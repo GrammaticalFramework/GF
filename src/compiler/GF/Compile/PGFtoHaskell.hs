@@ -61,7 +61,7 @@ haskPreamble name =
   "",
   predefInst "GString" "String"  "unStr"    "mkStr",
   "",
-  predefInst "GInt"    "Integer" "unInt"    "mkInt",
+  predefInst "GInt"    "Int"     "unInt"    "mkInt",
   "",
   predefInst "GFloat"  "Double"  "unDouble" "mkDouble",
   "",
