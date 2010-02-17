@@ -20,9 +20,13 @@ ppPGF pgf = ppAbs (absname pgf) (abstract pgf) $$ ppAll ppCnc (concretes pgf)
 
 ppAbs :: Language -> Abstr -> Doc
 ppAbs name a = text "abstract" <+> ppCId name <+> char '{' $$
-               nest 2 (ppAll ppCat (cats a) $$
+               nest 2 (ppAll ppFlag (aflags a) $$
+                       ppAll ppCat (cats a) $$
                        ppAll ppFun (funs a)) $$
                char '}'
+
+ppFlag :: CId -> Literal -> Doc
+ppFlag flag value = text "flag" <+> ppCId flag <+> char '=' <+> ppLit value ;
 
 ppCat :: CId -> [Hypo] -> Doc
 ppCat c hyps = text "cat" <+> ppCId c <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps))
@@ -38,7 +42,8 @@ ppFun f (t,_,Nothing)  = text "data" <+> ppCId f <+> colon <+> ppType 0 [] t
 ppCnc :: Language -> Concr -> Doc
 ppCnc name cnc =
   text "concrete" <+> ppCId name <+> char '{' $$
-  nest 2 (text "productions" $$
+  nest 2 (ppAll ppFlag (cflags cnc) $$
+          text "productions" $$
           nest 2 (vcat [ppProduction (fcat,prod) | (fcat,set) <- IntMap.toList (productions cnc), prod <- Set.toList set]) $$
           text "functions" $$
           nest 2 (vcat (map ppCncFun (assocs (cncfuns cnc)))) $$
