@@ -12,7 +12,7 @@ lincat
  Formula = PolSentence;
  [El] = [NP];
  [Class] = [CN];
- Stmt = SS ;
+ Stmt = StmtS ;
  lin 
 BaseClass = {s1,s2 = \\_,_ => "";   
              g  =  Neutr;

@@ -10,7 +10,7 @@ lincat
  Inherits = {} ;
  Desc = CN ;
  Formula = PolSentence;
- Stmt = SS ;
+ Stmt = StmtS ;
  [El] = {s1,s2 : NCase => Str ; a : Agr; nForm : NForm};
  [Class] = {s1,s2 : Number => Species => ACase => Str; g : NGender; a : Animacy ; isComp : Bool};
  
