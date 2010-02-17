@@ -1,0 +1,608 @@
+
+atomicNumber (desc Hydrogen ? ?) (el ? ? ? (toInt 1))
+
+atomicNumber (desc Helium ? ?) (el ? ? ? (toInt 2))
+
+atomicNumber (desc Lithium ? ?) (el ? ? ? (toInt 3))
+
+atomicNumber (desc Beryllium ? ?) (el ? ? ? (toInt 4))
+
+atomicNumber (desc Boron ? ?) (el ? ? ? (toInt 5))
+
+atomicNumber (desc Carbon ? ?) (el ? ? ? (toInt 6))
+
+atomicNumber (desc Nitrogen ? ?) (el ? ? ? (toInt 7))
+
+atomicNumber (desc Oxygen ? ?) (el ? ? ? (toInt 8))
+
+atomicNumber (desc Fluorine ? ?) (el ? ? ? (toInt 9))
+
+atomicNumber (desc Neon ? ?) (el ? ? ? (toInt 10))
+
+atomicNumber (desc Sodium ? ?) (el ? ? ? (toInt 11))
+
+atomicNumber (desc Magnesium ? ?) (el ? ? ? (toInt 12))
+
+atomicNumber (desc Aluminum ? ?) (el ? ? ? (toInt 13))
+
+atomicNumber (desc Silicon ? ?) (el ? ? ? (toInt 14))
+
+atomicNumber (desc Phosphorus ? ?) (el ? ? ? (toInt 15))
+
+atomicNumber (desc Sulphur ? ?) (el ? ? ? (toInt 16))
+
+atomicNumber (desc Chlorine ? ?) (el ? ? ? (toInt 17))
+
+atomicNumber (desc Argon ? ?) (el ? ? ? (toInt 18))
+
+atomicNumber (desc Potassium ? ?) (el ? ? ? (toInt 19))
+
+atomicNumber (desc Calcium ? ?) (el ? ? ? (toInt 20))
+
+atomicNumber (desc Scandium ? ?) (el ? ? ? (toInt 21))
+
+atomicNumber (desc Titanium ? ?) (el ? ? ? (toInt 22))
+
+atomicNumber (desc Vanadium ? ?) (el ? ? ? (toInt 23))
+
+atomicNumber (desc Chromium ? ?) (el ? ? ? (toInt 24))
+
+atomicNumber (desc Manganese ? ?) (el ? ? ? (toInt 25))
+
+atomicNumber (desc Iron ? ?) (el ? ? ? (toInt 26))
+
+atomicNumber (desc Cobalt ? ?) (el ? ? ? (toInt 27))
+
+atomicNumber (desc Nickel ? ?) (el ? ? ? (toInt 28))
+
+atomicNumber (desc Copper ? ?) (el ? ? ? (toInt 29))
+
+atomicNumber (desc Zinc ? ?) (el ? ? ? (toInt 30))
+
+atomicNumber (desc Gallium ? ?) (el ? ? ? (toInt 31))
+
+atomicNumber (desc Germanium ? ?) (el ? ? ? (toInt 32))
+
+atomicNumber (desc Arsenic ? ?) (el ? ? ? (toInt 33))
+
+atomicNumber (desc Selenium ? ?) (el ? ? ? (toInt 34))
+
+atomicNumber (desc Bromine ? ?) (el ? ? ? (toInt 35))
+
+atomicNumber (desc Krypton ? ?) (el ? ? ? (toInt 36))
+
+atomicNumber (desc Rubidium ? ?) (el ? ? ? (toInt 37))
+
+atomicNumber (desc Strontium ? ?) (el ? ? ? (toInt 38))
+
+atomicNumber (desc Yttrium ? ?) (el ? ? ? (toInt 39))
+
+atomicNumber (desc Zirconium ? ?) (el ? ? ? (toInt 40))
+
+atomicNumber (desc Niobium ? ?) (el ? ? ? (toInt 41))
+
+atomicNumber (desc Molybdenum ? ?) (el ? ? ? (toInt 42))
+
+atomicNumber (desc Technetium ? ?) (el ? ? ? (toInt 43))
+
+atomicNumber (desc Ruthenium ? ?) (el ? ? ? (toInt 44))
+
+atomicNumber (desc Rhodium ? ?) (el ? ? ? (toInt 45))
+
+atomicNumber (desc Palladium ? ?) (el ? ? ? (toInt 46))
+
+atomicNumber (desc Silver ? ?) (el ? ? ? (toInt 47))
+
+atomicNumber (desc Cadmium ? ?) (el ? ? ? (toInt 48))
+
+atomicNumber (desc Indium ? ?) (el ? ? ? (toInt 49))
+
+atomicNumber (desc Tin ? ?) (el ? ? ? (toInt 50))
+
+atomicNumber (desc Antimony ? ?) (el ? ? ? (toInt 51))
+
+atomicNumber (desc Tellurium ? ?) (el ? ? ? (toInt 52))
+
+atomicNumber (desc Iodine ? ?) (el ? ? ? (toInt 53))
+
+atomicNumber (desc Xenon ? ?) (el ? ? ? (toInt 54))
+
+atomicNumber (desc Caesium ? ?) (el ? ? ? (toInt 55))
+
+atomicNumber (desc Barium ? ?) (el ? ? ? (toInt 56))
+
+atomicNumber (desc Lanthanum ? ?) (el ? ? ? (toInt 57))
+
+atomicNumber (desc Cerium ? ?) (el ? ? ? (toInt 58))
+
+atomicNumber (desc Praseodymium ? ?) (el ? ? ? (toInt 59))
+
+atomicNumber (desc Neodymium ? ?) (el ? ? ? (toInt 60))
+
+atomicNumber (desc Promethium ? ?) (el ? ? ? (toInt 61))
+
+atomicNumber (desc Samarium ? ?) (el ? ? ? (toInt 62))
+
+atomicNumber (desc Europium ? ?) (el ? ? ? (toInt 63))
+
+atomicNumber (desc Gadolinium ? ?) (el ? ? ? (toInt 64))
+
+atomicNumber (desc Terbium ? ?) (el ? ? ? (toInt 65))
+
+atomicNumber (desc Dysprosium ? ?) (el ? ? ? (toInt 66))
+
+atomicNumber (desc Holmium ? ?) (el ? ? ? (toInt 67))
+
+atomicNumber (desc Erbium ? ?) (el ? ? ? (toInt 68))
+
+atomicNumber (desc Thulium ? ?) (el ? ? ? (toInt 69))
+
+atomicNumber (desc Ytterbium ? ?) (el ? ? ? (toInt 70))
+
+atomicNumber (desc Lutetium ? ?) (el ? ? ? (toInt 71))
+
+atomicNumber (desc Hafnium ? ?) (el ? ? ? (toInt 72))
+
+atomicNumber (desc Tantalum ? ?) (el ? ? ? (toInt 73))
+
+atomicNumber (desc Tungsten ? ?) (el ? ? ? (toInt 74))
+
+atomicNumber (desc Rhenium ? ?) (el ? ? ? (toInt 75))
+
+atomicNumber (desc Osmium ? ?) (el ? ? ? (toInt 76))
+
+atomicNumber (desc Iridium ? ?) (el ? ? ? (toInt 77))
+
+atomicNumber (desc Platinum ? ?) (el ? ? ? (toInt 78))
+
+atomicNumber (desc Gold ? ?) (el ? ? ? (toInt 79))
+
+atomicNumber (desc Mercury ? ?) (el ? ? ? (toInt 80))
+
+atomicNumber (desc Thallium ? ?) (el ? ? ? (toInt 81))
+
+atomicNumber (desc Lead ? ?) (el ? ? ? (toInt 82))
+
+atomicNumber (desc Bismuth ? ?) (el ? ? ? (toInt 83))
+
+atomicNumber (desc Polonium ? ?) (el ? ? ? (toInt 84))
+
+atomicNumber (desc Astatine ? ?) (el ? ? ? (toInt 85))
+
+atomicNumber (desc Radon ? ?) (el ? ? ? (toInt 86))
+
+atomicNumber (desc Francium ? ?) (el ? ? ? (toInt 87))
+
+atomicNumber (desc Radium ? ?) (el ? ? ? (toInt 88))
+
+atomicNumber (desc Actinium ? ?) (el ? ? ? (toInt 89))
+
+atomicNumber (desc Thorium ? ?) (el ? ? ? (toInt 90))
+
+atomicNumber (desc Protactinium ? ?) (el ? ? ? (toInt 91))
+
+atomicNumber (desc Uranium ? ?) (el ? ? ? (toInt 92))
+
+atomicNumber (desc Neptunium ? ?) (el ? ? ? (toInt 93))
+
+atomicNumber (desc Plutonium ? ?) (el ? ? ? (toInt 94))
+
+atomicNumber (desc Americium ? ?) (el ? ? ? (toInt 95))
+
+atomicNumber (desc Curium ? ?) (el ? ? ? (toInt 96))
+
+atomicNumber (desc Berkelium ? ?) (el ? ? ? (toInt 97))
+
+atomicNumber (desc Californium ? ?) (el ? ? ? (toInt 98))
+
+atomicNumber (desc Einsteinium ? ?) (el ? ? ? (toInt 99))
+
+atomicNumber (desc Fermium ? ?) (el ? ? ? (toInt 100))
+
+atomicNumber (desc Mendelevium ? ?) (el ? ? ? (toInt 101))
+
+atomicNumber (desc Nobelium ? ?) (el ? ? ? (toInt 102))
+
+atomicNumber (desc Lawrencium ? ?) (el ? ? ? (toInt 103))
+
+atomicNumber (desc Unnilquadium ? ?) (el ? ? ? (toInt 104))
+
+atomicNumber (desc Unnilpentium ? ?) (el ? ? ? (toInt 105))
+
+atomicNumber (desc Unnilhexium ? ?) (el ? ? ? (toInt 106))
+
+atomicNumber (desc Unnilseptium ? ?) (el ? ? ? (toInt 107))
+
+atomicNumber (desc Unniloctium ? ?) (el ? ? ? (toInt 108))
+
+atomicNumber (desc Meitnerium ? ?) (el ? ? ? (toInt 109))
+
+atomicNumber (desc Unnildecium ? ?) (el ? ? ? (toInt 110))
+
+meltingPoint (desc Hydrogen ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 14.01)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Hydrogen ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 20.28)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Helium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 0.95)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Helium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 4.216)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Lithium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 453.69)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Lithium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1590)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Beryllium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1551)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Beryllium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3243)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Boron ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2573)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Boron ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2823)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Carbon ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3823)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Carbon ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 5100)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Nitrogen ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 63.29)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Nitrogen ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 77.4)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Oxygen ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 54.75)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Oxygen ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 90.188)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Fluorine ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 53.53)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Fluorine ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 85.01)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Neon ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 24.48)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Neon ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 27.1)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Sodium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 370.95)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Sodium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1165)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Magnesium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 921.95)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Magnesium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1380)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Aluminum ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 933.52)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Aluminum ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2740)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Silicon ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1683)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Silicon ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2628)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Phosphorus ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 317.3)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Phosphorus ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 553)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Sulphur ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 386)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Sulphur ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 717.824)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Chlorine ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 172.17)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Chlorine ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 238.55)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Argon ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 83.78)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Argon ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 87.29)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Potassium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 336.8)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Potassium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1047)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Calcium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1112)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Calcium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1760)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Scandium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1812)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Scandium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3105)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Titanium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1933)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Titanium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3533)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Vanadium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2163)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Vanadium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3653)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Chromium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2130)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Chromium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2755)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Manganese ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1517)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Manganese ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2370)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Iron ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1808)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Iron ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3023)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Cobalt ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1768)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Cobalt ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3143)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Nickel ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1726)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Nickel ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3005)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Copper ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 1356.6)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Copper ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2868)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Zinc ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 692.73)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Zinc ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1180)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Gallium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 302.93)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Gallium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2676)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Germanium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 1210.55)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Germanium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3103)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Arsenic ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 886)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Arsenic ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 886)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Selenium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 490)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Selenium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 958.1)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Bromine ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 265.9)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Bromine ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 331.93)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Krypton ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 116.55)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Krypton ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 120.85)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Rubidium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 312.2)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Rubidium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 961)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Strontium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1042)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Strontium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1657)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Yttrium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1796)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Yttrium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3610)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Zirconium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2125)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Zirconium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 4650)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Niobium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2741)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Niobium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 5200)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Molybdenum ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2890)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Molybdenum ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 5833)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Technetium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2445)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Technetium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 5303)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Ruthenium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2583)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Ruthenium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 4173)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Rhodium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2239)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Rhodium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 4000)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Palladium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1825)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Palladium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3413)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Silver ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 1235.08)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Silver ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2485)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Cadmium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 594.1)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Cadmium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1038)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Indium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 429.32)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Indium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2353)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Tin ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 505.118)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Tin ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2543)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Antimony ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 903.89)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Antimony ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2023)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Tellurium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 722.7)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Tellurium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1263)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Iodine ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 386.65)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Iodine ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 457.55)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Xenon ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 161.3)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Xenon ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 166.1)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Caesium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 301.55)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Caesium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 963)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Barium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 998)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Barium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1913)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Lanthanum ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1193)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Lanthanum ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3727)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Cerium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1071)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Cerium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3530)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Praseodymium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1204)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Praseodymium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3485)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Neodymium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1283)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Neodymium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3400)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Promethium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1353)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Promethium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3000)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Samarium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1345)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Samarium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2051)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Europium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1095)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Europium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1870)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Gadolinium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1584)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Gadolinium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3506)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Terbium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1633)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Terbium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3314)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Dysprosium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1682)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Dysprosium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2608)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Holmium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1743)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Holmium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2993)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Erbium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1795)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Erbium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2783)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Thulium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1818)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Thulium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2000)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Ytterbium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1097)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Ytterbium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1466)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Lutetium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1929)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Lutetium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3588)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Hafnium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2423)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Hafnium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 5673)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Tantalum ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3269)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Tantalum ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 5698)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Tungsten ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3680)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Tungsten ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 6200)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Rhenium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3453)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Rhenium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 5900)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Osmium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3318)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Osmium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 5300)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Iridium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2683)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Iridium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 4403)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Platinum ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2045)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Platinum ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 4100)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Gold ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 1337.58)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Gold ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3213)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Mercury ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 234.28)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Mercury ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 629.73)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Thallium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 576.7)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Thallium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1730)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Lead ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 600.65)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Lead ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2013)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Bismuth ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 544.5)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Bismuth ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1833)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Polonium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 527)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Polonium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1235)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Astatine ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 575)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Astatine ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 610)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Radon ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 202)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Radon ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 211.4)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Francium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 300)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Francium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 950)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Radium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 973)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Radium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1413)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Actinium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1320)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Actinium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3470)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Thorium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2023)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Thorium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 5060)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Protactinium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1827)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Protactinium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 4300)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Uranium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 1405.5)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Uranium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 4091)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Neptunium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 913)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Neptunium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 4175)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Plutonium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 914)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Plutonium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3600)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Americium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1267)) (el ? ? ? KelvinDegree)))
+
+boilingPoint (desc Americium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2880)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Curium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1613)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Berkelium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1259)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Californium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1173)) (el ? ? ? KelvinDegree)))
+
+meltingPoint (desc Einsteinium ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1133)) (el ? ? ? KelvinDegree)))

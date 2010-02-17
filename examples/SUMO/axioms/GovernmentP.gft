@@ -1,0 +1,1184 @@
+
+leaderPosition (el ? ? ? UnitedKingdom) (el ? ? ? PrimeMinister)
+
+leaderPosition (el ? ? ? Canada) (el ? ? ? PrimeMinister)
+
+leaderPosition (el ? ? ? Iran) (el ? ? ? President)
+
+subOrganization (el ? ? ? USStateDepartment) (el ? ? ? (GovernmentFn (el ? ? ? UnitedStates)))
+
+subsumesContentInstance (el ? ? ? ImmigrationAndNationalityAct_US) (el ? ? ? ImmigrationAndNationalityAct_Section219_US)
+
+dateEstablished (el ? ? ? AfricanCaribbeanAndPacificGroupOfStates) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 6)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1975))))))))
+
+organizationalObjective (el ? ? ? AfricanCaribbeanAndPacificGroupOfStates) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? AfricanDevelopmentBank) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 4)) (descToDesc ? ? ? (MonthFn (desc August ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1963))))))))
+
+organizationalObjective (el ? ? ? AfricanDevelopmentBank) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? AfricanDevelopmentBank) (el ? ? ? SocialDevelopment)
+
+dateEstablished (el ? ? ? AgencyForTheFrenchSpeakingCommunity) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 20)) (descToDesc ? ? ? (MonthFn (desc March ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1970))))))))
+
+dateEstablished (el ? ? ? AgencyForTheProhibitionOfNuclearWeaponsInLatinAmericaAndTheCaribbean) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 14)) (descToDesc ? ? ? (MonthFn (desc February ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1967))))))))
+
+organizationalObjective (el ? ? ? AgencyForTheProhibitionOfNuclearWeaponsInLatinAmericaAndTheCaribbean) (el ? ? ? NuclearNonproliferation)
+
+organizationalObjective (el ? ? ? AgencyForTheProhibitionOfNuclearWeaponsInLatinAmericaAndTheCaribbean) (el ? ? ? PeacefulUseOfAtomicPower)
+
+dateEstablished (el ? ? ? AndeanCommunityOfNations) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 26)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1969))))))))
+
+organizationalObjective (el ? ? ? AndeanCommunityOfNations) (el ? ? ? EconomicIntegration)
+
+dateEstablished (el ? ? ? AntarcticTreatyCouncil) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 23)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1961))))))))
+
+organizationalObjective (el ? ? ? AntarcticTreatyCouncil) (el ? ? ? AdministrationAndManagement)
+
+organizationalObjective (el ? ? ? AntarcticTreatyCouncil) (el ? ? ? PromoteRegionalStability)
+
+dateEstablished (el ? ? ? ArabBankForEconomicDevelopmentInAfrica) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 18)) (descToDesc ? ? ? (MonthFn (desc February ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1974))))))))
+
+organizationalObjective (el ? ? ? ArabBankForEconomicDevelopmentInAfrica) (el ? ? ? EconomicDevelopment)
+
+dateEstablished (el ? ? ? ArabCooperationCouncil) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 16)) (descToDesc ? ? ? (MonthFn (desc February ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1989))))))))
+
+organizationalObjective (el ? ? ? ArabCooperationCouncil) (el ? ? ? EconomicIntegration)
+
+dateEstablished (el ? ? ? ArabFundForEconomicAndSocialDevelopment) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 16)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1968))))))))
+
+organizationalObjective (el ? ? ? ArabFundForEconomicAndSocialDevelopment) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? ArabFundForEconomicAndSocialDevelopment) (el ? ? ? SocialDevelopment)
+
+dateEstablished (el ? ? ? ArabLeague) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 22)) (descToDesc ? ? ? (MonthFn (desc March ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1945))))))))
+
+organizationalObjective (el ? ? ? ArabLeague) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? ArabLeague) (el ? ? ? SocialCooperation)
+
+organizationalObjective (el ? ? ? ArabLeague) (el ? ? ? PoliticalCooperation)
+
+organizationalObjective (el ? ? ? ArabLeague) (el ? ? ? MilitaryCooperation)
+
+dateEstablished (el ? ? ? ArabMaghrebUnion) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 17)) (descToDesc ? ? ? (MonthFn (desc February ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1989))))))))
+
+organizationalObjective (el ? ? ? ArabMaghrebUnion) (el ? ? ? EconomicIntegration)
+
+organizationalObjective (el ? ? ? ArabMaghrebUnion) (el ? ? ? CulturalCooperation)
+
+organizationalObjective (el ? ? ? ArabMaghrebUnion) (el ? ? ? PoliticalCooperation)
+
+organizationalObjective (el ? ? ? ArabMaghrebUnion) (el ? ? ? MilitaryCooperation)
+
+dateEstablished (el ? ? ? ArabMonetaryFund) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 27)) (descToDesc ? ? ? (MonthFn (desc April ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1976))))))))
+
+organizationalObjective (el ? ? ? ArabMonetaryFund) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? AsiaPacificEconomicCooperation) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 7)) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1989))))))))
+
+organizationalObjective (el ? ? ? AsiaPacificEconomicCooperation) (el ? ? ? PromotionOfTradeAndInvestment)
+
+dateEstablished (el ? ? ? AsianDevelopmentBank) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 19)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1966))))))))
+
+organizationalObjective (el ? ? ? AsianDevelopmentBank) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? AssociationOfSoutheastAsianNations) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 8)) (descToDesc ? ? ? (MonthFn (desc August ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1967))))))))
+
+organizationalObjective (el ? ? ? AssociationOfSoutheastAsianNations) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? AssociationOfSoutheastAsianNations) (el ? ? ? SocialCooperation)
+
+organizationalObjective (el ? ? ? AssociationOfSoutheastAsianNations) (el ? ? ? CulturalCooperation)
+
+dateEstablished (el ? ? ? ASEANRegionalForum) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1994))))
+
+organizationalObjective (el ? ? ? ASEANRegionalForum) (el ? ? ? RegionalSecurity)
+
+dateEstablished (el ? ? ? AustraliaGroup) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1984))))
+
+organizationalObjective (el ? ? ? AustraliaGroup) (el ? ? ? CBWExportControls)
+
+dateEstablished (el ? ? ? AustraliaNewZealandUnitedStatesSecurityTreaty) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 1)) (descToDesc ? ? ? (MonthFn (desc September ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1951))))))))
+
+organizationalObjective (el ? ? ? AustraliaNewZealandUnitedStatesSecurityTreaty) (el ? ? ? MutualDefensePact)
+
+dateEstablished (el ? ? ? BankForInternationalSettlements) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 20)) (descToDesc ? ? ? (MonthFn (desc January ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1930))))))))
+
+organizationalObjective (el ? ? ? BankForInternationalSettlements) (el ? ? ? FinancialCooperation)
+
+dateEstablished (el ? ? ? BeneluxEconomicUnion) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 3)) (descToDesc ? ? ? (MonthFn (desc February ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1958))))))))
+
+organizationalObjective (el ? ? ? BeneluxEconomicUnion) (el ? ? ? EconomicIntegration)
+
+member (el ? ? ? Belgium) (el ? ? ? BeneluxEconomicUnion)
+
+member (el ? ? ? Netherlands) (el ? ? ? BeneluxEconomicUnion)
+
+member (el ? ? ? Luxembourg) (el ? ? ? BeneluxEconomicUnion)
+
+dateEstablished (el ? ? ? BigSeven) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1975))))
+
+organizationalObjective (el ? ? ? BigSeven) (el ? ? ? EconomicPolicyCoordination)
+
+dateEstablished (el ? ? ? BigSix) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1967))))
+
+organizationalObjective (el ? ? ? BigSix) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? BlackSeaEconomicCooperationZone) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 25)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1992))))))))
+
+organizationalObjective (el ? ? ? BlackSeaEconomicCooperationZone) (el ? ? ? PromoteRegionalStability)
+
+organizationalObjective (el ? ? ? BlackSeaEconomicCooperationZone) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? CaribbeanCommunityAndCommonMarket) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 4)) (descToDesc ? ? ? (MonthFn (desc July ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1973))))))))
+
+organizationalObjective (el ? ? ? CaribbeanCommunityAndCommonMarket) (el ? ? ? EconomicIntegration)
+
+organizationalObjective (el ? ? ? CaribbeanCommunityAndCommonMarket) (el ? ? ? EconomicDevelopment)
+
+dateEstablished (el ? ? ? CaribbeanDevelopmentBank) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 18)) (descToDesc ? ? ? (MonthFn (desc October ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1969))))))))
+
+organizationalObjective (el ? ? ? CaribbeanDevelopmentBank) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? CaribbeanDevelopmentBank) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? CentralAfricanStatesDevelopmentBank) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 3)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1975))))))))
+
+organizationalObjective (el ? ? ? CentralAfricanStatesDevelopmentBank) (el ? ? ? EconomicDevelopment)
+
+dateEstablished (el ? ? ? CentralAmericanBankForEconomicIntegration) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 13)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1960))))))))
+
+organizationalObjective (el ? ? ? CentralAmericanBankForEconomicIntegration) (el ? ? ? EconomicIntegration)
+
+organizationalObjective (el ? ? ? CentralAmericanBankForEconomicIntegration) (el ? ? ? EconomicDevelopment)
+
+dateEstablished (el ? ? ? CentralAmericanCommonMarket) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 13)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1960))))))))
+
+organizationalObjective (el ? ? ? CentralAmericanCommonMarket) (el ? ? ? EconomicIntegration)
+
+dateEstablished (el ? ? ? CentralEuropeanInitiative) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 11)) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1989))))))))
+
+organizationalObjective (el ? ? ? CentralEuropeanInitiative) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? CentralEuropeanInitiative) (el ? ? ? PoliticalCooperation)
+
+dateEstablished (el ? ? ? ColomboPlan) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1950))))))
+
+organizationalObjective (el ? ? ? ColomboPlan) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? ColomboPlan) (el ? ? ? SocialDevelopment)
+
+dateEstablished (el ? ? ? CommonwealthOfNations) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 31)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1931))))))))
+
+organizationalObjective (el ? ? ? CommonwealthOfNations) (el ? ? ? PoliticalCooperation)
+
+organizationalObjective (el ? ? ? CommonwealthOfNations) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? CommonwealthOfIndependentStates) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 8)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1991))))))))
+
+organizationalObjective (el ? ? ? CommonwealthOfIndependentStates) (el ? ? ? PoliticalCooperation)
+
+dateEstablished (el ? ? ? CoordinatingCommitteeOnExportControls) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1949))))
+
+dateDissolved (el ? ? ? CoordinatingCommitteeOnExportControls) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 31)) (descToDesc ? ? ? (MonthFn (desc March ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1994))))))))
+
+successorOrganization (el ? ? ? CoordinatingCommitteeOnExportControls) (el ? ? ? WassenaarArrangement)
+
+dateEstablished (el ? ? ? CouncilForMutualEconomicAssistance) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 25)) (descToDesc ? ? ? (MonthFn (desc January ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1949))))))))
+
+dateDissolved (el ? ? ? CouncilForMutualEconomicAssistance) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 1)) (descToDesc ? ? ? (MonthFn (desc January ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1991))))))))
+
+dateEstablished (el ? ? ? CouncilOfArabEconomicUnity) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 3)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1957))))))))
+
+organizationalObjective (el ? ? ? CouncilOfArabEconomicUnity) (el ? ? ? EconomicIntegration)
+
+dateEstablished (el ? ? ? CouncilOfEurope) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 5)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1949))))))))
+
+organizationalObjective (el ? ? ? CouncilOfEurope) (el ? ? ? PoliticalCooperation)
+
+organizationalObjective (el ? ? ? CouncilOfEurope) (el ? ? ? SocialDevelopment)
+
+organizationalObjective (el ? ? ? CouncilOfEurope) (el ? ? ? CulturalCooperation)
+
+organizationalObjective (el ? ? ? CouncilOfEurope) (el ? ? ? PromoteRegionalStability)
+
+organizationalObjective (el ? ? ? CouncilOfEurope) (el ? ? ? HumanRightsIssues)
+
+dateEstablished (el ? ? ? CouncilOfTheBalticSeaStates) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 6)) (descToDesc ? ? ? (MonthFn (desc March ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1992))))))))
+
+organizationalObjective (el ? ? ? CouncilOfTheBalticSeaStates) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? CouncilOfTheBalticSeaStates) (el ? ? ? HumanitarianAid)
+
+organizationalObjective (el ? ? ? CouncilOfTheBalticSeaStates) (el ? ? ? EnergyAndTheEnvironment)
+
+organizationalObjective (el ? ? ? CouncilOfTheBalticSeaStates) (el ? ? ? PoliticalDevelopment)
+
+organizationalObjective (el ? ? ? CouncilOfTheBalticSeaStates) (el ? ? ? CulturalCooperation)
+
+dateEstablished (el ? ? ? CouncilOfTheEntente) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 29)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1959))))))))
+
+organizationalObjective (el ? ? ? CouncilOfTheEntente) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? CouncilOfTheEntente) (el ? ? ? PoliticalCooperation)
+
+organizationalObjective (el ? ? ? CouncilOfTheEntente) (el ? ? ? SocialCooperation)
+
+dateEstablished (el ? ? ? WorldCustomsOrganization) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 15)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1950))))))))
+
+dateEstablished (el ? ? ? EastAfricanDevelopmentBank) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 6)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1967))))))))
+
+organizationalObjective (el ? ? ? EastAfricanDevelopmentBank) (el ? ? ? EconomicDevelopment)
+
+dateEstablished (el ? ? ? EconomicAndSocialCouncil) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 26)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1945))))))))
+
+organizationalObjective (el ? ? ? EconomicAndSocialCouncil) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? EconomicAndSocialCouncil) (el ? ? ? SocialDevelopment)
+
+subOrganization (el ? ? ? EconomicAndSocialCouncil) (el ? ? ? UnitedNations)
+
+subOrganization (el ? ? ? CommissionForSocialDevelopment) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? CommissionOnCrimePreventionAndCriminalJustice) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? CommissionOnHumanRights) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? CommissionOnNarcoticsDrugs) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? CommissionOnPopulationAndDevelopment) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? CommissionOnScienceAndTechnologyForDevelopment) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? CommissionOnSustainableDevelopment) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? CommissionOnTheStatusOfWomen) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? EconomicAndSocialCommissionForAsiaAndThePacific) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? EconomicAndSocialCommissionForWesternAsia) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? EconomicCommissionForAfrica) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? EconomicCommissionForEurope) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? EconomicCommissionForLatinAmericaAndTheCaribbean) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? FoodAndAgricultureOrganization) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? InternationalAtomicEnergyAgency) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? InternationalBankForReconstructionAndDevelopment) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? InternationalCenterForSecretariatOfInvestmentDisputes) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? InternationalCivilAviationOrganization) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? InternationalDevelopmentAssociation) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? InternationalFinanceCorporation) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? InternationalFundForAgriculturalDevelopment) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? InternationalLaborOrganization) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? InternationalMaritimeOrganization) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? InternationalMonetaryFund) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? InternationalTelecommunicationUnion) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? MulitlateralInvestmentGeographicAgency) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? StatisticalCommission) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? UnitedNationsEducationalScientificAndCulturalOrganization) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? UnitedNationsIndustrialDevelopmentOrganization) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? UniversalPostalUnion) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? WorldHealthOrganization) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? WorldIntellectualPropertyOrganization) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? WorldMeteorologicalOrganization) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? WorldTourismOrganization) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? WorldTradeOrganization) (el ? ? ? EconomicAndSocialCouncil)
+
+subOrganization (el ? ? ? WorldFoodProgram) (el ? ? ? EconomicAndSocialCouncil)
+
+dateEstablished (el ? ? ? EconomicCommunityOfTheGreatLakesCountries) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 20)) (descToDesc ? ? ? (MonthFn (desc September ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1976))))))))
+
+organizationalObjective (el ? ? ? EconomicCommunityOfTheGreatLakesCountries) (el ? ? ? EconomicIntegration)
+
+dateEstablished (el ? ? ? EconomicCommunityOfWestAfricanStates) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 28)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1975))))))))
+
+organizationalObjective (el ? ? ? EconomicCommunityOfWestAfricanStates) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? EconomicCooperationOrganization) (descToDesc ? ? ? (MonthFn (desc January ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1985))))))
+
+organizationalObjective (el ? ? ? EconomicCooperationOrganization) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? EconomicCooperationOrganization) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? EconomicCooperationOrganization) (el ? ? ? CulturalCooperation)
+
+organizationalObjective (el ? ? ? EconomicCooperationOrganization) (el ? ? ? TransportationCoordination)
+
+organizationalObjective (el ? ? ? EconomicCooperationOrganization) (el ? ? ? CommunicationsCoordination)
+
+dateEstablished (el ? ? ? EuroAtlanticPartnershipCouncil) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 8)) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1991))))))))
+
+organizationalObjective (el ? ? ? EuroAtlanticPartnershipCouncil) (el ? ? ? PoliticalCooperation)
+
+organizationalObjective (el ? ? ? EuroAtlanticPartnershipCouncil) (el ? ? ? MilitaryCooperation)
+
+organizationalObjective (el ? ? ? EuroAtlanticPartnershipCouncil) (el ? ? ? ConventionalArmsControl)
+
+dateEstablished (el ? ? ? EuropeanBankForReconstructionAndDevelopment) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 15)) (descToDesc ? ? ? (MonthFn (desc April ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1991))))))))
+
+organizationalObjective (el ? ? ? EuropeanBankForReconstructionAndDevelopment) (el ? ? ? EconomicDevelopment)
+
+dateEstablished (el ? ? ? EuropeanCommunity) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 8)) (descToDesc ? ? ? (MonthFn (desc April ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1965))))))))
+
+organizationalObjective (el ? ? ? EuropeanCommunity) (el ? ? ? EconomicIntegration)
+
+organizationalObjective (el ? ? ? EuropeanCommunity) (el ? ? ? PoliticalCooperation)
+
+dateEstablished (el ? ? ? EuropeanFreeTradeAssociation) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 4)) (descToDesc ? ? ? (MonthFn (desc January ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1960))))))))
+
+organizationalObjective (el ? ? ? EuropeanFreeTradeAssociation) (el ? ? ? PromotionOfFreeTrade)
+
+dateEstablished (el ? ? ? EuropeanInvestmentBank) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 25)) (descToDesc ? ? ? (MonthFn (desc March ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1957))))))))
+
+organizationalObjective (el ? ? ? EuropeanInvestmentBank) (el ? ? ? EconomicDevelopment)
+
+dateEstablished (el ? ? ? EuropeanMonetaryUnion) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 7)) (descToDesc ? ? ? (MonthFn (desc February ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1992))))))))
+
+organizationalObjective (el ? ? ? EuropeanMonetaryUnion) (el ? ? ? MonetaryUnion)
+
+member (el ? ? ? Austria) (el ? ? ? EuropeanMonetaryUnion)
+
+member (el ? ? ? Belgium) (el ? ? ? EuropeanMonetaryUnion)
+
+member (el ? ? ? Finland) (el ? ? ? EuropeanMonetaryUnion)
+
+member (el ? ? ? France) (el ? ? ? EuropeanMonetaryUnion)
+
+member (el ? ? ? Germany) (el ? ? ? EuropeanMonetaryUnion)
+
+member (el ? ? ? Greece) (el ? ? ? EuropeanMonetaryUnion)
+
+member (el ? ? ? Ireland) (el ? ? ? EuropeanMonetaryUnion)
+
+member (el ? ? ? Italy) (el ? ? ? EuropeanMonetaryUnion)
+
+member (el ? ? ? Luxembourg) (el ? ? ? EuropeanMonetaryUnion)
+
+member (el ? ? ? Netherlands) (el ? ? ? EuropeanMonetaryUnion)
+
+member (el ? ? ? Portugal) (el ? ? ? EuropeanMonetaryUnion)
+
+member (el ? ? ? Spain) (el ? ? ? EuropeanMonetaryUnion)
+
+dateEstablished (el ? ? ? EuropeanOrganizationForNuclearResearch) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 1)) (descToDesc ? ? ? (MonthFn (desc July ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1953))))))))
+
+organizationalObjective (el ? ? ? EuropeanOrganizationForNuclearResearch) (el ? ? ? PeacefulUseOfAtomicPower)
+
+organizationalObjective (el ? ? ? EuropeanOrganizationForNuclearResearch) (el ? ? ? TechnologyCooperation)
+
+organizationalObjective (el ? ? ? EuropeanOrganizationForNuclearResearch) (el ? ? ? ScientificCooperation)
+
+dateEstablished (el ? ? ? EuropeanSpaceAgency) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 31)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1975))))))))
+
+organizationalObjective (el ? ? ? EuropeanSpaceAgency) (el ? ? ? SpaceResearchAndTechnology)
+
+organizationalObjective (el ? ? ? EuropeanSpaceAgency) (el ? ? ? TechnologyCooperation)
+
+dateEstablished (el ? ? ? EuropeanUnion) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 7)) (descToDesc ? ? ? (MonthFn (desc February ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1992))))))))
+
+organizationalObjective (el ? ? ? EuropeanUnion) (el ? ? ? EconomicIntegration)
+
+organizationalObjective (el ? ? ? EuropeanUnion) (el ? ? ? MonetaryUnion)
+
+organizationalObjective (el ? ? ? EuropeanUnion) (el ? ? ? PoliticalCooperation)
+
+organizationalObjective (el ? ? ? EuropeanUnion) (el ? ? ? SocialCooperation)
+
+organizationalObjective (el ? ? ? EuropeanUnion) (el ? ? ? MilitaryCooperation)
+
+successorOrganization (el ? ? ? EuropeanCommunity) (el ? ? ? EuropeanUnion)
+
+dateEstablished (el ? ? ? FoodAndAgricultureOrganization) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 16)) (descToDesc ? ? ? (MonthFn (desc October ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1945))))))))
+
+organizationalObjective (el ? ? ? FoodAndAgricultureOrganization) (el ? ? ? AgriculturalDevelopment)
+
+dateEstablished (el ? ? ? FrancZone) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1964))))
+
+organizationalObjective (el ? ? ? FrancZone) (el ? ? ? MonetaryUnion)
+
+dateEstablished (el ? ? ? GroupOf3) (descToDesc ? ? ? (MonthFn (desc September ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1990))))))
+
+organizationalObjective (el ? ? ? GroupOf3) (el ? ? ? PoliticalCooperation)
+
+dateEstablished (el ? ? ? GroupOf5) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 22)) (descToDesc ? ? ? (MonthFn (desc September ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1985))))))))
+
+organizationalObjective (el ? ? ? GroupOf5) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? GroupOf6) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 22)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1985))))))))
+
+organizationalObjective (el ? ? ? GroupOf6) (el ? ? ? NuclearDisarmament)
+
+dateEstablished (el ? ? ? GroupOf7) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 22)) (descToDesc ? ? ? (MonthFn (desc September ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1985))))))))
+
+organizationalObjective (el ? ? ? GroupOf7) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? GroupOf8) (descToDesc ? ? ? (MonthFn (desc October ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1975))))))
+
+organizationalObjective (el ? ? ? GroupOf8) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? GroupOf9) (el ? ? ? PoliticalCooperation)
+
+dateEstablished (el ? ? ? GroupOf10) (descToDesc ? ? ? (MonthFn (desc October ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1962))))))
+
+organizationalObjective (el ? ? ? GroupOf10) (el ? ? ? CoordinateCreditPolicy)
+
+dateEstablished (el ? ? ? GroupOf11) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 22)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1984))))))))
+
+organizationalObjective (el ? ? ? GroupOf11) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? GroupOf15) (descToDesc ? ? ? (MonthFn (desc September ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1989))))))
+
+organizationalObjective (el ? ? ? GroupOf15) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? GroupOf15) (el ? ? ? PoliticalCooperation)
+
+dateEstablished (el ? ? ? GroupOf24) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 1)) (descToDesc ? ? ? (MonthFn (desc August ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1989))))))))
+
+organizationalObjective (el ? ? ? GroupOf24) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? GroupOf77) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 15)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1964))))))))
+
+organizationalObjective (el ? ? ? GroupOf77) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? GulfCooperationCouncil) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 25)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1981))))))))
+
+organizationalObjective (el ? ? ? GulfCooperationCouncil) (el ? ? ? PoliticalCooperation)
+
+organizationalObjective (el ? ? ? GulfCooperationCouncil) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? GulfCooperationCouncil) (el ? ? ? MilitaryCooperation)
+
+organizationalObjective (el ? ? ? GulfCooperationCouncil) (el ? ? ? SocialCooperation)
+
+dateEstablished (el ? ? ? IndianOceanCommission) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 21)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1982))))))))
+
+organizationalObjective (el ? ? ? IndianOceanCommission) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? IndianOceanCommission) (el ? ? ? PoliticalCooperation)
+
+dateEstablished (el ? ? ? InterAmericanDevelopmentBank) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 8)) (descToDesc ? ? ? (MonthFn (desc April ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1959))))))))
+
+organizationalObjective (el ? ? ? InterAmericanDevelopmentBank) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? InterAmericanDevelopmentBank) (el ? ? ? SocialDevelopment)
+
+dateEstablished (el ? ? ? InterGovernmentalAuthorityOnDevelopment) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 21)) (descToDesc ? ? ? (MonthFn (desc March ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1996))))))))
+
+organizationalObjective (el ? ? ? InterGovernmentalAuthorityOnDevelopment) (el ? ? ? SocialCooperation)
+
+organizationalObjective (el ? ? ? InterGovernmentalAuthorityOnDevelopment) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? InterGovernmentalAuthorityOnDevelopment) (el ? ? ? ScientificCooperation)
+
+dateEstablished (el ? ? ? InternationalAtomicEnergyAgency) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 26)) (descToDesc ? ? ? (MonthFn (desc October ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1956))))))))
+
+organizationalObjective (el ? ? ? InternationalAtomicEnergyAgency) (el ? ? ? PeacefulUseOfAtomicPower)
+
+dateEstablished (el ? ? ? InternationalBankForReconstructionAndDevelopment) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 22)) (descToDesc ? ? ? (MonthFn (desc July ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1944))))))))
+
+organizationalObjective (el ? ? ? InternationalBankForReconstructionAndDevelopment) (el ? ? ? EconomicDevelopment)
+
+subOrganization (el ? ? ? InternationalBankForReconstructionAndDevelopment) (el ? ? ? UnitedNations)
+
+dateEstablished (el ? ? ? InternationalChamberOfCommerce) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1919))))
+
+organizationalObjective (el ? ? ? InternationalChamberOfCommerce) (el ? ? ? PromotionOfFreeTrade)
+
+organizationalObjective (el ? ? ? InternationalChamberOfCommerce) (el ? ? ? PromotionOfTradeAndInvestment)
+
+organizationalObjective (el ? ? ? InternationalChamberOfCommerce) (el ? ? ? PromotionOfPrivateEnterprise)
+
+dateEstablished (el ? ? ? InternationalCivilAviationOrganization) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 7)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1944))))))))
+
+subOrganization (el ? ? ? InternationalCivilAviationOrganization) (el ? ? ? UnitedNations)
+
+organizationalObjective (el ? ? ? InternationalCivilAviationOrganization) (el ? ? ? CooperationInCivilAviation)
+
+dateEstablished (el ? ? ? InternationalCommitteeOfTheRedCross) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 17)) (descToDesc ? ? ? (MonthFn (desc February ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1863))))))))
+
+organizationalObjective (el ? ? ? InternationalCommitteeOfTheRedCross) (el ? ? ? HumanitarianAid)
+
+dateEstablished (el ? ? ? InternationalConfederationOfFreeTradeUnions) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1949))))))
+
+organizationalObjective (el ? ? ? InternationalConfederationOfFreeTradeUnions) (el ? ? ? PromoteTradeUnionism)
+
+subOrganization (el ? ? ? InternationalCourtOfJustice) (el ? ? ? UnitedNations)
+
+organizationalObjective (el ? ? ? InternationalCourtOfJustice) (el ? ? ? InternationalJustice)
+
+dateEstablished (el ? ? ? InternationalCriminalPoliceOrganization) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 13)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1956))))))))
+
+organizationalObjective (el ? ? ? InternationalCriminalPoliceOrganization) (el ? ? ? SupportLawEnforcement)
+
+dateEstablished (el ? ? ? InternationalDevelopmentAssociation) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 26)) (descToDesc ? ? ? (MonthFn (desc January ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1960))))))))
+
+subOrganization (el ? ? ? InternationalDevelopmentAssociation) (el ? ? ? UnitedNations)
+
+organizationalObjective (el ? ? ? InternationalDevelopmentAssociation) (el ? ? ? EconomicDevelopment)
+
+dateEstablished (el ? ? ? InternationalEnergyAgency) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 15)) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1974))))))))
+
+organizationalObjective (el ? ? ? InternationalEnergyAgency) (el ? ? ? EnergyCooperation)
+
+dateEstablished (el ? ? ? InternationalFederationOfRedCrossAndRedCrescentSocieties) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 5)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1919))))))))
+
+organizationalObjective (el ? ? ? InternationalFederationOfRedCrossAndRedCrescentSocieties) (el ? ? ? HumanitarianAid)
+
+dateEstablished (el ? ? ? InternationalFinanceCorporation) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 25)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1955))))))))
+
+subOrganization (el ? ? ? InternationalFinanceCorporation) (el ? ? ? UnitedNations)
+
+organizationalObjective (el ? ? ? InternationalFinanceCorporation) (el ? ? ? PromotePrivateEnterprise)
+
+dateEstablished (el ? ? ? InternationalFundForAgriculturalDevelopment) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1974))))))
+
+organizationalObjective (el ? ? ? InternationalFundForAgriculturalDevelopment) (el ? ? ? AgriculturalDevelopment)
+
+subOrganization (el ? ? ? InternationalFundForAgriculturalDevelopment) (el ? ? ? UnitedNations)
+
+dateEstablished (el ? ? ? InternationalHydrographicOrganization) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1919))))))
+
+organizationalObjective (el ? ? ? InternationalHydrographicOrganization) (el ? ? ? ScientificCooperation)
+
+organizationalObjective (el ? ? ? InternationalHydrographicOrganization) (el ? ? ? InformationStandards)
+
+inScopeOfInterest (el ? ? ? InternationalHydrographicOrganization) (el ? ? ? WorldOcean)
+
+dateEstablished (el ? ? ? InternationalLaborOrganization) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 28)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1919))))))))
+
+organizationalObjective (el ? ? ? InternationalLaborOrganization) (el ? ? ? WorldLaborIssues)
+
+subOrganization (el ? ? ? InternationalLaborOrganization) (el ? ? ? UnitedNations)
+
+dateEstablished (el ? ? ? InternationalMaritimeOrganization) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 6)) (descToDesc ? ? ? (MonthFn (desc March ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1948))))))))
+
+subOrganization (el ? ? ? InternationalMaritimeOrganization) (el ? ? ? UnitedNations)
+
+organizationalObjective (el ? ? ? InternationalMaritimeOrganization) (el ? ? ? InternationalMaritimeAffairs)
+
+dateEstablished (el ? ? ? InternationalMonetaryFund) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 22)) (descToDesc ? ? ? (MonthFn (desc July ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1944))))))))
+
+subOrganization (el ? ? ? InternationalMonetaryFund) (el ? ? ? UnitedNations)
+
+organizationalObjective (el ? ? ? InternationalMonetaryFund) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? InternationalMonetaryFund) (el ? ? ? MonetaryStability)
+
+dateEstablished (el ? ? ? InternationalOlympicCommittee) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 23)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1894))))))))
+
+organizationalObjective (el ? ? ? InternationalOlympicCommittee) (el ? ? ? OrganizeOlympicGames)
+
+dateEstablished (el ? ? ? InternationalOrganizationForMigration) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 5)) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1951))))))))
+
+organizationalObjective (el ? ? ? InternationalOrganizationForMigration) (el ? ? ? EmigrationAndImmigrationIssues)
+
+dateEstablished (el ? ? ? InternationalOrganizationForStandardization) (descToDesc ? ? ? (MonthFn (desc February ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1947))))))
+
+organizationalObjective (el ? ? ? InternationalOrganizationForStandardization) (el ? ? ? InformationStandards)
+
+organizationalObjective (el ? ? ? InternationalOrganizationForStandardization) (el ? ? ? IndustryStandards)
+
+dateEstablished (el ? ? ? InternationalRedCrossAndRedCrescentMovement) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1928))))
+
+organizationalObjective (el ? ? ? InternationalRedCrossAndRedCrescentMovement) (el ? ? ? HumanitarianAid)
+
+dateEstablished (el ? ? ? InternationalTelecommunicationUnion) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 17)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1865))))))))
+
+organizationalObjective (el ? ? ? InternationalTelecommunicationUnion) (el ? ? ? CommunicationsCoordination)
+
+subOrganization (el ? ? ? InternationalTelecommunicationUnion) (el ? ? ? UnitedNations)
+
+dateEstablished (el ? ? ? IslamicDevelopmentBank) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 15)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1973))))))))
+
+organizationalObjective (el ? ? ? IslamicDevelopmentBank) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? IslamicDevelopmentBank) (el ? ? ? SocialDevelopment)
+
+dateEstablished (el ? ? ? LatinAmericanEconomicSystem) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 17)) (descToDesc ? ? ? (MonthFn (desc October ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1975))))))))
+
+organizationalObjective (el ? ? ? LatinAmericanEconomicSystem) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? LatinAmericanEconomicSystem) (el ? ? ? SocialDevelopment)
+
+dateEstablished (el ? ? ? LatinAmericanIntegrationAssociation) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 12)) (descToDesc ? ? ? (MonthFn (desc August ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1980))))))))
+
+organizationalObjective (el ? ? ? LatinAmericanIntegrationAssociation) (el ? ? ? PromotionOfFreeTrade)
+
+organizationalObjective (el ? ? ? LatinAmericanIntegrationAssociation) (el ? ? ? EconomicIntegration)
+
+dateEstablished (el ? ? ? MonetaryAndEconomicCommunityOfCentralAfrica) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 8)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1864))))))))
+
+organizationalObjective (el ? ? ? MonetaryAndEconomicCommunityOfCentralAfrica) (el ? ? ? EconomicIntegration)
+
+dateEstablished (el ? ? ? NonalignedMovement) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 6)) (descToDesc ? ? ? (MonthFn (desc September ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1961))))))))
+
+organizationalObjective (el ? ? ? NonalignedMovement) (el ? ? ? PoliticalCooperation)
+
+organizationalObjective (el ? ? ? NonalignedMovement) (el ? ? ? MilitaryCooperation)
+
+dateEstablished (el ? ? ? NordicCouncil) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 16)) (descToDesc ? ? ? (MonthFn (desc March ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1952))))))))
+
+organizationalObjective (el ? ? ? NordicCouncil) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? NordicCouncil) (el ? ? ? CulturalCooperation)
+
+organizationalObjective (el ? ? ? NordicCouncil) (el ? ? ? EnvironmentalCooperation)
+
+dateEstablished (el ? ? ? NordicInvestmentBank) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 4)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1975))))))))
+
+organizationalObjective (el ? ? ? NordicInvestmentBank) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? NordicInvestmentBank) (el ? ? ? EconomicDevelopment)
+
+dateEstablished (el ? ? ? NorthAtlanticTreatyOrganization) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 4)) (descToDesc ? ? ? (MonthFn (desc April ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1949))))))))
+
+organizationalObjective (el ? ? ? NorthAtlanticTreatyOrganization) (el ? ? ? MutualDefensePact)
+
+dateEstablished (el ? ? ? NuclearEnergyAgency) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 1)) (descToDesc ? ? ? (MonthFn (desc February ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1958))))))))
+
+organizationalObjective (el ? ? ? NuclearEnergyAgency) (el ? ? ? PeacefulUseOfAtomicPower)
+
+subOrganization (el ? ? ? NuclearEnergyAgency) (el ? ? ? OrganizationForEconomicCooperationAndDevelopment)
+
+dateEstablished (el ? ? ? NuclearSuppliersGroup) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1974))))
+
+organizationalObjective (el ? ? ? NuclearSuppliersGroup) (el ? ? ? NuclearExportControls)
+
+dateEstablished (el ? ? ? OrganizationForEconomicCooperationAndDevelopment) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 14)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1960))))))))
+
+organizationalObjective (el ? ? ? OrganizationForEconomicCooperationAndDevelopment) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? OrganizationForEconomicCooperationAndDevelopment) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? OrganizationForSecurityAndCooperationInEurope) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 1)) (descToDesc ? ? ? (MonthFn (desc January ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1995))))))))
+
+organizationalObjective (el ? ? ? OrganizationForSecurityAndCooperationInEurope) (el ? ? ? HumanRightsIssues)
+
+organizationalObjective (el ? ? ? OrganizationForSecurityAndCooperationInEurope) (el ? ? ? PromoteRegionalStability)
+
+organizationalObjective (el ? ? ? OrganizationForSecurityAndCooperationInEurope) (el ? ? ? ConventionalArmsControl)
+
+dateEstablished (el ? ? ? OrganizationForTheProhibitionOfChemicalWeapons) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 29)) (descToDesc ? ? ? (MonthFn (desc April ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1997))))))))
+
+organizationalObjective (el ? ? ? OrganizationForTheProhibitionOfChemicalWeapons) (el ? ? ? EliminateChemicalWeapons)
+
+dateEstablished (el ? ? ? OrganizationOfAfricanUnity) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 25)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1963))))))))
+
+organizationalObjective (el ? ? ? OrganizationOfAfricanUnity) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? OrganizationOfAfricanUnity) (el ? ? ? MilitaryCooperation)
+
+organizationalObjective (el ? ? ? OrganizationOfAfricanUnity) (el ? ? ? SocialDevelopment)
+
+organizationalObjective (el ? ? ? OrganizationOfAfricanUnity) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? OrganizationOfAfricanUnity) (el ? ? ? CulturalCooperation)
+
+organizationalObjective (el ? ? ? OrganizationOfAfricanUnity) (el ? ? ? PublicHealthConcern)
+
+dateEstablished (el ? ? ? OrganizationOfAmericanStates) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 14)) (descToDesc ? ? ? (MonthFn (desc April ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1890))))))))
+
+organizationalObjective (el ? ? ? OrganizationOfAmericanStates) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? OrganizationOfAmericanStates) (el ? ? ? SocialDevelopment)
+
+organizationalObjective (el ? ? ? OrganizationOfAmericanStates) (el ? ? ? PromoteRegionalStability)
+
+dateEstablished (el ? ? ? OrganizationOfArabPetroleumExportingCountries) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 9)) (descToDesc ? ? ? (MonthFn (desc January ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1968))))))))
+
+organizationalObjective (el ? ? ? OrganizationOfArabPetroleumExportingCountries) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? OrganizationOfEasternCaribbeanStates) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 18)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1981))))))))
+
+organizationalObjective (el ? ? ? OrganizationOfEasternCaribbeanStates) (el ? ? ? PoliticalCooperation)
+
+organizationalObjective (el ? ? ? OrganizationOfEasternCaribbeanStates) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? OrganizationOfEasternCaribbeanStates) (el ? ? ? MilitaryCooperation)
+
+dateEstablished (el ? ? ? OrganizationOfPetroleumExportingCountries) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 14)) (descToDesc ? ? ? (MonthFn (desc September ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1960))))))))
+
+organizationalObjective (el ? ? ? OrganizationOfPetroleumExportingCountries) (el ? ? ? EconomicPolicyCoordination)
+
+dateEstablished (el ? ? ? OrganizationOfTheIslamicConference) (descToDesc ? ? ? (MonthFn (desc September ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1969))))))
+
+organizationalObjective (el ? ? ? OrganizationOfTheIslamicConference) (el ? ? ? PoliticalCooperation)
+
+organizationalObjective (el ? ? ? OrganizationOfTheIslamicConference) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? OrganizationOfTheIslamicConference) (el ? ? ? CulturalCooperation)
+
+organizationalObjective (el ? ? ? OrganizationOfTheIslamicConference) (el ? ? ? SocialCooperation)
+
+dateEstablished (el ? ? ? PacificCommunity) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 6)) (descToDesc ? ? ? (MonthFn (desc February ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1947))))))))
+
+organizationalObjective (el ? ? ? PacificCommunity) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? PacificCommunity) (el ? ? ? SocialCooperation)
+
+dateEstablished (el ? ? ? PacificIslandForum) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 5)) (descToDesc ? ? ? (MonthFn (desc August ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1971))))))))
+
+organizationalObjective (el ? ? ? PacificIslandForum) (el ? ? ? PoliticalCooperation)
+
+dateEstablished (el ? ? ? PartnershipForPeace) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 11)) (descToDesc ? ? ? (MonthFn (desc January ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1994))))))))
+
+organizationalObjective (el ? ? ? PartnershipForPeace) (el ? ? ? PoliticalCooperation)
+
+organizationalObjective (el ? ? ? PartnershipForPeace) (el ? ? ? MilitaryCooperation)
+
+organizationalObjective (el ? ? ? PartnershipForPeace) (el ? ? ? PromoteRegionalStability)
+
+dateEstablished (el ? ? ? PermanentCourtOfArbitration) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 29)) (descToDesc ? ? ? (MonthFn (desc July ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1899))))))))
+
+organizationalObjective (el ? ? ? PermanentCourtOfArbitration) (el ? ? ? InternationalJustice)
+
+dateEstablished (el ? ? ? RioGroup) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1986))))
+
+organizationalObjective (el ? ? ? RioGroup) (el ? ? ? PoliticalCooperation)
+
+dateEstablished (el ? ? ? SouthAsianAssociationForRegionalCooperation) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 8)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1985))))))))
+
+organizationalObjective (el ? ? ? SouthAsianAssociationForRegionalCooperation) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? SouthAsianAssociationForRegionalCooperation) (el ? ? ? SocialCooperation)
+
+organizationalObjective (el ? ? ? SouthAsianAssociationForRegionalCooperation) (el ? ? ? CulturalCooperation)
+
+organizationalObjective (el ? ? ? SouthPacificRegionalTradeAndEconomicCooperationAgreement) (el ? ? ? EconomicCooperation)
+
+organizationalObjective (el ? ? ? SouthPacificRegionalTradeAndEconomicCooperationAgreement) (el ? ? ? PromotionOfFreeTrade)
+
+dateEstablished (el ? ? ? SouthernAfricanCustomsUnion) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 11)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1969))))))))
+
+organizationalObjective (el ? ? ? SouthernAfricanCustomsUnion) (el ? ? ? PromotionOfFreeTrade)
+
+organizationalObjective (el ? ? ? SouthernAfricanCustomsUnion) (el ? ? ? EfficientCustomsAdministration)
+
+dateEstablished (el ? ? ? SouthernAfricanDevelopmentCommunity) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 17)) (descToDesc ? ? ? (MonthFn (desc August ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1992))))))))
+
+organizationalObjective (el ? ? ? SouthernAfricanDevelopmentCommunity) (el ? ? ? EconomicIntegration)
+
+organizationalObjective (el ? ? ? SouthernAfricanDevelopmentCommunity) (el ? ? ? EconomicDevelopment)
+
+dateEstablished (el ? ? ? SouthernConeCommonMarket) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 26)) (descToDesc ? ? ? (MonthFn (desc March ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1991))))))))
+
+organizationalObjective (el ? ? ? SouthernConeCommonMarket) (el ? ? ? EconomicCooperation)
+
+dateEstablished (el ? ? ? UnitedNations) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 26)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1945))))))))
+
+organizationalObjective (el ? ? ? UnitedNations) (el ? ? ? InternationalPeaceAndSecurity)
+
+organizationalObjective (el ? ? ? UnitedNations) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? UnitedNations) (el ? ? ? SocialDevelopment)
+
+organizationalObjective (el ? ? ? UnitedNations) (el ? ? ? HumanitarianAid)
+
+organizationalObjective (el ? ? ? UnitedNations) (el ? ? ? CulturalCooperation)
+
+dateEstablished (el ? ? ? UnitedNationsChildrensFund) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 11)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1946))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsChildrensFund) (el ? ? ? ChildHealthServices)
+
+dateEstablished (el ? ? ? UnitedNationsCivilianPoliceMissionInHaiti) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 28)) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1997))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsCivilianPoliceMissionInHaiti) (el ? ? ? CivilPoliceTraining)
+
+dateEstablished (el ? ? ? UnitedNationsConferenceOnTradeAndDevelopment) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 30)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1964))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsConferenceOnTradeAndDevelopment) (el ? ? ? InternationalTradeSupport)
+
+dateEstablished (el ? ? ? UnitedNationsDevelopmentProgram) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 22)) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1965))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsDevelopmentProgram) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? UnitedNationsDevelopmentProgram) (el ? ? ? SocialDevelopment)
+
+organizationalObjective (el ? ? ? UnitedNationsDevelopmentProgram) (el ? ? ? TechnologyCooperation)
+
+dateEstablished (el ? ? ? UnitedNationsDisengagementObserverForce) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 31)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1974))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsDisengagementObserverForce) (el ? ? ? ObservationAndMonitoring)
+
+dateEstablished (el ? ? ? UnitedNationsEducationalScientificAndCulturalOrganization) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 16)) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1945))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsEducationalScientificAndCulturalOrganization) (el ? ? ? ScientificCooperation)
+
+organizationalObjective (el ? ? ? UnitedNationsEducationalScientificAndCulturalOrganization) (el ? ? ? CulturalCooperation)
+
+organizationalObjective (el ? ? ? UnitedNationsEducationalScientificAndCulturalOrganization) (el ? ? ? EducationalCooperation)
+
+dateEstablished (el ? ? ? UnitedNationsEnvironmentProgram) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 15)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1972))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsEnvironmentProgram) (el ? ? ? EnvironmentalCooperation)
+
+dateEstablished (el ? ? ? UnitedNationsGeneralAssembly) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 26)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1945))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsGeneralAssembly) (el ? ? ? PoliticalCooperation)
+
+subOrganization (el ? ? ? UnitedNationsGeneralAssembly) (el ? ? ? UnitedNations)
+
+subOrganization (el ? ? ? UnitedNationsChildrensFund) (el ? ? ? UnitedNationsGeneralAssembly)
+
+subOrganization (el ? ? ? UnitedNationsConferenceOnTradeAndDevelopment) (el ? ? ? UnitedNationsGeneralAssembly)
+
+subOrganization (el ? ? ? UnitedNationsDevelopmentProgram) (el ? ? ? UnitedNationsGeneralAssembly)
+
+subOrganization (el ? ? ? UnitedNationsEnvironmentProgram) (el ? ? ? UnitedNationsGeneralAssembly)
+
+subOrganization (el ? ? ? UnitedNationsHighCommissionerForRefugees) (el ? ? ? UnitedNationsGeneralAssembly)
+
+subOrganization (el ? ? ? UnitedNationsInstituteForTrainingAndResearch) (el ? ? ? UnitedNationsGeneralAssembly)
+
+subOrganization (el ? ? ? UnitedNationsPopulationFund) (el ? ? ? UnitedNationsGeneralAssembly)
+
+subOrganization (el ? ? ? UnitedNationsReliefAndWorksAgencyForPalestineRefugeesInTheNearEast) (el ? ? ? UnitedNationsGeneralAssembly)
+
+subOrganization (el ? ? ? UnitedNationsResearchInstituteForSocialDevelopment) (el ? ? ? UnitedNationsGeneralAssembly)
+
+subOrganization (el ? ? ? UnitedNationsUniversity) (el ? ? ? UnitedNationsGeneralAssembly)
+
+subOrganization (el ? ? ? WorldFoodProgram) (el ? ? ? UnitedNationsGeneralAssembly)
+
+subOrganization (el ? ? ? InternationalResearchAndTrainingInstituteForTheAdvancementOfWomen) (el ? ? ? UnitedNationsGeneralAssembly)
+
+organizationalObjective (el ? ? ? InternationalResearchAndTrainingInstituteForTheAdvancementOfWomen) (el ? ? ? GenderEquality)
+
+subOrganization (el ? ? ? UnitedNationsCenterForHumanSettlements) (el ? ? ? UnitedNationsGeneralAssembly)
+
+organizationalObjective (el ? ? ? UnitedNationsCenterForHumanSettlements) (el ? ? ? ImproveHumanSettlementConditions)
+
+organizationalObjective (el ? ? ? UnitedNationsCenterForHumanSettlements) (el ? ? ? ReducePoverty)
+
+organizationalObjective (el ? ? ? UnitedNationsCenterForHumanSettlements) (el ? ? ? PromoteSustainableDevelopment)
+
+subOrganization (el ? ? ? UnitedNationsHighCommissionerForHumanRights) (el ? ? ? UnitedNationsGeneralAssembly)
+
+organizationalObjective (el ? ? ? UnitedNationsHighCommissionerForHumanRights) (el ? ? ? HumanRightsIssues)
+
+subOrganization (el ? ? ? UnitedNationsInstituteForDisarmamentResearch) (el ? ? ? UnitedNationsGeneralAssembly)
+
+organizationalObjective (el ? ? ? UnitedNationsInstituteForDisarmamentResearch) (el ? ? ? ArmsControl)
+
+subOrganization (el ? ? ? UnitedNationsInterregionalCrimeAndJusticeResearchInstitute) (el ? ? ? UnitedNationsGeneralAssembly)
+
+dateEstablished (el ? ? ? UnitedNationsInterregionalCrimeAndJusticeResearchInstitute) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 29)) (descToDesc ? ? ? (MonthFn (desc April ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1969))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsInterregionalCrimeAndJusticeResearchInstitute) (el ? ? ? ReducingCrime)
+
+organizationalObjective (el ? ? ? UnitedNationsInterregionalCrimeAndJusticeResearchInstitute) (el ? ? ? EducationalCooperation)
+
+subOrganization (el ? ? ? UnitedNationsOfficeOfProjectServices) (el ? ? ? UnitedNationsGeneralAssembly)
+
+organizationalObjective (el ? ? ? UnitedNationsOfficeOfProjectServices) (el ? ? ? AdministrationAndManagement)
+
+subOrganization (el ? ? ? UnitedNationsSystemStaffCollege) (el ? ? ? UnitedNationsGeneralAssembly)
+
+organizationalObjective (el ? ? ? UnitedNationsSystemStaffCollege) (el ? ? ? EducationalCooperation)
+
+dateEstablished (el ? ? ? UnitedNationsHighCommissionerForRefugees) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 3)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1949))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsHighCommissionerForRefugees) (el ? ? ? HumanitarianAssistance)
+
+organizationalObjective (el ? ? ? UnitedNationsHighCommissionerForRefugees) (el ? ? ? RefugeeAssistance)
+
+dateEstablished (el ? ? ? UnitedNationsIndustrialDevelopmentOrganization) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 17)) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1966))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsIndustrialDevelopmentOrganization) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? UnitedNationsIndustrialDevelopmentOrganization) (el ? ? ? TechnologyCooperation)
+
+dateEstablished (el ? ? ? UnitedNationsInstituteForTrainingAndResearch) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 11)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1963))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsInstituteForTrainingAndResearch) (el ? ? ? EducationalCooperation)
+
+dateEstablished (el ? ? ? UnitedNationsInterimAdminstrationMissionInKosovo) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 10)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1999))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsInterimAdminstrationMissionInKosovo) (el ? ? ? HumanitarianAssistance)
+
+organizationalObjective (el ? ? ? UnitedNationsInterimAdminstrationMissionInKosovo) (el ? ? ? TransitionalAdministration)
+
+dateEstablished (el ? ? ? UnitedNationsInterimForceInLebanon) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 19)) (descToDesc ? ? ? (MonthFn (desc March ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1978))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsInterimForceInLebanon) (el ? ? ? TransitionalAdministration)
+
+organizationalObjective (el ? ? ? UnitedNationsInterimForceInLebanon) (el ? ? ? ObservationAndMonitoring)
+
+dateEstablished (el ? ? ? UnitedNationsIraqKuwaitObservationMission) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 9)) (descToDesc ? ? ? (MonthFn (desc April ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1991))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsIraqKuwaitObservationMission) (el ? ? ? ObservationAndMonitoring)
+
+dateEstablished (el ? ? ? UnitedNationsMilitaryObserverGroupInIndiaAndPakistan) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 24)) (descToDesc ? ? ? (MonthFn (desc January ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1949))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsMilitaryObserverGroupInIndiaAndPakistan) (el ? ? ? ObservationAndMonitoring)
+
+dateEstablished (el ? ? ? UnitedNationsMissionForTheReferendumInWesternSahara) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 29)) (descToDesc ? ? ? (MonthFn (desc April ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1991))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsMissionForTheReferendumInWesternSahara) (el ? ? ? ObservationAndMonitoring)
+
+organizationalObjective (el ? ? ? UnitedNationsMissionForTheReferendumInWesternSahara) (el ? ? ? TransitionalAdministration)
+
+dateEstablished (el ? ? ? UnitedNationsMissionInBosniaAndHerzegovina) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 21)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1995))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsMissionInBosniaAndHerzegovina) (el ? ? ? SupportLawEnforcement)
+
+organizationalObjective (el ? ? ? UnitedNationsMissionInBosniaAndHerzegovina) (el ? ? ? CivilPoliceTraining)
+
+organizationalObjective (el ? ? ? UnitedNationsMissionInBosniaAndHerzegovina) (el ? ? ? ObservationAndMonitoring)
+
+dateEstablished (el ? ? ? UnitedNationsMissionInEthiopiaAndEritrea) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 31)) (descToDesc ? ? ? (MonthFn (desc July ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 2000))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsMissionInEthiopiaAndEritrea) (el ? ? ? ObservationAndMonitoring)
+
+dateEstablished (el ? ? ? UnitedNationsMissionInSierraLeone) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 22)) (descToDesc ? ? ? (MonthFn (desc October ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1999))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsMissionInSierraLeone) (el ? ? ? TransitionalAdministration)
+
+organizationalObjective (el ? ? ? UnitedNationsMissionInSierraLeone) (el ? ? ? ObservationAndMonitoring)
+
+dateEstablished (el ? ? ? UnitedNationsMissionOfObserversInPrevlaka) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 1)) (descToDesc ? ? ? (MonthFn (desc February ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1996))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsMissionOfObserversInPrevlaka) (el ? ? ? ObservationAndMonitoring)
+
+dateEstablished (el ? ? ? UnitedNationsMissionOfObserversInTajikistan) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 16)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1994))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsMissionOfObserversInTajikistan) (el ? ? ? TransitionalAdministration)
+
+organizationalObjective (el ? ? ? UnitedNationsMissionOfObserversInTajikistan) (el ? ? ? ObservationAndMonitoring)
+
+dateEstablished (el ? ? ? UnitedNationsMonitoringAndVerificationCommission) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1999))))
+
+organizationalObjective (el ? ? ? UnitedNationsMonitoringAndVerificationCommission) (el ? ? ? ObservationAndMonitoring)
+
+organizationalObjective (el ? ? ? UnitedNationsMonitoringAndVerificationCommission) (el ? ? ? ControlWeaponsOfMassDestruction)
+
+dateEstablished (el ? ? ? UnitedNationsObserverMissionInGeorgia) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 24)) (descToDesc ? ? ? (MonthFn (desc August ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1993))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsObserverMissionInGeorgia) (el ? ? ? ObservationAndMonitoring)
+
+agentOperatesInArea (el ? ? ? UnitedNationsObserverMissionInGeorgia) (el ? ? ? RepublicOfGeorgia)
+
+dateEstablished (el ? ? ? UnitedNationsOrganizationMissionInTheDemocraticRepublicOfTheCongo) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 30)) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1999))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsOrganizationMissionInTheDemocraticRepublicOfTheCongo) (el ? ? ? ObservationAndMonitoring)
+
+dateEstablished (el ? ? ? UnitedNationsPeaceKeepingForceInCyprus) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 4)) (descToDesc ? ? ? (MonthFn (desc March ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1964))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsPeaceKeepingForceInCyprus) (el ? ? ? PeacekeepingOperation)
+
+dateEstablished (el ? ? ? UnitedNationsPopulationFund) (descToDesc ? ? ? (MonthFn (desc July ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1967))))))
+
+organizationalObjective (el ? ? ? UnitedNationsPopulationFund) (el ? ? ? ReproductiveHealthAndFamilyPlannning)
+
+organizationalObjective (el ? ? ? UnitedNationsPopulationFund) (el ? ? ? PopulationPolicySupport)
+
+dateEstablished (el ? ? ? UnitedNationsPreventiveDeploymentForce) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 31)) (descToDesc ? ? ? (MonthFn (desc March ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1995))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsPreventiveDeploymentForce) (el ? ? ? ObservationAndMonitoring)
+
+dateDissolved (el ? ? ? UnitedNationsPreventiveDeploymentForce) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 25)) (descToDesc ? ? ? (MonthFn (desc March ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1999))))))))
+
+dateEstablished (el ? ? ? UnitedNationsReliefAndWorksAgencyForPalestineRefugeesInTheNearEast) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 8)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1949))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsReliefAndWorksAgencyForPalestineRefugeesInTheNearEast) (el ? ? ? RefugeeAssistance)
+
+dateEstablished (el ? ? ? UnitedNationsResearchInstituteForSocialDevelopment) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1963))))
+
+organizationalObjective (el ? ? ? UnitedNationsResearchInstituteForSocialDevelopment) (el ? ? ? SocioeconomicResearch)
+
+dateEstablished (el ? ? ? UnitedNationsSecretariat) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 26)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1945))))))))
+
+subOrganization (el ? ? ? UnitedNationsSecretariat) (el ? ? ? UnitedNations)
+
+dateEstablished (el ? ? ? UnitedNationsSecurityCouncil) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 26)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1945))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsSecurityCouncil) (el ? ? ? InternationalPeaceAndSecurity)
+
+subOrganization (el ? ? ? UnitedNationsSecurityCouncil) (el ? ? ? UnitedNations)
+
+subOrganization (el ? ? ? InternationalCriminalTribunalForTheFormerYugoslavia) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? InternationalCriminalTribunalForRwanda) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsCompensationCommission) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsDisengagementObserverForce) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsInterimAdministrationMissionInKosovo) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsInterimForceInLebanon) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsIraqKuwaitBoundaryDemarcationCommission) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsIraqKuwaitObservationMission) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsMilitaryObserverGroupInIndiaAndPakistan) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsMissionForTheReferendumInWesternSahara) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsMissionInBosniaAndHerzegovina) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsMissionInEthiopiaAndEritrea) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsMissionInSierraLeone) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsMissionOfObserversInPrevlaka) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsMonitoringAndVerificationCommission) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsObserverMissionInGeorgia) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsOrganizationMissionInTheDemocraticRepublicOfTheCongo) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsPeaceKeepingForceInCyprus) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsTransitionalAdministrationInEastTimor) (el ? ? ? UnitedNationsSecurityCouncil)
+
+subOrganization (el ? ? ? UnitedNationsTruceSupervisionOrganization) (el ? ? ? UnitedNationsSecurityCouncil)
+
+dateEstablished (el ? ? ? InternationalCriminalTribunalForTheFormerYugoslavia) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 25)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1993))))))))
+
+organizationalObjective (el ? ? ? InternationalCriminalTribunalForTheFormerYugoslavia) (el ? ? ? WarCrimesProsecution)
+
+organizationalObjective (el ? ? ? InternationalCriminalTribunalForRwanda) (el ? ? ? WarCrimesProsecution)
+
+dateEstablished (el ? ? ? InternationalCriminalTribunalForRwanda) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 8)) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1994))))))))
+
+dateEstablished (el ? ? ? UnitedNationsCompensationCommission) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1991))))
+
+organizationalObjective (el ? ? ? UnitedNationsCompensationCommission) (el ? ? ? CompensationAndReparation)
+
+dateEstablished (el ? ? ? UnitedNationsIraqKuwaitBoundaryDemarcationCommission) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1991))))
+
+organizationalObjective (el ? ? ? UnitedNationsIraqKuwaitBoundaryDemarcationCommission) (el ? ? ? BoundaryDetermination)
+
+dateEstablished (el ? ? ? UnitedNationsTransitionalAdministrationInEastTimor) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 25)) (descToDesc ? ? ? (MonthFn (desc October ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1999))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsTransitionalAdministrationInEastTimor) (el ? ? ? TransitionalAdministration)
+
+organizationalObjective (el ? ? ? UnitedNationsTransitionalAdministrationInEastTimor) (el ? ? ? HumanitarianAssistance)
+
+dateEstablished (el ? ? ? UnitedNationsTruceSupervisionOrganization) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1948))))))
+
+organizationalObjective (el ? ? ? UnitedNationsTruceSupervisionOrganization) (el ? ? ? ObservationAndMonitoring)
+
+organizationalObjective (el ? ? ? UnitedNationsTruceSupervisionOrganization) (el ? ? ? PeacekeepingOperation)
+
+dateEstablished (el ? ? ? UnitedNationsTrusteeshipCouncil) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 26)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1945))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsTrusteeshipCouncil) (el ? ? ? TransitionalAdministration)
+
+dateEstablished (el ? ? ? UnitedNationsUniversity) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 3)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1973))))))))
+
+organizationalObjective (el ? ? ? UnitedNationsUniversity) (el ? ? ? SocioeconomicResearch)
+
+dateEstablished (el ? ? ? UniversalPostalUnion) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 9)) (descToDesc ? ? ? (MonthFn (desc October ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1874))))))))
+
+organizationalObjective (el ? ? ? UniversalPostalUnion) (el ? ? ? InfrastructureCooperation)
+
+dateEstablished (el ? ? ? WarsawPact) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 14)) (descToDesc ? ? ? (MonthFn (desc May ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1955))))))))
+
+dateDissolved (el ? ? ? WarsawPact) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 1)) (descToDesc ? ? ? (MonthFn (desc July ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1991))))))))
+
+organizationalObjective (el ? ? ? WarsawPact) (el ? ? ? MutualDefensePact)
+
+dateEstablished (el ? ? ? WassenaarArrangement) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 12)) (descToDesc ? ? ? (MonthFn (desc July ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1996))))))))
+
+organizationalObjective (el ? ? ? WassenaarArrangement) (el ? ? ? ArmsControl)
+
+dateEstablished (el ? ? ? WestAfricanDevelopmentBank) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 14)) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1973))))))))
+
+organizationalObjective (el ? ? ? WestAfricanDevelopmentBank) (el ? ? ? EconomicDevelopment)
+
+organizationalObjective (el ? ? ? WestAfricanDevelopmentBank) (el ? ? ? EconomicIntegration)
+
+dateEstablished (el ? ? ? WestAfricanEconomicAndMonetaryUnion) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 1)) (descToDesc ? ? ? (MonthFn (desc August ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1994))))))))
+
+organizationalObjective (el ? ? ? WestAfricanEconomicAndMonetaryUnion) (el ? ? ? EconomicIntegration)
+
+dateEstablished (el ? ? ? WesternEuropeanUnion) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 23)) (descToDesc ? ? ? (MonthFn (desc October ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1954))))))))
+
+organizationalObjective (el ? ? ? WesternEuropeanUnion) (el ? ? ? MutualDefensePact)
+
+organizationalObjective (el ? ? ? WesternEuropeanUnion) (el ? ? ? PoliticalIntegration)
+
+subOrganization (el ? ? ? InternationalBankForReconstructionAndDevelopment) (el ? ? ? WorldBankGroup)
+
+subOrganization (el ? ? ? InternationalDevelopmentAssociation) (el ? ? ? WorldBankGroup)
+
+subOrganization (el ? ? ? InternationalFinanceCorporation) (el ? ? ? WorldBankGroup)
+
+dateEstablished (el ? ? ? WorldConfederationOfLabor) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 19)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1920))))))))
+
+organizationalObjective (el ? ? ? WorldConfederationOfLabor) (el ? ? ? PromoteTradeUnionism)
+
+dateEstablished (el ? ? ? WorldFederationOfTradeUnions) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 3)) (descToDesc ? ? ? (MonthFn (desc October ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1945))))))))
+
+organizationalObjective (el ? ? ? WorldFederationOfTradeUnions) (el ? ? ? PromoteTradeUnionism)
+
+dateEstablished (el ? ? ? WorldFoodProgram) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 24)) (descToDesc ? ? ? (MonthFn (desc November ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1961))))))))
+
+organizationalObjective (el ? ? ? WorldFoodProgram) (el ? ? ? FoodAid)
+
+dateEstablished (el ? ? ? WorldHealthOrganization) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 22)) (descToDesc ? ? ? (MonthFn (desc July ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1946))))))))
+
+organizationalObjective (el ? ? ? WorldHealthOrganization) (el ? ? ? PublicHealthConcern)
+
+dateEstablished (el ? ? ? WorldIntellectualPropertyOrganization) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 14)) (descToDesc ? ? ? (MonthFn (desc July ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1967))))))))
+
+organizationalObjective (el ? ? ? WorldIntellectualPropertyOrganization) (el ? ? ? IntellectualPropertyProtection)
+
+organizationalObjective (el ? ? ? WorldMeteorologicalOrganization) (el ? ? ? ScientificCooperation)
+
+dateEstablished (el ? ? ? WorldTourismOrganization) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 2)) (descToDesc ? ? ? (MonthFn (desc January ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1975))))))))
+
+organizationalObjective (el ? ? ? WorldTourismOrganization) (el ? ? ? PromotionOfTourism)
+
+dateEstablished (el ? ? ? WorldTradeOrganization) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 15)) (descToDesc ? ? ? (MonthFn (desc April ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1994))))))))
+
+organizationalObjective (el ? ? ? WorldTradeOrganization) (el ? ? ? PromotionOfFreeTrade)
+
+organizationalObjective (el ? ? ? ZanggerCommittee) (el ? ? ? NuclearExportControls)
+
+subOrganization (el ? ? ? USCustomsAndBorderProtection) (el ? ? ? DepartmentOfHomelandSecurity)
+
+part (el ? ? ? UnitedStatesHouseOfRepresentatives) (el ? ? ? UnitedStatesCongress)
+
+part (el ? ? ? UnitedStatesSenate) (el ? ? ? UnitedStatesCongress)
+
+subOrganization (el ? ? ? DepartmentOfHomelandSecurity) (el ? ? ? (GovernmentFn (el ? ? ? UnitedStates)))
+
+dateEstablished (el ? ? ? DepartmentOfHomelandSecurity) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 2002))))
+
+(not(equal(el ? ? ? BigSix)(el ? ? ? GroupOf6))
+
+(not(member(el ? ? ? Denmark)(el ? ? ? EuropeanMonetaryUnion))
+
+(not(member(el ? ? ? Sweden)(el ? ? ? EuropeanMonetaryUnion))
+
+(not(member(el ? ? ? UnitedKingdom)(el ? ? ? EuropeanMonetaryUnion))

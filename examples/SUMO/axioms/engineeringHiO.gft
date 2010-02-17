@@ -1,0 +1,2 @@
+
+PartialOrderingRelation ? (\x,y -> abstractPart x y)

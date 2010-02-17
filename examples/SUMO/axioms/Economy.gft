@@ -1,0 +1,102 @@
+
+forall (both Object Agent) (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? FormerSovietOrEasternEuropeanCountry))( economyType(var ? ? ? AREA)(el ? ? ? CountryInTransition)))
+
+forall (both Object Agent) (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? FourDragonsEconomy))( economyType(var ? ? ? AREA)(el ? ? ? LessDevelopedCountry)))
+
+forall (both Object Agent) (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? FourDragonsEconomy))( economyType(var ? ? ? AREA)(el ? ? ? AdvancedEconomy)))
+
+forall (both Object Agent) (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? LowIncomeCountry))( economyType(var ? ? ? AREA)(el ? ? ? LeastDevelopedCountry)))
+
+forall (both Object (both SelfConnectedObject Agent)) (\AREA ->  impl (and ( attribute(var ? ? ? AREA)(el ? ? ? HighIncomeCountry))( not (member(var ? ? ? AREA)(el ? ? ? OrganizationOfPetroleumExportingCountries))))( economyType(var ? ? ? AREA)(el ? ? ? DevelopedCountry)))
+
+forall (both Object Agent) (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? MajorIndustrialEconomy))( economyType(var ? ? ? AREA)(el ? ? ? DevelopedCountry)))
+
+forall (both Object Agent) (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? MajorIndustrialEconomy))( economyType(var ? ? ? AREA)(el ? ? ? AdvancedEconomy)))
+
+forall (both SelfConnectedObject Object) (\STATE ->  impl ( member(var ? ? ? STATE)(el ? ? ? GroupOf7))( attribute(var ? ? ? STATE)(el ? ? ? MajorIndustrialEconomy)))
+
+forall (both Object Agent) (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? DemocraticSocialism))( governmentType(var ? ? ? AREA)(el ? ? ? Democracy)))
+
+forall Nation (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? CommunistState))( economyType(var ? ? ? AREA)(el ? ? ? CentrallyPlannedEconomy)))
+
+forall (both Object Agent) (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? PrivatizingEconomy))( economyType(var ? ? ? AREA)(el ? ? ? CountryInTransition)))
+
+forall (both RealNumber Quantity) (\FRACTION -> forall IndustryAttribute (\SECTOR -> forall GeopoliticalArea (\AREA ->  impl ( sectorCompositionOfGDP(var ? ? ? AREA)(var ? ? ? SECTOR)(var ? ? ? FRACTION))( lessThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toRealNum 1.0))))))
+
+forall (both RealNumber Quantity) (\FRACTION -> forall GeopoliticalArea (\AREA ->  impl ( populationFractionBelowPovertyLine(var ? ? ? AREA)(var ? ? ? FRACTION))( lessThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toRealNum 1.0)))))
+
+forall (both RealNumber Quantity) (\FRACTION -> forall GeopoliticalArea (\AREA ->  impl ( lowestDecileShareOfHouseholdIncome(var ? ? ? AREA)(var ? ? ? FRACTION))( lessThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toRealNum 1.0)))))
+
+forall (both RealNumber Quantity) (\FRACTION -> forall GeopoliticalArea (\AREA ->  impl ( highestDecileShareOfHouseholdIncome(var ? ? ? AREA)(var ? ? ? FRACTION))( lessThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toRealNum 1.0)))))
+
+forall (both NonnegativeRealNumber Quantity) (\INDEX -> forall GeopoliticalArea (\AREA ->  impl ( incomeDistributionByGiniIndex(var ? ? ? AREA)(var ? ? ? INDEX))( lessThanOrEqualTo(var ? ? ? INDEX)(el ? ? ? (toInt 100)))))
+
+forall (both RealNumber Quantity) (\FRACTION -> forall GeopoliticalArea (\AREA ->  impl ( inflationRateOfConsumerPrices(var ? ? ? AREA)(var ? ? ? FRACTION))( lessThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toRealNum 1.0)))))
+
+forall (both RealNumber Quantity) (\FRACTION -> forall Attribute (\SECTOR -> forall GeopoliticalArea (\AREA ->  impl ( laborForceFractionByOccupation(var ? ? ? AREA)(var ? ? ? SECTOR)(var ? ? ? FRACTION))( lessThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toRealNum 1.0))))))
+
+forall (both CurrencyMeasure Quantity) (\TOTALAMOUNT -> forall (both CurrencyMeasure Quantity) (\CAPAMOUNT -> forall GeopoliticalArea (\AREA -> forall TimePosition (\TIME ->  impl (and ( holdsDuring(var ? ? ? TIME)( capitalExpendituresOfArea(var ? ? ? AREA)(var ? ? ? CAPAMOUNT)))( holdsDuring(var ? ? ? TIME)( annualExpendituresOfArea(var ? ? ? AREA)(var ? ? ? TOTALAMOUNT))))( greaterThan(var ? ? ? TOTALAMOUNT)(var ? ? ? CAPAMOUNT))))))
+
+forall PositiveInteger (\NTH -> forall IndustryAttribute (\SECTOR -> forall GeopoliticalArea (\AREA ->  impl ( industryRankByOutput(var ? ? ? AREA)(var ? ? ? SECTOR)(var ? ? ? NTH))( industryOfArea(var ? ? ? AREA)(var ? ? ? SECTOR)))))
+
+forall MetallurgicalPlant (\ORG ->  attribute(var ? ? ? ORG)(el ? ? ? MetallurgyIndustry))
+
+forall (both RealNumber Quantity) (\X -> forall Entity (\AMOUNT ->  impl ( equal(var ? ? ? AMOUNT)( el ? ? ? ( MeasureFn(var ? ? ? X)(el ? ? ? KilowattHour))))( equal(var ? ? ? AMOUNT)( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 3600000))(var ? ? ? X)))(el ? ? ? Joule))))))
+
+forall (both RealNumber Quantity) (\X -> forall Entity (\AMOUNT ->  impl ( equal(var ? ? ? AMOUNT)( el ? ? ? ( MeasureFn(var ? ? ? X)(el ? ? ? Joule))))( equal(var ? ? ? AMOUNT)( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(el ? ? ? (toRealNum 0.0002778))(var ? ? ? X)))(el ? ? ? Watt))))))
+
+forall (both Agent Entity) (\AGENT2 -> forall (both Agent Object) (\AGENT1 ->  impl ( exportPartner(var ? ? ? AGENT1)(var ? ? ? AGENT2))(exists Exporting (\EXPORT -> and ( origin(var ? ? ? EXPORT)(var ? ? ? AGENT1))( destination(var ? ? ? EXPORT)(var ? ? ? AGENT2))))))
+
+forall Exporting (\EXPORT -> exists Object (\ITEM ->  patient(var ? ? ? EXPORT)(var ? ? ? ITEM)))
+
+forall Exporting (\EXPORT -> forall GeopoliticalArea (\AREA -> forall (both Entity Physical) (\ITEM ->  impl (and ( patient(var ? ? ? EXPORT)(var ? ? ? ITEM))( origin(var ? ? ? EXPORT)(var ? ? ? AREA)))( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? EXPORT)))))( not (located(var ? ? ? ITEM)(var ? ? ? AREA)))))))
+
+forall Exporting (\EXPORT -> forall GeopoliticalArea (\AREA -> forall (both Entity Physical) (\ITEM ->  impl (and ( patient(var ? ? ? EXPORT)(var ? ? ? ITEM))( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? EXPORT)))))( located(var ? ? ? ITEM)(var ? ? ? AREA))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? EXPORT)))))( located(var ? ? ? ITEM)(var ? ? ? AREA))))))
+
+forall Exporting (\EXPORT -> forall GeopoliticalArea (\AREA -> forall GeopoliticalArea (\AREA1 -> forall (both Entity Physical) (\ITEM ->  impl (and ( patient(var ? ? ? EXPORT)(var ? ? ? ITEM))( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? EXPORT)))))( located(var ? ? ? ITEM)(var ? ? ? AREA))))(exists GeopoliticalArea (\AREA2 -> and ( geopoliticalSubdivision(var ? ? ? AREA1)(var ? ? ? AREA2))(and ( geopoliticalSubdivision(var ? ? ? AREA2)(var ? ? ? AREA1))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? EXPORT)))))( not (located(var ? ? ? ITEM)(var ? ? ? AREA2)))))))))))
+
+forall Exporting (\EXPORT -> forall GeopoliticalArea (\AREA -> forall (both Entity Physical) (\ITEM ->  impl (and ( patient(var ? ? ? EXPORT)(var ? ? ? ITEM))( destination(var ? ? ? EXPORT)(var ? ? ? AREA)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? EXPORT)))))( located(var ? ? ? ITEM)(var ? ? ? AREA))))))
+
+forall Exporting (\EXPORT -> forall GeopoliticalArea (\AREA1 -> forall GeopoliticalArea (\AREA2 -> forall (both Entity Physical) (\ITEM ->  impl (and ( patient(var ? ? ? EXPORT)(var ? ? ? ITEM))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? EXPORT)))))( located(var ? ? ? ITEM)(var ? ? ? AREA1)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? EXPORT)))))( located(var ? ? ? ITEM)(var ? ? ? AREA2)))))( not ( located(var ? ? ? AREA2)(var ? ? ? AREA1)))))))
+
+forall Exporting (\EXPORT -> forall GeopoliticalArea (\AREA1 -> forall GeopoliticalArea (\AREA2 -> forall Entity (\ITEM ->  impl (and ( patient(var ? ? ? EXPORT)(var ? ? ? ITEM))(and ( origin(var ? ? ? EXPORT)(var ? ? ? AREA1))( destination(var ? ? ? EXPORT)(var ? ? ? AREA2))))( not (equal(var ? ? ? AREA1)(var ? ? ? AREA2)))))))
+
+forall Exporting (\EXPORT -> forall GeopoliticalArea (\AREA1 -> forall GeopoliticalArea (\AREA2 -> forall Entity (\ITEM ->  impl (and ( patient(var ? ? ? EXPORT)(var ? ? ? ITEM))(and ( origin(var ? ? ? EXPORT)(var ? ? ? AREA1))( destination(var ? ? ? EXPORT)(var ? ? ? AREA2))))( not (located(var ? ? ? AREA2)(var ? ? ? AREA1)))))))
+
+forall Quantity (\YEAR -> forall PositiveRealNumber (\FRACTION -> forall GeopoliticalArea (\AREA2 -> forall GeopoliticalArea (\AREA1 ->  impl ( exportPartnerByFraction(var ? ? ? AREA1)(var ? ? ? AREA2)(var ? ? ? FRACTION))( lessThanOrEqualTo(var ? ? ? YEAR)(el ? ? ? (toRealNum 1.0)))))))
+
+forall (both Agent Object) (\AGENT2 -> forall (both Agent Entity) (\AGENT1 ->  impl ( importPartner(var ? ? ? AGENT1)(var ? ? ? AGENT2))(exists Exporting (\EXPORT -> and ( origin(var ? ? ? EXPORT)(var ? ? ? AGENT2))( destination(var ? ? ? EXPORT)(var ? ? ? AGENT1))))))
+
+forall Quantity (\YEAR -> forall PositiveRealNumber (\FRACTION -> forall GeopoliticalArea (\AREA2 -> forall GeopoliticalArea (\AREA1 ->  impl ( importPartnerByFraction(var ? ? ? AREA1)(var ? ? ? AREA2)(var ? ? ? FRACTION))( lessThanOrEqualTo(var ? ? ? YEAR)(el ? ? ? (toRealNum 1.0)))))))
+
+forall Agriculture (\AG ->  resultType(var ? ? ? AG)(desc AgriculturalProduct ? ?))
+
+forall PackagedFoodProduct (\ITEM -> exists FoodProduct (\FOOD -> exists ProductPackage (\PACKAGE ->  contains(var ? ? ? PACKAGE)(var ? ? ? FOOD))))
+
+forall PackagedBeverageProduct (\ITEM -> exists BeverageProduct (\DRINK -> exists ProductPackage (\PACKAGE ->  contains(var ? ? ? PACKAGE)(var ? ? ? DRINK))))
+
+forall Bauxite (\ORE -> exists Alumina (\METAL ->  component(var ? ? ? METAL)(var ? ? ? ORE)))
+
+forall IronOre (\ORE -> exists Iron (\METAL ->  component(var ? ? ? METAL)(var ? ? ? ORE)))
+
+forall CopperOre (\ORE -> exists Copper (\METAL ->  component(var ? ? ? METAL)(var ? ? ? ORE)))
+
+forall NickelOre (\ORE -> exists Nickel (\METAL ->  component(var ? ? ? METAL)(var ? ? ? ORE)))
+
+forall LeadOre (\ORE -> exists Lead (\METAL ->  component(var ? ? ? METAL)(var ? ? ? ORE)))
+
+forall ZincOre (\ORE -> exists Zinc (\METAL ->  component(var ? ? ? METAL)(var ? ? ? ORE)))
+
+forall Steel (\ITEM -> exists Iron (\PART ->  part(var ? ? ? PART)(var ? ? ? ITEM)))
+
+forall Steel (\ITEM -> exists Carbon (\PART ->  part(var ? ? ? PART)(var ? ? ? ITEM)))
+
+forall IronMetal (\ITEM -> exists Iron (\PART ->  part(var ? ? ? PART)(var ? ? ? ITEM)))
+
+forall AluminumMetal (\ITEM -> exists Aluminum (\PART ->  part(var ? ? ? PART)(var ? ? ? ITEM)))
+
+forall LeadMetal (\ITEM -> exists Lead (\PART ->  part(var ? ? ? PART)(var ? ? ? ITEM)))
+
+forall Concrete (\CONCRETE -> exists Mineral (\PART ->  component(var ? ? ? PART)(var ? ? ? CONCRETE)))
+
+forall Concrete (\CONCRETE -> exists Cement (\PART ->  component(var ? ? ? PART)(var ? ? ? CONCRETE)))

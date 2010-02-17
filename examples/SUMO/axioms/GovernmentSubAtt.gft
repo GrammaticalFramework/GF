@@ -1,0 +1,252 @@
+
+subAttribute (el ? ? ? HereditaryMonarchy) (el ? ? ? Monarchy)
+
+subAttribute (el ? ? ? Chiefdom) (el ? ? ? Monarchy)
+
+subAttribute (el ? ? ? ConstitutionalMonarchy) (el ? ? ? Monarchy)
+
+subAttribute (el ? ? ? AbsoluteMonarchy) (el ? ? ? Monarchy)
+
+subAttribute (el ? ? ? ParliamentaryRepublic) (el ? ? ? ParliamentaryGovernment)
+
+subAttribute (el ? ? ? ParliamentaryDemocracy) (el ? ? ? ParliamentaryGovernment)
+
+subAttribute (el ? ? ? FederalParliamentaryDemocracy) (el ? ? ? ParliamentaryGovernment)
+
+subAttribute (el ? ? ? ConstitutionalParliamentaryDemocracy) (el ? ? ? ParliamentaryGovernment)
+
+subAttribute (el ? ? ? FederalRepublic) (el ? ? ? FederalGovernment)
+
+subAttribute (el ? ? ? FederalDemocraticRepublic) (el ? ? ? FederalGovernment)
+
+subAttribute (el ? ? ? FederalParliamentaryDemocracy) (el ? ? ? FederalGovernment)
+
+subAttribute (el ? ? ? Federation) (el ? ? ? FederalGovernment)
+
+subAttribute (el ? ? ? ConstitutionalRepublic) (el ? ? ? Republic)
+
+subAttribute (el ? ? ? ConstitutionalDemocraticRepublic) (el ? ? ? Republic)
+
+subAttribute (el ? ? ? FederalRepublic) (el ? ? ? Republic)
+
+subAttribute (el ? ? ? ParliamentaryRepublic) (el ? ? ? Republic)
+
+subAttribute (el ? ? ? ParliamentaryDemocraticRepublic) (el ? ? ? Republic)
+
+subAttribute (el ? ? ? FederalDemocraticRepublic) (el ? ? ? Republic)
+
+subAttribute (el ? ? ? FederalDemocraticRepublic) (el ? ? ? Democracy)
+
+subAttribute (el ? ? ? ParliamentaryDemocracy) (el ? ? ? Democracy)
+
+subAttribute (el ? ? ? ParliamentaryDemocraticRepublic) (el ? ? ? Democracy)
+
+subAttribute (el ? ? ? FederalParliamentaryDemocracy) (el ? ? ? Democracy)
+
+subAttribute (el ? ? ? ConstitutionalParliamentaryDemocracy) (el ? ? ? Democracy)
+
+subAttribute (el ? ? ? ConstitutionalDemocraticRepublic) (el ? ? ? Democracy)
+
+subAttribute (el ? ? ? MultipartyDemocracy) (el ? ? ? Democracy)
+
+subAttribute (el ? ? ? EmergingDemocracy) (el ? ? ? Democracy)
+
+subAttribute (el ? ? ? ConstitutionalDemocracy) (el ? ? ? ConstitutionalGovernment)
+
+subAttribute (el ? ? ? ConstitutionalMonarchy) (el ? ? ? ConstitutionalGovernment)
+
+subAttribute (el ? ? ? ConstitutionalParliamentaryDemocracy) (el ? ? ? ConstitutionalDemocracy)
+
+subAttribute (el ? ? ? ConstitutionalRepublic) (el ? ? ? ConstitutionalGovernment)
+
+subAttribute (el ? ? ? Dictatorship) (el ? ? ? AuthoritarianRegime)
+
+subAttribute (el ? ? ? MilitaryDictatorship) (el ? ? ? Dictatorship)
+
+subAttribute (el ? ? ? AbsoluteMonarchy) (el ? ? ? AuthoritarianRegime)
+
+subAttribute (el ? ? ? CommunistState) (el ? ? ? AuthoritarianRegime)
+
+subAttribute (el ? ? ? AuthoritarianSocialist) (el ? ? ? AuthoritarianRegime)
+
+subAttribute (el ? ? ? TheocraticGovernment) (el ? ? ? AuthoritarianRegime)
+
+subAttribute (el ? ? ? TheocraticRepublic) (el ? ? ? TheocraticGovernment)
+
+subAttribute (el ? ? ? EcclesiasticalGovernment) (el ? ? ? TheocraticGovernment)
+
+subAttribute (el ? ? ? IslamicGovernment) (el ? ? ? TheocraticGovernment)
+
+subAttribute (el ? ? ? EmergingDemocracy) (el ? ? ? TransitionalGovernment)
+
+subAttribute (el ? ? ? Factionalism) (el ? ? ? TransitionalGovernment)
+
+subAttribute (el ? ? ? NapoleonicCode) (el ? ? ? CivilLaw)
+
+subAttribute (el ? ? ? Queen) (el ? ? ? Monarch)
+
+subAttribute (el ? ? ? King) (el ? ? ? Monarch)
+
+subAttribute (el ? ? ? SupremeCourtJudge) (el ? ? ? JudgeAtLaw)
+
+subAttribute (el ? ? ? TransitionalAdministration) (el ? ? ? AdministrationAndManagement)
+
+subAttribute (el ? ? ? TransitionalAdministration) (el ? ? ? PromoteRegionalStability)
+
+subAttribute (el ? ? ? PeacekeepingOperation) (el ? ? ? PromoteRegionalStability)
+
+subAttribute (el ? ? ? EmigrationAndImmigrationIssues) (el ? ? ? PromoteRegionalStability)
+
+subAttribute (el ? ? ? WeaponsInspection) (el ? ? ? ObservationAndMonitoring)
+
+subAttribute (el ? ? ? WeaponsInspection) (el ? ? ? ArmsControl)
+
+subAttribute (el ? ? ? ArmsControl) (el ? ? ? InternationalPeaceAndSecurity)
+
+subAttribute (el ? ? ? ConventionalArmsControl) (el ? ? ? ArmsControl)
+
+subAttribute (el ? ? ? ControlWeaponsOfMassDestruction) (el ? ? ? ArmsControl)
+
+subAttribute (el ? ? ? ControlNuclearWeapons) (el ? ? ? ControlWeaponsOfMassDestruction)
+
+subAttribute (el ? ? ? NuclearNonproliferation) (el ? ? ? ControlWeaponsOfMassDestruction)
+
+subAttribute (el ? ? ? NuclearExportControls) (el ? ? ? NuclearNonproliferation)
+
+subAttribute (el ? ? ? NuclearDisarmament) (el ? ? ? NuclearNonproliferation)
+
+subAttribute (el ? ? ? ControlBiologicalAndChemicalWeapons) (el ? ? ? ControlWeaponsOfMassDestruction)
+
+subAttribute (el ? ? ? CBWExportControls) (el ? ? ? ControlBiologicalAndChemicalWeapons)
+
+subAttribute (el ? ? ? EliminateChemicalWeapons) (el ? ? ? ControlBiologicalAndChemicalWeapons)
+
+subAttribute (el ? ? ? ReducingCrime) (el ? ? ? SocialDevelopment)
+
+subAttribute (el ? ? ? CrimePrevention) (el ? ? ? ReducingCrime)
+
+subAttribute (el ? ? ? SupportLawEnforcement) (el ? ? ? ReducingCrime)
+
+subAttribute (el ? ? ? CivilPoliceTraining) (el ? ? ? SupportLawEnforcement)
+
+subAttribute (el ? ? ? PeacekeepingOperation) (el ? ? ? ReducingCrime)
+
+subAttribute (el ? ? ? EconomicIntegration) (el ? ? ? EconomicCooperation)
+
+subAttribute (el ? ? ? EconomicPolicyCoordination) (el ? ? ? EconomicCooperation)
+
+subAttribute (el ? ? ? CoordinateCreditPolicy) (el ? ? ? EconomicPolicyCoordination)
+
+subAttribute (el ? ? ? FinancialCooperation) (el ? ? ? EconomicCooperation)
+
+subAttribute (el ? ? ? MonetaryUnion) (el ? ? ? FinancialCooperation)
+
+subAttribute (el ? ? ? EnergyCooperation) (el ? ? ? EconomicCooperation)
+
+subAttribute (el ? ? ? EnvironmentalCooperation) (el ? ? ? EnergyAndTheEnvironment)
+
+subAttribute (el ? ? ? EnergyCooperation) (el ? ? ? EnergyAndTheEnvironment)
+
+subAttribute (el ? ? ? PeacefulUseOfAtomicPower) (el ? ? ? EnergyAndTheEnvironment)
+
+subAttribute (el ? ? ? TransportationCoordination) (el ? ? ? InfrastructureCooperation)
+
+subAttribute (el ? ? ? CooperationInCivilAviation) (el ? ? ? TransportationCoordination)
+
+subAttribute (el ? ? ? EnergyCooperation) (el ? ? ? InfrastructureCooperation)
+
+subAttribute (el ? ? ? InformationStandards) (el ? ? ? InfrastructureCooperation)
+
+subAttribute (el ? ? ? IndustryStandards) (el ? ? ? InfrastructureCooperation)
+
+subAttribute (el ? ? ? CommunicationsCoordination) (el ? ? ? InfrastructureCooperation)
+
+subAttribute (el ? ? ? IntellectualPropertyProtection) (el ? ? ? InfrastructureCooperation)
+
+subAttribute (el ? ? ? InternationalMaritimeAffairs) (el ? ? ? InfrastructureCooperation)
+
+subAttribute (el ? ? ? AgriculturalDevelopment) (el ? ? ? EconomicDevelopment)
+
+subAttribute (el ? ? ? PromotionOfPrivateEnterprise) (el ? ? ? EconomicDevelopment)
+
+subAttribute (el ? ? ? PromotionOfTourism) (el ? ? ? EconomicDevelopment)
+
+subAttribute (el ? ? ? PromotionOfTradeAndInvestment) (el ? ? ? InternationalTradeSupport)
+
+subAttribute (el ? ? ? PromotionOfFreeTrade) (el ? ? ? InternationalTradeSupport)
+
+subAttribute (el ? ? ? EfficientCustomsAdministration) (el ? ? ? InternationalTradeSupport)
+
+subAttribute (el ? ? ? EfficientCustomsAdministration) (el ? ? ? InfrastructureCooperation)
+
+subAttribute (el ? ? ? MonetaryStability) (el ? ? ? EconomicDevelopment)
+
+subAttribute (el ? ? ? ReducePoverty) (el ? ? ? EconomicDevelopment)
+
+subAttribute (el ? ? ? PromoteSustainableDevelopment) (el ? ? ? EconomicDevelopment)
+
+subAttribute (el ? ? ? LaborIssues) (el ? ? ? EconomicDevelopment)
+
+subAttribute (el ? ? ? PromoteTradeUnionism) (el ? ? ? LaborIssues)
+
+subAttribute (el ? ? ? WorldLaborIssues) (el ? ? ? LaborIssues)
+
+subAttribute (el ? ? ? MutualDefensePact) (el ? ? ? MilitaryCooperation)
+
+subAttribute (el ? ? ? PoliticalIntegration) (el ? ? ? PoliticalCooperation)
+
+subAttribute (el ? ? ? PoliticalDevelopment) (el ? ? ? PoliticalCooperation)
+
+subAttribute (el ? ? ? WarCrimesProsecution) (el ? ? ? InternationalJustice)
+
+subAttribute (el ? ? ? CompensationAndReparation) (el ? ? ? JusticeIssues)
+
+subAttribute (el ? ? ? GenderEquality) (el ? ? ? SocialDevelopment)
+
+subAttribute (el ? ? ? ReducePoverty) (el ? ? ? SocialDevelopment)
+
+subAttribute (el ? ? ? PromoteSustainableDevelopment) (el ? ? ? SocialDevelopment)
+
+subAttribute (el ? ? ? EmigrationAndImmigrationIssues) (el ? ? ? SocialDevelopment)
+
+subAttribute (el ? ? ? PublicHealthConcern) (el ? ? ? SocialDevelopment)
+
+subAttribute (el ? ? ? CulturalCooperation) (el ? ? ? SocialCooperation)
+
+subAttribute (el ? ? ? OrganizeOlympicGames) (el ? ? ? CulturalCooperation)
+
+subAttribute (el ? ? ? EducationalCooperation) (el ? ? ? SocialCooperation)
+
+subAttribute (el ? ? ? HumanitarianAssistance) (el ? ? ? SocialCooperation)
+
+subAttribute (el ? ? ? EducationalCooperation) (el ? ? ? InformationCooperation)
+
+subAttribute (el ? ? ? HumanRightsIssues) (el ? ? ? HumanitarianAssistance)
+
+subAttribute (el ? ? ? HumanitarianAid) (el ? ? ? HumanitarianAssistance)
+
+subAttribute (el ? ? ? FoodAid) (el ? ? ? HumanitarianAid)
+
+subAttribute (el ? ? ? RefugeeAssistance) (el ? ? ? HumanitarianAssistance)
+
+subAttribute (el ? ? ? RefugeeAssistance) (el ? ? ? EmigrationAndImmigrationIssues)
+
+subAttribute (el ? ? ? ChildHealthServices) (el ? ? ? PublicHealthConcern)
+
+subAttribute (el ? ? ? ReproductiveHealthAndFamilyPlannning) (el ? ? ? PublicHealthConcern)
+
+subAttribute (el ? ? ? PopulationPolicySupport) (el ? ? ? ReproductiveHealthAndFamilyPlannning)
+
+subAttribute (el ? ? ? ImproveHumanSettlementConditions) (el ? ? ? PublicHealthConcern)
+
+subAttribute (el ? ? ? Ambassador) (el ? ? ? DiplomaticAgent)
+
+subAttribute (el ? ? ? ConsulGeneral) (el ? ? ? DiplomaticAgent)
+
+subAttribute (el ? ? ? Consul) (el ? ? ? DiplomaticAgent)
+
+subAttribute (el ? ? ? ChargeDAffaires) (el ? ? ? DiplomaticAgent)
+
+subAttribute (el ? ? ? PermanentChargeDAffaires) (el ? ? ? ChargeDAffaires)
+
+subAttribute (el ? ? ? ActingConsulGeneral) (el ? ? ? ConsulGeneral)

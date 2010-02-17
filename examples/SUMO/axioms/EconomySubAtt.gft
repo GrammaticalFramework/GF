@@ -1,0 +1,154 @@
+
+subAttribute (el ? ? ? AdvancedDevelopingCountry) (el ? ? ? LessDevelopedCountry)
+
+subAttribute (el ? ? ? UnderdevelopedCountry) (el ? ? ? LessDevelopedCountry)
+
+subAttribute (el ? ? ? LeastDevelopedCountry) (el ? ? ? LessDevelopedCountry)
+
+subAttribute (el ? ? ? CapitalistEconomy) (el ? ? ? PrivateEnterpriseEconomy)
+
+subAttribute (el ? ? ? PureCapitalistEconomy) (el ? ? ? CapitalistEconomy)
+
+subAttribute (el ? ? ? PrivateEnterpriseEconomy) (el ? ? ? CapitalistEconomy)
+
+subAttribute (el ? ? ? PureSocialistEconomy) (el ? ? ? SocialistEconomy)
+
+subAttribute (el ? ? ? DemocraticSocialism) (el ? ? ? SocialistEconomy)
+
+subAttribute (el ? ? ? MarketSocialism) (el ? ? ? PartialMarketEconomy)
+
+subAttribute (el ? ? ? CommunalLandOwnershipEconomy) (el ? ? ? SocialistEconomy)
+
+subAttribute (el ? ? ? PartialMarketEconomy) (el ? ? ? MixedEconomy)
+
+subAttribute (el ? ? ? CentrallyPlannedEconomy) (el ? ? ? GovernmentRegulatedEconomy)
+
+subAttribute (el ? ? ? PrivatizingEconomy) (el ? ? ? MixedEconomy)
+
+subAttribute (el ? ? ? NationalizedIndustryEconomy) (el ? ? ? GovernmentRegulatedEconomy)
+
+subAttribute (el ? ? ? WelfareCapitalism) (el ? ? ? MixedEconomy)
+
+subAttribute (el ? ? ? WelfareCapitalism) (el ? ? ? GovernmentSubsidizedEconomy)
+
+subAttribute (el ? ? ? SubsistenceAgricultureEconomy) (el ? ? ? AgricultureBasedEconomy)
+
+subAttribute (el ? ? ? TaxHavenEconomy) (el ? ? ? OffshoreFinancialSectorEconomy)
+
+subAttribute (el ? ? ? OffshoreBankingSectorEconomy) (el ? ? ? OffshoreFinancialSectorEconomy)
+
+subAttribute (el ? ? ? AgricultureForestryFishingAndHunting) (el ? ? ? AgriculturalSector)
+
+subAttribute (el ? ? ? CoalMining) (el ? ? ? CoalIndustry)
+
+subAttribute (el ? ? ? CoalProductsManufacturing) (el ? ? ? CoalIndustry)
+
+subAttribute (el ? ? ? CopperOreMining) (el ? ? ? CopperIndustry)
+
+subAttribute (el ? ? ? PrimarySmeltingAndRefiningOfCopper) (el ? ? ? CopperIndustry)
+
+subAttribute (el ? ? ? CopperRollingDrawingExtrudingAndAlloying) (el ? ? ? CopperIndustry)
+
+subAttribute (el ? ? ? CopperFoundriesExceptDieCasting) (el ? ? ? CopperIndustry)
+
+subAttribute (el ? ? ? FertilizerManufacturing) (el ? ? ? FertilizerIndustry)
+
+subAttribute (el ? ? ? FertilizerMineralMining) (el ? ? ? FertilizerIndustry)
+
+subAttribute (el ? ? ? FurnitureAndRelatedProductManufacturing) (el ? ? ? FurnitureIndustry)
+
+subAttribute (el ? ? ? FurnitureAndHomeFurnishingWholesalers) (el ? ? ? FurnitureIndustry)
+
+subAttribute (el ? ? ? FurnitureAndHomeFurnishingsStores) (el ? ? ? FurnitureIndustry)
+
+subAttribute (el ? ? ? FurnitureManufacturing) (el ? ? ? FurnitureAndRelatedProductManufacturing)
+
+subAttribute (el ? ? ? HandwovenCarpetManufacturing) (el ? ? ? HandicraftIndustry)
+
+subAttribute (el ? ? ? LeadOreMining) (el ? ? ? LeadIndustry)
+
+subAttribute (el ? ? ? LeadManufacturing) (el ? ? ? LeadIndustry)
+
+subAttribute (el ? ? ? ForestryAndLogging) (el ? ? ? LumberIndustry)
+
+subAttribute (el ? ? ? WoodProductManufacturing) (el ? ? ? LumberIndustry)
+
+subAttribute (el ? ? ? Millwork) (el ? ? ? LumberIndustry)
+
+subAttribute (el ? ? ? LumberPlywoodMillworkAndWoodPanelWholesalers) (el ? ? ? LumberIndustry)
+
+subAttribute (el ? ? ? MiningExceptOilAndGas) (el ? ? ? MiningIndustry)
+
+subAttribute (el ? ? ? SupportActivitiesForMetalMining) (el ? ? ? MiningIndustry)
+
+subAttribute (el ? ? ? SupportActivitiesForNonmetallicMineralsExceptFuels) (el ? ? ? MiningIndustry)
+
+subAttribute (el ? ? ? MotorVehicleManufacturing) (el ? ? ? MotorVehicleIndustry)
+
+subAttribute (el ? ? ? MotorVehiclePartsManufacturing) (el ? ? ? MotorVehicleIndustry)
+
+subAttribute (el ? ? ? MotorVehicleBodyAndTrailerManufacturing) (el ? ? ? MotorVehicleIndustry)
+
+subAttribute (el ? ? ? MotorVehicleAndMotorVehiclePartsAndSuppliesWholesalers) (el ? ? ? MotorVehicleIndustry)
+
+subAttribute (el ? ? ? MotorVehicleAndPartsDealers) (el ? ? ? MotorVehicleIndustry)
+
+subAttribute (el ? ? ? NaturalGasLiquidExtraction) (el ? ? ? NaturalGasIndustry)
+
+subAttribute (el ? ? ? NaturalGasDistribution) (el ? ? ? NaturalGasIndustry)
+
+subAttribute (el ? ? ? PipelineTransportationOfNaturalGas) (el ? ? ? NaturalGasIndustry)
+
+subAttribute (el ? ? ? PetroleumProductsManufacturing) (el ? ? ? PetroleumIndustry)
+
+subAttribute (el ? ? ? PetroleumRefineries) (el ? ? ? PetroleumIndustry)
+
+subAttribute (el ? ? ? CrudePetroleumExtraction) (el ? ? ? PetroleumIndustry)
+
+subAttribute (el ? ? ? DrillingOilAndGasWells) (el ? ? ? PetroleumIndustry)
+
+subAttribute (el ? ? ? SupportActivitiesForOilOperations) (el ? ? ? PetroleumIndustry)
+
+subAttribute (el ? ? ? AsphaltPavingRoofingAndSaturatedMaterialsManufacturing) (el ? ? ? PetroleumIndustry)
+
+subAttribute (el ? ? ? RefrigerationEquipmentManufacturing) (el ? ? ? RefrigeratorAndFreezerIndustry)
+
+subAttribute (el ? ? ? RefrigerationEquipmentAndSuppliesWholesalers) (el ? ? ? RefrigeratorAndFreezerIndustry)
+
+subAttribute (el ? ? ? RefrigeratedWarehousingAndStorage) (el ? ? ? RefrigeratorAndFreezerIndustry)
+
+subAttribute (el ? ? ? HouseholdRefrigeratorAndHomeFreezerManufacturing) (el ? ? ? RefrigeratorAndFreezerIndustry)
+
+subAttribute (el ? ? ? CommercialAndIndustrialRefrigerationAndEquipmentManufacturing) (el ? ? ? RefrigeratorAndFreezerIndustry)
+
+subAttribute (el ? ? ? SteelMills) (el ? ? ? SteelIndustry)
+
+subAttribute (el ? ? ? SteelForging) (el ? ? ? SteelIndustry)
+
+subAttribute (el ? ? ? SteelFoundriesExceptInvestment) (el ? ? ? SteelIndustry)
+
+subAttribute (el ? ? ? SteelInvestmentFoundries) (el ? ? ? SteelIndustry)
+
+subAttribute (el ? ? ? SteelProductManufacturingFromPurchasedSteel) (el ? ? ? SteelIndustry)
+
+subAttribute (el ? ? ? TextileMills) (el ? ? ? TextileIndustry)
+
+subAttribute (el ? ? ? TextileProductMills) (el ? ? ? TextileIndustry)
+
+subAttribute (el ? ? ? GrainAndOilseedMilling) (el ? ? ? VegetableOilIndustry)
+
+subAttribute (el ? ? ? ZincOreMining) (el ? ? ? ZincIndustry)
+
+subAttribute (el ? ? ? CornFarming) (el ? ? ? CerealGrainFarming)
+
+subAttribute (el ? ? ? RiceFarming) (el ? ? ? CerealGrainFarming)
+
+subAttribute (el ? ? ? WheatFarming) (el ? ? ? CerealGrainFarming)
+
+subAttribute (el ? ? ? OatFarming) (el ? ? ? CerealGrainFarming)
+
+subAttribute (el ? ? ? BarleyFarming) (el ? ? ? CerealGrainFarming)
+
+subAttribute (el ? ? ? RyeFarming) (el ? ? ? CerealGrainFarming)
+
+subAttribute (el ? ? ? MilletFarming) (el ? ? ? CerealGrainFarming)

@@ -1,0 +1,36 @@
+
+subRelation2El ? ? ? ? (\x,y -> accountAt x y) (\x,y -> agreementMember x y)
+
+subRelation2El ? ? ? ? (\x,y -> accountHolder x y) (\x,y -> agreementMember x y)
+
+subRelation2El ? ? ? ? (\x,y -> maturityDate x y) (\x,y -> expirationDate x y)
+
+subRelation2El ? ? ? ? (\x,y -> amountCharged x y) (\x,y -> transactionAmount x y)
+
+subRelation2El ? ? ? ? (\x,y -> lender x y) (\x,y -> agreementMember x y)
+
+subRelation2El ? ? ? ? (\x,y -> borrower x y) (\x,y -> agreementMember x y)
+
+subRelation2El ? ? ? ? (\x,y -> appraisedValue x y) (\x,y -> monetaryValue x y)
+
+subRelation2El ? ? ? ? (\x,y -> creditRanking x y) (\x,y -> attribute x y)
+
+subRelation2El ? ? ? ? (\x,y -> bondRating x y) (\x,y -> attribute x y)
+
+subRelation2El ? ? ? ? (\x,y -> optionHolder x y) (\x,y -> agreementMember x y)
+
+subRelation2El ? ? ? ? (\x,y -> optionSeller x y) (\x,y -> agreementMember x y)
+
+subRelation2El ? ? ? ? (\x,y -> expirationDate x y) (\x,y -> date x y)
+
+subRelation2El ? ? ? ? (\x,y -> effectiveDate x y) (\x,y -> date x y)
+
+subRelation2El ? ? ? ? (\x,y -> finalPrice x y) (\x,y -> monetaryValue x y)
+
+subRelation2El ? ? ? ? (\x,y -> cardCode x y) (\x,y -> represents x y)
+
+subRelation2El ? ? ? ? (\x,y -> pin x y) (\x,y -> represents x y)
+
+subRelation2El ? ? ? ? (\x,y -> phoneNumber x y) (\x,y -> refers x y)
+
+subRelation2El ? ? ? ? (\x,y -> emailAddress x y) (\x,y -> refers x y)

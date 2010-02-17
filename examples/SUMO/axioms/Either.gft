@@ -1,0 +1,23 @@
+
+forall Poisoning (\POISON -> exists (either Organism AnatomicalStructure) (\THING ->  patient(var ? ? ? POISON)(var ? ? ? THING)))
+
+forall (both OrganicCompound Molecule) (\COMPOUND -> exists Carbon (\CARBON ->  part(var ? ? ? CARBON)(var ? ? ? COMPOUND)))
+
+forall SalineSolution (\SOLUTION -> forall (either SodiumChloride Water) (\PART ->  part(var ? ? ? PART)(var ? ? ? SOLUTION)))
+
+forall Window (\W -> exists (either Vehicle (either Building Room)) (\A ->  part(var ? ? ? W)(var ? ? ? A)))
+
+forall Doorway (\WAY -> exists (either Room Building) (\ARTIFACT ->  part(var ? ? ? WAY)(var ? ? ? ARTIFACT)))
+
+forall Door (\DOOR -> exists (either Room Building) (\ARTIFACT ->  part(var ? ? ? DOOR)(var ? ? ? ARTIFACT)))
+
+forall Wagon (\W -> forall (both Transportation Pulling) (\T ->  impl ( instrument(var ? ? ? T)(var ? ? ? W))(exists (either Vehicle DomesticAnimal) (\P -> and ( agent(var ? ? ? T)(var ? ? ? P))( patient(var ? ? ? T)(var ? ? ? W))))))
+
+
+forall ContraceptiveDevice (\C ->  hasPurpose(var ? ? ? C)(exists Mating (\M -> and ( patient(var ? ? ? M)(var ? ? ? C)) (not (exists BiologicalConception (\SR ->  result(var ? ? ? M)(var ? ? ? SR)))))))
+
+forall Entity (\AXIS -> forall Entity (\OBJ ->  impl ( axis(var ? ? ? AXIS)(var ? ? ? OBJ))(exists Rotating (\R -> and ( part(var ? ? ? AXIS)(var ? ? ? OBJ))(and ( experiencer(var ? ? ? R)(var ? ? ? OBJ))(not(exists Rotating (\R2 -> and ( subProcess(var ? ? ? R2)(var ? ? ? R))( experiencer(var ? ? ? R2)(var ? ? ? AXIS))))))))))
+
+
+
+

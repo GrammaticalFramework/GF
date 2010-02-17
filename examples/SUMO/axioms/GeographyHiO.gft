@@ -1,0 +1,4 @@
+
+SymmetricRelation ? (\x,y -> oppositeDirection x y)
+
+IrreflexiveRelation ? (\x,y -> oppositeDirection x y)

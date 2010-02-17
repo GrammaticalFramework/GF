@@ -1,0 +1,46 @@
+
+forall BiochemicalAttack (\ATTACK -> forall Organism (\Organism ->  hasPurpose(var ? ? ? ATTACK)(exists Damaging (\DAMAGE -> exists Entity (\ORGANISM -> and ( patient(var ? ? ? DAMAGE)(var ? ? ? ORGANISM))( causes(var ? ? ? ATTACK)(var ? ? ? DAMAGE)))))))
+
+forall BiochemicalWeapon (\WEAPON -> exists BiochemicalAgent (\AGENT ->  part(var ? ? ? AGENT)(var ? ? ? WEAPON)))
+
+forall BiologicalWeapon (\WEAPON -> exists BiologicalAgent (\AGENT ->  part(var ? ? ? AGENT)(var ? ? ? WEAPON)))
+
+forall Toxin (\SUBSTANCE -> exists ToxicOrganism (\ORGANISM -> exists BiologicalProcess (\PROCESS -> and ( instrument(var ? ? ? PROCESS)(var ? ? ? ORGANISM))(or ( result(var ? ? ? PROCESS)(var ? ? ? SUBSTANCE))(exists (both Entity Object) (\RESULT -> and ( result(var ? ? ? PROCESS)(var ? ? ? RESULT))( copy(var ? ? ? SUBSTANCE)(var ? ? ? RESULT))))))))
+
+forall ToxicOrganism (\ORGANISM -> exists Toxin (\SUBSTANCE ->  part(var ? ? ? SUBSTANCE)(var ? ? ? ORGANISM)))
+
+forall Bacterium (\BACTERIUM -> exists (both RealNumber Quantity) (\NUMBER -> and ( width(var ? ? ? BACTERIUM)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Meter))))(and ( greaterThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toRealNum 0.000001)))( lessThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toRealNum 0.000002))))))
+
+forall Mycotoxin (\SUBSTANCE -> forall Object (\ORGANISM -> exists FungalAgent (\FUNGUS -> exists BiologicalProcess (\PROCESS -> and ( instrument(var ? ? ? PROCESS)(var ? ? ? ORGANISM))( result(var ? ? ? PROCESS)(var ? ? ? SUBSTANCE))))))
+
+forall GeneticallyEngineeredOrganism (\ORGANISM -> exists IntentionalProcess (\PROCESS ->  result(var ? ? ? PROCESS)(var ? ? ? ORGANISM)))
+
+forall ChemicalWeapon (\WEAPON -> exists ChemicalAgent (\AGENT ->  part(var ? ? ? AGENT)(var ? ? ? WEAPON)))
+
+forall ChemicalAgent (\AGENT -> exists Organism (\ORGANISM -> exists BiologicalProcess (\PROCESS -> exists (both Entity Object) (\SUBSTANCE -> and ( instrument(var ? ? ? PROCESS)(var ? ? ? ORGANISM))(and ( result(var ? ? ? PROCESS)(var ? ? ? SUBSTANCE))( copy(var ? ? ? SUBSTANCE)(var ? ? ? AGENT)))))))
+
+forall BlisterAgent (\AGENT ->  hasPurpose(var ? ? ? AGENT)(exists Damaging (\DAMAGE -> exists Tissue (\TISSUE ->  patient(var ? ? ? DAMAGE)(var ? ? ? TISSUE)))))
+
+forall WMDWeaponsProductionFacility (\FACILITY -> exists DevelopingWeaponOfMassDestruction (\DEVELOP ->  located(var ? ? ? DEVELOP)(var ? ? ? FACILITY)))
+
+forall WMDWeaponsResearchFacility (\FACILITY -> exists ResearchingWeaponOfMassDestruction (\RESEARCH ->  located(var ? ? ? RESEARCH)(var ? ? ? FACILITY)))
+
+forall DismantlingWeaponOfMassDestruction (\DISMANTLE -> forall Entity (\WEAPON ->  impl ( patient(var ? ? ? DISMANTLE)(var ? ? ? WEAPON))(exists DevelopingWeaponOfMassDestruction (\DEVELOP -> and ( result(var ? ? ? DEVELOP)(var ? ? ? WEAPON))( earlier( el ? ? ? ( WhenFn(var ? ? ? DEVELOP)))( el ? ? ? ( WhenFn(var ? ? ? DISMANTLE))))))))
+
+forall Object (\ORGANISM -> forall (both DiseaseOrSyndrome Attribute) (\SYMPTOM -> forall (both DiseaseOrSyndrome Attribute) (\DISEASE ->  impl ( diseaseSymptom(var ? ? ? DISEASE)(var ? ? ? SYMPTOM))( increasesLikelihood( attribute(var ? ? ? ORGANISM)(var ? ? ? DISEASE))( attribute(var ? ? ? ORGANISM)(var ? ? ? SYMPTOM))))))
+
+forall (both Object Entity) (\ORGANISM -> forall RealNumber (\RATE -> forall (both DiseaseOrSyndrome Attribute) (\DISEASE ->  impl ( diseaseMortality(var ? ? ? DISEASE)(var ? ? ? RATE))( conditionalProbability( attribute(var ? ? ? ORGANISM)(var ? ? ? DISEASE))(exists Death (\DEATH ->  experiencer(var ? ? ? DEATH)(var ? ? ? ORGANISM)))(var ? ? ? RATE)))))
+
+forall (both RealNumber Quantity) (\RATE -> forall DiseaseOrSyndrome (\DISEASE ->  impl ( diseaseMortality(var ? ? ? DISEASE)(var ? ? ? RATE))(and ( greaterThan(var ? ? ? RATE)(el ? ? ? (toInt 0)))( lessThan(var ? ? ? RATE)(el ? ? ? (toInt 1))))))
+
+forall VaccinatableDisease (\DISEASE -> forall Putting (\PUT -> forall Human (\HUMAN -> exists BiologicallyActiveSubstance (\VACCINE ->  impl ( destination(var ? ? ? PUT)(var ? ? ? HUMAN))( holdsDuring( el ? ? ? ( FutureFn( el ? ? ? ( WhenFn(var ? ? ? PUT)))))( not (attribute(var ? ? ? HUMAN)(var ? ? ? DISEASE))))))))
+
+forall Human (\ORGANISM ->  impl ( attribute(var ? ? ? ORGANISM)(el ? ? ? Fever))(exists (both RealNumber Quantity) (\NUMBER -> and ( measure(var ? ? ? ORGANISM)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? FahrenheitDegree))))( greaterThan(var ? ? ? NUMBER)(el ? ? ? (toRealNum 98.6))))))
+
+forall (both Object Agent) (\ORGANISM ->  impl ( attribute(var ? ? ? ORGANISM)(el ? ? ? InhalationalAnthrax))(exists BacillusAnthracis (\ANTHRACIS -> exists Breathing (\BREATHING -> and ( agent(var ? ? ? BREATHING)(var ? ? ? ORGANISM))( patient(var ? ? ? BREATHING)(var ? ? ? ANTHRACIS))))))
+
+forall YellowFeverVirus (\VIRUS -> exists (both RealNumber Entity) (\NUMBER -> and ( width(var ? ? ? VIRUS)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Meter))))( equal(var ? ? ? NUMBER)(el ? ? ? (toRealNum 0.00000002)))))
+
+forall FootAndMouthVirus (\VIRUS1 -> forall YellowFeverVirus (\VIRUS2 ->  smaller(var ? ? ? VIRUS1)(var ? ? ? VIRUS2)))
+
+forall Hepatitis (\DISEASE ->  biochemicalAgentSyndrome(desc HepatitisVirus ? ?)(var ? ? ? DISEASE))

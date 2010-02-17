@@ -1,0 +1,12 @@
+
+subAttribute (el ? ? ? MountainousTerrain) (el ? ? ? SteepTerrain)
+
+subAttribute (el ? ? ? Upwind) (el ? ? ? Upstream)
+
+subAttribute (el ? ? ? Downwind) (el ? ? ? Downstream)
+
+subAttribute (el ? ? ? GroundwaterPollutionIssue) (el ? ? ? WaterPollutionIssue)
+
+subAttribute (el ? ? ? EndangeredMarineWildlifeIssue) (el ? ? ? EndangeredSpeciesIssue)
+
+subAttribute (el ? ? ? SoilSalinityIssue) (el ? ? ? SoilDegradationIssue)

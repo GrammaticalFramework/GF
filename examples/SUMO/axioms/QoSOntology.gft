@@ -1,0 +1,114 @@
+
+forall ComputerHardware (\HARDWARE -> exists Computer (\COMPUTER ->  component(var ? ? ? HARDWARE)(var ? ? ? COMPUTER)))
+
+forall DataTransfer (\TRANSFER -> exists HardwareSystem (\ORIGIN -> exists ComputationalSystem (\DESTINATION -> exists HardwareSystem (\SYSTEM -> exists ComputerData (\DATA -> and ( origin(var ? ? ? TRANSFER)(var ? ? ? ORIGIN))(and ( destination(var ? ? ? TRANSFER)(var ? ? ? DESTINATION))(and ( instrument(var ? ? ? TRANSFER)(var ? ? ? SYSTEM))( patient(var ? ? ? TRANSFER)(var ? ? ? DATA)))))))))
+
+forall ComputerProcess (\PROCESS -> exists Computer (\COMPUTER -> exists ComputerProgram (\PROGRAM -> and ( computerRunning(var ? ? ? PROCESS)(var ? ? ? COMPUTER))( programRunning(var ? ? ? PROCESS)(var ? ? ? PROGRAM)))))
+
+forall ComputerProgram (\PROGRAM -> forall ComputerProcess (\PROCESS ->  impl ( programRunning(var ? ? ? PROCESS)(var ? ? ? PROGRAM))(exists Computer (\COMPUTER ->  runningOn(var ? ? ? PROGRAM)(var ? ? ? COMPUTER)))))
+
+forall Computer (\COMPUTER -> forall ComputerProgram (\PROGRAM ->  impl ( runningOn(var ? ? ? PROGRAM)(var ? ? ? COMPUTER))(exists ComputerProcess (\PROCESS -> and ( programRunning(var ? ? ? PROCESS)(var ? ? ? PROGRAM))( computerRunning(var ? ? ? PROCESS)(var ? ? ? COMPUTER))))))
+
+forall ComputerDirectory (\DIRECTORY -> forall ComputerFile (\FILE ->  impl ( directoryOf(var ? ? ? FILE)(var ? ? ? DIRECTORY))( refers( el ? ? ? ( AddressFn(var ? ? ? FILE)))(var ? ? ? DIRECTORY))))
+
+forall SoftwareSystem (\SOFTWARE -> forall ComputerProcess (\PROCESS ->  impl ( programRunning(var ? ? ? PROCESS)(var ? ? ? SOFTWARE))(exists HardwareSystem (\HARDWARE ->  computerRunning(var ? ? ? PROCESS)(var ? ? ? HARDWARE)))))
+
+forall HardwareSystem (\SYSTEM -> exists CPU (\PROCESSOR -> exists ComputerMemory (\MEMORY -> exists ComputerNetwork (\NETWORK -> and ( component(var ? ? ? SYSTEM)(var ? ? ? PROCESSOR))(and ( component(var ? ? ? SYSTEM)(var ? ? ? MEMORY))( component(var ? ? ? SYSTEM)(var ? ? ? NETWORK)))))))
+
+forall Computer (\COMPUTER -> forall ComputerProgram (\PROGRAM ->  impl (exists ComputerProcess (\PROCESS -> and ( programRunning(var ? ? ? PROCESS)(var ? ? ? PROGRAM))( computerRunning(var ? ? ? PROCESS)(var ? ? ? COMPUTER))))( runsOn(var ? ? ? PROGRAM)(var ? ? ? COMPUTER))))
+
+forall StartupBlock (\STARTUP -> exists ComputerProgram (\APPLICATION ->  startupOf(var ? ? ? STARTUP)(var ? ? ? APPLICATION)))
+
+forall ComputerProcess (\PROCESS1 -> forall (both Entity TimeInterval) (\TIME1 -> forall ComputerProgram (\APPLICATION -> forall (both StartupBlock ComputerProgram) (\STARTUP ->  impl (and ( startupOf(var ? ? ? STARTUP)(var ? ? ? APPLICATION))(and ( programRunning(var ? ? ? PROCESS1)(var ? ? ? STARTUP))( equal( el ? ? ? ( WhenFn(var ? ? ? PROCESS1)))(var ? ? ? TIME1))))(exists ComputerProcess (\PROCESS2 -> exists (both Entity TimeInterval) (\TIME2 -> and ( programRunning(var ? ? ? PROCESS2)(var ? ? ? APPLICATION))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? PROCESS2)))(var ? ? ? TIME2))( meetsTemporally(var ? ? ? TIME1)(var ? ? ? TIME2))))))))))
+
+forall ShutdownBlock (\SHUTDOWN -> exists ComputerProgram (\APPLICATION ->  shutdownOf(var ? ? ? SHUTDOWN)(var ? ? ? APPLICATION)))
+
+forall ComputerProcess (\PROCESS1 -> forall (both Entity TimeInterval) (\TIME1 -> forall ComputerProgram (\APPLICATION -> forall (both ShutdownBlock ComputerProgram) (\SHUTDOWN ->  impl (and ( shutdownOf(var ? ? ? SHUTDOWN)(var ? ? ? APPLICATION))(and ( programRunning(var ? ? ? PROCESS1)(var ? ? ? SHUTDOWN))( equal( el ? ? ? ( WhenFn(var ? ? ? PROCESS1)))(var ? ? ? TIME1))))(exists ComputerProcess (\PROCESS2 -> exists (both Entity TimeInterval) (\TIME2 -> and ( programRunning(var ? ? ? PROCESS2)(var ? ? ? APPLICATION))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? PROCESS2)))(var ? ? ? TIME2))( meetsTemporally(var ? ? ? TIME2)(var ? ? ? TIME1))))))))))
+
+forall ComputerProgram (\PROGRAM -> forall ComputerProcess (\PROCESS ->  impl ( programRunning(var ? ? ? PROCESS)(var ? ? ? PROGRAM))(exists ComputerInputDevice (\DEVICE ->  standardInputDevice(var ? ? ? PROCESS)(var ? ? ? DEVICE)))))
+
+forall ComputerProgram (\PROGRAM -> forall ComputerProcess (\PROCESS ->  impl ( programRunning(var ? ? ? PROCESS)(var ? ? ? PROGRAM))(exists ComputerOutputDevice (\DEVICE ->  standardOutputDevice(var ? ? ? PROCESS)(var ? ? ? DEVICE)))))
+
+forall ComputerProgram (\PROGRAM -> forall ComputerProcess (\PROCESS ->  impl ( programRunning(var ? ? ? PROCESS)(var ? ? ? PROGRAM))(exists ComputerOutputDevice (\DEVICE ->  standardErrorDevice(var ? ? ? PROCESS)(var ? ? ? DEVICE)))))
+
+forall ProcessState (\STATE -> exists ComputerProgram (\PROGRAM -> forall (both ComputerProcess Entity) (\PROCESS ->  impl ( programRunning(var ? ? ? PROCESS)(var ? ? ? PROGRAM))( represents(var ? ? ? STATE)(var ? ? ? PROCESS)))))
+
+forall AutomaticApplication (\APPLICATION -> forall SoftwareSystem (\SYSTEM ->  impl ( part(var ? ? ? APPLICATION)(var ? ? ? SYSTEM))( part( el ? ? ? ( StartupFn(var ? ? ? APPLICATION)))( el ? ? ? ( StartupFn(var ? ? ? SYSTEM))))))
+
+forall RM_StartApplication (\RM -> exists ComputerProgram (\APPLICATION -> exists (both ComputerFile Agent) (\RMCOPY -> exists (both ComputerProcess Process) (\PROCESS -> and ( programCopy(var ? ? ? RMCOPY)(var ? ? ? RM))(and ( programRunning(var ? ? ? PROCESS)( el ? ? ? ( StartupFn(var ? ? ? APPLICATION))))( agent(var ? ? ? PROCESS)(var ? ? ? RMCOPY)))))))
+
+forall (both SoftwareSystem Object) (\SYSTEM -> forall (both ResourceManagementProgram ComputerProgram) (\RM ->  impl ( rMProgram_of(var ? ? ? RM)(var ? ? ? SYSTEM))(exists (both ComputerFile Agent) (\RMCOPY -> exists (both ComputerProcess Process) (\PROCESS -> exists (both Object ComputerProgram) (\APPLICATION -> and ( part(var ? ? ? APPLICATION)(var ? ? ? SYSTEM))(and ( programCopy(var ? ? ? RMCOPY)(var ? ? ? RM))(and ( programRunning(var ? ? ? PROCESS)(var ? ? ? APPLICATION))( agent(var ? ? ? PROCESS)(var ? ? ? RMCOPY))))))))))
+
+forall ComputerProcess (\PROCESS1 -> forall ComputerProcess (\PROCESS2 -> forall (both TimeInterval Object) (\TIME -> forall (both Entity TimeInterval) (\TIME2 -> forall (both Entity TimeInterval) (\TIME1 -> forall (both TimeDuration PhysicalQuantity) (\DELAY -> forall ComputerProgram (\APPLICATION ->  impl (and ( startupTimeDelay(var ? ? ? APPLICATION)(var ? ? ? DELAY))(and ( programRunning(var ? ? ? PROCESS1)(var ? ? ? APPLICATION))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? PROCESS1)))(var ? ? ? TIME1))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? PROCESS2)))(var ? ? ? TIME2))(and ( meetsTemporally(var ? ? ? TIME1)(var ? ? ? TIME))( meetsTemporally(var ? ? ? TIME)(var ? ? ? TIME2)))))))( measure(var ? ? ? TIME)(var ? ? ? DELAY)))))))))
+
+forall Feedback (\FEEDBACK -> forall DataTransfer (\SEND -> exists (both SoftwareSystem ComputerProgram) (\PROGRAM -> exists ComputerProcess (\PROCESS -> exists (both ResourceManagementProgram Entity) (\RM -> and ( rMProgram_of(var ? ? ? RM)(var ? ? ? PROGRAM))(and ( programRunning(var ? ? ? PROCESS)(var ? ? ? PROGRAM))(and ( patient(var ? ? ? SEND)(var ? ? ? FEEDBACK))( destination(var ? ? ? SEND)(var ? ? ? RM)))))))))
+
+forall ComputerComponent (\COMPONENT -> exists UnitOfMeasure (\UNIT ->  unitMeasuringPerformance(var ? ? ? COMPONENT)(var ? ? ? UNIT)))
+
+forall NetworkAdapter (\NA -> exists ComputerNetwork (\NET ->  connected(var ? ? ? NA)(var ? ? ? NET)))
+
+forall NetworkAdapter (\NA ->  unitMeasuringPerformance(var ? ? ? NA)(el ? ? ? PacketsPerSecond))
+
+forall MonitoringProgram (\MONITOR -> exists (both ComputerFile Agent) (\MONITORCOPY -> exists (both MeasuringPerformance Process) (\EVENT -> exists ComputationalSystem (\SYSTEM -> and ( systemMeasured(var ? ? ? EVENT)(var ? ? ? SYSTEM))(and ( programCopy(var ? ? ? MONITORCOPY)(var ? ? ? MONITOR))( agent(var ? ? ? EVENT)(var ? ? ? MONITORCOPY)))))))
+
+forall MeasuringPerformance (\EVENT -> exists MonitoringProgram (\PROGRAM -> exists (both ComputerFile Agent) (\COPY -> and ( programCopy(var ? ? ? COPY)(var ? ? ? PROGRAM))( agent(var ? ? ? EVENT)(var ? ? ? COPY)))))
+
+forall ComputerProgram (\APPLICATION -> forall TimePosition (\TIME ->  impl ( monitorApplicationData(var ? ? ? TIME)(var ? ? ? APPLICATION))(exists (both ComputerProcess Physical) (\PROCESS -> and ( programRunning(var ? ? ? PROCESS)(var ? ? ? APPLICATION))( time(var ? ? ? PROCESS)(var ? ? ? TIME))))))
+
+forall (both ComputerProgram Entity) (\PROGRAM ->  equiv (exists ComputerProcess (\PROCESS ->  programRunning(var ? ? ? PROCESS)(var ? ? ? PROGRAM)))( property(var ? ? ? PROGRAM)(el ? ? ? Executable)))
+
+forall (both SymbolicString ContentBearingObject) (\MODEL -> forall (both Computer Product) (\COMPUTER -> forall (both SymbolicString ContentBearingObject) (\TYPE ->  impl (and ( hardwareType(var ? ? ? TYPE)(var ? ? ? COMPUTER))( productModel(var ? ? ? MODEL)(var ? ? ? COMPUTER)))( subsumesContentInstance(var ? ? ? TYPE)(var ? ? ? MODEL)))))
+
+forall (both Quantity RealNumber) (\NUMBER -> forall MonitoringProgram (\TEST -> forall (both ComputationalSystem ComputerComponent) (\SYSTEM ->  impl ( benchmarkPerformance(var ? ? ? SYSTEM)(var ? ? ? TEST)(var ? ? ? NUMBER))(exists MeasuringPerformance (\EVENT ->  performanceResult(var ? ? ? EVENT)(var ? ? ? SYSTEM)(var ? ? ? NUMBER))))))
+
+forall ComputerPathAttribute (\ATTRIBUTE -> exists ComputerPath (\PATH ->  property(var ? ? ? PATH)(var ? ? ? ATTRIBUTE)))
+
+forall ComputerProcess (\PROCESS1 -> forall ComputerProcess (\PROCESS2 -> forall TimeInterval (\TIME -> forall ComputerProgram (\PROGRAM2 -> forall TimeDuration (\DELAY -> forall ComputerProgram (\PROGRAM1 ->  impl (exists (both Entity TimeInterval) (\TIME2 -> exists (both Entity TimeInterval) (\TIME1 -> and ( dependencyDelay(var ? ? ? PROGRAM1)(var ? ? ? DELAY))(and ( dependencyType(var ? ? ? PROGRAM1)(desc StartupBlock ? ?))(and ( hasDependency(var ? ? ? PROGRAM1)(var ? ? ? PROGRAM2))(and ( programRunning(var ? ? ? PROCESS1)(var ? ? ? PROGRAM1))(and ( programRunning(var ? ? ? PROCESS2)(var ? ? ? PROGRAM2))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? PROCESS2)))(var ? ? ? TIME2))(and ( starts(var ? ? ? TIME2)(var ? ? ? TIME))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? PROCESS1)))(var ? ? ? TIME1))( equal( el ? ? ? ( EndFn(var ? ? ? TIME)))( el ? ? ? ( BeginFn(var ? ? ? TIME1))))))))))))))( duration(var ? ? ? TIME)(var ? ? ? DELAY))))))))
+
+forall ComputerProcess (\PROCESS1 -> forall ComputerProcess (\PROCESS2 -> forall TimeInterval (\TIME -> forall ComputerProgram (\PROGRAM2 -> forall TimeDuration (\DELAY -> forall ComputerProgram (\PROGRAM1 ->  impl (exists (both Entity TimeInterval) (\TIME2 -> exists TimeInterval (\TIME1 -> and ( dependencyDelay(var ? ? ? PROGRAM1)(var ? ? ? DELAY))(and ( dependencyType(var ? ? ? PROGRAM1)(desc ShutdownBlock ? ?))(and ( hasDependency(var ? ? ? PROGRAM1)(var ? ? ? PROGRAM2))(and ( programRunning(var ? ? ? PROCESS1)(var ? ? ? PROGRAM1))(and ( programRunning(var ? ? ? PROCESS2)(var ? ? ? PROGRAM2))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? PROCESS2)))(var ? ? ? TIME2))(and ( finishes(var ? ? ? TIME)(var ? ? ? TIME1))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? PROCESS2)))(var ? ? ? TIME2))( equal( el ? ? ? ( BeginFn(var ? ? ? TIME)))( el ? ? ? ( EndFn(var ? ? ? TIME2))))))))))))))( duration(var ? ? ? TIME)(var ? ? ? DELAY))))))))
+
+forall Entity (\PROGRAM ->  impl ( property(var ? ? ? PROGRAM)(el ? ? ? ReplicationsOnSameHostOK))( property(var ? ? ? PROGRAM)(el ? ? ? Restartable)))
+
+forall UniformResourceIdentifier (\URI -> exists ComputerData (\RESOURCE ->  refers(var ? ? ? URI)(var ? ? ? RESOURCE)))
+
+forall UniformResourceLocator (\URL -> exists IPAddress (\ADDRESS ->  represents(var ? ? ? URL)(var ? ? ? ADDRESS)))
+
+forall DataSink (\SINK -> exists DataTransfer (\TRANSFER ->  destination(var ? ? ? TRANSFER)(var ? ? ? SINK)))
+
+forall ComputerUser (\USER -> exists Computer (\COMPUTER ->  uses(var ? ? ? USER)(var ? ? ? COMPUTER)))
+
+forall UserRequest (\REQUEST -> exists ComputerUser (\USER ->  agent(var ? ? ? REQUEST)(var ? ? ? USER)))
+
+forall (both ComputerResponse Physical) (\RESPONSE -> forall TimeDuration (\TIME -> forall UserRequest (\REQUEST ->  impl (and ( responseTime(var ? ? ? REQUEST)(var ? ? ? TIME))( computerResponseTo(var ? ? ? RESPONSE)(var ? ? ? REQUEST)))( duration( el ? ? ? ( WhenFn(var ? ? ? RESPONSE)))(var ? ? ? TIME)))))
+
+forall Multitasking (\PROCESS -> exists (both ComputerProgram Entity) (\PROGRAM2 -> exists (both ComputerProgram Entity) (\PROGRAM1 -> and ( programRunning(var ? ? ? PROCESS)(var ? ? ? PROGRAM1))(and ( programRunning(var ? ? ? PROCESS)(var ? ? ? PROGRAM2))( not (equal(var ? ? ? PROGRAM1)(var ? ? ? PROGRAM2)))))))
+
+forall ComputerTask (\TASK -> exists Multitasking (\PROCESS -> exists ComputerProgram (\PROGRAM -> and ( part(var ? ? ? TASK)(var ? ? ? PROCESS))( programRunning(var ? ? ? TASK)(var ? ? ? PROGRAM)))))
+
+forall ComputerResource (\RESOURCE -> exists ComputationalSystem (\SYSTEM ->  part(var ? ? ? RESOURCE)(var ? ? ? SYSTEM)))
+
+forall (both ConstantQuantity RealNumber) (\LOAD -> forall ComputerComponent (\SYSTEM ->  impl ( load(var ? ? ? SYSTEM)(var ? ? ? LOAD))(exists MeasuringPerformance (\EVENT ->  performanceResult(var ? ? ? EVENT)(var ? ? ? SYSTEM)(var ? ? ? LOAD)))))
+
+forall ComputerData (\DATA -> exists ComputerHardware (\HARDWARE ->  located(var ? ? ? DATA)(var ? ? ? HARDWARE)))
+
+forall ComputerData (\DATA -> forall ComputerProcess (\PROCESS -> forall Abort (\ABORT ->  impl (and ( processAborted(var ? ? ? ABORT)(var ? ? ? PROCESS))( dataProcessed(var ? ? ? PROCESS)(var ? ? ? DATA)))(exists DataSaving (\SAVE ->  dataProcessed(var ? ? ? SAVE)(var ? ? ? DATA))))))
+
+forall DataSaving (\SAVE -> exists ComputerData (\DATA ->  dataProcessed(var ? ? ? SAVE)(var ? ? ? DATA)))
+
+forall DataCompression (\COMPRESSION -> forall (both RealNumber Quantity) (\NEWMEMORY -> forall UnitOfMeasure (\MEASURE -> forall (both RealNumber Quantity) (\MEMORY -> forall (both ComputerData ComputationalSystem) (\DATA ->  impl (and ( dataProcessed(var ? ? ? COMPRESSION)(var ? ? ? DATA))(and ( holdsDuring( el ? ? ? ( ImmediatePastFn( el ? ? ? ( WhenFn(var ? ? ? COMPRESSION)))))( memorySize(var ? ? ? DATA)( el ? ? ? ( MeasureFn(var ? ? ? MEMORY)(var ? ? ? MEASURE)))))( holdsDuring( el ? ? ? ( ImmediateFutureFn( el ? ? ? ( WhenFn(var ? ? ? COMPRESSION)))))( memorySize(var ? ? ? DATA)( el ? ? ? ( MeasureFn(var ? ? ? NEWMEMORY)(var ? ? ? MEASURE)))))))( lessThan(var ? ? ? NEWMEMORY)(var ? ? ? MEMORY)))))))
+
+forall ProcessTask (\TASK -> exists ComputerProcess (\PROCESS ->  task(var ? ? ? PROCESS)(var ? ? ? TASK)))
+
+forall UsingAResource (\USING -> exists ComputerResource (\RESOURCE ->  resourceUsed(var ? ? ? USING)(var ? ? ? RESOURCE)))
+
+forall UsingAResource (\USING -> forall (both Agent Object) (\AGENT -> forall (both ComputerResource Agent) (\RESOURCE ->  impl (and ( resourceUsed(var ? ? ? USING)(var ? ? ? RESOURCE))( agent(var ? ? ? USING)(var ? ? ? AGENT)))( uses(var ? ? ? AGENT)(var ? ? ? RESOURCE)))))
+
+forall ReusingAResource (\USING -> exists ComputerResource (\RESOURCE ->  resourceUsed(var ? ? ? USING)(var ? ? ? RESOURCE)))
+
+forall ReusingAResource (\REUSING -> forall ComputerResource (\RESOURCE ->  impl ( resourceUsed(var ? ? ? REUSING)(var ? ? ? RESOURCE))(exists UsingAResource (\USING -> and ( resourceUsed(var ? ? ? USING)(var ? ? ? RESOURCE))( earlier( el ? ? ? ( WhenFn(var ? ? ? USING)))( el ? ? ? ( WhenFn(var ? ? ? REUSING))))))))
+
+forall UserAccount (\ACCOUNT -> exists ComputerUser (\USER ->  hasAccount(var ? ? ? USER)(var ? ? ? ACCOUNT)))
+
+forall UserAccount (\ACCOUNT -> forall ComputerUser (\USER ->  impl ( hasAccount(var ? ? ? USER)(var ? ? ? ACCOUNT))(exists UserName (\NAME ->  userName(var ? ? ? USER)(var ? ? ? NAME)))))
+
+forall UserAccount (\ACCOUNT -> forall (both ComputerUser ComputerPassword) (\USER ->  impl ( hasAccount(var ? ? ? USER)(var ? ? ? ACCOUNT))(exists ComputerUser (\PASSWORD ->  password(var ? ? ? PASSWORD)(var ? ? ? USER)))))

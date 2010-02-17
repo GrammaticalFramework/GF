@@ -1,0 +1,172 @@
+
+forall (both LengthMeasure Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( totalLengthOfRailwaySystem(var ? ? ? AREA)(var ? ? ? LENGTH))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists Railway (\RAILWAY ->  located(var ? ? ? RAILWAY)(var ? ? ? AREA)))))
+
+forall (both LengthMeasure Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( lengthOfElectrifiedRailway(var ? ? ? AREA)(var ? ? ? LENGTH))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists ElectrifiedRailway (\RAILWAY ->  located(var ? ? ? RAILWAY)(var ? ? ? AREA)))))
+
+forall (both LengthMeasure Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( lengthOfMultipleTrackRailway(var ? ? ? AREA)(var ? ? ? LENGTH))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists MultipleTrackRailway (\RAILWAY ->  located(var ? ? ? RAILWAY)(var ? ? ? AREA)))))
+
+forall UnitOfLength (\UNIT -> forall (both RealNumber Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( lengthOfBroadGaugeRailway(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH)(var ? ? ? UNIT))))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists BroadGaugeRailway (\RAILWAY ->  located(var ? ? ? RAILWAY)(var ? ? ? AREA))))))
+
+forall UnitOfLength (\UNIT -> forall (both RealNumber Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( lengthOfDualGaugeRailway(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH)(var ? ? ? UNIT))))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists DualGaugeRailway (\RAILWAY ->  located(var ? ? ? RAILWAY)(var ? ? ? AREA))))))
+
+forall UnitOfLength (\UNIT -> forall (both RealNumber Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( lengthOfNarrowGaugeRailway(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH)(var ? ? ? UNIT))))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists NarrowGaugeRailway (\RAILWAY ->  located(var ? ? ? RAILWAY)(var ? ? ? AREA))))))
+
+forall UnitOfLength (\UNIT -> forall (both RealNumber Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( lengthOfStandardGaugeRailway(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH)(var ? ? ? UNIT))))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists StandardGaugeRailway (\RAILWAY ->  located(var ? ? ? RAILWAY)(var ? ? ? AREA))))))
+
+forall UnitOfLength (\UNIT -> forall (both RealNumber Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( lengthOfUnclassifiedGaugeRailway(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH)(var ? ? ? UNIT))))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists Railway (\RAILWAY ->  located(var ? ? ? RAILWAY)(var ? ? ? AREA))))))
+
+forall MultipleTrackRailway (\RAIL -> exists RailroadTrack (\TRACK1 -> exists RailroadTrack (\TRACK2 -> and ( not (equal(var ? ? ? TRACK1)(var ? ? ? TRACK2)))(and ( part(var ? ? ? TRACK1)(var ? ? ? RAIL))( part(var ? ? ? TRACK2)(var ? ? ? RAIL))))))
+
+forall Railway (\RR -> forall (both LengthMeasure Quantity) (\WIDTH ->  impl (and ( property(var ? ? ? RR)(el ? ? ? BroadGauge))( trackWidth(var ? ? ? RR)(var ? ? ? WIDTH)))( greaterThan(var ? ? ? WIDTH)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 1.44))(el ? ? ? Meter))))))
+
+forall Railway (\RR -> forall (both LengthMeasure Quantity) (\WIDTH ->  impl (and ( property(var ? ? ? RR)(el ? ? ? StandardGauge))( trackWidth(var ? ? ? RR)(var ? ? ? WIDTH)))( greaterThanOrEqualTo(var ? ? ? WIDTH)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 1.435))(el ? ? ? Meter))))))
+
+forall Railway (\RR -> forall (both LengthMeasure Quantity) (\WIDTH ->  impl (and ( property(var ? ? ? RR)(el ? ? ? StandardGauge))( trackWidth(var ? ? ? RR)(var ? ? ? WIDTH)))( lessThanOrEqualTo(var ? ? ? WIDTH)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 1.44))(el ? ? ? Meter))))))
+
+forall Railway (\RR -> forall (both LengthMeasure Quantity) (\WIDTH ->  impl (and ( property(var ? ? ? RR)(el ? ? ? NarrowGauge))( trackWidth(var ? ? ? RR)(var ? ? ? WIDTH)))( lessThanOrEqualTo(var ? ? ? WIDTH)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 1.435))(el ? ? ? Meter))))))
+
+forall UnitOfLength (\UNIT -> forall (both RealNumber Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( totalLengthOfHighwaySystem(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH)(var ? ? ? UNIT))))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists Roadway (\HIGHWAY ->  located(var ? ? ? HIGHWAY)(var ? ? ? AREA))))))
+
+forall (both LengthMeasure Quantity) (\LENGTH2 -> forall (both LengthMeasure Quantity) (\LENGTH1 -> forall (both LengthMeasure Entity) (\LENGTH -> forall GeographicArea (\AREA ->  impl (and ( totalLengthOfHighwaySystem(var ? ? ? AREA)(var ? ? ? LENGTH))(and ( lengthOfPavedHighway(var ? ? ? AREA)(var ? ? ? LENGTH1))( lengthOfUnpavedHighway(var ? ? ? AREA)(var ? ? ? LENGTH2))))( equal(var ? ? ? LENGTH)( el ? ? ? ( AdditionFn(var ? ? ? LENGTH1)(var ? ? ? LENGTH2))))))))
+
+forall UnitOfLength (\UNIT -> forall (both RealNumber Quantity) (\LENGTH2 -> forall (both RealNumber Quantity) (\LENGTH1 -> forall RealNumber (\LENGTH -> forall GeographicArea (\AREA ->  impl (and ( totalLengthOfHighwaySystem(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH)(var ? ? ? UNIT))))(and ( lengthOfPavedHighway(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH1)(var ? ? ? UNIT))))( lengthOfUnpavedHighway(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH2)(var ? ? ? UNIT))))))( totalLengthOfHighwaySystem(var ? ? ? AREA)( el ? ? ? ( MeasureFn( el ? ? ? ( AdditionFn(var ? ? ? LENGTH1)(var ? ? ? LENGTH2)))(var ? ? ? UNIT)))))))))
+
+forall (both LengthMeasure Quantity) (\PAVED -> forall (both LengthMeasure Quantity) (\TOTAL -> forall GeographicArea (\AREA ->  impl (and ( totalLengthOfHighwaySystem(var ? ? ? AREA)(var ? ? ? TOTAL))( lengthOfPavedHighway(var ? ? ? AREA)(var ? ? ? PAVED)))( greaterThanOrEqualTo(var ? ? ? TOTAL)(var ? ? ? PAVED)))))
+
+forall (both LengthMeasure Quantity) (\UNPAVED -> forall (both LengthMeasure Quantity) (\TOTAL -> forall GeographicArea (\AREA ->  impl (and ( totalLengthOfHighwaySystem(var ? ? ? AREA)(var ? ? ? TOTAL))( lengthOfUnpavedHighway(var ? ? ? AREA)(var ? ? ? UNPAVED)))( greaterThanOrEqualTo(var ? ? ? TOTAL)(var ? ? ? UNPAVED)))))
+
+forall UnitOfLength (\UNIT -> forall (both RealNumber Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( lengthOfPavedHighway(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH)(var ? ? ? UNIT))))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists SurfacedRoadway (\HIGHWAY ->  located(var ? ? ? HIGHWAY)(var ? ? ? AREA))))))
+
+forall UnitOfLength (\UNIT -> forall (both RealNumber Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( lengthOfExpresswaySystem(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH)(var ? ? ? UNIT))))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists Expressway (\HIGHWAY ->  located(var ? ? ? HIGHWAY)(var ? ? ? AREA))))))
+
+forall (both LengthMeasure Quantity) (\LENGTH2 -> forall (both LengthMeasure Quantity) (\LENGTH1 -> forall GeographicArea (\AREA ->  impl (and ( lengthOfExpresswaySystem(var ? ? ? AREA)(var ? ? ? LENGTH1))( lengthOfPavedHighway(var ? ? ? AREA)(var ? ? ? LENGTH2)))( greaterThanOrEqualTo(var ? ? ? LENGTH2)(var ? ? ? LENGTH1)))))
+
+forall UnitOfLength (\UNIT -> forall (both RealNumber Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( lengthOfUnpavedHighway(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH)(var ? ? ? UNIT))))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists UnsurfacedRoadway (\HIGHWAY ->  located(var ? ? ? HIGHWAY)(var ? ? ? AREA))))))
+
+forall UnitOfLength (\UNIT -> forall (both RealNumber Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( totalLengthOfWaterways(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH)(var ? ? ? UNIT))))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists Waterway (\WATERWAY ->  located(var ? ? ? WATERWAY)(var ? ? ? AREA))))))
+
+forall UnitOfLength (\UNIT -> forall (both RealNumber Quantity) (\LENGTH -> forall (both GeographicArea Object) (\AREA ->  impl (and ( totalPipelineInArea(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LENGTH)(var ? ? ? UNIT))))( greaterThan(var ? ? ? LENGTH)(el ? ? ? (toInt 0))))(exists Pipeline (\PIPE ->  located(var ? ? ? PIPE)(var ? ? ? AREA))))))
+
+forall (both LengthMeasure Quantity) (\AMOUNT2 -> forall (both LengthMeasure Quantity) (\AMOUNT1 -> forall GeographicArea (\AREA ->  impl (and ( lengthOfCrudeOilPipeline(var ? ? ? AREA)(var ? ? ? AMOUNT1))( totalPipelineInArea(var ? ? ? AREA)(var ? ? ? AMOUNT2)))( lessThanOrEqualTo(var ? ? ? AMOUNT1)(var ? ? ? AMOUNT2)))))
+
+forall (both LengthMeasure Quantity) (\AMOUNT2 -> forall (both LengthMeasure Quantity) (\AMOUNT1 -> forall GeographicArea (\AREA ->  impl (and ( lengthOfNaturalGasPipeline(var ? ? ? AREA)(var ? ? ? AMOUNT1))( totalPipelineInArea(var ? ? ? AREA)(var ? ? ? AMOUNT2)))( lessThanOrEqualTo(var ? ? ? AMOUNT1)(var ? ? ? AMOUNT2)))))
+
+forall (both LengthMeasure Quantity) (\AMOUNT2 -> forall (both LengthMeasure Quantity) (\AMOUNT1 -> forall GeographicArea (\AREA ->  impl (and ( lengthOfPetroleumProductPipeline(var ? ? ? AREA)(var ? ? ? AMOUNT1))( totalPipelineInArea(var ? ? ? AREA)(var ? ? ? AMOUNT2)))( lessThanOrEqualTo(var ? ? ? AMOUNT1)(var ? ? ? AMOUNT2)))))
+
+forall PortCity (\CITY -> exists Harbor (\HARBOR ->  geographicSubregion(var ? ? ? HARBOR)(var ? ? ? CITY)))
+
+forall RiverPort (\PORT -> exists (both River Waterway) (\RIVER ->  meetsSpatially(var ? ? ? PORT)(var ? ? ? RIVER)))
+
+forall Object (\OBJECT2 -> forall Object (\OBJECT1 ->  impl ( meetsSpatially(var ? ? ? OBJECT1)(var ? ? ? OBJECT2))( orientation(var ? ? ? OBJECT1)(var ? ? ? OBJECT2)(el ? ? ? Adjacent))))
+
+forall SeaPort (\PORT -> exists (both Sea Ocean) (\SEA -> or ( orientation(var ? ? ? PORT)(var ? ? ? SEA)(el ? ? ? Adjacent))( orientation(var ? ? ? PORT)(var ? ? ? SEA)(el ? ? ? Near))))
+
+forall DeepDraftPort (\PORT -> exists DeepDraftHarbor (\HARBOR ->  geographicSubregion(var ? ? ? HARBOR)(var ? ? ? PORT)))
+
+forall DeepDraftHarbor (\HARBOR ->  navigableForDraft(var ? ? ? HARBOR)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 13.7))(el ? ? ? Meter))))
+
+forall DeepDraftHarbor (\HARBOR ->  navigableForDraft(var ? ? ? HARBOR)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 45))(el ? ? ? FootLength))))
+
+forall OffshoreAnchorage (\ANCHOR -> exists Harbor (\HARBOR ->  located(var ? ? ? ANCHOR)(var ? ? ? HARBOR)))
+
+forall UnitOfMass (\UNIT -> forall RealNumber (\NUMBER -> forall Collection (\FLEET ->  impl ( fleetGrossRegisteredTonnage(var ? ? ? FLEET)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(var ? ? ? UNIT))))( equal(var ? ? ? UNIT)(el ? ? ? RegistryTon)))))
+
+forall UnitOfMass (\UNIT -> forall RealNumber (\NUMBER -> forall Collection (\FLEET ->  impl ( fleetDeadWeightTonnage(var ? ? ? FLEET)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(var ? ? ? UNIT))))( equal(var ? ? ? UNIT)(el ? ? ? LongTon)))))
+
+forall MerchantMarineShip (\SHIP -> forall (both RealNumber Quantity) (\GRT ->  impl ( measure(var ? ? ? SHIP)( el ? ? ? ( MeasureFn(var ? ? ? GRT)(el ? ? ? RegistryTon))))( greaterThanOrEqualTo(var ? ? ? GRT)(el ? ? ? (toInt 1000)))))
+
+forall PetroleumTankerShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc PetroleumProduct ? ?))
+
+forall ChemicalTankerShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc ChemicalProduct ? ?))
+
+forall LiquefiedGasTankerShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc ChemicalProduct ? ?))
+
+forall LiquefiedGasTankerShip (\SHIP ->  cargoType(var ? ? ? SHIP)( desc(ExtensionFn(el ? ? ? Liquid)) ? ?))
+
+forall CombinationBulk_OilCarrierShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc Object ? ?))
+
+forall CombinationBulk_OilCarrierShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc Petroleum ? ?))
+
+forall CombinationOre_OilCarrierShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc Mineral ? ?))
+
+forall CombinationOre_OilCarrierShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc Petroleum ? ?))
+
+forall GeneralCargoShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc Product ? ?))
+
+forall ContainerShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc ShipContainer ? ?))
+
+forall VehicleCarrierShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc Vehicle ? ?))
+
+forall RailcarCarrierShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc RollingStock ? ?))
+
+forall LivestockCarrierShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc Livestock ? ?))
+
+forall PassengerShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc Human ? ?))
+
+forall SpecializedTankerShip (\SHIP ->  cargoType(var ? ? ? SHIP)(desc ( ExtensionFn(el ? ? ? Fluid)) ? ?))
+
+forall ShipRegistration (\REGISTRATION -> forall Ship (\SHIP -> forall GeopoliticalArea (\AREA ->  impl (and ( possesses(var ? ? ? SHIP)(var ? ? ? REGISTRATION))( flagState(var ? ? ? SHIP)(var ? ? ? AREA)))( subsumesContentInstance( el ? ? ? ( ShipRegisterFn(var ? ? ? AREA)))(var ? ? ? REGISTRATION)))))
+
+forall Ship (\SHIP -> forall GeopoliticalArea (\AREA ->  impl ( member(var ? ? ? SHIP)( el ? ? ? ( MerchantMarineFn(var ? ? ? AREA))))(exists ShipRegistration (\REGISTRATION -> and ( possesses(var ? ? ? SHIP)(var ? ? ? REGISTRATION))( subsumesContentInstance( el ? ? ? ( ShipRegisterFn(var ? ? ? AREA)))(var ? ? ? REGISTRATION))))))
+
+forall (both GeopoliticalArea Entity) (\AREA -> forall NonnegativeInteger (\COUNT -> forall (both GeopoliticalArea Entity) (\HOME -> forall (both MerchantMarine Entity) (\MM ->  impl (and ( fOCShipsByOrigin(var ? ? ? MM)(var ? ? ? HOME)(var ? ? ? COUNT))( equal(var ? ? ? MM)( el ? ? ? ( MerchantMarineFn(var ? ? ? AREA)))))( not (equal(var ? ? ? HOME)(var ? ? ? AREA)))))))
+
+forall NonnegativeInteger (\COUNT -> forall (both GeographicArea Object) (\AREA ->  impl ( totalFacilityTypeInArea(var ? ? ? AREA)( ExtensionFn(el ? ? ? AirportWithPavedRunway))(var ? ? ? COUNT))(exists Airport (\AIRPORT -> exists PavedRunway (\RUNWAY -> and ( part(var ? ? ? RUNWAY)(var ? ? ? AIRPORT))( located(var ? ? ? AIRPORT)(var ? ? ? AREA)))))))
+
+forall Runway (\RUNWAY -> exists LengthMeasure (\LENGTH ->  length(var ? ? ? RUNWAY)(var ? ? ? LENGTH)))
+
+forall Airport (\AIRPORT ->  impl ( attribute(var ? ? ? AIRPORT)(el ? ? ? AirportWithPavedRunway))(exists PavedRunway (\RUNWAY ->  part(var ? ? ? RUNWAY)(var ? ? ? AIRPORT))))
+
+forall Airport (\AIRPORT ->  impl ( attribute(var ? ? ? AIRPORT)(el ? ? ? AirportWithUnpavedRunway))(exists UnpavedRunway (\RUNWAY ->  part(var ? ? ? RUNWAY)(var ? ? ? AIRPORT))))
+
+forall Airport (\AIRPORT ->  impl ( attribute(var ? ? ? AIRPORT)(el ? ? ? VeryShortRunwayAirport))(exists Runway (\RUNWAY -> exists (both PhysicalQuantity Quantity) (\LENGTH -> and ( part(var ? ? ? RUNWAY)(var ? ? ? AIRPORT))(and ( length(var ? ? ? RUNWAY)(var ? ? ? LENGTH))( lessThan(var ? ? ? LENGTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 914))(el ? ? ? Meter)))))))))
+
+forall Airport (\AIRPORT ->  impl ( attribute(var ? ? ? AIRPORT)(el ? ? ? ShortRunwayAirport))(exists Runway (\RUNWAY -> exists (both PhysicalQuantity Quantity) (\LENGTH -> and ( part(var ? ? ? RUNWAY)(var ? ? ? AIRPORT))(and ( length(var ? ? ? RUNWAY)(var ? ? ? LENGTH))(or ( greaterThanOrEqualTo(var ? ? ? LENGTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 914))(el ? ? ? Meter))))( lessThanOrEqualTo(var ? ? ? LENGTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1523))(el ? ? ? Meter))))))))))
+
+forall Airport (\AIRPORT ->  impl ( attribute(var ? ? ? AIRPORT)(el ? ? ? ShortRunwayAirport))(exists Runway (\RUNWAY -> exists (both PhysicalQuantity Quantity) (\LENGTH -> and ( part(var ? ? ? RUNWAY)(var ? ? ? AIRPORT))(and ( length(var ? ? ? RUNWAY)(var ? ? ? LENGTH))(or ( greaterThanOrEqualTo(var ? ? ? LENGTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1524))(el ? ? ? Meter))))( lessThanOrEqualTo(var ? ? ? LENGTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 2437))(el ? ? ? Meter))))))))))
+
+forall Airport (\AIRPORT ->  impl ( attribute(var ? ? ? AIRPORT)(el ? ? ? LongRunwayAirport))(exists Runway (\RUNWAY -> exists (both PhysicalQuantity Quantity) (\LENGTH -> and ( part(var ? ? ? RUNWAY)(var ? ? ? AIRPORT))(and ( length(var ? ? ? RUNWAY)(var ? ? ? LENGTH))(or ( greaterThanOrEqualTo(var ? ? ? LENGTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 2438))(el ? ? ? Meter))))( lessThanOrEqualTo(var ? ? ? LENGTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 3047))(el ? ? ? Meter))))))))))
+
+forall Airport (\AIRPORT ->  impl ( attribute(var ? ? ? AIRPORT)(el ? ? ? VeryLongRunwayAirport))(exists Runway (\RUNWAY -> exists (both PhysicalQuantity Quantity) (\LENGTH -> and ( part(var ? ? ? RUNWAY)(var ? ? ? AIRPORT))(and ( length(var ? ? ? RUNWAY)(var ? ? ? LENGTH))( greaterThan(var ? ? ? LENGTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 3047))(el ? ? ? Meter)))))))))
+
+forall (both NonnegativeInteger Quantity) (\COUNT -> forall (both GeographicArea Object) (\AREA ->  impl (and ( totalFacilityTypeInArea(var ? ? ? AREA)( ExtensionFn(el ? ? ? AirportWithUnpavedRunway))(var ? ? ? COUNT))( greaterThan(var ? ? ? COUNT)(el ? ? ? (toInt 0))))(exists Airport (\AIRPORT -> exists UnpavedRunway (\RUNWAY -> and ( part(var ? ? ? RUNWAY)(var ? ? ? AIRPORT))( located(var ? ? ? AIRPORT)(var ? ? ? AREA)))))))
+
+forall Heliport (\HELO ->  trafficableForTrafficType(var ? ? ? HELO)(desc Helicopter ? ?))
+
+forall TimeDuration (\T2 -> forall LengthMeasure (\L2 -> forall (both Entity Quantity) (\SLOWPROB -> forall TimeDuration (\T1 -> forall LengthMeasure (\L1 -> forall (both Entity Quantity) (\FASTPROB -> forall FunctionQuantity (\Q -> forall (both Vehicle Object) (\V ->  impl (and ( topSpeed(var ? ? ? V)(var ? ? ? Q))(and ( equal(var ? ? ? FASTPROB)( el ? ? ? ( ProbabilityFn( measure(var ? ? ? V)( el ? ? ? ( SpeedFn(var ? ? ? L1)(var ? ? ? T1)))))))(and ( equal(var ? ? ? SLOWPROB)( el ? ? ? ( ProbabilityFn( measure(var ? ? ? V)( el ? ? ? ( SpeedFn(var ? ? ? L2)(var ? ? ? T2)))))))( greaterThan( el ? ? ? ( SpeedFn(var ? ? ? L1)(var ? ? ? T1)))( el ? ? ? ( SpeedFn(var ? ? ? L2)(var ? ? ? T2)))))))( greaterThan(var ? ? ? SLOWPROB)(var ? ? ? FASTPROB))))))))))
+
+forall RailVehicle (\X ->  hasPurpose(var ? ? ? X)(exists Transportation (\EV -> exists Railway (\RAIL ->  holdsDuring( el ? ? ? ( WhenFn(var ? ? ? EV)))( meetsSpatially(var ? ? ? X)(var ? ? ? RAIL))))))
+
+forall Train (\TRAIN -> exists RollingStock (\X -> exists RollingStock (\Y ->  not (equal(var ? ? ? X)(var ? ? ? Y)))))
+
+forall WaterVehicle (\X ->  hasPurpose(var ? ? ? X)(exists Transportation (\EV -> exists Water (\SURF ->  holdsDuring( el ? ? ? ( WhenFn(var ? ? ? EV)))( meetsSpatially(var ? ? ? X)(var ? ? ? SURF))))))
+
+forall WaterVehicle (\CRAFT -> forall Transportation (\EVENT ->  impl ( instrument(var ? ? ? EVENT)(var ? ? ? CRAFT))(exists WaterArea (\WATER ->  located(var ? ? ? EVENT)(var ? ? ? WATER)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? LongTon)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 2240))))(el ? ? ? PoundMass)))))
+
+forall Entity (\QUANT -> forall (both Quantity RealNumber) (\N3 -> forall (both Quantity RealNumber) (\N2 -> forall (both Quantity RealNumber) (\N1 -> forall (both Entity RealNumber) (\N4 ->  impl (and ( equal(var ? ? ? N4)( el ? ? ? ( MultiplicationFn(var ? ? ? N1)( el ? ? ? ( MultiplicationFn(var ? ? ? N2)(var ? ? ? N3))))))( equal(var ? ? ? QUANT)( el ? ? ? ( MultiplicationFn( el ? ? ? ( MeasureFn(var ? ? ? N1)(el ? ? ? FootLength)))( el ? ? ? ( MultiplicationFn( el ? ? ? ( MeasureFn(var ? ? ? N2)(el ? ? ? FootLength)))( el ? ? ? ( MeasureFn(var ? ? ? N3)(el ? ? ? FootLength)))))))))( equal(var ? ? ? QUANT)( el ? ? ? ( MeasureFn(var ? ? ? N4)(el ? ? ? CubicFoot)))))))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? RegistryTon)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 100))))(el ? ? ? CubicFoot)))))
+
+forall ShipDeck (\DECK -> exists Ship (\SHIP ->  properPart(var ? ? ? DECK)(var ? ? ? SHIP)))
+
+forall Airport (\AIRPORT ->  trafficableForTrafficType(var ? ? ? AIRPORT)(desc Airplane ? ?))
+
+forall Waterway (\WATERWAY -> forall UnitOfLength (\UNIT -> forall (both Quantity RealNumber) (\DRAFT -> forall (both RealNumber Quantity) (\DEPTH -> forall Physical (\OBJ ->  impl (and ( depth(var ? ? ? OBJ)(var ? ? ? WATERWAY)( el ? ? ? ( MeasureFn(var ? ? ? DEPTH)(var ? ? ? UNIT))))( lessThan(var ? ? ? DRAFT)(var ? ? ? DEPTH)))( navigableForDraft(var ? ? ? WATERWAY)( el ? ? ? ( MeasureFn(var ? ? ? DRAFT)(var ? ? ? UNIT)))))))))
+
+forall TransitSystem (\SYSTEM -> exists Transitway (\ROUTE ->  part(var ? ? ? ROUTE)(var ? ? ? SYSTEM)))
+
+forall TransitSystem (\TS -> exists Graph (\G ->  abstractCounterpart(var ? ? ? G)(var ? ? ? TS)))
+
+forall TransitSystem (\TS -> forall Transitway (\T -> forall (both Abstract Graph) (\G ->  impl (and ( abstractCounterpart(var ? ? ? G)(var ? ? ? TS))( systemPart(var ? ? ? T)(var ? ? ? TS)))(exists GraphArc (\GA -> and ( abstractCounterpart(var ? ? ? GA)(var ? ? ? T))( graphPart(var ? ? ? GA)(var ? ? ? G)))))))
+
+forall TransitSystem (\TS -> forall TransitwayJunction (\TJ -> forall (both Abstract Graph) (\G ->  impl (and ( abstractCounterpart(var ? ? ? G)(var ? ? ? TS))( systemPart(var ? ? ? TJ)(var ? ? ? TS)))(exists GraphNode (\GN -> and ( abstractCounterpart(var ? ? ? GN)(var ? ? ? TJ))( graphPart(var ? ? ? GN)(var ? ? ? G)))))))
+
+forall (both Abstract GraphArc) (\ARC -> forall (both Abstract GraphNode) (\N2 -> forall (both Abstract GraphNode) (\N1 -> forall (both SelfConnectedObject Physical) (\NODE2 -> forall (both SelfConnectedObject Physical) (\NODE1 -> forall (both SelfConnectedObject Physical) (\A ->  impl (and ( connects(var ? ? ? A)(var ? ? ? NODE1)(var ? ? ? NODE2))(and ( abstractCounterpart(var ? ? ? N1)(var ? ? ? NODE1))(and ( abstractCounterpart(var ? ? ? N2)(var ? ? ? NODE2))( abstractCounterpart(var ? ? ? ARC)(var ? ? ? A)))))( links(var ? ? ? N1)(var ? ? ? N2)(var ? ? ? ARC))))))))
+
+forall (both Transitway Physical) (\PATH -> forall ConstantQuantity (\DIST ->  impl ( distanceOnPath(var ? ? ? DIST)(var ? ? ? PATH))(exists GraphPath (\GP ->  abstractCounterpart(var ? ? ? GP)(var ? ? ? PATH)))))
+
+forall (both Abstract (both Graph GraphPath)) (\GRAPH -> forall Region (\END -> forall (both Region Physical) (\START -> forall (both TransitSystem Physical) (\SYS -> forall (both Transitway TransitSystem) (\PATH -> forall ConstantQuantity (\DIST ->  impl (and ( distanceOnPath(var ? ? ? DIST)(var ? ? ? PATH))(and ( pathInSystem(var ? ? ? PATH)(var ? ? ? SYS))(and ( routeStart(var ? ? ? START)(var ? ? ? PATH))(and ( routeEnd(var ? ? ? END)(var ? ? ? PATH))( abstractCounterpart(var ? ? ? GRAPH)(var ? ? ? SYS))))))(exists (both Entity Abstract) (\EN -> exists (both Entity Abstract) (\BN -> exists Graph (\S -> and ( subGraph(var ? ? ? S)(var ? ? ? GRAPH))(and ( equal(var ? ? ? BN)( el ? ? ? ( BeginNodeFn(var ? ? ? GRAPH))))(and ( equal(var ? ? ? EN)( el ? ? ? ( EndNodeFn(var ? ? ? GRAPH))))(and ( abstractCounterpart(var ? ? ? BN)(var ? ? ? START))( abstractCounterpart(var ? ? ? EN)(var ? ? ? END)))))))))))))))
+
+

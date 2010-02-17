@@ -1,0 +1,153 @@
+
+forall CognitiveAgent (\AGENT ->  forall Reasoning (\REASONING -> agent (var ? ? ? REASONING)(var ? ? ? AGENT)))
+
+forall Object (\X ->  impl ( attribute(var ? ? ? X)(el ? ? ? Flammable))(forall Combustion (\COMBUSTION -> patient (var ? ? ? COMBUSTION)(var ? ? ? X))))
+
+forall SentientAgent (\AGENT ->  forall Perception (\PERCEPTION -> experiencer (var ? ? ? PERCEPTION)(var ? ? ? AGENT)))
+
+forall Cloud (\CLOUD ->  forall Seeing (\SEEING -> patient (var ? ? ? SEEING)(var ? ? ? CLOUD)))
+
+forall MusicalInstrument (\INSTRUMENT ->  forall Music (\MUSIC -> instrument (var ? ? ? MUSIC)(var ? ? ? INSTRUMENT)))
+
+forall TransportationDevice (\DEVICE ->  forall Transportation (\TRANSPORTATION ->  instrument (var ? ? ? TRANSPORTATION)(var ? ? ? DEVICE)))
+
+forall Weapon (\WEAPON ->  forall Damaging (\DAMAGING -> instrument (var ? ? ? DAMAGING)(var ? ? ? WEAPON)))
+
+forall MilitaryForce (\ORG ->  forall ViolentContest (\VIOLENTCONTEST -> agent (var ? ? ? VIOLENTCONTEST)(var ? ? ? ORG)))
+
+forall Spacecraft (\CRAFT ->  forall SpaceTransportation (\SPACETRANSPORTATION -> instrument (var ? ? ? SPACETRANSPORTATION)(var ? ? ? CRAFT)))
+
+forall WaterVehicle (\CRAFT ->  forall WaterTransportation (\WATERTRANSPORTATION -> instrument (var ? ? ? WATERTRANSPORTATION)(var ? ? ? CRAFT)))
+
+forall LandVehicle (\VEHICLE ->  forall LandTransportation (\LANDTRANSPORTATION -> instrument (var ? ? ? LANDTRANSPORTATION)(var ? ? ? VEHICLE)))
+
+forall ExplosiveSubstance (\S ->  forall Explosion (\EXPLOSION -> instrument (var ? ? ? EXPLOSION)(var ? ? ? S)))
+
+forall Aircraft (\CRAFT ->  forall AirTransportation (\AIRTRANSPORTATION -> instrument (var ? ? ? AIRTRANSPORTATION)(var ? ? ? CRAFT)))
+
+forall Explosion (\EXPLOSION ->  forall Damaging (\DAMAGING -> instrument (var ? ? ? DAMAGING) (var ? ? ? EXPLOSION)))
+
+forall Antenna (\ANTENNA ->  forall RadioEmission (\RADIOEMISSION -> instrument (var ? ? ? RADIOEMISSION)(var ? ? ? ANTENNA)))
+
+forall TelevisionReceiver (\TELEVISION ->  forall TelevisionBroadcasting (\TELEVISIONBROADCASTING -> patient (var ? ? ? TELEVISIONBROADCASTING)(var ? ? ? TELEVISION)))
+
+forall RadioReceiver (\RADIO ->  forall RadioBroadcasting (\RADIOBROADCASTING -> patient (var ? ? ? RADIOBROADCASTING)(var ? ? ? RADIO)))
+
+forall Elevator (\E -> and (forall MotionUpward (\MOTIONUPWARD -> instrument (var ? ? ? MOTIONUPWARD)(var ? ? ? E))) ( forall MotionDownward (\MOTIONDOWNWARD -> instrument (var ? ? ? MOTIONDOWNWARD)(var ? ? ? E))))
+
+forall Hinge (\HINGE ->  hasPurpose(var ? ? ? HINGE)(exists SelfConnectedObject (\OBJ2 -> exists SelfConnectedObject (\OBJ1 -> and ( connects(var ? ? ? HINGE)(var ? ? ? OBJ1)(var ? ? ? OBJ2)) (forall Rotating (\ROTATING -> or ( patient (var ? ? ? ROTATING)(var ? ? ? OBJ1)) ( patient (var ? ? ? ROTATING)(var ? ? ? OBJ2))))))))
+
+forall Ladder (\LADDER -> and (forall MotionUpward (\MOTIONUPWARD -> instrument (var ? ? ? MOTIONUPWARD)(var ? ? ? LADDER)))( forall MotionDownward (\MOTIONDOWNWARD -> instrument (var ? ? ? MOTIONDOWNWARD)(var ? ? ? LADDER))))
+
+forall Steps (\STEPS -> and ( forall MotionUpward (\MOTIONUPWARD -> instrument (var ? ? ? MOTIONUPWARD)(var ? ? ? STEPS)))( forall MotionDownward (\MOTIONDOWNWARD -> instrument (var ? ? ? MOTIONDOWNWARD)(var ? ? ? STEPS))))
+
+forall Stairway (\S -> and ( forall MotionUpward (\MOTIONUPWARD -> instrument (var ? ? ? MOTIONUPWARD)(var ? ? ? S)))( forall MotionDownward (\MOTIONDOWNWARD -> instrument (var ? ? ? MOTIONDOWNWARD)(var ? ? ? S))))
+
+forall MusicRecording (\X -> exists Music (\EV -> and ( represents(var ? ? ? X)(var ? ? ? EV))( forall Music (\MUSIC -> patient (var ? ? ? MUSIC)(var ? ? ? X)))))
+
+forall VideoRecording (\X -> exists Process (\EV -> and ( represents(var ? ? ? X)(var ? ? ? EV))( forall RadiatingLight (\RADIATINGLIGHT -> patient (var ? ? ? RADIATINGLIGHT)(var ? ? ? X)))))
+
+forall MusicText (\X ->  forall Music (\MUSIC -> patient (var ? ? ? MUSIC)(var ? ? ? X)))
+
+forall AudioRecording (\X -> exists RadiatingSound (\EV -> and ( represents(var ? ? ? X)(var ? ? ? EV))( forall RadiatingSound (\RADIATINGSOUND -> patient (var ? ? ? RADIATINGSOUND)(var ? ? ? X)))))
+
+forall LegislativeOrganization (\ORG ->  forall PassingABill (\PASSINGABILL -> agent (var ? ? ? PASSINGABILL)(var ? ? ? ORG)))
+
+forall Camera (\CAMERA ->  forall Photographing (\PHOTOGRAPHING -> instrument (var ? ? ? PHOTOGRAPHING)(var ? ? ? CAMERA)))
+
+forall QueenInsect (\INSECT -> exists Group (\GROUP -> and ( member(var ? ? ? INSECT)(var ? ? ? GROUP))(exists SelfConnectedObject (\MEMBER -> and ( member(var ? ? ? MEMBER)(var ? ? ? GROUP))(and ( forall Replication (\REPLICATION -> agent (var ? ? ? REPLICATION)(var ? ? ? MEMBER)))( equal(var ? ? ? MEMBER)(var ? ? ? INSECT)))))))
+
+forall QueenInsect (\INSECT -> and ( attribute(var ? ? ? INSECT)(el ? ? ? Female))( forall Replication (\REPLICATION -> agent (var ? ? ? REPLICATION)(var ? ? ? INSECT))))
+
+forall Eyelid (\E ->  forall Covering (\COVERING -> instrument (var ? ? ? COVERING)(var ? ? ? E)))
+
+forall Ear (\EAR ->  forall Hearing (\HEARING -> instrument (var ? ? ? HEARING)(var ? ? ? EAR)))
+
+forall Eye (\EYE ->  forall Seeing (\SEEING -> instrument (var ? ? ? SEEING)(var ? ? ? EYE)))
+
+forall Intestine (\I ->  forall Digesting (\DIGESTING -> instrument (var ? ? ? DIGESTING)(var ? ? ? I)))
+
+forall Stomach (\S ->  forall Digesting (\DIGESTING -> instrument (var ? ? ? DIGESTING)(var ? ? ? S)))
+
+forall RetailStore (\X -> and ( forall Selling (\SELLING -> located (var ? ? ? SELLING)(var ? ? ? X)))(exists Human (\P -> exists Selling (\EV ->  destination(var ? ? ? EV)(var ? ? ? P)))))
+
+forall RestaurantBuilding (\PLACE ->  forall Cooking (\COOKING -> located (var ? ? ? COOKING)(var ? ? ? PLACE)))
+
+forall Pocket (\POCKET ->  forall Keeping (\KEEPING -> instrument (var ? ? ? KEEPING)(var ? ? ? POCKET)))
+
+forall Towel (\X ->  forall Drying (\DRYING -> instrument (var ? ? ? DRYING)(var ? ? ? X)))
+
+forall BoardOrBlock (\BOARD ->  forall Constructing (\CONSTRUCTING -> resourceS (var ? ? ? CONSTRUCTING)(var ? ? ? BOARD)))
+
+forall Holder (\DEVICE ->  forall Keeping (\KEEPING ->  instrument (var ? ? ? KEEPING)(var ? ? ? DEVICE)))
+
+forall Furniture (\F ->  forall Translocation (\TRANSLOCATION -> moves (var ? ? ? TRANSLOCATION)(var ? ? ? F)))
+
+forall Mirror (\M ->  forall ReflectingLight (\REFLECTINGLIGHT -> instrument (var ? ? ? REFLECTINGLIGHT)(var ? ? ? M)))
+
+forall Nose (\NOSE ->  forall Smelling (\SMELLING -> instrument (var ? ? ? SMELLING)(var ? ? ? NOSE)))
+
+forall Fallout (\POWDER ->  forall RadiatingNuclear (\RADIATINGLIGHT -> instrument (var ? ? ? RADIATINGLIGHT)(var ? ? ? POWDER)))
+
+forall SteeringWheel (\W ->  forall DirectionChange (\DIRECTIONCHANGE -> instrument (var ? ? ? DIRECTIONCHANGE)(var ? ? ? W)))
+
+forall Paint (\PAINT ->  forall Coloring (\COLORING -> instrument (var ? ? ? COLORING)(var ? ? ? PAINT)))
+
+forall LightFixture (\F ->  forall RadiatingLight (\RADIATINGLIGHT -> instrument (var ? ? ? RADIATINGLIGHT)(var ? ? ? F)))
+
+forall Key (\KEY -> exists Lock (\LOCK -> and ( forall Opening (\OPENING -> instrument (var ? ? ? OPENING)(var ? ? ? LOCK)))( forall Closing (\CLOSING -> instrument (var ? ? ? CLOSING)(var ? ? ? LOCK)))))
+
+forall Sonar (\SONAR ->  forall RadiatingSound (\RADIATINGSOUND -> agent (var ? ? ? RADIATINGSOUND)(var ? ? ? SONAR)))
+
+forall Radar (\RADAR ->  forall RadiatingElectromagnetic (\RADIATINGELECTROMAGNETIC -> agent (var ? ? ?  RADIATINGELECTROMAGNETIC)(var ? ? ? RADAR)))
+
+forall FileDevice (\DEVICE ->  forall SurfaceChange (\SURFACECHANGE -> instrument (var ? ? ? SURFACECHANGE)(var ? ? ? DEVICE)))
+
+forall HoistingDevice (\H ->  forall MotionUpward (\MOTIONUPWARD -> instrument (var ? ? ? MOTIONUPWARD)(var ? ? ? H)))
+
+forall HoistingDevice (\H ->  forall MotionDownward (\MOTIONDOWNWARD -> instrument(var ? ? ? MOTIONDOWNWARD)(var ? ? ? H)))
+
+forall Ramp (\R ->  forall MotionUpward (\MOTIONUPWARD -> path (var ? ? ? MOTIONUPWARD)(var ? ? ? R)))
+
+forall Ramp (\R ->  forall MotionDownward (\MOTIONDOWNWARD -> path (var ? ? ? MOTIONDOWNWARD)(var ? ? ? R)))
+
+forall Rotor (\R ->  forall Rotating (\ROTATING -> instrument (var ? ? ? ROTATING)(var ? ? ? R)))
+
+forall NuclearWeapon (\W ->  forall RadiatingNuclear (\RADIATINGNUCLEAR -> instrument (var ? ? ? RADIATINGNUCLEAR)(var ? ? ? W)))
+
+forall GunPowder (\P ->  forall Explosion (\EXPLOSION -> instrument (var ? ? ? EXPLOSION)(var ? ? ? P)))
+
+forall Gun (\GUN ->  forall Shooting (\SHOOTING -> instrument (var ? ? ? SHOOTING)(var ? ? ? GUN)))
+
+forall ProjectileLauncher (\L ->  forall Shooting(\SHOOTING -> instrument (var ? ? ? SHOOTING)(var ? ? ? L)))
+
+forall Projectile (\PROJECTILE ->  forall Shooting (\SHOOTING -> patient (var ? ? ? SHOOTING)(var ? ? ? PROJECTILE)))
+
+forall TelevisionReceiver (\T ->  forall TelevisionBroadcasting (\TELEVISIONBROADCASTING -> patient (var ? ? ? TELEVISIONBROADCASTING)(var ? ? ? T)))
+
+forall CommunicationDevice (\DEVICE ->  forall Communication (\COMMUNICATION -> instrument (var ? ? ? COMMUNICATION)(var ? ? ? DEVICE)))
+
+forall Object (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? FertileTerrain))( forall Agriculture (\AGRICULTURE -> located (var ? ? ? AGRICULTURE)(var ? ? ? AREA))))
+
+forall CallableBond (\Bond -> forall CognitiveAgent (\AGENT ->  impl ( issuedBy(var ? ? ? Bond)(var ? ? ? AGENT))( forall Call (\CALL -> agent (var ? ? ? CALL)(var ? ? ? AGENT)))))
+
+forall MilitaryVehicle (\MV -> forall MilitaryForce (\A -> and ( possesses(var ? ? ? A)(var ? ? ? MV))( forall MilitaryProcess (\MILITARYPROCESS -> patient (var ? ? ? MILITARYPROCESS)(var ? ? ? MV)))))
+
+forall PortFacility (\PORT ->  impl ( forall ShipBerthing (\SHIPBERTHING -> patient (var ? ? ? SHIPBERTHING)(var ? ? ? PORT)))(exists Harbor (\HARBOR -> and ( connected(var ? ? ? HARBOR)(var ? ? ? PORT))( forall ShipBerthing (\SHIPBERTHING -> path (var ? ? ? SHIPBERTHING)(var ? ? ? HARBOR))))))
+
+forall Harbor (\HARBOR -> forall Quantity (\NUM ->  impl (and ( equipmentCount(var ? ? ? HARBOR)(desc ShipBerth ? ?)(var ? ? ? NUM))( greaterThan(var ? ? ? NUM)(el ? ? ? (toInt 0))))( forall ShipBerthing (\SHIPBERTHING -> path (var ? ? ? SHIPBERTHING)(var ? ? ? HARBOR)))))
+
+forall (both LengthMeasure Quantity) (\DRAFT -> forall (both WaterVehicle Vehicle) (\SHIP -> forall (both LengthMeasure Quantity) (\AMOUNT -> forall WaterArea (\WATERWAY ->  impl (and ( navigableForDraft(var ? ? ? WATERWAY)(var ? ? ? AMOUNT))(and ( ladenDraft(var ? ? ? SHIP)(var ? ? ? DRAFT))( lessThanOrEqualTo(var ? ? ? AMOUNT)(var ? ? ? DRAFT))))( forall (descToClass ? ( TripFn(var ? ? ? SHIP))) (\O1 -> path (var ? ? ? O1)(var ? ? ? WATERWAY)))))))
+
+forall (both LengthMeasure Quantity) (\DRAFT -> forall (both WaterVehicle Vehicle) (\SHIP -> forall (both LengthMeasure Quantity) (\AMOUNT -> forall WaterArea (\WATERWAY ->  impl (and ( navigableForDraft(var ? ? ? WATERWAY)(var ? ? ? AMOUNT))(and ( ladenDraft(var ? ? ? SHIP)(var ? ? ? DRAFT))( greaterThan(var ? ? ? AMOUNT)(var ? ? ? DRAFT))))( forall (descToClass ? (TripFn(var ? ? ? SHIP))) (\O1 ->  path (var ? ? ? O1)(var ? ? ? WATERWAY)))))))
+
+forall WaterVehicle (\VESSEL -> forall (both RealNumber Quantity) (\DWT -> forall (both RealNumber Quantity) (\TONNAGE -> forall WaterArea (\WATERWAY ->  impl (and ( navigableForShippingTonnage(var ? ? ? WATERWAY)( el ? ? ? ( MeasureFn(var ? ? ? TONNAGE)(el ? ? ? LongTon))))(and ( vesselDisplacement(var ? ? ? VESSEL)( el ? ? ? ( MeasureFn(var ? ? ? DWT)(el ? ? ? LongTon))))( lessThanOrEqualTo(var ? ? ? DWT)(var ? ? ? TONNAGE))))( forall (descToClass ? (TripFn(var ? ? ? VESSEL))) (\O1 -> path (var ? ? ? O1) (var ? ? ? WATERWAY)))))))
+
+forall PassengerVehicle (\VEHICLE -> forall Human (\HUMAN ->  forall Transportation (\TRANSPORTATION -> patient (var ? ? ? TRANSPORTATION)(var ? ? ? HUMAN))))
+
+forall LifeThreateningDisease (\DISEASE -> forall Object (\AGENT ->  impl ( attribute(var ? ? ? AGENT)(var ? ? ? DISEASE))( forall Death (\DEATH -> experiencer (var ? ? ? DEATH)(var ? ? ? AGENT)))))
+
+forall LifeThreateningAgent (\AGENT ->  forall Killing (\KILLING -> instrument (var ? ? ? KILLING)(var ? ? ? AGENT)))
+
+forall BiochemicalWeapon (\WEAPON -> forall Agent (\AGENT ->  impl ( possesses(var ? ? ? AGENT)(var ? ? ? WEAPON))( forall BiochemicalAttack (\BIOCHEMICALATTACK -> agent (var ? ? ? BIOCHEMICALATTACK)(var ? ? ? AGENT)))))
+

@@ -1,0 +1,14 @@
+
+subRelation2El ? ? ? ? (\x,y -> trackWidth x y) (\x,y -> measure x y)
+
+subRelation2El ? ? ? ? (\x,y -> fleetGrossRegisteredTonnage x y) (\x,y -> measure x y)
+
+subRelation2El ? ? ? ? (\x,y -> fleetDeadWeightTonnage x y) (\x,y -> measure x y)
+
+subRelation2El ? ? ? ? (\x,y -> path x y) (\x,y -> partlyLocated x y)
+
+subRelation2El ? ? ? ? (\x,y -> vesselDisplacement x y) (\x,y -> measure x y)
+
+subRelation2El ? ? ? ? (\x,y -> vesselDeadWeightTonnage x y) (\x,y -> vesselDisplacement x y)
+
+subRelation2El ? ? ? ? (\x,y -> vesselGrossRegisteredTonnage x y) (\x,y -> vesselDisplacement x y)

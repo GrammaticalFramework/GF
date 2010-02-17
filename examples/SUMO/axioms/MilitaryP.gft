@@ -1,0 +1,13 @@
+
+subEchelon (desc Brigade ? ?) (desc Battalion ? ?)
+
+subEchelon (desc Battalion ? ?) (desc Company_Military ? ?)
+
+commandRankOfEchelon (desc Battalion ? ?) (el ? ? ? USMilitaryRankO5)
+
+subEchelon (desc Company_Military ? ?) (desc Platoon ? ?)
+
+commandRankOfEchelon (desc Company_Military ? ?) (el ? ? ? (UnionFn (el ? ? ? USMilitaryRankO3) (el ? ? ? USMilitaryRankO4)))
+
+commandRankOfEchelon (desc Platoon ? ?) (el ? ? ? USMilitaryRankO2)
+

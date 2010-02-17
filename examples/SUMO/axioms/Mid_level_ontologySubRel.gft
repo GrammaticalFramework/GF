@@ -1,0 +1,158 @@
+
+subRelation2El ? ? ? ? (\x,y -> wavelength x y) (\x,y -> measure x y)
+
+subRelation2El ? ? ? ? (\x,y -> sententialObject x y) (\x,y -> grammaticalRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> sententialSubject x y) (\x,y -> grammaticalRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> effectiveRange x y) (\x,y -> measure x y)
+
+subRelation2El ? ? ? ? (\x,y -> powerPlant x y) (\x,y -> component x y)
+
+subRelation2El ? ? ? ? (\x,y -> deviceState x y) (\x,y -> attribute x y)
+
+subRelation2El ? ? ? ? (\x,y -> telephoneNumber x y) (\x,y -> uniqueIdentifier x y)
+
+subRelation2El ? ? ? ? (\x,y -> postalCode x y) (\x,y -> uniqueIdentifier x y)
+
+subRelation2El ? ? ? ? (\x,y -> postalBoxNumber x y) (\x,y -> uniqueIdentifier x y)
+
+subRelation2El ? ? ? ? (\x,y -> cityAddress x y) (\x,y -> address x y)
+
+subRelation2El ? ? ? ? (\x,y -> streetAddress x y) (\x,y -> address x y)
+
+subRelation2El ? ? ? ? (\x,y -> streetNumber x y) (\x,y -> address x y)
+
+subRelation2El ? ? ? ? (\x,y -> unitNumber x y) (\x,y -> address x y)
+
+subRelation2El ? ? ? ? (\x,y -> detainee x y) (\x,y -> patient x y)
+
+subRelation2El ? ? ? ? (\x,y -> targetInAttack x y) (\x,y -> patient x y)
+
+subRelation2El ? ? ? ? (\x,y -> enjoys x y) (\x,y -> inScopeOfInterest x y)
+
+subRelation2El ? ? ? ? (\x,y -> dislikes x y) (\x,y -> inScopeOfInterest x y)
+
+subRelation2El ? ? ? ? (\x,y -> lacks x y) (\x,y -> needs x y)
+
+subRelation2El ? ? ? ? (\x,y -> groupMember x y) (\x,y -> member x y)
+
+subRelation2El ? ? ? ? (\x,y -> headquartersOfOrganization x y) (\x,y -> located x y)
+
+subRelation2El ? ? ? ? (\x,y -> reagent x y) (\x,y -> instrument x y)
+
+subRelation2El ? ? ? ? (\x,y -> half x y) (\x,y -> part x y)
+
+subRelation2El ? ? ? ? (\x,y -> third x y) (\x,y -> part x y)
+
+subRelation2El ? ? ? ? (\x,y -> quarter x y) (\x,y -> part x y)
+
+subRelation2El ? ? ? ? (\x,y -> most x y) (\x,y -> part x y)
+
+subRelation2El ? ? ? ? (\x,y -> titles x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> brandName x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> formerName x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> familyName x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> middleName x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> givenName x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> localLongName x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> localShortName x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> experimentalControl x y) (\x,y -> patient x y)
+
+subRelation2El ? ? ? ? (\x,y -> defendant x y) (\x,y -> patient x y)
+
+subRelation2El ? ? ? ? (\x,y -> plaintiff x y) (\x,y -> agent x y)
+
+subRelation2El ? ? ? ? (\x,y -> registeredItem x y) (\x,y -> refers x y)
+
+subRelation2El ? ? ? ? (\x,y -> student x y) (\x,y -> member x y)
+
+subRelation2El ? ? ? ? (\x,y -> teacher x y) (\x,y -> member x y)
+
+subRelation2El ? ? ? ? (\x,y -> onboard x y) (\x,y -> located x y)
+
+subRelation2El ? ? ? ? (\x,y -> sideOfFigure x y) (\x,y -> geometricPart x y)
+
+subRelation2El ? ? ? ? (\x,y -> contestParticipant x y) (\x,y -> agent x y)
+
+subRelation2El ? ? ? ? (\x,y -> subField x y) (\x,y -> subProposition x y)
+
+subRelation2El ? ? ? ? (\x,y -> financialAccount x y) (\x,y -> agreementMember x y)
+
+subRelation2El ? ? ? ? (\x,y -> transported x y) (\x,y -> patient x y)
+
+subRelation2El ? ? ? ? (\x,y -> cargo x y) (\x,y -> transported x y)
+
+subRelation2El ? ? ? ? (\x,y -> serviceProvider x y) (\x,y -> agent x y)
+
+subRelation2El ? ? ? ? (\x,y -> serviceRecipient x y) (\x,y -> experiencer x y)
+
+subRelation2El ? ? ? ? (\x,y -> moves x y) (\x,y -> involvedInEvent x y)
+
+subRelation2El ? ? ? ? (\x,y -> changesLocation x y) (\x,y -> moves x y)
+
+subRelation2El ? ? ? ? (\x,y -> friend x y) (\x,y -> mutualAcquaintance x y)
+
+subRelation2El ? ? ? ? (\x,y -> coworker x y) (\x,y -> mutualAcquaintance x y)
+
+subRelation2El ? ? ? ? (\x,y -> cohabitant x y) (\x,y -> mutualAcquaintance x y)
+
+subRelation2El ? ? ? ? (\x,y -> grandmother x y) (\x,y -> grandparent x y)
+
+subRelation2El ? ? ? ? (\x,y -> grandfather x y) (\x,y -> grandparent x y)
+
+subRelation2El ? ? ? ? (\x,y -> grandparent x y) (\x,y -> ancestor x y)
+
+subRelation2El ? ? ? ? (\x,y -> aunt x y) (\x,y -> familyRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> cousin x y) (\x,y -> familyRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> grandfather x y) (\x,y -> familyRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> grandmother x y) (\x,y -> familyRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> nephew x y) (\x,y -> familyRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> niece x y) (\x,y -> familyRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> uncle x y) (\x,y -> familyRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> stepfather x y) (\x,y -> legalRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> stepmother x y) (\x,y -> legalRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> alias x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> deceptiveIdentifier x y) (\x,y -> refers x y)
+
+subRelation2El ? ? ? ? (\x,y -> alias x y) (\x,y -> deceptiveIdentifier x y)
+
+subRelation2El ? ? ? ? (\x,y -> mutualStranger x y) (\x,y -> stranger x y)
+
+subRelation2El ? ? ? ? (\x,y -> domesticPartner x y) (\x,y -> cohabitant x y)
+
+subRelation2El ? ? ? ? (\x,y -> controlled x y) (\x,y -> patient x y)
+
+subRelation2El ? ? ? ? (\x,y -> gainsControl x y) (\x,y -> agent x y)
+
+subRelation2El ? ? ? ? (\x,y -> losesControl x y) (\x,y -> experiencer x y)
+
+subRelation2El ? ? ? ? (\x,y -> arrested x y) (\x,y -> controlled x y)
+
+subRelation2El ? ? ? ? (\x,y -> conveyance x y) (\x,y -> instrument x y)
+
+subRelation2El ? ? ? ? (\x,y -> financialAsset x y) (\x,y -> possesses x y)
+
+subRelation2El ? ? ? ? (\x,y -> birthday x y) (\x,y -> anniversary x y)
+
+subRelation2El ? ? ? ? (\x,y -> pathInSystem x y) (\x,y -> part x y)
+
+subRelation2El ? ? ? ? (\x,y -> routeInSystem x y) (\x,y -> pathInSystem x y)

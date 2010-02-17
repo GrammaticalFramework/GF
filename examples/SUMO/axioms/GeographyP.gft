@@ -1,0 +1,434 @@
+
+geographicSubregion (el ? ? ? CentralAfrica) (el ? ? ? Africa)
+
+geographicSubregion (el ? ? ? EasternAfrica) (el ? ? ? Africa)
+
+geographicSubregion (el ? ? ? NorthernAfrica) (el ? ? ? Africa)
+
+geographicSubregion (el ? ? ? SouthernAfrica) (el ? ? ? Africa)
+
+geographicSubregion (el ? ? ? WesternAfrica) (el ? ? ? Africa)
+
+overlapsSpatially (el ? ? ? MiddleEastRegion) (el ? ? ? Asia)
+
+geographicSubregion (el ? ? ? CentralEurope) (el ? ? ? Europe)
+
+geographicSubregion (el ? ? ? EasternEurope) (el ? ? ? Europe)
+
+geographicSubregion (el ? ? ? NorthernEurope) (el ? ? ? Europe)
+
+geographicSubregion (el ? ? ? SouthernEurope) (el ? ? ? Europe)
+
+geographicSubregion (el ? ? ? WesternEurope) (el ? ? ? Europe)
+
+geographicSubregion (el ? ? ? SoutheasternEurope) (el ? ? ? Europe)
+
+geographicSubregion (el ? ? ? SouthwesternEurope) (el ? ? ? Europe)
+
+geographicSubregion (el ? ? ? NorthernNorthAmerica) (el ? ? ? NorthAmerica)
+
+overlapsSpatially (el ? ? ? CaribbeanRegion) (el ? ? ? SouthAmerica)
+
+overlapsSpatially (el ? ? ? CaribbeanRegion) (el ? ? ? NorthAmerica)
+
+overlapsSpatially (el ? ? ? MiddleAmerica) (el ? ? ? NorthAmerica)
+
+overlapsSpatially (el ? ? ? MiddleAmerica) (el ? ? ? SouthAmerica)
+
+geographicSubregion (el ? ? ? CentralSouthAmerica) (el ? ? ? SouthAmerica)
+
+geographicSubregion (el ? ? ? EasternSouthAmerica) (el ? ? ? SouthAmerica)
+
+geographicSubregion (el ? ? ? NorthernSouthAmerica) (el ? ? ? SouthAmerica)
+
+geographicSubregion (el ? ? ? SouthernSouthAmerica) (el ? ? ? SouthAmerica)
+
+geographicSubregion (el ? ? ? WesternSouthAmerica) (el ? ? ? SouthAmerica)
+
+geographicSubregion (el ? ? ? CentralAsia) (el ? ? ? Asia)
+
+geographicSubregion (el ? ? ? EasternAsia) (el ? ? ? Asia)
+
+geographicSubregion (el ? ? ? NorthernAsia) (el ? ? ? Asia)
+
+geographicSubregion (el ? ? ? NorthernAsia) (el ? ? ? NorthernHemisphere)
+
+geographicSubregion (el ? ? ? SouthernAsia) (el ? ? ? Asia)
+
+geographicSubregion (el ? ? ? SoutheasternAsia) (el ? ? ? Asia)
+
+geographicSubregion (el ? ? ? SouthwesternAsia) (el ? ? ? Asia)
+
+geographicSubregion (el ? ? ? CentralAfrica) (el ? ? ? EasternHemisphere)
+
+overlapsSpatially (el ? ? ? CentralAfrica) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? CentralAfrica) (el ? ? ? SouthernHemisphere)
+
+geographicSubregion (el ? ? ? EasternAfrica) (el ? ? ? EasternHemisphere)
+
+overlapsSpatially (el ? ? ? EasternAfrica) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? EasternAfrica) (el ? ? ? SouthernHemisphere)
+
+overlapsSpatially (el ? ? ? NorthernAfrica) (el ? ? ? EasternHemisphere)
+
+overlapsSpatially (el ? ? ? NorthernAfrica) (el ? ? ? WesternHemisphere)
+
+geographicSubregion (el ? ? ? NorthernAfrica) (el ? ? ? NorthernHemisphere)
+
+geographicSubregion (el ? ? ? SouthernAfrica) (el ? ? ? EasternHemisphere)
+
+geographicSubregion (el ? ? ? SouthernAfrica) (el ? ? ? SouthernHemisphere)
+
+overlapsSpatially (el ? ? ? WesternAfrica) (el ? ? ? EasternHemisphere)
+
+overlapsSpatially (el ? ? ? WesternAfrica) (el ? ? ? WesternHemisphere)
+
+overlapsSpatially (el ? ? ? WesternAfrica) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? WesternAfrica) (el ? ? ? SouthernHemisphere)
+
+geographicSubregion (el ? ? ? MiddleEastRegion) (el ? ? ? EasternHemisphere)
+
+geographicSubregion (el ? ? ? MiddleEastRegion) (el ? ? ? WesternHemisphere)
+
+geographicSubregion (el ? ? ? EasternEurope) (el ? ? ? EasternHemisphere)
+
+geographicSubregion (el ? ? ? EasternEurope) (el ? ? ? NorthernHemisphere)
+
+geographicSubregion (el ? ? ? CentralEurope) (el ? ? ? EasternHemisphere)
+
+geographicSubregion (el ? ? ? CentralEurope) (el ? ? ? NorthernHemisphere)
+
+geographicSubregion (el ? ? ? NorthernEurope) (el ? ? ? EasternHemisphere)
+
+geographicSubregion (el ? ? ? NorthernEurope) (el ? ? ? NorthernHemisphere)
+
+geographicSubregion (el ? ? ? SouthernEurope) (el ? ? ? EasternHemisphere)
+
+geographicSubregion (el ? ? ? SouthernEurope) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? WesternEurope) (el ? ? ? EasternHemisphere)
+
+overlapsSpatially (el ? ? ? WesternEurope) (el ? ? ? WesternHemisphere)
+
+geographicSubregion (el ? ? ? WesternEurope) (el ? ? ? NorthernHemisphere)
+
+geographicSubregion (el ? ? ? SoutheasternEurope) (el ? ? ? EasternHemisphere)
+
+geographicSubregion (el ? ? ? SoutheasternEurope) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? SouthwesternEurope) (el ? ? ? EasternHemisphere)
+
+overlapsSpatially (el ? ? ? SouthwesternEurope) (el ? ? ? WesternHemisphere)
+
+geographicSubregion (el ? ? ? SouthwesternEurope) (el ? ? ? NorthernHemisphere)
+
+geographicSubregion (el ? ? ? CaribbeanRegion) (el ? ? ? NorthernHemisphere)
+
+geographicSubregion (el ? ? ? CaribbeanRegion) (el ? ? ? WesternHemisphere)
+
+geographicSubregion (el ? ? ? MiddleAmerica) (el ? ? ? NorthernHemisphere)
+
+geographicSubregion (el ? ? ? MiddleAmerica) (el ? ? ? WesternHemisphere)
+
+geographicSubregion (el ? ? ? CentralSouthAmerica) (el ? ? ? WesternHemisphere)
+
+geographicSubregion (el ? ? ? CentralSouthAmerica) (el ? ? ? SouthernHemisphere)
+
+geographicSubregion (el ? ? ? EasternSouthAmerica) (el ? ? ? WesternHemisphere)
+
+overlapsSpatially (el ? ? ? EasternSouthAmerica) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? EasternSouthAmerica) (el ? ? ? SouthernHemisphere)
+
+geographicSubregion (el ? ? ? NorthernSouthAmerica) (el ? ? ? WesternHemisphere)
+
+overlapsSpatially (el ? ? ? NorthernSouthAmerica) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? NorthernSouthAmerica) (el ? ? ? SouthernHemisphere)
+
+geographicSubregion (el ? ? ? SouthernSouthAmerica) (el ? ? ? WesternHemisphere)
+
+geographicSubregion (el ? ? ? SouthernSouthAmerica) (el ? ? ? SouthernHemisphere)
+
+geographicSubregion (el ? ? ? WesternSouthAmerica) (el ? ? ? WesternHemisphere)
+
+overlapsSpatially (el ? ? ? WesternSouthAmerica) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? WesternSouthAmerica) (el ? ? ? SouthernHemisphere)
+
+geographicSubregion (el ? ? ? CentralAsia) (el ? ? ? EasternHemisphere)
+
+geographicSubregion (el ? ? ? CentralAsia) (el ? ? ? NorthernHemisphere)
+
+geographicSubregion (el ? ? ? EasternAsia) (el ? ? ? EasternHemisphere)
+
+geographicSubregion (el ? ? ? EasternAsia) (el ? ? ? NorthernHemisphere)
+
+geographicSubregion (el ? ? ? NorthernAsia) (el ? ? ? EasternHemisphere)
+
+geographicSubregion (el ? ? ? SouthernAsia) (el ? ? ? EasternHemisphere)
+
+overlapsSpatially (el ? ? ? SouthernAsia) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? SouthernAsia) (el ? ? ? SouthernHemisphere)
+
+geographicSubregion (el ? ? ? SoutheasternAsia) (el ? ? ? EasternHemisphere)
+
+overlapsSpatially (el ? ? ? SoutheasternAsia) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? SoutheasternAsia) (el ? ? ? SouthernHemisphere)
+
+geographicSubregion (el ? ? ? SouthwesternAsia) (el ? ? ? EasternHemisphere)
+
+geographicSubregion (el ? ? ? SouthwesternAsia) (el ? ? ? NorthernHemisphere)
+
+orientation (el ? ? ? Europe) (el ? ? ? Africa) (el ? ? ? North)
+
+orientation (el ? ? ? Europe) (el ? ? ? Asia) (el ? ? ? West)
+
+orientation (el ? ? ? Europe) (el ? ? ? NorthAmerica) (el ? ? ? East)
+
+orientation (el ? ? ? NorthAmerica) (el ? ? ? SouthAmerica) (el ? ? ? North)
+
+orientation (el ? ? ? NorthAmerica) (el ? ? ? Asia) (el ? ? ? East)
+
+orientation (el ? ? ? Africa) (el ? ? ? SouthAmerica) (el ? ? ? Northeast)
+
+orientation (el ? ? ? Asia) (el ? ? ? Oceania) (el ? ? ? Northwest)
+
+orientation (el ? ? ? Africa) (el ? ? ? NorthAmerica) (el ? ? ? Southeast)
+
+orientation (el ? ? ? Europe) (el ? ? ? SouthAmerica) (el ? ? ? Northeast)
+
+orientation (el ? ? ? Oceania) (el ? ? ? NorthAmerica) (el ? ? ? Southwest)
+
+orientation (el ? ? ? MiddleEastRegion) (el ? ? ? Asia) (el ? ? ? Southwest)
+
+orientation (el ? ? ? MiddleEastRegion) (el ? ? ? Africa) (el ? ? ? Northeast)
+
+orientation (el ? ? ? MiddleAmerica) (el ? ? ? SouthAmerica) (el ? ? ? North)
+
+orientation (el ? ? ? MiddleAmerica) (el ? ? ? NorthAmerica) (el ? ? ? South)
+
+orientation (el ? ? ? CaribbeanRegion) (el ? ? ? SouthAmerica) (el ? ? ? North)
+
+orientation (el ? ? ? CaribbeanRegion) (el ? ? ? NorthAmerica) (el ? ? ? South)
+
+equal (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? AngularDegree))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 60)) (el ? ? ? ArcMinute)))
+
+equal (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? ArcMinute))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 60)) (el ? ? ? ArcSecond)))
+
+equal (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? SquareKilometer))) (el ? ? ? (MultiplicationFn (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? (KiloFn (el ? ? ? Meter))))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? (KiloFn (el ? ? ? Meter)))))))
+
+causesSubclass (desc AirPollution ? ?) (desc AcidRainfall ? ?)
+
+causesSubclass (desc AcidRainfall ? ?) (desc Acidification ? ?)
+
+earthAltitude (el ? ? ? OzoneShield) (el ? ? ? (MeasureFn (el ? ? ? (toInt 25)) (el ? ? ? Mile)))
+
+causesSubclass (desc SoilErosion ? ?) (desc Siltation ? ?)
+
+agreementAdoptionDate (el ? ? ? AntarcticTreaty) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 1)) (descToDesc ? ? ? (MonthFn (desc December ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1959))))))))
+
+agreementEffectiveDate (el ? ? ? AntarcticTreaty) (descToDesc ? ? ? (DayFn (el ? ? ? (toInt 23)) (descToDesc ? ? ? (MonthFn (desc June ? ?) (descToDesc ? ? ? (YearFn (el ? ? ? (toInt 1961))))))))
+
+orbits (el ? ? ? EarthsMoon) (el ? ? ? PlanetEarth)
+
+orbits (el ? ? ? PlanetEarth) (el ? ? ? Sol)
+
+orbits (el ? ? ? PlanetMercury) (el ? ? ? Sol)
+
+orbits (el ? ? ? PlanetVenus) (el ? ? ? Sol)
+
+orbits (el ? ? ? PlanetMars) (el ? ? ? Sol)
+
+orbits (el ? ? ? PlanetJupiter) (el ? ? ? Sol)
+
+orbits (el ? ? ? PlanetSaturn) (el ? ? ? Sol)
+
+orbits (el ? ? ? PlanetNeptune) (el ? ? ? Sol)
+
+orbits (el ? ? ? PlanetUranus) (el ? ? ? Sol)
+
+orbits (el ? ? ? PlanetPluto) (el ? ? ? Sol)
+
+overlapsSpatially (el ? ? ? Africa) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? Africa) (el ? ? ? SouthernHemisphere)
+
+geographicSubregion (el ? ? ? Africa) (el ? ? ? EasternHemisphere)
+
+geographicSubregion (el ? ? ? NorthAmerica) (el ? ? ? NorthernHemisphere)
+
+geographicSubregion (el ? ? ? NorthAmerica) (el ? ? ? WesternHemisphere)
+
+overlapsSpatially (el ? ? ? SouthAmerica) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? SouthAmerica) (el ? ? ? SouthernHemisphere)
+
+geographicSubregion (el ? ? ? SouthAmerica) (el ? ? ? WesternHemisphere)
+
+geographicSubregion (el ? ? ? Antarctica) (el ? ? ? SouthernHemisphere)
+
+overlapsSpatially (el ? ? ? Antarctica) (el ? ? ? EasternHemisphere)
+
+overlapsSpatially (el ? ? ? Antarctica) (el ? ? ? WesternHemisphere)
+
+geographicSubregion (el ? ? ? Europe) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? Europe) (el ? ? ? EasternHemisphere)
+
+overlapsSpatially (el ? ? ? Europe) (el ? ? ? WesternHemisphere)
+
+overlapsSpatially (el ? ? ? Asia) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? Asia) (el ? ? ? SouthernHemisphere)
+
+geographicSubregion (el ? ? ? Asia) (el ? ? ? EasternHemisphere)
+
+overlapsSpatially (el ? ? ? Oceania) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? Oceania) (el ? ? ? SouthernHemisphere)
+
+overlapsSpatially (el ? ? ? Oceania) (el ? ? ? EasternHemisphere)
+
+overlapsSpatially (el ? ? ? Oceania) (el ? ? ? WesternHemisphere)
+
+overlapsSpatially (el ? ? ? Tropics) (el ? ? ? NorthernHemisphere)
+
+overlapsSpatially (el ? ? ? Tropics) (el ? ? ? SouthernHemisphere)
+
+overlapsSpatially (el ? ? ? Tropics) (el ? ? ? EasternHemisphere)
+
+overlapsSpatially (el ? ? ? Tropics) (el ? ? ? WesternHemisphere)
+
+oppositeDirection (el ? ? ? North) (el ? ? ? South)
+
+oppositeDirection (el ? ? ? East) (el ? ? ? West)
+
+oppositeDirection (el ? ? ? Northeast) (el ? ? ? Southwest)
+
+oppositeDirection (el ? ? ? Northwest) (el ? ? ? Southeast)
+
+equal (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? Fathom))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 6)) (el ? ? ? FootLength)))
+
+equal (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? NauticalMile))) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 6076.1)) (el ? ? ? FootLength)))
+
+equal (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? NauticalMile))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1852)) (el ? ? ? Meter)))
+
+equal (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? SquareMeter))) (el ? ? ? (MultiplicationFn (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? Meter))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? Meter)))))
+
+equal (el ? ? ? SquareMeter) (el ? ? ? (SquareUnitFn (el ? ? ? Meter)))
+
+equal (el ? ? ? SquareKilometer) (el ? ? ? (SquareUnitFn (el ? ? ? (KiloFn (el ? ? ? Meter)))))
+
+geographicSubregion (el ? ? ? NorthAtlanticOcean) (el ? ? ? AtlanticOcean)
+
+geographicSubregion (el ? ? ? NorthAtlanticOcean) (el ? ? ? NorthernHemisphere)
+
+geographicSubregion (el ? ? ? NorthAtlanticOcean) (el ? ? ? WesternHemisphere)
+
+geographicSubregion (el ? ? ? SouthAtlanticOcean) (el ? ? ? AtlanticOcean)
+
+geographicSubregion (el ? ? ? SouthAtlanticOcean) (el ? ? ? SouthernHemisphere)
+
+partlyLocated (el ? ? ? SouthAtlanticOcean) (el ? ? ? WesternHemisphere)
+
+partlyLocated (el ? ? ? SouthAtlanticOcean) (el ? ? ? EasternHemisphere)
+
+geographicSubregion (el ? ? ? NorthPacificOcean) (el ? ? ? PacificOcean)
+
+geographicSubregion (el ? ? ? NorthPacificOcean) (el ? ? ? NorthernHemisphere)
+
+partlyLocated (el ? ? ? NorthPacificOcean) (el ? ? ? EasternHemisphere)
+
+partlyLocated (el ? ? ? NorthPacificOcean) (el ? ? ? WesternHemisphere)
+
+geographicSubregion (el ? ? ? SouthPacificOcean) (el ? ? ? PacificOcean)
+
+geographicSubregion (el ? ? ? SouthPacificOcean) (el ? ? ? SouthernHemisphere)
+
+partlyLocated (el ? ? ? SouthPacificOcean) (el ? ? ? EasternHemisphere)
+
+partlyLocated (el ? ? ? SouthPacificOcean) (el ? ? ? WesternHemisphere)
+
+connected (el ? ? ? IndianOcean) (el ? ? ? SouthPacificOcean)
+
+connected (el ? ? ? IndianOcean) (el ? ? ? PersianGulf)
+
+connected (el ? ? ? IndianOcean) (el ? ? ? SouthernOcean)
+
+geographicSubregion (el ? ? ? ArcticOcean) (el ? ? ? NorthernHemisphere)
+
+partlyLocated (el ? ? ? ArcticOcean) (el ? ? ? EasternHemisphere)
+
+partlyLocated (el ? ? ? ArcticOcean) (el ? ? ? WesternHemisphere)
+
+geographicSubregion (el ? ? ? SouthernOcean) (el ? ? ? SouthernHemisphere)
+
+partlyLocated (el ? ? ? SouthernOcean) (el ? ? ? EasternHemisphere)
+
+partlyLocated (el ? ? ? SouthernOcean) (el ? ? ? WesternHemisphere)
+
+totalArea (el ? ? ? SouthernOcean) (el ? ? ? (MeasureFn (el ? ? ? (toInt 20327000)) (el ? ? ? SquareKilometer)))
+
+length (el ? ? ? (ShorelineFn (el ? ? ? SouthernOcean) (el ? ? ? Antarctica))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 17968)) (el ? ? ? (KiloFn (el ? ? ? Meter)))))
+
+naturalHazardTypeInArea (el ? ? ? SouthernOcean) (desc CyclonicStorm ? ?)
+
+naturalHazardTypeInArea (el ? ? ? SouthernOcean) (desc Iceberg ? ?)
+
+naturalHazardTypeInArea (el ? ? ? SouthernOcean) (desc SeaIce ? ?)
+
+elevation (el ? ? ? (ElevationHighPointFn (el ? ? ? SouthernOcean))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 0)) (el ? ? ? Meter)))
+
+elevation (el ? ? ? (ElevationLowPointFn (el ? ? ? SouthernOcean))) (el ? ? ? (MeasureFn (el ? ? ? (toInt -7235)) (el ? ? ? Meter)))
+
+geographicSubregion (el ? ? ? SouthSandwichTrench) (el ? ? ? SouthernOcean)
+
+located (el ? ? ? AntarcticCircumpolarCurrent) (el ? ? ? SouthernOcean)
+
+meetsSpatially (el ? ? ? Egypt) (el ? ? ? RedSea)
+
+meetsSpatially (el ? ? ? Sudan) (el ? ? ? RedSea)
+
+meetsSpatially (el ? ? ? Eritrea) (el ? ? ? RedSea)
+
+meetsSpatially (el ? ? ? SaudiArabia) (el ? ? ? RedSea)
+
+elevation (el ? ? ? SeaLevel) (el ? ? ? (MeasureFn (el ? ? ? (toInt 0)) (el ? ? ? Meter)))
+
+geographicSubregion (el ? ? ? GreatSaltLake) (el ? ? ? Utah)
+
+geographicSubregion (el ? ? ? SaltonSea) (el ? ? ? California)
+
+geographicSubregion (el ? ? ? LakeEyre) (el ? ? ? Australia)
+
+connected (el ? ? ? PersianGulf) (el ? ? ? StraitOfHormuz)
+
+meetsSpatially (el ? ? ? Iran) (el ? ? ? PersianGulf)
+
+connected (el ? ? ? StraitOfHormuz) (el ? ? ? GulfOfOman)
+
+connected (el ? ? ? GulfOfOman) (el ? ? ? ArabianSea)
+
+meetsSpatially (el ? ? ? Iran) (el ? ? ? GulfOfOman)
+
+meetsSpatially (el ? ? ? Oman) (el ? ? ? GulfOfOman)
+
+connected (el ? ? ? RedSea) (el ? ? ? GulfOfAden)
+
+connected (el ? ? ? GulfOfAden) (el ? ? ? ArabianSea)
+
+meetsSpatially (el ? ? ? Yemen) (el ? ? ? GulfOfAden)
+
+meetsSpatially (el ? ? ? Somalia) (el ? ? ? GulfOfAden)
+
+connected (el ? ? ? GulfOfMexico) (el ? ? ? NorthAtlanticOcean)
+
+connected (el ? ? ? GulfOfMexico) (el ? ? ? CaribbeanSea)
+
+oppositeDirection (el ? ? ? Upstream) (el ? ? ? Downstream)

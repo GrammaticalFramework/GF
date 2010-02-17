@@ -1,0 +1,42 @@
+
+subsumesContentClass (desc ChristianBible ? ?) (desc NewTestament ? ?)
+
+subsumesContentClass (desc ChristianBible ? ?) (desc OldTestament ? ?)
+
+subsumesContentClass (desc NewTestament ? ?) (desc ChristianGospel ? ?)
+
+equal (el ? ? ? (BeginFn (el ? ? ? BeforeCommonEra))) (el ? ? ? NegativeInfinity)
+
+equal (el ? ? ? (EndFn (el ? ? ? CommonEra))) (el ? ? ? PositiveInfinity)
+
+subOrganization (el ? ? ? UnitedStatesDepartmentOfState) (el ? ? ? (GovernmentFn (el ? ? ? UnitedStates)))
+
+subOrganization (el ? ? ? UnitedStatesDepartmentOfInterior) (el ? ? ? (GovernmentFn (el ? ? ? UnitedStates)))
+
+subOrganization (el ? ? ? UnitedStatesCongress) (el ? ? ? (GovernmentFn (el ? ? ? UnitedStates)))
+
+initialPart (desc DigitAppendage ? ?) (desc Limb ? ?)
+
+equal (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? MetricTon))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 2205)) (el ? ? ? PoundMass)))
+
+equal (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? SquareMile))) (el ? ? ? (PerFn (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? Mile))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? Mile)))))
+
+equal (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? SquareYard))) (el ? ? ? (PerFn (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? YardLength))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? YardLength)))))
+
+meatOfAnimal (desc Beef ? ?) (desc Cow ? ?)
+
+meatOfAnimal (desc ChickenMeat ? ?) (desc Chicken ? ?)
+
+meatOfAnimal (desc Pork ? ?) (desc Pig ? ?)
+
+meatOfAnimal (desc FishMeat ? ?) (desc Fish ? ?)
+
+subField (el ? ? ? Physiology) (el ? ? ? Biology)
+
+subField (el ? ? ? MedicalScience) (el ? ? ? Biology)
+
+subField (el ? ? ? Electronics) (el ? ? ? Physics)
+
+subField (el ? ? ? Electronics) (el ? ? ? Engineering)
+
+initialPart (desc AnimalAnatomicalStructure ? ?) (desc Animal ? ?)

@@ -1,0 +1,10 @@
+
+subAttribute (el ? ? ? BubonicPlague) (el ? ? ? Plague)
+
+subAttribute (el ? ? ? PneumonicPlague) (el ? ? ? Plague)
+
+subAttribute (el ? ? ? InhalationalAnthrax) (el ? ? ? Anthrax)
+
+subAttribute (el ? ? ? LegionnairesDisease) (el ? ? ? Legionellosis)
+
+subAttribute (el ? ? ? PontiacFever) (el ? ? ? Legionellosis)
