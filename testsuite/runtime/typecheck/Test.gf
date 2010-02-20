@@ -34,4 +34,6 @@ fun h  : (n : Nat) -> U n n -> Int ;
 -- fun u2 : (n : Nat) -> U (plus n zero) zero ;
 -- fun h2 : (f : Nat -> Nat) -> ((n : Nat) -> U (f n) (f zero)) -> Int ;
 
+fun forall2 : (n : Nat) -> (Vector n -> Vector n -> Int) -> Int ;
+
 }
