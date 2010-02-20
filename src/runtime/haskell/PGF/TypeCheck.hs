@@ -425,8 +425,8 @@ eqType scope k i0 tty1@(TTyp delta1 ty1@(DTyp hyps1 cat1 es1)) tty2@(TTyp delta2
         then return ()
         else raiseTypeMatchError
       v <- occurCheck i k xs v
-      funs <- getFuns
-      return (addLam vs0 (value2expr funs (length xs) v))
+      e <- value2expr (length xs) v
+      return (addLam vs0 e)
       where
         addLam []     e = e
         addLam (v:vs) e = EAbs Explicit var (addLam vs e)
@@ -481,16 +481,20 @@ checkResolvedMetaStore scope e = TcM (\abstr metaid ms ->
 
 evalType :: Int -> TType -> TcM Type
 evalType k (TTyp delta ty) = do funs <- getFuns
-                                refineType (evalTy funs k delta ty)
+                                evalTy funs k delta ty
   where
-    evalTy sig k delta (DTyp hyps cat es) = 
-      let ((k1,delta1),hyps1) = mapAccumL (evalHypo sig) (k,delta) hyps
-      in DTyp hyps1 cat (List.map (normalForm sig k1 delta1) es)
-    
-    evalHypo sig (k,delta) (b,x,ty) =
-      if x == wildCId
-        then ((k,              delta),(b,x,evalTy sig k delta ty))
-        else ((k+1,(VGen k []):delta),(b,x,evalTy sig k delta ty))
+    evalTy sig k delta (DTyp hyps cat es) = do
+      (k,delta,hyps) <- evalHypos sig k delta hyps
+      es <- mapM (value2expr k . eval sig delta) es
+      return (DTyp hyps cat es)
+
+    evalHypos sig k delta []              = return (k,delta,[])
+    evalHypos sig k delta ((b,x,ty):hyps) = do
+      ty <- evalTy sig k delta ty
+      (k,delta,hyps) <- if x == wildCId
+                          then evalHypos sig k                  delta  hyps
+                          else evalHypos sig (k+1) ((VGen k []):delta) hyps
+      return (k,delta,(b,x,ty) : hyps)
 
 
 -----------------------------------------------------
@@ -519,10 +523,17 @@ refineType ty = TcM (\abstr metaid ms -> Ok metaid ms (refineType_ ms ty))
 
 refineType_ ms (DTyp hyps cat es) = DTyp [(b,x,refineType_ ms ty) | (b,x,ty) <- hyps] cat (List.map (refineExpr_ ms) es)
 
-value2expr sig i (VApp f vs)                 = foldl EApp (EFun f)       (List.map (value2expr sig i) vs)
-value2expr sig i (VGen j vs)                 = foldl EApp (EVar (i-j-1)) (List.map (value2expr sig i) vs)
-value2expr sig i (VConst f vs)               = foldl EApp (EFun f)       (List.map (value2expr sig i) vs)
-value2expr sig i (VMeta j env vs)            = foldl EApp (EMeta j)      (List.map (value2expr sig i) vs)
-value2expr sig i (VSusp j env vs k)          = value2expr sig i (k (VGen j vs))
-value2expr sig i (VLit l)                    = ELit l
-value2expr sig i (VClosure env (EAbs b x e)) = EAbs b x (value2expr sig (i+1) (eval sig ((VGen i []):env) e))
+value2expr :: Int -> Value -> TcM Expr
+value2expr i v = TcM (\abstr metaid ms -> Ok metaid ms (value2expr ms (funs abstr) i v))
+  where
+    value2expr ms sig i (VApp f vs)                 = foldl EApp (EFun f)       (List.map (value2expr ms sig i) vs)
+    value2expr ms sig i (VGen j vs)                 = foldl EApp (EVar (i-j-1)) (List.map (value2expr ms sig i) vs)
+    value2expr ms sig i (VConst f vs)               = foldl EApp (EFun f)       (List.map (value2expr ms sig i) vs)
+    value2expr ms sig i (VMeta j env vs)            = case IntMap.lookup j ms of
+                                                        Just (MBound   e    ) -> value2expr ms sig i (apply sig env e vs)
+                                                        Just (MGuarded e _ _) -> value2expr ms sig i (apply sig env e vs)
+                                                        _                     -> foldl EApp (EMeta j)      (List.map (value2expr ms sig i) vs)
+    value2expr ms sig i (VSusp j env vs k)          = value2expr ms sig i (k (VGen j vs))
+    value2expr ms sig i (VLit l)                    = ELit l
+    value2expr ms sig i (VClosure env (EAbs b x e)) = EAbs b x (value2expr ms sig (i+1) (eval sig ((VGen i []):env) e))
+    value2expr ms sig i (VImplArg v)                = EImplArg (value2expr ms sig i v)

@@ -28,3 +28,4 @@ ai cmpVector (succ (succ zero)) (vector (succ (succ zero))) (append ? (succ zero
 ai diff ? (succ (succ zero)) (vector (succ (succ (succ (succ (succ zero)))))) (vector (succ (succ (succ zero))))
 ai diff ? (succ (succ zero)) (vector (succ (succ (succ (succ zero))))) (vector (succ (succ (succ zero))))
 ai idMorph (mkMorph2 (\x -> ?) (vector zero))
+ai <(\n -> forall2 n (\x,y -> cmpVector zero x y)) : Nat -> Int>

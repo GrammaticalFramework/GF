@@ -69,3 +69,6 @@ In the expression: vector (succ (succ (succ (succ zero))))
 Couldn't match expected type Vector ?1
        against inferred type Vector zero
 In the expression: vector zero
+Couldn't match expected type Vector zero
+       against inferred type Vector n
+In the expression: x
