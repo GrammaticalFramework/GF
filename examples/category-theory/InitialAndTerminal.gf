@@ -9,7 +9,7 @@ data initial  : ({c} : Category)
 fun initEl : ({c} : Category)
               -> Initial c
               -> El c ;
-def initEl (initial x f) = x ;
+def initEl {c} (initial {c} x f) = x ;
 
 fun initials2iso :  ({c} : Category)
                  -> ({x,y} : Initial c)
@@ -25,7 +25,7 @@ data terminal : ({c} : Category)
 fun termEl : ({c} : Category)
              -> Terminal c
              -> El c ;
-def termEl (terminal x f) = x ;
+def termEl {c} (terminal {c} x f) = x ;
 
 fun terminals2iso :  ({c} : Category)
                   -> ({x,y} : Terminal c)
