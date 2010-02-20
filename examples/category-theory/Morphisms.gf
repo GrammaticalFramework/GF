@@ -13,16 +13,30 @@ data iso :  ({c} : Category)
 fun iso2mono :  ({c} : Category)
              -> ({x,y} : El c)
              -> (Iso x y -> Mono x y) ;
--- def iso2mono (iso f g eq_fg eq_gf) = (mono f (\h m eq_fh_fm -> ...))
-
--- eqIdR (eqTran eq_gf (eqComp g f h)) : EqAr (comp g (comp f h)) h
--- comp g (comp f m)
+def iso2mono {c} {x} {y} (iso {c} {x} {y} f g id_fg id_gf) = 
+        mono f (\h,m,eq_fh_fm -> 
+                      eqSym (eqTran (eqIdR m)                                                                      --           h = m
+                                    (eqTran (eqCompR id_gf m)                                                      --      id . m = h
+                                            (eqTran (eqAssoc g f m)                                                -- (g . f) . m = h
+                                                    (eqSym (eqTran (eqIdR h)                                       -- g . (f . m) = h
+                                                                   (eqTran (eqCompR id_gf h)                       --      id . h = g . (f . m)
+                                                                           (eqTran (eqAssoc g f h)                 -- (g . f) . h = g . (f . m)
+                                                                                   (eqCompL g eq_fh_fm))))))))) ;  -- g . (f . h) = g . (f . m)
+                                                                                                                   --      f . h  = f . m
 
 fun iso2epi  :  ({c} : Category)
              -> ({x,y} : El c)
              -> (Iso x y -> Epi x y) ;
--- def iso2epi (iso f g eq_fg eq_gf) = (epi f (\h m eq_hf_mf -> ...))
-
+def iso2epi {c} {x} {y} (iso {c} {x} {y} f g id_fg id_gf) =
+        epi {c} {x} {y} f (\{z},h,m,eq_hf_mf -> 
+                      eqSym (eqTran (eqIdL m)                                                                     --           h = m
+                                    (eqTran (eqCompL m id_fg)                                                     --      m . id = h
+                                            (eqTran (eqSym (eqAssoc m f g))                                       -- m . (f . g) = h
+                                                    (eqSym (eqTran (eqIdL h)                                      -- (m . f) . g = h
+                                                                   (eqTran (eqCompL h id_fg)                      --      h . id = (m . f) . g
+                                                                           (eqTran (eqSym (eqAssoc h f g))        -- h . (f . g) = (m . f) . g
+                                                                                   (eqCompR eq_hf_mf g))))))))) ; -- (h . f) . g = (m . f) . g
+                                                                                                                  --  h . f      =  m . f
 
 cat Mono ({c} : Category) (x,y : El c) ;
 
