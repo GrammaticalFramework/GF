@@ -15,7 +15,7 @@ abstract Categories = {
 
   fun comp : ({c} : Category) -> ({x,y,z} : El c) -> Arrow z y -> Arrow x z -> Arrow x y ;
 
-  data eqRefl : ({c} : Category)
+  data eqRefl :  ({c} : Category)
               -> ({x,y} : El c)
               -> (a : Arrow x y)
               -> EqAr a a ;
@@ -77,7 +77,15 @@ abstract Categories = {
             -> Arrow {Op c} (opEl y) (opEl x) ;
   def  id {Op c} (opEl {c} x) = opAr (id x) ;
   def  comp {Op c} {opEl {c} x} {opEl {c} y} {opEl {c} z} (opAr {c} {y} {z} f) (opAr {c} {z} {x} g) = opAr (comp g f) ;
-
+  
+  fun eqOp :  ({c} : Category)
+           -> ({x,y} : El c)
+           -> ({f} : Arrow x y)
+           -> ({g} : Arrow x y)
+           -> EqAr f g
+           -> EqAr (opAr f) (opAr g) ;
+  def eqOp {c} {x} {y} {f} {f} (eqRefl {c} {x} {y} f) = eqRefl (opAr f) ;
+  
   data Slash     :  (c : Category)
                  -> (x : El c)
                  -> Category ;
