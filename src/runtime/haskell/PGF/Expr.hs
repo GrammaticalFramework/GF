@@ -10,7 +10,7 @@ module PGF.Expr(Tree, BindType(..), Expr(..), Literal(..), Patt(..), Equation(..
                 normalForm,
 
                 -- needed in the typechecker
-                Value(..), Env, Funs, eval, apply,
+                Value(..), Env, Sig, eval, apply, value2expr,
 
                 MetaId,
 
@@ -262,17 +262,19 @@ freshName x xs0 = loop 1 x
 -----------------------------------------------------
 
 -- | Compute an expression to normal form
-normalForm :: Funs -> Int -> Env -> Expr -> Expr
-normalForm funs k env e = value2expr k (eval funs env e)
-  where
-    value2expr i (VApp f vs)                 = foldl EApp (EFun f)       (List.map (value2expr i) vs)
-    value2expr i (VGen j vs)                 = foldl EApp (EVar (i-j-1)) (List.map (value2expr i) vs)
-    value2expr i (VMeta j env vs)            = foldl EApp (EMeta j)      (List.map (value2expr i) vs)
-    value2expr i (VSusp j env vs k)          = value2expr i (k (VGen j vs))
-    value2expr i (VConst f vs)               = foldl EApp (EFun f)       (List.map (value2expr i) vs)
-    value2expr i (VLit l)                    = ELit l
-    value2expr i (VClosure env (EAbs b x e)) = EAbs b x (value2expr (i+1) (eval funs ((VGen i []):env) e))
-    value2expr i (VImplArg v)                = EImplArg (value2expr i v)
+normalForm :: Sig -> Int -> Env -> Expr -> Expr
+normalForm sig k env e = value2expr sig k (eval sig env e)
+
+value2expr sig i (VApp f vs)                 = foldl EApp (EFun f)       (List.map (value2expr sig i) vs)
+value2expr sig i (VGen j vs)                 = foldl EApp (EVar (i-j-1)) (List.map (value2expr sig i) vs)
+value2expr sig i (VMeta j env vs)            = case snd sig j of
+                                                 Just e  -> value2expr sig i (apply sig env e vs)
+                                                 Nothing -> foldl EApp (EMeta j) (List.map (value2expr sig i) vs)
+value2expr sig i (VSusp j env vs k)          = value2expr sig i (k (VGen j vs))
+value2expr sig i (VConst f vs)               = foldl EApp (EFun f)       (List.map (value2expr sig i) vs)
+value2expr sig i (VLit l)                    = ELit l
+value2expr sig i (VClosure env (EAbs b x e)) = EAbs b x (value2expr sig (i+1) (eval sig ((VGen i []):env) e))
+value2expr sig i (VImplArg v)                = EImplArg (value2expr sig i v)
 
 data Value
   = VApp CId [Value]
@@ -284,65 +286,71 @@ data Value
   | VClosure Env Expr
   | VImplArg Value
 
-type Funs = Map.Map CId (Type,Int,Maybe [Equation]) -- type and def of a fun
-type Env  = [Value]
+type Sig = ( Map.Map CId (Type,Int,Maybe [Equation])    -- type and def of a fun
+           , Int -> Maybe Expr                          -- lookup for metavariables
+           )
+type Env = [Value]
 
-eval :: Funs -> Env -> Expr -> Value
-eval funs env (EVar i)     = env !! i
-eval funs env (EFun f)     = case Map.lookup f funs of
+eval :: Sig -> Env -> Expr -> Value
+eval sig env (EVar i)     = env !! i
+eval sig env (EFun f)     = case Map.lookup f (fst sig) of
                               Just (_,a,meqs) -> case meqs of
                                                    Just eqs -> if a == 0
                                                                  then case eqs of
-                                                                        Equ [] e : _ -> eval funs [] e
+                                                                        Equ [] e : _ -> eval sig [] e
                                                                         _            -> VConst f []
                                                                  else VApp f []
                                                    Nothing  -> VApp f []
                               Nothing        -> error ("unknown function "++showCId f)
-eval funs env (EApp e1 e2) = apply funs env e1 [eval funs env e2]
-eval funs env (EAbs b x e) = VClosure env (EAbs b x e)
-eval funs env (EMeta i)    = VMeta i env []
-eval funs env (ELit l)     = VLit l
-eval funs env (ETyped e _) = eval funs env e
-eval funs env (EImplArg e) = VImplArg (eval funs env e)
+eval sig env (EApp e1 e2) = apply sig env e1 [eval sig env e2]
+eval sig env (EAbs b x e) = VClosure env (EAbs b x e)
+eval sig env (EMeta i)    = case snd sig i of
+                              Just e  -> eval sig env e
+                              Nothing -> VMeta i env []
+eval sig env (ELit l)     = VLit l
+eval sig env (ETyped e _) = eval sig env e
+eval sig env (EImplArg e) = VImplArg (eval sig env e)
 
-apply :: Funs -> Env -> Expr -> [Value] -> Value
-apply funs env e            []     = eval funs env e
-apply funs env (EVar i)     vs     = applyValue funs (env !! i) vs
-apply funs env (EFun f)     vs     = case Map.lookup f funs of
-                                       Just (_,a,meqs) -> case meqs of
-                                                            Just eqs -> if a <= length vs
-                                                                          then match funs f eqs vs
-                                                                          else VApp f vs
-                                                            Nothing  -> VApp f vs
-                                       Nothing      -> error ("unknown function "++showCId f)
-apply funs env (EApp e1 e2) vs     = apply funs env e1 (eval funs env e2 : vs)
-apply funs env (EAbs _ x e) (v:vs) = apply funs (v:env) e vs
-apply funs env (EMeta i)    vs     = VMeta i env vs
-apply funs env (ELit l)     vs     = error "literal of function type"
-apply funs env (ETyped e _) vs     = apply funs env e vs
-apply funs env (EImplArg _) vs     = error "implicit argument in function position"
+apply :: Sig -> Env -> Expr -> [Value] -> Value
+apply sig env e            []     = eval sig env e
+apply sig env (EVar i)     vs     = applyValue sig (env !! i) vs
+apply sig env (EFun f)     vs     = case Map.lookup f (fst sig) of
+                                      Just (_,a,meqs) -> case meqs of
+                                                           Just eqs -> if a <= length vs
+                                                                         then match sig f eqs vs
+                                                                         else VApp f vs
+                                                           Nothing  -> VApp f vs
+                                      Nothing      -> error ("unknown function "++showCId f)
+apply sig env (EApp e1 e2) vs     = apply sig env e1 (eval sig env e2 : vs)
+apply sig env (EAbs _ x e) (v:vs) = apply sig (v:env) e vs
+apply sig env (EMeta i)    vs     = case snd sig i of
+                                      Just e  -> apply sig env e vs
+                                      Nothing -> VMeta i env vs
+apply sig env (ELit l)     vs     = error "literal of function type"
+apply sig env (ETyped e _) vs     = apply sig env e vs
+apply sig env (EImplArg _) vs     = error "implicit argument in function position"
 
-applyValue funs v                         []       = v
-applyValue funs (VApp f  vs0)             vs       = apply funs [] (EFun f) (vs0++vs)
-applyValue funs (VLit _)                  vs       = error "literal of function type"
-applyValue funs (VMeta i env vs0)         vs       = VMeta i env (vs0++vs)
-applyValue funs (VGen  i vs0)             vs       = VGen  i (vs0++vs)
-applyValue funs (VSusp i env vs0 k)       vs       = VSusp i env vs0 (\v -> applyValue funs (k v) vs)
-applyValue funs (VConst f vs0)            vs       = VConst f (vs0++vs)
-applyValue funs (VClosure env (EAbs b x e)) (v:vs) = apply funs (v:env) e vs
-applyValue funs (VImplArg _)              vs       = error "implicit argument in function position"
+applyValue sig v                         []       = v
+applyValue sig (VApp f  vs0)             vs       = apply sig [] (EFun f) (vs0++vs)
+applyValue sig (VLit _)                  vs       = error "literal of function type"
+applyValue sig (VMeta i env vs0)         vs       = VMeta i env (vs0++vs)
+applyValue sig (VGen  i vs0)             vs       = VGen  i (vs0++vs)
+applyValue sig (VSusp i env vs0 k)       vs       = VSusp i env vs0 (\v -> applyValue sig (k v) vs)
+applyValue sig (VConst f vs0)            vs       = VConst f (vs0++vs)
+applyValue sig (VClosure env (EAbs b x e)) (v:vs) = apply sig (v:env) e vs
+applyValue sig (VImplArg _)              vs       = error "implicit argument in function position"
 
 -----------------------------------------------------
 -- Pattern matching
 -----------------------------------------------------
 
-match :: Funs -> CId -> [Equation] -> [Value] -> Value
-match funs f eqs as0 =
+match :: Sig -> CId -> [Equation] -> [Value] -> Value
+match sig f eqs as0 =
   case eqs of
     []               -> VConst f as0
     (Equ ps res):eqs -> tryMatches eqs ps as0 res []
   where
-    tryMatches eqs []     as     res env = apply funs env res as
+    tryMatches eqs []     as     res env = apply sig env res as
     tryMatches eqs (p:ps) (a:as) res env = tryMatch p a env
       where
         tryMatch (PVar x     ) (v                ) env            = tryMatches eqs  ps        as  res (v:env)
@@ -354,5 +362,5 @@ match funs f eqs as0 =
         tryMatch (PApp f1 ps1) (VApp f2 vs2      ) env | f1 == f2 = tryMatches eqs (ps1++ps) (vs2++as) res env
         tryMatch (PLit l1    ) (VLit l2          ) env | l1 == l2 = tryMatches eqs  ps        as  res env
         tryMatch (PImplArg p ) (VImplArg v       ) env            = tryMatch p v env
-        tryMatch _             _                   env            = match funs f eqs as0
+        tryMatch _             _                   env            = match sig f eqs as0
 

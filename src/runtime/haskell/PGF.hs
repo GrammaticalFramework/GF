@@ -293,7 +293,7 @@ complete pgf from typ input =
 
 -- | Converts an expression to normal form
 compute :: PGF -> Expr -> Expr
-compute pgf = PGF.Data.normalForm (funs (abstract pgf)) 0 []
+compute pgf = PGF.Data.normalForm (funs (abstract pgf),const Nothing) 0 []
 
 browse :: PGF -> CId -> Maybe (String,[CId],[CId])
 browse pgf id = fmap (\def -> (def,producers,consumers)) definition
