@@ -13,7 +13,7 @@ Category unknown_cat is not in scope
 Cannot infer the type of expression \x -> x
 A function type is expected for the expression \x -> x instead of type Int
 Expression: append (succ (succ zero)) (succ zero) (vector (succ (succ zero))) (vector (succ zero))
-Type:       Vector (plus (succ (succ zero)) (succ zero))
+Type:       Vector (succ (succ (succ zero)))
 
 Expression: <\m, n -> vector (plus m n) : (m : Nat) -> (n : Nat) -> Vector (plus m n)>
 Type:       (m : Nat) -> (n : Nat) -> Vector (plus m n)

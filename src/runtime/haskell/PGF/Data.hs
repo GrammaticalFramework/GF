@@ -1,7 +1,7 @@
 module PGF.Data (module PGF.Data, module PGF.Expr, module PGF.Type) where
 
 import PGF.CId
-import PGF.Expr hiding (Value, Env, Tree)
+import PGF.Expr hiding (Value, Sig, Env, Tree, eval, apply, value2expr)
 import PGF.Type
 
 import qualified Data.Map as Map
