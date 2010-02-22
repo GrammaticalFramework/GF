@@ -206,6 +206,7 @@ ppPatt q d (PInt n)     = integer n
 ppPatt q d (PFloat f)   = double f
 ppPatt q d (PString s)  = str s
 ppPatt q d (PR xs)      = braces (hsep (punctuate semi [ppLabel l <+> equals <+> ppPatt q 0 e | (l,e) <- xs]))
+ppPatt q d (PImplArg p) = braces (ppPatt q 0 p)
 
 ppValue :: TermPrintQual -> Int -> Val -> Doc
 ppValue q d (VGen i x)    = ppIdent x <> text "{-" <> int i <> text "-}" ---- latter part for debugging
