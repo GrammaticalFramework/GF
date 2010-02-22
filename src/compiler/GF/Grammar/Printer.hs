@@ -180,6 +180,7 @@ ppTerm q d (R xs)      = braces (fsep (punctuate semi [ppLabel l <+>
                                                              equals <+> ppTerm q 0 e] | (l,(mb_t,e)) <- xs]))
 ppTerm q d (RecType xs)= braces (fsep (punctuate semi [ppLabel l <+> colon <+> ppTerm q 0 t | (l,t) <- xs]))
 ppTerm q d (Typed e t) = char '<' <> ppTerm q 0 e <+> colon <+> ppTerm q 0 t <> char '>'
+ppTerm q d (ImplArg e) = braces (ppTerm q 0 e)
 
 ppEquation q (ps,e) = hcat (map (ppPatt q 2) ps) <+> text "->" <+> ppTerm q 0 e
 
