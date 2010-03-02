@@ -1,0 +1,96 @@
+\begin{thebibliography}{10}
+
+\bibitem{aho-ullman}
+A.~Aho, R.~Sethi, and J.~Ullman.
+\newblock {\em {Compilers: Principles, Techniques, and Tools}}.
+\newblock {Addison-Wesley}, 1988.
+
+\bibitem{cayenne}
+L.~Augustsson.
+\newblock {Cayenne---a language with dependent types}.
+\newblock In {\em Proc. of {ICFP'98}}. ACM Press, September 1998.
+
+\bibitem{bnfc}
+M.~Forsberg and A.~Ranta.
+\newblock {\mbox{BNF Converter Homepage}}.
+\newblock \verb!http://www.cs.chalmers.se/~markus/BNFC/!, 2002--2004.
+
+\bibitem{harper-honsell}
+R.~Harper, F.~Honsell, and G.~Plotkin.
+\newblock {A Framework for Defining Logics}.
+\newblock {\em {JACM}}, 40(1):143--184, 1993.
+
+\bibitem{metal}
+G.~Kahn, B.~Lang, B.~Mélèse, and E.~Morcos.
+\newblock Metal: a formalism to specify formalisms.
+\newblock {\em Science of {C}omputer {P}rogramming}, 3:151--188, 1983.
+
+\bibitem{khegai}
+J.\ Khegai, B.\ Nordström, and A.\ Ranta.
+\newblock {Multilingual Syntax Editing in GF}.
+\newblock In A.~Gelbukh, editor, {\em {Intelligent Text Processing and
+  Computational Linguistics (CICLing-2003), Mexico City, February 2003}},
+  volume 2588 of {\em LNCS}, pages 453--464. Springer-Verlag, {2003}.
+%\newblock URL \url{http://www.cs.chalmers.se/~aarne/articles/mexico.ps.gz}.
+
+\bibitem{knuth-attr}
+D.~Knuth.
+\newblock Semantics of context-free languages.
+\newblock {\em Mathematical {Systems} {Theory}}, 2:127--145, 1968.
+
+\bibitem{landin}
+P.~Landin.
+\newblock The next 700 programming languages.
+\newblock {\em {Communications of the ACM}}, 9:157--166, 1966.
+
+\bibitem{magnusson-nordstr}
+L.~Magnusson and B.~Nordstr\"{o}m.
+\newblock The {ALF} proof editor and its proof engine.
+\newblock In {\em {Types for Proofs and Programs}}, LNCS 806, pages 213--237.
+  Springer, 1994.
+
+\bibitem{happy}
+S.~Marlow.
+\newblock {Happy, The Parser Generator for Haskell}, 2001.
+\newblock \verb6http://www.haskell.org/happy/6.
+
+\bibitem{jasmin}
+J.~Meyer and T.~Downing.
+\newblock {\em {Java Virtual Machine}}.
+\newblock O'Reilly, 1997.
+
+\bibitem{semBNF}
+{P. M\"aenp\"a\"a}.
+\newblock {Semantic BNF}.
+\newblock In E.~Gimenez and C.~Paulin-Mohring, editors, {\em Types for Proofs
+  and Programs, TYPES'96}, volume 1512 of {\em LNCS}, pages 196--215.
+  Springer-Verlag, 1998.
+
+\bibitem{pereira-shieber}
+F.~Pereira and S.~Shieber.
+\newblock {\em {Prolog and Natural-Language Analysis}}.
+\newblock {CSLI}, Stanford, 1987.
+
+\bibitem{twelf}
+F.~Pfenning.
+\newblock {The Twelf Project}.
+\newblock \verb!http://www-2.cs.cmu.edu/~twelf!, 2002.
+
+\bibitem{gf-jfp}
+A.~Ranta.
+\newblock {Grammatical Framework: A Type-Theoretical Grammar Formalism}.
+\newblock {\em {The Journal of Functional Programming}}, 14(2):145--189, 2004.
+%\newblock URL \url{http://www.cs.chalmers.se/~aarne/articles/gf-jfp.ps.gz}.
+
+\bibitem{gf-homepage}
+A.~Ranta, K.~Angelov, and T.~Hallgren.
+\newblock {\mbox{Grammatical Framework Homepage}}.
+\newblock \verb!http://grammaticalframework.org!, 2000--2009.
+
+\bibitem{teitelbaum}
+T.~Teitelbaum and T.~Reps.
+\newblock The {Cornell} {Program} {Synthesizer}: a syntax-directed programming
+  environment.
+\newblock {\em Commun. {ACM}}, 24(9):563--573, 1981.
+
+\end{thebibliography}
