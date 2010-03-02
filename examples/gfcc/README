@@ -1,0 +1,21 @@
+gfcc = GF C Compiler
+(c) Aarne Ranta 2004-2010 under LGPL
+
+You need:
+- gf 
+- jasmin assembler on your path as jasmin.jar; obtain from 
+  http://sourceforge.net/projects/jasmin/files/
+- ghc
+- javac
+- java
+
+
+Example:
+- make
+- ./gfcc fibonacci.c
+- java -cp . fibonacci
+
+
+More information:
+- make doc
+- open complin.pdf
