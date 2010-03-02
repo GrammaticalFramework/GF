@@ -13,7 +13,7 @@
 %\setlength{\parskip}{2mm}
 %\setlength{\parindent}{0mm}
 
-\input{macros}
+%\input{macros}
 
 \newcommand{\begit}{\begin{itemize}}
 \newcommand{\enit}{\end{itemize}}
@@ -27,6 +27,12 @@
 
 \newcommand{\nocolor}{} %% {\color[rgb]{0,0,0}}
 
+\newcommand{\bequ}{\begin{quote}}
+\newcommand{\enqu}{\end{quote}}
+\newcommand{\bece}{\begin{center}}
+\newcommand{\ence}{\end{center}}
+\newcommand{\eex}[1]{\begin{em}#1\end{em}}
+\newcommand{\sugmap}[1]{\mbox{$#1^{\mbox{\scriptsize o}}$}}
 
 \title{{\bf Declarative Language Definitions and Code Generation as Linearization}}
 
@@ -57,6 +63,11 @@ checking in accordance to the C grammar, and the back end consists
 of linearization in accordance to the JVM grammar. The tool provides
 other functionalities as well, such as decompilation and interactive
 editing. 
+}
+
+{\bf Notice}. {\em 
+Revised 2 March 2010 for GF 3.1. The only change is that the GF
+parser is now used directly, instead of going via BNFC (Section 7).
 }
 
 \section{Introduction}
