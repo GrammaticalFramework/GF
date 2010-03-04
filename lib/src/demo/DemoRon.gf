@@ -1,6 +1,6 @@
 --# -path=.:alltenses
 
-concrete DemoRon of Demo = LangRon ** 
+concrete DemoRon of Demo = LangRon - [SlashVP] ** 
   open LangRon in {
 
   lin 
