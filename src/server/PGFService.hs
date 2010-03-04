@@ -24,6 +24,9 @@ import System.Process
 logFile :: FilePath
 logFile = "pgf-error.log"
 
+--canParse = PGF.canParse -- old
+canParse _ _ = True -- parser is not optional in new PGF format
+
 main :: IO ()
 main = do stderrToFile logFile
           cache <- newCache PGF.readPGF
@@ -150,7 +153,7 @@ doGrammar pgf macc = showJSON $ toJSObject
   where languages = map toJSObject
                     [[("name", showJSON l), 
                       ("languageCode", showJSON $ fromMaybe "" (PGF.languageCode pgf l)),
-                      ("canParse",     showJSON $ PGF.canParse pgf l)]
+                      ("canParse",     showJSON $ canParse pgf l)]
                      | l <- PGF.languages pgf]
         categories = [PGF.showCId cat | cat <- PGF.categories pgf]
         functions  = [PGF.showCId fun | fun <- PGF.functions pgf]
@@ -227,13 +230,13 @@ cat pgf mcat = fromMaybe (PGF.startCat pgf) mcat
 
 parse' :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [(PGF.Language,[PGF.Tree])]
 parse' pgf input mcat mfrom = 
-   [(from,ts) | from <- froms, PGF.canParse pgf from, let ts = PGF.parse pgf from cat input, not (null ts)]
+   [(from,ts) | from <- froms, canParse pgf from, let ts = PGF.parse pgf from cat input, not (null ts)]
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
         cat = fromMaybe (PGF.startCat pgf) mcat
 
 complete' :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [(PGF.Language,[String])]
 complete' pgf input mcat mfrom = 
-   [(from,order ss) | from <- froms, PGF.canParse pgf from, let ss = PGF.complete pgf from cat input, not (null ss)]
+   [(from,order ss) | from <- froms, canParse pgf from, let ss = PGF.complete pgf from cat input, not (null ss)]
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
         cat = fromMaybe (PGF.startCat pgf) mcat
         order = sortBy (compare `on` map toLower)
