@@ -13,7 +13,7 @@ main = do
   writeFile gfs []
   writeFile txt []
   script <- mkTour lan language src txt gfs
-  system $ "gf -s Lang.pgf <" ++ gfs
+  system $ "gf -s Demo.pgf <" ++ gfs
   system $ "txt2tags -thtml " ++ txt
 
 
