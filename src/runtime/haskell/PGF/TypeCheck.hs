@@ -99,8 +99,8 @@ lookupFunType fun = TcM (\abstr metaid ms -> case Map.lookup fun (funs abstr) of
 newMeta :: Scope -> TcM MetaId
 newMeta scope = TcM (\abstr metaid ms -> Ok (metaid+1) (IntMap.insert metaid (MUnbound scope []) ms) metaid)
 
-newGuardedMeta :: Scope -> Expr -> TcM MetaId
-newGuardedMeta scope e = TcM (\abstr metaid ms -> Ok (metaid+1) (IntMap.insert metaid (MGuarded e [] 0) ms) metaid)
+newGuardedMeta :: Expr -> TcM MetaId
+newGuardedMeta e = TcM (\abstr metaid ms -> Ok (metaid+1) (IntMap.insert metaid (MGuarded e [] 0) ms) metaid)
 
 getMeta :: MetaId -> TcM MetaValue
 getMeta i = TcM (\abstr metaid ms -> Ok metaid ms $! case IntMap.lookup i ms of
@@ -283,7 +283,7 @@ tcExpr scope (EMeta _) tty = do
   return (EMeta i)
 tcExpr scope e0        tty = do
   (e0,tty0) <- infExpr scope e0
-  i <- newGuardedMeta scope e0
+  i <- newGuardedMeta e0
   eqType scope (scopeSize scope) i tty tty0
   return (EMeta i)
 
