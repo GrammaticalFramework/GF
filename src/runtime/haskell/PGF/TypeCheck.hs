@@ -406,14 +406,18 @@ eqType scope k i0 tty1@(TTyp delta1 ty1@(DTyp hyps1 cat1 es1)) tty2@(TTyp delta2
     eqValue' k (VSusp i env vs1 c)            v2                             = addConstraint i0 i env vs1 (\v1 -> eqValue k (c v1) v2)
     eqValue' k v1                             (VSusp i env vs2 c)            = addConstraint i0 i env vs2 (\v2 -> eqValue k v1 (c v2))
     eqValue' k (VMeta i env1 vs1)             (VMeta j env2 vs2) | i  == j   = zipWithM_ (eqValue k) vs1 vs2
-    eqValue' k (VMeta i env1 vs1)             v2                             = do (MUnbound scopei cs) <- getMeta i
-                                                                                  e2 <- mkLam i scopei env1 vs1 v2
-                                                                                  setMeta i (MBound e2)
-                                                                                  sequence_ [c e2 | c <- cs]
-    eqValue' k v1                             (VMeta i env2 vs2)             = do (MUnbound scopei cs) <- getMeta i
-                                                                                  e1 <- mkLam i scopei env2 vs2 v1
-                                                                                  setMeta i (MBound e1)
-                                                                                  sequence_ [c e1 | c <- cs]
+    eqValue' k (VMeta i env1 vs1)             v2                             = do mv <- getMeta i
+                                                                                  case mv of
+                                                                                    MUnbound scopei cs -> do e2 <- mkLam i scopei env1 vs1 v2
+                                                                                                             setMeta i (MBound e2)
+                                                                                                             sequence_ [c e2 | c <- cs]
+                                                                                    MGuarded e cs x    -> setMeta i (MGuarded e ((\e -> apply env1 e vs1 >>= \v1 -> eqValue' k v1 v2) : cs) x)
+    eqValue' k v1                             (VMeta i env2 vs2)             = do mv <- getMeta i
+                                                                                  case mv of
+                                                                                    MUnbound scopei cs -> do e1 <- mkLam i scopei env2 vs2 v1
+                                                                                                             setMeta i (MBound e1)
+                                                                                                             sequence_ [c e1 | c <- cs]
+                                                                                    MGuarded e cs x    -> setMeta i (MGuarded e ((\e -> apply env2 e vs2 >>= \v2 -> eqValue' k v1 v2) : cs) x)
     eqValue' k (VApp f1 vs1)                  (VApp f2 vs2)   | f1 == f2     = zipWithM_ (eqValue k) vs1 vs2
     eqValue' k (VConst f1 vs1)                (VConst f2 vs2) | f1 == f2     = zipWithM_ (eqValue k) vs1 vs2
     eqValue' k (VLit l1)                      (VLit l2    )   | l1 == l2     = return ()
