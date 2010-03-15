@@ -8,11 +8,13 @@ data functor :  ({c1, c2} : Category)
              -> ((x : El c1) -> EqAr (f1 (id x)) (id (f0 x)))
              -> (({x,y,z} : El c1) -> (f : Arrow x z) -> (g : Arrow z y) -> EqAr (f1 (comp g f)) (comp (f1 g) (f1 f)))
              -> Functor c1 c2 ;
-{-
+
+fun idF : (c : Category) -> Functor c c ;
+-- def idF c = functor (\x->x) (\f->f) (\x -> eqRefl (id x)) (\f,g -> eqRefl (comp g f)) ;
+
 fun compF : ({c1,c2,c3} : Category) -> Functor c3 c2 -> Functor c1 c3 -> Functor c1 c2 ;
-def compF {c1} {c2} {c3} (functor {c3} {c2} f032 f132 eqid32 eqcmp32) (functor {c1} {c3} f013 f113 eqid13 eqcmp13) =
-        functor (\x -> f032 (f013 x)) (\x -> f132 (f113 x)) (\x -> mapEqAr (f132 {?} {?}) eqid13) ? ;
--}
+-- def compF {c1} {c2} {c3} (functor {c3} {c2} f032 f132 eqid32 eqcmp32) (functor {c1} {c3} f013 f113 eqid13 eqcmp13) =
+--         functor (\x -> f032 (f013 x)) (\x -> f132 (f113 x)) (\x -> mapEqAr (f132 {?} {?}) eqid13) ? ;
 
 fun mapEl :  ({c1, c2} : Category)
           -> Functor c1 c2
