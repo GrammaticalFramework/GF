@@ -3,6 +3,6 @@ abstract CategoryTheory
   , Morphisms
   , InitialAndTerminal
   , Functor
-
+  , Equalizer
 ** {
 }
