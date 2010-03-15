@@ -5,5 +5,7 @@ abstract CategoryTheory
   , Functor
   , NaturalTransform
   , Equalizer
+  , Adjoints
+  , Monad
 ** {
 }
