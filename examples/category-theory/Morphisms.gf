@@ -1,6 +1,6 @@
 abstract Morphisms = Categories ** {
 
-cat Iso ({c} : Category) (x,y : El c) ;
+cat Iso ({c} : Category) ({x,y} : El c) (Arrow x y) (Arrow y x) ;
 
 data iso :  ({c} : Category)
          -> ({x,y} : El c)
@@ -8,12 +8,23 @@ data iso :  ({c} : Category)
          -> (g : Arrow y x)
          -> (EqAr (comp f g) (id y))
          -> (EqAr (comp g f) (id x))
-         -> Iso x y ;
+         -> Iso f g ;
+
+fun isoOp : ({c} : Category)
+         -> ({x,y} : El c)
+         -> ({f} : Arrow x y)
+         -> ({g} : Arrow y x)
+         -> Iso f g
+         -> Iso (opAr g) (opAr f) ;
+def isoOp {c} {x} {y} {f} {g} (iso {c} {x} {y} f g id_fg id_gf) =
+        iso {Op c} (opAr g) (opAr f) (eqOp id_fg) (eqOp id_gf) ;
 
 fun iso2mono :  ({c} : Category)
              -> ({x,y} : El c)
-             -> (Iso x y -> Mono x y) ;
-def iso2mono {c} {x} {y} (iso {c} {x} {y} f g id_fg id_gf) = 
+             -> ({f} : Arrow x y)
+             -> ({g} : Arrow y x)
+             -> (Iso f g -> Mono f) ;
+def iso2mono {c} {x} {y} {f} {g} (iso {c} {x} {y} f g id_fg id_gf) = 
         mono f (\h,m,eq_fh_fm -> 
                       eqSym (eqTran (eqIdR m)                                                                      --           h = m
                                     (eqTran (eqCompR id_gf m)                                                      --      id . m = h
@@ -26,8 +37,10 @@ def iso2mono {c} {x} {y} (iso {c} {x} {y} f g id_fg id_gf) =
 
 fun iso2epi  :  ({c} : Category)
              -> ({x,y} : El c)
-             -> (Iso x y -> Epi x y) ;
-def iso2epi {c} {x} {y} (iso {c} {x} {y} f g id_fg id_gf) =
+             -> ({f} : Arrow x y)
+             -> ({g} : Arrow y x)
+             -> (Iso f g -> Epi f) ;
+def iso2epi {c} {x} {y} {f} {g} (iso {c} {x} {y} f g id_fg id_gf) =
         epi {c} {x} {y} f (\{z},h,m,eq_hf_mf -> 
                       eqSym (eqTran (eqIdL m)                                                                     --           h = m
                                     (eqTran (eqCompL m id_fg)                                                     --      m . id = h
@@ -38,21 +51,21 @@ def iso2epi {c} {x} {y} (iso {c} {x} {y} f g id_fg id_gf) =
                                                                                    (eqCompR eq_hf_mf g))))))))) ; -- (h . f) . g = (m . f) . g
                                                                                                                   --  h . f      =  m . f
 
-cat Mono ({c} : Category) (x,y : El c) ;
+cat Mono ({c} : Category) ({x,y} : El c) (Arrow x y) ;
 
 data mono :  ({c} : Category)
           -> ({x,y} : El c)
           -> (f : Arrow x y)
           -> (({z} : El c) -> (h,m : Arrow z x) -> EqAr (comp f h) (comp f m) -> EqAr h m)
-          -> Mono x y ;
+          -> Mono f ;
 
 
-cat Epi ({c} : Category) (x,y : El c) ;
+cat Epi ({c} : Category) ({x,y} : El c) (Arrow x y) ;
 
 data epi  :  ({c} : Category)
           -> ({x,y} : El c)
           -> (f : Arrow x y)
           -> (({z} : El c) -> (h,m : Arrow y z) -> EqAr (comp h f) (comp m f) -> EqAr h m)
-          -> Epi x y ;
+          -> Epi f ;
 
 }
