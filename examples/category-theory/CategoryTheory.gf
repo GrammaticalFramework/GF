@@ -3,6 +3,7 @@ abstract CategoryTheory
   , Morphisms
   , InitialAndTerminal
   , Functor
+  , NaturalTransform
   , Equalizer
 ** {
 }
