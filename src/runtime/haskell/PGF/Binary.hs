@@ -125,18 +125,20 @@ instance Binary Expr where
 instance Binary Patt where
   put (PApp f ps)  = putWord8 0 >> put (f,ps)
   put (PVar   x)   = putWord8 1 >> put x
-  put PWild        = putWord8 2
-  put (PLit l)     = putWord8 3 >> put l
-  put (PImplArg p) = putWord8 4 >> put p
-  put (PTilde p)   = putWord8 5 >> put p
+  put (PAs x p)    = putWord8 2 >> put (x,p)
+  put PWild        = putWord8 3
+  put (PLit l)     = putWord8 4 >> put l
+  put (PImplArg p) = putWord8 5 >> put p
+  put (PTilde p)   = putWord8 6 >> put p
   get = do tag <- getWord8
            case tag of
              0 -> liftM2 PApp get get
              1 -> liftM  PVar get
-             2 -> return PWild
-             3 -> liftM  PLit get
-             4 -> liftM  PImplArg get
-             5 -> liftM  PTilde get
+             2 -> liftM2 PAs get get
+             3 -> return PWild
+             4 -> liftM  PLit get
+             5 -> liftM  PImplArg get
+             6 -> liftM  PTilde get
              _ -> decodingError
 
 instance Binary Equation where
