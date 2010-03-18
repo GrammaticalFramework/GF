@@ -236,11 +236,13 @@ checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $
   p2t p (ps,i,g,k) = case p of
      PW      -> (Meta i : ps, i+1,g,k) 
      PV x    -> (Vr x   : ps, i, upd x k g,k+1)
+     PAs x p -> p2t p (ps,i,g,k)
      PString s -> (K s : ps, i, g, k)
      PInt n -> (EInt n : ps, i, g, k)
      PFloat n -> (EFloat n : ps, i, g, k)
      PP m c xs -> (mkApp (Q m c) xss : ps, j, g',k') 
                     where (xss,j,g',k') = foldr p2t ([],i,g,k) xs
+     PImplArg p -> p2t p (ps,i,g,k)
      PTilde t -> (t : ps, i, g, k)
      _ -> error $ render (text "undefined p2t case" <+> ppPatt Unqualified 0 p <+> text "in checkBranch")
 

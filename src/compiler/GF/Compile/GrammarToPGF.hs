@@ -141,10 +141,14 @@ mkPatt scope p =
     A.PP _ c ps -> let (scope',ps') = mapAccumL mkPatt scope ps
                    in (scope',C.PApp (i2i c) ps')
     A.PV x      -> (x:scope,C.PVar (i2i x))
+    A.PAs x p   -> let (scope',p') = mkPatt scope p
+                   in (x:scope',C.PAs (i2i x) p')
     A.PW        -> (  scope,C.PWild)
     A.PInt i    -> (  scope,C.PLit (C.LInt (fromIntegral i)))
     A.PFloat f  -> (  scope,C.PLit (C.LFlt f))
     A.PString s -> (  scope,C.PLit (C.LStr s))
+    A.PImplArg p-> let (scope',p') = mkPatt scope p
+                   in (scope',C.PImplArg p')
     A.PTilde t  -> (  scope,C.PTilde (mkExp scope t))
 
 

@@ -66,6 +66,7 @@ data Patt =
    PApp CId [Patt]                  -- ^ application. The identifier should be constructor i.e. defined with 'data'
  | PLit Literal                     -- ^ literal
  | PVar CId                         -- ^ variable
+ | PAs  CId Patt                    -- ^ variable@pattern
  | PWild                            -- ^ wildcard
  | PImplArg Patt                    -- ^ implicit argument in pattern
  | PTilde Expr
@@ -229,6 +230,7 @@ ppPatt d scope (PApp f ps)  = let ds = List.map (ppPatt 2 scope) ps
                               in ppParens (not (List.null ps) && d > 1) (ppCId f PP.<+> PP.hsep ds)
 ppPatt d scope (PLit l)     = ppLit l
 ppPatt d scope (PVar f)     = ppCId f
+ppPatt d scope (PAs x p)    = ppCId x PP.<> PP.char '@' PP.<> ppPatt 3 scope p
 ppPatt d scope PWild        = PP.char '_'
 ppPatt d scope (PImplArg p) = PP.braces (ppPatt 0 scope p)
 ppPatt d scope (PTilde e)   = PP.char '~' PP.<> ppExpr 6 scope e
@@ -237,6 +239,7 @@ pattScope :: [CId] -> Patt -> [CId]
 pattScope scope (PApp f ps)  = foldl pattScope scope ps
 pattScope scope (PLit l)     = scope
 pattScope scope (PVar f)     = f:scope
+pattScope scope (PAs x p)    = pattScope (x:scope) p
 pattScope scope PWild        = scope
 pattScope scope (PImplArg p) = pattScope scope p                               
 pattScope scope (PTilde e)   = scope
@@ -363,6 +366,7 @@ match sig f eqs as0 =
     tryMatches eqs (p:ps) (a:as) res env = tryMatch p a env
       where
         tryMatch (PVar x     ) (v                ) env            = tryMatches eqs  ps        as  res (v:env)
+        tryMatch (PAs  x p   ) (v                ) env            = tryMatch p v (v:env)
         tryMatch (PWild      ) (_                ) env            = tryMatches eqs  ps        as  res env
         tryMatch (p          ) (VMeta i envi vs  ) env            = VSusp i envi vs (\v -> tryMatch p v env)
         tryMatch (p          ) (VGen  i vs       ) env            = VConst f as0
