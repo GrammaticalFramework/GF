@@ -426,7 +426,7 @@ Exp4
   | 'pre' '{' String ';' ListAltern '}' { Alts (K $3, $5) }
   | 'pre' '{' Ident ';' ListAltern '}' { Alts (Vr $3, $5) }
   | 'strs' '{' ListExp '}'           { Strs $3       }
-  | '#' Patt2                        { EPatt $2      }
+  | '#' Patt3                        { EPatt $2      }
   | 'pattern' Exp5                   { EPattType $2  }
   | 'lincat' Ident Exp5              { ELincat $2 $3 }
   | 'lin' Ident Exp5                 { ELin $2 $3 }
@@ -477,18 +477,22 @@ Patt1 :: { Patt }
 Patt1
   : Ident ListPatt            { PC $1 $2 } 
   | Ident '.' Ident ListPatt  { PP $1 $3 $4 }
-  | Patt2 '*'                 { PRep $1 }
-  | Ident '@' Patt2           { PAs $1 $3 }
-  | '-' Patt2                 { PNeg $2 }
+  | Patt3 '*'                 { PRep $1 }
   | Patt2                     { $1 }
 
 Patt2 :: { Patt }
 Patt2
+  : Ident '@' Patt3           { PAs $1 $3 }
+  | '-' Patt3                 { PNeg $2 }
+  | '~' Exp6                  { PTilde $2 }
+  | Patt3                     { $1 } 
+
+Patt3 :: { Patt }
+Patt3
   : '?'                       { PChar } 
   | '[' String ']'            { PChars $2 }
   | '#' Ident                 { PMacro $2 }
   | '#' Ident '.' Ident       { PM $2 $4 }
-  | '~' Exp6                  { PTilde $2 }
   | '_'                       { PW }
   | Ident                     { PV $1 }
   | Ident '.' Ident           { PP $1 $3 [] }
@@ -529,7 +533,7 @@ ListPatt
 
 PattArg :: { Patt }
   : Patt2         { $1                }
-  | '{' Patt2 '}' { PImplArg $2       }
+  | '{' Patt '}'  { PImplArg $2       }
 
 Arg :: { [(BindType,Ident)] }
 Arg 

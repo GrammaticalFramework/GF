@@ -190,13 +190,13 @@ ppPatt q d (PAlt p1 p2) = prec d 0 (ppPatt q 0 p1 <+> char '|' <+> ppPatt q 1 p2
 ppPatt q d (PSeq p1 p2) = prec d 0 (ppPatt q 0 p1 <+> char '+' <+> ppPatt q 1 p2)
 ppPatt q d (PC f ps)    = if null ps
                             then ppIdent f
-                            else prec d 1 (ppIdent f <+> hsep (map (ppPatt q 2) ps))
+                            else prec d 1 (ppIdent f <+> hsep (map (ppPatt q 3) ps))
 ppPatt q d (PP f g ps)  = if null ps
                             then ppQIdent q f g
-                            else prec d 1 (ppQIdent q f g <+> hsep (map (ppPatt q 2) ps))
-ppPatt q d (PRep p)     = prec d 1 (ppPatt q 2 p <> char '*')
-ppPatt q d (PAs f p)    = prec d 1 (ppIdent f <> char '@' <> ppPatt q 2 p)
-ppPatt q d (PNeg p)     = prec d 1 (char '-' <> ppPatt q 2 p)
+                            else prec d 1 (ppQIdent q f g <+> hsep (map (ppPatt q 3) ps))
+ppPatt q d (PRep p)     = prec d 1 (ppPatt q 3 p <> char '*')
+ppPatt q d (PAs f p)    = prec d 2 (ppIdent f <> char '@' <> ppPatt q 3 p)
+ppPatt q d (PNeg p)     = prec d 2 (char '-' <> ppPatt q 3 p)
 ppPatt q d (PChar)      = char '?'
 ppPatt q d (PChars s)   = brackets (str s)
 ppPatt q d (PMacro id)  = char '#' <> ppIdent id
@@ -208,7 +208,7 @@ ppPatt q d (PFloat f)   = double f
 ppPatt q d (PString s)  = str s
 ppPatt q d (PR xs)      = braces (hsep (punctuate semi [ppLabel l <+> equals <+> ppPatt q 0 e | (l,e) <- xs]))
 ppPatt q d (PImplArg p) = braces (ppPatt q 0 p)
-ppPatt q d (PTilde t)   = char '~' <> ppTerm q 6 t
+ppPatt q d (PTilde t)   = prec d 2 (char '~' <> ppTerm q 6 t)
 
 ppValue :: TermPrintQual -> Int -> Val -> Doc
 ppValue q d (VGen i x)    = ppIdent x <> text "{-" <> int i <> text "-}" ---- latter part for debugging
