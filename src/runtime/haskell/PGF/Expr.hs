@@ -1,5 +1,5 @@
 module PGF.Expr(Tree, BindType(..), Expr(..), Literal(..), Patt(..), Equation(..),
-                readExpr, showExpr, pExpr, pBinds, ppExpr, ppPatt,
+                readExpr, showExpr, pExpr, pBinds, ppExpr, ppPatt, pattScope,
 
                 mkApp,    unApp,
                 mkStr,    unStr,
@@ -68,6 +68,7 @@ data Patt =
  | PVar CId                         -- ^ variable
  | PWild                            -- ^ wildcard
  | PImplArg Patt                    -- ^ implicit argument in pattern
+ | PTilde Expr
   deriving Show
 
 -- | The equation is used to define lambda function as a sequence
@@ -223,14 +224,22 @@ ppExpr d scope (EVar i)     = ppCId (scope !! i)
 ppExpr d scope (ETyped e ty)= PP.char '<' PP.<> ppExpr 0 scope e PP.<+> PP.colon PP.<+> ppType 0 scope ty PP.<> PP.char '>'
 ppExpr d scope (EImplArg e) = PP.braces (ppExpr 0 scope e)
 
-ppPatt :: Int -> [CId] -> Patt -> ([CId],PP.Doc)
-ppPatt d scope (PApp f ps) = let (scope',ds) = mapAccumL (ppPatt 2) scope ps
-                             in (scope',ppParens (not (List.null ps) && d > 1) (ppCId f PP.<+> PP.hsep ds))
-ppPatt d scope (PLit l)    = (scope,ppLit l)
-ppPatt d scope (PVar f)    = (f:scope,ppCId f)
-ppPatt d scope PWild       = (scope,PP.char '_')
-ppPatt d scope (PImplArg p) = let (scope',d) = ppPatt 0 scope p
-                              in (scope',PP.braces d)
+ppPatt :: Int -> [CId] -> Patt -> PP.Doc
+ppPatt d scope (PApp f ps)  = let ds = List.map (ppPatt 2 scope) ps
+                              in ppParens (not (List.null ps) && d > 1) (ppCId f PP.<+> PP.hsep ds)
+ppPatt d scope (PLit l)     = ppLit l
+ppPatt d scope (PVar f)     = ppCId f
+ppPatt d scope PWild        = PP.char '_'
+ppPatt d scope (PImplArg p) = PP.braces (ppPatt 0 scope p)
+ppPatt d scope (PTilde e)   = PP.char '~' PP.<> ppExpr 6 scope e
+
+pattScope :: [CId] -> Patt -> [CId]
+pattScope scope (PApp f ps)  = foldl pattScope scope ps
+pattScope scope (PLit l)     = scope
+pattScope scope (PVar f)     = f:scope
+pattScope scope PWild        = scope
+pattScope scope (PImplArg p) = pattScope scope p                               
+pattScope scope (PTilde e)   = scope
 
 ppBind Explicit x = ppCId x
 ppBind Implicit x = PP.braces (ppCId x)
@@ -362,5 +371,6 @@ match sig f eqs as0 =
         tryMatch (PApp f1 ps1) (VApp f2 vs2      ) env | f1 == f2 = tryMatches eqs (ps1++ps) (vs2++as) res env
         tryMatch (PLit l1    ) (VLit l2          ) env | l1 == l2 = tryMatches eqs  ps        as  res env
         tryMatch (PImplArg p ) (VImplArg v       ) env            = tryMatch p v env
+        tryMatch (PTilde _   ) (_                ) env            = tryMatches eqs  ps        as  res env
         tryMatch _             _                   env            = match sig f eqs as0
 

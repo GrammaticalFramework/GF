@@ -302,7 +302,8 @@ browse pgf id = fmap (\def -> (def,producers,consumers)) definition
                    Just (ty,_,Just eqs) -> Just $ render (text "fun" <+> ppCId id <+> colon <+> ppType 0 [] ty $$
                                                           if null eqs
                                                             then empty
-                                                            else text "def" <+> vcat [let (scope,ds) = mapAccumL (ppPatt 9) [] patts
+                                                            else text "def" <+> vcat [let scope = foldl pattScope [] patts
+                                                                                          ds    = map (ppPatt 9 scope) patts
                                                                                       in ppCId id <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
                    Just (ty,_,Nothing ) -> Just $ render (text "data" <+> ppCId id <+> colon <+> ppType 0 [] ty)
                    Nothing   -> case Map.lookup id (cats (abstract pgf)) of

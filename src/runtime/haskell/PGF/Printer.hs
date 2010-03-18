@@ -35,7 +35,8 @@ ppFun :: CId -> (Type,Int,Maybe [Equation]) -> Doc
 ppFun f (t,_,Just eqs) = text "fun" <+> ppCId f <+> colon <+> ppType 0 [] t $$
                          if null eqs
                            then empty
-                           else text "def" <+> vcat [let (scope,ds) = mapAccumL (ppPatt 9) [] patts
+                           else text "def" <+> vcat [let scope = foldl pattScope [] patts
+                                                         ds    = map (ppPatt 9 scope) patts
                                                      in ppCId f <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs]
 ppFun f (t,_,Nothing)  = text "data" <+> ppCId f <+> colon <+> ppType 0 [] t
 

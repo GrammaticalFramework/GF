@@ -35,6 +35,7 @@ import GF.Compile.Update (buildAnyTree)
  '$'          { T_int_label }
  '('          { T_oparen    }
  ')'          { T_cparen    }
+ '~'          { T_tilde     }
  '*'          { T_star      }
  '**'         { T_starstar  }
  '+'          { T_plus      }
@@ -487,6 +488,7 @@ Patt2
   | '[' String ']'            { PChars $2 }
   | '#' Ident                 { PMacro $2 }
   | '#' Ident '.' Ident       { PM $2 $4 }
+  | '~' Exp6                  { PTilde $2 }
   | '_'                       { PW }
   | Ident                     { PV $1 }
   | Ident '.' Ident           { PP $1 $3 [] }
@@ -526,8 +528,8 @@ ListPatt
   | PattArg ListPatt { $1 : $2 }
 
 PattArg :: { Patt }
-  : Patt2         { $1          }
-  | '{' Patt2 '}' { PImplArg $2 }
+  : Patt2         { $1                }
+  | '{' Patt2 '}' { PImplArg $2       }
 
 Arg :: { [(BindType,Ident)] }
 Arg 

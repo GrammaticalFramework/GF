@@ -145,6 +145,7 @@ mkPatt scope p =
     A.PInt i    -> (  scope,C.PLit (C.LInt (fromIntegral i)))
     A.PFloat f  -> (  scope,C.PLit (C.LFlt f))
     A.PString s -> (  scope,C.PLit (C.LStr s))
+    A.PTilde t  -> (  scope,C.PTilde (mkExp scope t))
 
 
 mkContext :: [Ident] -> A.Context -> ([Ident],[C.Hypo])

@@ -23,7 +23,7 @@ $i = [$l $d _ ']          -- identifier character
 $u = [\0-\255]          -- universal: any character
 
 @rsyms =    -- symbols and non-identifier-like reserved words
-   \; | \= | \{ | \} | \( | \) | \* \* | \: | \- \> | \, | \[ | \] | \- | \. | \| | \% | \? | \< | \> | \@ | \# | \! | \* | \+ | \+ \+ | \\ | \\\\ | \= \> | \_ | \$ | \/
+   \; | \= | \{ | \} | \( | \) | \~ | \* \* | \: | \- \> | \, | \[ | \] | \- | \. | \| | \% | \? | \< | \> | \@ | \# | \! | \* | \+ | \+ \+ | \\ | \\\\ | \= \> | \_ | \$ | \/
 
 :-
 "--" [.]* ; -- Toss single line comments
@@ -49,6 +49,7 @@ data Token
  | T_int_label
  | T_oparen
  | T_cparen
+ | T_tilde
  | T_star
  | T_starstar
  | T_plus
@@ -132,6 +133,7 @@ resWords = Map.fromList
  , b "$"  T_int_label
  , b "("  T_oparen
  , b ")"  T_cparen
+ , b "~"  T_tilde
  , b "*"  T_star
  , b "**" T_starstar
  , b "+"  T_plus
