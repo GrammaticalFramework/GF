@@ -168,6 +168,7 @@ data Patt =
  | PAs Ident Patt         -- ^ as-pattern: x@p
  
  | PImplArg Patt          -- ^ placeholder for pattern for implicit argument @{p}@
+ | PTilde   Term          -- ^ inaccessible pattern
 
  -- regular expression patterns
  | PNeg Patt              -- ^ negated pattern: -p

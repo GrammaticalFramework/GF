@@ -128,6 +128,7 @@ instance Binary Patt where
   put PWild        = putWord8 2
   put (PLit l)     = putWord8 3 >> put l
   put (PImplArg p) = putWord8 4 >> put p
+  put (PTilde p)   = putWord8 5 >> put p
   get = do tag <- getWord8
            case tag of
              0 -> liftM2 PApp get get
@@ -135,6 +136,7 @@ instance Binary Patt where
              2 -> return PWild
              3 -> liftM  PLit get
              4 -> liftM  PImplArg get
+             5 -> liftM  PTilde get
              _ -> decodingError
 
 instance Binary Equation where

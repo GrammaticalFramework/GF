@@ -241,6 +241,7 @@ checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $
      PFloat n -> (EFloat n : ps, i, g, k)
      PP m c xs -> (mkApp (Q m c) xss : ps, j, g',k') 
                     where (xss,j,g',k') = foldr p2t ([],i,g,k) xs
+     PTilde t -> (t : ps, i, g, k)
      _ -> error $ render (text "undefined p2t case" <+> ppPatt Unqualified 0 p <+> text "in checkBranch")
 
   upd x k g = (x, VGen k x) : g --- hack to recognize pattern variables

@@ -209,6 +209,7 @@ instance Binary Patt where
   put (PChars x)   = putWord8 16 >> put x
   put (PMacro x)   = putWord8 17 >> put x
   put (PM x y)     = putWord8 18 >> put (x,y)
+  put (PTilde x)   = putWord8 19 >> put x
   get = do tag <- getWord8
            case tag of
              0  -> get >>= \(x,y)   -> return (PC x y)
@@ -229,6 +230,7 @@ instance Binary Patt where
              16 -> get >>= \x       -> return (PChars x)
              17 -> get >>= \x       -> return (PMacro x)
              18 -> get >>= \(x,y)   -> return (PM x y)
+             19 -> get >>= \x       -> return (PTilde x)
              _  -> decodingError
 
 instance Binary TInfo where
