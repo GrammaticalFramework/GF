@@ -1,5 +1,6 @@
 concrete StructuralCat of Structural = CatCat ** 
-  open PhonoCat, MorphoCat, ParadigmsCat, BeschCat, (X = ConstructX), Prelude in {
+  open PhonoCat, MorphoCat, ParadigmsCat, BeschCat, 
+       MakeStructuralCat, (X = ConstructX), Prelude in {
 
   flags optimize=all ; coding=utf8 ;
 
@@ -190,6 +191,7 @@ lin
   at_most_AdN = X.mkAdN "com a màxim" ;
   except_Prep = mkPrep "excepte" ;
   as_CAdv = X.mkCAdv "tan" "com" ;
+  that_Subj = {s = "que" ; m = Conjunct} ;
 
   lin language_title_Utt = ss "català" ;
 
