@@ -62,6 +62,7 @@ lin
      mkPronoun
       "" "el" "lui" "lui" [] "sãu" "sa" "sãi" "sale"  Masc Sg P3 ;
   
+  have_V2 = dirV2 (v_have) ;
   less_CAdv = {s = "mai puþin" ; sNum = ""; p = conjThan ; lock_CAdv = <> } ; 
   many_Det = mkDet "mulþi" "multe" "multor" "multor" "mulþi" "multe" "multora" "multora" Pl; 
   more_CAdv = {s = "mai" ; sNum = "mult" ; p =conjThan ; lock_CAdv = <>};
