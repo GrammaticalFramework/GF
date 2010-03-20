@@ -4,6 +4,7 @@ import PGF
 import PGF.Printer
 import GF.Compile.PGFtoHaskell
 import GF.Compile.PGFtoProlog
+import GF.Compile.PGFtoLProlog
 import GF.Compile.PGFtoJS
 import GF.Infra.Option
 import GF.Speech.CFG
@@ -32,8 +33,9 @@ exportPGF opts fmt pgf =
       FmtPGFPretty    -> multi "txt" (render . ppPGF)
       FmtJavaScript   -> multi "js"  pgf2js
       FmtHaskell      -> multi "hs"  (grammar2haskell opts name)
-      FmtProlog       -> multi "pl"  grammar2prolog 
-      FmtProlog_Abs   -> multi "pl"  grammar2prolog_abs 
+      FmtProlog       -> multi "pl"  grammar2prolog
+      FmtProlog_Abs   -> multi "pl"  grammar2prolog_abs
+      FmtLambdaProlog -> multi "mod" grammar2lambdaprolog_mod ++ multi "sig" grammar2lambdaprolog_sig
       FmtBNF          -> single "bnf"   bnfPrinter
       FmtEBNF         -> single "ebnf"  (ebnfPrinter opts)
       FmtSRGS_XML     -> single "grxml" (srgsXmlPrinter opts)

@@ -85,6 +85,7 @@ data OutputFormat = FmtPGFPretty
                   | FmtHaskell 
                   | FmtProlog
                   | FmtProlog_Abs
+                  | FmtLambdaProlog
                   | FmtBNF
                   | FmtEBNF
                   | FmtRegular
@@ -432,6 +433,7 @@ outputFormats =
      ("haskell",      FmtHaskell),
      ("prolog",       FmtProlog),
      ("prolog_abs",   FmtProlog_Abs),
+     ("lambda_prolog",FmtLambdaProlog),
      ("bnf",          FmtBNF),
      ("ebnf",         FmtEBNF),
      ("regular",      FmtRegular),
