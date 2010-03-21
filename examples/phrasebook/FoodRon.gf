@@ -9,15 +9,15 @@ flags coding=utf8 ;
 lin
 
 Wine = mkCN (mkN "vin" "vinuri" neuter) ;
-Cheese = mkCN (mkN "brânzã" "brânzeturi" feminine) ;
-Fish = mkCN (mkN "peºte" "peºti" masculine) ;
+Cheese = mkCN (mkN "brÃ¢nzÄƒ" "brÃ¢nzeturi" feminine) ;
+Fish = mkCN (mkN "peÅŸte" "peÅŸti" masculine) ;
 Pizza = mkCN (mkN "pizza" "pizze" feminine) ;
 
-Fresh = mkAPA "proaspãt" "proaspãtã" "proaspeşi" "proaspete" ;
-Warm = mkAPA "cald" "caldã" "calzi" "calde" ;
-Italian = mkAPA "italian" "italianã" "italieni" "italiene" ;
-Expensive = mkAPA "scump" "scumpã" "scumpi" "scumpe" ;
-Delicious = mkAPA "delicios" "delcioasã" "delicioºi" "delicioase" ;
+Fresh = mkAPA "proaspÄƒt" "proaspÄƒtÄƒ" "proaspeÅ£i" "proaspete" ;
+Warm = mkAPA "cald" "caldÄƒ" "calzi" "calde" ;
+Italian = mkAPA "italian" "italianÄƒ" "italieni" "italiene" ;
+Expensive = mkAPA "scump" "scumpÄƒ" "scumpi" "scumpe" ;
+Delicious = mkAPA "delicios" "delcioasÄƒ" "delicioÅŸi" "delicioase" ;
 Boring = mkAPA "plictisitor" "plictisitoare" "plictisitori" "plictisitoare" ;
 
 oper
