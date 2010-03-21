@@ -1,5 +1,8 @@
 incomplete concrete SentencesI of Sentences = Numeral ** 
-  open Syntax in {
+  open
+    DiffPhrasebook, 
+    Syntax 
+  in {
   lincat
     Sentence = Utt ; 
     Item = NP ;
@@ -10,7 +13,8 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Is item quality = mkUtt (mkCl item quality) ;
     IsNot item quality = mkUtt (mkS negativePol (mkCl item quality)) ;
     WhetherIs item quality = mkUtt (mkQCl (mkCl item quality)) ;
-    IWant obj = mkUtt (mkCl (mkNP i_Pron) want_VV (mkVP have_V2 obj)) ;
+    IWant obj = mkUtt (mkCl (mkNP i_Pron) want_V2 obj) ;
+    ILike item = mkUtt (mkCl (mkNP i_Pron) like_V2 item) ;
     DoYouHave kind = 
       mkUtt (mkQCl (mkCl (mkNP youPol_Pron) have_V2 (mkNP kind))) ;
     ObjItem i = i ;

@@ -8,6 +8,7 @@ abstract Sentences = Numeral ** {
     IsNot : Item -> Quality -> Sentence ;
 
     IWant : Object -> Sentence ;
+    ILike : Item -> Sentence ; 
     DoYouHave : Kind -> Sentence ;
     WhetherIs : Item -> Quality -> Sentence ;
     ObjItem : Item -> Object ;
