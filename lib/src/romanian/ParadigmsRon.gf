@@ -14,7 +14,7 @@ resource ParadigmsRon =
     CatRon,
     BeschRon in {
 
-  flags optimize=all ;
+  flags optimize=all ; coding = utf8 ;
 
 --2 Parameters 
 --
@@ -226,14 +226,14 @@ chV s n = mkVocc n s ** {lock_N = <>};
 
 mkSPN : Str -> N ;
 mkSPN s = case s of 
-   { x + ("ã"|"e"|"a") => regN s feminine ;
+   { x + ("Äƒ"|"e"|"a") => regN s feminine ;
      x + ("el"|"mp"|"mb"|"en"|"id"|"at"|"ete"|"ol"|"et"|"or") => regN s masculine ;
      _  => regN s neuter  
     };
 
 mkNN : Str -> Str -> N ;
 mkNN s ss = case s of 
-     { x + ("ã"|"e"|"a") => mkNI s ss feminine ;
+     { x + ("Äƒ"|"e"|"a") => mkNI s ss feminine ;
        _                 => case ss of 
                           {x + "uri" => mkNI s ss neuter ;
                            x + "e"   => mkNI s ss neuter ;
@@ -338,7 +338,7 @@ case s of
   x + "ui"  => mkV121 s ;
   x + "ii"  => mkV120 s ;
   x + "i"   => mkV119 s ;
-  x + "î"   => mkV141 s
+  x + "Ã®"   => mkV141 s
 };
 
 oper mkV : Str -> V = \s -> mkNV (regV s) ; 

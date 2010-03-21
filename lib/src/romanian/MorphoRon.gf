@@ -3,7 +3,7 @@
 resource MorphoRon = ResRon ** 
   open   Prelude, Predef in {
 
-flags optimize=noexpand ;
+flags optimize=noexpand ; coding = utf8 ;
 
 ---------------------------------------------------------------------------------
 ------------------------------ARTICLES-------------------------------------------
@@ -19,18 +19,18 @@ case <g,n,a> of
 { <Masc,Sg,ANomAcc>  => case last bun of
                         { "u" => bun + "l";
                           "e" => bun + "le"; 
-                          "ã" => bun + "l";
+                          "Äƒ" => bun + "l";
                            _   => bun + "ul"
                         };
   <Masc,Sg,AGenDat>  => case last bun of
-                        {("u"|"e"|"ã" ) => bun + "lui" ;    
+                        {("u"|"e"|"Äƒ" ) => bun + "lui" ;    
                           _          => bun + "ului"
                          };              
   <Masc,Sg,AVoc>  => case bun of
 					    { x+"u"           => bun + "le";
 					      x + "itor"      => bun + "ule" ;
 					      x + ("en"|"or") => bun + "e" ;
-					      x+("e"|"ã") => bun;
+					      x+("e"|"Äƒ") => bun;
 						  _           => bun + "ule"
 					    };                                  
   <Masc,Pl,ANomAcc>  => buni + "i";
@@ -38,7 +38,7 @@ case <g,n,a> of
   <Fem,Sg,ANomAcc>   =>  case bun of
 				        { x + ("a"|"i") => bun + "ua";
 					      x + "ie"      => x + "ia";
-						  x + "ã"       => x + "a";
+						  x + "Äƒ"       => x + "a";
 						  _             => bun + "a"			
 						};
 						 
@@ -49,7 +49,7 @@ case <g,n,a> of
                          };
                             
  <Fem,Sg,AVoc>   => case bun of
-					    { x + "ã"       => x + "o";
+					    { x + "Äƒ"       => x + "o";
 					      x + "ie"      => x + "io";
 					      _             => bun + "o"
 					    };						  
@@ -148,9 +148,9 @@ mkNomReg : Str -> NGender -> Noun = \obiect, g ->
 case g of 
        {NMasc => mkNomIrreg obiect ((mkAdjReg obiect).s ! (AF Masc Pl Indef ANomAcc)) NMasc ;
         NFem  => case (Predef.dp 4 obiect) of 
-                   { "ai"+x+"ã"  => mkNomIrreg obiect (init obiect + "e") NFem ; --always
+                   { "ai"+x+"Äƒ"  => mkNomIrreg obiect (init obiect + "e") NFem ; --always
                       _ => case (Predef.dp 3 obiect) of
-                      {"i"+("c"|"n"|"m"|"p")+"ã" => mkNomIrreg obiect (init obiect + "i") NFem ; -- 60% cases frequently used words, not frequent for neological words
+                      {"i"+("c"|"n"|"m"|"p")+"Äƒ" => mkNomIrreg obiect (init obiect + "i") NFem ; -- 60% cases frequently used words, not frequent for neological words
                          _                       => mkNomIrreg obiect (mkFemPl obiect) NFem 
                       }
                    };
@@ -271,14 +271,14 @@ oper adjAuriu : Str -> Adj = \s ->
 oper adjMuncitor : Str -> Adj = \s ->
  let f   = Predef.tk 2 s + "oare";
      pl  = s + "i";
-     adv = s + "eºte"
+     adv = s + "eÅŸte"
      in
  mkAdjSSpec s f pl f adv ;
  
  oper adjRomanesc : Str -> Adj = \s ->
-  let f   = Predef.tk 2 s + "ascã";
-      pl  = Predef.tk 2 s + "ºti";
-      adv = Predef.tk 2 s + "ºte"
+  let f   = Predef.tk 2 s + "ascÄƒ";
+      pl  = Predef.tk 2 s + "ÅŸti";
+      adv = Predef.tk 2 s + "ÅŸte"
       in
  mkAdjSSpec s f pl pl adv ;
  
@@ -288,7 +288,7 @@ oper adjMare : Str -> Adj = \s ->
    mkAdjSpec s s pl pl;                    
   
 oper adjDimin : Str -> Adj = \s ->
-  let f  = Predef.tk 2 s + "icã";
+  let f  = Predef.tk 2 s + "icÄƒ";
      pl  = init s + "i";  
      plf = s + "e" 
      in
@@ -296,8 +296,8 @@ oper adjDimin : Str -> Adj = \s ->
  
  
  -- the phonetical mutations that occur in Romanian (Singular Masculine -> Singular Feminine) are 
- -- o -> oa  (Ex : frumos -> frumoasã)
- -- e -> ea / ie -> ia (Ex : des -> deasã)
+ -- o -> oa  (Ex : frumos -> frumoasÄƒ)
+ -- e -> ea / ie -> ia (Ex : des -> deasÄƒ)
  -- on the last occurence of o/e in the word (usually 2rd or 3rd last letter)
      
   mkStemMutE : Str -> Str = \s ->
@@ -315,13 +315,13 @@ oper adjDimin : Str -> Adj = \s ->
     _    => (Predef.tk 2 s) + "oa" + (last s)
   };
 
-  -- another phonetical mutation is ã -> e (Ex : proaspãtã -> proaspete) 
+  -- another phonetical mutation is Äƒ -> e (Ex : proaspÄƒtÄƒ -> proaspete) 
   -- Singular Feminine -> Plural Feminine
-  -- on the last occurence of ã -- 2nd last letter of the root 
+  -- on the last occurence of Äƒ -- 2nd last letter of the root 
   
   mkStemMutA : Str -> Str = \s ->
    case (Predef.dp 2 s) of
-   { "ã" + x => (Predef.tk 2 s) + "e" + (last s);
+   { "Äƒ" + x => (Predef.tk 2 s) + "e" + (last s);
       _      => s
    };
    
@@ -331,17 +331,17 @@ oper adjDimin : Str -> Adj = \s ->
 
 oper mkStemPlReg : Str -> Str = \s -> 
 case s of
-{x + ("st"|"sc"|"ºc")=> x + "ºti"; -- always -- usually the nouns/adj can end in an "u", but we eliminate that first
- x + "str"           => x + "ºtri"; 
- x + "s"             => x + "ºi"; 
- x + "x"             => x + "cºi"; 
- x + "xt"            => x + "cºti"; 
+{x + ("st"|"sc"|"ÅŸc")=> x + "ÅŸti"; -- always -- usually the nouns/adj can end in an "u", but we eliminate that first
+ x + "str"           => x + "ÅŸtri"; 
+ x + "s"             => x + "ÅŸi"; 
+ x + "x"             => x + "cÅŸi"; 
+ x + "xt"            => x + "cÅŸti"; 
  x + "ian"           => x + "ieni"; 
  x + "ean"           => x + "eni"; 
  x + "ead"           => x + "ezi"; 
  x + ("de"|"d")      => x + "zi";  
- x + ("te"|"tã"|"t") => x + "þi";
- x + ("e"|"i"|"a"|"ã")=> x + "i";
+ x + ("te"|"tÄƒ"|"t") => x + "Å£i";
+ x + ("e"|"i"|"a"|"Äƒ")=> x + "i";
  _                   => s + "i"
 }; --all the mutations occur always for adjectives, appart from the exception that mutate other syllables from the word
 
@@ -364,34 +364,34 @@ mkFemSg : Str -> Str = \s ->
 case s of
 {x + "i"  => s + "e";
  x + "iu" => x + "ie";
- x + "u"  => x + "ã";
- _        => s + "ã"
+ x + "u"  => x + "Äƒ";
+ _        => s + "Äƒ"
 };
 
 -- obtaining the Feminine Plural from Feminine Singular for Nouns :
 
 mkFemPl : Str -> Str = \s ->
 case s of
-{ x + "are"           => x + "ãri"; --always
+{ x + "are"           => x + "Äƒri"; --always
   x + ("ui"|"ai")     => s + "e"; -- from Masc (adjectives)
-  x + "urã"           => x + "uri"; -- always
+  x + "urÄƒ"           => x + "uri"; -- always
   x + "oaie"          => x + "oi"; -- almost always
-  x + "aie"           => x + "ãi"; --always
+  x + "aie"           => x + "Äƒi"; --always
   x + "eie"           => x + "ei"; --always
   x + "i"             => s + "le" ; --always - special cases of Feminines ending in "i" like zi = day
   x + "a"             => x + "le"; --always - special cases of Feminines ending in "a" -- most of Turkish origine like cafea = coffee
-  x + "une"           => x + "uni"; --always - abstract collective nouns like "naþiune" = nation, French origine
-  x + "ate"           => x + "ãþi"; --always same as above like "libertate" = freedom--  x + "ºã"            => x + "ºi"; -- 70% of cases
+  x + "une"           => x + "uni"; --always - abstract collective nouns like "naÅ£iune" = nation, French origine
+  x + "ate"           => x + "ÄƒÅ£i"; --always same as above like "libertate" = freedom--  x + "ÅŸÄƒ"            => x + "ÅŸi"; -- 70% of cases
   x + "re"            => x + "ri"; -- almost always, exception nouns ending in "oare" which are treated as special case in adjReg
   x + "e"             => x + "i"; -- almost always for Nouns, always for Adjectives
   _                   => case init s of
                         { 
                           x + ("g"|"h"|"nc")   => (init s) + "i"; -- always for Adjectives, almost always for Nouns (g - ending has exceptions)
                           
-                          x + "ãt"                 => x + "ete"; --always
-                          x + "ânt"                => x + "inte"; --always
+                          x + "Äƒt"                 => x + "ete"; --always
+                          x + "Ã¢nt"                => x + "inte"; --always
                           _                        => case s of
-                                                  { x + "ã" => x + "e" ; -- default -- exception occur
+                                                  { x + "Äƒ" => x + "e" ; -- default -- exception occur
                                                     _       => s + "e" -- worst case
                                                   }
 
@@ -404,8 +404,8 @@ case s of
 mkFemAdj : Str -> Str = \s ->
 case s of 
 { x + ("g"|"h"|"nc") => s + "i";
-  x + "ânt"              => x + "inte";
-  x + "ãt"               => x + "ete";
+  x + "Ã¢nt"              => x + "inte";
+  x + "Äƒt"               => x + "ete";
   _                      => s + "e"
 
 };
@@ -547,10 +547,10 @@ SVerbe : Type = VerbForm => Str ;
       TIndi  TPSimple n p     => vb.s ! (Indi PSimple n p) ;
       TIndi  TPPerfect n p    => vb.s ! (Indi PPerfect n p) ;
       TIndi  TFutur   n p     => pFut ! n ! p ++ vb.s ! Inf ;
-      TSubjo TSPres   n p     => "sã" ++ vb.s ! (Subjo SPres n p) ;
-      TSubjo TSPast   n p     => "sã" ++ "fi" ++ vb.s ! (PPasse Masc Sg Indef ANomAcc) ;
+      TSubjo TSPres   n p     => "sÄƒ" ++ vb.s ! (Subjo SPres n p) ;
+      TSubjo TSPast   n p     => "sÄƒ" ++ "fi" ++ vb.s ! (PPasse Masc Sg Indef ANomAcc) ;
       TCondi n p              => pCond ! n ! p ++ vb.s ! Inf ;
-      TImper        PlP1      => "sã" ++ vb.s ! (Imper PlP1) ;
+      TImper        PlP1      => "sÄƒ" ++ vb.s ! (Imper PlP1) ;
       TImper        p         => vb.s ! (Imper p) ;
       TGer                    => vb.s ! Ger ;
       TPPasse g n a d         => vb.s ! (PPasse g n a d)
@@ -565,10 +565,10 @@ table {
       TIndi  TPSimple n p     => pronRefl ! n ! p ++ vb.s ! (Indi PSimple n p) ;
       TIndi  TPPerfect n p    => pronRefl ! n ! p ++ vb.s ! (Indi PPerfect n p) ;
       TIndi  TFutur   n p     => pronRefl ! n ! p ++ pFut ! n ! p ++ vb.s ! Inf ;
-      TSubjo TSPres   n p     => "sã" ++ pronRefl ! n ! p ++ vb.s ! (Subjo SPres n p) ;
-      TSubjo TSPast   n p     => "sã" ++ pronRefl ! n ! p ++ "fi" ++ vb.s ! (PPasse Masc Sg Indef ANomAcc) ;
+      TSubjo TSPres   n p     => "sÄƒ" ++ pronRefl ! n ! p ++ vb.s ! (Subjo SPres n p) ;
+      TSubjo TSPast   n p     => "sÄƒ" ++ pronRefl ! n ! p ++ "fi" ++ vb.s ! (PPasse Masc Sg Indef ANomAcc) ;
       TCondi n p              => pronReflClit ! n ! p + "-" + pCond ! n ! p ++ vb.s ! Inf ;
-      TImper        PlP1      => "sã" ++ pronRefl ! Pl ! P1 ++ vb.s ! (Imper PlP1) ;
+      TImper        PlP1      => "sÄƒ" ++ pronRefl ! Pl ! P1 ++ vb.s ! (Imper PlP1) ;
       TImper        PlP2      => vb.s ! (Imper PlP2) + "-"+ pronRefl ! Pl ! P2  ;
       TImper        SgP2      => vb.s ! (Imper SgP2) + "-"+ pronRefl ! Sg ! P2  ;
       TGer                    => vb.s ! Ger + "u" + "-" + pronRefl ! Sg ! P3 ;
@@ -582,8 +582,8 @@ table {
 -- reflexive pronouns - full form
 
 pronRefl : Number => Person => Str = 
-table {Sg => table {P1 => "mã" ; P2 => "te" ; P3 => "se"};
-       Pl => table {P1 => "ne" ; P2 => "vã" ; P3 => "se" } 
+table {Sg => table {P1 => "mÄƒ" ; P2 => "te" ; P3 => "se"};
+       Pl => table {P1 => "ne" ; P2 => "vÄƒ" ; P3 => "se" } 
 };
 
 -- reflexive pronouns - short form (clitics)
@@ -639,14 +639,14 @@ oper
 
 -- vowells in Romanian - used for clitics
 
-   vocale : Str = ("a"|"e"|"i"|"u"|"ã"|"î"|"â");
+   vocale : Str = ("a"|"e"|"i"|"u"|"Äƒ"|"Ã®"|"Ã¢");
 
 -- phonetical mutations that occur when declining verbs :
 
--- last ã in the word -> a
+-- last Äƒ in the word -> a
 
 modALast : Str -> Str = \root ->
-if_then_Str (pbool2bool (Predef.occur "ã" (Predef.dp 2 root))) 
+if_then_Str (pbool2bool (Predef.occur "Äƒ" (Predef.dp 2 root))) 
                    ((Predef.tk 2 root) + "a" + (last root)) ((Predef.tk 3 root) + "a" + (Predef.dp 2 root)); 
            
 -- last u in the word -> o
@@ -655,16 +655,16 @@ modU : Str -> Str = \root ->
 if_then_Str (pbool2bool (Predef.occur "u" (Predef.dp 2 root))) 
                    ((Predef.tk 2 root) + "o" + (last root)) ((Predef.tk 3 root) + "o" + (Predef.dp 2 root)); 
                       
--- first ã in the word -> a           
+-- first Äƒ in the word -> a           
            
 modAFirst : Str -> Str = \root ->
-if_then_Str (pbool2bool (Predef.occur "ã" (Predef.take 2 root))) 
+if_then_Str (pbool2bool (Predef.occur "Äƒ" (Predef.take 2 root))) 
                    ((Predef.take 1 root) + "a" + (Predef.drop 2 root)) ((Predef.take 2 root) + "a" + (Predef.drop 3 root)); 
            
--- ã -> a (general)           
+-- Äƒ -> a (general)           
 
 modA : Str -> Str = \root ->
-  if_then_Str (pbool2bool (Predef.occur "ã" (Predef.dp 3 root))) (modALast root) (modAFirst root) ;
+  if_then_Str (pbool2bool (Predef.occur "Äƒ" (Predef.dp 3 root))) (modALast root) (modAFirst root) ;
 
 
 -- e -> ea mutation (general)
@@ -738,40 +738,40 @@ specTab : Str -> Str -> Number => Person => Str = \ploua, plouau ->
 ---------------------------------
 --for subGroups 1,13
 
-  affixSgGr1Ez  : Affixe = afixe "ez" "ezi" "eazã" ;
-  affixPlGr1Ez  : Affixe = afixe "ãm" "aþi" "eazã" ;
+  affixSgGr1Ez  : Affixe = afixe "ez" "ezi" "eazÄƒ" ;
+  affixPlGr1Ez  : Affixe = afixe "Äƒm" "aÅ£i" "eazÄƒ" ;
 ------
 --for subGroups 2-3
-  affixSgGr1EzI : Affixe = afixe "ez" "ezi" "azã" ;
-  affixPlGr1EzI : Affixe = afixe "em" "aþi" "azã" ;
+  affixSgGr1EzI : Affixe = afixe "ez" "ezi" "azÄƒ" ;
+  affixPlGr1EzI : Affixe = afixe "em" "aÅ£i" "azÄƒ" ;
 ------
 --for subGroup 4
   affixSgGr1I  : Affixe = afixe "i" "i" "e" ;
-  affixPlGr1I  : Affixe = afixe "em" "aþi" "e";
+  affixPlGr1I  : Affixe = afixe "em" "aÅ£i" "e";
 ------
 --for subGroup 5
   affixSgGr1VI  : Affixe = afixe "" "" "e" ;
   affixPlGr1VI  : Affixe = affixPlGr1I ; 
 ------
 --for subGroups 6-7
-  affixSgGr1    : Affixe = afixe "" "i" "ã" ; 
-  affixPlGr1    : Affixe = afixe "ãm" "aþi" "ã" ;   
+  affixSgGr1    : Affixe = afixe "" "i" "Äƒ" ; 
+  affixPlGr1    : Affixe = afixe "Äƒm" "aÅ£i" "Äƒ" ;   
 ------
 --for subGroup 8
-  affixSgGr1U   : Affixe = afixe "u" "i" "ã" ;
+  affixSgGr1U   : Affixe = afixe "u" "i" "Äƒ" ;
   affixPlGr1U   : Affixe = affixPlGr1 ;
 ------
 --for subGroup 9,11,12
-  affixSgGr1AU   : Affixe = afixe "au" "ai" "ã" ;
-  affixPlGr1AU   : Affixe =  afixe "ãm" "aþi" "au" ;
+  affixSgGr1AU   : Affixe = afixe "au" "ai" "Äƒ" ;
+  affixPlGr1AU   : Affixe =  afixe "Äƒm" "aÅ£i" "au" ;
 -------
 --for subGroup 10
   affixSgGr1EU   : Affixe = afixe "au" "ei" "a" ;
-  affixPlGr1EU   : Affixe =  afixe "ãm" "aþi" "au" ;
+  affixPlGr1EU   : Affixe =  afixe "Äƒm" "aÅ£i" "au" ;
 -------
  --for subGroup 14 
   affixSgGr1CI  : Affixe = afixe "i" "i" "e" ;
-  affixPlGr1CI  : Affixe = afixe "em" "eaþi" "e";
+  affixPlGr1CI  : Affixe = afixe "em" "eaÅ£i" "e";
 -----  
 
 
@@ -780,34 +780,34 @@ specTab : Str -> Str -> Number => Person => Str = \ploua, plouau ->
 -------------------------
 --for subGroups 1-10
  affixSgI : Affixe = afixe "am" "ai" "a" ;
- affixPlI : Affixe = afixe "am" "aþi" "au" ;
+ affixPlI : Affixe = afixe "am" "aÅ£i" "au" ;
  
 --for subGroups 11-14 
  affixSgII : Affixe = afixe "eam" "eai" "ea" ;
- affixPlII : Affixe = afixe "eam" "eaþi" "eau" ;
+ affixPlII : Affixe = afixe "eam" "eaÅ£i" "eau" ;
 
 ---------------------------
  --for Perfect Simple :
  ---------------------------
  --for subGroups 1, 6-10
  
- affixSgPS1 : Affixe = afixe "ai" "aºi" "ã" ;
- affixPlPS1 : Affixe = afixe "arãm" "arãþi" "arã" ;
+ affixSgPS1 : Affixe = afixe "ai" "aÅŸi" "Äƒ" ;
+ affixPlPS1 : Affixe = afixe "arÄƒm" "arÄƒÅ£i" "arÄƒ" ;
  
  --for subGroups 2-5
  
- affixSgPS2 : Affixe = afixe "ai" "aºi" "e" ;
- affixPlPS2 : Affixe = afixe "arãm" "arãþi" "arã" ;
+ affixSgPS2 : Affixe = afixe "ai" "aÅŸi" "e" ;
+ affixPlPS2 : Affixe = afixe "arÄƒm" "arÄƒÅ£i" "arÄƒ" ;
  
  --for subGroups 11-12
  
- affixSgPS3 : Affixe = afixe "ui" "uºi" "u" ;
- affixPlPS3 : Affixe = afixe "urãm" "urãþi" "urã" ;
+ affixSgPS3 : Affixe = afixe "ui" "uÅŸi" "u" ;
+ affixPlPS3 : Affixe = afixe "urÄƒm" "urÄƒÅ£i" "urÄƒ" ;
  
  --for subGroups 13-14
  
- affixSgPS4 : Affixe = afixe "eai" "eaºi" "e" ;
- affixPlPS4 : Affixe = afixe "earãm" "earãþi" "earã" ;
+ affixSgPS4 : Affixe = afixe "eai" "eaÅŸi" "e" ;
+ affixPlPS4 : Affixe = afixe "earÄƒm" "earÄƒÅ£i" "earÄƒ" ;
  
 --------------------------  
 -- for Past Perfect :
@@ -815,18 +815,18 @@ specTab : Str -> Str -> Number => Person => Str = \ploua, plouau ->
 
 --for subGroups 1-10
 
-affixSgPP : Affixe = afixe "asem" "aseºi" "ase" ;
-affixPlPP : Affixe = afixe "aserãm" "aserãþi" "aserã" ;
+affixSgPP : Affixe = afixe "asem" "aseÅŸi" "ase" ;
+affixPlPP : Affixe = afixe "aserÄƒm" "aserÄƒÅ£i" "aserÄƒ" ;
 
 --for subGroups 11-12
 
-affixSgPP2 : Affixe = afixe "usem" "useºi" "use" ;
-affixPlPP2 : Affixe = afixe "userãm" "userãþi" "userã" ;
+affixSgPP2 : Affixe = afixe "usem" "useÅŸi" "use" ;
+affixPlPP2 : Affixe = afixe "userÄƒm" "userÄƒÅ£i" "userÄƒ" ;
 
 --for subGroups 13-14
 
-affixSgPP3 : Affixe = afixe "easem" "easeºi" "ease" ;
-affixPlPP3 : Affixe = afixe "easerãm" "easerãþi" "easerã" ;
+affixSgPP3 : Affixe = afixe "easem" "easeÅŸi" "ease" ;
+affixPlPP3 : Affixe = afixe "easerÄƒm" "easerÄƒÅ£i" "easerÄƒ" ;
 
 
 -- functions that build a tense table for a verb :
@@ -917,7 +917,7 @@ mkV6: Str -> Verbe = \lucra ->
 verbAffixes lucra (mkFromAffix root affixSgGr1Ez affixPlGr1Ez) 
                (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
                   (mkFromAffix root affixSgPP affixPlPP) (root + "eze") (mkAdjReg(root + "at")) 
-                        (root + "ând") (root + "eazã") ;
+                        (root + "Ã¢nd") (root + "eazÄƒ") ;
 
 
 mkV7 : Str -> Verbe = \crea ->
@@ -930,7 +930,7 @@ mkV8 : Str -> Verbe = \parca ->
 verbAffixes parca (mkFromAffixes1 r root  affixSgGr1Ez affixPlGr1Ez)
           (mkFromAffix r affixSgI affixPlI) (mkFromAffix r affixSgPS1 affixPlPS1)
              (mkFromAffix r affixSgPP affixPlPP) (root + "eze") (mkAdjReg (r + "at"))
-                    (r + "ând") (root + "eazã") ;
+                    (r + "Ã¢nd") (root + "eazÄƒ") ;
                     
 mkV9 : Str -> Verbe = \divaga ->
           mkV8 divaga ;                    
@@ -943,7 +943,7 @@ mkV10 : Str -> Verbe = \studia ->
  verbAffixes studia (mkFromAffix root affixSgGr1EzI affixPlGr1EzI) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS2 affixPlPS2)
              (mkFromAffix root affixSgPP affixPlPP) (root + "eze") (mkAdjReg (root + "at"))
-                    (root + "ind") (root + "azã") ;
+                    (root + "ind") (root + "azÄƒ") ;
 
 --subGroup 3 
 
@@ -952,7 +952,7 @@ mkV11 : Str -> Verbe = \ardeia ->
     verbAffixes ardeia (mkFromAffix root affixSgGr1EzI affixPlGr1EzI) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS2 affixPlPS2)
              (mkFromAffix root affixSgPP affixPlPP) (root + "eze") (mkAdjReg (root + "at"))
-                    (root + "nd") (root + "azã") ;
+                    (root + "nd") (root + "azÄƒ") ;
 
 --subGroup 4
 
@@ -1008,7 +1008,7 @@ mkV17 : Str -> Verbe = \acuza ->
   verbAffixes acuza (mkFromAffix root affixSgGr1 affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (root + "e") (mkAdjReg (root + "at"))
-                    (root + "ând") (root + "ã") ;       
+                    (root + "Ã¢nd") (root + "Äƒ") ;       
                     
 mkV18 : Str -> Verbe = \ajuta ->
    let root = init ajuta ;
@@ -1018,7 +1018,7 @@ in
 verbAffixes ajuta pres 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (root + "e") (mkAdjReg (root + "at"))
-                    (root + "ând") (root + "ã") ;  
+                    (root + "Ã¢nd") (root + "Äƒ") ;  
 
 
 mkV19 : Str -> Verbe = \acorda ->
@@ -1038,7 +1038,7 @@ in
 verbAffixes risca pres 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) newP (mkAdjReg (root + "at"))
-                    (root + "ând") (root + "ã") ;  
+                    (root + "Ã¢nd") (root + "Äƒ") ;  
 
  
  mkV22 : Str -> Verbe = \misca ->
@@ -1051,7 +1051,7 @@ verbAffixes risca pres
    verbAffixes calca (mkFromAffixes1 r root affixSgGr1 affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (r + "e") (mkAdjReg (root + "at"))
-                    (root + "ând") (r + "ã") ;  
+                    (root + "Ã¢nd") (r + "Äƒ") ;  
 
 mkV24 : Str -> Verbe = \cauta ->
     let root = init cauta ;
@@ -1062,7 +1062,7 @@ mkV24 : Str -> Verbe = \cauta ->
    verbAffixes cauta pres 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (r + "e") (mkAdjReg (root + "at"))
-                    (root + "ând") (r + "ã") ;  
+                    (root + "Ã¢nd") (r + "Äƒ") ;  
 
 mkV25 : Str -> Verbe = \lauda ->
    mkV24 lauda ;
@@ -1082,7 +1082,7 @@ mkV28 : Str -> Verbe = \casca ->
   verbAffixes casca (changeP2 newF (mkFromAffixes1 r root  affixSgGr1 affixPlGr1)) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) newP (mkAdjReg (root + "at"))
-                    (root + "ând") (r + "ã") ;  
+                    (root + "Ã¢nd") (r + "Äƒ") ;  
                     
  mkV29 : Str -> Verbe = \chema ->
   let root = init chema ;
@@ -1091,17 +1091,17 @@ mkV28 : Str -> Verbe = \casca ->
     verbAffixes chema (mkAffixSpec1 root r affixSgGr1 affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (root+"e") (mkAdjReg (root + "at"))
-                    (root + "ând") (r + "ã") ; 
+                    (root + "Ã¢nd") (r + "Äƒ") ; 
                     
   mkV30 : Str -> Verbe = \certa ->
    let root = init certa ;
        newF = mkStemPlReg root ;
-       newP = mkMutE root + "ã"
+       newP = mkMutE root + "Äƒ"
        in
      verbAffixes certa (mkTab root root newF newP newP affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (root+"e") (mkAdjReg (root + "at"))
-                    (root + "ând") newP ;
+                    (root + "Ã¢nd") newP ;
                     
  mkV31 : Str -> Verbe = \toca ->
   let root = init toca ;
@@ -1110,17 +1110,17 @@ mkV28 : Str -> Verbe = \casca ->
     verbAffixes toca (mkAffixSpec1 root r affixSgGr1 affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (root+"e") (mkAdjReg (root + "at"))
-                    (root + "ând") (r + "ã") ; 
+                    (root + "Ã¢nd") (r + "Äƒ") ; 
                                               
   mkV32 : Str -> Verbe = \inota -> 
    let root = init inota ;
        newF = mkStemPlReg root ;
-       newP = mkStemMutO root + "ã"
+       newP = mkStemMutO root + "Äƒ"
        in
      verbAffixes inota (mkTab root root newF newP newP affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (root+"e") (mkAdjReg (root + "at"))
-                    (root + "ând") newP ;
+                    (root + "Ã¢nd") newP ;
                              
   mkV33 : Str -> Verbe = \innoda ->
      mkV32 innoda ;
@@ -1129,12 +1129,12 @@ mkV28 : Str -> Verbe = \casca ->
     let root = init improsca ;
         newF = mkStemPlReg root ;                  
         newS = mkStemMutO (init newF) + "e" ;
-        newP = mkStemMutO root + "ã"
+        newP = mkStemMutO root + "Äƒ"
        in
   verbAffixes improsca (mkTab root root newF newP newP affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) newS (mkAdjReg (root + "at"))
-                    (root + "ând") newP ;  
+                    (root + "Ã¢nd") newP ;  
         
  mkV35 : Str -> Verbe = \apara ->
     let root = init apara ;
@@ -1144,29 +1144,29 @@ mkV28 : Str -> Verbe = \casca ->
   verbAffixes apara pres 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (newP + "e") (mkAdjReg (root + "at"))
-                    (root + "ând") (root + "ã") ;  
+                    (root + "Ã¢nd") (root + "Äƒ") ;  
                 
   mkV36 : Str -> Verbe = \semana -> 
      let root = init semana ;          
          newP = mkStemMutA root ;
-         newF = mkMutE root + "ã" 
+         newF = mkMutE root + "Äƒ" 
          in                           
   verbAffixes semana (mkTab root root (newP+"i") newF newF affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (newP + "e") (mkAdjReg (root + "at"))
-                    (root + "ând") newF ;  
+                    (root + "Ã¢nd") newF ;  
                          
    mkV37 : Str -> Verbe = \fremata ->
        let root = init fremata ;
            r    = mkMutE root ;
            newC = (mkStemMutA root) + "e" ;
            newP = mkStemPlReg r ;
-           newF = r + "ã" 
+           newF = r + "Äƒ" 
            in                      
   verbAffixes fremata (mkTab root r newP newF newF affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) newC (mkAdjReg (root + "at"))
-                    (root + "ând") newF ;
+                    (root + "Ã¢nd") newF ;
                     
   mkV38 : Str -> Verbe = \lepada -> 
     mkV37 lepada ;
@@ -1175,24 +1175,24 @@ mkV28 : Str -> Verbe = \casca ->
      let root = init scapara ;
          r    = modAFirst root ;
          newP = mkStemMutA r ;
-         newF = r + "ã"
+         newF = r + "Äƒ"
          in
     verbAffixes scapara (mkTab root r (newP + "i") newF newF affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (newP + "e") (mkAdjReg (root + "at"))
-                    (root + "ând") newF ;     
+                    (root + "Ã¢nd") newF ;     
          
   mkV40 : Str -> Verbe = \capata ->
   let root = init capata ;
          r    = modAFirst root ;
          newC = mkStemMutA r + "e" ;
          newP = mkStemPlReg(mkStemMutA r)  ;
-         newF = r + "ã"
+         newF = r + "Äƒ"
          in
     verbAffixes capata (mkTab root r newP newF newF affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) newC (mkAdjReg (root + "at"))
-                    (root + "ând") newF ;            
+                    (root + "Ã¢nd") newF ;            
          
   mkV41 : Str -> Verbe = \aseza ->
      let root = init aseza ;
@@ -1201,7 +1201,7 @@ mkV28 : Str -> Verbe = \casca ->
   verbAffixes aseza (mkAffixSpec1 root r  affixSgGr1 affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (root+"e") (mkAdjReg (root + "at"))
-                    (root + "ând") (r +"ã") ;
+                    (root + "Ã¢nd") (r +"Äƒ") ;
         
  mkV42 : Str -> Verbe = \ierta ->
     mkV30 ierta ;
@@ -1215,22 +1215,22 @@ mkV28 : Str -> Verbe = \casca ->
  mkV45 : Str -> Verbe = \invata ->
    let root = init invata ;
        newP = mkStemMutA root ;
-       r   = genMut root "ã" "a"       
+       r   = genMut root "Äƒ" "a"       
          in
-   verbAffixes invata (mkTab root root (newP + "i") (r+"ã") (r+"ã") affixPlGr1) 
+   verbAffixes invata (mkTab root root (newP + "i") (r+"Äƒ") (r+"Äƒ") affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (newP +"e") (mkAdjReg (root + "at"))
-                    (root + "ând") (r +"ã") ;      
+                    (root + "Ã¢nd") (r +"Äƒ") ;      
    
  mkV46 : Str -> Verbe = \imbata ->
    let root = init imbata ;
        newP = mkStemMutA root ;
-       r   = genMut root "ã" "a"       
+       r   = genMut root "Äƒ" "a"       
          in
-   verbAffixes imbata (mkTab root root (mkStemPlReg newP) (r+"ã") (r+"ã") affixPlGr1) 
+   verbAffixes imbata (mkTab root root (mkStemPlReg newP) (r+"Äƒ") (r+"Äƒ") affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (newP +"e") (mkAdjReg (root + "at"))
-                    (root + "ând") (r +"ã") ;      
+                    (root + "Ã¢nd") (r +"Äƒ") ;      
                     
  mkV47 : Str -> Verbe = \varsa ->
       mkV46 varsa ;
@@ -1240,10 +1240,10 @@ mkV28 : Str -> Verbe = \casca ->
          r1   = modU root ;
          r2   = mkStemMutO r1
          in                      
-   verbAffixes juca (mkTab root r1 (mkStemPlReg r1)  (r2+"ã") (r2+"ã") affixPlGr1) 
+   verbAffixes juca (mkTab root r1 (mkStemPlReg r1)  (r2+"Äƒ") (r2+"Äƒ") affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (r2 +"e") (mkAdjReg (root + "at"))
-                    (root + "ând") (r2 +"ã") ;      
+                    (root + "Ã¢nd") (r2 +"Äƒ") ;      
                     
  mkV49 : Str -> Verbe = \purta ->
      mkV48 purta ;
@@ -1252,28 +1252,28 @@ mkV28 : Str -> Verbe = \casca ->
     let root = init prezenta ;
         r1   = genMut root "e" "i" 
         in
-  verbAffixes prezenta (mkTab root r1 (mkStemPlReg r1)  (r1+"ã") (r1+"ã") affixPlGr1) 
+  verbAffixes prezenta (mkTab root r1 (mkStemPlReg r1)  (r1+"Äƒ") (r1+"Äƒ") affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (r1 +"e") (mkAdjReg (root + "at"))
-                    (root + "ând") (r1 +"ã") ; 
+                    (root + "Ã¢nd") (r1 +"Äƒ") ; 
            
   mkV51 : Str -> Verbe = \usca ->
      let root = init usca ;
           r   = "usuc"
       in
-    verbAffixes usca (mkTab root r (r + "i") (r+"ã") (r+"ã") affixPlGr1) 
+    verbAffixes usca (mkTab root r (r + "i") (r+"Äƒ") (r+"Äƒ") affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (r +"e") (mkAdjReg (root + "at"))
-                    (root + "ând") (r +"ã") ;          
+                    (root + "Ã¢nd") (r +"Äƒ") ;          
         
    mkV52 : Str -> Verbe = \manca ->
       let root = init manca ;     
-          r    = "mãnânc"   
+          r    = "mÄƒnÃ¢nc"   
         in
-   verbAffixes manca (mkTab root r (r + "i") (r+"ã") (r+"ã") affixPlGr1) 
+   verbAffixes manca (mkTab root r (r + "i") (r+"Äƒ") (r+"Äƒ") affixPlGr1) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (r +"e") (mkAdjReg (root + "at"))
-                    (root + "ând") (r +"ã") ; 
+                    (root + "Ã¢nd") (r +"Äƒ") ; 
      
  --subGroup 7                   
   mkV53 : Str -> Verbe = \preceda ->
@@ -1283,15 +1283,15 @@ mkV28 : Str -> Verbe = \casca ->
             in
    verbAffixes preceda (changeP2 newP (mkFromAffix root affixSgGr1 affixPlGr1)) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
-             (mkFromAffix root affixSgPP affixPlPP) (newC +"ã") (mkAdjReg (root + "at"))
-                    (root + "ând") (root +"ã") ;          
+             (mkFromAffix root affixSgPP affixPlPP) (newC +"Äƒ") (mkAdjReg (root + "at"))
+                    (root + "Ã¢nd") (root +"Äƒ") ;          
                                
   mkV54 : Str -> Verbe = \ploua ->
           let root = init ploua
           in
-    verbAffixes ploua (specTab (root + "ã") (root + "ã")) (specTab ploua (ploua+ "u")) 
-      (specTab (root + "ã") (root + "arã")) (specTab (root + "ase") (root + "aserã")) 
-       (root + "ã") (mkAdjReg (root + "at")) (root + "ând") (root + "ã") ;     
+    verbAffixes ploua (specTab (root + "Äƒ") (root + "Äƒ")) (specTab ploua (ploua+ "u")) 
+      (specTab (root + "Äƒ") (root + "arÄƒ")) (specTab (root + "ase") (root + "aserÄƒ")) 
+       (root + "Äƒ") (mkAdjReg (root + "at")) (root + "Ã¢nd") (root + "Äƒ") ;     
                                            
  --subGroup8
    mkV55 : Str -> Verbe = \umbla ->
@@ -1300,16 +1300,16 @@ mkV28 : Str -> Verbe = \casca ->
    verbAffixes umbla (mkFromAffix root affixSgGr1U affixPlGr1U) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (root +"e") (mkAdjReg (root + "at"))
-                    (root + "ând") (root +"ã") ;          
+                    (root + "Ã¢nd") (root +"Äƒ") ;          
                                       
    mkV56 : Str -> Verbe = \latra ->
          let root = init latra ;
-             r    = genMut root "ã" "a"
+             r    = genMut root "Äƒ" "a"
              in
    verbAffixes latra (mkFromAffixes1 r root  affixSgGr1U affixPlGr1U) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (r +"e") (mkAdjReg (root + "at"))
-                    (root + "ând") (r +"ã") ;          
+                    (root + "Ã¢nd") (r +"Äƒ") ;          
      
   --subGroup 9 
                                   
@@ -1319,7 +1319,7 @@ mkV28 : Str -> Verbe = \casca ->
    verbAffixes reda (mkFromAffix root affixSgGr1AU affixPlGr1AU) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (root +"ea") (mkAdjReg (root + "at"))
-                    (root + "ând") (root +"ã") ;          
+                    (root + "Ã¢nd") (root +"Äƒ") ;          
   
   --subGroup 10
   mkV58 : Str -> Verbe = \lua ->
@@ -1329,27 +1329,27 @@ mkV28 : Str -> Verbe = \casca ->
    verbAffixes lua (mkFromAffixes1 r root  affixSgGr1EU affixPlGr1EU) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS1 affixPlPS1)
              (mkFromAffix root affixSgPP affixPlPP) (r +"a") (mkAdjReg (root + "at"))
-                    (root + "ând") (r +"a") ;          
+                    (root + "Ã¢nd") (r +"a") ;          
                                                                          
   --subGroup 11
   mkV59 : Str -> Verbe = \sta ->
        let root = init sta ;
-           r    = Predef.tk 2 root + "stãt" 
+           r    = Predef.tk 2 root + "stÄƒt" 
            in
    verbAffixes sta (mkFromAffix root  affixSgGr1AU affixPlGr1AU) 
         (mkFromAffix r affixSgII affixPlII) (mkFromAffix r affixSgPS3 affixPlPS3)
              (mkFromAffix r affixSgPP2 affixPlPP2) (root +"ea") (mkAdjReg (root + "at"))
-                    (root + "ând") (root +"ai") ;          
+                    (root + "Ã¢nd") (root +"ai") ;          
                                              
  --subGroups 12
  mkV60 : Str -> Verbe = \da ->
       let root = init da ;
-          r    = init root + "dãd"
+          r    = init root + "dÄƒd"
           in
    verbAffixes da (mkFromAffix root  affixSgGr1AU affixPlGr1AU) 
         (mkFromAffix r affixSgII affixPlII) (mkFromAffix r affixSgPS3 affixPlPS3)
              (mkFromAffix r affixSgPP2 affixPlPP2) (root +"ea") (mkAdjReg (root + "at"))
-                    (root + "ând") (root +"ai") ;          
+                    (root + "Ã¢nd") (root +"ai") ;          
                                    
  --subGroups 13 
  mkV61 : Str -> Verbe = \veghea ->
@@ -1358,7 +1358,7 @@ mkV28 : Str -> Verbe = \casca ->
      verbAffixes veghea (mkFromAffix root  affixSgGr1Ez affixPlGr1Ez) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS4 affixPlPS4)
              (mkFromAffix root affixSgPP3 affixPlPP3) (root +"eze") (mkAdjReg (root + "eat"))
-                    (root + "ind") (root +"eazã") ;          
+                    (root + "ind") (root +"eazÄƒ") ;          
             
 --subGroups 14                 
 mkV62 : Str -> Verbe = \deochea ->
@@ -1379,15 +1379,15 @@ mkV62 : Str -> Verbe = \deochea ->
 
 --subGroup 1-2
 affixSgGr21  : Affixe = afixe "" "i" "e" ;
-affixPlGr21  : Affixe = afixe "em" "eþi" "" ;
+affixPlGr21  : Affixe = afixe "em" "eÅ£i" "" ;
 
 --subGroup 3
 affixSgGr23  : Affixe = afixe "eau" "ei" "ea" ;
-affixPlGr23  : Affixe = afixe "em" "eþi" "eau" ;
+affixPlGr23  : Affixe = afixe "em" "eÅ£i" "eau" ;
 
 --subGroup 4 
 affixSgGr24  : Affixe = afixe "eau" "ei" "ea" ; 
-affixPlGr24  : Affixe = afixe "em" "eþi" "" ;
+affixPlGr24  : Affixe = afixe "em" "eÅ£i" "" ;
 
 ----------
 --Imperf
@@ -1398,7 +1398,7 @@ affixPlGr24  : Affixe = afixe "em" "eþi" "" ;
 
 --subGroup 4
 affixSgI2 : Affixe = afixe "iam" "iai" "ia" ;
-affixPlI2 : Affixe = afixe "iam" "iaþi" "iau" ;
+affixPlI2 : Affixe = afixe "iam" "iaÅ£i" "iau" ;
 
 ---------------
 --Past Simple
@@ -1412,8 +1412,8 @@ affixPlI2 : Affixe = afixe "iam" "iaþi" "iau" ;
 -- affixSgPP2 and affixPlPP2
 
 --for subGroup 4 
-affixSgPP4 : Affixe = afixe "usem" "useºi" "use" ;
-affixPlPP4 : Affixe = afixe "useserãm" "useserãþi" "useserã" ;
+affixSgPP4 : Affixe = afixe "usem" "useÅŸi" "use" ;
+affixPlPP4 : Affixe = afixe "useserÄƒm" "useserÄƒÅ£i" "useserÄƒ" ;
 
 
 -----------------
@@ -1422,22 +1422,22 @@ affixPlPP4 : Affixe = afixe "useserãm" "useserãþi" "useserã" ;
 
 mkV64 : Str -> Verbe = \aparea ->
    let root = Predef.tk 2 aparea ;
-       r    = genMut root "ã" "a"
+       r    = genMut root "Äƒ" "a"
        in
    verbAffixes aparea (mkFromAffixes2 r root   affixSgGr21 affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS3 affixPlPS3)
-             (mkFromAffix r affixSgPP2 affixPlPP2) (r +"ã") (mkAdjReg (root + "ut"))
-                    (root + "ând") (r + "i") ;            
+             (mkFromAffix r affixSgPP2 affixPlPP2) (r +"Äƒ") (mkAdjReg (root + "ut"))
+                    (root + "Ã¢nd") (r + "i") ;            
 
 mkV65 : Str -> Verbe = \cadea ->
     let root = Predef.tk 2 cadea ;
-        r    = genMut root "ã" "a";
+        r    = genMut root "Äƒ" "a";
         rad  = init (mkStemPlReg root) 
       in
    verbAffixes cadea (changeP2 (mkStemPlReg r) (mkFromAffixes2 r root  affixSgGr21 affixPlGr21) )
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix rad affixSgPS3 affixPlPS3)
-             (mkFromAffix rad affixSgPP2 affixPlPP2) (r +"ã") (mkAdjReg (rad + "ut"))
-                    (rad + "ând") (mkStemPlReg r) ;
+             (mkFromAffix rad affixSgPP2 affixPlPP2) (r +"Äƒ") (mkAdjReg (rad + "ut"))
+                    (rad + "Ã¢nd") (mkStemPlReg r) ;
                     
 mkV66 : Str -> Verbe = \sedea ->
      let root = Predef.tk 2 sedea ;
@@ -1446,19 +1446,19 @@ mkV66 : Str -> Verbe = \sedea ->
        in
    verbAffixes sedea (mkTab root root (mkStemPlReg root) (r + "e") root affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix rad affixSgPS3 affixPlPS3)
-             (mkFromAffix rad affixSgPP2 affixPlPP2) (r +"ã") (mkAdjReg (rad + "ut"))
-                    (rad + "ând") (rad + "i") ;            
+             (mkFromAffix rad affixSgPP2 affixPlPP2) (r +"Äƒ") (mkAdjReg (rad + "ut"))
+                    (rad + "Ã¢nd") (rad + "i") ;            
    
 mkV67 : Str -> Verbe = \vedea ->
      let root = Predef.tk 2 vedea ;
-         r    = genMut root "e" "ã" ;
+         r    = genMut root "e" "Äƒ" ;
          newC = genMut root "e" "a" ;
          rad  = init (mkStemPlReg r)
         in
   verbAffixes vedea (mkTab root r (mkStemPlReg root) (root + "e") r affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix rad affixSgPS3 affixPlPS3)
-             (mkFromAffix rad affixSgPP2 affixPlPP2) (newC +"ã") (mkAdjReg (rad + "ut"))
-                    (rad + "ând") (mkStemPlReg root) ;
+             (mkFromAffix rad affixSgPP2 affixPlPP2) (newC +"Äƒ") (mkAdjReg (rad + "ut"))
+                    (rad + "Ã¢nd") (mkStemPlReg root) ;
                     
 mkV68 : Str -> Verbe = \putea ->
       let root = Predef.tk 2 putea ;
@@ -1467,40 +1467,40 @@ mkV68 : Str -> Verbe = \putea ->
        in
    verbAffixes putea (mkTab root r (mkStemPlReg r) (newP + "e") r affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS3 affixPlPS3)
-             (mkFromAffix root affixSgPP2 affixPlPP2) (newP +"ã") (mkAdjReg (root + "ut"))
-                    (root + "ând") (mkStemPlReg r) ;
+             (mkFromAffix root affixSgPP2 affixPlPP2) (newP +"Äƒ") (mkAdjReg (root + "ut"))
+                    (root + "Ã¢nd") (mkStemPlReg r) ;
 
 --subGroup 2
                     
  mkV69 : Str -> Verbe = \scadea ->
    let root = Predef.tk 2 scadea ;
-       r    = genMut root "ã" "a";
+       r    = genMut root "Äƒ" "a";
        rad  = init (mkStemPlReg root) 
       in
    verbAffixes scadea (changeP2 (mkStemPlReg r) (mkFromAffixes2 r root  affixSgGr21 affixPlGr21) )
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix rad affixSgPS3 affixPlPS3)
-             (mkFromAffix rad affixSgPP2 affixPlPP2) (r +"ã") (mkAdjReg (rad + "ut"))
-                    (rad + "ând") (r + "e") ;
+             (mkFromAffix rad affixSgPP2 affixPlPP2) (r +"Äƒ") (mkAdjReg (rad + "ut"))
+                    (rad + "Ã¢nd") (r + "e") ;
       
   mkV70 : Str -> Verbe = \prevedea ->
      let root = Predef.tk 2 prevedea ;
-         r    = genMut root "e" "ã" ;
+         r    = genMut root "e" "Äƒ" ;
          newC = genMut root "e" "a" ;
          rad  = init (mkStemPlReg r)
         in
   verbAffixes prevedea (mkTab root r (mkStemPlReg root) (root + "e") r affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix rad affixSgPS3 affixPlPS3)
-             (mkFromAffix rad affixSgPP2 affixPlPP2) (newC +"ã") (mkAdjReg (rad + "ut"))
-                    (rad + "ând") (root + "e") ;
+             (mkFromAffix rad affixSgPP2 affixPlPP2) (newC +"Äƒ") (mkAdjReg (rad + "ut"))
+                    (rad + "Ã¢nd") (root + "e") ;
                     
   mkV71 : Str -> Verbe = \placea ->
      let root = Predef.tk 2 placea ;
-         r    = genMut root "ã" "a"
+         r    = genMut root "Äƒ" "a"
        in
    verbAffixes placea (mkFromAffixes2 r root affixSgGr21 affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS3 affixPlPS3)
-             (mkFromAffix r affixSgPP2 affixPlPP2) (r +"ã") (mkAdjReg (root + "ut"))
-                    (root + "ând") (r + "e") ;       
+             (mkFromAffix r affixSgPP2 affixPlPP2) (r +"Äƒ") (mkAdjReg (root + "ut"))
+                    (root + "Ã¢nd") (r + "e") ;       
                     
   mkV72 : Str -> Verbe = \durea ->
                   mkV68 durea ;
@@ -1509,12 +1509,12 @@ mkV68 : Str -> Verbe = \putea ->
                   
   mkV73 : Str -> Verbe = \bea ->
       let root = Predef.tk 2 bea ;
-          r    = root + "ã"                
+          r    = root + "Äƒ"                
      in              
     verbAffixes bea (mkFromAffix root affixSgGr23 affixPlGr23) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS3 affixPlPS3)
              (mkFromAffix r affixSgPP2 affixPlPP2) (root +"ea") (mkAdjReg (r + "ut"))
-                    (root + "ând") (root + "ea") ;
+                    (root + "Ã¢nd") (root + "ea") ;
 
 --subGroup 4
                     
@@ -1525,7 +1525,7 @@ mkV68 : Str -> Verbe = \putea ->
        verbAffixes vrea (mkTab root (root+"eau") (root+"ei")(root +"ea") (init root + "or")  affixPlGr24) 
         (mkFromAffix r affixSgI2 affixPlI2) (mkFromAffix root affixSgPS3 affixPlPS3)
              (mkFromAffix root affixSgPP4 affixPlPP4) (root +"ea") (mkAdjReg (root + "ut"))
-                    (root + "ând") (root + "ei") ;
+                    (root + "Ã¢nd") (root + "ei") ;
                     
   ----------------------------------------------------------------------
   -------Group 3 -- verbs ending in -e
@@ -1538,7 +1538,7 @@ mkV68 : Str -> Verbe = \putea ->
 
 --subGroup 7-8
 affixSgGr31 : Affixe = afixe "u" "i" "e" ;
-affixPlGr31 : Affixe = afixe "em" "eþi" "u" ;
+affixPlGr31 : Affixe = afixe "em" "eÅ£i" "u" ;
 
 ----------------
 --Imperfect
@@ -1551,8 +1551,8 @@ affixPlGr31 : Affixe = afixe "em" "eþi" "u" ;
 --Past Simple
 ----------------
 --subGroups 1-4,8
-affixSgPS5 : Affixe = afixe "sei" "seºi" "se" ;
-affixPlPS5 : Affixe = afixe "serãm" "serãþi" "serã" ;
+affixSgPS5 : Affixe = afixe "sei" "seÅŸi" "se" ;
+affixPlPS5 : Affixe = afixe "serÄƒm" "serÄƒÅ£i" "serÄƒ" ;
 
 --subGroups 5-7 affixSgPS3 + affixPlPS3
 
@@ -1560,8 +1560,8 @@ affixPlPS5 : Affixe = afixe "serãm" "serãþi" "serã" ;
 --P Perfect 
 ---------------
 --subGroups 1-4,8
-affixSgPP5 : Affixe = afixe "sesem" "seseºi" "sese" ;
-affixPlPP5 : Affixe = afixe "seserãm" "seserãþi" "seserã" ;
+affixSgPP5 : Affixe = afixe "sesem" "seseÅŸi" "sese" ;
+affixPlPP5 : Affixe = afixe "seserÄƒm" "seserÄƒÅ£i" "seserÄƒ" ;
 
 --subGroups 5-7
 --affixSgPP2 and affixPlPP2 
@@ -1574,8 +1574,8 @@ mkV76 : Str -> Verbe = \pune ->
        in
 verbAffixes pune (changeP2 (r+"i") (mkFromAffix root affixSgGr21 affixPlGr21) )
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (r + "s"))
-                    (root + "ând") (root + "e") ;
+             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (r + "s"))
+                    (root + "Ã¢nd") (root + "e") ;
        
 mkV77 : Str -> Verbe = \atinge ->
     let root = init atinge ;
@@ -1583,20 +1583,20 @@ mkV77 : Str -> Verbe = \atinge ->
         in
 verbAffixes atinge (mkFromAffix root affixSgGr21 affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (r + "s"))
-                    (root + "ând") (root + "e") ;
+             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (r + "s"))
+                    (root + "Ã¢nd") (root + "e") ;
                     
 mkV78 : Str -> Verbe = \trage ->                    
      let root = init trage ;
-         rad1  = genMut root "a" "ã" ;
+         rad1  = genMut root "a" "Äƒ" ;
          r    = init root ;
-         rad2 = genMut r "a" "ã"
+         rad2 = genMut r "a" "Äƒ"
         in
 verbAffixes trage (mkFromAffix root affixSgGr21 affixPlGr21) 
         (mkFromAffix rad1 affixSgII affixPlII) 
-        (mkTab rad2 (r + "ei") (r + "seºi") (rad2 + "e") (rad2 + "erã") affixPlPS5)
-             (mkFromAffix rad2 affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (r + "s"))
-                    (rad1 + "ând") (root + "e") ;
+        (mkTab rad2 (r + "ei") (r + "seÅŸi") (rad2 + "e") (rad2 + "erÄƒ") affixPlPS5)
+             (mkFromAffix rad2 affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (r + "s"))
+                    (rad1 + "Ã¢nd") (root + "e") ;
               
 mkV79 : Str -> Verbe = \decide ->
      let root = init decide ;
@@ -1604,20 +1604,20 @@ mkV79 : Str -> Verbe = \decide ->
          in
 verbAffixes decide (changeP2 (mkStemPlReg root) (mkFromAffix root affixSgGr21 affixPlGr21)) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (r + "s"))
-                    (r + "zând") (root + "e") ;
+             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (r + "s"))
+                    (r + "zÃ¢nd") (root + "e") ;
                     
 mkV80 : Str -> Verbe = \rade ->
       let root = init rade ;
-          rad1  = genMut root "a" "ã" ;
+          rad1  = genMut root "a" "Äƒ" ;
           r    = init root ;
-          rad2 = genMut r "a" "ã"
+          rad2 = genMut r "a" "Äƒ"
         in
 verbAffixes rade (changeP2 (mkStemPlReg root) (mkFromAffix root affixSgGr21 affixPlGr21)) 
         (mkFromAffix rad1 affixSgII affixPlII) 
-        (mkTab rad2 (r + "ei") (r + "seºi") (rad2 + "e") (rad2 + "erã") affixPlPS5)
-             (mkFromAffix rad2 affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (r + "s"))
-                    (rad2 + "zând") (root + "e") ;
+        (mkTab rad2 (r + "ei") (r + "seÅŸi") (rad2 + "e") (rad2 + "erÄƒ") affixPlPS5)
+             (mkFromAffix rad2 affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (r + "s"))
+                    (rad2 + "zÃ¢nd") (root + "e") ;
 
 mkV81 : Str -> Verbe = \ucide ->
      let root = init ucide ;
@@ -1625,8 +1625,8 @@ mkV81 : Str -> Verbe = \ucide ->
          in
 verbAffixes ucide (changeP2 (mkStemPlReg root) (mkFromAffix root affixSgGr21 affixPlGr21)) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (r + "s"))
-                    (r + "gând") (root + "e") ;
+             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (r + "s"))
+                    (r + "gÃ¢nd") (root + "e") ;
 
 mkV82 : Str -> Verbe = \admite ->
     let root = init admite ;
@@ -1634,8 +1634,8 @@ mkV82 : Str -> Verbe = \admite ->
          in
 verbAffixes admite (changeP2 (mkStemPlReg root) (mkFromAffix root affixSgGr21 affixPlGr21)) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (r + "s"))
-                    (r + "þând") (root + "e") ;
+             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (r + "s"))
+                    (r + "Å£Ã¢nd") (root + "e") ;
 
 mkV83 : Str -> Verbe = \alege ->
     let root = init alege ;
@@ -1644,8 +1644,8 @@ mkV83 : Str -> Verbe = \alege ->
         in
 verbAffixes alege (mkFromAffix root affixSgGr21 affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-             (mkFromAffix r affixSgPP5 affixPlPP5) (newP +"ã") (mkAdjRegE (r + "s"))
-                    (root + "ând") (root + "e") ;
+             (mkFromAffix r affixSgPP5 affixPlPP5) (newP +"Äƒ") (mkAdjRegE (r + "s"))
+                    (root + "Ã¢nd") (root + "e") ;
 
 mkV84 : Str -> Verbe = \sumete ->
 	let root = init sumete ;
@@ -1654,8 +1654,8 @@ mkV84 : Str -> Verbe = \sumete ->
 			in
 verbAffixes sumete (changeP2 (mkStemPlReg root) (mkAffixSpec2 root newP affixSgGr21 affixPlGr21)) 
 			(mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-				 (mkFromAffix r affixSgPP5 affixPlPP5) (newP +"ã") (mkAdjRegE (r + "s"))
-						(r + "þând") (root + "e") ;
+				 (mkFromAffix r affixSgPP5 affixPlPP5) (newP +"Äƒ") (mkAdjRegE (r + "s"))
+						(r + "Å£Ã¢nd") (root + "e") ;
 
 mkV85 : Str -> Verbe = \scoate ->
     let root = init scoate ;
@@ -1665,9 +1665,9 @@ mkV85 : Str -> Verbe = \scoate ->
            in 
 verbAffixes scoate (mkTab root r (mkStemPlReg r) scoate r affixPlGr21) 
 	    	(mkFromAffix r affixSgII affixPlII) 
-	    	(mkTab rad1 (rad + "sei") (rad + "seºi") (rad1 + "se") (rad1 + "erã") affixPlPS5)
-    			 (mkFromAffix rad affixSgPP5 affixPlPP5) (root +"ã") (mkAdjRegO (rad + "s"))
-						(rad + "þând") (root + "e") ;
+	    	(mkTab rad1 (rad + "sei") (rad + "seÅŸi") (rad1 + "se") (rad1 + "erÄƒ") affixPlPS5)
+    			 (mkFromAffix rad affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjRegO (rad + "s"))
+						(rad + "Å£Ã¢nd") (root + "e") ;
      
         
 mkV86 : Str -> Verbe = \roade ->
@@ -1678,9 +1678,9 @@ mkV86 : Str -> Verbe = \roade ->
 		   in 
 verbAffixes roade (mkTab root r (mkStemPlReg r) roade r affixPlGr21) 
 	    		(mkFromAffix r affixSgII affixPlII) 
-	    		(mkTab rad1 (rad + "sei") (rad + "seºi") (rad1 + "se") (rad1 + "erã") affixPlPS5)
-    				 (mkFromAffix rad affixSgPP5 affixPlPP5) (root +"ã") (mkAdjRegO (rad + "s"))
-							(rad + "zând") (root + "e") ;
+	    		(mkTab rad1 (rad + "sei") (rad + "seÅŸi") (rad1 + "se") (rad1 + "erÄƒ") affixPlPS5)
+    				 (mkFromAffix rad affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjRegO (rad + "s"))
+							(rad + "zÃ¢nd") (root + "e") ;
 	     
 
 mkV87 : Str -> Verbe = \purcede ->
@@ -1690,8 +1690,8 @@ mkV87 : Str -> Verbe = \purcede ->
            in
 verbAffixes purcede (changeP2 (mkStemPlReg root) (mkFromAffix root affixSgGr21 affixPlGr21)) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-             (mkFromAffix r affixSgPP5 affixPlPP5) (newP +"ã") (mkAdjRegE (r + "s"))
-                    (r + "zând") (root + "e") ;
+             (mkFromAffix r affixSgPP5 affixPlPP5) (newP +"Äƒ") (mkAdjRegE (r + "s"))
+                    (r + "zÃ¢nd") (root + "e") ;
 
 
 mkV88 : Str -> Verbe = \toarce ->
@@ -1702,9 +1702,9 @@ mkV88 : Str -> Verbe = \toarce ->
 				   in 
 verbAffixes toarce (mkTab root r (mkStemPlReg r) toarce r affixPlGr21) 
 	    (mkFromAffix r affixSgII affixPlII) 
-	    (mkTab rad1 (rad + "sei") (rad + "seºi") (rad1 + "se") (rad1 + "erã") affixPlPS5)
-    			 (mkFromAffix rad affixSgPP5 affixPlPP5) (root +"ã") (mkAdjRegO (rad + "s"))
-						(rad + "când") (root + "e") ;
+	    (mkTab rad1 (rad + "sei") (rad + "seÅŸi") (rad1 + "se") (rad1 + "erÄƒ") affixPlPS5)
+    			 (mkFromAffix rad affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjRegO (rad + "s"))
+						(rad + "cÃ¢nd") (root + "e") ;
 
 --subGroup 2
 
@@ -1714,8 +1714,8 @@ mkV89 : Str -> Verbe = \curge ->
 			in
 	verbAffixes curge (mkFromAffix root affixSgGr21 affixPlGr21) 
 			(mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-				 (mkFromAffix r affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (r + "s"))
-						(root + "ând") (root + "i") ;
+				 (mkFromAffix r affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (r + "s"))
+						(root + "Ã¢nd") (root + "i") ;
 						
 mkV90 : Str -> Verbe = \merge ->
 let root = init merge ;
@@ -1724,8 +1724,8 @@ let root = init merge ;
         in
 verbAffixes merge (mkFromAffix root affixSgGr21 affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-             (mkFromAffix r affixSgPP5 affixPlPP5) (newP +"ã") (mkAdjRegE (r + "s"))
-                    (root + "ând") (root + "i") ;
+             (mkFromAffix r affixSgPP5 affixPlPP5) (newP +"Äƒ") (mkAdjRegE (r + "s"))
+                    (root + "Ã¢nd") (root + "i") ;
 
 mkV91 : Str -> Verbe = \ride ->
 let root = init ride ;
@@ -1733,21 +1733,21 @@ let root = init ride ;
          in
 verbAffixes ride (changeP2 (mkStemPlReg root) (mkFromAffix root affixSgGr21 affixPlGr21)) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (r + "s"))
-                    (r + "zând") (mkStemPlReg root) ;
+             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (r + "s"))
+                    (r + "zÃ¢nd") (mkStemPlReg root) ;
                     
 
 mkV92 : Str -> Verbe = \ramane ->
 let root = init ramane ;
     r    = init root ;
-    r1   = genMut root "â" "ã" ;
-    r2   = genMut root "â" "a"
+    r1   = genMut root "Ã¢" "Äƒ" ;
+    r2   = genMut root "Ã¢" "a"
        in
 verbAffixes ramane (changeP2 (r + "i") (mkFromAffix root affixSgGr21 affixPlGr21)) 
         (mkFromAffix root affixSgII affixPlII) 
-        (mkTab (init r2) (init r1 + "sei") (init r1 + "seºi") (init r2 + "se") (init r2 + "serã")  affixPlPS5)
-             (mkFromAffix (init r1) affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (init r2 + "s"))
-                    (root + "ând") (r + "i") ;       
+        (mkTab (init r2) (init r1 + "sei") (init r1 + "seÅŸi") (init r2 + "se") (init r2 + "serÄƒ")  affixPlPS5)
+             (mkFromAffix (init r1) affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (init r2 + "s"))
+                    (root + "Ã¢nd") (r + "i") ;       
 
 --subGroup 3 :
 
@@ -1757,8 +1757,8 @@ mkV93 : Str -> Verbe = \zice ->
         in
 verbAffixes zice (mkFromAffix root affixSgGr21 affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (r + "s"))
-                    (root + "ând") r ;
+             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (r + "s"))
+                    (root + "Ã¢nd") r ;
                     
 --subGroup 4 :
                     
@@ -1767,8 +1767,8 @@ mkV94 : Str -> Verbe = \rupe ->
   in 
 verbAffixes rupe (mkFromAffix root affixSgGr21 affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS5 affixPlPS5)
-             (mkFromAffix root affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (root + "t"))
-                    (root + "ând") rupe ;  
+             (mkFromAffix root affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (root + "t"))
+                    (root + "Ã¢nd") rupe ;  
 
 mkV95 : Str -> Verbe = \frige ->
    let root = init frige ;
@@ -1776,8 +1776,8 @@ mkV95 : Str -> Verbe = \frige ->
        in
 verbAffixes frige (mkFromAffix root affixSgGr21 affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (r + "t"))
-                    (root + "ând") frige ;
+             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (r + "t"))
+                    (root + "Ã¢nd") frige ;
 
 
 mkV96 : Str -> Verbe = \frange ->
@@ -1786,20 +1786,20 @@ mkV96 : Str -> Verbe = \frange ->
        in
 verbAffixes frange (mkFromAffix root affixSgGr21 affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (r + "t"))
-                    (root + "ând") frange ;
+             (mkFromAffix r affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (r + "t"))
+                    (root + "Ã¢nd") frange ;
 
 mkV97 : Str -> Verbe = \sparge ->
   let root = init sparge ;
       r    = init root ;
-      r1   = genMut root "a" "ã";
-      r2   = genMut r "a" "ã"
+      r1   = genMut root "a" "Äƒ";
+      r2   = genMut r "a" "Äƒ"
       in
 verbAffixes sparge (mkFromAffix root affixSgGr21 affixPlGr21) 
         (mkFromAffix r1 affixSgII affixPlII) 
-        (mkTab r2 (init r1 + "sei") (init r1 + "seºi") (r2 + "se") (r2 + "serã")  affixPlPS5)
-             (mkFromAffix r2 affixSgPP5 affixPlPP5) (root +"ã") (mkAdjReg (r + "t"))
-                    (r1 + "ând") sparge ;
+        (mkTab r2 (init r1 + "sei") (init r1 + "seÅŸi") (r2 + "se") (r2 + "serÄƒ")  affixPlPS5)
+             (mkFromAffix r2 affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjReg (r + "t"))
+                    (r1 + "Ã¢nd") sparge ;
 
 mkV98 : Str -> Verbe = \fierbe ->
   let root = init fierbe ;
@@ -1808,8 +1808,8 @@ mkV98 : Str -> Verbe = \fierbe ->
       in
 verbAffixes fierbe (mkFromAffix root affixSgGr21 affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS5 affixPlPS5)
-             (mkFromAffix r affixSgPP5 affixPlPP5) (r1 +"ã") (mkAdjRegE (r + "t"))
-                    (root + "ând") fierbe ;      
+             (mkFromAffix r affixSgPP5 affixPlPP5) (r1 +"Äƒ") (mkAdjRegE (r + "t"))
+                    (root + "Ã¢nd") fierbe ;      
 
 mkV99 : Str -> Verbe = \coace ->
    let root = init coace ;
@@ -1818,8 +1818,8 @@ mkV99 : Str -> Verbe = \coace ->
        in
 verbAffixes coace (mkTab root r1 (r1+"i") (root+"e") r1 affixPlGr21) 
         (mkFromAffix r affixSgII affixPlII) (mkFromAffix r1 affixSgPS5 affixPlPS5)
-             (mkFromAffix r1 affixSgPP5 affixPlPP5) (root +"ã") (mkAdjRegO (r1 + "t"))
-                    (r + "ând") coace ;       
+             (mkFromAffix r1 affixSgPP5 affixPlPP5) (root +"Äƒ") (mkAdjRegO (r1 + "t"))
+                    (r + "Ã¢nd") coace ;       
 --subGroup 5 :
 
 mkV100 : Str -> Verbe = \cere ->
@@ -1828,8 +1828,8 @@ mkV100 : Str -> Verbe = \cere ->
       in
 verbAffixes cere (mkFromAffix root affixSgGr21 affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS3 affixPlPS3)
-             (mkFromAffix r affixSgPP2 affixPlPP2) (r +"ã") (mkAdjReg (root + "ut"))
-                    (root + "ând") cere ;
+             (mkFromAffix r affixSgPP2 affixPlPP2) (r +"Äƒ") (mkAdjReg (root + "ut"))
+                    (root + "Ã¢nd") cere ;
     
 
 mkV101 : Str -> Verbe = \crede ->
@@ -1839,8 +1839,8 @@ mkV101 : Str -> Verbe = \crede ->
        in
 verbAffixes crede (changeP2 (newP + "i") (mkFromAffix root affixSgGr21 affixPlGr21)) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix newP affixSgPS3 affixPlPS3)
-             (mkFromAffix newP affixSgPP2 affixPlPP2) (r +"ã") (mkAdjReg (newP + "ut"))
-                    (newP + "ând") crede ;  
+             (mkFromAffix newP affixSgPP2 affixPlPP2) (r +"Äƒ") (mkAdjReg (newP + "ut"))
+                    (newP + "Ã¢nd") crede ;  
 
 mkV102 : Str -> Verbe = \tese ->
    let root = init tese ;
@@ -1849,8 +1849,8 @@ mkV102 : Str -> Verbe = \tese ->
        in
 verbAffixes tese (changeP2 (newP + "i") (mkFromAffix root affixSgGr21 affixPlGr21)) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS3 affixPlPS3)
-             (mkFromAffix root affixSgPP2 affixPlPP2) (r +"ã") (mkAdjReg (root + "ut"))
-                    (root + "ând") tese ;  
+             (mkFromAffix root affixSgPP2 affixPlPP2) (r +"Äƒ") (mkAdjReg (root + "ut"))
+                    (root + "Ã¢nd") tese ;  
 
 mkV103 : Str -> Verbe = \creste ->
   let root = init creste ;
@@ -1859,40 +1859,40 @@ mkV103 : Str -> Verbe = \creste ->
       in
 verbAffixes creste (changeP1 r (mkFromAffix  root affixSgGr21 affixPlGr21)) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS3 affixPlPS3)
-             (mkFromAffix r affixSgPP2 affixPlPP2) (newC +"ã") (mkAdjReg (r + "ut"))
-                    (r + "ând") creste ;
+             (mkFromAffix r affixSgPP2 affixPlPP2) (newC +"Äƒ") (mkAdjReg (r + "ut"))
+                    (r + "Ã¢nd") creste ;
       
 
 mkV104 : Str -> Verbe = \investe ->
   let root = init investe ;
       r    = Predef.tk 2 root + "sc" ;
       newC = mkMutE r ;
-      rad  = genMut r "e" "ã" 
+      rad  = genMut r "e" "Äƒ" 
       in
 verbAffixes investe (changeP1 r (mkFromAffix  root affixSgGr21 affixPlGr21)) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix rad affixSgPS3 affixPlPS3)
-             (mkFromAffix rad affixSgPP2 affixPlPP2) (newC +"ã") (mkAdjReg (rad + "ut"))
-                    (rad + "ând") investe ;
+             (mkFromAffix rad affixSgPP2 affixPlPP2) (newC +"Äƒ") (mkAdjReg (rad + "ut"))
+                    (rad + "Ã¢nd") investe ;
 
 
 mkV105 : Str -> Verbe = \bate ->
  let root = init bate ;
-     r    = genMut root "a" "ã"
+     r    = genMut root "a" "Äƒ"
      in
 verbAffixes bate (changeP2 (mkStemPlReg root) (mkFromAffix  root affixSgGr21 affixPlGr21)) 
         (mkFromAffix r affixSgII affixPlII) (mkFromAffix r affixSgPS3 affixPlPS3)
-             (mkFromAffix r affixSgPP2 affixPlPP2) (root +"ã") (mkAdjReg (r + "ut"))
-                    (r + "ând") bate ;
+             (mkFromAffix r affixSgPP2 affixPlPP2) (root +"Äƒ") (mkAdjReg (r + "ut"))
+                    (r + "Ã¢nd") bate ;
 
 mkV106 : Str -> Verbe = \naste ->
   let root = init naste ;
       r    = Predef.tk 2 root + "sc" ;
-      rad  = genMut r "a" "ã" 
+      rad  = genMut r "a" "Äƒ" 
       in
 verbAffixes naste (changeP1 r (mkFromAffix  root affixSgGr21 affixPlGr21)) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix rad affixSgPS3 affixPlPS3)
-             (mkFromAffix rad affixSgPP2 affixPlPP2) (r +"ã") (mkAdjReg (rad + "ut"))
-                    (rad + "ând") naste ;
+             (mkFromAffix rad affixSgPP2 affixPlPP2) (r +"Äƒ") (mkAdjReg (rad + "ut"))
+                    (rad + "Ã¢nd") naste ;
 
 --mkV107 : Str -> Verbe = \rage ->
 
@@ -1903,8 +1903,8 @@ let root = init tine ;
      in
 verbAffixes tine (changeP2 r (mkFromAffix  root affixSgGr21 affixPlGr21)) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS3 affixPlPS3)
-             (mkFromAffix root affixSgPP2 affixPlPP2) (root +"ã") (mkAdjReg (root + "ut"))
-                    (root + "ând") tine ;
+             (mkFromAffix root affixSgPP2 affixPlPP2) (root +"Äƒ") (mkAdjReg (root + "ut"))
+                    (root + "Ã¢nd") tine ;
 
 mkV109 : Str -> Verbe = \cunoaste ->
 let   root = init cunoaste ;
@@ -1914,8 +1914,8 @@ let   root = init cunoaste ;
       in
 verbAffixes cunoaste (mkTab root r (mkStemPlReg r) cunoaste r affixPlGr21) 
         (mkFromAffix rad affixSgII affixPlII) (mkFromAffix r affixSgPS3 affixPlPS3)
-             (mkFromAffix r affixSgPP2 affixPlPP2) (newC +"ã") (mkAdjReg (r + "ut"))
-                    (r + "ând") cunoaste ;    
+             (mkFromAffix r affixSgPP2 affixPlPP2) (newC +"Äƒ") (mkAdjReg (r + "ut"))
+                    (r + "Ã¢nd") cunoaste ;    
 
 mkV110 : Str -> Verbe = \coase ->
 let root = init coase ;
@@ -1924,25 +1924,25 @@ let root = init coase ;
     in
 verbAffixes coase (mkTab root r (mkStemPlReg r) coase r affixPlGr21) 
         (mkFromAffix r affixSgII affixPlII) (mkFromAffix rad affixSgPS3 affixPlPS3)
-             (mkFromAffix rad affixSgPP2 affixPlPP2) (root +"ã") (mkAdjReg (rad + "ut"))
-                    (r + "ând") coase ;     
+             (mkFromAffix rad affixSgPP2 affixPlPP2) (root +"Äƒ") (mkAdjReg (rad + "ut"))
+                    (r + "Ã¢nd") coase ;     
     
 mkV111 : Str -> Verbe = \divide ->
 let root = init divide ;
     newP = mkStemPlReg root
     in
 verbAffixes divide (changeP2 newP (mkFromAffix root affixSgGr21 affixPlGr21)) 
-        empty empty empty (root +"ã") (variants{})
-                    (root + "ând") divide ;
+        empty empty empty (root +"Äƒ") (variants{})
+                    (root + "Ã¢nd") divide ;
                        
 mkV112 : Str -> Verbe = \vinde ->
 let root = init vinde ;
-    r    = genMut root "i" "â" ;
+    r    = genMut root "i" "Ã¢" ;
     in
 verbAffixes vinde (mkTab root r (mkStemPlReg root) vinde r affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix r affixSgPS3 affixPlPS3)
-             (mkFromAffix r affixSgPP2 affixPlPP2) (root +"ã") (mkAdjReg (r + "ut"))
-                    (init r + "zând") vinde ;   
+             (mkFromAffix r affixSgPP2 affixPlPP2) (root +"Äƒ") (mkAdjReg (r + "ut"))
+                    (init r + "zÃ¢nd") vinde ;   
    
 mkV113 : Str -> Verbe = \pierde ->
 let root = init pierde ;
@@ -1951,8 +1951,8 @@ let root = init pierde ;
     in
 verbAffixes pierde (changeP2 (rad + "i") (mkFromAffix root affixSgGr21 affixPlGr21)) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS3 affixPlPS3)
-             (mkFromAffix root affixSgPP2 affixPlPP2) (r +"ã") (mkAdjReg (root + "ut"))
-                    (rad + "ând") pierde ;
+             (mkFromAffix root affixSgPP2 affixPlPP2) (r +"Äƒ") (mkAdjReg (root + "ut"))
+                    (rad + "Ã¢nd") pierde ;
 
 --mkV114 : Str -> Verbe = \exige ->
 
@@ -1961,12 +1961,12 @@ verbAffixes pierde (changeP2 (rad + "i") (mkFromAffix root affixSgGr21 affixPlGr
 
 mkV115 : Str -> Verbe = \face -> 
 let root = init face ;
-    r    = genMut root "a" "ã" 
+    r    = genMut root "a" "Äƒ" 
     in
 verbAffixes face (mkFromAffix root affixSgGr21 affixPlGr21) 
         (mkFromAffix r affixSgII affixPlII) (mkFromAffix r affixSgPS3 affixPlPS3)
-             (mkFromAffix r affixSgPP2 affixPlPP2) (root +"ã") (mkAdjReg (r + "ut"))
-                    (r + "ând") (init r) ;
+             (mkFromAffix r affixSgPP2 affixPlPP2) (root +"Äƒ") (mkAdjReg (r + "ut"))
+                    (r + "Ã¢nd") (init r) ;
 --subGroup 7
 mkV116 : Str -> Verbe = \umple ->
 let root = init umple 
@@ -1974,7 +1974,7 @@ let root = init umple
 verbAffixes umple (mkFromAffix root affixSgGr31 affixPlGr31) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS3 affixPlPS3)
              (mkFromAffix root affixSgPP2 affixPlPP2) (root +"e") (mkAdjReg (root + "ut"))
-                    (root + "ând") umple ;   
+                    (root + "Ã¢nd") umple ;   
 
 --subGroup 8
 mkV117 : Str -> Verbe = \scrie ->
@@ -1986,45 +1986,45 @@ verbAffixes scrie (mkFromAffix root affixSgGr31 affixPlGr31)
                     (root + "ind") scrie ;
 
 ------------------------------------
----GROUP 4 -- verbs ending in -i/-î
+---GROUP 4 -- verbs ending in -i/-Ã®
 ------------------------------------
 --------------
 --Present 
 --------------
 
 --subGroups 1-2
-affixSgGr41 : Affixe = afixe "esc" "eºti" "eºte" ;
-affixPlGr41 : Affixe = afixe "im" "iþi" "esc" ;
+affixSgGr41 : Affixe = afixe "esc" "eÅŸti" "eÅŸte" ;
+affixPlGr41 : Affixe = afixe "im" "iÅ£i" "esc" ;
 
 --subGroup 3
 
-affixSgGr43 : Affixe = afixe "iesc" "ieºti" "ieºte" ;
-affixPlGr43 : Affixe = afixe "im" "iþi" "iesc" ;
+affixSgGr43 : Affixe = afixe "iesc" "ieÅŸti" "ieÅŸte" ;
+affixPlGr43 : Affixe = afixe "im" "iÅ£i" "iesc" ;
 
 --subGroup 4
 
 affixSgGr44 : Affixe = afixe "iu" "ii" "ie" ;
-affixPlGr44 : Affixe = afixe "im" "iþi" "iu" ;
+affixPlGr44 : Affixe = afixe "im" "iÅ£i" "iu" ;
 
 --subGroup 5 
 
 affixSgGr45 : Affixe = afixe "i" "i" "ie" ;
-affixPlGr45 : Affixe = afixe "im" "iþi" "ie" ;
+affixPlGr45 : Affixe = afixe "im" "iÅ£i" "ie" ;
 
 --subGroups 6 -8
 
 affixSgGr468 : Affixe = afixe "" "i" "e" ;
-affixPlGr468 : Affixe = afixe "im" "iþi" "" ;
+affixPlGr468 : Affixe = afixe "im" "iÅ£i" "" ;
 
 --subGroup 9 
 
-affixSgGr49 : Affixe = afixe "" "i" "ã" ;
-affixPlGr49 : Affixe = afixe "im" "iþi" "ã" ;
+affixSgGr49 : Affixe = afixe "" "i" "Äƒ" ;
+affixPlGr49 : Affixe = afixe "im" "iÅ£i" "Äƒ" ;
 
 --subGroup 10
 
 affixSgGr410 : Affixe = afixe "" "i" "e" ;
-affixPlGr410 : Affixe = afixe "im" "iþi" "e" ;
+affixPlGr410 : Affixe = afixe "im" "iÅ£i" "e" ;
 
 --subGroup 11
 
@@ -2033,13 +2033,13 @@ affixPlGr411 : Affixe = afixe "" "" "ie" ;
 
 --subGroup 12 
 
-affixSgGr412 : Affixe = afixe "ãsc" "ãºti" "ãºte" ;
-affixPlGr412 : Affixe = afixe "âm" "âþi" "ãsc" ;
+affixSgGr412 : Affixe = afixe "Äƒsc" "ÄƒÅŸti" "ÄƒÅŸte" ;
+affixPlGr412 : Affixe = afixe "Ã¢m" "Ã¢Å£i" "Äƒsc" ;
 
 --subGroup 13
 
-affixSgGr413 : Affixe = afixe "" "i" "ã" ;
-affixPlGr413 : Affixe = afixe "âm" "âþi" "ã" ;
+affixSgGr413 : Affixe = afixe "" "i" "Äƒ" ;
+affixPlGr413 : Affixe = afixe "Ã¢m" "Ã¢Å£i" "Äƒ" ;
 
 
 -------------------------
@@ -2063,40 +2063,40 @@ affixPlI4 : Affixe = afixe "" "" "iau" ;
 --Past Simple
 ------------------------
 --subGroups 1-3,5-10
-affixSgPS6 : Affixe = afixe "ii" "iºi" "i" ;
-affixPlPS6 : Affixe = afixe "irãm" "irãþi" "irã" ;
+affixSgPS6 : Affixe = afixe "ii" "iÅŸi" "i" ;
+affixPlPS6 : Affixe = afixe "irÄƒm" "irÄƒÅ£i" "irÄƒ" ;
 
 --subGroup 4
-affixSgPS7 : Affixe = afixe "iui" "iuºi" "iu" ;
-affixPlPS7 : Affixe = afixe "iurãm" "iurãþi" "iurã" ;
+affixSgPS7 : Affixe = afixe "iui" "iuÅŸi" "iu" ;
+affixPlPS7 : Affixe = afixe "iurÄƒm" "iurÄƒÅ£i" "iurÄƒ" ;
 
 --subGroup 11
 affixSgPS8 : Affixe = afixe "" "" "i" ;
-affixPlPS8 : Affixe = afixe "" "" "irã" ;
+affixPlPS8 : Affixe = afixe "" "" "irÄƒ" ;
 
 --subGroup 12-13
-affixSgPS9 : Affixe = afixe "âi" "âºi" "î" ;
-affixPlPS9 : Affixe = afixe "ârãm" "ârãþi" "ârã" ;
+affixSgPS9 : Affixe = afixe "Ã¢i" "Ã¢ÅŸi" "Ã®" ;
+affixPlPS9 : Affixe = afixe "Ã¢rÄƒm" "Ã¢rÄƒÅ£i" "Ã¢rÄƒ" ;
 
 -----------------------
 --Past Perfect
 -----------------------
 --subGroups 1-3,5 + 10
-affixSgPP6 : Affixe = afixe "isem" "iseºi" "ise" ;
-affixPlPP6 : Affixe = afixe "iserãm" "iserãþi" "iserã" ;
+affixSgPP6 : Affixe = afixe "isem" "iseÅŸi" "ise" ;
+affixPlPP6 : Affixe = afixe "iserÄƒm" "iserÄƒÅ£i" "iserÄƒ" ;
 
 --subGroup 4
 
-affixSgPP7 : Affixe = afixe "iusem" "iuseºi" "iuse" ;
-affixPlPP7 : Affixe = afixe "iuserãm" "iuserãþi" "iuserã" ;
+affixSgPP7 : Affixe = afixe "iusem" "iuseÅŸi" "iuse" ;
+affixPlPP7 : Affixe = afixe "iuserÄƒm" "iuserÄƒÅ£i" "iuserÄƒ" ;
 
 --subGroup 11
 affixSgPP8 : Affixe = afixe "" "" "ise" ;
-affixPlPP8 : Affixe = afixe "" "" "iserã" ;
+affixPlPP8 : Affixe = afixe "" "" "iserÄƒ" ;
 
 --subGroup 12-13
-affixSgPP9 : Affixe = afixe "âsem" "âseºi" "âse" ;
-affixPlPP9 : Affixe = afixe "âserãm" "âserãþi" "âserã" ;
+affixSgPP9 : Affixe = afixe "Ã¢sem" "Ã¢seÅŸi" "Ã¢se" ;
+affixPlPP9 : Affixe = afixe "Ã¢serÄƒm" "Ã¢serÄƒÅ£i" "Ã¢serÄƒ" ;
 
 
 --subGroup 1 
@@ -2108,24 +2108,24 @@ mkV119 : Str -> Verbe = \povesti ->
  in
 verbAffixes povesti (mkFromAffix root affixSgGr41 affixPlGr41) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (root +"eascã") (mkAdjReg (root + "it"))
-                    (root + "ind") (root + "eºte") ;
+             (mkFromAffix root affixSgPP6 affixPlPP6) (root +"eascÄƒ") (mkAdjReg (root + "it"))
+                    (root + "ind") (root + "eÅŸte") ;
 --subGroup 2
 mkV120 : Str -> Verbe = \pustii ->
 let root = init pustii
 in 
 verbAffixes pustii (mkFromAffix root affixSgGr41 affixPlGr41) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (root +"ascã") (mkAdjReg (root + "it"))
-                    (root + "ind") (root + "eºte") ;
+             (mkFromAffix root affixSgPP6 affixPlPP6) (root +"ascÄƒ") (mkAdjReg (root + "it"))
+                    (root + "ind") (root + "eÅŸte") ;
 --subGroup 3
 mkV121 : Str -> Verbe = \locui ->
 let root = init locui
 in
 verbAffixes locui (mkFromAffix root affixSgGr43 affixPlGr44) 
         (mkFromAffix root affixSgI2 affixPlI2) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (root +"iascã") (mkAdjReg (root + "it"))
-                    (root + "ind") (root + "eºte") ;
+             (mkFromAffix root affixSgPP6 affixPlPP6) (root +"iascÄƒ") (mkAdjReg (root + "it"))
+                    (root + "ind") (root + "eÅŸte") ;
 --subGroup 4
 mkV122 : Str -> Verbe = \sti ->
 let root = init sti 
@@ -2133,7 +2133,7 @@ in
 verbAffixes sti (mkFromAffix root affixSgGr44 affixPlGr44) 
         (mkFromAffix root affixSgI2 affixPlI2) (mkFromAffix root affixSgPS7 affixPlPS7)
              (mkFromAffix root affixSgPP7 affixPlPP7) (root +"ie") (mkAdjReg (root + "iut"))
-                    (root + "iind") "ºtii" ;
+                    (root + "iind") "ÅŸtii" ;
 --subGroup 5
 mkV123 : Str -> Verbe = \sui ->
 let root = init sui
@@ -2168,7 +2168,7 @@ let root = init fugi
 in
 verbAffixes fugi (mkFromAffix root affixSgGr468 affixPlGr468) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (root +"ã") (mkAdjReg (root + "it"))
+             (mkFromAffix root affixSgPP6 affixPlPP6) (root +"Äƒ") (mkAdjReg (root + "it"))
                     (root + "ind") fugi ;
 
 mkV127 : Str -> Verbe = \auzi ->
@@ -2177,7 +2177,7 @@ let root = init auzi ;
     in
 verbAffixes auzi (mkTab root r auzi (r+"e") r affixPlGr468) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"ã") (mkAdjReg (root + "it"))
+             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"Äƒ") (mkAdjReg (root + "it"))
                     (root + "ind") auzi ;
 
 mkV128 : Str -> Verbe = \dormi ->
@@ -2186,7 +2186,7 @@ let root = init dormi ;
     in
 verbAffixes dormi (mkAffixSpec2 root r affixSgGr468 affixPlGr468) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"ã") (mkAdjReg (root + "it"))
+             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"Äƒ") (mkAdjReg (root + "it"))
                     (root + "ind") dormi ;
                     
 mkV129 : Str -> Verbe = \muri ->
@@ -2196,7 +2196,7 @@ let root = init muri ;
          in                  
 verbAffixes muri (mkTab root r1 (r1 + "i") (r2 + "e") r1  affixPlGr468) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (r2 +"ã") (mkAdjReg (root + "it"))
+             (mkFromAffix root affixSgPP6 affixPlPP6) (r2 +"Äƒ") (mkAdjReg (root + "it"))
                     (root + "ind") (r1 + "i") ;
 --subGroup 7
 mkV130 : Str -> Verbe = \simti ->
@@ -2205,7 +2205,7 @@ let root = init simti ;
     in
 verbAffixes simti (mkTab root r (mkStemPlReg r) (r+"e") r affixPlGr468) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"ã") (mkAdjReg (root + "it"))
+             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"Äƒ") (mkAdjReg (root + "it"))
                     (root + "ind") (r+"e") ;
                     
 mkV131 : Str -> Verbe = \sorbi ->
@@ -2214,7 +2214,7 @@ let root = init sorbi ;
     in
 verbAffixes sorbi (mkAffixSpec2 root r affixSgGr468 affixPlGr468) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"ã") (mkAdjReg (root + "it"))
+             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"Äƒ") (mkAdjReg (root + "it"))
                     (root + "ind") (r + "e") ;
                     
 mkV132 : Str -> Verbe = \slobozi ->
@@ -2224,7 +2224,7 @@ let root = init slobozi ;
     in
 verbAffixes slobozi (mkTab root rad root (r+"e") rad affixPlGr468) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"ã") (mkAdjReg (root + "it"))
+             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"Äƒ") (mkAdjReg (root + "it"))
                     (root + "ind") (r+"e") ;
                     
 mkV133 : Str -> Verbe = \mirosi ->
@@ -2233,26 +2233,26 @@ let root = init mirosi ;
     in
 verbAffixes mirosi (mkAffixSpec2 root r  affixSgGr468 affixPlGr468) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"ã") (mkAdjReg (root + "it"))
+             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"Äƒ") (mkAdjReg (root + "it"))
                     (root + "ind") (r+"e") ;
                     
 mkV134 : Str -> Verbe = \imparti ->
 let root = init imparti ;
     rad  = init root + "t" ;
-    r    = genMut rad "ã" "a"
+    r    = genMut rad "Äƒ" "a"
     in
 verbAffixes imparti (mkFromAffixes1 r root  affixSgGr468 affixPlGr468) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"ã") (mkAdjReg (root + "it"))
+             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"Äƒ") (mkAdjReg (root + "it"))
                     (root + "ind") (r+"e") ;
                     
 mkV118 : Str -> Verbe = \sari ->
 let root = init sari ;
-    r    = genMut root "ã" "a"
+    r    = genMut root "Äƒ" "a"
     in
 verbAffixes sari (mkFromAffixes2 r root  affixSgGr468 affixPlGr468) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"ã") (mkAdjReg (root + "it"))
+             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"Äƒ") (mkAdjReg (root + "it"))
                     (root + "ind") (r+"i") ;
                     
                     
@@ -2263,7 +2263,7 @@ let root = init repezi ;
     in
 verbAffixes repezi (mkTab root rad repezi (rad + "e") r affixPlGr468)
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"ã") (mkAdjReg (root + "it"))
+             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"Äƒ") (mkAdjReg (root + "it"))
                     (root + "ind") (rad + "e") ;
 
 --subGroup 8
@@ -2274,7 +2274,7 @@ let root = init veni ;
     in
 verbAffixes veni (mkTab root r (init r + "i") (r + "e") r affixPlGr468) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
-             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"ã") (mkAdjReg (root + "it"))
+             (mkFromAffix root affixSgPP6 affixPlPP6) (r +"Äƒ") (mkAdjReg (root + "it"))
                     (root + "ind") (r + "o") ;
 --subGroup 9
 mkV137 : Str -> Verbe = \oferi ->
@@ -2283,16 +2283,16 @@ in
 verbAffixes oferi (mkFromAffix root affixSgGr49 affixPlGr49) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
              (mkFromAffix root affixSgPP6 affixPlPP6) (root +"e") (mkAdjReg (root + "it"))
-                    (root + "ind") (root + "ã") ;
+                    (root + "ind") (root + "Äƒ") ;
 
 mkV138 : Str -> Verbe = \acoperi ->
 let root = init acoperi;
-    r    = genMut root "e" "ã" 
+    r    = genMut root "e" "Äƒ" 
     in
-verbAffixes acoperi (mkTab root r acoperi (root + "ã") (root + "ã")  affixPlGr49) 
+verbAffixes acoperi (mkTab root r acoperi (root + "Äƒ") (root + "Äƒ")  affixPlGr49) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS6 affixPlPS6)
              (mkFromAffix root affixSgPP6 affixPlPP6) (root +"e") (mkAdjReg (root + "it"))
-                    (root + "ind") (root + "ã") ;
+                    (root + "ind") (root + "Äƒ") ;
 
 --subGroup 10
 mkV139 : Str -> Verbe = \bombani ->
@@ -2309,7 +2309,7 @@ let root = init trebui
 in
 verbAffixes trebui (mkFromAffix root affixSgGr411 affixPlGr411) 
         (mkFromAffix root affixSgI4 affixPlI4) (mkFromAffix root affixSgPS8 affixPlPS8)
-             (mkFromAffix root affixSgPP8 affixPlPP8) (root +"iascã") (mkAdjReg (root + "it"))
+             (mkFromAffix root affixSgPP8 affixPlPP8) (root +"iascÄƒ") (mkAdjReg (root + "it"))
                     (root + "ind") "" ;
 
 --subGroup 12
@@ -2318,8 +2318,8 @@ let root = init uri
 in
 verbAffixes uri (mkFromAffix root affixSgGr412 affixPlGr412) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS9 affixPlPS9)
-             (mkFromAffix root affixSgPP9 affixPlPP9) (root +"ascã") (mkAdjReg (root + "ât"))
-                    (root + "ând") (root + "ãºte") ;
+             (mkFromAffix root affixSgPP9 affixPlPP9) (root +"ascÄƒ") (mkAdjReg (root + "Ã¢t"))
+                    (root + "Ã¢nd") (root + "ÄƒÅŸte") ;
 --subGroup 13
 
 mkV142 : Str -> Verbe = \vari ->
@@ -2327,8 +2327,8 @@ let root = init vari
 in
 verbAffixes vari (mkFromAffix root affixSgGr413 affixPlGr413) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS9 affixPlPS9)
-             (mkFromAffix root affixSgPP9 affixPlPP9) (root +"e") (mkAdjReg (root + "ât"))
-                    (root + "ând") (root + "ã") ;
+             (mkFromAffix root affixSgPP9 affixPlPP9) (root +"e") (mkAdjReg (root + "Ã¢t"))
+                    (root + "Ã¢nd") (root + "Äƒ") ;
 
 mkV143 : Str -> Verbe = \cobori ->
 let root = init cobori ;
@@ -2336,18 +2336,18 @@ let root = init cobori ;
     in
 verbAffixes cobori (mkAffixSpec1 root r affixSgGr413 affixPlGr413) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS9 affixPlPS9)
-             (mkFromAffix root affixSgPP9 affixPlPP9) (r +"e") (mkAdjReg (root + "ât"))
-                    (root + "ând") (r + "ã") ;
+             (mkFromAffix root affixSgPP9 affixPlPP9) (r +"e") (mkAdjReg (root + "Ã¢t"))
+                    (root + "Ã¢nd") (r + "Äƒ") ;
                  
 mkV144 : Str -> Verbe = \tabari ->
 let root = init tabari ;
     rad  = modAFirst root ;
     r    = mkStemPlReg rad
     in
-verbAffixes tabari (mkTab root rad r (rad + "ã") (rad + "ã") affixPlGr413) 
+verbAffixes tabari (mkTab root rad r (rad + "Äƒ") (rad + "Äƒ") affixPlGr413) 
         (mkFromAffix root affixSgI affixPlI) (mkFromAffix root affixSgPS9 affixPlPS9)
-             (mkFromAffix root affixSgPP9 affixPlPP9) (init r +"e") (mkAdjReg (root + "ât"))
-                    (root + "ând") (rad + "ã") ;
+             (mkFromAffix root affixSgPP9 affixPlPP9) (init r +"e") (mkAdjReg (root + "Ã¢t"))
+                    (root + "Ã¢nd") (rad + "Äƒ") ;
 
 
 ---------------------------------------
@@ -2360,8 +2360,8 @@ let root = Predef.tk 2 avea
   in
 verbAffixes avea (mkTab root "am" "ai" "are" "au" affixPlGr21) 
         (mkFromAffix root affixSgII affixPlII) (mkFromAffix root affixSgPS3 affixPlPS3)
-             (mkFromAffix root affixSgPP2 affixPlPP2) "aibã" (mkAdjReg (root + "ut"))
-                    (root + "ând") "ai" ;
+             (mkFromAffix root affixSgPP2 affixPlPP2) "aibÄƒ" (mkAdjReg (root + "ut"))
+                    (root + "Ã¢nd") "ai" ;
                     
 
  

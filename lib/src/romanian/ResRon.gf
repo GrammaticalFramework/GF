@@ -3,7 +3,7 @@
 
 resource ResRon = ParamX - [Temp,TTAnt,Tense,TPres,TPast,TFut,TCond] ** open Prelude in {
 
-flags optimize= all ;
+flags optimize= all ; coding = utf8 ;
 
   
 --------------------------------------------------------------------------
@@ -114,22 +114,22 @@ param
 oper 
  copula    : VerbPhrase = 
     let t = table {Inf => "fi" ;
-                Indi Presn Sg P1 => "sunt" ; Indi Presn Sg P2 => "eºti" ; Indi Presn Sg P3 => "este" ;
-                Indi Presn Pl P1 => "suntem" ; Indi Presn Pl P2 => "sunteşi" ; Indi Presn Pl P3 => "sunt" ;
-                Indi PSimple Sg P1 => "fusei" ; Indi PSimple Sg P2 => "fuseºi" ; Indi PSimple Sg P3 => "fuse" ;
-                Indi PSimple Pl P1 => "fuserãm" ; Indi PSimple Pl P2 => "fuserãşi" ; Indi PSimple Pl P3 => "fuserã" ;
+                Indi Presn Sg P1 => "sunt" ; Indi Presn Sg P2 => "eÅŸti" ; Indi Presn Sg P3 => "este" ;
+                Indi Presn Pl P1 => "suntem" ; Indi Presn Pl P2 => "sunteÅ£i" ; Indi Presn Pl P3 => "sunt" ;
+                Indi PSimple Sg P1 => "fusei" ; Indi PSimple Sg P2 => "fuseÅŸi" ; Indi PSimple Sg P3 => "fuse" ;
+                Indi PSimple Pl P1 => "fuserÄƒm" ; Indi PSimple Pl P2 => "fuserÄƒÅ£i" ; Indi PSimple Pl P3 => "fuserÄƒ" ;
                 Indi Imparf Sg P1 => "eram" ; Indi Imparf Sg P2 => "erai" ; Indi Imparf Sg P3 => "era" ;
-                Indi Imparf Pl P1 => "eram" ; Indi Imparf Pl P2 => "eraşi" ; Indi Imparf Pl P3 => "erau" ;
-                Indi PPerfect Sg P1 => "fusesem" ; Indi PPerfect Sg P2 => "fuseseºi" ; Indi PPerfect Sg P3 => "fusese" ;
-                Indi PPerfect Pl P1 => "fusesem" ; Indi PPerfect Pl P2 => "fuseseşi" ; Indi PPerfect Pl P3 => "fuseserã" ;
+                Indi Imparf Pl P1 => "eram" ; Indi Imparf Pl P2 => "eraÅ£i" ; Indi Imparf Pl P3 => "erau" ;
+                Indi PPerfect Sg P1 => "fusesem" ; Indi PPerfect Sg P2 => "fuseseÅŸi" ; Indi PPerfect Sg P3 => "fusese" ;
+                Indi PPerfect Pl P1 => "fusesem" ; Indi PPerfect Pl P2 => "fuseseÅ£i" ; Indi PPerfect Pl P3 => "fuseserÄƒ" ;
                 Subjo SPres Sg P1 => "fiu" ; Subjo SPres Sg P2 => "fii" ; Subjo SPres Sg P3 => "fie" ;
-                Subjo SPres Pl P1 => "fim" ; Subjo SPres Pl P2 => "fişi" ; Subjo SPres Pl P3 => "fie" ;
-                Imper SgP2 => "fii" ; Imper PlP2 => "fişi" ; Imper PlP1 => "fim" ;
+                Subjo SPres Pl P1 => "fim" ; Subjo SPres Pl P2 => "fiÅ£i" ; Subjo SPres Pl P3 => "fie" ;
+                Imper SgP2 => "fii" ; Imper PlP2 => "fiÅ£i" ; Imper PlP1 => "fim" ;
                 Ger => "fiind"; 
                 PPasse g n a d => case <g,n,d,a> of 
                    {<Masc,Sg,ANomAcc,Def> => "fostul"; <Masc,Sg,_,Indef> => "fost";                   <Masc,Sg,AGenDat,Def> => "fostului"; <Masc,Sg,AVoc,Def> => "fostule";  
-                   <Masc,Pl,ANomAcc,Def> => "foºtii"; <Masc,Pl,_,Indef> => "foºti";                   <Masc,Pl,_,Def> => "foºtilor"; 
-                   <Fem,Sg,ANomAcc,Def> => "fosta"; <Fem,Sg,ANomAcc,Indef> => "fostã";                   <Fem,Sg,AGenDat,Def> => "fostei"; <Fem,Sg,AGenDat,Indef> => "foste";<Fem,Sg,AVoc,Def> => "fosto"; <Fem,Sg,AVoc,Indef> => "fostã";
+                   <Masc,Pl,ANomAcc,Def> => "foÅŸtii"; <Masc,Pl,_,Indef> => "foÅŸti";                   <Masc,Pl,_,Def> => "foÅŸtilor"; 
+                   <Fem,Sg,ANomAcc,Def> => "fosta"; <Fem,Sg,ANomAcc,Indef> => "fostÄƒ";                   <Fem,Sg,AGenDat,Def> => "fostei"; <Fem,Sg,AGenDat,Indef> => "foste";<Fem,Sg,AVoc,Def> => "fosto"; <Fem,Sg,AVoc,Indef> => "fostÄƒ";
                    <Fem,Pl,ANomAcc,Def> => "fostele"; <Fem,Pl,_,Indef> => "foste";<Fem,Pl,_,Def> => "fostelor"
                    }                
                 } in
@@ -143,19 +143,19 @@ oper
 -- auxiliary for Past Tense :  
 
  pComp : Number => Person => Str = table {Sg => table {P1 => "am" ; P2 => "ai" ; P3 => "a"} ;
-                                         Pl => table {P1 => "am" ; P2 => "aşi"; P3 => "au"}
+                                         Pl => table {P1 => "am" ; P2 => "aÅ£i"; P3 => "au"}
                                          };
                                          
 -- auxiliary for Future Simple :
                                          
  pFut : Number => Person => Str = table  {Sg => table {P1 => "voi" ; P2 => "vei" ; P3 => "va"} ;
-                                         Pl => table {P1 => "vom" ; P2 => "veşi"; P3 => "vor"}
+                                         Pl => table {P1 => "vom" ; P2 => "veÅ£i"; P3 => "vor"}
                                          };                                          
 
 --auxiliary for Condional Present :
 
- pCond : Number => Person => Str = table {Sg => table {P1 => "aº" ; P2 => "ai" ; P3 => "ar"} ;
-                                         Pl => table {P1 => "am" ; P2 => "aşi"; P3 => "ar"}
+ pCond : Number => Person => Str = table {Sg => table {P1 => "aÅŸ" ; P2 => "ai" ; P3 => "ar"} ;
+                                         Pl => table {P1 => "am" ; P2 => "aÅ£i"; P3 => "ar"}
                                          };
    
 -- short form of the verb, conjunctive present, without the auxiliary
@@ -194,22 +194,22 @@ oper
     s = table {
       VPFinite tm Simul => case tm of 
                              {VPres Indic => vf "" (\a -> verb ! Indi Presn a.n a.p) ;
-                              VPres Conjunct => vf "sã" (\a -> verb ! Subjo SPres a.n a.p) ;
+                              VPres Conjunct => vf "sÄƒ" (\a -> verb ! Subjo SPres a.n a.p) ;
                               VImperff  => vf "" (\a -> verb ! Indi Imparf a.n a.p)  ;
                               VPasse  Indic => vf "" (\a -> pComp ! a.n ! a.p ++ verb ! PPasse Masc Sg Indef ANomAcc) ; 
-                              VPasse  Conjunct => vf "sã" (\a -> copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;
+                              VPasse  Conjunct => vf "sÄƒ" (\a -> copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;
                               VFut => vf "" (\a -> pFut ! a.n ! a.p ++ verb ! Inf) ;
                               VCondit => vf "" (\a -> pCond ! a.n ! a.p ++ verb ! Inf) 
                               } ;  
       VPFinite tm Anter => case tm of 
                               {VPres Indic => vf "" (\a -> pComp ! a.n ! a.p ++ verb ! PPasse Masc Sg Indef ANomAcc) ; 
-                              (VPres Conjunct | VPasse Conjunct) => vf "sã" (\a -> copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;
+                              (VPres Conjunct | VPasse Conjunct) => vf "sÄƒ" (\a -> copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;
                               VFut => vf "" (\a -> pFut !a.n ! a.p ++ copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;   
                               VCondit => vf "" (\a -> pCond ! a.n ! a.p ++ copula.s ! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc);
                               _       => vf "" (\a -> verb ! Indi PPerfect a.n a.p) 
                               }; 
       VPInfinit Anter b=> vf "a" (\a -> copula.s ! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc);  
-      VPImperat        => vf "sã" (\a -> verb ! Subjo SPres a.n a.p) ; -- fix it later !
+      VPImperat        => vf "sÄƒ" (\a -> verb ! Subjo SPres a.n a.p) ; -- fix it later !
       VPGerund         => vf "" (\a -> vger) ;
       VPInfinit Simul b => vf "a" (\a -> verb ! Inf) 
       } ;
@@ -377,23 +377,23 @@ oper
 
  dRefl : Agr -> RAgr = \a -> 
    case <a.g,a.n,a.p> of
-    {<_,_,P3> => {s = (genClit "îºi" "-ºi" "ºi" "").s } ;
+    {<_,_,P3> => {s = (genClit "Ã®ÅŸi" "-ÅŸi" "ÅŸi" "").s } ;
      _ => {s = (cliticsDa a.g a.n a.p).s }
     };
 
  cliticsAc : Gender -> Number -> Person -> {s: Clitics => Str} = \g,n,p -> 
    case <g,n,p> of
-    {<_,Sg,P1> => genClit "mã" "m-" "mã" "-mã"; <_,Pl,P1> => genClit "ne" "ne-" "ne" "-ne"; 
-     <_,Sg,P2> => genClit "te" "te-" "te" "-te"; <_,Pl,P2> => genClit "vã" "v-" "vã" "-vã";
-     <Masc,Sg,P3> => genClit "îl" "l-" "-l" "-l"; <Masc,Pl,P3> => genClit "îi" "i-" "-i" "-i";
+    {<_,Sg,P1> => genClit "mÄƒ" "m-" "mÄƒ" "-mÄƒ"; <_,Pl,P1> => genClit "ne" "ne-" "ne" "-ne"; 
+     <_,Sg,P2> => genClit "te" "te-" "te" "-te"; <_,Pl,P2> => genClit "vÄƒ" "v-" "vÄƒ" "-vÄƒ";
+     <Masc,Sg,P3> => genClit "Ã®l" "l-" "-l" "-l"; <Masc,Pl,P3> => genClit "Ã®i" "i-" "-i" "-i";
      <Fem,Sg,P3> => genClit "o" "-o" "-o" "-o"; <Fem,Pl,P3> => genClit "le" "le-" "le" "-le" 
     };
 
  cliticsDa : Gender -> Number -> Person -> {s : Clitics => Str} = \g,n,p -> 
    case <g,n,p> of
-    {<_,Sg,P1> => genClit "îmi" "mi-" "mi" "-mi"; <_,Pl,P1> => genClit "ne" "ne-" "ni" "-ne"; 
-     <_,Sg,P2> => genClit "îşi" "şi-" "şi" "-şi"; <_,Pl,P2> => genClit "vã" "v-" "vi" "-vã";
-     <_,Sg,P3> => genClit "îi" "i-" "i" "-i"; <_,Pl,P3> => genClit "le" "le-" "li" "-le"
+    {<_,Sg,P1> => genClit "Ã®mi" "mi-" "mi" "-mi"; <_,Pl,P1> => genClit "ne" "ne-" "ni" "-ne"; 
+     <_,Sg,P2> => genClit "Ã®Å£i" "Å£i-" "Å£i" "-Å£i"; <_,Pl,P2> => genClit "vÄƒ" "v-" "vi" "-vÄƒ";
+     <_,Sg,P3> => genClit "Ã®i" "i-" "i" "-i"; <_,Pl,P3> => genClit "le" "le-" "li" "-le"
     };
 
      
@@ -445,7 +445,7 @@ oper
  artUndef : Gender -> Number -> NCase -> Str = \g,n,a ->
    case <g,n,a> of
       {<Masc,Sg,No> => "un"; <Masc,Sg,Ac> => "un" ; <Masc,Sg,Ge> => "unui"; <Masc,Sg,Da> => "unui" ;<_,_,Vo> => "" ;
-       <_,Pl,No> => "niºte"; <_,Pl,Ac> => "niºte"; <_,Pl,Da> => "unor"; <_,Pl,Ge> => "unor" ; 
+       <_,Pl,No> => "niÅŸte"; <_,Pl,Ac> => "niÅŸte"; <_,Pl,Da> => "unor"; <_,Pl,Ge> => "unor" ; 
        <Fem,Sg,No> => "o"; <Fem,Sg,Ac> => "o"; <Fem,Sg,Da> => "unei"; <Fem,Sg,Ge> => "unei"
       };
      
@@ -471,20 +471,20 @@ oper
  reflPron : Number -> Person -> ACase -> Str = \n,p,c -> 
    case <n,p,c> of
      {<Sg,P1,AGenDat> => "mie" ; <Sg,P1,_> => "mine";
-      <Sg,P2,AGenDat> => "şie" ; <Sg,P2,_> => "tine";
-      <_,P3,AGenDat> => "sieºi" ; <_,P3,_> => "sine" ;
-      <Pl,P1,AGenDat> => "nouã" ; <Pl,P1,_> => "noi" ;
-      <Pl,P2,AGenDat> => "vouã" ; <Pl,P2,_> => "voi"   
+      <Sg,P2,AGenDat> => "Å£ie" ; <Sg,P2,_> => "tine";
+      <_,P3,AGenDat> => "sieÅŸi" ; <_,P3,_> => "sine" ;
+      <Pl,P1,AGenDat> => "nouÄƒ" ; <Pl,P1,_> => "noi" ;
+      <Pl,P2,AGenDat> => "vouÄƒ" ; <Pl,P2,_> => "voi"   
      };
 
  reflPronHard : Gender -> Number -> Person -> Str = \g,n,p -> 
    case <g,n,p> of
-     {<Masc,Sg,P1> => "însumi" ; <Fem,Sg,P1> => "însãmi";
-      <Masc,Sg,P2> => "însuşi" ; <Fem,Sg,P2> => "însãşi";
-      <Masc,Sg,P3> => "însuºi" ; <Fem,Sg,P3> => "însãºi";
-      <Masc,Pl,P1> => "înºine" ; <Fem,Pl,P1> => "însene";  
-      <Masc,Pl,P2> => "înºivã";  <Fem,Pl,P2> => "înseva";
-      <Masc,Pl,P3> => "înºiºi";  <Fem,Pl,P3> => "înseºi"};   
+     {<Masc,Sg,P1> => "Ã®nsumi" ; <Fem,Sg,P1> => "Ã®nsÄƒmi";
+      <Masc,Sg,P2> => "Ã®nsuÅ£i" ; <Fem,Sg,P2> => "Ã®nsÄƒÅ£i";
+      <Masc,Sg,P3> => "Ã®nsuÅŸi" ; <Fem,Sg,P3> => "Ã®nsÄƒÅŸi";
+      <Masc,Pl,P1> => "Ã®nÅŸine" ; <Fem,Pl,P1> => "Ã®nsene";  
+      <Masc,Pl,P2> => "Ã®nÅŸivÄƒ";  <Fem,Pl,P2> => "Ã®nseva";
+      <Masc,Pl,P3> => "Ã®nÅŸiÅŸi";  <Fem,Pl,P3> => "Ã®nseÅŸi"};   
    
    
 -- Agreements :

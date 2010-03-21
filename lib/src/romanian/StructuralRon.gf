@@ -4,76 +4,76 @@ concrete StructuralRon of Structural = CatRon **
   open  MorphoRon, ParadigmsRon, BeschRon, Prelude,(X = ConstructX) in {
 
   flags optimize=all ; 
-           --coding=utf8 ;
+        coding=utf8 ;
 
 lin
 
   above_Prep = mkPrep "deasupra" Ge ;
-  after_Prep = mkPrep "dupã" Ac True;
+  after_Prep = mkPrep "dupÄƒ" Ac True;
   all_Predet = {
     s = \\a => table { AGenDat => aagrForms nonExist nonExist "tuturor" "tuturor" ! a ;
-                       _       => aagrForms "tot" "toatã" "toþi" "toate" ! a 
+                       _       => aagrForms "tot" "toatÄƒ" "toÅ£i" "toate" ! a 
                      };
     c = No
     } ;
   almost_AdA, almost_AdN = ss "aproape" ;
   always_AdV = ss "mereu" ;
-  although_Subj = ss "deºi" ;
-  and_Conj = {s1 = [] ; s2 = "ºi" ; n = Pl} ;
+  although_Subj = ss "deÅŸi" ;
+  and_Conj = {s1 = [] ; s2 = "ÅŸi" ; n = Pl} ;
   because_Subj = ss "deoarece" ;
-  before_Prep = mkPrep "înaintea" Ge ;
-  behind_Prep = mkPrep "înapoia" Ge ;
-  between_Prep = mkPrep "între" Ac True ;
-  both7and_DConj = {s1,s2 = "ºi" ; n = Pl} ;
+  before_Prep = mkPrep "Ã®naintea" Ge ;
+  behind_Prep = mkPrep "Ã®napoia" Ge ;
+  between_Prep = mkPrep "Ã®ntre" Ac True ;
+  both7and_DConj = {s1,s2 = "ÅŸi" ; n = Pl} ;
   but_PConj = ss "dar" ;
-  by8agent_Prep = mkPrep "de cãtre" Ac True;
+  by8agent_Prep = mkPrep "de cÄƒtre" Ac True;
   by8means_Prep = mkPrep "de" Ac True;
   can8know_VV = mkVV (v_besch68 "putea") ;
   can_VV = mkVV (v_besch68 "putea") ;
-  during_Prep = mkPrep "în timpul" Ge ;
+  during_Prep = mkPrep "Ã®n timpul" Ge ;
   either7or_DConj = {s1,s2 = "sau" ; n = Pl} ;
-  everybody_NP = mkNP "toþi" "tuturor" Pl Masc True; -- form for Fem needed also !
-  every_Det = mkDet "orice" "orice" "oricãrui" "oricãrei" "orice" "orice" "oricãruia" "oricãreia" Sg ; 
+  everybody_NP = mkNP "toÅ£i" "tuturor" Pl Masc True; -- form for Fem needed also !
+  every_Det = mkDet "orice" "orice" "oricÄƒrui" "oricÄƒrei" "orice" "orice" "oricÄƒruia" "oricÄƒreia" Sg ; 
   everything_NP = mkNP "totul" nonExist Sg Masc False;
   everywhere_Adv = ss "pretutindeni" ;
-  few_Det  = mkDet "câþiva" "câteva" "câtorva" "câtorva" Pl ;
+  few_Det  = mkDet "cÃ¢Å£iva" "cÃ¢teva" "cÃ¢torva" "cÃ¢torva" Pl ;
   for_Prep = mkPrep "pentru" Ac True;
   from_Prep = mkPrep "de la" Ac True; 
   
   he_Pron = 
     mkPronoun
-      "el" "el" "lui" "lui" [] "sãu" "sa" "sãi" "sale"  Masc Sg P3 ;
+      "el" "el" "lui" "lui" [] "sÄƒu" "sa" "sÄƒi" "sale"  Masc Sg P3 ;
   
   here7from_Adv = ss "de aici" ;
-  here7to_Adv = ss "pânã aici" ;
+  here7to_Adv = ss "pÃ¢nÄƒ aici" ;
   here_Adv = ss "aici" ;
   how_IAdv = ss "cum" ;
   how8many_IDet = {s = \\g,c => case <g,c> of
-                                   { <Fem,AGenDat> => "câtor"; <Fem,_> => "câte" ;
-                                     <Masc,AGenDat> => "câtor" ; _ => "câþi" 
+                                   { <Fem,AGenDat> => "cÃ¢tor"; <Fem,_> => "cÃ¢te" ;
+                                     <Masc,AGenDat> => "cÃ¢tor" ; _ => "cÃ¢Å£i" 
                                      };
                    n = Pl
                     } ;
-  if_Subj = ss "dacã" ;
-  in8front_Prep = mkPrep "în faþa" Ge ;
+  if_Subj = ss "dacÄƒ" ;
+  in8front_Prep = mkPrep "Ã®n faÅ£a" Ge ;
   i_Pron = mkPronoun "eu" "mine" "mie" [] [] "meu" "mea" "mei" "mele" Masc Sg P1 ;
-  in_Prep = mkPrep "în" Ac True;
+  in_Prep = mkPrep "Ã®n" Ac True;
   it_Pron = 
      mkPronoun
-      "" "el" "lui" "lui" [] "sãu" "sa" "sãi" "sale"  Masc Sg P3 ;
+      "" "el" "lui" "lui" [] "sÄƒu" "sa" "sÄƒi" "sale"  Masc Sg P3 ;
   
   have_V2 = dirV2 (v_have) ;
-  less_CAdv = {s = "mai puþin" ; sNum = ""; p = conjThan ; lock_CAdv = <> } ; 
-  many_Det = mkDet "mulþi" "multe" "multor" "multor" "mulþi" "multe" "multora" "multora" Pl; 
+  less_CAdv = {s = "mai puÅ£in" ; sNum = ""; p = conjThan ; lock_CAdv = <> } ; 
+  many_Det = mkDet "mulÅ£i" "multe" "multor" "multor" "mulÅ£i" "multe" "multora" "multora" Pl; 
   more_CAdv = {s = "mai" ; sNum = "mult" ; p =conjThan ; lock_CAdv = <>};
   most_Predet = {
-    s = \\a => table { AGenDat => "marii parþi a" ;
+    s = \\a => table { AGenDat => "marii parÅ£i a" ;
                        ANomAcc => "marea parte a"; 
                        AVoc    => "mare parte a"
                      };
     c = Ge
     };
-  much_Det = mkDet "mult" "multã" nonExist nonExist Sg ;
+  much_Det = mkDet "mult" "multÄƒ" nonExist nonExist Sg ;
   must_VV = mkVV (v_besch140 "trebui") ;
   no_Utt = ss "nu" ;
   on_Prep = mkPrep "pe" Ac True;
@@ -81,18 +81,18 @@ lin
   or_Conj = {s1 = [] ; s2 = "sau" ; n = Sg} ;
   otherwise_PConj = ss "altfel" ;
   part_Prep = mkPrep "din" Ac True;
-  please_Voc = ss ["vã rog"] ;
+  please_Voc = ss ["vÄƒ rog"] ;
   possess_Prep = mkPrep "" Ge ; -- required forms for Fem Sg, Masc Pl and Fem Pl - maybe variants
   quite_Adv = ss "chiar" ;
   she_Pron = 
     mkPronoun
-       "ea" "ea" "ei" "ei" [] "sãu" "sa" "sãi" "sale"  
+       "ea" "ea" "ei" "ei" [] "sÄƒu" "sa" "sÄƒi" "sale"  
         Fem Sg P3 ;
 
-  so_AdA = ss "aºa" ;
+  so_AdA = ss "aÅŸa" ;
   somebody_NP = mkNP "cineva" "cuiva" Sg Masc True;
 somePl_Det = mkDet "unii" "unele" "unor" "unor" "unii" "unele" "unora" "unora" Pl ;
-someSg_Det = mkDet "niºte" "niºte" "la niºte" "la niºte" Sg ;
+someSg_Det = mkDet "niÅŸte" "niÅŸte" "la niÅŸte" "la niÅŸte" Sg ;
   something_NP = mkNP "ceva" "a ceva" Sg Masc False;
   somewhere_Adv = ss ["undeva"] ; --- ne - pas
 
@@ -133,10 +133,10 @@ that_Quant = {
 };
 
   there7from_Adv = ss ["de acolo"] ;
-  there7to_Adv = ss "pânã acolo" ; 
+  there7to_Adv = ss "pÃ¢nÄƒ acolo" ; 
   there_Adv = ss "acolo" ;
   therefore_PConj = ss "astfel" ;
-  --these_NP = mkNP "aceºtia" "acestora" Masc Pl True; --form for Fem needed also !
+  --these_NP = mkNP "aceÅŸtia" "acestora" Masc Pl True; --form for Fem needed also !
   they_Pron = mkPronoun
       "ei" "ei" "lor" "lor" [] "lor" "lor" "lor" "lor"  
         Masc Pl P3 ;
@@ -146,11 +146,11 @@ that_Quant = {
                                    _       => "acest"
                                  };
                    Fem  => table {AGenDat => "acestei";
-                                  _       => "aceastã"
+                                  _       => "aceastÄƒ"
                                  }
                   };
       Pl => table { Masc => table {AGenDat => "acestor";
-                                   _       => "aceºti" 
+                                   _       => "aceÅŸti" 
                                   };
                     Fem  => table {AGenDat => "acestor";
                                    _       => "aceste" 
@@ -166,7 +166,7 @@ that_Quant = {
                                  }
                   };
       Pl => table {Masc => table {AGenDat => "acestora";
-                                  _       => "aceºtia" 
+                                  _       => "aceÅŸtia" 
                                   };
                    Fem  => table {AGenDat => "acestora";
                                   _       => "acestea" 
@@ -182,12 +182,12 @@ that_Quant = {
   very_AdA = ss "foarte" ;
   want_VV = mkVV (v_besch74 "vrea") ; 
   we_Pron =  mkPronoun
-    "noi" "noi" "nouã" [] [] "nostru" "noastrã" "noºtri" "noastre"  
+    "noi" "noi" "nouÄƒ" [] [] "nostru" "noastrÄƒ" "noÅŸtri" "noastre"  
         Masc Pl P1 ; 
 whatSg_IP = 
     {s = \\c => case c of
-                { Da => "cãruia"  ;
-                  Ge => "a cãruia" ; 
+                { Da => "cÄƒruia"  ;
+                  Ge => "a cÄƒruia" ; 
                   _      => "ce" };
      a = aagr Masc Sg;
      hasRef = False
@@ -195,24 +195,24 @@ whatSg_IP =
 
 whatPl_IP = 
    {s = \\c => case c of
-                { Da => "cãrora" ;
-                  Ge => "a cãrora" ; 
+                { Da => "cÄƒrora" ;
+                  Ge => "a cÄƒrora" ; 
                   _      => "ce" };
      a = aagr Masc Pl;
      hasRef = False
     };
-  when_IAdv = ss "când" ;
-  when_Subj = ss "când" ;
+  when_IAdv = ss "cÃ¢nd" ;
+  when_Subj = ss "cÃ¢nd" ;
   where_IAdv = ss "unde" ;
   which_IQuant = {s = table {
-      Sg => table {Masc => table { AGenDat => "cãrui";
+      Sg => table {Masc => table { AGenDat => "cÄƒrui";
                                    _       => "care"
                                  };
-                   Fem  => table {AGenDat => "cãrei";
+                   Fem  => table {AGenDat => "cÄƒrei";
                                   _       => "care"
                                  }
                   };
-      Pl => \\g => table {AGenDat => "cãror";
+      Pl => \\g => table {AGenDat => "cÄƒror";
                                    _       => "care" 
                                   }
                    
@@ -236,16 +236,16 @@ whatPl_IP =
      hasRef = True
     };
   why_IAdv = ss "de ce" ;
-  without_Prep = mkPrep "fãrã" Ac True;
+  without_Prep = mkPrep "fÄƒrÄƒ" Ac True;
   with_Prep = mkPrep "cu" Ac ;
   yes_Utt = ss "da" ; 
 
   youSg_Pron = mkPronoun 
-    "tu" "tine" "þie" [] "tu" "tãu" "ta" "tãi" "tale"  
+    "tu" "tine" "Å£ie" [] "tu" "tÄƒu" "ta" "tÄƒi" "tale"  
         Masc Sg P2 ;
   youPl_Pron, youPol_Pron = 
     mkPronoun
-      "voi" "voi" "vouã" [] "voi" "vostru" "voastrã" "voºtri" "voastre"  
+      "voi" "voi" "vouÄƒ" [] "voi" "vostru" "voastrÄƒ" "voÅŸtri" "voastre"  
          Masc Pl P2 ;
 
  not_Predet = {s = \\a,c => "nu" ; c = No} ;
@@ -269,10 +269,10 @@ whatPl_IP =
                    }
                       } ;
     sp = table { 
-      Sg => table {Masc => table { AGenDat => "nimãnui";
+      Sg => table {Masc => table { AGenDat => "nimÄƒnui";
                                    _       => "nimeni"
                                  };
-                   Fem  => table {AGenDat => "nimãnui";
+                   Fem  => table {AGenDat => "nimÄƒnui";
                                   _       => "nimeni"
                                  }
                   };
@@ -286,14 +286,14 @@ whatPl_IP =
               } ;
  isDef = False ; isPost = False ; hasRef = False
 };
-  if_then_Conj = {s1 = "dacã" ; s2 = "atunci" ; n = Sg ; lock_Conj = <>} ;
-  nobody_NP = mkNP "nimeni" "nimãnui" Sg Masc True;
+  if_then_Conj = {s1 = "dacÄƒ" ; s2 = "atunci" ; n = Sg ; lock_Conj = <>} ;
+  nobody_NP = mkNP "nimeni" "nimÄƒnui" Sg Masc True;
  
   nothing_NP = mkNP "nimic" "nimicului" Sg Masc False;
-  at_least_AdN = ss "cel puþin" ;
+  at_least_AdN = ss "cel puÅ£in" ;
   at_most_AdN = ss "cel mult" ;
 
-  except_Prep = mkPrep "cu excepþia" Ge ;
+  except_Prep = mkPrep "cu excepÅ£ia" Ge ;
 
   as_CAdv = { s = "la fel de"; sNum = "mult"; p = "ca" ; lock_CAdv = <> };
 
