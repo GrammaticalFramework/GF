@@ -7,29 +7,24 @@ concrete AdjectiveUrd of Adjective = CatUrd ** open ResUrd, Prelude in {
 
     ComparA a np = {
         s = \\n,g,c,d => np.s ! NPC Obl ++ "sE" ++ a.s ! n ! g ! c ! d ;                       
---      isPre = False
        } ;
 
 ---- $SuperlA$ belongs to determiner syntax in $Noun$.
 
     ComplA2 a np = {
       s = \\n,g,c,d => np.s ! NPC Obl ++ a.c2 ++ a.s ! n ! g ! c ! d ; 
---      isPre = False
-      } ;
+     } ;
 
---    ReflA2 a = {
---      s = \\n,g,c,d => a.s ! n ! g ! c ! d  ++ reflPron ! ag ; 
---      isPre = False
---      } ;
+    ReflA2 a = {
+      s = \\n,g,c,d => a.s ! n ! g ! c ! d  ++  RefPron ++ "sE" ; 
+      } ;
 
     SentAP ap sc = {
       s = \\n,g,c,d => ap.s ! n ! g ! c ! d ++ sc.s ; 
---      isPre = False
       } ;
 
     AdAP ada ap = {
       s = \\n,g,c,d => ada.s ++ ap.s ! n ! g ! c ! d ;
---      isPre = ap.isPre
       } ;
 
     UseA2 a = a ;
@@ -37,5 +32,7 @@ concrete AdjectiveUrd of Adjective = CatUrd ** open ResUrd, Prelude in {
 	CAdvAP  cadv ap np = {
 	 s = \\n,g,c,d => cadv.s ++ ap.s ! n ! g ! c ! d ++ cadv.p ++  np.s ! NPC Dir ;
 	 };
+    
+    AdjOrd ord =  { s = \\_,_,_,_ => ord.s ; };
 
 }
