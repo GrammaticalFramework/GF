@@ -120,7 +120,7 @@ loop opts gfenv0 = do
                
                (style,q,s) = pOpts TermPrintDefault Qualified (tail (words s0))
 
-               checkComputeTerm gr t = do
+               checkComputeTerm gr (L _ t) = do
                  mo <- maybe (Bad "no source grammar in scope") return $ greatestResource gr
                  ((t,_),_) <- runCheck $ do t <- renameSourceTerm gr mo t
                                             inferLType gr [] t
@@ -128,7 +128,7 @@ loop opts gfenv0 = do
 
              case runP pExp (BS.pack s) of
                Left (_,msg) -> putStrLn msg
-               Right t      -> case checkComputeTerm sgr (codeTerm (decode gfenv) t) of
+               Right t      -> case checkComputeTerm sgr (codeTerm (decode gfenv) (L (0,0) t)) of
                                  Ok  x -> putStrLn $ enc (showTerm sgr style q x)
                                  Bad s -> putStrLn $ enc s
              loopNewCPU gfenv

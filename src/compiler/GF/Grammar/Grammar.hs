@@ -20,6 +20,7 @@ module GF.Grammar.Grammar (SourceGrammar,
         SourceModule,
         mapSourceModule,
         Info(..),
+        L(..), unLoc,
         Type,
         Cat,
         Fun,
@@ -75,23 +76,32 @@ mapSourceModule f (i,mi) = (i, f mi)
 -- and indirection to module (/INDIR/)
 data Info =
 -- judgements in abstract syntax
-   AbsCat   (Maybe Context)
- | AbsFun   (Maybe Type) (Maybe Int) (Maybe [Equation])  -- ^ (/ABS/) type, arrity and definition of function
+   AbsCat   (Maybe (L Context))                                -- ^ (/ABS/) context of a category
+ | AbsFun   (Maybe (L Type)) (Maybe Int) (Maybe [L Equation])  -- ^ (/ABS/) type, arrity and definition of a function
 
 -- judgements in resource
- | ResParam (Maybe [Param]) (Maybe [Term])   -- ^ (/RES/) the second parameter is list of all possible values
- | ResValue Type                             -- ^ (/RES/) to mark parameter constructors for lookup
- | ResOper  (Maybe Type) (Maybe Term)        -- ^ (/RES/)
+ | ResParam (Maybe [L Param]) (Maybe [Term])     -- ^ (/RES/) the second parameter is list of all possible values
+ | ResValue (L Type)                             -- ^ (/RES/) to mark parameter constructors for lookup
+ | ResOper  (Maybe (L Type)) (Maybe (L Term))    -- ^ (/RES/)
 
- | ResOverload [Ident] [(Type,Term)]         -- ^ (/RES/) idents: modules inherited
+ | ResOverload [Ident] [(L Type,L Term)]         -- ^ (/RES/) idents: modules inherited
 
 -- judgements in concrete syntax
- | CncCat  (Maybe Type)                 (Maybe Term) (Maybe Term)  -- ^ (/CNC/) lindef ini'zed, 
- | CncFun  (Maybe (Ident,Context,Type)) (Maybe Term) (Maybe Term)  -- ^ (/CNC/) type info added at 'TC'
+ | CncCat  (Maybe (L Type))             (Maybe (L Term)) (Maybe (L Term))  -- ^ (/CNC/) lindef ini'zed, 
+ | CncFun  (Maybe (Ident,Context,Type)) (Maybe (L Term)) (Maybe (L Term))  -- ^ (/CNC/) type info added at 'TC'
 
 -- indirection to module Ident
  | AnyInd Bool Ident                         -- ^ (/INDIR/) the 'Bool' says if canonical
   deriving Show
+
+data L a = L (Int,Int) a  -- location information
+  deriving (Eq,Show)
+
+instance Functor L where
+  fmap f (L loc x) = L loc (f x)
+
+unLoc :: L a -> a
+unLoc (L _ x) = x
 
 type Type = Term
 type Cat  = QIdent

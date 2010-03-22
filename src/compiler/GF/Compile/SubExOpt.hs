@@ -53,9 +53,9 @@ unsubexpModule sm@(i,mo)
     -- perform this iff the module has opers
     hasSub ljs = not $ null [c | (c,ResOper _ _) <- ljs]
     unparInfo (c,info) = case info of
-      CncFun xs (Just t) m -> [(c, CncFun xs (Just (unparTerm t)) m)]
-      ResOper (Just (EInt 8)) _ -> [] -- subexp-generated opers
-      ResOper pty (Just t) -> [(c, ResOper pty (Just (unparTerm t)))]
+      CncFun xs (Just (L loc t)) m -> [(c, CncFun xs (Just (L loc (unparTerm t))) m)]
+      ResOper (Just (L loc (EInt 8))) _ -> [] -- subexp-generated opers
+      ResOper pty (Just (L loc t)) -> [(c, ResOper pty (Just (L loc (unparTerm t))))]
       _ -> [(c,info)]
     unparTerm t = case t of
       Q m c | isOperIdent c -> --- name convention of subexp opers
@@ -76,12 +76,12 @@ addSubexpConsts mo tree lins = do
   mapM mkOne $ opers ++ lins
  where
    mkOne (f,def) = case def of
-     CncFun xs (Just trm) pn -> do
+     CncFun xs (Just (L loc trm)) pn -> do
        trm' <- recomp f trm
-       return (f,CncFun xs (Just trm') pn)
-     ResOper ty (Just trm) -> do
+       return (f,CncFun xs (Just (L loc trm')) pn)
+     ResOper ty (Just (L loc trm)) -> do
        trm' <- recomp f trm
-       return (f,ResOper ty (Just trm'))
+       return (f,ResOper ty (Just (L loc trm')))
      _ -> return (f,def)
    recomp f t = case Map.lookup t tree of
      Just (_,id) | operIdent id /= f -> return $ Q mo (operIdent id)
@@ -89,7 +89,7 @@ addSubexpConsts mo tree lins = do
 
    list = Map.toList tree
 
-   oper id trm = (operIdent id, ResOper (Just (EInt 8)) (Just trm)) 
+   oper id trm = (operIdent id, ResOper (Just (L (0,0) (EInt 8))) (Just (L (0,0) trm))) 
    --- impossible type encoding generated opers
 
 getSubtermsMod :: Ident -> [(Ident,Info)] -> TermM (Map Term (Int,Int))
@@ -99,10 +99,10 @@ getSubtermsMod mo js = do
   return $ Map.filter (\ (nu,_) -> nu > 1) tree0
  where
    getInfo get fi@(f,i) = case i of
-     CncFun xs (Just trm) pn -> do
+     CncFun xs (Just (L _ trm)) pn -> do
        get trm
        return $ fi
-     ResOper ty (Just trm) -> do
+     ResOper ty (Just (L _ trm)) -> do
        get trm
        return $ fi
      _ -> return fi

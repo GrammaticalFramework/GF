@@ -1087,8 +1087,6 @@ abstract IrregCatAbs = Cat ** {
 --  fun zaherir_V  : V ; 
 --  fun zambullir_V  : V ; 
 --  fun zurcir_V  : V ; 
-fun haver_V  : V ; 
-fun estar_V  : V ;
 fun callar_V  : V ;
 fun caure_V  : V ;
 fun cloure_V  : V ;

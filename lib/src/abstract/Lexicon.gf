@@ -79,14 +79,12 @@ fun
   door_N : N ;
   do_V2 : V2 ;
   drink_V2 : V2 ;
-  drink_V2 : V2 ;
   dry_A : A ;
   dull_A : A ;
   dust_N : N ;
   ear_N : N ;
   earth_N : N ;
   easy_A2V : A2 ;
-  eat_V2 : V2 ;
   eat_V2 : V2 ;
   egg_N : N ;
   empty_A : A ;
@@ -139,7 +137,6 @@ fun
   hat_N : N ;
   head_N : N ;
   heart_N : N ;
-  hear_V2 : V2 ;
   hear_V2 : V2 ;
   heavy_A : A ;
   hill_N : N ;
@@ -254,7 +251,6 @@ fun
   sea_N : N ;
   seed_N : N ;
   seek_V2 : V2 ;
-  see_V2 : V2 ;
   see_V2 : V2 ;
   sell_V3 : V3 ;
   send_V3 : V3 ;

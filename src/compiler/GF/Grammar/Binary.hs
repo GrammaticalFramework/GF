@@ -31,9 +31,9 @@ instance Binary a => Binary (MGrammar a) where
   get               = fmap MGrammar get
 
 instance Binary a => Binary (ModInfo a) where
-  put mi = do put (mtype mi,mstatus mi,flags mi,extend mi,mwith mi,opens mi,mexdeps mi,jments mi,positions mi)
-  get    = do (mtype,mstatus,flags,extend,mwith,opens,med,jments,positions) <- get
-              return (ModInfo mtype mstatus flags extend mwith opens med jments positions)
+  put mi = do put (mtype mi,mstatus mi,flags mi,extend mi,mwith mi,opens mi,mexdeps mi,jments mi)
+  get    = do (mtype,mstatus,flags,extend,mwith,opens,med,jments) <- get
+              return (ModInfo mtype mstatus flags extend mwith opens med jments)
 
 instance Binary ModuleType where
   put MTAbstract       = putWord8 0
@@ -108,6 +108,10 @@ instance Binary Info where
              7 -> get >>= \(x,y,z) -> return (CncFun x y z)
              8 -> get >>= \(x,y)   -> return (AnyInd x y)
              _ -> decodingError
+
+instance Binary a => Binary (L a) where
+  put (L x y) = put (x,y)
+  get = get >>= \(x,y) -> return (L x y)
 
 instance Binary BindType where
   put Explicit = putWord8 0
@@ -258,6 +262,6 @@ instance Binary Label where
 decodeModHeader :: FilePath -> IO SourceModule
 decodeModHeader fpath = do
   (m,mtype,mstatus,flags,extend,mwith,opens,med) <- decodeFile fpath
-  return (m,ModInfo mtype mstatus flags extend mwith opens med Map.empty Map.empty)
+  return (m,ModInfo mtype mstatus flags extend mwith opens med Map.empty)
 
 decodingError = fail "This GFO file was compiled with different version of GF"

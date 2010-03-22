@@ -54,7 +54,7 @@ renameModule :: [SourceModule] -> SourceModule -> Check SourceModule
 renameModule ms (name,mo) = checkIn (text "renaming module" <+> ppIdent name) $ do
   let js1 = jments mo
   status <- buildStatus (MGrammar ms) name mo
-  js2    <- checkMap (renameInfo mo status) js1
+  js2    <- checkMap (renameInfo status name) js1
   return (name, mo {opens = map forceQualif (opens mo), jments = js2})
 
 type Status = (StatusTree, [(OpenSpec, StatusTree)])
@@ -137,31 +137,49 @@ forceQualif o = case o of
   OSimple i   -> OQualif i i
   OQualif _ i -> OQualif i i
   
-renameInfo :: SourceModInfo -> Status -> Ident -> Info -> Check Info
-renameInfo mo status i info = checkIn 
-    (text "renaming definition of" <+> ppIdent i <+> ppPosition mo i) $ 
-                                case info of
-  AbsCat pco -> liftM AbsCat (renPerh (renameContext status) pco)
-  AbsFun  pty pa ptr -> liftM3 AbsFun (ren pty) (return pa) (renPerh (mapM (renameEquation status [])) ptr)
-  ResOper pty ptr -> liftM2 ResOper (ren pty) (ren ptr)
-  ResOverload os tysts -> 
-    liftM (ResOverload os) (mapM (pairM rent) tysts)
+renameInfo :: Status -> Ident -> Ident -> Info -> Check Info
+renameInfo status m i info =
+  case info of
+    AbsCat pco -> liftM AbsCat (renPerh (renameContext status) pco)
+    AbsFun  pty pa ptr -> liftM3 AbsFun (renTerm pty) (return pa) (renMaybe (mapM (renLoc (renEquation status))) ptr)
+    ResOper pty ptr -> liftM2 ResOper (renTerm pty) (renTerm ptr)
+    ResOverload os tysts -> liftM (ResOverload os) (mapM (renPair (renameTerm status [])) tysts)
+    ResParam (Just pp) m -> do
+      pp' <- mapM (renLoc (renParam status)) pp
+      return (ResParam (Just pp') m)
+    ResValue t -> do
+      t <- renLoc (renameTerm status []) t
+      return (ResValue t)
+    CncCat pty ptr ppr -> liftM3 CncCat (renTerm pty) (renTerm ptr) (renTerm ppr)
+    CncFun mt  ptr ppr -> liftM2 (CncFun mt)          (renTerm ptr) (renTerm ppr)
+    _ -> return info
+  where
+    renTerm = renPerh (renameTerm status [])
 
-  ResParam (Just pp) m -> do
-    pp' <- mapM (renameParam status) pp
-    return (ResParam (Just pp') m)
-  ResValue t -> do
-    t <- rent t
-    return (ResValue t)
-  CncCat pty ptr ppr -> liftM3 CncCat (ren pty) (ren ptr) (ren ppr)
-  CncFun mt  ptr ppr -> liftM2 (CncFun mt)      (ren ptr) (ren ppr)
-  _ -> return info
- where 
-   ren = renPerh rent
-   rent = renameTerm status []
+    renPerh ren = renMaybe (renLoc ren)
 
-renPerh ren (Just t) = liftM Just $ ren t
-renPerh ren Nothing  = return Nothing
+    renMaybe ren (Just x) = ren x >>= return . Just
+    renMaybe ren Nothing  = return Nothing
+
+    renLoc ren (L loc x) =
+      checkIn (text "renaming of" <+> ppIdent i <+> ppPosition m loc) $ do
+        x <- ren x
+        return (L loc x)
+
+    renPair ren (L locx x, L locy y) = do x <- ren x
+                                          y <- ren y
+                                          return (L locx x, L locy y)
+
+    renEquation :: Status -> Equation -> Check Equation
+    renEquation b (ps,t) = do
+        (ps',vs) <- liftM unzip $ mapM (renamePattern b) ps
+        t'       <- renameTerm b (concat vs) t
+        return (ps',t')
+
+    renParam :: Status -> Param -> Check Param
+    renParam env (c,co) = do
+      co' <- renameContext env co
+      return (c,co')
 
 renameTerm :: Status -> [Ident] -> Term -> Check Term
 renameTerm env vars = ren vars where
@@ -283,11 +301,6 @@ renamePattern env patt = case patt of
    renp  = renamePattern env
    renid = renameIdentTerm env
 
-renameParam :: Status -> (Ident, Context) -> Check (Ident, Context)
-renameParam env (c,co) = do
-  co' <- renameContext env co
-  return (c,co')
-
 renameContext :: Status -> Context -> Check Context
 renameContext b = renc [] where
   renc vs cont = case cont of
@@ -303,10 +316,3 @@ renameContext b = renc [] where
           return $ (bt,x,t') : xts'
     _ -> return cont
   ren = renameTerm b
-
--- | vars not needed in env, since patterns always overshadow old vars
-renameEquation :: Status -> [Ident] -> Equation -> Check Equation
-renameEquation b vs (ps,t) = do
-  (ps',vs') <- liftM unzip $ mapM (renamePattern b) ps
-  t'        <- renameTerm b (concat vs' ++ vs) t
-  return (ps',t')

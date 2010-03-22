@@ -60,7 +60,7 @@ canon2pgf opts pars cgr@(M.MGrammar ((a,abm):cms)) = do
   gflags = Map.empty
   aflags = Map.fromList [(mkCId f,C.LStr x) | (f,x) <- optionsPGF (M.flags abm)]
 
-  mkDef (Just eqs) = Just [C.Equ ps' (mkExp scope' e) | (ps,e) <- eqs, let (scope',ps') = mapAccumL mkPatt [] ps]
+  mkDef (Just eqs) = Just [C.Equ ps' (mkExp scope' e) | L _ (ps,e) <- eqs, let (scope',ps') = mapAccumL mkPatt [] ps]
   mkDef Nothing    = Nothing
 
   mkArrity (Just a) = a
@@ -68,10 +68,10 @@ canon2pgf opts pars cgr@(M.MGrammar ((a,abm):cms)) = do
 
   -- concretes
   lfuns = [(f', (mkType [] ty, mkArrity ma, mkDef pty)) | 
-             (f,AbsFun (Just ty) ma pty) <- tree2list (M.jments abm), let f' = i2i f]
+             (f,AbsFun (Just (L _ ty)) ma pty) <- tree2list (M.jments abm), let f' = i2i f]
   funs = Map.fromAscList lfuns
   lcats = [(i2i c, snd (mkContext [] cont)) |
-                (c,AbsCat (Just cont)) <- tree2list (M.jments abm)]
+                (c,AbsCat (Just (L _ cont))) <- tree2list (M.jments abm)]
   cats = Map.fromAscList lcats
   catfuns = Map.fromList 
     [(cat,[f | (f, (C.DTyp _ c _,_,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
@@ -91,16 +91,16 @@ canon2pgf opts pars cgr@(M.MGrammar ((a,abm):cms)) = do
                 ---- then (trace "decode" D.convertStringsInTerm decodeUTF8) else id
       umkTerm = utf . mkTerm
       lins    = Map.fromAscList 
-        [(f', umkTerm tr)  | (f,CncFun _ (Just tr) _) <- js, 
+        [(f', umkTerm tr)  | (f,CncFun _ (Just (L _ tr)) _) <- js, 
             let f' = i2i f, exists f'] -- eliminating lins without fun 
             -- needed even here because of restricted inheritance
       lincats = Map.fromAscList 
-        [(i2i c, mkCType ty) | (c,CncCat (Just ty) _ _) <- js]
+        [(i2i c, mkCType ty) | (c,CncCat (Just (L _ ty)) _ _) <- js]
       lindefs = Map.fromAscList 
-        [(i2i c, umkTerm tr)  | (c,CncCat _ (Just tr) _) <- js]
+        [(i2i c, umkTerm tr)  | (c,CncCat _ (Just (L _ tr)) _) <- js]
       printnames = Map.union 
-        (Map.fromAscList [(i2i f, realize (umkTerm tr)) | (f,CncFun _ _ (Just tr)) <- js])
-        (Map.fromAscList [(i2i f, realize (umkTerm tr)) | (f,CncCat _ _ (Just tr)) <- js])
+        (Map.fromAscList [(i2i f, realize (umkTerm tr)) | (f,CncFun _ _ (Just (L _ tr))) <- js])
+        (Map.fromAscList [(i2i f, realize (umkTerm tr)) | (f,CncCat _ _ (Just (L _ tr))) <- js])
       params = Map.fromAscList 
         [(i2i c, pars lang0 c) | (c,CncCat (Just ty) _ _) <- js]
       fcfg = Nothing
@@ -236,16 +236,15 @@ mkParamLincat sgr lang cat = errVal (C.R [C.S []]) $ do
 
 reorder :: Ident -> SourceGrammar -> SourceGrammar
 reorder abs cg = M.MGrammar $ 
-    (abs, M.ModInfo M.MTAbstract M.MSComplete aflags [] Nothing [] [] adefs poss):
-      [(c, M.ModInfo (M.MTConcrete abs) M.MSComplete fs [] Nothing [] [] (sorted2tree js) poss)
+    (abs, M.ModInfo M.MTAbstract M.MSComplete aflags [] Nothing [] [] adefs):
+      [(c, M.ModInfo (M.MTConcrete abs) M.MSComplete fs [] Nothing [] [] (sorted2tree js))
             | (c,(fs,js)) <- cncs] 
      where
-       poss = emptyBinTree -- positions no longer needed
        mos = M.modules cg
        adefs = sorted2tree $ sortIds $
                  predefADefs ++ Look.allOrigInfos cg abs
        predefADefs = 
-         [(c, AbsCat (Just [])) | c <- [cFloat,cInt,cString]]
+         [(c, AbsCat (Just (L (0,0) []))) | c <- [cFloat,cInt,cString]]
        aflags = 
          concatOptions [M.flags mo | (_,mo) <- M.modules cg, M.isModAbs mo]
 
@@ -259,7 +258,7 @@ reorder abs cg = M.MGrammar $
                      Just r <- [lookup i (M.allExtendSpecs cg la)]]
 
          predefCDefs = 
-           [(c, CncCat (Just GM.defLinType) Nothing Nothing) | c <- [cInt,cFloat,cString]]
+           [(c, CncCat (Just (L (0,0) GM.defLinType)) Nothing Nothing) | c <- [cInt,cFloat,cString]]
 
        sortIds = sortBy (\ (f,_) (g,_) -> compare f g) 
 
@@ -292,8 +291,8 @@ canon2canon opts abs cg0 =
   j2j cg (f,j) = 
     let debug = if verbAtLeast opts Verbose then trace ("+ " ++ showIdent f) else id in
     case j of
-      CncFun x (Just tr) z -> CncFun x (Just (debug (t2t (unfactor cg0 tr)))) z
-      CncCat (Just ty) (Just x) y -> CncCat (Just (ty2ty ty)) (Just (t2t (unfactor cg0 x))) y
+      CncFun x (Just (L loc tr)) z -> CncFun x (Just (L loc (debug (t2t (unfactor cg0 tr))))) z
+      CncCat (Just (L locty ty)) (Just (L locx x)) y -> CncCat (Just (L locty (ty2ty ty))) (Just (L locx (t2t (unfactor cg0 x)))) y
       _ -> j
    where
       cg1 = cg
@@ -315,7 +314,7 @@ canon2canon opts abs cg0 =
     -- flatten record arguments of param constructors
   p2p (f,j) = case j of
       ResParam (Just ps) (Just vs) -> 
-        ResParam (Just [(c,concatMap unRec cont) | (c,cont) <- ps]) (Just (map unrec vs))
+        ResParam (Just [L loc (c,concatMap unRec cont) | L loc (c,cont) <- ps]) (Just (map unrec vs))
       _ -> j
   unRec (bt,x,ty) = case ty of
       RecType fs -> [ity | (_,typ) <- fs, ity <- unRec (Explicit,identW,typ)] 
@@ -359,13 +358,13 @@ paramValues cgr = (labels,untyps,typs) where
   partyps = nub $ 
             --- [App (Q (IC "Predef") (IC "Ints")) (EInt i) | i <- [1,9]] ---linTypeInt 
             [ty | 
-              (_,(_,CncCat (Just ty0) _ _)) <- jments,
+              (_,(_,CncCat (Just (L _ ty0)) _ _)) <- jments,
               ty  <- typsFrom ty0
             ] ++ [
              Q m ty | 
               (m,(ty,ResParam _ _)) <- jments
             ] ++ [ty | 
-              (_,(_,CncFun _ (Just tr) _)) <- jments,
+              (_,(_,CncFun _ (Just (L _ tr)) _)) <- jments,
               ty  <- err (const []) snd $ appSTM (typsFromTrm tr) []
             ]
   params = [(ty, errVal (traceD ("UNKNOWN PARAM TYPE" +++ show ty) []) $ 
@@ -407,7 +406,7 @@ paramValues cgr = (labels,untyps,typs) where
     [(cat,[f | let RecType fs = GM.defLinType, f <- fs]) | cat <- [cInt,cFloat, cString]] ++
     reverse ---- TODO: really those lincats that are reached
             ---- reverse is enough to expel overshadowed ones... 
-      [(cat,ls) | (_,(cat,CncCat (Just ty) _ _)) <- jments, 
+      [(cat,ls) | (_,(cat,CncCat (Just (L _ ty)) _ _)) <- jments, 
                   RecType ls <- [unlockTy ty]]
   labels = Map.fromList $ concat 
     [((cat,[lab]),(typ,i)): 

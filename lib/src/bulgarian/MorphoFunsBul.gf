@@ -125,16 +125,9 @@ oper
   
   mkVA : V -> VA ;
   mkVA  v = v ** {lock_VA = <>} ;
-
-  mkV2A : V -> Prep -> V2A ;
-  mkV2A v p = prepV2 v p ** {lock_V2A = <>} ;
   
   mkVQ  : V -> VQ ;
   mkVQ  v = v ** {lock_VQ = <>} ;
-  
-  mkV2Q : V -> Prep -> V2Q ;  
-  mkV2Q v p = prepV2 v p ** {lock_V2Q = <>} ;
-
 
 --2 Nouns
 

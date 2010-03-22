@@ -94,7 +94,8 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
   where
    checkAbs js i@(c,info) =
      case info of
-       AbsFun (Just ty) _ _ -> do let mb_def = do
+       AbsFun (Just (L loc ty)) _ _ 
+                            -> do let mb_def = do
                                         let (cxt,(_,i),_) = typeForm ty
                                         info <- lookupIdent i js
                                         info <- case info of
@@ -102,8 +103,8 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
                                                                      return info
                                                   _            -> return info
                                         case info of
-                                          CncCat (Just (RecType [])) _ _ -> return (foldr (\_ -> Abs Explicit identW) (R []) cxt)
-                                          _                              -> Bad "no def lin"
+                                          CncCat (Just (L loc (RecType []))) _ _ -> return (foldr (\_ -> Abs Explicit identW) (R []) cxt)
+                                          _                                      -> Bad "no def lin"
                                              
                                   case lookupIdent c js of
                                     Ok (AnyInd _ _) -> return js
@@ -111,14 +112,14 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
                                                   return $ updateTree (c,CncFun ty (Just def) pn) js
                                     Ok (CncFun ty Nothing    pn) ->
                                       case mb_def of
-                                        Ok def -> return $ updateTree (c,CncFun ty (Just def) pn) js
+                                        Ok def -> return $ updateTree (c,CncFun ty (Just (L (0,0) def)) pn) js
                                         Bad _  -> do checkWarn $ text "no linearization of" <+> ppIdent c
                                                      return js
                                     _ -> do
                                       case mb_def of
                                         Ok def -> do (cont,val) <- linTypeOfType gr cm ty
                                                      let linty = (snd (valCat ty),cont,val)
-                                                     return $ updateTree (c,CncFun (Just linty) (Just def) Nothing) js
+                                                     return $ updateTree (c,CncFun (Just linty) (Just (L (0,0) def)) Nothing) js
                                         Bad _  -> do checkWarn $ text "no linearization of" <+> ppIdent c
                                                      return js
        AbsCat (Just _) -> case lookupIdent c js of
@@ -127,17 +128,17 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
          Ok (CncCat _ mt mp) -> do
            checkWarn $ 
              text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}"
-           return $ updateTree (c,CncCat (Just defLinType) mt mp) js
+           return $ updateTree (c,CncCat (Just (L (0,0) defLinType)) mt mp) js
          _ -> do
            checkWarn $ 
              text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}"
-           return $ updateTree (c,CncCat (Just defLinType) Nothing Nothing) js
+           return $ updateTree (c,CncCat (Just (L (0,0) defLinType)) Nothing Nothing) js
        _ -> return js
      
    checkCnc js i@(c,info) =
      case info of
        CncFun _ d pn -> case lookupOrigInfo gr am c of
-                          Ok (_,AbsFun (Just ty) _ _) -> 
+                          Ok (_,AbsFun (Just (L _ ty)) _ _) -> 
                                      do (cont,val) <- linTypeOfType gr cm ty
                                         let linty = (snd (valCat ty),cont,val)
                                         return $ updateTree (c,CncFun (Just linty) d pn) js
@@ -156,50 +157,51 @@ checkInfo :: [SourceModule] -> SourceModule -> Ident -> Info -> Check Info
 checkInfo ms (m,mo) c info = do
   checkReservedId c
   case info of
-    AbsCat (Just cont) -> mkCheck "category" $ 
-      checkContext gr cont
+    AbsCat (Just (L loc cont)) -> 
+      mkCheck loc "category" $ 
+        checkContext gr cont
 
-    AbsFun (Just typ0) ma md -> do
+    AbsFun (Just (L loc typ0)) ma md -> do
       typ <- compAbsTyp [] typ0   -- to calculate let definitions
-      mkCheck "type of function" $
+      mkCheck loc "type of function" $
         checkTyp gr typ
       case md of
-        Just eqs -> mkCheck "definition of function" $
+        Just eqs -> mkCheck loc "definition of function" $
 	                  checkDef gr (m,c) typ eqs
         Nothing  -> return info
-      return (AbsFun (Just typ) ma md)
+      return (AbsFun (Just (L loc typ)) ma md)
 
-    CncFun linty@(Just (cat,cont,val)) (Just trm) mpr -> chIn "linearization of" $ do
+    CncFun linty@(Just (cat,cont,val)) (Just (L loc trm)) mpr -> chIn loc "linearization of" $ do
       (trm',_) <- checkLType gr [] trm (mkFunType (map (\(_,_,ty) -> ty) cont) val)  -- erases arg vars
       mpr <- checkPrintname gr mpr
-      return (CncFun linty (Just trm') mpr)
+      return (CncFun linty (Just (L loc trm')) mpr)
 
-    CncCat (Just typ) mdef mpr -> chIn "linearization type of" $ do
+    CncCat (Just (L loc typ)) mdef mpr -> chIn loc "linearization type of" $ do
       (typ,_) <- checkLType gr [] typ typeType
       typ  <- computeLType gr [] typ
       mdef <- case mdef of
-        Just def -> do
+        Just (L loc def) -> do
           (def,_) <- checkLType gr [] def (mkFunType [typeStr] typ)
-          return $ Just def
+          return $ Just (L loc def)
         _ -> return mdef
       mpr <- checkPrintname gr mpr
-      return (CncCat (Just typ) mdef mpr)
+      return (CncCat (Just (L loc typ)) mdef mpr)
 
-    ResOper pty pde -> chIn "operation" $ do
+    ResOper pty pde -> chIn (0,0) "operation" $ do
       (pty', pde') <- case (pty,pde) of
-         (Just ty, Just de) -> do
+         (Just (L loc1 ty), Just (L loc2 de)) -> do
            ty'     <- checkLType gr [] ty typeType >>= computeLType gr [] . fst
            (de',_) <- checkLType gr [] de ty'
-           return (Just ty', Just de')
-         (_      , Just de) -> do
+           return (Just (L loc1 ty'), Just (L loc2 de'))
+         (_      , Just (L loc de)) -> do
            (de',ty') <- inferLType gr [] de
-           return (Just ty', Just de')
+           return (Just (L loc ty'), Just (L loc de'))
          (_      , Nothing) -> do
            checkError (text "No definition given to the operation")
       return (ResOper pty' pde')
 
-    ResOverload os tysts -> chIn "overloading" $ do
-      tysts' <- mapM (uncurry $ flip (checkLType gr [])) tysts  -- return explicit ones
+    ResOverload os tysts -> chIn (0,0) "overloading" $ do
+      tysts' <- mapM (uncurry $ flip (\(L loc1 t) (L loc2 ty) -> checkLType gr [] t ty >>= \(t,ty) -> return (L loc1 t, L loc2 ty))) tysts  -- return explicit ones
       tysts0 <- checkErr $ lookupOverload gr m c  -- check against inherited ones too
       tysts1 <- mapM (uncurry $ flip (checkLType gr [])) 
                   [(mkFunType args val,tr) | (args,(val,tr)) <- tysts0]
@@ -209,16 +211,16 @@ checkInfo ms (m,mo) c info = do
         sort [let (xs,t) = typeFormCnc x in t : map (\(b,x,t) -> t) xs | (_,x) <- tysts1]
       return (ResOverload os [(y,x) | (x,y) <- tysts'])
 
-    ResParam (Just pcs) _ -> chIn "parameter type" $ do
+    ResParam (Just pcs) _ -> chIn (0,0) "parameter type" $ do
       ts <- checkErr $ liftM concat $ mapM mkPar pcs
       return (ResParam (Just pcs) (Just ts))
 
     _ ->  return info
  where
    gr = MGrammar ((m,mo) : ms)
-   chIn cat = checkIn (text "Happened in" <+> text cat <+> ppIdent c <+> ppPosition mo c <> colon)
+   chIn loc cat = checkIn (text "Happened in" <+> text cat <+> ppIdent c <+> ppPosition m loc <> colon)
 
-   mkPar (f,co) = do
+   mkPar (L _ (f,co)) = do
      vs <- liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
      return $ map (mkApp (QC m f)) vs
 
@@ -229,9 +231,9 @@ checkInfo ms (m,mo) c info = do
       | otherwise -> checkUniq $ y:xs
      _ -> return ()
 
-   mkCheck cat ss = case ss of
+   mkCheck loc cat ss = case ss of
      [] -> return info
-     _  -> checkError (vcat ss $$ text "in" <+> text cat <+> ppIdent c <+> ppPosition mo c)
+     _  -> checkError (vcat ss $$ text "in" <+> text cat <+> ppIdent c <+> ppPosition m loc)
 
    compAbsTyp g t = case t of
      Vr x -> maybe (checkError (text "no value given to variable" <+> ppIdent x)) return $ lookup x g
@@ -246,10 +248,10 @@ checkInfo ms (m,mo) c info = do
      _ -> composOp (compAbsTyp g) t  
 
 
-checkPrintname :: SourceGrammar -> Maybe Term -> Check (Maybe Term)
-checkPrintname gr (Just t) = do (t,_) <- checkLType gr [] t typeStr
-                                return (Just t)
-checkPrintname gr Nothing  = return Nothing
+checkPrintname :: SourceGrammar -> Maybe (L Term) -> Check (Maybe (L Term))
+checkPrintname gr (Just (L loc t)) = do (t,_) <- checkLType gr [] t typeStr
+                                        return (Just (L loc t))
+checkPrintname gr Nothing          = return Nothing
 
 -- | for grammars obtained otherwise than by parsing ---- update!!
 checkReservedId :: Ident -> Check ()
