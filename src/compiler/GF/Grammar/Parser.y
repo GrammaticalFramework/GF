@@ -673,43 +673,35 @@ isOverloading t =
     Vr keyw | showIdent keyw == "overload" -> True      -- overload is a "soft keyword"
     _                                      -> False
 
+checkInfoType mt (id,info) =
+  case info of
+    AbsCat pcont      -> ifAbstract mt (locPerh pcont)
+    AbsFun pty _ pde  -> ifAbstract mt (locPerh pty ++ maybe [] locAll pde)
+    CncCat pty pd ppn -> ifConcrete mt (locPerh pty ++ locPerh pd ++ locPerh ppn)
+    CncFun _   pd ppn -> ifConcrete mt (locPerh pd ++ locPerh ppn)
+    ResParam pparam _ -> ifResource mt (maybe [] locAll pparam)
+    ResValue ty       -> ifResource mt (locL ty)
+    ResOper  pty pt   -> ifResource mt (locPerh pty ++ locPerh pt)
+    ResOverload _ xs  -> ifResource mt (concat [[loc1,loc2] | (L loc1 _,L loc2 _) <- xs])
+  where
+    locPerh = maybe [] locL
+    locAll xs = [loc | L loc x <- xs]
+    locL (L loc x) = [loc]
+    
+    illegal ((s,e):_) = failLoc (Pn s 0) "illegal definition"
+    illegal _         = return ()
 
-checkInfoType MTAbstract       (id,info) =
-  case info of
-    AbsCat _     -> return ()
-    AbsFun _ _ _ -> return ()
-    _            -> failLoc (getInfoPos info) "illegal definition in abstract module" 
-checkInfoType MTResource       (id,info) =
-  case info of
-    ResParam _ _ -> return ()
-    ResValue _   -> return ()
-    ResOper  _ _ -> return ()
-    ResOverload _ _ -> return ()
-    _            -> failLoc (getInfoPos info) "illegal definition in resource module" 
-checkInfoType MTInterface      (id,info) =
-  case info of
-    ResParam _ _ -> return ()
-    ResValue _   -> return ()
-    ResOper  _ _ -> return ()
-    ResOverload _ _ -> return ()
-    _            -> failLoc (getInfoPos info) "illegal definition in interface module" 
-checkInfoType (MTConcrete _)   (id,info) =
-  case info of
-    CncCat _ _ _ -> return ()
-    CncFun _ _ _ -> return ()
-    ResParam _ _ -> return ()
-    ResValue _   -> return ()
-    ResOper  _ _ -> return ()
-    ResOverload _ _ -> return ()
-    _            -> failLoc (getInfoPos info) "illegal definition in concrete module" 
-checkInfoType (MTInstance _)   (id,info) =
-  case info of
-    ResParam _ _ -> return ()
-    ResValue _   -> return ()
-    ResOper  _ _ -> return ()
-    _            -> failLoc (getInfoPos info) "illegal definition in instance module" 
+    ifAbstract MTAbstract     locs = return ()
+    ifAbstract _              locs = illegal locs
 
-getInfoPos = undefined
+    ifConcrete (MTConcrete _) locs = return ()
+    ifConcrete _              locs = illegal locs
+
+    ifResource (MTConcrete _) locs = return ()
+    ifResource (MTInstance _) locs = return ()
+    ifResource MTInterface    locs = return ()
+    ifResource MTResource     locs = return ()
+    ifResource _              locs = illegal locs
 
 mkAlts cs = case cs of
   _:_ -> do
