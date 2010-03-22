@@ -51,6 +51,7 @@ pgfMain pgf command =
          "linearize"      -> return (doLinearize pgf) `ap` getTree `ap` getTo >>= outputJSONP
          "random"         -> getCat >>= \c -> getLimit >>= liftIO . doRandom pgf c >>= outputJSONP
          "translate"      -> return (doTranslate pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo >>= outputJSONP
+         "translategroup" -> return (doTranslateGroup pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo >>= outputJSONP
          "grammar"        -> return (doGrammar pgf) `ap` requestAcceptLanguage >>= outputJSONP
          "abstrtree"      -> getTree >>= liftIO . doGraphvizAbstrTree pgf >>= outputPNG
          "parsetree"      -> getTree >>= \t -> getFrom >>= \(Just l) -> liftIO (doGraphvizParseTree pgf l t) >>= outputPNG
@@ -113,11 +114,33 @@ doTranslate pgf input mcat mfrom mto =
   showJSON
      [toJSObject [("from",          showJSON (PGF.showLanguage from)),
                   ("tree",          showJSON tree),
-                  ("linearizations",showJSON [toJSObject [("to", PGF.showLanguage to),("text",output)]
-                                                   | (to,output) <- linearize' pgf mto tree])
+                  ("linearizations",showJSON 
+                     [toJSObject [("to", PGF.showLanguage to),("text",output)]
+                       | (to,output) <- linearize' pgf mto tree]
+                  )
                  ]
            | (from,trees) <- parse' pgf input mcat mfrom,
              tree <- trees]
+
+doTranslateGroup :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
+doTranslateGroup pgf input mcat mfrom mto =
+  showJSON
+     [toJSObject [("from",          showJSON (PGF.showLanguage from)),
+                  ("to",            showJSON (PGF.showLanguage to)),
+                  ("linearizations",showJSON 
+                                      [toJSObject [("text", unlines output)]])
+                 ]
+        | 
+          (from,trees) <- parse' pgf input mcat mfrom,
+          (to,output)  <- groupResults (map (linearize' pgf mto) trees) 
+          ]
+  where
+   groupResults = Map.toList . foldr more Map.empty . start . concat
+     where
+       start ls = [(l,[s]) | (l,s) <- ls]
+       more (l,s) = 
+         Map.insertWith (\ [x] xs -> if elem x xs then xs else (x : xs)) l s
+
 
 doParse :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> JSValue
 doParse pgf input mcat mfrom = showJSON $ map toJSObject
