@@ -386,10 +386,11 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -to_utf8 -- hindi table",
        "l -unlexer=\"LangSwe=to_utf8 LangHin=to_devanagari,to_utf8\" -- different lexers"
        ],
-     exec = \opts -> return . fromStrings . map (optLin opts),
+     exec = \opts -> return . fromStrings . optLins opts,
      options = [
        ("all","show all forms and variants, one by line (cf. l -list)"),
        ("bracket","show tree structure with brackets and paths to nodes"),
+       ("groups","all languages, grouped by lang, remove duplicate strings"),
        ("list","show all forms and variants, comma-separated on one line (cf. l -all)"),
        ("multi","linearize to all languages (default)"),
        ("table","show all forms labelled by parameters"),
@@ -871,11 +872,17 @@ allCommands cod env@(pgf, mos) = Map.fromList [
  
    void = ([],[])
 
+   optLins opts ts = case opts of
+     _ | isOpt "groups" opts ->
+       map (unlines . snd) $ groupResults
+         [[(lang, linear opts lang t) | lang <- optLangs opts] | t <- ts]
+     _ -> map (optLin opts) ts 
    optLin opts t = unlines $ 
      case opts of 
-       _ | isOpt "treebank" opts -> (showCId (abstractName pgf) ++ ": " ++ showExpr [] t) :
-                                    [showCId lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
-       _                         -> [linear opts lang t | lang <- optLangs opts] 
+       _ | isOpt "treebank" opts -> 
+         (showCId (abstractName pgf) ++ ": " ++ showExpr [] t) :
+         [showCId lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
+       _  -> [linear opts lang t | lang <- optLangs opts] 
     
    linear :: [Option] -> CId -> Expr -> String
    linear opts lang = let unl = unlex opts lang in case opts of
