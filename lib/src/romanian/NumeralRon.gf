@@ -1,6 +1,8 @@
 concrete NumeralRon of Numeral = CatRon ** 
   open  MorphoRon, CatRon, Prelude in {
 
+flags coding = utf8 ;
+
 param DForm = unit | teen | ten | teen_inf ;
 param Place = indep | attr ;
 
@@ -20,7 +22,7 @@ oper mkOrdinalForm : Str -> Gender ->  Str =
                              _        => two+"lea" 
                             };      
                     Fem => case two of
-                            { x + ("ã"|"u")   => x +"a"; 
+                            { x + ("Äƒ"|"u")   => x +"a"; 
                               x + "ei"        => two + "a";
                               x + "ii"        => x + "ia" ;
                               x + "i"         => x + "ea";
@@ -72,7 +74,7 @@ oper mkNumVSpc : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> 
   } ;
 
 oper regNum : Str -> Digit = 
-  \trei -> mkNum trei (trei + "sprezece") (trei + "zeci") (trei + "ºpe") ;
+  \trei -> mkNum trei (trei + "sprezece") (trei + "zeci") (trei + "ÅŸpe") ;
 
 
 oper mkMidF : Str -> Str -> Sub100 =
@@ -111,17 +113,17 @@ lin num = \d ->
  } ; 
 -- Latin A Supplement chars
 
-lin n2 = mkNumVSpc "doi" "doispreze" "douãsprezece" "douãzeci" "douã" "doiºpe" "douãºpe" "doilea" "doua";
+lin n2 = mkNumVSpc "doi" "doispreze" "douÄƒsprezece" "douÄƒzeci" "douÄƒ" "doiÅŸpe" "douÄƒÅŸpe" "doilea" "doua";
 lin n3 = regNum "trei";
-lin n4 = mkNum "patru" "paisprezece" "patruzeci" "paiºpe";
-lin n5 = mkNum "cinci" "cinsprezece" "cincizeci" "cinºpe";
-lin n6 = mkNum "ºase" "ºaisprezece" "ºaizeci" "ºaiºpe";
-lin n7 = mkNum "ºapte" "ºaptesprezece" "ºaptezeci" "ºaptispe";
-lin n8 = mkNum "opt" "optsprezece" "optzeci" "optiºpe";
-lin n9 = regNum "nouã";
+lin n4 = mkNum "patru" "paisprezece" "patruzeci" "paiÅŸpe";
+lin n5 = mkNum "cinci" "cinsprezece" "cincizeci" "cinÅŸpe";
+lin n6 = mkNum "ÅŸase" "ÅŸaisprezece" "ÅŸaizeci" "ÅŸaiÅŸpe";
+lin n7 = mkNum "ÅŸapte" "ÅŸaptesprezece" "ÅŸaptezeci" "ÅŸaptispe";
+lin n8 = mkNum "opt" "optsprezece" "optzeci" "optiÅŸpe";
+lin n9 = regNum "nouÄƒ";
 
-lin pot01 = let num = mkNumVSpc "un" "unsprezece" "unsprezece" "zece" "o" "unºpe" "unºpe" "dintâi" "dintâi" ;
-                dep = mkNumVSpc "unu" "unsprezece" "unsprezece" "zece" "una" "unºpe" "unºpe" "unulea" "una" 
+lin pot01 = let num = mkNumVSpc "un" "unsprezece" "unsprezece" "zece" "o" "unÅŸpe" "unÅŸpe" "dintÃ¢i" "dintÃ¢i" ;
+                dep = mkNumVSpc "unu" "unsprezece" "unsprezece" "zece" "una" "unÅŸpe" "unÅŸpe" "unulea" "una" 
                         
               in 
          { s = \\o,c => table {indep => num.s ! o ! c ;
@@ -136,7 +138,7 @@ lin pot0 d = { s = \\o, c => \\_ => d.s ! o ! c ;
 
 lin pot110 = mkMidF "zece" "zece" ;           
 
-lin pot111 = mkMidF "unsprezece" "unºpe" ; 
+lin pot111 = mkMidF "unsprezece" "unÅŸpe" ; 
                                        
 lin pot1to19 = \d -> 
   {s = \\c => table { Formal   => \\_ => d.s ! c ! teen ;
@@ -159,8 +161,8 @@ lin pot1  = \d ->
                  
 lin pot1plus d e = 
   {s = table { 
-          NCard g => \\_,_ => d.s ! (NCard g) ! ten ++ "ºi" ++ e.s ! (NCard g) ! unit ! attr  ;
-          NOrd g  => \\_,_ => d.s ! (NCard g) ! ten ++ "ºi" ++ e.s ! (NOrd g) ! unit ! attr 
+          NCard g => \\_,_ => d.s ! (NCard g) ! ten ++ "ÅŸi" ++ e.s ! (NCard g) ! unit ! attr  ;
+          NOrd g  => \\_,_ => d.s ! (NCard g) ! ten ++ "ÅŸi" ++ e.s ! (NOrd g) ! unit ! attr 
              };
    size = pl 
    };          
@@ -195,9 +197,9 @@ lin pot3plus n m =
   size = pl                              
    };
 
-oper mksute : Size -> Str = \sz -> table {sg => "sutã" ; _ => "sute" } ! sz ; 
+oper mksute : Size -> Str = \sz -> table {sg => "sutÄƒ" ; _ => "sute" } ! sz ; 
 oper mkSute : Size -> Gender -> Str = \sz, g -> 
-table {sg => mkOrdinalForm "sutã" g  ;
+table {sg => mkOrdinalForm "sutÄƒ" g  ;
        _  => mkOrdinalForm "sute" g  } ! sz ;
 
 oper mkmie : Size -> Str -> Str = \sz, attr -> 
