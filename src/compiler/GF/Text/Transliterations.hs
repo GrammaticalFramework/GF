@@ -40,8 +40,8 @@ allTransliterations = Map.fromAscList [
   ("hebrew", transHebrew),
   ("persian", transPersian),
   ("telugu", transTelugu),
-  ("thai", transThai)
-  ----  "urdu", transUrdu
+  ("thai", transThai),
+  ("urdu", transUrdu)
   ]
 
 -- used in command options and help
@@ -121,8 +121,16 @@ allTransUrduHindi = words $
 
 transUrdu :: Transliteration
 transUrdu = 
-  (mkTransliteration "Urdu" allTransUrduHindi allCodes){invisible_chars = ["a"]} where
-    allCodes = [0x0900 .. 0x095f] ---- TODO: this is devanagari
+  (mkTransliteration "Urdu" allTrans allCodes) where
+    allCodes = [0x0622 .. 0x0670] ++ [0x0679 .. 0x0698] ++ [0x062a .. 0x062f] ++ [0x063a,0x06a9,0x06af,0x06ba,0x06c1,0x06be,0x06c3,0x06cc,0x06d2]
+    allTrans = words $
+      "A  - w^ - y^ a b - Z r z s X S Z- " ++  -- 0622 - 0636
+      "t- z- e - f q - l m n - w - i - "   ++  -- 0637 - 0651
+      "- - $ - i- u - - - - - - - - - - - - a: "    ++  -- 0652 - 0670
+      "T - - - - - - c - D - - R - - - - - - x"   ++  -- 0679 -- 0698
+      "t C j H K d  " ++                               -- 062a -- 062f
+      "G k g N h h- t: y E"
+    
 
 transArabic :: Transliteration
 transArabic = mkTransliteration "Arabic" allTrans allCodes where
