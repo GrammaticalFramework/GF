@@ -6,11 +6,11 @@ flags
   coding = utf8 ;
 
 lincat
-  Digit = {s : DForm => CardOrd => Str} ;
-  Sub10 = {s : DForm => CardOrd => Str ; n : Number ; blank : Str} ; -- the field blank is used to get rid of metavariables at parsing
-  Sub100     = {s : CardOrd => Str ; n : Number ; blank : Str} ;
-  Sub1000    = {s : CardOrd => Str ; n : Number ; blank : Str} ;
-  Sub1000000 = {s : CardOrd => Str ; n : Number} ;
+  Digit = {s : DForm => CardOrd => Number => Case => Str} ;
+  Sub10 = {s : DForm => CardOrd => Number => Case => Str ; n : Number ; blank : Str} ; -- the field blank is used to get rid of metavariables at parsing
+  Sub100     = {s : CardOrd => Number => Case => Str ; n : Number ; blank : Str} ;
+  Sub1000    = {s : CardOrd => Number => Case => Str ; n : Number ; blank : Str} ;
+  Sub1000000 = {s : CardOrd => Number => Case => Str ; n : Number} ;
 
 lin num x = x ;
 
@@ -25,35 +25,35 @@ lin n9 = mkNum "dokuz" "doksan" ;
 lin pot01 = mkNum "bir" "on" "birinci" "onuncu" ** {n = Sg; blank = []} ;
 lin pot0 d = d ** {n = Pl; blank = []} ;
 lin pot110 = {s = pot01.s ! ten; n = Pl; blank = []} ;
-lin pot111 = {s = \\t => "on" ++ pot01.s ! unit ! t; n = Pl; blank = []} ;
-lin pot1to19 d = {s = \\t => "on" ++ d.s ! unit ! t; n = Pl; blank = []} ;
+lin pot111 = {s = \\t,num,c => "on" ++ pot01.s ! unit ! t ! num ! c; n = Pl; blank = []} ;
+lin pot1to19 d = {s = \\t,num,c => "on" ++ d.s ! unit ! t ! num ! c; n = Pl; blank = []} ;
 lin pot0as1 n = {s = \\t => n.s ! unit ! t; n = n.n ; blank = n.blank} ;
 lin pot1 d = {s = d.s ! ten; n = Pl ; blank = []} ;
-lin pot1plus d e = {s = \\t => d.s ! ten ! NCard ++ e.s ! unit ! t; n = Pl; blank = e.blank} ;
+lin pot1plus d e = {s = \\t,num,c => d.s ! ten ! NCard ! Sg ! Nom ++ e.s ! unit ! t ! num ! c; n = Pl; blank = e.blank} ;
 lin pot1as2 n = n ;
-lin pot2 d = {s = \\t => case d.n of {
+lin pot2 d = {s = \\t,num,c => case d.n of {
                            Sg => d.blank ;
-                           Pl => d.s ! unit ! NCard
-                         } ++ (mkNum "yüz" "yüz").s ! unit ! t; n = Pl; blank = d.blank} ;
-lin pot2plus d e = {s = \\t => case d.n of {
+                           Pl => d.s ! unit ! NCard ! Sg ! Nom
+                         } ++ (mkNum "yüz" "yüz").s ! unit ! t ! num ! c; n = Pl; blank = d.blank} ;
+lin pot2plus d e = {s = \\t,num,c => case d.n of {
                                 Sg => d.blank ;
-                                Pl => d.s ! unit ! NCard
-                               } ++ "yüz" ++ e.s ! t ; n = Pl; blank = d.blank} ;
+                                Pl => d.s ! unit ! NCard ! Sg ! Nom
+                               } ++ "yüz" ++ e.s ! t ! num ! c; n = Pl; blank = d.blank} ;
 lin pot2as3 n = n ;
-lin pot3 n = {s = \\t => case n.n of {
+lin pot3 n = {s = \\t,num,c => case n.n of {
                            Sg => n.blank ;
-                           Pl => n.s ! NCard
-                         } ++ (mkNum "bin" "bin").s ! unit ! t; n = Pl} ;
-lin pot3plus n m = {s = \\t => case n.n of {
+                           Pl => n.s ! NCard ! Sg ! Nom
+                         } ++ (mkNum "bin" "bin").s ! unit ! t ! num ! c; n = Pl} ;
+lin pot3plus n m = {s = \\t,num,c => case n.n of {
 			         Sg => n.blank ;
-			         Pl => n.s ! NCard
-			       } ++ "bin" ++ m.s ! t; n = Pl} ;
+			         Pl => n.s ! NCard ! Sg !Nom
+			       } ++ "bin" ++ m.s ! t ! num ! c; n = Pl} ;
 lincat
-  Dig = {s : CardOrd => Str ; n : Number} ;
+  Dig = {s : CardOrd => Number => Case => Str ; n : Number} ;
 lin
   IDig d = d ** {tail = T1};
   IIDig d ds =
-    { s = \\t => d.s ! NCard ++ commaIf ds.tail ++ ds.s ! t; n = Pl; tail = inc ds.tail} ;
+    { s = \\t,num,c => d.s ! NCard ! Sg ! Nom ++ commaIf ds.tail ++ ds.s ! t ! num ! c; n = Pl; tail = inc ds.tail} ;
 
   D_0 = mkDig "0" ;
   D_1 = mkDig "1" "1." Sg;

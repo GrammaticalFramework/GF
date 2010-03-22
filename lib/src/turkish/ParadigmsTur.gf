@@ -5,7 +5,8 @@ resource ParadigmsTur = open
   Predef,
   Prelude,
   ResTur,
-  SuffixTur
+  SuffixTur,
+  HarmonyTur
   in {
 
 flags
@@ -21,8 +22,8 @@ oper
     mkV : (gelmek : Str) -> AoristType -> Verb ; 
     -- make verbs which do not obey softnening rule
     mkV : (gitmek, gidmek : Str) -> Verb ; 
-    -- make verbs which present and future forms has "e" to "i" conversion like "yemek" -> "yiyorum" and "demek" -> "diyorum"
-    -- two forms are enough but three form is needed to differentiate from the other overloads
+    -- make verbs which progressive and future forms has "e" to "i" conversion like "yemek" -> "yiyorum" and "demek" -> "diyorum"
+    -- two forms are enough but third form is needed to differentiate from the other overloads
     mkV : (yemek, yemek, yimek : Str) -> Verb ;
     -- make verbs that is usually formed by a noun and a auxiallary verb
     -- contiguity indicates whether they are written concatenated or separated
@@ -52,7 +53,7 @@ oper
 
   -- worst-case function
   -- bases of all forms are required.
-  makeVerb : (inf,base,presBase,pastBase,futureBase,aoristBase : Str) -> Verb ;
+  makeVerb : (inf,base,presBase,pastBase,aoristBase : Str) -> ( futureBase : Softness => Str ) -> Harmony -> Verb ;
 
   -- make a regular verb
   -- supply infinitive, softened infinitive, future infinitive forms and aorist type
@@ -122,35 +123,50 @@ oper
   regPN : Str -> Noun ;
   -- worst case function for proper nouns
   makePN : Str -> Str -> Noun ;
+  -- digits can be seen as proper noun, but we need an additional harmony argument since harmony information can not be extracted from digit string.
+  makeHarPN : Str -> Str -> Harmony -> Noun ;
+  -- Link two nouns, e.g. zeytin (olive) + yağ (oil) -> zeytinyağı (olive oil)
+  linkNoun : (tere,yag : Noun) -> Species -> Contiguity -> Noun ;
 
--- Paradigms for adjactives (mkA is same as mkN)
-  mkA2 : overload {
-    -- (biri) ile evli
-    mkA2 : Noun -> Case -> Prep -> Noun ** {c : Case; p : Prep} ;
-    -- makes default case accusative
-    mkA2 : Noun -> Prep -> Noun ** {c : Case; p : Prep} ;
+-- Paradigms for adjactives
+  mkA : overload {
+    -- güzel
+    mkA : Str -> Adjective ;
+    -- ak 
+    mkA : Str -> Str -> Adjective ;
+    -- kahve rengi
+    mkA : Noun -> Noun -> Adjective ;
+    -- pürdikkat
+    mkA : Str -> Str -> HarVowP -> Adjective ;
   } ;
 
-  mkAdj2 : Noun -> Case -> Prep -> Noun ** {c : Case; p : Prep} ;
+  mkA2 : overload {
+    -- (biri) ile evli
+    mkA2 : Adjective -> Case -> Prep -> Adjective ** {c : Case; p : Prep} ;
+    -- makes default case accusative
+    mkA2 : Adjective -> Prep -> Adjective ** {c : Case; p : Prep} ;
+  } ;
+
+  mkAdj2 : Adjective -> Case -> Prep -> Adjective ** {c : Case; p : Prep} ;
 
 -- Paradigms for numerals
   mkNum : overload {
     -- a regular numeral, obeys softening and hardening rules. e.g. "bir" "birinci"
-    mkNum : Str -> Str -> {s : DForm => CardOrd => Str} ;
+    mkNum : Str -> Str -> {s : DForm => CardOrd => Number => Case => Str} ;
     -- an irregular numeral of which two form is needed. e.g. "kırk" "kırkıncı" "kırk" "kırkıncı" (does not soften)
-    mkNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Str} ;
+    mkNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Number => Case => Str} ;
   } ;
   
-  regNum : Str -> Str -> {s : DForm => CardOrd => Str} ;
-  makeNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Str} ;
+  regNum : Str -> Str -> {s : DForm => CardOrd => Number => Case => Str} ;
+  makeNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Number => Case => Str} ;
 
   mkDig : overload {
-    mkDig : Str -> {s : CardOrd => Str ; n : Number} ;
-    mkDig : Str -> Str -> Number -> {s : CardOrd => Str ; n : Number} ;
+    mkDig : Str -> {s : CardOrd => Number => Case => Str ; n : Number} ;
+    mkDig : Str -> Str -> Number -> {s : CardOrd => Number => Case => Str ; n : Number} ;
   } ;
 
-  regDigit : Str -> {s : CardOrd => Str ; n : Number} ;
-  makeDigit : Str -> Str -> Number -> {s : CardOrd => Str ; n : Number} ;
+  regDigit : Str -> {s : CardOrd => Number => Case => Str ; n : Number} ;
+  makeDigit : Str -> Str -> Number -> {s : CardOrd => Number => Case => Str ; n : Number} ;
 
 
 --Implementation of verb paradigms
@@ -188,36 +204,34 @@ oper
         har = getHarmony base ;
         softness = getSoftness base ;
         futureBase = addSuffix futBase har futureSuffix ;
+	softFutureBase = addSuffix futBase har softFutureSuffix ;
         pastBase = addSuffix base har pastSuffix ;
+	futureTable = table {
+		    Soft => softFutureBase ;
+		    Hard => futureBase
+		   } ;
         aoristBase = case aoristType of {
 		      SgSylConReg => addSuffix softBase har aoristErSuffix ;
 		      _           => addSuffix softBase har aoristIrSuffix
 		     } ;
-        presBase = case (getHarConP base) of {
+        progBase = case (getHarConP base) of {
                       SVow => addSuffix (tk 1 base) (getHarmony (tk 1 base)) presentSuffix ;
                       _    => addSuffix softBase har presentSuffix
 		   } ;
-        in makeVerb inf base presBase pastBase futureBase aoristBase ;
+        in makeVerb inf base progBase pastBase aoristBase futureTable har;
 
   
-  makeVerb inf base presBase pastBase futureBase aoristBase =
-    let fbt = table {
-          Soft => softenBase futureBase ;
-          Hard => futureBase
-        } ;
-        preht = getHarVowP presBase ;
-        pasht = getHarVowP pastBase ;
-        futht = getHarVowP futureBase ;
-        aorht = getHarVowP aoristBase ;
-	preHar = (mkHar preht (SCon Soft));
-	pastHar = (mkHar pasht SVow);
-	futHar = (mkHar futht (SCon Soft));
-	aorHar = (mkHar aorht (SCon Soft));
+  makeVerb inf base progBase pastBase aoristBase futureTable har =
+    let 
+	futht = getHarVowP (futureTable ! Hard) ;
+	pastHar = {vow = har.vow ; con = SVow} ;
+	futHar = {vow = futht ; con = (SCon Soft)} ;
+	aorHar = {vow = getHarVowP aoristBase ; con = (SCon Soft)} ;
     in {
           s = table {
-               VPres agr   => addSuffix presBase   preHar (verbSuffixes ! agr) ;
+               VProg agr   => addSuffix progBase   progHar (verbSuffixes ! agr) ;
                VPast agr   => addSuffix pastBase   pastHar (verbSuffixes ! agr) ;
-               VFuture agr => addSuffix fbt        futHar (verbSuffixes ! agr) ;
+               VFuture agr => addSuffix futureTable futHar (verbSuffixes ! agr) ;
                VAorist agr => addSuffix aoristBase aorHar (verbSuffixes ! agr) ;
                VImperative => base ;
                VInfinitive => inf
@@ -241,7 +255,11 @@ oper
 		      Abess Pos => sgabPos ;
                       Abess Neg => sgabNeg
 		    } ;
-               Pl => \\s => addSuffix pln plHar (caseSuffixes ! s)
+               Pl => table {
+		      Abess Pos => addSuffix sgabPos plHar plSuffix;
+		      Abess Neg => addSuffix sgabNeg plHar plSuffix;
+		      c => addSuffix pln plHar (caseSuffixes ! c)
+		    }
                 } ;
       gen = table {
               Sg => table {
@@ -250,7 +268,8 @@ oper
 		      s            => addSuffix sgs har (genSuffixes ! s)
 		  } ;
               Pl => \\s => addSuffix pln plHar (genSuffixes ! s)
-        }
+        } ;
+      harmony = har
     } ;
   
   irregN_h sn sg har = irregN har sn sg ;
@@ -278,10 +297,7 @@ oper
   regN sn =
     let har = getHarmony sn ;
         pln = add_number Pl sn har.vow ;
-        bt = table {
-          Soft => softenBase sn ;
-          Hard => sn
-        } ;
+        bt = getBaseTable sn
     in
     mkNoun sn
            (addSuffix bt har accSuffix)
@@ -289,29 +305,17 @@ oper
 	   (addSuffix bt har genSuffix)
 	   (addSuffix bt har locSuffix)
 	   (addSuffix bt har ablatSuffix)
-           (addSuffix bt har abessPosSuffix)
+	   (addSuffix bt har abessPosSuffix)
 	   (addSuffix bt har abessNegSuffix)
 	   (bt ! Soft)
-           pln
-           har ;
-
-  {-
-    --this function will be needed when nouns are fully implemented
-    regNounSTableOnly : Str -> Harmony -> Case => Str;
-    regNounSTableOnly sn har = 
-      table {
-	t => (addSuffix sn har (caseSuffixes ! t))
-      } ;
-  -}
-    
+	   pln
+	   har ;
 
   
   regPN sn = makePN sn sn ;
 
-  
-  makePN sn sy =
-    let har = getHarmony sn ;
-        bn = sn + "'" ;
+  makeHarPN sn sy har = 
+    let bn = sn + "'" ;
         by = sy + "'" ;
         pln = add_number Pl bn har.vow ;
     in
@@ -327,8 +331,9 @@ oper
            pln
            har ;
 
-  -- Link two nouns, e.g. zeytin (olive) + yağ (oil) -> zeytinyağı (olive oil)
-  linkNoun : (tere,yag : Noun) -> Species -> Contiguity -> Noun ;
+  makePN sn sy = makeHarPN sn sy (getHarmony sn) ;
+
+  
   
   linkNoun n1 n2 lt ct =
       let n1sn = n1.s ! Sg ! Nom ;--tere
@@ -336,16 +341,20 @@ oper
           n2pn = n2.s ! Pl ! Nom ;--yağlar
           n2sb = n2.gen ! Sg ! {n = Sg;  p = P3} ;--yağı
           n2pb = n2.gen ! Pl ! {n = Sg;  p = P3} ;--yağları
+	  n2AbessPos = n2. s ! Sg ! Abess Pos ;
+	  n2AbessNeg = n2. s ! Sg ! Abess Neg ;
           con = case ct of {
-                  Con => <n1sn +  n2sn, n1sn +  n2sb, n1sn +  n2pn, n1sn +  n2pb> ;
-                  Sep => <n1sn ++ n2sn, n1sn ++ n2sb, n1sn ++ n2pn, n1sn ++ n2pb>
+                  Con => <n1sn +  n2sn, n1sn +  n2sb, n1sn +  n2pn, n1sn +  n2pb, n1sn +  n2AbessPos, n1sn +  n2AbessNeg> ;
+                  Sep => <n1sn ++ n2sn, n1sn ++ n2sb, n1sn ++ n2pn, n1sn ++ n2pb, n1sn ++ n2AbessPos, n1sn ++ n2AbessNeg>
                 } ;
           sb = con.p1 ;--tereyağ
           sn = con.p2 ;--tereyağı
           pb = con.p3 ;--tereyağlar
           pn = con.p4 ;--tereyağları
+	  sgAbessPos = con.p5 ;
+	  sgAbessNeg = con.p6 ;
           sgHar = getHarmony sn ;
-          plHar = getHarmony pn ;
+          plHar = getHarmony pn
       in {
         s   = table {
               Sg => table {
@@ -355,8 +364,8 @@ oper
 		      Gen     => addSuffix sn sgHar genSuffix ; --tereyağının
 		      Loc     => addSuffix sn sgHar locSuffixN ; --tereyağında
 		      Ablat   => addSuffix sn sgHar ablatSuffixN ; --tereyağından
-		      Abess Pos => addSuffix sb sgHar abessPosSuffix ; --tereyağlı
-                      Abess Neg => addSuffix sb sgHar abessNegSuffix   --tereyağsız
+		      Abess Pos => sgAbessPos ; --tereyağlı
+                      Abess Neg => sgAbessNeg   --tereyağsız
 		    } ;
                Pl => table {
 		      Nom     => pn ;--tereyağları
@@ -365,14 +374,15 @@ oper
 		      Gen     => addSuffix pn plHar genSuffix ; --tereyağlarının
 		      Loc     => addSuffix pn plHar locSuffixN ; --tereyağlarında
 		      Ablat   => addSuffix pn plHar ablatSuffixN ; --tereyağlarından
-		      Abess   Pos => addSuffix pb plHar abessPosSuffix ; --tereyağlarlı
-		      Abess   Neg => addSuffix pb plHar abessNegSuffix   --tereyağlarsız
+		      Abess   Pos => addSuffix sgAbessPos plHar abessPosSuffix ; --tereyağlılar
+		      Abess   Neg => addSuffix sgAbessNeg plHar abessNegSuffix   --tereyağsızlar
                     }
                 } ;
         gen = case ct of {
                 Con => \\num,agr => n1sn + n2.gen ! num ! agr ;
                 Sep => \\num,agr => n1sn ++ n2.gen ! num ! agr
-	      }
+	      } ;
+	harmony = sgHar
     } ;
   
   mkN = overload {
@@ -391,17 +401,29 @@ oper
 
   
 -- Implementation of adjactive paradigms
+  mkA = overload {
+    -- güzel
+    mkA : Str -> Adjective = \base -> (mkN base)  ** { adv = addSuffix base (getHarmony base) adjAdvSuffix } ;
+    -- ak 
+    mkA : Str -> Str -> Adjective = \base,soft -> (irregN (getComplexHarmony base soft) base soft )  ** { adv = addSuffix base (getHarmony base) adjAdvSuffix } ;
+    -- kahve rengi
+    mkA : (zeytin, yag : Noun) -> Adjective = \n1,n2 -> let n = linkNoun n1 n2 Indef Con in n ** {adv = addSuffix (n.s ! Sg ! Nom) (getHarmony (n.s ! Sg ! Nom)) adjAdvSuffix }  ;
+    -- pürdikkat
+    mkA : (base, base1 : Str) -> (ih_har : HarVowP) -> Adjective = \base,base1,ih_har -> (irregN_h base base ih_har) ** { adv = addSuffix base (mkHar ih_har (getHarConP base)) adjAdvSuffix };
+  } ;
+
+
   mkA2 = overload {
-    mkA2 : Noun -> Case -> Prep -> Noun ** {c : Case; p : Prep} = mkAdj2 ;
-    mkA2 : Noun -> Prep -> Noun ** {c : Case; p : Prep} = \n,p -> mkAdj2 n Acc p ;
+    mkA2 : Adjective -> Case -> Prep -> Adjective ** {c : Case; p : Prep} = mkAdj2 ;
+    mkA2 : Adjective -> Prep -> Adjective ** {c : Case; p : Prep} = \n,p -> mkAdj2 n Acc p ;
   } ;
 
   mkAdj2 base c prep = base ** {c = c; p = prep} ;
   
 -- Implementation of numeral paradigms
   mkNum = overload {
-    mkNum : Str -> Str -> {s : DForm => CardOrd => Str} = regNum ;
-    mkNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Str} = makeNum ;
+    mkNum : Str -> Str -> {s : DForm => CardOrd => Number => Case => Str} = regNum ;
+    mkNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Number => Case => Str} = makeNum ;
   } ;
 
   regNum  two twenty =
@@ -414,34 +436,50 @@ oper
       {
 	s = table {
 	  unit => table {
-		  NCard => two ;
-		  NOrd  => second
+		  NCard => (regN two).s ;
+		  NOrd  => (regN second).s
 		  } ;
 	  ten  => table {
-		  NCard => twenty ;
-		  NOrd  => twentieth
+		  NCard => (regN twenty).s ;
+		  NOrd  => (regN twentieth).s
 		  }
 	}
       } ;
 
   mkDig = overload {
     --all digits except 1 (plural)
-    mkDig : Str -> {s : CardOrd => Str ; n : Number} = regDigit ;
+    mkDig : Str -> {s : CardOrd => Number => Case => Str ; n : Number} = regDigit ;
     --for 1 (singular)
-    mkDig : Str -> Str -> Number -> {s : CardOrd => Str ; n : Number} = makeDigit ;
+    mkDig : Str -> Str -> Number -> {s : CardOrd => Number => Case => Str ; n : Number} = makeDigit ;
   } ;
 
   regDigit card = makeDigit card (card + ".") Pl ;
 
   makeDigit card ordi num = 
+    let
+      digitStr = case card of {
+	  "0" => "sıfır" ;
+	  "1" => "bir" ;
+	  "2" => "iki" ;
+	  "3" => "üç" ;
+	  "4" => "dört" ;
+	  "5" => "beş" ;
+	  "6" => "altı" ;
+	  "7" => "yedi" ;
+	  "8" => "sekiz" ;
+	  "9" => "dokuz" 
+	} ;
+      harCard = getHarmony digitStr ;
+      harOrd = getHarmony (addSuffix digitStr harCard ordNumSuffix)
+    in
     {
       s = table {
-	NCard => card ;
-	NOrd  => ordi
+	NCard => (makeHarPN card card harCard).s ;
+	NOrd  => (makeHarPN ordi ordi harOrd).s 
       } ; 
       n = num
     } ;
-
+    
 -- Helper functions and parameters
   -- finds which aorist type will be used with a base, see aorist type parameter for more info
   getAoristType : Str -> AoristType = 
@@ -453,19 +491,7 @@ oper
 	      _ => PlSyl
 	    } ;
 
-  -- returns softened form of a base
-  softenBase : Str -> Str = \base ->
-    let root = tk 1 base in
-    case base of {
-      _+ "p" => root + "b" ;
-      _+ "ç" => root + "c" ;
-      _+ "t" => root + "d" ;
-      _+ #consonant  + "k" => root + "g" ;
-      _+ #vowel + "k" => root + "ğ" ;
-      _+ #vowel + "g" => root + "ğ" ;
-      _ => base
-    } ;
-
+  
   -- construct a table contatining soft and hard forms of a base
   getBaseTable : Str -> Softness => Str =
     \base -> table {

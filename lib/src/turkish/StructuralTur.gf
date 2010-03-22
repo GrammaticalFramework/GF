@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../common:../../prelude
+
 concrete StructuralTur of Structural = CatTur ** 
   open ResTur in {
 
