@@ -1,6 +1,7 @@
 concrete RelativeUrd of Relative = CatUrd ** open ResUrd in {
 
   flags optimize=all_subs ;
+  coding = utf8;
 
   lin
 
@@ -30,7 +31,7 @@ concrete RelativeUrd of Relative = CatUrd ** open ResUrd in {
         cl.s ! t ! p ! ODir ;
       c = Dir
       } ;
---
+ --
 ---- Pied piping: "at which we are looking". Stranding and empty
 ---- relative are defined in $ExtraHin.gf$ ("that we are looking at", 
 ---- "we are looking at").
@@ -44,7 +45,7 @@ concrete RelativeUrd of Relative = CatUrd ** open ResUrd in {
       } ;
 -}
     FunRP p np rp = {
-      s = \\n,c => rp.s ! n ! c ++ np.s ! NPC c ++ p.s ! PP n (giveGender np.a)  ;
+      s = \\n,c => rp.s ! n ! c ++ np.s ! NPC c ++ p.s  ;
       a = RAg np.a
       } ;
 
@@ -52,17 +53,15 @@ concrete RelativeUrd of Relative = CatUrd ** open ResUrd in {
       s = table {
         Sg => table {
 		
-    		Dir  => "jw" ; 
-            Obl  => "js" ;
-            Voc  => "js" 
+    		ResUrd.Dir  => "jw" ; 
+            ResUrd.Obl  => "js" ;
+            ResUrd.Voc  => "js" 
 			};
 		Pl => table {
-            Dir  => "jw" ;
-		    Obl  => "jn" ;
-		    Voc  => "jn"
+            ResUrd.Dir  => "jw" ;
+		    ResUrd.Obl  => "jn" ;
+		    ResUrd.Voc  => "jn"
 			}
---        RPrep Neutr => "jn" ;
---        RPrep _     => "whom"
        }; 
       a = RNoAg
       } ;

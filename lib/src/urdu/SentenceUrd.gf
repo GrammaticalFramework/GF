@@ -1,43 +1,42 @@
 concrete SentenceUrd of Sentence = CatUrd ** open Prelude, ResUrd in {
 
   flags optimize=all_subs ;
+  coding = utf8;
 
   lin
 
     PredVP np vp = mkClause np vp ;
---      PredVP np vp =  np.s!NPC Sg Pers1 Dir ++ vp.s ! Pat1  Inf1 ;
 
     PredSCVP sc vp = mkSClause sc.s (defaultAgr) vp ;
---
---    ImpVP vp = {
---      s = \\pol,n => 
---        let 
---          agr   = AgP2 (numImp n) ;
---          verb  = infVP True vp agr ;
---          dont  = case pol of {
---            CNeg True => "don't" ;
---            CNeg False => "do" ++ "not" ;
---            _ => []
---            }
---        in
---        dont ++ verb
---    } ;
---
+
+    ImpVP vp = {
+      s = \\pol,n => 
+        let 
+          agr   = Ag Masc (numImp n) Pers2_Casual ;
+          verb  = infVP True vp agr ;
+          dont  = case pol of {
+            CNeg True => "mt" ;
+            CNeg False => "nh" ;
+            _ => []
+            }
+        in
+        dont ++ verb
+    } ;
+
     SlashVP np vp = 
       mkClause np vp ** {c2 = vp.c2} ;
 
     AdvSlash slash adv = {
 	  s  = \\t,p,o =>  adv.s ++ slash.s ! t ! p ! o  ;
---      s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
       c2 = slash.c2
     } ;
---
-    SlashPrep cl prep = cl **  {c2 = { s = prep.s ! PP Sg Masc ; c = VIntrans}} ;
---
---    SlashVS np vs slash = 
---      mkClause (np.s ! Nom) np.a 
---        (insertObj (\\_ => conjThat ++ slash.s) (predV vs))  **
---        {c2 = slash.c2} ;
+
+    SlashPrep cl prep = cl **  {c2 = { s = prep.s ; c = VIntrans}} ;
+
+    SlashVS np vs slash = 
+      mkClause  np 
+        (insertObj2 (conjThat ++ slash.s) (predV vs))  **
+        {c2 = slash.c2} ;
 
     EmbedS  s  = {s = conjThat ++ s.s} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
@@ -82,16 +81,23 @@ concrete SentenceUrd of Sentence = CatUrd ** open Prelude, ResUrd in {
      };		  
       c = rcl.c
     } ;
---    UseSlash t a p cl = {
---      s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p  ! ODir ;
---      c2 = cl.c2
---    } ;
---
-    AdvS a s = {s = a.s ++ "," ++ s.s} ;
---
---    RelS s r = {s = s.s ++ "," ++ r.s ! agrP3 Sg} ;
---
---  oper
---    ctr = contrNeg True ;  -- contracted negations
+    UseSlash temp p clslash = {
+      s = case <temp.t,temp.a> of {
+	      <Pres,Simul> => temp.s ++ p.s ++ clslash.s ! VPGenPres ! p.p ! ODir;
+          <Pres,Anter> => temp.s ++ p.s ++ clslash.s ! VPPerfPres ! p.p ! ODir;
+          <Past,Simul> => temp.s ++ p.s ++ clslash.s ! VPImpPast ! p.p ! ODir ;
+          <Past,Anter> => temp.s ++ p.s ++ clslash.s ! VPPerfPast ! p.p ! ODir;
+          <Fut,Simul>  => temp.s ++ p.s ++ clslash.s ! VPFut ! p.p ! ODir;
+          <Fut,Anter>  => temp.s ++ p.s ++ clslash.s ! VPPerfFut ! p.p ! ODir;
+          <Cond,Simul> => temp.s ++ p.s ++ clslash.s ! VPContPres ! p.p ! ODir;
+          <Cond,Anter> => temp.s ++ p.s ++ clslash.s ! VPContPast ! p.p ! ODir
+     };		  
+      c2 = clslash.c2
+    } ;
+
+    AdvS a s = {s = a.s ++ s.s} ;
+
+    RelS s r = {s = s.s ++ r.s ! agrP3 Masc Sg} ;
+    SSubjS s sj s = { s = s.s ++ sj.s ++ s.s};
 
 }

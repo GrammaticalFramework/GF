@@ -1,6 +1,6 @@
 concrete QuestionUrd of Question = CatUrd ** open ResUrd, Prelude in {
---
   flags optimize=all_subs ;
+    coding = utf8;
 
   lin
 
@@ -12,25 +12,30 @@ concrete QuestionUrd of Question = CatUrd ** open ResUrd, Prelude in {
 				};	  
 
     QuestVP qp vp = 
-
-       let cl = mkSClause (qp.s ! Dir) (Ag qp.g qp.n Pers3_Near) vp;
-	       cl2 = mkSClause (qp.s ! Obl ++ "nE" ) (Ag qp.g Sg Pers3_Near) vp
---        in {s = \\t,p,o => cl.s ! t ! p ! ODir} ;
+       let cl = mkSClause ("") (Ag qp.g qp.n Pers3_Near) vp;
+           qp1 = qp.s ! Dir;
+           qp2 = qp.s ! Obl ++ "nE"
           in { s = \\t,p,o => case t of {
-		             VPImpPast => cl2.s ! t ! p ! ODir;
-					 _         => cl.s ! t ! p ! ODir
+		             VPImpPast => qp2 ++ cl.s ! t ! p ! ODir;
+					 _         => qp1 ++ cl.s ! t ! p ! ODir
 					 }
 					}; 
---    QuestSlash ip slash = 
---      mkQuestion (ss (slash.c2 ++ ip.s ! Acc)) slash ;
---      --- stranding in ExratHin 
+    QuestSlash ip slash = 
+     let ip1 = ip.s ! Dir;
+         ip2 = ip.s ! Obl ++ "nE"
+     in {
+      s = \\t,p,o => case t of { 
+            VPImpPast => ip2 ++ slash.s ! t ! p ! ODir;
+            _         => ip1 ++ slash.s ! t ! p ! ODir
+            }
+        };
 
     QuestIAdv iadv cl = { 
              s = \\t,p,_ => iadv.s ++ cl.s ! t ! p ! ODir;
                       	};
 
     QuestIComp icomp np = 
-	let cl = mkSClause (np.s ! NPC Dir ++ icomp.s) np.a (predAux auxBe); 
+     let cl = mkSClause (np.s ! NPC Dir ++ icomp.s) np.a (predAux auxBe); 
 	   in {
        s = \\t,p,qf => case qf of { 
 	      QDir =>   cl.s ! t ! p ! ODir;
@@ -38,7 +43,7 @@ concrete QuestionUrd of Question = CatUrd ** open ResUrd, Prelude in {
 		  }
 		};
 
-    PrepIP p ip = {s = ip.s ! Voc ++ p.s ! PP ip.n ip.g } ;
+    PrepIP p ip = {s = ip.s ! ResUrd. Voc ++ p.s } ;
 
     AdvIP ip adv = {
       s = \\c => adv.s ++ ip.s ! c ;

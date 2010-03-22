@@ -4,20 +4,19 @@ concrete VerbUrd of Verb = CatUrd ** open ResUrd in {
 
   lin
     UseV  v = predV v   ;
-    SlashV2a v = predV v ** {c2 = v.c2} ;
+    SlashV2a v = predV v ** {c2 = {s = v.c2.s ; c = VIntrans}} ;
     Slash2V3 v np = 
       insertObjc (\\_ => np.s ! NPObj ++ v.c3 ) (predV v ** {c2 = {s = v.c2 ; c = VTrans}}) ;
     Slash3V3 v np = 
       insertObjc (\\_ => np.s ! NPC Obl ++ v.c2) (predV v ** {c2 = {s = v.c3 ; c = VTrans}}) ; 
-	  
-    ComplVV v vp = insertObj (\\a => infVP v.isAux vp a) (predV v) ;
-    ComplVS v s  = insertObj (\\_ => conjThat ++ s.s) (predV v) ;
-    ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
+    ComplVV v vp = insertVV (infVV v.isAux vp) (predV v) ;
+    ComplVS v s  = insertObj2 (conjThat ++ s.s) (predV v) ;
+    ComplVQ v q  = insertObj2 (conjThat ++ q.s ! QIndir) (predV v) ;
     ComplVA v ap = insertObj (\\a => ap.s ! giveNumber a ! giveGender a ! Dir ! Posit) (predV v) ;
-    SlashV2V v vp = insertObjc (\\a => infVP v.isAux vp a) (predVc v) ;
-    SlashV2S v s  = insertObjc (\\_ => conjThat ++ s.s) (predV v ** {c2 = {s = "" ; c = VTrans}}) ;
-    SlashV2Q v q  = insertObjc (\\_ => conjThat ++ q.s ! QIndir) (predV v ** {c2 = {s = "" ; c = VTrans}}) ;
-    SlashV2A v ap = insertObjc (\\a => ap.s ! giveNumber a ! giveGender a ! Dir ! Posit) (predV v ** {c2 = {s = "kw" ; c = VTrans}}) ; ----
+    SlashV2V v vp = insertVV ((vp.s!VPImp).inf++"ky") (predV v) **{c2 = {s = "sE" ; c = VIntrans}} ;
+    SlashV2S v s  = insertObjc2 (conjThat ++ s.s) (predV v ** {c2 = {s = "kw" ; c = VIntrans}}) ;
+    SlashV2Q v q  = insertObjc2 (conjThat ++ q.s ! QIndir) (predV v ** {c2 = {s = "sE" ; c = VIntrans}}) ;
+    SlashV2A v ap = insertObjc (\\a => ap.s ! giveNumber a ! giveGender a ! Dir ! Posit) (predV v ** {c2 = {s = "kw" ; c = VIntrans}}) ; ----
     ComplSlash vp np = insertObject np vp ;
     SlashVV vv vp = 
       insertObj (\\a => infVP vv.isAux vp a) (predV vv) **
@@ -31,9 +30,8 @@ concrete VerbUrd of Verb = CatUrd ** open ResUrd in {
     AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
 
     AdVVP adv vp = insertAdV adv.s vp ;
---    ReflVP v = insertObjPre (\\a => v.c2 ++ reflPron ! a) v ;
---    PassV2 v = insertObj (\\_ => v.s ! VPPart) (predAux auxBe) ;
-
+    ReflVP v = insertObjPre (\\_ =>  RefPron) v ;
+    PassV2 v = predV v ; -- need to be fixed
     CompAP ap ={s = \\a => ap.s ! giveNumber a ! giveGender a ! Dir ! Posit } ;
     CompNP np = {s = \\_ => np.s ! NPObj} ;
     CompAdv a = {s = \\_ => a.s} ;
