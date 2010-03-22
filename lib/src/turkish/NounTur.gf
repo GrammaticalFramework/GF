@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../common:../../prelude
+
 concrete NounTur of Noun = CatTur ** open ResTur, Prelude in {
 
   flags optimize=all_subs ;
@@ -11,20 +13,20 @@ concrete NounTur of Noun = CatTur ** open ResTur, Prelude in {
     UsePron p = p ;
 
     DetQuant quant num = {
-      s  = quant.s ++ num.s ;
+      s  = quant.s ++ num.s ! Sg ! Nom ;
       n  = num.n
       } ;
 
-    NumSg = {s = []; n = Sg} ;
-    NumPl = {s = []; n = Pl} ;
+    NumSg = {s = \\num,c => []; n = Sg} ;
+    NumPl = {s = \\num,c => []; n = Pl} ;
 
     NumCard n = n ** {n = Sg} ;
 
     NumNumeral numeral = {s = numeral.s ! NCard} ;
 
-    OrdDigits  dig = {s = dig.s ! NOrd} ;
-    OrdNumeral num = {s = num.s ! NOrd} ;
-    OrdSuperl  a = {s = "daha" ++ a.s ! Sg ! Nom} ;
+    OrdDigits  dig = {s = \\c => dig.s ! NOrd ! c} ;
+    OrdNumeral num = {s = \\c => num.s ! NOrd ! c} ;
+    OrdSuperl  a = {s = \\n,c => "en" ++ a.s ! n ! c} ;
 
     DefArt = {
       s = []
