@@ -210,8 +210,7 @@ generateModuleCode :: Options -> FilePath -> SourceModule -> IOE SourceModule
 generateModuleCode opts file minfo = do
   let minfo1 = subexpModule minfo
       minfo2 = case minfo1 of
-                 (m,mi) -> (m,mi{jments=Map.filter (\x -> case x of {AnyInd _ _ -> False; _ -> True}) (jments mi)
-                                , positions=Map.empty})
+                 (m,mi) -> (m,mi{jments=Map.filter (\x -> case x of {AnyInd _ _ -> False; _ -> True}) (jments mi)})
   putPointE Normal opts ("  wrote file" +++ file) $ ioeIO $ encodeFile file minfo2
   return minfo1
 

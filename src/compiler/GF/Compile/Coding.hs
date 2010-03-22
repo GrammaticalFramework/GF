@@ -25,13 +25,15 @@ codeSourceModule co (id,mo) = (id,replaceJudgements mo (mapTree codj (jments mo)
       CncFun mty pt mpr   -> CncFun mty (fmap (codeTerm co) pt) (fmap (codeTerm co) mpr)
       _ -> info
 
-codeTerm :: (String -> String) -> Term -> Term
-codeTerm co t = case t of
-      K s -> K (co s)
-      T ty cs -> T ty [(codp p,codeTerm co v) | (p,v) <- cs]
-      EPatt p -> EPatt (codp p)
-      _ -> composSafeOp (codeTerm co) t
+codeTerm :: (String -> String) -> L Term -> L Term
+codeTerm co (L loc t) = L loc (codt t)
   where
+    codt t = case t of
+      K s -> K (co s)
+      T ty cs -> T ty [(codp p,codt v) | (p,v) <- cs]
+      EPatt p -> EPatt (codp p)
+      _ -> composSafeOp codt t
+
     codp p = case p of  --- really: composOpPatt
       PR rs -> PR [(l,codp p) | (l,p) <- rs]
       PString s -> PString (co s)

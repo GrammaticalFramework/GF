@@ -113,23 +113,17 @@ ModDef
                                           (extends,with,content) = $4
                                           (opens,jments,opts) = case content of { Just c -> c; Nothing -> ([],[],noOptions) }
                                       mapM_ (checkInfoType mtype) jments
-                                      defs <- case buildAnyTree id [(i,d) | (i,_,d) <- jments] of
+                                      defs <- case buildAnyTree id jments of
                                                 Ok x    -> return x
                                                 Bad msg -> fail msg
-                                      let poss  = buildTree [(i,(fname,mkSrcSpan p)) | (i,p,_) <- jments]
-                                          fname = showIdent id ++ ".gf"
-                                          
-                                          mkSrcSpan :: (Posn, Posn) -> (Int,Int)
-					  mkSrcSpan (Pn l1 _, Pn l2 _) = (l1,l2)
-
-                                      return (id, ModInfo mtype mstat opts extends with opens [] defs poss)  }
+                                      return (id, ModInfo mtype mstat opts extends with opens [] defs)  }
 
 ModHeader :: { SourceModule }
 ModHeader
   : ComplMod ModType '=' ModHeaderBody { let { mstat = $1 ;
                                                (mtype,id) = $2 ;
                                                (extends,with,opens) = $4 }
-                                         in (id, ModInfo mtype mstat noOptions extends with opens [] emptyBinTree emptyBinTree) }
+                                         in (id, ModInfo mtype mstat noOptions extends with opens [] emptyBinTree) }
 
 ComplMod :: { ModuleStatus }
 ComplMod 
@@ -164,7 +158,7 @@ ModOpen
 
 ModBody :: { ( [(Ident,MInclude)]
              , Maybe (Ident,MInclude,[(Ident,Ident)])
-             , Maybe ([OpenSpec],[(Ident,SrcSpan,Info)],Options)
+             , Maybe ([OpenSpec],[(Ident,Info)],Options)
              ) }
 ModBody
   : ListIncluded '**' Included 'with' ListInst '**' ModContent  { ($1, Just (fst $3,snd $3,$5), Just $7) }
@@ -176,12 +170,12 @@ ModBody
   |                                                 ModContent  { ([], Nothing,                 Just $1) }
   | ModBody ';'                                                 { $1                                     }
 
-ModContent :: { ([OpenSpec],[(Ident,SrcSpan,Info)],Options) }
+ModContent :: { ([OpenSpec],[(Ident,Info)],Options) }
 ModContent
   :                      '{' ListTopDef '}' { ([],[d | Left ds <- $2, d <- ds],concatOptions [o | Right o <- $2]) }
   | 'open' ListOpen 'in' '{' ListTopDef '}' { ($2,[d | Left ds <- $5, d <- ds],concatOptions [o | Right o <- $5]) }
 
-ListTopDef :: { [Either [(Ident,SrcSpan,Info)] Options] }
+ListTopDef :: { [Either [(Ident,Info)] Options] }
 ListTopDef
   : {- empty -}       { []      } 
   | TopDef ListTopDef { $1 : $2 }
@@ -216,7 +210,7 @@ Included
   | Ident     '[' ListIdent ']' { ($1,MIOnly   $3) }
   | Ident '-' '[' ListIdent ']' { ($1,MIExcept $4) }
 
-TopDef :: { Either [(Ident,SrcSpan,Info)] Options }
+TopDef :: { Either [(Ident,Info)] Options }
 TopDef
   : 'cat'             ListCatDef      { Left  $2 }
   | 'fun'             ListFunDef      { Left  $2 }
@@ -224,56 +218,56 @@ TopDef
   | 'data'            ListDataDef     { Left  $2 }
   | 'param'           ListParamDef    { Left  $2 }
   | 'oper'            ListOperDef     { Left  $2 }
-  | 'lincat'          ListTermDef     { Left  [(f, pos, CncCat (Just e) Nothing    Nothing   ) | (f,pos,e) <- $2] }
-  | 'lindef'          ListTermDef     { Left  [(f, pos, CncCat Nothing    (Just e) Nothing   ) | (f,pos,e) <- $2] }
+  | 'lincat'          ListTermDef     { Left  [(f, CncCat (Just e) Nothing    Nothing   ) | (f,e) <- $2] }
+  | 'lindef'          ListTermDef     { Left  [(f, CncCat Nothing    (Just e) Nothing   ) | (f,e) <- $2] }
   | 'lin'             ListLinDef      { Left  $2 }
-  | 'printname' 'cat' ListTermDef     { Left  [(f, pos, CncCat Nothing    Nothing (Just e)) | (f,pos,e) <- $3] }
-  | 'printname' 'fun' ListTermDef     { Left  [(f, pos, CncFun Nothing Nothing (Just e)) | (f,pos,e) <- $3] }
+  | 'printname' 'cat' ListTermDef     { Left  [(f, CncCat Nothing    Nothing (Just e)) | (f,e) <- $3] }
+  | 'printname' 'fun' ListTermDef     { Left  [(f, CncFun Nothing Nothing (Just e)) | (f,e) <- $3] }
   | 'flags'           ListFlagDef     { Right $2 }
 
-CatDef :: { [(Ident,SrcSpan,Info)] }
+CatDef :: { [(Ident,Info)] }
 CatDef
-  : Posn Ident ListDDecl                         Posn { [($2, ($1,$4), AbsCat (Just $3))]        }
-  | Posn '[' Ident ListDDecl ']'                 Posn { listCatDef $3 ($1,$6) $4 0                 }
-  | Posn '[' Ident ListDDecl ']' '{' Integer '}' Posn { listCatDef $3 ($1,$9) $4 (fromIntegral $7) }
+  : Posn Ident ListDDecl                         Posn { [($2, AbsCat (Just (mkL $1 $4 $3)))]           }
+  | Posn '[' Ident ListDDecl ']'                 Posn { listCatDef (mkL $1 $6 ($3,$4,0))               }
+  | Posn '[' Ident ListDDecl ']' '{' Integer '}' Posn { listCatDef (mkL $1 $9 ($3,$4,fromIntegral $7)) }
 
-FunDef :: { [(Ident,SrcSpan,Info)] }
+FunDef :: { [(Ident,Info)] }
 FunDef
-  : Posn ListIdent ':' Exp Posn { [(fun, ($1,$5), AbsFun (Just $4) Nothing (Just [])) | fun <- $2] } 
+  : Posn ListIdent ':' Exp Posn { [(fun, AbsFun (Just (mkL $1 $5 $4)) Nothing (Just [])) | fun <- $2] } 
 
-DefDef :: { [(Ident,SrcSpan,Info)] }
+DefDef :: { [(Ident,Info)] }
 DefDef
-  : Posn ListName '=' Exp         Posn { [(f, ($1,$5),AbsFun Nothing (Just 0) (Just [([],$4)])) | f <- $2] }
-  | Posn Name ListPatt '=' Exp    Posn { [($2,($1,$6),AbsFun Nothing (Just (length $3)) (Just [($3,$5)]))] }
+  : Posn ListName '=' Exp         Posn { [(f, AbsFun Nothing (Just 0)           (Just [mkL $1 $5 ([],$4)])) | f <- $2] }
+  | Posn Name ListPatt '=' Exp    Posn { [($2,AbsFun Nothing (Just (length $3)) (Just [mkL $1 $6 ($3,$5)]))] }
 
-DataDef :: { [(Ident,SrcSpan,Info)] }
+DataDef :: { [(Ident,Info)] }
 DataDef
-  : Posn Ident '=' ListDataConstr Posn { ($2,   ($1,$5), AbsCat Nothing) :
-                                         [(fun, ($1,$5), AbsFun Nothing   Nothing Nothing) | fun <- $4] }
-  | Posn ListIdent ':' Exp Posn        { -- (snd (valCat $4), ($1,$5), AbsCat Nothing) :
-                                         [(fun, ($1,$5), AbsFun (Just $4) Nothing Nothing) | fun <- $2] }                                         
+  : Posn Ident '=' ListDataConstr Posn { ($2,   AbsCat Nothing) :
+                                         [(fun, AbsFun Nothing   Nothing Nothing) | fun <- $4] }
+  | Posn ListIdent ':' Exp Posn        { -- (snd (valCat $4), AbsCat Nothing) :
+                                         [(fun, AbsFun (Just (mkL $1 $5 $4)) Nothing Nothing) | fun <- $2] }                                         
 
-ParamDef :: { [(Ident,SrcSpan,Info)] }
+ParamDef :: { [(Ident,Info)] }
 ParamDef
-  : Posn Ident '=' ListParConstr Posn {  ($2, ($1,$5), ResParam (Just $4) Nothing) :
-                                        [(f,  ($1,$5), ResValue (mkProdSimple co (Cn $2))) | (f,co) <- $4] }
-  | Posn Ident                   Posn { [($2, ($1,$3), ResParam Nothing   Nothing)] }
+  : Ident '=' ListParConstr { ($1, ResParam (Just $3) Nothing) :
+                              [(f, ResValue (L loc (mkProdSimple co (Cn $1)))) | L loc (f,co) <- $3] }
+  | Ident                   { [($1, ResParam Nothing Nothing)] }
 
-OperDef :: { [(Ident,SrcSpan,Info)] }
+OperDef :: { [(Ident,Info)] }
 OperDef
-  : Posn ListName ':' Exp         Posn { [(i, ($1,$5), info) | i <- $2,   info <- mkOverload (Just $4) Nothing  ] } 
-  | Posn ListName '=' Exp         Posn { [(i, ($1,$5), info) | i <- $2,   info <- mkOverload Nothing   (Just $4)] }
-  | Posn Name ListArg '=' Exp     Posn { [(i, ($1,$6), info) | i <- [$2], info <- mkOverload Nothing   (Just (mkAbs $3 $5))] }
-  | Posn ListName ':' Exp '=' Exp Posn { [(i, ($1,$7), info) | i <- $2,   info <- mkOverload (Just $4) (Just $6)] }
+  : Posn ListName ':' Exp         Posn { [(i, info) | i <- $2,   info <- mkOverload (Just (mkL $1 $5 $4)) Nothing  ] } 
+  | Posn ListName '=' Exp         Posn { [(i, info) | i <- $2,   info <- mkOverload Nothing   (Just (mkL $1 $5 $4))] }
+  | Posn Name ListArg '=' Exp     Posn { [(i, info) | i <- [$2], info <- mkOverload Nothing   (Just (mkL $1 $6 (mkAbs $3 $5)))] }
+  | Posn ListName ':' Exp '=' Exp Posn { [(i, info) | i <- $2,   info <- mkOverload (Just (mkL $1 $7 $4)) (Just (mkL $1 $7 $6))] }
 
-LinDef :: { [(Ident,SrcSpan,Info)] }
+LinDef :: { [(Ident,Info)] }
 LinDef
-  : Posn ListName '=' Exp         Posn { [(f,  ($1,$5), CncFun Nothing (Just $4) Nothing) | f <- $2] }
-  | Posn Name ListArg '=' Exp     Posn { [($2, ($1,$6), CncFun Nothing (Just (mkAbs $3 $5)) Nothing)] }
+  : Posn ListName '=' Exp         Posn { [(f,  CncFun Nothing (Just (mkL $1 $5 $4)) Nothing) | f <- $2] }
+  | Posn Name ListArg '=' Exp     Posn { [($2, CncFun Nothing (Just (mkL $1 $6 (mkAbs $3 $5))) Nothing)] }
 
-TermDef :: { [(Ident,SrcSpan,Term)] }
+TermDef :: { [(Ident,L Term)] }
 TermDef
-  : Posn ListName '=' Exp Posn { [(i,($1,$5),$4) | i <- $2] } 
+  : Posn ListName '=' Exp Posn { [(i,mkL $1 $5 $4) | i <- $2] } 
 
 FlagDef :: { Options }
 FlagDef
@@ -286,46 +280,46 @@ ListDataConstr
   : Ident                    { [$1]    }
   | Ident '|' ListDataConstr { $1 : $3 }
 
-ParConstr :: { Param }
+ParConstr :: { L Param }
 ParConstr
-  : Ident ListDDecl { ($1,$2) } 
+  : Posn Ident ListDDecl Posn { mkL $1 $4 ($2,$3) } 
 
-ListLinDef :: { [(Ident,SrcSpan,Info)] }
+ListLinDef :: { [(Ident,Info)] }
 ListLinDef
   : LinDef ';'            { $1       } 
   | LinDef ';' ListLinDef { $1 ++ $3 }
 
-ListDefDef :: { [(Ident,SrcSpan,Info)] }
+ListDefDef :: { [(Ident,Info)] }
 ListDefDef
   : DefDef ';'            { $1       } 
   | DefDef ';' ListDefDef { $1 ++ $3 }
 
-ListOperDef :: { [(Ident,SrcSpan,Info)] }
+ListOperDef :: { [(Ident,Info)] }
 ListOperDef
   : OperDef ';'             { $1       } 
   | OperDef ';' ListOperDef { $1 ++ $3 }
 
-ListCatDef :: { [(Ident,SrcSpan,Info)] }
+ListCatDef :: { [(Ident,Info)] }
 ListCatDef
   : CatDef ';'            { $1       } 
   | CatDef ';' ListCatDef { $1 ++ $3 }
 
-ListFunDef :: { [(Ident,SrcSpan,Info)] }
+ListFunDef :: { [(Ident,Info)] }
 ListFunDef
   : FunDef ';'            { $1       }
   | FunDef ';' ListFunDef { $1 ++ $3 }
 
-ListDataDef :: { [(Ident,SrcSpan,Info)] }
+ListDataDef :: { [(Ident,Info)] }
 ListDataDef
   : DataDef ';'             { $1       } 
   | DataDef ';' ListDataDef { $1 ++ $3 }
 
-ListParamDef :: { [(Ident,SrcSpan,Info)] }
+ListParamDef :: { [(Ident,Info)] }
 ListParamDef
   : ParamDef ';'              { $1       } 
   | ParamDef ';' ListParamDef { $1 ++ $3 }
 
-ListTermDef :: { [(Ident,SrcSpan,Term)] }
+ListTermDef :: { [(Ident,L Term)] }
 ListTermDef
   : TermDef ';'             { $1       } 
   | TermDef ';' ListTermDef { $1 ++ $3 }
@@ -335,7 +329,7 @@ ListFlagDef
   : FlagDef ';'               { $1               } 
   | FlagDef ';' ListFlagDef   { addOptions $1 $3 }
 
-ListParConstr :: { [Param] }
+ListParConstr :: { [L Param] }
 ListParConstr
   : ParConstr                   { [$1]    }
   | ParConstr '|' ListParConstr { $1 : $3 }
@@ -620,16 +614,16 @@ mkBaseId = prefixId (BS.pack "Base")
 prefixId :: BS.ByteString -> Ident -> Ident
 prefixId pref id = identC (BS.append pref (ident2bs id))
 
-listCatDef :: Ident -> SrcSpan -> Context -> Int -> [(Ident,SrcSpan,Info)]
-listCatDef id pos cont size = [catd,nilfund,consfund]
+listCatDef :: L (Ident, Context, Int) -> [(Ident,Info)]
+listCatDef (L loc (id,cont,size)) = [catd,nilfund,consfund]
   where
     listId = mkListId id
     baseId = mkBaseId id
     consId = mkConsId id
 
-    catd     = (listId, pos, AbsCat (Just cont'))
-    nilfund  = (baseId, pos, AbsFun (Just niltyp)  Nothing Nothing)
-    consfund = (consId, pos, AbsFun (Just constyp) Nothing Nothing)
+    catd     = (listId, AbsCat (Just (L loc cont')))
+    nilfund  = (baseId, AbsFun (Just (L loc niltyp))  Nothing Nothing)
+    consfund = (consId, AbsFun (Just (L loc constyp)) Nothing Nothing)
 
     cont' = [(b,mkId x i,ty) | (i,(b,x,ty)) <- zip [0..] cont]
     xs = map (\(b,x,t) -> Vr x) cont'
@@ -656,16 +650,16 @@ mkR fs@(f:_) =
     tryR (lab,mty,Just t) = return (ident2label lab,(mty,t))
     tryR (lab,_  ,_     ) = fail $ "illegal record field" +++ showIdent lab
 
-mkOverload pdt pdf@(Just df) =
+mkOverload pdt pdf@(Just (L loc df)) =
   case appForm df of
     (keyw, ts@(_:_)) | isOverloading keyw -> 
        case last ts of
-         R fs -> [ResOverload [m | Vr m <- ts] [(ty,fu) | (_,(Just ty,fu)) <- fs]]
+         R fs -> [ResOverload [m | Vr m <- ts] [(L loc ty,L loc fu) | (_,(Just ty,fu)) <- fs]]
          _    -> [ResOper pdt pdf]
     _         -> [ResOper pdt pdf]
 
      -- to enable separare type signature --- not type-checked
-mkOverload pdt@(Just df) pdf =
+mkOverload pdt@(Just (L _ df)) pdf =
   case appForm df of
     (keyw, ts@(_:_)) | isOverloading keyw ->
        case last ts of
@@ -680,29 +674,26 @@ isOverloading t =
     _                                      -> False
 
 
-type SrcSpan = (Posn,Posn)
-
-
-checkInfoType MTAbstract       (id,pos,info) =
+checkInfoType MTAbstract       (id,info) =
   case info of
     AbsCat _     -> return ()
     AbsFun _ _ _ -> return ()
-    _            -> failLoc (fst pos) "illegal definition in abstract module" 
-checkInfoType MTResource       (id,pos,info) =
+    _            -> failLoc (getInfoPos info) "illegal definition in abstract module" 
+checkInfoType MTResource       (id,info) =
   case info of
     ResParam _ _ -> return ()
     ResValue _   -> return ()
     ResOper  _ _ -> return ()
     ResOverload _ _ -> return ()
-    _            -> failLoc (fst pos) "illegal definition in resource module" 
-checkInfoType MTInterface      (id,pos,info) =
+    _            -> failLoc (getInfoPos info) "illegal definition in resource module" 
+checkInfoType MTInterface      (id,info) =
   case info of
     ResParam _ _ -> return ()
     ResValue _   -> return ()
     ResOper  _ _ -> return ()
     ResOverload _ _ -> return ()
-    _            -> failLoc (fst pos) "illegal definition in interface module" 
-checkInfoType (MTConcrete _)   (id,pos,info) =
+    _            -> failLoc (getInfoPos info) "illegal definition in interface module" 
+checkInfoType (MTConcrete _)   (id,info) =
   case info of
     CncCat _ _ _ -> return ()
     CncFun _ _ _ -> return ()
@@ -710,14 +701,15 @@ checkInfoType (MTConcrete _)   (id,pos,info) =
     ResValue _   -> return ()
     ResOper  _ _ -> return ()
     ResOverload _ _ -> return ()
-    _            -> failLoc (fst pos) "illegal definition in concrete module" 
-checkInfoType (MTInstance _)   (id,pos,info) =
+    _            -> failLoc (getInfoPos info) "illegal definition in concrete module" 
+checkInfoType (MTInstance _)   (id,info) =
   case info of
     ResParam _ _ -> return ()
     ResValue _   -> return ()
     ResOper  _ _ -> return ()
-    _            -> failLoc (fst pos) "illegal definition in instance module" 
+    _            -> failLoc (getInfoPos info) "illegal definition in instance module" 
 
+getInfoPos = undefined
 
 mkAlts cs = case cs of
   _:_ -> do
@@ -741,5 +733,7 @@ mkAlts cs = case cs of
      PM m c -> return (Q m c) --- for macros; not yet complete
      _ -> fail "no strs from pattern"
 
-}
+mkL :: Posn -> Posn -> x -> L x
+mkL (Pn l1 _) (Pn l2 _) x = L (l1,l2) x
 
+}

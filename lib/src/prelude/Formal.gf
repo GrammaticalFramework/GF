@@ -3,7 +3,6 @@ resource Formal = open Prelude in {
 -- to replace the old library Precedence
 
   oper
-    Prec : PType ;
     TermPrec : Type = {s : Str ; p : Prec} ;
 
     mkPrec : Prec -> Str -> TermPrec = \p,s -> 

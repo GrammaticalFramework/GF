@@ -77,7 +77,7 @@ extendModule gr (name,m)
 -- | rebuilding instance + interface, and "with" modules, prior to renaming. 
 -- AR 24/10/2003
 rebuildModule :: SourceGrammar -> SourceModule -> Err SourceModule
-rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_ ps_)) = do
+rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_)) = do
 ----  deps <- moduleDeps ms
 ----  is   <- openInterfaces deps i
   let is = [] ---- the method above is buggy: try "i -src" for two grs. AR 8/3/2005
@@ -100,8 +100,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_ ps_)) = do
                 m0s <- mapM (lookupModule gr) j0s
                 let notInM0 c _  = all (not . isInBinTree c . jments) m0s
                 let js2 = filterBinTree notInM0 js'
-                return $ (replaceJudgements mi js2) 
-                  {positions = Map.union (positions m1) (positions mi)}
+                return $ replaceJudgements mi js2
         _ -> return mi
 
     -- add the instance opens to an incomplete module "with" instances
@@ -111,7 +110,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_ ps_)) = do
                     [i | i <- is, notElem i infs]
       testErr (stat' == MSComplete || stat == MSIncomplete) 
               ("module" +++ showIdent i +++ "remains incomplete")
-      ModInfo mt0 _ fs me' _ ops0 _ js ps0 <- lookupModule gr ext
+      ModInfo mt0 _ fs me' _ ops0 _ js <- lookupModule gr ext
       let ops1 = nub $
                    ops_ ++ -- N.B. js has been name-resolved already
                    [OQualif i j | (i,j) <- ops] ++
@@ -123,9 +122,8 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_ ps_)) = do
       let fs1 = fs `addOptions` fs_                           -- new flags have priority
       let js0 = [ci | ci@(c,_) <- tree2list js, isInherited incl c]
       let js1 = buildTree (tree2list js_ ++ js0)
-      let ps1 = Map.union ps_ ps0
       let med1= nub (ext : infs ++ insts ++ med_)
-      return $ ModInfo mt0 stat' fs1 me Nothing ops1 med1 js1 ps1
+      return $ ModInfo mt0 stat' fs1 me Nothing ops1 med1 js1
 
   return (i,mi')
 
@@ -170,9 +168,9 @@ extendMod gr isCompl (name,cond) base old new = foldM try new $ Map.toList old
 unifyAnyInfo :: Ident -> Info -> Info -> Err Info
 unifyAnyInfo m i j = case (i,j) of
   (AbsCat mc1, AbsCat mc2) -> 
-    liftM AbsCat (unifMaybe mc1 mc2)
+    liftM AbsCat (unifMaybeL mc1 mc2)
   (AbsFun mt1 ma1 md1, AbsFun mt2 ma2 md2) -> 
-    liftM3 AbsFun (unifMaybe mt1 mt2) (unifAbsArrity ma1 ma2) (unifAbsDefs md1 md2) -- adding defs
+    liftM3 AbsFun (unifMaybeL mt1 mt2) (unifAbsArrity ma1 ma2) (unifAbsDefs md1 md2) -- adding defs
 
   (ResParam mt1 mv1, ResParam mt2 mv2) ->
     liftM2 ResParam (unifMaybe mt1 mt2) (unifMaybe mv1 mv2)
@@ -182,12 +180,12 @@ unifyAnyInfo m i j = case (i,j) of
   (_, ResOverload ms t) | elem m ms ->
     return $ ResOverload ms t
   (ResOper mt1 m1, ResOper mt2 m2) -> 
-    liftM2 ResOper (unifMaybe mt1 mt2) (unifMaybe m1 m2)
+    liftM2 ResOper (unifMaybeL mt1 mt2) (unifMaybeL m1 m2)
 
   (CncCat mc1 mf1 mp1, CncCat mc2 mf2 mp2) -> 
-    liftM3 CncCat (unifMaybe mc1 mc2) (unifMaybe mf1 mf2) (unifMaybe mp1 mp2)
+    liftM3 CncCat (unifMaybeL mc1 mc2) (unifMaybeL mf1 mf2) (unifMaybeL mp1 mp2)
   (CncFun m mt1 md1, CncFun _ mt2 md2) -> 
-    liftM2 (CncFun m) (unifMaybe mt1 mt2) (unifMaybe md1 md2) ---- adding defs
+    liftM2 (CncFun m) (unifMaybeL mt1 mt2) (unifMaybeL md1 md2) ---- adding defs
 
   (AnyInd b1 m1, AnyInd b2 m2) -> do
     testErr (b1 == b2) $ "indirection status"
@@ -205,6 +203,15 @@ unifMaybe (Just p1) (Just p2)
   | p1==p2                    = return (Just p1)
   | otherwise                 = fail ""
 
+-- | this is what happens when matching two values in the same module
+unifMaybeL :: Eq a => Maybe (L a) -> Maybe (L a) -> Err (Maybe (L a))
+unifMaybeL Nothing          Nothing          = return Nothing
+unifMaybeL (Just p1)        Nothing          = return (Just p1)
+unifMaybeL Nothing          (Just p2)        = return (Just p2)
+unifMaybeL (Just (L l1 p1)) (Just (L l2 p2))
+  | p1==p2                                   = return (Just (L l1 p1))
+  | otherwise                                = fail ""
+
 unifAbsArrity :: Maybe Int -> Maybe Int -> Err (Maybe Int)
 unifAbsArrity Nothing   Nothing   = return Nothing
 unifAbsArrity (Just a ) Nothing   = return (Just a )
@@ -213,14 +220,8 @@ unifAbsArrity (Just a1) (Just a2)
   | a1==a2                        = return (Just a1)
   | otherwise                     = fail ""
 
-unifAbsDefs :: Maybe [Equation] -> Maybe [Equation] -> Err (Maybe [Equation])
+unifAbsDefs :: Maybe [L Equation] -> Maybe [L Equation] -> Err (Maybe [L Equation])
 unifAbsDefs Nothing   Nothing   = return Nothing
 unifAbsDefs (Just _ ) Nothing   = fail ""
 unifAbsDefs Nothing   (Just _ ) = fail ""
 unifAbsDefs (Just xs) (Just ys) = return (Just (xs ++ ys))
-
-unifConstrs :: Maybe [Term] -> Maybe [Term] -> Err (Maybe [Term])
-unifConstrs p1 p2 = case (p1,p2) of
-  (Nothing, _)  -> return p2
-  (_, Nothing)  -> return p1
-  (Just bs, Just ds) -> return $ Just $ bs ++ ds

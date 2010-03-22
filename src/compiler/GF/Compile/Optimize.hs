@@ -64,24 +64,24 @@ evalInfo opts ms m c info = do
 
   CncCat ptyp pde ppr -> do
     pde' <- case (ptyp,pde) of
-      (Just typ, Just de) -> do
+      (Just (L _ typ), Just (L loc de)) -> do
         de <- partEval opts gr ([(Explicit, varStr, typeStr)], typ) de
-        return (Just (factor param c 0 de))
-      (Just typ, Nothing) -> do
+        return (Just (L loc (factor param c 0 de)))
+      (Just (L loc typ), Nothing) -> do
         de <- mkLinDefault gr typ
         de <- partEval opts gr ([(Explicit, varStr, typeStr)], typ) de
-        return (Just (factor param c 0 de))
+        return (Just (L loc (factor param c 0 de)))
       _ -> return pde   -- indirection
 
-    ppr' <- liftM Just $ evalPrintname gr c ppr (Just $ K $ showIdent c)
+    ppr' <- liftM Just $ evalPrintname gr c ppr (Just (L (0,0) (K $ showIdent c)))
 
     return (CncCat ptyp pde' ppr')
 
   CncFun (mt@(Just (_,cont,val))) pde ppr -> --trace (prt c) $
        eIn (text "linearization in type" <+> ppTerm Unqualified 0 (mkProd cont val []) $$ text "of function") $ do
     pde' <- case pde of
-      Just de -> do de <- partEval opts gr (cont,val) de
-                    return (Just (factor param c 0 de))
+      Just (L loc de) -> do de <- partEval opts gr (cont,val) de
+                            return (Just (L loc (factor param c 0 de)))
       Nothing -> return pde
     ppr' <-  liftM Just $ evalPrintname gr c ppr pde'
     return $ CncFun mt pde' ppr' -- only cat in type actually needed
@@ -89,8 +89,8 @@ evalInfo opts ms m c info = do
   ResOper pty pde 
     | OptExpand `Set.member` optim -> do
          pde' <- case pde of
-                   Just de -> do de <- computeConcrete gr de
-                                 return (Just (factor param c 0 de))
+                   Just (L loc de) -> do de <- computeConcrete gr de
+                                         return (Just (L loc (factor param c 0 de)))
                    Nothing -> return Nothing
          return $ ResOper pty pde'
 
@@ -161,13 +161,14 @@ mkLinDefault gr typ = liftM (Abs Explicit varStr) $ mkDefField typ
 -- lin for functions, cat name for cats (dispatch made in evalCncDef above).
 --- We cannot use linearization at this stage, since we do not know the
 --- defaults we would need for question marks - and we're not yet in canon.
-evalPrintname :: SourceGrammar -> Ident -> Maybe Term -> Maybe Term -> Err Term
+evalPrintname :: SourceGrammar -> Ident -> Maybe (L Term) -> Maybe (L Term) -> Err (L Term)
 evalPrintname gr c ppr lin =
   case ppr of
-    Just pr -> comp pr
+    Just (L loc pr) -> do pr <- comp pr
+                          return (L loc pr)
     Nothing -> case lin of
-                 Just t  -> return $ K $ clean $ render (ppTerm Unqualified 0 (oneBranch t))
-                 Nothing -> return $ K $ showIdent c ----
+                 Just (L loc t)  -> return $ L loc (K $ clean $ render (ppTerm Unqualified 0 (oneBranch t)))
+                 Nothing -> return $ L (0,0) (K $ showIdent c) ----
  where
    comp = computeConcrete gr
 

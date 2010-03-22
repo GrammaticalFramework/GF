@@ -67,13 +67,13 @@ lookupResDef gr m c
       mo <- lookupModule gr m
       info <- lookupIdentInfo mo c
       case info of
-        ResOper _ (Just t) -> return t
+        ResOper _ (Just (L _ t)) -> return t
         ResOper _ Nothing  -> return (Q m c)
-        CncCat (Just ty) _ _ -> lock c ty
+        CncCat (Just (L _ ty)) _ _ -> lock c ty
         CncCat _ _ _         -> lock c defLinType
       
-        CncFun (Just (cat,_,_)) (Just tr) _ -> unlock cat tr
-        CncFun _                (Just tr) _ -> return tr
+        CncFun (Just (cat,_,_)) (Just (L _ tr)) _ -> unlock cat tr
+        CncFun _                (Just (L _ tr)) _ -> return tr
 
         AnyInd _ n        -> look n c
         ResParam _ _      -> return (QC m c)
@@ -85,7 +85,7 @@ lookupResType gr m c = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    ResOper (Just t) _ -> return t
+    ResOper (Just (L _ t)) _ -> return t
 
     -- used in reused concrete
     CncCat _ _ _ -> return typeType
@@ -94,7 +94,7 @@ lookupResType gr m c = do
           return $ mkProd cont val' []
     AnyInd _ n        -> lookupResType gr n c
     ResParam _ _      -> return typePType
-    ResValue t        -> return t
+    ResValue (L _ t)  -> return t
     _   -> Bad $ render (ppIdent c <+> text "has no type defined in resource" <+> ppIdent m)
 
 lookupOverload :: SourceGrammar -> Ident -> Ident -> Err [([Type],(Type,Term))]
@@ -105,7 +105,7 @@ lookupOverload gr m c = do
       ResOverload os tysts -> do
             tss <- mapM (\x -> lookupOverload gr x c) os
             return $ [let (args,val) = typeFormCnc ty in (map (\(b,x,t) -> t) args,(val,tr)) | 
-                      (ty,tr) <- tysts] ++ 
+                      (L _ ty,L _ tr) <- tysts] ++ 
                      concat tss
 
       AnyInd _ n  -> lookupOverload gr n c
@@ -153,7 +153,7 @@ lookupAbsDef gr m c = errIn (render (text "looking up absdef of" <+> ppIdent c))
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    AbsFun _ a d -> return (a,d)
+    AbsFun _ a d -> return (a,fmap (map unLoc) d)
     AnyInd _ n   -> lookupAbsDef gr n c
     _            -> return (Nothing,Nothing)
 
@@ -163,9 +163,9 @@ lookupLincat gr m c = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    CncCat (Just t) _ _ -> return t
-    AnyInd _ n          -> lookupLincat gr n c
-    _                   -> Bad (render (ppIdent c <+> text "has no linearization type in" <+> ppIdent m))
+    CncCat (Just (L _ t)) _ _ -> return t
+    AnyInd _ n                -> lookupLincat gr n c
+    _                         -> Bad (render (ppIdent c <+> text "has no linearization type in" <+> ppIdent m))
 
 -- | this is needed at compile time
 lookupFunType :: SourceGrammar -> Ident -> Ident -> Err Type
@@ -173,9 +173,9 @@ lookupFunType gr m c = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    AbsFun (Just t) _ _  -> return t
-    AnyInd _ n           -> lookupFunType gr n c
-    _                    -> Bad (render (text "cannot find type of" <+> ppIdent c))
+    AbsFun (Just (L _ t)) _ _ -> return t
+    AnyInd _ n                -> lookupFunType gr n c
+    _                         -> Bad (render (text "cannot find type of" <+> ppIdent c))
 
 -- | this is needed at compile time
 lookupCatContext :: SourceGrammar -> Ident -> Ident -> Err Context
@@ -183,6 +183,6 @@ lookupCatContext gr m c = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    AbsCat (Just co) -> return co
-    AnyInd _ n       -> lookupCatContext gr n c
-    _                -> Bad (render (text "unknown category" <+> ppIdent c))
+    AbsCat (Just (L _ co)) -> return co
+    AnyInd _ n             -> lookupCatContext gr n c
+    _                      -> Bad (render (text "unknown category" <+> ppIdent c))

@@ -116,18 +116,18 @@ refreshModule (k,ms) mi@(i,mo)
   | otherwise = return (k, mi:ms)
  where
   refreshRes (k,cs) ci@(c,info) = case info of
-    ResOper ptyp (Just trm) -> do   ---- refresh ptyp
+    ResOper ptyp (Just (L loc trm)) -> do   ---- refresh ptyp
       (k',trm') <- refreshTermKN k trm
-      return $ (k', (c, ResOper ptyp (Just trm')):cs)
+      return $ (k', (c, ResOper ptyp (Just (L loc trm'))):cs)
     ResOverload os tyts -> do
       (k',tyts') <- liftM (\ (t,(_,i)) -> (i,t)) $ 
-                    appSTM (mapPairsM refresh tyts) (initIdStateN k)
+                    appSTM (mapPairsM (\(L loc t) -> liftM (L loc) (refresh t)) tyts) (initIdStateN k)
       return $ (k', (c, ResOverload os tyts'):cs)
-    CncCat mt (Just trm) pn -> do   ---- refresh mt, pn
+    CncCat mt (Just (L loc trm)) pn -> do   ---- refresh mt, pn
       (k',trm') <- refreshTermKN k trm
-      return $ (k', (c, CncCat mt (Just trm') pn):cs)
-    CncFun mt (Just trm) pn -> do   ---- refresh pn
+      return $ (k', (c, CncCat mt (Just (L loc trm')) pn):cs)
+    CncFun mt (Just (L loc trm)) pn -> do   ---- refresh pn
       (k',trm') <- refreshTermKN k trm
-      return $ (k', (c, CncFun mt (Just trm') pn):cs)
+      return $ (k', (c, CncFun mt (Just (L loc trm')) pn):cs)
     _ -> return (k, ci:cs)
 

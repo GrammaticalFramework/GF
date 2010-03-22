@@ -32,7 +32,6 @@ module GF.Infra.Modules (
         emptyMGrammar, emptyModInfo,
         abstractOfConcrete, abstractModOfConcrete,
         lookupModule, lookupModuleType, lookupInfo,
-        lookupPosition, ppPosition,
         isModAbs, isModRes, isModCnc,
         sameMType, isCompilableModule, isCompleteModule,
         allAbstracts, greatestAbstract, allResources,
@@ -64,8 +63,7 @@ data ModInfo a = ModInfo {
     mwith   :: Maybe (Ident,MInclude,[(Ident,Ident)]),
     opens   :: [OpenSpec],
     mexdeps :: [Ident],
-    jments  :: Map.Map Ident a,
-    positions :: Map.Map Ident (String,(Int,Int)) -- file, first line, last line
+    jments  :: Map.Map Ident a
   }
   deriving Show
 
@@ -105,13 +103,13 @@ updateMGrammar old new = MGrammar $
    ns = modules new
 
 updateModule :: ModInfo t -> Ident -> t -> ModInfo t
-updateModule (ModInfo mt ms fs me mw ops med js ps) i t = ModInfo mt ms fs me mw ops med (updateTree (i,t) js) ps
+updateModule (ModInfo mt ms fs me mw ops med js) i t = ModInfo mt ms fs me mw ops med (updateTree (i,t) js)
 
 replaceJudgements :: ModInfo t -> Map.Map Ident t -> ModInfo t
-replaceJudgements (ModInfo mt ms fs me mw ops med _ ps) js = ModInfo mt ms fs me mw ops med js ps
+replaceJudgements (ModInfo mt ms fs me mw ops med _) js = ModInfo mt ms fs me mw ops med js
 
 addOpenQualif :: Ident -> Ident -> ModInfo t -> ModInfo t
-addOpenQualif i j (ModInfo mt ms fs me mw ops med js ps) = ModInfo mt ms fs me mw (OQualif i j : ops) med js ps
+addOpenQualif i j (ModInfo mt ms fs me mw ops med js) = ModInfo mt ms fs me mw (OQualif i j : ops) med js
 
 addFlag :: Options -> ModInfo t -> ModInfo t
 addFlag f mo = mo {flags = flags mo `addOptions` f} 
@@ -216,7 +214,7 @@ emptyMGrammar :: MGrammar a
 emptyMGrammar = MGrammar []
 
 emptyModInfo :: ModInfo a
-emptyModInfo = ModInfo MTResource MSComplete noOptions [] Nothing [] [] emptyBinTree emptyBinTree
+emptyModInfo = ModInfo MTResource MSComplete noOptions [] Nothing [] [] emptyBinTree
 
 -- | we store the module type with the identifier
 
@@ -249,15 +247,6 @@ lookupModuleType gr m = do
 
 lookupInfo :: ModInfo a -> Ident -> Err a
 lookupInfo mo i = lookupTree showIdent i (jments mo)
-
-lookupPosition :: ModInfo a -> Ident -> Err (String,(Int,Int))
-lookupPosition mo i = lookupTree showIdent i (positions mo)
-
-ppPosition :: ModInfo a -> Ident -> Doc
-ppPosition mo i = case lookupPosition mo i of
-  Ok (f,(b,e)) | b == e    -> text "in" <+> text f <> text ", line" <+> int b
-               | otherwise -> text "in" <+> text f <> text ", lines" <+> int b <> text "-" <> int e
-  _ -> empty
 
 isModAbs :: ModInfo a -> Bool
 isModAbs m =

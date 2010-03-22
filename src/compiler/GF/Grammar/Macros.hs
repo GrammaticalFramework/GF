@@ -607,15 +607,15 @@ allDependencies ism b =
       Q n c | ism n -> [c]
       QC n c | ism n -> [c]
       _ -> collectOp opersIn t
-    opty (Just ty) = opersIn ty
+    opty (Just (L _ ty)) = opersIn ty
     opty _ = []
     pts i = case i of
       ResOper pty pt -> [pty,pt]
-      ResParam (Just ps) _ -> [Just t | (_,cont) <- ps, (_,_,t) <- cont]
+      ResParam (Just ps) _ -> [Just (L loc t) | L loc (_,cont) <- ps, (_,_,t) <- cont]
       CncCat pty _ _ -> [pty]
       CncFun _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
       AbsFun pty _ ptr -> [pty] --- ptr is def, which can be mutual
-      AbsCat (Just co) -> [Just ty | (_,_,ty) <- co]
+      AbsCat (Just (L loc co)) -> [Just (L loc ty) | (_,_,ty) <- co]
       _              -> []
 
 topoSortJments :: SourceModule -> Err [(Ident,Info)]

@@ -16,6 +16,7 @@ module GF.Grammar.Printer
            , ppPatt
            , ppValue
            , ppConstrs
+           , ppPosition
            ) where
 
 import GF.Infra.Ident
@@ -32,7 +33,7 @@ import qualified Data.Map as Map
 data TermPrintQual = Qualified | Unqualified
 
 ppModule :: TermPrintQual -> SourceModule -> Doc
-ppModule q (mn, ModInfo mtype mstat opts exts with opens _ jments _) =
+ppModule q (mn, ModInfo mtype mstat opts exts with opens _ jments) =
     hdr $$ nest 2 (ppOptions opts $$ vcat (map (ppJudgement q) defs)) $$ ftr
     where
       defs = Map.toList jments
@@ -74,15 +75,15 @@ ppOptions opts =
 ppJudgement q (id, AbsCat pcont ) =
   text "cat" <+> ppIdent id <+>
   (case pcont of
-     Just cont -> hsep (map (ppDecl q) cont)
-     Nothing   -> empty) <+> semi
+     Just (L _ cont) -> hsep (map (ppDecl q) cont)
+     Nothing         -> empty) <+> semi
 ppJudgement q (id, AbsFun ptype _ pexp) =
   (case ptype of
-     Just typ   -> text (if isNothing pexp then "data" else "fun") <+> ppIdent id <+> colon <+> ppTerm q 0 typ <+> semi
-     Nothing    -> empty) $$
+     Just (L _ typ) -> text (if isNothing pexp then "data" else "fun") <+> ppIdent id <+> colon <+> ppTerm q 0 typ <+> semi
+     Nothing        -> empty) $$
   (case pexp of
      Just []  -> empty
-     Just eqs -> text "def" <+> vcat [ppIdent id <+> hsep (map (ppPatt q 2) ps) <+> equals <+> ppTerm q 0 e <+> semi | (ps,e) <- eqs]
+     Just eqs -> text "def" <+> vcat [ppIdent id <+> hsep (map (ppPatt q 2) ps) <+> equals <+> ppTerm q 0 e <+> semi | L _ (ps,e) <- eqs]
      Nothing  -> empty)
 ppJudgement q (id, ResParam pparams _) = 
   text "param" <+> ppIdent id <+>
@@ -92,31 +93,31 @@ ppJudgement q (id, ResParam pparams _) =
 ppJudgement q (id, ResValue pvalue) = empty
 ppJudgement q (id, ResOper  ptype pexp) =
   text "oper" <+> ppIdent id <+>
-  (case ptype of {Just t -> colon  <+> ppTerm q 0 t; Nothing -> empty} $$
-   case pexp  of {Just e -> equals <+> ppTerm q 0 e; Nothing -> empty}) <+> semi
+  (case ptype of {Just (L _ t) -> colon  <+> ppTerm q 0 t; Nothing -> empty} $$
+   case pexp  of {Just (L _ e) -> equals <+> ppTerm q 0 e; Nothing -> empty}) <+> semi
 ppJudgement q (id, ResOverload ids defs) =
   text "oper" <+> ppIdent id <+> equals <+> 
   (text "overload" <+> lbrace $$
-   nest 2 (vcat [ppIdent id <+> (colon <+> ppTerm q 0 ty $$ equals <+> ppTerm q 0 e) | (ty,e) <- defs]) $$
+   nest 2 (vcat [ppIdent id <+> (colon <+> ppTerm q 0 ty $$ equals <+> ppTerm q 0 e) | (L _ ty,L _ e) <- defs]) $$
    rbrace) <+> semi
 ppJudgement q (id, CncCat  ptype pexp pprn) =
   (case ptype of
-     Just typ -> text "lincat" <+> ppIdent id <+> equals <+> ppTerm q 0 typ <+> semi
-     Nothing  -> empty) $$
+     Just (L _ typ) -> text "lincat" <+> ppIdent id <+> equals <+> ppTerm q 0 typ <+> semi
+     Nothing        -> empty) $$
   (case pexp of
-     Just exp -> text "lindef" <+> ppIdent id <+> equals <+> ppTerm q 0 exp <+> semi
-     Nothing  -> empty) $$
+     Just (L _ exp) -> text "lindef" <+> ppIdent id <+> equals <+> ppTerm q 0 exp <+> semi
+     Nothing        -> empty) $$
   (case pprn of
-     Just prn -> text "printname" <+> text "cat" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
-     Nothing  -> empty)
+     Just (L _ prn) -> text "printname" <+> text "cat" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
+     Nothing        -> empty)
 ppJudgement q (id, CncFun  ptype pdef pprn) =
   (case pdef of
-     Just e  -> let (xs,e') = getAbs e
-              in text "lin" <+> ppIdent id <+> hsep (map ppBind xs) <+> equals <+> ppTerm q 0 e' <+> semi
-     Nothing -> empty) $$
+     Just (L _ e) -> let (xs,e') = getAbs e
+                     in text "lin" <+> ppIdent id <+> hsep (map ppBind xs) <+> equals <+> ppTerm q 0 e' <+> semi
+     Nothing      -> empty) $$
   (case pprn of
-     Just prn -> text "printname" <+> text "fun" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
-     Nothing  -> empty)
+     Just (L _ prn) -> text "printname" <+> text "fun" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
+     Nothing        -> empty)
 ppJudgement q (id, AnyInd cann mid) = text "ind" <+> ppIdent id <+> equals <+> (if cann then text "canonical" else empty) <+> ppIdent mid <+> semi
 
 ppTerm q d (Abs b v e)   = let (xs,e') = getAbs (Abs b v e)
@@ -257,7 +258,12 @@ ppBind (Implicit,v) = braces (ppIdent v)
 
 ppAltern q (x,y) = ppTerm q 0 x <+> char '/' <+> ppTerm q 0 y
 
-ppParam q (id,cxt) = ppIdent id <+> hsep (map (ppDDecl q) cxt)
+ppParam q (L _ (id,cxt)) = ppIdent id <+> hsep (map (ppDDecl q) cxt)
+
+ppPosition :: Ident -> (Int,Int) -> Doc
+ppPosition m (b,e)
+  | b == e    = text "in" <+> ppIdent m <> text ".gf, line"  <+> int b
+  | otherwise = text "in" <+> ppIdent m <> text ".gf, lines" <+> int b <> text "-" <> int e
 
 commaPunct f ds = (hcat (punctuate comma (map f ds)))
 
