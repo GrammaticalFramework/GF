@@ -51,6 +51,7 @@ module PGF(
            -- * Operations
            -- ** Linearization
            linearize, linearizeAllLang, linearizeAll,
+           groupResults, -- lins of trees by language, removing duplicates
            showPrintName,
 
            -- ** Parsing
@@ -238,6 +239,13 @@ parseWithRecovery pgf lang typ open_typs s = Parse.parseWithRecovery pgf lang ty
 linearizeAll mgr = map snd . linearizeAllLang mgr
 linearizeAllLang mgr t = 
   [(lang,PGF.linearize mgr lang t) | lang <- languages mgr]
+
+groupResults :: [[(Language,String)]] -> [(Language,[String])]
+groupResults = Map.toList . foldr more Map.empty . start . concat
+ where
+  start ls = [(l,[s]) | (l,s) <- ls]
+  more (l,s) = 
+    Map.insertWith (\ [x] xs -> if elem x xs then xs else (x : xs)) l s
 
 parseAll mgr typ = map snd . parseAllLang mgr typ
 
