@@ -41,22 +41,33 @@ ppExport c hyps = text "exportdef" <+> ppPred c <+> foldr (\hyp doc -> ppHypo 1 
     hyp = (Explicit,wildCId,DTyp [] c [])
 
 ppClause :: Int -> Int -> [CId] -> CId -> Type -> Doc
-ppClause d i scope f (DTyp hyps cat args)
+ppClause d i scope f ty@(DTyp hyps cat args)
   | null hyps = let res = EFun f
                 in ppRes i scope cat (res : args)
-  | otherwise = let ((i',vars,scope'),hdocs) = mapAccumL (ppGoal 1) (i,[],scope) hyps
+  | otherwise = let (i',vars,scope',hdocs) = ppHypos i [] scope hyps (depType [] ty)
                     res  = foldl EApp (EFun f) (map EFun (reverse vars))
-                    quants = hsep (map (\v -> text "pi" <+> ppCId v <+> char '\\') vars)
-                in ppParens (d > 0) (quants <+> ppRes i' scope' cat (res : args) <+> text ":-" <+> hsep (punctuate comma hdocs))
+                    quants = if d > 0
+                               then hsep (map (\v -> text "pi" <+> ppCId v <+> char '\\') vars)
+                               else empty
+                in ppParens (d > 0) (quants <+> ppRes i' scope' cat (res : args) <+> 
+                                     (if null hdocs 
+                                        then empty
+                                        else text ":-" <+> hsep (punctuate comma hdocs)))
   where
     ppRes i scope cat es = ppParens (d > 3) (ppPred cat <+> hsep (map (ppExpr 4 i scope) es))
 
-    ppGoal :: Int -> (Int,[CId],[CId]) -> (BindType,CId,Type) -> ((Int,[CId],[CId]),Doc)
-    ppGoal d (i,vars,scope) (_,x,typ)
-      | x == wildCId = ((i+1,v:vars,  scope),ppClause d (i+1) scope v typ)
-      | otherwise    = ((i+1,v:vars,v:scope),ppClause d (i+1) scope v typ)
-      where
-        v = mkCId ("X_"++show i)
+    ppHypos :: Int -> [CId] -> [CId] -> [(BindType,CId,Type)] -> [Int] -> (Int,[CId],[CId],[Doc])
+    ppHypos i vars scope [] []
+                     = (i,vars,scope,[])
+    ppHypos i vars scope ((_,x,typ):hyps) (c:cs)
+      | x /= wildCId = let v = mkCId ("X_"++show i)
+                           (i',vars',scope',docs) = ppHypos (i+1) (v:vars) (v:scope) hyps cs
+                       in (i',vars',scope',if c == 0 then ppClause 1 (i+1) scope v typ : docs else docs)
+    ppHypos i vars scope ((_,x,typ):hyps)    cs
+                     = let v = mkCId ("X_"++show i)
+                           (i',vars',scope',docs) = ppHypos (i+1) (v:vars)    scope  hyps cs
+                       in (i',vars',scope',ppClause 1 (i+1) scope v typ : docs)
+        
 
 ppPred :: CId -> Doc
 ppPred cat = text "p_" <> ppCId cat
@@ -82,3 +93,20 @@ ppExpr d i scope (ETyped e ty)= ppExpr d i scope e
 ppExpr d i scope (EImplArg e) = ppExpr 0 i scope e
 
 dot = char '.'
+
+depType counts (DTyp hyps cat es) =
+  foldl' depExpr (foldl' depHypo counts hyps) es
+
+depHypo counts (_,x,ty)
+  | x == wildCId =   depType counts ty
+  | otherwise    = 0:depType counts ty
+
+depExpr counts (EAbs b x e) = tail (depExpr (0:counts) e)
+depExpr counts (EApp e1 e2) = depExpr (depExpr counts e1) e2
+depExpr counts (ELit l)     = counts
+depExpr counts (EMeta n)    = counts
+depExpr counts (EFun f)     = counts
+depExpr counts (EVar j)     = let (xs,c:ys) = splitAt j counts
+                              in xs++(c+1):ys
+depExpr counts (ETyped e ty)= depExpr counts e
+depExpr counts (EImplArg e) = depExpr counts e
