@@ -166,9 +166,9 @@ checkInfo ms (m,mo) c info = do
       mkCheck loc "type of function" $
         checkTyp gr typ
       case md of
-        Just eqs -> mkCheck loc "definition of function" $
-	                  checkDef gr (m,c) typ eqs
-        Nothing  -> return info
+        Just eqs -> mapM_ (\(L loc eq) -> mkCheck loc "definition of function" $
+	                                        checkDef gr (m,c) typ eq) eqs
+        Nothing  -> return ()
       return (AbsFun (Just (L loc typ)) ma md)
 
     CncFun linty@(Just (cat,cont,val)) (Just (L loc trm)) mpr -> chIn loc "linearization of" $ do
@@ -187,17 +187,21 @@ checkInfo ms (m,mo) c info = do
       mpr <- checkPrintname gr mpr
       return (CncCat (Just (L loc typ)) mdef mpr)
 
-    ResOper pty pde -> chIn (0,0) "operation" $ do
+    ResOper pty pde -> do
       (pty', pde') <- case (pty,pde) of
-         (Just (L loc1 ty), Just (L loc2 de)) -> do
-           ty'     <- checkLType gr [] ty typeType >>= computeLType gr [] . fst
-           (de',_) <- checkLType gr [] de ty'
-           return (Just (L loc1 ty'), Just (L loc2 de'))
-         (_      , Just (L loc de)) -> do
-           (de',ty') <- inferLType gr [] de
-           return (Just (L loc ty'), Just (L loc de'))
-         (_      , Nothing) -> do
-           checkError (text "No definition given to the operation")
+         (Just (L loct ty), Just (L locd de)) -> do
+           ty'     <- chIn loct "operation" $
+                         checkLType gr [] ty typeType >>= computeLType gr [] . fst
+           (de',_) <- chIn locd "operation" $
+                         checkLType gr [] de ty'
+           return (Just (L loct ty'), Just (L locd de'))
+         (Nothing         , Just (L locd de)) -> do
+           (de',ty') <- chIn locd "operation" $
+                          inferLType gr [] de
+           return (Just (L locd ty'), Just (L locd de'))
+         (Just (L loct ty), Nothing) -> do
+           chIn loct "operation" $
+             checkError (text "No definition given to the operation")
       return (ResOper pty' pde')
 
     ResOverload os tysts -> chIn (0,0) "overloading" $ do
@@ -211,7 +215,7 @@ checkInfo ms (m,mo) c info = do
         sort [let (xs,t) = typeFormCnc x in t : map (\(b,x,t) -> t) xs | (_,x) <- tysts1]
       return (ResOverload os [(y,x) | (x,y) <- tysts'])
 
-    ResParam (Just pcs) _ -> chIn (0,0) "parameter type" $ do
+    ResParam (Just pcs) _ -> do
       ts <- checkErr $ liftM concat $ mapM mkPar pcs
       return (ResParam (Just pcs) (Just ts))
 
@@ -220,9 +224,10 @@ checkInfo ms (m,mo) c info = do
    gr = MGrammar ((m,mo) : ms)
    chIn loc cat = checkIn (text "Happened in" <+> text cat <+> ppIdent c <+> ppPosition m loc <> colon)
 
-   mkPar (L _ (f,co)) = do
-     vs <- liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
-     return $ map (mkApp (QC m f)) vs
+   mkPar (L loc (f,co)) = 
+     chIn loc "parameter type" $ do
+       vs <- liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
+       return $ map (mkApp (QC m f)) vs
 
    checkUniq xss = case xss of
      x:y:xs 

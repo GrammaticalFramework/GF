@@ -72,11 +72,10 @@ checkContext st = checkTyp st . cont2exp
 checkTyp :: SourceGrammar -> Type -> [Message]
 checkTyp gr typ = err (\x -> [text x]) ppConstrs $ justTypeCheck gr typ vType
 
-checkDef :: SourceGrammar -> Fun -> Type -> [L Equation] -> [Message]
-checkDef gr (m,fun) typ eqs = err (\x -> [text x]) ppConstrs $ do
-  bcs <- mapM (\(L _ b) -> checkBranch (grammar2theory gr) (initTCEnv []) b (type2val typ)) eqs
-  let (bs,css) = unzip bcs
-  (constrs,_) <- unifyVal (concat css)
+checkDef :: SourceGrammar -> Fun -> Type -> Equation -> [Message]
+checkDef gr (m,fun) typ eq = err (\x -> [text x]) ppConstrs $ do
+  (b,cs) <- checkBranch (grammar2theory gr) (initTCEnv []) eq (type2val typ)
+  (constrs,_) <- unifyVal cs
   return $ filter notJustMeta constrs
 
 checkConstrs :: SourceGrammar -> Cat -> [Ident] -> [String]
