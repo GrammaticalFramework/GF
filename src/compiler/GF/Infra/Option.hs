@@ -77,7 +77,7 @@ data Verbosity = Quiet | Normal | Verbose | Debug
 data Phase = Preproc | Convert | Compile | Link
   deriving (Show,Eq,Ord)
 
-data Encoding = UTF_8 | ISO_8859_1 | CP_1250 | CP_1251 | CP_1252
+data Encoding = UTF_8 | ISO_8859_1 | CP_1250 | CP_1251 | CP_1252 | CP_1254
   deriving (Eq,Ord)
 
 data OutputFormat = FmtPGFPretty
@@ -489,6 +489,7 @@ encodings =
      ("cp1250", CP_1250),
      ("cp1251", CP_1251),
      ("cp1252", CP_1252),
+     ("cp1254", CP_1254),
      ("latin1", ISO_8859_1)
     ]
 
