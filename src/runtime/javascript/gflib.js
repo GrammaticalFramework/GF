@@ -494,6 +494,69 @@ Parser.prototype.parseString = function (string, cat) {
 	}
 	return ps.extractTrees();
 };
+/**
+ * Generate list of suggestions given an input string
+ */
+Parser.prototype.complete = function (input, cat) {
+
+	// Parameter defaults
+	if (input == null) input = "";
+	if (cat == null) cat = grammar.abstract.startcat;
+	
+	// Tokenise input string & remove empty tokens
+	tokens = input.trim().split(' ');
+	for (var i = tokens.length - 1; i >= 0; i--) {
+		if (tokens[i] == "") { tokens.splice(i, 1); }
+	}
+	
+	// Capture last token as it may be partial
+	current = tokens.pop();
+	if (current == null) current = "";
+
+	// Init parse state objects.
+	// ps2 is used for testing whether the final token is parsable or not.
+	var ps = new ParseState(this, cat);
+	var ps2 = new ParseState(this, cat);
+	
+	// Iterate over tokens, feed one by one to parser
+	for (var i = 0; i < tokens.length ; i++) {
+		if (!ps.next(tokens[i])) {
+			return new Array(); // Incorrect parse, nothing to suggest
+		}
+		ps2.next(tokens[i]); // also consume token in ps2
+	}
+	
+	// Attempt to also parse current, knowing it may be incomplete
+	if (ps2.next(current)) {
+		ps.next(current);
+		tokens.push(current);
+		current = "";
+	}
+	delete(ps2); // don't need this anymore
+	
+	// Parse is successful so far, now get suggestions
+	var acc = ps.complete(current);
+	
+	// Format into just a list of strings & return
+	// (I know the multiple nesting looks horrible)
+	var suggs = new Array();
+	if (acc.value) {
+		// Iterate over all acc.value[]
+		for (var v = 0; v < acc.value.length; v++) {
+			// Iterate over all acc.value[].seq[]
+			for (var s = 0; s < acc.value[v].seq.length; s++) {
+				if (acc.value[v].seq[s].tokens == null) continue;
+				// Iterate over all acc.value[].seq[].tokens
+				for (var t = 0; t < acc.value[v].seq[s].tokens.length; t++) {
+					suggs.push( acc.value[v].seq[s].tokens[t] );
+				}
+			}
+		}
+	}
+	
+	// Note: return used tokens too
+	return { 'consumed' : tokens, 'suggestions' : suggs };
+}
 
 // Rule Object Definition
 
@@ -730,6 +793,43 @@ ParseState.prototype.next = function (token) {
   this.chart.shift();
   
   return !this.items.isEmpty();
+}
+/**
+ * For a ParseState and a partial input, return all possible completions
+ * Based closely on ParseState.next()
+ * currentToken could be empty or a partial string
+ */
+ParseState.prototype.complete = function (currentToken) {
+
+	// Initialise accumulator for suggestions
+	var acc = this.items.lookup(currentToken);
+	if (acc == null)
+		acc = new Trie();
+	
+	this.process(
+		// Items
+		this.items.value,
+		
+		// Deal with literal categories
+		function (fid) {
+			// Always return null, as suggested by Krasimir
+			return null;
+		},
+	
+		// Takes an array of tokens and populates the accumulator
+		function (tokens, item) {
+			if (currentToken == "" || tokens[0].indexOf(currentToken) == 0) { //if begins with...
+				var tokens1 = new Array();
+				for (var i = 1; i < tokens.length; i++) {
+					tokens1[i-1] = tokens[i];
+				}
+				acc.insertChain1(tokens1, item);
+			}
+		}
+	);
+	
+	// Return matches
+	return acc;
 }
 ParseState.prototype.extractTrees = function() {
   this.process( this.items.value
