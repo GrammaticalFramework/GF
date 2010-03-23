@@ -216,7 +216,7 @@ checkInfo ms (m,mo) c info = do
       return (ResOverload os [(y,x) | (x,y) <- tysts'])
 
     ResParam (Just pcs) _ -> do
-      ts <- checkErr $ liftM concat $ mapM mkPar pcs
+      ts <- liftM concat $ mapM mkPar pcs
       return (ResParam (Just pcs) (Just ts))
 
     _ ->  return info
@@ -226,7 +226,7 @@ checkInfo ms (m,mo) c info = do
 
    mkPar (L loc (f,co)) = 
      chIn loc "parameter type" $ do
-       vs <- liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
+       vs <- checkErr $ liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
        return $ map (mkApp (QC m f)) vs
 
    checkUniq xss = case xss of
