@@ -1,3 +1,15 @@
+-----------------------------------------------------------------------------
+-- |
+-- Module      : GF.Text.CP1251
+-- Maintainer  : Krasimir Angelov
+--
+-- cp1251 is a popular 8-bit character encoding, designed to cover languages
+-- that use the Cyrillic alphabet such as Russian, Bulgarian, Serbian Cyrillic
+-- and other languages. It is the most widely used for encoding the Bulgarian,
+-- Serbian and Macedonian languages.
+--
+-----------------------------------------------------------------------------
+
 module GF.Text.CP1251 where
 
 import Data.Char

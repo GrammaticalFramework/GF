@@ -1,3 +1,17 @@
+-----------------------------------------------------------------------------
+-- |
+-- Module      : GF.Text.CP1250
+-- Maintainer  : Krasimir Angelov
+--
+-- cp1250 is a code page used under Microsoft Windows to represent texts 
+-- in Central European and Eastern European languages that use Latin script, 
+-- such as Polish, Czech, Slovak, Hungarian, Slovene, Bosnian, Croatian, 
+-- Serbian (Latin script), Romanian and Albanian. It may also be used with 
+-- the German language; German-language texts encoded with cp1250 and cp1252 
+-- are identical.
+--
+-----------------------------------------------------------------------------
+
 module GF.Text.CP1250 where
 
 import Data.Char
