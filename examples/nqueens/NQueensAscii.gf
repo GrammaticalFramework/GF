@@ -4,7 +4,7 @@ lincat Matrix, Vec = Str ;
        Constr, Sat = {} ;
 
 lin nilV _ _ = "" ;
-    consV _ _ f _ l _ v = f ++ "X" ++ l ++ "\n" ++ v ;
+    consV _ j k _ _ v = j ++ "X" ++ k ++ "\n" ++ v ;
 
     matrix _ v = v ;
 
