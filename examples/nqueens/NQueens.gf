@@ -6,7 +6,9 @@ cat Vec (s,l : Nat) Constr ;
 cat Sat Nat Nat Constr ;
 
 data nilV  : (s : Nat) -> (c : Constr) -> Vec s zero c ;
-     consV : (s,l,j : Nat) -> (c : Constr) -> LT j s -> Sat j (succ zero) c -> Vec s l (consC j c) -> Vec s (succ l) c ;
+     consV : (l,j,k : Nat) -> 
+                let s = succ (plus j k)
+                in (c : Constr) -> Sat j (succ zero) c -> Vec s l (consC j c) -> Vec s (succ l) c ;
 
      nilC  : Constr ;
      consC : (j : Nat) -> Constr -> Constr ;
