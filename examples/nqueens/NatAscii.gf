@@ -7,7 +7,6 @@ lin zero   = "" ;
 
 lincat LT = Str ;
        NE = {} ;
-       Plus = {} ;
 
 lin zLT n = n ;
     sLT _ _ l = l ;
