@@ -88,8 +88,8 @@ instance Functor TcM where
 
 lookupCatHyps :: CId -> TcM [Hypo]
 lookupCatHyps cat = TcM (\abstr metaid ms -> case Map.lookup cat (cats abstr) of
-                                               Just hyps -> Ok metaid ms hyps
-                                               Nothing   -> Fail (UnknownCat cat))
+                                               Just (hyps,_) -> Ok metaid ms hyps
+                                               Nothing       -> Fail (UnknownCat cat))
 
 lookupFunType :: CId -> TcM TType
 lookupFunType fun = TcM (\abstr metaid ms -> case Map.lookup fun (funs abstr) of

@@ -51,7 +51,7 @@ clauseHeader hdr clauses = "":hdr:clauses
 -- abstract syntax
 
 plAbstract :: (CId, Abstr) -> [String]
-plAbstract (name, Abstr aflags funs cats _catfuns) =
+plAbstract (name, Abstr aflags funs cats) =
     ["", "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",
      "%% abstract module: " ++ plp name] ++
     clauseHeader "%% absflag(?Flag, ?Value): flags for abstract syntax"
@@ -63,8 +63,8 @@ plAbstract (name, Abstr aflags funs cats _catfuns) =
     clauseHeader "%% def(?Fun, ?Expr)" 
                      (concatMap plFundef (Map.assocs funs))
 
-plCat :: (CId, [Hypo]) -> String
-plCat (cat, hypos) = plFact "cat" (plTypeWithHypos typ) 
+plCat :: (CId, ([Hypo],[CId])) -> String
+plCat (cat, (hypos,_)) = plFact "cat" (plTypeWithHypos typ) 
     where ((_,subst), hypos') = mapAccumL alphaConvertHypo emptyEnv hypos
           args = reverse [EFun x | (_,x) <- subst]
           typ = DTyp hypos' cat args

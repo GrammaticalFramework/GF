@@ -59,7 +59,7 @@ functionsToCat :: PGF -> CId -> [(CId,Type)]
 functionsToCat pgf cat =
   [(f,ty) | f <- fs, Just (ty,_,_) <- [Map.lookup f $ funs $ abstract pgf]]
  where 
-   fs = lookMap [] cat $ catfuns $ abstract pgf
+   (_,fs) = lookMap ([],[]) cat $ cats $ abstract pgf
 
 missingLins :: PGF -> CId -> [CId]
 missingLins pgf lang = [c | c <- fs, not (hasl c)] where
@@ -72,12 +72,11 @@ hasLin pgf lang f = Map.member f $ lproductions $ lookConcr pgf lang
 restrictPGF :: (CId -> Bool) -> PGF -> PGF
 restrictPGF cond pgf = pgf {
   abstract = abstr {
-    funs = restrict $ funs $ abstr,
-    cats = restrict $ cats $ abstr
+    funs = Map.filterWithKey (\c _ -> cond c) (funs abstr),
+    cats = Map.map (\(hyps,fs) -> (hyps,filter cond fs)) (cats abstr)
     }
   }  ---- restrict concrs also, might be needed
  where
-  restrict = Map.filterWithKey (\c _ -> cond c)
   abstr = abstract pgf
 
 depth :: Expr -> Int
@@ -142,13 +141,8 @@ _B = mkCId "__gfB"
 _V = mkCId "__gfV"
 
 updateProductionIndices :: PGF -> PGF
-updateProductionIndices pgf = pgf{ abstract  = updateAbstract (abstract pgf)
-                                 , concretes = fmap updateConcrete (concretes pgf)
-                                 }
+updateProductionIndices pgf = pgf{ concretes = fmap updateConcrete (concretes pgf) }
   where
-    updateAbstract abs =
-      abs{catfuns = Map.mapWithKey (\cat _ -> [f | (f, (DTyp _ c _,_,_)) <- Map.toList (funs abs), c==cat]) (cats abs)}
-
     updateConcrete cnc = 
       let prods0    = filterProductions (productions cnc)
           p_prods   = parseIndex cnc prods0
