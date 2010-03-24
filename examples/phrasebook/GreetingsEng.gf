@@ -1,7 +1,7 @@
-concrete GreetingsEng of Greetings = open Prelude in {
+concrete GreetingsEng of Greetings = open Roles, Prelude in {
 
 lincat 
-  Greeting, Politeness = SS ;
+  Greeting = SS ;
 
 lin 
   GHello = ss "hello" ;

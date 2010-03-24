@@ -4,6 +4,7 @@ concrete PhrasebookFre of Phrasebook =
   GreetingsFre,
   FoodFre
   ** open 
+    (R = Roles),
     SyntaxFre,
     ParadigmsFre,
     ResFre, ---- for Num to Utt 
@@ -11,13 +12,22 @@ concrete PhrasebookFre of Phrasebook =
 
 lincat 
   Phrase = Utt ;
+  Gender = {s : Str ; g : R.Gender} ;
+  Politeness = {s : Str ; p : R.Politeness} ;
 
 lin
-  PNumeral n = mkPhrase (ss ((mkCard <n : Numeral>).s ! masculine)) ; ----
-  PGreeting g = mkPhrase g ;
+  PNumeral n = mkPhrase ((mkCard <n : Numeral>).s ! masculine) ; ----
   PSentence s = s ;
 
+  PGreeting g = mkPhrase (g.s ! R.Polite ! R.Male ! R.Male) ;
+----  PGreeting p s h g = mkPhrase (g.s ! p.p ! s.g ! h.g ++ p.s ++ s.s ++ h.s) ;
+
+  Male = {s = [] ; g = R.Male} ;
+  Female = {s = [] ; g = R.Female} ;
+  Polite = {s = [] ; p = R.Polite} ;
+  Familiar = {s = [] ; p = R.Familiar} ;
+  
 oper 
-  mkPhrase : SS -> Utt = \s -> lin Utt s ;
+  mkPhrase : Str -> Utt = \s -> lin Utt (ss s) ;
 
 }

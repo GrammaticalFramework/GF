@@ -1,38 +1,39 @@
-concrete GreetingsFre of Greetings = open Prelude in {
+concrete GreetingsFre of Greetings = open Roles,Prelude in {
 
 flags coding = utf8 ;
 
 lincat 
-  Greeting, Politeness = SS ;
+  Greeting = RolePhrase ;
 
 lin 
-  GHello = ss "salut" ;
-  GThanks = ss "merci" ;
-  GHowAreYou = ss "comment ça va" ;
-  GPleaseGive = ss "s'il vous plaît" ; ---- politeness
-  GExcuse = ss "excusez-moi" ;
-  GSorry = ss "pardon" ;
-  GGoodbye = ss "au revoir" ;
-  GBye = ss "au revoir" ;
-  GWhatsYourName = ss "comment vous appelez-vous" ; ---- politeness
-  GNiceToMeetYou = ss "enchanté" ; ---- gender
-  GSeeYouSoon = ss "à bientôt" ;
-  GHelp = ss "au secours" ;
-  GLookOut = ss "attention" ;
-  GGoodMorning = ss "bonjour" ;
-  GGoodDay = ss "bonjour" ;
-  GGoodEvening = ss "bon soir" ;
-  GGoodNight = ss "bonne nuit" ;
-  GImHungry = ss "j'ai faim" ;
-  GImThirsty = ss "j'ai soif" ;
-  GImTired = ss "je suis fatigué" ; ---- gender
-  GImScared = ss "j'ai peur" ;
-  GIdontUnderstand = ss "je ne comprends pas" ;
-  GWheresTheBathroom = ss "où est la toilette" ;
-  GTheCheck = ss "l'addition" ;
+  GHello = roleNeutral "salut" ;
+  GThanks = roleNeutral "merci" ;
+  GHowAreYou = roleNeutral "comment ça va" ;
+  GPleaseGive = politeDistinct "s'il vous plaît" "s'il te plaît" ;
+  GExcuse = politeDistinct "excusez-moi" "excuse-moi" ;
+  GSorry = roleNeutral "pardon" ;
+  GGoodbye = roleNeutral "au revoir" ;
+  GBye = roleNeutral "au revoir" ;
+  GWhatsYourName = 
+    politeDistinct "comment vous appelez-vous" "comment t'appelles-tu" ;
+  GNiceToMeetYou = speakerDistinct "enchanté" "enchantée" ;
+  GSeeYouSoon = roleNeutral "à bientôt" ;
+  GHelp = roleNeutral "au secours" ;
+  GLookOut = roleNeutral "attention" ;
+  GGoodMorning = roleNeutral "bonjour" ;
+  GGoodDay = roleNeutral "bonjour" ;
+  GGoodEvening = roleNeutral "bon soir" ;
+  GGoodNight = roleNeutral "bonne nuit" ;
+  GImHungry = roleNeutral "j'ai faim" ;
+  GImThirsty = roleNeutral "j'ai soif" ;
+  GImTired = speakerDistinct "je suis fatigué" "je suis fatiguée" ;
+  GImScared = roleNeutral "j'ai peur" ;
+  GIdontUnderstand = roleNeutral "je ne comprends pas" ;
+  GWheresTheBathroom = roleNeutral "où est la toilette" ;
+  GTheCheck = roleNeutral "l'addition" ;
 
-  GYes = ss "oui" ; ---- si
-  GNo = ss "non" ;
+  GYes = roleNeutral "oui" ; ---- si
+  GNo = roleNeutral "non" ;
 
 
 }
