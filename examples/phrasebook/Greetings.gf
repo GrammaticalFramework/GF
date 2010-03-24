@@ -2,7 +2,6 @@ abstract Greetings = {
 
 cat 
   Greeting ;
-  Politeness ;
 
 fun
   GHello  : Greeting ;
