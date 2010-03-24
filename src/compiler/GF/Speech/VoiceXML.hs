@@ -40,7 +40,7 @@ type Skeleton = [(CId, [(CId, [CId])])]
 
 pgfSkeleton :: PGF -> Skeleton
 pgfSkeleton pgf = [(c,[(f,fst (catSkeleton (lookType pgf f))) | f <- fs]) 
-                   | (c,fs) <- Map.toList (catfuns (abstract pgf)),
+                   | (c,(_,fs)) <- Map.toList (cats (abstract pgf)),
                      not (isLiteralCat c)]
 
 --

@@ -28,8 +28,8 @@ ppAbs name a = text "abstract" <+> ppCId name <+> char '{' $$
 ppFlag :: CId -> Literal -> Doc
 ppFlag flag value = text "flag" <+> ppCId flag <+> char '=' <+> ppLit value ;
 
-ppCat :: CId -> [Hypo] -> Doc
-ppCat c hyps = text "cat" <+> ppCId c <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps))
+ppCat :: CId -> ([Hypo],[CId]) -> Doc
+ppCat c (hyps,_) = text "cat" <+> ppCId c <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps))
 
 ppFun :: CId -> (Type,Int,Maybe [Equation]) -> Doc
 ppFun f (t,_,Just eqs) = text "fun" <+> ppCId f <+> colon <+> ppType 0 [] t $$

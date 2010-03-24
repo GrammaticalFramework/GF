@@ -25,6 +25,7 @@ import GF.Infra.Option
 import GF.Data.Operations
 
 import Data.List
+import Data.Function
 import Data.Char (isDigit,isSpace)
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
@@ -56,7 +57,7 @@ canon2pgf opts pars cgr@(M.MGrammar ((a,abm):cms)) = do
  where
   -- abstract
   an  = (i2i a)
-  abs = D.Abstr aflags funs cats Map.empty
+  abs = D.Abstr aflags funs cats
   gflags = Map.empty
   aflags = Map.fromList [(mkCId f,C.LStr x) | (f,x) <- optionsPGF (M.flags abm)]
 
@@ -70,11 +71,12 @@ canon2pgf opts pars cgr@(M.MGrammar ((a,abm):cms)) = do
   lfuns = [(f', (mkType [] ty, mkArrity ma, mkDef pty)) | 
              (f,AbsFun (Just (L _ ty)) ma pty) <- tree2list (M.jments abm), let f' = i2i f]
   funs = Map.fromAscList lfuns
-  lcats = [(i2i c, snd (mkContext [] cont)) |
+  lcats = [(i2i c, (snd (mkContext [] cont),catfuns c)) |
                 (c,AbsCat (Just (L _ cont))) <- tree2list (M.jments abm)]
   cats = Map.fromAscList lcats
-  catfuns = Map.fromList 
-    [(cat,[f | (f, (C.DTyp _ c _,_,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
+  catfuns cat =
+    (map snd . sortBy (compare `on` fst))
+        [(loc,i2i f) | (f,AbsFun (Just (L loc ty)) _ _) <- tree2list (M.jments abm), snd (GM.valCat ty) == cat]
 
   mkConcr lang0 lang mo = do
     lins' <- case mapM (checkLin (funs,lins,lincats) lang) (Map.toList lins) of
