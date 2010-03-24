@@ -61,14 +61,11 @@ ppClause abstr d i scope f ty@(DTyp hyps cat args)
                                then hsep (map (\v -> text "pi" <+> ppCId v <+> char '\\') vars)
                                else empty
                     (goals,i'',head) = ppRes i' scope' cat (res : args)
-                in (i'',(if null goals
-                          then empty
-                          else hsep (punctuate comma (map (ppExpr 0 i'' scope') goals)) <> comma)
-                        <+>
-                        (ppParens (d > 0) (quants <+> head <+> 
-                                          (if null hdocs
+                    docs = map (ppExpr 0 i'' scope') goals ++ hdocs
+                in (i'',ppParens (d > 0) (quants <+> head <+> 
+                                          (if null docs
                                              then empty
-                                             else text ":-" <+> hsep (punctuate comma hdocs)))))
+                                             else text ":-" <+> hsep (punctuate comma docs))))
   where
     ppRes i scope cat es = 
        let ((goals,i'),es') = mapAccumL (\(goals,i) e -> let (goals',i',e') = expr2goal abstr scope goals i e []
