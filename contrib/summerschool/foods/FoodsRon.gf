@@ -2,7 +2,7 @@
 
 concrete FoodsRon of Foods = 
 {
-flags coding=cp1250;
+flags coding=utf8 ;
 
 param Number = Sg | Pl ;
       Gender = Masc | Fem ;
@@ -15,23 +15,23 @@ Item = {s : Str ; n : Number; g : Gender};
 
 lin
 
-This = det Sg (mkTab "acest" "aceastã");
+This = det Sg (mkTab "acest" "aceastÃ£");
 That = det Sg (mkTab "acel" "acea");
-These = det Pl (mkTab "aceºti" "aceste");
+These = det Pl (mkTab "aceÂºti" "aceste");
 Those = det Pl (mkTab "acei" "acele");
 
 Wine = mkNoun "vin" "vinuri" NNeut ;
-Cheese = mkNoun "brânzã" "brânzeturi" NFem ;
-Fish = mkNoun "peºte" "peºti" NMasc;
+Cheese = mkNoun "brÃ¢nzÄƒ" "brÃ¢nzeturi" NFem ;
+Fish = mkNoun "peÅŸte" "peÅŸti" NMasc ;
 Pizza = mkNoun "pizza" "pizze" NFem;
 
 Very a = {s = \\n,g => "foarte" ++ a.s ! n ! g};
 
-Fresh = mkAdj "proaspãt" "proaspãtã" "proaspeşi" "proaspete" ;
-Warm = mkAdj "cald" "caldã" "calzi" "calde" ;
-Italian = mkAdj "italian" "italianã" "italieni" "italiene" ;
-Expensive = mkAdj "scump" "scumpã" "scumpi" "scumpe" ;
-Delicious = mkAdj "delicios" "delcioasã" "delicioºi" "delicioase" ;
+Fresh = mkAdj "proaspÄƒt" "proaspÄƒtÄƒ" "proaspeÅ£i" "proaspete" ;
+Warm = mkAdj "cald" "caldÄƒ" "calzi" "calde" ;
+Italian = mkAdj "italian" "italianÄƒ" "italieni" "italiene" ;
+Expensive = mkAdj "scump" "scumpÄƒ" "scumpi" "scumpe" ;
+Delicious = mkAdj "delicios" "delcioasÄƒ" "delicioÅŸi" "delicioase" ;
 Boring = mkAdj "plictisitor" "plictisitoare" "plictisitori" "plictisitoare" ;
 
 Pred item quality = {s = item.s ++ copula ! item.n ++ quality.s ! item.n ! item.g} ;
