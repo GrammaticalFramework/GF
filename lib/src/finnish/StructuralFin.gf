@@ -46,6 +46,7 @@ concrete StructuralFin of Structural = CatFin **
   here7to_Adv = ss "tänne" ;
   here7from_Adv = ss "täältä" ;
   how_IAdv = ss "miten" ;
+  how8much_IAdv = ss "kuinka paljon" ;
   how8many_IDet = 
     {s = \\c => "kuinka" ++ (mkN "moni" "monia").s ! NCase Sg c ; n = Sg ; isNum = False} ;
   if_Subj = ss "jos" ;

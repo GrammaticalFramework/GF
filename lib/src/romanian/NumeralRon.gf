@@ -4,13 +4,13 @@ concrete NumeralRon of Numeral = CatRon **
 flags coding = utf8 ;
 
 param DForm = unit | teen | ten | teen_inf ;
-param Place = indep | attr ;
+param Placement = indep | attr ;
 
 lincat Digit = {s : CardOrd => DForm => Str ; size : Size} ;
-lincat Sub10 = {s : CardOrd => DForm => Place => Str ; size : Size} ;
-lincat Sub100 = {s : CardOrd => NumF => Place => Str ; size : Size} ;
-lincat Sub1000 = {s : CardOrd => NumF => Place => Str ; size : Size} ;
-lincat Sub1000000 = { s : CardOrd => NumF => Place => Str; size : Size } ;
+lincat Sub10 = {s : CardOrd => DForm => Placement => Str ; size : Size} ;
+lincat Sub100 = {s : CardOrd => NumF => Placement => Str ; size : Size} ;
+lincat Sub1000 = {s : CardOrd => NumF => Placement => Str ; size : Size} ;
+lincat Sub1000000 = { s : CardOrd => NumF => Placement => Str; size : Size } ;
 
 
 

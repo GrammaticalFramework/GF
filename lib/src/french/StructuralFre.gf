@@ -53,6 +53,7 @@ lin
   here7to_Adv = ss "ici" ;
   here_Adv = ss "ici" ;
   how_IAdv = ss "comment" ;
+  how8much_IAdv = ss "combien" ;
   how8many_IDet = {s = \\_,c => prepCase c ++ "combien" ++ elisDe ; n = Pl} ;
   if_Subj = ss elisSi ** {m = Indic} ;
   in8front_Prep = mkPreposition "devant" ;
