@@ -95,7 +95,7 @@ lin
     in {
       s = \\_ => 
         quello (elision "quel" "quell'" "quello") 
-               (elision "quelli" "quegli" "quegli")  ;
+               (elision "quei" "quegli" "quegli")  ;
       sp = quello "quello" "quelli" ;
       s2 = []
       } ;
