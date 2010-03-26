@@ -116,19 +116,20 @@ doTranslate pgf input mcat mfrom mto =
                   ("tree",          showJSON tree),
                   ("linearizations",showJSON 
                      [toJSObject [("to", PGF.showLanguage to),("text",output)]
-                       | (to,output) <- linearize' pgf mto tree]
+                       | (to,output) <- linearizeAndBind pgf mto tree]
                   )
                  ]
            | (from,trees) <- parse' pgf input mcat mfrom,
              tree <- trees]
 
+-- used in phrasebook
 doTranslateGroup :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
 doTranslateGroup pgf input mcat mfrom mto =
   showJSON
      [toJSObject [("from",          showJSON (langOnly (PGF.showLanguage from))),
                   ("to",            showJSON (langOnly (PGF.showLanguage to))),
                   ("linearizations",showJSON 
-                      [toJSObject [("text", doBind alt)] | alt <- output])
+                      [toJSObject [("text", doText (doBind alt))] | alt <- output])
                  ]
         | 
           (from,trees) <- parse' pgf input mcat mfrom,
@@ -141,6 +142,9 @@ doTranslateGroup pgf input mcat mfrom mto =
        more (l,s) = 
          Map.insertWith (\ [x] xs -> if elem x xs then xs else (x : xs)) l s
    doBind = unwords . bind . words
+   doText s = case s of
+     c:cs | elem (last s) ".?!" -> toUpper c : init (init cs) ++ [last s]
+     _ -> s
    bind ws = case ws of
          w : "&+" : u : ws2 -> bind ((w ++ u) : ws2)
          w : ws2            -> w : bind ws2
@@ -275,6 +279,14 @@ linearize' pgf mto tree =
     case mto of
       Nothing -> PGF.linearizeAllLang pgf tree
       Just to -> [(to,PGF.linearize pgf to tree)]
+
+linearizeAndBind pgf mto t = [(la, binds s) | (la,s) <- linearize' pgf mto t]
+  where
+    binds = unwords . bs . words
+    bs ws = case ws of
+      u:"&+":v:ws2 -> bs ((u ++ v):ws2)
+      u:ws2        -> u : bs ws2
+      _            -> []
 
 random' :: PGF -> Maybe PGF.Type -> IO [PGF.Tree]
 random' pgf mcat = PGF.generateRandom pgf (fromMaybe (PGF.startCat pgf) mcat)
