@@ -1,6 +1,6 @@
 -- (c) 2009 Ramona Enache under LGPL
 
-concrete FoodRon of Food = SentencesRon ** open
+concrete WordsRon of Words = SentencesRon ** open
   SyntaxRon,
   ParadigmsRon in
 {
@@ -19,6 +19,14 @@ Italian = mkAPA "italian" "italiană" "italieni" "italiene" ;
 Expensive = mkAPA "scump" "scumpă" "scumpi" "scumpe" ;
 Delicious = mkAPA "delicios" "delcioasă" "delicioşi" "delicioase" ;
 Boring = mkAPA "plictisitor" "plictisitoare" "plictisitori" "plictisitoare" ;
+
+    Restaurant = mkCN (mkN "restaurant") ;
+    Bar = mkCN (mkN "bar") ;
+    Toilet = mkCN (mkN "toaleta") ;
+
+    Euro = mkCN (mkN "euro") ;
+    Dollar = mkCN (mkN "dollar") ;
+    Lei = mkCN (mkN "leu" "lei") ;
 
 oper
 mkAPA : (_,_,_,_ : Str) -> AP = \x,y,z,u -> mkAP (mkA x y z u) ;

@@ -1,6 +1,6 @@
 -- (c) 2009 Aarne Ranta under LGPL
 
-concrete FoodFin of Food = SentencesFin ** 
+concrete WordsFin of Words = SentencesFin ** 
     open SyntaxFin, ParadigmsFin in {
   lin
     Wine = mkCN (mkN "viini") ;
@@ -17,6 +17,14 @@ concrete FoodFin of Food = SentencesFin **
     Expensive = mkAP (mkA "kallis") ;
     Delicious = mkAP (mkA "herkullinen") ;
     Boring = mkAP (mkA "tylsä") ;
+
+    Restaurant = mkCN (mkN "ravintola") ;
+    Bar = mkCN (mkN "baari") ;
+    Toilet = mkCN (mkN "vessa") ;
+
+    Euro = mkCN (mkN "euro") ;
+    Dollar = mkCN (mkN "dollari") ;
+    Lei = mkCN (mkN "lei") ;
 
 -- oper ---- optimization lasts forever
 --  mkCNN : Str -> CN = \s -> mkCN (mkN s) ;

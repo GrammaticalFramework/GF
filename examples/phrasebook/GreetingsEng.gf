@@ -26,7 +26,6 @@ lin
   GImTired = ss "I'm tired" ;
   GImScared = ss "I'm scared" ;
   GIdontUnderstand = ss "I don't understand" ;
-  GWheresTheBathroom = ss "where's the bathroom" ;
   GTheCheck = ss "the bill" ;
 
   GYes = ss "yes" ;

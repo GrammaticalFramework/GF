@@ -28,7 +28,6 @@ lin
   GImTired = ss "minä olen väsynyt" ;
   GImScared = ss "minua pelottaa" ;
   GIdontUnderstand = ss "en ymmärrä" ;
-  GWheresTheBathroom = ss "missä on vessa" ;
   GTheCheck = ss "lasku" ;
 
   GYes = ss "kyllä" ;

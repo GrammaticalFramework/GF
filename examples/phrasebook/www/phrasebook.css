@@ -1,0 +1,37 @@
+body {
+    background: #ccc url("http://www.grammaticalframework.org:41296/fridge/se.chalmers.cs.gf.gwt.FridgeApp/brushed-metal.png");
+}
+
+h1, h2, h3, small, th { font-family: sans-serif; }
+
+th, td { vertical-align: baseline; text-align: left; }
+
+div#surface {
+    min-height: 3ex;
+    margin: 5px;
+    padding: 5px;
+    border: 3px dashed #e0e0e0;
+}
+
+div#words {
+    min-height: 3ex;
+    margin: 5px;
+    padding: 6px;
+    border: 3px solid #e0e0e0;
+}
+
+div.word, span.word, div#words div {
+    display: inline-block;
+    font-family: sans-serif;
+    background-color: white;
+    border: 1px solid black;
+    padding: 3px;
+    margin: 3px;
+}
+
+.invalid { color: red; }
+
+div.modtime { float: right; }
+.modtime { color: #444; white-space: nowrap; }
+
+ul.space>li { margin-top: 0.5ex; }

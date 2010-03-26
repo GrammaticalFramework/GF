@@ -1,6 +1,6 @@
 -- (c) 2009 Aarne Ranta under LGPL
 
-concrete FoodEng of Food = SentencesEng ** 
+concrete WordsEng of Words = SentencesEng ** 
     open SyntaxEng, ParadigmsEng in {
   lin
     Wine = mkCN (mkN "wine") ;
@@ -13,5 +13,13 @@ concrete FoodEng of Food = SentencesEng **
     Expensive = mkAP (mkA "expensive") ;
     Delicious = mkAP (mkA "delicious") ;
     Boring = mkAP (mkA "boring") ;
+
+    Restaurant = mkCN (mkN "restaurant") ;
+    Bar = mkCN (mkN "bar") ;
+    Toilet = mkCN (mkN "toilet") ;
+
+    Euro = mkCN (mkN "euro" "euros") ; -- to prevent euroes
+    Dollar = mkCN (mkN "dollar") ;
+    Lei = mkCN (mkN "leu" "lei") ;
 
 }

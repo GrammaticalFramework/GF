@@ -2,19 +2,20 @@
 
 concrete PhrasebookEng of Phrasebook = 
   GreetingsEng,
-  FoodEng ** open 
+  WordsEng ** open 
     (R = Roles),
     SyntaxEng,
     ResEng, ---- for Num to Utt 
     Prelude in {
 
 lincat 
-  Phrase = Utt ;
+  Phrase = Text ;
 
 lin
   PNumeral n = 
     mkPhrase ((SyntaxEng.mkCard <n : Numeral>).s ! Nom) ; ----
-  PSentence s = s ;
+  PSentence s = mkText s ;
+  PQuestion s = mkText s ;
 
   PGreeting g = mkPhrase g.s ;
 ----  PGreeting p s h g = mkPhrase (g.s ++ p.s ++ s.s ++ h.s) ;

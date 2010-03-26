@@ -29,7 +29,6 @@ lin
   GImTired = speakerDistinct "je suis fatigué" "je suis fatiguée" ;
   GImScared = roleNeutral "j'ai peur" ;
   GIdontUnderstand = roleNeutral "je ne comprends pas" ;
-  GWheresTheBathroom = roleNeutral "où est la toilette" ;
   GTheCheck = roleNeutral "l'addition" ;
 
   GYes = roleNeutral "oui" ; ---- si

@@ -1,6 +1,6 @@
 -- (c) 2009 Ramona Enache and Aarne Ranta under LGPL
 
-concrete FoodFre of Food = SentencesFre ** open
+concrete WordsFre of Words = SentencesFre ** open
   SyntaxFre,
   ParadigmsFre in
 {
@@ -19,6 +19,14 @@ Italian = mkAPA "italien" ;
 Expensive = mkAPA "cher" ;
 Delicious = mkAPA "délicieux" ;
 Boring = mkAPA "ennuyeux" ;
+
+    Restaurant = mkCN (mkN "restaurant") ;
+    Bar = mkCN (mkN "bar") ;
+    Toilet = mkCN (mkN "toilette") ;
+
+    Euro = mkCN (mkN "euro") ;
+    Dollar = mkCN (mkN "dollar") ;
+    Lei = mkCN (mkN "lei") ; ---- ?
 
 oper
 mkAPA : (_ : Str) -> AP = \x -> mkAP (mkA x) ;
