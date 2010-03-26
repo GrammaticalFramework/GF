@@ -37,13 +37,13 @@ oper
     } ;
 
 param DForm = unit  | teen  | jten  | ten  | tenplus  ;
-param Place = indep  | postpo | attr  ;
+param Placement = indep  | postpo | attr  ;
 
 lincat 
   Digit = {s : CardOrd => DForm => Str ; inh : DForm ; n : Number} ; 
-  Sub10 = {s : CardOrd => (DForm * Place) => Str ; inh : Number} ;
-  Sub100 = {s : CardOrd => Place => Str ; n : Number} ;
-  Sub1000 = {s : CardOrd => Place => Str ; n : Number} ;
+  Sub10 = {s : CardOrd => (DForm * Placement) => Str ; inh : Number} ;
+  Sub100 = {s : CardOrd => Placement => Str ; n : Number} ;
+  Sub1000 = {s : CardOrd => Placement => Str ; n : Number} ;
   Sub1000000 = {s : CardOrd => Str ; n : Number} ;
 
 lin num x0 = x0 ;

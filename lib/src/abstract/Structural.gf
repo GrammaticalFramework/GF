@@ -48,6 +48,7 @@ abstract Structural = Cat ** {
   here7from_Adv : Adv ;  -- from here
   how_IAdv : IAdv ;
   how8many_IDet : IDet ;
+  how8much_IAdv : IAdv ;
   i_Pron : Pron ;
   if_Subj : Subj ;
   in8front_Prep : Prep ; -- in front of

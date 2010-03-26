@@ -48,6 +48,7 @@ concrete StructuralEng of Structural = CatEng **
   here7to_Adv = mkAdv ["to here"] ;
   here7from_Adv = mkAdv ["from here"] ;
   how_IAdv = ss "how" ;
+  how8much_IAdv = ss "how much" ;
   how8many_IDet = mkDeterminer plural ["how many"] ;
   if_Subj = ss "if" ;
   in8front_Prep = mkPrep ["in front of"] ;

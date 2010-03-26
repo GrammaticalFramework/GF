@@ -48,6 +48,7 @@ lin
   here7to_Adv = ss "până aici" ;
   here_Adv = ss "aici" ;
   how_IAdv = ss "cum" ;
+  how8much_IAdv = ss "cât" ; ---- ? AR
   how8many_IDet = {s = \\g,c => case <g,c> of
                                    { <Fem,AGenDat> => "câtor"; <Fem,_> => "câte" ;
                                      <Masc,AGenDat> => "câtor" ; _ => "câţi" 
