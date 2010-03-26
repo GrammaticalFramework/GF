@@ -1,6 +1,7 @@
 -- (c) 2009 Aarne Ranta under LGPL
 
 concrete FoodsEng of Foods = {
+  flags language = en_US;
   lincat
     Comment, Quality = {s : Str} ; 
     Kind = {s : Number => Str} ; 

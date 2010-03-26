@@ -125,10 +125,10 @@ doTranslate pgf input mcat mfrom mto =
 doTranslateGroup :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
 doTranslateGroup pgf input mcat mfrom mto =
   showJSON
-     [toJSObject [("from",          showJSON (PGF.showLanguage from)),
-                  ("to",            showJSON (PGF.showLanguage to)),
+     [toJSObject [("from",          showJSON (langOnly (PGF.showLanguage from))),
+                  ("to",            showJSON (langOnly (PGF.showLanguage to))),
                   ("linearizations",showJSON 
-                                      [toJSObject [("text", unlines output)]])
+                      [toJSObject [("text", doBind alt)] | alt <- output])
                  ]
         | 
           (from,trees) <- parse' pgf input mcat mfrom,
@@ -140,6 +140,12 @@ doTranslateGroup pgf input mcat mfrom mto =
        start ls = [(l,[s]) | (l,s) <- ls]
        more (l,s) = 
          Map.insertWith (\ [x] xs -> if elem x xs then xs else (x : xs)) l s
+   doBind = unwords . bind . words
+   bind ws = case ws of
+         w : "&+" : u : ws2 -> bind ((w ++ u) : ws2)
+         w : ws2            -> w : bind ws2
+         _ -> ws
+   langOnly = reverse . take 3 . reverse
 
 
 doParse :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> JSValue
