@@ -2,19 +2,20 @@
 
 concrete PhrasebookFin of Phrasebook = 
   GreetingsFin,
-  FoodFin ** open 
+  WordsFin ** open 
     SyntaxFin,
     ResFin, ---- for Num to Utt 
     Prelude in {
 
 lincat 
-  Phrase = Utt ;
+  Phrase = Text ;
 
 lin
   PNumeral n = 
     mkPhrase (ss ((SyntaxFin.mkCard <n : Numeral>).s ! Sg ! Nom)) ; ----
   PGreeting g = mkPhrase g ;
-  PSentence s = s ;
+  PSentence s = mkText s ;
+  PQuestion s = mkText s ;
 
 
 oper 

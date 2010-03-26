@@ -28,7 +28,6 @@ lin
   GImTired = ss "mi-e somn" ;
   GImScared = ss "mi-e frică" ;
   GIdontUnderstand = ss "nu înţeleg" ;
-  GWheresTheBathroom = ss "unde e toaleta" ;
   GTheCheck = ss "nota de plată" ;
 
   GYes = ss "da" ;

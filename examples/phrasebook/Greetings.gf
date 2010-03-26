@@ -26,7 +26,6 @@ fun
   GImTired : Greeting ; 
   GImScared : Greeting ; 
   GIdontUnderstand : Greeting ; 
-  GWheresTheBathroom : Greeting ; 
   GTheCheck : Greeting ; 
 
   GYes : Greeting ;

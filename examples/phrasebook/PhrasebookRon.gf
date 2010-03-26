@@ -2,19 +2,20 @@
 
 concrete PhrasebookRon of Phrasebook = 
   GreetingsRon,
-  FoodRon
+  WordsRon
   ** open 
     SyntaxRon,
     ResRon, ---- for Num to Utt 
     Prelude in {
 
 lincat 
-  Phrase = Utt ;
+  Phrase = Text ;
 
 lin
   PNumeral n = mkPhrase (ss ((mkCard <n : Numeral>).sp ! Masc)) ; ----
   PGreeting g = mkPhrase g ;
-  PSentence s = s ;
+  PSentence s = mkText s ;
+  PQuestion s = mkText s ;
 
 oper 
   mkPhrase : SS -> Utt = \s -> lin Utt s ;

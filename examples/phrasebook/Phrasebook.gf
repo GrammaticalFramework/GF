@@ -1,6 +1,6 @@
 abstract Phrasebook = 
   Greetings,
-  Food
+  Words
   ** {
 
 flags startcat = Phrase ;
@@ -11,6 +11,7 @@ cat
 fun
   PNumeral  : Numeral -> Phrase ;
   PSentence : Sentence -> Phrase ;
+  PQuestion : Question -> Phrase ;
 
   PGreeting : Greeting -> Phrase ;
 ----  PGreeting : Politeness -> Gender -> Gender -> Greeting -> Phrase ;
