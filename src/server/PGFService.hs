@@ -147,6 +147,7 @@ doTranslateGroup pgf input mcat mfrom mto =
      _ -> s
    bind ws = case ws of
          w : "&+" : u : ws2 -> bind ((w ++ u) : ws2)
+         "&+":ws2           -> bind ws2
          w : ws2            -> w : bind ws2
          _ -> ws
    langOnly = reverse . take 3 . reverse
