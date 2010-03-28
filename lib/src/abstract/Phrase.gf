@@ -29,6 +29,8 @@ abstract Phrase = Cat ** {
     UttAdv  : Adv  -> Utt ;                 -- here
     UttVP   : VP   -> Utt ;                 -- to sleep
     UttCN   : CN   -> Utt ;                 -- house
+    UttCard : Card -> Utt ;                 -- five
+    UttAP   : AP   -> Utt ;                 -- fine
 
 -- The phrasal conjunction is optional. A sentence conjunction
 -- can also used to prefix an utterance.

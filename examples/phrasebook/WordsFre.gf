@@ -2,6 +2,8 @@
 
 concrete WordsFre of Words = SentencesFre ** open
   SyntaxFre,
+  DiffPhrasebookFre,
+  IrregFre,
   ParadigmsFre in
 {
 flags coding=utf8 ;
@@ -32,6 +34,18 @@ Boring = mkAPA "ennuyeux" ;
     Euro = mkCN (mkN "euro") ;
     Dollar = mkCN (mkN "dollar") ;
     Lei = mkCN (mkN "lei") ; ---- ?
+
+    AWant p obj = mkCl p want_V2 obj ;
+    ALike p item = mkCl item plaire_V2 p ;
+    AHave p kind = mkCl p have_V2 (mkNP kind) ;
+    ASpeak p lang = mkCl p  (mkV2 (mkV "parler")) lang ;
+    ALove p q = mkCl p (mkV2 (mkV "aimer")) q ;
+
+    English = mkNP (mkPN "anglais") ;
+    Finnish = mkNP (mkPN "finnois") ;
+    French = mkNP (mkPN "français") ; 
+    Romanian = mkNP (mkPN "roumain") ;
+    Swedish = mkNP (mkPN "suédois") ;
 
 oper
 mkAPA : (_ : Str) -> AP = \x -> mkAP (mkA x) ;

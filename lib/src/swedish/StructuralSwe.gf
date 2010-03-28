@@ -43,6 +43,7 @@ concrete StructuralSwe of Structural = CatSwe **
   here7to_Adv = ss "hit" ;
   here7from_Adv = ss "härifrån" ;
   how_IAdv = ss "hur" ;
+  how8much_IAdv = ss "hur mycket" ;
   how8many_IDet = {s = \\_ => ["hur många"] ; n = Pl ; det = DDef Indef} ;
   if_Subj = ss "om" ;
   in8front_Prep = ss "framför" ;

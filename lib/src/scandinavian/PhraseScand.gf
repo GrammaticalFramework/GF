@@ -15,6 +15,9 @@ incomplete concrete PhraseScand of Phrase =
     UttNP np = {s = np.s ! accusative} ;
     UttVP vp = {s = infMark ++ infVP vp (agrP3 Utr Sg)} ;
     UttAdv adv = adv ;
+    UttCN n = {s = n.s ! Sg ! DIndef ! Nom} ;
+    UttAP n = {s = n.s ! Strong (GSg Utr)} ;
+    UttCard n = {s = n.s ! neutrum} ;
 
     NoPConj = {s = []} ;
     PConjConj conj = {s = conj.s2} ;

@@ -2,8 +2,10 @@ abstract Sentences = Numeral ** {
 
   cat
     Phrase ;
-    Sentence ; Question ; Object ; Item ; Kind ; Quality ; 
-    Place ; PlaceKind ; Currency ; Price ;
+    Sentence ; Question ; 
+    Object ; Item ; Kind ; Quality ; 
+    Place ; PlaceKind ; Currency ; Price ; Language ;
+    Person ; Action ;
 
   fun
     -- these phrases are formed here, not in Phrasebook, as they are functorial
@@ -15,15 +17,17 @@ abstract Sentences = Numeral ** {
     PPlaceKind: PlaceKind-> Phrase ;
     PCurrency : Currency -> Phrase ;
     PPrice    : Price    -> Phrase ;
+    PLanguage : Language -> Phrase ;
 
     Is    : Item -> Quality -> Sentence ;
     IsNot : Item -> Quality -> Sentence ;
 
-    IWant : Object -> Sentence ;
-    ILike : Item -> Sentence ; 
-    DoYouHave : Kind -> Question ;
     WhetherIs : Item -> Quality -> Question ;
-    WhereIs : Place -> Question ;
+    WhereIs   : Place -> Question ;
+
+    SAction : Action -> Sentence ;
+    SNotAction : Action -> Sentence ;
+    QAction : Action -> Question ;
 
     HowMuchCost : Item -> Question ;
     ItCost : Item -> Price -> Sentence ;
@@ -36,6 +40,8 @@ abstract Sentences = Numeral ** {
     SuchKind : Quality -> Kind -> Kind ;
     Very : Quality -> Quality ;
     Too : Quality -> Quality ;
+
+    I, You : Person ;
 
     ThePlace : PlaceKind -> Place ;
 

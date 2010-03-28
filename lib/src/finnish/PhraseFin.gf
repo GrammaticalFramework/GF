@@ -1,4 +1,4 @@
-concrete PhraseFin of Phrase = CatFin ** open ResFin in {
+concrete PhraseFin of Phrase = CatFin ** open ResFin, (P = Prelude) in {
 
   lin
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;
@@ -14,6 +14,9 @@ concrete PhraseFin of Phrase = CatFin ** open ResFin in {
     UttNP np = {s = np.s ! NPCase Nom} ;
     UttVP vp = {s = infVP (NPCase Nom) Pos (agrP3 Sg) vp Inf1} ;
     UttAdv adv = adv ;
+    UttCN np = {s = np.s ! NCase Sg Nom} ;
+    UttAP np = {s = np.s ! P.False ! NCase Sg Nom} ;
+    UttCard n = {s = n.s ! Sg ! Nom} ;
 
     NoPConj = {s = []} ;
     PConjConj conj = {s = conj.s2} ;

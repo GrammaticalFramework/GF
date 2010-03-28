@@ -15,6 +15,9 @@ incomplete concrete SentencesI of Sentences = Numeral **
     PlaceKind = CN ;
     Currency = CN ;
     Price = NP ;
+    Action = Cl ;
+    Person = NP ;
+    Language = NP ;
   lin
     PObject x = mkPhrase (mkUtt x) ;
     PKind x = mkPhrase (mkUtt x) ;
@@ -24,22 +27,23 @@ incomplete concrete SentencesI of Sentences = Numeral **
     PPlaceKind x = mkPhrase (mkUtt x) ;
     PCurrency x = mkPhrase (mkUtt x) ;
     PPrice x = mkPhrase (mkUtt x) ;
+    PLanguage x = mkPhrase (mkUtt x) ;
 
     Is item quality = mkS (mkCl item quality) ;
     IsNot item quality = mkS negativePol (mkCl item quality) ;
     WhetherIs item quality = mkQS (mkQCl (mkCl item quality)) ;
     WhereIs place = mkQS (mkQCl where_IAdv place) ;
-    IWant obj = mkS (mkCl (mkNP i_Pron) want_V2 obj) ;
-    ILike item = mkS (mkCl (mkNP i_Pron) like_V2 item) ;
-    DoYouHave kind = 
-      mkQS (mkQCl (mkCl (mkNP youPol_Pron) have_V2 (mkNP kind))) ;
+
+    SAction = mkS ;
+    SNotAction = mkS negativePol ;
+    QAction a = mkQS (mkQCl a) ;
 
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item cost_V)) ; 
     ItCost item price = mkS (mkCl item cost_V2 price) ; 
-    AmountCurrency num curr = mkNP <num : Numeral> curr ;
+    AmountCurrency num curr = mkNP <lin Numeral num : Numeral> curr ;
 
     ObjItem i = i ;
-    ObjNumber n k = mkNP <n : Numeral> k ;
+    ObjNumber n k = mkNP <lin Numeral n : Numeral> k ;
 
     This kind = mkNP this_Quant kind ;
     That kind = mkNP that_Quant kind ;
@@ -52,6 +56,9 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Very quality = mkAP very_AdA quality ;
     Too quality = mkAP too_AdA quality ;
     ThePlace kind = mkNP the_Quant kind ;
+
+    I = mkNP i_Pron ;
+    You = mkNP youPol_Pron ;
 
 oper 
   mkPhrase : Utt -> Text = \u -> lin Text u ; -- no punctuation

@@ -1,7 +1,7 @@
 -- (c) 2009 Aarne Ranta under LGPL
 
 concrete WordsFin of Words = SentencesFin ** 
-    open SyntaxFin, ParadigmsFin in {
+    open SyntaxFin, ParadigmsFin, DiffPhrasebookFin in {
   lin
     Wine = mkCN (mkN "viini") ;
     Beer = mkCN (mkN "olut") ;
@@ -31,7 +31,15 @@ concrete WordsFin of Words = SentencesFin **
     Dollar = mkCN (mkN "dollari") ;
     Lei = mkCN (mkN "lei") ;
 
--- oper ---- optimization lasts forever
---  mkCNN : Str -> CN = \s -> mkCN (mkN s) ;
---  mkAPA : Str -> AP = \s -> mkAP (mkA s) ;
+    AWant p obj = mkCl p want_V2 obj ;
+    ALike p item = mkCl item like_V2 p ;
+    AHave p kind = mkCl p have_V2 (mkNP kind) ;
+    ASpeak p lang = mkCl p  (mkV2 (mkV "puhua") partitive) lang ;
+    ALove p q = mkCl p (mkV2 (mkV "rakastaa") partitive) q ;
+
+    English = mkNP (mkPN "englanti") ;
+    Finnish = mkNP (mkPN (mkN "suomi" "suomia")) ;
+    French = mkNP (mkPN "ranska") ; 
+    Romanian = mkNP (mkPN "romania") ;
+    Swedish = mkNP (mkPN "ruotsi") ;
 }

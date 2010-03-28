@@ -18,6 +18,9 @@
     UttVP vp = let a = agrP3 Masc Sg in 
           {s = "sã"  ++ (flattenSimpleClitics vp.nrClit vp.clAcc vp.clDat (vp.isRefl ! a)) ++ conjVP vp a ++vp.comp ! a ++ vp.ext ! Pos} ; 
     UttAdv adv = adv ;
+    UttCN cn = {s = cn.s ! Sg ! Indef ! ANomAcc} ;
+    UttAP ap = {s = ap.s ! AF Masc Sg Indef ANomAcc} ;
+    UttCard n = {s = n.sp ! Masc} ;
 
     NoPConj = {s = []} ;
     PConjConj conj = {s = conj.s2} ;
