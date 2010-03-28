@@ -4,7 +4,7 @@ concrete WordsFin of Words = SentencesFin **
     open SyntaxFin, ParadigmsFin, DiffPhrasebookFin in {
   lin
     Wine = mkCN (mkN "viini") ;
-    Beer = mkCN (mkN "olut") ;
+    Beer = mkCN (mkN "olut" "oluita") ;
     Water = mkCN (mkN "vesi" "veden" "vesiä") ;
     Coffee = mkCN (mkN "kahvi") ;
     Tea = mkCN (mkN "tee") ;
@@ -32,7 +32,7 @@ concrete WordsFin of Words = SentencesFin **
     Lei = mkCN (mkN "lei") ;
 
     AWant p obj = mkCl p want_V2 obj ;
-    ALike p item = mkCl item like_V2 p ;
+    ALike p item = mkCl p like_V2 item ;
     AHave p kind = mkCl p have_V2 (mkNP kind) ;
     ASpeak p lang = mkCl p  (mkV2 (mkV "puhua") partitive) lang ;
     ALove p q = mkCl p (mkV2 (mkV "rakastaa") partitive) q ;

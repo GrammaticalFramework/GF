@@ -60,14 +60,18 @@ Disambiguation, esp. by the parameters in Roles.
 abstract Sentences: general syntactic structures implementable by functor
 - concrete by functor SencencesI
 
+
 abstract Words: words and predicates, typically language-dependent
 - concrete separate
+
 
 abstract Greetings: idiomatic phrases, strings with role dependence
 - concrete separate
 
-abstract Phrasebook: put everything everything together
+
+abstract Phrasebook: put everything together
 - concrete separate
+
 
 resource Roles: param Politeness, Gender
 
@@ -87,6 +91,11 @@ Extract/construct lexica for
 - food stuff
 - languages
 - places
+
+
+Connection to Google translate, for fall-back and for comparison
+
+Feedback facility in the UI.
 
 
 
