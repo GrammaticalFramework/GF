@@ -4,7 +4,7 @@ Aarne Ranta
 
 History
 - Version 0.1, 26 March 2010. Eng, Fin, Fre, Ron; dedicated minibar UI.
-- Version 0.2, 28 March. Swe; cat Action; small phrases.
+- Version 0.2, 28 March. Swe, Ita; cat Action; small phrases.
 
 
 
@@ -36,7 +36,7 @@ The source code resides in
 
 
 Current status (28 March 2010):
-- available in English, Finnish, French, Romanian, Swedish
+- available in English, Finnish, French, Italian, Romanian, Swedish
 - very small coverage
 - works on web browsers calling a server
 - web service not yet released, but preliminarily available 
