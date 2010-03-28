@@ -2,6 +2,12 @@ MOLTO Multilingual Phrasebook
 Aarne Ranta
 
 
+History
+- Version 0.1, 26 March 2010. Eng, Fin, Fre, Ron; dedicated minibar UI.
+- Version 0.2, 28 March. Swe; cat Action; small phrases.
+
+
+
 =Purpose=
 
 This phrasebook is a programme for translating touristic phrases 
@@ -35,5 +41,56 @@ Current status (28 March 2010):
 - works on web browsers calling a server
 - web service not yet released, but preliminarily available 
   [here http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html]
+
+
+
+=Points illustrated=
+
+The use of resource grammars and functors.
+
+Compile-time transfer: especially, in Action in Words.
+
+Quasi-incremental translation: many basic types are also used as phrases.
+
+Disambiguation, esp. by the parameters in Roles.
+
+
+=Files=
+
+abstract Sentences: general syntactic structures implementable by functor
+- concrete by functor SencencesI
+
+abstract Words: words and predicates, typically language-dependent
+- concrete separate
+
+abstract Greetings: idiomatic phrases, strings with role dependence
+- concrete separate
+
+abstract Phrasebook: put everything everything together
+- concrete separate
+
+resource Roles: param Politeness, Gender
+
+interface DiffPhrasebook: the (so far small) interface for Sentences
+
+
+
+=To Do=
+
+Text-based translation interface.
+
+Access to disambiguation grammars in the interface.
+
+The remaining 10 languages
+
+Extract/construct lexica for
+- food stuff
+- languages
+- places
+
+
+
+
+
 
 

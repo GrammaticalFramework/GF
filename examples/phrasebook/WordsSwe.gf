@@ -27,4 +27,17 @@ concrete WordsSwe of Words = SentencesSwe **
     Dollar = mkCN (mkN "dollar" "dollar") ;
     Lei = mkCN (mkN "lei" "lei") ;
 
+    English = mkNP (mkPN "engelska") ;
+    Finnish = mkNP (mkPN "finska") ;
+    French = mkNP (mkPN "franska") ; 
+    Romanian = mkNP (mkPN "rumänska") ;
+    Swedish = mkNP (mkPN "svenska") ;
+
+    AWant p obj = mkCl p want_VV (mkVP have_V2 obj) ;
+    ALike p item = mkCl p (mkV2 (mkV "tycker") (mkPrep "om")) item ;
+    AHave p kind = mkCl p have_V2 (mkNP kind) ;
+    ASpeak p lang = mkCl p  (mkV2 (mkV "tala")) lang ;
+    ALove p q = mkCl p (mkV2 (mkV "älska")) q ;
+
+
 }

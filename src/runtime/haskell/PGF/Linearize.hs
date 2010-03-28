@@ -52,7 +52,7 @@ linTree pgf lang mark e = lin0 [] [] [] Nothing e
                                                                  return (listArray (bounds lins) [computeSeq seqid args | seqid <- elems lins])
                                          PCoerce fid       -> apply path xs (Just fid) f es
                         Nothing  -> mzero
-        Nothing    -> apply path xs mb_fid _V [ELit (LStr "?")]              -- function without linearization
+        Nothing    -> apply path xs mb_fid _V [ELit (LStr ("[" ++ showCId f ++ "]"))]  -- fun without lin
       where
         lookupProds (Just fid) prods = IntMap.lookup fid prods
         lookupProds Nothing    prods

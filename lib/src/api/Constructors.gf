@@ -154,7 +154,10 @@ incomplete resource Constructors = open Grammar in {
       mkUtt : IAdv ->  Utt ;  -- 7. why --# notminimal
       mkUtt : NP   ->  Utt ;  -- 8. John --# notminimal
       mkUtt : Adv  ->  Utt ;  -- 9. here --# notminimal
-      mkUtt : VP   ->  Utt    -- 10. to walk --# notminimal
+      mkUtt : VP   ->  Utt ;  -- 10. to walk --# notminimal
+      mkUtt : CN   ->  Utt ;  -- 11. beer --# notminimal
+      mkUtt : AP   ->  Utt ;  -- 12. fine --# notminimal
+      mkUtt : Card ->  Utt ;  -- 13. five --# notminimal
       } ; --# notminimal
 
 -- The plural first-person imperative is a special construction.
@@ -1361,7 +1364,10 @@ incomplete resource Constructors = open Grammar in {
       mkUtt : Adv  -> Utt                   -- here  
                                          =    UttAdv   ;  
       mkUtt : VP   -> Utt                   -- to sleep --# notminimal
-                                         =    UttVP  --# notminimal
+                                         =    UttVP ;  --# notminimal
+      mkUtt : CN   -> Utt =    UttCN ;    --# notminimal
+      mkUtt : AP   -> Utt =    UttAP ;    --# notminimal
+      mkUtt : Card -> Utt =    UttCard ;  --# notminimal
       } ;  
 
     lets_Utt : VP -> Utt = ImpPl1 ; --# notminimal

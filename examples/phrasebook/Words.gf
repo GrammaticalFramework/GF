@@ -11,4 +11,14 @@ abstract Words = Sentences ** {
 
     Euro, Dollar, Lei : Currency ;
 
+    English, Finnish, French, Romanian, Swedish : Language ;
+
+-- actions can be expressed by different structures in different languages
+
+    AWant  : Person -> Object   -> Action ;
+    ALike  : Person -> Item     -> Action ; 
+    AHave  : Person -> Kind     -> Action ;
+    ASpeak : Person -> Language -> Action ;
+    ALove  : Person -> Person   -> Action ;
+
 }
