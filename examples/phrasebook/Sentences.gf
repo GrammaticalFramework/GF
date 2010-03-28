@@ -1,10 +1,21 @@
 abstract Sentences = Numeral ** {
 
   cat
+    Phrase ;
     Sentence ; Question ; Object ; Item ; Kind ; Quality ; 
     Place ; PlaceKind ; Currency ; Price ;
 
   fun
+    -- these phrases are formed here, not in Phrasebook, as they are functorial
+    PObject   : Object   -> Phrase ;
+    PKind     : Kind     -> Phrase ;
+    PQuality  : Quality  -> Phrase ;
+    PNumeral  : Numeral  -> Phrase ;
+    PPlace    : Place    -> Phrase ;
+    PPlaceKind: PlaceKind-> Phrase ;
+    PCurrency : Currency -> Phrase ;
+    PPrice    : Price    -> Phrase ;
+
     Is    : Item -> Quality -> Sentence ;
     IsNot : Item -> Quality -> Sentence ;
 

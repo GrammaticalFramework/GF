@@ -4,6 +4,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Syntax 
   in {
   lincat
+    Phrase = Text ;
     Sentence = S ; 
     Question = QS ; 
     Item = NP ;
@@ -15,6 +16,15 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Currency = CN ;
     Price = NP ;
   lin
+    PObject x = mkPhrase (mkUtt x) ;
+    PKind x = mkPhrase (mkUtt x) ;
+    PQuality x = mkPhrase (mkUtt x) ;
+    PNumeral x = mkPhrase (mkUtt (mkCard (x ** {lock_Numeral = <>}))) ;
+    PPlace x = mkPhrase (mkUtt x) ;
+    PPlaceKind x = mkPhrase (mkUtt x) ;
+    PCurrency x = mkPhrase (mkUtt x) ;
+    PPrice x = mkPhrase (mkUtt x) ;
+
     Is item quality = mkS (mkCl item quality) ;
     IsNot item quality = mkS negativePol (mkCl item quality) ;
     WhetherIs item quality = mkQS (mkQCl (mkCl item quality)) ;
@@ -42,5 +52,8 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Very quality = mkAP very_AdA quality ;
     Too quality = mkAP too_AdA quality ;
     ThePlace kind = mkNP the_Quant kind ;
+
+oper 
+  mkPhrase : Utt -> Text = \u -> lin Text u ; -- no punctuation
 
 }

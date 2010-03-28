@@ -4,6 +4,11 @@ concrete WordsFin of Words = SentencesFin **
     open SyntaxFin, ParadigmsFin in {
   lin
     Wine = mkCN (mkN "viini") ;
+    Beer = mkCN (mkN "olut") ;
+    Water = mkCN (mkN "vesi" "veden" "vesiä") ;
+    Coffee = mkCN (mkN "kahvi") ;
+    Tea = mkCN (mkN "tee") ;
+
     Pizza = mkCN (mkN "pizza") ;
     Cheese = mkCN (mkN "juusto") ;
     Fish = mkCN (mkN "kala") ;

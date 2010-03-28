@@ -5,19 +5,11 @@ concrete PhrasebookRon of Phrasebook =
   WordsRon
   ** open 
     SyntaxRon,
-    ResRon, ---- for Num to Utt 
     Prelude in {
 
-lincat 
-  Phrase = Text ;
-
 lin
-  PNumeral n = mkPhrase (ss ((mkCard <n : Numeral>).sp ! Masc)) ; ----
-  PGreeting g = mkPhrase g ;
-  PSentence s = mkText s ;
-  PQuestion s = mkText s ;
-
-oper 
-  mkPhrase : SS -> Utt = \s -> lin Utt s ;
+  PSentence s = mkText s | lin Text (mkUtt s) ;  -- optional .
+  PQuestion s = mkText s | lin Text (mkUtt s) ;  -- optional ?
+  PGreeting g = lin Text g ;
 
 }

@@ -2,7 +2,8 @@
 
 abstract Words = Sentences ** {
   fun
-    Wine, Cheese, Fish, Pizza : Kind ;
+    Wine, Beer, Water, Coffee, Tea : Kind ; 
+    Cheese, Fish, Pizza : Kind ;
     Fresh, Warm, Italian, 
       Expensive, Delicious, Boring : Quality ;
 

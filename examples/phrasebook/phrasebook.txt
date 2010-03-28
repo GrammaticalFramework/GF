@@ -1,0 +1,39 @@
+MOLTO Multilingual Phrasebook
+Aarne Ranta
+
+
+=Purpose=
+
+This phrasebook is a programme for translating touristic phrases 
+between 15 European languages:
+- Bulgarian, Catalan, Danish, Dutch, English,
+  Finnish, French, German, Italian, Norwegian,
+  Polish, Romanian, Russian, Spanish, Swedish
+
+
+It is implemented by using the GF programming language 
+([Grammatical Framework http://grammaticalframework.org]).
+It is the first demo for the MOLTO project 
+([Multilingual On-Line Translation http://www.molto-project.eu]).
+
+The phrasebook has the following requirements:
+- high quality: reliable translations
+- translation from any language to any other ones
+- runnable in web browsers
+- runnable on mobile phones (also off-line: forthcoming for Android phones)
+- easily extensible by new words (forthcoming: semi-automatic extensions by users)
+
+
+The phrasebook is available as open-source software, licensed under GNU LGPL. 
+The source code resides in 
+[``code.haskell.org/gf/examples/phrasebook/`` http://code.haskell.org/gf/examples/phrasebook/]
+
+
+Current status (28 March 2010):
+- available in English, Finnish, French, Romanian, Swedish
+- very small coverage
+- works on web browsers calling a server
+- web service not yet released, but preliminarily available 
+  [here http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html]
+
+
