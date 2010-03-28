@@ -4,6 +4,11 @@ concrete WordsEng of Words = SentencesEng **
     open SyntaxEng, ParadigmsEng in {
   lin
     Wine = mkCN (mkN "wine") ;
+    Beer = mkCN (mkN "beer") ;
+    Water = mkCN (mkN "water") ;
+    Coffee = mkCN (mkN "coffee") ;
+    Tea = mkCN (mkN "tea") ;
+
     Pizza = mkCN (mkN "pizza") ;
     Cheese = mkCN (mkN "cheese") ;
     Fish = mkCN (mkN "fish" "fish") ;

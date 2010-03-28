@@ -1,9 +1,9 @@
 --# -path=.:present
 
-concrete PhrasebookFin of Phrasebook = 
-  GreetingsFin,
-  WordsFin ** open 
-    SyntaxFin,
+concrete PhrasebookSwe of Phrasebook = 
+  GreetingsSwe,
+  WordsSwe ** open 
+    SyntaxSwe,
     Prelude in {
 
 lin

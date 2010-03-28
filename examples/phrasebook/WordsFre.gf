@@ -9,6 +9,11 @@ flags coding=utf8 ;
 lin
 
 Wine = mkCN (mkN "vin") ;
+    Beer = mkCN (mkN "bière") ;
+    Water = mkCN (mkN "eau" feminine) ;
+    Coffee = mkCN (mkN "café") ;
+    Tea = mkCN (mkN "thé") ;
+
 Cheese = mkCN (mkN "fromage" masculine) ;
 Fish = mkCN (mkN "poisson" masculine) ;
 Pizza = mkCN (mkN "pizza" feminine) ;
