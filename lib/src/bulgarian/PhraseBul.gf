@@ -16,6 +16,9 @@ concrete PhraseBul of Phrase = CatBul ** open Prelude, ResBul in {
     UttNP np = {s = np.s ! RSubj} ;
     UttVP vp = {s = daComplex vp ! Perf ! agrP3 (GSg Neut)} ;
     UttAdv adv = adv ;
+    UttCN n = {s = n.s ! NF Sg Indef} ;
+    UttCard n = {s = n.s ! CFNeut Indef} ;
+    UttAP ap = {s = ap.s ! ASg Masc Indef} ;
 
     NoPConj = {s = []} ;
     PConjConj conj = {s = conj.s ++ linCoord!conj.conj} ;

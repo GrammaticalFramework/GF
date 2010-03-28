@@ -22,6 +22,9 @@ concrete PhrasePol of Phrase = CatPol ** open Prelude, ResPol, VerbMorphoPol in 
             vp.sufix !Pos !MascAniSg  ++ vp.postfix !Pos !MascAniSg
    };
    UttAdv adv = adv ;
+   UttCN n = {s = n.s ! Sg ! Nom} ;
+   UttCard n = {s = n.s ! Nom ! Neut} ;
+   UttAP ap = {s = ap.s ! AF NeutSg Nom} ; ---- gennum ? (AR)
 
    NoPConj = {s = []} ;
    PConjConj conj = {s = conj.s2} ; ---

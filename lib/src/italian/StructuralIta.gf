@@ -46,6 +46,7 @@ lin
   here7to_Adv = ss "quì" ;
   here_Adv = ss "quì" ;
   how_IAdv = ss "come" ;
+  how8much_IAdv = ss "quanto" ;
   how8many_IDet = {s = \\g,c => prepCase c ++ genForms "quanti" "quante" ! g ; n = Pl} ;
   if_Subj = ss "se" ** {m = Indic} ;
   in8front_Prep = mkPrep "davanti" ;

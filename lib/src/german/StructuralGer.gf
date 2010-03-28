@@ -43,6 +43,7 @@ concrete StructuralGer of Structural = CatGer **
   here7from_Adv = ss ["hieraus"] ;
   here_Adv = ss "hier" ;
   how_IAdv = ss "wie" ;
+  how8much_IAdv = ss "wieviel" ;
   how8many_IDet = detLikeAdj Pl "wieviel" ;
   if_Subj = ss "wenn" ;
   in8front_Prep = mkPrep "vor" Dat ;
