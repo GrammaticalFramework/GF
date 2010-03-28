@@ -40,10 +40,10 @@ Boring = mkAPA "plictisitor" "plictisitoare" "plictisitori" "plictisitoare" ;
     ASpeak p lang = mkCl p  (dirV2 (mkV "vorbi")) lang ;
     ALove p q = mkCl p (dirV2 (mkV "iubi")) q ;
 
-    English = SyntaxRon.mkNP (mkPN "anglais") ; ---- ?
+    English = SyntaxRon.mkNP (mkPN "engleză") ; ---- ?
 --    Finnish = mkNP (mkPN "finnois") ;
 --    French = mkNP (mkPN "français") ; 
-    Romanian = SyntaxRon.mkNP (mkPN "engleză") ; ---- ?
+    Romanian = SyntaxRon.mkNP (mkPN "română") ; ---- ?
 --    Swedish = mkNP (mkPN "suédois") ;
 
 oper

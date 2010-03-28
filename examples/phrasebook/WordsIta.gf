@@ -12,7 +12,7 @@ Wine = mkCN (mkN "vino") ;
     Beer = mkCN (mkN "birra") ;
     Water = mkCN (mkN "acqua") ;
     Coffee = mkCN (mkN "caffè") ;
-    Tea = mkCN (mkN "té") ; ----
+--   Tea = mkCN (mkN "té") ; ----
 
 Cheese = mkCN (mkN "formaggio") ;
 Fish = mkCN (mkN "pesce") ;
