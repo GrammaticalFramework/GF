@@ -35,7 +35,7 @@ Boring = mkAPA "plictisitor" "plictisitoare" "plictisitori" "plictisitoare" ;
     Lei = mkCN (mkN "leu" "lei") ;
 
     AWant p obj = mkCl p want_V2 obj ;
-    ALike p item = mkCl item like_V2 p ;
+    ALike p item = mkCl p like_V2 item ;
     AHave p kind = mkCl p have_V2 (SyntaxRon.mkNP kind) ;
     ASpeak p lang = mkCl p  (dirV2 (mkV "vorbi")) lang ;
     ALove p q = mkCl p (dirV2 (mkV "iubi")) q ;
