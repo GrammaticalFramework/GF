@@ -8,7 +8,7 @@ flags
 
 lin
   airplane_N = regN "airplane" ;
-  answer_V2S = mkV2S (regV "answer") toP ;
+  answer_V2S = mkV2S (mkV "answer" "answered") toP ;
   apartment_N = regN "apartment" ;
   apple_N = regN "apple" ;
   art_N = regN "art" ;
@@ -49,7 +49,7 @@ lin
   church_N = regN "church" ;
   city_N = regN "city" ;
   clean_A = regADeg "clean" ;
-  clever_A = regADeg "clever" ;
+  clever_A = mkA "clever" "cleverer" ;
   close_V2 = dirV2 (regV "close") ;
   coat_N = regN "coat" ;
   cold_A = regADeg "cold" ;
@@ -207,7 +207,7 @@ lin
   wine_N = regN "wine" ;
   win_V2 = dirV2 (irregDuplV "win" "won" "won") ;
   woman_N = mkN feminine (mk2N "woman" "women") ;
-  wonder_VQ = mkVQ (regV "wonder") ;
+  wonder_VQ = mkVQ (mkV "wonder" "wondered") ;
   wood_N = regN "wood" ;
   write_V2 = dirV2 (irregV "write" "wrote" "written") ;
   yellow_A = mkA "yellow" ;
@@ -325,7 +325,7 @@ lin
   swim_V = IrregEng.swim_V ;
   think_V = IrregEng.think_V ;
   turn_V = regV "turn" ;
-  vomit_V = regV "vomit" ;
+  vomit_V = mkV "vomit" "vomited" ;
 
   bite_V2 = dirV2 IrregEng.bite_V ;
   count_V2 = dirV2 (regV "count") ;
