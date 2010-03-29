@@ -2,10 +2,31 @@ MOLTO Multilingual Phrasebook
 Aarne Ranta
 
 
-History
-- Version 0.1, 26 March 2010. Eng, Fin, Fre, Ron; dedicated minibar UI.
-- Version 0.2, 28 March. Swe, Ita; cat Action; small phrases.
+%!postproc(html): #HR <HR>
+%!postproc(html): #BSMALL <font size=-1>
+%!postproc(html): #ESMALL </font>
 
+
+
+
+#HR
+#BSMALL
+
+History
+- 26 March 2010. Version 0.1: Eng, Fin, Fre, Ron; dedicated minibar UI.
+- 28 March. Version 0.2: Swe, Ita; cat Action; small phrases.
+
+
+Want to contribute? You can add [missing words missing.txt] by using the
+[morphological paradigms http://www.grammaticalframework.org/lib/doc/synopsis.html#toc78].
+The words are added to the ``Words``//L//``.gf`` files for each language //L//. Then recompile the
+phrasebook by ``make``. All this of course in the
+[source directory http://code.haskell.org/gf/examples/phrasebook/],
+which you can obtain by 
+[GF Darcs http://www.grammaticalframework.org/doc/gf-developers.html].
+
+#ESMALL
+#HR
 
 
 =Purpose=
@@ -57,25 +78,27 @@ Disambiguation, esp. by the parameters in Roles.
 
 =Files=
 
-abstract Sentences: general syntactic structures implementable by functor
-- concrete by functor SencencesI
+``Sentences``: general syntactic structures implementable by 
+functor. Concrete syntax via ``SencencesI``.
 
 
-abstract Words: words and predicates, typically language-dependent
-- concrete separate
+``Words``: words and predicates, typically language-dependent. Separate
+concrete syntaxes.
 
 
-abstract Greetings: idiomatic phrases, strings with role dependence
-- concrete separate
+``Greetings``: idiomatic phrases, string-based. Separate concrete
+syntaxes.
 
 
-abstract Phrasebook: put everything together
-- concrete separate
+``Phrasebook``: the top module putting everything together. Separate
+concrete syntaxes.
 
 
-resource Roles: param Politeness, Gender
+Resource ``Roles``: parameter types Politeness, Gender
 
-interface DiffPhrasebook: the (so far small) interface for Sentences
+Interface ``DiffPhrasebook``: the (so far small) interface for Sentences.
+
+
 
 
 

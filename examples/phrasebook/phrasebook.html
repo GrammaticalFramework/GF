@@ -10,13 +10,30 @@
 </FONT></CENTER>
 
 <P>
+<HR>
+<font size=-1>
+</P>
+<P>
 History
 </P>
 <UL>
-<LI>Version 0.1, 26 March 2010. Eng, Fin, Fre, Ron; dedicated minibar UI.
-<LI>Version 0.2, 28 March. Swe, Ita; cat Action; small phrases.
+<LI>26 March 2010. Version 0.1: Eng, Fin, Fre, Ron; dedicated minibar UI.
+<LI>28 March. Version 0.2: Swe, Ita; cat Action; small phrases.
 </UL>
 
+<P>
+Want to contribute? You can add <A HREF="missing.txt">missing words</A> by using the
+<A HREF="http://www.grammaticalframework.org/lib/doc/synopsis.html#toc78">morphological paradigms</A>.
+The words are added to the <CODE>Words</CODE><I>L</I><CODE>.gf</CODE> files for each language <I>L</I>. Then recompile the
+phrasebook by <CODE>make</CODE>. All this of course in the
+<A HREF="http://code.haskell.org/gf/examples/phrasebook/">source directory</A>,
+which you can obtain by 
+<A HREF="http://www.grammaticalframework.org/doc/gf-developers.html">GF Darcs</A>.
+</P>
+<P>
+</font>
+<HR>
+</P>
 <H1>Purpose</H1>
 <P>
 This phrasebook is a programme for translating touristic phrases 
@@ -76,38 +93,26 @@ Disambiguation, esp. by the parameters in Roles.
 </P>
 <H1>Files</H1>
 <P>
-abstract Sentences: general syntactic structures implementable by functor
-</P>
-<UL>
-<LI>concrete by functor SencencesI
-</UL>
-
-<P>
-abstract Words: words and predicates, typically language-dependent
-</P>
-<UL>
-<LI>concrete separate
-</UL>
-
-<P>
-abstract Greetings: idiomatic phrases, strings with role dependence
-</P>
-<UL>
-<LI>concrete separate
-</UL>
-
-<P>
-abstract Phrasebook: put everything together
-</P>
-<UL>
-<LI>concrete separate
-</UL>
-
-<P>
-resource Roles: param Politeness, Gender
+<CODE>Sentences</CODE>: general syntactic structures implementable by 
+functor. Concrete syntax via <CODE>SencencesI</CODE>.
 </P>
 <P>
-interface DiffPhrasebook: the (so far small) interface for Sentences
+<CODE>Words</CODE>: words and predicates, typically language-dependent. Separate
+concrete syntaxes.
+</P>
+<P>
+<CODE>Greetings</CODE>: idiomatic phrases, string-based. Separate concrete
+syntaxes.
+</P>
+<P>
+<CODE>Phrasebook</CODE>: the top module putting everything together. Separate
+concrete syntaxes.
+</P>
+<P>
+Resource <CODE>Roles</CODE>: parameter types Politeness, Gender
+</P>
+<P>
+Interface <CODE>DiffPhrasebook</CODE>: the (so far small) interface for Sentences.
 </P>
 <H1>To Do</H1>
 <P>
