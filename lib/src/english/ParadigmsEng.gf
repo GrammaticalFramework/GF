@@ -450,6 +450,7 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ;
         _   => duplFinal happy + "e"
         } ;
       happily : Str = case happy of {
+        _ + "ble" => init happy + "y" ;
         _ + "y" => happ + "ily" ;
         _ + "ll" => happy + "y" ;
         _   => happy + "ly"
