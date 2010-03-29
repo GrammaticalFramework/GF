@@ -14,7 +14,8 @@ concrete RelativeUrd of Relative = CatUrd ** open ResUrd in {
       c = Dir
       } ;
 
-{-    RelVP rp vp = {
+-- {-
+    RelVP rp vp = {
       s = \\t,p,o,ag => 
         let 
           agr = case rp.a of {
@@ -43,7 +44,7 @@ concrete RelativeUrd of Relative = CatUrd ** open ResUrd in {
 --		   };
       c = Dir
       } ;
--}
+-- -}
     FunRP p np rp = {
       s = \\n,c => rp.s ! n ! c ++ np.s ! NPC c ++ p.s  ;
       a = RAg np.a

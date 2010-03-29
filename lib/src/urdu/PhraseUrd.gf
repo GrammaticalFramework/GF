@@ -15,6 +15,8 @@ concrete PhraseUrd of Phrase = CatUrd ** open Prelude, ResUrd in {
     UttVP vp = {s = infVP False vp (agrP3 Masc Sg)} ;
     UttAdv adv = adv ;
 	UttCN cn = {s = cn.s ! Sg ! Dir};
+    UttCard n = n ;
+    UttAP ap = {s = ap.s ! Sg ! Masc ! Dir ! Posit} ;
 
     NoPConj = {s = []} ;
     PConjConj conj = {s = conj.s2} ; ---
