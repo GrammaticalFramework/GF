@@ -15,15 +15,12 @@ Aarne Ranta
 History
 - 26 March 2010. Version 0.1: Eng, Fin, Fre, Ron; dedicated minibar UI.
 - 28 March. Version 0.2: Swe, Ita; cat Action; small phrases.
+- 30 March. Version 0.3: disambiguation grammar for English
 
 
-Want to contribute? You can add [missing words missing.txt] by using the
-[morphological paradigms http://www.grammaticalframework.org/lib/doc/synopsis.html#toc78].
-The words are added to the ``Words``//L//``.gf`` files for each language //L//. Then recompile the
-phrasebook by ``make``. All this of course in the
-[source directory http://code.haskell.org/gf/examples/phrasebook/],
-which you can obtain by 
-[GF Darcs http://www.grammaticalframework.org/doc/gf-developers.html].
+[Missing constructs missing.txt] 
+
+[Back to phrasebook http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html]
 
 #ESMALL
 #HR
@@ -32,7 +29,8 @@ which you can obtain by
 =Purpose=
 
 This phrasebook is a programme for translating touristic phrases 
-between 15 European languages:
+between the 15 European languages included in the [MOLTO http://www.molto-project.eu] project
+(Multilingual On-Line Translation):
 - Bulgarian, Catalan, Danish, Dutch, English,
   Finnish, French, German, Italian, Norwegian,
   Polish, Romanian, Russian, Spanish, Swedish
@@ -40,8 +38,8 @@ between 15 European languages:
 
 It is implemented by using the GF programming language 
 ([Grammatical Framework http://grammaticalframework.org]).
-It is the first demo for the MOLTO project 
-([Multilingual On-Line Translation http://www.molto-project.eu]).
+It is the first demo for the MOLTO project, released in the third month but to be
+updated in the course of the project.
 
 The phrasebook has the following requirements:
 - high quality: reliable translations
@@ -60,8 +58,8 @@ Current status (28 March 2010):
 - available in English, Finnish, French, Italian, Romanian, Swedish
 - very small coverage
 - works on web browsers calling a server
-- web service not yet released, but preliminarily available 
-  [here http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html]
+- web service not yet released, but preliminarily available in
+  [``http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html`` http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html]
 
 
 
@@ -78,27 +76,22 @@ Disambiguation, esp. by the parameters in Roles.
 
 =Files=
 
-``Sentences``: general syntactic structures implementable by 
-functor. Concrete syntax via ``SencencesI``.
+``Sentences``: general syntactic structures implementable in a uniform way. 
+Concrete syntax via the functor ``SencencesI``.
 
+``Words``: words and predicates, typically language-dependent. 
+Separate concrete syntaxes.
 
-``Words``: words and predicates, typically language-dependent. Separate
-concrete syntaxes.
+``Greetings``: idiomatic phrases, string-based. 
+Separate concrete syntaxes.
 
+``Phrasebook``: the top module putting everything together. 
+Separate concrete syntaxes.
 
-``Greetings``: idiomatic phrases, string-based. Separate concrete
-syntaxes.
+``DiffPhrasebook``: the (so far small) interface for ``Sentences``.
 
-
-``Phrasebook``: the top module putting everything together. Separate
-concrete syntaxes.
-
-
-Resource ``Roles``: parameter types Politeness, Gender
-
-Interface ``DiffPhrasebook``: the (so far small) interface for Sentences.
-
-
+``DisambPhrasebook``: disambiguation grammars generating feedback phrases if
+the input language is ambiguous.
 
 
 
@@ -106,9 +99,9 @@ Interface ``DiffPhrasebook``: the (so far small) interface for Sentences.
 
 Text-based translation interface.
 
-Access to disambiguation grammars in the interface.
-
 The remaining 10 languages
+
+Disambiguation grammars for other languages than English.
 
 Extract/construct lexica for
 - food stuff
@@ -118,7 +111,46 @@ Extract/construct lexica for
 
 Connection to Google translate, for fall-back and for comparison
 
-Feedback facility in the UI.
+Feedback facility in the UI
+
+
+
+=How to contribute=
+
+The basic things "everyone" can do is 
+- complete [missing words missing.txt] in concrete syntaxes
+- add new abstract words in ``Words`` and greetings in ``Greetings``
+
+
+The missing concrete syntax entries are added to the ``Words``//L//``.gf`` 
+files for each language //L//. The
+[morphological paradigms http://www.grammaticalframework.org/lib/doc/synopsis.html#toc78]
+of the GF resource library should be used. Actions (prefixed with ``A``, as ``AWant``) are
+a little more demanding, since they also require syntax constructors. Greetings (prefixed
+with ``G``) are pure strings.
+
+Here are the steps to follow for contributors:
++ Make sure you have the latest sources 
+  from [GF Darcs http://www.grammaticalframework.org/doc/gf-developers.html], using ``darcs pull``.
++ Also make sure that you have compiled the library by ``make present`` in ``gf/lib/src/``.
++ Work in the directory [``gf/examples/phrasebook/`` http://code.haskell.org/gf/examples/phrasebook/].
++ After you've finished your contribution, recompile the phrasebook by ``make``.
++ Save your changes in ``darcs record .`` (in the ``phrasebook`` subdirectory).
++ Make a patch file with ``darcs send -o my_phrasebook_patch``, which you can send to GF maintainers.
++ (Recommended:) Test the phrasebook on your local server:
+  + Go to ``gf/src/server/`` and follow the instructions in the
+    [project Wiki http://code.google.com/p/grammatical-framework/wiki/LaunchWebDemos].
+  + Make sure that ``Phrasebook.pgf`` is available to you GF server (see project wiki).
+  + Launch ``lighttpd`` (see project wiki).
+  + How you can open ``gf/examples/phrasebook/www/phrasebook.html`` and use your phrasebook!
+
+
++ Don't delete anything! But you are free to correct incorrect forms.
++ Don't change the module structure! But you are free to add a new language.
++ Don't compromise quality to gain coverage: //non multa sed multum!// 
+
+
+
 
 
 
