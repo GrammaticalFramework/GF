@@ -22,11 +22,6 @@ lin
   GGoodNight = ss "god natt" ;
 
   GWhatsYourName = ss "vad heter du" ;
-  GImHungry = ss "jag är hungrig" ;
-  GImThirsty = ss "jag är törstig" ;
-  GImTired = ss "jag är trött" ;
-  GImScared = ss "jag är rädd" ;
-  GIdontUnderstand = ss "jag förstår inte" ;
 
   GTheCheck = ss "notan" ;
 

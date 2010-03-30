@@ -24,11 +24,6 @@ lin
   GGoodDay = ss "hyvää päivää" ;
   GGoodEvening = ss "hyvää iltaa" ;
   GGoodNight = ss "hyvää yötä" ;
-  GImHungry = ss "minun on nälkä" ;
-  GImThirsty = ss "minun on jano" ;
-  GImTired = ss "minä olen väsynyt" ;
-  GImScared = ss "minua pelottaa" ;
-  GIdontUnderstand = ss "en ymmärrä" ;
   GTheCheck = ss "lasku" ;
 
   GYes = ss "kyllä" ;

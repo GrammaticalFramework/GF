@@ -3,5 +3,5 @@ PhrasebookEng :
 PhrasebookFin :
 PhrasebookFre :
 PhrasebookIta : GNiceToMeetYou GSeeYouSoon Tea
-PhrasebookRon : Coffee Finnish French GExcusePol GPleaseGivePol GSorryPol Swedish Tea
+PhrasebookRon : AHungry AScared AThirsty ATired Coffee Finnish French GExcusePol GPleaseGivePol GSorryPol Swedish Tea
 PhrasebookSwe : GExcusePol GPleaseGivePol GSorryPol

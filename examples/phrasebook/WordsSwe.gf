@@ -39,5 +39,10 @@ concrete WordsSwe of Words = SentencesSwe **
     ASpeak p lang = mkCl p  (mkV2 (mkV "tala")) lang ;
     ALove p q = mkCl p (mkV2 (mkV "älska")) q ;
 
+    AHungry p = mkCl p (mkA "hungrig") ;
+    AThirsty p = mkCl p (mkA "törstig") ;
+    ATired p = mkCl p (mkA "trött") ;
+    AScared p = mkCl p (mkA "rädd") ;
+    AUnderstand p = mkCl p (mkV "förstå" "förstod" "förstått") ;
 
 }

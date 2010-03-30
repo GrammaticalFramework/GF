@@ -21,4 +21,10 @@ abstract Words = Sentences ** {
     ASpeak : Person -> Language -> Action ;
     ALove  : Person -> Person   -> Action ;
 
+    AHungry  : Person -> Action ;
+    AThirsty : Person -> Action ;
+    ATired   : Person -> Action ;
+    AScared  : Person -> Action ;
+    AUnderstand : Person -> Action ;
+
 }

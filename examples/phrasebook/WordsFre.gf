@@ -4,6 +4,7 @@ concrete WordsFre of Words = SentencesFre ** open
   SyntaxFre,
   DiffPhrasebookFre,
   IrregFre,
+  (E = ExtraFre),
   ParadigmsFre in
 {
 flags coding=utf8 ;
@@ -46,6 +47,12 @@ Boring = mkAPA "ennuyeux" ;
     French = mkNP (mkPN "français") ; 
     Romanian = mkNP (mkPN "roumain") ;
     Swedish = mkNP (mkPN "suédois") ;
+
+    AHungry p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "faim" feminine))) ;
+    AThirsty p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "soif" feminine))) ;
+    ATired p = mkCl p (mkA "fatigué") ;
+    AScared p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "peur" feminine))) ;
+    AUnderstand p = mkCl p (mkV IrregFre.comprendre_V2) ;
 
 oper
 mkAPA : (_ : Str) -> AP = \x -> mkAP (mkA x) ;

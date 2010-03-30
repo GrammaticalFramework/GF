@@ -3,6 +3,7 @@
 concrete WordsRon of Words = SentencesRon ** open
   SyntaxRon,
   ParadigmsRon,
+  BeschRon,
   DiffPhrasebookRon in
 {
 flags coding=utf8 ;
@@ -45,6 +46,19 @@ Boring = mkAPA "plictisitor" "plictisitoare" "plictisitori" "plictisitoare" ;
 --    French = mkNP (mkPN "français") ; 
     Romanian = SyntaxRon.mkNP (mkPN "română") ; ---- ?
 --    Swedish = mkNP (mkPN "suédois") ;
+
+--    AHungry p = mkCl p have_V2 (SyntaxRon.mkNP a_Det (mkN "foame")) ;
+--    AThirsty p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "sete" feminine))) ;
+--    ATired p = mkCl p (mkA "stanco") ;
+--    AScared p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "paura" feminine))) ;
+    AUnderstand p = mkCl p (v_besch83 "înţelege") ;
+{-
+  GImHungry = ss "mi-e foame" ;
+  GImThirsty = ss "mi-e sete" ;
+  GImTired = ss "mi-e somn" ;
+  GImScared = ss "mi-e frică" ;
+-}
+
 
 oper
 mkAPA : (_,_,_,_ : Str) -> AP = \x,y,z,u -> mkAP (mkA x y z u) ;
