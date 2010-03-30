@@ -19,16 +19,14 @@ History
 <UL>
 <LI>26 March 2010. Version 0.1: Eng, Fin, Fre, Ron; dedicated minibar UI.
 <LI>28 March. Version 0.2: Swe, Ita; cat Action; small phrases.
+<LI>30 March. Version 0.3: disambiguation grammar for English
 </UL>
 
 <P>
-Want to contribute? You can add <A HREF="missing.txt">missing words</A> by using the
-<A HREF="http://www.grammaticalframework.org/lib/doc/synopsis.html#toc78">morphological paradigms</A>.
-The words are added to the <CODE>Words</CODE><I>L</I><CODE>.gf</CODE> files for each language <I>L</I>. Then recompile the
-phrasebook by <CODE>make</CODE>. All this of course in the
-<A HREF="http://code.haskell.org/gf/examples/phrasebook/">source directory</A>,
-which you can obtain by 
-<A HREF="http://www.grammaticalframework.org/doc/gf-developers.html">GF Darcs</A>.
+<A HREF="missing.txt">Missing constructs</A> 
+</P>
+<P>
+<A HREF="http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html">Back to phrasebook</A>
 </P>
 <P>
 </font>
@@ -37,7 +35,8 @@ which you can obtain by
 <H1>Purpose</H1>
 <P>
 This phrasebook is a programme for translating touristic phrases 
-between 15 European languages:
+between the 15 European languages included in the <A HREF="http://www.molto-project.eu">MOLTO</A> project
+(Multilingual On-Line Translation):
 </P>
 <UL>
 <LI>Bulgarian, Catalan, Danish, Dutch, English,
@@ -48,8 +47,8 @@ between 15 European languages:
 <P>
 It is implemented by using the GF programming language 
 (<A HREF="http://grammaticalframework.org">Grammatical Framework</A>).
-It is the first demo for the MOLTO project 
-(<A HREF="http://www.molto-project.eu">Multilingual On-Line Translation</A>).
+It is the first demo for the MOLTO project, released in the third month but to be
+updated in the course of the project.
 </P>
 <P>
 The phrasebook has the following requirements:
@@ -74,8 +73,8 @@ Current status (28 March 2010):
 <LI>available in English, Finnish, French, Italian, Romanian, Swedish
 <LI>very small coverage
 <LI>works on web browsers calling a server
-<LI>web service not yet released, but preliminarily available 
-  <A HREF="http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html">here</A>
+<LI>web service not yet released, but preliminarily available in
+  <A HREF="http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html"><CODE>http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html</CODE></A>
 </UL>
 
 <H1>Points illustrated</H1>
@@ -93,36 +92,37 @@ Disambiguation, esp. by the parameters in Roles.
 </P>
 <H1>Files</H1>
 <P>
-<CODE>Sentences</CODE>: general syntactic structures implementable by 
-functor. Concrete syntax via <CODE>SencencesI</CODE>.
+<CODE>Sentences</CODE>: general syntactic structures implementable in a uniform way. 
+Concrete syntax via the functor <CODE>SencencesI</CODE>.
 </P>
 <P>
-<CODE>Words</CODE>: words and predicates, typically language-dependent. Separate
-concrete syntaxes.
+<CODE>Words</CODE>: words and predicates, typically language-dependent. 
+Separate concrete syntaxes.
 </P>
 <P>
-<CODE>Greetings</CODE>: idiomatic phrases, string-based. Separate concrete
-syntaxes.
+<CODE>Greetings</CODE>: idiomatic phrases, string-based. 
+Separate concrete syntaxes.
 </P>
 <P>
-<CODE>Phrasebook</CODE>: the top module putting everything together. Separate
-concrete syntaxes.
+<CODE>Phrasebook</CODE>: the top module putting everything together. 
+Separate concrete syntaxes.
 </P>
 <P>
-Resource <CODE>Roles</CODE>: parameter types Politeness, Gender
+<CODE>DiffPhrasebook</CODE>: the (so far small) interface for <CODE>Sentences</CODE>.
 </P>
 <P>
-Interface <CODE>DiffPhrasebook</CODE>: the (so far small) interface for Sentences.
+<CODE>DisambPhrasebook</CODE>: disambiguation grammars generating feedback phrases if
+the input language is ambiguous.
 </P>
 <H1>To Do</H1>
 <P>
 Text-based translation interface.
 </P>
 <P>
-Access to disambiguation grammars in the interface.
+The remaining 10 languages
 </P>
 <P>
-The remaining 10 languages
+Disambiguation grammars for other languages than English.
 </P>
 <P>
 Extract/construct lexica for
@@ -137,8 +137,52 @@ Extract/construct lexica for
 Connection to Google translate, for fall-back and for comparison
 </P>
 <P>
-Feedback facility in the UI.
+Feedback facility in the UI
 </P>
+<H1>How to contribute</H1>
+<P>
+The basic things "everyone" can do is 
+</P>
+<UL>
+<LI>complete <A HREF="missing.txt">missing words</A> in concrete syntaxes
+<LI>add new abstract words in <CODE>Words</CODE> and greetings in <CODE>Greetings</CODE>
+</UL>
+
+<P>
+The missing concrete syntax entries are added to the <CODE>Words</CODE><I>L</I><CODE>.gf</CODE> 
+files for each language <I>L</I>. The
+<A HREF="http://www.grammaticalframework.org/lib/doc/synopsis.html#toc78">morphological paradigms</A>
+of the GF resource library should be used. Actions (prefixed with <CODE>A</CODE>, as <CODE>AWant</CODE>) are
+a little more demanding, since they also require syntax constructors. Greetings (prefixed
+with <CODE>G</CODE>) are pure strings.
+</P>
+<P>
+Here are the steps to follow for contributors:
+</P>
+<OL>
+<LI>Make sure you have the latest sources 
+  from <A HREF="http://www.grammaticalframework.org/doc/gf-developers.html">GF Darcs</A>, using <CODE>darcs pull</CODE>.
+<LI>Also make sure that you have compiled the library by <CODE>make present</CODE> in <CODE>gf/lib/src/</CODE>.
+<LI>Work in the directory <A HREF="http://code.haskell.org/gf/examples/phrasebook/"><CODE>gf/examples/phrasebook/</CODE></A>.
+<LI>After you've finished your contribution, recompile the phrasebook by <CODE>make</CODE>.
+<LI>Save your changes in <CODE>darcs record .</CODE> (in the <CODE>phrasebook</CODE> subdirectory).
+<LI>Make a patch file with <CODE>darcs send -o my_phrasebook_patch</CODE>, which you can send to GF maintainers.
+<LI>(Recommended:) Test the phrasebook on your local server:
+  <OL>
+  <LI>Go to <CODE>gf/src/server/</CODE> and follow the instructions in the
+    <A HREF="http://code.google.com/p/grammatical-framework/wiki/LaunchWebDemos">project Wiki</A>.
+  <LI>Make sure that <CODE>Phrasebook.pgf</CODE> is available to you GF server (see project wiki).
+  <LI>Launch <CODE>lighttpd</CODE> (see project wiki).
+  <LI>How you can open <CODE>gf/examples/phrasebook/www/phrasebook.html</CODE> and use your phrasebook!
+  </OL>
+</OL>
+
+<OL>
+<LI>Don't delete anything! But you are free to correct incorrect forms.
+<LI>Don't change the module structure! But you are free to add a new language.
+<LI>Don't compromise quality to gain coverage: <I>non multa sed multum!</I> 
+</OL>
+
 
 <!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml phrasebook.txt -->
