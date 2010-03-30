@@ -1,36 +1,37 @@
-concrete GreetingsIta of Greetings = open Roles,Prelude in {
+concrete GreetingsIta of Greetings = open Prelude in {
 
 lincat 
-  Greeting = RolePhrase ;
+  Greeting = SS ;
 
 lin 
-  GHello = roleNeutral "ciao" ;
-  GThanks = roleNeutral "grazie" ;
-  GHowAreYou = roleNeutral "come sta" ;
-  GPleaseGive = roleNeutral "per favore" ;
-  GExcuse = politeDistinct "scusi" "scusa" ;
-  GSorry = politeDistinct "scusimi" "scusami" ; ----
-  GGoodbye = roleNeutral "arrivederci" ;
-  GBye = roleNeutral "ciao" ;
-  GWhatsYourName = 
-    politeDistinct "come si chiama" "come ti chiami" ;
---  GNiceToMeetYou = roleNeutral "piacevole" ; ----
---  GSeeYouSoon = roleNeutral "a poco tempo" ; ----
-  GHelp = roleNeutral "aiuto" ;
-  GLookOut = roleNeutral "attenzione" ;
-  GGoodMorning = roleNeutral "buongiorno" ;
-  GGoodDay = roleNeutral "buongiorno" ;
-  GGoodEvening = roleNeutral "buona sera" ;
-  GGoodNight = roleNeutral "buona notte" ;
-  GImHungry = roleNeutral "ho fame" ;
-  GImThirsty = roleNeutral "ho sete" ;
-  GImTired = speakerDistinct "sono stanco" "sono stanca" ;
-  GImScared = roleNeutral "ho paura" ;
-  GIdontUnderstand = roleNeutral "non capisco" ;
-  GTheCheck = roleNeutral "il conto" ;
+  GHello = ss "ciao" ;
+  GThanks = ss "grazie" ;
+  GHowAreYou = ss "come sta" ;
+  GPleaseGive, GPleaseGivePol = ss "per favore" ;
+  GExcuse = ss "scusa" ;
+  GExcusePol = ss "scusi" ;
+  GSorry = ss "scusami" ; ----
+  GSorryPol = ss "scusimi" ; ----
+  GGoodbye = ss "arrivederci" ;
+  GBye = ss "ciao" ;
+  GWhatsYourName = ss "come si chiama" ;
+--  GNiceToMeetYou = ss "piacevole" ; ----
+--  GSeeYouSoon = ss "a poco tempo" ; ----
+  GHelp = ss "aiuto" ;
+  GLookOut = ss "attenzione" ;
+  GGoodMorning = ss "buongiorno" ;
+  GGoodDay = ss "buongiorno" ;
+  GGoodEvening = ss "buona sera" ;
+  GGoodNight = ss "buona notte" ;
+  GImHungry = ss "ho fame" ;
+  GImThirsty = ss "ho sete" ;
+  GImTired = ss "sono stanco" ; ----
+  GImScared = ss "ho paura" ;
+  GIdontUnderstand = ss "non capisco" ;
+  GTheCheck = ss "il conto" ;
 
-  GYes = roleNeutral "sì" ; ---- si
-  GNo = roleNeutral "no" ;
+  GYes = ss "sì" ; ---- si
+  GNo = ss "no" ;
 
 
 }

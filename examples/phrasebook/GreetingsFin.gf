@@ -10,8 +10,9 @@ lin
   GThanks = ss "kiitos" ;
   GHowAreYou = ss "mitä kuuluu" ;
   GPleaseGive = ss "ole hyvä" ;
-  GExcuse = ss "anteeksi" ;
-  GSorry = ss "anteeksi" ;
+  GPleaseGivePol = ss "olkaa hyvä" ;
+  GExcuse, GExcusePol = ss "anteeksi" ;
+  GSorry, GSorryPol = ss "anteeksi" ;
   GGoodbye = ss "näkemiin" ;
   GBye = ss "hei hei" ;
   GWhatsYourName = ss "mikä sinun nimesi on" ;
