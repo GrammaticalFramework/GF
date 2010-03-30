@@ -1,7 +1,7 @@
-concrete GreetingsSwe of Greetings = open Prelude in {
+concrete GreetingsSwe of Greetings = open Roles, Prelude in {
 
 lincat 
-  Greeting, Politeness = SS ;
+  Greeting = SS ;
 
 lin 
   GHello = ss "hej" ;
@@ -12,7 +12,6 @@ lin
   GSorry = ss "förlåt" ;
   GGoodbye = ss "hej då" ;
   GBye = ss "hej då" ;
-  GWhatsYourName = ss "vad heter du" ;
   GNiceToMeetYou = ss "trevligt att träffas" ;
   GSeeYouSoon = ss "vi ses snart" ;
   GHelp = ss "hjälp" ;
@@ -21,11 +20,14 @@ lin
   GGoodDay = ss "god dag" ;
   GGoodEvening = ss "god afton" ;
   GGoodNight = ss "god natt" ;
+
+  GWhatsYourName = ss "vad heter du" ;
   GImHungry = ss "jag är hungrig" ;
   GImThirsty = ss "jag är törstig" ;
   GImTired = ss "jag är trött" ;
   GImScared = ss "jag är rädd" ;
   GIdontUnderstand = ss "jag förstår inte" ;
+
   GTheCheck = ss "notan" ;
 
   GYes = ss "ja" ;

@@ -1,7 +1,7 @@
 -- (c) 2009 Aarne Ranta under LGPL
 
 concrete WordsEng of Words = SentencesEng ** 
-    open SyntaxEng, ParadigmsEng, IrregEng in {
+    open SyntaxEng, ParadigmsEng, IrregEng, (R = Roles) in {
   lin
     Wine = mkCN (mkN "wine") ;
     Beer = mkCN (mkN "beer") ;
@@ -33,11 +33,13 @@ concrete WordsEng of Words = SentencesEng **
     Romanian = mkNP (mkPN "Romanian") ;
     Swedish = mkNP (mkPN "Swedish") ;
 
-    AWant p obj = mkCl p (mkV2 (mkV "want")) obj ;
-    ALike p item = mkCl p (mkV2 (mkV "like")) item ;
-    AHave p kind = mkCl p have_V2 (mkNP kind) ;
-    ASpeak p lang = mkCl p  (mkV2 IrregEng.speak_V) lang ;
-    ALove p q = mkCl p (mkV2 (mkV "love")) q ;
+    AWant p obj = neutralA (mkCl (np p) (mkV2 (mkV "want")) obj) ;
+    ALike p item = neutralA (mkCl (np p) (mkV2 (mkV "like")) item) ;
+    AHave p kind = neutralA (mkCl (np p) have_V2 (mkNP kind)) ;
+    ASpeak p lang = neutralA (mkCl (np p)  (mkV2 IrregEng.speak_V) lang) ;
+    ALove p q = neutralA (mkCl (np p) (mkV2 (mkV "love")) (np q)) ;
 
-
+  oper
+    neutralA : Cl -> {s : R.Politeness => Cl}  = \pol -> {s = \\_ => pol} ;
+    np : {s : R.Politeness => NP} -> NP = \p -> p.s ! R.PPolite ;
 }

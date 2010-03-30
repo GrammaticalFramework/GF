@@ -33,11 +33,11 @@ concrete WordsSwe of Words = SentencesSwe **
     Romanian = mkNP (mkPN "rumänska") ;
     Swedish = mkNP (mkPN "svenska") ;
 
-    AWant p obj = mkCl p want_VV (mkVP have_V2 obj) ;
-    ALike p item = mkCl p (mkV2 (mkV "tycker") (mkPrep "om")) item ;
-    AHave p kind = mkCl p have_V2 (mkNP kind) ;
-    ASpeak p lang = mkCl p  (mkV2 (mkV "tala")) lang ;
-    ALove p q = mkCl p (mkV2 (mkV "älska")) q ;
+    AWant p obj = {s = \\r => mkCl (p.s ! r) want_VV (mkVP have_V2 obj)} ;
+    ALike p item = {s = \\r => mkCl (p.s ! r) (mkV2 (mkV "tycker") (mkPrep "om")) item} ;
+    AHave p kind = {s = \\r => mkCl (p.s ! r) have_V2 (mkNP kind)} ;
+    ASpeak p lang = {s = \\r => mkCl (p.s ! r)  (mkV2 (mkV "tala")) lang} ;
+    ALove p q = {s = \\r => mkCl (p.s ! r) (mkV2 (mkV "älska")) (q.s ! r)} ;
 
 
 }

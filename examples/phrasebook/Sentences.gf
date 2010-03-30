@@ -7,8 +7,15 @@ abstract Sentences = Numeral ** {
     Place ; PlaceKind ; Currency ; Price ; Language ;
     Person ; Action ;
 
+    -- abstract parameters
+    Politeness ; 
+    -- Gender ; 
+
   fun
     -- these phrases are formed here, not in Phrasebook, as they are functorial
+    PSentence : Politeness -> Sentence -> Phrase ;
+    PQuestion : Politeness -> Question -> Phrase ;
+
     PObject   : Object   -> Phrase ;
     PKind     : Kind     -> Phrase ;
     PQuality  : Quality  -> Phrase ;
@@ -41,8 +48,11 @@ abstract Sentences = Numeral ** {
     Very : Quality -> Quality ;
     Too : Quality -> Quality ;
 
+    ThePlace : PlaceKind -> Place ;
+
     I, You : Person ;
 
-    ThePlace : PlaceKind -> Place ;
+    Polite, Familiar : Politeness ;
+    -- Male, Female : Gender ;
 
 }

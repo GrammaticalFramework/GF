@@ -53,7 +53,7 @@ function show_languages(grammar) {
   menu.setAttribute("onchange","new_language(this)");
   menu.grammar=grammar;
   menu.innerHTML="";
-  for(var i=0; i<lang.length; i++) {
+  for(var i=1; i<lang.length; i++) { // 1, to hide Disamb...
     if(lang[i].canParse) {
       var opt=empty("option");
       opt.setAttribute("value",""+i);
@@ -188,8 +188,10 @@ function show_translations(translations) {
     var lin=t.linearizations;
     var tbody=empty("tbody");
     tbody.appendChild(tr([th(text(t.to+":"))]));
-    for(var i=0;i<lin.length;i++)
+    for(var i=0;i<lin.length;i++) {
       tbody.appendChild(tr([(text(lin[i].text))]));
+      if (lin.length > 1) tbody.appendChild(tr([(text(lin[i].tree))]));
+    }
     trans.appendChild(wrap("table",tbody));
   }
 }

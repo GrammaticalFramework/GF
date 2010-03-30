@@ -8,8 +8,6 @@ concrete PhrasebookRon of Phrasebook =
     Prelude in {
 
 lin
-  PSentence s = mkText s | lin Text (mkUtt s) ;  -- optional .
-  PQuestion s = mkText s | lin Text (mkUtt s) ;  -- optional ?
-  PGreeting g = lin Text g ;
+  PGreeting p g = mkText (lin Text (ss g.s)) (lin Text (ss p.s)) ;
 
 }
