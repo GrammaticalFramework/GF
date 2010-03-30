@@ -39,5 +39,10 @@ concrete WordsEng of Words = SentencesEng **
     ASpeak p lang = mkCl p  (mkV2 IrregEng.speak_V) lang ;
     ALove p q = mkCl p (mkV2 (mkV "love")) q ;
 
+    AHungry p = mkCl p (mkA "hungry") ;
+    AThirsty p = mkCl p (mkA "thirsty") ;
+    ATired p = mkCl p (mkA "tired") ;
+    AScared p = mkCl p (mkA "scared") ;
+    AUnderstand p = mkCl p IrregEng.understand_V ;
 
 }

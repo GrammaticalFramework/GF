@@ -53,8 +53,8 @@ function show_languages(grammar) {
   menu.setAttribute("onchange","new_language(this)");
   menu.grammar=grammar;
   menu.innerHTML="";
-  for(var i=1; i<lang.length; i++) { // 1, to hide Disamb...
-    if(lang[i].canParse) {
+  for(var i=0; i<lang.length; i++) { 
+    if(lang[i].canParse && (lang[i].name[0] !='D')) { /// to hide Disamb; should be made properly...
       var opt=empty("option");
       opt.setAttribute("value",""+i);
       opt.innerHTML=short_name(lang[i].name);

@@ -23,11 +23,6 @@ lin
   GGoodDay = ss "bună ziua" ;
   GGoodEvening = ss "bună seara" ;
   GGoodNight = ss "noapte bună" ;
-  GImHungry = ss "mi-e foame" ;
-  GImThirsty = ss "mi-e sete" ;
-  GImTired = ss "mi-e somn" ;
-  GImScared = ss "mi-e frică" ;
-  GIdontUnderstand = ss "nu înţeleg" ;
   GTheCheck = ss "nota de plată" ;
 
   GYes = ss "da" ;

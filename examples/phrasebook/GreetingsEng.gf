@@ -21,11 +21,6 @@ lin
   GGoodDay = ss "good afternoon" ; ----
   GGoodEvening = ss "good evening" ;
   GGoodNight = ss "good night" ;
-  GImHungry = ss "I'm hungry" ;
-  GImThirsty = ss "I'm thirsty" ;
-  GImTired = ss "I'm tired" ;
-  GImScared = ss "I'm scared" ;
-  GIdontUnderstand = ss "I don't understand" ;
   GTheCheck = ss "the bill" ;
 
   GYes = ss "yes" ;

@@ -25,11 +25,6 @@ lin
   GGoodDay = ss "bonjour" ;
   GGoodEvening = ss "bon soir" ;
   GGoodNight = ss "bonne nuit" ;
-  GImHungry = ss "j'ai faim" ;
-  GImThirsty = ss "j'ai soif" ;
-  GImTired = ss "je suis fatigué" ; ----
-  GImScared = ss "j'ai peur" ;
-  GIdontUnderstand = ss "je ne comprends pas" ;
   GTheCheck = ss "l'addition" ;
 
   GYes = ss "oui" ; ---- si

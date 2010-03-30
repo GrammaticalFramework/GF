@@ -4,6 +4,7 @@ concrete WordsIta of Words = SentencesIta ** open
   SyntaxIta,
   DiffPhrasebookIta,
   BeschIta,
+  (E = ExtraIta),
   ParadigmsIta in {
 
 lin
@@ -44,6 +45,12 @@ Boring = mkAPA "noioso" ;
     French = mkNP (mkPN "francese") ; 
     Romanian = mkNP (mkPN "romano") ;
     Swedish = mkNP (mkPN "svedese") ;
+
+    AHungry p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "fame" feminine))) ;
+    AThirsty p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "sete" feminine))) ;
+    ATired p = mkCl p (mkA "stanco") ;
+    AScared p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "paura" feminine))) ;
+    AUnderstand p = mkCl p (mkV "capire") ;
 
 oper
 mkAPA : (_ : Str) -> AP = \x -> mkAP (mkA x) ;

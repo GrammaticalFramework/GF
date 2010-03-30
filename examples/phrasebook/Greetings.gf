@@ -12,7 +12,6 @@ fun
   GSorry, GSorryPol : Greeting ;
   GGoodbye : Greeting ;
   GBye : Greeting ;
-  GWhatsYourName : Greeting ;
   GNiceToMeetYou : Greeting ;
   GSeeYouSoon : Greeting ;
   GHelp : Greeting ;
@@ -20,16 +19,12 @@ fun
   GGoodMorning : Greeting ;
   GGoodDay : Greeting ; 
   GGoodEvening : Greeting ;
-  GGoodNight : Greeting ; 
-  GImHungry : Greeting ; 
-  GImThirsty : Greeting ; 
-  GImTired : Greeting ; 
-  GImScared : Greeting ; 
-  GIdontUnderstand : Greeting ; 
+  GGoodNight : Greeting ;
   GTheCheck : Greeting ; 
 
   GYes : Greeting ;
   GNo : Greeting ;
 
+  GWhatsYourName : Greeting ; ---- move
 
 }

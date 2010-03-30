@@ -42,4 +42,11 @@ concrete WordsFin of Words = SentencesFin **
     French = mkNP (mkPN "ranska") ; 
     Romanian = mkNP (mkPN "romania") ;
     Swedish = mkNP (mkPN "ruotsi") ;
+
+    AHungry p = mkCl p have_V2 (mkNP (mkN "n‰lk‰")) ;
+    AThirsty p = mkCl p have_V2 (mkNP (mkN "jano")) ;
+    ATired p = mkCl p (caseV partitive (mkV "v‰sytt‰‰")) ;
+    AScared p = mkCl p (caseV partitive (mkV "pelottaa")) ;
+    AUnderstand p = mkCl p (mkV "ymm‰rt‰‰") ;
+
 }

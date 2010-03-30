@@ -6,6 +6,8 @@ incomplete concrete ExtraRomance of ExtraRomanceAbs = CatRomance **
 
     lin TPasseSimple = {s = []} ** {t = RPasse} ;   --# notpresent
 
+  lin ComplCN v cn = insertComplement (\\_ => prepCase v.c2.c ++ cn.s ! Sg) (predV v) ;
+
   lincat
     VPI   = {s : Str} ;
     [VPI] = {s1,s2 : Str} ;
