@@ -18,7 +18,7 @@ Cheese = mkCN (mkN "formaggio") ;
 Fish = mkCN (mkN "pesce") ;
 Pizza = mkCN (mkN "pizza") ;
 
-Itash = mkAP (mkA "frasco") ;
+Fresh = mkAP (mkA "fresco") ;
 Warm = mkAPA "caldo" ;
 Italian = mkAPA "italiano" ;
 Expensive = mkAPA "caro" ;
@@ -33,17 +33,17 @@ Boring = mkAPA "noioso" ;
     Dollar = mkCN (mkN "dollar") ;
     Lei = mkCN (mkN "lei") ; ---- ?
 
+    AWant p obj = mkCl p want_V2 obj ;
+    ALike p item = mkCl item (mkV2 (mkV (piacere_64 "piacere")) dative) p ;
+    AHave p kind = mkCl p have_V2 (mkNP kind) ;
+    ASpeak p lang = mkCl p  (mkV2 (mkV "parlare")) lang ;
+    ALove p q = mkCl p (mkV2 (mkV "amare")) q ;
+
     English = mkNP (mkPN "inglese") ;
     Finnish = mkNP (mkPN "finnico") ;
-    Itanch = mkNP (mkPN "francese") ; 
+    French = mkNP (mkPN "francese") ; 
     Romanian = mkNP (mkPN "romano") ;
     Swedish = mkNP (mkPN "svedese") ;
-
-    AWant p obj = {s = \\r => mkCl (p.s ! r) want_V2 obj} ;
-    ALike p item = {s = \\r => mkCl item (mkV2 (mkV (piacere_64 "piacere")) dative) (p.s ! r)} ;
-    AHave p kind = {s = \\r => mkCl (p.s ! r) have_V2 (mkNP kind)} ;
-    ASpeak p lang = {s = \\r => mkCl (p.s ! r) (mkV2 (mkV "parlare")) lang} ;
-    ALove p q = {s = \\r => mkCl (p.s ! r) (mkV2 (mkV "amare")) (q.s ! r)} ;
 
 oper
 mkAPA : (_ : Str) -> AP = \x -> mkAP (mkA x) ;

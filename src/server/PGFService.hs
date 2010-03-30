@@ -157,7 +157,7 @@ doTranslateGroup pgf input mcat mfrom mto =
    disamb lg from t = 
      if lg < 2 
        then [] 
-       else [("tree", "-- " ++ doText (doBind PGF.linearize pgf (disambLang from)) t)]
+       else [("tree", "-- " ++ doText (doBind (PGF.linearize pgf (disambLang from) t)))]
 
    disambLang f = maybe f id $ PGF.readLanguage $ "Disamb" ++ PGF.showLanguage f
    notDisamb = (/="Disamb") . take 6 . PGF.showLanguage

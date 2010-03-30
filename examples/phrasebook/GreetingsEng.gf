@@ -7,9 +7,9 @@ lin
   GHello = ss "hello" ;
   GThanks = ss "thank you" ;
   GHowAreYou = ss "how are you" ;
-  GPleaseGive = ss "please" ;
-  GExcuse = ss "excuse me" ;
-  GSorry = ss "sorry" ;
+  GPleaseGive, GPleaseGivePol = ss "please" ;
+  GExcuse, GExcusePol = ss "excuse me" ;
+  GSorry, GSorryPol = ss "sorry" ;
   GGoodbye = ss "goodbye" ;
   GBye = ss "bye" ;
   GWhatsYourName = ss "what's your name" ;

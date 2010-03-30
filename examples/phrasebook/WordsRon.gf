@@ -3,8 +3,7 @@
 concrete WordsRon of Words = SentencesRon ** open
   SyntaxRon,
   ParadigmsRon,
-  DiffPhrasebookRon,
-  (R = Roles) in
+  DiffPhrasebookRon in
 {
 flags coding=utf8 ;
 
@@ -35,17 +34,17 @@ Boring = mkAPA "plictisitor" "plictisitoare" "plictisitori" "plictisitoare" ;
     Dollar = mkCN (mkN "dolar" masculine) ;
     Lei = mkCN (mkN "leu" "lei") ;
 
+    AWant p obj = mkCl p want_V2 obj ;
+    ALike p item = mkCl p like_V2 item ;
+    AHave p kind = mkCl p have_V2 (SyntaxRon.mkNP kind) ;
+    ASpeak p lang = mkCl p  (dirV2 (mkV "vorbi")) lang ;
+    ALove p q = mkCl p (dirV2 (mkV "iubi")) q ;
+
     English = SyntaxRon.mkNP (mkPN "engleză") ; ---- ?
 --    Finnish = mkNP (mkPN "finnois") ;
 --    French = mkNP (mkPN "français") ; 
     Romanian = SyntaxRon.mkNP (mkPN "română") ; ---- ?
 --    Swedish = mkNP (mkPN "suédois") ;
-
-    AWant p obj = {s = \\r => mkCl (p.s ! r) want_V2 obj} ;
-    ALike p item = {s = \\r => mkCl (p.s ! r) like_V2 item} ;
-    AHave p kind = {s = \\r => mkCl (p.s ! r) have_V2 (SyntaxRon.mkNP kind)} ;
-    ASpeak p lang = {s = \\r => mkCl (p.s ! r) (dirV2 (mkV "vorbi")) lang} ;
-    ALove p q = {s = \\r => mkCl (p.s ! R.PPolite) (dirV2 (mkV "iubi")) (q.s ! r)} ; ---- linking slow
 
 oper
 mkAPA : (_,_,_,_ : Str) -> AP = \x,y,z,u -> mkAP (mkA x y z u) ;

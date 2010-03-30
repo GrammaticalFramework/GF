@@ -2,6 +2,6 @@ DisambPhrasebookEng :
 PhrasebookEng :
 PhrasebookFin :
 PhrasebookFre :
-PhrasebookIta : French Fresh GNiceToMeetYou GSeeYouSoon Tea
-PhrasebookRon : Coffee Finnish French Swedish Tea
-PhrasebookSwe :
+PhrasebookIta : GNiceToMeetYou GSeeYouSoon Tea
+PhrasebookRon : Coffee Finnish French GExcusePol GPleaseGivePol GSorryPol Swedish Tea
+PhrasebookSwe : GExcusePol GPleaseGivePol GSorryPol

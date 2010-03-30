@@ -7,9 +7,9 @@ fun
   GHello  : Greeting ;
   GThanks : Greeting ;
   GHowAreYou : Greeting ;
-  GPleaseGive : Greeting ;
-  GExcuse : Greeting ;
-  GSorry : Greeting ;
+  GPleaseGive, GPleaseGivePol : Greeting ;
+  GExcuse, GExcusePol : Greeting ;
+  GSorry, GSorryPol : Greeting ;
   GGoodbye : Greeting ;
   GBye : Greeting ;
   GWhatsYourName : Greeting ;

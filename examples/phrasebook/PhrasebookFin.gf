@@ -7,6 +7,6 @@ concrete PhrasebookFin of Phrasebook =
     Prelude in {
 
 lin
-  PGreeting p g = mkText (lin Text (ss g.s)) (lin Text (ss p.s)) ;
+  PGreeting g = lin Text (ss g.s) ;
 
 }
