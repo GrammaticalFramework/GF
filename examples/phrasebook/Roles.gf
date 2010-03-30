@@ -2,15 +2,15 @@ resource Roles = {
 
 param
   Gender = Male | Female ;
-  Politeness = Polite | Familiar ;
+  Politeness = PPolite | PFamiliar ;
 
 oper
   RolePhrase : Type = {s : Politeness => Gender => Gender => Str} ;
 
   politeDistinct : (_,_ : Str) -> RolePhrase = \pol,fam -> {
     s = table {
-      Polite   => \\_,_ => pol ;
-      Familiar => \\_,_ => fam
+      PPolite   => \\_,_ => pol ;
+      PFamiliar => \\_,_ => fam
       }
     } ;
 

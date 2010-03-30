@@ -129,18 +129,20 @@ doTranslateGroup pgf input mcat mfrom mto =
      [toJSObject [("from",          showJSON (langOnly (PGF.showLanguage from))),
                   ("to",            showJSON (langOnly (PGF.showLanguage to))),
                   ("linearizations",showJSON 
-                      [toJSObject [("text", doText (doBind alt))] | alt <- output])
+                      [toJSObject (("text", doText (doBind alt)) : disamb lg from t) | 
+                                                (t,alt) <- output, let lg = length output])
                  ]
         | 
           (from,trees) <- parse' pgf input mcat mfrom,
-          (to,output)  <- groupResults (map (linearize' pgf mto) trees) 
+          (to,output)  <- groupResults [(t, linearize' pgf mto t) | t <- trees] 
           ]
   where
-   groupResults = Map.toList . foldr more Map.empty . start . concat
+   groupResults = Map.toList . foldr more Map.empty . start . collect
      where
-       start ls = [(l,[s]) | (l,s) <- ls]
+       collect tls = [(t,(l,s)) | (t,ls) <- tls, (l,s) <- ls, notDisamb l]
+       start ls = [(l,[(t,s)]) | (t,(l,s)) <- ls]
        more (l,s) = 
-         Map.insertWith (\ [x] xs -> if elem x xs then xs else (x : xs)) l s
+         Map.insertWith (\ [(t,x)] xs -> if elem x (map snd xs) then xs else ((t,x) : xs)) l s
    doBind = unwords . bind . words
    doText s = case s of
      c:cs | elem (last s) ".?!" -> toUpper c : init (init cs) ++ [last s]
@@ -152,6 +154,13 @@ doTranslateGroup pgf input mcat mfrom mto =
          _ -> ws
    langOnly = reverse . take 3 . reverse
 
+   disamb lg from t = 
+     if lg < 2 
+       then [] 
+       else [("tree", "-- " ++ doText (doBind PGF.linearize pgf (disambLang from)) t)]
+
+   disambLang f = maybe f id $ PGF.readLanguage $ "Disamb" ++ PGF.showLanguage f
+   notDisamb = (/="Disamb") . take 6 . PGF.showLanguage
 
 doParse :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> JSValue
 doParse pgf input mcat mfrom = showJSON $ map toJSObject

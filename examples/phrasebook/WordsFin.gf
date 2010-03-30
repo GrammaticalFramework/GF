@@ -31,15 +31,16 @@ concrete WordsFin of Words = SentencesFin **
     Dollar = mkCN (mkN "dollari") ;
     Lei = mkCN (mkN "lei") ;
 
-    AWant p obj = mkCl p want_V2 obj ;
-    ALike p item = mkCl p like_V2 item ;
-    AHave p kind = mkCl p have_V2 (mkNP kind) ;
-    ASpeak p lang = mkCl p  (mkV2 (mkV "puhua") partitive) lang ;
-    ALove p q = mkCl p (mkV2 (mkV "rakastaa") partitive) q ;
-
     English = mkNP (mkPN "englanti") ;
     Finnish = mkNP (mkPN (mkN "suomi" "suomia")) ;
     French = mkNP (mkPN "ranska") ; 
     Romanian = mkNP (mkPN "romania") ;
     Swedish = mkNP (mkPN "ruotsi") ;
+
+    AWant p obj = {s = \\r => mkCl (p.s ! r) want_V2 obj} ;
+    ALike p item = {s = \\r => mkCl (p.s ! r) like_V2 item} ;
+    AHave p kind = {s = \\r => mkCl (p.s ! r) have_V2 (mkNP kind)} ;
+    ASpeak p lang = {s = \\r => mkCl (p.s ! r) (mkV2 (mkV "puhua") partitive) lang} ;
+    ALove p q = {s = \\r => mkCl (p.s ! r) (mkV2 (mkV "rakastaa") partitive) (q.s ! r)} ;
+
 }

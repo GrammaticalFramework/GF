@@ -1,6 +1,7 @@
+DisambPhrasebookEng :
 PhrasebookEng :
-PhrasebookFin : Familiar Female Male Polite
+PhrasebookFin :
 PhrasebookFre :
 PhrasebookIta : French Fresh GNiceToMeetYou GSeeYouSoon Tea
-PhrasebookRon : Coffee Familiar Female Finnish French Male Polite Swedish Tea
-PhrasebookSwe : Familiar Female Male Polite
+PhrasebookRon : Coffee Finnish French Swedish Tea
+PhrasebookSwe :
