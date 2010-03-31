@@ -12,7 +12,7 @@ lin
   GSorry, GSorryPol = ss "sorry" ;
   GGoodbye = ss "goodbye" ;
   GBye = ss "bye" ;
-  GWhatsYourName = ss "what's your name" ;
+  GWhatsYourName, GWhatsYourNamePol = ss "what's your name" ;
   GNiceToMeetYou = ss "nice to meet you" ;
   GSeeYouSoon = ss "see you soon" ;
   GHelp = ss "help" ;

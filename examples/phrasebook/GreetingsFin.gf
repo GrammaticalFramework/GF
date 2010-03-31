@@ -16,6 +16,7 @@ lin
   GGoodbye = ss "näkemiin" ;
   GBye = ss "hei hei" ;
   GWhatsYourName = ss "mikä sinun nimesi on" ;
+  GWhatsYourNamePol = ss "mikä teidän nimenne on" ;
   GNiceToMeetYou = ss "hauska tutustua" ;
   GSeeYouSoon = ss "nähdään pian" ;
   GHelp = ss "apua" ;
