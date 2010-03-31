@@ -256,7 +256,7 @@ inferLType gr g trm = case trm of
    -- for record fields, which may be typed
    inferM (mty, t) = do
      (t', ty') <- case mty of
-       Just ty -> checkLType gr g ty t
+       Just ty -> checkLType gr g t ty
        _ -> inferLType gr g t
      return (Just ty',t')
 
@@ -431,6 +431,7 @@ checkLType gr g trm typ0 = do
            ExtR (Vr _) (RecType _) -> termWith trm $ return typeType 
                                       -- ext t = t ** ...
            _ -> checkError (text "invalid record type extension" <+> nest 2 (ppTerm Unqualified 0 trm))
+
        RecType rr -> do
          (r',ty,s') <- checks [
             do (r',ty) <- inferLType gr g r
@@ -438,7 +439,8 @@ checkLType gr g trm typ0 = do
            ,
             do (s',ty) <- inferLType gr g s
                return (s',ty,r)
-            ]
+           ]
+
          case ty of
            RecType rr1 -> do
                 let (rr0,rr2) = recParts rr rr1
@@ -451,7 +453,7 @@ checkLType gr g trm typ0 = do
        ExtR ty ex -> do
          r' <- justCheck g r ty
          s' <- justCheck g s ex
-         return $ (ExtR r' s', typ) --- is this all?
+         return $ (ExtR r' s', typ) --- is this all? it assumes the same division in trm and typ
 
        _ -> checkError (text "record extension not meaningful for" <+> ppTerm Unqualified 0 typ)
 
