@@ -41,9 +41,9 @@ Boring = mkAPA "noioso" ;
     ALove p q = mkCl p (mkV2 (mkV "amare")) q ;
 
     English = mkNP (mkPN "inglese") ;
-    Finnish = mkNP (mkPN "finnico") ;
+    Finnish = mkNP (mkPN "finlandese") ;
     French = mkNP (mkPN "francese") ; 
-    Romanian = mkNP (mkPN "romano") ;
+    Romanian = mkNP (mkPN "rumeno") ;
     Swedish = mkNP (mkPN "svedese") ;
 
     AHungry p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "fame" feminine))) ;

@@ -22,6 +22,7 @@ lin
   GGoodNight = ss "god natt" ;
 
   GWhatsYourName = ss "vad heter du" ;
+  GWhatsYourNamePol = ss "vad heter ni" ;
 
   GTheCheck = ss "notan" ;
 

@@ -16,7 +16,8 @@ lin
   GSorry, GSorryPol = ss "pardon" ;
   GGoodbye = ss "au revoir" ;
   GBye = ss "au revoir" ;
-  GWhatsYourName = ss "comment vous appelez-vous" ; ----
+  GWhatsYourName = ss "comment t'appelles-tu" ;
+  GWhatsYourNamePol = ss "comment vous appelez-vous" ;
   GNiceToMeetYou = ss "enchanté" ;
   GSeeYouSoon = ss "à bientôt" ;
   GHelp = ss "au secours" ;

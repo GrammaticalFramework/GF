@@ -1,7 +1,12 @@
 --# -path=.:present
 
 concrete DisambPhrasebookEng of Phrasebook = PhrasebookEng - 
-   [YouFam, YouPol, GExcuse, GExcusePol, GSorry, GSorryPol, GPleaseGive, GPleaseGivePol] 
+   [YouFam, YouPol, 
+    GExcuse, GExcusePol, 
+    GSorry, GSorryPol, 
+    GPleaseGive, GPleaseGivePol,
+    GWhatsYourName, GWhatsYourNamePol
+   ] 
   ** open SyntaxEng, ParadigmsEng, Prelude in {
 lin
   YouFam = mkNP (mkNP youSg_Pron) (ParadigmsEng.mkAdv "(familiar)") ;
@@ -13,6 +18,8 @@ lin
   GSorryPol = pol "sorry" ;
   GPleaseGive = fam "please" ;
   GPleaseGivePol = pol "please" ;
+  GWhatsYourName = ss "what's your name (familiar)" ;
+  GWhatsYourNamePol = ss "what's your name (polite)" ;
 
 oper
   fam : Str -> SS = \s -> postfixSS "(familiar)" (ss s) ;

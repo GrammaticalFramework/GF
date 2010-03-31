@@ -14,7 +14,8 @@ lin
   GSorryPol = ss "scusimi" ; ----
   GGoodbye = ss "arrivederci" ;
   GBye = ss "ciao" ;
-  GWhatsYourName = ss "come si chiama" ;
+  GWhatsYourName = ss "come ti chiami" ;
+  GWhatsYourNamePol = ss "come si chiama" ;
 --  GNiceToMeetYou = ss "piacevole" ; ----
 --  GSeeYouSoon = ss "a poco tempo" ; ----
   GHelp = ss "aiuto" ;
@@ -23,14 +24,9 @@ lin
   GGoodDay = ss "buongiorno" ;
   GGoodEvening = ss "buona sera" ;
   GGoodNight = ss "buona notte" ;
-  GImHungry = ss "ho fame" ;
-  GImThirsty = ss "ho sete" ;
-  GImTired = ss "sono stanco" ; ----
-  GImScared = ss "ho paura" ;
-  GIdontUnderstand = ss "non capisco" ;
   GTheCheck = ss "il conto" ;
 
-  GYes = ss "sì" ; ---- si
+  GYes = ss "sì" ;
   GNo = ss "no" ;
 
 
