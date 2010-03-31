@@ -84,7 +84,7 @@ module PGF(
 
            -- ** Morphological Analysis
            Lemma, Analysis, Morpho,
-           lookupMorpho, buildMorpho,
+           lookupMorpho, buildMorpho, fullFormLexicon,
 
            -- ** Visualizations
            graphvizAbstractTree,
