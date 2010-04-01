@@ -122,14 +122,14 @@ allTransUrduHindi = words $
 transUrdu :: Transliteration
 transUrdu = 
   (mkTransliteration "Urdu" allTrans allCodes) where
-    allCodes = [0x0622 .. 0x0670] ++ [0x0679 .. 0x0698] ++ [0x062a .. 0x062f] ++ [0x063a,0x06a9,0x06af,0x06ba,0x06c1,0x06be,0x06c3,0x06cc,0x06d2]
+    allCodes = [0x0622 .. 0x062f] ++ [0x0630 .. 0x063a] ++ [0x0641 .. 0x0648] ++ 
+               [0x0654,0x0658,0x0679,0x067e,0x0686,0x0688,0x0691,0x0698,0x06af,0x06c1,0x06c3,0x06cc,0x06ba,0x06be,0x06d2]
     allTrans = words $
-      "A  - w^ - y^ a b - Z r z s X S Z- " ++  -- 0622 - 0636
-      "t- z- e - f q - l m n - w - i - "   ++  -- 0637 - 0651
-      "- - $ - i- u - - - - - - - - - - - - a: "    ++  -- 0652 - 0670
-      "T - - - - - - c - D - - R - - - - - - x"   ++  -- 0679 -- 0698
-      "t C j H K d  " ++                               -- 062a -- 062f
-      "G k g N h h- t: y E"
+      "A - w^ - y^ a b - t C j H K d " ++  -- 0622 - 062f
+      "Z r z s X S Z- t- z- e G "   ++  -- 0630 - 063a
+      "f q k l m n - w "    ++  -- 0641 - 0648
+      "$ n- T p c D R x g h t: y N h- E "   -- 0654,658,679,67e,686,688,698,6af,6c1,6c3,6cc,6ba,6be,6d2
+      
     
 
 transArabic :: Transliteration
