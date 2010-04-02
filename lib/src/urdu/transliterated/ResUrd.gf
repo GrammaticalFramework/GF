@@ -147,10 +147,10 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
  
     regAdjective : Str -> Adjective; 
 	regAdjective x =  case x of {
-	      acch + ("ا"|"اں") => mkAdjective x            ("بہت" ++ x)          ("ساب سے" ++ x)          (acch + "ے") ("بہت" ++ acch + "ے") ("ساب سے" ++ acch + "ے") (acch + "ے") ("بہت" ++ acch + "ے") ("ساب سے" ++ acch + "ے")
-		                                   (acch + "ی") ("بہت" ++ acch + "ی") ("ساب سے" ++ acch + "ی") (acch + "ی") ("بہت" ++ acch + "ی") ("ساب سے" ++ acch + "ی") (acch + "ی") ("بہت" ++ acch + "ی") ("ساب سے" ++ acch + "ی")
-									       (acch +"ے")  ("بہت" ++ acch + "ے") ("ساب سے" ++ acch + "ے") (acch + "ے") ("بہت" ++ acch + "ے") ("ساب سے" ++ acch + "ے") (acch + "ے") ("بہت" ++ acch + "ے") ("ساب سے" ++ acch + "ے")
-		                                   (acch + "ی") ("بہت" ++ acch + "ی") ("ساب سے" ++ acch + "ی") (acch + "ی") ("بہت" ++ acch + "ی") ("ساب سے" ++ acch + "ی") (acch + "ی") ("بہت" ++ acch + "ی") ("ساب سے" ++ acch + "ی");
+	      acch + ("a"|"aN") => mkAdjective x            ("bht" ++ x)          ("sab sE" ++ x)          (acch + "E") ("bht" ++ acch + "E") ("sab sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sab sE" ++ acch + "E")
+		                                   (acch + "y") ("bht" ++ acch + "y") ("sab sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sab sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sab sE" ++ acch + "y")
+									       (acch +"E")  ("bht" ++ acch + "E") ("sab sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sab sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sab sE" ++ acch + "E")
+		                                   (acch + "y") ("bht" ++ acch + "y") ("sab sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sab sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sab sE" ++ acch + "y");
 									
           _                 => mkAdjective  x x x x x x x x x
                                             x x x x x x x x x
@@ -161,7 +161,7 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
 		 
 
   RefPron : Str;
-  RefPron = "خود";
+  RefPron = "Kwd";
   
   ----------------------------------------------------------
   -- Grammar part
@@ -175,23 +175,23 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
     np2pronCase :  (Case => Str) -> NPCase -> Str = \ppf,npc -> case npc of {
        NPC c => ppf ! c;
        NPObj => ppf ! Dir ;
-       NPErg => ppf ! Obl ++ "نع"
+       NPErg => ppf ! Obl ++ "ne"
       } ;
     
 	toNP : ( Case => Str) -> NPCase -> Str = \pn, npc -> case npc of {
       NPC c => pn !  c ;
       NPObj => pn !  Dir ;
-      NPErg => pn !  Obl ++ "نع"
+      NPErg => pn !  Obl ++ "ne"
       } ;
 	detcn2NP : (Determiner) -> Noun -> NPCase -> Number -> Str = \dt,cn,npc,nn -> case npc of {
        NPC c => dt.s ! Sg ! Masc ++ cn.s ! nn ! Dir ;
        NPObj => dt.s ! Sg ! Masc ++ cn.s ! nn ! Dir ;
-       NPErg => dt.s ! Sg ! Masc ++ cn.s ! nn ! Obl ++ "نع"
+       NPErg => dt.s ! Sg ! Masc ++ cn.s ! nn ! Obl ++ "ne"
       } ;  
     det2NP : (Determiner) -> NPCase -> Str = \dt,npc -> case npc of {
        NPC c => dt.s ! Sg ! Masc ;
        NPObj => dt.s ! Sg ! Masc ;
-       NPErg => dt.s ! Sg  ! Masc ++ "نع"
+       NPErg => dt.s ! Sg  ! Masc ++ "ne"
       } ;    
 	  
 ------------------------------------------
@@ -243,66 +243,66 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
   oper 
     copula : CTense -> Number -> UPerson -> Gender -> Str = \t,n,p,g -> 
       case <t,n,p,g> of {
-        <CPresent,Sg,Pers1,_   > => "ہوں" ;
-        <CPresent,Sg,Pers2_Casual,_   > => "ہے" ;
-        <CPresent,Sg,Pers2_Familiar,_   > => "ہو" ;
-		<CPresent,Sg,Pers2_Respect,_   > => "ہیں" ;
-        <CPresent,Sg,Pers3_Near,_   > => "ہے" ;
-        <CPresent,Sg,Pers3_Distant,_   > => "ہے" ;
-		<CPresent,Pl,Pers1,_   > => "ہیں" ;
-        <CPresent,Pl,Pers2_Casual,_   > => "ہو" ;
-        <CPresent,Pl,Pers2_Familiar,_   > => "ہو" ;
-		<CPresent,Pl,Pers2_Respect,_   > => "ہیں" ;
-        <CPresent,Pl,Pers3_Near,_   > => "ہیں" ;
-        <CPresent,Pl,Pers3_Distant,_   > => "ہیں" ;
-		<CPast,Sg,Pers1,Masc   > => "تھا" ;
-		<CPast,Sg,Pers1,Fem   > => "تھی" ;
-        <CPast,Sg,Pers2_Casual,Masc   > => "تھا" ;
-		<CPast,Sg,Pers2_Casual,Fem   > => "تھی" ;
-        <CPast,Sg,Pers2_Familiar,Masc   > => "تھا" ;
-		<CPast,Sg,Pers2_Familiar,Fem   > => "تھی" ;
-		<CPast,Sg,Pers2_Respect,Masc   > => "تھے" ;
-		<CPast,Sg,Pers2_Respect,Fem   > => "تھیں" ;
-        <CPast,Sg,Pers3_Near,Masc   > => "تھا" ;
-		<CPast,Sg,Pers3_Near,Fem   > => "تھی" ;
-        <CPast,Sg,Pers3_Distant,Masc  > => "تھا" ;
-		<CPast,Sg,Pers3_Distant,Fem  > => "تھی" ;
-		<CPast,Pl,Pers1,Masc   > => "تھے" ;
-		<CPast,Pl,Pers1,Fem   > => "تھیں" ;
-        <CPast,Pl,Pers2_Casual,Masc   > => "تھے" ;
-		<CPast,Pl,Pers2_Casual,Fem   > => "تھیں" ;
-        <CPast,Pl,Pers2_Familiar,Masc   > => "تھے" ;
-		<CPast,Pl,Pers2_Familiar,Fem   > => "تھیں" ;
-		<CPast,Pl,Pers2_Respect,Masc   > => "تھے" ;
-		<CPast,Pl,Pers2_Respect,Fem   > => "تھیں" ;
-        <CPast,Pl,Pers3_Near,Masc   > => "تھے" ;
-		<CPast,Pl,Pers3_Near,Fem   > => "تھیں" ;
-		<CPast,Pl,Pers3_Distant,Masc   > => "تھے" ;
-		<CPast,Pl,Pers3_Distant,Fem   > => "تھیں" ;
-		<CFuture,Sg,Pers1,Masc   > => "گا" ;
-		<CFuture,Sg,Pers1,Fem   > => "گی" ;
-        <CFuture,Sg,Pers2_Casual,Masc   > => "گا" ;
-		<CFuture,Sg,Pers2_Casual,Fem   > => "گi" ;
-        <CFuture,Sg,Pers2_Familiar,Masc   > => "گے" ;
-		<CFuture,Sg,Pers2_Familiar,Fem   > => "گی" ;
-		<CFuture,Sg,Pers2_Respect,Masc   > => "گے" ;
-		<CFuture,Sg,Pers2_Respect,Fem   > => "گی" ;
-        <CFuture,Sg,Pers3_Near,Masc   > => "گا" ;
-		<CFuture,Sg,Pers3_Near,Fem   > => "گی" ;
-        <CFuture,Sg,Pers3_Distant,Masc  > => "گا" ;
-		<CFuture,Sg,Pers3_Distant,Fem  > => "گی" ;
-		<CFuture,Pl,Pers1,Masc   > => "گے" ;
-		<CFuture,Pl,Pers1,Fem   > => "گی" ;
-        <CFuture,Pl,Pers2_Casual,Masc   > => "گے" ;
-		<CFuture,Pl,Pers2_Casual,Fem   > => "گی" ;
-        <CFuture,Pl,Pers2_Familiar,Masc   > => "گے" ;
-		<CFuture,Pl,Pers2_Familiar,Fem   > => "گی" ;
-		<CFuture,Pl,Pers2_Respect,Masc   > => "گے" ;
-		<CFuture,Pl,Pers2_Respect,Fem   > => "گی" ;
-        <CFuture,Pl,Pers3_Near,Masc   > => "گے" ;
-		<CFuture,Pl,Pers3_Near,Fem   > => "گے" ;
-		<CFuture,Pl,Pers3_Distant,Masc  > => "گے" ;
-		<CFuture,Pl,Pers3_Distant,Fem  > => "گی" 
+        <CPresent,Sg,Pers1,_   > => "hwN" ;
+        <CPresent,Sg,Pers2_Casual,_   > => "hE" ;
+        <CPresent,Sg,Pers2_Familiar,_   > => "hw" ;
+		<CPresent,Sg,Pers2_Respect,_   > => "hyN" ;
+        <CPresent,Sg,Pers3_Near,_   > => "hE" ;
+        <CPresent,Sg,Pers3_Distant,_   > => "hE" ;
+		<CPresent,Pl,Pers1,_   > => "hyN" ;
+        <CPresent,Pl,Pers2_Casual,_   > => "hw" ;
+        <CPresent,Pl,Pers2_Familiar,_   > => "hw" ;
+		<CPresent,Pl,Pers2_Respect,_   > => "hyN" ;
+        <CPresent,Pl,Pers3_Near,_   > => "hyN" ;
+        <CPresent,Pl,Pers3_Distant,_   > => "hyN" ;
+		<CPast,Sg,Pers1,Masc   > => "th-a" ;
+		<CPast,Sg,Pers1,Fem   > => "th-y" ;
+        <CPast,Sg,Pers2_Casual,Masc   > => "th-a" ;
+		<CPast,Sg,Pers2_Casual,Fem   > => "th-y" ;
+        <CPast,Sg,Pers2_Familiar,Masc   > => "th-a" ;
+		<CPast,Sg,Pers2_Familiar,Fem   > => "th-y" ;
+		<CPast,Sg,Pers2_Respect,Masc   > => "th-E" ;
+		<CPast,Sg,Pers2_Respect,Fem   > => "th-yN" ;
+        <CPast,Sg,Pers3_Near,Masc   > => "th-a" ;
+		<CPast,Sg,Pers3_Near,Fem   > => "th-y" ;
+        <CPast,Sg,Pers3_Distant,Masc  > => "th-a" ;
+		<CPast,Sg,Pers3_Distant,Fem  > => "th-y" ;
+		<CPast,Pl,Pers1,Masc   > => "th-E" ;
+		<CPast,Pl,Pers1,Fem   > => "th-yN" ;
+        <CPast,Pl,Pers2_Casual,Masc   > => "th-E" ;
+		<CPast,Pl,Pers2_Casual,Fem   > => "th-yN" ;
+        <CPast,Pl,Pers2_Familiar,Masc   > => "th-E" ;
+		<CPast,Pl,Pers2_Familiar,Fem   > => "th-yN" ;
+		<CPast,Pl,Pers2_Respect,Masc   > => "th-E" ;
+		<CPast,Pl,Pers2_Respect,Fem   > => "th-yN" ;
+        <CPast,Pl,Pers3_Near,Masc   > => "th-E" ;
+		<CPast,Pl,Pers3_Near,Fem   > => "th-yN" ;
+		<CPast,Pl,Pers3_Distant,Masc   > => "th-E" ;
+		<CPast,Pl,Pers3_Distant,Fem   > => "th-yN" ;
+		<CFuture,Sg,Pers1,Masc   > => "ga" ;
+		<CFuture,Sg,Pers1,Fem   > => "gy" ;
+        <CFuture,Sg,Pers2_Casual,Masc   > => "ga" ;
+		<CFuture,Sg,Pers2_Casual,Fem   > => "gi" ;
+        <CFuture,Sg,Pers2_Familiar,Masc   > => "gE" ;
+		<CFuture,Sg,Pers2_Familiar,Fem   > => "gy" ;
+		<CFuture,Sg,Pers2_Respect,Masc   > => "gE" ;
+		<CFuture,Sg,Pers2_Respect,Fem   > => "gy" ;
+        <CFuture,Sg,Pers3_Near,Masc   > => "ga" ;
+		<CFuture,Sg,Pers3_Near,Fem   > => "gy" ;
+        <CFuture,Sg,Pers3_Distant,Masc  > => "ga" ;
+		<CFuture,Sg,Pers3_Distant,Fem  > => "gy" ;
+		<CFuture,Pl,Pers1,Masc   > => "gE" ;
+		<CFuture,Pl,Pers1,Fem   > => "gy" ;
+        <CFuture,Pl,Pers2_Casual,Masc   > => "gE" ;
+		<CFuture,Pl,Pers2_Casual,Fem   > => "gy" ;
+        <CFuture,Pl,Pers2_Familiar,Masc   > => "gE" ;
+		<CFuture,Pl,Pers2_Familiar,Fem   > => "gy" ;
+		<CFuture,Pl,Pers2_Respect,Masc   > => "gE" ;
+		<CFuture,Pl,Pers2_Respect,Fem   > => "gy" ;
+        <CFuture,Pl,Pers3_Near,Masc   > => "gE" ;
+		<CFuture,Pl,Pers3_Near,Fem   > => "gE" ;
+		<CFuture,Pl,Pers3_Distant,Masc  > => "gE" ;
+		<CFuture,Pl,Pers3_Distant,Fem  > => "gy" 
         
         
         } ;
@@ -314,19 +314,19 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
 	  |VPFutr;
       
     VPHTense = 
-       VPGenPres  -- impf hum       nahim    "I گo"
-     | VPImpPast  -- impf Ta        nahim    "I وعنت"
-	 | VPFut      -- fut            na/nahim "I سہالل گo"
-     | VPContPres -- stem raha hum  nahim    "I ام گoiنگ"
-     | VPContPast -- stem raha Ta   nahim    "I واس گoiنگ"
+       VPGenPres  -- impf hum       nahim    "I go"
+     | VPImpPast  -- impf Ta        nahim    "I went"
+	 | VPFut      -- fut            na/nahim "I shall go"
+     | VPContPres -- stem raha hum  nahim    "I am going"
+     | VPContPast -- stem raha Ta   nahim    "I was going"
 	 | VPContFut
-     | VPPerfPres -- perf hum       na/nahim "I ہاvع گoنع"
-     | VPPerfPast -- perf Ta        na/nahim "I ہاد گoنع"          
+     | VPPerfPres -- perf hum       na/nahim "I have gone"
+     | VPPerfPast -- perf Ta        na/nahim "I had gone"          
 	 | VPPerfFut
 	 | VPPerfPresCont
 	 | VPPerfPastCont
 	 | VPPerfFutCont
-     | VPSubj     -- subj           na       "I مای گo"
+     | VPSubj     -- subj           na       "I may go"
      ;
 
     VPHForm = 
@@ -383,16 +383,16 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
 
 	 
     raha : Gender -> Number -> Str = \g,n -> 
-	   (regAdjective "رہا").s ! n ! g ! Dir ! Posit ;
+	   (regAdjective "rha").s ! n ! g ! Dir ! Posit ;
 
 	cka : Gender -> Number -> Str = \g,n -> 
-	  (regAdjective "چكا").s ! n ! g ! Dir ! Posit ;
+	  (regAdjective "cka").s ! n ! g ! Dir ! Posit ;
 	  
 	hw : UPerson -> Number -> Str = \pp,n ->    
 	 case <pp,n> of {
-	 <Pers1,_> => "ہوں";
-	 <_,Pl>    => "ہوں";
-	 <_,_>		=> "ہو"
+	 <Pers1,_> => "hwN";
+	 <_,Pl>    => "hwN";
+	 <_,_>		=> "hw"
 	 };
 	 
 	predAux : Aux -> VPH = \verb -> {
@@ -407,7 +407,7 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
 	     VPTense VPPres (Ag g n p) => {fin = copula CPresent n p g ; inf = part } ;
          VPTense VPPast (Ag g n p) => {fin = copula CPast n p g ; inf = part } ;
          VPTense VPFutr (Ag g n p) => {fin = copula CFuture n p g ; inf = part ++ hw p n  } ;
-         VPStem => {fin = []  ; inf = "رہ" };
+         VPStem => {fin = []  ; inf = "rh" };
 		 _ => {fin = part ; inf = [] }
 		 };
 	  obj = {s = [] ; a = defaultAgr} ;
@@ -468,7 +468,7 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
 					  {fin = copula CPast n p g ; inf = (vp.s ! VPTense VPPres agr).inf ++ raha g n } ;					
 					VPPerfFutCont => 
 					  {fin = copula CFuture n p g ; inf = (vp.s ! VPTense VPPres agr).inf ++ raha g n  ++ hw p n } ;					
-					VPSubj   => {fin = insertSubj p (vp.s ! VPStem).inf  ; inf = "ژاید"  }
+					VPSubj   => {fin = insertSubj p (vp.s ! VPStem).inf  ; inf = "xayd"  }
                    
 					};
 					
@@ -476,15 +476,15 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
           quest =
             case ord of
               { ODir => [];
-                OQuest => "كیا" }; 
+                OQuest => "kya" }; 
 		  na =
             case b of
               { Pos => [];
-                Neg => "نا" };
+                Neg => "na" };
            nahim =
             case b of 
               { Pos => [];
-                Neg => "نہیں" };
+                Neg => "nhyN" };
         in
 		case vt of {
 		VPSubj => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ na ++  vps.inf ++ vps.fin ++ vp.embComp ;
@@ -521,22 +521,22 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
 					  {fin = copula CPast n p g ; inf = (vp.s ! VPStem).inf ++ raha g n } ; 
 					VPPerfFutCont => 
 					  {fin = copula CFuture n p g ; inf = (vp.s ! VPStem).inf ++ raha g n ++ hw p n } ;
-					VPSubj   => {fin = insertSubj p (vp.s ! VPStem).inf ; inf = "ژاید"  }
+					VPSubj   => {fin = insertSubj p (vp.s ! VPStem).inf ; inf = "xayd"  }
                     
 					};
 
 		  quest =
             case ord of
               { ODir => [];
-                OQuest => "كیا" }; 
+                OQuest => "kya" }; 
 		  na =
             case b of
               { Pos => [];
-                Neg => "نا" };
+                Neg => "na" };
           nahim =
             case b of 
               { Pos => [];
-                Neg => "نہیں" };		
+                Neg => "nhyN" };		
         in
 		case t of {
 		VPSubj => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ na ++  vps.inf ++ vps.fin ++ vp.embComp;
@@ -544,7 +544,7 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
     } ;
     
     insertSubj : UPerson -> Str -> Str = \p,s -> 
-      case p of { Pers1 => s ++ "وں" ; _ => s ++ "ے"};
+      case p of { Pers1 => s ++ "wN" ; _ => s ++ "E"};
      
     insertObj : (Agr => Str) -> VPH -> VPH = \obj1,vp -> {
      s = vp.s ;
@@ -615,27 +615,27 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
      embComp = vp.embComp;
      comp = vp.comp
     } ;
-	conjThat : Str = "كہ" ;
+	conjThat : Str = "kh" ;
 
 -- strings collected from syntax files, AR
 
 oper
-  sE_Str = "سے" ;
-  ka_Str = "كا" ;
-  hr_kwy_Str = "ہر كوی" ;
-  rakh6na_Str = "راكھنا" ;
+  sE_Str = "sE" ;
+  ka_Str = "ka" ;
+  hr_kwy_Str = "hr kwy" ;
+  rakh6na_Str = "rakh-na" ;
   comma_Str = "," ;
-  agr_Str = "اگر" ;
-  nE_Str = "نے" ;
-  jw_Str = "جو" ;
-  js_Str = "جس" ;
-  jn_Str = "جن" ;
-  mt_Str = "مت" ;
-  nh_Str = "نہ" ;
-  waN_Str = "واں" ;
-  awr_Str = "اور" ;
-  ky_Str = "كی" ;
-  kw_Str = "كو" ;
+  agr_Str = "agr" ;
+  nE_Str = "nE" ;
+  jw_Str = "jw" ;
+  js_Str = "js" ;
+  jn_Str = "jn" ;
+  mt_Str = "mt" ;
+  nh_Str = "nh" ;
+  waN_Str = "waN" ;
+  awr_Str = "awr" ;
+  ky_Str = "ky" ;
+  kw_Str = "kw" ;
    
 }
 

@@ -15,6 +15,6 @@ concrete AdverbUrd of Adverb = CatUrd ** open ResUrd, Prelude in {
 
     SubjS = cc2 ;
 
-    AdnCAdv cadv = {s = "sE" ++ cadv.s} ;
+    AdnCAdv cadv = {s = sE_Str ++ cadv.s} ;
 
 }

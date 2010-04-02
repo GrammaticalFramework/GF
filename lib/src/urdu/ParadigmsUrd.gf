@@ -92,7 +92,7 @@ oper
 ----2 Prepositions
 
   mkPrep : Str -> Prep ;
-    mkPrep str = makePrep str ;
+    mkPrep str = lin Prep (makePrep str) ;
 
 --2 Conjunctions
   mkConj : overload {

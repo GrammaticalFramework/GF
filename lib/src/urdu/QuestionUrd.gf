@@ -1,20 +1,19 @@
 concrete QuestionUrd of Question = CatUrd ** open ResUrd, Prelude in {
   flags optimize=all_subs ;
-    coding = utf8;
 
   lin
 
     QuestCl cl = {
       s = \\t,p,qf => case qf of { 
 	                  QDir => cl.s ! t ! p ! OQuest;
-                      QIndir => "agr" ++ cl.s ! t! p ! ODir
+                      QIndir => agr_Str ++ cl.s ! t! p ! ODir
 					  }
 				};	  
 
     QuestVP qp vp = 
-       let cl = mkSClause ("") (Ag qp.g qp.n Pers3_Near) vp;
+       let cl = mkSClause [] (Ag qp.g qp.n Pers3_Near) vp;
            qp1 = qp.s ! Dir;
-           qp2 = qp.s ! Obl ++ "nE"
+           qp2 = qp.s ! Obl ++ nE_Str
           in { s = \\t,p,o => case t of {
 		             VPImpPast => qp2 ++ cl.s ! t ! p ! ODir;
 					 _         => qp1 ++ cl.s ! t ! p ! ODir
@@ -22,7 +21,7 @@ concrete QuestionUrd of Question = CatUrd ** open ResUrd, Prelude in {
 					}; 
     QuestSlash ip slash = 
      let ip1 = ip.s ! Dir;
-         ip2 = ip.s ! Obl ++ "nE"
+         ip2 = ip.s ! Obl ++ nE_Str
      in {
       s = \\t,p,o => case t of { 
             VPImpPast => ip2 ++ slash.s ! t ! p ! ODir;

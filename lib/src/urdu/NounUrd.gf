@@ -22,7 +22,7 @@ concrete NounUrd of Noun = CatUrd ** open ResUrd, Prelude in {
       } ;
 
     RelNP np rs = {
-	  s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ;
+	  s = \\c => np.s ! c ++ comma_Str ++ rs.s ! np.a ;
       a = np.a
       } ;
 
@@ -64,18 +64,6 @@ concrete NounUrd of Noun = CatUrd ** open ResUrd, Prelude in {
     AdNum adn num = {s = adn.s ++ num.s ; n = num.n} ;
 
     OrdSuperl a = {s = a.s ! Sg ! Masc ! Dir ! Superl ; n = Sg} ;
-
-
-
-    DetArtSg art cn = {
-      s = \\c => art.s ++ toNP (cn.s ! Sg) c ;
-      a = agrP3 cn.g Sg
-      } ;
-
-    DetArtPl art cn = {
-      s = \\c => art.s ++ toNP (cn.s ! Pl) c ;
-      a = agrP3 cn.g Pl
-      } ;
 
     DefArt = {s = \\_,_,_ => [] ; a = defaultAgr} ;
     IndefArt = {s = \\_,_,_ => [] ; a =defaultAgr } ;

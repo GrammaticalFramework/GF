@@ -37,29 +37,29 @@ oper
 
     regNoun : Str -> Noun ;
     regNoun s = case s of {
-		     _ + "یا" => mkN05 (s);
-                 _ + ("ا"|"ع"|"ہ") =>  mkN01 (s);
-                 _ + "ی" => mkN03 (s);
-                 _ + ("اں"|"وں") => mkN04 (s);
-                 _ + "ؤ" => mkN12 (s);
+		     _ + "ya" => mkN05 (s);
+                 _ + ("a"|"e"|"h") =>  mkN01 (s);
+                 _ + "y" => mkN03 (s);
+                 _ + ("aN"|"wN") => mkN04 (s);
+                 _ + "w^" => mkN12 (s);
              _			  => regNoun2 (s)				 
                  };
 	regNoun2 : Str -> Noun;
-	regNoun2 s = let c = if_then_else Bool (eq (last s) "ا" ) True (if_then_else Bool (eq (last s) "ہ") True (if_then_else Bool (eq (last s) "ع") True False))
+	regNoun2 s = let c = if_then_else Bool (eq (last s) "a" ) True (if_then_else Bool (eq (last s) "h") True (if_then_else Bool (eq (last s) "e") True False))
      in case c of {
       False => mkN02 (s);
 	  True => mkN01 (s)
      };	  
 	  
     reggNoun : Str -> Gender -> Noun ;
-    reggNoun s g = let c = if_then_else Bool (eq (last s) "ا" ) True (if_then_else Bool (eq (dp 2 s) "اں") True (if_then_else Bool (eq (dp 2 s) "وں") True False))
+    reggNoun s g = let c = if_then_else Bool (eq (last s) "a" ) True (if_then_else Bool (eq (dp 2 s) "aN") True (if_then_else Bool (eq (dp 2 s) "wN") True False))
 	 in case <s,g,c> of {
-		         <_ + "ت",Fem,_> => mkN10 (s);
-				 <_ + "ت",Masc,_> => mkN02 (s);
-				 <_ + "و",Masc,_> => mkN11 (s);
-                 <_ + "و",Fem,_> 	=> mkN07 (s);
-				 <_ + "یا",Fem,_> => mkN05 (s);
-                 <_ + "یا",Masc,_> => mkN02 (s);
+		         <_ + "t",Fem,_> => mkN10 (s);
+				 <_ + "t",Masc,_> => mkN02 (s);
+				 <_ + "w",Masc,_> => mkN11 (s);
+                 <_ + "w",Fem,_> 	=> mkN07 (s);
+				 <_ + "ya",Fem,_> => mkN05 (s);
+                 <_ + "ya",Masc,_> => mkN02 (s);
                  <_,Fem,False>		=> mkN08 (s);
                  <_,Fem,_>		=> mkN09 (s)
                  				 
@@ -70,15 +70,15 @@ oper
 
      mkN01 : Str -> Noun ;
      mkN01 lRka = let end = last (lRka) ;
-                 lRk = if_then_else Str (eq end "ع") lRka (tk 1 lRka)
-             in mkNoun (lRka)     (lRk+"ے")  (lRk+"ے")
-                       (lRk+"ے")  (lRk+"وں") (lRk+"و")
+                 lRk = if_then_else Str (eq end "e") lRka (tk 1 lRka)
+             in mkNoun (lRka)     (lRk+"E")  (lRk+"E")
+                       (lRk+"E")  (lRk+"wN") (lRk+"w")
                        Masc ;
 
 -- masculine nouns does not end with a, h, e, an
 
      mkN02 : Str -> Noun ;
-     mkN02 mrd = let mrdwN = mrd+"وں" ;
+     mkN02 mrd = let mrdwN = mrd+"wN" ;
               mrdw  = tk 1 mrdwN
               in mkNoun mrd mrd   mrd
                       mrd mrdwN mrdw
@@ -87,8 +87,8 @@ oper
 -- feminine Nouns end with y
 
      mkN03 : Str -> Noun ;
-     mkN03 krsy = let krsyaN  = krsy+"اں" ;
-		 krsywN  = krsy+"وں" ;
+     mkN03 krsy = let krsyaN  = krsy+"aN" ;
+		 krsywN  = krsy+"wN" ;
 		 krsyw   = tk 1 krsywN
              in mkNoun krsy   krsy   krsy
                        krsyaN krsywN krsyw
@@ -97,14 +97,14 @@ oper
 -- feminine nouns end with a, aN, wN
      mkN04 : Str -> Noun ;
      mkN04 n = case last n of {
-     "ا" => let bla = n
+     "a" => let bla = n
         in mkNoun bla          bla         bla
-                  (bla+"ئیں") (bla+"ؤں") (bla+"ؤ")
+                  (bla+"y^yN") (bla+"w^N") (bla+"w^")
                   Fem ;
       _   => let maN = n ; -- ends with aN and wN
             ma  = tk 1 maN
         in mkNoun maN         maN        maN
-                  (ma+"ئیں") (ma+"ؤں") (ma+"ؤں")
+                  (ma+"y^yN") (ma+"w^N") (ma+"w^N")
                   Fem 
 
             };
@@ -113,14 +113,14 @@ oper
       mkN05 : Str -> Noun ;
       mkN05 gRya = let gRy = (tk 1 gRya)
              in mkNoun gRya       gRya       gRya
-                       (gRya+"ں") (gRy+"وں") (gRy+"و")
+                       (gRya+"N") (gRy+"wN") (gRy+"w")
                        Fem ;
 
 -- feminine nouns end with w
       
       mkN07 : Str -> Noun ;
       mkN07 khshbw =  mkNoun khshbw     khshbw         khshbw
-                            (khshbw + "ئیں") (khshbw + "ؤں") (khshbw + "ؤ")
+                            (khshbw + "y^yN") (khshbw + "w^N") (khshbw + "w^")
                             Fem ;
 
 -- Loan arabic feminine nouns end with t
@@ -128,7 +128,7 @@ oper
 
       mkN10 : Str -> Noun ;
       mkN10 ndamt = mkNoun ndamt        ndamt        ndamt
-                     (ndamt+"یں") (ndamt+"وں") (ndamt+"و")
+                     (ndamt+"yN") (ndamt+"wN") (ndamt+"w")
                      Fem ;
 -- Worst case function
       mkN : (_,_,_,_,_,_ : Str) -> Gender -> Noun ;
@@ -137,28 +137,28 @@ oper
 
       mkN06 : Str -> Noun ;
       mkN06 rya = mkNoun rya          rya         rya 
-                   (rya+"ئیں") (rya+"ؤں") rya
+                   (rya+"y^yN") (rya+"w^N") rya
                    Fem ;
 
 -- feminine nouns that do not end with a, N, w, wN
      
       mkN08 : Str -> Noun ;
       mkN08 ktab = mkNoun ktab ktab ktab
-                    (ktab+"یں") (ktab+"وں") (ktab+"و")
+                    (ktab+"yN") (ktab+"wN") (ktab+"w")
                     Fem ;
 
 -- Loan arabic feminine nouns
      
       mkN09 : Str -> Noun ;
       mkN09 ahsan = mkNoun ahsan        ahsan                             ahsan
-                     (ahsan+"ات")  (ahsan+"ات") (ahsan+"و") 
+                     (ahsan+"at")  (ahsan+"at") (ahsan+"w") 
                      Fem ;
--- (variants{ahsan+"ات";ahsan+"وں"})
+-- (variants{ahsan+"at";ahsan+"wN"})
 -- Loan persian maculine nouns end with w
 
       mkN11 : Str -> Noun ;
       mkN11 alw = mkNoun alw alw         alw
-                   alw (alw+"ؤں") (alw+"ؤ")
+                   alw (alw+"w^N") (alw+"w^")
                    Masc ;
 
 
@@ -291,8 +291,8 @@ oper
       };
 	  
    makePersPron : PersPron;
-   makePersPron     = mkPersPron	"m(a)یں"	"m(o)j'|ہ"		""		"t(o)و "		"t(o)j|ہ"		"t(o)و "		"t(o)م"		"t(o)م"		"t(o)م"		"آپ"		"آپ"		"آپ"		"y(i)ہ"		"a(i)س"		""		"w(o)ہ"		"a(o)س"		""
-									"h(a)م"		"h(a)م"			""		"t(o)م" 		"t(o)م"			"t(o)م"			"t(o)م"		"t(o)م"		"t(o)م"		"آپ"		"آپ"		"آپ"		"y(i)ہ"		"a(i)ن"		""		"w(o)ہ"		"a(o)ن"		"" ;
+   makePersPron     = mkPersPron	"m(a)yN"	"m(o)j'|h"		""		"t(o)w "		"t(o)j|h"		"t(o)w "		"t(o)m"		"t(o)m"		"t(o)m"		"Ap"		"Ap"		"Ap"		"y(i)h"		"a(i)s"		""		"w(o)h"		"a(o)s"		""
+									"h(a)m"		"h(a)m"			""		"t(o)m" 		"t(o)m"			"t(o)m"			"t(o)m"		"t(o)m"		"t(o)m"		"Ap"		"Ap"		"Ap"		"y(i)h"		"a(i)n"		""		"w(o)h"		"a(o)n"		"" ;
 						
   mkPron : (x1,x2,x3:Str) -> {s:Case => Str} = 
      \y1,y2,y3 -> { s =
@@ -324,7 +324,7 @@ oper
   CommonVF = {s : VTense => UPerson => Number => Gender => Str} ;
  
    mkVerb : (x1: Str) -> Verb = \inf  ->
-     	 let root = (tk 2 inf); inf_obl = ((tk 1 inf) + "ے"); inf_fem = ((tk 1 inf) + "ی")
+     	 let root = (tk 2 inf); inf_obl = ((tk 1 inf) + "E"); inf_fem = ((tk 1 inf) + "y")
 	in { s = table {
           
                VF tense person number gender => (mkCmnVF root tense person number gender).s  ;
@@ -337,7 +337,7 @@ oper
        }
      } ;
    rem_y : Str -> Str;
-   rem_y str = let b = take 1 str; yth = drop 1 str; a1	= take 4 yth; a2 = take 1 yth; 	th= if_then_else Str (eq a1 "(a)ی") (drop 5 str) (drop 2 str);	st = if_then_else Str (eq a1 "(a)ی") (b ++ "(i)"++th) (if_then_else Str (eq a2 "ی") (b ++ th)  str)
+   rem_y str = let b = take 1 str; yth = drop 1 str; a1	= take 4 yth; a2 = take 1 yth; 	th= if_then_else Str (eq a1 "(a)y") (drop 5 str) (drop 2 str);	st = if_then_else Str (eq a1 "(a)y") (b ++ "(i)"++th) (if_then_else Str (eq a2 "y") (b ++ th)  str)
               in rt st;
 	rt: Str -> Str;
 	rt r = r;
@@ -345,12 +345,12 @@ oper
     \root,t,p,n,g ->
      {s = 
       let form1 = case (last root) of {
-                  "ا"|"آ"|"و" => root + "ؤں" ;
-                  _           => root + "وں"
+                  "a"|"A"|"w" => root + "w^N" ;
+                  _           => root + "wN"
                  };
           form2 =  case (last root) of {
-                  "ا"|"آ"|"و" => root + "ئں" ;
-                  _           => root + "یں"
+                  "a"|"A"|"w" => root + "y^N" ;
+                  _           => root + "yN"
                  };
 	 in
        case <t,p,n,g> of {
@@ -358,24 +358,24 @@ oper
         <Subj,Pers1,Pl,_> => form2 ;
         <Subj,_,_,_>      => (mkImpert root p n g).s ;
         <Perf,_,_,_>      => case root of {
-		                      "ہو" => (mkPastInd root p n g).s ;
-							  "جا" => (mkPastInd "گی" p n g).s ;
-							  "كر" => (mkPastInd "ك" p n g).s ;
-							  "دے" => (mkPastInd "د" p n g).s ;
-							  "لے" => (mkPastInd "ل" p n g).s ;
+		                      "hw" => (mkPastInd root p n g).s ;
+							  "ja" => (mkPastInd "gy" p n g).s ;
+							  "kr" => (mkPastInd "k" p n g).s ;
+							  "dE" => (mkPastInd "d" p n g).s ;
+							  "lE" => (mkPastInd "l" p n g).s ;
 							  _    => (mkPastInd root p n g).s };
-        <Imperf,Pers2_Familiar,Sg,Masc>         => root + "تے";
-        <Imperf,Pers2_Familiar,Sg,Fem>         => root + "تی"; --variants{root+"تی" ; root+"تیں"};	
-        <Imperf,Pers2_Familiar,Pl,Masc>         => root + "تے";
-        <Imperf,Pers2_Familiar,Pl,Fem>         => root+"تیں";
-        <Imperf,Pers2_Respect,Sg,Masc>         => root + "تے";
-        <Imperf,Pers2_Respect,Sg,Fem>         => root + "تی"; --variants{root+"تی" ; root+"تیں"};	
-        <Imperf,Pers2_Respect,Pl,Masc>         => root + "تے";
-        <Imperf,Pers2_Respect,Pl,Fem>         => root+"تیں";
-		<Imperf,_,Sg,Masc>					  => root+"تا";
-		<Imperf,_,Sg,Fem>					  => root+"تی";
-		<Imperf,_,Pl,Masc>					  => root+"تع";
-		<Imperf,_,Pl,Fem>					  => root+"تیں"
+        <Imperf,Pers2_Familiar,Sg,Masc>         => root + "tE";
+        <Imperf,Pers2_Familiar,Sg,Fem>         => root + "ty"; --variants{root+"ty" ; root+"tyN"};	
+        <Imperf,Pers2_Familiar,Pl,Masc>         => root + "tE";
+        <Imperf,Pers2_Familiar,Pl,Fem>         => root+"tyN";
+        <Imperf,Pers2_Respect,Sg,Masc>         => root + "tE";
+        <Imperf,Pers2_Respect,Sg,Fem>         => root + "ty"; --variants{root+"ty" ; root+"tyN"};	
+        <Imperf,Pers2_Respect,Pl,Masc>         => root + "tE";
+        <Imperf,Pers2_Respect,Pl,Fem>         => root+"tyN";
+		<Imperf,_,Sg,Masc>					  => root+"ta";
+		<Imperf,_,Sg,Fem>					  => root+"ty";
+		<Imperf,_,Pl,Masc>					  => root+"te";
+		<Imperf,_,Pl,Fem>					  => root+"tyN"
         }
        
      } ;
@@ -383,20 +383,20 @@ oper
    mkPastInd : Str -> UPerson -> Number -> Gender -> {s:Str} = \root,p,n,g ->
     {s = let roo = root ;
              a = case (last root) of {
-                  "ا"|"آ"|"و"|"ك" => "یا" ;
-                  _           => "ا"
+                  "a"|"A"|"w"|"k" => "ya" ;
+                  _           => "a"
                  } ;
              y = case (last root) of {
-                  "ا"|"آ"|"و" => "ئی" ;
-                  _           => "ی"
+                  "a"|"A"|"w" => "y^y" ;
+                  _           => "y"
                  } ;
              e = case (last root) of {
-                  "ا"|"آ"|"و"|"ك" => "ئے" ;
-                  _           => "ے"
+                  "a"|"A"|"w"|"k" => "y^E" ;
+                  _           => "E"
                  } ;
             yN = case (last root) of {
-                  "ا"|"آ"|"و" => "ئیں" ;
-                  _           => "یں"
+                  "a"|"A"|"w" => "y^yN" ;
+                  _           => "yN"
                  } ;
 
      in 
@@ -431,20 +431,20 @@ oper
    mkImpert : Str -> UPerson -> Number -> Gender -> {s:Str} = \root,p,n,g ->
     {s = let roo =  root ;
              w = case (last root) of {
-                  "ا"|"آ"|"و" => "ؤ" ;
-                  _           => "و"
+                  "a"|"A"|"w" => "w^" ;
+                  _           => "w"
                } ;
              yN = case (last root) of {
-                  "ا"|"آ"|"و" => "ئیں" ;
-                  _           => "یں" 
+                  "a"|"A"|"w" => "y^yN" ;
+                  _           => "yN" 
                } ;
              yE = case (last root) of {
-                  "ا"|"آ"|"و" => "ئیے" ;
-                  _           => "یے" 
+                  "a"|"A"|"w" => "y^yE" ;
+                  _           => "yE" 
                } ;
              e = case (last root) of {
-                  "ا"|"آ"|"و" => "ئے" ;
-                  _           => "ے" 
+                  "a"|"A"|"w" => "y^E" ;
+                  _           => "E" 
                } in
       case <p,n,g> of {
        <Pers1,_,_>          => ""; --nonExist ;

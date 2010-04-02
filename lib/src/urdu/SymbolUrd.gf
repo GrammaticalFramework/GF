@@ -23,7 +23,7 @@ concrete SymbolUrd of Symbol = CatUrd ** open Prelude, ResUrd in {
 
   SymbS sy = sy ; 
   SymbNum sy = { s = sy.s ; n = Pl } ;
-  SymbOrd sy = { s = sy.s ++ "waN" ; n = Pl} ;
+  SymbOrd sy = { s = sy.s ++ waN_Str ; n = Pl} ;
 
 lincat 
 
@@ -32,14 +32,15 @@ lincat
 lin
   MkSymb s = s ;
 
-  BaseSymb = infixSS "awr" ;
-  ConsSymb = infixSS "" ;
+  BaseSymb = infixSS awr_Str
+ ;
+  ConsSymb = infixSS [] ;
 
 oper
     -- Note: this results in a space before 's, but there's
     -- not mauch we can do about that.
     addGenitiveS : Str -> Case => Str = \s -> 
-     table {_ => s ++ "ka" } ;
+     table {_ => s ++ ka_Str} ;
 
 
 }

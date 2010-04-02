@@ -1,7 +1,6 @@
 concrete SentenceUrd of Sentence = CatUrd ** open Prelude, ResUrd in {
 
   flags optimize=all_subs ;
-  coding = utf8;
 
   lin
 
@@ -15,8 +14,8 @@ concrete SentenceUrd of Sentence = CatUrd ** open Prelude, ResUrd in {
           agr   = Ag Masc (numImp n) Pers2_Casual ;
           verb  = infVP True vp agr ;
           dont  = case pol of {
-            CNeg True => "mt" ;
-            CNeg False => "nh" ;
+            CNeg True => mt_Str ;
+            CNeg False => nh_Str ;
             _ => []
             }
         in

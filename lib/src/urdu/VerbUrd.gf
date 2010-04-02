@@ -13,10 +13,10 @@ concrete VerbUrd of Verb = CatUrd ** open ResUrd in {
     ComplVS v s  = insertObj2 (conjThat ++ s.s) (predV v) ;
     ComplVQ v q  = insertObj2 (conjThat ++ q.s ! QIndir) (predV v) ;
     ComplVA v ap = insertObj (\\a => ap.s ! giveNumber a ! giveGender a ! Dir ! Posit) (predV v) ;
-    SlashV2V v vp = insertVV ((vp.s!VPImp).inf++"ky") (predV v) **{c2 = {s = "sE" ; c = VIntrans}} ;
-    SlashV2S v s  = insertObjc2 (conjThat ++ s.s) (predV v ** {c2 = {s = "kw" ; c = VIntrans}}) ;
-    SlashV2Q v q  = insertObjc2 (conjThat ++ q.s ! QIndir) (predV v ** {c2 = {s = "sE" ; c = VIntrans}}) ;
-    SlashV2A v ap = insertObjc (\\a => ap.s ! giveNumber a ! giveGender a ! Dir ! Posit) (predV v ** {c2 = {s = "kw" ; c = VIntrans}}) ; ----
+    SlashV2V v vp = insertVV ((vp.s!VPImp).inf++ky_Str) (predV v) **{c2 = {s = sE_Str ; c = VIntrans}} ;
+    SlashV2S v s  = insertObjc2 (conjThat ++ s.s) (predV v ** {c2 = {s = kw_Str ; c = VIntrans}}) ;
+    SlashV2Q v q  = insertObjc2 (conjThat ++ q.s ! QIndir) (predV v ** {c2 = {s = sE_Str ; c = VIntrans}}) ;
+    SlashV2A v ap = insertObjc (\\a => ap.s ! giveNumber a ! giveGender a ! Dir ! Posit) (predV v ** {c2 = {s = kw_Str ; c = VIntrans}}) ; ----
     ComplSlash vp np = insertObject np vp ;
     SlashVV vv vp = 
       insertObj (\\a => infVP vv.isAux vp a) (predV vv) **
