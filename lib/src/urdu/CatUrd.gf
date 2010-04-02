@@ -24,6 +24,7 @@ concrete CatUrd of Cat = CommonX ** open ResUrd, Prelude in {
     IP = {s: Case => Str ; g : Gender ; n : Number};
     IDet = {s :Gender => Str ; n : Number} ;
     IQuant = {s : Number => Str} ;
+    IComp = {s : Str} ;
 
 ---- Relative
 
@@ -54,7 +55,6 @@ concrete CatUrd of Cat = CommonX ** open ResUrd, Prelude in {
     Card = {s : Str; n : Number} ;
     Ord = {s : Str; n : Number} ;
     Quant = {s:Number => Gender => Case => Str ; a:Agr};
-    Art = {s : Str} ;
 
 ---- Numeral
 

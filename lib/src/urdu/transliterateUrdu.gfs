@@ -1,0 +1,6 @@
+rf -file=transliterated/IdiomUrd.gf   | ps -env=quotes -to_urdu | wf -file=IdiomUrd.gf
+rf -file=transliterated/LexiconUrd.gf | ps -env=quotes -to_urdu | wf -file=LexiconUrd.gf
+rf -file=transliterated/MorphoUrd.gf  | ps -env=quotes -to_urdu | wf -file=MorphoUrd.gf
+rf -file=transliterated/NumeralUrd.gf | ps -env=quotes -to_urdu | wf -file=NumeralUrd.gf
+rf -file=transliterated/ResUrd.gf     | ps -env=quotes -to_urdu | wf -file=ResUrd.gf
+rf -file=transliterated/StructuralUrd.gf | ps -env=quotes -to_urdu | wf -file=StructuralUrd.gf

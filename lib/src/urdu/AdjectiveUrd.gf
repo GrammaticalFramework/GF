@@ -6,7 +6,7 @@ concrete AdjectiveUrd of Adjective = CatUrd ** open ResUrd, Prelude in {
 	UseComparA a = a;
 
     ComparA a np = {
-        s = \\n,g,c,d => np.s ! NPC Obl ++ "sE" ++ a.s ! n ! g ! c ! d ;                       
+        s = \\n,g,c,d => np.s ! NPC Obl ++ sE_Str ++ a.s ! n ! g ! c ! d ;                       
        } ;
 
 ---- $SuperlA$ belongs to determiner syntax in $Noun$.
@@ -16,7 +16,7 @@ concrete AdjectiveUrd of Adjective = CatUrd ** open ResUrd, Prelude in {
      } ;
 
     ReflA2 a = {
-      s = \\n,g,c,d => a.s ! n ! g ! c ! d  ++  RefPron ++ "sE" ; 
+      s = \\n,g,c,d => a.s ! n ! g ! c ! d  ++  RefPron ++ sE_Str ; 
       } ;
 
     SentAP ap sc = {
