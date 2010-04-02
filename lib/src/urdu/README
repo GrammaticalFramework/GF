@@ -1,0 +1,17 @@
+Urdu resource grammar in GF
+
+(c) Shafqat Virk 2010 under GNU LGPL
+
+Sources: files in ./transliterated/ convert to files with the same names in ./
+**Don't hand-edit** the generated files, but the ones in ./transliterated/
+To convert the edited files, do 'make' in this directory.
+
+Principles: all files containing string literals are in ./transliterated/
+**Don't put string literals** in other files. Add string opers to transliterated/ResUrd.gf 
+instead (to the end of the file).
+
+Purpose: the files without strings will work as such for Hindi as well.
+
+
+
+
