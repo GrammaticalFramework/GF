@@ -43,53 +43,53 @@ concrete SentenceUrd of Sentence = CatUrd ** open Prelude, ResUrd in {
 
     UseCl  temp p cl = 
 	 { s = case <temp.t,temp.a> of {
-	      <Pres,Simul> => temp.s ++ p.s ++ cl.s ! VPGenPres ! p.p ! ODir;
-          <Pres,Anter> => temp.s ++ p.s ++ cl.s ! VPPerfPres ! p.p ! ODir;
-          <Past,Simul> => temp.s ++ p.s ++ cl.s ! VPImpPast ! p.p ! ODir;
-          <Past,Anter> => temp.s ++ p.s ++ cl.s ! VPPerfPast ! p.p ! ODir;
-          <Fut,Simul>  => temp.s ++ p.s ++ cl.s ! VPFut ! p.p ! ODir;
-          <Fut,Anter>  => temp.s ++ p.s ++ cl.s ! VPPerfFut ! p.p ! ODir;
-          <Cond,Simul> => temp.s ++ p.s ++ cl.s ! VPContPres ! p.p ! ODir;
-          <Cond,Anter> => temp.s ++ p.s ++ cl.s ! VPContPast ! p.p ! ODir		  
+	      <Pres,Simul> => temp.s ++ p.s ++ cl.s ! VPGenPres ! p.p ! ODir
+          ;<Pres,Anter> => temp.s ++ p.s ++ cl.s ! VPPerfPres ! p.p ! ODir;  --# notpresent
+          <Past,Simul> => temp.s ++ p.s ++ cl.s ! VPImpPast ! p.p ! ODir; --# notpresent
+          <Past,Anter> => temp.s ++ p.s ++ cl.s ! VPPerfPast ! p.p ! ODir; --# notpresent
+          <Fut,Simul>  => temp.s ++ p.s ++ cl.s ! VPFut ! p.p ! ODir; --# notpresent
+          <Fut,Anter>  => temp.s ++ p.s ++ cl.s ! VPPerfFut ! p.p ! ODir; --# notpresent
+          <Cond,Simul> => temp.s ++ p.s ++ cl.s ! VPContPres ! p.p ! ODir; --# notpresent
+          <Cond,Anter> => temp.s ++ p.s ++ cl.s ! VPContPast ! p.p ! ODir --# notpresent		  
 
    };
   } ;
     UseQCl temp p cl = {
       s = \\q => case <temp.t,temp.a> of {
-	      <Pres,Simul> => temp.s ++ p.s ++ cl.s ! VPGenPres ! p.p ! q;
-          <Pres,Anter> => temp.s ++ p.s ++ cl.s ! VPPerfPres ! p.p ! q;
-          <Past,Simul> => temp.s ++ p.s ++ cl.s ! VPImpPast ! p.p ! q;
-          <Past,Anter> => temp.s ++ p.s ++ cl.s ! VPPerfPast ! p.p ! q;
-          <Fut,Simul>  => temp.s ++ p.s ++ cl.s ! VPFut ! p.p ! q;
-          <Fut,Anter>  => temp.s ++ p.s ++ cl.s ! VPPerfFut ! p.p ! q;
-          <Cond,Simul> => temp.s ++ p.s ++ cl.s ! VPContPres ! p.p ! q;
-          <Cond,Anter> => temp.s ++ p.s ++ cl.s ! VPContPast ! p.p ! q		  
+	      <Pres,Simul> => temp.s ++ p.s ++ cl.s ! VPGenPres ! p.p ! q
+          ;<Pres,Anter> => temp.s ++ p.s ++ cl.s ! VPPerfPres ! p.p ! q; --# notpresent
+          <Past,Simul> => temp.s ++ p.s ++ cl.s ! VPImpPast ! p.p ! q; --# notpresent
+          <Past,Anter> => temp.s ++ p.s ++ cl.s ! VPPerfPast ! p.p ! q; --# notpresent
+          <Fut,Simul>  => temp.s ++ p.s ++ cl.s ! VPFut ! p.p ! q; --# notpresent
+          <Fut,Anter>  => temp.s ++ p.s ++ cl.s ! VPPerfFut ! p.p ! q; --# notpresent
+          <Cond,Simul> => temp.s ++ p.s ++ cl.s ! VPContPres ! p.p ! q; --# notpresent
+          <Cond,Anter> => temp.s ++ p.s ++ cl.s ! VPContPast ! p.p ! q		   --# notpresent
  
    };
   } ;
     UseRCl temp p rcl = {
       s = \\q => case <temp.t,temp.a> of {
-	      <Pres,Simul> => temp.s ++ p.s ++ rcl.s ! VPGenPres ! p.p ! ODir ! q;
-          <Pres,Anter> => temp.s ++ p.s ++ rcl.s ! VPPerfPres ! p.p ! ODir ! q;
-          <Past,Simul> => temp.s ++ p.s ++ rcl.s ! VPImpPast ! p.p ! ODir ! q;
-          <Past,Anter> => temp.s ++ p.s ++ rcl.s ! VPPerfPast ! p.p ! ODir ! q;
-          <Fut,Simul>  => temp.s ++ p.s ++ rcl.s ! VPFut ! p.p ! ODir ! q;
-          <Fut,Anter>  => temp.s ++ p.s ++ rcl.s ! VPPerfFut ! p.p ! ODir ! q;
-          <Cond,Simul> => temp.s ++ p.s ++ rcl.s ! VPContPres ! p.p ! ODir ! q;
-          <Cond,Anter> => temp.s ++ p.s ++ rcl.s ! VPContPast ! p.p ! ODir ! q
+	      <Pres,Simul> => temp.s ++ p.s ++ rcl.s ! VPGenPres ! p.p ! ODir ! q
+         ;<Pres,Anter> => temp.s ++ p.s ++ rcl.s ! VPPerfPres ! p.p ! ODir ! q; --# notpresent
+          <Past,Simul> => temp.s ++ p.s ++ rcl.s ! VPImpPast ! p.p ! ODir ! q; --# notpresent
+          <Past,Anter> => temp.s ++ p.s ++ rcl.s ! VPPerfPast ! p.p ! ODir ! q; --# notpresent
+          <Fut,Simul>  => temp.s ++ p.s ++ rcl.s ! VPFut ! p.p ! ODir ! q; --# notpresent
+          <Fut,Anter>  => temp.s ++ p.s ++ rcl.s ! VPPerfFut ! p.p ! ODir ! q; --# notpresent
+          <Cond,Simul> => temp.s ++ p.s ++ rcl.s ! VPContPres ! p.p ! ODir ! q; --# notpresent
+          <Cond,Anter> => temp.s ++ p.s ++ rcl.s ! VPContPast ! p.p ! ODir ! q --# notpresent
      };		  
       c = rcl.c
     } ;
     UseSlash temp p clslash = {
       s = case <temp.t,temp.a> of {
-	      <Pres,Simul> => temp.s ++ p.s ++ clslash.s ! VPGenPres ! p.p ! ODir;
-          <Pres,Anter> => temp.s ++ p.s ++ clslash.s ! VPPerfPres ! p.p ! ODir;
-          <Past,Simul> => temp.s ++ p.s ++ clslash.s ! VPImpPast ! p.p ! ODir ;
-          <Past,Anter> => temp.s ++ p.s ++ clslash.s ! VPPerfPast ! p.p ! ODir;
-          <Fut,Simul>  => temp.s ++ p.s ++ clslash.s ! VPFut ! p.p ! ODir;
-          <Fut,Anter>  => temp.s ++ p.s ++ clslash.s ! VPPerfFut ! p.p ! ODir;
-          <Cond,Simul> => temp.s ++ p.s ++ clslash.s ! VPContPres ! p.p ! ODir;
-          <Cond,Anter> => temp.s ++ p.s ++ clslash.s ! VPContPast ! p.p ! ODir
+	      <Pres,Simul> => temp.s ++ p.s ++ clslash.s ! VPGenPres ! p.p ! ODir
+         ;<Pres,Anter> => temp.s ++ p.s ++ clslash.s ! VPPerfPres ! p.p ! ODir; --# notpresent
+          <Past,Simul> => temp.s ++ p.s ++ clslash.s ! VPImpPast ! p.p ! ODir ; --# notpresent
+          <Past,Anter> => temp.s ++ p.s ++ clslash.s ! VPPerfPast ! p.p ! ODir; --# notpresent
+          <Fut,Simul>  => temp.s ++ p.s ++ clslash.s ! VPFut ! p.p ! ODir; --# notpresent
+          <Fut,Anter>  => temp.s ++ p.s ++ clslash.s ! VPPerfFut ! p.p ! ODir; --# notpresent
+          <Cond,Simul> => temp.s ++ p.s ++ clslash.s ! VPContPres ! p.p ! ODir; --# notpresent
+          <Cond,Anter> => temp.s ++ p.s ++ clslash.s ! VPContPast ! p.p ! ODir --# notpresent
      };		  
       c2 = clslash.c2
     } ;
