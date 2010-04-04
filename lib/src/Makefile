@@ -47,7 +47,8 @@ demo:
 	gf -make -name=Demo3 demo/DemoFre.gf demo/DemoGer.gf demo/DemoIta.gf demo/DemoNor.gf demo/DemoPol.gf +RTS -K48M
 	gf -make -name=Demo4 demo/DemoRon.gf +RTS -K48M
 	gf -make -name=Demo5 demo/DemoRus.gf demo/DemoSpa.gf demo/DemoSwe.gf
-	gf -make Demo0.pgf Demo1.pgf Demo2.pgf Demo3.pgf Demo4.pgf Demo5.pgf
+	gf -make -name=Demo6 demo/DemoUrd.gf +RTS -K48M
+	gf -make Demo0.pgf Demo1.pgf Demo2.pgf Demo3.pgf Demo4.pgf Demo5.pgf Demo6.pgf
 	rm Demo?.pgf
 
 demoex:
@@ -57,7 +58,7 @@ parse:
 	$(RUNMAKE) parse
 
 synopsis:
-	cd doc ; $(RUNGHC) MkSynopsis ; cd ..
+	cd ../doc ; $(RUNGHC) MkSynopsis ; cd ../src
 
 link:
 	chmod a+x mkPresent mkMinimal

@@ -71,10 +71,10 @@ B. Bringert and A. Ranta
 =Categories=
 
 
-Source 1: [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/abstract/Common.gf`` ../src/abstract/Common.gf]
+Source 1: [``http://www.grammaticalframework.org/lib/resource/src/abstract/Common.gf`` ../src/abstract/Common.gf]
 
 
-Source 2: [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/abstract/Cat.gf`` ../src/abstract/Cat.gf]
+Source 2: [``http://www.grammaticalframework.org/lib/resource/src/abstract/Cat.gf`` ../src/abstract/Cat.gf]
 
 
 ==A hierarchic view==
@@ -150,10 +150,10 @@ Source 2: [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/abstract/Cat.g
 =Syntax Rules and Structural Words=
 
 
-Source 1: [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/api/Constructors.gf`` ../src/api/Constructors.gf]
+Source 1: [``http://www.grammaticalframework.org/lib/resource/src/api/Constructors.gf`` ../src/api/Constructors.gf]
 
 
-Source 2: [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/abstract/Structural.gf`` ../src/abstract/Structural.gf]
+Source 2: [``http://www.grammaticalframework.org/lib/resource/src/abstract/Structural.gf`` ../src/abstract/Structural.gf]
 
 
 ==A - one-place adjective==[A]
@@ -175,7 +175,7 @@ Lexical category, constructors given in
 | ``mkAP`` | [AdA #AdA] ``->`` [A #A] ``->`` [AP #AP] | //very old// |
 | ``mkAP`` | [AdA #AdA] ``->`` [AP #AP] ``->`` [AP #AP] | //very very old// |
 | ``mkAP`` | [Conj #Conj] ``->`` [AP #AP] ``->`` [AP #AP] ``->`` [AP #AP] | //old and big// |
-| ``mkAP`` | [Conj #Conj] ``->`` [ListAP #ListAP] ``->`` [AP #AP] | //old, big, and warm// |
+| ``mkAP`` | [Conj #Conj] ``->`` [ListAP #ListAP] ``->`` [AP #AP] | //old, big and warm// |
 | ``mkAP`` | [Ord #Ord] ``->`` [AP #AP] | //oldest// |
 | ``mkAP`` | [CAdv #CAdv] ``->`` [AP #AP] ``->`` [NP #NP] ``->`` [AP #AP] | //as old as John// |
 | ``reflAP`` | [A2 #A2] ``->`` [AP #AP] | //married to himself// |
@@ -243,8 +243,11 @@ Lexical category, constructors given in
 | ``mkCN`` | [N #N] ``->`` [NP #NP] ``->`` [CN #CN] | //king John// |
 | ``mkCN`` | [CN #CN] ``->`` [NP #NP] ``->`` [CN #CN] | //old king John// |
 ==Card - cardinal number==[Card]
-Lexical category, constructors given in
-[lexical paradigms #RParadigms].
+|| Function  | Type  | Example  ||
+| ``mkCard`` | ``Str`` ``->`` [Card #Card] | //thirty-five (given by "35")// |
+| ``mkCard`` | [Numeral #Numeral] ``->`` [Card #Card] | //thirty-five (given in any way)// |
+| ``mkCard`` | [Digits #Digits] ``->`` [Card #Card] | //51// |
+| ``mkCard`` | [AdN #AdN] ``->`` [Card #Card] ``->`` [Card #Card] | //mkCard// |
 ==Cl - declarative clause, with all tenses==[Cl]
 || Function  | Type  | Example  ||
 | ``genericCl`` | [VP #VP] ``->`` [Cl #Cl] | //one walks// |
@@ -293,6 +296,9 @@ Lexical category, constructors given in
 | ``or_Conj`` | [Conj #Conj] | //or// |
 ==Det - determiner phrase==[Det]
 || Function  | Type  | Example  ||
+| ``aPl_Det`` | [Det #Det] | //(houses)// |
+| ``aSg_Det`` | [Det #Det] | //a (house)// |
+| ``a_Det`` | [Det #Det] | //a (house)// |
 | ``every_Det`` | [Det #Det] | //every// |
 | ``few_Det`` | [Det #Det] | //few// |
 | ``many_Det`` | [Det #Det] | //many// |
@@ -310,6 +316,8 @@ Lexical category, constructors given in
 | ``much_Det`` | [Det #Det] | //much// |
 | ``somePl_Det`` | [Det #Det] | //somePl// |
 | ``someSg_Det`` | [Det #Det] | //someSg// |
+| ``thePl_Det`` | [Det #Det] | //the (houses)// |
+| ``the_Det`` | [Det #Det] | //the (house)// |
 ==Dig==[Dig]
 || Function  | Type  | Example  ||
 | ``n0_Dig`` | [Dig #Dig] | //0// |
@@ -341,6 +349,7 @@ Lexical category, constructors given in
 | ``n9_Digits`` | [Digits #Digits] | //9// |
 ==IAdv - interrogative adverb==[IAdv]
 || Function  | Type  | Example  ||
+| ``how8much_IAdv`` | [IAdv #IAdv] | //how8much// |
 | ``how_IAdv`` | [IAdv #IAdv] | //how// |
 | ``mkIAdv`` | [Prep #Prep] ``->`` [IP #IP] ``->`` [IAdv #IAdv] | //in which city// |
 | ``when_IAdv`` | [IAdv #IAdv] | //when// |
@@ -437,6 +446,7 @@ Lexical category, constructors given in
 | ``something_NP`` | [NP #NP] | //something// |
 ==Num - number determining element==[Num]
 || Function  | Type  | Example  ||
+| ``mkNum`` | ``Str`` ``->`` [Num #Num] | //thirty-five (given by "35")// |
 | ``mkNum`` | [Numeral #Numeral] ``->`` [Num #Num] | //twenty// |
 | ``mkNum`` | [Digits #Digits] ``->`` [Num #Num] | //51// |
 | ``mkNum`` | [Card #Card] ``->`` [Num #Num] | //almost ten// |
@@ -445,6 +455,7 @@ Lexical category, constructors given in
 | ``sgNum`` | [Num #Num] | //singular// |
 ==Numeral - cardinal or ordinal in words==[Numeral]
 || Function  | Type  | Example  ||
+| ``mkNumeral`` | ``Str`` ``->`` [Numeral #Numeral] | //thirty-five (given by "35")// |
 | ``n1000_Numeral`` | [Numeral #Numeral] | //thousand// |
 | ``n100_Numeral`` | [Numeral #Numeral] | //hundred// |
 | ``n10_Numeral`` | [Numeral #Numeral] | //ten// |
@@ -582,6 +593,7 @@ Lexical category, constructors given in
 | ``although_Subj`` | [Subj #Subj] | //although// |
 | ``because_Subj`` | [Subj #Subj] | //because// |
 | ``if_Subj`` | [Subj #Subj] | //if// |
+| ``that_Subj`` | [Subj #Subj] | //that// |
 | ``when_Subj`` | [Subj #Subj] | //when// |
 ==Temp - temporal and aspectual features==[Temp]
 Lexical category, constructors given in
@@ -617,6 +629,9 @@ Lexical category, constructors given in
 | ``mkUtt`` | [NP #NP] ``->`` [Utt #Utt] | //John// |
 | ``mkUtt`` | [Adv #Adv] ``->`` [Utt #Utt] | //here// |
 | ``mkUtt`` | [VP #VP] ``->`` [Utt #Utt] | //to walk// |
+| ``mkUtt`` | [CN #CN] ``->`` [Utt #Utt] | //beer// |
+| ``mkUtt`` | [AP #AP] ``->`` [Utt #Utt] | //fine// |
+| ``mkUtt`` | [Card #Card] ``->`` [Utt #Utt] | //five// |
 | ``no_Utt`` | [Utt #Utt] | //no// |
 | ``yes_Utt`` | [Utt #Utt] | //yes// |
 ==V - one-place verb==[V]
@@ -702,7 +717,7 @@ Lexical category, constructors given in
 #LParadigms
 
 
-source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/bulgarian/ParadigmsBul.gf`` ../src/bulgarian/ParadigmsBul.gf]
+source [``http://www.grammaticalframework.org/lib/resource/src/bulgarian/ParadigmsBul.gf`` ../src/bulgarian/ParadigmsBul.gf]
 
 
 
@@ -882,7 +897,7 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/bulgarian/Paradig
 #LParadigms
 
 
-source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/catalan/ParadigmsCat.gf`` ../src/catalan/ParadigmsCat.gf]
+source [``http://www.grammaticalframework.org/lib/resource/src/catalan/ParadigmsCat.gf`` ../src/catalan/ParadigmsCat.gf]
 
 
 
@@ -949,7 +964,7 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/catalan/Paradigms
 #LParadigms
 
 
-source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/danish/ParadigmsDan.gf`` ../src/danish/ParadigmsDan.gf]
+source [``http://www.grammaticalframework.org/lib/resource/src/danish/ParadigmsDan.gf`` ../src/danish/ParadigmsDan.gf]
 
 
 
@@ -1020,7 +1035,7 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/danish/ParadigmsD
 #LParadigms
 
 
-source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/english/ParadigmsEng.gf`` ../src/english/ParadigmsEng.gf]
+source [``http://www.grammaticalframework.org/lib/resource/src/english/ParadigmsEng.gf`` ../src/english/ParadigmsEng.gf]
 
 
 
@@ -1113,7 +1128,7 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/english/Paradigms
 #LParadigms
 
 
-source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/finnish/ParadigmsFin.gf`` ../src/finnish/ParadigmsFin.gf]
+source [``http://www.grammaticalframework.org/lib/resource/src/finnish/ParadigmsFin.gf`` ../src/finnish/ParadigmsFin.gf]
 
 
 
@@ -1190,7 +1205,7 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/finnish/Paradigms
 #LParadigms
 
 
-source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/french/ParadigmsFre.gf`` ../src/french/ParadigmsFre.gf]
+source [``http://www.grammaticalframework.org/lib/resource/src/french/ParadigmsFre.gf`` ../src/french/ParadigmsFre.gf]
 
 
 
@@ -1258,7 +1273,7 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/french/ParadigmsF
 #LParadigms
 
 
-source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/german/ParadigmsGer.gf`` ../src/german/ParadigmsGer.gf]
+source [``http://www.grammaticalframework.org/lib/resource/src/german/ParadigmsGer.gf`` ../src/german/ParadigmsGer.gf]
 
 
 
@@ -1303,6 +1318,7 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/german/ParadigmsG
 | ``mkV`` | ``(geben,`` ``gibt,`` ``gib,`` ``gab,`` ``gäbe,`` ``gegeben`` ``:`` ``Str)`` ``->`` [V #V] |
 | ``mkV`` | ``Str`` ``->`` [V #V] ``->`` [V #V] |
 | ``no_geV`` | [V #V] ``->`` [V #V] |
+| ``fixprefixV`` | ``Str`` ``->`` [V #V] ``->`` [V #V] |
 | ``seinV`` | [V #V] ``->`` [V #V] |
 | ``habenV`` | [V #V] ``->`` [V #V] |
 | ``reflV`` | [V #V] ``->`` [Case #Case] ``->`` [V #V] |
@@ -1333,7 +1349,7 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/german/ParadigmsG
 #LParadigms
 
 
-source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/italian/ParadigmsIta.gf`` ../src/italian/ParadigmsIta.gf]
+source [``http://www.grammaticalframework.org/lib/resource/src/italian/ParadigmsIta.gf`` ../src/italian/ParadigmsIta.gf]
 
 
 
@@ -1401,7 +1417,7 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/italian/Paradigms
 #LParadigms
 
 
-source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/norwegian/ParadigmsNor.gf`` ../src/norwegian/ParadigmsNor.gf]
+source [``http://www.grammaticalframework.org/lib/resource/src/norwegian/ParadigmsNor.gf`` ../src/norwegian/ParadigmsNor.gf]
 
 
 
@@ -1468,11 +1484,171 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/norwegian/Paradig
 | ``V0`` | [Type #Type] |
 
 
+==Paradigms for Polish==
+#LParadigms
+
+
+source [``http://www.grammaticalframework.org/lib/resource/src/polish/ParadigmsPol.gf`` ../src/polish/ParadigmsPol.gf]
+
+
+
+
+|| Function  | Type  ||
+| ``Gender`` | [Type #Type] |
+| ``masculineP`` | [Gender #Gender] |
+| ``masculineA`` | [Gender #Gender] |
+| ``masculineI`` | [Gender #Gender] |
+| ``feminine`` | [Gender #Gender] |
+| ``neuter`` | [Gender #Gender] |
+| ``personal`` | [Animacy #Animacy] |
+| ``Case`` | [Type #Type] |
+| ``nominative`` | [Case #Case] |
+| ``genitive`` | [Case #Case] |
+| ``dative`` | [Case #Case] |
+| ``accusative`` | [Case #Case] |
+| ``instrumental`` | [Case #Case] |
+| ``locative`` | [Case #Case] |
+| ``vocative`` | [Case #Case] |
+| ``Number`` | [Type #Type] |
+| ``singular`` | [Number #Number] |
+| ``plural`` | [Number #Number] |
+| ``nKapiel`` | ``Str`` ``->`` [N #N] |
+| ``nLodz`` | ``Str`` ``->`` [N #N] |
+| ``nSul`` | ``Str`` ``->`` [N #N] |
+| ``nKonew`` | ``Str`` ``->`` [N #N] |
+| ``nWies`` | ``Str`` ``->`` [N #N] |
+| ``nDlon`` | ``Str`` ``->`` [N #N] |
+| ``nSiec`` | ``Str`` ``->`` [N #N] |
+| ``nDrzwi`` | ``Str`` ``->`` [N #N] |
+| ``nKosc`` | ``Str`` ``->`` [N #N] |
+| ``nNoc`` | ``Str`` ``->`` [N #N] |
+| ``nWesz`` | ``Str`` ``->`` [N #N] |
+| ``nKrolowa`` | ``Str`` ``->`` [N #N] |
+| ``nReka`` | ``Str`` ``->`` [N #N] |
+| ``nApteka`` | ``Str`` ``->`` [N #N] |
+| ``nDroga`` | ``Str`` ``->`` [N #N] |
+| ``nMatka`` | ``Str`` ``->`` [N #N] |
+| ``nZiemia`` | ``Str`` ``->`` [N #N] |
+| ``nFala`` | ``Str`` ``->`` [N #N] |
+| ``nLilia`` | ``Str`` ``->`` [N #N] |
+| ``nKobieta`` | ``Str`` ``->`` [N #N] |
+| ``nLiczba`` | ``Str`` ``->`` [N #N] |
+| ``nSila`` | ``Str`` ``->`` [N #N] |
+| ``nDoba`` | ``Str`` ``->`` [N #N] |
+| ``nWoda`` | ``Str`` ``->`` [N #N] |
+| ``nSzkola`` | ``Str`` ``->`` [N #N] |
+| ``nWojna`` | ``Str`` ``->`` [N #N] |
+| ``nWiosna`` | ``Str`` ``->`` [N #N] |
+| ``nMgla`` | ``Str`` ``->`` [N #N] |
+| ``nGwiazda`` | ``Str`` ``->`` [N #N] |
+| ``nUlica`` | ``Str`` ``->`` [N #N] |
+| ``nOwca`` | ``Str`` ``->`` [N #N] |
+| ``nDanie`` | ``Str`` ``->`` [N #N] |
+| ``nSerce`` | ``Str`` ``->`` [N #N] |
+| ``nNasienie`` | ``Str`` ``->`` [N #N] |
+| ``nMorze`` | ``Str`` ``->`` [N #N] |
+| ``nImie`` | ``Str`` ``->`` [N #N] |
+| ``nCiele`` | ``Str`` ``->`` [N #N] |
+| ``nUdo`` | ``Str`` ``->`` [N #N] |
+| ``nPiwo`` | ``Str`` ``->`` [N #N] |
+| ``nZero`` | ``Str`` ``->`` [N #N] |
+| ``nNiebo`` | ``Str`` ``->`` [N #N] |
+| ``nTlo`` | ``Str`` ``->`` [N #N] |
+| ``nZebro`` | ``Str`` ``->`` [N #N] |
+| ``nOkno`` | ``Str`` ``->`` [N #N] |
+| ``nGniazdo`` | ``Str`` ``->`` [N #N] |
+| ``nWojsko`` | ``Str`` ``->`` [N #N] |
+| ``nJajo`` | ``Str`` ``->`` [N #N] |
+| ``nJablko`` | ``Str`` ``->`` [N #N] |
+| ``nStudio`` | ``Str`` ``->`` [N #N] |
+| ``nDziecko`` | ``Str`` ``->`` [N #N] |
+| ``nUcho`` | ``Str`` ``->`` [N #N] |
+| ``nOko`` | ``Str`` ``->`` [N #N] |
+| ``nFacet`` | ``Str`` ``->`` [N #N] |
+| ``nArab`` | ``Str`` ``->`` [N #N] |
+| ``nPrzyjaciel`` | ``Str`` ``->`` [N #N] |
+| ``nKowal`` | ``Str`` ``->`` [N #N] |
+| ``nLekarz`` | ``Str`` ``->`` [N #N] |
+| ``nKrol`` | ``Str`` ``->`` [N #N] |
+| ``nMaz`` | ``Str`` ``->`` [N #N] |
+| ``nWrog`` | ``Str`` ``->`` [N #N] |
+| ``nKsiadz`` | ``Str`` ``->`` [N #N] |
+| ``nOjciec`` | ``Str`` ``->`` [N #N] |
+| ``nBrat`` | ``Str`` ``->`` [N #N] |
+| ``nBog`` | ``Str`` ``->`` [N #N] |
+| ``nChlopiec`` | ``Str`` ``->`` [N #N] |
+| ``nMezczyzna`` | ``Str`` ``->`` [N #N] |
+| ``nKon`` | ``Str`` ``->`` [N #N] |
+| ``nWaz`` | ``Str`` ``->`` [N #N] |
+| ``nPtak`` | ``Str`` ``->`` [N #N] |
+| ``nKot`` | ``Str`` ``->`` [N #N] |
+| ``nPies`` | ``Str`` ``->`` [N #N] |
+| ``nBat`` | ``Str`` ``->`` [N #N] |
+| ``nChleb`` | ``Str`` ``->`` [N #N] |
+| ``nSer`` | ``Str`` ``->`` [N #N] |
+| ``nZab`` | ``Str`` ``->`` [N #N] |
+| ``nKosciol`` | ``Str`` ``->`` [N #N] |
+| ``nCien`` | ``Str`` ``->`` [N #N] |
+| ``nPien`` | ``Str`` ``->`` [N #N] |
+| ``nLisc`` | ``Str`` ``->`` [N #N] |
+| ``nKoc`` | ``Str`` ``->`` [N #N] |
+| ``nWiersz`` | ``Str`` ``->`` [N #N] |
+| ``nDzien`` | ``Str`` ``->`` [N #N] |
+| ``nKajak`` | ``Str`` ``->`` [N #N] |
+| ``nMlotek`` | ``Str`` ``->`` [N #N] |
+| ``nMiech`` | ``Str`` ``->`` [N #N] |
+| ``nSad`` | ``Str`` ``->`` [N #N] |
+| ``nDym`` | ``Str`` ``->`` [N #N] |
+| ``nWal`` | ``Str`` ``->`` [N #N] |
+| ``nDol`` | ``Str`` ``->`` [N #N] |
+| ``nOgrod`` | ``Str`` ``->`` [N #N] |
+| ``nKwiat`` | ``Str`` ``->`` [N #N] |
+| ``nLas`` | ``Str`` ``->`` [N #N] |
+| ``nWiatr`` | ``Str`` ``->`` [N #N] |
+| ``nPopiol`` | ``Str`` ``->`` [N #N] |
+| ``nPokoj`` | ``Str`` ``->`` [N #N] |
+| ``nGaj`` | ``Str`` ``->`` [N #N] |
+| ``nBrzeg`` | ``Str`` ``->`` [N #N] |
+| ``nRok`` | ``Str`` ``->`` ``Str`` ``->`` [N #N] |
+| ``nProg`` | ``Str`` ``->`` [N #N] |
+| ``nStatek`` | ``Str`` ``->`` [N #N] |
+| ``nDom`` | ``Str`` ``->`` [N #N] |
+| ``mkN`` | ``(nomSg,`` ``genSg,`` ``datSg,`` ``accSg,`` ``instrSg,`` ``locSg,`` ``vocSg,`` |
+| ``mkN2`` | [N #N] ``->`` [N2 #N2] |
+| ``mkFun`` | [N #N] ``->`` [Prep #Prep] ``->`` [N2 #N2] |
+| ``nullPrep`` | [Prep #Prep] ``=`` ``{s`` ``=`` ``[]`` ``c=`` [GenNoPrep #GenNoPrep] ``lock_Prep=<>}`` |
+| ``mkN3`` | [N #N] ``->`` [Prep #Prep] ``->`` [Prep #Prep] ``->`` [N3 #N3] |
+| ``mkPrep`` | ``Str`` ``->`` [Case #Case] ``->`` [Prep #Prep] |
+| ``genPrep`` | [Prep #Prep] |
+| ``datPrep`` | [Prep #Prep] |
+| ``accPrep`` | [Prep #Prep] |
+| ``instrPrep`` | [Prep #Prep] |
+| ``bez_Prep`` | [Prep #Prep] ``--without`` |
+| ``dla_Prep`` | [Prep #Prep] ``--for`` |
+| ``do_Prep`` | [Prep #Prep] ``--to`` |
+| ``dookola_Prep`` | [Prep #Prep] ``--(a)round`` |
+| ``kolo_Prep`` | [Prep #Prep] ``--near`` |
+| ``obok_Prep`` | [Prep #Prep] ``--beside,`` ``next`` ``to`` |
+| ``od_Prep`` | [Prep #Prep] ``--from`` |
+| ``oprocz_Prep`` | [Prep #Prep] ``--out`` ``of`` |
+| ``podczas_Prep`` | [Prep #Prep] ``--during`` |
+| ``mimo_Prep`` | [Prep #Prep] |
+| ``spod_Prep`` | [Prep #Prep] ``--under`` |
+| ``u_Prep`` | [Prep #Prep] ``--by,`` ``with`` ``(I`` ``was`` ``by`` [Peter #Peter] ``last`` ``sunday.)`` |
+| ``wzdluz_Prep`` | [Prep #Prep] ``--along`` |
+| ``z_Prep`` | [Prep #Prep] ``--from`` ``(I`` ``come`` ``from`` ``Italy.),`` ``of/`` ``from`` ``(The`` ``ring`` ``is`` ``made`` ``of`` ``silver.)`` |
+| ``zamiast_Prep`` | [Prep #Prep] ``--instead`` ``of`` |
+| ``znad_Prep`` | [Prep #Prep] ``--over,`` ``above`` |
+| ``zza_Prep`` | [Prep #Prep] ``--behind`` |
+| ``dzieki_Prep`` | [Prep #Prep] |
+| ``przeciw_Prep`` | [Prep #Prep] |
+
+
 ==Paradigms for Romanian==
 #LParadigms
 
 
-source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/romanian/ParadigmsRon.gf`` ../src/romanian/ParadigmsRon.gf]
+source [``http://www.grammaticalframework.org/lib/resource/src/romanian/ParadigmsRon.gf`` ../src/romanian/ParadigmsRon.gf]
 
 
 
@@ -1517,7 +1693,7 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/romanian/Paradigm
 #LParadigms
 
 
-source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/russian/ParadigmsRus.gf`` ../src/russian/ParadigmsRus.gf]
+source [``http://www.grammaticalframework.org/lib/resource/src/russian/ParadigmsRus.gf`` ../src/russian/ParadigmsRus.gf]
 
 
 
@@ -1561,7 +1737,7 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/russian/Paradigms
 #LParadigms
 
 
-source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/spanish/ParadigmsSpa.gf`` ../src/spanish/ParadigmsSpa.gf]
+source [``http://www.grammaticalframework.org/lib/resource/src/spanish/ParadigmsSpa.gf`` ../src/spanish/ParadigmsSpa.gf]
 
 
 
@@ -1629,7 +1805,7 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/spanish/Paradigms
 #LParadigms
 
 
-source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/swedish/ParadigmsSwe.gf`` ../src/swedish/ParadigmsSwe.gf]
+source [``http://www.grammaticalframework.org/lib/resource/src/swedish/ParadigmsSwe.gf`` ../src/swedish/ParadigmsSwe.gf]
 
 
 
@@ -1693,6 +1869,55 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/swedish/Paradigms
 | ``mkAV`` | [A #A] ``->`` [AV #AV] |
 | ``mkA2V`` | [A #A] ``->`` [Prep #Prep] ``->`` [A2V #A2V] |
 | ``V0`` | [Type #Type] |
+
+
+==Paradigms for Urdu==
+#LParadigms
+
+
+source [``http://www.grammaticalframework.org/lib/resource/src/urdu/ParadigmsUrd.gf`` ../src/urdu/ParadigmsUrd.gf]
+
+
+
+
+|| Function  | Type  ||
+| ``masculine`` | [Gender #Gender] |
+| ``feminine`` | [Gender #Gender] |
+| ``singular`` | ``Number;`` |
+| ``plural`` | ``Number;`` |
+| ``mkN`` | ``Str`` ``->`` [N #N] |
+| ``mkN`` | ``Str`` ``->`` [Gender #Gender] ``->`` [N #N] |
+| ``mkN`` | ``(x1,_,_,_,_,x6`` ``:`` ``Str)`` ``->`` [Gender #Gender] ``->`` [N #N] |
+| ``mkN2`` | [N #N] ``->`` [Prep #Prep] ``->`` ``Str`` ``->`` ``N2;`` |
+| ``mkN3`` | [N #N] ``->`` [Prep #Prep] ``->`` ``Str`` ``->`` ``Str->`` [N3 #N3] |
+| ``mkCmpdNoun`` | ``Str`` ``->`` [N #N] ``->`` [N #N] |
+| ``mkPN`` | ``Str`` ``->`` [PN #PN] ``=`` ``\s`` ``->`` ``let`` ``n`` ``=`` ``regNoun`` ``s`` ``in`` ``{s`` ``=`` ``n.s`` ``!`` [Sg #Sg] ``g`` ``=`` ``n.g`` ``lock_PN`` ``=`` ``<>}`` |
+| ``personalPN`` | ``Str`` ``->`` ``Str`` ``->`` ``Str`` ``->`` ``Str`` ``->`` [Number #Number] ``->`` [Gender #Gender] ``->`` [UPerson #UPerson] ``->`` [Pron #Pron] ``=`` ``\s1,s2,s3,sp,nn,g,p`` ``->`` ``let`` ``n`` ``=`` ``mkPron`` ``s1`` ``s2`` ``s3`` ``in`` ``{s`` ``=`` ``n.s`` ``a`` ``=`` ``toAgr`` ``nn`` ``p`` ``g`` ``ps`` ``=`` ``sp`` ``lock_Pron`` ``=`` ``<>};`` |
+| ``demoPN`` | ``Str`` ``->`` ``Str`` ``->`` ``Str`` ``->`` [Quant #Quant] ``=`` ``\s1,s2,s3`` ``->`` ``let`` ``n`` ``=`` ``makeDemonPronForm`` ``s1`` ``s2`` ``s3`` ``in`` ``{s`` ``=`` ``n.s`` ``a`` ``=`` ``defaultAgr`` ``lock_Quant`` ``=`` ``<>};`` |
+| ``mkDet`` | ``Str`` ``->`` ``Str`` ``->`` ``Str`` ``->`` ``Str`` ``->`` [Number #Number] ``->`` [Det #Det] ``=`` ``\s1,s2,s3,s4,nb`` ``->`` ``let`` ``dt`` ``=`` ``makeDet`` ``s1`` ``s2`` ``s3`` ``s4`` ``nb`` ``in`` ``{s`` ``=`` ``dt.s`` ``n`` ``=`` ``nb`` ``lock_Det`` ``=`` ``<>};`` |
+| ``mkIP`` | ``(x1,x2,x3:Str)`` ``->`` [Number #Number] ``->`` [Gender #Gender] ``->`` [IP #IP] ``=`` ``\s1,s2,s3,n,g`` ``->`` ``let`` ``p`` ``=`` ``mkIntPronForm`` ``s1`` ``s2`` ``s3`` ``in`` ``{`` ``s`` ``=`` ``p.s`` ``n`` ``=`` ``n`` ``g`` ``=`` ``g`` ``lock_IP`` ``=`` ``<>};`` |
+| ``mkA`` | ``Str->`` [A #A] |
+| ``mkA`` | ``Str`` ``->`` ``Str`` ``->`` [A2 #A2] |
+| ``mkV`` | ``Str`` ``->`` [V #V] |
+| ``mkV2`` | ``Str`` ``->`` [V2 #V2] |
+| ``mkV2`` | [V #V] ``->`` [V2 #V2] |
+| ``mkV2`` | [V #V] ``->`` ``Str`` ``->`` [V2 #V2] |
+| ``mkV3`` | [V #V] ``->`` ``Str`` ``->`` ``Str`` ``->`` ``V3;`` |
+| ``mkV2V`` | [V #V] ``->`` ``Str`` ``->`` ``Str`` ``->`` [Bool #Bool] ``->`` [V2V #V2V] |
+| ``compoundV`` | ``Str`` ``->`` [V #V] ``->`` [V #V] ``=`` ``\s,v`` ``->`` ``{s`` ``=`` ``\\vf`` ``=>`` ``s`` ``++`` ``v.s`` ``!`` ``vf`` ``lock_V`` ``=`` ``<>}`` |
+| ``compoundV`` | ``Str`` ``->`` [V2 #V2] ``->`` [V #V] ``=`` ``\s,v`` ``->`` ``{s`` ``=`` ``\\vf`` ``=>`` ``s`` ``++`` ``v.s`` ``!`` ``vf`` ``lock_V`` ``=`` ``<>}`` |
+| ``mkAdv`` | ``Str`` ``->`` [Adv #Adv] ``=`` ``\str`` ``->`` ``{s`` ``=`` ``str`` ``lock_Adv`` ``=`` ``<>};`` |
+| ``mkPrep`` | ``Str`` ``->`` [Prep #Prep] |
+| ``mkConj`` | ``Str`` ``->`` [Conj #Conj] |
+| ``mkConj`` | ``Str`` ``->`` [Number #Number] ``->`` [Conj #Conj] |
+| ``mkConj`` | ``Str`` ``->`` ``Str`` ``->`` [Conj #Conj] |
+| ``mkConj`` | ``Str`` ``->`` ``Str`` ``->`` [Number #Number] ``->`` [Conj #Conj] |
+| ``mkConj`` | ``Str`` ``->`` [Conj #Conj] ``=`` ``\y`` ``->`` ``mk2Conj`` ``[]`` ``y`` ``plural`` |
+| ``mkConj`` | ``Str`` ``->`` [Number #Number] ``->`` [Conj #Conj] ``=`` ``\y,n`` ``->`` ``mk2Conj`` ``[]`` ``y`` ``n`` |
+| ``mkConj`` | ``Str`` ``->`` ``Str`` ``->`` [Conj #Conj] ``=`` ``\x,y`` ``->`` ``mk2Conj`` ``x`` ``y`` ``plural`` |
+| ``mkConj`` | ``Str`` ``->`` ``Str`` ``->`` [Number #Number] ``->`` [Conj #Conj] ``=`` ``mk2Conj`` |
+| ``mk2Conj`` | ``Str`` ``->`` ``Str`` ``->`` [Number #Number] ``->`` [Conj #Conj] ``=`` ``\x,y,n`` ``->`` |
+| ``mkVV`` | [V #V] ``->`` [VV #VV] ``=`` ``\v`` ``->`` ``lin`` [VV #VV] ``(v`` ``**`` ``{isAux`` ``=`` ``False});`` |
 
 
 
