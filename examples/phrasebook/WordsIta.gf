@@ -19,12 +19,13 @@ Cheese = mkCN (mkN "formaggio") ;
 Fish = mkCN (mkN "pesce") ;
 Pizza = mkCN (mkN "pizza") ;
 
-Fresh = mkAP (mkA "fresco") ;
-Warm = mkAPA "caldo" ;
-Italian = mkAPA "italiano" ;
-Expensive = mkAPA "caro" ;
-Delicious = mkAPA "delizioso" ;
-Boring = mkAPA "noioso" ;
+Fresh = mkA "fresco" ;
+Warm = mkA "caldo" ;
+Italian = mkA "italiano" ;
+Expensive = mkA "caro" ;
+Delicious = mkA "delizioso" ;
+Boring = mkA "noioso" ;
+Good = prefixA (mkA "buono" "buona" "buoni" "buone" "bene") ;
 
     Restaurant = mkCN (mkN "ristorante") ;
     Bar = mkCN (mkN "bar") ;

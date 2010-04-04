@@ -11,6 +11,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Item = NP ;
     Kind = CN ;
     Quality = AP ;
+    Property = A ;
     Object = NP ;
     Place = NP ;
     PlaceKind = CN ;
@@ -49,6 +50,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
 
     ObjItem i = i ;
     ObjNumber n k = mkNP <lin Numeral n : Numeral> k ;
+    ObjIndef k = mkNP a_Quant k ;
 
     This kind = mkNP this_Quant kind ;
     That kind = mkNP that_Quant kind ;
@@ -58,8 +60,9 @@ incomplete concrete SentencesI of Sentences = Numeral **
     The kind = mkNP the_Quant kind ;
     Thes kind = mkNP the_Quant plNum kind ;
     SuchKind quality kind = mkCN quality kind ;
-    Very quality = mkAP very_AdA quality ;
-    Too quality = mkAP too_AdA quality ;
+    Very property = mkAP very_AdA (mkAP property) ;
+    Too property = mkAP too_AdA (mkAP property) ;
+    PropQuality property = mkAP property ;
     ThePlace kind = mkNP the_Quant kind ;
 
     I = mkNP i_Pron ;

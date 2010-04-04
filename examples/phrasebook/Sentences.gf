@@ -3,7 +3,7 @@ abstract Sentences = Numeral ** {
   cat
     Phrase ;
     Sentence ; Question ; 
-    Object ; Item ; Kind ; Quality ; 
+    Object ; Item ; Kind ; Quality ; Property ;  
     Place ; PlaceKind ; Currency ; Price ; Language ;
     Person ; Action ;
 
@@ -36,13 +36,15 @@ abstract Sentences = Numeral ** {
     ItCost : Item -> Price -> Sentence ;
     AmountCurrency : Numeral -> Currency -> Price ;
 
-    ObjItem : Item -> Object ;
+    ObjItem   : Item -> Object ;
     ObjNumber : Numeral -> Kind -> Object ;
+    ObjIndef  : Kind -> Object ;
     
     This, That, These, Those, The, Thes : Kind -> Item ;
     SuchKind : Quality -> Kind -> Kind ;
-    Very : Quality -> Quality ;
-    Too : Quality -> Quality ;
+    Very : Property -> Quality ;
+    Too : Property -> Quality ;
+    PropQuality : Property -> Quality ;
 
     ThePlace : PlaceKind -> Place ;
 

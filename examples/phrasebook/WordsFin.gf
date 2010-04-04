@@ -12,16 +12,18 @@ concrete WordsFin of Words = SentencesFin **
     Pizza = mkCN (mkN "pizza") ;
     Cheese = mkCN (mkN "juusto") ;
     Fish = mkCN (mkN "kala") ;
-    Fresh = mkAP (mkA "tuore") ;
-    Warm = mkAP (mkA 
+
+    Fresh = mkA "tuore" ;
+    Warm = mkA 
     (mkN "l‰mmin" "l‰mpim‰n" "l‰mmint‰" "l‰mpim‰n‰" "l‰mpim‰‰n" 
          "l‰mpimin‰" "l‰mpimi‰" "l‰mpimien" "l‰mpimiss‰" "l‰mpimiin"
 	 ) 
-    "l‰mpim‰mpi" "l‰mpimin") ;
-    Italian = mkAP (mkA "italialainen") ;
-    Expensive = mkAP (mkA "kallis") ;
-    Delicious = mkAP (mkA "herkullinen") ;
-    Boring = mkAP (mkA "tyls‰") ;
+    "l‰mpim‰mpi" "l‰mpimin" ;
+    Italian = mkA "italialainen" ;
+    Expensive = mkA "kallis" ;
+    Delicious = mkA "herkullinen" ;
+    Boring = mkA "tyls‰" ;
+    Good = mkA (mkN "hyv‰") "parempi" "paras" ; ---- comparisons?
 
     Restaurant = mkCN (mkN "ravintola") ;
     Bar = mkCN (mkN "baari") ;
