@@ -5,7 +5,7 @@ abstract Words = Sentences ** {
     Wine, Beer, Water, Coffee, Tea : Kind ; 
     Cheese, Fish, Pizza : Kind ;
     Fresh, Warm, Italian, 
-      Expensive, Delicious, Boring : Quality ;
+      Expensive, Delicious, Boring, Good : Property ;
 
     Bar, Restaurant, Toilet : PlaceKind ;
 

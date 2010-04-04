@@ -21,12 +21,13 @@ Cheese = mkCN (mkN "fromage" masculine) ;
 Fish = mkCN (mkN "poisson" masculine) ;
 Pizza = mkCN (mkN "pizza" feminine) ;
 
-Fresh = mkAP (mkA "frais" "fraîche") ;
-Warm = mkAPA "chaud" ;
-Italian = mkAPA "italien" ;
-Expensive = mkAPA "cher" ;
-Delicious = mkAPA "délicieux" ;
-Boring = mkAPA "ennuyeux" ;
+Fresh = mkA "frais" "fraîche" "frais" "fraîchement" ;
+Warm = mkA "chaud" ;
+Italian = mkA "italien" ;
+Expensive = mkA "cher" ;
+Delicious = mkA "délicieux" ;
+Boring = mkA "ennuyeux" ;
+Good = prefixA (mkA "bon" "bonne" "bons" "bien") ;
 
     Restaurant = mkCN (mkN "restaurant") ;
     Bar = mkCN (mkN "bar") ;
@@ -53,8 +54,5 @@ Boring = mkAPA "ennuyeux" ;
     ATired p = mkCl p (mkA "fatigué") ;
     AScared p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "peur" feminine))) ;
     AUnderstand p = mkCl p (mkV IrregFre.comprendre_V2) ;
-
-oper
-mkAPA : (_ : Str) -> AP = \x -> mkAP (mkA x) ;
 
 }

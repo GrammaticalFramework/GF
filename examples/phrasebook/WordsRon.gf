@@ -20,12 +20,13 @@ Cheese = mkCN (mkN "brânză" "brânzeturi" feminine) ;
 Fish = mkCN (mkN "peşte" "peşti" masculine) ;
 Pizza = mkCN (mkN "pizza" "pizze" feminine) ;
 
-Fresh = mkAPA "proaspăt" "proaspătă" "proaspeţi" "proaspete" ;
-Warm = mkAPA "cald" "caldă" "calzi" "calde" ;
-Italian = mkAPA "italian" "italiană" "italieni" "italiene" ;
-Expensive = mkAPA "scump" "scumpă" "scumpi" "scumpe" ;
-Delicious = mkAPA "delicios" "delcioasă" "delicioşi" "delicioase" ;
-Boring = mkAPA "plictisitor" "plictisitoare" "plictisitori" "plictisitoare" ;
+Fresh = mkA "proaspăt" "proaspătă" "proaspeţi" "proaspete" ;
+Warm = mkA "cald" "caldă" "calzi" "calde" ;
+Italian = mkA "italian" "italiană" "italieni" "italiene" ;
+Expensive = mkA "scump" "scumpă" "scumpi" "scumpe" ;
+Delicious = mkA "delicios" "delcioasă" "delicioşi" "delicioase" ;
+Boring = mkA "plictisitor" "plictisitoare" "plictisitori" "plictisitoare" ;
+Good = mkA "bun" "bună" "buni" "bune" "bine" ;
 
     Restaurant = mkCN (mkN "restaurant") ;
     Bar = mkCN (mkNR "bar") ;
