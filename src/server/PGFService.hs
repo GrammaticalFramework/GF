@@ -157,9 +157,13 @@ doTranslateGroup pgf input mcat mfrom mto =
    disamb lg from t = 
      if lg < 2 
        then [] 
-       else [("tree", "-- " ++ doText (doBind (PGF.linearize pgf (disambLang from) t)))]
+       else [("tree", "-- " ++ doText (doBind (disambLang from t)))]
 
-   disambLang f = maybe f id $ PGF.readLanguage $ "Disamb" ++ PGF.showLanguage f
+   disambLang f t = let disf = PGF.mkCId ("Disamb" ++ PGF.showLanguage f) in
+     if elem disf (PGF.languages pgf) 
+       then PGF.linearize pgf disf t 
+       else PGF.showExpr [] t
+
    notDisamb = (/="Disamb") . take 6 . PGF.showLanguage
 
 doParse :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> JSValue
