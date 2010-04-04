@@ -184,10 +184,12 @@ paradigmFiles = [
 --  ("Interlingua", srcPath "/interlingua/ParadigmsIna.gf"),
   ("Italian",  srcPath "/italian/ParadigmsIta.gf"),
   ("Norwegian", srcPath "/norwegian/ParadigmsNor.gf"),
+  ("Polish", srcPath "/polish/ParadigmsPol.gf"),
   ("Romanian", srcPath "/romanian/ParadigmsRon.gf"),
   ("Russian", srcPath "/russian/ParadigmsRus.gf"),
   ("Spanish",  srcPath "/spanish/ParadigmsSpa.gf"),
-  ("Swedish",  srcPath "/swedish/ParadigmsSwe.gf")
+  ("Swedish",  srcPath "/swedish/ParadigmsSwe.gf"),
+  ("Urdu", srcPath "/urdu/ParadigmsUrd.gf")
   ]
 
 append s = appendFile synopsis ('\n':s)
@@ -197,7 +199,7 @@ include s = append $ "%!include: " ++ s
 space = append "\n"
 delimit ss = mapM_ append ss
 link s f = append $ s ++ " [``" ++ fa ++ "`` " ++ f ++ "]" where
-  fa = "http://www.cs.chalmers.se/~aarne/GF/lib/resource" ++ dropWhile (=='.') f
+  fa = "http://www.grammaticalframework.org/lib/resource" ++ dropWhile (=='.') f
 
 ttf s = "``" ++ s ++ "``"
 itf s = "//" ++ s ++ "//"
