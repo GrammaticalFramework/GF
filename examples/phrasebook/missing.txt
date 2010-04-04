@@ -1,4 +1,5 @@
 DisambPhrasebookEng :
+DisambPhrasebookRon : AHungry AScared AThirsty ATired Coffee Finnish French GExcusePol GPleaseGivePol GSorryPol GWhatsYourNamePol Swedish Tea
 PhrasebookEng :
 PhrasebookFin :
 PhrasebookFre :
