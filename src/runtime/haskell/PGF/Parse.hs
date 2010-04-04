@@ -65,7 +65,7 @@ initState pgf lang (DTyp _ start _) =
                                                return (Active 0 0 funid seqid args (AK cat lbl))
                 Nothing                  -> mzero
 
-      cnc = lookConcr pgf lang
+      cnc = lookConcrComplete pgf lang
 
   in PState pgf
             cnc
