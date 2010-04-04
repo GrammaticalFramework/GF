@@ -52,6 +52,13 @@ lookConcr :: PGF -> CId -> Concr
 lookConcr pgf cnc = 
     lookMap (error $ "Missing concrete syntax: " ++ showCId cnc) cnc $ concretes pgf
 
+-- use if name fails, use abstract + name; so e.g. "Eng" becomes "DemoEng" 
+lookConcrComplete :: PGF -> CId -> Concr
+lookConcrComplete pgf cnc = 
+  case Map.lookup cnc (concretes pgf) of
+    Just c -> c
+    _ -> lookConcr pgf (mkCId (showCId (absname pgf) ++ showCId cnc))
+
 lookConcrFlag :: PGF -> CId -> CId -> Maybe Literal
 lookConcrFlag pgf lang f = Map.lookup f $ cflags $ lookConcr pgf lang
 

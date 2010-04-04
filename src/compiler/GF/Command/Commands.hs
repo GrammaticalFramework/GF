@@ -924,7 +924,12 @@ allCommands cod env@(pgf, mos) = Map.fromList [
 
    optLangs opts = case valStrOpts "lang" "" opts of
      "" -> languages pgf
-     lang -> map mkCId (chunks ',' lang)
+     lang -> map completeLang (chunks ',' lang)
+   completeLang la = let cla = (mkCId la) in
+     if elem cla (languages pgf) 
+       then cla 
+       else (mkCId (showCId (abstractName pgf) ++ la))
+
    optLang opts = head $ optLangs opts ++ [wildCId]
 
    optOpenTypes opts = case valStrOpts "openclass" "" opts of
