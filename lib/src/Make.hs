@@ -25,33 +25,34 @@ presApiPath = "-path=api:present"
 presSymbolPath = "" -- "-path=.:abstract:present:common:romance:scandinavian" ----
 
 -- the languages have long directory names and short ISO codes (3 letters)
--- we also give the decodings for postprocessing linearizations, as long as grammars
--- don't support all flags needed; they are used in tests
+-- we also give the functors implied
  
 langsCoding = [
   (("arabic",   "Ara"),""),
   (("bulgarian","Bul"),""),
-  (("catalan",  "Cat"),""),
-  (("danish",   "Dan"),""),
+  (("catalan",  "Cat"),"Romance"),
+  (("danish",   "Dan"),"Scand"),
   (("dutch",    "Dut"),""),
   (("english",  "Eng"),""),
   (("finnish",  "Fin"),""),
-  (("french",   "Fre"),""),
-  (("hindi",    "Hin"),"to_devanagari"),
+  (("french",   "Fre"),"Romance"),
+  (("hindi",    "Hin"),""),
   (("german",   "Ger"),""),
   (("interlingua","Ina"),""),
-  (("italian",  "Ita"),""),
+  (("italian",  "Ita"),"Romance"),
   (("latin",    "Lat"),""),
-  (("norwegian","Nor"),""),
+  (("norwegian","Nor"),"Scand"),
   (("polish",   "Pol"),""),
   (("romanian", "Ron"),""),
   (("russian",  "Rus"),""),
-  (("spanish",  "Spa"),""),
-  (("swedish",  "Swe"),""), 
-  (("thai",     "Tha"),"to_thai"),
+  (("spanish",  "Spa"),"Romance"),
+  (("swedish",  "Swe"),"Scand"), 
+  (("thai",     "Tha"),""),
   (("turkish",  "Tur"),""),
   (("urdu",     "Urd"),"")
   ]
+
+implied (_,lan) = [fun | ((_,la),fun) <- langsCoding, la == lan, fun /= ""]
 
 langs = map fst langsCoding
 
@@ -96,19 +97,23 @@ make xx = do
   let optl ls = maybe ls id $ getOptLangs xx
 
   ifx "lang" $ do
-    mapM_ (gfc pres [] . lang) (optl langsLang)
-    mapM_ (gfc pres presSymbolPath . symbol) (optl langsAPI)
-    copy "*/*.gfo" dir
+    let lans = optl langsLang
+    mapM_ (gfc pres [] . lang) lans
+    mapM_ (gfc pres presSymbolPath . symbol) lans ---- (optl langsAPI)
+    copyl lans "*.gfo" dir
   ifx "compat" $ do
-    mapM_ (gfc pres [] . compat) (optl langsCompat)
-    copy "*/Compatibility*.gfo" dir
+    let lans = optl langsCompat
+    mapM_ (gfc pres [] . compat) lans
+    copyld lans "*/Compatibility" ".gfo" dir
   ifx "api" $ do
-    mapM_ (gfc pres presApiPath . try) (optl langsAPI)
-    mapM_ (gfc pres presApiPath . symbolic) (optl langsAPI)
-    copy "*/*.gfo" dir
+    let lans = optl langsAPI
+    mapM_ (gfc pres presApiPath . try) lans
+    mapM_ (gfc pres presApiPath . symbolic) lans
+    copyld lans "api" ".gfo" dir
   ifx "minimal" $ do
-    mapM_ (gfcmin presApiPath . syntax) (optl langsMinimal)
-    copy "api/*.gfo" "../minimal"
+    let lans = optl langsMinimal
+    mapM_ (gfcmin presApiPath . syntax) lans
+    copyld lans "api" ".gfo" "../minimal"
   ifxx "pgf" $ do
     run_gfc $ ["-s","--make","--name=langs","--parser=off",
                "--output-dir=" ++ dir]
@@ -116,10 +121,6 @@ make xx = do
   ifxx "test" $ do
     let ls = optl langsTest
     gf (treeb "Lang" ls) $ unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- ls] 
--- use 'make demo'
---  ifxx "demo" $ do
---    let ls = optl langsDemo
---    gf (demos "Demo" ls) $ unwords ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls]
   ifxx "parse" $ do
     mapM_ (gfc pres [] . parse) (optl langsParse)
     copy "parse/*.gfo parse/oald/*.gfo" dir
@@ -215,3 +216,21 @@ copy :: String -> String -> IO ()
 copy from to = 
     do system $ "cp " ++ from ++ " " ++ to
        return ()
+
+copyl :: [(String,String)] -> String -> String -> IO ()
+copyl lans from to = do 
+  echosystem $ "cp abstract/" ++ from ++ " " ++ to
+  echosystem $ "cp common/"   ++ from ++ " " ++ to
+  mapM_ (\lan -> echosystem $ "cp */*" ++ lan ++ from ++ " " ++ to) 
+        (map snd lans ++ concatMap implied lans)
+  return ()
+
+copyld :: [(String,String)] -> String -> String -> String -> IO ()
+copyld lans dir from to = do 
+  mapM_ (\lan -> echosystem $ "cp " ++ dir ++ "/*" ++ lan ++ from ++ " " ++ to) 
+        (map snd lans ++ if (dir == "api") then [] else concatMap implied lans)
+  return ()
+
+echosystem c = do
+  putStrLn c 
+  system c
