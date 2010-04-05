@@ -14,7 +14,6 @@ lin
   GSorry = ss "îmi pare rău" ;
   GGoodbye = ss "la revedere" ;
   GBye = ss "pa" ;
-  GWhatsYourName = ss "cum te cheamă" ;
   GNiceToMeetYou = ss "încântat" ;
   GSeeYouSoon = ss "pe curând" ;
   GHelp = ss "ajutor" ;
@@ -23,6 +22,7 @@ lin
   GGoodDay = ss "bună ziua" ;
   GGoodEvening = ss "bună seara" ;
   GGoodNight = ss "noapte bună" ;
+  GCheers = ss "noroc" ;
   GTheCheck = ss "nota de plată" ;
 
   GYes = ss "da" ;

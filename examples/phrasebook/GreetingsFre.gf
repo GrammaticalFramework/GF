@@ -1,4 +1,4 @@
-concrete GreetingsFre of Greetings = open Roles,Prelude in {
+concrete GreetingsFre of Greetings = open Prelude in {
 
 flags coding = utf8 ;
 
@@ -16,8 +16,6 @@ lin
   GSorry, GSorryPol = ss "pardon" ;
   GGoodbye = ss "au revoir" ;
   GBye = ss "au revoir" ;
-  GWhatsYourName = ss "comment t'appelles-tu" ;
-  GWhatsYourNamePol = ss "comment vous appelez-vous" ;
   GNiceToMeetYou = ss "enchanté" ;
   GSeeYouSoon = ss "à bientôt" ;
   GHelp = ss "au secours" ;
@@ -27,6 +25,7 @@ lin
   GGoodEvening = ss "bon soir" ;
   GGoodNight = ss "bonne nuit" ;
   GTheCheck = ss "l'addition" ;
+  GCheers = ss "santé" ;
 
   GYes = ss "oui" ; ---- si
   GNo = ss "non" ;

@@ -1,3 +1,5 @@
 concrete SentencesEng of Sentences = NumeralEng ** SentencesI with 
   (DiffPhrasebook = DiffPhrasebookEng), 
-  (Syntax = SyntaxEng) ;
+  (Syntax = SyntaxEng),
+  (Symbolic = SymbolicEng),
+  (Lexicon = LexiconEng) ;

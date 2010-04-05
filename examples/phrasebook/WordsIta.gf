@@ -5,6 +5,8 @@ concrete WordsIta of Words = SentencesIta ** open
   DiffPhrasebookIta,
   BeschIta,
   (E = ExtraIta),
+  (L = LexiconIta),
+  (P = ParadigmsIta), 
   ParadigmsIta in {
 
 lin
@@ -13,7 +15,7 @@ Wine = mkCN (mkN "vino") ;
     Beer = mkCN (mkN "birra") ;
     Water = mkCN (mkN "acqua") ;
     Coffee = mkCN (mkN "caffè") ;
---   Tea = mkCN (mkN "té") ; ----
+   Tea = mkCN (mkN "tè") ;
 
 Cheese = mkCN (mkN "formaggio") ;
 Fish = mkCN (mkN "pesce") ;
@@ -21,39 +23,92 @@ Pizza = mkCN (mkN "pizza") ;
 
 Fresh = mkA "fresco" ;
 Warm = mkA "caldo" ;
-Italian = mkA "italiano" ;
 Expensive = mkA "caro" ;
 Delicious = mkA "delizioso" ;
 Boring = mkA "noioso" ;
 Good = prefixA (mkA "buono" "buona" "buoni" "buone" "bene") ;
 
-    Restaurant = mkCN (mkN "ristorante") ;
-    Bar = mkCN (mkN "bar") ;
-    Toilet = mkCN (mkN "bagno") ;
+    Restaurant = mkPlace (mkN "ristorante") P.in_Prep ;
+    Bar = mkPlace (mkN "bar") P.in_Prep ;
+    Toilet = mkPlace (mkN "bagno") P.in_Prep ;
+    Museum = mkPlace (mkN "museo") P.in_Prep ;
+    Airport = mkPlace (mkN "aeroporto") dative ;
+    Station = mkPlace (mkN "stazione" feminine) dative ;
+    Hospital = mkPlace (mkN "ospedale") P.in_Prep ;
+    Church = mkPlace (mkN "chiesa") P.in_Prep ;
 
     Euro = mkCN (mkN "euro" "euro" masculine) ;
     Dollar = mkCN (mkN "dollar") ;
     Lei = mkCN (mkN "lei") ; ---- ?
 
-    AWant p obj = mkCl p want_V2 obj ;
-    ALike p item = mkCl item (mkV2 (mkV (piacere_64 "piacere")) dative) p ;
-    AHave p kind = mkCl p have_V2 (mkNP kind) ;
-    ASpeak p lang = mkCl p  (mkV2 (mkV "parlare")) lang ;
-    ALove p q = mkCl p (mkV2 (mkV "amare")) q ;
+    English = mkNat "inglese" "Inghilterra" ;
+    Finnish = mkNat "finlandese" "Finlandia" ;
+    French = mkNat "francese" "Francia" ; 
+    Italian = mkNat "italiano" "Italia" ;
+    Romanian = mkNat "rumeno" "Romania" ;
+    Swedish = mkNat "svedese" "Svezia" ;
 
-    English = mkNP (mkPN "inglese") ;
-    Finnish = mkNP (mkPN "finlandese") ;
-    French = mkNP (mkPN "francese") ; 
-    Romanian = mkNP (mkPN "rumeno") ;
-    Swedish = mkNP (mkPN "svedese") ;
+    Belgian = mkA "belgo" ;
+    Flemish = mkNP (mkPN "fiammingo") ;
+    Belgium = mkNP (mkPN "Belgio") ;
 
-    AHungry p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "fame" feminine))) ;
-    AThirsty p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "sete" feminine))) ;
-    ATired p = mkCl p (mkA "stanco") ;
-    AScared p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "paura" feminine))) ;
-    AUnderstand p = mkCl p (mkV "capire") ;
+    Monday = mkDay "lunedì" ;
+    Tuesday = mkDay "martedì" ;
+    Wednesday = mkDay "mercoledì" ;
+    Thursday = mkDay "giovedì" ;
+    Friday = mkDay "venerdì" ;
+    Saturday = mkDay "sabato" ;
+    Sunday = mkDay "domenica" ;
 
-oper
-mkAPA : (_ : Str) -> AP = \x -> mkAP (mkA x) ;
+    AWant p obj = mkCl p.name want_V2 obj ;
+    ALike p item = mkCl item (mkV2 (mkV (piacere_64 "piacere")) dative) p.name ;
+    AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
+    ASpeak p lang = mkCl p.name  (mkV2 (mkV "parlare")) lang ;
+    ALove p q = mkCl p.name (mkV2 (mkV "amare")) q.name ;
+    ACitizen p n = mkCl p.name n ;
+    AHungry p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "fame" feminine))) ;
+    AThirsty p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "sete" feminine))) ;
+    ATired p = mkCl p.name (mkA "stanco") ;
+    AScared p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "paura" feminine))) ;
+    AIll p = mkCl p.name (mkA "malato") ;
+    AUnderstand p = mkCl p.name (mkV "capire") ;
+    AKnow p = mkCl p.name (mkV (sapere_78 "sapere")) ;
+    AWantGo p place = 
+      mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
+    ABePlace p place = mkCl p.name place.at ;
+    AHasName p name = mkCl p.name (mkV2 (reflV (mkV "chiamare"))) name ;
+    ALive p co = 
+      mkCl p.name (mkVP (mkVP (mkV "abitare")) 
+        (SyntaxIta.mkAdv P.in_Prep co)) ;
+
+    QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name (reflV (mkV "chiamare")))) ;
+
+    PropOpen p = mkCl p.name open_A ;
+    PropClosed p = mkCl p.name closed_A ;
+    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_A) d) ; 
+    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_A) d) ; 
+    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_A) d.habitual) ; 
+    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
+
+  oper
+    mkNat : Str -> Str -> {lang : NP ; prop : A ; country : NP} = \nat,co -> 
+      {lang = mkNP (mkPN nat) ; prop = mkA nat ; country = mkNP (mkPN co)} ;
+
+    mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
+      let day = mkNP (mkPN d) in
+      {name = day ; 
+       point, -- = ParadigmsIta.mkAdv d ; 
+       habitual = ParadigmsIta.mkAdv ("il" ++ d) ; ---- ?
+      } ;
+
+    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i -> {
+      name = mkCN p ;
+      at = i ;
+      to = dative
+      } ;
+
+    open_A = mkA "aperto" ;
+    closed_A = mkA "chiuso" ;
+
 
 }

@@ -1,4 +1,4 @@
-concrete GreetingsEng of Greetings = open Roles, Prelude in {
+concrete GreetingsEng of Greetings = open Prelude in {
 
 lincat 
   Greeting = SS ;
@@ -12,7 +12,6 @@ lin
   GSorry, GSorryPol = ss "sorry" ;
   GGoodbye = ss "goodbye" ;
   GBye = ss "bye" ;
-  GWhatsYourName, GWhatsYourNamePol = ss "what's your name" ;
   GNiceToMeetYou = ss "nice to meet you" ;
   GSeeYouSoon = ss "see you soon" ;
   GHelp = ss "help" ;
@@ -22,6 +21,7 @@ lin
   GGoodEvening = ss "good evening" ;
   GGoodNight = ss "good night" ;
   GTheCheck = ss "the bill" ;
+  GCheers = ss "cheers" ;
 
   GYes = ss "yes" ;
   GNo = ss "no" ;

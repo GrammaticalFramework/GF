@@ -1,3 +1,5 @@
 concrete SentencesFin of Sentences = NumeralFin ** SentencesI with 
   (DiffPhrasebook = DiffPhrasebookFin), 
-  (Syntax = SyntaxFin) ;
+  (Syntax = SyntaxFin),
+  (Symbolic = SymbolicFin),
+  (Lexicon = LexiconFin) ;

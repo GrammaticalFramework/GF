@@ -1,10 +1,22 @@
-concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [WhetherIs, QAction] 
+concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [
+  QProp,
+  IFemale, YouFamFemale, YouPolFemale
+ ] 
   with 
     (DiffPhrasebook = DiffPhrasebookFre), 
-    (Syntax = SyntaxFre) ** open SyntaxFre, ExtraFre in {
+    (Syntax = SyntaxFre), 
+    (Symbolic = SymbolicFre), 
+    (Lexicon = LexiconFre) ** 
+  open SyntaxFre, ExtraFre, Prelude in {
 
     lin 
-      WhetherIs item quality = lin QS {s = \\_ => (EstcequeS (mkS (mkCl item quality))).s} ;
-      QAction a = lin QS {s = \\_ => (EstcequeS (mkS a)).s} ;
+      QProp a = 
+        lin QS {s = \\_ => (EstcequeS (mkS a)).s} ;
+      IFemale = 
+        {name = mkNP i8fem_Pron ; isPron = True ; poss = mkDet i_Pron} ; 
+      YouFamFemale = 
+        {name = mkNP youSg8fem_Pron ; isPron = True ; poss = mkDet youSg_Pron} ; 
+      YouPolFemale = 
+        {name = mkNP youPol8fem_Pron ; isPron = True ; poss = mkDet youPol_Pron};
 
 }

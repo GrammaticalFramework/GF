@@ -15,8 +15,6 @@ lin
   GSorry, GSorryPol = ss "anteeksi" ;
   GGoodbye = ss "näkemiin" ;
   GBye = ss "hei hei" ;
-  GWhatsYourName = ss "mikä sinun nimesi on" ;
-  GWhatsYourNamePol = ss "mikä teidän nimenne on" ;
   GNiceToMeetYou = ss "hauska tutustua" ;
   GSeeYouSoon = ss "nähdään pian" ;
   GHelp = ss "apua" ;
@@ -26,6 +24,7 @@ lin
   GGoodEvening = ss "hyvää iltaa" ;
   GGoodNight = ss "hyvää yötä" ;
   GTheCheck = ss "lasku" ;
+  GCheers = ss "terveydeksi" ;
 
   GYes = ss "kyllä" ;
   GNo = ss "ei" ;
