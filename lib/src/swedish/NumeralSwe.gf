@@ -1,4 +1,4 @@
-concrete NumeralSwe of Numeral = CatSwe ** open ResSwe, MorphoSwe in {
+concrete NumeralSwe of Numeral = CatSwe ** open ResSwe, MorphoSwe, Prelude in {
 
 lincat 
   Digit = {s : DForm => CardOrd => Str} ;
@@ -31,17 +31,17 @@ lin
   pot1to19 d = numPl (d.s ! ton) ;
   pot0as1 n = {s = n.s ! ental ; n = n.n} ;
   pot1 d = numPl (d.s ! tiotal) ;
-  pot1plus d e = {s = \\g => d.s ! tiotal ! invNum ++ e.s ! ental ! g ; n = Pl} ;
+  pot1plus d e = {s = \\g => d.s ! tiotal ! invNum ++ BIND ++ e.s ! ental ! g ; n = Pl} ;
   pot1as2 n = n ;
   pot2 d = 
-    numPl (\\g => d.s ! ental ! invNum ++ cardOrd "hundra" "hundrade" ! g) ;
+    numPl (\\g => d.s ! ental ! invNum ++ BIND ++ cardOrd "hundra" "hundrade" ! g) ;
   pot2plus d e = 
-    {s = \\g => d.s ! ental ! invNum ++ "hundra" ++ e.s ! g ; n = Pl} ;
+    {s = \\g => d.s ! ental ! invNum ++ BIND ++ "hundra" ++ e.s ! g ; n = Pl} ;
   pot2as3 n = n ;
   pot3 n = 
     numPl (\\g => n.s ! invNum ++ cardOrd "tusen" "tusende" ! g) ;
   pot3plus n m = 
-    {s = \\g => n.s ! invNum ++ "tusen" ++ m.s ! g ; n = Pl} ;
+    {s = \\g => n.s ! invNum ++ BIND ++ "tusen" ++ m.s ! g ; n = Pl} ;
 
   lincat 
     Dig = TDigit ;
