@@ -51,20 +51,20 @@ lin
     n = Pl
     } ;
 
-  pot111 = {n = Pl ; s = \\_,c => yksiN.s ! c ++"toista"} ; ---- yhdes
-  pot1to19 d = {n = Pl ; s = \\_,c => d.s ! c ++"toista"} ;
+  pot111 = {n = Pl ; s = \\_,c => yksiN.s ! c ++ BIND ++ "toista"} ; ---- yhdes
+  pot1to19 d = {n = Pl ; s = \\_,c => d.s ! c ++ BIND ++ "toista"} ;
   pot0as1 n = n ;
 
-  pot1 d = {n = Pl ; s = \\_,c => d.s ! c ++ kymmentaN.s ! c} ;
+  pot1 d = {n = Pl ; s = \\_,c => d.s ! c ++ BIND ++ kymmentaN.s ! c} ;
   pot1plus d e = {
     n = Pl ; 
-    s = \\_,c => d.s ! c ++ kymmentaN.s ! c ++ e.s ! NumIndep ! c
+    s = \\_,c => d.s ! c ++ BIND ++ kymmentaN.s ! c ++ BIND ++ e.s ! NumIndep ! c
     } ;
   pot1as2 n = n ;
-  pot2 d = {n = Pl ; s = \\_,c => d.s ! NumAttr ! c ++ sataaN.s ! d.n ! c} ; ----
+  pot2 d = {n = Pl ; s = \\_,c => d.s ! NumAttr ! c ++ BIND ++ sataaN.s ! d.n ! c} ; ----
   pot2plus d e = {
     n = Pl ; 
-    s = \\_,c => d.s ! NumAttr ! c ++ sataaN.s ! d.n ! c ++ e.s ! NumIndep ! c
+    s = \\_,c => d.s ! NumAttr ! c ++ BIND ++ sataaN.s ! d.n ! c ++ e.s ! NumIndep ! c
     } ;
   pot2as3 n = {n = n.n  ; s = n.s ! NumIndep} ;
   pot3 d = {n = Pl ; s = \\c => d.s ! NumAttr ! c ++ tuhattaN.s ! d.n ! c} ; ----
