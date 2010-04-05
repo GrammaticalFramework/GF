@@ -1,16 +1,22 @@
 --# -path=.:present
 
 concrete DisambPhrasebookEng of Phrasebook = PhrasebookEng - 
-   [YouFam, YouPol, 
+   [
+    IMale, IFemale,
+    YouFamMale, YouFamFemale, 
+    YouPolMale, YouPolFemale, 
     GExcuse, GExcusePol, 
     GSorry, GSorryPol, 
-    GPleaseGive, GPleaseGivePol,
-    GWhatsYourName, GWhatsYourNamePol
+    GPleaseGive, GPleaseGivePol
    ] 
   ** open SyntaxEng, ParadigmsEng, Prelude in {
 lin
-  YouFam = mkNP (mkNP youSg_Pron) (ParadigmsEng.mkAdv "(familiar)") ;
-  YouPol = mkNP (mkNP youPol_Pron) (ParadigmsEng.mkAdv "(polite)") ;
+  IMale = mkP i_Pron "(male)" ;
+  IFemale = mkP i_Pron "(female)" ;
+  YouFamMale = mkP youSg_Pron "(familiar,male)" ;
+  YouFamFemale = mkP youSg_Pron "(familiar,female)" ;
+  YouPolMale = mkP youPol_Pron "(polite,male)" ;
+  YouPolFemale = mkP youPol_Pron "(polite,female)" ;
 
   GExcuse = fam "excuse me" ;
   GExcusePol = pol "excuse me" ;
@@ -18,11 +24,14 @@ lin
   GSorryPol = pol "sorry" ;
   GPleaseGive = fam "please" ;
   GPleaseGivePol = pol "please" ;
-  GWhatsYourName = ss "what's your name (familiar)" ;
-  GWhatsYourNamePol = ss "what's your name (polite)" ;
 
 oper
   fam : Str -> SS = \s -> postfixSS "(familiar)" (ss s) ;
   pol : Str -> SS = \s -> postfixSS "(polite)" (ss s) ;
 
+  mkP : Pron -> Str -> {name : NP ; isPron : Bool ; poss : Det} = \p,s ->
+    {name = mkNP (mkNP p) (ParadigmsEng.mkAdv s) ;
+     isPron = False ; -- to show the disambiguation 
+     poss = mkDet youSg_Pron 
+    } ;
 }

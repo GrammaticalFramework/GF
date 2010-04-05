@@ -2,24 +2,33 @@ incomplete concrete SentencesI of Sentences = Numeral **
   open
     DiffPhrasebook, 
     Syntax,
+    Lexicon,
+    Symbolic,  -- for names as strings
     Prelude
   in {
   lincat
     Phrase = Text ;
     Sentence = S ;
     Question = QS ;
+    Proposition = Cl ;
     Item = NP ;
     Kind = CN ;
     Quality = AP ;
     Property = A ;
     Object = NP ;
-    Place = NP ;
-    PlaceKind = CN ;
+    Place = {name : NP ; at : Adv ; to : Adv} ;
+    PlaceKind = {name : CN ; at : Prep ; to : Prep} ;
     Currency = CN ;
     Price = NP ;
     Action = Cl ;
-    Person = NP ;
+    Person = {name : NP ; isPron : Bool ; poss : Det} ;
+    Nationality = {lang : NP ; prop : A ; country : NP} ; 
     Language = NP ;
+    Citizenship = A ;
+    Country = NP ;
+    Day = {name : NP ; point : Adv ; habitual : Adv} ;
+    Date = Adv ;
+    Name = NP ;
   lin
     PSentence s = mkText s | lin Text (mkUtt s) ;  -- optional '.'
     PQuestion s = mkText s | lin Text (mkUtt s) ;  -- optional '?'
@@ -28,23 +37,27 @@ incomplete concrete SentencesI of Sentences = Numeral **
     PKind x = mkPhrase (mkUtt x) ;
     PQuality x = mkPhrase (mkUtt x) ;
     PNumeral x = mkPhrase (mkUtt (mkCard (x ** {lock_Numeral = <>}))) ;
-    PPlace x = mkPhrase (mkUtt x) ;
-    PPlaceKind x = mkPhrase (mkUtt x) ;
+    PPlace x = mkPhrase (mkUtt x.name) ;
+    PPlaceKind x = mkPhrase (mkUtt x.name) ;
     PCurrency x = mkPhrase (mkUtt x) ;
     PPrice x = mkPhrase (mkUtt x) ;
     PLanguage x = mkPhrase (mkUtt x) ;
+    PCountry x = mkPhrase (mkUtt x) ;
+    PCitizenship x = mkPhrase (mkUtt (mkAP x)) ;
+    PDay d = mkPhrase (mkUtt d.name) ;
+    
+    Is = mkCl ;
 
-    Is item quality = mkS (mkCl item quality) ;
-    IsNot item quality = mkS negativePol (mkCl item quality) ;
-    WhetherIs item quality = mkQS (mkQCl (mkCl item quality)) ;
-    WhereIs place = mkQS (mkQCl where_IAdv place) ;
+    SProp = mkS ;
+    SPropNot = mkS negativePol ;
+    QProp p = mkQS (mkQCl p) ;
 
-    SAction = mkS ;
-    SNotAction = mkS negativePol ;
-    QAction a = mkQS (mkQCl a) ;
+    WhereIs place = mkQS (mkQCl where_IAdv place.name) ;
+
+    PropAction a = a ;
 
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item cost_V)) ; 
-    ItCost item price = mkS (mkCl item cost_V2 price) ;
+    ItCost item price = mkCl item cost_V2 price ;
  
     AmountCurrency num curr = mkNP <lin Numeral num : Numeral> curr ;
 
@@ -63,14 +76,34 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Very property = mkAP very_AdA (mkAP property) ;
     Too property = mkAP too_AdA (mkAP property) ;
     PropQuality property = mkAP property ;
-    ThePlace kind = mkNP the_Quant kind ;
+    ThePlace kind =
+      let name : NP = mkNP the_Quant kind.name in {
+        name = name ;
+        at = mkAdv kind.at name ;
+        to = mkAdv kind.to name
+      } ;
 
-    I = mkNP i_Pron ;
-    YouFam = mkNP youSg_Pron ;
-    YouPol = mkNP youPol_Pron ;
+    IMale, IFemale = mkPerson i_Pron ;
+    YouFamMale, YouFamFemale = mkPerson youSg_Pron ;
+    YouPolMale, YouPolFemale = mkPerson youPol_Pron ;
+
+    LangNat n = n.lang ;
+    CitiNat n = n.prop ;
+    CountryNat n = n.country ;
+    PropCit c = c ;
+
+    OnDay d = d.point ;
+    Today = today_Adv ;
+
+    PersonName n = 
+      {name = n ; isPron = False ; poss = mkDet he_Pron} ; -- poss not used
+----    NameString s = symb s ;
+    NameNN = symb "NN" ;
 
 oper 
   mkPhrase : Utt -> Text = \u -> lin Text u ; -- no punctuation
 
+  mkPerson : Pron -> {name : NP ; isPron : Bool ; poss : Det} = \p -> 
+    {name = mkNP p ; isPron = True ; poss = mkDet p} ;
 
 }

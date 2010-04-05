@@ -47,6 +47,7 @@ oper
   nominative  : Case ; 
   genitive    : Case ; 
   partitive   : Case ; 
+  essive      : Case ; 
   translative : Case ; 
   inessive    : Case ; 
   elative     : Case ; 
@@ -232,6 +233,7 @@ oper
   partitive = Part ;
   translative = Transl ;
   inessive = Iness ;
+  essive  = Ess ;
   elative = Elat ;
   illative = Illat ;
   adessive = Adess ;

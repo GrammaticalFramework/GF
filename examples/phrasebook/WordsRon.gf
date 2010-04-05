@@ -22,37 +22,39 @@ Pizza = mkCN (mkN "pizza" "pizze" feminine) ;
 
 Fresh = mkA "proaspăt" "proaspătă" "proaspeţi" "proaspete" ;
 Warm = mkA "cald" "caldă" "calzi" "calde" ;
-Italian = mkA "italian" "italiană" "italieni" "italiene" ;
 Expensive = mkA "scump" "scumpă" "scumpi" "scumpe" ;
 Delicious = mkA "delicios" "delcioasă" "delicioşi" "delicioase" ;
 Boring = mkA "plictisitor" "plictisitoare" "plictisitori" "plictisitoare" ;
 Good = mkA "bun" "bună" "buni" "bune" "bine" ;
 
-    Restaurant = mkCN (mkN "restaurant") ;
-    Bar = mkCN (mkNR "bar") ;
-    Toilet = mkCN (mkN "toaleta") ;
+    Restaurant = mkPlace (mkN "restaurant") in_Prep ;
+    Bar = mkPlace (mkNR "bar") in_Prep ;
+    Toilet = mkPlace (mkN "toaleta") in_Prep ;
 
     Euro = mkCN (mkN "euro" "euro") ;
     Dollar = mkCN (mkN "dolar" masculine) ;
     Lei = mkCN (mkN "leu" "lei") ;
 
-    AWant p obj = mkCl p want_V2 obj ;
-    ALike p item = mkCl p like_V2 item ;
-    AHave p kind = mkCl p have_V2 (SyntaxRon.mkNP kind) ;
-    ASpeak p lang = mkCl p  (dirV2 (mkV "vorbi")) lang ;
-    ALove p q = mkCl p (dirV2 (mkV "iubi")) q ;
-
-    English = SyntaxRon.mkNP (mkPN "engleză") ; ---- ?
+--    English = SyntaxRon.mkNP (mkPN "engleză") ; ---- ?
 --    Finnish = mkNP (mkPN "finnois") ;
 --    French = mkNP (mkPN "français") ; 
-    Romanian = SyntaxRon.mkNP (mkPN "română") ; ---- ?
+--    Italian = mkA "italian" "italiană" "italieni" "italiene" ;
+--    Romanian = SyntaxRon.mkNP (mkPN "română") ; ---- ?
 --    Swedish = mkNP (mkPN "suédois") ;
+
+    AWant p obj = mkCl p.name want_V2 obj ;
+    ALike p item = mkCl p.name like_V2 item ;
+    AHave p kind = mkCl p.name have_V2 (SyntaxRon.mkNP kind) ;
+    ASpeak p lang = mkCl p.name  (dirV2 (mkV "vorbi")) lang ;
+    ALove p q = mkCl p.name (dirV2 (mkV "iubi")) q.name ;
+    AUnderstand p = mkCl p.name (v_besch83 "înţelege") ;
 
 --    AHungry p = mkCl p have_V2 (SyntaxRon.mkNP a_Det (mkN "foame")) ;
 --    AThirsty p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "sete" feminine))) ;
 --    ATired p = mkCl p (mkA "stanco") ;
 --    AScared p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "paura" feminine))) ;
-    AUnderstand p = mkCl p (v_besch83 "înţelege") ;
+
+
 {-
   GImHungry = ss "mi-e foame" ;
   GImThirsty = ss "mi-e sete" ;
@@ -60,8 +62,11 @@ Good = mkA "bun" "bună" "buni" "bune" "bine" ;
   GImScared = ss "mi-e frică" ;
 -}
 
-
 oper
-mkAPA : (_,_,_,_ : Str) -> AP = \x,y,z,u -> mkAP (mkA x y z u) ;
+    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i -> {
+      name = mkCN p ;
+      at = i ;
+      to = to_Prep   ---- ?
+      } ;
 
 }
