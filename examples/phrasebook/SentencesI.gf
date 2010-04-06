@@ -1,6 +1,5 @@
 incomplete concrete SentencesI of Sentences = Numeral ** 
   open
-    DiffPhrasebook, 
     Syntax,
     Lexicon,
     Symbolic,  -- for names as strings
@@ -57,9 +56,6 @@ incomplete concrete SentencesI of Sentences = Numeral **
 
     PropAction a = a ;
 
-    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item cost_V)) ; 
-    ItCost item price = mkCl item cost_V2 price ;
- 
     AmountCurrency num curr = mkNP <lin Numeral num : Numeral> curr ;
 
     ObjItem i = i ;

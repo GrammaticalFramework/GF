@@ -111,7 +111,7 @@ oper
        } ;
 
     a = Ag g n p ;
-    hasClit = True
+    hasClit = True ; isPol = False
     } ;
 
 

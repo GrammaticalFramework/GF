@@ -17,10 +17,10 @@
 History
 </P>
 <UL>
-<LI>26 March 2010. Version 0.1: Eng, Fin, Fre, Ron; dedicated minibar UI.
-<LI>28 March. Version 0.2: Swe, Ita; cat Action; small phrases.
-<LI>30 March. Version 0.3: disambiguation grammar for English
 <LI>6 April. Version 0.4: weekdays, nationalities
+<LI>30 March. Version 0.3: disambiguation grammar for English
+<LI>28 March. Version 0.2: Swe, Ita; cat Action; small phrases.
+<LI>26 March 2010. Version 0.1: Eng, Fin, Fre, Ron; dedicated minibar UI.
 </UL>
 
 <P>
@@ -117,9 +117,6 @@ Separate concrete syntaxes.
 Separate concrete syntaxes.
 </P>
 <P>
-<CODE>DiffPhrasebook</CODE>: the (so far small) interface for <CODE>Sentences</CODE>.
-</P>
-<P>
 <CODE>DisambPhrasebook</CODE>: disambiguation grammars generating feedback phrases if
 the input language is ambiguous.
 </P>
@@ -128,7 +125,7 @@ Here is the module structure as produced by
 </P>
 <PRE>
     &gt; i -retain DisambPhrasebookEng.gf
-    &gt; dg -only=Phrasebook*,Sentences*,Words*,Greetings*,DiffP*,DisambPhrasebookEng
+    &gt; dg -only=Phrasebook*,Sentences*,Words*,Greetings*,DisambPhrasebookEng
     &gt; ! dot -Tpng _gfdepgraph.dot &gt;pgraph.png
 </PRE>
 <P></P>

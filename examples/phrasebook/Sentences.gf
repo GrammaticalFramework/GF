@@ -85,8 +85,6 @@ abstract Sentences = Numeral ** {
     The, Thes : Kind -> Item ;                   -- the pizza, the pizzas
 
     AmountCurrency : Numeral -> Currency -> Price ;  -- five euros
-    HowMuchCost    : Item -> Question ;              -- how much does the pizza cost
-    ItCost         : Item -> Price -> Proposition ;  -- the pizza costs five euros
 
     ThePlace : PlaceKind -> Place ;                  -- the bar
 

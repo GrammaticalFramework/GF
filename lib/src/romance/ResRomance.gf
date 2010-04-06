@@ -15,7 +15,8 @@ oper
   NounPhrase : Type = {
     s : Case => {c1,c2,comp,ton : Str} ;
     a : Agr ;
-    hasClit : Bool
+    hasClit : Bool ; 
+    isPol : Bool --- only needed for French complement agr
     } ;
   Pronoun : Type = NounPhrase ** {
     poss : Number => Gender => Str ---- also: substantival
@@ -24,7 +25,8 @@ oper
   heavyNP : {s : Case => Str ; a : Agr} -> NounPhrase = \np -> {
     s = \\c => {comp,ton = np.s ! c ; c1,c2 = []} ;
     a = np.a ;
-    hasClit = False
+    hasClit = False ;
+    isPol = False
     } ;
 
   Compl : Type = {s : Str ; c : Case ; isDir : Bool} ;
@@ -188,18 +190,21 @@ oper
     ext    : Polarity => Str ;         -- que je dors / que je dorme
     } ;
 
-  mkClause : Str -> Bool -> Agr -> VP -> 
+  mkClause : Str -> Bool -> Bool -> Agr -> VP -> 
       {s : Direct => RTense => Anteriority => Polarity => Mood => Str} =
-    \subj, hasClit, ag, vp -> {
+    \subj, hasClit, isPol, agr, vp -> {
       s = \\d,te,a,b,m => 
         let
-          neg   = vp.neg ! b ;
-          compl = vp.comp ! ag ++ vp.ext ! b ;
+          neg = vp.neg ! b ;
 
-          agr = verbAgr ag ;
           gen = agr.g ;
           num = agr.n ;
           per = agr.p ;
+
+          compl = case isPol of {
+            True => vp.comp ! {g = gen ; n = Sg ; p = per} ;
+            _ => vp.comp ! agr
+            } ++ vp.ext ! b ;
 
           vtyp  = vp.s.vtyp ;
           refl  = case vtyp of {

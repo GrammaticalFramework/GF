@@ -77,6 +77,9 @@ concrete WordsSwe of Words = SentencesSwe **
     PropOpenDay p d = mkCl p.name (mkVP (mkVP open_A) d.habitual) ; 
     PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
 
+    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "kosta"))) ; 
+    ItCost item price = mkCl item (mkV2 (mkV "kosta")) price ;
+
   oper
     mkNat : Str -> Str -> {lang : NP ; prop : A ; country : NP} = \nat,co -> 
       {lang = mkNP (mkPN (nat + "a")) ; 

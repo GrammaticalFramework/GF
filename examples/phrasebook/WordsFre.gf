@@ -2,7 +2,6 @@
 
 concrete WordsFre of Words = SentencesFre ** open
   SyntaxFre,
-  DiffPhrasebookFre,
   IrregFre,
   (E = ExtraFre),
   ParadigmsFre,
@@ -59,7 +58,7 @@ Good = prefixA (mkA "bon" "bonne" "bons" "bien") ;
     Saturday = mkDay "samedi" ;
     Sunday = mkDay "dimanche" ;
 
-    AWant p obj = mkCl p.name want_V2 obj ;
+    AWant p obj = mkCl p.name vouloir_V2 obj ;
     ALike p item = mkCl item plaire_V2 p.name ;
     ASpeak p lang = mkCl p.name  (mkV2 (mkV "parler")) lang ;
     ALove p q = mkCl p.name (mkV2 (mkV "aimer")) q.name ;
@@ -85,6 +84,9 @@ Good = prefixA (mkA "bon" "bonne" "bons" "bien") ;
     PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_A) d) ; 
     PropOpenDay p d = mkCl p.name (mkVP (mkVP open_A) d.habitual) ; 
     PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
+
+    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "coûter"))) ; 
+    ItCost item price = mkCl item (mkV2 (mkV "coûter")) price ;
 
   oper
     mkNat : Str -> Str -> {lang : NP ; prop : A ; country : NP} = \nat,co -> 

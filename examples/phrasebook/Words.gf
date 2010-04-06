@@ -45,4 +45,7 @@ abstract Words = Sentences ** {
     PropOpenDay    : Place -> Day  -> Proposition ;
     PropClosedDay  : Place -> Day  -> Proposition ;
 
+    HowMuchCost    : Item -> Question ;              -- how much does the pizza cost
+    ItCost         : Item -> Price -> Proposition ;  -- the pizza costs five euros
+
 }

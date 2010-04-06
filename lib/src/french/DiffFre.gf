@@ -118,21 +118,21 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
           _ => <pdat ++ pacc, []>
           } ;
 
-    mkImperative b p vp = {
-      s = \\pol,ag => 
+    mkImperative b p vp = 
+      \\pol,g,n => 
         let 
-          agr   = verbAgr ag ;
-          num   = if_then_else Number b Pl agr.n ;
-          verb  = vp.s.s ! vImperForm ag ;
+          agr   = Ag g n p ;
+          num   = if_then_else Number b Pl n ;
+          verb  = vp.s.s ! vImper n p ;
           neg   = vp.neg ! pol ;
           clpr  =  <vp.clit1 ++ vp.clit2, False> ;  ---- TODO: True if clit
-          compl = vp.comp ! ag ++ vp.ext ! pol
+          compl = vp.comp ! agr ++ vp.ext ! pol
         in
         case pol of {
           Pos => verb ++ if_then_Str clpr.p2 "-" [] ++ clpr.p1 ++ compl ;
           Neg => neg.p1 ++ clpr.p1 ++ verb ++ neg.p2 ++ compl
-          } 
-      } ;  ---- TODO: vois-le vs. vois-moi vs. ne me vois pas
+          } ;
+          ---- TODO: vois-le vs. vois-moi vs. ne me vois pas
 
 
     negation : Polarity => (Str * Str) = table {

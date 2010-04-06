@@ -4,10 +4,10 @@ concrete IdiomCat of Idiom = CatCat **
   flags optimize=all_subs ;
 
   lin
-    ExistNP np = mkClause [] True (agrP3 Masc Sg) 
+    ExistNP np = mkClause [] True False (agrP3 Masc Sg) 
         (insertClit3 "hi" (insertComplement (\\_ => (np.s ! Acc).ton) (predV haver_V))) ;
-    GenericCl vp = mkClause "hom" True (agrP3 Masc Sg) vp ;
-    ImpersCl vp = mkClause [] True (agrP3 Masc Sg) vp ;
+    GenericCl vp = mkClause "hom" True False (agrP3 Masc Sg) vp ;
+    ImpersCl vp = mkClause [] True False (agrP3 Masc Sg) vp ;
 
 
     ProgrVP vp = 
@@ -23,7 +23,7 @@ concrete IdiomCat of Idiom = CatCat **
 
 ----AR, for completeness
 
-    CleftNP np rs = mkClause [] True (agrP3 Masc Sg) 
+    CleftNP np rs = mkClause [] True False (agrP3 Masc Sg) 
       (insertComplement (\\_ => rs.s ! Indic ! np.a)
         (insertComplement (\\_ => (np.s ! rs.c).ton) (predV copula))) ;
 
@@ -31,17 +31,17 @@ concrete IdiomCat of Idiom = CatCat **
     ExistIP ip = {
       s = \\t,a,p,_ =>
         ip.s ! Nom ++ 
-        (mkClause [] True 
+        (mkClause [] True False
           (agrP3 Masc Sg) 
           (insertClit3 "hi" (insertComplement (\\_ => ip.s ! Acc) (predV haver_V))))
           .s ! DDir ! t ! a ! p ! Indic
       } ;
 
     ImpPl1 vp = {s =
-      (mkImperative False P1 vp).s ! Pos ! Ag Masc Pl P1 ; --- fem
+      mkImperative False P1 vp ! Pos ! Masc ! Pl --- fem
       } ;
 
-    CleftAdv ad s = mkClause [] True (agrP3 Masc Sg) 
+    CleftAdv ad s = mkClause [] True False (agrP3 Masc Sg) 
       (insertComplement (\\_ => conjThat ++ s.s ! Indic)
         (insertComplement (\\_ => ad.s) (predV copula))) ;
 

@@ -403,7 +403,7 @@ oper
 --------------------------- obsolete
 
   makeNP : Str -> Gender -> Number -> NP ; 
-  makeNP x g n = {s = (pn2np {s=x;g= g}).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
+  makeNP x g n = {s = (pn2np {s=x;g= g}).s; a = agrP3 g n ; hasClit = False ; isPol = False ; lock_NP = <>} ;
   regPN : Str -> PN ; 
   mk2PN : Str -> Gender -> PN = \x,g -> {s = x ; g = g} ** {lock_PN = <>} ;
 

@@ -172,7 +172,8 @@ lin
        Masc Pl P2 ;
   youPol_Pron = 
     let vous = mkPronoun "vous" "vous" "vous" "vous" "votre" "votre" "vos" Masc Pl P2
-    in {s = vous.s ; hasClit = vous.hasClit ; poss = vous.poss ; a = AgPol Masc} ;
+    in 
+    {s = vous.s ; hasClit = vous.hasClit ; poss = vous.poss ; a = vous.a ; isPol = True} ;
 
   not_Predet = {s = \\a,c => prepCase c ++ "pas" ; c = Nom ; a = PNoAg} ;
 

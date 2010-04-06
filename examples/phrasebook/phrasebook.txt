@@ -13,10 +13,10 @@ Aarne Ranta
 #BSMALL
 
 History
-- 26 March 2010. Version 0.1: Eng, Fin, Fre, Ron; dedicated minibar UI.
-- 28 March. Version 0.2: Swe, Ita; cat Action; small phrases.
-- 30 March. Version 0.3: disambiguation grammar for English
 - 6 April. Version 0.4: weekdays, nationalities
+- 30 March. Version 0.3: disambiguation grammar for English
+- 28 March. Version 0.2: Swe, Ita; cat Action; small phrases.
+- 26 March 2010. Version 0.1: Eng, Fin, Fre, Ron; dedicated minibar UI.
 
 
 [Missing constructs missing.txt] 
@@ -99,15 +99,13 @@ Separate concrete syntaxes.
 ``Phrasebook``: the top module putting everything together. 
 Separate concrete syntaxes.
 
-``DiffPhrasebook``: the (so far small) interface for ``Sentences``.
-
 ``DisambPhrasebook``: disambiguation grammars generating feedback phrases if
 the input language is ambiguous.
 
 Here is the module structure as produced by
 ```
   > i -retain DisambPhrasebookEng.gf
-  > dg -only=Phrasebook*,Sentences*,Words*,Greetings*,DiffP*,DisambPhrasebookEng
+  > dg -only=Phrasebook*,Sentences*,Words*,Greetings*,DisambPhrasebookEng
   > ! dot -Tpng _gfdepgraph.dot >pgraph.png
 ```
 
