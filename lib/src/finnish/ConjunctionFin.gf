@@ -10,7 +10,7 @@ concrete ConjunctionFin of Conjunction =
     ConjAdv = conjunctDistrSS ;
 
     ConjNP conj ss = conjunctDistrTable NPForm conj ss ** {
-      a = {n = conjNumber conj.n ss.a.n ; p = ss.a.p} ;
+      a = conjAgr (Ag conj.n P3) ss.a ; -- P3 is the maximum
       isPron = False
       } ;
 

@@ -108,7 +108,7 @@ concrete WordsFin of Words = SentencesFin **
     mkPlace : N -> Bool -> {name : CN ; at : Prep ; to : Prep} = \p,e -> {
       name = mkCN p ;
       at = casePrep (if_then_else Case e adessive inessive) ;  -- True: external
-      to = casePrep (if_then_else Case e allative elative) ;
+      to = casePrep (if_then_else Case e allative illative) ;
       } ;
 
     open_Adv = ParadigmsFin.mkAdv "avoinna" ;

@@ -9,9 +9,8 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
     PredSCVP sc vp = mkClause (\_ -> sc.s) (agrP3 Sg) vp ;
 
     ImpVP vp = {
-      s = \\pol,n => 
+      s = \\pol,agr => 
         let 
-          agr   = {n = n ; p = P2} ;
           verb  = vp.s ! VIImper ! Simul ! pol ! agr ;
           compl = vp.s2 ! False ! pol ! agr ++ vp.ext  --- False = like inf (osta auto)
         in
