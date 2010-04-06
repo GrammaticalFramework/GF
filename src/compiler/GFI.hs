@@ -7,6 +7,7 @@ import GF.Command.Commands
 import GF.Command.Abstract
 import GF.Command.Parse
 import GF.Data.ErrM
+import GF.Data.Operations (chunks)
 import GF.Grammar hiding (Ident)
 import GF.Grammar.Parser (runP, pExp)
 import GF.Grammar.ShowTerm
@@ -133,7 +134,10 @@ loop opts gfenv0 = do
                                  Bad s -> putStrLn $ enc s
              loopNewCPU gfenv
           "dg":ws -> do
-             writeFile "_gfdepgraph.dot" (depGraph sgr)
+             let stop = case ws of
+                   ('-':'o':'n':'l':'y':'=':fs):_ -> Just $ chunks ',' fs
+                   _ -> Nothing
+             writeFile "_gfdepgraph.dot" (depGraph stop sgr)
              putStrLn "wrote graph in file _gfdepgraph.dot"
              loopNewCPU gfenv
           "eh":w:_ -> do

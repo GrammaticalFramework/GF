@@ -208,6 +208,31 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ],
      needsTypeCheck = False
      }),
+  ("dg",  emptyCommandInfo {
+     longname = "dependency_graph",
+     syntax = "dg (-only=MODULES)?",
+     synopsis = "print module dependency graph",
+     explanation = unlines [
+       "Prints the dependency graph of source modules.",
+       "Requires that import has been done with the -retain flag.",
+       "The graph is written in the file _gfdepgraph.dot",
+       "which can be further processed by Graphviz (the system command 'dot').",
+       "By default, all modules are shown, but the -only flag restricts them",
+       "by a comma-separated list of patterns, where 'name*' matches modules",
+       "whose name has prefix 'name', and other patterns match modules with",
+       "exactly the same name. The graphical conventions are:",
+       "  solid box = abstract, solid ellipse = concrete, dashed ellipse = other",
+       "  solid arrow empty head = of, solid arrow = **, dashed arrow = open",
+       "  dotted arrow = other dependency"
+       ],
+     flags = [
+       ("only","list of modules included (default: all), literally or by prefix*")
+       ],
+     examples = [
+       "dg -only=SyntaxEng,Food*  -- shows only SyntaxEng, and those with prefix Food"
+       ],
+     needsTypeCheck = False
+     }),
   ("dt",  emptyCommandInfo {
      longname = "define_tree",
      syntax = "dt IDENT (TREE | STRING | \"<\" COMMANDLINE)",
