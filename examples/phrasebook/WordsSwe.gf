@@ -53,10 +53,8 @@ concrete WordsSwe of Words = SentencesSwe **
 
     AWant p obj = mkCl p.name want_VV (mkVP have_V2 obj) ;
     ALike p item = mkCl p.name (mkV2 (mkV "tycker") (mkPrep "om")) item ;
-    AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
     ASpeak p lang = mkCl p.name  (mkV2 (mkV "tala")) lang ;
     ALove p q = mkCl p.name (mkV2 (mkV "älska")) q.name ;
-    ACitizen p n = mkCl p.name n ;
     AHungry p = mkCl p.name (mkA "hungrig") ;
     AThirsty p = mkCl p.name (mkA "törstig") ;
     ATired p = mkCl p.name (mkA "trött") ;
@@ -66,7 +64,6 @@ concrete WordsSwe of Words = SentencesSwe **
     AKnow p = mkCl p.name (mkV "veta" "vet" "vet" "visste" "vetat" "visst") ; 
                           ---- IrregSwe.veta_V gives "missing"
     AWantGo p place = mkCl p.name want_VV (mkVP (mkVP IrregSwe.gå_V) place.to) ;
-    ABePlace p place = mkCl p.name place.at ;
     AHasName p name = mkCl (nameOf p) name ;
     ALive p co = 
       mkCl p.name (mkVP (mkVP (mkV "bo")) (SyntaxSwe.mkAdv in_Prep co)) ;

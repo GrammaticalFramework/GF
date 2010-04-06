@@ -56,8 +56,6 @@ The source code resides in
 [``code.haskell.org/gf/examples/phrasebook/`` http://code.haskell.org/gf/examples/phrasebook/]
 
 
-%The abstract syntax defines an [ontology of phrases ontology.html].
-
 Current status (6 April 2010):
 - available in English, Finnish, French, Italian, Romanian, Swedish
 - small coverage
@@ -76,6 +74,15 @@ Compile-time transfer: especially, in Action in Words.
 Quasi-incremental translation: many basic types are also used as phrases.
 
 Disambiguation, esp. of politeness distinctions.
+
+
+=Ontology=
+
+The abstract syntax defines the **ontology** behind the phrasebook. The ontology
+consists of the following **categories**. Some explanations can be found in the
+abstract syntax file
+[``Sentences.gf`` http://code.haskell.org/gf/examples/phrasebook/Sentences.gf].
+
 
 
 =Files=
@@ -97,7 +104,7 @@ Separate concrete syntaxes.
 ``DisambPhrasebook``: disambiguation grammars generating feedback phrases if
 the input language is ambiguous.
 
-Here is the module structure produced by
+Here is the module structure as produced by
 ```
   > i -retain DisambPhrasebookEng.gf
   > dg -only=Phrasebook*,Sentences*,Words*,Greetings*,DiffP*,DisambPhrasebookEng
@@ -165,6 +172,9 @@ Here are the steps to follow for contributors:
 - Don't delete anything! But you are free to correct incorrect forms.
 - Don't change the module structure! But you are free to add a new language.
 - Don't compromise quality to gain coverage: //non multa sed multum!// 
+
+
+
 
 
 

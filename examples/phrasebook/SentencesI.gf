@@ -52,7 +52,8 @@ incomplete concrete SentencesI of Sentences = Numeral **
     SPropNot = mkS negativePol ;
     QProp p = mkQS (mkQCl p) ;
 
-    WhereIs place = mkQS (mkQCl where_IAdv place.name) ;
+    WherePlace place = mkQS (mkQCl where_IAdv place.name) ;
+    WherePerson person = mkQS (mkQCl where_IAdv person.name) ;
 
     PropAction a = a ;
 
@@ -99,6 +100,10 @@ incomplete concrete SentencesI of Sentences = Numeral **
       {name = n ; isPron = False ; poss = mkDet he_Pron} ; -- poss not used
 ----    NameString s = symb s ;
     NameNN = symb "NN" ;
+
+    AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
+    ACitizen p n = mkCl p.name n ;
+    ABePlace p place = mkCl p.name place.at ;
 
 oper 
   mkPhrase : Utt -> Text = \u -> lin Text u ; -- no punctuation

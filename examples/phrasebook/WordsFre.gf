@@ -8,35 +8,33 @@ concrete WordsFre of Words = SentencesFre ** open
   ParadigmsFre,
   (P = ParadigmsFre) in {
 
-flags coding=utf8 ;
-
 lin
 
 Wine = mkCN (mkN "vin") ;
-    Beer = mkCN (mkN "biÃ¨re") ;
+    Beer = mkCN (mkN "bière") ;
     Water = mkCN (mkN "eau" feminine) ;
-    Coffee = mkCN (mkN "cafÃ©") ;
-    Tea = mkCN (mkN "thÃ©") ;
+    Coffee = mkCN (mkN "café") ;
+    Tea = mkCN (mkN "thé") ;
 
 Cheese = mkCN (mkN "fromage" masculine) ;
 Fish = mkCN (mkN "poisson" masculine) ;
 Pizza = mkCN (mkN "pizza" feminine) ;
 
-Fresh = mkA "frais" "fraÃ®che" "frais" "fraÃ®chement" ;
+Fresh = mkA "frais" "fraîche" "frais" "fraîchement" ;
 Warm = mkA "chaud" ;
 Expensive = mkA "cher" ;
-Delicious = mkA "dÃ©licieux" ;
+Delicious = mkA "délicieux" ;
 Boring = mkA "ennuyeux" ;
 Good = prefixA (mkA "bon" "bonne" "bons" "bien") ;
 
     Restaurant = mkPlace (mkN "restaurant") in_Prep ;
     Bar = mkPlace (mkN "bar") in_Prep ;
     Toilet = mkPlace (mkN "toilette") in_Prep ;
-    Museum = mkPlace (mkN "musÃ©e" masculine) in_Prep ;
-    Airport = mkPlace (mkN "aÃ©roport") dative ;
+    Museum = mkPlace (mkN "musée" masculine) in_Prep ;
+    Airport = mkPlace (mkN "aéroport") dative ;
     Station = mkPlace (mkN "gare") dative ;
-    Hospital = mkPlace (mkN "hÃ´pital") dative ;
-    Church = mkPlace (mkN "Ã©glise") in_Prep ;
+    Hospital = mkPlace (mkN "hôpital") dative ;
+    Church = mkPlace (mkN "église") in_Prep ;
 
     Euro = mkCN (mkN "euro") ;
     Dollar = mkCN (mkN "dollar") ;
@@ -44,10 +42,10 @@ Good = prefixA (mkA "bon" "bonne" "bons" "bien") ;
 
     English = mkNat "anglais" "Angleterre" ;
     Finnish = mkNat "finlandais" "Finlande" ;
-    French = mkNat "franÃ§ais" "France" ; 
+    French = mkNat "français" "France" ; 
     Italian = mkNat "italien" "Italie" ;
     Romanian = mkNat "roumain" "Roumanie" ;
-    Swedish = mkNat "suÃ©dois" "SuÃ¨de" ;
+    Swedish = mkNat "suédois" "Suède" ;
 
     Belgian = mkA "belge" ;
     Flemish = mkNP (mkPN "flamand") ;
@@ -63,20 +61,17 @@ Good = prefixA (mkA "bon" "bonne" "bons" "bien") ;
 
     AWant p obj = mkCl p.name want_V2 obj ;
     ALike p item = mkCl item plaire_V2 p.name ;
-    AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
     ASpeak p lang = mkCl p.name  (mkV2 (mkV "parler")) lang ;
     ALove p q = mkCl p.name (mkV2 (mkV "aimer")) q.name ;
-    ACitizen p n = mkCl p.name n ;
     AHungry p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "faim" feminine))) ;
     AThirsty p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "soif" feminine))) ;
-    ATired p = mkCl p.name (mkA "fatiguÃ©") ;
+    ATired p = mkCl p.name (mkA "fatigué") ;
     AScared p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "peur" feminine))) ;
     AIll p = mkCl p.name (mkA "malade") ;
     AUnderstand p = mkCl p.name (mkV IrregFre.comprendre_V2) ;
     AKnow p = mkCl p.name (mkV IrregFre.savoir_V2) ;
     AWantGo p place = 
       mkCl p.name want_VV (mkVP (mkVP IrregFre.aller_V) place.to) ;
-    ABePlace p place = mkCl p.name place.at ;
     AHasName p name = mkCl p.name (mkV2 (reflV (mkV "appeler"))) name ;
     ALive p co = 
       mkCl p.name (mkVP (mkVP (mkV "habiter")) 
@@ -109,7 +104,6 @@ Good = prefixA (mkA "bon" "bonne" "bons" "bien") ;
       } ;
 
     open_A = P.mkA "ouvert" ;
-    closed_A = P.mkA "fermÃ©" ;
-
+    closed_A = P.mkA "fermé" ;
 
 }

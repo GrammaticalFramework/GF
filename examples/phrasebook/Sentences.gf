@@ -1,17 +1,42 @@
+
+-- This module contains phrases that can be defined by a functor over the
+-- resource grammar API. The phrases that are likely to have different implementations
+-- are in the module Words. But the distinction is not quite sharp; thus it may happen
+-- that the functor instantiations make exceptions.
+
 abstract Sentences = Numeral ** {
 
+-- The ontology of the phrasebook is defined by the following types.
+
   cat
-    Phrase ;
-    Sentence ; Question ; Proposition ; 
-    Object ; Item ; Kind ; Quality ; Property ;  
-    Place ; PlaceKind ; Currency ; Price ; 
-    Person ; Action ; 
-    Nationality ; Language ; Citizenship ; Country ;
-    Day ;   -- weekday type
-    Date ;  -- definite date
-    Name ;  
+    Phrase ;      -- complete phrase, the unit of translation  e.g. "Where are you?"
+    Sentence ;    -- declarative sentence                      e.g. "I am in the bar"
+    Question ;    -- question, either yes/no or wh             e.g. "where are you"
+    -- Greeting ; -- idiomatic phrase, not inflected,          e.g. "hello"
+    Proposition ; -- can be turned into sentence or question   e.g. "this pizza is good"
+    Object ;      -- the object of wanting, ordering, etc      e.g. "three pizzas"
+    Item ;        -- a single entity                           e.g. "this pizza"
+    Kind ;        -- a type of an item                         e.g. "pizza"
+    Quality ;     -- qualification of an item, can be complex  e.g. "very good"
+    Property ;    -- basic property of an item, one word       e.g. "good"
+    Place ;       -- location                                  e.g. "the bar" 
+    PlaceKind ;   -- type of location                          e.g. "bar" 
+    Currency ;    -- currency unit                             e.g. "leu"  
+    Price ;       -- number of currency units                  e.g. "eleven leu"
+    Person ;      -- agent wanting or doing something          e.g. "you" 
+    Action ;      -- proposition about a Person                e.g. "you are here"
+    Nationality ; -- complex of language, property, country    e.g. "Swedish, Sweden"
+    Language ;    -- language (can be without nationality)     e.g. "Flemish"
+    Citizenship ; -- property (can be without language)        e.g. "Belgian"
+    Country ;     -- country (can be without language)         e.g. "Belgium"
+    Day ;         -- weekday type                              e.g. "Friday"
+    Date ;        -- definite date                             e.g. "on Friday"
+    Name ;        -- name of person                            e.g. "NN"
+    -- Numeral ;  -- number expression 1 .. 999,999            e.g. "twenty"
+
+-- Many of the categories are accessible as Phrases, i.e. as translation units.
+
   fun
-    -- these phrases are formed here, not in Phrasebook, as they are functorial
     PSentence : Sentence -> Phrase ;
     PQuestion : Question -> Phrase ;
 
@@ -28,45 +53,67 @@ abstract Sentences = Numeral ** {
     PCountry  : Country -> Phrase ;
     PDay      : Day -> Phrase ;
 
-    Is       : Item -> Quality -> Proposition ;
+-- This is the way to build propositions about inanimate items.
 
-    SProp    : Proposition -> Sentence ;
-    SPropNot : Proposition -> Sentence ;
-    QProp    : Proposition -> Question ;
+    Is       : Item -> Quality -> Proposition ;  -- this pizza is good
 
-    WhereIs : Place -> Question ;
+    SProp    : Proposition -> Sentence ;         -- this pizza is good
+    SPropNot : Proposition -> Sentence ;         -- this pizza isn't good
+    QProp    : Proposition -> Question ;         -- is this pizza good
 
-    PropAction : Action -> Proposition ;
+    WherePlace  : Place -> Question ;            -- where is the bar
+    WherePerson : Person -> Question ;           -- where are you
 
-    HowMuchCost : Item -> Question ;
-    ItCost : Item -> Price -> Proposition ;
-    AmountCurrency : Numeral -> Currency -> Price ;
+-- This is the way to build propositions about persons.
 
-    ObjItem   : Item -> Object ;
-    ObjNumber : Numeral -> Kind -> Object ;
-    ObjIndef  : Kind -> Object ;
+    PropAction : Action -> Proposition ;         -- (you (are|aren't) | are you) Swedish
+
+-- Here are some general syntactic constructions.
+
+    ObjItem   : Item -> Object ;                 -- this pizza
+    ObjNumber : Numeral -> Kind -> Object ;      -- five pizzas
+    ObjIndef  : Kind -> Object ;                 -- a pizza
     
-    This, That, These, Those, The, Thes : Kind -> Item ;
-    SuchKind : Quality -> Kind -> Kind ;
-    Very : Property -> Quality ;
-    Too : Property -> Quality ;
-    PropQuality : Property -> Quality ;
+    SuchKind : Quality -> Kind -> Kind ;         -- Italian pizza
+    Very : Property -> Quality ;                 -- very Italian
+    Too  : Property -> Quality ;                 -- too Italian      
+    PropQuality : Property -> Quality ;          -- Italian
 
-    ThePlace : PlaceKind -> Place ;
+-- Determiners.
 
-    IMale, IFemale, 
-    YouFamMale, YouFamFemale, 
-    YouPolMale, YouPolFemale : Person ;
+    This, That, These, Those : Kind -> Item ;    -- this pizza,...,those pizzas
+    The, Thes : Kind -> Item ;                   -- the pizza, the pizzas
 
-    LangNat    : Nationality -> Language ;
-    CitiNat    : Nationality -> Citizenship ;
-    CountryNat : Nationality -> Country ;
-    PropCit    : Citizenship -> Property ;
+    AmountCurrency : Numeral -> Currency -> Price ;  -- five euros
+    HowMuchCost    : Item -> Question ;              -- how much does the pizza cost
+    ItCost         : Item -> Price -> Proposition ;  -- the pizza costs five euros
 
-    OnDay : Day -> Date ;
-    Today : Date ;
+    ThePlace : PlaceKind -> Place ;                  -- the bar
 
-    PersonName : Name -> Person ;
+    IMale, IFemale,                     -- I, said by man/woman (affects agreement)
+    YouFamMale, YouFamFemale,           -- familiar you, said to man/woman (affects agreement)
+    YouPolMale, YouPolFemale : Person ; -- polite you, said to man/woman (affects agreement)
+
+    LangNat    : Nationality -> Language ;    -- Swedish
+    CitiNat    : Nationality -> Citizenship ; -- Swedish
+    CountryNat : Nationality -> Country ;     -- Sweden
+    PropCit    : Citizenship -> Property ;    -- Swedish
+
+    OnDay : Day -> Date ;  -- on Friday
+    Today : Date ;         -- today
+
+    PersonName : Name -> Person ;             -- person referred by name
+    NameNN     : Name ;                       -- the name "NN"
+
 ----    NameString : String -> Name ; ---- creates ambiguities with all words
-    NameNN : Name ; -- the name "NN"
+
+-- Actions are typically language-dependent, not only lexically but also
+-- structurally. However, these ones are mostly functorial.
+
+    AHave    : Person -> Kind        -> Action ;  -- you have a pizza
+    ACitizen : Person -> Citizenship -> Action ;  -- you are Swedish
+    ABePlace : Person -> Place       -> Action ;  -- you are in the bar
+
+
+
 }

@@ -44,7 +44,6 @@ Good = mkA "bun" "bună" "buni" "bune" "bine" ;
 
     AWant p obj = mkCl p.name want_V2 obj ;
     ALike p item = mkCl p.name like_V2 item ;
-    AHave p kind = mkCl p.name have_V2 (SyntaxRon.mkNP kind) ;
     ASpeak p lang = mkCl p.name  (dirV2 (mkV "vorbi")) lang ;
     ALove p q = mkCl p.name (dirV2 (mkV "iubi")) q.name ;
     AUnderstand p = mkCl p.name (v_besch83 "înţelege") ;

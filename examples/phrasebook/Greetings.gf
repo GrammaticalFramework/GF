@@ -1,7 +1,7 @@
 abstract Greetings = {
 
 cat 
-  Greeting ;
+  Greeting ; -- idiomatic phrase, not inflected, e.g. "hello"
 
 fun
   GHello  : Greeting ;
