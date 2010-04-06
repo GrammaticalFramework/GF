@@ -42,9 +42,8 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
       Fem Sg P2 ;
     youPl8fem_Pron,
     youPol8fem_Pron =
-      mkPronoun
-        "vous" "vous" "vous" "vous" "votre" "votre" "vos"
-        Fem Pl P2 ;
+      let vous = mkPronoun "vous" "vous" "vous" "vous" "votre" "votre" "vos" Masc Pl P2
+      in {s = vous.s ; hasClit = vous.hasClit ; poss = vous.poss ; a = AgPol Fem} ;
 
   oper
     prepQue : Case -> Str = \c -> case c of {

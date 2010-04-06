@@ -39,7 +39,7 @@ concrete IdiomSpa of Idiom = CatSpa **
         (predV (verboV (estar_2 "estar"))) ;
 
     ImpPl1 vp = {s =
-      (mkImperative False P1 vp).s ! Pos ! {n = Pl ; g = Masc} --- fem
+      (mkImperative False P1 vp).s ! Pos ! Ag Masc Pl P1 ; --- fem
       } ;
 
 }

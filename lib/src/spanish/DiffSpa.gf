@@ -91,10 +91,12 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
     infForm _ _ _ _  = True ;
 
     mkImperative b p vp = {
-      s = \\pol,aag => 
+      s = \\pol,agr => 
         let 
           pe    = case b of {True => P3 ; _ => p} ;
-          agr   = aag ** {p = pe} ;
+----          agr   = aag ** {p = pe} ; 
+          aag   = verbAgr agr ; ----
+
           clpr  = <[],[],False> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
 ----e          verb  = case <aag.n, pol,pe> of {
 ----e            <Sg,Neg,P2> => (vp.s ! VPInfinit Simul clpr.p3).inf ! aag ;

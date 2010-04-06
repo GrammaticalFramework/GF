@@ -34,7 +34,7 @@ concrete IdiomFre of Idiom = CatFre **
         (predV copula) ;
 
     ImpPl1 vp = {s =
-      (mkImperative False P1 vp).s ! Pos ! {n = Pl ; g = Masc} --- fem
+      (mkImperative False P1 vp).s ! Pos ! Ag Masc Pl P1  --- fem
       } ;
 
     ImpP3 np vp = {

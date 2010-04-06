@@ -62,7 +62,8 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
       _ => VPAgrSubj
       } ;
 
-    vpAgrClit : Agr -> VPAgr = \a ->
+    vpAgrClit : Agr -> VPAgr = \a0 ->
+      let a = complAgr a0 in
       VPAgrClit a.g a.n ;
 
 ----    pronArg = pronArgGen Neg ; --- takes more space and time
@@ -118,14 +119,14 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
           } ;
 
     mkImperative b p vp = {
-      s = \\pol,aag => 
+      s = \\pol,ag => 
         let 
-          num   = if_then_else Number b Pl aag.n ;
-          agr   = {g = aag.g ; n = num ; p = p} ;
-          verb  = vp.s.s ! vImperForm agr ;
+          agr   = verbAgr ag ;
+          num   = if_then_else Number b Pl agr.n ;
+          verb  = vp.s.s ! vImperForm ag ;
           neg   = vp.neg ! pol ;
           clpr  =  <vp.clit1 ++ vp.clit2, False> ;  ---- TODO: True if clit
-          compl = vp.comp ! agr ++ vp.ext ! pol
+          compl = vp.comp ! ag ++ vp.ext ! pol
         in
         case pol of {
           Pos => verb ++ if_then_Str clpr.p2 "-" [] ++ clpr.p1 ++ compl ;

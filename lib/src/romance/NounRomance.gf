@@ -18,16 +18,20 @@ incomplete concrete NounRomance of Noun =
 
     UsePron p = p ;
 
-    PredetNP pred np = heavyNP {
-      s = \\c => pred.s ! aagr (np.a.g) (np.a.n) ! c ++ (np.s ! pred.c).ton ;
-      a = case pred.a of {PAg n => agrP3 np.a.g n ; _ => np.a} ;
-      hasClit = False
+    PredetNP pred np = 
+      let agr = complAgr np.a in
+      heavyNP {
+        s = \\c => pred.s ! agr ! c ++ (np.s ! pred.c).ton ;
+        a = case pred.a of {PAg n => agrP3 agr.g n ; _ => np.a} ;
+        hasClit = False
       } ;
 
-    PPartNP np v2 = heavyNP {
-      s = \\c => (np.s ! c).ton ++ v2.s ! VPart np.a.g np.a.n ;
-      a = np.a ;
-      hasClit = False
+    PPartNP np v2 = 
+      let agr = complAgr np.a in
+      heavyNP {
+        s = \\c => (np.s ! c).ton ++ v2.s ! VPart agr.g agr.n ;
+        a = np.a ;
+        hasClit = False
       } ;
 
     RelNP np rs = heavyNP {

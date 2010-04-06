@@ -77,8 +77,9 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
       _ => VPAgrSubj
       } ;
 
-    vpAgrClit : Agr -> VPAgr = \a ->
-      VPAgrClit a.g a.n ; --- subty
+    vpAgrClit : Agr -> VPAgr = \a0 ->
+      let a = complAgr a0 in
+      VPAgrClit a.g a.n ;
 
     pronArg = \n,p,acc,dat ->
       let 
@@ -108,10 +109,11 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
     infForm n p x y = (pronArg n p x y).p3 ;
 
     mkImperative b p vp = {
-      s = \\pol,aag => 
+      s = \\pol,agr => 
         let 
           pe    = case b of {True => P3 ; _ => p} ;
-          agr   = aag ** {p = pe} ;
+----          agr   = aag ** {p = pe} ;
+          aag   = verbAgr agr ; ----
           clpr  = <vp.clit1 ++ vp.clit2,[],False> ;  ---- TODO: True is clit 
           verb  = case <aag.n, pol,pe> of {
             <Sg,Neg,P2> => vp.s.s ! VInfin clpr.p3 ; ----  ! aag ;

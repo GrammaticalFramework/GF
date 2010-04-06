@@ -116,6 +116,18 @@ Separate concrete syntaxes.
 <CODE>DisambPhrasebook</CODE>: disambiguation grammars generating feedback phrases if
 the input language is ambiguous.
 </P>
+<P>
+Here is the module structure produced by
+</P>
+<PRE>
+    &gt; i -retain DisambPhrasebookEng.gf
+    &gt; dg -only=Phrasebook*,Sentences*,Words*,Greetings*,DiffP*,DisambPhrasebookEng
+    &gt; ! dot -Tpng _gfdepgraph.dot &gt;pgraph.png
+</PRE>
+<P></P>
+<P>
+<IMG ALIGN="middle" SRC="pgraph.png" BORDER="0" ALT="">
+</P>
 <H1>To Do</H1>
 <P>
 Improved translation interface
