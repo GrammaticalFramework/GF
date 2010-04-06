@@ -2,7 +2,6 @@ concrete SentencesIta of Sentences = NumeralIta ** SentencesI - [
   IFemale, YouFamFemale, YouPolFemale
  ] 
   with 
-    (DiffPhrasebook = DiffPhrasebookIta), 
     (Syntax = SyntaxIta), 
     (Symbolic = SymbolicIta), 
     (Lexicon = LexiconIta) ** 

@@ -3,8 +3,7 @@
 concrete WordsRon of Words = SentencesRon ** open
   SyntaxRon,
   ParadigmsRon,
-  BeschRon,
-  DiffPhrasebookRon in
+  BeschRon in
 {
 flags coding=utf8 ;
 
@@ -42,8 +41,8 @@ Good = mkA "bun" "bună" "buni" "bune" "bine" ;
 --    Romanian = SyntaxRon.mkNP (mkPN "română") ; ---- ?
 --    Swedish = mkNP (mkPN "suédois") ;
 
-    AWant p obj = mkCl p.name want_V2 obj ;
-    ALike p item = mkCl p.name like_V2 item ;
+    AWant p obj = mkCl p.name (dirV2 (lin V want_VV)) obj ;
+    ALike p item = mkCl p.name (dirV2 (v_besch71 "plăcea")) item ;
     ASpeak p lang = mkCl p.name  (dirV2 (mkV "vorbi")) lang ;
     ALove p q = mkCl p.name (dirV2 (mkV "iubi")) q.name ;
     AUnderstand p = mkCl p.name (v_besch83 "înţelege") ;
@@ -53,13 +52,15 @@ Good = mkA "bun" "bună" "buni" "bune" "bine" ;
 --    ATired p = mkCl p (mkA "stanco") ;
 --    AScared p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "paura" feminine))) ;
 
-
 {-
   GImHungry = ss "mi-e foame" ;
   GImThirsty = ss "mi-e sete" ;
   GImTired = ss "mi-e somn" ;
   GImScared = ss "mi-e frică" ;
 -}
+
+    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (v_besch18 "costa"))) ; 
+    ItCost item price = mkCl item (dirV2 (v_besch18 "costa")) price ;
 
 oper
     mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i -> {

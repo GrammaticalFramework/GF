@@ -63,12 +63,6 @@ oper
       _ => Masc 
       } ;
 
-  conjAgr : Agr -> Agr -> Agr = \a,b -> case <a,b> of {
-      <Ag g n p, Ag h m q> => Ag (conjGender g h) (conjNumber n m) (conjPerson p q) ;
-      <Ag g n p, AgPol h>  => Ag (conjGender g h) Pl (conjPerson p P2) ;
-      <AgPol h,  Ag g n p> => Ag (conjGender g h) Pl (conjPerson p P2) ;
-      <AgPol g,  AgPol h>  => AgPol (conjGender g h)
-      } ;
 
 --3 Verbs 
 --
@@ -123,6 +117,27 @@ param
 oper
   AAgr : Type = {g : Gender ; n : Number} ;
 
+  Agr : Type = {g : Gender ; n : Number ; p : Person} ;
+
+  complAgr : Agr -> {g : Gender ; n : Number} = \a -> {g = a.g ; n = a.n} ;
+
+  verbAgr : Agr -> {g : Gender ; n : Number ; p : Person} = \a -> a ;
+
+  conjAgr : Agr -> Agr -> Agr = \a,b -> 
+    {g = conjGender a.g b.g ; n = conjNumber a.n b.n ; p = conjPerson a.p b.p} ;
+
+  Ag : Gender -> Number -> Person -> Agr = \g,n,p -> {g = g ; n = n ; p = p} ;
+
+-- The imperative forms depend on number and person.
+
+  vImper : Number -> Person -> VF = \n,p -> case <n,p> of {
+    <Sg,P2> => VImper SgP2 ; 
+    <Pl,P1> => VImper PlP1 ; 
+    <Pl,P2> => VImper PlP2 ;
+    _       => VInfin False
+    } ; 
+
+{-
 param
     Agr = Ag Gender Number Person | AgPol Gender ;
 
@@ -136,6 +151,21 @@ param
       AgPol g  => {g = g ; n = Pl ; p = P2}
       } ;
 
+  conjAgr : Agr -> Agr -> Agr = \a,b -> case <a,b> of {
+      <Ag g n p, Ag h m q> => Ag (conjGender g h) (conjNumber n m) (conjPerson p q) ;
+      <Ag g n p, AgPol h>  => Ag (conjGender g h) Pl (conjPerson p P2) ;
+      <AgPol h,  Ag g n p> => Ag (conjGender g h) Pl (conjPerson p P2) ;
+      <AgPol g,  AgPol h>  => AgPol (conjGender g h)
+      } ;
+
+   vImperForm : Agr -> VF = \a -> case a of {
+        Ag _ Pl P1 => VImper PlP1 ;
+        Ag _ n  P3 => VFin (VPres Conjunct) n P3 ;
+        Ag _ Sg _  => VImper SgP2 ;
+        _          => VImper PlP2  -- covers French AgPol
+        } ;
+
+-}
 param
   RAgr = RAg {g : Gender ; n : Number} | RNoAg ; --- AAgr
   PAgr = PAg Number | PNoAg ;
@@ -158,23 +188,6 @@ oper
     } ;
 
   presInd = VPres Indic ;
-
--- The imperative forms depend on number and person.
-
-  vImper : Number -> Person -> VF = \n,p -> case <n,p> of {
-    <Sg,P2> => VImper SgP2 ; 
-    <Pl,P1> => VImper PlP1 ; 
-    <Pl,P2> => VImper PlP2 ;
-    _       => VInfin False
-    } ; 
-
-   vImperForm : Agr -> VF = \a -> case a of {
-        Ag _ Pl P1 => VImper PlP1 ;
-        Ag _ n  P3 => VFin (VPres Conjunct) n P3 ;
-        Ag _ Sg _  => VImper SgP2 ;
-        _          => VImper PlP2  -- covers French AgPol
-        } ;
-
 
 
 ---

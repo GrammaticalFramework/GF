@@ -3,7 +3,6 @@ concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [
   IFemale, YouFamFemale, YouPolFemale
  ] 
   with 
-    (DiffPhrasebook = DiffPhrasebookFre), 
     (Syntax = SyntaxFre), 
     (Symbolic = SymbolicFre), 
     (Lexicon = LexiconFre) ** 

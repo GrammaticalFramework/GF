@@ -147,7 +147,7 @@ oper
       _         => ses
       } ;
     a = Ag g n p ;
-    hasClit = True
+    hasClit = True ; isPol = False
     } ;
 
   elisPoss : Str -> Str = \s ->

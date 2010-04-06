@@ -78,6 +78,9 @@ concrete WordsEng of Words = SentencesEng **
     PropOpenDay p d = mkCl p.name (mkVP (mkVP open_Adv) d.habitual) ; 
     PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_Adv) d.habitual) ; 
 
+    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregEng.cost_V)) ; 
+    ItCost item price = mkCl item (mkV2 IrregEng.cost_V) price ;
+ 
   oper
     mkNat : Str -> Str -> {lang : NP ; prop : A ; country : NP} = \nat,co -> 
       {lang = mkNP (mkPN nat) ; prop = mkA nat ; country = mkNP (mkPN co)} ;

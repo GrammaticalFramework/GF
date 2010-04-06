@@ -3,7 +3,7 @@
 concrete WordsFin of Words = SentencesFin ** 
   open 
     SyntaxFin, ParadigmsFin, (L = LangFin), 
-    DiffPhrasebookFin, Prelude, (E = ExtraFin) in {
+    Prelude, (E = ExtraFin) in {
   lin
     Wine = mkCN (mkN "viini") ;
     Beer = mkCN (mkN "olut" "oluita") ;
@@ -61,7 +61,7 @@ concrete WordsFin of Words = SentencesFin **
     Saturday = let d = "lauantai" in mkDay (mkPN d) (d + "sin") ;
     Sunday = let d = "sunnuntai" in mkDay (mkPN d) (d + "sin") ;
 
-    AWant p obj = mkCl p.name want_V2 obj ;
+    AWant p obj = mkCl p.name (mkV2 "haluta") obj ;
     ALike p item = mkCl p.name L.like_V2 item ;
     ASpeak p lang = mkCl p.name  (mkV2 (mkV "puhua") partitive) lang ;
     ALove p q = mkCl p.name (mkV2 (mkV "rakastaa") partitive) q.name ;
@@ -85,6 +85,9 @@ concrete WordsFin of Words = SentencesFin **
     PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_Adv) d) ; 
     PropOpenDay p d = mkCl p.name (mkVP (mkVP open_Adv) d.habitual) ; 
     PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_Adv) d.habitual) ; 
+
+    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "maksaa"))) ; 
+    ItCost item price = mkCl item (mkV2 (mkV "maksaa")) price ;
 
   oper
     mkNat : PN -> PN -> A -> 

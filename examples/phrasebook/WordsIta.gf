@@ -2,7 +2,6 @@
 
 concrete WordsIta of Words = SentencesIta ** open
   SyntaxIta,
-  DiffPhrasebookIta,
   BeschIta,
   (E = ExtraIta),
   (L = LexiconIta),
@@ -60,7 +59,7 @@ Good = prefixA (mkA "buono" "buona" "buoni" "buone" "bene") ;
     Saturday = mkDay "sabato" ;
     Sunday = mkDay "domenica" ;
 
-    AWant p obj = mkCl p.name want_V2 obj ;
+    AWant p obj = mkCl p.name (mkV2 (mkV (volere_96 "volere"))) obj ;
     ALike p item = mkCl item (mkV2 (mkV (piacere_64 "piacere")) dative) p.name ;
     ASpeak p lang = mkCl p.name  (mkV2 (mkV "parlare")) lang ;
     ALove p q = mkCl p.name (mkV2 (mkV "amare")) q.name ;
@@ -86,6 +85,9 @@ Good = prefixA (mkA "buono" "buona" "buoni" "buone" "bene") ;
     PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_A) d) ; 
     PropOpenDay p d = mkCl p.name (mkVP (mkVP open_A) d.habitual) ; 
     PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
+
+    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "costare"))) ; 
+    ItCost item price = mkCl item (mkV2 (mkV "costare")) price ;
 
   oper
     mkNat : Str -> Str -> {lang : NP ; prop : A ; country : NP} = \nat,co -> 
