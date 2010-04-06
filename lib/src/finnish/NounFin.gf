@@ -64,13 +64,13 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
     UsePron p = p ** {isPron = True} ;
 
     PredetNP pred np = {
-      s = \\c => pred.s ! np.a.n ! c ++ np.s ! c ;
+      s = \\c => pred.s ! complNumAgr np.a ! c ++ np.s ! c ;
       a = np.a ;
       isPron = np.isPron  -- kaikki minun - ni
       } ;
 
     PPartNP np v2 = {
-      s = \\c => np.s ! c ++ v2.s ! PastPartPass (AN (NCase np.a.n Ess)) ;
+      s = \\c => np.s ! c ++ v2.s ! PastPartPass (AN (NCase (complNumAgr np.a) Ess)) ;
       a = np.a ;
       isPron = np.isPron  -- minun t‰‰ll‰ - ni
       } ;

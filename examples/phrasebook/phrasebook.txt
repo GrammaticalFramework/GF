@@ -16,6 +16,7 @@ History
 - 26 March 2010. Version 0.1: Eng, Fin, Fre, Ron; dedicated minibar UI.
 - 28 March. Version 0.2: Swe, Ita; cat Action; small phrases.
 - 30 March. Version 0.3: disambiguation grammar for English
+- 6 April. Version 0.4: weekdays, nationalities
 
 
 [Missing constructs missing.txt] 
@@ -28,8 +29,9 @@ History
 
 =Purpose=
 
-This phrasebook is a programme for translating touristic phrases 
-between the 15 European languages included in the [MOLTO http://www.molto-project.eu] project
+This phrasebook is a program for translating touristic phrases 
+between the 15 European languages included in the 
+[MOLTO http://www.molto-project.eu] project
 (Multilingual On-Line Translation):
 - Bulgarian, Catalan, Danish, Dutch, English,
   Finnish, French, German, Italian, Norwegian,
@@ -54,9 +56,11 @@ The source code resides in
 [``code.haskell.org/gf/examples/phrasebook/`` http://code.haskell.org/gf/examples/phrasebook/]
 
 
-Current status (28 March 2010):
+%The abstract syntax defines an [ontology of phrases ontology.html].
+
+Current status (6 April 2010):
 - available in English, Finnish, French, Italian, Romanian, Swedish
-- very small coverage
+- small coverage
 - works on web browsers calling a server
 - web service not yet released, but preliminarily available in
   [``http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html`` http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html]
@@ -71,7 +75,7 @@ Compile-time transfer: especially, in Action in Words.
 
 Quasi-incremental translation: many basic types are also used as phrases.
 
-Disambiguation, esp. by the parameters in Roles.
+Disambiguation, esp. of politeness distinctions.
 
 
 =Files=
@@ -97,19 +101,23 @@ the input language is ambiguous.
 
 =To Do=
 
-Text-based translation interface.
+Improved translation interface
+- a //to// list of languages: either //all//, or just one
+- combined text field/fridge magnet input; filter magnets by started word prefix
+- a nicer way to show disambiguation (smaller font, maybe hidden by default)
+
 
 The remaining 10 languages
 
-Disambiguation grammars for other languages than English.
+Disambiguation grammars for other languages than English
 
-Extract/construct lexica for
+Extend lexica by hand or (semi)automatically for
 - food stuff
 - languages
 - places
 
 
-Connection to Google translate, for fall-back and for comparison
+Link to Google translate, for fall-back and for comparison
 
 Feedback facility in the UI
 
@@ -145,9 +153,9 @@ Here are the steps to follow for contributors:
   + How you can open ``gf/examples/phrasebook/www/phrasebook.html`` and use your phrasebook!
 
 
-+ Don't delete anything! But you are free to correct incorrect forms.
-+ Don't change the module structure! But you are free to add a new language.
-+ Don't compromise quality to gain coverage: //non multa sed multum!// 
+- Don't delete anything! But you are free to correct incorrect forms.
+- Don't change the module structure! But you are free to add a new language.
+- Don't compromise quality to gain coverage: //non multa sed multum!// 
 
 
 

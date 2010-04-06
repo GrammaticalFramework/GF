@@ -18,7 +18,7 @@ concrete RelativeFin of Relative = CatFin ** open Prelude, ResFin, MorphoFin in 
             RAg a => a
             } ;
           cl = mkClause 
-             (subjForm {s = rp.s ! agr.n ; 
+             (subjForm {s = rp.s ! (complNumAgr agr) ; 
                         a = agr ; isPron = False} vp.sc) agr vp
         in
         cl.s ! t ! ant ! b ! SDecl ;
@@ -29,7 +29,7 @@ concrete RelativeFin of Relative = CatFin ** open Prelude, ResFin, MorphoFin in 
       s = \\t,a,p,ag => 
             let 
               cls = slash.s ! t ! a ! p ;
-              who = appCompl True p slash.c2 (rp2np ag.n rp)
+              who = appCompl True p slash.c2 (rp2np (complNumAgr ag) rp)
             in
             who ++ cls ;
       c = slash.c2.c

@@ -10,7 +10,7 @@ concrete StructuralFre of Structural = CatFre **
 lin
 
   above_Prep = {s = ["au dessus"] ; c = MorphoFre.genitive ; isDir = False} ;
-  after_Prep = mkPreposition "aprËs" ;
+  after_Prep = mkPreposition "apr√®s" ;
   all_Predet = {
     s = \\a,c => prepCase c ++ aagrForms "tout" "toute" "tous" "toutes" ! a ;
     c = Nom ;
@@ -22,7 +22,7 @@ lin
   and_Conj = {s1 = [] ; s2 = "et" ; n = Pl} ;
   because_Subj = ss ("parce" ++ elisQue) ** {m = Indic} ;
   before_Prep = mkPreposition "avant" ;
-  behind_Prep = mkPreposition "derriËre" ;
+  behind_Prep = mkPreposition "derri√®re" ;
   between_Prep = mkPreposition "entre" ;
   both7and_DConj = {s1,s2 = "et" ; n = Pl} ;
   but_PConj = ss "mais" ;
@@ -80,7 +80,7 @@ lin
   or_Conj = {s1 = [] ; s2 = "ou" ; n = Sg} ;
   otherwise_PConj = ss "autrement" ;
   part_Prep = complGen ;
-  please_Voc = ss ["s'il vous plaÓt"] ;
+  please_Voc = ss ["s'il vous pla√Æt"] ;
   possess_Prep = complGen ;
   quite_Adv = ss "assez" ;
   she_Pron = 
@@ -102,16 +102,16 @@ lin
       Pl => \\_,c => prepCase c ++ "ces"
       } ;
     sp = table {
-      Sg => \\g,c => prepCase c ++ genForms "celui-l‡" "celle-l‡" ! g ;
-      Pl => \\g,c => prepCase c ++ genForms "celui-l‡" "celle-l‡" ! g
+      Sg => \\g,c => prepCase c ++ genForms "celui-l√†" "celle-l√†" ! g ;
+      Pl => \\g,c => prepCase c ++ genForms "celui-l√†" "celle-l√†" ! g
       } ;
-    s2 = [] ---- "-l‡"
+    s2 = [] ---- "-l√†"
     } ;
 
 ---b  that_NP = makeNP ["cela"] Masc Sg ;
-  there7from_Adv = ss ["de l‡"] ;
-  there7to_Adv = ss "l‡" ; --- y
-  there_Adv = ss "l‡" ;
+  there7from_Adv = ss ["de l√†"] ;
+  there7to_Adv = ss "l√†" ; --- y
+  there_Adv = ss "l√†" ;
   therefore_PConj = ss "donc" ;
 ---b  these_NP = makeNP ["ceux-ci"] Masc Pl ;
   they_Pron = mkPronoun
@@ -132,12 +132,12 @@ lin
     } ;
 
 ---b  this_NP = pn2np (mkPN ["ceci"] Masc) ;
----b  those_NP = makeNP ["ceux-l‡"] Masc Pl ;
+---b  those_NP = makeNP ["ceux-l√†"] Masc Pl ;
   through_Prep = mkPreposition "par" ;
   too_AdA = ss "trop" ;
   to_Prep = complDat ;
   under_Prep = mkPreposition "sous" ;
-  very_AdA = ss "trËs" ;
+  very_AdA = ss "tr√®s" ;
   want_VV = mkVV (vouloir_V2 ** {lock_V = <>}) ;
   we_Pron = 
     mkPronoun "nous" "nous" "nous" "nous" "notre" "notre" "nos"
@@ -150,7 +150,7 @@ lin
     where {a = aagr Masc Pl} ;
   when_IAdv = ss "quand" ;
   when_Subj = ss "quand" ** {m = Indic} ;
-  where_IAdv = ss "o˘" ;
+  where_IAdv = ss "o√π" ;
   which_IQuant = {
     s = \\n,g,c => 
         prepCase c ++ aagrForms "quel" "quelle" "quels" "quelles" ! aagr g n
@@ -190,14 +190,14 @@ lin
   at_least_AdN = ss "au moins" ;
   at_most_AdN = ss "au plus" ;
 
-  except_Prep = mkPreposition "exceptÈ" ;
+  except_Prep = mkPreposition "except√©" ;
 
   as_CAdv = X.mkCAdv "aussi" conjThan ;
 
   have_V2 = avoir_V2 ;
   that_Subj = ss elisQue ** {m = Conjunct} ;
 
-  lin language_title_Utt = ss "franÁais" ;
+  lin language_title_Utt = ss "fran√ßais" ;
 
 }
 

@@ -159,8 +159,9 @@ concrete StructuralFin of Structural = CatFin **
   yes_Utt = ss "kyllä" ;
   youSg_Pron = mkPronoun "sinä" "sinun" "sinua" "sinuna" "sinuun"  Sg P2 ;
   youPl_Pron = mkPronoun "te" "teidän" "teitä" "teinä" "teihin"  Pl P2 ;
-  youPol_Pron = mkPronoun "te" "teidän" "teitä" "teinä" "teihin"  Pl P2 ; --- Sg
-
+  youPol_Pron = 
+    let p = mkPronoun "te" "teidän" "teitä" "teinä" "teihin"  Pl P2 in
+    {s = p.s ; a = AgPol} ;
 
 oper
   jokuPron : MorphoFin.Number => (MorphoFin.Case) => Str =

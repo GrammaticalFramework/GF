@@ -61,10 +61,10 @@ concrete IdiomFin of Idiom = CatFin **
 -- The imperative is not available in a $VP$.
 
   ImpPl1 vp = 
-    let vps = vp.s ! VIPass ! Simul ! Pos ! {n = Pl ; p = P1}
+    let vps = vp.s ! VIPass ! Simul ! Pos ! Ag Pl P1
     in
     {s = vps.fin ++ vps.inf ++ 
-         vp.s2 ! True ! Pos ! {n = Pl ; p = P1} ++ vp.ext
+         vp.s2 ! True ! Pos ! Ag Pl P1 ++ vp.ext
     } ;
 
   oper

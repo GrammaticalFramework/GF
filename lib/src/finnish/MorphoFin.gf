@@ -866,7 +866,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       NPCase Abess  => minu + ("tt" + a) ;
       NPAcc         => Predef.tk 1 minun + "t"
       } ;
-     a = {n = n ; p = p}
+     a = Ag n p
     } ; 
 
   mkDemPronoun : (_,_,_,_,_ : Str) ->  Number -> 

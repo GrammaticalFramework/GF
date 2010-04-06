@@ -15,7 +15,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 
     Cl    = {s : ResFin.Tense => Anteriority => Polarity => SType => Str} ;
     ClSlash = {s : ResFin.Tense => Anteriority => Polarity => Str ; c2 : Compl} ;
-    Imp   = {s : Polarity => Number => Str} ;
+    Imp   = {s : Polarity => Agr => Str} ;
 
 -- Question
 

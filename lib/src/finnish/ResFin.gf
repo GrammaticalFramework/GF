@@ -26,11 +26,22 @@ resource ResFin = ParamX ** open Prelude in {
           | NPossNom Number | NPossGen Number --- number needed for syntax of AdjCN
           | NPossTransl Number | NPossIllat Number ;
 
--- Agreement of $NP$ is a record. We'll add $Gender$ later.
+-- Agreement of $NP$ has number*person and the polite second ("te olette valmis").
+
+
+    Agr = Ag Number Person | AgPol ;
 
   oper
-    Agr = {n : Number ; p : Person} ;
+    complNumAgr : Agr -> Number = \a -> case a of {
+      Ag n _ => n ;
+      AgPol  => Sg
+      } ;
+    verbAgr : Agr -> {n : Number ; p : Person} = \a -> case a of {
+      Ag n p => {n = n  ; p = p} ;
+      AgPol  => {n = Pl ; p = P2}
+      } ;
 
+  oper
     NP = {s : NPForm => Str ; a : Agr ; isPron : Bool} ;
 
 --
@@ -106,7 +117,7 @@ param
 
 --2 For $Relative$
  
-    RAgr = RNoAg | RAg {n : Number ; p : Person} ;
+    RAgr = RNoAg | RAg Agr ;
 
 --2 For $Numeral$
 
@@ -116,11 +127,13 @@ param
 
   oper
     agrP3 : Number -> Agr = \n -> 
-      {n = n ; p = P3} ;
+      Ag n P3 ;
 
-    conjAgr : Agr -> Agr -> Agr = \a,b -> {
-      n = conjNumber a.n b.n ;
-      p = conjPerson a.p b.p
+    conjAgr : Agr -> Agr -> Agr = \a,b -> case <a,b> of {
+      <Ag n p, Ag m q> => Ag (conjNumber n m) (conjPerson p q) ;
+      <Ag n p, AgPol>  => Ag Pl (conjPerson p P2) ;
+      <AgPol,  Ag n p> => Ag Pl (conjPerson p P2) ;
+      _ => b 
       } ;
 
 ---
@@ -163,9 +176,10 @@ oper
     } ;
     
   predV : (Verb ** {sc : NPForm ; qp : Str}) -> VP = \verb -> {
-    s = \\vi,ant,b,agr => 
+    s = \\vi,ant,b,agr0 => 
       let
 
+        agr = verbAgr agr0 ;
         verbs = verb.s ;
         part  : Str = case vi of {
           VIPass => verbs ! PastPartPass (AN (NCase agr.n Nom)) ; 
@@ -573,9 +587,9 @@ oper
       } ;
 
   possSuffixFront : Agr -> Str = \agr -> 
-    table Agr ["ni" ; "si" ; "nsä" ; "mme" ; "nne" ; "nsä"] ! agr ;
+    table Agr ["ni" ; "si" ; "nsä" ; "mme" ; "nne" ; "nsä" ; "nne"] ! agr ;
   possSuffix : Agr -> Str = \agr -> 
-    table Agr ["ni" ; "si" ; "nsa" ; "mme" ; "nne" ; "nsa"] ! agr ;
+    table Agr ["ni" ; "si" ; "nsa" ; "mme" ; "nne" ; "nsa" ; "nne"] ! agr ;
 
 oper
   rp2np : Number -> {s : Number => NPForm => Str ; a : RAgr} -> NP = \n,rp -> {
