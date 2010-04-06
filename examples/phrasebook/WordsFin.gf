@@ -63,10 +63,8 @@ concrete WordsFin of Words = SentencesFin **
 
     AWant p obj = mkCl p.name want_V2 obj ;
     ALike p item = mkCl p.name L.like_V2 item ;
-    AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
     ASpeak p lang = mkCl p.name  (mkV2 (mkV "puhua") partitive) lang ;
     ALove p q = mkCl p.name (mkV2 (mkV "rakastaa") partitive) q.name ;
-    ACitizen p n = mkCl p.name n ;
     AHungry p = mkCl p.name have_V2 (mkNP (mkN "n‰lk‰")) ;
     AThirsty p = mkCl p.name have_V2 (mkNP (mkN "jano")) ;
     ATired p = mkCl p.name (caseV partitive (mkV "v‰sytt‰‰")) ;
@@ -75,7 +73,6 @@ concrete WordsFin of Words = SentencesFin **
     AUnderstand p = mkCl p.name (mkV "ymm‰rt‰‰") ;
     AKnow p = mkCl p.name (mkV "tiet‰‰") ;
     AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
-    ABePlace p place = mkCl p.name place.at ;
     AHasName p name = mkCl (nameOf p) name ;
     ALive p co = 
       mkCl p.name (mkVP (mkVP (mkV "asua")) (SyntaxFin.mkAdv in_Prep co)) ;

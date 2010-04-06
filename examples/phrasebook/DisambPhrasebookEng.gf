@@ -5,6 +5,7 @@ concrete DisambPhrasebookEng of Phrasebook = PhrasebookEng -
     IMale, IFemale,
     YouFamMale, YouFamFemale, 
     YouPolMale, YouPolFemale, 
+    LangNat, -- CitiNat,
     GExcuse, GExcusePol, 
     GSorry, GSorryPol, 
     GPleaseGive, GPleaseGivePol
@@ -17,6 +18,9 @@ lin
   YouFamFemale = mkP youSg_Pron "(familiar,female)" ;
   YouPolMale = mkP youPol_Pron "(polite,male)" ;
   YouPolFemale = mkP youPol_Pron "(polite,female)" ;
+
+  LangNat nat = mkNP nat.lang (ParadigmsEng.mkAdv "(language)") ;
+--  CitiNat nat = nat.prop ;
 
   GExcuse = fam "excuse me" ;
   GExcusePol = pol "excuse me" ;

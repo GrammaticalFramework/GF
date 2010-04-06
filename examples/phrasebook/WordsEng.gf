@@ -55,10 +55,8 @@ concrete WordsEng of Words = SentencesEng **
 
     AWant p obj = mkCl p.name (mkV2 (mkV "want")) obj ;
     ALike p item = mkCl p.name (mkV2 (mkV "like")) item ;
-    AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
     ASpeak p lang = mkCl p.name  (mkV2 IrregEng.speak_V) lang ;
     ALove p q = mkCl p.name (mkV2 (mkV "love")) q.name ;
-    ACitizen p n = mkCl p.name n ;
     AHungry p = mkCl p.name (mkA "hungry") ;
     AThirsty p = mkCl p.name (mkA "thirsty") ;
     ATired p = mkCl p.name (mkA "tired") ;
@@ -67,7 +65,6 @@ concrete WordsEng of Words = SentencesEng **
     AUnderstand p = mkCl p.name IrregEng.understand_V ;
     AKnow p = mkCl p.name IrregEng.know_V ;
     AWantGo p place = mkCl p.name want_VV (mkVP (mkVP IrregEng.go_V) place.to) ;
-    ABePlace p place = mkCl p.name place.at ;
     AHasName p name = mkCl (nameOf p) name ;
     ALive p co = 
       mkCl p.name (mkVP (mkVP (mkV "live")) (SyntaxEng.mkAdv in_Prep co)) ;

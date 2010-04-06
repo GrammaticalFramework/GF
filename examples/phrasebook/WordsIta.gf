@@ -62,10 +62,8 @@ Good = prefixA (mkA "buono" "buona" "buoni" "buone" "bene") ;
 
     AWant p obj = mkCl p.name want_V2 obj ;
     ALike p item = mkCl item (mkV2 (mkV (piacere_64 "piacere")) dative) p.name ;
-    AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
     ASpeak p lang = mkCl p.name  (mkV2 (mkV "parlare")) lang ;
     ALove p q = mkCl p.name (mkV2 (mkV "amare")) q.name ;
-    ACitizen p n = mkCl p.name n ;
     AHungry p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "fame" feminine))) ;
     AThirsty p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "sete" feminine))) ;
     ATired p = mkCl p.name (mkA "stanco") ;
@@ -75,7 +73,6 @@ Good = prefixA (mkA "buono" "buona" "buoni" "buone" "bene") ;
     AKnow p = mkCl p.name (mkV (sapere_78 "sapere")) ;
     AWantGo p place = 
       mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
-    ABePlace p place = mkCl p.name place.at ;
     AHasName p name = mkCl p.name (mkV2 (reflV (mkV "chiamare"))) name ;
     ALive p co = 
       mkCl p.name (mkVP (mkVP (mkV "abitare")) 

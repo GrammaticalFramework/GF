@@ -23,10 +23,8 @@ abstract Words = Sentences ** {
 
     AWant    : Person -> Object   -> Action ;
     ALike    : Person -> Item     -> Action ; 
-    AHave    : Person -> Kind     -> Action ;
     ASpeak   : Person -> Language -> Action ;
     ALove    : Person -> Person   -> Action ;
-    ACitizen : Person -> Citizenship -> Action ;
     AHungry  : Person -> Action ;
     AThirsty : Person -> Action ;
     ATired   : Person -> Action ;
@@ -35,7 +33,6 @@ abstract Words = Sentences ** {
     AUnderstand : Person -> Action ;
     AKnow    : Person -> Action ;
     AWantGo  : Person -> Place -> Action ;
-    ABePlace : Person -> Place -> Action ;
     AHasName : Person -> Name -> Action ;
     ALive    : Person -> Country -> Action ;
 
