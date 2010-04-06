@@ -166,10 +166,13 @@ lin
   youSg_Pron = mkPronoun 
     "tu" (elision "t") (elision "t") "toi" "ton" (elisPoss "t") "tes"
     Masc Sg P2 ;
-  youPl_Pron, youPol_Pron = 
+  youPl_Pron =
     mkPronoun
       "vous" "vous" "vous" "vous" "votre" "votre" "vos"
        Masc Pl P2 ;
+  youPol_Pron = 
+    let vous = mkPronoun "vous" "vous" "vous" "vous" "votre" "votre" "vos" Masc Pl P2
+    in {s = vous.s ; hasClit = vous.hasClit ; poss = vous.poss ; a = AgPol Masc} ;
 
   not_Predet = {s = \\a,c => prepCase c ++ "pas" ; c = Nom ; a = PNoAg} ;
 

@@ -97,6 +97,15 @@ Separate concrete syntaxes.
 ``DisambPhrasebook``: disambiguation grammars generating feedback phrases if
 the input language is ambiguous.
 
+Here is the module structure produced by
+```
+  > i -retain DisambPhrasebookEng.gf
+  > dg -only=Phrasebook*,Sentences*,Words*,Greetings*,DiffP*,DisambPhrasebookEng
+  > ! dot -Tpng _gfdepgraph.dot >pgraph.png
+```
+
+[pgraph.png]
+
 
 
 =To Do=

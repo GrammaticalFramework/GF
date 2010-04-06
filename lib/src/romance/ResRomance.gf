@@ -190,12 +190,13 @@ oper
 
   mkClause : Str -> Bool -> Agr -> VP -> 
       {s : Direct => RTense => Anteriority => Polarity => Mood => Str} =
-    \subj, hasClit, agr, vp -> {
+    \subj, hasClit, ag, vp -> {
       s = \\d,te,a,b,m => 
         let
           neg   = vp.neg ! b ;
-          compl = vp.comp ! agr ++ vp.ext ! b ;
+          compl = vp.comp ! ag ++ vp.ext ! b ;
 
+          agr = verbAgr ag ;
           gen = agr.g ;
           num = agr.n ;
           per = agr.p ;

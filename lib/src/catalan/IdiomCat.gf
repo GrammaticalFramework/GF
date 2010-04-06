@@ -38,7 +38,7 @@ concrete IdiomCat of Idiom = CatCat **
       } ;
 
     ImpPl1 vp = {s =
-      (mkImperative False P1 vp).s ! Pos ! {n = Pl ; g = Masc} --- fem
+      (mkImperative False P1 vp).s ! Pos ! Ag Masc Pl P1 ; --- fem
       } ;
 
     CleftAdv ad s = mkClause [] True (agrP3 Masc Sg) 

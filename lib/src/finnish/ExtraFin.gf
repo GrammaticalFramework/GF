@@ -31,9 +31,10 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     RelExistNP prep rp np = {
       s = \\t,ant,bo,ag => 
-      let cl = 
-        mkClause 
-          (\_ -> appCompl True Pos prep (rp2np ag.n rp))
+      let 
+        n = complNumAgr ag ;
+        cl = mkClause 
+          (\_ -> appCompl True Pos prep (rp2np n rp))
           np.a 
           (insertObj 
             (\\_,b,_ => np.s ! NPCase Nom) 
@@ -71,7 +72,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
     vai_Conj = {s1 = [] ; s2 = "vai" ; n = Sg} ;
 
     CompPartAP ap = {
-      s = \\agr => ap.s ! False ! NCase agr.n Part
+      s = \\agr => ap.s ! False ! NCase (complNumAgr agr) Part
       } ;
 
 } 

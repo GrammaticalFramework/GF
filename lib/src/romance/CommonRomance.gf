@@ -63,12 +63,12 @@ oper
       _ => Masc 
       } ;
 
-  conjAgr : Agr -> Agr -> Agr = \a,b -> {
-    g = conjGender a.g b.g ;
-    n = conjNumber a.n b.n ;
-    p = conjPerson a.p b.p
-    } ;
-
+  conjAgr : Agr -> Agr -> Agr = \a,b -> case <a,b> of {
+      <Ag g n p, Ag h m q> => Ag (conjGender g h) (conjNumber n m) (conjPerson p q) ;
+      <Ag g n p, AgPol h>  => Ag (conjGender g h) Pl (conjPerson p P2) ;
+      <AgPol h,  Ag g n p> => Ag (conjGender g h) Pl (conjPerson p P2) ;
+      <AgPol g,  AgPol h>  => AgPol (conjGender g h)
+      } ;
 
 --3 Verbs 
 --
@@ -122,7 +122,19 @@ param
 
 oper
   AAgr : Type = {g : Gender ; n : Number} ;
-  Agr  : Type = AAgr ** {p : Person} ;
+
+param
+    Agr = Ag Gender Number Person | AgPol Gender ;
+
+  oper
+    complAgr : Agr -> {g : Gender ; n : Number} = \a -> case a of {
+      Ag g n _ => {g = g ; n = n} ;
+      AgPol g  => {g = g ; n = Sg}  -- vous êtes fatiguée
+      } ;
+    verbAgr : Agr -> {g : Gender ; n : Number ; p : Person} = \a -> case a of {
+      Ag g n p => {g = g ; n = n  ; p = p} ;
+      AgPol g  => {g = g ; n = Pl ; p = P2}
+      } ;
 
 param
   RAgr = RAg {g : Gender ; n : Number} | RNoAg ; --- AAgr
@@ -137,7 +149,7 @@ oper
   aagr : Gender -> Number -> AAgr = \g,n ->
     {g = g ; n = n} ;
   agrP3 : Gender -> Number -> Agr = \g,n ->
-    aagr g n ** {p = P3} ;
+    Ag g n P3 ;
 
 
   vf2numpers : VF -> (Number * Person) = \v -> case v of {
@@ -156,11 +168,11 @@ oper
     _       => VInfin False
     } ; 
 
-   vImperForm : Agr -> VF = \a -> case <a.n,a.p> of {
-        <Pl,P1> => VImper PlP1 ;
-        <_, P3> => VFin (VPres Conjunct) a.n P3 ;
-        <Sg,_>  => VImper SgP2 ;
-        <Pl,_>  => VImper PlP2
+   vImperForm : Agr -> VF = \a -> case a of {
+        Ag _ Pl P1 => VImper PlP1 ;
+        Ag _ n  P3 => VFin (VPres Conjunct) n P3 ;
+        Ag _ Sg _  => VImper SgP2 ;
+        _          => VImper PlP2  -- covers French AgPol
         } ;
 
 

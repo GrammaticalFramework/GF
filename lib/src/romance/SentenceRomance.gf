@@ -10,13 +10,13 @@ incomplete concrete SentenceRomance of Sentence =
 
     ImpVP vp = {
       s = \\p,i,g => case i of {
-        ImpF n b => (mkImperative b P2 vp).s ! p ! (aagr g n)
+        ImpF n b => (mkImperative b P2 vp).s ! p ! (Ag g n P2) ---- AgPol ?
         }
       } ;
 
     SlashVP np v2 = 
       -- agreement decided afterwards: la fille qu'il a trouvée
-      {s = \\ag => 
+      {s = \\_ => 
           let 
             vp = v2
 ----e            vp = case <v2.c2.c, v2.c2.isDir> of {

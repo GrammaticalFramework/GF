@@ -6,7 +6,7 @@ incomplete concrete RelativeRomance of Relative =
   lin
 
     RelCl cl = {
-      s = \\ag,t,a,p,m => pronSuch ! {g=ag.g; n=ag.n} ++ conjThat ++ 
+      s = \\ag,t,a,p,m => pronSuch ! complAgr ag ++ conjThat ++ 
                           cl.s ! DDir ! t ! a ! p ! m ;
       c = Nom
       } ;
@@ -15,12 +15,12 @@ incomplete concrete RelativeRomance of Relative =
     RelVP rp vp = case rp.hasAgr of {
       True => {s = \\ag =>
           (mkClause
-                    (rp.s ! False ! {g = ag.g ; n = ag.n} ! Nom) False
-                    {g = rp.a.g ; n = rp.a.n ; p = P3}
+                    (rp.s ! False ! complAgr ag ! Nom) False
+                    (Ag rp.a.g rp.a.n P3)
                     vp).s ! DDir ; c = Nom} ;
       False => {s = \\ag =>
           (mkClause
-                    (rp.s ! False ! {g = ag.g ; n = ag.n} ! Nom) False
+                    (rp.s ! False ! complAgr ag ! Nom) False
                     ag
                     vp).s ! DDir ; c = Nom
          }
@@ -28,7 +28,7 @@ incomplete concrete RelativeRomance of Relative =
 
     RelSlash rp slash = {
       s = \\ag,t,a,p,m => 
-          let aag = {g = ag.g ; n = ag.n} 
+          let aag = complAgr ag
           in
           slash.c2.s ++ 
           rp.s ! False ! aag ! slash.c2.c ++ 
@@ -38,7 +38,7 @@ incomplete concrete RelativeRomance of Relative =
 
     FunRP p np rp = {
       s = \\_,a,c => (np.s ! Nom).ton ++ p.s ++ rp.s ! True ! a ! p.c ;
-      a = {g = np.a.g ; n = np.a.n} ; 
+      a = complAgr np.a ; 
       hasAgr = True
       } ;
     IdRP = {

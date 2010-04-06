@@ -10,7 +10,7 @@ incomplete concrete ConjunctionRomance of Conjunction =
     ConjAdv conj ss = conjunctDistrSS conj ss ;
 
     ConjNP conj ss = heavyNP (conjunctDistrTable Case conj ss ** {
-      a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p} ;
+      a = conjAgr (Ag Masc conj.n P3) ss.a ;
       hasClit = False
       }) ;
     ConjAP conj ss = conjunctDistrTable AForm conj ss ** {

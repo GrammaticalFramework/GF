@@ -18,7 +18,8 @@ concrete IdiomIta of Idiom = CatIta **
         (insertComplement (\\_ => ad.s) (predV copula))) ;
 
     ExistNP np = 
-      mkClause [] True (agrP3 np.a.g np.a.n) 
+      let npa = complAgr np.a in
+      mkClause [] True (agrP3 npa.g npa.n) 
         (insertClit3 (elision "ci" "c'" "ci") 
           (insertComplement (\\_ => (np.s ! Nom).ton) 
             (predV copula))) ;
@@ -43,7 +44,7 @@ concrete IdiomIta of Idiom = CatIta **
         (predV (essereV (verboV (stare_16 "stare")))) ;
 
     ImpPl1 vp = {s =
-      (mkImperative False P1 vp).s ! Pos ! {n = Pl ; g = Masc} --- fem
+      (mkImperative False P1 vp).s ! Pos ! Ag Masc Pl P1 --- fem
       } ;
 
 }

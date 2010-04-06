@@ -146,7 +146,7 @@ oper
       <Sg,Fem>  => sa ;
       _         => ses
       } ;
-    a = {g = g ; n = n ; p = p} ;
+    a = Ag g n p ;
     hasClit = True
     } ;
 
