@@ -13,6 +13,7 @@ Aarne Ranta
 #BSMALL
 
 History
+- 7 April. Added the Clone script, applied to the rest of MOLTO languages.
 - 6 April. Version 0.4: weekdays, nationalities
 - 30 March. Version 0.3: disambiguation grammar for English
 - 28 March. Version 0.2: Swe, Ita; cat Action; small phrases.
@@ -56,9 +57,10 @@ The source code resides in
 [``code.haskell.org/gf/examples/phrasebook/`` http://code.haskell.org/gf/examples/phrasebook/]
 
 
-Current status (6 April 2010):
-- available in English, Finnish, French, Italian, Romanian, Swedish
+Current status (7 April 2010):
 - small coverage
+- reasonable for English, Finnish, French, Italian, Romanian, Swedish
+- almost just cloned for the rest of MOLTO languages
 - works on web browsers calling a server
 - web service not yet released, but preliminarily available in
   [``http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html`` http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html]
@@ -121,11 +123,11 @@ Improved translation interface
 - a nicer way to show disambiguation (smaller font, maybe hidden by default)
 
 
-The remaining 10 languages
+Complete the missing words and phrases
 
 Disambiguation grammars for other languages than English
 
-Extend lexica by hand or (semi)automatically for
+Extend the abstract lexicon in ``Words`` by hand or (semi)automatically for
 - food stuff
 - languages
 - places
