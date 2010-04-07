@@ -1,4 +1,4 @@
--- (c) 2009 Ramona Enache and Aarne Ranta under LGPL
+-- (c) 2009 Aarne Ranta and Olga Caprotti under LGPL
 
 concrete WordsIta of Words = SentencesIta ** open
   SyntaxIta,
@@ -10,72 +10,82 @@ concrete WordsIta of Words = SentencesIta ** open
 
 lin
 
-Wine = mkCN (mkN "vino") ;
-    Beer = mkCN (mkN "birra") ;
-    Water = mkCN (mkN "acqua") ;
+-- kinds
+
+    Apple = mkCN L.apple_N ;
+    Beer = mkCN L.beer_N ;
+    Bread = mkCN L.bread_N ;
+    Cheese = mkCN (mkN "formaggio") ;
     Coffee = mkCN (mkN "caffè") ;
-   Tea = mkCN (mkN "tè") ;
+    Fish = mkCN L.fish_N ;
+    Milk = mkCN L.milk_N ;
+    Pizza = mkCN (mkN "pizza") ;
+    Salt = mkCN L.salt_N ;
+    Tea = mkCN (mkN "tè") ;
+    Water = mkCN L.water_N ;
+    Wine = mkCN L.wine_N ;
 
-Cheese = mkCN (mkN "formaggio") ;
-Fish = mkCN (mkN "pesce") ;
-Pizza = mkCN (mkN "pizza") ;
+-- properties
 
-Fresh = mkA "fresco" ;
-Warm = mkA "caldo" ;
-Expensive = mkA "caro" ;
-Delicious = mkA "delizioso" ;
-Boring = mkA "noioso" ;
-Good = prefixA (mkA "buono" "buona" "buoni" "buone" "bene") ;
+    Bad = L.bad_A ;
+    Boring = mkA "noioso" ;
+    Cold = L.cold_A ;
+    Delicious = mkA "delizioso" ;
+    Expensive = mkA "caro" ;
+    Fresh = mkA "fresco" ;
+    Good = L.good_A ;
+    Warm = L.warm_A ;
 
-    Restaurant = mkPlace (mkN "ristorante") P.in_Prep ;
-    Bar = mkPlace (mkN "bar") P.in_Prep ;
-    Toilet = mkPlace (mkN "bagno") P.in_Prep ;
-    Museum = mkPlace (mkN "museo") P.in_Prep ;
+-- places
+
     Airport = mkPlace (mkN "aeroporto") dative ;
-    Station = mkPlace (mkN "stazione" feminine) dative ;
-    Hospital = mkPlace (mkN "ospedale") P.in_Prep ;
+    Bar = mkPlace (mkN "bar") P.in_Prep ;
     Church = mkPlace (mkN "chiesa") P.in_Prep ;
+    Hospital = mkPlace (mkN "ospedale") P.in_Prep ;
+    Museum = mkPlace (mkN "museo") P.in_Prep ;
+    Restaurant = mkPlace (mkN "ristorante") P.in_Prep ;
+    Station = mkPlace (mkN "stazione" feminine) dative ;
+    Toilet = mkPlace (mkN "bagno") P.in_Prep ;
 
-    Euro = mkCN (mkN "euro" "euro" masculine) ;
+-- currencies
+
+    DanishCrown = mkCN (mkA "danese") (mkN "corona") ;
     Dollar = mkCN (mkN "dollar") ;
+    Euro = mkCN (mkN "euro" "euro" masculine) ;
     Lei = mkCN (mkN "lei") ; ---- ?
 
+-- nationalities
+
+    Belgian = mkA "belgo" ;
+    Belgium = mkNP (mkPN "Belgio") ;
     English = mkNat "inglese" "Inghilterra" ;
     Finnish = mkNat "finlandese" "Finlandia" ;
+    Flemish = mkNP (mkPN "fiammingo") ;
     French = mkNat "francese" "Francia" ; 
     Italian = mkNat "italiano" "Italia" ;
     Romanian = mkNat "rumeno" "Romania" ;
     Swedish = mkNat "svedese" "Svezia" ;
 
-    Belgian = mkA "belgo" ;
-    Flemish = mkNP (mkPN "fiammingo") ;
-    Belgium = mkNP (mkPN "Belgio") ;
+-- actions
 
-    Monday = mkDay "lunedì" ;
-    Tuesday = mkDay "martedì" ;
-    Wednesday = mkDay "mercoledì" ;
-    Thursday = mkDay "giovedì" ;
-    Friday = mkDay "venerdì" ;
-    Saturday = mkDay "sabato" ;
-    Sunday = mkDay "domenica" ;
-
-    AWant p obj = mkCl p.name (mkV2 (mkV (volere_96 "volere"))) obj ;
-    ALike p item = mkCl item (mkV2 (mkV (piacere_64 "piacere")) dative) p.name ;
-    ASpeak p lang = mkCl p.name  (mkV2 (mkV "parlare")) lang ;
-    ALove p q = mkCl p.name (mkV2 (mkV "amare")) q.name ;
+    AHasName p name = mkCl p.name (mkV2 (reflV (mkV "chiamare"))) name ;
     AHungry p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "fame" feminine))) ;
+    AIll p = mkCl p.name (mkA "malato") ;
+    AKnow p = mkCl p.name (mkV (sapere_78 "sapere")) ;
+    ALike p item = mkCl item (mkV2 (mkV (piacere_64 "piacere")) dative) p.name ;
+    ALive p co = 
+      mkCl p.name (mkVP (mkVP (mkV "abitare")) (SyntaxIta.mkAdv P.in_Prep co)) ;
+    ALove p q = mkCl p.name (mkV2 (mkV "amare")) q.name ;
+    AScared p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "paura" feminine))) ;
+    ASpeak p lang = mkCl p.name  (mkV2 (mkV "parlare")) lang ;
     AThirsty p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "sete" feminine))) ;
     ATired p = mkCl p.name (mkA "stanco") ;
-    AScared p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "paura" feminine))) ;
-    AIll p = mkCl p.name (mkA "malato") ;
     AUnderstand p = mkCl p.name (mkV "capire") ;
-    AKnow p = mkCl p.name (mkV (sapere_78 "sapere")) ;
-    AWantGo p place = 
-      mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
-    AHasName p name = mkCl p.name (mkV2 (reflV (mkV "chiamare"))) name ;
-    ALive p co = 
-      mkCl p.name (mkVP (mkVP (mkV "abitare")) 
-        (SyntaxIta.mkAdv P.in_Prep co)) ;
+    AWant p obj = mkCl p.name (mkV2 (mkV (volere_96 "volere"))) obj ;
+    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
+
+
+-- miscellaneous
 
     QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name (reflV (mkV "chiamare")))) ;
 
@@ -88,6 +98,18 @@ Good = prefixA (mkA "buono" "buona" "buoni" "buone" "bene") ;
 
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "costare"))) ; 
     ItCost item price = mkCl item (mkV2 (mkV "costare")) price ;
+
+-- week days
+
+    Monday = mkDay "lunedì" ;
+    Tuesday = mkDay "martedì" ;
+    Wednesday = mkDay "mercoledì" ;
+    Thursday = mkDay "giovedì" ;
+    Friday = mkDay "venerdì" ;
+    Saturday = mkDay "sabato" ;
+    Sunday = mkDay "domenica" ;
+
+-- auxiliaries
 
   oper
     mkNat : Str -> Str -> {lang : NP ; prop : A ; country : NP} = \nat,co -> 

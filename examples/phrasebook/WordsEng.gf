@@ -5,42 +5,38 @@ concrete WordsEng of Words = SentencesEng **
       SyntaxEng, ParadigmsEng, (L = LexiconEng), (P = ParadigmsEng), 
       IrregEng, Prelude in {
   lin
+
+-- kinds
+
     Apple = mkCN L.apple_N ;
     Beer = mkCN L.beer_N ;
     Bread = mkCN L.bread_N ;
-    Milk = mkCN L.milk_N ;
-    Salt = mkCN L.salt_N ;
-    Water = mkCN L.water_N ;
-    Wine = mkCN L.wine_N ;
-    Coffee = mkCN (mkN "coffee") ;
-    Tea = mkCN (mkN "tea") ;
-    Pizza = mkCN (mkN "pizza") ;
     Cheese = mkCN (mkN "cheese") ;
     Chicken = mkCN (mkN "chicken") ;
-    Meat = mkCN (mkN "meat") ;
+    Coffee = mkCN (mkN "coffee") ;
     Fish = mkCN L.fish_N ;
+    Meat = mkCN (mkN "meat") ;
+    Milk = mkCN L.milk_N ;
+    Pizza = mkCN (mkN "pizza") ;
+    Salt = mkCN L.salt_N ;
+    Tea = mkCN (mkN "tea") ;
+    Water = mkCN L.water_N ;
+    Wine = mkCN L.wine_N ;
 
-    Fresh = mkA "fresh" ;
-    Warm = L.warm_A ;
-    Expensive = mkA "expensive" ;
-    Delicious = mkA "delicious" ;
-    Boring = mkA "boring" ;
-    Good = L.good_A ;
-    Bad = L.bad_A ;
-    Cold = L.cold_A ;
-    Cheap = mkA "cheap" ;
-    Suspect = mkA "suspect" ;
+-- properties
 
-    Fresh = mkA "fresh" ;
-    Warm = L.warm_A ;
-    Expensive = mkA "expensive" ;
-    Delicious = mkA "delicious" ;
-    Boring = mkA "boring" ;
-    Good = L.good_A ;
     Bad = L.bad_A ;
-    Cold = L.cold_A ;
+    Boring = mkA "boring" ;
     Cheap = mkA "cheap" ;
+    Cold = L.cold_A ;
+    Delicious = mkA "delicious" ;
+    Expensive = mkA "expensive" ;
+    Fresh = mkA "fresh" ;
+    Good = L.good_A ;
     Suspect = mkA "suspect" ;
+    Warm = L.warm_A ;
+
+-- places
 
     Airport = mkPlace "airport" "at" ;
     Bar = mkPlace "bar" "in" ;
@@ -58,11 +54,15 @@ concrete WordsEng of Words = SentencesEng **
     Toilet = mkPlace "toilet" "in" ;
     University = mkPlace "university" "at" ;
 
+-- currencies
+
     DanishCrown = mkCN (mkA "Danish") (mkN "crown") ;
     Dollar = mkCN (mkN "dollar") ;
     Euro = mkCN (mkN "euro" "euros") ; -- to prevent euroes
     Lei = mkCN (mkN "leu" "lei") ;
     SwedishCrown = mkCN (mkA "Swedish") (mkN "crown") ;
+
+-- nationalities
 
     Belgian = mkA "Belgian" ;
     Belgium = mkNP (mkPN "Belgium") ;
@@ -73,6 +73,8 @@ concrete WordsEng of Words = SentencesEng **
     Italian = mkNat "Italian" "Italy" ;
     Romanian = mkNat "Romanian" "Romania" ;
     Swedish = mkNat "Swedish" "Sweden" ;
+
+-- actions
 
     AHasName p name = mkCl (nameOf p) name ;
     AHungry p = mkCl p.name (mkA "hungry") ;
@@ -89,6 +91,8 @@ concrete WordsEng of Words = SentencesEng **
     AWant p obj = mkCl p.name (mkV2 (mkV "want")) obj ;
     AWantGo p place = mkCl p.name want_VV (mkVP (mkVP IrregEng.go_V) place.to) ;
 
+-- miscellaneous
+
     QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
 
     PropOpen p = mkCl p.name open_Adv ;
@@ -101,6 +105,8 @@ concrete WordsEng of Words = SentencesEng **
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregEng.cost_V)) ; 
     ItCost item price = mkCl item (mkV2 IrregEng.cost_V) price ;
 
+-- week days
+
     Monday = mkDay "Monday" ;
     Tuesday = mkDay "Tuesday" ;
     Wednesday = mkDay "Wednesday" ;
@@ -109,6 +115,8 @@ concrete WordsEng of Words = SentencesEng **
     Saturday = mkDay "Saturday" ;
     Sunday = mkDay "Sunday" ;
  
+-- auxiliaries
+
   oper
     mkNat : Str -> Str -> {lang : NP ; prop : A ; country : NP} = \nat,co -> 
       {lang = mkNP (mkPN nat) ; prop = mkA nat ; country = mkNP (mkPN co)} ;
