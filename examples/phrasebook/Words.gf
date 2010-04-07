@@ -1,42 +1,97 @@
 -- (c) 2009 Aarne Ranta under LGPL
 
 abstract Words = Sentences ** {
+
   fun
-    Wine, Beer, Water, Coffee, Tea : Kind ; 
-    Cheese, Fish, Pizza : Kind ;
-    Fresh, Warm, 
-      Expensive, Delicious, Boring, Good : Property ;
 
-    Bar, Restaurant, Toilet, 
-      Museum, Airport, Station, Hospital, Church : PlaceKind ;
+-- kinds of items (so far mostly food stuff)
 
-    Euro, Dollar, Lei : Currency ;
+    Apple : Kind ;
+    Beer : Kind ;
+    Bread : Kind ; 
+    Cheese : Kind ;
+    Chicken : Kind ; 
+    Coffee : Kind ; 
+    Fish : Kind ; 
+    Meat : Kind ;
+    Milk : Kind ; 
+    Pizza : Kind ; 
+    Salt : Kind ; 
+    Tea : Kind ; 
+    Water : Kind ; 
+    Wine : Kind ;
 
-    English, Finnish, French, Italian, Romanian, Swedish : Nationality ;
+-- properties of kinds (so far mostly of food)
+
+    Bad : Property ;
+    Boring : Property ;
+    Cheap : Property ; 
+    Cold : Property ; 
+    Delicious : Property ;  
+    Expensive : Property ; 
+    Fresh : Property ; 
+    Good : Property ;
+    Suspect : Property ;
+    Warm : Property ; 
+
+-- kinds of places
+
+    Airport : PlaceKind ;
+    Bar : PlaceKind ;
+    Cinema : PlaceKind ;
+    Church : PlaceKind ;
+    Hospital : PlaceKind ;
+    Hotel : PlaceKind ;
+    Museum : PlaceKind ;
+    Park : PlaceKind ;
+    Restaurant : PlaceKind ;
+    School : PlaceKind ;
+    Shop : PlaceKind ;
+    Station : PlaceKind ;
+    Theatre : PlaceKind ; 
+    Toilet : PlaceKind ; 
+    University : PlaceKind ;
+
+-- currency units
+
+    DanishCrown : Currency ;
+    Dollar : Currency ; 
+    Euro : Currency ;
+    Lei : Currency ;
+    SwedishCrown : Currency ;
+
+-- nationalities, countries, languages, citizenships
+
     Belgian : Citizenship ;
-    Flemish : Language ;
     Belgium : Country ;
+    English : Nationality ;
+    Finnish : Nationality ;
+    Flemish : Language ;
+    French : Nationality ;
+    Italian : Nationality ;
+    Romanian : Nationality ;
+    Swedish : Nationality ;
 
-    Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday : Day ;
+-- actions (which can be expressed by different structures in different languages)
 
--- actions can be expressed by different structures in different languages
-
-    AWant    : Person -> Object   -> Action ;
-    ALike    : Person -> Item     -> Action ; 
-    ASpeak   : Person -> Language -> Action ;
-    ALove    : Person -> Person   -> Action ;
-    AHungry  : Person -> Action ;
-    AThirsty : Person -> Action ;
-    ATired   : Person -> Action ;
-    AIll     : Person -> Action ;
-    AScared  : Person -> Action ;
+    AHasName    : Person -> Name -> Action ;
+    AHungry     : Person -> Action ;
+    AIll        : Person -> Action ;
+    AKnow       : Person -> Action ;
+    ALike       : Person -> Item     -> Action ; 
+    ALive       : Person -> Country -> Action ;
+    ALove       : Person -> Person   -> Action ;
+    AScared     : Person -> Action ;
+    ASpeak      : Person -> Language -> Action ;
+    AThirsty    : Person -> Action ;
+    ATired      : Person -> Action ;
     AUnderstand : Person -> Action ;
-    AKnow    : Person -> Action ;
-    AWantGo  : Person -> Place -> Action ;
-    AHasName : Person -> Name -> Action ;
-    ALive    : Person -> Country -> Action ;
+    AWant       : Person -> Object   -> Action ;
+    AWantGo     : Person -> Place -> Action ;
 
-    QWhatName : Person -> Question ;
+-- miscellaneous phrases
+
+    QWhatName      : Person -> Question ;
 
     PropOpen       : Place -> Proposition ;
     PropClosed     : Place -> Proposition ;
@@ -47,5 +102,9 @@ abstract Words = Sentences ** {
 
     HowMuchCost    : Item -> Question ;              -- how much does the pizza cost
     ItCost         : Item -> Price -> Proposition ;  -- the pizza costs five euros
+
+-- week days
+
+    Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday : Day ;
 
 }

@@ -117,7 +117,6 @@ fun
   friend_N : N ;
   fruit_N : N ;
   full_A : A ;
-  fun
   fun_AV : A ;
   garden_N : N ;
   girl_N : N ;

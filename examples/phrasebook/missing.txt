@@ -1,5 +1,4 @@
 DisambPhrasebookEng :
-DisambPhrasebookRon : AHasName AHungry AIll AKnow ALive AScared AThirsty ATired AWantGo Airport Belgian Belgium Church Coffee English Finnish Flemish French Friday GExcusePol GPleaseGivePol GSorryPol Hospital Italian Monday Museum PropClosed PropClosedDate PropClosedDay PropOpen PropOpenDate PropOpenDay QWhatName Romanian Saturday Station Sunday Swedish Tea Thursday Tuesday Wednesday
 PhrasebookEng :
 PhrasebookFin :
 PhrasebookFre :
