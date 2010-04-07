@@ -13,7 +13,7 @@ Aarne Ranta
 #BSMALL
 
 History
-- 7 April. Added the Clone script, applied to the rest of MOLTO languages.
+- 7 April. Added the Clone script, applied to initiate the rest of MOLTO languages.
 - 6 April. Version 0.4: weekdays, nationalities
 - 30 March. Version 0.3: disambiguation grammar for English
 - 28 March. Version 0.2: Swe, Ita; cat Action; small phrases.
@@ -58,8 +58,8 @@ The source code resides in
 
 
 Current status (7 April 2010):
-- small coverage
-- reasonable for English, Finnish, French, Italian, Romanian, Swedish
+- small coverage in abstract syntax
+- reasonable implementations for English, Finnish, French, Italian, Romanian, Swedish
 - almost just cloned for the rest of MOLTO languages
 - works on web browsers calling a server
 - web service not yet released, but preliminarily available in
@@ -80,10 +80,11 @@ Disambiguation, esp. of politeness distinctions.
 
 =Ontology=
 
-The abstract syntax defines the **ontology** behind the phrasebook. The ontology
-consists of the following **categories**. Some explanations can be found in the
-abstract syntax file
-[``Sentences.gf`` http://code.haskell.org/gf/examples/phrasebook/Sentences.gf].
+The abstract syntax defines the **ontology** behind the phrasebook. 
+Some explanations can be found in the abstract syntax files
+[``Sentences.gf`` http://code.haskell.org/gf/examples/phrasebook/Sentences.gf]
+and
+[``Words.gf`` http://code.haskell.org/gf/examples/phrasebook/Words.gf].
 
 
 

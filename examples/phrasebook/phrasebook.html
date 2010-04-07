@@ -17,6 +17,7 @@
 History
 </P>
 <UL>
+<LI>7 April. Added the Clone script, applied to initiate the rest of MOLTO languages.
 <LI>6 April. Version 0.4: weekdays, nationalities
 <LI>30 March. Version 0.3: disambiguation grammar for English
 <LI>28 March. Version 0.2: Swe, Ita; cat Action; small phrases.
@@ -69,11 +70,12 @@ The source code resides in
 <A HREF="http://code.haskell.org/gf/examples/phrasebook/"><CODE>code.haskell.org/gf/examples/phrasebook/</CODE></A>
 </P>
 <P>
-Current status (6 April 2010):
+Current status (7 April 2010):
 </P>
 <UL>
-<LI>available in English, Finnish, French, Italian, Romanian, Swedish
-<LI>small coverage
+<LI>small coverage in abstract syntax
+<LI>reasonable implementations for English, Finnish, French, Italian, Romanian, Swedish
+<LI>almost just cloned for the rest of MOLTO languages
 <LI>works on web browsers calling a server
 <LI>web service not yet released, but preliminarily available in
   <A HREF="http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html"><CODE>http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html</CODE></A>
@@ -94,10 +96,11 @@ Disambiguation, esp. of politeness distinctions.
 </P>
 <H1>Ontology</H1>
 <P>
-The abstract syntax defines the <B>ontology</B> behind the phrasebook. The ontology
-consists of the following <B>categories</B>. Some explanations can be found in the
-abstract syntax file
-<A HREF="http://code.haskell.org/gf/examples/phrasebook/Sentences.gf"><CODE>Sentences.gf</CODE></A>.
+The abstract syntax defines the <B>ontology</B> behind the phrasebook. 
+Some explanations can be found in the abstract syntax files
+<A HREF="http://code.haskell.org/gf/examples/phrasebook/Sentences.gf"><CODE>Sentences.gf</CODE></A>
+and
+<A HREF="http://code.haskell.org/gf/examples/phrasebook/Words.gf"><CODE>Words.gf</CODE></A>.
 </P>
 <H1>Files</H1>
 <P>
@@ -143,13 +146,13 @@ Improved translation interface
 </UL>
 
 <P>
-The remaining 10 languages
+Complete the missing words and phrases
 </P>
 <P>
 Disambiguation grammars for other languages than English
 </P>
 <P>
-Extend lexica by hand or (semi)automatically for
+Extend the abstract lexicon in <CODE>Words</CODE> by hand or (semi)automatically for
 </P>
 <UL>
 <LI>food stuff

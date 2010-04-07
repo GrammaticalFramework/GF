@@ -2,7 +2,7 @@
 
 concrete PhrasebookCat of Phrasebook = 
   GreetingsCat,
-  WordsIta
+  WordsCat
   ** open 
     SyntaxCat,
     Prelude in {
