@@ -19,6 +19,11 @@ concrete ConjunctionBul of Conjunction =
       a = {gn = conjGenNum (gennum (AMasc NonHuman) conj.n) ss.a.gn; p = ss.a.p}
       } ;
 
+    ---- RS rules by AR 7/4/2010 to make API compile
+    ConjRS conj ss = {
+      s = \\role => (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!role
+      } ;
+
     ConjAP conj ss = {
       s     = \\aform => (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!aform;
       adv   =            (linCoordSep [])!conj.distr!conj.conj++ss.adv!conj.distr!conj.conj;
@@ -39,6 +44,11 @@ concrete ConjunctionBul of Conjunction =
       {s = \\d,t,role=>x.s!role++(linCoordSep comma)!d!t++xs.s!d!t!role; 
        a = conjAgr xs.a x.a} ;
 
+    BaseRS x y =
+      {s = \\d,t,role=>x.s!role++linCoord!t++y.s!role} ;
+    ConsRS x xs =
+      {s = \\d,t,role=>x.s!role++(linCoordSep comma)!d!t++xs.s!d!t!role} ;
+
     BaseAP x y =
       {s  = \\d,t,aform=>x.s!aform++linCoord!t++y.s!aform; 
        adv= \\d,t      =>x.adv    ++linCoord!t++y.adv;
@@ -52,5 +62,6 @@ concrete ConjunctionBul of Conjunction =
     [S] = {s : Bool => Bool => Str} ;
     [Adv] = {s : Bool => Bool => Str} ;
     [NP] = {s : Bool => Bool => Role  => Str; a : Agr} ;
+    [RS] = {s : Bool => Bool => Agr   => Str} ;
     [AP] = {s : Bool => Bool => AForm => Str; adv : Bool => Bool => Str; isPre : Bool} ;
 }
