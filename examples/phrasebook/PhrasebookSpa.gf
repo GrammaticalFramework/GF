@@ -2,7 +2,7 @@
 
 concrete PhrasebookSpa of Phrasebook = 
   GreetingsSpa,
-  WordsIta
+  WordsSpa
   ** open 
     SyntaxSpa,
     Prelude in {
