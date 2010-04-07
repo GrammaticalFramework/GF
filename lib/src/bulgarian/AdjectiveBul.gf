@@ -27,6 +27,13 @@ concrete AdjectiveBul of Adjective = CatBul ** open ResBul, Prelude in {
 
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
+---- just to make the API compile. AR 7/4/2010
+    CAdvAP ad ap np = {
+      s = \\a => ad.s ++ ap.s ! a ++ ad.sn ++ np.s ! RObj Acc ; 
+      adv =      ad.s ++ ap.adv ++ ad.sn ++ np.s ! RObj Acc ; 
+      isPre = False
+      } ;
+
     ComplA2 a np = {
       s = \\aform => a.s ! aform ++ a.c2 ++ np.s ! RObj Acc ; 
       adv = a.adv ++ a.c2 ++ np.s ! RObj Acc ; 

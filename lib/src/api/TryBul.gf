@@ -1,6 +1,6 @@
 --# -path=.:alltenses:prelude
 
-resource TryBul = SyntaxBul, LexiconBul, ParadigmsBul - [mkAdv] ** 
+resource TryBul = SyntaxBul, LexiconBul, ParadigmsBul - [mkAdv,mkIAdv] ** 
   open (P = ParadigmsBul) in {
 
 oper
