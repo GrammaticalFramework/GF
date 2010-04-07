@@ -1,34 +1,29 @@
 concrete GreetingsFre of Greetings = open Prelude in {
 
-flags coding = utf8 ;
-
 lincat 
   Greeting = SS ;
 
 lin 
-  GHello = ss "salut" ;
-  GThanks = ss "merci" ;
-  GHowAreYou = ss "comment Ã§a va" ;
-  GPleaseGive = ss "s'il te plaÃ®t" ;
-  GPleaseGivePol = ss "s'il vous plaÃ®t" ;
+  GBye = ss "au revoir" ;
+  GCheers = ss "santé" ;
+  GDamn = ss "maudit" ;
   GExcuse = ss "excuse-moi" ;
   GExcusePol = ss "excusez-moi" ;
-  GSorry, GSorryPol = ss "pardon" ;
-  GGoodbye = ss "au revoir" ;
-  GBye = ss "au revoir" ;
-  GNiceToMeetYou = ss "enchantÃ©" ;
-  GSeeYouSoon = ss "Ã  bientÃ´t" ;
-  GHelp = ss "au secours" ;
-  GLookOut = ss "attention" ;
-  GGoodMorning = ss "bonjour" ;
   GGoodDay = ss "bonjour" ;
   GGoodEvening = ss "bon soir" ;
+  GGoodMorning = ss "bonjour" ;
   GGoodNight = ss "bonne nuit" ;
+  GGoodbye = ss "au revoir" ;
+  GHello = ss "salut" ;
+  GHelp = ss "au secours" ;
+  GHowAreYou = ss "comment ça va" ;
+  GLookOut = ss "attention" ;
+  GNiceToMeetYou = ss "enchanté" ;
+  GPleaseGive = ss "s'il te plaît" ;
+  GPleaseGivePol = ss "s'il vous plaît" ;
+  GSeeYouSoon = ss "à bientôt" ;
+  GSorry, GSorryPol = ss "pardon" ;
+  GThanks = ss "merci" ;
   GTheCheck = ss "l'addition" ;
-  GCheers = ss "santÃ©" ;
-
-  GYes = ss "oui" ; ---- si
-  GNo = ss "non" ;
-
 
 }

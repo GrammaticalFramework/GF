@@ -1,33 +1,27 @@
 concrete GreetingsFin of Greetings = open Prelude in {
 
-flags coding=utf8 ;
-
 lincat 
   Greeting, Politeness = SS ;
 
 lin 
-  GHello = ss "hei" ;
-  GThanks = ss "kiitos" ;
-  GHowAreYou = ss "mit√§ kuuluu" ;
-  GPleaseGive = ss "ole hyv√§" ;
-  GPleaseGivePol = ss "olkaa hyv√§" ;
-  GExcuse, GExcusePol = ss "anteeksi" ;
-  GSorry, GSorryPol = ss "anteeksi" ;
-  GGoodbye = ss "n√§kemiin" ;
   GBye = ss "hei hei" ;
-  GNiceToMeetYou = ss "hauska tutustua" ;
-  GSeeYouSoon = ss "n√§hd√§√§n pian" ;
-  GHelp = ss "apua" ;
-  GLookOut = ss "varo" ;
-  GGoodMorning = ss "hyv√§√§ huomenta" ;
-  GGoodDay = ss "hyv√§√§ p√§iv√§√§" ;
-  GGoodEvening = ss "hyv√§√§ iltaa" ;
-  GGoodNight = ss "hyv√§√§ y√∂t√§" ;
-  GTheCheck = ss "lasku" ;
   GCheers = ss "terveydeksi" ;
-
-  GYes = ss "kyll√§" ;
-  GNo = ss "ei" ;
-
-
+  GDamn = ss "hitto" ;
+  GExcuse, GExcusePol = ss "anteeksi" ;
+  GGoodDay = ss "hyv‰‰ p‰iv‰‰" ;
+  GGoodEvening = ss "hyv‰‰ iltaa" ;
+  GGoodMorning = ss "hyv‰‰ huomenta" ;
+  GGoodNight = ss "hyv‰‰ yˆt‰" ;
+  GGoodbye = ss "n‰kemiin" ;
+  GHello = ss "hei" ;
+  GHelp = ss "apua" ;
+  GHowAreYou = ss "mit‰ kuuluu" ;
+  GLookOut = ss "varo" ;
+  GNiceToMeetYou = ss "hauska tutustua" ;
+  GPleaseGive = ss "ole hyv‰" ;
+  GPleaseGivePol = ss "olkaa hyv‰" ;
+  GSeeYouSoon = ss "n‰hd‰‰n pian" ;
+  GSorry, GSorryPol = ss "anteeksi" ;
+  GThanks = ss "kiitos" ;
+  GTheCheck = ss "lasku" ;
 }

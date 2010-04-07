@@ -53,6 +53,8 @@ abstract Sentences = Numeral ** {
     PCountry  : Country -> Phrase ;
     PDay      : Day -> Phrase ;
 
+    PYes, PNo : Phrase ;
+
 -- This is the way to build propositions about inanimate items.
 
     Is       : Item -> Quality -> Proposition ;  -- this pizza is good

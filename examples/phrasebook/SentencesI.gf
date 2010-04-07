@@ -45,6 +45,9 @@ incomplete concrete SentencesI of Sentences = Numeral **
     PCitizenship x = mkPhrase (mkUtt (mkAP x)) ;
     PDay d = mkPhrase (mkUtt d.name) ;
     
+    PYes = mkPhrase yes_Utt ;
+    PNo = mkPhrase no_Utt ;
+
     Is = mkCl ;
 
     SProp = mkS ;

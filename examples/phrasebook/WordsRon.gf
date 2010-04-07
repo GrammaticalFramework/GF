@@ -3,36 +3,50 @@
 concrete WordsRon of Words = SentencesRon ** open
   SyntaxRon,
   ParadigmsRon,
-  BeschRon in
-{
-flags coding=utf8 ;
+  (L = LexiconRon),
+  BeschRon in {
 
-lin
+  flags coding=utf8 ;
 
-Wine = mkCN (mkN "vin" "vinuri" neuter) ;
-    Beer = mkCN (mkN "bere") ;
-    Water = mkCN (mkN "apă") ;
-----    Coffee = mkCN (mkN "coffee") ;
-----    Tea = mkCN (mkN "tea") ;
+  lin
 
-Cheese = mkCN (mkN "brânză" "brânzeturi" feminine) ;
-Fish = mkCN (mkN "peşte" "peşti" masculine) ;
-Pizza = mkCN (mkN "pizza" "pizze" feminine) ;
+-- kinds
 
-Fresh = mkA "proaspăt" "proaspătă" "proaspeţi" "proaspete" ;
-Warm = mkA "cald" "caldă" "calzi" "calde" ;
-Expensive = mkA "scump" "scumpă" "scumpi" "scumpe" ;
-Delicious = mkA "delicios" "delcioasă" "delicioşi" "delicioase" ;
-Boring = mkA "plictisitor" "plictisitoare" "plictisitori" "plictisitoare" ;
-Good = mkA "bun" "bună" "buni" "bune" "bine" ;
+    Apple = mkCN L.apple_N ;
+    Beer = mkCN L.beer_N ;
+    Bread = mkCN L.bread_N ;
+    Cheese = mkCN (mkN "brânză" "brânzeturi" feminine) ;
+    Fish = mkCN L.fish_N ;
+    Milk = mkCN L.milk_N ;
+    Pizza = mkCN (mkN "pizza" "pizze" feminine) ;
+    Salt = mkCN L.salt_N ;
+    Water = mkCN L.water_N ;
+    Wine = mkCN L.wine_N ;
 
-    Restaurant = mkPlace (mkN "restaurant") in_Prep ;
+-- qualities
+
+    Bad = L.bad_A ;
+    Boring = mkA "plictisitor" "plictisitoare" "plictisitori" "plictisitoare" ;
+    Cold = L.cold_A ;
+    Delicious = mkA "delicios" "delcioasă" "delicioşi" "delicioase" ;
+    Expensive = mkA "scump" "scumpă" "scumpi" "scumpe" ;
+    Fresh = mkA "proaspăt" "proaspătă" "proaspeţi" "proaspete" ;
+    Good = L.good_A ;
+    Warm = L.warm_A ;
+
+-- places
+
     Bar = mkPlace (mkNR "bar") in_Prep ;
+    Restaurant = mkPlace (mkN "restaurant") in_Prep ;
     Toilet = mkPlace (mkN "toaleta") in_Prep ;
 
-    Euro = mkCN (mkN "euro" "euro") ;
+-- currencies
+
     Dollar = mkCN (mkN "dolar" masculine) ;
+    Euro = mkCN (mkN "euro" "euro") ;
     Lei = mkCN (mkN "leu" "lei") ;
+
+-- nationalities
 
 --    English = SyntaxRon.mkNP (mkPN "engleză") ; ---- ?
 --    Finnish = mkNP (mkPN "finnois") ;
@@ -41,26 +55,24 @@ Good = mkA "bun" "bună" "buni" "bune" "bine" ;
 --    Romanian = SyntaxRon.mkNP (mkPN "română") ; ---- ?
 --    Swedish = mkNP (mkPN "suédois") ;
 
+-- actions
+
     AWant p obj = mkCl p.name (dirV2 (lin V want_VV)) obj ;
     ALike p item = mkCl p.name (dirV2 (v_besch71 "plăcea")) item ;
     ASpeak p lang = mkCl p.name  (dirV2 (mkV "vorbi")) lang ;
     ALove p q = mkCl p.name (dirV2 (mkV "iubi")) q.name ;
     AUnderstand p = mkCl p.name (v_besch83 "înţelege") ;
-
 --    AHungry p = mkCl p have_V2 (SyntaxRon.mkNP a_Det (mkN "foame")) ;
 --    AThirsty p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "sete" feminine))) ;
 --    ATired p = mkCl p (mkA "stanco") ;
 --    AScared p = mkCl p (E.ComplCN have_V2 (mkCN (mkN "paura" feminine))) ;
 
-{-
-  GImHungry = ss "mi-e foame" ;
-  GImThirsty = ss "mi-e sete" ;
-  GImTired = ss "mi-e somn" ;
-  GImScared = ss "mi-e frică" ;
--}
+-- miscellaneous
 
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (v_besch18 "costa"))) ; 
     ItCost item price = mkCl item (dirV2 (v_besch18 "costa")) price ;
+
+-- auxiliaries
 
 oper
     mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i -> {

@@ -60,7 +60,7 @@ langs = map fst langsCoding
 langsLang = langs `except` ["Tur"]
 
 -- languages for which to compile Try 
-langsAPI  = langsLang `except` ["Ara","Bul","Hin","Ina","Lat","Rus","Tha"]
+langsAPI  = langsLang `except` ["Ara","Hin","Ina","Lat","Rus","Tha"]
 
 -- languages for which to compile minimal Syntax
 langsMinimal = langs `only` ["Ara","Eng","Bul","Rus"]

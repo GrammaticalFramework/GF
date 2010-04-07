@@ -51,4 +51,4 @@ commentBody ss = header ++ map comment body ++ ["}"] where
   isJment ws = case ws of
     k:_ | elem k ["flags","lin","lincat","oper","param"] -> True
     _ -> False
-  comment l = "-- " ++ l
+  comment l = if take 2 l == "--" then l else "-- " ++ l

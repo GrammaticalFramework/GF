@@ -4,29 +4,26 @@ lincat
   Greeting = SS ;
 
 lin 
-  GHello = ss "ciao" ;
-  GThanks = ss "grazie" ;
-  GHowAreYou = ss "come sta" ;
-  GPleaseGive, GPleaseGivePol = ss "per favore" ;
+  GBye = ss "ciao" ;
+  GCheers = ss "cincin" ;
+  GDamn = ss "maledizione" ;
   GExcuse = ss "scusa" ;
   GExcusePol = ss "scusi" ;
-  GSorry = ss "scusami" ; ----
-  GSorryPol = ss "scusimi" ; ----
-  GGoodbye = ss "arrivederci" ;
-  GBye = ss "ciao" ;
---  GNiceToMeetYou = ss "piacevole" ; ----
---  GSeeYouSoon = ss "a poco tempo" ; ----
-  GHelp = ss "aiuto" ;
-  GLookOut = ss "attenzione" ;
-  GGoodMorning = ss "buongiorno" ;
   GGoodDay = ss "buongiorno" ;
   GGoodEvening = ss "buona sera" ;
+  GGoodMorning = ss "buongiorno" ;
   GGoodNight = ss "buona notte" ;
-  GCheers = ss "cincin" ;
+  GGoodbye = ss "arrivederci" ;
+  GHello = ss "ciao" ;
+  GHelp = ss "aiuto" ;
+  GHowAreYou = ss "come sta" ;
+  GLookOut = ss "attenzione" ;
+--  GNiceToMeetYou = ss "piacevole" ; ----
+  GPleaseGive, GPleaseGivePol = ss "per favore" ;
+  GSeeYouSoon = ss "a presto" ; ----
+  GSorry = ss "scusami" ; ----
+  GSorryPol = ss "scusimi" ; ----
+  GThanks = ss "grazie" ;
   GTheCheck = ss "il conto" ;
-
-  GYes = ss "sì" ;
-  GNo = ss "no" ;
-
 
 }
