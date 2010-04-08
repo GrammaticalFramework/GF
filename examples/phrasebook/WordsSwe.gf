@@ -64,7 +64,7 @@ concrete WordsSwe of Words = SentencesSwe **
 
 -- actions
 
-    AHasName p name = mkCl (nameOf p) name ;
+    AHasName p name = mkCl p.name (mkV2 (mkV "heter")) name ;
     AHungry p = mkCl p.name (mkA "hungrig") ;
     AIll p = mkCl p.name (mkA "sjuk") ;
     AKnow p = mkCl p.name (mkV "veta" "vet" "vet" "visste" "vetat" "visst") ; 
@@ -81,7 +81,7 @@ concrete WordsSwe of Words = SentencesSwe **
 
 -- miscellaneous
 
-    QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
+    QWhatName p = mkQS (mkQCl whatSg_IP p.name (mkV2 (mkV "heter"))) ;
 
     PropOpen p = mkCl p.name open_A ;
     PropClosed p = mkCl p.name closed_A ;

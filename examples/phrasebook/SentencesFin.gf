@@ -5,5 +5,5 @@ concrete SentencesFin of Sentences = NumeralFin ** SentencesI - [Is,NameNN] with
 
   lin 
     Is item prop = mkCl item (V.UseComp (CompPartAP prop)) ; -- pizza on herkullista
-    NameNN = mkNP (P.mkPN "NN") ;
+    NameNN = mkNP (P.mkPN (P.mkN "NN" "NN:iä")) ;
   } ;

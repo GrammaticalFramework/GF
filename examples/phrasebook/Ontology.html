@@ -1,0 +1,260 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1> The Ontology of the Phrasebook</h1>
+
+<h2> Syntactic Structures of the Phrasebook</h2>
+This module contains phrases that can be defined by a functor over the
+resource grammar API. The phrases that are likely to have different implementations
+are in the module Words. But the distinction is not quite sharp; thus it may happen
+that the functor instantiations make exceptions.
+<pre>
+  abstract Sentences = Numeral ** {
+</pre>
+
+The ontology of the phrasebook is defined by the following types. The commented ones
+are defined in other modules.
+<pre>
+    cat
+      Phrase ;      -- complete phrase, the unit of translation  e.g. "Where are you?"
+      Sentence ;    -- declarative sentence                      e.g. "I am in the bar"
+      Question ;    -- question, either yes/no or wh             e.g. "where are you"
+      -- Greeting ; -- idiomatic phrase, not inflected,          e.g. "hello"
+      Proposition ; -- can be turned into sentence or question   e.g. "this pizza is good"
+      Object ;      -- the object of wanting, ordering, etc      e.g. "three pizzas"
+      Item ;        -- a single entity                           e.g. "this pizza"
+      Kind ;        -- a type of an item                         e.g. "pizza"
+      Quality ;     -- qualification of an item, can be complex  e.g. "very good"
+      Property ;    -- basic property of an item, one word       e.g. "good"
+      Place ;       -- location                                  e.g. "the bar" 
+      PlaceKind ;   -- type of location                          e.g. "bar" 
+      Currency ;    -- currency unit                             e.g. "leu"  
+      Price ;       -- number of currency units                  e.g. "eleven leu"
+      Person ;      -- agent wanting or doing something          e.g. "you" 
+      Action ;      -- proposition about a Person                e.g. "you are here"
+      Nationality ; -- complex of language, property, country    e.g. "Swedish, Sweden"
+      Language ;    -- language (can be without nationality)     e.g. "Flemish"
+      Citizenship ; -- property (can be without language)        e.g. "Belgian"
+      Country ;     -- country (can be without language)         e.g. "Belgium"
+      Day ;         -- weekday type                              e.g. "Friday"
+      Date ;        -- definite date                             e.g. "on Friday"
+      Name ;        -- name of person                            e.g. "NN"
+      -- Numeral ;  -- number expression 1 .. 999,999            e.g. "twenty"
+</pre>
+
+Many of the categories are accessible as Phrases, i.e. as translation units.
+<pre>
+    fun
+      PSentence    : Sentence -> Phrase ;
+      PQuestion    : Question -> Phrase ;
+  
+      PObject      : Object   -> Phrase ;
+      PKind        : Kind     -> Phrase ;
+      PQuality     : Quality  -> Phrase ;
+      PNumeral     : Numeral  -> Phrase ;
+      PPlace       : Place    -> Phrase ;
+      PPlaceKind   : PlaceKind-> Phrase ;
+      PCurrency    : Currency -> Phrase ;
+      PPrice       : Price    -> Phrase ;
+      PLanguage    : Language -> Phrase ;
+      PCitizenship : Citizenship -> Phrase ;
+      PCountry     : Country -> Phrase ;
+      PDay         : Day -> Phrase ;
+  
+      PYes, PNo : Phrase ;
+</pre>
+
+This is the way to build propositions about inanimate items.
+<pre>
+      Is       : Item -> Quality -> Proposition ;  -- this pizza is good
+</pre>
+
+To use propositions on higher levels.
+<pre>
+      SProp    : Proposition -> Sentence ;         -- this pizza is good
+      SPropNot : Proposition -> Sentence ;         -- this pizza isn't good
+      QProp    : Proposition -> Question ;         -- is this pizza good
+  
+      WherePlace  : Place  -> Question ;           -- where is the bar
+      WherePerson : Person -> Question ;           -- where are you
+</pre>
+
+This is the way to build propositions about persons.
+<pre>
+      PropAction : Action -> Proposition ;         -- (you (are|aren't) | are you) Swedish
+</pre>
+
+Here are some general syntactic constructions.
+<pre>
+      ObjItem   : Item -> Object ;                 -- this pizza
+      ObjNumber : Numeral -> Kind -> Object ;      -- five pizzas
+      ObjIndef  : Kind -> Object ;                 -- a pizza
+  
+      SuchKind : Quality -> Kind -> Kind ;         -- Italian pizza
+      Very : Property -> Quality ;                 -- very Italian
+      Too  : Property -> Quality ;                 -- too Italian      
+      PropQuality : Property -> Quality ;          -- Italian
+</pre>
+
+Determiners.
+<pre>
+      This, That, These, Those : Kind -> Item ;    -- this pizza,...,those pizzas
+      The, Thes : Kind -> Item ;                   -- the pizza, the pizzas
+  
+      AmountCurrency : Numeral -> Currency -> Price ;  -- five euros
+  
+      ThePlace : PlaceKind -> Place ;                  -- the bar
+  
+      IMale, IFemale,                     -- I, said by man/woman (affects agreement)
+      YouFamMale, YouFamFemale,           -- familiar you, said to man/woman (affects agreement)
+      YouPolMale, YouPolFemale : Person ; -- polite you, said to man/woman (affects agreement)
+  
+      LangNat    : Nationality -> Language ;    -- Swedish
+      CitiNat    : Nationality -> Citizenship ; -- Swedish
+      CountryNat : Nationality -> Country ;     -- Sweden
+      PropCit    : Citizenship -> Property ;    -- Swedish
+  
+      OnDay      : Day -> Date ;  -- on Friday
+      Today      : Date ;         -- today
+  
+      PersonName : Name -> Person ;             -- person referred by name
+      NameNN     : Name ;                       -- the name "NN"
+</pre>
+
+Actions are typically language-dependent, not only lexically but also
+structurally. However, these ones are mostly functorial.
+<pre>
+      AHave    : Person -> Kind        -> Action ;  -- you have a pizza
+      ACitizen : Person -> Citizenship -> Action ;  -- you are Swedish
+      ABePlace : Person -> Place       -> Action ;  -- you are in the bar
+  
+  }
+</pre>
+
+<h2> Words and idiomatic phrases of the Phrasebook</h2>
+<pre>
+  abstract Words = Sentences ** {
+  
+    fun
+</pre>
+
+kinds of items (so far mostly food stuff)
+<pre>
+      Apple : Kind ;
+      Beer : Kind ;
+      Bread : Kind ; 
+      Cheese : Kind ;
+      Chicken : Kind ; 
+      Coffee : Kind ; 
+      Fish : Kind ; 
+      Meat : Kind ;
+      Milk : Kind ; 
+      Pizza : Kind ; 
+      Salt : Kind ; 
+      Tea : Kind ; 
+      Water : Kind ; 
+      Wine : Kind ;
+</pre>
+
+properties of kinds (so far mostly of food)
+<pre>
+      Bad : Property ;
+      Boring : Property ;
+      Cheap : Property ; 
+      Cold : Property ; 
+      Delicious : Property ;  
+      Expensive : Property ; 
+      Fresh : Property ; 
+      Good : Property ;
+      Suspect : Property ;
+      Warm : Property ; 
+</pre>
+
+kinds of places
+<pre>
+      Airport : PlaceKind ;
+      Bar : PlaceKind ;
+      Cinema : PlaceKind ;
+      Church : PlaceKind ;
+      Hospital : PlaceKind ;
+      Hotel : PlaceKind ;
+      Museum : PlaceKind ;
+      Park : PlaceKind ;
+      Restaurant : PlaceKind ;
+      School : PlaceKind ;
+      Shop : PlaceKind ;
+      Station : PlaceKind ;
+      Theatre : PlaceKind ; 
+      Toilet : PlaceKind ; 
+      University : PlaceKind ;
+</pre>
+
+currency units
+<pre>
+      DanishCrown : Currency ;
+      Dollar : Currency ; 
+      Euro : Currency ;
+      Lei : Currency ;
+      SwedishCrown : Currency ;
+</pre>
+
+nationalities, countries, languages, citizenships
+<pre>
+      Belgian : Citizenship ;
+      Belgium : Country ;
+      English : Nationality ;
+      Finnish : Nationality ;
+      Flemish : Language ;
+      French : Nationality ;
+      Italian : Nationality ;
+      Romanian : Nationality ;
+      Swedish : Nationality ;
+</pre>
+
+Actions (which can be expressed by different structures in different languages).
+Notice that also negations and questions can be formed from these.
+<pre>
+      AHasName    : Person -> Name -> Action ;      -- my name is Bond
+      AHungry     : Person -> Action ;              -- I am hungry
+      AIll        : Person -> Action ;              -- I am ill
+      AKnow       : Person -> Action ;              -- I (don't) know
+      ALike       : Person -> Item     -> Action ;  -- I like this pizza
+      ALive       : Person -> Country  -> Action ;  -- I live in Sweden
+      ALove       : Person -> Person   -> Action ;  -- I love you
+      AScared     : Person -> Action ;              -- I am scared
+      ASpeak      : Person -> Language -> Action ;  -- I speak Finnish
+      AThirsty    : Person -> Action ;              -- I am thirsty
+      ATired      : Person -> Action ;              -- I am tired
+      AUnderstand : Person -> Action ;              -- I (don't) understand
+      AWant       : Person -> Object -> Action ;    -- I want two beers
+      AWantGo     : Person -> Place -> Action ;     -- I want to go to the hospital
+</pre>
+
+miscellaneous phrases
+<pre>
+      QWhatName      : Person -> Question ;            -- what is your name
+  
+      PropOpen       : Place -> Proposition ;          -- the museum is open
+      PropClosed     : Place -> Proposition ;          -- the museum is closed
+      PropOpenDate   : Place -> Date -> Proposition ;  -- the museum is open today
+      PropClosedDate : Place -> Date -> Proposition ;  -- the museum is closed today
+      PropOpenDay    : Place -> Day  -> Proposition ;  -- the museum is open on Mondays
+      PropClosedDay  : Place -> Day  -> Proposition ;  -- the museum is closed on Mondays
+  
+      HowMuchCost    : Item -> Question ;              -- how much does the pizza cost
+      ItCost         : Item -> Price -> Proposition ;  -- the pizza costs five euros
+</pre>
+
+week days
+<pre>
+      Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday : Day ;
+  
+  }
+</pre>
+
+</body>
+</html>

@@ -1,12 +1,35 @@
-abstract Greetings
-
++ Greetings
 fun GCongratulations : Greeting ;
+fun GLeaveMeAlone : Greeting ;
++ GreetingsEng
+lin GCongratulations = ss "congratulations" ;
++ GreetingsFin
+lin GCongratulations = ss "onneksi olkoon" ;
+lin GLeaveMeAlone = ss "jätä minut rauhaan" ;
 
-lin 
-Eng = ss "congratulations" ;
-Fin = ss "onneksi olkoon" ;
 Fre = ss "félicitations" ;
 Ita = ss "auguri" ;
+
 Swe = ss "grattis" ;
 
+
+lin
+Eng = ss "leave me alone" ;
+Swe = ss "låt mig vara i fred" ;
+
+
+abstract Words
+
+fun Library : PlaceKind ;
+
+lin
+Eng = mkPlace "library" "in" ;
+Fin = mkPlace (mkN "kirjasto") ssa ;
+Fre = mkPlace (mkN "bibliothèque") dative ;
+Swe = mkPlace (mkN "bibliotek" "bibliotek") "på" ;
+
+concrete WordsGer
+
+lin Delicious = mkA "köstlich" ;
+lin Expensive = mkA "teuer" ;
 
