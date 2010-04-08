@@ -1,3 +1,6 @@
+--1 The Ontology of the Phrasebook
+
+--2 Syntactic Structures of the Phrasebook
 
 -- This module contains phrases that can be defined by a functor over the
 -- resource grammar API. The phrases that are likely to have different implementations
@@ -6,7 +9,8 @@
 
 abstract Sentences = Numeral ** {
 
--- The ontology of the phrasebook is defined by the following types.
+-- The ontology of the phrasebook is defined by the following types. The commented ones
+-- are defined in other modules.
 
   cat
     Phrase ;      -- complete phrase, the unit of translation  e.g. "Where are you?"
@@ -37,21 +41,21 @@ abstract Sentences = Numeral ** {
 -- Many of the categories are accessible as Phrases, i.e. as translation units.
 
   fun
-    PSentence : Sentence -> Phrase ;
-    PQuestion : Question -> Phrase ;
+    PSentence    : Sentence -> Phrase ;
+    PQuestion    : Question -> Phrase ;
 
-    PObject   : Object   -> Phrase ;
-    PKind     : Kind     -> Phrase ;
-    PQuality  : Quality  -> Phrase ;
-    PNumeral  : Numeral  -> Phrase ;
-    PPlace    : Place    -> Phrase ;
-    PPlaceKind: PlaceKind-> Phrase ;
-    PCurrency : Currency -> Phrase ;
-    PPrice    : Price    -> Phrase ;
-    PLanguage : Language -> Phrase ;
+    PObject      : Object   -> Phrase ;
+    PKind        : Kind     -> Phrase ;
+    PQuality     : Quality  -> Phrase ;
+    PNumeral     : Numeral  -> Phrase ;
+    PPlace       : Place    -> Phrase ;
+    PPlaceKind   : PlaceKind-> Phrase ;
+    PCurrency    : Currency -> Phrase ;
+    PPrice       : Price    -> Phrase ;
+    PLanguage    : Language -> Phrase ;
     PCitizenship : Citizenship -> Phrase ;
-    PCountry  : Country -> Phrase ;
-    PDay      : Day -> Phrase ;
+    PCountry     : Country -> Phrase ;
+    PDay         : Day -> Phrase ;
 
     PYes, PNo : Phrase ;
 
@@ -59,11 +63,13 @@ abstract Sentences = Numeral ** {
 
     Is       : Item -> Quality -> Proposition ;  -- this pizza is good
 
+-- To use propositions on higher levels.
+
     SProp    : Proposition -> Sentence ;         -- this pizza is good
     SPropNot : Proposition -> Sentence ;         -- this pizza isn't good
     QProp    : Proposition -> Question ;         -- is this pizza good
 
-    WherePlace  : Place -> Question ;            -- where is the bar
+    WherePlace  : Place  -> Question ;           -- where is the bar
     WherePerson : Person -> Question ;           -- where are you
 
 -- This is the way to build propositions about persons.
@@ -99,13 +105,13 @@ abstract Sentences = Numeral ** {
     CountryNat : Nationality -> Country ;     -- Sweden
     PropCit    : Citizenship -> Property ;    -- Swedish
 
-    OnDay : Day -> Date ;  -- on Friday
-    Today : Date ;         -- today
+    OnDay      : Day -> Date ;  -- on Friday
+    Today      : Date ;         -- today
 
     PersonName : Name -> Person ;             -- person referred by name
     NameNN     : Name ;                       -- the name "NN"
 
-----    NameString : String -> Name ; ---- creates ambiguities with all words
+----    NameString : String -> Name ; ---- creates ambiguities with all words --%
 
 -- Actions are typically language-dependent, not only lexically but also
 -- structurally. However, these ones are mostly functorial.
@@ -114,6 +120,5 @@ abstract Sentences = Numeral ** {
     ACitizen : Person -> Citizenship -> Action ;  -- you are Swedish
     ABePlace : Person -> Place       -> Action ;  -- you are in the bar
 
-
-
 }
+

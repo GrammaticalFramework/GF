@@ -144,6 +144,10 @@ concrete WordsFin of Words = SentencesFin **
     closed_Adv = ParadigmsFin.mkAdv "kiinni" ;
 
     nameOf : {name : NP ; isPron : Bool ; poss : Det} -> NP = \p -> 
-      mkNP (E.GenNP p.name) (mkN "nimi" "nimiä") ; 
+      let nimi = L.name_N in
+      case p.isPron of {
+        True => mkNP p.poss nimi ;
+        _    => mkNP (E.GenNP p.name) nimi
+        } ; 
 
 }

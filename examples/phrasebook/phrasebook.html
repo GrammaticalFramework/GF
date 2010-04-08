@@ -17,6 +17,7 @@
 History
 </P>
 <UL>
+<LI>8 April. Added German.
 <LI>7 April. Added the Clone script, applied to initiate the rest of MOLTO languages.
 <LI>6 April. Version 0.4: weekdays, nationalities
 <LI>30 March. Version 0.3: disambiguation grammar for English
@@ -50,15 +51,15 @@ between the 15 European languages included in the
 <P>
 It is implemented by using the GF programming language 
 (<A HREF="http://grammaticalframework.org">Grammatical Framework</A>).
-It is the first demo for the MOLTO project, released in the third month but to be
-updated in the course of the project.
+It is the first demo for the MOLTO project, released in the third month (by June 2010)
+but to be updated in the course of the project.
 </P>
 <P>
 The phrasebook has the following requirements:
 </P>
 <UL>
-<LI>high quality: reliable translations
-<LI>translation from any language to any other ones
+<LI>high quality: reliable translations to express yourself in any language
+<LI>translation between all pairs of languages
 <LI>runnable in web browsers
 <LI>runnable on mobile phones (also off-line: forthcoming for Android phones)
 <LI>easily extensible by new words (forthcoming: semi-automatic extensions by users)
@@ -70,18 +71,25 @@ The source code resides in
 <A HREF="http://code.haskell.org/gf/examples/phrasebook/"><CODE>code.haskell.org/gf/examples/phrasebook/</CODE></A>
 </P>
 <P>
-Current status (7 April 2010):
+Current status (8 April 2010):
 </P>
 <UL>
 <LI>small coverage in abstract syntax
-<LI>reasonable implementations for English, Finnish, French, Italian, Romanian, Swedish
+<LI>reasonable implementations for English, Finnish, French, German, Italian, Romanian, Swedish
 <LI>almost just cloned for the rest of MOLTO languages
+<LI>temporary user interdace
 <LI>works on web browsers calling a server
 <LI>web service not yet released, but preliminarily available in
   <A HREF="http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html"><CODE>http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html</CODE></A>
 </UL>
 
 <H1>Points illustrated</H1>
+<P>
+Interlingua-based translation.
+</P>
+<P>
+Incremental parsing.
+</P>
 <P>
 The use of resource grammars and functors.
 </P>
@@ -97,10 +105,13 @@ Disambiguation, esp. of politeness distinctions.
 <H1>Ontology</H1>
 <P>
 The abstract syntax defines the <B>ontology</B> behind the phrasebook. 
-Some explanations can be found in the abstract syntax files
+Some explanations can be found in the 
+<A HREF="Ontology.html">ontology document</A>, which is produced from the
+abstract syntax files
 <A HREF="http://code.haskell.org/gf/examples/phrasebook/Sentences.gf"><CODE>Sentences.gf</CODE></A>
 and
-<A HREF="http://code.haskell.org/gf/examples/phrasebook/Words.gf"><CODE>Words.gf</CODE></A>.
+<A HREF="http://code.haskell.org/gf/examples/phrasebook/Words.gf"><CODE>Words.gf</CODE></A>
+by <CODE>make doc</CODE>.
 </P>
 <H1>Files</H1>
 <P>
@@ -124,7 +135,7 @@ Separate concrete syntaxes.
 the input language is ambiguous.
 </P>
 <P>
-Here is the module structure as produced by
+Here is the module structure as produced in GF by
 </P>
 <PRE>
     &gt; i -retain DisambPhrasebookEng.gf
@@ -142,7 +153,7 @@ Improved translation interface
 <UL>
 <LI>a <I>to</I> list of languages: either <I>all</I>, or just one
 <LI>combined text field/fridge magnet input; filter magnets by started word prefix
-<LI>a nicer way to show disambiguation (smaller font, maybe hidden by default)
+<LI>a nicer way to show disambiguation (maybe hidden by default)
 </UL>
 
 <P>
@@ -166,6 +177,10 @@ Link to Google translate, for fall-back and for comparison
 <P>
 Feedback facility in the UI
 </P>
+<P>
+Customizable distribution: make your own selection of the 2^15 language subsets
+when downloading the phrasebook to a phone
+</P>
 <H1>How to contribute</H1>
 <P>
 The basic things "everyone" can do is 
@@ -188,12 +203,15 @@ Here are the steps to follow for contributors:
 </P>
 <OL>
 <LI>Make sure you have the latest sources 
-  from <A HREF="http://www.grammaticalframework.org/doc/gf-developers.html">GF Darcs</A>, using <CODE>darcs pull</CODE>.
+  from <A HREF="http://www.grammaticalframework.org/doc/gf-developers.html">GF Darcs</A>, 
+  using <CODE>darcs pull</CODE>.
 <LI>Also make sure that you have compiled the library by <CODE>make present</CODE> in <CODE>gf/lib/src/</CODE>.
-<LI>Work in the directory <A HREF="http://code.haskell.org/gf/examples/phrasebook/"><CODE>gf/examples/phrasebook/</CODE></A>.
-<LI>After you've finished your contribution, recompile the phrasebook by <CODE>make</CODE>.
+<LI>Work in the directory 
+  <A HREF="http://code.haskell.org/gf/examples/phrasebook/"><CODE>gf/examples/phrasebook/</CODE></A>.
+<LI>After you've finished your contribution, recompile the phrasebook by <CODE>make pgf</CODE>.
 <LI>Save your changes in <CODE>darcs record .</CODE> (in the <CODE>phrasebook</CODE> subdirectory).
-<LI>Make a patch file with <CODE>darcs send -o my_phrasebook_patch</CODE>, which you can send to GF maintainers.
+<LI>Make a patch file with <CODE>darcs send -o my_phrasebook_patch</CODE>, which you can 
+  send to GF maintainers.
 <LI>(Recommended:) Test the phrasebook on your local server:
   <OL>
   <LI>Go to <CODE>gf/src/server/</CODE> and follow the instructions in the
@@ -206,8 +224,9 @@ Here are the steps to follow for contributors:
 
 <UL>
 <LI>Don't delete anything! But you are free to correct incorrect forms.
-<LI>Don't change the module structure! But you are free to add a new language.
+<LI>Don't change the module structure! 
 <LI>Don't compromise quality to gain coverage: <I>non multa sed multum!</I> 
+<P></P>
 </UL>
 
 

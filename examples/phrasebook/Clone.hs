@@ -36,7 +36,7 @@ isSpecific = flip elem specifics
 replaceLang s1 s2 = repl where
   repl s = case s of
     c:cs -> case splitAt lgs s of
-      (pre,c:rest) | pre == s1 && elem c " ,:=(){}.-[]" -> s2 ++ [c] ++ repl rest
+      (pre,c:rest) | pre == s1 && elem c " \n\t,:=(){}.-[];" -> s2 ++ [c] ++ repl rest
       _                      -> c : repl cs
     _ -> s
   lgs = 3 -- length s1

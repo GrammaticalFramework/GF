@@ -88,11 +88,10 @@ help = unlines $ [
   " --         new paragraph",
   " --!        new page (in HTML, recognized by the htmls program)",
   " --.        end of document",
----  " ---        ignore this comment line in document",
----  " {---}      ignore this code line in document",
   " --*[Text]  Text paragraph starting with a bullet",
   " --[Text]   Text belongs to text paragraph",
   " [Text]     Text belongs to code paragraph",
+  " --%        (in the end of a line): ignore this line",
   "",
   "Within a text paragraph, text enclosed between certain characters",
   "is treated specially:",
@@ -143,7 +142,7 @@ pDoc time s = case dropWhile emptyOrPragma (lines s) of
   paras -> Doc [] time (map pPara (grp paras))
  where
    grp ss = case ss of
-     s : rest --- | ignore s      -> grp rest
+     s : rest | ignore s      -> grp rest
               | isEnd s       -> []
               | begComment s  -> let (s1,s2) = getComment (drop 2 s : rest) 
                                  in map ("-- " ++) s1 ++ grp s2 
@@ -169,16 +168,15 @@ pDoc time s = case dropWhile emptyOrPragma (lines s) of
    get k con isEnd cs = con beg : pItems (drop k rest) 
                     where (beg,rest) =  span (not . isEnd) cs
  
-   ignore s = case s of
-     '-':'-':'-':_ -> True
-     '{':'-':'-':'-':'}':_ -> True
-     _ -> False
-
    isEnd s = case s of
      '-':'-':'.':_ -> True
      _ -> False
 
    emptyOrPragma s = all isSpace s || "--#" `isPrefixOf` s
+
+ignore s = case reverse s of
+     '%':'-':'-':_ -> True
+     _ -> False
 
 -- render in html
 
@@ -196,7 +194,7 @@ para2html :: Paragraph -> String
 para2html p = case p of
   Text its      -> concat (map item2html its)
   Item its      -> mkTagXML "li" ++ concat (map item2html its)
-  Code s        -> unlines $ tagXML "pre" $ map (indent 2) $ 
+  Code s        -> unlines $ tagXML "pre" $ map (indent 2) $ filter (not . ignore) $ 
                                               remEmptyLines $ lines $ spec s
   New           -> mkTagXML "p"
   NewPage       -> mkTagXML "p" ++ "\n" ++ mkTagXML "!-- NEW --"

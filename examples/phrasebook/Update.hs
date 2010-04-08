@@ -20,4 +20,8 @@ doUpdate src (target,ls) = do
   appendFile tmp $ unlines [(line ++ "-- UPDATE FROM " ++ src) | line <- ls]
   appendFile tmp "\n}\n"
 
-dropLastBracket s = s
+tmpFile file = "tmp-update/"++ file
+
+---- quick and dirty
+dropLastBracket = reverse . init . dropWhile (/='}') . reverse
+
