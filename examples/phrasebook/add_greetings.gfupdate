@@ -1,0 +1,12 @@
+abstract Greetings
+
+fun GCongratulations : Greeting ;
+
+lin 
+Eng = ss "congratulations" ;
+Fin = ss "onneksi olkoon" ;
+Fre = ss "félicitations" ;
+Ita = ss "auguri" ;
+Swe = ss "grattis" ;
+
+
