@@ -124,10 +124,21 @@ concrete WordsSwe of Words = SentencesSwe **
     open_A = mkA "öppen" "öppet" ;
     closed_A = mkA "stängd" "stängt" ;
 
-    nameOf : {name : NP ; isPron : Bool ; poss : Det} -> NP = \p -> 
-      case p.isPron of {
-        True => mkNP p.poss (mkN "namn" "namn") ;
-        _    => mkNP (mkNP the_Det (mkN "namn" "namn")) 
+    NPPerson : Type = {name : NP ; isPron : Bool ; poss : Quant} ;
+
+    xOf : Bool -> N -> NPPerson -> NPPerson = \n,x,p -> 
+      let num = if_then_else Num n plNum sgNum in {
+      name = case p.isPron of {
+        True => mkNP p.poss num x ;
+        _    => mkNP (mkNP the_Quant num x) 
                        (SyntaxSwe.mkAdv possess_Prep p.name)
         } ;
+      isPron = False ;
+      poss = SyntaxSwe.mkQuant he_Pron -- not used because not pron
+      } ;
+
+    nameOf : NPPerson -> NP = \p -> (xOf sing L.name_N p).name ;
+
+    sing = False ; plur = True ;
+
 }

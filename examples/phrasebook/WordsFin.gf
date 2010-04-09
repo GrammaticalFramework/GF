@@ -143,11 +143,21 @@ concrete WordsFin of Words = SentencesFin **
     open_Adv = ParadigmsFin.mkAdv "avoinna" ;
     closed_Adv = ParadigmsFin.mkAdv "kiinni" ;
 
-    nameOf : {name : NP ; isPron : Bool ; poss : Det} -> NP = \p -> 
-      let nimi = L.name_N in
-      case p.isPron of {
-        True => mkNP p.poss nimi ;
-        _    => mkNP (E.GenNP p.name) nimi
-        } ; 
+    NPPerson : Type = {name : NP ; isPron : Bool ; poss : Quant} ;
+
+    xOf : Bool -> N -> NPPerson -> NPPerson = \n,x,p -> 
+      let num = if_then_else Num n plNum sgNum in {
+        name = case p.isPron of {
+          True => mkNP p.poss num x ;
+          _    => mkNP (E.GenNP p.name) num x
+          } ;
+        isPron = False ;
+        poss = SyntaxFin.mkQuant he_Pron -- not used because not pron
+      } ;
+         
+
+    nameOf : NPPerson -> NP = \p -> (xOf sing L.name_N p).name ;
+
+    sing = False ; plur = True ;
 
 }

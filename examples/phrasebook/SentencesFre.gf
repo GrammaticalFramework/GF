@@ -12,10 +12,10 @@ concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [
       QProp a = 
         lin QS {s = \\_ => (EstcequeS (mkS a)).s} ;
       IFemale = 
-        {name = mkNP i8fem_Pron ; isPron = True ; poss = mkDet i_Pron} ; 
+        {name = mkNP i8fem_Pron ; isPron = True ; poss = mkQuant i_Pron} ; 
       YouFamFemale = 
-        {name = mkNP youSg8fem_Pron ; isPron = True ; poss = mkDet youSg_Pron} ; 
+        {name = mkNP youSg8fem_Pron ; isPron = True ; poss = mkQuant youSg_Pron} ; 
       YouPolFemale = 
-        {name = mkNP youPol8fem_Pron ; isPron = True ; poss = mkDet youPol_Pron};
+        {name = mkNP youPol8fem_Pron ; isPron = True ; poss = mkQuant youPol_Pron};
 
 }
