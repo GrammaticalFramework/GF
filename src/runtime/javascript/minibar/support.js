@@ -1,6 +1,10 @@
+/* --- Accessing document elements ------------------------------------------ */
+
 function element(id) {
   return document.getElementById(id);
 }
+
+/* --- JSONP ---------------------------------------------------------------- */
 
 // Inspired by the function jsonp from 
 //          http://www.west-wind.com/Weblog/posts/107136.aspx
@@ -124,7 +128,7 @@ function filter(p,xs) {
   return ys;
 }
 
-function implode(cs) {
+function implode(cs) { // array of strings to string
   /*
   var s="";
   for(var i=0;i<cs.length;i++)
@@ -147,11 +151,12 @@ function map(f,xs) {
   return ys;
 }
 
+// map in continuation passing style 
+function mapc(f,xs,cont) { mapc_from(f,xs,0,[],cont); }
+
 function mapc_from(f,xs,i,ys,cont) {
   if(i<xs.length)
     f(xs[i],function(y){ys[i]=y;mapc_from(f,xs,i+1,ys,cont)});
   else
     cont(ys);
 }
-
-function mapc(f,xs,cont) { mapc_from(f,xs,0,[],cont); }
