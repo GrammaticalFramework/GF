@@ -61,5 +61,7 @@ interface DiffScand = open CommonScand, Prelude in {
 
     reflPron : Agr -> Str ;
 
+    hur_IAdv : {s : Str} ;
+
 }
 

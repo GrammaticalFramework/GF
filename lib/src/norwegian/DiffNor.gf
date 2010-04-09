@@ -86,4 +86,6 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
       <_, P3> => "seg"
       } ;
 
+    hur_IAdv = {s = "hvor"} ;
+
 }

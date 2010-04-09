@@ -75,4 +75,18 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       s = \\agr => ap.s ! False ! NCase (complNumAgr agr) Part
       } ;
 
+---- copied from VerbFin.CompAP, should be shared
+    ICompAP ap = {
+      s = \\agr => 
+          let
+            n = complNumAgr agr ;
+            c = case n of {
+              Sg => Nom ;  -- minä olen iso ; te olette iso
+              Pl => Part   -- me olemme isoja ; te olette isoja
+              }            --- definiteness of NP ?
+          in "kuinka" ++ ap.s ! False ! (NCase n c)
+      } ;
+
+    IAdvAdv adv = {s = "kuinka" ++ adv.s} ;
+
 } 

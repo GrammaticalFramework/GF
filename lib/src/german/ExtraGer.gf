@@ -31,4 +31,8 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
 
     moegen_VV = auxVV mögen_V ;
 
+    ICompAP ap = {s = \\_ => "wie" ++ ap.s ! APred} ; 
+
+    IAdvAdv adv = {s = "wie" ++ adv.s} ;
+
 } 

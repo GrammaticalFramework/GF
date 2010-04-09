@@ -93,4 +93,8 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
 
     ConjVPS = conjunctDistrTable Agr ;
 
+    ICompAP ap = {s = "how" ++ ap.s ! agrP3 Sg} ; ---- IComp should have agr!
+
+    IAdvAdv adv = {s = "how" ++ adv.s} ;
+
 } 

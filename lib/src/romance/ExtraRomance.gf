@@ -20,4 +20,15 @@ incomplete concrete ExtraRomance of ExtraRomanceAbs = CatRomance **
     ComplVPIVV v vpi = 
       insertComplement (\\a => prepCase v.c2.c ++ vpi.s) (predV v) ;
 
+    ProDrop p = {
+      s = table {
+        Nom => let pn = p.s ! Nom in {c1 = pn.c1 ; c2 = pn.c2 ; comp = [] ; ton = pn.ton} ; 
+        c => p.s ! c
+        } ;
+      a = p.a ;
+      poss = p.poss ;
+      hasClit = p.hasClit ;
+      isPol = p.isPol
+      } ;
+
 } 

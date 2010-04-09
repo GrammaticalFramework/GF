@@ -1,7 +1,7 @@
 -- Structures special for French. These are not implemented in other
 -- Romance languages.
 
-abstract ExtraFreAbs = ExtraRomanceAbs ** {
+abstract ExtraFreAbs = ExtraRomanceAbs - [ProDrop] ** {
 
 -- Notice: only direct (main-clause) questions are generated, and needed.
 
