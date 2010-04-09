@@ -1,20 +1,68 @@
+// minibar.js, assumes that support.js has also been loaded
+
+/* --- Configuration -------------------------------------------------------- */
 
 var server="http://www.grammaticalframework.org:41296"
 //var server="http://tournesol.cs.chalmers.se:41296";
 //var server="http://localhost:41296";
 var grammars_url=server+"/grammars/";
-var current_grammar_url=grammars_url+"Foods.pgf";
 
 var tree_icon=server+"/translate/se.chalmers.cs.gf.gwt.TranslateApp/tree-btn.png";
 
-function start_minibar() {
+/* --- Grammar access object ------------------------------------------------ */
+
+var server = {
+    // State variables (private):
+    current_grammar_url: grammars_url+"Foods.pgf",
+    // Methods:
+    switch_grammar: function(grammar_name) {
+	this.current_grammar_url=grammars_url+grammar_name;
+    },
+    
+    get_grammarlist: function() {
+	jsonp(grammars_url+"grammars.cgi") // calls show_grammarlist
+    },
+    get_languages: function(cont_name) {
+	jsonp(this.current_grammar_url,cont_name);
+    },
+    get_random: function(cont_name) {
+	jsonp(this.current_grammar_url+"?command=random&random="+Math.random(),cont_name);
+    },
+    linearize: function(tree,to,cont_name) {
+	jsonp(this.current_grammar_url+"?command=linearize&tree="
+	      +encodeURIComponent(tree)+"&to="+to,cont_name)
+    },
+    complete: function(from,input,cont_name) {
+	jsonp(this.current_grammar_url
+	      +"?command=complete"
+	      +"&from="+encodeURIComponent(from)
+	      +"&input="+encodeURIComponent(input),
+	      cont_name);
+
+    },
+    translate: function(from,input,cont_name) {
+	jsonp(this.current_grammar_url
+	      +"?command=translate"
+	      +"&from="+encodeURIComponent(from)
+	      +"&input="+encodeURIComponent(input),
+	      cont_name)
+    }
+
+};
+
+/* --- Initialisation ------------------------------------------------------- */
+
+function start_minibar() { // typically called when the HTML document is loaded
   var minibar=element("minibar");
   minibar.appendChild(div_id("menubar"));
   minibar.appendChild(div_id("surface"));
   minibar.appendChild(div_id("words"));
   minibar.appendChild(div_id("translations"));
-  jsonp(grammars_url+"grammars.cgi",""); // calls show_grammarlist
+  server.get_grammarlist(); // calls show_grammarlist
 }
+
+
+/* --- Functions ------------------------------------------------------------ */
 
 function show_grammarlist(grammars) {
   var menu=empty("select");
@@ -41,8 +89,8 @@ function new_grammar(menu) {
 }
 
 function select_grammar(grammar_name) {
-  current_grammar_url=grammars_url+grammar_name;
-  jsonp(current_grammar_url,"show_languages");
+    server.switch_grammar(grammar_name);
+    server.get_languages("show_languages");
 }
 
 function show_languages(grammar) {
@@ -96,17 +144,19 @@ function delete_last() {
 }
 
 function generate_random() {
-  jsonp(current_grammar_url+"?command=random&random="+Math.random(),"lin_random");
-
+    server.get_random("lin_random");
+//  jsonp(server.current_grammar_url+"?command=random&random="+Math.random(),"lin_random");
 }
 
 function lin_random(abs) {
   var menu=element("language_menu");
   var lang=menu.current.from;
-  jsonp(current_grammar_url+"?command=linearize&tree="+encodeURIComponent(abs[0].tree)
+  server.linearize(abs[0].tree,lang,"show_random");
+/*
+  jsonp(server.current_grammar_url+"?command=linearize&tree="+encodeURIComponent(abs[0].tree)
 	+"&to="+lang,
 	"show_random")
-	
+*/	
 }
 
 function show_random(random) {
@@ -120,11 +170,14 @@ function show_random(random) {
 
 function get_completions(menu) {
   var c=menu.current;
-  jsonp(current_grammar_url
+  server.complete(c.from,c.input,"show_completions");
+/*
+  jsonp(server.current_grammar_url
 	+"?command=complete"
 	+"&from="+encodeURIComponent(c.from)
 	+"&input="+encodeURIComponent(c.input),
 	"show_completions");
+*/
 }
 
 function word(s) {
@@ -163,11 +216,14 @@ function show_completions(completions) {
 }
 
 function get_translations(menu) {
-  jsonp(current_grammar_url
+  server.translate(menu.current.from,menu.current.input,"show_translations");
+/*
+  jsonp(server.current_grammar_url
 	+"?command=translate"
 	+"&from="+encodeURIComponent(menu.current.from)
 	+"&input="+encodeURIComponent(menu.current.input),
 	"show_translations")
+*/
 }
 
 function show_translations(translations) {
@@ -194,14 +250,14 @@ function show_translations(translations) {
 function abstree_button(abs) {
   var i=img(tree_icon);
   i.setAttribute("onclick","toggle_img(this)");
-  i.other=current_grammar_url+"?command=abstrtree&tree="+encodeURIComponent(abs);
+  i.other=server.current_grammar_url+"?command=abstrtree&tree="+encodeURIComponent(abs);
   return i;
 }
 
 function parsetree_button(abs,lang) {
   var i=img(tree_icon);
   i.setAttribute("onclick","toggle_img(this)");
-  i.other=current_grammar_url
+  i.other=server.current_grammar_url
           +"?command=parsetree&from="+lang+"&tree="+encodeURIComponent(abs);
   return i;
 }
