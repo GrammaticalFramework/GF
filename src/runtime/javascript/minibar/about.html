@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>About Minibar</title>
+<link rel=stylesheet type="text/css" href="minibar.css">
+</head>
+
+<body>
+<h1>About Minibar</h1>
+
+<a href="minibar.html">Minibar</a> is an alternative implementation of the
+<a href="http://www.grammaticalframework.org:41296/fridge/">Fridge Poetry web app</a>.
+It doesn't do everything the original Fridge Poetry does (e.g. drag-and-drop is missing),
+so I refer to it as a minibar rather than a full refrigerator :-)
+
+<p>
+Some implementation details:
+
+<ul class=space>
+  <li>It is implemented directly in JavaScipt. It does not use Google Web Toolkit or any big JavaScript libraries.
+  <li>It has been tested and found to work in the following browsers:
+  <ul>
+    <li>On the Mac: Firefox 3.5 &amp; 3.6, Safari 4.0, Opera 10.10 and
+    Google Chrome 4.0.249.49.
+    <li>On Linux: Firefox 3.0.18 & 3.5, Opera 10.10.
+    <li>On the Android Dev Phone: Android Mobile Safari 3.0.4 & 3.1.2
+    and Android Opera Mini 4.2.
+  </ul>
+  It does not seem work in Internet Explorer 7
+  (there are both styling and scripting issues).
+  <li>The implementation consist of two JavaScript files:
+  <a href="minibar.js">minibar.js</a> (186 lines)
+  and <a href="support.js">support.js</a> (147 lines).
+  The latter is also used in a small web app based on the
+  <a href="http://spraakbanken.gu.se/sal/ws/">SALDO web services</a>.
+  <li>To access the GF web service, it uses the
+  <a href="http://en.wikipedia.org/wiki/JSON#JSONP">JSONP method</a>
+  mentioned in the GF
+  web services paper, which allows the web app to be hosted on a different server
+  from the GF web service. (To demonstrate this, I put the Minibar demo on
+  www.cs.chalmers.se, while the GF server that it calls is on
+  www.grammaticalframework.org.)
+  <li>As an experiment, it does no use the <code>grammars.xml</code> file,
+  but instead calls a little CGI script,
+  <a href="http://www.grammaticalframework.org:41296/grammars/grammars.cgi.txt">grammars.cgi</a>
+  which lists the .pgf in the directory, in JSONP format. (Note: if you want to install
+  this on your own computer,
+  <ul>
+    <li>if you click on the link,
+        the CGI script will be downloaded as <code>grammars.cgi.txt</code>,
+        but it should be called <code>grammars.cgi</code> and stored on the server
+        in the same directory as the grammar files.
+    <li>for CGI scripts to work with lighttpd, <code>"mod_cgi"</code> needs to be included
+    in the definition of <code>server.modules</code> in the
+    <code>lighttpd.conf</code> file.)
+  </ul>
+  <li>[Added 2010-02-16] There is a button for generating random sentences.
+  <li>[Added 2010-02-23] All translations are shown, not just the first one, if there are
+  multiple parses.
+  <li>[Added 2010-02-25] Next to each translation, there is now a little tree icon that
+  you can click on to see a drawing of an abstract syntax tree or a parse tree. If you click
+  on a drawing it collapses back into a tree icon.
+</ul>
+
+<hr>
+<address>
+<a href="http://www.cs.chalmers.se/~hallgren/">TH</a>
+<img src="http://www.altocumulus.org/~hallgren/online.cgi?icon" alt=""></address>
+</address>
+<!-- hhmts start --> Last modified: Thu Mar 25 15:06:22 CET 2010 <!-- hhmts end -->
+</body> </html>
