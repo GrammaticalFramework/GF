@@ -78,6 +78,8 @@ abstract Words = Sentences ** {
 -- Actions (which can be expressed by different structures in different languages).
 -- Notice that also negations and questions can be formed from these.
 
+    AHasAge     : Person -> Numeral -> Action ;   -- I am seventy years
+    AHasChildren: Person -> Numeral -> Action ;   -- I have six children
     AHasName    : Person -> Name -> Action ;      -- my name is Bond
     AHungry     : Person -> Action ;              -- I am hungry
     AIll        : Person -> Action ;              -- I am ill
@@ -85,6 +87,7 @@ abstract Words = Sentences ** {
     ALike       : Person -> Item     -> Action ;  -- I like this pizza
     ALive       : Person -> Country  -> Action ;  -- I live in Sweden
     ALove       : Person -> Person   -> Action ;  -- I love you
+    AMarried    : Person -> Action ;              -- I am married
     AScared     : Person -> Action ;              -- I am scared
     ASpeak      : Person -> Language -> Action ;  -- I speak Finnish
     AThirsty    : Person -> Action ;              -- I am thirsty
@@ -95,6 +98,7 @@ abstract Words = Sentences ** {
 
 -- miscellaneous phrases
 
+    QWhatAge       : Person -> Question ;            -- how many years are you
     QWhatName      : Person -> Question ;            -- what is your name
 
     PropOpen       : Place -> Proposition ;          -- the museum is open
@@ -106,6 +110,10 @@ abstract Words = Sentences ** {
 
     HowMuchCost    : Item -> Question ;              -- how much does the pizza cost
     ItCost         : Item -> Price -> Proposition ;  -- the pizza costs five euros
+
+    Wife, Husband  : Person -> Person ;              -- my wife, your husband
+    Son, Daughter  : Person -> Person ;              -- my son, your husband
+    Children       : Person -> Person ;              -- my children 
 
 -- week days
 

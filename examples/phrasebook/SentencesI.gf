@@ -20,7 +20,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Currency = CN ;
     Price = NP ;
     Action = Cl ;
-    Person = {name : NP ; isPron : Bool ; poss : Det} ;
+    Person = {name : NP ; isPron : Bool ; poss : Quant} ;
     Nationality = {lang : NP ; prop : A ; country : NP} ; 
     Language = NP ;
     Citizenship = A ;
@@ -96,7 +96,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Today = today_Adv ;
 
     PersonName n = 
-      {name = n ; isPron = False ; poss = mkDet he_Pron} ; -- poss not used
+      {name = n ; isPron = False ; poss = mkQuant he_Pron} ; -- poss not used
 ----    NameString s = symb s ;
     NameNN = symb "NN" ;
 
@@ -107,7 +107,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
 oper 
   mkPhrase : Utt -> Text = \u -> lin Text u ; -- no punctuation
 
-  mkPerson : Pron -> {name : NP ; isPron : Bool ; poss : Det} = \p -> 
-    {name = mkNP p ; isPron = True ; poss = mkDet p} ;
+  mkPerson : Pron -> {name : NP ; isPron : Bool ; poss : Quant} = \p -> 
+    {name = mkNP p ; isPron = True ; poss = mkQuant p} ;
 
 }

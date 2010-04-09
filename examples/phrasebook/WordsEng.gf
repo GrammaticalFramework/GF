@@ -3,7 +3,7 @@
 concrete WordsEng of Words = SentencesEng ** 
     open 
       SyntaxEng, ParadigmsEng, (L = LexiconEng), (P = ParadigmsEng), 
-      IrregEng, Prelude in {
+      IrregEng, ExtraEng, Prelude in {
   lin
 
 -- kinds
@@ -76,6 +76,8 @@ concrete WordsEng of Words = SentencesEng **
 
 -- actions
 
+    AHasAge p num = mkCl p.name (mkNP <lin Numeral num : Numeral> L.year_N) ;
+    AHasChildren p num = mkCl p.name have_V2 (mkNP <lin Numeral num : Numeral> L.child_N) ;
     AHasName p name = mkCl (nameOf p) name ;
     AHungry p = mkCl p.name (mkA "hungry") ;
     AIll p = mkCl p.name (mkA "ill") ;
@@ -83,6 +85,7 @@ concrete WordsEng of Words = SentencesEng **
     ALike p item = mkCl p.name (mkV2 (mkV "like")) item ;
     ALive p co = mkCl p.name (mkVP (mkVP (mkV "live")) (SyntaxEng.mkAdv in_Prep co)) ;
     ALove p q = mkCl p.name (mkV2 (mkV "love")) q.name ;
+    AMarried p = mkCl p.name (mkA "married") ;
     AScared p = mkCl p.name (mkA "scared") ;
     ASpeak p lang = mkCl p.name  (mkV2 IrregEng.speak_V) lang ;
     AThirsty p = mkCl p.name (mkA "thirsty") ;
@@ -94,6 +97,7 @@ concrete WordsEng of Words = SentencesEng **
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
+    QWhatAge p = mkQS (mkQCl (ICompAP (mkAP (mkA "old"))) p.name) ;
 
     PropOpen p = mkCl p.name open_Adv ;
     PropClosed p = mkCl p.name closed_Adv ;
@@ -104,6 +108,12 @@ concrete WordsEng of Words = SentencesEng **
 
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregEng.cost_V)) ; 
     ItCost item price = mkCl item (mkV2 IrregEng.cost_V) price ;
+
+    Wife = xOf sing (mkN "wife") ;
+    Husband = xOf sing (mkN "husband") ;
+    Son = xOf sing (mkN "son") ;
+    Daughter = xOf sing (mkN "daughter") ;
+    Children = xOf plur L.child_N ;
 
 -- week days
 
@@ -137,11 +147,20 @@ concrete WordsEng of Words = SentencesEng **
     open_Adv = P.mkAdv "open" ;
     closed_Adv = P.mkAdv "closed" ;
 
-    nameOf : {name : NP ; isPron : Bool ; poss : Det} -> NP = \p -> 
-      case p.isPron of {
-        True => mkNP p.poss (mkN "name") ;
-        _    => mkNP (mkNP the_Det (mkN "name")) 
+    NPPerson : Type = {name : NP ; isPron : Bool ; poss : Quant} ;
+
+    xOf : Bool -> N -> NPPerson -> NPPerson = \n,x,p -> 
+      let num = if_then_else Num n plNum sgNum in {
+      name = case p.isPron of {
+        True => mkNP p.poss num x ;
+        _    => mkNP (mkNP the_Quant num x) 
                        (SyntaxEng.mkAdv possess_Prep p.name)
         } ;
+      isPron = False ;
+      poss = SyntaxEng.mkQuant he_Pron -- not used because not pron
+      } ;
 
+    nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "name") p).name ;
+
+    sing = False ; plur = True ;
 }
