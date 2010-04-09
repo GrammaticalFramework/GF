@@ -443,6 +443,10 @@ incomplete resource Constructors = open Grammar in {
 
 -- There are definite and indefinite articles.
 
+    mkQuant : overload { --# notminimal
+      mkQuant : Pron -> Quant ;  -- 1. my --# notminimal
+      } ; --# notminimal
+
       the_Quant : Quant ;   -- the --# notminimal
       a_Quant   : Quant ;   -- a --# notminimal
 
@@ -1124,6 +1128,10 @@ incomplete resource Constructors = open Grammar in {
       mkDet : Pron -> Num -> Det   -- my (houses) --# notminimal
         = \p -> DetQuant (PossPron p) ; --# notminimal
       } ;  
+
+    mkQuant = overload { --# notminimal
+      mkQuant : Pron -> Quant = PossPron ;  -- 1. my --# notminimal
+      } ; --# notminimal
 
 
       the_Art : Art = DefArt ;     -- the  

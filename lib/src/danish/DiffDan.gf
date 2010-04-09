@@ -76,4 +76,5 @@ instance DiffDan of DiffScand = open CommonScand, Prelude in {
       <_, P3> => "sig"
       } ;
 
+    hur_IAdv = {s = "hvor"} ;
 }

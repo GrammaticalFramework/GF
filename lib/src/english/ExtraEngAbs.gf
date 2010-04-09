@@ -1,4 +1,4 @@
-abstract ExtraEngAbs = Extra ** {
+abstract ExtraEngAbs = Extra - [ProDrop] ** {
 
 -- uncontracted negations; contracted are the default
   fun

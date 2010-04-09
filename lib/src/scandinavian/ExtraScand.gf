@@ -80,4 +80,8 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
       } ;
 
     ConjVPS = conjunctDistrTable2 Order Agr ;
+
+    ICompAP ap = {s = \\a => hur_IAdv.s ++ ap.s ! a} ;
+
+    IAdvAdv adv = {s = hur_IAdv.s ++ adv.s} ;
 } 

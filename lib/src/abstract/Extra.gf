@@ -36,4 +36,11 @@ abstract Extra = Cat ** {
     ConjVPS : Conj -> [VPS] -> VPS ;
     PredVPS : NP -> VPS -> S ;
 
+  -- 9/4/2010
+
+  fun
+    ProDrop : Pron -> Pron ;  -- unstressed subject pronoun becomes []: "(io) sono stanco"
+    ICompAP : AP -> IComp ;   -- "how old"
+    IAdvAdv : Adv -> IAdv ;   -- "how often"
+
 }

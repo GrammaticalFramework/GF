@@ -1,6 +1,6 @@
 --# -path=.:alltenses:prelude
 
-resource TryEng = SyntaxEng-[mkAdN], LexiconEng, ParadigmsEng - [mkAdv,mkAdN,mkOrd] ** 
+resource TryEng = SyntaxEng-[mkAdN], LexiconEng, ParadigmsEng - [mkAdv,mkAdN,mkOrd,mkQuant] ** 
   open (P = ParadigmsEng) in {
 
 oper
