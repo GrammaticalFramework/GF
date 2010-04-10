@@ -89,4 +89,10 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     IAdvAdv adv = {s = "kuinka" ++ adv.s} ;
 
+    ProDrop p = {
+      s = table {NPCase (Nom | Gen) => [] ; c => p.s ! c} ; 
+          ---- drop Gen only works in adjectival position
+      a = p.a
+      } ;
+
 } 
