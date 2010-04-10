@@ -1,12 +1,13 @@
 concrete SentencesCat of Sentences = NumeralCat ** SentencesI - [
-  IFemale, YouFamFemale, YouPolFemale
+  PersonName ---- stack overflow
+  ,IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale
  ] 
   with 
     (Syntax = SyntaxCat), 
     (Symbolic = SymbolicCat), 
     (Lexicon = LexiconCat) ** 
   open SyntaxCat, ExtraCat, Prelude in {
-
+{-
     lin 
       IFemale = 
         {name = mkNP (ProDrop i8fem_Pron) ; isPron = True ; poss = mkQuant i_Pron} ; 
@@ -20,6 +21,7 @@ concrete SentencesCat of Sentences = NumeralCat ** SentencesI - [
         {name = mkNP (ProDrop youSg_Pron) ; isPron = True ; poss = mkQuant youSg_Pron} ; 
       YouPolMale = 
         {name = mkNP (ProDrop youPol_Pron) ; isPron = True ; poss = mkQuant youPol_Pron} ;
-
+-}
 }
+
 

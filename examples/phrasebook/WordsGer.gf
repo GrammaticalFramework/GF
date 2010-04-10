@@ -48,7 +48,7 @@ concrete WordsGer of Words = SentencesGer **
 
     DanishCrown = mkCN (mkA "Dänisch") (mkN "Krone") ;
 --     Dollar = mkCN (mkN "dollar" "dollar") ;
-    Euro = mkCN (mkN "Euro" "Euro" neuter) ;
+    Euro = mkCN (mkN "Euro" "Euro" "Euro" "Euro" "Euro" "Euro" neuter) ;
 --     Lei = mkCN (mkN "lei" "lei") ;
 --     SwedishCrown = mkCN (mkA "svensk") (mkN "krona") ;
 

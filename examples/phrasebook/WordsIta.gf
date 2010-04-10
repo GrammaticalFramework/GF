@@ -1,4 +1,4 @@
--- (c) 2009 Aarne Ranta and Olga Caprotti under LGPL
+-- (c) 2010 Aarne Ranta and Olga Caprotti under LGPL
 
 concrete WordsIta of Words = SentencesIta ** open
   SyntaxIta,
@@ -6,7 +6,8 @@ concrete WordsIta of Words = SentencesIta ** open
   (E = ExtraIta),
   (L = LexiconIta),
   (P = ParadigmsIta), 
-  ParadigmsIta in {
+  ParadigmsIta,
+  Prelude in {
 
 lin
 
@@ -16,8 +17,10 @@ lin
     Beer = mkCN L.beer_N ;
     Bread = mkCN L.bread_N ;
     Cheese = mkCN (mkN "formaggio") ;
+    Chicken = mkCN (mkN "pollo") ;
     Coffee = mkCN (mkN "caffè") ;
     Fish = mkCN L.fish_N ;
+    Meat = mkCN (mkN "carne" feminine) ;
     Milk = mkCN L.milk_N ;
     Pizza = mkCN (mkN "pizza") ;
     Salt = mkCN L.salt_N ;
@@ -29,30 +32,40 @@ lin
 
     Bad = L.bad_A ;
     Boring = mkA "noioso" ;
+    Cheap = let c = "a buon mercato" in mkA c c c c c ; ----
     Cold = L.cold_A ;
     Delicious = mkA "delizioso" ;
     Expensive = mkA "caro" ;
     Fresh = mkA "fresco" ;
     Good = L.good_A ;
     Warm = L.warm_A ;
+    Suspect = mkA "sospetto" ;
 
 -- places
 
     Airport = mkPlace (mkN "aeroporto") dative ;
     Bar = mkPlace (mkN "bar") P.in_Prep ;
     Church = mkPlace (mkN "chiesa") P.in_Prep ;
+    Cinema = mkPlace (mkN "cinema") P.in_Prep ;
     Hospital = mkPlace (mkN "ospedale") P.in_Prep ;
+    Hotel = mkPlace (mkN "albergo") P.in_Prep ;
     Museum = mkPlace (mkN "museo") P.in_Prep ;
+    Park = mkPlace (mkN "parco") P.in_Prep ;
     Restaurant = mkPlace (mkN "ristorante") P.in_Prep ;
+    School = mkPlace (mkN "scuola") P.in_Prep ;
+    Shop = mkPlace (mkN "negozio") P.in_Prep ;
     Station = mkPlace (mkN "stazione" feminine) dative ;
+    Theatre = mkPlace (mkN "teatro") P.in_Prep ;
     Toilet = mkPlace (mkN "bagno") P.in_Prep ;
+    University = mkPlace (mkN "università") dative ;
 
 -- currencies
 
-    DanishCrown = mkCN (mkA "danese") (mkN "corona") ;
+    DanishCrown = mkCN (mkA "danese") (mkN "corona") | mkCN (mkN "corona") ;
     Dollar = mkCN (mkN "dollar") ;
     Euro = mkCN (mkN "euro" "euro" masculine) ;
     Lei = mkCN (mkN "lei") ; ---- ?
+    SwedishCrown = mkCN (mkA "svedese") (mkN "corona") | mkCN (mkN "corona") ;
 
 -- nationalities
 
@@ -68,6 +81,12 @@ lin
 
 -- actions
 
+    AHasAge p num = mkCl p.name have_V2 (mkNP num L.year_N) ;
+    AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
+    AHasRoom p num = mkCl p.name have_V2 
+      (mkNP (mkNP a_Det (mkN "camera")) (SyntaxIta.mkAdv for_Prep (mkNP num (mkN "persona")))) ;
+    AHasTable p num = mkCl p.name have_V2 
+      (mkNP (mkNP a_Det (mkN "tavolo")) (SyntaxIta.mkAdv for_Prep (mkNP num (mkN "persona")))) ;
     AHasName p name = mkCl p.name (mkV2 (reflV (mkV "chiamare"))) name ;
     AHungry p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "fame" feminine))) ;
     AIll p = mkCl p.name (mkA "malato") ;
@@ -76,6 +95,8 @@ lin
     ALive p co = 
       mkCl p.name (mkVP (mkVP (mkV "abitare")) (SyntaxIta.mkAdv P.in_Prep co)) ;
     ALove p q = mkCl p.name (mkV2 (mkV "amare")) q.name ;
+    AMarried p = mkCl p.name (mkA "sposato") ;
+    AReady p = mkCl p.name (mkA "pronto") ;
     AScared p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "paura" feminine))) ;
     ASpeak p lang = mkCl p.name  (mkV2 (mkV "parlare")) lang ;
     AThirsty p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "sete" feminine))) ;
@@ -88,6 +109,7 @@ lin
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name (reflV (mkV "chiamare")))) ;
+    QWhatAge p = mkQS (mkQCl (mkIP how8many_IDet L.year_N) p.name have_V2) ; 
 
     PropOpen p = mkCl p.name open_A ;
     PropClosed p = mkCl p.name closed_A ;
@@ -99,6 +121,24 @@ lin
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "costare"))) ; 
     ItCost item price = mkCl item (mkV2 (mkV "costare")) price ;
 
+-- Building phrases from strings is complicated: the solution is to use
+-- mkText : Text -> Text -> Text ;
+
+    PSeeYou d = mkText (lin Text (ss ("arrivederci"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlace p d = 
+      mkText (lin Text (ss ("arrivederci"))) 
+        (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
+
+-- Relations are expressed as "my wife" or "the wife of my son", as defined by $xOf$
+-- below. Languages with productive genitives can use an equivalent of
+-- "my son's wife" for non-pronouns, as e.g. in English.
+
+    Wife = xOf sing (mkN "sposa") ;
+    Husband = xOf sing (mkN "marito") ;
+    Son = xOf sing (mkN "figlio") ;
+    Daughter = xOf sing (mkN "figlia") ;
+    Children = xOf plur L.child_N ;
+
 -- week days
 
     Monday = mkDay "lunedì" ;
@@ -109,24 +149,22 @@ lin
     Saturday = mkDay "sabato" ;
     Sunday = mkDay "domenica" ;
 
+    Tomorrow = P.mkAdv "domani" ;
+
 -- auxiliaries
 
   oper
-    mkNat : Str -> Str -> {lang : NP ; prop : A ; country : NP} = \nat,co -> 
-      {lang = mkNP (mkPN nat) ; prop = mkA nat ; country = mkNP (mkPN co)} ;
+    mkNat : Str -> Str -> NPNationality = \nat,co -> 
+      mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
 
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
       let day = mkNP (mkPN d) in
-      {name = day ; 
-       point, -- = ParadigmsIta.mkAdv d ; 
-       habitual = ParadigmsIta.mkAdv ("il" ++ d) ; ---- ?
-      } ;
+      mkNPDay day (P.mkAdv ("il" ++ d)) (P.mkAdv ("il" ++ d)) ; ---- ?
 
-    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i -> {
-      name = mkCN p ;
-      at = i ;
-      to = dative
-      } ;
+    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i ->
+      mkCNPlace (mkCN p) i dative ;
+
+    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (mkCN x) p ; 
 
     open_A = mkA "aperto" ;
     closed_A = mkA "chiuso" ;

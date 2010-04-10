@@ -1,28 +1,28 @@
 concrete GreetingsPol of Greetings = open Prelude in {
 
--- lincat 
---   Greeting = SS ;
--- 
--- lin 
---   GBye = ss "hej då" ;
---   GCheers = ss "skål" ;
---   GDamn = ss "fan" ;
---   GExcuse, GExcusePol = ss "ursäkta" ;
---   GGoodDay = ss "god dag" ;
---   GGoodEvening = ss "god afton" ;
---   GGoodMorning = ss "god morgon" ;
---   GGoodNight = ss "god natt" ;
---   GGoodbye = ss "hej då" ;
---   GHello = ss "hej" ;
---   GHelp = ss "hjälp" ;
---   GHowAreYou = ss "hur står det till" ;
---   GLookOut = ss "se upp" ;
---   GNiceToMeetYou = ss "trevligt att träffas" ;
---   GPleaseGive, GPleaseGivePol = ss "var så god" ;
---   GSeeYouSoon = ss "vi ses snart" ;
---   GSorry, GSorryPol = ss "förlåt" ;
---   GThanks = ss "tack" ;
---   GTheCheck = ss "notan" ;
--- 
--- }
+--lincat 
+--  Greeting = SS ;
+
+--lin 
+--  GBye = ss "bye" ;
+--  GCheers = ss "cheers" ;
+--  GDamn = ss "damn" ;
+--  GExcuse, GExcusePol = ss "excuse me" ;
+--  GGoodDay = ss "good afternoon" ; ----
+--  GGoodEvening = ss "good evening" ;
+--  GGoodMorning = ss "good morning" ;
+--  GGoodNight = ss "good night" ;
+--  GGoodbye = ss "goodbye" ;
+--  GHello = ss "hello" ;
+--  GHelp = ss "help" ;
+--  GHowAreYou = ss "how are you" ;
+--  GLookOut = ss "look out" ;
+--  GNiceToMeetYou, GNiceToMeetYouPol = ss "nice to meet you" ;
+--  GPleaseGive, GPleaseGivePol = ss "please" ;
+--  GSeeYouSoon = ss "see you soon" ;
+--  GSorry, GSorryPol = ss "sorry" ;
+--  GThanks = ss "thank you" ;
+--  GTheCheck = ss "the bill" ;
+
+--}
 }

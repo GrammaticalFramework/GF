@@ -17,6 +17,7 @@
 History
 </P>
 <UL>
+<LI>10 April. Some additions in API, comments in implementation; regenerated clones.
 <LI>8 April. Added German.
 <LI>7 April. Added the Clone script, applied to initiate the rest of MOLTO languages.
 <LI>6 April. Version 0.4: weekdays, nationalities
@@ -193,10 +194,19 @@ The basic things "everyone" can do is
 <P>
 The missing concrete syntax entries are added to the <CODE>Words</CODE><I>L</I><CODE>.gf</CODE> 
 files for each language <I>L</I>. The
-<A HREF="http://www.grammaticalframework.org/lib/doc/synopsis.html#toc78">morphological paradigms</A>
+<A HREF="http://code.haskell.org/gf/lib/doc/synopsis.html#toc78">morphological paradigms</A>
 of the GF resource library should be used. Actions (prefixed with <CODE>A</CODE>, as <CODE>AWant</CODE>) are
 a little more demanding, since they also require syntax constructors. Greetings (prefixed
 with <CODE>G</CODE>) are pure strings.
+</P>
+<P>
+Some explanations can be found in the 
+<A HREF="Implementation.html">implementation document</A>, which is produced from the
+concrete syntax files
+<A HREF="http://code.haskell.org/gf/examples/phrasebook/SentencesI.gf"><CODE>SentencesI.gf</CODE></A>
+and
+<A HREF="http://code.haskell.org/gf/examples/phrasebook/WordsEng.gf"><CODE>WordsEng.gf</CODE></A>
+by <CODE>make doc</CODE>.
 </P>
 <P>
 Here are the steps to follow for contributors:

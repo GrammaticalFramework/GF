@@ -8,7 +8,8 @@ concrete DisambPhrasebookEng of Phrasebook = PhrasebookEng -
     LangNat, -- CitiNat,
     GExcuse, GExcusePol, 
     GSorry, GSorryPol, 
-    GPleaseGive, GPleaseGivePol
+    GPleaseGive, GPleaseGivePol,
+    GNiceToMeetYou, GNiceToMeetYouPol
    ] 
   ** open SyntaxEng, ParadigmsEng, Prelude in {
 lin
@@ -28,14 +29,16 @@ lin
   GSorryPol = pol "sorry" ;
   GPleaseGive = fam "please" ;
   GPleaseGivePol = pol "please" ;
+  GNiceToMeetYou = fam "nice to meet you" ;
+  GNiceToMeetYouPol = pol "nice to meet you" ;
 
 oper
   fam : Str -> SS = \s -> postfixSS "(familiar)" (ss s) ;
   pol : Str -> SS = \s -> postfixSS "(polite)" (ss s) ;
 
-  mkP : Pron -> Str -> {name : NP ; isPron : Bool ; poss : Det} = \p,s ->
+  mkP : Pron -> Str -> {name : NP ; isPron : Bool ; poss : Quant} = \p,s ->
     {name = mkNP (mkNP p) (ParadigmsEng.mkAdv s) ;
      isPron = False ; -- to show the disambiguation 
-     poss = mkDet youSg_Pron 
+     poss = SyntaxEng.mkQuant youSg_Pron 
     } ;
 }

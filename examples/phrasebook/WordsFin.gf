@@ -47,6 +47,8 @@ concrete WordsFin of Words = SentencesFin **
     Station = mkPlace (mkN "asema") lla ;
     Hospital = mkPlace (mkN "sairaala") ssa ;
     Church = mkPlace (mkN "kirkko") ssa ;
+    Cinema = mkPlace (mkN "elokuva" (mkN "teatteri")) ssa ;
+    Theatre = mkPlace (mkN "teatteri") ssa ;
     Shop = mkPlace (mkN "kauppa") ssa ;
     Park = mkPlace (mkN "puisto") ssa ;
     Hotel = mkPlace (mkN "hotelli") ssa ;
@@ -55,9 +57,11 @@ concrete WordsFin of Words = SentencesFin **
 
 -- currencies
 
+    DanishCrown = mkCN (mkN "Tanskan kruunu") | mkCN (mkN "kruunu") ;
     Dollar = mkCN (mkN "dollari") ;
     Euro = mkCN (mkN "euro") ;
     Lei = mkCN (mkN "lei") ;
+    SwedishCrown = mkCN (mkN "Ruotsin kruunu") | mkCN (mkN "kruunu") ;
 
 -- nationalities
 
@@ -77,13 +81,27 @@ concrete WordsFin of Words = SentencesFin **
 
 -- actions
 
+    AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
+    AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
     AHasName p name = mkCl (nameOf p) name ;
+    AHasRoom p num = mkCl p.name have_V2 
+----      (mkNP (E.PartCN (mkN "huone"))  ---- partitive works in questions 
+      (mkNP (mkNP a_Det (mkN "huone"))
+         (SyntaxFin.mkAdv for_Prep (mkNP num (mkN "henki" "henkiä")))) ;
+    AHasTable p num = mkCl p.name have_V2 
+----      (mkNP (E.PartCN (mkN "pöytä")) 
+      (mkNP (mkNP a_Det (mkN "pöytä")) 
+         (SyntaxFin.mkAdv for_Prep (mkNP num (mkN "henki" "henkiä")))) ;
+
+
     AHungry p = mkCl p.name have_V2 (mkNP (mkN "nälkä")) ;
     AIll p = mkCl p.name (mkA "sairas") ;
     AKnow p = mkCl p.name (mkV "tietää") ;
     ALike p item = mkCl p.name L.like_V2 item ;
     ALive p co = mkCl p.name (mkVP (mkVP (mkV "asua")) (SyntaxFin.mkAdv in_Prep co)) ;
     ALove p q = mkCl p.name (mkV2 (mkV "rakastaa") partitive) q.name ;
+    AMarried p = mkCl p.name (ParadigmsFin.mkAdv "naimisissa") ;
+    AReady p = mkCl p.name (ParadigmsFin.mkA "valmis") ;
     AScared p = mkCl p.name (caseV partitive (mkV "pelottaa")) ;
     ASpeak p lang = mkCl p.name  (mkV2 (mkV "puhua") partitive) lang ;
     AThirsty p = mkCl p.name have_V2 (mkNP (mkN "jano")) ;
@@ -95,6 +113,9 @@ concrete WordsFin of Words = SentencesFin **
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
+    QWhatAge p = mkQS (mkQCl (E.ICompAP (mkAP L.old_A)) p.name) ;
+    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "maksaa"))) ; 
+    ItCost item price = mkCl item (mkV2 (mkV "maksaa")) price ;
 
     PropOpen p = mkCl p.name open_Adv ;
     PropClosed p = mkCl p.name closed_Adv ;
@@ -103,8 +124,24 @@ concrete WordsFin of Words = SentencesFin **
     PropOpenDay p d = mkCl p.name (mkVP (mkVP open_Adv) d.habitual) ; 
     PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_Adv) d.habitual) ; 
 
-    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "maksaa"))) ; 
-    ItCost item price = mkCl item (mkV2 (mkV "maksaa")) price ;
+
+-- Building phrases from strings is complicated: the solution is to use
+-- mkText : Text -> Text -> Text ;
+
+    PSeeYou d = mkText (lin Text (ss ("nähdään"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlace p d = 
+      mkText (lin Text (ss ("nähdään"))) 
+        (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
+
+-- Relations are expressed as "my wife" or "my son's wife", as defined by $xOf$
+-- below. Languages without productive genitives must use an equivalent of
+-- "the wife of my son" for non-pronouns.
+
+    Wife = xOf sing (mkN "vaimo") ;
+    Husband = xOf sing L.man_N ;
+    Son = xOf sing L.boy_N ;
+    Daughter = xOf sing (mkN "tytär") ;
+    Children = xOf plur L.child_N ;
 
 -- week days
 
@@ -115,6 +152,8 @@ concrete WordsFin of Words = SentencesFin **
     Friday = let d = "perjantai" in mkDay (mkPN d) (d + "sin") ;
     Saturday = let d = "lauantai" in mkDay (mkPN d) (d + "sin") ;
     Sunday = let d = "sunnuntai" in mkDay (mkPN d) (d + "sin") ;
+
+    Tomorrow = ParadigmsFin.mkAdv "huomenna" ;
 
   oper
     mkNat : PN -> PN -> A -> 
@@ -140,24 +179,12 @@ concrete WordsFin of Words = SentencesFin **
     ssa = False ;
     lla = True ;
 
-    open_Adv = ParadigmsFin.mkAdv "avoinna" ;
-    closed_Adv = ParadigmsFin.mkAdv "kiinni" ;
-
-    NPPerson : Type = {name : NP ; isPron : Bool ; poss : Quant} ;
-
-    xOf : Bool -> N -> NPPerson -> NPPerson = \n,x,p -> 
-      let num = if_then_else Num n plNum sgNum in {
-        name = case p.isPron of {
-          True => mkNP p.poss num x ;
-          _    => mkNP (E.GenNP p.name) num x
-          } ;
-        isPron = False ;
-        poss = SyntaxFin.mkQuant he_Pron -- not used because not pron
-      } ;
-         
+    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
+      relativePerson n (mkCN x) (\a,b,c -> mkNP (E.GenNP b) a c) p ;
 
     nameOf : NPPerson -> NP = \p -> (xOf sing L.name_N p).name ;
 
-    sing = False ; plur = True ;
+    open_Adv = ParadigmsFin.mkAdv "avoinna" ;
+    closed_Adv = ParadigmsFin.mkAdv "kiinni" ;
 
 }

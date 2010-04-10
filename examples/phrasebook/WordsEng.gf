@@ -1,12 +1,17 @@
--- (c) 2009 Aarne Ranta under LGPL
+--2 Implementations of Words, with English as example
 
 concrete WordsEng of Words = SentencesEng ** 
     open 
-      SyntaxEng, ParadigmsEng, (L = LexiconEng), (P = ParadigmsEng), 
-      IrregEng, ExtraEng, Prelude in {
+      SyntaxEng, 
+      ParadigmsEng, 
+      (L = LexiconEng), 
+      (P = ParadigmsEng), 
+      IrregEng, 
+      ExtraEng, 
+      Prelude in {
   lin
 
--- kinds
+-- Kinds; many of them are in the resource lexicon, others can be built by $mkN$.
 
     Apple = mkCN L.apple_N ;
     Beer = mkCN L.beer_N ;
@@ -23,7 +28,7 @@ concrete WordsEng of Words = SentencesEng **
     Water = mkCN L.water_N ;
     Wine = mkCN L.wine_N ;
 
--- properties
+-- Properties; many of them are in the resource lexicon, others can be built by $mkA$.
 
     Bad = L.bad_A ;
     Boring = mkA "boring" ;
@@ -36,7 +41,9 @@ concrete WordsEng of Words = SentencesEng **
     Suspect = mkA "suspect" ;
     Warm = L.warm_A ;
 
--- places
+-- Places require different prepositions to express location; in some languages 
+-- also the directional preposition varies, but in English we use $to$, as
+-- defined by $mkPlace$.
 
     Airport = mkPlace "airport" "at" ;
     Bar = mkPlace "bar" "in" ;
@@ -54,15 +61,15 @@ concrete WordsEng of Words = SentencesEng **
     Toilet = mkPlace "toilet" "in" ;
     University = mkPlace "university" "at" ;
 
--- currencies
+-- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
 
-    DanishCrown = mkCN (mkA "Danish") (mkN "crown") ;
+    DanishCrown = mkCN (mkA "Danish") (mkN "crown") | mkCN (mkN "crown") ;
     Dollar = mkCN (mkN "dollar") ;
     Euro = mkCN (mkN "euro" "euros") ; -- to prevent euroes
     Lei = mkCN (mkN "leu" "lei") ;
-    SwedishCrown = mkCN (mkA "Swedish") (mkN "crown") ;
+    SwedishCrown = mkCN (mkA "Swedish") (mkN "crown") | mkCN (mkN "crown") ;
 
--- nationalities
+-- Nationalities
 
     Belgian = mkA "Belgian" ;
     Belgium = mkNP (mkPN "Belgium") ;
@@ -74,10 +81,14 @@ concrete WordsEng of Words = SentencesEng **
     Romanian = mkNat "Romanian" "Romania" ;
     Swedish = mkNat "Swedish" "Sweden" ;
 
--- actions
+-- Actions: the predication patterns are very often language-dependent.
 
-    AHasAge p num = mkCl p.name (mkNP <lin Numeral num : Numeral> L.year_N) ;
-    AHasChildren p num = mkCl p.name have_V2 (mkNP <lin Numeral num : Numeral> L.child_N) ;
+    AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
+    AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
+    AHasRoom p num = mkCl p.name have_V2 
+      (mkNP (mkNP a_Det (mkN "room")) (SyntaxEng.mkAdv for_Prep (mkNP num (mkN "person")))) ;
+    AHasTable p num = mkCl p.name have_V2 
+      (mkNP (mkNP a_Det (mkN "table")) (SyntaxEng.mkAdv for_Prep (mkNP num (mkN "person")))) ;
     AHasName p name = mkCl (nameOf p) name ;
     AHungry p = mkCl p.name (mkA "hungry") ;
     AIll p = mkCl p.name (mkA "ill") ;
@@ -86,6 +97,7 @@ concrete WordsEng of Words = SentencesEng **
     ALive p co = mkCl p.name (mkVP (mkVP (mkV "live")) (SyntaxEng.mkAdv in_Prep co)) ;
     ALove p q = mkCl p.name (mkV2 (mkV "love")) q.name ;
     AMarried p = mkCl p.name (mkA "married") ;
+    AReady p = mkCl p.name (mkA "ready") ;
     AScared p = mkCl p.name (mkA "scared") ;
     ASpeak p lang = mkCl p.name  (mkV2 IrregEng.speak_V) lang ;
     AThirsty p = mkCl p.name (mkA "thirsty") ;
@@ -97,7 +109,9 @@ concrete WordsEng of Words = SentencesEng **
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
-    QWhatAge p = mkQS (mkQCl (ICompAP (mkAP (mkA "old"))) p.name) ;
+    QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
+    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregEng.cost_V)) ; 
+    ItCost item price = mkCl item (mkV2 IrregEng.cost_V) price ;
 
     PropOpen p = mkCl p.name open_Adv ;
     PropClosed p = mkCl p.name closed_Adv ;
@@ -106,8 +120,17 @@ concrete WordsEng of Words = SentencesEng **
     PropOpenDay p d = mkCl p.name (mkVP (mkVP open_Adv) d.habitual) ; 
     PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_Adv) d.habitual) ; 
 
-    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregEng.cost_V)) ; 
-    ItCost item price = mkCl item (mkV2 IrregEng.cost_V) price ;
+-- Building phrases from strings is complicated: the solution is to use
+-- mkText : Text -> Text -> Text ;
+
+    PSeeYou d = mkText (lin Text (ss ("see you"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlace p d = 
+      mkText (lin Text (ss ("see you"))) 
+        (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
+
+-- Relations are expressed as "my wife" or "my son's wife", as defined by $xOf$
+-- below. Languages without productive genitives must use an equivalent of
+-- "the wife of my son" for non-pronouns.
 
     Wife = xOf sing (mkN "wife") ;
     Husband = xOf sing (mkN "husband") ;
@@ -125,42 +148,29 @@ concrete WordsEng of Words = SentencesEng **
     Saturday = mkDay "Saturday" ;
     Sunday = mkDay "Sunday" ;
  
+    Tomorrow = P.mkAdv "tomorrow" ;
+
 -- auxiliaries
 
   oper
-    mkNat : Str -> Str -> {lang : NP ; prop : A ; country : NP} = \nat,co -> 
-      {lang = mkNP (mkPN nat) ; prop = mkA nat ; country = mkNP (mkPN co)} ;
+
+    mkNat : Str -> Str -> NPNationality = \nat,co -> 
+      mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
 
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
-      let day = mkNP (mkPN d) in
-      {name = day ; 
-       point = SyntaxEng.mkAdv on_Prep day ; 
-       habitual = SyntaxEng.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))
-      } ;
+      let day = mkNP (mkPN d) in 
+      mkNPDay day (SyntaxEng.mkAdv on_Prep day) 
+        (SyntaxEng.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
 
-    mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> {
-      name = mkCN (mkN p) ;
-      at = P.mkPrep i ;
-      to = to_Prep
-      } ;
+    mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
+      mkCNPlace (mkCN (mkN p)) (P.mkPrep i) to_Prep ;
 
     open_Adv = P.mkAdv "open" ;
     closed_Adv = P.mkAdv "closed" ;
 
-    NPPerson : Type = {name : NP ; isPron : Bool ; poss : Quant} ;
-
-    xOf : Bool -> N -> NPPerson -> NPPerson = \n,x,p -> 
-      let num = if_then_else Num n plNum sgNum in {
-      name = case p.isPron of {
-        True => mkNP p.poss num x ;
-        _    => mkNP (mkNP the_Quant num x) 
-                       (SyntaxEng.mkAdv possess_Prep p.name)
-        } ;
-      isPron = False ;
-      poss = SyntaxEng.mkQuant he_Pron -- not used because not pron
-      } ;
+    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
+      relativePerson n (mkCN x) (\a,b,c -> mkNP (GenNP b) a c) p ;
 
     nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "name") p).name ;
 
-    sing = False ; plur = True ;
 }

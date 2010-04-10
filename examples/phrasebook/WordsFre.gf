@@ -71,6 +71,9 @@ lin
 
 -- actions
 
+    AHasAge p num = mkCl p.name have_V2 (mkNP num L.year_N) ;
+    AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
+    AMarried p = mkCl p.name (mkA "marié") ;
     AWant p obj = mkCl p.name vouloir_V2 obj ;
     ALike p item = mkCl item plaire_V2 p.name ;
     ASpeak p lang = mkCl p.name  (mkV2 (mkV "parler")) lang ;
@@ -89,6 +92,7 @@ lin
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name (reflV (mkV "appeler")))) ;
+    QWhatAge p = mkQS (mkQCl (mkIP whichSg_IDet (mkN "âge" masculine)) p.name have_V2) ; 
 
     PropOpen p = mkCl p.name open_A ;
     PropClosed p = mkCl p.name closed_A ;
@@ -99,6 +103,12 @@ lin
 
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "coûter"))) ; 
     ItCost item price = mkCl item (mkV2 (mkV "coûter")) price ;
+
+    Wife = xOf sing (mkN "femme") ;
+    Husband = xOf sing (mkN "mari") ;
+    Son = xOf sing (mkN "fils") ;
+    Daughter = xOf sing (mkN "fille") ;
+    Children = xOf plur L.child_N ;
 
 -- week days
 
@@ -112,23 +122,19 @@ lin
 
 
   oper
-    mkNat : Str -> Str -> {lang : NP ; prop : A ; country : NP} = \nat,co -> 
-      {lang = mkNP (mkPN nat) ; prop = mkA nat ; country = mkNP (mkPN co)} ;
+    mkNat : Str -> Str -> NPNationality = \nat,co -> 
+      mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
 
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
       let day = mkNP (mkPN d) in
-      {name = day ; 
-       point = P.mkAdv d ; 
-       habitual = P.mkAdv ("le" ++ d) ;
-      } ;
+      mkNPDay day (P.mkAdv d) (P.mkAdv ("le" ++ d)) ;
 
-    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i -> {
-      name = mkCN p ;
-      at = i ;
-      to = dative
-      } ;
+    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i ->
+      mkCNPlace (mkCN p) i dative ;
 
     open_A = P.mkA "ouvert" ;
     closed_A = P.mkA "fermé" ;
+
+    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (mkCN x) p ; 
 
 }

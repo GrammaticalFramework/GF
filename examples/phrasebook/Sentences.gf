@@ -36,7 +36,7 @@ abstract Sentences = Numeral ** {
     Day ;         -- weekday type                              e.g. "Friday"
     Date ;        -- definite date                             e.g. "on Friday"
     Name ;        -- name of person                            e.g. "NN"
-    -- Numeral ;  -- number expression 1 .. 999,999            e.g. "twenty"
+    Number ;      -- number expression 1 .. 999,999            e.g. "twenty"
 
 -- Many of the categories are accessible as Phrases, i.e. as translation units.
 
@@ -47,7 +47,7 @@ abstract Sentences = Numeral ** {
     PObject      : Object   -> Phrase ;
     PKind        : Kind     -> Phrase ;
     PQuality     : Quality  -> Phrase ;
-    PNumeral     : Numeral  -> Phrase ;
+    PNumber      : Number   -> Phrase ;
     PPlace       : Place    -> Phrase ;
     PPlaceKind   : PlaceKind-> Phrase ;
     PCurrency    : Currency -> Phrase ;
@@ -79,7 +79,7 @@ abstract Sentences = Numeral ** {
 -- Here are some general syntactic constructions.
 
     ObjItem   : Item -> Object ;                 -- this pizza
-    ObjNumber : Numeral -> Kind -> Object ;      -- five pizzas
+    ObjNumber : Number -> Kind -> Object ;       -- five pizzas
     ObjIndef  : Kind -> Object ;                 -- a pizza
     
     SuchKind : Quality -> Kind -> Kind ;         -- Italian pizza
@@ -92,7 +92,7 @@ abstract Sentences = Numeral ** {
     This, That, These, Those : Kind -> Item ;    -- this pizza,...,those pizzas
     The, Thes : Kind -> Item ;                   -- the pizza, the pizzas
 
-    AmountCurrency : Numeral -> Currency -> Price ;  -- five euros
+    AmountCurrency : Number -> Currency -> Price ;  -- five euros
 
     ThePlace : PlaceKind -> Place ;                  -- the bar
 
@@ -112,6 +112,8 @@ abstract Sentences = Numeral ** {
     NameNN     : Name ;                       -- the name "NN"
 
 ----    NameString : String -> Name ; ---- creates ambiguities with all words --%
+
+    NNumeral   : Numeral -> Number ;          -- numeral in words, e.g. "twenty"
 
 -- Actions are typically language-dependent, not only lexically but also
 -- structurally. However, these ones are mostly functorial.

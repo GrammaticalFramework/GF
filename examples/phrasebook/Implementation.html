@@ -1,0 +1,381 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1> Implementation of MOLTO Phrasebook</h1>
+
+<h2> The functor for (mostly) common structures</h2>
+<pre>
+  incomplete concrete SentencesI of Sentences = Numeral ** 
+    open
+      Syntax,
+      Lexicon,
+      Symbolic,  -- for names as strings
+      Prelude
+    in {
+    lincat
+      Phrase = Text ;
+      Sentence = S ;
+      Question = QS ;
+      Proposition = Cl ;
+      Item = NP ;
+      Kind = CN ;
+      Quality = AP ;
+      Property = A ;
+      Object = NP ;
+      Place = NPPlace ; -- {name : NP ; at : Adv ; to : Adv} ;
+      PlaceKind = CNPlace ; -- {name : CN ; at : Prep ; to : Prep} ;
+      Currency = CN ;
+      Price = NP ;
+      Action = Cl ;
+      Person = NPPerson ; -- {name : NP ; isPron : Bool ; poss : Quant} ;
+      Nationality = NPNationality ; -- {lang : NP ; country : NP ; prop : A} ; 
+      Language = NP ;
+      Citizenship = A ;
+      Country = NP ;
+      Day = NPDay ; -- {name : NP ; point : Adv ; habitual : Adv} ;
+      Date = Adv ;
+      Name = NP ;
+      Number = Card ;
+    lin
+      PSentence s = mkText s | lin Text (mkUtt s) ;  -- optional '.'
+      PQuestion s = mkText s | lin Text (mkUtt s) ;  -- optional '?'
+  
+      PObject x = mkPhrase (mkUtt x) ;
+      PKind x = mkPhrase (mkUtt x) ;
+      PQuality x = mkPhrase (mkUtt x) ;
+      PNumber x = mkPhrase (mkUtt x) ;
+      PPlace x = mkPhrase (mkUtt x.name) ;
+      PPlaceKind x = mkPhrase (mkUtt x.name) ;
+      PCurrency x = mkPhrase (mkUtt x) ;
+      PPrice x = mkPhrase (mkUtt x) ;
+      PLanguage x = mkPhrase (mkUtt x) ;
+      PCountry x = mkPhrase (mkUtt x) ;
+      PCitizenship x = mkPhrase (mkUtt (mkAP x)) ;
+      PDay d = mkPhrase (mkUtt d.name) ;
+  
+      PYes = mkPhrase yes_Utt ;
+      PNo = mkPhrase no_Utt ;
+  
+      Is = mkCl ;
+  
+      SProp = mkS ;
+      SPropNot = mkS negativePol ;
+      QProp p = mkQS (mkQCl p) ;
+  
+      WherePlace place = mkQS (mkQCl where_IAdv place.name) ;
+      WherePerson person = mkQS (mkQCl where_IAdv person.name) ;
+  
+      PropAction a = a ;
+  
+      AmountCurrency num curr = mkNP num curr ;
+  
+      ObjItem i = i ;
+      ObjNumber n k = mkNP n k ;
+      ObjIndef k = mkNP a_Quant k ;
+  
+      This kind = mkNP this_Quant kind ;
+      That kind = mkNP that_Quant kind ;
+      These kind = mkNP this_Quant plNum kind ;
+      Those kind = mkNP that_Quant plNum kind ;
+      The kind = mkNP the_Quant kind ;
+      The kind = mkNP the_Quant kind ;
+      Thes kind = mkNP the_Quant plNum kind ;
+      SuchKind quality kind = mkCN quality kind ;
+      Very property = mkAP very_AdA (mkAP property) ;
+      Too property = mkAP too_AdA (mkAP property) ;
+      PropQuality property = mkAP property ;
+      ThePlace kind =
+        let name : NP = mkNP the_Quant kind.name in {
+          name = name ;
+          at = mkAdv kind.at name ;
+          to = mkAdv kind.to name
+        } ;
+  
+      IMale, IFemale = mkPerson i_Pron ;
+      YouFamMale, YouFamFemale = mkPerson youSg_Pron ;
+      YouPolMale, YouPolFemale = mkPerson youPol_Pron ;
+  
+      LangNat n = n.lang ;
+      CitiNat n = n.prop ;
+      CountryNat n = n.country ;
+      PropCit c = c ;
+  
+      OnDay d = d.point ;
+      Today = today_Adv ;
+  
+      PersonName n = 
+        {name = n ; isPron = False ; poss = mkQuant he_Pron} ; -- poss not used
+</pre>
+
+<pre>
+      NameNN = symb "NN" ;
+  
+      NNumeral n = mkCard &lt;lin Numeral n : Numeral>  ;
+  
+      AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
+      ACitizen p n = mkCl p.name n ;
+      ABePlace p place = mkCl p.name place.at ;
+  
+  oper 
+</pre>
+
+These operations are used internally in Sentences.
+<pre>
+    mkPhrase : Utt -> Text = \u -> lin Text u ; -- no punctuation
+  
+    mkPerson : Pron -> {name : NP ; isPron : Bool ; poss : Quant} = \p -> 
+      {name = mkNP p ; isPron = True ; poss = mkQuant p} ;
+</pre>
+
+These are used in Words for each language.
+<pre>
+    NPNationality : Type = {lang : NP ; country : NP ; prop : A} ;
+  
+    mkNPNationality : NP -> NP -> A -> NPNationality = \la,co,pro ->
+          {lang = la ; 
+           country = co ;
+           prop = pro
+          } ;
+  
+    NPDay : Type = {name : NP ; point : Adv ; habitual : Adv} ;
+  
+    mkNPDay : NP -> Adv -> Adv -> NPDay = \d,p,h ->
+        {name = d ; 
+         point = p ;
+         habitual = h
+        } ;
+  
+    NPPlace : Type = {name : NP ; at : Adv ; to : Adv} ;
+    CNPlace : Type = {name : CN ; at : Prep ; to : Prep} ;
+  
+    mkCNPlace : CN -> Prep -> Prep -> CNPlace = \p,i,t -> {
+      name = p ;
+      at = i ;
+      to = t
+      } ;
+  
+    NPPerson : Type = {name : NP ; isPron : Bool ; poss : Quant} ;
+  
+    relativePerson : GNumber -> CN -> (Num -> NP -> CN -> NP) -> NPPerson -> NPPerson = 
+      \n,x,f,p -> 
+        let num = if_then_else Num n plNum sgNum in {
+        name = case p.isPron of {
+          True => mkNP p.poss num x ;
+          _    => f num p.name x
+          } ;
+        isPron = False ;
+        poss = mkQuant he_Pron -- not used because not pron
+        } ;
+  
+    GNumber : PType = Bool ;
+    sing = False ; plur = True ;
+</pre>
+
+for languages without GenNP, use <i>the wife of p</i>
+<pre>
+    mkRelative : Bool -> CN -> NPPerson -> NPPerson = \n,x,p ->
+      relativePerson n x 
+        (\a,b,c -> mkNP (mkNP the_Quant a c) (Syntax.mkAdv possess_Prep b)) p ;
+</pre>
+
+for languages with GenNP, use <i>p's wife</i>
+relativePerson n x (\a,b,c -> mkNP (GenNP b) a c) p ;
+<pre>
+  }
+</pre>
+
+<h2> Implementations of Words, with English as example</h2>
+<pre>
+  concrete WordsEng of Words = SentencesEng ** 
+      open 
+        SyntaxEng, 
+        ParadigmsEng, 
+        (L = LexiconEng), 
+        (P = ParadigmsEng), 
+        IrregEng, 
+        ExtraEng, 
+        Prelude in {
+    lin
+</pre>
+
+Kinds; many of them are in the resource lexicon, others can be built by <tt>mkN</tt>.
+<pre>
+      Apple = mkCN L.apple_N ;
+      Beer = mkCN L.beer_N ;
+      Bread = mkCN L.bread_N ;
+      Cheese = mkCN (mkN "cheese") ;
+      Chicken = mkCN (mkN "chicken") ;
+      Coffee = mkCN (mkN "coffee") ;
+      Fish = mkCN L.fish_N ;
+      Meat = mkCN (mkN "meat") ;
+      Milk = mkCN L.milk_N ;
+      Pizza = mkCN (mkN "pizza") ;
+      Salt = mkCN L.salt_N ;
+      Tea = mkCN (mkN "tea") ;
+      Water = mkCN L.water_N ;
+      Wine = mkCN L.wine_N ;
+</pre>
+
+Properties; many of them are in the resource lexicon, others can be built by <tt>mkA</tt>.
+<pre>
+      Bad = L.bad_A ;
+      Boring = mkA "boring" ;
+      Cheap = mkA "cheap" ;
+      Cold = L.cold_A ;
+      Delicious = mkA "delicious" ;
+      Expensive = mkA "expensive" ;
+      Fresh = mkA "fresh" ;
+      Good = L.good_A ;
+      Suspect = mkA "suspect" ;
+      Warm = L.warm_A ;
+</pre>
+
+Places require different prepositions to express location; in some languages 
+also the directional preposition varies, but in English we use <tt>to</tt>, as
+defined by <tt>mkPlace</tt>.
+<pre>
+      Airport = mkPlace "airport" "at" ;
+      Bar = mkPlace "bar" "in" ;
+      Church = mkPlace "church" "in" ;
+      Cinema = mkPlace "cinema" "at" ;
+      Hospital = mkPlace "hospital" "in" ;
+      Hotel = mkPlace "hotel" "in" ;
+      Museum = mkPlace "museum" "in" ;
+      Park = mkPlace "park" "in" ;
+      Restaurant = mkPlace "restaurant" "in" ;
+      School = mkPlace "school" "at" ;
+      Shop = mkPlace "shop" "in" ;
+      Station = mkPlace "station" "at" ;
+      Theatre = mkPlace "theatre" "at" ;
+      Toilet = mkPlace "toilet" "in" ;
+      University = mkPlace "university" "at" ;
+</pre>
+
+Currencies; <tt>crown</tt> is ambiguous between Danish and Swedish crowns.
+<pre>
+      DanishCrown = mkCN (mkA "Danish") (mkN "crown") | mkCN (mkN "crown") ;
+      Dollar = mkCN (mkN "dollar") ;
+      Euro = mkCN (mkN "euro" "euros") ; -- to prevent euroes
+      Lei = mkCN (mkN "leu" "lei") ;
+      SwedishCrown = mkCN (mkA "Swedish") (mkN "crown") | mkCN (mkN "crown") ;
+</pre>
+
+Nationalities
+<pre>
+      Belgian = mkA "Belgian" ;
+      Belgium = mkNP (mkPN "Belgium") ;
+      English = mkNat "English" "England" ;
+      Finnish = mkNat "Finnish" "Finland" ;
+      Flemish = mkNP (mkPN "Flemish") ;
+      French = mkNat "French" "France" ; 
+      Italian = mkNat "Italian" "Italy" ;
+      Romanian = mkNat "Romanian" "Romania" ;
+      Swedish = mkNat "Swedish" "Sweden" ;
+</pre>
+
+Actions: the predication patterns are very often language-dependent.
+<pre>
+      AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
+      AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
+      AHasRoom p num = mkCl p.name have_V2 
+        (mkNP (mkNP a_Det (mkN "room")) (SyntaxEng.mkAdv for_Prep (mkNP num (mkN "person")))) ;
+      AHasTable p num = mkCl p.name have_V2 
+        (mkNP (mkNP a_Det (mkN "table")) (SyntaxEng.mkAdv for_Prep (mkNP num (mkN "person")))) ;
+      AHasName p name = mkCl (nameOf p) name ;
+      AHungry p = mkCl p.name (mkA "hungry") ;
+      AIll p = mkCl p.name (mkA "ill") ;
+      AKnow p = mkCl p.name IrregEng.know_V ;
+      ALike p item = mkCl p.name (mkV2 (mkV "like")) item ;
+      ALive p co = mkCl p.name (mkVP (mkVP (mkV "live")) (SyntaxEng.mkAdv in_Prep co)) ;
+      ALove p q = mkCl p.name (mkV2 (mkV "love")) q.name ;
+      AMarried p = mkCl p.name (mkA "married") ;
+      AReady p = mkCl p.name (mkA "ready") ;
+      AScared p = mkCl p.name (mkA "scared") ;
+      ASpeak p lang = mkCl p.name  (mkV2 IrregEng.speak_V) lang ;
+      AThirsty p = mkCl p.name (mkA "thirsty") ;
+      ATired p = mkCl p.name (mkA "tired") ;
+      AUnderstand p = mkCl p.name IrregEng.understand_V ;
+      AWant p obj = mkCl p.name (mkV2 (mkV "want")) obj ;
+      AWantGo p place = mkCl p.name want_VV (mkVP (mkVP IrregEng.go_V) place.to) ;
+</pre>
+
+miscellaneous
+<pre>
+      QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
+      QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
+      HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregEng.cost_V)) ; 
+      ItCost item price = mkCl item (mkV2 IrregEng.cost_V) price ;
+  
+      PropOpen p = mkCl p.name open_Adv ;
+      PropClosed p = mkCl p.name closed_Adv ;
+      PropOpenDate p d = mkCl p.name (mkVP (mkVP open_Adv) d) ; 
+      PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_Adv) d) ; 
+      PropOpenDay p d = mkCl p.name (mkVP (mkVP open_Adv) d.habitual) ; 
+      PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_Adv) d.habitual) ; 
+</pre>
+
+Building phrases from strings is complicated: the solution is to use
+mkText : Text -> Text -> Text ;
+<pre>
+      PSeeYou d = mkText (lin Text (ss ("see you"))) (mkPhrase (mkUtt d)) ;
+      PSeeYouPlace p d = 
+        mkText (lin Text (ss ("see you"))) 
+          (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
+</pre>
+
+Relations are expressed as <i>my wife</i> or <i>my son's wife</i>, as defined by <tt>xOf</tt>
+below. Languages without productive genitives must use an equivalent of
+<i>the wife of my son</i> for non-pronouns.
+<pre>
+      Wife = xOf sing (mkN "wife") ;
+      Husband = xOf sing (mkN "husband") ;
+      Son = xOf sing (mkN "son") ;
+      Daughter = xOf sing (mkN "daughter") ;
+      Children = xOf plur L.child_N ;
+</pre>
+
+week days
+<pre>
+      Monday = mkDay "Monday" ;
+      Tuesday = mkDay "Tuesday" ;
+      Wednesday = mkDay "Wednesday" ;
+      Thursday = mkDay "Thursday" ;
+      Friday = mkDay "Friday" ;
+      Saturday = mkDay "Saturday" ;
+      Sunday = mkDay "Sunday" ;
+  
+      Tomorrow = P.mkAdv "tomorrow" ;
+</pre>
+
+auxiliaries
+<pre>
+    oper
+  
+      mkNat : Str -> Str -> NPNationality = \nat,co -> 
+        mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
+  
+      mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
+        let day = mkNP (mkPN d) in 
+        mkNPDay day (SyntaxEng.mkAdv on_Prep day) 
+          (SyntaxEng.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
+  
+      mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
+        mkCNPlace (mkCN (mkN p)) (P.mkPrep i) to_Prep ;
+  
+      open_Adv = P.mkAdv "open" ;
+      closed_Adv = P.mkAdv "closed" ;
+  
+      xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
+        relativePerson n (mkCN x) (\a,b,c -> mkNP (GenNP b) a c) p ;
+  
+      nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "name") p).name ;
+  
+  }
+</pre>
+
+</body>
+</html>
