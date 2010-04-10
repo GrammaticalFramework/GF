@@ -78,9 +78,11 @@ abstract Words = Sentences ** {
 -- Actions (which can be expressed by different structures in different languages).
 -- Notice that also negations and questions can be formed from these.
 
-    AHasAge     : Person -> Numeral -> Action ;   -- I am seventy years
-    AHasChildren: Person -> Numeral -> Action ;   -- I have six children
+    AHasAge     : Person -> Number -> Action ;    -- I am seventy years
+    AHasChildren: Person -> Number -> Action ;    -- I have six children
     AHasName    : Person -> Name -> Action ;      -- my name is Bond
+    AHasRoom    : Person -> Number -> Action ;    -- you have a room for five persons
+    AHasTable   : Person -> Number -> Action ;    -- you have a table for five persons
     AHungry     : Person -> Action ;              -- I am hungry
     AIll        : Person -> Action ;              -- I am ill
     AKnow       : Person -> Action ;              -- I (don't) know
@@ -88,6 +90,7 @@ abstract Words = Sentences ** {
     ALive       : Person -> Country  -> Action ;  -- I live in Sweden
     ALove       : Person -> Person   -> Action ;  -- I love you
     AMarried    : Person -> Action ;              -- I am married
+    AReady      : Person -> Action ;              -- I am ready
     AScared     : Person -> Action ;              -- I am scared
     ASpeak      : Person -> Language -> Action ;  -- I speak Finnish
     AThirsty    : Person -> Action ;              -- I am thirsty
@@ -100,6 +103,8 @@ abstract Words = Sentences ** {
 
     QWhatAge       : Person -> Question ;            -- how many years are you
     QWhatName      : Person -> Question ;            -- what is your name
+    HowMuchCost    : Item -> Question ;              -- how much does the pizza cost
+    ItCost         : Item -> Price -> Proposition ;  -- the pizza costs five euros
 
     PropOpen       : Place -> Proposition ;          -- the museum is open
     PropClosed     : Place -> Proposition ;          -- the museum is closed
@@ -108,8 +113,10 @@ abstract Words = Sentences ** {
     PropOpenDay    : Place -> Day  -> Proposition ;  -- the museum is open on Mondays
     PropClosedDay  : Place -> Day  -> Proposition ;  -- the museum is closed on Mondays
 
-    HowMuchCost    : Item -> Question ;              -- how much does the pizza cost
-    ItCost         : Item -> Price -> Proposition ;  -- the pizza costs five euros
+    PSeeYou      : Date -> Phrase ;           -- see you on Monday
+    PSeeYouPlace : Place -> Date -> Phrase ;  -- see you in the bar on Monday
+
+-- family relations
 
     Wife, Husband  : Person -> Person ;              -- my wife, your husband
     Son, Daughter  : Person -> Person ;              -- my son, your husband
@@ -118,5 +125,7 @@ abstract Words = Sentences ** {
 -- week days
 
     Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday : Day ;
+
+    Tomorrow : Date ;
 
 }

@@ -43,7 +43,7 @@ are defined in other modules.
       Day ;         -- weekday type                              e.g. "Friday"
       Date ;        -- definite date                             e.g. "on Friday"
       Name ;        -- name of person                            e.g. "NN"
-      -- Numeral ;  -- number expression 1 .. 999,999            e.g. "twenty"
+      Number ;      -- number expression 1 .. 999,999            e.g. "twenty"
 </pre>
 
 Many of the categories are accessible as Phrases, i.e. as translation units.
@@ -55,7 +55,7 @@ Many of the categories are accessible as Phrases, i.e. as translation units.
       PObject      : Object   -> Phrase ;
       PKind        : Kind     -> Phrase ;
       PQuality     : Quality  -> Phrase ;
-      PNumeral     : Numeral  -> Phrase ;
+      PNumber      : Number   -> Phrase ;
       PPlace       : Place    -> Phrase ;
       PPlaceKind   : PlaceKind-> Phrase ;
       PCurrency    : Currency -> Phrase ;
@@ -91,7 +91,7 @@ This is the way to build propositions about persons.
 Here are some general syntactic constructions.
 <pre>
       ObjItem   : Item -> Object ;                 -- this pizza
-      ObjNumber : Numeral -> Kind -> Object ;      -- five pizzas
+      ObjNumber : Number -> Kind -> Object ;       -- five pizzas
       ObjIndef  : Kind -> Object ;                 -- a pizza
   
       SuchKind : Quality -> Kind -> Kind ;         -- Italian pizza
@@ -105,7 +105,7 @@ Determiners.
       This, That, These, Those : Kind -> Item ;    -- this pizza,...,those pizzas
       The, Thes : Kind -> Item ;                   -- the pizza, the pizzas
   
-      AmountCurrency : Numeral -> Currency -> Price ;  -- five euros
+      AmountCurrency : Number -> Currency -> Price ;  -- five euros
   
       ThePlace : PlaceKind -> Place ;                  -- the bar
   
@@ -123,6 +123,10 @@ Determiners.
   
       PersonName : Name -> Person ;             -- person referred by name
       NameNN     : Name ;                       -- the name "NN"
+</pre>
+
+<pre>
+      NNumeral   : Numeral -> Number ;          -- numeral in words, e.g. "twenty"
 </pre>
 
 Actions are typically language-dependent, not only lexically but also
@@ -218,13 +222,19 @@ nationalities, countries, languages, citizenships
 Actions (which can be expressed by different structures in different languages).
 Notice that also negations and questions can be formed from these.
 <pre>
+      AHasAge     : Person -> Number -> Action ;    -- I am seventy years
+      AHasChildren: Person -> Number -> Action ;    -- I have six children
       AHasName    : Person -> Name -> Action ;      -- my name is Bond
+      AHasRoom    : Person -> Number -> Action ;    -- you have a room for five persons
+      AHasTable   : Person -> Number -> Action ;    -- you have a table for five persons
       AHungry     : Person -> Action ;              -- I am hungry
       AIll        : Person -> Action ;              -- I am ill
       AKnow       : Person -> Action ;              -- I (don't) know
       ALike       : Person -> Item     -> Action ;  -- I like this pizza
       ALive       : Person -> Country  -> Action ;  -- I live in Sweden
       ALove       : Person -> Person   -> Action ;  -- I love you
+      AMarried    : Person -> Action ;              -- I am married
+      AReady      : Person -> Action ;              -- I am ready
       AScared     : Person -> Action ;              -- I am scared
       ASpeak      : Person -> Language -> Action ;  -- I speak Finnish
       AThirsty    : Person -> Action ;              -- I am thirsty
@@ -236,7 +246,10 @@ Notice that also negations and questions can be formed from these.
 
 miscellaneous phrases
 <pre>
+      QWhatAge       : Person -> Question ;            -- how many years are you
       QWhatName      : Person -> Question ;            -- what is your name
+      HowMuchCost    : Item -> Question ;              -- how much does the pizza cost
+      ItCost         : Item -> Price -> Proposition ;  -- the pizza costs five euros
   
       PropOpen       : Place -> Proposition ;          -- the museum is open
       PropClosed     : Place -> Proposition ;          -- the museum is closed
@@ -245,13 +258,22 @@ miscellaneous phrases
       PropOpenDay    : Place -> Day  -> Proposition ;  -- the museum is open on Mondays
       PropClosedDay  : Place -> Day  -> Proposition ;  -- the museum is closed on Mondays
   
-      HowMuchCost    : Item -> Question ;              -- how much does the pizza cost
-      ItCost         : Item -> Price -> Proposition ;  -- the pizza costs five euros
+      PSeeYou      : Date -> Phrase ;           -- see you on Monday
+      PSeeYouPlace : Place -> Date -> Phrase ;  -- see you in the bar on Monday
+</pre>
+
+family relations
+<pre>
+      Wife, Husband  : Person -> Person ;              -- my wife, your husband
+      Son, Daughter  : Person -> Person ;              -- my son, your husband
+      Children       : Person -> Person ;              -- my children 
 </pre>
 
 week days
 <pre>
       Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday : Day ;
+  
+      Tomorrow : Date ;
   
   }
 </pre>

@@ -7,6 +7,6 @@ concrete PhrasebookPol of Phrasebook =
     Prelude in {
 
 lin
-  PGreeting g = lin Text (ss g.s) ;
+  PGreeting g = lin Text g ;
 
 }

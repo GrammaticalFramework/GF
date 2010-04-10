@@ -1,134 +1,176 @@
--- (c) 2009 Aarne Ranta under LGPL
+--2 Implementations of Words, with English as example
 
 concrete WordsPol of Words = SentencesPol ** 
-    open SyntaxPol, ParadigmsPol, (L = LexiconPol), Prelude in {
-
+    open 
+      SyntaxPol, 
+      ParadigmsPol, 
+      (L = LexiconPol), 
+      (P = ParadigmsPol), 
+--      ExtraPol, 
+      Prelude in {
   lin
- 
--- kinds of food
+
+-- Kinds; many of them are in the resource lexicon, others can be built by $mkN$.
 
     Apple = mkCN L.apple_N ;
     Beer = mkCN L.beer_N ;
     Bread = mkCN L.bread_N ;
---     Cheese = mkCN (mkN "ost") ;
---     Coffee = mkCN (mkN "kaffe" neutrum) ;
+--    Cheese = mkCN (mkN "cheese") ;
+--    Chicken = mkCN (mkN "chicken") ;
+--    Coffee = mkCN (mkN "coffee") ;
     Fish = mkCN L.fish_N ;
+--    Meat = mkCN (mkN "meat") ;
     Milk = mkCN L.milk_N ;
---     Pizza = mkCN (mkN "pizza") ;
+--    Pizza = mkCN (mkN "pizza") ;
     Salt = mkCN L.salt_N ;
---     Tea = mkCN (mkN "te" neutrum) ;
+--    Tea = mkCN (mkN "tea") ;
     Water = mkCN L.water_N ;
     Wine = mkCN L.wine_N ;
--- 
--- properties
--- 
+
+-- Properties; many of them are in the resource lexicon, others can be built by $mkA$.
+
     Bad = L.bad_A ;
---     Boring = mkA "tråkig" ;
+--    Boring = mkA "boring" ;
+--    Cheap = mkA "cheap" ;
     Cold = L.cold_A ;
---     Delicious = mkA "läcker" ;
---     Expensive = mkA "dyr" ;
---     Fresh = mkA "färsk" ;
+--    Delicious = mkA "delicious" ;
+--    Expensive = mkA "expensive" ;
+--    Fresh = mkA "fresh" ;
     Good = L.good_A ;
+--    Suspect = mkA "suspect" ;
     Warm = L.warm_A ;
--- 
--- places
--- 
---     Airport = mkPlace (mkN "flygplats" "flygplatser") "på" ;
---     Bar = mkPlace (mkN "bar" "barer") "i" ;
---     Church = mkPlace (mkN "kyrka") "i" ;
---     Hospital = mkPlace (mkN "sjukhus" "sjukhus") "på" ;
---     Museum = mkPlace (mkN "museum" "museet" "museer" "museerna") "på" ;
---     Restaurant = mkPlace (mkN "restaurang" "restauranger") "på" ;
---     Station = mkPlace (mkN "station" "stationer") "på" ;
---     Toilet = mkPlace (mkN "toalett" "toaletter") "på" ;
--- 
--- currencies
--- 
---     DanishCrown = mkCN (mkA "dansk") (mkN "krona") ;
---     Dollar = mkCN (mkN "dollar" "dollar") ;
---     Euro = mkCN (mkN "euro" "euro") ;
---     Lei = mkCN (mkN "lei" "lei") ;
---     SwedishCrown = mkCN (mkA "svensk") (mkN "krona") ;
--- 
--- nationalities
--- 
---     Belgian = mkA "belgisk" ;
---     Belgium = mkNP (mkPN "Belgien") ;
---     English = mkNat "engelsk" "England" ;
---     Finnish = mkNat "finsk" "Finland" ;
---     Flemish = mkNP (mkPN "flamländska") ;
---     French = mkNat "fransk" "Frankrike" ; 
---     Italian = mkNat "italiensk" "Italien" ;
---     Romanian = mkNat "rumänsk" "Rumänien" ;
---     Swedish = mkNat "svensk" "Sverige" ;
--- 
--- actions
--- 
---     AHasName p name = mkCl (nameOf p) name ;
---     AHungry p = mkCl p.name (mkA "hungrig") ;
---     AIll p = mkCl p.name (mkA "sjuk") ;
---     AKnow p = mkCl p.name (mkV "veta" "vet" "vet" "visste" "vetat" "visst") ; 
---     ALike p item = mkCl p.name (mkV2 (mkV "tycker") (mkPrep "om")) item ;
---     ALive p co = mkCl p.name (mkVP (mkVP (mkV "bo")) (SyntaxPol.mkAdv in_Prep co)) ;
---     ALove p q = mkCl p.name (mkV2 (mkV "älska")) q.name ;
---     AScared p = mkCl p.name (mkA "rädd") ;
---     ASpeak p lang = mkCl p.name  (mkV2 (mkV "tala")) lang ;
---     AThirsty p = mkCl p.name (mkA "törstig") ;
---     ATired p = mkCl p.name (mkA "trött") ;
---     AUnderstand p = mkCl p.name (mkV "förstå" "förstod" "förstått") ;
---     AWant p obj = mkCl p.name want_VV (mkVP have_V2 obj) ;
---     AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
--- 
+
+-- Places require different prepositions to express location; in some languages 
+-- also the directional preposition varies, but in English we use $to$, as
+-- defined by $mkPlace$.
+
+--    Airport = mkPlace "airport" "at" ;
+--    Bar = mkPlace "bar" "in" ;
+--    Church = mkPlace "church" "in" ;
+--    Cinema = mkPlace "cinema" "at" ;
+--    Hospital = mkPlace "hospital" "in" ;
+--    Hotel = mkPlace "hotel" "in" ;
+--    Museum = mkPlace "museum" "in" ;
+--    Park = mkPlace "park" "in" ;
+--    Restaurant = mkPlace "restaurant" "in" ;
+--    School = mkPlace "school" "at" ;
+--    Shop = mkPlace "shop" "in" ;
+--    Station = mkPlace "station" "at" ;
+--    Theatre = mkPlace "theatre" "at" ;
+--    Toilet = mkPlace "toilet" "in" ;
+--    University = mkPlace "university" "at" ;
+
+-- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
+
+--    DanishCrown = mkCN (mkA "Danish") (mkN "crown") | mkCN (mkN "crown") ;
+--    Dollar = mkCN (mkN "dollar") ;
+--    Euro = mkCN (mkN "euro" "euros") ; -- to prevent euroes
+--    Lei = mkCN (mkN "leu" "lei") ;
+--    SwedishCrown = mkCN (mkA "Swedish") (mkN "crown") | mkCN (mkN "crown") ;
+
+-- Nationalities
+
+--    Belgian = mkA "Belgian" ;
+--    Belgium = mkNP (mkPN "Belgium") ;
+--    English = mkNat "English" "England" ;
+--    Finnish = mkNat "Finnish" "Finland" ;
+--    Flemish = mkNP (mkPN "Flemish") ;
+--    French = mkNat "French" "France" ; 
+--    Italian = mkNat "Italian" "Italy" ;
+--    Romanian = mkNat "Romanian" "Romania" ;
+--    Swedish = mkNat "Swedish" "Sweden" ;
+
+-- Actions: the predication patterns are very often language-dependent.
+
+--    AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
+    AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
+--    AHasRoom p num = mkCl p.name have_V2 
+--      (mkNP (mkNP a_Det (mkN "room")) (SyntaxPol.mkAdv for_Prep (mkNP num (mkN "person")))) ;
+--    AHasTable p num = mkCl p.name have_V2 
+--      (mkNP (mkNP a_Det (mkN "table")) (SyntaxPol.mkAdv for_Prep (mkNP num (mkN "person")))) ;
+--    AHasName p name = mkCl (nameOf p) name ;
+--    AHungry p = mkCl p.name (mkA "hungry") ;
+--    AIll p = mkCl p.name (mkA "ill") ;
+--    AKnow p = mkCl p.name IrregPol.know_V ;
+--    ALike p item = mkCl p.name (mkV2 (mkV "like")) item ;
+--    ALive p co = mkCl p.name (mkVP (mkVP (mkV "live")) (SyntaxPol.mkAdv in_Prep co)) ;
+--    ALove p q = mkCl p.name (mkV2 (mkV "love")) q.name ;
+--    AMarried p = mkCl p.name (mkA "married") ;
+--    AReady p = mkCl p.name (mkA "ready") ;
+--    AScared p = mkCl p.name (mkA "scared") ;
+--    ASpeak p lang = mkCl p.name  (mkV2 IrregPol.speak_V) lang ;
+--    AThirsty p = mkCl p.name (mkA "thirsty") ;
+--    ATired p = mkCl p.name (mkA "tired") ;
+--    AUnderstand p = mkCl p.name IrregPol.understand_V ;
+--    AWant p obj = mkCl p.name (mkV2 (mkV "want")) obj ;
+--    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP IrregPol.go_V) place.to) ;
+
 -- miscellaneous
--- 
---     QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
--- 
---     PropOpen p = mkCl p.name open_A ;
---     PropClosed p = mkCl p.name closed_A ;
---     PropOpenDate p d = mkCl p.name (mkVP (mkVP open_A) d) ; 
---     PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_A) d) ; 
---     PropOpenDay p d = mkCl p.name (mkVP (mkVP open_A) d.habitual) ; 
---     PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
--- 
---     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "kosta"))) ; 
---     ItCost item price = mkCl item (mkV2 (mkV "kosta")) price ;
--- 
+
+--    QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
+--    QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
+--    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregPol.cost_V)) ; 
+--    ItCost item price = mkCl item (mkV2 IrregPol.cost_V) price ;
+
+--    PropOpen p = mkCl p.name open_Adv ;
+--    PropClosed p = mkCl p.name closed_Adv ;
+--    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_Adv) d) ; 
+--    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_Adv) d) ; 
+--    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_Adv) d.habitual) ; 
+--    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_Adv) d.habitual) ; 
+
+-- Building phrases from strings is complicated: the solution is to use
+-- mkText : Text -> Text -> Text ;
+
+--    PSeeYou d = mkText (lin Text (ss ("see you"))) (mkPhrase (mkUtt d)) ;
+--    PSeeYouPlace p d = 
+--      mkText (lin Text (ss ("see you"))) 
+--        (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
+
+-- Relations are expressed as "my wife" or "my son's wife", as defined by $xOf$
+-- below. Languages without productive genitives must use an equivalent of
+-- "the wife of my son" for non-pronouns.
+
+--    Wife = xOf sing (mkN "wife") ;
+--    Husband = xOf sing (mkN "husband") ;
+--    Son = xOf sing (mkN "son") ;
+--    Daughter = xOf sing (mkN "daughter") ;
+--    Children = xOf plur L.child_N ;
+
 -- week days
--- 
---     Monday = mkDay "måndag" ;
---     Tuesday = mkDay "tisdag" ;
---     Wednesday = mkDay "onsdag" ;
---     Thursday = mkDay "torsdag" ;
---     Friday = mkDay "fredag" ;
---     Saturday = mkDay "lördag" ;
---     Sunday = mkDay "söndag" ;
--- 
---   oper
---     mkNat : Str -> Str -> {lang : NP ; prop : A ; country : NP} = \nat,co -> 
---       {lang = mkNP (mkPN (nat + "a")) ; 
---        prop = mkA nat ; country = mkNP (mkPN co)} ;
--- 
---     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
---       let day = mkNP (mkPN d) in
---       {name = day ; 
---        point = SyntaxPol.mkAdv on_Prep day ; 
---        habitual = SyntaxPol.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))
---       } ;
--- 
---     mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> {
---       name = mkCN p ;
---       at = mkPrep i ;
---       to = to_Prep
---       } ;
--- 
---     open_A = mkA "öppen" "öppet" ;
---     closed_A = mkA "stängd" "stängt" ;
--- 
---     nameOf : {name : NP ; isPron : Bool ; poss : Det} -> NP = \p -> 
---       case p.isPron of {
---         True => mkNP p.poss (mkN "namn" "namn") ;
---         _    => mkNP (mkNP the_Det (mkN "namn" "namn")) 
---                        (SyntaxPol.mkAdv possess_Prep p.name)
---         } ;
--- }
+
+--    Monday = mkDay "Monday" ;
+--    Tuesday = mkDay "Tuesday" ;
+--    Wednesday = mkDay "Wednesday" ;
+--    Thursday = mkDay "Thursday" ;
+--    Friday = mkDay "Friday" ;
+--    Saturday = mkDay "Saturday" ;
+--    Sunday = mkDay "Sunday" ;
+ 
+--    Tomorrow = P.mkAdv "tomorrow" ;
+
+-- auxiliaries
+
+--  oper
+
+--    mkNat : Str -> Str -> NPNationality = \nat,co -> 
+--      mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
+
+--    mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
+--      let day = mkNP (mkPN d) in 
+--      mkNPDay day (SyntaxPol.mkAdv on_Prep day) 
+--        (SyntaxPol.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
+
+--    mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
+--      mkCNPlace (mkCN (mkN p)) (P.mkPrep i) to_Prep ;
+
+--    open_Adv = P.mkAdv "open" ;
+--    closed_Adv = P.mkAdv "closed" ;
+
+--    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
+--      relativePerson n (mkCN x) (\a,b,c -> mkNP (GenNP b) a c) p ;
+
+--    nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "name") p).name ;
+
+--}
 }

@@ -1,3 +1,7 @@
+--1 Implementation of MOLTO Phrasebook
+
+--2 The functor for (mostly) common structures
+
 incomplete concrete SentencesI of Sentences = Numeral ** 
   open
     Syntax,
@@ -15,19 +19,20 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Quality = AP ;
     Property = A ;
     Object = NP ;
-    Place = {name : NP ; at : Adv ; to : Adv} ;
-    PlaceKind = {name : CN ; at : Prep ; to : Prep} ;
+    Place = NPPlace ; -- {name : NP ; at : Adv ; to : Adv} ;
+    PlaceKind = CNPlace ; -- {name : CN ; at : Prep ; to : Prep} ;
     Currency = CN ;
     Price = NP ;
     Action = Cl ;
-    Person = {name : NP ; isPron : Bool ; poss : Quant} ;
-    Nationality = {lang : NP ; prop : A ; country : NP} ; 
+    Person = NPPerson ; -- {name : NP ; isPron : Bool ; poss : Quant} ;
+    Nationality = NPNationality ; -- {lang : NP ; country : NP ; prop : A} ; 
     Language = NP ;
     Citizenship = A ;
     Country = NP ;
-    Day = {name : NP ; point : Adv ; habitual : Adv} ;
+    Day = NPDay ; -- {name : NP ; point : Adv ; habitual : Adv} ;
     Date = Adv ;
     Name = NP ;
+    Number = Card ;
   lin
     PSentence s = mkText s | lin Text (mkUtt s) ;  -- optional '.'
     PQuestion s = mkText s | lin Text (mkUtt s) ;  -- optional '?'
@@ -35,7 +40,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     PObject x = mkPhrase (mkUtt x) ;
     PKind x = mkPhrase (mkUtt x) ;
     PQuality x = mkPhrase (mkUtt x) ;
-    PNumeral x = mkPhrase (mkUtt (mkCard (x ** {lock_Numeral = <>}))) ;
+    PNumber x = mkPhrase (mkUtt x) ;
     PPlace x = mkPhrase (mkUtt x.name) ;
     PPlaceKind x = mkPhrase (mkUtt x.name) ;
     PCurrency x = mkPhrase (mkUtt x) ;
@@ -59,10 +64,10 @@ incomplete concrete SentencesI of Sentences = Numeral **
 
     PropAction a = a ;
 
-    AmountCurrency num curr = mkNP <lin Numeral num : Numeral> curr ;
+    AmountCurrency num curr = mkNP num curr ;
 
     ObjItem i = i ;
-    ObjNumber n k = mkNP <lin Numeral n : Numeral> k ;
+    ObjNumber n k = mkNP n k ;
     ObjIndef k = mkNP a_Quant k ;
 
     This kind = mkNP this_Quant kind ;
@@ -97,17 +102,73 @@ incomplete concrete SentencesI of Sentences = Numeral **
 
     PersonName n = 
       {name = n ; isPron = False ; poss = mkQuant he_Pron} ; -- poss not used
-----    NameString s = symb s ;
+----    NameString s = symb s ; --%
     NameNN = symb "NN" ;
+
+    NNumeral n = mkCard <lin Numeral n : Numeral>  ;
 
     AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
     ACitizen p n = mkCl p.name n ;
     ABePlace p place = mkCl p.name place.at ;
 
 oper 
+
+-- These operations are used internally in Sentences.
+
   mkPhrase : Utt -> Text = \u -> lin Text u ; -- no punctuation
 
   mkPerson : Pron -> {name : NP ; isPron : Bool ; poss : Quant} = \p -> 
     {name = mkNP p ; isPron = True ; poss = mkQuant p} ;
+
+-- These are used in Words for each language.
+
+  NPNationality : Type = {lang : NP ; country : NP ; prop : A} ;
+
+  mkNPNationality : NP -> NP -> A -> NPNationality = \la,co,pro ->
+        {lang = la ; 
+         country = co ;
+         prop = pro
+        } ;
+
+  NPDay : Type = {name : NP ; point : Adv ; habitual : Adv} ;
+
+  mkNPDay : NP -> Adv -> Adv -> NPDay = \d,p,h ->
+      {name = d ; 
+       point = p ;
+       habitual = h
+      } ;
+
+  NPPlace : Type = {name : NP ; at : Adv ; to : Adv} ;
+  CNPlace : Type = {name : CN ; at : Prep ; to : Prep} ;
+
+  mkCNPlace : CN -> Prep -> Prep -> CNPlace = \p,i,t -> {
+    name = p ;
+    at = i ;
+    to = t
+    } ;
+
+  NPPerson : Type = {name : NP ; isPron : Bool ; poss : Quant} ;
+
+  relativePerson : GNumber -> CN -> (Num -> NP -> CN -> NP) -> NPPerson -> NPPerson = 
+    \n,x,f,p -> 
+      let num = if_then_else Num n plNum sgNum in {
+      name = case p.isPron of {
+        True => mkNP p.poss num x ;
+        _    => f num p.name x
+        } ;
+      isPron = False ;
+      poss = mkQuant he_Pron -- not used because not pron
+      } ;
+
+  GNumber : PType = Bool ;
+  sing = False ; plur = True ;
+
+-- for languages without GenNP, use "the wife of p"
+  mkRelative : Bool -> CN -> NPPerson -> NPPerson = \n,x,p ->
+    relativePerson n x 
+      (\a,b,c -> mkNP (mkNP the_Quant a c) (Syntax.mkAdv possess_Prep b)) p ;
+
+-- for languages with GenNP, use "p's wife"
+--   relativePerson n x (\a,b,c -> mkNP (GenNP b) a c) p ;
 
 }

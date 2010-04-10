@@ -13,6 +13,7 @@ Aarne Ranta
 #BSMALL
 
 History
+- 10 April. Some additions in API, comments in implementation; regenerated clones.
 - 8 April. Added German.
 - 7 April. Added the Clone script, applied to initiate the rest of MOLTO languages.
 - 6 April. Version 0.4: weekdays, nationalities
@@ -163,10 +164,18 @@ The basic things "everyone" can do is
 
 The missing concrete syntax entries are added to the ``Words``//L//``.gf`` 
 files for each language //L//. The
-[morphological paradigms http://www.grammaticalframework.org/lib/doc/synopsis.html#toc78]
+[morphological paradigms http://code.haskell.org/gf/lib/doc/synopsis.html#toc78]
 of the GF resource library should be used. Actions (prefixed with ``A``, as ``AWant``) are
 a little more demanding, since they also require syntax constructors. Greetings (prefixed
 with ``G``) are pure strings.
+
+Some explanations can be found in the 
+[implementation document Implementation.html], which is produced from the
+concrete syntax files
+[``SentencesI.gf`` http://code.haskell.org/gf/examples/phrasebook/SentencesI.gf]
+and
+[``WordsEng.gf`` http://code.haskell.org/gf/examples/phrasebook/WordsEng.gf]
+by ``make doc``.
 
 Here are the steps to follow for contributors:
 + Make sure you have the latest sources 

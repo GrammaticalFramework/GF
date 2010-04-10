@@ -2,6 +2,7 @@ module Main where
 
 import Control.Monad
 import Data.Maybe
+import Data.Char
 import System.Cmd
 import System.Directory
 import System.Environment
@@ -10,17 +11,21 @@ import System.Exit
 
 -- To clone a project from one language to another:
 --
--- 1. for each Module in modules, copy ModuleFROM to ModuleTO
+-- 1. for each Module in 'modules', copy ModuleFROM to ModuleTO
 -- 2. in each ModuleTO, replace substrings FROM by TO, if not prefixes of an Ident
--- 3. in each ModuleTO in specifics, comment out every line in the body
+-- 3. in each ModuleTO in 'specifics', comment out every line in the body, except
+--    those whose first word is in 'commons'.
 --
 -- Syntax:  runghc Clone FROM TO
 -- Example: runhugs Clone Swe Nor
 
--- The following lines are for the phrasebook project, but can be modified to other projects.
+-- The following lines are for the phrasebook project, and can be changed 
+-- to fit other projects.
 
 modules   = "Phrasebook":"Sentences":specifics
 specifics = ["Words","Greetings"]
+commons = ["Apple","Beer","Bread","Fish","Milk","Salt","Water","Wine",
+           "Bad","Cold","Good","Warm","AHasChildren"]
 
 
 main = do
@@ -42,7 +47,9 @@ replaceLang s1 s2 = repl where
   lgs = 3 -- length s1
 
 -- the file name has the form p....pLLL.gf, i.e. 3-letter lang name, suffix .gf
-getLangName fi = let (nal,ferp) = splitAt 3 (drop 3 (reverse fi)) in (reverse ferp,reverse nal)  
+getLangName fi = 
+  let (nal,ferp) = splitAt 3 (drop 3 (reverse fi)) in 
+  (reverse ferp,reverse nal)  
 
 commentIf c = if c then (unlines . commentBody . lines) else id
 
@@ -51,4 +58,8 @@ commentBody ss = header ++ map comment body ++ ["}"] where
   isJment ws = case ws of
     k:_ | elem k ["flags","lin","lincat","oper","param"] -> True
     _ -> False
-  comment l = if take 2 l == "--" then l else "-- " ++ l
+  comment l = case l of
+    _ | take 2 l == "--" -> l                -- already commented
+    _ | all isSpace l    -> l                -- empty line
+    _ | elem (head (words l)) commons -> l   -- in 'commons'
+    _ -> "--" ++ l

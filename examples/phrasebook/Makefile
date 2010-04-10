@@ -11,11 +11,16 @@ koe:
 	gf -make PhrasebookEng.gf PhrasebookFre.gf DisambPhrasebookEng.gf
 
 missing:
-	echo "pg -missing | wf -file=missing.txt" | gf Phrasebook???.gf 
+	echo "pg -missing | wf -file=missing.txt" | gf Phrasebook.pgf 
+#PhrasebookBul.gf PhrasebookCat.gf PhrasebookDan.gf PhrasebookDut.gf PhrasebookNor.gf PhrasebookPol.gf PhrasebookRus.gf PhrasebookSpa.gf
+
 
 doc:
 	cat Sentences.gf Words.gf >Ontology.gf
 	gfdoc Ontology.gf
-	txt2tags -thtml phrasebook.txt
 	rm -f Ontology.gf
+	cat SentencesI.gf WordsEng.gf >Implementation.gf
+	gfdoc Implementation.gf
+	txt2tags -thtml phrasebook.txt
+	rm -f Ontology.gf Implementation.gf
 
