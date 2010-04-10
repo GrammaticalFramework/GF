@@ -737,7 +737,9 @@ incomplete resource Constructors = open Grammar in {
 
 -- Existentials are a special construction.
 
-      mkQCl : IP -> QCl  -- 8. what is there --# notminimal
+      mkQCl : IP -> QCl ;    -- 8. what is there --# notminimal
+      mkQCl : IComp -> NP -> QCl ;  -- 9. who is John --# notminimal
+
       } ; --# notminimal
 
 
@@ -1399,8 +1401,9 @@ incomplete resource Constructors = open Grammar in {
       mkQCl : IP -> NP -> QCl   -- who is John --# notminimal
                                          =    \a -> QuestIComp (CompIP a)   ; --# notminimal
       mkQCl : IP -> QCl         -- which houses are there --# notminimal
-                                         =    ExistIP  --# notminimal
-
+                                         =    ExistIP ; --# notminimal
+      mkQCl : IComp -> NP -> QCl   -- who is John --# notminimal
+                                         =    \a -> QuestIComp a   ; --# notminimal
       } ;  
 
     mkIP = overload {  
