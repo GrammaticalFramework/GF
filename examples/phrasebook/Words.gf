@@ -99,7 +99,8 @@ abstract Words = Sentences ** {
     AWant       : Person -> Object -> Action ;    -- I want two beers
     AWantGo     : Person -> Place -> Action ;     -- I want to go to the hospital
 
--- miscellaneous phrases
+-- Miscellaneous phrases. Notice that also negations and questions can be formed from
+-- propositions.
 
     QWhatAge       : Person -> Question ;            -- how many years are you
     QWhatName      : Person -> Question ;            -- what is your name

@@ -84,17 +84,9 @@ concrete WordsFin of Words = SentencesFin **
     AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
     AHasName p name = mkCl (nameOf p) name ;
-    AHasRoom p num = mkCl p.name have_V2 
-----      (mkNP (E.PartCN (mkN "huone"))  ---- partitive works in questions 
-      (mkNP (mkNP a_Det (mkN "huone"))
-         (SyntaxFin.mkAdv for_Prep (mkNP num (mkN "henki" "henkiä")))) ;
-    AHasTable p num = mkCl p.name have_V2 
-----      (mkNP (E.PartCN (mkN "pöytä")) 
-      (mkNP (mkNP a_Det (mkN "pöytä")) 
-         (SyntaxFin.mkAdv for_Prep (mkNP num (mkN "henki" "henkiä")))) ;
-
-
-    AHungry p = mkCl p.name have_V2 (mkNP (mkN "nälkä")) ;
+    AHasRoom p = haveForPerson p.name (mkCN (mkN "huone")) ;
+    AHasTable p = haveForPerson p.name (mkCN (mkN "pöytä")) ;
+    AHungry p = E.AdvExistNP (SyntaxFin.mkAdv on_Prep p.name) (mkNP (mkN "nälkä")) ;
     AIll p = mkCl p.name (mkA "sairas") ;
     AKnow p = mkCl p.name (mkV "tietää") ;
     ALike p item = mkCl p.name L.like_V2 item ;
@@ -104,7 +96,7 @@ concrete WordsFin of Words = SentencesFin **
     AReady p = mkCl p.name (ParadigmsFin.mkA "valmis") ;
     AScared p = mkCl p.name (caseV partitive (mkV "pelottaa")) ;
     ASpeak p lang = mkCl p.name  (mkV2 (mkV "puhua") partitive) lang ;
-    AThirsty p = mkCl p.name have_V2 (mkNP (mkN "jano")) ;
+    AThirsty p = E.AdvExistNP (SyntaxFin.mkAdv on_Prep p.name) (mkNP (mkN "jano")) ;
     ATired p = mkCl p.name (caseV partitive (mkV "väsyttää")) ;
     AUnderstand p = mkCl p.name (mkV "ymmärtää") ;
     AWant p obj = mkCl p.name (mkV2 "haluta") obj ;
@@ -183,6 +175,14 @@ concrete WordsFin of Words = SentencesFin **
       relativePerson n (mkCN x) (\a,b,c -> mkNP (E.GenNP b) a c) p ;
 
     nameOf : NPPerson -> NP = \p -> (xOf sing L.name_N p).name ;
+
+  oper 
+    -- do you have a table for five persons
+    haveForPerson : NP -> CN -> Card -> Cl = \p,a,n ->
+      mkCl p have_V2 
+----      (mkNP (E.PartCN a)  ---- partitive works in questions 
+        (mkNP (mkNP a_Det a)
+           (SyntaxFin.mkAdv for_Prep (mkNP n (mkN "henki" "henkiä")))) ;
 
     open_Adv = ParadigmsFin.mkAdv "avoinna" ;
     closed_Adv = ParadigmsFin.mkAdv "kiinni" ;

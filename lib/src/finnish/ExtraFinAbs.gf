@@ -16,4 +16,5 @@ abstract ExtraFinAbs = Extra [
     vai_Conj : Conj ;                     -- minä vai sinä? ("or" in question)
 
     CompPartAP : AP -> Comp ;             -- kahvi on valmista
+
 }

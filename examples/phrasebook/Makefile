@@ -1,19 +1,23 @@
+compile = runghc Compile 
+
 all: demo missing
 
 demo:
-	gf -make PhrasebookEng.gf PhrasebookFin.gf PhrasebookFre.gf PhrasebookGer.gf PhrasebookIta.gf PhrasebookRon.gf PhrasebookSwe.gf DisambPhrasebookEng.gf 
-#DisambPhrasebookRon.gf
+	$(compile) Eng Fre Ger Ita Ron Swe
+	$(compile) -link Eng Fin Fre Ger Ita Ron Swe DisambPhrasebookEng 
 
-pgf:
-	gf -make Phrasebook???.gf DisambPhrasebookEng.gf
+#separate, because slow...
+fin:
+	$(compile) Fin
+
+pgfs:
+	$(compile) Bul Cat Dan Dut Eng Fin Fre Ger Ita Nor Pol Ron Rus Spa Swe
 
 koe:
-	gf -make PhrasebookEng.gf PhrasebookFre.gf DisambPhrasebookEng.gf
+	$(compile) Eng Fre DisambPhrasebookEng
 
 missing:
 	echo "pg -missing | wf -file=missing.txt" | gf Phrasebook.pgf 
-#PhrasebookBul.gf PhrasebookCat.gf PhrasebookDan.gf PhrasebookDut.gf PhrasebookNor.gf PhrasebookPol.gf PhrasebookRus.gf PhrasebookSpa.gf
-
 
 doc:
 	cat Sentences.gf Words.gf >Ontology.gf
