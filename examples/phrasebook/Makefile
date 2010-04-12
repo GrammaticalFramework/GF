@@ -1,9 +1,13 @@
 compile = runghc Compile 
 
-all: demo missing
+all: fin demo missing
 
-demo:
+demo: compdemo linkdemo
+
+compdemo:
 	$(compile) Eng Fre Ger Ita Ron Swe DisambPhrasebookEng
+
+linkdemo:
 	$(compile) -link Eng Fin Fre Ger Ita Ron Swe DisambPhrasebookEng 
 
 #separate, because slow...
