@@ -103,6 +103,35 @@ oper
        {s : P => Q => R => Str} = 
     \P,Q,R,or,xs ->
     {s = \\p,q,r => or.s1++ xs.s1 ! p ! q ! r ++ or.s2 ++ xs.s2 ! p ! q ! r} ;
+	
+	---------
+	ListTable4 : Type -> Type -> Type -> Type -> Type = \P,Q,R,T -> 
+    {s1,s2 : P => Q => R => T => Str} ; 
+
+  twoTable4 : (P,Q,R,T : Type) -> (_,_ : {s : P => Q => R => T => Str}) -> 
+              ListTable4 P Q R T = 
+    \_,_,_,_,x,y ->
+    {s1 = x.s ; s2 = y.s} ; 
+
+  consTable4 : 
+    (P,Q,R,T : Type) -> Str -> ListTable4 P Q R T -> {s : P => Q => R => T => Str} -> 
+         ListTable4 P Q R T =
+     \P,Q,R,T,c,xs,x ->
+    {s1 = \\p,q,r,t => xs.s1 ! p ! q ! r ! t ++ c ++ xs.s2 ! p ! q ! r ! t ; 
+     s2 = x.s
+    } ; 
+
+  conjunctTable4 : 
+    (P,Q,R,T : Type) -> Conjunction -> ListTable4 P Q R T -> {s : P => Q => R => T => Str} = 
+    \P,Q,R,T,or,xs ->
+    {s = \\p,q,r,t => xs.s1 ! p ! q ! r ! t ++ or.s ++ xs.s2 ! p ! q ! r ! t} ;
+
+  conjunctDistrTable4 : 
+    (P,Q,R,T : Type) -> ConjunctionDistr -> ListTable4 P Q R T -> 
+       {s : P => Q => R => T => Str} = 
+    \P,Q,R,T,or,xs ->
+    {s = \\p,q,r,t => or.s1++ xs.s1 ! p ! q ! r ! t ++ or.s2 ++ xs.s2 ! p ! q ! r ! t} ;
+	--------------
 
   comma = "," ;
 
@@ -124,13 +153,10 @@ oper
     {s1 = table P {p => table Q {q => x.s ! p ! q ++ c ++ xs.s1 ! p ! q}} ; 
      s2 = xs.s2
     } ; 
-
-  consrTable3 : (P,Q,R : Type) -> Str -> {s : P => Q => R => Str} -> 
-    ListTable3 P Q R -> ListTable3 P Q R = 
-    \P,Q,R,c,x,xs ->
-    {s1 = table P {p => table Q {q => table R {
-       r => x.s ! p ! q ! r ++ c ++ xs.s1 ! p ! q ! r
-       }}} ; 
+	consrTable4 : (P,Q,R,T : Type) -> Str -> {s : P => Q => R => T => Str} -> 
+    ListTable4 P Q R T -> ListTable4 P Q R T = 
+    \P,Q,R,T,c,x,xs ->
+    {s1 = table P {p => table Q {q => table R { r => table T {t => x.s ! p ! q ! r ! t ++ c ++ xs.s1 ! p ! q ! r ! t}}}} ; 
      s2 = xs.s2
     } ; 
 
