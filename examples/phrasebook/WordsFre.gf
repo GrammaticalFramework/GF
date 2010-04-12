@@ -6,7 +6,8 @@ concrete WordsFre of Words = SentencesFre ** open
   (E = ExtraFre),
   (L = LexiconFre),
   ParadigmsFre,
-  (P = ParadigmsFre) in {
+  (P = ParadigmsFre),
+  Prelude in {
 
 lin
 
@@ -31,11 +32,13 @@ lin
 
     Bad = L.bad_A ;
     Boring = mkA "ennuyeux" ;
+    Cheap = let bm = "bon marché" in mkA bm bm bm bm ;
     Cold = L.cold_A ;
     Delicious = mkA "délicieux" ;
     Expensive = mkA "cher" ;
     Fresh = mkA "frais" "fraîche" "frais" "fraîchement" ;
     Good = L.good_A ;
+    Suspect = mkA "suspect" ;
     Warm = L.warm_A ;
 
 -- places
@@ -43,19 +46,26 @@ lin
     Airport = mkPlace (mkN "aéroport") dative ;
     Bar = mkPlace (mkN "bar") in_Prep ;
     Church = mkPlace (mkN "église") in_Prep ;
+    Cinema = mkPlace (mkN "cinéma" masculine) in_Prep ;
     Hospital = mkPlace (mkN "hôpital") dative ;
+    Hotel = mkPlace (mkN "hôtel") dative ;
     Museum = mkPlace (mkN "musée" masculine) in_Prep ;
+    Park = mkPlace (mkN "parc") in_Prep ;
     Restaurant = mkPlace (mkN "restaurant") in_Prep ;
+    School = mkPlace (mkN "école") dative ;
+    Shop = mkPlace (mkN "magasin") in_Prep ;
     Station = mkPlace (mkN "gare") dative ;
+    Theatre = mkPlace (mkN "théâtre" masculine) in_Prep ;
     Toilet = mkPlace (mkN "toilette") in_Prep ;
+    University = mkPlace (mkN "université" feminine) dative ;
 
 -- currencies
 
-    DanishCrown = mkCN (mkA "danois") (mkN "couronne") ;
+    DanishCrown = mkCN (mkA "danois") (mkN "couronne") | mkCN (mkN "couronne") ;
     Dollar = mkCN (mkN "dollar") ;
     Euro = mkCN (mkN "euro") ;
     Lei = mkCN (mkN "leu" "lei" masculine) ;
-    SwedishCrown = mkCN (mkA "suédois") (mkN "couronne") ;
+    SwedishCrown = mkCN (mkA "suédois") (mkN "couronne") | mkCN (mkN "couronne") ;
 
 -- nationalities
 
@@ -73,12 +83,19 @@ lin
 
     AHasAge p num = mkCl p.name have_V2 (mkNP num L.year_N) ;
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
+    AHasRoom p num = mkCl p.name have_V2 
+      (mkNP (mkNP a_Det (mkN "chambre")) 
+        (SyntaxFre.mkAdv for_Prep (mkNP num (mkN "personne")))) ;
+    AHasTable p num = mkCl p.name have_V2 
+      (mkNP (mkNP a_Det (mkN "table")) 
+        (SyntaxFre.mkAdv for_Prep (mkNP num (mkN "personne")))) ;
     AMarried p = mkCl p.name (mkA "marié") ;
     AWant p obj = mkCl p.name vouloir_V2 obj ;
     ALike p item = mkCl item plaire_V2 p.name ;
     ASpeak p lang = mkCl p.name  (mkV2 (mkV "parler")) lang ;
     ALove p q = mkCl p.name (mkV2 (mkV "aimer")) q.name ;
     AHungry p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "faim" feminine))) ;
+    AReady p = mkCl p.name (mkA "prêt") ;
     AThirsty p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "soif" feminine))) ;
     ATired p = mkCl p.name (mkA "fatigué") ;
     AScared p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "peur" feminine))) ;
@@ -104,6 +121,19 @@ lin
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "coûter"))) ; 
     ItCost item price = mkCl item (mkV2 (mkV "coûter")) price ;
 
+-- Building phrases from strings is complicated: the solution is to use
+-- mkText : Text -> Text -> Text ;
+
+    PSeeYou d = mkText (lin Text (ss ("on se verra"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlace p d = 
+      mkText (lin Text (ss ("on se verra"))) 
+        (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
+
+-- Relations are expressed as "my wife" or "the wife of my son", as defined by $xOf$
+-- below. Languages with productive genitives can use an equivalent of
+-- "my son's wife" for non-pronouns, as e.g. in English.
+
+
     Wife = xOf sing (mkN "femme") ;
     Husband = xOf sing (mkN "mari") ;
     Son = xOf sing (mkN "fils") ;
@@ -119,6 +149,8 @@ lin
     Friday = mkDay "vendredi" ;
     Saturday = mkDay "samedi" ;
     Sunday = mkDay "dimanche" ;
+
+    Tomorrow = ParadigmsFre.mkAdv "demain" ;
 
 
   oper

@@ -3,7 +3,7 @@ compile = runghc Compile
 all: demo missing
 
 demo:
-	$(compile) Eng Fre Ger Ita Ron Swe
+	$(compile) Eng Fre Ger Ita Ron Swe DisambPhrasebookEng
 	$(compile) -link Eng Fin Fre Ger Ita Ron Swe DisambPhrasebookEng 
 
 #separate, because slow...

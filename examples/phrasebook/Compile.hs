@@ -28,7 +28,7 @@ main = do
     then mapM_ compileOne modus >> return ()
     else return ()
   case opts of
-    _ | elem "-make" opts || elem "makeonly" opts -> do
+    _ | elem "-make" opts || elem "-link" opts -> do
       system $ "gf -make " ++ unwords (map (++ ".pgf") modus)
       return () 
     _ -> return ()
