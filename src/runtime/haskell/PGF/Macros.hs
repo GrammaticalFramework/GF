@@ -151,28 +151,27 @@ updateProductionIndices :: PGF -> PGF
 updateProductionIndices pgf = pgf{ concretes = fmap updateConcrete (concretes pgf) }
   where
     updateConcrete cnc = 
-      let prods0    = filterProductions (productions cnc)
-          p_prods   = parseIndex cnc prods0
-          l_prods   = linIndex   cnc prods0
+      let p_prods   = (filterProductions IntMap.empty . parseIndex cnc) (productions cnc)
+          l_prods   = (linIndex   cnc . filterProductions IntMap.empty) (productions cnc)
       in cnc{pproductions = p_prods, lproductions = l_prods}
 
-    filterProductions prods0
-      | IntMap.size prods == IntMap.size prods0 = prods
-      | otherwise                               = filterProductions prods
+    filterProductions prods0 prods
+      | prods0 == prods1 = prods0
+      | otherwise        = filterProductions prods1 prods
       where
-        prods = IntMap.mapMaybe (filterProdSet prods0) prods0
+        prods1 = IntMap.unionWith Set.union prods0 (IntMap.mapMaybe (filterProdSet prods0) prods)
 
-        filterProdSet prods set0
-          | Set.null set = Nothing
-          | otherwise    = Just set
+        filterProdSet prods0 set
+          | Set.null set1 = Nothing
+          | otherwise     = Just set1
           where
-            set = Set.filter (filterRule prods) set0
+            set1 = Set.filter (filterRule prods0) set
 
-        filterRule prods (PApply funid args) = all (\fcat -> isLiteralFCat fcat || IntMap.member fcat prods) args
-        filterRule prods (PCoerce fcat)      = isLiteralFCat fcat || IntMap.member fcat prods
-        filterRule prods _                   = True
+        filterRule prods0 (PApply funid args) = all (\fcat -> isLiteralFCat fcat || IntMap.member fcat prods0) args
+        filterRule prods0 (PCoerce fcat)      = isLiteralFCat fcat || IntMap.member fcat prods0
+        filterRule prods0 _                   = True
 
-    parseIndex pinfo = IntMap.mapMaybeWithKey filterProdSet
+    parseIndex cnc = IntMap.mapMaybeWithKey filterProdSet
       where
         filterProdSet fid prods
           | fid `IntSet.member` ho_fids = Just prods
@@ -186,21 +185,20 @@ updateProductionIndices pgf = pgf{ concretes = fmap updateConcrete (concretes pg
 
         ho_fids :: IntSet.IntSet
         ho_fids = IntSet.fromList [fid | cat <- ho_cats
-                                       , fid <- maybe [] (\(CncCat s e _) -> [s..e]) (Map.lookup cat (cnccats pinfo))]
+                                       , fid <- maybe [] (\(CncCat s e _) -> [s..e]) (Map.lookup cat (cnccats cnc))]
 
         ho_cats :: [CId]
         ho_cats = sortNub [c | (ty,_,_) <- Map.elems (funs (abstract pgf))
                              , h <- case ty of {DTyp hyps val _ -> hyps}
-                             , let ty = typeOfHypo h
-                             , c <- fst (catSkeleton ty)]
+                             , c <- fst (catSkeleton (typeOfHypo h))]
 
-    linIndex pinfo productions = 
+    linIndex cnc productions = 
       Map.fromListWith (IntMap.unionWith Set.union)
                        [(fun,IntMap.singleton res (Set.singleton prod)) | (res,prods) <- IntMap.toList productions
                                                                         , prod <- Set.toList prods
                                                                         , fun <- getFunctions prod]
       where
-        getFunctions (PApply funid args) = let CncFun fun _ = cncfuns pinfo Array.! funid in [fun]
+        getFunctions (PApply funid args) = let CncFun fun _ = cncfuns cnc Array.! funid in [fun]
         getFunctions (PCoerce fid)       = case IntMap.lookup fid productions of
                                              Nothing    -> []
                                              Just prods -> [fun | prod <- Set.toList prods, fun <- getFunctions prod]
