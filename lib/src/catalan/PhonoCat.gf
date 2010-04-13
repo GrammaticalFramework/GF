@@ -2,30 +2,33 @@
 
 resource PhonoCat = open Prelude in {
 
+flags
+  coding = utf8 ;
+
 --3 Elision
 --
 -- The phonological rule of *elision* can be defined as follows in GF.
 -- In Catalan it includes both vowels and 'h'.
 
----TODO: L'elisió depén de la tonicitat.
+---TODO: L'elisi√≥ dep√©n de la tonicitat.
 
 oper 
   vocal : Strs = strs {
-    "a" ; "à" ;
-	"e" ; "è" ; "é" ; "o" ; "ò" ; "ó" ;
-	"i" ; "í" ; "ï" ; "u" ; "ú" ; "ü" ;  "h" 
+    "a" ; "√†" ;
+	"e" ; "√®" ; "√©" ; "o" ; "√≤" ; "√≥" ;
+	"i" ; "√≠" ; "√Ø" ; "u" ; "√∫" ; "√º" ;  "h" 
 	} ;
   
   vocalForta : Strs = strs {
-	"a" ; "à" ; "ha" ; "hà" ;
-	"e" ; "è" ; "é" ; "he" ; "hè" ; "hé" ;
-	"o" ; "ò" ; "ó" ; "ho" ; "hò" ; "hó" ;
-	"í"  ; "ú" ; "hí" ; "hú" ; 
+	"a" ; "√†" ; "ha" ; "h√†" ;
+	"e" ; "√®" ; "√©" ; "he" ; "h√®" ; "h√©" ;
+	"o" ; "√≤" ; "√≥" ; "ho" ; "h√≤" ; "h√≥" ;
+	"√≠"  ; "√∫" ; "h√≠" ; "h√∫" ; 
 	} ;
 	
   vocalFeble : Strs = strs {
-	"i" ; "ï" ; "u" ; "ü" ;
-	"hi" ; "hï" ; "hu" ; "hü" ;
+	"i" ; "√Ø" ; "u" ; "√º" ;
+	"hi" ; "h√Ø" ; "hu" ; "h√º" ;
 	} ;
 	
 	
