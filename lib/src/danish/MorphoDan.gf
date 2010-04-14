@@ -48,8 +48,8 @@ oper
 
   mkAdject : (_,_,_,_,_ : Str) -> Adj = 
     \stor,stort,store,storre,storst -> {s = table {
-       AF (APosit (Strong SgUtr )) c    => mkCase c stor ; 
-       AF (APosit (Strong SgNeutr)) c   => mkCase c stort ;
+       AF (APosit (Strong (GSg Utr))) c    => mkCase c stor ; 
+       AF (APosit (Strong (GSg Neutr))) c   => mkCase c stort ;
        AF (APosit _) c                  => mkCase c store ;
        AF ACompar c                     => mkCase c storre ;
        AF (ASuperl SupStrong) c         => mkCase c storst ;

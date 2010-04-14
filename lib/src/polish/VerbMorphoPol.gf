@@ -406,13 +406,14 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
             let perf = verb.sp; in
             let imperf = verb.si; in
             table {
-                <Pres, Simul, gn, p>   =>  nie ++ imperf ! (VFinM (extract_num!gn) p) ++ sie ;
-                <Pres, Anter, gn, p>   =>  nie ++ perf   ! (VPraetM gn p) ++ sie ;
-                <Past, _, gn, p>       =>  nie ++ perf   ! (VPraetM gn p) ++ sie ;
-                <Fut, Simul, gn, p>    =>  nie ++ bedzie ! <(extract_num!gn), p> ++ sie ++ imperf ! (VPraetM gn P3);
-                <Fut, Anter, gn, p>    =>  nie ++ perf ! (VFinM (extract_num!gn) p) ++ sie;
-                <Cond, Simul, gn, p>   =>  nie ++ imperf ! (VCondM gn p) ++ sie;
-                <Cond, Anter, gn, p>   =>  nie ++ perf   ! (VCondM gn p) ++ sie
+                <Pres, Simul, gn, p>   =>  nie ++ imperf ! (VFinM (extract_num!gn) p) ++ sie 
+                ;  --# notpresent
+                <Pres, Anter, gn, p>   =>  nie ++ perf   ! (VPraetM gn p) ++ sie ;  --# notpresent
+                <Past, _, gn, p>       =>  nie ++ perf   ! (VPraetM gn p) ++ sie ; --# notpresent
+                <Fut, Simul, gn, p>    =>  nie ++ bedzie ! <(extract_num!gn), p> ++ sie ++ imperf ! (VPraetM gn P3); --# notpresent
+                <Fut, Anter, gn, p>    =>  nie ++ perf ! (VFinM (extract_num!gn) p) ++ sie; --# notpresent
+                <Cond, Simul, gn, p>   =>  nie ++ imperf ! (VCondM gn p) ++ sie; --# notpresent
+                <Cond, Anter, gn, p>   =>  nie ++ perf   ! (VCondM gn p) ++ sie --# notpresent
             }
         };
         
@@ -422,17 +423,18 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
         let zostac = (case verb.asp of { Imperfective => conj1 "być";    _ => conj3 "zostać" }).s; in
         let nie = case pol of { Pos => "" ; Neg => "nie" }; in
         table { 
-            <Pres, Simul, gn, p> => nie ++ byc ! (VFinM (extract_num!gn) p) ++ verb.ppart ! AF gn Nom;
-            <Pres, Anter, gn, p> => nie ++ zostac ! (VPraetM gn p) ++ verb.ppart ! AF gn Nom;
-            <Past, Simul, gn, p> => nie ++ byc ! (VPraetM gn p) ++ verb.ppart ! AF gn Nom;
-            <Past, Anter, gn, p> => nie ++ zostac ! (VPraetM gn p) ++ verb.ppart ! AF gn Nom;
-            <Fut,  Simul, gn, p> => nie ++ case verb.asp of {
-                Perfective => zostac ! (VFinM (extract_num!gn) p);
-                _          => bedzie ! <extract_num!gn, p>
-            } ++ verb.ppart ! AF gn Nom;
-            <Fut,  Anter, gn, p> => nie ++ zostac ! (VFinM (extract_num!gn) p) ++ verb.ppart ! AF gn Nom;
-            <Cond, Simul, gn, p> => nie ++ byc ! (VCondM gn p) ++ verb.ppart ! AF gn Nom;
-            <Cond, Anter, gn, p> => nie ++ zostac ! (VCondM gn p) ++ verb.ppart ! AF gn Nom
+            <Pres, Simul, gn, p> => nie ++ byc ! (VFinM (extract_num!gn) p) ++ verb.ppart ! AF gn Nom
+            ;  --# notpresent
+            <Pres, Anter, gn, p> => nie ++ zostac ! (VPraetM gn p) ++ verb.ppart ! AF gn Nom; --# notpresent
+            <Past, Simul, gn, p> => nie ++ byc ! (VPraetM gn p) ++ verb.ppart ! AF gn Nom; --# notpresent
+            <Past, Anter, gn, p> => nie ++ zostac ! (VPraetM gn p) ++ verb.ppart ! AF gn Nom; --# notpresent
+            <Fut,  Simul, gn, p> => nie ++ case verb.asp of { --# notpresent
+                Perfective => zostac ! (VFinM (extract_num!gn) p); --# notpresent
+                _          => bedzie ! <extract_num!gn, p> --# notpresent
+            } ++ verb.ppart ! AF gn Nom; --# notpresent
+            <Fut,  Anter, gn, p> => nie ++ zostac ! (VFinM (extract_num!gn) p) ++ verb.ppart ! AF gn Nom; --# notpresent
+            <Cond, Simul, gn, p> => nie ++ byc ! (VCondM gn p) ++ verb.ppart ! AF gn Nom; --# notpresent
+            <Cond, Anter, gn, p> => nie ++ zostac ! (VCondM gn p) ++ verb.ppart ! AF gn Nom --# notpresent
         };
    
     bedzie : Number * Person => Str = table {

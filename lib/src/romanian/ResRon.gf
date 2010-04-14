@@ -100,7 +100,13 @@ param
            | Ger
            | PPasse Gender Number Species ACase ;
 
-  TMood    = VPres  Mood | VImperff | VPasse Mood | VFut | VCondit ;
+  TMood    = 
+      VPres  Mood 
+    | VImperff  --# notpresent
+    | VPasse Mood  --# notpresent
+    | VFut  --# notpresent
+    | VCondit   --# notpresent
+   ;
 
   NumPersI = SgP2 | PlP1 | PlP2 ;
 
@@ -109,7 +115,12 @@ param
             | VPGerund
             | VPInfinit Anteriority Bool ;
 
-  RTense = RPres | RPast | RFut | RCond ;
+  RTense = 
+     RPres 
+   | RPast  --# notpresent
+   | RFut  --# notpresent
+   | RCond --# notpresent
+  ;
 
 oper 
  copula    : VerbPhrase = 
@@ -193,22 +204,23 @@ oper
     in {
     s = table {
       VPFinite tm Simul => case tm of 
-                             {VPres Indic => vf "" (\a -> verb ! Indi Presn a.n a.p) ;
-                              VPres Conjunct => vf "să" (\a -> verb ! Subjo SPres a.n a.p) ;
-                              VImperff  => vf "" (\a -> verb ! Indi Imparf a.n a.p)  ;
-                              VPasse  Indic => vf "" (\a -> pComp ! a.n ! a.p ++ verb ! PPasse Masc Sg Indef ANomAcc) ; 
-                              VPasse  Conjunct => vf "să" (\a -> copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;
-                              VFut => vf "" (\a -> pFut ! a.n ! a.p ++ verb ! Inf) ;
-                              VCondit => vf "" (\a -> pCond ! a.n ! a.p ++ verb ! Inf) 
-                              } ;  
-      VPFinite tm Anter => case tm of 
-                              {VPres Indic => vf "" (\a -> pComp ! a.n ! a.p ++ verb ! PPasse Masc Sg Indef ANomAcc) ; 
-                              (VPres Conjunct | VPasse Conjunct) => vf "să" (\a -> copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;
-                              VFut => vf "" (\a -> pFut !a.n ! a.p ++ copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;   
-                              VCondit => vf "" (\a -> pCond ! a.n ! a.p ++ copula.s ! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc);
-                              _       => vf "" (\a -> verb ! Indi PPerfect a.n a.p) 
-                              }; 
-      VPInfinit Anter b=> vf "a" (\a -> copula.s ! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc);  
+                             {
+        VPres Indic => vf "" (\a -> verb ! Indi Presn a.n a.p) ;
+        VPres Conjunct => vf "să" (\a -> verb ! Subjo SPres a.n a.p) 
+        ; VImperff  => vf "" (\a -> verb ! Indi Imparf a.n a.p)  --# notpresent
+        ; VPasse  Indic => vf "" (\a -> pComp ! a.n ! a.p ++ verb ! PPasse Masc Sg Indef ANomAcc) ; --# notpresent 
+        VPasse  Conjunct => vf "să" (\a -> copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;  --# notpresent
+        VFut => vf "" (\a -> pFut ! a.n ! a.p ++ verb ! Inf) ;  --# notpresent
+        VCondit => vf "" (\a -> pCond ! a.n ! a.p ++ verb ! Inf)  --# notpresent
+        } ;  
+      VPFinite tm Anter => case tm of {  --# notpresent
+        VPres Indic => vf "" (\a -> pComp ! a.n ! a.p ++ verb ! PPasse Masc Sg Indef ANomAcc) ;  --# notpresent 
+        (VPres Conjunct | VPasse Conjunct) => vf "să" (\a -> copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;  --# notpresent
+        VFut => vf "" (\a -> pFut !a.n ! a.p ++ copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;   --# notpresent
+        VCondit => vf "" (\a -> pCond ! a.n ! a.p ++ copula.s ! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc);  --# notpresent
+        _       => vf "" (\a -> verb ! Indi PPerfect a.n a.p)  --# notpresent 
+                              };  --# notpresentx
+      VPInfinit Anter b=> vf "a" (\a -> copula.s ! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc);  --# notpresent  
       VPImperat        => vf "să" (\a -> verb ! Subjo SPres a.n a.p) ; -- fix it later !
       VPGerund         => vf "" (\a -> vger) ;
       VPInfinit Simul b => vf "a" (\a -> verb ! Inf) 
@@ -506,9 +518,9 @@ oper
       s = \\d,t,a,b,m => 
         let 
           tm = case t of {
-            RPast  => VPasse m ;   
-            RFut   => VFut ;        
-            RCond  => VCondit ;        
+            RPast  => VPasse m ;  --# notpresent   
+            RFut   => VFut ;         --# notpresent
+            RCond  => VCondit ;         --# notpresent
             RPres  => VPres m
             } ;
           cmp = case <<t,a,m> : RTense * Anteriority * Mood> of {

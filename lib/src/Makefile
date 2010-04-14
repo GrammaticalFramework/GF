@@ -5,15 +5,17 @@ GF_LIB_PATH=..
 
 .PHONY: all present alltenses lang api math prelude test demo parse synopsis link compiled constructX clean
 
-all: link prelude constructX present alltenses compat
+all: link prelude constructX present alltenses
 
 present:
 	$(RUNMAKE) present lang
 	$(RUNMAKE) present api
+	$(RUNMAKE) present symbolic
 
 alltenses: 
 	$(RUNMAKE) lang
 	$(RUNMAKE) api
+	$(RUNMAKE) symbolic
 
 lang:
 	$(RUNMAKE) lang
@@ -21,7 +23,7 @@ lang:
 api:
 	$(RUNMAKE) api
 
-compat:
+compatibility:
 	$(RUNMAKE) present compat
 
 prelude:
