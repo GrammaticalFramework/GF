@@ -16,9 +16,9 @@ lin
     } ;
   almost_AdA, almost_AdN = ss "quasi" ;
   always_AdV = ss "sempre" ;
-  although_Subj = ss "bench�" ** {m = Conjunct} ;
+  although_Subj = ss "benché" ** {m = Conjunct} ;
   and_Conj = {s1 = [] ; s2 = "e" ; n = Pl} ;
-  because_Subj = ss "perch�" ** {m = Indic} ;
+  because_Subj = ss "perché" ** {m = Indic} ;
   before_Prep = mkPrep "prima" ;
   behind_Prep = mkPrep "dietro" ;
   between_Prep = mkPrep "fra" ;
@@ -42,9 +42,9 @@ lin
     mkPronoun
       "lui" "lo" "gli" "glie" "lui" "suo" "sua" "suoi" "sue"
       Masc Sg P3 ;
-  here7from_Adv = ss ["da quì"] ;
-  here7to_Adv = ss "quì" ;
-  here_Adv = ss "quì" ;
+  here7from_Adv = ss ["da quÃ¬"] ;
+  here7to_Adv = ss "quÃ¬" ;
+  here_Adv = ss "quÃ¬" ;
   how_IAdv = ss "come" ;
   how8much_IAdv = ss "quanto" ;
   how8many_IDet = {s = \\g,c => prepCase c ++ genForms "quanti" "quante" ! g ; n = Pl} ;
@@ -61,7 +61,7 @@ lin
       Masc Sg P3 ;
   less_CAdv = X.mkCAdv "meno" conjThan ;
   many_Det = {s,sp = \\g,c => prepCase c ++ genForms "molti" "molte" ! g ; n = Pl ; s2 = []} ;
-  more_CAdv = X.mkCAdv "pi�" conjThan ;
+  more_CAdv = X.mkCAdv "più" conjThan ;
   most_Predet = {s = \\_,c => prepCase c ++ ["la maggior parte"] ; c = CPrep P_di ;
     a = PNoAg} ;
   much_Det = {s,sp = \\g,c => prepCase c ++ genForms "molto" "molta" ! g ; n = Sg ; s2 = []} ;
@@ -81,7 +81,7 @@ lin
     mkPronoun
       "lei" "la" "le" "glie" "lei" "suo" "sua" "suoi" "sue"
       Fem Sg P3 ;
-  so_AdA = ss "così" ;
+  so_AdA = ss "cosÃ¬" ;
   somebody_NP = pn2np (mkPN ["qualcuno"] Masc) ;
   somePl_Det = {s,sp = \\_,c => prepCase c ++ "qualche" ; n = Pl ; s2 = []} ;
   someSg_Det = {s,sp = \\_,c => prepCase c ++ "qualche" ; n = Sg ; s2 = []} ;
@@ -101,9 +101,9 @@ lin
       s2 = []
       } ;
 
-  there7from_Adv = ss ["di l�"] ;
-  there7to_Adv = ss "l�" ; --- ci
-  there_Adv = ss "l�" ;
+  there7from_Adv = ss ["di là"] ;
+  there7to_Adv = ss "là" ; --- ci
+  there_Adv = ss "là" ;
   therefore_PConj = ss "quindi" ;
   they_Pron = mkPronoun
     "loro" "loro" "li" "glie" "loro" "loro" "loro" "loro" "loro" 
@@ -141,10 +141,10 @@ lin
   } ;
   whoPl_IP = {s = \\c => prepCase c ++ "chi" ; a = aagr Masc Pl} ;
   whoSg_IP = {s = \\c => prepCase c ++ "chi" ; a = aagr Masc Sg} ;
-  why_IAdv = ss "perch�" ;
+  why_IAdv = ss "perché" ;
   without_Prep = mkPrep "senza" ;
   with_Prep = {s = [] ; c = CPrep P_con ; isDir = False} ;
-  yes_Utt = ss "s�" ;
+  yes_Utt = ss "sì" ;
   youSg_Pron = mkPronoun 
     "tu" "ti" "ti" "te" "te" "tuo" "tua" "tuoi" "tue"
     Masc Sg P2 ;
@@ -176,7 +176,7 @@ lin
   at_least_AdN = ss "almeno" ;
   at_most_AdN = ss "al massimo" ;
 
-  as_CAdv = X.mkCAdv "cos�" conjThan ;
+  as_CAdv = X.mkCAdv "così" conjThan ;
   except_Prep = mkPrep "eccetto" ;
 
   have_V2 = dirV2 (verboV (avere_2 "avere")) ;
