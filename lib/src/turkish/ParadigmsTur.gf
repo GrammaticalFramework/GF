@@ -10,7 +10,7 @@ resource ParadigmsTur = open
   in {
 
 flags
-  coding=utf8 ;
+  coding=utf8 ; optimize=noexpand ;
 
 oper
 -- Paradigms for verb
