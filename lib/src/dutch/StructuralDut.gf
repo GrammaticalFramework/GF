@@ -38,6 +38,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   here7from_Adv = ss ["van hier"] ; ----
   here_Adv = ss "hier" ;
   how_IAdv = ss "hoe" ;
+  how8much_IAdv = ss "hoeveel" ;
   how8many_IDet = mkDet "hoeveel" "hoeveel" Pl ;
   if_Subj = ss "als" ;
   in8front_Prep = mkPrep "voor" ;
@@ -71,6 +72,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   something_NP = mkNP "iets" Utr Sg ;
   somewhere_Adv = ss "ergens" ;
   that_Quant = mkQuant "die" "dat" ;
+  that_Subj = ss "dat" ;
   there_Adv = ss "daar" ;
   there7to_Adv = ss "daar" ;
   there7from_Adv = ss "van daar" ;
@@ -116,7 +118,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   except_Prep = mkPrep "met uitzondering van" ;
 
   as_CAdv = X.mkCAdv "zo" "als" ;
-  have_V2 = mkV2 hebben_V ;
+  have_V2 = mkV2 ParadigmsDut.hebben_V ;
 
   lin language_title_Utt = ss "nederlands" ;
 

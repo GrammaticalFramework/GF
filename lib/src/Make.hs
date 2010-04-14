@@ -10,7 +10,7 @@ import System.Exit
 -- Make commands for compiling and testing resource grammars.
 -- usage: runghc Make ((present? OPT?) | (clone FILE))? LANGS? 
 -- where 
--- - OPT = (lang | api | math | pgf | test | parse | clean | clone)
+-- - OPT = (lang | api | pgf | test | parse | clean | clone)
 -- - LANGS has the form e.g. langs=Eng,Fin,Rus
 -- - clone with a flag file=FILENAME clones the file to the specified languages,
 --   by replacing the 3-letter language name of the original in both 
@@ -56,11 +56,17 @@ implied (_,lan) = [fun | ((_,la),fun) <- langsCoding, la == lan, fun /= ""]
 
 langs = map fst langsCoding
 
--- languagues for which to compile Lang
-langsLang = langs `except` ["Tur"]
+-- all languagues for which Lang can be compiled
+langsLangAll = langs
+
+-- languagues that are almost complete and for which Lang is normally compiled
+langsLang = langs `except` ["Ara","Hin","Lat","Tha","Tur"]
 
 -- languages for which to compile Try 
-langsAPI  = langsLang `except` ["Ara","Hin","Ina","Lat","Rus","Tha"]
+langsAPI = langsLang `except` ["Ina"]
+
+-- languages for which to compile Symbolic
+langsSymbolic = langsLang `except` ["Rus","Ina"]
 
 -- languages for which to compile minimal Syntax
 langsMinimal = langs `only` ["Ara","Eng","Bul","Rus"]
@@ -108,12 +114,17 @@ make xx = do
   ifx "api" $ do
     let lans = optl langsAPI
     mapM_ (gfc pres presApiPath . try) lans
+    copy "api/Constructors.gfo api/Combinators.gfo api/Syntax.gfo" dir
+    copyld lans "api/*" ".gfo" dir
+  ifx "symbolic" $ do
+    let lans = optl langsSymbolic
     mapM_ (gfc pres presApiPath . symbolic) lans
-    copyld lans "api" ".gfo" dir
+    copy "api/Symbolic.gfo" dir
+    copyld lans "api/Symbolic" ".gfo" dir
   ifx "minimal" $ do
     let lans = optl langsMinimal
     mapM_ (gfcmin presApiPath . syntax) lans
-    copyld lans "api" ".gfo" "../minimal"
+    copyld lans "api/*" ".gfo" "../minimal"
   ifxx "pgf" $ do
     run_gfc $ ["-s","--make","--name=langs","--parser=off",
                "--output-dir=" ++ dir]
@@ -227,8 +238,8 @@ copyl lans from to = do
 
 copyld :: [(String,String)] -> String -> String -> String -> IO ()
 copyld lans dir from to = do 
-  mapM_ (\lan -> echosystem $ "cp " ++ dir ++ "/*" ++ lan ++ from ++ " " ++ to) 
-        (map snd lans ++ if (dir == "api") then [] else concatMap implied lans)
+  mapM_ (\lan -> echosystem $ "cp " ++ dir ++ lan ++ from ++ " " ++ to) 
+        (map snd lans ++ if (take 3 dir == "api") then [] else concatMap implied lans)
   return ()
 
 echosystem c = do

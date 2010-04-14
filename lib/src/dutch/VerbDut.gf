@@ -79,5 +79,5 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
   oper
     v2v : VVerb -> VVerb = \v -> 
       {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = v.vtype} ;
-    predVv : V -> VP = \v -> predV (v2v v) ;
+    predVv : VVerb -> ResDut.VP = \v -> predV (v2v v) ;
 }

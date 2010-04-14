@@ -20,7 +20,7 @@ concrete CatDut of Cat =
 
 -- Question
 
-    QCl = {s : Tense => Anteriority => Polarity => QForm => Str} ;
+    QCl = {s : ResDut.Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : NPCase => Str ; n : Number} ;
     IComp  = {s : Agr => Str} ; 
     IDet   = {s : Gender => Str ; n : Number} ;
@@ -28,7 +28,7 @@ concrete CatDut of Cat =
 
 -- Relative
 
-    RCl = {s : Tense => Anteriority => Polarity => Gender => Number => Str} ;
+    RCl = {s : ResDut.Tense => Anteriority => Polarity => Gender => Number => Str} ;
     RP = {s : Gender => Number => Str ; a : RAgr} ;
 
 -- Verb
