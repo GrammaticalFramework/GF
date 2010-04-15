@@ -68,8 +68,7 @@ function tr(cells) {
 }
 
 function button(label,action) {
-  var el=empty("input");
-  el.setAttribute("type","button");
+  var el=empty("input","type","button");
   el.setAttribute("value",label);
   el.setAttribute("onclick",action);
   return el;
