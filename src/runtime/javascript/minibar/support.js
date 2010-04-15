@@ -16,8 +16,8 @@ function jsonp(url,callback)
         url += "&jsonp=" 
     else
         url += "?jsonp=" 
-    url += callback + "&";
-    //url += new Date().getTime().toString(); // prevent caching        
+    url += callback;
+    //url += "&" + new Date().getTime().toString(); // prevent caching        
     
     var script = empty("script");        
     script.setAttribute("src",url);
