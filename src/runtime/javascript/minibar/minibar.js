@@ -19,8 +19,8 @@ var server = {
 	this.current_grammar_url=grammars_url+grammar_name;
     },
     
-    get_grammarlist: function() {
-	jsonp(grammars_url+"grammars.cgi") // calls show_grammarlist
+    get_grammarlist: function(cont_name) {
+	jsonp(grammars_url+"grammars.cgi",cont_name);
     },
     get_languages: function(cont_name) {
 	jsonp(this.current_grammar_url,cont_name);
@@ -53,12 +53,12 @@ var server = {
 /* --- Initialisation ------------------------------------------------------- */
 
 function start_minibar() { // typically called when the HTML document is loaded
-  var minibar=element("minibar");
-  minibar.appendChild(div_id("menubar"));
-  minibar.appendChild(div_id("surface"));
-  minibar.appendChild(div_id("words"));
-  minibar.appendChild(div_id("translations"));
-  server.get_grammarlist(); // calls show_grammarlist
+    appendChildren(element("minibar"),
+		   [div_id("menubar"),
+		    div_id("surface"),
+		    div_id("words"),
+		    div_id("translations")]);
+    server.get_grammarlist("show_grammarlist");
 }
 
 
@@ -75,12 +75,13 @@ function show_grammarlist(grammars) {
   menu.setAttribute("onchange","new_grammar(this)");
   var menubar=element("menubar");
   menubar.innerHTML="Grammar: ";
-  menubar.appendChild(menu);
-  menubar.appendChild(text(" Input language: "));
-  menubar.appendChild(empty_id("select","language_menu"));
-  menubar.appendChild(button("Clear","clear_all()"));
-  menubar.appendChild(button("⌫","delete_last()"));
-  menubar.appendChild(button("Random","generate_random()"));
+  appendChildren(menubar,
+		 [menu,
+		  text(" Input language: "),
+		  empty_id("select","language_menu"),
+		  button("Clear","clear_all()"),
+		  button("⌫","delete_last()"),
+		  button("Random","generate_random()")]);
   select_grammar(grammars[0]);
 }
 
