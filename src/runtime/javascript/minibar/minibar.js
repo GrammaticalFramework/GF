@@ -53,9 +53,11 @@ var server = {
 /* --- Initialisation ------------------------------------------------------- */
 
 function start_minibar() { // typically called when the HTML document is loaded
+    var surface=div_id("surface");
+    surface.setAttribute("onclick","surface_click(this)");
     appendChildren(element("minibar"),
 		   [div_id("menubar"),
-		    div_id("surface"),
+		    surface,
 		    div_id("words"),
 		    div_id("translations")]);
     server.get_grammarlist("show_grammarlist");
@@ -120,12 +122,14 @@ function new_language(menu) {
 }
 
 function clear_all1() {
-  var menu=element("language_menu");
-  menu.current.input="";
-  menu.previous=null;
-  element("surface").innerHTML="";
-  element("translations").innerHTML="";
-  return menu;
+    var menu=element("language_menu");
+    menu.current.input="";
+    menu.previous=null;
+    var surface=element("surface");
+    surface.innerHTML="";
+    surface.typed=null;
+    element("translations").innerHTML="";
+    return menu;
 }
 
 function clear_all() {
@@ -138,26 +142,54 @@ function delete_last() {
     menu.current.input=menu.previous.input;
     menu.previous=menu.previous.previous;
     var s=element("surface");
-    s.removeChild(s.lastChild);
+    if(s.typed) {
+	s.removeChild(s.typed.previousSibling);
+	s.typed.focus();
+    }
+    else
+	s.removeChild(s.lastChild);
     element("translations").innerHTML="";
     get_completions(menu);
   }
 }
 
+function surface_click(surface) {
+    if(surface.typed)
+	inp=surface.typed;
+    else {
+	var inp=empty("input","type","text");
+	//inp.setAttribute("onclick","return false;"); // Don't propagate click to surface
+	inp.setAttribute("onkeyup","complete_typed(this)");
+	inp.setAttribute("onchange","finish_typed(this)");
+	surface.appendChild(inp);
+	surface.typed=inp;
+    }
+    inp.focus();
+}
+
+function complete_typed(inp) {
+    var menu=element("language_menu");
+    var c=menu.current;
+    if(!inp.completing || inp.completing!=inp.value) {
+	inp.completing=inp.value;
+	server.complete(c.from,c.input+inp.value,"show_completions");
+    }
+}
+
+function finish_typed(inp) {
+    var box=element("words");
+    if(box.completions.length==1)
+	add_word(box.completions[0]);
+}
+
 function generate_random() {
     server.get_random("lin_random");
-//  jsonp(server.current_grammar_url+"?command=random&random="+Math.random(),"lin_random");
 }
 
 function lin_random(abs) {
   var menu=element("language_menu");
   var lang=menu.current.from;
   server.linearize(abs[0].tree,lang,"show_random");
-/*
-  jsonp(server.current_grammar_url+"?command=linearize&tree="+encodeURIComponent(abs[0].tree)
-	+"&to="+lang,
-	"show_random")
-*/	
 }
 
 function show_random(random) {
@@ -172,13 +204,6 @@ function show_random(random) {
 function get_completions(menu) {
   var c=menu.current;
   server.complete(c.from,c.input,"show_completions");
-/*
-  jsonp(server.current_grammar_url
-	+"?command=complete"
-	+"&from="+encodeURIComponent(c.from)
-	+"&input="+encodeURIComponent(c.input),
-	"show_completions");
-*/
 }
 
 function word(s) {
@@ -188,9 +213,16 @@ function word(s) {
 }
 
 function add_word1(menu,s) {
-  menu.previous={ input: menu.current.input, previous: menu.previous };
-  menu.current.input+=s;
-  element("surface").appendChild(span_class("word",text(s)));
+    menu.previous={ input: menu.current.input, previous: menu.previous };
+    menu.current.input+=s;
+    var w=span_class("word",text(s));
+    var surface=element("surface");
+    if(surface.typed) {
+	surface.typed.value="";
+	surface.insertBefore(w,surface.typed);
+    }
+    else
+	surface.appendChild(w);
 }
 
 function add_word(s) {
@@ -206,8 +238,10 @@ function show_completions(completions) {
   var prefixlen=menu.current.input.length;
   var emptycnt=0;
   box.innerHTML="";
+  box.completions=[];
   for(var i=0;i<completions.length;i++) {
     var s=completions[i].text.substring(prefixlen);
+    box.completions[i]=s;
     if(s.length>0) box.appendChild(word(s));
     else emptycnt++;
   }
