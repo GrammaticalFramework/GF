@@ -18,7 +18,8 @@ abstract Sentences = Numeral ** {
     Question ;    -- question, either yes/no or wh             e.g. "where are you"
     -- Greeting ; -- idiomatic phrase, not inflected,          e.g. "hello"
     Proposition ; -- can be turned into sentence or question   e.g. "this pizza is good"
-    Object ;      -- the object of wanting, ordering, etc      e.g. "three pizzas"
+    Object ;      -- the object of wanting, ordering, etc      e.g. "three pizzas and a beer"
+    PrimObject ;  -- single object of wanting, ordering, etc   e.g. "three pizzas"
     Item ;        -- a single entity                           e.g. "this pizza"
     Kind ;        -- a type of an item                         e.g. "pizza"
     Quality ;     -- qualification of an item, can be complex  e.g. "very good"
@@ -78,9 +79,11 @@ abstract Sentences = Numeral ** {
 
 -- Here are some general syntactic constructions.
 
-    ObjItem   : Item -> Object ;                 -- this pizza
-    ObjNumber : Number -> Kind -> Object ;       -- five pizzas
-    ObjIndef  : Kind -> Object ;                 -- a pizza
+    ObjItem   : Item -> PrimObject ;             -- this pizza
+    ObjNumber : Number -> Kind -> PrimObject ;   -- five pizzas
+    ObjIndef  : Kind -> PrimObject ;             -- a pizza
+    ObjAndObj : PrimObject -> Object -> Object ; -- this pizza and a beer
+    OneObj    : PrimObject -> Object ;           -- this pizza
     
     SuchKind : Quality -> Kind -> Kind ;         -- Italian pizza
     Very : Property -> Quality ;                 -- very Italian

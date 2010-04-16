@@ -80,7 +80,7 @@ abstract Words = Sentences ** {
 
     AHasAge     : Person -> Number -> Action ;    -- I am seventy years
     AHasChildren: Person -> Number -> Action ;    -- I have six children
-    AHasName    : Person -> Name -> Action ;      -- my name is Bond
+    AHasName    : Person -> Name   -> Action ;    -- my name is Bond
     AHasRoom    : Person -> Number -> Action ;    -- you have a room for five persons
     AHasTable   : Person -> Number -> Action ;    -- you have a table for five persons
     AHungry     : Person -> Action ;              -- I am hungry
@@ -102,7 +102,7 @@ abstract Words = Sentences ** {
 -- Miscellaneous phrases. Notice that also negations and questions can be formed from
 -- propositions.
 
-    QWhatAge       : Person -> Question ;            -- how many years are you
+    QWhatAge       : Person -> Question ;            -- how old are you
     QWhatName      : Person -> Question ;            -- what is your name
     HowMuchCost    : Item -> Question ;              -- how much does the pizza cost
     ItCost         : Item -> Price -> Proposition ;  -- the pizza costs five euros
