@@ -25,7 +25,8 @@ are defined in other modules.
       Question ;    -- question, either yes/no or wh             e.g. "where are you"
       -- Greeting ; -- idiomatic phrase, not inflected,          e.g. "hello"
       Proposition ; -- can be turned into sentence or question   e.g. "this pizza is good"
-      Object ;      -- the object of wanting, ordering, etc      e.g. "three pizzas"
+      Object ;      -- the object of wanting, ordering, etc      e.g. "three pizzas and a beer"
+      PrimObject ;  -- single object of wanting, ordering, etc   e.g. "three pizzas"
       Item ;        -- a single entity                           e.g. "this pizza"
       Kind ;        -- a type of an item                         e.g. "pizza"
       Quality ;     -- qualification of an item, can be complex  e.g. "very good"
@@ -90,9 +91,11 @@ This is the way to build propositions about persons.
 
 Here are some general syntactic constructions.
 <pre>
-      ObjItem   : Item -> Object ;                 -- this pizza
-      ObjNumber : Number -> Kind -> Object ;       -- five pizzas
-      ObjIndef  : Kind -> Object ;                 -- a pizza
+      ObjItem   : Item -> PrimObject ;             -- this pizza
+      ObjNumber : Number -> Kind -> PrimObject ;   -- five pizzas
+      ObjIndef  : Kind -> PrimObject ;             -- a pizza
+      ObjAndObj : PrimObject -> Object -> Object ; -- this pizza and a beer
+      OneObj    : PrimObject -> Object ;           -- this pizza
   
       SuchKind : Quality -> Kind -> Kind ;         -- Italian pizza
       Very : Property -> Quality ;                 -- very Italian
@@ -125,6 +128,7 @@ Determiners.
       NameNN     : Name ;                       -- the name "NN"
 </pre>
 
+--    NameString : String -> Name ; ---- creates ambiguities with all words --%
 <pre>
       NNumeral   : Numeral -> Number ;          -- numeral in words, e.g. "twenty"
 </pre>
@@ -140,6 +144,7 @@ structurally. However, these ones are mostly functorial.
 </pre>
 
 <h2> Words and idiomatic phrases of the Phrasebook</h2>
+(c) 2009 Aarne Ranta under LGPL --%
 <pre>
   abstract Words = Sentences ** {
   
@@ -224,7 +229,7 @@ Notice that also negations and questions can be formed from these.
 <pre>
       AHasAge     : Person -> Number -> Action ;    -- I am seventy years
       AHasChildren: Person -> Number -> Action ;    -- I have six children
-      AHasName    : Person -> Name -> Action ;      -- my name is Bond
+      AHasName    : Person -> Name   -> Action ;    -- my name is Bond
       AHasRoom    : Person -> Number -> Action ;    -- you have a room for five persons
       AHasTable   : Person -> Number -> Action ;    -- you have a table for five persons
       AHungry     : Person -> Action ;              -- I am hungry
@@ -247,7 +252,7 @@ Notice that also negations and questions can be formed from these.
 Miscellaneous phrases. Notice that also negations and questions can be formed from
 propositions.
 <pre>
-      QWhatAge       : Person -> Question ;            -- how many years are you
+      QWhatAge       : Person -> Question ;            -- how old are you
       QWhatName      : Person -> Question ;            -- what is your name
       HowMuchCost    : Item -> Question ;              -- how much does the pizza cost
       ItCost         : Item -> Price -> Proposition ;  -- the pizza costs five euros

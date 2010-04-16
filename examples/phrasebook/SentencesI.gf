@@ -19,6 +19,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Quality = AP ;
     Property = A ;
     Object = NP ;
+    PrimObject = NP ;
     Place = NPPlace ; -- {name : NP ; at : Adv ; to : Adv} ;
     PlaceKind = CNPlace ; -- {name : CN ; at : Prep ; to : Prep} ;
     Currency = CN ;
@@ -69,6 +70,8 @@ incomplete concrete SentencesI of Sentences = Numeral **
     ObjItem i = i ;
     ObjNumber n k = mkNP n k ;
     ObjIndef k = mkNP a_Quant k ;
+    ObjAndObj = mkNP and_Conj ;
+    OneObj o = o ; 
 
     This kind = mkNP this_Quant kind ;
     That kind = mkNP that_Quant kind ;
