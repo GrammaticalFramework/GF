@@ -2,12 +2,17 @@
 
 concrete WordsBul of Words = SentencesBul ** 
     open 
-      SyntaxBul, 
+      SyntaxBul,
+      (R = ResBul),
       ParadigmsBul, 
       (L = LexiconBul), 
       (P = ParadigmsBul), 
       ExtraBul, 
       Prelude in {
+   
+  flags
+    coding=utf8;
+
   lin
 
 -- Kinds; many of them are in the resource lexicon, others can be built by $mkN$.
@@ -15,64 +20,64 @@ concrete WordsBul of Words = SentencesBul **
     Apple = mkCN L.apple_N ;
     Beer = mkCN L.beer_N ;
     Bread = mkCN L.bread_N ;
---    Cheese = mkCN (mkN "cheese") ;
---    Chicken = mkCN (mkN "chicken") ;
---    Coffee = mkCN (mkN "coffee") ;
+    Cheese = mkCN (mkN066 "сирене") ;
+    Chicken = mkCN (mkN065 "пиле") ;
+    Coffee = mkCN (mkN065 "кафе") ;
     Fish = mkCN L.fish_N ;
---    Meat = mkCN (mkN "meat") ;
+    Meat = mkCN (mkN054 "месо") ;
     Milk = mkCN L.milk_N ;
---    Pizza = mkCN (mkN "pizza") ;
+    Pizza = mkCN (mkN041 "пица") ;
     Salt = mkCN L.salt_N ;
---    Tea = mkCN (mkN "tea") ;
+    Tea = mkCN (mkN028 "чай") ;
     Water = mkCN L.water_N ;
     Wine = mkCN L.wine_N ;
 
 -- Properties; many of them are in the resource lexicon, others can be built by $mkA$.
 
     Bad = L.bad_A ;
---    Boring = mkA "boring" ;
---    Cheap = mkA "cheap" ;
+    Boring = mkA079 "еднообразен" ;
+    Cheap = mkA076 "евтин" ;
     Cold = L.cold_A ;
---    Delicious = mkA "delicious" ;
---    Expensive = mkA "expensive" ;
---    Fresh = mkA "fresh" ;
+    Delicious = mkA079 "превъзходен" ;
+    Expensive = mkA076 "скъп" ;
+    Fresh = mkA076 "свеж" ;
     Good = L.good_A ;
---    Suspect = mkA "suspect" ;
+    Suspect = mkA079 "подозрителен" ;
     Warm = L.warm_A ;
 
 -- Places require different prepositions to express location; in some languages 
 -- also the directional preposition varies, but in English we use $to$, as
 -- defined by $mkPlace$.
 
---    Airport = mkPlace "airport" "at" ;
---    Bar = mkPlace "bar" "in" ;
---    Church = mkPlace "church" "in" ;
---    Cinema = mkPlace "cinema" "at" ;
---    Hospital = mkPlace "hospital" "in" ;
---    Hotel = mkPlace "hotel" "in" ;
---    Museum = mkPlace "museum" "in" ;
---    Park = mkPlace "park" "in" ;
---    Restaurant = mkPlace "restaurant" "in" ;
---    School = mkPlace "school" "at" ;
---    Shop = mkPlace "shop" "in" ;
---    Station = mkPlace "station" "at" ;
---    Theatre = mkPlace "theatre" "at" ;
---    Toilet = mkPlace "toilet" "in" ;
---    University = mkPlace "university" "at" ;
+    Airport = mkPlace (mkN066 "летище") "на" ;
+    Bar = mkPlace (mkN042 "бар") "в" ;
+    Church = mkPlace (mkN041 "църква") "в" ;
+    Cinema = mkPlace (mkN054 "кино") "на" ;
+    Hospital = mkPlace (mkN041 "болница") "в" ;
+    Hotel = mkPlace (mkN007 "хотел") "в" ;
+    Museum = mkPlace (mkN032 "музей") "в" ;
+    Park = mkPlace (mkN001 "парк") "в" ;
+    Restaurant = mkPlace (mkN007 "ресторант") "в" ;
+    School = mkPlace (mkN007 "училище") "в" ;
+    Shop = mkPlace (mkN007 "магазин") "в" ;
+    Station = mkPlace (mkN041 "гарата") "на" ;
+    Theatre = mkPlace (mkN009 "театър") "на" ;
+    Toilet = mkPlace (mkN007 "тоалет") "в" ;
+    University = mkPlace (mkN007 "университет") "в" ;
 
 -- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
 
---    DanishCrown = mkCN (mkA "Danish") (mkN "crown") | mkCN (mkN "crown") ;
---    Dollar = mkCN (mkN "dollar") ;
---    Euro = mkCN (mkN "euro" "euros") ; -- to prevent euroes
---    Lei = mkCN (mkN "leu" "lei") ;
---    SwedishCrown = mkCN (mkA "Swedish") (mkN "crown") | mkCN (mkN "crown") ;
+    DanishCrown = mkCN (mkA078 "датски") (mkN041 "крона") | mkCN (mkN041 "крона") ;
+    Dollar = mkCN (mkN007 "долар") ;
+    Euro = mkCN (mkN054 "евро") ;
+    Lei = mkCN (mkN047 "лея") ;
+    SwedishCrown = mkCN (mkA078 "шведски") (mkN041 "крона") | mkCN (mkN041 "крона") ;
 
 -- Nationalities
 
---    Belgian = mkA "Belgian" ;
---    Belgium = mkNP (mkPN "Belgium") ;
---    English = mkNat "English" "England" ;
+    Belgian = mkA078 "белгийски" ;
+    -- Belgium = mkNP (mkPN "Белгия" Fem) ;
+    -- English = mkA078 "английски" ;
 --    Finnish = mkNat "Finnish" "Finland" ;
 --    Flemish = mkNP (mkPN "Flemish") ;
 --    French = mkNat "French" "France" ; 
@@ -82,7 +87,7 @@ concrete WordsBul of Words = SentencesBul **
 
 -- Actions: the predication patterns are very often language-dependent.
 
---    AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
+    AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
 --    AHasRoom p num = mkCl p.name have_V2 
 --      (mkNP (mkNP a_Det (mkN "room")) (SyntaxBul.mkAdv for_Prep (mkNP num (mkN "person")))) ;
@@ -151,7 +156,7 @@ concrete WordsBul of Words = SentencesBul **
 
 -- auxiliaries
 
---  oper
+  oper
 
 --    mkNat : Str -> Str -> NPNationality = \nat,co -> 
 --      mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
@@ -161,8 +166,8 @@ concrete WordsBul of Words = SentencesBul **
 --      mkNPDay day (SyntaxBul.mkAdv on_Prep day) 
 --        (SyntaxBul.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
 
---    mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
---      mkCNPlace (mkCN (mkN p)) (P.mkPrep i) to_Prep ;
+    mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
+      mkCNPlace (mkCN p) (P.mkPrep i R.Acc) to_Prep ;
 
 --    open_Adv = P.mkAdv "open" ;
 --    closed_Adv = P.mkAdv "closed" ;
@@ -172,5 +177,5 @@ concrete WordsBul of Words = SentencesBul **
 
 --    nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "name") p).name ;
 
---}
+
 }
