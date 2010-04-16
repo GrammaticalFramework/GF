@@ -1,28 +1,30 @@
 concrete GreetingsBul of Greetings = open Prelude in {
 
---lincat 
---  Greeting = SS ;
+flags
+  coding=utf8;
 
---lin 
---  GBye = ss "bye" ;
---  GCheers = ss "cheers" ;
---  GDamn = ss "damn" ;
---  GExcuse, GExcusePol = ss "excuse me" ;
---  GGoodDay = ss "good afternoon" ; ----
---  GGoodEvening = ss "good evening" ;
---  GGoodMorning = ss "good morning" ;
---  GGoodNight = ss "good night" ;
---  GGoodbye = ss "goodbye" ;
---  GHello = ss "hello" ;
---  GHelp = ss "help" ;
---  GHowAreYou = ss "how are you" ;
---  GLookOut = ss "look out" ;
---  GNiceToMeetYou, GNiceToMeetYouPol = ss "nice to meet you" ;
---  GPleaseGive, GPleaseGivePol = ss "please" ;
---  GSeeYouSoon = ss "see you soon" ;
---  GSorry, GSorryPol = ss "sorry" ;
---  GThanks = ss "thank you" ;
---  GTheCheck = ss "the bill" ;
+lincat 
+  Greeting = SS ;
 
---}
+lin 
+  GBye = ss "чао" ;
+  GCheers = ss "наздраве" ;
+  GDamn = ss "по дяволите" ;
+  GExcuse, GExcusePol = ss "извинете" ;
+  GGoodDay = ss "добър ден" ;
+  GGoodEvening = ss "добра вечер" ;
+  GGoodMorning = ss "добро утро" ;
+  GGoodNight = ss "лека нощ" ;
+  GGoodbye = ss "довиждане" ;
+  GHello = ss "здравей" ;
+  GHelp = ss "помощ" ;
+  GHowAreYou = ss "как си" ;
+  GLookOut = ss "погледни" ;
+  GNiceToMeetYou = ss "радвам се да се видим" ;
+  GPleaseGive, GPleaseGivePol = ss "моля" ;
+  GSeeYouSoon = ss "до скоро" ;
+  GSorry, GSorryPol = ss "извинете" ;
+  GThanks = ss "благодаря ти" ;
+  GTheCheck = ss "сметката" ;
+
 }
