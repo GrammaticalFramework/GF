@@ -1,8 +1,8 @@
 DisambPhrasebookEng :
 PhrasebookEng :
 PhrasebookFin :
-PhrasebookFre : AHasRoom AHasTable AReady Cheap Cinema Hotel PSeeYou PSeeYouPlace Park School Shop Suspect Theatre Tomorrow University
-PhrasebookGer : AHasAge AHasChildren AHasRoom AHasTable AMarried AReady Bar Cheap Chicken Children Cinema Coffee Daughter Dollar Flemish GNiceToMeetYou Hotel Husband Lei Meat Museum PSeeYou PSeeYouPlace Park QWhatAge Romanian School Shop Son Suspect Swedish SwedishCrown Tea Theatre Toilet Tomorrow Wife
+PhrasebookFre :
+PhrasebookGer : Bar Chicken Cinema Coffee Dollar GNiceToMeetYou Hotel Lei Meat Museum PSeeYou PSeeYouPlace Park School Shop Suspect Tea Theatre Toilet
 PhrasebookIta :
 PhrasebookRon : AHungry AThirsty Flemish GExcusePol GPleaseGivePol GSorryPol
 PhrasebookSwe :
