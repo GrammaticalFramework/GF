@@ -73,18 +73,14 @@ fof(axMerge17, axiom,
 fof(axMerge18, axiom, 
  ( ! [X] : 
  (hasType(type_AnimalSubstance, X) => hasType(type_BodySubstance, X)))).
-
-fof(axMerge19, axiom, 
- ( ! [X] : 
- (hasType(type_Animal, X) => hasType(type_Organism, X)))).
  
-fof(axMerge19_1, axiom, 
+fof(axMerge19, axiom, 
  (! [Var_ANIMAL] : 
  (((hasType(type_Organism, Var_ANIMAL)) & ( ((( ? [Var_SUBSTANCE] : 
  (hasType(type_AnimalSubstance, Var_SUBSTANCE) &  
 (f_part(Var_SUBSTANCE,Var_ANIMAL))))) & (( ? [Var_STRUCTURE] : 
  (hasType(type_AnimalAnatomicalStructure, Var_STRUCTURE) &  
-(f_part(Var_STRUCTURE,Var_ANIMAL)))))))) => (hasType(type_Animal, Var_ANIMAL))))).
+(f_part(Var_STRUCTURE,Var_ANIMAL)))))))) <=> (hasType(type_Animal, Var_ANIMAL))))).
 
 fof(axMerge20, axiom, 
  ( ! [X] : 
@@ -1123,13 +1119,10 @@ fof(axMerge278, axiom,
  (hasType(type_Injecting, X) => hasType(type_Inserting, X)))).
 
 fof(axMerge279, axiom, 
- ( ! [X] : 
- (hasType(type_Injuring, X) => hasType(type_Damaging, X)))).
-fof(axMerge279_1, axiom, 
  (! [Var_INJ] : 
  (((hasType(type_Damaging, Var_INJ)) & ( ( ? [Var_ORGANISM] : 
  (hasType(type_Organism, Var_ORGANISM) &  
-(f_patient(Var_INJ,Var_ORGANISM)))))) => (hasType(type_Injuring, Var_INJ))))).
+(f_patient(Var_INJ,Var_ORGANISM)))))) <=> (hasType(type_Injuring, Var_INJ))))).
 
 fof(axMerge280, axiom, 
  ( ! [X] : 
@@ -1208,13 +1201,10 @@ fof(axMerge298, axiom,
  (hasType(type_JudicialOrganization, X) => hasType(type_Organization, X)))).
 
 fof(axMerge299, axiom, 
- ( ! [X] : 
- (hasType(type_JudicialProcess, X) => hasType(type_PoliticalProcess, X)))).
-fof(axMerge299_1, axiom, 
  (! [Var_PROCESS] : 
  (((hasType(type_PoliticalProcess, Var_PROCESS)) & ( ( ? [Var_ORG] : 
  (hasType(type_Organization, Var_ORG) &  
-(f_agent(Var_PROCESS,Var_ORG)))))) => (hasType(type_JudicialProcess, Var_PROCESS))))).
+(f_agent(Var_PROCESS,Var_ORG)))))) <=> (hasType(type_JudicialProcess, Var_PROCESS))))).
 
 fof(axMerge300, axiom, 
  ( ! [X] : 
@@ -1545,11 +1535,8 @@ fof(axMerge381, axiom,
  (hasType(type_NegativeInteger, X) => hasType(type_NegativeRealNumber, X)))).
 
 fof(axMerge382, axiom, 
- ( ! [X] : 
- (hasType(type_NegativeRealNumber, X) => hasType(type_RealNumber, X)))).
-fof(axMerge382_1, axiom, 
  (! [Var_NUMBER] : 
- (((hasType(type_RealNumber, Var_NUMBER)) & ( f_lessThan(Var_NUMBER,0))) => (hasType(type_NegativeRealNumber, Var_NUMBER))))).
+ (((hasType(type_RealNumber, Var_NUMBER)) & ( f_lessThan(Var_NUMBER,0))) <=> (hasType(type_NegativeRealNumber, Var_NUMBER))))).
 
 fof(axMerge383, axiom, 
  ( ! [X] : 
@@ -1576,11 +1563,8 @@ fof(axMerge388, axiom,
  (hasType(type_NonnegativeInteger, X) => hasType(type_NonnegativeRealNumber, X)))).
 
 fof(axMerge389, axiom, 
- ( ! [X] : 
- (hasType(type_NonnegativeRealNumber, X) => hasType(type_RealNumber, X)))).
-fof(axMerge389_1, axiom, 
  (! [Var_NUMBER] : 
- (((hasType(type_RealNumber, Var_NUMBER)) & ( f_greaterThanOrEqualTo(Var_NUMBER,0))) => (hasType(type_NonnegativeRealNumber, Var_NUMBER))))).
+ (((hasType(type_RealNumber, Var_NUMBER)) & ( f_greaterThanOrEqualTo(Var_NUMBER,0))) <=> (hasType(type_NonnegativeRealNumber, Var_NUMBER))))).
 
 fof(axMerge390, axiom, 
  ( ! [X] : 
@@ -1771,15 +1755,12 @@ fof(axMerge436, axiom,
  (hasType(type_PlantSubstance, X) => hasType(type_BodySubstance, X)))).
 
 fof(axMerge437, axiom, 
- ( ! [X] : 
- (hasType(type_Plant, X) => hasType(type_Organism, X)))).
-fof(axMerge437_1, axiom, 
  (! [Var_PLANT] : 
  (((hasType(type_Organism, Var_PLANT)) & ( ((( ? [Var_SUBSTANCE] : 
  (hasType(type_PlantSubstance, Var_SUBSTANCE) &  
 (f_part(Var_SUBSTANCE,Var_PLANT))))) & (( ? [Var_STRUCTURE] : 
  (hasType(type_PlantAnatomicalStructure, Var_STRUCTURE) &  
-(f_part(Var_STRUCTURE,Var_PLANT)))))))) => (hasType(type_Plant, Var_PLANT))))).
+(f_part(Var_STRUCTURE,Var_PLANT)))))))) <=> (hasType(type_Plant, Var_PLANT))))).
 
 fof(axMerge438, axiom, 
  ( ! [X] : 
@@ -1825,12 +1806,9 @@ fof(axMerge448, axiom,
  ( ! [X] : 
  (hasType(type_PositiveInteger, X) => hasType(type_PositiveRealNumber, X)))).
 
-fof(axMerge449, axiom, 
- ( ! [X] : 
- (hasType(type_PositiveRealNumber, X) => hasType(type_NonnegativeRealNumber, X)))).
-fof(axMerge449_1, axiom, 
+ fof(axMerge449, axiom, 
  (! [Var_NUMBER] : 
- (((hasType(type_NonnegativeRealNumber, Var_NUMBER)) & ( f_greaterThan(Var_NUMBER,0))) => (hasType(type_PositiveRealNumber, Var_NUMBER))))).
+ (((hasType(type_NonnegativeRealNumber, Var_NUMBER)) & ( f_greaterThan(Var_NUMBER,0))) <=> (hasType(type_PositiveRealNumber, Var_NUMBER))))).
 
 fof(axMerge450, axiom, 
  ( ! [X] : 
@@ -2349,13 +2327,10 @@ fof(axMerge578, axiom,
  (hasType(type_SymmetricPositionalAttribute, X) => hasType(type_PositionalAttribute, X)))).
 
 fof(axMerge579, axiom, 
- ( ! [X] : 
- (hasType(type_SyntheticSubstance, X) => hasType(type_Substance, X)))).
-fof(axMerge579_1, axiom, 
  (! [Var_SUBSTANCE] : 
  (((hasType(type_Substance, Var_SUBSTANCE)) & ( ( ? [Var_PROCESS] : 
  (hasType(type_IntentionalProcess, Var_PROCESS) &  
-(f_result(Var_PROCESS,Var_SUBSTANCE)))))) => (hasType(type_SyntheticSubstance, Var_SUBSTANCE))))).
+(f_result(Var_PROCESS,Var_SUBSTANCE)))))) <=> (hasType(type_SyntheticSubstance, Var_SUBSTANCE))))).
 
 fof(axMerge580, axiom, 
  ( ! [X] : 
@@ -2634,9 +2609,6 @@ fof(axMerge648, axiom,
  (hasType(type_Exoskeleton, X) => hasType(type_BodyPart, X)))).
 
 fof(axMerge649, axiom, 
- ( ! [X] : 
- (hasType(type_Vertebrate, X) => hasType(type_Animal, X)))).
-fof(axMerge649_1, axiom, 
  (! [Var_VERT] : 
  (((hasType(type_Animal, Var_VERT)) & ( ((((((( ? [Var_SPINE] : 
  (hasType(type_SpinalColumn, Var_SPINE) &  
@@ -2646,7 +2618,7 @@ fof(axMerge649_1, axiom,
  (hasType(type_Skeleton, Var_SKELETON) &  
 (f_part(Var_SKELETON,Var_VERT))))))) & (( ? [Var_SKELETON] : 
  (hasType(type_Exoskeleton, Var_SKELETON) &  
-(f_part(Var_SKELETON,Var_VERT)))))))) => (hasType(type_Vertebrate, Var_VERT))))).
+(f_part(Var_SKELETON,Var_VERT)))))))) <=> (hasType(type_Vertebrate, Var_VERT))))).
 
 fof(axMerge650, axiom, 
  ( ! [X] : 

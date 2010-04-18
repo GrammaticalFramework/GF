@@ -43,7 +43,7 @@ equiv f1 f2 = {s = \\f,c => f1.s ! Indep ! c ++ "est" ++ "equivalent" ++ "à" ++
                
 var c1 c2 i e = let np = UsePN e in
                {s = np.s;
-                a = agrP3 c1.g Sg;
+                a = agrP3 c1.g Sg; isPol = False;
                 hasClit = False; lock_NP = <>};               
                
 el c1 c2 i e = e ; 
