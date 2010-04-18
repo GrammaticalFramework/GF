@@ -3,9 +3,9 @@
 concrete WordsRon of Words = SentencesRon ** open
   SyntaxRon,
   (P = ParadigmsRon),
-  NounRon,
   (L = LexiconRon),
-  BeschRon in {
+  BeschRon,
+  ExtraRon  in {
 
   flags coding=utf8 ;
 
@@ -43,36 +43,37 @@ concrete WordsRon of Words = SentencesRon ** open
     
 -- places
 
-    Airport = mkPlace (P.mkNR "aeroport") in_Prep ; 
-    Bar = mkPlace (P.mkNR "bar") in_Prep ; -- at_Prep which doesn't exist
-    Church = mkPlace (P.mkN "biserică" "biserici") in_Prep ; 
-    Cinema = mkPlace (P.mkNR "cinema") in_Prep ; 
-    Hospital = mkPlace (P.mkN "spital") in_Prep ;
-    Hotel = mkPlace (P.mkNR "hotel") in_Prep ; -- at_Prep, plural ending in -e is accepted also
-    Museum = mkPlace (P.mkN "muzeu" "muzee") in_Prep ; 
-    Park = mkPlace (P.mkNR "parc") in_Prep ;
-    Restaurant = mkPlace (P.mkN "restaurant") in_Prep ; -- at_Prep
-    School = mkPlace (P.mkN "şcoală" "şcoli") in_Prep ; -- at_Prep
-    Shop = mkPlace (P.mkN "magazin") in_Prep ; -- at_Prep
-    Station = mkPlace (P.mkN "gară" "gări") in_Prep ; -- at_Prep
-    Theatre = mkPlace (P.mkN "teatru" "teatre") in_Prep; -- at_Prep
-    Toilet = mkPlace (P.mkN "toaletă") in_Prep ; -- at_Prep
-    University = mkPlace (P.mkN "universitate") in_Prep ;
+    Airport = mkPlace (P.mkNR "aeroport") at_Prep ; 
+    Bar = mkPlace (P.mkNR "bar") at_Prep ; 
+    Church = mkPlace (P.mkN "biserică" "biserici") at_Prep ; 
+    Cinema = mkPlace (P.mkNR "cinema") at_Prep ; 
+    Hospital = mkPlace (P.mkN "spital") at_Prep ;
+    Hotel = mkPlace (P.mkNR "hotel") at_Prep ; 
+    Museum = mkPlace (P.mkN "muzeu" "muzee") at_Prep ; 
+    Park = mkPlace (P.mkNR "parc") at_Prep ;
+    Restaurant = mkPlace (P.mkN "restaurant") at_Prep ; 
+    School = mkPlace (P.mkN "şcoală" "şcoli") at_Prep ;
+    Shop = mkPlace (P.mkN "magazin") at_Prep ;
+    Station = mkPlace (P.mkN "gară" "gări") at_Prep ;
+    Theatre = mkPlace (P.mkN "teatru" "teatre") at_Prep ;
+    Toilet = mkPlace (P.mkN "toaletă") at_Prep ;
+    University = mkPlace (P.mkN "universitate") at_Prep ;
 
 -- currencies
 
     Dollar = mkCN (P.mkN "dolar" P.masculine) ;
     Euro = mkCN (P.mkN "euro" "euro") ;
     Lei = mkCN (P.mkN "leu" "lei") ;
-    DanishCrown = mkCN (P.mkN "coroană") ;
-    SwedishCrown = mkCN (P.mkN "coroană") ;
+    DanishCrown = mkCN (P.mkA "danez") (P.mkN "coroană") ;
+    SwedishCrown = mkCN (P.mkA "suedez") (P.mkN "coroană") ;
+    
 -- nationalities
 
     Belgian = P.mkA "belgian" ;
     Belgium = UsePN (P.mkPN "Belgia") ;
     English = mkNat "englez" "Anglia" ;
     Finnish = mkNat "finlandez" "Finlanda" ;
-   -- Flemish = UsePN (P.mkPN "fiammingo") ;  -- why NP ?
+    Flemish = UsePN (P.mkPN "flamandă") ; 
     French = mkNat "francez" "Franţa" ; 
     Italian = mkNat "italian" "Italia" ;
     Romanian = mkNat "român" "România" ;
@@ -88,7 +89,7 @@ concrete WordsRon of Words = SentencesRon ** open
     AHasTable p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (P.mkN "masa" "mese")) (SyntaxRon.mkAdv for_Prep (mkNP num (P.mkN "persoană")))) ;
     AHasName p name = mkCl p.name (P.dirV2 (mkRVAcc (v_besch119 "numi"))) name ;
-    --AHungry p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "fame" feminine))) ;
+    AHungry p = DatSubjCl p.name (mkVP (UseN (P.mkN "foame"))) ;
     AIll p = mkCl p.name (P.mkA "bolnav") ;
     AKnow p = mkCl p.name (v_besch122 "şti") ;
     ALike p item = mkCl p.name (P.dirV2 (v_besch71 "plăcea")) item ;
@@ -99,7 +100,7 @@ concrete WordsRon of Words = SentencesRon ** open
     AReady p = mkCl p.name (P.mkA "gata" "gata" "gata" "gata") ;
     AScared p = mkCl p.name (P.mkA "speriat") ;
     ASpeak p lang = mkCl p.name  (P.dirV2 (P.mkV "vorbi")) lang ;
-    --AThirsty p = mkCl p.name (E.ComplCN have_V2 (mkCN (P.mkN "sete" feminine))) ;
+    AThirsty p = DatSubjCl p.name (mkVP (UseN (P.mkN "sete"))) ;
     ATired p = mkCl p.name (P.mkA "obosit") ;
     AUnderstand p = mkCl p.name (v_besch83 "înţelege") ;
     AWant p obj = mkCl p.name (P.dirV2 (v_besch74 "vrea")) obj ;

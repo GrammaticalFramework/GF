@@ -399,13 +399,10 @@ fof(axMid_level_ontology99, axiom,
  (hasType(type_Bathing, X) => hasType(type_Washing, X)))).
 
 fof(axMid_level_ontology100, axiom, 
- ( ! [X] : 
- (hasType(type_Bathroom, X) => hasType(type_Room, X)))).
-fof(axMid_level_ontology100_1, axiom, 
  (! [Var_R] : 
  (((hasType(type_Room, Var_R)) & ( ( ? [Var_T] : 
  (hasType(type_Toilet, Var_T) &  
-(f_located(Var_T,Var_R)))))) => (hasType(type_Bathroom, Var_R))))).
+(f_located(Var_T,Var_R)))))) <=> (hasType(type_Bathroom, Var_R))))).
 
 fof(axMid_level_ontology101, axiom, 
  ( ! [X] : 
@@ -696,9 +693,6 @@ fof(axMid_level_ontology172, axiom,
  (hasType(type_BuildingLevel, X) => hasType(type_StationaryArtifact, X)))).
 
 fof(axMid_level_ontology173, axiom, 
- ( ! [X] : 
- (hasType(type_Bull, X) => hasType(type_Cow, X)))).
-fof(axMid_level_ontology173_1, axiom, 
  (! [Var_B] : 
  (((hasType(type_Cow, Var_B)) & ( f_attribute(Var_B,inst_Male))) => (hasType(type_Bull, Var_B))))).
 
@@ -751,11 +745,8 @@ fof(axMid_level_ontology185, axiom,
  (hasType(type_Cafeteria, X) => hasType(type_Restaurant, X)))).
 
 fof(axMid_level_ontology186, axiom, 
- ( ! [X] : 
- (hasType(type_Calf, X) => hasType(type_Cow, X)))).
-fof(axMid_level_ontology186_1, axiom, 
  (! [Var_C] : 
- (((hasType(type_Cow, Var_C)) & ( f_attribute(Var_C,inst_NonFullyFormed))) => (hasType(type_Calf, Var_C))))).
+ (((hasType(type_Cow, Var_C)) & ( f_attribute(Var_C,inst_NonFullyFormed))) <=> (hasType(type_Calf, Var_C))))).
 
 fof(axMid_level_ontology187, axiom, 
  ( ! [X] : 
@@ -1178,13 +1169,10 @@ fof(axMid_level_ontology291, axiom,
  (hasType(type_CondominiumBuilding, X) => hasType(type_ResidentialBuilding, X)))).
 
 fof(axMid_level_ontology292, axiom, 
- ( ! [X] : 
- (hasType(type_CondominiumUnit, X) => hasType(type_SingleFamilyResidence, X)))).
-fof(axMid_level_ontology292_1, axiom, 
  (! [Var_UNIT] : 
  (((hasType(type_SingleFamilyResidence, Var_UNIT)) & ( ( ? [Var_PERSON] : 
  (hasType(type_Human, Var_PERSON) &  
-(((f_home(Var_PERSON,Var_UNIT)) & (f_possesses(Var_PERSON,Var_UNIT)))))))) => (hasType(type_CondominiumUnit, Var_UNIT))))).
+(((f_home(Var_PERSON,Var_UNIT)) & (f_possesses(Var_PERSON,Var_UNIT)))))))) <=> (hasType(type_CondominiumUnit, Var_UNIT))))).
 
 fof(axMid_level_ontology293, axiom, 
  ( ! [X] : 
@@ -1887,11 +1875,8 @@ fof(axMid_level_ontology467, axiom,
  (hasType(type_Feeding, X) => hasType(type_Giving, X)))).
 
 fof(axMid_level_ontology468, axiom, 
- ( ! [X] : 
- (hasType(type_FemaleCow, X) => hasType(type_Cow, X)))).
-fof(axMid_level_ontology468_1, axiom, 
  (! [Var_COW] : 
- (((hasType(type_Cow, Var_COW)) & ( f_attribute(Var_COW,inst_Female))) => (hasType(type_FemaleCow, Var_COW))))).
+ (((hasType(type_Cow, Var_COW)) & ( f_attribute(Var_COW,inst_Female))) <=> (hasType(type_FemaleCow, Var_COW))))).
 
 fof(axMid_level_ontology469, axiom, 
  ( ! [X] : 
@@ -2342,11 +2327,8 @@ fof(axMid_level_ontology580, axiom,
  (hasType(type_Helicopter, X) => hasType(type_Aircraft, X)))).
 
 fof(axMid_level_ontology581, axiom, 
- ( ! [X] : 
- (hasType(type_Hen, X) => hasType(type_Chicken, X)))).
-fof(axMid_level_ontology581_1, axiom, 
  (! [Var_H] : 
- (((hasType(type_Chicken, Var_H)) & ( f_attribute(Var_H,inst_Female))) => (hasType(type_Hen, Var_H))))).
+ (((hasType(type_Chicken, Var_H)) & ( f_attribute(Var_H,inst_Female))) <=> (hasType(type_Hen, Var_H))))).
 
 fof(axMid_level_ontology582, axiom, 
  ( ! [X] : 
@@ -2485,11 +2467,8 @@ fof(axMid_level_ontology615, axiom,
  (hasType(type_Hypothalamus, X) => hasType(type_BodyPart, X)))).
 
 fof(axMid_level_ontology616, axiom, 
- ( ! [X] : 
- (hasType(type_Ice, X) => hasType(type_Water, X)))).
-fof(axMid_level_ontology616_1, axiom, 
  (! [Var_ICE] : 
- (((hasType(type_Water, Var_ICE)) & ( f_attribute(Var_ICE,inst_Solid))) => (hasType(type_Ice, Var_ICE))))).
+ (((hasType(type_Water, Var_ICE)) & ( f_attribute(Var_ICE,inst_Solid))) <=> (hasType(type_Ice, Var_ICE))))).
 
 fof(axMid_level_ontology617, axiom, 
  ( ! [X] : 
@@ -2696,11 +2675,8 @@ fof(axMid_level_ontology667, axiom,
  (hasType(type_Ladder, X) => hasType(type_Artifact, X)))).
 
 fof(axMid_level_ontology668, axiom, 
- ( ! [X] : 
- (hasType(type_Lamb, X) => hasType(type_Sheep, X)))).
-fof(axMid_level_ontology668_1, axiom, 
  (! [Var_L] : 
- (((hasType(type_Sheep, Var_L)) & ( f_attribute(Var_L,inst_NonFullyFormed))) => (hasType(type_Lamb, Var_L))))).
+ (((hasType(type_Sheep, Var_L)) & ( f_attribute(Var_L,inst_NonFullyFormed))) <=> (hasType(type_Lamb, Var_L))))).
 
 fof(axMid_level_ontology669, axiom, 
  ( ! [X] : 
@@ -3555,13 +3531,10 @@ fof(axMid_level_ontology881, axiom,
  (hasType(type_OrchestralConducting, X) => hasType(type_Guiding, X)))).
 
 fof(axMid_level_ontology882, axiom, 
- ( ! [X] : 
- (hasType(type_Order, X) => hasType(type_Sentence, X)))).
-fof(axMid_level_ontology882_1, axiom, 
  (! [Var_SENTENCE] : 
  (((hasType(type_Sentence, Var_SENTENCE)) & ( ( ? [Var_ORDER] : 
  (hasType(type_Ordering, Var_ORDER) &  
-(f_result(Var_ORDER,Var_SENTENCE)))))) => (hasType(type_Order, Var_SENTENCE))))).
+(f_result(Var_ORDER,Var_SENTENCE)))))) <=> (hasType(type_Order, Var_SENTENCE))))).
 
 fof(axMid_level_ontology883, axiom, 
  ( ! [X] : 
@@ -3916,15 +3889,12 @@ fof(axMid_level_ontology970, axiom,
  (hasType(type_Polygon, X) => hasType(type_ClosedTwoDimensionalFigure, X)))).
 
 fof(axMid_level_ontology971, axiom, 
- ( ! [X] : 
- (hasType(type_PolyphonicMusic, X) => hasType(type_Music, X)))).
-fof(axMid_level_ontology971_1, axiom, 
  (! [Var_MUSIC] : 
  (((hasType(type_Music, Var_MUSIC)) & ( ( ? [Var_PART1] : 
  (hasType(type_Music, Var_PART1) &  
 (( ? [Var_PART2] : 
  (hasType(type_Music, Var_PART2) &  
-(((((((((f_subProcess(Var_PART1,Var_MUSIC)) & (f_subProcess(Var_PART2,Var_MUSIC)))) & (Var_PART1 = Var_PART2))) & (f_cooccur(Var_PART1,Var_MUSIC)))) & (f_cooccur(Var_PART2,Var_MUSIC))))))))))) => (hasType(type_PolyphonicMusic, Var_MUSIC))))).
+(((((((((f_subProcess(Var_PART1,Var_MUSIC)) & (f_subProcess(Var_PART2,Var_MUSIC)))) & (Var_PART1 = Var_PART2))) & (f_cooccur(Var_PART1,Var_MUSIC)))) & (f_cooccur(Var_PART2,Var_MUSIC))))))))))) <=> (hasType(type_PolyphonicMusic, Var_MUSIC))))).
 
 fof(axMid_level_ontology972, axiom, 
  ( ! [X] : 
@@ -4119,13 +4089,10 @@ fof(axMid_level_ontology1019, axiom,
  (hasType(type_QueenInsect, X) => hasType(type_Insect, X)))).
 
 fof(axMid_level_ontology1020, axiom, 
- ( ! [X] : 
- (hasType(type_Question, X) => hasType(type_Sentence, X)))).
-fof(axMid_level_ontology1020_1, axiom, 
  (! [Var_SENTENCE] : 
  (((hasType(type_Sentence, Var_SENTENCE)) & ( ( ? [Var_QUESTION] : 
  (hasType(type_Questioning, Var_QUESTION) &  
-(f_result(Var_QUESTION,Var_SENTENCE)))))) => (hasType(type_Question, Var_SENTENCE))))).
+(f_result(Var_QUESTION,Var_SENTENCE)))))) <=> (hasType(type_Question, Var_SENTENCE))))).
 
 fof(axMid_level_ontology1021, axiom, 
  ( ! [X] : 
@@ -4152,15 +4119,12 @@ fof(axMid_level_ontology1026, axiom,
  (hasType(type_RadiatingUltraviolet, X) => hasType(type_RadiatingElectromagnetic, X)))).
 
 fof(axMid_level_ontology1027, axiom, 
- ( ! [X] : 
- (hasType(type_RadiatingVisibleLight, X) => hasType(type_RadiatingLight, X)))).
-fof(axMid_level_ontology1027_1, axiom, 
  (! [Var_R] : 
  (((hasType(type_RadiatingLight, Var_R)) & ( ( ? [Var_H] : 
  (hasType(type_Human, Var_H) &  
 (( ? [Var_S] : 
  (hasType(type_Seeing, Var_S) &  
-(((f_agent(Var_S,Var_H)) & (f_patient(Var_S,Var_R))))))))))) => (hasType(type_RadiatingVisibleLight, Var_R))))).
+(((f_agent(Var_S,Var_H)) & (f_patient(Var_S,Var_R))))))))))) <=> (hasType(type_RadiatingVisibleLight, Var_R))))).
 
 fof(axMid_level_ontology1028, axiom, 
  ( ! [X] : 
@@ -4355,13 +4319,10 @@ fof(axMid_level_ontology1075, axiom,
  (hasType(type_Report, X) => hasType(type_FactualText, X)))).
 
 fof(axMid_level_ontology1076, axiom, 
- ( ! [X] : 
- (hasType(type_Request, X) => hasType(type_Sentence, X)))).
-fof(axMid_level_ontology1076_1, axiom, 
  (! [Var_SENTENCE] : 
  (((hasType(type_Sentence, Var_SENTENCE)) & ( ( ? [Var_REQUEST] : 
  (hasType(type_Requesting, Var_REQUEST) &  
-(f_result(Var_REQUEST,Var_SENTENCE)))))) => (hasType(type_Request, Var_SENTENCE))))).
+(f_result(Var_REQUEST,Var_SENTENCE)))))) <=> (hasType(type_Request, Var_SENTENCE))))).
 
 fof(axMid_level_ontology1077, axiom, 
  ( ! [X] : 
@@ -4464,11 +4425,8 @@ fof(axMid_level_ontology1101, axiom,
  (hasType(type_Roof, X) => hasType(type_StationaryArtifact, X)))).
 
 fof(axMid_level_ontology1102, axiom, 
- ( ! [X] : 
- (hasType(type_Rooster, X) => hasType(type_Chicken, X)))).
-fof(axMid_level_ontology1102_1, axiom, 
  (! [Var_R] : 
- (((hasType(type_Chicken, Var_R)) & ( f_attribute(Var_R,inst_Male))) => (hasType(type_Rooster, Var_R))))).
+ (((hasType(type_Chicken, Var_R)) & ( f_attribute(Var_R,inst_Male))) <=> (hasType(type_Rooster, Var_R))))).
 
 fof(axMid_level_ontology1103, axiom, 
  ( ! [X] : 
@@ -4611,13 +4569,10 @@ fof(axMid_level_ontology1137, axiom,
  (hasType(type_SeizingProperty, X) => hasType(type_UnilateralGetting, X)))).
 
 fof(axMid_level_ontology1138, axiom, 
- ( ! [X] : 
- (hasType(type_SelfPoweredDevice, X) => hasType(type_Device, X)))).
-fof(axMid_level_ontology1138_1, axiom, 
  (! [Var_O] : 
  (((hasType(type_Device, Var_O)) & ( ( ? [Var_G] : 
  (hasType(type_Artifact, Var_G) &  
-(f_powerPlant(Var_O,Var_G)))))) => (hasType(type_SelfPoweredDevice, Var_O))))).
+(f_powerPlant(Var_O,Var_G)))))) <=> (hasType(type_SelfPoweredDevice, Var_O))))).
 
 fof(axMid_level_ontology1139, axiom, 
  ( ! [X] : 
@@ -5000,13 +4955,10 @@ fof(axMid_level_ontology1233, axiom,
  (hasType(type_StateGovernment, X) => hasType(type_Government, X)))).
 
 fof(axMid_level_ontology1234, axiom, 
- ( ! [X] : 
- (hasType(type_Statement, X) => hasType(type_Sentence, X)))).
-fof(axMid_level_ontology1234_1, axiom, 
  (! [Var_SENTENCE] : 
  (((hasType(type_Sentence, Var_SENTENCE)) & ( ( ? [Var_STATE] : 
  (hasType(type_Stating, Var_STATE) &  
-(f_result(Var_STATE,Var_SENTENCE)))))) => (hasType(type_Statement, Var_SENTENCE))))).
+(f_result(Var_STATE,Var_SENTENCE)))))) <=> (hasType(type_Statement, Var_SENTENCE))))).
 
 fof(axMid_level_ontology1235, axiom, 
  ( ! [X] : 
@@ -5157,13 +5109,10 @@ fof(axMid_level_ontology1271, axiom,
  (hasType(type_Sunset, X) => hasType(type_TimeInterval, X)))).
 
 fof(axMid_level_ontology1272, axiom, 
- ( ! [X] : 
- (hasType(type_Supposition, X) => hasType(type_Sentence, X)))).
-fof(axMid_level_ontology1272_1, axiom, 
  (! [Var_SENTENCE] : 
  (((hasType(type_Sentence, Var_SENTENCE)) & ( ( ? [Var_SUPPOSE] : 
  (hasType(type_Supposing, Var_SUPPOSE) &  
-(f_result(Var_SUPPOSE,Var_SENTENCE)))))) => (hasType(type_Supposition, Var_SENTENCE))))).
+(f_result(Var_SUPPOSE,Var_SENTENCE)))))) <=> (hasType(type_Supposition, Var_SENTENCE))))).
 
 fof(axMid_level_ontology1273, axiom, 
  ( ! [X] : 
@@ -5494,13 +5443,10 @@ fof(axMid_level_ontology1354, axiom,
  (hasType(type_TransportViaRoadVehicle, X) => hasType(type_LandTransportation, X)))).
 
 fof(axMid_level_ontology1355, axiom, 
- ( ! [X] : 
- (hasType(type_TransportViaRoadVehicle, X) => hasType(type_Transportation, X)))).
-fof(axMid_level_ontology1355_1, axiom, 
  (! [Var_TRANSPORT] : 
  (((hasType(type_Transportation, Var_TRANSPORT)) & ( ( ? [Var_VEHICLE] : 
  (hasType(type_RoadVehicle, Var_VEHICLE) &  
-(f_instrument(Var_TRANSPORT,Var_VEHICLE)))))) => (hasType(type_TransportViaRoadVehicle, Var_TRANSPORT))))).
+(f_instrument(Var_TRANSPORT,Var_VEHICLE)))))) <=> (hasType(type_TransportViaRoadVehicle, Var_TRANSPORT))))).
 
 fof(axMid_level_ontology1356, axiom, 
  ( ! [X] : 
@@ -5755,15 +5701,12 @@ fof(axMid_level_ontology1418, axiom,
  (hasType(type_Wastebasket, X) => hasType(type_Container, X)))).
 
 fof(axMid_level_ontology1419, axiom, 
- ( ! [X] : 
- (hasType(type_WatchClock, X) => hasType(type_Clock, X)))).
-fof(axMid_level_ontology1419_1, axiom, 
  (! [Var_C] : 
  (((hasType(type_Clock, Var_C)) & ( ( ? [Var_P] : 
  (hasType(type_Human, Var_P) &  
 (( ? [Var_W] : 
  (hasType(type_Wrist, Var_W) &  
-(((f_wears(Var_P,Var_C)) & (f_located(Var_C,Var_W))))))))))) => (hasType(type_WatchClock, Var_C))))).
+(((f_wears(Var_P,Var_C)) & (f_located(Var_C,Var_W))))))))))) <=> (hasType(type_WatchClock, Var_C))))).
 
 fof(axMid_level_ontology1420, axiom, 
  ( ! [X] : 
