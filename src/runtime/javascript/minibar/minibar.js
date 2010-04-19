@@ -9,6 +9,11 @@ var grammars_url=server+"/grammars/";
 
 var tree_icon=server+"/translate/se.chalmers.cs.gf.gwt.TranslateApp/tree-btn.png";
 
+var options={
+    show_abstract: true,
+    show_trees: true
+}
+
 /* --- Grammar access object ------------------------------------------------ */
 
 var server = {
@@ -52,7 +57,9 @@ var server = {
 
 /* --- Initialisation ------------------------------------------------------- */
 
-function start_minibar() { // typically called when the HTML document is loaded
+function start_minibar(opts) { // typically called when the HTML document is loaded
+    if(opts) for(var o in opts) options[o]=opts[o];
+
     var surface=div_id("surface");
     surface.setAttribute("onclick","surface_click(this)");
     appendChildren(element("minibar"),
@@ -79,8 +86,8 @@ function show_grammarlist(grammars) {
   menubar.innerHTML="Grammar: ";
   appendChildren(menubar,
 		 [menu,
-		  text(" Input language: "),
-		  empty_id("select","language_menu"),
+		  text(" From: "), empty_id("select","language_menu"),
+		  text(" To: "), empty_id("select","to_menu"),
 		  button("Clear","clear_all()"),
 		  button("⌫","delete_last()"),
 		  button("Random","generate_random()")]);
@@ -96,22 +103,30 @@ function select_grammar(grammar_name) {
     server.get_languages("show_languages");
 }
 
+function langpart(conc,abs) { // langpart("FoodsEng","Food") == "Eng"
+  return conc.indexOf(abs)==0 ? conc.substring(abs.length) : conc;
+}
+
 function show_languages(grammar) {
-  var r="";
-  var lang=grammar.languages;
-  var menu=element("language_menu");
-  menu.setAttribute("onchange","new_language(this)");
-  menu.grammar=grammar;
-  menu.innerHTML="";
-  for(var i=0; i<lang.length; i++) {
-    if(lang[i].canParse) {
-      var opt=empty("option");
-      opt.setAttribute("value",""+i);
-      opt.innerHTML=lang[i].name;
-      menu.appendChild(opt);
-    }
-  }
-  new_language(menu);
+    var r="";
+    var lang=grammar.languages;
+    var menu=element("language_menu");
+    menu.setAttribute("onchange","new_language(this)");
+    menu.grammar=grammar;
+    menu.innerHTML="";
+
+    for(var i=0; i<lang.length; i++)
+	if(lang[i].canParse)
+	    menu.appendChild(option(langpart(lang[i].name,grammar.name),""+i));
+
+    var to=element("to_menu");
+    to.langmenu=menu;
+    to.setAttribute("onchange","change_tolang(this)");
+    to.innerHMTL="";
+    to.appendChild(option("All","-1"));
+    for(var i=0; i<lang.length; i++)
+	to.appendChild(option(langpart(lang[i].name,grammar.name),lang[i].name));
+    new_language(menu);
 }
 
 function new_language(menu) {
@@ -119,6 +134,10 @@ function new_language(menu) {
   var langname=menu.grammar.languages[ix].name;
   menu.current={from: langname, input: ""};
   clear_all();
+}
+
+function change_tolang(to_menu) {
+    get_translations(to_menu.langmenu)
 }
 
 function clear_all1() {
@@ -252,17 +271,18 @@ function show_completions(completions) {
 
 function get_translations(menu) {
   server.translate(menu.current.from,menu.current.input,"show_translations");
-/*
-  jsonp(server.current_grammar_url
-	+"?command=translate"
-	+"&from="+encodeURIComponent(menu.current.from)
-	+"&input="+encodeURIComponent(menu.current.input),
-	"show_translations")
-*/
+}
+
+function tdt(tree_btn,txt) {
+    return options.show_trees ? tda([tree_btn,txt]) : td(txt);
 }
 
 function show_translations(translations) {
   var trans=element("translations");
+  var menu=element("language_menu");
+  var grammar=menu.grammar;
+  var to_menu=element("to_menu");
+  var to=to_menu.options[to_menu.selectedIndex].value
   var cnt=translations.length;
   trans.innerHTML="";
   trans.appendChild(wrap("h3",text(cnt<1 ? "No translations?" :
@@ -272,12 +292,14 @@ function show_translations(translations) {
     var t=translations[p];
     var lin=t.linearizations;
     var tbody=empty("tbody");
-    if(t.tree)
+    if(options.show_abstract && t.tree)
       tbody.appendChild(tr([th(text("Abstract: ")),
-			    tda([abstree_button(t.tree),text(" "+t.tree)])]));
+			    tdt(abstree_button(t.tree),text(" "+t.tree))]));
     for(var i=0;i<lin.length;i++)
-      tbody.appendChild(tr([th(text(lin[i].to+": ")),
-			    tda([parsetree_button(t.tree,lin[i].to),text(lin[i].text)])]));
+	if(to=="-1" || lin[i].to==to)
+	    tbody.appendChild(tr([th(text(langpart(lin[i].to,grammar.name)+": ")),
+				  tdt(parsetree_button(t.tree,lin[i].to),
+				      text(lin[i].text))]));
     trans.appendChild(wrap("table",tbody));
   }
 }
