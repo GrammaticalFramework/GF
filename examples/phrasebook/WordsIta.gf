@@ -69,7 +69,7 @@ lin
 
 -- nationalities
 
-    Belgian = mkA "belgo" ;
+    Belgian = mkA "belga" ;
     Belgium = mkNP (mkPN "Belgio") ;
     English = mkNat "inglese" "Inghilterra" ;
     Finnish = mkNat "finlandese" "Finlandia" ;
@@ -124,9 +124,9 @@ lin
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYou d = mkText (lin Text (ss ("arrivederci"))) (mkPhrase (mkUtt d)) ;
+    PSeeYou d = mkText (lin Text (ss ("ci vediamo"))) (mkPhrase (mkUtt d)) ;
     PSeeYouPlace p d = 
-      mkText (lin Text (ss ("arrivederci"))) 
+      mkText (lin Text (ss ("ci vediamo"))) 
         (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
 
 -- Relations are expressed as "my wife" or "the wife of my son", as defined by $xOf$
