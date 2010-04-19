@@ -26,10 +26,10 @@ Some implementation details:
     and Android Opera Mini 4.2.
   </ul>
   It does not seem work in Internet Explorer 7
-  (there are both styling and scripting issues).
+  (there are both styling and scripting issues). There seems to be some rendering bugs
+  in Chrome 5.0.342.9 β.
   <li>The implementation consist of two JavaScript files:
-  <a href="minibar.js">minibar.js</a> (186 lines)
-  and <a href="support.js">support.js</a> (147 lines).
+  <a href="minibar.js">minibar.js</a> and <a href="support.js">support.js</a>
   The latter is also used in a small web app based on the
   <a href="http://spraakbanken.gu.se/sal/ws/">SALDO web services</a>.
   <li>To access the GF web service, it uses the
@@ -60,11 +60,29 @@ Some implementation details:
   you can click on to see a drawing of an abstract syntax tree or a parse tree. If you click
   on a drawing it collapses back into a tree icon.
 </ul>
+Work in progress:
+<ul>
+  <li>[Added 2010-04-09] Preparations to support different ways to access the grammar:
+  currently we access a PGF server via JSONP, but I would also like to support AJAX,
+  and local/downloaded JavaScript grammars.
+  <li>[Added 2010-04-19] A text entry field appears when you click in
+  the sentence area (with a dashed border). This allows you to enter words by typing on
+  the keyboard. As you start typing word magnets that don't match what you are typing
+  are removed. When only one magnet remains, you can press enter to complete the word.
+  <li>[Added 2010-04-19] There is a menu for choosing the output language:
+  you can pick "All" to translate to all available languages, or pick one particular
+  language.
+  <li>[Added 2010-04-19] You can pass options to the function <code>start_minibar</code>
+  to customize the user interface. The default is
+  <code>{show_abstract:true,show_trees:true}</code> to show the abstract syntax of parsed
+  sentences, and to show icons that expand to syntax/parse trees next each translation.
+  These features can be turned off by setting the fields to <code>false</code>.
+</ul>
 
 <hr>
 <address>
 <a href="http://www.cs.chalmers.se/~hallgren/">TH</a>
 <img src="http://www.altocumulus.org/~hallgren/online.cgi?icon" alt=""></address>
 </address>
-<!-- hhmts start --> Last modified: Thu Mar 25 15:06:22 CET 2010 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Mon Apr 19 18:43:48 CEST 2010 <!-- hhmts end -->
 </body> </html>

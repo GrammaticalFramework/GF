@@ -74,6 +74,12 @@ function button(label,action) {
   return el;
 }
 
+function option(label,value) {
+    var el=empty("option","value",value);
+    el.innerHTML=label;
+    return el;
+}
+
 function appendChildren(el,cs) {
   for(var i=0;i<cs.length;i++)
     el.appendChild(cs[i]);
