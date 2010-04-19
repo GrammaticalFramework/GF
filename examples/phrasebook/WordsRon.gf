@@ -70,10 +70,10 @@ concrete WordsRon of Words = SentencesRon ** open
 -- nationalities
 
     Belgian = P.mkA "belgian" ;
-    Belgium = UsePN (P.mkPN "Belgia") ;
+    Belgium = mkNP (P.mkPN "Belgia") ;
     English = mkNat "englez" "Anglia" ;
     Finnish = mkNat "finlandez" "Finlanda" ;
-    Flemish = UsePN (P.mkPN "flamandă") ; 
+    Flemish = mkNP (P.mkPN "flamandă") ; 
     French = mkNat "francez" "Franţa" ; 
     Italian = mkNat "italian" "Italia" ;
     Romanian = mkNat "român" "România" ;
@@ -89,7 +89,7 @@ concrete WordsRon of Words = SentencesRon ** open
     AHasTable p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (P.mkN "masa" "mese")) (SyntaxRon.mkAdv for_Prep (mkNP num (P.mkN "persoană")))) ;
     AHasName p name = mkCl p.name (P.dirV2 (mkRVAcc (v_besch119 "numi"))) name ;
-    AHungry p = DatSubjCl p.name (mkVP (UseN (P.mkN "foame"))) ;
+    AHungry p = DatSubjCl p.name (mkVP (mkCN (P.mkN "foame"))) ;
     AIll p = mkCl p.name (P.mkA "bolnav") ;
     AKnow p = mkCl p.name (v_besch122 "şti") ;
     ALike p item = mkCl p.name (P.dirV2 (v_besch71 "plăcea")) item ;
@@ -100,7 +100,7 @@ concrete WordsRon of Words = SentencesRon ** open
     AReady p = mkCl p.name (P.mkA "gata" "gata" "gata" "gata") ;
     AScared p = mkCl p.name (P.mkA "speriat") ;
     ASpeak p lang = mkCl p.name  (P.dirV2 (P.mkV "vorbi")) lang ;
-    AThirsty p = DatSubjCl p.name (mkVP (UseN (P.mkN "sete"))) ;
+    AThirsty p = DatSubjCl p.name (mkVP (mkCN (P.mkN "sete"))) ;
     ATired p = mkCl p.name (P.mkA "obosit") ;
     AUnderstand p = mkCl p.name (v_besch83 "înţelege") ;
     AWant p obj = mkCl p.name (P.dirV2 (v_besch74 "vrea")) obj ;
@@ -159,10 +159,10 @@ open_A : A = P.mkA "deschis" ;
 -- auxiliaries
 
     mkNat : Str -> Str -> NPNationality = \nat,co -> 
-      mkNPNationality (UsePN (P.mkPN nat)) (UsePN (P.mkPN co)) (P.mkA nat) ;
+      mkNPNationality (mkNP (P.mkPN nat)) (mkNP (P.mkPN co)) (P.mkA nat) ;
 
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
-      let day = UsePN (P.mkPN d P.Feminine) ;
+      let day = mkNP (P.mkPN d P.Feminine) ;
           ad = {s = d} in
       mkNPDay day ad ad; ---- difference is enforced by additional constructions
 
