@@ -24,7 +24,7 @@ import PGF.Probabilistic -- (getProbsFromFile,prProbabilities,defaultProbabiliti
 import PGF.Generate (generateRandomFrom) ----
 import GF.Compile.Export
 import GF.Compile.ExampleBased
-import GF.Infra.Option (noOptions, readOutputFormat, Encoding(..))
+import GF.Infra.Option (noOptions, readOutputFormat)
 import GF.Infra.UseIO
 import GF.Data.ErrM ----
 import GF.Command.Abstract
@@ -36,7 +36,6 @@ import GF.Quiz
 import GF.Command.TreeOperations ---- temporary place for typecheck and compute
 
 import GF.Data.Operations
-import GF.Text.Coding
 
 import Data.List
 import Data.Maybe
@@ -77,10 +76,10 @@ emptyCommandInfo = CommandInfo {
 lookCommand :: String -> Map.Map String CommandInfo -> Maybe CommandInfo
 lookCommand = Map.lookup
 
-commandHelpAll :: Encoding -> PGFEnv -> [Option] -> String
-commandHelpAll cod pgf opts = unlines
+commandHelpAll :: PGFEnv -> [Option] -> String
+commandHelpAll pgf opts = unlines
   [commandHelp (isOpt "full" opts) (co,info)
-    | (co,info) <- Map.assocs (allCommands cod pgf)]
+    | (co,info) <- Map.assocs (allCommands pgf)]
 
 commandHelp :: Bool -> (String,CommandInfo) -> String
 commandHelp full (co,info) = unlines $ [
@@ -120,8 +119,8 @@ commandHelpTags full (co,info) = unlines $ [
 type PGFEnv = (PGF, Map.Map Language Morpho)
 
 -- this list must no more be kept sorted by the command name
-allCommands :: Encoding -> PGFEnv -> Map.Map String CommandInfo
-allCommands cod env@(pgf, mos) = Map.fromList [
+allCommands :: PGFEnv -> Map.Map String CommandInfo
+allCommands env@(pgf, mos) = Map.fromList [
   ("!", emptyCommandInfo {
      synopsis = "system command: escape to system shell",
      syntax   = "! SYSTEMCOMMAND",
@@ -156,7 +155,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
            let file s = "_grph." ++ s
            let view = optViewGraph opts ++ " "
            let format = optViewFormat opts 
-           writeFile (file "dot") (enc grph)
+           writeFile (file "dot") grph
            system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format ++ 
                     " ; " ++ view ++ file format
            return void
@@ -365,10 +364,10 @@ allCommands cod env@(pgf, mos) = Map.fromList [
           _ | isOpt "coding" opts -> codingMsg
           _ | isOpt "license" opts -> licenseMsg
           [t] -> let co = getCommandOp (showExpr [] t) in 
-                 case lookCommand co (allCommands cod env) of   ---- new map ??!!
+                 case lookCommand co (allCommands env) of   ---- new map ??!!
                    Just info -> commandHelp True (co,info)
                    _ -> "command not found"
-          _ -> commandHelpAll cod env opts
+          _ -> commandHelpAll env opts
        in return (fromString msg),
      needsTypeCheck = False
      }),
@@ -458,7 +457,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
          let typ  = optType opts
          mprobs <- optProbs opts pgf
          let mt = mexp xs 
-         morphologyQuiz mt mprobs cod pgf lang typ
+         morphologyQuiz mt mprobs pgf lang typ
          return void,
      flags = [
        ("lang","language of the quiz"),
@@ -656,7 +655,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
          let typ  = optType opts
          let mt   = mexp xs
          mprobs <- optProbs opts pgf
-         translationQuiz mt mprobs cod pgf from to typ
+         translationQuiz mt mprobs pgf from to typ
          return void,
      flags = [
        ("from","translate from this language"),
@@ -687,7 +686,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts arg -> do
        let tmpi = "_tmpi" ---
        let tmpo = "_tmpo"
-       writeFile tmpi $ enc $ toString arg
+       writeFile tmpi $ toString arg
        let syst = optComm opts ++ " " ++ tmpi
        system $ syst ++ " <" ++ tmpi ++ " >" ++ tmpo 
        s <- readFile tmpo
@@ -738,7 +737,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
            let file s = "_grphd." ++ s
            let view = optViewGraph opts ++ " "
            let format = optViewFormat opts 
-           writeFile (file "dot") (enc grphs)
+           writeFile (file "dot") grphs
            system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format ++ 
                     " ; " ++ view ++ file format
            return void
@@ -779,7 +778,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
            let file s = "_grph." ++ s
            let view = optViewGraph opts ++ " "
            let format = optViewFormat opts 
-           writeFile (file "dot") (enc grph)
+           writeFile (file "dot") grph
            system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format ++ 
                     " ; " ++ view ++ file format
            return void
@@ -819,7 +818,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
            let file s = "_grph." ++ s
            let view = optViewGraph opts ++ " "
            let format = optViewFormat opts 
-           writeFile (file "dot") (enc grph)
+           writeFile (file "dot") grph
            system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format ++ 
                     " ; " ++ view ++ file format
            return void
@@ -844,8 +843,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts arg -> do
          let file = valStrOpts "file" "_gftmp" opts
          if isOpt "append" opts 
-           then appendFile file (enc (toString arg))
-           else writeFile file (enc (toString arg))
+           then appendFile file (toString arg)
+           else writeFile file (toString arg)
          return void,
      options = [
        ("append","append to file, instead of overwriting it")
@@ -889,8 +888,6 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      })
   ]
  where
-   enc = encodeUnicode cod
-
    par opts s = case optOpenTypes opts of
                   []        -> concat  [parse pgf lang (optType opts) s | lang <- optLangs opts]
                   open_typs -> concat  [parseWithRecovery pgf lang (optType opts) open_typs s | lang <- optLangs opts]
@@ -1063,17 +1060,17 @@ stringOpOptions = sort $ [
 treeOpOptions pgf = [(op,expl) | (op,(expl,Left  _)) <- allTreeOps pgf]
 treeOpFlags   pgf = [(op,expl) | (op,(expl,Right _)) <- allTreeOps pgf]
 
-translationQuiz :: Maybe Expr -> Maybe Probabilities -> Encoding -> 
+translationQuiz :: Maybe Expr -> Maybe Probabilities ->
                    PGF -> Language -> Language -> Type -> IO ()
-translationQuiz mex mprobs cod pgf ig og typ = do
+translationQuiz mex mprobs pgf ig og typ = do
   tts <- translationList mex mprobs pgf ig og typ infinity
-  mkQuiz cod "Welcome to GF Translation Quiz." tts
+  mkQuiz "Welcome to GF Translation Quiz." tts
 
-morphologyQuiz :: Maybe Expr -> Maybe Probabilities -> Encoding -> 
+morphologyQuiz :: Maybe Expr -> Maybe Probabilities -> 
                   PGF -> Language -> Type -> IO ()
-morphologyQuiz mex mprobs cod pgf ig typ = do
+morphologyQuiz mex mprobs pgf ig typ = do
   tts <- morphologyList mex mprobs pgf ig typ infinity
-  mkQuiz cod "Welcome to GF Morphology Quiz." tts
+  mkQuiz "Welcome to GF Morphology Quiz." tts
 
 -- | the maximal number of precompiled quiz problems
 infinity :: Int

@@ -3,7 +3,7 @@ module GF.Infra.Option
      -- * Option types
      Options, 
      Flags(..), 
-     Mode(..), Phase(..), Verbosity(..), Encoding(..), OutputFormat(..), 
+     Mode(..), Phase(..), Verbosity(..), OutputFormat(..), 
      SISRFormat(..), Optimization(..), CFGTransform(..), HaskellOption(..),
      Dump(..), Printer(..), Recomp(..),
      -- * Option parsing 
@@ -17,7 +17,7 @@ module GF.Infra.Option
      helpMessage,
      -- * Checking specific options
      flag, cfgTransform, haskellOption, readOutputFormat,
-     isLexicalCat, encodings,
+     isLexicalCat, renameEncoding,
      -- * Setting specific options
      setOptimization, setCFGTransform,
      -- * Convenience methods for checking options    
@@ -25,12 +25,13 @@ module GF.Infra.Option
     ) where
 
 import Control.Monad
-import Data.Char (toLower)
+import Data.Char (toLower, isDigit)
 import Data.List
 import Data.Maybe
 import GF.Infra.GetOpt
 --import System.Console.GetOpt
 import System.FilePath
+import System.IO
 
 import GF.Data.ErrM
 
@@ -76,9 +77,6 @@ data Verbosity = Quiet | Normal | Verbose | Debug
 
 data Phase = Preproc | Convert | Compile | Link
   deriving (Show,Eq,Ord)
-
-data Encoding = UTF_8 | ISO_8859_1 | CP_1250 | CP_1251 | CP_1252 | CP_1254
-  deriving (Eq,Ord)
 
 data OutputFormat = FmtPGFPretty
                   | FmtJavaScript 
@@ -161,7 +159,7 @@ data Flags = Flags {
       optCncName         :: Maybe String,
       optResName         :: Maybe String,
       optPreprocessors   :: [String],
-      optEncoding        :: Encoding,
+      optEncoding        :: String,
       optOptimizations   :: Set Optimization,
       optCFGTransforms   :: Set CFGTransform,
       optLibraryPath     :: [FilePath],
@@ -207,7 +205,7 @@ fixRelativeLibPaths curr_dir lib_dir (Options o) = Options (fixPathFlags . o)
 -- | Pretty-print the options that are preserved in .gfo files.
 optionsGFO :: Options -> [(String,String)]
 optionsGFO opts = optionsPGF opts
-      ++ [("coding", show (flag optEncoding opts))]
+      ++ [("coding", flag optEncoding opts)]
 
 -- | Pretty-print the options that are preserved in .pgf files.
 optionsPGF :: Options -> [(String,String)]
@@ -260,7 +258,7 @@ defaultFlags = Flags {
       optCncName         = Nothing,
       optResName         = Nothing,
       optPreprocessors   = [],
-      optEncoding        = ISO_8859_1,
+      optEncoding        = "latin1",
       optOptimizations   = Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize],
       optCFGTransforms   = Set.fromList [CFGRemoveCycles, CFGBottomUpFilter, 
                                          CFGTopDownFilter, CFGMergeIdentical],
@@ -343,8 +341,7 @@ optDescr =
                  (unlines ["Use CMD to preprocess input files.",
                            "Multiple preprocessors can be used by giving this option multiple times."]),
      Option [] ["coding"] (ReqArg coding "ENCODING") 
-                ("Character encoding of the source grammar, ENCODING = "
-                 ++ concat (intersperse " | " (map fst encodings)) ++ "."),
+                ("Character encoding of the source grammar, ENCODING = utf8, latin1, cp1251, ..."),
      Option [] ["startcat"] (ReqArg startcat "CAT") "Grammar start category.",
      Option [] ["language"] (ReqArg language "LANG") "Set the speech language flag to LANG in the generated grammar.",
      Option [] ["lexer"] (ReqArg lexer "LEXER") "Use lexer LEXER.",
@@ -400,9 +397,7 @@ optDescr =
        addLibDir   x = set $ \o -> o { optLibraryPath = x:optLibraryPath o }
        setLibPath  x = set $ \o -> o { optLibraryPath = splitInModuleSearchPath x }
        preproc     x = set $ \o -> o { optPreprocessors = optPreprocessors o ++ [x] }
-       coding      x = case lookup x encodings of
-                         Just c  -> set $ \o -> o { optEncoding = c }
-                         Nothing -> fail $ "Unknown character encoding: " ++ x
+       coding      x = set $ \o -> o { optEncoding = x }
        startcat    x = set $ \o -> o { optStartCat = Just x }
        language    x = set $ \o -> o { optSpeechLanguage = Just x }
        lexer       x = set $ \o -> o { optLexer = Just x }
@@ -483,18 +478,14 @@ haskellOptionNames =
      ("gadt",     HaskellGADT),
      ("lexical",  HaskellLexical)]
 
-encodings :: [(String,Encoding)]
-encodings = 
-    [("utf8",   UTF_8),
-     ("cp1250", CP_1250),
-     ("cp1251", CP_1251),
-     ("cp1252", CP_1252),
-     ("cp1254", CP_1254),
-     ("latin1", ISO_8859_1)
-    ]
-
-instance Show Encoding where
-    show = lookupShow encodings
+-- | This is for bacward compatibility. Since GHC 6.12 we
+-- started using the native Unicode support in GHC but it
+-- uses different names for the code pages.
+renameEncoding :: String -> String
+renameEncoding "utf8"                      = "UTF-8"
+renameEncoding "latin1"                    = "CP1252"
+renameEncoding ('c':'p':s) | all isDigit s = 'C':'P':s
+renameEncoding s                           = s
 
 lookupShow :: Eq a => [(String,a)] -> a -> String
 lookupShow xs z = fromMaybe "lookupShow" $ lookup z [(y,x) | (x,y) <- xs]

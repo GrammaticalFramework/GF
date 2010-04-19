@@ -12,7 +12,6 @@ import GF.Compile.Update
 import GF.Compile.Refresh
 
 import GF.Compile.Coding
-import GF.Text.UTF8 ----
 
 import GF.Grammar.Grammar
 import GF.Grammar.Lookup
@@ -82,7 +81,7 @@ compileSourceGrammar opts gr@(MGrammar ms) = do
 -- to output an intermediate stage
 intermOut :: Options -> Dump -> Doc -> IOE ()
 intermOut opts d doc
-  | dump opts d = ioeIO (hPutStrLn stderr (encodeUTF8 (render (text "\n\n--#" <+> text (show d) $$ doc))))
+  | dump opts d = ioeIO (hPutStrLn stderr (render (text "\n\n--#" <+> text (show d) $$ doc)))
   | otherwise   = return ()
 
 -- | the environment
@@ -162,7 +161,8 @@ compileOne opts env@(_,srcgr,_) file = do
 
        sm00 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
                                            getSourceModule opts file
-       let sm0 = decodeStringsInModule sm00
+       enc <- ioeIO $ mkTextEncoding (renameEncoding (flag optEncoding (flagsModule sm00)))
+       let sm0 = decodeStringsInModule enc sm00
 
        intermOut opts DumpSource (ppModule Qualified sm0)
 

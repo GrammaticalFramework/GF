@@ -24,6 +24,10 @@ main = do
   codepage <- getACP
   setConsoleCP codepage
   setConsoleOutputCP codepage
+  enc <- mkTextEncoding ("CP"++show codepage)
+  hSetEncoding stdin  enc
+  hSetEncoding stdout enc
+  hSetEncoding stderr enc
 #endif
   args <- getArgs
   case parseOptions args of

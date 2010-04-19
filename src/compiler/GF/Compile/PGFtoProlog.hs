@@ -15,7 +15,6 @@ import PGF.Data
 import PGF.Macros
 
 import GF.Data.Operations
-import GF.Text.UTF8
 
 import qualified Data.Map as Map
 import Data.Char (isAlphaNum, isAsciiLower, isAsciiUpper, ord)

@@ -21,7 +21,6 @@ import GF.Infra.Option
 import GF.Infra.Modules (greatestResource, modules, emptyModInfo)
 import GF.System.Readline
 
-import GF.Text.Coding
 import GF.Compile.Coding
 
 import PGF
@@ -34,6 +33,7 @@ import Data.List(isPrefixOf)
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
 import qualified Text.ParserCombinators.ReadP as RP
+import System.IO
 import System.Cmd
 import System.CPUTime
 import System.Directory
@@ -86,9 +86,7 @@ loop opts gfenv0 = do
   s0 <- fetch 
   let gfenv = gfenv0 {history = s0 : history gfenv0}
   let 
-    enc = encode gfenv
-    s = decode gfenv s0
-    pwords = case words s of
+    pwords = case words s0 of
       w:ws -> getCommandOp w :ws
       ws -> ws
   
@@ -130,8 +128,8 @@ loop opts gfenv0 = do
              case runP pExp (BS.pack s) of
                Left (_,msg) -> putStrLn msg
                Right t      -> case checkComputeTerm sgr (codeTerm (decode gfenv) (L (0,0) t)) of
-                                 Ok  x -> putStrLn $ enc (showTerm sgr style q x)
-                                 Bad s -> putStrLn $ enc s
+                                 Ok  x -> putStrLn $ showTerm sgr style q x
+                                 Bad s -> putStrLn $ s
              loopNewCPU gfenv
           "dg":ws -> do
              let stop = case ws of
@@ -141,7 +139,7 @@ loop opts gfenv0 = do
              putStrLn "wrote graph in file _gfdepgraph.dot"
              loopNewCPU gfenv
           "eh":w:_ -> do
-             cs <- readFile w >>= return . map (interpretCommandLine enc env) . lines
+             cs <- readFile w >>= return . map (interpretCommandLine env) . lines
              loopNewCPU gfenv
 
           "i":args -> do
@@ -179,25 +177,28 @@ loop opts gfenv0 = do
                _ -> putStrLn "value definition not parsed" >> loopNewCPU gfenv
 
           "ph":_ -> 
-            mapM_ (putStrLn . enc) (reverse (history gfenv0)) >> loopNewCPU gfenv
-          "se":c:_ -> 
-             case lookup c encodings of
-               Just cod -> do
+            mapM_ putStrLn (reverse (history gfenv0)) >> loopNewCPU gfenv
+          "se":c:_ -> do
+             let cod = renameEncoding c
 #ifdef mingw32_HOST_OS
-                              case c of
-                                'c':'p':c -> case reads c of
-                                               [(cp,"")] -> setConsoleCP cp >> setConsoleOutputCP cp
-                                               _         -> return ()
-                                "utf8"    -> setConsoleCP 65001 >> setConsoleOutputCP 65001
-                                _         -> return ()
+             case cod of
+               'C':'P':c -> case reads c of
+                              [(cp,"")] -> do setConsoleCP cp
+                                              setConsoleOutputCP cp
+                              _         -> return ()
+               "UTF-8"   -> do setConsoleCP 65001
+                               setConsoleOutputCP 65001
+               _         -> return ()
 #endif
-                              loopNewCPU $ gfenv {coding = cod}
-               Nothing  -> do putStrLn "unknown encoding"
-                              loopNewCPU gfenv
+             enc <- mkTextEncoding cod
+             hSetEncoding stdin  enc
+             hSetEncoding stdout enc
+             hSetEncoding stderr enc
+             loopNewCPU gfenv
 
   -- ordinary commands, working on CommandEnv
           _ -> do
-            interpretCommandLine enc env s
+            interpretCommandLine env s0
             loopNewCPU gfenv
 --        gfenv' <- return $ either (const gfenv) id r
         gfenv' <- either (\e -> (print e >> return gfenv)) return r
@@ -215,7 +216,7 @@ importInEnv gfenv opts files
            if (verbAtLeast opts Normal)
              then putStrLnFlush $ unwords $ "\nLanguages:" : map showCId (languages pgf1)
              else return ()
-           return $ gfenv { commandenv = mkCommandEnv (coding gfenv) pgf1 }
+           return $ gfenv { commandenv = mkCommandEnv pgf1 }
 
 tryGetLine = do
   res <- try getLine
@@ -252,24 +253,16 @@ data GFEnv = GFEnv {
   sourcegrammar :: SourceGrammar, -- gfo grammar -retain
   commandenv :: CommandEnv,
   history    :: [String],
-  cputime    :: Integer,
-  coding     :: Encoding
+  cputime    :: Integer
   }
 
 emptyGFEnv :: IO GFEnv
 emptyGFEnv = do
-#ifdef mingw32_HOST_OS
-  codepage <- getACP
-  let coding = fromMaybe UTF_8 (lookup ("cp"++show codepage) encodings)
-#else
-  let coding = UTF_8
-#endif
-  return $ GFEnv emptySourceGrammar{modules=[(identW,emptyModInfo)]} (mkCommandEnv coding emptyPGF) [] 0 coding
+  return $ GFEnv emptySourceGrammar{modules=[(identW,emptyModInfo)]} (mkCommandEnv emptyPGF) [] 0
 
-encode = encodeUnicode . coding 
-decode = decodeUnicode . coding
+decode _ = id -- decodeUnicode . coding
 
-wordCompletion gfenv line0 prefix0 p =
+wordCompletion gfenv line prefix p =
   case wc_type (take p line) of
     CmplCmd pref
       -> ret ' ' [name | name <- Map.keys (commands cmdEnv), isPrefixOf pref name]
@@ -280,7 +273,7 @@ wordCompletion gfenv line0 prefix0 p =
                               in case loop state0 ws of
                                    Nothing    -> ret ' ' []
                                    Just state -> let compls = getCompletions state prefix
-                                                 in ret ' ' (map (encode gfenv) (Map.keys compls))
+                                                 in ret ' ' (Map.keys compls)
               Left (_ :: SomeException) -> ret ' ' []
     CmplOpt (Just (Command n _ _)) pref
       -> case Map.lookup n (commands cmdEnv) of
@@ -298,9 +291,6 @@ wordCompletion gfenv line0 prefix0 p =
               Left (_ :: SomeException) -> ret ' ' []
     _ -> ret ' ' []
   where
-    line   = decode gfenv line0
-    prefix = decode gfenv prefix0
-
     pgf    = multigrammar cmdEnv
     cmdEnv = commandenv gfenv
     optLang opts = valCIdOpts "lang" (head (languages pgf)) opts
