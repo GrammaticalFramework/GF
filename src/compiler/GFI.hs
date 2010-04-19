@@ -20,6 +20,7 @@ import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Infra.Modules (greatestResource, modules, emptyModInfo)
 import qualified System.Console.Haskeline as Haskeline
+import GF.Text.Coding
 
 import GF.Compile.Coding
 
@@ -123,9 +124,9 @@ loop opts gfenv0 = do
                                             inferLType gr [] t
                  computeConcrete sgr t
 
-             case runP pExp (BS.pack s) of
+             case runP pExp (encodeUnicode utf8 s) of
                Left (_,msg) -> putStrLn msg
-               Right t      -> case checkComputeTerm sgr (codeTerm (decode gfenv) (L (0,0) t)) of
+               Right t      -> case checkComputeTerm sgr (codeTerm (decodeUnicode utf8 . BS.pack) (L (0,0) t)) of
                                  Ok  x -> putStrLn $ showTerm sgr style q x
                                  Bad s -> putStrLn $ s
              loopNewCPU gfenv
@@ -271,8 +272,6 @@ data GFEnv = GFEnv {
 emptyGFEnv :: IO GFEnv
 emptyGFEnv = do
   return $ GFEnv emptySourceGrammar{modules=[(identW,emptyModInfo)]} (mkCommandEnv emptyPGF) [] 0
-
-decode _ = id -- decodeUnicode . coding
 
 wordCompletion gfenv (left,right) = do
   case wc_type (reverse left) of
