@@ -6,18 +6,6 @@ license: GPL
 license-file: LICENSE
 synopsis: Grammatical Framework
 
-flag haskeline
-  Description: Enable Haskeline in the shell
-  Default:     True
-
-flag readline
-  Description: Enable Readline in the shell
-  Default:     True
-
-flag editline
-  Description: Enable Editline in the shell
-  Default:     True
-
 flag interrupt
   Description: Enable Ctrl+Break in the shell
   Default:     True
@@ -74,7 +62,8 @@ executable gf
                  old-time,
                  process,
                  pretty,
-                 mtl
+                 mtl,
+                 haskeline
   build-tools: happy, alex
   if os(windows)
     build-depends: Win32
@@ -142,7 +131,6 @@ executable gf
     GF.Compile.PGFtoProlog
     GF.Compile.PGFtoJS
     GF.Compile
-    GF.System.Readline
     GF.Quiz
     PGF
     PGF.CId
@@ -160,23 +148,6 @@ executable gf
     PGF.Printer
     GFC
     GFI
-
-  if flag(haskeline)
-    build-depends: haskeline
-    cpp-options: -DUSE_HASKELINE
-    other-modules: GF.System.UseHaskeline
-  else
-    if flag(readline)
-      build-depends: readline
-      cpp-options: -DUSE_READLINE
-      other-modules: GF.System.UseReadline
-    else
-      if flag(editline)
-        build-depends: editline
-        cpp-options: -DUSE_EDITLINE
-        other-modules: GF.System.UseEditline
-      else
-        other-modules: GF.System.NoReadline
 
   if flag(interrupt)
     cpp-options: -DUSE_INTERRUPT

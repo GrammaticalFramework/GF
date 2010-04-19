@@ -19,7 +19,7 @@ import GF.Infra.CheckM
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Infra.Modules (greatestResource, modules, emptyModInfo)
-import GF.System.Readline
+import qualified System.Console.Haskeline as Haskeline
 
 import GF.Compile.Coding
 
@@ -79,11 +79,9 @@ loop opts gfenv0 = do
   let ifv act = if isv then act else return ()
   let env = commandenv gfenv0
   let sgr = sourcegrammar gfenv0
-  setCompletionFunction (Just (wordCompletion gfenv0))
-  let fetch = case flag optMode opts of
-        ModeRun -> tryGetLine
-        _ -> fetchCommand (prompt env)
-  s0 <- fetch 
+  s0 <- case flag optMode opts of
+          ModeRun -> tryGetLine
+          _       -> fetchCommand gfenv0
   let gfenv = gfenv0 {history = s0 : history gfenv0}
   let 
     pwords = case words s0 of
@@ -204,6 +202,20 @@ loop opts gfenv0 = do
         gfenv' <- either (\e -> (print e >> return gfenv)) return r
         loop opts gfenv'
 
+fetchCommand :: GFEnv -> IO String
+fetchCommand gfenv = do
+  path <- getAppUserDataDirectory "gf_history"
+  let settings =
+        Haskeline.Settings {
+          Haskeline.complete = wordCompletion gfenv,
+          Haskeline.historyFile = Just path,
+          Haskeline.autoAddHistory = True
+        }
+  res <- Haskeline.runInputT settings (Haskeline.getInputLine (prompt (commandenv gfenv)))
+  case res of
+    Nothing -> return "q"
+    Just s  -> return s
+
 importInEnv :: GFEnv -> Options -> [FilePath] -> IO GFEnv
 importInEnv gfenv opts files
     | flag optRetainResource opts =
@@ -262,34 +274,37 @@ emptyGFEnv = do
 
 decode _ = id -- decodeUnicode . coding
 
-wordCompletion gfenv line prefix p =
-  case wc_type (take p line) of
+wordCompletion gfenv (left,right) = do
+  case wc_type (reverse left) of
     CmplCmd pref
-      -> ret ' ' [name | name <- Map.keys (commands cmdEnv), isPrefixOf pref name]
-    CmplStr (Just (Command _ opts _)) s
+      -> ret (length pref) [Haskeline.simpleCompletion name | name <- Map.keys (commands cmdEnv), isPrefixOf pref name]
+    CmplStr (Just (Command _ opts _)) s0
       -> do mb_state0 <- try (evaluate (initState pgf (optLang opts) (optType opts)))
             case mb_state0 of
-              Right state0 -> let ws     = words (take (length s - length prefix) s)
+              Right state0 -> let (rprefix,rs) = break isSpace (reverse s0)
+                                  s            = reverse rs
+                                  prefix       = reverse rprefix
+                                  ws           = words s
                               in case loop state0 ws of
-                                   Nothing    -> ret ' ' []
+                                   Nothing    -> ret 0 []
                                    Just state -> let compls = getCompletions state prefix
-                                                 in ret ' ' (Map.keys compls)
-              Left (_ :: SomeException) -> ret ' ' []
+                                                 in ret (length prefix) (map (\x -> Haskeline.simpleCompletion x) (Map.keys compls))
+              Left (_ :: SomeException) -> ret 0 []
     CmplOpt (Just (Command n _ _)) pref
       -> case Map.lookup n (commands cmdEnv) of
-           Just inf -> do let flg_compls = ['-':flg | (flg,_) <- flags   inf, isPrefixOf pref flg]
-                              opt_compls = ['-':opt | (opt,_) <- options inf, isPrefixOf pref opt]
-                          ret (if null flg_compls then ' ' else '=')
+           Just inf -> do let flg_compls = [Haskeline.Completion ('-':flg++"=") ('-':flg) False | (flg,_) <- flags   inf, isPrefixOf pref flg]
+                              opt_compls = [Haskeline.Completion ('-':opt)      ('-':opt) True | (opt,_) <- options inf, isPrefixOf pref opt]
+                          ret (length pref+1)
                               (flg_compls++opt_compls)
-           Nothing  -> ret ' ' []
+           Nothing  -> ret (length pref) []
     CmplIdent (Just (Command "i" _ _)) _        -- HACK: file name completion for command i
-      -> filenameCompletionFunction prefix
+      -> Haskeline.completeFilename (left,right)
     CmplIdent _ pref
       -> do mb_abs <- try (evaluate (abstract pgf))
             case mb_abs of
-              Right abs -> ret ' ' [name | cid <- Map.keys (funs abs), let name = showCId cid, isPrefixOf pref name]
-              Left (_ :: SomeException) -> ret ' ' []
-    _ -> ret ' ' []
+              Right abs -> ret (length pref) [Haskeline.simpleCompletion name | cid <- Map.keys (funs abs), let name = showCId cid, isPrefixOf pref name]
+              Left (_ :: SomeException) -> ret (length pref) []
+    _ -> ret 0 []
   where
     pgf    = multigrammar cmdEnv
     cmdEnv = commandenv gfenv
@@ -305,8 +320,7 @@ wordCompletion gfenv line prefix p =
                        Left  es -> Nothing
                        Right ps -> loop ps ts
 
-    ret c [x] = return [x++[c]]
-    ret _ xs  = return xs
+    ret len xs  = return (drop len left,xs)
 
 
 data CompletionType
