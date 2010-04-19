@@ -1,3 +1,3 @@
 abstract AllRonAbs =
-  Lang
+  Lang, ExtraRonAbs
   ** {} ;
