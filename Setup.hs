@@ -204,7 +204,7 @@ langs = map fst langsCoding
 langsLang = langs `except` ["Ara","Lat","Tur"]
 
 -- languages for which to compile Try 
-langsAPI  = langsLang `except` ["Bul","Hin","Ina","Rus","Tha"]
+langsAPI  = langsLang `except` ["Hin","Ina","Rus","Tha"]
 
 -- languages for which to run demo test
 langsDemo = langsLang `except` ["Ara","Hin","Ina","Tha"]
