@@ -1,4 +1,5 @@
---# -path=.:RGLExt:../../lib/src/abstract:../../lib/src/english:../../lib/src/common
+--# -path=.:RGLExt:alltenses:src/english
+-- --# -path=.:RGLExt:../../lib/src/abstract:../../lib/src/english:../../lib/src/common
 concrete SUMOEng of SUMO =
         BasicEng,
         MergeEng,
