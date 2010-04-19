@@ -7,7 +7,6 @@
 module GF.Data.XML (XML(..), Attr, comments, showXMLDoc, showsXMLDoc, showsXML, bottomUpXML) where
 
 import GF.Data.Utilities
-import GF.Text.UTF8
 
 data XML = Data String | CData String | Tag String [Attr] [XML] | ETag String [Attr] | Comment String | Empty
  deriving (Ord,Eq,Show)
@@ -21,7 +20,7 @@ showXMLDoc :: XML -> String
 showXMLDoc xml = showsXMLDoc xml ""
 
 showsXMLDoc :: XML -> ShowS
-showsXMLDoc xml = encodeUTF8 . showString header . showsXML xml
+showsXMLDoc xml = showString header . showsXML xml
   where header = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
 
 showsXML :: XML -> ShowS

@@ -8,12 +8,14 @@ import GF.Infra.Option
 import GF.Data.Operations
 
 import Data.Char
+import System.IO
+import qualified Data.ByteString.Char8 as BS
 
-encodeStringsInModule :: SourceModule -> SourceModule
-encodeStringsInModule = codeSourceModule (encodeUnicode UTF_8)
+encodeStringsInModule :: TextEncoding -> SourceModule -> SourceModule
+encodeStringsInModule enc = codeSourceModule (BS.unpack . encodeUnicode enc)
 
-decodeStringsInModule :: SourceModule -> SourceModule
-decodeStringsInModule mo = codeSourceModule (decodeUnicode (flag optEncoding (flagsModule mo))) mo
+decodeStringsInModule :: TextEncoding -> SourceModule -> SourceModule
+decodeStringsInModule enc mo = codeSourceModule (decodeUnicode enc . BS.pack) mo
 
 codeSourceModule :: (String -> String) -> SourceModule -> SourceModule
 codeSourceModule co (id,mo) = (id,replaceJudgements mo (mapTree codj (jments mo)))

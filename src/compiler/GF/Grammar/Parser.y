@@ -441,9 +441,7 @@ Exp6
   | '?'                   { Meta 0 }
   | '[' ']'               { Empty }
   | '[' Ident Exps ']'    { foldl App (Vr (mkListId $2)) $3 }
-  | '[' String ']'        { case $2 of
-                              []   -> Empty
-                              str  -> foldr1 C (map K (words str)) }
+  | '[' String ']'        { K $2 }
   | '{' ListLocDef '}'    {% mkR $2 }
   | '<' ListTupleComp '>' { R (tuple2record $2) }
   | '<' Exp ':' Exp '>'   { Typed $2 $4      }

@@ -22,7 +22,6 @@ import PGF.Macros
 
 import GF.Data.Operations
 import GF.Infra.Option
-import GF.Text.UTF8
 
 import Data.List --(isPrefixOf, find, intersperse)
 import qualified Data.Map as Map
@@ -34,7 +33,7 @@ grammar2haskell :: Options
                 -> String  -- ^ Module name.
                 -> PGF
                 -> String
-grammar2haskell opts name gr = encodeUTF8 $ foldr (++++) [] $  
+grammar2haskell opts name gr = foldr (++++) [] $  
   pragmas ++ haskPreamble name ++ [types, gfinstances gId lexical gr']
     where gr' = hSkeleton gr
           gadt = haskellOption opts HaskellGADT

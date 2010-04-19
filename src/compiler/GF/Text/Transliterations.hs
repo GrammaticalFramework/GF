@@ -5,8 +5,6 @@ module GF.Text.Transliterations (
   transliterationPrintNames
   ) where
 
-import GF.Text.UTF8
-
 import Data.Char
 import Numeric
 import qualified Data.Map as Map

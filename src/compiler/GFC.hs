@@ -17,6 +17,7 @@ import Data.Maybe
 import Data.Binary
 import System.FilePath
 import System.IO
+import Control.Exception
 
 
 mainGFC :: Options -> [FilePath] -> IOE ()
@@ -81,8 +82,8 @@ writeOutput opts file str =
     do let path = case flag optOutputDir opts of
                     Nothing  -> file
                     Just dir -> dir </> file
-       writeOutputFile opts path str
-
-writeOutputFile :: Options -> FilePath -> String -> IOE ()
-writeOutputFile opts outfile output = 
-      do putPointE Normal opts ("Writing " ++ outfile ++ "...") $ ioeIO $ writeFile outfile output
+       putPointE Normal opts ("Writing " ++ path ++ "...") $ ioeIO $
+         bracket
+           (openFile path WriteMode)
+           (hClose)
+           (\h -> hSetEncoding h utf8 >> hPutStr h str)

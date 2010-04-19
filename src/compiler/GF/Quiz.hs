@@ -23,7 +23,6 @@ import PGF.Linearize
 import GF.Data.Operations
 import GF.Infra.UseIO
 import GF.Infra.Option
-import GF.Text.Coding
 import PGF.Probabilistic
 
 import System.Random
@@ -33,9 +32,9 @@ import Data.List (nub)
 
 -- generic quiz function
 
-mkQuiz :: Encoding -> String -> [(String,[String])] -> IO ()
-mkQuiz cod msg tts = do
-  let qas = [ (encodeUnicode cod q, mkAnswer cod as) | (q,as) <- tts]
+mkQuiz :: String -> [(String,[String])] -> IO ()
+mkQuiz msg tts = do
+  let qas = [(q, mkAnswer as) | (q,as) <- tts]
   teachDialogue qas msg
 
 translationList :: 
@@ -62,14 +61,13 @@ morphologyList mex mprobs pgf ig typ number = do
            (pwss@(pws0:_),i) <- zip ss forms, let ws = map (\pws -> snd (pws !! i)) pwss]
 
 -- | compare answer to the list of right answers, increase score and give feedback 
-mkAnswer :: Encoding -> [String] -> String -> (Integer, String) 
-mkAnswer cod as s = 
+mkAnswer :: [String] -> String -> (Integer, String) 
+mkAnswer as s = 
   if (elem (norm s) as) 
      then (1,"Yes.") 
-     else (0,"No, not" +++ s ++ ", but" ++++ enc (unlines as))
+     else (0,"No, not" +++ s ++ ", but" ++++ unlines as)
  where
-   norm = unwords . words . decodeUnicode cod
-   enc = encodeUnicode cod
+   norm = unwords . words
 
 norml = unwords . words
 

@@ -29,24 +29,24 @@ data CommandEnv = CommandEnv {
   expmacros     :: Map.Map String Expr
   }
 
-mkCommandEnv :: Encoding -> PGF -> CommandEnv
-mkCommandEnv enc pgf = 
+mkCommandEnv :: PGF -> CommandEnv
+mkCommandEnv pgf = 
   let mos = Map.fromList [(la,buildMorpho pgf la) | la <- languages pgf] in
-    CommandEnv pgf mos (allCommands enc (pgf, mos)) Map.empty Map.empty
+    CommandEnv pgf mos (allCommands (pgf, mos)) Map.empty Map.empty
 
 emptyCommandEnv :: CommandEnv
-emptyCommandEnv = mkCommandEnv UTF_8 emptyPGF
+emptyCommandEnv = mkCommandEnv emptyPGF
 
-interpretCommandLine :: (String -> String) -> CommandEnv -> String -> IO ()
-interpretCommandLine enc env line =
+interpretCommandLine :: CommandEnv -> String -> IO ()
+interpretCommandLine env line =
   case readCommandLine line of
     Just []    -> return ()
-    Just pipes -> mapM_ (interpretPipe enc env) pipes
+    Just pipes -> mapM_ (interpretPipe env) pipes
     Nothing    -> putStrLnFlush "command not parsed"
 
-interpretPipe enc env cs = do
+interpretPipe env cs = do
      v@(_,s) <- intercs ([],"") cs
-     putStrLnFlush $ enc s
+     putStrLnFlush s
      return v
   where
    intercs treess [] = return treess
@@ -57,14 +57,14 @@ interpretPipe enc env cs = do
      '%':f -> case Map.lookup f (commandmacros env) of
        Just css ->
          case getCommandTrees env False arg es of
-           Right es -> do mapM_ (interpretPipe enc env) (appLine es css) 
+           Right es -> do mapM_ (interpretPipe env) (appLine es css) 
                           return ([],[])
            Left msg -> do putStrLn ('\n':msg)
                           return ([],[])
        Nothing  -> do
          putStrLn $ "command macro " ++ co ++ " not interpreted"
          return ([],[])
-     _ -> interpret enc env es comm
+     _ -> interpret env es comm
    appLine es = map (map (appCommand es))
 
 -- macro definition applications: replace ?i by (exps !! i)
@@ -81,14 +81,14 @@ appCommand xs c@(Command i os arg) = case arg of
     EFun x     -> EFun x
 
 -- return the trees to be sent in pipe, and the output possibly printed
-interpret :: (String -> String) -> CommandEnv -> [Expr] -> Command -> IO CommandOutput
-interpret enc env trees comm = 
+interpret :: CommandEnv -> [Expr] -> Command -> IO CommandOutput
+interpret env trees comm = 
   case getCommand env trees comm of
     Left  msg               -> do putStrLn ('\n':msg)
                                   return ([],[])
     Right (info,opts,trees) -> do tss@(_,s) <- exec info opts trees
                                   if isOpt "tr" opts
-                                    then putStrLn (enc s)
+                                    then putStrLn s
                                     else return ()
                                   return tss
 

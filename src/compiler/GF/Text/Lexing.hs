@@ -1,8 +1,6 @@
 module GF.Text.Lexing (stringOp,opInEnv) where
 
 import GF.Text.Transliterations
-import GF.Text.UTF8
-import GF.Text.CP1251
 
 import Data.Char
 import Data.List (intersperse)
@@ -23,10 +21,6 @@ stringOp name = case name of
   "unlexmixed" -> Just $ capitInit . appUnlexer (unlexMixed . unquote)
   "unwords"    -> Just $ appUnlexer unwords
   "to_html"    -> Just wrapHTML
-  "to_utf8"    -> Just encodeUTF8
-  "from_utf8"  -> Just decodeUTF8
-  "to_cp1251"  -> Just encodeCP1251
-  "from_cp1251" -> Just decodeCP1251
   _ -> transliterate name
 
 -- perform op in environments beg--end, t.ex. between "--"

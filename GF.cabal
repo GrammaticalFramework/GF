@@ -89,7 +89,6 @@ executable gf
     GF.JavaScript.AbsJS
     GF.JavaScript.PrintJS
     GF.Infra.CompactPrint
-    GF.Text.UTF8
     GF.Data.TrieMap
     GF.Data.Utilities
     GF.Data.SortedList

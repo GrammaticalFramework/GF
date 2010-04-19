@@ -6,7 +6,6 @@ import qualified PGF.Macros as M
 import qualified GF.JavaScript.AbsJS as JS
 import qualified GF.JavaScript.PrintJS as JS
 
-import GF.Text.UTF8
 import GF.Data.ErrM
 import GF.Infra.Option
 
@@ -21,7 +20,7 @@ import qualified Data.IntMap as IntMap
 
 pgf2js :: PGF -> String
 pgf2js pgf =
-  encodeUTF8 $ JS.printTree $ JS.Program [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit (JS.Ident n) grammar]]
+  JS.printTree $ JS.Program [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit (JS.Ident n) grammar]]
  where
    n  = showCId $ absname pgf
    as = abstract pgf
