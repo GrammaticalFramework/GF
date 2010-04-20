@@ -4,8 +4,7 @@
 
 concrete FoodsIce of Foods = open Prelude in {
 
-  flags
-    coding=utf8;
+--flags coding=utf8;
 
   lincat
     Comment = SS ; 
