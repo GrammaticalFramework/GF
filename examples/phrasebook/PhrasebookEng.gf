@@ -6,6 +6,9 @@ concrete PhrasebookEng of Phrasebook =
     SyntaxEng,
     Prelude in {
 
+flags 
+  language = en_US ;
+
 lin
   PGreeting g = lin Text g ;
 
