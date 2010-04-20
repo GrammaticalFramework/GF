@@ -1,8 +1,9 @@
 DisambPhrasebookEng :
+PhrasebookBul : AHasName AHasRoom AHasTable AHungry AIll AKnow ALike ALive ALove AMarried AReady AScared ASpeak AThirsty ATired AUnderstand AWant AWantGo Belgium Children Daughter English Finnish Flemish French Friday HowMuchCost Husband ItCost Italian Monday PSeeYou PSeeYouPlace PropClosed PropClosedDate PropClosedDay PropOpen PropOpenDate PropOpenDay QWhatAge QWhatName Romanian Saturday Son Sunday Swedish Thursday Tomorrow Tuesday Wednesday Wife
 PhrasebookEng :
 PhrasebookFin :
 PhrasebookFre :
 PhrasebookGer : Bar Chicken Cinema Coffee Dollar GNiceToMeetYou Hotel Lei Meat Museum PSeeYou PSeeYouPlace Park School Shop Suspect Tea Theatre Toilet
 PhrasebookIta :
-PhrasebookRon : AHungry AThirsty Flemish GExcusePol GPleaseGivePol GSorryPol
+PhrasebookRon : GExcusePol GPleaseGivePol GSorryPol
 PhrasebookSwe :

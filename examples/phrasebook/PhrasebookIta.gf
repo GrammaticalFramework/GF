@@ -7,6 +7,8 @@ concrete PhrasebookIta of Phrasebook =
     SyntaxIta,
     Prelude in {
 
+flags language = it_IT ;
+
 lin
   PGreeting g = lin Text (ss g.s) ;
 

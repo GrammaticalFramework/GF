@@ -5,7 +5,8 @@ concrete PhrasebookSwe of Phrasebook =
   WordsSwe ** open 
     SyntaxSwe,
     Prelude in {
-
+flags  
+  language = sv_SE ;
 lin
   PGreeting g = lin Text (ss g.s) ;
 

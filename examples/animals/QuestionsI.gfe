@@ -1,4 +1,4 @@
--- to compile: echo "eb -file=QuestionsI.gfe" -probs=probs | gf $GF_LIB_PATH/present/LangEng.gfo
+-- to compile: echo "eb -file=QuestionsI.gfe" | gf $GF_LIB_PATH/present/LangEng.gfo
 -- or use directly gf <mkAnimals.gfs
 
 incomplete concrete QuestionsI of Questions = open Lang in {
@@ -9,7 +9,7 @@ incomplete concrete QuestionsI of Questions = open Lang in {
 
   lin 
     Who  love_V2 man_N           = %ex Utt "who loves men" ;
-    Whom man_N love_V2           = %ex Utt "whom does the man love" ;
-    Answer woman_N love_V2 man_N = %ex Utt "the woman loves men" ;
+    Whom man_N love_V2           = %ex Utt "whom does the man love and chase" ;
+    Answer woman_N love_V2 man_N = %ex Utt "the woman loves and chases men" ;
 
 }
