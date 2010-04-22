@@ -8,7 +8,7 @@ module FastCGIUtils (initFastCGI, loopFastCGI,
                      splitBy) where
 
 import Control.Concurrent
-import Control.OldException
+import Control.Exception
 import Control.Monad
 import Data.Dynamic
 import Data.IORef
@@ -143,17 +143,19 @@ stderrToFile s = return ()
 -- * General CGI Error exception mechanism
 
 data CGIError = CGIError { cgiErrorCode :: Int, cgiErrorMessage :: String, cgiErrorText :: [String] }
-                deriving Typeable
+                deriving (Show,Typeable)
+
+instance Exception CGIError where
+  toException e = SomeException e
+  fromException (SomeException e) = cast e
 
 throwCGIError :: Int -> String -> [String] -> CGI a
-throwCGIError c m t = throwCGI $ DynException $ toDyn $ CGIError c m t
+throwCGIError c m t = throwCGI $ toException $ CGIError c m t
 
 handleCGIErrors :: CGI CGIResult -> CGI CGIResult
-handleCGIErrors x = x `catchCGI` \e -> case e of
-                                         DynException d -> case fromDynamic d of
-                                                             Nothing -> throw e
-                                                             Just (CGIError c m t) -> outputError c m t
-                                         _ -> throw e
+handleCGIErrors x = x `catchCGI` \e -> case fromException e of
+                                         Nothing -> throw e
+                                         Just (CGIError c m t) -> outputError c m t
 
 -- * General CGI and JSON stuff
 
