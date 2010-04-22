@@ -1,5 +1,5 @@
 name: gf
-version: 3.1
+version: 3.1.6
 cabal-version: >= 1.2
 build-type: Custom
 license: GPL
