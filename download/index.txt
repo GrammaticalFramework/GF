@@ -7,71 +7,52 @@ Grammatical Framework Download and Installation
 
 ==Latest release==
 
-- GF 3.0 beta3 MacOS X binary (Intel Mac with MacOS X Leopard) 
-  [GF-3.0-beta2-i386-apple-leopard.tgz]
-
-- [GF 3.0 beta2 Windows package  gf-3.0-beta2.zip] (includes libraries)
-
-- [GF 3.0 beta2 sources         GF-3.0-beta2.tgz] (both system and library)
-
-- [GF libraries v 1.4          gf-lib-1.4.tgz] (compiled resource grammar libraries)
-
+GF 3.1.6 released 23 May 2010.
+- MacOS X (Snow Leopard):
+- MacOS X (Leopard):
+- Windows:
+- Ubuntu Linux:
+- compiled library package:
+- full source package (GF system, libraries, examples, documentation):
 
 
-==Previous release==
+What's new? See the [release notes release-3.1.6.txt].
 
-- [GF 3.0 beta2 Linux binary package GF-3.0-beta2-i686-pc-linux-gnu.tgz] (Intel, Ubuntu)
+==Previous releases==
 
-- GF 3.0 beta2 MacOS X binary package: 
-  [Leopard GF-3.0-beta2-i386-apple-darwin9.4.0.tgz] (Intel Mac with MacOS X Leopard)
-  [Tiger  GF-3.0-beta2-i386-apple-darwin8.11.1.tgz] (Intel Mac with MacOS X Tiger)
-
-- [GF 3.0 beta2 Windows package  gf-3.0-beta2.zip] (includes libraries)
-
-- [GF 3.0 beta2 sources         GF-3.0-beta2.tgz] (both system and library)
-
-- [GF libraries v 1.4          gf-lib-1.4.tgz] (compiled resource grammar libraries)
-
+[Follow this link old-index.html].
 
 
 ==Installation instructions==
 
-The Windows package is installed by just unpacking it anywhere. It finds the libraries
-relative to the ``.exe`` file.
+The MacOS packages are installed by clicking at the icons, as usual.
 
-To install a binary package for Linux and Mac OS X:
-+ uncompress the package by ``tar -xfz``
-+ ``cd`` to the created directory
-+ ``./configure``
-+ ``make install``
+The Windows package is installed by just unpacking it anywhere. 
+It finds the libraries relative to the ``.exe`` file.
+
+To install a binary package for Linux: uncompress the package by ``tar -xfz``
 
 
-The Mac OS X binary (Intel) requires Readline from
-[Mac Ports http://www.macports.org/]. To install, see above item.
-
-To compile and install from source: 
+To compile and install from source on Mac or Linux, do:
 ```
-  tar xvfz gf-3.0beta.tgz
+  tar xvfz gf-[VERSION].tgz
   cd GF/src
-  autoconf
-  ./configure
-  make
-  make install
+  runghc Setup configure --user
+  runghc Setup build
+  runghc Setup install
 ```
+The last command must be prefixed by ``sudo``, if the installation is outside
+user-writeable area.
+
 To install the libraries (if done separately), unpack them in the place to which your
 ``GF_LIB_PATH`` points.
 ```
   cd $GF_LIB_PATH
-  gtar xvfz gf-lib-1.4.tgz
+  gtar xvfz gf-lib-[VERSION].tgz
 ```
 If this variable hasn't been defined, it is useful define it, e.g.
 ```
   export GF_LIB_PATH=/usr/local/lib/gf/
 ```
-
-
-==Old releases==
-
-- [GF 2.9 download page ../../GF2/download/index.html]
 
 
