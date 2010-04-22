@@ -27,6 +27,7 @@ import Network.FastCGI
 
 import Text.JSON
 import qualified Codec.Binary.UTF8.String as UTF8 (encodeString, decodeString)
+import qualified Data.ByteString.Lazy as BS
 
 
 initFastCGI :: IO ()
@@ -168,10 +169,10 @@ outputJSONP x =
        setHeader "Content-Type" "text/json; charset=utf-8"
        outputStrict $ UTF8.encodeString str
 
-outputPNG :: String -> CGI CGIResult
+outputPNG :: BS.ByteString -> CGI CGIResult
 outputPNG x = do
        setHeader "Content-Type" "image/png"
-       outputStrict x
+       outputFPS x
 
 outputHTML :: String -> CGI CGIResult
 outputHTML x = do
