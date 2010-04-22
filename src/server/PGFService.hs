@@ -9,8 +9,10 @@ import URLEncoding
 import Network.FastCGI
 import Text.JSON
 import qualified Codec.Binary.UTF8.String as UTF8 (encodeString, decodeString)
+import qualified Data.ByteString.Lazy as BS
 
 import Control.Concurrent
+import Control.Exception
 import Control.Monad
 import Data.Char
 import Data.Function (on)
@@ -20,6 +22,8 @@ import Data.Maybe
 import System.Directory
 import System.FilePath
 import System.Process
+import System.Exit
+import System.IO
 
 logFile :: FilePath
 logFile = "pgf-error.log"
@@ -206,16 +210,45 @@ doGrammar pgf macc = showJSON $ toJSObject
         functions  = [PGF.showCId fun | fun <- PGF.functions pgf]
 
 doGraphvizAbstrTree pgf tree = do
-  let dot = PGF.graphvizAbstractTree pgf (True,True) tree
-  readProcess "dot" ["-T","png"] dot
+  pipeIt2graphviz $  PGF.graphvizAbstractTree pgf (True,True) tree
 
 doGraphvizParseTree pgf lang tree = do
-  let dot = PGF.graphvizParseTree pgf lang tree
-  readProcess "dot" ["-T","png"] (UTF8.encodeString dot)
+  pipeIt2graphviz $ PGF.graphvizParseTree pgf lang tree
 
 doGraphvizAlignment pgf tree = do
-  let dot = PGF.graphvizAlignment pgf tree
-  readProcess "dot" ["-T","png"] (UTF8.encodeString dot)
+  pipeIt2graphviz $ PGF.graphvizAlignment pgf tree
+
+pipeIt2graphviz :: String -> IO BS.ByteString
+pipeIt2graphviz code = do
+    (Just inh, Just outh, _, pid) <-
+        createProcess (proc "dot" ["-T","png"])
+                      { std_in  = CreatePipe,
+                        std_out = CreatePipe,
+                        std_err = Inherit }
+
+    hSetEncoding outh latin1
+    hSetEncoding inh  utf8
+
+    -- fork off a thread to start consuming the output
+    output  <- BS.hGetContents outh
+    outMVar <- newEmptyMVar
+    _ <- forkIO $ evaluate (BS.length output) >> putMVar outMVar ()
+
+    -- now write and flush any input
+    hPutStr inh code
+    hFlush inh
+    hClose inh -- done with stdin
+
+    -- wait on the output
+    takeMVar outMVar
+    hClose outh
+
+    -- wait on the process
+    ex <- waitForProcess pid
+
+    case ex of
+     ExitSuccess   -> return output
+     ExitFailure r -> fail ("pipeIt2graphviz: (exit " ++ show r ++ ")")
 
 doBrowse pgf id cssClass href =
   case PGF.browse pgf id of
