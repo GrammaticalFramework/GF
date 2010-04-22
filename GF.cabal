@@ -5,13 +5,14 @@ build-type: Custom
 license: GPL
 license-file: LICENSE
 synopsis: Grammatical Framework
+homepage: http://www.grammaticalframework.org
 
 flag interrupt
   Description: Enable Ctrl+Break in the shell
   Default:     True
 
 library
-  build-depends: base >= 4.1,
+  build-depends: base >= 4.2 && <5,
                  array,
                  containers,
                  bytestring,
@@ -52,7 +53,7 @@ library
     Data.Binary.Builder
 
 executable gf
-  build-depends: base >= 4.1,
+  build-depends: base >= 4.2,
                  array,
                  containers,
                  bytestring,
