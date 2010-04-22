@@ -1,0 +1,58 @@
+GF Version 3.1.6 Release Notes
+
+
+
+=Installation=
+
+The binaries now work out of the box for each platform and support
+completions (file names and parsing), because readline has been 
+changed to haskeline.
+
+To compile from source, GHC 6.12 is now required. But GHC is not needed
+if the binary executables are used.
+
+Binaries (``.gfo`` and ``.pgf`` files) compiled with GF 3.1 are incompatible 
+with 3.1.6 and must either be removed; alternatively, the ``-src`` flag can be
+used when compiling.
+
+Notice the new place to send bug reports (see GF's welcome message)!
+
+
+=New features=
+
+Grammar language
+- increased support for dependent types (see ``SUMO``,
+  ``category-theory`` and ``nqueens`` in ``examples``)
+
+
+Shell commands and options (see ``help`` in GF for more information) 
+- ``eb``: example-based grammar file conversion 
+  (see ``examples/animals/QuestionI.gf``)
+- ``vd = visualize_dependency``: show dependency tree
+- ``vp = visualize_parse``: show parse tree
+- ``gr, gt, mq, tq``: use a seed tree with metavariables
+- ``gr, p, tq``: use ``-probs=FILE`` to bias or rank generated trees
+- ``dg``: hide modules when printing dependency graph
+
+
+Libraries
+- Urdu completed
+- Turkish morphology completed
+
+
+Examples
+- SUMO
+- category-theory
+- phrasebook
+- nqueens
+
+
+Internal
+- single PMCFG format for both linearization and parsing
+- use of Haskeline for completion - more portable than Readline
+- unicode support from Haskell 6.12 instead of home-made coding
+
+
+
+
+
