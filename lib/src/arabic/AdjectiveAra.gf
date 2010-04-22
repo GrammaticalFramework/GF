@@ -1,5 +1,6 @@
 concrete AdjectiveAra of Adjective = CatAra ** open ResAra, Prelude in {
 
+ flags coding = utf8 ;
   lin
 
 
