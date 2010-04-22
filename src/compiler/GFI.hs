@@ -252,7 +252,6 @@ welcome = unlines [
   "                              ",
   "This is GF version "++showVersion version++". ",
   "License: see help -license.   ",
-  "Differences from GF 2.9: see help -changes.",
   "Bug reports: http://code.google.com/p/grammatical-framework/issues/list"
   ]
 

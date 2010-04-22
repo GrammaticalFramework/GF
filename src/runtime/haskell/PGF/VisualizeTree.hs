@@ -95,10 +95,11 @@ graphvizDependencyTree format debug mlab ms pgf lang exp = case format of
 
  where
 
-  lin2dep format = trace (ifd (show sortedNodes ++ show nodeWords)) $ case format of
-    "malt" -> map (concat . intersperse "\t") wnodes
-    "malt_input" -> map (concat . intersperse "\t" . take 6) wnodes
-    _ -> prelude ++ nodes ++ links
+  lin2dep format = -- trace (ifd (show sortedNodes ++ show nodeWords)) $ 
+    case format of
+      "malt" -> map (concat . intersperse "\t") wnodes
+      "malt_input" -> map (concat . intersperse "\t" . take 6) wnodes
+      _ -> prelude ++ nodes ++ links
 
   ifd s = if debug then s else []
 
@@ -190,7 +191,7 @@ getDepLabels ss = Map.fromList [(mkCId f,ls) | f:ls <- map words ss]
 graphvizParseTree :: PGF -> CId -> Expr -> String
 graphvizParseTree pgf lang = prGraph False . lin2tree pgf . concat . take 1 . markLinearizes pgf lang where
 
-lin2tree pgf s = trace s $ prelude ++ nodes ++ links where
+lin2tree pgf s = prelude ++ nodes ++ links where
 
   prelude = ["rankdir=BU ;", "node [shape = record, color = white] ;"]
 
@@ -241,7 +242,8 @@ graphvizAlignment pgf = prGraph True . lin2graph . linsMark  where
   linsMark t = [concat (take 1 (markLinearizes pgf la t)) | la <- Map.keys (concretes pgf)]
 
 lin2graph :: [String] -> [String]
-lin2graph ss = trace (show ss) $ prelude ++ nodes ++ links
+lin2graph ss = -- trace (show ss) $ 
+               prelude ++ nodes ++ links
 
  where
 
