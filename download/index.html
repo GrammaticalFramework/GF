@@ -1,145 +1,77 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.sf.net">
 <TITLE>Grammatical Framework Download and Installation</TITLE>
-<style>
-h1 { text-align: center; }
-h1,h2,h3 { font-family: sans-serif; }
-ul.downloads a { font-family: monospace; }
-</style>
-</HEAD>
-
-<BODY BGCOLOR="white" TEXT="black">
-<H1>Grammatical Framework<br>Download and Installation</H1>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1>Grammatical Framework Download and Installation</H1>
+<FONT SIZE="4">
+</FONT></CENTER>
 
 <H2>Latest developer code</H2>
 <P>
-<A HREF="../doc/gf-developers.html">GF darcs repository</A>
+<A HREF="../doc/darcs.html">GF darcs repository</A>
 </P>
-
-<H2>Latest release</h2>
-
-<dl>
-<dt>GF 3.1, 15 December 2009
-<dd>
-<p>
-<ul class=downloads>
-  <li>For Linux (32-bit):
-    <a href="gf-3.1-bin-i486-linux.tar.gz">gf-3.1-bin-i468-linux.tar.gz</a>
-  <li>For Linux (64-bit):
-    <a href="gf-3.1-bin-x86_64-linux.tar.gz">gf-3.1-bin-x86_64-linux.tar.gz</a>
-  <li>For Mac:
-    <a href="gf-3.1-bin-intel-mac.tar.gz">gf-3.1-bin-intel-mac.tar.gz</a>
-    (Leopard &amp; Snow Leopard)
-  <li>For Windows:
-    <a href="gf-3.1-bin-i486-windows.zip">gf-3.1-bin-i486-windows.zip</a>
-  <li>Source package:
-    <a href="gf-3.1-src.tar.gz">gf-3.1-src.tar.gz</a>
-    (a dump of the darcs repo)
-  <li>Libraries: <a href="gf-lib-1.7.tar.gz">gf-lib-1.7.tar.gz</a>
-    (sources, compiled as alltenses/present, docs)
-</ul>
-
-<H3>Installation instructions</H3>
-
-<ul>
-<li>Linux &amp; Mac binaries: <tt>tar xvfz</tt> in /
-<li>Windows binary: unzip in c:\
-<li>Compiled library:
-  <tt>tar xvfz</tt> in some DIR and point the variable GF_LIB_PATH to DIR/lib.
-<li>
-Source package: <tt>tar xvfz</tt> somewhere and compile as follows:
+<H2>Latest release</H2>
 <P>
-<PRE>
-    tar xvfz gf-3.0.tgz
-    cd gf-3.0
+GF 3.1.6 released 23 May 2010.
+</P>
+<UL>
+<LI>MacOS X (Snow Leopard):
+<LI>MacOS X (Leopard):
+<LI>Windows:
+<LI>Ubuntu Linux:
+<LI>compiled library package:
+<LI>full source package (GF system, libraries, examples, documentation):
+</UL>
 
-    # alternative 1:
-    runghc Setup configure
+<P>
+What's new? See the <A HREF="release-3.1.6.txt">release notes</A>.
+</P>
+<H2>Previous releases</H2>
+<P>
+<A HREF="old-index.html">Follow this link</A>.
+</P>
+<H2>Installation instructions</H2>
+<P>
+The MacOS packages are installed by clicking at the icons, as usual.
+</P>
+<P>
+The Windows package is installed by just unpacking it anywhere. 
+It finds the libraries relative to the <CODE>.exe</CODE> file.
+</P>
+<P>
+To install a binary package for Linux: uncompress the package by <CODE>tar -xfz</CODE>
+</P>
+<P>
+To compile and install from source on Mac or Linux, do:
+</P>
+<PRE>
+    tar xvfz gf-[VERSION].tgz
+    cd GF/src
+    runghc Setup configure --user
     runghc Setup build
     runghc Setup install
-
-    # alternative 2:
-    make
-    make install
 </PRE>
-</dl>
-
-<H2>Old releases</H2>
-
-<dl>
-<dt>GF 3.0, 24 June 2009.
-<dd>
 <P>
-<ul>
-<li><A HREF="gf-3.0-mac.gz">Mac OS X Leopard (intel) executable</A> 
-      (requires Readline from <A HREF="http://www.macports.org/">Mac Ports</A>)
-<li><A HREF="gf-3.0-mac-noreadline.gz">Mac OS X Leopard (Intel) executable</A> 
-      (doesn't require Readline)
-<li><A HREF="gf-linux.tar.gz">Linux (intel) binary package</A> 
-<li><A HREF="gf-win32.zip">Windows binary package</A> 
-<li><A HREF="gf-lib-1.6.tgz">Compiled libraries, v. 1.6</A> 
-<li><A HREF="gf-3.0-src.tgz">Source package for GF system (a dump of the darcs repo)</A> 
-</ul>
-
-<H3>Installation instructions</H3>
-
-<p>
-Mac binary: gunzip and put somewhere on your path.
+The last command must be prefixed by <CODE>sudo</CODE>, if the installation is outside
+user-writeable area.
+</P>
 <P>
-Linux: <tt>tar xvfz</tt> in /
-<P>
-Windows: unzip in c:\
-<p>
-Compiled library: <tt>tar xvfz</tt> in some DIR and point the variable GF_LIB_PATH to DIR/lib.
-<p>
-Source package: <tt>tar xvfz</tt> somewhere and compile as follows:
-<P>
+To install the libraries (if done separately), unpack them in the place to which your
+<CODE>GF_LIB_PATH</CODE> points.
+</P>
 <PRE>
-    tar xvfz gf-3.0.tgz
-    cd gf-3.0
-
-    # alternative 1:
-    runghc Setup configure
-    runghc Setup build
-    runghc Setup install
-
-    # alternative 2:
-    make
-    make install
+    cd $GF_LIB_PATH
+    gtar xvfz gf-lib-[VERSION].tgz
 </PRE>
-</dl>
-
-
-GF 3.0 beta3, April 2009.
-<UL>
-<LI>
-  <A HREF="GF-3.0-beta3-i386-apple-darwin9.6.0.tgz">Mac OS X Leopard (intel) binary package</A> 
-<LI>
-  <A HREF="gf-3.0-beta3.zip">Windows binary</A> 
-
-<LI><A HREF="GF-3.0-beta3.tgz">GF 3.0 beta3 sources</A> (both system and library)
-</UL>
-3.0 beta2
-<UL>
-<LI><A HREF="GF-3.0-beta2-i686-pc-linux-gnu.tgz">GF 3.0 beta2 Linux binary package</A> (Intel, Ubuntu)
+<P>
+If this variable hasn't been defined, it is useful define it, e.g.
+</P>
+<PRE>
+    export GF_LIB_PATH=/usr/local/lib/gf/
+</PRE>
 <P></P>
-<LI>GF 3.0 beta2 MacOS X binary package: 
-  <A HREF="GF-3.0-beta2-i386-apple-darwin9.4.0.tgz">Leopard</A> (Intel Mac with MacOS X Leopard)
-  <A HREF="GF-3.0-beta2-i386-apple-darwin8.11.1.tgz">Tiger</A> (Intel Mac with MacOS X Tiger)
-<P></P>
-<LI><A HREF="gf-3.0-beta2.zip">GF 3.0 beta2 Windows package</A> (includes libraries)
-<P></P>
-<LI><A HREF="GF-3.0-beta2.tgz">GF 3.0 beta2 sources</A> (both system and library)
-<P></P>
-<LI><A HREF="gf-lib-1.4.tgz">GF libraries v 1.4</A> (compiled resource grammar libraries)
-</UL>
-<!--
-<UL>
-<LI><A HREF="../../GF2/download/index.html">GF 2.9 download page</A>
-</UL>
--->
 
 <!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml index.txt -->
