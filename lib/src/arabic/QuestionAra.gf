@@ -1,6 +1,6 @@
 concrete QuestionAra of Question = CatAra ** open ResAra, ParamX, Prelude in {
 
-  flags optimize=all_subs ;
+  flags optimize=all_subs ; coding = utf8 ;
 
   lin
 

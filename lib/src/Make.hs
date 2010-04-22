@@ -60,13 +60,16 @@ langs = map fst langsCoding
 langsLangAll = langs
 
 -- languagues that are almost complete and for which Lang is normally compiled
-langsLang = langs `except` ["Ara","Hin","Lat","Tha","Tur"]
+langsLang = langs `except` langsIncomplete ---- []
+
+-- languages for which Lang can be compiled but which are incomplete
+langsIncomplete = ["Ara","Hin","Lat","Tha","Tur"]
 
 -- languages for which to compile Try 
-langsAPI = langsLang `except` ["Ina"]
+langsAPI = langsLang `except` (langsIncomplete ++ ["Ina"])
 
 -- languages for which to compile Symbolic
-langsSymbolic = langsLang `except` ["Rus","Ina"]
+langsSymbolic = langsLang `except` (langsIncomplete ++ ["Rus","Ina"])
 
 -- languages for which to compile minimal Syntax
 langsMinimal = langs `only` ["Ara","Eng","Bul","Rus"]
