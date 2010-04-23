@@ -21,8 +21,7 @@ Notice the new place to send bug reports (see GF's welcome message)!
 =New features=
 
 Grammar language
-- increased support for dependent types (see ``SUMO``,
-  ``category-theory`` and ``nqueens`` in ``examples``)
+- improved support for dependent types (see ``SUMO``, ``nqueens`` in ``examples``)
 
 
 Shell commands and options (see ``help`` in GF for more information) 
@@ -32,17 +31,18 @@ Shell commands and options (see ``help`` in GF for more information)
 - ``vp = visualize_parse``: show parse tree
 - ``gr, gt, mq, tq``: use a seed tree with metavariables
 - ``gr, p, tq``: use ``-probs=FILE`` to bias or rank generated trees
+- ``gt`` now tries the different alternatives in the order in which they appear in the source code
 - ``dg``: hide modules when printing dependency graph
+- -output-format=lambda_prolog let us to use Lambda Prolog for exhaustive generation with dependent types
 
 
 Libraries
-- Urdu completed
-- Turkish morphology completed
+- Urdu completed (Shafqat Virk)
+- Turkish morphology + Zamberek's dictionary in GF (Server Cimen)
 
 
 Examples
 - SUMO
-- category-theory
 - phrasebook
 - nqueens
 
