@@ -4,7 +4,9 @@ cabal-version: >= 1.2
 build-type: Custom
 license: GPL
 license-file: LICENSE
+category: Natural Language Processing, Compiler
 synopsis: Grammatical Framework
+description: GF, Grammatical Framework, is a programming language for multilingual grammar applications
 homepage: http://www.grammaticalframework.org
 
 flag interrupt
