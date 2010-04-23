@@ -8,7 +8,7 @@ Version 3.1.6, 23 April 2010
 
 ==Latest release==
 
-GF 3.1.6 released 23 May 2010.
+GF 3.1.6 released 23 April 2010.
 - MacOS X (Snow Leopard):
 - MacOS X (Leopard):
 - Windows:
