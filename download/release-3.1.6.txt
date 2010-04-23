@@ -1,5 +1,5 @@
 GF Version 3.1.6 Release Notes
-
+23 April 2010
 
 
 =Installation=
@@ -51,6 +51,12 @@ Internal
 - single PMCFG format for both linearization and parsing
 - use of Haskeline for completion - more portable than Readline
 - unicode support from Haskell 6.12 instead of home-made coding
+
+
+==Issues==
+
+Javascript generation is not updated to the new PGF format.
+[GF 3.1 old-index.html] should still be used for building Javascript applications.
 
 
 

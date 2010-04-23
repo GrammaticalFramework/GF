@@ -1,4 +1,5 @@
 Grammatical Framework Download and Installation
+Version 3.1.6, 23 April 2010
 
 
 ==Latest developer code==
@@ -11,12 +12,19 @@ GF 3.1.6 released 23 May 2010.
 - MacOS X (Snow Leopard):
 - MacOS X (Leopard):
 - Windows:
-- Ubuntu Linux:
+- Ubuntu Linux: 
+  [``gf-bin-3.1.6-i386-linux.gz`` gf-bin-3.1.6-i386-linux.gz]
+  (1.7 MB)
 - compiled library package:
+  [``gf-lib-3.1.6.tar.gz`` gf-lib-3.1.6.tar.gz]
+  (4.4 MB)
 - full source package (GF system, libraries, examples, documentation):
+  [``gf-src-3.1.6.tar.gz`` gf-src-3.1.6.tar.gz]
+  (11 MB)
 
 
-What's new? See the [release notes release-3.1.6.txt].
+What's new? See the [release notes release-3.1.6.html].
+
 
 ==Previous releases==
 
@@ -30,8 +38,22 @@ The MacOS packages are installed by clicking at the icons, as usual.
 The Windows package is installed by just unpacking it anywhere. 
 It finds the libraries relative to the ``.exe`` file.
 
-To install a binary package for Linux: uncompress the package by ``tar -xfz``
-
+To install a binary package for Linux: uncompress the executable and
+put it somewhere on your path, renaming it to just ``gf``. For instance:
+```
+  gunzip gf-bin-[version].gz
+  sudo mv gf-bin-[version] /usr/local/bin/gf
+```
+To install the libraries (if done separately), unpack them in the place to which your
+``GF_LIB_PATH`` points.
+```
+  cd $GF_LIB_PATH
+  gtar xvfz gf-lib-[VERSION].tgz
+```
+If this variable hasn't been defined, it is useful define it, e.g.
+```
+  export GF_LIB_PATH=/usr/local/lib/gf/
+```
 
 To compile and install from source on Mac or Linux, do:
 ```
@@ -44,15 +66,5 @@ To compile and install from source on Mac or Linux, do:
 The last command must be prefixed by ``sudo``, if the installation is outside
 user-writeable area.
 
-To install the libraries (if done separately), unpack them in the place to which your
-``GF_LIB_PATH`` points.
-```
-  cd $GF_LIB_PATH
-  gtar xvfz gf-lib-[VERSION].tgz
-```
-If this variable hasn't been defined, it is useful define it, e.g.
-```
-  export GF_LIB_PATH=/usr/local/lib/gf/
-```
 
 
