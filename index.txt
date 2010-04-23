@@ -32,7 +32,7 @@ December 2009
 
 ``[`` [Demos demos/index.html]
 ``|`` [Download download/index.html]
-``|`` [Developers doc/gf-developers.html]
+``|`` [Developers http://code.google.com/p/grammatical-framework/wiki/SideBar?tm=6]
 ``|`` [Libraries lib/doc/synopsis.html]
 ``|`` [People doc/gf-people.html]
 ``|`` [Publications doc/gf-bibliography.html]
