@@ -212,17 +212,24 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
       	           -> let !acc' = foldl (\acc toks -> fn toks (Active j (ppos+1) funid seqid args key0) acc) acc
                                    (strs:[strs' | Alt strs' _ <- vars])
                       in process mbt fn seqs funs items acc' chart
-        SymLit d r -> let !fid = args !! d
-                      in case [ts | PConst _ ts <- maybe [] Set.toList (IntMap.lookup fid (forest chart))] of
-                           (toks:_) -> let !acc' = fn toks (Active j (ppos+1) funid seqid args key0) acc
+        SymLit d r -> let fid   = args !! d
+                          key   = AK fid r
+                          !fid' = case lookupPC (mkPK key k) (passive chart) of
+                                    Nothing  -> fid
+                                    Just fid -> fid
+
+                      in case [ts | PConst _ ts <- maybe [] Set.toList (IntMap.lookup fid' (forest chart))] of
+                           (toks:_) -> let !acc' = fn toks (Active j (ppos+1) funid seqid (updateAt d fid' args) key0) acc
                                        in process mbt fn seqs funs items acc' chart
                            []       -> case litCatMatch fid mbt of
-                                         Just (toks,lit) -> let fid'  = nextId chart
-                                                                !acc' = fn toks (Active j (ppos+1) funid seqid (updateAt d fid' args) key0) acc
-                                                            in process mbt fn seqs funs items acc' chart{forest=IntMap.insert fid' (Set.singleton (PConst lit toks)) (forest chart)
-                                                                                                        ,nextId=nextId chart+1
-                                                                                                        }
-                                         Nothing         -> process mbt fn seqs funs items acc chart
+                                         Just (toks,lit) 
+                                                     -> let fid'  = nextId chart
+                                                            !acc' = fn toks (Active j (ppos+1) funid seqid (updateAt d fid' args) key0) acc
+                                                        in process mbt fn seqs funs items acc' chart{passive=insertPC (mkPK key k) fid' (passive chart)
+                                                                                                    ,forest =IntMap.insert fid' (Set.singleton (PConst lit toks)) (forest chart)
+                                                                                                    ,nextId =nextId chart+1
+                                                                                                    }
+                                         Nothing     -> process mbt fn seqs funs items acc chart
   | otherwise =
       case lookupPC (mkPK key0 j) (passive chart) of
         Nothing -> let fid = nextId chart
