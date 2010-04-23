@@ -23,6 +23,8 @@ GF 3.1.6 released 23 April 2010.
 - full source package (GF system, libraries, examples, documentation):
   [``gf-3.1.6-src.tar.gz`` gf-3.1.6-src.tar.gz]
   (11 MB)
+  
+GF is also on [Hackage http://hackage.haskell.org/package/gf]
 
 
 What's new? See the [release notes release-3.1.6.html].
