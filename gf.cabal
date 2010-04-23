@@ -8,6 +8,7 @@ category: Natural Language Processing, Compiler
 synopsis: Grammatical Framework
 description: GF, Grammatical Framework, is a programming language for multilingual grammar applications
 homepage: http://www.grammaticalframework.org
+bug-reports: http://code.google.com/p/grammatical-framework/issues/list
 
 flag interrupt
   Description: Enable Ctrl+Break in the shell
