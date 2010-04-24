@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------
 -- |
--- Maintainer  : Peter Ljunglöf
+-- Maintainer  : Peter LjunglÃ¶f
 -- Stability   : stable
 -- Portability : portable
 --
