@@ -244,10 +244,14 @@ whatPl_IP =
   youSg_Pron = mkPronoun 
     "tu" "tine" "ţie" [] "tu" "tău" "ta" "tăi" "tale"  
         Masc Sg P2 ;
-  youPl_Pron, youPol_Pron = 
+  youPl_Pron =  
     mkPronoun
       "voi" "voi" "vouă" [] "voi" "vostru" "voastră" "voştri" "voastre"  
          Masc Pl P2 ;
+  youPol_Pron = let dvs = mkPronoun "dumneavoastră" "dumneavoastră" "dumneavoastră" [] "dumneavoastră" "dumneavoastră" "dumneavoastră" "dumneavoastră" "dumneavoastră" Masc Pl P2 
+             in 
+            {s = dvs.s; c1 = dvs.c1; 
+                c2 = dvs.c2; a = dvs.a; isPol = True; poss = dvs.poss} ; 
 
  not_Predet = {s = \\a,c => "nu" ; c = No} ;
 

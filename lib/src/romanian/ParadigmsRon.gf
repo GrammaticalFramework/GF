@@ -466,7 +466,7 @@ mkNPspec : Str -> Str -> Str -> Number -> Gender -> NP =
 a = ag ;
 indForm = cineva ;
 nForm = HasClit ;
-isPronoun = False ;
+isPronoun = False ; isPol = False;
 lock_NP = <>
 } ;
 
@@ -481,7 +481,7 @@ mkNPs : Str -> Str -> Number -> Gender -> Bool -> NP =
             };
  a = ag ;
  indForm = cineva ;
- isPronoun = False ;
+ isPronoun = False ; isPol = False;
  nForm = HasRef b ;
 lock_NP = <>
 };
@@ -500,7 +500,7 @@ mkNPa : Str -> Str -> Str -> Number -> Gender -> Bool -> NP =
             };
  a = ag;
  nForm = HasRef b;
- isPronoun = False ;
+ isPronoun = False; isPol = False; 
  indForm = om ;
 lock_NP = <>
 };
@@ -517,6 +517,7 @@ mkPronoun :(_,_,_,_,_,_,_,_,_ : Str) -> Gender -> Number -> Person -> Pron =\eu,
          poss = table {Sg => table {Masc => meuP ; Fem => mea};
                        Pl => table {Masc => mei ; Fem => mele}
                       }; 
+         isPol = False;
          lock_Pron = <>};
 
 

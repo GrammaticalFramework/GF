@@ -329,8 +329,9 @@ oper
                       a : Agr ; 
                       indForm : Str ; --needed for prepositions that demand the indefinite form of a NP  
                       nForm : NForm ; -- indicates the presence of clitic doubling and referential form
-                      isPronoun : Bool -- in the case of pronouns, just the clitics are used, and not the comp form
-                     } ;   
+                      isPronoun : Bool ; -- in the case of pronouns, just the clitics are used, and not the comp form
+                      isPol : Bool -- needed for the agreement of the polite pronoun, singular form
+                      } ;   
  VerbPhrase :Type = {
       s : VForm => Str ;
       isRefl : Agr => RAgr ;             -- the clitics for reflexive verbs
@@ -512,9 +513,9 @@ oper
 
 -- clause building function :
 
- mkClause : Str ->  Agr -> VerbPhrase -> 
+ mkClause : Str ->  Bool -> Agr -> VerbPhrase -> 
     {s : Direct => RTense => Anteriority => Polarity => Mood => Str} =
-    \subj,agr,vpr -> {
+    \subj,isPol,agr,vpr -> {
       s = \\d,t,a,b,m => 
         let 
           tm = case t of {
@@ -533,9 +534,12 @@ oper
           sa    = (vp.s ! VPFinite tm a ).sa ; 
           verb  = vps ! agr ; 
           neg   = vp.neg ! b ;
-          clpr  = flattenClitics vpr.nrClit vpr.clAcc vpr.clDat (vpr.isRefl ! agr) (andB vpr.isFemSg cmp) cmp vpr.pReflClit; 
-          compl = vp.comp ! agr ++ vp.ext ! b
-        in
+          clpr  = flattenClitics vpr.nrClit vpr.clAcc vpr.clDat (vpr.isRefl ! agr) (andB vpr.isFemSg cmp) cmp vpr.pReflClit;   
+          compl = case isPol of {
+            True => vp.comp ! {g = agr.g ; n = Sg ; p = agr.p} ;
+            _ => vp.comp ! agr
+            } ++ vp.ext ! b         
+in
         case d of {
           DDir => 
             subj ++ sa ++ neg ++ clpr.s1 ++ verb ++ clpr.s2;
@@ -554,8 +558,8 @@ oper
                                   _       => [] }};
     a = np.a ;
     indForm = np.ss ; 
-    nForm = np.hasClit;
-    isPronoun = False  
+    nForm = np.hasClit ;
+    isPronoun = False ;isPol = False 
     } ;
  
  genForms : Str -> Str -> Gender => Str = \bon,bonne ->

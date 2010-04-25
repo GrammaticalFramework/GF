@@ -15,9 +15,9 @@ Item = {s : Str ; n : Number; g : Gender};
 
 lin
 
-This = det Sg (mkTab "acest" "aceastã");
+This = det Sg (mkTab "acest" "această");
 That = det Sg (mkTab "acel" "acea");
-These = det Pl (mkTab "aceºti" "aceste");
+These = det Pl (mkTab "acești" "aceste");
 Those = det Pl (mkTab "acei" "acele");
 
 Wine = mkNoun "vin" "vinuri" NNeut ;
