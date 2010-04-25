@@ -1,7 +1,7 @@
 -- (c) 2009 Ramona Enache under LGPL
 
 concrete WordsRon of Words = SentencesRon ** open
-  SyntaxRon,
+  SyntaxRon, ResRon,
   (P = ParadigmsRon),
   (L = LexiconRon),
   BeschRon,
@@ -89,7 +89,7 @@ concrete WordsRon of Words = SentencesRon ** open
     AHasTable p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (P.mkN "masa" "mese")) (SyntaxRon.mkAdv for_Prep (mkNP num (P.mkN "persoană")))) ;
     AHasName p name = mkCl p.name (P.dirV2 (mkRVAcc (v_besch119 "numi"))) name ;
-    AHungry p = DatSubjCl p.name (mkVP (mkCN (P.mkN "foame"))) ;
+    AHungry p = DatSubjCl p.name (mkVP (mkNP (P.mkN "foame"))) ;
     AIll p = mkCl p.name (P.mkA "bolnav") ;
     AKnow p = mkCl p.name (v_besch122 "şti") ;
     ALike p item = mkCl p.name (P.dirV2 (v_besch71 "plăcea")) item ;
@@ -100,7 +100,7 @@ concrete WordsRon of Words = SentencesRon ** open
     AReady p = mkCl p.name (P.mkA "gata" "gata" "gata" "gata") ;
     AScared p = mkCl p.name (P.mkA "speriat") ;
     ASpeak p lang = mkCl p.name  (P.dirV2 (P.mkV "vorbi")) lang ;
-    AThirsty p = DatSubjCl p.name (mkVP (mkCN (P.mkN "sete"))) ;
+    AThirsty p = DatSubjCl p.name (mkVP (mkNP (P.mkN "sete"))) ;
     ATired p = mkCl p.name (P.mkA "obosit") ;
     AUnderstand p = mkCl p.name (v_besch83 "înţelege") ;
     AWant p obj = mkCl p.name (P.dirV2 (v_besch74 "vrea")) obj ;
@@ -138,7 +138,7 @@ concrete WordsRon of Words = SentencesRon ** open
     Son = xOf sing (P.mkN "fiu") ;
     Daughter = xOf sing (P.mkN "fiică") ;
     Children = xOf plur L.child_N ;    
-    
+ 
 -- week days
 
     Monday = mkDay "luni" ;
@@ -165,9 +165,6 @@ open_A : A = P.mkA "deschis" ;
       let day = mkNP (P.mkPN d P.Feminine) ;
           ad = {s = d} in
       mkNPDay day ad ad; ---- difference is enforced by additional constructions
-
-   -- mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i ->
-   --   mkCNPlace (mkCN p) i P.dative ;
 
     xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (mkCN x) p ; 
     

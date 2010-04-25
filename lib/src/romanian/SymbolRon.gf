@@ -32,7 +32,7 @@ lin
                     };
      a = ag ;
      nForm = nf ;
- 
+     isPol = False ;
      isPronoun = False ;
      indForm = det.s ! gg ! No ++ det.size ++cn.s ! det.n ! rs ! ANomAcc 
    } ;   
@@ -62,7 +62,7 @@ lin
 
   MkSymb s = s ;
 
-  BaseSymb = infixSS "ºi" ; 
+  BaseSymb = infixSS "È™i" ; 
   ConsSymb = infixSS "," ;
 
 oper mkSymb : Str -> PN = \ss ->

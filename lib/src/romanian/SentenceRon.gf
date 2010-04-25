@@ -4,9 +4,9 @@
   flags optimize=all_subs ;
 
   lin
-    PredVP np vp = mkClause (np.s ! No).comp np.a vp ;
+    PredVP np vp = mkClause (np.s ! No).comp np.isPol np.a vp ;
 
-    PredSCVP sc vp = mkClause sc.s (agrP3 Masc Sg) vp ;
+    PredSCVP sc vp = mkClause sc.s False (agrP3 Masc Sg) vp ;
 
     ImpVP vpr = let agSg = {n = Sg ; g = Masc ; p = P2 } ;
                     agPl = {n = Pl ; g = Masc ; p = P2 } ;
@@ -40,8 +40,8 @@
             bcond = andB vp.needClit bb
             in
             case <bcond,v2.c2.isDir> of
-             {<True, Dir pc> => (mkClause (np.s ! No).comp np.a (putClit (agrP3 ag.g ag.n) pc vp)).s ;
-              _      => (mkClause (np.s ! No).comp np.a vp).s
+             {<True, Dir pc> => (mkClause (np.s ! No).comp np.isPol np.a (putClit (agrP3 ag.g ag.n) pc vp)).s ;
+              _      => (mkClause (np.s ! No).comp np.isPol np.a vp).s
               };
               c2 = v2.c2
       } ;
@@ -60,7 +60,7 @@
     SlashVS np vs slash = 
       {s = \\bb,ag =>
         (mkClause
-          (np.s ! No).comp np.a
+          (np.s ! No).comp np.isPol np.a
           (insertExtrapos (\\b => conjThat ++ slash.s !  ag ! (vs.m ! b))
             (predV vs))
         ).s ;

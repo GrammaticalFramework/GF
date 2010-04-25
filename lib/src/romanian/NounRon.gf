@@ -23,6 +23,7 @@ concrete NounRon of Noun =
                    };
         a = ag ;
         nForm = nf;
+        isPol = False;
         isPronoun = False;
         indForm = det.s ! gg ! No ++ det.size ++cn.s ! n ! rs ! ANomAcc ++ det.post ! gg ! No 
              
@@ -39,7 +40,7 @@ concrete NounRon of Noun =
                    
         a = ag;
         nForm = if_then_else NForm hc HasClit (HasRef False) ;
-        isPronoun = False ;
+        isPronoun = False ; isPol = False;
         indForm = pn.s ! No
         } ;
 
@@ -47,6 +48,7 @@ concrete NounRon of Noun =
                            clit = (genCliticsCase p.a c).s } ;
                 nForm = HasClit;
                 isPronoun = True ;
+                isPol = p.isPol ;
                 a = p.a;
                 indForm = p.s ! Ac
                };
@@ -58,7 +60,7 @@ concrete NounRon of Noun =
                     clit = (np.s ! c).clit };
         a = np.a ;
         nForm = np.nForm ;
-        isPronoun = False ;
+        isPronoun = False ; isPol = False;
         indForm = pred.s ! aagr (np.a.g) (np.a.n) ! ANomAcc ++ (np.s ! pred.c).comp
    } ;
 
@@ -224,6 +226,7 @@ in {
                       clit = \\cs => []  } ;
         a = agrP3 g n ;
         nForm = HasRef False ;
+        isPol = False;
         isPronoun = False ;
         indForm = cn.s ! n ! Indef ! ANomAcc
         } ;

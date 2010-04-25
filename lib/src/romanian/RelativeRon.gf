@@ -16,11 +16,13 @@ concrete RelativeRon of Relative =
       True => {s = \\ag =>
           (mkClause 
                     (rp.s ! {g = ag.g ; n = ag.n} ! No) 
+                    False
                     {g = rp.a.g ; n = rp.a.n ; p = P3}
                     vp).s ! DDir ; c = No} ;
       False => {s = \\ag =>
           (mkClause
                     (rp.s  ! {g = ag.g ; n = ag.n} ! No) 
+                    False
                     ag
                     vp).s ! DDir ; c = No
          }

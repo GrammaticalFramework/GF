@@ -18,7 +18,7 @@ concrete QuestionRon of Question =
     QuestVP qp vp = {
       s = \\t,a,b,_ => 
         let
-          cl = mkClause (qp.s ! No) (agrP3 qp.a.g qp.a.n) vp  
+          cl = mkClause (qp.s ! No) False (agrP3 qp.a.g qp.a.n) vp  
         in
         cl.s ! DDir ! t ! a ! b ! Indic
       } ;   
@@ -52,7 +52,7 @@ concrete QuestionRon of Question =
       s = \\t,a,p,_ => 
             let 
               vp  = predV copula ;
-              cls = (mkClause (np.s ! No).comp np.a vp).s ! 
+              cls = (mkClause (np.s ! No).comp np.isPol np.a vp).s ! 
                        DInv ! t ! a ! p ! Indic ;
               why = icomp.s ! {g = np.a.g ; n = np.a.n}
             in why ++ cls

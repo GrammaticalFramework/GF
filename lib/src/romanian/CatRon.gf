@@ -52,6 +52,7 @@ concrete CatRon of Cat =
    Pron    = {s : NCase =>  Str ;
               c1, c2 : Clitics => Str ;
               a : Agr ;
+              isPol : Bool ;
               poss : Number => Gender => Str } ;
               
    NP      = NounPhrase ;
