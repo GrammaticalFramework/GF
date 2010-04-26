@@ -3,7 +3,10 @@ concrete ExtraRon of ExtraRonAbs = CatRon **
   open ResRon, ParadigmsRon, Prelude, MorphoRon in {
 
   lin
- at_Prep = mkPrep "la" Ac True;  
+ at_Prep = mkPrep "la" Ac True;
+ DatSubjCompCl np vp np2 = let ss = if_then_Str np.isPronoun "" (np.s ! Dat).comp
+                              in 
+                            mkClause ss np.isPol np2.a (insertClit (insertSimpObj (\\_ => (np2.s ! Nom).comp) vp) np);
  DatSubjCl np vp = let ss = if_then_Str np.isPronoun "" (np.s ! Da).comp 
                       in mkClause ss np.isPol (agrP3 Masc Sg) (insertClit vp np);
 i8fem_Pron = mkPronoun "eu" "mine" "mie" [] [] "meu" "mea" "mei" "mele" Fem Sg P1 ;
@@ -13,7 +16,8 @@ youPol8fem_Pron = let dvs = mkPronoun "dumneavoastră" "dumneavoastră" "dumneav
              in 
             {s = dvs.s; c1 = dvs.c1; 
                 c2 = dvs.c2; a = dvs.a; isPol = True; poss = dvs.poss} ;  
- 
+
+refCN n = n ** {isComp = False; needsRefForm = True}; 
  
  oper     
 insertClit : VerbPhrase -> NounPhrase -> VerbPhrase = \vp, np ->      

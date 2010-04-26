@@ -54,7 +54,9 @@ oper
   Acc : NCase ;
   Dat : NCase ;
   Gen : NCase ;
- mkPrep : overload {   
+  Nom : NCase ;
+ 
+mkPrep : overload {   
   mkPrep : Str -> NCase-> Bool -> Prep ;
   mkPrep : Str -> NCase -> Prep; 
  };
@@ -173,7 +175,7 @@ lock_PN = <>
   Acc = Ac ;
   Dat = Da ;
   Gen = Ge ;
-  
+  Nom = No ; 
   
   Preposition = Compl ;
 

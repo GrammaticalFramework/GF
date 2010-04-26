@@ -9,7 +9,7 @@ concrete NounRon of Noun =
         n = det.n;
         gg = agrGender cn.g n ;
         ag = agrP3 gg n ;
-        hr = orB (andB (getClit cn.a) det.hasRef) (andB det.isDef cn.isComp);
+        hr = orB cn.needsRefForm (orB (andB (getClit cn.a) det.hasRef) (andB det.isDef cn.isComp));
         nf = if_then_else NForm hr HasClit (HasRef False);
         st= if_then_else Species det.isDef Def Indef;
         rs = if_then_else Species det.hasRef Def Indef
@@ -233,7 +233,7 @@ in {
 
 -- This is based on record subtyping.
 
-    UseN, UseN2 = \noun -> noun ** {isComp = False};
+    UseN, UseN2 = \noun -> noun ** {isComp = False; needsRefForm = False};
 
     Use2N3 f = f ;
 
@@ -243,6 +243,7 @@ in {
       s = \\n,sp,c => f.s ! n ! sp ! c ++ appCompl f.c2 x ;
       g = f.g ;
       a = f.a ;
+      needsRefForm = False ;  
       isComp = getClit f.a
       } ;
 
@@ -251,6 +252,7 @@ in {
       g = f.g ;
       c2 = f.c3;
       a = f.a ;
+      needsRefForm = False ;  
       isComp = getClit f.a
       } ;
 
@@ -266,6 +268,7 @@ in {
                  };
         g = g ;
         a = cn.a ;
+        needsRefForm = cn.needsRefForm ;
         isComp = getClit cn.a  
         } ;
 
@@ -274,6 +277,7 @@ in {
       s = \\n,sp,c => cn.s ! n ! sp ! c ++ rs.s ! Indic ! agrP3 (agrGender cn.g n) n ;
       g = cn.g  ;
       a = cn.a ;
+      needsRefForm = cn.needsRefForm;
       isComp = False  
       } ;
 
@@ -281,6 +285,7 @@ in {
       s = \\n,sp,c => cn.s ! n ! sp ! c ++ sc.s ;
       g = g ;
       a = cn.a ;
+      needsRefForm = cn.needsRefForm;
       isComp = False
       } ;
 
@@ -288,6 +293,7 @@ in {
       s = \\n,sp,c => cn.s ! n ! sp ! c ++ sc.s ;
       g = g;
       a = cn.a ;
+      needsRefForm = cn.needsRefForm; 
       isComp = False
       } ;
 
@@ -295,6 +301,7 @@ in {
       s = \\n,sp,c => cn.s ! n ! sp ! c ++ (np.s ! No).comp ;
       g = g;
       a = cn.a ;
+      needsRefForm = cn.needsRefForm;
       isComp = False
       } ;
 

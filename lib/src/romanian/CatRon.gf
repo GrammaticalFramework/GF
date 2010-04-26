@@ -47,7 +47,8 @@ concrete CatRon of Cat =
    
 -- Noun
  
-   CN      = {s : Number => Species => ACase => Str; g : NGender; a : Animacy ; isComp : Bool} ; 
+   CN      = {s : Number => Species => ACase => Str; g : NGender; 
+              a : Animacy; isComp : Bool; needsRefForm : Bool} ; 
    
    Pron    = {s : NCase =>  Str ;
               c1, c2 : Clitics => Str ;
