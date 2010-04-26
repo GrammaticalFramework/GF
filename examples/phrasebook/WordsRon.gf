@@ -88,11 +88,11 @@ concrete WordsRon of Words = SentencesRon ** open
       (mkNP (mkNP a_Det (P.mkN "cameră")) (SyntaxRon.mkAdv for_Prep (mkNP num (P.mkN "persoană")))) ;
     AHasTable p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (P.mkN "masa" "mese")) (SyntaxRon.mkAdv for_Prep (mkNP num (P.mkN "persoană")))) ;
-    AHasName p name = mkCl p.name (P.dirV2 (mkRVAcc (v_besch119 "numi"))) name ;
+    AHasName p name = mkCl p.name (P.mmkV2 (mkRVAcc (v_besch119 "numi")) (P.noPrep P.Nom)) name ;
     AHungry p = DatSubjCl p.name (mkVP (mkNP (P.mkN "foame"))) ;
     AIll p = mkCl p.name (P.mkA "bolnav") ;
     AKnow p = mkCl p.name (v_besch122 "şti") ;
-    ALike p item = mkCl p.name (P.dirV2 (v_besch71 "plăcea")) item ;
+    ALike p item = DatSubjCompCl p.name  (mkVP (v_besch71 "plăcea")) item ;
     ALive p co = 
       mkCl p.name (mkVP (mkVP (v_besch121 "locui")) (SyntaxRon.mkAdv in_Prep co)) ;
     ALove p q = mkCl p.name (P.dirV2 (P.mkV "iubi")) q.name ;
@@ -166,7 +166,8 @@ open_A : A = P.mkA "deschis" ;
           ad = {s = d} in
       mkNPDay day ad ad; ---- difference is enforced by additional constructions
 
-    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (mkCN x) p ; 
+    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (refCN x) p ; 
+
     
     
 -- auxiliaries
