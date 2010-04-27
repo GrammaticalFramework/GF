@@ -153,11 +153,11 @@ allCommands env@(pgf, mos) = Map.fromList [
          let grph = if null es then [] else graphvizAlignment pgf (head es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
-           let view = optViewGraph opts ++ " "
+           let view = optViewGraph opts
            let format = optViewFormat opts 
            writeFile (file "dot") grph
-           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format ++ 
-                    " ; " ++ view ++ file format
+           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
+           system $ view ++ " " ++ file format
            return void
           else return $ fromString grph,
      examples = [
@@ -735,11 +735,11 @@ allCommands env@(pgf, mos) = Map.fromList [
          let grphs = unlines $ map (graphvizDependencyTree outp debug mlab Nothing pgf lang) es
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grphd." ++ s
-           let view = optViewGraph opts ++ " "
+           let view = optViewGraph opts
            let format = optViewFormat opts 
            writeFile (file "dot") grphs
-           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format ++ 
-                    " ; " ++ view ++ file format
+           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
+           system $ view ++ " " ++ file format
            return void
           else return $ fromString grphs,
      examples = [
@@ -776,11 +776,11 @@ allCommands env@(pgf, mos) = Map.fromList [
          let grph = if null es then [] else graphvizParseTree pgf lang (head es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
-           let view = optViewGraph opts ++ " "
+           let view = optViewGraph opts
            let format = optViewFormat opts 
            writeFile (file "dot") grph
-           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format ++ 
-                    " ; " ++ view ++ file format
+           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
+           system $ view ++ " " ++ file format
            return void
           else return $ fromString grph,
      examples = [
@@ -816,11 +816,11 @@ allCommands env@(pgf, mos) = Map.fromList [
          let grph = unlines (map (graphvizAbstractTree pgf (funs,cats)) es) -- True=digraph
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
-           let view = optViewGraph opts ++ " "
+           let view = optViewGraph opts
            let format = optViewFormat opts 
            writeFile (file "dot") grph
-           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format ++ 
-                    " ; " ++ view ++ file format
+           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
+           system $ view  ++ " " ++ file format
            return void
           else return $ fromString grph,
      examples = [
