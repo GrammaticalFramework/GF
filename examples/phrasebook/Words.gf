@@ -56,7 +56,7 @@ abstract Words = Sentences ** {
     University : PlaceKind ;
    
 
-    NationalRestaurant : Nationality -> PlaceKind ;
+    CitRestaurant : Citizenship -> PlaceKind ;
     Parking : PlaceKind ;
     Supermarket : PlaceKind ;
     Pharmacy : PlaceKind ;
@@ -107,17 +107,17 @@ abstract Words = Sentences ** {
 
 -- means of transportation 
 
-    Train : Transp ;
-    Bus : Transp ;
-    Plane : Transp ;
-    Ferry : Transp ;
-    Subway : Transp ;
-    Tram : Transp ;
-    Taxi : Transp ;
-    Car : Transp ;
-    Bike : Transp ; 
+    Train : Transport ;
+    Bus : Transport ;
+    Plane : Transport ;
+    Ferry : Transport ;
+    Subway : Transport ;
+    Tram : Transport ;
+    Taxi : Transport ;
+    Car : Transport ;
+    Bike : Transport ; 
 
-    ByFoot : ByTransp ;
+    ByFoot : ByTransport ;
 
 
 -- Actions (which can be expressed by different structures in different languages).
@@ -173,5 +173,27 @@ abstract Words = Sentences ** {
     Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday : Day ;
 
     Tomorrow : Date ;
+
+-- transports
+
+    HowFar : Place -> Question ;                  -- how far is the zoo ?
+    HowFarFrom : Place -> Place -> Question ;     -- how far is the center from the hotel ?
+    HowFarFromBy : Place -> Place -> ByTransport -> Question ; -- how far is the airport from the hotel by taxi ? 
+    HowFarBy : Place -> Transport -> Question ;                -- how far is the museum by bus ?
+
+
+                          
+    WhichTranspPlace : Transport -> Place -> Question ;   -- which bus goes to the hotel
+    IsTranspPlace    : Transport -> Place -> Question ;   -- is there a metro to the airport ?
+    ByTransp : Transport -> ByTransport ;             -- by bus
+
+    TheBest : Superlative ;
+    TheClosest : Superlative ;
+    TheCheapest : Superlative ;
+    TheWorst : Superlative ;
+    MostExpensive : Superlative ;
+    MostPopular : Superlative ;
+
+    SuperlPlace : Superlative -> PlaceKind -> Place ; -- the best bar
 
 }

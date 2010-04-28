@@ -38,9 +38,9 @@ abstract Sentences = Numeral ** {
     Date ;        -- definite date                             e.g. "on Friday"
     Name ;        -- name of person                            e.g. "NN"
     Number ;      -- number expression 1 .. 999,999            e.g. "twenty"
-    Transp ;      -- transportation device                     e.g. "car"
-    ByTransp ;    -- mean of transportation                    e.g. "by tram"
-    SuperlModif ; -- superlative modifiers of places           e.g. "the best restaurant"
+    Transport ;   -- transportation device                     e.g. "car"
+    ByTransport ; -- mean of transportation                    e.g. "by tram"
+    Superlative ; -- superlative modifiers of places           e.g. "the best restaurant"
 
  
 -- Many of the categories are accessible as Phrases, i.e. as translation units.
@@ -77,20 +77,6 @@ abstract Sentences = Numeral ** {
     WherePlace  : Place  -> Question ;           -- where is the bar
     WherePerson : Person -> Question ;           -- where are you
 
---** added 
-    HowFar : Place -> Question ;                            -- how far is the zoo ?
-    HowFarFrom : Place -> Place -> Question ;               -- how far is the center from the hotel ?
-    HowFarFromBy : Place -> Place -> ByTransp -> Question ; -- how far is the airport from the hotel by taxi ? 
-    HowFarBy : Place -> Transp -> Question ;                -- how far is the museum by bus ?
-
-
-    By : Transp -> ByTransp ;                              -- by bus
-                          
-    WhichTranspPlace : Transp -> Place -> Question ;       -- which bus goes to the best amusement park ?
-    IsTranspPlace : Transp -> Place -> Question ;          -- is there a metro to the airport ?
-
--- ** 
-
 -- This is the way to build propositions about persons.
 
     PropAction : Action -> Proposition ;         -- (you (are|aren't) | are you) Swedish
@@ -115,23 +101,9 @@ abstract Sentences = Numeral ** {
 
     AmountCurrency : Number -> Currency -> Price ;  -- five euros
 
-    ThePlace : PlaceKind -> Place ;                  -- the bar
--- ** added :
-    APlace : PlaceKind -> Place ; 
+    ThePlace : PlaceKind -> Place ;                   -- the bar
+    APlace : PlaceKind -> Place ;                     -- a bar
    
-
-    SuperlPlace : SuperlModif -> PlaceKind -> Place ;                 -- the best bar
-    
-
-    TheBest : SuperlModif ;
-    TheClosest : SuperlModif ;
-    TheCheapest : SuperlModif ;
-    TheWorst : SuperlModif ;
-    MostExpensive : SuperlModif ;
-    MostPopular : SuperlModif ;
-
--- ** 
-
     IMale, IFemale,                     -- I, said by man/woman (affects agreement)
     YouFamMale, YouFamFemale,           -- familiar you, said to man/woman (affects agreement)
     YouPolMale, YouPolFemale : Person ; -- polite you, said to man/woman (affects agreement)
