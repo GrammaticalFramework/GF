@@ -56,6 +56,7 @@ function div_class(cls,contents)  { return wrap_class("div",cls,contents); }
 
 function p(contents) { return wrap("p",contents); }
 function dt(contents) { return wrap("dt",contents); }
+function li(contents) { return wrap("li",contents); }
 
 function th(contents) { return wrap("th",contents); }
 function td(contents) { return wrap("td",contents); }
@@ -164,4 +165,21 @@ function mapc_from(f,xs,i,ys,cont) {
     f(xs[i],function(y){ys[i]=y;mapc_from(f,xs,i+1,ys,cont)});
   else
     cont(ys);
+}
+
+function overlaps(as,bs) {
+    for(var i=0;i<as.length;i++)
+	if(elem(as[i],bs)) return true;
+    return false;
+}
+
+function elem(a,as) {
+    for(var i=0;i<as.length;i++)
+	if(a==as[i]) return true;
+    return false;
+}
+
+function shuffle(a) {
+    for(i=0;i<a.length;i++) swap(a,i,Math.floor(Math.random()*a.length))
+    return a;
 }
