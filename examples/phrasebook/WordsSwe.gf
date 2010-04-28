@@ -1,4 +1,4 @@
--- (c) 2009 Aarne Ranta under LGPL
+-- (c) 2010 Aarne Ranta under LGPL
 
 concrete WordsSwe of Words = SentencesSwe ** 
     open SyntaxSwe, ParadigmsSwe, IrregSwe, (L = LexiconSwe), ExtraSwe, Prelude in {
@@ -38,20 +38,33 @@ concrete WordsSwe of Words = SentencesSwe **
 -- places
 
     Airport = mkPlace (mkN "flygplats" "flygplatser") "på" ;
+    AmusementPark = mkPlace (mkN "nöjespark" "nöjesparken") "i" ;
+    Bank = mkPlace (mkN "bank" "banker") "i" ;
     Bar = mkPlace (mkN "bar" "barer") "i" ;
+    Cafeteria = mkPlace (mkN "café" "café") "på" ;
+    Center = mkPlace (mkN "innerstad" "innerstäder") "på" ; ----
     Church = mkPlace (mkN "kyrka") "i" ;
     Cinema = mkPlace (mkN "bio" "bio" "bion" "biona") "på" ; ---- ?
+    Disco = mkPlace (mkN "diskotek" "diskotek") "på" ;
     Hospital = mkPlace (mkN "sjukhus" "sjukhus") "på" ;
     Hotel = mkPlace (mkN "hotell" "hotell") "på" ;
     Museum = mkPlace (mkN "museum" "museet" "museer" "museerna") "på" ;
     Park = mkPlace (mkN "park" "parker") "i" ;
+    Parking = mkPlace (mkN "parkering") "på" ;
+    Pharmacy = mkPlace (mkN "apotek" "apotek") "i" ;
+    PostOffice = mkPlace (mkN "post" "poster") "på" ;
+    Pub = mkPlace (mkN "pub" "pubben") "på" ;
     Restaurant = mkPlace (mkN "restaurang" "restauranger") "på" ;
     Shop = mkPlace (mkN "affär" "affär") "i" ;
     School = mkPlace (mkN "skola") "på" ;
     Station = mkPlace (mkN "station" "stationer") "på" ;
+    Supermarket = mkPlace (mkN "snabbköp" "snabbköp") "på" ;
     Theatre = mkPlace (mkN "teater" "teatrar") "på" ;
     Toilet = mkPlace (mkN "toalett" "toaletter") "på" ;
     University = mkPlace (mkN "universitet" "universitet") "på" ;
+    Zoo = mkPlace (mkN "djurpark" "djurparker") "i" ;
+
+    CitRestaurant cit =  mkCNPlace (mkCN cit (mkN "restaurang" "restauranger")) on_Prep to_Prep ;
 
 -- currencies
 
@@ -59,19 +72,46 @@ concrete WordsSwe of Words = SentencesSwe **
     Dollar = mkCN (mkN "dollar" "dollar") ;
     Euro = mkCN (mkN "euro" "euro") ;
     Lei = mkCN (mkN "lei" "lei") ;
+    Leva = mkCN (mkN "leva" "leva") ;
+    NorwegianCrown = mkCN (mkA "norsk") (mkN "krona") | mkCN (mkN "krona") ;
+    Rouble = mkCN (mkN "rubel" "rubeln" "rubel" "rubeln") ; ---- ?
     SwedishCrown = mkCN (mkA "svensk") (mkN "krona") | mkCN (mkN "krona") ;
+    Zloty = mkCN (mkN "zloty" "zloty") ;
 
 -- nationalities
 
     Belgian = mkA "belgisk" ;
     Belgium = mkNP (mkPN "Belgien") ;
+    Bulgarian = mkNat "bulgarisk" "Bulgarien" ;
+    Catalan = mkNat "katalansk" "Katalonien" ;
+    Danish = mkNat "dansk" "Danmark" ;
+    Dutch = mkNat "nederländsk" "Nederländerna" ;
     English = mkNat "engelsk" "England" ;
     Finnish = mkNat "finsk" "Finland" ;
     Flemish = mkNP (mkPN "flamländska") ;
-    French = mkNat "fransk" "Frankrike" ; 
+    French = mkNat "fransk" "Frankrike" ;
+    German = mkNat "tysk" "Tyskland" ; 
     Italian = mkNat "italiensk" "Italien" ;
+    Norwegian = mkNat "norsk" "Norge" ;
+    Polish = mkNat "polsk" "Polen" ;
     Romanian = mkNat "rumänsk" "Rumänien" ;
+    Russian = mkNat "rysk" "Ryssland" ;
+    Spanish = mkNat "spansk" "Spanien" ;
     Swedish = mkNat "svensk" "Sverige" ;
+
+-- means of transportation 
+
+    Bike = mkTransport L.bike_N ; 
+    Bus = mkTransport (mkN "bus" "bussar") ;
+    Car = mkTransport L.car_N ;
+    Ferry = mkTransport (mkN "färja") ;
+    Plane = mkTransport L.airplane_N ;
+    Subway = mkTransport (mkN "metro" "metron" "metro" "metrona") ; ----
+    Taxi = mkTransport (mkN "taxi" "taxin" "taxibilar" "taxibilarna") ; ----
+    Train = mkTransport (mkN "tåg" "tåg") ;
+    Tram = mkTransport (mkN "spårvagn") ;
+
+    ByFoot = ParadigmsSwe.mkAdv "till fots" ;
 
 -- actions
 
@@ -144,6 +184,32 @@ concrete WordsSwe of Words = SentencesSwe **
 
     Tomorrow = ParadigmsSwe.mkAdv "imorgon" ;
 
+-- transports
+
+    HowFar place = mkQS (mkQCl (ExtraSwe.IAdvAdv L.far_Adv) place.name) ;
+{-
+    HowFarFrom : Place -> Place -> Question ;     -- how far is the center from the hotel ?
+    HowFarFromBy : Place -> Place -> ByTransport -> Question ; 
+                                            -- how far is the airport from the hotel by taxi ? 
+    HowFarBy : Place -> Transport -> Question ;   -- how far is the museum by bus ?
+-}                          
+    WhichTranspPlace trans place = 
+      mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
+
+    IsTranspPlace trans place =
+      mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
+
+-- modifiers of places
+
+    TheBest = mkSuperl L.good_A ;
+    TheClosest = mkSuperl L.near_A ; 
+    TheCheapest = mkSuperl (mkA "billig") ;
+    TheMostExpensive = mkSuperl (mkA "dyr") ;
+    TheMostPopular = mkSuperl (mkA "populär") ;
+    TheWorst = mkSuperl L.bad_A ;
+
+    SuperlPlace sup p = placeNP sup p ;
+
   oper
     mkNat : Str -> Str -> NPNationality = \nat,co -> 
       mkNPNationality (mkNP (mkPN (nat + "a"))) (mkNP (mkPN co)) (mkA nat) ;
@@ -162,5 +228,10 @@ concrete WordsSwe of Words = SentencesSwe **
     xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
       relativePerson n (mkCN x) (\a,b,c -> mkNP (GenNP b) a c) p ;
 
+    mkTransport : N -> {name : CN ; by : Adv} = \n -> {
+      name = mkCN n ; 
+      by = SyntaxSwe.mkAdv with_Prep (mkNP n)
+      } ;
 
+    mkSuperl : A -> Det = \a -> mkDet the_Art (mkOrd a) ;
 }

@@ -61,6 +61,8 @@ abstract Sentences = Numeral ** {
     PCitizenship : Citizenship -> Phrase ;
     PCountry     : Country -> Phrase ;
     PDay         : Day -> Phrase ;
+    PByTransport : ByTransport -> Phrase ;
+    PTransport   : Transport -> Phrase ;
 
     PYes, PNo : Phrase ;
 
@@ -129,6 +131,8 @@ abstract Sentences = Numeral ** {
     AHave    : Person -> Kind        -> Action ;  -- you have a pizza
     ACitizen : Person -> Citizenship -> Action ;  -- you are Swedish
     ABePlace : Person -> Place       -> Action ;  -- you are in the bar
+
+    ByTransp : Transport -> ByTransport ;         -- by bus
 
 }
 

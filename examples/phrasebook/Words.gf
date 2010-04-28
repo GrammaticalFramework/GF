@@ -40,41 +40,43 @@ abstract Words = Sentences ** {
 -- kinds of places
 
     Airport : PlaceKind ;
+    AmusementPark : PlaceKind ;
+    Bank : PlaceKind ;
     Bar : PlaceKind ;
+    Cafeteria : PlaceKind ;
+    Center : PlaceKind ;
     Cinema : PlaceKind ;
     Church : PlaceKind ;
+    Disco : PlaceKind ;
     Hospital : PlaceKind ;
     Hotel : PlaceKind ;
     Museum : PlaceKind ;
     Park : PlaceKind ;
+    Parking : PlaceKind ;
+    Pharmacy : PlaceKind ;
+    PostOffice : PlaceKind ;
+    Pub : PlaceKind ;
     Restaurant : PlaceKind ;
     School : PlaceKind ;
     Shop : PlaceKind ;
     Station : PlaceKind ;
+    Supermarket : PlaceKind ;
     Theatre : PlaceKind ; 
     Toilet : PlaceKind ; 
     University : PlaceKind ;
+    Zoo : PlaceKind ;
    
-
     CitRestaurant : Citizenship -> PlaceKind ;
-    Parking : PlaceKind ;
-    Supermarket : PlaceKind ;
-    Pharmacy : PlaceKind ;
-    Center : PlaceKind ;
-    Cafeteria : PlaceKind ;
-    Disco : PlaceKind ;
-    Pub : PlaceKind ;
-    AmusementPark : PlaceKind ;   
 
 -- currency units
 
     DanishCrown : Currency ; 
     Dollar : Currency ; 
-    Euro : Currency ; -- Germany, France, Italy, Finland, Spain, Netherlands
+    Euro : Currency ; -- Germany, France, Italy, Finland, Spain, The Netherlands
     Lei : Currency ; -- Romania
     Leva : Currency ; -- Bulgaria
     NorwegianCrown : Currency ;
-    Ruble : Currency ; -- Russia
+    Rouble : Currency ; -- Russia
     SwedishCrown : Currency ;
     Zloty : Currency ; -- Poland
 
@@ -83,39 +85,34 @@ abstract Words = Sentences ** {
 
     Belgian : Citizenship ;
     Belgium : Country ;
+    Bulgarian : Nationality ;
+    Catalan : Nationality ;
+    Danish : Nationality ;
+    Dutch : Nationality ;
     English : Nationality ;
     Finnish : Nationality ;
     Flemish : Language ;
     French : Nationality ;
-    Italian : Nationality ;
-    Romanian : Nationality ;
-    Swedish : Nationality ;
-    
--- ** added
-    Spanish : Nationality ;
-    Norwegian : Nationality ;
-    Danish : Nationality ;
---    Dane : Citizenship ;  
-    Dutch : Nationality ;
-    Polish : Nationality ;
-    Catalan : Language ; -- ??? 
     German : Nationality ;
+    Italian : Nationality ;
+    Norwegian : Nationality ;
+    Polish : Nationality ;
+    Romanian : Nationality ;
     Russian : Nationality ;
-    Bulgarian : Nationality ;
-  
-
+    Spanish : Nationality ;
+    Swedish : Nationality ;
 
 -- means of transportation 
 
-    Train : Transport ;
-    Bus : Transport ;
-    Plane : Transport ;
-    Ferry : Transport ;
-    Subway : Transport ;
-    Tram : Transport ;
-    Taxi : Transport ;
-    Car : Transport ;
     Bike : Transport ; 
+    Bus : Transport ;
+    Car : Transport ;
+    Ferry : Transport ;
+    Plane : Transport ;
+    Subway : Transport ;
+    Taxi : Transport ;
+    Train : Transport ;
+    Tram : Transport ;
 
     ByFoot : ByTransport ;
 
@@ -178,21 +175,21 @@ abstract Words = Sentences ** {
 
     HowFar : Place -> Question ;                  -- how far is the zoo ?
     HowFarFrom : Place -> Place -> Question ;     -- how far is the center from the hotel ?
-    HowFarFromBy : Place -> Place -> ByTransport -> Question ; -- how far is the airport from the hotel by taxi ? 
-    HowFarBy : Place -> Transport -> Question ;                -- how far is the museum by bus ?
-
-
+    HowFarFromBy : Place -> Place -> ByTransport -> Question ; 
+                                            -- how far is the airport from the hotel by taxi ? 
+    HowFarBy : Place -> Transport -> Question ;   -- how far is the museum by bus ?
                           
     WhichTranspPlace : Transport -> Place -> Question ;   -- which bus goes to the hotel
     IsTranspPlace    : Transport -> Place -> Question ;   -- is there a metro to the airport ?
-    ByTransp : Transport -> ByTransport ;             -- by bus
+
+-- modifiers of places
 
     TheBest : Superlative ;
     TheClosest : Superlative ;
     TheCheapest : Superlative ;
+    TheMostExpensive : Superlative ;
+    TheMostPopular : Superlative ;
     TheWorst : Superlative ;
-    MostExpensive : Superlative ;
-    MostPopular : Superlative ;
 
     SuperlPlace : Superlative -> PlaceKind -> Place ; -- the best bar
 

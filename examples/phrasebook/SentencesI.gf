@@ -35,7 +35,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Name = NP ;
     Number = Card ;
     ByTransport = Adv ;
-    Transport = {name : NP ; by : Adv} ;
+    Transport = {name : CN ; by : Adv} ;
     Superlative = Det ;
   lin
     PSentence s = mkText s | lin Text (mkUtt s) ;  -- optional '.'
@@ -53,7 +53,9 @@ incomplete concrete SentencesI of Sentences = Numeral **
     PCountry x = mkPhrase (mkUtt x) ;
     PCitizenship x = mkPhrase (mkUtt (mkAP x)) ;
     PDay d = mkPhrase (mkUtt d.name) ;
-    
+    PTransport t = mkPhrase (mkUtt t.name) ;
+    PByTransport t = mkPhrase (mkUtt t) ;
+
     PYes = mkPhrase yes_Utt ;
     PNo = mkPhrase no_Utt ;
 
@@ -88,18 +90,8 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Too property = mkAP too_AdA (mkAP property) ;
     PropQuality property = mkAP property ;
 
-    ThePlace kind =
-      let name : NP = mkNP the_Quant kind.name in {
-        name = name ;
-        at = mkAdv kind.at name ;
-        to = mkAdv kind.to name
-      } ;
-    APlace kind =
-      let name : NP = mkNP a_Quant kind.name in {
-        name = name ;
-        at = mkAdv kind.at name ;
-        to = mkAdv kind.to name
-      } ;
+    ThePlace kind = placeNP the_Det kind ;
+    APlace kind = placeNP a_Det kind ;
 
     IMale, IFemale = mkPerson i_Pron ;
     YouFamMale, YouFamFemale = mkPerson youSg_Pron ;
@@ -123,7 +115,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
     ACitizen p n = mkCl p.name n ;
     ABePlace p place = mkCl p.name place.at ;
-
+    ByTransp t = t.by ;
 
 oper 
 
@@ -159,6 +151,13 @@ oper
     name = p ;
     at = i ;
     to = t
+    } ;
+
+  placeNP : Det -> CNPlace -> NPPlace = \det,kind ->
+    let name : NP = mkNP det kind.name in {
+      name = name ;
+      at = mkAdv kind.at name ;
+      to = mkAdv kind.to name
     } ;
 
   NPPerson : Type = {name : NP ; isPron : Bool ; poss : Quant} ;
