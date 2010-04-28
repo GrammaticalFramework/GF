@@ -184,3 +184,10 @@ putPointE v opts msg act = do
       else when (verbAtLeast opts v) $ putStrLnE ""
 
   return a
+
+writeUTF8File :: FilePath -> String -> IO ()
+writeUTF8File fpath content = do
+  h <- openFile fpath WriteMode
+  hSetEncoding h utf8
+  hPutStr h content
+  hClose h
