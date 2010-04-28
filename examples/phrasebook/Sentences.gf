@@ -73,6 +73,20 @@ abstract Sentences = Numeral ** {
     WherePlace  : Place  -> Question ;           -- where is the bar
     WherePerson : Person -> Question ;           -- where are you
 
+--** added 
+    HowFar : Place -> Question ;                            -- how far is the zoo ?
+    HowFarFrom : Place -> Place -> Question ;               -- how far is the center from the hotel ?
+    HowFarFromBy : Place -> Place -> ByTransp -> Question ; -- how far is the airport from the hotel by taxi ? 
+    HowFarBy : Place -> Transp -> Question ;                -- how far is the museum by bus ?
+
+
+    By : Transp -> ByTransp ;                              -- by bus
+                          
+    WhichTranspPlace : Transp -> Place -> Question ;       -- which bus goes to the best amusement park ?
+    IsTranspPlace : Transp -> Place -> Question ;          -- is there a metro to the airport ?
+
+-- ** 
+
 -- This is the way to build propositions about persons.
 
     PropAction : Action -> Proposition ;         -- (you (are|aren't) | are you) Swedish
@@ -98,6 +112,21 @@ abstract Sentences = Numeral ** {
     AmountCurrency : Number -> Currency -> Price ;  -- five euros
 
     ThePlace : PlaceKind -> Place ;                  -- the bar
+-- ** added :
+    APlace : PlaceKind -> Place ; 
+   
+
+    SuperlPlace : SuperlModif -> PlaceKind -> Place ;                 -- the best bar
+    
+
+    TheBest : SuperlModif ;
+    TheClosest : SuperlModif ;
+    TheCheapest : SuperlModif ;
+    TheWorst : SuperlModif ;
+    MostExpensive : SuperlModif ;
+    MostPopular : SuperlModif ;
+
+-- ** 
 
     IMale, IFemale,                     -- I, said by man/woman (affects agreement)
     YouFamMale, YouFamFemale,           -- familiar you, said to man/woman (affects agreement)

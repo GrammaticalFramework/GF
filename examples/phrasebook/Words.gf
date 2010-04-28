@@ -54,15 +54,31 @@ abstract Words = Sentences ** {
     Theatre : PlaceKind ; 
     Toilet : PlaceKind ; 
     University : PlaceKind ;
+   
+
+    NationalRestaurant : Nationality -> PlaceKind ;
+    Parking : PlaceKind ;
+    Supermarket : PlaceKind ;
+    Pharmacy : PlaceKind ;
+    Center : PlaceKind ;
+    Cafeteria : PlaceKind ;
+    Disco : PlaceKind ;
+    Pub : PlaceKind ;
+    AmusementPark : PlaceKind ;   
 
 -- currency units
 
-    DanishCrown : Currency ;
+    DanishCrown : Currency ; 
     Dollar : Currency ; 
-    Euro : Currency ;
-    Lei : Currency ;
+    Euro : Currency ; -- Germany, France, Italy, Finland, Spain, Netherlands
+    Lei : Currency ; -- Romania
+    Leva : Currency ; -- Bulgaria
+    NorwegianCrown : Currency ;
+    Ruble : Currency ; -- Russia
     SwedishCrown : Currency ;
+    Zloty : Currency ; -- Poland
 
+  
 -- nationalities, countries, languages, citizenships
 
     Belgian : Citizenship ;
@@ -74,6 +90,35 @@ abstract Words = Sentences ** {
     Italian : Nationality ;
     Romanian : Nationality ;
     Swedish : Nationality ;
+    
+-- ** added
+    Spanish : Nationality ;
+    Norwegian : Nationality ;
+    Danish : Nationality ;
+--    Dane : Citizenship ;  
+    Dutch : Nationality ;
+    Polish : Nationality ;
+    Catalan : Language ; -- ??? 
+    German : Nationality ;
+    Russian : Nationality ;
+    Bulgarian : Nationality ;
+  
+
+
+-- means of transportation 
+
+    Train : Transp ;
+    Bus : Transp ;
+    Plane : Transp ;
+    Ferry : Transp ;
+    Subway : Transp ;
+    Tram : Transp ;
+    Taxi : Transp ;
+    Car : Transp ;
+    Bike : Transp ; 
+
+    ByFoot : ByTransp ;
+
 
 -- Actions (which can be expressed by different structures in different languages).
 -- Notice that also negations and questions can be formed from these.
