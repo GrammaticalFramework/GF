@@ -34,6 +34,9 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Date = Adv ;
     Name = NP ;
     Number = Card ;
+    ByTransport = Adv ;
+    Transport = {name : NP ; by : Adv} ;
+    Superlative = Det ;
   lin
     PSentence s = mkText s | lin Text (mkUtt s) ;  -- optional '.'
     PQuestion s = mkText s | lin Text (mkUtt s) ;  -- optional '?'
@@ -84,8 +87,15 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Very property = mkAP very_AdA (mkAP property) ;
     Too property = mkAP too_AdA (mkAP property) ;
     PropQuality property = mkAP property ;
+
     ThePlace kind =
       let name : NP = mkNP the_Quant kind.name in {
+        name = name ;
+        at = mkAdv kind.at name ;
+        to = mkAdv kind.to name
+      } ;
+    APlace kind =
+      let name : NP = mkNP a_Quant kind.name in {
         name = name ;
         at = mkAdv kind.at name ;
         to = mkAdv kind.to name
@@ -113,6 +123,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
     ACitizen p n = mkCl p.name n ;
     ABePlace p place = mkCl p.name place.at ;
+
 
 oper 
 

@@ -55,6 +55,18 @@ concrete WordsFin of Words = SentencesFin **
     University = mkPlace (mkN "yliopisto") lla ;
     School = mkPlace (mkN "koulu") lla ;
 
+    CitRestaurant cit = {
+      name = mkCN cit (mkN "ravintola") ; at = casePrep inessive ; to = casePrep illative
+      } ;
+    Parking = mkPlace (mkN "pysäköinti" (mkN "alue")) lla ;
+    Supermarket = mkPlace (mkN "supermarket") ssa ;
+    Pharmacy = mkPlace (mkN "apteekki") ssa ;
+    Center = mkPlace (mkN "keskusta") ssa ;
+    Cafeteria = mkPlace (mkN "kahvila") ssa ;
+    Disco = mkPlace (mkN "disko") ssa ;
+    Pub = mkPlace (mkN "pub") ssa ;
+    AmusementPark = mkPlace (mkN "huvi" (mkN "puisto")) ssa ;   
+
 -- currencies
 
     DanishCrown = mkCN (mkN "Tanskan kruunu") | mkCN (mkN "kruunu") ;
