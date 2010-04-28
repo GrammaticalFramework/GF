@@ -38,7 +38,11 @@ abstract Sentences = Numeral ** {
     Date ;        -- definite date                             e.g. "on Friday"
     Name ;        -- name of person                            e.g. "NN"
     Number ;      -- number expression 1 .. 999,999            e.g. "twenty"
+    Transp ;      -- transportation device                     e.g. "car"
+    ByTransp ;    -- mean of transportation                    e.g. "by tram"
+    SuperlModif ; -- superlative modifiers of places           e.g. "the best restaurant"
 
+ 
 -- Many of the categories are accessible as Phrases, i.e. as translation units.
 
   fun
