@@ -3,6 +3,14 @@ var Saldo_ws_url = "http://spraakbanken.gu.se/ws/saldo-ws/";
 //var Saldo_ff_url = Saldo_ws_url+"ff/json+remember_completions/";
 var Saldo_lid_url = Saldo_ws_url+"lid/json";
 
+function saldo_ws(fn,fmt,arg,cont_name) {
+    jsonp(Saldo_ws_url+fn+"/"+fmt+(cont_name ? "+"+cont_name : "")+"/"+arg,"");
+}
+
+function saldo_json(fn,arg,cont_name) { saldo_ws(fn,"json",arg,cont_name); }
+function saldo_lid(arg,cont_name) { saldo_json("lid",arg,cont_name); }
+function saldo_lid_rnd(cont_name) { saldo_lid("rnd?"+Math.random(),cont_name); }
+
 var ordlista=[];
 var current="";
 
@@ -22,7 +30,7 @@ function start_saldotest() {
 }
 
 function random_word() {
-  jsonp(Saldo_lid_url+"+show_random/rnd?"+Math.random());
+  saldo_lid_rnd("show_random");
 }
 
 function show_random(lid) {
@@ -106,6 +114,8 @@ function allowed(c) {
   }
 }
 
+// ordklasser: mxc sxc (förekommer bara som prefix),
+//             *h (förekommer bara som suffix)
 function ignore(msd) {
   switch(msd) {
   case "c":
@@ -237,4 +247,81 @@ function show_prefixes() {
   var trans=element("translations");
   trans.innerHTML="Prefix av "+current+":";
   show_prefixes_of(trans,current);
+}
+
+/* -------------------------------------------------------------------------- */
+
+var spel={ antal_ord: 4, // antal närbesläktade ord att visa
+	   antal_korrekta_svar: 0,
+	   antal_felaktiga_svar: 0 
+	 };
+
+function start_saldospel() {
+    spel.hylla=div_id("hylla");
+    spel.status=div_id("status");
+    element("saldospel").innerHTML="<h2>Vilket ord ska bort? <span id=score></span></h2>";
+    appendChildren(element("saldospel"),
+		   [spel.hylla,spel.status,
+		    button("Nya ord","spel0()")]);
+    spel.score=element("score");
+    spel0();
+}
+
+function spel0() { // Välj ord 1
+  saldo_lid_rnd("spel1");
+}
+
+function spel1(lid) { // Slå upp md1 för ord 1
+    spel.lid=lid;
+    saldo_json("md1",lid.lex,"spel2");
+}
+
+function spel2(md1) { // Kontrollera att det finns minst 4 ord i md1 för ord1
+    if(md1.length<spel.antal_ord) spel0();
+    else {
+	spel.md1=md1;
+	spel3();
+    }
+}
+
+function spel3() { // Välj ord 2
+    saldo_lid_rnd("spel4");
+}
+
+function spel4(lid) { // Slå upp md1 för ord 2
+    spel.lid2=lid;
+    saldo_json("md1",lid.lex,"spel5");
+}
+
+function spel5(md1) { // Kontrollera att ord 1 och ord 2 inte har något gemensamt
+    var ordlista1=map(wf,spel.md1);
+    var ord2=wf(spel.lid2.lex);
+    var ordlista2=map(wf,md1).concat(ord2);
+    if(overlaps(ordlista1,ordlista2)) spel3();
+    else spel6(ordlista1,ord2);
+}
+
+function spel6(ordlista1,ord2) {
+    spel.ord2=ord2;
+    var pos=Math.floor(Math.random()*spel.antal_ord);
+    var ordlista=shuffle(shuffle(ordlista1).slice(0,spel.antal_ord).concat(ord2));
+    spel.hylla.innerHTML="";
+    var lista=empty_class("p","space");
+    for(var i=0;i<ordlista.length;i++)
+	lista.appendChild((button(ordlista[i],"spel7(this)")));
+    spel.hylla.appendChild(lista);
+}
+
+function spel7(btn) {
+    btn.disabled=true;
+    var ok=btn.value==spel.ord2;
+    btn.setAttribute("class",ok ? "correct" : "incorrect");
+    if(ok) spel.antal_korrekta_svar++; else spel.antal_felaktiga_svar++;
+    spel.score.innerHTML=""+spel.antal_korrekta_svar+" rätt, "
+	+spel.antal_felaktiga_svar+" fel";
+    if(ok) spel0();
+}
+
+function wf(ord) { // word form, wf("band..1") == "band"
+    return ord.split(".",1)[0].split("_").join(" ");
 }

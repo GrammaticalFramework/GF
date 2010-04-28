@@ -35,3 +35,8 @@ div.modtime { float: right; }
 .modtime { color: #444; white-space: nowrap; }
 
 ul.space>li { margin-top: 0.5ex; }
+
+div#saldospel input[type=button] { font-size: 100%; }
+
+div#saldospel input.correct { color: green; }
+div#saldospel input.incorrect { color: red; }
