@@ -155,7 +155,7 @@ allCommands env@(pgf, mos) = Map.fromList [
            let file s = "_grph." ++ s
            let view = optViewGraph opts
            let format = optViewFormat opts 
-           writeFile (file "dot") grph
+           writeUTF8File (file "dot") grph
            system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
            system $ view ++ " " ++ file format
            return void
@@ -737,7 +737,7 @@ allCommands env@(pgf, mos) = Map.fromList [
            let file s = "_grphd." ++ s
            let view = optViewGraph opts
            let format = optViewFormat opts 
-           writeFile (file "dot") grphs
+           writeUTF8File (file "dot") grphs
            system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
            system $ view ++ " " ++ file format
            return void
@@ -778,7 +778,7 @@ allCommands env@(pgf, mos) = Map.fromList [
            let file s = "_grph." ++ s
            let view = optViewGraph opts
            let format = optViewFormat opts 
-           writeFile (file "dot") grph
+           writeUTF8File (file "dot") grph
            system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
            system $ view ++ " " ++ file format
            return void
@@ -818,7 +818,7 @@ allCommands env@(pgf, mos) = Map.fromList [
            let file s = "_grph." ++ s
            let view = optViewGraph opts
            let format = optViewFormat opts 
-           writeFile (file "dot") grph
+           writeUTF8File (file "dot") grph
            system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
            system $ view  ++ " " ++ file format
            return void
@@ -844,7 +844,7 @@ allCommands env@(pgf, mos) = Map.fromList [
          let file = valStrOpts "file" "_gftmp" opts
          if isOpt "append" opts 
            then appendFile file (toString arg)
-           else writeFile file (toString arg)
+           else writeUTF8File file (toString arg)
          return void,
      options = [
        ("append","append to file, instead of overwriting it")
