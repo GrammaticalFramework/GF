@@ -510,8 +510,12 @@ allCommands env@(pgf, mos) = Map.fromList [
      options = [
        ("cats",   "show just the names of abstract syntax categories"),
        ("fullform", "print the fullform lexicon"),
+       ("funs",   "show just the names and types of abstract syntax functions"),
        ("missing","show just the names of functions that have no linearization"),
        ("words", "print the list of words")
+       ],
+     examples = [
+       ("pg -funs | ? grep \" S ;\"  -- show functions with value cat S")
        ]
      }),
   ("ph", emptyCommandInfo {
@@ -998,12 +1002,16 @@ allCommands env@(pgf, mos) = Map.fromList [
 
    prGrammar opts
      | isOpt "cats"     opts = return $ fromString $ unwords $ map showCId $ categories pgf
+     | isOpt "funs"     opts = return $ fromString $ unlines $ map showFun $ funsigs pgf
      | isOpt "fullform" opts = return $ fromString $ concatMap (morpho "" prFullFormLexicon) $ optLangs opts
      | isOpt "missing"  opts = return $ fromString $ unlines $ [unwords (showCId la:":": map showCId cs) | 
                                                                   la <- optLangs opts, let cs = missingLins pgf la]
      | isOpt "words" opts = return $ fromString $ concatMap (morpho "" prAllWords) $ optLangs opts
      | otherwise             = do fmt <- readOutputFormat (valStrOpts "printer" "pgf_pretty" opts)
                                   return $ fromString $ concatMap snd $ exportPGF noOptions fmt pgf
+
+   funsigs pgf = [(f,ty) | (f,(ty,_,_)) <- Map.assocs (funs (abstract pgf))]
+   showFun (f,ty) = showCId f ++ " : " ++ showType [] ty ++ " ;"
 
    morphos opts s = 
      [(s,morpho [] (\mo -> lookupMorpho mo s) la) | la <- optLangs opts]
