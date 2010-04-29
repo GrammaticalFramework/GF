@@ -59,5 +59,7 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
       nonEmpty = num.nonEmpty
       } ;
 
+    AdvIAdv i a = {s = i.s ++ a.s} ;
+
     CompIP ip = {s = ip.s ! RSubj} ;
 }

@@ -92,6 +92,8 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
       s = \\g,c => idet.s ! n ! g ! c ++ num.s!g!c  ; 
       n = n
       } ;
+
+    AdvIAdv i a = {s = i.s ++ a.s} ;
  
     CompIAdv a = {s = \\_ => a.s} ;
 

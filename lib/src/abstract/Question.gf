@@ -30,6 +30,10 @@ abstract Question = Cat ** {
 
     PrepIP    : Prep -> IP -> IAdv ;     -- with whom
 
+-- They can be modified with other adverbs.
+
+    AdvIAdv   : IAdv -> Adv -> IAdv ;    -- where in Paris
+
 -- Interrogative complements to copulas can be both adverbs and
 -- pronouns.
 

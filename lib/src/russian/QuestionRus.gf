@@ -67,6 +67,8 @@ concrete QuestionRus of Question = CatRus ** open ResRus, Prelude in {
      c = kakoj.c 
     } ;
 
+    AdvIAdv i a = {s = i.s ++ a.s} ;
+
     CompIAdv a = a ;
     CompIP ip = {s = ip.s ! PF Nom No NonPoss} ;
 }

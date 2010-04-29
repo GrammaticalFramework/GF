@@ -767,7 +767,10 @@ incomplete resource Constructors = open Grammar in {
 -- In addition to the interrogative adverbs defined in the $Structural$ lexicon, they
 -- can be formed as prepositional phrases from interrogative pronouns.
 
-    mkIAdv : Prep -> IP -> IAdv ;  -- 1. in which city --# notminimal
+    mkIAdv : overload {  --# notminimal
+      mkIAdv : Prep -> IP -> IAdv ;   -- 1. in which city --# notminimal
+      mkIAdv : IAdv -> Adv -> IAdv ;  -- 2. where in Paris --# notminimal
+      } ;  --# notminimal
 
 -- More interrogative adverbs are given in $Structural$.
 
@@ -1435,7 +1438,11 @@ incomplete resource Constructors = open Grammar in {
     who_IP : IP = whoSg_IP ;  
     which_IDet : IDet = whichSg_IDet ; --# notminimal
 
-    mkIAdv : Prep -> IP -> IAdv = PrepIP ; --# notminimal
+    mkIAdv = overload {  --# notminimal
+      mkIAdv : Prep -> IP -> IAdv = PrepIP ;    -- 1. in which city --# notminimal
+      mkIAdv : IAdv -> Adv -> IAdv = AdvIAdv ;  -- 2. where in Paris --# notminimal
+      } ;  --# notminimal
+
 
     mkRCl = overload { --# notminimal
       mkRCl : Cl -> RCl              -- such that John loves her --# notminimal

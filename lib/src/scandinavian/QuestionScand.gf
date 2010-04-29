@@ -93,6 +93,8 @@ incomplete concrete QuestionScand of Question =
       det = idet.det
       } ;
 
+    AdvIAdv i a = {s = i.s ++ a.s} ;
+
     CompIAdv a = {s = \\_ => a.s} ;
     CompIP ip = {s = \\_ => ip.s ! nominative} ;
 

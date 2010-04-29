@@ -100,7 +100,7 @@ concrete QuestionRon of Question =
       n = n
       } ;
 
-
+    AdvIAdv i a = {s = i.s ++ a.s} ;
 
     CompIAdv a = {s = \\_  => a.s} ;
 
