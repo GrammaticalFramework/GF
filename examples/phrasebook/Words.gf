@@ -177,7 +177,7 @@ abstract Words = Sentences ** {
     HowFarFrom : Place -> Place -> Question ;     -- how far is the center from the hotel ?
     HowFarFromBy : Place -> Place -> ByTransport -> Question ; 
                                             -- how far is the airport from the hotel by taxi ? 
-    HowFarBy : Place -> Transport -> Question ;   -- how far is the museum by bus ?
+    HowFarBy : Place -> ByTransport -> Question ;   -- how far is the museum by bus ?
                           
     WhichTranspPlace : Transport -> Place -> Question ;   -- which bus goes to the hotel
     IsTranspPlace    : Transport -> Place -> Question ;   -- is there a metro to the airport ?
