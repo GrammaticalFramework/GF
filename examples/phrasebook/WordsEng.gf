@@ -46,20 +46,34 @@ concrete WordsEng of Words = SentencesEng **
 -- defined by $mkPlace$.
 
     Airport = mkPlace "airport" "at" ;
+    AmusementPark = mkCompoundPlace "amusement" "park" "in" ;
+    Bank = mkPlace "bank" "at" ;
     Bar = mkPlace "bar" "in" ;
-    Church = mkPlace "church" "in" ;
+    Cafeteria = mkPlace "cafeteria" "in" ;
+    Center = mkPlace "center" "in" ;
     Cinema = mkPlace "cinema" "at" ;
+    Church = mkPlace "church" "in" ;
+    Disco = mkPlace "disco" "in" ;
     Hospital = mkPlace "hospital" "in" ;
     Hotel = mkPlace "hotel" "in" ;
     Museum = mkPlace "museum" "in" ;
     Park = mkPlace "park" "in" ;
+    Parking = mkPlace "parking" "in" ; 
+    Pharmacy = mkPlace "pharmacy" "at" ;
+    PostOffice = mkCompoundPlace "post" "office" "in" ;
+    Pub = mkPlace "pub" "at" ;
     Restaurant = mkPlace "restaurant" "in" ;
     School = mkPlace "school" "at" ;
     Shop = mkPlace "shop" "in" ;
     Station = mkPlace "station" "at" ;
+    Supermarket = mkPlace "supermarket" "at" ; 
     Theatre = mkPlace "theatre" "at" ;
     Toilet = mkPlace "toilet" "in" ;
     University = mkPlace "university" "at" ;
+    Zoo = mkPlace "zoo" "at" ;
+   
+    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "restaurant")) in_Prep to_Prep ;
+
 
 -- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
 
@@ -67,19 +81,46 @@ concrete WordsEng of Words = SentencesEng **
     Dollar = mkCN (mkN "dollar") ;
     Euro = mkCN (mkN "euro" "euros") ; -- to prevent euroes
     Lei = mkCN (mkN "leu" "lei") ;
+    Leva = mkCN (mkN "lev") ;
+    NorwegianCrown = mkCN (mkA "Norwegian") (mkN "crown") | mkCN (mkN "crown") ;
+    Rouble = mkCN (mkN "rouble") ;
     SwedishCrown = mkCN (mkA "Swedish") (mkN "crown") | mkCN (mkN "crown") ;
+    Zloty = mkCN (mkN "zloty" "zloty") ;
 
 -- Nationalities
 
     Belgian = mkA "Belgian" ;
     Belgium = mkNP (mkPN "Belgium") ;
+    Bulgarian = mkNat "Bulgarian" "Bulgaria" ;
+    Catalan = mkNat "Catalan" "Catalonia" ;
+    Danish = mkNat "Danish" "Denmark" ;
+ --   Dutch = mkNat "Dutch" ""
     English = mkNat "English" "England" ;
     Finnish = mkNat "Finnish" "Finland" ;
     Flemish = mkNP (mkPN "Flemish") ;
     French = mkNat "French" "France" ; 
+    German = mkNat "German" "Germany" ;
     Italian = mkNat "Italian" "Italy" ;
+    Norwegian = mkNat "Norwegian" "Norway" ;
+    Polish = mkNat "Polish" "Poland" ;
     Romanian = mkNat "Romanian" "Romania" ;
+    Russian = mkNat "Russian" "Russia" ;
+    Spanish = mkNat "Spanish" "Spain" ;
     Swedish = mkNat "Swedish" "Sweden" ;
+
+-- Means of transportation 
+
+   Bike = mkTransport L.bike_N ;
+   Bus = mkTransport (mkN "bus") ;
+   Car = mkTransport L.car_N ;
+   Ferry = mkTransport (mkN "ferry") ;
+   Plane = mkTransport L.airplane_N ;
+   Subway = mkTransport (mkN "subway") ;
+   Taxi = mkTransport (mkN "taxi") ;
+   Train = mkTransport (mkN "train") ;
+   Tram = mkTransport (mkN "tram") ;
+
+   ByFoot = P.mkAdv "by foot" ;
 
 -- Actions: the predication patterns are very often language-dependent.
 
@@ -150,6 +191,34 @@ concrete WordsEng of Words = SentencesEng **
  
     Tomorrow = P.mkAdv "tomorrow" ;
 
+-- modifiers of places
+
+    TheBest = mkSuperl L.good_A ;
+    TheClosest = mkSuperl L.near_A ; 
+    TheCheapest = mkSuperl (mkA "cheap") ;
+    TheMostExpensive = mkSuperl (mkA "expensive") ;
+    TheMostPopular = mkSuperl (mkA "popular") ;
+    TheWorst = mkSuperl L.bad_A ;
+
+    SuperlPlace sup p = placeNP sup p ;
+
+
+-- transports
+
+    HowFar place = mkQS (mkQCl far_IAdv place.name) ;
+    HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP y.name (SyntaxEng.mkAdv from_Prep x.name))) ;
+    HowFarFromBy x y t = 
+      mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxEng.mkAdv from_Prep x.name)) t)) ;
+    HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t.by)) ;
+ 
+    WhichTranspPlace trans place = 
+      mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
+
+    IsTranspPlace trans place =
+      mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
+
+
+
 -- auxiliaries
 
   oper
@@ -161,6 +230,9 @@ concrete WordsEng of Words = SentencesEng **
       let day = mkNP (mkPN d) in 
       mkNPDay day (SyntaxEng.mkAdv on_Prep day) 
         (SyntaxEng.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
+    
+    mkCompoundPlace : Str -> Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \comp, p, i ->
+     mkCNPlace (mkCN (P.mkN comp (mkN p))) (P.mkPrep i) to_Prep ;
 
     mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
       mkCNPlace (mkCN (mkN p)) (P.mkPrep i) to_Prep ;
@@ -172,5 +244,15 @@ concrete WordsEng of Words = SentencesEng **
       relativePerson n (mkCN x) (\a,b,c -> mkNP (GenNP b) a c) p ;
 
     nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "name") p).name ;
+
+
+    mkTransport : N -> {name : CN ; by : Adv} = \n -> {
+      name = mkCN n ; 
+      by = SyntaxEng.mkAdv by8means_Prep (mkNP n)
+      } ;
+
+    mkSuperl : A -> Det = \a -> SyntaxEng.mkDet the_Art (SyntaxEng.mkOrd a) ;
+    
+   far_IAdv = ExtraEng.IAdvAdv (ss "far") ;
 
 }
