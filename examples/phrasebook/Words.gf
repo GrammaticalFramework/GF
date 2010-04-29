@@ -76,6 +76,7 @@ abstract Words = Sentences ** {
     Lei : Currency ; -- Romania
     Leva : Currency ; -- Bulgaria
     NorwegianCrown : Currency ;
+    Pound : Currency ; -- UK
     Rouble : Currency ; -- Russia
     SwedishCrown : Currency ;
     Zloty : Currency ; -- Poland
