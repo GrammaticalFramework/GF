@@ -186,13 +186,14 @@ concrete WordsSwe of Words = SentencesSwe **
 
 -- transports
 
-    HowFar place = mkQS (mkQCl (ExtraSwe.IAdvAdv L.far_Adv) place.name) ;
-{-
-    HowFarFrom : Place -> Place -> Question ;     -- how far is the center from the hotel ?
-    HowFarFromBy : Place -> Place -> ByTransport -> Question ; 
-                                            -- how far is the airport from the hotel by taxi ? 
-    HowFarBy : Place -> Transport -> Question ;   -- how far is the museum by bus ?
--}                          
+    HowFar place = mkQS (mkQCl far_IAdv place.name) ;
+    HowFarFrom x y = mkQS (mkQCl (mkIAdv far_IAdv (SyntaxSwe.mkAdv from_Prep x.name)) y.name) ;
+    HowFarFromBy x y t = 
+      mkQS (mkQCl (mkIAdv (mkIAdv far_IAdv (SyntaxSwe.mkAdv from_Prep x.name)) t) y.name) ;
+    HowFarBy y t = mkQS (mkQCl (mkIAdv far_IAdv t.by) y.name) ; 
+
+oper far_IAdv = ExtraSwe.IAdvAdv L.far_Adv ;
+lin
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
