@@ -67,6 +67,8 @@ concrete QuestionUrd of Question = CatUrd ** open ResUrd, Prelude in {
       n = num.n
       } ;
 
+    AdvIAdv i a = {s = i.s ++ a.s} ;
+
     CompIAdv a = a ;
     CompIP p = ss (p.s ! Dir) ;
 

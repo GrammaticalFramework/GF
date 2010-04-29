@@ -69,6 +69,8 @@ lin
 --     PrepIP    : Prep -> IP -> IAdv ;     -- with whom
     PrepIP prep ip = { s = prep.s ++ ip.dep !prep.c};
 
+    AdvIAdv i a = {s = i.s ++ a.s} ;
+
 --     CompIAdv  : IAdv -> IComp ;          -- where (is it)
     CompIAdv ia = ia;
 

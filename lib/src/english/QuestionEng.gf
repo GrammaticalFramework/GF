@@ -49,6 +49,8 @@ concrete QuestionEng of Question = CatEng ** open ResEng, Prelude in {
       n = num.n
       } ;
 
+    AdvIAdv i a = ss (i.s ++ a.s) ;
+
     CompIAdv a = a ;
     CompIP p = ss (p.s ! Nom) ;
 

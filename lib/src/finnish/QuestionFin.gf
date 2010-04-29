@@ -90,6 +90,8 @@ concrete QuestionFin of Question = CatFin ** open ResFin, Prelude in {
       isNum = isn
       } ;
 
+    AdvIAdv i a = {s = i.s ++ a.s} ;
+
     CompIAdv a = {s = \\_ => a.s} ;
     CompIP ip = {s = \\_ => ip.s ! NPCase Nom} ;
 
