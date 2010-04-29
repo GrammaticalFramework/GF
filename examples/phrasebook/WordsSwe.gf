@@ -75,6 +75,7 @@ concrete WordsSwe of Words = SentencesSwe **
     Lei = mkCN (mkN "lei" "lei") ;
     Leva = mkCN (mkN "leva" "leva") ;
     NorwegianCrown = mkCN (mkA "norsk") (mkN "krona") | mkCN (mkN "krona") ;
+    Pound = mkCN (mkN "pund" "pund") ; ---- ett pund ?
     Rouble = mkCN (mkN "rubel" "rubeln" "rubel" "rubeln") ; ---- ?
     SwedishCrown = mkCN (mkA "svensk") (mkN "krona") | mkCN (mkN "krona") ;
     Zloty = mkCN (mkN "zloty" "zloty") ;
@@ -103,13 +104,13 @@ concrete WordsSwe of Words = SentencesSwe **
 -- means of transportation 
 
     Bike = mkTransport L.bike_N ; 
-    Bus = mkTransport (mkN "bus" "bussar") ;
+    Bus = mkTransport (mkN "buss") ;
     Car = mkTransport L.car_N ;
     Ferry = mkTransport (mkN "färja") ;
     Plane = mkTransport L.airplane_N ;
     Subway = mkTransport (mkN "metro" "metron" "metro" "metrona") ; ----
     Taxi = mkTransport (mkN "taxi" "taxin" "taxibilar" "taxibilarna") ; ----
-    Train = mkTransport (mkN "tåg" "tåg") ;
+    Train = mkTransport L.train_N ;
     Tram = mkTransport (mkN "spårvagn") ;
 
     ByFoot = ParadigmsSwe.mkAdv "till fots" ;
