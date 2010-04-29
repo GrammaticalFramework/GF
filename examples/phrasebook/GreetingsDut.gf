@@ -1,28 +1,29 @@
 concrete GreetingsDut of Greetings = open Prelude in {
 
---lincat 
---  Greeting = SS ;
+lincat 
+  Greeting = SS ;
 
---lin 
---  GBye = ss "hej då" ;
---  GCheers = ss "skål" ;
---  GDamn = ss "fan" ;
---  GExcuse, GExcusePol = ss "ursäkta" ;
---  GGoodDay = ss "god dag" ;
---  GGoodEvening = ss "god afton" ;
---  GGoodMorning = ss "god morgon" ;
---  GGoodNight = ss "god natt" ;
---  GGoodbye = ss "hej då" ;
---  GHello = ss "hej" ;
---  GHelp = ss "hjälp" ;
---  GHowAreYou = ss "hur står det till" ;
---  GLookOut = ss "se upp" ;
---  GNiceToMeetYou, GNiceToMeetYouPol = ss "trevligt att träffas" ;
---  GPleaseGive, GPleaseGivePol = ss "var så god" ;
---  GSeeYouSoon = ss "vi ses snart" ;
---  GSorry, GSorryPol = ss "förlåt" ;
---  GThanks = ss "tack" ;
---  GTheCheck = ss "notan" ;
+lin 
+  GBye = ss "doei" ; 
+  GCheers = ss "proost" ;
+  GDamn = ss "verdomme" ; 
+  GExcuse, GExcusePol = ss "pardon" ; 
+  GGoodDay = ss "goedendag" ;
+  GGoodEvening = ss "goedenavond" ;
+  GGoodMorning = ss "goedemorgen" ;
+  GGoodNight = ss "goedenacht" ;
+  GGoodbye = ss "tot ziens" ;
+  GHello = ss "hallo" ;
+  GHelp = ss "help" ;
+  GHowAreYou = ss "hoe gaat het" ;
+  GLookOut = ss "kijk uit" ;
+  GNiceToMeetYou = ss "leuk je te ontmoeten" ;
+  GNiceToMeetYouPol = ss "leuk je u ontmoeten" ;
+  GPleaseGive, GPleaseGivePol = ss "alstublieft" ; 
+  GSeeYouSoon = ss "tot ziens" ;
+  GSorry = ss "sorry";
+  GSorryPol = ss "mijn verontschuldiging" ;
+  GThanks = ss "dank je wel" ; 
+  GTheCheck = ss "rekening" ; 
 
---}
 }

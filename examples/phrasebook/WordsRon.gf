@@ -1,7 +1,7 @@
 -- (c) 2009 Ramona Enache under LGPL
 
 concrete WordsRon of Words = SentencesRon ** open
-  SyntaxRon, ResRon,
+  SyntaxRon, ResRon, Prelude,
   (P = ParadigmsRon),
   (L = LexiconRon),
   BeschRon,
@@ -17,7 +17,7 @@ concrete WordsRon of Words = SentencesRon ** open
     Beer = mkCN L.beer_N ;
     Bread = mkCN L.bread_N ;
     Cheese = mkCN L.cheese_N ;
-    Chicken = mkCN (P.mkN "pui" "pui") ;
+    Chicken = mkCN (P.mkN "pui" "pui" P.masculine) ;
     Coffee = mkCN (P.mkN "cafea") ;
     Fish = mkCN L.fish_N ;
     Meat = mkCN (P.mkN "carne" "cărnuri" "cărni") ;
@@ -44,41 +44,93 @@ concrete WordsRon of Words = SentencesRon ** open
 -- places
 
     Airport = mkPlace (P.mkNR "aeroport") at_Prep ; 
-    Bar = mkPlace (P.mkNR "bar") at_Prep ; 
+    AmusementPark = mkPlace (P.compN (P.mkNR "parc") ["de distracții"]) in_Prep ;
+    Bank = mkPlace (P.mkN "bancă" "bănci") in_Prep ;
+    Bar = mkPlace (P.mkNR "bar") at_Prep ;
+    Cafeteria = mkPlace (P.mkN "cantină" "cantine") in_Prep ;
+    Center = mkPlace (P.mkN "centru" "centre" ) in_Prep ; 
     Church = mkPlace (P.mkN "biserică" "biserici") at_Prep ; 
-    Cinema = mkPlace (P.mkNR "cinema") at_Prep ; 
+    Cinema = mkPlace (P.mkNR "cinematograf") at_Prep ;
+    Disco = mkPlace (P.mkN "discotecă" "discoteci" ) at_Prep ; 
     Hospital = mkPlace (P.mkN "spital") at_Prep ;
     Hotel = mkPlace (P.mkNR "hotel") at_Prep ; 
     Museum = mkPlace (P.mkN "muzeu" "muzee") at_Prep ; 
     Park = mkPlace (P.mkNR "parc") at_Prep ;
+    Parking = mkPlace (P.mkN "parcare" "parcări") in_Prep ;
+    Pharmacy = mkPlace (P.mkN "farmacie" "farmacii" P.feminine) at_Prep;
+    PostOffice = mkPlace (P.mkN "poștă" "poște") at_Prep ;
+    Pub = mkPlace (P.mkNR "pub") in_Prep ;
     Restaurant = mkPlace (P.mkN "restaurant") at_Prep ; 
     School = mkPlace (P.mkN "şcoală" "şcoli") at_Prep ;
     Shop = mkPlace (P.mkN "magazin") at_Prep ;
     Station = mkPlace (P.mkN "gară" "gări") at_Prep ;
+    Supermarket = mkPlace (P.mkNR "supermarket") at_Prep ;
     Theatre = mkPlace (P.mkN "teatru" "teatre") at_Prep ;
     Toilet = mkPlace (P.mkN "toaletă") at_Prep ;
     University = mkPlace (P.mkN "universitate") at_Prep ;
+    --Zoo = mkPlace 
+
+    CitRestaurant cit = mkCNPlace (mkCN cit.prop (P.mkN "restaurant" "restaurante")) in_Prep to_Prep;  
 
 -- currencies
 
-    Dollar = mkCN (P.mkN "dolar" P.masculine) ;
-    Euro = mkCN (P.mkN "euro" "euro") ;
-    Lei = mkCN (P.mkN "leu" "lei") ;
     DanishCrown = mkCN (P.mkA "danez") (P.mkN "coroană") ;
+    Dollar = mkCN (P.mkN "dolar" P.masculine) ;
+    Euro = mkCN (P.mkN "euro" "euro" P.masculine) ;
+    Lei = mkCN (P.mkN "leu" "lei") ;
+    Leva = mkCN (P.mkN "levă" "leve") ;
+    NorwegianCrown = mkCN (P.mkA "norvegian") (P.mkN "coroană") ;
+    Rouble = mkCN (P.mkN "rublă" "ruble") ;
     SwedishCrown = mkCN (P.mkA "suedez") (P.mkN "coroană") ;
-    
+    Zloty = mkCN (P.mkN "zlot" P.masculine) ;    
+
 -- nationalities
 
-    Belgian = P.mkA "belgian" ;
+    Belgian = mkCitizenshipRon (P.mkA "belgian") (P.mkA "belgian") ;
     Belgium = mkNP (P.mkPN "Belgia") ;
-    English = mkNat "englez" "Anglia" ;
-    Finnish = mkNat "finlandez" "Finlanda" ;
+    Bulgarian = mkSimpNat "bulgar" "Bulgaria" ;
+    Catalan = mkSimpNat "catalan" "Catalonia" ;
+    Danish = mkSimpNat "danez" "Danemarca" ;
+    Dutch = mkSimpNat "olandez" "Olanda" ;
+    English = mkSimpNat "englez" "Anglia" ;
+    Finnish = mkSimpNat "finlandez" "Finlanda" ;
     Flemish = mkNP (P.mkPN "flamandă") ; 
-    French = mkNat "francez" "Franţa" ; 
-    Italian = mkNat "italian" "Italia" ;
-    Romanian = mkNat "român" "România" ;
-    Swedish = mkNat "suedez" "Suedia" ;
+    French = mkSimpNat "francez" "Franţa" ;
+    German = mkSimpNat "german" "Germania" ; 
+    Italian = mkNPNationalityRon (mkNP (P.mkPN "italiană"))  (mkNP (P.mkPN "Italia")) (P.mkA "italian") (P.mkA "italian" "italiancă" "italieni" "italience") ;
+    Norwegian = mkSimpNat "norvegian" "Norvegia" ;
+    Polish = mkSimpNat "polonez" "Polonia" ;
+    Romanian = mkNPNationalityRon (mkNP (P.mkPN "română")) (mkNP (P.mkPN "România")) (P.mkA "român") (P.mkA "român" "româncă" "români" "românce") ;
+    Russian = mkSimpNat "rus" "Rusia" ;
+    Spanish = mkSimpNat "spaniol" "Spania" ;
+    Swedish = mkSimpNat "suedez" "Suedia" ;
     
+-- means of transportation 
+
+    Bike = mkTransport L.bike_N ; 
+    Bus = mkTransport (P.mkN "autobuz" "autobuze") ;
+    Car = mkTransport L.car_N ;
+    Ferry = mkTransport (P.mkNR "feribot") ;
+    Plane = mkTransport L.airplane_N ;
+    Subway = mkTransport (P.mkNR "metrou") ; 
+    Taxi = mkTransport (P.mkNR "taxi") ; 
+    Train = mkTransport (P.mkNR "tren") ;
+    Tram = mkTransport (P.mkN "tramvai" "tramvaie") ;
+
+    ByFoot = P.mkAdv "pe jos" ;
+
+    HowFar place = mkQS (mkQCl how8much_IAdv (mkDestination place.name)) ;
+    HowFarFrom x y = mkQS (mkQCl how8much_IAdv (mkNP (mkDestination y.name) (SyntaxRon.mkAdv from_Prep x.name))) ;
+    HowFarFromBy x y t = 
+      mkQS (mkQCl how8much_IAdv (mkNP (mkNP (mkDestination y.name) (SyntaxRon.mkAdv from_Prep x.name)) t)) ;
+    HowFarBy y t = mkQS (mkQCl how8much_IAdv (mkNP (mkDestination y.name) t.by)) ; 
+
+   WhichTranspPlace trans place = 
+      mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
+
+    IsTranspPlace trans place =
+      mkQS (mkQCl (mkCl (mkCN trans.name (mkDestination place.name)))) ;
+
 
 -- actions
 
@@ -124,7 +176,7 @@ concrete WordsRon of Words = SentencesRon ** open
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYou d = mkText (lin Text {s = ("pe" ++ "curând")}) (mkPhrase (mkUtt d)) ;
+    PSeeYou d = mkText (lin Text {s = ("ne" ++ "vedem")}) (mkPhrase (mkUtt d)) ;
     PSeeYouPlace p d = 
       mkText (lin Text { s = ("ne" ++ "vedem")}) 
         (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
@@ -151,6 +203,21 @@ concrete WordsRon of Words = SentencesRon ** open
 
     Tomorrow = P.mkAdv "mâine" ;
 
+-- modifiers of places
+
+    TheBest = mkSuperl L.good_A ;
+    TheClosest = mkSuperl L.near_A ; 
+    TheCheapest = mkSuperl (P.mkA "ieftin") ;
+    TheMostExpensive = mkSuperl (P.mkA "scump") ;
+    TheMostPopular = mkSuperl (P.mkA "popular") ;
+    TheWorst = mkSuperl L.bad_A ;
+
+    SuperlPlace sup p = placeNP sup p ;
+
+
+
+
+
 oper
 
 closed_A : A = P.mkA "inchis" ;
@@ -158,12 +225,15 @@ open_A : A = P.mkA "deschis" ;
 
 -- auxiliaries
 
-    mkNat : Str -> Str -> NPNationality = \nat,co -> 
-      mkNPNationality (mkNP (P.mkPN nat)) (mkNP (P.mkPN co)) (P.mkA nat) ;
+   mkSimpNat : Str -> Str -> NPNationalityRon = \nat, co ->
+      mkNPNationalityRon (mkNP (P.mkPN (nat+"ă"))) (mkNP (P.mkPN co)) (P.mkA nat) (P.mkA nat) ;    
+
+    mkNat : Str -> Str -> A -> NPNationalityRon = \nat,co, adj -> 
+      mkNPNationalityRon (mkNP (P.mkPN nat)) (mkNP (P.mkPN co)) adj adj ;
 
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
       let day = mkNP (P.mkPN d P.Feminine) ;
-          ad = {s = d} in
+          ad = {s = d; lock_Adv=<>} in
       mkNPDay day ad ad; ---- difference is enforced by additional constructions
 
     xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (refCN x) p ; 
@@ -178,5 +248,16 @@ oper
       at = i ;
       to = to_Prep   -- in Romanian, most of the time they would be the same
       } ;
+
+   mkTransport : N -> {name : CN ; by : Adv} = \n -> {
+      name = mkCN n ; 
+      by = SyntaxRon.mkAdv with_Prep (mkNP the_Det n)
+      } ;
+
+    mkSuperl : A -> Det = \a -> mkDet the_Art (SyntaxRon.mkOrd a) ;
+
+    mkDestination : NP -> NP = \np -> heavyNP {s = \\c => "pâna la"++np.indForm ; 
+                                               a = np.a; hasClit = HasRef False;
+                                               ss = "pâna la"++np.indForm} ** {lock_NP =<>};
 
 }
