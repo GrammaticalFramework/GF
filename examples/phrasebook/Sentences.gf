@@ -128,9 +128,10 @@ abstract Sentences = Numeral ** {
 -- Actions are typically language-dependent, not only lexically but also
 -- structurally. However, these ones are mostly functorial.
 
-    AHave    : Person -> Kind        -> Action ;  -- you have a pizza
-    ACitizen : Person -> Citizenship -> Action ;  -- you are Swedish
-    ABePlace : Person -> Place       -> Action ;  -- you are in the bar
+    AHave     : Person -> Kind        -> Action ;  -- you have a pizza
+    AHaveCurr : Person -> Currency    -> Action ;  -- you have dollars
+    ACitizen  : Person -> Citizenship -> Action ;  -- you are Swedish
+    ABePlace  : Person -> Place       -> Action ;  -- you are in the bar
 
     ByTransp : Transport -> ByTransport ;         -- by bus
 
