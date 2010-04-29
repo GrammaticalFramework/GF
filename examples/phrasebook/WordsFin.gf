@@ -40,6 +40,8 @@ concrete WordsFin of Words = SentencesFin **
 -- places
 
     Restaurant = mkPlace (mkN "ravintola") ssa ;
+    Bank = mkPlace (mkN "pankki") ssa ;
+    PostOffice = mkPlace (mkN "posti") ssa ;
     Bar = mkPlace (mkN "baari") ssa ;
     Toilet = mkPlace (mkN "vessa") ssa ;
     Museum = mkPlace (mkN "museo") ssa ;
@@ -66,6 +68,7 @@ concrete WordsFin of Words = SentencesFin **
     Disco = mkPlace (mkN "disko") ssa ;
     Pub = mkPlace (mkN "pub") ssa ;
     AmusementPark = mkPlace (mkN "huvi" (mkN "puisto")) ssa ;   
+    Zoo = mkPlace (mkN "eläin" (mkN "tarha")) ssa ;   
 
 -- currencies
 
@@ -73,23 +76,52 @@ concrete WordsFin of Words = SentencesFin **
     Dollar = mkCN (mkN "dollari") ;
     Euro = mkCN (mkN "euro") ;
     Lei = mkCN (mkN "lei") ;
+    Leva = mkCN (mkN "leva") ;
+    NorwegianCrown = mkCN (mkN "Norjan kruunu") | mkCN (mkN "kruunu") ;
+    Pound = mkCN (mkN "punta") ;
+    Rouble = mkCN (mkN "rupla") ;
     SwedishCrown = mkCN (mkN "Ruotsin kruunu") | mkCN (mkN "kruunu") ;
+    Zloty = mkCN (mkN "zloty" "zlotyja") ;
 
 -- nationalities
 
     Belgian = mkA "belgialainen" ;
     Belgium = mkNP (mkPN "Belgia") ;
+    Bulgarian = mkNat (mkPN "bulgaria") (mkPN "Bulgaria") (mkA "bulgarialainen") ;
+    Catalan = mkNat (mkPN "katalaani") (mkPN "Katalonia") (mkA "katalonialainen") ;
+    Danish = mkNat (mkPN "tanska") (mkPN "Tanska") (mkA "tanskalainen") ;
+    Dutch = mkNat (mkPN "hollanti") (mkPN "Hollanti") (mkA "hollantilainen") ;
     English = mkNat (mkPN "englanti") (mkPN "Englanti") (mkA "englantilainen") ;
     Finnish = 
       mkNat (mkPN (mkN "suomi" "suomia")) (mkPN (mkN "Suomi" "Suomia")) 
             (mkA "suomalainen") ;
     Flemish = mkNP (mkPN "flaami") ;
     French = mkNat (mkPN "ranska") (mkPN "Ranska") (mkA "ranskalainen") ; 
+    German = mkNat (mkPN "saksa") (mkPN "Saksa") (mkA "saksalainen") ;
     Italian = mkNat (mkPN "italia") (mkPN "Italia") (mkA "italialainen") ;
+    Norwegian = mkNat (mkPN "norja") (mkPN "Norja") (mkA "norjalainen") ;
+    Polish = mkNat (mkPN "puola") (mkPN "Puola") (mkA "puolalainen") ;
     Romanian = mkNat (mkPN "romania") (mkPN "Romania") (mkA "romanialainen") ;
+    Russian = mkNat (mkPN "venäjä") (mkPN "Venäjä") (mkA "venäläinen") ;
+    Spanish = mkNat (mkPN "espanja") (mkPN "Espanja") (mkA "espanjalainen") ;
     Swedish = mkNat (mkPN "ruotsi") (mkPN "Ruotsi") (mkA "ruotsalainen") ;
 
     ---- it would be nice to have a capitalization Predef function
+
+-- means of transportation 
+
+    Bike = mkTransport L.bike_N ; 
+    Bus = mkTransport (mkN "bussi") ;
+    Car = mkTransport L.car_N ;
+    Ferry = mkTransport (mkN "lautta") ;
+    Plane = mkTransport L.airplane_N ;
+    Subway = mkTransport (mkN "metro") ;
+    Taxi = mkTransport (mkN "taksi") ;
+    Train = mkTransport L.train_N ;
+    Tram = mkTransport (mkN "raitiovaunu") ;
+
+    ByFoot = ParadigmsFin.mkAdv "jalkaisin" ;
+
 
 -- actions
 
@@ -159,6 +191,36 @@ concrete WordsFin of Words = SentencesFin **
 
     Tomorrow = ParadigmsFin.mkAdv "huomenna" ;
 
+-- transports
+
+    HowFar place = mkQS (mkQCl far_IAdv place.name) ;
+    HowFarFrom place x = 
+      mkQS (mkQCl far_IAdv (mkCl place.name (SyntaxFin.mkAdv from_Prep x.name))) ;
+    HowFarFromBy place x t = 
+      mkQS (mkQCl far_IAdv (mkCl place.name 
+        (mkVP (mkVP (SyntaxFin.mkAdv from_Prep x.name)) t))) ;
+    HowFarBy place t = 
+      mkQS (mkQCl far_IAdv (mkCl place.name t)) ;
+      -- mkQS (mkQCl (mkIAdv far_IAdv t) y.name) ; 
+
+    ---- TODO: meneekö keskustaan busseja
+    WhichTranspPlace trans place = 
+      mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
+
+    IsTranspPlace trans place =
+      mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
+
+-- modifiers of places
+
+    TheBest = mkSuperl L.good_A ;
+    TheClosest = mkSuperl L.near_A ; 
+    TheCheapest = mkSuperl (mkA "halpa") ;
+    TheMostExpensive = mkSuperl (mkA "kallis") ;
+    TheMostPopular = mkSuperl (mkA "suosittu") ;
+    TheWorst = mkSuperl L.bad_A ;
+
+    SuperlPlace sup p = placeNP sup p ;
+
   oper
     mkNat : PN -> PN -> A -> 
       {lang : NP ; prop : A ; country : NP} = \nat,co,pro ->
@@ -192,11 +254,19 @@ concrete WordsFin of Words = SentencesFin **
     -- do you have a table for five persons
     haveForPerson : NP -> CN -> Card -> Cl = \p,a,n ->
       mkCl p have_V2 
-----      (mkNP (E.PartCN a)  ---- partitive works in questions 
+----      (mkNP (E.PartCN a)  ---- partitive works in questions )
         (mkNP (mkNP a_Det a)
            (SyntaxFin.mkAdv for_Prep (mkNP n (mkN "henki" "henkiä")))) ;
 
     open_Adv = ParadigmsFin.mkAdv "avoinna" ;
     closed_Adv = ParadigmsFin.mkAdv "kiinni" ;
 
+    mkTransport : N -> {name : CN ; by : Adv} = \n -> {
+      name = mkCN n ; 
+      by = SyntaxFin.mkAdv (casePrep adessive) (mkNP n)
+      } ;
+
+    mkSuperl : A -> Det = \a -> mkDet the_Art (mkOrd a) ;
+
+    far_IAdv = E.IAdvAdv L.far_Adv ;
 }

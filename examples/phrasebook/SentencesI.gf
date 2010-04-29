@@ -113,6 +113,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     NNumeral n = mkCard <lin Numeral n : Numeral>  ;
 
     AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
+    AHaveCurr p curr = mkCl p.name have_V2 (mkNP aPl_Det curr) ;
     ACitizen p n = mkCl p.name n ;
     ABePlace p place = mkCl p.name place.at ;
     ByTransp t = t.by ;
