@@ -247,7 +247,7 @@ lin
   dull_A = mkA (mkN "tylsä") "tylsempi" "tylsin" ;
   full_A = mkA (mk3N "täysi" "täyden" "täysiä") "täydempi" "täysin" ;
   heavy_A = mkA "raskas" ;
-  near_A = mkA (mkN "läheinen") ;
+  near_A = mkA (mkN "läheinen") "läheisempi" "lähin" ;
   rotten_A = mkA "mätä" ;
   round_A = mkA "pyöreä" ;
   sharp_A = mkA "terävä" ;

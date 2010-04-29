@@ -127,7 +127,7 @@ oper
   mkA : overload {
     mkA : Str -> A ;
     mkA : N -> A ;
-    mkA : N -> (kivempaa,kivinta : Str) -> A ;
+    mkA : N -> (kivempi,kivin : Str) -> A ;
     mkA : (hyva,parempi,paras : N) -> (hyvin,paremmin,parhaiten : Str) -> A ;
   } ;
 
