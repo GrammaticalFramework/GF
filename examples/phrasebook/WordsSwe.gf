@@ -64,7 +64,8 @@ concrete WordsSwe of Words = SentencesSwe **
     University = mkPlace (mkN "universitet" "universitet") "på" ;
     Zoo = mkPlace (mkN "djurpark" "djurparker") "i" ;
 
-    CitRestaurant cit =  mkCNPlace (mkCN cit (mkN "restaurang" "restauranger")) on_Prep to_Prep ;
+    CitRestaurant cit = 
+      mkCNPlace (mkCN cit (mkN "restaurang" "restauranger")) on_Prep to_Prep ;
 
 -- currencies
 
@@ -187,13 +188,15 @@ concrete WordsSwe of Words = SentencesSwe **
 -- transports
 
     HowFar place = mkQS (mkQCl far_IAdv place.name) ;
-    HowFarFrom x y = mkQS (mkQCl (mkIAdv far_IAdv (SyntaxSwe.mkAdv from_Prep x.name)) y.name) ;
-    HowFarFromBy x y t = 
-      mkQS (mkQCl (mkIAdv (mkIAdv far_IAdv (SyntaxSwe.mkAdv from_Prep x.name)) t) y.name) ;
-    HowFarBy y t = mkQS (mkQCl (mkIAdv far_IAdv t.by) y.name) ; 
+    HowFarFrom place x = 
+      mkQS (mkQCl far_IAdv (mkCl place.name (SyntaxSwe.mkAdv from_Prep x.name))) ;
+    HowFarFromBy place x t = 
+      mkQS (mkQCl far_IAdv (mkCl place.name 
+        (mkVP (mkVP (SyntaxSwe.mkAdv from_Prep x.name)) t))) ;
+    HowFarBy place t = 
+      mkQS (mkQCl far_IAdv (mkCl place.name t)) ;
+      -- mkQS (mkQCl (mkIAdv far_IAdv t) y.name) ; 
 
-oper far_IAdv = ExtraSwe.IAdvAdv L.far_Adv ;
-lin
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
@@ -235,4 +238,6 @@ lin
       } ;
 
     mkSuperl : A -> Det = \a -> mkDet the_Art (mkOrd a) ;
+
+    far_IAdv = ExtraSwe.IAdvAdv L.far_Adv ;
 }
