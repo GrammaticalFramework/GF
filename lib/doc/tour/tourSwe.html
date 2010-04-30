@@ -1,0 +1,1085 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<LINK REL="stylesheet" TYPE="text/css" HREF="utf8">
+<TITLE>A Guided Tour of Swedish Grammar</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1>A Guided Tour of Swedish Grammar</H1>
+<FONT SIZE="4">
+<I>Aarne Ranta</I><BR>
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+  <UL>
+  <LI><A HREF="#toc1">Computer prerequisites</A>
+  <LI><A HREF="#toc2">Words and inflection</A>
+    <UL>
+    <LI><A HREF="#toc3">Nouns</A>
+      <UL>
+      <LI><A HREF="#toc4">Quizzes with nouns</A>
+      </UL>
+    <LI><A HREF="#toc5">Numerals and determiners</A>
+    <LI><A HREF="#toc6">Adjectives</A>
+    <LI><A HREF="#toc7">The use of adjectives</A>
+    <LI><A HREF="#toc8">Personal pronouns</A>
+    <LI><A HREF="#toc9">Prepositions</A>
+    <LI><A HREF="#toc10">Verbs</A>
+    </UL>
+  <LI><A HREF="#toc11">Syntactic combinations</A>
+    <UL>
+    <LI><A HREF="#toc12">Predication</A>
+    <LI><A HREF="#toc13">Verbs with different predication patterns</A>
+    <LI><A HREF="#toc14">Questions</A>
+    </UL>
+  <LI><A HREF="#toc15">For developers</A>
+  </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P>
+This is an introduction to the basic grammar of Swedish. 
+It is guided by a computer program that knows the rules of the grammar.
+All examples shown during the tour have been produced by that program.
+You can read this document as it is, to get an
+overview of Swedish grammar. 
+However, really to exploit the linguistic knowledge included in the program,
+you should try out every rule by itself and also vary the rules in
+interaction with the computer. 
+</P>
+<P>
+The same tour is (or will be) available for 17 languages.
+</P>
+<UL>
+<LI><A HREF="tourAra.html">Arabic</A>
+<LI><A HREF="tourBul.html">Bulgarian</A>
+<LI><A HREF="tourCat.html">Catalan</A>
+<LI><A HREF="tourDan.html">Danish</A>
+<LI><A HREF="tourDut.html">Dutch</A>
+<LI><A HREF="tourEng.html">English</A>
+<LI><A HREF="tourFin.html">Finnish</A>
+<LI><A HREF="tourFre.html">French</A>
+<LI><A HREF="tourGer.html">German</A>
+<LI><A HREF="tourIta.html">Italian</A>
+<LI><A HREF="tourNor.html">Norwegian</A>
+<LI><A HREF="tourPol.html">Polish</A>
+<LI><A HREF="tourRon.html">Romanian</A>
+<LI><A HREF="tourRus.html">Russian</A>
+<LI><A HREF="tourSpa.html">Spanish</A>
+<LI><A HREF="tourSwe.html">Swedish</A>
+<LI><A HREF="tourUrd.html">Urdu</A>
+</UL>
+
+<P>
+See the last section of this document for how to contribute support for 
+new languages as a developer.
+</P>
+<A NAME="toc1"></A>
+<H1>Computer prerequisites</H1>
+<P>
+To use the Swedish grammar program and test the grammar yourself, you need
+</P>
+<UL>
+<LI>a computer with Linux, Mac OS, or Windows
+<LI>the program GF (Grammatical Framework), downloadable from
+  the <A HREF="http://grammaticalframework.org">GF website</A>
+<LI>the grammar package <CODE>Demo.pgf</CODE>, downloadable from 
+  <A HREF="http://grammaticalframework.org/lib/doc/Demo.pgf.gz">here</A>
+</UL>
+
+<P>
+In the future, we plan to provide a web-based version of this grammar tour,
+so that you can ran the program without downloading or installing anything.
+</P>
+<P>
+After installing GF (see instructions at GF website), just start it by
+the shell command
+</P>
+<PRE>
+    gf Demo.pgf
+</PRE>
+<P>
+Then initialize the shell with a couple of handy commands:
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TD><CODE>%forms</CODE></TD>
+<TD>show the forms of a word or a phrase in Swedish</TD>
+</TR>
+<TR>
+<TD><CODE>%numeral</CODE></TD>
+<TD>translate a number to a Swedish numeral expression</TD>
+</TR>
+<TR>
+<TD><CODE>%table</CODE></TD>
+<TD>show the inflection table a word or a phrase in Swedish</TD>
+</TR>
+<TR>
+<TD><CODE>%translate</CODE></TD>
+<TD>translate an utterance from English to Swedish</TD>
+</TR>
+</TABLE>
+
+<P>
+Initialization is made with the command macro definitions in GF:
+</P>
+<PRE>
+  &gt; dc translate ps -lextext ?0 | parse -cat=Utt -lang=Eng | linearize -lang=Swe
+  &gt; dc table linearize -table -lang=Swe ?0
+  &gt; dc forms linearize -list -lang=Swe ?0
+  &gt; dc numeral ps -chars ?0 | p -cat=Digits -lang=Swe | pt -transfer=digits2num | l -bind -lang=Swe
+</PRE>
+<P>
+This is just to save you some work afterwards and to make this document
+clearer; you could quite as well use the basic commands that are predifined
+in GF, and for some less frequent cases we'll actually use them directly.
+</P>
+<P>
+The <B>prompt</B> sign <CODE>&gt;</CODE> is produced by GF, and you should only
+write what is after it. In this document, we will use two kinds of markings
+of type-written lines:
+</P>
+<UL>
+<LI><CODE>&gt;</CODE> followed by a command you type
+<LI><CODE>*</CODE> followed by output from GF
+</UL>
+
+<A NAME="toc2"></A>
+<H1>Words and inflection</H1>
+<P>
+We are ready to start the tour. 
+We begin in the same way as grammar books usually do:
+from words and their forms. We will also show the most basic 
+syntactic combinations, to explain how the words are used, but
+syntax proper is treated in the next chapter.
+</P>
+<A NAME="toc3"></A>
+<H2>Nouns</H2>
+<P>
+The inflection forms of nouns are shown in the following example:
+</P>
+<PRE>
+  &gt; %table flower_N
+  s Sg Indef Nom : blomma
+  s Sg Indef Gen : blommas
+  s Sg Def Nom : blomman
+  s Sg Def Gen : blommans
+  s Pl Indef Nom : blommor
+  s Pl Indef Gen : blommors
+  s Pl Def Nom : blommorna
+  s Pl Def Gen : blommornas
+  
+</PRE>
+<P>
+The forms together are an example of an <B>inflection pattern</B>.
+Here are some inflection patterns.
+They show the declensions 1 to 5.
+</P>
+<PRE>
+  &gt; %forms flower_N
+  blomma, blommas, blomman, blommans, blommor, blommors, blommorna, blommornas
+  
+  &gt; %forms car_N
+  bil, bils, bilen, bilens, bilar, bilars, bilarna, bilarnas
+  
+  &gt; %forms cat_N
+  katt, katts, katten, kattens, katter, katters, katterna, katternas
+  
+  &gt; %forms apple_N
+  äpple, äpples, äpplet, äpplets, äpplen, äpplens, äpplena, äpplenas
+  
+  &gt; %forms house_N
+  hus, hus, huset, husets, hus, hus, husen, husens
+</PRE>
+<P>
+The symbol <CODE>N</CODE> is used in the program to denote nouns. Here it is suffixed to
+English words to indicate the meanings of the Swedish nouns. This meaning
+can be approximative, or just cover one of the possible senses.
+</P>
+<P>
+In addition to inflection forms,
+Swedish nouns also have a gender. The gender is reflected, among
+other things, in the indefinite article used with the nouns.
+</P>
+<PRE>
+  &gt; %translate "a man"
+  en man
+  
+  &gt; %translate "a woman"
+  en kvinna
+  
+  &gt; %translate "a house"
+  ett hus
+</PRE>
+<P>
+The grammar training program has a small lexicon, with just 182 nouns. To see 
+all there nouns, together with their inflection forms and senses explained in
+English, you can do as follows:
+</P>
+<PRE>
+  &gt; generate_trees -cat=N -number=5 | linearize -treebank -list -lang=Swe
+  Demo: airplane_N
+  DemoSwe: flygplan, flygplans, flygplanet, flygplanets, flygplan, flygplans, flygplanen, flygplanens
+   Demo: animal_N
+  DemoSwe: djur, djurs, djuret, djurets, djur, djurs, djuren, djurens
+   Demo: apartment_N
+  DemoSwe: lägenhet, lägenhets, lägenheten, lägenhetens, lägenheter, lägenheters, lägenheterna, lägenheternas
+   Demo: apple_N
+  DemoSwe: äpple, äpples, äpplet, äpplets, äpplen, äpplens, äpplena, äpplenas
+   Demo: art_N
+  DemoSwe: konst, konsts, konsten, konstens, konster, konsters, konsterna, konsternas
+  
+  
+</PRE>
+<P></P>
+<A NAME="toc4"></A>
+<H3>Quizzes with nouns</H3>
+<P>
+If you already know some Swedish,
+you can try out a <B>morphology quiz</B>, which lets you train your knowledge
+of Swedish noun inflection. You can later train your inflection skills with
+other parts of speech, just changing the symbol <CODE>N</CODE> to some other symbol.
+</P>
+<PRE>
+    morpho_quiz -cat=N -lang=Swe
+  
+    Welcome to GF Morphology Quiz.
+    The quiz is over when you have done at least 10 examples
+    with at least 75 % success.
+    You can interrupt the quiz by entering a line consisting of a dot ('.').
+  
+    vetenskap s Sg Def Gen
+    vetenskapens
+    &gt; Yes.
+    Score 1/1
+  
+    kyrka s Pl Indef Nom
+    kyrker
+    &gt; No, not kyrker, but
+    kyrkor
+    Score 1/2
+</PRE>
+<P>
+(The above quiz example is swedish for all languages, for technical reasons.)
+</P>
+<P>
+The quiz questions are randomly generated, so you can use the same
+quiz for increasing your Swedish skills over and over again.
+</P>
+<P>
+Another quiz is the <B>translation quiz</B>, which lets you to train translations
+of nouns from English to Swedish (or, in fact, of any part of speech from any
+language to any other one). Here is how it goes 
+(to Swedish, for the sake of example):
+</P>
+<PRE>
+    translation_quiz -from=DemoEng -to=DemoSwe -cat=N
+    Welcome to GF Translation Quiz.
+    The quiz is over when you have done at least 10 examples
+    with at least 75 % success.
+    You can interrupt the quiz by entering a line consisting of a dot ('.').
+   
+    ceiling
+    tak
+    &gt; Yes.
+    Score 1/1
+    night
+    nat
+    &gt; No, not nat, but
+    natt
+</PRE>
+<P></P>
+<A NAME="toc5"></A>
+<H2>Numerals and determiners</H2>
+<P>
+Numerals are in Swedish the easiest way to build complex noun phrases from nouns,
+since their forms are independent of the noun; the noun is just inflected in
+the plural indefinite. This is with the exception of "one", whose form depends
+on the gender of the noun. Here is a quick way to generate the numerals from 1 
+to 9:
+</P>
+<PRE>
+  &gt; generate_trees -cat=Sub10 -number=9 | l -lang=Eng,Swe
+  two
+  två
+   three
+  tre
+   four
+  fyra
+   five
+  fem
+   six
+  sex
+   seven
+  sju
+   eight
+  åtta
+   nine
+  nio
+   two
+  två
+</PRE>
+<P>
+Any sequence of digits from 1 to 999999 can be translated 
+to a Swedish numeral with the <CODE>%numeral</CODE> command:
+</P>
+<PRE>
+  &gt; %numeral "10"
+  tio
+  
+  &gt; %numeral "11"
+  elva
+  
+  &gt; %numeral "20"
+  tjugo
+  
+  &gt; %numeral "123"
+  etthundra tjugotre
+  
+  &gt; %numeral "999999"
+  niohundra nittioniotusen niohundra nittionio
+  
+</PRE>
+<P>
+Numerals can be combined with nouns to form <B>noun phrases</B>:
+</P>
+<PRE>
+  &gt; %translate "one boy"
+  en pojke
+  &gt; %translate "one apple"
+  ett äpple
+  &gt; %translate "two boys"
+  två pojkar
+  &gt; %translate "eleven cars"
+  elva bilar
+</PRE>
+<P>
+Numerals are a special case of <B>determiners</B>: words that are 
+combined with nouns to
+form <B>noun phrases</B>. Articles are anouther special case; 
+we already saw the indefinite articles:
+</P>
+<PRE>
+  &gt; %translate "a man"
+  en man
+  
+  &gt; %translate "a woman"
+  en kvinna
+  
+  &gt; %translate "a car"
+  en bil
+  
+  &gt; %translate "a house"
+  ett hus
+</PRE>
+<P>
+Here are examples with definite articles.
+In Swedish, they are expressed by inflecting the noun 
+rather than adding a word like English <I>the</I>.
+</P>
+<PRE>
+  &gt; %translate "the man"
+  mannen
+  
+  &gt; %translate "the woman"
+  kvinnan
+  
+  &gt; %translate "the car"
+  bilen
+  
+  &gt; %translate "the house"
+  huset
+</PRE>
+<P>
+Definite articles in the plural:
+</P>
+<PRE>
+  &gt; %translate "the men"
+  männen
+  
+  &gt; %translate "the women"
+  kvinnorna
+  
+  &gt; %translate "the cars"
+  bilarna
+  
+  &gt; %translate "the houses"
+  husen
+</PRE>
+<P>
+The indefinite forms in the plural form look as follows.
+English, like many other languages, have no explicit indefinite article: 
+just use the plural form of the noun.
+</P>
+<PRE>
+  &gt; %translate "men"
+  män
+  
+  &gt; %translate "women"
+  kvinnor
+  
+  &gt; %translate "cars"
+  bilar
+  
+  &gt; %translate "houses"
+  hus
+</PRE>
+<P>
+Other common determiners are shown in the following:
+</P>
+<PRE>
+  &gt; %translate "this car"
+  den här bilen
+  
+  &gt; %translate "that car"
+  den där bilen
+  
+  &gt; %translate "these cars"
+  de här bilarna
+  
+  &gt; %translate "those cars"
+  de där bilarna
+  
+  &gt; %translate "some cars"
+  några bilar
+  
+  &gt; %translate "all cars"
+</PRE>
+<P>
+Generate more examples of nouns with determiners:
+</P>
+<PRE>
+  &gt; gr -number=11 (UttNP (DetCN ? (UseN ?))) | l -lang=Eng,Swe
+  some sister
+  någon syster
+   many men
+  många män
+   those dusts
+  de där dammen
+   many pens
+  många pennor
+   some sticks
+  några pinnar
+   every boss
+  varje chef
+   few houses
+  få hus
+   some wars
+  några krig
+   some school
+  någon skola
+   many moons
+  många månar
+   a flower
+  en blomma
+</PRE>
+<P>
+You will find out that other determiners can combine with numerals, such as in
+</P>
+<PRE>
+  &gt; %translate "these seven sisters"
+  de här sju systrarna
+  
+  &gt; %translate "the seven sisters"
+  de sju systrarna
+</PRE>
+<P>
+thus with a numeral, the definite article suddenly appears as a word.
+</P>
+<P>
+The random generation above used a <B>pattern</B> for generating
+expressions of the form <CODE>(UttNP (DetCN ? (UseN ?)))</CODE>, where just the
+question marks may vary. Such patterns can also be used to fine-tune quizzes.
+For instance, here is a translation quiz for nouns with determiners:
+</P>
+<PRE>
+    trans_quiz -from=DemoEng -to=DemoSwe (UttNP (DetCN ? (UseN ?)))
+</PRE>
+<P></P>
+<A NAME="toc6"></A>
+<H2>Adjectives</H2>
+<P>
+Adjectives generally have more forms than nouns. Here is an example showing the
+available forms for Swedish adjectives:
+</P>
+<PRE>
+  &gt; %table warm_A
+  s (AF (APosit (Strong (GSg Utr))) Nom) : varm
+  s (AF (APosit (Strong (GSg Utr))) Gen) : varms
+  s (AF (APosit (Strong (GSg Neutr))) Nom) : varmt
+  s (AF (APosit (Strong (GSg Neutr))) Gen) : varmts
+  s (AF (APosit (Strong GPl)) Nom) : varma
+  s (AF (APosit (Strong GPl)) Gen) : varmas
+  s (AF (APosit (Weak Sg)) Nom) : varma
+  s (AF (APosit (Weak Sg)) Gen) : varmas
+  s (AF (APosit (Weak Pl)) Nom) : varma
+  s (AF (APosit (Weak Pl)) Gen) : varmas
+  s (AF ACompar Nom) : varmare
+  s (AF ACompar Gen) : varmares
+  s (AF (ASuperl SupStrong) Nom) : varmast
+  s (AF (ASuperl SupStrong) Gen) : varmasts
+  s (AF (ASuperl SupWeak) Nom) : varmaste
+  s (AF (ASuperl SupWeak) Gen) : varmastes
+  
+</PRE>
+<P>
+The comparative and superlative forms are often formed syntactically, by using 
+words similar to <I>more</I> and <I>most</I>.
+</P>
+<P>
+Here are some examples of adjective inflections:
+</P>
+<PRE>
+  &gt; %forms good_A
+  god, gods, gott, gotts, goda, godas, goda, godas, goda, godas, bättre, bättres, bäst, bästs, bästa, bästas
+  
+  &gt; %forms bad_A
+  dålig, dåligs, dåligt, dåligts, dåliga, dåligas, dåliga, dåligas, dåliga, dåligas, sämre, sämres, sämst, sämsts, sämsta, sämstas
+  
+  &gt; %forms rotten_A
+  rutten, ruttens, ruttet, ruttets, ruttna, ruttnas, ruttna, ruttnas, ruttna, ruttnas, ruttnare, ruttnares, ruttnast, ruttnasts, ruttnaste, ruttnastes
+  
+  &gt; %forms important_A
+  viktig, viktigs, viktigt, viktigts, viktiga, viktigas, viktiga, viktigas, viktiga, viktigas, viktigare, viktigares, viktigast, viktigasts, viktigaste, viktigastes
+  
+  &gt; %forms stupid_A
+  dum, dums, dumt, dumts, dumma, dummas, dumma, dummas, dumma, dummas, dummare, dummares, dummast, dummasts, dummaste, dummastes
+</PRE>
+<P>
+The morpho quiz for adjectives is as one would expect:
+</P>
+<PRE>
+    morpho_quiz -cat=A -lang=DemoSwe
+</PRE>
+<P></P>
+<A NAME="toc7"></A>
+<H2>The use of adjectives</H2>
+<P>
+Adjectives can be used to <B>modify</B> nouns.
+The form of the adjective may then depend on the gender of the noun.
+</P>
+<PRE>
+  &gt; %translate "old man"
+  gammal man
+  
+  &gt; %translate "old woman"
+  gammal kvinna
+  
+  &gt; %translate "old house"
+  gammalt hus
+</PRE>
+<P>
+The adjective+noun combination is inflected for the same forms as the
+bare noun:
+</P>
+<PRE>
+  &gt; parse -cat=CN "old house" | %forms
+  gammalt hus, gammalt hus, gamla hus, gamla hus, gamla huset, gamla husets, gamla hus, gamla hus, gamla hus, gamla hus, gamla husen, gamla husens
+</PRE>
+<P>
+Here are the quizzes for training the adjectival modification of nouns:
+</P>
+<PRE>
+    translate_quiz -from=DemoEng -to=DemoSwe (AdjCN (PositA ?) (UseN ?))
+    
+    morpho_quiz -lang=DemoSwe (AdjCN (PositA ?) (UseN ?))
+</PRE>
+<P>
+Adjectives can be combined to <B>adjectival phrases</B> (AP). One way to do this
+is by means of <B>adadjectives</B>, such as <I>very</I> and <I>too</I>:
+</P>
+<PRE>
+  &gt; p -lang=Eng -cat=AP "very old" | l -lang=Swe
+  mycket gammal
+  
+  &gt; p -lang=Eng -cat=AP "too heavy" | l -lang=Swe
+  för tung
+</PRE>
+<P>
+The <B>comparative</B> forms can be used for building adjectival phrases together
+with noun phrase complements:
+</P>
+<PRE>
+  &gt; p -lang=Eng -cat=AP  "warmer than the sun" | l -lang=Swe
+</PRE>
+<P>
+Also these complex AP's can modify common nouns. The word order can be different
+from modification with simple adjectives.
+</P>
+<PRE>
+  &gt; p -lang=Eng -cat=CN  "country warmer than the sun" | l -lang=Swe
+  
+  &gt; p -lang=Eng -cat=CN  "very warm country" | l -lang=Swe
+  mycket varmt land
+</PRE>
+<P>
+Quizzes for such constructions are as follows:
+</P>
+<PRE>
+    translate_quiz -from=DemoEng -to=DemoSwe (AdjCN ? (UseN ?))
+    
+    morpho_quiz -lang=DemoSwe (AdjCN ? (UseN ?))
+</PRE>
+<P></P>
+<A NAME="toc8"></A>
+<H2>Personal pronouns</H2>
+<P>
+Personal pronouns have many forms:
+</P>
+<PRE>
+  &gt; %table we_Pron
+  s NPNom : vi
+  s NPAcc : oss
+  s (NPPoss (GSg Utr)) : vår
+  s (NPPoss (GSg Neutr)) : vårt
+  s (NPPoss GPl) : våra
+  
+</PRE>
+<P>
+Here are the forms of all personal pronouns of Swedish:
+</P>
+<PRE>
+  &gt; %forms i_Pron
+  jag, mig, min, mitt, mina
+  
+  &gt; %forms youSg_Pron
+  du, dig, din, ditt, dina
+  
+  &gt; %forms youPol_Pron
+  ni, er, er, ert, era
+  
+  &gt; %forms he_Pron
+  han, honom, hans, hans, hans
+  
+  &gt; %forms she_Pron
+  hon, henne, hennes, hennes, hennes
+  
+  &gt; %forms we_Pron
+  vi, oss, vår, vårt, våra
+  
+  &gt; %forms youPl_Pron
+  ni, er, er, ert, era
+  
+  &gt; %forms they_Pron
+  de, dem, deras, deras, deras
+</PRE>
+<P>
+Notice the polite and plural forms of <I>you</I>, which English doesn't have.
+</P>
+<P>
+The <B>possessive</B> forms of pronouns are used as determiners:
+</P>
+<PRE>
+  &gt; %translate "her house , my car and our children"
+</PRE>
+<P>
+Here's the pattern for training the combination of possessive pronouns and
+nouns, with the <CODE>morpho_quiz</CODE> and <CODE>translate_quiz</CODE> commands:
+</P>
+<PRE>
+    (DetCN (DetQuant (PossPron ?) ?) (UseN ?))
+</PRE>
+<P></P>
+<A NAME="toc9"></A>
+<H2>Prepositions</H2>
+<P>
+Prepositions are not inflected. But when attached to noun phrases, they may
+affect the inflection of the noun phrase. In some languages, no preposition
+word may be shown, but just a different form of the noun phrase.
+</P>
+<PRE>
+  &gt; %translate "my yellow house"
+  mitt gula hus
+  
+  &gt; %translate "in my yellow house"
+  i mitt gula hus
+  
+  &gt; %translate "to my yellow house"
+  till mitt gula hus
+  
+  &gt; %translate "from my yellow house"
+  från mitt gula hus
+  
+  &gt; %translate "with my yellow house"
+  med mitt gula hus
+  
+  &gt; %translate "without my yellow house"
+  utan mitt gula hus
+</PRE>
+<P>
+Pronouns show in some languages even more variation.
+</P>
+<P>
+To train prepositional phrases, use the pattern
+</P>
+<PRE>
+    (PrepNP ? ?)
+</PRE>
+<P></P>
+<A NAME="toc10"></A>
+<H2>Verbs</H2>
+<P>
+Verbs usually have more inflection forms than any other words:
+</P>
+<PRE>
+  &gt; %table sleep_V
+  s (VF (VPres Act)) : sover
+  s (VF (VPres Pass)) : sovs
+  s (VF (VPret Act)) : sov
+  s (VF (VPret Pass)) : sovs
+  s (VF (VImper Act)) : sov
+  s (VF (VImper Pass)) : sovs
+  s (VI (VInfin Act)) : sova
+  s (VI (VInfin Pass)) : sovas
+  s (VI (VSupin Act)) : sovit
+  s (VI (VSupin Pass)) : sovits
+  s (VI (VPtPret (Strong (GSg Utr)) Nom)) : soven
+  s (VI (VPtPret (Strong (GSg Utr)) Gen)) : sovens
+  s (VI (VPtPret (Strong (GSg Neutr)) Nom)) : sovet
+  s (VI (VPtPret (Strong (GSg Neutr)) Gen)) : sovets
+  s (VI (VPtPret (Strong GPl) Nom)) : sovna
+  s (VI (VPtPret (Strong GPl) Gen)) : sovnas
+  s (VI (VPtPret (Weak Sg) Nom)) : sovna
+  s (VI (VPtPret (Weak Sg) Gen)) : sovnas
+  s (VI (VPtPret (Weak Pl) Nom)) : sovna
+  s (VI (VPtPret (Weak Pl) Gen)) : sovnas
+  part : 
+  
+</PRE>
+<P>
+Here are some inflection examples:
+</P>
+<PRE>
+  &gt; %forms speak_V2
+  talar, talas, talade, talades, tala, talas, tala, talas, talat, talats, talad, talads, talat, talats, talade, talades, talade, talades, talade, talades, , 
+  
+  &gt; %forms play_V2
+  spelar, spelas, spelade, spelades, spela, spelas, spela, spelas, spelat, spelats, spelad, spelads, spelat, spelats, spelade, spelades, spelade, spelades, spelade, spelades, , 
+  
+  &gt; %forms buy_V2
+  köper, köps, köpte, köptes, köp, köps, köpa, köpas, köpt, köpts, köpt, köpts, köpt, köpts, köpta, köptas, köpta, köptas, köpta, köptas, , 
+  
+  &gt; %forms run_V
+  springer, springs, sprang, sprangs, spring, springs, springa, springas, sprungit, sprungits, sprungen, sprungens, sprunget, sprungets, sprungna, sprungnas, sprungna, sprungnas, sprungna, sprungnas, 
+  
+  &gt; %forms walk_V
+  går, gås, gick, gicks, gå, gås, gå, gås, gått, gåtts, gången, gångens, gånget, gångets, gångna, gångnas, gångna, gångnas, gångna, gångnas, 
+</PRE>
+<P>
+In some languages, verbs can be very irregular.
+</P>
+<P>
+There are different <B>subcategories</B> of verbs: intransitive verbs (V), two-place
+verbs (V2), sentence-complement verbs (VS). The differences have to do with
+syntax, and will be discussed later.
+</P>
+<A NAME="toc11"></A>
+<H1>Syntactic combinations</H1>
+<P>
+Above, we have discussed some syntactic combinations:
+determination (<I>the car</I>, <I>this car</I>) and adjectival modification
+(<I>old car</I>). In this chapter, we concentrate on the formation of
+sentences.
+</P>
+<A NAME="toc12"></A>
+<H2>Predication</H2>
+<P>
+In <B>predication</B>, a verb is give its <B>arguments</B>: 
+the <B>subject</B> (the one who does something)
+and the <B>complements</B> (what is done, to whom it is done, etc). The simplest
+predication is with <B>intransitive verbs</B>, which only have the subject:
+</P>
+<PRE>
+  &gt; %translate "he walks"
+  han går
+  
+  &gt; %translate "we sleep"
+  vi sover
+  
+  &gt; %translate "the very old woman sings"
+  den mycket gamla kvinnan sjunger
+</PRE>
+<P>
+A predication forms a <B>clause</B>, which corresponds to many different
+(yes or no), and possibly a word order (inverted question, subordinate clause),
+a mood (indicative, subjunctive). Here is a table showing what forms a clause
+can have in Swedish:
+</P>
+<PRE>
+  &gt; p -cat=Cl -lang=Eng "the man walks" | %table
+  s Pres Simul Pos Main : mannen går
+  s Pres Simul Pos Inv : går mannen
+  s Pres Simul Pos Sub : mannen går
+  s Pres Simul Neg Main : mannen går inte
+  s Pres Simul Neg Inv : går mannen inte
+  s Pres Simul Neg Sub : mannen inte går
+  s Pres Anter Pos Main : mannen har gått
+  s Pres Anter Pos Inv : har mannen gått
+  s Pres Anter Pos Sub : mannen har gått
+  s Pres Anter Neg Main : mannen har inte gått
+  s Pres Anter Neg Inv : har mannen inte gått
+  s Pres Anter Neg Sub : mannen inte har gått
+  s Past Simul Pos Main : mannen gick
+  s Past Simul Pos Inv : gick mannen
+  s Past Simul Pos Sub : mannen gick
+  s Past Simul Neg Main : mannen gick inte
+  s Past Simul Neg Inv : gick mannen inte
+  s Past Simul Neg Sub : mannen inte gick
+  s Past Anter Pos Main : mannen hade gått
+  s Past Anter Pos Inv : hade mannen gått
+  s Past Anter Pos Sub : mannen hade gått
+  s Past Anter Neg Main : mannen hade inte gått
+  s Past Anter Neg Inv : hade mannen inte gått
+  s Past Anter Neg Sub : mannen inte hade gått
+  s Fut Simul Pos Main : mannen ska gå
+  s Fut Simul Pos Inv : ska mannen gå
+  s Fut Simul Pos Sub : mannen ska gå
+  s Fut Simul Neg Main : mannen ska inte gå
+  s Fut Simul Neg Inv : ska mannen inte gå
+  s Fut Simul Neg Sub : mannen inte ska gå
+  s Fut Anter Pos Main : mannen ska ha gått
+  s Fut Anter Pos Inv : ska mannen ha gått
+  s Fut Anter Pos Sub : mannen ska ha gått
+  s Fut Anter Neg Main : mannen ska inte ha gått
+  s Fut Anter Neg Inv : ska mannen inte ha gått
+  s Fut Anter Neg Sub : mannen inte ska ha gått
+  s Cond Simul Pos Main : mannen skulle gå
+  s Cond Simul Pos Inv : skulle mannen gå
+  s Cond Simul Pos Sub : mannen skulle gå
+  s Cond Simul Neg Main : mannen skulle inte gå
+  s Cond Simul Neg Inv : skulle mannen inte gå
+  s Cond Simul Neg Sub : mannen inte skulle gå
+  s Cond Anter Pos Main : mannen skulle ha gått
+  s Cond Anter Pos Inv : skulle mannen ha gått
+  s Cond Anter Pos Sub : mannen skulle ha gått
+  s Cond Anter Neg Main : mannen skulle inte ha gått
+  s Cond Anter Neg Inv : skulle mannen inte ha gått
+  s Cond Anter Neg Sub : mannen inte skulle ha gått
+  
+</PRE>
+<P>
+The following quiz can be used for training the inflection of intransitive
+clauses:
+</P>
+<PRE>
+    morpho_quiz -lang=DemoSwe (PredVP (UsePron ?) (UseV ?))
+</PRE>
+<P>
+The following quiz translates English sentences in random tenses and polarities:
+</P>
+<PRE>
+    translate_quiz -from=DemoEng -to=DemoSwe (UseCl ? ? (PredVP (UsePron ?) (UseV ?)))
+</PRE>
+<P></P>
+<A NAME="toc13"></A>
+<H2>Verbs with different predication patterns</H2>
+<P>
+Transitive verbs take an object in the accusative case (if there is a case):
+</P>
+<PRE>
+  &gt; %translate "he loves her"
+  han älskar henne
+</PRE>
+<P>
+A generalization is two-place verbs, where the object is in some other case, or
+has a preposition. What is transitive in one language can often require a 
+preposition in another language:
+</P>
+<PRE>
+  &gt; %translate "he waits for her"
+  han väntar på henne
+  
+  &gt; %translate "he likes her"
+  han tycker om henne
+</PRE>
+<P>
+Three-place verbs usually take an object and another argument:
+</P>
+<PRE>
+  &gt; %translate "the king gave the city to the queen"
+  kungen gav staden till drottningen
+</PRE>
+<P>
+There are also verbs that have a sentence or a question as an argument,
+possibly with an object:
+</P>
+<PRE>
+  &gt; %translate "he said that the man walks"
+  han sade att mannen går
+  
+  &gt; %translate "he wonders who sleeps"
+  han undrar vem som sover
+  
+  &gt; %translate "he asked me who sleeps"
+  han frågade mig vem som sover
+  
+  &gt; %translate "we answer to him that everybody sleeps"
+  vi svarar till honom att alla sover
+</PRE>
+<P>
+There are also verbs that take other verbs (with their complements) as arguments:
+</P>
+<PRE>
+  &gt; %translate "we must sleep"
+  vi måste sova
+  
+  &gt; %translate "we want to wait for her"
+  vi vill vänta på henne
+</PRE>
+<P>
+The verb <I>to be</I> takes adjectives and noun phrases as arguments:
+</P>
+<PRE>
+  &gt; %translate "he is very old"
+  han är mycket gammal
+  
+  &gt; %translate "he is an old man"
+  han är en gammal man
+</PRE>
+<P>
+The following quiz can be used for training the inflection of clauses with 
+any verb:
+</P>
+<PRE>
+    morpho_quiz -lang=DemoSwe (PredVP (UsePron ?) ?)
+</PRE>
+<P>
+The following quiz can be used for training the inflection of clauses with 
+<I>to be</I>:
+</P>
+<PRE>
+    morpho_quiz -lang=DemoSwe (PredVP (UsePron ?) (UseComp ?))
+</PRE>
+<P>
+The following quiz translates English sentences in random tenses and polarities:
+</P>
+<PRE>
+    translate_quiz -from=DemoEng -to=DemoSwe (UseCl ? ? (PredVP (UsePron ?) ?))
+</PRE>
+<P></P>
+<A NAME="toc14"></A>
+<H2>Questions</H2>
+<P>
+Questions are similar to sentences, but can have a different word order:
+</P>
+<PRE>
+  &gt; %translate "is he very old"
+  är han mycket gammal
+  
+  &gt; %translate "would I sleep"
+  skulle jag sova
+</PRE>
+<P>
+Questions can moreover have <B>interrogatives</B> as their arguments,
+instead of norman nouns:
+</P>
+<PRE>
+  &gt; %translate "who doesn't sleep"
+  vem sover inte
+  
+  &gt; %translate "whom did she see"
+  vem såg hon
+</PRE>
+<P>
+Sentences without interrogatives can be made to questions with
+</P>
+<PRE>
+  &gt; %translate "where will we sleep"
+  var ska vi sova
+  
+  &gt; %translate "why didn't she wait for us"
+  varför väntade hon inte på oss
+</PRE>
+<P></P>
+<A NAME="toc15"></A>
+<H1>For developers</H1>
+<P>
+There are three levels of involvement, from the easiest to the hardest,
+</P>
+<OL>
+<LI>create the default tour for a language that is in the GF resource grammar library
+  (takes less than a minute, if you have the tools listed below)
+<LI>customize the tour for a language that is in the library
+  (worth spending a couple of hours on)
+<LI>add a language to the library and build the tour for it
+  (an undertaking of a few months)
+</OL>
+
+<P>
+1. To create the tour for a language that is in the library, e.g. Spanish, 
+just run
+</P>
+<PRE>
+    make Spa
+</PRE>
+<P>
+in the directory <CODE>GF/lib/doc/tour</CODE>. You need the following things for this 
+to work out
+</P>
+<UL>
+<LI>the program GF (Grammatical Framework), downloadable from
+  the <A HREF="http://grammaticalframework.org">GF website</A>
+<LI>the precompiled grammar package <CODE>Demo.pgf</CODE>, downloadable from 
+  <A HREF="http://grammaticalframework.org/lib/doc/Demo.pgf.gz">here</A> or makeable in
+  <CODE>GF/lib/src</CODE> with <CODE>make demo</CODE>
+<LI>the command <CODE>runghc</CODE> available in any <A HREF="http://www.haskell.org/ghc">GHC</A> installation
+<LI>the command <A HREF="http://txt2tags.sourceforge.net/"><CODE>txt2tags</CODE></A>
+</UL>
+
+<P>
+2. To customize the tour, edit the master file <CODE>GF/lib/doc/tour/tour.txt</CODE>. 
+The customization mainly proceeds by adding lines marked <CODE>#Spa</CODE> (if Spanish is
+your target language). This can be done both for text lines, e.g.
+</P>
+<PRE>
+    #Spa Swedish has separate second-person plural pronouns for both genders.
+</PRE>
+<P>
+and for GF command lines, e.g.
+</P>
+<PRE>
+    #Spa %translate "you are very old"
+</PRE>
+<P>
+In both cases, one can also add <CODE>#Spa</CODE> to the existing markings if they are
+adequate, e.g.
+</P>
+<PRE>
+    #Fre,Spa Swedish has two genders: the masculine and the feminine.
+</PRE>
+<P>
+It's in particular for this purpose that we recommend using the variable <CODE>Swedish</CODE>
+rather than the constant <CODE>Spanish</CODE>. The <CODE>make</CODE> procedure replaces the variable with
+the constant automatically. Similarly, the language code <CODE>Spa</CODE> used in GF commands
+should be avoided and the variable <CODE>Swe</CODE> used instead.
+</P>
+<P>
+In general, the master file <CODE>tour.txt</CODE> is processed line by line. It has five kinds
+of lines, distinguished by the prefix of the line:
+</P>
+<UL>
+<LI><CODE>#</CODE> <I>LANGS</I> <CODE>&gt;</CODE> <I>COMMAND</I> : language-specific GF command
+<LI><CODE>#</CODE> <I>LANGS</I> <I>TEXT</I> : language-specific text
+<LI><CODE>&gt;</CODE> <I>COMMAND</I> : language-independent GF command
+<LI><CODE>*</CODE> : ignored; included for the sake of documentation
+<LI>any other text : language-independet text
+</UL>
+
+<P>
+Here <I>LANGS</I> is a comma-separated list of 3-letter language codes,
+such as <CODE>Fre,Spa,Ita</CODE>.
+</P>
+<P>
+3. To contribute a new language to the library, see the
+<A HREF="http://grammaticalframework.org/doc/gfss">GF Resource Grammar Project</A>.
+</P>
+<P>
+In cases (2) and (3), please contribute your work to the GF community!
+</P>
+
+<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -\-toc -thtml tourSwe.txt -->
+</BODY></HTML>
