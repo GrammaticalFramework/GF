@@ -216,7 +216,7 @@ doGraphvizParseTree pgf lang tree = do
   pipeIt2graphviz $ PGF.graphvizParseTree pgf lang tree
 
 doGraphvizAlignment pgf tree = do
-  pipeIt2graphviz $ PGF.graphvizAlignment pgf tree
+  pipeIt2graphviz $ PGF.graphvizAlignment pgf (PGF.languages pgf) tree
 
 pipeIt2graphviz :: String -> IO BS.ByteString
 pipeIt2graphviz code = do
@@ -310,7 +310,7 @@ cat pgf mcat = fromMaybe (PGF.startCat pgf) mcat
 
 parse' :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [(PGF.Language,[PGF.Tree])]
 parse' pgf input mcat mfrom = 
-   [(from,ts) | from <- froms, canParse pgf from, let ts = PGF.parse pgf from cat input, not (null ts)]
+   [(from,ts) | from <- froms, canParse pgf from, (PGF.ParseResult ts,_) <- [PGF.parse pgf from cat input]]
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
         cat = fromMaybe (PGF.startCat pgf) mcat
 
