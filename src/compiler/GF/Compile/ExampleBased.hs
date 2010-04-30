@@ -41,7 +41,7 @@ convertFile conf src file = do
   convEx (cat,ex) = do
     appn "("
     let typ = maybe (error "no valid cat") id $ readType cat
-    ws <- case fst (parse pgf lang typ ex) of
+    ws <- case fst (parse_ pgf lang typ ex) of
       ParseFailed _ -> do
         let ws = morphoMissing morpho (words ex)
         appv ("WARNING: cannot parse example " ++ ex) 

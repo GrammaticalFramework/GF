@@ -58,7 +58,7 @@ module PGF(
            Forest.showBracketedString,
 
            -- ** Parsing
-           parse, parseWithRecovery, parseAllLang, parseAll,
+           parse, parseAllLang, parseAll, parse_, parseWithRecovery,
 
            -- ** Evaluation
            PGF.compute, paraphrase,
@@ -139,10 +139,7 @@ readPGF  :: FilePath -> IO PGF
 
 -- | Tries to parse the given string in the specified language
 -- and to produce abstract syntax expression.
-parse        :: PGF -> Language -> Type -> String -> (Parse.ParseResult,Maybe BracketedString)
-
--- | This is an experimental function. Use it on your own risk
-parseWithRecovery :: PGF -> Language -> Type -> [Type] -> String -> (Parse.ParseResult,Maybe BracketedString)
+parse        :: PGF -> Language -> Type -> String -> [Tree]
 
 -- | The same as 'parseAllLang' but does not return
 -- the language.
@@ -155,6 +152,12 @@ parseAll     :: PGF -> Type -> String -> [[Tree]]
 -- Only those languages
 -- for which at least one parsing is possible are listed.
 parseAllLang :: PGF -> Type -> String -> [(Language,[Tree])]
+
+-- | The same as 'parse' but returns more detailed information
+parse_       :: PGF -> Language -> Type -> String -> (Parse.ParseResult,Maybe BracketedString)
+
+-- | This is an experimental function. Use it on your own risk
+parseWithRecovery :: PGF -> Language -> Type -> [Type] -> String -> (Parse.ParseResult,Maybe BracketedString)
 
 -- | The same as 'generateAllDepth' but does not limit
 -- the depth in the generation, and doesn't give an initial expression.
@@ -217,7 +220,17 @@ complete :: PGF -> Language -> Type -> String
 
 readPGF f = decodeFile f
 
-parse pgf lang typ s = 
+parse pgf lang typ s =
+  case parse_ pgf lang typ s of
+    (Parse.ParseResult ts,_) -> ts
+    _                        -> []
+
+parseAll mgr typ = map snd . parseAllLang mgr typ
+
+parseAllLang mgr typ s = 
+  [(lang,ts) | lang <- languages mgr, (Parse.ParseResult ts,_) <- [parse_ mgr lang typ s]]
+
+parse_ pgf lang typ s = 
   case Map.lookup lang (concretes pgf) of
     Just cnc -> Parse.parse pgf lang typ (words s)
     Nothing  -> error ("Unknown language: " ++ showCId lang)
@@ -230,11 +243,6 @@ groupResults = Map.toList . foldr more Map.empty . start . concat
   start ls = [(l,[s]) | (l,s) <- ls]
   more (l,s) = 
     Map.insertWith (\ [x] xs -> if elem x xs then xs else (x : xs)) l s
-
-parseAll mgr typ = map snd . parseAllLang mgr typ
-
-parseAllLang mgr typ s = 
-  [(lang,ts) | lang <- languages mgr, (Parse.ParseResult ts,_) <- [parse mgr lang typ s], not (null ts)]
 
 generateRandom pgf cat = do
   gen <- newStdGen
