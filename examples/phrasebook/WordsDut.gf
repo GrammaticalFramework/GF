@@ -161,8 +161,10 @@ ik ga te voet/ ik ga lopend
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYou d = mkText (lin Text (ss ("tot"))) (mkPhrase (mkUtt d)) ; -- zie je / tot 
-    PSeeYouPlace p d = 
+    PSeeYouDate d = mkText (lin Text (ss ("tot"))) (mkPhrase (mkUtt d)) ; -- zie je / tot 
+    PSeeYouPlace p = 
+      mkText (lin Text (ss ("tot ziens"))) (mkPhrase (mkUtt p.at)) ; -- tot ziens in p (AR) 
+    PSeeYouPlaceDate p d = 
       mkText (lin Text (ss ("tot"))) 
         (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ; --tot ... op/in/bij
 
@@ -208,7 +210,7 @@ ik ga te voet/ ik ga lopend
     HowFarFromBy x y t = 
       mkQS (mkQCl long_IAdv (mkNP (mkNP y.name (SyntaxDut.mkAdv from_Prep x.name)) t)) ;
 --hoelang duurt het om van het vliegveld naar het hotel te gaan per taxi
-    HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t.by)) ; --hoe ver is het museum per bus
+    HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t)) ; --hoe ver is het museum per bus
  
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;

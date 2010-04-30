@@ -123,7 +123,7 @@ concrete WordsRon of Words = SentencesRon ** open
     HowFarFrom x y = mkQS (mkQCl how8much_IAdv (mkNP (mkDestination y.name) (SyntaxRon.mkAdv from_Prep x.name))) ;
     HowFarFromBy x y t = 
       mkQS (mkQCl how8much_IAdv (mkNP (mkNP (mkDestination y.name) (SyntaxRon.mkAdv from_Prep x.name)) t)) ;
-    HowFarBy y t = mkQS (mkQCl how8much_IAdv (mkNP (mkDestination y.name) t.by)) ; 
+    HowFarBy y t = mkQS (mkQCl how8much_IAdv (mkNP (mkDestination y.name) t)) ; 
 
    WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
@@ -176,10 +176,11 @@ concrete WordsRon of Words = SentencesRon ** open
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYou d = mkText (lin Text {s = ("ne" ++ "vedem")}) (mkPhrase (mkUtt d)) ;
-    PSeeYouPlace p d = 
+    PSeeYouDate d = mkText (lin Text {s = ("ne" ++ "vedem")}) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlaceDate p d = 
       mkText (lin Text { s = ("ne" ++ "vedem")}) 
         (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
+    PSeeYouPlace p = mkText (lin Text {s = ("ne" ++ "vedem")}) (mkPhrase (mkUtt p.at)) ;
 
 -- Relations are expressed as "my wife" or "the wife of my son", as defined by $xOf$
 -- below. Languages with productive genitives can use an equivalent of

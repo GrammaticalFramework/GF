@@ -159,8 +159,9 @@ concrete WordsSwe of Words = SentencesSwe **
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYou d = mkText (lin Text (ss ("vi ses"))) (mkPhrase (mkUtt d)) ;
-    PSeeYouPlace p d = 
+    PSeeYouDate d = mkText (lin Text (ss ("vi ses"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlace p = mkText (lin Text (ss ("vi ses"))) (mkPhrase (mkUtt p.at)) ;
+    PSeeYouPlaceDate p d = 
       mkText (lin Text (ss ("vi ses"))) 
         (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
 
