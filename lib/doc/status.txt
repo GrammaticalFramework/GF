@@ -31,10 +31,10 @@ are marked in the table
 | Ron   | +    | ++    | +   | +    | +   | +    | -     | -    | *RE
 | Rus   | +    | ++    | +   | +    | +   | -    | -     | -    | JK
 | Spa   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,IA,TS
-| Swe   | +    | ++    | +   | +    | +   | +    | +     | +    | *AR
+| Swe   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
 | Tha   | -    | -     | -   | -    | -   | -    | -     | -    | AR
 | Tur   | -    | ++    | +   | -    | -   | -    | -     | +    | SC,KA
-| Urd   | +    | ++    | +   | +    | +   | +    | -     | -    | *SV
+| Urd   | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,MH
 
 Lang = 3-letter ISO language code, used in library file names
 
@@ -73,6 +73,8 @@ JB Jean-Philippe Bernardy,
 JK Janna Khegai,
 JS Jordi Saludes,
 KA Krasimir Angelov,
+MF Markus Forsberg,
+MH Muhammad Humayoun,
 RE Ramona Enache,
 SC Server Cimen,
 SV Shafqat Virk,
