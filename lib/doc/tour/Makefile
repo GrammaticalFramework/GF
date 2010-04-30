@@ -37,5 +37,8 @@ Spa:
 	runghc MkTour Spa Spanish
 
 Swe:
-	txt2tags -thtml -o tourSwe.html tour.txt 
+	runghc MkTour Swe Swedish
+
+Urd:
+	runghc MkTour Urd Urdu
 
