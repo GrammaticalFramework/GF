@@ -117,7 +117,10 @@ function swap(a,i,j) { // Note: this doesn't work on strings.
   return a;
 }
 
-function sort(a) { // Note: this doesn't work on strings.
+function sort(a) {
+// https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array/sort
+  return a.sort;
+  /* // Note: this doesn't work on strings.
   for(var i=0;i<a.length-1;i++) {
     var min=i;
     for(var j=i+1;j<a.length;j++)
@@ -125,6 +128,7 @@ function sort(a) { // Note: this doesn't work on strings.
     if(min!=i) swap(a,i,min);
   }
   return a;
+  */
 }
 
 function filter(p,xs) {
@@ -143,6 +147,9 @@ function implode(cs) { // array of strings to string
   */
   return cs.join("");
 }
+
+function hasPrefix(s,pre) { return s.substr(0,pre.length)==pre; }
+
 /*
 function all(p,xs) {
   for(var i=0;i<xs.length;i++)

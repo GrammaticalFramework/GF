@@ -59,9 +59,6 @@ Some implementation details:
   <li>[Added 2010-02-25] Next to each translation, there is now a little tree icon that
   you can click on to see a drawing of an abstract syntax tree or a parse tree. If you click
   on a drawing it collapses back into a tree icon.
-</ul>
-Work in progress:
-<ul>
   <li>[Added 2010-04-09] Preparations to support different ways to access the grammar:
   currently we access a PGF server via JSONP, but I would also like to support AJAX,
   and local/downloaded JavaScript grammars.
@@ -77,12 +74,20 @@ Work in progress:
   <code>{show_abstract:true,show_trees:true}</code> to show the abstract syntax of parsed
   sentences, and to show icons that expand to syntax/parse trees next each translation.
   These features can be turned off by setting the fields to <code>false</code>.
+  <li>[Added 2010-04-30] Grammar menu is omitted if there is only one grammar in
+  the grammar list.
+  <li>[Added 2010-04-30] Fewer hardwired constants and new
+  <code>start_minibar</code> options (server, grammars_url, grammar_list,
+  show_grouped_translations, delete_button_text) to make
+  <code>minibar.js</code> more resuable.)
 </ul>
 
 <hr>
+<small class=modtime>
+<!-- hhmts start --> Last modified: Fri Apr 30 16:47:43 CEST 2010 <!-- hhmts end -->
+</small>
 <address>
 <a href="http://www.cs.chalmers.se/~hallgren/">TH</a>
 <img src="http://www.altocumulus.org/~hallgren/online.cgi?icon" alt=""></address>
 </address>
-<!-- hhmts start --> Last modified: Mon Apr 19 18:43:48 CEST 2010 <!-- hhmts end -->
 </body> </html>
