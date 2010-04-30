@@ -31,9 +31,9 @@ are marked in the table
 | Ron   | +    | ++    | +   | +    | +   | +    | -     | -    | *RE
 | Rus   | +    | ++    | +   | +    | +   | -    | -     | -    | JK
 | Spa   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,IA,TS
-| Swe   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Swe   | +    | ++    | +   | +    | +   | +    | +     | +    | *AR
 | Tha   | -    | -     | -   | -    | -   | -    | -     | -    | AR
-| Tur   | -    | ++    | +   | -    | -   | -    | -     | -    | SC,KA
+| Tur   | -    | ++    | +   | -    | -   | -    | -     | +    | SC,KA
 | Urd   | +    | ++    | +   | +    | +   | +    | -     | -    | *KA
 
 Lang = 3-letter ISO language code, used in library file names
