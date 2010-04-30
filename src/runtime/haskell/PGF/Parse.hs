@@ -39,12 +39,13 @@ data ParseResult
   | ParseResult [Tree]             -- ^ If the parsing was successful we get a list of abstract syntax trees. The list should be non-empty.
 
 parse :: PGF -> Language -> Type -> [String] -> (ParseResult,Maybe BracketedString)
-parse pgf lang typ toks = loop 0 (initState pgf lang typ) toks
+parse pgf lang typ toks = loop (initState pgf lang typ) toks
   where
-    loop i ps []     = getParseResult ps typ
-    loop i ps (t:ts) = case nextState ps t of
-                         Left  es -> (ParseFailed i,Nothing)
-                         Right ps -> loop (i+1) ps ts
+    loop ps []     = getParseResult ps typ
+    loop ps (t:ts) = case nextState ps t of
+                       Left  es -> case es of
+                                     EState _ _ chart -> (ParseFailed (offset chart),Nothing)
+                       Right ps -> loop ps ts
 
 parseWithRecovery :: PGF -> Language -> Type -> [Type] -> [String] -> (ParseResult,Maybe BracketedString)
 parseWithRecovery pgf lang typ open_typs toks = accept (initState pgf lang typ) toks
@@ -167,7 +168,11 @@ getParseResult (PState pgf cnc chart items) ty@(DTyp _ start _) =
                 Right e1 <- [checkExpr pgf e ty]
                 return e1
 
-  in (ParseResult exps,mb_bs)
+      res   = if null exps
+                then ParseFailed (offset chart)
+                else ParseResult exps
+
+  in (res,mb_bs)
   where
     (mb_agenda,acc) = TMap.decompose items
     agenda = maybe [] Set.toList mb_agenda
