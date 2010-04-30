@@ -1,22 +1,22 @@
-Expression: join {n1} {n2} {n3} l12 (link {n2} {n3} l23)
-Type:       Path n1 n3
-
-Expression: join {n1} {n2} {n3} l12 (link {n2} {n3} l23)
-Type:       Path n1 n3
-
-Expression: <?2 : Label {?1}>
-Type:       Label {?1}
-
-Expression: <?2 : Label {n1}>
-Type:       Label {n1}
-
-{n1} is implicit argument but not implicit argument is expected here
-Expression: <\{_1}, x -> x : ({m} : Node) -> (n : Node) -> Node>
-Type:       ({m} : Node) -> (n : Node) -> Node
-
-Expression: <\{_1} -> n1 : ({m} : Node) -> Node>
-Type:       ({m} : Node) -> Node
-
-Expression: <\{_1} -> ?1 : ({m} : Node) -> Node>
-Type:       ({m} : Node) -> Node
-
+Expression: join {n1} {n2} {n3} l12 (link {n2} {n3} l23)
+Type:       Path n1 n3
+
+Expression: join {n1} {n2} {n3} l12 (link {n2} {n3} l23)
+Type:       Path n1 n3
+
+Expression: <?2 : Label {?1}>
+Type:       Label {?1}
+
+Expression: <?2 : Label {n1}>
+Type:       Label {n1}
+
+{n1} is implicit argument but not implicit argument is expected here
+Expression: <\{_1}, x -> x : ({m} : Node) -> (n : Node) -> Node>
+Type:       ({m} : Node) -> (n : Node) -> Node
+
+Expression: <\{_1} -> n1 : ({m} : Node) -> Node>
+Type:       ({m} : Node) -> Node
+
+Expression: <\{_1} -> ?1 : ({m} : Node) -> Node>
+Type:       ({m} : Node) -> Node
+

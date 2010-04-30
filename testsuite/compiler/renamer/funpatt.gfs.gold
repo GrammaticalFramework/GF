@@ -1,5 +1,5 @@
-
-
-renaming module funpatt
-   renaming definition of d in funpatt.gf, line 12
-      data constructor expected but funpatt.D1 is found instead
+
+
+renaming module funpatt
+   renaming of d in funpatt.gf, line 11
+      data constructor expected but funpatt.D1 is found instead
