@@ -46,10 +46,7 @@ translationList mex mprobs pgf ig og typ number = do
   return $ map mkOne $ ts
  where
    mkOne t = (norml (linearize pgf ig t), map (norml . linearize pgf og) (homonyms t))
-   homonyms t =
-     case (fst . parse pgf ig typ . linearize pgf ig) t of
-       ParseResult ts -> ts
-       _              -> []
+   homonyms = parse pgf ig typ . linearize pgf ig
 
 morphologyList :: 
   Maybe Expr -> Maybe Probabilities -> 

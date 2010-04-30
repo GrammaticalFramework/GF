@@ -897,7 +897,7 @@ allCommands env@(pgf, mos) = Map.fromList [
   ]
  where
    par opts s = case optOpenTypes opts of
-                  []        -> [parse pgf lang (optType opts) s | lang <- optLangs opts]
+                  []        -> [parse_ pgf lang (optType opts) s | lang <- optLangs opts]
                   open_typs -> [parseWithRecovery pgf lang (optType opts) open_typs s | lang <- optLangs opts]
  
    void = ([],[])
