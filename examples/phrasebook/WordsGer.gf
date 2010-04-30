@@ -110,8 +110,8 @@ concrete WordsGer of Words = SentencesGer **
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
---    PSeeYou d = mkText (lin Text (ss ("auf Wiedersehen"))) (mkPhrase (mkUtt d)) ;
---    PSeeYouPlace p d = 
+--    PSeeYouDate d = mkText (lin Text (ss ("auf Wiedersehen"))) (mkPhrase (mkUtt d)) ;
+--    PSeeYouPlaceDate p d = 
 --      mkText (lin Text (ss ("auf Wiedersehen"))) 
 --        (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
 

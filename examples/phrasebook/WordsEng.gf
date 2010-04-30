@@ -164,8 +164,9 @@ concrete WordsEng of Words = SentencesEng **
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYou d = mkText (lin Text (ss ("see you"))) (mkPhrase (mkUtt d)) ;
-    PSeeYouPlace p d = 
+    PSeeYouDate d = mkText (lin Text (ss ("see you"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlace p = mkText (lin Text (ss ("see you"))) (mkPhrase (mkUtt p.at)) ;
+    PSeeYouPlaceDate p d = 
       mkText (lin Text (ss ("see you"))) 
         (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
 
@@ -209,7 +210,7 @@ concrete WordsEng of Words = SentencesEng **
     HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP y.name (SyntaxEng.mkAdv from_Prep x.name))) ;
     HowFarFromBy x y t = 
       mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxEng.mkAdv from_Prep x.name)) t)) ;
-    HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t.by)) ;
+    HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t)) ;
  
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;

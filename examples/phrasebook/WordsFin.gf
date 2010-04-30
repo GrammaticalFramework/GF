@@ -164,8 +164,9 @@ concrete WordsFin of Words = SentencesFin **
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYou d = mkText (lin Text (ss ("nähdään"))) (mkPhrase (mkUtt d)) ;
-    PSeeYouPlace p d = 
+    PSeeYouDate d = mkText (lin Text (ss ("nähdään"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlace p = mkText (lin Text (ss ("nähdään"))) (mkPhrase (mkUtt p.at)) ;
+    PSeeYouPlaceDate p d = 
       mkText (lin Text (ss ("nähdään"))) 
         (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
 
@@ -203,12 +204,12 @@ concrete WordsFin of Words = SentencesFin **
       mkQS (mkQCl far_IAdv (mkCl place.name t)) ;
       -- mkQS (mkQCl (mkIAdv far_IAdv t) y.name) ; 
 
-    ---- TODO: meneekö keskustaan busseja
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
     IsTranspPlace trans place =
-      mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
+      mkQS (mkQCl (E.AdvPredNP place.to L.go_V (E.PartCN (trans.name)))) ; 
+      -- meneekö keskustaan bussia
 
 -- modifiers of places
 

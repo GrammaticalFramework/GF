@@ -124,8 +124,9 @@ lin
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYou d = mkText (lin Text (ss ("on se verra"))) (mkPhrase (mkUtt d)) ;
-    PSeeYouPlace p d = 
+    PSeeYouPlace p = mkText (lin Text (ss ("on se verra"))) (mkPhrase (mkUtt p.at)) ;
+    PSeeYouDate d = mkText (lin Text (ss ("on se verra"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlaceDate p d = 
       mkText (lin Text (ss ("on se verra"))) 
         (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
 

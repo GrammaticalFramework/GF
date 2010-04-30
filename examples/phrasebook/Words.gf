@@ -157,8 +157,11 @@ abstract Words = Sentences ** {
     PropOpenDay    : Place -> Day  -> Proposition ;  -- the museum is open on Mondays
     PropClosedDay  : Place -> Day  -> Proposition ;  -- the museum is closed on Mondays
 
-    PSeeYou      : Date -> Phrase ;           -- see you on Monday
-    PSeeYouPlace : Place -> Date -> Phrase ;  -- see you in the bar on Monday
+    PSeeYouPlaceDate : Place -> Date -> Phrase ;     -- see you in the bar on Monday
+    PSeeYouPlace     : Place         -> Phrase ;     -- see you in the bar
+    PSeeYouDate      :          Date -> Phrase ;     -- see you on Monday
+
+
 
 -- family relations
 
