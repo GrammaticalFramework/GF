@@ -1,0 +1,93 @@
+The Status of the GF Resource Grammar Library
+Aarne Ranta
+%%date
+
+
+
+The following table gives the languages currently available in the 
+GF Resource Grammar Library.
+
+Corrections and additions are welcome! Notice that only those parts of implementations
+that are currently available via http://grammaticalframework.org 
+are marked in the table
+
+
+|| Lang | Mini | Parad | Lex | Lang | API | Symb | Irreg | Dict | authors       ||
+| Ara   | +    | +     | +   | -    | -   | -    | -     | -    | AD
+| Bul   | +    | +     | +   | +    | +   | +    | +     | +    | *KA
+| Cat   | +    | ++    | +   | +    | +   | +    | +     | -    | *JS
+| Dan   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Dut   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,FJ
+| Eng   | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,BB
+| Fin   | +    | ++    | +   | +    | +   | +    | -     | -    | *AR
+| Fre   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Ger   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Hin   | -    | -     | -   | -    | -   | -    | -     | -    | AR,SV
+| Ina   | +    | ++    | +   | +    | -   | -    | -     | -    | JB
+| Ita   | +    | ++    | +   | +    | +   | +    | -     | -    | *AR
+| Lat   | -    | -     | -   | -    | -   | -    | -     | -    | *AR
+| Nor   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Pol   | +    | +     | +   | +    | +   | +    | -     | -    | IN,AS
+| Ron   | +    | ++    | +   | +    | +   | +    | -     | -    | *RE
+| Rus   | +    | ++    | +   | +    | +   | -    | -     | -    | JK
+| Spa   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,IA,TS
+| Swe   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Tha   | -    | -     | -   | -    | -   | -    | -     | -    | AR
+| Tur   | -    | ++    | +   | -    | -   | -    | -     | -    | SC,KA
+| Urd   | +    | ++    | +   | +    | +   | +    | -     | -    | *KA
+
+Lang = 3-letter ISO language code, used in library file names
+
+Mini = minimal resource, compiles with ``make minimal``
+
+Parad = ``Paradigms`` file complete for major POS, ++ means with smart paradigms
+
+Lex = the resource ``Lexicon`` (nearly) complete
+
+Lang = the resource ``Syntax`` (nearly) complete
+
+API = the ``Syntax`` compiles
+
+API = the ``Symbolic`` API compiles
+
+Irreg = the ``Irreg`` module with irregular verbs exists
+
+Dict = the ``Dict`` module, large-scale morphological lexicon, exists
+
+authors = main contributors, * means still active 
+(ready to fix bugs, answer to questions, etc)
+
+
+===Author codes===
+
+AD Ali El Dada,
+AR Aarne Ranta,
+AS Adam Slaski,
+BB Björn Bringert,
+FJ Femke Johansson,
+IA Ingrid Andersson,
+IN Ilona Novak,
+JB Jean-Philippe Bernardy,
+JK Janna Khegai,
+JS Jordi Saludes,
+KA Krasimir Angelov,
+RE Ramona Enache,
+SC Server Cimen,
+SV Shafqat Virk,
+TH Therese Söderberg
+
+
+
+
+==Rules==
+
+Only languages available at http://grammaticalframework.org are included in the table.
+
+If you want to work on a language already in the table, please be kind and contact the
+active authors of it.
+
+Feel free to start a new language that is not yet in the table - but let us know and
+contribute some code as soon as you can!
+
+
+
