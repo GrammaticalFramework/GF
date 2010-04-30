@@ -22,6 +22,7 @@ import PGF.Morphology
 import PGF.Printer
 import PGF.Probabilistic -- (getProbsFromFile,prProbabilities,defaultProbabilities)
 import PGF.Generate (generateRandomFrom) ----
+import PGF.Tree (Tree(Fun), expr2tree, tree2expr)
 import GF.Compile.Export
 import GF.Compile.ExampleBased
 import GF.Infra.Option (noOptions, readOutputFormat)
@@ -150,7 +151,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        "flag -format."
        ],
      exec = \opts es -> do
-         let grph = if null es then [] else graphvizAlignment pgf (head es)
+         let grph = if null es then [] else graphvizAlignment pgf (languages pgf) (head es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts
@@ -481,11 +482,14 @@ allCommands env@(pgf, mos) = Map.fromList [
        "will accept unknown adjectives, nouns and verbs with the resource grammar."
        ],
      exec = \opts ts -> 
-              returnFromExprsPar opts ts $ concatMap (par opts) $ toStrings ts,
+              return $ fromParse opts ts $ concatMap (par opts) $ toStrings ts,
      flags = [
        ("cat","target category of parsing"),
        ("lang","the languages of parsing (comma-separated, no spaces)"),
        ("openclass","list of open-class categories for robust parsing")
+       ],
+     options = [
+       ("bracket","prints the bracketed string from the parser")
        ]
      }),
   ("pg", emptyCommandInfo { -----
@@ -893,8 +897,8 @@ allCommands env@(pgf, mos) = Map.fromList [
   ]
  where
    par opts s = case optOpenTypes opts of
-                  []        -> concat  [parse pgf lang (optType opts) s | lang <- optLangs opts]
-                  open_typs -> concat  [parseWithRecovery pgf lang (optType opts) open_typs s | lang <- optLangs opts]
+                  []        -> [parse pgf lang (optType opts) s | lang <- optLangs opts]
+                  open_typs -> [parseWithRecovery pgf lang (optType opts) open_typs s | lang <- optLangs opts]
  
    void = ([],[])
 
@@ -918,8 +922,16 @@ allCommands env@(pgf, mos) = Map.fromList [
                                    map (map (unl . snd)) . tabularLinearizes pgf lang
        _ | isOpt "table"   opts -> unlines . concat . intersperse [[]] . 
                     map (map (\(p,v) -> p+++":"+++unl v)) . tabularLinearizes pgf lang
-       _ | isOpt "bracket" opts -> unlines . markLinearizes pgf lang
+       _ | isOpt "bracket" opts -> showBracketedString . bracketedLinearize pgf lang
        _                        -> unl . linearize pgf lang
+
+   -- replace each non-atomic constructor with mkC, where C is the val cat
+   tree2mk pgf = showExpr [] . tree2expr . t2m . expr2tree where
+     t2m t = case t of
+       Fun cid [] -> t
+       Fun cid ts -> Fun (mk cid) (map t2m ts)
+       _ -> t
+     mk = mkCId . ("mk" ++) . showCId . lookValCat pgf
 
    unlex opts lang = stringOps Nothing (getUnlex opts lang ++ map prOpt opts) ----
 
@@ -991,13 +1003,21 @@ allCommands env@(pgf, mos) = Map.fromList [
    toStrings = map showAsString 
    toString = unwords . toStrings
 
+   fromParse opts ts parses
+     | isOpt "bracket" opts = case catMaybes bss of
+                                []  -> ([], "no brackets found")
+                                bss -> ([], unlines $ map showBracketedString bss)
+     | otherwise            = case ts of
+                                [] -> ([], "no trees found" ++ 
+                                           missingWordMsg (optMorpho opts) (concatMap words (toStrings ts))
+                                      )
+                                _  -> fromExprs ts
+     where
+       (prs,bss) = unzip parses
+       ts        = [t | ParseResult ts <- prs, t <- ts]
+
    returnFromExprs es = return $ case es of
      [] -> ([], "no trees found")
-     _  -> fromExprs es
-   returnFromExprsPar opts ts es = return $ case es of
-     [] -> ([], "no trees found" ++ 
-                missingWordMsg (optMorpho opts) (concatMap words (toStrings ts))
-            )
      _  -> fromExprs es
 
    prGrammar opts

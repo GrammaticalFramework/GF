@@ -56,7 +56,7 @@ data Symbol
 data Production
   = PApply  {-# UNPACK #-} !FunId [FId]
   | PCoerce {-# UNPACK #-} !FId
-  | PConst  Expr [String]
+  | PConst  CId Expr [String]
   deriving (Eq,Ord,Show)
 data CncCat = CncCat {-# UNPACK #-} !FId {-# UNPACK #-} !FId {-# UNPACK #-} !(Array LIndex String)
 data CncFun = CncFun CId {-# UNPACK #-} !(UArray LIndex SeqId) deriving (Eq,Ord,Show)
@@ -85,7 +85,6 @@ data Tokn =
    KS String
  | KP [String] [Alternative]
   deriving (Eq,Ord,Show)
-
 
 -- merge two PGFs; fails is differens absnames; priority to second arg
 

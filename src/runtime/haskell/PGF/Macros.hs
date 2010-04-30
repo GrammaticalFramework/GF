@@ -11,6 +11,7 @@ import qualified Data.Array  as Array
 import Data.Maybe
 import Data.List
 import GF.Data.Utilities(sortNub)
+import Text.PrettyPrint
 
 -- operations for manipulating PGF grammars and objects
 
@@ -202,3 +203,56 @@ updateProductionIndices pgf = pgf{ concretes = fmap updateConcrete (concretes pg
         getFunctions (PCoerce fid)       = case IntMap.lookup fid productions of
                                              Nothing    -> []
                                              Just prods -> [fun | prod <- Set.toList prods, fun <- getFunctions prod]
+
+
+-- Utilities for doing linearization
+
+-- | BracketedString represents a sentence that is linearized
+-- as usual but we also want to retain the ''brackets'' that
+-- mark the beginning and the end of each constituent.
+data BracketedString
+  = Leaf String                                                                -- ^ this is the leaf i.e. a single token
+  | Bracket {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex CId [BracketedString]   -- ^ this is a bracket. The 'CId' is the category of
+                                                                               -- the phrase. The 'FId' is an unique identifier for
+                                                                               -- every phrase in the sentence. For context-free grammars
+                                                                               -- i.e. without discontinuous constituents this identifier
+                                                                               -- is also unique for every bracket. When there are discontinuous 
+                                                                               -- phrases then the identifiers are unique for every phrase but
+                                                                               -- not for every bracket since the bracket represents a constituent.
+                                                                               -- The different constituents could still be distinguished by using
+                                                                               -- the constituent index i.e. 'LIndex'. If the grammar is reduplicating
+                                                                               -- then the constituent indices will be the same for all brackets
+                                                                               -- that represents the same constituent.
+
+data BracketedTokn
+  = LeafKS [String]
+  | LeafKP [String] [Alternative]
+  | Bracket_ {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex CId [BracketedTokn]        -- Invariant: the list is not empty
+
+type LinTable = Array.Array LIndex [BracketedTokn]
+
+-- | Renders the bracketed string as string where 
+-- the brackets are shown as @(S ...)@ where
+-- @S@ is the category.
+showBracketedString :: BracketedString -> String
+showBracketedString = render . ppBracketedString
+
+ppBracketedString (Leaf t) = text t
+ppBracketedString (Bracket fcat index cat bss) = parens (ppCId cat <+> hsep (map ppBracketedString bss))
+
+untokn :: String -> BracketedTokn -> (String,[BracketedString])
+untokn nw (LeafKS ts)   = (head ts,map Leaf ts)
+untokn nw (LeafKP d vs) = let ts = sel d vs nw
+                          in (head ts,map Leaf ts)
+                          where
+                            sel d vs nw =
+                              case [v | Alt v cs <- vs, any (\c -> isPrefixOf c nw) cs] of
+                                v:_ -> v
+                                _   -> d
+untokn nw (Bracket_ fid index cat bss) =
+  let (nw',bss') = mapAccumR untokn nw bss
+  in (nw',[Bracket fid index cat (concat bss')])
+
+flattenBracketedString :: BracketedString -> [String]
+flattenBracketedString (Leaf w)            = [w]
+flattenBracketedString (Bracket _ _ _ bss) = concatMap flattenBracketedString bss
