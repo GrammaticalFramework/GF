@@ -1,4 +1,4 @@
-
-
-checking module Test2Abs
-   circular definitions: f g
+
+
+checking module Test2Abs
+   circular definitions: f g

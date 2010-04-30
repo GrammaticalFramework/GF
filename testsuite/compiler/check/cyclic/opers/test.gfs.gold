@@ -1,8 +1,8 @@
-
-
-checking module TestOpers
-   circular definitions: A B
-
-
-checking module TestOperTypes
-   circular definitions: A T
+
+
+checking module TestOpers
+   circular definitions: A B
+
+
+checking module TestOperTypes
+   circular definitions: A T

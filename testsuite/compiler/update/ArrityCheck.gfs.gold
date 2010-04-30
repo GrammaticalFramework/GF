@@ -1,8 +1,8 @@
-
-
-C:\gf_3\testsuite\compiler\update\ArrityCheck.gf:6:1: cannot unify the informations
-    fun f : Int -> Int -> Int ;
-    def f 0 = \x -> x ;
-and
-    def f 1 1 = 0 ;
-in module ArrityCheck
+
+
+C:\gf\testsuite\compiler\update\ArrityCheck.gf:6:1: cannot unify the informations
+    fun f : Int -> Int -> Int ;
+    def f 0 = \x -> x ;
+and
+    def f 1 1 = 0 ;
+in module ArrityCheck
