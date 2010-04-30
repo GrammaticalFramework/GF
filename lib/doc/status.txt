@@ -21,10 +21,10 @@ are marked in the table
 | Eng   | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,BB
 | Fin   | +    | ++    | +   | +    | +   | +    | -     | -    | *AR
 | Fre   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
-| Ger   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Ger   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,HH
 | Hin   | -    | -     | -   | -    | -   | -    | -     | -    | AR,SV
 | Ina   | +    | ++    | +   | +    | -   | -    | -     | -    | JB
-| Ita   | +    | ++    | +   | +    | +   | +    | -     | -    | *AR
+| Ita   | +    | ++    | +   | +    | +   | +    | -     | -    | *AR,*RE,GP
 | Lat   | -    | -     | -   | -    | -   | -    | -     | -    | *AR
 | Nor   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
 | Pol   | +    | +     | +   | +    | +   | +    | -     | -    | IN,AS
@@ -34,7 +34,7 @@ are marked in the table
 | Swe   | +    | ++    | +   | +    | +   | +    | +     | +    | *AR
 | Tha   | -    | -     | -   | -    | -   | -    | -     | -    | AR
 | Tur   | -    | ++    | +   | -    | -   | -    | -     | +    | SC,KA
-| Urd   | +    | ++    | +   | +    | +   | +    | -     | -    | *KA
+| Urd   | +    | ++    | +   | +    | +   | +    | -     | -    | *SV
 
 Lang = 3-letter ISO language code, used in library file names
 
@@ -65,6 +65,8 @@ AR Aarne Ranta,
 AS Adam Slaski,
 BB Björn Bringert,
 FJ Femke Johansson,
+HH Harald Hammarström,
+GP Gabriele Paganelli,
 IA Ingrid Andersson,
 IN Ilona Novak,
 JB Jean-Philippe Bernardy,
