@@ -58,7 +58,7 @@ ppProduction (fcat,PApply funid args) =
   ppFCat fcat <+> text "->" <+> ppFunId funid <> brackets (hcat (punctuate comma (map ppFCat args)))
 ppProduction (fcat,PCoerce arg) =
   ppFCat fcat <+> text "->" <+> char '_' <> brackets (ppFCat arg)
-ppProduction (fcat,PConst _ ss) =
+ppProduction (fcat,PConst _ _ ss) =
   ppFCat fcat <+> text "->" <+> ppStrs ss
 
 ppCncFun (funid,CncFun fun arr) =

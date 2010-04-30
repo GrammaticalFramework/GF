@@ -42,6 +42,7 @@ library
     PGF.VisualizeTree
     PGF.Printer
     PGF.Probabilistic
+    PGF.Forest
     GF.Data.TrieMap
     GF.Data.Utilities
     GF.Data.SortedList

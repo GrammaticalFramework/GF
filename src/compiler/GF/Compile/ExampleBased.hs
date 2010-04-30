@@ -41,17 +41,20 @@ convertFile conf src file = do
   convEx (cat,ex) = do
     appn "("
     let typ = maybe (error "no valid cat") id $ readType cat
-    let ts = rank $ parse pgf lang typ ex
-    ws <- case ts of
-      []   -> do
+    ws <- case fst (parse pgf lang typ ex) of
+      ParseFailed _ -> do
         let ws = morphoMissing morpho (words ex)
         appv ("WARNING: cannot parse example " ++ ex) 
         case ws of
           [] -> return ()
           _  -> appv ("  missing words: " ++ unwords ws)
-        return ws 
-      t:tt -> appv ("WARNING: ambiguous example " ++ ex) >>
-              appn t >> mapM_ (appn . ("  --- " ++)) tt >> return []
+        return ws
+      TypeError _ _ ->
+        return []
+      ParseResult ts ->
+        case rank ts of
+          (t:tt) -> appv ("WARNING: ambiguous example " ++ ex) >>
+                    appn t >> mapM_ (appn . ("  --- " ++)) tt >> return []
     appn ")"
     return ws
   rank ts = case probs conf of

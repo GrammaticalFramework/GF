@@ -6,7 +6,7 @@ module PGF.Parse
           , nextState
           , getCompletions
           , recoveryStates
-          , extractTrees
+          , ParseResult(..), getParseResult
           , parse
           , parseWithRecovery
           ) where
@@ -14,7 +14,7 @@ module PGF.Parse
 import Data.Array.IArray
 import Data.Array.Base (unsafeAt)
 import Data.List (isPrefixOf, foldl')
-import Data.Maybe (fromMaybe, maybe)
+import Data.Maybe (fromMaybe, maybe, maybeToList)
 import qualified Data.Map as Map
 import qualified GF.Data.TrieMap as TMap
 import qualified Data.IntMap as IntMap
@@ -27,26 +27,35 @@ import PGF.Data
 import PGF.Expr(Tree)
 import PGF.Macros
 import PGF.TypeCheck
-import Debug.Trace
+import PGF.Forest(Forest(Forest), linearizeWithBrackets)
 
-parse :: PGF -> Language -> Type -> [String] -> [Tree]
-parse pgf lang typ toks = loop (initState pgf lang typ) toks
+-- | This data type encodes the different outcomes which you could get from the parser.
+data ParseResult
+  = ParseFailed Int                -- ^ The integer is the position in number of tokens where the parser failed.
+  | TypeError   FId [TcError]      -- ^ The parsing was successful but none of the trees is type correct. 
+                                   -- The forest id ('FId') points to the bracketed string from the parser
+                                   -- where the type checking failed. More than one error is returned
+                                   -- if there are many analizes for some phrase but they all are not type correct.
+  | ParseResult [Tree]             -- ^ If the parsing was successful we get a list of abstract syntax trees. The list should be non-empty.
+
+parse :: PGF -> Language -> Type -> [String] -> (ParseResult,Maybe BracketedString)
+parse pgf lang typ toks = loop 0 (initState pgf lang typ) toks
   where
-    loop ps []     = extractTrees ps typ
-    loop ps (t:ts) = case nextState ps t of
-                       Left  es -> []
-                       Right ps -> loop ps ts
+    loop i ps []     = getParseResult ps typ
+    loop i ps (t:ts) = case nextState ps t of
+                         Left  es -> (ParseFailed i,Nothing)
+                         Right ps -> loop (i+1) ps ts
 
-parseWithRecovery :: PGF -> Language -> Type -> [Type] -> [String] -> [Tree]
+parseWithRecovery :: PGF -> Language -> Type -> [Type] -> [String] -> (ParseResult,Maybe BracketedString)
 parseWithRecovery pgf lang typ open_typs toks = accept (initState pgf lang typ) toks
   where
-    accept ps []     = extractTrees ps typ
+    accept ps []     = getParseResult ps typ
     accept ps (t:ts) =
       case nextState ps t of
         Right ps -> accept ps ts
         Left  es -> skip (recoveryStates open_typs es) ts
 
-    skip ps_map []     = extractTrees (fst ps_map) typ
+    skip ps_map []     = getParseResult (fst ps_map) typ
     skip ps_map (t:ts) =
       case Map.lookup t (snd ps_map) of
         Just ps -> accept ps ts
@@ -145,23 +154,31 @@ recoveryStates open_types (EState pgf cnc chart) =
 -- that spans the whole input consumed so far. The trees are also
 -- limited by the category specified, which is usually
 -- the same as the startup category.
-extractTrees :: ParseState -> Type -> [Tree]
-extractTrees (PState pgf cnc chart items) ty@(DTyp _ start _) = 
-  nubsort [e1 | e <- exps, Right e1 <- [checkExpr pgf e ty]]
+getParseResult :: ParseState -> Type -> (ParseResult,Maybe BracketedString)
+getParseResult (PState pgf cnc chart items) ty@(DTyp _ start _) =
+  let mb_bs = case roots of
+                ((root,lbl):_) -> Just $ linearizeWithBrackets $ Forest (abstract pgf) cnc (forest st) root lbl
+                _              -> Nothing
+                
+      exps  = nubsort $ do
+                (fid,lbl) <- roots
+                (fvs,e) <- go Set.empty 0 (0,fid)
+                guard (Set.null fvs)
+                Right e1 <- [checkExpr pgf e ty]
+                return e1
+
+  in (ParseResult exps,mb_bs)
   where
     (mb_agenda,acc) = TMap.decompose items
     agenda = maybe [] Set.toList mb_agenda
     (_,st) = process Nothing (\_ _ -> id) (sequences cnc) (cncfuns cnc) agenda () chart
 
-    exps = 
-      case Map.lookup start (cnccats cnc) of
-        Just (CncCat s e lbls) -> do cat <- range (s,e)
-                                     lbl <- indices lbls
-                                     Just fid <- [lookupPC (PK cat lbl 0) (passive st)]
-                                     (fvs,tree) <- go Set.empty 0 (0,fid)
-                                     guard (Set.null fvs)
-                                     return tree
-        Nothing                -> mzero
+    roots = case Map.lookup start (cnccats cnc) of
+              Just (CncCat s e lbls) -> do cat <- range (s,e)
+                                           lbl <- indices lbls
+                                           fid <- maybeToList (lookupPC (PK cat lbl 0) (passive st))
+                                           return (fid,lbl)
+              Nothing                -> mzero
 
     go rec fcat' (d,fcat)
       | fcat < totalCats cnc = return (Set.empty,EMeta (fcat'*10+d))   -- FIXME: here we assume that every rule has at most 10 arguments
@@ -188,6 +205,7 @@ extractTrees (PState pgf cnc chart items) ty@(DTyp _ start _) =
     
     freeVar (EFun v) = Set.singleton v
     freeVar _        = Set.empty
+
 
 process mbt fn !seqs !funs []                                                 acc chart = (acc,chart)
 process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) acc chart
@@ -218,15 +236,15 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
                                     Nothing  -> fid
                                     Just fid -> fid
 
-                      in case [ts | PConst _ ts <- maybe [] Set.toList (IntMap.lookup fid' (forest chart))] of
+                      in case [ts | PConst _ _ ts <- maybe [] Set.toList (IntMap.lookup fid' (forest chart))] of
                            (toks:_) -> let !acc' = fn toks (Active j (ppos+1) funid seqid (updateAt d fid' args) key0) acc
                                        in process mbt fn seqs funs items acc' chart
                            []       -> case litCatMatch fid mbt of
-                                         Just (toks,lit) 
+                                         Just (cat,lit,toks) 
                                                      -> let fid'  = nextId chart
                                                             !acc' = fn toks (Active j (ppos+1) funid seqid (updateAt d fid' args) key0) acc
                                                         in process mbt fn seqs funs items acc' chart{passive=insertPC (mkPK key k) fid' (passive chart)
-                                                                                                    ,forest =IntMap.insert fid' (Set.singleton (PConst lit toks)) (forest chart)
+                                                                                                    ,forest =IntMap.insert fid' (Set.singleton (PConst cat lit toks)) (forest chart)
                                                                                                     ,nextId =nextId chart+1
                                                                                                     }
                                          Nothing     -> process mbt fn seqs funs items acc chart
@@ -260,12 +278,12 @@ updateAt :: Int -> a -> [a] -> [a]
 updateAt nr x xs = [if i == nr then x else y | (i,y) <- zip [0..] xs]
 
 litCatMatch fcat (Just t)
-  | fcat == fcatString = Just ([t],ELit (LStr t))
-  | fcat == fcatInt    = case reads t of {[(n,"")] -> Just ([t],ELit (LInt n));
+  | fcat == fcatString = Just (cidString,ELit (LStr t),[t])
+  | fcat == fcatInt    = case reads t of {[(n,"")] -> Just (cidInt,ELit (LInt n),[t]);
                                          _         -> Nothing }
-  | fcat == fcatFloat  = case reads t of {[(d,"")] -> Just ([t],ELit (LFlt d));
+  | fcat == fcatFloat  = case reads t of {[(d,"")] -> Just (cidFloat,ELit (LFlt d),[t]);
                                          _         -> Nothing }
-  | fcat == fcatVar    = Just ([t],EFun (mkCId t))
+  | fcat == fcatVar    = Just (cidVar,EFun (mkCId t),[t])
 litCatMatch _    _     = Nothing
 
 
@@ -341,9 +359,9 @@ foldForest f g b fcat forest =
     Nothing  -> b
     Just set -> Set.fold foldProd b set
   where
-    foldProd (PCoerce fcat)      b = foldForest f g b fcat forest
-    foldProd (PApply funid args) b = f funid args b
-    foldProd (PConst const toks) b = g const toks b
+    foldProd (PCoerce fcat)        b = foldForest f g b fcat forest
+    foldProd (PApply funid args)   b = f funid args b
+    foldProd (PConst _ const toks) b = g const toks b
 
 
 ----------------------------------------------------------------

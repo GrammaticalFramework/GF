@@ -1,7 +1,7 @@
 -------------------------------------------------
 -- |
 -- Module      : PGF
--- Maintainer  : Aarne Ranta
+-- Maintainer  : Krasimir Angelov
 -- Stability   : stable
 -- Portability : portable
 --
@@ -50,9 +50,12 @@ module PGF(
 
            -- * Operations
            -- ** Linearization
-           linearize, linearizeAllLang, linearizeAll,
+           linearize, linearizeAllLang, linearizeAll, bracketedLinearize, tabularLinearizes,
            groupResults, -- lins of trees by language, removing duplicates
            showPrintName,
+           
+           BracketedString(..), FId, LIndex,
+           Forest.showBracketedString,
 
            -- ** Parsing
            parse, parseWithRecovery, parseAllLang, parseAll,
@@ -73,10 +76,11 @@ module PGF(
            checkType, checkExpr, inferExpr,
            TcError(..), ppTcError,
 
-           -- ** Word Completion (Incremental Parsing)
+           -- ** Low level parsing API
            complete,
            Parse.ParseState,
-           Parse.initState, Parse.nextState, Parse.getCompletions, Parse.recoveryStates, Parse.extractTrees,
+           Parse.initState, Parse.nextState, Parse.getCompletions, Parse.recoveryStates, 
+           Parse.ParseResult(..), Parse.getParseResult,
 
            -- ** Generation
            generateRandom, generateAll, generateAllDepth,
@@ -90,6 +94,7 @@ module PGF(
            graphvizAbstractTree,
            graphvizParseTree,
            graphvizDependencyTree,
+           graphvizBracketedString,
            graphvizAlignment,
 
            -- * Browsing
@@ -107,6 +112,7 @@ import PGF.Expr (Tree)
 import PGF.Morphology
 import PGF.Data
 import PGF.Binary
+import qualified PGF.Forest as Forest
 import qualified PGF.Parse as Parse
 
 import GF.Data.Utilities (replace)
@@ -131,34 +137,18 @@ import Text.PrettyPrint
 -- > $ gf -make <grammar file name>
 readPGF  :: FilePath -> IO PGF
 
--- | Linearizes given expression as string in the language
-linearize    :: PGF -> Language -> Tree -> String
-
 -- | Tries to parse the given string in the specified language
--- and to produce abstract syntax expression. An empty
--- list is returned if the parsing is not successful. The list may also
--- contain more than one element if the grammar is ambiguous.
--- Throws an exception if the given language cannot be used
--- for parsing, see 'canParse'.
-parse        :: PGF -> Language -> Type -> String -> [Tree]
+-- and to produce abstract syntax expression.
+parse        :: PGF -> Language -> Type -> String -> (Parse.ParseResult,Maybe BracketedString)
 
-parseWithRecovery :: PGF -> Language -> Type -> [Type] -> String -> [Tree]
-
--- | The same as 'linearizeAllLang' but does not return
--- the language.
-linearizeAll     :: PGF -> Tree -> [String]
-
--- | Linearizes given expression as string in all languages
--- available in the grammar.
-linearizeAllLang :: PGF -> Tree -> [(Language,String)]
+-- | This is an experimental function. Use it on your own risk
+parseWithRecovery :: PGF -> Language -> Type -> [Type] -> String -> (Parse.ParseResult,Maybe BracketedString)
 
 -- | The same as 'parseAllLang' but does not return
 -- the language.
 parseAll     :: PGF -> Type -> String -> [[Tree]]
 
 -- | Tries to parse the given string with all available languages.
--- Languages which cannot be used for parsing (see 'canParse')
--- are ignored.
 -- The returned list contains pairs of language
 -- and list of abstract syntax expressions 
 -- (this is a list, since grammars can be ambiguous). 
@@ -227,18 +217,12 @@ complete :: PGF -> Language -> Type -> String
 
 readPGF f = decodeFile f
 
-linearize pgf lang = concat . take 1 . PGF.Linearize.linearizes pgf lang
-
 parse pgf lang typ s = 
   case Map.lookup lang (concretes pgf) of
     Just cnc -> Parse.parse pgf lang typ (words s)
     Nothing  -> error ("Unknown language: " ++ showCId lang)
 
 parseWithRecovery pgf lang typ open_typs s = Parse.parseWithRecovery pgf lang typ open_typs (words s)
-
-linearizeAll mgr = map snd . linearizeAllLang mgr
-linearizeAllLang mgr t = 
-  [(lang,PGF.linearize mgr lang t) | lang <- languages mgr]
 
 groupResults :: [[(Language,String)]] -> [(Language,[String])]
 groupResults = Map.toList . foldr more Map.empty . start . concat
@@ -250,7 +234,7 @@ groupResults = Map.toList . foldr more Map.empty . start . concat
 parseAll mgr typ = map snd . parseAllLang mgr typ
 
 parseAllLang mgr typ s = 
-  [(lang,ts) | lang <- languages mgr, let ts = parse mgr lang typ s, not (null ts)]
+  [(lang,ts) | lang <- languages mgr, (Parse.ParseResult ts,_) <- [parse mgr lang typ s], not (null ts)]
 
 generateRandom pgf cat = do
   gen <- newStdGen
@@ -280,14 +264,18 @@ functionType pgf fun =
     Nothing       -> Nothing
 
 complete pgf from typ input = 
-         let (ws,prefix) = tokensAndPrefix input
-             state0 = Parse.initState pgf from typ
-         in case loop state0 ws of
-              Nothing -> []
-              Just state -> 
-                (if null prefix && not (null (Parse.extractTrees state typ)) then [unwords ws ++ " "] else [])
-                ++ [unwords (ws++[c]) ++ " " | c <- Map.keys (Parse.getCompletions state prefix)]
+  let (ws,prefix) = tokensAndPrefix input
+      state0 = Parse.initState pgf from typ
+  in case loop state0 ws of
+       Nothing    -> []
+       Just state -> (if null prefix && isSuccessful state then [unwords ws ++ " "] else [])
+                      ++ [unwords (ws++[c]) ++ " " | c <- Map.keys (Parse.getCompletions state prefix)]
   where
+    isSuccessful state =
+      case Parse.getParseResult state typ of
+        (Parse.ParseResult ts, _) -> not (null ts)
+        _                         -> False
+
     tokensAndPrefix :: String -> ([String],String)
     tokensAndPrefix s | not (null s) && isSpace (last s) = (ws, "")
                       | null ws = ([],"")
