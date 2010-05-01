@@ -63,7 +63,7 @@ type CncType = (CId, FId)    -- concrete type is the abstract type (the category
 
 linTree :: PGF -> Language -> Expr -> [Array LIndex BracketedTokn]
 linTree pgf lang e = 
-  [amapWithIndex (\label -> Bracket_ fid label cat) lin | (_,((cat,fid),lin)) <- lin0 [] [] Nothing 0 e]
+  [amapWithIndex (\label -> Bracket_ cat fid label) lin | (_,((cat,fid),lin)) <- lin0 [] [] Nothing 0 e]
   where
     cnc   = lookMap (error "no lang") lang (concretes pgf)
     lp    = lproductions cnc
@@ -127,7 +127,7 @@ linTree pgf lang e =
             compute (SymKP ts alts) = [LeafKP ts alts]
 
             getArg d r
-              | not (null arg_lin) = [Bracket_ fid r cat arg_lin]
+              | not (null arg_lin) = [Bracket_ cat fid r arg_lin]
               | otherwise          = arg_lin
               where
                 arg_lin         = lin ! r

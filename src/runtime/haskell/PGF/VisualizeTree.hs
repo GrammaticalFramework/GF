@@ -123,7 +123,7 @@ graphvizDependencyTree format debug mlab ms pgf lang t = render $
     getLeaves parent bs =
       case bs of
         Leaf w              -> [(parent,w)]
-        Bracket fid _ _ bss -> concatMap (getLeaves fid) bss
+        Bracket _ fid _ bss -> concatMap (getLeaves fid) bss
 
     mkNode (p,i,w) = 
       tag p <> text " [label = " <> doubleQuotes (int i <> char '.' <+> text w) <> text "] ;"
@@ -235,12 +235,12 @@ graphvizBracketedString = render . lin2tree
         getLeaves  level parent bs =
           case bs of
             Leaf w              -> [(level-1,parent,w)]
-            Bracket fid i _ bss -> concatMap (getLeaves (level+1) fid) bss
+            Bracket _ fid i bss -> concatMap (getLeaves (level+1) fid) bss
 
         getInterns level []    = []
         getInterns level nodes =
-          nub [(level-1,parent,fid,showCId cat) | (parent,Bracket fid _ cat _) <- nodes] :
-          getInterns (level+1) [(fid,child) | (_,Bracket fid _ _ children) <- nodes, child <- children]
+          nub [(level-1,parent,fid,showCId cat) | (parent,Bracket cat fid _ _) <- nodes] :
+          getInterns (level+1) [(fid,child) | (_,Bracket _ fid _ children) <- nodes, child <- children]
 
         mkStruct l cs = struct l <> text "[label = \"" <> fields cs <> text "\"] ;" $$
                         vcat [link pl pid l id | (pl,pid,id,_) <- cs]
@@ -291,7 +291,7 @@ graphvizAlignment pgf langs = render . lin2graph . linsBracketed
         getLeaves parent bs =
           case bs of
             Leaf w              -> [(parent,w)]
-            Bracket fid _ _ bss -> concatMap (getLeaves fid) bss
+            Bracket _ fid _ bss -> concatMap (getLeaves fid) bss
 
         mkLayers l []       = empty
         mkLayers l (cs:css) = struct l <> text "[label = \"" <> fields cs <> text "\"] ;" $$
