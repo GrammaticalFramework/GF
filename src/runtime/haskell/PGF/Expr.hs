@@ -106,6 +106,8 @@ unApp = extract []
   where
     extract es (EFun f)     = Just (f,es)
     extract es (EApp e1 e2) = extract (e2:es) e1
+    extract es (ETyped e ty)= extract es e
+    extract es (EImplArg e) = extract es e
     extract es _            = Nothing
 
 -- | Constructs an expression from string literal
@@ -115,6 +117,8 @@ mkStr s = ELit (LStr s)
 -- | Decomposes an expression into string literal
 unStr :: Expr -> Maybe String
 unStr (ELit (LStr s)) = Just s
+unStr (ETyped e ty)   = unStr e
+unStr (EImplArg e)    = unStr e
 unStr _               = Nothing
 
 -- | Constructs an expression from integer literal
@@ -124,6 +128,8 @@ mkInt i = ELit (LInt i)
 -- | Decomposes an expression into integer literal
 unInt :: Expr -> Maybe Int
 unInt (ELit (LInt i)) = Just i
+unInt (ETyped e ty)   = unInt e
+unInt (EImplArg e)    = unInt e
 unInt _               = Nothing
 
 -- | Constructs an expression from real number literal
@@ -133,6 +139,8 @@ mkDouble f = ELit (LFlt f)
 -- | Decomposes an expression into real number literal
 unDouble :: Expr -> Maybe Double
 unDouble (ELit (LFlt f)) = Just f
+unDouble (ETyped e ty)   = unDouble e
+unDouble (EImplArg e)    = unDouble e
 unDouble _               = Nothing
 
 -- | Constructs an expression which is meta variable
@@ -141,8 +149,10 @@ mkMeta = EMeta 0
 
 -- | Checks whether an expression is a meta variable
 isMeta :: Expr -> Bool
-isMeta (EMeta _) = True
-isMeta _         = False
+isMeta (EMeta _)     = True
+isMeta (ETyped e ty) = isMeta e
+isMeta (EImplArg e)  = isMeta e
+isMeta _             = False
 
 -----------------------------------------------------
 -- Parsing
