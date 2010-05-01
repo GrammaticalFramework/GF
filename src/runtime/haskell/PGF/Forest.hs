@@ -51,7 +51,7 @@ linearizeWithBrackets = head . snd . untokn "" . bracketedTokn
 bracketedTokn :: Forest -> BracketedTokn
 bracketedTokn (Forest abs cnc forest root label) =
   let (fid,cat,lin) = render IntMap.empty root
-  in Bracket_ fid label cat (lin ! label)
+  in Bracket_ cat fid label (lin ! label)
   where
     trusted = trustedSpots IntSet.empty root
 
@@ -94,7 +94,7 @@ bracketedTokn (Forest abs cnc forest root label) =
         getArg d r
           | not (null arg_lin) &&
             IntSet.member fid trusted
-                        = [Bracket_ fid r cat arg_lin]
+                        = [Bracket_ cat fid r arg_lin]
           | otherwise   = arg_lin
           where
             arg_lin       = lin ! r
