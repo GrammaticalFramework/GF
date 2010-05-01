@@ -1,0 +1,12 @@
+i -src testsuite/runtime/linearize/TestCnc.gf
+
+l -bracket Even ?
+l -bracket Exist (\x -> <Even : E -> S> x)
+l -bracket f  a
+l -bracket fa a
+l -bracket fb a
+l -bracket IsString "abcd"
+l -bracket IsInteger 100
+l -bracket IsFloat   12.4
+l -bracket <IsString "xyz" : S>
+l -bracket <\x -> x : S -> S>
