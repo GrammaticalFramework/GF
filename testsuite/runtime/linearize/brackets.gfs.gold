@@ -1,0 +1,28 @@
+(S (E (String ?1)) is even)
+
+
+(S exists (S (String x)) such that (S (S (E (String x)) is even)))
+
+
+(S (E a))
+
+
+(S (E aa) a)
+
+
+(S (E a) b)
+
+
+(S (String abcd) is string)
+
+
+(S (Int 100) is integer)
+
+
+(S (Float 12.4) is float)
+
+
+(S (String xyz) is string)
+
+
+cannot linearize
