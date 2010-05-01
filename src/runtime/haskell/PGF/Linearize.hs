@@ -38,6 +38,9 @@ linearizeAllLang pgf t = [(lang,linearize pgf lang t) | lang <- Map.keys (concre
 -- | Linearizes given expression as a bracketed string in the language
 bracketedLinearize :: PGF -> Language -> Tree -> BracketedString
 bracketedLinearize pgf lang = head . concat . map (snd . untokn "" . (!0)) . linTree pgf lang
+  where
+    head []       = error "cannot linearize"
+    head (bs:bss) = bs
 
 -- | Creates a table from feature name to linearization. 
 -- The outher list encodes the variations
@@ -56,58 +59,64 @@ tabularLinearizes pgf lang e = map (zip lbls . map (unwords . concatMap flattenB
 -- Implementation
 --------------------------------------------------------------------
 
+type CncType = (CId, FId)    -- concrete type is the abstract type (the category) + the forest id
+
 linTree :: PGF -> Language -> Expr -> [Array LIndex BracketedTokn]
 linTree pgf lang e = 
-  [amapWithIndex (\label -> Bracket_ fid label cat) lin | (_,(fid,cat,lin)) <- lin0 [] [] Nothing 0 e]
+  [amapWithIndex (\label -> Bracket_ fid label cat) lin | (_,((cat,fid),lin)) <- lin0 [] [] Nothing 0 e]
   where
     cnc   = lookMap (error "no lang") lang (concretes pgf)
     lp    = lproductions cnc
   
-    lin0 xs ys mb_fid n_fid (EAbs _ x e)  = lin0 (showCId x:xs) ys mb_fid n_fid e
-    lin0 xs ys mb_fid n_fid (ETyped e _)  = lin0 xs ys mb_fid n_fid e
-    lin0 xs ys mb_fid n_fid e | null xs   = lin ys mb_fid n_fid e []
-                              | otherwise = apply (xs ++ ys) mb_fid n_fid _B (e:[ELit (LStr x) | x <- xs])
+    lin0 xs ys mb_cty n_fid (EAbs _ x e)  = lin0 (showCId x:xs) ys mb_cty n_fid e
+    lin0 xs ys mb_cty n_fid (ETyped e _)  = lin0 xs ys mb_cty n_fid e
+    lin0 xs ys mb_cty n_fid e | null xs   = lin ys mb_cty n_fid e []
+                              | otherwise = apply (xs ++ ys) mb_cty n_fid _B (e:[ELit (LStr x) | x <- xs])
 
-    lin xs mb_fid n_fid (EApp e1 e2) es = lin xs mb_fid n_fid e1 (e2:es)
-    lin xs mb_fid n_fid (ELit l)     [] = case l of
-                                            LStr s -> return (n_fid+1,(n_fid,cidString,ss s))
-                                            LInt n -> return (n_fid+1,(n_fid,cidInt   ,ss (show n)))
-                                            LFlt f -> return (n_fid+1,(n_fid,cidFloat ,ss (show f)))
-    lin xs mb_fid n_fid (EMeta i)    es = apply xs mb_fid n_fid _V (ELit (LStr ('?':show i)):es)
-    lin xs mb_fid n_fid (EFun f)     es = apply xs mb_fid n_fid f  es
-    lin xs mb_fid n_fid (EVar  i)    es = apply xs mb_fid n_fid _V (ELit (LStr (xs !! i))   :es)
-    lin xs mb_fid n_fid (ETyped e _) es = lin xs mb_fid n_fid e es
-    lin xs mb_fid n_fid (EImplArg e) es = lin xs mb_fid n_fid e es
+    lin xs mb_cty n_fid (EApp e1 e2) es = lin xs mb_cty n_fid e1 (e2:es)
+    lin xs mb_cty n_fid (ELit l)     [] = case l of
+                                            LStr s -> return (n_fid+1,((cidString,n_fid),ss s))
+                                            LInt n -> return (n_fid+1,((cidInt,   n_fid),ss (show n)))
+                                            LFlt f -> return (n_fid+1,((cidFloat, n_fid),ss (show f)))
+    lin xs mb_cty n_fid (EMeta i)    es = apply xs mb_cty n_fid _V (ELit (LStr ('?':show i)):es)
+    lin xs mb_cty n_fid (EFun f)     es = apply xs mb_cty n_fid f  es
+    lin xs mb_cty n_fid (EVar  i)    es = apply xs mb_cty n_fid _V (ELit (LStr (xs !! i))   :es)
+    lin xs mb_cty n_fid (ETyped e _) es = lin xs mb_cty n_fid e es
+    lin xs mb_cty n_fid (EImplArg e) es = lin xs mb_cty n_fid e es
 
     ss s = listArray (0,0) [[LeafKS [s]]]
 
-    apply :: [String] -> Maybe FId -> FId -> CId -> [Expr] -> [(FId,(FId, CId, LinTable))]
-    apply xs mb_fid n_fid f es =
+    apply :: [String] -> Maybe CncType -> FId -> CId -> [Expr] -> [(FId,(CncType, LinTable))]
+    apply xs mb_cty n_fid f es =
       case Map.lookup f lp of
-        Just prods -> do prod <- lookupProds mb_fid prods
-                         case prod of
-                           PApply funid fids -> do guard (length fids == length es)
-                                                   (n_fid,args) <- descend n_fid (zip fids es)
-                                                   let (CncFun fun lins) = cncfuns cnc ! funid
-                                                       Just (DTyp _ cat _,_,_) = Map.lookup fun (funs (abstract pgf))
-                                                   return (n_fid+1,(n_fid,cat,listArray (bounds lins) [computeSeq seqid args | seqid <- elems lins]))
-                           PCoerce fid       -> apply xs (Just fid) n_fid f es
-        Nothing    -> apply xs mb_fid n_fid _V [ELit (LStr ("[" ++ showCId f ++ "]"))]  -- fun without lin
+        Just prods -> do (funid,(cat,fid),ctys) <- getApps prods
+                         guard (length ctys == length es)
+                         (n_fid,args) <- descend n_fid (zip ctys es)
+                         let (CncFun _ lins) = cncfuns cnc ! funid
+                         return (n_fid+1,((cat,n_fid),listArray (bounds lins) [computeSeq seqid args | seqid <- elems lins]))
+        Nothing    -> apply xs mb_cty n_fid _V [ELit (LStr ("[" ++ showCId f ++ "]"))]  -- fun without lin
       where
-        lookupProds (Just fid) prods = maybe [] Set.toList (IntMap.lookup fid prods)
-        lookupProds Nothing    prods
-          | f == _B || f == _V       = []
-          | otherwise                = [prod | (fid,set) <- IntMap.toList prods, prod <- Set.toList set]
+        getApps prods =
+          case mb_cty of
+            Just cty@(cat,fid)  -> maybe [] (concatMap (toApp cty) . Set.toList) (IntMap.lookup fid prods)
+            Nothing |  f == _B
+                    || f == _V  -> []
+                    | otherwise -> concat [toApp (wildCId,fid) prod | (fid,set) <- IntMap.toList prods, prod <- Set.toList set]
+          where
+            toApp cty (PApply funid fids)
+              | f == _V          = [(funid,cty,zip (          repeat cidVar) fids)]
+              | f == _B          = [(funid,cty,zip (fst cty : repeat cidVar) fids)]
+              | otherwise        = let Just (ty,_,_) = Map.lookup f (funs (abstract pgf))
+                                       (args,res) = catSkeleton ty
+                                   in [(funid,(res,snd cty),zip args fids)]
+            toApp cty (PCoerce fid) = concatMap (toApp cty) (maybe [] Set.toList (IntMap.lookup fid prods))
 
-        descend n_fid []            = return (n_fid,[])
-        descend n_fid ((fid,e):fes) = do (n_fid,xx) <- lin0 [] xs (Just fid) n_fid e
-                                         (n_fid,xxs) <- descend n_fid fes
-                                         return (n_fid,xx:xxs)
+        descend n_fid []                  = return (n_fid,[])
+        descend n_fid (((cat,fid),e):fes) = do (n_fid,arg)  <- lin0 [] xs (Just (cat,fid)) n_fid e
+                                               (n_fid,args) <- descend n_fid fes
+                                               return (n_fid,arg:args)
 
-        isApp (PApply _ _) = True
-        isApp _            = False
-
-        computeSeq :: SeqId -> [(FId,CId,LinTable)] -> [BracketedTokn]
+        computeSeq :: SeqId -> [(CncType,LinTable)] -> [BracketedTokn]
         computeSeq seqid args = concatMap compute (elems seq)
           where
             seq = sequences cnc ! seqid
@@ -121,8 +130,8 @@ linTree pgf lang e =
               | not (null arg_lin) = [Bracket_ fid r cat arg_lin]
               | otherwise          = arg_lin
               where
-                arg_lin       = lin ! r
-                (fid,cat,lin) = args !! d
+                arg_lin         = lin ! r
+                ((cat,fid),lin) = args !! d
 
 amapWithIndex :: (IArray a e1, IArray a e2, Ix i) => (i -> e1 -> e2) -> a i e1 -> a i e2
 amapWithIndex f arr = listArray (bounds arr) (map (uncurry f) (assocs arr))
