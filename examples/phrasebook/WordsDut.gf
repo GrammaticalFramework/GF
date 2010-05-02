@@ -1,5 +1,6 @@
 -- (c) 2009 Aarne Ranta under LGPL
 
+
 concrete WordsDut of Words = SentencesDut ** 
     open SyntaxDut, (P = ParadigmsDut), (I = IrregDut), (L = LexiconDut), ExtraDut, Prelude in {
 
@@ -42,6 +43,7 @@ concrete WordsDut of Words = SentencesDut **
  
     Airport = mkPlace (P.mkN "luchthaven" "luchthavens" P.de) "op" ; 
     AmusementPark = mkPlace (P.mkN "pretpark" "pretparken" P.het) "in" ;
+    Bank = mkPlace (P.mkN "bank" "banken" P.de) "op" ;
     Bar = mkPlace (P.mkN "bar" P.de) "in" ;  
     Cafeteria = mkPlace (P.mkN "cafetaria" "cafetaria's" P.de) "in" ;
     Center = mkPlace (P.mkN "centrum" "centra" P.het) "in" ;
@@ -54,6 +56,7 @@ concrete WordsDut of Words = SentencesDut **
     Park = mkPlace (P.mkN "park" "parken" P.het) "in" ; 
     Parking = mkPlace (P.mkN "parkeerplaats" "parkeerplaatsen" P.de) "op" ; --parkeren x parkeerplaats -- naar op 
     Pharmacy = mkPlace (P.mkN "apotheek" "apotheken" P.de)  "in" ;
+    PostOffice = mkPlace (P.mkN "postkantoor" "postkantoren" P.het) "op" ;
     Pub = mkPlace (P.mkN "kroeg" "kroegen" P.de) "in" ;
     Restaurant = mkPlace (P.mkN "restaurant" "restaurants" P.het) "in" ; 
     Shop = mkPlace (P.mkN "winkel" "winkels" P.de) "in" ; -- shop x winkel 
@@ -77,6 +80,7 @@ concrete WordsDut of Words = SentencesDut **
     Lei = mkCN (P.mkA "Roemeens") (P.mkN "leu" "lei" P.de) ;
     Leva = mkCN (P.mkA "Bulgaars") (P.mkN "leva" "levs" P.de) ;
     NorwegianCrown = mkCN (P.mkA "Noors") (P.mkN "kroon" "kronen "P.de) ;  
+    Pound = mkCN (P.mkA "Brits") (P.mkN "pond" "pond" P.het);
     Rouble = mkCN (P.mkA "Russisch") (P.mkN "roebel" "roebel" P.de) ;
     SwedishCrown = mkCN (P.mkA "Zweeds") (P.mkN "kroon" "kronen" P.de) ;
     Zloty = mkCN (P.mkA "Pools") (P.mkN "zloty" "zloty" P.de) ;
@@ -84,15 +88,24 @@ concrete WordsDut of Words = SentencesDut **
 
 -- Nationalities
 
---    Belgian = mkA "belgisk" ; belgische
---    Belgium = mkNP (mkPN "Belgien") ; belgië
---    English = mkNat "engelsk" "England" ; engelse
---    Finnish = mkNat "finsk" "Finland" ; finse 
---    Flemish = mkNP (mkPN "flamländska") ; vlaamse
---    French = mkNat "fransk" "Frankrike" ; franse
---    Italian = mkNat "italiensk" "Italien" ; italiaanse
---    Romanian = mkNat "rumänsk" "Rumänien" ; roemeense
---    Swedish = mkNat "svensk" "Sverige" ; zweedse
+    Belgian = P.mkA "Belgisch" ;
+    Belgium = mkNP (P.mkPN "België") ;
+    Bulgarian = mkNat "Bulgaars" "Bulgarije" ;
+    Catalan = mkNat "Catalaans" "Catalonië" ;
+    Danish = mkNat "Deens" "Denemarken" ;
+    Dutch = mkNat "Nederlands" "Nederland" ;
+    English = mkNat "Engels" "Engeland" ;
+    Finnish = mkNat "Fins" "Finland" ;
+    Flemish = mkNP (P.mkPN "Vlaams") ;
+    French = mkNat "Frans" "Frankrijk" ; 
+    German = mkNat "Duits" "Duitsland" ;
+    Italian = mkNat "Italiaans" "Italië" ;
+    Norwegian = mkNat "Noors" "Noorwegen" ;
+    Polish = mkNat "Pools" "Polen" ;
+    Romanian = mkNat "Roemeens" "Roemenië" ;
+    Russian = mkNat "Russisch" "Rusland" ;
+    Spanish = mkNat "Spaans" "Spanje" ;
+    Swedish = mkNat "Zweeds" "Zweden" ;
 
 
 -- Means of transportation
@@ -223,7 +236,7 @@ ik ga te voet/ ik ga lopend
 
   oper
     mkNat : Str -> Str -> NPNationality = \nat,co -> 
-      mkNPNationality (mkNP (P.mkPN (nat + "a"))) (mkNP (P.mkPN co)) (P.mkA nat) ;
+      mkNPNationality (mkNP (P.mkPN nat)) (mkNP (P.mkPN co)) (P.mkA nat) ;
 
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d -> 
       mkNPDay (mkNP (P.mkPN d)) (mkAdv on_Prep (mkNP (P.mkPN d))) 
@@ -249,20 +262,10 @@ ik ga te voet/ ik ga lopend
   mkSuperl : A -> Det = \a -> SyntaxDut.mkDet the_Art (SyntaxDut.mkOrd a) ;
 
 
-
-{-
-TheBest : SuperlModif ; de/het beste
-    TheClosest : SuperlModif ; welke ... is het dichtste bij (which .. is the closest)
-    TheCheapest : SuperlModif ; de goedkoopste
-    TheWorst : SuperlModif ; de slechtste
-    MostExpensive : SuperlModif ; de duurste
-    MostPopular : SuperlModif ; populairste
-
-    HowFar : Place -> Question ;                            -- how far is the zoo ?  
-    HowFarFrom : Place -> Place -> Question ;               -- how far is the center from the hotel ? hoever is het centrum van het hotel
-    HowFarFromBy : Place -> Place -> ByTransp -> Question ; -- how far is the airport from the hotel by taxi ? hoelang duurt het om van het vliegveld naar het hotel te gaan per taxi
-    HowFarBy : Place -> Transp -> Question ;                -- how far is the museum by bus ? hoe ver is het museum per bus/ hoelang doe je er over om met de bus naar het museum te gaan/hoelang doet de bus er over tot het museum
-
+{- 
+    HowFarFrom : how far is the center from the hotel ? hoe ver is het centrum van het hotel
+    HowFarFromBy : how far is the airport from the hotel by taxi ? hoe lang duurt het om van het vliegveld naar het hotel te gaan per taxi
+    HowFarBy : how far is the museum by bus ? hoe ver is het museum per bus/ hoelang doe je er over om met de bus naar het museum te gaan/hoelang doet de bus er over tot het museum
 
 
 -}
