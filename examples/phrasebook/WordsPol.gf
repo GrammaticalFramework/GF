@@ -1,4 +1,4 @@
---2 Implementations of Words, with English as example
+
 
 concrete WordsPol of Words = SentencesPol ** 
     open 

@@ -68,7 +68,8 @@ concrete WordsRon of Words = SentencesRon ** open
     Theatre = mkPlace (P.mkN "teatru" "teatre") at_Prep ;
     Toilet = mkPlace (P.mkN "toaletă") at_Prep ;
     University = mkPlace (P.mkN "universitate") at_Prep ;
-    --Zoo = mkPlace 
+    Zoo = {name = mkCN (P.mkA "zoologic") (P.mkN "grădină" "grădini");
+           to = to_Prep; at = at_Prep };
 
     CitRestaurant cit = mkCNPlace (mkCN cit.prop (P.mkN "restaurant" "restaurante")) in_Prep to_Prep;  
 
@@ -80,30 +81,31 @@ concrete WordsRon of Words = SentencesRon ** open
     Lei = mkCN (P.mkN "leu" "lei") ;
     Leva = mkCN (P.mkN "levă" "leve") ;
     NorwegianCrown = mkCN (P.mkA "norvegian") (P.mkN "coroană") ;
+    Pound = mkCN (P.mkA "sterlin") (P.mkN "liră") ;
     Rouble = mkCN (P.mkN "rublă" "ruble") ;
     SwedishCrown = mkCN (P.mkA "suedez") (P.mkN "coroană") ;
     Zloty = mkCN (P.mkN "zlot" P.masculine) ;    
 
 -- nationalities
 
-    Belgian = mkCitizenshipRon (P.mkA "belgian") (P.mkA "belgian") ;
+    Belgian = mkCitizenshipRon (P.mkA "belgian" "belgiană" "belgieni" "belgiene")  "belgian" "belgiancă" "belgieni" "belgience" ;
     Belgium = mkNP (P.mkPN "Belgia") ;
-    Bulgarian = mkSimpNat "bulgar" "Bulgaria" ;
-    Catalan = mkSimpNat "catalan" "Catalonia" ;
-    Danish = mkSimpNat "danez" "Danemarca" ;
-    Dutch = mkSimpNat "olandez" "Olanda" ;
-    English = mkSimpNat "englez" "Anglia" ;
-    Finnish = mkSimpNat "finlandez" "Finlanda" ;
+    Bulgarian = mkCompNat "bulgar" "Bulgaria" "bulgăresc" "bulgar" "bulgăroaică" "bulgari" "bulgăroaice";
+    Catalan = mkSimpSimpNat "catalan" "Catalonia" ;
+    Danish = mkSimpSimpNat "danez" "Danemarca" ;
+    Dutch = mkSimpSimpNat "olandez" "Olanda" ;
+    English = mkNat "englez" "Anglia" "englez" "englezoaică" "englezi" "englezoaice" ;
+    Finnish = mkSimpSimpNat "finlandez" "Finlanda" ;
     Flemish = mkNP (P.mkPN "flamandă") ; 
-    French = mkSimpNat "francez" "Franţa" ;
-    German = mkSimpNat "german" "Germania" ; 
-    Italian = mkNPNationalityRon (mkNP (P.mkPN "italiană"))  (mkNP (P.mkPN "Italia")) (P.mkA "italian") (P.mkA "italian" "italiancă" "italieni" "italience") ;
-    Norwegian = mkSimpNat "norvegian" "Norvegia" ;
-    Polish = mkSimpNat "polonez" "Polonia" ;
-    Romanian = mkNPNationalityRon (mkNP (P.mkPN "română")) (mkNP (P.mkPN "România")) (P.mkA "român") (P.mkA "român" "româncă" "români" "românce") ;
-    Russian = mkSimpNat "rus" "Rusia" ;
-    Spanish = mkSimpNat "spaniol" "Spania" ;
-    Swedish = mkSimpNat "suedez" "Suedia" ;
+    French = mkCompNat "francez" "Franţa" "franțuzesc" "francez" "franțuzoaică" "francezi" "franțuzoaice";
+    German = mkCompNat "german" "Germania" "nemțesc" "neamț" "nemțoaică" "nemți" "nemțoaice"; 
+    Italian = mkSimpNat "italian"  "Italia" "italian" "italiancă" "italieni" "italience" ;
+    Norwegian = mkSimpSimpNat "norvegian" "Norvegia";
+    Polish = mkSimpSimpNat "polonez" "Polonia" ;
+    Romanian = mkNat "român" "România" "român" "româncă" "români" "românce" ;
+    Russian = mkNat "rus" "Rusia" "rus" "rusoaică" "ruși" "rusoaice";
+    Spanish = mkSimpSimpNat "spaniol" "Spania" ;
+    Swedish = mkSimpSimpNat "suedez" "Suedia" ;
     
 -- means of transportation 
 
@@ -221,18 +223,26 @@ concrete WordsRon of Words = SentencesRon ** open
 
 oper
 
-closed_A : A = P.mkA "inchis" ;
+closed_A : A = P.mkA "închis" ;
 open_A : A = P.mkA "deschis" ;
 
--- auxiliaries
+-- auxiliaries     
 
-   mkSimpNat : Str -> Str -> NPNationalityRon = \nat, co ->
-      mkNPNationalityRon (mkNP (P.mkPN (nat+"ă"))) (mkNP (P.mkPN co)) (P.mkA nat) (P.mkA nat) ;    
+   mkSimpSimpNat : Str -> Str -> NPNationalityRon = \nat, co -> 
+     mkSimpNat nat co nat (nat + "ă") (nat + "i") (nat+"e");
 
-    mkNat : Str -> Str -> A -> NPNationalityRon = \nat,co, adj -> 
-      mkNPNationalityRon (mkNP (P.mkPN nat)) (mkNP (P.mkPN co)) adj adj ;
+    mkSimpNat : Str -> Str -> Str -> Str -> Str -> Str -> NPNationalityRon = \nat,co, citMS, citFS, citMP, citFP -> let adj = P.mkA nat in
+      mkNPNationalityRon (mkNP (P.mkPN (nat+"ă"))) (mkNP (P.mkPN co)) adj citMS citFS citMP citFP ;
 
-    mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
+    mkNat : Str -> Str -> Str -> Str -> Str -> Str -> NPNationalityRon = \nat,co, citMS, citFS, citMP, citFP -> let adj = P.mkA (nat+"esc") in
+      mkNPNationalityRon (mkNP (P.mkPN (nat+"ă"))) (mkNP (P.mkPN co)) adj citMS citFS citMP citFP ;
+
+   mkCompNat : Str -> Str -> Str -> Str -> Str -> Str -> Str -> NPNationalityRon = \nat,co, adj, citMS, citFS, citMP, citFP -> let a = P.mkA adj in
+      mkNPNationalityRon (mkNP (P.mkPN (nat+"ă"))) (mkNP (P.mkPN co)) a citMS citFS citMP citFP ;
+   
+
+
+mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
       let day = mkNP (P.mkPN d P.Feminine) ;
           ad = {s = d; lock_Adv=<>} in
       mkNPDay day ad ad; ---- difference is enforced by additional constructions

@@ -46,25 +46,25 @@ concrete WordsEng of Words = SentencesEng **
 -- defined by $mkPlace$.
 
     Airport = mkPlace "airport" "at" ;
-    AmusementPark = mkCompoundPlace "amusement" "park" "in" ;
+    AmusementPark = mkCompoundPlace "amusement" "park" "at" ;
     Bank = mkPlace "bank" "at" ;
     Bar = mkPlace "bar" "in" ;
-    Cafeteria = mkPlace "cafeteria" "in" ;
+    Cafeteria = mkPlace "canteen" "in" ;
     Center = mkPlace "center" "in" ;
     Cinema = mkPlace "cinema" "at" ;
     Church = mkPlace "church" "in" ;
-    Disco = mkPlace "disco" "in" ;
+    Disco = mkPlace "disco" "at" ;
     Hospital = mkPlace "hospital" "in" ;
     Hotel = mkPlace "hotel" "in" ;
-    Museum = mkPlace "museum" "in" ;
+    Museum = mkPlace "museum" "at" ;
     Park = mkPlace "park" "in" ;
-    Parking = mkPlace "parking" "in" ; 
+    Parking = mkCompoundPlace "car" "park" "in" ; 
     Pharmacy = mkPlace "pharmacy" "at" ;
-    PostOffice = mkCompoundPlace "post" "office" "in" ;
+    PostOffice = mkCompoundPlace "post" "office" "at" ;
     Pub = mkPlace "pub" "at" ;
     Restaurant = mkPlace "restaurant" "in" ;
     School = mkPlace "school" "at" ;
-    Shop = mkPlace "shop" "in" ;
+    Shop = mkPlace "shop" "at" ;
     Station = mkPlace "station" "at" ;
     Supermarket = mkPlace "supermarket" "at" ; 
     Theatre = mkPlace "theatre" "at" ;
@@ -83,6 +83,7 @@ concrete WordsEng of Words = SentencesEng **
     Lei = mkCN (mkN "leu" "lei") ;
     Leva = mkCN (mkN "lev") ;
     NorwegianCrown = mkCN (mkA "Norwegian") (mkN "crown") | mkCN (mkN "crown") ;
+    Pound = mkCN (mkN "pound") ;
     Rouble = mkCN (mkN "rouble") ;
     SwedishCrown = mkCN (mkA "Swedish") (mkN "crown") | mkCN (mkN "crown") ;
     Zloty = mkCN (mkN "zloty" "zloty") ;
@@ -92,9 +93,9 @@ concrete WordsEng of Words = SentencesEng **
     Belgian = mkA "Belgian" ;
     Belgium = mkNP (mkPN "Belgium") ;
     Bulgarian = mkNat "Bulgarian" "Bulgaria" ;
-    Catalan = mkNat "Catalan" "Catalonia" ;
+    Catalan = mkNPNationality (mkNP (mkPN "Catalan")) (mkNP (mkPN "Catalonia")) (mkA "Catalonian") ;
     Danish = mkNat "Danish" "Denmark" ;
- --   Dutch = mkNat "Dutch" ""
+    Dutch =  mkNPNationality (mkNP (mkPN "Dutch")) (mkNP the_Quant (mkN "Netherlands")) (mkA "Dutch") ;
     English = mkNat "English" "England" ;
     Finnish = mkNat "Finnish" "Finland" ;
     Flemish = mkNP (mkPN "Flemish") ;
@@ -124,7 +125,7 @@ concrete WordsEng of Words = SentencesEng **
 
 -- Actions: the predication patterns are very often language-dependent.
 
-    AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
+    AHasAge p num = mkCl p.name (mkNP (mkDet num)) ;
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
     AHasRoom p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (mkN "room")) (SyntaxEng.mkAdv for_Prep (mkNP num (mkN "person")))) ;
