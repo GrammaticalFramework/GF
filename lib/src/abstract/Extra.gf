@@ -45,4 +45,6 @@ abstract Extra = Cat ** {
 
     CompIQuant : IQuant -> IComp ; -- which (is it) [agreement to NP]
 
+    PrepCN : Prep -> CN -> Adv ;   -- by accident [Prep + CN without article]
+
 }
