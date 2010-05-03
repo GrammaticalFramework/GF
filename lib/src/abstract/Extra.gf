@@ -43,4 +43,6 @@ abstract Extra = Cat ** {
     ICompAP : AP -> IComp ;   -- "how old"
     IAdvAdv : Adv -> IAdv ;   -- "how often"
 
+    CompIQuant : IQuant -> IComp ; -- which (is it) [agreement to NP]
+
 }

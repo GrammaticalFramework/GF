@@ -31,4 +31,6 @@ incomplete concrete ExtraRomance of ExtraRomanceAbs = CatRomance **
       isPol = p.isPol
       } ;
 
+    CompIQuant iq = {s = \\aa => iq.s ! aa.n ! aa.g ! Nom} ;
+
 } 
