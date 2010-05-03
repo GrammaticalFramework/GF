@@ -41,6 +41,9 @@ gfdoc - a rudimentary GF document generator.
       Date = Adv ;
       Name = NP ;
       Number = Card ;
+      ByTransport = Adv ;
+      Transport = {name : CN ; by : Adv} ;
+      Superlative = Det ;
     lin
       PSentence s = mkText s | lin Text (mkUtt s) ;  -- optional '.'
       PQuestion s = mkText s | lin Text (mkUtt s) ;  -- optional '?'
@@ -57,6 +60,8 @@ gfdoc - a rudimentary GF document generator.
       PCountry x = mkPhrase (mkUtt x) ;
       PCitizenship x = mkPhrase (mkUtt (mkAP x)) ;
       PDay d = mkPhrase (mkUtt d.name) ;
+      PTransport t = mkPhrase (mkUtt t.name) ;
+      PByTransport t = mkPhrase (mkUtt t) ;
   
       PYes = mkPhrase yes_Utt ;
       PNo = mkPhrase no_Utt ;
@@ -91,12 +96,9 @@ gfdoc - a rudimentary GF document generator.
       Very property = mkAP very_AdA (mkAP property) ;
       Too property = mkAP too_AdA (mkAP property) ;
       PropQuality property = mkAP property ;
-      ThePlace kind =
-        let name : NP = mkNP the_Quant kind.name in {
-          name = name ;
-          at = mkAdv kind.at name ;
-          to = mkAdv kind.to name
-        } ;
+  
+      ThePlace kind = placeNP the_Det kind ;
+      APlace kind = placeNP a_Det kind ;
   
       IMale, IFemale = mkPerson i_Pron ;
       YouFamMale, YouFamFemale = mkPerson youSg_Pron ;
@@ -120,8 +122,10 @@ gfdoc - a rudimentary GF document generator.
       NNumeral n = mkCard &lt;lin Numeral n : Numeral>  ;
   
       AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
+      AHaveCurr p curr = mkCl p.name have_V2 (mkNP aPl_Det curr) ;
       ACitizen p n = mkCl p.name n ;
       ABePlace p place = mkCl p.name place.at ;
+      ByTransp t = t.by ;
   
   oper 
 </pre>
@@ -159,6 +163,13 @@ These are used in Words for each language.
       name = p ;
       at = i ;
       to = t
+      } ;
+  
+    placeNP : Det -> CNPlace -> NPPlace = \det,kind ->
+      let name : NP = mkNP det kind.name in {
+        name = name ;
+        at = mkAdv kind.at name ;
+        to = mkAdv kind.to name
       } ;
   
     NPPerson : Type = {name : NP ; isPron : Bool ; poss : Quant} ;
@@ -242,20 +253,33 @@ also the directional preposition varies, but in English we use <tt>to</tt>, as
 defined by <tt>mkPlace</tt>.
 <pre>
       Airport = mkPlace "airport" "at" ;
+      AmusementPark = mkCompoundPlace "amusement" "park" "at" ;
+      Bank = mkPlace "bank" "at" ;
       Bar = mkPlace "bar" "in" ;
-      Church = mkPlace "church" "in" ;
+      Cafeteria = mkPlace "canteen" "in" ;
+      Center = mkPlace "center" "in" ;
       Cinema = mkPlace "cinema" "at" ;
+      Church = mkPlace "church" "in" ;
+      Disco = mkPlace "disco" "at" ;
       Hospital = mkPlace "hospital" "in" ;
       Hotel = mkPlace "hotel" "in" ;
-      Museum = mkPlace "museum" "in" ;
+      Museum = mkPlace "museum" "at" ;
       Park = mkPlace "park" "in" ;
+      Parking = mkCompoundPlace "car" "park" "in" ; 
+      Pharmacy = mkPlace "pharmacy" "at" ;
+      PostOffice = mkCompoundPlace "post" "office" "at" ;
+      Pub = mkPlace "pub" "at" ;
       Restaurant = mkPlace "restaurant" "in" ;
       School = mkPlace "school" "at" ;
-      Shop = mkPlace "shop" "in" ;
+      Shop = mkPlace "shop" "at" ;
       Station = mkPlace "station" "at" ;
+      Supermarket = mkPlace "supermarket" "at" ; 
       Theatre = mkPlace "theatre" "at" ;
       Toilet = mkPlace "toilet" "in" ;
       University = mkPlace "university" "at" ;
+      Zoo = mkPlace "zoo" "at" ;
+  
+      CitRestaurant cit = mkCNPlace (mkCN cit (mkN "restaurant")) in_Prep to_Prep ;
 </pre>
 
 Currencies; <tt>crown</tt> is ambiguous between Danish and Swedish crowns.
@@ -264,25 +288,54 @@ Currencies; <tt>crown</tt> is ambiguous between Danish and Swedish crowns.
       Dollar = mkCN (mkN "dollar") ;
       Euro = mkCN (mkN "euro" "euros") ; -- to prevent euroes
       Lei = mkCN (mkN "leu" "lei") ;
+      Leva = mkCN (mkN "lev") ;
+      NorwegianCrown = mkCN (mkA "Norwegian") (mkN "crown") | mkCN (mkN "crown") ;
+      Pound = mkCN (mkN "pound") ;
+      Rouble = mkCN (mkN "rouble") ;
       SwedishCrown = mkCN (mkA "Swedish") (mkN "crown") | mkCN (mkN "crown") ;
+      Zloty = mkCN (mkN "zloty" "zloty") ;
 </pre>
 
 Nationalities
 <pre>
       Belgian = mkA "Belgian" ;
       Belgium = mkNP (mkPN "Belgium") ;
+      Bulgarian = mkNat "Bulgarian" "Bulgaria" ;
+      Catalan = mkNPNationality (mkNP (mkPN "Catalan")) (mkNP (mkPN "Catalonia")) (mkA "Catalonian") ;
+      Danish = mkNat "Danish" "Denmark" ;
+      Dutch =  mkNPNationality (mkNP (mkPN "Dutch")) (mkNP the_Quant (mkN "Netherlands")) (mkA "Dutch") ;
       English = mkNat "English" "England" ;
       Finnish = mkNat "Finnish" "Finland" ;
       Flemish = mkNP (mkPN "Flemish") ;
       French = mkNat "French" "France" ; 
+      German = mkNat "German" "Germany" ;
       Italian = mkNat "Italian" "Italy" ;
+      Norwegian = mkNat "Norwegian" "Norway" ;
+      Polish = mkNat "Polish" "Poland" ;
       Romanian = mkNat "Romanian" "Romania" ;
+      Russian = mkNat "Russian" "Russia" ;
+      Spanish = mkNat "Spanish" "Spain" ;
       Swedish = mkNat "Swedish" "Sweden" ;
+</pre>
+
+Means of transportation 
+<pre>
+     Bike = mkTransport L.bike_N ;
+     Bus = mkTransport (mkN "bus") ;
+     Car = mkTransport L.car_N ;
+     Ferry = mkTransport (mkN "ferry") ;
+     Plane = mkTransport L.airplane_N ;
+     Subway = mkTransport (mkN "subway") ;
+     Taxi = mkTransport (mkN "taxi") ;
+     Train = mkTransport (mkN "train") ;
+     Tram = mkTransport (mkN "tram") ;
+  
+     ByFoot = P.mkAdv "by foot" ;
 </pre>
 
 Actions: the predication patterns are very often language-dependent.
 <pre>
-      AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
+      AHasAge p num = mkCl p.name (mkNP (mkDet num)) ;
       AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
       AHasRoom p num = mkCl p.name have_V2 
         (mkNP (mkNP a_Det (mkN "room")) (SyntaxEng.mkAdv for_Prep (mkNP num (mkN "person")))) ;
@@ -324,8 +377,9 @@ miscellaneous
 Building phrases from strings is complicated: the solution is to use
 mkText : Text -> Text -> Text ;
 <pre>
-      PSeeYou d = mkText (lin Text (ss ("see you"))) (mkPhrase (mkUtt d)) ;
-      PSeeYouPlace p d = 
+      PSeeYouDate d = mkText (lin Text (ss ("see you"))) (mkPhrase (mkUtt d)) ;
+      PSeeYouPlace p = mkText (lin Text (ss ("see you"))) (mkPhrase (mkUtt p.at)) ;
+      PSeeYouPlaceDate p d = 
         mkText (lin Text (ss ("see you"))) 
           (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
 </pre>
@@ -354,6 +408,33 @@ week days
       Tomorrow = P.mkAdv "tomorrow" ;
 </pre>
 
+modifiers of places
+<pre>
+      TheBest = mkSuperl L.good_A ;
+      TheClosest = mkSuperl L.near_A ; 
+      TheCheapest = mkSuperl (mkA "cheap") ;
+      TheMostExpensive = mkSuperl (mkA "expensive") ;
+      TheMostPopular = mkSuperl (mkA "popular") ;
+      TheWorst = mkSuperl L.bad_A ;
+  
+      SuperlPlace sup p = placeNP sup p ;
+</pre>
+
+transports
+<pre>
+      HowFar place = mkQS (mkQCl far_IAdv place.name) ;
+      HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP y.name (SyntaxEng.mkAdv from_Prep x.name))) ;
+      HowFarFromBy x y t = 
+        mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxEng.mkAdv from_Prep x.name)) t)) ;
+      HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t)) ;
+  
+      WhichTranspPlace trans place = 
+        mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
+  
+      IsTranspPlace trans place =
+        mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
+</pre>
+
 auxiliaries
 <pre>
     oper
@@ -366,6 +447,9 @@ auxiliaries
         mkNPDay day (SyntaxEng.mkAdv on_Prep day) 
           (SyntaxEng.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
   
+      mkCompoundPlace : Str -> Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \comp, p, i ->
+       mkCNPlace (mkCN (P.mkN comp (mkN p))) (P.mkPrep i) to_Prep ;
+  
       mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
         mkCNPlace (mkCN (mkN p)) (P.mkPrep i) to_Prep ;
   
@@ -376,6 +460,15 @@ auxiliaries
         relativePerson n (mkCN x) (\a,b,c -> mkNP (GenNP b) a c) p ;
   
       nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "name") p).name ;
+  
+      mkTransport : N -> {name : CN ; by : Adv} = \n -> {
+        name = mkCN n ; 
+        by = SyntaxEng.mkAdv by8means_Prep (mkNP n)
+        } ;
+  
+      mkSuperl : A -> Det = \a -> SyntaxEng.mkDet the_Art (SyntaxEng.mkOrd a) ;
+  
+     far_IAdv = ExtraEng.IAdvAdv (ss "far") ;
   
   }
 </pre>

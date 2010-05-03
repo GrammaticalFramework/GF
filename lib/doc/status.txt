@@ -12,31 +12,36 @@ that are currently available via http://grammaticalframework.org
 are marked in the table
 
 
-|| Lang | Mini | Parad | Lex | Lang | API | Symb | Irreg | Dict | authors       ||
-| Ara   | +    | +     | +   | -    | -   | -    | -     | -    | AD
-| Bul   | +    | +     | +   | +    | +   | +    | +     | +    | *KA
-| Cat   | +    | ++    | +   | +    | +   | +    | +     | -    | *JS
-| Dan   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
-| Dut   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,FJ
-| Eng   | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,BB
-| Fin   | +    | ++    | +   | +    | +   | +    | -     | -    | *AR
-| Fre   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
-| Ger   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,HH
-| Hin   | -    | -     | -   | -    | -   | -    | -     | -    | AR,SV
-| Ina   | +    | ++    | +   | +    | -   | -    | -     | -    | JB
-| Ita   | +    | ++    | +   | +    | +   | +    | -     | -    | *AR,*RE,GP
-| Lat   | -    | -     | -   | -    | -   | -    | -     | -    | *AR
-| Nor   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
-| Pol   | +    | +     | +   | +    | +   | +    | -     | -    | IN,AS
-| Ron   | +    | ++    | +   | +    | +   | +    | -     | -    | *RE
-| Rus   | +    | ++    | +   | +    | +   | -    | -     | -    | JK
-| Spa   | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,IA,TS
-| Swe   | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,MF
-| Tha   | -    | -     | -   | -    | -   | -    | -     | -    | AR
-| Tur   | -    | ++    | +   | -    | -   | -    | -     | +    | SC,KA
-| Urd   | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,MH
+|| Lang | Darcs | Mini | Parad | Lex | Lang | API | Symb | Irreg | Dict | authors       ||
+| Afr   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *LPs,LPj
+| Ara   | +     | +    | +     | +   | -    | -   | -    | -     | -    | AD
+| Bul   | +     | +    | +     | +   | +    | +   | +    | +     | +    | *KA
+| Cat   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *JS
+| Dan   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Dut   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,FJ
+| Eng   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,BB
+| Fin   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *AR
+| Fre   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Ger   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,HH
+% | Heb   | -   | -    | -     | -   | -    | -   | -    | -     | -    | DD
+| Hin   | +     | -    | -     | -   | -    | -   | -    | -     | -    | AR,SV
+| Ina   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | JB
+| Ita   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *AR,*RE,GP
+| Lat   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
+| Nor   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Pol   | +     | +    | +     | +   | +    | +   | +    | -     | -    | IN,*AS
+| Ron   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *RE
+| Rus   | +     | +    | ++    | +   | +    | +   | -    | -     | -    | JK
+| Spa   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,IA,TS
+| Swe   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,MF
+| Tha   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
+| Tsn   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *LPs,AB
+| Tur   | +     | -    | ++    | +   | -    | -   | -    | -     | +    | *SC,KA
+| Urd   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,MH
 
 Lang = 3-letter ISO language code, used in library file names
+
+Darcs = available in the darcs repository of http://code.haskell.org/gf
 
 Mini = minimal resource, compiles with ``make minimal``
 
@@ -60,6 +65,7 @@ authors = main contributors, * means still active
 
 ===Author codes===
 
+AB Ansu Berg,
 AD Ali El Dada,
 AR Aarne Ranta,
 AS Adam Slaski,
@@ -73,6 +79,8 @@ JB Jean-Philippe Bernardy,
 JK Janna Khegai,
 JS Jordi Saludes,
 KA Krasimir Angelov,
+LPj Laurette Pretorius Jr,
+LPs Laurette Pretorius Sr,
 MF Markus Forsberg,
 MH Muhammad Humayoun,
 RE Ramona Enache,
@@ -85,7 +93,7 @@ TH Therese Söderberg
 
 ==Rules==
 
-Only languages available at http://grammaticalframework.org are included in the table.
+Only components available at http://grammaticalframework.org are included in the table.
 
 If you want to work on a language already in the table, please be kind and contact the
 active authors of it.
