@@ -33,4 +33,6 @@ incomplete concrete ExtraRomance of ExtraRomanceAbs = CatRomance **
 
     CompIQuant iq = {s = \\aa => iq.s ! aa.n ! aa.g ! Nom} ;
 
+    PrepCN prep cn = {s = prep.s ++ prepCase prep.c ++ cn.s ! Sg} ;
+    
 } 
