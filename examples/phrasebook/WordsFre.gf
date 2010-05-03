@@ -109,15 +109,15 @@ lin
 
 -- means of transportation
   
-   Bike = mkTransport L.bike_N ;
-   Bus = mkTransport (mkN "bus") ;
-   Car = mkTransport L.car_N ;
-   Ferry = mkTransport (mkN "ferry-boat") ;
-   Plane = mkTransport L.airplane_N ;
-   Subway = mkTransport (mkN "métro") ;
-   Taxi = mkTransport (mkN "taxi") ;
-   Train = mkTransport (mkN "train") ;
-   Tram = mkTransport (mkN "tram") ;
+   Bike = mkTransport en_Prep L.bike_N ;
+   Bus = mkTransport par_Prep (mkN "bus") ;
+   Car = mkTransport en_Prep L.car_N ;
+   Ferry = mkTransport en_Prep (mkN "ferry-boat") ;
+   Plane = mkTransport par_Prep L.airplane_N ;
+   Subway = mkTransport par_Prep (mkN "métro") ;
+   Taxi = mkTransport en_Prep (mkN "taxi") ;
+   Train = mkTransport par_Prep (mkN "train") ;
+   Tram = mkTransport par_Prep (mkN "tram") ;
 
    ByFoot = P.mkAdv "à pied" ;
 
@@ -244,10 +244,13 @@ lin
 
     xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (mkCN x) p ; 
 
-    mkTransport : N -> {name : CN ; by : Adv} = \n -> {
+    mkTransport : Prep -> N -> {name : CN ; by : Adv} = \p,n -> {
       name = mkCN n ; 
-      by = SyntaxFre.mkAdv by8means_Prep (mkNP the_Det n)  --- par le bus
+      by = E.PrepCN p n  -- par train, en vélo
       } ;
+
+    en_Prep = mkPrep "en" ;
+    par_Prep = mkPrep "par" ;
 
     mkSuperl : A -> Det = \a -> SyntaxFre.mkDet the_Art (SyntaxFre.mkOrd a) ;
     
