@@ -1,9 +1,10 @@
 DisambPhrasebookEng :
-PhrasebookBul : AHasName AHasRoom AHasTable AHungry AIll AKnow ALike ALive ALove AMarried AReady AScared ASpeak AThirsty ATired AUnderstand AWant AWantGo Belgium Children Daughter English Finnish Flemish French Friday HowMuchCost Husband ItCost Italian Monday PSeeYou PSeeYouPlace PropClosed PropClosedDate PropClosedDay PropOpen PropOpenDate PropOpenDay QWhatAge QWhatName Romanian Saturday Son Sunday Swedish Thursday Tomorrow Tuesday Wednesday Wife
+PhrasebookBul : AHasName AHasRoom AHasTable AHungry AIll AKnow ALike ALive ALove AMarried AReady AScared ASpeak AThirsty ATired AUnderstand AWant AWantGo AmusementPark Bank Belgium Bike Bulgarian Bus ByFoot Cafeteria Car Catalan Center Children CitRestaurant Danish Daughter Disco Dutch English Ferry Finnish Flemish French Friday German HowFar HowFarBy HowFarFrom HowFarFromBy HowMuchCost Husband IsTranspPlace ItCost Italian Leva Monday Norwegian NorwegianCrown PSeeYouDate PSeeYouPlace PSeeYouPlaceDate Parking Pharmacy Plane Polish PostOffice Pound PropClosed PropClosedDate PropClosedDay PropOpen PropOpenDate PropOpenDay Pub QWhatAge QWhatName Romanian Rouble Russian Saturday Son Spanish Subway Sunday SuperlPlace Supermarket Swedish Taxi TheBest TheCheapest TheClosest TheMostExpensive TheMostPopular TheWorst Thursday Tomorrow Train Tram Tuesday Wednesday WhichTranspPlace Wife Zloty Zoo
+PhrasebookDut :
 PhrasebookEng :
 PhrasebookFin :
-PhrasebookFre :
-PhrasebookGer : Bar Chicken Cinema Coffee Dollar GNiceToMeetYou Hotel Lei Meat Museum PSeeYou PSeeYouPlace Park School Shop Suspect Tea Theatre Toilet
-PhrasebookIta :
+PhrasebookFre : HowFar HowFarBy HowFarFrom HowFarFromBy
+PhrasebookGer : AmusementPark Bank Bar Bike Bulgarian Bus ByFoot Cafeteria Car Catalan Center Chicken Cinema CitRestaurant Coffee Danish Disco Dollar Dutch Ferry GNiceToMeetYou German Hotel HowFar HowFarBy HowFarFrom HowFarFromBy IsTranspPlace Lei Leva Meat Museum Norwegian NorwegianCrown PSeeYouDate PSeeYouPlace PSeeYouPlaceDate Park Parking Pharmacy Plane Polish PostOffice Pound Pub Rouble Russian School Shop Spanish Subway SuperlPlace Supermarket Suspect Taxi Tea TheBest TheCheapest TheClosest TheMostExpensive TheMostPopular TheWorst Theatre Toilet Train Tram WhichTranspPlace Zloty Zoo
+PhrasebookIta : AmusementPark Bank Bike Bulgarian Bus ByFoot Cafeteria Car Catalan Center CitRestaurant Danish Disco Dutch Ferry German HowFar HowFarBy HowFarFrom HowFarFromBy IsTranspPlace Leva Norwegian NorwegianCrown Parking Pharmacy Plane Polish PostOffice Pound Pub Rouble Russian Spanish Subway SuperlPlace Supermarket Taxi TheBest TheCheapest TheClosest TheMostExpensive TheMostPopular TheWorst Train Tram WhichTranspPlace Zloty Zoo
 PhrasebookRon : GExcusePol GPleaseGivePol GSorryPol
 PhrasebookSwe :
