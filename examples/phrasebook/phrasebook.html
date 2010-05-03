@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1>MOLTO Multilingual Phrasebook</H1>
 <FONT SIZE="4">
-<I>Aarne Ranta</I><BR>
+<I>Krasimir Angelov, Olga Caprotti, Ramona Enache, Thomas Hallgren, Aarne Ranta </I><BR>
 </FONT></CENTER>
 
 <P>
@@ -17,6 +17,9 @@
 History
 </P>
 <UL>
+<LI>3 May. Version 0.6: 
+  Extended API (now final for release), Dutch added; new user interface with text 
+  input enabled.
 <LI>10 April. Some additions in API, comments in implementation; regenerated clones.
 <LI>8 April. Added German.
 <LI>7 April. Added the Clone script, applied to initiate the rest of MOLTO languages.
@@ -72,12 +75,13 @@ The source code resides in
 <A HREF="http://code.haskell.org/gf/examples/phrasebook/"><CODE>code.haskell.org/gf/examples/phrasebook/</CODE></A>
 </P>
 <P>
-Current status (8 April 2010):
+Current status (3 May 2010):
 </P>
 <UL>
-<LI>small coverage in abstract syntax
-<LI>reasonable implementations for English, Finnish, French, German, Italian, Romanian, Swedish
-<LI>almost just cloned for the rest of MOLTO languages
+<LI>small but useful coverage in abstract syntax
+<LI>reasonable implementations for 
+  Bulgarian, Dutch, English, Finnish, French, German, Italian, Romanian, Swedish
+<LI>mostly just cloned for the rest of MOLTO languages
 <LI>temporary user interdace
 <LI>works on web browsers calling a server
 <LI>web service not yet released, but preliminarily available in
@@ -152,8 +156,6 @@ Here is the module structure as produced in GF by
 Improved translation interface
 </P>
 <UL>
-<LI>a <I>to</I> list of languages: either <I>all</I>, or just one
-<LI>combined text field/fridge magnet input; filter magnets by started word prefix
 <LI>a nicer way to show disambiguation (maybe hidden by default)
 </UL>
 

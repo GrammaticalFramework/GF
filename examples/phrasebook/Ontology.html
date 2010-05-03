@@ -45,6 +45,9 @@ are defined in other modules.
       Date ;        -- definite date                             e.g. "on Friday"
       Name ;        -- name of person                            e.g. "NN"
       Number ;      -- number expression 1 .. 999,999            e.g. "twenty"
+      Transport ;   -- transportation device                     e.g. "car"
+      ByTransport ; -- mean of transportation                    e.g. "by tram"
+      Superlative ; -- superlative modifiers of places           e.g. "the best restaurant"
 </pre>
 
 Many of the categories are accessible as Phrases, i.e. as translation units.
@@ -65,6 +68,8 @@ Many of the categories are accessible as Phrases, i.e. as translation units.
       PCitizenship : Citizenship -> Phrase ;
       PCountry     : Country -> Phrase ;
       PDay         : Day -> Phrase ;
+      PByTransport : ByTransport -> Phrase ;
+      PTransport   : Transport -> Phrase ;
   
       PYes, PNo : Phrase ;
 </pre>
@@ -110,7 +115,8 @@ Determiners.
   
       AmountCurrency : Number -> Currency -> Price ;  -- five euros
   
-      ThePlace : PlaceKind -> Place ;                  -- the bar
+      ThePlace : PlaceKind -> Place ;                   -- the bar
+      APlace : PlaceKind -> Place ;                     -- a bar
   
       IMale, IFemale,                     -- I, said by man/woman (affects agreement)
       YouFamMale, YouFamFemale,           -- familiar you, said to man/woman (affects agreement)
@@ -135,9 +141,12 @@ Determiners.
 Actions are typically language-dependent, not only lexically but also
 structurally. However, these ones are mostly functorial.
 <pre>
-      AHave    : Person -> Kind        -> Action ;  -- you have a pizza
-      ACitizen : Person -> Citizenship -> Action ;  -- you are Swedish
-      ABePlace : Person -> Place       -> Action ;  -- you are in the bar
+      AHave     : Person -> Kind        -> Action ;  -- you have a pizza
+      AHaveCurr : Person -> Currency    -> Action ;  -- you have dollars
+      ACitizen  : Person -> Citizenship -> Action ;  -- you are Swedish
+      ABePlace  : Person -> Place       -> Action ;  -- you are in the bar
+  
+      ByTransp : Transport -> ByTransport ;         -- by bus
   
   }
 </pre>
@@ -184,42 +193,84 @@ properties of kinds (so far mostly of food)
 kinds of places
 <pre>
       Airport : PlaceKind ;
+      AmusementPark : PlaceKind ;
+      Bank : PlaceKind ;
       Bar : PlaceKind ;
+      Cafeteria : PlaceKind ;
+      Center : PlaceKind ;
       Cinema : PlaceKind ;
       Church : PlaceKind ;
+      Disco : PlaceKind ;
       Hospital : PlaceKind ;
       Hotel : PlaceKind ;
       Museum : PlaceKind ;
       Park : PlaceKind ;
+      Parking : PlaceKind ;
+      Pharmacy : PlaceKind ;
+      PostOffice : PlaceKind ;
+      Pub : PlaceKind ;
       Restaurant : PlaceKind ;
       School : PlaceKind ;
       Shop : PlaceKind ;
       Station : PlaceKind ;
+      Supermarket : PlaceKind ;
       Theatre : PlaceKind ; 
       Toilet : PlaceKind ; 
       University : PlaceKind ;
+      Zoo : PlaceKind ;
+  
+      CitRestaurant : Citizenship -> PlaceKind ;
 </pre>
 
 currency units
 <pre>
-      DanishCrown : Currency ;
+      DanishCrown : Currency ; 
       Dollar : Currency ; 
-      Euro : Currency ;
-      Lei : Currency ;
+      Euro : Currency ; -- Germany, France, Italy, Finland, Spain, The Netherlands
+      Lei : Currency ; -- Romania
+      Leva : Currency ; -- Bulgaria
+      NorwegianCrown : Currency ;
+      Pound : Currency ; -- UK
+      Rouble : Currency ; -- Russia
       SwedishCrown : Currency ;
+      Zloty : Currency ; -- Poland
 </pre>
 
 nationalities, countries, languages, citizenships
 <pre>
       Belgian : Citizenship ;
       Belgium : Country ;
+      Bulgarian : Nationality ;
+      Catalan : Nationality ;
+      Danish : Nationality ;
+      Dutch : Nationality ;
       English : Nationality ;
       Finnish : Nationality ;
       Flemish : Language ;
       French : Nationality ;
+      German : Nationality ;
       Italian : Nationality ;
+      Norwegian : Nationality ;
+      Polish : Nationality ;
       Romanian : Nationality ;
+      Russian : Nationality ;
+      Spanish : Nationality ;
       Swedish : Nationality ;
+</pre>
+
+means of transportation 
+<pre>
+      Bike : Transport ; 
+      Bus : Transport ;
+      Car : Transport ;
+      Ferry : Transport ;
+      Plane : Transport ;
+      Subway : Transport ;
+      Taxi : Transport ;
+      Train : Transport ;
+      Tram : Transport ;
+  
+      ByFoot : ByTransport ;
 </pre>
 
 Actions (which can be expressed by different structures in different languages).
@@ -262,8 +313,9 @@ propositions.
       PropOpenDay    : Place -> Day  -> Proposition ;  -- the museum is open on Mondays
       PropClosedDay  : Place -> Day  -> Proposition ;  -- the museum is closed on Mondays
   
-      PSeeYou      : Date -> Phrase ;           -- see you on Monday
-      PSeeYouPlace : Place -> Date -> Phrase ;  -- see you in the bar on Monday
+      PSeeYouPlaceDate : Place -> Date -> Phrase ;     -- see you in the bar on Monday
+      PSeeYouPlace     : Place         -> Phrase ;     -- see you in the bar
+      PSeeYouDate      :          Date -> Phrase ;     -- see you on Monday
 </pre>
 
 family relations
@@ -278,6 +330,30 @@ week days
       Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday : Day ;
   
       Tomorrow : Date ;
+</pre>
+
+transports
+<pre>
+      HowFar : Place -> Question ;                  -- how far is the zoo ?
+      HowFarFrom : Place -> Place -> Question ;     -- how far is the center from the hotel ?
+      HowFarFromBy : Place -> Place -> ByTransport -> Question ; 
+                                              -- how far is the airport from the hotel by taxi ? 
+      HowFarBy : Place -> ByTransport -> Question ;   -- how far is the museum by bus ?
+  
+      WhichTranspPlace : Transport -> Place -> Question ;   -- which bus goes to the hotel
+      IsTranspPlace    : Transport -> Place -> Question ;   -- is there a metro to the airport ?
+</pre>
+
+modifiers of places
+<pre>
+      TheBest : Superlative ;
+      TheClosest : Superlative ;
+      TheCheapest : Superlative ;
+      TheMostExpensive : Superlative ;
+      TheMostPopular : Superlative ;
+      TheWorst : Superlative ;
+  
+      SuperlPlace : Superlative -> PlaceKind -> Place ; -- the best bar
   
   }
 </pre>
