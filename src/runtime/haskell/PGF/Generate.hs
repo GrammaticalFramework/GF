@@ -30,7 +30,7 @@ generateForMetas :: Bool -> PGF -> (Type -> [Expr]) -> Expr -> [Expr]
 generateForMetas breadth pgf gen exp = case exp of
   EApp f (EMeta _) -> [EApp g a | g <- gener f, a <- genArg g]
   EApp f x | breadth -> [EApp g a | (g,a) <- zip (gener f) (gener x)]
-  EApp f x  -> [EApp g a | (g,a) <- zip (gener f) (gener x)]
+  EApp f x           -> [EApp g a | g <- gener f, a <- gener x]
   _ -> if breadth then repeat exp else [exp]
  where
   gener    = generateForMetas breadth pgf gen
@@ -48,7 +48,7 @@ generate pgf ty@(DTyp _ cat _) dp = filter (\e -> case checkExpr pgf e ty of
   gener 0 c = [EFun f | (f, ([],_)) <- fns c]
   gener i c = [
     tr | 
-      (f, (cs,_)) <- fns c,
+      (f, (cs,_)) <- fns c, not (null cs),
       let alts = map (gener (i-1)) cs,
       ts <- combinations alts,
       let tr = foldl EApp (EFun f) ts,
