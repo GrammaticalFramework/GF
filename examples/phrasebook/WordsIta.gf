@@ -32,10 +32,10 @@ lin
 
     Bad = L.bad_A ;
     Boring = mkA "noioso" ;
-    Cheap = let c = "a buon mercato" in mkA c c c c c ; ----
+    Cheap = mkA "conveniente";
     Cold = L.cold_A ;
     Delicious = mkA "delizioso" ;
-    Expensive = mkA "caro" ;
+    Expensive = mkA "costoso" ;
     Fresh = mkA "fresco" ;
     Good = L.good_A ;
     Warm = L.warm_A ;
@@ -44,40 +44,81 @@ lin
 -- places
 
     Airport = mkPlace (mkN "aeroporto") dative ;
-    Bar = mkPlace (mkN "bar") P.in_Prep ;
+    AmusementPark = mkPlace (mkN "parco divertimenti") dative ;
+    Bank = mkPlace (mkN "banca") P.in_Prep ;
+    Bar = mkPlace (mkN "bar") dative ;
+    Cafeteria = mkPlace (mkN "mensa") P.in_Prep;
+    Center = mkPlace (mkN "centro") P.in_Prep;
     Church = mkPlace (mkN "chiesa") P.in_Prep ;
-    Cinema = mkPlace (mkN "cinema") P.in_Prep ;
+    Cinema = mkPlace (mkN "cinema" masculine) dative ;
+    Disco = mkPlace (mkN "discoteca") P.in_Prep;
     Hospital = mkPlace (mkN "ospedale") P.in_Prep ;
     Hotel = mkPlace (mkN "albergo") P.in_Prep ;
-    Museum = mkPlace (mkN "museo") P.in_Prep ;
-    Park = mkPlace (mkN "parco") P.in_Prep ;
-    Restaurant = mkPlace (mkN "ristorante") P.in_Prep ;
-    School = mkPlace (mkN "scuola") P.in_Prep ;
+    Museum = mkPlace (mkN "museo") dative ;
+    Park = mkPlace (mkN "parco") dative ;
+    Parking = mkPlace (mkN "parcheggio") dative ;
+    Pharmacy = mkPlace (mkN "farmacia") P.in_Prep ;
+    PostOffice = mkPlace (mkN "ufficio postale") dative ;
+    Pub = mkPlace (mkN "birreria") P.in_Prep ;
+    Restaurant = mkPlace (mkN "ristorante") dative ;
+    School = mkPlace (mkN "scuola") dative ;
     Shop = mkPlace (mkN "negozio") P.in_Prep ;
     Station = mkPlace (mkN "stazione" feminine) dative ;
-    Theatre = mkPlace (mkN "teatro") P.in_Prep ;
+    Supermarket = mkPlace (mkN "supermercato") dative ;
+    Theatre = mkPlace (mkN "teatro") dative ;
     Toilet = mkPlace (mkN "bagno") P.in_Prep ;
     University = mkPlace (mkN "università") dative ;
+    Zoo = mkPlace (mkN "zoo") dative ;
+
+    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "ristorante")) P.in_Prep dative ;
+
 
 -- currencies
 
     DanishCrown = mkCN (mkA "danese") (mkN "corona") | mkCN (mkN "corona") ;
     Dollar = mkCN (mkN "dollar") ;
-    Euro = mkCN (mkN "euro" "euro" masculine) ;
-    Lei = mkCN (mkN "lei") ; ---- ?
+    Euro = mkCN (mkN "Euro" "Euro" masculine) ;
+    Lei = mkCN (mkN "leu") ; 
+    Leva = mkCN (mkN "lev" "lev" masculine) ; 
+    NorwegianCrown = mkCN (mkA "norvegese") (mkN "corona") | mkCN (mkN "corona") ;
+    Rouble = mkCN (mkN "rublo") ; 
     SwedishCrown = mkCN (mkA "svedese") (mkN "corona") | mkCN (mkN "corona") ;
+    Zloty = mkCN (mkN "zloty" "zlotych" masculine) ;
 
 -- nationalities
 
     Belgian = mkA "belga" ;
     Belgium = mkNP (mkPN "Belgio") ;
+    Bulgarian = mkNat "bulgaro" "Bulgaria" ;
+    Catalan = mkNat "catalano" "Catalonia" ;
+    Danish = mkNat "danese" "Danimarca" ;
+    Dutch = mkNat "olandese" "Olanda" ;
     English = mkNat "inglese" "Inghilterra" ;
     Finnish = mkNat "finlandese" "Finlandia" ;
     Flemish = mkNP (mkPN "fiammingo") ;
-    French = mkNat "francese" "Francia" ; 
+    French = mkNat "francese" "Francia" ;
+    German = mkNat "tedesco" "Germania" ;
     Italian = mkNat "italiano" "Italia" ;
+    Norwegian = mkNat "norvegese" "Norvegia" ;
+    Polish = mkNat "polacco" "Polonia" ;
     Romanian = mkNat "rumeno" "Romania" ;
+    Russian = mkNat "russo" "Russia" ;
+    Spanish = mkNat "spagnolo" "Spania" ;
     Swedish = mkNat "svedese" "Svezia" ;
+
+-- means of transportation 
+
+    Bike = mkTransport (mkN "bicicletta") ; 
+    Bus = mkTransport (mkN "autobus" "autobus" masculine) ;
+    Car = mkTransport L.car_N ;
+    Ferry = mkTransport (mkN "traghetto") ;
+    Plane = mkTransport L.airplane_N ;
+    Subway = mkTransport (mkN "metro" feminine) ; 
+    Taxi = mkTransport (mkN "taxi" masculine) ; 
+    Train = mkTransport (mkN "treno") ;
+    Tram = mkTransport (mkN "tram") ;
+
+    ByFoot = ParadigmsIta.mkAdv "a piedi" ;    
 
 -- actions
 
@@ -110,6 +151,8 @@ lin
 
     QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name (reflV (mkV "chiamare")))) ;
     QWhatAge p = mkQS (mkQCl (mkIP how8many_IDet L.year_N) p.name have_V2) ; 
+    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "costare"))) ; 
+    ItCost item price = mkCl item (mkV2 (mkV "costare")) price ;
 
     PropOpen p = mkCl p.name open_A ;
     PropClosed p = mkCl p.name closed_A ;
@@ -118,8 +161,6 @@ lin
     PropOpenDay p d = mkCl p.name (mkVP (mkVP open_A) d.habitual) ; 
     PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
 
-    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "costare"))) ; 
-    ItCost item price = mkCl item (mkV2 (mkV "costare")) price ;
 
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
@@ -134,10 +175,10 @@ lin
 -- below. Languages with productive genitives can use an equivalent of
 -- "my son's wife" for non-pronouns, as e.g. in English.
 
-    Wife = xOf sing (mkN "sposa") ;
-    Husband = xOf sing (mkN "marito") ;
-    Son = xOf sing (mkN "figlio") ;
-    Daughter = xOf sing (mkN "figlia") ;
+    Wife = xOf sing (mkN "moglie" feminine) ;
+    Husband = xOf sing (mkN "marito" masculine) ;
+    Son = xOf sing (mkN "figlio" masculine) ;
+    Daughter = xOf sing (mkN "figlia" feminine) ;
     Children = xOf plur L.child_N ;
 
 -- week days
@@ -152,6 +193,37 @@ lin
 
     Tomorrow = P.mkAdv "domani" ;
 
+
+-- transports
+
+--    HowFar place = mkQS (mkQCl far_IAdv place.name) ;
+--    HowFarFrom x y = mkQS (mkQCl (mkIAdv far_IAdv (SyntaxIta.mkAdv from_Prep x.name)) y.name) ;
+--    HowFarFromBy x y t =       mkQS (mkQCl (mkIAdv (mkIAdv far_IAdv (SyntaxIta.mkAdv from_Prep x.name)) t) y.name) ;
+--    HowFarBy y t = mkQS (mkQCl (mkIAdv far_IAdv t.by) y.name) ; 
+
+-- oper far_IAdv = E.IAdvAdv L.far_Adv ;
+
+lin
+    WhichTranspPlace trans place = 
+      mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
+
+    IsTranspPlace trans place =
+      mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
+
+-- modifiers of places
+
+    TheBest = mkSuperl L.good_A ;
+    TheClosest = mkSuperl L.near_A ; 
+    TheCheapest = mkSuperl (mkA "economico") ;
+    TheMostExpensive = mkSuperl (mkA "costoso") ;
+    TheMostPopular = mkSuperl (mkA "di moda") ;
+    TheWorst = mkSuperl L.bad_A ;
+
+    SuperlPlace sup p = placeNP sup p ;
+
+
+
+
 -- auxiliaries
 
   oper
@@ -160,12 +232,19 @@ lin
 
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
       let day = mkNP (mkPN d) in
-      mkNPDay day (P.mkAdv ("il" ++ d)) (P.mkAdv ("il" ++ d)) ; ---- ?
+      mkNPDay day (P.mkAdv d) (P.mkAdv ("di" ++ d)) ; ---- ?
 
     mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i ->
       mkCNPlace (mkCN p) i dative ;
 
     xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (mkCN x) p ; 
+
+    mkTransport : N -> {name : CN ; by : Adv} = \n -> {
+      name = mkCN n ; 
+      by = SyntaxIta.mkAdv with_Prep (mkNP n)
+      } ;
+
+    mkSuperl : A -> Det = \a -> SyntaxIta.mkDet the_Art (SyntaxIta.mkOrd a) ;
 
     open_A = mkA "aperto" ;
     closed_A = mkA "chiuso" ;

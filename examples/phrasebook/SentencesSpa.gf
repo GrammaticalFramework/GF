@@ -20,6 +20,23 @@ concrete SentencesSpa of Sentences = NumeralSpa ** SentencesI - [
         {name = mkNP (ProDrop youSg_Pron) ; isPron = True ; poss = mkQuant youSg_Pron} ; 
       YouPolMale = 
         {name = mkNP (ProDrop youPol_Pron) ; isPron = True ; poss = mkQuant youPol_Pron} ;
+    
+oper
+  
+  CNPlace : Type = {name : CN ; at : Prep ; to : Prep }  ;
+
+  mkCNPlace : CN -> Prep -> Prep -> CNPlace = \p,i,t -> {
+    name = p ;
+    at = i ;
+    to = t ;
+    } ;
+
+  placeNP : Det -> CNPlace -> NPPlace = \det,kind ->
+    let name : NP = mkNP det kind.name in {
+      name = name ;
+      at = mkAdv kind.at name ;
+      to = mkAdv kind.to name ;
+ };
 
 }
 
