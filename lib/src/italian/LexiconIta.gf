@@ -14,7 +14,7 @@ lin
   art_N = femN (regN "arte") ;
   ask_V2Q = mkV2Q (verboV (chiedere_29 "chiedere")) ParadigmsIta.dative ;
   baby_N = regN "bambino" ;
-  bad_A = prefA (mkADeg (regA "cattivo") (regA "peggio")) ;
+  bad_A = prefA (mkADeg (regA "cattivo") (regA "peggiore")) ;
   bank_N = regN "banca" ;
   beautiful_A = prefA (regADeg "bello") ;
   become_VA = essereV (regV "diventare") ;
