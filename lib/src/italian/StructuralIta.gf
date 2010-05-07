@@ -37,7 +37,7 @@ lin
   few_Det  = {s,sp = \\g,c => prepCase c ++ genForms "pochi" "poche" ! g ; n = Pl ; s2 = []} ;
 ----  first_Ord = {s = \\ag => (regA "primo").s ! Posit ! AF ag.g ag.n} ;
   for_Prep = mkPrep "per" ;
-  from_Prep = complGen ; ---
+  from_Prep = da_Prep ;
   he_Pron = 
     mkPronoun
       "lui" "lo" "gli" "glie" "lui" "suo" "sua" "suoi" "sue"
