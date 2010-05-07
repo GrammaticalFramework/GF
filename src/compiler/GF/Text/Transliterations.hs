@@ -31,6 +31,7 @@ transliteration :: String -> Maybe Transliteration
 transliteration s = Map.lookup s allTransliterations 
 
 allTransliterations = Map.fromAscList [
+  ("amharic",transAmharic),
   ("ancientgreek", transAncientGreek),
   ("arabic", transArabic),
   ("devanagari", transDevanagari),
@@ -40,7 +41,7 @@ allTransliterations = Map.fromAscList [
   ("telugu", transTelugu),
   ("thai", transThai),
   ("urdu", transUrdu)
-  ]
+ ]
 
 -- used in command options and help
 transliterationPrintNames = [(t,printname p) | (t,p) <- Map.toList allTransliterations]
@@ -116,6 +117,7 @@ allTransUrduHindi = words $
     "r  -  l  -  -  v  S  s. s  h  -  -  r: -  A  i  " ++
     "I  u  U  R  -  -  -  e  E  o  O  -  -  -  -  -  " ++
     "-  -  -  -  -  -  -  -  -  -  -  z  r. -  -  -  "
+
 
 transUrdu :: Transliteration
 transUrdu = 
@@ -210,3 +212,35 @@ transAncientGreek = mkTransliteration "ancient Greek" allTrans allCodes where
     "-  -  w|` w|  w|'  -  w~ w|~ - - - - - - - - "    -- 1ff0-
   allCodes = [0x0380 .. 0x03cf] ++ [0x1f00 .. 0x1fff]
 
+
+
+ 
+transAmharic :: Transliteration
+transAmharic = mkTransliteration "Amharic" allTrans allCodes where
+ 
+allTrans = words $
+    
+  	" h.  h-  h'  h(  h)  h  h?  h*  l.  l-  l'  l(  l)  l  l?  l*  "++
+	" H.  H-  H'  H(  H)  H  H?  H*  m.  m-  m'  m(  m)  m  m?  m*  "++
+	" s.  s-  s'  s(  s)  s  s?  s*  r.  r-  r'  r(  r)  r  r?  r* "++
+	" -   -   -   -   -  -   -  -   x.  x-  x'  x(  x)  x  x?   x* "++
+	" q.  q-  q'  q(  q)  q  q?  q*  -   -   -   -   -   -  -   - "++
+	" -   -   -   -   -   -  -   -   -   -   -   -   -   -  -   - "++
+	" b.  b-  b'  b(  b)  b  b?  b*  v.  v-  v'  v(  v)  v  v?  v* "++
+	" t.  t-  t'  t(  t)  t  t?  t*  c.  c-  c'  c(  c)  c  c?  c* "++
+	" X.  X-  X'  X(  X)  X  X?  -   -   -   -   X*  -   -  -   - "++
+	" n.  n-  n'  n(  n)  n  n?  n*  N.  N-  N'  N(  N)  N  N?  N* "++
+	" a   u   i   A   E   e  o   e*  k.  k-  k'  k(  k)  k  k?  - "++
+	" -   -   -   k*  -   -  -   -   -   -   -   -   -   -  -   - "++
+	" -   -   -   -   -   -  -   -   w.  w-  w'  w(  w)  w  w?  w* "++
+	" -   -   -   -   -   -  -   -   z.  z-  z'  z(  z)  z  z?  z* "++
+	" Z.  Z-  Z'  Z(  Z)  Z  Z?  Z*  y.  y-  y'  y(  y)  y  y?  y* "++
+	" d.  d-  d'  d(  d)  d  d?  d*  -   -   -   -   -   -  -   - "++
+	" j.  j-  j'  j(  j)  j  j?  j*  g.  g-  g'  g(  g)  g  g?  - "++
+	" -   -   -   g*  -   -  -   -   -   -   -   -   -   -  -   - "++
+	" T.  T-  T'  T(  T)  T  T?  T*  C.  C-  C'  C(  C)  C  C?  C* "++
+	" P.  P-  P'  P(  P)  P  P?  P*  S.  S-  S'  S(  S)  S  S?  S* "++
+	" -   -   -   -   -   -  -   -   f.  f-  f'  f(  f)  f  f?  f*"++
+	" p.  p-  p'  p(  p)  p  p?  p*" 	
+allCodes = [0x1200..0x1357]
+ 
