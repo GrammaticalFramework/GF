@@ -153,7 +153,7 @@ concrete WordsRon of Words = SentencesRon ** open
     AMarried p = mkCl p.name (P.mkA "căsătorit") ;
     AReady p = mkCl p.name (P.mkA "gata" "gata" "gata" "gata") ;
     AScared p = mkCl p.name (P.mkA "speriat") ;
-    ASpeak p lang = mkCl p.name  (P.dirV2 (P.mkV "vorbi")) lang ;
+    ASpeak p lang = mkCl p.name  (P.mmkV2 (P.mkV "vorbi") (P.noPrep P.Nom)) lang ;
     AThirsty p = DatSubjCl p.name (mkVP (mkNP (P.mkN "sete"))) ;
     ATired p = mkCl p.name (P.mkA "obosit") ;
     AUnderstand p = mkCl p.name (v_besch83 "înţelege") ;
@@ -190,8 +190,8 @@ concrete WordsRon of Words = SentencesRon ** open
 
     Wife = xOf sing (P.mkN "soţie") ;
     Husband = xOf sing (P.mkN "soţ" "soţi") ;
-    Son = xOf sing (P.mkN "fiu") ;
-    Daughter = xOf sing (P.mkN "fiică") ;
+    Son = xOf sing (P.mkN "fiu" "fii") ;
+    Daughter = xOf sing (P.mkN "fiică" "fiice") ;
     Children = xOf plur L.child_N ;    
  
 -- week days
