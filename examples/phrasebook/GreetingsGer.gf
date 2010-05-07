@@ -17,7 +17,7 @@ lin
   GHelp = ss "Hilfe" ;
   GHowAreYou = ss "wie geht's" ;
   GLookOut = ss "Achtung" ;
---  GNiceToMeetYou = ss "trevligt att träffas" ;
+  GNiceToMeetYou = ss "nett, Sie zu treffen" ;
   GPleaseGive, GPleaseGivePol = ss "bitte" ;
   GSeeYouSoon = ss "bis bald" ;
   GSorry, GSorryPol = ss "Entschuldigung" ;

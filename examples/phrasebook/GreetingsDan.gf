@@ -1,28 +1,28 @@
 concrete GreetingsDan of Greetings = open Prelude in {
 
---lincat 
---  Greeting = SS ;
+lincat 
+  Greeting = SS ;
 
---lin 
---  GBye = ss "hej då" ;
---  GCheers = ss "skål" ;
+lin 
+  GBye = ss "hej hej" ; -- not google translate
+  GCheers = ss "farvel" ;
 --  GDamn = ss "fan" ;
---  GExcuse, GExcusePol = ss "ursäkta" ;
---  GGoodDay = ss "god dag" ;
---  GGoodEvening = ss "god afton" ;
---  GGoodMorning = ss "god morgon" ;
---  GGoodNight = ss "god natt" ;
---  GGoodbye = ss "hej då" ;
---  GHello = ss "hej" ;
---  GHelp = ss "hjälp" ;
---  GHowAreYou = ss "hur står det till" ;
---  GLookOut = ss "se upp" ;
---  GNiceToMeetYou, GNiceToMeetYouPol = ss "trevligt att träffas" ;
---  GPleaseGive, GPleaseGivePol = ss "var så god" ;
---  GSeeYouSoon = ss "vi ses snart" ;
---  GSorry, GSorryPol = ss "förlåt" ;
---  GThanks = ss "tack" ;
---  GTheCheck = ss "notan" ;
+  GExcuse, GExcusePol = ss "undskyld mig" ;
+  GGoodDay = ss "god dag" ;
+  GGoodEvening = ss "god aften" ;
+  GGoodMorning = ss "god morgen" ;
+  GGoodNight = ss "godnat" ;
+  GGoodbye = ss "farvel" ;
+  GHello = ss "hej" ;
+  GHelp = ss "hjælp" ;
+  GHowAreYou = ss "hvordan har du det" ;
+  GLookOut = ss "se ud" ;
+  GNiceToMeetYou, GNiceToMeetYouPol = ss "rart at møde dig" ;
+  GPleaseGive, GPleaseGivePol = ss "behage" ;
+  GSeeYouSoon = ss "se dig snart" ;
+  GSorry, GSorryPol = ss "undskyld" ;
+  GThanks = ss "tak" ;
+  GTheCheck = ss "regningen" ;
 
 --}
 }
