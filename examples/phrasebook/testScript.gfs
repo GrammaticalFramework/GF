@@ -1,0 +1,109 @@
+-- invoke script with command : 
+-- > gf PhrasebookX <testScript.gfs 
+-- where X is the name of the language
+-- for collecting the results in a separate file, use the command 
+-- > gf PhrasebookX <testScript.gfs >rez.txt
+-- where rez.txt can be replaced by the name of the file that you want to write
+
+i PhrasebookEng.gf
+
+gt (PPlace (ThePlace (CitRestaurant  ?))) | l -treebank 
+gr (AHasAge  IMale ?) | l -treebank 
+gr (AHasChildren IMale ?) | l -treebank 
+gr (AHasName  IMale ?) | l -treebank 
+gr (AHasRoom  IMale ?) | l -treebank 
+gr (AHasTable  IMale ?) | l -treebank 
+gr (AHungry  ?) | l -treebank 
+gr (AIll  ?) | l -treebank 
+gr (AKnow  ?) | l -treebank 
+gr (ALike  ? ?) | l -treebank 
+--gr (ALive  ? ?) | l -treebank 
+gr (ALove  ? ?) | l -treebank 
+gr (AMarried  ?) | l -treebank 
+gr (AReady  ?) | l -treebank 
+gr (AScared  ?) | l -treebank 
+gr (ASpeak  ? ?) | l -treebank 
+gr (AThirsty  ?) | l -treebank 
+gr (ATired  ?) | l -treebank 
+gr (AUnderstand  ?) | l -treebank 
+gr (AWant  IMale ?) | l -treebank 
+gr (AWantGo  IMale ?) | l -treebank 
+gr (QWhatAge  ?) | l -treebank 
+gr (QWhatName  ?) | l -treebank 
+gr (HowMuchCost  ?) | l -treebank 
+gr (ItCost  ? ?) | l -treebank 
+gr (PropOpen  ?) | l -treebank 
+gr (PropClosed  ?) | l -treebank 
+gr (PropOpenDate  ? ?) | l -treebank 
+gr (PropClosedDate  ? ?) | l -treebank 
+gr (PropOpenDay  ? ?) | l -treebank 
+gr (PropClosedDay  ? ?) | l -treebank 
+gr (PSeeYouPlaceDate  ? ?) | l -treebank 
+gr (PSeeYouPlace  ?) | l -treebank 
+gr (PSeeYouDate  ?) | l -treebank 
+gr (Wife ?) | l -treebank 
+gr (Husband  ?) | l -treebank 
+gr (Son ?) | l -treebank 
+gr (Daughter  ?) | l -treebank 
+gr (Children  ?) | l -treebank 
+gr (HowFar  ?) | l -treebank 
+gr (HowFarFrom  ? ?) | l -treebank 
+gr (HowFarFromBy  ? ? ?) | l -treebank 
+gt (HowFarBy  (ThePlace Hospital) ?) | l -treebank 
+gr (WhichTranspPlace  ? ?) | l -treebank 
+gr (IsTranspPlace  ? ?) | l -treebank 
+gr (SuperlPlace  ? ?) | l -treebank 
+gr (PSentence  ?) | l -treebank 
+gr (PQuestion  ?) | l -treebank 
+gr (PObject  ?) | l -treebank 
+gr (PKind  ?) | l -treebank 
+gr (PQuality  ?) | l -treebank 
+gr (PNumber  ?) | l -treebank 
+gr (PPlace  ?) | l -treebank 
+gr (PPlaceKind ) | l -treebank 
+gr (PCurrency  ?) | l -treebank 
+gr (PPrice  ?) | l -treebank 
+gr (PLanguage  ?) | l -treebank 
+gr (PCitizenship  ?) | l -treebank 
+gr (PCountry  ?) | l -treebank 
+gr (PDay  ?) | l -treebank 
+gr (PByTransport  ?) | l -treebank 
+gr (PTransport  ?) | l -treebank 
+gr (Is  ? ?) | l -treebank 
+gr (SProp  ?) | l -treebank 
+gr (SPropNot  ?) | l -treebank 
+gr (QProp  ?) | l -treebank 
+gr (WherePlace  ?) | l -treebank 
+gr (WherePerson  ?) | l -treebank 
+gr (PropAction  ?) | l -treebank 
+gr (ObjItem  ?) | l -treebank 
+gr (ObjNumber  ? ?) | l -treebank 
+gr (ObjIndef  ?) | l -treebank 
+gr (ObjAndObj  ? ?) | l -treebank 
+gr (OneObj  ?) | l -treebank 
+gr (SuchKind  ? ?) | l -treebank 
+gr (Very  ?) | l -treebank 
+gr (Too  ?) | l -treebank 
+gr (PropQuality  ?) | l -treebank 
+gr (This ?) | l -treebank
+gr (That ?) | l -treebank
+gr (These ?) | l -treebank
+gr (Those  ?) | l -treebank 
+gr (The ?) | l -treebank
+gr (Thes  ?) | l -treebank 
+gr (AmountCurrency  ? ?) | l -treebank 
+gr (ThePlace  ?) | l -treebank 
+gr (APlace  ?) | l -treebank 
+gr (LangNat  ?) | l -treebank 
+gr (CitiNat  ?) | l -treebank 
+gr (CountryNat  ?) | l -treebank 
+gr (PropCit  ?) | l -treebank 
+gr (OnDay  ?) | l -treebank 
+gr (PersonName  ?) | l -treebank 
+gr (NNumeral  ?) | l -treebank 
+gr (AHave  ? ?) | l -treebank 
+gr (AHaveCurr  ? ?) | l -treebank 
+gt (ACitizen  IMale ?) | l -treebank 
+gt (ABePlace  IMale (ThePlace ?)) | l -treebank 
+gr (ByTransp  ?) | l -treebank 
+

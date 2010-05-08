@@ -2,7 +2,6 @@ se utf8
 i alltenses/LangEng.gfo
 i alltenses/LangSwe.gfo
 i alltenses/LangBul.gfo
-
 -- Adjective
 
 l -treebank PositA warm_A
