@@ -1,3 +1,4 @@
+--# -path=.:alltenses:
 abstract SUMO =
   Basic,
   Merge,

@@ -1,4 +1,5 @@
---# -path=.:romanian:abstract:prelude:common
+--# -path=.:RGLExt:alltenses
+
 concrete BasicRon of Basic = CatRon - [Text] ** open DictLangRon,ResRon, Prelude, ParamBasic,Coordination, ParadigmsRon in{
 lincat 
  Class = CN ;
@@ -12,13 +13,14 @@ lincat
  Formula = PolSentence;
  Stmt = StmtS ;
  [El] = {s1,s2 : NCase => Str ; a : Agr; nForm : NForm};
- [Class] = {s1,s2 : Number => Species => ACase => Str; g : NGender; a : Animacy ; isComp : Bool};
+ [Class] = {s1,s2 : Number => Species => ACase => Str; g : NGender; a : Animacy ; isComp : Bool; needsRefForm : Bool};
  
- lin 
-BaseClass = {s1,s2 = \\_,_,_ => "";   
+ lin
+ 
+BaseClass = {s1,s2 = \\_,_,_ => "";   needsRefForm = False ;
              g  =  NNeut; a = Inanimate; isComp = False} ;
              
-ConsClass xs x = consrTable3 Number Species ACase comma xs x ** {g = x.g; a = x.a; isComp = x.isComp} ;   
+ConsClass xs x = consrTable3 Number Species ACase comma xs x ** {g = x.g; a = x.a; needsRefForm = False; isComp = x.isComp} ;   
    
  
 BaseEl c = {s1,s2 = \\_ => "";
@@ -48,7 +50,7 @@ el c1 c2 i e = e ;
  
 var c1 c2 i e = let np = UsePN e in
                {s = np.s;
-                a = agrP3 (agrGender c1.g Sg) Sg; indForm = np.indForm ;
+                a = agrP3 (agrGender c1.g Sg) Sg; indForm = np.indForm ; isPol = False;
                 nForm = np.nForm; ss = np.ss; isComp = np.isComp ; isPronoun = False;
                 lock_NP = <>}; 
            
@@ -84,14 +86,14 @@ both c1 c2 = {s = \\c,sp,n => c1.s ! c ! sp ! n ++ "şi" ++ c2.s ! c ! sp ! n;
              g = c2.g; a = case c1.a of 
                             {Inanimate => Inanimate;
                              _         => c2.a };                            
-             isComp = orB c1.isComp c2.isComp; lock_CN = <>};
+             isComp = orB c1.isComp c2.isComp; needsRefForm = False; lock_CN = <>};
 
          
 either c1 c2 = {s = \\c,sp,n => c1.s ! c ! sp ! n ++ "sau" ++ c2.s ! c ! sp ! n;
                 g = c2.g; a = case c1.a of 
                              {Inanimate => Inanimate;
                               _         => c2.a };
-                isComp = orB c1.isComp c2.isComp; lock_CN = <>};         
+                isComp = orB c1.isComp c2.isComp; needsRefForm = False; lock_CN = <>};         
                 
 subClassStm c1 c2 sc = ss (c1. s ! Sg ! Def ! ANomAcc ++ "este" ++ "o" ++ "subclasã" ++ "a" ++ c2.s ! Sg ! Def ! AGenDat) ;
 instStm c i = ss ((i.s ! No).comp ++ "este" ++ "o" ++ "instanþiere" ++ "a" ++ c.s ! Sg ! Def ! AGenDat) ;
@@ -111,6 +113,6 @@ lindef El = \x -> mkNP x ("lui" ++ x) x Sg Masc;
 lindef Class = \x -> {s = \\n,sp,c => case c of 
                                   {AGenDat => "lui" ++ x ;
                                    _       => x};
-                      g = NMasc; a = Animate; isComp=False; lock_CN =<>}; 
+                      g = NMasc; a = Animate; isComp=False; needsRefForm = False; lock_CN =<>}; 
                    
  };
