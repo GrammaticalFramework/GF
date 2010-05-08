@@ -297,7 +297,12 @@ computeTermOpt rec gr = comput True where
        _ -> return p
 
      compSelect g (S t' v') = case v' of
-       FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . variants        
+       FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . variants    
+
+----       S (T i cs) e -> prawitz g i (S t') cs e  -- AR 8/7/2010 sometimes better
+----       S (V i cs) e -> prawitzV g i (S t') cs e -- sometimes much worse 
+
+    
        _ -> case t' of
          FV ccs -> mapM (\c -> comp g (S c v')) ccs >>= returnC . variants
 
