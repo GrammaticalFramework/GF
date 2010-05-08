@@ -1,4 +1,4 @@
-concrete NumeralGer of Numeral = CatGer ** open MorphoGer in {
+concrete NumeralGer of Numeral = CatGer ** open MorphoGer, Prelude in {
 
 flags optimize = all_subs ;
 
@@ -33,18 +33,24 @@ lin
   pot1to19 d = {s = d.s ! DTeen; n = Pl} ;
   pot0as1 n = {s = n.s ! DUnit; n = n.n } ;
   pot1 d = {s = d.s ! DTen; n = Pl} ;
-  pot1plus d e = {s = \\g => e.s ! DUnit ! invNum ++ "und" ++ d.s ! DTen ! g; n = Pl} ;
+  pot1plus d e = {s = \\g => 
+    e.s ! DUnit ! invNum ++ BIND ++ "und" ++ BIND ++ d.s ! DTen ! g; n = Pl} ;
   pot1as2 n = n ;
-  pot2 d = 
-    {s = \\g => d.s ! DUnit ! invNum ++ cardOrd "hundert" "hunderte" ! g ; n = Pl} ;
-  pot2plus d e = 
-    {s = \\g => d.s ! DUnit ! invNum ++ "hundert" ++ e.s ! g ; n = Pl} ;
+  pot2 d = {s = \\g => 
+    multiple (d.s ! DUnit) d.n ++ cardOrd "hundert" "hunderte" ! g ; n = Pl} ;
+  pot2plus d e = {s = \\g => 
+    multiple (d.s ! DUnit) d.n ++ "hundert" ++ BIND ++ e.s ! g ; n = Pl} ;
   pot2as3 n = n ;
-  pot3 n = 
-    {s = \\g => n.s ! invNum ++ cardOrd "tausend" "tausendte" ! g ; n = Pl} ; ----
-  pot3plus n m = 
-    {s = \\g => n.s ! invNum ++ "tausend" ++ m.s ! g ; n = Pl} ;
+  pot3 n = {s = \\g => 
+    multiple n.s n.n ++ cardOrd "tausend" "tausendte" ! g ; n = Pl} ; ----
+  pot3plus n m = {s = \\g => 
+    multiple n.s n.n ++ "tausend" ++ BIND ++ m.s ! g ; n = Pl} ;
 
+oper
+  multiple : (CardOrd => Str) -> Number -> Str = \d,n -> 
+    case n of {Sg => [] ; _ => d ! invNum ++ BIND} ;
+
+--------------------
 
   lincat 
     Dig = TDigit ;
