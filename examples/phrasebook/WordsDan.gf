@@ -199,7 +199,7 @@ concrete WordsDan of Words = SentencesDan **
 
     TheBest = mkSuperl L.good_A ;
     TheClosest = mkSuperl L.near_A ; 
-    TheCheapest = mkSuperl (mkA "bilig") ;
+    TheCheapest = mkSuperl (mkA "billig") ;
     TheMostExpensive = mkSuperl (mkA "dyr") ;
     TheMostPopular = mkSuperl (mkA "populær") ;
     TheWorst = mkSuperl L.bad_A ;
