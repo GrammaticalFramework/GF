@@ -1,4 +1,7 @@
--- (c) 2009 Ramona Enache under LGPL
+--# -path=.:../../dist/build/rgl/alltenses
+
+
+-- (c) 2010 Ramona Enache under LGPL
 
 concrete WordsRon of Words = SentencesRon ** open
   SyntaxRon, ResRon, Prelude,

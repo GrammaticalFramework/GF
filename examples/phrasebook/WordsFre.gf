@@ -91,7 +91,7 @@ lin
     Belgian = mkA "belge" ;
     Belgium = mkNP (mkPN "Belgique") ;
     Bulgarian = mkNat "bulgare" "Bulgarie" ;
-    Catalan = mkNat "cataln" "Catalogne" ;
+    Catalan = mkNat "catalan" "Catalogne" ;
     Danish = mkNat "danois" "Danemark" ;
     Dutch = mkNat "hollandais" "Holland" ;
     English = mkNat "anglais" "Angleterre" ;

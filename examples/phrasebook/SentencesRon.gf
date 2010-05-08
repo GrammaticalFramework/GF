@@ -56,4 +56,3 @@ PCitizenship x =  mkPhrase (mkUtt (mkAP x.prop)) ;
 PropCit p = p.prop ;
 }
 
-

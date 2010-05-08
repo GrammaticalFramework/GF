@@ -36,16 +36,17 @@ sentToNoun ps = heavyNP {s = \\_ => "\"" ++ ps.s ! Indep ! Pos ++ "\"";
                         };               
                
 ConjCN conj ss = conjunctDistrTable3 Number Species ACase conj ss ** {
-                g = ss.g; a = ss.a; isComp = ss.isComp                
+                g = ss.g; a = ss.a; isComp = ss.isComp; needsRefForm = False                
                 };               
 
 
 BaseCN x y ={
       s1 = \\n,sp,c => x.s ! n ! sp ! c ;
       s2 = \\n,sp,c => y.s ! n ! sp ! c ;   
-      g  =  x.g; a = x.a ; isComp = x.isComp};  
+      g  =  x.g; a = x.a ; isComp = x.isComp;
+      needsRefForm = False};  
 
-ConsCN xs x = consrTable3 Number Species ACase comma xs x ** {g = x.g; a = x.a; isComp = x.isComp} ;               
+ConsCN xs x = consrTable3 Number Species ACase comma xs x ** {g = x.g; a = x.a; isComp = x.isComp; needsRefForm = False} ;               
 
 at_Prep = mkPrep "la" Ac True;
 per_Prep = mkPrep "per" Ac True;  

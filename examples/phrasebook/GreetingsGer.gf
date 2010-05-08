@@ -1,3 +1,4 @@
+--# -path=.:abstract:prelude:german:api:common
 concrete GreetingsGer of Greetings = open Prelude in {
 
 lincat 
