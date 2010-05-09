@@ -13,6 +13,9 @@ Krasimir Angelov, Olga Caprotti, Ramona Enache, Thomas Hallgren, Aarne Ranta
 #BSMALL
 
 History
+- 9 May. Version 0.7: 
+  Danish and Norwegian added (preliminary versions induced from statistical models 
+  and resource grammars).
 - 3 May. Version 0.6: 
   Extended API (now final for release), Dutch added; new user interface with text 
   input enabled.
@@ -62,10 +65,11 @@ The source code resides in
 [``code.haskell.org/gf/examples/phrasebook/`` http://code.haskell.org/gf/examples/phrasebook/]
 
 
-Current status (3 May 2010):
+Current status (9 May 2010):
 - small but useful coverage in abstract syntax
 - reasonable implementations for 
-  Bulgarian, Dutch, English, Finnish, French, German, Italian, Romanian, Swedish
+  Bulgarian, Danish, Dutch, English, Finnish, French, German, 
+  Italian, Norwegian, Romanian, Swedish
 - mostly just cloned for the rest of MOLTO languages
 - temporary user interdace
 - works on web browsers calling a server
@@ -81,6 +85,8 @@ Interlingua-based translation.
 Incremental parsing.
 
 The use of resource grammars and functors.
+
+Example-based grammar writing and grammar induction from statistical models (Google).
 
 Compile-time transfer: especially, in Action in Words.
 
