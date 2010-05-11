@@ -26,19 +26,19 @@ ppAbs name a = text "abstract" <+> ppCId name <+> char '{' $$
                char '}'
 
 ppFlag :: CId -> Literal -> Doc
-ppFlag flag value = text "flag" <+> ppCId flag <+> char '=' <+> ppLit value ;
+ppFlag flag value = text "flag" <+> ppCId flag <+> char '=' <+> ppLit value <+> char ';'
 
 ppCat :: CId -> ([Hypo],[CId]) -> Doc
-ppCat c (hyps,_) = text "cat" <+> ppCId c <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps))
+ppCat c (hyps,_) = text "cat" <+> ppCId c <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps)) <+> char ';'
 
 ppFun :: CId -> (Type,Int,Maybe [Equation]) -> Doc
-ppFun f (t,_,Just eqs) = text "fun" <+> ppCId f <+> colon <+> ppType 0 [] t $$
+ppFun f (t,_,Just eqs) = text "fun" <+> ppCId f <+> colon <+> ppType 0 [] t <+> char ';' $$
                          if null eqs
                            then empty
                            else text "def" <+> vcat [let scope = foldl pattScope [] patts
                                                          ds    = map (ppPatt 9 scope) patts
-                                                     in ppCId f <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs]
-ppFun f (t,_,Nothing)  = text "data" <+> ppCId f <+> colon <+> ppType 0 [] t
+                                                     in ppCId f <+> hsep ds <+> char '=' <+> ppExpr 0 scope res <+> char ';' | Equ patts res <- eqs]
+ppFun f (t,_,Nothing)  = text "data" <+> ppCId f <+> colon <+> ppType 0 [] t <+> char ';'
 
 ppCnc :: Language -> Concr -> Doc
 ppCnc name cnc =
