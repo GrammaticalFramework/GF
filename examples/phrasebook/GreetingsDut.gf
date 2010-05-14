@@ -25,5 +25,7 @@ lin
   GSorryPol = ss "mijn verontschuldiging" ;
   GThanks = ss "dank je wel" ; 
   GTheCheck = ss "rekening" ; 
-
+  GCongratulations = ss "gefeliciteerd";
+  GHappyBirthday = ss "gelukkige verjaardag" ;
+  GGoodLuck = ss "veel geluk" ; 
 }

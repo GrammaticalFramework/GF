@@ -24,4 +24,7 @@ lin
   GSorry, GSorryPol = ss "anteeksi" ;
   GThanks = ss "kiitos" ;
   GTheCheck = ss "lasku" ;
+  GCongratulations = ss "onnittelut";
+  GHappyBirthday = ss "hyv‰‰ syntym‰p‰iv‰‰" ;
+  GGoodLuck = ss "onnea" ; 
 }

@@ -23,6 +23,8 @@ lin
   GSorry, GSorryPol = ss "beklager" ;
   GThanks = ss "takk" ;
   GTheCheck = ss "regningen" ;
-
+  GCongratulations = ss "gratulerer";
+  GHappyBirthday = ss "gratulerer med dagen" ;
+  GGoodLuck = ss "lykke til" ; 
 
 }

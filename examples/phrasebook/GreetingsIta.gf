@@ -26,5 +26,8 @@ lin
   GSorryPol = ss "scusimi" ; ----
   GThanks = ss "grazie" ;
   GTheCheck = ss "il conto" ;
+  GCongratulations = ss "congratulazioni";
+  GHappyBirthday = ss "buon compleanno" ;
+  GGoodLuck = ss "buona fortuna" ; 
 
 }

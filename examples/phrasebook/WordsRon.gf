@@ -160,12 +160,12 @@ concrete WordsRon of Words = SentencesRon ** open
     AThirsty p = DatSubjCl p.name (mkVP (mkNP (P.mkN "sete"))) ;
     ATired p = mkCl p.name (P.mkA "obosit") ;
     AUnderstand p = mkCl p.name (v_besch83 "înţelege") ;
-    AWant p obj = mkCl p.name (P.dirV2 (v_besch74 "vrea")) obj ;
+    AWant p obj = mkCl p.name (P.mmkV2 (v_besch74 "vrea") (P.noPrep P.Nom)) obj ;
     AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
 
 -- miscellaneous
 
-    QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name (mkRVAcc (v_besch29 "chema")))) ;
+    QWhatName p = mkQS (mkQCl how_IAdv (AccSubjCl p.name (mkVP (v_besch29 "chema")))) ;
     QWhatAge p = mkQS (mkQCl (mkIP how8many_IDet L.year_N) p.name have_V2) ; 
 
     PropOpen p = mkCl p.name open_A ;
@@ -176,7 +176,7 @@ concrete WordsRon of Words = SentencesRon ** open
     PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
     
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (v_besch18 "costa"))) ; 
-    ItCost item price = mkCl item (P.dirV2 (v_besch18 "costa")) price ;
+    ItCost item price = mkCl item (P.mmkV2 (v_besch18 "costa") (P.noPrep P.Nom)) price ;
 
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
