@@ -22,6 +22,9 @@ fun
   GSeeYouSoon : Greeting ;
   GSorry, GSorryPol : Greeting ;
   GThanks : Greeting ;
-  GTheCheck : Greeting ; 
+  GTheCheck : Greeting ;
+  GCongratulations : Greeting ;
+  GHappyBirthday : Greeting ;
+  GGoodLuck : Greeting ; 
 
 }

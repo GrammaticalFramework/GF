@@ -10,6 +10,7 @@ lin
   GCheers = ss "noroc" ;
   GDamn = ss "ptiu" ;
   GExcuse = ss "pardon" ;
+  GExcusePol = ss "mă scuzați" ;
   GGoodDay = ss "bună ziua" ;
   GGoodEvening = ss "bună seara" ;
   GGoodMorning = ss "bună dimineaţa" ;
@@ -20,10 +21,14 @@ lin
   GHowAreYou = ss "ce faci" ;
   GLookOut = ss "atenţie" ;
   GNiceToMeetYou = ss "încântat" ;
-  GPleaseGive = ss "vă rog" ;
+  GPleaseGive = ss "te rog" ;
+  GPleaseGivePol = ss "vă rog" ;
   GSeeYouSoon = ss "pe curând" ;
-  GSorry = ss "îmi pare rău" ;
+  GSorry, GSorryPol = ss "îmi pare rău" ;
   GThanks = ss "mulţumesc" ;
   GTheCheck = ss "nota de plată" ;
+  GCongratulations = ss "felicitări";
+  GHappyBirthday = ss "la mulți ani" ;
+  GGoodLuck = ss "baftă" ; 
 
 }
