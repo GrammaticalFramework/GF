@@ -6,9 +6,14 @@ concrete ExtraRon of ExtraRonAbs = CatRon **
  at_Prep = mkPrep "la" Ac True;
  DatSubjCompCl np vp np2 = let ss = if_then_Str np.isPronoun "" (np.s ! Dat).comp
                               in 
-                            mkClause ss np.isPol np2.a (insertClit (insertSimpObj (\\_ => (np2.s ! Nom).comp) vp) np);
+                            mkClause ss np.isPol np2.a (insertDatClit (insertSimpObj (\\_ => (np2.s ! Nom).comp) vp) np);
+
+ AccSubjCl np vp = let ss = if_then_Str np.isPronoun "" (np.s ! Ac).comp
+                     in 
+                       mkClause ss np.isPol (agrP3 Masc Sg) (insertAccClit vp np) ;
+
  DatSubjCl np vp = let ss = if_then_Str np.isPronoun "" (np.s ! Da).comp 
-                      in mkClause ss np.isPol (agrP3 Masc Sg) (insertClit vp np);
+                      in mkClause ss np.isPol (agrP3 Masc Sg) (insertDatClit vp np);
 i8fem_Pron = mkPronoun "eu" "mine" "mie" [] [] "meu" "mea" "mei" "mele" Fem Sg P1 ;
 youSg8fem_Pron = mkPronoun "tu" "tine" "ţie" [] "tu" "tău" "ta" "tăi" "tale"  Fem Sg P2 ;
 youPl8fem_Pron = mkPronoun "voi" "voi" "vouă" [] "voi" "vostru" "voastră" "voştri" "voastre" Fem Pl P2 ;
@@ -20,7 +25,7 @@ youPol8fem_Pron = let dvs = mkPronoun "dumneavoastră" "dumneavoastră" "dumneav
 refCN n = n ** {isComp = False; needsRefForm = True}; 
  
  oper     
-insertClit : VerbPhrase -> NounPhrase -> VerbPhrase = \vp, np ->      
+insertDatClit : VerbPhrase -> NounPhrase -> VerbPhrase = \vp, np ->      
                         let  
                              vcDa = case np.nForm of 
                                         {HasClit => nextClit vp.nrClit PDat ;
@@ -36,6 +41,22 @@ insertClit : VerbPhrase -> NounPhrase -> VerbPhrase = \vp, np ->
                           ext   = vpp.ext ;
                           lock_VP = <> };
 
+
+insertAccClit : VerbPhrase -> NounPhrase -> VerbPhrase = \vp, np ->      
+                        let  
+                             vcAc = case np.nForm of 
+                                        {HasClit => nextClit vp.nrClit PAcc ;
+                                         _       => vp.nrClit
+                                         };                             
+                             vpp = insertObje (\\_ => "") (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc vp ;
+                            in 
+                         {isRefl = vpp.isRefl; 
+                          s = vpp.s ; isFemSg = vpp.isFemSg ; pReflClit = vp.pReflClit ;
+                          nrClit = vpp.nrClit; clAcc = vpp.clAcc ; 
+                          clDat = vpp.clDat ; neg   = vpp.neg ;
+                          comp  = \\a => vpp.comp ! (np.a);
+                          ext   = vpp.ext ;
+                          lock_VP = <> };
 
     
 } 
