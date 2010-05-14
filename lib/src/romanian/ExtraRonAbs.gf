@@ -4,6 +4,7 @@ abstract ExtraRonAbs = Cat **{
 
   fun
     DatSubjCl : NP -> VP -> Cl ;
+    AccSubjCl : NP -> VP -> Cl ;
     DatSubjCompCl : NP -> VP -> NP -> Cl ;
     at_Prep : Prep ;   
     refCN : N -> CN ;
