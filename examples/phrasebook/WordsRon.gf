@@ -47,18 +47,18 @@ concrete WordsRon of Words = SentencesRon ** open
 -- places
 
     Airport = mkPlace (P.mkNR "aeroport") at_Prep ; 
-    AmusementPark = mkPlace (P.compN (P.mkNR "parc") ["de distracții"]) in_Prep ;
-    Bank = mkPlace (P.mkN "bancă" "bănci") in_Prep ;
+    AmusementPark = mkCNPlace (mkCN (mkCN (P.mkNR "parc")) (mkAdv by8means_Prep (mkNP (P.mkPN "distracții")))) in_Prep to_Prep;
+    Bank = mkPlace (P.mkN "bancă" "bănci") at_Prep ;
     Bar = mkPlace (P.mkNR "bar") at_Prep ;
     Cafeteria = mkPlace (P.mkN "cantină" "cantine") in_Prep ;
-    Center = mkPlace (P.mkN "centru" "centre" ) in_Prep ; 
+    Center = mkCNPlace (mkCN (P.mkN "centru" "centre" )) in_Prep in_Prep; 
     Church = mkPlace (P.mkN "biserică" "biserici") at_Prep ; 
     Cinema = mkPlace (P.mkNR "cinematograf") at_Prep ;
     Disco = mkPlace (P.mkN "discotecă" "discoteci" ) at_Prep ; 
     Hospital = mkPlace (P.mkN "spital") at_Prep ;
     Hotel = mkPlace (P.mkNR "hotel") at_Prep ; 
     Museum = mkPlace (P.mkN "muzeu" "muzee") at_Prep ; 
-    Park = mkPlace (P.mkNR "parc") at_Prep ;
+    Park = mkPlace (P.mkNR "parc") in_Prep ;
     Parking = mkPlace (P.mkN "parcare" "parcări") in_Prep ;
     Pharmacy = mkPlace (P.mkN "farmacie" "farmacii" P.feminine) at_Prep;
     PostOffice = mkPlace (P.mkN "poștă" "poște") at_Prep ;
@@ -194,8 +194,8 @@ concrete WordsRon of Words = SentencesRon ** open
     Wife = xOf sing (P.mkN "soţie") ;
     Husband = xOf sing (P.mkN "soţ" "soţi") ;
     Son = xOf sing (P.mkN "fiu" "fii") ;
-    Daughter = xOf sing (P.mkN "fiică" "fiice") ;
-    Children = xOf plur L.child_N ;    
+    Daughter = xOf sing  (P.mkN "fiică" "fiice") ;
+    Children = xOf plur  L.child_N ;    
  
 -- week days
 
@@ -232,16 +232,16 @@ open_A : A = P.mkA "deschis" ;
 -- auxiliaries     
 
    mkSimpSimpNat : Str -> Str -> NPNationalityRon = \nat, co -> 
-     mkSimpNat nat co nat (nat + "ă") (nat + "i") (nat+"e");
+     mkSimpNat nat co nat (nat + "a") (nat + "i") (nat+"e");
 
     mkSimpNat : Str -> Str -> Str -> Str -> Str -> Str -> NPNationalityRon = \nat,co, citMS, citFS, citMP, citFP -> let adj = P.mkA nat in
-      mkNPNationalityRon (mkNP (P.mkPN (nat+"ă"))) (mkNP (P.mkPN co)) adj citMS citFS citMP citFP ;
+      mkNPNationalityRon (mkNP (P.mkPN (nat+"a"))) (mkNP (P.mkPN co)) adj citMS citFS citMP citFP ;
 
     mkNat : Str -> Str -> Str -> Str -> Str -> Str -> NPNationalityRon = \nat,co, citMS, citFS, citMP, citFP -> let adj = P.mkA (nat+"esc") in
-      mkNPNationalityRon (mkNP (P.mkPN (nat+"ă"))) (mkNP (P.mkPN co)) adj citMS citFS citMP citFP ;
+      mkNPNationalityRon (mkNP (P.mkPN (nat+"a"))) (mkNP (P.mkPN co)) adj citMS citFS citMP citFP ;
 
    mkCompNat : Str -> Str -> Str -> Str -> Str -> Str -> Str -> NPNationalityRon = \nat,co, adj, citMS, citFS, citMP, citFP -> let a = P.mkA adj in
-      mkNPNationalityRon (mkNP (P.mkPN (nat+"ă"))) (mkNP (P.mkPN co)) a citMS citFS citMP citFP ;
+      mkNPNationalityRon (mkNP (P.mkPN (nat+"a"))) (mkNP (P.mkPN co)) a citMS citFS citMP citFP ;
    
 
 
