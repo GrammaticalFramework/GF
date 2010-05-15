@@ -516,9 +516,14 @@ mkPronoun :(_,_,_,_,_,_,_,_,_ : Str) -> Gender -> Number -> Person -> Pron =\eu,
                } ; 
          c1 = \\c => (cliticsAc g n p).s ! c ; c2 = \\c => (cliticsDa g n p).s ! c ;
          a = {g = g ; n = n ; p = p} ;
-         poss = table {Sg => table {Masc => meuP ; Fem => mea};
-                       Pl => table {Masc => mei ; Fem => mele}
-                      }; 
+         poss = \\n,g,c => case <n,g,c> of
+                 {<Sg,Masc,AGenDat> => meuP ;
+                  <Sg,Masc,_> => meuP ;
+                  <Sg,Fem,AGenDat> => mele ;
+                  <Sg,Fem,_> => mea;
+                  <Pl,Masc,_> => mei;
+                  <Pl,Fem,_> => mele
+                   } ; 
          isPol = False;
          lock_Pron = <>};
 

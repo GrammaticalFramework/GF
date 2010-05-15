@@ -294,7 +294,11 @@ oper adjDimin : Str -> Adj = \s ->
      in
      mkAdjSpec s f pl plf;
  
- 
+oper adjNat : Str -> Adj = \s ->
+  let f = Predef.tk 2 s + "en" 
+      in
+     mkAdjSpec s (s+"ă") (f+"i") (f+"e");
+
  -- the phonetical mutations that occur in Romanian (Singular Masculine -> Singular Feminine) are 
  -- o -> oa  (Ex : frumos -> frumoasă)
  -- e -> ea / ie -> ia (Ex : des -> deasă)
@@ -434,6 +438,7 @@ mkAdjReg : Str -> Adj = \s ->
   x + "e"   => adjMare s;
   x + "iu"  => adjAuriu s;
   x + "el"  => adjDimin s;
+  x + "an"  => adjNat s;
   _         => mkAdjSpec s (mkFemSg radF) (mkStemPlReg rad) (mkFemAdj rad)
  
  };

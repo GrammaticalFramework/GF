@@ -54,7 +54,7 @@ concrete CatRon of Cat =
               c1, c2 : Clitics => Str ;
               a : Agr ;
               isPol : Bool ;
-              poss : Number => Gender => Str } ;
+              poss : Number => Gender => ACase => Str } ;
               
    NP      = NounPhrase ;
 

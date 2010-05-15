@@ -9,7 +9,7 @@ param Placement = indep | attr ;
 lincat Digit = {s : CardOrd => DForm => Str ; size : Size} ;
 lincat Sub10 = {s : CardOrd => DForm => Placement => Str ; size : Size} ;
 lincat Sub100 = {s : CardOrd => NumF => Placement => Str ; size : Size} ;
-lincat Sub1000 = {s : CardOrd => NumF => Placement => Str ; size : Size} ;
+lincat Sub1000 = {s : CardOrd => NumF => Placement => Str ; size : Size } ;
 lincat Sub1000000 = { s : CardOrd => NumF => Placement => Str; size : Size } ;
 
 
@@ -174,12 +174,11 @@ lin pot2 d =
               NCard g => \\_,_ => d.s ! (NCard Fem) ! unit ! indep ++ (mksute d.size) ; 
               NOrd g  => \\_,_ => d.s ! (NCard Fem) ! unit ! indep ++ (mkSute d.size g)       
              };
-                     
   size = pl} ;
              
 lin pot2plus d e = 
   {s = \\c,f,_ => d.s ! (NCard Fem) ! unit ! indep ++ (mksute d.size) ++ e.s ! c ! f ! attr ;    
-   size = pl} ;
+   size = e.size} ;
 
 lin pot2as3 n = n ;
  
@@ -193,8 +192,8 @@ lin pot3 n =
 
 
 lin pot3plus n m = 
- {s = \\c, f, p => mkmie n.size (n.s ! (NCard Fem) ! f ! indep)  ++ m.s ! c ! f ! attr;                   
-  size = pl                              
+ {s = \\c, f, p => mkmie n.size (n.s ! (NCard Fem) ! f ! indep)  ++ m.s ! c ! f ! attr;                  
+  size = m.size                              
    };
 
 oper mksute : Size -> Str = \sz -> table {sg => "sută" ; _ => "sute" } ! sz ; 

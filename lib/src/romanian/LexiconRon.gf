@@ -75,7 +75,7 @@ lin
  fear_VS = mkVS (v_besch100 "teme") ;
  fear_V2 = mmkV2 (mkRVAcc (mkV100 "teme")) (mkPrep "de" Ac) ;
  find_V2 = dirV2 (mkV "găsi") ;
- fish_N = mkN "peşte" masculine ;
+ fish_N = mkN "peşte" "peşti" masculine ;
  floor_N = mkN "podea" ;
  forget_V2 = dirV2 (v_besch18 "uita") ;
  fridge_N = mkN "frigider" ;
@@ -303,7 +303,7 @@ wide_A = mkA "adânc" ;
   wind_N = mkNR "vânt" ;
   wing_N = mkN "aripă" ;
   worm_N = mkN "vierme" masculine;
-  year_N = mkN "an" masculine;
+  year_N = mkN "an" "ani" masculine;
   bite_V2 = dirV2 (v_besch22 "muşca") ;
   blow_V = v_besch55 "sufla" ; 
   breathe_V = v_besch17 "respira" ;
