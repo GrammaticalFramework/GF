@@ -45,14 +45,24 @@ lin
  IMale = {name = mkNP i_Pron ; isPron = True ; poss = mkQuant i_Pron} ; 
  YouFamMale = {name = mkNP youSg_Pron ; isPron = True ; poss = mkQuant youSg_Pron} ; 
  YouPolMale = {name = mkNP youPol_Pron ; isPron = True ; poss = mkQuant youPol_Pron} ;
- ThePlace kind = let name : NP = mkNP the_Quant kind.name in {
+ ThePlace kind = let name : NP = mkNP the_Quant kind.name ;
+                     condAt : Bool = needIndefPlace kind.name kind.at ;
+                     condTo : Bool = needIndefPlace kind.name kind.to in {
          name = name ;
-         at = if_then_else Adv kind.at.needIndef (mkAdv kind.at name) (mkAdv kind.at (mkNP kind.name));
-         to = if_then_else Adv kind.at.needIndef (mkAdv kind.to name) (mkAdv kind.at (mkNP kind.name))
+         at = if_then_else Adv condAt (mkAdv kind.at (mkNP the_Art kind.name)) (mkAdv kind.at name);
+         to = if_then_else Adv condTo (mkAdv kind.at (mkNP the_Art kind.name)) (mkAdv kind.to name)
        } ;
 CitiNat n = {pers = n.propPers; prop = n.propObj} ;
 ACitizen p n = mkCl p.name (PR.mkAdv (n.pers ! (p.name.a.g) ! (p.name.a.n))) ;
 PCitizenship x =  mkPhrase (mkUtt (mkAP x.prop)) ;
 PropCit p = p.prop ;
+
+
+oper needIndefPlace : CN -> Prep -> Bool = \cn,prep -> 
+ case <cn.isComp,prep.needIndef> of
+  {<True,_> => True ;
+   <False,True> => False ;
+    _ => True
+   };
 }
 
