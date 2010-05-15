@@ -151,17 +151,17 @@ concrete WordsDan of Words = SentencesDan **
 
 -- miscellaneous
 
-    QWhatName p = mkQS (mkQCl whatSg_IP p.name (mkV2 (mkV "hedde"))) ;
+    QWhatName p = mkQS (mkQCl whatSg_IP p.name (mkV2 hede_V)) ;
     QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "koste"))) ; 
     ItCost item price = mkCl item (mkV2 (mkV "koste")) price ;
 
-    PropOpen p = mkCl p.name open_A ;
-    PropClosed p = mkCl p.name closed_A ;
-    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_A) d) ; 
-    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_A) d) ; 
-    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_A) d.habitual) ; 
-    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
+    PropOpen p = mkCl p.name (mkVP (mkVP have_V) open_Adv) ;
+    PropClosed p = mkCl p.name (mkVP (mkVP have_V) closed_Adv) ;
+    PropOpenDate p d = mkCl p.name (mkVP (mkVP (mkVP have_V) open_Adv) d) ; 
+    PropClosedDate p d = mkCl p.name (mkVP (mkVP (mkVP have_V) closed_Adv) d) ; 
+    PropOpenDay p d = mkCl p.name (mkVP (mkVP (mkVP have_V) open_Adv) d.habitual) ; 
+    PropClosedDay p d = mkCl p.name (mkVP (mkVP (mkVP have_V) closed_Adv) d.habitual) ; 
 
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
@@ -236,8 +236,8 @@ concrete WordsDan of Words = SentencesDan **
     mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
     mkCNPlace (mkCN p) (mkPrep i) to_Prep ;
 
-    open_A = mkA "åben" "åbent" ;
-    closed_A = mkA "lukket" "lukket" ;
+    open_Adv = ParadigmsDan.mkAdv "åbent" ;
+    closed_Adv = ParadigmsDan.mkAdv "lukket" ;
 
     xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
       relativePerson n (mkCN x) (\a,b,c -> mkNP (GenNP b) a c) p ;
