@@ -8,7 +8,11 @@ concrete ExtraRon of ExtraRonAbs = CatRon **
                               in 
                             mkClause ss np.isPol np2.a (insertDatClit (insertSimpObj (\\_ => (np2.s ! Nom).comp) vp) np);
 
- AccSubjCl np vp = let ss = if_then_Str np.isPronoun "" (np.s ! Ac).comp
+ AccSubjCl np vp = let s1 = case np.nForm of
+                           {HasRef False => "";
+                            _            => "pe"};
+                       ss = if_then_Str np.isPronoun "" (s1 ++ (np.s ! Ac).comp)
+                     
                      in 
                        mkClause ss np.isPol (agrP3 Masc Sg) (insertAccClit vp np) ;
 

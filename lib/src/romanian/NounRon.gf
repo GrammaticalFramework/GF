@@ -9,7 +9,7 @@ concrete NounRon of Noun =
         n = det.n;
         gg = agrGender cn.g n ;
         ag = agrP3 gg n ;
-        hr = orB cn.needsRefForm (orB (andB (getClit cn.a) det.hasRef) (andB det.isDef cn.isComp));
+        hr = orB cn.needsRefForm  (andB (getClit cn.a) (orB det.hasRef (andB det.isDef cn.isComp)));
         nf = if_then_else NForm hr HasClit (HasRef False);
         st= if_then_else Species det.isDef Def Indef;
         rs = if_then_else Species det.hasRef Def Indef
@@ -147,8 +147,8 @@ in {
 -- assume that it refers to people
 
     PossPron p = {
-      s = \\_,n,g,c =>  p.poss ! n ! g ; 
-      sp = \\ n,g,c => artPos g n c ++ p.poss ! n ! g ; 
+      s = \\_,n,g,c =>  p.poss ! n ! g ! c; 
+      sp = \\ n,g,c => artPos g n c ++ p.poss ! n ! g ! c ; 
       isDef = True ;
       isPost = True ;
       hasRef = True
@@ -244,7 +244,7 @@ in {
       g = f.g ;
       a = f.a ;
       needsRefForm = False ;  
-      isComp = getClit f.a
+      isComp = False
       } ;
 
     ComplN3 f x = {
@@ -253,7 +253,7 @@ in {
       c2 = f.c3;
       a = f.a ;
       needsRefForm = False ;  
-      isComp = getClit f.a
+      isComp = False
       } ;
 
     AdjCN ap cn = 
@@ -269,7 +269,7 @@ in {
         g = g ;
         a = cn.a ;
         needsRefForm = cn.needsRefForm ;
-        isComp = getClit cn.a  
+        isComp = True  
         } ;
 
 
@@ -278,7 +278,7 @@ in {
       g = cn.g  ;
       a = cn.a ;
       needsRefForm = cn.needsRefForm;
-      isComp = False  
+      isComp = True  
       } ;
 
     SentCN  cn sc = let g = cn.g in {
@@ -286,7 +286,7 @@ in {
       g = g ;
       a = cn.a ;
       needsRefForm = cn.needsRefForm;
-      isComp = False
+      isComp = True
       } ;
 
     AdvCN  cn sc = let g = cn.g in {
@@ -294,7 +294,7 @@ in {
       g = g;
       a = cn.a ;
       needsRefForm = cn.needsRefForm; 
-      isComp = False
+      isComp = True
       } ;
 
     ApposCN  cn np = let g = cn.g in {
@@ -302,7 +302,7 @@ in {
       g = g;
       a = cn.a ;
       needsRefForm = cn.needsRefForm;
-      isComp = False
+      isComp = True
       } ;
 
 
