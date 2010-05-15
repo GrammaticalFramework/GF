@@ -29,7 +29,7 @@ abstract IrregDanAbs = Cat ** {
   gøre_V : V ; 
   have_V : V ; 
   hente_V : V ; 
---  hete_V : V ; 
+  hede_V : V ; 
 --  hjelpe_V : V ; 
   holde_V : V ; 
   komme_V : V ; 

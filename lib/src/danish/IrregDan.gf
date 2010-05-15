@@ -33,8 +33,8 @@ concrete IrregDan of IrregDanAbs = CatDan ** open Prelude, ParadigmsDan in {
   gnide_V = irregV "gnide" "gned" "gnidd" ;--
   gøre_V = irregV "gøre" "gjorde" "gjort" ;
   have_V =  mkV "have" "har" "havde" "haft" "havd" "hav" ;
+  hede_V = mkV "hede" "hed" "hedes" "hedde" "hett" "hed" ; ----
   hente_V = irregV "hente" "hentet" "hendt" ;--
---  hete_V = irregV "hete" (variants {"het" ;-- "hette"}) "hett" ;--
 --  hjelpe_V = irregV "hjelpe" "hjalp" "hjulpet" ;--
   holde_V = irregV "holde" "holdt" "holdt" ;--
   komme_V = irregV "komme" "kom" "kommet" ;
@@ -65,7 +65,7 @@ concrete IrregDan of IrregDanAbs = CatDan ** open Prelude, ParadigmsDan in {
 --  treffe_V = irregV "treffe" "traff" "truffet" ;--
 --  trives_V = irregV "trives" "trivdes" (variants {"trives" ;-- "trivs"}) ;--
   tælle_V = irregV "tælle" "talte" "talt" ;
-  vide_V = irregV "vide" "vidste" "vidst" ;
+  vide_V = mkV "vide" "ved" "vedes" "vidste" "vidst" "ved" ; ----
 
 }
 
