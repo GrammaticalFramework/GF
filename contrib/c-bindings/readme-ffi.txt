@@ -1,5 +1,5 @@
 GF C Bindings
-Copyright (C) 2008-2009 Kevin Kofler
+Copyright (C) 2008-2010 Kevin Kofler
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -109,10 +109,12 @@ void gf_freeTrees(GF_Tree *p);
 
 
 
-In addition, the following function from GF.Text.Lexing:
+In addition, a C equivalent to the following function from GF.Text.Lexing:
 stringOp :: String -> Maybe (String -> String)
-is wrapped as:
-char *gf_stringOp(char *op, char *str)
-which returns NULL if op is not a valid operation name, otherwise applies the
-function corresponding to op to the string str. The resulting string must be
-freed with free if non-NULL.
+is provided as:
+typedef char *(*GF_StringOp)(const char *str);
+GF_StringOp gf_stringOp(const char *op); /* may return NULL */
+which returns NULL if op is not a valid operation name, otherwise a pointer to a
+function which applies the function corresponding to op to the string str. The
+resulting string must be freed with free. The function pointer MUST NOT be
+freed.
