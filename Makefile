@@ -2,7 +2,7 @@
 
 all: build
 
-dist/setup-config: GF.cabal
+dist/setup-config: gf.cabal
 	chmod u+x lib/src/mkPresent
 	chmod u+x lib/src/mkMinimal
 	runghc Setup.hs configure
