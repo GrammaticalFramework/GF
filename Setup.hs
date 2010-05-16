@@ -298,7 +298,7 @@ unlexer abstr ls =
 -- | Runs the gf executable in compile mode with the given arguments.
 run_gfc :: PackageDescription -> LocalBuildInfo -> [String] -> IO ()
 run_gfc pkg lbi args = 
-    do let args' = ["-batch","-gf-lib-path="++rgl_src_dir] ++ filter (not . null) args
+    do let args' = ["-batch","-gf-lib-path="++rgl_src_dir,"+RTS","-K16M","-RTS"] ++ filter (not . null) args
            gf = default_gf pkg lbi
        putStrLn $ "Running: " ++ gf ++ " " ++ unwords (map showArg args')
        e <- rawSystem gf args'
