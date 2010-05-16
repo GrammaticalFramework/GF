@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 {
   gf_init(&argc, &argv);
 
-  GF_PGF pgf = gf_readPGF("../examples/tutorial/embedded/Query.pgf");
+  GF_PGF pgf = gf_readPGF("Query.pgf");
   GF_Language lang = gf_readLanguage("QueryEng");
   GF_Type cat = gf_startCat(pgf);
   char *lexed = gf_stringOp("lextext")("Is 2 prime");
