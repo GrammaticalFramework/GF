@@ -1,5 +1,5 @@
 -- GF C Bindings
--- Copyright (C) 2008-2009 Kevin Kofler
+-- Copyright (C) 2008-2010 Kevin Kofler
 --
 -- This library is free software; you can redistribute it and/or
 -- modify it under the terms of the GNU Lesser General Public
@@ -24,7 +24,7 @@ import Foreign.C.Types
 import Control.Exception
 import IO
 import Data.Maybe
-import GF.Text.Lexing
+-- import GF.Text.Lexing
 
 
 -- Utility functions used in the implementation (not exported):
@@ -217,13 +217,13 @@ gf_parse pgf lang cat input = do
 
 -- GF.Text.Lexing:
 
-foreign export ccall gf_stringOp :: CString -> CString -> IO CString
-gf_stringOp op str = do
-  o <- (peekCString op)
-  s <- (peekCString str)
-  case (stringOp o) of
-    Just fn -> (newCString (fn s))
-    Nothing -> (return nullPtr)
+-- foreign export ccall gf_stringOp :: CString -> CString -> IO CString
+-- gf_stringOp op str = do
+--   o <- (peekCString op)
+--   s <- (peekCString str)
+--   case (stringOp o) of
+--     Just fn -> (newCString (fn s))
+--     Nothing -> (return nullPtr)
 
 
 -- Unused (exception handling):

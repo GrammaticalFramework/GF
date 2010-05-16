@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "pgf.h"
+#include "gf_lexing.h"
 
 int main(int argc, char *argv[])
 {
@@ -26,7 +27,7 @@ int main(int argc, char *argv[])
   GF_PGF pgf = gf_readPGF("../examples/tutorial/embedded/Query.pgf");
   GF_Language lang = gf_readLanguage("QueryEng");
   GF_Type cat = gf_startCat(pgf);
-  char *lexed = gf_stringOp("lextext", "Is 2 prime");
+  char *lexed = gf_stringOp("lextext")("Is 2 prime");
   GF_Tree *result = gf_parse(pgf, lang, cat, lexed);
   free(lexed);
   GF_Tree *p = result;

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # GF C Bindings
-# Copyright (C) 2008-2009 Kevin Kofler
+# Copyright (C) 2008-2010 Kevin Kofler
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,4 +17,4 @@
 # License along with this library; if not, see <http://www.gnu.org/licenses/>.
 
 ghc --make -fglasgow-exts -O2 -no-hs-main $* -c PGFFFI.hs &&
-ghc --make -fglasgow-exts -O2 -no-hs-main $* gfctest.c PGFFFI.hs -o gfctest
+ghc --make -fglasgow-exts -O2 -no-hs-main $* gfctest.c gf_lexing.c PGFFFI.hs -o gfctest
