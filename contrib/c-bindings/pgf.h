@@ -36,26 +36,26 @@ static inline void gf_exit(void)
   hs_exit();
 }
 
-typedef HsStablePtr GF_Language;
 typedef HsStablePtr GF_PGF;
-typedef HsStablePtr GF_Type;
 typedef HsStablePtr GF_CId;
+typedef HsStablePtr GF_Language;
+typedef HsStablePtr GF_Type;
 typedef HsStablePtr GF_Tree;
 typedef HsStablePtr GF_Expr;
+
+static inline void gf_freeCIds(GF_CId *p)
+{
+  GF_CId *q = p;
+  while (*q)
+    gf_freeCId(*(q++));
+  free(p);
+}
 
 static inline void gf_freeLanguages(GF_Language *p)
 {
   GF_Language *q = p;
   while (*q)
     gf_freeLanguage(*(q++));
-  free(p);
-}
-
-static inline void gf_freeTypes(GF_Type *p)
-{
-  GF_Type *q = p;
-  while (*q)
-    gf_freeType(*(q++));
   free(p);
 }
 

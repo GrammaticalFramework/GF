@@ -25,26 +25,25 @@ applications. To use it:
 
 Currently, the following functions from PGF are wrapped:
 readPGF  :: FilePath -> IO PGF
+mkCId :: String -> CId
+wildCId :: CId
+showCId :: CId -> String
+readCId :: String -> Maybe CId
 showLanguage :: Language -> String
 readLanguage :: String -> Maybe Language
-languages    :: PGF -> [Language]
+languages :: PGF -> [Language]
 abstractName :: PGF -> Language
 languageCode :: PGF -> Language -> Maybe String
-showType :: Type -> String
+showType :: Type -> [CId] -> String (*)
 readType :: String -> Maybe Type
-categories :: PGF -> [Type]
-startCat   :: PGF -> Type
-mkCId :: String -> CId
-prCId :: CId -> String
-wildCId :: CId
-showTree :: Tree -> String
-readTree :: String -> Maybe Tree
-showExpr :: Expr -> String
+categories :: PGF -> [CId]
+startCat :: PGF -> Type
+showExpr :: Expr -> [CId] -> String (*)
 readExpr :: String -> Maybe Expr
-linearize    :: PGF -> Language -> Tree -> String
-showPrintName :: PGF -> Language -> Type -> String
-parse        :: PGF -> Language -> Type -> String -> [Tree]
-canParse     :: PGF -> Language -> Bool
+linearize :: PGF -> Language -> Tree -> String
+showPrintName :: PGF -> Language -> CId -> String
+parse :: PGF -> Language -> Type -> String -> [Tree]
+(*) The [CId] parameter is currently not mapped; instead, [] is always passed.
 
 
 Some notes about the wrapping:
@@ -78,6 +77,10 @@ Some notes about the wrapping:
 
 Thus, the C prototypes for the wrapped functions are:
 GF_PGF *gf_readPGF(char *path);
+GF_CId gf_mkCId(char *str);
+GF_CId wildCId(void);
+char *gf_showCId(GF_CID cid);
+GF_CId gf_readCId(char *str); /* may return NULL */
 char *gf_showLanguage(GF_Language lang);
 GF_Language gf_readLanguage(char *str); /* may return NULL */
 GF_Language *gf_languages(GF_PGF pgf);
@@ -85,29 +88,23 @@ GF_Language gf_abstractName(GF_PGF pgf);
 char *gf_languageCode(GF_PGF pgf, GF_Language lang); /* may return NULL */
 char *gf_showType(GF_Type tp);
 GF_Type gf_readType(char *str); /* may return NULL */
-GF_Type *gf_categories(GF_PGF pgf);
+GF_CId *gf_categories(GF_PGF pgf);
 GF_Type gf_startCat(GF_PGF pgf);
-GF_CId gf_mkCId(char *str);
-char *gf_prCId(GF_CID cid);
-GF_CId wildCId(void);
-char *gf_showTree(GF_Tree tree);
-GF_Tree gf_readTree(char *str); /* may return NULL */
 char *gf_showExpr(GF_Expr expr);
 GF_Expr gf_readExpr(char *str); /* may return NULL */
 char *gf_linearize(GF_PGF pgf, GF_Language lang, GF_Tree tree);
-char *gf_showPrintName(GF_PGF pgf, GF_Language lang, GF_Type tp);
+char *gf_showPrintName(GF_PGF pgf, GF_Language lang, GF_CId cid);
 GF_Tree *gf_parse(GF_PGF pgf, GF_Language lang, GF_Type cat, char *input);
-int gf_canParse(GF_PGF pgf, GF_Language lang); /* returns 0 or 1 */
 
 The C prototypes for the freeing functions are:
 void gf_freePGF(GF_PGF pgf);
+void gf_freeCId(GF_CId cid);
 void gf_freeLanguage(GF_Language lang);
 void gf_freeType(GF_Type tp);
-void gf_freeCId(GF_CId cid);
 void gf_freeTree(GF_Tree tree);
 void gf_freeExpr(GF_Expr expr);
+void gf_freeCIds(GF_Type *p);
 void gf_freeLanguages(GF_Language *p);
-void gf_freeTypes(GF_Type *p);
 void gf_freeTrees(GF_Tree *p);
 
 

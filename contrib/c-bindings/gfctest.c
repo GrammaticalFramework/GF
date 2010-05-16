@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
   GF_Tree *p = result;
   if (*p) {
     do {
-      char *str = gf_showTree(*(p++));
+      char *str = gf_showExpr(*(p++));
       puts(str);
       free(str);
     } while (*p);
