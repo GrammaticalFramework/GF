@@ -53,8 +53,7 @@ listToArray list = do
     return buf
 
 
--- PGF:
-
+-- * PGF
 foreign export ccall "gf_freePGF" freeStablePtr :: StablePtr PGF -> IO ()
 
 foreign export ccall gf_readPGF :: CString -> IO (StablePtr PGF)
@@ -63,6 +62,34 @@ gf_readPGF path = do
   result <- (readPGF p)
   (newStablePtr result)
 
+-- * Identifiers
+foreign export ccall "gf_freeCId" freeStablePtr :: StablePtr CId -> IO ()
+
+foreign export ccall gf_mkCId :: CString -> IO (StablePtr CId)
+gf_mkCId str = do
+  s <- (peekCString str)
+  (newStablePtr (mkCId s))
+
+foreign export ccall gf_wildCId :: IO (StablePtr CId)
+gf_wildCId = do
+  (newStablePtr (wildCId))
+
+foreign export ccall gf_showCId :: StablePtr CId -> IO CString
+gf_showCId cid = do
+  c <- (deRefStablePtr cid)
+  (newCString (showCId c))
+
+foreign export ccall gf_readCId :: CString -> IO (StablePtr CId)
+gf_readCId str = do
+  s <- (peekCString str)
+  case (readCId s) of
+    Just x -> (newStablePtr x)
+    Nothing -> (return (nullStablePtr))
+
+-- TODO: So we can create, print and free a CId, but can we do anything useful with it?
+--       We need some kind of C wrapper for the tree datastructures.
+
+-- * Languages
 foreign export ccall "gf_freeLanguage" freeStablePtr :: StablePtr Language -> IO ()
 
 foreign export ccall gf_showLanguage :: StablePtr Language -> IO CString
@@ -95,12 +122,16 @@ gf_languageCode pgf lang = do
     Just s -> (newCString s)
     Nothing -> (return nullPtr)
 
+-- * Types
 foreign export ccall "gf_freeType" freeStablePtr :: StablePtr Type -> IO ()
 
+-- TODO: Hypo
+
+-- TODO: allow nonempty scope
 foreign export ccall gf_showType :: StablePtr Type -> IO CString
 gf_showType tp = do
   t <- (deRefStablePtr tp)
-  (newCString (showType t))
+  (newCString (showType [] t))
 
 foreign export ccall gf_readType :: CString -> IO (StablePtr Type)
 gf_readType str = do
@@ -109,7 +140,9 @@ gf_readType str = do
     Just x -> (newStablePtr x)
     Nothing -> (return (nullStablePtr))
 
-foreign export ccall gf_categories :: StablePtr PGF -> IO (Ptr (StablePtr Type))
+-- TODO: mkType, mkHypo, mkDepHypo, mkImplHypo
+
+foreign export ccall gf_categories :: StablePtr PGF -> IO (Ptr (StablePtr CId))
 gf_categories pgf = do
   p <- (deRefStablePtr pgf)
   (listToArray (categories p))
@@ -119,51 +152,20 @@ gf_startCat pgf = do
   p <- (deRefStablePtr pgf)
   (newStablePtr (startCat p))
 
-foreign export ccall "gf_freeCId" freeStablePtr :: StablePtr CId -> IO ()
+-- TODO: * Functions
 
-foreign export ccall gf_mkCId :: CString -> IO (StablePtr CId)
-gf_mkCId str = do
-  s <- (peekCString str)
-  (newStablePtr (mkCId s))
-
-foreign export ccall gf_prCId :: StablePtr CId -> IO CString
-gf_prCId cid = do
-  c <- (deRefStablePtr cid)
-  (newCString (prCId c))
-
-foreign export ccall gf_wildCId :: IO (StablePtr CId)
-gf_wildCId = do
-  (newStablePtr (wildCId))
-
--- TODO: So we can create, print and free a CId, but can we do anything useful with it?
---       We need some kind of C wrapper for the tree datastructures.
-
+-- * Expressions & Trees
+-- ** Tree
 foreign export ccall "gf_freeTree" freeStablePtr :: StablePtr Tree -> IO ()
 
--- TODO: Literal(..)
--- (Not much use exporting a free function for that type if you can't do anything with it.)
-
-foreign export ccall gf_showTree :: StablePtr Tree -> IO CString
-gf_showTree tree = do
-  t <- (deRefStablePtr tree)
-  (newCString (showTree t))
-
-foreign export ccall gf_readTree :: CString -> IO (StablePtr Tree)
-gf_readTree str = do
-  s <- (peekCString str)
-  case (readTree s) of
-    Just x -> (newStablePtr x)
-    Nothing -> (return (nullStablePtr))
-
+-- ** Expr
 foreign export ccall "gf_freeExpr" freeStablePtr :: StablePtr Expr -> IO ()
 
--- TODO: Equation(..)
--- (Not much use exporting a free function for that type if you can't do anything with it.)
-
+-- TODO: allow nonempty scope
 foreign export ccall gf_showExpr :: StablePtr Expr -> IO CString
 gf_showExpr expr = do
   e <- (deRefStablePtr expr)
-  (newCString (showExpr e))
+  (newCString (showExpr [] e))
 
 foreign export ccall gf_readExpr :: CString -> IO (StablePtr Expr)
 gf_readExpr str = do
@@ -172,6 +174,8 @@ gf_readExpr str = do
     Just x -> (newStablePtr x)
     Nothing -> (return (nullStablePtr))
 
+-- * Operations
+-- ** Linearization
 foreign export ccall gf_linearize :: StablePtr PGF -> StablePtr Language -> StablePtr Tree -> IO CString
 gf_linearize pgf lang tree = do
   p <- (deRefStablePtr pgf)
@@ -179,15 +183,19 @@ gf_linearize pgf lang tree = do
   t <- (deRefStablePtr tree)
   (newCString (linearize p l t))
 
--- TODO: linearizeAllLang, linearizeAll
+-- TODO: linearizeAllLang, linearizeAll, bracketedLinearize, tabularLinearizes
+-- TODO: groupResults
 
-foreign export ccall gf_showPrintName :: StablePtr PGF -> StablePtr Language -> StablePtr Type -> IO CString
-gf_showPrintName pgf lang tp = do
+foreign export ccall gf_showPrintName :: StablePtr PGF -> StablePtr Language -> StablePtr CId -> IO CString
+gf_showPrintName pgf lang cid = do
   p <- (deRefStablePtr pgf)
   l <- (deRefStablePtr lang)
-  t <- (deRefStablePtr tp)
-  (newCString (showPrintName p l t))
+  c <- (deRefStablePtr cid)
+  (newCString (showPrintName p l c))
 
+-- TODO: BracketedString(..), FId, LIndex, Forest.showBracketedString
+
+-- ** Parsing
 foreign export ccall gf_parse :: StablePtr PGF -> StablePtr Language -> StablePtr Type -> CString -> IO (Ptr (StablePtr Tree))
 gf_parse pgf lang cat input = do
   p <- (deRefStablePtr pgf)
@@ -196,22 +204,16 @@ gf_parse pgf lang cat input = do
   i <- (peekCString input)
   (listToArray (parse p l c i))
 
-foreign export ccall gf_canParse :: StablePtr PGF -> StablePtr Language -> IO CInt
-gf_canParse pgf lang = do
-  p <- (deRefStablePtr pgf)
-  l <- (deRefStablePtr lang)
-  case (canParse p l) of
-    True -> (return 1)
-    False -> (return 0)
+-- TODO: parseAllLang, parseAll, parse_, parseWithRecovery
 
--- TODO: parseAllLang, parseAll
+-- TODO: ** Evaluation
+-- TODO: ** Type Checking
+-- TODO: ** Low level parsing API
+-- TODO: ** Generation
+-- TODO: ** Morphological Analysis
+-- TODO: ** Visualizations
 
--- TODO: tree2expr, expr2tree, PGF.compute, paraphrase, typecheck
-
--- TODO: complete, Incremental.ParseState, initState, Incremental.nextState, Incremental.getCompletions, extractExps
-
--- TODO: generateRandom, generateAll, generateAllDepth
-
+-- TODO: * Browsing
 
 -- GF.Text.Lexing:
 
