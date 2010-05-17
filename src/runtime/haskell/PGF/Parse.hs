@@ -158,11 +158,11 @@ recoveryStates open_types (EState pgf cnc chart) =
 getParseResult :: ParseState -> Type -> (ParseResult,Maybe BracketedString)
 getParseResult (PState pgf cnc chart items) ty@(DTyp _ start _) =
   let mb_bs = case roots of
-                ((root,lbl):_) -> Just $ linearizeWithBrackets $ Forest (abstract pgf) cnc (forest st) root lbl
-                _              -> Nothing
+                ((AK fid lbl):_) -> Just $ linearizeWithBrackets $ Forest (abstract pgf) cnc (forest st) fid lbl
+                _                -> Nothing
                 
       exps  = nubsort $ do
-                (fid,lbl) <- roots
+                (AK fid lbl) <- roots
                 (fvs,e) <- go Set.empty 0 (0,fid)
                 guard (Set.null fvs)
                 Right e1 <- [checkExpr pgf e ty]
@@ -182,7 +182,7 @@ getParseResult (PState pgf cnc chart items) ty@(DTyp _ start _) =
               Just (CncCat s e lbls) -> do cat <- range (s,e)
                                            lbl <- indices lbls
                                            fid <- maybeToList (lookupPC (PK cat lbl 0) (passive st))
-                                           return (fid,lbl)
+                                           return (AK fid lbl)
               Nothing                -> mzero
 
     go rec fcat' (d,fcat)
