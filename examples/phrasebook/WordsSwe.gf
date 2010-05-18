@@ -189,15 +189,16 @@ concrete WordsSwe of Words = SentencesSwe **
 
 -- transports
 
-    HowFar place = mkQS (mkQCl far_IAdv place.name) ;
+    HowFar place = 
+      mkQS (mkQCl far_IAdv (mkCl (mkVP place.to))) ;
     HowFarFrom place x = 
-      mkQS (mkQCl far_IAdv (mkCl place.name (SyntaxSwe.mkAdv from_Prep x.name))) ;
+      mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP place.to) 
+                    (SyntaxSwe.mkAdv from_Prep x.name)))) ;
     HowFarFromBy place x t = 
-      mkQS (mkQCl far_IAdv (mkCl place.name 
-        (mkVP (mkVP (SyntaxSwe.mkAdv from_Prep x.name)) t))) ;
+      mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP (mkVP place.to) 
+                    (SyntaxSwe.mkAdv from_Prep x.name)) t))) ;
     HowFarBy place t = 
-      mkQS (mkQCl far_IAdv (mkCl place.name t)) ;
-      -- mkQS (mkQCl (mkIAdv far_IAdv t) y.name) ; 
+      mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP place.to) t))) ;
 
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
