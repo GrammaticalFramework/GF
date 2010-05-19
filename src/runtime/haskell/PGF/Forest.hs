@@ -12,7 +12,7 @@
 -------------------------------------------------
 
 module PGF.Forest( Forest(..)
-                 , BracketedString, showBracketedString
+                 , BracketedString, showBracketedString, lengthBracketedString
                  , linearizeWithBrackets
                  ) where
 
