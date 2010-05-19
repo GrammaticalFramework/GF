@@ -38,16 +38,16 @@ data ParseResult
                                    -- if there are many analizes for some phrase but they all are not type correct.
   | ParseResult [Tree]             -- ^ If the parsing was successful we get a list of abstract syntax trees. The list should be non-empty.
 
-parse :: PGF -> Language -> Type -> [String] -> (ParseResult,Maybe BracketedString)
+parse :: PGF -> Language -> Type -> [String] -> (ParseResult,BracketedString)
 parse pgf lang typ toks = loop (initState pgf lang typ) toks
   where
     loop ps []     = getParseResult ps typ
     loop ps (t:ts) = case nextState ps t of
                        Left  es -> case es of
-                                     EState _ _ chart -> (ParseFailed (offset chart),Nothing)
+                                     EState _ _ chart -> (ParseFailed (offset chart),snd (getParseResult ps typ))
                        Right ps -> loop ps ts
 
-parseWithRecovery :: PGF -> Language -> Type -> [Type] -> [String] -> (ParseResult,Maybe BracketedString)
+parseWithRecovery :: PGF -> Language -> Type -> [Type] -> [String] -> (ParseResult,BracketedString)
 parseWithRecovery pgf lang typ open_typs toks = accept (initState pgf lang typ) toks
   where
     accept ps []     = getParseResult ps typ
@@ -155,11 +155,13 @@ recoveryStates open_types (EState pgf cnc chart) =
 -- that spans the whole input consumed so far. The trees are also
 -- limited by the category specified, which is usually
 -- the same as the startup category.
-getParseResult :: ParseState -> Type -> (ParseResult,Maybe BracketedString)
+getParseResult :: ParseState -> Type -> (ParseResult,BracketedString)
 getParseResult (PState pgf cnc chart items) ty@(DTyp _ start _) =
-  let mb_bs = case roots of
-                ((AK fid lbl):_) -> Just $ linearizeWithBrackets $ Forest (abstract pgf) cnc (forest st) fid lbl
-                _                -> Nothing
+  let froots | null roots = getPartialSeq (sequences cnc) (reverse (active st : actives st)) acc1
+             | otherwise  = [([SymCat 0 lbl],[fid]) | AK fid lbl <- roots]
+
+      bs    = linearizeWithBrackets (Forest (abstract pgf) cnc (forest st) froots)
+              
                 
       exps  = nubsort $ do
                 (AK fid lbl) <- roots
@@ -172,11 +174,15 @@ getParseResult (PState pgf cnc chart items) ty@(DTyp _ start _) =
                 then ParseFailed (offset chart)
                 else ParseResult exps
 
-  in (res,mb_bs)
+  in (res,bs)
   where
     (mb_agenda,acc) = TMap.decompose items
     agenda = maybe [] Set.toList mb_agenda
-    (_,st) = process Nothing (\_ _ -> id) (sequences cnc) (cncfuns cnc) agenda () chart
+    (acc1,st) = process Nothing add (sequences cnc) (cncfuns cnc) agenda [] chart
+
+    add _ (Active j ppos funid seqid args key) items = (j,lin,args,key) : items
+      where
+        lin  = take (ppos-1) (elems (unsafeAt (sequences cnc) seqid))
 
     roots = case Map.lookup start (cnccats cnc) of
               Just (CncCat s e lbls) -> do cat <- range (s,e)
@@ -187,18 +193,18 @@ getParseResult (PState pgf cnc chart items) ty@(DTyp _ start _) =
 
     go rec fcat' (d,fcat)
       | fcat < totalCats cnc = return (Set.empty,EMeta (fcat'*10+d))   -- FIXME: here we assume that every rule has at most 10 arguments
-      | Set.member fcat rec    = mzero
-      | otherwise              = foldForest (\funid args trees -> 
+      | Set.member fcat rec  = mzero
+      | otherwise            = foldForest (\funid args trees -> 
                                                   do let CncFun fn lins = cncfuns cnc ! funid
                                                      args <- mapM (go (Set.insert fcat rec) fcat) (zip [0..] args)
                                                      check_ho_fun fn args
                                                   `mplus`
                                                   trees)
-                                            (\const _ trees ->
+                                          (\const _ trees ->
                                                   return (freeVar const,const)
                                                   `mplus`
                                                   trees)
-                                            [] fcat (forest st)
+                                          [] fcat (forest st)
 
     check_ho_fun fun args
       | fun == _V = return (head args)
@@ -211,6 +217,25 @@ getParseResult (PState pgf cnc chart items) ty@(DTyp _ start _) =
     freeVar (EFun v) = Set.singleton v
     freeVar _        = Set.empty
 
+getPartialSeq seqs actives = expand Set.empty
+  where
+    expand acc [] = 
+      [(lin,args) | (j,lin,args,key) <- Set.toList acc, j == 0]
+    expand acc (item@(j,lin,args,key) : items)
+      | item `Set.member` acc = expand acc  items
+      | otherwise             = expand acc' items'
+      where
+        acc'   = Set.insert item acc
+        items' = case lookupAC key (actives !! j) of
+                   Nothing  -> items
+                   Just set -> [if j' < j
+                                  then let lin' = take ppos (elems (unsafeAt seqs seqid))
+                                       in (j',lin'++map (inc (length args')) lin,args'++args,key')
+                                  else (j',lin,args,key') | Active j' ppos funid seqid args' key' <- Set.toList set] ++ items
+
+    inc n (SymCat d r) = SymCat (n+d) r
+    inc n (SymLit d r) = SymLit (n+d) r
+    inc n s            = s
 
 process mbt fn !seqs !funs []                                                 acc chart = (acc,chart)
 process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) acc chart

@@ -154,10 +154,10 @@ parseAll     :: PGF -> Type -> String -> [[Tree]]
 parseAllLang :: PGF -> Type -> String -> [(Language,[Tree])]
 
 -- | The same as 'parse' but returns more detailed information
-parse_       :: PGF -> Language -> Type -> String -> (Parse.ParseResult,Maybe BracketedString)
+parse_       :: PGF -> Language -> Type -> String -> (Parse.ParseResult,BracketedString)
 
 -- | This is an experimental function. Use it on your own risk
-parseWithRecovery :: PGF -> Language -> Type -> [Type] -> String -> (Parse.ParseResult,Maybe BracketedString)
+parseWithRecovery :: PGF -> Language -> Type -> [Type] -> String -> (Parse.ParseResult,BracketedString)
 
 -- | The same as 'generateAllDepth' but does not limit
 -- the depth in the generation, and doesn't give an initial expression.

@@ -1004,9 +1004,7 @@ allCommands env@(pgf, mos) = Map.fromList [
    toString = unwords . toStrings
 
    fromParse opts ts parses
-     | isOpt "bracket" opts = case catMaybes bss of
-                                []  -> ([], "no brackets found")
-                                bss -> ([], unlines $ map showBracketedString bss)
+     | isOpt "bracket" opts = ([], unlines $ map showBracketedString bss)
      | otherwise            = case ts of
                                 [] -> ([], "no trees found" ++ 
                                            missingWordMsg (optMorpho opts) (concatMap words (toStrings ts))
