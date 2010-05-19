@@ -27,7 +27,7 @@ import PGF.Data
 import PGF.Expr(Tree)
 import PGF.Macros
 import PGF.TypeCheck
-import PGF.Forest(Forest(Forest), linearizeWithBrackets)
+import PGF.Forest(Forest(Forest), linearizeWithBrackets, foldForest)
 
 -- | This data type encodes the different outcomes which you could get from the parser.
 data ParseResult
@@ -377,21 +377,6 @@ lookupPC key chart = Map.lookup key chart
 
 insertPC :: PassiveKey -> FId -> PassiveChart -> PassiveChart
 insertPC key fcat chart = Map.insert key fcat chart
-
-
-----------------------------------------------------------------
--- Forest
-----------------------------------------------------------------
-
-foldForest :: (FunId -> [FId] -> b -> b) -> (Expr -> [String] -> b -> b) -> b -> FId -> IntMap.IntMap (Set.Set Production) -> b
-foldForest f g b fcat forest =
-  case IntMap.lookup fcat forest of
-    Nothing  -> b
-    Just set -> Set.fold foldProd b set
-  where
-    foldProd (PCoerce fcat)        b = foldForest f g b fcat forest
-    foldProd (PApply funid args)   b = f funid args b
-    foldProd (PConst _ const toks) b = g const toks b
 
 
 ----------------------------------------------------------------

@@ -212,7 +212,8 @@ updateProductionIndices pgf = pgf{ concretes = fmap updateConcrete (concretes pg
 -- mark the beginning and the end of each constituent.
 data BracketedString
   = Leaf String                                                                -- ^ this is the leaf i.e. a single token
-  | Bracket CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex [BracketedString]   -- ^ this is a bracket. The 'CId' is the category of
+  | Bracket CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex [Expr] [BracketedString]   
+                                                                               -- ^ this is a bracket. The 'CId' is the category of
                                                                                -- the phrase. The 'FId' is an unique identifier for
                                                                                -- every phrase in the sentence. For context-free grammars
                                                                                -- i.e. without discontinuous constituents this identifier
@@ -227,7 +228,7 @@ data BracketedString
 data BracketedTokn
   = LeafKS [String]
   | LeafKP [String] [Alternative]
-  | Bracket_ CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex [BracketedTokn]    -- Invariant: the list is not empty
+  | Bracket_ CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex [Expr] [BracketedTokn]    -- Invariant: the list is not empty
 
 type LinTable = Array.Array LIndex [BracketedTokn]
 
@@ -238,12 +239,12 @@ showBracketedString :: BracketedString -> String
 showBracketedString = render . ppBracketedString
 
 ppBracketedString (Leaf t) = text t
-ppBracketedString (Bracket cat fcat index bss) = parens (ppCId cat <+> hsep (map ppBracketedString bss))
+ppBracketedString (Bracket cat fcat index _ bss) = parens (ppCId cat <+> hsep (map ppBracketedString bss))
 
 -- | The length of the bracketed string in number of tokens.
 lengthBracketedString :: BracketedString -> Int
-lengthBracketedString (Leaf _)            = 1
-lengthBracketedString (Bracket _ _ _ bss) = sum (map lengthBracketedString bss)
+lengthBracketedString (Leaf _)              = 1
+lengthBracketedString (Bracket _ _ _ _ bss) = sum (map lengthBracketedString bss)
 
 untokn :: String -> BracketedTokn -> (String,[BracketedString])
 untokn nw (LeafKS ts)   = (head ts,map Leaf ts)
@@ -254,10 +255,10 @@ untokn nw (LeafKP d vs) = let ts = sel d vs nw
                               case [v | Alt v cs <- vs, any (\c -> isPrefixOf c nw) cs] of
                                 v:_ -> v
                                 _   -> d
-untokn nw (Bracket_ cat fid index bss) =
+untokn nw (Bracket_ cat fid index es bss) =
   let (nw',bss') = mapAccumR untokn nw bss
-  in (nw',[Bracket cat fid index (concat bss')])
+  in (nw',[Bracket cat fid index es (concat bss')])
 
 flattenBracketedString :: BracketedString -> [String]
-flattenBracketedString (Leaf w)            = [w]
-flattenBracketedString (Bracket _ _ _ bss) = concatMap flattenBracketedString bss
+flattenBracketedString (Leaf w)              = [w]
+flattenBracketedString (Bracket _ _ _ _ bss) = concatMap flattenBracketedString bss

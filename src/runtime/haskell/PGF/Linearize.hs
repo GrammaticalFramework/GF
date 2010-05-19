@@ -63,7 +63,7 @@ type CncType = (CId, FId)    -- concrete type is the abstract type (the category
 
 linTree :: PGF -> Language -> Expr -> [Array LIndex BracketedTokn]
 linTree pgf lang e = 
-  [amapWithIndex (\label -> Bracket_ cat fid label) lin | (_,((cat,fid),lin)) <- lin0 [] [] Nothing 0 e]
+  [amapWithIndex (\label -> Bracket_ cat fid label [e]) lin | (_,((cat,fid),e,lin)) <- lin0 [] [] Nothing 0 e]
   where
     cnc   = lookMap (error "no lang") lang (concretes pgf)
     lp    = lproductions cnc
@@ -74,26 +74,26 @@ linTree pgf lang e =
                               | otherwise = apply (xs ++ ys) mb_cty n_fid _B (e:[ELit (LStr x) | x <- xs])
 
     lin xs mb_cty n_fid (EApp e1 e2) es = lin xs mb_cty n_fid e1 (e2:es)
-    lin xs mb_cty n_fid (ELit l)     [] = case l of
-                                            LStr s -> return (n_fid+1,((cidString,n_fid),ss s))
-                                            LInt n -> return (n_fid+1,((cidInt,   n_fid),ss (show n)))
-                                            LFlt f -> return (n_fid+1,((cidFloat, n_fid),ss (show f)))
+    lin xs mb_cty n_fid e@(ELit l)   [] = case l of
+                                              LStr s -> return (n_fid+1,((cidString,n_fid),e,ss s))
+                                              LInt n -> return (n_fid+1,((cidInt,   n_fid),e,ss (show n)))
+                                              LFlt f -> return (n_fid+1,((cidFloat, n_fid),e,ss (show f)))
     lin xs mb_cty n_fid (EMeta i)    es = apply xs mb_cty n_fid _V (ELit (LStr ('?':show i)):es)
     lin xs mb_cty n_fid (EFun f)     es = apply xs mb_cty n_fid f  es
     lin xs mb_cty n_fid (EVar  i)    es = apply xs mb_cty n_fid _V (ELit (LStr (xs !! i))   :es)
-    lin xs mb_cty n_fid (ETyped e _) es = lin xs mb_cty n_fid e es
-    lin xs mb_cty n_fid (EImplArg e) es = lin xs mb_cty n_fid e es
+    lin xs mb_cty n_fid   (ETyped e _) es = lin xs mb_cty n_fid e es
+    lin xs mb_cty n_fid   (EImplArg e) es = lin xs mb_cty n_fid e es
 
     ss s = listArray (0,0) [[LeafKS [s]]]
 
-    apply :: [String] -> Maybe CncType -> FId -> CId -> [Expr] -> [(FId,(CncType, LinTable))]
+    apply :: [String] -> Maybe CncType -> FId -> CId -> [Expr] -> [(FId,(CncType, Expr, LinTable))]
     apply xs mb_cty n_fid f es =
       case Map.lookup f lp of
         Just prods -> do (funid,(cat,fid),ctys) <- getApps prods
                          guard (length ctys == length es)
                          (n_fid,args) <- descend n_fid (zip ctys es)
                          let (CncFun _ lins) = cncfuns cnc ! funid
-                         return (n_fid+1,((cat,n_fid),listArray (bounds lins) [computeSeq seqid args | seqid <- elems lins]))
+                         return (n_fid+1,((cat,n_fid),undefined,listArray (bounds lins) [computeSeq seqid args | seqid <- elems lins]))
         Nothing    -> apply xs mb_cty n_fid _V [ELit (LStr ("[" ++ showCId f ++ "]"))]  -- fun without lin
       where
         getApps prods =
@@ -116,7 +116,7 @@ linTree pgf lang e =
                                                (n_fid,args) <- descend n_fid fes
                                                return (n_fid,arg:args)
 
-        computeSeq :: SeqId -> [(CncType,LinTable)] -> [BracketedTokn]
+        computeSeq :: SeqId -> [(CncType,Expr,LinTable)] -> [BracketedTokn]
         computeSeq seqid args = concatMap compute (elems seq)
           where
             seq = sequences cnc ! seqid
@@ -127,11 +127,11 @@ linTree pgf lang e =
             compute (SymKP ts alts) = [LeafKP ts alts]
 
             getArg d r
-              | not (null arg_lin) = [Bracket_ cat fid r arg_lin]
+              | not (null arg_lin) = [Bracket_ cat fid r [e] arg_lin]
               | otherwise          = arg_lin
               where
-                arg_lin         = lin ! r
-                ((cat,fid),lin) = args !! d
+                arg_lin           = lin ! r
+                ((cat,fid),e,lin) = args !! d
 
 amapWithIndex :: (IArray a e1, IArray a e2, Ix i) => (i -> e1 -> e2) -> a i e1 -> a i e2
 amapWithIndex f arr = listArray (bounds arr) (map (uncurry f) (assocs arr))
