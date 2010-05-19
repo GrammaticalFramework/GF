@@ -240,6 +240,11 @@ showBracketedString = render . ppBracketedString
 ppBracketedString (Leaf t) = text t
 ppBracketedString (Bracket cat fcat index bss) = parens (ppCId cat <+> hsep (map ppBracketedString bss))
 
+-- | The length of the bracketed string in number of tokens.
+lengthBracketedString :: BracketedString -> Int
+lengthBracketedString (Leaf _)            = 1
+lengthBracketedString (Bracket _ _ _ bss) = sum (map lengthBracketedString bss)
+
 untokn :: String -> BracketedTokn -> (String,[BracketedString])
 untokn nw (LeafKS ts)   = (head ts,map Leaf ts)
 untokn nw (LeafKP d vs) = let ts = sel d vs nw
