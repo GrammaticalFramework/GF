@@ -14,6 +14,7 @@
 module PGF.Forest( Forest(..)
                  , BracketedString, showBracketedString, lengthBracketedString
                  , linearizeWithBrackets
+                 , foldForest
                  ) where
 
 import PGF.CId
@@ -26,6 +27,7 @@ import qualified Data.Map as Map
 import qualified Data.IntSet as IntSet
 import qualified Data.IntMap as IntMap
 import Control.Monad
+import GF.Data.SortedList
 
 data Forest
   = Forest
@@ -48,11 +50,11 @@ linearizeWithBrackets = head . snd . untokn "" . bracketedTokn
 --
 
 bracketedTokn :: Forest -> BracketedTokn
-bracketedTokn (Forest abs cnc forest root) =
+bracketedTokn f@(Forest abs cnc forest root) =
   case [computeSeq seq (map (render IntMap.empty) args) | (seq,args) <- root] of
-    ([bs@(Bracket_ cat fid label lin)]:_) -> bs
-    (bss:_)                               -> Bracket_ wildCId 0 0 bss
-    []                                    -> Bracket_ wildCId 0 0 []
+    ([bs@(Bracket_ _ _ _ _ _)]:_) -> bs
+    (bss:_)                       -> Bracket_ wildCId 0 0 [] bss
+    []                            -> Bracket_ wildCId 0 0 [] []
   where
     trusted = foldl1 IntSet.intersection [IntSet.unions (map (trustedSpots IntSet.empty) args) | (_,args) <- root]
 
@@ -97,8 +99,56 @@ bracketedTokn (Forest abs cnc forest root) =
         getArg d r
           | not (null arg_lin) &&
             IntSet.member fid trusted
-                        = [Bracket_ cat fid r arg_lin]
+                        = [Bracket_ cat fid r es arg_lin]
           | otherwise   = arg_lin
           where
             arg_lin       = lin ! r
             (fid,cat,lin) = args !! d
+            es            = getAbsTrees f fid
+
+-- | This function extracts the list of all completed parse trees
+-- that spans the whole input consumed so far. The trees are also
+-- limited by the category specified, which is usually
+-- the same as the startup category.
+getAbsTrees :: Forest -> FId -> [Expr]
+getAbsTrees (Forest abs cnc forest root) fid =
+  nubsort $ do (fvs,e) <- go Set.empty 0 (0,fid)
+               guard (Set.null fvs)
+               return e
+  where
+    go rec fcat' (d,fcat)
+      | fcat < totalCats cnc = return (Set.empty,EMeta (fcat'*10+d))   -- FIXME: here we assume that every rule has at most 10 arguments
+      | Set.member fcat rec  = mzero
+      | otherwise            = foldForest (\funid args trees -> 
+                                                  do let CncFun fn lins = cncfuns cnc ! funid
+                                                     args <- mapM (go (Set.insert fcat rec) fcat) (zip [0..] args)
+                                                     check_ho_fun fn args
+                                                  `mplus`
+                                                  trees)
+                                          (\const _ trees ->
+                                                  return (freeVar const,const)
+                                                  `mplus`
+                                                  trees)
+                                          [] fcat forest
+
+    check_ho_fun fun args
+      | fun == _V = return (head args)
+      | fun == _B = return (foldl1 Set.difference (map fst args), foldr (\x e -> EAbs Explicit (mkVar (snd x)) e) (snd (head args)) (tail args))
+      | otherwise = return (Set.unions (map fst args),foldl (\e x -> EApp e (snd x)) (EFun fun) args)
+    
+    mkVar (EFun  v) = v
+    mkVar (EMeta _) = wildCId
+    
+    freeVar (EFun v) = Set.singleton v
+    freeVar _        = Set.empty
+
+
+foldForest :: (FunId -> [FId] -> b -> b) -> (Expr -> [String] -> b -> b) -> b -> FId -> IntMap.IntMap (Set.Set Production) -> b
+foldForest f g b fcat forest =
+  case IntMap.lookup fcat forest of
+    Nothing  -> b
+    Just set -> Set.fold foldProd b set
+  where
+    foldProd (PCoerce fcat)        b = foldForest f g b fcat forest
+    foldProd (PApply funid args)   b = f funid args b
+    foldProd (PConst _ const toks) b = g const toks b
