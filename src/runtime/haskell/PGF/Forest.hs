@@ -32,8 +32,7 @@ data Forest
       { abstr  :: Abstr
       , concr  :: Concr
       , forest :: IntMap.IntMap (Set.Set Production)
-      , root   :: {-# UNPACK #-} !FId
-      , label  :: {-# UNPACK #-} !LIndex
+      , root   :: [([Symbol],[FId])]
       }
 
 --------------------------------------------------------------------
@@ -49,11 +48,13 @@ linearizeWithBrackets = head . snd . untokn "" . bracketedTokn
 --
 
 bracketedTokn :: Forest -> BracketedTokn
-bracketedTokn (Forest abs cnc forest root label) =
-  let (fid,cat,lin) = render IntMap.empty root
-  in Bracket_ cat fid label (lin ! label)
+bracketedTokn (Forest abs cnc forest root) =
+  case [computeSeq seq (map (render IntMap.empty) args) | (seq,args) <- root] of
+    ([bs@(Bracket_ cat fid label lin)]:_) -> bs
+    (bss:_)                               -> Bracket_ wildCId 0 0 bss
+    []                                    -> Bracket_ wildCId 0 0 []
   where
-    trusted = trustedSpots IntSet.empty root
+    trusted = foldl1 IntSet.intersection [IntSet.unions (map (trustedSpots IntSet.empty) args) | (_,args) <- root]
 
     render parents fid =
       case (IntMap.lookup fid parents) `mplus` (fmap Set.toList $ IntMap.lookup fid forest) of
@@ -63,12 +64,16 @@ bracketedTokn (Forest abs cnc forest root label) =
         descend parents (PApply funid args) = let (CncFun fun lins) = cncfuns cnc ! funid
                                                   Just (DTyp _ cat _,_,_) = Map.lookup fun (funs abs)
                                                   largs = map (render parents) args
-                                              in (fid,cat,listArray (bounds lins) [computeSeq seqid largs | seqid <- elems lins])
+                                                  ltable = listArray (bounds lins)
+                                                                     [computeSeq (elems (sequences cnc ! seqid)) largs |
+                                                                                                         seqid <- elems lins]
+                                              in (fid,cat,ltable)
         descend parents (PCoerce fid)       = render parents fid
         descend parents (PConst cat _ ts)   = (fid,cat,listArray (0,0) [[LeafKS ts]])
 
     trustedSpots parents fid
-      | IntSet.member fid parents
+      | fid < totalCats cnc ||                  -- forest ids from the grammar correspond to metavariables
+        IntSet.member fid parents               -- this avoids loops in the grammar
                   = IntSet.empty
       | otherwise = IntSet.insert fid $
                       case IntMap.lookup fid forest of
@@ -81,11 +86,9 @@ bracketedTokn (Forest abs cnc forest root label) =
         descend (PCoerce fid)       = trustedSpots parents' fid
         descend (PConst c e _)      = IntSet.empty
 
-    computeSeq :: SeqId -> [(FId,CId,LinTable)] -> [BracketedTokn]
-    computeSeq seqid args = concatMap compute (elems seq)
+    computeSeq :: [Symbol] -> [(FId,CId,LinTable)] -> [BracketedTokn]
+    computeSeq seq args = concatMap compute seq
       where
-        seq = sequences cnc ! seqid
-
         compute (SymCat d r)    = getArg d r
         compute (SymLit d r)    = getArg d r
         compute (SymKS ts)      = [LeafKS ts]
