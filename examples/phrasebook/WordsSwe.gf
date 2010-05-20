@@ -38,7 +38,7 @@ concrete WordsSwe of Words = SentencesSwe **
 -- places
 
     Airport = mkPlace (mkN "flygplats" "flygplatser") "på" ;
-    AmusementPark = mkPlace (mkN "nöjespark" "nöjesparken") "i" ;
+    AmusementPark = mkPlace (mkN "nöjespark" "nöjesparker") "i" ;
     Bank = mkPlace (mkN "bank" "banker") "i" ;
     Bar = mkPlace (mkN "bar" "barer") "i" ;
     Cafeteria = mkPlace (mkN "café" "café") "på" ;

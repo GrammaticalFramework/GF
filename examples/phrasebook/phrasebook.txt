@@ -1,5 +1,5 @@
 MOLTO Multilingual Phrasebook
-Krasimir Angelov, Olga Caprotti, Ramona Enache, Thomas Hallgren, Aarne Ranta 
+Krasimir Angelov, Olga Caprotti, Ramona Enache, Thomas Hallgren, Inari Listenmaa, Aarne Ranta 
 
 
 %!postproc(html): #HR <HR>
@@ -13,6 +13,9 @@ Krasimir Angelov, Olga Caprotti, Ramona Enache, Thomas Hallgren, Aarne Ranta
 #BSMALL
 
 History
+- 20 May. Version 0.9:
+  Spanish added, Bulgarian complete.
+
 - 9 May. Version 0.7: 
   Danish and Norwegian added (preliminary versions induced from statistical models 
   and resource grammars).
@@ -65,11 +68,11 @@ The source code resides in
 [``code.haskell.org/gf/examples/phrasebook/`` http://code.haskell.org/gf/examples/phrasebook/]
 
 
-Current status (9 May 2010):
+Current status (20 May 2010):
 - small but useful coverage in abstract syntax
 - reasonable implementations for 
   Bulgarian, Danish, Dutch, English, Finnish, French, German, 
-  Italian, Norwegian, Romanian, Swedish
+  Italian, Norwegian, Romanian, Spanish, Swedish
 - mostly just cloned for the rest of MOLTO languages
 - temporary user interdace
 - works on web browsers calling a server
