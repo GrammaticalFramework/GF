@@ -37,6 +37,7 @@ concrete StructuralBul of Structural = CatBul **
   here7to_Adv = ss ["до тук"] ;
   here7from_Adv = ss ["от тук"] ;
   how_IAdv = mkIAdv "как" ;
+  how8much_IAdv = mkIAdv "колко" ;
   how8many_IDet = {s = \\_ => table QForm ["колко";"колкото"]; n = Pl; nonEmpty = False} ;
   if_Subj = ss "ако" ;
   in8front_Prep = mkPrep "пред" Acc ;
