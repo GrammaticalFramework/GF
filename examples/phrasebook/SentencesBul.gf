@@ -23,8 +23,7 @@ lin IMale = mkPerson i_Pron ;
 
 lin YouFamMale = mkPerson youSg_Pron ;
     YouFamFemale = mkPerson youSg8fem_Pron ;
-    YouPolMale = mkPerson youPol_Pron ;
-    YouPolFemale = mkPerson youPol8fem_Pron ;
+    YouPolMale, YouPolFemale = mkPerson youPol_Pron ;
 
 lin ACitizen p cit = 
       let noun : N

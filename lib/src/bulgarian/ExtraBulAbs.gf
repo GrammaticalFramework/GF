@@ -22,9 +22,6 @@ fun
     
   youSg8fem_Pron : Pron ;
   youSg8neut_Pron : Pron ;
-
-  youPol8fem_Pron : Pron ;
-  youPol8neut_Pron : Pron ;
   
   onePl_Num : Num ;
   
