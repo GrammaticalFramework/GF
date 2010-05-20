@@ -7,7 +7,8 @@ concrete WordsBul of Words = SentencesBul **
       ParadigmsBul, 
       (L = LexiconBul), 
       (P = ParadigmsBul), 
-      ExtraBul, 
+      ExtraBul,
+      MorphoFunsBul,
       Prelude in {
    
   flags
@@ -69,12 +70,14 @@ concrete WordsBul of Words = SentencesBul **
     Restaurant = mkPlace (mkN007 "ресторант") "в" ;
     School = mkPlace (mkN007 "училище") "в" ;
     Shop = mkPlace (mkN007 "магазин") "в" ;
-    Station = mkPlace (mkN041 "гарата") "на" ;
+    Station = mkPlace (mkN041 "гара") "на" ;
     Supermarket = mkPlace (mkN007 "супермаркет") "в" ;
     Theatre = mkPlace (mkN009 "театър") "на" ;
     Toilet = mkPlace (mkN007 "тоалет") "в" ;
     University = mkPlace (mkN007 "университет") "в" ;
     Zoo = mkPlace (mkN001 "зоопарк") "в" ;
+    
+    CitRestaurant cit = mkCNPlace (mkCN cit.s2 (mkN007 "ресторант")) in_Prep to_Prep ;
 
 -- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
 
@@ -126,50 +129,52 @@ concrete WordsBul of Words = SentencesBul **
 
 -- Actions: the predication patterns are very often language-dependent.
 
-    AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
+    AHasAge p num = mkCl p.name (SyntaxBul.mkAdv (mkPrep "на" R.Acc) (mkNP num L.year_N)) ;
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
---    AHasRoom p num = mkCl p.name have_V2 
---      (mkNP (mkNP a_Det (mkN "room")) (SyntaxBul.mkAdv for_Prep (mkNP num (mkN "person")))) ;
---    AHasTable p num = mkCl p.name have_V2 
---      (mkNP (mkNP a_Det (mkN "table")) (SyntaxBul.mkAdv for_Prep (mkNP num (mkN "person")))) ;
---    AHasName p name = mkCl (nameOf p) name ;
---    AHungry p = mkCl p.name (mkA "hungry") ;
---    AIll p = mkCl p.name (mkA "ill") ;
---    AKnow p = mkCl p.name IrregBul.know_V ;
---    ALike p item = mkCl p.name (mkV2 (mkV "like")) item ;
---    ALive p co = mkCl p.name (mkVP (mkVP (mkV "live")) (SyntaxBul.mkAdv in_Prep co)) ;
---    ALove p q = mkCl p.name (mkV2 (mkV "love")) q.name ;
---    AMarried p = mkCl p.name (mkA "married") ;
---    AReady p = mkCl p.name (mkA "ready") ;
---    AScared p = mkCl p.name (mkA "scared") ;
---    ASpeak p lang = mkCl p.name  (mkV2 IrregBul.speak_V) lang ;
---    AThirsty p = mkCl p.name (mkA "thirsty") ;
---    ATired p = mkCl p.name (mkA "tired") ;
---    AUnderstand p = mkCl p.name IrregBul.understand_V ;
---    AWant p obj = mkCl p.name (mkV2 (mkV "want")) obj ;
---    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP IrregBul.go_V) place.to) ;
+    AHasRoom p num = mkCl p.name have_V2 (mkNP (mkNP a_Det (mkN047 "стая")) (SyntaxBul.mkAdv (mkPrep "за" R.Acc) (mkNP num (mkN014 "човек")))) ;
+    AHasTable p num = mkCl p.name have_V2 (mkNP (mkNP a_Det (mkN041 "маса")) (SyntaxBul.mkAdv (mkPrep "за" R.Acc) (mkNP num (mkN014 "човек")))) ;
+    AHasName p name = mkCl p.name (dirV2 (medialV (actionV (mkV186 "казвам") (mkV156 "кажа")) R.Acc)) name ;
+    AHungry p = mkCl p.name (mkA079 "гладен") ;
+    AIll p = mkCl p.name (mkA079 "болен") ;
+    AKnow p = mkCl p.name (actionV (mkV186 "знам") (mkV162 "зная")) ;
+    ALike p item = mkCl p.name (dirV2 (actionV (mkV186 "харесвам") (mkV186 "харесам"))) item ;
+    ALive p co = mkCl p.name (mkVP (mkVP (stateV (mkV160 "живея"))) (SyntaxBul.mkAdv in_Prep (mkNP co))) ;
+    ALove p q = mkCl p.name (dirV2 (actionV (mkV186 "обичам") (mkV152 "обикна"))) q.name ;
+    AMarried p = mkCl p.name (mkA076 (case p.name.a.gn of {
+                                        R.GSg R.Fem => "омъжен" ;
+                                        _           => "женен"
+                                      })) ;
+    AReady p = mkCl p.name (mkA076 "готов") ;
+    AScared p = mkCl p.name (mkA076 "уплашен") ;
+    ASpeak p lang = mkCl p.name (dirV2 (stateV (mkV173 "говоря"))) (mkNP (adj2noun lang)) ;
+    AThirsty p = mkCl p.name (mkA079 "жаден") ;
+    ATired p = mkCl p.name (mkA076 "уморен") ;
+    AUnderstand p = mkCl p.name (actionV (mkV186 "разбирам") (mkV170 "разбера")) ;
+    AWant p obj = mkCl p.name (dirV2 (stateV (mkV186 "искам"))) obj ;
+    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP (actionV (mkV186 "отивам") (mkV146 "отида"))) place.to) ;
 
 -- miscellaneous
 
---    QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
---    QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
---    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregBul.cost_V)) ; 
---    ItCost item price = mkCl item (mkV2 IrregBul.cost_V) price ;
+    QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name (medialV (actionV (mkV186 "казвам") (mkV156 "кажа")) R.Acc))) ;
+    QWhatAge p = mkQS (mkQCl (MorphoFunsBul.mkIAdv "на колко") (mkCl p.name (mkNP the_Quant plNum L.year_N))) ;
+    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (stateV (mkV186 "струвам")))) ; 
+    ItCost item price = mkCl item (dirV2 (stateV (mkV186 "струвам"))) price ;
 
---    PropOpen p = mkCl p.name open_Adv ;
---    PropClosed p = mkCl p.name closed_Adv ;
---    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_Adv) d) ; 
---    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_Adv) d) ; 
---    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_Adv) d.habitual) ; 
---    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_Adv) d.habitual) ; 
+    PropOpen p = mkCl p.name open_AP ;
+    PropClosed p = mkCl p.name closed_AP ;
+    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_AP) d) ; 
+    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_AP) d) ; 
+    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_AP) d.habitual) ;
+    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_AP) d.habitual) ;
 
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
---    PSeeYou d = mkText (lin Text (ss ("see you"))) (mkPhrase (mkUtt d)) ;
---    PSeeYouPlace p d = 
---      mkText (lin Text (ss ("see you"))) 
---        (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
+    PSeeYouDate d = mkText (lin Text (ss ("ще се видим"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlace p = mkText (lin Text (ss ("ще се видим"))) (mkPhrase (mkUtt p.at)) ;
+    PSeeYouPlaceDate p d =
+      mkText (lin Text (ss ("ще се видим"))) 
+        (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
 
 -- Relations are expressed as "my wife" or "my son's wife", as defined by $xOf$
 -- below. Languages without productive genitives must use an equivalent of
@@ -193,6 +198,32 @@ concrete WordsBul of Words = SentencesBul **
  
     Tomorrow = P.mkAdv "утре" ;
 
+-- modifiers of places
+
+    TheBest = mkSuperl L.good_A ;
+    TheClosest = mkSuperl L.near_A ; 
+    TheCheapest = mkSuperl (mkA076 "евтин") ;
+    TheMostExpensive = mkSuperl (mkA076 "скъп") ;
+    TheMostPopular = mkSuperl (mkA079 "известен") ;
+    TheWorst = mkSuperl L.bad_A ;
+
+    SuperlPlace sup p = placeNP sup p ;
+
+
+-- transports
+
+    HowFar place = mkQS (mkQCl far_IAdv place.name) ;
+    HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP y.name (SyntaxBul.mkAdv from_Prep x.name))) ;
+    HowFarFromBy x y t = 
+      mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxBul.mkAdv from_Prep x.name)) t)) ;
+    HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t)) ;
+
+    WhichTranspPlace trans place = 
+      mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
+
+    IsTranspPlace trans place =
+      mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
+
 -- auxiliaries
 
   oper
@@ -204,10 +235,9 @@ concrete WordsBul of Words = SentencesBul **
 
     mkDay : N -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
       let day    : NP   = mkNP d ;
-          w_Prep : Prep = mkPrep "в" R.Acc
       in mkNPDay day
-                 (SyntaxBul.mkAdv w_Prep day) 
-                 (SyntaxBul.mkAdv w_Prep (mkNP the_Quant plNum (mkCN d))) ;
+                 (SyntaxBul.mkAdv in_Prep day) 
+                 (SyntaxBul.mkAdv in_Prep (mkNP the_Quant plNum (mkCN d))) ;
 
     mkCompoundPlace : A -> N -> Str -> {name : CN ; at : Prep ; to : Prep} = \a, n, i ->
      mkCNPlace (mkCN a n) (P.mkPrep i R.Acc) to_Prep ;
@@ -215,17 +245,23 @@ concrete WordsBul of Words = SentencesBul **
     mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
       mkCNPlace (mkCN p) (P.mkPrep i R.Acc) to_Prep ;
 
---    open_Adv = P.mkAdv "open" ;
---    closed_Adv = P.mkAdv "closed" ;
+    open_AP = mkAP (mkA076 "отворен") ;
+    closed_AP = mkAP (mkA076 "затворен") ;
 
     xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
       relativePerson n (mkCN x) (\a,b,c -> mkNP (mkNP the_Quant a c) (SyntaxBul.mkAdv (mkPrep "" R.Dat) b)) p ;
 
---    nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "name") p).name ;
+    adj2noun : A -> N ;
+    adj2noun a = let g = R.AMasc R.NonHuman
+                 in lin N {s = \\nf => a.s ! R.nform2aform nf g; g = g} ;
 
     mkTransport : N -> {name : CN ; by : Adv} = \n -> {
       name = mkCN n ; 
       by = SyntaxBul.mkAdv (P.mkPrep "с" R.Acc) (mkNP n)
       } ;
+
+    mkSuperl : A -> Det = \a -> SyntaxBul.mkDet the_Art (SyntaxBul.mkOrd a) ;
+
+    far_IAdv = ExtraBul.IAdvAdv (ss "далече") ;
 
 }
