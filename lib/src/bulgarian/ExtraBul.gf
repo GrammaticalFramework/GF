@@ -1,5 +1,5 @@
 concrete ExtraBul of ExtraBulAbs = CatBul ** 
-  open ResBul, Coordination, Prelude in {
+  open ResBul, MorphoFunsBul, Coordination, Prelude in {
   flags coding=cp1251 ;
 
 
@@ -45,6 +45,8 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
     UttImpSg8fem  pol imp = {s = pol.s ++ imp.s ! pol.p ! GSg Fem} ;
     UttImpSg8neut pol imp = {s = pol.s ++ imp.s ! pol.p ! GSg Fem} ;
     
+    IAdvAdv adv = {s = \\qf => (mkIAdv "колко").s ! qf ++ adv.s} ;
+
   oper
     reflPron : AForm => Str =
       table {
