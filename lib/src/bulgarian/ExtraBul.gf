@@ -33,9 +33,6 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
     
     youSg8fem_Pron  = mkPron "ти" "теб" "ти" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Fem) P2 ;
     youSg8neut_Pron = mkPron "ти" "теб" "ти" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Neut) P2 ;
-    
-    youPol8fem_Pron  = mkPron "вие" "вас" "ви" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" (GSg Fem) P2 ;
-    youPol8neut_Pron = mkPron "вие" "вас" "ви" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" (GSg Neut) P2 ;
 
     onePl_Num = {s = table {
                        CFMasc Indef _ | CFFem Indef | CFNeut Indef            => "едни" ;
