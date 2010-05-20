@@ -1,31 +1,31 @@
 concrete GreetingsSpa of Greetings = open Prelude in {
 
---lincat 
---  Greeting = SS ;
+flags coding = utf8 ;
 
---lin 
---  GBye = ss "ciao" ;
---  GCheers = ss "cincin" ;
---  GDamn = ss "maledizione" ;
---  GExcuse = ss "scusa" ;
---  GExcusePol = ss "scusi" ;
---  GGoodDay = ss "buongiorno" ;
---  GGoodEvening = ss "buona sera" ;
---  GGoodMorning = ss "buongiorno" ;
---  GGoodNight = ss "buona notte" ;
---  GGoodbye = ss "arrivederci" ;
---  GHello = ss "ciao" ;
---  GHelp = ss "aiuto" ;
---  GHowAreYou = ss "come sta" ;
---  GLookOut = ss "attenzione" ;
---  GNiceToMeetYou = ss "piacere di conoscerti" ;
---  GNiceToMeetYouPol = ss "piacere di conoscerLa" ;
---  GPleaseGive, GPleaseGivePol = ss "per favore" ;
---  GSeeYouSoon = ss "a presto" ; ----
---  GSorry = ss "scusami" ; ----
---  GSorryPol = ss "scusimi" ; ----
---  GThanks = ss "grazie" ;
---  GTheCheck = ss "il conto" ;
+lincat 
+  Greeting = SS ;
 
---}
+lin 
+  GBye = ss "adiós" ;
+  GCheers = ss "salud" ;
+  GDamn = ss "joder" ;
+  GExcuse = ss "perdón" ;
+  GExcusePol = ss "perdone" ;
+  GGoodMorning, GGoodDay = ss "buenos días" ;
+  GGoodEvening = ss "buenas tardes" ;
+  GGoodNight = ss "buenas noches" ;
+  GGoodbye = ss "hasta luego" ;
+  GHello = ss "hola" ;
+  GHelp = ss "socorro" ;
+  GHowAreYou = ss "cómo está" ; -- the polite singular "you"
+  GLookOut = ss "atención" ;
+  GNiceToMeetYou = ss "encantado de conocerle" ; -- the polite singular "you"
+  GPleaseGive, GPleaseGivePol = ss "por favor" ;
+  GSeeYouSoon = ss "nos vemos pronto" ; 
+  GSorry = ss "disculpa" ; 
+  GSorryPol = ss "disculpe" ; 
+  GThanks = ss "gracias" ;
+  GTheCheck = ss "la cuenta" ;
+
+
 }
