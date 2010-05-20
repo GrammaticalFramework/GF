@@ -50,20 +50,31 @@ concrete WordsBul of Words = SentencesBul **
 -- defined by $mkPlace$.
 
     Airport = mkPlace (mkN066 "летище") "на" ;
+    AmusementPark = mkCompoundPlace (mkA079 "увеселителен") (mkN001 "парк") "в" ;
+    Bank = mkPlace (mkN041 "банка") "в" ;
     Bar = mkPlace (mkN042 "бар") "в" ;
-    Church = mkPlace (mkN041 "църква") "в" ;
+    Cafeteria = mkPlace (mkN065 "кафе") "в" ;
+    Center = mkPlace (mkN009a "център") "в" ;
     Cinema = mkPlace (mkN054 "кино") "на" ;
+    Church = mkPlace (mkN041 "църква") "в" ;
+    Disco = mkPlace (mkN041 "дискотека") "в" ;
     Hospital = mkPlace (mkN041 "болница") "в" ;
     Hotel = mkPlace (mkN007 "хотел") "в" ;
     Museum = mkPlace (mkN032 "музей") "в" ;
     Park = mkPlace (mkN001 "парк") "в" ;
+    Parking = mkPlace (mkN007 "паркинг") "на" ; 
+    Pharmacy = mkPlace (mkN041 "аптека") "в" ;
+    PostOffice = mkPlace (mkN041 "поща") "в" ;
+    Pub = mkPlace (mkN042 "бар") "в" ;
     Restaurant = mkPlace (mkN007 "ресторант") "в" ;
     School = mkPlace (mkN007 "училище") "в" ;
     Shop = mkPlace (mkN007 "магазин") "в" ;
     Station = mkPlace (mkN041 "гарата") "на" ;
+    Supermarket = mkPlace (mkN007 "супермаркет") "в" ;
     Theatre = mkPlace (mkN009 "театър") "на" ;
     Toilet = mkPlace (mkN007 "тоалет") "в" ;
     University = mkPlace (mkN007 "университет") "в" ;
+    Zoo = mkPlace (mkN001 "зоопарк") "в" ;
 
 -- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
 
@@ -71,7 +82,12 @@ concrete WordsBul of Words = SentencesBul **
     Dollar = mkCN (mkN007 "долар") ;
     Euro = mkCN (mkN054 "евро") ;
     Lei = mkCN (mkN047 "лея") ;
+    Leva = mkCN (mkN001 "лев") ;
+    NorwegianCrown = mkCN (mkA078 "норвежки") (mkN041 "крона") | mkCN (mkN041 "крона") ;
+    Pound = mkCN (mkN007 "паунд") ;
+    Rouble = mkCN (mkN041 "рубла") ;
     SwedishCrown = mkCN (mkA078 "шведски") (mkN041 "крона") | mkCN (mkN041 "крона") ;
+    Zloty = mkCN (mkN041 "злота") ;
 
 -- Nationalities
 
@@ -165,6 +181,9 @@ concrete WordsBul of Words = SentencesBul **
 --      let day = mkNP (mkPN d) in 
 --      mkNPDay day (SyntaxBul.mkAdv on_Prep day) 
 --        (SyntaxBul.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
+
+    mkCompoundPlace : A -> N -> Str -> {name : CN ; at : Prep ; to : Prep} = \a, n, i ->
+     mkCNPlace (mkCN a n) (P.mkPrep i R.Acc) to_Prep ;
 
     mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
       mkCNPlace (mkCN p) (P.mkPrep i R.Acc) to_Prep ;
