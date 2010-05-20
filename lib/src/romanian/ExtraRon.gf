@@ -2,6 +2,8 @@
 concrete ExtraRon of ExtraRonAbs = CatRon ** 
   open ResRon, ParadigmsRon, Prelude, MorphoRon in {
 
+  flags coding = utf8 ;
+
   lin
  at_Prep = mkPrep "la" Ac True;
  DatSubjCompCl np vp np2 = let ss = if_then_Str np.isPronoun "" (np.s ! Dat).comp
