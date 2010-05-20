@@ -183,15 +183,15 @@ concrete WordsBul of Words = SentencesBul **
 
 -- week days
 
---    Monday = mkDay "Monday" ;
---    Tuesday = mkDay "Tuesday" ;
---    Wednesday = mkDay "Wednesday" ;
---    Thursday = mkDay "Thursday" ;
---    Friday = mkDay "Friday" ;
---    Saturday = mkDay "Saturday" ;
---    Sunday = mkDay "Sunday" ;
+    Monday = mkDay (mkN014 "понеделник") ;
+    Tuesday = mkDay (mkN014 "вторник") ;
+    Wednesday = mkDay (mkN043 "сряда") ;
+    Thursday = mkDay (mkN014 "четвъртък") ;
+    Friday = mkDay (mkN014 "петък") ;
+    Saturday = mkDay (mkN041 "събота") ;
+    Sunday = mkDay (mkN047 "неделя") ;
  
---    Tomorrow = P.mkAdv "tomorrow" ;
+    Tomorrow = P.mkAdv "утре" ;
 
 -- auxiliaries
 
@@ -202,10 +202,12 @@ concrete WordsBul of Words = SentencesBul **
     mkNat : N -> N -> A -> PN -> Nationality
           = \male, female, adj, country -> lin Nationality {s1 = table {R.Fem => female.s; _ => male.s}; s2 = adj; s3 = country} ;
 
---    mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
---      let day = mkNP (mkPN d) in 
---      mkNPDay day (SyntaxBul.mkAdv on_Prep day) 
---        (SyntaxBul.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
+    mkDay : N -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
+      let day    : NP   = mkNP d ;
+          w_Prep : Prep = mkPrep "в" R.Acc
+      in mkNPDay day
+                 (SyntaxBul.mkAdv w_Prep day) 
+                 (SyntaxBul.mkAdv w_Prep (mkNP the_Quant plNum (mkCN d))) ;
 
     mkCompoundPlace : A -> N -> Str -> {name : CN ; at : Prep ; to : Prep} = \a, n, i ->
      mkCNPlace (mkCN a n) (P.mkPrep i R.Acc) to_Prep ;
