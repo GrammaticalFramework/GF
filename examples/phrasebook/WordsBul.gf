@@ -91,15 +91,24 @@ concrete WordsBul of Words = SentencesBul **
 
 -- Nationalities
 
-    Belgian = mkA078 "белгийски" ;
-    -- Belgium = mkNP (mkPN "Белгия" Fem) ;
-    -- English = mkA078 "английски" ;
---    Finnish = mkNat "Finnish" "Finland" ;
---    Flemish = mkNP (mkPN "Flemish") ;
---    French = mkNat "French" "France" ; 
---    Italian = mkNat "Italian" "Italy" ;
---    Romanian = mkNat "Romanian" "Romania" ;
---    Swedish = mkNat "Swedish" "Sweden" ;
+    Belgian = mkCitizenship (mkN013 "белгиец") (mkN041 "белгийка") (mkA078 "белгийски") ;
+    Belgium = mkPN "Белгия" R.Fem ;
+    Bulgarian = mkNat (mkN018 "българин") (mkN041 "българка") (mkA078 "български") (mkPN "България" R.Fem) ;
+    Catalan = mkNat (mkN008a "каталонец") (mkN041 "каталонка") (mkA078 "каталонски") (mkPN "Каталуния" R.Fem) ;
+    Danish = mkNat (mkN018 "датчанин") (mkN041 "датчанка") (mkA078 "датски") (mkPN "Дания" R.Fem) ;
+    Dutch =  mkNat (mkN008a "холандец") (mkN041 "холандка") (mkA078 "холандски") (mkPN "Холандия" R.Fem) ;
+    English =  mkNat (mkN018 "англичанин") (mkN041 "англичанка") (mkA078 "английски") (mkPN "Англия" R.Fem) ;
+    Finnish = mkNat (mkN008a "финландец") (mkN041 "финландка") (mkA078 "финландски") (mkPN "Финландия" R.Fem) ;
+    Flemish = mkA078 "фламандски" ;
+    French = mkNat (mkN018 "французин") (mkN041 "французойка") (mkA078 "френски") (mkPN "Франция" R.Fem) ;
+    German = mkNat (mkN008a "германец") (mkN041 "германка") (mkA078 "немски") (mkPN "Германия" R.Fem) ;
+    Italian = mkNat (mkN008a "италианец") (mkN041 "италианка") (mkA078 "италиански") (mkPN "Италия" R.Fem) ;
+    Norwegian = mkNat (mkN008a "норвежец") (mkN041 "норвежка") (mkA078 "норвежки") (mkPN "Норвегия" R.Fem) ;
+    Polish = mkNat (mkN014 "поляк") (mkN047 "полякиня") (mkA078 "полски") (mkPN "Полша" R.Fem) ;
+    Romanian = mkNat (mkN008a "румънец") (mkN041 "румънка") (mkA078 "румънски") (mkPN "Румъния" R.Fem) ;
+    Russian = mkNat (mkN014 "руснак") (mkN047 "рускиня") (mkA078 "руски") (mkPN "Русия" R.Fem) ;
+    Swedish = mkNat (mkN007 "швед") (mkN041 "шведка") (mkA078 "шведски") (mkPN "Швеция" R.Fem) ;
+    Spanish = mkNat (mkN008a "испанец") (mkN041 "испанка") (mkA078 "испански") (mkPN "Испания" R.Fem) ;
 
 -- Actions: the predication patterns are very often language-dependent.
 
@@ -173,9 +182,11 @@ concrete WordsBul of Words = SentencesBul **
 -- auxiliaries
 
   oper
+    mkCitizenship : N -> N -> A -> Citizenship
+                  = \male, female, adj -> lin Citizenship {s1 = table {R.Fem => female.s; _ => male.s}; s2 = adj} ;
 
---    mkNat : Str -> Str -> NPNationality = \nat,co -> 
---      mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
+    mkNat : N -> N -> A -> PN -> Nationality
+          = \male, female, adj, country -> lin Nationality {s1 = table {R.Fem => female.s; _ => male.s}; s2 = adj; s3 = country} ;
 
 --    mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
 --      let day = mkNP (mkPN d) in 
