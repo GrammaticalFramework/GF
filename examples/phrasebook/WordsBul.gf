@@ -112,17 +112,17 @@ concrete WordsBul of Words = SentencesBul **
 
 -- Means of transportation 
 
-   Bike = mkTransport L.bike_N ;
-   Bus = mkTransport (mkN007 "автобус") ;
-   Car = mkTransport L.car_N ;
-   Ferry = mkTransport (mkN007 "ферибот") ;
-   Plane = mkTransport (mkN007 "самолет") ;
-   Subway = mkTransport (mkN054 "метро") ;
-   Taxi = mkTransport (mkN073 "такси") ;
-   Train = mkTransport (mkN001 "влак") ;
-   Tram = mkTransport (mkN032 "трамвай") ;
+    Bike = mkTransport L.bike_N ;
+    Bus = mkTransport (mkN007 "автобус") ;
+    Car = mkTransport L.car_N ;
+    Ferry = mkTransport (mkN007 "ферибот") ;
+    Plane = mkTransport (mkN007 "самолет") ;
+    Subway = mkTransport (mkN054 "метро") ;
+    Taxi = mkTransport (mkN073 "такси") ;
+    Train = mkTransport (mkN001 "влак") ;
+    Tram = mkTransport (mkN032 "трамвай") ;
 
-   ByFoot = P.mkAdv "пеша" ;
+    ByFoot = P.mkAdv "пеша" ;
 
 -- Actions: the predication patterns are very often language-dependent.
 
@@ -175,11 +175,11 @@ concrete WordsBul of Words = SentencesBul **
 -- below. Languages without productive genitives must use an equivalent of
 -- "the wife of my son" for non-pronouns.
 
---    Wife = xOf sing (mkN "wife") ;
---    Husband = xOf sing (mkN "husband") ;
---    Son = xOf sing (mkN "son") ;
---    Daughter = xOf sing (mkN "daughter") ;
---    Children = xOf plur L.child_N ;
+    Wife = xOf sing (mkN041 "съпруга") ;
+    Husband = xOf sing (mkN015 "съпруг") ;
+    Son = xOf sing (mkN018 "син") ;
+    Daughter = xOf sing (mkN047 "дъщеря") ;
+    Children = xOf plur L.child_N ;
 
 -- week days
 
@@ -216,8 +216,8 @@ concrete WordsBul of Words = SentencesBul **
 --    open_Adv = P.mkAdv "open" ;
 --    closed_Adv = P.mkAdv "closed" ;
 
---    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
---      relativePerson n (mkCN x) (\a,b,c -> mkNP (GenNP b) a c) p ;
+    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
+      relativePerson n (mkCN x) (\a,b,c -> mkNP (mkNP the_Quant a c) (SyntaxBul.mkAdv (mkPrep "" R.Dat) b)) p ;
 
 --    nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "name") p).name ;
 
