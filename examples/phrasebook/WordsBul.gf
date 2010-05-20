@@ -110,6 +110,20 @@ concrete WordsBul of Words = SentencesBul **
     Swedish = mkNat (mkN007 "швед") (mkN041 "шведка") (mkA078 "шведски") (mkPN "Швеция" R.Fem) ;
     Spanish = mkNat (mkN008a "испанец") (mkN041 "испанка") (mkA078 "испански") (mkPN "Испания" R.Fem) ;
 
+-- Means of transportation 
+
+   Bike = mkTransport L.bike_N ;
+   Bus = mkTransport (mkN007 "автобус") ;
+   Car = mkTransport L.car_N ;
+   Ferry = mkTransport (mkN007 "ферибот") ;
+   Plane = mkTransport (mkN007 "самолет") ;
+   Subway = mkTransport (mkN054 "метро") ;
+   Taxi = mkTransport (mkN073 "такси") ;
+   Train = mkTransport (mkN001 "влак") ;
+   Tram = mkTransport (mkN032 "трамвай") ;
+
+   ByFoot = P.mkAdv "пеша" ;
+
 -- Actions: the predication patterns are very often language-dependent.
 
     AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
@@ -207,5 +221,9 @@ concrete WordsBul of Words = SentencesBul **
 
 --    nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "name") p).name ;
 
+    mkTransport : N -> {name : CN ; by : Adv} = \n -> {
+      name = mkCN n ; 
+      by = SyntaxBul.mkAdv (P.mkPrep "с" R.Acc) (mkNP n)
+      } ;
 
 }
