@@ -50,32 +50,32 @@ concrete WordsBul of Words = SentencesBul **
 -- also the directional preposition varies, but in English we use $to$, as
 -- defined by $mkPlace$.
 
-    Airport = mkPlace (mkN066 "летище") "на" ;
-    AmusementPark = mkCompoundPlace (mkA079 "увеселителен") (mkN001 "парк") "в" ;
-    Bank = mkPlace (mkN041 "банка") "в" ;
-    Bar = mkPlace (mkN042 "бар") "в" ;
-    Cafeteria = mkPlace (mkN065 "кафе") "в" ;
-    Center = mkPlace (mkN009a "център") "в" ;
-    Cinema = mkPlace (mkN054 "кино") "на" ;
-    Church = mkPlace (mkN041 "църква") "в" ;
-    Disco = mkPlace (mkN041 "дискотека") "в" ;
-    Hospital = mkPlace (mkN041 "болница") "в" ;
-    Hotel = mkPlace (mkN007 "хотел") "в" ;
-    Museum = mkPlace (mkN032 "музей") "в" ;
-    Park = mkPlace (mkN001 "парк") "в" ;
-    Parking = mkPlace (mkN007 "паркинг") "на" ; 
-    Pharmacy = mkPlace (mkN041 "аптека") "в" ;
-    PostOffice = mkPlace (mkN041 "поща") "в" ;
-    Pub = mkPlace (mkN042 "бар") "в" ;
-    Restaurant = mkPlace (mkN007 "ресторант") "в" ;
-    School = mkPlace (mkN007 "училище") "в" ;
-    Shop = mkPlace (mkN007 "магазин") "в" ;
-    Station = mkPlace (mkN041 "гара") "на" ;
-    Supermarket = mkPlace (mkN007 "супермаркет") "в" ;
-    Theatre = mkPlace (mkN009 "театър") "на" ;
-    Toilet = mkPlace (mkN007 "тоалет") "в" ;
-    University = mkPlace (mkN007 "университет") "в" ;
-    Zoo = mkPlace (mkN001 "зоопарк") "в" ;
+    Airport = mkPlace (mkN066 "летище") na_Prep ;
+    AmusementPark = mkCompoundPlace (mkA079 "увеселителен") (mkN001 "парк") in_Prep ;
+    Bank = mkPlace (mkN041 "банка") in_Prep ;
+    Bar = mkPlace (mkN042 "бар") in_Prep ;
+    Cafeteria = mkPlace (mkN065 "кафе") in_Prep ;
+    Center = mkPlace (mkN009a "център") in_Prep ;
+    Cinema = mkPlace (mkN054 "кино") na_Prep ;
+    Church = mkPlace (mkN041 "църква") in_Prep ;
+    Disco = mkPlace (mkN041 "дискотека") in_Prep ;
+    Hospital = mkPlace (mkN041 "болница") in_Prep ;
+    Hotel = mkPlace (mkN007 "хотел") in_Prep ;
+    Museum = mkPlace (mkN032 "музей") in_Prep ;
+    Park = mkPlace (mkN001 "парк") in_Prep ;
+    Parking = mkPlace (mkN007 "паркинг") na_Prep ; 
+    Pharmacy = mkPlace (mkN041 "аптека") in_Prep ;
+    PostOffice = mkPlace (mkN041 "поща") in_Prep ;
+    Pub = mkPlace (mkN042 "бар") in_Prep ;
+    Restaurant = mkPlace (mkN007 "ресторант") in_Prep ;
+    School = mkPlace (mkN007 "училище") in_Prep ;
+    Shop = mkPlace (mkN007 "магазин") in_Prep ;
+    Station = mkPlace (mkN041 "гара") na_Prep ;
+    Supermarket = mkPlace (mkN007 "супермаркет") in_Prep ;
+    Theatre = mkPlace (mkN009 "театър") na_Prep ;
+    Toilet = mkPlace (mkN007 "тоалет") in_Prep ;
+    University = mkPlace (mkN007 "университет") in_Prep ;
+    Zoo = mkPlace (mkN001 "зоопарк") in_Prep ;
     
     CitRestaurant cit = mkCNPlace (mkCN cit.s2 (mkN007 "ресторант")) in_Prep to_Prep ;
 
@@ -129,7 +129,7 @@ concrete WordsBul of Words = SentencesBul **
 
 -- Actions: the predication patterns are very often language-dependent.
 
-    AHasAge p num = mkCl p.name (SyntaxBul.mkAdv (mkPrep "на" R.Acc) (mkNP num L.year_N)) ;
+    AHasAge p num = mkCl p.name (SyntaxBul.mkAdv na_Prep (mkNP num L.year_N)) ;
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
     AHasRoom p num = mkCl p.name have_V2 (mkNP (mkNP a_Det (mkN047 "стая")) (SyntaxBul.mkAdv (mkPrep "за" R.Acc) (mkNP num (mkN014 "човек")))) ;
     AHasTable p num = mkCl p.name have_V2 (mkNP (mkNP a_Det (mkN041 "маса")) (SyntaxBul.mkAdv (mkPrep "за" R.Acc) (mkNP num (mkN014 "човек")))) ;
@@ -239,11 +239,11 @@ concrete WordsBul of Words = SentencesBul **
                  (SyntaxBul.mkAdv in_Prep day) 
                  (SyntaxBul.mkAdv in_Prep (mkNP the_Quant plNum (mkCN d))) ;
 
-    mkCompoundPlace : A -> N -> Str -> {name : CN ; at : Prep ; to : Prep} = \a, n, i ->
-     mkCNPlace (mkCN a n) (P.mkPrep i R.Acc) to_Prep ;
+    mkCompoundPlace : A -> N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \a, n, p ->
+     mkCNPlace (mkCN a n) p to_Prep ;
 
-    mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
-      mkCNPlace (mkCN p) (P.mkPrep i R.Acc) to_Prep ;
+    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \n,p -> 
+      mkCNPlace (mkCN n) p to_Prep ;
 
     open_AP = mkAP (mkA076 "отворен") ;
     closed_AP = mkAP (mkA076 "затворен") ;
@@ -257,11 +257,13 @@ concrete WordsBul of Words = SentencesBul **
 
     mkTransport : N -> {name : CN ; by : Adv} = \n -> {
       name = mkCN n ; 
-      by = SyntaxBul.mkAdv (P.mkPrep "с" R.Acc) (mkNP n)
+      by = SyntaxBul.mkAdv with_Prep (mkNP n)
       } ;
 
     mkSuperl : A -> Det = \a -> SyntaxBul.mkDet the_Art (SyntaxBul.mkOrd a) ;
 
     far_IAdv = ExtraBul.IAdvAdv (ss "далече") ;
+    
+    na_Prep = mkPrep "на" R.Acc ;
 
 }
