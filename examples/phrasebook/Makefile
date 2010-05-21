@@ -32,3 +32,5 @@ doc:
 	txt2tags -thtml phrasebook.txt
 	rm -f Ontology.gf Implementation.gf
 
+upload:: Phrasebook.pgf
+	rsync -a Phrasebook.pgf www.grammaticalframework.org:/usr/local/www/GF-demos/www/grammars
