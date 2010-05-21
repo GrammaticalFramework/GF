@@ -10,12 +10,18 @@ resource ParadigmsBul = MorphoFunsBul ** open
 
 oper
   mkN001 : Str -> N ;
-  mkN001 base = let v0 = base
-                in mkNoun (v0)
-                          (v0+"ове")
-                          (v0+"а")
-                          (v0)
-                          (AMasc NonHuman) ;
+  mkN001 base = {s = table {
+                       NF Sg Indef => base ;
+                       NF Sg Def   => base+"а" ;
+                       NF Pl Indef => base+"ове" ;
+                       NF Pl Def   => base+"овете" ;
+                       NFSgDefNom  => base+"ът" ;
+                       NFPlCount   => base+"а" ;
+                       NFVocative  => base+"е"
+                     } ;
+                 g = AMasc NonHuman ;
+                 lock_N = <>
+                } ;
   mkN002 : Str -> N ;
   mkN002 base = let v0 = tk 2 base;
                     v1 = last (base)
@@ -62,12 +68,18 @@ oper
                           (v0)
                           (AMasc NonHuman) ;
   mkN007 : Str -> N ;
-  mkN007 base = let v0 = base
-                in mkNoun (v0)
-                          (v0+"и")
-                          (v0+"а")
-                          (v0+"е")
-                          (AMasc NonHuman) ;
+  mkN007 base = {s = table {
+                       NF Sg Indef => base ;
+                       NF Sg Def   => base+"а" ;
+                       NF Pl Indef => base+"и" ;
+                       NF Pl Def   => base+"ите" ;
+                       NFSgDefNom  => base+"ът" ;
+                       NFPlCount   => base+"а" ;
+                       NFVocative  => base+"е"
+                     } ;
+                 g = AMasc NonHuman ;
+                 lock_N = <>
+                } ;
   mkN007b : Str -> N ;
   mkN007b base = let v0 = base
                  in mkNoun (v0)
@@ -76,12 +88,18 @@ oper
                            (v0+"о")
                            (AMasc NonHuman) ;
   mkN007a : Str -> N ;
-  mkN007a base = let v0 = base
-                 in mkNoun (v0)
-                           (v0+"и")
-                           (v0+"а")
-                           (v0+"е")
-                           (AMasc Human) ;
+  mkN007a base = {s = table {
+                       NF Sg Indef => base ;
+                       NF Sg Def   => base+"а" ;
+                       NF Pl Indef => base+"и" ;
+                       NF Pl Def   => base+"ите" ;
+                       NFSgDefNom  => base+"ът" ;
+                       NFPlCount   => base+"и" ;
+                       NFVocative  => base+"е"
+                     } ;
+                  g = AMasc Human ;
+                  lock_N = <>
+                 } ;
   mkN008 : Str -> N ;
   mkN008 base = let v0 = tk 2 base;
                     v1 = last (base)
