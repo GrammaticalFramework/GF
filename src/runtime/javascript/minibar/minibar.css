@@ -40,3 +40,5 @@ div#saldospel input[type=button] { font-size: 100%; }
 
 div#saldospel input.correct { color: green; }
 div#saldospel input.incorrect { color: red; }
+
+input[type=text] { width: 5em; }
