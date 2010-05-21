@@ -1,5 +1,5 @@
 DisambPhrasebookEng :
-PhrasebookBul : AHasName AHasRoom AHasTable AHungry AIll AKnow ALike ALive ALove AMarried AReady AScared ASpeak AThirsty ATired AUnderstand AWant AWantGo AmusementPark Bank Belgium Bike Bulgarian Bus ByFoot Cafeteria Car Catalan Center Children CitRestaurant Danish Daughter Disco Dutch English Ferry Finnish Flemish French Friday GCongratulations GGoodLuck GHappyBirthday German HowFar HowFarBy HowFarFrom HowFarFromBy HowMuchCost Husband IsTranspPlace ItCost Italian Leva Monday Norwegian NorwegianCrown PSeeYouDate PSeeYouPlace PSeeYouPlaceDate Parking Pharmacy Plane Polish PostOffice Pound PropClosed PropClosedDate PropClosedDay PropOpen PropOpenDate PropOpenDay Pub QWhatAge QWhatName Romanian Rouble Russian Saturday Son Spanish Subway Sunday SuperlPlace Supermarket Swedish Taxi TheBest TheCheapest TheClosest TheMostExpensive TheMostPopular TheWorst Thursday Tomorrow Train Tram Tuesday Wednesday WhichTranspPlace Wife Zloty Zoo
+PhrasebookBul : GCongratulations GGoodLuck GHappyBirthday
 PhrasebookDan :
 PhrasebookDut :
 PhrasebookEng :
@@ -9,4 +9,5 @@ PhrasebookGer :
 PhrasebookIta : HowFar HowFarBy HowFarFrom HowFarFromBy Pound
 PhrasebookNor : Cafeteria GDamn
 PhrasebookRon :
+PhrasebookSpa : GCongratulations GGoodLuck GHappyBirthday
 PhrasebookSwe :
