@@ -73,7 +73,7 @@ concrete WordsBul of Words = SentencesBul **
     Station = mkPlace (mkN041 "гара") na_Prep ;
     Supermarket = mkPlace (mkN007 "супермаркет") in_Prep ;
     Theatre = mkPlace (mkN009 "театър") na_Prep ;
-    Toilet = mkPlace (mkN007 "тоалет") in_Prep ;
+    Toilet = mkPlace (mkN041 "тоалетна") in_Prep ;
     University = mkPlace (mkN007 "университет") in_Prep ;
     Zoo = mkPlace (mkN001 "зоопарк") in_Prep ;
     
