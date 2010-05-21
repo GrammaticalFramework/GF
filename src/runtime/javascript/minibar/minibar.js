@@ -334,7 +334,7 @@ function show_groupedtranslations(translations) {
 	if(to=="-1" || t.to==to) {
 	    var lin=t.linearizations;
 	    var tbody=empty("tbody");
-	    /*if(to=="-1")*/
+	    if(to=="-1")
 		tbody.appendChild(tr([th(text(t.to+":"))]));
 	    for(var i=0;i<lin.length;i++) {
 		tbody.appendChild(tr([(text(lin[i].text))]));
