@@ -156,7 +156,7 @@ concrete WordsBul of Words = SentencesBul **
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name (medialV (actionV (mkV186 "казвам") (mkV156 "кажа")) R.Acc))) ;
-    QWhatAge p = mkQS (mkQCl (MorphoFunsBul.mkIAdv "на колко") (mkCl p.name (mkNP the_Quant plNum L.year_N))) ;
+    QWhatAge p = mkQS (mkQCl (MorphoFunsBul.mkIAdv "на колко") (mkCl p.name (mkNP a_Quant plNum L.year_N))) ;
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (stateV (mkV186 "струвам")))) ; 
     ItCost item price = mkCl item (dirV2 (stateV (mkV186 "струвам"))) price ;
 
