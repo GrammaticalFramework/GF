@@ -105,6 +105,7 @@ resource ResDut = ParamX ** open Prelude in {
      | VPresSg1  -- ben 
      | VPresSg2  -- bent
      | VPresSg3  -- is
+     | VPresPl   -- zijn
      | VPastSg   -- was  --# notpresent
      | VPastPl   -- waren --# notpresent
      | VImp2     -- wees
@@ -121,7 +122,7 @@ resource ResDut = ParamX ** open Prelude in {
   mkVerb : (_,_,_,_,_,_,_ : Str) -> 
     	Verb = \aai, aait, aaien, aaide, _, aaiden, geaaid -> {
     	s = table {
-    		VInf | VImpPl    => aaien; -- hij/zij/het/wij aaien
+    		VInf | VImpPl | VPresPl   => aaien; -- hij/zij/het/wij aaien
     		VPresSg1 | VImp2 => aai; -- ik aai
     		VPresSg2 | VPresSg3 | VImp3 => aait; -- jij aait
     		VPastSg => aaide; -- ik aaide  --# notpresent
@@ -278,6 +279,7 @@ resource ResDut = ParamX ** open Prelude in {
        VPresSg1  => "ben" ; 
        VPresSg2  => "bent" ;
        VPresSg3  => "is" ;
+       VPresPl   => "zijn" ;
        VPastSg   => "was" ; --# notpresent
        VPastPl   => "waren" ; --# notpresent
        VImp2     => "wees" ;
@@ -296,6 +298,7 @@ resource ResDut = ParamX ** open Prelude in {
        VPresSg1  => "heb" ; 
        VPresSg2  => "hebt" ;
        VPresSg3  => "heeft" ;
+       VPresPl   => "hebben" ;
        VPastSg   => "had" ; --# notpresent
        VPastPl   => "hadden" ; --# notpresent
        VImp2     => "heb" ;
@@ -314,6 +317,7 @@ resource ResDut = ParamX ** open Prelude in {
        VPresSg1  => "zal" ; 
        VPresSg2  => "zult" ;
        VPresSg3  => "zal" ;
+       VPresPl   => "zullen" ;
        VPastSg   => "zou" ; --# notpresent
        VPastPl   => "zouden" ; --# notpresent
        VImp2     => "zoud" ;  ---- not used
@@ -332,6 +336,7 @@ resource ResDut = ParamX ** open Prelude in {
        VPresSg1  => "kan" ; 
        VPresSg2  => "kunt" ;
        VPresSg3  => "kan" ; ---- kun je
+       VPresPl   => "kunnen" ;
        VPastSg   => "kon" ; --# notpresent
        VPastPl   => "konden" ; --# notpresent
        VImp2     => "kan" ;  ---- not used
@@ -408,7 +413,7 @@ param
        ,Sg,P3> => VPresSg3 ;
       <Pres 
        |Fut --# notpresent
-       ,Pl,_ > => VInf 
+       ,Pl,_ > => VPresPl
       ; --# notpresent
 
       <Past|Cond,Sg,_> => VPastSg ;   -- Fut and Cond affect zullen --# notpresent
