@@ -42,7 +42,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   how8many_IDet = mkDet "hoeveel" "hoeveel" Pl ;
   if_Subj = ss "als" ;
   in8front_Prep = mkPrep "voor" ;
-  i_Pron = mkPronoun "ik" "me" "m'n" "ik" "mij" "mijn" "mijne" Utr Sg P1 ;
+  i_Pron = mkPronoun "ik" "me" "mijn" "ik" "mij" "mijn" "mijne" Utr Sg P1 ;
   in_Prep = ss "in" ;
   it_Pron = mkPronoun "het" "het" "zijn" "het" "het" "zijn" "zijne" Neutr Sg P3 ;
 
