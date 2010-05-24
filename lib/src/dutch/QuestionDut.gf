@@ -93,6 +93,8 @@ concrete QuestionDut of Question = CatDut ** open ResDut in {
       s = \\g => idet.s ! n ! g ++ num.s  ; 
       n = n
       } ;
+
+    AdvIAdv i a = {s = i.s ++ a.s} ;
  
     CompIAdv a = {s = \\_ => a.s} ;
 
