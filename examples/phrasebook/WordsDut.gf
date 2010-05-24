@@ -69,7 +69,8 @@ concrete WordsDut of Words = SentencesDut **
     Zoo = mkPlace (P.mkN "dierentuin" "dierentuinen" P.de) "op" ;
 
  
-   CitRestaurant cit = mkCNPlace (mkCN cit (P.mkN "restaurant")) in_Prep to_Prep ;    
+    CitRestaurant cit = 
+      mkCNPlace (mkCN cit (P.mkN "restaurant" "restaurants" P.het)) in_Prep to_Prep ;    
 
 
 -- currencies
@@ -144,7 +145,7 @@ ik ga te voet/ ik ga lopend
     AIll p = mkCl p.name (P.mkA "ziek") ; -- to be ?
     AKnow p = mkCl p.name I.wijten_V ; -- ik weet het.
     ALike p item = mkCl p.name (P.mkV2 I.houden_V P.van_Prep) item ; -- lekker
-    ALive p co = mkCl p.name (mkVP (mkVP L.live_V) (SyntaxDut.mkAdv in_Prep co)) ; -- woon
+    ALive p co = mkCl p.name (mkVP (mkVP (P.mkV "wonen")) (SyntaxDut.mkAdv in_Prep co)) ; -- woon
     ALove p q = mkCl p.name (P.mkV2 (P.mkV "lief" P.hebben_V)) q.name ; -- houden van
     AMarried p = mkCl p.name (P.mkA "getrouwd") ; -- ik ben getrouwd
     AReady p = mkCl p.name (P.mkA "klaar") ; -- ik ben klaar
@@ -240,7 +241,7 @@ ik ga te voet/ ik ga lopend
 
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d -> 
       mkNPDay (mkNP (P.mkPN d)) (mkAdv on_Prep (mkNP (P.mkPN d))) 
-        (mkAdv on_Prep (mkNP a_Quant plNum (mkCN (P.mkN d)))) ;
+        (mkAdv on_Prep (mkNP a_Quant plNum (mkCN (P.mkN d (d + "en") P.utrum)))) ;
 
     mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
       mkCNPlace (mkCN p) (P.mkPrep i) to_Prep ;
