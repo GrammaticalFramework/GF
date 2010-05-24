@@ -15,7 +15,7 @@ concrete WordsDut of Words = SentencesDut **
     Chicken = mkCN (P.mkN "kip" "kippen" P.de) ;
     Coffee = mkCN (P.mkN "koffie" "koffie" P.de) ;
     Fish = mkCN L.fish_N ;
-    Meat = mkCN (P.mkN "vlees" "vlees" P.het) ;
+    Meat = mkCN (P.mkN "vlees" "vleesen" P.het) ;
     Milk = mkCN L.milk_N ; 
     Pizza = mkCN (P.mkN "pizza" "pizza's" P.de) ;
     Salt = mkCN L.salt_N ;
@@ -26,15 +26,15 @@ concrete WordsDut of Words = SentencesDut **
 -- properties
 
 
-    Bad = L.bad_A ;
+    Bad = P.mkA "slecht" ;
     Cheap = P.mkA "goedkoop" ;
-    Boring = P.mkA "vervelend" ;
+    Boring = P.mkA "saai" ;
     Cold = L.cold_A ;
-    Delicious = P.mkA "heerlijk" ;
+    Delicious = P.mkA "lekker" ;
     Expensive = P.mkA "duur" ;
     Fresh = P.mkA "vers" ;
     Good = L.good_A ;
-    Suspect = P.mkA "verdachte" ;
+    Suspect = P.mkA "verdacht" ;
     Warm = L.warm_A ;
 
 
@@ -143,7 +143,7 @@ ik ga te voet/ ik ga lopend
         (SyntaxDut.mkAdv for_Prep (mkNP num (P.mkN "persoon")))) ;
     AHungry p = mkCl p.name have_V2 (mkNP (P.mkN "honger")) ; -- to have   
     AIll p = mkCl p.name (P.mkA "ziek") ; -- to be ?
-    AKnow p = mkCl p.name I.wijten_V ; -- ik weet het.
+    AKnow p = mkCl p.name I.weten_V ; -- ik weet het.
     ALike p item = mkCl p.name (P.mkV2 I.houden_V P.van_Prep) item ; -- lekker
     ALive p co = mkCl p.name (mkVP (mkVP (P.mkV "wonen")) (SyntaxDut.mkAdv in_Prep co)) ; -- woon
     ALove p q = mkCl p.name (P.mkV2 (P.mkV "lief" P.hebben_V)) q.name ; -- houden van
@@ -153,14 +153,14 @@ ik ga te voet/ ik ga lopend
     ASpeak p lang = mkCl p.name (P.mkV2 I.spreken_V) lang ; -- ik spreek .../ ik versta ...
     AThirsty p = mkCl p.name have_V2 (mkNP (P.mkN "dorst")) ; -- ik heb dorst
     ATired p = mkCl p.name (P.mkA "moe") ; -- ik ben moe
-    AUnderstand p = mkCl p.name (P.mkV "begrijpen" "begreep" "begrepen" "begrepen") ; -- ik begrijp het
+    AUnderstand p = mkCl p.name (P.mkV "verstaan" "verstond" "verstonden" "verstaan") ; 
     AWant p obj = mkCl p.name want_VV (mkVP have_V2 obj) ; -- ik wil
     AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ; -- ik wil naar ...
 
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name  I.heten_V)) ; --hoe heet je
-    QWhatAge p = mkQS (mkQCl how_IAdv (mkCl p.name (mkAP L.old_A))) ; -- hoe oud ben je
+    QWhatAge p =  mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (P.mkV "kosten"))) ; --hoeveel kost...
     ItCost item price = mkCl item (P.mkV2 (P.mkV "kosta")) price ; --..item.. kost ..price..
 
@@ -175,12 +175,12 @@ ik ga te voet/ ik ga lopend
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYouDate d = mkText (lin Text (ss ("tot"))) (mkPhrase (mkUtt d)) ; -- zie je / tot 
+    PSeeYouDate d = mkText (lin Text (ss ("ik zie je"))) (mkPhrase (mkUtt d)) ; -- zie je / tot 
     PSeeYouPlace p = 
-      mkText (lin Text (ss ("tot ziens"))) (mkPhrase (mkUtt p.at)) ; -- tot ziens in p (AR) 
+      mkText (lin Text (ss ("ik zie je"))) (mkPhrase (mkUtt p.at)) ; -- tot ziens in p (AR) 
     PSeeYouPlaceDate p d = 
-      mkText (lin Text (ss ("tot"))) 
-        (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ; --tot ... op/in/bij
+      mkText (lin Text (ss ("ik zie je"))) 
+        (mkText (mkPhrase (mkUtt d)) (mkPhrase (mkUtt p.at))) ; --tot ... op/in/bij
 
 -- Relations are expressed as "my wife" or "my son's wife", as defined by $xOf$
 -- below. Languages without productive genitives must use an equivalent of
@@ -208,11 +208,13 @@ ik ga te voet/ ik ga lopend
 
 -- modifiers of places 
     TheBest = mkSuperl L.good_A ;
-    TheClosest = mkSuperl L.near_A ; 
+    TheClosest = mkSuperl (P.mkA 
+      "dichtbijzijnd" "dichtbijzijnde" "dichtbijzijndes" 
+      "dichterbijzijnd" "dichtestbijzijnd") ; 
     TheCheapest = mkSuperl (P.mkA "goedkoop") ;
     TheMostExpensive = mkSuperl (P.mkA "duur") ;
     TheMostPopular = mkSuperl (P.mkA "populair") ;
-    TheWorst = mkSuperl L.bad_A ;
+    TheWorst = mkSuperl (P.mkA "slecht") ;
 
     SuperlPlace sup p = placeNP sup p ;
 
@@ -222,7 +224,7 @@ ik ga te voet/ ik ga lopend
     HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP y.name (SyntaxDut.mkAdv from_Prep x.name))) ;
 -- how far is the center from the hotel ? hoever is het centrum van het hotel
     HowFarFromBy x y t = 
-      mkQS (mkQCl long_IAdv (mkNP (mkNP y.name (SyntaxDut.mkAdv from_Prep x.name)) t)) ;
+      mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxDut.mkAdv from_Prep x.name)) t)) ;
 --hoelang duurt het om van het vliegveld naar het hotel te gaan per taxi
     HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t)) ; --hoe ver is het museum per bus
  
@@ -240,7 +242,8 @@ ik ga te voet/ ik ga lopend
       mkNPNationality (mkNP (P.mkPN nat)) (mkNP (P.mkPN co)) (P.mkA nat) ;
 
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d -> 
-      mkNPDay (mkNP (P.mkPN d)) (mkAdv on_Prep (mkNP (P.mkPN d))) 
+      mkNPDay (mkNP (P.mkPN d)) (mkAdv (P.mkPrep []) (mkNP (P.mkPN d))) 
+                                ---- (mkAdv on_Prep (mkNP (P.mkPN d))) 
         (mkAdv on_Prep (mkNP a_Quant plNum (mkCN (P.mkN d (d + "en") P.utrum)))) ;
 
     mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
@@ -254,7 +257,7 @@ ik ga te voet/ ik ga lopend
 
      mkTransport : N -> {name : CN ; by : Adv} = \n -> {
       name = mkCN n ; 
-      by = SyntaxDut.mkAdv with_Prep (mkNP n)
+      by = SyntaxDut.mkAdv with_Prep (mkNP the_Det n)
       } ;
 
   far_IAdv = ss "hoe ver" ** {lock_IAdv = <>} ;

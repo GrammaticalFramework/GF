@@ -105,7 +105,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   with_Prep = mkPrep "met" ;
   youSg_Pron = mkPronoun "je" "je" "je" "jij" "jou" "je" "jouwe" Utr Sg P2 ;
   youPl_Pron = mkPronoun "jullie" "jullie" "je" "jullie" "jullie" "jullie" "uwe" Utr Pl P2 ;
-  youPol_Pron = mkPronoun "u" "u" "uw" "u" "u" "uw" "uwe" Utr Sg P3 ;
+  youPol_Pron = mkPronoun "u" "u" "uw" "u" "u" "uw" "uwe" Utr Sg P2 ;
   yes_Utt = ss "ja" ;
 
   not_Predet = mkPredet "niet" "niet" ;
