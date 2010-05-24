@@ -6,7 +6,7 @@ lincat
 lin 
   GBye = ss "hade" ;
   GCheers = ss "skål" ; -- google translate ! 
---  GDamn = ss "fan" ; ? 
+  GDamn = ss "faen" ; 
   GExcuse, GExcusePol = ss "unnskyld" ;
   GGoodDay = ss "god dag" ;
   GGoodEvening = ss "god kveld" ;

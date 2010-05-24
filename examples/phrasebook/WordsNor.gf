@@ -11,14 +11,14 @@ concrete WordsNor of Words = SentencesNor **
     Beer = mkCN L.beer_N ;
     Bread = mkCN L.bread_N ;
     Cheese = mkCN (mkN "ost" "osten" "oster" "ostene") ;
-    Chicken = mkCN (mkN "kylling" "kyllingen" "kyllinger" "kyllinger") ;
+    Chicken = mkCN (mkN "kylling" "kyllingen" "kyllinger" "kyllingene") ;
     Coffee = mkCN (mkN "kaffe" "kaffen" "kaffe" "kaffe") ; -- av kaffe ?
     Fish = mkCN L.fish_N ;
-    Meat = mkCN (mkN "kjøtt" "kjøttet" "kjøtt" "kjøttet") ;
+    Meat = mkCN (mkN "kjøtt" "kjøttet" "kjøtt" "kjøtta") ;
     Milk = mkCN L.milk_N ;
-    Pizza = mkCN (mkN "pizza" "pizzaen" "pizzaer" "pizzaer") ; -- av pizza ?
+    Pizza = mkCN (mkN "pizza" "pizzaen" "pizzaer" "pizzaene") ; -- av pizza ?
     Salt = mkCN L.salt_N ;
-    Tea = mkCN (mkN "te" "teen" "te" "te") ; -- av te ?
+    Tea = mkCN (mkN "te" "teen" "teer" "teene") ; -- av te ?
     Water = mkCN L.water_N ;
     Wine = mkCN L.wine_N ;
 
@@ -32,7 +32,7 @@ concrete WordsNor of Words = SentencesNor **
     Expensive = mkA "dyr" ;
     Fresh = mkA "fersk" ;
     Good = L.good_A ;
-    Suspect = mkA "mistanke" ;
+    Suspect = mkA "suspekt" ;
     Warm = L.warm_A ;
 
 -- places
@@ -40,14 +40,14 @@ concrete WordsNor of Words = SentencesNor **
 
     Airport = mkPlace (mkN "flyplass" "flyplassen" "flyplasser" "flyplassene") "på" "til";
     AmusementPark = mkPlace (mkN "fornøyelsespark" "fornøyelsesparken" "fornøyelsesparker" "fornøyelsesparkene") "i" "til";
-    Bank = mkPlace (mkN "bank" "banken" "banke" "bankane") "i" "til";
+    Bank = mkPlace (mkN "bank" "banken" "banker" "bankene") "i" "til";
     Bar = mkPlace (mkN "bar" "baren" "barer" "barene") "i" "til"; -- ?? check forms
---    Cafeteria = mkPlace (mkN "cafeteria" "cafeteriet" "cafeterier" "cafeterierne") "i" "til"; -- check kafeteria / kantina
-    Center = mkPlace (mkN "senter" "sentrum" "sentre" "sentrene") "i" "til";
+    Cafeteria = mkPlace (mkN "kafeteria" "kafeterian" "kafeterier" "kafeteriene") "i" "til";
+    Center = mkPlace (mkN "sentrum" "sentrum" "sentre" "sentrene") "i" "til";
     Cinema = mkPlace (mkN "kino" "kino" "kinoer" "kinoene") "på" "på";
-    Church = mkPlace (mkN "kirke" "kirken" "kirker" "kirkene") "i" "til"; 
+    Church = mkPlace (mkN "kirke" "kirka" "kirker" "kirkene") "i" "til"; 
     Disco = mkPlace (mkN "diskotek" "diskoteket" "diskoteker" "diskotekene") "i" "på";
-    Hospital = mkPlace (mkN "sykehus" "sykehuset" "sykehus" "sykehusene") "på" "til";
+    Hospital = mkPlace (mkN "sykehus" "sykehuset" "sykehus" "sykehusa") "på" "til";
 
     Hotel = mkPlace (mkN "hotel" "hotellet" "hoteller" "hotellene") "på" "til";
     Museum = mkPlace (mkN "museum" "museet" "museer" "museene") "i" "til";
@@ -57,28 +57,28 @@ concrete WordsNor of Words = SentencesNor **
     PostOffice = mkPlace (mkN "postkontor" "postkontoret" "postkontorer" "postkontorene") "på" "til";
     Pub = mkPlace (mkN "pub" "puben" "puber" "pubene") "i" "til";
     Restaurant = mkPlace (mkN "restaurant" "restauranten" "restauranter" "restaurantene") "i" "til";
-    School = mkPlace (mkN "skolen" "skolen" "skoler" "skolene") "i" "til";
+    School = mkPlace (mkN "skole" "skola" "skoler" "skolene") "i" "til";
     Shop = mkPlace (mkN "butikk" "butikken" "butikker" "butikkene") "i" "til";
     Station = mkPlace (mkN "stasjon" "stasjonen" "stasjoner" "stasjonene") "i" "til";
     Supermarket = mkPlace (mkN "supermarked" "supermarkedet" "supermarkeder" "supermarkedene") "i" "til";
     Theatre = mkPlace (mkN "teater" "teatret" "teatre" "teatrene") "i" "på";
     Toilet = mkPlace (mkN "toalett" "toalettet" "toaletter" "toalettene") "på" "på";
-    University = mkPlace (mkN "universitet" "universitetet" "universitetys" "universitetene") "i" "til";
+    University = mkPlace (mkN "universitet" "universitetet" "universitet" "universiteta") "i" "til";
     Zoo = mkPlace (mkN "dyrepark" "dyreparken" "dyreparker" "dyreparkene") "på" "til";
 
     CitRestaurant cit = mkCNPlace (mkCN cit (mkN "restaurant" "restauranten" "restauranter" "restaurantene")) in_Prep to_Prep ;
 
 -- currencies
 
-    DanishCrown = mkCN (mkA "dansk") (mkN "krone" "kronen" "kroner" "kronene") | mkCN (mkN "krone" "kronen" "kroner" "kronene") ;
+    DanishCrown = mkCN (mkA "dansk") (mkN "krone" "krona" "kroner" "kronene") | mkCN (mkN "krone" "krona" "kroner" "kronene") ;
     Dollar = mkCN (mkN "dollar" "dollaren" "dollar" "dollar") ; -- i dollar ?
     Euro = mkCN (mkN "euro" "euroen" "euro" "euro") ; -- i euro 
     Lei = mkCN (mkN "leu" "leu" "leis" "leis") ; -- den leis ?
     Leva = mkCN (mkN "lev" "lev" "leva" "leva") ; -- det leva ?
-    NorwegianCrown = mkCN (mkA "norsk") (mkN "krone" "kronen" "kroner" "kronene") | mkCN (mkN "krone" "kronen" "kroner" "kronene") ;
-    Pound = mkCN (mkN "pund" "pundet" "pounds" "pounds") ; -- i pounds ?
-    Rouble = mkCN (mkN "rubel" "rubelen" "rubler" "rubler") ; -- av rubler ?
-    SwedishCrown = mkCN (mkA "svensk") (mkN "krone" "kronen" "kroner" "kronene") | mkCN (mkN "krone" "kronen" "kroner" "kronene") ;
+    NorwegianCrown = mkCN (mkA "norsk") (mkN "krone" "krona" "kroner" "kronene") | mkCN (mkN "krone" "krona" "kroner" "kronene") ;
+    Pound = mkCN (mkN "pund" "pundet" "pund" "punda") ; -- i pounds ?
+    Rouble = mkCN (mkN "rubel" "rubelen" "rubler" "rublene") ; -- av rubler ?
+    SwedishCrown = mkCN (mkA "svensk") (mkN "krone" "krona" "kroner" "kronene") | mkCN (mkN "krone" "krona" "kroner" "kronene") ;
     Zloty = mkCN (mkN "zloty" "zloty" "zloty" "zloty") ; -- i/den zloty ?
 
 -- nationalities
@@ -113,8 +113,8 @@ concrete WordsNor of Words = SentencesNor **
    Ferry = mkTransport (mkN "ferge" "fergen" "ferger" "fergene") ;
    Plane = mkTransport L.airplane_N ;
    Subway = mkTransport (mkN "undergrunnsbane" "undergrunnsbanen" "undergrunnsbaner" "undergrunnsbanene") ; -- check ?
-   Taxi = mkTransport (mkN "drosje" "drosjen" "drosjer" "drosjene") ;
-   Train = mkTransport (mkN "tog" "toget" "tog" "togene") ;
+   Taxi = mkTransport (mkN "drosje" "drosja" "drosjer" "drosjene") ;
+   Train = mkTransport (mkN "tog" "toget" "tog" "toga") ;
    Tram = mkTransport (mkN "trikk" "trikken" "trikker" "trikkene") ;
 
    ByFoot = ParadigmsNor.mkAdv "til fots" ;
@@ -125,10 +125,10 @@ concrete WordsNor of Words = SentencesNor **
 -- actions
 
     AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
-    AHasName p name = mkCl p.name (mkV2 (mkV "heter")) name ;
+    AHasName p name = mkCl p.name (mkV2 hete_V) name ;
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
     AHasRoom p num = mkCl p.name have_V2 
-      (mkNP (mkNP a_Det (mkN "rom" "rommet" "rommene" "rommene")) 
+      (mkNP (mkNP a_Det (mkN "rom" "rommet" "rommene" "romma")) 
         (SyntaxNor.mkAdv for_Prep (mkNP num (mkN "person" "personen" "personer" "personene")))) ;
     AHasTable p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (mkN "tabel" "tabellen" "tabeller" "tabellene")) 
@@ -151,7 +151,7 @@ concrete WordsNor of Words = SentencesNor **
 
 -- miscellaneous
 
-    QWhatName p = mkQS (mkQCl whatSg_IP p.name (mkV2 (mkV "heter"))) ;
+    QWhatName p = mkQS (mkQCl whatSg_IP p.name (mkV2 hete_V)) ;
     QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "koste"))) ; 
     ItCost item price = mkCl item (mkV2 (mkV "koste")) price ;
@@ -166,17 +166,17 @@ concrete WordsNor of Words = SentencesNor **
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYouDate d = mkText (lin Text (ss ("se deg"))) (mkPhrase (mkUtt d)) ;
-    PSeeYouPlace p = mkText (lin Text (ss ("se deg"))) (mkPhrase (mkUtt p.at)) ;
+    PSeeYouDate d = mkText (lin Text (ss ("vi ses"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlace p = mkText (lin Text (ss ("vi ses"))) (mkPhrase (mkUtt p.at)) ;
     PSeeYouPlaceDate p d = 
-      mkText (lin Text (ss ("se deg"))) 
+      mkText (lin Text (ss ("vi ses"))) 
         (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
 
 -- Relations are expressed as "my wife" or "my son's wife", as defined by $xOf$
 -- below. Languages without productive genitives must use an equivalent of
 -- "the wife of my son" for non-pronouns.
 
-    Wife = xOf sing (mkN "kone" "konen" "koner" "konene") ;
+    Wife = xOf sing (mkN "kone" "kona" "koner" "konene") ;
     Husband = xOf sing L.man_N ;
     Son = xOf sing (mkN "sønn" "sønnen" "sønner" "sønnene") ;
     Daughter = xOf sing (mkN "datter" "datteren" "døtre" "døtrene") ;
@@ -211,12 +211,17 @@ concrete WordsNor of Words = SentencesNor **
 
 -- transports
 
-    HowFar place = mkQS (mkQCl far_IAdv place.name) ;
-    HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP y.name (SyntaxNor.mkAdv from_Prep x.name))) ;
-    HowFarFromBy x y t = 
-      mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxNor.mkAdv from_Prep x.name)) t)) ;
-    HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t)) ;
- 
+    HowFar place = 
+      mkQS (mkQCl far_IAdv (mkCl (mkVP place.to))) ;
+    HowFarFrom place x = 
+      mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP place.to) 
+                    (SyntaxNor.mkAdv from_Prep x.name)))) ;
+    HowFarFromBy place x t = 
+      mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP (mkVP place.to) 
+                    (SyntaxNor.mkAdv from_Prep x.name)) t))) ;
+    HowFarBy place t = 
+      mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP place.to) t))) ;
+
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
@@ -226,7 +231,7 @@ concrete WordsNor of Words = SentencesNor **
 
   oper
     mkNat : Str -> Str -> NPNationality = \nat,co -> 
-      mkNPNationality (mkNP (mkPN (nat + "a"))) (mkNP (mkPN co)) (mkA nat) ;
+      mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
 
    mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
       let day = mkNP (mkPN d) in 
@@ -240,7 +245,7 @@ concrete WordsNor of Words = SentencesNor **
     closed_A = mkA "stengt" "stengt";
 
     xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
-      relativePerson n (mkCN x) (\a,b,c -> mkNP (GenNP b) a c) p ;
+      relativePersonNor n (mkCN x) (\a,b,c -> mkNP (GenNP b) a c) p ;
 
     mkSuperl : A -> Det = \a -> mkDet the_Art (mkOrd a) ;
 
@@ -249,6 +254,19 @@ concrete WordsNor of Words = SentencesNor **
       by = SyntaxNor.mkAdv by8means_Prep (mkNP n)
       } ;
 
-    far_IAdv = ExtraNor.IAdvAdv L.far_Adv ;
-    how8much_IAdv : IAdv = ss "hvor" ** {lock_IAdv = <>};
+    far_IAdv = ExtraNor.IAdvAdv (ParadigmsNor.mkAdv "langt") ;
+
+    how8much_IAdv : IAdv = ss "hvor mye" ** {lock_IAdv = <>};
+
+  relativePersonNor : GNumber -> CN -> (Num -> NP -> CN -> NP) -> NPPerson -> NPPerson = 
+    \n,x,f,p -> 
+      let num = if_then_else Num n plNum sgNum in {
+      name = case p.isPron of {
+        True => PossNP (mkNP the_Quant num x) p.name ;
+        _    => f num p.name x
+        } ;
+      isPron = False ;
+      poss = mkQuant he_Pron -- not used because not pron
+      } ;
+
 }
