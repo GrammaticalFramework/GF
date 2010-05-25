@@ -46,6 +46,7 @@ lin
   here7to_Adv = mkAdv ["cap aquí"] ;
   here7from_Adv = mkAdv ["d'aquí"] ;
   how_IAdv = ss "com" ;
+  how8much_IAdv = ss "quant" ;
   how8many_IDet = 
     {s = \\g,c => prepCase c ++ genForms "quants" "quantes" ! g ; n = Pl} ;
   if_Subj = ss "si" ** {m = Indic} ;
