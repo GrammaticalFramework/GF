@@ -16,6 +16,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Proposition = Cl ;
     Item = NP ;
     Kind = CN ;
+    MassKind = CN ;
     Quality = AP ;
     Property = A ;
     Object = NP ;
@@ -43,6 +44,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
 
     PObject x = mkPhrase (mkUtt x) ;
     PKind x = mkPhrase (mkUtt x) ;
+    PMassKind x = mkPhrase (mkUtt x) ;
     PQuality x = mkPhrase (mkUtt x) ;
     PNumber x = mkPhrase (mkUtt x) ;
     PPlace x = mkPhrase (mkUtt x.name) ;
@@ -58,6 +60,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
 
     PYes = mkPhrase yes_Utt ;
     PNo = mkPhrase no_Utt ;
+    PYesToNo = mkPhrase yes_Utt ;
 
     Is = mkCl ;
 
@@ -75,6 +78,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     ObjItem i = i ;
     ObjNumber n k = mkNP n k ;
     ObjIndef k = mkNP a_Quant k ;
+    ObjMass k = mkNP k ;
     ObjAndObj = mkNP and_Conj ;
     OneObj o = o ; 
 
@@ -83,9 +87,13 @@ incomplete concrete SentencesI of Sentences = Numeral **
     These kind = mkNP this_Quant plNum kind ;
     Those kind = mkNP that_Quant plNum kind ;
     The kind = mkNP the_Quant kind ;
-    The kind = mkNP the_Quant kind ;
     Thes kind = mkNP the_Quant plNum kind ;
+    ThisMass kind = mkNP this_Quant kind ;
+    ThatMass kind = mkNP that_Quant kind ;
+    TheMass kind = mkNP the_Quant kind ;
+
     SuchKind quality kind = mkCN quality kind ;
+    SuchMassKind quality kind = mkCN quality kind ;
     Very property = mkAP very_AdA (mkAP property) ;
     Too property = mkAP too_AdA (mkAP property) ;
     PropQuality property = mkAP property ;
@@ -112,7 +120,8 @@ incomplete concrete SentencesI of Sentences = Numeral **
 
     NNumeral n = mkCard <lin Numeral n : Numeral>  ;
 
-    AHave p kind = mkCl p.name have_V2 (mkNP kind) ;
+    AHave p kind = mkCl p.name have_V2 (mkNP aPl_Det kind) ;
+    AHaveMass p kind = mkCl p.name have_V2 (mkNP kind) ;
     AHaveCurr p curr = mkCl p.name have_V2 (mkNP aPl_Det curr) ;
     ACitizen p n = mkCl p.name n ;
     ABePlace p place = mkCl p.name place.at ;
