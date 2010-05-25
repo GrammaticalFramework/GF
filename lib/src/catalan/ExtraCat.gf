@@ -3,7 +3,7 @@ concrete ExtraCat of ExtraCatAbs = ExtraRomanceCat **
 
 lin
 	i8fem_Pron =  mkPronoun
-      	"jo" "em" "em" "mi"  ("mon"|["el meu"]) ("ma"|["la meva"]) "mes"
+      	"jo" "em" "em" "mi"  ["el meu"] ["la meva"] "mes"
 		Fem Sg P1 ;
 
       these8fem_NP = makeNP "aquestes" Fem Pl ;
@@ -25,7 +25,7 @@ lin
 
     youSg8fem_Pron = mkPronoun 
   		"tu" "et" "et" "tu"
-    	("ton"|["el teu"]) ("ta"|["la teva"]) ("tes"|["les teves"])
+    	["el teu"] ["la teva"] ["les teves"]
       	Fem Sg P2 ;
     youPl8fem_Pron = mkPronoun
       "vosaltres" "us" "us" "vosaltres"

@@ -40,7 +40,7 @@ lin
   from_Prep = complGen ; ---
   he_Pron = 
     mkPronoun 
-     "ell" "el" "li" "ell" ("son"|["el seu"]) ("sa"|["la seva"]) "ses"
+     "ell" "el" "li" "ell" ["el seu"] ["la seva"] "ses"
       Masc Sg P3 ;
   here_Adv = mkAdv "aquí" ;		-- acÌ
   here7to_Adv = mkAdv ["cap aquí"] ;
@@ -53,7 +53,7 @@ lin
   i_Pron = 
     mkPronoun
       "jo" "em" "em" "mi"
-      ("mon"|["el meu"]) ("ma"|["la meva"]) "mes"
+      ["el meu"] ["la meva"] "mes"
       Fem Sg P1 ;
   in_Prep = mkPrep "en" ;
   it_Pron = mkPronoun 
@@ -84,7 +84,7 @@ lin
   she_Pron = 
     mkPronoun
       "ella" "la" "li" "ella"
-      ("son"|["el seu"]) ("sa"|["la seva"]) "ses"
+      ["el seu"] ["la seva"] "ses"
       Fem Sg P3 ;
   so_AdA = ss "tan" ;
   somebody_NP = pn2np (mkPN ["alg˙"] Masc) ;
@@ -152,7 +152,7 @@ lin
   yes_Utt = ss "sí" ;  
   youSg_Pron = mkPronoun 
     "tu" "et" "et" "tu"
-    ("ton"|["el teu"]) ("ta"|["la teva"]) ("tes"|["les teves"])
+    ["el teu"] ["la teva"] ["les teves"]
     Masc Sg P2 ;
   youPl_Pron =
     mkPronoun
