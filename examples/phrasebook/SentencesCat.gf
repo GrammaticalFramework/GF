@@ -18,31 +18,22 @@ lin
 
   IFemale = 
     {name = mkNP (ProDrop i8fem_Pron) ; isPron = True ; poss = mkQuant i_Pron} ; 
-  
   YouFamFemale = 
     {name = mkNP (ProDrop youSg8fem_Pron) ; isPron = True ; poss = mkQuant youSg_Pron} ;
-
   YouPolFemale = 
      {name = mkNP (ProDrop youPol8fem_Pron) ; isPron = True ; poss = mkQuant youPol_Pron};
-     
   IMale = 
      {name = mkNP (ProDrop i_Pron) ; isPron = True ; poss = mkQuant i_Pron} ; 
-
   YouFamMale = 
      {name = mkNP (ProDrop youSg_Pron) ; isPron = True ; poss = mkQuant youSg_Pron} ; 
-
   YouPolMale = 
      {name = mkNP (ProDrop youPol_Pron) ; isPron = True ; poss = mkQuant youPol_Pron} ;
-
-   ABePlace p place = mkCl p.name (mkVP (mkVP estar) place.at) ;
-
-   WherePlace place = mkQS (mkQCl where_IAdv (mkCl place.name estar) ) ;
-
-   WherePerson person = mkQS (mkQCl where_IAdv (mkCl person.name estar) ) ;
+   ABePlace p place = mkCl p.name (mkVP (mkVP ser) place.at) ;
+   WherePlace place = mkQS (mkQCl where_IAdv (mkCl place.name ser) ) ;
+   WherePerson person = mkQS (mkQCl where_IAdv (mkCl person.name ser) ) ;
 
 oper
-
-   estar = mkV (estar_54 "estar") ;
+   ser = mkV (ser_52 "ser") ;
 
    CNPlace : Type = {name : CN ; at : Prep ; to : Prep }  ;
 
