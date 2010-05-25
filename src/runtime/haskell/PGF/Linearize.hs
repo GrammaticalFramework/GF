@@ -63,38 +63,38 @@ type CncType = (CId, FId)    -- concrete type is the abstract type (the category
 
 linTree :: PGF -> Language -> Expr -> [Array LIndex BracketedTokn]
 linTree pgf lang e = 
-  [amapWithIndex (\label -> Bracket_ cat fid label [e]) lin | (_,((cat,fid),e,lin)) <- lin0 [] [] Nothing 0 e]
+  [amapWithIndex (\label -> Bracket_ cat fid label [e]) lin | (_,((cat,fid),e,lin)) <- lin0 [] [] Nothing 0 e e]
   where
     cnc   = lookMap (error "no lang") lang (concretes pgf)
     lp    = lproductions cnc
   
-    lin0 xs ys mb_cty n_fid (EAbs _ x e)  = lin0 (showCId x:xs) ys mb_cty n_fid e
-    lin0 xs ys mb_cty n_fid (ETyped e _)  = lin0 xs ys mb_cty n_fid e
-    lin0 xs ys mb_cty n_fid e | null xs   = lin ys mb_cty n_fid e []
-                              | otherwise = apply (xs ++ ys) mb_cty n_fid _B (e:[ELit (LStr x) | x <- xs])
+    lin0 xs ys mb_cty n_fid e0 (EAbs _ x e)  = lin0 (showCId x:xs) ys mb_cty n_fid e0 e
+    lin0 xs ys mb_cty n_fid e0 (ETyped e _)  = lin0 xs ys mb_cty n_fid e0 e
+    lin0 xs ys mb_cty n_fid e0 e | null xs   = lin ys mb_cty n_fid e0 e []
+                                 | otherwise = apply (xs ++ ys) mb_cty n_fid e0 _B (e:[ELit (LStr x) | x <- xs])
 
-    lin xs mb_cty n_fid (EApp e1 e2) es = lin xs mb_cty n_fid e1 (e2:es)
-    lin xs mb_cty n_fid e@(ELit l)   [] = case l of
-                                              LStr s -> return (n_fid+1,((cidString,n_fid),e,ss s))
-                                              LInt n -> return (n_fid+1,((cidInt,   n_fid),e,ss (show n)))
-                                              LFlt f -> return (n_fid+1,((cidFloat, n_fid),e,ss (show f)))
-    lin xs mb_cty n_fid (EMeta i)    es = apply xs mb_cty n_fid _V (ELit (LStr ('?':show i)):es)
-    lin xs mb_cty n_fid (EFun f)     es = apply xs mb_cty n_fid f  es
-    lin xs mb_cty n_fid (EVar  i)    es = apply xs mb_cty n_fid _V (ELit (LStr (xs !! i))   :es)
-    lin xs mb_cty n_fid   (ETyped e _) es = lin xs mb_cty n_fid e es
-    lin xs mb_cty n_fid   (EImplArg e) es = lin xs mb_cty n_fid e es
+    lin xs mb_cty n_fid e0 (EApp e1 e2) es = lin xs mb_cty n_fid e0 e1 (e2:es)
+    lin xs mb_cty n_fid e0 (ELit l)     [] = case l of
+                                               LStr s -> return (n_fid+1,((cidString,n_fid),e0,ss s))
+                                               LInt n -> return (n_fid+1,((cidInt,   n_fid),e0,ss (show n)))
+                                               LFlt f -> return (n_fid+1,((cidFloat, n_fid),e0,ss (show f)))
+    lin xs mb_cty n_fid e0 (EMeta i)    es = apply xs mb_cty n_fid e0 _V (ELit (LStr ('?':show i)):es)
+    lin xs mb_cty n_fid e0 (EFun f)     es = apply xs mb_cty n_fid e0 f  es
+    lin xs mb_cty n_fid e0 (EVar  i)    es = apply xs mb_cty n_fid e0 _V (ELit (LStr (xs !! i))   :es)
+    lin xs mb_cty n_fid e0 (ETyped e _) es = lin xs mb_cty n_fid e0 e es
+    lin xs mb_cty n_fid e0 (EImplArg e) es = lin xs mb_cty n_fid e0 e es
 
     ss s = listArray (0,0) [[LeafKS [s]]]
 
-    apply :: [String] -> Maybe CncType -> FId -> CId -> [Expr] -> [(FId,(CncType, Expr, LinTable))]
-    apply xs mb_cty n_fid f es =
+    apply :: [String] -> Maybe CncType -> FId -> Expr -> CId -> [Expr] -> [(FId,(CncType, Expr, LinTable))]
+    apply xs mb_cty n_fid e0 f es =
       case Map.lookup f lp of
         Just prods -> do (funid,(cat,fid),ctys) <- getApps prods
                          guard (length ctys == length es)
                          (n_fid,args) <- descend n_fid (zip ctys es)
                          let (CncFun _ lins) = cncfuns cnc ! funid
-                         return (n_fid+1,((cat,n_fid),undefined,listArray (bounds lins) [computeSeq seqid args | seqid <- elems lins]))
-        Nothing    -> apply xs mb_cty n_fid _V [ELit (LStr ("[" ++ showCId f ++ "]"))]  -- fun without lin
+                         return (n_fid+1,((cat,n_fid),e0,listArray (bounds lins) [computeSeq seqid args | seqid <- elems lins]))
+        Nothing    -> apply xs mb_cty n_fid e0 _V [ELit (LStr ("[" ++ showCId f ++ "]"))]  -- fun without lin
       where
         getApps prods =
           case mb_cty of
@@ -112,7 +112,7 @@ linTree pgf lang e =
             toApp cty (PCoerce fid) = concatMap (toApp cty) (maybe [] Set.toList (IntMap.lookup fid prods))
 
         descend n_fid []                  = return (n_fid,[])
-        descend n_fid (((cat,fid),e):fes) = do (n_fid,arg)  <- lin0 [] xs (Just (cat,fid)) n_fid e
+        descend n_fid (((cat,fid),e):fes) = do (n_fid,arg)  <- lin0 [] xs (Just (cat,fid)) n_fid e e
                                                (n_fid,args) <- descend n_fid fes
                                                return (n_fid,arg:args)
 
