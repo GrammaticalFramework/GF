@@ -1,4 +1,4 @@
-concrete SentencesCat of Sentences = NumeralCat ** SentencesI - [PersonName, -- stack overflow
+concrete SentencesCat of Sentences = NumeralCat ** SentencesI - [
   IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
   WherePlace, WherePerson, ABePlace,
   Superlative
