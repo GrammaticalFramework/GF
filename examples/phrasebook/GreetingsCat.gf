@@ -1,31 +1,33 @@
 concrete GreetingsCat of Greetings = open Prelude in {
 
---lincat 
---  Greeting = SS ;
+lincat 
+  Greeting = SS ;
 
---lin 
---  GBye = ss "ciao" ;
---  GCheers = ss "cincin" ;
---  GDamn = ss "maledizione" ;
---  GExcuse = ss "scusa" ;
---  GExcusePol = ss "scusi" ;
---  GGoodDay = ss "buongiorno" ;
---  GGoodEvening = ss "buona sera" ;
---  GGoodMorning = ss "buongiorno" ;
---  GGoodNight = ss "buona notte" ;
---  GGoodbye = ss "arrivederci" ;
---  GHello = ss "ciao" ;
---  GHelp = ss "aiuto" ;
---  GHowAreYou = ss "come sta" ;
---  GLookOut = ss "attenzione" ;
---  GNiceToMeetYou = ss "piacere di conoscerti" ;
---  GNiceToMeetYouPol = ss "piacere di conoscerLa" ;
---  GPleaseGive, GPleaseGivePol = ss "per favore" ;
---  GSeeYouSoon = ss "a presto" ; ----
---  GSorry = ss "scusami" ; ----
---  GSorryPol = ss "scusimi" ; ----
---  GThanks = ss "grazie" ;
---  GTheCheck = ss "il conto" ;
+lin 
+  GBye = ss "adéu" ;
+  GCheers = ss "salut" ;
+  GDamn = ss "merda" ;
+  GExcuse = ss "perdona" ;
+  GExcusePol = ss ("perdoni" | "disculpi") ;
+  GCongratulations = ss "felicitats" ;
+  GHappyBirthday = ss "feliç aniversari" ;
+  GGoodLuck = ss "sort" ;
+  GGoodDay = ss "bon dia" ;
+  GGoodEvening = ss "bona tarda" ;
+  GGoodMorning = ss "bon dia" ;
+  GGoodNight = ss "bona nit" ;
+  GGoodbye = ss "a reveure" ;
+  GHello = ss "hola" ;
+  GHelp = ss "socors" ;
+  GHowAreYou = ss "què tal" ;
+  GLookOut = ss "compte" ;
+  GNiceToMeetYou = ss "encantat de conèixer-lo" ; -- make distinction Masc/Fem
+  GPleaseGive = ss "si et plau" ;
+  GPleaseGivePol = ss "si us plau" ;
+  GSeeYouSoon = ss "fins aviat" ; 
+  GSorry = ss "perdoni" ;
+  GSorryPol = ss "em sap greu" ; 
+  GThanks = ss "gràcies" ;
+  GTheCheck = ss "el compte" ;
 
---}
 }

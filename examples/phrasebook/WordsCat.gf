@@ -16,35 +16,35 @@ lin
     Apple = mkCN L.apple_N ;
     Beer = mkCN L.beer_N ;
     Bread = mkCN L.bread_N ;
---    Cheese = mkCN (mkN "formaggio") ;
---    Chicken = mkCN (mkN "pollo") ;
---    Coffee = mkCN (mkN "caffè") ;
+    Cheese = mkCN (mkN "formatge") ;
+    Chicken = mkCN (mkN "pollastre") ;
+    Coffee = mkCN (mkN "cafè") ;
     Fish = mkCN L.fish_N ;
---    Meat = mkCN (mkN "carne" feminine) ;
+    Meat = mkCN (mkN "carn" feminine) ;
     Milk = mkCN L.milk_N ;
---    Pizza = mkCN (mkN "pizza") ;
+    Pizza = mkCN (mkN "pizza") ;
     Salt = mkCN L.salt_N ;
---    Tea = mkCN (mkN "tè") ;
+    Tea = mkCN (mkN "te") ;
     Water = mkCN L.water_N ;
     Wine = mkCN L.wine_N ;
 
 -- properties
 
     Bad = L.bad_A ;
---    Boring = mkA "noioso" ;
---    Cheap = let c = "a buon mercato" in mkA c c c c c ; ----
+    Boring = mkA "avorrit" "avorrida" "avorrits" "avorrides" "avorridament" ;
+    Cheap = mkA "barat" ; 
     Cold = L.cold_A ;
---    Delicious = mkA "delizioso" ;
---    Expensive = mkA "caro" ;
---    Fresh = mkA "fresco" ;
+    Delicious = mkA "deliciós" "deliciosa" "deliciosos" "delicioses" "deliciosament";
+    Expensive = mkA "car" ;
+    Fresh = mkA "fresc" ;
     Good = L.good_A ;
     Warm = L.warm_A ;
---    Suspect = mkA "sospetto" ;
+    Suspect = mkA "sospitós" ;
 
 -- places
 
---    Airport = mkPlace (mkN "aeroporto") dative ;
---    Bar = mkPlace (mkN "bar") P.in_Prep ;
+    Airport = mkPlace (mkN "aeroport") dative ;
+    Bar = mkPlace (mkN "bar") P.in_Prep ;
 --    Church = mkPlace (mkN "chiesa") P.in_Prep ;
 --    Cinema = mkPlace (mkN "cinema") P.in_Prep ;
 --    Hospital = mkPlace (mkN "ospedale") P.in_Prep ;
@@ -153,7 +153,7 @@ lin
 
 -- auxiliaries
 
---  oper
+  oper
 --    mkNat : Str -> Str -> NPNationality = \nat,co -> 
 --      mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
 
@@ -161,8 +161,8 @@ lin
 --      let day = mkNP (mkPN d) in
 --      mkNPDay day (P.mkAdv ("il" ++ d)) (P.mkAdv ("il" ++ d)) ; ---- ?
 
---    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i ->
---      mkCNPlace (mkCN p) i dative ;
+    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i ->
+      mkCNPlace (mkCN p) i dative ;
 
 --    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (mkCN x) p ; 
 
