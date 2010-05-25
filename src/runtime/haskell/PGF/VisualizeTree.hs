@@ -31,8 +31,10 @@ import PGF.Linearize
 import PGF.Macros (lookValCat, BracketedString(..), flattenBracketedString)
 
 import qualified Data.Map as Map
+import qualified Data.IntMap as IntMap
 import Data.List (intersperse,nub,isPrefixOf,sort,sortBy)
 import Data.Char (isDigit)
+import Data.Maybe (fromMaybe)
 import Text.PrettyPrint
 
 -- | Renders abstract syntax tree in Graphviz format
@@ -98,11 +100,11 @@ graphvizDependencyTree format debug mlab ms pgf lang t = render $
                     nest 2 (text "rankdir=LR ;" $$
                             text "node [shape = plaintext] ;" $$
                             vcat nodes $$
-                            links) $$
+                            vcat links) $$
                     text "}"
   where
     nodes  = map mkNode leaves
-    links  = empty
+    links  = map mkLink [(fid, fromMaybe nil (lookup fid deps)) | (fid,_,w) <- tail leaves]
     wnodes = undefined
 
     nil = -1
@@ -110,6 +112,7 @@ graphvizDependencyTree format debug mlab ms pgf lang t = render $
     bs = bracketedLinearize pgf lang t
 
     leaves = (nil,0,"ROOT") : (groupAndIndexIt 1 . getLeaves nil) bs
+    deps   = getDeps nil [bs]
 
     groupAndIndexIt id []          = []
     groupAndIndexIt id ((p,w):pws) = let (ws,pws1) = collect pws
@@ -125,86 +128,28 @@ graphvizDependencyTree format debug mlab ms pgf lang t = render $
         Leaf w                -> [(parent,w)]
         Bracket _ fid _ _ bss -> concatMap (getLeaves fid) bss
 
+    getDeps out_head bss =
+      case IntMap.maxViewWithKey children of
+        Just ((head, bss'), deps) -> concat (descend out_head head bss' : [descend (headOf head bss') fid bss | (fid,bss) <- IntMap.toList deps])
+        Nothing                  -> []
+      where
+        children = IntMap.fromListWith (++) [(fid,bss) | Bracket _ fid _ _ bss <- bss]
+
+        descend head fid bss = (fid,head) : getDeps head bss
+        
+    headOf head bss
+      | null [() | Leaf _ <- bss] =
+          case IntMap.maxViewWithKey children of
+            Just ((head, bss), deps) -> headOf head bss
+            Nothing                  -> head
+      | otherwise = head
+      where
+        children = IntMap.fromListWith (++) [(fid,bss) | Bracket _ fid _ _ bss <- bss]
+
     mkNode (p,i,w) = 
       tag p <> text " [label = " <> doubleQuotes (int i <> char '.' <+> text w) <> text "] ;"
 
-{-
-    ifd s = if debug then s else []
-
-    pot = readPosText $ concat $ take 1 $ markLinearizes pgf lang exp
-
-    nodes = map mkNode nodeWords
-    mkNode (i,((_,p),ss)) = 
-      node p ++ " [label = \"" ++ show i ++ ". " ++ ifd (show p) ++ unwords ss ++ "\"] ;"
-    nodeWords = (0,((mkCId "",[]),["ROOT"])) : zip [1..] [((f,p),w)| 
-                                         ((Just f,p),w) <- wlins pot]
-
-    links = map mkLink thelinks 
-    thelinks =  [(word y, x, label tr y x) | 
-                        (_,((f,x),_)) <- tail nodeWords,
-                        let y = dominant x]
-    mkLink (x,y,l) = node x ++ " -> " ++ node y ++ " [label = \"" ++ l ++ "\"] ;"
-    node = show . show
-
-    dominant x = case x of 
-      [] -> x
-      _ | not (x == hx) -> hx
-      _  -> dominant (init x)
-     where
-      hx = headArg (init x) tr x
-
-    headArg x0 tr x = case (tr,x) of
-      (Fun f [],[_]) -> x0 ---- ??
-      (Fun f ts,[_]) -> x0 ++ [getHead (length ts - 1) f]
-      (Fun f ts,i:y) -> headArg x0 (ts !! i) y
-      _ -> x0 ----
-
-    label tr y x = case span (uncurry (==)) (zip y x) of
-      (xys,(_,i):_) -> getLabel i (funAt tr (map fst xys))
-      _ -> "" ----
-
-    funAt tr x = case (tr,x) of
-      (Fun f _ ,[])  -> f
-      (Fun f ts,i:y) -> funAt (ts !! i) y
-      _ -> mkCId (prTree tr) ----
-
-    word x = if elem x sortedNodes then x else 
-             let x' = headArg x tr (x ++[0]) in
-             if x' == x then [] else word x'
-
-    tr = expr2tree exp
-    sortedNodes = [p | (_,((_,p),_)) <- nodeWords]
-
-    labels = maybe Map.empty id mlab
-    getHead i f = case Map.lookup f labels of
-      Just ls -> length $ takeWhile (/= "head") ls
-      _ -> i
-    getLabel i f = case Map.lookup f labels of
-      Just ls | length ls > i -> ifd (showCId f ++ "#" ++ show i ++ "=") ++ ls !! i
-      _ -> showCId f ++ "#" ++ show i
-
-  -- to generate CoNLL format for MaltParser
-    nodeMap :: Map.Map [Int] Int
-    nodeMap = Map.fromList [(p,i) | (i,((_,p),_)) <- nodeWords]
-
-    arcMap :: Map.Map [Int] ([Int],String)
-    arcMap = Map.fromList [(y,(x,l)) | (x,y,l) <- thelinks]
-
-    lookDomLab p = case Map.lookup p arcMap of
-      Just (q,l) -> (maybe 0 id (Map.lookup q nodeMap), if null l then rootlabel else l)
-      _          -> (0,rootlabel)
-
-    wnodes = [[show i, maltws ws, showCId fun, pos, pos, morph, show dom, lab, unspec, unspec] | 
-                (i, ((fun,p),ws)) <- tail nodeWords,
-                let pos = showCId $ lookValCat pgf fun,
-                let morph = unspec,
-                let (dom,lab) = lookDomLab p
-             ]
-    maltws = concat . intersperse "+" . words . unwords  -- no spaces in column 2
-    unspec = "_"
-    rootlabel = "ROOT"
--}
-
+    mkLink (x,y) = tag y <+> text "->" <+> tag x -- ++ " [label = \"" ++ l ++ "\"] ;"
 
 getDepLabels :: [String] -> Labels
 getDepLabels ss = Map.fromList [(mkCId f,ls) | f:ls <- map words ss]
@@ -251,14 +196,6 @@ graphvizBracketedString = render . lin2tree
                         struct l  <> colon <> tag  id <> colon <> char 'n' <+> semi
         fields cs = hsep (intersperse (char '|') [tbrackets (tag id) <> text c | (_,_,id,c) <- cs])
 
-
--- auxiliaries for graphviz syntax
-struct l = text ("struct" ++ show l)
-tbrackets d = char '<' <> d  <> char '>'
-tag i = char 'n' <> int i
-
--- word alignments from Linearize.markLinearize
--- words are chunks like {[0,1,1,0] old}
 
 graphvizAlignment :: PGF -> [Language] -> Expr -> String
 graphvizAlignment pgf langs = render . lin2graph . linsBracketed
@@ -308,3 +245,11 @@ graphvizAlignment pgf langs = render . lin2graph . linsBracketed
             indices = [id1 | (p1,id1,_) <- cs, p1 == p0]
 
         fields cs = hsep (intersperse (char '|') [tbrackets (tag id) <> text w | (_,id,w) <- cs])
+
+
+-- auxiliaries for graphviz syntax
+struct l = text ("struct" ++ show l)
+tbrackets d = char '<' <> d  <> char '>'
+tag i
+  | i < 0     = char 'r' <> int (negate i)
+  | otherwise = char 'n' <> int i
