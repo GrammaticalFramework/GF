@@ -1,6 +1,7 @@
 concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [
   QProp,
-  IFemale, YouFamFemale, YouPolFemale
+  IFemale, YouFamFemale, YouPolFemale,
+  PYesToNo
  ] 
   with 
     (Syntax = SyntaxFre), 
@@ -18,4 +19,5 @@ concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [
       YouPolFemale = 
         {name = mkNP youPol8fem_Pron ; isPron = True ; poss = mkQuant youPol_Pron};
 
+      PYesToNo = mkPhrase (lin Utt (ss "si")) ;
 }

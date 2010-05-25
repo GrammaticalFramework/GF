@@ -22,6 +22,7 @@ abstract Sentences = Numeral ** {
     PrimObject ;  -- single object of wanting, ordering, etc   e.g. "three pizzas"
     Item ;        -- a single entity                           e.g. "this pizza"
     Kind ;        -- a type of an item                         e.g. "pizza"
+    MassKind ;    -- a type mass (uncountable)                 e.g. "water"
     Quality ;     -- qualification of an item, can be complex  e.g. "very good"
     Property ;    -- basic property of an item, one word       e.g. "good"
     Place ;       -- location                                  e.g. "the bar" 
@@ -49,22 +50,23 @@ abstract Sentences = Numeral ** {
     PSentence    : Sentence -> Phrase ;
     PQuestion    : Question -> Phrase ;
 
-    PObject      : Object   -> Phrase ;
-    PKind        : Kind     -> Phrase ;
-    PQuality     : Quality  -> Phrase ;
-    PNumber      : Number   -> Phrase ;
-    PPlace       : Place    -> Phrase ;
-    PPlaceKind   : PlaceKind-> Phrase ;
-    PCurrency    : Currency -> Phrase ;
-    PPrice       : Price    -> Phrase ;
-    PLanguage    : Language -> Phrase ;
+    PObject      : Object      -> Phrase ;
+    PKind        : Kind        -> Phrase ;
+    PMassKind    : MassKind    -> Phrase ;
+    PQuality     : Quality     -> Phrase ;
+    PNumber      : Number      -> Phrase ;
+    PPlace       : Place       -> Phrase ;
+    PPlaceKind   : PlaceKind   -> Phrase ;
+    PCurrency    : Currency    -> Phrase ;
+    PPrice       : Price       -> Phrase ;
+    PLanguage    : Language    -> Phrase ;
     PCitizenship : Citizenship -> Phrase ;
-    PCountry     : Country -> Phrase ;
-    PDay         : Day -> Phrase ;
+    PCountry     : Country     -> Phrase ;
+    PDay         : Day         -> Phrase ;
     PByTransport : ByTransport -> Phrase ;
-    PTransport   : Transport -> Phrase ;
+    PTransport   : Transport   -> Phrase ;
 
-    PYes, PNo : Phrase ;
+    PYes, PNo, PYesToNo : Phrase ;  -- yes, no, si/doch (pos. answer to neg. question)
 
 -- This is the way to build propositions about inanimate items.
 
@@ -88,20 +90,23 @@ abstract Sentences = Numeral ** {
     ObjItem   : Item -> PrimObject ;             -- this pizza
     ObjNumber : Number -> Kind -> PrimObject ;   -- five pizzas
     ObjIndef  : Kind -> PrimObject ;             -- a pizza
+    ObjMass   : MassKind -> PrimObject ;         -- water
     ObjAndObj : PrimObject -> Object -> Object ; -- this pizza and a beer
     OneObj    : PrimObject -> Object ;           -- this pizza
     
     SuchKind : Quality -> Kind -> Kind ;         -- Italian pizza
+    SuchMassKind : Quality -> MassKind -> MassKind ; -- Italian water
     Very : Property -> Quality ;                 -- very Italian
     Too  : Property -> Quality ;                 -- too Italian      
     PropQuality : Property -> Quality ;          -- Italian
 
 -- Determiners.
 
-    This, That, These, Those : Kind -> Item ;    -- this pizza,...,those pizzas
-    The, Thes : Kind -> Item ;                   -- the pizza, the pizzas
+    This, That, These, Those : Kind -> Item ;         -- this pizza,...,those pizzas
+    The, Thes : Kind -> Item ;                        -- the pizza, the pizzas
+    ThisMass, ThatMass, TheMass : MassKind -> Item ;  -- this/that/the water
 
-    AmountCurrency : Number -> Currency -> Price ;  -- five euros
+    AmountCurrency : Number -> Currency -> Price ;    -- five euros
 
     ThePlace : PlaceKind -> Place ;                   -- the bar
     APlace : PlaceKind -> Place ;                     -- a bar
@@ -128,7 +133,8 @@ abstract Sentences = Numeral ** {
 -- Actions are typically language-dependent, not only lexically but also
 -- structurally. However, these ones are mostly functorial.
 
-    AHave     : Person -> Kind        -> Action ;  -- you have a pizza
+    AHave     : Person -> Kind        -> Action ;  -- you have pizzas
+    AHaveMass : Person -> MassKind    -> Action ;  -- you have water
     AHaveCurr : Person -> Currency    -> Action ;  -- you have dollars
     ACitizen  : Person -> Citizenship -> Action ;  -- you are Swedish
     ABePlace  : Person -> Place       -> Action ;  -- you are in the bar

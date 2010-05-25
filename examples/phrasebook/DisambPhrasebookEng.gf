@@ -9,7 +9,8 @@ concrete DisambPhrasebookEng of Phrasebook = PhrasebookEng -
     GExcuse, GExcusePol, 
     GSorry, GSorryPol, 
     GPleaseGive, GPleaseGivePol,
-    GNiceToMeetYou, GNiceToMeetYouPol
+    GNiceToMeetYou, -- GNiceToMeetYouPol,
+    PYes, PYesToNo
    ] 
   ** open SyntaxEng, ParadigmsEng, Prelude in {
 lin
@@ -30,7 +31,10 @@ lin
   GPleaseGive = fam "please" ;
   GPleaseGivePol = pol "please" ;
   GNiceToMeetYou = fam "nice to meet you" ;
-  GNiceToMeetYouPol = pol "nice to meet you" ;
+--  GNiceToMeetYouPol = pol "nice to meet you" ;
+
+  PYes = mkPhrase (lin Utt (ss "yes (answer to positive question)")) ;
+  PYesToNo = mkPhrase (lin Utt (ss "yes (answer to negative question)")) ;
 
 oper
   fam : Str -> SS = \s -> postfixSS "(familiar)" (ss s) ;

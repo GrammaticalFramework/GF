@@ -10,19 +10,19 @@ abstract Words = Sentences ** {
 -- kinds of items (so far mostly food stuff)
 
     Apple : Kind ;
-    Beer : Kind ;
-    Bread : Kind ; 
-    Cheese : Kind ;
-    Chicken : Kind ; 
-    Coffee : Kind ; 
-    Fish : Kind ; 
-    Meat : Kind ;
-    Milk : Kind ; 
+    Beer : MassKind ;
+    Bread : MassKind ; 
+    Cheese : MassKind ;
+    Chicken : MassKind ; 
+    Coffee : MassKind ; 
+    Fish : MassKind ; 
+    Meat : MassKind ;
+    Milk : MassKind ; 
     Pizza : Kind ; 
-    Salt : Kind ; 
-    Tea : Kind ; 
-    Water : Kind ; 
-    Wine : Kind ;
+    Salt : MassKind ; 
+    Tea : MassKind ; 
+    Water : MassKind ; 
+    Wine : MassKind ;
 
 -- properties of kinds (so far mostly of food)
 

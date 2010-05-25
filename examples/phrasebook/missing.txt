@@ -1,13 +1,10 @@
 DisambPhrasebookEng :
-PhrasebookBul : GCongratulations GGoodLuck GHappyBirthday
-PhrasebookDan :
+PhrasebookBul : AHasName AHasRoom AHasTable AHungry AIll AKnow ALike ALive ALove AMarried AReady AScared ASpeak AThirsty ATired AUnderstand AWant AWantGo AmusementPark Bank Belgium Bike Bulgarian Bus ByFoot Cafeteria Car Catalan Center Children CitRestaurant Danish Daughter Disco Dutch English Ferry Finnish Flemish French Friday German HowFar HowFarBy HowFarFrom HowFarFromBy HowMuchCost Husband IsTranspPlace ItCost Italian Leva Monday Norwegian NorwegianCrown PSeeYouDate PSeeYouPlace PSeeYouPlaceDate Parking Pharmacy Plane Polish PostOffice Pound PropClosed PropClosedDate PropClosedDay PropOpen PropOpenDate PropOpenDay Pub QWhatAge QWhatName Romanian Rouble Russian Saturday Son Spanish Subway Sunday SuperlPlace Supermarket Swedish Taxi TheBest TheCheapest TheClosest TheMostExpensive TheMostPopular TheWorst Thursday Tomorrow Train Tram Tuesday Wednesday WhichTranspPlace Wife Zloty Zoo
 PhrasebookDut :
 PhrasebookEng :
 PhrasebookFin :
 PhrasebookFre :
-PhrasebookGer :
-PhrasebookIta : HowFar HowFarBy HowFarFrom HowFarFromBy Pound
-PhrasebookNor : Cafeteria GDamn
-PhrasebookRon :
-PhrasebookSpa : GCongratulations GGoodLuck GHappyBirthday
+PhrasebookGer : AmusementPark Bank Bar Bike Bulgarian Bus ByFoot Cafeteria Car Catalan Center Chicken Cinema CitRestaurant Coffee Danish Disco Dollar Dutch Ferry GNiceToMeetYou German Hotel HowFar HowFarBy HowFarFrom HowFarFromBy IsTranspPlace Lei Leva Meat Museum Norwegian NorwegianCrown PSeeYouDate PSeeYouPlace PSeeYouPlaceDate Park Parking Pharmacy Plane Polish PostOffice Pound Pub Rouble Russian School Shop Spanish Subway SuperlPlace Supermarket Suspect Taxi Tea TheBest TheCheapest TheClosest TheMostExpensive TheMostPopular TheWorst Theatre Toilet Train Tram WhichTranspPlace Zloty Zoo
+PhrasebookIta : AmusementPark Bank Bike Bulgarian Bus ByFoot Cafeteria Car Catalan Center CitRestaurant Danish Disco Dutch Ferry German HowFar HowFarBy HowFarFrom HowFarFromBy IsTranspPlace Leva Norwegian NorwegianCrown Parking Pharmacy Plane Polish PostOffice Pound Pub Rouble Russian Spanish Subway SuperlPlace Supermarket Taxi TheBest TheCheapest TheClosest TheMostExpensive TheMostPopular TheWorst Train Tram WhichTranspPlace Zloty Zoo
+PhrasebookRon : GExcusePol GPleaseGivePol GSorryPol
 PhrasebookSwe :
