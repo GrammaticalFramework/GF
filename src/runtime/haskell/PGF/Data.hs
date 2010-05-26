@@ -75,7 +75,6 @@ data Term =
  | K Tokn
  | V Int
  | C Int
- | F CId
  | FV [Term]
  | W String Term
  | TM String

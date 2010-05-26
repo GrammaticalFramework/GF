@@ -116,32 +116,6 @@ instance PLPrint Patt where
 instance PLPrint Equation where
     plp (Equ patterns result)   = plOper ":" (plp patterns) (plp result)
 
-instance PLPrint Term where
-    plp (S terms) = plTerm "s"  [plp terms]
-    plp (C n)     = plTerm "c"  [show n]
-    plp (K tokn)  = plTerm "k"  [plp tokn]
-    plp (FV trms) = plTerm "fv" [plp trms]
-    plp (P t1 t2) = plTerm "p"  [plp t1, plp t2]
-    plp (W s trm) = plTerm "w"  [plp s, plp trm]
-    plp (R terms) = plTerm "r"  [plp terms]
-    plp (F oper)  = plTerm "f"  [plp oper]
-    plp (V n)     = plTerm "v"  [show n]
-    plp (TM str)  = plTerm "tm" [plp str]
-
-{-- more prolog-like syntax for PGF terms, but also more difficult to handle:
-instance PLPrint Term where
-    plp (S terms)  = plp terms
-    plp (C n)      = show n
-    plp (K token)  = plp token
-    plp (FV terms) = prCurlyList (map plp terms)
-    plp (P t1 t2)  = plOper "/" (plp t1) (plp t2)
-    plp (W s trm)  = plOper "+" (plp s) (plp trm)
-    plp (R terms)  = plTerm "r" (map plp terms)
-    plp (F oper)   = plTerm "f" [plp oper]
-    plp (V n)      = plTerm "arg"  [show n]
-    plp (TM str)   = plTerm "meta" [plp str]
---}
-
 instance PLPrint CId where
     plp cid | isLogicalVariable str || 
               cid == wildCId = plVar str

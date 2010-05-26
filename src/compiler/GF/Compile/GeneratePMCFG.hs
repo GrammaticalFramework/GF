@@ -37,11 +37,11 @@ import Control.Exception
 
 --convertConcrete :: Options -> Abstr -> CId -> Concr -> IO Concr
 convertConcrete opts lang flags printnames abs_defs cnc_defs lincats params lin_defs = do
-  let env0 = emptyGrammarEnv cnc_defs cat_defs params
+  let env0 = emptyGrammarEnv cat_defs params
   when (flag optProf opts) $ do
-    profileGrammar lang cnc_defs env0 pfrules
-  env1 <- expandHOAS opts abs_defs cnc_defs cat_defs lin_defs env0
-  env2 <- foldM (convertRule opts cnc_defs) env1 pfrules
+    profileGrammar lang env0 pfrules
+  env1 <- expandHOAS opts abs_defs cat_defs lin_defs env0
+  env2 <- foldM (convertRule opts) env1 pfrules
   return $ getParserInfo flags printnames env2
   where
     cat_defs = Map.insert cidVar (S []) lincats
@@ -53,7 +53,7 @@ convertConcrete opts lang flags printnames abs_defs cnc_defs lincats params lin_
         
     findLinType (_,id) = fromMaybe (error $ "No lincat for " ++ show id) (Map.lookup id cat_defs)
 
-profileGrammar lang cnc_defs (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) pfrules = do
+profileGrammar lang (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) pfrules = do
   hPutStrLn stderr ""
   hPutStrLn stderr ("Language: " ++ show lang)
   hPutStrLn stderr ""
@@ -73,7 +73,7 @@ profileGrammar lang cnc_defs (GrammarEnv last_id catSet seqSet funSet crcSet pro
       hPutStrLn stderr (lformat 23 cid ++ rformat 9 (fcat2-fcat1+1))
 
     profileRule (PFRule fun args res ctypes ctype term) = do
-      let pargs = zipWith (protoFCat cnc_defs) args ctypes
+      let pargs = zipWith protoFCat args ctypes
       hPutStrLn stderr (lformat 23 fun ++ rformat 9 (product [length xs | PFCat _ _ _ tcs <- pargs, (_,xs) <- tcs]))
 
     lformat :: Show a => Int -> a -> String
@@ -103,12 +103,12 @@ brk f (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
             count = length xs
             ys    = foldr (zipWith Set.insert) (repeat Set.empty) xs
 
-convertRule :: Options -> TermMap -> GrammarEnv -> ProtoFRule -> IO GrammarEnv
-convertRule opts cnc_defs grammarEnv (PFRule fun args res ctypes ctype term) = do
-  let pres  = protoFCat cnc_defs res ctype
-      pargs = zipWith (protoFCat cnc_defs) args ctypes
+convertRule :: Options -> GrammarEnv -> ProtoFRule -> IO GrammarEnv
+convertRule opts grammarEnv (PFRule fun args res ctypes ctype term) = do
+  let pres  = protoFCat res ctype
+      pargs = zipWith protoFCat args ctypes
 
-      b     = runBranchM (convertTerm cnc_defs [] ctype term) (pargs,[])
+      b     = runBranchM (convertTerm [] ctype term) (pargs,[])
       (grammarEnv1,b1) = addSequences' grammarEnv b
       grammarEnv2 = brk (\grammarEnv -> foldBM addRule
                                                grammarEnv
@@ -185,8 +185,8 @@ data ProtoFRule = PFRule CId           {- function -}
 type TermMap    = Map.Map CId Term
 
 
-protoFCat :: TermMap -> (Int,CId) -> Term -> ProtoFCat
-protoFCat cnc_defs (n,cat) ctype = 
+protoFCat :: (Int,CId) -> Term -> ProtoFCat
+protoFCat (n,cat) ctype = 
   let (rcs,tcs) = loop [] [] [] ctype'
   in PFCat n cat rcs tcs
   where
@@ -199,9 +199,6 @@ protoFCat cnc_defs (n,cat) ctype =
     loop path rcs tcs (R record) = List.foldr (\(index,term) (rcs,tcs) -> loop (index:path) rcs tcs term) (rcs,tcs) (zip [0..] record)
     loop path rcs tcs (C i)      = (     rcs,(path,[0..i]):tcs)
     loop path rcs tcs (S _)      = (path:rcs,              tcs)
-    loop path rcs tcs (F id)     = case Map.lookup id cnc_defs of
-                                     Just term -> loop path rcs tcs term
-                                     Nothing   -> error ("unknown identifier: "++show id)
 
 data Branch a
   = Case Int FPath [Branch a]
@@ -254,29 +251,23 @@ optimizeLin lin@(SymKS _ : _) =
 optimizeLin (sym : lin) = sym : optimizeLin lin
 
 
-convertTerm :: TermMap -> FPath -> Term -> Term -> CnvMonad (Value [Symbol])
-convertTerm cnc_defs sel ctype (V nr)     = convertArg ctype nr (reverse sel)
-convertTerm cnc_defs sel ctype (C nr)     = convertCon ctype nr (reverse sel)
-convertTerm cnc_defs sel ctype (R record) = convertRec cnc_defs sel ctype record
-convertTerm cnc_defs sel ctype (P term p) = do nr <- evalTerm cnc_defs [] p
-                                               convertTerm cnc_defs (nr:sel) ctype term
-convertTerm cnc_defs sel ctype (FV vars)  = do term <- variants vars
-                                               convertTerm cnc_defs sel ctype term
-convertTerm cnc_defs sel ctype (S ts)     = do vs <- mapM (convertTerm cnc_defs sel ctype) ts
-                                               return (Str (concat [s | Str s <- vs]))
-convertTerm cnc_defs sel ctype (K (KS t)) = return (Str [SymKS [t]])
-convertTerm cnc_defs sel ctype (K (KP s v))=return (Str [SymKP s v])
-convertTerm cnc_defs sel ctype (F id)     = case Map.lookup id cnc_defs of
-                                              Just term -> convertTerm cnc_defs sel ctype term
-                                              Nothing   -> error ("unknown id " ++ showCId id)
-convertTerm cnc_defs sel ctype (W s t)    = do
+convertTerm :: FPath -> Term -> Term -> CnvMonad (Value [Symbol])
+convertTerm sel ctype (V nr)     = convertArg ctype nr (reverse sel)
+convertTerm sel ctype (C nr)     = convertCon ctype nr (reverse sel)
+convertTerm sel ctype (R record) = convertRec sel ctype record
+convertTerm sel ctype (P term p) = do nr <- evalTerm [] p
+                                      convertTerm (nr:sel) ctype term
+convertTerm sel ctype (FV vars)  = do term <- variants vars
+                                      convertTerm sel ctype term
+convertTerm sel ctype (S ts)     = do vs <- mapM (convertTerm sel ctype) ts
+                                      return (Str (concat [s | Str s <- vs]))
+convertTerm sel ctype (K (KS t)) = return (Str [SymKS [t]])
+convertTerm sel ctype (K (KP s v))=return (Str [SymKP s v])
+convertTerm sel ctype (W s t)    = do
   ss <- case t of
     R ss -> return ss
-    F f -> case Map.lookup f cnc_defs of
-             Just (R ss) -> return ss
-             _           -> error ("unknown id " ++ showCId f)
-  convertRec cnc_defs sel ctype [K (KS (s ++ s1)) | K (KS s1) <- ss]
-convertTerm cnc_defs sel ctype x          = error ("convertTerm ("++show x++")")
+  convertRec sel ctype [K (KS (s ++ s1)) | K (KS s1) <- ss]
+convertTerm sel ctype x          = error ("convertTerm ("++show x++")")
 
 convertArg :: Term -> Int -> FPath -> CnvMonad (Value [Symbol])
 convertArg (R ctypes) nr path = do
@@ -299,27 +290,24 @@ convertArg (S _)      nr path = do
 convertCon (C max) index [] = return (Con index)
 convertCon x _ _            = fail $ "SimpleToFCFG.convertCon: " ++ show x
 
-convertRec cnc_defs [] (R ctypes) record = do
-  mkRecord (zipWith (convertTerm cnc_defs []) ctypes record)
-convertRec cnc_defs (index:sub_sel) ctype record =
-  convertTerm cnc_defs sub_sel ctype (record !! index)
+convertRec [] (R ctypes) record = do
+  mkRecord (zipWith (convertTerm []) ctypes record)
+convertRec (index:sub_sel) ctype record =
+  convertTerm sub_sel ctype (record !! index)
 
 
 ------------------------------------------------------------
 -- eval a term to ground terms
 
-evalTerm :: TermMap -> FPath -> Term -> CnvMonad LIndex
-evalTerm cnc_defs path (V nr)       = choices nr (reverse path)
-evalTerm cnc_defs path (C nr)       = return nr
-evalTerm cnc_defs path (R record)   = case path of
-                                        (index:path) -> evalTerm cnc_defs path (record !! index)
-evalTerm cnc_defs path (P term sel) = do index <- evalTerm cnc_defs [] sel
-                                         evalTerm cnc_defs (index:path) term
-evalTerm cnc_defs path (FV terms)   = variants terms >>= evalTerm cnc_defs path
-evalTerm cnc_defs path (F id)       = case Map.lookup id cnc_defs of
-                                        Just term -> evalTerm cnc_defs path term
-                                        Nothing   -> error ("unknown id " ++ showCId id)
-evalTerm cnc_defs path x = error ("evalTerm ("++show x++")")
+evalTerm :: FPath -> Term -> CnvMonad LIndex
+evalTerm path (V nr)       = choices nr (reverse path)
+evalTerm path (C nr)       = return nr
+evalTerm path (R record)   = case path of
+                               (index:path) -> evalTerm  path (record !! index)
+evalTerm path (P term sel) = do index <- evalTerm [] sel
+                                evalTerm (index:path) term
+evalTerm path (FV terms)   = variants terms >>= evalTerm path
+evalTerm path x = error ("evalTerm ("++show x++")")
 
 
 ----------------------------------------------------------------------
@@ -331,7 +319,7 @@ type SeqSet   = Map.Map Sequence SeqId
 type FunSet   = Map.Map CncFun FunId
 type CoerceSet= Map.Map [FId] FId
 
-emptyGrammarEnv cnc_defs lincats params =
+emptyGrammarEnv lincats params =
   let (last_id,catSet) = Map.mapAccumWithKey computeCatRange 0 lincats
   in GrammarEnv last_id (IntMap.singleton 0 catSet) Map.empty Map.empty Map.empty IntMap.empty
   where
@@ -347,9 +335,6 @@ emptyGrammarEnv cnc_defs lincats params =
     getMultipliers m ms (R record)    = foldr (\t (m,ms) -> getMultipliers m ms t) (m,ms) record
     getMultipliers m ms (S _)         = (m,ms)
     getMultipliers m ms (C max_index) = (m*(max_index+1),m : ms)
-    getMultipliers m ms (F id)        = case Map.lookup id cnc_defs of
-                                          Just term -> getMultipliers m ms term
-                                          Nothing   -> error ("unknown identifier: "++showCId id)
 
     getLabels ls (R record)    = concat [getLabels (l:ls) t | P (K (KS l)) t <- record]
     getLabels ls (S [FV ps,t]) = concat [getLabels (l:ls) t | K (KS l) <- ps]
@@ -357,7 +342,7 @@ emptyGrammarEnv cnc_defs lincats params =
     getLabels ls (FV _)        = []
     getLabels _ t = error (show t)
 
-expandHOAS opts abs_defs cnc_defs lincats lindefs env = 
+expandHOAS opts abs_defs lincats lindefs env = 
   foldM add_varFun (foldl (\env ncat -> add_hoFun (add_hoCat env ncat) ncat) env hoTypes) (Map.keys lincats)
   where
     hoTypes :: [(Int,CId)]
@@ -388,13 +373,13 @@ expandHOAS opts abs_defs cnc_defs lincats lindefs env =
       where
         (arg,res) = case Map.lookup cat lincats of
 	              Nothing    -> error $ "No lincat for " ++ showCId cat
-                      Just ctype -> (protoFCat cnc_defs (0,cat) ctype, protoFCat cnc_defs (n,cat) ctype)
+                      Just ctype -> (protoFCat (0,cat) ctype, protoFCat (n,cat) ctype)
 
     -- add one PMCFG function for each high-order category: _V : Var -> Cat
     add_varFun env cat =
       case Map.lookup cat lindefs of
         Nothing     -> return env
-        Just lindef -> convertRule opts cnc_defs env (PFRule _V [(0,cidVar)] (0,cat) [arg] res lindef)
+        Just lindef -> convertRule opts env (PFRule _V [(0,cidVar)] (0,cat) [arg] res lindef)
       where
         arg =
           case Map.lookup cidVar lincats of

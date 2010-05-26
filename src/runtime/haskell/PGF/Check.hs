@@ -137,14 +137,6 @@ lintype pgf lang fun = case typeSkeleton (lookFun pgf fun) of
    vlinc (i,c) = case linc c of
      R ts -> R (ts ++ replicate i str)
 
-inline :: PGFSig -> CId -> Term -> Term
-inline pgf lang t = case t of
-  F c -> inl $ look c
-  _ -> composSafeOp inl t
- where
-  inl  = inline pgf lang
-  look = lookLin pgf lang
-
 composOp :: Monad m => (Term -> m Term) -> Term -> m Term
 composOp f trm = case trm of
   R  ts -> liftM R $ mapM f ts
