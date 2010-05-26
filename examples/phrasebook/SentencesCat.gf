@@ -47,7 +47,6 @@ oper
      False  => placeNPAdj sup.ord kind 
      } ;
 
- -- "el mejor aeropuerto"
    placeNPDet : Ord -> CNPlace -> NPPlace = \ord,kind ->
      let name : NP = mkNP (mkDet the_Art ord) kind.name in {
        name = name ;
@@ -55,7 +54,7 @@ oper
        to = SyntaxCat.mkAdv kind.to name ;
     };
 
- -- "el aeropuerto más grande"
+
    placeNPAdj : Ord -> CNPlace -> NPPlace = \ord,kind ->
      let name : NP = mkNP the_Art (mkCN kind.name (mkAP ord)) in {
        name = name ;

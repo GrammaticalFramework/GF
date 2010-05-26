@@ -75,20 +75,19 @@ lin
     CitRestaurant cit = mkCNPlace (mkCN cit (mkN "restaurant")) dative dative ;
 
 -- currencies
-oper
-	Corona : A -> CN = \adj -> 
-		let corona = (mkN "corona")
-		in mkCN adj corona | mkCN corona ;
+oper corona : A -> CN = \adj -> 
+	  let corona_N = (mkN "corona")
+	  in mkCN adj corona_N | mkCN corona_N ;
 lin
-    DanishCrown = Corona (mkA "danès" "danesa" "danesos" "daneses" "a la danesa") ; 
+    DanishCrown = corona (mkA "danès" "danesa" "danesos" "daneses" "a la danesa") ; 
     Dollar = mkCN (mkN "dollar") ;
-  	Euro = mkCN (mkN "euro" "euro" masculine) ;
+  	Euro = mkCN (mkN "euro" masculine) ;
     Lei = mkCN (mkN "leu" "lei" masculine) ;
 	Leva = mkCN (mkN "lev" "lev" masculine) ; 
-	NorwegianCrown = Corona (mkA "noruec" "noruega" "noruecs" "noruegues" "a la noruega") ;
+	NorwegianCrown = corona (mkA "noruec" "noruega" "noruecs" "noruegues" "a la noruega") ;
 	Pound = mkCN (mkN "lliura") ;
 	Rouble = mkCN (mkN "ruble") ;
-    SwedishCrown = Corona (mkA "suec" "sueca" "suecs" "sueques" "a la sueca") ;
+    SwedishCrown = corona (mkA "suec" "sueca" "suecs" "sueques" "a la sueca") ;
 	Zloty = mkCN (mkN "zloty" "zloty" masculine) ;
 
 -- nationalities
@@ -181,19 +180,12 @@ lin
     PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_A) d) ; 
     PropOpenDay p d = mkCl p.name (mkVP (mkVP open_A) d.habitual) ; 
     PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
--- Building phrases from strings is complicated: the solution is to use
---   mkText : Text -> Text -> Text ;
 	PSeeYouPlaceDate p d = 
       mkText (lin Text (ss ("a reveure"))) 
       (mkText (mkPhrase (mkUtt d)) (mkPhrase (mkUtt p.at))) ;
     PSeeYouPlace p = mkText (lin Text (ss ("fins aviat"))) (mkPhrase (mkUtt p.at)) ;
 --  PSeeYou d = mkText (lin Text (ss ("fins aviat"))) (mkPhrase (mkUtt d)) ;
     PSeeYouDate d = mkText (lin Text (ss ("a reveure"))) (mkPhrase (mkUtt d)) ;
-
-
--- Relations are expressed as "my wife" or "the wife of my son", as defined by $xOf$
--- below. Languages with productive genitives can use an equivalent of
--- "my son's wife" for non-pronouns, as e.g. in English.
 
 -- family relations
 
@@ -274,8 +266,11 @@ lin
     xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (mkCN x) p ; 
 
     open_A = mkA "obert" ;
+
     closed_A = mkA "tancat" ;
+
 	cheap_A = mkA "barat" ; 
+
 	expensive_A = mkA "car" ;
 }
 
