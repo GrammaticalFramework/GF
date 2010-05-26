@@ -4,7 +4,8 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
 
   lin
     DetCN det cn = {
-      s = \\c => det.s ! cn.g ! c ++ cn.s ! adjfCase det.a c ! det.n ! c ;
+      s = \\c => det.s ! cn.g ! c ++ 
+                 (let k = (prepC c).c in cn.s ! adjfCase det.a k ! det.n ! k) ;
       a = agrgP3 cn.g det.n ;
       isPron = False
       } ;
@@ -15,10 +16,13 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       isPron = False
       } ;
 
-    UsePN pn = pn ** {a = agrP3 Sg} ;
+    UsePN pn = {
+      s = \\c => usePrepC c (\k -> pn.s ! k) ;
+      a = agrP3 Sg
+      } ;
 
     UsePron pron = {
-      s = \\c => pron.s ! NPCase c ;
+      s = \\c => usePrepC c (\k -> pron.s ! NPCase k) ;
       a = pron.a
       } ;
 
@@ -45,10 +49,10 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
         n = num.n ;
         a = quant.a
       in {
-        s  = \\g,c => quant.s ! num.isNum ! n ! g ! c ++ 
-                      num.s!g!c ++ ord.s ! agrAdj g (adjfCase a c) n c ;
-        sp = \\g,c => quant.sp ! n ! g ! c ++ 
-                      num.s!g!c ++ ord.s ! agrAdj g (adjfCase a c) n c ;
+        s  = \\g,c => quant.s ! num.isNum ! n ! g ! c ++ (let k = (prepC c).c in
+                        num.s!g!k ++ ord.s ! agrAdj g (adjfCase a k) n k) ;
+        sp = \\g,c => quant.sp ! n ! g ! c ++ (let k = (prepC c).c in
+                        num.s!g!k ++ ord.s ! agrAdj g (adjfCase a k) n k) ;
         n = n ;
         a = a
         } ;
@@ -58,16 +62,18 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
         n = num.n ;
         a = quant.a
       in {
-        s = \\g,c => quant.s ! num.isNum ! n ! g ! c ++ num.s!g!c ;
-        sp = \\g,c => quant.sp ! n ! g ! c ++ num.s!g!c ;
+        s  = \\g,c => quant.s ! num.isNum ! n ! g ! c ++ (let k = (prepC c).c in
+                        num.s!g!k) ;
+        sp = \\g,c => quant.sp ! n ! g ! c ++ (let k = (prepC c).c in
+                        num.s!g!k) ;
         n = n ;
         a = a
         } ;
 
 
     PossPron p = {
-      s  = \\_,n,g,c => p.s ! NPPoss (gennum g n) c ;
-      sp = \\n,g,c => p.s ! NPPoss (gennum g n) c ;
+      s  = \\_,n,g,c => usePrepC c (\k -> p.s ! NPPoss (gennum g n) k) ;
+      sp = \\n,g,c   => usePrepC c (\k -> p.s ! NPPoss (gennum g n) k) ;
       a = Strong --- need separately weak for Pl ?
       } ;
 
@@ -87,28 +93,28 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
     OrdSuperl a = {s = a.s ! Superl} ;
 
     DefArt = {
-      s = \\_,n,g,c => artDef ! gennum g n ! c ; 
-      sp = \\n,g,c   => artDef ! gennum g n ! c ;  ---- deren, denem...
+      s = \\_,n,g,c => artDefContr (gennum g n) c ; 
+      sp = \\n,g,c  => artDefContr (gennum g n) c ;  ---- deren, denem...
       a = Weak
       } ;
 
     IndefArt = {
       s = table {
-        True => \\_,_,_ => [] ; 
+        True => \\_,_,c => usePrepC c (\k -> []) ;
         False => table {
-          Sg => \\g,c => "ein" + pronEnding ! GSg g ! c ;  
-          Pl =>  \\_,_ => []
+          Sg => \\g,c => usePrepC c (\k -> "ein" + pronEnding ! GSg g ! k) ;  
+          Pl => \\_,c => usePrepC c (\k -> [])
           }
         } ; 
       sp = table {
-        Sg => \\g,c => "ein" + pronEnding ! GSg g ! c ;
-        Pl => \\_ => caselist "einige" "einige" "einigen" "einiger"
+        Sg => \\g,c => usePrepC c (\k -> "ein" + pronEnding ! GSg g ! k) ;
+        Pl => \\_,c => usePrepC c (\k -> caselist "einige" "einige" "einigen" "einiger" ! k)
         } ;
       a = Strong
       } ;
 
     MassNP cn = {
-      s = \\c => cn.s ! adjfCase Strong c ! Sg ! c ;
+      s = \\c => usePrepC c (\k -> cn.s ! adjfCase Strong k ! Sg ! k) ;
       a = agrP3 Sg ;
       isPron = False
       } ;
@@ -175,7 +181,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       } ;
 
     ApposCN  cn np = let g = cn.g in {
-      s = \\a,n,c => cn.s ! a ! n ! c ++ np.s ! c ;
+      s = \\a,n,c => cn.s ! a ! n ! c ++ np.s ! NPC c ;
       g = g ;
       isMod = cn.isMod
       } ;

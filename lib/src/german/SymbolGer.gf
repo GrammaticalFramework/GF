@@ -14,12 +14,13 @@ lin
     isPron = False
     } ;
   CNSymbNP det cn xs = let g = cn.g in {
-    s = \\c => det.s ! g ! c ++ cn.s !  adjfCase det.a c ! det.n ! c ++ xs.s ; 
+    s = \\c => det.s ! g ! c ++ 
+               (let k = (prepC c).c in cn.s !  adjfCase det.a k ! det.n ! k) ++ xs.s ; 
     a = agrP3 det.n ;
     isPron = False
     } ;
   CNNumNP cn i = {
-    s = \\c => artDef ! (GSg cn.g) ! c ++ cn.s ! Weak ! Sg ! Nom ++ i.s ! Neutr ! c ;
+    s = \\c => artDefContr (GSg cn.g) c ++ cn.s ! Weak ! Sg ! Nom ++ i.s ! Neutr ! (prepC c).c ;
     a = agrP3 Sg ;
     isPron = False
     } ;

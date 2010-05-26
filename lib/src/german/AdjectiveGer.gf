@@ -9,11 +9,11 @@ concrete AdjectiveGer of Adjective = CatGer ** open ResGer, Prelude in {
       isPre = True
       } ;
     ComparA a np = {
-      s = \\af => a.s ! Compar ! af ++ conjThan ++ np.s ! Nom ;
+      s = \\af => a.s ! Compar ! af ++ conjThan ++ np.s ! NPC Nom ;
       isPre = True
       } ;
     CAdvAP ad ap np = {
-      s = \\af => ad.s ++ ap.s ! af ++ ad.p ++ np.s ! Nom ;
+      s = \\af => ad.s ++ ap.s ! af ++ ad.p ++ np.s ! NPC Nom ;
       isPre = False
       } ;
     UseComparA a = {
@@ -33,7 +33,8 @@ concrete AdjectiveGer of Adjective = CatGer ** open ResGer, Prelude in {
       } ;
 
     ReflA2 a = {
-      s = \\af => a.s ! Posit ! APred ++ appPrep a.c2 (reflPron ! agrP3 Sg) ; --- agr 
+      s = \\af => a.s ! Posit ! APred ++ 
+                  appPrep a.c2 (\\k => usePrepC k (\c -> reflPron ! agrP3 Sg ! c)) ; --- agr 
       isPre = True
       } ;
 

@@ -17,7 +17,7 @@ oper
         c = noCase ;
         a = PAgNone
         } ;     
-    mkPredet : A -> Str -> Case -> Bool -> Number -> Predet = \a,p,c,b,n ->
+    mkPredet : A -> Str -> PCase -> Bool -> Number -> Predet = \a,p,c,b,n ->
       lin Predet {
         s = appAdj a ; 
         c = {p = p ; k = PredCase c} ; 

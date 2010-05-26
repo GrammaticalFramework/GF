@@ -9,7 +9,7 @@ concrete ConjunctionGer of Conjunction =
 
     ConjAdv conj ss = conjunctDistrSS conj ss ;
 
-    ConjNP conj ss = conjunctDistrTable Case conj ss ** {
+    ConjNP conj ss = conjunctDistrTable PCase conj ss ** {
       a = Ag Fem (conjNumber conj.n (numberAgr ss.a)) (personAgr ss.a)
       } ;
 
@@ -28,8 +28,8 @@ concrete ConjunctionGer of Conjunction =
     ConsS = consrTable Order comma ;
     BaseAdv = twoSS ;
     ConsAdv = consrSS comma ;
-    BaseNP x y = twoTable Case x y ** {a = conjAgr x.a y.a} ;
-    ConsNP xs x = consrTable Case comma xs x ** {a = conjAgr xs.a x.a} ;
+    BaseNP x y = twoTable PCase x y ** {a = conjAgr x.a y.a} ;
+    ConsNP xs x = consrTable PCase comma xs x ** {a = conjAgr xs.a x.a} ;
     BaseAP x y = twoTable AForm x y ** {isPre = andB x.isPre y.isPre} ;
     ConsAP xs x = consrTable AForm comma xs x ** {isPre = andB xs.isPre x.isPre} ;
     BaseRS x y = twoTable GenNum x y ** {c = y.c} ;
@@ -38,7 +38,7 @@ concrete ConjunctionGer of Conjunction =
   lincat
     [S] = {s1,s2 : Order => Str} ;
     [Adv] = {s1,s2 : Str} ;
-    [NP] = {s1,s2 : Case => Str ; a : Agr} ;
+    [NP] = {s1,s2 : PCase => Str ; a : Agr} ;
     [AP] = {s1,s2 : AForm => Str ; isPre : Bool} ;
     [RS] = {s1,s2 : GenNum => Str ; c : Case} ;
 

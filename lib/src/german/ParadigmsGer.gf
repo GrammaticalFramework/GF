@@ -47,6 +47,11 @@ oper
   dative     : Case ;
   genitive   : Case ;
 
+  anDat_Case : Case ;
+  inAcc_Case : Case ;
+  inDat_Case : Case ;
+  zuDat_Case : Case ;
+
 -- To abstract over number names, we define the following.
 
   Number    : Type ; 
@@ -156,7 +161,7 @@ mkN : overload {
 
 -- A preposition is formed from a string and a case.
 
-  mkPrep : Str -> Case -> Prep ;
+  mkPrep : Str -> PCase -> Prep ;
   
 -- Often just a case with the empty string is enough.
 
@@ -164,10 +169,13 @@ mkN : overload {
   datPrep : Prep ;
   genPrep : Prep ;
 
--- A couple of common prepositions (always with the dative).
+-- A couple of common prepositions (the first two always with the dative).
 
   von_Prep : Prep ;
   zu_Prep  : Prep ;
+  anDat_Prep : Prep ;
+  inDat_Prep : Prep ;
+  inAcc_Prep : Prep ;
 
 --2 Verbs
 
@@ -287,15 +295,20 @@ mkV2 : overload {
 
 
   Gender = MorphoGer.Gender ;
-  Case = MorphoGer.Case ;
+  Case = MorphoGer.PCase ;
   Number = MorphoGer.Number ;
   masculine = Masc ;
   feminine  = Fem ;
   neuter = Neutr ;
-  nominative = Nom ;
-  accusative = Acc ;
-  dative = Dat ;
-  genitive = Gen ;
+  nominative = NPC Nom ;
+  accusative = NPC Acc ;
+  dative = NPC Dat ;
+  genitive = NPC Gen ;
+  anDat_Case = NPP CAnDat ;
+  inAcc_Case = NPP CInAcc ;
+  inDat_Case = NPP CInDat ;
+  zuDat_Case = NPP CZuDat ;
+
   singular = Sg ;
   plural = Pl ;
 
@@ -386,7 +399,11 @@ mkV2 : overload {
   datPrep = mkPrep [] dative ;
   genPrep = mkPrep [] genitive ;
   von_Prep = mkPrep "von" dative ;
-  zu_Prep = mkPrep "zu" dative ;
+  zu_Prep = mkPrep [] zuDat_Case ;
+  anDat_Prep = mkPrep [] anDat_Case ;
+  inDat_Prep = mkPrep [] inDat_Case ; 
+  inAcc_Prep = mkPrep [] inAcc_Case ; 
+
 
   mk6V geben gibt gib gab gaebe gegeben = 
     let
@@ -424,7 +441,7 @@ mkV2 : overload {
   seinV v = 
     {s = v.s ; prefix = v.prefix ; lock_V = v.lock_V ; aux = VSein ; vtype = v.vtype} ;
   reflV v c = 
-    {s = v.s ; prefix = v.prefix ; lock_V = v.lock_V ; aux = VHaben ; vtype = VRefl c} ;
+    {s = v.s ; prefix = v.prefix ; lock_V = v.lock_V ; aux = VHaben ; vtype = VRefl (prepC c).c} ;
 
   no_geV v = let vs = v.s in {
     s = table {

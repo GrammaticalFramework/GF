@@ -33,6 +33,24 @@ resource ResGer = ParamX ** open Prelude in {
 
     Agr = Ag Gender Number Person ;
 
+-- Case of $NP$ extended to deal with contractions like "zur", "im".
+
+    PCase = NPC Case | NPP CPrep ;
+    CPrep = CAnDat | CInAcc | CInDat | CZuDat ;
+
+  oper 
+    NPNom : PCase = NPC Nom ;
+    prepC : PCase -> {s : Str ; c : Case} = \cp -> case cp of {
+      NPC c      => {s = []   ; c = c} ;
+      NPP CAnDat => {s = "an" ; c = Dat} ;
+      NPP CInAcc => {s = "an" ; c = Acc} ;
+      NPP CInDat => {s = "in" ; c = Dat} ;
+      NPP CZuDat => {s = "zu" ; c = Dat}
+      } ;
+
+    usePrepC : PCase -> (Case -> Str) -> Str = \c,fs -> 
+      let sc = prepC c in sc.s ++ fs sc.c ;
+
   oper
     mkAgr : {g : Gender ; n : Number ; p : Person} -> Agr = \r ->
       Ag r.g r.n r.p ;
@@ -50,7 +68,7 @@ resource ResGer = ParamX ** open Prelude in {
 -- sometimes forced ("jeder von Mwnschen").
 
   param 
-    PredetCase = NoCase | PredCase Case ;
+    PredetCase = NoCase | PredCase PCase ;
     PredetAgr = PAg Number | PAgNone ;
   oper
     noCase : {p : Str ; k : PredetCase} = {p = [] ; k = NoCase} ;
@@ -319,17 +337,17 @@ resource ResGer = ParamX ** open Prelude in {
 
 -- Prepositions for complements indicate the complement case.
 
-  Preposition : Type = {s : Str ; c : Case} ;
+  Preposition : Type = {s : Str ; c : PCase} ;
 
 -- To apply a preposition to a complement.
 
-  appPrep : Preposition -> (Case => Str) -> Str = \prep,arg ->
+  appPrep : Preposition -> (PCase => Str) -> Str = \prep,arg ->
     prep.s ++ arg ! prep.c ;
 
 -- To build a preposition from just a case.
 
   noPreposition : Case -> Preposition = \c -> 
-    {s = [] ; c = c} ;
+    {s = [] ; c = NPC c} ;
 
 -- Pronouns and articles
 -- Here we define personal and relative pronouns.
@@ -349,28 +367,42 @@ resource ResGer = ParamX ** open Prelude in {
   pronEnding : GenNum => Case => Str = table {
     GSg Masc => caselist ""  "en" "em" "es" ;
     GSg Fem  => caselist "e" "e"  "er" "er" ;
-    GSg Neut => caselist ""  ""   "em" "es" ;
+    GSg Neutr => caselist ""  ""   "em" "es" ;
     GPl      => caselist "e"  "e" "en" "er"
     } ;
 
   artDef : GenNum => Case => Str = table {
     GSg Masc => caselist "der" "den" "dem" "des" ;
     GSg Fem  => caselist "die" "die" "der" "der" ;
-    GSg Neut => caselist "das" "das" "dem" "des" ;
+    GSg Neutr => caselist "das" "das" "dem" "des" ;
     GPl      => caselist "die" "die" "den" "der"
     } ;
 
+  artDefContr : GenNum -> PCase -> Str = \gn,np -> case np of {
+    NPC c => artDef ! gn ! c ;
+    NPP p => case <p,gn> of {
+      <CAnDat, GSg (Masc | Neutr)> => "am" ;
+      <CInAcc, GSg Neutr>          => "ins" ;
+      <CInDat, GSg (Masc | Neutr)> => "im" ;
+      <CZuDat, GSg Masc>           => "zum" ;
+      <CZuDat, GSg Neutr>          => "zum" ;
+      <CZuDat, GSg Fem>            => "zur" ;
+      _ => let sp = prepC np in sp.s ++ artDef ! gn ! sp.c
+      }
+    } ;
+
+
 -- This is used when forming determiners that are like adjectives.
 
-  appAdj : Adjective -> Number => Gender => Case => Str = \adj ->
+  appAdj : Adjective -> Number => Gender => PCase => Str = \adj ->
     let
       ad : GenNum -> Case -> Str = \gn,c -> 
         adj.s ! Posit ! AMod gn c
     in
-    \\n,g,c => case n of {
-       Sg => ad (GSg g) c ;
-       _  => ad GPl c
-     } ;
+    \\n,g,c => usePrepC c (\k -> case n of {
+       Sg => ad (GSg g) k ;
+       _  => ad GPl k
+     }) ;
 
 -- This auxiliary gives the forms in each degree of adjectives. 
 

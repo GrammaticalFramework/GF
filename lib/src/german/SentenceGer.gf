@@ -4,7 +4,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
 
   lin
 
-    PredVP np vp = mkClause (np.s ! Nom) np.a vp ;
+    PredVP np vp = mkClause (np.s ! NPC Nom) np.a vp ;
 
     PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
 
@@ -25,7 +25,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
 
     SlashVP np vp = 
       mkClause 
-        (np.s ! Nom) np.a 
+        (np.s ! NPC Nom) np.a 
         vp **
       {c2 = vp.c2} ;
 
@@ -37,7 +37,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
     SlashPrep cl prep = cl ** {c2 = prep} ;
 
     SlashVS np vs slash = 
-        mkClause (np.s ! Nom) np.a 
+        mkClause (np.s ! NPC Nom) np.a 
           (insertExtrapos (conjThat ++ slash.s ! Sub) (predV vs)) **
         {c2 = slash.c2} ;
 
