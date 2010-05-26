@@ -90,6 +90,7 @@ abstract Sentences = Numeral ** {
     ObjItem   : Item -> PrimObject ;             -- this pizza
     ObjNumber : Number -> Kind -> PrimObject ;   -- five pizzas
     ObjIndef  : Kind -> PrimObject ;             -- a pizza
+    ObjPlural : Kind -> PrimObject ;             -- pizzas
     ObjMass   : MassKind -> PrimObject ;         -- water
     ObjAndObj : PrimObject -> Object -> Object ; -- this pizza and a beer
     OneObj    : PrimObject -> Object ;           -- this pizza
@@ -133,8 +134,7 @@ abstract Sentences = Numeral ** {
 -- Actions are typically language-dependent, not only lexically but also
 -- structurally. However, these ones are mostly functorial.
 
-    AHave     : Person -> Kind        -> Action ;  -- you have pizzas
-    AHaveMass : Person -> MassKind    -> Action ;  -- you have water
+    AHave     : Person -> Object      -> Action ;  -- you have pizzas
     AHaveCurr : Person -> Currency    -> Action ;  -- you have dollars
     ACitizen  : Person -> Citizenship -> Action ;  -- you are Swedish
     ABePlace  : Person -> Place       -> Action ;  -- you are in the bar

@@ -139,7 +139,7 @@ abstract Words = Sentences ** {
     AThirsty    : Person -> Action ;              -- I am thirsty
     ATired      : Person -> Action ;              -- I am tired
     AUnderstand : Person -> Action ;              -- I (don't) understand
-    AWant       : Person -> Object -> Action ;    -- I want two beers
+    AWant       : Person -> Object -> Action ;    -- I want two apples
     AWantGo     : Person -> Place -> Action ;     -- I want to go to the hospital
 
 -- Miscellaneous phrases. Notice that also negations and questions can be formed from

@@ -1,5 +1,5 @@
 concrete SentencesFin of Sentences = NumeralFin ** SentencesI - 
-  [Is,NameNN,
+  [Is, NameNN, ObjMass,
    IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale
   ] with 
   (Syntax = SyntaxFin),
@@ -15,5 +15,8 @@ concrete SentencesFin of Sentences = NumeralFin ** SentencesI -
     YouFamMale, YouFamFemale = 
         {name = mkNP (ProDrop youSg_Pron) ; isPron = True ; poss = mkQuant youSg_Pron} ; 
     YouPolMale, YouPolFemale = 
-        {name = mkNP (ProDrop youPol_Pron) ; isPron = True ; poss = mkQuant youPol_Pron};
+        {name = mkNP (ProDrop youPol_Pron) ; isPron = True ; poss = mkQuant youPol_Pron} ;
+
+    ObjMass = PartCN ;
+
   }

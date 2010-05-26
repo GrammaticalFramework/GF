@@ -1,4 +1,4 @@
--- (c) 2009 Aarne Ranta under LGPL
+-- (c) 2010 Aarne Ranta under LGPL
 
 concrete WordsFin of Words = SentencesFin ** 
   open 

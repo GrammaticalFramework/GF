@@ -78,6 +78,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     ObjItem i = i ;
     ObjNumber n k = mkNP n k ;
     ObjIndef k = mkNP a_Quant k ;
+    ObjPlural k = mkNP aPl_Det k ;
     ObjMass k = mkNP k ;
     ObjAndObj = mkNP and_Conj ;
     OneObj o = o ; 
@@ -120,8 +121,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
 
     NNumeral n = mkCard <lin Numeral n : Numeral>  ;
 
-    AHave p kind = mkCl p.name have_V2 (mkNP aPl_Det kind) ;
-    AHaveMass p kind = mkCl p.name have_V2 (mkNP kind) ;
+    AHave p obj = mkCl p.name have_V2 obj ;
     AHaveCurr p curr = mkCl p.name have_V2 (mkNP aPl_Det curr) ;
     ACitizen p n = mkCl p.name n ;
     ABePlace p place = mkCl p.name place.at ;

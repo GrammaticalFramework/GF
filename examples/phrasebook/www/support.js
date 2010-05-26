@@ -1,6 +1,10 @@
+/* --- Accessing document elements ------------------------------------------ */
+
 function element(id) {
   return document.getElementById(id);
 }
+
+/* --- JSONP ---------------------------------------------------------------- */
 
 // Inspired by the function jsonp from 
 //          http://www.west-wind.com/Weblog/posts/107136.aspx
@@ -12,8 +16,8 @@ function jsonp(url,callback)
         url += "&jsonp=" 
     else
         url += "?jsonp=" 
-    url += callback + "&";
-    //url += new Date().getTime().toString(); // prevent caching        
+    url += callback;
+    //url += "&" + new Date().getTime().toString(); // prevent caching        
     
     var script = empty("script");        
     script.setAttribute("src",url);
@@ -52,6 +56,7 @@ function div_class(cls,contents)  { return wrap_class("div",cls,contents); }
 
 function p(contents) { return wrap("p",contents); }
 function dt(contents) { return wrap("dt",contents); }
+function li(contents) { return wrap("li",contents); }
 
 function th(contents) { return wrap("th",contents); }
 function td(contents) { return wrap("td",contents); }
@@ -64,11 +69,16 @@ function tr(cells) {
 }
 
 function button(label,action) {
-  var el=empty("input");
-  el.setAttribute("type","button");
+  var el=empty("input","type","button");
   el.setAttribute("value",label);
   el.setAttribute("onclick",action);
   return el;
+}
+
+function option(label,value) {
+    var el=empty("option","value",value);
+    el.innerHTML=label;
+    return el;
 }
 
 function appendChildren(el,cs) {
@@ -107,7 +117,10 @@ function swap(a,i,j) { // Note: this doesn't work on strings.
   return a;
 }
 
-function sort(a) { // Note: this doesn't work on strings.
+function sort(a) {
+// https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array/sort
+  return a.sort;
+  /* // Note: this doesn't work on strings.
   for(var i=0;i<a.length-1;i++) {
     var min=i;
     for(var j=i+1;j<a.length;j++)
@@ -115,6 +128,7 @@ function sort(a) { // Note: this doesn't work on strings.
     if(min!=i) swap(a,i,min);
   }
   return a;
+  */
 }
 
 function filter(p,xs) {
@@ -124,7 +138,7 @@ function filter(p,xs) {
   return ys;
 }
 
-function implode(cs) {
+function implode(cs) { // array of strings to string
   /*
   var s="";
   for(var i=0;i<cs.length;i++)
@@ -133,6 +147,9 @@ function implode(cs) {
   */
   return cs.join("");
 }
+
+function hasPrefix(s,pre) { return s.substr(0,pre.length)==pre; }
+
 /*
 function all(p,xs) {
   for(var i=0;i<xs.length;i++)
@@ -147,6 +164,9 @@ function map(f,xs) {
   return ys;
 }
 
+// map in continuation passing style 
+function mapc(f,xs,cont) { mapc_from(f,xs,0,[],cont); }
+
 function mapc_from(f,xs,i,ys,cont) {
   if(i<xs.length)
     f(xs[i],function(y){ys[i]=y;mapc_from(f,xs,i+1,ys,cont)});
@@ -154,4 +174,19 @@ function mapc_from(f,xs,i,ys,cont) {
     cont(ys);
 }
 
-function mapc(f,xs,cont) { mapc_from(f,xs,0,[],cont); }
+function overlaps(as,bs) {
+    for(var i=0;i<as.length;i++)
+	if(elem(as[i],bs)) return true;
+    return false;
+}
+
+function elem(a,as) {
+    for(var i=0;i<as.length;i++)
+	if(a==as[i]) return true;
+    return false;
+}
+
+function shuffle(a) {
+    for(i=0;i<a.length;i++) swap(a,i,Math.floor(Math.random()*a.length))
+    return a;
+}
