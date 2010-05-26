@@ -70,7 +70,7 @@ var server = {
 function start_minibar(opts) { // typically called when the HTML document is loaded
     if(opts) for(var o in opts) options[o]=opts[o];
     var surface=div_id("surface");
-    surface.setAttribute("onclick","surface_click(this)");
+    //surface.setAttribute("onclick","add_typed_input(this)");
     appendChildren(element("minibar"),
 		   [div_id("menubar"),
 		    surface,
@@ -187,7 +187,7 @@ function delete_last() {
   }
 }
 
-function surface_click(surface) {
+function add_typed_input(surface) {
     if(surface.typed)
 	inp=surface.typed;
     else {
@@ -201,6 +201,13 @@ function surface_click(surface) {
     inp.focus();
 }
 
+function remove_typed_input(surface) {
+    if(surface.typed) {
+	surface.typed.parentNode.removeChild(surface.typed);
+	surface.typed=null;
+    }
+}
+
 function complete_typed(inp) {
     var menu=element("language_menu");
     var c=menu.current;
@@ -211,9 +218,13 @@ function complete_typed(inp) {
 }
 
 function finish_typed(inp) {
+    //alert("finish_typed "+inp.value);
     var box=element("words");
+    var w=inp.value+" ";
     if(box.completions.length==1)
 	add_word(box.completions[0]);
+    else if(elem(w,box.completions))
+	add_word(w);
 }
 
 function generate_random() {
@@ -283,6 +294,11 @@ function show_completions(completions) {
   if(emptycnt>0)
     //setTimeout(function(){get_translations(menu);},200);
     get_translations(menu);
+  var surface=element("surface");
+  if(surface.typed && emptycnt==completions.length) {
+      if(surface.typed.value=="") remove_typed_input(surface);
+  }
+  else add_typed_input(surface);
 }
 
 function get_translations(menu) {
