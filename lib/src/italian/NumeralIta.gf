@@ -35,7 +35,7 @@ lin pot01 =
                                          NCard Fem => "una" ;
                                          _ => uno ! f ! g
                                          };
-                    indep =>  case g of
+                    indip =>  case g of
                                    { NCard _ => [] ;
                                      _       => uno ! f ! g
                                     }
@@ -54,25 +54,27 @@ lin pot1 d = spl (d.s ! tiotal) ;
 lin pot1plus d e = 
        let ss = if_then_Str e.isContr  (d.s ! tiouno ! NCard Masc) (d.s ! tiotal ! NCard Masc)
               in
-   {s = table {NCard g =>  ss ++ "&+" ++(e.s ! ental pred ! NCard Masc) ;
-               NOrd g n => ss ++ "&+" ++e.s ! ental indip ! NOrd g n};
+   {s = table {NCard g =>  ss ++ BIND ++(e.s ! ental pred ! NCard Masc) ;
+               NOrd g n => ss ++ BIND ++e.s ! ental indip ! NOrd g n};
      n = Pl} ;
 
 lin pot1as2 n = n ;
 
-lin pot2 d = spl (\\co => d.s ! ental indip ! NCard Masc ++ "&+"++
+lin pot2 d = spl (\\co => d.s ! ental indip ! NCard Masc ++ nBIND d.n ++
   (mkTall "cento" [] [] [] "cent").s ! ental indip ! co) ;
 lin pot2plus d e = 
-  {s = table {NCard g => d.s ! ental indip ! NCard Masc ++ "&+" ++"cento" ++ "&+" ++e.s ! NCard Masc ;
-              NOrd g n => d.s ! ental indip ! NCard Masc ++ "&+" ++"cento" ++ "&+" ++ e.s ! NOrd g n};
+  {s = table {NCard g => d.s ! ental indip ! NCard Masc ++ nBIND d.n ++"cento" ++ BIND ++e.s ! NCard Masc ;
+              NOrd g n => d.s ! ental indip ! NCard Masc ++ nBIND d.n ++"cento" ++ BIND ++ e.s ! NOrd g n};
    n = Pl} ;
 lin pot2as3 n = n ;
-lin pot3 n = spl (\\co => n.s ! NCard Masc ++ "&+" ++
+lin pot3 n = spl (\\co => n.s ! NCard Masc ++ nBIND n.n ++
   (mkTall (mille ! n.n) [] [] [] "mill").s ! ental indip ! co ) ;
 
-lin pot3plus n m = {s = \\g => n.s ! NCard Masc ++ "&+" ++ mille ! n.n ++ "e" ++ m.s ! g ; n = Pl} ;
+lin pot3plus n m = {s = \\g => n.s ! NCard Masc ++ nBIND n.n ++ mille ! n.n ++ "e" ++ m.s ! g ; n = Pl} ;
 
 oper
+  nBIND : Number -> Str = \n -> case n of {Sg => [] ; _ => BIND} ; -- no BIND after silent 1
+
   mkTall : (x1,_,_,_,x5 : Str) -> {s : DForm => CardOrd => Str} =
     \due,dodici,venti,secondo,du -> 
    {s = \\d,co => case <d,co> of {
