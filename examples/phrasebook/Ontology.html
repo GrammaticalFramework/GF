@@ -101,6 +101,7 @@ Here are some general syntactic constructions.
       ObjItem   : Item -> PrimObject ;             -- this pizza
       ObjNumber : Number -> Kind -> PrimObject ;   -- five pizzas
       ObjIndef  : Kind -> PrimObject ;             -- a pizza
+      ObjPlural : Kind -> PrimObject ;             -- pizzas
       ObjMass   : MassKind -> PrimObject ;         -- water
       ObjAndObj : PrimObject -> Object -> Object ; -- this pizza and a beer
       OneObj    : PrimObject -> Object ;           -- this pizza
@@ -146,8 +147,7 @@ Determiners.
 Actions are typically language-dependent, not only lexically but also
 structurally. However, these ones are mostly functorial.
 <pre>
-      AHave     : Person -> Kind        -> Action ;  -- you have pizzas
-      AHaveMass : Person -> MassKind    -> Action ;  -- you have water
+      AHave     : Person -> Object      -> Action ;  -- you have pizzas
       AHaveCurr : Person -> Currency    -> Action ;  -- you have dollars
       ACitizen  : Person -> Citizenship -> Action ;  -- you are Swedish
       ABePlace  : Person -> Place       -> Action ;  -- you are in the bar
@@ -300,7 +300,7 @@ Notice that also negations and questions can be formed from these.
       AThirsty    : Person -> Action ;              -- I am thirsty
       ATired      : Person -> Action ;              -- I am tired
       AUnderstand : Person -> Action ;              -- I (don't) understand
-      AWant       : Person -> Object -> Action ;    -- I want two beers
+      AWant       : Person -> Object -> Action ;    -- I want two apples
       AWantGo     : Person -> Place -> Action ;     -- I want to go to the hospital
 </pre>
 

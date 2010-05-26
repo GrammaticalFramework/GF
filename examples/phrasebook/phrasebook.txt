@@ -1,5 +1,6 @@
 MOLTO Multilingual Phrasebook
-Krasimir Angelov, Olga Caprotti, Ramona Enache, Thomas Hallgren, Inari Listenmaa, Aarne Ranta 
+Krasimir Angelov, Olga Caprotti, Ramona Enache, Thomas Hallgren, Inari Listenmaa, Aarne Ranta, Jordi Saludes 
+Showcase for project FP7-ICT-247914, Deliverable D10.2.
 
 
 %!postproc(html): #HR <HR>
@@ -13,9 +14,11 @@ Krasimir Angelov, Olga Caprotti, Ramona Enache, Thomas Hallgren, Inari Listenmaa
 #BSMALL
 
 History
-- 20 May. Version 0.9:
+- 26 May. Version 0.9:
+  Catalan added, mass/count noun distinction to reduce overgeneration, 
+  improved web interface.
+- 20 May. Version 0.8:
   Spanish added, Bulgarian complete.
-
 - 9 May. Version 0.7: 
   Danish and Norwegian added (preliminary versions induced from statistical models 
   and resource grammars).
@@ -33,7 +36,7 @@ History
 
 [Missing constructs missing.txt] 
 
-[Back to phrasebook http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html]
+[Back to phrasebook http://www.grammaticalframework.org/demos/phrasebook/]
 
 #ESMALL
 #HR
@@ -68,16 +71,15 @@ The source code resides in
 [``code.haskell.org/gf/examples/phrasebook/`` http://code.haskell.org/gf/examples/phrasebook/]
 
 
-Current status (20 May 2010):
+Current status (26 May 2010):
 - small but useful coverage in abstract syntax
 - reasonable implementations for 
-  Bulgarian, Danish, Dutch, English, Finnish, French, German, 
+  Bulgarian, Catalan, Danish, Dutch, English, Finnish, French, German, 
   Italian, Norwegian, Romanian, Spanish, Swedish
-- mostly just cloned for the rest of MOLTO languages
-- temporary user interdace
+- Polish and Russian under construction
 - works on web browsers calling a server
 - web service not yet released, but preliminarily available in
-  [``http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html`` http://tournesol.cs.chalmers.se/~aarne/phrasebook/phrasebook.html]
+  http://www.grammaticalframework.org/demos/phrasebook/
 
 
 
@@ -130,6 +132,8 @@ Separate concrete syntaxes.
 
 ``DisambPhrasebook``: disambiguation grammars generating feedback phrases if
 the input language is ambiguous.
+
+``Numeral``: resource grammar module directly inherited from the library.
 
 Here is the module structure as produced in GF by
 ```

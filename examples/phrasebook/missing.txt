@@ -1,12 +1,13 @@
 DisambPhrasebookEng :
 PhrasebookBul : GCongratulations GGoodLuck GHappyBirthday
+PhrasebookCat : pot01
 PhrasebookDan :
 PhrasebookDut :
 PhrasebookEng :
 PhrasebookFin :
 PhrasebookFre :
 PhrasebookGer :
-PhrasebookIta : HowFar HowFarBy HowFarFrom HowFarFromBy Pound
+PhrasebookIta :
 PhrasebookNor :
 PhrasebookRon :
 PhrasebookSpa : GCongratulations GGoodLuck GHappyBirthday
