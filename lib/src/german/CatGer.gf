@@ -48,16 +48,16 @@ concrete CatGer of Cat =
 -- Noun
 
     CN = {s : Adjf => Number => Case => Str ; g : Gender} ;
-    NP = {s : Case => Str ; a : Agr} ;
+    NP = {s : PCase => Str ; a : Agr} ;
     Pron = {s : NPForm => Str ; a : Agr} ;
-    Det = {s,sp : Gender => Case => Str ; n : Number ; a : Adjf} ;
+    Det = {s,sp : Gender => PCase => Str ; n : Number ; a : Adjf} ;
     Quant = {
-      s  : Bool => Number => Gender => Case => Str ; 
-      sp : Number => Gender => Case => Str ; 
+      s  : Bool => Number => Gender => PCase => Str ; 
+      sp : Number => Gender => PCase => Str ; 
       a  : Adjf
       } ;
     Predet = {
-      s : Number => Gender => Case => Str ; 
+      s : Number => Gender => PCase => Str ; 
       c : {p : Str ; k : PredetCase} ;
       a : PredetAgr -- if an agr is forced, e.g. jeder von uns ist ...
       } ;
@@ -74,7 +74,7 @@ concrete CatGer of Cat =
 
     Conj = {s1,s2 : Str ; n : Number} ;
     Subj = {s : Str} ;
-    Prep = {s : Str ; c : Case} ;
+    Prep = {s : Str ; c : PCase} ;
 
 -- Open lexical classes, e.g. Lexicon
 

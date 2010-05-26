@@ -16,14 +16,16 @@ oper
 
 -- For $StructuralGer$.
 
-  mkPrep : Str -> Case -> Preposition = \s,c -> 
+  mkPrep : Str -> PCase -> Preposition = \s,c -> 
     {s = s ; c = c} ;
 
-  nameNounPhrase : {s : Case => Str} ->  {s : Case => Str ; a : Agr} = \name ->
-    name ** {a = agrP3 Sg} ;
+  nameNounPhrase : {s : Case => Str} ->  {s : PCase => Str ; a : Agr} = \name -> {
+      s = \\c => usePrepC c (\k -> name.s ! k) ;
+      a = agrP3 Sg
+      } ;
 
   detLikeAdj : Number -> Str -> 
-    {s,sp : Gender => Case => Str ; n : Number ; a : Adjf} = \n,dies -> 
+    {s,sp : Gender => PCase => Str ; n : Number ; a : Adjf} = \n,dies -> 
       {s,sp = appAdj (regA dies) ! n ; n = n ; a = Weak} ;
 
   mkOrd : {s : Degree => AForm => Str} -> {s : AForm => Str} = \a ->
