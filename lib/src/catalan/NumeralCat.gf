@@ -100,7 +100,7 @@ lin
 			unit => cardOrd1 co "un" "una" "primer" ;
 			teen => cardOrd2 co "onze" ;
 			ten => cardOrd2 co "deu" ;
-			tenplus => variants {} ;
+			tenplus => [] ; ---- variants {} ; -- not used AR 26/5/2010 
 			OrdF => cardOrd2 co "un" ;
 			Aunit => [] 
 		};
