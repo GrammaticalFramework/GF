@@ -72,34 +72,6 @@ instance Binary Alternative where
   put (Alt v x) = put (v,x)
   get = liftM2 Alt get get
 
-instance Binary Term where
-  put (R  es) = putWord8 0 >> put es
-  put (S  es) = putWord8 1 >> put es
-  put (FV es) = putWord8 2 >> put es
-  put (P e v) = putWord8 3 >> put (e,v)
-  put (W e v) = putWord8 4 >> put (e,v)
-  put (C i  ) = putWord8 5 >> put i
-  put (TM i ) = putWord8 6 >> put i
-  put (F f)   = putWord8 7 >> put f
-  put (V i)   = putWord8 8 >> put i
-  put (K (KS s))    = putWord8 9  >> put s
-  put (K (KP d vs)) = putWord8 10 >> put (d,vs)
-
-  get = do tag <- getWord8
-           case tag of
-             0 -> liftM  R  get
-             1 -> liftM  S  get
-             2 -> liftM  FV get
-             3 -> liftM2 P  get get
-             4 -> liftM2 W  get get
-             5 -> liftM  C  get
-             6 -> liftM  TM get
-             7 -> liftM  F  get
-             8 -> liftM  V  get
-             9  -> liftM  (K . KS) get
-             10 -> liftM2 (\d vs -> K (KP d vs)) get get
-             _  -> decodingError
-
 instance Binary Expr where
   put (EAbs b x exp)  = putWord8 0 >> put (b,x,exp)
   put (EApp e1 e2)    = putWord8 1 >> put (e1,e2)
