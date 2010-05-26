@@ -116,8 +116,8 @@ concrete StructuralDan of Structural = CatDan **
   yes_Utt = ss ["ja"] ;
   youSg_Pron = 
     MorphoDan.mkNP "du" "dig" "din" "dit" "dine" Utr Sg P2 ; ----
-  youPl_Pron = MorphoDan.mkNP "i" "jer" "jeres" "jeres" "jeres"  Utr Pl P2 ;
-  youPol_Pron = MorphoDan.mkNP "Dere" "Dere" "Deres" "Deres" "Deres"  Utr Sg P2 ; --- wrong in refl
+  youPl_Pron = MorphoDan.mkNP "I" "jer" "jeres" "jeres" "jeres"  Utr Pl P2 ;
+  youPol_Pron = MorphoDan.mkNP "De" "Dem" "Deres" "Deres" "Deres"  Utr Sg P2 ; --- wrong in refl
   have_V2 = dirV2 have_V ;
 
 -- Auxiliaries that are used repeatedly.
