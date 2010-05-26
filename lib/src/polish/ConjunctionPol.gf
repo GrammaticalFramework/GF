@@ -23,8 +23,9 @@ concrete ConjunctionPol of Conjunction =
         voc = conj.s1 ++ list.np1.voc ++ conj.s2 ++ list.np2.voc;
         dep = \\c => conj.s1 ++ list.np1.dep !c ++ conj.s2 ++ list.np2.dep !c;
         gn  = case <list.np1.gn,list.np2.gn> of {
-            <(MascPersSg|MascPersPl), (MascPersSg|MascPersPl)> => MascPersPl;
-            <_,_>                          => OthersPl
+            <(MascPersSg|MascPersPl), _> => MascPersPl;
+            <_, (MascPersSg|MascPersPl)> => MascPersPl;
+            <_,_>                        => OthersPl
         };
         p = case <list.np1.p,list.np2.p> of {
             <P1, _> => P1;

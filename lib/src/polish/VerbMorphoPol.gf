@@ -18,7 +18,7 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
 -- opers for the building of the whole paradigm of a verb
 -- in all tenses
 
-  oper ConjCl : Type = Str -> { s:VFormM => Str; p:AForm=>Str };
+  oper ConjCl : Type = Str -> { s:VFormM => Str; p:adj11table };
 
   oper conj1 : ConjCl = 
     \byc -> 
@@ -247,14 +247,14 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
     Str -> Str -> ConjCl;
   oper mkRegItConjCl pytac pyta j jmy jcie m sz sg3 my cie ja l la lo li ly = {
     s = mkVerbTable pytac pyta j jmy jcie m sz sg3 my cie ja l la lo li ly;
-    p = \\_=> "["++pytac ++ [": the participle form does not exist]"]
+    p = record2table { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 = "["++pytac ++ [": the participle form does not exist]"] };
   };
     
   oper mkRegConjCl : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> 
     Str -> Str -> Str -> Str -> ConjCl;
   oper mkRegConjCl pytac pyta j jmy jcie m sz sg3 my cie ja l la lo li ly n npl = {
     s = mkVerbTable pytac pyta j jmy jcie m sz sg3 my cie ja l la lo li ly;
-    p = mkAtable (Adj.model4 (pyta+n+"y") (pyta+npl+"i"))
+    p = record2table (Adj.model4 (pyta+n+"y") (pyta+npl+"i"))
   };
     
   oper mkVerbTable : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> 
@@ -320,7 +320,8 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
 	  sp = v.sp;
 	  refl = "się";
 	  asp = v.asp;
-	  ppart =  v.ppart
+	  ppartp =  v.ppartp;
+	  pparti =  v.pparti
 	 };
  
 -- intransitive verbs
@@ -331,7 +332,8 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
 	  sp = v.sp;
 	  refl = v.refl;
 	  asp = v.asp;
-	  ppart = \\_=> "["++v.si!VInfM ++ [": the participle form does not exist]"]
+	  ppartp = record2table { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 = "["++v.si!VInfM ++ [": the participle form does not exist]"]};
+	  pparti = record2table { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 = "["++v.si!VInfM ++ [": the participle form does not exist]"]}
 	 };
 	 
 -- monoaspective verbs
@@ -342,18 +344,20 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
 	 sp = tmp.s; 
 	 refl = "";
 	 asp = a;
-	 ppart= tmp.p
+	 ppartp = tmp.p;
+	 pparti = tmp.p
 	 };
 
 -- normal verbs
   
   oper mkVerb : Str -> ConjCl -> Str -> ConjCl -> Verb = 
-	 \s, c, s2, c2 -> let tmp = (c2 s2) in 
-	 {si = (c s).s;
-	 sp = tmp.s;
+	 \s, c, s2, c2 -> let tmpp = (c2 s2); tmpi = (c s) in 
+	 {si = tmpi.s;
+	 sp = tmpp.s;
 	 refl = "";
 	 asp = Dual;
-	 ppart = tmp.p
+	 ppartp = tmpp.p;
+	 pparti = tmpi.p
 	 };
 
 -- Comlicated verbs
@@ -366,7 +370,8 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
 	 {si = \\form => v.si !form ++ s;
 	 sp = \\form => v.sp !form ++ s;
 	 refl = v.refl; asp = v.asp;
-	 ppart = v.ppart
+	 ppartp = record2table { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 = "["++v.si!VInfM ++s++ [": the participle form does not exist]"]};
+	 pparti = record2table { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 = "["++v.si!VInfM ++s++ [": the participle form does not exist]"]}
 	 };
 
   
@@ -385,18 +390,6 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
 
   dirV3 : Verb -> V3; -- a typical case ie. "zabrać", "dać"
   dirV3 v = mkV3 v "" "" Acc Dat; 
-
--- conditional endings - not present
-{-  oper condEnd :  Number -> Person -> Str = \n,p ->
-    case <n,p> of {
-      <Sg, P1> => "bym";
-      <Sg, P2> => "byś";
-      <Sg, P3> => "by";
-      <Pl, P1> => "byśmy";
-      <Pl, P2> => "byście";
-      <Pl, P3> => "by"
-    };-}
-
 	   
     indicative_form : Verb -> Bool -> Polarity -> Tense * Anteriority * GenNum * Person => Str;
     indicative_form verb imienne pol = 
@@ -406,37 +399,35 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
             let perf = verb.sp; in
             let imperf = verb.si; in
             table {
-                <Pres, Simul, gn, p>   =>  nie ++ imperf ! (VFinM (extract_num!gn) p) ++ sie 
-                ;  --# notpresent
-                <Pres, Anter, gn, p>   =>  nie ++ perf   ! (VPraetM gn p) ++ sie ;  --# notpresent
-                <Past, _, gn, p>       =>  nie ++ perf   ! (VPraetM gn p) ++ sie ; --# notpresent
-                <Fut, Simul, gn, p>    =>  nie ++ bedzie ! <(extract_num!gn), p> ++ sie ++ imperf ! (VPraetM gn P3); --# notpresent
-                <Fut, Anter, gn, p>    =>  nie ++ perf ! (VFinM (extract_num!gn) p) ++ sie; --# notpresent
-                <Cond, Simul, gn, p>   =>  nie ++ imperf ! (VCondM gn p) ++ sie; --# notpresent
-                <Cond, Anter, gn, p>   =>  nie ++ perf   ! (VCondM gn p) ++ sie --# notpresent
+                <Pres, Simul, gn, p>   =>  nie ++ imperf ! (VFinM (extract_num!gn) p) ++ sie ;
+                <Pres, Anter, gn, p>   =>  nie ++ perf   ! (VPraetM gn p) ++ sie ;
+                <Past, _, gn, p>       =>  nie ++ perf   ! (VPraetM gn p) ++ sie ;
+                <Fut, Simul, gn, p>    =>  nie ++ bedzie ! <(extract_num!gn), p> ++ sie ++ imperf ! (VPraetM gn P3);
+                <Fut, Anter, gn, p>    =>  nie ++ perf ! (VFinM (extract_num!gn) p) ++ sie;
+                <Cond, Simul, gn, p>   =>  nie ++ imperf ! (VCondM gn p) ++ sie;
+                <Cond, Anter, gn, p>   =>  nie ++ perf   ! (VCondM gn p) ++ sie
             }
         };
         
     imienne_form : Verb -> Polarity -> Tense * Anteriority * GenNum * Person => Str;
-    imienne_form verb pol = 
+    imienne_form verb pol =
         let byc    = (case verb.asp of { Perfective   => conj3 "zostać"; _ => conj1 "być"    }).s; in
         let zostac = (case verb.asp of { Imperfective => conj1 "być";    _ => conj3 "zostać" }).s; in
         let nie = case pol of { Pos => "" ; Neg => "nie" }; in
-        table { 
-            <Pres, Simul, gn, p> => nie ++ byc ! (VFinM (extract_num!gn) p) ++ verb.ppart ! AF gn Nom
-            ;  --# notpresent
-            <Pres, Anter, gn, p> => nie ++ zostac ! (VPraetM gn p) ++ verb.ppart ! AF gn Nom; --# notpresent
-            <Past, Simul, gn, p> => nie ++ byc ! (VPraetM gn p) ++ verb.ppart ! AF gn Nom; --# notpresent
-            <Past, Anter, gn, p> => nie ++ zostac ! (VPraetM gn p) ++ verb.ppart ! AF gn Nom; --# notpresent
-            <Fut,  Simul, gn, p> => nie ++ case verb.asp of { --# notpresent
-                Perfective => zostac ! (VFinM (extract_num!gn) p); --# notpresent
-                _          => bedzie ! <extract_num!gn, p> --# notpresent
-            } ++ verb.ppart ! AF gn Nom; --# notpresent
-            <Fut,  Anter, gn, p> => nie ++ zostac ! (VFinM (extract_num!gn) p) ++ verb.ppart ! AF gn Nom; --# notpresent
-            <Cond, Simul, gn, p> => nie ++ byc ! (VCondM gn p) ++ verb.ppart ! AF gn Nom; --# notpresent
-            <Cond, Anter, gn, p> => nie ++ zostac ! (VCondM gn p) ++ verb.ppart ! AF gn Nom --# notpresent
+        table {
+            <Pres, Simul, gn, p> => nie ++ byc ! (VFinM (extract_num!gn) p) ++ (mkAtable (table2record verb.pparti)) ! AF gn Nom;
+            <Pres, Anter, gn, p> => nie ++ zostac ! (VPraetM gn p) ++ (mkAtable (table2record verb.ppartp)) ! AF gn Nom;
+            <Past, Simul, gn, p> => nie ++ byc ! (VPraetM gn p) ++ (mkAtable (table2record verb.pparti)) ! AF gn Nom;
+            <Past, Anter, gn, p> => nie ++ zostac ! (VPraetM gn p) ++ (mkAtable (table2record verb.ppartp)) ! AF gn Nom;
+            <Fut,  Simul, gn, p> => nie ++ case verb.asp of {
+                Perfective => zostac ! (VFinM (extract_num!gn) p) ++ (mkAtable (table2record verb.ppartp)) ! AF gn Nom;
+                _          => bedzie ! <extract_num!gn, p>  ++ (mkAtable (table2record verb.pparti)) ! AF gn Nom
+            };
+            <Fut,  Anter, gn, p> => nie ++ zostac ! (VFinM (extract_num!gn) p) ++ (mkAtable (table2record verb.ppartp)) ! AF gn Nom;
+            <Cond, Simul, gn, p> => nie ++ byc ! (VCondM gn p) ++ (mkAtable (table2record verb.pparti)) ! AF gn Nom;
+            <Cond, Anter, gn, p> => nie ++ zostac ! (VCondM gn p) ++ (mkAtable (table2record verb.ppartp)) ! AF gn Nom
         };
-   
+            
     bedzie : Number * Person => Str = table {
         <Sg, P1> => "będę";
         <Sg, P2> => "będziesz";
@@ -453,8 +444,8 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
                 let badz   = (case verb.asp of { Perfective   => zostan_op; _ => badz_op   })!<(extract_num!gn), p> in
                 let zostan = (case verb.asp of { Imperfective => badz_op;   _ => zostan_op })!<(extract_num!gn), p> in
                 case pol of {
-                    Pos => badz ++ verb.ppart! AF gn Nom;
-                    Neg => "nie" ++ zostan ++ verb.ppart! AF gn Nom
+                    Pos => badz ++ (mkAtable (table2record verb.pparti))! AF gn Nom;
+                    Neg => "nie" ++ zostan ++ (mkAtable (table2record verb.ppartp))! AF gn Nom
                 };
             False => 
                 let sie = verb.refl; in
@@ -484,8 +475,8 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
             True =>
                 let byc = case verb.asp of { Perfective   => "zostać"; _ => "być" }; in
                 case pol of {
-                    Pos => byc ++ verb.ppart! AF MascPersSg Nom;
-                    Neg => "nie" ++ byc ++ verb.ppart! AF MascPersSg Nom
+                    Pos => byc ++ (mkAtable (table2record verb.pparti))! AF MascPersSg Nom;
+                    Neg => "nie" ++ byc ++ (mkAtable (table2record verb.pparti))! AF MascPersSg Nom
                     };
             False => 
                 let sie = verb.refl; in
@@ -513,5 +504,23 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
         <Pl, P2> => ["zostańcie"];
         <Pl, P3> => ["niech zostaną"]
     };
+
+    jest_op : GenNum * Person * Tense * Anteriority => Str = 
+      let byc =  (conj1 "być").s in table {
+        <gn, p, Pres, Simul> => byc ! (VFinM (extract_num!gn) p);
+        <gn, p, Pres, Anter> => byc ! (VPraetM gn p);
+        <gn, p, Past, _    > => byc ! (VPraetM gn p);
+        <gn, p, Fut , _    > => bedzie ! <(extract_num!gn), p>;
+        <gn, p, Cond, _    > => byc ! (VCondM gn p)
+      };
+
+    niema_op : Tense * Anteriority => Str = 
+      let byc =  conj1 "być" in table {
+        <Pres, Simul> => ["nie ma"];
+        <Pres, Anter> => ["nie było"];
+        <Past, _    > => ["nie było"];
+        <Fut , _    > => ["nie będzie"];
+        <Cond, _    > => ["nie byłoby"]
+      };
 
 }

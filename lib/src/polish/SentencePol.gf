@@ -10,9 +10,9 @@ lin
 --     PredVP    : NP -> VP -> Cl ;         -- John walks
     PredVP np vp = {
         s = \\pol,anter,tense =>
-            np.nom ++ vp.prefix !pol !np.gn ++
+            np.nom ++ vp.prefix ++
             ((indicative_form vp.verb vp.imienne pol) !<tense, anter, np.gn, np.p>) ++ 
-            vp.sufix !pol !np.gn ++ vp.postfix !pol !np.gn;
+            vp.sufix !pol !np.gn ;
     };
 
 --     UseCl    : Temp -> Pol -> Cl  -> S ;
@@ -40,11 +40,11 @@ lin
     SlashVP np vps = {
         s = \\pol,anter,tense => case vps.exp of {
             True => 
-              np.nom ++ vps.prefix !pol !np.gn ++
+              np.nom ++ vps.prefix ++
               ((indicative_form vps.verb vps.imienne pol) !<tense, anter, np.gn, np.p>) ++ 
               vps.sufix !pol !np.gn  ++ vps.postfix !pol !np.gn;
             False => 
-              vps.prefix !pol !np.gn ++
+              vps.prefix ++
               ((indicative_form vps.verb vps.imienne pol) !<tense, anter, np.gn, np.p>) ++ 
               vps.sufix !pol !np.gn  ++ vps.postfix !pol !np.gn ++ np.nom
           };
@@ -67,9 +67,9 @@ lin
     
 --     ImpVP     : VP -> Imp ;              -- love yourselves
     ImpVP vp = {
-        s = \\pol,num => vp.prefix !pol !MascAniSg ++
+        s = \\pol,num => vp.prefix ++
             (imperative_form vp.verb vp.imienne pol (cast_gennum!<Masc Personal, num>) P2) ++ 
-            vp.sufix !pol !MascAniSg ++ vp.postfix !pol !MascAniSg
+            vp.sufix !pol !MascAniSg 
     };
     
 --     AdvS     : Adv -> S  -> S ;            -- today, I will go home
@@ -79,16 +79,16 @@ lin
     SlashPrep c p = { s=c.s; c=p };
 
 --     EmbedS    : S  -> SC ;               -- that she goes
-    EmbedS s = s;
+    EmbedS s = { s = [", że"] ++ s.s } ;
 
 --     EmbedQS   : QS -> SC ;               -- who goes
-    EmbedQS s = s;
+    EmbedQS s = { s = "," ++ s.s } ;
 
 --     EmbedVP   : VP -> SC ;               -- to go
     EmbedVP vp = {
-        s = vp.prefix !Pos !MascPersSg ++
+        s = vp.prefix ++
             (infinitive_form vp.verb vp.imienne Pos) ++ 
-            vp.sufix !Pos !MascPersSg ++ vp.postfix !Pos !MascPersSg
+            vp.sufix !Pos !MascPersSg 
     };
 
 --     RelS     : S -> RS -> S ;              -- she sleeps, which is good
@@ -97,8 +97,8 @@ lin
 --     PredSCVP  : SC -> VP -> Cl ;         -- that she goes is good
     PredSCVP sc vp = {
         s = \\pol,anter,tense =>
-            sc.s ++ vp.prefix !pol !NeutSg ++
+            sc.s ++ vp.prefix ++
             ((indicative_form vp.verb vp.imienne pol) !<tense, anter, NeutSg, P3>) ++ 
-            vp.sufix !pol !NeutSg ++ vp.postfix !pol !NeutSg;
+            vp.sufix !pol !NeutSg 
     };
 }

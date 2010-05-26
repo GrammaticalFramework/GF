@@ -19,7 +19,8 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 --4.2 Personal pronouns and their possessive forms  
 
 -- for "I", "my", "mine"
-  oper pronJa: Pron = 
+  oper pronJa: Pron = pronJaFoo PNoGen;
+  oper pronJaFoo: PronGen -> Pron = \gender ->
 	 { nom = "ja";
 	   voc = "ja";
 	   dep = table {
@@ -27,7 +28,7 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     DatNoPrep => "mi";
 	     DatPrep => "mnie";
 	     (AccNoPrep|AccPrep) => "mnie"; 
-	     (InstrNoPrep|InstrPrep) => "mną";
+	     InstrC => "mną";
 	     LocPrep => "mnie"
 	     };
 	   sp = table {
@@ -69,12 +70,13 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	   };
 	   n = Sg;
 	   p = P1 ;
-	   g = PNoGen
+	   g = gender
 	 };
        
 
 -- for "you", "yours"
-  oper pronTy: Pron = 
+  oper pronTy: Pron = pronTyFoo PNoGen;
+  oper pronTyFoo: PronGen -> Pron = \gender ->
 	 { sp = table {
 	     AF (MascPersSg|MascAniSg|MascInaniSg) Nom => "twój";
 	     AF (MascPersSg|MascAniSg|MascInaniSg) Gen => "twojego";
@@ -121,14 +123,53 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     DatPrep => "ci";
 	     AccNoPrep => "cię";
 	     AccPrep => "ciebie";
-	     (InstrNoPrep|InstrPrep) => "tobą";
+	     InstrC => "tobą";
 	     LocPrep => "tobie"
 	     };
 	   n = Sg;
 	   p = P2 ;
-	   g = PNoGen
+	   g = gender
 	 };
        
+-- for "you polite" (very idiomatic: pron you = 'sir') male version
+  oper pronPan: Pron = 
+	 { nom = "pan" ;
+	   voc = "panie" ;
+	   dep = table {
+	     GenNoPrep => "pana"; --"go"};
+	     GenPrep => "pana";
+	     DatNoPrep => "panu"; --"mu"};
+	     DatPrep => "panu";
+	     AccNoPrep => "pana"; --"go" };
+	     AccPrep => "pana"; 
+	     InstrC => "panem";
+	     LocPrep => "panu"
+	     };
+	   sp = \\_ => "pana";
+	   n = Sg;
+	   p = P3 ;
+	   g = PGen (Masc Personal)
+	 };
+
+-- for "you polite" (very idiomatic: pron you = 'madam') female version
+  oper pronPani: Pron = 
+	 { nom = "pani" ;
+	   voc = "pani" ;
+	   dep = table {
+	     GenNoPrep => "pani"; --"go"};
+	     GenPrep => "pani";
+	     DatNoPrep => "pani"; --"mu"};
+	     DatPrep => "pani";
+	     AccNoPrep => "panią"; --"go" };
+	     AccPrep => "panią"; 
+	     InstrC => "panią";
+	     LocPrep => "pani"
+	     };
+	   sp = \\_ => "pani";
+	   n = Sg;
+	   p = P3 ;
+	   g = PGen (Fem)
+	 };
 
 -- for "he", "his" 
   oper pronOn: Pron = 
@@ -141,8 +182,7 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     DatPrep => "niemu";
 	     AccNoPrep => "jego"; --"go" };
 	     AccPrep => "niego"; 
-	     InstrNoPrep => "nim";
-	     InstrPrep => "nim"; 
+	     InstrC => "nim";
 	     LocPrep => "nim"
 	     };
 	   sp = \\_ => "jego";
@@ -160,11 +200,10 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     GenNoPrep => "jej";
 	     GenPrep  => "niej";
 	     DatNoPrep => "jej";
-	     DatPrep => "nią";
+	     DatPrep => "niej";
 	     AccNoPrep => "ją";
 	     AccPrep => "nią"; 
-	     InstrNoPrep => "nią";
-	     InstrPrep => "nią"; 
+	     InstrC => "nią";
 	     LocPrep => "niej"
 	     };
 	   sp = \\_ => "jej";
@@ -185,8 +224,7 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     DatPrep  => "niemu";
 	     AccNoPrep  => "je";
 	     AccPrep  => "nie"; 
-	     InstrNoPrep => "nim";
-	     InstrPrep  => "nim"; 
+	     InstrC  => "nim"; 
 	     LocPrep  => "nim"
 	     };
 	   sp = \\_ => "jej";
@@ -204,7 +242,7 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     (GenNoPrep|GenPrep)  => "nas";
 	     (DatNoPrep|DatPrep)  => "nam"; 
 	     (AccNoPrep|AccPrep)  => "nas";
-	     (InstrNoPrep|InstrPrep)  => "nami";
+	     InstrC  => "nami";
 	     LocPrep  => "nas"
 	     };
        sp = table {
@@ -258,7 +296,7 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     (GenNoPrep|GenPrep) => "was";
 	     (DatNoPrep|DatPrep) => "wam"; 
 	     (AccNoPrep|AccPrep) => "was";
-	     (InstrNoPrep|InstrPrep) => "wami";
+	     InstrC => "wami";
 	     LocPrep => "was"
 	     };
 	   sp = table {
@@ -315,7 +353,7 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     DatPrep => "nim";
 	     AccNoPrep => "ich";
 	     AccPrep => "nich"; 
-	     (InstrNoPrep|InstrPrep) => "nimi"; 
+	     InstrC => "nimi"; 
 	     LocPrep => "nich"
 	     };
 	   sp = \\_ => "ich";
@@ -336,7 +374,7 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     DatPrep => "nim";
 	     AccNoPrep => "je";
 	     AccPrep => "nie"; 
-	     (InstrNoPrep|InstrPrep) => "nimi"; 
+	     InstrC => "nimi"; 
 	     LocPrep => "nich"
 	     };
 	   sp = \\_ => "ich";
@@ -355,7 +393,7 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     DatPrep => "nim";
 	     AccNoPrep => "je";
 	     AccPrep => "nie"; 
-	     (InstrNoPrep|InstrPrep) => "nimi"; 
+	     InstrC => "nimi"; 
 	     LocPrep => "nich"
 	     };
 	   sp = \\_ => "ich";
@@ -372,7 +410,7 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     (GenNoPrep|GenPrep) NonPoss => "kogo";
 	     (DatNoPrep|DatPrep) NonPoss => "komu";
 	     (AccNoPrep|AccPrep) NonPoss => "kogo";
-	     (InstrNoPrep|InstrPrep) NonPoss => "kim";
+	     InstrC NonPoss => "kim";
 	     LocPrep NonPoss => "kim";
 	     PF VocP _ NonPoss => nonExist;
 	     PF _ _ (Poss _ _) => nonExist -- exists in my opinion [asl] : czyje
@@ -391,7 +429,7 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     (GenNoPrep|GenPrep) NonPoss => "czego";
 	     (DatNoPrep|DatPrep) NonPoss => "czemu";
 	     (AccNoPrep|AccPrep) NonPoss => "co";
-	     (InstrNoPrep|InstrPrep) NonPoss => "czym";
+	     InstrC NonPoss => "czym";
 	     LocPrep NonPoss => "czym";
 	     PF VocP _ NonPoss => nonExist;
 	     PF _ _ (Poss _ _) => nonExist 
@@ -419,7 +457,7 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     (GenNoPrep|GenPrep) NonPoss => "kogokolwiek";
 	     (DatNoPrep|DatPrep) NonPoss => "komukolwiek";
 	     (AccNoPrep|AccPrep) NonPoss => "kogokolwiek";
-	     (InstrNoPrep|InstrPrep) NonPoss => "kimkolwiek";
+	     InstrC NonPoss => "kimkolwiek";
 	     LocPrep NonPoss => "kimkolwiek";
 	     PF VocP _ NonPoss => nonExist;
 	     PF _ _ (Poss _ _) => nonExist 
@@ -448,7 +486,7 @@ resource PronounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 -- 	     (GenNoPrep|GenPrep) NonPoss => "czegokolwiek";
 -- 	     (DatNoPrep|DatPrep) NonPoss => "czemukolwiek";
 -- 	     (AccNoPrep|AccPrep) NonPoss => "cokolwiek";
--- 	     (InstrNoPrep|InstrPrep) NonPoss => "czymkolwiek";
+-- 	     InstrC NonPoss => "czymkolwiek";
 -- 	     LocPrep NonPoss => "czymkolwiek";
 -- 	     PF VocP _ NonPoss => nonExist;
 -- 	     PF _ _ (Poss _ _) => nonExist 

@@ -62,7 +62,7 @@ lin
   many_Det  = wieleDet;
   more_CAdv = {s = "bardziej" ; pn,p = "niż"; sn="więcej"} ;
   most_Predet = { s=wszystek; np={nom="większość"; voc="większości"; 
-    dep=table{AccPrep|AccNoPrep=>"większość"; InstrPrep|InstrNoPrep=>"większością"; _=>"większości"}; 
+    dep=table{AccPrep|AccNoPrep=>"większość"; InstrC=>"większością"; _=>"większości"}; 
     p=P3; gn=FemSg}; adj=False };
   much_Det   = duzoDet;
   must_VV = mkItVerb (mkMonoVerb "musieć" conj93 Imperfective);

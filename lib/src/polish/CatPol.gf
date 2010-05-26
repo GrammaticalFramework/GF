@@ -52,7 +52,6 @@ concrete CatPol of Cat = CommonX - [CAdv] ** open ResPol, Prelude, (R = ParamX) 
 
 ---- Noun
   
---   CommNoun : Type = { s : SubstForm => Str; g : Gender };
     CN = { s : Number => Case => Str; g : Gender };
 
 --   NounPhrase : Type = { s : PronForm => Str; n : Number; g: Gender; p : Person };
@@ -105,7 +104,7 @@ concrete CatPol of Cat = CommonX - [CAdv] ** open ResPol, Prelude, (R = ParamX) 
     VA = Verb  ** { c:{ c:Case; s:Str; adv:Bool } };
     V2A = Verb ** { c:{ c:Case; s:Str; adv:Bool }; c2:Complement };
     
-    VPSlash = VerbPhrase ** { c : Complement };
+    VPSlash = VerbPhraseSlash;
     
     VP = VerbPhrase;
     Comp = { s: GenNum => Str };

@@ -10,11 +10,12 @@ lin
 
 --     QuestCl     : Cl -> QCl ;            -- does John walk
     QuestCl cl = { s = \\p,a,t=> "czy" ++ cl.s !p !a !t };
+    
 --     QuestVP     : IP -> VP -> QCl ;      -- who walks
     QuestVP ip vp = {
-        s = \\pol,anter,tense => ip.nom ++ vp.prefix !pol !ip.gn ++
+        s = \\pol,anter,tense => ip.nom ++ vp.prefix ++
             ((indicative_form vp.verb vp.imienne pol) !<tense, anter, ip.gn, ip.p>) ++ 
-            vp.sufix !pol !ip.gn ++ vp.postfix !pol !ip.gn;
+            vp.sufix !pol !ip.gn
     };
 
 --     QuestSlash  : IP -> ClSlash -> QCl ; -- whom does John love 
@@ -27,8 +28,8 @@ lin
     
 --     QuestIComp  : IComp -> NP -> QCl ;   -- where is John
     QuestIComp ic np = { 
-        s = \\p,a,t => 
-          (imienne_form {si = \\_=>[]; sp = \\_=>[]; asp = Dual; refl = ""; ppart=\\_=>""} p !<t,a,np.gn,np.p>) ++ np.nom
+        s = \\p,a,t => ic.s ++ 
+          (imienne_form {si = \\_=>[]; sp = \\_=>[]; asp = Dual; refl = ""; pparti,ppartp=\\_=>""} p !<t,a,np.gn,np.p>) ++ np.nom
     };
  
 --     IdetCN    : IDet -> CN -> IP ;       -- which five songs
@@ -46,8 +47,8 @@ lin
         voc = idet.s !VocP !(Masc Personal);
         dep = \\cc => let c = extract_case! cc in
           idet.s !c !(Masc Personal);
-        gn = cast_gennum! <Masc Personal, idet.n>;
-        p = P3
+        gn = (accom_gennum !<idet.a, Masc Personal, idet.n>);
+        p = P3 
     };
 
 --     AdvIP     : IP -> Adv -> IP ;        -- who in Paris
@@ -61,20 +62,20 @@ lin
 
 --     IdetQuant : IQuant -> Num -> IDet ;  -- which (five)
     IdetQuant iq n = {
-        s = \\c,g => iq.s! AF (cast_gennum! <g,n.n>) c;
+        s = \\c,g => iq.s! AF (cast_gennum!<g,n.n>) (accom_case!<n.a,c,g>) ++ n.s !c !g;
         n = n.n;
-        a = NoA
+        a = n.a
     };
 
 --     PrepIP    : Prep -> IP -> IAdv ;     -- with whom
     PrepIP prep ip = { s = prep.s ++ ip.dep !prep.c};
 
-    AdvIAdv i a = {s = i.s ++ a.s} ;
-
 --     CompIAdv  : IAdv -> IComp ;          -- where (is it)
     CompIAdv ia = ia;
 
 --     CompIP    : IP   -> IComp ;          -- who (is it)
-    CompIP ip = { s = ip.dep ! InstrNoPrep };
+    CompIP ip = { s = ip.dep ! InstrC };
+
+    AdvIAdv i a = ss (i.s ++ a.s) ;
 
 }
