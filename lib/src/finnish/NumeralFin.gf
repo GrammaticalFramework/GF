@@ -61,16 +61,17 @@ lin
     s = \\_,c => d.s ! c ++ BIND ++ kymmentaN.s ! c ++ BIND ++ e.s ! NumIndep ! c
     } ;
   pot1as2 n = n ;
-  pot2 d = {n = Pl ; s = \\_,c => d.s ! NumAttr ! c ++ BIND ++ sataaN.s ! d.n ! c} ; ----
+  pot2 d = {n = Pl ; s = \\_,c => d.s ! NumAttr ! c ++ nBIND d.n ++ sataaN.s ! d.n ! c} ; ----
   pot2plus d e = {
     n = Pl ; 
-    s = \\_,c => d.s ! NumAttr ! c ++ BIND ++ sataaN.s ! d.n ! c ++ e.s ! NumIndep ! c
+    s = \\_,c => d.s ! NumAttr ! c ++ nBIND d.n ++ sataaN.s ! d.n ! c ++ 
+                 BIND ++ e.s ! NumIndep ! c
     } ;
   pot2as3 n = {n = n.n  ; s = n.s ! NumIndep} ;
-  pot3 d = {n = Pl ; s = \\c => d.s ! NumAttr ! c ++ tuhattaN.s ! d.n ! c} ; ----
+  pot3 d = {n = Pl ; s = \\c => d.s ! NumAttr ! c ++ nBIND d.n ++ tuhattaN.s ! d.n ! c} ; ----
   pot3plus d e = {
     n = Pl ;
-    s = \\c => d.s ! NumAttr ! c ++ tuhattaN.s ! d.n ! c ++ e.s ! NumIndep ! c
+    s = \\c => d.s ! NumAttr ! c ++ nBIND d.n ++ tuhattaN.s ! d.n ! c ++ e.s ! NumIndep ! c
     } ;
 
 oper
@@ -80,6 +81,8 @@ oper
       NOrd  nf => o.s ! nf
       }
     } ;
+
+  nBIND : Number -> Str = \n -> case n of {Sg => [] ; _ => BIND} ; -- no BIND after silent 1
 
 -- Too much trouble to infer vowel, cf. "kuudes" vs. "viides".
 

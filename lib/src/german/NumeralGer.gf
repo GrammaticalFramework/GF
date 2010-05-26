@@ -44,7 +44,7 @@ lin
   pot3 n = {s = \\g => 
     multiple n.s n.n ++ cardOrd "tausend" "tausendte" ! g ; n = Pl} ; ----
   pot3plus n m = {s = \\g => 
-    multiple n.s n.n ++ "tausend" ++ BIND ++ m.s ! g ; n = Pl} ;
+    multiple n.s n.n ++ "tausend" ++ m.s ! g ; n = Pl} ;
 
 oper
   multiple : (CardOrd => Str) -> Number -> Str = \d,n -> 
