@@ -125,7 +125,7 @@ concrete WordsEng of Words = SentencesEng **
 
 -- Actions: the predication patterns are very often language-dependent.
 
-    AHasAge p num = mkCl p.name (mkNP (mkDet num)) ;
+    AHasAge p num = mkCl p.name (mkNP (mkNP num L.year_N) (mkAdv "old"));
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
     AHasRoom p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (mkN "room")) (SyntaxEng.mkAdv for_Prep (mkNP num (mkN "person")))) ;
