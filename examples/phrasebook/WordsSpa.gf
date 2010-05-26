@@ -250,7 +250,9 @@ lin
     TheClosest = mkSuperl L.near_A False; 
     TheCheapest = mkSuperl cheap_A False ;
     TheMostExpensive = mkSuperl expensive_A False ;
-    TheMostPopular = mkSuperl (mkA "popular") False ;
+    TheMostPopular =
+      let popular = mkA "popular" "popular" "populars" "populars" "popularment"
+      in  mkSuperl popular False ;
     TheWorst = mkSuperl L.bad_A True ;
 
     SuperlPlace sup p = placeNPSuperl sup p ;
