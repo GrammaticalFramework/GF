@@ -73,6 +73,22 @@ lin
     CitRestaurant cit = mkCNPlace (mkCN cit (mkN "ristorante")) P.in_Prep dative ;
 
 
+
+-- transports
+
+   HowFar place = mkQS (mkQCl how8much_IAdv (mkCl place.name (mkV "distare")));
+
+-- -- how far is place from x
+   HowFarFrom x place = mkQS (mkQCl how8much_IAdv (mkCl place.name (mkVP (mkV2 (mkV "distare") from_Prep) x.name ))) ;
+
+-- -- how far is place by t
+   HowFarBy place t = mkQS (mkQCl how8much_IAdv (mkCl place.name (mkVP (mkVP (mkV "distare")) t)) ); 
+
+-- -- how far is place from x by t
+   HowFarFromBy x place t = mkQS (mkQCl how8much_IAdv (mkCl place.name (mkVP (mkVP (mkV2 (mkV "distare") from_Prep)x.name) t) )); 
+
+--   HowFarFromBy x y t =  mkQS (mkQCl (mkIAdv (mkIAdv L.far_Adv (SyntaxIta.mkAdv from_Prep x.name)) t) y.name) ;
+
 -- currencies
 
     DanishCrown = mkCN (mkA "danese") (mkN "corona") | mkCN (mkN "corona") ;
@@ -81,6 +97,7 @@ lin
     Lei = mkCN (mkN "leu") ; 
     Leva = mkCN (mkN "lev" "lev" masculine) ; 
     NorwegianCrown = mkCN (mkA "norvegese") (mkN "corona") | mkCN (mkN "corona") ;
+    Pound = mkCN (mkN "sterlina") ;
     Rouble = mkCN (mkN "rublo") ; 
     SwedishCrown = mkCN (mkA "svedese") (mkN "corona") | mkCN (mkN "corona") ;
     Zloty = mkCN (mkN "zloty" "zlotych" masculine) ;
@@ -103,7 +120,7 @@ lin
     Polish = mkNat "polacco" "Polonia" ;
     Romanian = mkNat "rumeno" "Romania" ;
     Russian = mkNat "russo" "Russia" ;
-    Spanish = mkNat "spagnolo" "Spania" ;
+    Spanish = mkNat "spagnolo" "Spagna" ;
     Swedish = mkNat "svedese" "Svezia" ;
 
 -- means of transportation 
@@ -193,16 +210,6 @@ lin
 
     Tomorrow = P.mkAdv "domani" ;
 
-
--- transports
-
---    HowFar place = mkQS (mkQCl far_IAdv place.name) ;
---    HowFarFrom x y = mkQS (mkQCl (mkIAdv far_IAdv (SyntaxIta.mkAdv from_Prep x.name)) y.name) ;
---    HowFarFromBy x y t =       mkQS (mkQCl (mkIAdv (mkIAdv far_IAdv (SyntaxIta.mkAdv from_Prep x.name)) t) y.name) ;
---    HowFarBy y t = mkQS (mkQCl (mkIAdv far_IAdv t.by) y.name) ; 
-
--- oper far_IAdv = E.IAdvAdv L.far_Adv ;
-
 lin
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
@@ -216,12 +223,10 @@ lin
     TheClosest = mkSuperl L.near_A ; 
     TheCheapest = mkSuperl (mkA "economico") ;
     TheMostExpensive = mkSuperl (mkA "costoso") ;
-    TheMostPopular = mkSuperl (mkA "di moda") ;
+    TheMostPopular = mkSuperl (mkA "alla moda") ;
     TheWorst = mkSuperl L.bad_A ;
 
     SuperlPlace sup p = placeNP sup p ;
-
-
 
 
 -- auxiliaries
@@ -241,7 +246,7 @@ lin
 
     mkTransport : N -> {name : CN ; by : Adv} = \n -> {
       name = mkCN n ; 
-      by = SyntaxIta.mkAdv with_Prep (mkNP n)
+      by = E.PrepCN P.in_Prep n
       } ;
 
     mkSuperl : A -> Det = \a -> SyntaxIta.mkDet the_Art (SyntaxIta.mkOrd a) ;
