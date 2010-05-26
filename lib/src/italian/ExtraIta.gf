@@ -36,4 +36,9 @@ concrete ExtraIta of ExtraItaAbs = ExtraRomanceIta **
       "Loro" "Loro" "Li" "Glie" "Loro" "Loro" "Loro" "Loro" "Loro" 
       Fem Pl P3 ;
 
+    PossFamQuant p = {
+      s = \\_,n,g,c => prepCase c ++ p.poss ! n ! g ;
+      sp = \\ n,g,c => prepCase c ++ p.poss ! n ! g ;
+      s2 = []
+      } ;
 }

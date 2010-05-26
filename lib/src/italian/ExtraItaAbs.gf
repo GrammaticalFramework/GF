@@ -25,4 +25,7 @@ abstract ExtraItaAbs = ExtraRomanceAbs ** {
     youPolPl_Pron : Pron ;    -- Loro
     youPolPl8fem_Pron : Pron ;
 
+-- Possessive without definite article, like "mio figlio".
+
+    PossFamQuant : Pron -> Quant ;
 }
