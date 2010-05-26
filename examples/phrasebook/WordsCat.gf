@@ -44,37 +44,35 @@ lin
 
 -- places
 
-oper
-	mkLloc : N -> CNPlace = \n -> mkPlace n dative ;
 lin
-    Airport = mkLloc (mkN "aeroport") ;
-    AmusementPark = mkLloc (mkN "parc d' atraccions") ;
-	Bank = mkLloc (mkN "banc") ;
-    Bar = mkLloc (mkN "bar") ;
-    Cafeteria = mkLloc (mkN "cafeteria") ;
-    Center = mkLloc (mkN "centre") ;
-    Cinema = mkLloc (mkN "cinema" masculine) ;
-    Church = mkLloc (mkN "església")  ;
-    Disco = mkLloc (mkN "discoteca") ;
-    Hospital = mkLloc (mkN "hospital")  ;
-    Hotel = mkLloc (mkN "alberg")  ;
-    Museum = mkLloc (mkN "museu")  ;
-    Park = mkLloc (mkN "parc") ;
-    Parking = mkLloc (mkN "pàrking" masculine) ;
-    Pharmacy = mkLloc (mkN "farmàcia") ;
-	PostOffice = mkLloc (mkN "oficina de correus" feminine) ;
-    Pub = mkLloc (mkN "pub" masculine) ;
-    Restaurant = mkLloc (mkN "restaurant") ;
-    School = mkLloc (mkN "escola") ;
-    Shop = mkLloc (mkN "tenda") ;
-    Station = mkLloc (mkN "estació" feminine)  ;
-    Supermarket = mkLloc (mkN "supermercat" masculine) ;
-    Theatre = mkLloc (mkN "teatre")  ;
-    Toilet = mkLloc (mkN "lavabo")  ;
-    University = mkLloc (mkN "universitat" feminine) ;
-    Zoo = mkLloc (mkN "zoo" masculine) ;
+    Airport = mkPlace (mkN "aeroport") ;
+    AmusementPark = mkPlace (mkN "parc d' atraccions") ;
+	Bank = mkPlace (mkN "banc") ;
+    Bar = mkPlace (mkN "bar") ;
+    Cafeteria = mkPlace (mkN "cafeteria") ;
+    Center = mkPlace (mkN "centre") ;
+    Cinema = mkPlace (mkN "cinema" masculine) ;
+    Church = mkPlace (mkN "església")  ;
+    Disco = mkPlace (mkN "discoteca") ;
+    Hospital = mkPlace (mkN "hospital")  ;
+    Hotel = mkPlace (mkN "alberg")  ;
+    Museum = mkPlace (mkN "museu")  ;
+    Park = mkPlace (mkN "parc") ;
+    Parking = mkPlace (mkN "pàrking" masculine) ;
+    Pharmacy = mkPlace (mkN "farmàcia") ;
+	PostOffice = mkPlace (mkN "oficina de correus" feminine) ;
+    Pub = mkPlace (mkN "pub" masculine) ;
+    Restaurant = mkPlace (mkN "restaurant") ;
+    School = mkPlace (mkN "escola") ;
+    Shop = mkPlace (mkN "tenda") ;
+    Station = mkPlace (mkN "estació" feminine)  ;
+    Supermarket = mkPlace (mkN "supermercat" masculine) ;
+    Theatre = mkPlace (mkN "teatre")  ;
+    Toilet = mkPlace (mkN "lavabo")  ;
+    University = mkPlace (mkN "universitat" feminine) ;
+    Zoo = mkPlace (mkN "zoo" masculine) ;
 
-    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "restaurant")) in_Prep dative ;
+    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "restaurant")) dative dative ;
 
 -- currencies
 oper
@@ -265,8 +263,8 @@ lin
       let day = mkNP (mkPN d)
       in mkNPDay day (P.mkAdv ("el" ++ d)) (P.mkAdv ("el" ++ d)) ; ---- ?
 
-    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i ->
-      mkCNPlace (mkCN p) i dative ;
+    mkPlace : N -> {name : CN ; at : Prep ; to : Prep} = \p ->
+      mkCNPlace (mkCN p) dative dative ;
 
 	 mkTransport : N -> {name : CN ; by : Adv} = \n -> {
 	      name = mkCN n ; 
