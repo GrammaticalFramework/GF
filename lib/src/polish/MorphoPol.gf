@@ -32,7 +32,7 @@ resource MorphoPol =
         (GenNoPrep|GenPrep) => "wszystkich";
         (DatNoPrep|DatPrep) => "wszystkim";
         (AccNoPrep|AccPrep) => "wszystkich";
-        (InstrNoPrep|InstrPrep) => "wszystkimi";
+        InstrC => "wszystkimi";
         LocPrep => "wszystkich"
       };
       p = P3 ;
@@ -46,7 +46,7 @@ resource MorphoPol =
         (GenNoPrep|GenPrep) => "wszystkiego";
         (DatNoPrep|DatPrep) => "wszystkiemu";
         (AccNoPrep|AccPrep) => "wszystko";
-        (InstrNoPrep|InstrPrep) => "wszystkim";
+        InstrC => "wszystkim";
         LocPrep => "wszystkim"
       };
       p = P3;
@@ -60,7 +60,7 @@ resource MorphoPol =
 	     (GenNoPrep|GenPrep) => "kogoś";
 	     (DatNoPrep|DatPrep) => "komuś";
 	     (AccNoPrep|AccPrep) => "kogoś";
-	     (InstrNoPrep|InstrPrep) => "kimś";
+	     InstrC => "kimś";
 	     LocPrep => "kimś"
 	     };
 	   p = P3 ;
@@ -74,7 +74,7 @@ resource MorphoPol =
 	     (GenNoPrep|GenPrep) => "czegoś";
 	     (DatNoPrep|DatPrep) => "czemuś";
 	     (AccNoPrep|AccPrep) => "coś";
-	     (InstrNoPrep|InstrPrep) => "czymś";
+	     InstrC => "czymś";
 	     LocPrep => "czymś"
 	     };
 	   p = P3 ;
@@ -89,7 +89,7 @@ resource MorphoPol =
 	     (GenNoPrep|GenPrep) => "kogo";
 	     (DatNoPrep|DatPrep) => "komu";
 	     (AccNoPrep|AccPrep) => "kogo";
-	     (InstrNoPrep|InstrPrep) => "kim";
+	     InstrC => "kim";
 	     LocPrep => "kim"
 	     };
 	   p = P3 ;
@@ -103,7 +103,7 @@ resource MorphoPol =
 	     (GenNoPrep|GenPrep) => "czego";
 	     (DatNoPrep|DatPrep) => "czemu";
 	     (AccNoPrep|AccPrep) => "co";
-	     (InstrNoPrep|InstrPrep) => "czym";
+	     InstrC => "czym";
 	     LocPrep => "czym"
 	     };
 	   p = P3 ;
@@ -112,13 +112,13 @@ resource MorphoPol =
 
 	kazdyDet : Determiner = {
 	  s,sp = table {
-	    Nom => table {Masc _ => "każdy"; Fem => "każda"; (Neut|NeutGr) => "każde" };
-        Gen => table {Masc _ => "każdego"; Fem => "każdą"; (Neut|NeutGr) => "każdego" };
-        Dat => table {Masc _ => "każdemu"; Fem => "każdej"; (Neut|NeutGr) => "każdemu" };
-        Acc => table {Masc (Personal|Animate) => "każdego"; Masc Inanimate => "każdy"; Fem => "każdą"; (Neut|NeutGr) => "każde" };
-        Instr => table {Masc _ => "każdym"; Fem => "każdą"; (Neut|NeutGr) => "każdym" };
-        Loc => table {Masc _ => "każdym"; Fem => "każdej"; (Neut|NeutGr) => "każdym" };
-        VocP => table {Masc _ => "każdy"; Fem => "każda"; (Neut|NeutGr) => "każde" }
+	    Nom => table {Masc _ => "każdy"; Fem => "każda"; (Neut|NeutGr|Plur) => "każde" };
+        Gen => table {Masc _ => "każdego"; Fem => "każdą"; (Neut|NeutGr|Plur) => "każdego" };
+        Dat => table {Masc _ => "każdemu"; Fem => "każdej"; (Neut|NeutGr|Plur) => "każdemu" };
+        Acc => table {Masc (Personal|Animate) => "każdego"; Masc Inanimate => "każdy"; Fem => "każdą"; (Neut|NeutGr|Plur) => "każde" };
+        Instr => table {Masc _ => "każdym"; Fem => "każdą"; (Neut|NeutGr|Plur) => "każdym" };
+        Loc => table {Masc _ => "każdym"; Fem => "każdej"; (Neut|NeutGr|Plur) => "każdym" };
+        VocP => table {Masc _ => "każdy"; Fem => "każda"; (Neut|NeutGr|Plur) => "każde" }
       };
 	  n = Sg;
 	  a = NoA;
@@ -177,7 +177,7 @@ resource MorphoPol =
 	    Loc => table { _ => "ilu" };
 	    VocP => table {Masc Personal => "ilu"; _ => "ile" }
 	  };
-	  n = Pl;
+	  n = Sg;
 	  a = StoA
 	};
 	
@@ -188,7 +188,7 @@ resource MorphoPol =
 	     (GenNoPrep|GenPrep) => "nikogo";
 	     (DatNoPrep|DatPrep) => "nikomu";
 	     (AccNoPrep|AccPrep) => "nikogo";
-	     (InstrNoPrep|InstrPrep) => "nikim";
+	     InstrC => "nikim";
 	     LocPrep => "nikim"
 	     };
 	   p=P3;
@@ -201,8 +201,8 @@ resource MorphoPol =
 	   dep = table {
 	     (GenNoPrep|GenPrep) => "niczego";
 	     (DatNoPrep|DatPrep) => "niczemu";
-	     (AccNoPrep|AccPrep) => "niczego";
-	     (InstrNoPrep|InstrPrep) => "niczym";
+	     (AccNoPrep|AccPrep) => "nic";
+	     InstrC => "niczym";
 	     LocPrep => "niczym"
 	     };
 	   p=P3;

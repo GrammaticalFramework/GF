@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../prelude
+    --# -path=.:../abstract:../common:../prelude
 
 concrete SymbolPol of Symbol = CatPol ** open Prelude, ResPol, AdjectiveMorphoPol in {
 
@@ -34,7 +34,7 @@ lin
 
   SymbS sy = sy ; 
 
-  SymbNum sy = { s = \\_,_=>sy.s; a=NoA; n=Pl };
+  SymbNum sy = { s = \\_,_=>sy.s; a=StoA; n=Pl };
   SymbOrd sy = { s = \\af => sy.s ++ (mkAtable (guess_model "-ty"))!af} ;
 
 lincat 

@@ -16,16 +16,16 @@ concrete PhrasePol of Phrase = CatPol ** open Prelude, ResPol, VerbMorphoPol in 
    UttIP ip = {s = ip.nom};
    UttIAdv iadv = iadv ;
    UttNP np = {s = np.nom};
-   UttVP vp = { -- I assume positive polarization to avoid variants
-        s = vp.prefix !Pos !MascAniSg ++
+   UttVP vp = { -- I assume the positive polarization to avoid variants
+        s = vp.prefix ++
             (infinitive_form vp.verb vp.imienne Pos) ++ 
-            vp.sufix !Pos !MascAniSg  ++ vp.postfix !Pos !MascAniSg
+            vp.sufix !Pos !MascAniSg 
    };
    UttAdv adv = adv ;
-   UttCN n = {s = n.s ! Sg ! Nom} ;
-   UttCard n = {s = n.s ! Nom ! Neut} ;
-   UttAP ap = {s = ap.s ! AF NeutSg Nom} ; ---- gennum ? (AR)
-
+   UttCN n = {s = n.s ! Sg ! Nom};
+   UttAP ap = {s = ap.s ! AF MascPersSg Nom} ;
+   UttCard c = {s = c.s ! Nom ! Fem } ;
+   
    NoPConj = {s = []} ;
    PConjConj conj = {s = conj.s2} ; ---
 

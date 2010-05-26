@@ -1,28 +1,30 @@
 concrete GreetingsPol of Greetings = open Prelude in {
 
---lincat 
---  Greeting = SS ;
+flags
+  optimize =values ; coding =utf8 ; 
 
---lin 
---  GBye = ss "bye" ;
---  GCheers = ss "cheers" ;
---  GDamn = ss "damn" ;
---  GExcuse, GExcusePol = ss "excuse me" ;
---  GGoodDay = ss "good afternoon" ; ----
---  GGoodEvening = ss "good evening" ;
---  GGoodMorning = ss "good morning" ;
---  GGoodNight = ss "good night" ;
---  GGoodbye = ss "goodbye" ;
---  GHello = ss "hello" ;
---  GHelp = ss "help" ;
---  GHowAreYou = ss "how are you" ;
---  GLookOut = ss "look out" ;
---  GNiceToMeetYou, GNiceToMeetYouPol = ss "nice to meet you" ;
---  GPleaseGive, GPleaseGivePol = ss "please" ;
---  GSeeYouSoon = ss "see you soon" ;
---  GSorry, GSorryPol = ss "sorry" ;
---  GThanks = ss "thank you" ;
---  GTheCheck = ss "the bill" ;
+lincat 
+  Greeting = SS ; 
 
---}
+lin 
+  GBye = ss "cześć" ;
+  GCheers = ss "na zdrowie" ;
+  GDamn = ss "cholera" ; -- not polite
+  GExcuse, GExcusePol, GSorry, GSorryPol = ss "przepraszam" ;
+  GGoodDay, GGoodMorning = ss "dzień dobry" ;
+  GGoodEvening = ss "dobry wieczór" ;
+  GGoodNight = ss "dobranoc" ;
+  GGoodbye = ss "do widzenia" ;
+  GHello = ss "cześć" ;
+  GHelp = ss "pomocy" ;
+  GHowAreYou = ss "jak się masz" ;
+  GLookOut = ss "uwaga" ;
+  GNiceToMeetYou = ss "miło mi" ; 
+  GPleaseGive, GPleaseGivePol = ss "poproszę" ;
+  GSeeYouSoon = ss "do zobaczenia" ;
+  GThanks = ss "dziękuję" ;
+  GTheCheck = ss "rachunek" ;
+  GCongratulations = ss "gratulacje";
+  GHappyBirthday = ss "wszystkiego najlepszego z okazji urodzin" ;
+  GGoodLuck = ss "powodzenia" ; 
 }

@@ -90,17 +90,17 @@ concrete NounPol of Noun = CatPol ** open ResPol, Prelude, PronounMorphoPol in {
     NumPl = { s = \\_,_ => ""; a = NoA; n = Pl; hasCard = False };
     
     DetQuant q num = {
-      s = \\c,g => q.s ! AF (cast_gennum!<g,num.n>) c ++ num.s !c !g;
+      s = \\c,g => q.s ! AF (cast_gennum!<g,num.n>) (accom_case!<num.a,c,g>) ++ num.s !c !g;
       sp = \\c,g => case num.hasCard of { 
-        True  => q.s  ! AF (cast_gennum!<g,num.n>) c ++ num.s !c !g;
-        False => q.sp ! AF (cast_gennum!<g,num.n>) c ++ num.s !c !g
+        True  => q.s  ! AF (cast_gennum!<g,num.n>) (accom_case!<num.a,c,g>) ++ num.s !c !g;
+        False => q.sp ! AF (cast_gennum!<g,num.n>) (accom_case!<num.a,c,g>) ++ num.s !c !g
       };
       n = num.n;
       a = num.a
     };
     
     DetQuantOrd q num ord = {
-      s,sp = \\c,g => q.s ! AF (cast_gennum!<g,num.n>) c  
+      s,sp = \\c,g => q.s ! AF (cast_gennum!<g,num.n>) (accom_case!<num.a,c,g>)  
         ++ num.s !c !g
         ++ ord.s ! AF (cast_gennum!<g,num.n>) (accom_case! <num.a,c,g>);
       n = num.n;
@@ -156,9 +156,9 @@ concrete NounPol of Noun = CatPol ** open ResPol, Prelude, PronounMorphoPol in {
     
 --     PPartNP : NP -> V2  -> NP ;    -- the man seen
     PPartNP np v2 = {
-      nom = np.nom ++ v2.ppart ! AF np.gn Nom;
-      voc = np.voc ++ v2.ppart ! AF np.gn VocP;
-      dep = \\cc => np.dep !cc ++ v2.ppart ! AF np.gn (extract_case!cc) ;
+      nom = np.nom ++ (mkAtable (table2record v2.ppartp)) ! AF np.gn Nom;
+      voc = np.voc ++ (mkAtable (table2record v2.ppartp)) ! AF np.gn VocP;
+      dep = \\cc => np.dep !cc ++ (mkAtable (table2record v2.ppartp)) ! AF np.gn (extract_case!cc) ;
       gn = np.gn;
       p = np.p
     };

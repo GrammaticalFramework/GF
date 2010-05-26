@@ -324,7 +324,7 @@ lin
     hear_V2 = dirV2 (mkV "słyszeć" conj94 "usłyszeć" conj94); 
     suck_V2 = dirV2 (mkMonoVerb "ssać" conj65 Imperfective);     
     seek_V2 = dirV2 (mkMonoVerb "szukać" conj98 Imperfective); 
-    wipe_V2 = dirV2 (mkV "wycierać" conj98 "trzeć" conj43);
+    wipe_V2 = dirV2 (mkV "wycierać" conj98 "trzeć" conj43); -- strange?!?!
     squeeze_V2 = dirV2 (mkV "ściskać" conj98 "ścisnąć" conj6); 
     rub_V2 = dirV2 (mkMonoVerb "trzeć" conj43 Imperfective); 
     hold_V2 = dirV2 (mkMonoVerb "trzymać" conj98 Imperfective);
@@ -378,9 +378,9 @@ lin
     live_V = mkV1 "żyć" conj51 "pożyć" conj51;
      
     john_PN = { nom = "Jan"; voc="Janie"; dep=table{GenPrep|GenNoPrep|AccPrep|AccNoPrep=>"Jana"; DatPrep|DatNoPrep=>"Janowi";
-                    InstrNoPrep|InstrPrep=>"Janem"; LocPrep=>"Janie"}; 
+                    InstrC=>"Janem"; LocPrep=>"Janie"}; 
                 gn=MascPersSg; p=P3};
     paris_PN = { nom = "Paryż"; voc="Paryżu"; dep=table{GenPrep|GenNoPrep=>"Paryża"; AccPrep|AccNoPrep=>"Paryż"; 
-                    DatPrep|DatNoPrep=>"Paryżowi"; InstrNoPrep|InstrPrep=>"Paryżem"; LocPrep=>"Paryżu"}; 
+                    DatPrep|DatNoPrep=>"Paryżowi"; InstrC=>"Paryżem"; LocPrep=>"Paryżu"}; 
                 gn=MascPersSg; p=P3};
 } ;

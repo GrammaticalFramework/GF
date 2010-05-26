@@ -257,14 +257,13 @@ resource NounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     "y" => drzw + "ów"};
 	 in 
 	 { s = table { 
-	     SF Sg _ => "[" ++ drzwi ++ [": the singl form does not exist]"];
-	     SF Pl Gen => x;
-	     SF Pl Dat => x + "om";
-	     SF Pl Instr => x + "ami";
-	     SF Pl Loc => x + "ach";
-	     SF Pl _ => drzwi
+	     SF _ Gen => x;
+	     SF _ Dat => x + "om";
+	     SF _ Instr => x + "ami";
+	     SF _ Loc => x + "ach";
+	     SF _ _ => drzwi
              };
-	   g = Neut 
+	   g = Plur
 	 };
 
 
@@ -1057,7 +1056,7 @@ resource NounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     SF Pl Loc => z + "ach";
 	     SF Pl _ => z + "a"
              };
-	   g = Neut
+	   g = NeutGr
 	 };
 
 
@@ -1086,7 +1085,7 @@ resource NounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	    SF Pl Loc => z  + "ach";
 	    SF Pl _ => z + "a"
             };
-	  g = Neut
+	  g = NeutGr
 	};
 
 
@@ -1449,7 +1448,7 @@ resource NounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     SF Pl Loc => w + "ach";
 	     SF Pl _ => u + "i"
              };
-	   g = Neut
+	   g = NeutGr --asl
 	 };
 
 
@@ -1477,7 +1476,7 @@ resource NounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     SF Pl Loc => y + "ach";
 	     SF Pl _ => y + "y"
              };
-	   g = Neut
+	   g = NeutGr
 	 };
 
 -- oper for neuter, subject ending in -k,
@@ -1504,7 +1503,7 @@ resource NounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
 	     SF Pl Loc => y + "ach";
 	     SF Pl _ => y + "y"
              };
-	   g = Neut
+	   g = NeutGr
 	 };
 
 
@@ -2141,6 +2140,7 @@ resource NounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
      	 { s = table { 
 	     SF Sg Nom => u;
 	     SF Sg Dat => u + "owi";
+	     SF Sg Acc => u;
 	     SF Sg Instr => u + "em";
 	     SF Sg Loc => x + "e";
 	     SF Sg VocP => x + "e";

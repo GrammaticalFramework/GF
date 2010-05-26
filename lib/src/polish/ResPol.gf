@@ -30,7 +30,7 @@
 ----------------------- Parameter for nouns ----------------------------------
 
   param 
-    Gender     = Masc Animacy | Fem | NeutGr | Neut ; 
+    Gender     = Masc Animacy | Fem | NeutGr | Neut | Plur ; 
 	Animacy    = Animate | Inanimate | Personal ;
 	Case       = Nom | Gen | Dat | Acc | Instr | Loc | VocP ;   
 
@@ -41,6 +41,7 @@
 	param SubstForm = SF Number Case ;
 
 
+    -- oper used in NounMorphoPol.gf
     oper CommNoun = {s : SubstForm => Str; g : Gender};  
 
 
@@ -84,37 +85,21 @@
 	 sp : VFormM => Str;
 	 refl : Str;
 	 asp : Aspect;
-	 ppart : AForm=>Str
+	 ppartp : adj11table; --AForm=>Str;
+	 pparti : adj11table  --AForm=>Str
   };
-  
--- and on syntax level:
-{-  param  
-    TenseP = Present | PastP | Future ;
-    PolarityP = PosP | DirNeg | InDirNeg; -- for the indirect object of negation
-  
-  param VForm =
-	   VInf Gender Number               --byc zjedzonym / zjedzoną (?)
-	  |VInd Gender Number Person TenseP Anteriority
-	  |VImp Gender Number Person;       --niech zostane zjedzony / zjedzona-}
-  	 
+    	 
   oper VerbPhrase : Type = {
-    prefix, sufix, postfix : Polarity => GenNum => Str;
+    prefix : Str;
+    sufix : Polarity => GenNum => Str;
     verb : Verb;
     imienne : Bool;-- formed with 'to be' (she was nice, he is a man, etc.)
 	exp : Bool -- expanded 
   };
-
-{-  oper AccToGen : Complement -> Case = \c -> 
-    case c.s of {
-      "" => case c.c of {Acc => Gen; _ => c.c };
-      _  => c.c
-    };-}
   
--- Anteriority is defined in ../common/ParamX.gf. 
--- So it isn't needed to be defined here again.
+  oper VerbPhraseSlash : Type = 
+    VerbPhrase ** { c : Complement; postfix : Polarity => GenNum => Str };
 
---	     Anteriority = Simul | Anter ; -- predefined 
- 
 --3 Adjectives
 
 ----------------------- Parameter for adjectives ----------------------------------
@@ -122,6 +107,19 @@
 -- Description and explanation in AdjectiveMorphoPol.gf
 
   oper adj11forms : Type = { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 : Str };
+  
+  oper empty11forms : adj11forms = { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 = "" };
+  
+  
+  -- this is because of the bug (undocumented feature) in GF. only two levels of nested records are possible, on the third level compiler throw a strange error about more than 6664 fields demanded. tables on second level are accepted, so adj11forms is translated into table and back.
+  
+  param param11 = X1 | X2 | X3 | X4 | X5 | X6 | X7 | X8 | X9 | X10 | X11 ;
+  
+  oper adj11table : Type = param11 => Str;
+  
+  oper table2record : adj11table -> adj11forms = \a -> { s1 = a!X1;s2 = a!X2;s3 = a!X3;s4 = a!X4;s5 = a!X5;s6 = a!X6;s7 = a!X7;s8 = a!X8;s9 = a!X9;s10 = a!X10;s11 = a!X11 };
+  
+  oper record2table : adj11forms -> adj11table = \a -> table { X1 => a.s1;X2 => a.s2;X3 => a.s3;X4 => a.s4;X5 => a.s5;X6 => a.s6;X7 => a.s7;X8 => a.s8;X9 => a.s9;X10 => a.s10;X11 => a.s11 };
   
   oper Adj : Type = {
     pos : adj11forms;
@@ -201,7 +199,7 @@
 --6 Complement definition
   
   param ComplCase = GenPrep | GenNoPrep | DatPrep | DatNoPrep |
-    AccPrep | AccNoPrep | InstrPrep | InstrNoPrep | LocPrep ;
+    AccPrep | AccNoPrep | InstrC | LocPrep ;
   
   oper 
   Complement : Type = {s : Str; c : ComplCase} ;
@@ -210,14 +208,14 @@
   mkCompl s c = { 
     s=s; 
     c = case s of { 
-      "" => case c of { Gen => GenNoPrep; Dat => DatNoPrep; Instr => InstrNoPrep; _ => AccNoPrep }; 
-      _  => case c of { Gen => GenPrep; Dat => DatPrep; Acc => AccPrep; Instr => InstrPrep; _ => LocPrep }
+      "" => case c of { Gen => GenNoPrep; Dat => DatNoPrep; Instr => InstrC; _ => AccNoPrep }; 
+      _  => case c of { Gen => GenPrep; Dat => DatPrep; Acc => AccPrep; Instr => InstrC; _ => LocPrep }
     }
   };
         
   extract_case = table {GenPrep => Gen; GenNoPrep => Gen; DatPrep => Dat;
-        DatNoPrep => Dat; AccPrep => Acc; AccNoPrep => Acc; InstrPrep => Instr; 
-        InstrNoPrep => Instr; LocPrep => Loc};
+        DatNoPrep => Dat; AccPrep => Acc; AccNoPrep => Acc; InstrC => Instr; 
+        LocPrep => Loc};
 
 --7 Various types
 -- possible problem: dzieci ,ktorych piecioro bawilo sie... / okna, ktorych piec stalo opartych o sciane...
@@ -237,6 +235,7 @@
     <Fem, Sg> => FemSg;
     <Neut, Sg> => NeutSg;
     <NeutGr, Sg> => NeutSg;
+    <Plur, Sg> => OthersPl; --plurale tantum
     <Masc Personal, Pl> => MascPersPl;
     _ => OthersPl
   };
@@ -260,21 +259,23 @@
   Determiner  : Type = { s,sp: Case => Gender => Str; n: Number; a: Accom};
 
   oper 
-    accom_case = table {
-      <DwaA,    Nom,     Masc Personal> => Gen;
-      <DwaA,    _,       NeutGr>        => Gen;
-      <PiecA,   Nom,     Masc Personal> => Gen;
-      <PiecA,   _,       NeutGr>        => Gen;
-      <PiecA,   Nom|Acc, Masc (Animate|Inanimate)|Neut|Fem> => Gen;
-      <StoA,    Nom,     Masc Personal> => Gen;
-      <StoA,    Nom|Acc, Masc (Animate|Inanimate)|Neut|Fem> => Gen;
-      <TysiacA, _,       _>             => Gen;
-      x                                 => x.p2
+    accom_case : Accom * Case * Gender => Case = 
+    table {
+      <DwaA,    Nom|VocP,     Masc Personal> => Gen;
+      <DwaA,    _,           NeutGr| Plur>   => Gen;
+      <PiecA,   Nom|VocP,     Masc Personal> => Gen;
+      <PiecA,   _,           NeutGr| Plur>   => Gen;
+      <PiecA,   Nom|VocP|Acc, Masc (Animate|Inanimate)|Neut|Fem> => Gen;
+      <StoA,    Nom|VocP,     Masc Personal> => Gen;
+      <StoA,    Acc,          Masc Personal> => Acc;
+      <StoA,    Nom|VocP|Acc, _>             => Gen;
+      <TysiacA, _,            _>             => Gen;
+      x                                      => x.p2
     };
 
     accom_gennum : Accom * Gender * Number => GenNum = 
       table {
-        <DwaA,    Masc Personal | NeutGr, _> => NeutSg;
+        <DwaA,    Masc Personal | NeutGr | Plur, _> => NeutSg;
         <PiecA,   _,                      _> => NeutSg;
         <StoA,    _,                      _> => NeutSg;
         <TysiacA, _,                      _> => NeutSg;

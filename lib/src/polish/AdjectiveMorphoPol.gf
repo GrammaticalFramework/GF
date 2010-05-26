@@ -163,9 +163,9 @@ resource AdjectiveMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
       pos = guess_model pos;
       comp = model_comp comp;
       super = model_comp ("naj" + comp);
-      advpos = "["++pos ++ [": the adjective positive form does not exist]"];
-      advcomp = "["++pos ++ [": the adjective comparative form does not exist]"];
-      advsuper = "["++pos ++ [": the adjective superlative form does not exist]"]
+      advpos = "["++pos ++ [": the adverb positive form does not exist]"];
+      advcomp = "["++pos ++ [": the adverb comparative form does not exist]"];
+      advsuper = "["++pos ++ [": the adverb superlative form does not exist]"]
     };
   };
   
@@ -184,9 +184,9 @@ resource AdjectiveMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
       pos = guess_model pos;
       comp = guess_model ("bardziej" ++ pos);
       super = guess_model ("najbardziej" ++ pos);
-      advpos = "["++pos ++ [": the adjective positive form does not exist]"];
-      advcomp = "["++pos ++ [": the adjective comparative form does not exist]"];
-      advsuper = "["++pos ++ [": the adjective superlative form does not exist]"]
+      advpos = "["++pos ++ [": the adverb positive form does not exist]"];
+      advcomp = "["++pos ++ [": the adverb comparative form does not exist]"];
+      advsuper = "["++pos ++ [": the adverb superlative form does not exist]"]
     };
   };
   

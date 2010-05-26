@@ -11,24 +11,24 @@ concrete IdiomPol of Idiom = CatPol ** open Prelude, ResPol, VerbMorphoPol in {
 --     ImpersCl  : VP -> Cl ;        -- it is hot
     ImpersCl vp = {
         s = \\pol,anter,tense =>
-            vp.prefix !pol !NeutSg ++
+            vp.prefix ++
             ((indicative_form vp.verb vp.imienne pol) !<tense, anter, NeutSg, P3>) ++ 
-            vp.sufix !pol !NeutSg ++ vp.postfix !pol !NeutSg;
+            vp.sufix !pol !NeutSg 
     };    
 
 --     ImpPl1    : VP -> Utt ;       -- let's go
     ImpPl1 vp = {
-        s = vp.prefix !Pos !MascPersPl ++
+        s = vp.prefix ++
             (imperative_form vp.verb vp.imienne Pos MascPersPl P1) ++ 
-            vp.sufix !Pos !MascPersPl ++ vp.postfix !Pos !MascPersPl;
+            vp.sufix !Pos !MascPersPl 
     };
     
 --     GenericCl : VP -> Cl ;        -- one sleeps
     GenericCl vp = {
         s = \\pol,anter,tense =>
-            "ktoś" ++ vp.prefix !pol !MascPersSg ++
+            "ktoś" ++ vp.prefix  ++
             ((indicative_form vp.verb vp.imienne pol) !<tense, anter, MascPersSg, P3>) ++ 
-            vp.sufix !pol !MascPersSg ++ vp.postfix !pol !MascPersSg;
+            vp.sufix !pol !MascPersSg 
     };
 
 --     CleftNP   : NP  -> RS -> Cl ; -- it is I who did it
@@ -38,15 +38,23 @@ concrete IdiomPol of Idiom = CatPol ** open Prelude, ResPol, VerbMorphoPol in {
     CleftAdv adv s = {s=\\_,_,_ => adv.s ++ s.s };
 
 --     ExistNP   : NP -> Cl ;        -- there is a house
-    ExistNP np = {s=\\pol,anter,tense => case pol of {
-        Pos=> case np.gn of {MascPersPl|OthersPl => "są" ; _=>"jest"} ++ np.nom; -- not in every case
-        Neg=>["nie ma"] ++ np.dep!GenNoPrep } };
+    ExistNP np = {s=\\pol,anter,tense => case pol of { 
+        Pos=> jest_op ! <np.gn, np.p, tense, anter> ++ np.nom;
+        Neg=> niema_op!<tense,anter> ++ np.dep!GenNoPrep } };
     
 --     ExistIP   : IP -> QCl ;       -- which houses are there
-    ExistIP ip = {s=\\pol,_,_ => case pol of {
-        Pos=>ip.nom; -- not in every case
-        Neg=>ip.dep!GenNoPrep ++ ["nie ma"]} };
+    ExistIP ip = {s=\\pol,anter,tense => case pol of {
+        Pos=>ip.nom ++ jest_op ! <ip.gn, ip.p, tense, anter>;
+        Neg=>ip.dep!GenNoPrep ++ niema_op!<tense,anter>} };
 
 --     ProgrVP   : VP -> VP ;        -- be sleeping
-    ProgrVP vp = vp;
+    ProgrVP vp = {
+        prefix=vp.prefix; sufix=vp.sufix;
+        imienne = vp.imienne; exp=vp.exp;
+        verb= { si,sp= vp.verb.si;
+            refl=vp.verb.refl;
+            asp=vp.verb.asp;
+            ppartp=vp.verb.pparti;
+            pparti=vp.verb.pparti}
+        };
 } ;

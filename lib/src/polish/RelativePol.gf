@@ -24,14 +24,14 @@ concrete RelativePol of Relative = CatPol ** open ResPol, VerbMorphoPol in {
       s = \\gn => case rp.mgn of { 
         NoGenNum=>
           \\pol, anter, tense => 
-            "," ++ rp.s !AF gn Nom ++ vp.prefix !pol !gn ++
+            "," ++ rp.s !AF gn Nom ++ vp.prefix ++
             ((indicative_form vp.verb vp.imienne pol) !<tense, anter, gn, P3>) ++ 
-            vp.sufix !pol !gn ++ vp.postfix !pol !gn;
+            vp.sufix !pol !gn;
         JustGenNum x => 
           \\pol, anter, tense => 
-            "," ++ rp.s !AF gn Nom ++ vp.prefix !pol !x ++
+            "," ++ rp.s !AF gn Nom ++ vp.prefix ++
             ((indicative_form vp.verb vp.imienne pol) !<tense, anter, x, P3>) ++ 
-            vp.sufix !pol !x ++ vp.postfix !pol !x
+            vp.sufix !pol !x
          }  
     };
 
@@ -52,7 +52,7 @@ concrete RelativePol of Relative = CatPol ** open ResPol, VerbMorphoPol in {
         AF gn Nom  => p.s ++ rp.s!AF gn (extract_case!p.c) ++ n.nom;
         AF gn VocP => p.s ++ rp.s!AF gn (extract_case!p.c) ++ n.voc;
         AF gn c    => p.s ++ rp.s!AF gn (extract_case!p.c) ++ n.dep!
-            (case c of { Gen => GenNoPrep; Dat => DatNoPrep; Instr => InstrNoPrep; Acc => AccNoPrep; _=>LocPrep })
+            (case c of { Gen => GenNoPrep; Dat => DatNoPrep; Instr => InstrC; Acc => AccNoPrep; _=>LocPrep })
       };
       mgn = JustGenNum n.gn
     };
