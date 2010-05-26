@@ -241,9 +241,10 @@ function get_completions(menu) {
 }
 
 function word(s) {
-  var w=div_class("word",text(s));
-  w.setAttribute("onclick",'add_word("'+s+'")');
-  return w;
+  //var w=div_class("word",text(s));
+  //w.setAttribute("onclick",'add_word("'+s+'")');
+  //return w;
+  return button(s,'add_word("'+s+'")');
 }
 
 function add_word1(menu,s) {
