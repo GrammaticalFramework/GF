@@ -37,36 +37,36 @@ concrete WordsGer of Words = SentencesGer **
 
 -- places
 
-    Airport = mkPlace (mkN "Flughafen" "Flughäfen" masculine) on_Prep to_Prep ; -- am/an dem (dative)  --im/in dem
-    Church = mkPlace (mkN "Kirche") in_Prep to_Prep ;
-    Hospital = mkPlace (mkN "Krankenhaus" "Krankenhäuser" neuter) in_Prep to_Prep ;
-    Restaurant = mkPlace (mkN "Restaurant" "Restaurants" neuter) in_Prep to_Prep ;
-    Station = mkPlace (mkN "Bahnhofen" "Bahnhöfen" masculine) on_Prep to_Prep ;
-    University = mkPlace (mkN "Universität" "Universitäten" feminine) in_Prep to_Prep ;
+    Airport = mkPlace (mkN "Flughafen" "Flughäfen" masculine) on_Prep zu_Prep ; -- am/an dem (dative)  --im/in dem
+    Church = mkPlace (mkN "Kirche") in_Prep zu_Prep ;
+    Hospital = mkPlace (mkN "Krankenhaus" "Krankenhäuser" neuter) in_Prep zu_Prep ;
+    Restaurant = mkPlace (mkN "Restaurant" "Restaurants" neuter) in_Prep zu_Prep ;
+    Station = mkPlace (mkN "Bahnhofen" "Bahnhöfen" masculine) on_Prep zu_Prep ;
+    University = mkPlace (mkN "Universität" "Universitäten" feminine) in_Prep zu_Prep ;
 
-    AmusementPark = mkPlace (mkN "Vergnügungspark" "Vergnügungspark" "Vergnügungspark" "Vergnügungspark" "Vergnügungsparks" "Vergnügungsparks" masculine) in_Prep to_Prep ;
-    Bank = mkPlace (mkN "Bank" "Bank" "Bank" "Bank" "Banken" "Banken" feminine) in_Prep to_Prep ;
-    Bar = mkPlace (mkN "Bar" "Bar" "Bar" "Bar" "Bars" "Bars" masculine) in_Prep to_Prep ;
-    Cafeteria = mkPlace (mkN "Cafeteria" "Cafeteria" "Cafeteria" "Cafeteria" "Cafeterien" "Cafeterien" feminine) in_Prep to_Prep ;
-    Center = mkPlace (mkN "Zentrum" "Zentrum" "Zentrum" "Zentrum" "Zentren" "Zentren" neuter) in_Prep to_Prep ;
-    Cinema = mkPlace (mkN "Kino" "Kino" "Kino" "Kino" "Kinos" "Kinos" neuter) in_Prep to_Prep ;
-    Disco = mkPlace (mkN "Disco" "Disco" "Disco" "Disco" "Discos" "Discos" feminine) in_Prep to_Prep ;
-    Hotel = mkPlace (mkN "Hotel" "Hotel" "Hotel" "Hotel" "Hotels" "Hotels" neuter) in_Prep to_Prep ;
-    Museum = mkPlace (mkN "Museum" "Museum" "Museum" "Museum" "Museen" "Museen" neuter) in_Prep to_Prep ;
-    Park = mkPlace (mkN "Park" "Park" "Park" "Park" "Parks" "Parks" masculine) in_Prep to_Prep ;
-    Parking = mkPlace (mkN "Parkplatz" "Parkplatz" "Parkplatz" "Parkplatz" "Parkplatzen" "Parkplatzen" masculine) on_Prep to_Prep ;
-    Pharmacy = mkPlace (mkN "Apotheke" "Apotheke" "Apotheke" "Apotheke" "Apotheken" "Apotheken" feminine) in_Prep to_Prep ;
-    PostOffice = mkPlace (mkN "Post" "Post" "Post" "Post" "Posten" "Posten" feminine) in_Prep to_Prep ;
-    Pub = mkPlace (mkN "Kneipe" "Kneipe" "Kneipe" "Kneipe" "Kneipen" "Kneipen" feminine) in_Prep to_Prep;
-    School = mkPlace (mkN "Schule" "Schule" "Schule" "Schule" "Schulen" "Schule" feminine) in_Prep to_Prep ;
-    Shop = mkPlace (mkN "Geschäft" "Geschäft" "Geschäft" "Geschäft" "Geschäfte" "Geschäfte" neuter) in_Prep to_Prep ;
-    Supermarket = mkPlace (mkN "Supermarkt" "Supermarkt" "Supermarkt" "Supermarkt" "Supermärkten" "Supermärkte" masculine) in_Prep to_Prep ;
-    Theatre = mkPlace (mkN "Theater" "Theater" "Theater" "Theaters" "Theatern" "Thaters" neuter) in_Prep to_Prep ; 
-    Toilet = mkPlace (mkN "Toilette" "Toilette" "Toilette" "Toilette" "Toiletten" "Toiletten" feminine) in_Prep to_Prep ; 
-    Zoo = mkPlace (mkN "Zoo" "Zoo" "Zoo" "Zoo" "Zoos" "Zoos" masculine) in_Prep to_Prep ;
+    AmusementPark = mkPlace (mkN "Vergnügungspark" "Vergnügungspark" "Vergnügungspark" "Vergnügungspark" "Vergnügungsparks" "Vergnügungsparks" masculine) in_Prep zu_Prep ;
+    Bank = mkPlace (mkN "Bank" "Bank" "Bank" "Bank" "Banken" "Banken" feminine) in_Prep zu_Prep ;
+    Bar = mkPlace (mkN "Bar" "Bar" "Bar" "Bar" "Bars" "Bars" masculine) in_Prep zu_Prep ;
+    Cafeteria = mkPlace (mkN "Cafeteria" "Cafeteria" "Cafeteria" "Cafeteria" "Cafeterien" "Cafeterien" feminine) in_Prep zu_Prep ;
+    Center = mkPlace (mkN "Zentrum" "Zentrum" "Zentrum" "Zentrum" "Zentren" "Zentren" neuter) in_Prep zu_Prep ;
+    Cinema = mkPlace (mkN "Kino" "Kino" "Kino" "Kino" "Kinos" "Kinos" neuter) in_Prep zu_Prep ;
+    Disco = mkPlace (mkN "Disco" "Disco" "Disco" "Disco" "Discos" "Discos" feminine) in_Prep zu_Prep ;
+    Hotel = mkPlace (mkN "Hotel" "Hotel" "Hotel" "Hotel" "Hotels" "Hotels" neuter) in_Prep zu_Prep ;
+    Museum = mkPlace (mkN "Museum" "Museum" "Museum" "Museum" "Museen" "Museen" neuter) in_Prep zu_Prep ;
+    Park = mkPlace (mkN "Park" "Park" "Park" "Park" "Parks" "Parks" masculine) in_Prep zu_Prep ;
+    Parking = mkPlace (mkN "Parkplatz" "Parkplatz" "Parkplatz" "Parkplatz" "Parkplatzen" "Parkplatzen" masculine) on_Prep zu_Prep ;
+    Pharmacy = mkPlace (mkN "Apotheke" "Apotheke" "Apotheke" "Apotheke" "Apotheken" "Apotheken" feminine) in_Prep zu_Prep ;
+    PostOffice = mkPlace (mkN "Post" "Post" "Post" "Post" "Posten" "Posten" feminine) in_Prep zu_Prep ;
+    Pub = mkPlace (mkN "Kneipe" "Kneipe" "Kneipe" "Kneipe" "Kneipen" "Kneipen" feminine) in_Prep zu_Prep;
+    School = mkPlace (mkN "Schule" "Schule" "Schule" "Schule" "Schulen" "Schule" feminine) in_Prep zu_Prep ;
+    Shop = mkPlace (mkN "Geschäft" "Geschäft" "Geschäft" "Geschäft" "Geschäfte" "Geschäfte" neuter) in_Prep zu_Prep ;
+    Supermarket = mkPlace (mkN "Supermarkt" "Supermarkt" "Supermarkt" "Supermarkt" "Supermärkten" "Supermärkte" masculine) in_Prep zu_Prep ;
+    Theatre = mkPlace (mkN "Theater" "Theater" "Theater" "Theaters" "Theatern" "Thaters" neuter) in_Prep zu_Prep ; 
+    Toilet = mkPlace (mkN "Toilette" "Toilette" "Toilette" "Toilette" "Toiletten" "Toiletten" feminine) in_Prep zu_Prep ; 
+    Zoo = mkPlace (mkN "Zoo" "Zoo" "Zoo" "Zoo" "Zoos" "Zoos" masculine) in_Prep zu_Prep ;
 
 
-CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)) in_Prep to_Prep ;
+CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)) in_Prep zu_Prep ;
 
 
 -- currencies

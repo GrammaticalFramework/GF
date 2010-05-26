@@ -148,7 +148,7 @@ concrete WordsDan of Words = SentencesDan **
     AUnderstand p = mkCl p.name (irregV "forstå" "forstod" "forstået") ;
     AWant p obj = mkCl p.name want_VV (mkVP have_V2 obj) ;
 --    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
-    AWantGo p place = mkCl p.name want_VV (mkVP (mkV "tage") place.to) ;
+    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP tage_V) place.to) ;
 
 -- miscellaneous
 
