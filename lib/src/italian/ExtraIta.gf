@@ -37,8 +37,8 @@ concrete ExtraIta of ExtraItaAbs = ExtraRomanceIta **
       Fem Pl P3 ;
 
     PossFamQuant p = {
-      s = \\_,n,g,c => prepCase c ++ p.poss ! n ! g ;
-      sp = \\ n,g,c => prepCase c ++ p.poss ! n ! g ;
+      s = \\_,n,g,c => case n of {Sg => prepCase c ; _ => possCase g n c} ++ p.poss ! n ! g ;
+      sp = \\ n,g,c => case n of {Sg => prepCase c ; _ => possCase g n c} ++ p.poss ! n ! g ;
       s2 = []
       } ;
 }
