@@ -1,7 +1,8 @@
 concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [
   QProp,
   IFemale, YouFamFemale, YouPolFemale,
-  PYesToNo
+  PYesToNo,
+  Superlative
  ] 
   with 
     (Syntax = SyntaxFre), 
@@ -9,6 +10,8 @@ concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [
     (Lexicon = LexiconFre) ** 
   open SyntaxFre, ExtraFre, Prelude in {
 
+    lincat
+      Superlative = {s : Ord ; isPre : Bool} ;
     lin 
       QProp a = 
         lin QS {s = \\_ => (EstcequeS (mkS a)).s} ;

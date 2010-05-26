@@ -1,5 +1,6 @@
 concrete SentencesIta of Sentences = NumeralIta ** SentencesI - [
-  IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale
+  IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
+  mkPerson, Superlative
  ] 
   with 
     (Syntax = SyntaxIta), 
@@ -9,21 +10,21 @@ concrete SentencesIta of Sentences = NumeralIta ** SentencesI - [
 
     lincat
      Place = NPPlace ; -- {name : NP ; at : Adv ; to : Adv ; } ;
-
-
+     Superlative = {s : A ; isPre : Bool} ;
+ 
     lin 
       IFemale = 
-        {name = mkNP (ProDrop i8fem_Pron) ; isPron = True ; poss = mkQuant i_Pron} ; 
+        {name = mkNP (ProDrop i8fem_Pron) ; isPron = True ; poss = PossFamQuant i_Pron} ; 
       YouFamFemale = 
-        {name = mkNP (ProDrop youSg8fem_Pron) ; isPron = True ; poss = mkQuant youSg_Pron} ; 
+        {name = mkNP (ProDrop youSg8fem_Pron) ; isPron = True ; poss = PossFamQuant youSg_Pron} ; 
       YouPolFemale = 
-        {name = mkNP (ProDrop youPol8fem_Pron) ; isPron = True ; poss = mkQuant youPol_Pron};
+        {name = mkNP (ProDrop youPol8fem_Pron) ; isPron = True ; poss = PossFamQuant youPol_Pron};
       IMale = 
-        {name = mkNP (ProDrop i_Pron) ; isPron = True ; poss = mkQuant i_Pron} ; 
+        {name = mkNP (ProDrop i_Pron) ; isPron = True ; poss = PossFamQuant i_Pron} ; 
       YouFamMale = 
-        {name = mkNP (ProDrop youSg_Pron) ; isPron = True ; poss = mkQuant youSg_Pron} ; 
+        {name = mkNP (ProDrop youSg_Pron) ; isPron = True ; poss = PossFamQuant youSg_Pron} ; 
       YouPolMale = 
-        {name = mkNP (ProDrop youPol_Pron) ; isPron = True ; poss = mkQuant youPol_Pron} ;
+        {name = mkNP (ProDrop youPol_Pron) ; isPron = True ; poss = PossFamQuant youPol_Pron} ;
 
     oper
 
@@ -42,7 +43,8 @@ concrete SentencesIta of Sentences = NumeralIta ** SentencesI - [
       to = mkAdv kind.to name
     } ;
 
-
+  mkPerson : Pron -> {name : NP ; isPron : Bool ; poss : Quant} = \p -> 
+    {name = mkNP p ; isPron = True ; poss = PossFamQuant p} ;
 
 }
 

@@ -199,15 +199,27 @@ lin
 
 -- modifiers of places
 
-    TheBest = mkSuperl L.good_A ;
-    TheClosest = mkSuperl L.near_A ; 
-    TheCheapest = mkSuperl (compADeg {s = \\_ => (M.mkAdj "bon marché" "bon marché" "bon marché" "bon marché").s ; isPre = False ; lock_A = <>}) ; 
-    TheMostExpensive = mkSuperl (mkA "cher") ;
-    TheMostPopular = mkSuperl (mkA "populair") ;
-    TheWorst = mkSuperl L.bad_A ;
+    TheBest = mkSuperl True L.good_A ;
+    TheClosest = mkSuperl False L.near_A ; 
+    TheCheapest = mkSuperl False 
+      (compADeg {s = \\_ => (M.mkAdj "bon marché" "bon marché" "bon marché" "bon marché").s ; 
+       isPre = False ; lock_A = <>}) ; ---- 
+    TheMostExpensive = mkSuperl False (mkA "cher") ;
+    TheMostPopular = mkSuperl False (mkA "populaire") ;
+    TheWorst = mkSuperl True L.bad_A ;
 
-    SuperlPlace sup p = placeNP sup p ;
-
+    SuperlPlace sup kind = 
+      let 
+        det  : Det = mkDet the_Art sup.s ;
+        name : NP  = case sup.isPre of {
+          True  => mkNP det kind.name ;                      -- le meilleur bar
+          False => mkNP the_Art (mkCN kind.name (mkNP det))  -- le bar le plus cher
+          } 
+      in {
+        name = name ;
+        at = SyntaxFre.mkAdv kind.at name ;
+        to = SyntaxFre.mkAdv kind.to name
+      } ;
 
 -- transports
 
@@ -252,8 +264,9 @@ lin
     en_Prep = mkPrep "en" ;
     par_Prep = mkPrep "par" ;
 
-    mkSuperl : A -> Det = \a -> SyntaxFre.mkDet the_Art (SyntaxFre.mkOrd a) ;
-    
+    mkSuperl : Bool -> A -> {s : Ord ; isPre : Bool} = \b,a -> 
+      {s = SyntaxFre.mkOrd a ; isPre = b} ;
+
     far_IAdv = ss "loin" ;
 
     distance_NP : NP = mkNP the_Det (mkN "distance" feminine) ;

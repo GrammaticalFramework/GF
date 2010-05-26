@@ -219,15 +219,25 @@ lin
 
 -- modifiers of places
 
-    TheBest = mkSuperl L.good_A ;
-    TheClosest = mkSuperl L.near_A ; 
-    TheCheapest = mkSuperl (mkA "economico") ;
-    TheMostExpensive = mkSuperl (mkA "costoso") ;
-    TheMostPopular = mkSuperl (mkA "alla moda") ;
-    TheWorst = mkSuperl L.bad_A ;
+    TheBest = mkSuperl True L.good_A ;
+    TheClosest = mkSuperl False L.near_A ; 
+    TheCheapest = mkSuperl False (mkA (mkA "economico") (mkA "meno caro")) ;
+    TheMostExpensive = mkSuperl False (mkA "costoso") ;
+    TheMostPopular = mkSuperl False (mkA "alla moda") ;
+    TheWorst = mkSuperl True L.bad_A ;
 
-    SuperlPlace sup p = placeNP sup p ;
-
+    SuperlPlace sup kind = 
+      let 
+        det  : Det = mkDet the_Art (mkOrd sup.s) ;
+        name : NP  = case sup.isPre of {
+          True  => mkNP det kind.name ;                 -- il migliore bar
+          False => mkNP the_Art (mkCN (mkAP (mkOrd sup.s)) kind.name)  -- il bar più caro
+          } 
+      in {
+        name = name ;
+        at = SyntaxIta.mkAdv kind.at name ;
+        to = SyntaxIta.mkAdv kind.to name
+      } ;
 
 -- auxiliaries
 
@@ -249,10 +259,10 @@ lin
       by = E.PrepCN P.in_Prep n
       } ;
 
-    mkSuperl : A -> Det = \a -> SyntaxIta.mkDet the_Art (SyntaxIta.mkOrd a) ;
+    mkSuperl : Bool -> A -> {s : A ; isPre : Bool} = \b,a -> 
+      {s = a ; isPre = b} ;
 
     open_A = mkA "aperto" ;
     closed_A = mkA "chiuso" ;
-
 
 }
