@@ -1,4 +1,4 @@
-    --# -path=.:../abstract:../common:../prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete SymbolPol of Symbol = CatPol ** open Prelude, ResPol, AdjectiveMorphoPol in {
 

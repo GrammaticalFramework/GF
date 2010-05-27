@@ -110,7 +110,7 @@ concrete WordsPol of Words = SentencesPol **
 
 -- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
 
-    DanishCrown = mkCN (mkCurrency "korona holenderska" "korony holenderskie" "koron holenderskich" Fem);
+    DanishCrown = mkCN (mkCurrency "korona duńska" "korony duńskie" "koron duńskich" Fem);
     Dollar = mkCN (P.nSer "dolar") ;
     Euro = mkCN (mkCurrency "euro" "euro" "euro" Neut);
     Lei = mkCN (mkCurrency "leja" "leje" "lei" Fem);
