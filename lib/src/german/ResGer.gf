@@ -320,7 +320,12 @@ resource ResGer = ParamX ** open Prelude in {
     mkN wein wein wein weines weine weinen ;
 
   regA : Str -> Adjective = \blau ->
-    mkA blau blau (blau + "er") (blau + "est") ;
+   let blauest : Str = case blau of {
+     _ + ("t" | "d" | "s" | "sch" | "z") => blau + "est" ;
+     _ => blau + "st"
+   }
+   in
+   mkA blau blau (blau + "er") blauest ;
 
   regV : Str -> Verb = \legen ->
     let 

@@ -214,11 +214,11 @@ concrete WordsFin of Words = SentencesFin **
 -- modifiers of places
 
     TheBest = mkSuperl L.good_A ;
-    TheClosest = mkSuperl L.near_A ; 
-    TheCheapest = mkSuperl (mkA "halpa") ;
-    TheMostExpensive = mkSuperl (mkA "kallis") ;
+    TheClosest = mkSuperl (mkA (mkN "läheinen") "lähempi" "lähin") ;
+    TheCheapest = mkSuperl (mkA (mkN "halpa") "halvempi" "halvin") ;
+    TheMostExpensive = mkSuperl (mkA (mkN "kallis") "kalliimpi" "kallein") ;
     TheMostPopular = mkSuperl (mkA "suosittu") ;
-    TheWorst = mkSuperl L.bad_A ;
+    TheWorst = mkSuperl (mkA "huono") ;
 
     SuperlPlace sup p = placeNP sup p ;
 
@@ -267,7 +267,7 @@ concrete WordsFin of Words = SentencesFin **
       by = SyntaxFin.mkAdv (casePrep adessive) (mkNP n)
       } ;
 
-    mkSuperl : A -> Det = \a -> mkDet the_Art (mkOrd a) ;
+    mkSuperl : A -> Det = \a -> mkDet the_Quant (mkOrd a) ;
 
     far_IAdv = E.IAdvAdv L.far_Adv ;
 }

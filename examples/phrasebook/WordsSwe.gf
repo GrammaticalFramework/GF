@@ -191,11 +191,11 @@ concrete WordsSwe of Words = SentencesSwe **
 
     HowFar place = 
       mkQS (mkQCl far_IAdv (mkCl (mkVP place.to))) ;
-    HowFarFrom place x = 
-      mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP place.to) 
+    HowFarFrom x y = 
+      mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP y.to) 
                     (SyntaxSwe.mkAdv from_Prep x.name)))) ;
-    HowFarFromBy place x t = 
-      mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP (mkVP place.to) 
+    HowFarFromBy x y t = 
+      mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP (mkVP y.to) 
                     (SyntaxSwe.mkAdv from_Prep x.name)) t))) ;
     HowFarBy place t = 
       mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP place.to) t))) ;

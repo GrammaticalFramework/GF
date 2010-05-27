@@ -385,7 +385,8 @@ mkV2 : overload {
   regA : Str -> A = \a -> case a of {
     teu + "er" => mk3A a (teu + "rer") (teu + "reste") ;
     _ + "e"    => mk3A a (a + "r") (a + "ste") ;
-    _          => mk3A a (a + "er") (a + "este")
+     _ + ("t" | "d" | "s" | "sch" | "z") => mk3A a (a + "er") (a + "este") ;
+    _          => mk3A a (a + "er") (a + "ste")
     } ;
 
   invarA = \s -> {s = \\_,_ => s ; lock_A = <>} ; ---- comparison
