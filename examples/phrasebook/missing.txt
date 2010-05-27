@@ -1,6 +1,6 @@
 DisambPhrasebookEng :
 PhrasebookBul : GCongratulations GGoodLuck GHappyBirthday
-PhrasebookCat : pot01
+PhrasebookCat :
 PhrasebookDan :
 PhrasebookDut :
 PhrasebookEng :
@@ -9,6 +9,7 @@ PhrasebookFre :
 PhrasebookGer :
 PhrasebookIta :
 PhrasebookNor :
+PhrasebookPol :
 PhrasebookRon :
 PhrasebookSpa : GCongratulations GGoodLuck GHappyBirthday
 PhrasebookSwe :
