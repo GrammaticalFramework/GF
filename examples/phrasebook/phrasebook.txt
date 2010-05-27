@@ -1,5 +1,5 @@
 MOLTO Multilingual Phrasebook
-Krasimir Angelov, Olga Caprotti, Ramona Enache, Thomas Hallgren, Inari Listenmaa, Aarne Ranta, Jordi Saludes 
+Krasimir Angelov, Olga Caprotti, Ramona Enache, Thomas Hallgren, Inari Listenmaa, Aarne Ranta, Jordi Saludes, Adam Slaski
 Showcase for project FP7-ICT-247914, Deliverable D10.2.
 
 
@@ -14,6 +14,7 @@ Showcase for project FP7-ICT-247914, Deliverable D10.2.
 #BSMALL
 
 History
+- 27 May. Polish added.
 - 26 May. Version 0.9:
   Catalan added, mass/count noun distinction to reduce overgeneration, 
   improved web interface.
@@ -71,12 +72,9 @@ The source code resides in
 [``code.haskell.org/gf/examples/phrasebook/`` http://code.haskell.org/gf/examples/phrasebook/]
 
 
-Current status (26 May 2010):
+Current status (27 May 2010):
 - small but useful coverage in abstract syntax
-- reasonable implementations for 
-  Bulgarian, Catalan, Danish, Dutch, English, Finnish, French, German, 
-  Italian, Norwegian, Romanian, Spanish, Swedish
-- Polish and Russian under construction
+- reasonable implementations for all MOLTO languages except Russian
 - works on web browsers calling a server
 - web service not yet released, but preliminarily available in
   http://www.grammaticalframework.org/demos/phrasebook/
@@ -214,4 +212,12 @@ Here are the steps to follow for contributors:
 - Don't delete anything! But you are free to correct incorrect forms.
 - Don't change the module structure! 
 - Don't compromise quality to gain coverage: //non multa sed multum!// 
+
+
+==Acknowledgements==
+
+The Phrasebook has been built in the MOLTO project funded by the European Commission.
+
+The authors are grateful to their native speaker informants helping to bootstrap and evaluate
+the grammars: Richard Bubel, Grégoire Détrez, Michal Palka, Willard Rafnsson,...
 

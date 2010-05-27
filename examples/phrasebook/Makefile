@@ -5,10 +5,10 @@ all: fin demo missing
 demo: compdemo linkdemo
 
 compdemo:
-	$(compile) Bul Cat Dan Dut Eng Fre Ger Ita Nor Ron Spa Swe DisambPhrasebookEng
+	$(compile) Bul Cat Dan Dut Eng Fre Ger Ita Nor Pol Ron Spa Swe DisambPhrasebookEng
 
 linkdemo:
-	$(compile) -link Eng Bul Cat Dan Dut Fin Fre Ger Ita Nor Ron Spa Swe DisambPhrasebookEng 
+	$(compile) -link Eng Bul Cat Dan Dut Fin Fre Ger Ita Nor Pol Ron Spa Swe DisambPhrasebookEng 
 
 #separate, because slow...
 fin:
