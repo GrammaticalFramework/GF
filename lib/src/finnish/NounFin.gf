@@ -82,8 +82,8 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
       } ;
 
     DetQuantOrd quant num ord = {
-      s1 = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! NCase Pl c ; 
-      sp = \\c => quant.sp ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! NCase Pl c ; 
+      s1 = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! NCase num.n c ; 
+      sp = \\c => quant.sp ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! NCase num.n c ; 
       s2 = quant.s2 ;
       n = num.n ;
       isNum = num.isNum ;
