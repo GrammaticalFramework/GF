@@ -95,4 +95,12 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       a = p.a
       } ;
 
+    ProDropPoss p = {
+      s1 = \\_,_ => [] ;
+      sp = \\_,_ => p.s ! NPCase Gen ;
+      s2 = BIND ++ possSuffix p.a ;
+      isNum = False ;
+      isPoss = True ;
+      isDef = True  --- "minun kolme autoani ovat" ; thus "...on" is missing
+      } ;
 } 
