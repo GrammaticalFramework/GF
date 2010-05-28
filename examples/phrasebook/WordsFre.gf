@@ -237,8 +237,8 @@ lin
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
     IsTranspPlace trans place =
-      mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
-
+      lin QS {s = \\_ => (E.EstcequeS (mkS (mkCl (mkCN trans.name place.to)))).s} ;
+      --      mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
 
   oper
     mkNat : Str -> Str -> NPNationality = \nat,co -> 
