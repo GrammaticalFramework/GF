@@ -226,7 +226,7 @@ concrete WordsSwe of Words = SentencesSwe **
       mkNPDay day (SyntaxSwe.mkAdv on_Prep day) 
         (SyntaxSwe.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
 
-    mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
+    mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep ; isPl : Bool} = \p,i -> 
       mkCNPlace (mkCN p) (mkPrep i) to_Prep ;
 
     open_A = mkA "öppen" "öppet" ;
