@@ -2,10 +2,8 @@ concrete ExtraNor of ExtraNorAbs = ExtraScandNor ** open CommonScand, ResNor, Pr
 
   lin
     PossNP np pro = {
-      s = table {
-            NPPoss _ => np.s ! NPNom ++ pro.s ! NPPoss (gennumAgr np.a) ++ BIND ++ "s" ; ----
-            _ => np.s ! NPNom ++ pro.s ! NPPoss (gennumAgr np.a)
-            } ;
+      s = \\c => np.s ! NPNom ++ pro.s ! NPPoss (gennumAgr np.a) (caseNP c) ;
       a = np.a
       } ;
+
 }

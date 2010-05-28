@@ -436,7 +436,7 @@ oper
   regGenPN n g = {s = \\c => mkCase c n ; g = g} ** {lock_PN = <>} ;
   nounPN n = {s = n.s ! singular ! Indef ; g = n.g ; lock_PN = <>} ;
   makeNP x y n g = 
-    {s = table {NPPoss _ => y ; _ => x} ; a = agrP3 g n ; p = P3 ;
+    {s = table {NPPoss _ _ => y ; _ => x} ; a = agrP3 g n ; p = P3 ;
      lock_NP = <>} ;
 
   mkA = overload {

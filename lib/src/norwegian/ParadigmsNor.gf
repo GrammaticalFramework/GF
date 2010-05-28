@@ -325,7 +325,7 @@ oper
 
   makeNP : Str -> Str -> Number -> Gender -> NP ; 
   makeNP x y n g = 
-    {s = table {NPPoss _ => x ; _ => y} ; a = agrP3 (ngen2gen g) n ;
+    {s = table {NPPoss _ _ => x ; _ => y} ; a = agrP3 (ngen2gen g) n ;
      lock_NP = <>} ;
 
   mk3A = mk3ADeg ; ---- (mkAdject a b c [] []) ** {isComp = False ; lock_A = <>} ;

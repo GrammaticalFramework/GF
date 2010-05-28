@@ -340,7 +340,7 @@ oper
 
   makeNP : Str -> Str -> Number -> Gender -> NP ; 
   makeNP x y n g = 
-    {s = table {NPPoss _ => x ; _ => y} ; a = agrP3 g n ;
+    {s = table {NPPoss _ _ => x ; _ => y} ; a = agrP3 g n ;
      lock_NP = <>} ;
 
   mk3A = mk3ADeg ;

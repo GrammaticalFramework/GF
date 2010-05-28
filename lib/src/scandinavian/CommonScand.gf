@@ -65,7 +65,7 @@ param
 
   VType = VAct | VPass | VRefl ;
 
-  NPForm = NPNom | NPAcc | NPPoss GenNum ;
+  NPForm = NPNom | NPAcc | NPPoss GenNum Case ;
 
   RCase = RNom | RGen | RPrep Bool ;
 
@@ -82,7 +82,7 @@ oper
   accusative : NPForm = NPAcc ;
 
   caseNP : NPForm -> Case = \np -> case np of {
-    NPPoss _ => Gen ;
+    NPPoss _ _ => Gen ;
     _ => Nom
     } ;
 
@@ -224,7 +224,7 @@ oper
     s = table {
       NPNom => du ;
       NPAcc => dig ;
-      NPPoss h => gennumForms din ditt dina ! h
+      NPPoss h c => mkCase c (gennumForms din ditt dina ! h)
       } ;
     a = {
       g = g ;
