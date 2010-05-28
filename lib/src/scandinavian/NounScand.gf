@@ -83,7 +83,7 @@ incomplete concrete NounScand of Noun =
       } ;
 
     PossPron p = {
-      s,sp = \\n,_,_,g => p.s ! NPPoss (gennum (ngen2gen g) n) ; 
+      s,sp = \\n,_,_,g => p.s ! NPPoss (gennum (ngen2gen g) n) Nom ; 
       det = DDef Indef
       } ;
 
