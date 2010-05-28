@@ -37,33 +37,33 @@ concrete WordsGer of Words = SentencesGer **
 
 -- places
 
-    Airport = mkPlace (mkN "Flughafen" "Flughäfen" masculine) on_Prep zu_Prep ; -- am/an dem (dative)  --im/in dem
-    Church = mkPlace (mkN "Kirche") in_Prep zu_Prep ;
-    Hospital = mkPlace (mkN "Krankenhaus" "Krankenhäuser" neuter) in_Prep zu_Prep ;
+    Airport = mkPlace (mkN "Flughafen" "Flughäfen" masculine) on_Prep zu_Prep ; 
+    Church = mkPlace (mkN "Kirche") in_Prep in_Prep ;
+    Hospital = mkPlace (mkN "Krankenhaus" "Krankenhäuser" neuter) in_Prep in_Prep ;
     Restaurant = mkPlace (mkN "Restaurant" "Restaurants" neuter) in_Prep zu_Prep ;
     Station = mkPlace (mkN "Bahnhofen" "Bahnhöfen" masculine) on_Prep zu_Prep ;
     University = mkPlace (mkN "Universität" "Universitäten" feminine) in_Prep zu_Prep ;
 
-    AmusementPark = mkPlace (mkN "Vergnügungspark" "Vergnügungspark" "Vergnügungspark" "Vergnügungspark" "Vergnügungsparks" "Vergnügungsparks" masculine) in_Prep zu_Prep ;
+    AmusementPark = mkPlace (mkN "Vergnügungspark" "Vergnügungspark" "Vergnügungspark" "Vergnügungspark" "Vergnügungsparks" "Vergnügungsparks" masculine) in_Prep in_Prep ;
     Bank = mkPlace (mkN "Bank" "Bank" "Bank" "Bank" "Banken" "Banken" feminine) in_Prep zu_Prep ;
-    Bar = mkPlace (mkN "Bar" "Bar" "Bar" "Bar" "Bars" "Bars" masculine) in_Prep zu_Prep ;
-    Cafeteria = mkPlace (mkN "Cafeteria" "Cafeteria" "Cafeteria" "Cafeteria" "Cafeterien" "Cafeterien" feminine) in_Prep zu_Prep ;
+    Bar = mkPlace (mkN "Bar" "Bar" "Bar" "Bar" "Bars" "Bars" feminine) in_Prep in_Prep ;
+    Cafeteria = mkPlace (mkN "Cafeteria" "Cafeteria" "Cafeteria" "Cafeteria" "Cafeterien" "Cafeterien" feminine) in_Prep in_Prep ;
     Center = mkPlace (mkN "Zentrum" "Zentrum" "Zentrum" "Zentrum" "Zentren" "Zentren" neuter) in_Prep zu_Prep ;
-    Cinema = mkPlace (mkN "Kino" "Kino" "Kino" "Kino" "Kinos" "Kinos" neuter) in_Prep zu_Prep ;
-    Disco = mkPlace (mkN "Disco" "Disco" "Disco" "Disco" "Discos" "Discos" feminine) in_Prep zu_Prep ;
-    Hotel = mkPlace (mkN "Hotel" "Hotel" "Hotel" "Hotel" "Hotels" "Hotels" neuter) in_Prep zu_Prep ;
+    Cinema = mkPlace (mkN "Kino" "Kino" "Kino" "Kino" "Kinos" "Kinos" neuter) in_Prep in_Prep ;
+    Disco = mkPlace (mkN "Disco" "Disco" "Disco" "Disco" "Discos" "Discos" feminine) in_Prep in_Prep ;
+    Hotel = mkPlace (mkN "Hotel" "Hotel" "Hotel" "Hotel" "Hotels" "Hotels" neuter) in_Prep in_Prep ;
     Museum = mkPlace (mkN "Museum" "Museum" "Museum" "Museum" "Museen" "Museen" neuter) in_Prep zu_Prep ;
-    Park = mkPlace (mkN "Park" "Park" "Park" "Park" "Parks" "Parks" masculine) in_Prep zu_Prep ;
-    Parking = mkPlace (mkN "Parkplatz" "Parkplatz" "Parkplatz" "Parkplatz" "Parkplatzen" "Parkplatzen" masculine) on_Prep zu_Prep ;
+    Park = mkPlace (mkN "Park" "Park" "Park" "Park" "Parks" "Parks" masculine) in_Prep in_Prep ;
+    Parking = mkPlace (mkN "Parkplatz" "Parkplatz" "Parkplatz" "Parkplatz" "Parkplatzen" "Parkplatzen" masculine) on_Prep on_Prep ;
     Pharmacy = mkPlace (mkN "Apotheke" "Apotheke" "Apotheke" "Apotheke" "Apotheken" "Apotheken" feminine) in_Prep zu_Prep ;
-    PostOffice = mkPlace (mkN "Post" "Post" "Post" "Post" "Posten" "Posten" feminine) in_Prep zu_Prep ;
-    Pub = mkPlace (mkN "Kneipe" "Kneipe" "Kneipe" "Kneipe" "Kneipen" "Kneipen" feminine) in_Prep zu_Prep;
-    School = mkPlace (mkN "Schule" "Schule" "Schule" "Schule" "Schulen" "Schule" feminine) in_Prep zu_Prep ;
+    PostOffice = mkPlace (mkN "Post" "Post" "Post" "Post" "Posten" "Posten" feminine) in_Prep on_Prep ;
+    Pub = mkPlace (mkN "Kneipe" "Kneipe" "Kneipe" "Kneipe" "Kneipen" "Kneipen" feminine) in_Prep in_Prep;
+    School = mkPlace (mkN "Schule" "Schule" "Schule" "Schule" "Schulen" "Schule" feminine) in_Prep in_Prep ;
     Shop = mkPlace (mkN "Geschäft" "Geschäft" "Geschäft" "Geschäft" "Geschäfte" "Geschäfte" neuter) in_Prep zu_Prep ;
-    Supermarket = mkPlace (mkN "Supermarkt" "Supermarkt" "Supermarkt" "Supermarkt" "Supermärkten" "Supermärkte" masculine) in_Prep zu_Prep ;
-    Theatre = mkPlace (mkN "Theater" "Theater" "Theater" "Theaters" "Theatern" "Thaters" neuter) in_Prep zu_Prep ; 
-    Toilet = mkPlace (mkN "Toilette" "Toilette" "Toilette" "Toilette" "Toiletten" "Toiletten" feminine) in_Prep zu_Prep ; 
-    Zoo = mkPlace (mkN "Zoo" "Zoo" "Zoo" "Zoo" "Zoos" "Zoos" masculine) in_Prep zu_Prep ;
+    Supermarket = mkPlace (mkN "Supermarkt" "Supermarkt" "Supermarkt" "Supermarkt" "Supermärkten" "Supermärkte" masculine) in_Prep in_Prep ;
+    Theatre = mkPlace (mkN "Theater" "Theater" "Theater" "Theaters" "Theatern" "Thaters" neuter) in_Prep in_Prep ; 
+    Toilet = mkPlace (mkN "Toilette" "Toilette" "Toilette" "Toilette" "Toiletten" "Toiletten" feminine) in_Prep on_Prep ; 
+    Zoo = mkPlace (mkN "Zoo" "Zoo" "Zoo" "Zoo" "Zoos" "Zoos" masculine) in_Prep in_Prep ;
 
 
 CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)) in_Prep zu_Prep ;
@@ -86,7 +86,7 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
 
 -- nationalities
 
-    Belgian = mkA "Belgisch" ;
+    Belgian = mkA "belgisch" ;
     Belgium = mkNP (mkPN "Belgien") ;
     Bulgarian = mkNat "Bulgarien" "Bulgarisch" "bulgarisch" ;	
     Catalan = mkNat "Katalonien" "Katalanisch" "katalanisch" ;
@@ -156,7 +156,7 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
     PSeeYouPlace p = mkText (lin Text (ss ("Wir sehen uns"))) (mkPhrase (mkUtt p.at)) ;
     PSeeYouPlaceDate p d = 
       mkText (lin Text (ss ("Wir sehen uns"))) 
-        (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
+        (mkText (mkPhrase (mkUtt d)) (mkPhrase (mkUtt p.at))) ;
 
 
 -- Relations are expressed as "my wife" or "my son's wife", as defined by $xOf$
@@ -207,10 +207,10 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
 
 
     HowFar place = mkQS (mkQCl far_IAdv place.name) ;
-    HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP y.name (SyntaxGer.mkAdv from_Prep x.name))) ;
+    HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxGer.mkAdv from_Prep x.name)) (ParadigmsGer.mkAdv "entfernt"))) ;
     HowFarFromBy x y t = 
-      mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxGer.mkAdv from_Prep x.name)) t)) ;
-    HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t)) ;
+      mkQS (mkQCl how_long_IAdv (mkCl (mkVP (SyntaxGer.mkAdv zu_Prep (mkNP (mkNP y.name (SyntaxGer.mkAdv from_Prep x.name)) t))))) ;
+    HowFarBy y t = mkQS (mkQCl how_long_IAdv (mkCl (mkVP (SyntaxGer.mkAdv zu_Prep (mkNP y.name t))))) ;
  
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
@@ -240,8 +240,8 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
       to = to
       } ;
 
-    open_Adv = mkAdv "geöffnet" ;  ---- Adv to get right word order easily
-    closed_Adv = mkAdv "geschlossen" ;
+    open_Adv = ParadigmsGer.mkAdv "geöffnet" ;  ---- Adv to get right word order easily
+    closed_Adv = ParadigmsGer.mkAdv "geschlossen" ;
 
     xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (mkCN x) p ; 
   
@@ -255,4 +255,5 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
       } ;
 
    far_IAdv = ss "wie weit" ** {lock_IAdv = <>} ; 
+   how_long_IAdv = ss "wie lange dauert" ** {lock_IAdv=<>} ;
 }
