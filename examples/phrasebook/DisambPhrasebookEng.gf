@@ -10,7 +10,7 @@ concrete DisambPhrasebookEng of Phrasebook = PhrasebookEng -
     GSorry, GSorryPol, 
     GPleaseGive, GPleaseGivePol,
     GNiceToMeetYou, -- GNiceToMeetYouPol,
-    PYes, PYesToNo
+    PYes, PYesToNo, ObjMass
    ] 
   ** open SyntaxEng, ParadigmsEng, Prelude in {
 lin
@@ -35,6 +35,8 @@ lin
 
   PYes = mkPhrase (lin Utt (ss "yes (answer to positive question)")) ;
   PYesToNo = mkPhrase (lin Utt (ss "yes (answer to negative question)")) ;
+
+  ObjMass x = mkNP (mkNP x) (ParadigmsEng.mkAdv "(a portion of)") ;
 
 oper
   fam : Str -> SS = \s -> postfixSS "(familiar)" (ss s) ;
