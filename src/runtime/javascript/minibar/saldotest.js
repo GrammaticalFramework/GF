@@ -19,13 +19,16 @@ function start_saldotest() {
 		 [button("Slumpa","random_word()"),
 		  button("Rensa","clear_all()"),
 		  button("⌫","delete_last()"),
-		  button("Ordlista","show_ordlista()"),
+		//button("Ordlista","show_ordlista()"),
 		  button("Visa tänkbara drag","show_moves()"),
 		  button("Gör ett drag","make_a_move()"),
-		  button("Visa prefix","show_prefixes()"),
+		//button("Visa prefix","show_prefixes()"),
 		  div_id("surface"),
 		  div_id("words"),
 		  div_id("translations")])
+  var style0="min-height: 3ex; margin: 5px; padding: 5px;";
+  element("surface").setAttribute("style",style0+"border: 3px dashed #e0e0e0;");
+  element("words").setAttribute("style",style0+"border: 3px solid #e0e0e0;");
   clear_all();
 }
 
@@ -74,10 +77,11 @@ function get_completions() {
 }
 
 function word(s) {
-  var w=span_class("word",text(s));
-  if(s==" ") w.innerHTML="&nbsp;";
-  w.setAttribute("onclick",'extend_current("'+s+'")');
-  return w;
+    //var w=span_class("word",text(s));
+    //if(s==" ") w.innerHTML="&nbsp;";
+    //w.setAttribute("onclick",'extend_current("'+s+'")');
+    //return w;
+    return button(s,'extend_current("'+s+'")');
 }
 
 function extend_current(s) {
@@ -259,11 +263,15 @@ var spel={ antal_ord: 4, // antal närbesläktade ord att visa
 function start_saldospel() {
     spel.hylla=div_id("hylla");
     spel.status=div_id("status");
-    element("saldospel").innerHTML="<h2>Vilket ord ska bort? <span id=score></span></h2>";
+    //element("saldospel").innerHTML="<span id=score></span>";
     appendChildren(element("saldospel"),
 		   [spel.hylla,spel.status,
-		    button("Nya ord","spel0()")]);
+		    p(text("")),
+		    button("Nya ord","spel0()"),
+		    text(" "),
+		    wrap("b",span_id("score"))]);
     spel.score=element("score");
+    show_score();
     spel0();
 }
 
@@ -306,7 +314,7 @@ function spel6(ordlista1,ord2) {
     var pos=Math.floor(Math.random()*spel.antal_ord);
     var ordlista=shuffle(shuffle(ordlista1).slice(0,spel.antal_ord).concat(ord2));
     spel.hylla.innerHTML="";
-    var lista=empty_class("p","space");
+    var lista=empty_class("div","space");
     for(var i=0;i<ordlista.length;i++)
 	lista.appendChild((button(ordlista[i],"spel7(this)")));
     spel.hylla.appendChild(lista);
@@ -315,11 +323,16 @@ function spel6(ordlista1,ord2) {
 function spel7(btn) {
     btn.disabled=true;
     var ok=btn.value==spel.ord2;
-    btn.setAttribute("class",ok ? "correct" : "incorrect");
+    //btn.setAttribute("class",ok ? "correct" : "incorrect");
+    btn.setAttribute("style",ok ? "color: green" : "color: red");
     if(ok) spel.antal_korrekta_svar++; else spel.antal_felaktiga_svar++;
+    show_score();
+    if(ok) spel0();
+}
+
+function show_score() {
     spel.score.innerHTML=""+spel.antal_korrekta_svar+" rätt, "
 	+spel.antal_felaktiga_svar+" fel";
-    if(ok) spel0();
 }
 
 function wf(ord) { // word form, wf("band..1") == "band"
