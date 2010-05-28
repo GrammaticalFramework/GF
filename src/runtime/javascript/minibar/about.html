@@ -80,11 +80,21 @@ Some implementation details:
   <code>start_minibar</code> options (server, grammars_url, grammar_list,
   show_grouped_translations, delete_button_text) to make
   <code>minibar.js</code> more resuable.)
+  <li>[Added 2010-05-26] The magnets are now created with
+  <code>&lt;input type=button&gt;</code> tags to make them clickable in more browsers.
+  <li>[Added 2010-05-26] The text entry field is now visible from the start, and it is
+  removed when no more words can be added to the sentence. When you press enter, the a word
+  is added if there is only one magnet left, <em>or</em> if what you have entered
+  exactly matches one of the remaining magnet.
+  <li>[Added 2010-05-28] Added a link to make it easy to try the same sentence in
+  <a href="http://translate.google.com">Google Translate</a>.
+  This can be turned of by passing the option {try_google:false} to
+  <code>start_minibar</code>.
 </ul>
 
 <hr>
 <small class=modtime>
-<!-- hhmts start --> Last modified: Fri Apr 30 16:47:43 CEST 2010 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Fri May 28 18:11:05 CEST 2010 <!-- hhmts end -->
 </small>
 <address>
 <a href="http://www.cs.chalmers.se/~hallgren/">TH</a>
