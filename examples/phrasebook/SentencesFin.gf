@@ -11,11 +11,11 @@ concrete SentencesFin of Sentences = NumeralFin ** SentencesI -
     NameNN = mkNP (P.mkPN (P.mkN "NN" "NN:iä")) ;
 
     IMale, IFemale = 
-        {name = mkNP (ProDrop i_Pron) ; isPron = True ; poss = mkQuant i_Pron} ; 
+        {name = mkNP (ProDrop i_Pron) ; isPron = True ; poss = ProDropPoss i_Pron} ; 
     YouFamMale, YouFamFemale = 
-        {name = mkNP (ProDrop youSg_Pron) ; isPron = True ; poss = mkQuant youSg_Pron} ; 
+        {name = mkNP (ProDrop youSg_Pron) ; isPron = True ; poss = ProDropPoss youSg_Pron} ; 
     YouPolMale, YouPolFemale = 
-        {name = mkNP (ProDrop youPol_Pron) ; isPron = True ; poss = mkQuant youPol_Pron} ;
+        {name = mkNP (ProDrop youPol_Pron) ; isPron = True ; poss = ProDropPoss youPol_Pron} ;
 
     ObjMass = PartCN ;
 
