@@ -133,7 +133,7 @@ concrete WordsDan of Words = SentencesDan **
     AHasTable p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (mkN "bord")) 
         (SyntaxDan.mkAdv to_Prep (mkNP num (mkN "person" "personen" "personer" "personerne")))) ;
-    AHungry p = mkCl p.name (mkA "sulten") ;
+    AHungry p = mkCl p.name (mkA "sulten" "sultet" "sultne") ;
     AIll p = mkCl p.name (mkA "syg") ;
     AKnow p = mkCl p.name vide_V ; 
     ALike p item = mkCl p.name (mkV2 holde_V (mkPrep "af")) item ;

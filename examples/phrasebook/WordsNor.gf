@@ -32,7 +32,7 @@ concrete WordsNor of Words = SentencesNor **
     Expensive = mkA "dyr" ;
     Fresh = mkA "fersk" ;
     Good = L.good_A ;
-    Suspect = mkA "suspekt" ;
+    Suspect = mkA "suspekt" "suspekt" ;
     Warm = L.warm_A ;
 
 -- places
@@ -131,9 +131,9 @@ concrete WordsNor of Words = SentencesNor **
       (mkNP (mkNP a_Det (mkN "rom" "rommet" "rommene" "romma")) 
         (SyntaxNor.mkAdv for_Prep (mkNP num (mkN "person" "personen" "personer" "personene")))) ;
     AHasTable p num = mkCl p.name have_V2 
-      (mkNP (mkNP a_Det (mkN "tabel" "tabellen" "tabeller" "tabellene")) 
+      (mkNP (mkNP a_Det (mkN "bord" "bordet" "bord" "borda")) 
         (SyntaxNor.mkAdv for_Prep (mkNP num (mkN "person" "personen" "personer" "personene")))) ;
-    AHungry p = mkCl p.name (mkA "sulten") ;
+    AHungry p = mkCl p.name (mkA "sulten" "sultet" "sultne") ;
     AIll p = mkCl p.name (mkA "syk") ;
     AKnow p = mkCl p.name vite_V ; 
     ALike p item = mkCl p.name (dirV2 (mk2V "like" "likte")) item ;
@@ -143,7 +143,7 @@ concrete WordsNor of Words = SentencesNor **
     AReady p = mkCl p.name (mkA "klar") ;
     AScared p = mkCl p.name (mkA "redd") ;
     ASpeak p lang = mkCl p.name  (dirV2 (regV "snakke")) lang ;
-    AThirsty p = mkCl p.name (mkA "tørst") ;
+    AThirsty p = mkCl p.name (mkA "tørstig") ;
     ATired p = mkCl p.name (mkA "sliten") ;
     AUnderstand p = mkCl p.name (irregV "forstå" "forstod" "forstått") ;
     AWant p obj = mkCl p.name want_VV (mkVP have_V2 obj) ;
@@ -251,7 +251,7 @@ concrete WordsNor of Words = SentencesNor **
 
     mkTransport : N -> {name : CN ; by : Adv} = \n -> {
       name = mkCN n ; 
-      by = SyntaxNor.mkAdv by8means_Prep (mkNP n)
+      by = SyntaxNor.mkAdv by8means_Prep (mkNP the_Det n)
       } ;
 
     far_IAdv = ExtraNor.IAdvAdv (ParadigmsNor.mkAdv "langt") ;
