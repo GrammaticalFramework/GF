@@ -417,8 +417,8 @@ Exp4
                                        in S (T annot $5) $2         }
   | 'variants' '{' ListExp '}'       { FV $3         }
   | 'pre' '{' ListCase '}'           {% mkAlts $3     }
-  | 'pre' '{' String ';' ListAltern '}' { Alts (K $3, $5) }
-  | 'pre' '{' Ident ';' ListAltern '}' { Alts (Vr $3, $5) }
+  | 'pre' '{' String ';' ListAltern '}' { Alts (K $3) $5 }
+  | 'pre' '{' Ident ';' ListAltern '}' { Alts (Vr $3) $5 }
   | 'strs' '{' ListExp '}'           { Strs $3       }
   | '#' Patt3                        { EPatt $2      }
   | 'pattern' Exp5                   { EPattType $2  }
@@ -468,7 +468,7 @@ Patt
 Patt1 :: { Patt }
 Patt1
   : Ident ListPatt            { PC $1 $2 } 
-  | Ident '.' Ident ListPatt  { PP $1 $3 $4 }
+  | Ident '.' Ident ListPatt  { PP ($1,$3) $4 }
   | Patt3 '*'                 { PRep $1 }
   | Patt2                     { $1 }
 
@@ -484,10 +484,10 @@ Patt3
   : '?'                       { PChar } 
   | '[' String ']'            { PChars $2 }
   | '#' Ident                 { PMacro $2 }
-  | '#' Ident '.' Ident       { PM $2 $4 }
+  | '#' Ident '.' Ident       { PM ($2,$4) }
   | '_'                       { PW }
   | Ident                     { PV $1 }
-  | Ident '.' Ident           { PP $1 $3 [] }
+  | Ident '.' Ident           { PP ($1,$3) [] }
   | Integer                   { PInt $1 }
   | Double                    { PFloat  $1 }
   | String                    { PString $1 }
@@ -705,7 +705,7 @@ mkAlts cs = case cs of
   _:_ -> do
     def  <- mkDef (last cs)
     alts <- mapM mkAlt (init cs)
-    return (Alts (def,alts))
+    return (Alts def alts)
   _ -> fail "empty alts"
  where
    mkDef (_,t) = return t
@@ -720,7 +720,7 @@ mkAlts cs = case cs of
      PString s -> return $ Strs [K s]
      PV x -> return (Vr x) --- for macros; not yet complete
      PMacro x -> return (Vr x) --- for macros; not yet complete
-     PM m c -> return (Q m c) --- for macros; not yet complete
+     PM c -> return (Q c) --- for macros; not yet complete
      _ -> fail "no strs from pattern"
 
 mkL :: Posn -> Posn -> x -> L x

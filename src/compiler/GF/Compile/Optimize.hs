@@ -146,10 +146,10 @@ mkLinDefault gr typ = liftM (Abs Explicit varStr) $ mkDefField typ
        let T _ cs = mkWildCases t'
        return $ T (TWild p) cs
      Sort s | s == cStr -> return $ Vr varStr
-     QC q p             -> do vs <- lookupParamValues gr q p
-                              case vs of
-                                v:_ -> return v
-                                _   -> Bad (render (text "no parameter values given to type" <+> ppIdent p))
+     QC p           -> do vs <- lookupParamValues gr p
+                          case vs of
+                            v:_ -> return v
+                            _   -> Bad (render (text "no parameter values given to type" <+> ppQIdent Qualified p))
      RecType r  -> do
        let (ls,ts) = unzip r
        ts <- mapM mkDefField ts
@@ -181,7 +181,7 @@ evalPrintname gr c ppr lin =
      C x y     -> C (oneBranch x) (oneBranch y)
      S x _     -> oneBranch x
      P x _     -> oneBranch x
-     Alts (d,_) -> oneBranch d
+     Alts d _  -> oneBranch d
      _ -> t
 
   --- very unclean cleaner
@@ -222,7 +222,7 @@ replace :: Term -> Term -> Term -> Term
 replace old new trm =
   case trm of
     -- these are the important cases, since they can correspond to patterns  
-    QC _ _   | trm == old -> new
+    QC _     | trm == old -> new
     App _ _  | trm == old -> new
     R _      | trm == old -> new
     App x y               -> App (replace old new x) (replace old new y)

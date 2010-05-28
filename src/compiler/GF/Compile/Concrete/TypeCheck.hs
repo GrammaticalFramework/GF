@@ -23,8 +23,8 @@ computeLType gr g0 t = comp (reverse [(b,x, Vr x) | (b,x,_) <- g0] ++ g0) t
     _ | Just _ <- isTypeInts ty -> return ty ---- shouldn't be needed
       | isPredefConstant ty     -> return ty ---- shouldn't be needed
 
-    Q m ident -> checkIn (text "module" <+> ppIdent m) $ do
-      ty' <- checkErr (lookupResDef gr m ident) 
+    Q (m,ident) -> checkIn (text "module" <+> ppIdent m) $ do
+      ty' <- checkErr (lookupResDef gr (m,ident)) 
       if ty' == ty then return ty else comp g ty' --- is this necessary to test?
 
     Vr ident  -> checkLookup ident g -- never needed to compute!
@@ -70,22 +70,22 @@ computeLType gr g0 t = comp (reverse [(b,x, Vr x) | (b,x,_) <- g0] ++ g0) t
 inferLType :: SourceGrammar -> Context -> Term -> Check (Term, Type)
 inferLType gr g trm = case trm of
 
-   Q m ident | isPredef m -> termWith trm $ checkErr (typPredefined ident)
+   Q (m,ident) | isPredef m -> termWith trm $ checkErr (typPredefined ident)
 
-   Q m ident -> checks [
-     termWith trm $ checkErr (lookupResType gr m ident) >>= computeLType gr g
+   Q ident -> checks [
+     termWith trm $ checkErr (lookupResType gr ident) >>= computeLType gr g
      ,
-     checkErr (lookupResDef gr m ident) >>= inferLType gr g
+     checkErr (lookupResDef gr ident) >>= inferLType gr g
      ,
      checkError (text "cannot infer type of constant" <+> ppTerm Unqualified 0 trm)
      ]
 
-   QC m ident | isPredef m -> termWith trm $ checkErr (typPredefined ident)
+   QC (m,ident) | isPredef m -> termWith trm $ checkErr (typPredefined ident)
 
-   QC m ident -> checks [
-       termWith trm $ checkErr (lookupResType gr m ident) >>= computeLType gr g
+   QC ident -> checks [
+       termWith trm $ checkErr (lookupResType gr ident) >>= computeLType gr g
        ,
-       checkErr (lookupResDef gr m ident) >>= inferLType gr g
+       checkErr (lookupResDef gr ident) >>= inferLType gr g
        ,
        checkError (text "cannot infer type of canonical constant" <+> ppTerm Unqualified 0 trm)
        ]
@@ -188,13 +188,13 @@ inferLType gr g trm = case trm of
      ts' <- mapM (\t -> justCheck g t typeStr) ts 
      return (Strs ts', typeStrs)
 
-   Alts (t,aa) -> do
+   Alts t aa -> do
      t'  <- justCheck g t typeStr
      aa' <- flip mapM aa (\ (c,v) -> do
         c' <- justCheck g c typeStr 
         v' <- checks $ map (justCheck g v) [typeStrs, EPattType typeStr]
         return (c',v'))
-     return (Alts (t',aa'), typeStr)
+     return (Alts t' aa', typeStr)
 
    RecType r -> do
      let (ls,ts) = unzip r
@@ -267,7 +267,7 @@ inferLType gr g trm = case trm of
      return (arg,val)
    isConstPatt p = case p of
      PC _ ps -> True --- all isConstPatt ps
-     PP _ _ ps -> True --- all isConstPatt ps
+     PP _ ps -> True --- all isConstPatt ps
      PR ps -> all (isConstPatt . snd) ps
      PT _ p -> isConstPatt p
      PString _ -> True
@@ -283,7 +283,7 @@ inferLType gr g trm = case trm of
      _ -> False
 
    inferPatt p = case p of
-     PP q c ps | q /= cPredef -> checkErr $ liftM valTypeCnc (lookupResType gr q c)
+     PP (q,c) ps | q /= cPredef -> checkErr $ liftM valTypeCnc (lookupResType gr (q,c))
      PAs _ p  -> inferPatt p
      PNeg p   -> inferPatt p
      PAlt p q -> checks [inferPatt p, inferPatt q]
@@ -298,7 +298,7 @@ inferLType gr g trm = case trm of
 -- the latter permits matching with value type
 getOverload :: SourceGrammar -> Context -> Maybe Type -> Term -> Check (Maybe (Term,Type))
 getOverload gr g mt ot = case appForm ot of
-     (f@(Q m c), ts) -> case lookupOverload gr m c of
+     (f@(Q c), ts) -> case lookupOverload gr c of
        Ok typs -> do
          ttys <- mapM (inferLType gr g) ts
          v <- matchOverload f typs ttys
@@ -390,7 +390,7 @@ checkLType gr g trm typ0 = do
           (trm',ty') <- inferLType gr g trm
           termWith trm' $ checkEqLType gr g typ ty' trm'
 
-    Q _ _ -> do
+    Q _ -> do
        over <- getOverload gr g (Just typ) trm
        case over of
          Just trty -> return trty
@@ -522,8 +522,8 @@ checkLType gr g trm typ0 = do
 pattContext :: SourceGrammar -> Context -> Type -> Patt -> Check Context
 pattContext env g typ p = case p of
   PV x -> return [(Explicit,x,typ)]
-  PP q c ps | q /= cPredef -> do ---- why this /=? AR 6/1/2006
-    t <- checkErr $ lookupResType env q c
+  PP (q,c) ps | q /= cPredef -> do ---- why this /=? AR 6/1/2006
+    t <- checkErr $ lookupResType env (q,c)
     let (cont,v) = typeFormCnc t
     checkCond (text "wrong number of arguments for constructor in" <+> ppPatt Unqualified 0 p) 
               (length cont == length ps)
@@ -617,15 +617,15 @@ checkIfEqLType gr g t u trm = do
            | t == typeInt,           Just _ <- isTypeInts u -> True ---- why this ???? AR 11/12/2005
 
      ---- this should be made in Rename
-     (Q  m a, Q  n b) | a == b -> elem m (allExtendsPlus gr n) 
-                               || elem n (allExtendsPlus gr m)
-                               || m == n --- for Predef
-     (QC m a, QC n b) | a == b -> elem m (allExtendsPlus gr n) 
-                               || elem n (allExtendsPlus gr m)
-     (QC m a, Q  n b) | a == b -> elem m (allExtendsPlus gr n) 
-                               || elem n (allExtendsPlus gr m)
-     (Q  m a, QC n b) | a == b -> elem m (allExtendsPlus gr n) 
-                               || elem n (allExtendsPlus gr m)
+     (Q  (m,a), Q  (n,b)) | a == b -> elem m (allExtendsPlus gr n) 
+                                   || elem n (allExtendsPlus gr m)
+                                   || m == n --- for Predef
+     (QC (m,a), QC (n,b)) | a == b -> elem m (allExtendsPlus gr n) 
+                                   || elem n (allExtendsPlus gr m)
+     (QC (m,a), Q  (n,b)) | a == b -> elem m (allExtendsPlus gr n) 
+                                   || elem n (allExtendsPlus gr m)
+     (Q  (m,a), QC (n,b)) | a == b -> elem m (allExtendsPlus gr n) 
+                                   || elem n (allExtendsPlus gr m)
 
      (Table a b,  Table c d)  -> alpha g a c && alpha g b d
      (Vr x,       Vr y)       -> x == y || elem (x,y) g || elem (y,x) g

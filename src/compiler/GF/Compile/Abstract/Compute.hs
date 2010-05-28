@@ -72,7 +72,7 @@ computeAbsTermIn lookd xs e = errIn (render (text "computing" <+> ppTerm Unquali
           tracd (text "not defined" <+> ppTerm Unqualified 0 t2) $ return t2
 
   look t = case t of
-     (Q m f) -> case lookd m f of
+     (Q (m,f)) -> case lookd m f of
        Ok (_,md) -> md
        _ -> Nothing
      _ -> Nothing
@@ -114,11 +114,11 @@ tryMatch (p,t) = do
     (PString s, ([],K i,[])) | s==i -> return []
     (PInt s, ([],EInt i,[])) | s==i -> return []
     (PFloat s,([],EFloat i,[])) | s==i -> return [] --- rounding?
-    (PP q p pp, ([], QC r f, tt)) | 
+    (PP (q,p) pp, ([], QC (r,f), tt)) | 
        p `eqStrIdent` f && length pp == length tt -> do
          matches <- mapM tryMatch (zip pp tt)
          return (concat matches)
-    (PP q p pp, ([], Q r f, tt)) | 
+    (PP (q,p) pp, ([], Q (r,f), tt)) | 
        p `eqStrIdent` f && length pp == length tt -> do
          matches <- mapM tryMatch (zip pp tt)
          return (concat matches)

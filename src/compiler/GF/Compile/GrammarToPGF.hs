@@ -125,8 +125,8 @@ mkType scope t =
 mkExp :: [Ident] -> A.Term -> C.Expr
 mkExp scope t = 
   case t of
-    Q _ c    -> C.EFun (i2i c)
-    QC _ c   -> C.EFun (i2i c)
+    Q (_,c)  -> C.EFun (i2i c)
+    QC (_,c) -> C.EFun (i2i c)
     Vr x     -> case lookup x (zip scope [0..]) of
                   Just i  -> C.EVar  i
                   Nothing -> C.EMeta 0
@@ -140,7 +140,7 @@ mkExp scope t =
 
 mkPatt scope p = 
   case p of
-    A.PP _ c ps -> let (scope',ps') = mapAccumL mkPatt scope ps
+    A.PP (_,c) ps->let (scope',ps') = mapAccumL mkPatt scope ps
                    in (scope',C.PApp (i2i c) ps')
     A.PV x      -> (x:scope,C.PVar (i2i x))
     A.PAs x p   -> let (scope',p') = mkPatt scope p
@@ -180,7 +180,7 @@ mkTerm tr = case tr of
   Empty    -> C.S []
   App _ _  -> prtTrace tr $ C.C 66661          ---- for debugging
   Abs _ _ t -> mkTerm t ---- only on toplevel
-  Alts (td,tvs) -> 
+  Alts td tvs -> 
     C.K (C.KP (strings td) [C.Alt (strings u) (strings v) | (u,v) <- tvs])
   _ -> prtTrace tr $ C.S [C.K (C.KS (render (A.ppTerm Unqualified 0 tr <+> int 66662)))] ---- for debugging
  where
@@ -363,7 +363,7 @@ paramValues cgr = (labels,untyps,typs) where
               (_,(_,CncCat (Just (L _ ty0)) _ _)) <- jments,
               ty  <- typsFrom ty0
             ] ++ [
-             Q m ty | 
+             Q (m,ty) | 
               (m,(ty,ResParam _ _)) <- jments
             ] ++ [ty | 
               (_,(_,CncFun _ (Just (L _ tr)) _)) <- jments,
@@ -377,8 +377,8 @@ paramValues cgr = (labels,untyps,typs) where
     _ -> []
  
   isParam ty = case ty of
-    Q _ _ -> True
-    QC _ _ -> True
+    Q _ -> True
+    QC _ -> True
     RecType rs -> all isParam (map snd rs)
     _ -> False
 
@@ -436,7 +436,7 @@ type2type cgr env@(labels,untyps,typs) ty = case ty of
   RecType rs ->
     RecType [(mkLab i, t2t t) | (i,(l, t)) <- zip [0..] (unlockTyp rs)]
   Table pt vt -> Table (t2t pt) (t2t vt)
-  QC _ _ -> look ty
+  QC _ -> look ty
   _ -> ty
  where
    t2t = type2type cgr env
@@ -447,7 +447,7 @@ type2type cgr env@(labels,untyps,typs) ty = case ty of
 term2term :: Ident -> SourceGrammar -> ParamEnv -> Term -> Term
 term2term fun cgr env@(labels,untyps,typs) tr = case tr of
   App _ _ -> mkValCase (unrec tr)
-  QC  _ _ -> mkValCase tr 
+  QC _    -> mkValCase tr 
   R rs    -> R [(mkLab i, (Nothing, t2t t)) | 
                  (i,(l,(_,t))) <- zip [0..] (GM.sortRec (unlock rs))]
   P  t l   -> r2r tr
@@ -523,7 +523,7 @@ term2term fun cgr env@(labels,untyps,typs) tr = case tr of
    valNum tr = maybe (valNumFV $ tryFV tr) EInt $ Map.lookup tr untyps
     where
       tryFV tr = case GM.appForm tr of
-        (c@(QC _ _), ts) -> [GM.mkApp c ts' | ts' <- combinations (map tryFV ts)]
+        (c@(QC _), ts) -> [GM.mkApp c ts' | ts' <- combinations (map tryFV ts)]
         (FV ts,_) -> ts
         _ -> [tr]
       valNumFV ts = case ts of

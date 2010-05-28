@@ -69,13 +69,13 @@ renameIdentTerm env@(act,imps) t =
    case t of
   Vr c -> ident predefAbs c
   Cn c -> ident (\_ s -> checkError s) c
-  Q m' c | m' == cPredef {- && isInPredefined c -} -> return t
-  Q m' c -> do
+  Q (m',c) | m' == cPredef {- && isInPredefined c -} -> return t
+  Q (m',c) -> do
     m <- checkErr (lookupErr m' qualifs)
     f <- lookupTree showIdent c m
     return $ f c
-  QC m' c | m' == cPredef {- && isInPredefined c -} -> return t
-  QC m' c -> do
+  QC (m',c) | m' == cPredef {- && isInPredefined c -} -> return t
+  QC (m',c) -> do
     m <- checkErr (lookupErr m' qualifs)
     f <- lookupTree showIdent c m
     return $ f c
@@ -87,7 +87,7 @@ renameIdentTerm env@(act,imps) t =
 
    -- this facility is mainly for BWC with GF1: you need not import PredefAbs
    predefAbs c s
-     | isPredefCat c = return $ Q cPredefAbs c
+     | isPredefCat c = return $ Q (cPredefAbs,c)
      | otherwise     = checkError s
 
    ident alt c = case lookupTree showIdent c act of
@@ -105,12 +105,12 @@ renameIdentTerm env@(act,imps) t =
 
 info2status :: Maybe Ident -> (Ident,Info) -> StatusInfo
 info2status mq (c,i) = case i of
-  AbsFun _ _ Nothing -> maybe Con QC mq
-  ResValue _  -> maybe Con QC mq
-  ResParam _ _  -> maybe Con QC mq
-  AnyInd True m -> maybe Con (const (QC m)) mq
-  AnyInd False m -> maybe Cn (const (Q m)) mq
-  _           -> maybe Cn  Q mq
+  AbsFun _ _ Nothing -> maybe Con (curry QC) mq
+  ResValue _  -> maybe Con (curry QC) mq
+  ResParam _ _  -> maybe Con (curry QC) mq
+  AnyInd True m -> maybe Con (const (curry QC m)) mq
+  AnyInd False m -> maybe Cn (const (curry Q m)) mq
+  _           -> maybe Cn (curry Q) mq
 
 tree2status :: OpenSpec -> BinTree Ident Info -> BinTree Ident StatusInfo
 tree2status o = case o of
@@ -192,8 +192,8 @@ renameTerm env vars = ren vars where
       | otherwise -> renid trm
     Cn _   -> renid trm
     Con _  -> renid trm
-    Q _ _  -> renid trm
-    QC _ _ -> renid trm
+    Q _    -> renid trm
+    QC _   -> renid trm
     T i cs -> do
       i' <- case i of
         TTyped ty -> liftM TTyped $ ren vs ty -- the only annotation in source
@@ -211,7 +211,7 @@ renameTerm env vars = ren vars where
     P t@(Vr r) l                                               -- Here we have $r.l$ and this is ambiguous it could be either 
                                                                -- record projection from variable or constant $r$ or qualified expression with module $r$
       | elem r vs -> return trm                                -- try var proj first ..
-      | otherwise -> checks [ renid (Q r (label2ident l))      -- .. and qualified expression second.
+      | otherwise -> checks [ renid (Q (r,label2ident l))      -- .. and qualified expression second.
                             , renid t >>= \t -> return (P t l) -- try as a constant at the end
                             , checkError (text "unknown qualified constant" <+> ppTerm Unqualified 0 trm)
                             ]
@@ -236,34 +236,34 @@ renamePattern env patt = case patt of
   PMacro c -> do
     c' <- renid $ Vr c
     case c' of
-      Q p d -> renp $ PM p d
+      Q d -> renp $ PM d
       _ -> checkError (text "unresolved pattern" <+> ppPatt Unqualified 0 patt)
 
   PC c ps -> do
     c' <- renid $ Cn c
     case c' of
-      QC m c -> do psvss <- mapM renp ps
-                   let (ps,vs) = unzip psvss
-                   return (PP m c ps, concat vs)
-      Q  _ _ -> checkError (text "data constructor expected but" <+> ppTerm Qualified 0 c' <+> text "is found instead")
-      _      -> checkError (text "unresolved data constructor" <+> ppTerm Qualified 0 c')
+      QC c -> do psvss <- mapM renp ps
+                 let (ps,vs) = unzip psvss
+                 return (PP c ps, concat vs)
+      Q  _ -> checkError (text "data constructor expected but" <+> ppTerm Qualified 0 c' <+> text "is found instead")
+      _    -> checkError (text "unresolved data constructor" <+> ppTerm Qualified 0 c')
 
-  PP p c ps -> do
-    (QC p' c') <- renid (QC p c)
+  PP c ps -> do
+    (QC c') <- renid (QC c)
     psvss <- mapM renp ps
     let (ps',vs) = unzip psvss
-    return (PP p' c' ps', concat vs)
+    return (PP c' ps', concat vs)
 
-  PM p c -> do
-    x <- renid (Q p c)
-    (p',c') <- case x of
-                 (Q p' c') -> return (p',c')
-                 _         -> checkError (text "not a pattern macro" <+> ppPatt Qualified 0 patt)
-    return (PM p' c', [])
+  PM c -> do
+    x <- renid (Q c)
+    c' <- case x of
+            (Q c') -> return c'
+            _      -> checkError (text "not a pattern macro" <+> ppPatt Qualified 0 patt)
+    return (PM c', [])
 
   PV x -> checks [ renid (Vr x) >>= \t' -> case t' of
-                                             QC m c -> return (PP m c [],[])
-                                             _      -> checkError (text "not a constructor")
+                                             QC c -> return (PP c [],[])
+                                             _    -> checkError (text "not a constructor")
                  , return (patt, [x])
                  ]
 

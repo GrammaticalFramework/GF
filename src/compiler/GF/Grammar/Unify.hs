@@ -57,8 +57,8 @@ unify e1 e2 g =
      let sg = maybe e1 id (lookup s g)
      if (sg == Meta s) then extend g s tg else unify sg tg g 
   (t, Meta s) -> unify e2 e1 g
-  (Q _ a, Q _ b) | (a == b)      -> return g ---- qualif?
-  (QC _ a, QC _ b) | (a == b)    -> return g ----
+  (Q (_,a), Q (_,b)) | (a == b)  -> return g ---- qualif?
+  (QC (_,a), QC (_,b)) | (a == b)-> return g ----
   (Vr x, Vr y) | (x == y)        -> return g 
   (Abs _ x b, Abs _ y c)         -> do let c' = substTerm [x] [(y,Vr x)] c 
                                        unify b c' g

@@ -84,8 +84,8 @@ eval :: Env -> Exp -> Err Val
 eval env e = ---- errIn ("eval" +++ prt e +++ "in" +++ prEnv env) $ 
              case e of
   Vr x    -> lookupVar env x
-  Q m c   -> return $ VCn (m,c)
-  QC m c  -> return $ VCn (m,c) ---- == Q ?
+  Q c   -> return $ VCn c
+  QC c  -> return $ VCn c ---- == Q ?
   Sort c  -> return $ VType --- the only sort is Type
   App f a -> join $ liftM2 app (eval env f) (eval env a)
   RecType xs -> do xs <- mapM (\(l,e) -> eval env e >>= \e -> return (l,e)) xs
@@ -161,10 +161,10 @@ checkInferExp th tenv@(k,_,_) e typ = do
 inferExp :: Theory -> TCEnv -> Exp -> Err (AExp, Val, [(Val,Val)])
 inferExp th tenv@(k,rho,gamma) e = case e of
    Vr x -> mkAnnot (AVr x) $ noConstr $ lookupVar gamma x
-   Q m c | m == cPredefAbs && isPredefCat c
+   Q (m,c) | m == cPredefAbs && isPredefCat c
                      -> return (ACn (m,c) vType, vType, [])
-         | otherwise -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c)
-   QC m c -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c) ----
+           | otherwise -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c)
+   QC c -> mkAnnot (ACn c) $ noConstr $ lookupConst th c ----
    EInt i -> return (AInt i, valAbsInt, [])
    EFloat i -> return (AFloat i, valAbsFloat, [])
    K i -> return (AStr i, valAbsString, [])
@@ -240,7 +240,7 @@ checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $
      PString s -> (K s : ps, i, g, k)
      PInt n -> (EInt n : ps, i, g, k)
      PFloat n -> (EFloat n : ps, i, g, k)
-     PP m c xs -> (mkApp (Q m c) xss : ps, j, g',k') 
+     PP c xs -> (mkApp (Q c) xss : ps, j, g',k') 
                     where (xss,j,g',k') = foldr p2t ([],i,g,k) xs
      PImplArg p -> p2t p (ps,i,g,k)
      PTilde t -> (t : ps, i, g, k)
@@ -268,12 +268,12 @@ checkPatt th tenv exp val = do
      EFloat i -> return (AFloat i, valAbsFloat, [])
      K s    -> return (AStr s, valAbsString, [])
 
-     Q m c  -> do
-       typ <- lookupConst th (m,c)
-       return $ (ACn (m,c) typ, typ, [])
-     QC m c  -> do
-       typ <- lookupConst th (m,c)
-       return $ (ACn (m,c) typ, typ, []) ----
+     Q c  -> do
+       typ <- lookupConst th c
+       return $ (ACn c typ, typ, [])
+     QC c  -> do
+       typ <- lookupConst th c
+       return $ (ACn c typ, typ, []) ----
      App f t -> do
        (f',w,csf) <- checkExpP tenv f val
        typ <- whnf w

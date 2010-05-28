@@ -21,14 +21,14 @@ module GF.Grammar.Lookup (
            lookupOrigInfo,
            allOrigInfos,
            lookupResDef,
-	       lookupResType, 
+           lookupResType, 
            lookupOverload,
-	       lookupParamValues, 
-	       allParamValues,
-	       lookupAbsDef, 
-	       lookupLincat, 
-	       lookupFunType,
-	       lookupCatContext
+           lookupParamValues, 
+           allParamValues,
+           lookupAbsDef, 
+           lookupLincat, 
+           lookupFunType,
+           lookupCatContext
 	      ) where
 
 import GF.Data.Operations
@@ -58,8 +58,8 @@ lookupIdent c t =
 lookupIdentInfo :: ModInfo a -> Ident -> Err a
 lookupIdentInfo mo i = lookupIdent i (jments mo)
 
-lookupResDef :: SourceGrammar -> Ident -> Ident -> Err Term
-lookupResDef gr m c
+lookupResDef :: SourceGrammar -> QIdent -> Err Term
+lookupResDef gr (m,c)
   | isPredefCat c = lock c defLinType 
   | otherwise     = look m c
   where 
@@ -68,7 +68,7 @@ lookupResDef gr m c
       info <- lookupIdentInfo mo c
       case info of
         ResOper _ (Just (L _ t)) -> return t
-        ResOper _ Nothing  -> return (Q m c)
+        ResOper _ Nothing  -> return (Q (m,c))
         CncCat (Just (L _ ty)) _ _ -> lock c ty
         CncCat _ _ _         -> lock c defLinType
       
@@ -76,12 +76,12 @@ lookupResDef gr m c
         CncFun _                (Just (L _ tr)) _ -> return tr
 
         AnyInd _ n        -> look n c
-        ResParam _ _      -> return (QC m c)
-        ResValue _        -> return (QC m c)
+        ResParam _ _      -> return (QC (m,c))
+        ResValue _        -> return (QC (m,c))
         _   -> Bad $ render (ppIdent c <+> text "is not defined in resource" <+> ppIdent m)
 
-lookupResType :: SourceGrammar -> Ident -> Ident -> Err Type
-lookupResType gr m c = do
+lookupResType :: SourceGrammar -> QIdent -> Err Type
+lookupResType gr (m,c) = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
@@ -92,53 +92,51 @@ lookupResType gr m c = do
     CncFun (Just (cat,cont,val)) _ _ -> do
           val' <- lock cat val 
           return $ mkProd cont val' []
-    AnyInd _ n        -> lookupResType gr n c
+    AnyInd _ n        -> lookupResType gr (n,c)
     ResParam _ _      -> return typePType
     ResValue (L _ t)  -> return t
     _   -> Bad $ render (ppIdent c <+> text "has no type defined in resource" <+> ppIdent m)
 
-lookupOverload :: SourceGrammar -> Ident -> Ident -> Err [([Type],(Type,Term))]
-lookupOverload gr m c = do
+lookupOverload :: SourceGrammar -> QIdent -> Err [([Type],(Type,Term))]
+lookupOverload gr (m,c) = do
     mo <- lookupModule gr m
     info <- lookupIdentInfo mo c
     case info of
       ResOverload os tysts -> do
-            tss <- mapM (\x -> lookupOverload gr x c) os
+            tss <- mapM (\x -> lookupOverload gr (x,c)) os
             return $ [let (args,val) = typeFormCnc ty in (map (\(b,x,t) -> t) args,(val,tr)) | 
                       (L _ ty,L _ tr) <- tysts] ++ 
                      concat tss
 
-      AnyInd _ n  -> lookupOverload gr n c
+      AnyInd _ n  -> lookupOverload gr (n,c)
       _   -> Bad $ render (ppIdent c <+> text "is not an overloaded operation")
 
 -- | returns the original 'Info' and the module where it was found
-lookupOrigInfo :: SourceGrammar -> Ident -> Ident -> Err (Ident,Info)
-lookupOrigInfo gr m c = do
+lookupOrigInfo :: SourceGrammar -> QIdent -> Err (Ident,Info)
+lookupOrigInfo gr (m,c) = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    AnyInd _ n  -> lookupOrigInfo gr n c
+    AnyInd _ n  -> lookupOrigInfo gr (n,c)
     i           -> return (m,i)
 
 allOrigInfos :: SourceGrammar -> Ident -> [(Ident,Info)]
 allOrigInfos gr m = errVal [] $ do
   mo <- lookupModule gr m
-  return [(c,i) | (c,_) <- tree2list (jments mo), Ok (_,i) <- [look c]]
-  where
-    look = lookupOrigInfo gr m
+  return [(c,i) | (c,_) <- tree2list (jments mo), Ok (_,i) <- [lookupOrigInfo gr (m,c)]]
 
-lookupParamValues :: SourceGrammar -> Ident -> Ident -> Err [Term]
-lookupParamValues gr m c = do
-  (_,info) <- lookupOrigInfo gr m c
+lookupParamValues :: SourceGrammar -> QIdent -> Err [Term]
+lookupParamValues gr c = do
+  (_,info) <- lookupOrigInfo gr c
   case info of
     ResParam _ (Just pvs) -> return pvs
-    _                     -> Bad $ render (ppIdent c <+> text "has no parameter values defined in resource" <+> ppIdent m)
+    _                     -> Bad $ render (ppQIdent Qualified c <+> text "has no parameter values defined")
 
 allParamValues :: SourceGrammar -> Type -> Err [Term]
 allParamValues cnc ptyp = case ptyp of
      _ | Just n <- isTypeInts ptyp -> return [EInt i | i <- [0..n]]
-     QC p c -> lookupParamValues cnc p c
-     Q  p c -> lookupResDef cnc p c >>= allParamValues cnc
+     QC c -> lookupParamValues cnc c
+     Q  c -> lookupResDef cnc c >>= allParamValues cnc
      RecType r -> do
        let (ls,tys) = unzip $ sortByFst r
        tss <- mapM (allParamValues cnc) tys

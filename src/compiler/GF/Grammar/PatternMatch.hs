@@ -87,13 +87,13 @@ tryMatch (p,t) = do
          do matches <- mapM tryMatch (zip pp tt)
             return (concat matches)
 
-      (PP q p pp, ([], QC r f, tt)) | 
+      (PP (q,p) pp, ([], QC (r,f), tt)) | 
             -- q `eqStrIdent` r &&  --- not for inherited AR 10/10/2005
             p `eqStrIdent` f && length pp == length tt ->
          do matches <- mapM tryMatch (zip pp tt)
             return (concat matches)
       ---- hack for AppPredef bug
-      (PP q p pp, ([], Q r f, tt)) | 
+      (PP (q,p) pp, ([], Q (r,f), tt)) | 
             -- q `eqStrIdent` r && --- 
             p `eqStrIdent` f && length pp == length tt ->
          do matches <- mapM tryMatch (zip pp tt)
@@ -136,8 +136,8 @@ isInConstantForm :: Term -> Bool
 isInConstantForm trm = case trm of
     Cn _     -> True
     Con _    -> True
-    Q _ _    -> True
-    QC _ _   -> True
+    Q _      -> True
+    QC _     -> True
     Abs _ _ _ -> True
     C c a    -> isInConstantForm c && isInConstantForm a
     App c a  -> isInConstantForm c && isInConstantForm a
@@ -151,7 +151,7 @@ varsOfPatt :: Patt -> [Ident]
 varsOfPatt p = case p of
   PV x -> [x]
   PC _ ps -> concat $ map varsOfPatt ps
-  PP _ _ ps -> concat $ map varsOfPatt ps
+  PP _ ps -> concat $ map varsOfPatt ps
   PR r    -> concat $ map (varsOfPatt . snd) r
   PT _ q -> varsOfPatt q
   _ -> []

@@ -99,7 +99,7 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
                                         let (cxt,(_,i),_) = typeForm ty
                                         info <- lookupIdent i js
                                         info <- case info of
-                                                  (AnyInd _ m) -> do (m,info) <- lookupOrigInfo gr m i
+                                                  (AnyInd _ m) -> do (m,info) <- lookupOrigInfo gr (m,i)
                                                                      return info
                                                   _            -> return info
                                         case info of
@@ -137,14 +137,14 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
      
    checkCnc js i@(c,info) =
      case info of
-       CncFun _ d pn -> case lookupOrigInfo gr am c of
+       CncFun _ d pn -> case lookupOrigInfo gr (am,c) of
                           Ok (_,AbsFun (Just (L _ ty)) _ _) -> 
                                      do (cont,val) <- linTypeOfType gr cm ty
                                         let linty = (snd (valCat ty),cont,val)
                                         return $ updateTree (c,CncFun (Just linty) d pn) js
                           _       -> do checkWarn $ text "function" <+> ppIdent c <+> text "is not in abstract"
                                         return js
-       CncCat _ _ _  -> case lookupOrigInfo gr am c of
+       CncCat _ _ _  -> case lookupOrigInfo gr (am,c) of
                           Ok _ -> return $ updateTree i js
                           _    -> do checkWarn $ text "category" <+> ppIdent c <+> text "is not in abstract"
                                      return js
@@ -206,7 +206,7 @@ checkInfo ms (m,mo) c info = do
 
     ResOverload os tysts -> chIn (0,0) "overloading" $ do
       tysts' <- mapM (uncurry $ flip (\(L loc1 t) (L loc2 ty) -> checkLType gr [] t ty >>= \(t,ty) -> return (L loc1 t, L loc2 ty))) tysts  -- return explicit ones
-      tysts0 <- checkErr $ lookupOverload gr m c  -- check against inherited ones too
+      tysts0 <- checkErr $ lookupOverload gr (m,c)  -- check against inherited ones too
       tysts1 <- mapM (uncurry $ flip (checkLType gr [])) 
                   [(mkFunType args val,tr) | (args,(val,tr)) <- tysts0]
       --- this can only be a partial guarantee, since matching
@@ -227,7 +227,7 @@ checkInfo ms (m,mo) c info = do
    mkPar (L loc (f,co)) = 
      chIn loc "parameter type" $ do
        vs <- checkErr $ liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
-       return $ map (mkApp (QC m f)) vs
+       return $ map (mkApp (QC (m,f))) vs
 
    checkUniq xss = case xss of
      x:y:xs 
