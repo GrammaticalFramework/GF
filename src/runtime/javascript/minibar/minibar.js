@@ -15,6 +15,7 @@ var options={
     show_trees: false,
     show_grouped_translations: true,
     delete_button_text: "⌫",
+    try_google: true
 }
 
 /* --- Grammar access object ------------------------------------------------ */
@@ -337,6 +338,7 @@ function show_translations(translations) {
 				      text(lin[i].text))]));
     trans.appendChild(wrap("table",tbody));
   }
+  try_google(grammar,trans,to);
 }
 
 function show_groupedtranslations(translations) {
@@ -359,6 +361,20 @@ function show_groupedtranslations(translations) {
 	    }
 	    trans.appendChild(wrap("table",tbody));
 	}
+    }
+    try_google(grammar,trans,to);
+}
+
+function try_google(grammar,trans,to) {
+    if(options.try_google) {
+	var menu=element("language_menu");
+	var c=menu.current;
+	var url="http://translate.google.com/?sl="+langpart(c.from,grammar.name);
+	if(to!="-1") url+="&tl="+to;
+	url+="&q="+encodeURIComponent(c.input);
+	var link=empty("a","href",url);
+	link.innerHTML="Try this sentence in Google Translate";
+	trans.appendChild(link);
     }
 }
 
