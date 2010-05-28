@@ -105,7 +105,7 @@ concrete WordsPol of Words = SentencesPol **
     Zoo = mkPlaceDo "zoo" "zoo" "zoo" Neut ;
    
     CitRestaurant cit = { name=(mkCN cit (mkCN L.restaurant_N));
-        at = { s="w"; c=LocPrep; lock_Prep = <> }; to = {s="do"; c=GenPrep; lock_Prep = <>} };
+        at = { s="w"; c=LocPrep; lock_Prep = <> }; to = {s="do"; c=GenPrep; lock_Prep = <>}; isPl = False };
 
 
 -- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
@@ -276,27 +276,27 @@ concrete WordsPol of Words = SentencesPol **
   mkA : Adj -> A = \adj -> adj ** { lock_A = <> };
 
   mkPlaceDo = overload {
-    mkPlaceDo : N -> {name : CN ; at : Prep ; to : Prep} = \n -> {
-      name = mkCN n; at = { s="w"; c=LocPrep; lock_Prep = <> }; to = {s="do"; c=GenPrep; lock_Prep = <>} };
-    mkPlaceDo : Str -> Str -> Str -> Gender -> {name : CN ; at : Prep ; to : Prep} = \nom,gen,loc,g -> {
+    mkPlaceDo : N -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \n -> {
+      name = mkCN n; at = { s="w"; c=LocPrep; lock_Prep = <> }; to = {s="do"; c=GenPrep; lock_Prep = <>}; isPl = False };
+    mkPlaceDo : Str -> Str -> Str -> Gender -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \nom,gen,loc,g -> {
       name = mkCN {
         s = table {SF Sg Nom => nom; SF Sg Gen => gen; SF Sg Loc => loc; _ => ["not implemented"]};
         g = g;
         lock_N=<>
       };
-      at = { s="w"; c=LocPrep; lock_Prep = <> }; to = {s="do"; c=GenPrep; lock_Prep = <>} };
+      at = { s="w"; c=LocPrep; lock_Prep = <> }; to = {s="do"; c=GenPrep; lock_Prep = <>}; isPl = False };
   };
   
   mkPlaceNa = overload {
-    mkPlaceNa : N -> {name : CN ; at : Prep ; to : Prep} = \n -> {
-      name = mkCN n; at = { s="na"; c=LocPrep; lock_Prep = <> }; to = {s="na"; c=AccPrep; lock_Prep = <>} };
-    mkPlaceNa : Str -> Str -> Str -> Gender -> {name : CN ; at : Prep ; to : Prep} = \nom,acc,loc,g -> {
+    mkPlaceNa : N -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \n -> {
+      name = mkCN n; at = { s="na"; c=LocPrep; lock_Prep = <> }; to = {s="na"; c=AccPrep; lock_Prep = <>}; isPl = False };
+    mkPlaceNa : Str -> Str -> Str -> Gender -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \nom,acc,loc,g -> {
       name = mkCN {
         s = table {SF Sg Nom => nom; SF Sg Acc => acc; SF Sg Loc => loc; _ => ["not implemented"]};
         g = g;
         lock_N=<>
       };
-    at = { s="na"; c=LocPrep; lock_Prep = <> }; to = {s="na"; c=AccPrep; lock_Prep = <>} };
+    at = { s="na"; c=LocPrep; lock_Prep = <> }; to = {s="na"; c=AccPrep; lock_Prep = <>}; isPl = False };
   };
   
   mkTransport : Str -> Str -> Gender -> CN = \nom,instr,g -> {

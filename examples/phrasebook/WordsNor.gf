@@ -238,7 +238,7 @@ concrete WordsNor of Words = SentencesNor **
       mkNPDay day (SyntaxNor.mkAdv on_Prep day) 
         (SyntaxNor.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
 
-    mkPlace : N -> Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i,t -> 
+    mkPlace : N -> Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i,t -> 
     mkCNPlace (mkCN p) (mkPrep i) (mkPrep t) ;
 
     open_A = mkA "åpen" "åpent";

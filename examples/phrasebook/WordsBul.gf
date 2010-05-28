@@ -239,10 +239,10 @@ concrete WordsBul of Words = SentencesBul **
                  (SyntaxBul.mkAdv in_Prep day) 
                  (SyntaxBul.mkAdv in_Prep (mkNP the_Quant plNum (mkCN d))) ;
 
-    mkCompoundPlace : A -> N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \a, n, p ->
+    mkCompoundPlace : A -> N -> Prep -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \a, n, p ->
      mkCNPlace (mkCN a n) p to_Prep ;
 
-    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \n,p -> 
+    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \n,p -> 
       mkCNPlace (mkCN n) p to_Prep ;
 
     open_AP = mkAP (mkA076 "отворен") ;

@@ -68,7 +68,7 @@ lin
     Station = mkPlace (mkN "gare") dative ;
     Supermarket = mkPlace (mkN "supermarché" masculine) dative ;
     Theatre = mkPlace (mkN "théâtre" masculine) dative ;
-    Toilet = mkPlace (mkN "toilette") dative ; 
+    Toilet = mkCNPlacePl (mkCN (mkN "toilette")) dative dative; 
     University = mkPlace (mkN "université" feminine) dative ;
     Zoo = mkPlace (mkN "zoo" masculine) dative ;
 
@@ -248,7 +248,7 @@ lin
       let day = mkNP (mkPN d) in
       mkNPDay day (P.mkAdv d) (P.mkAdv ("le" ++ d)) ;
 
-    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i ->
+    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i ->
       mkCNPlace (mkCN p) i dative ;
 
     open_A = P.mkA "ouvert" ;

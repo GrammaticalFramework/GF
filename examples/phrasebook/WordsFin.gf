@@ -58,7 +58,7 @@ concrete WordsFin of Words = SentencesFin **
     School = mkPlace (mkN "koulu") lla ;
 
     CitRestaurant cit = {
-      name = mkCN cit (mkN "ravintola") ; at = casePrep inessive ; to = casePrep illative
+      name = mkCN cit (mkN "ravintola") ; at = casePrep inessive ; to = casePrep illative; isPl = False
       } ;
     Parking = mkPlace (mkN "pysäköinti" (mkN "alue")) lla ;
     Supermarket = mkPlace (mkN "supermarket") ssa ;
@@ -238,11 +238,12 @@ concrete WordsFin of Words = SentencesFin **
        habitual = ParadigmsFin.mkAdv s
       } ;
 
-    mkPlace : N -> Bool -> {name : CN ; at : Prep ; to : Prep} = \p,e -> {
+    mkPlace : N -> Bool -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,e -> {
       name = mkCN p ;
       at = casePrep (if_then_else Case e adessive inessive) ;  -- True: external
       to = casePrep (if_then_else Case e allative illative) ;
-      } ;
+      isPl = False   
+   } ;
     ssa = False ;
     lla = True ;
 
