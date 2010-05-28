@@ -7,12 +7,12 @@ concrete WordsNor of Words = SentencesNor **
 
 -- kinds of food
 
-    Apple = mkCN L.apple_N ;
+    Apple = mkCN (mkN "eple" "eplet" "epler" "eplene") ;
     Beer = mkCN L.beer_N ;
     Bread = mkCN L.bread_N ;
     Cheese = mkCN (mkN "ost" "osten" "oster" "ostene") ;
     Chicken = mkCN (mkN "kylling" "kyllingen" "kyllinger" "kyllingene") ;
-    Coffee = mkCN (mkN "kaffe" "kaffen" "kaffe" "kaffe") ; -- av kaffe ?
+    Coffee = mkCN (mkN "kaffe" "kaffet" "kaffen" "kaffene") ; -- av kaffe ?
     Fish = mkCN L.fish_N ;
     Meat = mkCN (mkN "kjøtt" "kjøttet" "kjøtt" "kjøtta") ;
     Milk = mkCN L.milk_N ;
@@ -87,7 +87,7 @@ concrete WordsNor of Words = SentencesNor **
     Belgian = mkA "belgisk" ;
     Belgium = mkNP (mkPN "Belgia") ;
     Bulgarian = mkNat "bulgarsk" "Bulgaria" ;
-    Catalan = mkNat "katalansk" "Catalonia" ;
+    Catalan = mkNat "katalansk" "Katalonia" ;
     Danish = mkNat "dansk" "Danmark" ;
     Dutch =  mkNat "nederlandsk" "Nederland" ;
     English = mkNat "engelsk" "England" ;
