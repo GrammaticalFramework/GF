@@ -157,9 +157,7 @@ ppTerm q d (S x y)     = case x of
 			   _          -> prec d 3 (ppTerm q 3 x <+> text "!" <+> ppTerm q 4 y)
 ppTerm q d (ExtR x y)  = prec d 3 (ppTerm q 3 x <+> text "**" <+> ppTerm q 4 y)
 ppTerm q d (App x y)   = prec d 4 (ppTerm q 4 x <+> ppTerm q 5 y)
-ppTerm q d (V e es)    = text "table" <+> ppTerm q 6 e <+> lbrace $$
-                         nest 2 (fsep (punctuate semi (map (ppTerm q 0) es))) $$
-                         rbrace
+ppTerm q d (V e es)    = text "table" <+> ppTerm q 6 e <+> brackets (fsep (punctuate semi (map (ppTerm q 0) es)))
 ppTerm q d (FV es)     = text "variants" <+> braces (fsep (punctuate semi (map (ppTerm q 0) es)))
 ppTerm q d (Alts (e,xs))=text "pre" <+> braces (ppTerm q 0 e <> semi <+> fsep (punctuate semi (map (ppAltern q) xs)))
 ppTerm q d (Strs es)   = text "strs" <+> braces (fsep (punctuate semi (map (ppTerm q 0) es)))
