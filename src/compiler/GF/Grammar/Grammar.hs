@@ -145,8 +145,8 @@ data Term =
 
  | Let LocalDef Term             -- ^ local definition: @let {t : T = a} in b@
 
- | Q  Ident Ident                -- ^ qualified constant from a package
- | QC Ident Ident                -- ^ qualified constructor from a package
+ | Q  QIdent                     -- ^ qualified constant from a package
+ | QC QIdent                     -- ^ qualified constructor from a package
 
  | C Term Term                   -- ^ concatenation: @s ++ t@
  | Glue Term Term                -- ^ agglutination: @s + t@
@@ -159,14 +159,14 @@ data Term =
 
  | FV [Term]                     -- ^ alternatives in free variation: @variants { s ; ... }@
 
- | Alts (Term, [(Term, Term)])   -- ^ alternatives by prefix: @pre {t ; s\/c ; ...}@
+ | Alts Term [(Term, Term)]      -- ^ alternatives by prefix: @pre {t ; s\/c ; ...}@
  | Strs [Term]                   -- ^ conditioning prefix strings: @strs {s ; ...}@
 
   deriving (Show, Eq, Ord)
 
 data Patt =
    PC Ident [Patt]        -- ^ constructor pattern: @C p1 ... pn@    @C@ 
- | PP Ident Ident [Patt]  -- ^ package constructor pattern: @P.C p1 ... pn@    @P.C@ 
+ | PP QIdent [Patt]       -- ^ package constructor pattern: @P.C p1 ... pn@    @P.C@ 
  | PV Ident               -- ^ variable pattern: @x@
  | PW                     -- ^ wild card pattern: @_@
  | PR [(Label,Patt)]      -- ^ record pattern: @{r = p ; ...}@  -- only concrete
@@ -188,7 +188,7 @@ data Patt =
  | PChar                  -- ^ string of length one: ?
  | PChars [Char]          -- ^ character list: ["aeiou"]
  | PMacro Ident           -- #p
- | PM Ident Ident         -- #m.p
+ | PM QIdent              -- #m.p
 
   deriving (Show, Eq, Ord)
 

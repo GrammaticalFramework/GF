@@ -41,8 +41,8 @@ typeForm t =
     App c a ->
       let (_,  cat, args) = typeForm c
       in ([],cat,args ++ [a])
-    Q  m c -> ([],(m,c),[])
-    QC m c -> ([],(m,c),[])
+    Q  c -> ([],c,[])
+    QC c -> ([],c,[])
     Sort c -> ([],(identW, c),[])
     _      -> error (render (text "no normal form of type" <+> ppTerm Unqualified 0 t))
 
@@ -61,7 +61,7 @@ valCat typ =
 valType :: Type -> Type
 valType typ =
   let (_,cat,xx) = typeForm typ --- not optimal to do in this way
-  in mkApp (uncurry Q cat) xx
+  in mkApp (Q cat) xx
 
 valTypeCnc :: Type -> Type
 valTypeCnc typ = snd (typeFormCnc typ)
@@ -216,11 +216,11 @@ isTypeInts _                                      = Nothing
 
 isPredefConstant :: Term -> Bool
 isPredefConstant t = case t of
-  Q mod _ | mod == cPredef || mod == cPredefAbs -> True
-  _                                             -> False
+  Q (mod,_) | mod == cPredef || mod == cPredefAbs -> True
+  _                                               -> False
 
 cnPredef :: Ident -> Term
-cnPredef f = Q cPredef f
+cnPredef f = Q (cPredef,f)
 
 mkSelects :: Term -> [Term] -> Term
 mkSelects t tt = foldl S t tt
@@ -333,12 +333,12 @@ term2patt trm = case termForm trm of
   Ok ([], Con c, aa) -> do
     aa' <- mapM term2patt aa
     return (PC c aa')
-  Ok ([], QC p c, aa) -> do
+  Ok ([], QC  c, aa) -> do
     aa' <- mapM term2patt aa
-    return (PP p c aa')
+    return (PP c aa')
 
-  Ok ([], Q p c, []) -> do
-    return (PM p c)
+  Ok ([], Q c, []) -> do
+    return (PM c)
 
   Ok ([], R r, []) -> do
     let (ll,aa) = unzipR r
@@ -381,10 +381,10 @@ patt2term pt = case pt of
   PV x      -> Vr x
   PW        -> Vr identW             --- not parsable, should not occur
   PMacro c  -> Cn c
-  PM p c    -> Q p c
+  PM c      -> Q c
 
   PC c pp   -> mkApp (Con c) (map patt2term pp)
-  PP p c pp -> mkApp (QC p c) (map patt2term pp)
+  PP c pp   -> mkApp (QC  c) (map patt2term pp)
 
   PR r      -> R [assign l (patt2term p) | (l,p) <- r] 
   PT _ p    -> patt2term p
@@ -403,8 +403,8 @@ patt2term pt = case pt of
 
 redirectTerm :: Ident -> Term -> Term
 redirectTerm n t = case t of
-  QC _ f -> QC n f
-  Q _ f  -> Q  n f
+  QC (_,f) -> QC (n,f)
+  Q  (_,f) -> Q  (n,f)
   _ -> composSafeOp (redirectTerm n) t
 
 -- | to gather ultimate cases in a table; preserves pattern list
@@ -426,7 +426,7 @@ strsFromTerm t = case t of
     s' <- strsFromTerm s
     t' <- strsFromTerm t
     return [glueStr x y | x <- s', y <- t']
-  Alts (d,vs) -> do
+  Alts d vs -> do
     d0 <- strsFromTerm d
     v0 <- mapM (strsFromTerm . fst) vs
     c0 <- mapM (strsFromTerm . snd) vs
@@ -516,10 +516,10 @@ composOp co trm =
      do v1 <- co s1
         v2 <- co s2
         return (Glue v1 v2)
-   Alts (t,aa) ->
+   Alts t aa ->
      do t' <- co t
         aa' <- mapM (pairM co) aa
-        return (Alts (t',aa'))
+        return (Alts t' aa')
    FV ts -> mapM co ts >>= return . FV
    Strs tt -> mapM co tt >>= return . Strs
 
@@ -571,7 +571,7 @@ collectOp co trm = case trm of
   Let (x,(mt,a)) b -> maybe [] co mt ++ co a ++ co b
   C s1 s2      -> co s1 ++ co s2 
   Glue s1 s2   -> co s1 ++ co s2 
-  Alts (t,aa)  -> let (x,y) = unzip aa in co t ++ concatMap co (x ++ y)
+  Alts t aa    -> let (x,y) = unzip aa in co t ++ concatMap co (x ++ y)
   FV ts        -> concatMap co ts
   Strs tt      -> concatMap co tt
   _            -> [] -- covers K, Vr, Cn, Sort
@@ -581,7 +581,7 @@ wordsInTerm :: Term -> [String]
 wordsInTerm trm = filter (not . null) $ case trm of
    K s     -> [s]
    S c _   -> wo c
-   Alts (t,aa) -> wo t ++ concatMap (wo . fst) aa
+   Alts t aa -> wo t ++ concatMap (wo . fst) aa
    _       -> collectOp wo trm
  where wo = wordsInTerm
 
@@ -608,8 +608,8 @@ allDependencies ism b =
   [(f, nub (concatMap opty (pts i))) | (f,i) <- tree2list b]
   where
     opersIn t = case t of
-      Q n c | ism n -> [c]
-      QC n c | ism n -> [c]
+      Q  (n,c) | ism n -> [c]
+      QC (n,c) | ism n -> [c]
       _ -> collectOp opersIn t
     opty (Just (L _ ty)) = opersIn ty
     opty _ = []

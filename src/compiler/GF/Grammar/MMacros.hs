@@ -134,7 +134,7 @@ getMetaAtom a = case a of
   _ -> Bad "the active node is not meta"
 -}
 cat2val :: Context -> Cat -> Val
-cat2val cont cat = vClos $ mkApp (uncurry Q cat) [Meta i | i <- [1..length cont]]
+cat2val cont cat = vClos $ mkApp (Q cat) [Meta i | i <- [1..length cont]]
 
 val2cat :: Val -> Err Cat
 val2cat v = liftM valCat (val2exp v)
@@ -183,7 +183,7 @@ val2expP safe v = case v of
                               else substVal g e
   VClos g e -> substVal g e
   VApp f c  -> liftM2 App (val2expP safe f) (val2expP safe c)
-  VCn c     -> return $ uncurry Q c
+  VCn c     -> return $ Q c
   VGen i x  -> if safe 
                then Bad (render (text "unsafe val2exp" <+> ppValue Unqualified 0 v))
                else return $ Vr $ x  --- in editing, no alpha conversions presentv
@@ -234,9 +234,9 @@ qualifTerm m  = qualif [] where
   qualif xs t = case t of
     Abs b x t -> let x' = chV x in Abs b x' $ qualif (x':xs) t
     Prod b x a t -> Prod b x (qualif xs a) $ qualif (x:xs) t
-    Vr x -> let x' = chV x in if (elem x' xs) then (Vr x') else (Q m x) 
-    Cn c  -> Q m c
-    Con c -> QC m c
+    Vr x -> let x' = chV x in if (elem x' xs) then (Vr x') else (Q (m,x))
+    Cn c  -> Q (m,c)
+    Con c -> QC (m,c)
     _ -> composSafeOp (qualif xs) t
   chV x = string2var $ ident2bs x
     

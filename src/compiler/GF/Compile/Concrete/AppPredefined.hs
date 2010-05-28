@@ -71,13 +71,13 @@ appPredefined t = case t of
    (x,_) <- appPredefined x0
    case f of
     -- one-place functions
-    Q mod f | mod == cPredef ->
+    Q (mod,f) | mod == cPredef ->
       case x of
         (K s) | f == cLength -> retb $ EInt $ toInteger $ length s
         _                    -> retb t
 
     -- two-place functions
-    App (Q mod f) z0 | mod == cPredef -> do
+    App (Q (mod,f)) z0 | mod == cPredef -> do
      (z,_) <- appPredefined z0
      case (norm z, norm x) of
       (EInt i, K s)    | f == cDrop    -> retb $ K (drop (fi i) s)
@@ -96,7 +96,7 @@ appPredefined t = case t of
       _ -> retb t ---- prtBad "cannot compute predefined" t
 
     -- three-place functions
-    App (App (Q mod f) z0) y0 | mod == cPredef -> do
+    App (App (Q (mod,f)) z0) y0 | mod == cPredef -> do
      (y,_) <- appPredefined y0
      (z,_) <- appPredefined z0
      case (z, y, x) of
@@ -123,8 +123,8 @@ appPredefined t = case t of
 
 -- read makes variables into constants
 
-predefTrue = QC cPredef cPTrue
-predefFalse = QC cPredef cPFalse
+predefTrue = QC (cPredef,cPTrue)
+predefFalse = QC (cPredef,cPFalse)
 
 substring :: String -> String -> Bool
 substring s t = case (s,t) of

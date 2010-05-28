@@ -142,10 +142,10 @@ extendMod gr isCompl (name,cond) base old new = foldM try new $ Map.toList old
                          Just j -> case unifyAnyInfo name i j of
 		                     Ok k  -> return $ updateTree (c,k) new
 		                     Bad _ -> do (base,j) <- case j of 
-		                                               AnyInd _ m -> lookupOrigInfo gr m c
+		                                               AnyInd _ m -> lookupOrigInfo gr (m,c)
 		                                               _          -> return (base,j)
 		                                 (name,i) <- case i of 
-                                                               AnyInd _ m -> lookupOrigInfo gr m c
+                                                               AnyInd _ m -> lookupOrigInfo gr (m,c)
                                                                _          -> return (name,i)
 		                                 fail $ render (text "cannot unify the information" $$ 
 		                                                nest 4 (ppJudgement Qualified (c,i)) $$

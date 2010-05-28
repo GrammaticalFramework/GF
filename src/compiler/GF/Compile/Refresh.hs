@@ -68,7 +68,7 @@ refreshCase (p,t) = liftM2 (,) (refreshPatt p) (refresh t)
 refreshPatt p = case p of
   PV x    -> liftM PV     (refVar x)
   PC c ps -> liftM (PC c) (mapM refreshPatt ps)
-  PP q c ps -> liftM (PP q c) (mapM refreshPatt ps)
+  PP c ps -> liftM (PP c) (mapM refreshPatt ps)
   PR r    -> liftM PR     (mapPairsM refreshPatt r)
   PT t p' -> liftM2 PT    (refresh t) (refreshPatt p')
 

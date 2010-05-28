@@ -58,8 +58,8 @@ unsubexpModule sm@(i,mo)
       ResOper pty (Just (L loc t)) -> [(c, ResOper pty (Just (L loc (unparTerm t))))]
       _ -> [(c,info)]
     unparTerm t = case t of
-      Q m c | isOperIdent c -> --- name convention of subexp opers
-        errVal t $ liftM unparTerm $ lookupResDef gr m c 
+      Q (m,c) | isOperIdent c -> --- name convention of subexp opers
+        errVal t $ liftM unparTerm $ lookupResDef gr (m,c)
       _ -> C.composSafeOp unparTerm t
     gr = M.MGrammar [sm] 
     rebuild = buildTree . concat
@@ -84,7 +84,7 @@ addSubexpConsts mo tree lins = do
        return (f,ResOper ty (Just (L loc trm')))
      _ -> return (f,def)
    recomp f t = case Map.lookup t tree of
-     Just (_,id) | operIdent id /= f -> return $ Q mo (operIdent id)
+     Just (_,id) | operIdent id /= f -> return $ Q (mo, operIdent id)
      _ -> C.composOp (recomp f) t
 
    list = Map.toList tree

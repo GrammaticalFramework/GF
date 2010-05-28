@@ -17,6 +17,7 @@ module GF.Grammar.Printer
            , ppValue
            , ppConstrs
            , ppPosition
+           , ppQIdent
            ) where
 
 import GF.Infra.Ident
@@ -159,15 +160,15 @@ ppTerm q d (ExtR x y)  = prec d 3 (ppTerm q 3 x <+> text "**" <+> ppTerm q 4 y)
 ppTerm q d (App x y)   = prec d 4 (ppTerm q 4 x <+> ppTerm q 5 y)
 ppTerm q d (V e es)    = text "table" <+> ppTerm q 6 e <+> brackets (fsep (punctuate semi (map (ppTerm q 0) es)))
 ppTerm q d (FV es)     = text "variants" <+> braces (fsep (punctuate semi (map (ppTerm q 0) es)))
-ppTerm q d (Alts (e,xs))=text "pre" <+> braces (ppTerm q 0 e <> semi <+> fsep (punctuate semi (map (ppAltern q) xs)))
+ppTerm q d (Alts e xs) = text "pre" <+> braces (ppTerm q 0 e <> semi <+> fsep (punctuate semi (map (ppAltern q) xs)))
 ppTerm q d (Strs es)   = text "strs" <+> braces (fsep (punctuate semi (map (ppTerm q 0) es)))
 ppTerm q d (EPatt p)   = prec d 4 (char '#' <+> ppPatt q 2 p)
 ppTerm q d (EPattType t)=prec d 4 (text "pattern" <+> ppTerm q 0 t)
 ppTerm q d (P t l)     = prec d 5 (ppTerm q 5 t <> char '.' <> ppLabel l)
 ppTerm q d (Cn id)     = ppIdent id
 ppTerm q d (Vr id)     = ppIdent id
-ppTerm q d (Q  m id)   = ppQIdent q m id
-ppTerm q d (QC m id)   = ppQIdent q m id
+ppTerm q d (Q  id)     = ppQIdent q id
+ppTerm q d (QC id)     = char '!' <> ppQIdent q id <> char '!'
 ppTerm q d (Sort id)   = ppIdent id
 ppTerm q d (K s)       = str s
 ppTerm q d (EInt n)    = integer n
@@ -191,16 +192,16 @@ ppPatt q d (PSeq p1 p2) = prec d 0 (ppPatt q 0 p1 <+> char '+' <+> ppPatt q 1 p2
 ppPatt q d (PC f ps)    = if null ps
                             then ppIdent f
                             else prec d 1 (ppIdent f <+> hsep (map (ppPatt q 3) ps))
-ppPatt q d (PP f g ps)  = if null ps
-                            then ppQIdent q f g
-                            else prec d 1 (ppQIdent q f g <+> hsep (map (ppPatt q 3) ps))
+ppPatt q d (PP f ps)    = if null ps
+                            then ppQIdent q f
+                            else prec d 1 (ppQIdent q f <+> hsep (map (ppPatt q 3) ps))
 ppPatt q d (PRep p)     = prec d 1 (ppPatt q 3 p <> char '*')
 ppPatt q d (PAs f p)    = prec d 2 (ppIdent f <> char '@' <> ppPatt q 3 p)
 ppPatt q d (PNeg p)     = prec d 2 (char '-' <> ppPatt q 3 p)
 ppPatt q d (PChar)      = char '?'
 ppPatt q d (PChars s)   = brackets (str s)
 ppPatt q d (PMacro id)  = char '#' <> ppIdent id
-ppPatt q d (PM m id)    = char '#' <> ppIdent m <> char '.' <> ppIdent id
+ppPatt q d (PM id)      = char '#' <> ppQIdent q id
 ppPatt q d PW           = char '_'
 ppPatt q d (PV id)      = ppIdent id
 ppPatt q d (PInt n)     = integer n
@@ -236,7 +237,7 @@ ppDDecl q (_,id,typ)
   | id == identW = ppTerm q 6 typ
   | otherwise    = parens (ppIdent id <+> colon <+> ppTerm q 0 typ)
 
-ppQIdent q m id =
+ppQIdent q (m,id) =
   case q of
     Qualified   -> ppIdent m <> char '.' <> ppIdent id
     Unqualified ->                          ppIdent id

@@ -52,8 +52,8 @@ computeTermOpt rec gr = comput True where
    comput full g t = ---- errIn ("subterm" +++ prt t) $ --- for debugging 
               case t of
 
-     Q p c | p == cPredef -> return t
-           | otherwise    -> look p c 
+     Q (p,c) | p == cPredef -> return t
+             | otherwise    -> look (p,c) 
 
      Vr x -> do
        t' <- maybe (Bad (render (text "no value given to variable" <+> ppIdent x))) return $ lookup x g
@@ -86,9 +86,9 @@ computeTermOpt rec gr = comput True where
         as' <- mapM (comp g) as
         case h' of
           _ | not (null [() | FV _ <- as']) -> compApp g (mkApp h' as')
-          c@(QC _ _) -> do
+          c@(QC _) -> do
             return $ mkApp c as'
-          Q mod f | mod == cPredef -> do     
+          Q (mod,f) | mod == cPredef -> do     
             (t',b) <- appPredefined (mkApp h' as')
             if b then return t' else comp g t'
 
@@ -163,11 +163,11 @@ computeTermOpt rec gr = comput True where
          (_,Empty)         -> return x
          (Empty,_)         -> return y
          (K a, K b)        -> return $ K (a ++ b)
-         (_, Alts (d,vs)) -> do
+         (_, Alts d vs)    -> do
 ----         (K a, Alts (d,vs)) -> do
             let glx = Glue x
-            comp g $ Alts (glx d, [(glx v,c) | (v,c) <- vs])
-         (Alts _, ka) -> checks [do
+            comp g $ Alts (glx d) [(glx v,c) | (v,c) <- vs]
+         (Alts _ _, ka) -> checks [do
             y' <- strsFromTerm ka
 ----         (Alts _, K a) -> checks [do
             x' <- strsFromTerm x -- this may fail when compiling opers
@@ -183,17 +183,17 @@ computeTermOpt rec gr = comput True where
            r <- composOp (comp g) t
            returnC r
 
-     Alts (d,aa) -> do
+     Alts d aa -> do
        d' <- comp g d
        aa' <- mapM (compInAlts g) aa
-       returnC (Alts (d',aa'))
+       returnC (Alts d' aa')
 
      -- remove empty
      C a b    -> do
        a' <- comp g a
        b' <- comp g b
        case (a',b') of
-         (Alts _, K a) -> checks [do
+         (Alts _ _, K a) -> checks [do
             as <- strsFromTerm a' -- this may fail when compiling opers
             return $ variants [
               foldr1 C (map K (str2strings (plusStr v (str a)))) | v <- as]
@@ -238,7 +238,7 @@ computeTermOpt rec gr = comput True where
          (FV fs, _)  -> mapM (\c -> comp g (App c a')) fs >>= return . variants
          (Abs _ x b,_) -> comp (ext x a' g) b
 
-         (QC _ _,_)  -> returnC $ App f' a'
+         (QC _,_)  -> returnC $ App f' a'
 
          (S (T i cs) e,_) -> prawitz g i (flip App a') cs e
          (S (V i cs) e,_) -> prawitzV g i (flip App a') cs e
@@ -250,9 +250,9 @@ computeTermOpt rec gr = comput True where
      hnf  = comput False
      comp = comput True
 
-     look p c
-       | rec       = lookupResDef gr p c >>= comp []
-       | otherwise = lookupResDef gr p c
+     look c
+       | rec       = lookupResDef gr c >>= comp []
+       | otherwise = lookupResDef gr c
 
      ext x a g = (x,a):g
 
@@ -264,13 +264,13 @@ computeTermOpt rec gr = comput True where
 
      isCan v = case v of
        Con _    -> True
-       QC _ _   -> True
+       QC _     -> True
        App f a  -> isCan f && isCan a
        R rs     -> all (isCan . snd . snd) rs
        _        -> False
 
      compPatternMacro p = case p of
-       PM m c -> case look m c of
+       PM c -> case look c of
          Ok (EPatt p') -> compPatternMacro p'
          _ -> Bad (render (text "pattern expected as value of" $$ nest 2 (ppPatt Unqualified 0 p)))
        PAs x p -> do
@@ -384,7 +384,7 @@ computeTermOpt rec gr = comput True where
      contP p = case p of
        PV x -> [(x,Vr x)]
        PC _ ps -> concatMap contP ps
-       PP _ _ ps -> concatMap contP ps
+       PP _ ps -> concatMap contP ps
        PT _ p -> contP p
        PR rs -> concatMap (contP . snd) rs
 

@@ -146,14 +146,14 @@ instance Binary Term where
   put (V x y)       = putWord8 20 >> put (x,y)
   put (S x y)       = putWord8 21 >> put (x,y)
   put (Let x y)     = putWord8 22 >> put (x,y)
-  put (Q  x y)      = putWord8 23 >> put (x,y)
-  put (QC x y)      = putWord8 24 >> put (x,y)
+  put (Q x)         = putWord8 23 >> put x
+  put (QC x)        = putWord8 24 >> put x
   put (C x y)       = putWord8 25 >> put (x,y)
   put (Glue x y)    = putWord8 26 >> put (x,y)
   put (EPatt x)     = putWord8 27 >> put x
   put (EPattType x) = putWord8 28 >> put x
   put (FV x)        = putWord8 29 >> put x
-  put (Alts x)      = putWord8 30 >> put x
+  put (Alts x y)    = putWord8 30 >> put (x,y)
   put (Strs x)      = putWord8 31 >> put x
   put (ELin x y)    = putWord8 32 >> put (x,y)
 
@@ -182,21 +182,21 @@ instance Binary Term where
              20 -> get >>= \(x,y)   -> return (V x y)
              21 -> get >>= \(x,y)   -> return (S x y)
              22 -> get >>= \(x,y)   -> return (Let x y)
-             23 -> get >>= \(x,y)   -> return (Q  x y)
-             24 -> get >>= \(x,y)   -> return (QC x y)
+             23 -> get >>= \x       -> return (Q  x)
+             24 -> get >>= \x       -> return (QC x)
              25 -> get >>= \(x,y)   -> return (C x y)
              26 -> get >>= \(x,y)   -> return (Glue x y)
              27 -> get >>= \x       -> return (EPatt x)
              28 -> get >>= \x       -> return (EPattType x)
              29 -> get >>= \x       -> return (FV x)
-             30 -> get >>= \x       -> return (Alts x)
+             30 -> get >>= \(x,y)   -> return (Alts x y)
              31 -> get >>= \x       -> return (Strs x)
              32 -> get >>= \(x,y)   -> return (ELin x y)
              _  -> decodingError
 
 instance Binary Patt where
   put (PC x y)     = putWord8  0 >> put (x,y)
-  put (PP x y z)   = putWord8  1 >> put (x,y,z)
+  put (PP x y)     = putWord8  1 >> put (x,y)
   put (PV x)       = putWord8  2 >> put x
   put (PW)         = putWord8  3
   put (PR x)       = putWord8  4 >> put x
@@ -212,12 +212,12 @@ instance Binary Patt where
   put (PChar)      = putWord8 15
   put (PChars x)   = putWord8 16 >> put x
   put (PMacro x)   = putWord8 17 >> put x
-  put (PM x y)     = putWord8 18 >> put (x,y)
+  put (PM x)       = putWord8 18 >> put x
   put (PTilde x)   = putWord8 19 >> put x
   get = do tag <- getWord8
            case tag of
              0  -> get >>= \(x,y)   -> return (PC x y)
-             1  -> get >>= \(x,y,z) -> return (PP x y z)
+             1  -> get >>= \(x,y)   -> return (PP x y)
              2  -> get >>= \x       -> return (PV x)
              3  ->                     return (PW)
              4  -> get >>= \x       -> return (PR x)
@@ -233,7 +233,7 @@ instance Binary Patt where
              15 ->                     return (PChar)
              16 -> get >>= \x       -> return (PChars x)
              17 -> get >>= \x       -> return (PMacro x)
-             18 -> get >>= \(x,y)   -> return (PM x y)
+             18 -> get >>= \x       -> return (PM x)
              19 -> get >>= \x       -> return (PTilde x)
              _  -> decodingError
 
