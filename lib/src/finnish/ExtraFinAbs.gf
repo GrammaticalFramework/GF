@@ -13,8 +13,10 @@ abstract ExtraFinAbs = Extra [
 
     PartCN : CN -> NP ;                   -- olutta
 
-    vai_Conj : Conj ;                     -- minÃ¤ vai sinÃ¤? ("or" in question)
+    vai_Conj : Conj ;                     -- minä vai sinä? ("or" in question)
 
     CompPartAP : AP -> Comp ;             -- kahvi on valmista
+
+    ProDropPoss : Pron -> Quant ;         -- vaimoni
 
 }
