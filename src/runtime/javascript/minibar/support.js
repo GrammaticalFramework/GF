@@ -38,6 +38,7 @@ function empty_id(tag,id) { return empty(tag,"id",id); }
 function empty_class(tag,cls) { return empty(tag,"class",cls); }
 
 function div_id(id) { return empty_id("div",id); }
+function span_id(id) { return empty_id("span",id); }
 
 function wrap(tag,contents) {
   var el=empty(tag);
@@ -119,7 +120,7 @@ function swap(a,i,j) { // Note: this doesn't work on strings.
 
 function sort(a) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array/sort
-  return a.sort;
+  return a.sort();
   /* // Note: this doesn't work on strings.
   for(var i=0;i<a.length-1;i++) {
     var min=i;
