@@ -33,7 +33,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
 
     artIndef = \g,n,c -> case n of {
       Sg  => prepCase c ++ genForms "un"   "una" ! g ;
-      _   => prepCase c ++ genForms "unos" "unas" ! g
+      _   => prepCase c -- ++ genForms "unos" "unas" ! g   --- take this as a determiner
       } ;
 
     possCase = \_,_,c -> prepCase c ;
