@@ -249,7 +249,7 @@ lin
       let day = mkNP (mkPN d) in
       mkNPDay day (P.mkAdv d) (P.mkAdv ("di" ++ d)) ; ---- ?
 
-    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i ->
+    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i ->
       mkCNPlace (mkCN p) i dative ;
 
     xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (mkCN x) p ; 

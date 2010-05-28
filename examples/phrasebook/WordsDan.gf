@@ -212,17 +212,11 @@ concrete WordsDan of Words = SentencesDan **
 
 -- transports
 
-    HowFar place = 
-      mkQS (mkQCl far_IAdv (mkCl (mkVP place.to))) ;
-    HowFarFrom x y = 
-      mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP y.to) 
-                    (SyntaxDan.mkAdv from_Prep x.name)))) ;
+    HowFar place = mkQS (mkQCl long_IAdv (mkCl (mkVP (SyntaxDan.mkAdv to_Prep place.name)))) ;
+    HowFarFrom place x = mkQS (mkQCl long_IAdv (mkCl place.name (SyntaxDan.mkAdv from_Prep x.name))) ;
     HowFarFromBy x y t = 
-      mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP (mkVP y.to) 
-                    (SyntaxDan.mkAdv from_Prep x.name)) t))) ;
-    HowFarBy place t = 
-      mkQS (mkQCl far_IAdv (mkCl (mkVP (mkVP place.to) t))) ;
-
+      mkQS (mkQCl long_IAdv (mkNP (mkNP y.name (SyntaxDan.mkAdv from_Prep x.name)) t)) ;
+    HowFarBy y t = mkQS (mkQCl long_IAdv (mkNP y.name t)) ;
  -- not sure !
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
@@ -240,7 +234,7 @@ concrete WordsDan of Words = SentencesDan **
       mkNPDay day (SyntaxDan.mkAdv on_Prep day) 
         (SyntaxDan.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
 
-    mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
+    mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i -> 
     mkCNPlace (mkCN p) (mkPrep i) to_Prep ;
 
     open_Adv = ParadigmsDan.mkAdv "åbent" ;
@@ -256,6 +250,7 @@ concrete WordsDan of Words = SentencesDan **
       by = SyntaxDan.mkAdv by8means_Prep (mkNP n)
       } ;
 
-    far_IAdv : IAdv = ss "hvor langt" ** {lock_IAdv = <>};
+    far_IAdv = ExtraDan.IAdvAdv L.far_Adv ;
+    long_IAdv : IAdv = ss "hvor langt" ** {lock_IAdv = <>};
     how8much_IAdv : IAdv = ss "hvad" ** {lock_IAdv = <>};
 }

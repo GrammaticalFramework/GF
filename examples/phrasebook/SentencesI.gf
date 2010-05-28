@@ -99,8 +99,10 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Too property = mkAP too_AdA (mkAP property) ;
     PropQuality property = mkAP property ;
 
-    ThePlace kind = placeNP the_Det kind ;
-    APlace kind = placeNP a_Det kind ;
+    ThePlace kind = let dd = if_then_else Det kind.isPl thePl_Det theSg_Det 
+                     in placeNP dd kind ;
+    APlace kind = let dd = if_then_else Det kind.isPl thePl_Det theSg_Det 
+                     in placeNP dd kind ;
 
     IMale, IFemale = mkPerson i_Pron ;
     YouFamMale, YouFamFemale = mkPerson youSg_Pron ;
@@ -155,12 +157,20 @@ oper
       } ;
 
   NPPlace : Type = {name : NP ; at : Adv ; to : Adv} ;
-  CNPlace : Type = {name : CN ; at : Prep ; to : Prep} ;
+  CNPlace : Type = {name : CN ; at : Prep ; to : Prep; isPl : Bool} ;
 
   mkCNPlace : CN -> Prep -> Prep -> CNPlace = \p,i,t -> {
     name = p ;
     at = i ;
-    to = t
+    to = t ;
+    isPl = False
+    } ;
+
+ mkCNPlacePl : CN -> Prep -> Prep -> CNPlace = \p,i,t -> {
+    name = p ;
+    at = i ;
+    to = t ;
+    isPl = True
     } ;
 
   placeNP : Det -> CNPlace -> NPPlace = \det,kind ->

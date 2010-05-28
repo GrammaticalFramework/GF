@@ -246,7 +246,7 @@ ik ga te voet/ ik ga lopend
                                 ---- (mkAdv on_Prep (mkNP (P.mkPN d))) 
         (mkAdv on_Prep (mkNP a_Quant plNum (mkCN (P.mkN d (d + "en") P.utrum)))) ;
 
-    mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
+    mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i -> 
       mkCNPlace (mkCN p) (P.mkPrep i) to_Prep ;
 
     open_A = P.mkA "geopend" ;

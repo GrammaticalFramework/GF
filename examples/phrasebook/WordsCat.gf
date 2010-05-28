@@ -255,7 +255,7 @@ lin
       let day = mkNP (mkPN d)
       in mkNPDay day (P.mkAdv ("el" ++ d)) (P.mkAdv ("el" ++ d)) ; ---- ?
 
-    mkPlace : N -> {name : CN ; at : Prep ; to : Prep} = \p ->
+    mkPlace : N -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p ->
       mkCNPlace (mkCN p) dative dative ;
 
 	 mkTransport : N -> {name : CN ; by : Adv} = \n -> {

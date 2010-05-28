@@ -233,10 +233,10 @@ concrete WordsEng of Words = SentencesEng **
       mkNPDay day (SyntaxEng.mkAdv on_Prep day) 
         (SyntaxEng.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
     
-    mkCompoundPlace : Str -> Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \comp, p, i ->
+    mkCompoundPlace : Str -> Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \comp, p, i ->
      mkCNPlace (mkCN (P.mkN comp (mkN p))) (P.mkPrep i) to_Prep ;
 
-    mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
+    mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i -> 
       mkCNPlace (mkCN (mkN p)) (P.mkPrep i) to_Prep ;
 
     open_Adv = P.mkAdv "open" ;

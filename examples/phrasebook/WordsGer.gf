@@ -234,10 +234,11 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
        habitual = ParadigmsGer.mkAdv (d + "s") ----
       } ;
 
-    mkPlace : N -> Prep -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,at,to -> {
+    mkPlace : N -> Prep -> Prep -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,at,to -> {
       name = mkCN p ;
       at = at ;
-      to = to
+      to = to ;
+      isPl = False
       } ;
 
     open_Adv = ParadigmsGer.mkAdv "geöffnet" ;  ---- Adv to get right word order easily

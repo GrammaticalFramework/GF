@@ -72,7 +72,7 @@ concrete WordsRon of Words = SentencesRon ** open
     Toilet = mkPlace (P.mkN "toaletă") at_Prep ;
     University = mkPlace (P.mkN "universitate") at_Prep ;
     Zoo = {name = mkCN (P.mkA "zoologic") (P.mkN "grădină" "grădini");
-           to = to_Prep; at = at_Prep };
+           to = to_Prep; at = at_Prep; isPl = False };
 
     CitRestaurant cit = mkCNPlace (mkCN cit.prop (P.mkN "restaurant" "restaurante")) in_Prep to_Prep;  
 
@@ -257,9 +257,9 @@ mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
 -- auxiliaries
 
 oper
-    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep} = \p,i -> {
+    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i -> {
       name = mkCN p ;
-      at = i ;
+      at = i ; isPl = False ;
       to = to_Prep   -- in Romanian, most of the time they would be the same
       } ;
 
