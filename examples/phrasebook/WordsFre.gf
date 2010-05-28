@@ -10,6 +10,7 @@ concrete WordsFre of Words = SentencesFre ** open
   (P = ParadigmsFre),
   Prelude in {
 
+
 lin
 
 -- kinds
@@ -45,33 +46,33 @@ lin
 -- places
 
     Airport = mkPlace (mkN "aéroport") dative ;
-    AmusementPark = mkPlace (compN (mkN "parc") ["d'attractions"]) in_Prep ;
-    Bank = mkPlace (mkN "banque") in_Prep ;
-    Bar = mkPlace (mkN "bar") in_Prep ;
-    Cafeteria = mkPlace (mkN "cafétéria") in_Prep ;
-    Center = mkPlace (mkN "centre") in_Prep ;
-    Church = mkPlace (mkN "église") in_Prep ;
-    Cinema = mkPlace (mkN "cinéma" masculine) in_Prep ;
+    AmusementPark = mkPlace (compN (mkN "parc") ["d'attractions"]) dative ;
+    Bank = mkPlace (mkN "banque") dative ;
+    Bar = mkPlace (mkN "bar") dative ;
+    Cafeteria = mkPlace (mkN "cafétéria") dative ;
+    Center = mkPlace (mkN "centre" "centres" ParadigmsFre.masculine) dative ;
+    Church = mkPlace (mkN "église") dative ;
+    Cinema = mkPlace (mkN "cinéma" masculine) dative ;
     Disco = mkPlace (mkN "discothèque" feminine) dative ;
     Hospital = mkPlace (mkN "hôpital") dative ;
     Hotel = mkPlace (mkN "hôtel") dative ;
-    Museum = mkPlace (mkN "musée" masculine) in_Prep ;
-    Park = mkPlace (mkN "parc") in_Prep ;
-    Parking = mkPlace (mkN "parking" masculine) in_Prep ;
-    Pharmacy = mkPlace (mkN "pharmacie" feminine) in_Prep ;
+    Museum = mkPlace (mkN "musée" masculine) dative ;
+    Park = mkPlace (mkN "parc") dative ;
+    Parking = mkPlace (mkN "parking" masculine) dative ;
+    Pharmacy = mkPlace (mkN "pharmacie" feminine) dative ;
     PostOffice = mkPlace (mkN "poste" feminine) dative ;
     Pub = mkPlace (mkN "pub" masculine) dative ;
-    Restaurant = mkPlace (mkN "restaurant") in_Prep ;
+    Restaurant = mkPlace (mkN "restaurant") dative ;
     School = mkPlace (mkN "école") dative ;
-    Shop = mkPlace (mkN "magasin") in_Prep ;
+    Shop = mkPlace (mkN "magasin") dative ;
     Station = mkPlace (mkN "gare") dative ;
-    Supermarket = mkPlace (mkN "supermarché" masculine) in_Prep ;
-    Theatre = mkPlace (mkN "théâtre" masculine) in_Prep ;
-    Toilet = mkPlace (mkN "toilette") in_Prep ;
+    Supermarket = mkPlace (mkN "supermarché" masculine) dative ;
+    Theatre = mkPlace (mkN "théâtre" masculine) dative ;
+    Toilet = mkPlace (mkN "toilette") dative ; 
     University = mkPlace (mkN "université" feminine) dative ;
     Zoo = mkPlace (mkN "zoo" masculine) dative ;
 
-    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "restaurant")) in_Prep to_Prep ;
+    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "restaurant")) dative to_Prep ;
 
 -- currencies
 
@@ -112,7 +113,7 @@ lin
    Bike = mkTransport en_Prep L.bike_N ;
    Bus = mkTransport par_Prep (mkN "bus") ;
    Car = mkTransport en_Prep L.car_N ;
-   Ferry = mkTransport en_Prep (mkN "ferry-boat") ;
+   Ferry = mkTransport en_Prep (mkN "ferry") ;
    Plane = mkTransport par_Prep L.airplane_N ;
    Subway = mkTransport par_Prep (mkN "métro") ;
    Taxi = mkTransport en_Prep (mkN "taxi") ;
@@ -124,7 +125,7 @@ lin
 
 -- actions
 
-    AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
+    AHasAge p num = mkCl p.name have_V2 (mkNP num L.year_N) ;
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
     AHasRoom p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (mkN "chambre")) 
@@ -198,12 +199,11 @@ lin
     Tomorrow = ParadigmsFre.mkAdv "demain" ;
 
 -- modifiers of places
-
     TheBest = mkSuperl True L.good_A ;
     TheClosest = mkSuperl False L.near_A ; 
     TheCheapest = mkSuperl False 
       (compADeg {s = \\_ => (M.mkAdj "bon marché" "bon marché" "bon marché" "bon marché").s ; 
-       isPre = False ; lock_A = <>}) ; ---- 
+       isPre = False ; lock_A = <>}) ; 
     TheMostExpensive = mkSuperl False (mkA "cher") ;
     TheMostPopular = mkSuperl False (mkA "populaire") ;
     TheWorst = mkSuperl True L.bad_A ;
@@ -223,7 +223,7 @@ lin
 
 -- transports
 
-    HowFar place = mkQS (mkQCl (E.CompIQuant which_IQuant) (mkNP distance_NP place.to)) ; 
+    HowFar place = mkQS (mkQCl what_distance_IAdv place.name) ; 
     HowFarFrom place x = 
       mkQS (mkQCl (E.CompIQuant which_IQuant) 
         (mkNP (mkNP distance_NP (SyntaxFre.mkAdv from_Prep x.name)) place.to)) ; 
@@ -231,7 +231,7 @@ lin
       mkQS (mkQCl (E.CompIQuant which_IQuant) 
         (mkNP (mkNP (mkNP distance_NP (SyntaxFre.mkAdv from_Prep x.name)) place.to) t)) ; 
     HowFarBy place t = 
-      mkQS (mkQCl (E.CompIQuant which_IQuant) (mkNP (mkNP distance_NP place.to) t)) ; 
+       mkQS (mkQCl what_distance_IAdv (mkNP place.name t)) ; 
      
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
@@ -264,11 +264,12 @@ lin
     en_Prep = mkPrep "en" ;
     par_Prep = mkPrep "par" ;
 
-    mkSuperl : Bool -> A -> {s : Ord ; isPre : Bool} = \b,a -> 
-      {s = SyntaxFre.mkOrd a ; isPre = b} ;
+  mkSuperl : Bool -> A -> {s : Ord ; isPre : Bool} = \b,a ->
+     {s = SyntaxFre.mkOrd a ; isPre = b} ;
 
-    far_IAdv = ss "loin" ;
-
+    
+    what_distance_IAdv = ss "à quelle distance"**{lock_IAdv=<>};
+    
     distance_NP : NP = mkNP the_Det (mkN "distance" feminine) ;
 
 
