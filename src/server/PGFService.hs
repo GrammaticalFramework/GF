@@ -16,7 +16,7 @@ import Control.Exception
 import Control.Monad
 import Data.Char
 import Data.Function (on)
-import Data.List (sortBy)
+import Data.List (sortBy,intersperse)
 import qualified Data.Map as Map
 import Data.Maybe
 import System.Directory
@@ -133,8 +133,8 @@ doTranslateGroup pgf input mcat mfrom mto =
      [toJSObject [("from",          showJSON (langOnly (PGF.showLanguage from))),
                   ("to",            showJSON (langOnly (PGF.showLanguage to))),
                   ("linearizations",showJSON 
-                      [toJSObject (("text", doText (doBind alt)) : disamb lg from t) | 
-                                                (t,alt) <- output, let lg = length output])
+                      [toJSObject (("text", doText (doBind alt)) : disamb lg from ts) | 
+                                             (ts,alt) <- output, let lg = length output])
                  ]
         | 
           (from,trees) <- parse' pgf input mcat mfrom,
@@ -144,9 +144,15 @@ doTranslateGroup pgf input mcat mfrom mto =
    groupResults = Map.toList . foldr more Map.empty . start . collect
      where
        collect tls = [(t,(l,s)) | (t,ls) <- tls, (l,s) <- ls, notDisamb l]
-       start ls = [(l,[(t,s)]) | (t,(l,s)) <- ls]
+       start ls = [(l,[([t],s)]) | (t,(l,s)) <- ls]
        more (l,s) = 
-         Map.insertWith (\ [(t,x)] xs -> if elem x (map snd xs) then xs else ((t,x) : xs)) l s
+         Map.insertWith (\ [([t],x)] xs -> insertAlt t x xs) l s
+
+   insertAlt t x xs = case xs of
+     (ts,y):xs2 -> if x==y then (t:ts,y):xs2        -- if string is there add only tree
+                   else (ts,y) : insertAlt t x xs2
+     _ -> [([t],x)]
+
    doBind = unwords . bind . words
    doText s = case s of
      c:cs | elem (last s) ".?!" -> toUpper c : init (init cs) ++ [last s]
@@ -158,15 +164,24 @@ doTranslateGroup pgf input mcat mfrom mto =
          _ -> ws
    langOnly = reverse . take 3 . reverse
 
-   disamb lg from t = 
+   disamb lg from ts = 
      if lg < 2 
        then [] 
-       else [("tree", "-- " ++ doText (doBind (disambLang from t)))]
+       else [("tree", "-- " ++ groupDisambs [doText (doBind (disambLang from t)) | t <- ts])]
 
-   disambLang f t = let disf = PGF.mkCId ("Disamb" ++ PGF.showLanguage f) in
-     if elem disf (PGF.languages pgf) 
-       then PGF.linearize pgf disf t 
-       else PGF.showExpr [] t
+   groupDisambs = unwords . intersperse "/"
+
+   disambLang f t = 
+     let 
+       disfl lang = PGF.mkCId ("Disamb" ++ lang) 
+       disf       = disfl (PGF.showLanguage f) 
+       disfEng    = disfl (reverse (drop 3 (reverse (PGF.showLanguage f))) ++ "Eng") 
+     in
+       if elem disf (PGF.languages pgf)         -- if Disamb f exists use it
+         then PGF.linearize pgf disf t          
+       else if elem disfEng (PGF.languages pgf) -- else try DisambEng
+         then PGF.linearize pgf disfEng t 
+       else "AST " ++ PGF.showExpr [] t                   -- else show abstract tree
 
    notDisamb = (/="Disamb") . take 6 . PGF.showLanguage
 
