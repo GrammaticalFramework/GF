@@ -534,6 +534,10 @@ composOp co trm =
    ELin c ty -> 
      do ty' <- co ty
         return (ELin c ty')
+        
+   ImplArg t -> 
+     do t' <- co t
+        return (ImplArg t')
 
    _ -> return trm -- covers K, Vr, Cn, Sort, EPatt
 
