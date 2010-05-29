@@ -120,6 +120,7 @@ oper
   mkAdjReg : Str -> Adj = \prim ->
 	case last prim of {
 		"e"|"u"|"o"	=> adjFondo prim ;
+		"l"|"r"       => adjFidel prim ;
 		_			=> adjPrim prim  
 	} ;
 

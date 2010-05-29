@@ -91,7 +91,7 @@ lin
    girl_N = regFN "noia" ;
    glove_N = regMN "guant" ;
    gold_N = regMN "or" ;
-   good_A = mkADeg (mkA "bó" "bona" "bons" "bones" "bonament") (regA "millor") ; ---- adv?
+   good_A = mkADeg (mkA "bo" "bona" "bons" "bones" "bonament") (regA "millor") ; ---- adv?
    go_V = (verbV (anar_4 "anar")) ;
    green_A = regADeg "verd" ;
    harbour_N = regMN "port" ;
