@@ -9,9 +9,9 @@ concrete ConjunctionGer of Conjunction =
 
     ConjAdv conj ss = conjunctDistrSS conj ss ;
 
-    ConjNP conj ss = conjunctDistrTable PCase conj ss ** {
+    ConjNP conj ss = heavyNP (conjunctDistrTable PCase conj ss ** {
       a = Ag Fem (conjNumber conj.n (numberAgr ss.a)) (personAgr ss.a)
-      } ;
+      }) ;
 
     ConjAP conj ss = conjunctDistrTable AForm conj ss ** {
       isPre = ss.isPre

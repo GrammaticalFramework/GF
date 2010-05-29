@@ -436,7 +436,8 @@ resource ResGer = ParamX ** open Prelude in {
   VP : Type = {
       s  : Verb ;
       a1 : Polarity => Str ; -- nicht
-      n2 : Agr => Str ;      -- dich
+      n0 : Agr => Str ;      -- dich
+      n2 : Agr => Str ;      -- deine Frau
       a2 : Str ;             -- heute
       isAux : Bool ;         -- is a double infinitive
       inf : Str ;            -- sagen
@@ -509,10 +510,11 @@ resource ResGer = ParamX ** open Prelude in {
      } ;
 
     a1  : Polarity => Str = negation ;
-    n2  : Agr => Str = case verb.vtype of {
+    n0  : Agr => Str = case verb.vtype of {
       VAct => \\_ => [] ;
       VRefl c => \\a => reflPron ! a ! c
       } ;
+    n2  : Agr => Str = \\_ => [] ;
     a2  : Str = [] ;
     isAux = isAux ; ----
     inf,ext : Str = []
@@ -576,10 +578,13 @@ resource ResGer = ParamX ** open Prelude in {
 
 -- Extending a verb phrase with new constituents.
 
-  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
+  insertObj : (Agr => Str) -> VP -> VP = insertObjNP False ;
+
+  insertObjNP : Bool -> (Agr => Str) -> VP -> VP = \isPron, obj,vp -> {
     s = vp.s ;
     a1 = vp.a1 ;
-    n2 = \\a => obj ! a ++ vp.n2 ! a ;
+    n0 = \\a => case isPron of {True  => obj ! a ; _ => []} ++ vp.n0 ! a ;
+    n2 = \\a => case isPron of {False => obj ! a ; _ => []} ++ vp.n2 ! a ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
     inf = vp.inf ;
@@ -589,6 +594,7 @@ resource ResGer = ParamX ** open Prelude in {
   insertAdV : Str -> VP -> VP = \adv,vp -> {
     s = vp.s ;
     a1 = \\a => adv ++ vp.a1 ! a ; -- immer nicht
+    n0 = vp.n0 ;
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
@@ -599,6 +605,7 @@ resource ResGer = ParamX ** open Prelude in {
   insertAdv : Str -> VP -> VP = \adv,vp -> {
     s = vp.s ;
     a1 = vp.a1 ;
+    n0 = vp.n0 ;
     n2 = vp.n2 ;
     a2 = vp.a2 ++ adv ;
     isAux = vp.isAux ;
@@ -609,6 +616,7 @@ resource ResGer = ParamX ** open Prelude in {
   insertExtrapos : Str -> VP -> VP = \ext,vp -> {
     s = vp.s ;
     a1 = vp.a1 ;
+    n0 = vp.n0 ;
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
@@ -619,6 +627,7 @@ resource ResGer = ParamX ** open Prelude in {
   insertInf : Str -> VP -> VP = \inf,vp -> {
     s = vp.s ;
     a1 = vp.a1 ;
+    n0 = vp.n0 ;
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ; ----
@@ -641,8 +650,9 @@ resource ResGer = ParamX ** open Prelude in {
             } ;
           verb  = vps.s  ! ord ! agr ! VPFinite m t a ;
           neg   = vp.a1 ! b ;
+          obj0  = vp.n0 ! agr ;
           obj   = vp.n2 ! agr ;
-          compl = obj ++ neg ++ vp.a2 ;
+          compl = obj0 ++ neg ++ obj ++ vp.a2 ;
           inf   = vp.inf ++ verb.inf ;
           extra = vp.ext ;
           inffin = 
@@ -661,7 +671,7 @@ resource ResGer = ParamX ** open Prelude in {
 
   infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp -> let vps = useVP vp in
     <
-     \\agr => vp.n2 ! agr ++  vp.a2,
+     \\agr => vp.n0 ! agr ++ vp.n2 ! agr ++  vp.a2,
      vp.a1 ! Pos ++ (vps.s ! (notB isAux) ! agrP3 Sg ! VPInfinit Simul).inf,
      vp.inf ++ vp.ext
     > ;
@@ -693,5 +703,9 @@ resource ResGer = ParamX ** open Prelude in {
 -- The infinitive particle "zu" is used if and only if $vv.isAux = False$.
  
   infPart : Bool -> Str = \b -> if_then_Str b [] "zu" ;
+
+  heavyNP : 
+    {s : PCase => Str ; a : Agr} -> {s : PCase => Str ; a : Agr ; isPron : Bool} = \np ->
+    np ** {isPron = False} ;
 
 }

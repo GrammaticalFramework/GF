@@ -16,30 +16,31 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       isPron = False
       } ;
 
-    UsePN pn = {
+    UsePN pn = heavyNP {
       s = \\c => usePrepC c (\k -> pn.s ! k) ;
       a = agrP3 Sg
       } ;
 
     UsePron pron = {
       s = \\c => usePrepC c (\k -> pron.s ! NPCase k) ;
-      a = pron.a
+      a = pron.a ;
+      isPron = True
       } ;
 
     PredetNP pred np = 
-      let ag = case pred.a of {PAg n => agrP3 n ; _ => np.a} in {
+      let ag = case pred.a of {PAg n => agrP3 n ; _ => np.a} in heavyNP {
         s = \\c0 => 
           let c = case pred.c.k of {NoCase => c0 ; PredCase k => k} in
           pred.s ! numberAgr ag ! genderAgr np.a ! c0 ++ pred.c.p ++ np.s ! c ; 
         a = ag
         } ;
 
-    PPartNP np v2 = {
+    PPartNP np v2 = heavyNP {
       s = \\c => np.s ! c ++ v2.s ! VPastPart APred ; --- invar part
       a = np.a
       } ;
 
-    AdvNP np adv = {
+    AdvNP np adv = heavyNP {
       s = \\c => np.s ! c ++ adv.s ;
       a = np.a
       } ;
