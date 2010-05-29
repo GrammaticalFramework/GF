@@ -7,7 +7,7 @@ lincat
 lin 
   GBye = ss "tschüß" ;
   GCheers = ss "zum Wohl" ;
-  GDamn = ss "Teufel" ;
+  GDamn = ss "verdammt" ;
   GExcuse, GExcusePol = ss "Entschuldigung" ;
   GGoodDay = ss "guten Tag" ;
   GGoodEvening = ss "guten Abend" ;

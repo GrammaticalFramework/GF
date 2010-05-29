@@ -43,7 +43,7 @@ resource ResGer = ParamX ** open Prelude in {
     prepC : PCase -> {s : Str ; c : Case} = \cp -> case cp of {
       NPC c      => {s = []   ; c = c} ;
       NPP CAnDat => {s = "an" ; c = Dat} ;
-      NPP CInAcc => {s = "an" ; c = Acc} ;
+      NPP CInAcc => {s = "in" ; c = Acc} ;
       NPP CInDat => {s = "in" ; c = Dat} ;
       NPP CZuDat => {s = "zu" ; c = Dat}
       } ;
