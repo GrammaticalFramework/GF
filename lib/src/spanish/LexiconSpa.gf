@@ -230,7 +230,7 @@ lin
    dull_A = regA "desafilado" ;
    full_A = regA "lleno" ;
    heavy_A = regA "pesado" ;
-   near_A = regA "cerca" ;
+   near_A = regA "cercano" ;
    rotten_A = regA "podrido" ;
    round_A = regA "redondo" ;
    sharp_A = regA "filoso" ; -- afilado, puntiagudo
