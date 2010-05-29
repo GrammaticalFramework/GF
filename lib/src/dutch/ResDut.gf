@@ -53,7 +53,7 @@ resource ResDut = ParamX ** open Prelude in {
     shortVoc : Str -> Str -> Str = \v,s -> init v + endCons s ;
 
     endCons : Str -> Str = \s -> case s of {
-      _ + ("ts" |"rs" | "ls") => s ;
+      _ + ("ts" |"rs" | "ls" | "ds" | "ns" | "ms") => s ;
       b + "s" => b + "z" ;
       b + "f" => b + "v" ;
       _ => s
