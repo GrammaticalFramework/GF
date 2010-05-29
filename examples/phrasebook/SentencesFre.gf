@@ -2,13 +2,14 @@ concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [
   QProp,
   IFemale, YouFamFemale, YouPolFemale,
   PYesToNo,
+  SHaveNo,SHaveNoMass,
   Superlative
  ] 
   with 
     (Syntax = SyntaxFre), 
     (Symbolic = SymbolicFre), 
     (Lexicon = LexiconFre) ** 
-  open SyntaxFre, ExtraFre, Prelude in {
+  open SyntaxFre, ExtraFre, (P = ParadigmsFre), Prelude in {
 
     lincat
       Superlative = {s : Ord ; isPre : Bool} ;
@@ -23,4 +24,11 @@ concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [
         {name = mkNP youPol8fem_Pron ; isPron = True ; poss = mkQuant youPol_Pron};
 
       PYesToNo = mkPhrase (lin Utt (ss "si")) ;
+
+    SHaveNo p k = mkS negativePol (mkCl p.name have_de (mkNP aPl_Det k)) ;
+    SHaveNoMass p k = mkS negativePol (mkCl p.name (ComplCN have_de k)) ;
+
+  oper
+    have_de : V2 =  P.mkV2 (P.mkV have_V2) P.genitive ;
+
 }
