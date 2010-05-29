@@ -118,10 +118,11 @@ oper
 	mkAdj fidel fidel fidels fidels (fidel + "ment") ;
 
   mkAdjReg : Str -> Adj = \prim ->
-	case last prim of {
-		"e"|"u"|"o"	=> adjFondo prim ;
-		"l"|"r"       => adjFidel prim ;
-		_			=> adjPrim prim  
+	case prim of {
+		_ + "e" + ("r"|"l") => adjPrim prim ;
+		_ + ("r"|"l")       => adjFidel prim ;
+		_ + ("e"|"u"|"o")   => adjFondo prim ;
+		_                   => adjPrim prim  
 	} ;
 
 
