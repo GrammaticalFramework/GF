@@ -1,6 +1,6 @@
 concrete SentencesIta of Sentences = NumeralIta ** SentencesI - [
   IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
-  mkPerson, Superlative
+  mkPerson, Superlative, SHaveNoMass
  ] 
   with 
     (Syntax = SyntaxIta), 
@@ -26,6 +26,8 @@ concrete SentencesIta of Sentences = NumeralIta ** SentencesI - [
       YouPolMale = 
         {name = mkNP (ProDrop youPol_Pron) ; isPron = True ; poss = PossFamQuant youPol_Pron} ;
 
+      SHaveNoMass p k =  mkS negativePol (mkCl p.name (ComplCN have_V2 k)) ;
+
     oper
 
   CNPlace : Type = {name : CN ; at : Prep ; to : Prep }  ;
@@ -45,6 +47,7 @@ concrete SentencesIta of Sentences = NumeralIta ** SentencesI - [
 
   mkPerson : Pron -> {name : NP ; isPron : Bool ; poss : Quant} = \p -> 
     {name = mkNP p ; isPron = True ; poss = PossFamQuant p} ;
+
 
 }
 
