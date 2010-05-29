@@ -9,9 +9,9 @@ concrete ConjunctionDut of Conjunction =
 
     ConjAdv conj ss = conjunctDistrSS conj ss ;
 
-    ConjNP conj ss = conjunctDistrTable NPCase conj ss ** {
+    ConjNP conj ss = heavyNP (conjunctDistrTable NPCase conj ss ** {
       a = {g = Utr ; n = conjNumber conj.n ss.a.n ; p = ss.a.p}
-      } ;
+      }) ;
 
     ConjAP conj ss = conjunctDistrTable AForm conj ss ** {
       isPre = ss.isPre

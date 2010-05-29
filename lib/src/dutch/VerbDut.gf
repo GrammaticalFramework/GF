@@ -42,7 +42,7 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
     SlashV2A v ap = 
       insertObj (\\_ => ap.s ! APred) (predVv v) ** {c2 = v.c2} ;
 
-    ComplSlash vp np = insertObj (\\_ => appPrep vp.c2 np.s) vp ;
+    ComplSlash vp np = insertObjNP np.isPron (\\_ => appPrep vp.c2 np.s) vp ;
 
     SlashVV v vp = 
       let 

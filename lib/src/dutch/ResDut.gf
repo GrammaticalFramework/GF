@@ -452,8 +452,9 @@ param
   oper VP : Type = {
       s  : VVerb ;
       a1 : Polarity => Str ; -- niet
-      n2 : Agr => Str ;      -- dich
-      a2 : Str ;             -- heute
+      n0 : Agr => Str ;      -- je
+      n2 : Agr => Str ;      -- je vrouw
+      a2 : Str ;             -- vandaag
       isAux : Bool ;         -- is a double infinitive
       inf : Str * Bool ;     -- sagen (True = non-empty)
       ext : Str              -- dass sie kommt
@@ -465,10 +466,11 @@ param
   predVGen : Bool -> VVerb -> VP = \isAux, verb -> {
     s = verb ;
     a1  : Polarity => Str = negation ;
-    n2  : Agr => Str = \\a => case verb.vtype of {
+    n0  : Agr => Str = \\a => case verb.vtype of {
       VAct  => [] ;
       VRefl => reflPron ! a
       } ;
+    n2  : Agr => Str = \\a => [] ;
     a2  : Str = [] ;
     isAux = isAux ; ----
     inf : Str * Bool = <[],False> ;
@@ -482,10 +484,13 @@ param
 
 -- Extending a verb phrase with new constituents.
 
-  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
+  insertObj : (Agr => Str) -> VP -> VP = insertObjNP False ;
+
+  insertObjNP : Bool -> (Agr => Str) -> VP -> VP = \isPron, obj,vp -> {
     s = vp.s ;
     a1 = vp.a1 ;
-    n2 = \\a => obj ! a ++ vp.n2 ! a ;
+    n0 = \\a => case isPron of {True  => obj ! a ; _ => []} ++ vp.n0 ! a ;
+    n2 = \\a => case isPron of {False => obj ! a ; _ => []} ++ vp.n2 ! a ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
     inf = vp.inf ;
@@ -495,6 +500,7 @@ param
   insertAdV : Str -> VP -> VP = \adv,vp -> {
     s = vp.s ;
     a1 = \\a => adv ++ vp.a1 ! a ; -- immer nicht
+    n0 = vp.n0 ;
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
@@ -505,6 +511,7 @@ param
   insertAdv : Str -> VP -> VP = \adv,vp -> {
     s = vp.s ;
     a1 = vp.a1 ;
+    n0 = vp.n0 ;
     n2 = vp.n2 ;
     a2 = vp.a2 ++ adv ;
     isAux = vp.isAux ;
@@ -515,6 +522,7 @@ param
   insertExtrapos : Str -> VP -> VP = \ext,vp -> {
     s = vp.s ;
     a1 = vp.a1 ;
+    n0 = vp.n0 ;
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
@@ -525,6 +533,7 @@ param
   insertInf : Str -> VP -> VP = \inf,vp -> {
     s = vp.s ;
     a1 = vp.a1 ;
+    n0 = vp.n0 ;
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ; ----
@@ -556,8 +565,9 @@ param
             } ;
           fin   = verb.p1 ;
           neg   = vp.a1 ! b ;
+          obj0  = vp.n0 ! agr ;
           obj   = vp.n2 ! agr ;
-          compl = obj ++ neg ++ vp.a2 ++ vp.s.prefix ;
+          compl = obj0 ++ neg ++ obj ++ vp.a2 ++ vp.s.prefix ;
           inf   = 
             case <vp.isAux, vp.inf.p2, a> of {                  --# notpresent
               <True,True,Anter> => vp.s.s ! VInf ++ vp.inf.p1 ; --# notpresent
@@ -644,11 +654,16 @@ param
       s  = \\n,g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze}
       } ;
 
-  mkNP : Str -> Gender -> Number -> {s : NPCase => Str ; a : Agr} = \s,g,n -> {
-    s = \\_ => s ;
-    a = agrgP3 g n ;
-    } ;
+  mkNP : Str -> Gender -> Number -> {s : NPCase => Str ; a : Agr ; isPron : Bool} = 
+    \s,g,n -> heavyNP {
+      s = \\_ => s ;
+      a = agrgP3 g n ;
+      } ;
 
   auxVV : VVerb -> VVerb ** {isAux : Bool} = \v -> v ** {isAux = True} ;
+
+  heavyNP : 
+    {s : NPCase => Str ; a : Agr} -> {s : NPCase => Str ; a : Agr ; isPron : Bool} = \np ->
+    np ** {isPron = False} ;
 
 }
