@@ -19,21 +19,22 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
 
     UsePron pron = {
       s = table {NPNom => pron.unstressed.nom ; NPAcc => pron.unstressed.acc} ;
-      a = pron.a
+      a = pron.a ;
+      isPron = True
       } ;
 
-    PredetNP pred np = {
+    PredetNP pred np = heavyNP {
       s = \\c => 
         pred.s ! np.a.n ! np.a.g ++ np.s ! c ; ---- g
       a = np.a
       } ;
 
-    PPartNP np v2 = {
+    PPartNP np v2 = heavyNP {
       s = \\c => np.s ! c ++ v2.s ! VPerf ; -- invar part
       a = np.a
       } ;
 
-    AdvNP np adv = {
+    AdvNP np adv = heavyNP {
       s = \\c => np.s ! c ++ adv.s ;
       a = np.a
       } ;

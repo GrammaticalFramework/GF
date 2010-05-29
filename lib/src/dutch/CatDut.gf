@@ -44,7 +44,7 @@ concrete CatDut of Cat =
 -- Noun
 
     CN = {s : Adjf => NForm => Str ; g : Gender} ;
-    NP = {s : NPCase => Str ; a : Agr} ;
+    NP = {s : NPCase => Str ; a : Agr ; isPron : Bool} ;
     Pron = Pronoun ;
 
     Det = {s,sp : Gender => Str ; n : Number ; a : Adjf} ;
