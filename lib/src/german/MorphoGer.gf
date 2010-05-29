@@ -19,7 +19,7 @@ oper
   mkPrep : Str -> PCase -> Preposition = \s,c -> 
     {s = s ; c = c} ;
 
-  nameNounPhrase : {s : Case => Str} ->  {s : PCase => Str ; a : Agr} = \name -> {
+  nameNounPhrase : {s : Case => Str} ->  {s : PCase => Str ; a : Agr ; isPron : Bool} = \name -> heavyNP {
       s = \\c => usePrepC c (\k -> name.s ! k) ;
       a = agrP3 Sg
       } ;

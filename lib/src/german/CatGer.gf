@@ -48,7 +48,7 @@ concrete CatGer of Cat =
 -- Noun
 
     CN = {s : Adjf => Number => Case => Str ; g : Gender} ;
-    NP = {s : PCase => Str ; a : Agr} ;
+    NP = {s : PCase => Str ; a : Agr ; isPron : Bool} ;
     Pron = {s : NPForm => Str ; a : Agr} ;
     Det = {s,sp : Gender => PCase => Str ; n : Number ; a : Adjf} ;
     Quant = {
