@@ -123,7 +123,11 @@ incomplete concrete SentencesI of Sentences = Numeral **
 
     NNumeral n = mkCard <lin Numeral n : Numeral>  ;
 
-    AHave p obj = mkCl p.name have_V2 obj ;
+    SHave   p obj = mkS (mkCl p.name have_V2 obj) ;
+    SHaveNo p k = mkS negativePol (mkCl p.name have_V2 (mkNP aPl_Det k)) ;
+    SHaveNoMass p m = mkS negativePol (mkCl p.name have_V2 (mkNP m)) ;
+    QDoHave p obj = mkQS (mkQCl (mkCl p.name have_V2 obj)) ;
+
     AHaveCurr p curr = mkCl p.name have_V2 (mkNP aPl_Det curr) ;
     ACitizen p n = mkCl p.name n ;
     ABePlace p place = mkCl p.name place.at ;
