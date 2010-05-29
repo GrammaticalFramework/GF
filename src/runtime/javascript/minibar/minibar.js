@@ -292,9 +292,12 @@ function show_completions(completions) {
     if(s.length>0) box.appendChild(word(s));
     else emptycnt++;
   }
-  if(emptycnt>0)
-    //setTimeout(function(){get_translations(menu);},200);
-    get_translations(menu);
+  if(emptycnt>0) get_translations(menu);
+  else {
+    var trans=element("translations");
+    trans.innerHTML="";
+    try_google(menu.grammar,trans,target_lang());
+  }
   var surface=element("surface");
   if(surface.typed && emptycnt==completions.length) {
       if(surface.typed.value=="") remove_typed_input(surface);
@@ -314,11 +317,16 @@ function tdt(tree_btn,txt) {
     return options.show_trees ? tda([tree_btn,txt]) : td(txt);
 }
 
+function target_lang() {
+    var to_menu=element("to_menu");
+    var grammar=element("language_menu").grammar;
+    return langpart(to_menu.options[to_menu.selectedIndex].value,grammar.name);
+}
+
 function show_translations(translations) {
   var trans=element("translations");
   var grammar=element("language_menu").grammar;
-  var to_menu=element("to_menu");
-  var to=to_menu.options[to_menu.selectedIndex].value
+  var to=target_lang();
   var cnt=translations.length;
   trans.innerHTML="";
   trans.appendChild(wrap("h3",text(cnt<1 ? "No translations?" :
@@ -344,8 +352,7 @@ function show_translations(translations) {
 function show_groupedtranslations(translations) {
     var trans=element("translations");
     var grammar=element("language_menu").grammar;
-    var to_menu=element("to_menu");
-    var to=langpart(to_menu.options[to_menu.selectedIndex].value,grammar.name);
+    var to=target_lang();
     var cnt=translations.length;
     trans.innerHTML="";
     for(p=0;p<cnt;p++) {
@@ -374,6 +381,7 @@ function try_google(grammar,trans,to) {
 	url+="&q="+encodeURIComponent(c.input);
 	var link=empty("a","href",url);
 	link.innerHTML="Try this sentence in Google Translate";
+	link.setAttribute("target","translate.google.com");
 	trans.appendChild(link);
     }
 }
