@@ -60,7 +60,7 @@ concrete WordsSwe of Words = SentencesSwe **
     Station = mkPlace (mkN "station" "stationer") "på" ;
     Supermarket = mkPlace (mkN "snabbköp" "snabbköp") "på" ;
     Theatre = mkPlace (mkN "teater" "teatrar") "på" ;
-    Toilet = mkPlace (mkN "toalett" "toaletter") "på" ;
+    Toilet = mkPlace2 (mkN "toalett" "toaletter") "på" "på" ;
     University = mkPlace (mkN "universitet" "universitet") "på" ;
     Zoo = mkPlace (mkN "djurpark" "djurparker") "i" ;
 
@@ -228,6 +228,8 @@ concrete WordsSwe of Words = SentencesSwe **
 
     mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep ; isPl : Bool} = \p,i -> 
       mkCNPlace (mkCN p) (mkPrep i) to_Prep ;
+    mkPlace2 : N -> Str -> Str -> {name : CN ; at : Prep ; to : Prep ; isPl : Bool} = 
+      \p,i,t -> mkCNPlace (mkCN p) (mkPrep i) (mkPrep t) ;
 
     open_A = mkA "öppen" "öppet" ;
     closed_A = mkA "stängd" "stängt" ;
