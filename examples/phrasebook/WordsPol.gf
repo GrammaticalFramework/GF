@@ -158,12 +158,12 @@ concrete WordsPol of Words = SentencesPol **
 
 -- Actions: the predication patterns are very often language-dependent.
 
---     AHasAge p num = mkCl p.name have_V2 (mkNP (mkDet num) (mkCN L.year_N)) ;
---     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ; --!!!!!!!!!!! FIXME HELP!!!!!
---     AHasRoom p num = mkCl p.name have_V2 
---       (mkNP (mkNP a_Det (P.nPokoj "pokój")) (SyntaxPol.mkAdv for_Prep (mkNP num (L.person_N)))) ;
---     AHasTable p num = mkCl p.name have_V2 
---       (mkNP (mkNP a_Det (L.table_N)) (SyntaxPol.mkAdv for_Prep (mkNP num (L.person_N)))) ;
+    AHasAge p num = mkCl p.name have_V2 (mkNP (mkDet num) (mkCN L.year_N)) ;
+    AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ; 
+    AHasRoom p num = mkCl p.name have_V2 
+      (mkNP (mkNP a_Det (P.nPokoj "pokój")) (SyntaxPol.mkAdv for_Prep (mkNP num (L.person_N)))) ;
+    AHasTable p num = mkCl p.name have_V2 
+      (mkNP (mkNP a_Det (L.table_N)) (SyntaxPol.mkAdv for_Prep (mkNP num (L.person_N)))) ;
 
 
 
