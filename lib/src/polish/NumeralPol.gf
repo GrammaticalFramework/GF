@@ -485,7 +485,7 @@ n9 = { unit = table {
         s = s.s;
         o = s.o;
         a = s.a; 
-        n = Pl
+        n = s.n -- was Pl - why? very strange ASL
     };
 
 --   pot3 : Sub1000 -> Sub1000000 ;                -- m * 1000
