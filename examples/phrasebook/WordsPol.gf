@@ -88,7 +88,7 @@ concrete WordsPol of Words = SentencesPol **
     Disco = mkPlaceNa "dyskoteka" "dyskotekę" "dyskotece" Fem ;
     Hospital = mkPlaceDo "szpital" "szpitala" "szpitalu" (Masc Inanimate);
     Hotel = mkPlaceDo "hotel" "hotelu" "hotelu" (Masc Inanimate) ;
-    Museum = mkPlaceDo "museum" "museum" "museum" Neut ;
+    Museum = mkPlaceDo "muzeum" "muzeum" "muzeum" Neut ;
     Park = mkPlaceDo "park" "parku" "parku" (Masc Inanimate) ;
     Parking = mkPlaceNa "parking" "parking" "parkingu" (Masc Inanimate) ;
     Pharmacy = mkPlaceDo "apteka" "apteki" "aptece" Fem ;
@@ -104,7 +104,7 @@ concrete WordsPol of Words = SentencesPol **
     University = mkPlaceNa L.university_N;
     Zoo = mkPlaceDo "zoo" "zoo" "zoo" Neut ;
    
-    CitRestaurant cit = { name=(mkCN cit (mkCN L.restaurant_N));
+    CitRestaurant cit = { name=(mkCN cit.prop (mkCN L.restaurant_N));
         at = { s="w"; c=LocPrep; lock_Prep = <> }; to = {s="do"; c=GenPrep; lock_Prep = <>}; isPl = False };
 
 
@@ -122,50 +122,48 @@ concrete WordsPol of Words = SentencesPol **
     Zloty = mkCN (mkCurrency "złoty" "złote" "złotych" (Masc Animate));
 
 -- Nationalities
---  język, po języku, obywatelstwo, kraj
-    Belgian = mkA (mkCompAdj "belgijski") ;
+--  język, po języku, obywatelstwo, kraj, obywatelem, obywatelami, obywatelką
+    Belgian = {prop=mkA (mkCompAdj "belgijski"); citizenMSg="Belgiem"; citizenMPl="Belgami"; citizenF="Belgijką"};
     Belgium = mkNP (P.nLilia "Belgia") ;
-    Bulgarian = mkNat "bułgarski" ["po bułgarsku"] "bułgarski" (P.nLilia "Bułgaria");
-    Catalan = mkNat "kataloński" ["po katalońsku"] "kataloński" (P.nLilia "Katalonia");
-    Danish = mkNat "duński" ["po duńsku"] "duński" (P.nLilia "Dania");
-    Dutch =  mkNat "holenderski" ["po holendersku"] "holenderski" (P.nLilia "Holandia");
-    English = mkNat "angielski" ["po angielsku"] "angielski" (P.nLilia "Anglia");
-    Finnish = mkNat "fiński" ["po fińsku"] "finladzki" (P.nLilia "Finlandia");
+    Bulgarian = mkNat "bułgarski" ["po bułgarsku"] "bułgarski" (P.nLilia "Bułgaria") "Bułgarem" "Bułgarami" "Bułgarką";
+    Catalan = mkNat "kataloński" ["po katalońsku"] "kataloński" (P.nLilia "Katalonia") "Katalończykiem" "Katalończykami" "Katalonką";
+    Danish = mkNat "duński" ["po duńsku"] "duński" (P.nLilia "Dania") "Duńczykiem" "Duńczykami" "Dunką";
+    Dutch =  mkNat "holenderski" ["po holendersku"] "holenderski" (P.nLilia "Holandia") "Holendrem" "Holendrami" "Holenderką";
+    English = mkNat "angielski" ["po angielsku"] "angielski" (P.nLilia "Anglia") "Anglikiem" "Anglikami" "Angielką";
+    Finnish = mkNat "fiński" ["po fińsku"] "finladzki" (P.nLilia "Finlandia") "Finem" "Finami" "Finką";
     Flemish = mkA (mkCompAdj "flamandzki" ["po flamandzku"]);
-    French = mkNat "francuski" ["po francusku"] "francuski" (P.nLilia "Francja");
-    German = mkNat "niemiecki" ["po niemiecku"] "niemiecki" (mkCountry "Niemcy" "Niemczech" Plur);
-    Italian = mkNat "włoski" ["po włosku"] "włoski" (mkCountry "Włochy" "Włoszech" Plur);
-    Norwegian = mkNat "norweski" ["po norwesku"] "norweski" (P.nLilia "Norwegia");
-    Polish = mkNat "polski" ["po polsku"] "polski" (mkCountry "Polska" "Polsce" Fem);
-    Romanian = mkNat "rumuński" ["po rumuńsku"] "rumuński" (P.nLilia "Rumunia");
-    Russian = mkNat "rosyjski" ["po rosyjsku"] "rosyjski" (P.nLilia "Rosja");
-    Spanish = mkNat "hiszpański" ["po hiszpańsku"] "hiszpański" (P.nLilia "Hiszpania");
-    Swedish = mkNat "szwedzki" ["po szwedzku"] "szwedzki" (P.nLilia "Szwecja");
+    French = mkNat "francuski" ["po francusku"] "francuski" (P.nLilia "Francja") "Framcuzem" "Francuzami" "Francuzką";
+    German = mkNat "niemiecki" ["po niemiecku"] "niemiecki" (mkCountry "Niemcy" "Niemczech" Plur) "Niemcem" "Niemcami" "Niemką";
+    Italian = mkNat "włoski" ["po włosku"] "włoski" (mkCountry "Włochy" "Włoszech" Plur)"Włochem" "Włochami" "Włoszką";
+    Norwegian = mkNat "norweski" ["po norwesku"] "norweski" (P.nLilia "Norwegia") "Norwegiem" "Norwegami" "Norweszką";
+    Polish = mkNat "polski" ["po polsku"] "polski" (mkCountry "Polska" "Polsce" Fem) "Polakiem" "Polakami" "Polką";
+    Romanian = mkNat "rumuński" ["po rumuńsku"] "rumuński" (P.nLilia "Rumunia") "Rumunem" "Rumunami" "Rumunką";
+    Russian = mkNat "rosyjski" ["po rosyjsku"] "rosyjski" (P.nLilia "Rosja") "Rosjaninem" "Rosjanami"  "Rosjanką";
+    Spanish = mkNat "hiszpański" ["po hiszpańsku"] "hiszpański" (P.nLilia "Hiszpania") "Hiszpanem" "Hiszpanami"  "Hiszpanką";
+    Swedish = mkNat "szwedzki" ["po szwedzku"] "szwedzki" (P.nLilia "Szwecja") "Szwedem" "Szwedami" "Szwedką";
 
 -- Means of transportation 
 
-   Bike = mkCN L.bike_N ;
-   Bus = mkTransport "autobus" "autobusem" (Masc Inanimate) ;
-   Car = mkCN L.car_N ;
-   Ferry = mkTransport "prom" "promem" (Masc Inanimate) ;
-   Plane = mkCN L.airplane_N ;
-   Subway = mkTransport "metro" "metrem" Neut ;
-   Taxi = mkTransport "taksówka" "taksówką" Fem ;
-   Train = mkTransport "pociąg" "pociągiem" (Masc Inanimate) ;
-   Tram = mkTransport "tramwaj" "tramwajem" (Masc Inanimate) ;
+   Bike = {cn = mkCN L.bike_N ; verb="jedzie" };
+   Bus = mkTransport "autobus" "autobusem" (Masc Inanimate) "jedzie";
+   Car = {cn = mkCN L.car_N ; verb="jedzie" };
+   Ferry = mkTransport "prom" "promem" (Masc Inanimate) "płynie";
+   Plane = {cn = mkCN L.airplane_N ; verb="leci" };
+   Subway = mkTransport "metro" "metrem" Neut "jedzie";
+   Taxi = mkTransport "taksówka" "taksówką" Fem "jedzie";
+   Train = mkTransport "pociąg" "pociągiem" (Masc Inanimate) "jedzie";
+   Tram = mkTransport "tramwaj" "tramwajem" (Masc Inanimate) "jedzie";
 
    ByFoot = ss "pieszo" ** {lock_Adv = <>};
 
 -- Actions: the predication patterns are very often language-dependent.
 
-
--- ok commented because of the effectivness
-    AHasAge p num = mkCl p.name have_V2 (mkNP (mkDet num) (mkCN L.year_N)) ;
-    AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ; --!!!!!!!!!!! FIXME HELP!!!!!
-    AHasRoom p num = mkCl p.name have_V2 
-      (mkNP (mkNP a_Det (P.nPokoj "pokój")) (SyntaxPol.mkAdv for_Prep (mkNP num (L.person_N)))) ;
-    AHasTable p num = mkCl p.name have_V2 
-      (mkNP (mkNP a_Det (L.table_N)) (SyntaxPol.mkAdv for_Prep (mkNP num (L.person_N)))) ;
+--     AHasAge p num = mkCl p.name have_V2 (mkNP (mkDet num) (mkCN L.year_N)) ;
+--     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ; --!!!!!!!!!!! FIXME HELP!!!!!
+--     AHasRoom p num = mkCl p.name have_V2 
+--       (mkNP (mkNP a_Det (P.nPokoj "pokój")) (SyntaxPol.mkAdv for_Prep (mkNP num (L.person_N)))) ;
+--     AHasTable p num = mkCl p.name have_V2 
+--       (mkNP (mkNP a_Det (L.table_N)) (SyntaxPol.mkAdv for_Prep (mkNP num (L.person_N)))) ;
 
 
 
@@ -253,20 +251,20 @@ concrete WordsPol of Words = SentencesPol **
     HowFar place = mkQS (Q.QuestIComp (Q.CompIAdv far_IAdv) place.name) ;
     
     --jak daleko jest z cenrum do hotelu
-    HowFarFrom x y = { s=["jak jest daleko z"] ++ x.name.dep!GenPrep ++ y.to.s; lock_QS=<> };
+    HowFarFrom x y = { s=["jak daleko jest z"] ++ x.name.dep!GenPrep ++ y.to.s; lock_QS=<> };
 
     --jak daleko jest pieszo z centrum do hotelu
     HowFarFromBy x y t = 
-      { s=["jak jest daleko"] ++ t.s ++ "z" ++ x.name.dep!GenPrep ++ y.to.s; lock_QS=<> };
+      { s=["jak daleko jest"] ++ t.s ++ "z" ++ x.name.dep!GenPrep ++ y.to.s; lock_QS=<> };
 
     HowFarBy y t = 
-            { s=["jak jest daleko"] ++ t.s ++ y.to.s; lock_QS=<> };
+            { s=["jak daleko jest"] ++ t.s ++ y.to.s; lock_QS=<> };
  
     WhichTranspPlace trans place = 
-      { s= ktory ! AF (cast_gennum!<trans.g,Sg>) Instr ++ trans.s!Sg!Instr ++ place.to.s; lock_QS=<> };
+      { s= ktory ! AF (cast_gennum!<trans.cn.g,Sg>) Nom ++ trans.cn.s!Sg!Nom ++ trans.verb ++ place.to.s; lock_QS=<> };
 
     IsTranspPlace trans place = 
-      { s= ["czy jest stąd"] ++ trans.s!Sg!Nom ++ place.to.s; lock_QS=<> };
+      { s= ["czy jest stąd"] ++ trans.cn.s!Sg!Nom ++ place.to.s; lock_QS=<> };
 
 
 -- auxiliaries
@@ -299,12 +297,28 @@ concrete WordsPol of Words = SentencesPol **
     at = { s="na"; c=LocPrep; lock_Prep = <> }; to = {s="na"; c=AccPrep; lock_Prep = <>}; isPl = False };
   };
   
-  mkTransport : Str -> Str -> Gender -> CN = \nom,instr,g -> {
+  mkTransport : Str -> Str -> Gender -> Str -> {cn:CN; verb:Str} = \nom,instr,g,verb -> {
+    cn = {
     s = \\n,c => case <n,c> of {<Sg,Nom> => nom; <Sg,Instr> => instr; _ => ["not implemented"]};
     g = g;
     lock_CN=<>
+    };
+    verb=verb
   };
 
+  mkCitizen = overload {
+    mkCitizen : Str -> N = \s -> {
+      s = table {SF Sg Instr => s; _ => ["not implemented"]};
+      g = Fem;
+      lock_N=<>
+    };
+    mkCitizen : Str -> Str -> N = \inst, instpl -> {
+      s = table {SF Sg Instr => inst; SF Pl Instr => instpl; _ => ["not implemented"]};
+      g = Masc Personal;
+      lock_N=<>
+    };
+  };
+  
   mkCountry : Str -> Str -> Gender -> N = \nom,loc,g -> {
     s = table {SF Sg Nom => nom; SF Sg Loc => loc; _ => ["not implemented"]};
     g = g;
@@ -319,24 +333,27 @@ concrete WordsPol of Words = SentencesPol **
 
   
   mkCurrency : Str -> Str -> Str -> Gender -> N = \nom,nompl,genpl,g -> {
-    s = table {SF Sg Nom => nom; SF Pl Nom => nompl; SF Pl Gen => genpl; _ => ["not implemented"]};
+    s = table {SF Sg Nom => nom; SF Pl (Nom|Acc) => nompl; SF Pl Gen => genpl; _ => ["not implemented"]};
     g = g;
     lock_N=<>
   };
   
-  mkNat : Str -> Str -> Str -> N -> { lang: A; prop: A; country: NP } = \lang,ladv,prop,country -> {
-    lang = mkA (mkCompAdj lang ladv); prop = mkA (mkCompAdj prop); country=mkNP country };
+  mkNat : Str -> Str -> Str -> N -> Str -> Str -> Str -> 
+    { lang: A; prop: A; country: NP; citizenMSg:Str; citizenMPl: Str; citizenF:Str } = 
+    \lang,ladv,prop,country,citiMsg, citiMpl, citiF -> {
+    lang = mkA (mkCompAdj lang ladv); prop = mkA (mkCompAdj prop); 
+    country=mkNP country; citizenMSg=citiMsg; citizenMPl=citiMpl; citizenF=citiF };
  
-    open_A : A = (mkA (mkCompAdj "otwarty"));
-    closed_A : A = (mkA (mkCompAdj "zamknięty"));
+  open_A : A = (mkA (mkCompAdj "otwarty"));
+  closed_A : A = (mkA (mkCompAdj "zamknięty"));
     
-    xOf : NPPerson -> Num -> N -> NPPerson = \p,num,n ->
-        { name = case p.isPron of {
-            True  => mkNP (mkDet p.poss num) n; 
-            False => mkNP (mkNP n) ({s=p.name.dep!GenNoPrep; lock_Adv=<>})
-          };
-          isPron = False;
-          poss = p.poss }; --it is not used, because it is not a pron
+  xOf : NPPerson -> Num -> N -> NPPerson = \p,num,n ->
+      { name = case p.isPron of {
+          True  => mkNP (mkDet p.poss num) n; 
+          False => mkNP (mkNP (mkDet a_Quant num) n) ({s=p.name.dep!GenNoPrep; lock_Adv=<>})
+        };
+        isPron = False;
+        poss = p.poss }; --it is not used, because it is not a pron
     
     mkSuperl : A -> Det = \a -> SyntaxPol.mkDet the_Art (SyntaxPol.mkOrd a) ;
 

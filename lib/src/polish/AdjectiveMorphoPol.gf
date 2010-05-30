@@ -140,6 +140,8 @@ resource AdjectiveMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
       x + "zły" => model4 form (x+"źli");
       x + "ły" => model4 form (x+"li");
       x + "sny" => model4 form (x+"śni");
+      x + "szny" => model4 form (x+"szni");
+      x + "rzny" => model4 form (x+"rzni");
       x + "zny" => model4 form (x+"źni");
       x + "chy" => model4 form (x+"si");
       x + "hy" => model4 form (x+"zi"); -- błahy - błazi (not really in use)
