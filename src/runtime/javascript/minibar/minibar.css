@@ -41,4 +41,8 @@ div#saldospel input[type=button] { font-size: 100%; }
 div#saldospel input.correct { color: green; }
 div#saldospel input.incorrect { color: red; }
 
-input[type=text] { width: 5em; }
+#surface input[type=text] { width: 5em; }
+
+.feedback textarea { width: 95%; }
+
+span.field { background-color: #eee; }
