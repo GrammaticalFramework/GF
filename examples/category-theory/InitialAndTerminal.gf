@@ -11,13 +11,14 @@ fun initAr :  ({c} : Category)
            -> Initial x
            -> (y : El c)
            -> Arrow x y ;
-def initAr {c} {x} (initial {c} x f) y = f y ;
-
+-- def initAr {~c} {~x} (initial {c} x f) y = f y ;
+{-
 fun initials2iso :  ({c} : Category)
                  -> ({x,y} : El c)
                  -> (ix : Initial x)
                  -> (iy : Initial y)
                  -> Iso (initAr ix y) (initAr iy x) ;
+-}
 -- def initials2iso = .. ;
 
 
@@ -32,13 +33,14 @@ fun terminalAr :  ({c} : Category)
                -> ({y} : El c)
                -> Terminal y
                -> Arrow x y ;
-def terminalAr {c} x {y} (terminal {c} y f) = f x ;
-
+-- def terminalAr {c} x {~y} (terminal {~c} y f) = f x ;
+{-
 fun terminals2iso :  ({c} : Category)
                   -> ({x,y} : El c)
                   -> (tx : Terminal x)
                   -> (ty : Terminal y)
                   -> Iso (terminalAr x ty) (terminalAr y tx) ;
+                  -}
 -- def terminals2iso = .. ;
 
 }

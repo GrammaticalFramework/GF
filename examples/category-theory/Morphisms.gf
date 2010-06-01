@@ -16,15 +16,14 @@ fun isoOp : ({c} : Category)
          -> ({g} : Arrow y x)
          -> Iso f g
          -> Iso (opAr g) (opAr f) ;
-def isoOp {c} {x} {y} {f} {g} (iso {c} {x} {y} f g id_fg id_gf) =
-        iso {Op c} (opAr g) (opAr f) (eqOp id_fg) (eqOp id_gf) ;
+def isoOp (iso f g id_fg id_gf) = iso (opAr g) (opAr f) (eqOp id_fg) (eqOp id_gf) ;
 
 fun iso2mono :  ({c} : Category)
              -> ({x,y} : El c)
              -> ({f} : Arrow x y)
              -> ({g} : Arrow y x)
              -> (Iso f g -> Mono f) ;
-def iso2mono {c} {x} {y} {f} {g} (iso {c} {x} {y} f g id_fg id_gf) = 
+def iso2mono (iso f g id_fg id_gf) = 
         mono f (\h,m,eq_fh_fm -> 
                       eqSym (eqTran (eqIdR m)                                                                      --           h = m
                                     (eqTran (eqCompR id_gf m)                                                      --      id . m = h
@@ -40,8 +39,9 @@ fun iso2epi  :  ({c} : Category)
              -> ({f} : Arrow x y)
              -> ({g} : Arrow y x)
              -> (Iso f g -> Epi f) ;
-def iso2epi {c} {x} {y} {f} {g} (iso {c} {x} {y} f g id_fg id_gf) =
-        epi {c} {x} {y} f (\{z},h,m,eq_hf_mf -> 
+
+def iso2epi (iso fff g id_fg id_gf) =
+        epi f (\h,m,eq_hf_mf -> 
                       eqSym (eqTran (eqIdL m)                                                                     --           h = m
                                     (eqTran (eqCompL m id_fg)                                                     --      m . id = h
                                             (eqTran (eqSym (eqAssoc m f g))                                       -- m . (f . g) = h
@@ -58,7 +58,6 @@ data mono :  ({c} : Category)
           -> (f : Arrow x y)
           -> (({z} : El c) -> (h,m : Arrow z x) -> EqAr (comp f h) (comp f m) -> EqAr h m)
           -> Mono f ;
-
 
 cat Epi ({c} : Category) ({x,y} : El c) (Arrow x y) ;
 
