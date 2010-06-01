@@ -11,5 +11,5 @@ PhrasebookIta :
 PhrasebookNor :
 PhrasebookPol :
 PhrasebookRon :
-PhrasebookSpa : GCongratulations GGoodLuck GHappyBirthday
+PhrasebookSpa :
 PhrasebookSwe :

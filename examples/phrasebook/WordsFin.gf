@@ -208,7 +208,9 @@ concrete WordsFin of Words = SentencesFin **
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
     IsTranspPlace trans place =
-      mkQS (mkQCl (E.AdvPredNP place.to L.go_V (E.PartCN (trans.name)))) ; 
+      mkQS (mkQCl (mkCl (mkVP (mkVP (mkVP (mkV "päästä")) trans.by) place.to))) ;
+      -- pääseekö keskustaan bussilla
+      -- mkQS (mkQCl (E.AdvPredNP place.to L.go_V (E.PartCN (trans.name)))) ; 
       -- meneekö keskustaan bussia
 
 -- modifiers of places

@@ -11,6 +11,9 @@ lin
   GDamn = ss "joder" ;
   GExcuse = ss "perdón" ;
   GExcusePol = ss "perdone" ;
+  GCongratulations = ss "felicitaciones" ;
+  GGoodLuck = ss "buena suerte" ;
+  GHappyBirthday = ss "feliz cumpleaños" ;
   GGoodMorning, GGoodDay = ss "buenos días" ;
   GGoodEvening = ss "buenas tardes" ;
   GGoodNight = ss "buenas noches" ;

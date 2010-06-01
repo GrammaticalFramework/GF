@@ -106,8 +106,10 @@ gfdoc - a rudimentary GF document generator.
       Too property = mkAP too_AdA (mkAP property) ;
       PropQuality property = mkAP property ;
   
-      ThePlace kind = placeNP the_Det kind ;
-      APlace kind = placeNP a_Det kind ;
+      ThePlace kind = let dd = if_then_else Det kind.isPl thePl_Det theSg_Det 
+                       in placeNP dd kind ;
+      APlace kind = let dd = if_then_else Det kind.isPl thePl_Det theSg_Det 
+                       in placeNP dd kind ;
   
       IMale, IFemale = mkPerson i_Pron ;
       YouFamMale, YouFamFemale = mkPerson youSg_Pron ;
@@ -130,7 +132,11 @@ gfdoc - a rudimentary GF document generator.
   
       NNumeral n = mkCard &lt;lin Numeral n : Numeral>  ;
   
-      AHave p obj = mkCl p.name have_V2 obj ;
+      SHave   p obj = mkS (mkCl p.name have_V2 obj) ;
+      SHaveNo p k = mkS negativePol (mkCl p.name have_V2 (mkNP aPl_Det k)) ;
+      SHaveNoMass p m = mkS negativePol (mkCl p.name have_V2 (mkNP m)) ;
+      QDoHave p obj = mkQS (mkQCl (mkCl p.name have_V2 obj)) ;
+  
       AHaveCurr p curr = mkCl p.name have_V2 (mkNP aPl_Det curr) ;
       ACitizen p n = mkCl p.name n ;
       ABePlace p place = mkCl p.name place.at ;
@@ -166,12 +172,20 @@ These are used in Words for each language.
         } ;
   
     NPPlace : Type = {name : NP ; at : Adv ; to : Adv} ;
-    CNPlace : Type = {name : CN ; at : Prep ; to : Prep} ;
+    CNPlace : Type = {name : CN ; at : Prep ; to : Prep; isPl : Bool} ;
   
     mkCNPlace : CN -> Prep -> Prep -> CNPlace = \p,i,t -> {
       name = p ;
       at = i ;
-      to = t
+      to = t ;
+      isPl = False
+      } ;
+  
+   mkCNPlacePl : CN -> Prep -> Prep -> CNPlace = \p,i,t -> {
+      name = p ;
+      at = i ;
+      to = t ;
+      isPl = True
       } ;
   
     placeNP : Det -> CNPlace -> NPPlace = \det,kind ->
@@ -344,7 +358,7 @@ Means of transportation
 
 Actions: the predication patterns are very often language-dependent.
 <pre>
-      AHasAge p num = mkCl p.name (mkNP (mkNP num L.year_N) (mkAdv "old"));
+      AHasAge p num = mkCl p.name (mkNP (mkNP num L.year_N) (ParadigmsEng.mkAdv "old"));
       AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
       AHasRoom p num = mkCl p.name have_V2 
         (mkNP (mkNP a_Det (mkN "room")) (SyntaxEng.mkAdv for_Prep (mkNP num (mkN "person")))) ;
@@ -456,10 +470,10 @@ auxiliaries
         mkNPDay day (SyntaxEng.mkAdv on_Prep day) 
           (SyntaxEng.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
   
-      mkCompoundPlace : Str -> Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \comp, p, i ->
+      mkCompoundPlace : Str -> Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \comp, p, i ->
        mkCNPlace (mkCN (P.mkN comp (mkN p))) (P.mkPrep i) to_Prep ;
   
-      mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
+      mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i -> 
         mkCNPlace (mkCN (mkN p)) (P.mkPrep i) to_Prep ;
   
       open_Adv = P.mkAdv "open" ;
