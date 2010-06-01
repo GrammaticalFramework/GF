@@ -15,7 +15,8 @@ var options={
     show_trees: false,
     show_grouped_translations: true,
     delete_button_text: "⌫",
-    try_google: true
+    try_google: true,
+    feedback_button: false
 }
 
 /* --- Grammar access object ------------------------------------------------ */
@@ -296,7 +297,7 @@ function show_completions(completions) {
   else {
     var trans=element("translations");
     trans.innerHTML="";
-    try_google(menu.grammar,trans,target_lang());
+    extra_actions(menu.grammar,trans,target_lang());
   }
   var surface=element("surface");
   if(surface.typed && emptycnt==completions.length) {
@@ -328,6 +329,8 @@ function show_translations(translations) {
   var grammar=element("language_menu").grammar;
   var to=target_lang();
   var cnt=translations.length;
+  //trans.translations=translations;
+  trans.single_translation=[];
   trans.innerHTML="";
   trans.appendChild(wrap("h3",text(cnt<1 ? "No translations?" :
 				   cnt>1 ? ""+cnt+" translations:":
@@ -339,14 +342,14 @@ function show_translations(translations) {
     if(options.show_abstract && t.tree)
       tbody.appendChild(tr([th(text("Abstract: ")),
 			    tdt(abstree_button(t.tree),text(" "+t.tree))]));
-    for(var i=0;i<lin.length;i++)
+    for(var i=0;i<lin.length;i++) 
 	if(to=="-1" || lin[i].to==to)
 	    tbody.appendChild(tr([th(text(langpart(lin[i].to,grammar.name)+": ")),
 				  tdt(parsetree_button(t.tree,lin[i].to),
 				      text(lin[i].text))]));
     trans.appendChild(wrap("table",tbody));
   }
-  try_google(grammar,trans,to);
+  extra_actions(grammar,trans,to);
 }
 
 function show_groupedtranslations(translations) {
@@ -354,36 +357,24 @@ function show_groupedtranslations(translations) {
     var grammar=element("language_menu").grammar;
     var to=target_lang();
     var cnt=translations.length;
+    //trans.translations=translations;
+    trans.single_translation=[];
     trans.innerHTML="";
     for(p=0;p<cnt;p++) {
 	var t=translations[p];
 	if(to=="-1" || t.to==to) {
 	    var lin=t.linearizations;
 	    var tbody=empty("tbody");
-	    if(to=="-1")
-		tbody.appendChild(tr([th(text(t.to+":"))]));
+	    if(to=="-1") tbody.appendChild(tr([th(text(t.to+":"))]));
 	    for(var i=0;i<lin.length;i++) {
+		if(to!="-1") trans.single_translation[i]=lin[i].text;
 		tbody.appendChild(tr([(text(lin[i].text))]));
 		if (lin.length > 1) tbody.appendChild(tr([(text(lin[i].tree))]));
 	    }
 	    trans.appendChild(wrap("table",tbody));
 	}
     }
-    try_google(grammar,trans,to);
-}
-
-function try_google(grammar,trans,to) {
-    if(options.try_google) {
-	var menu=element("language_menu");
-	var c=menu.current;
-	var url="http://translate.google.com/?sl="+langpart(c.from,grammar.name);
-	if(to!="-1") url+="&tl="+to;
-	url+="&q="+encodeURIComponent(c.input);
-	var link=empty("a","href",url);
-	link.innerHTML="Try this sentence in Google Translate";
-	link.setAttribute("target","translate.google.com");
-	trans.appendChild(link);
-    }
+    extra_actions(grammar,trans,to);
 }
 
 function abstree_button(abs) {
@@ -407,6 +398,70 @@ function toggle_img(i) {
   i.other=tmp;
 }
 
+
+function extra_actions(grammar,trans,to) {
+    if(options.try_google) try_google(grammar,trans,to);
+    if(options.feedback_button) feedback_button(trans);
+}
+
+function try_google(grammar,trans,to) {
+    var menu=element("language_menu");
+    var c=menu.current;
+    var url="http://translate.google.com/?sl="+langpart(c.from,grammar.name);
+    if(to!="-1") url+="&tl="+to;
+    url+="&q="+encodeURIComponent(c.input);
+    var link=empty("a","href",url);
+    link.innerHTML="Try this sentence in Google Translate";
+    link.setAttribute("target","translate.google.com");
+    trans.appendChild(link);
+}
+
+function feedback_button(trans) {
+    trans.appendChild(text(" "));
+    trans.appendChild(button("Feedback","open_feedback()"));
+}
+
+function open_feedback() {
+    window.open("feedback.html",'feedback','toolbar=no,location=no,status=no,menubar=no');
+}
+
+function setField(form,name,value) {
+    form[name].value=value;
+    var el=element(name);
+    if(el) el.innerHTML=value;
+}
+
+function opener_element(id) { with(window.opener) return element(id); }
+
+function prefill_feedback_form() {
+    var to_menu=opener_element("to_menu");
+    var trans=opener_element("translations");
+    var menu=to_menu.langmenu;
+    var grammar=menu.grammar;
+    var gn=grammar.name;
+    var form=document.forms.namedItem("feedback");
+    var from=langpart(menu.current.from,gn);
+    var to=langpart(to_menu.options[to_menu.selectedIndex].value,gn);
+
+    setField(form,"grammar",gn);
+    setField(form,"from",from);
+    setField(form,"input",menu.current.input);
+    setField(form,"to",to=="-1" ? "All" : to);
+    if(to=="-1") 
+	element("translation_box").style.display="none";
+    else 
+	setField(form,"translation",trans.single_translation.join(" / "));
+
+    // Browser info:
+    form["inner_size"].value=window.innerWidth+"×"+window.innerHeight;
+    form["outer_size"].value=window.outerWidth+"×"+window.outerHeight;
+    form["screen_size"].value=screen.width+"×"+screen.height;
+    form["available_screen_size"].value=screen.availWidth+"×"+screen.availHeight;
+    form["color_depth"].value=screen.colorDepth;
+    form["pixel_depth"].value=screen.pixelDepth;
+
+    window.focus();
+}
 
 /*
 se.chalmers.cs.gf.gwt.TranslateApp/align-btn.png
