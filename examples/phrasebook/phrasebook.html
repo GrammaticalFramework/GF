@@ -2,6 +2,7 @@
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
 <TITLE>MOLTO Multilingual Phrasebook</TITLE>
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1>MOLTO Multilingual Phrasebook</H1>
@@ -10,6 +11,25 @@
 Showcase for project FP7-ICT-247914, Deliverable D10.2.
 </FONT></CENTER>
 
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+  <UL>
+  <LI><A HREF="#toc1">Purpose</A>
+  <LI><A HREF="#toc2">Points illustrated</A>
+  <LI><A HREF="#toc3">Ontology</A>
+  <LI><A HREF="#toc4">Files</A>
+  <LI><A HREF="#toc5">To Do</A>
+  <LI><A HREF="#toc6">How to contribute</A>
+  <LI><A HREF="#toc7">Effort and cost</A>
+  <LI><A HREF="#toc8">Example-based grammar writing prototype</A>
+  <LI><A HREF="#toc9">Conclusions (tentative)</A>
+  <LI><A HREF="#toc10">Acknowledgements</A>
+  </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
 <P>
 <HR>
 <font size=-1>
@@ -18,6 +38,8 @@ Showcase for project FP7-ICT-247914, Deliverable D10.2.
 History
 </P>
 <UL>
+<LI>2 June. Version 1.0 released!
+<LI>29 May. Link to Google translate with the current language pair and phrase.
 <LI>27 May. Polish added.
 <LI>26 May. Version 0.9:
   Catalan added, mass/count noun distinction to reduce overgeneration, 
@@ -49,33 +71,34 @@ History
 </font>
 <HR>
 </P>
+<A NAME="toc1"></A>
 <H1>Purpose</H1>
 <P>
 This phrasebook is a program for translating touristic phrases 
-between the 15 European languages included in the 
+between 14 European languages included in the 
 <A HREF="http://www.molto-project.eu">MOLTO</A> project
 (Multilingual On-Line Translation):
 </P>
 <UL>
 <LI>Bulgarian, Catalan, Danish, Dutch, English,
   Finnish, French, German, Italian, Norwegian,
-  Polish, Romanian, Russian, Spanish, Swedish
+  Polish, Romanian, Spanish, Swedish
 </UL>
 
 <P>
 It is implemented by using the GF programming language 
 (<A HREF="http://grammaticalframework.org">Grammatical Framework</A>).
-It is the first demo for the MOLTO project, released in the third month (by June 2010)
-but to be updated in the course of the project.
+It is the first demo for the MOLTO project, released in the third month (by June 2010).
+The first version is a very small system, but it will extended in the course of the project.
 </P>
 <P>
-The phrasebook has the following requirements:
+The phrasebook has the following requirement specification:
 </P>
 <UL>
 <LI>high quality: reliable translations to express yourself in any language
 <LI>translation between all pairs of languages
 <LI>runnable in web browsers
-<LI>runnable on mobile phones (also off-line: forthcoming for Android phones)
+<LI>runnable on mobile phones (forthcoming: Android phones)
 <LI>easily extensible by new words (forthcoming: semi-automatic extensions by users)
 </UL>
 
@@ -84,39 +107,91 @@ The phrasebook is available as open-source software, licensed under GNU LGPL.
 The source code resides in 
 <A HREF="http://code.haskell.org/gf/examples/phrasebook/"><CODE>code.haskell.org/gf/examples/phrasebook/</CODE></A>
 </P>
-<P>
-Current status (27 May 2010):
-</P>
-<UL>
-<LI>small but useful coverage in abstract syntax
-<LI>reasonable implementations for all MOLTO languages except Russian
-<LI>works on web browsers calling a server
-<LI>web service not yet released, but preliminarily available in
-  <A HREF="http://www.grammaticalframework.org/demos/phrasebook/">http://www.grammaticalframework.org/demos/phrasebook/</A>
-</UL>
-
+<A NAME="toc2"></A>
 <H1>Points illustrated</H1>
 <P>
-Interlingua-based translation.
+Interlingua-based translation
 </P>
+<UL>
+<LI>we translate meanings, rather than words
+</UL>
+
 <P>
-Incremental parsing.
+Incremental parsing
 </P>
+<UL>
+<LI>the user is at every point guided by the list of possible next words
+</UL>
+
 <P>
-The use of resource grammars and functors.
+The use of resource grammars and functors
 </P>
+<UL>
+<LI>the translator was implemented on top of an earlier linguistic knowledge base,
+  the <A HREF="http://grammaticalframework.com/lib">GF Resource Grammar Library</A>
+</UL>
+
 <P>
-Example-based grammar writing and grammar induction from statistical models (Google).
+Example-based grammar writing and grammar induction from statistical models 
+(<A HREF="http://translate.google.com">Google translate</A>)
 </P>
+<UL>
+<LI>many of the grammars were created semi-automatically by generalization from
+  examples
+</UL>
+
 <P>
-Compile-time transfer: especially, in Action in Words.
+Compile-time transfer: especially, in Action in Words
 </P>
+<UL>
+<LI>the structural differences between languages are treated at compile time,
+  for maximal run-time efficiency
+</UL>
+
 <P>
-Quasi-incremental translation: many basic types are also used as phrases.
+Quasi-incremental translation: many basic types are also used as phrases
 </P>
+<UL>
+<LI>one can translate both words and complete sentences, and get intermediate results
+</UL>
+
 <P>
-Disambiguation, esp. of politeness distinctions.
+Disambiguation, esp. of politeness distinctions
 </P>
+<UL>
+<LI>if a phrase has many translations, each of them is shown and given an explanation
+  (currently just in English, later in any source language)
+</UL>
+
+<P>
+Fall-back to statistical translation
+</P>
+<UL>
+<LI>currently just a link to Google translate (forthcoming: tailor-made statistical models)
+</UL>
+
+<P>
+Feed-back from users
+</P>
+<UL>
+<LI>you are welcome to send comments, bug reports, and better translation suggestions!
+</UL>
+
+<P>
+The level of skills involved in grammar development
+</P>
+<UL>
+<LI>testing different configurations (see table below)
+</UL>
+
+<P>
+Grammar testing
+</P>
+<UL>
+<LI>use of treebanks with guided random generation for initial evaluation and regression testing
+</UL>
+
+<A NAME="toc3"></A>
 <H1>Ontology</H1>
 <P>
 The abstract syntax defines the <B>ontology</B> behind the phrasebook. 
@@ -128,6 +203,7 @@ and
 <A HREF="http://code.haskell.org/gf/examples/phrasebook/Words.gf"><CODE>Words.gf</CODE></A>
 by <CODE>make doc</CODE>.
 </P>
+<A NAME="toc4"></A>
 <H1>Files</H1>
 <P>
 <CODE>Sentences</CODE>: general syntactic structures implementable in a uniform way. 
@@ -164,17 +240,8 @@ Here is the module structure as produced in GF by
 <P>
 <IMG ALIGN="middle" SRC="pgraph.png" BORDER="0" ALT="">
 </P>
+<A NAME="toc5"></A>
 <H1>To Do</H1>
-<P>
-Improved translation interface
-</P>
-<UL>
-<LI>a nicer way to show disambiguation (maybe hidden by default)
-</UL>
-
-<P>
-Complete the missing words and phrases
-</P>
 <P>
 Disambiguation grammars for other languages than English
 </P>
@@ -183,20 +250,15 @@ Extend the abstract lexicon in <CODE>Words</CODE> by hand or (semi)automatically
 </P>
 <UL>
 <LI>food stuff
-<LI>languages
 <LI>places
+<LI>actions
 </UL>
 
 <P>
-Link to Google translate, for fall-back and for comparison
-</P>
-<P>
-Feedback facility in the UI
-</P>
-<P>
-Customizable distribution: make your own selection of the 2^15 language subsets
+Customizable phone distribution: make your own selection of the 2^15 language subsets
 when downloading the phrasebook to a phone
 </P>
+<A NAME="toc6"></A>
 <H1>How to contribute</H1>
 <P>
 The basic things "everyone" can do is 
@@ -253,15 +315,337 @@ Here are the steps to follow for contributors:
 <LI>Don't compromise quality to gain coverage: <I>non multa sed multum!</I> 
 </UL>
 
-<H2>Acknowledgements</H2>
+<A NAME="toc7"></A>
+<H1>Effort and cost</H1>
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>Language</TH>
+<TH>Grammarian's language skills</TH>
+<TH>Grammarian's GF skills</TH>
+<TH>Informant used for development</TH>
+<TH>Informant used for testing</TH>
+<TH>Use of external tools</TH>
+<TH>Impact of external tools</TH>
+<TH>Changes on the resource grammar</TH>
+<TH COLSPAN="2">Development time</TH>
+</TR>
+<TR>
+<TD>Bulgarian</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">?</TD>
+<TD ALIGN="center">#</TD>
+<TD ALIGN="center">##</TD>
+</TR>
+<TR>
+<TD>Catalan</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">?</TD>
+<TD ALIGN="center">#</TD>
+<TD ALIGN="center">#</TD>
+</TR>
+<TR>
+<TD>Danish</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">##</TD>
+<TD ALIGN="center">##</TD>
+<TD ALIGN="center">##</TD>
+</TR>
+<TR>
+<TD>Dutch</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">##</TD>
+<TD ALIGN="center">#</TD>
+<TD ALIGN="center">##</TD>
+</TR>
+<TR>
+<TD>English</TD>
+<TD ALIGN="center">##</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">_</TD>
+<TD ALIGN="center">#</TD>
+</TR>
+<TR>
+<TD>Finnish</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">?</TD>
+<TD ALIGN="center">#</TD>
+<TD ALIGN="center">##</TD>
+</TR>
+<TR>
+<TD>French</TD>
+<TD ALIGN="center">##</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">?</TD>
+<TD ALIGN="center">#</TD>
+<TD ALIGN="center">#</TD>
+</TR>
+<TR>
+<TD>German</TD>
+<TD ALIGN="center">#</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">##</TD>
+<TD ALIGN="center">##</TD>
+<TD ALIGN="center">###</TD>
+</TR>
+<TR>
+<TD>Italian</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">#</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">?</TD>
+<TD ALIGN="center">##</TD>
+<TD ALIGN="center">##</TD>
+</TR>
+<TR>
+<TD>Norwegian</TD>
+<TD ALIGN="center">#</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">##</TD>
+<TD ALIGN="center">#</TD>
+<TD ALIGN="center">##</TD>
+</TR>
+<TR>
+<TD>Polish</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">#</TD>
+<TD ALIGN="center">#</TD>
+<TD ALIGN="center">##</TD>
+</TR>
+<TR>
+<TD>Romanian</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">#</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">###</TD>
+</TR>
+<TR>
+<TD>Spanish</TD>
+<TD ALIGN="center">##</TD>
+<TD ALIGN="center">#</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">?</TD>
+<TD ALIGN="center">_</TD>
+<TD ALIGN="center">##</TD>
+</TR>
+<TR>
+<TD>Swedish</TD>
+<TD ALIGN="center">##</TD>
+<TD ALIGN="center">###</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">+</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">?</TD>
+<TD ALIGN="center">-</TD>
+<TD ALIGN="center">##</TD>
+</TR>
+</TABLE>
+
+<P>
+Explanation on scores
+</P>
+<UL>
+<LI>Grammarian's language skills  
+   <UL>
+   <LI>-   : no skills
+   <LI>#   : passive knowledge
+   <LI>##  : fluent non-native
+   <LI>### : native speaker
+   </UL>
+</UL>
+
+<UL>
+<LI>Grammarian's GF skills  
+   <UL>
+   <LI>-   : no skills
+   <LI>#   : basic skills (2-day GF tutorial)
+   <LI>##  : medium skills (previous experience of similar task)
+   <LI>### : advanced skills (resource grammar writer/substantial contributor)
+   </UL>
+</UL>
+
+<UL>
+<LI>Informant used for development/Informant needed for testing/Use of external tools 
+   <UL>
+   <LI>- : no
+   <LI>+ : yes
+   </UL>
+</UL>
+
+<UL>
+<LI>Impact of external tools 
+   <UL>
+   <LI>? : not investigated
+   <LI>- : no effect on the Phrasebook
+   <LI># : small impact (literal translation, simple idioms)
+   <LI>## : medium effect (translation of more forms of words, contextual preposition)
+   <LI>### : great effect (no extra work needed, translations are correct)
+   </UL>
+</UL>
+
+<UL>
+<LI>Changes on the resource grammars
+   <UL>
+   <LI>- : no changes
+   <LI># : 1-3 minor changes
+   <LI>## : 4-10 minor changes, 1-3 medium changes
+   <LI>### : &gt;10 changes of any kind  
+   </UL>
+</UL>
+
+<UL>
+<LI>Overall effort (including extra work on resource grammars)
+   <UL>
+   <LI># : less than 8 person hours
+   <LI>## : 8-24 person hours
+   <LI>### : &gt;24 person hours
+   </UL>
+</UL>
+
+<A NAME="toc8"></A>
+<H1>Example-based grammar writing prototype</H1>
+<P>
+The figure presents the process of creating a Phrasebook using an example-based 
+approach for the language X, where X = {Danish, Dutch, German, Norwegian}.
+</P>
+<P>
+<IMG ALIGN="middle" SRC="picpic.jpg" BORDER="0" ALT="">
+</P>
+<UL>
+<LI>the first step assumes an analysis of the resource grammar and extracts the necessary 
+  information that functions that build new lexical entries would need. 
+  A model is built so that the proper forms of the word can be rendered, 
+  and additional information, such as gender, can be inferred. The script applies 
+  these rules to each entry that we want to translate into the target language, and 
+  one obtains a set of constructions.
+<LI>they are furthermore given to an external translator tool (Google translate) 
+  or a native speaker for translation. One needs the configuration file even if the 
+  translator is human, because formal knowledge of grammar is not assumed.
+<LI>the translations into the target language are further more processed in order to 
+  build the linearizations of the categories first, decoding the information received. 
+  Furthermore, having the words in the lexicon, one can parse the translations of 
+  functions with the GF parser and generalize from that.
+<LI>the resulting grammar is tested with the aid of a script that generates 
+  constructions covering all the functions and categories from the grammar, along 
+  with some other constructions that proved to be problematic in some language. 
+  The result of the script contains for each construction in the target language 
+  its English correspondent and the abstract syntax tree. A native speaker 
+  evaluates the results and if corrections are needed, the algorithm runs again 
+  with the new examples. Depending on the language skills of the grammar writer, 
+  the changes can be made directly into the GF files, and the correct examples 
+  given by the native informant are just kept for validating the results. 
+  The algorithm is repeated as long as corrections are needed.
+</UL>
+
+<P>
+The time needed for preparing the configuration files for a grammar will not be needed 
+in the future, since the files are reusable for other applications.
+The time for the second step can be saved if automatic tools, like Google translate 
+are used. This is only possible in languages with a simpler morphology and syntax 
+and large corpora available.
+Good results were obtained for German and Dutch with Google translate, but for 
+languages like Romanian or Polish, which are both complex and lack enough resources, 
+the results are discouraging. 
+</P>
+<P>
+If the statistical oracle works well, the only step where the presence of a human 
+translator is needed is the evaluation and feedback step. An average of 4 hours per 
+round and 2 rounds were needed in average for the languages for which we performed 
+the experiment. It is possible that more effort is needed for more complex languages.
+</P>
+<A NAME="toc9"></A>
+<H1>Conclusions (tentative)</H1>
+<P>
+The grammarian need not be a native speaker of the language.
+</P>
+<P>
+For many languages, the grammarian need not even know the language - native informants are
+enough.
+</P>
+<P>
+However, evaluation by native speakers is necessary.
+</P>
+<P>
+Correct and idiomatic translations are possible.
+</P>
+<P>
+A typical development time was 2-3 person working days per language.
+</P>
+<P>
+Google translate helps in bootstrapping grammars, but must be checked.
+</P>
+<UL>
+<LI>in particular, unreliable for morphologically rich languages
+</UL>
+
+<P>
+Resource grammars should give some more support
+</P>
+<UL>
+<LI>higher-level access to constructions like negative expressions
+<LI>large-scale morphological lexica
+</UL>
+
+<A NAME="toc10"></A>
+<H1>Acknowledgements</H1>
 <P>
 The Phrasebook has been built in the MOLTO project funded by the European Commission.
 </P>
 <P>
 The authors are grateful to their native speaker informants helping to bootstrap and evaluate
-the grammars: Richard Bubel, Grégoire Détrez, Michal Palka, Willard Rafnsson,...
+the grammars: 
+Richard Bubel, 
+Grégoire Détrez, 
+Karin Keijzer, 
+Michał Pałka,
+Willard Rafnsson,
+Nick Smallbone.
 </P>
 
 <!-- html code generated by txt2tags 2.5 (http://txt2tags.sf.net) -->
-<!-- cmdline: txt2tags -thtml phrasebook.txt -->
+<!-- cmdline: txt2tags -thtml -\-toc phrasebook.txt -->
 </BODY></HTML>
