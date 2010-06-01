@@ -1,5 +1,5 @@
 incomplete concrete ExtraScand of ExtraScandAbs = CatScand ** 
-   open CommonScand,Coordination,ResScand in {
+   open CommonScand,Coordination,ResScand, ParamX in {
   lin
     GenNP np = {
       s,sp = \\n,_,_,g => np.s ! NPPoss (gennum (ngen2gen g) n) Nom ; 
@@ -84,4 +84,24 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
     ICompAP ap = {s = \\a => hur_IAdv.s ++ ap.s ! a} ;
 
     IAdvAdv adv = {s = hur_IAdv.s ++ adv.s} ;
+
+  lincat
+    Foc = {s : ParamX.Tense => Anteriority => Polarity => Str} ;
+
+  lin
+    FocObj np cls = {
+      s = \\t,a,p => cls.c2.s ++ np.s ! accusative ++ cls.s ! t ! a ! p ! Inv
+      } ;
+    FocAdv adv cls = {
+      s = \\t,a,p => adv.s ++ cls.s ! t ! a ! p ! Inv
+      } ; 
+    FocAdV adv cls = {
+      s = \\t,a,p => adv.s ++ cls.s ! t ! a ! p ! Inv
+      } ; 
+    FocNeg cl = {
+      s = \\t,a,p => (negation ! Neg) ++ cl.s ! t ! a ! p ! Inv
+      } ;
+    
+    UseFoc t p foc = {s = t.s ++ p.s ++ foc.s ! t.t ! t.a ! p.p} ;
+
 } 
