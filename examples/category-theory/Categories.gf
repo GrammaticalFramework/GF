@@ -1,5 +1,9 @@
 abstract Categories = {
 
+  -------------------------------------------------------
+  -- Basic category theory: categories, objects, 
+  -- arrows and equality of arrows
+
   cat Category ;
       Obj Category ;
       Arrow ({c} : Category) (Obj c) (Obj c) ;
@@ -11,14 +15,23 @@ abstract Categories = {
   fun codom : ({c} : Category) -> ({x,y} : Obj c) -> Arrow x y -> Obj c ;
   def codom {_} {x} {y} _ = y ;
 
+  -- 'id x' is the identity arrow for object x
   fun id   : ({c} : Category) -> (x : Obj c) -> Arrow x x ;
 
+  -- composition of arrows
   fun comp : ({c} : Category) -> ({x,y,z} : Obj c) -> Arrow z y -> Arrow x z -> Arrow x y ;
+
+
+  -------------------------------------------------------
+  -- The basic equality properties: reflexive, 
+  -- symetric and transitive relation. 
+  -- Only the reflexivity is an axiom.
 
   data eqRefl :  ({c} : Category)
               -> ({x,y} : Obj c)
               -> (a : Arrow x y)
               -> EqAr a a ;
+
   fun  eqSym  : ({c} : Category)
               -> ({x,y} : Obj c)
               -> ({a,b} : Arrow x y)
@@ -34,21 +47,18 @@ abstract Categories = {
              -> EqAr g h ;
   def eqTran (eqRefl a) eq = eq ;
 
-  fun eqCompL :  ({c} : Category)
-              -> ({x,y,z} : Obj c)
-              -> ({g,h} : Arrow x z)
-              -> (f : Arrow z y)
-              -> EqAr g h
-              -> EqAr (comp f g) (comp f h) ;
-  def eqCompL f (eqRefl g) = eqRefl (comp f g) ;
 
-  fun eqCompR :  ({c} : Category)
-              -> ({x,y,z} : Obj c)
-              -> ({g,h} : Arrow z y)
-              -> EqAr g h
-              -> (f : Arrow x z)
-              -> EqAr (comp g f) (comp h f) ;
-  def eqCompR (eqRefl g) f = eqRefl (comp g f) ;
+  -------------------------------------------------------
+  -- Now we prove some theorems which are specific for
+  -- the equality of arrows
+  --
+  -- First we assert the axioms:
+  --
+  --    a . id == id . a == a
+  --    f . (g . h) == (f . g) . h
+  --
+  -- and after that we prove that the composition
+  -- preserves the equality.
 
   fun eqIdL  : ({c} : Category)
              -> ({x,y} : Obj c)
@@ -66,6 +76,28 @@ abstract Categories = {
               -> (h : Arrow x z)
               -> EqAr (comp f (comp g h)) (comp (comp f g) h) ;
 
+  fun eqCompL :  ({c} : Category)
+              -> ({x,y,z} : Obj c)
+              -> ({g,h} : Arrow x z)
+              -> (f : Arrow z y)
+              -> EqAr g h
+              -> EqAr (comp f g) (comp f h) ;
+  def eqCompL f (eqRefl g) = eqRefl (comp f g) ;
+
+  fun eqCompR :  ({c} : Category)
+              -> ({x,y,z} : Obj c)
+              -> ({g,h} : Arrow z y)
+              -> EqAr g h
+              -> (f : Arrow x z)
+              -> EqAr (comp g f) (comp h f) ;
+  def eqCompR (eqRefl g) f = eqRefl (comp g f) ;
+
+
+  -------------------------------------------------------
+  -- Operations over categories
+  --
+  
+  -- 1. Dual category
   data Op   :  (c : Category)
             -> Category ;
        opObj:  ({c} : Category)
@@ -86,6 +118,7 @@ abstract Categories = {
            -> EqAr (opAr f) (opAr g) ;
   def eqOp (eqRefl f) = eqRefl (opAr f) ;
 
+  -- 2. Slash of a category
   data Slash     :  (c : Category)
                  -> (x : Obj c)
                  -> Category ;
@@ -102,6 +135,7 @@ abstract Categories = {
   def  id (slashObj x {y} a) = slashAr x (id y) ;
   def  comp (slashAr t azy) (slashAr ~t axz) = slashAr t (comp azy axz) ;
 
+  -- 3. CoSlash of a category
   data CoSlash   :  (c : Category)
                  -> (x : Obj c)
                  -> Category ;
@@ -118,6 +152,7 @@ abstract Categories = {
   def  id (coslashObj x {y} a) = coslashAr x (id y) ;
   def  comp (coslashAr t ayz) (coslashAr ~t azx) = coslashAr t (comp azx ayz) ;
 
+  -- 4. Cartesian product of two categories
   data Prod   :  (c1,c2 : Category)
               -> Category ;
        prodObj:  ({c1,c2} : Category)
@@ -139,6 +174,7 @@ abstract Categories = {
   fun snd : ({c1,c2} : Category) -> Obj (Prod c1 c2) -> Obj c2 ;
   def snd (prodObj _ x2) = x2 ;
   
+  -- 5. Sum of two categories
   data Sum    :  (c1,c2 : Category)
               -> Category ;
        sumLObj:  ({c1,c2} : Category)

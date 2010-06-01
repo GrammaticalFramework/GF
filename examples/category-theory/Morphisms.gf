@@ -1,5 +1,9 @@
 abstract Morphisms = Categories ** {
 
+-------------------------------------------------------
+-- 1. Isomorphism - pair of arrows whose composition
+-- is the identity arrow
+
 cat Iso ({c} : Category) ({x,y} : Obj c) (Arrow x y) (Arrow y x) ;
 
 data iso :  ({c} : Category)
@@ -18,6 +22,7 @@ fun isoOp : ({c} : Category)
          -> Iso (opAr g) (opAr f) ;
 def isoOp (iso f g id_fg id_gf) = iso (opAr g) (opAr f) (eqOp id_fg) (eqOp id_gf) ;
 
+-- every isomorphism is also monomorphism
 fun iso2mono :  ({c} : Category)
              -> ({x,y} : Obj c)
              -> ({f} : Arrow x y)
@@ -34,6 +39,7 @@ def iso2mono (iso f g id_fg id_gf) =
                                                                                    (eqCompL g eq_fh_fm))))))))) ;  -- g . (f . h) = g . (f . m)
                                                                                                                    --      f . h  = f . m
 
+-- every isomorphism is also epimorphism
 fun iso2epi  :  ({c} : Category)
              -> ({x,y} : Obj c)
              -> ({f} : Arrow x y)
@@ -51,6 +57,14 @@ def iso2epi (iso fff g id_fg id_gf) =
                                                                                    (eqCompR eq_hf_mf g))))))))) ; -- (h . f) . g = (m . f) . g
                                                                                                                   --  h . f      =  m . f
 
+
+-------------------------------------------------------
+-- 2. Monomorphism - an arrow f such that:
+-- 
+--        f . h == f . m  ==>  h == m
+--
+-- for every h and m.
+
 cat Mono ({c} : Category) ({x,y} : Obj c) (Arrow x y) ;
 
 data mono :  ({c} : Category)
@@ -58,6 +72,14 @@ data mono :  ({c} : Category)
           -> (f : Arrow x y)
           -> (({z} : Obj c) -> (h,m : Arrow z x) -> EqAr (comp f h) (comp f m) -> EqAr h m)
           -> Mono f ;
+
+
+-------------------------------------------------------
+-- 3. Epimorphism - an arrow f such that:
+-- 
+--        h . f == m . f  ==>  h == m
+--
+-- for every h and m.
 
 cat Epi ({c} : Category) ({x,y} : Obj c) (Arrow x y) ;
 
