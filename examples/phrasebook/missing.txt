@@ -1,5 +1,5 @@
 DisambPhrasebookEng :
-PhrasebookBul : GCongratulations GGoodLuck GHappyBirthday
+PhrasebookBul :
 PhrasebookCat :
 PhrasebookDan :
 PhrasebookDut :
