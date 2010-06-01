@@ -8,7 +8,7 @@ lin
           agr  = np.a ;
           vps  = vp.s ! VPFinite t a ;
           verb = case <<t,a> : ParamX.Tense * Anteriority> of {
-            <Pres,Simul> => {fin = "gÃ¶r"    ; inf = vps.inf} 
+            <Pres,Simul> => {fin = "gör"    ; inf = vps.inf} 
             ; --# notpresent
             <Past,Simul> => {fin = "gjorde" ; inf = vps.inf} ; --# notpresent
             _ => vps --# notpresent
