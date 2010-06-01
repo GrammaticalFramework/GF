@@ -26,5 +26,8 @@ lin
   GSorry, GSorryPol = ss "извинете" ;
   GThanks = ss "благодаря ти" ;
   GTheCheck = ss "сметката" ;
+  GCongratulations = ss "поздравления";
+  GHappyBirthday = ss "честит рожден ден" ;
+  GGoodLuck = ss "успех" ; 
 
 }
