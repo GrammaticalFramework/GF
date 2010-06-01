@@ -4,7 +4,7 @@ lincat
   Greeting = SS ;
 
 lin 
-  GBye = ss "hade" ;
+  GBye = ss "ha det" ;
   GCheers = ss "skål" ; -- google translate ! 
   GDamn = ss "faen" ; 
   GExcuse, GExcusePol = ss "unnskyld" ;

@@ -46,27 +46,27 @@ concrete WordsNor of Words = SentencesNor **
     Center = mkPlace (mkN "sentrum" "sentrum" "sentre" "sentrene") "i" "til";
     Cinema = mkPlace (mkN "kino" "kino" "kinoer" "kinoene") "på" "på";
     Church = mkPlace (mkN "kirke" "kirka" "kirker" "kirkene") "i" "til"; 
-    Disco = mkPlace (mkN "diskotek" "diskoteket" "diskoteker" "diskotekene") "i" "på";
+    Disco = mkPlace (mkN "diskotek" "diskoteket" "diskoteker" "diskotekene") "på" "på";
     Hospital = mkPlace (mkN "sykehus" "sykehuset" "sykehus" "sykehusa") "på" "til";
 
     Hotel = mkPlace (mkN "hotel" "hotellet" "hoteller" "hotellene") "på" "til";
     Museum = mkPlace (mkN "museum" "museet" "museer" "museene") "i" "til";
     Park = mkPlace (mkN "park" "parken" "parker" "parkene") "i" "til";
     Parking = mkPlace (mkN "parkeringsplass" "parkeringsplassen" "parkeringsplasser" "parkeringplassene") "på" "til";
-    Pharmacy = mkPlace (mkN "apotek" "apoteket" "apoteker" "apotekene") "i" "til";
+    Pharmacy = mkPlace (mkN "apotek" "apoteket" "apoteker" "apotekene") "på" "til";
     PostOffice = mkPlace (mkN "postkontor" "postkontoret" "postkontorer" "postkontorene") "på" "til";
-    Pub = mkPlace (mkN "pub" "puben" "puber" "pubene") "i" "til";
-    Restaurant = mkPlace (mkN "restaurant" "restauranten" "restauranter" "restaurantene") "i" "til";
+    Pub = mkPlace (mkN "pub" "puben" "puber" "pubene") "på" "til";
+    Restaurant = mkPlace (mkN "restaurant" "restauranten" "restauranter" "restaurantene") "på" "til";
     School = mkPlace (mkN "skole" "skola" "skoler" "skolene") "i" "til";
     Shop = mkPlace (mkN "butikk" "butikken" "butikker" "butikkene") "i" "til";
-    Station = mkPlace (mkN "stasjon" "stasjonen" "stasjoner" "stasjonene") "i" "til";
-    Supermarket = mkPlace (mkN "supermarked" "supermarkedet" "supermarkeder" "supermarkedene") "i" "til";
-    Theatre = mkPlace (mkN "teater" "teatret" "teatre" "teatrene") "i" "på";
+    Station = mkPlace (mkN "stasjon" "stasjonen" "stasjoner" "stasjonene") "på" "til";
+    Supermarket = mkPlace (mkN "supermarked" "supermarkedet" "supermarkeder" "supermarkedene") "på" "til";
+    Theatre = mkPlace (mkN "teater" "teatret" "teatre" "teatrene") "på" "til";
     Toilet = mkPlace (mkN "toalett" "toalettet" "toaletter" "toalettene") "på" "på";
     University = mkPlace (mkN "universitet" "universitetet" "universitet" "universiteta") "i" "til";
     Zoo = mkPlace (mkN "dyrepark" "dyreparken" "dyreparker" "dyreparkene") "på" "til";
 
-    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "restaurant" "restauranten" "restauranter" "restaurantene")) in_Prep to_Prep ;
+    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "restaurant" "restauranten" "restauranter" "restaurantene")) on_Prep to_Prep ;
 
 -- currencies
 
