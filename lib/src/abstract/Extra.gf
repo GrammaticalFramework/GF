@@ -47,4 +47,21 @@ abstract Extra = Cat ** {
 
     PrepCN : Prep -> CN -> Adv ;   -- by accident [Prep + CN without article]
 
+  -- fronted/focal constructions, only for main clauses
+
+  cat
+    Foc ;
+
+  fun
+    FocObj : NP  -> ClSlash -> Foc ;   -- her I love
+    FocAdv : Adv -> Cl      -> Foc ;   -- today I will sleep
+    FocAdV : AdV -> Cl      -> Foc ;   -- never will I sleep
+    FocAP  : AP  -> NP      -> Foc ;   -- green was the tree
+    FocNeg : Cl             -> Foc ;   -- not is he here
+    FocVP  : VP  -> NP      -> Foc ;   -- love her I do
+    FocVV  : VV -> VP -> NP -> Foc ;   -- to love her I want
+    
+    UseFoc : Temp -> Pol -> Foc -> Utt ;
+
+    
 }
