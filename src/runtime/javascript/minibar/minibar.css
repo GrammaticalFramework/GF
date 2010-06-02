@@ -47,3 +47,5 @@ div#saldospel input.incorrect { color: red; }
 .feedback textarea { width: 95%; }
 
 span.field { background-color: #eee; }
+
+pre.feedbacklist { background: white }
