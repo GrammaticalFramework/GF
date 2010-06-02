@@ -398,11 +398,11 @@ param
     Order = Main | Inv | Sub ;
 
   oper
-    vForm : Tense -> Number -> Person -> Order -> VForm = \t,n,p,o -> case <t,n,p> of {
+    vForm : Tense -> Gender -> Number -> Person -> Order -> VForm = \t,g,n,p,o -> case <t,n,p> of {
       <Pres
         |Fut --# notpresent
-       ,Sg,P2> => case o of {
-        Inv => VPresSg1 ;
+       ,Sg,P2> => case <o,g> of {
+        <Inv,Neutr> => VPresSg1 ;   --- Neutr is a hack for familiar you, "je", in StructuralDut
         _   => VPresSg2
         } ;
       <Pres
@@ -554,7 +554,7 @@ param
             Sub => True ;  -- glue prefix to verb
             _ => False
             } ;
-          vform = vForm t agr.n agr.p o ;
+          vform = vForm t agr.g agr.n agr.p o ;
           auxv = (auxVerb vp.s.aux).s ;
           vperf = vp.s.s ! VPerf ;
           verb : Str * Str = case <t,a> of {
