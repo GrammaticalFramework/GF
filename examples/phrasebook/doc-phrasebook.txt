@@ -142,22 +142,9 @@ Grammar testing
 
 
 
-=Ontology=
-
-The abstract syntax defines the **ontology** behind the phrasebook. 
-Some explanations can be found in the 
-[ontology document Ontology.html], which is produced from the
-abstract syntax files
-[``Sentences.gf`` http://code.haskell.org/gf/examples/phrasebook/Sentences.gf]
-and
-[``Words.gf`` http://code.haskell.org/gf/examples/phrasebook/Words.gf]
-by ``make doc``.
-
-
-
-
-
 =Files=
+
+==Grammars==
 
 ``Sentences``: general syntactic structures implementable in a uniform way. 
 Concrete syntax via the functor ``SencencesI``.
@@ -183,8 +170,31 @@ Here is the module structure as produced in GF by
   > ! dot -Tpng _gfdepgraph.dot >pgraph.png
 ```
 
-[npgraph.png]
+[pgraph.png]
 
+
+==Ontology==
+
+The abstract syntax defines the **ontology** behind the phrasebook. 
+Some explanations can be found in the 
+[ontology document Ontology.html], which is produced from the
+abstract syntax files
+[``Sentences.gf`` http://code.haskell.org/gf/examples/phrasebook/Sentences.gf]
+and
+[``Words.gf`` http://code.haskell.org/gf/examples/phrasebook/Words.gf]
+by ``make doc``.
+
+
+
+==Run-time system and user interface==
+
+The phrasebook uses 
+the 
+[PGF server http://code.google.com/p/grammatical-framework/wiki/LaunchWebDemos]
+written in Haskell and the 
+[minibar library http://www.cse.chalmers.se/~hallgren/minibar/about.html]
+written in JavaScript. Since the sources of these systems are available, anyone can build the phrasebook
+locally on her own computer.
 
 
 =Effort and cost=
