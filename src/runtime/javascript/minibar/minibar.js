@@ -15,6 +15,7 @@ var options={
     show_trees: false,
     show_grouped_translations: true,
     delete_button_text: "⌫",
+    default_source_language: null,
     try_google: true,
     feedback_url: null,
     help_url: null
@@ -142,7 +143,13 @@ function show_languages(grammar) {
     for(var i=0; i<lang.length; i++)
 	if(lang[i].canParse && !hasPrefix(lang[i].name,"Disamb"))
 	    menu.appendChild(option(langpart(lang[i].name,grammar.name),""+i));
-
+    if(options.default_source_language) {
+	for(var i=0;i<menu.options.length;i++) {
+	    var ix=menu.options[i].value;
+	    var l=langpart(menu.grammar.languages[ix].name,menu.grammar.name);
+	    if(l==options.default_source_language) menu.selectedIndex=i;
+	}
+    }
     var to=element("to_menu");
     to.langmenu=menu;
     to.setAttribute("onchange","change_tolang(this)");
