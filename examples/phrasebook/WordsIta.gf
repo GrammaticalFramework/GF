@@ -215,7 +215,7 @@ lin
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
     IsTranspPlace trans place =
-      mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
+      mkQS (mkQCl (mkCl (mkCN trans.name (SyntaxIta.mkAdv for_Prep place.name)))) ;
 
 -- modifiers of places
 

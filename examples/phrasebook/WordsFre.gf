@@ -237,7 +237,7 @@ lin
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
     IsTranspPlace trans place =
-      lin QS {s = \\_ => (E.EstcequeS (mkS (mkCl (mkCN trans.name place.to)))).s} ;
+      lin QS {s = \\_ => (E.EstcequeS (mkS (mkCl (mkCN trans.name (SyntaxFre.mkAdv for_Prep place.name))))).s} ;
       --      mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
 
   oper
