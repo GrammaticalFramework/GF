@@ -16,7 +16,8 @@ var options={
     show_grouped_translations: true,
     delete_button_text: "⌫",
     try_google: true,
-    feedback_button: false
+    feedback_url: null,
+    help_url: null
 }
 
 /* --- Grammar access object ------------------------------------------------ */
@@ -74,7 +75,9 @@ function start_minibar(opts) { // typically called when the HTML document is loa
     var surface=div_id("surface");
     var extra=div_id("extra");
     //surface.setAttribute("onclick","add_typed_input(this)");
-    appendChildren(element("minibar"),
+    var minibar=element("minibar");
+    minibar.innerHTML="";
+    appendChildren(minibar,
 		   [div_id("menubar"),
 		    surface,
 		    div_id("words"),
@@ -110,6 +113,8 @@ function show_grammarlist(grammars) {
 		    button(options.delete_button_text,"delete_last()"),
 		    button("Clear","clear_all()"),
 		    button("Random","generate_random()")]);
+    if(options.help_url)
+	menubar.appendChild(button("Help","open_help()"));
     select_grammar(grammars[0]);
 }
 
@@ -397,8 +402,8 @@ function toggle_img(i) {
 
 function append_extra_buttons(extra) {
     if(options.try_google)
-	extra.appendChild(button("Try this sentence in Google Translate","try_google()"));
-    if(options.feedback_button)
+	extra.appendChild(button("Try Google Translate","try_google()"));
+    if(options.feedback_url)
 	appendChildren(extra,[text(" "),button("Feedback","open_feedback()")]);
 }
 
@@ -417,12 +422,13 @@ function try_google() {
     window.open(url);
 }
 
-function feedback_button(trans) {
+function open_popup(url,target) {
+    var w=window.open(url,target,'toolbar=no,location=no,status=no,menubar=no');
+    w.focus();
 }
 
-function open_feedback() {
-    window.open("feedback.html",'feedback','toolbar=no,location=no,status=no,menubar=no');
-}
+function open_help() { open_popup(options.help_url,"help"); }
+function open_feedback() { open_popup(options.feedback_url,'feedback'); }
 
 function setField(form,name,value) {
     form[name].value=value;
