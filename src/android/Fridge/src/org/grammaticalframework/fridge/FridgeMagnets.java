@@ -14,7 +14,7 @@ public class FridgeMagnets extends Activity {
     /** Called when the activity is first created. */
 	String[] words = {"hello","buy","I","you","have","please","where",
 			          "how","go","Gothenburg","London","rakia","wine",
-			          "whisky","man","woman","boy","girl"};
+			          "whisky","man","woman","boy","girl","to"};
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
