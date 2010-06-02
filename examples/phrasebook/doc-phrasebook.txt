@@ -401,6 +401,7 @@ The authors are grateful to their native speaker informants helping to bootstrap
 the grammars: 
 Richard Bubel, 
 Grégoire Détrez, 
+Rise Eilert,
 Karin Keijzer, 
 Michał Pałka,
 Willard Rafnsson,
