@@ -21,14 +21,18 @@ Showcase for project FP7-ICT-247914, Deliverable D10.2.
     <LI><A HREF="#toc3">From the user perspective</A>
     <LI><A HREF="#toc4">From the programmer's perspective</A>
     </UL>
-  <LI><A HREF="#toc5">Ontology</A>
-  <LI><A HREF="#toc6">Files</A>
-  <LI><A HREF="#toc7">Effort and cost</A>
-  <LI><A HREF="#toc8">Example-based grammar writing prototype</A>
-  <LI><A HREF="#toc9">To Do</A>
-  <LI><A HREF="#toc10">How to contribute</A>
-  <LI><A HREF="#toc11">Conclusions (tentative)</A>
-  <LI><A HREF="#toc12">Acknowledgements</A>
+  <LI><A HREF="#toc5">Files</A>
+    <UL>
+    <LI><A HREF="#toc6">Grammars</A>
+    <LI><A HREF="#toc7">Ontology</A>
+    <LI><A HREF="#toc8">Run-time system and user interface</A>
+    </UL>
+  <LI><A HREF="#toc9">Effort and cost</A>
+  <LI><A HREF="#toc10">Example-based grammar writing prototype</A>
+  <LI><A HREF="#toc11">To Do</A>
+  <LI><A HREF="#toc12">How to contribute</A>
+  <LI><A HREF="#toc13">Conclusions (tentative)</A>
+  <LI><A HREF="#toc14">Acknowledgements</A>
   </UL>
 
 <P></P>
@@ -210,19 +214,9 @@ Grammar testing
 </UL>
 
 <A NAME="toc5"></A>
-<H1>Ontology</H1>
-<P>
-The abstract syntax defines the <B>ontology</B> behind the phrasebook. 
-Some explanations can be found in the 
-<A HREF="Ontology.html">ontology document</A>, which is produced from the
-abstract syntax files
-<A HREF="http://code.haskell.org/gf/examples/phrasebook/Sentences.gf"><CODE>Sentences.gf</CODE></A>
-and
-<A HREF="http://code.haskell.org/gf/examples/phrasebook/Words.gf"><CODE>Words.gf</CODE></A>
-by <CODE>make doc</CODE>.
-</P>
-<A NAME="toc6"></A>
 <H1>Files</H1>
+<A NAME="toc6"></A>
+<H2>Grammars</H2>
 <P>
 <CODE>Sentences</CODE>: general syntactic structures implementable in a uniform way. 
 Concrete syntax via the functor <CODE>SencencesI</CODE>.
@@ -256,9 +250,32 @@ Here is the module structure as produced in GF by
 </PRE>
 <P></P>
 <P>
-<IMG ALIGN="middle" SRC="npgraph.png" BORDER="0" ALT="">
+<IMG ALIGN="middle" SRC="pgraph.png" BORDER="0" ALT="">
 </P>
 <A NAME="toc7"></A>
+<H2>Ontology</H2>
+<P>
+The abstract syntax defines the <B>ontology</B> behind the phrasebook. 
+Some explanations can be found in the 
+<A HREF="Ontology.html">ontology document</A>, which is produced from the
+abstract syntax files
+<A HREF="http://code.haskell.org/gf/examples/phrasebook/Sentences.gf"><CODE>Sentences.gf</CODE></A>
+and
+<A HREF="http://code.haskell.org/gf/examples/phrasebook/Words.gf"><CODE>Words.gf</CODE></A>
+by <CODE>make doc</CODE>.
+</P>
+<A NAME="toc8"></A>
+<H2>Run-time system and user interface</H2>
+<P>
+The phrasebook uses 
+the 
+<A HREF="http://code.google.com/p/grammatical-framework/wiki/LaunchWebDemos">PGF server</A>
+written in Haskell and the 
+<A HREF="http://www.cse.chalmers.se/~hallgren/minibar/about.html">minibar library</A>
+written in JavaScript. Since the sources of these systems are available, anyone can build the phrasebook
+locally on her own computer.
+</P>
+<A NAME="toc9"></A>
 <H1>Effort and cost</H1>
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
@@ -489,7 +506,7 @@ Explanation on scores
    </UL>
 </UL>
 
-<A NAME="toc8"></A>
+<A NAME="toc10"></A>
 <H1>Example-based grammar writing prototype</H1>
 <P>
 The figure presents the process of creating a Phrasebook using an example-based 
@@ -540,7 +557,7 @@ translator is needed is the evaluation and feedback step. An average of 4 hours 
 round and 2 rounds were needed in average for the languages for which we performed 
 the experiment. It is possible that more effort is needed for more complex languages.
 </P>
-<A NAME="toc9"></A>
+<A NAME="toc11"></A>
 <H1>To Do</H1>
 <P>
 Disambiguation grammars for other languages than English
@@ -558,7 +575,7 @@ Extend the abstract lexicon in <CODE>Words</CODE> by hand or (semi)automatically
 Customizable phone distribution: make your own selection of the 2^15 language subsets
 when downloading the phrasebook to a phone
 </P>
-<A NAME="toc10"></A>
+<A NAME="toc12"></A>
 <H1>How to contribute</H1>
 <P>
 The basic things "everyone" can do is 
@@ -615,7 +632,7 @@ Here are the steps to follow for contributors:
 <LI>Don't compromise quality to gain coverage: <I>non multa sed multum!</I> 
 </UL>
 
-<A NAME="toc11"></A>
+<A NAME="toc13"></A>
 <H1>Conclusions (tentative)</H1>
 <P>
 The grammarian need not be a native speaker of the language.
@@ -648,7 +665,7 @@ Resource grammars should give some more support
 <LI>large-scale morphological lexica
 </UL>
 
-<A NAME="toc12"></A>
+<A NAME="toc14"></A>
 <H1>Acknowledgements</H1>
 <P>
 The Phrasebook has been built in the MOLTO project funded by the European Commission.
