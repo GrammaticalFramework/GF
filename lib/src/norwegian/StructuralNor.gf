@@ -101,7 +101,7 @@ concrete StructuralNor of Structural = CatNor **
   whatPl_IP = {s = \\_ => "hva" ; g = Neutr ; n = Pl} ; ---- infl
   when_IAdv = ss "når" ;
   when_Subj = ss "når" ;
-  where_IAdv = ss "hver" ;
+  where_IAdv = ss "hvor" ;
   which_IQuant = {
     s = table {
       Sg => genderForms "hvilken" "hvilket" ;

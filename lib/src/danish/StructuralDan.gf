@@ -100,7 +100,7 @@ concrete StructuralDan of Structural = CatDan **
   whatPl_IP = {s = \\_ => "hvilke" ; g = Utr ; n = Pl} ; ---- infl
   when_IAdv = ss "hvornår" ;
   when_Subj = ss "når" ;
-  where_IAdv = ss "hver" ;
+  where_IAdv = ss "hvor" ;
   which_IQuant = {
     s = table {
       Sg => genderForms "hvilken" "hvilket" ;
