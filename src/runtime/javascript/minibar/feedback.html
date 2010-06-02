@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html> <head>
+<title>Feedback</title>
+<link rel=stylesheet type="text/css" href="minibar.css">
+<script type="text/JavaScript" src="support.js"></script>
+<script type="text/JavaScript" src="minibar.js"></script>
+<meta name = "viewport" content = "width = device-width">
+
+</head>
+
+<body onload="prefill_feedback_form()">
+
+<h2><span id=grammar></span> Feedback</h2>
+
+<form class=feedback name=feedback action="feedback.cgi" method="post">
+<input type=hidden name="grammar">
+
+<p>
+<input type=hidden name="from"> <span class=field id=from>...</span> input:
+<input type=hidden name="input"> <span class=field id=input>...</span>
+
+<div id=translation_box>
+<p><input type=hidden name="to"> <span class=field id="to">...</span> translation:
+<input type=hidden name="translation"> <span class=field id=translation>...</span>
+
+<p>Suggest a better translation:
+<textarea rows=3 name="improvement"></textarea>
+</div>
+
+<p>Comments:
+<br><textarea rows=5 name="comment"></textarea>
+
+<p>
+<input type=submit value="Submit Feedback">
+<input type=button value="Cancel" onclick="window.close()">
+
+
+<input type=hidden name="inner_size">
+<input type=hidden name="outer_size">
+<input type=hidden name="screen_size">
+<input type=hidden name="available_screen_size">
+<input type=hidden name="color_depth">
+<input type=hidden name="pixel_depth">
+
+</form>
+</body>
+
+</html>
