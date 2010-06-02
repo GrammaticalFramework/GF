@@ -20,9 +20,10 @@ div#words {
     border: 3px solid #e0e0e0;
 }
 
-div.word, span.word, div#words div {
+div.word, span.word, div#words div, div#words input[type=button] {
     display: inline-block;
     font-family: sans-serif;
+    font-size: 100%;
     background-color: white;
     border: 1px solid black;
     padding: 3px;
