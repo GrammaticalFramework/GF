@@ -32,7 +32,7 @@ fi
 view_feedback() {
   charset="UTF-8"
   pagestart "Collected Feedback"
-  begin pre
+  begin pre class=feedbacklist
    Reg show reverse drop color_depth,pixel_depth,outer_size,inner_size,available_screen_size from-url <"$PATH_TRANSLATED" | plain2html
   end
   pageend
