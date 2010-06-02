@@ -1,0 +1,26 @@
+MOLTO Phrasebook Help
+
+
+
+To start: klick at a word or start typing.
+
+**From**: source language
+
+**To**: target language (either a single one or "All" simultaneously)
+
+**Del**: delete last word
+
+**Clear**: start over
+
+**Random**: generate a random phrase
+
+Google translate: the current input and language choice; opens in a new window or tab.
+
+The symbol ``&+`` means binding of two words. It will disappear in the complete translation.
+
+The translator is slightly //overgenerating//, which means you can build some semantically strange phrases.
+Before reporting them as bugs, ask yourself: could this be correct in some situation? is the translation
+valid in that situation?
+
+[Back to the phrasebook http://www.grammaticalframework.org/demos/phrasebook/]
+
