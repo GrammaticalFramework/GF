@@ -21,6 +21,3 @@ The symbol ``&+`` means binding of two words. It will disappear in the complete 
 The translator is slightly //overgenerating//, which means you can build some semantically strange phrases.
 Before reporting them as bugs, ask yourself: could this be correct in some situation? is the translation
 valid in that situation?
-
-[Back to the phrasebook http://www.grammaticalframework.org/demos/phrasebook/]
-
