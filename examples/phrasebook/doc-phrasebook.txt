@@ -41,7 +41,7 @@ History
 
 [Missing constructs missing.txt] 
 
-[Back to phrasebook http://www.grammaticalframework.org/demos/phrasebook/]
+[Back to the phrasebook http://www.grammaticalframework.org/demos/phrasebook/]
 
 #ESMALL
 #HR
@@ -58,16 +58,18 @@ between 14 European languages included in the
   Polish, Romanian, Spanish, Swedish
 
 
-It is implemented by using the GF programming language 
+A Russian version is not yet finished but is projected later. Also other languages may be added.
+
+The phrasebook is implemented by using the GF programming language 
 ([Grammatical Framework http://grammaticalframework.org]).
 It is the first demo for the MOLTO project, released in the third month (by June 2010).
 The first version is a very small system, but it will extended in the course of the project.
 
 The phrasebook has the following requirement specification:
-- high quality: reliable translations to express yourself in any language
+- high quality: reliable translations to express yourself in any of the languages
 - translation between all pairs of languages
 - runnable in web browsers
-- runnable on mobile phones (forthcoming: Android phones)
+- runnable on mobile phones (via web browser; Android stand-alone forthcoming)
 - easily extensible by new words (forthcoming: semi-automatic extensions by users)
 
 
@@ -79,6 +81,9 @@ The source code resides in
 
 =Points illustrated=
 
+
+==From the user perspective==
+
 Interlingua-based translation
 - we translate meanings, rather than words
 
@@ -87,20 +92,8 @@ Incremental parsing
 - the user is at every point guided by the list of possible next words
 
 
-The use of resource grammars and functors
-- the translator was implemented on top of an earlier linguistic knowledge base,
-  the [GF Resource Grammar Library http://grammaticalframework.com/lib]
-
-
-Example-based grammar writing and grammar induction from statistical models 
-([Google translate http://translate.google.com])
-- many of the grammars were created semi-automatically by generalization from
-  examples
-
-
-Compile-time transfer: especially, in Action in Words
-- the structural differences between languages are treated at compile time,
-  for maximal run-time efficiency
+Mixed modalities
+- selection of words ("fridge magnets") combined with text input
 
 
 Quasi-incremental translation: many basic types are also used as phrases
@@ -117,7 +110,26 @@ Fall-back to statistical translation
 
 
 Feed-back from users
-- you are welcome to send comments, bug reports, and better translation suggestions!
+- users are welcomed to send comments, bug reports, and better translation suggestions
+
+
+
+==From the programmer's perspective==
+
+The use of resource grammars and functors
+- the translator was implemented on top of an earlier linguistic knowledge base,
+  the [GF Resource Grammar Library http://grammaticalframework.com/lib]
+
+
+Example-based grammar writing and grammar induction from statistical models 
+([Google translate http://translate.google.com])
+- many of the grammars were created semi-automatically by generalization from
+  examples
+
+
+Compile-time transfer: especially, in Action in Words
+- the structural differences between languages are treated at compile time,
+  for maximal run-time efficiency
 
 
 The level of skills involved in grammar development
@@ -167,72 +179,11 @@ the input language is ambiguous.
 Here is the module structure as produced in GF by
 ```
   > i -retain DisambPhrasebookEng.gf
-  > dg -only=Phrasebook*,Sentences*,Words*,Greetings*,DisambPhrasebookEng
+  > dg -only=Phrasebook*,Sentences*,Words*,Greetings*,Numeral,NumeralEng,DisambPhrasebookEng
   > ! dot -Tpng _gfdepgraph.dot >pgraph.png
 ```
 
-[pgraph.png]
-
-
-
-=To Do=
-
-Disambiguation grammars for other languages than English
-
-Extend the abstract lexicon in ``Words`` by hand or (semi)automatically for
-- food stuff
-- places
-- actions
-
-
-Customizable phone distribution: make your own selection of the 2^15 language subsets
-when downloading the phrasebook to a phone
-
-
-=How to contribute=
-
-The basic things "everyone" can do is 
-- complete [missing words missing.txt] in concrete syntaxes
-- add new abstract words in ``Words`` and greetings in ``Greetings``
-
-
-The missing concrete syntax entries are added to the ``Words``//L//``.gf`` 
-files for each language //L//. The
-[morphological paradigms http://code.haskell.org/gf/lib/doc/synopsis.html#toc78]
-of the GF resource library should be used. Actions (prefixed with ``A``, as ``AWant``) are
-a little more demanding, since they also require syntax constructors. Greetings (prefixed
-with ``G``) are pure strings.
-
-Some explanations can be found in the 
-[implementation document Implementation.html], which is produced from the
-concrete syntax files
-[``SentencesI.gf`` http://code.haskell.org/gf/examples/phrasebook/SentencesI.gf]
-and
-[``WordsEng.gf`` http://code.haskell.org/gf/examples/phrasebook/WordsEng.gf]
-by ``make doc``.
-
-Here are the steps to follow for contributors:
-+ Make sure you have the latest sources 
-  from [GF Darcs http://www.grammaticalframework.org/doc/gf-developers.html], 
-  using ``darcs pull``.
-+ Also make sure that you have compiled the library by ``make present`` in ``gf/lib/src/``.
-+ Work in the directory 
-  [``gf/examples/phrasebook/`` http://code.haskell.org/gf/examples/phrasebook/].
-+ After you've finished your contribution, recompile the phrasebook by ``make pgf``.
-+ Save your changes in ``darcs record .`` (in the ``phrasebook`` subdirectory).
-+ Make a patch file with ``darcs send -o my_phrasebook_patch``, which you can 
-  send to GF maintainers.
-+ (Recommended:) Test the phrasebook on your local server:
-  + Go to ``gf/src/server/`` and follow the instructions in the
-    [project Wiki http://code.google.com/p/grammatical-framework/wiki/LaunchWebDemos].
-  + Make sure that ``Phrasebook.pgf`` is available to you GF server (see project wiki).
-  + Launch ``lighttpd`` (see project wiki).
-  + How you can open ``gf/examples/phrasebook/www/phrasebook.html`` and use your phrasebook!
-
-
-- Don't delete anything! But you are free to correct incorrect forms.
-- Don't change the module structure! 
-- Don't compromise quality to gain coverage: //non multa sed multum!// 
+[npgraph.png]
 
 
 
@@ -241,7 +192,7 @@ Here are the steps to follow for contributors:
 || Language | Grammarian's language skills  | Grammarian's GF skills | Informant used for development | Informant used for testing | Use of external tools | Impact of external tools | Changes on the resource grammar | Development time || 
 | Bulgarian |   ###    |    ###  |    -  |  -  |   -   |   ?   |  #   |   ##  |
 | Catalan   |   ###    |    ###  |    -  |  -  |   -   |   ?   |  #   |   #   |
-| Danish    |   -      |    ###  |    +  |  +  |   +   |   ##  |  ##  |   ##  |
+| Danish    |   -      |    ###  |    +  |  +  |   +   |   ##  |  #   |   ##  |
 | Dutch     |   -      |    ###  |    +  |  +  |   +   |   ##  |  #   |   ##  |
 | English   |   ##     |    ###  |    -  |  +  |   -   |   -   |  _   |   #   |
 | Finnish   |   ###    |    ###  |    -  |  -  |   -   |   ?   |  #   |   ##  |
@@ -342,6 +293,68 @@ If the statistical oracle works well, the only step where the presence of a huma
 translator is needed is the evaluation and feedback step. An average of 4 hours per 
 round and 2 rounds were needed in average for the languages for which we performed 
 the experiment. It is possible that more effort is needed for more complex languages.
+
+
+=To Do=
+
+Disambiguation grammars for other languages than English
+
+Extend the abstract lexicon in ``Words`` by hand or (semi)automatically for
+- food stuff
+- places
+- actions
+
+
+Customizable phone distribution: make your own selection of the 2^15 language subsets
+when downloading the phrasebook to a phone
+
+
+=How to contribute=
+
+The basic things "everyone" can do is 
+- complete [missing words missing.txt] in concrete syntaxes
+- add new abstract words in ``Words`` and greetings in ``Greetings``
+
+
+The missing concrete syntax entries are added to the ``Words``//L//``.gf`` 
+files for each language //L//. The
+[morphological paradigms http://code.haskell.org/gf/lib/doc/synopsis.html#toc78]
+of the GF resource library should be used. Actions (prefixed with ``A``, as ``AWant``) are
+a little more demanding, since they also require syntax constructors. Greetings (prefixed
+with ``G``) are pure strings.
+
+Some explanations can be found in the 
+[implementation document Implementation.html], which is produced from the
+concrete syntax files
+[``SentencesI.gf`` http://code.haskell.org/gf/examples/phrasebook/SentencesI.gf]
+and
+[``WordsEng.gf`` http://code.haskell.org/gf/examples/phrasebook/WordsEng.gf]
+by ``make doc``.
+
+Here are the steps to follow for contributors:
++ Make sure you have the latest sources 
+  from [GF Darcs http://www.grammaticalframework.org/doc/gf-developers.html], 
+  using ``darcs pull``.
++ Also make sure that you have compiled the library by ``make present`` in ``gf/lib/src/``.
++ Work in the directory 
+  [``gf/examples/phrasebook/`` http://code.haskell.org/gf/examples/phrasebook/].
++ After you've finished your contribution, recompile the phrasebook by ``make pgf``.
++ Save your changes in ``darcs record .`` (in the ``phrasebook`` subdirectory).
++ Make a patch file with ``darcs send -o my_phrasebook_patch``, which you can 
+  send to GF maintainers.
++ (Recommended:) Test the phrasebook on your local server:
+  + Go to ``gf/src/server/`` and follow the instructions in the
+    [project Wiki http://code.google.com/p/grammatical-framework/wiki/LaunchWebDemos].
+  + Make sure that ``Phrasebook.pgf`` is available to you GF server (see project wiki).
+  + Launch ``lighttpd`` (see project wiki).
+  + How you can open ``gf/examples/phrasebook/www/phrasebook.html`` and use your phrasebook!
+
+
+- Don't delete anything! But you are free to correct incorrect forms.
+- Don't change the module structure! 
+- Don't compromise quality to gain coverage: //non multa sed multum!// 
+
+
 
 
 =Conclusions (tentative)=

@@ -29,7 +29,8 @@ doc:
 	rm -f Ontology.gf
 	cat SentencesI.gf WordsEng.gf >Implementation.gf
 	gfdoc Implementation.gf
-	txt2tags -thtml --toc phrasebook.txt
+	txt2tags -thtml --toc doc-phrasebook.txt
+	txt2tags -thtml help-phrasebook.txt
 	rm -f Ontology.gf Implementation.gf
 
 upload:: Phrasebook.pgf
