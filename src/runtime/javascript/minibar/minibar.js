@@ -72,14 +72,17 @@ var server = {
 function start_minibar(opts) { // typically called when the HTML document is loaded
     if(opts) for(var o in opts) options[o]=opts[o];
     var surface=div_id("surface");
+    var extra=div_id("extra");
     //surface.setAttribute("onclick","add_typed_input(this)");
     appendChildren(element("minibar"),
 		   [div_id("menubar"),
 		    surface,
 		    div_id("words"),
-		    div_id("translations")]);
+		    div_id("translations"),
+		    extra]);
+    append_extra_buttons(extra);
     if(!options.grammars_url) options.grammars_url=options.server+"/grammars/";
-    if(options.grammar_list) show_grammarlist(options.grammar_list)
+    if(options.grammar_list) show_grammarlist(options.grammar_list);
     else server.get_grammarlist("show_grammarlist");
 }
 
@@ -294,11 +297,7 @@ function show_completions(completions) {
     else emptycnt++;
   }
   if(emptycnt>0) get_translations(menu);
-  else {
-    var trans=element("translations");
-    trans.innerHTML="";
-    extra_actions(menu.grammar,trans,target_lang());
-  }
+  else element("translations").innerHTML="";
   var surface=element("surface");
   if(surface.typed && emptycnt==completions.length) {
       if(surface.typed.value=="") remove_typed_input(surface);
@@ -349,7 +348,6 @@ function show_translations(translations) {
 				      text(lin[i].text))]));
     trans.appendChild(wrap("table",tbody));
   }
-  extra_actions(grammar,trans,to);
 }
 
 function show_groupedtranslations(translations) {
@@ -374,7 +372,6 @@ function show_groupedtranslations(translations) {
 	    trans.appendChild(wrap("table",tbody));
 	}
     }
-    extra_actions(grammar,trans,to);
 }
 
 function abstree_button(abs) {
@@ -398,27 +395,29 @@ function toggle_img(i) {
   i.other=tmp;
 }
 
-
-function extra_actions(grammar,trans,to) {
-    if(options.try_google) try_google(grammar,trans,to);
-    if(options.feedback_button) feedback_button(trans);
+function append_extra_buttons(extra) {
+    if(options.try_google)
+	extra.appendChild(button("Try this sentence in Google Translate","try_google()"));
+    if(options.feedback_button)
+	appendChildren(extra,[text(" "),button("Feedback","open_feedback()")]);
 }
 
-function try_google(grammar,trans,to) {
+function try_google() {
     var menu=element("language_menu");
+    var trans=element("translations");
+    var surface=element("surface");
+    var to=target_lang();
+    var grammar=menu.grammar;
     var c=menu.current;
+    var s=c.input;
+    if(surface.typed) s+=surface.typed.value;
     var url="http://translate.google.com/?sl="+langpart(c.from,grammar.name);
     if(to!="-1") url+="&tl="+to;
-    url+="&q="+encodeURIComponent(c.input);
-    var link=empty("a","href",url);
-    link.innerHTML="Try this sentence in Google Translate";
-    link.setAttribute("target","translate.google.com");
-    trans.appendChild(link);
+    url+="&q="+encodeURIComponent(s);
+    window.open(url);
 }
 
 function feedback_button(trans) {
-    trans.appendChild(text(" "));
-    trans.appendChild(button("Feedback","open_feedback()"));
 }
 
 function open_feedback() {
