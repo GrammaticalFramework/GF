@@ -94,7 +94,10 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
         symbolToCFSymbol (SymCat n l)    = [NonTerminal (fcatToCat (args!!n) l)]
         symbolToCFSymbol (SymLit n l)    = [NonTerminal (fcatToCat (args!!n) l)]
         symbolToCFSymbol (SymKS ts)      = map Terminal ts
-
+        symbolToCFSymbol (SymKP ts as)   = map Terminal $ ts 
+                                           ---- ++ [t | Alt ss _ <- as, t <- ss]
+                                           ---- should be alternatives in [[CFSymbol]]
+                                           ---- AR 3/6/2010
         fixProfile :: Array DotPos Symbol -> Int -> Profile
         fixProfile row i = [k | (k,j) <- nts, j == i]
             where
