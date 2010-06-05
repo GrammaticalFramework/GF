@@ -191,12 +191,12 @@ getParseResult (PState pgf cnc chart items) ty@(DTyp _ start _) =
                                            return (AK fid lbl)
               Nothing                -> mzero
 
-    go rec fcat' (d,fcat)
+    go rec_ fcat' (d,fcat)
       | fcat < totalCats cnc = return (Set.empty,EMeta (fcat'*10+d))   -- FIXME: here we assume that every rule has at most 10 arguments
-      | Set.member fcat rec  = mzero
+      | Set.member fcat rec_  = mzero
       | otherwise            = foldForest (\funid args trees -> 
                                                   do let CncFun fn lins = cncfuns cnc ! funid
-                                                     args <- mapM (go (Set.insert fcat rec) fcat) (zip [0..] args)
+                                                     args <- mapM (go (Set.insert fcat rec_) fcat) (zip [0..] args)
                                                      check_ho_fun fn args
                                                   `mplus`
                                                   trees)
