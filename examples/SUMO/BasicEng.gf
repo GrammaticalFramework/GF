@@ -1,5 +1,5 @@
 --# -path=.:englishExtended:abstract:common:
-concrete BasicEng of Basic = CatEng - [Text] ** open DictLangEng, ParadigmsEng, ResEng, Coordination, Prelude, ParamBasic, NounEng in {
+concrete BasicEng of Basic = CatEng - [Text] ** open DictLangEng, DictEng, ParadigmsEng, ResEng, Coordination, Prelude, ParamBasic, NounEng in {
 
 lincat 
   Class = CN ;
@@ -82,6 +82,8 @@ lin
                    g = c2.g; lock_CN = <>
                  };
 
+  KappaFn c ob2 = ApposCN (AdvCN (AdvCN (UseN class_N) (PrepNP part_Prep (DetCN (DetQuant IndefArt NumPl) c))) where_Adv) (sentToNoun ob2) ;
+
   desc c1 c2 i = c2 ;
   descClass c dc = c;                
   desc2desc c1 c2 i d = d;                
@@ -89,7 +91,6 @@ lin
   subClassStm c1 c2 sc = lin StmtS (ss (c1. s ! Sg ! Nom ++ "is a subclass of" ++ c2.s ! Sg ! Nom)) ;
   instStm c i = lin StmtS (ss (i.s ! Nom ++ "is an instance of" ++ c.s ! Sg ! Nom)) ;
   formStm f = lin StmtS (ss (f.s ! Indep ! Pos)) ;
-  subClassCStm c1 c2 constr sc= lin StmtS (ss (c1.s ! Sg ! Nom ++ "is a subclass of" ++ c2.s ! Sg ! Nom ++ "where" ++ constr.s ! Indep ! Pos)) ;
 
 lindef
   Ind = \x -> {s = \\_ => x; a = agrP3 Sg; lock_NP = <>} ;
