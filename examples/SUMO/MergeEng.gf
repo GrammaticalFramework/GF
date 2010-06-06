@@ -723,7 +723,6 @@ lin
   HourFn ob1 ob2 = AdvCN (ApposCN (UseN hour_N) ob1) (PrepNP part_Prep (MassNP ob2)) ;
   IntersectionFn ob1 ob2 = AdvNP (DetCN (DetQuant DefArt NumSg) (UseN intersection_N)) (PrepNP part_Prep (ConjNP and_Conj (BaseNP ob1 ob2))) ;
   IntervalFn ob1 ob2 = AdvCN (AdvCN (UseN interval_N) (PrepNP from_Prep ob1)) (PrepNP to_Prep ob2) ;
-  KappaFn c ob2 = ApposCN (AdvCN (AdvCN (UseN class_N) (PrepNP part_Prep (DetCN (DetQuant IndefArt NumPl) c))) where_Adv) (sentToNoun ob2) ;
   ListConcatenateFn ob1 ob2 = AdvNP (AdvNP (DetCN (DetQuant DefArt NumSg) (UseN concatenation_N)) (PrepNP part_Prep ob1)) (PrepNP to_Prep ob2) ;
   ListOrderFn ob1 ob2 = AdvNP (AdvNP (DetCN (DetQuant DefArt NumSg) (UseN element_N)) (PrepNP with_Prep (MassNP (ApposCN (UseN number_N) ob2)))) (PrepNP in_Prep ob1) ;
   LogFn ob1 ob2 = AdvNP (AdvNP (DetCN (DetQuant DefArt NumSg) (UseN logarithm_N)) (PrepNP part_Prep ob1)) (PrepNP in_Prep (DetCN (DetQuant DefArt NumSg) (ApposCN (UseN base_N) ob2))) ;

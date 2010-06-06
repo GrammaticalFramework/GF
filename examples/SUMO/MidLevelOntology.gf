@@ -473,10 +473,9 @@ abstract MidLevelOntology = Merge, Elements ** {
   fun BathingDevice : Class ;
   fun BathingDevice_Class : SubClass BathingDevice WashingDevice ;
 
-  -- A Room that contains a WashBasin and 
-  -- possibly a Toilet.
+  -- A Room that contains a WashBasin and possibly a Toilet.
   fun Bathroom : Class ;
-  fun Bathroom_Room : SubClassC Bathroom Room (\R -> exists Toilet (\T -> located(var Toilet Physical ? T)(var Room Object ? R)));
+  def Bathroom = KappaFn Room (\R -> exists Toilet (\T -> located (var Toilet Physical ? T) (var Room Object ? R)));
 
   -- A thin stick which is used for OrchestralConducting.
   fun Baton : Class ;
@@ -798,7 +797,7 @@ abstract MidLevelOntology = Merge, Elements ** {
 
   -- A Cow that is Male.
   fun Bull : Class ;
-  fun Bull_Cow : SubClassC Bull Cow (\B -> attribute(var Cow Object ? B)(el SexAttribute Attribute ? Male));
+  def Bull = KappaFn Cow (\B -> attribute (var Cow Object ? B) (el SexAttribute Attribute ? Male)) ;
 
   -- A Projectile that is designed to be fired by a Gun.
   fun Bullet : Class ;
@@ -859,7 +858,7 @@ abstract MidLevelOntology = Merge, Elements ** {
 
   -- A young Cow, i.e. a Cow that is NonFullyFormed.
   fun Calf : Class ;
-  fun Calf_Cow : SubClassC Calf Cow (\C -> attribute(var Cow Object ? C)(el DevelopmentalAttribute Attribute ? NonFullyFormed));
+  def Calf = KappaFn Cow (\C -> attribute (var Cow Object ? C) (el DevelopmentalAttribute Attribute ? NonFullyFormed));
 
   -- A Device which is capable of Photographing.
   fun Camera : Class ;
@@ -1412,7 +1411,8 @@ abstract MidLevelOntology = Merge, Elements ** {
   -- A SingleFamilyResidence that may be owned 
   -- by a member of the SocialUnit that lives there.
   fun CondominiumUnit : Class ;
-  fun CondominiumUnit_SingleFamilyResidence : SubClassC CondominiumUnit SingleFamilyResidence (\UNIT -> exists Human (\PERSON -> and ( home (var Human Human ? PERSON)(var SingleFamilyResidence PermanentResidence ? UNIT))( possesses(var Human Agent ? PERSON)(var SingleFamilyResidence Object ? UNIT))));
+  def CondominiumUnit = KappaFn SingleFamilyResidence (\UNIT -> exists Human (\PERSON -> and (home (var Human Human ? PERSON) (var SingleFamilyResidence PermanentResidence ? UNIT))
+                                                                                             (possesses (var Human Agent ? PERSON) (var SingleFamilyResidence Object ? UNIT)))) ;
 
   -- The class of ThreeDimensionalFigures which are 
   -- produced by rotating a RightTriangle around its RightAngle.
@@ -2290,7 +2290,7 @@ abstract MidLevelOntology = Merge, Elements ** {
 
   -- A Cow that is Female.
   fun FemaleCow : Class ;
-  fun FemaleCow_Cow : SubClassC FemaleCow Cow (\COW -> attribute (var Cow Object ? COW)(el SexAttribute Attribute ? Female));
+  def FemaleCow = KappaFn Cow (\COW -> attribute (var Cow Object ? COW) (el SexAttribute Attribute ? Female)) ;
 
   -- A StationaryArtifact that serves to demarcate or
   -- to prevent access to or from the area that the Fence surrounds.
@@ -2866,7 +2866,7 @@ abstract MidLevelOntology = Merge, Elements ** {
 
   -- A Female Chicken.
   fun Hen : Class ;
-  fun Hen_Chicken : SubClassC Hen Chicken (\H -> attribute(var Chicken Object ? H)(el SexAttribute Attribute ? Female));
+  def Hen = KappaFn Chicken (\H -> attribute (var Chicken Object ? H) (el SexAttribute Attribute ? Female)) ;
 
   -- A plant_eating Mammal.
   fun Herbivore : Class ;
@@ -3033,7 +3033,7 @@ abstract MidLevelOntology = Merge, Elements ** {
 
   -- Water that has the PhysicalState of Solid.
   fun Ice : Class ;
-  fun Ice_Water : SubClassC Ice Water (\ICE -> attribute(var Water Object ? ICE)(el PhysicalState Attribute ? Solid));
+  def Ice = KappaFn Water (\ICE -> attribute (var Water Object ? ICE) (el PhysicalState Attribute ? Solid)) ;
 
   -- A proposition is Illegal just in case it is inconsistent 
   -- with any proposition that is a Law.
@@ -3302,8 +3302,8 @@ abstract MidLevelOntology = Merge, Elements ** {
 
   -- A young Sheep, i.e. a Sheep that is NonFullyFormed.
   fun Lamb : Class ;
-  fun Lamb_Sheep : SubClassC Lamb Sheep (\L -> attribute (var Sheep Object ? L)
-                                                         (el DevelopmentalAttribute Attribute ? NonFullyFormed));
+  def Lamb = KappaFn Sheep (\L -> attribute (var Sheep Object ? L)
+                                            (el DevelopmentalAttribute Attribute ? NonFullyFormed)) ;
 
   -- Any instance of Transportation where the 
   -- instrument is a LandVehicle.
@@ -4331,7 +4331,7 @@ abstract MidLevelOntology = Merge, Elements ** {
 
   -- A Sentence that expresses an order for something or that something be done.
   fun Order : Class ;
-  fun Order_Sentence : SubClassC Order Sentence (\SENTENCE -> exists Ordering (\ORDER -> result(var Ordering Process ? ORDER)(var Sentence Entity ? SENTENCE)));
+  def Order = KappaFn Sentence (\SENTENCE -> exists Ordering (\ORDER -> result (var Ordering Process ? ORDER) (var Sentence Entity ? SENTENCE)));
 
   -- Any CompoundSubstance that has a Carbon base.
   fun OrganicCompound : Class ;
@@ -4768,18 +4768,17 @@ abstract MidLevelOntology = Merge, Elements ** {
   -- which can be divided into two or more contemporaneous subProcesses which are 
   -- also instances of Music.
   fun PolyphonicMusic : Class ;
-  fun PolyphonicMusic_Music : SubClassC PolyphonicMusic Music
-                                        (\MUSIC -> exists Music (\PART1 -> 
-                                                   exists Music (\PART2 -> and (and (and (and (subProcess (var Music Process ? PART1)
-                                                                                                          (var Music Process ? MUSIC))
-                                                                                              (subProcess (var Music Process ? PART2)
-                                                                                                          (var Music Process ? MUSIC)))
-                                                                                         (not (equal (var Music Entity ? PART1)
-                                                                                                     (var Music Entity ? PART2))))
-                                                                                    (cooccur (var Music Physical ? PART1)
-                                                                                             (var Music Physical ? MUSIC)))
-                                                                               (cooccur (var Music Physical ? PART2)
-                                                                                        (var Music Physical ? MUSIC)))));
+  def PolyphonicMusic = KappaFn Music (\MUSIC -> exists Music (\PART1 -> 
+                                                 exists Music (\PART2 -> and (and (and (and (subProcess (var Music Process ? PART1)
+                                                                                                        (var Music Process ? MUSIC))
+                                                                                            (subProcess (var Music Process ? PART2)
+                                                                                                        (var Music Process ? MUSIC)))
+                                                                                       (not (equal (var Music Entity ? PART1)
+                                                                                                   (var Music Entity ? PART2))))
+                                                                                  (cooccur (var Music Physical ? PART1)
+                                                                                           (var Music Physical ? MUSIC)))
+                                                                             (cooccur (var Music Physical ? PART2)
+                                                                                      (var Music Physical ? MUSIC)))));
 
   -- The Position of head of the RomanCatholicChurch.
   fun Pope : Ind Position ;
@@ -5021,7 +5020,7 @@ abstract MidLevelOntology = Merge, Elements ** {
   -- An interrogative Sentence, a Sentence that 
   -- poses a question.
   fun Question : Class ;
-  fun Question_Sentence : SubClassC Question Sentence (\SENTENCE -> exists Questioning (\QUESTION -> result(var Questioning Process ? QUESTION)(var Sentence Entity ? SENTENCE)));
+  def Question = KappaFn Sentence (\SENTENCE -> exists Questioning (\QUESTION -> result (var Questioning Process ? QUESTION) (var Sentence Entity ? SENTENCE)));
 
   -- A burrowing Rodent with a short tail and long ears.
   fun Rabbit : Class ;
@@ -5054,12 +5053,11 @@ abstract MidLevelOntology = Merge, Elements ** {
   -- Any instance of RadiatingLight that can 
   -- be detected by normal human visual perception.
   fun RadiatingVisibleLight : Class ;
-  fun RadiatingVisibleLight_RadiatingLight : SubClassC RadiatingVisibleLight RadiatingLight 
-                                                       (\R -> exists Human (\H -> 
-                                                              exists Seeing (\S -> and (agent (var Seeing Process ? S)
-                                                                                              (var Human Agent ? H))
-                                                                                       (patient (var Seeing Process ? S)
-                                                                                                (var RadiatingLight Entity ? R)))));
+  def RadiatingVisibleLight = KappaFn RadiatingLight (\R -> exists Human (\H -> 
+                                                            exists Seeing (\S -> and (agent (var Seeing Process ? S)
+                                                                                            (var Human Agent ? H))
+                                                                                     (patient (var Seeing Process ? S)
+                                                                                              (var RadiatingLight Entity ? R))))) ;
 
   -- Any instance of Broadcasting which is 
   -- intended to be received by a RadioReceiver.
@@ -5285,7 +5283,7 @@ abstract MidLevelOntology = Merge, Elements ** {
   -- A Sentence that expresses a request for something or 
   -- that something be done.
   fun Request : Class ;
-  fun Request_Sentence : SubClassC Request Sentence (\SENTENCE -> exists Requesting (\REQUEST -> result (var Requesting Process ? REQUEST)(var Sentence Entity ? SENTENCE)));
+  def Request = KappaFn Sentence (\SENTENCE -> exists Requesting (\REQUEST -> result (var Requesting Process ? REQUEST)(var Sentence Entity ? SENTENCE)));
 
   -- The Profession of being a scientific 
   -- researcher.
@@ -5427,7 +5425,7 @@ abstract MidLevelOntology = Merge, Elements ** {
 
   -- A Male Chicken.
   fun Rooster : Class ;
-  fun Rooster_Chicken : SubClassC Rooster Chicken (\R -> attribute(var Chicken Object ? R)(el SexAttribute Attribute ? Male));
+  def Rooster = KappaFn Chicken (\R -> attribute (var Chicken Object ? R) (el SexAttribute Attribute ? Male)) ;
 
   -- Motion that begins and ends at the same point, 
   -- because the trajectory of the Motion is circular.
@@ -5632,7 +5630,7 @@ abstract MidLevelOntology = Merge, Elements ** {
   -- component or power source (not the user, which would be a 
   -- UserPoweredVehicle).
   fun SelfPoweredDevice : Class ;
-  fun SelfPoweredDevice_Device : SubClassC SelfPoweredDevice Device (\O -> exists Artifact (\G -> powerPlant(var Device Device ? O) (var Artifact Artifact ? G)));
+  def SelfPoweredDevice = KappaFn Device (\O -> exists Artifact (\G -> powerPlant (var Device Device ? O) (var Artifact Artifact ? G))) ;
 
   -- SelfPoweredRoadVehicle is the 
   -- class of RoadVehicles that are also PoweredVehicles. 
@@ -6086,9 +6084,8 @@ abstract MidLevelOntology = Merge, Elements ** {
 
   -- A Sentence that is stated to be true.
   fun Statement : Class ;
-  fun Statement_Sentence : SubClassC Statement Sentence
-                                     (\SENTENCE -> exists Stating (\STATE -> result (var Stating Process ? STATE)
-                                                                                    (var Sentence Entity ? SENTENCE)));
+  def Statement = KappaFn Sentence (\SENTENCE -> exists Stating (\STATE -> result (var Stating Process ? STATE)
+                                                                                  (var Sentence Entity ? SENTENCE))) ;
 
   -- Any UnilateralGetting which is not permitted by the 
   -- origin of the UnilateralGetting. These cases of UnilateralGetting are 
@@ -6294,9 +6291,8 @@ abstract MidLevelOntology = Merge, Elements ** {
   -- A Sentence that is assumed to be true, possibly 
   -- just for the sake of argument.
   fun Supposition : Class ;
-  fun Supposition_Sentence : SubClassC Supposition Sentence
-                                       (\SENTENCE -> exists Supposing (\SUPPOSE -> result (var Supposing Process ? SUPPOSE)
-                                                                                          (var Sentence Entity ? SENTENCE)));
+  def Supposition = KappaFn Sentence (\SENTENCE -> exists Supposing (\SUPPOSE -> result (var Supposing Process ? SUPPOSE)
+                                                                                        (var Sentence Entity ? SENTENCE))) ;
 
   -- Surfactants, also known as Wetting agents, 
   -- lower the surface tension of a Liquid, allowing easier spreading. The 
@@ -6695,8 +6691,9 @@ abstract MidLevelOntology = Merge, Elements ** {
   -- events in which the instrument is an instance of
   -- RoadVehicle.
   fun TransportViaRoadVehicle : Class ;
-  fun TransportViaRoadVehicle_Class : SubClass TransportViaRoadVehicle LandTransportation ;
-  fun TransportViaRoadVehicle_Transportation : SubClassC TransportViaRoadVehicle Transportation (\TRANSPORT -> exists RoadVehicle (\VEHICLE -> instrument(var Transportation Process ? TRANSPORT)(var RoadVehicle Object ? VEHICLE)));
+  def TransportViaRoadVehicle = both LandTransportation
+                                     (KappaFn Transportation (\TRANSPORT -> exists RoadVehicle (\VEHICLE -> instrument (var Transportation Process ? TRANSPORT) 
+                                                                                                                       (var RoadVehicle Object ? VEHICLE))));
 
   -- A CommercialAgent whose services include Transportation, 
   -- e.g. a RailroadCompany, an airline, a cruise ship line, etc.
@@ -7056,11 +7053,10 @@ abstract MidLevelOntology = Merge, Elements ** {
 
   -- A Clock that can be worn on the Wrist.
   fun WatchClock : Class ;
-  fun WatchClock_Clock : SubClassC WatchClock Clock 
-                                   (\C -> exists Human (\P -> exists Wrist (\W -> and (wears (var Human Animal ? P)
-                                                                                             (var Clock Clothing ? C))
-                                                                                      (located (var Clock Physical ? C)
-                                                                                               (var Wrist Object ? W)))));
+  def WatchClock = KappaFn Clock (\C -> exists Human (\P -> exists Wrist (\W -> and (wears (var Human Animal ? P)
+                                                                                           (var Clock Clothing ? C))
+                                                                                    (located (var Clock Physical ? C)
+                                                                                             (var Wrist Object ? W))))) ;
 
   -- Any instance of Transportation where the instrument is a WaterVehicle.
   fun WaterTransportation : Class ;

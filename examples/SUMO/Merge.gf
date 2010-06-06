@@ -132,8 +132,11 @@ abstract Merge = Basic ** {
 
   -- An Organism with eukaryotic Cells, and lacking 
   -- stiff cell walls, plastids, and photosynthetic pigments.
-  fun Animal  : Class ;
-  fun Animal_Organism  : SubClassC Animal Organism (\ANIMAL -> and (forall AnimalSubstance (\SUBSTANCE -> part(var AnimalSubstance Object ? SUBSTANCE)(var Organism Object ? ANIMAL))) (forall AnimalAnatomicalStructure (\STRUCTURE -> part(var AnimalAnatomicalStructure Object ? STRUCTURE)(var Organism Object ? ANIMAL)))) ;
+  fun Animal : Class ;
+  def Animal = KappaFn Organism (\ANIMAL -> and (forall AnimalSubstance           (\SUBSTANCE -> part (var AnimalSubstance Object ? SUBSTANCE)
+                                                                                                      (var Organism Object ? ANIMAL)))
+                                                (forall AnimalAnatomicalStructure (\STRUCTURE -> part (var AnimalAnatomicalStructure Object ? STRUCTURE)
+                                                                                                      (var Organism Object ? ANIMAL)))) ;
 
   -- AnatomicalStructures that 
   -- are possessed exclusively by Animals.
@@ -2019,9 +2022,10 @@ abstract Merge = Basic ** {
   -- The process of creating a traumatic wound or 
   -- injury. Since Injuring is not possible without some biologic function 
   -- of the organism being injured, it is a subclass of BiologicalProcess.
-  fun Injuring  : Class ;
-  fun Injuring_Class : SubClass Injuring PathologicProcess ;
-  fun Injuring_Damaging  : SubClassC Injuring Damaging (\INJ -> exists Organism (\ORGANISM -> patient(var Damaging Process ? INJ)(var Organism Entity ? ORGANISM)));
+  fun Injuring : Class ;
+  def Injuring = both PathologicProcess
+                      (KappaFn Damaging (\INJ -> exists Organism (\ORGANISM -> patient (var Damaging Process ? INJ)
+                                                                                       (var Organism Entity ? ORGANISM)))) ;
 
   -- A Class of small Arthropods that are 
   -- air_breathing and that are distinguished by appearance.
@@ -2088,18 +2092,6 @@ abstract Merge = Basic ** {
   -- would return the subclass of ConstantQuantity comprising quantities 
   -- between 8 and 14 meters in length.
   fun IntervalFn : El ConstantQuantity -> El ConstantQuantity -> Desc ConstantQuantity ;
-  
-  -- A class-forming operator that takes two arguments: 
-  -- a variable and a formula containing at least one unbound 
-  -- occurrence of the variable. The result of applying kappa 
-  -- to a variable and a formula is the set or class of things 
-  -- that satisfy the formula. For example, we can denote the set or class
-  -- of prime numbers that are less than 100 with the following expression:
-  -- (KappaFn ?NUMBER (and (instance ?NUMBER PrimeNumber) 
-  --                       (lessThan ?NUMBER 100))). 
-  -- Note that the use of this function is discouraged, since there is 
-  -- currently no axiomatic support for it.
-  fun KappaFn : (c : Class) -> (Ind c -> Formula) -> Class ;
 
   -- DeductiveArguments that are not 
   -- ValidDeductiveArguments, i.e. it is not the case that the set of premises 
@@ -2162,7 +2154,8 @@ abstract Merge = Basic ** {
   -- while the second refers to trials and other sorts of judicial hearings 
   -- where the merits of a LegalAction are decided.
   fun JudicialProcess  : Class ;
-  fun JudicialProcess_PoliticalProcess  : SubClassC JudicialProcess PoliticalProcess (\PROCESS -> forall Organization (\ORG -> agent(var PoliticalProcess Process ? PROCESS)(var Organization Agent ? ORG)));
+  def JudicialProcess = KappaFn PoliticalProcess (\PROCESS -> forall Organization (\ORG -> agent (var PoliticalProcess Process ? PROCESS)
+                                                                                                 (var Organization Agent ? ORG))) ;
 
   -- The Class of all Months which are July.
   fun July  : Class ;
@@ -2846,17 +2839,16 @@ abstract Merge = Basic ** {
   fun Necessity  : Ind AlethicAttribute ;
 
   -- The TimePoint that is before all other TimePoints.
-  fun NegativeInfinity  : Ind TimePoint ;
+  fun NegativeInfinity : Ind TimePoint ;
 
   -- An Integer that is less than zero.
-  fun NegativeInteger  : Class ;
+  fun NegativeInteger : Class ;
   fun NegativeInteger_Class : SubClass NegativeInteger (both Integer NegativeRealNumber) ;
 
   -- A RealNumber that is less than zero.
-  fun NegativeRealNumber  : Class ;
-  fun NegativeRealNumber_RealNumber  : SubClassC NegativeRealNumber RealNumber 
-                                                 (\NUMBER -> lessThan (var RealNumber Quantity ? NUMBER)
-                                                                      (el Integer Quantity ? (toInt 0)));
+  fun NegativeRealNumber : Class ;
+  def NegativeRealNumber = KappaFn RealNumber (\NUMBER -> lessThan (var RealNumber Quantity ? NUMBER)
+                                                                   (el Integer Quantity ? (toInt 0)));
 
   -- A system in Vertebrates that is made up of 
   -- the Brain, the spinal cord, nerves, etc.
@@ -2864,13 +2856,13 @@ abstract Merge = Basic ** {
   fun NervousSystem_Class : SubClass NervousSystem (both AnimalAnatomicalStructure Organ) ;
 
   -- Components of the AtomicNucleus. They have no charge.
-  fun Neutron  : Class ;
+  fun Neutron : Class ;
   fun Neutron_Class : SubClass Neutron SubatomicParticle ;
 
   -- SI force measure. Symbol: N. It is that force 
   -- which gives to a mass of 1 kilogram an acceleration of 1 Meter per 
   -- SecondDuration. Newton = m*kg*s^(_2).
-  fun Newton  : Ind CompositeUnitOfMeasure ;
+  fun Newton : Ind CompositeUnitOfMeasure ;
 
   -- Instances of
   -- this Class are UnitsOfMeasure that are applied to a single
@@ -2896,8 +2888,9 @@ abstract Merge = Basic ** {
   fun NonnegativeInteger_Class : SubClass NonnegativeInteger (both Integer NonnegativeRealNumber) ;
 
   -- A RealNumber that is greater than or equal to zero.
-  fun NonnegativeRealNumber  : Class ;
-  fun NonnegativeRealNumber_RealNumber  : SubClassC NonnegativeRealNumber RealNumber (\NUMBER -> greaterThanOrEqualTo(var RealNumber Quantity ? NUMBER)(el Integer Quantity ? (toInt 0)));
+  fun NonnegativeRealNumber : Class ;
+  def NonnegativeRealNumber = KappaFn RealNumber (\NUMBER -> greaterThanOrEqualTo (var RealNumber Quantity ? NUMBER)
+                                                                                  (el Integer Quantity ? (toInt 0))) ;
 
   -- A Class containing all of the 
   -- Attributes that are specific to morality, legality, aesthetics, 
@@ -3253,8 +3246,11 @@ abstract Merge = Basic ** {
   -- An Organism having cellulose cell walls, growing 
   -- by synthesis of Substances, generally distinguished by the presence of 
   -- chlorophyll, and lacking the power of locomotion.
-  fun Plant  : Class ;
-  fun Plant_Organism  : SubClassC Plant Organism (\PLANT -> and (forall PlantSubstance (\SUBSTANCE -> part(var PlantSubstance Object ? SUBSTANCE)(var Organism Object ? PLANT))) (forall PlantAnatomicalStructure (\STRUCTURE -> part(var PlantAnatomicalStructure Object ? STRUCTURE)(var Organism Object ? PLANT))));
+  fun Plant : Class ;
+  def Plant = KappaFn Organism (\PLANT -> and (forall PlantSubstance           (\SUBSTANCE -> part (var PlantSubstance Object ? SUBSTANCE)
+                                                                                                   (var Organism Object ? PLANT)))
+                                              (forall PlantAnatomicalStructure (\STRUCTURE -> part (var PlantAnatomicalStructure Object ? STRUCTURE)
+                                                                                                   (var Organism Object ? PLANT)))) ;
 
   -- AnatomicalStructures that 
   -- are possessed exclusively by Plants.
@@ -3324,33 +3320,34 @@ abstract Merge = Basic ** {
   -- Attributes characterizing the 
   -- orientation of an Object, e.g. Vertical versus Horizontal, Left 
   -- versus Right etc.
-  fun PositionalAttribute  : Class ;
+  fun PositionalAttribute : Class ;
   fun PositionalAttribute_Class : SubClass PositionalAttribute RelationalAttribute ;
 
   -- The TimePoint that is after all other TimePoints.
-  fun PositiveInfinity  : Ind TimePoint ;
+  fun PositiveInfinity : Ind TimePoint ;
 
   -- An Integer that is greater than zero.
-  fun PositiveInteger  : Class ;
+  fun PositiveInteger : Class ;
   fun PositiveInteger_Class : SubClass PositiveInteger (both NonnegativeInteger PositiveRealNumber) ;
 
   -- A RealNumber that is greater than 
   -- zero.
-  fun PositiveRealNumber  : Class ;
-  fun PositiveRealNumber_NonnegativeRealNumber  : SubClassC PositiveRealNumber NonnegativeRealNumber (\NUMBER -> greaterThan(var NonnegativeRealNumber Quantity ? NUMBER)(el Integer Quantity ? (toInt 0)));
+  fun PositiveRealNumber : Class ;
+  def PositiveRealNumber = KappaFn NonnegativeRealNumber (\NUMBER -> greaterThan (var NonnegativeRealNumber Quantity ? NUMBER)
+                                                                                 (el Integer Quantity ? (toInt 0)));
 
   -- Attribute that applies to Propositions that are 
   -- possible, i.e. true in at least one possible world.
-  fun Possibility  : Ind AlethicAttribute ;
+  fun Possibility : Ind AlethicAttribute ;
 
   -- English pound of force. The conversion
   -- factor depends on the local value of the acceleration of free fall. A
   -- mean value is used in the conversion axiom associated with this 
   -- constant.
-  fun PoundForce  : Ind CompositeUnitOfMeasure ;
+  fun PoundForce : Ind CompositeUnitOfMeasure ;
 
   -- English mass unit of pounds.
-  fun PoundMass  : Ind UnitOfMass ;
+  fun PoundMass : Ind UnitOfMass ;
 
   -- (PowerSetFn ?CLASS) maps the SetOrClass 
   -- ?CLASS to the SetOrClass of all subclasses of ?CLASS.
@@ -4294,11 +4291,10 @@ abstract Merge = Basic ** {
 
   -- Any Substance that is the result of an 
   -- IntentionalProcess, i.e. any substance that is created by Humans.
-  fun SyntheticSubstance  : Class ;
-  fun SyntheticSubstance_Substance  : SubClassC SyntheticSubstance Substance 
-                                                (\SUBSTANCE -> exists IntentionalProcess
-                                                                      (\PROCESS -> result (var IntentionalProcess Process ? PROCESS)
-                                                                                          (var Substance Entity ? SUBSTANCE)));
+  fun SyntheticSubstance : Class ;
+  def SyntheticSubstance = KappaFn Substance (\SUBSTANCE -> exists IntentionalProcess
+                                                                   (\PROCESS -> result (var IntentionalProcess Process ? PROCESS)
+                                                                                        (var Substance Entity ? SUBSTANCE))) ;
 
   -- The Class of Systeme 
   -- International (SI) units.
@@ -4719,16 +4715,15 @@ abstract Merge = Basic ** {
   fun VerbPhrase_Class : SubClass VerbPhrase Phrase ;
 
   -- An Animal which has a spinal column.
-  fun Vertebrate  : Class ;
-  fun Vertebrate_Animal  : SubClassC Vertebrate Animal 
-                                     (\VERT -> and (and (and (exists SpinalColumn (\SPINE -> component (var SpinalColumn CorpuscularObject ? SPINE)
-                                                                                                       (var Animal CorpuscularObject ? VERT)))
-                                                             (forall NervousSystem (\S -> part (var NervousSystem Object ? S)
-                                                                                               (var Animal Object ? VERT))))
-                                                        (forall Skeleton (\SKELETON -> part (var Skeleton Object ? SKELETON)
+  fun Vertebrate : Class ;
+  def Vertebrate = KappaFn Animal (\VERT -> and (and (and (exists SpinalColumn (\SPINE -> component (var SpinalColumn CorpuscularObject ? SPINE)
+                                                                                                    (var Animal CorpuscularObject ? VERT)))
+                                                          (forall NervousSystem (\S -> part (var NervousSystem Object ? S)
                                                                                             (var Animal Object ? VERT))))
-                                                   (forall Exoskeleton (\SKELETON -> part (var Exoskeleton Object ? SKELETON)
-                                                                                          (var Animal Object ? VERT))));
+                                                     (forall Skeleton (\SKELETON -> part (var Skeleton Object ? SKELETON)
+                                                                                         (var Animal Object ? VERT))))
+                                                (forall Exoskeleton (\SKELETON -> part (var Exoskeleton Object ? SKELETON)
+                                                                                       (var Animal Object ? VERT)))) ;
 
   -- Attribute used to indicate that an Object 
   -- is positioned height_wise with respect to another Object.
