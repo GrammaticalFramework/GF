@@ -5780,6 +5780,9 @@ abstract Merge = Basic ** {
   -- only if the relation is reflexive on the set or class, 
   -- and it is both an antisymmetric relation, and a transitive relation.
   fun partialOrderingOn : (c : Class) -> (El c -> El c -> Formula) -> Formula ;
+  def partialOrderingOn c p = and (reflexiveOn c p)
+                                  (and (TransitiveRelation c p)
+                                       (AntisymmetricRelation c p)) ;
 
   -- The basic mereological relation. All other 
   -- mereological relations are defined in terms of this one. 
@@ -5927,6 +5930,7 @@ abstract Merge = Basic ** {
   -- A binary predicate is reflexive on a set or class only if
   -- every instance of the set or class bears the relation to itself.
   fun reflexiveOn  : (c : Class) -> (El c -> El c -> Formula) -> Formula ;
+  def reflexiveOn c p = forall c (\INST -> p (var c c ? INST) (var c c ? INST)) ;
 
   -- (relatedEvent ?EVENT1 ?EVENT2) means 
   -- that the Process ?EVENT1 is related to the Process ?EVENT2. The 
@@ -6174,6 +6178,8 @@ abstract Merge = Basic ** {
   fun time  : El Physical -> El TimePosition -> Formula ;
   
   fun totalOrderingOn : (c : Class) -> (El c -> El c -> Formula) -> Formula ;
+  def totalOrderingOn c p = and (partialOrderingOn c p)
+                                (trichotomizingOn  c p) ;
 
   -- (top ?TOP ?OBJECT) means that ?TOP is the highest maximal 
   -- superficial part of ?OBJECT.
@@ -6188,6 +6194,17 @@ abstract Merge = Basic ** {
   -- crosses or extends across ?OBJ2. Note that crosses and 
   -- penetrates are subrelations of traverses.
   fun traverses  : El Object -> El Object -> Formula ;
+
+  -- A binary predicate ?REL is trichotomizing on a set or class only if, 
+  -- for all instances ?INST1 and ?INST2 of the set or class, 
+  -- at least one of the following holds: 
+  --    (?REL ?INST1 ?INST2), 
+  --    (?REL ?INST2 ?INST1) or 
+  --    (equal ?INST1 ?INST2)
+  fun trichotomizingOn : (c : Class) -> (El c -> El c -> Formula) -> Formula ;
+  def trichotomizingOn c p = forall c (\INST1 -> forall c (\INST2 -> or (or (p (var c c ? INST1) (var c c ? INST2)) 
+                                                                            (p (var c c ? INST2) (var c c ? INST1)))
+                                                                        (equal (var c Entity ? INST1) (var c Entity ? INST2)))) ;
 
   -- The BinaryPredicate that relates a Sentence 
   -- to its TruthValue.
