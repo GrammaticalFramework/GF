@@ -1,4 +1,4 @@
-concrete ExtensionEng of Extension = CatEng ** open MorphoEng, ResEng, ConjunctionEng, StructuralEng, Prelude, ParadigmsEng, Coordination,ParamBasic in {
+concrete ExtensionEng of Extension = CatEng ** open MorphoEng, ResEng, ConjunctionEng, StructuralEng, Prelude, ParadigmsEng, Coordination, ParamBasic in {
 
 
 lincat 
