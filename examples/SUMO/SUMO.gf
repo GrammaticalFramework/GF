@@ -2,23 +2,22 @@
 abstract SUMO =
   Basic,
   Merge,
+  Elements,
+  MidLevelOntology,
+  Transportation,
+  Geography,
   Communications,
+  Government,
   CountriesAndRegions,
   Economy,
-  elements,
-  engineering,
+  Engineering,
   FinancialOntology,
-  Geography,
-  Government,
-  Mid_level_ontology,
   Military,
-  mondial,
+  Mondial,
   QoSontology,
-  Transportation,
   WMD,
   WorldAirportsA_K,
-  WorldAirportsL_Z,
-  HigherOrder
+  WorldAirportsL_Z
   ** {
   
 flags startcat = Stmt ;

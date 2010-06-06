@@ -2,7 +2,7 @@
 
 concrete SUMORon of SUMO =
         MergeRon,
-        Mid_level_ontologyRon
+        MidLevelOntologyRon
         
 
 ** {
