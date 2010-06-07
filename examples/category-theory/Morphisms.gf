@@ -46,7 +46,7 @@ fun iso2epi  :  ({c} : Category)
              -> ({g} : Arrow y x)
              -> (Iso f g -> Epi f) ;
 
-def iso2epi (iso fff g id_fg id_gf) =
+def iso2epi (iso f g id_fg id_gf) =
         epi f (\h,m,eq_hf_mf -> 
                       eqSym (eqTran (eqIdL m)                                                                     --           h = m
                                     (eqTran (eqCompL m id_fg)                                                     --      m . id = h
