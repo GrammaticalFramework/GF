@@ -246,6 +246,7 @@ static char *unlexText(char **arr)
     } else cap = 0;
     *(r++) = ' ';
   }
+  *r = 0;
   return result;
 
 }
