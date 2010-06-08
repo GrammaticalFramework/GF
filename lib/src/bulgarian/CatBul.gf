@@ -1,4 +1,4 @@
-concrete CatBul of Cat = CommonX - [AAnter,ASimul,IAdv,CAdv] ** open ResBul, Prelude, (R = ParamX) in {
+concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, (R = ParamX) in {
 
   flags 
     coding=cp1251; optimize=all_subs;
@@ -87,11 +87,4 @@ concrete CatBul of Cat = CommonX - [AAnter,ASimul,IAdv,CAdv] ** open ResBul, Pre
     N2 = {s : NForm => Str; g : AGender} ** {c2 : Preposition} ;
     N3 = {s : NForm => Str; g : AGender} ** {c2,c3 : Preposition} ;
     PN = {s : Str; g : Gender} ;
-
-
--- Tense, Anteriority and Polarity functions
-
-  lin
-    ASimul = {s = []} ** {a = R.Simul} ;
-    AAnter = {s = []} ** {a = R.Anter} ; --# notpresent
 }
