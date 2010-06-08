@@ -60,7 +60,7 @@ getAllFiles opts ps env file = do
     -- construct list of paths to read
     paths ds = concatMap mkFile ds
       where
-        mkFile (f,st,gfTime,gfoTime,p) =
+        mkFile (f,st,gfTime,imps,p) =
           case st of 
             CSComp                 -> [p </> gfFile f]
             CSRead | isJust gfTime -> [gf2gfo opts (p </> gfFile f)]
@@ -80,7 +80,8 @@ getAllFiles opts ps env file = do
       | otherwise       = do
            (name,st0,t0,imps,p) <- findModule name
            ds <- foldM (get (name:trc)) ds imps
-           let (st,t) | (not . null) [f | (f,_,t1,_,_) <- ds, elem f imps && liftM2 (>=) t0 t1 /= Just True]
+           let (st,t) | (not . null) [f | (f,_,t1,_,_) <- ds, elem f imps && liftM2 (>=) t0 t1 /= Just True] &&
+                        flag optRecomp opts == RecompIfNewer
                                   = (CSComp,Nothing)
                       | otherwise = (st0,t0)
            return ((name,st,t,imps,p):ds)
