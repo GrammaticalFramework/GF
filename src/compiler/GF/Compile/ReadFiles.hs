@@ -54,18 +54,18 @@ getAllFiles :: Options -> [InitPath] -> ModEnv -> FileName -> IOE [FullPath]
 getAllFiles opts ps env file = do
   -- read module headers from all files recursively
   ds <- liftM reverse $ get [] [] (justModuleName file)
-  ioeIO $ putIfVerb opts $ "all modules:" +++ show [name | (name,_,_,_,_) <- ds]
+  ioeIO $ putIfVerb opts $ "all modules:" +++ show [name | (name,_,_,_,_,_) <- ds]
   return $ paths ds
   where
     -- construct list of paths to read
     paths ds = concatMap mkFile ds
       where
-        mkFile (f,st,gfTime,imps,p) =
+        mkFile (f,st,time,has_src,imps,p) =
           case st of 
-            CSComp                 -> [p </> gfFile f]
-            CSRead | isJust gfTime -> [gf2gfo opts (p </> gfFile f)]
-                   | otherwise     -> [p </> gfoFile f]
-            CSEnv                  -> []
+            CSComp             -> [p </> gfFile f]
+            CSRead | has_src   -> [gf2gfo opts (p </> gfFile f)]
+                   | otherwise -> [p </> gfoFile f]
+            CSEnv              -> []
 
     -- | traverses the dependency graph and returns a topologicaly sorted
     -- list of ModuleInfo. An error is raised if there is circular dependency
@@ -75,16 +75,17 @@ getAllFiles opts ps env file = do
         -> IOE [ModuleInfo]   -- ^ the final 
     get trc ds name
       | name `elem` trc = ioeErr $ Bad $ "circular modules" +++ unwords trc
-      | (not . null) [n | (n,_,_,_,_) <- ds, name == n]     --- file already read
+      | (not . null) [n | (n,_,_,_,_,_) <- ds, name == n]     --- file already read
                         = return ds
       | otherwise       = do
-           (name,st0,t0,imps,p) <- findModule name
+           (name,st0,t0,has_src,imps,p) <- findModule name
            ds <- foldM (get (name:trc)) ds imps
-           let (st,t) | (not . null) [f | (f,_,t1,_,_) <- ds, elem f imps && liftM2 (>=) t0 t1 /= Just True] &&
-                        flag optRecomp opts == RecompIfNewer
+           let (st,t) | has_src &&
+                        flag optRecomp opts == RecompIfNewer &&
+                        (not . null) [f | (f,st,t1,_,_,_) <- ds, elem f imps && liftM2 (>=) t0 t1 /= Just True]
                                   = (CSComp,Nothing)
                       | otherwise = (st0,t0)
-           return ((name,st,t,imps,p):ds)
+           return ((name,st,t,has_src,imps,p):ds)
 
     -- searches for module in the search path and if it is found
     -- returns 'ModuleInfo'. It fails if there is no such module
@@ -117,7 +118,7 @@ getAllFiles opts ps env file = do
                                        Right mo          -> return (importsOfModule mo)
       ioeErr $ testErr (mname == name)
                        ("module name" +++ mname +++ "differs from file name" +++ name)
-      return (name,st,t,imps,dropFileName file)
+      return (name,st,t,isJust gfTime,imps,dropFileName file)
 
 isGFO :: FilePath -> Bool
 isGFO = (== ".gfo") . takeExtensions
@@ -161,7 +162,7 @@ data CompStatus =
  | CSEnv  -- gfo is in env
   deriving Eq
 
-type ModuleInfo = (ModName,CompStatus,Maybe ClockTime,[ModName],InitPath)
+type ModuleInfo = (ModName,CompStatus,Maybe ClockTime,Bool,[ModName],InitPath)
 
 importsOfModule :: SourceModule -> (ModName,[ModName])
 importsOfModule (m,mi) = (modName m,depModInfo mi [])
