@@ -229,6 +229,7 @@ data BracketedTokn
   = LeafKS [String]
   | LeafKP [String] [Alternative]
   | Bracket_ CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex [Expr] [BracketedTokn]    -- Invariant: the list is not empty
+  deriving Eq
 
 type LinTable = Array.Array LIndex [BracketedTokn]
 
