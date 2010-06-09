@@ -2,7 +2,7 @@ module PGF.Binary where
 
 import PGF.CId
 import PGF.Data
-import PGF.Macros
+import PGF.Optimize
 import Data.Binary
 import Data.Binary.Put
 import Data.Binary.Get

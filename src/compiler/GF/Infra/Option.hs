@@ -161,6 +161,7 @@ data Flags = Flags {
       optPreprocessors   :: [String],
       optEncoding        :: String,
       optOptimizations   :: Set Optimization,
+      optOptimizePGF     :: Bool,
       optCFGTransforms   :: Set CFGTransform,
       optLibraryPath     :: [FilePath],
       optStartCat        :: Maybe String,
@@ -260,6 +261,7 @@ defaultFlags = Flags {
       optPreprocessors   = [],
       optEncoding        = "latin1",
       optOptimizations   = Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize],
+      optOptimizePGF     = False,
       optCFGTransforms   = Set.fromList [CFGRemoveCycles, CFGBottomUpFilter, 
                                          CFGTopDownFilter, CFGMergeIdentical],
       optLibraryPath     = [],
@@ -348,6 +350,8 @@ optDescr =
      Option [] ["unlexer"] (ReqArg unlexer "UNLEXER") "Use unlexer UNLEXER.",
      Option [] ["optimize"] (ReqArg optimize "OPT") 
                 "Select an optimization package. OPT = all | values | parametrize | none",
+     Option [] ["optimize-pgf"] (NoArg (optimize_pgf True))
+                "Enable or disable global grammar optimization. This could significantly reduce the size of the final PGF file",
      Option [] ["stem"] (onOff (toggleOptimize OptStem) True) "Perform stem-suffix analysis (default on).",
      Option [] ["cse"] (onOff (toggleOptimize OptCSE) True) "Perform common sub-expression elimination (default on).",
      Option [] ["cfg"] (ReqArg cfgTransform "TRANS") "Enable or disable specific CFG transformations. TRANS = merge, no-merge, bottomup, no-bottomup, ...",
@@ -406,6 +410,8 @@ optDescr =
        optimize    x = case lookup x optimizationPackages of
                          Just p  -> set $ \o -> o { optOptimizations = p }
                          Nothing -> fail $ "Unknown optimization package: " ++ x
+                         
+       optimize_pgf x = set $ \o -> o { optOptimizePGF = x }
 
        toggleOptimize x b = set $ setOptimization' x b
 

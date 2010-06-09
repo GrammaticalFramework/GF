@@ -4,6 +4,7 @@ module GFC (mainGFC) where
 import PGF
 import PGF.CId
 import PGF.Data
+import PGF.Optimize
 import GF.Compile
 import GF.Compile.Export
 
@@ -55,7 +56,8 @@ compileCFFiles opts fs =
 unionPGFFiles :: Options -> [FilePath] -> IOE ()
 unionPGFFiles opts fs = 
     do pgfs <- mapM readPGFVerbose fs
-       let pgf = foldl1 unionPGF pgfs
+       let pgf0 = foldl1 unionPGF pgfs
+           pgf = if flag optOptimizePGF opts then optimizePGF pgf0 else pgf0
            pgfFile = grammarName opts pgf <.> "pgf"
        if pgfFile `elem` fs 
          then putStrLnE $ "Refusing to overwrite " ++ pgfFile

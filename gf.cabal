@@ -43,6 +43,7 @@ library
     PGF.Printer
     PGF.Probabilistic
     PGF.Forest
+    PGF.Optimize
     GF.Data.TrieMap
     GF.Data.Utilities
     GF.Data.SortedList
