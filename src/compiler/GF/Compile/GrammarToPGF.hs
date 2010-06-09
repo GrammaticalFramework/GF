@@ -5,7 +5,7 @@ import GF.Compile.Export
 import GF.Compile.GeneratePMCFG
 
 import PGF.CId
-import PGF.Macros(updateProductionIndices)
+import PGF.Optimize(updateProductionIndices)
 import PGF.Check(checkLin)
 import qualified PGF.Macros as CM
 import qualified PGF.Data as C

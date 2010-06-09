@@ -41,6 +41,7 @@ import PGF.Check
 import PGF.CId
 import PGF.Data
 import PGF.Macros
+import PGF.Optimize
 
 
 -- | Compiles a number of source files and builds a 'PGF' structure for them.
@@ -60,7 +61,7 @@ link opts cnc gr = do
                         (True, True) -> ioeIO $ putStrLn "OK" 
                         (False,True) -> return ()
                         _            -> ioeIO $ putStrLn $ "Corrupted PGF"
-                      return gc
+                      return $ if flag optOptimizePGF opts then optimizePGF gc else gc
       Bad s     -> fail s
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar

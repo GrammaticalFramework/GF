@@ -10,7 +10,6 @@ import qualified Data.IntSet as IntSet
 import qualified Data.Array  as Array
 import Data.Maybe
 import Data.List
-import GF.Data.Utilities(sortNub)
 import Text.PrettyPrint
 
 -- operations for manipulating PGF grammars and objects
@@ -147,62 +146,6 @@ cidVar    = mkCId "__gfVar"
 
 _B = mkCId "__gfB"
 _V = mkCId "__gfV"
-
-updateProductionIndices :: PGF -> PGF
-updateProductionIndices pgf = pgf{ concretes = fmap updateConcrete (concretes pgf) }
-  where
-    updateConcrete cnc = 
-      let p_prods   = (filterProductions IntMap.empty . parseIndex cnc) (productions cnc)
-          l_prods   = (linIndex   cnc . filterProductions IntMap.empty) (productions cnc)
-      in cnc{pproductions = p_prods, lproductions = l_prods}
-
-    filterProductions prods0 prods
-      | prods0 == prods1 = prods0
-      | otherwise        = filterProductions prods1 prods
-      where
-        prods1 = IntMap.unionWith Set.union prods0 (IntMap.mapMaybe (filterProdSet prods0) prods)
-
-        filterProdSet prods0 set
-          | Set.null set1 = Nothing
-          | otherwise     = Just set1
-          where
-            set1 = Set.filter (filterRule prods0) set
-
-        filterRule prods0 (PApply funid args) = all (\fcat -> isLiteralFCat fcat || IntMap.member fcat prods0) args
-        filterRule prods0 (PCoerce fcat)      = isLiteralFCat fcat || IntMap.member fcat prods0
-        filterRule prods0 _                   = True
-
-    parseIndex cnc = IntMap.mapMaybeWithKey filterProdSet
-      where
-        filterProdSet fid prods
-          | fid `IntSet.member` ho_fids = Just prods
-          | otherwise                   = let prods' = Set.filter (not . is_ho_prod) prods
-                                          in if Set.null prods'
-                                               then Nothing
-                                               else Just prods'
-
-        is_ho_prod (PApply _ [fid]) | fid == fcatVar = True
-        is_ho_prod _                                 = False
-
-        ho_fids :: IntSet.IntSet
-        ho_fids = IntSet.fromList [fid | cat <- ho_cats
-                                       , fid <- maybe [] (\(CncCat s e _) -> [s..e]) (Map.lookup cat (cnccats cnc))]
-
-        ho_cats :: [CId]
-        ho_cats = sortNub [c | (ty,_,_) <- Map.elems (funs (abstract pgf))
-                             , h <- case ty of {DTyp hyps val _ -> hyps}
-                             , c <- fst (catSkeleton (typeOfHypo h))]
-
-    linIndex cnc productions = 
-      Map.fromListWith (IntMap.unionWith Set.union)
-                       [(fun,IntMap.singleton res (Set.singleton prod)) | (res,prods) <- IntMap.toList productions
-                                                                        , prod <- Set.toList prods
-                                                                        , fun <- getFunctions prod]
-      where
-        getFunctions (PApply funid args) = let CncFun fun _ = cncfuns cnc Array.! funid in [fun]
-        getFunctions (PCoerce fid)       = case IntMap.lookup fid productions of
-                                             Nothing    -> []
-                                             Just prods -> [fun | prod <- Set.toList prods, fun <- getFunctions prod]
 
 
 -- Utilities for doing linearization
