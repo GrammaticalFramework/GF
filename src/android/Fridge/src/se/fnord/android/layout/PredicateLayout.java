@@ -29,7 +29,17 @@ public class PredicateLayout extends ViewGroup {
          * @param vertical_spacing Pixels between items, vertically
          */
         public LayoutParams(int horizontal_spacing, int vertical_spacing) {
-            super(0, 0);
+            this(0, 0, horizontal_spacing, vertical_spacing);
+        }
+
+        /**
+         * @param width 
+         * @param height
+         * @param horizontal_spacing Pixels between items, horizontally
+         * @param vertical_spacing Pixels between items, vertically
+         */
+        public LayoutParams(int width, int height, int horizontal_spacing, int vertical_spacing) {
+            super(width, height);
             this.horizontal_spacing = horizontal_spacing;
             this.vertical_spacing = vertical_spacing;     
         }
