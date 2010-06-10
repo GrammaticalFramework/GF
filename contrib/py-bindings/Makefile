@@ -6,7 +6,7 @@ pythoninc=/usr/include/python2.5
 conf:
 	ln -s $(cbind)/PGFFFI.hs
 	ln -s $(cbind)/pgf.h
-Build: gf.so
+build: gf.so
 
 gf.so:  PGFFFI.hs gfmodule.c
 	gf --make ../../examples/tutorial/embedded/QueryEng.gf
@@ -18,5 +18,6 @@ clean:
 	rm -f *_stub.*
 
 superclean: 
+	make clean
 	rm -f PGFFFI.hs pgf.h Query.pgf
 	rm -f gf.so
