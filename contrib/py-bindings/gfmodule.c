@@ -1,137 +1,185 @@
-#define CAT(a,b) XCAT(a,b)
-#define XCAT(a,b) a ## b
-
-#include <stdio.h>
-#include <stdlib.h>
-#include "pgf.h" 
 #include <Python.h>
+#include "pgf.h"
+
+#define NEWOBJECT(OBJ, GFTYPE) typedef struct {\
+  PyObject_HEAD \
+  GFTYPE obj; \
+} OBJ;
+#define NEWTYPE(TYPE,NAME,OBJECT,DOC) static PyTypeObject TYPE = {\
+  PyObject_HEAD_INIT(NULL)\
+  0,                         /*ob_size*/\
+  NAME,             /*tp_name*/\
+  sizeof(OBJECT), /*tp_basicsize*/\
+  0,                         /*tp_itemsize*/\
+  0,                         /*tp_dealloc*/\
+  0,                         /*tp_print*/\
+  0,                         /*tp_getattr*/\
+  0,                         /*tp_setattr*/\
+  0,                         /*tp_compare*/\
+  0,                         /*tp_repr*/\
+  0,                         /*tp_as_number*/\
+  0,                         /*tp_as_sequence*/\
+  0,                         /*tp_as_mapping*/\
+  0,                         /*tp_hash */\
+  0,                         /*tp_call*/\
+  0,                         /*tp_str*/\
+  0,                         /*tp_getattro*/\
+  0,                         /*tp_setattro*/\
+  0,                         /*tp_as_buffer*/\
+  Py_TPFLAGS_DEFAULT,        /*tp_flags*/\
+  DOC,           /* tp_doc */\
+};
+#define NEWGF(OBJ,GFTYPE,TYPE,NAME,DOC) NEWOBJECT(OBJ,GFTYPE)	\
+NEWTYPE(TYPE,NAME,OBJ,DOC)
+
+
+NEWGF(PGFModule,GF_PGF,PGFType,"gf.pgf","PGF module")
+NEWGF(Lang,GF_Language,LangType,"gf.lang","language")
+NEWGF(gfType,GF_Type,gfTypeType,"gf.type","gf type")
+NEWGF(Expr,GF_Expr,ExprType,"gf.expr","gf expression")
+
 
 static PyObject*
+PGF_repr(PGFModule* obj)
+{
+  return PyString_FromFormat("this is a PGF module");
+}
+
+static PGFModule*
 readPGF(PyObject *self, PyObject *args)
 {
   char *path;
+  PGFModule *pgf;
   if (!PyArg_ParseTuple(args, "s", &path))
     return NULL;
-  GF_PGF pgf = gf_readPGF(path);
-  return PyCObject_FromVoidPtr(pgf, gf_freePGF);
+  pgf = (PGFModule*)PGFType.tp_new(&PGFType,NULL,NULL);
+  if (!pgf) return NULL;
+  pgf->obj = gf_readPGF(path);
+  return pgf;
 }
 
-static PyObject*
-readLanguage(PyObject *self, PyObject *args)
+static Lang*
+readLang(PyObject *self, PyObject *args)
 {
-  char *module_name;
-    if (!PyArg_ParseTuple(args, "s", &module_name))
+  char *langName;
+  Lang *l;
+  if (!PyArg_ParseTuple(args,"s",&langName))
     return NULL;
-  GF_Language lang = gf_readLanguage(module_name);
-  return PyCObject_FromVoidPtr(lang, gf_freeLanguage);
+  l = (Lang*)LangType.tp_new(&LangType,NULL,NULL);
+  if(!l) return NULL;
+  l->obj = gf_readLanguage(langName);
+  return l;
 }
 
-static PyObject*
-showExpr(PyObject *self, PyObject *args)
+int
+checkType(PyObject* obj, PyTypeObject* tp)
 {
-  PyObject *co_exp;
-  GF_Expr exp;
-  if (!PyArg_ParseTuple(args, "O", &co_exp))
-    return NULL;
-  if (!PyCObject_Check(co_exp)) {
-    PyErr_SetString(PyExc_TypeError, "Expected an expression.");
-    return NULL;
-  }
-  exp = (GF_Expr)PyCObject_AsVoidPtr(co_exp);
-  char *str = gf_showExpr(exp);
-  return Py_BuildValue("s",str);
+	int isRight = PyObject_TypeCheck(obj, tp);
+	if (!isRight)
+		PyErr_Format(PyExc_TypeError, "Expected a %s", tp->tp_doc);
+	return isRight;
 }
 
-
-static PyObject*
-startCat(PyObject *self, PyObject *args)
+static gfType*
+startCategory(PyObject *self, PyObject *args)
 {
-  PyObject *cobj;
-  GF_PGF pgf;
-    if (!PyArg_ParseTuple(args, "O", &cobj))
-    return NULL;
-    if (!PyCObject_Check(cobj)) {
-      PyErr_SetString(PyExc_TypeError, "Expected a pgf object");
-      return NULL;
-    }
-   pgf = (GF_PGF)PyCObject_AsVoidPtr(cobj);
-   GF_Type cat = gf_startCat(pgf);
-  return PyCObject_FromVoidPtr(cat, gf_freeType);
+  gfType *cat;
+  PyObject *pgf_obj;
+  if (!PyArg_ParseTuple(args,"O",&pgf_obj))
+    return NULL;	
+  if (!checkType(pgf_obj, &PGFType)) return NULL;
+  cat = (gfType*)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
+  GF_PGF pgf = ((PGFModule*)pgf_obj)->obj;
+  cat->obj = gf_startCat(pgf);
+  return cat;
 }
+
+    
 
 static PyObject*
 parse(PyObject *self, PyObject *args)
 {
-  PyObject *co_pgf, *co_lang, *co_cat;
-  GF_PGF pgf;
-  GF_Language lang;
-  GF_Type cat;
-  char *lexed;
-  if (!PyArg_ParseTuple(args, "OOOs", &co_pgf, &co_lang, &co_cat, &lexed))
-    return NULL;
-  if (!PyCObject_Check(co_pgf)) {
-      PyErr_SetString(PyExc_TypeError, "Expected a PGF object");
-      return NULL;
-  }
-  if (!PyCObject_Check(co_lang)) {
-      PyErr_SetString(PyExc_TypeError, "Expected a Language object");
-      return NULL;
-  }
-  if (!PyCObject_Check(co_cat)) {
-      PyErr_SetString(PyExc_TypeError, "Expected a Type object");
-      return NULL;
-  }
-  pgf = (GF_PGF)PyCObject_AsVoidPtr(co_pgf);
-  lang = (GF_Language)PyCObject_AsVoidPtr(co_lang);
-  cat = (GF_Type)PyCObject_AsVoidPtr(co_cat);
-  GF_Tree *result = gf_parse(pgf, lang, cat, lexed);
-  GF_Tree *p = result;
-  PyObject *parsed = PyList_New(0);
-  if (*p) {
-    do {
-      GF_Expr exp = *(p++);
-      PyObject *co_exp = PyCObject_FromVoidPtr(exp,gf_freeExpr);
-      PyList_Append(parsed, co_exp);
+	PyObject *pgf_pyob, *lang_pyob, *cat_pyob;
+	GF_PGF pgf;
+	GF_Language lang;
+	GF_Type cat;
+	char *lexed;
+	if (!PyArg_ParseTuple(args, "OOOs", &pgf_pyob, &lang_pyob, &cat_pyob, &lexed))
+    	return NULL;
+	if (!checkType(pgf_pyob, &PGFType)) return NULL;	
+	if (!checkType(lang_pyob, &LangType)) return NULL;
+	if (!checkType(cat_pyob, &gfTypeType)) return NULL;
+	pgf = ((PGFModule*)pgf_pyob)->obj;
+	lang = ((Lang*)lang_pyob)->obj;
+	cat = ((gfType*)cat_pyob)->obj;
+	GF_Tree *result = gf_parse(pgf, lang, cat, lexed);
+	GF_Tree *p = result;
+	PyObject *parsed = PyList_New(0);
+	if (*p) {
+    	do {
+			Expr* expr;
+			expr = (Expr*)ExprType.tp_new(&ExprType,NULL,NULL);
+			expr->obj = *(p++);
+      		PyList_Append(parsed, (PyObject*)expr);
       /*      char *str = gf_showExpr(exp);
       puts(str);
       free(str); */
-    } while (*p);
-  }
+    	} while (*p);
+  	}
   return parsed;
 }
 
+static PyObject*
+expr_repr(Expr *self)
+{
+	const char *str = gf_showExpr(self->obj);
+ 	return PyString_FromString(str);
+}
 
 
+    
+    
+      
 
 
-static PyMethodDef GfMethods[] = {
-  {"read_pgf", readPGF, METH_VARARGS,
-   "Read pgf file"},
-  {"read_lang", readLanguage, METH_VARARGS,
-   "Get language from pgf."},
-  {"startcat", startCat, METH_VARARGS,
-   "Get start category from pgf."},
-  {"parse", parse, METH_VARARGS,
-   "Parse string for language and given start category."},
-  {"show_expr", showExpr, METH_VARARGS,
-   "show an expression."},
-  {NULL, NULL, 0, NULL}
-} ;
+static PyMethodDef gf_methods[] = {
+  {"read_pgf", (PyCFunction)readPGF, METH_VARARGS,"Read pgf file."},
+  {"read_language", (PyCFunction)readLang, METH_VARARGS,"Get the language."},
+  {"startcat", (PyCFunction)startCategory, METH_VARARGS,"Get the start category of a pgf module."},
+  {"parse", (PyCFunction)parse, METH_VARARGS,"parse a string."},
+  {NULL, NULL, 0, NULL}  /* Sentinel */
+};
+
+#ifndef PyMODINIT_FUNC/* declarations for DLL import/export */
+#define PyMODINIT_FUNC void
+#endif
 
 PyMODINIT_FUNC
-initgf(void)
+initgf(void) 
 {
-  PyObject *m = Py_InitModule("gf", GfMethods);
-  static char *argv[] = { "gf.so", 0 }, **argv_ = argv;
+  PyObject* m;
+#define READYTYPE(t) t.tp_new = PyType_GenericNew;\
+	if (PyType_Ready(&t) < 0) return;
+
+	PGFType.tp_repr = (reprfunc)PGF_repr;
+	READYTYPE(PGFType)
+	READYTYPE(LangType)
+	READYTYPE(gfTypeType)
+  	ExprType.tp_repr = (reprfunc)expr_repr;
+	READYTYPE(ExprType)
+
+  m = Py_InitModule3("gf", gf_methods,
+		     "Grammatical Framework.");
+  static char *argv[] = {"gf.so", 0}, **argv_ = argv;
   static int argc = 1;
-
   gf_init (&argc, &argv_);
-  hs_add_root (CAT (__stginit_, MODULE));
-  printf("Started gf\n");
-  if (m == NULL) return;
+  hs_add_root (__stginit_PGFFFI);
 
-  /* gfError = PyErr_NewException("gf.error", NULL, NULL);
-  Py_INCREF(gfError);
-  PyModule_AddObject(m, "error", gfError);
-  */
+#define ADDTYPE(t) Py_INCREF(&t);\
+PyModule_AddObject(m, "gf", (PyObject *)&t);
+
+	ADDTYPE(PGFType)
+	ADDTYPE(LangType)
+	ADDTYPE(gfTypeType)
+	ADDTYPE(ExprType)
 }
