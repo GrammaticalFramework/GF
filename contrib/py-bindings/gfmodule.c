@@ -81,39 +81,38 @@ checkType(PyObject* obj, PyTypeObject* tp)
 }
 
 static gfType*
-startCategory(PyObject *self, PyObject *args)
+startCategory(PyObject *self, PyObject *noarg)
 {
   gfType *cat;
-  PyObject *pgf_obj;
-  if (!PyArg_ParseTuple(args,"O",&pgf_obj))
-    return NULL;	
-  if (!checkType(pgf_obj, &PGFType)) return NULL;
+  if (!checkType(self, &PGFType)) return NULL;
   cat = (gfType*)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
-  GF_PGF pgf = ((PGFModule*)pgf_obj)->obj;
-  cat->obj = gf_startCat(pgf);
+  cat->obj = gf_startCat(((PGFModule*)self)->obj);
   return cat;
 }
 
-    
-
 static PyObject*
-parse(PyObject *self, PyObject *args)
+parse(PyObject *self, PyObject *args, PyObject *kws)
 {
-	PyObject *pgf_pyob, *lang_pyob, *cat_pyob;
+	PyObject *lang_pyob, *cat_pyob = NULL;
 	GF_PGF pgf;
 	GF_Language lang;
 	GF_Type cat;
 	char *lexed;
-	if (!PyArg_ParseTuple(args, "OOOs", &pgf_pyob, &lang_pyob, &cat_pyob, &lexed))
+	static char *kwlist[] = {"lexed", "lang", "cat", NULL};
+	if (!PyArg_ParseTupleAndKeywords(args, kws, "sO|O", kwlist,
+									&lexed, &lang_pyob, &cat_pyob))
     	return NULL;
-	if (!checkType(pgf_pyob, &PGFType)) return NULL;	
+	if (!checkType(self, &PGFType)) return NULL;	
 	if (!checkType(lang_pyob, &LangType)) return NULL;
-	if (!checkType(cat_pyob, &gfTypeType)) return NULL;
-	pgf = ((PGFModule*)pgf_pyob)->obj;
+	if (cat_pyob) {
+		if (!checkType(cat_pyob, &gfTypeType)) return NULL;
+		cat = ((gfType*)cat_pyob)->obj;
+	} else { 
+		cat = startCategory(self,NULL)->obj;		
+	} 
+	pgf = ((PGFModule*)self)->obj;
 	lang = ((Lang*)lang_pyob)->obj;
-	cat = ((gfType*)cat_pyob)->obj;
-	GF_Tree *result = gf_parse(pgf, lang, cat, lexed);
-	GF_Tree *p = result;
+	GF_Tree *p = gf_parse(pgf, lang, cat, lexed);
 	PyObject *parsed = PyList_New(0);
 	if (*p) {
     	do {
@@ -137,16 +136,17 @@ expr_repr(Expr *self)
 }
 
 
-    
-    
-      
-
-
+ 
 static PyMethodDef gf_methods[] = {
   {"read_pgf", (PyCFunction)readPGF, METH_VARARGS,"Read pgf file."},
   {"read_language", (PyCFunction)readLang, METH_VARARGS,"Get the language."},
   {"startcat", (PyCFunction)startCategory, METH_VARARGS,"Get the start category of a pgf module."},
-  {"parse", (PyCFunction)parse, METH_VARARGS,"parse a string."},
+  {NULL, NULL, 0, NULL}  /* Sentinel */
+};
+
+static PyMethodDef pgf_methods[] = {
+  {"parse", (PyCFunction)parse, METH_VARARGS|METH_KEYWORDS,"Parse a string."},
+  {"startcat", (PyCFunction)startCategory, METH_NOARGS,"Get the start category."},
   {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
@@ -162,6 +162,7 @@ initgf(void)
 	if (PyType_Ready(&t) < 0) return;
 
 	PGFType.tp_repr = (reprfunc)PGF_repr;
+	PGFType.tp_methods = pgf_methods;
 	READYTYPE(PGFType)
 	READYTYPE(LangType)
 	READYTYPE(gfTypeType)
