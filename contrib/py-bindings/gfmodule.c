@@ -80,6 +80,18 @@ checkType(PyObject* obj, PyTypeObject* tp)
 	return isRight;
 }
 
+#define DEALLOCFN(delname,t,cb,cbname) static void \
+delname(t *self){ cb(self->obj);\
+	printf("gf_%s has been called for stable pointer 0x%x\n", cbname, self->obj);\
+	self->ob_type->tp_free((PyObject*)self); }
+
+
+
+DEALLOCFN(gfType_dealloc, gfType, gf_freeType, "freeType")
+DEALLOCFN(PGF_dealloc, PGFModule, gf_freePGF, "freePGF")
+DEALLOCFN(Lang_dealloc, Lang, gf_freeLanguage, "freeLanguage")
+
+
 static gfType*
 startCategory(PyObject *self, PyObject *noarg)
 {
@@ -163,8 +175,11 @@ initgf(void)
 
 	PGFType.tp_repr = (reprfunc)PGF_repr;
 	PGFType.tp_methods = pgf_methods;
+	PGFType.tp_dealloc = (destructor)PGF_dealloc;
 	READYTYPE(PGFType)
+		LangType.tp_dealloc = (destructor)Lang_dealloc;
 	READYTYPE(LangType)
+	gfTypeType.tp_dealloc = (destructor)gfType_dealloc;
 	READYTYPE(gfTypeType)
   	ExprType.tp_repr = (reprfunc)expr_repr;
 	READYTYPE(ExprType)
