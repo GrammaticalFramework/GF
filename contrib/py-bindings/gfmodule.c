@@ -37,6 +37,7 @@ NEWGF(PGFModule,GF_PGF,PGFType,"gf.pgf","PGF module")
 NEWGF(Lang,GF_Language,LangType,"gf.lang","language")
 NEWGF(gfType,GF_Type,gfTypeType,"gf.type","gf type")
 NEWGF(Expr,GF_Expr,ExprType,"gf.expr","gf expression")
+NEWGF(Tree,GF_Tree,TreeType,"gf.tree","gf tree")
 
 
 static PyObject*
@@ -90,6 +91,8 @@ delname(t *self){ cb(self->obj);\
 DEALLOCFN(gfType_dealloc, gfType, gf_freeType, "freeType")
 DEALLOCFN(PGF_dealloc, PGFModule, gf_freePGF, "freePGF")
 DEALLOCFN(Lang_dealloc, Lang, gf_freeLanguage, "freeLanguage")
+DEALLOCFN(Tree_dealloc, Tree, gf_freeTree, "freeTree")
+
 
 
 static gfType*
@@ -124,12 +127,12 @@ parse(PyObject *self, PyObject *args, PyObject *kws)
 	} 
 	pgf = ((PGFModule*)self)->obj;
 	lang = ((Lang*)lang_pyob)->obj;
-	GF_Tree *p = gf_parse(pgf, lang, cat, lexed);
 	PyObject *parsed = PyList_New(0);
+	GF_Tree *p = gf_parse(pgf,lang,cat,lexed); 
 	if (*p) {
     	do {
-			Expr* expr;
-			expr = (Expr*)ExprType.tp_new(&ExprType,NULL,NULL);
+			Tree* expr; //Expr
+			expr = (Tree*)TreeType.tp_new(&TreeType,NULL,NULL); // Expr* -> Tree*
 			expr->obj = *(p++);
       		PyList_Append(parsed, (PyObject*)expr);
       /*      char *str = gf_showExpr(exp);
@@ -162,6 +165,7 @@ static PyMethodDef pgf_methods[] = {
   {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
+
 #ifndef PyMODINIT_FUNC/* declarations for DLL import/export */
 #define PyMODINIT_FUNC void
 #endif
@@ -177,12 +181,15 @@ initgf(void)
 	PGFType.tp_methods = pgf_methods;
 	PGFType.tp_dealloc = (destructor)PGF_dealloc;
 	READYTYPE(PGFType)
-		LangType.tp_dealloc = (destructor)Lang_dealloc;
+	LangType.tp_dealloc = (destructor)Lang_dealloc;
 	READYTYPE(LangType)
 	gfTypeType.tp_dealloc = (destructor)gfType_dealloc;
 	READYTYPE(gfTypeType)
   	ExprType.tp_repr = (reprfunc)expr_repr;
 	READYTYPE(ExprType)
+	TreeType.tp_dealloc = (destructor)Tree_dealloc;
+   //  TreeType.tp_methods = tree_methods;
+	READYTYPE(TreeType)	
 
   m = Py_InitModule3("gf", gf_methods,
 		     "Grammatical Framework.");
