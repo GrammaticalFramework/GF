@@ -32,45 +32,17 @@
 #define NEWGF(OBJ,GFTYPE,TYPE,NAME,DOC) NEWOBJECT(OBJ,GFTYPE)	\
 NEWTYPE(TYPE,NAME,OBJ,DOC)
 
+#define DEALLOCFN(delname,t,cb,cbname) static void \
+delname(t *self){ cb(self->obj);\
+	printf("gf_%s has been called for stable pointer 0x%x\n", cbname, self->obj);\
+	self->ob_type->tp_free((PyObject*)self); }
 
-NEWGF(PGFModule,GF_PGF,PGFType,"gf.pgf","PGF module")
-NEWGF(Lang,GF_Language,LangType,"gf.lang","language")
-NEWGF(gfType,GF_Type,gfTypeType,"gf.type","gf type")
-NEWGF(Expr,GF_Expr,ExprType,"gf.expr","gf expression")
-NEWGF(Tree,GF_Tree,TreeType,"gf.tree","gf tree")
+#define REPRCB(cbid,t,gfcb) static PyObject* \
+cbid(t *self) { \
+	const char *str = gfcb(self->obj); \
+ 	return PyString_FromFormat("0x%x: %s", self->obj, str); }
 
-
-static PyObject*
-PGF_repr(PGFModule* obj)
-{
-  return PyString_FromFormat("this is a PGF module");
-}
-
-static PGFModule*
-readPGF(PyObject *self, PyObject *args)
-{
-  char *path;
-  PGFModule *pgf;
-  if (!PyArg_ParseTuple(args, "s", &path))
-    return NULL;
-  pgf = (PGFModule*)PGFType.tp_new(&PGFType,NULL,NULL);
-  if (!pgf) return NULL;
-  pgf->obj = gf_readPGF(path);
-  return pgf;
-}
-
-static Lang*
-readLang(PyObject *self, PyObject *args)
-{
-  char *langName;
-  Lang *l;
-  if (!PyArg_ParseTuple(args,"s",&langName))
-    return NULL;
-  l = (Lang*)LangType.tp_new(&LangType,NULL,NULL);
-  if(!l) return NULL;
-  l->obj = gf_readLanguage(langName);
-  return l;
-}
+/* utilities */
 
 int
 checkType(PyObject* obj, PyTypeObject* tp)
@@ -81,19 +53,19 @@ checkType(PyObject* obj, PyTypeObject* tp)
 	return isRight;
 }
 
-#define DEALLOCFN(delname,t,cb,cbname) static void \
-delname(t *self){ cb(self->obj);\
-	printf("gf_%s has been called for stable pointer 0x%x\n", cbname, self->obj);\
-	self->ob_type->tp_free((PyObject*)self); }
+
+/* new types and declarations */
+
+NEWGF(Lang,GF_Language,LangType,"gf.lang","language")
+NEWGF(gfType,GF_Type,gfTypeType,"gf.type","gf type")
+NEWGF(PGFModule,GF_PGF,PGFType,"gf.pgf","PGF module")
+NEWGF(Expr,GF_Expr,ExprType,"gf.expr","gf expression")	
+NEWGF(Tree,GF_Tree,TreeType,"gf.tree","gf tree")
 
 
+/* PGF methods, constructor and destructor */
 
-DEALLOCFN(gfType_dealloc, gfType, gf_freeType, "freeType")
 DEALLOCFN(PGF_dealloc, PGFModule, gf_freePGF, "freePGF")
-DEALLOCFN(Lang_dealloc, Lang, gf_freeLanguage, "freeLanguage")
-DEALLOCFN(Tree_dealloc, Tree, gf_freeTree, "freeTree")
-
-
 
 static gfType*
 startCategory(PyObject *self, PyObject *noarg)
@@ -135,6 +107,7 @@ parse(PyObject *self, PyObject *args, PyObject *kws)
 			expr = (Tree*)TreeType.tp_new(&TreeType,NULL,NULL); // Expr* -> Tree*
 			expr->obj = *(p++);
       		PyList_Append(parsed, (PyObject*)expr);
+			Py_DECREF(expr); //??
       /*      char *str = gf_showExpr(exp);
       puts(str);
       free(str); */
@@ -143,25 +116,77 @@ parse(PyObject *self, PyObject *args, PyObject *kws)
   return parsed;
 }
 
-static PyObject*
-expr_repr(Expr *self)
+static PGFModule*
+readPGF(PyObject *self, PyObject *args)
 {
-	const char *str = gf_showExpr(self->obj);
- 	return PyString_FromString(str);
+  char *path;
+  PGFModule *pgf;
+  if (!PyArg_ParseTuple(args, "s", &path))
+    return NULL;
+  pgf = (PGFModule*)PGFType.tp_new(&PGFType,NULL,NULL);
+  if (!pgf) return NULL;
+  pgf->obj = gf_readPGF(path);
+  return pgf;
 }
 
-
- 
-static PyMethodDef gf_methods[] = {
-  {"read_pgf", (PyCFunction)readPGF, METH_VARARGS,"Read pgf file."},
-  {"read_language", (PyCFunction)readLang, METH_VARARGS,"Get the language."},
-  {"startcat", (PyCFunction)startCategory, METH_VARARGS,"Get the start category of a pgf module."},
-  {NULL, NULL, 0, NULL}  /* Sentinel */
-};
+//Todo: repr
 
 static PyMethodDef pgf_methods[] = {
   {"parse", (PyCFunction)parse, METH_VARARGS|METH_KEYWORDS,"Parse a string."},
   {"startcat", (PyCFunction)startCategory, METH_NOARGS,"Get the start category."},
+  {NULL, NULL, 0, NULL}  /* Sentinel */
+};
+
+
+
+
+/* Language methods, constructor and destructor */
+
+REPRCB(lang_repr, Lang, gf_showLanguage)
+DEALLOCFN(Lang_dealloc, Lang, gf_freeLanguage, "freeLanguage")
+
+static Lang*
+readLang(PyObject *self, PyObject *args)
+{
+  char *langName;
+  Lang *l;
+  if (!PyArg_ParseTuple(args,"s",&langName))
+    return NULL;
+  l = (Lang*)LangType.tp_new(&LangType,NULL,NULL);
+  if(!l) return NULL;
+  l->obj = gf_readLanguage(langName);
+  return l;
+}
+
+
+
+/* gf types: methods, constructor and destructor */
+
+DEALLOCFN(gfType_dealloc, gfType, gf_freeType, "freeType")
+REPRCB(gfType_repr, gfType, gf_showType)
+
+
+
+
+/* expression type: methods, destructor */
+
+DEALLOCFN(expr_dealloc, Expr, gf_freeExpr, "freeExpr")
+REPRCB(expr_repr, Expr, gf_showExpr)
+
+
+/* tree typr: methods, constructor and destructor */
+//  Are Expr and Tree equivalent ? 
+
+REPRCB(tree_repr, Tree, gf_showExpr)
+DEALLOCFN(Tree_dealloc, Tree, gf_freeTree, "freeTree")
+
+
+/* gf module methods */
+
+static PyMethodDef gf_methods[] = {
+  {"read_pgf", (PyCFunction)readPGF, METH_VARARGS,"Read pgf file."},
+  {"read_language", (PyCFunction)readLang, METH_VARARGS,"Get the language."},
+  {"startcat", (PyCFunction)startCategory, METH_VARARGS,"Get the start category of a pgf module."},
   {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
@@ -174,22 +199,17 @@ PyMODINIT_FUNC
 initgf(void) 
 {
   PyObject* m;
-#define READYTYPE(t) t.tp_new = PyType_GenericNew;\
+#define READYTYPE(t,trepr,tdealloc) t.tp_new = PyType_GenericNew; \
+    t.tp_repr = (reprfunc)trepr; \
+	t.tp_dealloc = (destructor)tdealloc; \
 	if (PyType_Ready(&t) < 0) return;
-
-	PGFType.tp_repr = (reprfunc)PGF_repr;
+	
 	PGFType.tp_methods = pgf_methods;
-	PGFType.tp_dealloc = (destructor)PGF_dealloc;
-	READYTYPE(PGFType)
-	LangType.tp_dealloc = (destructor)Lang_dealloc;
-	READYTYPE(LangType)
-	gfTypeType.tp_dealloc = (destructor)gfType_dealloc;
-	READYTYPE(gfTypeType)
-  	ExprType.tp_repr = (reprfunc)expr_repr;
-	READYTYPE(ExprType)
-	TreeType.tp_dealloc = (destructor)Tree_dealloc;
-   //  TreeType.tp_methods = tree_methods;
-	READYTYPE(TreeType)	
+	READYTYPE(PGFType,NULL,PGF_dealloc)
+	READYTYPE(LangType, lang_repr, Lang_dealloc)
+	READYTYPE(gfTypeType, gfType_repr, gfType_dealloc)
+	READYTYPE(ExprType, expr_repr, expr_dealloc)
+	READYTYPE(TreeType, tree_repr, Tree_dealloc)	
 
   m = Py_InitModule3("gf", gf_methods,
 		     "Grammatical Framework.");
@@ -204,5 +224,6 @@ PyModule_AddObject(m, "gf", (PyObject *)&t);
 	ADDTYPE(PGFType)
 	ADDTYPE(LangType)
 	ADDTYPE(gfTypeType)
+	ADDTYPE(TreeType)
 	ADDTYPE(ExprType)
 }
