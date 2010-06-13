@@ -32,15 +32,28 @@
 #define NEWGF(OBJ,GFTYPE,TYPE,NAME,DOC) NEWOBJECT(OBJ,GFTYPE)	\
 NEWTYPE(TYPE,NAME,OBJ,DOC)
 
+#ifdef DEBUG
 #define DEALLOCFN(delname,t,cb,cbname) static void \
 delname(t *self){ cb(self->obj);\
 	printf("gf_%s has been called for stable pointer 0x%x\n", cbname, self->obj);\
 	self->ob_type->tp_free((PyObject*)self); }
+#else
+#define DEALLOCFN(delname,t,cb,cbname) static void \
+delname(t *self){ cb(self->obj);\
+	self->ob_type->tp_free((PyObject*)self); }
+#endif
 
+#ifdef DEBUG
 #define REPRCB(cbid,t,gfcb) static PyObject* \
 cbid(t *self) { \
 	const char *str = gfcb(self->obj); \
  	return PyString_FromFormat("0x%x: %s", self->obj, str); }
+#else
+#define REPRCB(cbid,t,gfcb) static PyObject* \
+cbid(t *self) { \
+	const char *str = gfcb(self->obj); \
+ 	return PyString_FromString(str); }
+#endif
 
 /* utilities */
 
