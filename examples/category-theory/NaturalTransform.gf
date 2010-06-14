@@ -8,7 +8,12 @@ abstract NaturalTransform = Functor ** {
 
   data nt :  ({c1,c2} : Category)
           -> (f,g : Functor c1 c2)
-          -> ((x : Obj c1) -> Arrow (mapObj f x) (mapObj g x))
+          -> (n : (x : Obj c1) -> Arrow (mapObj f x) (mapObj g x))
+          -> (  ({x,y} : Obj c1)
+             -> (ar : Arrow x y)
+             -> EqAr (comp (n y) (mapAr f ar))
+                     (comp (mapAr g ar) (n x))
+             )
           -> NT f g ;
 
 }
