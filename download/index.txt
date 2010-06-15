@@ -9,12 +9,14 @@ Version 3.1.6, 23 April 2010
 ==Latest release==
 
 GF 3.1.6 released 23 April 2010.
-- MacOS X (Leopard and Snow Leopard):
+- MacOS X installer package:
+  [``gf-3.1.6-leopard.pkg`` gf-3.1.6-leopard.pkg] (7.7MB)
+- MacOS X (gzipped executable, Leopard and Snow Leopard):
   [``gf-3.1.6-bin-intel-mac.gz`` gf-3.1.6-bin-intel-mac.gz] (1.9MB)
-- Windows:
+- Windows (zipped executable):
   [``gf-3.1.6-bin-i486-windows.zip`` gf-3.1.6-bin-i486-windows.zip]
   (1.6 MB)
-- Ubuntu Linux: 
+- Ubuntu Linux (gzipped executable): 
   [``gf-3.1.6-bin-i486-linux.gz`` gf-3.1.6-bin-i486-linux.gz]
   (1.7 MB)
 - compiled library package:
