@@ -180,6 +180,7 @@ langsCoding = [
   (("bulgarian","Bul"),""),
   (("catalan",  "Cat"),""),
   (("danish",   "Dan"),""),
+  (("dutch",    "Dut"),""),
   (("english",  "Eng"),""),
   (("finnish",  "Fin"),""),
   (("french",   "Fre"),""),
