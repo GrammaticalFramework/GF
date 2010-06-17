@@ -161,7 +161,7 @@ checkInferExp th tenv@(k,_,_) e typ = do
 inferExp :: Theory -> TCEnv -> Exp -> Err (AExp, Val, [(Val,Val)])
 inferExp th tenv@(k,rho,gamma) e = case e of
    Vr x -> mkAnnot (AVr x) $ noConstr $ lookupVar gamma x
-   Q (m,c) | m == cPredefAbs && isPredefCat c
+   Q (m,c) | m == cPredefAbs && isLiteralCat c
                      -> return (ACn (m,c) vType, vType, [])
            | otherwise -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c)
    QC c -> mkAnnot (ACn c) $ noConstr $ lookupConst th c ----
