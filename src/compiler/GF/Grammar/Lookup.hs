@@ -133,15 +133,20 @@ lookupParamValues gr c = do
     _                     -> Bad $ render (ppQIdent Qualified c <+> text "has no parameter values defined")
 
 allParamValues :: SourceGrammar -> Type -> Err [Term]
-allParamValues cnc ptyp = case ptyp of
-     _ | Just n <- isTypeInts ptyp -> return [EInt i | i <- [0..n]]
-     QC c -> lookupParamValues cnc c
-     Q  c -> lookupResDef cnc c >>= allParamValues cnc
-     RecType r -> do
+allParamValues cnc ptyp =
+  case ptyp of
+    _ | Just n <- isTypeInts ptyp -> return [EInt i | i <- [0..n]]
+    QC c -> lookupParamValues cnc c
+    Q  c -> lookupResDef cnc c >>= allParamValues cnc
+    RecType r -> do
        let (ls,tys) = unzip $ sortByFst r
        tss <- mapM (allParamValues cnc) tys
        return [R (zipAssign ls ts) | ts <- combinations tss]
-     _ -> Bad (render (text "cannot find parameter values for" <+> ppTerm Unqualified 0 ptyp))
+    Table pt vt -> do
+       pvs <- allParamValues cnc pt
+       vvs <- allParamValues cnc vt
+       return [V pt ts | ts <- combinations (replicate (length pvs) vvs)]
+    _ -> Bad (render (text "cannot find parameter values for" <+> ppTerm Unqualified 0 ptyp))
   where
     -- to normalize records and record types
     sortByFst = sortBy (\ x y -> compare (fst x) (fst y))
