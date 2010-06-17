@@ -58,9 +58,9 @@ cbid(t *self) { \
 /* utilities */
 
 int
-checkType(PyObject* obj, PyTypeObject* tp)
+checkType(void* obj, PyTypeObject* tp)
 {
-	int isRight = PyObject_TypeCheck(obj, tp);
+  int isRight = PyObject_TypeCheck((PyObject*)obj, tp);
 	if (!isRight)
 		PyErr_Format(PyExc_TypeError, "Expected a %s", tp->tp_doc);
 	return isRight;
@@ -91,6 +91,20 @@ startCategory(PyObject *self, PyObject *noarg)
 }
 
 static PyObject*
+linearize(PGFModule *self, PyObject *args)
+{
+  Lang *lang;
+  Tree *tree;
+  if (!checkType(self,&PGFType)) return NULL;
+  if (!PyArg_ParseTuple(args, "OO", &lang, &tree))
+    return NULL;
+  if (!checkType(lang,&LangType)) return NULL;
+  if (!checkType(tree,&TreeType)) return NULL;
+  char* c_lin = gf_linearize(self->obj, lang->obj, tree->obj);
+  return PyString_FromString(c_lin);
+}
+
+static PyObject*
 parse(PyObject *self, PyObject *args, PyObject *kws)
 {
 	PyObject *lang_pyob, *cat_pyob = NULL;
@@ -100,7 +114,7 @@ parse(PyObject *self, PyObject *args, PyObject *kws)
 	char *lexed;
 	static char *kwlist[] = {"lexed", "lang", "cat", NULL};
 	if (!PyArg_ParseTupleAndKeywords(args, kws, "sO|O", kwlist,
-									&lexed, &lang_pyob, &cat_pyob))
+				       &lexed, &lang_pyob, &cat_pyob))
     	return NULL;
 	if (!checkType(self, &PGFType)) return NULL;	
 	if (!checkType(lang_pyob, &LangType)) return NULL;
@@ -146,6 +160,7 @@ readPGF(PyObject *self, PyObject *args)
 
 static PyMethodDef pgf_methods[] = {
   {"parse", (PyCFunction)parse, METH_VARARGS|METH_KEYWORDS,"Parse a string."},
+  {"lin", (PyCFunction)linearize, METH_VARARGS,"Linearize tree."},
   {"startcat", (PyCFunction)startCategory, METH_NOARGS,"Get the start category."},
   {NULL, NULL, 0, NULL}  /* Sentinel */
 };
