@@ -24,7 +24,7 @@ module GF.Grammar.Predef
           , cErrorType
           , cOverload
           , cUndefinedType
-          , isPredefCat
+          , isLiteralCat
 
           , cPTrue, cPFalse
 
@@ -88,8 +88,8 @@ cOverload = identC (BS.pack "overload")
 cUndefinedType :: Ident
 cUndefinedType = identC (BS.pack "UndefinedType")
 
-isPredefCat :: Ident -> Bool
-isPredefCat c = elem c [cInt,cString,cFloat]
+isLiteralCat :: Ident -> Bool
+isLiteralCat c = elem c [cInt,cString,cFloat]
 
 cPTrue :: Ident
 cPTrue  = identC (BS.pack "PTrue")
