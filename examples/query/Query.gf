@@ -32,6 +32,7 @@ fun
   AAct   : Set  -> Activity -> Answer ; -- S As
 
   SAll   : Kind -> Set ;  -- all Ks | the Ks
+  SRel   : Set  -> Relation -> Set ;  -- S's Rs
   SOne   : Kind -> Set ;  -- one K
   SIndef : Kind -> Set ;  -- a K
   SPlural : Kind -> Set ;  -- Ks

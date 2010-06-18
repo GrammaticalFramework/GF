@@ -1,0 +1,562 @@
+ps -tr "what are the names of all locations that are subregions of other locations" | p
+ps -tr "give me the names of all locations that are subregions of other locations" | p
+ps -tr "give me the sub-regions of all locations" | p
+ps -tr "give me all locations with their sub-regions" | p
+ps -tr "give me all locations' sub-regions" | p
+ps -tr "give me all locations and their subregions" | p
+ps -tr "give me all subregions and their locations" | p
+ps -tr "what are the subregions of all locations" | p
+ps -tr "what subregions do all locations have" | p
+ps -tr "what do all locations have as subregions" | p
+ps -tr "what are the names of all locations that are subregion of Bulgaria" | p
+ps -tr "give me the sub-regions of Bulgaria" | p
+ps -tr "give me the Bulgarian sub-regions" | p
+ps -tr "what are the Bulgarian sub-regions" | p
+ps -tr "what are the names of the Bulgarian sub-regions" | p
+ps -tr "what are the names of all subregions of Bulgaria" | p
+ps -tr "what are the subregions of Bulgaria" | p
+ps -tr "what subregions does Bulgaria have" | p
+ps -tr "Bulgarian subregions" | p
+ps -tr "subregions of Bulgaria" | p
+ps -tr "where is Oblast Sofiya" | p
+ps -tr "give me the location of Oblast Sofiya" | p
+ps -tr "the location of Oblast Sofiya" | p
+ps -tr "what country is Oblast Sofiya in" | p
+ps -tr "Oblast Sofiya is in Bulgaria" | p
+ps -tr "Oblast Sofiya is located in Bulgaria" | p
+ps -tr "Oblast Sofiya is a subregion of Bulgaria" | p
+ps -tr "Oblast Sofiya's location is Bulgaria" | p
+ps -tr "Oblast Sofiya's location is in Bulgaria" | p
+ps -tr "One subregion of Bulgaria is Oblast Sofiya" | p
+ps -tr "A subregion of Bulgaria is Oblast Sofiya" | p
+ps -tr "Oblast Sofyia is the name of a subregion of Bulgaria" | p
+ps -tr "Bulgaria has a subregion - Oblast Sofiya" | p
+ps -tr "Oblast Sofiya is a Bulgarian subregion" | p
+ps -tr "Oblast Sofiya is a Bulgarian location" | p
+ps -tr "which are all organizations" | p
+ps -tr "what are the organizations" | p
+ps -tr "all organizations" | p
+ps -tr "give me all organizations" | p
+ps -tr "the organizations" | p
+ps -tr "what are the names of all organizations" | p
+ps -tr "give me all organizations' names" | p
+ps -tr "the names of all organizations" | p
+ps -tr "all organizations' names" | p
+ps -tr "organizations" | p
+ps -tr "what is Microsoft" | p
+ps -tr "what organization is Microsoft" | p
+ps -tr "Give me information about Microsoft" | p
+ps -tr "all about Microsoft" | p
+ps -tr "give me all organizations named Microsoft" | p
+ps -tr "give me all organizations that start with Microsoft" | p
+ps -tr "all organizations' names starting with Microsoft" | p
+ps -tr "what are the organizations starting with Microsoft" | p
+ps -tr "what are the organizations that start with Microsoft" | p
+ps -tr "organizations starting with Microsoft" | p
+ps -tr "all organizations and their locations" | p
+ps -tr "give me all organizations with their locations" | p
+ps -tr "which organizations with their locations do you have" | p
+ps -tr "which organizations are located where" | p
+ps -tr "organizations with their locations" | p
+ps -tr "give me the organizations and their locations" | p
+ps -tr "what are the organizations and their locations" | p
+ps -tr "what organizations are located in what locations" | p
+ps -tr "the names of organizations and their locations" | p
+ps -tr "what are the names of all organizations and their locations" | p
+ps -tr "all organizations in Bulgaria" | p
+ps -tr "give me all organizations in Bulgaria" | p
+ps -tr "organizations located in Bulgaria" | p
+ps -tr "organizations in Bulgaria" | p
+ps -tr "organizations from Bulgaria" | p
+ps -tr "which organizations are from Bulgaria" | p
+ps -tr "which organizations are in Bulgaria" | p
+ps -tr "which organizations are located in Bulgaria" | p
+ps -tr "organizations that are located in Bulgaria" | p
+ps -tr "organizations that are in Bulgaria" | p
+ps -tr "organizations which are in Bulgaria" | p
+ps -tr "organizations which are located in Bulgaria" | p
+ps -tr "where is Google located" | p
+ps -tr "where is Google" | p
+ps -tr "what is Google's location" | p
+ps -tr "the location of Google" | p
+ps -tr "give me the location of Google" | p
+ps -tr "give me where is Google" | p
+ps -tr "give me where Google is located" | p
+ps -tr "what is the location of Google" | p
+ps -tr "Google's location" | p
+ps -tr "Google is in California" | p
+ps -tr "Google is located in California" | p
+ps -tr "Google's location is California" | p
+ps -tr "Google's in California" | p
+ps -tr "Google's location is in California" | p
+ps -tr "Google has a location California" | p
+ps -tr "California is Google's location" | p
+ps -tr "California is where Google is located" | p
+ps -tr "california is the location of Google" | p
+ps -tr "Google is situated in california" | p
+ps -tr "California is where Google is situated" | p
+ps -tr "Organizations located in a subregion of a location" | p
+ps -tr "give me all organizations and in what subregion of what location they are located in" | p
+ps -tr "which organizations are located in a place which is the subregion of which location" | p
+ps -tr "where are the organizations located , in what subregion and region" | p
+ps -tr "which organizations are in which subregion and location" | p
+ps -tr "what organization is located in what subregion of which location" | p
+ps -tr "what are the organizations' locations by region and subregion" | p
+ps -tr "all organizations and their locations with their subregions" | p
+ps -tr "all organizations and the subregions of the locations they are located in" | p
+ps -tr "give me all organizations and the regions they are located in , with their subregions" | p
+ps -tr "the locations and subregions of all oragnizations" | p
+ps -tr "Orgnaizations which a located in subregions of Bulgaria" | p
+ps -tr "which organizations are located in subregions of Bulgaria" | p
+ps -tr "give me the organizations located in subregions of Bulgaria" | p
+ps -tr "give me all organizations that are located in subregions of Bulgaria" | p
+ps -tr "all organizations located in subregions of Bulgaria" | p
+ps -tr "all organizations which are in subregions of Bulgaria" | p
+ps -tr "the organizations which are in subregions of Bulgaria" | p
+ps -tr "the orgnaizations and the subregions of Bulgaria they are located in" | p
+ps -tr "the organizations and the subregions of Bulgaria they are in" | p
+ps -tr  "(simple} all organizations and the subregions of Bulgaria they are located in" | p
+ps -tr "all organizations in Sofia and a subregion of what area is Sofia" | p
+ps -tr "give me all organizations in Sofia and a subregion of which country it is" | p
+ps -tr "which organizations are located in Sofia , and where is Sofia" | p
+ps -tr "which organizations are located in Sofia and where is Sofia located" | p
+ps -tr "which organizations are located in Sofia and where is Sofia situated" | p
+ps -tr "all organizations located in Sofia and the region Sofia is subregion of" | p
+ps -tr "which organizations are located in Sofia , and Sofia is the subregion of which area" | p
+ps -tr "which organizations are in Sofia and a subregion of which country it is" | p
+ps -tr "all organizations in Sofia , a subregion of which country it is" | p
+ps -tr "all organizations in Sofia and the country of Sofia" | p
+ps -tr "which organizations are located in Sofia Bulgaria" | p
+ps -tr "all organizations located in Sofia Bulgaria" | p
+ps -tr "all organizations in Sofia Bulgaria" | p
+ps -tr "organizations which are in Sofia Bulgaria" | p
+ps -tr "organizations that are in Sofia Bulgaria" | p
+ps -tr "organizations located in Sofia , a subregion of Bulgaria" | p
+ps -tr "all organizations in Sofia , a subregion of Bulgaria" | p
+ps -tr "organizations that are in Sofia , which is a subregion of Bulgaria" | p
+ps -tr "organizations which are located in Sofia , which is in Bulgaria" | p
+ps -tr "organizations located in Sofia which is in Bulgaria" | p
+ps -tr "which organizations are situated in Sofia Bulgaria" | p
+ps -tr "all organizations situated in Sofia Bulgaria" | p
+ps -tr "organizations situated in Sofia , a subregion of Bulgaria" | p
+ps -tr "organizations which are situated in Sofia , which is in Bulgaria" | p
+ps -tr "organizations situated in Sofia which is in Bulgaria" | p
+ps -tr "what are the region and subregion where Google is located" | p
+ps -tr "what region and subregion Google is located in" | p
+ps -tr "the region and subregion Google is located in" | p
+ps -tr "the region and subregion of Google" | p
+ps -tr "the subregion of which region Google is located in" | p
+ps -tr "the subregion of which region is located Google in" | p
+ps -tr "which subregion and region Google is in" | p
+ps -tr "which are the region and subregion of Google" | p
+ps -tr "which are the locations of Google - region and subregion" | p
+ps -tr "give me the region and subregion Google is located in" | p
+ps -tr "where in the USA is Google" | p
+ps -tr "where in the USA is located Google" | p
+ps -tr "which subregion of the USA is Google located in" | p
+ps -tr "which subregion of the USA is Google in" | p
+ps -tr "which area in the USA is Google located in" | p
+ps -tr "which area of the USA is Google located in" | p
+ps -tr "the area of the USA Google is located in" | p
+ps -tr "the subregion of the USA where Google is located" | p
+ps -tr "the subregion of the USA Google is located in" | p
+ps -tr "give me the area of the USA Google is located in" | p
+ps -tr "give me the subregion of the USA where Google is located" | p
+ps -tr "give me the US state where Google is located" | p
+ps -tr "which country is located Google California in" | p
+ps -tr "where is located Google , California" | p
+ps -tr "what country is located Google , California in" | p
+ps -tr "what is the country of California , where Google is located" | p
+ps -tr "where is California , where Google is located in" | p
+ps -tr "give me the country of California , where Google is located in " | p
+ps -tr "what country is California located in , and Google" | p
+ps -tr "Google is located in California , USA" | p
+ps -tr "Google is located in California in the USA" | p
+ps -tr "Google is in California , the USA" | p
+ps -tr "Google is in California in the USA" | p
+ps -tr "Google's location is California , USA" | p
+ps -tr "Google's located in California in the USA" | p
+ps -tr "Google's location is California , which is in the USA" | p
+ps -tr "Google is located in California , which is in the USA" | p
+ps -tr "give me all people" | p
+ps -tr "give me all about all people" | p
+ps -tr  "{simples} give me the names of all people" | p
+ps -tr "give me all people's names" | p
+ps -tr "person" | p
+ps -tr "all people" | p
+ps -tr "all about Marissa Mayer" | p
+ps -tr "give me all people named Marissa Mayer" | p
+ps -tr "who is Marissa Mayer" | p
+ps -tr "what person is Marissa Mayer" | p
+ps -tr "give me information about Marissa Mayer" | p
+ps -tr "what do you know about Marissa Mayer" | p
+ps -tr "all people named Marissa Mayer" | p
+ps -tr "give me all names and nicknames of all people" | p
+ps -tr "give me all names of all people" | p
+ps -tr "what are the names and the nicknames of all people" | p
+ps -tr "give me the names and nicknames of all people" | p
+ps -tr "give me the names of all people" | p
+ps -tr "the names and the nicknames of all people" | p
+ps -tr "all names and nicknames of all people" | p
+ps -tr "who is also known as Jung " | p
+ps -tr "who is also called Jung" | p
+ps -tr "who is otherwise known as Jung " | p
+ps -tr "who is otherwise called Jung " | p
+ps -tr "who is also named Jung" | p
+ps -tr "who is otherwise named Jung" | p
+ps -tr "who is famous with the name Jung" | p
+ps -tr "what is the full name of a person also known as Jung" | p
+ps -tr "what is the full name of a person otherwise known as Jung" | p
+ps -tr "what is the full name of a person also named Jung" | p
+ps -tr "what is the full name of a person otherwise named Jung" | p
+ps -tr "what is the full name of a person also called Jung" | p
+ps -tr "what is the full name of a person otherwise called Jung" | p
+ps -tr "give me all people with a nickname Jung" | p
+ps -tr "give me all people also named Jung" | p
+ps -tr "give me all people also known as Jung" | p
+ps -tr "give me all people otherwise known as Jung" | p
+ps -tr "give me all people also called Jung" | p
+ps -tr "give me all people otherwise called Jung" | p
+ps -tr "how is Carl Gustav Jung also known " | p
+ps -tr "how is Carl Gustav Jung also called" | p
+ps -tr "how is Carl Gustav Jung otherwise known" | p
+ps -tr "how is Carl Gustav Jung otherwise called" | p
+ps -tr "how is Carl Gustav Jung also named" | p
+ps -tr "how is Carl Gustav Jung otherwise named" | p
+ps -tr "what name is Carl Gustav Jung famous with" | p
+ps -tr "what name is Carl Gustav Jung known with" | p
+ps -tr "what name is Carl Gustav Jung called with" | p
+ps -tr "what name is Carl Gustav Jung also called with" | p
+ps -tr "give me the nickname of Carl Gustav Jung" | p
+ps -tr "give me Carl Gustav Jung's nickname" | p
+ps -tr "Carl Gustav Jung is also known as Jung" | p
+ps -tr "Carl Gustav Jung also called Jung" | p
+ps -tr "Carl Gustav Jung otherwise known as Jung" | p
+ps -tr "Carl Gustav Jung otherwise called Jung" | p
+ps -tr "Carl Gustav Jung also named Jung" | p
+ps -tr "Carl Gustav Jung otherwise named Jung" | p
+ps -tr "Carl Gustav Jung famous with the name Jung" | p
+ps -tr "Carl Gustav Jung known with the name Jung" | p
+ps -tr "Carl Gustav Jung called with the name Jung" | p
+ps -tr "Carl Gustav Jung also called with the name Jung" | p
+ps -tr "the nickname of Carl Gustav Jung is Jung" | p
+ps -tr "Carl Gustav Jung's nickname is Jung" | p
+ps -tr "who works as what" | p
+ps -tr "give me all people with their job titles" | p
+ps -tr "give me all job titles with their holders" | p
+ps -tr "give me all people with their job positions" | p
+ps -tr "give me all job positions with their holders" | p
+ps -tr "give me all people with their occupation" | p
+ps -tr "give me all people with their occupations" | p
+ps -tr "give me all occupations with their holders" | p
+ps -tr "what are all people by occupation" | p
+ps -tr "what are the jobs of all people" | p
+ps -tr "what are all people's occupations" | p
+ps -tr "give me all job positions and the people occupying them" | p
+ps -tr "who is appointed to work as what" | p
+ps -tr "whose appointment is what" | p
+ps -tr "who is paid for what" | p
+ps -tr "who is appointed for what" | p
+ps -tr "who is active as what" | p
+ps -tr "whose mandate is what" | p
+ps -tr "which person works as what" | p
+ps -tr "which person is appointed as what" | p
+ps -tr "what are the job positions of all people" | p
+ps -tr "what is everybody's job" | p
+ps -tr "who works as a CEO" | p
+ps -tr "whose job position is CEO" | p
+ps -tr "whose job title is CEO" | p
+ps -tr "whose occupation is CEO" | p
+ps -tr "who is CEO by occupation" | p
+ps -tr "who holds the position CEO" | p
+ps -tr "all people working as CEO" | p
+ps -tr "give me all CEOs" | p
+ps -tr "give me all people with the job position CEO" | p
+ps -tr "who has a job title CEO" | p
+ps -tr "who has a job position CEO" | p
+ps -tr "who is appointed as CEO" | p
+ps -tr "who is active as CEO" | p
+ps -tr "who has a mandate to be a CEO" | p
+ps -tr "whose mandate is to be a CEO" | p
+ps -tr "whose appointment is to be a CEO" | p
+ps -tr "who operates as CEO" | p
+ps -tr "who is paid to be a CEO" | p
+ps -tr "which person is mandated to be a CEO" | p
+ps -tr "who is a CEO" | p
+ps -tr "what does Udi Manber work" | p
+ps -tr "what's Udi Manber's job position" | p
+ps -tr "what's Udi Manber's job title" | p
+ps -tr "what does Udi Manber do" | p
+ps -tr "what is Udi Manber's job" | p
+ps -tr "what's the job of Udi Manber" | p
+ps -tr "what's the job title of Udi Manber" | p
+ps -tr "what's Udi Manber's occupation" | p
+ps -tr "what is Udi Manber by occupation" | p
+ps -tr "what job position does Udi Manber hold" | p
+ps -tr "what is the position of Udi Manber" | p
+ps -tr "what is the appointment of Udi Manber" | p
+ps -tr "what is the mandate of Udi Manber" | p
+ps -tr "what is Udi Manber paid for" | p
+ps -tr "what is Udi Manber's title" | p
+ps -tr "what is Udi Manber working as" | p
+ps -tr "what is Udi Manber apopinted as" | p
+ps -tr "Ben Fried works as a Chief Information Officer" | p
+ps -tr "Ben Fried's job position is Chief Information Officer" | p
+ps -tr "Ben Fried is a Chief Information Officer" | p
+ps -tr "Ben Fried's job title is Chief Information Officer" | p
+ps -tr "Ben Fried's occupation is Chief Information Officer" | p
+ps -tr "Ben Fried is Cheif Information Officer by occupation" | p
+ps -tr "The Chief Information Officer is Ben Fried" | p
+ps -tr "Ben Fried holds the position of Chief Information Officer" | p
+ps -tr "Ben Fried is Chief Information Officer" | p
+ps -tr "Ben Fried is appointed as Chief Information Officer" | p
+ps -tr "Ben Fried is mandated as Chief Information Officer" | p
+ps -tr "Ben Fried has the title of Chief Information Officer" | p
+ps -tr "The title of Ben Fried is Chief Information Officer" | p
+ps -tr "Ben Fried works in a position of Chief Information Officer" | p
+ps -tr "The position of Ben Fried is Chief Information Officer" | p
+ps -tr "Ben Fried's title is Chief Information Officer" | p
+ps -tr "Ben fried's position is Chief Information Officer" | p
+ps -tr "where do all people work and what is their occupation" | p
+ps -tr "who do all people work for and what's their occupation" | p
+ps -tr "give me all people with their job titles and the Organization they work for" | p
+ps -tr "give me all job titles with their holders and the Organization they work for" | p
+ps -tr "give me all people with their job positions and the Organization they work for" | p
+ps -tr "give me all job positions with their holders and the Organization they work for" | p
+ps -tr "give me all people with their occupation and where they work" | p
+ps -tr "give me all people with their occupations and where they work" | p
+ps -tr "what are all people by occupation and who do they work for" | p
+ps -tr "what are all people by occupation and what is the name of the organization they work for" | p
+ps -tr "what are the jobs of all people and who do they work for" | p
+ps -tr "what are the jobs of all people and what is the name of the organization they work for" | p
+ps -tr "what are all people's occupations and what is the name of the organizations they work for" | p
+ps -tr "who is employed where as what" | p
+ps -tr "who is employed at what organization in what position" | p
+ps -tr "who operates where and in what position" | p
+ps -tr "who is active at what organization in what capacity" | p
+ps -tr "who is paid by which organization for what work" | p
+ps -tr "who is appointed by which organization as in what capacity" | p
+ps -tr "which orgniazation does employ whom as what" | p
+ps -tr "which organization appoints whom in what position" | p
+ps -tr "what is the job title of which person at what organization" | p
+ps -tr "what is the occupation of all people and who do they work for" | p
+ps -tr "which people work for what organization in what capacity" | p
+ps -tr "who works in what company and in what capacity" | p
+ps -tr "who works at Microsoft as what " | p
+ps -tr "who is who at Microsoft" | p
+ps -tr "who is appointed as what at Microsoft" | p
+ps -tr "who is employed by Microsoft as what" | p
+ps -tr "who is mandated by Microsoft as what" | p
+ps -tr "which position is occupied by whom at Microsoft" | p
+ps -tr "who occupies which position at Microsoft" | p
+ps -tr "who works at what position at Microsoft" | p
+ps -tr "who is active as what at Microsoft" | p
+ps -tr "who has what title at Microsoft" | p
+ps -tr "give me the names of the people that work for Microsoft with their job positions" | p
+ps -tr "give me the Microsoft employees names with their job titles" | p
+ps -tr "give me the names of the people that work for Microsoft with their job titles" | p
+ps -tr "give me the Microsoft employees names with their job positions" | p
+ps -tr "give me the Microsoft employees names with their occupations" | p
+ps -tr "give me the names of the people that work for Microsoft with their occupations" | p
+ps -tr "give me the names of the people that are active at Microsoft with their job positions" | p
+ps -tr "give me the names of the people that are active at Microsoft with their job titles" | p
+ps -tr "give me the names of the people that are active at Microsoft with their occupations" | p
+ps -tr "who works where as a CEO" | p
+ps -tr "who is apopinted at which oranigzation as a CEO" | p
+ps -tr "which organization employs whom as a CEO" | p
+ps -tr "which orgnization appoints whom as a CEO" | p
+ps -tr "which organization gives the mandate to whom to be the CEO" | p
+ps -tr "which organization has whom as the CEO" | p
+ps -tr "who is a CEO of which organization" | p
+ps -tr "who and where is CEO" | p
+ps -tr "who is a CEO of which organization" | p
+ps -tr "who is employed as CEO and in which organization" | p
+ps -tr "who is appointed as CEO and in which organization" | p
+ps -tr "who is mandated as CEO and in which organization" | p
+ps -tr "who is appointed as a CEO and where" | p
+ps -tr "who is a CEO and where" | p
+ps -tr "give me the names of all CEOs and the organizations they work for" | p
+ps -tr "give me the names of the people that work as a CEO and in which organization" | p
+ps -tr "give me the names of the people that have a job position CEO and in which organization" | p
+ps -tr "give me the names of the people that have a job title CEO and in which organization" | p
+ps -tr "give me the names of the people that have an occupation CEO and in which organization" | p
+ps -tr "give me the names of the people that occupy the the position CEO and in which organization" | p
+ps -tr "who is the president of Microsoft" | p
+ps -tr "who works as president of Microsoft" | p
+ps -tr "which person has the title president of Microsoft" | p
+ps -tr "who has the title president of Microsoft" | p
+ps -tr "who is employed as president of Microsoft" | p
+ps -tr "who is appointed as president of Microsoft" | p
+ps -tr "who has Microsoft employed as president" | p
+ps -tr "who is employed as president by Microsoft" | p
+ps -tr "who does Microsoft appoint as its president" | p
+ps -tr "who has the mandate to be the president of Microsoft" | p
+ps -tr "who acts as president of Microsoft" | p
+ps -tr "who acts as Microsoft's president" | p
+ps -tr "where does Eric Schmidt work and as what" | p
+ps -tr "where is Eric Schmidt apopinted and as what" | p
+ps -tr "what is the position of Eric Schmidt and at which organization does he work" | p
+ps -tr "what is the title of Eric Schmidt and where does he work" | p
+ps -tr "where does Eric Schmidt work and in what capacity" | p
+ps -tr "which organization has employed Eric Schmidt and as what" | p
+ps -tr "which organization has employed Eric Schmidt and in what capacity" | p
+ps -tr "where is Eric Schmidt appointed and as what" | p
+ps -tr "what is the title of Eric Schmidt at Google" | p
+ps -tr "what position does Eric Schmidt occupy at Google" | p
+ps -tr "what position does Eric Schmidt have at Google" | p
+ps -tr "what title does Eric Schmidt have at Google" | p
+ps -tr "Eric Schmidt is appointed at Google as what" | p
+ps -tr "Eric Schidt works for Google in what position" | p
+ps -tr "what is Eric Schmidt at Google" | p
+ps -tr "what mandate has Eric Schmidt at Google" | p
+ps -tr "The CEO of which organization is Eric Schmidt" | p
+ps -tr "Eric Schmidt is the CEO of which organization" | p
+ps -tr "Eric Schmidt is employed as CEO of which organization" | p
+ps -tr "where is Eric Schmidt the CEO" | p
+ps -tr "who employs Eric Schmidt as  CEO" | p
+ps -tr "where is Eric Schmidt appointed as CEO" | p
+ps -tr "which organization has employed Eric Schmidt as CEO" | p
+ps -tr "Eric Schmidt has the mandate of CEO for which organization" | p
+ps -tr "which organization gave Eric Schmidt the mandate to be the CEO" | p
+ps -tr "who appointed Eric Schmidt to be the CEO" | p
+ps -tr "which organization apopinted Eric Schmidt as the CEO" | p
+ps -tr "Eric Schmidt is CEO at Google" | p
+ps -tr "Eric Schmidt is the CEO of Google" | p
+ps -tr "Eric Schmidt has the title of CEO at Google" | p
+ps -tr "Eric Schmidt occupies the position of CEO at Google" | p
+ps -tr "Eric Schmidt acts as a CEO of Google" | p
+ps -tr "Eric Schmidt is employed as the CEO of Google" | p
+ps -tr "Eric Schmidt has the mandate of CEO of Google" | p
+ps -tr "Google has Eric Schmidt as its CEO" | p
+ps -tr "Google has employed Eric Schmidt as CEO" | p
+ps -tr "Google assigned Eric Schmidt to be the CEO" | p
+ps -tr "Google assigned the title of CEO to Eric Schmidt" | p
+ps -tr "Google gave the mandate of Eric Schmidt to be its CEO" | p
+ps -tr "Eric Schmidt's position is CEO at Google" | p
+ps -tr "Eric Schmidt's title is CEO at Google" | p
+ps -tr "who works where" | p
+ps -tr "who occupies position in which organization" | p
+ps -tr "which person works where" | p
+ps -tr "who is employed where" | p
+ps -tr "who is employed in what organization" | p
+ps -tr "what person has what workplace" | p
+ps -tr "who operates in what organization" | p
+ps -tr "which person operates in which organization" | p
+ps -tr "who occupies position where" | p
+ps -tr "who works at Google" | p
+ps -tr "all people working for Google" | p
+ps -tr "who is an employee of Google" | p
+ps -tr "all Google's employees" | p
+ps -tr "what are the names of the people working for Google" | p
+ps -tr "what are the names of all people working for Google" | p
+ps -tr "who operates at Google" | p
+ps -tr "what person exercises position at Google" | p
+ps -tr "who is active at Google" | p
+ps -tr "who works for Google" | p
+ps -tr "which person occupies position at Google" | p
+ps -tr "who has a job at Google" | p
+ps -tr "who is employed by Google" | p
+ps -tr "who is paid by Google" | p
+ps -tr "where does Sergey Brin work" | p
+ps -tr "what is the organization that employs Sergey Brin" | p
+ps -tr "which organization does Sergey Brin work for" | p
+ps -tr "who employes Sergey Brin" | p
+ps -tr "who does Sergey Brin work for" | p
+ps -tr "which organization is Sergey Brin employed by" | p
+ps -tr "which organization is Sergey Brin active in " | p
+ps -tr "Sergey Brin occupies position in which organizaton" | p
+ps -tr "where does Sergey Brin go to work" | p
+ps -tr "where is Sergey Brin professionally occupied" | p
+ps -tr "who is Sergey Brin's employer" | p
+ps -tr "who is the employer of Sergey Brin" | p
+ps -tr "Sergey Brin works at Google" | p
+ps -tr "Sergey Brin has position at Google" | p
+ps -tr "Sergey Brin is professionally occupied at Google" | p
+ps -tr "Sergey Brin is active at Google" | p
+ps -tr "Google has employed Sergey Brin" | p
+ps -tr "Google is the employer of Sergey Brin" | p
+ps -tr "Sergey Brin does work for Google" | p
+ps -tr "Sergey Brin is employed by Google" | p
+ps -tr "Sergey Brin has a work contract with Google" | p
+ps -tr "Sergey Brin has a job contract with Google" | p
+ps -tr "Sergey Brin is a professional at Google" | p
+ps -tr "who is also known as Jung and as Carl G Jung" | p
+ps -tr "who is also called Jung , or Carl G Jung" | p
+ps -tr "who is otherwise known as Jung , or Carl G Jung " | p
+ps -tr "who is otherwise called Jung , or Carl G Jung " | p
+ps -tr "who is also named Jung , or Carl G Jung" | p
+ps -tr "who is otherwise named Jung , or Carl G Jung" | p
+ps -tr "who is famous with the name Jung , or Carl G Jung" | p
+ps -tr "what is the full name of a person also known as Jung , or Carl G Jung" | p
+ps -tr "what is the full name of a person otherwise known as Jung , or Carl G Jung" | p
+ps -tr "what is the full name of a person also named Jung , or Carl G Jung" | p
+ps -tr "what is the full name of a person otherwise named Jung , or Carl G Jung" | p
+ps -tr "what is the full name of a person also called Jung , or Carl G Jung" | p
+ps -tr "what is the full name of a person otherwise called Jung , or Carl G Jung" | p
+ps -tr "give me all people with a nickname Jung , or Carl G Jung" | p
+ps -tr "give me all people also named Jung , or Carl G Jung" | p
+ps -tr "give me all people also known as Jung , or Carl G Jung" | p
+ps -tr "give me all people otherwise known as Jung , or Carl G Jung" | p
+ps -tr "give me all people also called Jung , or Carl G Jung" | p
+ps -tr "give me all people otherwise called Jung , or Carl G Jung" | p
+ps -tr "how is Carl Gustav Jung also known" | p
+ps -tr "how is Carl Gustav Jung also called" | p
+ps -tr "how is Carl Gustav Jung otherwise known" | p
+ps -tr "how is Carl Gustav Jung otherwise called" | p
+ps -tr "how is Carl Gustav Jung also named" | p
+ps -tr "how is Carl Gustav Jung otherwise named" | p
+ps -tr "what names is Carl Gustav Jung famous with" | p
+ps -tr "what names is Carl Gustav Jung known with" | p
+ps -tr "what names is Carl Gustav Jung called with" | p
+ps -tr "what names is Carl Gustav Jung also called with" | p
+ps -tr "give me the nicknames of Carl Gustav Jung" | p
+ps -tr "give me Carl Gustav Jung's nicknames" | p
+ps -tr "Carl Gustav Jung is also known as Jung and Carl G Jung" | p
+ps -tr "Carl Gustav Jung also called Jung and Carl G Jung" | p
+ps -tr "Carl Gustav Jung otherwise known as Jung and Carl G Jung" | p
+ps -tr "Carl Gustav Jung otherwise called Jung and Carl G Jung" | p
+ps -tr "Carl Gustav Jung also named Jung and Carl G Jung" | p
+ps -tr "Carl Gustav Jung otherwise named Jung and Carl G Jung" | p
+ps -tr "Carl Gustav Jung famous with the names Jung and Carl G Jung" | p
+ps -tr "Carl Gustav Jung known with the names Jung and Carl G Jung" | p
+ps -tr "Carl Gustav Jung called with the names Jung and Carl G Jung" | p
+ps -tr "Carl Gustav Jung also called with the names Jung and Carl G Jung" | p
+ps -tr "the nicknames of Carl Gustav Jung are Jung and Carl G Jung" | p
+ps -tr "Carl Gustav Jung's nicknames are Jung and Carl G Jung" | p
+ps -tr "Jung and Carl G Jung are names of Carl Gustav Jung" | p
+ps -tr "Jung and Carl G Jung are aliases of Carl Gustav Jung" | p
+ps -tr "Larry Page and Sergey Brin are co-founders of Google" | p
+ps -tr "Co-founders of Google are Larry Page and Sergey Brin" | p
+ps -tr "Larry Page is co-founder of Google and Sergey Brin is co-founder of Google" | p
+ps -tr "Larry Page with Sergey Brin is co-founder of Google" | p
+ps -tr "Larry Page and Sergey Brin co-founded Google" | p
+ps -tr "Larry Page and Sergey Brin founded Google together" | p
+ps -tr "Larry Page co-founded Google with Sergey Brin" | p
+ps -tr "Larry Page and Sergey Brin estabslished Google together" | p
+ps -tr "Larry Page and Sergey Brin set up Google together" | p
+ps -tr "Larry Page established Google with Sergey Brin" | p
+ps -tr "Larry Page set up Google with Sergey Brin" | p
+ps -tr "Larry Page launched Google with Sergey Brin" | p
+ps -tr "Larry Page and Sergey Brin launched Google" | p
+ps -tr "Larry Page and Sergey Brin created Google" | p
+ps -tr "Larry Page and Sergey Brin constituted Google together" | p
+ps -tr "Sergey Brin and Larry Page work at Google" | p
+ps -tr "Sergey Brin works with Larry Page at Google" | p
+ps -tr "Sergey Brin and Larry Page are colleagues at Google" | p
+ps -tr "Sergey Brin and Larry Page are occupied at Google" | p
+ps -tr "Google has employed Sergey Brin and Larry Page" | p
+ps -tr "Sergey Brin and Larry Page are employed by Google" | p
+ps -tr "Sergey Brin and Larry Page have positions at Google" | p
+ps -tr "Sergey Brin and Larry Page are professionally active at Google" | p
+ps -tr "Sergey Brin and Larry Page get sallaries from Google" | p
+ps -tr "Sergey Brin and Larry Page are paid by Google" | p
+ps -tr "Sergey Brin , Larry Page and Eric Schmidt work at Google" | p
+ps -tr "Sergey Brin , Larry Page and Eric Schmidt are colleagues at Google" | p
+ps -tr "Sergey Brin , Larry Page and Eric Schmidt are employed by Google" | p
+ps -tr "Sergey Brin , Larry Page and Eric Schmidt collaborate in Google" | p
+ps -tr "Sergey Brin , Larry Page and Eric Schmidt are paid by Google" | p
+ps -tr "Sergey Brin , Larry Page and Eric Schmidt get sallaries at Google" | p
+ps -tr "Sergey Brin , Larry Page and Eric Schmidt are professionally active at Google" | p
+ps -tr "Google has employed Sergey Brin , Larry Page and Eric Schmidt" | p
+ps -tr "Sergey Brin , Larry Page and Eric Schmidt are appointed by Google" | p
+ps -tr "Sergey Brin , Larry Page and Eric Schmidt do work for Google" | p
