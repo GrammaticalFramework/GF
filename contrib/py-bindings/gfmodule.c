@@ -81,6 +81,16 @@ NEWGF(Tree,GF_Tree,TreeType,"gf.tree","gf tree")
 
 DEALLOCFN(PGF_dealloc, PGFModule, gf_freePGF, "freePGF")
 
+static PyObject* 
+pgf_repr(PGFModule *self) {
+  GF_Language lang = gf_abstractName(self->obj);
+  const char* abs = gf_showLanguage(lang);
+  gf_freeLanguage(lang);					     
+  return PyString_FromFormat("<gf.pgf with abstract %s at 0x%x>", abs, self->obj);
+}
+
+
+
 static gfType*
 startCategory(PyObject *self, PyObject *noarg)
 {
@@ -89,6 +99,20 @@ startCategory(PyObject *self, PyObject *noarg)
   cat = (gfType*)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
   cat->obj = gf_startCat(((PGFModule*)self)->obj);
   return cat;
+}
+
+static PyObject*
+languages(PGFModule* self)
+{
+  PyObject *langs = PyList_New(0);
+  GF_Language *p = gf_languages(self->obj);
+  while (*p) {
+    Lang* l = (Lang*)LangType.tp_new(&LangType,NULL,NULL);
+    l->obj = *(p++);
+    PyList_Append(langs, (PyObject*)l);
+    Py_DECREF(l); //??
+  }                                                                                
+  return langs;
 }
 
 static PyObject*
@@ -104,6 +128,16 @@ linearize(PGFModule *self, PyObject *args)
   char* c_lin = gf_linearize(self->obj, lang->obj, tree->obj);
   return PyString_FromString(c_lin);
 }
+
+static Lang*
+abstractName(PGFModule* self)
+{
+  Lang* abs = (Lang*)LangType.tp_new(&LangType,NULL,NULL);
+  if (!checkType(self,&PGFType)) return NULL;
+  abs->obj = gf_abstractName(self->obj);
+  return abs;
+}
+
 
 static PyObject*
 parse(PyObject *self, PyObject *args, PyObject *kws)
@@ -163,6 +197,8 @@ static PyMethodDef pgf_methods[] = {
   {"parse", (PyCFunction)parse, METH_VARARGS|METH_KEYWORDS,"Parse a string."},
   {"lin", (PyCFunction)linearize, METH_VARARGS,"Linearize tree."},
   {"startcat", (PyCFunction)startCategory, METH_NOARGS,"Get the start category."},
+  {"abstract", (PyCFunction)abstractName, METH_NOARGS,"Get the module abstract name."},
+  {"languages", (PyCFunction)languages, METH_NOARGS,"Get the module languages."},
   {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
@@ -193,8 +229,6 @@ readLang(PyObject *self, PyObject *args)
 
 DEALLOCFN(gfType_dealloc, gfType, gf_freeType, "freeType")
 REPRCB(gfType_repr, gfType, gf_showType)
-
-
 
 
 /* expression type: methods, destructor */
@@ -234,7 +268,7 @@ initgf(void)
 	if (PyType_Ready(&t) < 0) return;
 	
 	PGFType.tp_methods = pgf_methods;
-	READYTYPE(PGFType,NULL,PGF_dealloc)
+	READYTYPE(PGFType, pgf_repr, PGF_dealloc)
 	READYTYPE(LangType, lang_repr, Lang_dealloc)
 	READYTYPE(gfTypeType, gfType_repr, gfType_dealloc)
 	READYTYPE(ExprType, expr_repr, expr_dealloc)
