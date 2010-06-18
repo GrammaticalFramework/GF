@@ -30,7 +30,7 @@ lin
     let 
      ss : NP = s 
         | mkNP (mkNP thePl_Det L.name_N) (mkAdv possess_Prep s)
-        ---- s's names
+        | mkNP (GenNP s) plNum L.name_N ;
     in 
       mkUtt (mkImp (mkVP give_V3 ss (mkNP i_Pron)))
     | mkUtt (mkQS (mkQCl (L.CompIP whatSg_IP) ss))
@@ -52,6 +52,7 @@ lin
   AAct s p = mkUtt (mkCl s p) ;
 
   SAll k = mkNP all_Predet (mkNP aPl_Det k) | mkNP thePl_Det k ;
+  SRel s r = mkNP (GenNP s) plNum r.cn ;
   SOne k = mkNP n1_Numeral k ;
   SIndef k = mkNP a_Det k ;
   SPlural k = mkNP aPl_Det k ;
@@ -61,7 +62,6 @@ lin
 
   KRelSet r s = 
      mkCN r.cn (mkAdv r.prep s) ;
-     ---- | S's R
 
 ----  KRelsSet r q s = 
 ----     mkCN r.cn (mkAdv r.prep s) ;
@@ -138,7 +138,7 @@ lin
 
   Location = mkRelation "location" ;
   Region = mkRelation "region" ;
-  Subregion = mkRelation "subregion" ;
+  Subregion = mkRelation "subregion" | mkRelation "sub-region" ;
   RName = mkRelation "name" ;
   RNickname = mkRelation "nickname" ;
 
