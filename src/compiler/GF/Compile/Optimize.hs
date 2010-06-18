@@ -73,7 +73,7 @@ evalInfo opts ms m c info = do
         return (Just (L loc (factor param c 0 de)))
       _ -> return pde   -- indirection
 
-    ppr' <- liftM Just $ evalPrintname gr c ppr (Just (L (0,0) (K $ showIdent c)))
+    ppr' <- evalPrintname gr ppr
 
     return (CncCat ptyp pde' ppr')
 
@@ -83,7 +83,7 @@ evalInfo opts ms m c info = do
       Just (L loc de) -> do de <- partEval opts gr (cont,val) de
                             return (Just (L loc (factor param c 0 de)))
       Nothing -> return pde
-    ppr' <-  liftM Just $ evalPrintname gr c ppr pde'
+    ppr' <-  evalPrintname gr ppr
     return $ CncFun mt pde' ppr' -- only cat in type actually needed
 
   ResOper pty pde 
@@ -157,40 +157,12 @@ mkLinDefault gr typ = liftM (Abs Explicit varStr) $ mkDefField typ
      _ | Just _ <- isTypeInts typ -> return $ EInt 0 -- exists in all as first val
      _ -> Bad (render (text "linearization type field cannot be" <+> ppTerm Unqualified 0 typ))
 
--- | Form the printname: if given, compute. If not, use the computed
--- lin for functions, cat name for cats (dispatch made in evalCncDef above).
---- We cannot use linearization at this stage, since we do not know the
---- defaults we would need for question marks - and we're not yet in canon.
-evalPrintname :: SourceGrammar -> Ident -> Maybe (L Term) -> Maybe (L Term) -> Err (L Term)
-evalPrintname gr c ppr lin =
-  case ppr of
-    Just (L loc pr) -> do pr <- comp pr
-                          return (L loc pr)
-    Nothing -> case lin of
-                 Just (L loc t)  -> return $ L loc (K $ clean $ render (ppTerm Unqualified 0 (oneBranch t)))
-                 Nothing -> return $ L (0,0) (K $ showIdent c) ----
- where
-   comp = computeConcrete gr
-
-   oneBranch t = case t of
-     Abs _ _ b -> oneBranch b
-     R   (r:_) -> oneBranch $ snd $ snd r
-     T _ (c:_) -> oneBranch $ snd c
-     V _ (c:_) -> oneBranch c
-     FV  (t:_) -> oneBranch t
-     C x y     -> C (oneBranch x) (oneBranch y)
-     S x _     -> oneBranch x
-     P x _     -> oneBranch x
-     Alts d _  -> oneBranch d
-     _ -> t
-
-  --- very unclean cleaner
-   clean s = case s of
-     '+':'+':' ':cs -> clean cs
-     '"':cs -> clean cs
-     c:cs -> c: clean cs
-     _ -> s
-
+evalPrintname :: SourceGrammar -> Maybe (L Term) -> Err (Maybe (L Term))
+evalPrintname gr mpr =
+  case mpr of
+    Just (L loc pr) -> do pr <- computeConcrete gr pr
+                          return (Just (L loc pr))
+    Nothing         -> return Nothing
 
 -- do even more: factor parametric branches
 
