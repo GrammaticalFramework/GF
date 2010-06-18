@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+# GF Python bindings
+# Jordi Saludes 2010
+#
+ 
+
 import gf
 import unittest
 

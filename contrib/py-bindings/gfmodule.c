@@ -1,3 +1,7 @@
+// GF Python bindings
+// Jordi Saludes 2010
+//
+
 #include <Python.h>
 #include "pgf.h"
 
