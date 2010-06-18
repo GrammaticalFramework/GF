@@ -69,11 +69,27 @@ checkType(void* obj, PyTypeObject* tp)
 
 /* new types and declarations */
 
+NEWGF(CId,GF_CId,CIdType,"gf.cid","c identifier")
 NEWGF(Lang,GF_Language,LangType,"gf.lang","language")
 NEWGF(gfType,GF_Type,gfTypeType,"gf.type","gf type")
 NEWGF(PGFModule,GF_PGF,PGFType,"gf.pgf","PGF module")
 NEWGF(Expr,GF_Expr,ExprType,"gf.expr","gf expression")	
 NEWGF(Tree,GF_Tree,TreeType,"gf.tree","gf tree")
+
+/* CId methods, constructor and destructor */
+
+
+DEALLOCFN(CId_dealloc, CId, gf_freeCId, "freeCId")
+
+static PyObject*
+CId_repr(CId *self)
+{
+  char* str_cid = gf_showCId(self->obj);
+  PyObject* repr = PyString_FromString(str_cid);
+  free(str_cid);
+  return repr;
+}
+
 
 
 /* PGF methods, constructor and destructor */
@@ -99,6 +115,20 @@ startCategory(PyObject *self, PyObject *noarg)
   cat = (gfType*)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
   cat->obj = gf_startCat(((PGFModule*)self)->obj);
   return cat;
+}
+
+static PyObject*
+categories(PGFModule* self)
+{
+  PyObject* cats = PyList_New(0);
+  GF_CId *p = gf_categories(self->obj);
+  while (*p) {
+    CId* c = (CId*)CIdType.tp_new(&CIdType,NULL,NULL);
+    c->obj = *(p++);
+    PyList_Append(cats, (PyObject*)c);
+    Py_DECREF(c); //?
+  }
+  return cats;
 }
 
 static PyObject*
@@ -197,6 +227,7 @@ static PyMethodDef pgf_methods[] = {
   {"parse", (PyCFunction)parse, METH_VARARGS|METH_KEYWORDS,"Parse a string."},
   {"lin", (PyCFunction)linearize, METH_VARARGS,"Linearize tree."},
   {"startcat", (PyCFunction)startCategory, METH_NOARGS,"Get the start category."},
+  {"categories", (PyCFunction)categories, METH_NOARGS,"Get all categories."},
   {"abstract", (PyCFunction)abstractName, METH_NOARGS,"Get the module abstract name."},
   {"languages", (PyCFunction)languages, METH_NOARGS,"Get the module languages."},
   {NULL, NULL, 0, NULL}  /* Sentinel */
@@ -267,6 +298,7 @@ initgf(void)
 	t.tp_dealloc = (destructor)tdealloc; \
 	if (PyType_Ready(&t) < 0) return;
 	
+        READYTYPE(CIdType, CId_repr, CId_dealloc)
 	PGFType.tp_methods = pgf_methods;
 	READYTYPE(PGFType, pgf_repr, PGF_dealloc)
 	READYTYPE(LangType, lang_repr, Lang_dealloc)

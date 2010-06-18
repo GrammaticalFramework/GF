@@ -23,22 +23,37 @@ def rmprefix(obj):
 #	s = `obj`
 #	m = hexre.match(s)
 #	return m and s[m.end(0):]
+
+class TestPgfInfo(unittest.TestCase):
+	def pgf(self):
+		return gf.read_pgf(self.path)
+	def setUp(self):
+		self.path = 'Query.pgf'
+	def test_readPgf(self):
+		pgf = self.pgf()
+		self.assertNotEqual(pgf,None)
+	def test_startcat(self):
+		pgf = self.pgf()
+		cat = pgf.startcat()
+		self.assertEqual(rmprefix(cat),'Question')
+	def test_categories(self):
+		pgf = self.pgf()
+		cats = [`c` for c in pgf.categories()]
+		self.failUnless('Float' in cats)
+		self.failUnless('Int' in cats)
+		self.failUnless('String' in cats)
+	def test_createLanguage(self):
+		pgf = self.pgf()
+		for lang in 'QueryEng QuerySpa'.split():
+			l = gf.read_language(lang) 
+			self.assertEqual(rmprefix(l),lang)
 	
 class TestParsing(unittest.TestCase):
 	def setUp(self):
 		self.lexed = samples
 		self.lang = 'QueryEng'
 		self.pgf = "Query.pgf"
-	def test_createPgf(self):
-		q = gf.read_pgf(self.pgf)
-		self.assertNotEqual(q,None)
-	def test_startcat(self):
-		pgf = gf.read_pgf(self.pgf)
-		cat = pgf.startcat()
-		self.assertEqual(rmprefix(cat),'Question')
-	def test_createLanguage(self):
-		l = gf.read_language(self.lang) 
-		self.assertEqual(rmprefix(l),self.lang)
+
 	def test_parse(self):
 		s = self.lexed[0]
 		pgf = gf.read_pgf(self.pgf)
