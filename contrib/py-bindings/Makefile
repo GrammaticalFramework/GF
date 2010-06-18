@@ -2,8 +2,8 @@ src=../../src
 import=-i$src/runtime/haskell:$src/compiler
 cbind=../c-bindings
 pythoninc=/usr/include/python2.5
-debug=-optc '-DDEBUG=1'
-
+debug= #-optc '-DDEBUG=1'
+exdir=../../examples/tutorial/embedded
 conf:
 	ln -s $(cbind)/PGFFFI.hs
 	ln -s $(cbind)/pgf.h

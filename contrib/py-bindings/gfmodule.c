@@ -78,6 +78,7 @@ NEWGF(Tree,GF_Tree,TreeType,"gf.tree","gf tree")
 
 /* PGF methods, constructor and destructor */
 
+
 DEALLOCFN(PGF_dealloc, PGFModule, gf_freePGF, "freePGF")
 
 static gfType*
