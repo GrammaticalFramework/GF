@@ -4,8 +4,17 @@ import unittest
 
 
 samples = [
-	('is 89 odd',"Odd (Number 89)"),
-	('is 21 prime',"Prime (Number 21)")]
+	("Odd (Number 89)",
+	 {'eng': "is 89 odd",
+	  'spa': "89 es impar"}),
+	("Prime (Number 21)",
+	 {'eng': "is 21 prime",
+	  'spa': "21 es primo"})]
+
+def lang2iso(l):
+	s = rmprefix(l)
+	assert(s[:5],"Query")
+	return s[5:].lower()
 
 import re
 hexre = re.compile('0x[0-9a-f]+:[ ]*')
@@ -34,11 +43,11 @@ class TestParsing(unittest.TestCase):
 		s = self.lexed[0]
 		pgf = gf.read_pgf(self.pgf)
 		l = gf.read_language(self.lang)
-		for s,t in self.lexed:
-			ps = pgf.parse(s, l)
+		for abs,cnc in self.lexed:
+			ps = pgf.parse(cnc['eng'], l)
 			self.failUnless(ps)
 			pt = rmprefix(ps[0])
-			self.assertEqual(pt,t)
+			self.assertEqual(pt,abs)
 
 
 class TestLinearize(unittest.TestCase):
@@ -49,15 +58,25 @@ class TestLinearize(unittest.TestCase):
 
 	def test_Linearize(self):
 		l = self.lang
-		for s,t in self.samples:
-			t = self.pgf.parse(s, l)[0]
-			self.assertEqual(s,self.pgf.lin(l,t))
+		for abs,cnc in self.samples:
+			ts = self.pgf.parse(cnc['eng'], l)
+			self.assertEqual(cnc['eng'],self.pgf.lin(l,ts[0]))
 
+class TestTranslate(unittest.TestCase):
+	def setUp(self):
+		self.samples = samples
+		self.pgf = gf.read_pgf('Query.pgf')
+		self.langs = [(lang2iso(l),l) for l in self.pgf.languages()]
+
+	def test_translate(self):
+		for abs,cnc in self.samples:
+			for i,l in self.langs:
+				for j,m in self.langs:
+					if i==j: continue
+					parsed = self.pgf.parse(cnc[i],l)
+					assert len(parsed) == 1
+					lin = self.pgf.lin(m,parsed[0])
+					self.assertEqual(lin,cnc[j])
+			
 if __name__ == '__main__':
 	unittest.main()
-	if 0:
-		q = gf.read_pgf('Query.pgf')
-		l = gf.read_language('QueryEng')
-		ts = q.parse('is 10 prime', l)
-		print ts[0]
-		print q.lin(l,ts[0])
