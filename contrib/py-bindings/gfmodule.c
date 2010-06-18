@@ -187,6 +187,20 @@ abstractName(PGFModule* self)
 
 
 static PyObject*
+printName(PGFModule *self, PyObject *args)
+{
+	Lang* lang;
+	CId* id;
+	if (!PyArg_ParseTuple(args, "OO", &lang, &id))
+		return NULL;
+	char *pname = gf_showPrintName(self->obj, lang->obj, id->obj);
+	PyObject* result = PyString_FromString(pname);
+	free(pname);
+	return result;
+}
+
+
+static PyObject*
 parse(PyObject *self, PyObject *args, PyObject *kws)
 {
 	PyObject *lang_pyob, *cat_pyob = NULL;
@@ -244,6 +258,7 @@ static PyMethodDef pgf_methods[] = {
   {"parse", (PyCFunction)parse, METH_VARARGS|METH_KEYWORDS,"Parse a string."},
   {"lin", (PyCFunction)linearize, METH_VARARGS,"Linearize tree."},
   {"lang_code", (PyCFunction)languageCode, METH_VARARGS,"Get the language code."},
+  {"print_name", (PyCFunction)printName, METH_VARARGS,"Get the print name for a id."},
   {"startcat", (PyCFunction)startCategory, METH_NOARGS,"Get the start category."},
   {"categories", (PyCFunction)categories, METH_NOARGS,"Get all categories."},
   {"abstract", (PyCFunction)abstractName, METH_NOARGS,"Get the module abstract name."},
