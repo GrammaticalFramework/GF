@@ -146,6 +146,23 @@ languages(PGFModule* self)
 }
 
 static PyObject*
+languageCode(PGFModule *self, PyObject *args)
+{
+  Lang *lang;
+  if (!PyArg_ParseTuple(args, "O", &lang))
+    return NULL;
+  char* scode = gf_languageCode(self->obj, lang->obj);
+  if (scode) {
+    PyObject* result = PyString_FromString(scode);
+    free(scode);
+    return result;
+  } else {
+    Py_INCREF(Py_None);
+    return Py_None;
+  }
+}
+
+static PyObject*
 linearize(PGFModule *self, PyObject *args)
 {
   Lang *lang;
@@ -226,6 +243,7 @@ readPGF(PyObject *self, PyObject *args)
 static PyMethodDef pgf_methods[] = {
   {"parse", (PyCFunction)parse, METH_VARARGS|METH_KEYWORDS,"Parse a string."},
   {"lin", (PyCFunction)linearize, METH_VARARGS,"Linearize tree."},
+  {"lang_code", (PyCFunction)languageCode, METH_VARARGS,"Get the language code."},
   {"startcat", (PyCFunction)startCategory, METH_NOARGS,"Get the start category."},
   {"categories", (PyCFunction)categories, METH_NOARGS,"Get all categories."},
   {"abstract", (PyCFunction)abstractName, METH_NOARGS,"Get the module abstract name."},
