@@ -51,7 +51,9 @@ ppCnc name cnc =
           text "sequences" $$
           nest 2 (vcat (map ppSeq (assocs (sequences cnc)))) $$
           text "categories" $$
-          nest 2 (vcat (map ppCncCat (Map.toList (cnccats cnc))))) $$
+          nest 2 (vcat (map ppCncCat (Map.toList (cnccats cnc)))) $$
+          text "printnames" $$
+          nest 2 (vcat (map ppPrintName (Map.toList (printnames cnc))))) $$
   char '}'
 
 ppProduction (fcat,PApply funid args) =
@@ -70,6 +72,9 @@ ppSeq (seqid,seq) =
 ppCncCat (id,(CncCat start end labels)) =
   ppCId id <+> text ":=" <+> (text "range " <+> brackets (ppFCat start <+> text ".." <+> ppFCat end) $$
                               text "labels" <+> brackets (vcat (map (text . show) (elems labels))))
+
+ppPrintName (id,name) =
+  ppCId id <+> text ":=" <+> ppStrs [name]
 
 ppSymbol (SymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
 ppSymbol (SymLit d r) = char '<' <> int d <> comma <> int r <> char '>'
