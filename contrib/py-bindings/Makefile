@@ -10,7 +10,7 @@ conf:
 build: gf.so
 
 gf.so:  PGFFFI.hs gfmodule.c
-	gf --make ../../examples/tutorial/embedded/QueryEng.gf
+	gf --make  $(exdir)/QueryEng.gf $(exdir)/QuerySpa.gf 
 	ghc $(import) --make -fglasgow-exts -O2 -no-hs-main -c $<
 	ghc -O2 --make -fglasgow-exts -no-hs-main -optl '-shared' \
 	 -optc '-DMODULE=PGFFFI' $(debug) -optc '-I$(pythoninc)' -o $@ $^
