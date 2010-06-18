@@ -73,17 +73,17 @@ appPredefined t = case t of
     -- one-place functions
     Q (mod,f) | mod == cPredef ->
       case x of
-        (K s) | f == cLength -> retb $ EInt $ toInteger $ length s
+        (K s) | f == cLength -> retb $ EInt $ length s
         _                    -> retb t
 
     -- two-place functions
     App (Q (mod,f)) z0 | mod == cPredef -> do
      (z,_) <- appPredefined z0
      case (norm z, norm x) of
-      (EInt i, K s)    | f == cDrop    -> retb $ K (drop (fi i) s)
-      (EInt i, K s)    | f == cTake    -> retb $ K (take (fi i) s)
-      (EInt i, K s)    | f == cTk      -> retb $ K (take (max 0 (length s - fi i)) s)
-      (EInt i, K s)    | f == cDp      -> retb $ K (drop (max 0 (length s - fi i)) s)
+      (EInt i, K s)    | f == cDrop    -> retb $ K (drop i s)
+      (EInt i, K s)    | f == cTake    -> retb $ K (take i s)
+      (EInt i, K s)    | f == cTk      -> retb $ K (take (max 0 (length s - i)) s)
+      (EInt i, K s)    | f == cDp      -> retb $ K (drop (max 0 (length s - i)) s)
       (K s,    K t)    | f == cEqStr   -> retb $ if s == t then predefTrue else predefFalse
       (K s,    K t)    | f == cOccur   -> retb $ if substring s t then predefTrue else predefFalse
       (K s,    K t)    | f == cOccurs  -> retb $ if any (flip elem t) s then predefTrue else predefFalse
@@ -119,7 +119,6 @@ appPredefined t = case t of
        (K x,K y) -> K (x +++ y)
        _ -> t
      _ -> t
-   fi = fromInteger
 
 -- read makes variables into constants
 

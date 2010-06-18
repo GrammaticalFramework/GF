@@ -34,7 +34,7 @@ data AExp =
      AVr   Ident Val 
    | ACn   QIdent Val
    | AType 
-   | AInt  Integer 
+   | AInt  Int 
    | AFloat Double
    | AStr  String
    | AMeta MetaId Val

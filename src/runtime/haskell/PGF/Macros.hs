@@ -117,15 +117,6 @@ contextLength ty = case ty of
 showPrintName :: PGF -> Language -> CId -> String
 showPrintName pgf lang id = lookMap (showCId id) id $ printnames $ lookMap (error "no lang") lang $ concretes pgf
 
-term0 :: CId -> Term
-term0 = TM . showCId
-
-tm0 :: Term
-tm0 = TM "?"
-
-kks :: String -> Term
-kks = K . KS
-
 -- lookup with default value
 lookMap :: (Show i, Ord i) => a -> i -> Map.Map i a -> a 
 lookMap d c m = Map.findWithDefault d c m

@@ -28,7 +28,8 @@ import PGF.CId (CId,showCId,ppCId,pCId,mkCId)
 import PGF.Data
 import PGF.Expr (showExpr, Tree)
 import PGF.Linearize
-import PGF.Macros (lookValCat, lookMap, _B, _V, BracketedString(..), flattenBracketedString)
+import PGF.Macros (lookValCat, lookMap, _B, _V,
+                   BracketedString(..), BracketedTokn(..), flattenBracketedString)
 
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
@@ -274,7 +275,7 @@ tag i
 --
 -- Uuuuugly!!! I hope that this code will be removed one day.
 
-type LinTable = Array LIndex [Tokn]
+type LinTable = Array LIndex [BracketedTokn]
 
 
 linTree :: PGF -> Language -> (Maybe CId -> [Int] -> LinTable -> LinTable) -> Expr -> [LinTable]
@@ -299,7 +300,7 @@ linTree pgf lang mark e = lin0 [] [] [] Nothing e
     lin path xs mb_fid (ETyped e _) es = lin path xs mb_fid e es
     lin path xs mb_fid (EImplArg e) es = lin path xs mb_fid e es
 
-    ss s = listArray (0,0) [[KS s]]
+    ss s = listArray (0,0) [[LeafKS [s]]]
 
     apply path xs mb_fid f es =
       case Map.lookup f lp of
@@ -332,15 +333,15 @@ linTree pgf lang mark e = lin0 [] [] [] Nothing e
 
             compute (SymCat d r)    = (args !! d) ! r
             compute (SymLit d r)    = (args !! d) ! r
-            compute (SymKS ts)      = map KS ts
-            compute (SymKP ts alts) = [KP ts alts]
+            compute (SymKS ts)      = [LeafKS ts]
+            compute (SymKP ts alts) = [LeafKP ts alts]
 
-untokn :: [Tokn] -> [String]
+untokn :: [BracketedTokn] -> [String]
 untokn ts = case ts of
-  KP d _  : [] -> d
-  KP d vs : ws -> let ss@(s:_) = untokn ws in sel d vs s ++ ss
-  KS s    : ws -> s : untokn ws
-  []           -> []
+  LeafKP d _  : [] -> d
+  LeafKP d vs : ws -> let ss@(s:_) = untokn ws in sel d vs s ++ ss
+  LeafKS s    : ws -> s ++ untokn ws
+  []               -> []
  where
    sel d vs w = case [v | Alt v cs <- vs, any (\c -> isPrefixOf c w) cs] of
      v:_ -> v
@@ -353,8 +354,8 @@ markLinearizes pgf lang = map (unwords . untokn . (! 0)) . linTree pgf lang mark
   where
     mark mb_f path lint = amap (bracket mb_f path) lint
 
-    bracket Nothing  path ts = [KS ("("++show (reverse path))] ++ ts ++ [KS ")"]
-    bracket (Just f) path ts = [KS ("(("++showCId f++","++show (reverse path)++")")] ++ ts ++ [KS ")"]
+    bracket Nothing  path ts = [LeafKS ["("++show (reverse path)]] ++ ts ++ [LeafKS [")"]]
+    bracket (Just f) path ts = [LeafKS ["(("++showCId f++","++show (reverse path)++")"]] ++ ts ++ [LeafKS [")"]]
 
 
 graphvizDependencyTree :: String -> Bool -> Maybe Labels -> Maybe String -> PGF -> CId -> Expr -> String

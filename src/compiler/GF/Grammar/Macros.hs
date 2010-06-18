@@ -166,6 +166,12 @@ unzipR r = (ls, map snd ts) where (ls,ts) = unzip r
 mkAssign :: [(Label,Term)] -> [Assign]
 mkAssign lts = [assign l t | (l,t) <- lts]
 
+projectRec :: Label -> [Assign] -> Term
+projectRec l rs =
+  case lookup l rs of
+    Just (_,t) -> t
+    Nothing    -> error (render (text "no value for label" <+> ppLabel l))
+
 zipAssign :: [Label] -> [Term] -> [Assign]
 zipAssign ls ts = [assign l t | (l,t) <- zip ls ts]
 
@@ -199,7 +205,7 @@ typeTok   = Sort cTok
 typeStrs  = Sort cStrs
 
 typeString, typeFloat, typeInt :: Term
-typeInts :: Integer -> Term
+typeInts :: Int -> Term
 typePBool :: Term
 typeError :: Term
 
@@ -210,7 +216,7 @@ typeInts i = App (cnPredef cInts) (EInt i)
 typePBool = cnPredef cPBool
 typeError = cnPredef cErrorType
 
-isTypeInts :: Term -> Maybe Integer
+isTypeInts :: Term -> Maybe Int
 isTypeInts (App c (EInt i)) | c == cnPredef cInts = Just i
 isTypeInts _                                      = Nothing
 
@@ -299,7 +305,7 @@ freshAsTerm s = Vr (varX (readIntArg s))
 string2term :: String -> Term
 string2term = K
 
-int2term :: Integer -> Term
+int2term :: Int -> Term
 int2term = EInt
 
 float2term :: Double -> Term

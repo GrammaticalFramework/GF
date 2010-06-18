@@ -9,6 +9,7 @@ import GF.Compile
 import GF.Compile.Export
 
 import GF.Grammar.CF ---- should this be on a deeper level? AR 15/10/2008
+import GF.Grammar (identC)
 
 import GF.Infra.UseIO
 import GF.Infra.Option
@@ -16,6 +17,7 @@ import GF.Data.ErrM
 
 import Data.Maybe
 import Data.Binary
+import qualified Data.ByteString.Char8 as BS
 import System.FilePath
 import System.IO
 import Control.Exception
@@ -37,7 +39,7 @@ compileSourceFiles opts fs =
        let cnc = justModuleName (last fs)
        if flag optStopAfterPhase opts == Compile 
          then return ()
-         else do pgf <- link opts cnc gr
+         else do pgf <- link opts (identC (BS.pack cnc)) gr
                  writePGF opts pgf
                  writeOutputs opts pgf
 
@@ -49,7 +51,7 @@ compileCFFiles opts fs =
        gr <- compileSourceGrammar opts gf
        if flag optStopAfterPhase opts == Compile 
          then return ()
-         else do pgf <- link opts cnc gr
+         else do pgf <- link opts (identC (BS.pack cnc)) gr
                  writePGF opts pgf
                  writeOutputs opts pgf
 

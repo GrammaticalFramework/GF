@@ -19,6 +19,7 @@ module GF.Grammar.Predef
           , cInt
           , cFloat
           , cString
+          , cVar
           , cInts
           , cPBool
           , cErrorType
@@ -73,6 +74,9 @@ cFloat = identC (BS.pack "Float")
 cString :: Ident
 cString = identC (BS.pack "String")
 
+cVar :: Ident
+cVar = identC (BS.pack "__gfVar")
+
 cInts :: Ident
 cInts = identC (BS.pack "Ints")
 
@@ -89,7 +93,7 @@ cUndefinedType :: Ident
 cUndefinedType = identC (BS.pack "UndefinedType")
 
 isLiteralCat :: Ident -> Bool
-isLiteralCat c = elem c [cInt,cString,cFloat]
+isLiteralCat c = elem c [cInt,cString,cFloat,cVar]
 
 cPTrue :: Ident
 cPTrue  = identC (BS.pack "PTrue")
