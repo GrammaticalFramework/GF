@@ -115,7 +115,7 @@ contextLength ty = case ty of
 
 -- | Show the printname of function or category
 showPrintName :: PGF -> Language -> CId -> String
-showPrintName pgf lang id = lookMap "?" id $ printnames $ lookMap (error "no lang") lang $ concretes pgf
+showPrintName pgf lang id = lookMap (showCId id) id $ printnames $ lookMap (error "no lang") lang $ concretes pgf
 
 term0 :: CId -> Term
 term0 = TM . showCId
