@@ -10,9 +10,10 @@ samples = [
 import re
 hexre = re.compile('0x[0-9a-f]+:[ ]*')
 def rmprefix(obj):
-	s = `obj`
-	m = hexre.match(s)
-	return m and s[m.end(0):]
+	return `obj`
+#	s = `obj`
+#	m = hexre.match(s)
+#	return m and s[m.end(0):]
 	
 class TestParsing(unittest.TestCase):
 	def setUp(self):
