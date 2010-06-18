@@ -112,7 +112,7 @@ data Token
  | T_where
  | T_with
  | T_String  String          -- string literals
- | T_Integer Integer         -- integer literals
+ | T_Integer Int             -- integer literals
  | T_Double  Double          -- double precision float literals
  | T_LString String
  | T_Ident   Ident

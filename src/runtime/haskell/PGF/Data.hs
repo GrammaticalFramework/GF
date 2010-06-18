@@ -68,22 +68,6 @@ data Alternative =
    Alt [String] [String]
   deriving (Eq,Ord,Show)
 
-data Term =
-   R [Term]
- | P Term Term
- | S [Term]
- | K Tokn
- | V Int
- | C Int
- | FV [Term]
- | W String Term
- | TM String
-  deriving (Eq,Ord,Show)
-
-data Tokn =
-   KS String
- | KP [String] [Alternative]
-  deriving (Eq,Ord,Show)
 
 -- merge two PGFs; fails is differens absnames; priority to second arg
 

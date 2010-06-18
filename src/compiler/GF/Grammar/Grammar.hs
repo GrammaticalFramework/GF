@@ -119,7 +119,7 @@ data Term =
  | Cn Ident                      -- ^ constant
  | Con Ident                     -- ^ constructor
  | Sort Ident                    -- ^ basic type
- | EInt Integer                  -- ^ integer literal
+ | EInt Int                      -- ^ integer literal
  | EFloat Double                 -- ^ floating point literal
  | K String                      -- ^ string literal or token: @\"foo\"@
  | Empty                         -- ^ the empty string @[]@
@@ -171,7 +171,7 @@ data Patt =
  | PW                     -- ^ wild card pattern: @_@
  | PR [(Label,Patt)]      -- ^ record pattern: @{r = p ; ...}@  -- only concrete
  | PString String         -- ^ string literal pattern: @\"foo\"@  -- only abstract
- | PInt    Integer        -- ^ integer literal pattern: @12@    -- only abstract
+ | PInt    Int            -- ^ integer literal pattern: @12@    -- only abstract
  | PFloat Double          -- ^ float literal pattern: @1.2@    -- only abstract
  | PT Type Patt           -- ^ type-annotated pattern
 

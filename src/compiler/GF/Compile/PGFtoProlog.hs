@@ -127,11 +127,6 @@ instance PLPrint Literal where
     plp (LInt n) = plp (show n)
     plp (LFlt f) = plp (show f)
 
-instance PLPrint Tokn where
-    plp (KS tokn) = plp tokn
-    plp (KP strs alts) = plTerm "kp" [plp strs, plList [plOper "/" (plp ss1) (plp ss2) |
-                                                        Alt ss1 ss2 <- alts]]
-
 ----------------------------------------------------------------------
 -- basic prolog-printing
 

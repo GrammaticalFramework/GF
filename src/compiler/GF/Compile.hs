@@ -35,9 +35,9 @@ import qualified Data.Set as Set
 import Data.List(nub)
 import Data.Maybe (isNothing)
 import Data.Binary
+import qualified Data.ByteString.Char8 as BS
 import Text.PrettyPrint
 
-import PGF.Check
 import PGF.CId
 import PGF.Data
 import PGF.Macros
@@ -49,20 +49,15 @@ compileToPGF :: Options -> [FilePath] -> IOE PGF
 compileToPGF opts fs =
     do gr <- batchCompile opts fs
        let name = justModuleName (last fs)
-       link opts name gr
+       link opts (identC (BS.pack name)) gr
 
-link :: Options -> String -> SourceGrammar -> IOE PGF
+link :: Options -> Ident -> SourceGrammar -> IOE PGF
 link opts cnc gr = do
   let isv = (verbAtLeast opts Normal)
   putPointE Normal opts "linking ... " $ do
-    gc0 <- ioeIO (mkCanon2pgf opts cnc gr)
-    case checkPGF gc0 of
-      Ok (gc,b) -> do case (isv,b) of
-                        (True, True) -> ioeIO $ putStrLn "OK" 
-                        (False,True) -> return ()
-                        _            -> ioeIO $ putStrLn $ "Corrupted PGF"
-                      return $ if flag optOptimizePGF opts then optimizePGF gc else gc
-      Bad s     -> fail s
+    gc <- ioeIO (mkCanon2pgf opts cnc gr)
+    ioeIO $ putStrLn "OK" 
+    return $ if flag optOptimizePGF opts then optimizePGF gc else gc
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do
