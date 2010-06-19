@@ -15,9 +15,11 @@ lincat
   Query = Utt ;
   Answer = Cl ; -- Utt ;
   Set = NP ;
-  Relation = {cn : CN ; prep : Prep} ;
+  Interrogative = IP ;
+  Function = {cn : CN ; prep : Prep} ;
   Kind = CN ;
   Property = {ap : AP ; vp : VP} ;
+  Relation = {ap : AP ; vp : VP ; prep : Prep} ;
   Individual = NP ;
   Name = NP ;
   [Individual] = [NP] ;
@@ -39,19 +41,34 @@ lin
     | mkUtt (mkQS (mkQCl (L.CompIP (L.IdetIP (mkIDet which_IQuant))) ss))
     | mkUtt ss ;
 
-  QWhat k p = 
-    mkUtt (mkQS (mkQCl (mkIP (what_IQuant | which_IQuant) (sgNum | plNum) k) p.vp)) ;
-  QWho p = mkUtt (mkQS (mkQCl whoSg_IP p.vp)) ;
-
   QWhere s = 
       mkUtt (mkQS (mkQCl where_IAdv s))
     | mkUtt (mkQS (mkQCl where_IAdv (mkCl s (mkA "located" | mkA "situated")))) ;
-  QRel r s = 
+  QWhat i p = mkUtt (mkQS (mkQCl i p.vp)) ;
+  QWhatWhat i j p = mkUtt (mkQS (QuestQVP i (AdvQVP p.vp (mkIAdv p.prep j)))) ;
+  QWhatWhere i p = mkUtt (mkQS (QuestQVP i (AdvQVP p.vp where_IAdv))) ;
+  QRelWhere s p = mkUtt (mkQS (mkQCl where_IAdv (mkCl s p.vp))) ;
+
+  QFun r s = 
       mkUtt 
-        (mkImp (mkVP give_V3 (mkNP and_Conj s (mkNP (mkQuant they_Pron) plNum r.cn)) (mkNP i_Pron)))
+        (mkImp (mkVP give_V3 
+          (mkNP and_Conj s (mkNP (mkQuant they_Pron) plNum r.cn)) (mkNP i_Pron)))
     | mkUtt (mkQS (mkQCl (mkIP what_IQuant plNum r.cn) s have_V2))
     | mkUtt (mkQS (mkQCl whatSg_IP 
         (mkClSlash (mkClSlash s have_V2) (mkAdv as_Prep (mkNP aPl_Det r.cn))))) ; 
+
+  QFunPair s f = 
+    let 
+     ss0 : NP = s 
+              | mkNP (mkNP thePl_Det L.name_N) (mkAdv possess_Prep s) ;
+     ss  : NP = mkNP and_Conj ss0 (mkNP (mkQuant they_Pron) plNum f.cn)
+              | mkNP ss0 (mkAdv with_Prep (mkNP (mkQuant they_Pron) plNum f.cn))
+    in 
+      mkUtt (mkImp (mkVP give_V3 ss (mkNP i_Pron)))
+    | mkUtt (mkQS (mkQCl (L.CompIP whatPl_IP) ss))
+    | mkUtt (mkQS (mkQCl (L.CompIP (L.IdetIP (mkIDet which_IQuant))) ss))
+    | mkUtt ss ;
+
   QInfo  s = 
     let
       info : NP = mkNP (all_NP | (mkNP information_N)) (mkAdv about_Prep s) ;
@@ -72,7 +89,7 @@ lin
   AProp s p = (mkCl s p.vp) ;
 
   SAll k = mkNP all_Predet (mkNP aPl_Det k) | mkNP thePl_Det k ;
-  SRel s r = mkNP (GenNP s) plNum r.cn | mkNP (GenNP s) sgNum r.cn ;
+  SFun s r = mkNP (GenNP s) plNum r.cn | mkNP (GenNP s) sgNum r.cn ;
   SOne k = mkNP n1_Numeral k ;
   SIndef k = mkNP a_Det k ;
   SDef k = mkNP the_Det k ;
@@ -81,20 +98,27 @@ lin
   SInd i = i ;
   SInds is = mkNP and_Conj is ;
 
-  KRelSet r s = 
+  IWhich k = 
+      mkIP what_IQuant  (sgNum | plNum) k
+    | mkIP which_IQuant (sgNum | plNum) k ;
+
+  IWho = whoSg_IP | whoPl_IP ;
+  IWhat = whatSg_IP | whatPl_IP ;
+
+  KFunSet r s = 
      mkCN r.cn (mkAdv r.prep s) ;
 
-  KRelsSet r q s = 
+  KFunsSet r q s = 
      mkCN (ConjCN and_Conj (BaseCN r.cn q.cn)) (mkAdv r.prep s) ;
 
-  KRelKind k r s = 
+  KFunKind k r s = 
     mkCN k (mkRS (mkRCl that_RP (mkVP (mkNP aPl_Det (mkCN r.cn (mkAdv r.prep s)))))) ;
   
-  KRelPair k r = mkCN k (mkAdv with_Prep (mkNP (mkQuant they_Pron) plNum r.cn)) ;
+  KFunPair k r = mkCN k (mkAdv with_Prep (mkNP (mkQuant they_Pron) plNum r.cn)) ;
   KProp p k = 
      mkCN p.ap k 
    | mkCN k (mkRS (mkRCl that_RP p.vp)) ;
-  KRel r = r.cn ;
+  KFun r = r.cn ;
 
   IName n = n ;
 
@@ -102,6 +126,11 @@ lin
   PCalleds is = propCalled (mkNP or_Conj is) ;
 
   PIs i = propVP (mkVP i) ;
+
+  PRelation r s = {
+    ap = AdvAP r.ap (mkAdv r.prep s) ; 
+    vp = mkVP r.vp (mkAdv r.prep s)
+    } ;
 
   BaseIndividual = mkListNP ;
   ConsIndividual = mkListNP ;
@@ -125,7 +154,7 @@ oper
 -- lexical constructors
   mkName : Str -> NP = 
     \s -> mkNP (mkPN s) ;
-  mkRelation : Str -> {cn : CN ; prep : Prep} = 
+  mkFunction : Str -> {cn : CN ; prep : Prep} = 
     \s -> {cn = mkCN (mkN s) ; prep = possess_Prep} ;
 
   propAP : AP -> {ap : AP ; vp : VP} = \ap -> {
@@ -138,9 +167,22 @@ oper
     vp = vp
     } ;
 
+  relAP : AP -> Prep -> {ap : AP ; vp : VP ; prep : Prep} = \ap,p -> {
+    ap = ap ;
+    vp = mkVP ap ;
+    prep = p
+    } ;
+
+  relVP : VP -> Prep -> {ap : AP ; vp : VP ; prep : Prep} = \vp,p -> {
+    ap = PartVP vp ;
+    vp = vp ;
+    prep = p
+    } ;
+
   propCalled : NP -> {ap : AP ; vp : VP} = \i -> 
     propAP (mkAP (also_AdA | otherwise_AdA) (mkAP (mkA2 called_A []) i)) ;
 
+  noPrep : Prep = mkPrep [] ;
 
 -- lexicon
 
@@ -151,65 +193,63 @@ lin
   NCountry c = c.np ;
   PCountry c = propAP (mkAP c.a) ;
 
-  Located i = propAP (
-      mkAP (mkA2 (mkA "located") in_Prep) i
-    | mkAP (mkA2 (mkA "situated") in_Prep) i
-    ) ;
+  Located = 
+      relAP (mkAP (mkA "located")) in_Prep
+    | relAP (mkAP (mkA "situated")) in_Prep
+    ;
 
-  In i = propVP (mkVP (mkAdv in_Prep i)) ;
+  In = relVP UseCopula in_Prep ;
 
-  Employed i = propAP ( 
-      mkAP (mkA2 (mkA "employed") by8agent_Prep) i
-    | mkAP (mkA2 (mkA "paid") by8agent_Prep) i
-    | mkAP (mkA2 (mkA "active") at_Prep) i
-    | mkAP (mkA2 (mkA "professionally active") at_Prep) i
-    )
-   |
-    propVP (
-      mkVP (mkV2 (mkV "work") at_Prep) i
-    | mkVP (mkV2 (mkV "collaborate") in_Prep) i
-    ) ;
+  Employed = 
+      relAP (mkAP (mkA "employed")) by8agent_Prep
+    | relAP (mkAP (mkA "paid")) by8agent_Prep
+    | relAP (mkAP (mkA "active")) at_Prep
+    | relAP (mkAP (mkA "professionally active")) at_Prep
+    | relVP (mkVP (mkV "work")) at_Prep
+    | relVP (mkVP (mkV "collaborate")) in_Prep
+    ;
 
-  HaveTitle t = 
-    propAP (
-      mkAP (mkA2 (mkA "employed") as_Prep) (mkNP t)
-      )
-    |
-    propVP (
-      mkVP (mkNP a_Det t)
-    | mkVP (mkV2 (mkV "work") as_Prep) (mkNP t) 
---    | mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "title")) (mkNP t))) 
-    ) ;
+  HaveTitle = 
+      relAP (mkAP (mkA "employed")) as_Prep
+    --- | relVP UseCopula noPrep
+    | relVP (mkVP (mkV "work")) as_Prep
+    | relVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "title"))))) possess_Prep
+    ;
 
-  HaveTitleAt t i = 
-    propAP (
-      mkAP (mkA2 (mkA "employed") as_Prep) (mkNP (mkNP t) (mkAdv at_Prep i))
-      )
-    |
-    propVP (
-      mkVP (mkVP (mkNP a_Det t)) (mkAdv at_Prep i) 
-    | mkVP (mkVP (mkV2 (mkV "work") as_Prep) (mkNP t)) (mkAdv at_Prep i) 
---    | mkVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "title")) (mkNP t)))) 
---           (mkAdv at_Prep i)
-    ) ;
+  EmployedAt s = 
+      relAP (mkAP (mkA2 (mkA "employed") at_Prep) s) as_Prep
+    | relAP (mkAP (mkA2 (mkA "employed") by8agent_Prep) s) as_Prep
+    | relVP (mkVP (mkV2 (mkV "work") at_Prep) s) as_Prep 
+    ;
+
+  HaveTitleAt t = 
+      relAP (mkAP (mkA2 (mkA "employed") as_Prep) (mkNP t)) at_Prep
+    | relAP (mkAP (mkA2 (mkA "employed") as_Prep) (mkNP t)) by8agent_Prep
+    | relVP (mkVP (mkNP a_Det t)) at_Prep
+    | relVP (mkVP (mkV2 (mkV "work") as_Prep) (mkNP t)) at_Prep 
+    | relVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "title")) (mkNP t)))) at_Prep 
+    ;
 
   Named n = propAP  (mkAP (mkA2 (mkA "named") []) n) ;
   Start n = propVP (mkVP (mkV2 "start" with_Prep) n) ;
 
   Organization = mkCN (mkN "organization") ;
+  Company = mkCN (mkN "company") ;
   Place = mkCN (mkN "place") ;
   Person = 
       mkCN (mkN "person" "people")
     | mkCN (mkN "person") ;
 
-  Location = mkRelation "location" ;
-  Region = mkRelation "region" ;
-  Subregion = mkRelation "subregion" | mkRelation "sub-region" ;
-  RName = mkRelation "name" ;
-  RNickname = mkRelation "nickname" ;
-  RJobTitle = mkRelation "job title" | mkRelation "job" | mkRelation "position" |
-    mkRelation "appointment" | mkRelation "job position" | mkRelation "mandate" |
-    mkRelation "title" ;
+  Location = mkFunction "location" ;
+  Region = mkFunction "region" ;
+  Subregion = mkFunction "subregion" | mkFunction "sub-region" ;
+  FName = mkFunction "name" ;
+  FNickname = mkFunction "nickname" ;
+  FJobTitle = mkFunction "job title" | mkFunction "job" | mkFunction "position" |
+    mkFunction "appointment" | mkFunction "job position" | mkFunction "mandate" |
+    mkFunction "title" | mkFunction "capacity" ;
+
+  SJobTitle t = mkNP a_Det t ;
 
   USA = mkCountry "USA" "American" ;
   Bulgaria = mkCountry "Bulgaria" "Bulgarian" ;
