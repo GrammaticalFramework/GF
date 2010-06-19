@@ -109,4 +109,24 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       s = \\a => vp.ad ++ vp.prp ++ vp.s2 ! a ;
       isPre = False ---- depends on whether there are complements
       } ;
+
+  lincat 
+    QVP = ResEng.VP ;
+    [IAdv] = {s1,s2 : Str} ;
+  lin
+    ComplSlashIP vp np = insertObjPre (\\_ => vp.c2 ++ np.s ! Acc) vp ;
+    AdvQVP vp adv = insertObj (\\_ => adv.s) vp ;
+    AddAdvQVP vp adv = insertObj (\\_ => adv.s) vp ;
+
+    QuestQVP qp vp = 
+      let cl = mkClause (qp.s ! Nom) (agrP3 qp.n) vp
+      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
+
+    BaseIAdv = twoSS ;
+    ConsIAdv = consrSS comma ;
+    ConjIAdv = conjunctDistrSS ;   
+
+    AdvAP ap adv = {s = \\a => ap.s ! a ++ adv.s ; isPre = False} ;
+
+    UseCopula = predAux auxBe ;
 } 
