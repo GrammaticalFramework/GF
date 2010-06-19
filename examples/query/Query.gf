@@ -10,8 +10,10 @@ cat
   Query ;   
   Answer ;
   Set ;      -- the set requested,      e.g. "all persons"
-  Relation ; -- something of something, e.g. "subregion of Bulgaria"
+  Interrogative ; -- interrog. pron.    e.g. "who" 
+  Function ; -- something of something, e.g. "subregion of Bulgaria"
   Kind ;     -- type of things,         e.g. "person"
+  Relation ; -- relation between things,e.g. "employed at"
   Property ; -- property of things,     e.g. "employed at Google"
   Individual ; -- one entity,           e.g. "Google"
   Name ;       -- person, company...    e.g. "Eric Schmidt"
@@ -22,13 +24,16 @@ fun
   MAnswer : Answer -> Move ;
  
   QSet    : Set  -> Query ;  -- (give me | what are | which are | ) (S | the names of S | S's names)
-  QWhere  : Set  -> Query ;  -- where are S
-  QWhat   : Kind -> Property -> Query ; -- what K P
-  QWho    : Property -> Query ; -- who P
-  QRel    : Relation -> Set -> Query ; -- what R does S have
-  QInfo   : Set  -> Query ;  -- (give me | ) (information about | all about) S
-  QCalled : Individual -> Query ; -- how is X (also | otherwise) (called | named | known) ;
-  QWhether : Answer -> Query ; -- is S P --- not in the corpus, but should be ??
+  QWhere     : Set  -> Query ;  -- where are S
+  QWhat      : Interrogative -> Property -> Query ; -- who P
+  QWhatWhat  : Interrogative -> Interrogative -> Relation -> Query ; -- who R what
+  QWhatWhere : Interrogative -> Relation -> Query ; -- who R where --- overgenerating
+  QRelWhere  : Set -> Relation -> Query ; -- where does S R --- overgenerating
+  QFun       : Function -> Set -> Query ; -- what R does S have
+  QFunPair   : Set -> Function -> Query ; -- S and their R's
+  QInfo      : Set  -> Query ;  -- (give me | ) (information about | all about) S
+  QCalled    : Individual -> Query ; -- how is X (also | otherwise) (called | named | known) ;
+  QWhether   : Answer -> Query ; -- is S P --- not in the corpus, but should be ??
 
   AKind  : Set  -> Kind     -> Answer ; -- S is a K
   AInd   : Set  -> Individual -> Answer ; -- S is I
@@ -36,7 +41,7 @@ fun
   AProp  : Set  -> Property -> Answer ; -- S is P
 
   SAll   : Kind -> Set ;  -- all Ks | the Ks
-  SRel   : Set  -> Relation -> Set ;  -- S's Rs
+  SFun   : Set  -> Function -> Set ;  -- S's Rs
   SOne   : Kind -> Set ;  -- one K
   SIndef : Kind -> Set ;  -- a K
   SDef   : Kind -> Set ;  -- the K
@@ -45,12 +50,16 @@ fun
   SInd   : Individual  -> Set ;  -- X
   SInds  : [Individual] -> Set ; -- X and Y
 
-  KRelSet  : Relation -> Set -> Kind ; -- R of S | S's R
-  KRelsSet : Relation -> Relation -> Set -> Kind ; -- R and Q of S
-  KRelKind : Kind -> Relation -> Set -> Kind ; -- K that is R of S
-  KRelPair : Kind -> Relation -> Kind ; -- S's with their R's
+  IWho   : Interrogative ; -- who
+  IWhat  : Interrogative ; -- what
+  IWhich : Kind -> Interrogative ; -- which K | what K | which Ks | what Ks
+
+  KFunSet  : Function -> Set -> Kind ; -- R of S | S's R
+  KFunsSet : Function -> Function -> Set -> Kind ; -- R and Q of S
+  KFunKind : Kind -> Function -> Set -> Kind ; -- K that is R of S
+  KFunPair : Kind -> Function -> Kind ; -- S's with their R's
   KProp    : Property -> Kind -> Kind ; -- P K | K that is P
-  KRel     : Relation -> Kind ; -- R ---??
+  KFun     : Function -> Kind ; -- R ---??
 
   IName    : Name -> Individual ;
 
@@ -58,6 +67,8 @@ fun
   PCalleds : [Individual] -> Property ;  -- also called I or J
 
   PIs      : Individual -> Property ;
+
+  PRelation : Relation -> Set -> Property ;
 
 -- the test lexicon
 
@@ -68,32 +79,37 @@ fun
   NCountry : Country -> Name ;
   PCountry : Country -> Property ;
 
-  Located : Set -> Property ;
+  Located : Relation ;
 
-  In : Set -> Property ;
-  HaveTitleAt : JobTitle -> Set -> Property ;
-  HaveTitle : JobTitle -> Property ;
-  Employed : Set -> Property ;
+  In : Relation ;
+  HaveTitleAt : JobTitle -> Relation ;
+  EmployedAt : Set -> Relation ;
+  HaveTitle : Relation ;
+  Employed : Relation ;
 
   Named : Name -> Property ;
+
   Start : Name -> Property ;
 
   Organization : Kind ;
+  Company : Kind ;
   Place : Kind ;
   Person : Kind ;
 
-  Location : Relation ;
-  Region : Relation ;
-  Subregion : Relation ;
+  Location : Function ;
+  Region : Function ;
+  Subregion : Function ;
 
   USA : Country ;
   California : Country ;
   Bulgaria : Country ;
   OblastSofiya : Name ;
 
-  RName     : Relation ;
-  RNickname : Relation ;
-  RJobTitle : Relation ;
+  FName     : Function ;
+  FNickname : Function ;
+  FJobTitle : Function ;
+
+  SJobTitle : JobTitle -> Set ; -- a programmer
 
   CEO : JobTitle ;
   ChiefInformationOfficer : JobTitle ;

@@ -1,0 +1,57 @@
+Copyright (c) 2010 Aarne Ranta, under LGPL(3).
+Part of MOLTO Project, WP 4.
+
+Query language, based on the corpus from Ontotext.
+
+Purpose: natural language queries to an ontology database.
+
+Work in progress: 
+- 19 June parsing 28% 160/562
+- 17 June 2010 first version, parsing under 10%
+
+
+The corpus contains misspellings and ungrammatical sentences; these will (mostly) not
+be covered by the grammar.
+
+Test:
+
+  -- start GF with the grammar; notice that lib/present/ must have latest Eng libraries,
+  -- which can be provided by 'runghc Make present lang api langs=Eng' in lib/src/
+  % gf QueryEng.gf
+  -- parse a sentence and see all variants
+  > "p "Bulgarian people working at Google" | l -all
+
+Regression test:
+
+  -- run the parser on the corpus
+  % gf QueryEng.gf <test.gfs > test.results8
+  -- compute the number of sentences not covered
+  % grep "no tree" test.results8 | wc
+
+
+Semantics: generic logical semantics, that could be mapped to many query languages.
+The denotations of the main categories are, assuming a domain of individuals:
+
+  Set ;           P(P(D)) (generalized quantifier) -- the set requested, e.g. "all persons"
+  Function ;      D -> P(D)   -- something of something, e.g. "subregion of Bulgaria"
+  Kind ;          P(D)        -- type of things,         e.g. "person"
+  Relation ;      D -> D -> T -- relation between things,e.g. "employed at"
+  Property ;      D -> T      -- property of things,     e.g. "employed at Google"
+  Individual ;    D           -- one entity,             e.g. "Google"
+  Name ;          D           -- person, company...      e.g. "Eric Schmidt"
+
+
+Characteristics:
+- simple AST's, lots of variants (easily hundreds per query)
+- semantic overgeneration, e.g. "Google works at Larry Page"
+- some ambiguities, e.g.
+
+    > give me the organizations and their locations
+    MQuery (QFun Location (SAll Organization))
+    MQuery (QFunPair (SAll Organization) Location)
+   
+  Maybe harmless?
+
+Resource grammar was not quite enough; added for instance multiple interrogatives
+("who is employed as what where") in Extra and ExtraEng
+
