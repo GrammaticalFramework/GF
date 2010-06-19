@@ -97,4 +97,16 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
 
     IAdvAdv adv = {s = "how" ++ adv.s} ;
 
+  lincat
+    [CN] = {s1,s2 : Number => Case => Str} ;
+
+  lin
+    BaseCN = twoTable2 Number Case ;
+    ConsCN = consrTable2 Number Case comma ;
+    ConjCN co ns = conjunctDistrTable2 Number Case co ns ** {g = Neutr} ; --- gender?
+
+    PartVP vp = {
+      s = \\a => vp.ad ++ vp.prp ++ vp.s2 ! a ;
+      isPre = False ---- depends on whether there are complements
+      } ;
 } 

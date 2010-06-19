@@ -65,7 +65,8 @@ abstract Verb = Cat ** {
 -- Adjectival phrases, noun phrases, and adverbs can be used.
 
     CompAP   : AP  -> Comp ;            -- (be) small
-    CompNP   : NP  -> Comp ;            -- (be) a man
+    CompNP   : NP  -> Comp ;            -- (be) the man
     CompAdv  : Adv -> Comp ;            -- (be) here
+    CompCN   : CN  -> Comp ;            -- (be) a man/men
 
 }

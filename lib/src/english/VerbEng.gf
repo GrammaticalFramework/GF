@@ -46,5 +46,10 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
     CompAP ap = ap ;
     CompNP np = {s = \\_ => np.s ! Acc} ;
     CompAdv a = {s = \\_ => a.s} ;
+    CompCN cn = {s = \\a => case (fromAgr a).n of { 
+      Sg => artIndef ++ cn.s ! Sg ! Nom ;
+      Pl => cn.s ! Pl ! Nom
+      }
+    } ;
 
 }

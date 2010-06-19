@@ -9,5 +9,7 @@ oper
     lin NP (regNP s n) ;
   mkIDet : Str -> ParadigmsEng.Number -> IDet = \s,n ->
     lin IDet {s = s ; n = n} ;
+  mkIQuant : Str -> Str -> IQuant = \s,n ->
+    lin IQuant {s = table {Sg => s ; Pl => n}} ;
 
 }

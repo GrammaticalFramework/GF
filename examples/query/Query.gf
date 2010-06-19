@@ -14,7 +14,6 @@ cat
   Kind ;     -- type of things,         e.g. "person"
   Property ; -- property of things,     e.g. "employed at Google"
   Individual ; -- one entity,           e.g. "Google"
-  Activity ;   -- action property,      e.g. "work at Google"
   Name ;       -- person, company...    e.g. "Eric Schmidt"
   [Individual] {2} ; -- list of entities, e.g. "Larry Page, Sergey Brin"
 
@@ -24,17 +23,23 @@ fun
  
   QSet    : Set  -> Query ;  -- (give me | what are | which are | ) (S | the names of S | S's names)
   QWhere  : Set  -> Query ;  -- where are S
+  QWhat   : Kind -> Property -> Query ; -- what K P
+  QWho    : Property -> Query ; -- who P
+  QRel    : Relation -> Set -> Query ; -- what R does S have
   QInfo   : Set  -> Query ;  -- (give me | ) (information about | all about) S
   QCalled : Individual -> Query ; -- how is X (also | otherwise) (called | named | known) ;
+  QWhether : Answer -> Query ; -- is S P --- not in the corpus, but should be ??
 
   AKind  : Set  -> Kind     -> Answer ; -- S is a K
+  AInd   : Set  -> Individual -> Answer ; -- S is I
+  AName  : Set  -> Name     -> Answer ; -- N is the name of S
   AProp  : Set  -> Property -> Answer ; -- S is P
-  AAct   : Set  -> Activity -> Answer ; -- S As
 
   SAll   : Kind -> Set ;  -- all Ks | the Ks
   SRel   : Set  -> Relation -> Set ;  -- S's Rs
   SOne   : Kind -> Set ;  -- one K
   SIndef : Kind -> Set ;  -- a K
+  SDef   : Kind -> Set ;  -- the K
   SPlural : Kind -> Set ;  -- Ks
   SOther : Kind -> Set ;  -- other Ks
   SInd   : Individual  -> Set ;  -- X
@@ -45,13 +50,14 @@ fun
   KRelKind : Kind -> Relation -> Set -> Kind ; -- K that is R of S
   KRelPair : Kind -> Relation -> Kind ; -- S's with their R's
   KProp    : Property -> Kind -> Kind ; -- P K | K that is P
-  KAct     : Activity -> Kind -> Kind ; -- K that Ps
   KRel     : Relation -> Kind ; -- R ---??
 
   IName    : Name -> Individual ;
 
-  ACalled  : [Individual] -> Activity ;
+  PCalled  : Individual   -> Property ;  -- also called I
+  PCalleds : [Individual] -> Property ;  -- also called I or J
 
+  PIs      : Individual -> Property ;
 
 -- the test lexicon
 
@@ -62,11 +68,15 @@ fun
   NCountry : Country -> Name ;
   PCountry : Country -> Property ;
 
-  Located : Individual -> Property ;
-  Employed : Individual -> Property ;
+  Located : Set -> Property ;
 
-  Work : Individual -> Activity ;
-  HaveTitle : JobTitle -> Individual -> Activity ;
+  In : Set -> Property ;
+  HaveTitleAt : JobTitle -> Set -> Property ;
+  HaveTitle : JobTitle -> Property ;
+  Employed : Set -> Property ;
+
+  Named : Name -> Property ;
+  Start : Name -> Property ;
 
   Organization : Kind ;
   Place : Kind ;
@@ -83,8 +93,10 @@ fun
 
   RName     : Relation ;
   RNickname : Relation ;
+  RJobTitle : Relation ;
 
   CEO : JobTitle ;
+  ChiefInformationOfficer : JobTitle ;
   
   Microsoft : Name ;
   Google : Name ;
@@ -94,7 +106,9 @@ fun
   EricSchmidt : Name ;
   MarissaMayer : Name ;
   UdiManber : Name ;
-
+  CarlGustavJung : Name ;
+  Jung : Name ;
+  BenFried : Name ;
 }
 
 

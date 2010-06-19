@@ -63,5 +63,11 @@ abstract Extra = Cat ** {
     
     UseFoc : Temp -> Pol -> Foc -> Utt ;
 
-    
+  cat
+    [CN] {2} ;
+  fun
+    ConjCN : Conj -> [CN] -> CN ; -- (every) man and woman
+
+    PartVP : VP -> AP ; -- looking at Mary
+        
 }
