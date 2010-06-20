@@ -129,8 +129,8 @@ convertRule gr opts grammarEnv (PFRule fun args res ctypes ctype term) = do
   return $! grammarEnv2
   where
     addRule lins (newCat', newArgs') env0 =
-      let [newCat]        = getFCats env0 newCat'
-          (env1, newArgs) = List.mapAccumL (\env -> addFCoercion env . getFCats env) env0 newArgs'
+      let [newCat]        = getFIds env0 newCat'
+          (env1, newArgs) = List.mapAccumL (\env -> addFCoercion env . getFIds env) env0 newArgs'
 
           (env2,funid) = addCncFun env1 (PGF.Data.CncFun (i2i fun) (mkArray lins))
 
@@ -500,7 +500,7 @@ expandHOAS opts (m,mo) env = return env {-
 
           env3 = foldl (\env (arg,res) -> addProduction env res (PApply funid (arg : replicate n fcatVar)))
                        env2
-                       (zip (getFCats env2 arg) (getFCats env2 res))
+                       (zip (getFIds env2 arg) (getFIds env2 res))
       in env3
       where
         (arg,res) = case Map.lookup cat lincats of
@@ -579,8 +579,8 @@ getConcr flags printnames (GrammarEnv last_id catSet seqSet funSet crcSet prodSe
         collect path paths (CPar _)    = paths
 
 
-getFCats :: GrammarEnv -> ProtoFCat -> [FId]
-getFCats (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) (PFCat n cat schema) =
+getFIds :: GrammarEnv -> ProtoFCat -> [FId]
+getFIds (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) (PFCat n cat schema) =
   case IntMap.lookup n catSet >>= Map.lookup cat of
     Just (start,end,_) -> reverse (solutions (fmap (start +) $ variants schema) ())
   where
