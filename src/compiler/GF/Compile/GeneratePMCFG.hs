@@ -130,7 +130,7 @@ convertRule gr opts grammarEnv (PFRule fun args res ctypes ctype term) = do
   where
     addRule lins (newCat', newArgs') env0 =
       let [newCat]        = getFIds env0 newCat'
-          (env1, newArgs) = List.mapAccumL (\env -> addFCoercion env . getFIds env) env0 newArgs'
+          (env1, newArgs) = List.mapAccumL (\env -> addCoercion env . getFIds env) env0 newArgs'
 
           (env2,funid) = addCncFun env1 (PGF.Data.CncFun (i2i fun) (mkArray lins))
 
@@ -146,7 +146,7 @@ brk f (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
         ff :: FunId -> [[FId]] -> GrammarEnv -> GrammarEnv
         ff funid xs env
           | product (map Set.size ys) == count = 
-                                   case List.mapAccumL (\env c -> addFCoercion env (Set.toList c)) env ys of
+                                   case List.mapAccumL (\env c -> addCoercion env (Set.toList c)) env ys of
                                      (env,args) -> addProduction env cat (PApply funid args)
           | otherwise                           =  List.foldl (\env args -> addProduction env cat (PApply funid args)) env xs
           where
@@ -543,8 +543,8 @@ addCncFun env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) fun =
     Nothing -> let !last_funid = Map.size funSet
                in (GrammarEnv last_id catSet seqSet (Map.insert fun last_funid funSet) crcSet prodSet,last_funid)
 
-addFCoercion :: GrammarEnv -> [FId] -> (GrammarEnv,FId)
-addFCoercion env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) sub_fcats =
+addCoercion :: GrammarEnv -> [FId] -> (GrammarEnv,FId)
+addCoercion env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) sub_fcats =
   case sub_fcats of
     [fcat] -> (env,fcat)
     _      -> case Map.lookup sub_fcats crcSet of
