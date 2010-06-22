@@ -178,6 +178,7 @@ resource ResEng = ParamX ** open Prelude in {
       "eu" | "Eu" | "uni" | "up" => "a" ;
       "un" => "an" ; 
       "a" | "e" | "i" | "o" | "A" | "E" | "I" | "O" => "an" ;
+      "SMS" | "sms" => "an" ; ---
       _ => "a"
       } ;
 
