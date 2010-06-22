@@ -449,8 +449,11 @@ emptyGrammarEnv gr (m,mo) =
   let (last_id,catSet) = Map.mapAccumWithKey computeCatRange 0 lincats
   in GrammarEnv last_id (IntMap.singleton 0 catSet) Map.empty Map.empty Map.empty IntMap.empty
   where
-    computeCatRange index cat ctype =
-      (index+size,(index,index+size-1,PFCat 0 cat schema))
+    computeCatRange index cat ctype
+      | cat == cString = (index,(fcatString,fcatString,PFCat 0 cat (CRec [(theLinLabel,Identity (CStr 0))])))
+      | cat == cInt    = (index,(fcatInt,   fcatInt,   PFCat 0 cat (CRec [(theLinLabel,Identity (CStr 0))])))
+      | cat == cFloat  = (index,(fcatFloat, fcatFloat, PFCat 0 cat (CRec [(theLinLabel,Identity (CStr 0))])))
+      | otherwise      = (index+size,(index,index+size-1,PFCat 0 cat schema))
       where
         ((_,size),schema) = compute (0,1) ctype
  
