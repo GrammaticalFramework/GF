@@ -5,6 +5,8 @@ module PGF.Parse
           , initState
           , nextState
           , getCompletions
+          , acceptsLiteral
+          , feedLiteral
           , recoveryStates
           , ParseResult(..), getParseResult
           , parse
@@ -92,7 +94,7 @@ nextState (PState pgf cnc chart items) t =
   let (mb_agenda,map_items) = TMap.decompose items
       agenda = maybe [] Set.toList mb_agenda
       acc    = fromMaybe TMap.empty (Map.lookup t map_items)
-      (acc1,chart1) = process (Just t) add (sequences cnc) (cncfuns cnc) agenda acc chart
+      (acc1,chart1) = process (litCatMatch (Just t)) add (sequences cnc) (cncfuns cnc) agenda acc chart
       chart2 = chart1{ active =emptyAC
                      , actives=active chart1 : actives chart1
                      , passive=emptyPC
@@ -106,6 +108,41 @@ nextState (PState pgf cnc chart items) t =
       | tok == t            = TMap.insertWith Set.union toks (Set.singleton item) acc
     add _          item acc = acc
 
+acceptsLiteral :: ParseState -> Type -> Bool
+acceptsLiteral (PState pgf cnc chart items) (DTyp _ cat _) =
+  case Map.lookup cat (cnccats cnc) of
+    Just (CncCat s e _) -> or [IntMap.member fid (active chart1) | fid <- [s..e]]
+    Nothing             -> False
+  where
+    (mb_agenda,map_items) = TMap.decompose items
+    agenda = maybe [] Set.toList mb_agenda
+    (acc1,chart1) = process (litCatMatch Nothing) add (sequences cnc) (cncfuns cnc) agenda TMap.empty chart
+
+    add (tok:toks) item acc = acc
+
+feedLiteral :: ParseState -> Expr -> Either ErrorState ParseState
+feedLiteral (PState pgf cnc chart items) (ELit lit) =
+  let (mb_agenda,map_items) = TMap.decompose items
+      agenda = maybe [] Set.toList mb_agenda
+      (acc1,chart1) = process (magic lit) add (sequences cnc) (cncfuns cnc) agenda TMap.empty chart
+      chart2 = chart1{ active =emptyAC
+                     , actives=active chart1 : actives chart1
+                     , passive=emptyPC
+                     , offset =offset chart1+1
+                     }
+  in if TMap.null acc1
+       then Left  (EState pgf cnc chart2)
+       else Right (PState pgf cnc chart2 acc1)
+  where
+    add toks item acc = TMap.insertWith Set.union toks (Set.singleton item) acc
+
+    magic lit fid =
+      case lit of
+        LStr s | fid == fcatString -> Just (cidString, ELit lit, words s)
+        LInt n | fid == fcatInt    -> Just (cidInt,    ELit lit, [show n])
+        LFlt d | fid == fcatFloat  -> Just (cidFloat,  ELit lit, [show d])
+        _                          -> Nothing
+
 -- | If the next token is not known but only its prefix (possible empty prefix)
 -- then the 'getCompletions' function can be used to calculate the possible
 -- next words and the consequent states. This is used for word completions in
@@ -115,7 +152,7 @@ getCompletions (PState pgf cnc chart items) w =
   let (mb_agenda,map_items) = TMap.decompose items
       agenda = maybe [] Set.toList mb_agenda
       acc    = Map.filterWithKey (\tok _ -> isPrefixOf w tok) map_items
-      (acc',chart1) = process Nothing add (sequences cnc) (cncfuns cnc) agenda acc chart
+      (acc',chart1) = process (litCatMatch Nothing) add (sequences cnc) (cncfuns cnc) agenda acc chart
       chart2 = chart1{ active =emptyAC
                      , actives=active chart1 : actives chart1
                      , passive=emptyPC
@@ -131,7 +168,7 @@ recoveryStates :: [Type] -> ErrorState -> (ParseState, Map.Map String ParseState
 recoveryStates open_types (EState pgf cnc chart) =
   let open_fcats = concatMap type2fcats open_types
       agenda = foldl (complete open_fcats) [] (actives chart)
-      (acc,chart1) = process Nothing add (sequences cnc) (cncfuns cnc) agenda Map.empty chart
+      (acc,chart1) = process (litCatMatch Nothing) add (sequences cnc) (cncfuns cnc) agenda Map.empty chart
       chart2 = chart1{ active =emptyAC
                      , actives=active chart1 : actives chart1
                      , passive=emptyPC
@@ -178,7 +215,7 @@ getParseResult (PState pgf cnc chart items) ty@(DTyp _ start _) =
   where
     (mb_agenda,acc) = TMap.decompose items
     agenda = maybe [] Set.toList mb_agenda
-    (acc1,st) = process Nothing add (sequences cnc) (cncfuns cnc) agenda [] chart
+    (acc1,st) = process (litCatMatch Nothing) add (sequences cnc) (cncfuns cnc) agenda [] chart
 
     add _ (Active j ppos funid seqid args key) items = (j,lin,args,key) : items
       where
@@ -269,7 +306,7 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
                       in case [ts | PConst _ _ ts <- maybe [] Set.toList (IntMap.lookup fid' (forest chart))] of
                            (toks:_) -> let !acc' = fn toks (Active j (ppos+1) funid seqid (updateAt d fid' args) key0) acc
                                        in process mbt fn seqs funs items acc' chart
-                           []       -> case litCatMatch fid mbt of
+                           []       -> case mbt fid of
                                          Just (cat,lit,toks) 
                                                      -> let fid'  = nextId chart
                                                             !acc' = fn toks (Active j (ppos+1) funid seqid (updateAt d fid' args) key0) acc
@@ -277,7 +314,7 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
                                                                                                     ,forest =IntMap.insert fid' (Set.singleton (PConst cat lit toks)) (forest chart)
                                                                                                     ,nextId =nextId chart+1
                                                                                                     }
-                                         Nothing     -> process mbt fn seqs funs items acc chart
+                                         Nothing     -> process mbt fn seqs funs items acc chart{active=insertAC key (Set.singleton item) (active chart)}
   | otherwise =
       case lookupPC (mkPK key0 j) (passive chart) of
         Nothing -> let fid = nextId chart
@@ -307,7 +344,7 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
 updateAt :: Int -> a -> [a] -> [a]
 updateAt nr x xs = [if i == nr then x else y | (i,y) <- zip [0..] xs]
 
-litCatMatch fcat (Just t)
+litCatMatch (Just t) fcat
   | fcat == fcatString = Just (cidString,ELit (LStr t),[t])
   | fcat == fcatInt    = case reads t of {[(n,"")] -> Just (cidInt,ELit (LInt n),[t]);
                                          _         -> Nothing }

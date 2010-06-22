@@ -80,6 +80,7 @@ module PGF(
            complete,
            Parse.ParseState,
            Parse.initState, Parse.nextState, Parse.getCompletions, Parse.recoveryStates, 
+           Parse.acceptsLiteral, Parse.feedLiteral,
            Parse.ParseResult(..), Parse.getParseResult,
 
            -- ** Generation
