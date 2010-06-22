@@ -123,7 +123,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
         let 
           agr   = Ag g n p ;
           num   = if_then_else Number b Pl n ;
-          verb  = vp.s.s ! vImper n p ;
+          verb  = vp.s.s ! vImper num p ;
           neg   = vp.neg ! pol ;
           clpr  =  <vp.clit1 ++ vp.clit2, False> ;  ---- TODO: True if clit
           compl = vp.comp ! agr ++ vp.ext ! pol
