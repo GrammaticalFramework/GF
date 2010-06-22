@@ -246,6 +246,7 @@ oper
   mkV2 : overload {
     mkV2 : Str -> V2 ;
     mkV2 : V   -> V2 ;
+    mkV2 : Str -> Prep -> V2 ;
     mkV2 : V   -> Prep -> V2
     } ;
 
@@ -573,6 +574,7 @@ oper
   mkV2 = overload {
     mkV2 : (läser : Str) -> V2 = \v -> dirV2 (regV v) ;
     mkV2 : V -> V2 = dirV2 ;
+    mkV2 : Str -> Prep -> V2 = \v -> mmkV2 (regV v) ;
     mkV2 : V -> Prep -> V2 = mmkV2
     } ;
 
