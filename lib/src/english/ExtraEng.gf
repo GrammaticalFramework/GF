@@ -129,4 +129,6 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     AdvAP ap adv = {s = \\a => ap.s ! a ++ adv.s ; isPre = False} ;
 
     UseCopula = predAux auxBe ;
+
+    UttVPShort vp = {s = infVP True vp (agrP3 Sg)} ;
 } 
