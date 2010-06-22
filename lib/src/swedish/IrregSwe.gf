@@ -161,6 +161,7 @@ concrete IrregSwe of IrregSweAbs = CatSwe ** open ParadigmsSwe in {
   svida_V = irregV "svida" "sved" "svidit" ;
   svika_V = irregV "svika" "svek" "svikit" ;
   sy_V = irregV "sy" "sydde" "sytt" ;
+  sätta_V = irregV "sätta" "satte" "satt" ;
   taga_V = irregV "taga" "tog" "tagit" ;
   tiga_V = irregV "tiga" "teg" "tigit" ;
   tillåta_V = irregV "tillåta" "tillät" "tillåtit" ;
