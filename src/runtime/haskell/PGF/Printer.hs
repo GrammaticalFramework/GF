@@ -77,7 +77,7 @@ ppPrintName (id,name) =
   ppCId id <+> text ":=" <+> ppStrs [name]
 
 ppSymbol (SymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
-ppSymbol (SymLit d r) = char '<' <> int d <> comma <> int r <> char '>'
+ppSymbol (SymLit d r) = char '{' <> int d <> comma <> int r <> char '}'
 ppSymbol (SymKS ts)   = ppStrs ts
 ppSymbol (SymKP ts alts) = text "pre" <+> braces (hsep (punctuate semi (ppStrs ts : map ppAlt alts)))
 
