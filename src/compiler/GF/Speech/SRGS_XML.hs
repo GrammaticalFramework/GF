@@ -13,7 +13,7 @@ import GF.Speech.CFG
 import GF.Speech.RegExp
 import GF.Speech.SISR as SISR
 import GF.Speech.SRG
-import PGF (PGF, CId)
+import PGF (PGF, CId, Token)
 
 import Control.Monad
 import Data.Char (toUpper,toLower)

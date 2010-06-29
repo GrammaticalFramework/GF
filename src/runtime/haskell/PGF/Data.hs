@@ -44,19 +44,20 @@ data Concr = Concr {
   totalCats    :: {-# UNPACK #-} !FId
   }
 
+type Token  = String
 type FId    = Int
 type LIndex = Int
 type DotPos = Int
 data Symbol
   = SymCat {-# UNPACK #-} !Int {-# UNPACK #-} !LIndex
   | SymLit {-# UNPACK #-} !Int {-# UNPACK #-} !LIndex
-  | SymKS [String]
-  | SymKP [String] [Alternative]
+  | SymKS [Token]
+  | SymKP [Token] [Alternative]
   deriving (Eq,Ord,Show)
 data Production
   = PApply  {-# UNPACK #-} !FunId [FId]
   | PCoerce {-# UNPACK #-} !FId
-  | PConst  CId Expr [String]
+  | PConst  CId Expr [Token]
   deriving (Eq,Ord,Show)
 data CncCat = CncCat {-# UNPACK #-} !FId {-# UNPACK #-} !FId {-# UNPACK #-} !(Array LIndex String)
 data CncFun = CncFun CId {-# UNPACK #-} !(UArray LIndex SeqId) deriving (Eq,Ord,Show)
@@ -65,7 +66,7 @@ type FunId = Int
 type SeqId = Int
 
 data Alternative =
-   Alt [String] [String]
+   Alt [Token] [String]
   deriving (Eq,Ord,Show)
 
 

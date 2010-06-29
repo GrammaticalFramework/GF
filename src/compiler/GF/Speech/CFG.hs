@@ -27,7 +27,6 @@ import qualified Data.Set as Set
 --
 
 type Cat = String
-type Token = String
 
 data Symbol c t = NonTerminal c | Terminal t
   deriving (Eq, Ord, Show)

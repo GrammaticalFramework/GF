@@ -145,7 +145,7 @@ _V = mkCId "__gfV"
 -- as usual but we also want to retain the ''brackets'' that
 -- mark the beginning and the end of each constituent.
 data BracketedString
-  = Leaf String                                                                -- ^ this is the leaf i.e. a single token
+  = Leaf Token                                                                -- ^ this is the leaf i.e. a single token
   | Bracket CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex [Expr] [BracketedString]   
                                                                                -- ^ this is a bracket. The 'CId' is the category of
                                                                                -- the phrase. The 'FId' is an unique identifier for
@@ -160,8 +160,8 @@ data BracketedString
                                                                                -- that represents the same constituent.
 
 data BracketedTokn
-  = LeafKS [String]
-  | LeafKP [String] [Alternative]
+  = LeafKS [Token]
+  | LeafKP [Token] [Alternative]
   | Bracket_ CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex [Expr] [BracketedTokn]    -- Invariant: the list is not empty
   deriving Eq
 

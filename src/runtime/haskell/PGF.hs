@@ -54,7 +54,7 @@ module PGF(
            groupResults, -- lins of trees by language, removing duplicates
            showPrintName,
            
-           BracketedString(..), FId, LIndex,
+           BracketedString(..), FId, LIndex, Token,
            Forest.showBracketedString,
 
            -- ** Parsing
