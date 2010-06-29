@@ -7,7 +7,7 @@
 module GF.Speech.CFG where
 
 import GF.Data.Utilities
-import PGF.CId
+import PGF
 import GF.Infra.Option
 import GF.Data.Relation
 
