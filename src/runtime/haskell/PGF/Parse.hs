@@ -89,7 +89,7 @@ initState pgf lang (DTyp _ start _) =
 -- is consumed and the current position is shifted by one.
 -- If the new token cannot be accepted then an error state 
 -- is returned.
-nextState :: ParseState -> String -> Either ErrorState ParseState
+nextState :: ParseState -> Token -> Either ErrorState ParseState
 nextState (PState pgf cnc chart items) t =
   let (mb_agenda,map_items) = TMap.decompose items
       agenda = maybe [] Set.toList mb_agenda
@@ -147,7 +147,7 @@ feedLiteral (PState pgf cnc chart items) (ELit lit) =
 -- then the 'getCompletions' function can be used to calculate the possible
 -- next words and the consequent states. This is used for word completions in
 -- the GF interpreter.
-getCompletions :: ParseState -> String -> Map.Map String ParseState
+getCompletions :: ParseState -> String -> Map.Map Token ParseState
 getCompletions (PState pgf cnc chart items) w =
   let (mb_agenda,map_items) = TMap.decompose items
       agenda = maybe [] Set.toList mb_agenda
@@ -164,7 +164,7 @@ getCompletions (PState pgf cnc chart items) w =
       | isPrefixOf w tok    = Map.insertWith (TMap.unionWith Set.union) tok (TMap.singleton toks (Set.singleton item)) acc
     add _          item acc = acc
 
-recoveryStates :: [Type] -> ErrorState -> (ParseState, Map.Map String ParseState)
+recoveryStates :: [Type] -> ErrorState -> (ParseState, Map.Map Token ParseState)
 recoveryStates open_types (EState pgf cnc chart) =
   let open_fcats = concatMap type2fcats open_types
       agenda = foldl (complete open_fcats) [] (actives chart)
