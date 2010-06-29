@@ -152,6 +152,7 @@ executable gf
     PGF.TypeCheck
     PGF.Binary
     PGF.Printer
+    PGF.Optimize
     GFC
     GFI
 
