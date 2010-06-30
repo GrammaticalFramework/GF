@@ -70,7 +70,7 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
     startRules :: [CFRule]
     startRules = [CFRule (showCId c) [NonTerminal (fcatToCat fc r)] (CFRes 0) 
                       | (c,CncCat s e lbls) <- Map.toList (cnccats cnc), 
-                        fc <- range (s,e), not (isLiteralFCat fc),
+                        fc <- range (s,e), not (isPredefFId fc),
                         r <- [0..catLinArity fc-1]]
 
     ruleToCFRule :: (FId,Production) -> [CFRule]
@@ -86,7 +86,7 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
         mkRhs = concatMap symbolToCFSymbol . Array.elems
 
         containsLiterals :: Array DotPos Symbol -> Bool
-        containsLiterals row = any isLiteralFCat [args!!n | SymCat n _ <- Array.elems row] ||
+        containsLiterals row = any isPredefFId [args!!n | SymCat n _ <- Array.elems row] ||
                                not (null [n | SymLit n _ <- Array.elems row])   -- only this is needed for PMCFG.
                                                                                 -- The first line is for backward compat.
 

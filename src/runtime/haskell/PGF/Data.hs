@@ -103,11 +103,11 @@ readLanguage = readCId
 showLanguage :: Language -> String
 showLanguage = showCId
 
-fcatString, fcatInt, fcatFloat, fcatVar :: Int
-fcatString = (-1)
-fcatInt    = (-2)
-fcatFloat  = (-3)
-fcatVar    = (-4)
+fidString, fidInt, fidFloat, fidVar :: FId
+fidString = (-1)
+fidInt    = (-2)
+fidFloat  = (-3)
+fidVar    = (-4)
 
-isLiteralFCat :: FId -> Bool
-isLiteralFCat = (`elem` [fcatString, fcatInt, fcatFloat, fcatVar])
+isPredefFId :: FId -> Bool
+isPredefFId = (`elem` [fidString, fidInt, fidFloat, fidVar])

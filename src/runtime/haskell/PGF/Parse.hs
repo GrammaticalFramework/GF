@@ -138,10 +138,10 @@ feedLiteral (PState pgf cnc chart items) (ELit lit) =
 
     magic lit fid =
       case lit of
-        LStr s | fid == fcatString -> Just (cidString, ELit lit, words s)
-        LInt n | fid == fcatInt    -> Just (cidInt,    ELit lit, [show n])
-        LFlt d | fid == fcatFloat  -> Just (cidFloat,  ELit lit, [show d])
-        _                          -> Nothing
+        LStr s | fid == fidString -> Just (cidString, ELit lit, words s)
+        LInt n | fid == fidInt    -> Just (cidInt,    ELit lit, [show n])
+        LFlt d | fid == fidFloat  -> Just (cidFloat,  ELit lit, [show d])
+        _                         -> Nothing
 
 -- | If the next token is not known but only its prefix (possible empty prefix)
 -- then the 'getCompletions' function can be used to calculate the possible
@@ -344,14 +344,14 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
 updateAt :: Int -> a -> [a] -> [a]
 updateAt nr x xs = [if i == nr then x else y | (i,y) <- zip [0..] xs]
 
-litCatMatch (Just t) fcat
-  | fcat == fcatString = Just (cidString,ELit (LStr t),[t])
-  | fcat == fcatInt    = case reads t of {[(n,"")] -> Just (cidInt,ELit (LInt n),[t]);
-                                         _         -> Nothing }
-  | fcat == fcatFloat  = case reads t of {[(d,"")] -> Just (cidFloat,ELit (LFlt d),[t]);
-                                         _         -> Nothing }
-  | fcat == fcatVar    = Just (cidVar,EFun (mkCId t),[t])
-litCatMatch _    _     = Nothing
+litCatMatch (Just t) fid
+  | fid == fidString = Just (cidString,ELit (LStr t),[t])
+  | fid == fidInt    = case reads t of {[(n,"")] -> Just (cidInt,ELit (LInt n),[t]);
+                                        _        -> Nothing }
+  | fid == fidFloat  = case reads t of {[(d,"")] -> Just (cidFloat,ELit (LFlt d),[t]);
+                                        _        -> Nothing }
+  | fid == fidVar    = Just (cidVar,EFun (mkCId t),[t])
+litCatMatch _    _   = Nothing
 
 
 ----------------------------------------------------------------

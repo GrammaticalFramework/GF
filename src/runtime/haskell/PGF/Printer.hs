@@ -56,12 +56,12 @@ ppCnc name cnc =
           nest 2 (vcat (map ppPrintName (Map.toList (printnames cnc))))) $$
   char '}'
 
-ppProduction (fcat,PApply funid args) =
-  ppFCat fcat <+> text "->" <+> ppFunId funid <> brackets (hcat (punctuate comma (map ppFCat args)))
-ppProduction (fcat,PCoerce arg) =
-  ppFCat fcat <+> text "->" <+> char '_' <> brackets (ppFCat arg)
-ppProduction (fcat,PConst _ _ ss) =
-  ppFCat fcat <+> text "->" <+> ppStrs ss
+ppProduction (fid,PApply funid args) =
+  ppFId fid <+> text "->" <+> ppFunId funid <> brackets (hcat (punctuate comma (map ppFId args)))
+ppProduction (fid,PCoerce arg) =
+  ppFId fid <+> text "->" <+> char '_' <> brackets (ppFId arg)
+ppProduction (fid,PConst _ _ ss) =
+  ppFId fid <+> text "->" <+> ppStrs ss
 
 ppCncFun (funid,CncFun fun arr) =
   ppFunId funid <+> text ":=" <+> parens (hcat (punctuate comma (map ppSeqId (elems arr)))) <+> brackets (ppCId fun)
@@ -70,7 +70,7 @@ ppSeq (seqid,seq) =
   ppSeqId seqid <+> text ":=" <+> hsep (map ppSymbol (elems seq))
 
 ppCncCat (id,(CncCat start end labels)) =
-  ppCId id <+> text ":=" <+> (text "range " <+> brackets (ppFCat start <+> text ".." <+> ppFCat end) $$
+  ppCId id <+> text ":=" <+> (text "range " <+> brackets (ppFId start <+> text ".." <+> ppFId end) $$
                               text "labels" <+> brackets (vcat (map (text . show) (elems labels))))
 
 ppPrintName (id,name) =
@@ -85,12 +85,12 @@ ppAlt (Alt ts ps) = ppStrs ts <+> char '/' <+> hsep (map (doubleQuotes . text) p
 
 ppStrs ss = doubleQuotes (hsep (map text ss))
 
-ppFCat  fcat
-  | fcat == fcatString = text "CString"
-  | fcat == fcatInt    = text "CInt"
-  | fcat == fcatFloat  = text "CFloat"
-  | fcat == fcatVar    = text "CVar"
-  | otherwise          = char 'C' <> int fcat
+ppFId fid
+  | fid == fidString = text "CString"
+  | fid == fidInt    = text "CInt"
+  | fid == fidFloat  = text "CFloat"
+  | fid == fidVar    = text "CVar"
+  | otherwise        = char 'C' <> int fid
 
 ppFunId funid = char 'F' <> int funid
 ppSeqId seqid = char 'S' <> int seqid
