@@ -127,6 +127,25 @@ mkDef Nothing    = Nothing
 mkArrity (Just a) = a
 mkArrity Nothing  = 0
 
+data PattTree
+  = Ret  C.Expr
+  | Case (Map.Map QIdent [PattTree]) [PattTree]
+
+compilePatt :: [Equation] -> [PattTree]
+compilePatt (([],t):_) = [Ret (mkExp [] t)]
+compilePatt eqs        = whilePP eqs Map.empty
+  where
+    whilePP []                         cns     = [mkCase cns []]
+    whilePP (((PP c ps' : ps), t):eqs) cns     = whilePP eqs (Map.insertWith (++) c [(ps'++ps,t)] cns)
+    whilePP eqs                        cns     = whilePV eqs cns []
+
+    whilePV []                         cns vrs = [mkCase cns (reverse vrs)]
+    whilePV (((PV x     : ps), t):eqs) cns vrs = whilePV eqs cns ((ps,t) : vrs)
+    whilePV eqs                        cns vrs = mkCase cns (reverse vrs) : compilePatt eqs
+
+    mkCase cns vrs = Case (fmap compilePatt cns) (compilePatt vrs)
+
+
 -- return just one module per language
 
 reorder :: Ident -> SourceGrammar -> SourceGrammar
