@@ -173,8 +173,8 @@ filterProductions prods0 prods
       where
         set1 = Set.filter (filterRule prods0) set
 
-    filterRule prods0 (PApply funid args) = all (\fcat -> isLiteralFCat fcat || IntMap.member fcat prods0) args
-    filterRule prods0 (PCoerce fcat)      = isLiteralFCat fcat || IntMap.member fcat prods0
+    filterRule prods0 (PApply funid args) = all (\fid -> isPredefFId fid || IntMap.member fid prods0) args
+    filterRule prods0 (PCoerce fid)       = isPredefFId fid || IntMap.member fid prods0
     filterRule prods0 _                   = True
 
 updateConcrete abs cnc = 
@@ -191,8 +191,8 @@ updateConcrete abs cnc =
                                                then Nothing
                                                else Just prods'
 
-        is_ho_prod (PApply _ [fid]) | fid == fcatVar = True
-        is_ho_prod _                                 = False
+        is_ho_prod (PApply _ [fid]) | fid == fidVar = True
+        is_ho_prod _                                = False
 
         ho_fids :: IntSet.IntSet
         ho_fids = IntSet.fromList [fid | cat <- ho_cats
