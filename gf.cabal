@@ -81,27 +81,26 @@ executable gf
   main-is: GF.hs
   other-modules:
     GF.Data.BacktrackM
-    GF.JavaScript.AbsJS
-    GF.JavaScript.PrintJS
-    GF.Infra.CompactPrint
     GF.Data.TrieMap
     GF.Data.Utilities
     GF.Data.SortedList
     GF.Data.ErrM
     GF.Data.Operations
-    GF.Infra.Ident
-    GF.Grammar.Predef
     GF.Data.Str
     GF.Data.Zipper
+    GF.JavaScript.AbsJS
+    GF.JavaScript.PrintJS
+    GF.Infra.Ident
+    GF.Infra.Modules
     GF.Infra.GetOpt
     GF.Infra.Option
     GF.Infra.UseIO
+    GF.Infra.CheckM
     GF.Command.Commands
     GF.Command.Interpreter
     GF.Command.Abstract
     GF.Command.Parse
     GF.Command.Importing
-    GF.Infra.Modules
     GF.Grammar
     GF.Grammar.Lexer
     GF.Grammar.Parser
@@ -116,7 +115,6 @@ executable gf
     GF.Grammar.Printer
     GF.Grammar.ShowTerm
     GF.Grammar.Binary
-    GF.Infra.CheckM
     GF.Compile.Update
     GF.Compile.CheckGrammar
     GF.Compile.Refresh
