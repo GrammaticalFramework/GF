@@ -70,7 +70,9 @@ computeLType gr g0 t = comp (reverse [(b,x, Vr x) | (b,x,_) <- g0] ++ g0) t
 inferLType :: SourceGrammar -> Context -> Term -> Check (Term, Type)
 inferLType gr g trm = case trm of
 
-   Q (m,ident) | isPredef m -> termWith trm $ checkErr (typPredefined ident)
+   Q (m,ident) | isPredef m -> termWith trm $ case typPredefined ident of
+                                                Just ty -> return ty
+                                                Nothing -> checkError (text "unknown in Predef:" <+> ppIdent ident)
 
    Q ident -> checks [
      termWith trm $ checkErr (lookupResType gr ident) >>= computeLType gr g
@@ -80,7 +82,9 @@ inferLType gr g trm = case trm of
      checkError (text "cannot infer type of constant" <+> ppTerm Unqualified 0 trm)
      ]
 
-   QC (m,ident) | isPredef m -> termWith trm $ checkErr (typPredefined ident)
+   QC (m,ident) | isPredef m -> termWith trm $ case typPredefined ident of
+                                                 Just ty -> return ty
+                                                 Nothing -> checkError (text "unknown in Predef:" <+> ppIdent ident)
 
    QC ident -> checks [
        termWith trm $ checkErr (lookupResType gr ident) >>= computeLType gr g
