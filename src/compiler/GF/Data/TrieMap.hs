@@ -11,8 +11,8 @@ module GF.Data.TrieMap
          
          , insertWith
 
-         , unionWith
-         , unionsWith
+         , union,  unionWith
+         , unions, unionsWith
          
          , elems
          ) where
@@ -47,6 +47,9 @@ insertWith f (k:ks) v0 (Tr mb_v m) = case Map.lookup k m of
                                        Nothing -> Tr mb_v (Map.insert k (singleton ks v0) m)
                                        Just tr -> Tr mb_v (Map.insert k (insertWith f ks v0 tr) m)
 
+union :: Ord k => TrieMap k v -> TrieMap k v -> TrieMap k v
+union = unionWith (\a b -> a)
+
 unionWith :: Ord k => (v -> v -> v) -> TrieMap k v -> TrieMap k v -> TrieMap k v
 unionWith f (Tr mb_v1 m1) (Tr mb_v2 m2) =
   let mb_v = case (mb_v1,mb_v2) of
@@ -56,6 +59,9 @@ unionWith f (Tr mb_v1 m1) (Tr mb_v2 m2) =
                (Just v1,Just v2) -> Just (f v1 v2)
       m    = Map.unionWith (unionWith f) m1 m2
   in Tr mb_v m
+
+unions :: Ord k => [TrieMap k v] -> TrieMap k v
+unions = foldl union empty
 
 unionsWith :: Ord k => (v -> v -> v) -> [TrieMap k v] -> TrieMap k v
 unionsWith f = foldl (unionWith f) empty

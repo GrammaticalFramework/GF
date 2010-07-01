@@ -43,7 +43,7 @@ import Control.Exception
 
 
 convertConcrete :: Options -> SourceGrammar -> SourceModule -> SourceModule -> IO Concr
-convertConcrete opts gr am cm = do
+convertConcrete opts0 gr am cm = do
   let env0 = emptyGrammarEnv gr cm
   when (flag optProf opts) $ do
     profileGrammar cm env0 pfrules
@@ -52,6 +52,8 @@ convertConcrete opts gr am cm = do
   return $ getConcr flags printnames env2
   where
     (m,mo) = cm
+    
+    opts = addOptions (M.flags (snd am)) opts0
 
     pfrules = [
       (PFRule id args (0,res) (map (\(_,_,ty) -> ty) cont) val term) |
@@ -119,7 +121,7 @@ convertRule gr opts grammarEnv (PFRule fun args res ctypes ctype term) = do
   let pres  = protoFCat grammarEnv res
       pargs = map (protoFCat grammarEnv) args
 
-      b     = runCnvMonad gr (unfactor term >>= convertTerm CNil ctype) (pargs,[])
+      b     = runCnvMonad gr (unfactor term >>= convertTerm opts CNil ctype) (pargs,[])
       (grammarEnv1,b1) = addSequencesB grammarEnv b
       grammarEnv2 = brk (\grammarEnv -> foldBM addRule
                                                grammarEnv
@@ -293,43 +295,43 @@ reversePath path = rev CNil path
 
 type Value a = Schema Branch a Term
 
-convertTerm :: Path -> Type -> Term -> CnvMonad (Value [Symbol])
-convertTerm sel ctype (Vr x)       = convertArg ctype (getVarIndex x) (reversePath sel)
-convertTerm sel ctype (Abs _ _ t)  = convertTerm sel ctype t                -- there are only top-level abstractions and we ignore them !!!
-convertTerm sel ctype (R record)   = convertRec sel ctype record
-convertTerm sel ctype (P term l)   = convertTerm (CProj l sel) ctype term
-convertTerm sel ctype (V pt ts)    = convertTbl sel ctype pt ts
-convertTerm sel ctype (S term p)   = do v <- evalTerm CNil p
-                                        convertTerm (CSel v sel) ctype term
-convertTerm sel ctype (FV vars)    = do term <- variants vars
-                                        convertTerm sel ctype term
-convertTerm sel ctype (C t1 t2)    = do v1 <- convertTerm sel ctype t1
-                                        v2 <- convertTerm sel ctype t2
-                                        return (CStr (concat [s | CStr s <- [v1,v2]]))
-convertTerm sel ctype (K t)        = return (CStr [SymKS [t]])
-convertTerm sel ctype Empty        = return (CStr [])
-convertTerm sel ctype (Alts s alts)
-                                   = return (CStr [SymKP (strings s) [Alt (strings u) (strings v) | (u,v) <- alts]])
-                                       where
-                                         strings (K s)     = [s]
-                                         strings (C u v)   = strings u ++ strings v
-                                         strings (Strs ss) = concatMap strings ss
-convertTerm CNil ctype t           = do v <- evalTerm CNil t
-                                        return (CPar v)
-convertTerm _    _     t           = error (render (text "convertTerm" <+> parens (ppTerm Unqualified 0 t)))
+convertTerm :: Options -> Path -> Type -> Term -> CnvMonad (Value [Symbol])
+convertTerm opts sel ctype (Vr x)       = convertArg opts ctype (getVarIndex x) (reversePath sel)
+convertTerm opts sel ctype (Abs _ _ t)  = convertTerm opts sel ctype t                -- there are only top-level abstractions and we ignore them !!!
+convertTerm opts sel ctype (R record)   = convertRec opts sel ctype record
+convertTerm opts sel ctype (P term l)   = convertTerm opts (CProj l sel) ctype term
+convertTerm opts sel ctype (V pt ts)    = convertTbl opts sel ctype pt ts
+convertTerm opts sel ctype (S term p)   = do v <- evalTerm CNil p
+                                             convertTerm opts (CSel v sel) ctype term
+convertTerm opts sel ctype (FV vars)    = do term <- variants vars
+                                             convertTerm opts sel ctype term
+convertTerm opts sel ctype (C t1 t2)    = do v1 <- convertTerm opts sel ctype t1
+                                             v2 <- convertTerm opts sel ctype t2
+                                             return (CStr (concat [s | CStr s <- [v1,v2]]))
+convertTerm opts sel ctype (K t)        = return (CStr [SymKS [t]])
+convertTerm opts sel ctype Empty        = return (CStr [])
+convertTerm opts sel ctype (Alts s alts)
+                                        = return (CStr [SymKP (strings s) [Alt (strings u) (strings v) | (u,v) <- alts]])
+                                            where
+                                              strings (K s)     = [s]
+                                              strings (C u v)   = strings u ++ strings v
+                                              strings (Strs ss) = concatMap strings ss
+convertTerm opts CNil ctype t           = do v <- evalTerm CNil t
+                                             return (CPar v)
+convertTerm _    _    _     t           = error (render (text "convertTerm" <+> parens (ppTerm Unqualified 0 t)))
 
-convertArg :: Term -> Int -> Path -> CnvMonad (Value [Symbol])
-convertArg (RecType rs)  nr path =
-  mkRecord (map (\(lbl,ctype) -> (lbl,convertArg ctype nr (CProj lbl path))) rs)
-convertArg (Table pt vt) nr path = do
+convertArg :: Options -> Term -> Int -> Path -> CnvMonad (Value [Symbol])
+convertArg opts (RecType rs)  nr path =
+  mkRecord (map (\(lbl,ctype) -> (lbl,convertArg opts ctype nr (CProj lbl path))) rs)
+convertArg opts (Table pt vt) nr path = do
   vs <- getAllParamValues pt
-  mkTable pt (map (\v -> (v,convertArg vt nr (CSel v path))) vs)
-convertArg (Sort _)      nr path = do
+  mkTable pt (map (\v -> (v,convertArg opts vt nr (CSel v path))) vs)
+convertArg opts (Sort _)      nr path = do
   (args,_) <- get
   let PFCat _ cat schema = args !! nr
       l = index (reversePath path) schema
-      sym | isLiteralCat cat = SymLit nr l
-          | otherwise        = SymCat nr l
+      sym | isLiteralCat opts cat = SymLit nr l
+          | otherwise             = SymCat nr l
   return (CStr [sym])
   where
     index (CProj lbl path) (CRec   rs) = case lookup lbl rs of
@@ -337,26 +339,26 @@ convertArg (Sort _)      nr path = do
     index (CSel  trm path) (CTbl _ rs) = case lookup trm rs of
                                            Just (Identity t) -> index path t
     index CNil             (CStr idx)  = idx
-convertArg ty nr path              = do
+convertArg opts ty nr path              = do
   value <- choices nr (reversePath path)
   return (CPar value)
 
-convertRec CNil (RecType rs) record =
-  mkRecord (map (\(lbl,ctype) -> (lbl,convertTerm CNil ctype (projectRec lbl record))) rs)
-convertRec (CProj lbl path) ctype record =
-  convertTerm path ctype (projectRec lbl record)
-convertRec _ ctype _ = error ("convertRec: "++show ctype)
+convertRec opts CNil (RecType rs) record =
+  mkRecord (map (\(lbl,ctype) -> (lbl,convertTerm opts CNil ctype (projectRec lbl record))) rs)
+convertRec opts (CProj lbl path) ctype record =
+  convertTerm opts path ctype (projectRec lbl record)
+convertRec opts _ ctype _ = error ("convertRec: "++show ctype)
 
-convertTbl CNil (Table _ vt) pt ts = do
+convertTbl opts CNil (Table _ vt) pt ts = do
   vs <- getAllParamValues pt
-  mkTable pt (zipWith (\v t -> (v,convertTerm CNil vt t)) vs ts)
-convertTbl (CSel v sub_sel) ctype pt ts = do
+  mkTable pt (zipWith (\v t -> (v,convertTerm opts CNil vt t)) vs ts)
+convertTbl opts (CSel v sub_sel) ctype pt ts = do
   vs <- getAllParamValues pt
   case lookup v (zip vs ts) of
-    Just t  -> convertTerm sub_sel ctype t
+    Just t  -> convertTerm opts sub_sel ctype t
     Nothing -> error (render (text "convertTbl:" <+> (text "missing value" <+> ppTerm Unqualified 0 v $$
                                                       text "among" <+> vcat (map (ppTerm Unqualified 0) vs))))
-convertTbl _ ctype _ _ = error ("convertTbl: "++show ctype)
+convertTbl opts _ ctype _ _ = error ("convertTbl: "++show ctype)
 
 
 goB :: Branch (Value SeqId) -> Path -> [SeqId] -> BacktrackM Env [SeqId]

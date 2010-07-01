@@ -17,7 +17,7 @@ module GF.Infra.Option
      helpMessage,
      -- * Checking specific options
      flag, cfgTransform, haskellOption, readOutputFormat,
-     isLexicalCat, renameEncoding,
+     isLexicalCat, isLiteralCat, renameEncoding,
      -- * Setting specific options
      setOptimization, setCFGTransform,
      -- * Convenience methods for checking options    
@@ -28,7 +28,9 @@ import Control.Monad
 import Data.Char (toLower, isDigit)
 import Data.List
 import Data.Maybe
+import GF.Infra.Ident
 import GF.Infra.GetOpt
+import GF.Grammar.Predef
 --import System.Console.GetOpt
 import System.FilePath
 import System.IO
@@ -37,7 +39,7 @@ import GF.Data.ErrM
 
 import Data.Set (Set)
 import qualified Data.Set as Set
-
+import qualified Data.ByteString.Char8 as BS
 
 
 
@@ -146,6 +148,7 @@ data Flags = Flags {
       optSISR            :: Maybe SISRFormat,
       optHaskellOptions  :: Set HaskellOption,
       optLexicalCats     :: Set String,
+      optLiteralCats     :: Set Ident,
       optGFODir          :: Maybe FilePath,
       optOutputFile      :: Maybe FilePath,
       optOutputDir       :: Maybe FilePath,
@@ -244,6 +247,7 @@ defaultFlags = Flags {
       optOutputFormats   = [],
       optSISR            = Nothing,
       optHaskellOptions  = Set.empty,
+      optLiteralCats     = Set.fromList [cString,cInt,cFloat],
       optLexicalCats     = Set.empty,
       optGFODir          = Nothing,
       optOutputFile      = Nothing,
@@ -308,6 +312,8 @@ optDescr =
              ++ concat (intersperse " | " (map fst haskellOptionNames))),
      Option [] ["lexical"] (ReqArg lexicalCat "CAT[,CAT[...]]") 
             "Treat CAT as a lexical category.",
+     Option [] ["literal"] (ReqArg literalCat "CAT[,CAT[...]]") 
+            "Treat CAT as a literal category.",
      Option ['o'] ["output-file"] (ReqArg outFile "FILE") 
            "Save output in FILE (default is out.X, where X depends on output format.",
      Option ['D'] ["output-dir"] (ReqArg outDir "DIR") 
@@ -386,6 +392,7 @@ optDescr =
                          Just p  -> set $ \o -> o { optHaskellOptions = Set.insert p (optHaskellOptions o) }
                          Nothing -> fail $ "Unknown Haskell option: " ++ x
                                             ++ " Known: " ++ show (map fst haskellOptionNames)
+       literalCat  x = set $ \o -> o { optLiteralCats = foldr Set.insert (optLiteralCats o) ((map (identC . BS.pack) . splitBy (==',')) x) }
        lexicalCat  x = set $ \o -> o { optLexicalCats = foldr Set.insert (optLexicalCats o) (splitBy (==',') x) }
        outFile     x = set $ \o -> o { optOutputFile = Just x }
        outDir      x = set $ \o -> o { optOutputDir = Just x }
@@ -535,6 +542,9 @@ cfgTransform opts t = Set.member t (flag optCFGTransforms opts)
 
 haskellOption :: Options -> HaskellOption -> Bool
 haskellOption opts o = Set.member o (flag optHaskellOptions opts)
+
+isLiteralCat :: Options -> Ident -> Bool
+isLiteralCat opts c = Set.member c (flag optLiteralCats opts)
 
 isLexicalCat :: Options -> String -> Bool
 isLexicalCat opts c = Set.member c (flag optLexicalCats opts)

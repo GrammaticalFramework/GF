@@ -80,8 +80,8 @@ module PGF(
            complete,
            Parse.ParseState,
            Parse.initState, Parse.nextState, Parse.getCompletions, Parse.recoveryStates, 
-           Parse.acceptsLiteral, Parse.feedLiteral,
-           Parse.ParseResult(..), Parse.getParseResult,
+           Parse.ParseInput(..),  Parse.simpleParseInput, Parse.mkParseInput,
+           Parse.ParseOutput(..), Parse.getParseOutput,
 
            -- ** Generation
            generateRandom, generateAll, generateAllDepth,
@@ -155,10 +155,10 @@ parseAll     :: PGF -> Type -> String -> [[Tree]]
 parseAllLang :: PGF -> Type -> String -> [(Language,[Tree])]
 
 -- | The same as 'parse' but returns more detailed information
-parse_       :: PGF -> Language -> Type -> String -> (Parse.ParseResult,BracketedString)
+parse_       :: PGF -> Language -> Type -> String -> (Parse.ParseOutput,BracketedString)
 
 -- | This is an experimental function. Use it on your own risk
-parseWithRecovery :: PGF -> Language -> Type -> [Type] -> String -> (Parse.ParseResult,BracketedString)
+parseWithRecovery :: PGF -> Language -> Type -> [Type] -> String -> (Parse.ParseOutput,BracketedString)
 
 -- | The same as 'generateAllDepth' but does not limit
 -- the depth in the generation, and doesn't give an initial expression.
@@ -223,13 +223,13 @@ readPGF f = decodeFile f
 
 parse pgf lang typ s =
   case parse_ pgf lang typ s of
-    (Parse.ParseResult ts,_) -> ts
-    _                        -> []
+    (Parse.ParseOk ts,_) -> ts
+    _                    -> []
 
 parseAll mgr typ = map snd . parseAllLang mgr typ
 
 parseAllLang mgr typ s = 
-  [(lang,ts) | lang <- languages mgr, (Parse.ParseResult ts,_) <- [parse_ mgr lang typ s]]
+  [(lang,ts) | lang <- languages mgr, (Parse.ParseOk ts,_) <- [parse_ mgr lang typ s]]
 
 parse_ pgf lang typ s = 
   case Map.lookup lang (concretes pgf) of
@@ -281,9 +281,9 @@ complete pgf from typ input =
                       ++ [unwords (ws++[c]) ++ " " | c <- Map.keys (Parse.getCompletions state prefix)]
   where
     isSuccessful state =
-      case Parse.getParseResult state typ of
-        (Parse.ParseResult ts, _) -> not (null ts)
-        _                         -> False
+      case Parse.getParseOutput state typ of
+        (Parse.ParseOk ts, _) -> not (null ts)
+        _                     -> False
 
     tokensAndPrefix :: String -> ([String],String)
     tokensAndPrefix s | not (null s) && isSpace (last s) = (ws, "")
@@ -292,7 +292,7 @@ complete pgf from typ input =
         where ws = words s
 
     loop ps []     = Just ps
-    loop ps (t:ts) = case Parse.nextState ps t of
+    loop ps (t:ts) = case Parse.nextState ps (Parse.simpleParseInput t) of
                        Left  es -> Nothing
                        Right ps -> loop ps ts
 

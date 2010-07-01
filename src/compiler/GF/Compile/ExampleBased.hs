@@ -51,7 +51,7 @@ convertFile conf src file = do
         return ws
       TypeError _ _ ->
         return []
-      ParseResult ts ->
+      ParseOk ts ->
         case rank ts of
           (t:tt) -> appv ("WARNING: ambiguous example " ++ ex) >>
                     appn t >> mapM_ (appn . ("  --- " ++)) tt >> return []

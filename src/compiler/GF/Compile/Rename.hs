@@ -87,8 +87,8 @@ renameIdentTerm env@(act,imps) t =
 
    -- this facility is mainly for BWC with GF1: you need not import PredefAbs
    predefAbs c s
-     | isLiteralCat c = return $ Q (cPredefAbs,c)
-     | otherwise      = checkError s
+     | isPredefCat c = return $ Q (cPredefAbs,c)
+     | otherwise     = checkError s
 
    ident alt c = case lookupTree showIdent c act of
       Ok f -> return $ f c

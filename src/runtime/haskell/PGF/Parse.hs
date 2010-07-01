@@ -5,10 +5,9 @@ module PGF.Parse
           , initState
           , nextState
           , getCompletions
-          , acceptsLiteral
-          , feedLiteral
           , recoveryStates
-          , ParseResult(..), getParseResult
+          , ParseInput(..),  simpleParseInput, mkParseInput
+          , ParseOutput(..), getParseOutput
           , parse
           , parseWithRecovery
           ) where
@@ -31,34 +30,45 @@ import PGF.Macros
 import PGF.TypeCheck
 import PGF.Forest(Forest(Forest), linearizeWithBrackets, foldForest)
 
+-- | The input to the parser is a pair of predicates. The first one
+-- 'piToken' checks that a given token, suggested by the grammar,
+-- actually appears at the current position in the input string.
+-- The second one 'piLiteral' recognizes whether a literal with forest id 'FId'
+-- could be matched at the current position.
+data ParseInput
+  = ParseInput
+      { piToken   :: Token -> Bool
+      , piLiteral :: FId -> Maybe (CId,Tree,[Token])
+      }
+
 -- | This data type encodes the different outcomes which you could get from the parser.
-data ParseResult
+data ParseOutput
   = ParseFailed Int                -- ^ The integer is the position in number of tokens where the parser failed.
   | TypeError   FId [TcError]      -- ^ The parsing was successful but none of the trees is type correct. 
                                    -- The forest id ('FId') points to the bracketed string from the parser
                                    -- where the type checking failed. More than one error is returned
                                    -- if there are many analizes for some phrase but they all are not type correct.
-  | ParseResult [Tree]             -- ^ If the parsing was successful we get a list of abstract syntax trees. The list should be non-empty.
+  | ParseOk [Tree]                 -- ^ If the parsing was successful we get a list of abstract syntax trees. The list should be non-empty.
 
-parse :: PGF -> Language -> Type -> [String] -> (ParseResult,BracketedString)
+parse :: PGF -> Language -> Type -> [Token] -> (ParseOutput,BracketedString)
 parse pgf lang typ toks = loop (initState pgf lang typ) toks
   where
-    loop ps []     = getParseResult ps typ
-    loop ps (t:ts) = case nextState ps t of
+    loop ps []     = getParseOutput ps typ
+    loop ps (t:ts) = case nextState ps (simpleParseInput t) of
                        Left  es -> case es of
-                                     EState _ _ chart -> (ParseFailed (offset chart),snd (getParseResult ps typ))
+                                     EState _ _ chart -> (ParseFailed (offset chart),snd (getParseOutput ps typ))
                        Right ps -> loop ps ts
 
-parseWithRecovery :: PGF -> Language -> Type -> [Type] -> [String] -> (ParseResult,BracketedString)
+parseWithRecovery :: PGF -> Language -> Type -> [Type] -> [String] -> (ParseOutput,BracketedString)
 parseWithRecovery pgf lang typ open_typs toks = accept (initState pgf lang typ) toks
   where
-    accept ps []     = getParseResult ps typ
+    accept ps []     = getParseOutput ps typ
     accept ps (t:ts) =
-      case nextState ps t of
+      case nextState ps (simpleParseInput t) of
         Right ps -> accept ps ts
         Left  es -> skip (recoveryStates open_typs es) ts
 
-    skip ps_map []     = getParseResult (fst ps_map) typ
+    skip ps_map []     = getParseOutput (fst ps_map) typ
     skip ps_map (t:ts) =
       case Map.lookup t (snd ps_map) of
         Just ps -> accept ps ts
@@ -84,17 +94,52 @@ initState pgf lang (DTyp _ start _) =
             (Chart emptyAC [] emptyPC (pproductions cnc) (totalCats cnc) 0)
             (TMap.singleton [] (Set.fromList items))
 
+-- | This function constructs the simplest possible parser input. 
+-- It checks the tokens for exact matching and recognizes only @String@, @Int@ and @Float@ literals.
+-- The @Int@ and @Float@ literals matche only if the token passed is some number.
+-- The @String@ literal always match but the length of the literal could be only one token.
+simpleParseInput :: Token -> ParseInput
+simpleParseInput t = ParseInput (==t) (matchLit t)
+  where
+    matchLit t fid
+      | fid == fidString = Just (cidString,ELit (LStr t),[t])
+      | fid == fidInt    = case reads t of {[(n,"")] -> Just (cidInt,ELit (LInt n),[t]);
+                                            _        -> Nothing }
+      | fid == fidFloat  = case reads t of {[(d,"")] -> Just (cidFloat,ELit (LFlt d),[t]);
+                                            _        -> Nothing }
+      | fid == fidVar    = Just (cidVar,EFun (mkCId t),[t])
+      | otherwise        = Nothing
+
+mkParseInput :: PGF -> Language -> (a -> Token -> Bool) -> [(CId,a -> Maybe (Tree,[Token]))] -> a -> ParseInput
+mkParseInput pgf lang ftok flits = \x -> ParseInput (ftok x) (flit x)
+  where
+    flit = mk flits
+    
+    cnc = lookConcr pgf lang
+
+    mk []               = \x fid -> Nothing
+    mk ((c,flit):flits) = \x fid -> if match fid 
+                                      then fmap (\(tree,toks) -> (c,tree,toks)) (flit x)
+                                      else flit' x fid
+                          where
+                            flit' = mk flits
+
+                            match fid = 
+                              case Map.lookup c (cnccats cnc) of
+                                Just (CncCat s e _) -> inRange (s,e) fid
+                                Nothing             -> False
+
 -- | From the current state and the next token
 -- 'nextState' computes a new state, where the token
 -- is consumed and the current position is shifted by one.
 -- If the new token cannot be accepted then an error state 
 -- is returned.
-nextState :: ParseState -> Token -> Either ErrorState ParseState
-nextState (PState pgf cnc chart items) t =
+nextState :: ParseState -> ParseInput -> Either ErrorState ParseState
+nextState (PState pgf cnc chart items) input =
   let (mb_agenda,map_items) = TMap.decompose items
       agenda = maybe [] Set.toList mb_agenda
-      acc    = fromMaybe TMap.empty (Map.lookup t map_items)
-      (acc1,chart1) = process (litCatMatch (Just t)) add (sequences cnc) (cncfuns cnc) agenda acc chart
+      acc    = TMap.unions [tmap | (t,tmap) <- Map.toList map_items, piToken input t]
+      (acc1,chart1) = process flit ftok (sequences cnc) (cncfuns cnc) agenda acc chart
       chart2 = chart1{ active =emptyAC
                      , actives=active chart1 : actives chart1
                      , passive=emptyPC
@@ -104,44 +149,12 @@ nextState (PState pgf cnc chart items) t =
        then Left  (EState pgf cnc chart2)
        else Right (PState pgf cnc chart2 acc1)
   where
-    add (tok:toks) item acc
-      | tok == t            = TMap.insertWith Set.union toks (Set.singleton item) acc
-    add _          item acc = acc
+    flit = piLiteral input
 
-acceptsLiteral :: ParseState -> Type -> Bool
-acceptsLiteral (PState pgf cnc chart items) (DTyp _ cat _) =
-  case Map.lookup cat (cnccats cnc) of
-    Just (CncCat s e _) -> or [IntMap.member fid (active chart1) | fid <- [s..e]]
-    Nothing             -> False
-  where
-    (mb_agenda,map_items) = TMap.decompose items
-    agenda = maybe [] Set.toList mb_agenda
-    (acc1,chart1) = process (litCatMatch Nothing) add (sequences cnc) (cncfuns cnc) agenda TMap.empty chart
+    ftok (tok:toks) item acc
+      | piToken input tok    = TMap.insertWith Set.union toks (Set.singleton item) acc
+    ftok _          item acc = acc
 
-    add (tok:toks) item acc = acc
-
-feedLiteral :: ParseState -> Expr -> Either ErrorState ParseState
-feedLiteral (PState pgf cnc chart items) (ELit lit) =
-  let (mb_agenda,map_items) = TMap.decompose items
-      agenda = maybe [] Set.toList mb_agenda
-      (acc1,chart1) = process (magic lit) add (sequences cnc) (cncfuns cnc) agenda TMap.empty chart
-      chart2 = chart1{ active =emptyAC
-                     , actives=active chart1 : actives chart1
-                     , passive=emptyPC
-                     , offset =offset chart1+1
-                     }
-  in if TMap.null acc1
-       then Left  (EState pgf cnc chart2)
-       else Right (PState pgf cnc chart2 acc1)
-  where
-    add toks item acc = TMap.insertWith Set.union toks (Set.singleton item) acc
-
-    magic lit fid =
-      case lit of
-        LStr s | fid == fidString -> Just (cidString, ELit lit, words s)
-        LInt n | fid == fidInt    -> Just (cidInt,    ELit lit, [show n])
-        LFlt d | fid == fidFloat  -> Just (cidFloat,  ELit lit, [show d])
-        _                         -> Nothing
 
 -- | If the next token is not known but only its prefix (possible empty prefix)
 -- then the 'getCompletions' function can be used to calculate the possible
@@ -152,7 +165,7 @@ getCompletions (PState pgf cnc chart items) w =
   let (mb_agenda,map_items) = TMap.decompose items
       agenda = maybe [] Set.toList mb_agenda
       acc    = Map.filterWithKey (\tok _ -> isPrefixOf w tok) map_items
-      (acc',chart1) = process (litCatMatch Nothing) add (sequences cnc) (cncfuns cnc) agenda acc chart
+      (acc',chart1) = process flit ftok (sequences cnc) (cncfuns cnc) agenda acc chart
       chart2 = chart1{ active =emptyAC
                      , actives=active chart1 : actives chart1
                      , passive=emptyPC
@@ -160,15 +173,17 @@ getCompletions (PState pgf cnc chart items) w =
                      }
   in fmap (PState pgf cnc chart2) acc'
   where
-    add (tok:toks) item acc
-      | isPrefixOf w tok    = Map.insertWith (TMap.unionWith Set.union) tok (TMap.singleton toks (Set.singleton item)) acc
-    add _          item acc = acc
+    flit _ = Nothing
+
+    ftok (tok:toks) item acc
+      | isPrefixOf w tok     = Map.insertWith (TMap.unionWith Set.union) tok (TMap.singleton toks (Set.singleton item)) acc
+    ftok _          item acc = acc
 
 recoveryStates :: [Type] -> ErrorState -> (ParseState, Map.Map Token ParseState)
 recoveryStates open_types (EState pgf cnc chart) =
   let open_fcats = concatMap type2fcats open_types
       agenda = foldl (complete open_fcats) [] (actives chart)
-      (acc,chart1) = process (litCatMatch Nothing) add (sequences cnc) (cncfuns cnc) agenda Map.empty chart
+      (acc,chart1) = process flit ftok (sequences cnc) (cncfuns cnc) agenda Map.empty chart
       chart2 = chart1{ active =emptyAC
                      , actives=active chart1 : actives chart1
                      , passive=emptyPC
@@ -186,14 +201,15 @@ recoveryStates open_types (EState pgf cnc chart) =
             items
             [set | fcat <- open_fcats, set <- lookupACByFCat fcat ac]
 
-    add (tok:toks) item acc = Map.insertWith (TMap.unionWith Set.union) tok (TMap.singleton toks (Set.singleton item)) acc
+    flit _ = Nothing
+    ftok (tok:toks) item acc = Map.insertWith (TMap.unionWith Set.union) tok (TMap.singleton toks (Set.singleton item)) acc
 
 -- | This function extracts the list of all completed parse trees
 -- that spans the whole input consumed so far. The trees are also
 -- limited by the category specified, which is usually
 -- the same as the startup category.
-getParseResult :: ParseState -> Type -> (ParseResult,BracketedString)
-getParseResult (PState pgf cnc chart items) ty@(DTyp _ start _) =
+getParseOutput :: ParseState -> Type -> (ParseOutput,BracketedString)
+getParseOutput (PState pgf cnc chart items) ty@(DTyp _ start _) =
   let froots | null roots = getPartialSeq (sequences cnc) (reverse (active st : actives st)) acc1
              | otherwise  = [([SymCat 0 lbl],[fid]) | AK fid lbl <- roots]
 
@@ -209,15 +225,16 @@ getParseResult (PState pgf cnc chart items) ty@(DTyp _ start _) =
 
       res   = if null exps
                 then ParseFailed (offset chart)
-                else ParseResult exps
+                else ParseOk exps
 
   in (res,bs)
   where
     (mb_agenda,acc) = TMap.decompose items
     agenda = maybe [] Set.toList mb_agenda
-    (acc1,st) = process (litCatMatch Nothing) add (sequences cnc) (cncfuns cnc) agenda [] chart
+    (acc1,st) = process flit ftok (sequences cnc) (cncfuns cnc) agenda [] chart
 
-    add _ (Active j ppos funid seqid args key) items = (j,lin,args,key) : items
+    flit _ = Nothing
+    ftok _ (Active j ppos funid seqid args key) items = (j,lin,args,key) : items
       where
         lin  = take (ppos-1) (elems (unsafeAt (sequences cnc) seqid))
 
@@ -274,8 +291,8 @@ getPartialSeq seqs actives = expand Set.empty
     inc n (SymLit d r) = SymLit (n+d) r
     inc n s            = s
 
-process mbt fn !seqs !funs []                                                 acc chart = (acc,chart)
-process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) acc chart
+process flit ftok !seqs !funs []                                                 acc chart = (acc,chart)
+process flit ftok !seqs !funs (item@(Active j ppos funid seqid args key0):items) acc chart
   | inRange (bounds lin) ppos =
       case unsafeAt lin ppos of
         SymCat d r -> let !fid = args !! d
@@ -288,15 +305,15 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
                                               (\_ _ items -> items)
                                               items2 fid (forest chart)
                       in case lookupAC key (active chart) of
-                           Nothing                        -> process mbt fn seqs funs items3 acc chart{active=insertAC key (Set.singleton item) (active chart)}
-                           Just set | Set.member item set -> process mbt fn seqs funs items  acc chart
-                                    | otherwise           -> process mbt fn seqs funs items2 acc chart{active=insertAC key (Set.insert item set) (active chart)}
-      	SymKS toks -> let !acc' = fn toks (Active j (ppos+1) funid seqid args key0) acc
-                      in process mbt fn seqs funs items acc' chart
+                           Nothing                        -> process flit ftok seqs funs items3 acc chart{active=insertAC key (Set.singleton item) (active chart)}
+                           Just set | Set.member item set -> process flit ftok seqs funs items  acc chart
+                                    | otherwise           -> process flit ftok seqs funs items2 acc chart{active=insertAC key (Set.insert item set) (active chart)}
+      	SymKS toks -> let !acc' = ftok toks (Active j (ppos+1) funid seqid args key0) acc
+                      in process flit ftok seqs funs items acc' chart
       	SymKP strs vars
-      	           -> let !acc' = foldl (\acc toks -> fn toks (Active j (ppos+1) funid seqid args key0) acc) acc
-                                   (strs:[strs' | Alt strs' _ <- vars])
-                      in process mbt fn seqs funs items acc' chart
+      	           -> let !acc' = foldl (\acc toks -> ftok toks (Active j (ppos+1) funid seqid args key0) acc) acc
+                                        (strs:[strs' | Alt strs' _ <- vars])
+                      in process flit ftok seqs funs items acc' chart
         SymLit d r -> let fid   = args !! d
                           key   = AK fid r
                           !fid' = case lookupPC (mkPK key k) (passive chart) of
@@ -304,17 +321,17 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
                                     Just fid -> fid
 
                       in case [ts | PConst _ _ ts <- maybe [] Set.toList (IntMap.lookup fid' (forest chart))] of
-                           (toks:_) -> let !acc' = fn toks (Active j (ppos+1) funid seqid (updateAt d fid' args) key0) acc
-                                       in process mbt fn seqs funs items acc' chart
-                           []       -> case mbt fid of
+                           (toks:_) -> let !acc' = ftok toks (Active j (ppos+1) funid seqid (updateAt d fid' args) key0) acc
+                                       in process flit ftok seqs funs items acc' chart
+                           []       -> case flit fid of
                                          Just (cat,lit,toks) 
                                                      -> let fid'  = nextId chart
-                                                            !acc' = fn toks (Active j (ppos+1) funid seqid (updateAt d fid' args) key0) acc
-                                                        in process mbt fn seqs funs items acc' chart{passive=insertPC (mkPK key k) fid' (passive chart)
-                                                                                                    ,forest =IntMap.insert fid' (Set.singleton (PConst cat lit toks)) (forest chart)
-                                                                                                    ,nextId =nextId chart+1
-                                                                                                    }
-                                         Nothing     -> process mbt fn seqs funs items acc chart{active=insertAC key (Set.singleton item) (active chart)}
+                                                            !acc' = ftok toks (Active j (ppos+1) funid seqid (updateAt d fid' args) key0) acc
+                                                        in process flit ftok seqs funs items acc' chart{passive=insertPC (mkPK key k) fid' (passive chart)
+                                                                                                       ,forest =IntMap.insert fid' (Set.singleton (PConst cat lit toks)) (forest chart)
+                                                                                                       ,nextId =nextId chart+1
+                                                                                                       }
+                                         Nothing     -> process flit ftok seqs funs items acc chart{active=insertAC key (Set.singleton item) (active chart)}
   | otherwise =
       case lookupPC (mkPK key0 j) (passive chart) of
         Nothing -> let fid = nextId chart
@@ -324,12 +341,12 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
                                   Just set -> Set.fold (\(Active j' ppos funid seqid args keyc) -> 
                                                             let SymCat d _ = unsafeAt (unsafeAt seqs seqid) ppos
                                                             in (:) (Active j' (ppos+1) funid seqid (updateAt d fid args) keyc)) items set
-                   in process mbt fn seqs funs items2 acc chart{passive=insertPC (mkPK key0 j) fid (passive chart)
-                                                               ,forest =IntMap.insert fid (Set.singleton (PApply funid args)) (forest chart)
-                                                               ,nextId =nextId chart+1
-                                                               }
+                   in process flit ftok seqs funs items2 acc chart{passive=insertPC (mkPK key0 j) fid (passive chart)
+                                                                  ,forest =IntMap.insert fid (Set.singleton (PApply funid args)) (forest chart)
+                                                                  ,nextId =nextId chart+1
+                                                                  }
         Just id -> let items2 = [Active k 0 funid (rhs funid r) args (AK id r) | r <- labelsAC id (active chart)] ++ items
-                   in process mbt fn seqs funs items2 acc chart{forest = IntMap.insertWith Set.union id (Set.singleton (PApply funid args)) (forest chart)}
+                   in process flit ftok seqs funs items2 acc chart{forest = IntMap.insertWith Set.union id (Set.singleton (PApply funid args)) (forest chart)}
   where
     !lin = unsafeAt seqs seqid
     !k   = offset chart
@@ -343,15 +360,6 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
 
 updateAt :: Int -> a -> [a] -> [a]
 updateAt nr x xs = [if i == nr then x else y | (i,y) <- zip [0..] xs]
-
-litCatMatch (Just t) fid
-  | fid == fidString = Just (cidString,ELit (LStr t),[t])
-  | fid == fidInt    = case reads t of {[(n,"")] -> Just (cidInt,ELit (LInt n),[t]);
-                                        _        -> Nothing }
-  | fid == fidFloat  = case reads t of {[(d,"")] -> Just (cidFloat,ELit (LFlt d),[t]);
-                                        _        -> Nothing }
-  | fid == fidVar    = Just (cidVar,EFun (mkCId t),[t])
-litCatMatch _    _   = Nothing
 
 
 ----------------------------------------------------------------

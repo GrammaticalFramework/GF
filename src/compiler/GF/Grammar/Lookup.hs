@@ -60,8 +60,8 @@ lookupIdentInfo mo i = lookupIdent i (jments mo)
 
 lookupResDef :: SourceGrammar -> QIdent -> Err Term
 lookupResDef gr (m,c)
-  | isLiteralCat c = lock c defLinType 
-  | otherwise      = look m c
+  | isPredefCat c = lock c defLinType 
+  | otherwise     = look m c
   where 
     look m c = do
       mo <- lookupModule gr m
@@ -161,7 +161,7 @@ lookupAbsDef gr m c = errIn (render (text "looking up absdef of" <+> ppIdent c))
     _            -> return (Nothing,Nothing)
 
 lookupLincat :: SourceGrammar -> Ident -> Ident -> Err Type
-lookupLincat gr m c | isLiteralCat c = return defLinType --- ad hoc; not needed?
+lookupLincat gr m c | isPredefCat c = return defLinType --- ad hoc; not needed?
 lookupLincat gr m c = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
