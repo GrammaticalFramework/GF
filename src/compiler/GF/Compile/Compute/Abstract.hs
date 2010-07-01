@@ -14,7 +14,7 @@
 -- old GF computation; to be updated
 -----------------------------------------------------------------------------
 
-module GF.Compile.Abstract.Compute (LookDef,
+module GF.Compile.Compute.Abstract (LookDef,
 		   compute, 
 		   computeAbsTerm, 
 		   computeAbsTermIn, 

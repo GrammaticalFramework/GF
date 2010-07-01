@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GF.Compile.Abstract.TypeCheck (-- * top-level type checking functions; TC should not be called directly.
+module GF.Compile.TypeCheck.Abstract (-- * top-level type checking functions; TC should not be called directly.
 		  checkContext,
 		  checkTyp,
 		  checkDef,
@@ -26,8 +26,8 @@ import GF.Grammar
 import GF.Grammar.Lookup
 import GF.Grammar.Unify
 import GF.Compile.Refresh
-import GF.Compile.Abstract.Compute
-import GF.Compile.Abstract.TC
+import GF.Compile.Compute.Abstract
+import GF.Compile.TypeCheck.TC
 
 import Text.PrettyPrint
 import Control.Monad (foldM, liftM, liftM2)

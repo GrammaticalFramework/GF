@@ -121,12 +121,12 @@ executable gf
     GF.Compile.Rename
     GF.Compile.ReadFiles
     GF.Compile.GrammarToPGF
-    GF.Compile.Concrete.TypeCheck
-    GF.Compile.Concrete.Compute
-    GF.Compile.Concrete.AppPredefined
-    GF.Compile.Abstract.TC
-    GF.Compile.Abstract.TypeCheck
-    GF.Compile.Abstract.Compute
+    GF.Compile.TypeCheck.Abstract
+    GF.Compile.TypeCheck.Concrete
+    GF.Compile.TypeCheck.TC
+    GF.Compile.Compute.Abstract
+    GF.Compile.Compute.Concrete
+    GF.Compile.Compute.AppPredefined
     GF.Compile.Optimize
     GF.Compile.SubExOpt
     GF.Compile.ModDeps

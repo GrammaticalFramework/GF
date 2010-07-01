@@ -12,8 +12,8 @@ import GF.Grammar hiding (Ident)
 import GF.Grammar.Parser (runP, pExp)
 import GF.Grammar.ShowTerm
 import GF.Compile.Rename
-import GF.Compile.Concrete.Compute (computeConcrete)
-import GF.Compile.Concrete.TypeCheck (inferLType)
+import GF.Compile.Compute.Concrete (computeConcrete)
+import GF.Compile.TypeCheck.Concrete (inferLType)
 import GF.Infra.Dependencies
 import GF.Infra.CheckM
 import GF.Infra.UseIO
