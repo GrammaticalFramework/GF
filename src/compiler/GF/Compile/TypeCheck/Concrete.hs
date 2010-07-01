@@ -1,5 +1,5 @@
 {-# LANGUAGE PatternGuards #-}
-module GF.Compile.Concrete.TypeCheck( checkLType, inferLType, computeLType, ppType ) where
+module GF.Compile.TypeCheck.Concrete( checkLType, inferLType, computeLType, ppType ) where
 
 import GF.Infra.CheckM
 import GF.Infra.Modules
@@ -10,7 +10,7 @@ import GF.Grammar.Lookup
 import GF.Grammar.Predef
 import GF.Grammar.PatternMatch
 import GF.Grammar.Lockfield (isLockLabel, lockRecType, unlockRecord)
-import GF.Compile.Concrete.AppPredefined
+import GF.Compile.Compute.AppPredefined
 
 import Data.List
 import Control.Monad

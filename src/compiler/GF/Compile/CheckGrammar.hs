@@ -25,8 +25,8 @@ module GF.Compile.CheckGrammar(checkModule) where
 import GF.Infra.Ident
 import GF.Infra.Modules
 
-import GF.Compile.Abstract.TypeCheck
-import GF.Compile.Concrete.TypeCheck
+import GF.Compile.TypeCheck.Abstract
+import GF.Compile.TypeCheck.Concrete
 
 import GF.Grammar
 import GF.Grammar.Lexer

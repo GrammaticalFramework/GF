@@ -12,7 +12,7 @@
 -- Thierry Coquand's type checking algorithm that creates a trace
 -----------------------------------------------------------------------------
 
-module GF.Compile.Abstract.TC (AExp(..),
+module GF.Compile.TypeCheck.TC (AExp(..),
 	   Theory,
 	   checkExp,
 	   inferExp,

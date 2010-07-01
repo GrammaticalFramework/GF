@@ -15,7 +15,7 @@ import GF.Grammar.Grammar
 import qualified GF.Grammar.Lookup as Look
 import qualified GF.Grammar as A
 import qualified GF.Grammar.Macros as GM
-import qualified GF.Compile.Concrete.Compute as Compute ---- 
+import qualified GF.Compile.Compute.Concrete as Compute ---- 
 import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
