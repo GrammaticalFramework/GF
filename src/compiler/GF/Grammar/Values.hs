@@ -19,7 +19,7 @@ module GF.Grammar.Values (-- * values used in TC type checking
                Binds, Constraints, MetaSubst,
 	       -- * for TC
 	       valAbsInt, valAbsFloat, valAbsString, vType,
-	       isLiteralCat,
+	       isPredefCat,
 	       eType, 
 --Z tree2exp, loc2treeFocus
 	      ) where

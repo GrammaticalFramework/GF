@@ -314,7 +314,7 @@ wordCompletion gfenv (left,right) = do
            Nothing -> error ("Can't parse '"++str++"' as type")
 
     loop ps []     = Just ps
-    loop ps (t:ts) = case nextState ps t of
+    loop ps (t:ts) = case nextState ps (simpleParseInput t) of
                        Left  es -> Nothing
                        Right ps -> loop ps ts
 

@@ -48,7 +48,7 @@ lookGlobalFlag pgf f = Map.lookup f (gflags pgf)
 lookAbsFlag :: PGF -> CId -> Maybe Literal
 lookAbsFlag pgf f = Map.lookup f (aflags (abstract pgf))
 
-lookConcr :: PGF -> CId -> Concr
+lookConcr :: PGF -> Language -> Concr
 lookConcr pgf cnc = 
     lookMap (error $ "Missing concrete syntax: " ++ showCId cnc) cnc $ concretes pgf
 
@@ -126,9 +126,6 @@ combinations :: [[a]] -> [[a]]
 combinations t = case t of 
   []    -> [[]]
   aa:uu -> [a:u | a <- aa, u <- combinations uu]
-
-isLiteralCat :: CId -> Bool
-isLiteralCat = (`elem` [cidString, cidFloat, cidInt, cidVar])
 
 cidString = mkCId "String"
 cidInt    = mkCId "Int"

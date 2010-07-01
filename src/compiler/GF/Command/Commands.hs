@@ -1012,7 +1012,7 @@ allCommands env@(pgf, mos) = Map.fromList [
                                 _  -> fromExprs ts
      where
        (prs,bss) = unzip parses
-       ts        = [t | ParseResult ts <- prs, t <- ts]
+       ts        = [t | ParseOk ts <- prs, t <- ts]
 
    returnFromExprs es = return $ case es of
      [] -> ([], "no trees found")
