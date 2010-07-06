@@ -71,7 +71,8 @@ var server = {
 
 /* --- Initialisation ------------------------------------------------------- */
 
-function start_minibar(opts) { // typically called when the HTML document is loaded
+function start_minibar(opts) {
+  // Typically called when the HTML document is loaded
     if(opts) for(var o in opts) options[o]=opts[o];
     var surface=div_id("surface");
     var extra=div_id("extra");
@@ -209,7 +210,7 @@ function add_typed_input(surface) {
 	inp=surface.typed;
     else {
 	var inp=empty("input","type","text");
-	//inp.setAttribute("onclick","return false;"); // Don't propagate click to surface
+	inp.setAttribute("accesskey","t");
 	inp.setAttribute("onkeyup","complete_typed(this)");
 	inp.setAttribute("onchange","finish_typed(this)");
 	surface.appendChild(inp);
