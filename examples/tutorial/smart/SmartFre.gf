@@ -19,6 +19,9 @@ lincat
   Action = {s : VForm => Str} ;
   Device = {s : Str ; g : Gender ; n : Number} ;
   Location = {s : Number => Str ; g : Gender} ; 
+  Switchable = SS ;
+  Dimmable = SS ;
+  Statelike = SS ;
 
 lin
   UCommand  c = c ;
@@ -47,10 +50,10 @@ lin
   light = mkNoun "lampe" Fem ;
   fan = mkNoun "ventilateur" Masc ;
 
-  switchOn _ _ = mkVerb "allumer" "allumé" ;
-  switchOff _ _ = mkVerb "éteindre" "éteint" ;
+  switchOn _ proof = mkVerb proof.s "allumer" "allumé" ;
+  switchOff _ proof = mkVerb proof.s "éteindre" "éteint" ;
 
-  dim _ _ = mkVerb "baisser" "baissé" ;
+  dim _ proof = mkVerb proof.s "baisser" "baissé" ;
 
   kitchen = mkNoun "cuisine" Fem ;
   livingRoom = mkNoun "salon" Masc ;
@@ -64,13 +67,13 @@ oper
     g = g
     } ;
   
-  mkVerb : (_,_ : Str) -> {s : VForm => Str} = \venir,venu -> {
+  mkVerb : (_,_,_ : Str) -> {s : VForm => Str} = \proof,venir,venu -> {
     s = table {
-      VInf => venir ;
-      VPart Masc Sg => venu ;
-      VPart Masc Pl => venu + "s" ;
-      VPart Fem  Sg => venu + "e" ;
-      VPart Fem  Pl => venu + "es"
+      VInf => proof++venir ;
+      VPart Masc Sg => proof++venu ;
+      VPart Masc Pl => proof++venu + "s" ;
+      VPart Fem  Sg => proof++venu + "e" ;
+      VPart Fem  Pl => proof++venu + "es"
       }
     } ;
 
