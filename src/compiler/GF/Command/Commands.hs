@@ -482,7 +482,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        "will accept unknown adjectives, nouns and verbs with the resource grammar."
        ],
      exec = \opts ts -> 
-              return $ fromParse opts ts $ concatMap (par opts) $ toStrings ts,
+              return $ fromParse opts (concat [map ((,) s) (par opts s) | s <- toStrings ts]),
      flags = [
        ("cat","target category of parsing"),
        ("lang","the languages of parsing (comma-separated, no spaces)"),
@@ -1003,16 +1003,20 @@ allCommands env@(pgf, mos) = Map.fromList [
    toStrings = map showAsString 
    toString = unwords . toStrings
 
-   fromParse opts ts parses
-     | isOpt "bracket" opts = ([], unlines $ map showBracketedString bss)
-     | otherwise            = case ts of
-                                [] -> ([], "no trees found" ++ 
-                                           missingWordMsg (optMorpho opts) (concatMap words (toStrings ts))
-                                      )
-                                _  -> fromExprs ts
+   fromParse opts []     = ([],"")
+   fromParse opts ((s,(po,bs)):ps)
+     | isOpt "bracket" opts = (es, showBracketedString bs
+                                   ++ "\n" ++ msg)
+     | otherwise            = case po of
+                                ParseOk ts     -> let (es',msg') = fromExprs ts
+                                                  in (es'++es,msg'++msg)
+                                TypeError errs -> ([], render (text "The parsing is successful but the type checking failed with error(s):" $$ 
+                                                               nest 2 (vcat (map (ppTcError . snd) errs)))
+                                                       ++ "\n" ++ msg)
+                                ParseFailed i  -> ([], "parse failed at token " ++ show (words s !! max 0 (i-1))
+                                                       ++ "\n" ++ msg)
      where
-       (prs,bss) = unzip parses
-       ts        = [t | ParseOk ts <- prs, t <- ts]
+       (es,msg) = fromParse opts ps
 
    returnFromExprs es = return $ case es of
      [] -> ([], "no trees found")
