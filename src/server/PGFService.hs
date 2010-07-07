@@ -325,7 +325,7 @@ cat pgf mcat = fromMaybe (PGF.startCat pgf) mcat
 
 parse' :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [(PGF.Language,[PGF.Tree])]
 parse' pgf input mcat mfrom = 
-   [(from,ts) | from <- froms, canParse pgf from, (PGF.ParseResult ts,_) <- [PGF.parse_ pgf from cat input]]
+   [(from,ts) | from <- froms, canParse pgf from, (PGF.ParseOk ts,_) <- [PGF.parse_ pgf from cat input]]
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
         cat = fromMaybe (PGF.startCat pgf) mcat
 
