@@ -49,7 +49,7 @@ convertFile conf src file = do
           [] -> return ()
           _  -> appv ("  missing words: " ++ unwords ws)
         return ws
-      TypeError _ _ ->
+      TypeError _ ->
         return []
       ParseOk ts ->
         case rank ts of

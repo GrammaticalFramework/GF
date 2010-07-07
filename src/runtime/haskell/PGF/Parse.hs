@@ -44,11 +44,12 @@ data ParseInput
 -- | This data type encodes the different outcomes which you could get from the parser.
 data ParseOutput
   = ParseFailed Int                -- ^ The integer is the position in number of tokens where the parser failed.
-  | TypeError   FId [TcError]      -- ^ The parsing was successful but none of the trees is type correct. 
+  | TypeError   [(FId,TcError)]    -- ^ The parsing was successful but none of the trees is type correct. 
                                    -- The forest id ('FId') points to the bracketed string from the parser
                                    -- where the type checking failed. More than one error is returned
                                    -- if there are many analizes for some phrase but they all are not type correct.
-  | ParseOk [Tree]                 -- ^ If the parsing was successful we get a list of abstract syntax trees. The list should be non-empty.
+  | ParseOk [Tree]                 -- ^ If the parsing and the type checkeing are successful we get a list of abstract syntax trees.
+                                   -- The list should be non-empty.
 
 parse :: PGF -> Language -> Type -> [Token] -> (ParseOutput,BracketedString)
 parse pgf lang typ toks = loop (initState pgf lang typ) toks
