@@ -18,6 +18,9 @@ lincat
   Action = {s : VForm => Str ; part : Str} ;
   Device = {s : Str ; n : Number} ;
   Location = SS ;
+  Switchable = SS ;
+  Dimmable = SS ;
+  Statelike = SS ;
 
 lin
   UCommand  c = c ;
@@ -42,10 +45,10 @@ lin
   light = mkNoun "light" ;
   fan = mkNoun "fan" ;
 
-  switchOn _ _ = mkVerb "switch" "swithced" "on" ;
-  switchOff _ _ = mkVerb "switch" "swithced" "off" ;
+  switchOn _ proof = mkVerb proof.s "switch" "switched" "on" ;
+  switchOff _ proof = mkVerb proof.s "switch" "switched" "off" ;
 
-  dim _ _ = mkVerb "dim" "dimmed" [] ;
+  dim _ proof = mkVerb proof.s "dim" "dimmed" [] ;
 
   kitchen = ss "kitchen" ;
   livingRoom = ss ["living room"] ;
@@ -58,10 +61,10 @@ oper
       }
     } ;
   
-  mkVerb : (_,_,_ : Str) -> {s : VForm => Str ; part : Str} = \go,gone,away -> {
+  mkVerb : (_,_,_,_ : Str) -> {s : VForm => Str ; part : Str} = \proof,go,gone,away -> {
     s = table {
-      VImp => go ;
-      VPart => gone
+      VImp => proof++go ;
+      VPart => proof++gone
       } ;
     part = away
     } ;
