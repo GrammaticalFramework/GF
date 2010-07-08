@@ -71,6 +71,13 @@ body {
     margin: 0.2em;    
 }
 
+.my-typeError {
+    padding: 6px;
+    font-size: 150%;
+    font-weight: bold;
+    background: #B9BEC0;
+}
+
 .my-SettingsPanel {
   width: 100%;
   padding: 0.5em 0; 

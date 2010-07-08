@@ -55,14 +55,22 @@ public class PGF {
 
 	public interface TranslateCallback extends JSONCallback<Translations> {  }
 
-	public static class Translations extends IterableJsArray<Translation> {
+	public static class Translations extends IterableJsArray<TranslationResult> {
 		protected Translations() { }
+	}
+
+	public static class TranslationResult extends JavaScriptObject {
+		protected TranslationResult() { }
+
+		public final native String getFrom() /*-{ return this.from; }-*/;
+		public final native String getBracketedString() /*-{ return this.brackets; }-*/;
+                public final native IterableJsArray<Translation> getTranslations() /*-{ return this.translations; }-*/;
+		public final native String[] getTypeErrors() /*-{ return this.typeErrors; }-*/;
 	}
 
 	public static class Translation extends JavaScriptObject {
 		protected Translation() { }
 
-		public final native String getFrom() /*-{ return this.from; }-*/;
                 public final native String getTree() /*-{ return this.tree; }-*/;
 		public final native Linearizations getLinearizations() /*-{ return this.linearizations; }-*/;
 	}
@@ -129,7 +137,9 @@ public class PGF {
 		protected ParseResult() { }
 
 		public final native String getFrom() /*-{ return this.from; }-*/;
-		public final native String getTree() /*-{ return this.tree; }-*/;
+		public final native String getBracketedString() /*-{ return this.brackets; }-*/;
+		public final native String[] getTrees() /*-{ return this.trees; }-*/;
+		public final native String[] getTypeErrors() /*-{ return this.typeErrors; }-*/;
 	}
 
 	public String graphvizAbstractTree(String pgfURL, String abstractTree) {
