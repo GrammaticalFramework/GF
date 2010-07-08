@@ -1,7 +1,5 @@
 package se.chalmers.cs.gf.gwt.client;
 
-import java.util.*;
-
 import com.google.gwt.core.client.*;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
