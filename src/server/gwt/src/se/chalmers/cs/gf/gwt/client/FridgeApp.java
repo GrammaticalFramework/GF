@@ -2,8 +2,6 @@ package se.chalmers.cs.gf.gwt.client;
 
 import java.util.List;
 
-import com.allen_sauer.gwt.dnd.client.PickupDragController;
-import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
@@ -124,28 +122,13 @@ public class FridgeApp implements EntryPoint {
 	// GUI
 
 	protected Widget createUI() {
-		PickupDragController dragController = new PickupDragController(RootPanel.get(), false);
-		dragController.setBehaviorDragStartSensitivity(1);
-		dragController.setBehaviorDragProxy(true);
-		dragController.setBehaviorConstrainedToBoundaryPanel(true);
-		/*
-		dragController.addDragHandler(new DragHandlerAdapter() {
-			public void onDragStart(DragStartEvent event) {
-				Widget w = event.getContext().draggable;
-				if (w instanceof Magnet) {
-					bagPanel.cloneMagnet((Magnet)w);
-				}
-			}
-		});
-		 */
-
 		ClickListener magnetClickListener = new ClickListener () {
 			public void onClick(Widget widget) {
 				Magnet magnet = (Magnet)widget;
 				textPanel.addMagnet(magnet);
 			}
 		};
-		magnetFactory = new MagnetFactory(dragController, magnetClickListener);
+		magnetFactory = new MagnetFactory(magnetClickListener);
 
 		textPanel = new FridgeTextPanel(magnetFactory);
 		textPanel.addChangeListener(new ChangeListener() {
@@ -172,9 +155,6 @@ public class FridgeApp implements EntryPoint {
 		mainPanel.setCellHorizontalAlignment(outputPanel, HasHorizontalAlignment.ALIGN_RIGHT);
 		mainPanel.setCellWidth(settingsPanel, "100%");
 		
-		DropController dropController = new FridgeTextPanelDropController(textPanel);
-		dragController.registerDropController(dropController);
-
 		Window.addWindowResizeListener(new WindowResizeListener() {
 			public void onWindowResized(int w, int h) {
 				mainPanel.setPixelSize(w, h);

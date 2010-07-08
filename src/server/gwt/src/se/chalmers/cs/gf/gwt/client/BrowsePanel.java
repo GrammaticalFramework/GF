@@ -1,11 +1,8 @@
 package se.chalmers.cs.gf.gwt.client;
 
 import java.util.*;
-import java.lang.*;
-import com.google.gwt.core.client.*;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.http.client.*;
-import com.google.gwt.dom.client.*;
 
 public class BrowsePanel extends Composite {
 

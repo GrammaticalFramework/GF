@@ -60,7 +60,7 @@ public class PGFWrapper {
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(url));
 		try
 		{
-			Request request = builder.sendRequest(null, new RequestCallback() {
+			builder.sendRequest(null, new RequestCallback() {
 				public void onResponseReceived(Request request, Response response)
 				{
 					if (200 == response.getStatusCode())

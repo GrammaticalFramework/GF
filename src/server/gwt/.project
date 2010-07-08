@@ -1,15 +1,28 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-   <name>GF-GWT</name>
-   <comment>GF-GWT project</comment>
-   <projects/>
-   <buildSpec>
-       <buildCommand>
-           <name>org.eclipse.jdt.core.javabuilder</name>
-           <arguments/>
-       </buildCommand>
-   </buildSpec>
-   <natures>
-       <nature>org.eclipse.jdt.core.javanature</nature>
-   </natures>
+	<name>GF-GWT</name>
+	<comment>GF-GWT project</comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.google.gdt.eclipse.core.webAppProjectValidator</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.google.gwt.eclipse.core.gwtProjectValidator</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>com.google.gwt.eclipse.core.gwtNature</nature>
+	</natures>
 </projectDescription>

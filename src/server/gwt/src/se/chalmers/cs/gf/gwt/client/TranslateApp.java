@@ -2,10 +2,8 @@ package se.chalmers.cs.gf.gwt.client;
 
 import java.util.List;
 
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.HistoryListener;
+import com.google.gwt.core.client.*;
+import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
 

@@ -3,13 +3,7 @@ package se.chalmers.cs.gf.gwt.client;
 import java.util.LinkedHashSet;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 public class FridgeBagPanel extends Composite {
 
