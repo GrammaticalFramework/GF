@@ -1,6 +1,6 @@
-package se.chalmers.cs.gf.gwt.client;
+package org.grammaticalframework.ui.gwt.client;
 
-import se.chalmers.cs.gf.gwt.client.JSONRequestBuilder.Arg;
+import org.grammaticalframework.ui.gwt.client.JSONRequestBuilder.Arg;
 
 import java.util.*;
 import com.google.gwt.core.client.*;

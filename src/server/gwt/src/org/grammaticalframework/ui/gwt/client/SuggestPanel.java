@@ -1,4 +1,4 @@
-package se.chalmers.cs.gf.gwt.client;
+package org.grammaticalframework.ui.gwt.client;
 
 import java.util.LinkedList;
 import java.util.List;

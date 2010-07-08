@@ -1,4 +1,4 @@
-package se.chalmers.cs.gf.gwt.client;
+package org.grammaticalframework.ui.gwt.client;
 
 import java.util.*;
 import com.google.gwt.user.client.ui.*;
@@ -30,7 +30,7 @@ public class BrowsePanel extends Composite {
 
 	public native void onActivate() /*-{
 		$doc.browsePanel = this;
-		$doc.callBrowse = @se.chalmers.cs.gf.gwt.client.BrowsePanel::callBrowse(Lse/chalmers/cs/gf/gwt/client/BrowsePanel;Ljava/lang/String;);
+		$doc.callBrowse = @org.grammaticalframework.ui.gwt.client.BrowsePanel::callBrowse(Lorg/grammaticalframework/ui/gwt/client/BrowsePanel;Ljava/lang/String;);
 	 }-*/;
 
 	protected Widget createSearchPanel(CompletionOracle oracle) {

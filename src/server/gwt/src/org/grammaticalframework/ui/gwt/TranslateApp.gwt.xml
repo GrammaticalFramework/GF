@@ -4,7 +4,7 @@
       <inherits name="com.google.gwt.user.User" />
       <inherits name="com.google.gwt.xml.XML" />
 
-      <inherits name="se.chalmers.cs.gf.gwt.PGF" />
+      <inherits name="org.grammaticalframework.ui.gwt.PGF" />
 
       <!-- Inherit the default GWT style sheet.  You can change       -->
       <!-- the theme of your GWT application by uncommenting          -->
@@ -17,9 +17,9 @@
 
 
       <!-- Specify the app entry point class.                         -->
-      <entry-point class="se.chalmers.cs.gf.gwt.client.EditorApp" />
+      <entry-point class="org.grammaticalframework.ui.gwt.client.TranslateApp" />
     
       <!-- Specify the application specific style sheet.              -->
-      <stylesheet src="Editor.css" />
+      <stylesheet src="Translate.css" />
 	
 </module>
