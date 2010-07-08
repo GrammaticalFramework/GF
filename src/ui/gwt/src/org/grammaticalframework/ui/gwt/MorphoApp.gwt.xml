@@ -11,12 +11,8 @@
       <!-- <inherits name="com.google.gwt.user.theme.chrome.Chrome"/> -->
       <!-- <inherits name="com.google.gwt.user.theme.dark.Dark"/>     -->
 
-      <!-- Other module inherits                                      -->
-      <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
-
-
       <!-- Specify the app entry point class.                         -->
-      <entry-point class="se.chalmers.cs.gf.gwt.client.MorphoApp" />
+      <entry-point class="org.grammaticalframework.ui.gwt.client.MorphoApp" />
     
       <!-- Specify the application specific style sheet.              -->
       <stylesheet src="Morpho.css" />

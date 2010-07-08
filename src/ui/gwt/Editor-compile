@@ -2,14 +2,11 @@
 
 APPDIR=`dirname $0`;
 
-GWT_DIR="/home/angelov/gwt-linux-1.5.3"
-GWT_CLASSPATH="$GWT_DIR/gwt-user.jar:$GWT_DIR/gwt-dev-linux.jar"
-
 if [ -z "$GWT_CLASSPATH" ]; then
   echo 'ERROR: $GWT_CLASSPATH is not set'
   echo 'Set $GWT_CLASSPATH to point to the GWT JAR files. For example:'
-  echo 'export GWT_DIR="/Users/bringert/src/gwt-mac-1.5.2"'
-  echo 'export GWT_CLASSPATH="$GWT_DIR/gwt-user.jar:$GWT_DIR/gwt-dev-mac.jar"'
+  echo 'export GWT_DIR="/Users/bringert/src/gwt-2.0.4"'
+  echo 'export GWT_CLASSPATH="$GWT_DIR/gwt-user.jar:$GWT_DIR/gwt-dev.jar"'
   exit 1
 fi
 
@@ -17,6 +14,4 @@ if [ `uname` = "Darwin" ]; then
   GWT_JAVA_OPTS=-XstartOnFirstThread
 fi
 
-LIBS=$APPDIR/lib/gwt-dnd-2.5.6.jar
-
-java $GWT_JAVA_OPTS -Xmx256M -cp "$APPDIR/src:$APPDIR/bin:$LIBS:$GWT_CLASSPATH" com.google.gwt.dev.GWTCompiler -out "$APPDIR/www/editor" "$@" se.chalmers.cs.gf.gwt.EditorApp;
+java $GWT_JAVA_OPTS -Xmx256M -cp "$APPDIR/src:$APPDIR/bin:$GWT_CLASSPATH" com.google.gwt.dev.Compiler -war "$APPDIR/www/editor" "$@" org.grammaticalframework.ui.gwt.EditorApp;
