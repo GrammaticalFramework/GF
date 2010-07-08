@@ -1,4 +1,4 @@
-package se.chalmers.cs.gf.gwt.client;
+package org.grammaticalframework.ui.gwt.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Label;
