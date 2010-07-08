@@ -5,18 +5,8 @@ import java.util.List;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.HistoryListener;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.WindowResizeListener;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.*;
+import com.google.gwt.user.client.ui.*;
 
 
 public class FridgeApp implements EntryPoint {
@@ -57,10 +47,21 @@ public class FridgeApp implements EntryPoint {
 				new PGF.TranslateCallback() {
 			public void onResult (PGF.Translations translations) {
 				outputPanel.removeStyleDependentName("working");
-				for (PGF.Translation t : translations.iterable()) {
-					for (PGF.Linearization l : t.getLinearizations().iterable()) {
-						outputPanel.add(createTranslation(l.getTo(), l.getText()));
-					}
+				for (PGF.TranslationResult tr : translations.iterable()) {
+					if (tr.getTranslations() != null)
+						for (PGF.Translation t : tr.getTranslations().iterable()) {
+							for (PGF.Linearization l : t.getLinearizations().iterable()) {
+								outputPanel.add(createTranslation(l.getTo(), l.getText()));
+							}
+						}
+
+					if (tr.getTypeErrors() != null)
+						for (String error : tr.getTypeErrors()) {
+							SimplePanel panel = new SimplePanel();
+							panel.addStyleName("my-typeError");
+							panel.add(new HTML("<pre>"+error+"</pre>"));
+							outputPanel.add(panel);
+						}
 				}
 			}
 			public void onError (Throwable e) {

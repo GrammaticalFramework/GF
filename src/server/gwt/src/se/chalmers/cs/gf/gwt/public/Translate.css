@@ -72,6 +72,13 @@
     cursor:pointer;
 }
 
+.my-typeError {
+    padding: 12px;
+    font-size: 150%;
+    font-weight: bold;
+    background: #CDFFDA;
+}
+
 .my-translation-btns {
     background: #DDDDDD;
     cursor:pointer;
