@@ -1,5 +1,5 @@
-<module rename-to="se.chalmers.cs.gf.gwt.FridgeApp">
-  <inherits name="se.chalmers.cs.gf.gwt.FridgeApp" />
+<module rename-to="org.grammaticalframework.ui.gwt.FridgeApp">
+  <inherits name="org.grammaticalframework.ui.gwt.FridgeApp" />
   <set-property name="user.agent" value="ie6" />
   <set-property name="locale" value="default" />
 </module>

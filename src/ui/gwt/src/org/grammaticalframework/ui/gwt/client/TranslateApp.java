@@ -82,7 +82,7 @@ public class TranslateApp implements EntryPoint {
 	}
 
 	protected Widget createAbsTreeButton(final String abstractTree) {
-		Image treeBtn = new Image("se.chalmers.cs.gf.gwt.TranslateApp/tree-btn.png");
+		Image treeBtn = new Image("org.grammaticalframework.ui.gwt.TranslateApp/tree-btn.png");
 		treeBtn.addClickListener(
 			new ClickListener() {
 				public void onClick(Widget sender) {
@@ -118,7 +118,7 @@ public class TranslateApp implements EntryPoint {
 	}
 
 	protected Widget createAlignButton(final String abstractTree) {
-		Image alignBtn = new Image("se.chalmers.cs.gf.gwt.TranslateApp/align-btn.png");
+		Image alignBtn = new Image("org.grammaticalframework.ui.gwt.TranslateApp/align-btn.png");
 		alignBtn.addClickListener(
 			new ClickListener() {
 				public void onClick(Widget sender) {
