@@ -1,4 +1,4 @@
-package org.grammaticalframework.fridge;
+package org.grammaticalframework.ui.android;
 
 import java.util.Arrays;
 
