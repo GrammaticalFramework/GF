@@ -142,7 +142,7 @@ function show_languages(grammar) {
     menu.innerHTML="";
 
     for(var i=0; i<lang.length; i++)
-	if(lang[i].canParse && !hasPrefix(lang[i].name,"Disamb"))
+	if(/*lang[i].canParse &&*/ !hasPrefix(lang[i].name,"Disamb"))
 	    menu.appendChild(option(langpart(lang[i].name,grammar.name),""+i));
     if(options.default_source_language) {
 	for(var i=0;i<menu.options.length;i++) {
