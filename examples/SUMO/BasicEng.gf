@@ -29,10 +29,10 @@ lin
 
   and f1 f2 = {s = \\f,c => f1.s ! Indep ! c ++ "and" ++ f2.s ! Indep ! c; flag = NothingS; lock_PolSentence = <>};
   or f1 f2 = {s = \\f,c => f1.s ! Indep ! c ++ "or" ++ f2.s ! Indep ! c; flag = NothingS; lock_PolSentence = <>};
-  not f1 = {s = \\f,c => case c of {
-                           Neg  => f1.s ! f ! Pos ; 
-                           Pos  => f1.s ! Indep ! Neg
-                         }; 
+  not f1 = {s = \\f => table {
+                         Neg  => "it is not true that" ++ f1.s ! f ! Neg ; 
+                         Pos  => f1.s ! Indep ! Neg
+                       }; 
             flag = f1.flag;  
             lock_PolSentence = <>
            };
