@@ -63,9 +63,9 @@ public class PGF {
 		protected TranslationResult() { }
 
 		public final native String getFrom() /*-{ return this.from; }-*/;
-		public final native String getBracketedString() /*-{ return this.brackets; }-*/;
+		public final native BracketedString getBracketedString() /*-{ return this.brackets; }-*/;
                 public final native IterableJsArray<Translation> getTranslations() /*-{ return this.translations; }-*/;
-		public final native String[] getTypeErrors() /*-{ return this.typeErrors; }-*/;
+		public final native TcError[] getTypeErrors() /*-{ return this.typeErrors; }-*/;
 	}
 
 	public static class Translation extends JavaScriptObject {
@@ -137,9 +137,27 @@ public class PGF {
 		protected ParseResult() { }
 
 		public final native String getFrom() /*-{ return this.from; }-*/;
-		public final native String getBracketedString() /*-{ return this.brackets; }-*/;
+		public final native BracketedString getBracketedString() /*-{ return this.brackets; }-*/;
 		public final native String[] getTrees() /*-{ return this.trees; }-*/;
-		public final native String[] getTypeErrors() /*-{ return this.typeErrors; }-*/;
+		public final native TcError[] getTypeErrors() /*-{ return this.typeErrors; }-*/;
+	}
+
+	public static class BracketedString extends JavaScriptObject {
+		protected BracketedString() { }
+
+		public final native String getToken() /*-{ return this.token; }-*/;
+
+		public final native String getCat() /*-{ return this.cat; }-*/;
+		public final native int getFId() /*-{ return this.fid; }-*/;
+		public final native int getIndex() /*-{ return this.index; }-*/;
+		public final native BracketedString[] getChildren() /*-{ return this.children; }-*/;
+	}
+
+	public static class TcError extends JavaScriptObject {
+		protected TcError() { }
+
+		public final native int getFId() /*-{ return this.fid; }-*/;
+		public final native String getMsg() /*-{ return this.msg; }-*/;
 	}
 
 	public String graphvizAbstractTree(String pgfURL, String abstractTree) {
