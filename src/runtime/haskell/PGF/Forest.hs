@@ -51,27 +51,27 @@ linearizeWithBrackets = head . snd . untokn "" . bracketedTokn
 
 bracketedTokn :: Forest -> BracketedTokn
 bracketedTokn f@(Forest abs cnc forest root) =
-  case [computeSeq seq (map (render IntMap.empty) args) | (seq,args) <- root] of
+  case [computeSeq seq (map (render forest) args) | (seq,args) <- root] of
     ([bs@(Bracket_ _ _ _ _ _)]:_) -> bs
     (bss:_)                       -> Bracket_ wildCId 0 0 [] bss
     []                            -> Bracket_ wildCId 0 0 [] []
   where
     trusted = foldl1 IntSet.intersection [IntSet.unions (map (trustedSpots IntSet.empty) args) | (_,args) <- root]
 
-    render parents fid =
-      case (IntMap.lookup fid parents) `mplus` (fmap Set.toList $ IntMap.lookup fid forest) of
-        Just (p:ps) -> descend (IntMap.insert fid ps parents) p
-        Nothing     -> error ("wrong forest id " ++ show fid)
+    render forest fid =
+      case IntMap.lookup fid forest >>= Set.maxView of
+        Just (p,set) -> descend (if Set.null set then forest else IntMap.insert fid set forest) p
+        Nothing      -> error ("wrong forest id " ++ show fid)
       where
-        descend parents (PApply funid args) = let (CncFun fun lins) = cncfuns cnc ! funid
-                                                  Just (DTyp _ cat _,_,_) = Map.lookup fun (funs abs)
-                                                  largs = map (render parents) args
-                                                  ltable = listArray (bounds lins)
-                                                                     [computeSeq (elems (sequences cnc ! seqid)) largs |
+        descend forest (PApply funid args) = let (CncFun fun lins) = cncfuns cnc ! funid
+                                                 Just (DTyp _ cat _,_,_) = Map.lookup fun (funs abs)
+                                                 largs = map (render forest) args
+                                                 ltable = listArray (bounds lins)
+                                                                    [computeSeq (elems (sequences cnc ! seqid)) largs |
                                                                                                          seqid <- elems lins]
-                                              in (fid,cat,ltable)
-        descend parents (PCoerce fid)       = render parents fid
-        descend parents (PConst cat _ ts)   = (fid,cat,listArray (0,0) [[LeafKS ts]])
+                                             in (fid,cat,ltable)
+        descend forest (PCoerce fid)       = render forest fid
+        descend forest (PConst cat _ ts)   = (fid,cat,listArray (0,0) [[LeafKS ts]])
 
     trustedSpots parents fid
       | fid < totalCats cnc ||                  -- forest ids from the grammar correspond to metavariables
