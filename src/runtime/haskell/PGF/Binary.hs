@@ -167,8 +167,8 @@ instance Binary Literal where
   get = do tag <- getWord8
            case tag of
              0 -> liftM  LStr get
-             1 -> liftM  LFlt get
-             2 -> liftM  LInt get
+             1 -> liftM  LInt get
+             2 -> liftM  LFlt get
              _ -> decodingError
 
 
