@@ -384,8 +384,8 @@ function show_groupedtranslations(translations) {
 	    if(to=="-1") tbody.appendChild(tr([th(text(t.to+":"))]));
 	    for(var i=0;i<lin.length;i++) {
 		if(to!="-1") trans.single_translation[i]=lin[i].text;
-		tbody.appendChild(tr([(text(lin[i].text))]));
-		if (lin.length > 1) tbody.appendChild(tr([(text(lin[i].tree))]));
+		tbody.appendChild(tr([td(text(lin[i].text))]));
+		if (lin.length > 1) tbody.appendChild(tr([td(text(lin[i].tree))]));
 	    }
 	    trans.appendChild(wrap("table",tbody));
 	}
