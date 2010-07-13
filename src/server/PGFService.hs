@@ -128,7 +128,9 @@ doTranslate pgf input mcat mfrom mto =
                                                             )]
                                                    | tree <- trees])]
     jsonParseOutput (PGF.ParseFailed _)  = []
-    jsonParseOutput (PGF.TypeError errs) = [("typeErrors",showJSON [show (PGF.ppTcError err) | (fid,err) <- errs])]
+    jsonParseOutput (PGF.TypeError errs) = [("typeErrors",showJSON [toJSObject [("fid", showJSON fid)
+                                                                               ,("msg", showJSON (show (PGF.ppTcError err)))
+                                                                               ] | (fid,err) <- errs])]
 
 -- used in phrasebook
 doTranslateGroup :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
@@ -198,7 +200,9 @@ doParse pgf input mcat mfrom = showJSON $ map toJSObject
   where
     jsonParseOutput (PGF.ParseOk trees)  = [("trees",showJSON trees)]
     jsonParseOutput (PGF.ParseFailed _)  = []
-    jsonParseOutput (PGF.TypeError errs) = [("typeErrors",showJSON [show (PGF.ppTcError err) | (fid,err) <- errs])]
+    jsonParseOutput (PGF.TypeError errs) = [("typeErrors",showJSON [toJSObject [("fid", showJSON fid)
+                                                                               ,("msg", showJSON (show (PGF.ppTcError err)))
+                                                                               ] | (fid,err) <- errs])]
 
 doComplete :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe Int -> JSValue
 doComplete pgf input mcat mfrom mlimit = showJSON $ map toJSObject $ limit
@@ -328,7 +332,13 @@ instance JSON PGF.Expr where
 
 instance JSON PGF.BracketedString where
     readJSON x = return (PGF.Leaf "")
-    showJSON x = showJSON ""
+    showJSON (PGF.Bracket cat fid index _ bs)
+                          = showJSON $ toJSObject [("cat",      showJSON cat)
+                                                  ,("fid",      showJSON fid)
+                                                  ,("index",    showJSON index)
+                                                  ,("children", showJSON bs)
+                                                  ]
+    showJSON (PGF.Leaf s) = showJSON $ toJSObject [("token", s)]
 
 -- * PGF utilities
 

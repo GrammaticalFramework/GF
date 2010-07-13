@@ -66,13 +66,18 @@ public class TranslateApp implements EntryPoint {
 							}
 						}
 
-					if (tr.getTypeErrors() != null)
-						for (String error : tr.getTypeErrors()) {
-							SimplePanel panel = new SimplePanel();
+					if (tr.getTypeErrors() != null && tr.getTypeErrors().length > 0) {
+						for (PGF.TcError error : tr.getTypeErrors()) {
+							VerticalPanel panel = new VerticalPanel();
 							panel.addStyleName("my-typeError");
-							panel.add(new HTML("<pre>"+error+"</pre>"));
+							Label errLabel = new Label("Type Error");
+							errLabel.addStyleName("my-error-title");
+							HTML  msgHTML  = new HTML("<pre>"+error.getMsg()+"</pre>");
+							panel.add(errLabel);
+							panel.add(msgHTML);
 							outputPanel.add(panel);
 						}
+					}
 				}
 			}
 			public void onError (Throwable e) {

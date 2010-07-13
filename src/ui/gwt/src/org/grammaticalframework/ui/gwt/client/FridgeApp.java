@@ -54,10 +54,10 @@ public class FridgeApp implements EntryPoint {
 						}
 
 					if (tr.getTypeErrors() != null)
-						for (String error : tr.getTypeErrors()) {
+						for (PGF.TcError error : tr.getTypeErrors()) {
 							SimplePanel panel = new SimplePanel();
 							panel.addStyleName("my-typeError");
-							panel.add(new HTML("<pre>"+error+"</pre>"));
+							panel.add(new HTML("<pre>"+error.getMsg()+"</pre>"));
 							outputPanel.add(panel);
 						}
 				}

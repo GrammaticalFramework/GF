@@ -2,6 +2,9 @@
 
 APPDIR=`dirname $0`;
 
+GWT_DIR="/home/angelov/gwt-2.0.4"
+GWT_CLASSPATH="$GWT_DIR/gwt-user.jar:$GWT_DIR/gwt-dev.jar"
+
 if [ -z "$GWT_CLASSPATH" ]; then
   echo 'ERROR: $GWT_CLASSPATH is not set'
   echo 'Set $GWT_CLASSPATH to point to the GWT JAR files. For example:'
