@@ -348,10 +348,10 @@ function show_translations(translationResults) {
 				   cnt>1 ? ""+cnt+" translations:":
 				   "One translation:")));
   for(p=0;p<cnt;p++) {
-    var tr=translationResults[p];
-    if (tr.translations != null) {
-      for (q = 0; q < tr.translations.length; q++) {
-        var t = tr.translations[q];
+    var tra=translationResults[p];
+    if (tra.translations != null) {
+      for (q = 0; q < tra.translations.length; q++) {
+        var t = tra.translations[q];
         var lin=t.linearizations;
         var tbody=empty("tbody");
         if(options.show_abstract && t.tree)
