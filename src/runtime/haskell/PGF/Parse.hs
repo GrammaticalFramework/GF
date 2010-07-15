@@ -211,12 +211,11 @@ recoveryStates open_types (EState pgf cnc chart) =
 -- the same as the startup category.
 getParseOutput :: ParseState -> Type -> (ParseOutput,BracketedString)
 getParseOutput (PState pgf cnc chart items) ty@(DTyp _ start _) =
-  let froots | null roots = getPartialSeq (sequences cnc) (reverse (active st : actives st)) acc1
+  let froots | null roots = getPartialSeq (sequences cnc) (reverse (active chart1 : actives chart1)) seq
              | otherwise  = [([SymCat 0 lbl],[fid]) | AK fid lbl <- roots]
 
-      bs    = linearizeWithBrackets (Forest (abstract pgf) cnc (forest st) froots)
-              
-                
+      bs    = linearizeWithBrackets (Forest (abstract pgf) cnc (forest chart1) froots)
+
       exps  = nubsort $ do
                 (AK fid lbl) <- roots
                 (fvs,e) <- go Set.empty 0 (0,fid)
@@ -232,17 +231,27 @@ getParseOutput (PState pgf cnc chart items) ty@(DTyp _ start _) =
   where
     (mb_agenda,acc) = TMap.decompose items
     agenda = maybe [] Set.toList mb_agenda
-    (acc1,st) = process flit ftok (sequences cnc) (cncfuns cnc) agenda [] chart
+    (acc',chart1) = process flit ftok (sequences cnc) (cncfuns cnc) agenda (TMap.compose Nothing acc) chart
+    seq = [(j,cutAt ppos toks seqid,args,key) | (toks,set) <- TMap.toList acc', Active j ppos funid seqid args key <- Set.toList set]
 
     flit _ = Nothing
-    ftok _ (Active j ppos funid seqid args key) items = (j,lin,args,key) : items
-      where
-        lin  = take (ppos-1) (elems (unsafeAt (sequences cnc) seqid))
+    ftok toks item acc = TMap.insertWith Set.union toks (Set.singleton item) acc
+
+    cutAt ppos toks seqid  = 
+      let seq  = unsafeAt (sequences cnc) seqid
+          init = take (ppos-1) (elems seq)
+          tail = case unsafeAt seq (ppos-1) of
+                   SymKS ts   -> let ts' = reverse (drop (length toks) (reverse ts))
+                                 in if null ts' then [] else [SymKS ts']
+		   SymKP ts _ -> let ts' = reverse (drop (length toks) (reverse ts))
+                                 in if null ts' then [] else [SymKS ts']
+                   sym        -> []
+      in init ++ tail
 
     roots = case Map.lookup start (cnccats cnc) of
               Just (CncCat s e lbls) -> do cat <- range (s,e)
                                            lbl <- indices lbls
-                                           fid <- maybeToList (lookupPC (PK cat lbl 0) (passive st))
+                                           fid <- maybeToList (lookupPC (PK cat lbl 0) (passive chart1))
                                            return (AK fid lbl)
               Nothing                -> mzero
 
@@ -259,7 +268,7 @@ getParseOutput (PState pgf cnc chart items) ty@(DTyp _ start _) =
                                                   return (freeVar const,const)
                                                   `mplus`
                                                   trees)
-                                          [] fcat (forest st)
+                                          [] fcat (forest chart1)
 
     check_ho_fun fun args
       | fun == _V = return (head args)
