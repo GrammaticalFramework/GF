@@ -7,6 +7,7 @@ module GF.Data.TrieMap
          , lookup
          
          , null
+         , compose
          , decompose
          
          , insertWith
@@ -15,6 +16,7 @@ module GF.Data.TrieMap
          , unions, unionsWith
          
          , elems
+         , toList
          ) where
 
 import Prelude hiding (lookup, null)
@@ -35,6 +37,9 @@ lookup (k:ks) (Tr mb_v m) = Map.lookup k m >>= lookup ks
 null :: TrieMap k v -> Bool
 null (Tr Nothing m) = Map.null m
 null _              = False
+
+compose :: Maybe v -> Map.Map k (TrieMap k v) -> TrieMap k v
+compose mb_v m = Tr mb_v m
 
 decompose :: TrieMap k v -> (Maybe v, Map.Map k (TrieMap k v))
 decompose (Tr mb_v m) = (mb_v,m)
@@ -70,3 +75,8 @@ elems :: TrieMap k v -> [v]
 elems tr = collect tr []
   where
     collect (Tr mb_v m) xs = maybe id (:) mb_v (Map.fold collect xs m)
+
+toList :: TrieMap k v -> [([k],v)]
+toList tr = collect [] tr []
+  where
+    collect ks (Tr mb_v m) xs = maybe id (\v -> (:) (ks,v)) mb_v (Map.foldWithKey (\k -> collect (k:ks)) xs m)
