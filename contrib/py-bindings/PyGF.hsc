@@ -9,6 +9,11 @@ import Foreign.C.Types
 #include "pygf.h"
 
 -- type PyPtr = Ptr Py
+freeSp :: String -> Ptr a -> IO ()
+freeSp tname p = do
+    sp <- (#peek PyGF, sp) p
+    freeStablePtr sp
+    putStrLn $ "freeing " ++ tname ++ " at " ++ (show p)
 
 instance Storable PGF where
     sizeOf _ = (#size PyGF)
@@ -49,7 +54,14 @@ instance Storable Tree where
     peek p = do
       sp <- (#peek PyGF, sp) p
       deRefStablePtr sp
-    
+
+foreign export ccall gf_freePGF :: Ptr PGF -> IO ()
+foreign export ccall gf_freeType :: Ptr Type -> IO ()
+foreign export ccall gf_freeLanguage :: Ptr Language -> IO ()
+gf_freePGF = freeSp "pgf"
+gf_freeType = freeSp "type"
+gf_freeLanguage = freeSp "language"
+
            
 {-foreign export ccall gf_printCId :: Ptr CId-> IO CString
 gf_printCId p = do
