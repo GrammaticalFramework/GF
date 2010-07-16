@@ -9,11 +9,11 @@ conf:
 	ln -s $(cbind)/pgf.h
 build: gf.so
 
-gf.so:  PGFFFI.hs gfmodule.c
-	gf --make  $(exdir)/QueryEng.gf $(exdir)/QuerySpa.gf 
+gf.so:  PGFFFI.hs gfmodule.c Query.pgf
 	ghc $(import) --make -fglasgow-exts -O2 -no-hs-main -c $<
 	ghc -O2 --make -fglasgow-exts -no-hs-main -optl '-shared' \
-	 -optc '-DMODULE=PGFFFI' $(debug) -optc '-I$(pythoninc)' -o $@ $^
+	 -optc '-DMODULE=PGFFFI' $(debug) -optc '-I$(pythoninc)' -o $@ \
+	$(filter-out %.pgf, $^)
 clean:
 	rm -f *.hi  *.o
 	rm -f *_stub.*
@@ -28,7 +28,11 @@ superclean:
 PyGF.hs: PyGF.hsc
 	hsc2hs -I$(pythoninc) $<
 
-mtest: PyGF.hs mtest.c
+Query.pgf:
+	gf --make  $(exdir)/QueryEng.gf $(exdir)/QuerySpa.gf 
+
+mtest: PyGF.hs mtest.c Query.pgf
 	ghc $(import) --make -fglasgow-exts -O2 -no-hs-main -c $<
 	ghc  -O2 --make -fglasgow-exts -no-hs-main \
-	-optc '-DMODULE=PyGF' -optc '-I$(pythoninc)' -o $@ $^
+	-optc '-DMODULE=PyGF' -optc '-I$(pythoninc)' -o $@ \
+	$(filter-out %.pgf, $^)
