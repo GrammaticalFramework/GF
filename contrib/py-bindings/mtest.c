@@ -56,11 +56,10 @@ int main(int argc, char *argv[])
     } while (*p && k < 5);
   } else
     puts("no match");
-   gf_freeTrees(result);
-  gf_freeType(cat);
-  gf_freeLanguage(lang);
-  gf_freePGF(pgf); */
-
+    gf_freeTrees(result); */
+  gf_freeType(&cat);
+  gf_freeLanguage(&lang);
+  gf_freePGF(&pgf);
   gf_exit();
   return 0;
 }
