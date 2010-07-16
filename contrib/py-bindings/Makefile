@@ -17,11 +17,13 @@ gf.so:  PGFFFI.hs gfmodule.c
 clean:
 	rm -f *.hi  *.o
 	rm -f *_stub.*
+	rm -f PyGF.hs
 
 superclean: 
 	make clean
 	rm -f PGFFFI.hs pgf.h Query.pgf
 	rm -f gf.so
+	rm -f mtest
 
 PyGF.hs: PyGF.hsc
 	hsc2hs -I$(pythoninc) $<
