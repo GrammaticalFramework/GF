@@ -10683,6 +10683,7 @@ abstract Mondial = MidLevelOntology, Geography, Government ** {
   fun Portugal : Ind (both Country EuropeanNation);
 
   fun Province : Class ;
+  fun Province_Class : SubClass Province StateOrProvince ;
 
   fun Qatar : Ind (both Country Nation);
 
