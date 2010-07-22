@@ -1,5 +1,4 @@
 #include <Python.h>
-//#include "pgf.h"
 #include "HsFFI.h"
 
 #ifdef __GLASGOW_HASKELL__
@@ -38,6 +37,10 @@ typedef struct {
   GFTYPE obj; \
   } OBJ;
 
+#define PYTYPE(OBJ) OBJ ## Type
+#define NEWCONSTRUCTOR(OBJ) inline OBJ* new ## OBJ () {\
+    return (OBJ*)PYTYPE(OBJ).tp_new(&PYTYPE(OBJ),NULL,NULL); }
+
 #define NEWTYPE(TYPE,NAME,OBJECT,DOC) static PyTypeObject TYPE = {\
     PyObject_HEAD_INIT(NULL)\
     0,                         /*ob_size*/\
@@ -63,7 +66,8 @@ typedef struct {
     DOC,           /* tp_doc */\
   };
 #define NEWGF(OBJ,GFTYPE,TYPE,NAME,DOC) NEWOBJECT(OBJ,GFTYPE)   \
-  NEWTYPE(TYPE,NAME,OBJ,DOC)
+  NEWTYPE(TYPE,NAME,OBJ,DOC)\
+  NEWCONSTRUCTOR(OBJ)
 
 
 // NEWOBJECT(CID, GF_CId)

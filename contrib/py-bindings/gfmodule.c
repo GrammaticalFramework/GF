@@ -97,8 +97,7 @@ languageCode(PGF *self, PyObject *args)
   Lang *lang;
   if (!PyArg_ParseTuple(args, "O", &lang))
     return NULL;
-  if (!checkType(lang, &LangType))
-    return NULL;
+  if (!checkType(lang, &LangType)) return NULL;
   char* scode = gf_languageCode(self, lang);
   if (scode) {
     PyObject* result = PyString_FromString(scode);
@@ -296,9 +295,9 @@ PyModule_AddObject(m, "gf", (PyObject *)&t);
 }
 
 
-inline Lang* newLang() {
+/* inline Lang* newLang() {
   return (Lang*)LangType.tp_new(&LangType,NULL,NULL);
-}
+  } 
 
 inline Tree* newTree() {
   return (Tree*)TreeType.tp_new(&TreeType,NULL,NULL);
@@ -307,9 +306,7 @@ inline Tree* newTree() {
 inline CId* newCId() {
   return (CId*)CIdType.tp_new(&CIdType,NULL,NULL);
 }
+*/
 
 inline PyObject* newList() { return  PyList_New(0); }
-
-void append(PyObject* l, PyObject* ob) {
-  PyList_Append(l, ob);
-}
+inline void append(PyObject* l, PyObject* ob) { PyList_Append(l, ob); } 
