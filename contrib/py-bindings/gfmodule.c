@@ -23,7 +23,7 @@ checkType(void* obj, PyTypeObject* tp)
 NEWGF(CId,GF_CId,CIdType,"gf.cid","c identifier")
 NEWGF(Lang,GF_Language,LangType,"gf.lang","language")
 NEWGF(gfType,GF_Type,gfTypeType,"gf.type","gf type")
-NEWGF(PGFModule,GF_PGF,PGFType,"gf.pgf","PGF module")
+NEWGF(PGF,GF_PGF,PGFType,"gf.pgf","PGF module")
 NEWGF(Expr,GF_Expr,ExprType,"gf.expr","gf expression")	
 NEWGF(Tree,GF_Tree,TreeType,"gf.tree","gf tree")
 
@@ -46,11 +46,11 @@ CId_repr(CId *self)
 /* PGF methods, constructor and destructor */
 
 
-DEALLOCFN(PGF_dealloc, PGFModule, gf_freePGF, "freePGF")
+DEALLOCFN(PGF_dealloc, PGF, gf_freePGF, "freePGF")
 
 
 static PyObject* 
-pgf_repr(PGFModule *self) {
+pgf_repr(PGF *self) {
   Lang lang;
   gf_abstractName(self, &lang);
   const char* abs = gf_showLanguage(&lang);
@@ -66,12 +66,12 @@ startCategory(PyObject *self, PyObject *noarg)
   gfType *cat;
   if (!checkType(self, &PGFType)) return NULL;
   cat = (gfType*)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
-  gf_startCat((PGFModule*)self, cat);
+  gf_startCat((PGF*)self, cat);
   return cat;
 }
 
 inline static PyObject*
-categories(PGFModule* self)
+categories(PGF* self)
 {
   /* PyObject* cats = PyList_New(0);
   GF_CId *p = gf_categories(self);
@@ -86,13 +86,13 @@ categories(PGFModule* self)
 }
 
 inline static PyObject*
-languages(PGFModule* self)
+languages(PGF* self)
 {
   return gf_languages(self);
 }
 
 static PyObject*
-languageCode(PGFModule *self, PyObject *args)
+languageCode(PGF *self, PyObject *args)
 {
   Lang *lang;
   if (!PyArg_ParseTuple(args, "O", &lang))
@@ -111,7 +111,7 @@ languageCode(PGFModule *self, PyObject *args)
 }
 
 static PyObject*
-linearize(PGFModule *self, PyObject *args)
+linearize(PGF *self, PyObject *args)
 {
   Lang *lang;
   Tree *tree;
@@ -125,7 +125,7 @@ linearize(PGFModule *self, PyObject *args)
 }
 
 static Lang*
-abstractName(PGFModule* self)
+abstractName(PGF *self)
 {
   Lang* abs_name = (Lang*)LangType.tp_new(&LangType,NULL,NULL);
   if (!checkType(self,&PGFType)) return NULL;
@@ -135,7 +135,7 @@ abstractName(PGFModule* self)
 
 
 static PyObject*
-printName(PGFModule *self, PyObject *args)
+printName(PGF *self, PyObject *args)
 {
 	Lang* lang;
 	CId* id;
@@ -172,16 +172,16 @@ parse(PyObject *self, PyObject *args, PyObject *kws)
 	return gf_parse(self, lang, cat, lexed);
 }
 
-static PGFModule*
+static PGF*
 readPGF(PyObject *self, PyObject *args)
 {
   char *path;
   struct stat info;
-  PGFModule *pgf;
+  PGF *pgf;
   if (!PyArg_ParseTuple(args, "s", &path))
     return NULL;
   if (stat(path, &info) == 0) {
-    pgf = (PGFModule*)PGFType.tp_new(&PGFType,NULL,NULL);
+    pgf = (PGF*)PGFType.tp_new(&PGFType,NULL,NULL);
     if (!pgf) return NULL;
     gf_readPGF(pgf, path);
     return pgf;
