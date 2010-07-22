@@ -12,9 +12,9 @@ int
 checkType(void* obj, PyTypeObject* tp)
 {
   int isRight = PyObject_TypeCheck((PyObject*)obj, tp);
-	if (!isRight)
-		PyErr_Format(PyExc_TypeError, "Expected a %s", tp->tp_doc);
-	return isRight;
+  if (!isRight)
+    PyErr_Format(PyExc_TypeError, "Expecting a %s.", tp->tp_doc);
+  return isRight;
 }
 
 
@@ -88,17 +88,6 @@ categories(PGFModule* self)
 inline static PyObject*
 languages(PGFModule* self)
 {
-  /* PyObject *langs = PyList_New(0);
-  PyGF **p = gf_languages(self);
-  // PyGF *q = p;
-  while (*p) {
-    printf("sp: %x\n", (*p)->sp);
-    //Lang* l = (Lang*)LangType.tp_new(&LangType,NULL,NULL);
-    //l->obj = (p++)->sp;
-    PyList_Append(langs, (PyObject*)(*(p++)));
-    // Py_DECREF(*(p++)); //??
-  } 
-  // gf_freeArray(q); */
   return gf_languages(self);
 }
 
@@ -180,23 +169,6 @@ parse(PyObject *self, PyObject *args, PyObject *kws)
 	} else { 
 	  cat = (PyObject*)startCategory(self,NULL);		
 	} 
-	/* pgf = ((PGFModule*)self)->obj;
-	lang = ((Lang*)lang_pyob)->obj;
-	PyObject *parsed = PyList_New(0);
-	GF_Tree *p = gf_parse(pgf,lang,cat,lexed); 
-	if (*p) {
-    	do {
-			Tree* expr; //Expr
-			expr = (Tree*)TreeType.tp_new(&TreeType,NULL,NULL); // Expr* -> Tree*
-			expr->obj = *(p++);
-      		PyList_Append(parsed, (PyObject*)expr);
-			Py_DECREF(expr); //??
-      //      char *str = gf_showExpr(exp);
-      //puts(str);
-      //free(str); 
-    	} while (*p);
-  	} 
-	return parsed; */
 	return gf_parse(self, lang, cat, lexed);
 }
 
