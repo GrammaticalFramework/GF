@@ -30,13 +30,17 @@ def rmprefix(obj):
 #	return m and s[m.end(0):]
 
 class TestPgfInfo(unittest.TestCase):
-	def pgf(self):
-		return gf.read_pgf(self.path)
+	def pgf(self, path=None):
+		path = path or self.path
+		return gf.read_pgf(path)
 	def setUp(self):
 		self.path = 'Query.pgf'
 	def test_readPgf(self):
 		pgf = self.pgf()
 		self.assertNotEqual(pgf,None)
+	def test_readNonExistent(self):
+		nopath = 'x' + self.path
+		self.assertRaises(IOError, self.pgf, nopath)
 	def test_startcat(self):
 		pgf = self.pgf()
 		cat = pgf.startcat()

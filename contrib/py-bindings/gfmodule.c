@@ -3,6 +3,7 @@
 //
 
 #include <Python.h>
+#include <sys/stat.h>
 #include "pygf.h"
 
 /* utilities */
@@ -107,6 +108,8 @@ languageCode(PGFModule *self, PyObject *args)
   Lang *lang;
   if (!PyArg_ParseTuple(args, "O", &lang))
     return NULL;
+  if (!checkType(lang, &LangType))
+    return NULL;
   char* scode = gf_languageCode(self, lang);
   if (scode) {
     PyObject* result = PyString_FromString(scode);
@@ -149,6 +152,8 @@ printName(PGFModule *self, PyObject *args)
 	CId* id;
 	if (!PyArg_ParseTuple(args, "OO", &lang, &id))
 		return NULL;
+	if (!checkType(lang,&LangType)) return NULL;
+	if (!checkType(id,&CIdType)) return NULL;
 	char *pname = gf_showPrintName(self, lang, id);
 	PyObject* result = PyString_FromString(pname);
 	free(pname);
@@ -199,13 +204,19 @@ static PGFModule*
 readPGF(PyObject *self, PyObject *args)
 {
   char *path;
+  struct stat info;
   PGFModule *pgf;
   if (!PyArg_ParseTuple(args, "s", &path))
     return NULL;
-  pgf = (PGFModule*)PGFType.tp_new(&PGFType,NULL,NULL);
-  if (!pgf) return NULL;
-  gf_readPGF(pgf, path);
-  return pgf;
+  if (stat(path, &info) == 0) {
+    pgf = (PGFModule*)PGFType.tp_new(&PGFType,NULL,NULL);
+    if (!pgf) return NULL;
+    gf_readPGF(pgf, path);
+    return pgf;
+  } else {
+    PyErr_Format(PyExc_IOError, "No such file: %s", path);
+    return NULL;
+  }
 }
 
 //Todo: repr
