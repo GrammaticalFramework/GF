@@ -27,8 +27,8 @@ NEWGF(PGF,GF_PGF,PGFType,"gf.pgf","PGF module")
 NEWGF(Expr,GF_Expr,ExprType,"gf.expr","gf expression")	
 NEWGF(Tree,GF_Tree,TreeType,"gf.tree","gf tree")
 
-/* CId methods, constructor and destructor */
 
+/* CId methods, constructor and destructor */
 
 DEALLOCFN(CId_dealloc, CId, gf_freeCId, "freeCId")
 
@@ -45,9 +45,7 @@ CId_repr(CId *self)
 
 /* PGF methods, constructor and destructor */
 
-
 DEALLOCFN(PGF_dealloc, PGF, gf_freePGF, "freePGF")
-
 
 static PyObject* 
 pgf_repr(PGF *self) {
@@ -58,10 +56,8 @@ pgf_repr(PGF *self) {
   return PyString_FromFormat("<gf.pgf with abstract %s at 0x%x>", abs, self->obj);
 }
 
-
-
 static gfType*
-startCategory(PyObject *self, PyObject *noarg)
+startCategory(PGF *self, PyObject *noarg)
 {
   gfType *cat;
   if (!checkType(self, &PGFType)) return NULL;
@@ -73,15 +69,6 @@ startCategory(PyObject *self, PyObject *noarg)
 inline static PyObject*
 categories(PGF* self)
 {
-  /* PyObject* cats = PyList_New(0);
-  GF_CId *p = gf_categories(self);
-  while (*p) {
-    CId* c = (CId*)CIdType.tp_new(&CIdType,NULL,NULL);
-    c->obj = *(p++);
-    PyList_Append(cats, (PyObject*)c);
-    Py_DECREF(c); //?
-  }
-  return cats; */
   return gf_categories(self);
 }
 
@@ -132,7 +119,6 @@ abstractName(PGF *self)
   return abs_name;
 }
 
-
 static PyObject*
 printName(PGF *self, PyObject *args)
 {
@@ -150,7 +136,7 @@ printName(PGF *self, PyObject *args)
 
 
 static PyObject*
-parse(PyObject *self, PyObject *args, PyObject *kws)
+parse(PGF *self, PyObject *args, PyObject *kws)
 {
 	PyObject *lang, *cat = NULL;
 	//GF_PGF pgf;
@@ -295,18 +281,7 @@ PyModule_AddObject(m, "gf", (PyObject *)&t);
 }
 
 
-/* inline Lang* newLang() {
-  return (Lang*)LangType.tp_new(&LangType,NULL,NULL);
-  } 
-
-inline Tree* newTree() {
-  return (Tree*)TreeType.tp_new(&TreeType,NULL,NULL);
-}
-
-inline CId* newCId() {
-  return (CId*)CIdType.tp_new(&CIdType,NULL,NULL);
-}
-*/
+/* List utilities to be imported by FFI */
 
 inline PyObject* newList() { return  PyList_New(0); }
-inline void append(PyObject* l, PyObject* ob) { PyList_Append(l, ob); } 
+inline void append(PyObject* l, PyObject* ob) { PyList_Append(l, ob); }
