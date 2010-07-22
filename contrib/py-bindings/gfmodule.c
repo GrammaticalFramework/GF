@@ -1,63 +1,9 @@
 // GF Python bindings
-// Jordi Saludes 2010
+// Jordi Saludes, upc.edu 2010
 //
 
 #include <Python.h>
-#include "pgf.h"
-
-#define NEWOBJECT(OBJ, GFTYPE) typedef struct {\
-  PyObject_HEAD \
-  GFTYPE obj; \
-} OBJ;
-#define NEWTYPE(TYPE,NAME,OBJECT,DOC) static PyTypeObject TYPE = {\
-  PyObject_HEAD_INIT(NULL)\
-  0,                         /*ob_size*/\
-  NAME,             /*tp_name*/\
-  sizeof(OBJECT), /*tp_basicsize*/\
-  0,                         /*tp_itemsize*/\
-  0,                         /*tp_dealloc*/\
-  0,                         /*tp_print*/\
-  0,                         /*tp_getattr*/\
-  0,                         /*tp_setattr*/\
-  0,                         /*tp_compare*/\
-  0,                         /*tp_repr*/\
-  0,                         /*tp_as_number*/\
-  0,                         /*tp_as_sequence*/\
-  0,                         /*tp_as_mapping*/\
-  0,                         /*tp_hash */\
-  0,                         /*tp_call*/\
-  0,                         /*tp_str*/\
-  0,                         /*tp_getattro*/\
-  0,                         /*tp_setattro*/\
-  0,                         /*tp_as_buffer*/\
-  Py_TPFLAGS_DEFAULT,        /*tp_flags*/\
-  DOC,           /* tp_doc */\
-};
-#define NEWGF(OBJ,GFTYPE,TYPE,NAME,DOC) NEWOBJECT(OBJ,GFTYPE)	\
-NEWTYPE(TYPE,NAME,OBJ,DOC)
-
-#ifdef DEBUG
-#define DEALLOCFN(delname,t,cb,cbname) static void \
-delname(t *self){ cb(self->obj);\
-	printf("gf_%s has been called for stable pointer 0x%x\n", cbname, self->obj);\
-	self->ob_type->tp_free((PyObject*)self); }
-#else
-#define DEALLOCFN(delname,t,cb,cbname) static void \
-delname(t *self){ cb(self->obj);\
-	self->ob_type->tp_free((PyObject*)self); }
-#endif
-
-#ifdef DEBUG
-#define REPRCB(cbid,t,gfcb) static PyObject* \
-cbid(t *self) { \
-	const char *str = gfcb(self->obj); \
- 	return PyString_FromFormat("0x%x: %s", self->obj, str); }
-#else
-#define REPRCB(cbid,t,gfcb) static PyObject* \
-cbid(t *self) { \
-	const char *str = gfcb(self->obj); \
- 	return PyString_FromString(str); }
-#endif
+#include "pygf.h"
 
 /* utilities */
 
@@ -85,14 +31,14 @@ NEWGF(Tree,GF_Tree,TreeType,"gf.tree","gf tree")
 
 DEALLOCFN(CId_dealloc, CId, gf_freeCId, "freeCId")
 
-static PyObject*
+/* static PyObject*
 CId_repr(CId *self)
 {
   char* str_cid = gf_showCId(self->obj);
   PyObject* repr = PyString_FromString(str_cid);
   free(str_cid);
   return repr;
-}
+  } */
 
 
 
@@ -101,11 +47,13 @@ CId_repr(CId *self)
 
 DEALLOCFN(PGF_dealloc, PGFModule, gf_freePGF, "freePGF")
 
+
 static PyObject* 
 pgf_repr(PGFModule *self) {
-  GF_Language lang = gf_abstractName(self->obj);
-  const char* abs = gf_showLanguage(lang);
-  gf_freeLanguage(lang);					     
+  Lang lang;
+  gf_abstractName(self, &lang);
+  const char* abs = gf_showLanguage(&lang);
+  gf_freeLanguage(&lang);					     
   return PyString_FromFormat("<gf.pgf with abstract %s at 0x%x>", abs, self->obj);
 }
 
@@ -117,36 +65,40 @@ startCategory(PyObject *self, PyObject *noarg)
   gfType *cat;
   if (!checkType(self, &PGFType)) return NULL;
   cat = (gfType*)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
-  cat->obj = gf_startCat(((PGFModule*)self)->obj);
+  gf_startCat((PGFModule*)self, cat);
   return cat;
 }
 
-static PyObject*
+inline static PyObject*
 categories(PGFModule* self)
 {
-  PyObject* cats = PyList_New(0);
-  GF_CId *p = gf_categories(self->obj);
+  /* PyObject* cats = PyList_New(0);
+  GF_CId *p = gf_categories(self);
   while (*p) {
     CId* c = (CId*)CIdType.tp_new(&CIdType,NULL,NULL);
     c->obj = *(p++);
     PyList_Append(cats, (PyObject*)c);
     Py_DECREF(c); //?
   }
-  return cats;
+  return cats; */
+  return gf_categories(self);
 }
 
-static PyObject*
+inline static PyObject*
 languages(PGFModule* self)
 {
-  PyObject *langs = PyList_New(0);
-  GF_Language *p = gf_languages(self->obj);
+  /* PyObject *langs = PyList_New(0);
+  PyGF **p = gf_languages(self);
+  // PyGF *q = p;
   while (*p) {
-    Lang* l = (Lang*)LangType.tp_new(&LangType,NULL,NULL);
-    l->obj = *(p++);
-    PyList_Append(langs, (PyObject*)l);
-    Py_DECREF(l); //??
-  }                                                                                
-  return langs;
+    printf("sp: %x\n", (*p)->sp);
+    //Lang* l = (Lang*)LangType.tp_new(&LangType,NULL,NULL);
+    //l->obj = (p++)->sp;
+    PyList_Append(langs, (PyObject*)(*(p++)));
+    // Py_DECREF(*(p++)); //??
+  } 
+  // gf_freeArray(q); */
+  return gf_languages(self);
 }
 
 static PyObject*
@@ -155,7 +107,7 @@ languageCode(PGFModule *self, PyObject *args)
   Lang *lang;
   if (!PyArg_ParseTuple(args, "O", &lang))
     return NULL;
-  char* scode = gf_languageCode(self->obj, lang->obj);
+  char* scode = gf_languageCode(self, lang);
   if (scode) {
     PyObject* result = PyString_FromString(scode);
     free(scode);
@@ -176,17 +128,17 @@ linearize(PGFModule *self, PyObject *args)
     return NULL;
   if (!checkType(lang,&LangType)) return NULL;
   if (!checkType(tree,&TreeType)) return NULL;
-  char* c_lin = gf_linearize(self->obj, lang->obj, tree->obj);
+  char* c_lin = gf_linearize(self, lang, tree);
   return PyString_FromString(c_lin);
 }
 
 static Lang*
 abstractName(PGFModule* self)
 {
-  Lang* abs = (Lang*)LangType.tp_new(&LangType,NULL,NULL);
+  Lang* abs_name = (Lang*)LangType.tp_new(&LangType,NULL,NULL);
   if (!checkType(self,&PGFType)) return NULL;
-  abs->obj = gf_abstractName(self->obj);
-  return abs;
+  gf_abstractName(self, abs_name);
+  return abs_name;
 }
 
 
@@ -197,7 +149,7 @@ printName(PGFModule *self, PyObject *args)
 	CId* id;
 	if (!PyArg_ParseTuple(args, "OO", &lang, &id))
 		return NULL;
-	char *pname = gf_showPrintName(self->obj, lang->obj, id->obj);
+	char *pname = gf_showPrintName(self, lang, id);
 	PyObject* result = PyString_FromString(pname);
 	free(pname);
 	return result;
@@ -207,24 +159,23 @@ printName(PGFModule *self, PyObject *args)
 static PyObject*
 parse(PyObject *self, PyObject *args, PyObject *kws)
 {
-	PyObject *lang_pyob, *cat_pyob = NULL;
-	GF_PGF pgf;
-	GF_Language lang;
-	GF_Type cat;
+	PyObject *lang, *cat = NULL;
+	//GF_PGF pgf;
+	// GF_Language lang;
+	// GF_Type cat;
 	char *lexed;
 	static char *kwlist[] = {"lexed", "lang", "cat", NULL};
 	if (!PyArg_ParseTupleAndKeywords(args, kws, "sO|O", kwlist,
-				       &lexed, &lang_pyob, &cat_pyob))
+				       &lexed, &lang, &cat))
     	return NULL;
-	if (!checkType(self, &PGFType)) return NULL;	
-	if (!checkType(lang_pyob, &LangType)) return NULL;
-	if (cat_pyob) {
-		if (!checkType(cat_pyob, &gfTypeType)) return NULL;
-		cat = ((gfType*)cat_pyob)->obj;
+	if (!checkType(self, &PGFType)) return NULL;
+	if (!checkType(lang, &LangType)) return NULL;
+	if (cat) {
+	  if (!checkType(cat, &gfTypeType)) return NULL;
 	} else { 
-		cat = startCategory(self,NULL)->obj;		
+	  cat = (PyObject*)startCategory(self,NULL);		
 	} 
-	pgf = ((PGFModule*)self)->obj;
+	/* pgf = ((PGFModule*)self)->obj;
 	lang = ((Lang*)lang_pyob)->obj;
 	PyObject *parsed = PyList_New(0);
 	GF_Tree *p = gf_parse(pgf,lang,cat,lexed); 
@@ -235,12 +186,13 @@ parse(PyObject *self, PyObject *args, PyObject *kws)
 			expr->obj = *(p++);
       		PyList_Append(parsed, (PyObject*)expr);
 			Py_DECREF(expr); //??
-      /*      char *str = gf_showExpr(exp);
-      puts(str);
-      free(str); */
+      //      char *str = gf_showExpr(exp);
+      //puts(str);
+      //free(str); 
     	} while (*p);
-  	}
-  return parsed;
+  	} 
+	return parsed; */
+	return gf_parse(self, lang, cat, lexed);
 }
 
 static PGFModule*
@@ -252,7 +204,7 @@ readPGF(PyObject *self, PyObject *args)
     return NULL;
   pgf = (PGFModule*)PGFType.tp_new(&PGFType,NULL,NULL);
   if (!pgf) return NULL;
-  pgf->obj = gf_readPGF(path);
+  gf_readPGF(pgf, path);
   return pgf;
 }
 
@@ -270,7 +222,7 @@ static PyMethodDef pgf_methods[] = {
   {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
-
+REPRCB(CId_repr, CId, gf_showCId)
 
 
 /* Language methods, constructor and destructor */
@@ -287,7 +239,7 @@ readLang(PyObject *self, PyObject *args)
     return NULL;
   l = (Lang*)LangType.tp_new(&LangType,NULL,NULL);
   if(!l) return NULL;
-  l->obj = gf_readLanguage(langName);
+  gf_readLanguage(l,langName);
   return l;
 }
 
@@ -348,7 +300,7 @@ initgf(void)
   static char *argv[] = {"gf.so", 0}, **argv_ = argv;
   static int argc = 1;
   gf_init (&argc, &argv_);
-  hs_add_root (__stginit_PGFFFI);
+  hs_add_root (__stginit_PyGF);
 
 #define ADDTYPE(t) Py_INCREF(&t);\
 PyModule_AddObject(m, "gf", (PyObject *)&t);
@@ -358,4 +310,23 @@ PyModule_AddObject(m, "gf", (PyObject *)&t);
 	ADDTYPE(gfTypeType)
 	ADDTYPE(TreeType)
 	ADDTYPE(ExprType)
+}
+
+
+inline Lang* newLang() {
+  return (Lang*)LangType.tp_new(&LangType,NULL,NULL);
+}
+
+inline Tree* newTree() {
+  return (Tree*)TreeType.tp_new(&TreeType,NULL,NULL);
+}
+
+inline CId* newCId() {
+  return (CId*)CIdType.tp_new(&CIdType,NULL,NULL);
+}
+
+inline PyObject* newList() { return  PyList_New(0); }
+
+void append(PyObject* l, PyObject* ob) {
+  PyList_Append(l, ob);
 }

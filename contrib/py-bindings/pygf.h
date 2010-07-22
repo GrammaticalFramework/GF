@@ -32,6 +32,7 @@ typedef struct {
   HsStablePtr sp;
 } PyGF;
 
+
 #define NEWOBJECT(OBJ, GFTYPE) typedef struct {\
   PyObject_HEAD \
   GFTYPE obj; \
@@ -65,4 +66,27 @@ typedef struct {
   NEWTYPE(TYPE,NAME,OBJ,DOC)
 
 
-NEWOBJECT(CID, GF_CId)
+// NEWOBJECT(CID, GF_CId)
+
+#ifdef DEBUG
+#define DEALLOCFN(delname,t,cb,cbname) static void \
+delname(t *self){ cb(self);\
+	printf("gf_%s has been called for stable pointer 0x%x\n", cbname, self->obj);\
+	self->ob_type->tp_free((PyObject*)self); }
+#else
+#define DEALLOCFN(delname,t,cb,cbname) static void \
+delname(t *self){ cb(self);\
+	self->ob_type->tp_free((PyObject*)self); }
+#endif
+
+#ifdef DEBUG
+#define REPRCB(cbid,t,gfcb) static PyObject* \
+cbid(t *self) { \
+	const char *str = gfcb(self); \
+ 	return PyString_FromFormat("0x%x: %s", self->obj, str); }
+#else
+#define REPRCB(cbid,t,gfcb) static PyObject* \
+cbid(t *self) { \
+	const char *str = gfcb(self); \
+ 	return PyString_FromString(str); }
+#endif
