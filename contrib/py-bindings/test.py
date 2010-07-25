@@ -9,10 +9,10 @@ import unittest
 
 
 samples = [
-	("Odd (Number 89)",
+	(['Odd', ['Number', 89]],
 	 {'eng': "is 89 odd",
 	  'spa': "89 es impar"}),
-	("Prime (Number 21)",
+	(['Prime', ['Number', 21]],
 	 {'eng': "is 21 prime",
 	  'spa': "21 es primo"})]
 
@@ -20,6 +20,22 @@ def lang2iso(l):
 	s = rmprefix(l)
 	assert(s[:5],"Query")
 	return s[5:].lower()
+
+def exp2str(e):
+	def e2s(e,n):
+		if type(e) == type([2]):
+			f = e[0]
+			sr = ' '.join([e2s(arg,n+1) for arg in e[1:]])
+			ret =f + ' ' + sr
+			return n and '('+ret+')' or ret
+		elif type(e) == type('2'):
+			return e
+		elif type(e) == type(2):
+			return `e`
+		else:
+			raise ValueError, "Do not know how to render " + `e`
+	return e2s(e,0)
+		
 
 import re
 hexre = re.compile('0x[0-9a-f]+:[ ]*')
@@ -68,10 +84,11 @@ class TestParsing(unittest.TestCase):
 		pgf = gf.read_pgf(self.pgf)
 		l = gf.read_language(self.lang)
 		for abs,cnc in self.lexed:
+			rabs = exp2str(abs)
 			ps = pgf.parse(cnc['eng'], l)
 			self.failUnless(ps)
 			pt = rmprefix(ps[0])
-			self.assertEqual(pt,abs)
+			self.assertEqual(pt,rabs)
 
 
 class TestLinearize(unittest.TestCase):
@@ -104,16 +121,26 @@ class TestTranslate(unittest.TestCase):
 
 class TestUnapplyExpr(unittest.TestCase):
 	def setUp(self):
+		self.samples = samples
 		self.pgf = gf.read_pgf('Query.pgf')
 		self.langs = dict([(lang2iso(l),l) for l in self.pgf.languages()])
 
+	def deep_unapp(self,exp):
+		exp = exp.unapply()
+		if type(exp) == type([2]):
+			f = exp[0]
+			return [`f`] + map(self.deep_unapp,exp[1:])
+		else:
+			return exp
+		
+
 	def test_unapply(self):
-		ps = self.pgf.parse('is 23 odd',self.langs['eng'])
-		f,es = ps[0].unapply()
-		self.assertEqual(`f`,'Odd')
-		f,es = es.unapply()
-		self.assertEqual(`f`,'Number')
-		self.assertEqual(es.unapply(),23)
+		lg = 'eng'
+		lang = self.langs[lg]
+		for abs,cnc in self.samples:
+			parsed = self.pgf.parse(cnc[lg],lang)
+			uparsed = self.deep_unapp(parsed[0])
+			self.assertEqual(abs,uparsed)
 
 if __name__ == '__main__':
 	unittest.main()
