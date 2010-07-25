@@ -225,11 +225,46 @@ DEALLOCFN(expr_dealloc, Expr, gf_freeExpr, "freeExpr")
 REPRCB(expr_repr, Expr, gf_showExpr)
 
 
+static PyObject*
+unapp(Expr *self) {
+  PyObject* obj = gf_unapp(self);
+  if (!obj) {
+    char* s = gf_unstr(self);
+    if (s) {
+      obj = PyString_FromString(s);
+      free(s);
+    } else {
+      long n = gf_unint(self);
+      if (n != -9) {
+	obj = PyInt_FromLong(n);
+      } else {
+	PyErr_Format(PyExc_TypeError, "Cannot unapply expr.");
+      }
+    }
+  }
+  return obj;
+}
+
+static PyMethodDef tree_methods[] = {
+  {"unapply", (PyCFunction)unapp, METH_NOARGS,"Unapply a tree."},
+  {NULL, NULL, 0, NULL}  /* Sentinel */
+};
+
+static PyMethodDef expr_methods[] = {
+  {"unapply", (PyCFunction)unapp, METH_NOARGS,"Unapply an expression."},
+  {NULL, NULL, 0, NULL}  /* Sentinel */
+};
+
+
+
 /* tree typr: methods, constructor and destructor */
 //  Are Expr and Tree equivalent ? 
 
 REPRCB(tree_repr, Tree, gf_showExpr)
 DEALLOCFN(Tree_dealloc, Tree, gf_freeTree, "freeTree")
+
+
+
 
 
 /* gf module methods */
@@ -260,7 +295,9 @@ initgf(void)
 	READYTYPE(PGFType, pgf_repr, PGF_dealloc)
 	READYTYPE(LangType, lang_repr, Lang_dealloc)
 	READYTYPE(gfTypeType, gfType_repr, gfType_dealloc)
+        ExprType.tp_methods = expr_methods;
 	READYTYPE(ExprType, expr_repr, expr_dealloc)
+	TreeType.tp_methods = tree_methods;
 	READYTYPE(TreeType, tree_repr, Tree_dealloc)	
 
   m = Py_InitModule3("gf", gf_methods,

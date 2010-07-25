@@ -127,10 +127,7 @@ gf_showExpr pexpr = do
 
 listToPy :: Storable a => IO (Ptr a) -> [a] -> IO (Ptr ()) -- opaque -- IO (Ptr (Ptr Language))
 listToPy mk ls = do
-    let bufl = length ls + 1
-    -- buf <- mallocBytes $ (#size PyGF) * bufl
     pyls <- pyList
-    -- pokeElemOff buf (length ls) nullPtr
     mapM_ (mpoke pyls)  ls
     return pyls
   where  mpoke pyl l = do
@@ -138,7 +135,6 @@ listToPy mk ls = do
           poke pl l
           pyl << pl
        
-
 -- foreign export ccall "gf_freeArray" free :: Ptr a -> IO ()
 
               
@@ -194,9 +190,38 @@ gf_showCId pcid = do
   cid <- peek pcid
   newCString $ showCId cid
 
+foreign export ccall gf_unapp :: Ptr Expr -> IO (Ptr ())
+foreign export ccall gf_unint :: Ptr Expr -> IO CInt
+foreign export ccall gf_unstr :: Ptr Expr -> IO CString
+
+gf_unapp pexp = do
+    exp <- peek pexp
+    case unApp exp of
+        Just (f,args) -> do
+                   puexp <- pyList
+                   pf <- pyCId
+                   poke pf f
+                   puexp << pf
+                   mapM_ (\e -> do
+                              pe <- pyExpr
+                              poke pe e
+                              puexp << pe) args 
+                   return puexp
+        Nothing -> return nullPtr
+gf_unint pexp = do
+    exp <- peek pexp
+    return $ fromIntegral $ case unInt exp of
+                              Just n -> n
+                              _      -> (-9)
+gf_unstr pexp = do
+   exp <- peek pexp
+   case unStr exp of
+        Just s -> newCString s
+        _      -> return nullPtr
 
 foreign import ccall "newLang" pyLang :: IO (Ptr Language) 
 foreign import ccall "newTree" pyTree :: IO (Ptr Tree) 
 foreign import ccall "newCId" pyCId :: IO (Ptr CId) 
+foreign import ccall "newExpr" pyExpr :: IO (Ptr Expr) 
 foreign import ccall "newList" pyList :: IO (Ptr ()) 
 foreign import ccall "append" (<<) :: Ptr () -> Ptr a -> IO ()
