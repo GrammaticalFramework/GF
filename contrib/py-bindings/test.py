@@ -101,6 +101,19 @@ class TestTranslate(unittest.TestCase):
 					assert len(parsed) == 1
 					lin = self.pgf.lin(m,parsed[0])
 					self.assertEqual(lin,cnc[j])
-			
+
+class TestUnapplyExpr(unittest.TestCase):
+	def setUp(self):
+		self.pgf = gf.read_pgf('Query.pgf')
+		self.langs = dict([(lang2iso(l),l) for l in self.pgf.languages()])
+
+	def test_unapply(self):
+		ps = self.pgf.parse('is 23 odd',self.langs['eng'])
+		f,es = ps[0].unapply()
+		self.assertEqual(`f`,'Odd')
+		f,es = es.unapply()
+		self.assertEqual(`f`,'Number')
+		self.assertEqual(es.unapply(),23)
+
 if __name__ == '__main__':
 	unittest.main()
