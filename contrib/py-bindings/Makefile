@@ -7,6 +7,9 @@ exdir=../../examples/tutorial/embedded
 
 build: gf.so
 
+test:
+	python test.py
+
 gf.so:  PyGF.hs gfmodule.c Query.pgf
 	ghc $(import) --make -fglasgow-exts -O2 -no-hs-main -c $<
 	ghc -O2 --make -fglasgow-exts -no-hs-main -optl '-shared' \
