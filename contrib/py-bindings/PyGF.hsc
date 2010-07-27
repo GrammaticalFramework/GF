@@ -219,6 +219,13 @@ gf_unstr pexp = do
         Just s -> newCString s
         _      -> return nullPtr
 
+foreign export ccall gf_inferexpr :: Ptr PGF -> Ptr Expr -> Ptr Type -> IO ()
+gf_inferexpr ppgf pexp ptype = do
+    pgf <- peek ppgf
+    exp <- peek pexp
+    let Right (_,t) = inferExpr pgf exp
+    poke ptype t
+
 foreign import ccall "newLang" pyLang :: IO (Ptr Language) 
 foreign import ccall "newTree" pyTree :: IO (Ptr Tree) 
 foreign import ccall "newCId" pyCId :: IO (Ptr CId) 
