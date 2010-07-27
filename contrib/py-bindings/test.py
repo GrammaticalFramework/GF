@@ -142,5 +142,17 @@ class TestUnapplyExpr(unittest.TestCase):
 			uparsed = self.deep_unapp(parsed[0])
 			self.assertEqual(abs,uparsed)
 
+	def test_infer(self):
+		lg = 'eng'
+		lang = self.langs[lg]
+		cnc = self.samples[0][1]
+		parsed = self.pgf.parse(cnc[lg],lang)
+		exp = parsed[0]
+		for t in 'Question Object Int'.split():
+			self.assertEqual(`exp.infer(self.pgf)`, t)
+			uexp = exp.unapply()
+			if type(uexp) != type(2) and type(uexp) != type('2'):
+				exp = uexp[1]
+
 if __name__ == '__main__':
 	unittest.main()

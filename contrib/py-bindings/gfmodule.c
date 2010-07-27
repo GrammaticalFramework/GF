@@ -245,13 +245,33 @@ unapp(Expr *self) {
   return obj;
 }
 
+static PyObject*
+infer_expr(Expr *self, PyObject* args) {
+  PGF* pgf;
+  if (!PyArg_ParseTuple(args, "O", &pgf))
+    return NULL;
+  if (!checkType(pgf, &PGFType)) {
+    PyErr_Format(PyExc_ValueError, "Must be a pgf module.");
+    return NULL;
+  }
+  gfType* gftp = (gfType*)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
+  gf_inferexpr(pgf, self, gftp);
+  return gftp;
+}
+
+
+
+/* todo: Is Tree == Expr ?
+
 static PyMethodDef tree_methods[] = {
-  {"unapply", (PyCFunction)unapp, METH_NOARGS,"Unapply a tree."},
-  {NULL, NULL, 0, NULL}  /* Sentinel */
+  {"unapply", (PyCFunction)unapp, METH_NOARGS, "Unapply a tree."},
+  {NULL, NULL, 0, NULL}  // * Sentinel * //
 };
+*/
 
 static PyMethodDef expr_methods[] = {
-  {"unapply", (PyCFunction)unapp, METH_NOARGS,"Unapply an expression."},
+  {"unapply", (PyCFunction)unapp, METH_NOARGS, "Unapply an expression."},
+  {"infer", (PyCFunction)infer_expr, METH_VARARGS, "Infer the type of an expression."},
   {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
@@ -297,7 +317,7 @@ initgf(void)
 	READYTYPE(gfTypeType, gfType_repr, gfType_dealloc)
         ExprType.tp_methods = expr_methods;
 	READYTYPE(ExprType, expr_repr, expr_dealloc)
-	TreeType.tp_methods = tree_methods;
+	TreeType.tp_methods = expr_methods; // Tree == Expr ?
 	READYTYPE(TreeType, tree_repr, Tree_dealloc)	
 
   m = Py_InitModule3("gf", gf_methods,
