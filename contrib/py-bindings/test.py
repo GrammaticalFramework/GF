@@ -72,7 +72,16 @@ class TestPgfInfo(unittest.TestCase):
 		for lang in 'QueryEng QuerySpa'.split():
 			l = gf.read_language(lang) 
 			self.assertEqual(rmprefix(l),lang)
-	
+	def test_functions(self):
+		pgf = self.pgf()
+		self.assertTrue('Even' in [`f` for f in pgf.functions()])
+	def test_function_types(self):
+		pgf = self.pgf()
+		gftypes = dict((`f`,`pgf.fun_type(f)`) for f in pgf.functions())
+		for p in "Prime : Object -> Question; Yes : Answer".split(';'):
+			lhs,rhs = [s.strip() for s in p.split(':')]
+			self.assertEqual(gftypes[lhs],rhs)
+
 class TestParsing(unittest.TestCase):
 	def setUp(self):
 		self.lexed = samples
@@ -153,6 +162,7 @@ class TestUnapplyExpr(unittest.TestCase):
 			uexp = exp.unapply()
 			if type(uexp) != type(2) and type(uexp) != type('2'):
 				exp = uexp[1]
+
 
 if __name__ == '__main__':
 	unittest.main()
