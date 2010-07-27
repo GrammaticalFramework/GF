@@ -1,4 +1,6 @@
 {-# LANGUAGE ForeignFunctionInterface #-} 
+-- GF Python bindings                                                                                                                                        -- Jordi Saludes, upc.edu 2010
+
 module PyGF where
 
 import PGF
@@ -226,8 +228,27 @@ gf_inferexpr ppgf pexp ptype = do
     let Right (_,t) = inferExpr pgf exp
     poke ptype t
 
+
+foreign export ccall gf_functions :: Ptr PGF -> IO (Ptr ())
+gf_functions ppgf = do
+    pgf <- peek ppgf
+    listToPy pyCId $ functions pgf 
+
+foreign export ccall gf_functiontype :: Ptr PGF -> Ptr CId -> IO (Ptr Type)
+gf_functiontype ppgf pcid = do
+    pgf <- peek ppgf
+    cid <- peek pcid
+    case functionType pgf cid of
+        Just t -> do
+               ptp <- pyType
+               poke ptp t
+               return ptp
+        _      -> return nullPtr
+
+
 foreign import ccall "newLang" pyLang :: IO (Ptr Language) 
 foreign import ccall "newTree" pyTree :: IO (Ptr Tree) 
+foreign import ccall "newgfType" pyType :: IO (Ptr Type) 
 foreign import ccall "newCId" pyCId :: IO (Ptr CId) 
 foreign import ccall "newExpr" pyExpr :: IO (Ptr Expr) 
 foreign import ccall "newList" pyList :: IO (Ptr ()) 

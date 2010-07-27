@@ -32,16 +32,6 @@ NEWGF(Tree,GF_Tree,TreeType,"gf.tree","gf tree")
 
 DEALLOCFN(CId_dealloc, CId, gf_freeCId, "freeCId")
 
-/* static PyObject*
-CId_repr(CId *self)
-{
-  char* str_cid = gf_showCId(self->obj);
-  PyObject* repr = PyString_FromString(str_cid);
-  free(str_cid);
-  return repr;
-  } */
-
-
 
 /* PGF methods, constructor and destructor */
 
@@ -62,21 +52,28 @@ startCategory(PGF *self, PyObject *noarg)
   gfType *cat;
   if (!checkType(self, &PGFType)) return NULL;
   cat = (gfType*)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
-  gf_startCat((PGF*)self, cat);
+  gf_startCat(self, cat);
   return cat;
 }
 
-inline static PyObject*
+/* inline static PyObject*
 categories(PGF* self)
 {
   return gf_categories(self);
 }
 
 inline static PyObject*
+functions(PGF* self)
+{
+  return gf_functions(self);
+  }
+
+inline static PyObject*
 languages(PGF* self)
 {
   return gf_languages(self);
 }
+*/
 
 static PyObject*
 languageCode(PGF *self, PyObject *args)
@@ -134,6 +131,22 @@ printName(PGF *self, PyObject *args)
 	return result;
 }
 
+static gfType*
+functiontype(PGF *self, PyObject* args)
+{
+  CId* cid;
+  gfType* gftp;
+  if (!PyArg_ParseTuple(args, "O", &cid))
+    return NULL;
+  if (!checkType(cid,&CIdType)) {
+    PyErr_Format(PyExc_TypeError, "Must be a gf identifier.");
+    return NULL;
+  }
+  // gftp = (gfType)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
+  return gf_functiontype(self, cid);
+  // return gftp;
+}
+
 
 static PyObject*
 parse(PGF *self, PyObject *args, PyObject *kws)
@@ -176,17 +189,19 @@ readPGF(PyObject *self, PyObject *args)
   }
 }
 
-//Todo: repr
+
 
 static PyMethodDef pgf_methods[] = {
   {"parse", (PyCFunction)parse, METH_VARARGS|METH_KEYWORDS,"Parse a string."},
   {"lin", (PyCFunction)linearize, METH_VARARGS,"Linearize tree."},
   {"lang_code", (PyCFunction)languageCode, METH_VARARGS,"Get the language code."},
   {"print_name", (PyCFunction)printName, METH_VARARGS,"Get the print name for a id."},
+  {"fun_type", (PyCFunction)functiontype, METH_VARARGS,"Get the type of a fun expression."},
   {"startcat", (PyCFunction)startCategory, METH_NOARGS,"Get the start category."},
-  {"categories", (PyCFunction)categories, METH_NOARGS,"Get all categories."},
+  {"categories", (PyCFunction)gf_categories, METH_NOARGS,"Get all categories."},
+  {"functions", (PyCFunction)gf_functions, METH_NOARGS,"Get all functions."},
   {"abstract", (PyCFunction)abstractName, METH_NOARGS,"Get the module abstract name."},
-  {"languages", (PyCFunction)languages, METH_NOARGS,"Get the module languages."},
+  {"languages", (PyCFunction)gf_languages, METH_NOARGS,"Get the module languages."},
   {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
@@ -256,18 +271,12 @@ infer_expr(Expr *self, PyObject* args) {
   }
   gfType* gftp = (gfType*)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
   gf_inferexpr(pgf, self, gftp);
-  return gftp;
+  return (PyObject*)gftp;
 }
 
 
 
-/* todo: Is Tree == Expr ?
-
-static PyMethodDef tree_methods[] = {
-  {"unapply", (PyCFunction)unapp, METH_NOARGS, "Unapply a tree."},
-  {NULL, NULL, 0, NULL}  // * Sentinel * //
-};
-*/
+/* todo: Is Tree == Expr ? */
 
 static PyMethodDef expr_methods[] = {
   {"unapply", (PyCFunction)unapp, METH_NOARGS, "Unapply an expression."},
