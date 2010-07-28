@@ -1,6 +1,7 @@
 {-# LANGUAGE ForeignFunctionInterface #-} 
 -- GF Python bindings                                                                                                                                        -- Jordi Saludes, upc.edu 2010
-
+-- Jordi Saludes, upc.edu 2010
+--
 module PyGF where
 
 import PGF
@@ -92,11 +93,12 @@ gf_printCId p = do
     newCString (showCId c)
 -}
 
-foreign export ccall gf_readPGF :: Ptr PGF -> CString -> IO ()
-gf_readPGF pt path = do
-  p <- (peekCString path)
-  result <- (readPGF p)
-  poke pt result
+foreign export ccall gf_readPGF :: CString -> IO (Ptr PGF)
+gf_readPGF path = do
+  ppgf <- pyPGF
+  p <- peekCString path
+  readPGF p >>= poke ppgf
+  return ppgf
   
 foreign export ccall gf_readLanguage :: Ptr Language -> CString -> IO Bool
 gf_readLanguage pt str = do
@@ -107,10 +109,12 @@ gf_readLanguage pt str = do
             return True
     Nothing -> return False
 
-foreign export ccall gf_startCat :: Ptr PGF -> Ptr Type -> IO ()
-gf_startCat ppgf pcat= do
+foreign export ccall gf_startCat :: Ptr PGF -> IO (Ptr Type)
+gf_startCat ppgf = do
   pgf <- peek ppgf
+  pcat <- pyType
   poke pcat (startCat pgf)
+  return pcat
 
 foreign export ccall gf_parse :: Ptr PGF -> Ptr Language -> Ptr Type -> CString -> IO  (Ptr ())
 gf_parse ppgf plang pcat input = do
@@ -157,10 +161,12 @@ gf_showPrintName ppgf plang pcid = do
   cid <- peek pcid
   newCString (showPrintName pgf lang cid)
 
-foreign export ccall gf_abstractName :: Ptr PGF -> Ptr Language -> IO ()
-gf_abstractName ppgf pabs = do
+foreign export ccall gf_abstractName :: Ptr PGF -> IO (Ptr Language)
+gf_abstractName ppgf = do
+  pabs <- pyLang
   pgf <- peek ppgf
   poke pabs $ abstractName pgf
+  return pabs
 
 foreign export ccall gf_linearize :: Ptr PGF -> Ptr Language -> Ptr Tree -> IO CString
 gf_linearize ppgf plang ptree = do
@@ -221,12 +227,16 @@ gf_unstr pexp = do
         Just s -> newCString s
         _      -> return nullPtr
 
-foreign export ccall gf_inferexpr :: Ptr PGF -> Ptr Expr -> Ptr Type -> IO ()
-gf_inferexpr ppgf pexp ptype = do
+foreign export ccall gf_inferexpr :: Ptr PGF -> Ptr Expr -> IO (Ptr Type)
+gf_inferexpr ppgf pexp = do
     pgf <- peek ppgf
     exp <- peek pexp
-    let Right (_,t) = inferExpr pgf exp
-    poke ptype t
+    case inferExpr pgf exp of
+      Right (_,t) -> do
+                 ptype <- pyType
+                 poke ptype t
+                 return ptype
+      Left _       -> return nullPtr 
 
 
 foreign export ccall gf_functions :: Ptr PGF -> IO (Ptr ())
@@ -247,6 +257,7 @@ gf_functiontype ppgf pcid = do
 
 
 foreign import ccall "newLang" pyLang :: IO (Ptr Language) 
+foreign import ccall "newPGF" pyPGF :: IO (Ptr PGF) 
 foreign import ccall "newTree" pyTree :: IO (Ptr Tree) 
 foreign import ccall "newgfType" pyType :: IO (Ptr Type) 
 foreign import ccall "newCId" pyCId :: IO (Ptr CId) 

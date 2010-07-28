@@ -20,7 +20,7 @@ checkType(void* obj, PyTypeObject* tp)
 
 /* new types and declarations */
 
-NEWGF(CId,GF_CId,CIdType,"gf.cid","c identifier")
+NEWGF(CId,GF_CId,CIdType,"gf.cid","identifier")
 NEWGF(Lang,GF_Language,LangType,"gf.lang","language")
 NEWGF(gfType,GF_Type,gfTypeType,"gf.type","gf type")
 NEWGF(PGF,GF_PGF,PGFType,"gf.pgf","PGF module")
@@ -39,14 +39,16 @@ DEALLOCFN(PGF_dealloc, PGF, gf_freePGF, "freePGF")
 
 static PyObject* 
 pgf_repr(PGF *self) {
-  Lang lang;
-  gf_abstractName(self, &lang);
-  const char* abs = gf_showLanguage(&lang);
-  gf_freeLanguage(&lang);					     
-  return PyString_FromFormat("<gf.pgf with abstract %s at 0x%x>", abs, self->obj);
+  Lang* lang = gf_abstractName(self);
+  char* abs = gf_showLanguage(lang);
+  // gf_freeLanguage(&lang);
+  Py_DECREF(lang);					     
+  PyObject* str = PyString_FromFormat("<gf.pgf with abstract %s>", abs);
+  free(abs);
+return str;
 }
 
-static gfType*
+/* static gfType*
 startCategory(PGF *self, PyObject *noarg)
 {
   gfType *cat;
@@ -56,7 +58,7 @@ startCategory(PGF *self, PyObject *noarg)
   return cat;
 }
 
-/* inline static PyObject*
+inline static PyObject*
 categories(PGF* self)
 {
   return gf_categories(self);
@@ -98,22 +100,21 @@ linearize(PGF *self, PyObject *args)
 {
   Lang *lang;
   Tree *tree;
-  if (!checkType(self,&PGFType)) return NULL;
   if (!PyArg_ParseTuple(args, "OO", &lang, &tree))
     return NULL;
   if (!checkType(lang,&LangType)) return NULL;
   if (!checkType(tree,&TreeType)) return NULL;
   char* c_lin = gf_linearize(self, lang, tree);
-  return PyString_FromString(c_lin);
+  PyObject* lin = PyString_FromString(c_lin);
+  free(c_lin);
+  return lin;
 }
 
 static Lang*
 abstractName(PGF *self)
 {
-  Lang* abs_name = (Lang*)LangType.tp_new(&LangType,NULL,NULL);
   if (!checkType(self,&PGFType)) return NULL;
-  gf_abstractName(self, abs_name);
-  return abs_name;
+  return gf_abstractName(self);
 }
 
 static PyObject*
@@ -142,19 +143,15 @@ functiontype(PGF *self, PyObject* args)
     PyErr_Format(PyExc_TypeError, "Must be a gf identifier.");
     return NULL;
   }
-  // gftp = (gfType)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
   return gf_functiontype(self, cid);
-  // return gftp;
 }
 
 
 static PyObject*
 parse(PGF *self, PyObject *args, PyObject *kws)
 {
-	PyObject *lang, *cat = NULL;
-	//GF_PGF pgf;
-	// GF_Language lang;
-	// GF_Type cat;
+	Lang *lang;
+	gfType *cat = NULL;
 	char *lexed;
 	static char *kwlist[] = {"lexed", "lang", "cat", NULL};
 	if (!PyArg_ParseTupleAndKeywords(args, kws, "sO|O", kwlist,
@@ -165,7 +162,7 @@ parse(PGF *self, PyObject *args, PyObject *kws)
 	if (cat) {
 	  if (!checkType(cat, &gfTypeType)) return NULL;
 	} else { 
-	  cat = (PyObject*)startCategory(self,NULL);		
+	  cat = gf_startCat(self);		
 	} 
 	return gf_parse(self, lang, cat, lexed);
 }
@@ -175,17 +172,14 @@ readPGF(PyObject *self, PyObject *args)
 {
   char *path;
   struct stat info;
-  PGF *pgf;
   if (!PyArg_ParseTuple(args, "s", &path))
     return NULL;
   if (stat(path, &info) == 0) {
-    pgf = (PGF*)PGFType.tp_new(&PGFType,NULL,NULL);
-    if (!pgf) return NULL;
-    gf_readPGF(pgf, path);
-    return pgf;
+    	PGF* pgf = gf_readPGF(path);
+    	return pgf;
   } else {
-    PyErr_Format(PyExc_IOError, "No such file: %s", path);
-    return NULL;
+		PyErr_Format(PyExc_IOError, "No such file: %s", path);
+    	return NULL;
   }
 }
 
@@ -197,7 +191,7 @@ static PyMethodDef pgf_methods[] = {
   {"lang_code", (PyCFunction)languageCode, METH_VARARGS,"Get the language code."},
   {"print_name", (PyCFunction)printName, METH_VARARGS,"Get the print name for a id."},
   {"fun_type", (PyCFunction)functiontype, METH_VARARGS,"Get the type of a fun expression."},
-  {"startcat", (PyCFunction)startCategory, METH_NOARGS,"Get the start category."},
+  {"startcat", (PyCFunction)gf_startCat, METH_NOARGS,"Get the start category."},
   {"categories", (PyCFunction)gf_categories, METH_NOARGS,"Get all categories."},
   {"functions", (PyCFunction)gf_functions, METH_NOARGS,"Get all functions."},
   {"abstract", (PyCFunction)abstractName, METH_NOARGS,"Get the module abstract name."},
@@ -269,9 +263,8 @@ infer_expr(Expr *self, PyObject* args) {
     PyErr_Format(PyExc_ValueError, "Must be a pgf module.");
     return NULL;
   }
-  gfType* gftp = (gfType*)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
-  gf_inferexpr(pgf, self, gftp);
-  return (PyObject*)gftp;
+  // gfType* gftp = (gfType*)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
+  return gf_inferexpr(pgf, self);
 }
 
 
@@ -301,7 +294,6 @@ DEALLOCFN(Tree_dealloc, Tree, gf_freeTree, "freeTree")
 static PyMethodDef gf_methods[] = {
   {"read_pgf", (PyCFunction)readPGF, METH_VARARGS,"Read pgf file."},
   {"read_language", (PyCFunction)readLang, METH_VARARGS,"Get the language."},
-  {"startcat", (PyCFunction)startCategory, METH_VARARGS,"Get the start category of a pgf module."},
   {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
