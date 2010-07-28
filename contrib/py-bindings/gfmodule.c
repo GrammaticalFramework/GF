@@ -41,41 +41,11 @@ static PyObject*
 pgf_repr(PGF *self) {
   Lang* lang = gf_abstractName(self);
   char* abs = gf_showLanguage(lang);
-  // gf_freeLanguage(&lang);
   Py_DECREF(lang);					     
   PyObject* str = PyString_FromFormat("<gf.pgf with abstract %s>", abs);
   free(abs);
 return str;
 }
-
-/* static gfType*
-startCategory(PGF *self, PyObject *noarg)
-{
-  gfType *cat;
-  if (!checkType(self, &PGFType)) return NULL;
-  cat = (gfType*)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
-  gf_startCat(self, cat);
-  return cat;
-}
-
-inline static PyObject*
-categories(PGF* self)
-{
-  return gf_categories(self);
-}
-
-inline static PyObject*
-functions(PGF* self)
-{
-  return gf_functions(self);
-  }
-
-inline static PyObject*
-languages(PGF* self)
-{
-  return gf_languages(self);
-}
-*/
 
 static PyObject*
 languageCode(PGF *self, PyObject *args)
@@ -263,7 +233,6 @@ infer_expr(Expr *self, PyObject* args) {
     PyErr_Format(PyExc_ValueError, "Must be a pgf module.");
     return NULL;
   }
-  // gfType* gftp = (gfType*)gfTypeType.tp_new(&gfTypeType,NULL,NULL);
   return gf_inferexpr(pgf, self);
 }
 
