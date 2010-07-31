@@ -9,8 +9,7 @@ Student = MassNP (UseN student_N) ;
 Teacher = MassNP (UseN teacher_N) ;
 
 
--- subclasses 
-Apple = UseN apple_N ;
+-- subclasses
 ArtSchool = ApposCN (UseN art_N) (MassNP (UseN school_N)) ;
 Beer = UseN beer_N ;
 BirdEgg = ApposCN (UseN bird_N) (MassNP (UseN egg_N)) ;

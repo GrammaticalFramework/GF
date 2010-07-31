@@ -2,7 +2,8 @@
 
 concrete SUMOFre of SUMO =
         MergeFre,
-        MidLevelOntologyFre
+        MidLevelOntologyFre,
+        EconomyFre
         
 
 ** {
