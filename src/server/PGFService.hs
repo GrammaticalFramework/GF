@@ -8,6 +8,7 @@ import URLEncoding
 
 import Network.FastCGI
 import Text.JSON
+import Text.PrettyPrint (render, text, (<+>))
 import qualified Codec.Binary.UTF8.String as UTF8 (encodeString, decodeString)
 import qualified Data.ByteString.Lazy as BS
 
@@ -65,9 +66,16 @@ pgfMain pgf command =
     getText = liftM (maybe "" (urlDecodeUnicode . UTF8.decodeString)) $ getInput "input"
 
     getTree :: CGI PGF.Tree
-    getTree = do mt <- getInput "tree"
-                 t <- maybe (throwCGIError 400 "No tree given" ["No tree given"]) return mt
-                 maybe (throwCGIError 400 "Bad tree" ["Bad tree: " ++ t]) return (PGF.readExpr t)
+    getTree = do ms <- getInput "tree"
+                 s <- maybe (throwCGIError 400 "No tree given" ["No tree given"]) return ms
+                 t <- maybe (throwCGIError 400 "Bad tree" ["tree: " ++ s]) return (PGF.readExpr s)
+                 t <- either (\err -> throwCGIError 400 "Type incorrect tree" 
+                                                        ["tree: " ++ PGF.showExpr [] t
+                                                        ,render (text "error:" <+> PGF.ppTcError err)
+                                                        ])
+                             (return . fst)
+                             (PGF.inferExpr pgf t)
+                 return t
 
     getCat :: CGI (Maybe PGF.Type)
     getCat = 
