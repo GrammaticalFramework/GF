@@ -17,7 +17,7 @@ import Control.Exception
 import Control.Monad
 import Data.Char
 import Data.Function (on)
-import Data.List (sortBy,intersperse)
+import Data.List (sortBy,intersperse,mapAccumL)
 import qualified Data.Map as Map
 import Data.Maybe
 import System.Directory
@@ -288,6 +288,7 @@ pipeIt2graphviz code = do
 doBrowse pgf id cssClass href =
   case PGF.browse pgf id of
     Just (def,ps,cs) -> "<PRE>"++annotate def++"</PRE>\n"++
+                        syntax++
                         (if not (null ps)
                            then "<BR/>"++
                                 "<H3>Producers</H3>"++
@@ -300,6 +301,30 @@ doBrowse pgf id cssClass href =
                            else "")
     Nothing          -> ""
   where
+    syntax = 
+      case PGF.functionType pgf id of
+        Just ty -> let (hypos,_,_) = PGF.unType ty
+                       e          = PGF.mkApp id (snd $ mapAccumL mkArg (1,1) hypos)
+                       rows = ["<TR class=\"my-SyntaxRow\">"++
+                               "<TD class=\"my-SyntaxLang\">"++PGF.showCId lang++"</TD>"++
+                               "<TD class=\"my-SyntaxLin\">"++PGF.linearize pgf lang e++"</TD>"++
+                               "</TR>"
+                                            | lang <- PGF.languages pgf]
+                   in "<BR/>"++
+                      "<H3>Syntax</H3>"++
+                      "<TABLE class=\"my-SyntaxTable\">\n"++
+                      "<TR class=\"my-SyntaxRow\">"++
+                      "<TD class=\"my-SyntaxLang\">"++PGF.showCId (PGF.abstractName pgf)++"</TD>"++
+                      "<TD class=\"my-SyntaxLin\">"++PGF.showExpr [] e++"</TD>"++
+                      "</TR>\n"++
+                      unlines rows++"\n</TABLE>"
+        Nothing -> ""
+
+    mkArg (i,j) (_,_,ty) = ((i+1,j+length hypos),e)
+      where
+        e = foldr (\(j,(bt,_,_)) -> PGF.mkAbs bt (PGF.mkCId ('X':show j))) (PGF.mkMeta i) (zip [j..] hypos)
+        (hypos,_,_) = PGF.unType ty
+
     identifiers = PGF.functions pgf ++ PGF.categories pgf
 
     annotate []   = []
