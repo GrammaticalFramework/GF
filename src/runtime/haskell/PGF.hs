@@ -43,6 +43,7 @@ module PGF(
            -- ** Expr
            Expr,
            showExpr, readExpr,
+           mkAbs,    unAbs,
            mkApp,    unApp,
            mkStr,    unStr,
            mkInt,    unInt,

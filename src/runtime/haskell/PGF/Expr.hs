@@ -1,6 +1,7 @@
 module PGF.Expr(Tree, BindType(..), Expr(..), Literal(..), Patt(..), Equation(..),
                 readExpr, showExpr, pExpr, pBinds, ppExpr, ppPatt, pattScope,
 
+                mkAbs,    unAbs,
                 mkApp,    unApp,
                 mkStr,    unStr,
                 mkInt,    unInt,
@@ -95,6 +96,15 @@ showExpr vars = PP.render . ppExpr 0 vars
 
 instance Read Expr where
     readsPrec _ = RP.readP_to_S pExpr
+
+mkAbs :: BindType -> CId -> Expr -> Expr
+mkAbs = EAbs
+
+unAbs :: Expr -> Maybe (BindType, CId, Expr)
+unAbs (EAbs bt x e) = Just (bt,x,e)
+unAbs (ETyped e ty) = unAbs e
+unAbs (EImplArg e)  = unAbs e
+unAbs _             = Nothing
 
 -- | Constructs an expression by applying a function to a list of expressions
 mkApp :: CId -> [Expr] -> Expr
