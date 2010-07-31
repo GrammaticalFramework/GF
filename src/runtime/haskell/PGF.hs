@@ -47,7 +47,7 @@ module PGF(
            mkStr,    unStr,
            mkInt,    unInt,
            mkDouble, unDouble,
-           mkMeta,   isMeta,
+           mkMeta,   unMeta,
 
            -- * Operations
            -- ** Linearization
