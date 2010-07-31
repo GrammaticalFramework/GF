@@ -30,6 +30,7 @@ module PGF(
            Type, Hypo,
            showType, readType,
            mkType, mkHypo, mkDepHypo, mkImplHypo,
+           unType,
            categories, startCat,
 
            -- * Functions

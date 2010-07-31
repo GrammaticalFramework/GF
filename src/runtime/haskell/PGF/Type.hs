@@ -1,6 +1,7 @@
 module PGF.Type ( Type(..), Hypo,
                   readType, showType,
                   mkType, mkHypo, mkDepHypo, mkImplHypo,
+                  unType,
                   pType, ppType, ppHypo ) where
 
 import PGF.CId
@@ -50,6 +51,9 @@ mkDepHypo x ty = (Explicit,x,ty)
 -- | creates hypothesis for dependent type with implicit argument i.e. ({x} : A)
 mkImplHypo :: CId -> Type -> Hypo
 mkImplHypo x ty = (Implicit,x,ty)
+
+unType :: Type -> ([Hypo], CId, [Expr])
+unType (DTyp hyps cat es) = (hyps, cat, es)
 
 pType :: RP.ReadP Type
 pType = do
