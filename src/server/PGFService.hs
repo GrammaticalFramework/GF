@@ -327,17 +327,21 @@ doBrowse pgf id cssClass href =
 
     identifiers = PGF.functions pgf ++ PGF.categories pgf
 
-    annotate []   = []
+    annotate []          = []
     annotate (c:cs)
-      | isSpace c = c : annotate cs
-      | otherwise = let (id,cs') = break isSpace (c:cs)
-                    in (if PGF.mkCId id `elem` identifiers
-                          then mkLink id
-                          else if id == "fun" || id == "data" || id == "cat" || id == "def"
-                                 then "<B>"++id++"</B>"
-                                 else id) ++
-                       annotate cs'
+      | isIdentInitial c = let (id,cs') = break (not . isIdentChar) (c:cs)
+                           in (if PGF.mkCId id `elem` identifiers
+                                 then mkLink id
+                                 else if id == "fun" || id == "data" || id == "cat" || id == "def"
+                                        then "<B>"++id++"</B>"
+                                        else id) ++
+                              annotate cs'
+      | otherwise        = c : annotate cs
+
     annotateCIds ids = unwords (map (mkLink . PGF.showCId) ids)
+    
+    isIdentInitial c = isAlpha c || c == '_'
+    isIdentChar    c = isAlphaNum c || c == '_' || c == '\''
 
     hrefAttr id =
       case href of
