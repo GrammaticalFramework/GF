@@ -1,6 +1,10 @@
 --# -path=.:RGLExt:alltenses
 
-concrete BasicRon of Basic = CatRon - [Text] ** open DictLangRon,ResRon, Prelude, ParamBasic,Coordination, ParadigmsRon in{
+concrete BasicRon of Basic = CatRon - [Text] ** open DictLangRon,ResRon, Prelude, ParamBasic,Coordination, ParadigmsRon in {
+
+flags
+  coding=utf8 ;
+
 lincat 
  Class = CN ;
  El = NP ;
