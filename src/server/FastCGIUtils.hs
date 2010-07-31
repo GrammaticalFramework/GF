@@ -177,7 +177,7 @@ outputPNG x = do
 outputHTML :: String -> CGI CGIResult
 outputHTML x = do
        setHeader "Content-Type" "text/html"
-       outputStrict x
+       outputStrict $ UTF8.encodeString x
 
 outputStrict :: String -> CGI CGIResult
 outputStrict x | x == x = output x
