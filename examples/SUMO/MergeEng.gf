@@ -95,7 +95,7 @@ lin
   
   -- subclass declarations :
   AbnormalAnatomicalStructure = AdjCN (PositA abnormal_A) (AdjCN (PositA anatomical_A) (UseN structure_N)) ;
-  Abstract = UseN abstract_N ;
+  Abstract = AdjCN (PositA abstract_A) (UseN entity_N) ;
   Adjective = UseN adjective_N ;
   Adverb = UseN adverb_N ;
   Advertising = UseN2 (VerbToNounV2 advertise_V2) ;
@@ -191,8 +191,9 @@ lin
   ConsciousnessAttribute = ApposCN (UseN consciousness_N) (MassNP (UseN attribute_N)) ;
   ConstantQuantity = AdjCN (PositA constant_A) (UseN quantity_N) ;
   Constructing = UseN2 (VerbToNounV2 construct_V2) ;
-  ContentBearingObject = AdjCN (PositA content_A) (AdjCN (PositA (VerbToGerundA bear_V2)) (UseN object_N)) ;
-  ContentBearingProcess = AdjCN (PositA content_A) (AdjCN (PositA (VerbToGerundA bear_V)) (UseN process_N)) ;
+  ContentBearingObject = AdjCN (PositA (mkA "content-bearing")) (UseN object_N) ;
+  ContentBearingPhysical = AdjCN (PositA (mkA "content-bearing")) (AdjCN (PositA physical_A) (UseN entity_N)) ;
+  ContentBearingProcess = AdjCN (PositA (mkA "content-bearing")) (UseN process_N) ;
   ContentDevelopment = AdjCN (PositA content_A) (UseN development_N) ;
   Contest = UseN contest_N ;
   ContestAttribute = ApposCN (UseN contest_N) (MassNP (UseN attribute_N)) ;
@@ -445,6 +446,7 @@ lin
   Periodical = UseN periodical_N ;
   PermanentResidence = AdjCN (PositA permanent_A) (UseN residence_N) ;
   Phrase = UseN phrase_N ;
+  Physical = AdjCN (PositA physical_A) (UseN entity_N) ;
   PhysicalAttribute = AdjCN (PositA physical_A) (UseN attribute_N) ;
   PhysicalQuantity = AdjCN (PositA physical_A) (UseN quantity_N) ;
   PhysicalState = AdjCN (PositA physical_A) (UseN state_N) ;
