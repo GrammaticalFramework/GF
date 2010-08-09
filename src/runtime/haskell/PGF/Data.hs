@@ -36,6 +36,7 @@ data Concr = Concr {
   cflags       :: Map.Map CId Literal,                               -- value of a flag
   printnames   :: Map.Map CId String,                                -- printname of a cat or a fun
   cncfuns      :: Array FunId CncFun,
+  lindefs      :: IntMap.IntMap [FunId],
   sequences    :: Array SeqId Sequence,
   productions  :: IntMap.IntMap (Set.Set Production),                -- the original productions loaded from the PGF file
   pproductions :: IntMap.IntMap (Set.Set Production),                -- productions needed for parsing
@@ -51,14 +52,16 @@ type DotPos = Int
 data Symbol
   = SymCat {-# UNPACK #-} !Int {-# UNPACK #-} !LIndex
   | SymLit {-# UNPACK #-} !Int {-# UNPACK #-} !LIndex
+  | SymVar {-# UNPACK #-} !Int {-# UNPACK #-} !Int
   | SymKS [Token]
   | SymKP [Token] [Alternative]
   deriving (Eq,Ord,Show)
 data Production
-  = PApply  {-# UNPACK #-} !FunId [FId]
+  = PApply  {-# UNPACK #-} !FunId [PArg]
   | PCoerce {-# UNPACK #-} !FId
   | PConst  CId Expr [Token]
   deriving (Eq,Ord,Show)
+data PArg = PArg [(FId,FId)] {-# UNPACK #-} !FId deriving (Eq,Ord,Show)
 data CncCat = CncCat {-# UNPACK #-} !FId {-# UNPACK #-} !FId {-# UNPACK #-} !(Array LIndex String)
 data CncFun = CncFun CId {-# UNPACK #-} !(UArray LIndex SeqId) deriving (Eq,Ord,Show)
 type Sequence = Array DotPos Symbol

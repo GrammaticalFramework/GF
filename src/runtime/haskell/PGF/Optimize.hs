@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 module PGF.Optimize
              ( optimizePGF
              , updateProductionIndices
@@ -16,6 +17,7 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.IntSet as IntSet
 import qualified Data.IntMap as IntMap
+import qualified Data.List as List
 import Control.Monad.ST
 import GF.Data.Utilities(sortNub)
 
@@ -29,14 +31,20 @@ updateProductionIndices pgf = pgf{concretes = fmap (updateConcrete (abstract pgf
 
 topDownFilter :: CId -> Concr -> Concr
 topDownFilter startCat cnc =
-  let ((seqs,funs),prods) = IntMap.mapAccumWithKey (\env res set  -> mapAccumLSet (optimize res) env set)
-                                                   (Map.empty,Map.empty)
-                                                   (productions cnc)
+  let env0         = (Map.empty,Map.empty)
+      (env1,defs)  = IntMap.mapAccumWithKey (\env fid funids -> mapAccumL (optimizeFun fid [PArg [] fidVar]) env funids) 
+                                            env0
+                                            (lindefs cnc)
+      (env2,prods) = IntMap.mapAccumWithKey (\env fid set  -> mapAccumLSet (optimizeProd fid) env set)
+                                            env1
+                                            (productions cnc)
       cats = Map.mapWithKey filterCatLabels (cnccats cnc)
+      (seqs,funs) = env2
   in cnc{ sequences   = mkSetArray seqs
         , cncfuns     = mkSetArray funs
         , productions = prods
         , cnccats     = cats
+        , lindefs     = defs
         }
   where
     fid2cat fid =
@@ -46,8 +54,8 @@ topDownFilter startCat cnc =
                       (fid:_) -> fid2cat fid
                       _       -> error "unknown forest id"
       where
-        fid2catMap = IntMap.fromList [(fid,cat) | (cat,CncCat start end lbls) <- Map.toList (cnccats cnc),
-                                                  fid <- [start..end]]
+        fid2catMap = IntMap.fromList ((fidVar,cidVar) :  [(fid,cat) | (cat,CncCat start end lbls) <- Map.toList (cnccats cnc),
+                                                                      fid <- [start..end]])
 
     starts =
       case Map.lookup startCat (cnccats cnc) of
@@ -64,11 +72,11 @@ topDownFilter startCat cnc =
             CncFun _ lin = cncfuns cnc ! funid
         rel fid _                   = Map.empty
 
-        deps args seqid = Set.fromList [(fid2cat (args !! r),d) | SymCat r d <- elems seq]
+        deps args seqid = Set.fromList [let PArg _ fid = args !! r in (fid2cat fid,d) | SymCat r d <- elems seq]
           where
             seq = sequences cnc ! seqid
 
-    -- here we create a mapping from category to an array of indices.
+    -- here we create a mapping from a category to an array of indices.
     -- An element of the array is equal to -1 if the corresponding index
     -- is not going to be used in the optimized grammar, or the new index
     -- if it will be used
@@ -122,11 +130,16 @@ topDownFilter startCat cnc =
                                       reindex indices (i+1) j (k+1)
               | otherwise = return ()
 
-    optimize res (seqs,funs) (PApply funid args) =
+    optimizeProd res env (PApply funid args) =
+      let (env',funid') = optimizeFun res args env funid
+      in (env', PApply funid' args)
+    optimizeProd res env prod = (env,prod)
+    
+    optimizeFun res args (seqs,funs) funid =
       let (seqs',lin') = mapAccumL addUnique seqs [amap updateSymbol (sequences cnc ! seqid) | 
                                                           (lbl,seqid) <- assocs lin, indicesOf res ! lbl >= 0]
           (funs',funid') = addUnique funs (CncFun fun (mkArray lin'))
-      in ((seqs',funs'), PApply funid' args)
+      in ((seqs',funs'), funid')
       where
         CncFun fun lin = cncfuns cnc ! funid
 
@@ -140,11 +153,10 @@ topDownFilter startCat cnc =
             Just seqid -> (seqs,seqid)
             Nothing    -> let seqid = Map.size seqs
                           in (Map.insert seq seqid seqs, seqid)
-                          
-        updateSymbol (SymCat r d) = SymCat r (indicesOf (args !! r) ! d)
+
+        updateSymbol (SymCat r d) = let PArg _ fid = args !! r in SymCat r (indicesOf fid ! d)
         updateSymbol s            = s
-    optimize res env prod = (env,prod)
-    
+
     filterCatLabels cat (CncCat start end lbls) =
       case Map.lookup cat closure of
         Just indices -> let lbls' = mkArray [lbl | (i,lbl) <- assocs lbls, indices ! i >= 0]
@@ -159,50 +171,35 @@ topDownFilter startCat cnc =
 
 
 bottomUpFilter :: Concr -> Concr
-bottomUpFilter cnc = cnc{productions=filterProductions IntMap.empty (productions cnc)}
+bottomUpFilter cnc = cnc{productions=filterProductions IntMap.empty IntSet.empty (productions cnc)}
 
-filterProductions prods0 prods
+filterProductions prods0 hoc0 prods
   | prods0 == prods1 = prods0
-  | otherwise        = filterProductions prods1 prods
+  | otherwise        = filterProductions prods1 hoc1 prods
   where
-    prods1 = IntMap.unionWith Set.union prods0 (IntMap.mapMaybe (filterProdSet prods0) prods)
+    (prods1,hoc1) = IntMap.foldWithKey foldProdSet (IntMap.empty,IntSet.empty) prods
 
-    filterProdSet prods0 set
-      | Set.null set1 = Nothing
-      | otherwise     = Just set1
+    foldProdSet fid set (!prods,!hoc)
+      | Set.null set1 = (prods,hoc)
+      | otherwise     = (IntMap.insert fid set1 prods,hoc1)
       where
-        set1 = Set.filter (filterRule prods0) set
+        set1 = Set.filter filterRule set
+        hoc1 = Set.fold accumHOC hoc set1
 
-    filterRule prods0 (PApply funid args) = all (\fid -> isPredefFId fid || IntMap.member fid prods0) args
-    filterRule prods0 (PCoerce fid)       = isPredefFId fid || IntMap.member fid prods0
-    filterRule prods0 _                   = True
+    filterRule (PApply funid args) = all (\(PArg _ fid) -> isLive fid) args
+    filterRule (PCoerce fid)       = isLive fid
+    filterRule _                   = True
+
+    isLive fid = isPredefFId fid || IntMap.member fid prods0 || IntSet.member fid hoc0
+
+    accumHOC (PApply funid args) hoc = List.foldl' (\hoc (PArg hypos _) -> List.foldl' (\hoc (_,fid) -> IntSet.insert fid hoc) hoc hypos) hoc args
+    accumHOC _                   hoc = hoc
 
 updateConcrete abs cnc = 
-  let p_prods   = (filterProductions IntMap.empty . parseIndex cnc) (productions cnc)
-      l_prods   = (linIndex   cnc . filterProductions IntMap.empty) (productions cnc)
+  let p_prods   = filterProductions IntMap.empty IntSet.empty (productions cnc)
+      l_prods   = linIndex cnc p_prods
   in cnc{pproductions = p_prods, lproductions = l_prods}
   where
-    parseIndex cnc = IntMap.mapMaybeWithKey filterProdSet
-      where
-        filterProdSet fid prods
-          | fid `IntSet.member` ho_fids = Just prods
-          | otherwise                   = let prods' = Set.filter (not . is_ho_prod) prods
-                                          in if Set.null prods'
-                                               then Nothing
-                                               else Just prods'
-
-        is_ho_prod (PApply _ [fid]) | fid == fidVar = True
-        is_ho_prod _                                = False
-
-        ho_fids :: IntSet.IntSet
-        ho_fids = IntSet.fromList [fid | cat <- ho_cats
-                                       , fid <- maybe [] (\(CncCat s e _) -> [s..e]) (Map.lookup cat (cnccats cnc))]
-
-        ho_cats :: [CId]
-        ho_cats = sortNub [c | (ty,_,_) <- Map.elems (funs abs)
-                             , h <- case ty of {DTyp hyps val _ -> hyps}
-                             , c <- fst (catSkeleton (typeOfHypo h))]
-
     linIndex cnc productions = 
       Map.fromListWith (IntMap.unionWith Set.union)
                        [(fun,IntMap.singleton res (Set.singleton prod)) | (res,prods) <- IntMap.toList productions

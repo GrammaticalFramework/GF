@@ -71,8 +71,10 @@ children :: JS.Ident
 children = JS.Ident "cs"
 
 frule2js :: Production -> JS.Expr
-frule2js (PApply funid args) = new "Rule"   [JS.EInt funid, JS.EArray (map JS.EInt args)]
+frule2js (PApply funid args) = new "Apply"  [JS.EInt funid, JS.EArray (map farg2js args)]
 frule2js (PCoerce arg)       = new "Coerce" [JS.EInt arg]
+
+farg2js (PArg hypos fid) = new "PArg" (map (JS.EInt . snd) hypos ++ [JS.EInt fid])
 
 ffun2js (CncFun f lins) = new "CncFun" [JS.EStr (showCId f), JS.EArray (map JS.EInt (Array.elems lins))]
 
@@ -80,10 +82,11 @@ seq2js :: Array.Array DotPos Symbol -> JS.Expr
 seq2js seq = JS.EArray [sym2js s | s <- Array.elems seq]
 
 sym2js :: Symbol -> JS.Expr
-sym2js (SymCat n l)    = new "Arg" [JS.EInt n, JS.EInt l]
-sym2js (SymLit n l)    = new "Lit" [JS.EInt n, JS.EInt l]
-sym2js (SymKS ts)      = new "KS"  (map JS.EStr ts)
-sym2js (SymKP ts alts) = new "KP"  [JS.EArray (map JS.EStr ts), JS.EArray (map alt2js alts)]
+sym2js (SymCat n l)    = new "SymCat" [JS.EInt n, JS.EInt l]
+sym2js (SymLit n l)    = new "SymLit" [JS.EInt n, JS.EInt l]
+sym2js (SymVar n l)    = new "SymVar" [JS.EInt n, JS.EInt l]
+sym2js (SymKS ts)      = new "SymKS"  (map JS.EStr ts)
+sym2js (SymKP ts alts) = new "SymKP"  [JS.EArray (map JS.EStr ts), JS.EArray (map alt2js alts)]
 
 alt2js (Alt ps ts) = new "Alt" [JS.EArray (map JS.EStr ps), JS.EArray (map JS.EStr ts)]
 

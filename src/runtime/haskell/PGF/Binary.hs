@@ -51,6 +51,7 @@ instance Binary Concr where
                put (printnames cnc)
                putArray2 (sequences cnc)
                putArray (cncfuns cnc)
+               put (lindefs cnc)
                put (productions cnc)
                put (cnccats cnc)
                put (totalCats cnc)
@@ -58,11 +59,13 @@ instance Binary Concr where
            printnames  <- get
            sequences   <- getArray2
            cncfuns     <- getArray
+           lindefs     <- get
            productions <- get
            cnccats     <- get
            totalCats   <- get
            return (Concr{ cflags=cflags, printnames=printnames
-                        , sequences=sequences, cncfuns=cncfuns, productions=productions
+                        , sequences=sequences, cncfuns=cncfuns, lindefs=lindefs
+                        , productions=productions
                         , pproductions = IntMap.empty
                         , lproductions = Map.empty
                         , cnccats=cnccats, totalCats=totalCats
@@ -141,15 +144,21 @@ instance Binary CncCat where
 instance Binary Symbol where
   put (SymCat n l)       = putWord8 0 >> put (n,l)
   put (SymLit n l)       = putWord8 1 >> put (n,l)
-  put (SymKS ts)         = putWord8 2 >> put ts
-  put (SymKP d vs)       = putWord8 3 >> put (d,vs)
+  put (SymVar n l)       = putWord8 2 >> put (n,l)
+  put (SymKS ts)         = putWord8 3 >> put ts
+  put (SymKP d vs)       = putWord8 4 >> put (d,vs)
   get = do tag <- getWord8
            case tag of
              0 -> liftM2 SymCat get get
              1 -> liftM2 SymLit get get
-             2 -> liftM  SymKS  get
-             3 -> liftM2 (\d vs -> SymKP d vs) get get
+             2 -> liftM2 SymVar get get
+             3 -> liftM  SymKS  get
+             4 -> liftM2 (\d vs -> SymKP d vs) get get
              _ -> decodingError
+
+instance Binary PArg where
+  put (PArg hypos fid) = put (map snd hypos,fid)
+  get = get >>= \(hypos,fid) -> return (PArg (zip (repeat fidVar) hypos) fid)
 
 instance Binary Production where
   put (PApply ruleid args) = putWord8 0 >> put (ruleid,args)

@@ -46,7 +46,9 @@ ppCnc name cnc =
   nest 2 (ppAll ppFlag (cflags cnc) $$
           text "productions" $$
           nest 2 (vcat [ppProduction (fcat,prod) | (fcat,set) <- IntMap.toList (productions cnc), prod <- Set.toList set]) $$
-          text "functions" $$
+          text "lindefs" $$
+          nest 2 (vcat (map ppLinDef (IntMap.toList (lindefs cnc)))) $$
+          text "lin" $$
           nest 2 (vcat (map ppCncFun (assocs (cncfuns cnc)))) $$
           text "sequences" $$
           nest 2 (vcat (map ppSeq (assocs (sequences cnc)))) $$
@@ -56,8 +58,13 @@ ppCnc name cnc =
           nest 2 (vcat (map ppPrintName (Map.toList (printnames cnc))))) $$
   char '}'
 
+ppCncArg :: PArg -> Doc
+ppCncArg (PArg hyps fid)
+  | null hyps = ppFId fid
+  | otherwise = hsep (map (ppFId . snd) hyps) <+> text "->" <+> ppFId fid
+
 ppProduction (fid,PApply funid args) =
-  ppFId fid <+> text "->" <+> ppFunId funid <> brackets (hcat (punctuate comma (map ppFId args)))
+  ppFId fid <+> text "->" <+> ppFunId funid <> brackets (hcat (punctuate comma (map ppCncArg args)))
 ppProduction (fid,PCoerce arg) =
   ppFId fid <+> text "->" <+> char '_' <> brackets (ppFId arg)
 ppProduction (fid,PConst _ _ ss) =
@@ -65,6 +72,9 @@ ppProduction (fid,PConst _ _ ss) =
 
 ppCncFun (funid,CncFun fun arr) =
   ppFunId funid <+> text ":=" <+> parens (hcat (punctuate comma (map ppSeqId (elems arr)))) <+> brackets (ppCId fun)
+
+ppLinDef (fid,funids) = 
+  ppFId fid <+> text "->" <+> hcat (punctuate comma (map ppFunId funids))
 
 ppSeq (seqid,seq) = 
   ppSeqId seqid <+> text ":=" <+> hsep (map ppSymbol (elems seq))
@@ -78,6 +88,7 @@ ppPrintName (id,name) =
 
 ppSymbol (SymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
 ppSymbol (SymLit d r) = char '{' <> int d <> comma <> int r <> char '}'
+ppSymbol (SymVar d r) = char '<' <> int d <> comma <> char '$' <> int r <> char '>'
 ppSymbol (SymKS ts)   = ppStrs ts
 ppSymbol (SymKP ts alts) = text "pre" <+> braces (hsep (punctuate semi (ppStrs ts : map ppAlt alts)))
 

@@ -86,13 +86,11 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
         mkRhs = concatMap symbolToCFSymbol . Array.elems
 
         containsLiterals :: Array DotPos Symbol -> Bool
-        containsLiterals row = any isPredefFId [args!!n | SymCat n _ <- Array.elems row] ||
-                               not (null [n | SymLit n _ <- Array.elems row])   -- only this is needed for PMCFG.
-                                                                                -- The first line is for backward compat.
+        containsLiterals row = not (null ([n | SymLit n _ <- Array.elems row] ++
+                                          [n | SymVar n _ <- Array.elems row]))
 
         symbolToCFSymbol :: Symbol -> [CFSymbol]
-        symbolToCFSymbol (SymCat n l)    = [NonTerminal (fcatToCat (args!!n) l)]
-        symbolToCFSymbol (SymLit n l)    = [NonTerminal (fcatToCat (args!!n) l)]
+        symbolToCFSymbol (SymCat n l)    = [let PArg _ fid = args!!n in NonTerminal (fcatToCat fid l)]
         symbolToCFSymbol (SymKS ts)      = map Terminal ts
         symbolToCFSymbol (SymKP ts as)   = map Terminal $ ts 
                                            ---- ++ [t | Alt ss _ <- as, t <- ss]

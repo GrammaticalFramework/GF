@@ -28,7 +28,7 @@ import PGF.CId (CId,showCId,ppCId,pCId,mkCId)
 import PGF.Data
 import PGF.Expr (showExpr, Tree)
 import PGF.Linearize
-import PGF.Macros (lookValCat, lookMap, _B, _V,
+import PGF.Macros (lookValCat, lookMap,
                    BracketedString(..), BracketedTokn(..), flattenBracketedString)
 
 import qualified Data.Map as Map
@@ -286,17 +286,14 @@ linTree pgf lang mark e = lin0 [] [] [] Nothing e
 
     lin0 path xs ys mb_fid (EAbs _ x e)  = lin0 path (showCId x:xs) ys mb_fid e
     lin0 path xs ys mb_fid (ETyped e _)  = lin0 path xs ys mb_fid e
-    lin0 path xs ys mb_fid e | null xs   = lin path ys mb_fid e []
-                             | otherwise = apply path (xs ++ ys) mb_fid _B (e:[ELit (LStr x) | x <- xs])
+    lin0 path xs ys mb_fid e             = lin path ys mb_fid e []
 
     lin path xs mb_fid (EApp e1 e2) es = lin path xs mb_fid e1 (e2:es)
     lin path xs mb_fid (ELit l)     [] = case l of
                                            LStr s -> return (mark Nothing path (ss s))
                                            LInt n -> return (mark Nothing path (ss (show n)))
                                            LFlt f -> return (mark Nothing path (ss (show f)))
-    lin path xs mb_fid (EMeta i)    es = apply path xs mb_fid _V (ELit (LStr ('?':show i)):es)
     lin path xs mb_fid (EFun f)     es = map (mark (Just f) path) (apply path xs mb_fid f  es)
-    lin path xs mb_fid (EVar  i)    es = apply path xs mb_fid _V (ELit (LStr (xs !! i))   :es)
     lin path xs mb_fid (ETyped e _) es = lin path xs mb_fid e es
     lin path xs mb_fid (EImplArg e) es = lin path xs mb_fid e es
 
@@ -308,21 +305,16 @@ linTree pgf lang mark e = lin0 [] [] [] Nothing e
                         Just set -> do prod <- Set.toList set
                                        case prod of
                                          PApply funid fids -> do guard (length fids == length es)
-                                                                 args <- sequence (zipWith3 (\i fid e -> lin0 (sub i path) [] xs (Just fid) e) [0..] fids es)
+                                                                 args <- sequence (zipWith3 (\i (PArg _ fid) e -> lin0 (sub i path) [] xs (Just fid) e) [0..] fids es)
                                                                  let (CncFun _ lins) = cncfuns cnc ! funid
                                                                  return (listArray (bounds lins) [computeSeq seqid args | seqid <- elems lins])
                                          PCoerce fid       -> apply path xs (Just fid) f es
                         Nothing  -> mzero
-        Nothing    -> apply path xs mb_fid _V [ELit (LStr ("[" ++ showCId f ++ "]"))]  -- fun without lin
       where
         lookupProds (Just fid) prods = IntMap.lookup fid prods
-        lookupProds Nothing    prods
-            | f == _B || f == _V     = Nothing
-            | otherwise              = Just (Set.filter isApp (Set.unions (IntMap.elems prods)))
+        lookupProds Nothing    prods = Just (Set.filter isApp (Set.unions (IntMap.elems prods)))
 
-        sub i path
-          | f == _B || f == _V =   path
-          | otherwise          = i:path
+        sub i path = i:path
 
         isApp (PApply _ _) = True
         isApp _            = False

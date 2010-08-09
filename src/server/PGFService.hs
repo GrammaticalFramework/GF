@@ -135,6 +135,7 @@ doTranslate pgf input mcat mfrom mto =
                                                                   | (to,output) <- linearizeAndBind pgf mto tree]
                                                             )]
                                                    | tree <- trees])]
+    jsonParseOutput (PGF.ParseIncomplete)= []
     jsonParseOutput (PGF.ParseFailed _)  = []
     jsonParseOutput (PGF.TypeError errs) = [("typeErrors",showJSON [toJSObject [("fid", showJSON fid)
                                                                                ,("msg", showJSON (show (PGF.ppTcError err)))

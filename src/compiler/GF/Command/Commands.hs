@@ -1013,8 +1013,9 @@ allCommands env@(pgf, mos) = Map.fromList [
                                 TypeError errs -> ([], render (text "The parsing is successful but the type checking failed with error(s):" $$ 
                                                                nest 2 (vcat (map (ppTcError . snd) errs)))
                                                        ++ "\n" ++ msg)
-                                ParseFailed i  -> ([], "parse failed at token " ++ show (words s !! max 0 (i-1))
+                                ParseFailed i  -> ([], "The parser failed at token " ++ show (words s !! max 0 (i-1))
                                                        ++ "\n" ++ msg)
+                                ParseIncomplete-> ([], "The sentence is not complete")
      where
        (es,msg) = fromParse opts ps
 
