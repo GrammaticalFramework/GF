@@ -10,6 +10,7 @@ import qualified Data.IntSet as IntSet
 import qualified Data.Array  as Array
 import Data.Maybe
 import Data.List
+import Data.Array.IArray
 import Text.PrettyPrint
 
 -- operations for manipulating PGF grammars and objects
@@ -132,9 +133,6 @@ cidInt    = mkCId "Int"
 cidFloat  = mkCId "Float"
 cidVar    = mkCId "__gfVar"
 
-_B = mkCId "__gfB"
-_V = mkCId "__gfV"
-
 
 -- Utilities for doing linearization
 
@@ -162,7 +160,7 @@ data BracketedTokn
   | Bracket_ CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex [Expr] [BracketedTokn]    -- Invariant: the list is not empty
   deriving Eq
 
-type LinTable = Array.Array LIndex [BracketedTokn]
+type LinTable = ([CId],Array.Array LIndex [BracketedTokn])
 
 -- | Renders the bracketed string as string where 
 -- the brackets are shown as @(S ...)@ where
@@ -190,6 +188,34 @@ untokn nw (LeafKP d vs) = let ts = sel d vs nw
 untokn nw (Bracket_ cat fid index es bss) =
   let (nw',bss') = mapAccumR untokn nw bss
   in (nw',[Bracket cat fid index es (concat bss')])
+
+type CncType = (CId, FId)    -- concrete type is the abstract type (the category) + the forest id
+
+mkLinTable :: Concr -> (CncType -> Bool) -> [CId] -> FunId -> [(CncType,[Expr],LinTable)] -> LinTable
+mkLinTable cnc filter xs funid args = (xs,listArray (bounds lins) [computeSeq filter (elems (sequences cnc ! seqid)) args | seqid <- elems lins])
+  where
+    (CncFun _ lins) = cncfuns cnc ! funid
+
+computeSeq :: (CncType -> Bool) -> [Symbol] -> [(CncType,[Expr],LinTable)] -> [BracketedTokn]
+computeSeq filter seq args = concatMap compute seq
+  where
+    compute (SymCat d r)    = getArg d r
+    compute (SymLit d r)    = getArg d r
+    compute (SymVar d r)    = getVar d r
+    compute (SymKS ts)      = [LeafKS ts]
+    compute (SymKP ts alts) = [LeafKP ts alts]
+
+    getArg d r
+      | not (null arg_lin) &&
+        filter ct   = [Bracket_ cat fid r es arg_lin]
+      | otherwise   = arg_lin
+      where
+        arg_lin                    = lin ! r
+        (ct@(cat,fid),es,(xs,lin)) = args !! d
+
+    getVar d r = [LeafKS [showCId (xs !! r)]]
+      where
+        (ct,es,(xs,lin)) = args !! d
 
 flattenBracketedString :: BracketedString -> [String]
 flattenBracketedString (Leaf w)              = [w]

@@ -44,21 +44,26 @@ import Control.Exception
 
 convertConcrete :: Options -> SourceGrammar -> SourceModule -> SourceModule -> IO Concr
 convertConcrete opts0 gr am cm = do
-  let env0 = emptyGrammarEnv gr cm
+  let env = emptyGrammarEnv gr cm
   when (flag optProf opts) $ do
-    profileGrammar cm env0 pfrules
-  env1 <- expandHOAS opts cm env0
-  env2 <- foldM (convertRule gr opts) env1 pfrules
-  return $ getConcr flags printnames env2
+    profileGrammar cm env pfrules
+  env <- foldM (convertLinDef gr opts) env pflindefs
+  env <- foldM (convertRule gr opts) env pfrules
+  return $ getConcr flags printnames env
   where
     (m,mo) = cm
     
     opts = addOptions (M.flags (snd am)) opts0
 
+    pflindefs = [
+      ((m,id),term,lincat) |
+        (id,GF.Grammar.CncCat (Just (L _ lincat)) (Just (L _ term)) _) <- Map.toList (M.jments mo)]
+
     pfrules = [
-      (PFRule id args (0,res) (map (\(_,_,ty) -> ty) cont) val term) |
+      (PFRule id args ([],res) (map (\(_,_,ty) -> ty) cont) val term) |
         (id,GF.Grammar.CncFun (Just (cat,cont,val)) (Just (L _ term)) _) <- Map.toList (M.jments mo),
-        let (args,res) = err error typeSkeleton (lookupFunType gr (fst am) id)]
+        let (ctxt,res,_) = err error typeForm (lookupFunType gr (fst am) id)
+            args         = [catSkeleton ty | (_,_,ty) <- ctxt]]
 
     flags   = Map.fromList [(mkCId f,LStr x) | (f,x) <- optionsPGF (M.flags mo)]
 
@@ -75,15 +80,13 @@ convertConcrete opts0 gr am cm = do
 i2i :: Ident -> CId
 i2i = CId . ident2bs
 
-profileGrammar (m,mo) env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) pfrules = do
+profileGrammar (m,mo) env@(GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) pfrules = do
   hPutStrLn stderr ""
   hPutStrLn stderr ("Language: " ++ showIdent m)
   hPutStrLn stderr ""
   hPutStrLn stderr "Categories                 Count"
   hPutStrLn stderr "--------------------------------"
-  case IntMap.lookup 0 catSet of
-    Just cats -> mapM_ profileCat (Map.toList cats)
-    Nothing   -> return ()
+  mapM_ profileCat (Map.toList catSet)
   hPutStrLn stderr "--------------------------------"
   hPutStrLn stderr ""
   hPutStrLn stderr "Rules                      Count"
@@ -98,8 +101,8 @@ profileGrammar (m,mo) env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSe
       let pargs = map (protoFCat env) args
       hPutStrLn stderr (lformat 23 (showIdent fun) ++ rformat 9 (show (product (map (catFactor env) args))))
       where
-        catFactor (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) (n,(_,cat)) =
-          case IntMap.lookup n catSet >>= Map.lookup cat of
+        catFactor (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) (n,(_,cat)) =
+          case Map.lookup cat catSet of
             Just (s,e,_) -> e-s+1
             Nothing      -> 0
 
@@ -109,12 +112,40 @@ profileGrammar (m,mo) env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSe
     rformat :: Int -> String -> String
     rformat n s = replicate (n-length s) ' ' ++ s
 
-data ProtoFRule = PFRule Ident       {- function -}
-                         [(Int,Cat)] {- argument types: context size and category -}
-                         (Int,Cat)   {- result   type : context size (always 0) and category  -}
-                         [Type]      {- argument lin-types representation -}
-                         Type        {- result   lin-type  representation -}
-                         Term        {- body -}
+data ProtoFRule = PFRule Ident         {- function -}
+                         [([Cat],Cat)] {- argument types: context size and category -}
+                         ([Cat],Cat)   {- result   type : context size (always 0) and category  -}
+                         [Type]        {- argument lin-types representation -}
+                         Type          {- result   lin-type  representation -}
+                         Term          {- body -}
+
+optimize :: [ProtoFCat] -> GrammarEnv -> GrammarEnv
+optimize pargs (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) =
+  IntMap.foldWithKey optimize (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet IntMap.empty prodSet) appSet
+  where
+    optimize cat ps env = IntMap.foldWithKey ff env (IntMap.fromListWith (++) [(funid,[args]) | (funid,args) <- Set.toList ps])
+      where
+        ff :: FunId -> [[FId]] -> GrammarEnv -> GrammarEnv
+        ff funid xs env
+          | product (map Set.size ys) == count
+                      = case List.mapAccumL (\env c -> addCoercion env (Set.toList c)) env ys of
+                          (env,args) -> let xs = sequence (zipWith addContext pargs args)
+                                        in List.foldl (\env x -> addProduction env cat (PApply funid x)) env xs
+          | otherwise = List.foldl (\env args -> let xs = sequence (zipWith addContext pargs args)
+                                                 in List.foldl (\env x -> addProduction env cat (PApply funid x)) env xs) env xs
+          where
+            count = length xs
+            ys    = foldr (zipWith Set.insert) (repeat Set.empty) xs
+
+        addContext (PFCat ctxt _ _) fid = do hyps <- mapM toCncHypo ctxt
+                                             return (PArg hyps fid)
+
+        toCncHypo cat =
+          case Map.lookup cat catSet of
+            Just (s,e,_) -> do fid <- range (s,e)
+                               guard (fid `IntMap.member` lindefSet)
+                               return (fidVar,fid)
+            Nothing      -> mzero
 
 convertRule :: SourceGrammar -> Options -> GrammarEnv -> ProtoFRule -> IO GrammarEnv
 convertRule gr opts grammarEnv (PFRule fun args res ctypes ctype term) = do
@@ -123,12 +154,13 @@ convertRule gr opts grammarEnv (PFRule fun args res ctypes ctype term) = do
 
       b     = runCnvMonad gr (unfactor term >>= convertTerm opts CNil ctype) (pargs,[])
       (grammarEnv1,b1) = addSequencesB grammarEnv b
-      grammarEnv2 = brk (\grammarEnv -> foldBM addRule
-                                               grammarEnv
-                                               (goB b1 CNil [])
-                                               (pres,pargs)  ) grammarEnv1
+      grammarEnv2 = foldBM addRule
+                           grammarEnv1
+                           (goB b1 CNil [])
+                           (pres,pargs)
+      grammarEnv3 = optimize pargs grammarEnv2
   when (verbAtLeast opts Verbose) $ hPutStrLn stderr ("+ "++showIdent fun)
-  return $! grammarEnv2
+  return $! grammarEnv3
   where
     addRule lins (newCat', newArgs') env0 =
       let [newCat]        = getFIds env0 newCat'
@@ -136,24 +168,28 @@ convertRule gr opts grammarEnv (PFRule fun args res ctypes ctype term) = do
 
           (env2,funid) = addCncFun env1 (PGF.Data.CncFun (i2i fun) (mkArray lins))
 
-      in addProduction env2 newCat (PApply funid newArgs)
+      in addApplication env2 newCat (funid,newArgs)
 
-brk :: (GrammarEnv -> GrammarEnv) -> (GrammarEnv -> GrammarEnv)
-brk f (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
-  case f (GrammarEnv last_id catSet seqSet funSet crcSet IntMap.empty) of
-    (GrammarEnv last_id catSet seqSet funSet crcSet topdown1) -> IntMap.foldWithKey optimize (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) topdown1
+convertLinDef :: SourceGrammar -> Options -> GrammarEnv -> (Cat,Term,Type) -> IO GrammarEnv
+convertLinDef gr opts grammarEnv (cat,lindef,lincat) = do
+  let pres = protoFCat grammarEnv ([],cat)
+      parg = protoFCat grammarEnv ([],(identW,cVar))
+
+      b     = runCnvMonad gr (unfactor lindef >>= convertTerm opts CNil lincat) ([parg],[])
+      (grammarEnv1,b1) = addSequencesB grammarEnv b
+      grammarEnv2 = foldBM addRule
+                           grammarEnv1
+                           (goB b1 CNil [])
+                           (pres,[parg])
+  when (verbAtLeast opts Verbose) $ hPutStrLn stderr ("+ "++showCId lindefCId)
+  return $! grammarEnv2
   where
-    optimize cat ps env = IntMap.foldWithKey ff env (IntMap.fromListWith (++) [(funid,[args]) | PApply funid args <- Set.toList ps])
-      where
-        ff :: FunId -> [[FId]] -> GrammarEnv -> GrammarEnv
-        ff funid xs env
-          | product (map Set.size ys) == count = 
-                                   case List.mapAccumL (\env c -> addCoercion env (Set.toList c)) env ys of
-                                     (env,args) -> addProduction env cat (PApply funid args)
-          | otherwise                           =  List.foldl (\env args -> addProduction env cat (PApply funid args)) env xs
-          where
-            count = length xs
-            ys    = foldr (zipWith Set.insert) (repeat Set.empty) xs
+    lindefCId = mkCId ("lindef "++showIdent (snd cat))
+
+    addRule lins (newCat', newArgs') env0 =
+      let [newCat]     = getFIds env0 newCat'
+          (env1,funid) = addCncFun env0 (PGF.Data.CncFun lindefCId (mkArray lins))
+      in addLinDef env1 newCat funid
 
 unfactor :: Term -> CnvMonad Term
 unfactor t = CM (\gr c -> c (unfac gr t))
@@ -270,13 +306,13 @@ data Path
 -- The annotations are as follows: the strings are annotated with
 -- their index in the PMCFG tuple, the parameters are annotated
 -- with their value both as term and as index.
-data ProtoFCat  = PFCat Int Ident (Schema Identity Int (Int,[(Term,Int)]))
+data ProtoFCat  = PFCat [Ident] Ident Proto
 type Env        = (ProtoFCat, [ProtoFCat])
 
-protoFCat :: GrammarEnv -> (Int,Cat) -> ProtoFCat
-protoFCat (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) (n,(_,cat)) =
-  case IntMap.lookup n catSet >>= Map.lookup cat of
-    Just (_,_,pfcat) -> pfcat
+protoFCat :: GrammarEnv -> ([Cat],Cat) -> ProtoFCat
+protoFCat (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) (ctxt,(_,cat)) =
+  case Map.lookup cat catSet of
+    Just (_,_,proto) -> PFCat (map snd ctxt) cat proto
     Nothing          -> error "unknown category"
   
 ppPath (CProj lbl path) = ppLabel lbl              <+> ppPath path
@@ -330,8 +366,9 @@ convertArg opts (Sort _)      nr path = do
   (args,_) <- get
   let PFCat _ cat schema = args !! nr
       l = index (reversePath path) schema
-      sym | isLiteralCat opts cat = SymLit nr l
-          | otherwise             = SymCat nr l
+      sym | CProj (LVar i) CNil <- path = SymVar nr i
+          | isLiteralCat opts cat       = SymLit nr l
+          | otherwise                   = SymCat nr l
   return (CStr [sym])
   where
     index (CProj lbl path) (CRec   rs) = case lookup lbl rs of
@@ -391,7 +428,7 @@ addSequencesV env (CRec vs)  = let (env1,vs1) = List.mapAccumL (\env (lbl,b) -> 
 addSequencesV env (CTbl pt vs)=let (env1,vs1) = List.mapAccumL (\env (trm,b) -> let (env',b') = addSequencesB env b
                                                                                 in (env',(trm,b'))) env vs
                                in (env1,CTbl pt vs1)
-addSequencesV env (CStr lin) = let (env1,seqid) = addFSeq env (optimizeLin lin)
+addSequencesV env (CStr lin) = let (env1,seqid) = addSequence env (optimizeLin lin)
                                in (env1,CStr seqid)
 addSequencesV env (CPar i)   = (env,CPar i)
 
@@ -441,25 +478,30 @@ getVarIndex (IC s) | isDigit (BS.last s) = (read . BS.unpack . snd . BS.spanEnd 
 ----------------------------------------------------------------------
 -- GrammarEnv
 
-data GrammarEnv = GrammarEnv {-# UNPACK #-} !Int CatSet SeqSet FunSet CoerceSet (IntMap.IntMap (Set.Set Production))
-type CatSet   = IntMap.IntMap (Map.Map Ident (FId,FId,ProtoFCat))
+data GrammarEnv = GrammarEnv {-# UNPACK #-} !Int CatSet SeqSet FunSet LinDefSet CoerceSet AppSet ProdSet
+type Proto    = Schema Identity Int (Int,[(Term,Int)])
+type CatSet   = Map.Map Ident (FId,FId,Proto)
 type SeqSet   = Map.Map Sequence SeqId
 type FunSet   = Map.Map CncFun FunId
+type LinDefSet= IntMap.IntMap [FunId]
 type CoerceSet= Map.Map [FId] FId
+type AppSet   = IntMap.IntMap (Set.Set (FunId,[FId]))
+type ProdSet  = IntMap.IntMap (Set.Set Production)
 
 emptyGrammarEnv gr (m,mo) =
   let (last_id,catSet) = Map.mapAccumWithKey computeCatRange 0 lincats
-  in GrammarEnv last_id (IntMap.singleton 0 catSet) Map.empty Map.empty Map.empty IntMap.empty
+  in GrammarEnv last_id catSet Map.empty Map.empty IntMap.empty Map.empty IntMap.empty IntMap.empty
   where
     computeCatRange index cat ctype
-      | cat == cString = (index,(fidString,fidString,PFCat 0 cat (CRec [(theLinLabel,Identity (CStr 0))])))
-      | cat == cInt    = (index,(fidInt,   fidInt,   PFCat 0 cat (CRec [(theLinLabel,Identity (CStr 0))])))
-      | cat == cFloat  = (index,(fidFloat, fidFloat, PFCat 0 cat (CRec [(theLinLabel,Identity (CStr 0))])))
-      | otherwise      = (index+size,(index,index+size-1,PFCat 0 cat schema))
+      | cat == cString = (index,(fidString,fidString,CRec [(theLinLabel,Identity (CStr 0))]))
+      | cat == cInt    = (index,(fidInt,   fidInt,   CRec [(theLinLabel,Identity (CStr 0))]))
+      | cat == cFloat  = (index,(fidFloat, fidFloat, CRec [(theLinLabel,Identity (CStr 0))]))
+      | cat == cVar    = (index,(fidFloat, fidFloat, CStr 0))
+      | otherwise      = (index+size,(index,index+size-1,schema))
       where
         ((_,size),schema) = compute (0,1) ctype
  
-    compute st (RecType rs)  = let (st',rs') = List.mapAccumL (\st (lbl,t) -> let (st',t') = compute st t
+    compute st (RecType  rs) = let (st',rs') = List.mapAccumL (\st (lbl,t) -> let (st',t') = compute st t
                                                                               in (st',(lbl,Identity t'))) st rs
                                in (st',CRec rs')
     compute st (Table pt vt) = let vs        = err error id (allParamValues gr pt)
@@ -478,96 +520,55 @@ emptyGrammarEnv gr (m,mo) =
       Map.fromAscList 
         [(c, ty) | (c,GF.Grammar.CncCat (Just (L _ ty)) _ _) <- Map.toList (M.jments mo)]
 
+addApplication :: GrammarEnv -> FId -> (FunId,[FId]) -> GrammarEnv
+addApplication (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) fid p =
+  GrammarEnv last_id catSet seqSet funSet lindefSet crcSet (IntMap.insertWith Set.union fid (Set.singleton p) appSet) prodSet
 
-expandHOAS opts (m,mo) env = return env {-
-  foldM add_varFun (foldl (\env ncat -> add_hoFun (add_hoCat env ncat) ncat) env hoTypes) (Map.keys lincats)
-  where
-    hoTypes :: [(Int,CId)]
-    hoTypes = sortNub [(n,c) | (_,(ty,_,_)) <- Map.toList abs_defs
-                             , (n,c) <- fst (typeSkeleton ty), n > 0]
-  
-    -- add a range of PMCFG categories for each GF high-order category
-    add_hoCat env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) (n,cat) =
-      case IntMap.lookup 0 catSet >>= Map.lookup cat of
-        Just (start,end,ms,lbls) -> let !catSet'  = IntMap.insertWith Map.union n (Map.singleton cat (last_id,last_id+(end-start),ms,lbls)) catSet
-                                        !last_id' = last_id+(end-start)+1
-                                    in (GrammarEnv last_id' catSet' seqSet funSet crcSet prodSet)
-        Nothing                  -> env
-        
-    -- add one PMCFG function for each high-order type: _B : Cat -> Var -> ... -> Var -> HoCat
-    add_hoFun env (n,cat) =
-      let linRec = [[SymCat 0 i] | i <- case arg of {PFCat _ _ rcs _ -> [0..length rcs-1]}] ++
-                   [[SymLit i 0] | i <- [1..n]]
-          (env1,lins) = List.mapAccumL addFSeq env linRec
-          newLinRec = mkArray lins
-	  
-	  (env2,funid) = addCncFun env1 (CncFun _B newLinRec)
-
-          env3 = foldl (\env (arg,res) -> addProduction env res (PApply funid (arg : replicate n fcatVar)))
-                       env2
-                       (zip (getFIds env2 arg) (getFIds env2 res))
-      in env3
-      where
-        (arg,res) = case Map.lookup cat lincats of
-	              Nothing    -> error $ "No lincat for " ++ showCId cat
-                      Just ctype -> (protoFCat (0,cat) ctype, protoFCat (n,cat) ctype)
-
-    -- add one PMCFG function for each high-order category: _V : Var -> Cat
-    add_varFun env cat =
-      case Map.lookup cat lindefs of
-        Nothing     -> return env
-        Just lindef -> convertRule opts env (PFRule _V [(0,cVar)] (0,cat) [arg] res lindef)
-      where
-        arg =
-          case Map.lookup cVar lincats of
-            Nothing    -> error $ "No lincat for " ++ showCId cat
-            Just ctype -> ctype
-
-        res =
-          case Map.lookup cat lincats of
-            Nothing    -> error $ "No lincat for " ++ showCId cat
-            Just ctype -> ctype
--}
 addProduction :: GrammarEnv -> FId -> Production -> GrammarEnv
-addProduction (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) cat p =
-  GrammarEnv last_id catSet seqSet funSet crcSet (IntMap.insertWith Set.union cat (Set.singleton p) prodSet)
+addProduction (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) cat p =
+  GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet (IntMap.insertWith Set.union cat (Set.singleton p) prodSet)
 
-addFSeq :: GrammarEnv -> [Symbol] -> (GrammarEnv,SeqId)
-addFSeq env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) lst =
+addSequence :: GrammarEnv -> [Symbol] -> (GrammarEnv,SeqId)
+addSequence env@(GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) lst =
   case Map.lookup seq seqSet of
     Just id -> (env,id)
     Nothing -> let !last_seq = Map.size seqSet
-               in (GrammarEnv last_id catSet (Map.insert seq last_seq seqSet) funSet crcSet prodSet,last_seq)
+               in (GrammarEnv last_id catSet (Map.insert seq last_seq seqSet) funSet lindefSet crcSet appSet prodSet,last_seq)
   where
     seq = mkArray lst
 
 addCncFun :: GrammarEnv -> CncFun -> (GrammarEnv,FunId)
-addCncFun env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) fun = 
+addCncFun env@(GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) fun = 
   case Map.lookup fun funSet of
     Just id -> (env,id)
     Nothing -> let !last_funid = Map.size funSet
-               in (GrammarEnv last_id catSet seqSet (Map.insert fun last_funid funSet) crcSet prodSet,last_funid)
+               in (GrammarEnv last_id catSet seqSet (Map.insert fun last_funid funSet) lindefSet crcSet appSet prodSet,last_funid)
 
 addCoercion :: GrammarEnv -> [FId] -> (GrammarEnv,FId)
-addCoercion env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) sub_fcats =
+addCoercion env@(GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) sub_fcats =
   case sub_fcats of
     [fcat] -> (env,fcat)
     _      -> case Map.lookup sub_fcats crcSet of
                 Just fcat -> (env,fcat)
                 Nothing   -> let !fcat = last_id+1
-                             in (GrammarEnv fcat catSet seqSet funSet (Map.insert sub_fcats fcat crcSet) prodSet,fcat)
+                             in (GrammarEnv fcat catSet seqSet funSet lindefSet (Map.insert sub_fcats fcat crcSet) appSet prodSet,fcat)
+
+addLinDef :: GrammarEnv -> FId -> FunId -> GrammarEnv
+addLinDef (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) fid funid =
+  GrammarEnv last_id catSet seqSet funSet (IntMap.insertWith (++) fid [funid] lindefSet) crcSet appSet prodSet
 
 getConcr :: Map.Map CId Literal -> Map.Map CId String -> GrammarEnv -> Concr
-getConcr flags printnames (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
+getConcr flags printnames (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) =
   Concr { cflags = flags
         , printnames = printnames
         , cncfuns   = mkSetArray funSet
+        , lindefs = lindefSet
         , sequences   = mkSetArray seqSet
         , productions = IntMap.union prodSet coercions
         , pproductions = IntMap.empty
         , lproductions = Map.empty
         , cnccats = Map.fromList [(i2i cat,PGF.Data.CncCat start end (mkArray (map (renderStyle style{mode=OneLineMode} . ppPath) (getStrPaths schema))))
-                                     | (cat,(start,end,PFCat _ _ schema)) <- maybe [] Map.toList (IntMap.lookup 0 catSet)]
+                                     | (cat,(start,end,schema)) <- Map.toList catSet]
         , totalCats   = last_id+1
         }
   where
@@ -585,8 +586,8 @@ getConcr flags printnames (GrammarEnv last_id catSet seqSet funSet crcSet prodSe
 
 
 getFIds :: GrammarEnv -> ProtoFCat -> [FId]
-getFIds (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) (PFCat n cat schema) =
-  case IntMap.lookup n catSet >>= Map.lookup cat of
+getFIds (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) (PFCat ctxt cat schema) =
+  case Map.lookup cat catSet of
     Just (start,end,_) -> reverse (solutions (fmap (start +) $ variants schema) ())
   where
     variants (CRec rs)         = fmap sum $ mapM (\(lbl,Identity t) -> variants t) rs
@@ -611,9 +612,9 @@ restrictHead path term = do
   put (head, args)
 
 restrictProtoFCat :: (Functor m, MonadPlus m) => Path -> Term -> ProtoFCat -> m ProtoFCat
-restrictProtoFCat path v (PFCat n cat schema) = do
+restrictProtoFCat path v (PFCat ctxt cat schema) = do
   schema <- addConstraint path v schema
-  return (PFCat n cat schema)
+  return (PFCat ctxt cat schema)
   where
     addConstraint (CProj lbl path) v (CRec rs)     = fmap CRec      $ update lbl (addConstraint path v) rs
     addConstraint (CSel  trm path) v (CTbl pt cs)  = fmap (CTbl pt) $ update trm (addConstraint path v) cs
