@@ -19,7 +19,7 @@ abstract Words = Sentences ** {
     Meat : MassKind ;
     Milk : MassKind ; 
     Pizza : Kind ; 
-    Salt : MassKind ; 
+    Salt : MassKind ;
     Tea : MassKind ; 
     Water : MassKind ; 
     Wine : MassKind ;

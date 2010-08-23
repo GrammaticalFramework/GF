@@ -28,11 +28,11 @@ concrete WordsDan of Words = SentencesDan **
     Cheap = mkA "billig" ;
     Boring = mkA "kedelig" ;
     Cold = L.cold_A ;
-    Delicious = mkA "lækkert" ;
+    Delicious = mkA "lækker" ;
     Expensive = mkA "dyr" ; -- or dyrt
     Fresh = mkA "frisk" ;
     Good = L.good_A ;
-    Suspect = mkA "mistænkeligt" ;
+    Suspect = mkA "mistænkelig" ;
     Warm = L.warm_A ;
 
 -- places
