@@ -29,13 +29,13 @@ incomplete resource Combinators = open Cat, Structural, Constructors in {
 
 --2 Function application
 
-    app : overload {
-      app : N  -> NP ;
-      app : N2 -> NP -> NP ; 
-      app : N3 -> NP -> NP -> NP ;
-      app : N2 -> NP -> NP -> NP ;
-      app : N2 -> N  -> CN ;
+    app : overload {                 
+      app : N  -> NP ;               -- the bottom
+      app : N2 -> NP -> NP ;         -- the successor of x
+      app : N3 -> NP -> NP -> NP ;   -- the distance from x to y
+      app : N2 -> NP -> NP -> NP ;   -- the sum of x and y
 
+      app : N2 -> N  -> CN ;         -- set of integers
       app : N2 -> NP -> CN ;         -- divisor of x
       app : N3 -> NP -> NP -> CN ;   -- path from x to y
       app : N2 -> NP -> NP -> CN ;   -- path between x and y

@@ -374,7 +374,8 @@ mkV2 : overload {
 
   mk3A : (gut,besser,beste : Str) -> A = \a,b,c ->
     let aa : Str = case a of {
-      teu + "er" => teu + "r" ;
+      dunk + "el" => dunk + "l" ;
+      te + "uer" => te + "ur" ;
       mud + "e" => mud ;
       _ => a
     } in 
@@ -383,7 +384,8 @@ mkV2 : overload {
     MorphoGer.mkA a aa b (init c) ** {lock_A = <>} ;
 
   regA : Str -> A = \a -> case a of {
-    teu + "er" => mk3A a (teu + "rer") (teu + "reste") ;
+    dunk + "el" => mk3A a (dunk + "ler") (dunk + "leste") ;
+    te + "uer" => mk3A a (te + "urer") (te + "ureste") ;
     _ + "e"    => mk3A a (a + "r") (a + "ste") ;
      _ + ("t" | "d" | "s" | "sch" | "z") => mk3A a (a + "er") (a + "este") ;
     _          => mk3A a (a + "er") (a + "ste")
