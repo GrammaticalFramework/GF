@@ -212,7 +212,11 @@ in {
   lin werfen_V =  irregV "werfen" "wirft" "warf" "würfe" "geworfen" ;
   lin wiegen_V =  irregV "wiegen" "wiegt" "wog" "wöge" "gewogen" ;
   lin winden_V =  irregV "winden" "windt" "wand" "wände" "gewunden" ;
-  lin wissen_V =  irregV "wissen" "weiß" "wußte" "wüßte" "gewußt" ;
+  lin wissen_V =  M.mkV 
+        "wissen" "weiß" "weißt" "weiß" "wisst" "wisse" 
+        "wusste" "wusstest" "wussten" "wusstet"
+        "wüsste" "gewusst" [] 
+        M.VHaben ** {lock_V = <>} ;
   lin wollen_V =  M.mkV 
         "wollen" "will" "willst" "will" "wollt" "woll" 
         "wollte" "wolltest" "wollten" "wolltet"
