@@ -70,6 +70,8 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer in {
     CompNP np = {s = \\_ => np.s ! NPC Nom} ;
     CompAdv a = {s = \\_ => a.s} ;
 
+--    CompCN cn 
+
     AdvVP vp adv = insertAdv adv.s vp ;
     AdVVP adv vp = insertAdV adv.s vp ;
 
@@ -78,6 +80,5 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer in {
 
     PassV2 v = insertInf (v.s ! VPastPart APred) (predV werdenPass) ;
 
----b    UseVS, UseVQ = \v -> v ** {c2 = noPreposition Acc} ;
 
 }
