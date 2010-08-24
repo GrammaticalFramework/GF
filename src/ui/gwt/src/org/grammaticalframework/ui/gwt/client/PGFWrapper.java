@@ -35,8 +35,6 @@ public class PGFWrapper {
 	
 	private LinkedHashMap<String,PGF.Language> languages;
 
-	private List<String> parseableLanguages;
-
 	private JsArrayString categories;
 	private JsArrayString functions;
 
@@ -107,13 +105,9 @@ public class PGFWrapper {
 			public void onResult(PGF.Grammar grammar) {
 				userLanguage = grammar.getUserLanguage();
 				languages = new LinkedHashMap<String,PGF.Language>();
-				parseableLanguages = new ArrayList<String>();
 				for (PGF.Language l : grammar.getLanguages().iterable()) {
 					String name = l.getName();
 					languages.put(name, l);
-					if (l.canParse()) {
-						parseableLanguages.add(name);
-					}
 				}
 				
 				categories = grammar.getCategories();
@@ -238,7 +232,6 @@ public class PGFWrapper {
 	//
 	private void clearCachedInfo () {
 		languages = null;
-		parseableLanguages = null;
 	}
 
 	public String getUserLanguage () {
@@ -248,10 +241,6 @@ public class PGFWrapper {
 	public String getLanguageCode (String language) {
 		PGF.Language l = languages.get(language);
 		return l == null ? null : l.getLanguageCode();
-	}
-
-	public Collection<String> getParseableLanguages() {
-		return parseableLanguages;
 	}
 	
 	public Collection<String> getAllLanguages() {

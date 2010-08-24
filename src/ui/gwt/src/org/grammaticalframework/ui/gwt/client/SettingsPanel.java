@@ -78,7 +78,7 @@ public class SettingsPanel extends Composite {
 			if (fromLangBox != null) {
 				fromLangBox.clear();
 				fromLangBox.addItem("Any language", "");
-				fromLangBox.addItems(pgf.getParseableLanguages());
+				fromLangBox.addItems(pgf.getAllLanguages());
 				String inputLanguage = pgf.getInputLanguage();
 				if (inputLanguage != null) {
 					fromLangBox.setSelectedValue(inputLanguage);

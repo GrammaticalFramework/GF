@@ -38,7 +38,6 @@ public class PGF {
 
 		public final native String getName() /*-{ return this.name; }-*/;
 		public final native String getLanguageCode() /*-{ return this.languageCode; }-*/;
-		public final native boolean canParse() /*-{ return this.canParse; }-*/;
 	}
 
 	/* Translation */
