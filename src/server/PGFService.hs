@@ -213,12 +213,15 @@ doParse pgf input mcat mfrom = showJSON $ map toJSObject
                                                                                ] | (fid,err) <- errs])]
 
 doComplete :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe Int -> JSValue
-doComplete pgf input mcat mfrom mlimit = showJSON $ map toJSObject $ limit
-     [[("from", PGF.showLanguage from),("text",text)]
-          | (from,compls) <- complete' pgf input mcat mfrom,
-            text <- compls]
+doComplete pgf input mcat mfrom mlimit = showJSON $ map toJSObject
+  [[("from",        showJSON from),
+    ("brackets",    showJSON bs),
+    ("completions", showJSON cs),
+    ("text",        showJSON s)]
+          | from <- froms, let (bs,s,cs) = complete' pgf from cat mlimit input]
   where
-    limit xs = maybe xs (\n -> take n xs) mlimit
+    froms = maybe (PGF.languages pgf) (:[]) mfrom
+    cat = fromMaybe (PGF.startCat pgf) mcat
 
 doLinearize :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
 doLinearize pgf tree mto = showJSON $ map toJSObject
@@ -388,12 +391,29 @@ parse' pgf input mcat mfrom =
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
         cat = fromMaybe (PGF.startCat pgf) mcat
 
-complete' :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [(PGF.Language,[String])]
-complete' pgf input mcat mfrom = 
-   [(from,order ss) | from <- froms, let ss = PGF.complete pgf from cat input, not (null ss)]
-  where froms = maybe (PGF.languages pgf) (:[]) mfrom
-        cat = fromMaybe (PGF.startCat pgf) mcat
-        order = sortBy (compare `on` map toLower)
+complete' :: PGF -> PGF.Language -> PGF.Type -> Maybe Int -> String
+         -> (PGF.BracketedString, String, [String])
+complete' pgf from typ mlimit input =
+  let (ws,prefix) = tokensAndPrefix input
+      ps0 = PGF.initState pgf from typ
+      (ps,ws') = loop ps0 ws
+      bs       = snd (PGF.getParseOutput ps typ)
+  in if not (null ws')
+       then (bs, unwords (if null prefix then ws' else ws'++[prefix]), [])
+       else (bs, prefix, maybe id take mlimit $ order $ Map.keys (PGF.getCompletions ps prefix))
+  where
+    order = sortBy (compare `on` map toLower)
+
+    tokensAndPrefix :: String -> ([String],String)
+    tokensAndPrefix s | not (null s) && isSpace (last s) = (ws, "")
+                      | null ws = ([],"")
+                      | otherwise = (init ws, last ws)
+        where ws = words s
+
+    loop ps []     = (ps,[])
+    loop ps (w:ws) = case PGF.nextState ps (PGF.simpleParseInput w) of
+                       Left  es -> (ps,w:ws)
+                       Right ps -> loop ps ws
 
 linearize' :: PGF -> Maybe PGF.Language -> PGF.Tree -> [(PGF.Language,String)]
 linearize' pgf mto tree = 

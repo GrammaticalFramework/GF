@@ -122,7 +122,15 @@ public class CompletionOracle extends SuggestOracle {
 				jsonRequest = null;
 				List<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();
 				for (PGF.Completion completion : completions.iterable()) {
-					suggestions.add(new CompletionSuggestion(completion.getText()));
+                    String text = completion.getBracketedString().render();
+                    for (String tokn : completion.getCompletions()) {
+                        StringBuilder sbuilder = new StringBuilder();
+                        sbuilder.append(text);
+                        if (sbuilder.length() > 0)
+                            sbuilder.append(' ');
+                        sbuilder.append(tokn);
+                        suggestions.add(new CompletionSuggestion(sbuilder.toString()));
+                    }
 				}
 				suggestionsReady(request, callback, suggestions);
 			}
