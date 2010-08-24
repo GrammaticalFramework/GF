@@ -87,7 +87,6 @@ executable gf
     GF.Data.ErrM
     GF.Data.Operations
     GF.Data.Str
-    GF.Data.Zipper
     GF.JavaScript.AbsJS
     GF.JavaScript.PrintJS
     GF.Infra.Ident
@@ -129,7 +128,6 @@ executable gf
     GF.Compile.Compute.AppPredefined
     GF.Compile.Optimize
     GF.Compile.SubExOpt
-    GF.Compile.ModDeps
     GF.Compile.GetGrammar
     GF.Compile.PGFtoHaskell
     GF.Compile.PGFtoProlog
