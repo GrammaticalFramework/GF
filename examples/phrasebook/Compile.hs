@@ -29,10 +29,13 @@ main = do
     else return ()
   case opts of
     _ | elem "-make" opts || elem "-link" opts -> do
-      system $ "gf -make " ++ unwords (map (++ ".pgf") modus)
+      system $ "gf -make -s " ++ unwords (map (++ ".pgf") modus)
       return () 
     _ -> return ()
 
-compileOne modu = system $ "gf -make -name=" ++ modu ++ " " ++ modu ++ ".gf"
+compileOne modu = do
+  let comm = "gf -make -s -name=" ++ modu ++ " " ++ modu ++ ".gf"
+  putStrLn comm
+  system comm
 
 mkFile la = if length la == 3 then mainmodu ++ la else la
