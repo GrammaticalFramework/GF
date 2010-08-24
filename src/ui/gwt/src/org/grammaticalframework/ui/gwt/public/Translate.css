@@ -20,34 +20,6 @@
     margin: 0 0.4em;
 }
 
-.my-LinksPanel * {
-    margin: 0 0.1em;
-}
-
-.my-HeaderPanel {
-    width: 100%;
-    margin: 0 0.1em;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: rgb(122,165,214);
-}
-
-.my-BrowsePanel {
-    width: 100%;
-    margin: 1em;
-    border-width: 5px;
-    border-color: rgb(122,165,214);
-}
-
-.my-BrowseFrame {
-    width: 100%;
-    height: 100%;
-    margin: 1em;
-    border-style:none;
-}
-
 .my-translations {
     margin-top: 1em;
 }
@@ -84,10 +56,6 @@
     cursor:pointer;
 }
 
-.my-error-title {
-    background: #DDDDDD;
-}
-
 .my-treeimage {
     width: 650px;
     height: 520px;
@@ -96,17 +64,6 @@
 .my-alignmentimage {
     width: 450px;
     height: 300px;
-}
-
-.my-identifierLink:link {
-    text-decoration: none;
-    color: black;
-}
-
-.my-identifierLink:hover {
-    text-decoration: none;
-    color: black;
-    background-color: silver;
 }
 
 /*
