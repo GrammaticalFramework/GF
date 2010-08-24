@@ -54,23 +54,16 @@ public class FridgeBagPanel extends Composite {
 				limit, new PGF.CompleteCallback() {
 			public void onResult(PGF.Completions completions) {
 				for (PGF.Completion completion : completions.iterable()) {
-					String newText = completion.getText();
-					if (!newText.equals(text + " ")) {
-						String[] words = newText.split("\\s+");
-						if (words.length > 0) {
-							String word = words[words.length - 1];
-							if (word.length() > 0) {
-								if (updatePrefixes) {
-									addPrefix(text, word.substring(0,1));
-								}
-								if (mainPanel.getWidgetCount() < maxMagnets) {
-									Magnet magnet = magnetFactory.createMagnet(word, completion.getFrom());
-									mainPanel.add(magnet);
-									removeStyleDependentName("empty");
-								} else {
-									prefixPanel.setVisible(true);
-								}
-							}
+                    for (String word : completion.getCompletions()) {
+						if (updatePrefixes) {
+							addPrefix(text, word.substring(0,1));
+						}
+						if (mainPanel.getWidgetCount() < maxMagnets) {
+							Magnet magnet = magnetFactory.createMagnet(word, completion.getFrom());
+							mainPanel.add(magnet);
+							removeStyleDependentName("empty");
+						} else {
+							prefixPanel.setVisible(true);
 						}
 					}
 				}

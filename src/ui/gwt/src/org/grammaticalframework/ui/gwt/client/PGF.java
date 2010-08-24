@@ -113,6 +113,8 @@ public class PGF {
 		protected Completion() { }
 
 		public final native String getFrom() /*-{ return this.from; }-*/;
+		public final native BracketedString getBracketedString() /*-{ return this.brackets; }-*/;
+		public final native String[] getCompletions() /*-{ return this.completions; }-*/;
 		public final native String getText() /*-{ return this.text; }-*/;
 	}
 
@@ -150,6 +152,20 @@ public class PGF {
 		public final native int getFId() /*-{ return this.fid; }-*/;
 		public final native int getIndex() /*-{ return this.index; }-*/;
 		public final native BracketedString[] getChildren() /*-{ return this.children; }-*/;
+        
+        public final String render() {
+            if (getToken() != null)
+                return getToken();
+            else {
+                StringBuilder sbuilder = new StringBuilder();
+                for (BracketedString bs : getChildren()) {
+                    if (sbuilder.length() > 0)
+                        sbuilder.append(' ');
+                    sbuilder.append(bs.render());
+                }
+                return sbuilder.toString();
+            }
+        }
 	}
 
 	public static class TcError extends JavaScriptObject {

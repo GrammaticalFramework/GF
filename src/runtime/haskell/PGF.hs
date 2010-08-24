@@ -79,7 +79,6 @@ module PGF(
            TcError(..), ppTcError,
 
            -- ** Low level parsing API
-           complete,
            Parse.ParseState,
            Parse.initState, Parse.nextState, Parse.getCompletions, Parse.recoveryStates, 
            Parse.ParseInput(..),  Parse.simpleParseInput, Parse.mkParseInput,
@@ -208,14 +207,6 @@ functions :: PGF -> [CId]
 -- | The type of a given function
 functionType :: PGF -> CId -> Maybe Type
 
--- | Complete the last word in the given string. If the input
--- is empty or ends in whitespace, the last word is considred
--- to be the empty string. This means that the completions
--- will be all possible next words.
-complete :: PGF -> Language -> Type -> String 
-         -> [String] -- ^ Possible completions, 
-                     -- including the given input.
-
 
 ---------------------------------------------------
 -- Implementation
@@ -273,30 +264,6 @@ functionType pgf fun =
   case Map.lookup fun (funs (abstract pgf)) of
     Just (ty,_,_) -> Just ty
     Nothing       -> Nothing
-
-complete pgf from typ input = 
-  let (ws,prefix) = tokensAndPrefix input
-      state0 = Parse.initState pgf from typ
-  in case loop state0 ws of
-       Nothing    -> []
-       Just state -> (if null prefix && isSuccessful state then [unwords ws ++ " "] else [])
-                      ++ [unwords (ws++[c]) ++ " " | c <- Map.keys (Parse.getCompletions state prefix)]
-  where
-    isSuccessful state =
-      case Parse.getParseOutput state typ of
-        (Parse.ParseOk ts, _) -> not (null ts)
-        _                     -> False
-
-    tokensAndPrefix :: String -> ([String],String)
-    tokensAndPrefix s | not (null s) && isSpace (last s) = (ws, "")
-                      | null ws = ([],"")
-                      | otherwise = (init ws, last ws)
-        where ws = words s
-
-    loop ps []     = Just ps
-    loop ps (t:ts) = case Parse.nextState ps (Parse.simpleParseInput t) of
-                       Left  es -> Nothing
-                       Right ps -> loop ps ts
 
 -- | Converts an expression to normal form
 compute :: PGF -> Expr -> Expr
