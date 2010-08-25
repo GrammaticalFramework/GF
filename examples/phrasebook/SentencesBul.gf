@@ -2,7 +2,8 @@ concrete SentencesBul of Sentences =
   NumeralBul ** SentencesI - [IMale, IFemale, YouFamMale, YouFamFemale, YouPolMale, 
                               YouPolFemale, ACitizen, Citizenship, PCitizenship, 
                               LangNat, CitiNat, CountryNat, PropCit,
-                              Nationality, Country, Language, PLanguage, PCountry] with 
+                              Nationality, Country, Language, PLanguage, PCountry
+                              ] with 
   (Syntax = SyntaxBul),
   (Symbolic = SymbolicBul),
   (Lexicon = LexiconBul) ** open ExtraBul, (R = ResBul) in {

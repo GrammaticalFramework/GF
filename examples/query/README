@@ -19,7 +19,7 @@ Test:
   -- which can be provided by 'runghc Make present lang api langs=Eng' in lib/src/
   % gf QueryEng.gf
   -- parse a sentence and see all variants
-  > "p "Bulgarian people working at Google" | l -all
+  > p "Bulgarian people working at Google" | l -all
 
 Regression test:
 

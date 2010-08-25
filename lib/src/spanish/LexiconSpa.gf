@@ -100,7 +100,8 @@ lin
    industry_N = regN "industria" ;
    iron_N = regN "fierro" ;
    king_N = regN "rey" ;
-   know_V2 = dirV2 (verboV (saber_71 "saber")) ; --   conocer
+   know_V2 = mkV2 (verboV (conocer_25 "conocer")) ;
+   know_VS = mkVS (verboV (saber_71 "saber")) ;
    lake_N = regN "lago" ;
    lamp_N = regN "lámpara" ;
    learn_V2 = dirV2 (regV "aprender") ;

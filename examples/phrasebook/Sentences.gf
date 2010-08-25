@@ -145,5 +145,11 @@ abstract Sentences = Numeral ** {
 
     ByTransp : Transport -> ByTransport ;          -- by bus
 
+    AKnowSentence : Person -> Sentence -> Action ; -- you know that I am in the bar
+    AKnowPerson   : Person -> Person   -> Action ;   -- you know me
+
+-- in Words, as long as Lexicon doesn't have it
+--    AKnowQuestion : Person -> Question -> Action ; -- you know how far the bar is
+
 }
 
