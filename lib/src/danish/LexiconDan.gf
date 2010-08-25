@@ -103,7 +103,8 @@ lin
   iron_N = mk2N "jern" "jernet" ;
   john_PN = mkPN "John" utrum ;
   king_N = mk2N "konge" "kongen" ;
-  know_V2 = dirV2 vide_V ;
+  know_V2 = dirV2 (mkV "kende" "kendte") ;
+  know_VS = mkVS vide_V ;
   lake_N = mk2N "sø" "søen" ;
   lamp_N = mk2N "lampe" "lampen" ;
   learn_V2 = dirV2 (mk2V "lære" "lærte") ;

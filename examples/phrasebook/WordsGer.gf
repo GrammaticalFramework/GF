@@ -33,7 +33,7 @@ concrete WordsGer of Words = SentencesGer **
     Fresh = mkA "frisch" ;
     Good = L.good_A ;
     Warm = L.warm_A ;
-    Suspect = mkA "vermut" ;
+    Suspect = mkA "verdächtig" ;
 
 -- places
 

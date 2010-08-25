@@ -133,6 +133,9 @@ incomplete concrete SentencesI of Sentences = Numeral **
     ABePlace p place = mkCl p.name place.at ;
     ByTransp t = t.by ;
 
+    AKnowSentence p s = mkCl p.name Lexicon.know_VS s ;
+    AKnowPerson p q = mkCl p.name Lexicon.know_V2 q.name ;
+
 oper 
 
 -- These operations are used internally in Sentences.

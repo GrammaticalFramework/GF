@@ -16,9 +16,10 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       isPron = False
       } ;
 
-    UsePN pn = heavyNP {
+    UsePN pn = {
       s = \\c => usePrepC c (\k -> pn.s ! k) ;
-      a = agrP3 Sg
+      a = agrP3 Sg ;
+      isPron = True --- means: this is not a heavy NP, but comes before negation
       } ;
 
     UsePron pron = {
