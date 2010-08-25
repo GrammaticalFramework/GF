@@ -53,6 +53,7 @@ oper
           VPres      Pl P2 => chete + "те";
           VPres      Pl P3 => case cheta of {
                                 vika + "м" => case chete of {
+                                                zn + "ае" => zn + "аят";
                                                 dad + "е" => dad + "ат";
                                                 vika      => vika + "т"
                                               };

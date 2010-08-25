@@ -1506,6 +1506,17 @@ oper
                           (v0+"€н")
                           (v0+"€щ")
                           (v0+"€й") ;
+  mkV188 : Str -> VTable ;
+  mkV188 base = let v0 = tk 2 base
+                in mkVerb (v0+"ам")
+                          (v0+"ае")
+                          (v0+"ах")
+                          (v0+"ах")
+                          (v0+"ал")
+                          (v0+"ал")
+                          (v0+"ан")
+                          (v0+"ащ")
+                          (v0+"ай") ;
 
   adjAdv : A -> Str -> A =
     \a,adv -> {s = a.s; adv = adv; lock_A=<>} ;
