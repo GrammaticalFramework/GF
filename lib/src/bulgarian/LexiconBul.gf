@@ -113,7 +113,6 @@ lin
               vtype  = VNormal ;
               lock_V = <>
             } ;
-  know_VS = mkVS (actionV (mkV188 "знам") (mkV162 "зная")) ;
   lake_N = mkN054 "езеро" ;
   lamp_N = mkN041 "лампа" ;
   learn_V2 = dirV2 (actionV (mkV176 "уча") (mkV176 "науча")) ;
@@ -377,4 +376,15 @@ oper
   sP  = mkPrep (pre { "с" ; 
                       "със" / strs {"с" ; "з" ; "С" ; "З"}
                     })  Acc ;
+
+oper know_V : V =
+{
+              s      = \\_,vform => case vform of {
+                                      VPassive aform => (mkA079 "известен").s ! aform ;
+                                      _              => mkV162 "зная" ! vform
+                                    } ;
+              vtype  = VNormal ;
+              lock_V = <>
+            } ;
+
 } ;
