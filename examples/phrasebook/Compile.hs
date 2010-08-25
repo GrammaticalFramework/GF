@@ -29,12 +29,14 @@ main = do
     else return ()
   case opts of
     _ | elem "-make" opts || elem "-link" opts -> do
-      system $ "gf -make -s " ++ unwords (map (++ ".pgf") modus)
+      let comm = "gf -make -s " ++ unwords (map (++ ".pgf") modus)
+      putStrLn comm
+      system comm
       return () 
     _ -> return ()
 
 compileOne modu = do
-  let comm = "gf -make -s -name=" ++ modu ++ " " ++ modu ++ ".gf"
+  let comm = "gf -make -s -optimize-pgf -name=" ++ modu ++ " " ++ modu ++ ".gf"
   putStrLn comm
   system comm
 
