@@ -162,7 +162,7 @@ ik ga te voet/ ik ga lopend
     QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name  I.heten_V)) ; --hoe heet je
     QWhatAge p =  mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (P.mkV "kosten"))) ; --hoeveel kost...
-    ItCost item price = mkCl item (P.mkV2 (P.mkV "kosta")) price ; --..item.. kost ..price..
+    ItCost item price = mkCl item (P.mkV2 (P.mkV "kosten")) price ; --..item.. kost ..price..
 
     PropOpen p = mkCl p.name open_A ; 
     PropClosed p = mkCl p.name closed_A ; 
