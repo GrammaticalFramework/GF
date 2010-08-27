@@ -291,25 +291,26 @@ function add_word1(menu,s) {
 
 function add_word(s) {
   var menu=element("language_menu");
-  add_word1(menu,s);
+  add_word1(menu,s+" ");
   element("words").innerHTML="...";
   get_completions(menu);
 }
 
-function show_completions(completions) {
+function show_completions(complete_output) {
   var box=element("words");
   var menu=element("language_menu");
   var prefixlen=menu.current.input.length;
   var emptycnt=0;
+  var completions=complete_output[0].completions;
   box.innerHTML="";
   box.completions=[];
   for(var i=0;i<completions.length;i++) {
-    var s=completions[i].text.substring(prefixlen);
+    var s=completions[i];
     box.completions[i]=s;
     if(s.length>0) box.appendChild(word(s));
     else emptycnt++;
   }
-  if(emptycnt>0) get_translations(menu);
+  if(true/*emptycnt>0*/) get_translations(menu);
   else element("translations").innerHTML="";
   var surface=element("surface");
   if(surface.typed && emptycnt==completions.length) {
