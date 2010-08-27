@@ -1,5 +1,6 @@
 
 concrete SentencesRon of Sentences = NumeralRon ** SentencesI - [
+  IsMass,
   IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
   ThePlace, Nationality, CitiNat, Citizenship, ACitizen, PCitizenship, PropCit
 ] 
@@ -39,6 +40,8 @@ lincat
    Citizenship = CitizenshipRon ;   
 
 lin 
+      IsMass m q = mkCl (mkNP the_Det m) q ; -- le vin allemand est bon
+
  IFemale = {name = mkNP i8fem_Pron ; isPron = True ; poss = mkQuant i_Pron} ; 
  YouFamFemale = {name = mkNP youSg8fem_Pron ; isPron = True ; poss = mkQuant youSg_Pron} ; 
  YouPolFemale = {name = mkNP youPol8fem_Pron ; isPron = True ; poss = mkQuant youPol_Pron};

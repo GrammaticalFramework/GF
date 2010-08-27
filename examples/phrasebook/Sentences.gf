@@ -70,7 +70,8 @@ abstract Sentences = Numeral ** {
 
 -- This is the way to build propositions about inanimate items.
 
-    Is       : Item -> Quality -> Proposition ;  -- this pizza is good
+    Is     : Item -> Quality -> Proposition ;      -- this pizza is good
+    IsMass : MassKind -> Quality -> Proposition ;  -- Belgian beer is good
 
 -- To use propositions on higher levels.
 
@@ -146,10 +147,8 @@ abstract Sentences = Numeral ** {
     ByTransp : Transport -> ByTransport ;          -- by bus
 
     AKnowSentence : Person -> Sentence -> Action ; -- you know that I am in the bar
-    AKnowPerson   : Person -> Person   -> Action ;   -- you know me
-
--- in Words, as long as Lexicon doesn't have it
---    AKnowQuestion : Person -> Question -> Action ; -- you know how far the bar is
+    AKnowPerson   : Person -> Person   -> Action ; -- you know me
+    AKnowQuestion : Person -> Question -> Action ; -- you know how far the bar is
 
 }
 
