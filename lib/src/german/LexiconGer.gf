@@ -108,6 +108,7 @@ lin
   jump_V = seinV (irregV "springen" "springt" "sprang" "spränge" "gesprungen") ;
   king_N = mkN "König" ;
   know_V2 = dirV2 (irregV "kennen" "kennt" "kannte" "kännte" "gekannt") ; ---- infl
+  know_VQ = mkVQ wissen_V ;
   know_VS = mkVS wissen_V ;
   lake_N = reg2N "See" "Seen" masculine ; --- infl
   lamp_N = mkN "Lampe";

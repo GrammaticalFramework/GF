@@ -108,6 +108,7 @@ lin
    iron_N = regMN "ferro" ;
    king_N = regMN "rei" ;
    know_V2 = dirV2 saberV ;
+   know_VQ = mkVQ saberV;
    know_VS = mkVS saberV;
    lake_N = regMN "llac" ;
    lamp_N = regFN "làmpada" ;

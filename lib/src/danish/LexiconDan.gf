@@ -104,6 +104,7 @@ lin
   john_PN = mkPN "John" utrum ;
   king_N = mk2N "konge" "kongen" ;
   know_V2 = dirV2 (mkV "kende" "kendte") ;
+  know_VQ = mkVQ vide_V ;
   know_VS = mkVS vide_V ;
   lake_N = mk2N "sø" "søen" ;
   lamp_N = mk2N "lampe" "lampen" ;

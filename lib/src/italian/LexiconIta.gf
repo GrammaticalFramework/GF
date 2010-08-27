@@ -103,6 +103,7 @@ lin
   john_PN = mkPN "Giovanni" masculine ;
   king_N = regN "ré" ;
   know_V2 = dirV2 (verboV (conoscere_37 "conoscere")) ;
+  know_VQ = mkVQ (verboV (sapere_78 "sapere")) ;
   know_VS = mkVS (verboV (sapere_78 "sapere")) ;
   lake_N = regN "lago" ;
   lamp_N = regN "lampada" ;

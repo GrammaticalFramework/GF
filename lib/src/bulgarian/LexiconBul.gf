@@ -113,6 +113,7 @@ lin
               vtype  = VNormal ;
               lock_V = <>
             } ;
+  know_VQ = mkVQ (actionV (mkV188 "знам") (mkV162 "зная")) ;
   know_VS = mkVS (actionV (mkV188 "знам") (mkV162 "зная")) ;
   lake_N = mkN054 "езеро" ;
   lamp_N = mkN041 "лампа" ;
