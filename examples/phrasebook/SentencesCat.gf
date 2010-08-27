@@ -1,4 +1,5 @@
 concrete SentencesCat of Sentences = NumeralCat ** SentencesI - [
+  IsMass,
   IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
   WherePlace, WherePerson, ABePlace,
   Superlative
@@ -15,6 +16,7 @@ lincat
   Superlative = OrdSuperlative ; -- {ord: Ord ; isPre: Bool}
 
 lin
+      IsMass m q = mkCl (mkNP the_Det m) q ; -- le vin allemand est bon
 
   IFemale = 
     {name = mkNP (ProDrop i8fem_Pron) ; isPron = True ; poss = mkQuant i_Pron} ; 

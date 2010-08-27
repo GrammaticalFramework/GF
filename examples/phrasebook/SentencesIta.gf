@@ -1,4 +1,5 @@
 concrete SentencesIta of Sentences = NumeralIta ** SentencesI - [
+  IsMass,
   IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
   mkPerson, Superlative, SHaveNoMass
  ] 
@@ -13,6 +14,8 @@ concrete SentencesIta of Sentences = NumeralIta ** SentencesI - [
      Superlative = {s : A ; isPre : Bool} ;
  
     lin 
+      IsMass m q = mkCl (mkNP the_Det m) q ; -- le vin allemand est bon
+
       IFemale = 
         {name = mkNP (ProDrop i8fem_Pron) ; isPron = True ; poss = PossFamQuant i_Pron} ; 
       YouFamFemale = 

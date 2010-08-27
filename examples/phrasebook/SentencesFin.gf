@@ -1,5 +1,5 @@
 concrete SentencesFin of Sentences = NumeralFin ** SentencesI - 
-  [Is, NameNN, ObjMass,
+  [Is, IsMass, NameNN, ObjMass,
    IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale
   ] with 
   (Syntax = SyntaxFin),
@@ -7,7 +7,8 @@ concrete SentencesFin of Sentences = NumeralFin ** SentencesI -
   (Lexicon = LexiconFin) ** open SyntaxFin, ExtraFin, (P = ParadigmsFin), (V = VerbFin) in {
 
   lin 
-    Is item prop = mkCl item (V.UseComp (CompPartAP prop)) ; -- pizza on herkullista
+    Is item prop = mkCl item (V.UseComp (CompPartAP prop)) ; -- tämä pizza on herkullista
+    IsMass mass prop = mkCl (mkNP a_Det mass) (V.UseComp (CompPartAP prop)) ; -- pizza on herkullista
     NameNN = mkNP (P.mkPN (P.mkN "NN" "NN:iä")) ;
 
     IMale, IFemale = 

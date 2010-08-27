@@ -1,4 +1,5 @@
 concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [
+  IsMass,
   QProp,
   IFemale, YouFamFemale, YouPolFemale,
   PYesToNo,
@@ -14,6 +15,7 @@ concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [
     lincat
       Superlative = {s : Ord ; isPre : Bool} ;
     lin 
+      IsMass m q = mkCl (mkNP the_Det m) q ; -- le vin allemand est bon
       QProp a = 
         lin QS {s = \\_ => (EstcequeS (mkS a)).s} ;
       IFemale = 

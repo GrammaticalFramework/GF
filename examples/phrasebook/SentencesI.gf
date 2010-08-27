@@ -63,6 +63,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     PYesToNo = mkPhrase yes_Utt ;
 
     Is = mkCl ;
+    IsMass m q = mkCl (mkNP m) q ;
 
     SProp = mkS ;
     SPropNot = mkS negativePol ;
@@ -134,6 +135,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     ByTransp t = t.by ;
 
     AKnowSentence p s = mkCl p.name Lexicon.know_VS s ;
+    AKnowQuestion p s = mkCl p.name Lexicon.know_VQ s ;
     AKnowPerson p q = mkCl p.name Lexicon.know_V2 q.name ;
 
 oper 
