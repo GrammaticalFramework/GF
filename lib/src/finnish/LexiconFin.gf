@@ -105,6 +105,7 @@ lin
   iron_N = mkN "rauta" ;
   king_N = mkN "kuningas" ;
   know_VS = mkVS (mkV "tiet‰‰" "tiesi") ;
+  know_VQ = mkVQ (mkV "tiet‰‰" "tiesi") ;
   know_V2 = mkV2 (mkV "tuntea" "tunsi") ;
   lake_N = mkN "j‰rvi" "j‰rvi‰" ;
   lamp_N = mkN "lamppu" ;

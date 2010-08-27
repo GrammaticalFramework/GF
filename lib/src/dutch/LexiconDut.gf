@@ -39,6 +39,7 @@ lin
   go_V = zijnV gaan_V ;
   hope_VS = mkVS (mkV "hopen") ;
   house_N = mkN "huis" neuter ;
+  know_VQ = mkVQ weten_V ;
   know_VS = mkVS weten_V ;
   married_A2 = mkA2 (mkA "getrouwd") (mkPrep "met") ;
   mother_N2 = mkN2 (mkN "moeder") ;

@@ -158,6 +158,7 @@ fun
   king_N : N ;
   knee_N : N ;
   know_V2 : V2 ;
+  know_VQ : VQ ;
   know_VS : VS ;
   lake_N : N ;
   lamp_N : N ;

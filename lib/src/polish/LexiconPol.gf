@@ -273,6 +273,7 @@ lin
     wonder_VQ = mkItVerb (mkReflVerb (mkV "zastanawiać" conj98 "zastanowić" conj77a));
     fear_VS = mkReflVerb (mkMonoVerb "bać" conjbac Imperfective);
     hope_VS = mkItVerb (mkComplicatedVerb (mkMonoVerb "mieć" conj100 Imperfective) "nadzieję");
+    know_VQ = mkMonoVerb "wiedzieć" conj103 Imperfective;
     know_VS = mkMonoVerb "wiedzieć" conj103 Imperfective;
     say_VS = mkV "mówić" conj72  "powiedzieć" conj103; 
     become_VA =  (mkReflVerb (mkV "stawać" conj57 "stać" conj3)) ** {c={c=Nom;s="";adv=False}};

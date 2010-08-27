@@ -101,6 +101,7 @@ lin
    iron_N = regN "fierro" ;
    king_N = regN "rey" ;
    know_V2 = mkV2 (verboV (conocer_25 "conocer")) ;
+   know_VQ = mkVQ (verboV (saber_71 "saber")) ;
    know_VS = mkVS (verboV (saber_71 "saber")) ;
    lake_N = regN "lago" ;
    lamp_N = regN "lámpara" ;

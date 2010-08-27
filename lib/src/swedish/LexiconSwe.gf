@@ -102,6 +102,7 @@ lin
   iron_N = regGenN "järn" neutrum ;
   king_N = (regGenN "kung" utrum) ;
   know_V2 = mkV2 (mkV "känner") ;
+  know_VQ = mkVQ (mkV "veta" "vet" "vet" "visste" "vetat" "visst") ;
   know_VS = mkVS (mkV "veta" "vet" "vet" "visste" "vetat" "visst") ;
   lake_N = mkN "sjö" "sjön" "sjöar" "sjöarna" ;
   lamp_N = regGenN "lampa" utrum;

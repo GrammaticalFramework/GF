@@ -102,6 +102,7 @@ lin
   john_PN = mkPN "John" masculine ;
   king_N = regGenN "konge" masculine ;
   know_V2 = dirV2 (mkV "kjenne" "kjente") ;
+  know_VQ = mkVQ IrregNor.vite_V ;
   know_VS = mkVS IrregNor.vite_V ;
   lake_N = regGenN "vann" neutrum ;
   lamp_N = regGenN "lampe" feminine ;

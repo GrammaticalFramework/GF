@@ -41,7 +41,7 @@ concrete QuestionRon of Question =
             let 
               ord = case q of {
                 QDir   => DInv ;
-                QIndir => DDir
+                QIndir => DInv --- DDir
               } ;
               cls = cl.s ! ord ! t ! a ! p ! Indic ;
               why = iadv.s
