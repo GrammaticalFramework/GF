@@ -19,6 +19,11 @@ resource Formal = open Prelude in {
     infixn : Prec -> Str -> (_,_ : TermPrec) -> TermPrec = \p,f,x,y ->
       mkPrec p (usePrec (nextPrec p) x ++ f ++ usePrec (nextPrec p) y) ;
 
+    prefix : Prec -> Str -> TermPrec -> TermPrec = \p,f,x ->
+      mkPrec p (f ++ usePrec p x) ;
+    postfix : Prec -> Str -> TermPrec -> TermPrec = \p,f,x ->
+      mkPrec p (usePrec p x ++ f) ;
+
 -- auxiliaries, should not be needed so much
 
     usePrec : Prec -> TermPrec -> Str = \p,x ->
