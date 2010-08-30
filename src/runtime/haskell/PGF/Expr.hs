@@ -305,7 +305,7 @@ value2expr sig i (VMeta j env vs)            = case snd sig j of
 value2expr sig i (VSusp j env vs k)          = value2expr sig i (k (VGen j vs))
 value2expr sig i (VConst f vs)               = foldl EApp (EFun f)       (List.map (value2expr sig i) vs)
 value2expr sig i (VLit l)                    = ELit l
-value2expr sig i (VClosure env (EAbs b x e)) = EAbs b x (value2expr sig (i+1) (eval sig ((VGen i []):env) e))
+value2expr sig i (VClosure env (EAbs b x e)) = EAbs b (mkCId ('v':show i)) (value2expr sig (i+1) (eval sig ((VGen i []):env) e))
 value2expr sig i (VImplArg v)                = EImplArg (value2expr sig i v)
 
 data Value
