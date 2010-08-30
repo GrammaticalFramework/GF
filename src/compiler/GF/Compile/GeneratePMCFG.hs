@@ -469,6 +469,7 @@ evalTerm path (V pt ts)    = case path of
 evalTerm path (S term sel) = do v <- evalTerm CNil sel
                                 evalTerm (CSel v path) term
 evalTerm path (FV terms)   = variants terms >>= evalTerm path
+evalTerm path (EInt n)     = return (EInt n)
 evalTerm path t            = error (render (text "evalTerm" <+> parens (ppTerm Unqualified 0 t)))
 
 getVarIndex (IA _ i) = i
