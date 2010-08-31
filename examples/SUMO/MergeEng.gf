@@ -469,6 +469,7 @@ lin
   Predicting = UseN2 (VerbToNounV2 predict_V2) ;
   PrepositionalPhrase = AdjCN (PositA prepositional_A) (UseN phrase_N) ;
   Pretending = UseN2 (VerbToNounV2 pretend_V2) ;
+  PrimaryColor = AdjCN (PositA primary_A) (UseN colour_N) ;
   Primate = UseN primate_N ;
   PrimeNumber = AdjCN (PositA prime_A) (UseN number_N) ;
   ProbabilityAttribute = ApposCN (UseN probability_N) (MassNP (UseN attribute_N)) ;
