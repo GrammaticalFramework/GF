@@ -5,6 +5,8 @@ import qualified PGF
 import Cache
 import FastCGIUtils
 import URLEncoding
+import RunHTTP
+import ServeStaticFile
 
 import Network.FastCGI
 import Text.JSON
@@ -25,6 +27,7 @@ import System.FilePath
 import System.Process
 import System.Exit
 import System.IO
+import System.Environment(getArgs)
 
 logFile :: FilePath
 logFile = "pgf-error.log"
@@ -33,33 +36,64 @@ logFile = "pgf-error.log"
 main :: IO ()
 main = do stderrToFile logFile
           cache <- newCache PGF.readPGF
+          args <- getArgs
+          case args of
+            [] -> fcgiMain cache
+            ["http"] -> httpMain cache 41296
+            ["http",port] -> httpMain cache =<< readIO port
+
+httpMain cache port = runHTTP port (do log ; serve =<< getPath)
+  where
+    log = do method <- requestMethod
+             uri    <- getVarWithDefault "REQUEST_URI" "-"
+             logCGI $ method++" "++uri
+
+    serve path =
+        if takeExtension path==".pgf"
+        then cgiMain' cache path
+        else if takeFileName path=="grammars.cgi"
+             then grammarList (takeDirectory path)
+             else serveStaticFile path
+
+    grammarList dir =
+        do paths <- liftIO $ getDirectoryContents dir
+           let pgfs = [path|path<-paths, takeExtension path==".pgf"]
+           outputJSONP pgfs
+
+fcgiMain :: Cache PGF -> IO ()
+fcgiMain cache =
 #ifndef mingw32_HOST_OS
-          runFastCGIConcurrent' forkIO 100 (handleErrors (handleCGIErrors (cgiMain cache)))
+          runFastCGIConcurrent' forkIO 100 (cgiMain cache)
 #else
-          runFastCGI (handleErrors (handleCGIErrors (cgiMain cache)))
+          runFastCGI (cgiMain cache)
 #endif
 
+getPath = getVarWithDefault "SCRIPT_FILENAME" ""
+
 cgiMain :: Cache PGF -> CGI CGIResult
-cgiMain cache =
-    do path <- getVarWithDefault "SCRIPT_FILENAME" ""
-       pgf <- liftIO $ readCache cache path
+cgiMain cache = cgiMain' cache =<< getPath
+
+cgiMain' :: Cache PGF -> FilePath -> CGI CGIResult
+cgiMain' cache path =
+  handleErrors . handleCGIErrors $
+    do pgf <- liftIO $ readCache cache path
        command <- liftM (maybe "grammar" (urlDecodeUnicode . UTF8.decodeString)) (getInput "command")
        pgfMain pgf command
 
 pgfMain :: PGF -> String -> CGI CGIResult
 pgfMain pgf command = 
        case command of
-         "parse"          -> return (doParse pgf) `ap` getText `ap` getCat `ap` getFrom >>= outputJSONP
-         "complete"       -> return (doComplete pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getLimit >>= outputJSONP
-         "linearize"      -> return (doLinearize pgf) `ap` getTree `ap` getTo >>= outputJSONP
+         "parse"          -> outputJSONP =<< doParse pgf `fmap` getText `ap` getCat `ap` getFrom 
+         "complete"       -> outputJSONP =<< doComplete pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit
+         "linearize"      -> outputJSONP =<< doLinearize pgf `fmap` getTree `ap` getTo
          "random"         -> getCat >>= \c -> getLimit >>= liftIO . doRandom pgf c >>= outputJSONP
-         "translate"      -> return (doTranslate pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo >>= outputJSONP
-         "translategroup" -> return (doTranslateGroup pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo >>= outputJSONP
-         "grammar"        -> return (doGrammar pgf) `ap` requestAcceptLanguage >>= outputJSONP
-         "abstrtree"      -> getTree >>= liftIO . doGraphvizAbstrTree pgf >>= outputPNG
+         "translate"      -> outputJSONP =<< doTranslate pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo
+         "translategroup" -> outputJSONP =<< doTranslateGroup pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo
+         "grammar"        -> outputJSONP =<< doGrammar pgf `fmap` requestAcceptLanguage
+         "abstrtree"      -> outputPNG =<< liftIO . doGraphvizAbstrTree pgf =<< getTree
          "parsetree"      -> getTree >>= \t -> getFrom >>= \(Just l) -> liftIO (doGraphvizParseTree pgf l t) >>= outputPNG
          "alignment"      -> getTree >>= liftIO . doGraphvizAlignment pgf >>= outputPNG
-         "browse"         -> return (doBrowse pgf) `ap` getId `ap` getCSSClass `ap` getHRef  >>= outputHTML
+         "browse"         -> outputHTML =<< doBrowse pgf `fmap` getId `ap` getCSSClass `ap` getHRef
          _                -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show command]
   where
     getText :: CGI String
@@ -447,5 +481,5 @@ langCodeLanguage pgf code = listToMaybe [l | l <- PGF.languages pgf, PGF.languag
 
 -- * General utilities
 
-cleanFilePath :: FilePath -> FilePath
-cleanFilePath = takeFileName
+--cleanFilePath :: FilePath -> FilePath
+--cleanFilePath = takeFileName
