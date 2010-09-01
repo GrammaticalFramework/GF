@@ -1,7 +1,8 @@
 src=../../src
 import=-i$(src)/runtime/haskell:$(src)/compiler
 cbind=../c-bindings
-pythoninc=/usr/include/python2.6
+pyversion = $(shell python -c 'import sys; print ".".join(`t` for t in sys.version_info[:2])')
+pythoninc=/usr/include/python$(pyversion)
 debug= #-optc '-DDEBUG=1'
 exdir=../../examples/tutorial/embedded
 
