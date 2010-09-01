@@ -1,7 +1,7 @@
 src=../../src
 import=-i$(src)/runtime/haskell:$(src)/compiler
 cbind=../c-bindings
-pythoninc=/usr/include/python2.5
+pythoninc=/usr/include/python2.6
 debug= #-optc '-DDEBUG=1'
 exdir=../../examples/tutorial/embedded
 
