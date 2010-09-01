@@ -16,6 +16,8 @@ executable pgf-server
                  gf >= 3.1,
                  cgi >= 3001.1.8.0,
                  fastcgi >= 3001.0.2.2,
+                 httpd-shed,
+                 network,
                  json >= 0.3.3,
                  utf8-string >= 0.3.1.1,
                  bytestring,
@@ -27,6 +29,8 @@ executable pgf-server
     FastCGIUtils
     Cache
     URLEncoding
+    RunHTTP
+    ServeStaticFile
   ghc-options: -threaded
   if os(windows)
     ghc-options: -optl-mwindows
