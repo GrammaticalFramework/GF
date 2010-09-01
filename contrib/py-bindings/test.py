@@ -18,7 +18,7 @@ samples = [
 
 def lang2iso(l):
 	s = rmprefix(l)
-	assert(s[:5],"Query")
+	assert s[:5]=="Query"
 	return s[5:].lower()
 
 def exp2str(e):
@@ -89,7 +89,6 @@ class TestParsing(unittest.TestCase):
 		self.pgf = "Query.pgf"
 
 	def test_parse(self):
-		s = self.lexed[0]
 		pgf = gf.read_pgf(self.pgf)
 		l = gf.read_language(self.lang)
 		for abs,cnc in self.lexed:
