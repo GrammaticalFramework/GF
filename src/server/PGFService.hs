@@ -49,6 +49,7 @@ httpMain cache port = runHTTP port (do log ; serve =<< getPath)
              logCGI $ method++" "++uri
 
     serve path =
+        handleErrors . handleCGIErrors $
         if takeExtension path==".pgf"
         then cgiMain' cache path
         else if takeFileName path=="grammars.cgi"
@@ -71,11 +72,11 @@ fcgiMain cache =
 getPath = getVarWithDefault "SCRIPT_FILENAME" ""
 
 cgiMain :: Cache PGF -> CGI CGIResult
-cgiMain cache = cgiMain' cache =<< getPath
+cgiMain cache = handleErrors . handleCGIErrors $
+                  cgiMain' cache =<< getPath
 
 cgiMain' :: Cache PGF -> FilePath -> CGI CGIResult
 cgiMain' cache path =
-  handleErrors . handleCGIErrors $
     do pgf <- liftIO $ readCache cache path
        command <- liftM (maybe "grammar" (urlDecodeUnicode . UTF8.decodeString)) (getInput "command")
        pgfMain pgf command
