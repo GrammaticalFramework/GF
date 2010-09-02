@@ -109,45 +109,45 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
 
 -- actions
 
-    AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
-    AHasName p name = mkCl p.name (mkV2 heißen_V) name ;
-    AHungry p = mkCl p.name (mkA "hungrig") ;
-    AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
-    AHasRoom p num = mkCl p.name have_V2 
+    AHasAge p num = prop (mkCl p.name (mkNP num L.year_N)) ;
+    AHasName p name = prop (mkCl p.name (mkV2 heißen_V) name) ;
+    AHungry p = prop (mkCl p.name (mkA "hungrig")) ;
+    AHasChildren p num = prop (mkCl p.name have_V2 (mkNP num L.child_N)) ;
+    AHasRoom p num = prop (mkCl p.name have_V2 
       (mkNP (mkNP a_Det (mkN "Zimmer" "Zimmer" neuter)) 
-        (SyntaxGer.mkAdv for_Prep (mkNP num (mkN "Persone")))) ;
-    AHasTable p num = mkCl p.name have_V2 
+        (SyntaxGer.mkAdv for_Prep (mkNP num (mkN "Persone"))))) ;
+    AHasTable p num = prop (mkCl p.name have_V2 
       (mkNP (mkNP a_Det (mkN "Tisch")) 
-        (SyntaxGer.mkAdv for_Prep (mkNP num (mkN "Persone")))) ;
-    AIll p = mkCl p.name (mkA "krank") ;
-    AKnow p = mkCl p.name wissen_V ;
-    ALike p item = mkCl p.name (mkV2 mögen_V) item;
-    ALive p co = mkCl p.name (mkVP (mkVP (mkV "wohnen")) (SyntaxGer.mkAdv in_Prep co)) ;
-    ALove p q = mkCl p.name (mkV2 (mkV "lieben")) q.name ;
-    AMarried p = mkCl p.name (mkA "verheiratet") ;
-    AReady p = mkCl p.name (mkA "bereit") ;
-    AScared p = mkCl p.name have_V2 (mkNP (mkN "Angst" "Angsten" feminine)) ;
-    ASpeak p lang = mkCl p.name  (mkV2 sprechen_V) lang ;
-    AThirsty p = mkCl p.name (mkA "durstig") ;
-    ATired p = mkCl p.name (mkA "müde") ;
-    AUnderstand p = mkCl p.name (fixprefixV "ver" stehen_V) ;
-    AWant p obj = mkCl p.name want_VV (mkVP have_V2 obj) ;
-    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
+        (SyntaxGer.mkAdv for_Prep (mkNP num (mkN "Persone"))))) ;
+    AIll p = prop (mkCl p.name (mkA "krank")) ;
+    AKnow p = prop (mkCl p.name wissen_V) ;
+    ALike p item = prop (mkCl p.name (mkV2 mögen_V) item) ;
+    ALive p co = prop (mkCl p.name (mkVP (mkVP (mkV "wohnen")) (SyntaxGer.mkAdv in_Prep co))) ;
+    ALove p q = prop (mkCl p.name (mkV2 (mkV "lieben")) q.name) ;
+    AMarried p = prop (mkCl p.name (mkA "verheiratet")) ;
+    AReady p = prop (mkCl p.name (mkA "bereit")) ;
+    AScared p = prop (mkCl p.name have_V2 (mkNP (mkN "Angst" "Angsten" feminine))) ;
+    ASpeak p lang = prop (mkCl p.name (mkV2 sprechen_V) lang) ;
+    AThirsty p = prop (mkCl p.name (mkA "durstig")) ;
+    ATired p = prop (mkCl p.name (mkA "müde")) ;
+    AUnderstand p = prop (mkCl p.name (fixprefixV "ver" stehen_V)) ;
+    AWant p obj = prop (mkCl p.name want_VV (mkVP have_V2 obj)) ;
+    AWantGo p place = prop (mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to)) ;
 
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name heißen_V)) ;
     QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
 
-    PropOpen p = mkCl p.name open_Adv ;
-    PropClosed p = mkCl p.name closed_Adv ;
-    PropOpenDate p d = mkCl p.name (mkVP (mkVP d) open_Adv) ; 
-    PropClosedDate p d = mkCl p.name (mkVP (mkVP d) closed_Adv) ; 
-    PropOpenDay p d = mkCl p.name (mkVP (mkVP d.habitual) open_Adv) ; 
-    PropClosedDay p d = mkCl p.name (mkVP (mkVP d.habitual) closed_Adv) ; 
+    PropOpen p = prop (mkCl p.name open_Adv) ;
+    PropClosed p = prop (mkCl p.name closed_Adv) ;
+    PropOpenDate p d = prop (mkCl p.name (mkVP (mkVP d) open_Adv)) ; 
+    PropClosedDate p d = prop (mkCl p.name (mkVP (mkVP d) closed_Adv)) ; 
+    PropOpenDay p d = prop (mkCl p.name (mkVP (mkVP d.habitual) open_Adv)) ; 
+    PropClosedDay p d = prop (mkCl p.name (mkVP (mkVP d.habitual) closed_Adv)) ; 
 
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "kosten"))) ; 
-    ItCost item price = mkCl item (mkV2 (mkV "kosten")) price ;
+    ItCost item price = prop (mkCl item (mkV2 (mkV "kosten")) price) ;
 
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
