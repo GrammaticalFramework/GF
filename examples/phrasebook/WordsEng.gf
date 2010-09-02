@@ -208,10 +208,11 @@ concrete WordsEng of Words = SentencesEng **
 -- transports
 
     HowFar place = mkQS (mkQCl far_IAdv place.name) ;
-    HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP y.name (SyntaxEng.mkAdv from_Prep x.name))) ;
+    HowFarFrom x y = 
+      mkQS (mkQCl far_IAdv (mkCl y.name (SyntaxEng.mkAdv from_Prep x.name))) ;
     HowFarFromBy x y t = 
-      mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxEng.mkAdv from_Prep x.name)) t)) ;
-    HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t)) ;
+      mkQS (mkQCl far_IAdv (mkCl y.name (SyntaxEng.mkAdv from_Prep (mkNP x.name t)))) ;
+    HowFarBy y t = mkQS (mkQCl far_IAdv (mkCl y.name t)) ;
  
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;

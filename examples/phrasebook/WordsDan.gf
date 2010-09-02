@@ -212,11 +212,14 @@ concrete WordsDan of Words = SentencesDan **
 
 -- transports
 
-    HowFar place = mkQS (mkQCl long_IAdv (mkCl (mkVP (SyntaxDan.mkAdv to_Prep place.name)))) ;
-    HowFarFrom place x = mkQS (mkQCl long_IAdv (mkCl place.name (SyntaxDan.mkAdv from_Prep x.name))) ;
+    HowFar place = 
+      mkQS (mkQCl long_IAdv (mkCl (mkVP (SyntaxDan.mkAdv to_Prep place.name)))) ;
+    HowFarFrom place x = 
+      mkQS (mkQCl long_IAdv (mkCl place.name (SyntaxDan.mkAdv from_Prep x.name))) ;
     HowFarFromBy x y t = 
-      mkQS (mkQCl long_IAdv (mkNP (mkNP y.name (SyntaxDan.mkAdv from_Prep x.name)) t)) ;
-    HowFarBy y t = mkQS (mkQCl long_IAdv (mkNP y.name t)) ;
+      mkQS (mkQCl long_IAdv (mkCl y.name (SyntaxDan.mkAdv from_Prep (mkNP x.name t)))) ;
+    HowFarBy y t = 
+      mkQS (mkQCl long_IAdv (mkCl y.name t)) ;
  -- not sure !
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
