@@ -102,7 +102,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
 
     ThePlace kind = let dd = if_then_else Det kind.isPl thePl_Det theSg_Det 
                      in placeNP dd kind ;
-    APlace kind = let dd = if_then_else Det kind.isPl thePl_Det theSg_Det 
+    APlace kind = let dd = if_then_else Det kind.isPl aPl_Det aSg_Det 
                      in placeNP dd kind ;
 
     IMale, IFemale = mkPerson i_Pron ;

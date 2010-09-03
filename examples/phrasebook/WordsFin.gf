@@ -195,10 +195,10 @@ concrete WordsFin of Words = SentencesFin **
 -- transports
 
     HowFar place = mkQS (mkQCl far_IAdv place.name) ;
-    HowFarFrom place x = 
-      mkQS (mkQCl far_IAdv (mkCl place.name (SyntaxFin.mkAdv from_Prep x.name))) ;
-    HowFarFromBy place x t = 
-      mkQS (mkQCl far_IAdv (mkCl place.name 
+    HowFarFrom x y = 
+      mkQS (mkQCl far_IAdv (mkCl y.name (SyntaxFin.mkAdv from_Prep x.name))) ;
+    HowFarFromBy x y t = 
+      mkQS (mkQCl far_IAdv (mkCl y.name 
         (mkVP (mkVP (SyntaxFin.mkAdv from_Prep x.name)) t))) ;
     HowFarBy place t = 
       mkQS (mkQCl far_IAdv (mkCl place.name t)) ;

@@ -224,12 +224,12 @@ lin
 -- transports
 
     HowFar place = mkQS (mkQCl what_distance_IAdv place.name) ; 
-    HowFarFrom place x = 
+    HowFarFrom x y = 
       mkQS (mkQCl (E.CompIQuant which_IQuant) 
-        (mkNP (mkNP distance_NP (SyntaxFre.mkAdv from_Prep x.name)) place.to)) ; 
-    HowFarFromBy place x t = 
+        (mkNP (mkNP distance_NP (SyntaxFre.mkAdv from_Prep x.name)) y.to)) ; 
+    HowFarFromBy x y t = 
       mkQS (mkQCl (E.CompIQuant which_IQuant) 
-        (mkNP (mkNP (mkNP distance_NP (SyntaxFre.mkAdv from_Prep x.name)) place.to) t)) ; 
+        (mkNP (mkNP (mkNP distance_NP (SyntaxFre.mkAdv from_Prep x.name)) y.to) t)) ; 
     HowFarBy place t = 
        mkQS (mkQCl what_distance_IAdv (mkNP place.name t)) ; 
      

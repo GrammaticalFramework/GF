@@ -1,7 +1,8 @@
 concrete SentencesGer of Sentences = NumeralGer ** SentencesI - 
   [PYesToNo,SHaveNo,SHaveNoMass,
    Proposition, Action, Is, IsMass, SProp, SPropNot, QProp,
-   AHaveCurr, ACitizen, ABePlace, AKnowSentence, AKnowPerson, AKnowQuestion
+   AHaveCurr, ACitizen, ABePlace, AKnowSentence, AKnowPerson, AKnowQuestion,
+   Nationality, Language
   ] with 
   (Syntax = SyntaxGer),
   (Symbolic = SymbolicGer),
@@ -32,5 +33,9 @@ concrete SentencesGer of Sentences = NumeralGer ** SentencesI -
     AKnowSentence p s = prop (mkCl p.name Lexicon.know_VS s) ;
     AKnowQuestion p s = prop (mkCl p.name Lexicon.know_VQ s) ;
     AKnowPerson p q = prop (mkCl p.name Lexicon.know_V2 q.name) ;
+
+  lincat
+    Nationality = {lang : CN ; country : NP ; prop : A} ;
+    Language = CN ; -- kein Deutsch
 
 }
