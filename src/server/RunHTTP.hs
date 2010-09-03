@@ -31,11 +31,13 @@ cgiReq (Request method uri hdrs body) = CGIRequest vars inputs body'
                        ("SCRIPT_FILENAME",documentRoot++uriPath uri),
                        ("QUERY_STRING",qs)]
     qs = case uriQuery uri of
+           '?':'&':s -> s -- httpd-shed bug workaround
            '?':s -> s
            s -> s
     inputs = map input $ queryToArguments qs  -- assumes method=="GET"
     body' = BS.pack body
 
-    input (name,val) = (name,Input (BS.pack val) Nothing plaintext)
-    plaintext = ContentType "plain" "text" []
-                            
+    input (name,val) = (name,Input (BS.pack (map decode val)) Nothing plaintext)
+    plaintext = ContentType "text" "plain" []
+    decode '+' = ' ' -- httpd-shed bug workaround
+    decode c   = c
