@@ -94,7 +94,7 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
     Dutch = mkNat "den Niederlanden" "Niederländisch" "niederländisch" ;
     English = mkNat "England" "Englisch" "englisch" ;
     Finnish = mkNat "Finnland" "Finnisch" "finnisch" ;
-    Flemish = mkNP (mkPN "Flämisch") ;
+    Flemish = mkCN (mkN "Flämisch" "Flämisch" neuter) ;
     French = mkNat "Frankreich" "Französisch" "französisch" ;
     German = mkNat "Deutschland" "Deutsch" "deutsche" ;
     Italian = mkNat "Italien" "Italienisch" "italienisch" ;
@@ -127,7 +127,8 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
     AMarried p = prop (mkCl p.name (mkA "verheiratet")) ;
     AReady p = prop (mkCl p.name (mkA "bereit")) ;
     AScared p = prop (mkCl p.name have_V2 (mkNP (mkN "Angst" "Angsten" feminine))) ;
-    ASpeak p lang = prop (mkCl p.name (mkV2 sprechen_V) lang) ;
+    ASpeak p lang = mkProp (mkCl p.name (mkV2 sprechen_V) (mkNP lang)) 
+      (mkS (mkCl p.name (mkV2 sprechen_V) (mkNP no_Quant lang))) ;
     AThirsty p = prop (mkCl p.name (mkA "durstig")) ;
     ATired p = prop (mkCl p.name (mkA "müde")) ;
     AUnderstand p = prop (mkCl p.name (fixprefixV "ver" stehen_V)) ;
@@ -209,8 +210,8 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
     HowFar place = mkQS (mkQCl far_IAdv place.name) ;
     HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxGer.mkAdv from_Prep x.name)) (ParadigmsGer.mkAdv "entfernt"))) ;
     HowFarFromBy x y t = 
-      mkQS (mkQCl how_long_IAdv (mkCl (mkVP (SyntaxGer.mkAdv zu_Prep (mkNP (mkNP y.name (SyntaxGer.mkAdv from_Prep x.name)) t))))) ;
-    HowFarBy y t = mkQS (mkQCl how_long_IAdv (mkCl (mkVP (SyntaxGer.mkAdv zu_Prep (mkNP y.name t))))) ;
+      mkQS (mkQCl far_IAdv (mkCl (mkVP (SyntaxGer.mkAdv zu_Prep (mkNP (mkNP y.name (SyntaxGer.mkAdv from_Prep x.name)) t))))) ;
+    HowFarBy y t = mkQS (mkQCl far_IAdv (mkCl (mkVP (SyntaxGer.mkAdv zu_Prep (mkNP y.name t))))) ;
  
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
@@ -223,8 +224,8 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
 
   oper
 
-    mkNat : Str -> Str -> Str -> {lang : NP ; prop : A ; country : NP} = \co, la, adj -> 
-      {lang = mkNP (mkPN la) ; 
+    mkNat : Str -> Str -> Str -> {lang : CN ; prop : A ; country : NP} = \co, la, adj -> 
+      {lang = mkCN (mkN la la neuter) ; 
        prop = mkA adj ; country = mkNP (mkPN co)} ;
      
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
@@ -256,5 +257,5 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
       } ;
 
    far_IAdv = ss "wie weit" ** {lock_IAdv = <>} ; 
-   how_long_IAdv = ss "wie lange dauert" ** {lock_IAdv=<>} ;
+
 }
