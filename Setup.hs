@@ -196,7 +196,8 @@ langsCoding = [
   (("spanish",  "Spa"),""),
   (("swedish",  "Swe"),""), 
   (("thai",     "Tha"),"to_thai"),
-  (("turkish",  "Tur"),"")
+  (("turkish",  "Tur"),""),
+  (("urdu",     "Urd"),"")
   ]
 
 langs = map fst langsCoding
