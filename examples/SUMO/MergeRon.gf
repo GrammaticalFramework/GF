@@ -51,4 +51,24 @@ sister ob1 ob2 = mkPolSent (PredVP ob1 (AdvVP (UseComp (CompNP (DetCN (DetQuant 
 --others
 toInt x = mkNP x.s ("lui" ++ x.s) x.s Sg Masc;
 toRealNum x = mkNP x.s ("lui" ++ x.s) x.s Sg Masc; 
+
+
+---------------- CNL demo
+Entity = UseN entity_N ;
+Abstract = UseN abstract_N ;
+Attribute = UseN attribute_N ; 
+Graph = UseN graph_N ;
+GraphElement = AdvCN (UseN element_N) (PrepNP part_Prep (MassNP (UseN graph_N))) ;
+Model = UseN model_N ; -- FIX ME
+ProcessTask = AdvCN (UseN task_N) (PrepNP possess_Prep (MassNP (UseN process_N))) ; -- FIX ME
+Proposition = UseN proposition_N ;
+Quantity = UseN quantity_N ;
+SetOrClass = ConjCN or_Conj (BaseCN (UseN set_N) (UseN class_N)) ;
+Physical = UseN physical_N ;
+ContentBearingPhysical = AdvCN (UseN physical_N) (PrepNP with_Prep (MassNP (UseN content_N))) ;
+Object = UseN object_N ;
+PhysicalSystem = AdjCN (PositA physical_A) (UseN system_N) ;
+Process = UseN process_N ;
+
+
 };
