@@ -25,6 +25,18 @@ function jsonp(url,callback)
     document.body.appendChild(script);
 }
 
+var json = {next:0};
+
+// Like jsonp, but instead of passing the name of the ballback function, you 
+// pass the callback function directly, making it possible to use anonymous
+// functions.
+function jsonpf(url,callback)
+{
+    var name="callback"+(json.next++);
+    json[name]=function(x) { delete json[name]; callback(x); }
+    jsonp(url,"json."+name);
+}
+
 /* --- HTML construction ---------------------------------------------------- */
 function text(s) { return document.createTextNode(s); }
 
