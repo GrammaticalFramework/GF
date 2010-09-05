@@ -1,5 +1,5 @@
 body {
-    background: #ccc url("http://www.grammaticalframework.org:41296/fridge/se.chalmers.cs.gf.gwt.FridgeApp/brushed-metal.png");
+    background: #ccc url("brushed-metal.png");
 }
 
 h1, h2, h3, small, th { font-family: sans-serif; }
