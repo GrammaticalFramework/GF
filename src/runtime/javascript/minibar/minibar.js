@@ -31,40 +31,40 @@ var server = {
 	this.current_grammar_url=options.grammars_url+grammar_name;
     },
     
-    get_grammarlist: function(cont_name) {
-	jsonp(options.grammars_url+"grammars.cgi",cont_name);
+    get_grammarlist: function(cont) {
+	jsonpf(options.grammars_url+"grammars.cgi",cont);
     },
-    get_languages: function(cont_name) {
-	jsonp(this.current_grammar_url,cont_name);
+    get_languages: function(cont) {
+	jsonpf(this.current_grammar_url,cont);
     },
-    get_random: function(cont_name) {
-	jsonp(this.current_grammar_url+"?command=random&random="+Math.random(),cont_name);
+    get_random: function(cont) {
+	jsonpf(this.current_grammar_url+"?command=random&random="+Math.random(),cont);
     },
-    linearize: function(tree,to,cont_name) {
-	jsonp(this.current_grammar_url+"?command=linearize&tree="
-	      +encodeURIComponent(tree)+"&to="+to,cont_name)
+    linearize: function(tree,to,cont) {
+	jsonpf(this.current_grammar_url+"?command=linearize&tree="
+	       +encodeURIComponent(tree)+"&to="+to,cont)
     },
-    complete: function(from,input,cont_name) {
-	jsonp(this.current_grammar_url
-	      +"?command=complete"
-	      +"&from="+encodeURIComponent(from)
-	      +"&input="+encodeURIComponent(input),
-	      cont_name);
+    complete: function(from,input,cont) {
+	jsonpf(this.current_grammar_url
+	       +"?command=complete"
+	       +"&from="+encodeURIComponent(from)
+	       +"&input="+encodeURIComponent(input),
+	       cont);
 
     },
-    translate: function(from,input,cont_name) {
-	jsonp(this.current_grammar_url
-	      +"?command=translate"
-	      +"&from="+encodeURIComponent(from)
-	      +"&input="+encodeURIComponent(input),
-	      cont_name)
+    translate: function(from,input,cont) {
+	jsonpf(this.current_grammar_url
+	       +"?command=translate"
+	       +"&from="+encodeURIComponent(from)
+	       +"&input="+encodeURIComponent(input),
+	       cont)
     },
-    translategroup: function(from,input,cont_name) {
-	jsonp(this.current_grammar_url
-	      +"?command=translategroup"
-	      +"&from="+encodeURIComponent(from)
-	      +"&input="+encodeURIComponent(input),
-	      cont_name)
+    translategroup: function(from,input,cont) {
+	jsonpf(this.current_grammar_url
+	       +"?command=translategroup"
+	       +"&from="+encodeURIComponent(from)
+	       +"&input="+encodeURIComponent(input),
+	       cont)
     }
 
 };
@@ -88,7 +88,7 @@ function start_minibar(opts) {
     append_extra_buttons(extra);
     if(!options.grammars_url) options.grammars_url=options.server+"/grammars/";
     if(options.grammar_list) show_grammarlist(options.grammar_list);
-    else server.get_grammarlist("show_grammarlist");
+    else server.get_grammarlist(show_grammarlist);
 }
 
 
@@ -126,7 +126,7 @@ function new_grammar(menu) {
 
 function select_grammar(grammar_name) {
     server.switch_grammar(grammar_name);
-    server.get_languages("show_languages");
+    server.get_languages(show_languages);
 }
 
 function langpart(conc,abs) { // langpart("FoodsEng","Food") == "Eng"
@@ -231,7 +231,7 @@ function complete_typed(inp) {
     var c=menu.current;
     if(!inp.completing || inp.completing!=inp.value) {
 	inp.completing=inp.value;
-	server.complete(c.from,c.input+inp.value,"show_completions");
+	server.complete(c.from,c.input+inp.value,show_completions);
     }
 }
 
@@ -246,13 +246,13 @@ function finish_typed(inp) {
 }
 
 function generate_random() {
-    server.get_random("lin_random");
+    server.get_random(lin_random);
 }
 
 function lin_random(abs) {
   var menu=element("language_menu");
   var lang=menu.current.from;
-  server.linearize(abs[0].tree,lang,"show_random");
+  server.linearize(abs[0].tree,lang,show_random);
 }
 
 function show_random(random) {
@@ -266,7 +266,7 @@ function show_random(random) {
 
 function get_completions(menu) {
   var c=menu.current;
-  server.complete(c.from,c.input,"show_completions");
+  server.complete(c.from,c.input,show_completions);
 }
 
 function word(s) {
@@ -322,9 +322,9 @@ function show_completions(complete_output) {
 function get_translations(menu) {
     var c=menu.current;
     if(options.show_grouped_translations)
-	server.translategroup(c.from,c.input,"show_groupedtranslations");
+	server.translategroup(c.from,c.input,show_groupedtranslations);
     else
-	server.translate(c.from,c.input,"show_translations");
+	server.translate(c.from,c.input,show_translations);
 }
 
 function tdt(tree_btn,txt) {
