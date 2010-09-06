@@ -4,7 +4,8 @@ concrete SUMOEng of SUMO =
         MidLevelOntologyEng,
         EconomyEng,
         EngineeringEng,
-        MondialEng
+        MondialEng,
+        QoSontologyEng
 
 ** {
 
