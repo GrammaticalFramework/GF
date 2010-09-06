@@ -8,9 +8,9 @@ flags
 
 lin
  value_N = regGenN "valeur" feminine ;
- square_A = regA "caré" ;
+ square_A = regA "carÃ©" ;
  time_N = regN "heure" ;
- element_N = mkN "élément" ;
+ element_N = mkN "Ã©lÃ©ment" ;
  
  entity_N = regGenN "entitÃ©" feminine;
  abstract_N = mkN "abstrait" ;
