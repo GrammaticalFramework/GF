@@ -16,7 +16,7 @@ lin
  abstract_N = mkN "abstract" ;
  attribute_N = mkN "atribut" ; 
  graph_N = mkNR "graf" ; 
- model_N = mkN "model" ; 
+ model_N = mkN "model" neuter; 
  process_N = mkN "proces" ;
  task_N = mkN "sarcină" ;
  proposition_N = mkN "propoziție" ;
