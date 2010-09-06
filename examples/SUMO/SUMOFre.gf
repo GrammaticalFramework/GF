@@ -3,7 +3,9 @@
 concrete SUMOFre of SUMO =
         MergeFre,
         MidLevelOntologyFre,
-        EconomyFre
+        EconomyFre,
+        EngineeringFre,
+        QoSontologyFre
         
 
 ** {

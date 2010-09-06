@@ -3,7 +3,9 @@
 concrete SUMORon of SUMO =
         MergeRon,
         MidLevelOntologyRon,
-        EconomyRon
+        EconomyRon,
+        EngineeringRon,
+        QoSontologyRon
 
 ** {
 
