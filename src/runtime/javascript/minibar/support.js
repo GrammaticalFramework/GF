@@ -37,6 +37,55 @@ function jsonpf(url,callback)
     jsonp(url,"json."+name);
 }
 
+/* --- AJAX ----------------------------------------------------------------- */
+
+function GetXmlHttpObject(handler)
+{ 
+  var objXMLHttp=null
+  if (window.XMLHttpRequest)
+  {
+    objXMLHttp=new XMLHttpRequest()
+  }
+  else if (window.ActiveXObject)
+  {
+    objXMLHttp=new ActiveXObject("Microsoft.XMLHTTP")
+  }
+  return objXMLHttp
+}
+
+function ajax_http_get(url,callback) {
+  var http=GetXmlHttpObject()
+  if (http==null) {
+    alert ("Browser does not support HTTP Request")
+    return
+  } 
+  var statechange=function() {
+      if (http.readyState==4 || http.readyState=="complete")
+	  callback(http.responseText)
+  }
+  http.onreadystatechange=statechange
+  http.open("GET",url,true)
+  http.send(null)
+  //dump("http get "+url+"\n")
+  return http
+}
+
+// JSON via AJAX
+function ajax_http_get_json(url,cont) {
+    ajax_http_get(url,function(txt) { cont(eval("("+txt+")")); });
+}
+
+function sameOrigin(url) {
+    return hasPrefix(url,location.protocol+"//"+location.host+"/");
+}
+
+// Use AJAX when possible, fallback to JSONP
+function http_get_json(url,cont) {
+    if(sameOrigin(url)) ajax_http_get_json(url,cont);
+    else jsonpf(url,cont);
+}
+
+
 /* --- HTML construction ---------------------------------------------------- */
 function text(s) { return document.createTextNode(s); }
 

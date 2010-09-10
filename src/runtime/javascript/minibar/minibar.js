@@ -30,41 +30,37 @@ var server = {
     switch_grammar: function(grammar_name) {
 	this.current_grammar_url=options.grammars_url+grammar_name;
     },
-    
     get_grammarlist: function(cont) {
-	jsonpf(options.grammars_url+"grammars.cgi",cont);
+	http_get_json(options.grammars_url+"grammars.cgi",cont);
     },
     get_languages: function(cont) {
-	jsonpf(this.current_grammar_url,cont);
+	http_get_json(this.current_grammar_url,cont);
     },
+    pgf_call: function(cmd,args,cont) {
+	var url=this.current_grammar_url+"?command="+cmd;
+	for(var arg in args) url+="&"+arg+"="+encodeURIComponent(args[arg]);
+	http_get_json(url,cont);
+    },
+
     get_random: function(cont) {
-	jsonpf(this.current_grammar_url+"?command=random&random="+Math.random(),cont);
+	//jsonpf(this.current_grammar_url+"?command=random&random="+Math.random(),cont);
+	this.pgf_call("random",{random:Math.random()},cont);
     },
     linearize: function(tree,to,cont) {
 	jsonpf(this.current_grammar_url+"?command=linearize&tree="
 	       +encodeURIComponent(tree)+"&to="+to,cont)
     },
     complete: function(from,input,cont) {
-	jsonpf(this.current_grammar_url
-	       +"?command=complete"
-	       +"&from="+encodeURIComponent(from)
-	       +"&input="+encodeURIComponent(input),
-	       cont);
-
+	this.pgf_call("complete",{from:from,input:input},cont);
+    },
+    parse: function(from,input,cont) {
+	this.pgf_call("parse",{from:from,input:input},cont);
     },
     translate: function(from,input,cont) {
-	jsonpf(this.current_grammar_url
-	       +"?command=translate"
-	       +"&from="+encodeURIComponent(from)
-	       +"&input="+encodeURIComponent(input),
-	       cont)
+	this.pgf_call("translate",{from:from,input:input},cont);
     },
     translategroup: function(from,input,cont) {
-	jsonpf(this.current_grammar_url
-	       +"?command=translategroup"
-	       +"&from="+encodeURIComponent(from)
-	       +"&input="+encodeURIComponent(input),
-	       cont)
+	this.pgf_call("translategroup",{from:from,input:input},cont);
     }
 
 };
