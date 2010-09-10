@@ -29,11 +29,13 @@ cgiReq (Request method uri hdrs body) = CGIRequest vars inputs body'
     vars = M.fromList [("REQUEST_METHOD",method),
                        ("REQUEST_URI",show uri),
                        ("SCRIPT_FILENAME",documentRoot++uriPath uri),
-                       ("QUERY_STRING",qs)]
+                       ("QUERY_STRING",qs),
+                       ("HTTP_ACCEPT_LANGUAGE",al)]
     qs = case uriQuery uri of
            '?':'&':s -> s -- httpd-shed bug workaround
            '?':s -> s
            s -> s
+    al = maybe "" id $ lookup "Accept-Language" hdrs
     inputs = map input $ queryToArguments qs  -- assumes method=="GET"
     body' = BS.pack body
 
