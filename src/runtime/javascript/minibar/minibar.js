@@ -140,7 +140,14 @@ function show_languages(grammar) {
     for(var i=0; i<lang.length; i++)
 	if(/*lang[i].canParse &&*/ !hasPrefix(lang[i].name,"Disamb"))
 	    menu.appendChild(option(langpart(lang[i].name,grammar.name),""+i));
-    if(options.default_source_language) {
+    if(grammar.userLanguage) {
+	for(var i=0;i<menu.options.length;i++) {
+	    var ix=menu.options[i].value;
+	    var l=menu.grammar.languages[ix].name;
+	    if(l==grammar.userLanguage) menu.selectedIndex=i;
+	}
+    }
+    else if(options.default_source_language) {
 	for(var i=0;i<menu.options.length;i++) {
 	    var ix=menu.options[i].value;
 	    var l=langpart(menu.grammar.languages[ix].name,menu.grammar.name);
