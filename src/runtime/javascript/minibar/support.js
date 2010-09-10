@@ -130,10 +130,11 @@ function tr(cells) {
   return tr;
 }
 
-function button(label,action) {
+function button(label,action,key) {
   var el=empty("input","type","button");
   el.setAttribute("value",label);
   el.setAttribute("onclick",action);
+  if(key) el.setAttribute("accesskey",key);
   return el;
 }
 
