@@ -67,21 +67,16 @@ pType = do
       do (cat,args) <- pAtom
          return [(Explicit,wildCId,DTyp [] cat args)]
       RP.<++
-      (RP.between (RP.char '(') (RP.char ')') $ do
-         xs <- RP.option [(Explicit,wildCId)] $ do
-                     xs <- pBinds
-                     RP.skipSpaces
-                     RP.char ':'
-                     return xs
-         ty <- pType
-         return [(b,v,ty) | (b,v) <- xs])
-      RP.<++
-      (RP.between (RP.char '{') (RP.char '}') $ do
-         vs <- RP.sepBy1 (RP.skipSpaces >> pCId) (RP.skipSpaces >> RP.char ',')
-         RP.skipSpaces
-         RP.char ':'
-         ty <- pType
-         return [(Implicit,v,ty) | v <- vs])
+      do RP.between (RP.char '(') (RP.char ')') pHypoBinds
+
+pHypoBinds = do
+   xs <- RP.option [(Explicit,wildCId)] $ do
+               xs <- pBinds
+               RP.skipSpaces
+               RP.char ':'
+               return xs
+   ty <- pType
+   return [(b,v,ty) | (b,v) <- xs]
 
     pAtom = do
       cat <- pCId
