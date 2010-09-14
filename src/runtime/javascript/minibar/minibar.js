@@ -33,22 +33,21 @@ var server = {
     get_grammarlist: function(cont) {
 	http_get_json(options.grammars_url+"grammars.cgi",cont);
     },
-    get_languages: function(cont) {
-	http_get_json(this.current_grammar_url,cont);
-    },
     pgf_call: function(cmd,args,cont) {
 	var url=this.current_grammar_url+"?command="+cmd;
 	for(var arg in args) url+="&"+arg+"="+encodeURIComponent(args[arg]);
 	http_get_json(url,cont);
     },
 
+    get_languages: function(cont) {
+	this.pgf_call("grammar",{},cont);
+    },
+
     get_random: function(cont) {
-	//jsonpf(this.current_grammar_url+"?command=random&random="+Math.random(),cont);
 	this.pgf_call("random",{random:Math.random()},cont);
     },
     linearize: function(tree,to,cont) {
-	jsonpf(this.current_grammar_url+"?command=linearize&tree="
-	       +encodeURIComponent(tree)+"&to="+to,cont)
+	this.pgf_call("linearize",{tree:tree,to:to},cont);
     },
     complete: function(from,input,cont) {
 	this.pgf_call("complete",{from:from,input:input},cont);
