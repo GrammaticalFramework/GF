@@ -108,9 +108,9 @@ function show_grammarlist(grammars) {
     appendChildren(menubar,
 		   [text(" From: "), empty_id("select","language_menu"),
 		    text(" To: "), empty_id("select","to_menu"),
-		    button(options.delete_button_text,"delete_last()"),
-		    button("Clear","clear_all()"),
-		    button("Random","generate_random()")]);
+		    button(options.delete_button_text,"delete_last()","H"),
+		    button("Clear","clear_all()","L"),
+		    button("Random","generate_random()","R")]);
     if(options.help_url)
 	menubar.appendChild(button("Help","open_help()"));
     select_grammar(grammars[0]);
