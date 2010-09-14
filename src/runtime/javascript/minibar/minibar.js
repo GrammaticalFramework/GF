@@ -241,7 +241,7 @@ function complete_typed(inp) {
 function finish_typed(inp) {
     //alert("finish_typed "+inp.value);
     var box=element("words");
-    var w=inp.value+" ";
+    var w=inp.value;
     if(box.completions.length==1)
 	add_word(box.completions[0]);
     else if(elem(w,box.completions))
