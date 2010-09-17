@@ -7,7 +7,6 @@ lincat
  Ind = NP ;
  Var = PN ;
  SubClass = {} ;
- SubClassC = {} ;
  Inherits = {} ;
  Desc = CN ;
  Formula = PolSentence;
@@ -94,7 +93,6 @@ desc2desc c1 c2 i d = d;
 subClassStm c1 c2 sc = ss (c1. s ! Sg ++ "est" ++ "une" ++ "sous-classe" ++ "de" ++ c2.s ! Sg) ;
 instStm c i = ss ((i.s ! Nom).comp ++ "est" ++ "une" ++ "instance" ++ "de" ++ c.s ! Sg) ;
 formStm f = ss (f.s ! Indep ! Pos) ;
-subClassCStm c1 c2 constr sc= ss (c1.s ! Sg  ++ "est" ++ "une" ++ "sous-classe" ++ "de" ++ c2.s ! Sg ++ "avec" ++ constr.s ! Indep ! Pos) ;
  
 
 -- lindef 
