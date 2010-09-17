@@ -651,7 +651,7 @@ lin
   Cyprus = UsePN (mkPN "Cyprus") ;
   GazaStrip = UsePN (mkPN "Gaza Strip") ;
   Iran = UsePN (mkPN "Iran") ;
-  Iraq = UsePN (mkPN "Iran") ;
+  Iraq = UsePN (mkPN "Iraq") ;
   Israel = UsePN (mkPN "Israel") ;
   Jordan = UsePN (mkPN "Jordan") ;
   Kuwait = UsePN (mkPN "Kuwait") ;
