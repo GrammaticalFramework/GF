@@ -5553,4 +5553,10 @@ lin
   Countries_VN_cities_ThaiNguyen = UsePN (mkPN "Thai Nguyen") ;
   Countries_ZRE_provinces_BasZaire = UsePN (mkPN "Bas Zaire") ;
   Countries_UA_provinces_Poltavska = UsePN (mkPN "Poltavska") ;
+  SaintKittsAndNevis = UsePN (mkPN "Saint Kitts and Nevis") ;
+  SaintVincentAndTheGrenadines = UsePN (mkPN "Saint Vincent and the Grenadines") ;
+  SaoTomeAndPrincipe = UsePN (mkPN "Sao Tome and Principe") ;
+  SerbiaAndMontenegro = UsePN (mkPN "Serbia and Montenegro") ;
+  TrinidadAndTobago = UsePN (mkPN "Trinidad and Tobago") ;
+
 }

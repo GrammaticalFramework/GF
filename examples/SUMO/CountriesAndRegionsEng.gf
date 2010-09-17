@@ -1,5 +1,5 @@
 --# -path=.:englishExtended
-concrete CountriesAndRegionsEng of CountriesAndRegions = MidLevelOntologyEng, GeographyEng, GovernmentEng ** open ParadigmsEng,NounEng  in {
+concrete CountriesAndRegionsEng of CountriesAndRegions = MidLevelOntologyEng ** open ParadigmsEng,NounEng  in {
   
 lin 
   NewJersey = UsePN (mkPN "New Jersey") ;
@@ -615,7 +615,7 @@ lin
   GloriosoIslands = UsePN (mkPN "Glorioso Islands") ;
   HeardIslandAndMcDonaldIslands = UsePN (mkPN "Heard Island and McDonald Islands") ;
   JuanDeNovaIsland = UsePN (mkPN "Juan de Nova Island") ;
-  Lesotho = variants (UsePN (mkPN "Lesotho")) (UsePN (mkPN "Basutoland")) ;
+  Lesotho = UsePN (mkPN "Lesotho" | mkPN "Basutoland") ;
   Madagascar = UsePN (mkPN "Madagascar") ;
   Malawi = UsePN (mkPN "Malawi") ;
   Mauritius = UsePN (mkPN "Mauritius") ;
@@ -643,7 +643,6 @@ lin
   Mali = UsePN (mkPN "Mali") ;
   Niger = UsePN (mkPN "Niger") ;
   Nigeria = UsePN (mkPN "Nigeria") ;
-  SaoTomeAndPrincipe = UsePN (mkPN "Sao Tome and Principe") ;
   Senegal = UsePN (mkPN "Senegal") ;
   SierraLeone = UsePN (mkPN "Sierra Leone") ;
   Togo = UsePN (mkPN "Togo") ;
@@ -711,7 +710,6 @@ lin
   Macedonia = UsePN (mkPN "Macedonia") ;
   Romania = UsePN (mkPN "Romania") ;
   Turkey = UsePN (mkPN "Turkey") ;
-  SerbiaAndMontenegro = UsePN (mkPN "Serbia and Montenegro") ;
   Andorra = UsePN (mkPN "Andorra") ;
   Gibraltar = UsePN (mkPN "Gibraltar") ;
   Portugal = UsePN (mkPN "Portugal") ;
@@ -740,10 +738,7 @@ lin
   NavassaIsland = UsePN (mkPN "Navassa Island") ;
   NetherlandsAntilles = UsePN (mkPN "Netherlands Antilles") ;
   PuertoRico = UsePN (mkPN "Puerto Rico") ;
-  SaintKittsAndNevis = UsePN (mkPN "Saint Kitts and Nevis") ;
   SaintLucia = UsePN (mkPN "Saint Lucia") ;
-  SaintVincentAndTheGrenadines = UsePN (mkPN "Saint Vincent and the Grenadines") ;
-  TrinidadAndTobago = UsePN (mkPN "Trinidad and Tobago") ;
   TurksAndCaicosIslands = UsePN (mkPN "Turks and Caicos Islands") ;
   VirginIslands = UsePN (mkPN "Virgin Islands") ;
   Belize = UsePN (mkPN "Belize") ;
