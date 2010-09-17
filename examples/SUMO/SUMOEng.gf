@@ -5,6 +5,7 @@ concrete SUMOEng of SUMO =
         EconomyEng,
         EngineeringEng,
         MondialEng,
+        CountriesAndRegionsEng,
         QoSontologyEng
 
 ** {
