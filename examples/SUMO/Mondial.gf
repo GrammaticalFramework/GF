@@ -10963,14 +10963,17 @@ abstract Mondial = MidLevelOntology, Geography, Government ** {
 
   fun Rwanda : Ind (both Country Nation);
 
+  -- The nation of SaintKittsAndNevis
   fun SaintKittsAndNevis : Ind (both Country Nation);
 
   fun SaintLucia : Ind (both Country Nation);
 
+  -- The nation of SaintVincentAndTheGrenadines.
   fun SaintVincentAndTheGrenadines : Ind (both Country Nation);
 
   fun SanMarino : Ind (both Country EuropeanNation);
 
+  -- The nation of SaoTomeAndPrincipe.
   fun SaoTomeAndPrincipe : Ind (both Country Nation);
 
   fun SaudiArabia : Ind (both Country Nation);
@@ -11021,6 +11024,7 @@ abstract Mondial = MidLevelOntology, Geography, Government ** {
 
   fun Senegal : Ind (both Country Nation);
 
+  -- The nation of SerbiaAndMontenegro.
   fun SerbiaAndMontenegro : Ind (both Country Nation);
 
   fun Seychelles : Ind (both Country Nation);
@@ -11069,6 +11073,7 @@ abstract Mondial = MidLevelOntology, Geography, Government ** {
 
   fun Tonga : Ind (both Country Nation);
 
+  -- The nation of TrinidadAndTobago.
   fun TrinidadAndTobago : Ind (both Country Nation);
 
   fun Tunisia : Ind (both Country Nation);
