@@ -7,7 +7,6 @@ lincat
   Ind = NP ;
   Var = PN ;
   SubClass = {} ;
-  SubClassC = {} ;
   Inherits = {} ;
   Desc = CN ;
   Formula = PolSentence;

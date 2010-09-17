@@ -11,7 +11,6 @@ lincat
  Ind = NP ;
  Var = PN ;
  SubClass = {} ;
- SubClassC = {} ;
  Inherits = {} ;
  Desc = CN ;
  Formula = PolSentence;
@@ -102,7 +101,6 @@ either c1 c2 = {s = \\c,sp,n => c1.s ! c ! sp ! n ++ "sau" ++ c2.s ! c ! sp ! n;
 subClassStm c1 c2 sc = ss (c1. s ! Sg ! Def ! ANomAcc ++ "este" ++ "o" ++ "subclasã" ++ "a" ++ c2.s ! Sg ! Def ! AGenDat) ;
 instStm c i = ss ((i.s ! No).comp ++ "este" ++ "o" ++ "instanþiere" ++ "a" ++ c.s ! Sg ! Def ! AGenDat) ;
 formStm f = ss (f.s ! Indep ! Pos) ;
-subClassCStm c1 c2 constr sc= ss (c1.s ! Sg ! Def ! ANomAcc ++ "este" ++ "o" ++ "subclasã" ++ "a" ++ c2.s ! Sg ! Def ! AGenDat ++ "unde" ++ constr.s ! Indep ! Pos) ;
                 
                 
 desc c1 c2 i = c2 ;
