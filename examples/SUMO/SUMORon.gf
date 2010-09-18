@@ -5,7 +5,6 @@ concrete SUMORon of SUMO =
         MidLevelOntologyRon,
         EconomyRon,
         EngineeringRon,
-        MondialRon,
         CountriesAndRegionsRon,
         QoSontologyRon
 

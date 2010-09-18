@@ -1,9 +1,8 @@
-concrete MondialEng of Mondial = MidLevelOntologyEng ** open ParadigmsEng,NounEng  in {
+concrete MondialEng of Mondial = MidLevelOntologyEng ** open ParadigmsEng,NounEng in {
 
 lin 
   Countries_H_provinces_Pest = UsePN (mkPN "Pest") ;
   Countries_THA_provinces_KamphaengPhet = UsePN (mkPN "Kamphaeng Phet") ;
-  CapeVerde = UsePN (mkPN "Cape Verde") ;
   Countries_USA_provinces_Illinois_cities_Naperville = UsePN (mkPN "Naperville") ;
   Countries_USA_provinces_NorthCarolina_cities_Greensboro = UsePN (mkPN "Greensboro") ;
   Countries_EAK_provinces_RiftValley_cities_Nakuru = UsePN (mkPN "Nakuru") ;
@@ -28,7 +27,6 @@ lin
   Islands_Anguilla = UsePN (mkPN "Anguilla") ;
   Countries_J_provinces_Fukushima = UsePN (mkPN "Fukushima") ;
   Islands_SaintLucia = UsePN (mkPN "Saint Lucia") ;
-  Zaire = UsePN (mkPN "Zaire") ;
   Countries_NOK_cities_Sunchon = UsePN (mkPN "Sunchon") ;
   Countries_RI_cities_Binjai = UsePN (mkPN "Binjai") ;
   Countries_S_provinces_Sodermanland_cities_Nykoping = UsePN (mkPN "Nykoping") ;
@@ -77,7 +75,6 @@ lin
   Countries_KAZ_provinces_Qostanay_cities_Rudny = UsePN (mkPN "Rudny") ;
   Countries_CO_provinces_Caldas = UsePN (mkPN "Caldas") ;
   Countries_ET_provinces_Aswan = UsePN (mkPN "Aswan") ;
-  Gambia = UsePN (mkPN "Gambia") ;
   Countries_EAT_provinces_Arusha = UsePN (mkPN "Arusha") ;
   Countries_UA_provinces_Dnipropetrovska = UsePN (mkPN "Dnipropetrovska") ;
   Countries_ET_provinces_Ismailiya_cities_Ismailiya = UsePN (mkPN "Ismailiya") ;
@@ -111,7 +108,6 @@ lin
   Countries_RC_provinces_Tainan = UsePN (mkPN "Tainan") ;
   Countries_C_provinces_VillaClara = UsePN (mkPN "Villa Clara") ;
   Countries_BR_cities_Hortolandia = UsePN (mkPN "Hortolandia") ;
-  Congo = UsePN (mkPN "Congo") ;
   Countries_USA_provinces_NewYork_cities_Syracuse = UsePN (mkPN "Syracuse") ;
   Mountains_Haltiatunturi = UsePN (mkPN "Haltiatunturi") ;
   Seas_IndianOcean = UsePN (mkPN "Indian Ocean") ;
@@ -179,7 +175,6 @@ lin
   Countries_I_provinces_EmiliaRomagna_cities_Parma = UsePN (mkPN "Parma") ;
   Countries_TJ_provinces_Hubei_cities_Echeng = UsePN (mkPN "Echeng") ;
   Countries_PL_provinces_Torunskie_cities_Grudziadz = UsePN (mkPN "Grudziadz") ;
-  Ireland = UsePN (mkPN "Ireland") ;
   Countries_USA_provinces_Florida_cities_Orlando = UsePN (mkPN "Orlando") ;
   Countries_YV_provinces_Zulia_cities_Cabimas = UsePN (mkPN "Cabimas") ;
   Countries_GB_provinces_Lancashire_cities_Blackpool = UsePN (mkPN "Blackpool") ;
@@ -212,7 +207,6 @@ lin
   Countries_PL_provinces_Wloclawskie_cities_Wloclawek = UsePN (mkPN "Wloclawek") ;
   Countries_USA_provinces_Michigan_cities_Warren = UsePN (mkPN "Warren") ;
   Organizations_IFC = UsePN (mkPN "International Finance Corporation") ;
-  DominicanRepublic = UsePN (mkPN "Dominican Republic") ;
   Countries_TJ_provinces_Guangdong_cities_Meixian = UsePN (mkPN "Meixian") ;
   Countries_GB_provinces_IsleofWight = UsePN (mkPN "Isle of Wight") ;
   Countries_USA_provinces_NewYork_cities_Buffalo = UsePN (mkPN "Buffalo") ;
@@ -276,11 +270,9 @@ lin
   Rivers_Ruvuma = UsePN (mkPN "Ruvuma") ;
   Countries_TJ_provinces_Shandong_cities_Zhucheng = UsePN (mkPN "Zhucheng") ;
   Countries_BR_provinces_Pernambuco_cities_Paulista = UsePN (mkPN "Paulista") ;
-  Djibouti = UsePN (mkPN "Djibouti") ;
   Countries_RI_cities_Semarang = UsePN (mkPN "Semarang") ;
   Countries_IRQ_provinces_Karbala = UsePN (mkPN "Karbala") ;
   Countries_PL_provinces_Jeleniogorskie_cities_JeleniaGora = UsePN (mkPN "Jelenia Gora") ;
-  Brunei = UsePN (mkPN "Brunei") ;
   Countries_TR_provinces_Bayburt_cities_Bayburt = UsePN (mkPN "Bayburt") ;
   Countries_IND_provinces_Orissa_cities_Bhubaneswar = UsePN (mkPN "Bhubaneswar") ;
   Mountains_PikMoskva = UsePN (mkPN "Pik Moskva") ;
@@ -382,12 +374,10 @@ lin
   Countries_EAK_provinces_Central_cities_Thika = UsePN (mkPN "Thika") ;
   Countries_IR_provinces_Mazandaran_cities_Babol = UsePN (mkPN "Babol") ;
   Countries_TJ_provinces_Guangdong_cities_Jiangmen = UsePN (mkPN "Jiangmen") ;
-  Kyrgyzstan = UsePN (mkPN "Kyrgyzstan") ;
   Countries_RO_provinces_Mures = UsePN (mkPN "Mures") ;
   Countries_CO_provinces_Tolima_cities_Ibague = UsePN (mkPN "Ibague") ;
   Countries_IR_provinces_Bakhtaran_cities_Bakhtaran = UsePN (mkPN "Bakhtaran") ;
   Countries_USA_provinces_Idaho = UsePN (mkPN "Idaho") ;
-  Tuvalu = UsePN (mkPN "Tuvalu") ;
   Countries_B_provinces_Hainaut = UsePN (mkPN "Hainaut") ;
   Lakes_OzeroTaimyr = UsePN (mkPN "Ozero Taimyr") ;
   Countries_BR_provinces_SaoPaulo_cities_Itapevi = UsePN (mkPN "Itapevi") ;
@@ -422,10 +412,8 @@ lin
   Countries_ZRE_provinces_KasaiOriental = UsePN (mkPN "Kasai Oriental") ;
   Countries_GB_provinces_Surrey = UsePN (mkPN "Surrey") ;
   Countries_EAT_provinces_KaskaziniUjunga_cities_Mkokotoni = UsePN (mkPN "Mkokotoni") ;
-  PapuaNewGuinea = UsePN (mkPN "Papua New Guinea") ;
   Countries_I_provinces_Piemonte_cities_Turin = UsePN (mkPN "Turin") ;
   Countries_RH_cities_Port_au_Prince = UsePN (mkPN "Port-au-Prince") ;
-  Morocco = UsePN (mkPN "Morocco") ;
   Countries_SF_provinces_Aland_cities_Mariehamn = UsePN (mkPN "Mariehamn") ;
   Countries_ES_provinces_Usulutan_cities_Usulutan = UsePN (mkPN "Usulutan") ;
   Countries_UA_provinces_Donetska_cities_Donetsk = UsePN (mkPN "Donetsk") ;
@@ -433,7 +421,6 @@ lin
   Countries_I_provinces_Lombardia_cities_Bergamo = UsePN (mkPN "Bergamo") ;
   Countries_IND_provinces_Gujarat = UsePN (mkPN "Gujarat") ;
   Countries_S_provinces_Blekinge_cities_Karlskrona = UsePN (mkPN "Karlskrona") ;
-  Honduras = UsePN (mkPN "Honduras") ;
   Countries_USA_provinces_Alabama = UsePN (mkPN "Alabama") ;
   Countries_cid_cia_Christmas_Island = UsePN (mkPN "Christmas Island") ;
   Countries_IND_provinces_Kerala_cities_Trivandrum = UsePN (mkPN "Trivandrum") ;
@@ -460,7 +447,6 @@ lin
   Countries_GB_provinces_GreaterManchester_cities_Oldham = UsePN (mkPN "Oldham") ;
   Countries_IR_provinces_Khorasan_cities_Birjand = UsePN (mkPN "Birjand") ;
   Countries_CH_provinces_GL = UsePN (mkPN "GL") ;
-  Hungary = UsePN (mkPN "Hungary") ;
   Countries_S_provinces_Kalmar_cities_Kalmar = UsePN (mkPN "Kalmar") ;
   Mountains_PikKarl_Marx = UsePN (mkPN "Pik Karl-Marx") ;
   Countries_DZ_cities_SidibelAbbes = UsePN (mkPN "Sidi bel Abbes") ;
@@ -514,9 +500,7 @@ lin
   Countries_IR_provinces_Mazandaran = UsePN (mkPN "Mazandaran") ;
   Islands_Lundy = UsePN (mkPN "Lundy") ;
   Countries_MEX_provinces_Colima = UsePN (mkPN "Colima") ;
-  Tajikistan = UsePN (mkPN "Tajikistan") ;
   Countries_D_provinces_BadenWurttemberg_cities_Reutlingen = UsePN (mkPN "Reutlingen") ;
-  Ecuador = UsePN (mkPN "Ecuador") ;
   Countries_USA_provinces_Oklahoma_cities_OklahomaCity = UsePN (mkPN "Oklahoma City") ;
   Countries_CDN_provinces_Ontario_cities_Hamilton = UsePN (mkPN "Hamilton") ;
   Countries_I_provinces_Campania = UsePN (mkPN "Campania") ;
@@ -524,13 +508,11 @@ lin
   Countries_PL_provinces_Gorzowskie_cities_GorzowWielkopolski = UsePN (mkPN "Gorzow Wielkopolski") ;
   Countries_RI_cities_BandaAceh = UsePN (mkPN "Banda Aceh") ;
   Islands_SantaMaria = UsePN (mkPN "Santa Maria") ;
-  Peru = UsePN (mkPN "Peru") ;
   Countries_KAZ_provinces_Almaty_munic = UsePN (mkPN "Almaty (munic.)") ;
   Countries_KN_cities_Basseterre = UsePN (mkPN "Basseterre") ;
   Countries_EAK_provinces_NorthEastern_cities_Garissa = UsePN (mkPN "Garissa") ;
   Countries_IND_provinces_Rajasthan_cities_Bikaner = UsePN (mkPN "Bikaner") ;
   Countries_TJ_provinces_Jilin_cities_Baicheng = UsePN (mkPN "Baicheng") ;
-  Dominica = UsePN (mkPN "Dominica") ;
   Countries_GB_provinces_Lincolnshire = UsePN (mkPN "Lincolnshire") ;
   Countries_CH_provinces_BS_cities_Basel = UsePN (mkPN "Basel") ;
   Countries_MEX_provinces_BajaCaliforniaSur_cities_LaPaz = UsePN (mkPN "La Paz") ;
@@ -570,7 +552,6 @@ lin
   Countries_R_provinces_Arkhangelskayaoblast_cities_Arkhangelsk = UsePN (mkPN "Arkhangelsk") ;
   Countries_NL_provinces_Friesland_cities_Leeuwarden = UsePN (mkPN "Leeuwarden") ;
   Rivers_Djuba = UsePN (mkPN "Djuba") ;
-  Benin = UsePN (mkPN "Benin") ;
   Countries_USA_provinces_California_cities_Corona = UsePN (mkPN "Corona") ;
   Countries_SF_provinces_Vaasa = UsePN (mkPN "Vaasa") ;
   Countries_CO_provinces_Vaupes_cities_Mitu = UsePN (mkPN "Mitu") ;
@@ -633,7 +614,6 @@ lin
   Countries_KAZ_provinces_Qostanay = UsePN (mkPN "Qostanay") ;
   Countries_RO_provinces_Bacau_cities_Bacau = UsePN (mkPN "Bacau") ;
   Countries_CDN_provinces_NovaScotia = UsePN (mkPN "Nova Scotia") ;
-  CentralAfricanRepublic = UsePN (mkPN "Central African Republic") ;
   Countries_D_provinces_NordrheinWestfalen_cities_Bielefeld = UsePN (mkPN "Bielefeld") ;
   Countries_CDN_provinces_Ontario_cities_Nepean = UsePN (mkPN "Nepean") ;
   Islands_Kiribati = UsePN (mkPN "Kiribati") ;
@@ -698,7 +678,6 @@ lin
   Countries_CO_provinces_Amazonas = UsePN (mkPN "Amazonas") ;
   Countries_IND_provinces_Maharashtra_cities_Amravati = UsePN (mkPN "Amravati") ;
   Countries_SN_provinces_Tambacounda_cities_Tambacounda = UsePN (mkPN "Tambacounda") ;
-  Vietnam = UsePN (mkPN "Vietnam") ;
   Countries_B_provinces_Hainaut_cities_Charleroi = UsePN (mkPN "Charleroi") ;
   Countries_GB_provinces_Kent_cities_RochesteruponMedway = UsePN (mkPN "Rochester upon Medway") ;
   Countries_WAN_cities_Abuja = UsePN (mkPN "Abuja") ;
@@ -719,7 +698,6 @@ lin
   Countries_ES_provinces_LaLibertad_cities_NuevaSanSalvador = UsePN (mkPN "Nueva San Salvador") ;
   Countries_GB_provinces_Central = UsePN (mkPN "Central") ;
   Countries_SF_provinces_Mikkeli = UsePN (mkPN "Mikkeli") ;
-  Azerbaijan = UsePN (mkPN "Azerbaijan") ;
   Countries_TR_provinces_Samsun_cities_Samsun = UsePN (mkPN "Samsun") ;
   Countries_UAE_provinces_AlFujayrah = UsePN (mkPN "Al Fujayrah") ;
   Countries_GB_provinces_HerefordandWorcester_cities_Worcester = UsePN (mkPN "Worcester") ;
@@ -736,9 +714,7 @@ lin
   Countries_D_provinces_Berlin_cities_Berlin = UsePN (mkPN "Berlin") ;
   Countries_TR_provinces_Bursa_cities_Bursa = UsePN (mkPN "Bursa") ;
   Lakes_LakePowell = UsePN (mkPN "Lake Powell") ;
-  SolomonIslands = UsePN (mkPN "Solomon Islands") ;
   Countries_PE_provinces_Moquegua_cities_Moquegua = UsePN (mkPN "Moquegua") ;
-  Canada = UsePN (mkPN "Canada") ;
   Countries_USA_provinces_California_cities_LongBeach = UsePN (mkPN "Long Beach") ;
   Countries_MEX_provinces_Michoacan_cities_Zamora = UsePN (mkPN "Zamora") ;
   Countries_BR_provinces_SaoPaulo_cities_Barretos = UsePN (mkPN "Barretos") ;
@@ -783,7 +759,6 @@ lin
   Countries_E_provinces_Madrid_cities_Leganes = UsePN (mkPN "Leganes") ;
   Countries_PE_provinces_Loreto = UsePN (mkPN "Loreto") ;
   Countries_UA_provinces_Chernihivska = UsePN (mkPN "Chernihivska") ;
-  Tonga = UsePN (mkPN "Tonga") ;
   Countries_RC_provinces_Tainan_munic_cities_Tainan = UsePN (mkPN "Tainan") ;
   Countries_GB_provinces_Highland_cities_Inverness = UsePN (mkPN "Inverness") ;
   Mountains_Pulog = UsePN (mkPN "Pulog") ;
@@ -854,7 +829,6 @@ lin
   Countries_BD_cities_Savar = UsePN (mkPN "Savar") ;
   Countries_CO_provinces_ValledeCauca_cities_Buenaventura = UsePN (mkPN "Buenaventura") ;
   Countries_BD_cities_Dhaka = UsePN (mkPN "Dhaka") ;
-  Seychelles = UsePN (mkPN "Seychelles") ;
   Countries_CH_provinces_GE_cities_Geneva = UsePN (mkPN "Geneva") ;
   Countries_IR_provinces_Semnan = UsePN (mkPN "Semnan") ;
   Countries_PE_provinces_Ayacucho = UsePN (mkPN "Ayacucho") ;
@@ -882,7 +856,6 @@ lin
   Countries_BR_provinces_SaoPaulo_cities_Indaiatuba = UsePN (mkPN "Indaiatuba") ;
   Countries_TR_provinces_Trabzon_cities_Trabzon = UsePN (mkPN "Trabzon") ;
   Countries_S_provinces_Ostergotland_cities_Linkoping = UsePN (mkPN "Linkoping") ;
-  Kuwait = UsePN (mkPN "Kuwait") ;
   Countries_NL_provinces_ZuidHolland_cities_Rotterdam = UsePN (mkPN "Rotterdam") ;
   Countries_J_provinces_Fukuoka_cities_Kitakyushu = UsePN (mkPN "Kita kyushu") ;
   Countries_IND_provinces_Maharashtra_cities_Mumbai = UsePN (mkPN "Mumbai") ;
@@ -896,7 +869,6 @@ lin
   Countries_THA_provinces_SakonNakhon = UsePN (mkPN "Sakon Nakhon") ;
   Lakes_LakeUrumiyeh = UsePN (mkPN "Lake Urumiyeh") ;
   Countries_GB_provinces_TyneandWear_cities_NewcastleuponTyne = UsePN (mkPN "Newcastle upon Tyne") ;
-  Qatar = UsePN (mkPN "Qatar") ;
   Countries_R_provinces_Stavropolskykray_cities_Neftekamsk = UsePN (mkPN "Neftekamsk") ;
   Countries_NL_provinces_Flevoland = UsePN (mkPN "Flevoland") ;
   Countries_TJ_provinces_Jiangsu_cities_Yizheng = UsePN (mkPN "Yizheng") ;
@@ -910,7 +882,6 @@ lin
   Countries_H_provinces_KomaromEsztergom = UsePN (mkPN "Komarom Esztergom") ;
   Countries_IND_provinces_Mizoram_cities_Aijal = UsePN (mkPN "Aijal") ;
   Countries_HR_cities_Zagreb = UsePN (mkPN "Zagreb") ;
-  Macedonia = UsePN (mkPN "Macedonia") ;
   Countries_MEX_provinces_NuevoLeon = UsePN (mkPN "Nuevo Leon") ;
   Countries_GB_provinces_Swansea_cities_Swansea = UsePN (mkPN "Swansea") ;
   Countries_RC_provinces_Ilan = UsePN (mkPN "Ilan") ;
@@ -978,7 +949,6 @@ lin
   Countries_MAL_provinces_Selangor_cities_Kelang = UsePN (mkPN "Kelang") ;
   Countries_CO_provinces_Vaupes = UsePN (mkPN "Vaupes") ;
   Countries_RO_provinces_Olt_cities_Slatina = UsePN (mkPN "Slatina") ;
-  Netherlands = UsePN (mkPN "Netherlands") ;
   Countries_MAL_provinces_Johor = UsePN (mkPN "Johor") ;
   Deserts_Kysylkum = UsePN (mkPN "Kysylkum") ;
   Countries_MEX_provinces_Puebla_cities_Puebla = UsePN (mkPN "Puebla") ;
@@ -995,7 +965,6 @@ lin
   Countries_CO_provinces_Cesar = UsePN (mkPN "Cesar") ;
   Countries_D_provinces_NordrheinWestfalen_cities_Krefeld = UsePN (mkPN "Krefeld") ;
   Countries_cid_cia_Howland_Island = UsePN (mkPN "Howland Island") ;
-  Uruguay = UsePN (mkPN "Uruguay") ;
   Countries_J_provinces_Saga = UsePN (mkPN "Saga") ;
   Islands_Alicudi = UsePN (mkPN "Alicudi") ;
   Lakes_LakeNgami = UsePN (mkPN "Lake Ngami") ;
@@ -1008,7 +977,6 @@ lin
   Countries_GB_provinces_Durham = UsePN (mkPN "Durham") ;
   Countries_USA_provinces_Arizona_cities_Chandler = UsePN (mkPN "Chandler") ;
   Countries_IND_provinces_Kerala_cities_Kozhikode = UsePN (mkPN "Kozhikode") ;
-  Chile = UsePN (mkPN "Chile") ;
   Countries_PK_cities_Okara = UsePN (mkPN "Okara") ;
   Countries_RO_provinces_BistritaNasaud = UsePN (mkPN "Bistrita Nasaud") ;
   Countries_E_provinces_Aragon = UsePN (mkPN "Aragon") ;
@@ -1021,7 +989,6 @@ lin
   Countries_RA_provinces_Neuquen = UsePN (mkPN "Neuquen") ;
   Countries_IRQ_provinces_AlAnbar = UsePN (mkPN "Al Anbar") ;
   Countries_RI_cities_TebingTinggi = UsePN (mkPN "Tebing Tinggi") ;
-  Swaziland = UsePN (mkPN "Swaziland") ;
   Countries_GB_provinces_Merseyside_cities_SaintHelens = UsePN (mkPN "Saint Helens") ;
   Deserts_Tanesruft = UsePN (mkPN "Tanesruft") ;
   Countries_SUD_provinces_alWusta = UsePN (mkPN "al Wusta") ;
@@ -1056,11 +1023,9 @@ lin
   Countries_IR_provinces_Bushehr_cities_Bushehr = UsePN (mkPN "Bushehr") ;
   Countries_UA_provinces_Chernivetska = UsePN (mkPN "Chernivetska") ;
   Countries_A_provinces_Salzburg = UsePN (mkPN "Salzburg") ;
-  NewZealand = UsePN (mkPN "New Zealand") ;
   Countries_R_provinces_Rostovskayaoblast_cities_Novoshakhtinsk = UsePN (mkPN "Novoshakhtinsk") ;
   Countries_C_provinces_VillaClara_cities_SantaClara = UsePN (mkPN "Santa Clara") ;
   Countries_EAT_provinces_Lindi_cities_Lindi = UsePN (mkPN "Lindi") ;
-  Russia = UsePN (mkPN "Russia") ;
   Countries_S_provinces_Gavleborg_cities_Gavle = UsePN (mkPN "Gavle") ;
   Countries_E_provinces_CanaryIslands_cities_LaLaguna = UsePN (mkPN "La Laguna") ;
   Countries_D_provinces_BadenWurttemberg_cities_FreiburgimBreisgau = UsePN (mkPN "Freiburg im Breisgau") ;
@@ -1099,7 +1064,6 @@ lin
   Countries_USA_provinces_Virginia_cities_VirginiaBeach = UsePN (mkPN "Virginia Beach") ;
   Countries_cid_cia_Cayman_Islands_cities_GeorgeTown = UsePN (mkPN "George Town") ;
   Countries_USA_provinces_California_cities_Stockton = UsePN (mkPN "Stockton") ;
-  Iran = UsePN (mkPN "Iran") ;
   Countries_SF_provinces_Oulu = UsePN (mkPN "Oulu") ;
   Countries_RO_provinces_Olt = UsePN (mkPN "Olt") ;
   Countries_CDN_provinces_Ontario_cities_Brampton = UsePN (mkPN "Brampton") ;
@@ -1115,11 +1079,9 @@ lin
   Rivers_Kwa = UsePN (mkPN "Kwa") ;
   Countries_IR_provinces_Semnan_cities_Semnan = UsePN (mkPN "Semnan") ;
   Countries_I_provinces_Veneto_cities_Venice = UsePN (mkPN "Venice") ;
-  CoteDIvoire = UsePN (mkPN "Cote dIvoire") ;
   Lakes_LakeSuat = UsePN (mkPN "Lake Suat") ;
   Countries_TJ_provinces_Anhui_cities_Anqing = UsePN (mkPN "Anqing") ;
   Countries_J_provinces_Shizuoka = UsePN (mkPN "Shizuoka") ;
-  MarshallIslands = UsePN (mkPN "Marshall Islands") ;
   Countries_S_provinces_Alvsborg_cities_Vanersborg = UsePN (mkPN "Vanersborg") ;
   Countries_TJ_provinces_Shaanxi_cities_Weinan = UsePN (mkPN "Weinan") ;
   Countries_HCA_provinces_Copan_cities_SantaRosadeCopan = UsePN (mkPN "Santa Rosa de Copan") ;
@@ -1131,7 +1093,6 @@ lin
   Countries_TJ_provinces_Tibet_cities_Lhasa = UsePN (mkPN "Lhasa") ;
   Countries_TR_provinces_Afyon_cities_Afyon = UsePN (mkPN "Afyon") ;
   Countries_IND_provinces_AndhraPradesh_cities_Warangal = UsePN (mkPN "Warangal") ;
-  Madagascar = UsePN (mkPN "Madagascar") ;
   Countries_KAZ_provinces_Almaty = UsePN (mkPN "Almaty") ;
   Countries_B_provinces_Antwerp = UsePN (mkPN "Antwerp") ;
   Countries_ZRE_provinces_Kivu_cities_Goma = UsePN (mkPN "Goma") ;
@@ -1140,7 +1101,6 @@ lin
   Countries_GR_provinces_StereaEllas = UsePN (mkPN "Sterea Ellas") ;
   Countries_MA_cities_Tanger = UsePN (mkPN "Tanger") ;
   Countries_R_provinces_Pskovskayaoblast_cities_Pskov = UsePN (mkPN "Pskov") ;
-  Venezuela = UsePN (mkPN "Venezuela") ;
   Countries_TJ_provinces_Henan_cities_Sanmenxia = UsePN (mkPN "Sanmenxia") ;
   Countries_ET_provinces_Asyut_cities_Asyut = UsePN (mkPN "Asyut") ;
   Countries_GB_provinces_IslandAreas_munic = UsePN (mkPN "Island Areas (munic.)") ;
@@ -1166,7 +1126,6 @@ lin
   Countries_RSA_cities_Daveyton = UsePN (mkPN "Daveyton") ;
   Countries_R_provinces_Tulskayaoblast_cities_Tula = UsePN (mkPN "Tula") ;
   Countries_IND_provinces_UttarPradesh_cities_Allahabad = UsePN (mkPN "Allahabad") ;
-  Ukraine = UsePN (mkPN "Ukraine") ;
   Countries_RA_provinces_LaPampa_cities_SantaRosa = UsePN (mkPN "Santa Rosa") ;
   Countries_RI_cities_Palangkaraya = UsePN (mkPN "Palangkaraya") ;
   Lakes_LakeNyasa = UsePN (mkPN "Lake Nyasa") ;
@@ -1181,7 +1140,6 @@ lin
   Countries_GB_provinces_TyneandWear_cities_Newcastle = UsePN (mkPN "Newcastle") ;
   Countries_E_provinces_Catalonia_cities_Lleida = UsePN (mkPN "Lleida") ;
   Countries_SN_provinces_Kolda_cities_Kolda = UsePN (mkPN "Kolda") ;
-  Uzbekistan = UsePN (mkPN "Uzbekistan") ;
   Countries_WAN_cities_Kano = UsePN (mkPN "Kano") ;
   Countries_USA_provinces_Georgia_cities_Columbus = UsePN (mkPN "Columbus") ;
   Countries_ET_provinces_BeniSuef_cities_BeniSuef = UsePN (mkPN "Beni Suef") ;
@@ -1302,7 +1260,6 @@ lin
   Countries_ET_provinces_Qena_cities_ElUqsur = UsePN (mkPN "El Uqsur") ;
   Countries_A_provinces_Vienna = UsePN (mkPN "Vienna") ;
   Countries_H_provinces_Csongrad_cities_Hodmezovasarhely = UsePN (mkPN "Hodmezovasarhely") ;
-  Lebanon = UsePN (mkPN "Lebanon") ;
   Countries_GB_provinces_Dorset = UsePN (mkPN "Dorset") ;
   Countries_USA_provinces_NewJersey_cities_Trenton = UsePN (mkPN "Trenton") ;
   Countries_TJ_provinces_Hunan_cities_Yuanjiang = UsePN (mkPN "Yuanjiang") ;
@@ -1311,7 +1268,6 @@ lin
   Countries_R_provinces_Rostovskayaoblast = UsePN (mkPN "Rostovskaya oblast") ;
   Countries_GNB_cities_Bissau = UsePN (mkPN "Bissau") ;
   Lakes_Vaenern = UsePN (mkPN "Vaenern") ;
-  Somalia = UsePN (mkPN "Somalia") ;
   Countries_LB_cities_Monrovia = UsePN (mkPN "Monrovia") ;
   Countries_IND_provinces_MadhyaPradesh_cities_Bhilai = UsePN (mkPN "Bhilai") ;
   Countries_PL_provinces_Bydgoskie_cities_Bydgoszcz = UsePN (mkPN "Bydgoszcz") ;
@@ -1328,7 +1284,6 @@ lin
   Countries_GR_cities_Larisa = UsePN (mkPN "Larisa") ;
   Mountains_Chimborazo = UsePN (mkPN "Chimborazo") ;
   Countries_GCA_cities_Mixco = UsePN (mkPN "Mixco") ;
-  Niger = UsePN (mkPN "Niger") ;
   Countries_Z_provinces_Copperbelt = UsePN (mkPN "Copperbelt") ;
   Countries_CDN_provinces_BritishColumbia_cities_Vancouver = UsePN (mkPN "Vancouver") ;
   Countries_F_provinces_IledeFrance_cities_Paris = UsePN (mkPN "Paris") ;
@@ -1359,11 +1314,9 @@ lin
   Countries_CH_provinces_AR_cities_Herisau = UsePN (mkPN "Herisau") ;
   Countries_MAL_provinces_Sabah_cities_KotaKinabalu = UsePN (mkPN "Kota Kinabalu") ;
   Countries_HCA_provinces_Ocotepeque = UsePN (mkPN "Ocotepeque") ;
-  Palau = UsePN (mkPN "Palau") ;
   Countries_KAZ_provinces_Qaraghandy_cities_Temirtau = UsePN (mkPN "Temirtau") ;
   Seas_RedSea = UsePN (mkPN "Red Sea") ;
   Countries_VN_provinces_CentralHighlands = UsePN (mkPN "Central Highlands") ;
-  Sweden = UsePN (mkPN "Sweden") ;
   Countries_TJ_provinces_Jilin_cities_Daan = UsePN (mkPN "Daan") ;
   Islands_Kefallinia = UsePN (mkPN "Kefallinia") ;
   Countries_ZRE_provinces_BasZaire_cities_Boma = UsePN (mkPN "Boma") ;
@@ -1397,7 +1350,6 @@ lin
   Countries_BR_cities_RibeiraodasNeves = UsePN (mkPN "Ribeirao das Neves") ;
   Countries_cid_cia_Cayman_Islands = UsePN (mkPN "Cayman Islands") ;
   Islands_Teneriffa = UsePN (mkPN "Teneriffa") ;
-  Belize = UsePN (mkPN "Belize") ;
   Countries_PE_provinces_Amazonas = UsePN (mkPN "Amazonas") ;
   Countries_AUS_provinces_Tasmania = UsePN (mkPN "Tasmania") ;
   Countries_RA_provinces_BuenosAires_cities_Moron = UsePN (mkPN "Moron") ;
@@ -1411,7 +1363,6 @@ lin
   Countries_TR_provinces_Eskisehir_cities_Eskisehir = UsePN (mkPN "Eskisehir") ;
   Countries_SUD_provinces_Darfur_cities_Nyala = UsePN (mkPN "Nyala") ;
   Islands_Leyte = UsePN (mkPN "Leyte") ;
-  Fiji = UsePN (mkPN "Fiji") ;
   Countries_I_provinces_EmiliaRomagna_cities_Modena = UsePN (mkPN "Modena") ;
   Countries_USA_provinces_California_cities_SantaAna = UsePN (mkPN "Santa Ana") ;
   Countries_NOK_cities_Songjin = UsePN (mkPN "Songjin") ;
@@ -1420,7 +1371,6 @@ lin
   Countries_IR_provinces_Lorestan = UsePN (mkPN "Lorestan") ;
   Lakes_LakeStephanie = UsePN (mkPN "Lake Stephanie") ;
   Countries_D_provinces_NordrheinWestfalen = UsePN (mkPN "Nordrhein Westfalen") ;
-  Oman = UsePN (mkPN "Oman") ;
   Countries_TJ_provinces_Anhui_cities_Hefei = UsePN (mkPN "Hefei") ;
   Countries_SF_provinces_Haeme = UsePN (mkPN "Haeme") ;
   Countries_F_provinces_Auvergne = UsePN (mkPN "Auvergne") ;
@@ -1429,7 +1379,6 @@ lin
   Countries_CH_provinces_SO_cities_Solothurn = UsePN (mkPN "Solothurn") ;
   Countries_R_provinces_Irkutskayaoblast_cities_UstIlimsk = UsePN (mkPN "Ust Ilimsk") ;
   Countries_USA_provinces_NewJersey_cities_Elizabeth = UsePN (mkPN "Elizabeth") ;
-  Singapore = UsePN (mkPN "Singapore") ;
   Rivers_Weser = UsePN (mkPN "Weser") ;
   Islands_Rhum = UsePN (mkPN "Rhum") ;
   Countries_CO_provinces_Guainia_cities_PuertoInirida = UsePN (mkPN "Puerto Inirida") ;
@@ -1474,7 +1423,6 @@ lin
   Rivers_St_Lorenzstrom = UsePN (mkPN "St. Lorenzstrom") ;
   Countries_N_provinces_MoereogRomsdal_cities_Molde = UsePN (mkPN "Molde") ;
   Countries_N_provinces_Telemark_cities_Skien = UsePN (mkPN "Skien") ;
-  Bhutan = UsePN (mkPN "Bhutan") ;
   Countries_UZB_provinces_Bukhoro = UsePN (mkPN "Bukhoro") ;
   Countries_PA_provinces_Cocle = UsePN (mkPN "Cocle") ;
   Countries_cid_cia_Svalbard = UsePN (mkPN "Svalbard") ;
@@ -1484,11 +1432,9 @@ lin
   Countries_TR_provinces_Ankara = UsePN (mkPN "Ankara") ;
   Countries_THA_provinces_NakhonSawan_cities_NakhonSawan = UsePN (mkPN "Nakhon Sawan") ;
   Countries_E_provinces_Catalonia_cities_SantaColomadeGramanet = UsePN (mkPN "Santa Coloma de Gramanet") ;
-  Turkmenistan = UsePN (mkPN "Turkmenistan") ;
   Countries_R_provinces_Moskovskayaoblast_cities_Podolsk = UsePN (mkPN "Podolsk") ;
   Countries_BR_provinces_SaoPaulo_cities_SaoVicente = UsePN (mkPN "Sao Vicente") ;
   Countries_E_provinces_Galicia_cities_Orense = UsePN (mkPN "Orense") ;
-  Brazil = UsePN (mkPN "Brazil") ;
   Countries_PE_provinces_Ayacucho_cities_Ayacucho = UsePN (mkPN "Ayacucho") ;
   Islands_Iona = UsePN (mkPN "Iona") ;
   Countries_MAL_provinces_Pahang = UsePN (mkPN "Pahang") ;
@@ -1511,7 +1457,6 @@ lin
   Countries_RM_provinces_Mahajanga = UsePN (mkPN "Mahajanga") ;
   Countries_PL_provinces_Leszczynskie_cities_Leszno = UsePN (mkPN "Leszno") ;
   Countries_VN_provinces_TuyenQuang = UsePN (mkPN "Tuyen Quang") ;
-  UnitedArabEmirates = UsePN (mkPN "United Arab Emirates") ;
   Organizations_OPEC = UsePN (mkPN "Organization of Petroleum Exporting Countries") ;
   Lakes_GreatBearLake = UsePN (mkPN "Great Bear Lake") ;
   Countries_TJ_provinces_Hunan_cities_Liling = UsePN (mkPN "Liling") ;
@@ -1549,7 +1494,6 @@ lin
   Countries_IR_provinces_Esfahan_cities_Esfahan = UsePN (mkPN "Esfahan") ;
   Countries_IR_cities_Islamshahr = UsePN (mkPN "Islamshahr") ;
   Countries_AL_cities_Elbasan = UsePN (mkPN "Elbasan") ;
-  UnitedKingdom = UsePN (mkPN "United Kingdom") ;
   Countries_GB_provinces_Merseyside_cities_Wiral = UsePN (mkPN "Wiral") ;
   Countries_cid_cia_Niue = UsePN (mkPN "Niue") ;
   Countries_GH_cities_Sekondi = UsePN (mkPN "Sekondi") ;
@@ -1560,10 +1504,7 @@ lin
   Countries_F_provinces_NordPasdeCalais = UsePN (mkPN "Nord Pas de Calais") ;
   Countries_BD_cities_Tangail = UsePN (mkPN "Tangail") ;
   Countries_R_provinces_Kaluzhskayaoblast = UsePN (mkPN "Kaluzhskaya oblast") ;
-  Liechtenstein = UsePN (mkPN "Liechtenstein") ;
-  Guinea = UsePN (mkPN "Guinea") ;
   Countries_TJ_provinces_Henan_cities_Nanyang = UsePN (mkPN "Nanyang") ;
-  SouthKorea = UsePN (mkPN "South Korea") ;
   Countries_J_provinces_Yamanashi_cities_Kofu = UsePN (mkPN "Kofu") ;
   Countries_USA_provinces_Ohio_cities_Cleveland = UsePN (mkPN "Cleveland") ;
   Countries_BR_provinces_RioGrandedoSul_cities_SantaCruzdoSul = UsePN (mkPN "Santa Cruz do Sul") ;
@@ -1614,7 +1555,6 @@ lin
   Rivers_Irtysch = UsePN (mkPN "Irtysch") ;
   Countries_TR_provinces_Artvin_cities_Artvin = UsePN (mkPN "Artvin") ;
   Countries_I_provinces_Puglia_cities_Lecce = UsePN (mkPN "Lecce") ;
-  Belgium = UsePN (mkPN "Belgium") ;
   Countries_MYA_provinces_Shan = UsePN (mkPN "Shan") ;
   Countries_TJ_provinces_Henan_cities_Pingdingshan = UsePN (mkPN "Pingdingshan") ;
   Countries_THA_provinces_CentralRegion = UsePN (mkPN "Central Region") ;
@@ -1645,12 +1585,10 @@ lin
   Countries_EAT_provinces_KaskaziniPemba_cities_Wete = UsePN (mkPN "Wete") ;
   Countries_TR_provinces_Kirklareli_cities_Kirklareli = UsePN (mkPN "Kirklareli") ;
   Countries_IND_provinces_UttarPradesh_cities_Gorakhpur = UsePN (mkPN "Gorakhpur") ;
-  Poland = UsePN (mkPN "Poland") ;
   Countries_RA_provinces_TierradelFuego = UsePN (mkPN "Tierra del Fuego") ;
   Countries_I_provinces_TrentinoAltoAdige_cities_Trento = UsePN (mkPN "Trento") ;
   Rivers_Donau = UsePN (mkPN "Donau") ;
   Countries_THA_provinces_Lampang = UsePN (mkPN "Lampang") ;
-  Bulgaria = UsePN (mkPN "Bulgaria") ;
   Countries_B_provinces_Luxembourg = UsePN (mkPN "Luxembourg") ;
   Organizations_ECOWAS = UsePN (mkPN "Economic Community of West African States") ;
   Countries_R_provinces_Moskva_cities_Moscow = UsePN (mkPN "Moscow") ;
@@ -1658,7 +1596,6 @@ lin
   Countries_IND_provinces_UttarPradesh_cities_Faridabad = UsePN (mkPN "Faridabad") ;
   Rivers_Sanaga = UsePN (mkPN "Sanaga") ;
   Countries_RO_provinces_Prahova = UsePN (mkPN "Prahova") ;
-  Burundi = UsePN (mkPN "Burundi") ;
   Countries_UZB_provinces_Sirdare = UsePN (mkPN "Sirdare") ;
   Countries_TJ_provinces_Guizhou_cities_Zunyi = UsePN (mkPN "Zunyi") ;
   Countries_PK_cities_WahCantonment = UsePN (mkPN "Wah Cantonment") ;
@@ -1740,7 +1677,6 @@ lin
   Countries_BS_cities_Nassau = UsePN (mkPN "Nassau") ;
   Countries_MEX_provinces_Veracruz_cities_Orizaba = UsePN (mkPN "Orizaba") ;
   Mountains_Tubhal = UsePN (mkPN "Tubhal") ;
-  Algeria = UsePN (mkPN "Algeria") ;
   Countries_ES_provinces_Sonsonate = UsePN (mkPN "Sonsonate") ;
   Countries_H_provinces_KomaromEsztergom_cities_Tatabanya = UsePN (mkPN "Tatabanya") ;
   Countries_GB_provinces_GreaterLondon_cities_London = UsePN (mkPN "London") ;
@@ -1765,11 +1701,9 @@ lin
   Countries_RA_provinces_Jujuy = UsePN (mkPN "Jujuy") ;
   Countries_DZ_cities_Blida = UsePN (mkPN "Blida") ;
   Countries_TR_provinces_Gumushane = UsePN (mkPN "Gumushane") ;
-  SerbiaAndMontenegro = UsePN (mkPN "Serbia and Montenegro") ;
   Countries_D_provinces_Sachsen_cities_Leipzig = UsePN (mkPN "Leipzig") ;
   Countries_RN_cities_Niamey = UsePN (mkPN "Niamey") ;
   Countries_UAE_provinces_RasalKhaymah = UsePN (mkPN "Ras al Khaymah") ;
-  Portugal = UsePN (mkPN "Portugal") ;
   Continents_America = UsePN (mkPN "America") ;
   Countries_SUD_provinces_AalianNil = UsePN (mkPN "Aali an Nil") ;
   Countries_PA_provinces_Herrera = UsePN (mkPN "Herrera") ;
@@ -1778,7 +1712,6 @@ lin
   Countries_P_provinces_Evora = UsePN (mkPN "Evora") ;
   Countries_ANG_provinces_Luanda_cities_Luanda = UsePN (mkPN "Luanda") ;
   Rivers_Luvua = UsePN (mkPN "Luvua") ;
-  Lesotho = UsePN (mkPN "Lesotho") ;
   Countries_cid_cia_Falkland_Islands = UsePN (mkPN "Falkland Islands") ;
   Countries_D_provinces_SchleswigHolstein_cities_Lubeck = UsePN (mkPN "Lubeck") ;
   Islands_Samar = UsePN (mkPN "Samar") ;
@@ -1831,7 +1764,6 @@ lin
   Countries_TJ_provinces_Hubei_cities_Zaoyang = UsePN (mkPN "Zaoyang") ;
   Countries_IL_provinces_South_cities_BeerSheva = UsePN (mkPN "Beer Sheva") ;
   Countries_IND_provinces_Karnataka_cities_Mysore = UsePN (mkPN "Mysore") ;
-  Bahrain = UsePN (mkPN "Bahrain") ;
   Countries_I_provinces_Campania_cities_TorredelGreco = UsePN (mkPN "Torre del Greco") ;
   Countries_RI_cities_Palembang = UsePN (mkPN "Palembang") ;
   Countries_TAD_provinces_Kulob_cities_Kulob = UsePN (mkPN "Kulob") ;
@@ -1898,7 +1830,6 @@ lin
   Countries_USA_provinces_Massachusetts_cities_Springfield = UsePN (mkPN "Springfield") ;
   Countries_RA_provinces_BuenosAires = UsePN (mkPN "Buenos Aires") ;
   Countries_GB_provinces_Bridgend = UsePN (mkPN "Bridgend") ;
-  Monaco = UsePN (mkPN "Monaco") ;
   Countries_S_provinces_Alvsborg = UsePN (mkPN "Alvsborg") ;
   Countries_S_provinces_Uppsala = UsePN (mkPN "Uppsala") ;
   Countries_TJ_provinces_Zhejiang_cities_Jinhua = UsePN (mkPN "Jinhua") ;
@@ -1916,7 +1847,6 @@ lin
   Countries_USA_provinces_California_cities_SanDiego = UsePN (mkPN "San Diego") ;
   Countries_THA_provinces_Sukhothai = UsePN (mkPN "Sukhothai") ;
   Countries_SUD_provinces_alWusta_cities_WadMadani = UsePN (mkPN "Wad Madani") ;
-  HolySee = UsePN (mkPN "Holy See") ;
   Countries_RP_cities_Cebu = UsePN (mkPN "Cebu") ;
   Countries_CO_provinces_Cundinamarca = UsePN (mkPN "Cundinamarca") ;
   Countries_KAZ_provinces_BatysQazaqstan_cities_Oral = UsePN (mkPN "Oral") ;
@@ -1984,7 +1914,6 @@ lin
   Countries_RO_provinces_Prahova_cities_Ploiesti = UsePN (mkPN "Ploiesti") ;
   Countries_GR_provinces_VoreionAiyaion = UsePN (mkPN "Voreion Aiyaion") ;
   Countries_N_provinces_Hordaland = UsePN (mkPN "Hordaland") ;
-  SaoTomeAndPrincipe = UsePN (mkPN "Sao Tome and Principe") ;
   Countries_GB_provinces_Powys = UsePN (mkPN "Powys") ;
   Countries_TJ_provinces_Anhui = UsePN (mkPN "Anhui") ;
   Countries_USA_provinces_Hawaii_cities_Honolulu = UsePN (mkPN "Honolulu") ;
@@ -1994,7 +1923,6 @@ lin
   Countries_F_provinces_LanguedocRousillon = UsePN (mkPN "Languedoc Rousillon") ;
   Countries_RC_provinces_Hsinchu_munic_cities_Hsinchu = UsePN (mkPN "Hsinchu") ;
   Countries_TJ_provinces_Hunan_cities_Xiangtan = UsePN (mkPN "Xiangtan") ;
-  SaintVincentAndTheGrenadines = UsePN (mkPN "Saint Vincent and the Grenadines") ;
   Countries_RI_cities_BandarLampung = UsePN (mkPN "Bandar Lampung") ;
   Countries_IND_provinces_Mizoram = UsePN (mkPN "Mizoram") ;
   Islands_SanClementeIsland = UsePN (mkPN "San Clemente Island") ;
@@ -2009,7 +1937,6 @@ lin
   Countries_BR_provinces_Para_cities_Santarem = UsePN (mkPN "Santarem") ;
   Countries_R_provinces_Kirovskayaoblast_cities_Kirov = UsePN (mkPN "Kirov") ;
   Countries_NL_provinces_Overijssel_cities_Zwolle = UsePN (mkPN "Zwolle") ;
-  FrenchGuiana = UsePN (mkPN "French Guiana") ;
   Islands_Nevis = UsePN (mkPN "Nevis") ;
   Islands_Coll = UsePN (mkPN "Coll") ;
   Countries_USA_provinces_Florida_cities_Hialeah = UsePN (mkPN "Hialeah") ;
@@ -2017,7 +1944,6 @@ lin
   Countries_HCA_provinces_IslasdelaBahia_cities_Roatan = UsePN (mkPN "Roatan") ;
   Countries_TJ_provinces_Fujian = UsePN (mkPN "Fujian") ;
   Countries_RSM_cities_SanMarino = UsePN (mkPN "San Marino") ;
-  Laos = UsePN (mkPN "Laos") ;
   Islands_Honshu = UsePN (mkPN "Honshu") ;
   Countries_GB_provinces_Staffordshire = UsePN (mkPN "Staffordshire") ;
   Countries_YV_provinces_Monagas_cities_Maturin = UsePN (mkPN "Maturin") ;
@@ -2034,7 +1960,6 @@ lin
   Countries_YV_provinces_Portuguesa = UsePN (mkPN "Portuguesa") ;
   Mountains_NevadodeToluca = UsePN (mkPN "Nevado de Toluca") ;
   Mountains_MountEverest = UsePN (mkPN "Mount Everest") ;
-  Iceland = UsePN (mkPN "Iceland") ;
   Countries_VN_provinces_ThaiBinh = UsePN (mkPN "Thai Binh") ;
   Countries_RM_provinces_Toliary_cities_Toliary = UsePN (mkPN "Toliary") ;
   Islands_VancouverIsland = UsePN (mkPN "Vancouver Island") ;
@@ -2057,7 +1982,6 @@ lin
   Countries_N_provinces_Finnmark_cities_Hammerfest = UsePN (mkPN "Hammerfest") ;
   Countries_TJ_provinces_Hunan_cities_Loudi = UsePN (mkPN "Loudi") ;
   Countries_THA_provinces_Saraburi_cities_Saraburi = UsePN (mkPN "Saraburi") ;
-  Haiti = UsePN (mkPN "Haiti") ;
   Mountains_MtWashington = UsePN (mkPN "Mt Washington") ;
   Organizations_UPU = UsePN (mkPN "Universal Postal Union") ;
   Countries_R_provinces_Ryazanskayaoblast_cities_Ryazan = UsePN (mkPN "Ryazan") ;
@@ -2083,7 +2007,6 @@ lin
   Countries_ES_provinces_LaLibertad = UsePN (mkPN "La Libertad") ;
   Countries_USA_provinces_California_cities_Pomona = UsePN (mkPN "Pomona") ;
   Countries_BR_cities_Abaetetuba = UsePN (mkPN "Abaetetuba") ;
-  BurkinaFaso = UsePN (mkPN "Burkina Faso") ;
   Countries_WAN_cities_Ikorodu = UsePN (mkPN "Ikorodu") ;
   Countries_ET_provinces_SinaashShamaliyah_cities_ElArish = UsePN (mkPN "El Arish") ;
   Rivers_Lukuga = UsePN (mkPN "Lukuga") ;
@@ -2096,7 +2019,6 @@ lin
   Mountains_Kenia = UsePN (mkPN "Kenia") ;
   Rivers_Bani = UsePN (mkPN "Bani") ;
   Countries_RA_provinces_RioNegro = UsePN (mkPN "Rio Negro") ;
-  Liberia = UsePN (mkPN "Liberia") ;
   Countries_WAN_cities_Ila = UsePN (mkPN "Ila") ;
   Countries_TJ_provinces_Hunan_cities_Yiyang = UsePN (mkPN "Yiyang") ;
   Countries_PL_provinces_Lodzkie = UsePN (mkPN "Lodzkie") ;
@@ -2136,7 +2058,6 @@ lin
   Organizations_Benelux = UsePN (mkPN "Benelux Economic Union") ;
   Countries_TJ_provinces_Sichuan_cities_Chengdu = UsePN (mkPN "Chengdu") ;
   Countries_PL_provinces_Lomzynskie_cities_Lomza = UsePN (mkPN "Lomza") ;
-  Burma = UsePN (mkPN "Burma") ;
   Countries_CO_provinces_Risaralda = UsePN (mkPN "Risaralda") ;
   Countries_R_provinces_Kostromskayaoblast = UsePN (mkPN "Kostromskaya oblast") ;
   Countries_E_provinces_Catalonia_cities_HospitaletdeLlobregat = UsePN (mkPN "Hospitalet de Llobregat") ;
@@ -2157,7 +2078,6 @@ lin
   Countries_USA_provinces_Texas_cities_Laredo = UsePN (mkPN "Laredo") ;
   Rivers_Chire = UsePN (mkPN "Chire") ;
   Countries_TJ_provinces_NeiMonggol_cities_Hohhot = UsePN (mkPN "Hohhot") ;
-  Bangladesh = UsePN (mkPN "Bangladesh") ;
   Countries_CZ_provinces_Severocesky_cities_Liberec = UsePN (mkPN "Liberec") ;
   Lakes_LakePrespa = UsePN (mkPN "Lake Prespa") ;
   Rivers_Cunene = UsePN (mkPN "Cunene") ;
@@ -2166,7 +2086,6 @@ lin
   Countries_VN_provinces_SongBe = UsePN (mkPN "Song Be") ;
   Countries_J_provinces_Okayama = UsePN (mkPN "Okayama") ;
   Countries_USA_provinces_Virginia_cities_Chesapeake = UsePN (mkPN "Chesapeake") ;
-  Mongolia = UsePN (mkPN "Mongolia") ;
   Countries_RSA_cities_Ibhayi = UsePN (mkPN "Ibhayi") ;
   Countries_CH_provinces_VD = UsePN (mkPN "VD") ;
   Lakes_LakeWilliston = UsePN (mkPN "Lake Williston") ;
@@ -2176,7 +2095,6 @@ lin
   Deserts_Makteir = UsePN (mkPN "Makteir") ;
   Countries_EAT_provinces_Mwanza = UsePN (mkPN "Mwanza") ;
   Rivers_Weichsel = UsePN (mkPN "Weichsel") ;
-  Spain = UsePN (mkPN "Spain") ;
   Countries_PL_provinces_Poznanskie = UsePN (mkPN "Poznanskie") ;
   Countries_GB_provinces_Somerset_cities_Taunton = UsePN (mkPN "Taunton") ;
   Countries_RO_provinces_Salaj = UsePN (mkPN "Salaj") ;
@@ -2226,7 +2144,6 @@ lin
   Mountains_BoundaryPeak = UsePN (mkPN "Boundary Peak") ;
   Countries_GB_provinces_AberconwyandColwyn = UsePN (mkPN "Aberconwy and Colwyn") ;
   Countries_UA_provinces_Zakarpatska_cities_Uzhhorod = UsePN (mkPN "Uzhhorod") ;
-  AntiguaAndBarbuda = UsePN (mkPN "Antigua and Barbuda") ;
   Countries_R_provinces_Irkutskayaoblast_cities_Irkutsk = UsePN (mkPN "Irkutsk") ;
   Countries_HCA_provinces_Comayagua = UsePN (mkPN "Comayagua") ;
   Countries_USA_provinces_NorthCarolina_cities_Durham = UsePN (mkPN "Durham") ;
@@ -2234,7 +2151,6 @@ lin
   Countries_WAN_cities_Shaki = UsePN (mkPN "Shaki") ;
   Countries_SF_provinces_Uusimaa_cities_Helsinki = UsePN (mkPN "Helsinki") ;
   Countries_I_provinces_Piemonte = UsePN (mkPN "Piemonte") ;
-  Comoros = UsePN (mkPN "Comoros") ;
   Countries_GR_provinces_KedrikiMakedhonia = UsePN (mkPN "Kedriki Makedhonia") ;
   Countries_USA_provinces_Texas_cities_Arlington = UsePN (mkPN "Arlington") ;
   Rivers_Casai = UsePN (mkPN "Casai") ;
@@ -2254,7 +2170,6 @@ lin
   Countries_MEX_provinces_NuevoLeon_cities_Monterrey = UsePN (mkPN "Monterrey") ;
   Countries_TR_provinces_Hatay_cities_Iskenderun = UsePN (mkPN "Iskenderun") ;
   Lakes_GreatSaltLake = UsePN (mkPN "Great Salt Lake") ;
-  SaintLucia = UsePN (mkPN "Saint Lucia") ;
   Countries_WAN_cities_Sapele = UsePN (mkPN "Sapele") ;
   Countries_USA_provinces_Tennessee_cities_Nashville = UsePN (mkPN "Nashville") ;
   Countries_CH_provinces_UR = UsePN (mkPN "UR") ;
@@ -2310,11 +2225,9 @@ lin
   Countries_GR_cities_Piraeus = UsePN (mkPN "Piraeus") ;
   Countries_ET_provinces_Sohag = UsePN (mkPN "Sohag") ;
   Countries_GB_provinces_WestMidlands_cities_Coventry = UsePN (mkPN "Coventry") ;
-  France = UsePN (mkPN "France") ;
   Countries_BR_provinces_Bahia_cities_FeiradeSantana = UsePN (mkPN "Feira de Santana") ;
   Countries_TR_provinces_Diyarbakir_cities_Diyarbakir = UsePN (mkPN "Diyarbakir") ;
   Organizations_UNRWA = UsePN (mkPN "United Nations Relief and Works Agency for Palestine Refugees in the Near East") ;
-  Germany = UsePN (mkPN "Germany") ;
   Countries_WAN_cities_Ibadan = UsePN (mkPN "Ibadan") ;
   Countries_PK_cities_Islamabad = UsePN (mkPN "Islamabad") ;
   Countries_RSA_cities_Soshanguve = UsePN (mkPN "Soshanguve") ;
@@ -2361,13 +2274,9 @@ lin
   Countries_MEX_provinces_Veracruz_cities_XalapaEnriquez = UsePN (mkPN "Xalapa Enriquez") ;
   Countries_VN_provinces_BacThai = UsePN (mkPN "Bac Thai") ;
   Countries_RO_provinces_Dolj_cities_Craiova = UsePN (mkPN "Craiova") ;
-  WesternSamoa = UsePN (mkPN "Western Samoa") ;
-  Kazakstan = UsePN (mkPN "Kazakstan") ;
   Countries_BF_cities_Ouagadougou = UsePN (mkPN "Ouagadougou") ;
   Countries_TJ_provinces_Liaoning_cities_Tieling = UsePN (mkPN "Tieling") ;
   Countries_BR_provinces_Para_cities_Ananindeua = UsePN (mkPN "Ananindeua") ;
-  Georgia = UsePN (mkPN "Georgia") ;
-  Senegal = UsePN (mkPN "Senegal") ;
   Countries_J_provinces_Kagoshima = UsePN (mkPN "Kagoshima") ;
   Islands_NorthCaicos = UsePN (mkPN "North Caicos") ;
   Countries_WAN_cities_Lafia = UsePN (mkPN "Lafia") ;
@@ -2376,7 +2285,6 @@ lin
   Countries_AUS_provinces_Victoria_cities_Melbourne = UsePN (mkPN "Melbourne") ;
   Countries_TR_provinces_Cankiri = UsePN (mkPN "Cankiri") ;
   Islands_Trinidad = UsePN (mkPN "Trinidad") ;
-  Micronesia = UsePN (mkPN "Micronesia") ;
   Organizations_ZC = UsePN (mkPN "Zangger Committee") ;
   Countries_E_provinces_BalearicIslands = UsePN (mkPN "Balearic Islands") ;
   Countries_BR_provinces_RioGrandedoSul_cities_Canoas = UsePN (mkPN "Canoas") ;
@@ -2422,7 +2330,6 @@ lin
   Countries_THA_provinces_SamutPrakan = UsePN (mkPN "Samut Prakan") ;
   Deserts_ArabianDesert = UsePN (mkPN "Arabian Desert") ;
   Countries_VN_cities_VietTri = UsePN (mkPN "Viet Tri") ;
-  Barbados = UsePN (mkPN "Barbados") ;
   Countries_RCH_cities_Valparaiso = UsePN (mkPN "Valparaiso") ;
   Countries_SUD_provinces_alIstiwaiyah = UsePN (mkPN "al Istiwaiyah") ;
   Countries_USA_provinces_Oklahoma_cities_Tulsa = UsePN (mkPN "Tulsa") ;
@@ -2434,7 +2341,6 @@ lin
   Countries_I_provinces_Molise = UsePN (mkPN "Molise") ;
   Countries_CO_provinces_Cauca_cities_Popayan = UsePN (mkPN "Popayan") ;
   Countries_UAE_provinces_Dubayy = UsePN (mkPN "Dubayy") ;
-  Lithuania = UsePN (mkPN "Lithuania") ;
   Countries_ZRE_provinces_KasaiOriental_cities_MweneDitu = UsePN (mkPN "Mwene Ditu") ;
   Countries_MAL_provinces_Sabah_cities_Tawai = UsePN (mkPN "Tawai") ;
   Countries_BR_provinces_Goias_cities_Goiania = UsePN (mkPN "Goiania") ;
@@ -2510,9 +2416,7 @@ lin
   Organizations_UNMOT = UsePN (mkPN "United Nations Mission of Observers in Tajikistan") ;
   Countries_YV_provinces_Apure = UsePN (mkPN "Apure") ;
   Countries_TJ_provinces_Gansu_cities_Tianshui = UsePN (mkPN "Tianshui") ;
-  Gabon = UsePN (mkPN "Gabon") ;
   Countries_GB_provinces_NorthernIreland_cities_Belfast = UsePN (mkPN "Belfast") ;
-  Nauru = UsePN (mkPN "Nauru") ;
   Countries_RM_provinces_Toliary = UsePN (mkPN "Toliary") ;
   Countries_cid_cia_Puerto_Rico_cities_SanJuan = UsePN (mkPN "San Juan") ;
   Countries_ZRE_provinces_Bandundu_cities_Kikwit = UsePN (mkPN "Kikwit") ;
@@ -2543,7 +2447,6 @@ lin
   Countries_A_provinces_Vorarlberg = UsePN (mkPN "Vorarlberg") ;
   Islands_Kauai = UsePN (mkPN "Kauai") ;
   Countries_D_provinces_NordrheinWestfalen_cities_Remscheid = UsePN (mkPN "Remscheid") ;
-  Indonesia = UsePN (mkPN "Indonesia") ;
   Countries_RSA_provinces_WesternCape_cities_CapeTown = UsePN (mkPN "Cape Town") ;
   Countries_YV_provinces_Falcon_cities_Coro = UsePN (mkPN "Coro") ;
   Countries_MEX_provinces_Chiapas = UsePN (mkPN "Chiapas") ;
@@ -2552,7 +2455,6 @@ lin
   Countries_THA_provinces_Songkhla_cities_Songkhla = UsePN (mkPN "Songkhla") ;
   Countries_RA_provinces_RioNegro_cities_Viedma = UsePN (mkPN "Viedma") ;
   Countries_PL_provinces_Lubelskie = UsePN (mkPN "Lubelskie") ;
-  Greece = UsePN (mkPN "Greece") ;
   Countries_IND_provinces_MadhyaPradesh_cities_Bhopal = UsePN (mkPN "Bhopal") ;
   Countries_H_provinces_BorsodAbaujZemplen = UsePN (mkPN "Borsod Abauj Zemplen") ;
   Countries_PE_provinces_Ancash_cities_Huaraz = UsePN (mkPN "Huaraz") ;
@@ -2561,12 +2463,10 @@ lin
   Countries_TR_provinces_Icel_cities_Mersin = UsePN (mkPN "Mersin") ;
   Countries_cid_cia_Anguilla_cities_TheValley = UsePN (mkPN "The Valley") ;
   Countries_UA_provinces_Kirovohradska = UsePN (mkPN "Kirovohradska") ;
-  Malta = UsePN (mkPN "Malta") ;
   Countries_RMM_cities_Bamako = UsePN (mkPN "Bamako") ;
   Countries_R_provinces_Kirovskayaoblast = UsePN (mkPN "Kirovskaya oblast") ;
   Countries_R_provinces_Irkutskayaoblast_cities_Angarsk = UsePN (mkPN "Angarsk") ;
   Countries_USA_provinces_Missouri_cities_Springfield = UsePN (mkPN "Springfield") ;
-  Libya = UsePN (mkPN "Libya") ;
   Countries_UZB_provinces_Qasqadare_cities_Qarshi = UsePN (mkPN "Qarshi") ;
   Countries_CO_provinces_Choco = UsePN (mkPN "Choco") ;
   Countries_NL_provinces_NoordBrabant_cities_Breda = UsePN (mkPN "Breda") ;
@@ -2583,7 +2483,6 @@ lin
   Countries_TJ_provinces_Heilongjiang_cities_Harbin = UsePN (mkPN "Harbin") ;
   Countries_GR_provinces_Attiki_cities_Athens = UsePN (mkPN "Athens") ;
   Rivers_Bija = UsePN (mkPN "Bija") ;
-  Vanuatu = UsePN (mkPN "Vanuatu") ;
   Mountains_Illampu = UsePN (mkPN "Illampu") ;
   Countries_UAE_cities_AbuDhabi = UsePN (mkPN "Abu Dhabi") ;
   Countries_TR_provinces_Agri_cities_Agri = UsePN (mkPN "Agri") ;
@@ -2601,7 +2500,6 @@ lin
   Countries_J_provinces_Yamaguchi = UsePN (mkPN "Yamaguchi") ;
   Countries_CDN_provinces_Alberta_cities_Edmonton = UsePN (mkPN "Edmonton") ;
   Countries_IND_provinces_Maharashtra_cities_Bombay = UsePN (mkPN "Bombay") ;
-  UnitedStates = UsePN (mkPN "United States") ;
   Countries_I_provinces_EmiliaRomagna_cities_Bologna = UsePN (mkPN "Bologna") ;
   Countries_I_provinces_Lazio_cities_Latina = UsePN (mkPN "Latina") ;
   Countries_UZB_provinces_Toshkent_cities_Angren = UsePN (mkPN "Angren") ;
@@ -2646,7 +2544,6 @@ lin
   Mountains_PikLenina = UsePN (mkPN "Pik Lenina") ;
   Countries_EAK_provinces_Eastern_cities_Meru = UsePN (mkPN "Meru") ;
   Countries_CDN_provinces_Ontario_cities_EastYork = UsePN (mkPN "East York") ;
-  SaintKittsAndNevis = UsePN (mkPN "Saint Kitts and Nevis") ;
   Countries_S_provinces_Malmohus_cities_Malmo = UsePN (mkPN "Malmo") ;
   Countries_CR_provinces_Cartago_cities_Cartago = UsePN (mkPN "Cartago") ;
   Countries_WL_cities_Castries = UsePN (mkPN "Castries") ;
@@ -2679,9 +2576,7 @@ lin
   Countries_USA_provinces_Washington_cities_Seattle = UsePN (mkPN "Seattle") ;
   Countries_RA_provinces_BuenosAires_cities_VicenteLopez = UsePN (mkPN "Vicente Lopez") ;
   Countries_Z_provinces_Central = UsePN (mkPN "Central") ;
-  India = UsePN (mkPN "India") ;
   Organizations_UNPROFOR = UsePN (mkPN "United Nations Protection Force") ;
-  Syria = UsePN (mkPN "Syria") ;
   Countries_TR_provinces_Adana_cities_Osmaniye = UsePN (mkPN "Osmaniye") ;
   Organizations_Mercosur = UsePN (mkPN "Southern Cone Common Market") ;
   Countries_RSA_cities_Evaton = UsePN (mkPN "Evaton") ;
@@ -2708,7 +2603,6 @@ lin
   Islands_Malta = UsePN (mkPN "Malta") ;
   Countries_S_provinces_Vastmanland = UsePN (mkPN "Vastmanland") ;
   Countries_D_provinces_NordrheinWestfalen_cities_Bonn = UsePN (mkPN "Bonn") ;
-  Malaysia = UsePN (mkPN "Malaysia") ;
   Countries_USA_provinces_California = UsePN (mkPN "California") ;
   Countries_YV_provinces_NuevaEsparta = UsePN (mkPN "Nueva Esparta") ;
   Countries_PA_provinces_Darien = UsePN (mkPN "Darien") ;
@@ -2779,7 +2673,6 @@ lin
   Countries_NL_provinces_Utrecht_cities_Utrecht = UsePN (mkPN "Utrecht") ;
   Countries_IRQ_provinces_DhiQar_cities_AnNasiriyah = UsePN (mkPN "An Nasiriyah") ;
   Countries_TR_provinces_Trabzon = UsePN (mkPN "Trabzon") ;
-  Mexico = UsePN (mkPN "Mexico") ;
   Countries_TAD_provinces_BadakhshoniKuni = UsePN (mkPN "Badakhshoni Kuni") ;
   Countries_PL_provinces_Koszalinskie = UsePN (mkPN "Koszalinskie") ;
   Countries_TJ_provinces_Sichuan_cities_Zigong = UsePN (mkPN "Zigong") ;
@@ -2865,7 +2758,6 @@ lin
   Countries_GB_provinces_Cambridgeshire_cities_Cambridge = UsePN (mkPN "Cambridge") ;
   Countries_I_provinces_Lombardia_cities_Monza = UsePN (mkPN "Monza") ;
   Rivers_Rhein = UsePN (mkPN "Rhein") ;
-  Cambodia = UsePN (mkPN "Cambodia") ;
   Countries_R_provinces_Kemerovskayaoblast_cities_AnzheroSudzhensk = UsePN (mkPN "Anzhero Sudzhensk") ;
   Countries_PL_provinces_Walbrzyskie_cities_Walbrzych = UsePN (mkPN "Walbrzych") ;
   Countries_BR_provinces_SaoPaulo_cities_Diadema = UsePN (mkPN "Diadema") ;
@@ -2914,7 +2806,6 @@ lin
   Countries_SUD_provinces_ashShamaliyah = UsePN (mkPN "ash Shamaliyah") ;
   Countries_MAL_provinces_Johor_cities_JohorBaharu = UsePN (mkPN "Johor Baharu") ;
   Countries_AUS_provinces_NewSouthWales_cities_SunshineCoast = UsePN (mkPN "Sunshine Coast") ;
-  Thailand = UsePN (mkPN "Thailand") ;
   Mountains_Semeru = UsePN (mkPN "Semeru") ;
   Countries_BR_provinces_MinasGerais_cities_MontesClaros = UsePN (mkPN "Montes Claros") ;
   Countries_RI_cities_Pontianak = UsePN (mkPN "Pontianak") ;
@@ -2926,7 +2817,6 @@ lin
   Mountains_Tahan = UsePN (mkPN "Tahan") ;
   Countries_TR_provinces_Siirt = UsePN (mkPN "Siirt") ;
   Countries_R_provinces_Rep_ofKarelia = UsePN (mkPN "Rep. of Karelia") ;
-  Mauritania = UsePN (mkPN "Mauritania") ;
   Countries_RO_provinces_Teleorman_cities_Alexandria = UsePN (mkPN "Alexandria") ;
   Mountains_MountGodwinAusten = UsePN (mkPN "Mount Godwin Austen") ;
   Countries_TR_provinces_Rize = UsePN (mkPN "Rize") ;
@@ -2962,7 +2852,6 @@ lin
   Countries_cid_cia_Faroe_Islands_cities_Torshavn = UsePN (mkPN "Torshavn") ;
   Countries_IND_provinces_TamilNadu_cities_Madras = UsePN (mkPN "Madras") ;
   Countries_MYA_provinces_Magway_cities_Magway = UsePN (mkPN "Magway") ;
-  Croatia = UsePN (mkPN "Croatia") ;
   Countries_RA_provinces_SantaFe = UsePN (mkPN "Santa Fe") ;
   Countries_AUS_provinces_WesternAustralia = UsePN (mkPN "Western Australia") ;
   Countries_PL_provinces_Zamojskie_cities_Zamosc = UsePN (mkPN "Zamosc") ;
@@ -3033,7 +2922,6 @@ lin
   Countries_GB_provinces_EastSussex = UsePN (mkPN "East Sussex") ;
   Countries_KAZ_provinces_BatysQazaqstan = UsePN (mkPN "Batys Qazaqstan") ;
   Countries_RI_cities_Manado = UsePN (mkPN "Manado") ;
-  NewCaledonia = UsePN (mkPN "New Caledonia") ;
   Countries_PE_provinces_SanMartin = UsePN (mkPN "San Martin") ;
   Countries_MOC_provinces_Zambezia_cities_Quelimane = UsePN (mkPN "Quelimane") ;
   Countries_BR_provinces_MinasGerais_cities_TeofiloOtoni = UsePN (mkPN "Teofilo Otoni") ;
@@ -3087,7 +2975,6 @@ lin
   Countries_BOL_cities_LaPaz = UsePN (mkPN "La Paz") ;
   Countries_D_provinces_Berlin = UsePN (mkPN "Berlin") ;
   Countries_MEX_provinces_Veracruz_cities_Jalapa = UsePN (mkPN "Jalapa") ;
-  Grenada = UsePN (mkPN "Grenada") ;
   Mountains_Sulitjelma = UsePN (mkPN "Sulitjelma") ;
   Countries_F_provinces_FrancheComte_cities_Besancon = UsePN (mkPN "Besancon") ;
   Countries_GB_provinces_Dorset_cities_Poole = UsePN (mkPN "Poole") ;
@@ -3120,7 +3007,6 @@ lin
   Countries_TJ_provinces_Hubei_cities_Shiyan = UsePN (mkPN "Shiyan") ;
   Organizations_UNAVEMIII = UsePN (mkPN "United Nations Angola Verification Mission") ;
   Rivers_Ischim = UsePN (mkPN "Ischim") ;
-  SaudiArabia = UsePN (mkPN "Saudi Arabia") ;
   Countries_cid_cia_Palmyra_Atoll = UsePN (mkPN "Palmyra Atoll") ;
   Countries_BR_provinces_MatoGrossodoSul_cities_Parnaiba = UsePN (mkPN "Parnaiba") ;
   Countries_VN_provinces_ThuaThienHue = UsePN (mkPN "Thua Thien Hue") ;
@@ -3144,7 +3030,6 @@ lin
   Countries_IR_provinces_SistaneBaluchestan_cities_Zahedan = UsePN (mkPN "Zahedan") ;
   Countries_R_provinces_Yaroslavskayaoblast = UsePN (mkPN "Yaroslavskaya oblast") ;
   Rivers_Werra = UsePN (mkPN "Werra") ;
-  Australia = UsePN (mkPN "Australia") ;
   Countries_ET_provinces_ElDaqahliya = UsePN (mkPN "El Daqahliya") ;
   Countries_ES_provinces_Morazan_cities_SanFranciscoGotera = UsePN (mkPN "San Francisco Gotera") ;
   Countries_CH_provinces_NW_cities_Stans = UsePN (mkPN "Stans") ;
@@ -3174,7 +3059,6 @@ lin
   Countries_USA_provinces_Kansas = UsePN (mkPN "Kansas") ;
   Countries_TJ_provinces_Fujian_cities_Sanming = UsePN (mkPN "Sanming") ;
   Countries_TJ_provinces_Anhui_cities_Huaibei = UsePN (mkPN "Huaibei") ;
-  Cameroon = UsePN (mkPN "Cameroon") ;
   Countries_USA_provinces_California_cities_LosAngeles = UsePN (mkPN "Los Angeles") ;
   Countries_ET_provinces_ElMinya = UsePN (mkPN "El Minya") ;
   Countries_RO_provinces_Dolj = UsePN (mkPN "Dolj") ;
@@ -3186,7 +3070,6 @@ lin
   Countries_TJ_provinces_Sichuan_cities_Neijiang = UsePN (mkPN "Neijiang") ;
   Countries_MYA_provinces_Tanintharyi = UsePN (mkPN "Tanintharyi") ;
   Countries_F_provinces_LanguedocRousillon_cities_Nimes = UsePN (mkPN "Nimes") ;
-  Jordan = UsePN (mkPN "Jordan") ;
   Countries_cid_cia_Netherlands_Antilles = UsePN (mkPN "Netherlands Antilles") ;
   Countries_GCA_cities_VillaNueva = UsePN (mkPN "Villa Nueva") ;
   Countries_TJ_provinces_NeiMonggol_cities_Wuhai = UsePN (mkPN "Wuhai") ;
@@ -3242,7 +3125,6 @@ lin
   Countries_MEX_provinces_BajaCalifornia_cities_Tijuana = UsePN (mkPN "Tijuana") ;
   Islands_Tilos = UsePN (mkPN "Tilos") ;
   Countries_SF_provinces_Oulu_cities_Oulu = UsePN (mkPN "Oulu") ;
-  NorthKorea = UsePN (mkPN "North Korea") ;
   Countries_TJ_provinces_NeiMonggol_cities_Jining = UsePN (mkPN "Jining") ;
   Countries_cid_cia_Tromelin_Island = UsePN (mkPN "Tromelin Island") ;
   Countries_N_provinces_Nordland_cities_Svolvaer = UsePN (mkPN "Svolvaer") ;
@@ -3295,10 +3177,8 @@ lin
   Islands_Chios = UsePN (mkPN "Chios") ;
   Countries_TJ_provinces_Gansu = UsePN (mkPN "Gansu") ;
   Countries_UZB_provinces_Andijon = UsePN (mkPN "Andijon") ;
-  Egypt = UsePN (mkPN "Egypt") ;
   Countries_USA_provinces_Missouri_cities_JeffersonCity = UsePN (mkPN "Jefferson City") ;
   Countries_THA_provinces_PrachuapKhiriKhan = UsePN (mkPN "Prachuap Khiri Khan") ;
-  Estonia = UsePN (mkPN "Estonia") ;
   Countries_D_provinces_MecklenburgVorpommern_cities_Rostock = UsePN (mkPN "Rostock") ;
   Countries_EAT_provinces_Rukwa_cities_Sumbawanga = UsePN (mkPN "Sumbawanga") ;
   Countries_D_provinces_NordrheinWestfalen_cities_Bottrop = UsePN (mkPN "Bottrop") ;
@@ -3314,7 +3194,6 @@ lin
   Countries_D_provinces_Brandenburg_cities_Potsdam = UsePN (mkPN "Potsdam") ;
   Countries_TR_provinces_Denizli = UsePN (mkPN "Denizli") ;
   Countries_TJ_provinces_Hunan_cities_Leiyang = UsePN (mkPN "Leiyang") ;
-  Latvia = UsePN (mkPN "Latvia") ;
   Countries_KAZ_provinces_Leninsk_munic_cities_Leninsk = UsePN (mkPN "Leninsk") ;
   Countries_H_provinces_Csongrad = UsePN (mkPN "Csongrad") ;
   Countries_R_provinces_Leningradskayaoblast_cities_Kolpino = UsePN (mkPN "Kolpino") ;
@@ -3344,7 +3223,6 @@ lin
   Countries_PL_provinces_Katowickie_cities_Zabrze = UsePN (mkPN "Zabrze") ;
   Countries_CDN_provinces_Quebec_cities_Richmond = UsePN (mkPN "Richmond") ;
   Countries_SUD_provinces_ashSharqiyah_cities_PortSudan = UsePN (mkPN "Port Sudan") ;
-  ElSalvador = UsePN (mkPN "El Salvador") ;
   Countries_BR_provinces_EspiritoSanto_cities_Vitoria = UsePN (mkPN "Vitoria") ;
   Countries_D_provinces_BadenWurttemberg_cities_Mannheim = UsePN (mkPN "Mannheim") ;
   Countries_TJ_provinces_NeiMonggol_cities_Manzhouli = UsePN (mkPN "Manzhouli") ;
@@ -3400,7 +3278,6 @@ lin
   Islands_CangarooIsland = UsePN (mkPN "Cangaroo Island") ;
   Deserts_Sagiael_Hamra = UsePN (mkPN "Sagia el-Hamra") ;
   Countries_R_provinces_Altayskiykray = UsePN (mkPN "Altayskiy kray") ;
-  Zambia = UsePN (mkPN "Zambia") ;
   Countries_RCH_cities_Santiago = UsePN (mkPN "Santiago") ;
   Countries_RO_provinces_Sibiu = UsePN (mkPN "Sibiu") ;
   Countries_MOC_provinces_Maputo_munic_cities_Maputo = UsePN (mkPN "Maputo") ;
@@ -3422,7 +3299,6 @@ lin
   Countries_RO_provinces_Tulcea = UsePN (mkPN "Tulcea") ;
   Countries_R_provinces_Chitinskayaoblast = UsePN (mkPN "Chitinskaya oblast") ;
   Countries_MYA_provinces_Mandalay_cities_Mandalay = UsePN (mkPN "Mandalay") ;
-  Yemen = UsePN (mkPN "Yemen") ;
   Islands_Nauru = UsePN (mkPN "Nauru") ;
   Countries_IND_provinces_Maharashtra_cities_Kolhapur = UsePN (mkPN "Kolhapur") ;
   Countries_EAK_provinces_RiftValley_cities_Kericho = UsePN (mkPN "Kericho") ;
@@ -3436,7 +3312,6 @@ lin
   Countries_CO_provinces_Vichada = UsePN (mkPN "Vichada") ;
   Countries_AUS_provinces_SouthAustralia_cities_Adelaide = UsePN (mkPN "Adelaide") ;
   Countries_J_provinces_Kumamoto_cities_Kumamoto = UsePN (mkPN "Kumamoto") ;
-  Romania = UsePN (mkPN "Romania") ;
   Islands_Paramuschir = UsePN (mkPN "Paramuschir") ;
   Countries_VN_provinces_HaTinh = UsePN (mkPN "Ha Tinh") ;
   Countries_USA_provinces_Connecticut_cities_Waterbury = UsePN (mkPN "Waterbury") ;
@@ -3455,7 +3330,6 @@ lin
   Countries_USA_provinces_Virginia = UsePN (mkPN "Virginia") ;
   Countries_S_provinces_Ostergotland = UsePN (mkPN "Ostergotland") ;
   Countries_VN_cities_Saigon = UsePN (mkPN "Saigon") ;
-  Austria = UsePN (mkPN "Austria") ;
   Countries_R_provinces_Tambovskayaoblast = UsePN (mkPN "Tambovskaya oblast") ;
   Countries_HCA_provinces_Intibuca_cities_LaEsperanza = UsePN (mkPN "La Esperanza") ;
   Countries_TR_provinces_Erzurum = UsePN (mkPN "Erzurum") ;
@@ -3519,7 +3393,6 @@ lin
   Countries_PE_provinces_MadredeDios_cities_PuertoMaldonado = UsePN (mkPN "Puerto Maldonado") ;
   Countries_NOK_cities_Nampo = UsePN (mkPN "Nampo") ;
   Countries_CO_provinces_Huila = UsePN (mkPN "Huila") ;
-  Namibia = UsePN (mkPN "Namibia") ;
   Countries_AUS_provinces_NewSouthWales_cities_Newcastle = UsePN (mkPN "Newcastle") ;
   Countries_PA_provinces_Colon_cities_Colon = UsePN (mkPN "Colon") ;
   Countries_MAL_provinces_Melaka = UsePN (mkPN "Melaka") ;
@@ -3565,7 +3438,6 @@ lin
   Mountains_GranitePeak = UsePN (mkPN "Granite Peak") ;
   Countries_R_provinces_Kamchatskayaoblast_cities_PetropavlovskKamchatsky = UsePN (mkPN "Petropavlovsk Kamchatsky") ;
   Countries_A_provinces_UpperAustria_cities_Linz = UsePN (mkPN "Linz") ;
-  Switzerland = UsePN (mkPN "Switzerland") ;
   Countries_USA_provinces_Florida_cities_Jacksonville = UsePN (mkPN "Jacksonville") ;
   Countries_IND_provinces_Kerala = UsePN (mkPN "Kerala") ;
   Countries_USA_provinces_Florida = UsePN (mkPN "Florida") ;
@@ -3631,7 +3503,6 @@ lin
   Countries_IR_provinces_Kordestan_cities_Sanandaj = UsePN (mkPN "Sanandaj") ;
   Countries_H_provinces_Veszprem = UsePN (mkPN "Veszprem") ;
   Countries_TR_provinces_Nigde_cities_Nigde = UsePN (mkPN "Nigde") ;
-  Nepal = UsePN (mkPN "Nepal") ;
   Countries_cid_cia_Guernsey = UsePN (mkPN "Guernsey") ;
   Countries_PA_provinces_LosSantos_cities_LasTablas = UsePN (mkPN "Las Tablas") ;
   Countries_R_provinces_Kurganskayaoblast_cities_Kurgan = UsePN (mkPN "Kurgan") ;
@@ -3657,7 +3528,6 @@ lin
   Countries_J_provinces_Miyagi = UsePN (mkPN "Miyagi") ;
   Countries_AUS_provinces_NewSouthWales = UsePN (mkPN "New South Wales") ;
   Seas_YellowSea = UsePN (mkPN "Yellow Sea") ;
-  TrinidadAndTobago = UsePN (mkPN "Trinidad and Tobago") ;
   Countries_GB_provinces_Durham_cities_Darlington = UsePN (mkPN "Darlington") ;
   Countries_UZB_provinces_Toshkent_cities_Olmaliq = UsePN (mkPN "Olmaliq") ;
   Countries_RA_provinces_Catamarca = UsePN (mkPN "Catamarca") ;
@@ -3681,8 +3551,6 @@ lin
   Countries_PL_provinces_Katowickie_cities_Tychy = UsePN (mkPN "Tychy") ;
   Countries_EAT_provinces_Pwani = UsePN (mkPN "Pwani") ;
   Lakes_LakeOkeechobee = UsePN (mkPN "Lake Okeechobee") ;
-  Slovenia = UsePN (mkPN "Slovenia") ;
-  China = UsePN (mkPN "China") ;
   Countries_NOK_cities_Anju = UsePN (mkPN "Anju") ;
   Countries_RA_provinces_Misiones = UsePN (mkPN "Misiones") ;
   Countries_THA_provinces_Nan = UsePN (mkPN "Nan") ;
@@ -3732,7 +3600,6 @@ lin
   Islands_Panarea = UsePN (mkPN "Panarea") ;
   Countries_BR_cities_Contagem = UsePN (mkPN "Contagem") ;
   Countries_TJ_provinces_GuangxiZhuangzu_cities_Wuzhou = UsePN (mkPN "Wuzhou") ;
-  Slovakia = UsePN (mkPN "Slovakia") ;
   Organizations_AFESD = UsePN (mkPN "Arab Fund for Economic and Social Development") ;
   Countries_PL_provinces_Czestochowskie = UsePN (mkPN "Czestochowskie") ;
   Rivers_Save = UsePN (mkPN "Save") ;
@@ -3763,7 +3630,6 @@ lin
   Rivers_Bahrel_Gasal = UsePN (mkPN "Bahr el-Gasal") ;
   Countries_TJ_provinces_Hunan_cities_Hengyang = UsePN (mkPN "Hengyang") ;
   Countries_GB_provinces_Buckinghamshire_cities_Wycombe = UsePN (mkPN "Wycombe") ;
-  Uganda = UsePN (mkPN "Uganda") ;
   Countries_GR_provinces_Thessalia = UsePN (mkPN "Thessalia") ;
   Countries_R_provinces_Nizhegorodskayaoblast_cities_Arzamas = UsePN (mkPN "Arzamas") ;
   Countries_USA_provinces_Kansas_cities_KansasCity = UsePN (mkPN "Kansas City") ;
@@ -3795,7 +3661,6 @@ lin
   Countries_RP_cities_Pasay = UsePN (mkPN "Pasay") ;
   Countries_ROK_cities_Cheju = UsePN (mkPN "Cheju") ;
   Countries_LAR_cities_Tripoli = UsePN (mkPN "Tripoli") ;
-  Tanzania = UsePN (mkPN "Tanzania") ;
   Lakes_BarragedeMbakaou = UsePN (mkPN "Barrage de Mbakaou") ;
   Countries_TJ_provinces_Hubei_cities_Yichang = UsePN (mkPN "Yichang") ;
   Countries_Z_provinces_Copperbelt_cities_Ndola = UsePN (mkPN "Ndola") ;
@@ -3827,7 +3692,6 @@ lin
   Mountains_Galdhoeppig = UsePN (mkPN "Galdhoeppig") ;
   Countries_GB_provinces_SouthYorkshire_cities_Doncaster = UsePN (mkPN "Doncaster") ;
   Countries_USA_provinces_Ohio_cities_Toledo = UsePN (mkPN "Toledo") ;
-  Ethiopia = UsePN (mkPN "Ethiopia") ;
   Organizations_ICAO = UsePN (mkPN "International Civil Aviation Organization") ;
   Countries_I_provinces_Umbria_cities_Perugia = UsePN (mkPN "Perugia") ;
   Organizations_MINURSO = UsePN (mkPN "United Nations Mission for the Referendum in Western Sahara") ;
@@ -3841,7 +3705,6 @@ lin
   Countries_RA_provinces_SantiagodeEstero = UsePN (mkPN "Santiago de Estero") ;
   Countries_R_provinces_Sverdlovskayaoblast_cities_Yekaterinburg = UsePN (mkPN "Yekaterinburg") ;
   Countries_IND_provinces_MadhyaPradesh = UsePN (mkPN "Madhya Pradesh") ;
-  BosniaAndHerzegovina = UsePN (mkPN "Bosnia and Herzegovina") ;
   Countries_ES_provinces_SantaAna_cities_SantaAna = UsePN (mkPN "Santa Ana") ;
   Countries_PE_provinces_Cajamarca_cities_Cajamarca = UsePN (mkPN "Cajamarca") ;
   Countries_cid_cia_South_Georgia_and_the_South_Sandwich_Islands = UsePN (mkPN "South Georgia and the South Sandwich Islands") ;
@@ -3860,7 +3723,6 @@ lin
   Countries_RC_provinces_Penghu = UsePN (mkPN "Penghu") ;
   Lakes_LakeKalla = UsePN (mkPN "Lake Kalla") ;
   Countries_THA_provinces_Mukdahan = UsePN (mkPN "Mukdahan") ;
-  Guatemala = UsePN (mkPN "Guatemala") ;
   Countries_MEX_provinces_Chiapas_cities_Tonala = UsePN (mkPN "Tonala") ;
   Rivers_RioGrande = UsePN (mkPN "Rio Grande") ;
   Islands_Mindoro = UsePN (mkPN "Mindoro") ;
@@ -3868,7 +3730,6 @@ lin
   Deserts_Tenere = UsePN (mkPN "Tenere") ;
   Countries_TJ_provinces_Hebei_cities_Renqiu = UsePN (mkPN "Renqiu") ;
   Countries_THA_provinces_Loei = UsePN (mkPN "Loei") ;
-  Tunisia = UsePN (mkPN "Tunisia") ;
   Countries_J_provinces_Iwate = UsePN (mkPN "Iwate") ;
   Countries_ZRE_provinces_Kivu = UsePN (mkPN "Kivu") ;
   Countries_RP_cities_Zamboanga = UsePN (mkPN "Zamboanga") ;
@@ -3942,14 +3803,12 @@ lin
   Countries_MYA_provinces_Yangon_cities_Rangoon = UsePN (mkPN "Rangoon") ;
   Countries_RO_provinces_Braila_cities_Braila = UsePN (mkPN "Braila") ;
   Islands_Lolland = UsePN (mkPN "Lolland") ;
-  Albania = UsePN (mkPN "Albania") ;
   Countries_USA_provinces_NewMexico_cities_Albuquerque = UsePN (mkPN "Albuquerque") ;
   Countries_HCA_provinces_FranciscoMorazan_cities_Tegucigalpa = UsePN (mkPN "Tegucigalpa") ;
   Countries_BR_provinces_RiodeJaneiro_cities_NovaFriburgo = UsePN (mkPN "Nova Friburgo") ;
   Countries_IRQ_provinces_SalahadDin = UsePN (mkPN "Salah ad Din") ;
   Countries_TJ_provinces_Shandong_cities_Laiyang = UsePN (mkPN "Laiyang") ;
   Countries_TJ_provinces_Jiangsu_cities_Changshu = UsePN (mkPN "Changshu") ;
-  Mozambique = UsePN (mkPN "Mozambique") ;
   Countries_UZB_provinces_Farghona = UsePN (mkPN "Farghona") ;
   Countries_R_provinces_Samarskayaoblast_cities_Novokuybyshevsk = UsePN (mkPN "Novokuybyshevsk") ;
   Countries_PE_provinces_Cuzco = UsePN (mkPN "Cuzco") ;
@@ -4021,7 +3880,6 @@ lin
   Countries_IND_provinces_Gujarat_cities_Ahmadabad = UsePN (mkPN "Ahmadabad") ;
   Countries_CAM_provinces_Nordextreme_cities_Maroua = UsePN (mkPN "Maroua") ;
   Countries_RSA_provinces_EasternCape_cities_EastLondon = UsePN (mkPN "East London") ;
-  Kiribati = UsePN (mkPN "Kiribati") ;
   Organizations_WFC = UsePN (mkPN "World Food Council") ;
   Countries_GB_provinces_Torfaen = UsePN (mkPN "Torfaen") ;
   Lakes_LakeEyre = UsePN (mkPN "Lake Eyre") ;
@@ -4030,7 +3888,6 @@ lin
   Mountains_MtWhitney = UsePN (mkPN "Mt Whitney") ;
   Countries_S_provinces_Gavleborg = UsePN (mkPN "Gavleborg") ;
   Countries_MEX_provinces_Puebla_cities_Tehuacan = UsePN (mkPN "Tehuacan") ;
-  Sudan = UsePN (mkPN "Sudan") ;
   Countries_GB_provinces_Essex_cities_EppingForest = UsePN (mkPN "Epping Forest") ;
   Countries_RA_provinces_Tucuman_cities_SanMigueldeTucuman = UsePN (mkPN "San Miguel de Tucuman") ;
   Countries_NOK_cities_Huichon = UsePN (mkPN "Huichon") ;
@@ -4104,7 +3961,6 @@ lin
   Countries_TJ_provinces_Liaoning_cities_Shenyang = UsePN (mkPN "Shenyang") ;
   Countries_GR_provinces_Peloponnisos = UsePN (mkPN "Peloponnisos") ;
   Countries_CDN_provinces_Ontario_cities_Mississauga = UsePN (mkPN "Mississauga") ;
-  Turkey = UsePN (mkPN "Turkey") ;
   Countries_THA_provinces_Phrae = UsePN (mkPN "Phrae") ;
   Countries_STP_cities_SaoTome = UsePN (mkPN "Sao Tome") ;
   Countries_RO_provinces_Bacau = UsePN (mkPN "Bacau") ;
@@ -4166,7 +4022,6 @@ lin
   Countries_MEX_provinces_Veracruz = UsePN (mkPN "Veracruz") ;
   Countries_P_provinces_Porto_cities_Porto = UsePN (mkPN "Porto") ;
   Countries_PE_provinces_Callao_cities_Callao = UsePN (mkPN "Callao") ;
-  SriLanka = UsePN (mkPN "Sri Lanka") ;
   Countries_ARM_cities_Yerevan = UsePN (mkPN "Yerevan") ;
   Countries_MW_cities_Lilongwe = UsePN (mkPN "Lilongwe") ;
   Countries_USA_provinces_Alabama_cities_Birmingham = UsePN (mkPN "Birmingham") ;
@@ -4178,7 +4033,6 @@ lin
   Countries_USA_provinces_NewYork_cities_Rochester = UsePN (mkPN "Rochester") ;
   Countries_GB_provinces_Nottinghamshire_cities_Nottingham = UsePN (mkPN "Nottingham") ;
   Countries_VN_provinces_BenTre = UsePN (mkPN "Ben Tre") ;
-  Armenia = UsePN (mkPN "Armenia") ;
   Countries_TJ_provinces_Shanxi_cities_Taiyuan = UsePN (mkPN "Taiyuan") ;
   Countries_VN_cities_DaNang = UsePN (mkPN "Da Nang") ;
   Countries_PL_provinces_Wroclawskie_cities_Wroclaw = UsePN (mkPN "Wroclaw") ;
@@ -4214,7 +4068,6 @@ lin
   Countries_GB_provinces_WestYorkshire_cities_Wakefield = UsePN (mkPN "Wakefield") ;
   Countries_MEX_provinces_Jalisco_cities_Cuautla = UsePN (mkPN "Cuautla") ;
   Rivers_Elbe = UsePN (mkPN "Elbe") ;
-  Belarus = UsePN (mkPN "Belarus") ;
   Countries_J_provinces_Shiga = UsePN (mkPN "Shiga") ;
   Countries_CAM_provinces_Nordextreme = UsePN (mkPN "Nord extreme") ;
   Countries_TJ_provinces_Heilongjiang_cities_Yichun = UsePN (mkPN "Yichun") ;
@@ -4230,7 +4083,6 @@ lin
   Countries_RC_provinces_Kaohsiung_munic = UsePN (mkPN "Kaohsiung (munic.)") ;
   Countries_I_provinces_Lazio_cities_Rome = UsePN (mkPN "Rome") ;
   Countries_TJ_provinces_Jilin_cities_Fuyu = UsePN (mkPN "Fuyu") ;
-  CostaRica = UsePN (mkPN "Costa Rica") ;
   Countries_PL_provinces_Pilskie = UsePN (mkPN "Pilskie") ;
   Countries_CH_provinces_TG_cities_Frauenfeld = UsePN (mkPN "Frauenfeld") ;
   Countries_GB_provinces_Strathclyde_cities_Renfrew = UsePN (mkPN "Renfrew") ;
@@ -4241,7 +4093,6 @@ lin
   Countries_HCA_provinces_Ocotepeque_cities_Ocotepeque = UsePN (mkPN "Ocotepeque") ;
   Lakes_LakeRukwa = UsePN (mkPN "Lake Rukwa") ;
   Countries_R_provinces_Sverdlovskayaoblast_cities_KamenskUralskiy = UsePN (mkPN "Kamensk Uralskiy") ;
-  Jamaica = UsePN (mkPN "Jamaica") ;
   Countries_GB_provinces_Fife_cities_Glenrothes = UsePN (mkPN "Glenrothes") ;
   Countries_SP_cities_Mogadishu = UsePN (mkPN "Mogadishu") ;
   Countries_D_provinces_NordrheinWestfalen_cities_Siegen = UsePN (mkPN "Siegen") ;
@@ -4320,7 +4171,6 @@ lin
   Countries_P_provinces_Aveiro = UsePN (mkPN "Aveiro") ;
   Countries_CY_cities_Nicosia = UsePN (mkPN "Nicosia") ;
   Islands_PrinceCharlesIsland = UsePN (mkPN "Prince Charles Island") ;
-  Maldives = UsePN (mkPN "Maldives") ;
   Organizations_NIB = UsePN (mkPN "Nordic Investment Bank") ;
   Countries_PAL_cities_Koror = UsePN (mkPN "Koror") ;
   Countries_YV_provinces_Miranda_cities_LosTeques = UsePN (mkPN "Los Teques") ;
@@ -4339,7 +4189,6 @@ lin
   Countries_TJ_provinces_Hubei_cities_Xiangfan = UsePN (mkPN "Xiangfan") ;
   Countries_CDN_provinces_NorthwestTerritories = UsePN (mkPN "Northwest Territories") ;
   Countries_TJ_provinces_Zhejiang_cities_Ruian = UsePN (mkPN "Ruian") ;
-  Chad = UsePN (mkPN "Chad") ;
   Countries_I_cities_Forli = UsePN (mkPN "Forli") ;
   Rivers_Luangwa = UsePN (mkPN "Luangwa") ;
   Countries_MA_provinces_Tensift = UsePN (mkPN "Tensift") ;
@@ -4351,7 +4200,6 @@ lin
   Countries_RO_provinces_Botosani = UsePN (mkPN "Botosani") ;
   Islands_Cuba = UsePN (mkPN "Cuba") ;
   Countries_BR_provinces_Ceara_cities_Maracanau = UsePN (mkPN "Maracanau") ;
-  Mauritius = UsePN (mkPN "Mauritius") ;
   Countries_TJ_provinces_Shandong_cities_Linyi = UsePN (mkPN "Linyi") ;
   Countries_USA_provinces_Texas_cities_Irving = UsePN (mkPN "Irving") ;
   Countries_CO_provinces_Cundinamarca_cities_Soacha = UsePN (mkPN "Soacha") ;
@@ -4429,12 +4277,10 @@ lin
   Countries_EAT_provinces_Kagera = UsePN (mkPN "Kagera") ;
   Countries_CI_cities_Abidjan = UsePN (mkPN "Abidjan") ;
   Countries_KAZ_provinces_Semey = UsePN (mkPN "Semey") ;
-  Cyprus = UsePN (mkPN "Cyprus") ;
   Countries_TR_provinces_Usak_cities_Usak = UsePN (mkPN "Usak") ;
   Countries_TJ_provinces_Heilongjiang_cities_Acheng = UsePN (mkPN "Acheng") ;
   Countries_TJ_provinces_Jiangsu_cities_Danyang = UsePN (mkPN "Danyang") ;
   Countries_PE_provinces_Cuzco_cities_Cuzco = UsePN (mkPN "Cuzco") ;
-  Nigeria = UsePN (mkPN "Nigeria") ;
   Countries_VN_provinces_RedRiverDelta = UsePN (mkPN "Red River Delta") ;
   Countries_R_provinces_Tyumenskayaoblast_cities_Surgut = UsePN (mkPN "Surgut") ;
   Countries_R_provinces_Vologodskayaoblast_cities_Vologda = UsePN (mkPN "Vologda") ;
@@ -4458,7 +4304,6 @@ lin
   Countries_R_provinces_Vladimirskayaoblast_cities_Murom = UsePN (mkPN "Murom") ;
   Countries_BR_provinces_Parana_cities_Curitiba = UsePN (mkPN "Curitiba") ;
   Countries_RSA_cities_Boksburg = UsePN (mkPN "Boksburg") ;
-  Finland = UsePN (mkPN "Finland") ;
   Countries_YV_provinces_DistritoFederal_cities_CatiaLaMar = UsePN (mkPN "Catia La Mar") ;
   Countries_TR_provinces_Sakarya = UsePN (mkPN "Sakarya") ;
   Countries_BR_provinces_SaoPaulo_cities_SaoBernardodoCampo = UsePN (mkPN "Sao Bernardo do Campo") ;
@@ -4467,16 +4312,13 @@ lin
   Countries_UA_provinces_Zakarpatska = UsePN (mkPN "Zakarpatska") ;
   Countries_TJ_provinces_Heilongjiang_cities_Daqing = UsePN (mkPN "Daqing") ;
   Countries_WAN_cities_IjebuOde = UsePN (mkPN "Ijebu Ode") ;
-  Malawi = UsePN (mkPN "Malawi") ;
   Countries_USA_provinces_Distr_Columbia_cities_Washington = UsePN (mkPN "Washington") ;
   Countries_TR_provinces_Burdur_cities_Burdur = UsePN (mkPN "Burdur") ;
   Countries_USA_provinces_Vermont_cities_Montpelier = UsePN (mkPN "Montpelier") ;
   Rivers_Anuwimi = UsePN (mkPN "Anuwimi") ;
   Countries_R_provinces_Tomskayaoblast = UsePN (mkPN "Tomskaya oblast") ;
-  SouthAfrica = UsePN (mkPN "South Africa") ;
   Countries_BR_provinces_SaoPaulo_cities_SaoPaulo = UsePN (mkPN "Sao Paulo") ;
   Countries_E_provinces_Navarre = UsePN (mkPN "Navarre") ;
-  Colombia = UsePN (mkPN "Colombia") ;
   Countries_GB_provinces_Caerphilly = UsePN (mkPN "Caerphilly") ;
   Countries_CAM_provinces_Sudoueste = UsePN (mkPN "Sudoueste") ;
   Countries_MYA_provinces_Mon = UsePN (mkPN "Mon") ;
@@ -4492,7 +4334,6 @@ lin
   Countries_PL_provinces_Slupskie_cities_Slupsk = UsePN (mkPN "Slupsk") ;
   Countries_USA_provinces_Pennsylvania_cities_Pittsburgh = UsePN (mkPN "Pittsburgh") ;
   Islands_Dominica = UsePN (mkPN "Dominica") ;
-  Panama = UsePN (mkPN "Panama") ;
   Countries_R_provinces_Rep_ofDagestan_cities_Makhachkala = UsePN (mkPN "Makhachkala") ;
   Lakes_F_D_R_Lake = UsePN (mkPN "F.D.R. Lake") ;
   Countries_CAM_provinces_Sud = UsePN (mkPN "Sud") ;
@@ -4513,13 +4354,11 @@ lin
   Mountains_Fuji_Yama = UsePN (mkPN "Fuji-Yama") ;
   Countries_TJ_provinces_Sichuan = UsePN (mkPN "Sichuan") ;
   Countries_CO_provinces_Antioquia_cities_Itagui = UsePN (mkPN "Itagui") ;
-  Guyana = UsePN (mkPN "Guyana") ;
   Countries_TJ_provinces_Heilongjiang_cities_Shuangyashan = UsePN (mkPN "Shuangyashan") ;
   Countries_CDN_provinces_Manitoba_cities_Winnipeg = UsePN (mkPN "Winnipeg") ;
   Countries_F_provinces_ChampagneArdenne_cities_Reims = UsePN (mkPN "Reims") ;
   Countries_UZB_provinces_Jizzakh = UsePN (mkPN "Jizzakh") ;
   Countries_RSA_cities_KemptonPark = UsePN (mkPN "Kempton Park") ;
-  Nicaragua = UsePN (mkPN "Nicaragua") ;
   Countries_VN_cities_Hanoi = UsePN (mkPN "Hanoi") ;
   Countries_THA_provinces_ChaiNat = UsePN (mkPN "Chai Nat") ;
   Countries_TAD_provinces_Leninobod_cities_Khujand = UsePN (mkPN "Khujand") ;
@@ -4577,11 +4416,9 @@ lin
   Countries_HCA_provinces_Atlantida = UsePN (mkPN "Atlantida") ;
   Countries_ETH_cities_Dese = UsePN (mkPN "Dese") ;
   Lakes_LakeNipigon = UsePN (mkPN "Lake Nipigon") ;
-  CzechRepublic = UsePN (mkPN "Czech Republic") ;
   Countries_EAT_provinces_Rukwa = UsePN (mkPN "Rukwa") ;
   Countries_D_provinces_Bremen = UsePN (mkPN "Bremen") ;
   Countries_B_provinces_EastFlanders_cities_Ghent = UsePN (mkPN "Ghent") ;
-  Luxembourg = UsePN (mkPN "Luxembourg") ;
   Countries_D_provinces_NordrheinWestfalen_cities_Gelsenkirchen = UsePN (mkPN "Gelsenkirchen") ;
   Countries_GB_provinces_WestMidlands_cities_Birmingham = UsePN (mkPN "Birmingham") ;
   Countries_ROK_cities_Chinju = UsePN (mkPN "Chinju") ;
@@ -4654,7 +4491,6 @@ lin
   Countries_R_provinces_Rep_ofTatarstan_cities_Kazan = UsePN (mkPN "Kazan") ;
   Countries_IND_provinces_WestBengal = UsePN (mkPN "West Bengal") ;
   Countries_CH_provinces_BE_cities_Bern = UsePN (mkPN "Bern") ;
-  Philippines = UsePN (mkPN "Philippines") ;
   Countries_WAN_cities_Jos = UsePN (mkPN "Jos") ;
   Countries_BR_provinces_Piaui_cities_Teresina = UsePN (mkPN "Teresina") ;
   Countries_ES_provinces_SanVicente_cities_SanVicente = UsePN (mkPN "San Vicente") ;
@@ -4665,7 +4501,6 @@ lin
   Countries_IR_provinces_Tehran_cities_Tehran = UsePN (mkPN "Tehran") ;
   Countries_IND_provinces_Haryana = UsePN (mkPN "Haryana") ;
   Countries_TJ_provinces_Henan_cities_Shangqiu = UsePN (mkPN "Shangqiu") ;
-  WesternSahara = UsePN (mkPN "Western Sahara") ;
   Countries_PL_provinces_Kaliskie = UsePN (mkPN "Kaliskie") ;
   Countries_CH_provinces_SG_cities_SanktGallen = UsePN (mkPN "Sankt Gallen") ;
   Countries_TJ_provinces_Hebei_cities_Hengshui = UsePN (mkPN "Hengshui") ;
@@ -4721,7 +4556,6 @@ lin
   Countries_ANG_provinces_CuandoCubango_cities_Menongue = UsePN (mkPN "Menongue") ;
   Countries_ROK_cities_Suwon = UsePN (mkPN "Suwon") ;
   Countries_N_provinces_Nordland_cities_Narvik = UsePN (mkPN "Narvik") ;
-  Pakistan = UsePN (mkPN "Pakistan") ;
   Countries_TR_provinces_Van_cities_Van = UsePN (mkPN "Van") ;
   Rivers_HudsonRiver = UsePN (mkPN "Hudson River") ;
   Countries_TJ_provinces_Hunan_cities_Huaihua = UsePN (mkPN "Huaihua") ;
@@ -4744,7 +4578,6 @@ lin
   Countries_BR_provinces_Goias = UsePN (mkPN "Goias") ;
   Countries_BR_provinces_RiodeJaneiro_cities_BarraMansa = UsePN (mkPN "Barra Mansa") ;
   Countries_MYA_provinces_Mandalay = UsePN (mkPN "Mandalay") ;
-  Andorra = UsePN (mkPN "Andorra") ;
   Countries_TR_provinces_Zonguldak = UsePN (mkPN "Zonguldak") ;
   Countries_H_provinces_Szolnok = UsePN (mkPN "Szolnok") ;
   Countries_RO_provinces_Harghita_cities_MiercureaCiuc = UsePN (mkPN "Miercurea Ciuc") ;
@@ -4772,7 +4605,6 @@ lin
   Countries_ES_provinces_Cabanas = UsePN (mkPN "Cabanas") ;
   Countries_ANG_provinces_CuanzaSul_cities_Sumbe = UsePN (mkPN "Sumbe") ;
   Countries_USA_provinces_Wisconsin = UsePN (mkPN "Wisconsin") ;
-  Ghana = UsePN (mkPN "Ghana") ;
   Countries_IR_provinces_Lorestan_cities_Khorramabad = UsePN (mkPN "Khorramabad") ;
   Countries_BR_provinces_DistritoFederal_cities_Brasilia = UsePN (mkPN "Brasilia") ;
   Countries_S_provinces_Jonkoping_cities_Jonkoping = UsePN (mkPN "Jonkoping") ;
@@ -4783,14 +4615,12 @@ lin
   Countries_USA_provinces_Tennessee_cities_NashvilleDavidson = UsePN (mkPN "Nashville Davidson") ;
   Islands_Kreta = UsePN (mkPN "Kreta") ;
   Countries_THA_provinces_NongKhai = UsePN (mkPN "Nong Khai") ;
-  Norway = UsePN (mkPN "Norway") ;
   Countries_MEX_provinces_Morelos_cities_Cuernavaca = UsePN (mkPN "Cuernavaca") ;
   Rivers_Paraguay = UsePN (mkPN "Paraguay") ;
   Lakes_LakeMichigan = UsePN (mkPN "Lake Michigan") ;
   Countries_VN_provinces_LaoCai = UsePN (mkPN "Lao Cai") ;
   Countries_BR_provinces_SaoPaulo_cities_Barueri = UsePN (mkPN "Barueri") ;
   Countries_TJ_provinces_Qinghai_cities_Xining = UsePN (mkPN "Xining") ;
-  Denmark = UsePN (mkPN "Denmark") ;
   Countries_UA_provinces_Kharkivska = UsePN (mkPN "Kharkivska") ;
   Countries_ET_provinces_SinaashShamaliyah = UsePN (mkPN "Sina ash Shamaliyah") ;
   Countries_IR_provinces_Kordestan = UsePN (mkPN "Kordestan") ;
@@ -4847,7 +4677,6 @@ lin
   Countries_ET_provinces_BeniSuef = UsePN (mkPN "Beni Suef") ;
   Countries_RSA_provinces_NorthWest = UsePN (mkPN "North West") ;
   Countries_UAE_provinces_AshShariqah = UsePN (mkPN "Ash Shariqah") ;
-  Mali = UsePN (mkPN "Mali") ;
   Countries_UZB_provinces_Qoraqalpoghiston_cities_Nukus = UsePN (mkPN "Nukus") ;
   Countries_I_provinces_Calabria_cities_Cosenza = UsePN (mkPN "Cosenza") ;
   Countries_R_provinces_Kurganskayaoblast = UsePN (mkPN "Kurganskaya oblast") ;
@@ -4892,7 +4721,6 @@ lin
   Countries_KAZ_provinces_Qaraghandy = UsePN (mkPN "Qaraghandy") ;
   Countries_IND_provinces_Meghalaya_cities_Shillong = UsePN (mkPN "Shillong") ;
   Countries_MA_cities_Oujda = UsePN (mkPN "Oujda") ;
-  SierraLeone = UsePN (mkPN "Sierra Leone") ;
   Countries_MA_cities_Safi = UsePN (mkPN "Safi") ;
   Countries_EAK_provinces_Nairobi_cities_Nairobi = UsePN (mkPN "Nairobi") ;
   Countries_IND_provinces_Bihar_cities_Jamshedpur = UsePN (mkPN "Jamshedpur") ;
@@ -4916,18 +4744,14 @@ lin
   Countries_GB_provinces_NorthernIreland = UsePN (mkPN "Northern Ireland") ;
   Countries_IND_provinces_Delhi = UsePN (mkPN "Delhi") ;
   Countries_CDN_provinces_NorthwestTerritories_cities_Yellowknife = UsePN (mkPN "Yellowknife") ;
-  Taiwan = UsePN (mkPN "Taiwan") ;
   Countries_TJ_provinces_Shanxi = UsePN (mkPN "Shanxi") ;
   Countries_CO_provinces_Magdalena = UsePN (mkPN "Magdalena") ;
   Countries_CO_provinces_Antioquia = UsePN (mkPN "Antioquia") ;
   Countries_TJ_provinces_Guizhou = UsePN (mkPN "Guizhou") ;
   Organizations_BIS = UsePN (mkPN "Bank for International Settlements") ;
-  Paraguay = UsePN (mkPN "Paraguay") ;
   Countries_D_provinces_RheinlandPfalz = UsePN (mkPN "Rheinland Pfalz") ;
   Countries_P_provinces_Beja = UsePN (mkPN "Beja") ;
-  Rwanda = UsePN (mkPN "Rwanda") ;
   Countries_PL_provinces_Kieleckie_cities_Kielce = UsePN (mkPN "Kielce") ;
-  Afghanistan = UsePN (mkPN "Afghanistan") ;
   Countries_PK_cities_Chiniot = UsePN (mkPN "Chiniot") ;
   Countries_ROK_cities_Songnam = UsePN (mkPN "Songnam") ;
   Organizations_IOC = UsePN (mkPN "International Olympic Committee") ;
@@ -4960,7 +4784,6 @@ lin
   Countries_THA_provinces_NorthernRegion = UsePN (mkPN "Northern Region") ;
   Countries_P_provinces_Porto_cities_VilaNovadeGaia = UsePN (mkPN "Vila Nova de Gaia") ;
   Countries_RC_provinces_Taichung_munic_cities_Taichung = UsePN (mkPN "Taichung") ;
-  EquatorialGuinea = UsePN (mkPN "Equatorial Guinea") ;
   Countries_GB_provinces_Essex_cities_Braintree = UsePN (mkPN "Braintree") ;
   Countries_CDN_cities_Surrey = UsePN (mkPN "Surrey") ;
   Islands_Hispaniola = UsePN (mkPN "Hispaniola") ;
@@ -5037,7 +4860,6 @@ lin
   Countries_J_provinces_Gumma = UsePN (mkPN "Gumma") ;
   Countries_TJ_provinces_Hubei_cities_Honghu = UsePN (mkPN "Honghu") ;
   Countries_RC_provinces_Taitung = UsePN (mkPN "Taitung") ;
-  Suriname = UsePN (mkPN "Suriname") ;
   Countries_RC_provinces_Nantou = UsePN (mkPN "Nantou") ;
   Countries_USA_provinces_Pennsylvania_cities_Harrisburg = UsePN (mkPN "Harrisburg") ;
   Countries_cid_cia_Glorioso_Islands = UsePN (mkPN "Glorioso Islands") ;
@@ -5072,13 +4894,11 @@ lin
   Countries_USA_provinces_SouthDakota = UsePN (mkPN "South Dakota") ;
   Rivers_Dnepr = UsePN (mkPN "Dnepr") ;
   Countries_WSA_cities_ElAlaiun = UsePN (mkPN "El Alaiun") ;
-  Botswana = UsePN (mkPN "Botswana") ;
   Countries_K_cities_PhnomPenh = UsePN (mkPN "Phnom Penh") ;
   Countries_PL_provinces_Jeleniogorskie = UsePN (mkPN "Jeleniogorskie") ;
   Countries_R_provinces_Kemerovskayaoblast_cities_Kiselyovsk = UsePN (mkPN "Kiselyovsk") ;
   Countries_I_provinces_Calabria_cities_Catanzaro = UsePN (mkPN "Catanzaro") ;
   Countries_TJ_provinces_Fujian_cities_Yongan = UsePN (mkPN "Yongan") ;
-  Moldova = UsePN (mkPN "Moldova") ;
   Countries_IND_provinces_Maharashtra_cities_Thane = UsePN (mkPN "Thane") ;
   Countries_PL_provinces_Siedleckie_cities_Siedlce = UsePN (mkPN "Siedlce") ;
   Countries_CO_provinces_Tolima = UsePN (mkPN "Tolima") ;
@@ -5094,7 +4914,6 @@ lin
   Countries_PL_provinces_Lubelskie_cities_Lublin = UsePN (mkPN "Lublin") ;
   Countries_BR_provinces_Maranhao_cities_Timon = UsePN (mkPN "Timon") ;
   Countries_CDN_provinces_BritishColumbia = UsePN (mkPN "British Columbia") ;
-  Eritrea = UsePN (mkPN "Eritrea") ;
   Countries_RA_provinces_Mendoza_cities_Mendoza = UsePN (mkPN "Mendoza") ;
   Countries_THA_provinces_UbonRatchathani_cities_UbonRatchathani = UsePN (mkPN "Ubon Ratchathani") ;
   Countries_R_provinces_Moskovskayaoblast_cities_Balashikha = UsePN (mkPN "Balashikha") ;
@@ -5124,7 +4943,6 @@ lin
   Countries_J_provinces_Okayama_cities_Okayama = UsePN (mkPN "Okayama") ;
   Countries_USA_provinces_Ohio_cities_Akron = UsePN (mkPN "Akron") ;
   Countries_CDN_provinces_Ontario_cities_Vaughan = UsePN (mkPN "Vaughan") ;
-  Argentina = UsePN (mkPN "Argentina") ;
   Countries_EAT_provinces_Dodoma = UsePN (mkPN "Dodoma") ;
   Countries_BR_provinces_RiodeJaneiro_cities_RiodeJaneiro = UsePN (mkPN "Rio de Janeiro") ;
   Countries_GB_provinces_Cumbria_cities_Carlisle = UsePN (mkPN "Carlisle") ;
@@ -5172,7 +4990,6 @@ lin
   Countries_ANG_provinces_Cunene_cities_Ngiva = UsePN (mkPN "Ngiva") ;
   Countries_J_provinces_Tokushima_cities_Tokushima = UsePN (mkPN "Tokushima") ;
   Countries_ET_provinces_Qena = UsePN (mkPN "Qena") ;
-  SanMarino = UsePN (mkPN "San Marino") ;
   Countries_BR_provinces_Ceara_cities_Caucaia = UsePN (mkPN "Caucaia") ;
   Countries_TR_provinces_Eskisehir = UsePN (mkPN "Eskisehir") ;
   Countries_RM_provinces_Fianarantsoa_cities_Fianarantsoa = UsePN (mkPN "Fianarantsoa") ;
@@ -5198,7 +5015,6 @@ lin
   Countries_TJ_provinces_Shandong_cities_Jiaonan = UsePN (mkPN "Jiaonan") ;
   Countries_TJ_provinces_NingxiaHuizu = UsePN (mkPN "Ningxia Huizu") ;
   Countries_PL_provinces_Gorzowskie_cities_GorzowWielkopolskie = UsePN (mkPN "Gorzow Wielkopolskie") ;
-  Angola = UsePN (mkPN "Angola") ;
   Countries_RO_provinces_Mehedinti = UsePN (mkPN "Mehedinti") ;
   Countries_ET_provinces_ElIskandariya_munic_cities_Alexandria = UsePN (mkPN "Alexandria") ;
   Mountains_Popocatepetl = UsePN (mkPN "Popocatepetl") ;
@@ -5217,7 +5033,6 @@ lin
   Countries_MAL_provinces_Melaka_cities_Melaka = UsePN (mkPN "Melaka") ;
   Countries_RO_provinces_Giurgiu = UsePN (mkPN "Giurgiu") ;
   Rivers_Oka = UsePN (mkPN "Oka") ;
-  Cuba = UsePN (mkPN "Cuba") ;
   Countries_BR_provinces_MinasGerais_cities_Uberlandia = UsePN (mkPN "Uberlandia") ;
   Countries_TR_provinces_Mus = UsePN (mkPN "Mus") ;
   Countries_GR_cities_Thessaloniki = UsePN (mkPN "Thessaloniki") ;
@@ -5313,12 +5128,10 @@ lin
   Countries_GH_cities_CapeCoast = UsePN (mkPN "Cape Coast") ;
   Countries_IR_cities_Rajaishahr = UsePN (mkPN "Rajaishahr") ;
   Countries_SUD_provinces_alKhartum = UsePN (mkPN "al Khartum") ;
-  Kenya = UsePN (mkPN "Kenya") ;
   Mountains_Sabalan = UsePN (mkPN "Sabalan") ;
   Countries_R_provinces_Rostovskayaoblast_cities_Shakhty = UsePN (mkPN "Shakhty") ;
   Countries_BR_provinces_RiodeJaneiro_cities_Teresopolis = UsePN (mkPN "Teresopolis") ;
   Lakes_Arresee = UsePN (mkPN "Arresee") ;
-  Japan = UsePN (mkPN "Japan") ;
   Countries_IND_provinces_UttarPradesh_cities_Moradabad = UsePN (mkPN "Moradabad") ;
   Countries_TR_provinces_Hatay_cities_Antakya = UsePN (mkPN "Antakya") ;
   Countries_VN_provinces_CanTho = UsePN (mkPN "Can Tho") ;
@@ -5333,7 +5146,6 @@ lin
   Countries_RI_cities_Probolinggo = UsePN (mkPN "Probolinggo") ;
   Countries_USA_provinces_Pennsylvania_cities_Philadelphia = UsePN (mkPN "Philadelphia") ;
   Countries_MA_cities_Marrakech = UsePN (mkPN "Marrakech") ;
-  Italy = UsePN (mkPN "Italy") ;
   Organizations_UNMIH = UsePN (mkPN "United Nations Mission in Haiti") ;
   Countries_I_provinces_Sicilia_cities_Siracusa = UsePN (mkPN "Siracusa") ;
   Countries_R_provinces_Rep_ofBashkortostan_cities_Salavat = UsePN (mkPN "Salavat") ;
@@ -5348,7 +5160,6 @@ lin
   Organizations_LAES = UsePN (mkPN "Latin American Economic System") ;
   Rivers_Neva = UsePN (mkPN "Neva") ;
   Countries_Z_provinces_Northwestern_cities_Solwezi = UsePN (mkPN "Solwezi") ;
-  Bahamas = UsePN (mkPN "Bahamas") ;
   Countries_BR_provinces_Maranhao = UsePN (mkPN "Maranhao") ;
   Countries_PL_provinces_Katowickie_cities_WodzilawSlaski = UsePN (mkPN "Wodzilaw Slaski") ;
   Countries_PK_cities_MirpurKhas = UsePN (mkPN "Mirpur Khas") ;
@@ -5366,7 +5177,6 @@ lin
   Rivers_Vaesterdalaelv = UsePN (mkPN "Vaesterdalaelv") ;
   Islands_Lanzarote = UsePN (mkPN "Lanzarote") ;
   Mountains_PikKommunizma = UsePN (mkPN "Pik Kommunizma") ;
-  Togo = UsePN (mkPN "Togo") ;
   Countries_F_provinces_Alsace_cities_Strasbourg = UsePN (mkPN "Strasbourg") ;
   Countries_IR_provinces_Ilam = UsePN (mkPN "Ilam") ;
   Countries_CDN_provinces_Ontario_cities_Ottawa = UsePN (mkPN "Ottawa") ;
@@ -5384,7 +5194,6 @@ lin
   Countries_cid_cia_West_Bank = UsePN (mkPN "West Bank") ;
   Countries_IND_provinces_Rajasthan_cities_Kota = UsePN (mkPN "Kota") ;
   Countries_CZ_provinces_Vychodocesky_cities_HradecKralove = UsePN (mkPN "Hradec Kralove") ;
-  Bolivia = UsePN (mkPN "Bolivia") ;
   Countries_IR_provinces_Khorasan_cities_Neyshabur = UsePN (mkPN "Neyshabur") ;
   Countries_ZRE_provinces_KasaiOriental_cities_Kalemi = UsePN (mkPN "Kalemi") ;
   Organizations_WHO = UsePN (mkPN "World Health Organization") ;
@@ -5429,7 +5238,6 @@ lin
   Countries_USA_provinces_Wisconsin_cities_GreenBay = UsePN (mkPN "Green Bay") ;
   Countries_TR_provinces_Bitlis = UsePN (mkPN "Bitlis") ;
   Countries_GB_provinces_Berkshire_cities_Wokingham = UsePN (mkPN "Wokingham") ;
-  Israel = UsePN (mkPN "Israel") ;
   Countries_cid_cia_Bassas_da_India = UsePN (mkPN "Bassas da India") ;
   Countries_WAN_cities_Shagamu = UsePN (mkPN "Shagamu") ;
   Countries_P_provinces_Azores_The = UsePN (mkPN "Azores, The") ;
@@ -5470,7 +5278,6 @@ lin
   Countries_R_provinces_Krasnodarskykray_cities_Sochi = UsePN (mkPN "Sochi") ;
   Countries_GB_provinces_Fife = UsePN (mkPN "Fife") ;
   Mountains_Mt_Bogong = UsePN (mkPN "Mt. Bogong") ;
-  Iraq = UsePN (mkPN "Iraq") ;
   Countries_J_provinces_Chiba = UsePN (mkPN "Chiba") ;
   Countries_R_provinces_Bryanskayaoblast_cities_Bryansk = UsePN (mkPN "Bryansk") ;
   Countries_CO_provinces_Sucre_cities_Sincelejo = UsePN (mkPN "Sincelejo") ;
@@ -5553,10 +5360,5 @@ lin
   Countries_VN_cities_ThaiNguyen = UsePN (mkPN "Thai Nguyen") ;
   Countries_ZRE_provinces_BasZaire = UsePN (mkPN "Bas Zaire") ;
   Countries_UA_provinces_Poltavska = UsePN (mkPN "Poltavska") ;
-  SaintKittsAndNevis = UsePN (mkPN "Saint Kitts and Nevis") ;
-  SaintVincentAndTheGrenadines = UsePN (mkPN "Saint Vincent and the Grenadines") ;
-  SaoTomeAndPrincipe = UsePN (mkPN "Sao Tome and Principe") ;
-  SerbiaAndMontenegro = UsePN (mkPN "Serbia and Montenegro") ;
-  TrinidadAndTobago = UsePN (mkPN "Trinidad and Tobago") ;
 
 }
