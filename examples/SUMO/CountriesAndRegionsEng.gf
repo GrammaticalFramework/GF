@@ -523,8 +523,7 @@ lin
   TegucigalpaHonduras = UsePN (mkPN "Tegucigalpa") ;
   TeheranIran = UsePN (mkPN "Teheran") ;
   TekoaWestBank = UsePN (mkPN "Tekoa") ;
-  TelAvivIsrael = UsePN (mkPN "Tel Aviv") ;
-  --TelAvivIsrael = UsePN (mkPN "Tel-Aviv") ;
+  TelAvivIsrael = UsePN (mkPN "Tel Aviv" | mkPN "Tel-Aviv") ;
   TelHaShomerJunctionIsrael = UsePN (mkPN "Tel HaShomer Junction") ;
   TelQateifaGazaStrip = UsePN (mkPN "Tel Qateifa") ;
   TelRumeiydaIsrael = UsePN (mkPN "Tel Rumeiyda") ;
@@ -704,9 +703,7 @@ lin
   IsleOfMan = UsePN (mkPN "Isle of Man") ;
   Monaco = UsePN (mkPN "Monaco") ;
   Netherlands = UsePN (mkPN "Netherlands") ;
-  UnitedKingdom = UsePN (mkPN "United Kingdom of Great Britain and Northern Ireland") ;
-  --UnitedKingdom = UsePN (mkPN "United Kingdom") ;
-  --UnitedKingdom = UsePN (mkPN "Great Britain") ;
+  UnitedKingdom = UsePN (mkPN "United Kingdom of Great Britain and Northern Ireland" | mkPN "United Kingdom" | mkPN "Great Britain") ;
   Albania = UsePN (mkPN "Albania") ;
   BosniaAndHerzegovina = UsePN (mkPN "Bosnia and Herzegovina") ;
   Bulgaria = UsePN (mkPN "Bulgaria") ;
@@ -780,8 +777,7 @@ lin
   NorthKorea = UsePN (mkPN "NorthKorea") ;
   SouthKorea = UsePN (mkPN "SouthKorea") ;
   Macau = UsePN (mkPN "Macau") ;
-  Taiwan = UsePN (mkPN "Taiwan") ;
-  --Taiwan = UsePN (mkPN "Republic of China") ;
+  Taiwan = UsePN (mkPN "Taiwan" | mkPN "Republic of China") ;
   Mongolia = UsePN (mkPN "Mongolia") ;
   Russia = UsePN (mkPN "Russia") ;
   Afghanistan = UsePN (mkPN "Afghanistan") ;
