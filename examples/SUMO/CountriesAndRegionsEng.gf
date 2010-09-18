@@ -52,6 +52,7 @@ lin
   BadVilbelGermany = UsePN (mkPN "Bad Vilbel") ;
   BaghdadIraq = UsePN (mkPN "Baghdad") ;
   BagreColombia = UsePN (mkPN "Bagre") ;
+  Bahamas = UsePN (mkPN "Bahamas") ;
   BahawalpurPakistan = UsePN (mkPN "Bahawalpur") ;
   BakaAlGarbiyehIsrael = UsePN (mkPN "Baka al-Garbiyeh") ;
   BakkaAlSharkiyaWestBank = UsePN (mkPN "Bakka al-Sharkiya") ;
@@ -100,6 +101,7 @@ lin
   BucharestIndia = UsePN (mkPN "Bucharest") ;
   BuenosAiresArgentina = UsePN (mkPN "Buenos Aires") ;
   BuinakskRussia = UsePN (mkPN "Buinaksk") ;
+  Burma = UsePN (mkPN "Burma") ;
   BwindiforestUganda = UsePN (mkPN "Bwindi forest") ;
   CabindaAngola = UsePN (mkPN "Cabinda") ;
   CaglayanTurkey = UsePN (mkPN "Caglayan") ;
@@ -130,6 +132,7 @@ lin
   ColombiaPanama = UsePN (mkPN "Colombia") ;
   ColomboSriLanka = UsePN (mkPN "Colombo") ;
   ComayaguaHonduras = UsePN (mkPN "Comayagua") ;
+  Congo = UsePN (mkPN "Congo") ;
   CopacaBanaCuba = UsePN (mkPN "Copaca-bana") ;
   CopenhagenDenmark = UsePN (mkPN "Copenhagen") ;
   CorsicaFrance = UsePN (mkPN "Corsica") ;
@@ -187,6 +190,7 @@ lin
   GashuriIsrael = UsePN (mkPN "Gashuri") ;
   GeneralSantosPhilippines = UsePN (mkPN "General Santos") ;
   GenevaSwitzerland = UsePN (mkPN "Geneva") ;
+  Georgia = UsePN (mkPN "Georgia") ;
   GetxoSpain = UsePN (mkPN "Getxo") ;
   GhalebiehIraq = UsePN (mkPN "Ghalebieh") ;
   GhaziabadUttarPradeshIndia = UsePN (mkPN "Ghaziabad Uttar Pradesh") ;
@@ -843,5 +847,6 @@ lin
   Vanuatu = UsePN (mkPN "Vanuatu") ;
   WakeIsland = UsePN (mkPN "Wake Island") ;
   WallisAndFutuna = UsePN (mkPN "Wallis and Futuna") ;
+  Zaire = UsePN (mkPN "Zaire") ;
   
 };

@@ -1,84 +1,4 @@
-abstract Mondial = MidLevelOntology, Geography, Government ** {
-
-  fun Afghanistan : Ind (both Country Nation);
-
-  fun Albania : Ind (both Country Nation);
-
-  fun Algeria : Ind (both Country Nation);
-
-  fun Andorra : Ind (both Country EuropeanNation);
-
-  fun Angola : Ind (both Country Nation);
-
-  fun AntiguaAndBarbuda : Ind (both Country Nation);
-
-  fun Argentina : Ind (both Country Nation);
-
-  fun Armenia : Ind (both Country Nation);
-
-  fun Australia : Ind (both Country Nation);
-
-  fun Austria : Ind (both Country Nation);
-
-  fun Azerbaijan : Ind (both Country Nation);
-
-  fun Bahamas : Ind Country ;
-
-  fun Bahrain : Ind (both Country Nation);
-
-  fun Bangladesh : Ind (both Country Nation);
-
-  fun Barbados : Ind (both Country Nation);
-
-  fun Belarus : Ind (both Country Nation);
-
-  fun Belgium : Ind (both Country EuropeanNation);
-
-  fun Belize : Ind (both Country Nation);
-
-  fun Benin : Ind (both Country Nation);
-
-  fun Bhutan : Ind (both Country Nation);
-
-  fun Bolivia : Ind (both Country Nation);
-
-  fun BosniaAndHerzegovina : Ind (both Country Nation);
-
-  fun Botswana : Ind (both Country Nation);
-
-  fun Brazil : Ind (both Country Nation);
-
-  fun Brunei : Ind (both Country Nation);
-
-  fun Bulgaria : Ind (both Country Nation);
-
-  fun BurkinaFaso : Ind (both Country Nation);
-
-  fun Burma : Ind Country ;
-
-  fun Burundi : Ind (both Country Nation);
-
-  fun Cambodia : Ind (both Country Nation);
-
-  fun Cameroon : Ind (both Country Nation);
-
-  fun Canada : Ind (both Country Nation);
-
-  fun CapeVerde : Ind (both Country Nation);
-
-  fun CentralAfricanRepublic : Ind (both Country Nation);
-
-  fun Chad : Ind (both Country Nation);
-
-  fun Chile : Ind (both Country Nation);
-
-  fun China : Ind (both Country Nation);
-
-  fun Colombia : Ind (both Country Nation);
-
-  fun Comoros : Ind (both Country Nation);
-
-  fun Congo : Ind Country ;
+abstract Mondial = CountriesAndRegions ** {
 
   fun Continents_Africa : Ind Continent ;
 
@@ -89,10 +9,6 @@ abstract Mondial = MidLevelOntology, Geography, Government ** {
   fun Continents_Australia_Oceania : Ind Continent ;
 
   fun Continents_Europe : Ind Continent ;
-
-  fun CostaRica : Ind (both Country Nation);
-
-  fun CoteDIvoire : Ind (both Country Nation);
 
   fun Countries_AFG_cities_Kabul : Ind City ;
 
@@ -9382,18 +9298,6 @@ abstract Mondial = MidLevelOntology, Geography, Government ** {
 
   fun Countries_cid_cia_West_Bank : Ind Country ;
 
-  fun Country : Class ;
-
-  fun Croatia : Ind (both Country Nation);
-
-  fun Cuba : Ind (both Country (both Nation Island)) ;
-
-  fun Cyprus : Ind (both Country Nation);
-
-  fun CzechRepublic : Ind (both Country Nation);
-
-  fun Denmark : Ind (both Country EuropeanNation);
-
   fun Deserts_ArabianDesert : Ind Desert ;
 
   fun Deserts_Asauad : Ind Desert ;
@@ -9453,76 +9357,6 @@ abstract Mondial = MidLevelOntology, Geography, Government ** {
   fun Deserts_Trarza : Ind Desert ;
 
   fun Deserts_Uaran : Ind Desert ;
-
-  fun Djibouti : Ind (both Country Nation);
-
-  fun Dominica : Ind (both Country Nation);
-
-  fun DominicanRepublic : Ind (both Country Nation);
-
-  fun Ecuador : Ind (both Country Nation);
-
-  fun Egypt : Ind (both Country Nation);
-
-  fun ElSalvador : Ind (both Country Nation);
-
-  fun EquatorialGuinea : Ind (both Country Nation);
-
-  fun Eritrea : Ind (both Country Nation);
-
-  fun Estonia : Ind (both Country Nation);
-
-  fun Ethiopia : Ind (both Country Nation);
-
-  fun Fiji : Ind (both Country Nation);
-
-  fun Finland : Ind (both Country EuropeanNation);
-
-  fun France : Ind (both Country EuropeanNation);
-
-  fun FrenchGuiana : Ind (both Country (both LandArea DependencyOrSpecialSovereigntyArea)) ;
-
-  fun Gabon : Ind (both Country Nation);
-
-  fun Gambia : Ind (both Country Nation);
-
-  fun Georgia : Ind (both Country Nation);
-
-  fun Germany : Ind (both Country EuropeanNation);
-
-  fun Ghana : Ind (both Country Nation);
-
-  fun Greece : Ind (both Country EuropeanNation);
-
-  fun Grenada : Ind (both Country Nation);
-
-  fun Guatemala : Ind (both Country Nation);
-
-  fun Guinea : Ind (both Country Nation);
-
-  fun Guinea_Bissau : Ind Country ;
-
-  fun Guyana : Ind (both Country Nation);
-
-  fun Haiti : Ind (both Country Nation);
-
-  fun HolySee : Ind (both Country EuropeanNation);
-
-  fun Honduras : Ind (both Country Nation);
-
-  fun Hungary : Ind (both Country Nation);
-
-  fun Iceland : Ind (both Country (both EuropeanNation Island)) ;
-
-  fun India : Ind (both Country Nation);
-
-  fun Indonesia : Ind (both Country Nation);
-
-  fun Iran : Ind (both Country Nation);
-
-  fun Iraq : Ind (both Country Nation);
-
-  fun Ireland : Ind (both Country EuropeanNation);
 
   fun Islands_Aland : Ind Island ;
 
@@ -9872,26 +9706,6 @@ abstract Mondial = MidLevelOntology, Geography, Government ** {
 
   fun Islands_Zakinthos : Ind Island ;
 
-  fun Israel : Ind (both Country Nation);
-
-  fun Italy : Ind (both Country EuropeanNation);
-
-  fun Jamaica : Ind (both Country Nation);
-
-  fun Japan : Ind (both Country (both Nation Island)) ;
-
-  fun Jordan : Ind (both Country Nation);
-
-  fun Kazakstan : Ind Country ;
-
-  fun Kenya : Ind (both Country Nation);
-
-  fun Kiribati : Ind (both Country Nation);
-
-  fun Kuwait : Ind (both Country Nation);
-
-  fun Kyrgyzstan : Ind (both Country Nation);
-
   fun Lakes_Arresee : Ind Lake ;
 
   fun Lakes_BarragedeMbakaou : Ind Lake ;
@@ -10076,56 +9890,6 @@ abstract Mondial = MidLevelOntology, Geography, Government ** {
 
   fun Lakes_Vaettern : Ind Lake ;
 
-  fun Laos : Ind (both Country Nation);
-
-  fun Latvia : Ind (both Country Nation);
-
-  fun Lebanon : Ind (both Country Nation);
-
-  fun Lesotho : Ind (both Country Nation);
-
-  fun Liberia : Ind (both Country Nation);
-
-  fun Libya : Ind (both Country Nation);
-
-  fun Liechtenstein : Ind (both Country Nation);
-
-  fun Lithuania : Ind (both Country Nation);
-
-  fun Luxembourg : Ind (both Country Nation);
-
-  fun Macedonia : Ind (both Country Nation);
-
-  fun Madagascar : Ind (both Country Nation);
-
-  fun Malawi : Ind (both Country Nation);
-
-  fun Malaysia : Ind (both Country Nation);
-
-  fun Maldives : Ind (both Country Nation);
-
-  fun Mali : Ind (both Country Nation);
-
-  fun Malta : Ind (both Country EuropeanNation);
-
-  fun MarshallIslands : Ind (both Country Nation);
-
-  fun Mauritania : Ind (both Country Nation);
-
-  fun Mauritius : Ind (both Country Nation);
-
-  fun Mexico : Ind (both Country Nation);
-
-  fun Micronesia : Ind (both Country Nation);
-
-  fun Moldova : Ind (both Country Nation);
-
-  fun Monaco : Ind (both Country EuropeanNation);
-
-  fun Mongolia : Ind (both Country Nation);
-
-  fun Morocco : Ind (both Country Nation);
-
   fun Mountains_Aconcagua : Ind Mountain ;
 
   fun Mountains_Bjelucha : Ind Mountain ;
@@ -10301,32 +10065,6 @@ abstract Mondial = MidLevelOntology, Geography, Government ** {
   fun Mountains_Tubhal : Ind Mountain ;
 
   fun Mountains_Zugspitze : Ind Mountain ;
-
-  fun Mozambique : Ind (both Country Nation);
-
-  fun Namibia : Ind (both Country Nation);
-
-  fun Nauru : Ind (both Country Nation);
-
-  fun Nepal : Ind (both Country Nation);
-
-  fun Netherlands : Ind (both Country EuropeanNation);
-
-  fun NewCaledonia : Ind (both Country (both LandArea DependencyOrSpecialSovereigntyArea)) ;
-
-  fun NewZealand : Ind (both Country Nation);
-
-  fun Nicaragua : Ind (both Country Nation);
-
-  fun Niger : Ind (both Country Nation);
-
-  fun Nigeria : Ind (both Country Nation);
-
-  fun NorthKorea : Ind (both Country Nation);
-
-  fun Norway : Ind (both Country EuropeanNation);
-
-  fun Oman : Ind (both Country Nation);
 
   fun Organizations_ABEDA : Ind Organization ;
 
@@ -10664,28 +10402,8 @@ abstract Mondial = MidLevelOntology, Geography, Government ** {
 
   fun Organizations_ZC : Ind Organization ;
 
-  fun Pakistan : Ind (both Country Nation);
-
-  fun Palau : Ind (both Country Nation);
-
-  fun Panama : Ind (both Country Nation);
-
-  fun PapuaNewGuinea : Ind (both Country Nation);
-
-  fun Paraguay : Ind (both Country Nation);
-
-  fun Peru : Ind (both Country Nation);
-
-  fun Philippines : Ind (both Country Nation);
-
-  fun Poland : Ind (both Country EuropeanNation);
-
-  fun Portugal : Ind (both Country EuropeanNation);
-
   fun Province : Class ;
   fun Province_Class : SubClass Province StateOrProvince ;
-
-  fun Qatar : Ind (both Country Nation);
 
   fun Rivers_Ajan_Jurjach : Ind River ;
 
@@ -10957,27 +10675,6 @@ abstract Mondial = MidLevelOntology, Geography, Government ** {
 
   fun Rivers_Zambezi : Ind River ;
 
-  fun Romania : Ind (both Country Nation);
-
-  fun Russia : Ind (both Country Nation);
-
-  fun Rwanda : Ind (both Country Nation);
-
-  -- The nation of SaintKittsAndNevis
-  fun SaintKittsAndNevis : Ind (both Country Nation);
-
-  fun SaintLucia : Ind (both Country Nation);
-
-  -- The nation of SaintVincentAndTheGrenadines.
-  fun SaintVincentAndTheGrenadines : Ind (both Country Nation);
-
-  fun SanMarino : Ind (both Country EuropeanNation);
-
-  -- The nation of SaoTomeAndPrincipe.
-  fun SaoTomeAndPrincipe : Ind (both Country Nation);
-
-  fun SaudiArabia : Ind (both Country Nation);
-
   fun Seas_ArabianSea : Ind Sea ;
 
   fun Seas_ArcticOcean : Ind Sea ;
@@ -11021,98 +10718,6 @@ abstract Mondial = MidLevelOntology, Geography, Government ** {
   fun Seas_SundaSea : Ind Sea ;
 
   fun Seas_YellowSea : Ind Sea ;
-
-  fun Senegal : Ind (both Country Nation);
-
-  -- The nation of SerbiaAndMontenegro.
-  fun SerbiaAndMontenegro : Ind (both Country Nation);
-
-  fun Seychelles : Ind (both Country Nation);
-
-  fun SierraLeone : Ind (both Country Nation);
-
-  fun Singapore : Ind (both Country Nation);
-
-  fun Slovakia : Ind (both Country Nation);
-
-  fun Slovenia : Ind (both Country Nation);
-
-  fun SolomonIslands : Ind (both Country Nation);
-
-  fun Somalia : Ind (both Country Nation);
-
-  fun SouthAfrica : Ind (both Country Nation);
-
-  fun SouthKorea : Ind (both Country Nation);
-
-  fun Spain : Ind (both Country EuropeanNation);
-
-  fun SriLanka : Ind (both Country Nation);
-
-  fun Sudan : Ind (both Country Nation);
-
-  fun Suriname : Ind (both Country Nation);
-
-  fun Swaziland : Ind (both Country Nation);
-
-  fun Sweden : Ind (both Country EuropeanNation);
-
-  fun Switzerland : Ind (both Country EuropeanNation);
-
-  fun Syria : Ind (both Country Nation);
-
-  fun Taiwan : Ind (both Country Nation);
-
-  fun Tajikistan : Ind (both Country Nation);
-
-  fun Tanzania : Ind (both Country Nation);
-
-  fun Thailand : Ind (both Country Nation);
-
-  fun Togo : Ind (both Country Nation);
-
-  fun Tonga : Ind (both Country Nation);
-
-  -- The nation of TrinidadAndTobago.
-  fun TrinidadAndTobago : Ind (both Country Nation);
-
-  fun Tunisia : Ind (both Country Nation);
-
-  fun Turkey : Ind (both Country Nation);
-
-  fun Turkmenistan : Ind (both Country Nation);
-
-  fun Tuvalu : Ind (both Country Nation);
-
-  fun Uganda : Ind (both Country Nation);
-
-  fun Ukraine : Ind (both Country Nation);
-
-  fun UnitedArabEmirates : Ind (both Country EuropeanNation);
-
-  fun UnitedKingdom : Ind (both Country Nation);
-
-  fun UnitedStates : Ind (both Country Nation);
-
-  fun Uruguay : Ind (both Country Nation);
-
-  fun Uzbekistan : Ind (both Country Nation);
-
-  fun Vanuatu : Ind (both Country Nation);
-
-  fun Venezuela : Ind (both Country Nation);
-
-  fun Vietnam : Ind (both Country Nation);
-
-  fun WesternSahara : Ind (both Country (both Nation GeopoliticalArea)) ;
-
-  fun WesternSamoa : Ind Country ;
-
-  fun Yemen : Ind (both Country Nation);
-
-  fun Zaire : Ind Country ;
-
-  fun Zambia : Ind (both Country Nation);
 
   fun flowsInto : El River -> El Sea -> Formula ;
 
