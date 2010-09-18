@@ -142,8 +142,6 @@ abstract CountriesAndRegions = MidLevelOntology, Geography, Government ** {
 
   fun Guinea : Ind (both Country Nation);
 
-  fun Guinea_Bissau : Ind Country ;
-
   fun Guyana : Ind (both Country Nation);
 
   fun Haiti : Ind (both Country Nation);
@@ -1155,7 +1153,7 @@ abstract CountriesAndRegions = MidLevelOntology, Geography, Government ** {
   fun GuilinChina : Ind City ;
 
   -- The Nation of GuineaBissau.
-  fun GuineaBissau : Ind Nation ;
+  fun GuineaBissau : Ind (both Country Nation) ;
 
   -- The City of Gujarat in India.
   fun GujaratIndia : Ind City ;

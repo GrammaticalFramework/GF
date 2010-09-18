@@ -3489,7 +3489,6 @@ lin
   Countries_D_provinces_Niedersachsen_cities_Oldenburg = UsePN (mkPN "Oldenburg") ;
   Countries_UA_provinces_Dnipropetrovska_cities_Dnipropetrovsk = UsePN (mkPN "Dnipropetrovsk") ;
   Countries_CH_provinces_AR = UsePN (mkPN "AR") ;
-  Guinea_Bissau = UsePN (mkPN "Guinea-Bissau") ;
   Countries_HCA_provinces_ElParaiso_cities_Yuscaran = UsePN (mkPN "Yuscaran") ;
   Organizations_UNFICYP = UsePN (mkPN "United Nations Force in Cyprus") ;
   Countries_IND_provinces_DamanandDiu = UsePN (mkPN "Daman and Diu") ;
