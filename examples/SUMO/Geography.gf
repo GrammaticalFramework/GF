@@ -1334,11 +1334,10 @@ abstract Geography = MidLevelOntology ** {
   fun NaturalGas : Class ;
   fun NaturalGas_Class : SubClass NaturalGas CompoundSubstance ;
 
-  -- NaturalSatellite is the class of 
-  -- large, naturally occurring astronomical bodies orbiting some other 
-  -- AstronomicalBody.
+  -- NaturalSatellite is the class of large, 
+  -- naturally occurring astronomical bodies orbiting some other AstronomicalBody.
   fun NaturalSatellite : Class ;
-  fun NaturalSatellite_Class : SubClass NaturalSatellite (both AstronomicalBody Satellite) ;
+  fun NaturalSatellite_Class : SubClass NaturalSatellite Satellite ;
 
   -- NauticalMile represents the international 
   -- unit used for measuring distance in sea and air navigation. The unit is 
