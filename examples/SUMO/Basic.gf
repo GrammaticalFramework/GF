@@ -30,8 +30,8 @@ data
   inhs : (c1, c2, c3 : Class) -> SubClass c1 c2 -> Inherits c2 c3 -> Inherits c1 c3;
 
   -- (both c1 c2) is subclass of c1 and of c2
-  bothL : (c1, c2 : Class) -> Inherits (both c1 c2) c1 ;
-  bothR : (c1, c2 : Class) -> Inherits (both c1 c2) c2 ; 
+  bothL : (c1, c2 : Class) -> SubClass (both c1 c2) c1 ;
+  bothR : (c1, c2 : Class) -> SubClass (both c1 c2) c2 ;
 
   -- relationship with other subclasses
   bothC : (c1, c2, c3 : Class) -> Inherits c3 c1 -> Inherits c3 c2 -> Inherits c3 (both c1 c2);
@@ -41,7 +41,7 @@ data
   eitherR : (c1, c2 : Class) -> Inherits c2 (either c1 c2);
 
   -- relationship with other subclasses
-  eitherC : (c1,c2,c3 : Class) -> Inherits c1 c3 -> Inherits c2 c3 -> Inherits (either c1 c2) c3 ; 
+  eitherC : (c1,c2,c3 : Class) -> SubClass c1 c3 -> SubClass c2 c3 -> SubClass (either c1 c2) c3 ; 
 
   -- sub-class axiom for KappaFn
   kappa : (c : Class) -> (p : Var c -> Formula) -> Inherits (KappaFn c p) c ;
