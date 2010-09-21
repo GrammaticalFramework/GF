@@ -741,8 +741,8 @@ abstract CountriesAndRegions = MidLevelOntology, Geography, Government ** {
   -- The City of Bucaramanga in Colombia.
   fun BucaramangaColombia : Ind City ;
 
-  -- The City of Bucharest in India.
-  fun BucharestIndia : Ind City ;
+  -- The City of Bucharest in Romania.
+  fun BucharestRomania : Ind City ;
 
   -- The City of BuenosAires in Argentina.
   fun BuenosAiresArgentina : Ind City ;

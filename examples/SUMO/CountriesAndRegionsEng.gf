@@ -98,7 +98,7 @@ lin
   BouzeGueneAlgeria = UsePN (mkPN "Bouze-guene") ;
   BrusselsBelgium = UsePN (mkPN "Brussels") ;
   BucaramangaColombia = UsePN (mkPN "Bucaramanga") ;
-  BucharestIndia = UsePN (mkPN "Bucharest") ;
+  BucharestRomania = UsePN (mkPN "Bucharest") ;
   BuenosAiresArgentina = UsePN (mkPN "Buenos Aires") ;
   BuinakskRussia = UsePN (mkPN "Buinaksk") ;
   Burma = UsePN (mkPN "Burma") ;
