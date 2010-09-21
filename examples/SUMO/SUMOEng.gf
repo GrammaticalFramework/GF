@@ -2,6 +2,7 @@
 concrete SUMOEng of SUMO =
         BasicEng,
         MidLevelOntologyEng,
+        GeographyEng,
         EconomyEng,
         EngineeringEng,
         MondialEng,
