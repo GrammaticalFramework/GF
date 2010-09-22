@@ -1,12 +1,13 @@
-module PGF.Probabilistic (
-  probTree                -- :: Probabilities -> Tree -> Double
- ,rankTreesByProbs        -- :: Probabilities -> [Tree] -> [Tree]
- ,Probabilities           -- data
- ,prProbabilities         -- Probabilities -> String
- ,catProbs
- ,getProbsFromFile        -- :: FilePath -> PGF -> IO Probabilities
- ,defaultProbabilities    -- :: PGF -> Probabilities
- ) where
+module PGF.Probabilistic
+         ( Probabilities(..)
+         , mkProbabilities                 -- :: PGF -> M.Map CId Double -> Probabilities
+         , defaultProbabilities            -- :: PGF -> Probabilities
+         , showProbabilities               -- :: Probabilities -> String
+         , readProbabilitiesFromFile       -- :: FilePath -> PGF -> IO Probabilities
+
+         , probTree                -- :: Probabilities -> Tree -> Double
+         , rankTreesByProbs        -- :: Probabilities -> [Tree] -> [Tree]
+         ) where
 
 import PGF.CId
 import PGF.Data
@@ -15,25 +16,34 @@ import PGF.Macros
 import qualified Data.Map as M
 import Data.List (sortBy,partition)
 
+-- | An abstract data structure which represents
+-- the probabilities for the different functions in a grammar.
 data Probabilities = Probs {
   funProbs :: M.Map CId Double,
   catProbs :: M.Map CId [(Double, (CId,[CId]))] -- prob and arglist
   }
 
-prProbabilities :: Probabilities -> String
-prProbabilities = unlines . map pr . M.toList . funProbs where
+-- | Renders the probability structure as string
+showProbabilities :: Probabilities -> String
+showProbabilities = unlines . map pr . M.toList . funProbs where
   pr (f,d) = showCId f ++ "\t" ++ show d
 
-getProbsFromFile :: FilePath -> PGF -> IO Probabilities
-getProbsFromFile file pgf = do
+-- | Reads the probabilities from a file.
+-- This should be a text file where on every line
+-- there is a function name followed by a real number.
+-- The number represents the probability mass allocated for that function.
+-- The function name and the probability should be separated by a whitespace.
+readProbabilitiesFromFile :: FilePath -> PGF -> IO Probabilities
+readProbabilitiesFromFile file pgf = do
   s <- readFile file
   let ps0 = M.fromList [(mkCId f,read p) | f:p:_ <- map words (lines s)]
-  return $ fillProbs pgf ps0
+  return $ mkProbabilities pgf ps0
 
--- | build probability tables by filling unspecified funs with prob sum
---   TODO: check that probabilities sum to 1
-fillProbs :: PGF -> M.Map CId Double -> Probabilities
-fillProbs pgf funs = 
+-- | Builds probability tables by filling unspecified funs with probability sum
+--
+-- TODO: check that probabilities sum to 1
+mkProbabilities :: PGF -> M.Map CId Double -> Probabilities
+mkProbabilities pgf funs = 
   let
      cats0 = [(cat,[(f,fst (catSkeleton ty)) | (f,ty) <- fs]) 
                 | (cat,_) <- M.toList (cats (abstract pgf)), 
@@ -54,8 +64,9 @@ fillProbs pgf funs =
             _ -> (1 - sum poss) / fromIntegral (length negs) 
           (poss,negs) = partition (> (-0.5)) (map fst pfs)
 
+-- | Returns the default even distibution.
 defaultProbabilities :: PGF -> Probabilities
-defaultProbabilities pgf = fillProbs pgf M.empty
+defaultProbabilities pgf = mkProbabilities pgf M.empty
 
 -- | compute the probability of a given tree
 probTree :: Probabilities -> Expr -> Double
