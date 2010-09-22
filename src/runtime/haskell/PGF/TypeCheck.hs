@@ -21,7 +21,7 @@ module PGF.TypeCheck ( checkType, checkExpr, inferExpr
                      , TcM(..), TcResult(..), TType(..), tcError
                      , tcExpr, infExpr, eqType
                      , lookupFunType, eval
-                     , refineExpr, checkResolvedMetaStore
+                     , refineExpr, checkResolvedMetaStore, lookupMeta
                      ) where
 
 import PGF.Data
@@ -431,7 +431,7 @@ eqType scope k i0 tty1@(TTyp delta1 ty1@(DTyp hyps1 cat1 es1)) tty2@(TTyp delta2
                                                                                     MUnbound scopei _ cs -> do e1 <- mkLam i scopei env2 vs2 v1
                                                                                                                setMeta i (MBound e1)
                                                                                                                sequence_ [c e1 | c <- cs]
-                                                                                    MGuarded e cs x    -> setMeta i (MGuarded e ((\e -> apply env2 e vs2 >>= \v2 -> eqValue' k v1 v2) : cs) x)
+                                                                                    MGuarded e cs x      -> setMeta i (MGuarded e ((\e -> apply env2 e vs2 >>= \v2 -> eqValue' k v1 v2) : cs) x)
     eqValue' k (VApp f1 vs1)                  (VApp f2 vs2)   | f1 == f2     = zipWithM_ (eqValue k) vs1 vs2
     eqValue' k (VConst f1 vs1)                (VConst f2 vs2) | f1 == f2     = zipWithM_ (eqValue k) vs1 vs2
     eqValue' k (VLit l1)                      (VLit l2    )   | l1 == l2     = return ()

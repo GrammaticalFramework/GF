@@ -312,8 +312,12 @@ allCommands env@(pgf, mos) = Map.fromList [
        let pgfr = optRestricted opts
        gen <- newStdGen
        mprobs <- optProbs opts pgfr
-       let mt = mexp xs
-       ts <- return $ generateRandomFrom mt mprobs gen pgfr (optType opts)
+       let sel = case mprobs of
+                   Just probs -> WeightSel gen probs
+                   Nothing    -> RandSel   gen
+       let ts  = case mexp xs of
+                   Just ex -> generateRandomFrom sel pgfr ex
+                   Nothing -> generateRandom     sel pgfr (optType opts)
        returnFromExprs $ take (optNum opts) ts
      }),
   ("gt", emptyCommandInfo {
@@ -339,9 +343,10 @@ allCommands env@(pgf, mos) = Map.fromList [
        ],
      exec = \opts xs -> do
        let pgfr = optRestricted opts
-       let dp = return $ valIntOpts "depth" 4 opts
-       let mt = mexp xs
-       let ts = generateAllDepth mt pgfr (optType opts) dp
+       let dp = valIntOpts "depth" 4 opts
+       let ts = case mexp xs of
+                  Just ex -> generateFromDepth pgfr ex (Just dp)
+                  Nothing -> generateAllDepth pgfr (optType opts) (Just dp)
        returnFromExprs $ take (optNumInf opts) ts
      }),
   ("h", emptyCommandInfo {

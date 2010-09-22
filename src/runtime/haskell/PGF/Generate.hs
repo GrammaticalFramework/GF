@@ -1,26 +1,68 @@
-module PGF.Generate where
+module PGF.Generate 
+         ( generateAll,         generateAllDepth
+         , generateFrom,        generateFromDepth
+         , generateRandom,      generateRandomDepth
+         , generateRandomFrom,  generateRandomFromDepth
+         
+         , RandomSelector(..)
+         ) where
 
 import PGF.CId
 import PGF.Data
+import PGF.Expr
 import PGF.Macros
 import PGF.TypeCheck
 import PGF.Probabilistic
 
-import qualified Data.Map as M
+import qualified Data.Map as Map
+import qualified Data.IntMap as IntMap
+import Control.Monad
 import System.Random
 
--- generate all fillings of metavariables in an expr
-generateAllFrom :: Maybe Expr -> PGF -> Type -> Maybe Int -> [Expr]
-generateAllFrom mex pgf ty mi = 
-  maybe (gen ty) (generateForMetas False pgf gen) mex where
-    gen ty = generate pgf ty mi
+-- | Generates an exhaustive possibly infinite list of
+-- abstract syntax expressions.
+generateAll :: PGF -> Type -> [Expr]
+generateAll pgf ty = generateAllDepth pgf ty Nothing
 
--- generate random fillings of metavariables in an expr
-generateRandomFrom :: Maybe Expr -> 
-                      Maybe Probabilities -> StdGen -> PGF -> Type -> [Expr]
-generateRandomFrom mex ps rg pgf ty = 
-  maybe (gen ty) (generateForMetas True pgf gen) mex where
-    gen ty = genRandomProb ps rg pgf ty
+-- | A variant of 'generateAll' which also takes as argument
+-- the upper limit of the depth of the generated expression.
+generateAllDepth :: PGF -> Type -> Maybe Int -> [Expr]
+generateAllDepth pgf ty dp = generate () pgf ty dp
+
+-- | Generates a list of abstract syntax expressions
+-- in a way similar to 'generateAll' but instead of
+-- generating all instances of a given type, this
+-- function uses a template. 
+generateFrom :: PGF -> Expr -> [Expr]
+generateFrom pgf ex = generateFromDepth pgf ex Nothing
+
+-- | A variant of 'generateFrom' which also takes as argument
+-- the upper limit of the depth of the generated subexpressions.
+generateFromDepth :: PGF -> Expr -> Maybe Int -> [Expr]
+generateFromDepth pgf e dp = generateForMetas False pgf (\ty -> generateAllDepth pgf ty dp) e
+
+-- | Generates an infinite list of random abstract syntax expressions.
+-- This is usefull for tree bank generation which after that can be used
+-- for grammar testing.
+generateRandom :: RandomGen g => RandomSelector g -> PGF -> Type -> [Expr]
+generateRandom sel pgf ty = 
+    generate sel pgf ty Nothing
+
+-- | A variant of 'generateRandom' which also takes as argument
+-- the upper limit of the depth of the generated expression.
+generateRandomDepth :: RandomGen g => RandomSelector g -> PGF -> Type -> Maybe Int -> [Expr]
+generateRandomDepth sel pgf ty dp = generate sel pgf ty dp
+
+-- | Random generation based on template
+generateRandomFrom :: RandomGen g => RandomSelector g -> PGF -> Expr -> [Expr]
+generateRandomFrom sel pgf e = 
+  generateForMetas True pgf (\ty -> generate sel pgf ty Nothing) e
+
+-- | Random generation based on template with a limitation in the depth.
+generateRandomFromDepth :: RandomGen g => RandomSelector g -> PGF -> Expr -> Maybe Int -> [Expr]
+generateRandomFromDepth sel pgf e dp = 
+  generateForMetas True pgf (\ty -> generate sel pgf ty dp) e
+
 
 
 -- generic algorithm for filling holes in a generator
@@ -38,80 +80,144 @@ generateForMetas breadth pgf gen exp = case exp of
     Right (_,DTyp ((_,_,ty):_) _ _) -> gen ty
     _ -> []
 
--- generate an infinite list of trees exhaustively
-generate :: PGF -> Type -> Maybe Int -> [Expr]
-generate pgf ty@(DTyp _ cat _) dp = filter (\e -> case checkExpr pgf e ty of 
-                                                    Left  _ -> False
-                                                    Right _ -> True             )
-                                           (concatMap (\i -> gener i cat) depths)
- where
-  gener 0 c = [EFun f | (f, ([],_)) <- fns c]
-  gener i c = [
-    tr | 
-      (f, (cs,_)) <- fns c, not (null cs),
-      let alts = map (gener (i-1)) cs,
-      ts <- combinations alts,
-      let tr = foldl EApp (EFun f) ts,
-      depth tr >= i
-    ]
-  fns c = [(f,catSkeleton ty) | (f,ty) <- functionsToCat pgf c]
-  depths = maybe [0 ..] (\d -> [0..d]) dp
 
--- generate an infinite list of trees randomly
-genRandom :: StdGen -> PGF -> Type -> [Expr]
-genRandom = genRandomProb Nothing
+------------------------------------------------------------------------------
+-- The main generation algorithm
 
-genRandomProb :: Maybe Probabilities -> StdGen -> PGF -> Type -> [Expr]
-genRandomProb mprobs gen pgf ty@(DTyp _ cat _) = 
-   filter (\e -> case checkExpr pgf e ty of 
-                   Left  _ -> False
-                   Right _ -> True             )
-          (genTrees (randomRs (0.0, 1.0 :: Double) gen) cat)
- where
-  timeout = 47 -- give up
+generate :: Selector sel => sel -> PGF -> Type -> Maybe Int -> [Expr]
+generate sel pgf ty dp =
+  [value2expr (funs (abstract pgf),lookupMeta ms) 0 v |
+        (ms,v) <- runGenM (prove (abstract pgf) emptyScope (TTyp [] ty) dp) sel IntMap.empty]
 
-  genTrees ds0 cat = 
-    let (ds,ds2) = splitAt (timeout+1) ds0  -- for time out, else ds
-        (t,k) = genTree ds cat      
-    in (if k>timeout then id else (t:))
-                (genTrees ds2 cat)          -- else (drop k ds)
+prove :: Selector sel => Abstr -> Scope -> TType -> Maybe Int -> GenM sel MetaStore Value
+prove abs scope tty@(TTyp env (DTyp [] cat es)) dp = do
+  (fn,DTyp hypos cat es) <- clauses cat
+  case dp of
+    Just 0 | not (null hypos) -> mzero
+    _                         -> return ()
+  (env,args) <- mkEnv [] hypos
+  runTcM abs (eqType scope (scopeSize scope) 0 (TTyp env (DTyp [] cat es)) tty)
+  vs <- mapM descend args
+  return (VApp fn vs)
+  where
+    clauses cat =
+      do fn <- select abs cat
+         case Map.lookup fn (funs abs) of
+           Just (ty,_,_) -> return (fn,ty)
+           Nothing       -> mzero
 
-  genTree rs = gett rs where
-    gett ds cid | cid == cidString = (ELit (LStr "foo"), 1)
-    gett ds cid | cid == cidInt    = (ELit (LInt 12345), 1)
-    gett ds cid | cid == cidFloat  = (ELit (LFlt 12345), 1)
-    gett [] _   = (ELit (LStr "TIMEOUT"), 1) ----
-    gett ds cat = case fns cat of
-      [] -> (EMeta 0,1)
-      fs -> let 
-          d:ds2    = ds
-          (f,args) = getf d fs
-          (ts,k)   = getts ds2 args
-        in (foldl EApp f ts, k+1)
-    getf d fs = case mprobs of
-      Just _ -> hitRegion d [(p,(f,args)) | (p,(f,args)) <- fs]
-      _      -> let 
-                  lg = length fs 
-                  (f,v) = snd (fs !! (floor (d * fromIntegral lg)))
-                in (EFun f,v)
-    getts ds cats = case cats of
-      c:cs -> let 
-          (t, k)  = gett ds c
-          (ts,ks) = getts (drop k ds) cs 
-        in (t:ts, k + ks)
-      _ -> ([],0)
+    mkEnv env []                = return (env,[])
+    mkEnv env ((bt,x,ty):hypos) = do
+      (env,arg) <- if x /= wildCId
+                    then do i <- runTcM abs (newMeta scope (TTyp env ty))
+                            let v = VMeta i env []
+                            return (v : env,Right v)
+                    else return (env,Left (TTyp env ty))
+      (env,args) <- mkEnv env hypos
+      return (env,(bt,arg):args)
 
-    fns :: CId -> [(Double,(CId,[CId]))]
-    fns cat = case mprobs of 
-      Just probs -> maybe [] id $ M.lookup cat (catProbs probs)
-      _ -> [(deflt,(f,(fst (catSkeleton ty)))) | 
-              let fs = functionsToCat pgf cat, 
-              (f,ty) <- fs,
-              let deflt = 1.0 / fromIntegral (length fs)]
-
-hitRegion :: Double -> [(Double,(CId,[a]))] -> (Expr,[a])
-hitRegion d vs = case vs of
-  (p1,(f,v1)):vs2 -> if d < p1 then (EFun f, v1) else hitRegion (d-p1) vs2
-  _ -> (EMeta 9,[])
+    descend (bt,arg) = do let dp' = fmap (flip (-) 1) dp
+                          v <- case arg of
+                                 Right v  -> return v
+                                 Left tty -> prove abs scope tty dp'
+                          v <- case bt of
+                                 Implicit -> return (VImplArg v)
+                                 Explicit -> return v
+                          return v
 
 
+------------------------------------------------------------------------------
+-- Generation Monad
+
+newtype GenM sel s a = GenM {unGen :: sel -> s -> Choice sel s a}
+data Choice sel s a = COk sel s a
+                    | CFail
+                    | CBranch (Choice sel s a) (Choice sel s a)
+
+instance Monad (GenM sel s) where
+  return x = GenM (\sel s -> COk sel s x)
+  f >>= g  = GenM (\sel s -> iter (unGen f sel s))
+    where
+      iter (COk sel s x)   = unGen (g x) sel s
+      iter (CBranch b1 b2) = CBranch (iter b1) (iter b2)
+      iter CFail           = CFail
+  fail _   = GenM (\sel s -> CFail)
+
+instance Selector sel => MonadPlus (GenM sel s) where
+  mzero = GenM (\sel s -> CFail)
+  mplus f g = GenM (\sel s -> let (sel1,sel2) = splitSelector sel
+                              in CBranch (unGen f sel1 s) (unGen g sel2 s))
+
+runGenM :: GenM sel s a -> sel -> s -> [(s,a)]
+runGenM f sel s = toList (unGen f sel s) []
+  where
+    toList (COk sel s x)   xs = (s,x) : xs
+    toList (CFail)         xs = xs
+    toList (CBranch b1 b2) xs = toList b1 (toList b2 xs)
+
+runTcM :: Abstr -> TcM a -> GenM sel MetaStore a
+runTcM abs f = GenM (\sel ms ->
+  case unTcM f abs ms of
+    Ok ms a -> COk sel ms a
+    Fail _  -> CFail)
+
+
+------------------------------------------------------------------------------
+-- Selectors
+
+class Selector sel where
+  splitSelector :: sel -> (sel,sel)
+  select        :: Abstr -> CId -> GenM sel s CId
+
+instance Selector () where
+  splitSelector sel = (sel,sel)
+  select abs cat = GenM (\sel s -> case Map.lookup cat (cats abs) of
+                                     Just (_,fns) -> iter s fns
+                                     Nothing      -> CFail)
+    where
+      iter s []       = CFail
+      iter s (fn:fns) = CBranch (COk () s fn) (iter s fns)
+
+-- | The random selector data type is used to specify the random number generator
+-- and the distribution among the functions with the same result category.
+-- The distribution is even for 'RandSel' and weighted for 'WeightSel'.
+data RandomSelector g = RandSel   g
+                      | WeightSel g Probabilities
+
+instance RandomGen g => Selector (RandomSelector g) where
+  splitSelector (RandSel g)         = let (g1,g2) = split g
+                                      in (RandSel g1, RandSel g2)
+  splitSelector (WeightSel g probs) = let (g1,g2) = split g
+                                      in (WeightSel g1 probs, WeightSel g2 probs)
+
+  select abs cat = GenM (\sel s -> case sel of
+                                     RandSel g         -> case Map.lookup cat (cats abs) of
+                                                            Just (_,fns) -> do_rand   g s (length fns) fns
+                                                            Nothing      -> CFail
+                                     WeightSel g probs -> case Map.lookup cat (catProbs probs) of
+                                                            Just fns     -> do_weight g s 1.0 fns
+                                                            Nothing      -> CFail)
+    where
+      do_rand g s n []  = CFail
+      do_rand g s n fns = let n'        = n-1
+                              (i,g')    = randomR (0,n') g
+                              (g1,g2)   = split g'
+                              (fn,fns') = pick i fns
+                          in CBranch (COk (RandSel g1) s fn) (do_rand g2 s n' fns')
+
+      do_weight g s p []  = CFail
+      do_weight g s p fns = let (d,g')    = randomR (0.0,p) g
+                                (g1,g2)   = split g'
+                                (p',fn,fns') = hit d fns
+                            in CBranch (COk (RandSel g1) s fn) (do_weight g2 s (p-p') fns')
+
+      pick :: Int -> [a] -> (a,[a])
+      pick 0 (x:xs) = (x,xs)
+      pick n (x:xs) = let (x',xs') = pick (n-1) xs
+                      in (x',x:xs')
+
+      hit :: Double -> [(Double,a)] -> (Double,a,[(Double,a)])
+      hit d (px@(p,x):xs)
+        | d < p     = (p,x,xs)
+        | otherwise = let (p',x',xs') = hit (d-p) xs
+                      in (p,x',px:xs')
