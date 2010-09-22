@@ -85,8 +85,28 @@ module PGF(
            Parse.ParseOutput(..), Parse.getParseOutput,
 
            -- ** Generation
-           generateRandom, generateAll, generateAllDepth,
-           generateRandomFrom, -- from initial expression, possibly weighed
+           -- | The PGF interpreter allows automatic generation of
+           -- abstract syntax expressions of a given type. Since the
+           -- type system of GF allows dependent types, the generation
+           -- is in general undecidable. In fact, the set of all type
+           -- signatures in the grammar is equivalent to a Turing-complete language (Prolog).
+           --
+           -- There are several generation methods which mainly differ in:
+           --
+           --     * whether the expressions are sequentially or randomly generated?
+           --
+           --     * are they generated from a template? The template is an expression
+           --     containing meta variables which the generator will fill in.
+           --
+           --     * is there a limit of the depth of the expression?
+           --     The depth can be used to limit the search space, which 
+           --     in some cases is the only way to make the search decidable.
+           generateAll,         generateAllDepth,
+           generateFrom,        generateFromDepth,
+           generateRandom,      generateRandomDepth,
+           generateRandomFrom,  generateRandomFromDepth,
+           
+           RandomSelector(..),           
 
            -- ** Morphological Analysis
            Lemma, Analysis, Morpho,
@@ -169,20 +189,6 @@ parse_       :: PGF -> Language -> Type -> String -> (Parse.ParseOutput,Brackete
 -- | This is an experimental function. Use it on your own risk
 parseWithRecovery :: PGF -> Language -> Type -> [Type] -> String -> (Parse.ParseOutput,BracketedString)
 
--- | The same as 'generateAllDepth' but does not limit
--- the depth in the generation, and doesn't give an initial expression.
-generateAll      :: PGF -> Type -> [Expr]
-
--- | Generates an infinite list of random abstract syntax expressions.
--- This is usefull for tree bank generation which after that can be used
--- for grammar testing.
-generateRandom   :: PGF -> Type -> IO [Expr]
-
--- | Generates an exhaustive possibly infinite list of
--- abstract syntax expressions. A depth can be specified
--- to limit the search space.
-generateAllDepth :: Maybe Expr -> PGF -> Type -> Maybe Int -> [Expr]
-
 -- | List of all languages available in the given grammar.
 languages    :: PGF -> [Language]
 
@@ -245,13 +251,6 @@ groupResults = Map.toList . foldr more Map.empty . start . concat
   start ls = [(l,[s]) | (l,s) <- ls]
   more (l,s) = 
     Map.insertWith (\ [x] xs -> if elem x xs then xs else (x : xs)) l s
-
-generateRandom pgf cat = do
-  gen <- newStdGen
-  return $ genRandom gen pgf cat
-
-generateAll pgf cat = generate pgf cat Nothing
-generateAllDepth mex pgf cat = generateAllFrom mex pgf cat
 
 abstractName pgf = absname pgf
 

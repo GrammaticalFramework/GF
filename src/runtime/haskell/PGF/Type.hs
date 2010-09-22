@@ -78,11 +78,11 @@ pHypoBinds = do
    ty <- pType
    return [(b,v,ty) | (b,v) <- xs]
 
-    pAtom = do
-      cat <- pCId
-      RP.skipSpaces
-      args <- RP.sepBy pArg RP.skipSpaces
-      return (cat, args)
+pAtom = do
+   cat <- pCId
+   RP.skipSpaces
+   args <- RP.sepBy pArg RP.skipSpaces
+   return (cat, args)
 
 ppType :: Int -> [CId] -> Type -> PP.Doc
 ppType d scope (DTyp hyps cat args)

@@ -42,7 +42,12 @@ translationList ::
   PGF -> Language -> Language -> Type -> Int -> IO [(String,[String])]
 translationList mex mprobs pgf ig og typ number = do
   gen <- newStdGen
-  let ts = take number $ generateRandomFrom mex mprobs gen pgf typ
+  let sel = case mprobs of
+              Just probs -> WeightSel gen probs
+              Nothing    -> RandSel   gen
+  let ts  = take number $ case mex of
+                            Just ex -> generateRandomFrom sel pgf ex
+                            Nothing -> generateRandom     sel pgf typ
   return $ map mkOne $ ts
  where
    mkOne t = (norml (linearize pgf ig t), map (norml . linearize pgf og) (homonyms t))
@@ -53,7 +58,12 @@ morphologyList ::
   PGF -> Language -> Type -> Int -> IO [(String,[String])]
 morphologyList mex mprobs pgf ig typ number = do
   gen <- newStdGen
-  let ts = take (max 1 number) $ generateRandomFrom mex mprobs gen pgf typ 
+  let sel = case mprobs of
+              Just probs -> WeightSel gen probs
+              Nothing    -> RandSel   gen
+  let ts = take (max 1 number) $ case mex of
+                                   Just ex -> generateRandomFrom sel pgf ex
+                                   Nothing -> generateRandom     sel pgf typ
   let ss    = map (tabularLinearizes pgf ig) ts
   let size  = length (head (head ss))
   let forms = take number $ randomRs (0,size-1) gen

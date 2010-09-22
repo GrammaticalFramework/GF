@@ -13,19 +13,20 @@ import PGF.CId
 import PGF.Data
 import PGF.Macros
 
-import qualified Data.Map as M
+import qualified Data.Map as Map
 import Data.List (sortBy,partition)
+import Data.Maybe (fromMaybe)
 
 -- | An abstract data structure which represents
 -- the probabilities for the different functions in a grammar.
 data Probabilities = Probs {
-  funProbs :: M.Map CId Double,
-  catProbs :: M.Map CId [(Double, (CId,[CId]))] -- prob and arglist
+  funProbs :: Map.Map CId Double,
+  catProbs :: Map.Map CId [(Double, CId)]
   }
 
 -- | Renders the probability structure as string
 showProbabilities :: Probabilities -> String
-showProbabilities = unlines . map pr . M.toList . funProbs where
+showProbabilities = unlines . map pr . Map.toList . funProbs where
   pr (f,d) = showCId f ++ "\t" ++ show d
 
 -- | Reads the probabilities from a file.
@@ -36,43 +37,38 @@ showProbabilities = unlines . map pr . M.toList . funProbs where
 readProbabilitiesFromFile :: FilePath -> PGF -> IO Probabilities
 readProbabilitiesFromFile file pgf = do
   s <- readFile file
-  let ps0 = M.fromList [(mkCId f,read p) | f:p:_ <- map words (lines s)]
+  let ps0 = Map.fromList [(mkCId f,read p) | f:p:_ <- map words (lines s)]
   return $ mkProbabilities pgf ps0
 
--- | Builds probability tables by filling unspecified funs with probability sum
---
--- TODO: check that probabilities sum to 1
-mkProbabilities :: PGF -> M.Map CId Double -> Probabilities
-mkProbabilities pgf funs = 
-  let
-     cats0 = [(cat,[(f,fst (catSkeleton ty)) | (f,ty) <- fs]) 
-                | (cat,_) <- M.toList (cats (abstract pgf)), 
-                  let fs = functionsToCat pgf cat]
-     cats1 = map fill cats0
-     funs1 = [(f,p) | (_,cf) <- cats1, (p,(f,_)) <- cf]
-     in Probs (M.fromList funs1) (M.fromList cats1)
- where
-  fill (cat,fs) = (cat, pad [(getProb0 f,(f,xs)) | (f,xs) <- fs]) 
-    where
-      getProb0 :: CId -> Double
-      getProb0 f = maybe (-1) id $ M.lookup f funs
-      pad :: [(Double,a)] -> [(Double,a)]
-      pad pfs = [(if p== -1 then deflt else p,f) | (p,f) <- pfs]
-        where
-          deflt = case length negs of
-            0 -> 0
-            _ -> (1 - sum poss) / fromIntegral (length negs) 
-          (poss,negs) = partition (> (-0.5)) (map fst pfs)
+-- | Builds probability tables. The second argument is a map
+-- which contains the know probabilities. If some function is
+-- not in the map then it gets assigned some probability based
+-- on the even distribution of the unallocated probability mass
+-- for the result category.
+mkProbabilities :: PGF -> Map.Map CId Double -> Probabilities
+mkProbabilities pgf probs =
+  let funs1 = Map.fromList [(f,p) | (_,cf) <- Map.toList cats1, (p,f) <- cf]
+      cats1 = Map.map (\(_,fs) -> fill fs) (cats (abstract pgf))
+  in Probs funs1 cats1
+  where
+    fill fs = pad [(Map.lookup f probs,f) | f <- fs]
+      where
+        pad :: [(Maybe Double,a)] -> [(Double,a)]
+        pad pfs = [(fromMaybe deflt mb_p,f) | (mb_p,f) <- pfs]
+          where
+            deflt = case length [f | (Nothing,f) <- pfs] of
+                      0 -> 0
+                      n -> (1 - sum [d | (Just d,f) <- pfs]) / fromIntegral n
 
 -- | Returns the default even distibution.
 defaultProbabilities :: PGF -> Probabilities
-defaultProbabilities pgf = mkProbabilities pgf M.empty
+defaultProbabilities pgf = mkProbabilities pgf Map.empty
 
 -- | compute the probability of a given tree
 probTree :: Probabilities -> Expr -> Double
 probTree probs t = case t of
   EApp f e -> probTree probs f * probTree probs e
-  EFun f   -> maybe 1 id $ M.lookup f (funProbs probs)
+  EFun f   -> maybe 1 id $ Map.lookup f (funProbs probs)
   _ -> 1
 
 -- | rank from highest to lowest probability
