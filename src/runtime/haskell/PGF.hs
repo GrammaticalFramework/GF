@@ -99,6 +99,13 @@ module PGF(
            graphvizBracketedString,
            graphvizAlignment,
 
+           -- * Probabilities
+           Probabilities,
+           mkProbabilities,
+           defaultProbabilities,
+           showProbabilities,
+           readProbabilitiesFromFile,
+           
            -- * Browsing
            browse
           ) where
@@ -109,6 +116,7 @@ import PGF.Generate
 import PGF.TypeCheck
 import PGF.Paraphrase
 import PGF.VisualizeTree
+import PGF.Probabilistic
 import PGF.Macros
 import PGF.Expr (Tree)
 import PGF.Morphology

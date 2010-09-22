@@ -977,8 +977,8 @@ allCommands env@(pgf, mos) = Map.fromList [
    optProbs opts pgfr = case valStrOpts "probs" "" opts of
      ""   -> return Nothing
      file -> do
-       ps <- getProbsFromFile file pgf ---- pgfr!
---       putStrLn $ prProbabilities ps 
+       ps <- readProbabilitiesFromFile file pgf ---- pgfr!
+--       putStrLn $ showProbabilities ps 
        return $ Just ps
 
    optFile opts = valStrOpts "file" "_gftmp" opts
