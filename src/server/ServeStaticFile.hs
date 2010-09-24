@@ -15,12 +15,12 @@ serveStaticFile' path =
 
 contentTypeFromExt ext =
   case ext of
-    ".html" -> "text/html; charset=\"iso8859-1\""
-    ".htm" -> "text/html; charset=\"iso8859-1\""
-    ".xml" -> "text/xml; charset=\"iso8859-1\""
-    ".txt" -> "text/plain; charset=\"iso8859-1\""
-    ".css" -> "text/css; charset=\"iso8859-1\""
-    ".js" -> "text/javascript; charset=\"iso8859-1\""
+    ".html" -> "text/html"
+    ".htm" -> "text/html"
+    ".xml" -> "text/xml"
+    ".txt" -> "text/plain"
+    ".css" -> "text/css"
+    ".js" -> "text/javascript"
     ".png" -> "image/png"
     ".jpg" -> "image/jpg"
     _ -> "application/octet-stream"
