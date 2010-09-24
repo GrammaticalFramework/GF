@@ -4,23 +4,14 @@
 <link rel=stylesheet type="text/css" href="minibar.css">
 <script type="text/JavaScript" src="support.js"></script>
 <script type="text/JavaScript" src="minibar.js"></script>
-<script type="text/JavaScript">
 
-var my_options= {
-  server: "http://www.grammaticalframework.org:41296",
-  //server: "http://tournesol.cs.chalmers.se:41296",
-  //server: "http://localhost:41296",
-  //grammar_list: ["Foods.pgf"],
-  show_abstract: true,
-  show_trees: true,
-  show_grouped_translations: false,
-  try_google: true
-}
-</script>
 <meta name = "viewport" content = "width = device-width">
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<meta charset="UTF-8">
+
 </head>
 
-<body onload="start_minibar(my_options)">
+<body>
 <h1>Minibar</h1>
 <div id=minibar>
 </div>
@@ -32,12 +23,26 @@ var my_options= {
 &amp; <a href="http://www.grammaticalframework.org:41296/translate/">Translator</a>]
 </small>
 <small class=modtime>
-HTML <!-- hhmts start --> Last modified: Fri May 28 18:16:11 CEST 2010 <!-- hhmts end -->
+HTML <!-- hhmts start --> Last modified: Fri Sep 24 14:30:47 CEST 2010 <!-- hhmts end -->
 </small>
 <address>
 <a href="http://www.cs.chalmers.se/~hallgren/">TH</a>
 <img src="http://www.altocumulus.org/~hallgren/online.cgi?icon" alt=""></address>
 
 </body>
+<script type="text/javascript">
 
+var my_options= {
+  //server: "http://www.grammaticalframework.org:41296",
+  //server: "http://tournesol.cs.chalmers.se:41296",
+  server: "http://localhost:41296",
+  //grammar_list: ["Foods.pgf"],
+  show_abstract: true,
+  show_trees: true,
+  show_grouped_translations: false,
+  default_source_language: "Eng",
+  try_google: true
+}
+start_minibar(my_options)
+</script>
 </html>
