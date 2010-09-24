@@ -6,6 +6,7 @@ import PGF.Data
 import GF.Compile
 import GF.Grammar (identC, SourceGrammar) -- for cc command
 import GF.Grammar.CF
+import GF.Grammar.EBNF
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Data.ErrM
@@ -19,17 +20,8 @@ importGrammar :: PGF -> Options -> [FilePath] -> IO PGF
 importGrammar pgf0 _ [] = return pgf0
 importGrammar pgf0 opts files =
   case takeExtensions (last files) of
-    ".cf" -> do
-       s  <- fmap unlines $ mapM readFile files 
-       let cnc = justModuleName (last files)
-       gf <- case getCF cnc s of
-               Ok g -> return g
-               Bad s -> error s ---- 
-       Ok gr <- appIOE $ compileSourceGrammar opts gf
-       epgf <- appIOE $ link opts (identC (BS.pack (cnc ++ "Abs"))) gr
-       case epgf of
-         Ok pgf -> return pgf
-         Bad s -> error s ----
+    ".cf" -> importCF opts files getCF
+    ".ebnf" -> importCF opts files getEBNF
     s | elem s [".gf",".gfo"] -> do
       res <- appIOE $ compileToPGF opts files
       case res of
@@ -49,3 +41,16 @@ importSource src0 opts files = do
     Bad msg -> do 
       putStrLn msg
       return src0
+
+-- for different cf formats
+importCF opts files get = do
+       s  <- fmap unlines $ mapM readFile files 
+       let cnc = justModuleName (last files)
+       gf <- case get cnc s of
+               Ok g -> return g
+               Bad s -> error s ---- 
+       Ok gr <- appIOE $ compileSourceGrammar opts gf
+       epgf <- appIOE $ link opts (identC (BS.pack (cnc ++ "Abs"))) gr
+       case epgf of
+         Ok pgf -> return pgf
+         Bad s -> error s ----
