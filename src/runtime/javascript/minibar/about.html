@@ -26,8 +26,8 @@ Some implementation details:
     and Android Opera Mini 4.2.
   </ul>
   It does not seem work in Internet Explorer 7
-  (there are both styling and scripting issues). There seems to be some rendering bugs
-  in Chrome 5.0.342.9 β.
+  (there are both styling and scripting issues).
+  There seems to be some rendering bugs in Chrome 5.0.342.9 β.
   <li>The implementation consist of two JavaScript files:
   <a href="minibar.js">minibar.js</a> and <a href="support.js">support.js</a>
   The latter is also used in a small web app based on the
@@ -49,30 +49,32 @@ Some implementation details:
         the CGI script will be downloaded as <code>grammars.cgi.txt</code>,
         but it should be called <code>grammars.cgi</code> and stored on the server
         in the same directory as the grammar files.
-    <li>for CGI scripts to work with lighttpd, <code>"mod_cgi"</code> needs to be included
-    in the definition of <code>server.modules</code> in the
+    <li>for CGI scripts to work with lighttpd, <code>"mod_cgi"</code> needs
+    to be included in the definition of <code>server.modules</code> in the
     <code>lighttpd.conf</code> file.)
   </ul>
   <li>[Added 2010-02-16] There is a button for generating random sentences.
-  <li>[Added 2010-02-23] All translations are shown, not just the first one, if there are
-  multiple parses.
-  <li>[Added 2010-02-25] Next to each translation, there is now a little tree icon that
-  you can click on to see a drawing of an abstract syntax tree or a parse tree. If you click
-  on a drawing it collapses back into a tree icon.
-  <li>[Added 2010-04-09] Preparations to support different ways to access the grammar:
-  currently we access a PGF server via JSONP, but I would also like to support AJAX,
-  and local/downloaded JavaScript grammars.
+  <li>[Added 2010-02-23] All translations are shown, not just the first one,
+  if there are multiple parses.
+  <li>[Added 2010-02-25] Next to each translation, there is now a little tree
+  icon that you can click on to see a drawing of an abstract syntax tree or a
+  parse tree. If you click on a drawing it collapses back into a tree icon.
+  <li>[Added 2010-04-09] Preparations to support different ways to access the
+  grammar: currently we access a PGF server via JSONP, but I would also like
+  to support AJAX, and local/downloaded JavaScript grammars.
   <li>[Added 2010-04-19] A text entry field appears when you click in
-  the sentence area (with a dashed border). This allows you to enter words by typing on
-  the keyboard. As you start typing word magnets that don't match what you are typing
-  are removed. When only one magnet remains, you can press enter to complete the word.
+  the sentence area (with a dashed border). This allows you to enter words by
+  typing on the keyboard. As you start typing word magnets that don't match what
+  you are typing are removed. When only one magnet remains, you can press enter
+  to complete the word.
   <li>[Added 2010-04-19] There is a menu for choosing the output language:
-  you can pick "All" to translate to all available languages, or pick one particular
-  language.
-  <li>[Added 2010-04-19] You can pass options to the function <code>start_minibar</code>
-  to customize the user interface. The default is
-  <code>{show_abstract:true,show_trees:true}</code> to show the abstract syntax of parsed
-  sentences, and to show icons that expand to syntax/parse trees next each translation.
+  you can pick "All" to translate to all available languages, or pick one
+  particular language.
+  <li>[Added 2010-04-19] You can pass options to the function
+  <code>start_minibar</code> to customize the user interface. The default is
+  <code>{show_abstract:true,show_trees:true}</code> to show the abstract syntax
+  of parsed sentences, and to show icons that expand to syntax/parse trees next
+  each translation.
   These features can be turned off by setting the fields to <code>false</code>.
   <li>[Added 2010-04-30] The grammar menu is omitted if there is only one
       grammar in the grammar list.
@@ -81,20 +83,32 @@ Some implementation details:
   show_grouped_translations, delete_button_text) to make
   <code>minibar.js</code> more resuable.)
   <li>[Added 2010-05-26] The magnets are now created with
-  <code>&lt;input type=button&gt;</code> tags to make them clickable in more browsers.
-  <li>[Added 2010-05-26] The text entry field is now visible from the start, and it is
-  removed when no more words can be added to the sentence. When you press enter, the a word
-  is added if there is only one magnet left, <em>or</em> if what you have entered
-  exactly matches one of the remaining magnet.
+  <code>&lt;input type=button&gt;</code> tags to make them clickable in more
+  browsers.
+  <li>[Added 2010-05-26] The text entry field is now visible from the start,
+  and it is removed when no more words can be added to the sentence. When you
+  press enter, the a word is added if there is only one magnet left,
+  <em>or</em> if what you have entered exactly matches one of the remaining
+  magnet.
   <li>[Added 2010-05-28] Added a link to make it easy to try the same sentence in
   <a href="http://translate.google.com">Google Translate</a>.
   This can be turned of by passing the option <code>{try_google:false}</code> to
   <code>start_minibar</code>.
+  <li>[Added 2010-06-02] Added support for Help and Feedback buttons, controlled
+  by the options <code>feedback_url</code> and <code>help_url</code> passed to
+  <code>start_minibar</code>.
+  <li>[Added 2010-06-02] New option: <code>default_source_language</code>.
+  <li>[Added 2010-09-10] Minibar now automatically uses AJAX instead of JSON
+  when possible (i.e. when the HTML document and the PGF server is on the same
+  server).
+  <li>[Added 2010-09-10] The default input language is now the user's preferred
+  language, if possible. This is implemented by consulting the
+  <code>userLanguage</code> field in the grammar info output by pgf-server.
 </ul>
 
 <hr>
 <small class=modtime>
-<!-- hhmts start --> Last modified: Tue Sep  7 14:48:13 CEST 2010 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Tue Sep 28 13:44:00 CEST 2010 <!-- hhmts end -->
 </small>
 <address>
 <a href="http://www.cs.chalmers.se/~hallgren/">TH</a>
