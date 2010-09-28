@@ -16,6 +16,7 @@ lincat
 lin
   -- display the same subset of forms as Petit Robert
 
+{-
   DAll w = 
     w ! R.VInfin True ++
     w ! R.VFin (R.VPres R.Indic) R.Sg R.P1 ++ 
@@ -33,7 +34,7 @@ lin
     w ! R.VImper R.PlP1 ++
     w ! R.VGer ++
     w ! R.VPart R.Masc R.Sg ; 
-
+-}
   DForm w f = w ! f.v ++ f.s ; ---
 
   VInfin = {s = [] ; v = R.VInfin True} ;

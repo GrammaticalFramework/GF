@@ -12,7 +12,7 @@ cat
   TMood ; Number ; Person ; NumPersI ; Gender ; Mood ;
 
 fun
-  DAll : Word -> Display ;
+--  DAll : Word -> Display ;
   DForm : Word -> Form -> Display ;
 
   VInfin : Form ;

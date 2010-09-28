@@ -9,13 +9,13 @@ lincat
   TMood, Number, Person, NumPersI, Gender, Mood = Str ;
 
 lin
-  DAll w = w ++ ":" ++ "la conjugaison" ;
+--  DAll w = w ++ ":" ++ "la conjugaison" ;
 
   DForm w f = w ++ ":" ++ f ;
 
   VInfin = "infinitif" ;
   VFin m n p = m ++ n ++ p ;
-  VImper np = "imparfait" ++ np ;
+  VImper np = "impératif" ++ np ;
   VPart g n = "participe passé" ++ g ++ n ;
   VGer = "participe présent" ;
 
