@@ -16,4 +16,7 @@ public class Magnet extends HTML {
 		return language;
 	}
 
+	public String getWord() {
+		return getHTML();
+	}
 }
