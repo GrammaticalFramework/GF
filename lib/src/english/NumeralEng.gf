@@ -1,4 +1,4 @@
-concrete NumeralEng of Numeral = CatEng ** open ResEng in {
+concrete NumeralEng of Numeral = CatEng [Numeral,Digits] ** open ResEng in {
 
 lincat 
   Digit = {s : DForm => CardOrd => Case => Str} ;

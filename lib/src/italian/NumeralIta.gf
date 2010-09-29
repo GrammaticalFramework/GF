@@ -1,4 +1,4 @@
-concrete NumeralIta of Numeral = CatIta ** 
+concrete NumeralIta of Numeral = CatIta [Numeral,Digits] ** 
   open CommonRomance, ResRomance, MorphoIta, Prelude in {
 
 lincat 

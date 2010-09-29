@@ -1,4 +1,4 @@
-concrete NumeralFre of Numeral = CatFre ** 
+concrete NumeralFre of Numeral = CatFre [Numeral,Digits] ** 
   open CommonRomance, ResRomance, MorphoFre, Prelude in {
 
 -- originally written in 1998, automatically translated to current notation...
