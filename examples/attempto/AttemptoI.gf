@@ -1,4 +1,4 @@
-incomplete concrete AttemptoI of Attempto = SymbolsC ** open 
+incomplete concrete AttemptoI of Attempto = SymbolsC, Numeral ** open 
   Syntax, 
   Symbolic,
   Prelude,
@@ -8,7 +8,7 @@ in {
 lincat CN = Syntax.CN ;
 lincat NP = Syntax.NP ;
 lincat Card = Syntax.Card ;
-lincat Numeral = Syntax.Numeral ;
+--lincat Numeral = Syntax.Numeral ;
 lincat PN = Syntax.PN ;
 lincat A = Syntax.A ;
 lincat A2 = Syntax.A2 ;
@@ -32,7 +32,7 @@ lincat ACEText = Syntax.Text ;
 lincat RP = Syntax.RP ;
 
 lincat MCN = Syntax.CN ;
-lincat PP = Adv ;
+lincat PP = Syntax.Adv ;
 
 lin aNP = mkNP a_Art ;
 lin theNP = mkNP the_Art ;
@@ -57,10 +57,10 @@ lin allMassNP cn = mkNP all_Predet (mkNP cn) ;
 lin noMassNP = mkNP no_Quant ;
 lin notAllMassNP cn = mkNP not_Predet (mkNP all_Predet (mkNP cn)) ; 
 
-lin one_Card = mkCard n1_Numeral ;
-lin two_Card = mkCard n2_Numeral ;
-lin five_Card = mkCard n5_Numeral ;
-lin ten_Card = mkCard n10_Numeral ;
+---lin one_Card = mkCard n1_Numeral ;
+---lin two_Card = mkCard n2_Numeral ;
+---lin five_Card = mkCard n5_Numeral ;
+---lin ten_Card = mkCard n10_Numeral ;
 
 lin pnNP = mkNP ;
 lin intNP = symb ;
@@ -159,7 +159,6 @@ lin more_thanVP ap np = mkVP (mkAP more_CAdv ap np) ;
 ---- John is as fond-of Mary as of Sue
 ---- John is more fond-of Mary than of Sue
 
-lincat PP = Adv ;
 --lincat [PP] = Adv ;
 
 --lin BasePP p = p ;
@@ -235,7 +234,7 @@ lin whoseIP = mkIP whose_IDet ;
 
 -- 3.6
 
-lin impVP np vp = mkText (mkPhr (mkUtt (mkImp vp)) (mkVoc np)) exclMarkPunct ; 
+lin np_impVP np vp = mkText (mkPhr (mkUtt (mkImp vp)) (mkVoc np)) exclMarkPunct ; 
         ---- John, go to the bank!
 
 
@@ -243,6 +242,15 @@ lin consText = mkText ;
 lin baseText t = t ;
 lin sText = mkText ;
 lin qsText = mkText ;
+
+
+--- more
+
+lin npVP = mkVP ;
+lin impVP vp = mkText (mkImp vp) ;
+lin numeralCard n = mkCard <lin Numeral n : Numeral> ;
+lin digitsCard n = mkCard <lin Digits n : Digits> ;
+lin have_V2 = Syntax.have_V2 ;
 
 }
 
