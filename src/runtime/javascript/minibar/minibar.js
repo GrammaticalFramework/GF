@@ -241,10 +241,11 @@ function finish_typed(inp) {
     //alert("finish_typed "+inp.value);
     var box=element("words");
     var w=inp.value;
+    var keep=w.substr(0,w.length-box.completed_text.length);
     if(box.completions.length==1)
-	add_word(box.completions[0]);
+	add_words(keep+box.completions[0]);
     else if(elem(w,box.completions))
-	add_word(w);
+	add_words(w);
 }
 
 function generate_random() {
@@ -298,6 +299,15 @@ function add_word(s) {
   get_completions(menu);
 }
 
+function add_words(s) {
+  var menu=element("language_menu");
+  var words=s.split(" ");
+  for(var i=0;i<words.length;i++)
+    add_word1(menu,words[i]+" ");
+  element("words").innerHTML="...";
+  get_completions(menu);
+}
+
 function show_completions(complete_output) {
   var box=element("words");
   var menu=element("language_menu");
@@ -305,10 +315,10 @@ function show_completions(complete_output) {
   var emptycnt=0;
   var completions=complete_output[0].completions;
   box.innerHTML="";
-  box.completions=[];
+  box.completions=completions;
+  box.completed_text=complete_output[0].text;
   for(var i=0;i<completions.length;i++) {
     var s=completions[i];
-    box.completions[i]=s;
     if(s.length>0) box.appendChild(word(s));
     else emptycnt++;
   }
