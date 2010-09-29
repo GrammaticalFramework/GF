@@ -17,7 +17,7 @@
 -- parts of a numeral, which is often incorrect - more work on
 -- (un)lexing is needed to solve this problem.
 
-abstract Numeral = Cat ** {
+abstract Numeral = Cat [Numeral,Digits] ** {
 
 cat 
   Digit ;       -- 2..9

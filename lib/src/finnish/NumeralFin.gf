@@ -1,4 +1,4 @@
-concrete NumeralFin of Numeral = CatFin **  open Prelude, ParadigmsFin, MorphoFin in {
+concrete NumeralFin of Numeral = CatFin [Numeral,Digits] **  open Prelude, ParadigmsFin, MorphoFin in {
 
 -- Notice: possessive forms are not used. They get wrong, since every
 -- part is made to agree in them.
