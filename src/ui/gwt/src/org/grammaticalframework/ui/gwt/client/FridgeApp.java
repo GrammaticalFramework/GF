@@ -1,6 +1,6 @@
 package org.grammaticalframework.ui.gwt.client;
 
-import java.util.List;
+import java.util.*;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.*;
@@ -13,12 +13,18 @@ public class FridgeApp implements EntryPoint {
 
 	protected PGFWrapper pgf;
 
+	protected JSONRequest completeRequest = null;
 	protected JSONRequest translateRequest = null;
 
 	private FridgeBagPanel bagPanel;
 	private FridgeTextPanel textPanel;
 	protected VerticalPanel outputPanel;
 	protected StatusPopup statusPopup;
+
+	private FlowPanel prefixPanel;
+	private LinkedHashSet<String> prefixes = new LinkedHashSet<String>();
+
+	private int maxMagnets = 100;
 
 	private MagnetFactory magnetFactory;
 
@@ -27,8 +33,64 @@ public class FridgeApp implements EntryPoint {
 	//
 
 	protected void update () {
-		bagPanel.updateBag(getText());
+		updateBag(getText());
 		translate();
+	}
+
+	public void updateBag (String text) {
+		updateBag(text, "");
+	}
+
+	public void updateBag (final String text, String prefix) {
+		if (completeRequest != null) {
+			completeRequest.cancel();
+		}
+		final boolean updatePrefixes = prefix.equals("");
+		bagPanel.clear();
+		bagPanel.addStyleDependentName("empty");
+		if (updatePrefixes) { clearPrefixes(); }
+		int limit = updatePrefixes ? 0 : maxMagnets; 
+		completeRequest = pgf.complete(text + " " + prefix, 
+				limit, new PGF.CompleteCallback() {
+			public void onResult(PGF.Completions completions) {
+				List<Magnet> magnets = new ArrayList<Magnet>();
+				for (PGF.Completion completion : completions.iterable()) {
+					for (String word : completion.getCompletions()) {
+						if (updatePrefixes) {
+							addPrefix(text, word.substring(0,1));
+						}
+						if (magnets.size() < maxMagnets) {
+							Magnet magnet = magnetFactory.createMagnet(word, completion.getFrom());
+							magnets.add(magnet);
+						} else {
+							prefixPanel.setVisible(true);
+						}
+					}
+				}
+				bagPanel.fill(magnets);
+			}
+			public void onError(Throwable e) {
+				showError("Translation failed", e);
+			}
+		});
+	}
+
+	protected void clearPrefixes () {
+		prefixes.clear();
+		prefixPanel.clear();
+		prefixPanel.setVisible(false);
+	}
+
+	protected void addPrefix(final String text, final String prefix) {
+		if (prefixes.add(prefix)) {
+			Button prefixButton = new Button(prefix, new ClickListener() {		
+				public void onClick(Widget sender) {
+					updateBag(text, prefix);
+				}
+			});
+			prefixButton.setTitle("Show only magnets stating with '" + prefix + "'");
+			prefixPanel.add(prefixButton);
+		}
 	}
 
 	//
@@ -136,19 +198,26 @@ public class FridgeApp implements EntryPoint {
 				update();
 			}
 		});
-		bagPanel = new FridgeBagPanel(pgf, magnetFactory);
+		prefixPanel = new FlowPanel();
+		prefixPanel.setStylePrimaryName("my-PrefixPanel");
+		bagPanel = new FridgeBagPanel();
 		outputPanel = new TranslationsPanel();
 		SettingsPanel settingsPanel = new SettingsPanel(pgf, true, false);
 		
+		VerticalPanel vPanel = new VerticalPanel();
+		vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+		vPanel.add(prefixPanel);
+		vPanel.add(bagPanel);
+
 		final DockPanel mainPanel = new DockPanel();
 		mainPanel.setStyleName("my-FridgeApp");
 		mainPanel.add(textPanel, DockPanel.NORTH);
 		mainPanel.add(settingsPanel, DockPanel.SOUTH);
-		mainPanel.add(bagPanel, DockPanel.CENTER);
+		mainPanel.add(vPanel, DockPanel.CENTER);
 		mainPanel.add(outputPanel, DockPanel.EAST);
 		
-		mainPanel.setCellHeight(bagPanel, "100%");
-		mainPanel.setCellWidth(bagPanel, "80%");
+		mainPanel.setCellHeight(vPanel, "100%");
+		mainPanel.setCellWidth(vPanel, "80%");
 		mainPanel.setCellHeight(outputPanel, "100%");
 		mainPanel.setCellWidth(outputPanel, "20%");
 		mainPanel.setCellVerticalAlignment(bagPanel, HasVerticalAlignment.ALIGN_TOP);
