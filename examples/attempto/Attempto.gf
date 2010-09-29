@@ -1,11 +1,12 @@
-abstract Attempto = Symbols ** {
+abstract Attempto = 
+  Numeral, Symbols ** {
 
 flags startcat = ACEText ;
 
 cat CN ;
 cat NP ;
 cat Card ;
-cat Numeral ;
+---cat Numeral ;
 cat PN ;
 cat A ;
 cat A2 ;
@@ -54,10 +55,10 @@ fun noMassNP : MCN -> NP ;
 fun allMassNP : MCN -> NP ;
 fun notAllMassNP : MCN -> NP ;
 
-fun one_Card : Card ;
-fun two_Card : Card ;
-fun five_Card : Card ;
-fun ten_Card : Card ;
+---fun one_Card : Card ;
+---fun two_Card : Card ;
+---fun five_Card : Card ;
+---fun ten_Card : Card ;
 
 
 fun pnNP : PN -> NP ;
@@ -234,7 +235,7 @@ fun whoseIP : CN -> IP ;  -- whose dog
 
 -- 3.6
 
-fun impVP : NP -> VP -> Text ; -- John, go to the bank!
+fun np_impVP : NP -> VP -> Text ; -- John, go to the bank!
 
 -- 4
 
@@ -245,6 +246,14 @@ fun baseText : Text -> ACEText ;
 
 fun sText : S -> Text ;
 fun qsText : QS -> Text ;
+
+-- more
+
+fun npVP  : NP -> VP ;              -- is a bank
+fun impVP : VP -> Text ;            -- go to the bank!
+fun numeralCard : Numeral -> Card ; -- fifteen banks
+fun digitsCard : Digits -> Card ;   -- 8 banks
+fun have_V2 : V2 ;                  -- has (an apple)
 
 }
 
