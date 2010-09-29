@@ -13,8 +13,10 @@
       <!-- <inherits name="com.google.gwt.user.theme.chrome.Chrome"/> -->
       <!-- <inherits name="com.google.gwt.user.theme.dark.Dark"/>     -->
 
-      <!-- Other module inherits                                      -->
-
+      <replace-with class="org.grammaticalframework.ui.gwt.client.selection.support.InternetExplorerSelectionSupport">
+	  <when-type-is class="org.grammaticalframework.ui.gwt.client.selection.support.SelectionSupport"/>
+	  <when-property-is name="user.agent" value="ie6"/>
+      </replace-with>
 
       <!-- Specify the app entry point class.                         -->
       <entry-point class="org.grammaticalframework.ui.gwt.client.EditorApp" />

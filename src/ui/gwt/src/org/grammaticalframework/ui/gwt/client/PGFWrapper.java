@@ -138,6 +138,10 @@ public class PGFWrapper {
 		return pgf.parse(grammarURL, input, inputLanguage, cat, callback);
 	}
 
+	public JSONRequest linearize (String tree, final PGF.LinearizeCallback callback) {
+		return pgf.linearize(grammarURL, tree, outputLanguage, callback);
+	}
+
 	public String graphvizAbstractTree(String abstractTree) {
 		return pgf.graphvizAbstractTree(grammarURL,abstractTree);
 	}
@@ -152,6 +156,10 @@ public class PGFWrapper {
 
 	public Request browse(String id, String href, String cssClass, RequestCallback callback) {
 		return pgf.browse(grammarURL, id, href, cssClass, callback);
+	}
+
+	public JSONRequest query(String query, PGF.QueryCallback callback) {
+		return pgf.query(grammarURL, query, callback);
 	}
 
 	//
@@ -242,7 +250,7 @@ public class PGFWrapper {
 		PGF.Language l = languages.get(language);
 		return l == null ? null : l.getLanguageCode();
 	}
-	
+
 	public Collection<String> getAllLanguages() {
 		return languages.keySet();
 	}

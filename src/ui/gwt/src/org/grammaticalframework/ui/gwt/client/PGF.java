@@ -74,17 +74,6 @@ public class PGF {
 		public final native Linearizations getLinearizations() /*-{ return this.linearizations; }-*/;
 	}
 
-	public static class Linearizations extends IterableJsArray<Linearization> {
-		protected Linearizations() { }
-	}
-	
-	public static class Linearization extends JavaScriptObject {
-		protected Linearization() { }
-
-		public final native String getTo() /*-{ return this.to; }-*/;
-                public final native String getText() /*-{ return this.text; }-*/;
-	}
-
 	/* Completion */
 
 	/**
@@ -152,20 +141,6 @@ public class PGF {
 		public final native int getFId() /*-{ return this.fid; }-*/;
 		public final native int getIndex() /*-{ return this.index; }-*/;
 		public final native BracketedString[] getChildren() /*-{ return this.children; }-*/;
-        
-        public final String render() {
-            if (getToken() != null)
-                return getToken();
-            else {
-                StringBuilder sbuilder = new StringBuilder();
-                for (BracketedString bs : getChildren()) {
-                    if (sbuilder.length() > 0)
-                        sbuilder.append(' ');
-                    sbuilder.append(bs.render());
-                }
-                return sbuilder.toString();
-            }
-        }
 	}
 
 	public static class TcError extends JavaScriptObject {
@@ -173,6 +148,29 @@ public class PGF {
 
 		public final native int getFId() /*-{ return this.fid; }-*/;
 		public final native String getMsg() /*-{ return this.msg; }-*/;
+	}
+	
+	
+	/* Linearization */
+
+	public JSONRequest linearize (String pgfURL, String tree, String toLang, final LinearizeCallback callback) {
+		List<Arg> args = new ArrayList<Arg>();
+		args.add(new Arg("tree", tree));
+		args.add(new Arg("to", toLang));
+		return sendGrammarRequest(pgfURL, "linearize", args, callback);
+	}
+
+	public interface LinearizeCallback extends JSONCallback<Linearizations> { }
+	
+	public static class Linearizations extends IterableJsArray<Linearization> {
+		protected Linearizations() { }
+	}
+	
+	public static class Linearization extends JavaScriptObject {
+		protected Linearization() { }
+
+		public final native String getTo() /*-{ return this.to; }-*/;
+                public final native String getText() /*-{ return this.text; }-*/;
 	}
 
 	public String graphvizAbstractTree(String pgfURL, String abstractTree) {
@@ -216,8 +214,20 @@ public class PGF {
 
 		return request;
 	}
+	
+	public JSONRequest query(String pgfURL, String query, QueryCallback callback) {
+		List<Arg> args = new ArrayList<Arg>();
+		args.add(new Arg("cat", query));
+		return sendGrammarRequest(pgfURL, "query", args, callback);
+	}
+	
+	public interface QueryCallback extends JSONCallback<QueryResult> {}
 
-	/* Common */
+	public static class QueryResult extends JavaScriptObject {
+		protected QueryResult() { }
+
+		public final native String[] getRows() /*-{ return this.rows; }-*/;
+	}
 
 	public <T extends JavaScriptObject> JSONRequest sendGrammarRequest(String pgfURL, String resource, List<Arg> args, final JSONCallback<T> callback) {
 		args.add(new Arg("command", resource));

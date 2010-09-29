@@ -1,108 +1,38 @@
 package org.grammaticalframework.ui.gwt.client;
 
-import java.util.LinkedHashSet;
+import java.util.*;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.*;
 
-public class FridgeBagPanel extends Composite {
+public class FridgeBagPanel extends Composite implements Iterable<Magnet> {
 
-	private PGFWrapper pgf;
+	private FlowPanel mainPanel;
 
-	private MagnetFactory magnetFactory;
-
-	private JSONRequest completeRequest = null;
-
-	private FlowPanel prefixPanel;
-
-	private FlowPanel mainPanel; 
-
-	private int maxMagnets = 100;
-
-	private LinkedHashSet<String> prefixes = new LinkedHashSet<String>();
-
-
-	public FridgeBagPanel (PGFWrapper pgf, MagnetFactory magnetFactory) {
-		this.pgf = pgf;
-		this.magnetFactory = magnetFactory;
-		prefixPanel = new FlowPanel();
-		prefixPanel.setStylePrimaryName("my-PrefixPanel");
+	public FridgeBagPanel () {
 		mainPanel = new FlowPanel();
-		VerticalPanel vPanel = new VerticalPanel();
-		vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-		vPanel.add(prefixPanel);
-		vPanel.add(mainPanel);
-		initWidget(new ScrollPanel(vPanel));
+
+		initWidget(new ScrollPanel(mainPanel));
 		setStylePrimaryName("my-FridgeBagPanel");
 		addStyleDependentName("empty");
 	}
 
-	public void updateBag (String text) {
-		updateBag(text, "");
-	}
-
-	public void updateBag (final String text, String prefix) {
-		if (completeRequest != null) {
-			completeRequest.cancel();
-		}
-		final boolean updatePrefixes = prefix.equals("");
+	public void clear() {
 		mainPanel.clear();
-		addStyleDependentName("empty");
-		if (updatePrefixes) { clearPrefixes(); }
-	    int limit = updatePrefixes ? 0 : maxMagnets; 
-		completeRequest = pgf.complete(text + " " + prefix, 
-				limit, new PGF.CompleteCallback() {
-			public void onResult(PGF.Completions completions) {
-				for (PGF.Completion completion : completions.iterable()) {
-                    for (String word : completion.getCompletions()) {
-						if (updatePrefixes) {
-							addPrefix(text, word.substring(0,1));
-						}
-						if (mainPanel.getWidgetCount() < maxMagnets) {
-							Magnet magnet = magnetFactory.createMagnet(word, completion.getFrom());
-							mainPanel.add(magnet);
-							removeStyleDependentName("empty");
-						} else {
-							prefixPanel.setVisible(true);
-						}
-					}
-				}
-			}
-			public void onError(Throwable e) {
-				// FIXME: show message to user?
-				GWT.log("Error getting completions.", e); 
-			}
-		});
 	}
 
-	protected void clearPrefixes () {
-		prefixes.clear();
-		prefixPanel.clear();
-		prefixPanel.setVisible(false);
-	}
-
-	protected void addPrefix(final String text, final String prefix) {
-		if (prefixes.add(prefix)) {
-			Button prefixButton = new Button(prefix, new ClickListener() {		
-				public void onClick(Widget sender) {
-					updateBag(text, prefix);
-				}
-			});
-			prefixButton.setTitle("Show only magnets stating with '" + prefix + "'");
-			prefixPanel.add(prefixButton);
+	public void fill(List<Magnet> magnets) {
+		for (Magnet magnet : magnets) {
+			mainPanel.add(magnet);
 		}
+
+		if (mainPanel.getWidgetCount() == 0)
+			addStyleDependentName("empty");
+		else
+			removeStyleDependentName("empty");
 	}
 
-
-	/*
-	public void cloneMagnet (Magnet magnet) {
-		int i = getWidgetIndex(magnet);
-		GWT.log("cloneMagnet: " + magnet.getParent(), null);
-		if (i != -1) {
-			GWT.log("cloning", null);
-			insert(magnetFactory.createMagnet(magnet), i);
-		}
+	public Iterator<Magnet> iterator() {
+		return (Iterator<Magnet>) (Iterator) mainPanel.iterator();
 	}
-	 */
-
 }
