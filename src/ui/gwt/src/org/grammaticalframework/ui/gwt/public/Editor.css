@@ -1,0 +1,253 @@
+/** Add css rules here for your application. */
+
+.my-TranslatePanel {
+  padding-top: 1em;
+  padding-bottom: 1em
+}
+
+.my-TextInputPanel {
+  width: 100%;
+}
+
+.my-TextInputPanel .frame {
+  margin: 0;
+  padding: 1em;
+  background-color: #F3F3F3;
+  outline: 0;
+}
+
+.my-TextInputPanel .text {
+  padding: 1em;
+  background-color: white;
+  border-top: 1px solid #CCCCCC;
+  border-left: 1px solid #CCCCCC;
+  border-bottom: 2px solid #BBBBBB;
+  border-right: 2px solid #BBBBBB;
+  min-width: 100px;
+  min-height: 100px;
+}
+
+.my-TextInputPanel .toolbar {
+  width: 100%;
+  padding: 3px;
+  background-attachement: scroll;
+  background-color: #E5E5E5;
+  background-image: url("background.png");
+  background-position: 0px -192px;
+  background-repeat: repeat-x;
+}
+
+.my-TextInputPanel .toolbar .button {
+  float: left;
+  margin: 2px;
+}
+
+.my-TextInputPanel .toolbar .button:hover {
+  margin: 1px;
+  border: 1px solid rgb(147,194,241);
+}
+
+.my-TextInputPanel .toolbar .status {
+  padding: 1px;
+  background-color: #E5E5E5;
+  border: 1px solid #BBBBBB;
+  float: right;
+}
+
+.my-TextInputPanel .searchbox {
+  font-size: 150%;
+  padding: 2px;
+  display: inline;
+  border-bottom: 1px dashed green;
+  outline: 0;
+}
+
+.my-TextInputPanel .searchbox-error {
+  border-bottom: 1px dashed red;
+}
+
+.my-TextInputPanel .wordspanel {
+  padding: 0;
+  display: inline;
+}
+
+.my-TextInputPanel .wordspanel-selected {
+  background-color: rgb(147,194,241);
+}
+
+.my-TextInputPanel .wordspanel-focused {
+  background-color: rgb(147,194,241);
+  border: 1px solid #666;
+}
+
+.my-TextInputPanel .wordspanel-error {
+  border-bottom: 1px dashed red;
+}
+
+.my-TextInputPanel .wordlabel {
+  display: inline;
+  font-size: 150%;
+}
+
+.my-TextInputPanel .wordspace {
+  display: inline;
+  font-size: 150%;
+}
+
+.my-SettingsPanel * {
+    margin: 0 0.4em;
+}
+
+.my-LinksPanel * {
+    margin: 0 0.1em;
+}
+
+.my-HeaderPanel {
+    width: 100%;
+    margin: 0 0.1em;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(122,165,214);
+}
+
+.my-BrowsePanel {
+    width: 100%;
+    margin: 1em;
+    border-width: 5px;
+    border-color: rgb(122,165,214);
+}
+
+.my-BrowsePanel .source {
+    padding: 1em;
+}
+
+.my-BrowseFrame {
+    width: 100%;
+    height: 100%;
+    margin: 1em;
+    border-style:none;
+}
+
+.my-QueryPanel {
+    margin: 1em;
+    border-width: 5px;
+    border-color: rgb(122,165,214);
+}
+
+.my-QueryBox {
+    min-width: 630px;
+    min-height: 94px;
+}
+
+.my-ResultGrid {
+    margin: 1em;
+}
+
+.my-translations {
+    margin-top: 1em;
+}
+
+.my-translation-frame {
+    margin: 0.5em;
+    background: #D0E4F6;
+}
+
+.my-translation-bar {
+    padding-left: 25px;
+    padding-right: 25px;
+    width: 100%;
+}
+
+.my-translation {
+    margin: 0.2em;
+    font-size: 150%;
+    background-repeat: no-repeat;
+    background-position: 0% 50%;
+    cursor:pointer;
+}
+
+.my-translation-btns {
+    background: #DDDDDD;
+    cursor:pointer;
+}
+
+.my-treeimage {
+    width: 650px;
+    height: 520px;
+}
+
+.my-alignmentimage {
+    width: 450px;
+    height: 300px;
+}
+
+.my-typeError {
+    margin: 2px;
+    padding: 12px;
+    font-size: 150%;
+    font-weight: bold;
+    background: #CDFFDA;
+}
+
+.my-typeError .title {
+    background: #DDDDDD;
+}
+
+.my-typeError .content {
+    cursor:pointer;
+}
+
+.my-identifierLink:link {
+    text-decoration: none;
+    color: black;
+}
+
+.my-identifierLink:hover {
+    text-decoration: none;
+    color: black;
+    background-color: rgb(147, 194, 241);
+}
+
+.my-FridgeBagPanel {
+  padding: 0.2em;
+  margin-top: 1.5em;
+  border: 3px solid #dddddd;
+}
+
+.my-FridgeBagPanel-empty {
+  visibility: hidden;
+}
+
+.my-Magnet {
+  float: left;
+  margin: 0.3em;
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+  padding: 0.3em;
+  color: black;
+  background-color: white;
+}
+
+.my-SyntaxTable {
+  font-size: 120%;
+}
+
+.my-SyntaxRow {
+  margin:  1px;
+}
+
+.my-SyntaxLang {
+  background: rgb(147,194,241);
+  padding: 2px;
+}
+
+.my-SyntaxLin {
+  border:  1px solid rgb(147,194,241);
+  padding-left:   8px;
+  padding-right:  8px;
+  padding-top:    2px;
+  padding-bottom: 2px;
+}
