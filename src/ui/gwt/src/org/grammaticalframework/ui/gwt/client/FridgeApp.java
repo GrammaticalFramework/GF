@@ -206,6 +206,7 @@ public class FridgeApp implements EntryPoint {
 		
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+        vPanel.setWidth("100%");
 		vPanel.add(prefixPanel);
 		vPanel.add(bagPanel);
 
@@ -220,7 +221,7 @@ public class FridgeApp implements EntryPoint {
 		mainPanel.setCellWidth(vPanel, "80%");
 		mainPanel.setCellHeight(outputPanel, "100%");
 		mainPanel.setCellWidth(outputPanel, "20%");
-		mainPanel.setCellVerticalAlignment(bagPanel, HasVerticalAlignment.ALIGN_TOP);
+		mainPanel.setCellVerticalAlignment(vPanel, HasVerticalAlignment.ALIGN_TOP);
 		mainPanel.setCellHorizontalAlignment(outputPanel, HasHorizontalAlignment.ALIGN_RIGHT);
 		mainPanel.setCellWidth(settingsPanel, "100%");
 		
