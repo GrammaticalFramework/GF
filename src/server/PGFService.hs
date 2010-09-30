@@ -23,6 +23,7 @@ import Data.List (sortBy,intersperse,mapAccumL)
 import qualified Data.Map as Map
 import Data.Maybe
 import System.Directory
+import System.Random
 import System.FilePath
 import System.Process
 import System.Exit
@@ -466,7 +467,9 @@ linearizeAndBind pgf mto t = [(la, binds s) | (la,s) <- linearize' pgf mto t]
       _            -> []
 
 random' :: PGF -> Maybe PGF.Type -> IO [PGF.Tree]
-random' pgf mcat = PGF.generateRandom pgf (fromMaybe (PGF.startCat pgf) mcat)
+random' pgf mcat = do
+  g <- newStdGen
+  return $ PGF.generateRandom (PGF.RandSel g) pgf (fromMaybe (PGF.startCat pgf) mcat)
 
 selectLanguage :: PGF -> Maybe (Accept Language) -> PGF.Language
 selectLanguage pgf macc = case acceptable of
