@@ -44,23 +44,21 @@ generateFromDepth pgf e dp = generateForMetas False pgf (\ty -> generateAllDepth
 -- This is usefull for tree bank generation which after that can be used
 -- for grammar testing.
 generateRandom :: RandomGen g => g -> PGF -> Type -> [Expr]
-generateRandom g pgf ty = 
-    generate (Identity g) pgf ty Nothing
+generateRandom g pgf ty = generateRandomDepth g pgf ty Nothing
 
 -- | A variant of 'generateRandom' which also takes as argument
 -- the upper limit of the depth of the generated expression.
 generateRandomDepth :: RandomGen g => g -> PGF -> Type -> Maybe Int -> [Expr]
-generateRandomDepth g pgf ty dp = generate (Identity g) pgf ty dp
+generateRandomDepth g pgf ty dp = restart g (\g -> generate (Identity g) pgf ty dp)
 
 -- | Random generation based on template
 generateRandomFrom :: RandomGen g => g -> PGF -> Expr -> [Expr]
-generateRandomFrom g pgf e = 
-  generateForMetas True pgf (\ty -> generate (Identity g) pgf ty Nothing) e
+generateRandomFrom g pgf e = generateRandomFromDepth g pgf e Nothing
 
 -- | Random generation based on template with a limitation in the depth.
 generateRandomFromDepth :: RandomGen g => g -> PGF -> Expr -> Maybe Int -> [Expr]
 generateRandomFromDepth g pgf e dp = 
-  generateForMetas True pgf (\ty -> generate (Identity g) pgf ty dp) e
+  restart g (\g -> generateForMetas True pgf (\ty -> generate (Identity g) pgf ty dp) e)
 
 
 
@@ -197,3 +195,12 @@ instance RandomGen g => Selector (Identity g) where
         | d < p     = (p,x,xs)
         | otherwise = let (p',x',xs') = hit (d-p) xs
                       in (p,x',px:xs')
+
+-- Helper function for random generation. After every
+-- success we must restart the search to find sufficiently different solution.
+restart :: RandomGen g => g -> (g -> [a]) -> [a]
+restart g f =
+  let (g1,g2) = split g
+  in case f g1 of
+       []     -> restart g2 f
+       (x:xs) -> x : restart g2 f
