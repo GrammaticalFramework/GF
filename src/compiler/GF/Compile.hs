@@ -59,10 +59,8 @@ link opts cnc gr = do
     pgf <- ioeIO (mkCanon2pgf opts cnc gr)
     probs <- ioeIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
     ioeIO $ putStrLn "OK"     
-    pgf <- return $ setProbabilities probs 
-             $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
-    ioeIO $ putStrLn (showProbabilities (getProbabilities pgf))
-    return pgf
+    return $ setProbabilities probs 
+           $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do
