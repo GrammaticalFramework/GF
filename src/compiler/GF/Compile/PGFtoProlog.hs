@@ -62,22 +62,22 @@ plAbstract (name, Abstr aflags funs cats) =
     clauseHeader "%% def(?Fun, ?Expr)" 
                      (concatMap plFundef (Map.assocs funs))
 
-plCat :: (CId, ([Hypo],[CId])) -> String
+plCat :: (CId, ([Hypo],[(Double,CId)])) -> String
 plCat (cat, (hypos,_)) = plFact "cat" (plTypeWithHypos typ) 
     where ((_,subst), hypos') = mapAccumL alphaConvertHypo emptyEnv hypos
           args = reverse [EFun x | (_,x) <- subst]
           typ = DTyp hypos' cat args
 
-plFun :: (CId, (Type, Int, Maybe [Equation])) -> String
-plFun (fun, (typ,_,_)) = plFact "fun" (plp fun : plTypeWithHypos typ')
+plFun :: (CId, (Type, Int, Maybe [Equation], Double)) -> String
+plFun (fun, (typ,_,_,_)) = plFact "fun" (plp fun : plTypeWithHypos typ')
     where typ' = snd $ alphaConvert emptyEnv typ
 
 plTypeWithHypos :: Type -> [String]
 plTypeWithHypos (DTyp hypos cat args) = [plTerm (plp cat) (map plp args), plList (map (\(_,x,ty) -> plOper ":" (plp x) (plp ty)) hypos)]
 
-plFundef :: (CId, (Type,Int,Maybe [Equation])) -> [String]
-plFundef (fun, (_,_,Nothing )) = []
-plFundef (fun, (_,_,Just eqs)) = [plFact "def" [plp fun, plp fundef']]
+plFundef :: (CId, (Type,Int,Maybe [Equation],Double)) -> [String]
+plFundef (fun, (_,_,Nothing ,_)) = []
+plFundef (fun, (_,_,Just eqs,_)) = [plFact "def" [plp fun, plp fundef']]
     where fundef' = snd $ alphaConvert emptyEnv eqs
 
 

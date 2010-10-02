@@ -57,14 +57,14 @@ canon2pgf opts gr cgr@(M.MGrammar (am:cms)) = do
       where
         flags = Map.fromList [(mkCId f,C.LStr x) | (f,x) <- optionsPGF (M.flags abm)]
         
-        funs = Map.fromAscList [(i2i f, (mkType [] ty, mkArrity ma, mkDef pty)) | 
+        funs = Map.fromAscList [(i2i f, (mkType [] ty, mkArrity ma, mkDef pty, 0)) | 
                                    (f,AbsFun (Just (L _ ty)) ma pty) <- Map.toAscList (M.jments abm)]
                                    
         cats = Map.fromAscList [(i2i c, (snd (mkContext [] cont),catfuns c)) |
                                    (c,AbsCat (Just (L _ cont))) <- Map.toAscList (M.jments abm)]
 
         catfuns cat =
-              (map snd . sortBy (compare `on` fst))
+              (map (\x -> (0,snd x)) . sortBy (compare `on` fst))
                  [(loc,i2i f) | (f,AbsFun (Just (L loc ty)) _ _) <- tree2list (M.jments abm), snd (GM.valCat ty) == cat]
 
     mkConcr am cm@(lang,mo) = do

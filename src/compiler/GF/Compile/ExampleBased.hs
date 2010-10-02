@@ -59,9 +59,7 @@ convertFile conf src file = do
                     appn t >> mapM_ (appn . ("  --- " ++)) tt >> return []
     appn ")"
     return ws
-  rank ts = case probs conf of
-    Just probs -> [showExpr [] t ++ "  -- " ++ show p | (t,p) <- rankTreesByProbs probs ts]
-    _ -> map (showExpr []) ts
+  rank ts = [showExpr [] t ++ "  -- " ++ show p | (t,p) <- rankTreesByProbs pgf ts]
   appf = appendFile file
   appn s = appf s >> appf "\n"
   appv s = appn ("--- " ++ s) >> putStrLn s
@@ -69,11 +67,10 @@ convertFile conf src file = do
 data ExConfiguration = ExConf {
   resource_pgf    :: PGF,
   resource_morpho :: Morpho,
-  probs    :: Maybe Probabilities,
   verbose  :: Bool,
   language :: Language
   }
 
-configureExBased :: PGF -> Morpho -> Maybe Probabilities -> Language -> ExConfiguration
-configureExBased pgf morpho mprobs lang = ExConf pgf morpho mprobs False lang
+configureExBased :: PGF -> Morpho -> Language -> ExConfiguration
+configureExBased pgf morpho lang = ExConf pgf morpho False lang
 

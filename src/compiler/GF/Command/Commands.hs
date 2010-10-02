@@ -278,8 +278,8 @@ allCommands env@(pgf, mos) = Map.fromList [
        ],
      exec = \opts _ -> do
        let file = optFile opts
-       mprobs <- optProbs opts pgf
-       let conf = configureExBased pgf (optMorpho opts) mprobs (optLang opts)
+       pgf <- optProbs opts pgf
+       let conf = configureExBased pgf (optMorpho opts) (optLang opts)
        (file',ws) <- parseExamplesInGrammar conf file
        if null ws then return () else putStrLn ("unknown words: " ++ unwords ws)
        return (fromString ("wrote " ++ file')),
@@ -309,15 +309,11 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("probs", "file with biased probabilities (format 'f 0.4' one by line)")
        ],
      exec = \opts xs -> do
-       let pgfr = optRestricted opts
+       pgf <- optProbs opts (optRestricted opts)
        gen <- newStdGen
-       mprobs <- optProbs opts pgfr
-       let sel = case mprobs of
-                   Just probs -> WeightSel gen probs
-                   Nothing    -> RandSel   gen
        let ts  = case mexp xs of
-                   Just ex -> generateRandomFrom sel pgfr ex
-                   Nothing -> generateRandom     sel pgfr (optType opts)
+                   Just ex -> generateRandomFrom gen pgf ex
+                   Nothing -> generateRandom     gen pgf (optType opts)
        returnFromExprs $ take (optNum opts) ts
      }),
   ("gt", emptyCommandInfo {
@@ -389,8 +385,11 @@ allCommands env@(pgf, mos) = Map.fromList [
        "  .gfo   compiled GF source",
        "  .pgf   precompiled grammar in Portable Grammar Format"
        ],
+     flags = [
+       ("probs","file with biased probabilities for generation")
+       ],
      options = [ 
-       -- ["prob", "retain", "gfo", "src", "no-cpu", "cpu", "quiet", "verbose"]
+       -- ["gfo", "src", "no-cpu", "cpu", "quiet", "verbose"]
        ("retain","retain operations (used for cc command)"),
        ("src",   "force compilation from source"),
        ("v",     "be verbose - show intermediate status information")
@@ -461,9 +460,9 @@ allCommands env@(pgf, mos) = Map.fromList [
      exec = \opts xs -> do
          let lang = optLang opts
          let typ  = optType opts
-         mprobs <- optProbs opts pgf
+         pgf <- optProbs opts pgf
          let mt = mexp xs 
-         morphologyQuiz mt mprobs pgf lang typ
+         morphologyQuiz mt pgf lang typ
          return void,
      flags = [
        ("lang","language of the quiz"),
@@ -639,9 +638,8 @@ allCommands env@(pgf, mos) = Map.fromList [
        "'function probability', e.g. 'youPol_Pron  0.01'."
        ],
      exec = \opts ts -> do
-         mprobs <- optProbs opts pgf
-         let probs = maybe (defaultProbabilities pgf) id mprobs
-         let tds = rankTreesByProbs probs ts
+         pgf <- optProbs opts pgf
+         let tds = rankTreesByProbs pgf ts
          if isOpt "v" opts
            then putStrLn $ 
                   unlines [showExpr []  t ++ "\t--" ++ show d | (t,d) <- tds]
@@ -667,8 +665,8 @@ allCommands env@(pgf, mos) = Map.fromList [
          let to   = valCIdOpts "to"   (optLang opts) opts
          let typ  = optType opts
          let mt   = mexp xs
-         mprobs <- optProbs opts pgf
-         translationQuiz mt mprobs pgf from to typ
+         pgf <- optProbs opts pgf
+         translationQuiz mt pgf from to typ
          return void,
      flags = [
        ("from","translate from this language"),
@@ -887,7 +885,7 @@ allCommands env@(pgf, mos) = Map.fromList [
                                                                 if null (functionsToCat pgf id)
                                                                   then empty
                                                                   else space $$
-                                                                       vcat [ppFun fid (ty,0,Just []) | (fid,ty) <- functionsToCat pgf id])
+                                                                       vcat [ppFun fid (ty,0,Just [],0) | (fid,ty) <- functionsToCat pgf id])
                                      Nothing   -> do putStrLn ("unknown category of function identifier "++show id)
                                                      return void
          [e]         -> case inferExpr pgf e of
@@ -979,12 +977,11 @@ allCommands env@(pgf, mos) = Map.fromList [
      ""   -> []
      cats -> mapMaybe readType (chunks ',' cats)
 
-   optProbs opts pgfr = case valStrOpts "probs" "" opts of
-     ""   -> return Nothing
+   optProbs opts pgf = case valStrOpts "probs" "" opts of
+     ""   -> return pgf
      file -> do
-       ps <- readProbabilitiesFromFile file pgf ---- pgfr!
---       putStrLn $ showProbabilities ps 
-       return $ Just ps
+       probs <- readProbabilitiesFromFile file pgf
+       return (setProbabilities probs pgf)
 
    optFile opts = valStrOpts "file" "_gftmp" opts
 
@@ -1038,7 +1035,7 @@ allCommands env@(pgf, mos) = Map.fromList [
      | otherwise             = do fmt <- readOutputFormat (valStrOpts "printer" "pgf_pretty" opts)
                                   return $ fromString $ concatMap snd $ exportPGF noOptions fmt pgf
 
-   funsigs pgf = [(f,ty) | (f,(ty,_,_)) <- Map.assocs (funs (abstract pgf))]
+   funsigs pgf = [(f,ty) | (f,(ty,_,_,_)) <- Map.assocs (funs (abstract pgf))]
    showFun (f,ty) = showCId f ++ " : " ++ showType [] ty ++ " ;"
 
    morphos opts s = 
@@ -1096,16 +1093,14 @@ stringOpOptions = sort $ [
 treeOpOptions pgf = [(op,expl) | (op,(expl,Left  _)) <- allTreeOps pgf]
 treeOpFlags   pgf = [(op,expl) | (op,(expl,Right _)) <- allTreeOps pgf]
 
-translationQuiz :: Maybe Expr -> Maybe Probabilities ->
-                   PGF -> Language -> Language -> Type -> IO ()
-translationQuiz mex mprobs pgf ig og typ = do
-  tts <- translationList mex mprobs pgf ig og typ infinity
+translationQuiz :: Maybe Expr -> PGF -> Language -> Language -> Type -> IO ()
+translationQuiz mex pgf ig og typ = do
+  tts <- translationList mex pgf ig og typ infinity
   mkQuiz "Welcome to GF Translation Quiz." tts
 
-morphologyQuiz :: Maybe Expr -> Maybe Probabilities -> 
-                  PGF -> Language -> Type -> IO ()
-morphologyQuiz mex mprobs pgf ig typ = do
-  tts <- morphologyList mex mprobs pgf ig typ infinity
+morphologyQuiz :: Maybe Expr -> PGF -> Language -> Type -> IO ()
+morphologyQuiz mex pgf ig typ = do
+  tts <- morphologyList mex pgf ig typ infinity
   mkQuiz "Welcome to GF Morphology Quiz." tts
 
 -- | the maximal number of precompiled quiz problems

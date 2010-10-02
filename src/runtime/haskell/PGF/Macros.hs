@@ -21,18 +21,18 @@ mapConcretes f pgf = pgf { concretes = Map.map f (concretes pgf) }
 lookType :: PGF -> CId -> Type
 lookType pgf f = 
   case lookMap (error $ "lookType " ++ show f) f (funs (abstract pgf)) of
-    (ty,_,_) -> ty
+    (ty,_,_,_) -> ty
 
 lookDef :: PGF -> CId -> Maybe [Equation]
 lookDef pgf f = 
   case lookMap (error $ "lookDef " ++ show f) f (funs (abstract pgf)) of
-    (_,a,eqs) -> eqs
+    (_,a,eqs,_) -> eqs
 
 isData :: PGF -> CId -> Bool
 isData pgf f =
   case Map.lookup f (funs (abstract pgf)) of
-    Just (_,_,Nothing) -> True             -- the encoding of data constrs
-    _                  -> False
+    Just (_,_,Nothing,_) -> True             -- the encoding of data constrs
+    _                    -> False
 
 lookValCat :: PGF -> CId -> CId
 lookValCat pgf = valCat . lookType pgf
@@ -65,7 +65,7 @@ lookConcrFlag pgf lang f = Map.lookup f $ cflags $ lookConcr pgf lang
 
 functionsToCat :: PGF -> CId -> [(CId,Type)]
 functionsToCat pgf cat =
-  [(f,ty) | f <- fs, Just (ty,_,_) <- [Map.lookup f $ funs $ abstract pgf]]
+  [(f,ty) | (_,f) <- fs, Just (ty,_,_,_) <- [Map.lookup f $ funs $ abstract pgf]]
  where 
    (_,fs) = lookMap ([],[]) cat $ cats $ abstract pgf
 
@@ -81,7 +81,7 @@ restrictPGF :: (CId -> Bool) -> PGF -> PGF
 restrictPGF cond pgf = pgf {
   abstract = abstr {
     funs = Map.filterWithKey (\c _ -> cond c) (funs abstr),
-    cats = Map.map (\(hyps,fs) -> (hyps,filter cond fs)) (cats abstr)
+    cats = Map.map (\(hyps,fs) -> (hyps,filter (cond . snd) fs)) (cats abstr)
     }
   }  ---- restrict concrs also, might be needed
  where

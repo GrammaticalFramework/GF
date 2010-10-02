@@ -105,8 +105,6 @@ module PGF(
            generateFrom,        generateFromDepth,
            generateRandom,      generateRandomDepth,
            generateRandomFrom,  generateRandomFromDepth,
-           
-           RandomSelector(..),           
 
            -- ** Morphological Analysis
            Lemma, Analysis, Morpho,
@@ -269,8 +267,8 @@ functions pgf = Map.keys (funs (abstract pgf))
 
 functionType pgf fun =
   case Map.lookup fun (funs (abstract pgf)) of
-    Just (ty,_,_) -> Just ty
-    Nothing       -> Nothing
+    Just (ty,_,_,_) -> Just ty
+    Nothing         -> Nothing
 
 -- | Converts an expression to normal form
 compute :: PGF -> Expr -> Expr
@@ -280,20 +278,20 @@ browse :: PGF -> CId -> Maybe (String,[CId],[CId])
 browse pgf id = fmap (\def -> (def,producers,consumers)) definition
   where
     definition = case Map.lookup id (funs (abstract pgf)) of
-                   Just (ty,_,Just eqs) -> Just $ render (text "fun" <+> ppCId id <+> colon <+> ppType 0 [] ty $$
-                                                          if null eqs
-                                                            then empty
-                                                            else text "def" <+> vcat [let scope = foldl pattScope [] patts
-                                                                                          ds    = map (ppPatt 9 scope) patts
-                                                                                      in ppCId id <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
-                   Just (ty,_,Nothing ) -> Just $ render (text "data" <+> ppCId id <+> colon <+> ppType 0 [] ty)
+                   Just (ty,_,Just eqs,_) -> Just $ render (text "fun" <+> ppCId id <+> colon <+> ppType 0 [] ty $$
+                                                            if null eqs
+                                                              then empty
+                                                              else text "def" <+> vcat [let scope = foldl pattScope [] patts
+                                                                                            ds    = map (ppPatt 9 scope) patts
+                                                                                        in ppCId id <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
+                   Just (ty,_,Nothing, _) -> Just $ render (text "data" <+> ppCId id <+> colon <+> ppType 0 [] ty)
                    Nothing   -> case Map.lookup id (cats (abstract pgf)) of
                                   Just (hyps,_) -> Just $ render (text "cat" <+> ppCId id <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps)))
                                   Nothing       -> Nothing
 
     (producers,consumers) = Map.foldWithKey accum ([],[]) (funs (abstract pgf))
       where
-        accum f (ty,_,_) (plist,clist) = 
+        accum f (ty,_,_,_) (plist,clist) = 
           let !plist' = if id `elem` ps then f : plist else plist
               !clist' = if id `elem` cs then f : clist else clist
           in (plist',clist')

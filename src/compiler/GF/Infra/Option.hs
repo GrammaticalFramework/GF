@@ -155,7 +155,7 @@ data Flags = Flags {
       optGFLibPath       :: Maybe FilePath,
       optRecomp          :: Recomp,
       optPrinter         :: [Printer],
-      optProb            :: Bool,
+      optProbsFile       :: Maybe FilePath,
       optRetainResource  :: Bool,
       optName            :: Maybe String,
       optAbsName         :: Maybe String,
@@ -255,7 +255,7 @@ defaultFlags = Flags {
       optGFLibPath       = Nothing,
       optRecomp          = RecompIfNewer,
       optPrinter         = [],
-      optProb            = False,
+      optProbsFile       = Nothing,
       optRetainResource  = False,
 
       optName            = Nothing,
@@ -329,7 +329,7 @@ optDescr =
      Option [] ["strip"] (NoArg (printer PrinterStrip))
                  "Remove name qualifiers when pretty-printing.",
      Option [] ["retain"] (NoArg (set $ \o -> o { optRetainResource = True })) "Retain opers.",
-     Option [] ["prob"] (NoArg (prob True)) "Read probabilities from '--# prob' pragmas.",
+     Option [] ["probs"] (ReqArg probsFile "file.probs") "Read probabilities from file.",
      Option ['n'] ["name"] (ReqArg name "NAME") 
            (unlines ["Use NAME as the name of the output. This is used in the output file names, ",
                      "with suffixes depending on the formats, and, when relevant, ",
@@ -399,7 +399,7 @@ optDescr =
        gfLibPath   x = set $ \o -> o { optGFLibPath = Just x }
        recomp      x = set $ \o -> o { optRecomp = x }
        printer     x = set $ \o -> o { optPrinter = x : optPrinter o }
-       prob        x = set $ \o -> o { optProb = x }
+       probsFile   x = set $ \o -> o { optProbsFile = Just x }
 
        name        x = set $ \o -> o { optName = Just x }
        absName     x = set $ \o -> o { optAbsName = Just x }

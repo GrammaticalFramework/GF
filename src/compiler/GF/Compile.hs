@@ -42,6 +42,7 @@ import PGF.CId
 import PGF.Data
 import PGF.Macros
 import PGF.Optimize
+import PGF.Probabilistic
 
 
 -- | Compiles a number of source files and builds a 'PGF' structure for them.
@@ -55,9 +56,13 @@ link :: Options -> Ident -> SourceGrammar -> IOE PGF
 link opts cnc gr = do
   let isv = (verbAtLeast opts Normal)
   putPointE Normal opts "linking ... " $ do
-    gc <- ioeIO (mkCanon2pgf opts cnc gr)
-    ioeIO $ putStrLn "OK" 
-    return $ if flag optOptimizePGF opts then optimizePGF gc else gc
+    pgf <- ioeIO (mkCanon2pgf opts cnc gr)
+    probs <- ioeIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
+    ioeIO $ putStrLn "OK"     
+    pgf <- return $ setProbabilities probs 
+             $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
+    ioeIO $ putStrLn (showProbabilities (getProbabilities pgf))
+    return pgf
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do
