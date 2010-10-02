@@ -96,7 +96,7 @@ linTree pgf lang e =
             Nothing        -> concat [toApp fid prod | (fid,set) <- IntMap.toList prods, prod <- Set.toList set]
           where
             toApp fid (PApply funid pargs) =
-              let Just (ty,_,_) = Map.lookup f (funs (abstract pgf))
+              let Just (ty,_,_,_) = Map.lookup f (funs (abstract pgf))
                   (args,res) = catSkeleton ty
               in [(funid,(res,fid),zip args [fid | PArg _ fid <- pargs])]
             toApp _   (PCoerce fid) = 

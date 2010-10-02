@@ -101,8 +101,8 @@ lookupCatHyps cat = TcM (\abstr ms -> case Map.lookup cat (cats abstr) of
 
 lookupFunType :: CId -> TcM TType
 lookupFunType fun = TcM (\abstr ms -> case Map.lookup fun (funs abstr) of
-                                        Just (ty,_,_) -> Ok ms (TTyp [] ty)
-                                        Nothing       -> Fail (UnknownFun fun))
+                                        Just (ty,_,_,_) -> Ok ms (TTyp [] ty)
+                                        Nothing         -> Fail (UnknownFun fun))
 
 newMeta :: Scope -> TType -> TcM MetaId
 newMeta scope tty = TcM (\abstr ms -> let metaid = IntMap.size ms + 1

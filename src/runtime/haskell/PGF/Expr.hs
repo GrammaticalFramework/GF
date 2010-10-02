@@ -318,22 +318,22 @@ data Value
   | VClosure Env Expr
   | VImplArg Value
 
-type Sig = ( Map.Map CId (Type,Int,Maybe [Equation])    -- type and def of a fun
-           , Int -> Maybe Expr                          -- lookup for metavariables
+type Sig = ( Map.Map CId (Type,Int,Maybe [Equation],Double)    -- type and def of a fun
+           , Int -> Maybe Expr                                 -- lookup for metavariables
            )
 type Env = [Value]
 
 eval :: Sig -> Env -> Expr -> Value
 eval sig env (EVar i)     = env !! i
 eval sig env (EFun f)     = case Map.lookup f (fst sig) of
-                              Just (_,a,meqs) -> case meqs of
-                                                   Just eqs -> if a == 0
-                                                                 then case eqs of
-                                                                        Equ [] e : _ -> eval sig [] e
-                                                                        _            -> VConst f []
-                                                                 else VApp f []
-                                                   Nothing  -> VApp f []
-                              Nothing        -> error ("unknown function "++showCId f)
+                              Just (_,a,meqs,_) -> case meqs of
+                                                     Just eqs -> if a == 0
+                                                                   then case eqs of
+                                                                          Equ [] e : _ -> eval sig [] e
+                                                                          _            -> VConst f []
+                                                                   else VApp f []
+                                                     Nothing  -> VApp f []
+                              Nothing           -> error ("unknown function "++showCId f)
 eval sig env (EApp e1 e2) = apply sig env e1 [eval sig env e2]
 eval sig env (EAbs b x e) = VClosure env (EAbs b x e)
 eval sig env (EMeta i)    = case snd sig i of
@@ -347,12 +347,12 @@ apply :: Sig -> Env -> Expr -> [Value] -> Value
 apply sig env e            []     = eval sig env e
 apply sig env (EVar i)     vs     = applyValue sig (env !! i) vs
 apply sig env (EFun f)     vs     = case Map.lookup f (fst sig) of
-                                      Just (_,a,meqs) -> case meqs of
-                                                           Just eqs -> if a <= length vs
-                                                                         then match sig f eqs vs
-                                                                         else VApp f vs
-                                                           Nothing  -> VApp f vs
-                                      Nothing      -> error ("unknown function "++showCId f)
+                                      Just (_,a,meqs,_) -> case meqs of
+                                                             Just eqs -> if a <= length vs
+                                                                           then match sig f eqs vs
+                                                                           else VApp f vs
+                                                             Nothing  -> VApp f vs
+                                      Nothing           -> error ("unknown function "++showCId f)
 apply sig env (EApp e1 e2) vs     = apply sig env e1 (eval sig env e2 : vs)
 apply sig env (EAbs _ x e) (v:vs) = apply sig (v:env) e vs
 apply sig env (EMeta i)    vs     = case snd sig i of

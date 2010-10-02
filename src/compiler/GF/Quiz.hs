@@ -38,32 +38,24 @@ mkQuiz msg tts = do
   teachDialogue qas msg
 
 translationList :: 
-  Maybe Expr -> Maybe Probabilities -> 
-  PGF -> Language -> Language -> Type -> Int -> IO [(String,[String])]
-translationList mex mprobs pgf ig og typ number = do
+  Maybe Expr -> PGF -> Language -> Language -> Type -> Int -> IO [(String,[String])]
+translationList mex pgf ig og typ number = do
   gen <- newStdGen
-  let sel = case mprobs of
-              Just probs -> WeightSel gen probs
-              Nothing    -> RandSel   gen
-  let ts  = take number $ case mex of
-                            Just ex -> generateRandomFrom sel pgf ex
-                            Nothing -> generateRandom     sel pgf typ
+  let ts   = take number $ case mex of
+                             Just ex -> generateRandomFrom gen pgf ex
+                             Nothing -> generateRandom     gen pgf typ
   return $ map mkOne $ ts
  where
    mkOne t = (norml (linearize pgf ig t), map (norml . linearize pgf og) (homonyms t))
    homonyms = parse pgf ig typ . linearize pgf ig
 
 morphologyList :: 
-  Maybe Expr -> Maybe Probabilities -> 
-  PGF -> Language -> Type -> Int -> IO [(String,[String])]
-morphologyList mex mprobs pgf ig typ number = do
+  Maybe Expr -> PGF -> Language -> Type -> Int -> IO [(String,[String])]
+morphologyList mex pgf ig typ number = do
   gen <- newStdGen
-  let sel = case mprobs of
-              Just probs -> WeightSel gen probs
-              Nothing    -> RandSel   gen
-  let ts = take (max 1 number) $ case mex of
-                                   Just ex -> generateRandomFrom sel pgf ex
-                                   Nothing -> generateRandom     sel pgf typ
+  let ts   = take (max 1 number) $ case mex of
+                                     Just ex -> generateRandomFrom gen pgf ex
+                                     Nothing -> generateRandom     gen pgf typ
   let ss    = map (tabularLinearizes pgf ig) ts
   let size  = length (head (head ss))
   let forms = take number $ randomRs (0,size-1) gen

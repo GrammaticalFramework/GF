@@ -3,8 +3,6 @@ module PGF.Generate
          , generateFrom,        generateFromDepth
          , generateRandom,      generateRandomDepth
          , generateRandomFrom,  generateRandomFromDepth
-         
-         , RandomSelector(..)
          ) where
 
 import PGF.CId
@@ -17,6 +15,7 @@ import PGF.Probabilistic
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import Control.Monad
+import Control.Monad.Identity
 import System.Random
 
 -- | Generates an exhaustive possibly infinite list of
@@ -44,24 +43,24 @@ generateFromDepth pgf e dp = generateForMetas False pgf (\ty -> generateAllDepth
 -- | Generates an infinite list of random abstract syntax expressions.
 -- This is usefull for tree bank generation which after that can be used
 -- for grammar testing.
-generateRandom :: RandomGen g => RandomSelector g -> PGF -> Type -> [Expr]
-generateRandom sel pgf ty = 
-    generate sel pgf ty Nothing
+generateRandom :: RandomGen g => g -> PGF -> Type -> [Expr]
+generateRandom g pgf ty = 
+    generate (Identity g) pgf ty Nothing
 
 -- | A variant of 'generateRandom' which also takes as argument
 -- the upper limit of the depth of the generated expression.
-generateRandomDepth :: RandomGen g => RandomSelector g -> PGF -> Type -> Maybe Int -> [Expr]
-generateRandomDepth sel pgf ty dp = generate sel pgf ty dp
+generateRandomDepth :: RandomGen g => g -> PGF -> Type -> Maybe Int -> [Expr]
+generateRandomDepth g pgf ty dp = generate (Identity g) pgf ty dp
 
 -- | Random generation based on template
-generateRandomFrom :: RandomGen g => RandomSelector g -> PGF -> Expr -> [Expr]
-generateRandomFrom sel pgf e = 
-  generateForMetas True pgf (\ty -> generate sel pgf ty Nothing) e
+generateRandomFrom :: RandomGen g => g -> PGF -> Expr -> [Expr]
+generateRandomFrom g pgf e = 
+  generateForMetas True pgf (\ty -> generate (Identity g) pgf ty Nothing) e
 
 -- | Random generation based on template with a limitation in the depth.
-generateRandomFromDepth :: RandomGen g => RandomSelector g -> PGF -> Expr -> Maybe Int -> [Expr]
-generateRandomFromDepth sel pgf e dp = 
-  generateForMetas True pgf (\ty -> generate sel pgf ty dp) e
+generateRandomFromDepth :: RandomGen g => g -> PGF -> Expr -> Maybe Int -> [Expr]
+generateRandomFromDepth g pgf e dp = 
+  generateForMetas True pgf (\ty -> generate (Identity g) pgf ty dp) e
 
 
 
@@ -103,8 +102,8 @@ prove abs scope tty@(TTyp env (DTyp [] cat es)) dp = do
     clauses cat =
       do fn <- select abs cat
          case Map.lookup fn (funs abs) of
-           Just (ty,_,_) -> return (fn,ty)
-           Nothing       -> mzero
+           Just (ty,_,_,_) -> return (fn,ty)
+           Nothing         -> mzero
 
     mkEnv env []                = return (env,[])
     mkEnv env ((bt,x,ty):hypos) = do
@@ -175,46 +174,23 @@ instance Selector () where
                                      Just (_,fns) -> iter s fns
                                      Nothing      -> CFail)
     where
-      iter s []       = CFail
-      iter s (fn:fns) = CBranch (COk () s fn) (iter s fns)
+      iter s []           = CFail
+      iter s ((_,fn):fns) = CBranch (COk () s fn) (iter s fns)
 
--- | The random selector data type is used to specify the random number generator
--- and the distribution among the functions with the same result category.
--- The distribution is even for 'RandSel' and weighted for 'WeightSel'.
-data RandomSelector g = RandSel   g
-                      | WeightSel g Probabilities
+instance RandomGen g => Selector (Identity g) where
+  splitSelector (Identity g) = let (g1,g2) = split g
+                               in (Identity g1, Identity g2)
 
-instance RandomGen g => Selector (RandomSelector g) where
-  splitSelector (RandSel g)         = let (g1,g2) = split g
-                                      in (RandSel g1, RandSel g2)
-  splitSelector (WeightSel g probs) = let (g1,g2) = split g
-                                      in (WeightSel g1 probs, WeightSel g2 probs)
-
-  select abs cat = GenM (\sel s -> case sel of
-                                     RandSel g         -> case Map.lookup cat (cats abs) of
-                                                            Just (_,fns) -> do_rand   g s (length fns) fns
-                                                            Nothing      -> CFail
-                                     WeightSel g probs -> case Map.lookup cat (catProbs probs) of
-                                                            Just fns     -> do_weight g s 1.0 fns
-                                                            Nothing      -> CFail)
+  select abs cat = GenM (\(Identity g) s ->
+                                      case Map.lookup cat (cats abs) of
+                                        Just (_,fns) -> do_rand g s 1.0 fns
+                                        Nothing      -> CFail)
     where
-      do_rand g s n []  = CFail
-      do_rand g s n fns = let n'        = n-1
-                              (i,g')    = randomR (0,n') g
+      do_rand g s p []  = CFail
+      do_rand g s p fns = let (d,g')    = randomR (0.0,p) g
                               (g1,g2)   = split g'
-                              (fn,fns') = pick i fns
-                          in CBranch (COk (RandSel g1) s fn) (do_rand g2 s n' fns')
-
-      do_weight g s p []  = CFail
-      do_weight g s p fns = let (d,g')    = randomR (0.0,p) g
-                                (g1,g2)   = split g'
-                                (p',fn,fns') = hit d fns
-                            in CBranch (COk (RandSel g1) s fn) (do_weight g2 s (p-p') fns')
-
-      pick :: Int -> [a] -> (a,[a])
-      pick 0 (x:xs) = (x,xs)
-      pick n (x:xs) = let (x',xs') = pick (n-1) xs
-                      in (x',x:xs')
+                              (p',fn,fns') = hit d fns
+                          in CBranch (COk (Identity g1) s fn) (do_rand g2 s (p-p') fns')
 
       hit :: Double -> [(Double,a)] -> (Double,a,[(Double,a)])
       hit d (px@(p,x):xs)

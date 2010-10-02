@@ -469,7 +469,7 @@ linearizeAndBind pgf mto t = [(la, binds s) | (la,s) <- linearize' pgf mto t]
 random' :: PGF -> Maybe PGF.Type -> IO [PGF.Tree]
 random' pgf mcat = do
   g <- newStdGen
-  return $ PGF.generateRandom (PGF.RandSel g) pgf (fromMaybe (PGF.startCat pgf) mcat)
+  return $ PGF.generateRandom g pgf (fromMaybe (PGF.startCat pgf) mcat)
 
 selectLanguage :: PGF -> Maybe (Accept Language) -> PGF.Language
 selectLanguage pgf macc = case acceptable of
