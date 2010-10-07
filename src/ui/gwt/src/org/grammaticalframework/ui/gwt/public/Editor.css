@@ -7,6 +7,14 @@
   width: 100%;
 }
 
+.my-DocumentsSearchFrame {
+    margin-bottom: 0.5em;
+}
+
+.my-DocumentsSearchFrame * {
+    margin: 0 0.4em;
+}
+
 .my-DocumentsHeader {
   width: 100%;
   background-attachement: scroll;

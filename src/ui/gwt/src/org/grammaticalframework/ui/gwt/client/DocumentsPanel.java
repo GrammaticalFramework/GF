@@ -18,6 +18,15 @@ public class DocumentsPanel extends Composite {
 
 		VerticalPanel documentsPanel = new VerticalPanel();
 		documentsPanel.setStylePrimaryName("my-DocumentsFrame");
+
+		HorizontalPanel searchPanel = new HorizontalPanel();
+		searchPanel.setStylePrimaryName("my-DocumentsSearchFrame");
+		TextBox searchBox = new TextBox();
+		searchBox.setWidth("20em");
+		Button  searchBtn = new Button("Search");
+		searchPanel.add(searchBox);
+		searchPanel.add(searchBtn);
+		documentsPanel.add(searchPanel);
 		
 		Label header = new Label("Documents");
 		header.setStylePrimaryName("my-DocumentsHeader");
