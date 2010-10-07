@@ -1,4 +1,36 @@
-/** Add css rules here for your application. */
+.my-DocumentsPanel {
+  padding: 1em;
+  width: 100%;
+}
+
+.my-DocumentsFrame {
+  width: 100%;
+}
+
+.my-DocumentsHeader {
+  width: 100%;
+  background-attachement: scroll;
+  background-color: #E5E5E5;
+  background-image: url("background.png");
+  background-position: 0px -192px;
+  background-repeat: repeat-x;
+  font-size: 150%;
+}
+
+.my-DocumentsTable {
+  width: 100%;
+  border: 1px solid #E5E5E5;
+  border-collapse: collapse;
+}
+
+.my-DocumentsTable .row td {
+  cursor:pointer;
+  border: 1px solid #E5E5E5;
+}
+
+.my-DocumentsTable .row:hover {
+  background-color: rgb(147, 194, 241);
+}
 
 .my-TranslatePanel {
   padding-top: 1em;
