@@ -16,7 +16,7 @@ public class EditorApp implements EntryPoint {
 	protected PGFWrapper pgf;
 
 	protected VerticalPanel outputPanel;
-	protected Widget translatePanel;
+	protected Widget editorPanel;
 	protected BrowsePanel browsePanel;
 	protected QueryPanel queryPanel;
 	protected DocumentsPanel documentsPanel;
@@ -215,7 +215,7 @@ public class EditorApp implements EntryPoint {
 	//
 
 	protected Widget createUI() {
-		translatePanel = createTranslatePanel();
+		editorPanel = createEditorPanel();
 		browsePanel = createBrowsePanel();
 		queryPanel = createQueryPanel();
 		documentsPanel = createDocumentsPanel();
@@ -228,19 +228,19 @@ public class EditorApp implements EntryPoint {
 		hPanel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 		hPanel.setStylePrimaryName("my-HeaderPanel");
 
-		Widget linksPanel = createLinksPanel(vPanel);
+		TabBar linksPanel = createLinksPanel(vPanel);
 		hPanel.add(linksPanel);
 		hPanel.setCellHorizontalAlignment(linksPanel,HorizontalPanel.ALIGN_LEFT);
+		linksPanel.selectTab(1);
 
 		Widget settingsPanel = createSettingsPanel();
 		hPanel.add(settingsPanel);
 		hPanel.setCellHorizontalAlignment(settingsPanel,HorizontalPanel.ALIGN_RIGHT);
 
 		vPanel.add(hPanel);
-		vPanel.add(translatePanel);
+		vPanel.add(editorPanel);
 
-		History.newItem("translate");
-		History.addHistoryListener(new MyHistoryListener(vPanel));
+		History.addHistoryListener(new MyHistoryListener(linksPanel));
 
 		return vPanel;
 	}
@@ -249,7 +249,7 @@ public class EditorApp implements EntryPoint {
 		return new SettingsPanel(pgf);
 	}
 
-	protected Widget createTranslatePanel() {
+	protected Widget createEditorPanel() {
 		textPanel = new TextInputPanel();
 		textPanel.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
@@ -287,29 +287,29 @@ public class EditorApp implements EntryPoint {
 		outputPanel = new VerticalPanel();
 		outputPanel.addStyleName("my-translations");
 
-		final DockPanel translatePanel = new DockPanel();
-		translatePanel.setStyleName("my-TranslatePanel");
-		translatePanel.add(textPanel, DockPanel.NORTH);
-		translatePanel.add(bagPanel, DockPanel.CENTER);
-		translatePanel.add(outputPanel, DockPanel.EAST);
+		final DockPanel editorPanel = new DockPanel();
+		editorPanel.setStyleName("my-EditorPanel");
+		editorPanel.add(textPanel, DockPanel.NORTH);
+		editorPanel.add(bagPanel, DockPanel.CENTER);
+		editorPanel.add(outputPanel, DockPanel.EAST);
 
-		translatePanel.setCellHeight(bagPanel, "100%");
-		translatePanel.setCellWidth(bagPanel, "70%");
-		translatePanel.setCellHeight(outputPanel, "100%");
-		translatePanel.setCellWidth(outputPanel, "30%");
-		translatePanel.setCellVerticalAlignment(bagPanel, HasVerticalAlignment.ALIGN_TOP);
-		translatePanel.setCellHorizontalAlignment(outputPanel, HasHorizontalAlignment.ALIGN_RIGHT);
+		editorPanel.setCellHeight(bagPanel, "100%");
+		editorPanel.setCellWidth(bagPanel, "70%");
+		editorPanel.setCellHeight(outputPanel, "100%");
+		editorPanel.setCellWidth(outputPanel, "30%");
+		editorPanel.setCellVerticalAlignment(bagPanel, HasVerticalAlignment.ALIGN_TOP);
+		editorPanel.setCellHorizontalAlignment(outputPanel, HasHorizontalAlignment.ALIGN_RIGHT);
 
 		Window.addWindowResizeListener(new WindowResizeListener() {
 			public void onWindowResized(int w, int h) {
-				translatePanel.setPixelSize(w-20, h-50);
+				editorPanel.setPixelSize(w-20, h-50);
 			}
 		});
 		int w = Window.getClientWidth();
 		int h = Window.getClientHeight();
-		translatePanel.setPixelSize(w-20, h-50);
+		editorPanel.setPixelSize(w-20, h-50);
 
-		return translatePanel;
+		return editorPanel;
 	}
 
 	protected BrowsePanel createBrowsePanel() {
@@ -324,56 +324,31 @@ public class EditorApp implements EntryPoint {
 		return new DocumentsPanel(pgf);
 	}
 
-	protected Widget createLinksPanel(final Panel parent) {
-		HorizontalPanel linksPanel = new HorizontalPanel();
-		linksPanel.setStylePrimaryName("my-LinksPanel");
-
-		Hyperlink documentsLink = new Hyperlink("Documents", "documents");
-		documentsLink.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
-				parent.remove(browsePanel);
-				parent.remove(queryPanel);
-				parent.remove(translatePanel);
-				parent.add(documentsPanel);
-			}
-		});
-		linksPanel.add(documentsLink);
-
-		Hyperlink translateLink = new Hyperlink("Translate", "translate");
-		translateLink.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+	protected TabBar createLinksPanel(final Panel parent) {
+		TabBar tabBar = new TabBar();
+		tabBar.setStylePrimaryName("my-LinksPanel");
+		tabBar.addTab("Documents");
+		tabBar.addTab("Editor");
+		tabBar.addTab("Query");
+		tabBar.addTab("Browse");
+		
+		tabBar.addSelectionHandler(new SelectionHandler<Integer>() {
+			public void onSelection(SelectionEvent<Integer> event) {
 				parent.remove(documentsPanel);
-				parent.remove(browsePanel);
+				parent.remove(editorPanel);
 				parent.remove(queryPanel);
-				parent.add(translatePanel);
-			}
-		});
-		linksPanel.add(translateLink);
-
-		Hyperlink queryLink = new Hyperlink("Query", "query");
-		queryLink.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
-				parent.remove(documentsPanel);
-				parent.remove(translatePanel);
 				parent.remove(browsePanel);
-				parent.add(queryPanel);
+
+				switch (event.getSelectedItem().intValue()) {
+					case 0: parent.add(documentsPanel); History.newItem("documents"); break;
+					case 1: parent.add(editorPanel);  History.newItem("editor"); break;
+					case 2: parent.add(queryPanel);  History.newItem("query"); break;
+					case 3: parent.add(browsePanel);  History.newItem("browse"); break;
+				}
 			}
 		});
-		linksPanel.add(queryLink);
 
-		Hyperlink browseLink = new Hyperlink("Browse", "browse");
-		browseLink.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
-				parent.remove(documentsPanel);
-				parent.remove(translatePanel);
-				parent.remove(queryPanel);
-				parent.add(browsePanel);
-				browsePanel.onActivate();
-			}
-		});
-		linksPanel.add(browseLink);
-
-		return linksPanel;
+		return tabBar;
 	}
 
 	protected Widget createErrorMsg(final PGF.TcError error) {
@@ -392,36 +367,25 @@ public class EditorApp implements EntryPoint {
 	//
 
 	protected class MyHistoryListener implements HistoryListener {
-		private final Panel parent;
+		private final TabBar linksPanel;
 
-		public MyHistoryListener(Panel parent) {
-			this.parent = parent;
+		public MyHistoryListener(TabBar linksPanel) {
+			this.linksPanel = linksPanel;
 		}
 
 		public void onHistoryChanged(String token) {
 			if (token.equals("documents")) {
-				parent.add(documentsPanel);
-				parent.remove(translatePanel);
-				parent.remove(queryPanel);
-				parent.remove(browsePanel);
-			} else if (token.equals("translate")) {
-				parent.remove(documentsPanel);
-				parent.add(translatePanel);
-				parent.remove(queryPanel);
-				parent.remove(browsePanel);
+				linksPanel.selectTab(0);
+			} else if (token.equals("editor")) {
+				linksPanel.selectTab(1);
 			} else if (token.equals("query")) {
-				parent.remove(documentsPanel);
-				parent.remove(translatePanel);
-				parent.add(queryPanel);
-				parent.remove(browsePanel);
+				linksPanel.selectTab(2);
 			} else if (token.equals("browse")) {
-				parent.remove(documentsPanel);
-				parent.remove(translatePanel);
-				parent.remove(queryPanel);
-				parent.add(browsePanel);
+				linksPanel.selectTab(3);
 				browsePanel.onActivate();
 				browsePanel.browse(null);
 			} else if (token.startsWith("browse:")) {
+				linksPanel.selectTab(4);
 				browsePanel.browse(token.substring(7));
 			}
 		}

@@ -32,7 +32,7 @@
   background-color: rgb(147, 194, 241);
 }
 
-.my-TranslatePanel {
+.my-EditorPanel {
   padding-top: 1em;
   padding-bottom: 1em
 }
@@ -131,7 +131,26 @@
 }
 
 .my-LinksPanel * {
-    margin: 0 0.1em;
+    margin: 0 0.2em;
+}
+
+.my-LinksPanel .gwt-TabBarItem {
+    font-weight: normal;
+    color: gray;
+    outline: 0;
+}
+
+.my-LinksPanel .gwt-TabBarItem-selected {
+    font-weight: bold;
+    color: black;
+}
+
+.my-LinksPanel .gwt-TabBarItem:hover {
+    text-decoration: underline;
+}
+
+.my-LinksPanel .gwt-TabBarItem-selected:hover {
+    text-decoration: none;
 }
 
 .my-HeaderPanel {
