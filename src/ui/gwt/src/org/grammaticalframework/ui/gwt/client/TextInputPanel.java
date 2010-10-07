@@ -71,7 +71,7 @@ public class TextInputPanel extends Composite implements Focusable, HasValueChan
 		toolbar.setCellVerticalAlignment(buttons,HorizontalPanel.ALIGN_MIDDLE);
 
 		Image clearButton = new Image("org.grammaticalframework.ui.gwt.EditorApp/textinput-buttons.png",0,0,20,20);
-		clearButton.setTitle("Clears the whole text.");
+		clearButton.setTitle("Clears the whole document.");
 		clearButton.setStylePrimaryName("button");
 		clearButton.addClickListener(new ClickListener () {
 			public void onClick(Widget sender) {
@@ -80,7 +80,17 @@ public class TextInputPanel extends Composite implements Focusable, HasValueChan
 		});
 		buttons.add(clearButton);
 
- 		Image deleteLastButton = new Image("org.grammaticalframework.ui.gwt.EditorApp/textinput-buttons.png",20,0,20,20);
+ 		Image saveButton = new Image("org.grammaticalframework.ui.gwt.EditorApp/textinput-buttons.png",20,0,20,20);
+		saveButton.setTitle("Save the document.");
+		saveButton.setStylePrimaryName("button");
+		saveButton.addClickListener(new ClickListener () {
+			public void onClick(Widget sender) {
+				save();
+			}
+		});
+		buttons.add(saveButton);
+
+ 		Image deleteLastButton = new Image("org.grammaticalframework.ui.gwt.EditorApp/textinput-buttons.png",40,0,20,20);
 		deleteLastButton.setTitle("Removes the last word.");
 		deleteLastButton.setStylePrimaryName("button");
 		deleteLastButton.addClickListener(new ClickListener () {
@@ -159,6 +169,9 @@ public class TextInputPanel extends Composite implements Focusable, HasValueChan
 		errorPanels = null;
 		tempPanel = null;
 		fireValueChange();
+	}
+	
+	public void save() {
 	}
 
 	public void addMagnet(Magnet magnet) {

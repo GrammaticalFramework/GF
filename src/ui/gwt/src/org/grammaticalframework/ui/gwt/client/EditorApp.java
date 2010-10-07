@@ -19,6 +19,7 @@ public class EditorApp implements EntryPoint {
 	protected Widget translatePanel;
 	protected BrowsePanel browsePanel;
 	protected QueryPanel queryPanel;
+	protected DocumentsPanel documentsPanel;
 	protected StatusPopup statusPopup;
 	protected TextInputPanel textPanel;
 	protected FridgeBagPanel bagPanel;
@@ -217,6 +218,7 @@ public class EditorApp implements EntryPoint {
 		translatePanel = createTranslatePanel();
 		browsePanel = createBrowsePanel();
 		queryPanel = createQueryPanel();
+		documentsPanel = createDocumentsPanel();
 
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setWidth("100%");
@@ -318,13 +320,29 @@ public class EditorApp implements EntryPoint {
 		return new QueryPanel(pgf);
 	}
 
+	protected DocumentsPanel createDocumentsPanel() {
+		return new DocumentsPanel(pgf);
+	}
+
 	protected Widget createLinksPanel(final Panel parent) {
 		HorizontalPanel linksPanel = new HorizontalPanel();
 		linksPanel.setStylePrimaryName("my-LinksPanel");
 
+		Hyperlink documentsLink = new Hyperlink("Documents", "documents");
+		documentsLink.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				parent.remove(browsePanel);
+				parent.remove(queryPanel);
+				parent.remove(translatePanel);
+				parent.add(documentsPanel);
+			}
+		});
+		linksPanel.add(documentsLink);
+
 		Hyperlink translateLink = new Hyperlink("Translate", "translate");
 		translateLink.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
+				parent.remove(documentsPanel);
 				parent.remove(browsePanel);
 				parent.remove(queryPanel);
 				parent.add(translatePanel);
@@ -335,6 +353,7 @@ public class EditorApp implements EntryPoint {
 		Hyperlink queryLink = new Hyperlink("Query", "query");
 		queryLink.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
+				parent.remove(documentsPanel);
 				parent.remove(translatePanel);
 				parent.remove(browsePanel);
 				parent.add(queryPanel);
@@ -345,6 +364,7 @@ public class EditorApp implements EntryPoint {
 		Hyperlink browseLink = new Hyperlink("Browse", "browse");
 		browseLink.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
+				parent.remove(documentsPanel);
 				parent.remove(translatePanel);
 				parent.remove(queryPanel);
 				parent.add(browsePanel);
@@ -379,15 +399,23 @@ public class EditorApp implements EntryPoint {
 		}
 
 		public void onHistoryChanged(String token) {
-			if (token.equals("translate")) {
+			if (token.equals("documents")) {
+				parent.add(documentsPanel);
+				parent.remove(translatePanel);
 				parent.remove(queryPanel);
 				parent.remove(browsePanel);
+			} else if (token.equals("translate")) {
+				parent.remove(documentsPanel);
 				parent.add(translatePanel);
-			} else if (token.equals("query")) {
-				parent.remove(translatePanel);
+				parent.remove(queryPanel);
 				parent.remove(browsePanel);
+			} else if (token.equals("query")) {
+				parent.remove(documentsPanel);
+				parent.remove(translatePanel);
 				parent.add(queryPanel);
+				parent.remove(browsePanel);
 			} else if (token.equals("browse")) {
+				parent.remove(documentsPanel);
 				parent.remove(translatePanel);
 				parent.remove(queryPanel);
 				parent.add(browsePanel);
