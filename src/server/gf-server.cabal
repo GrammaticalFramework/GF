@@ -35,3 +35,7 @@ executable pgf-server
   ghc-options: -threaded
   if os(windows)
     ghc-options: -optl-mwindows
+
+executable content-server
+  build-depends: base >=4.2 && <5
+  main-is: ContentService.hs

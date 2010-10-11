@@ -67,41 +67,52 @@ generateRandomFromDepth g pgf e dp =
 generate :: Selector sel => sel -> PGF -> Type -> Maybe Int -> [Expr]
 generate sel pgf ty dp =
   [value2expr (funs (abstract pgf),lookupMeta ms) 0 v |
-        (ms,v) <- runGenM (prove (abstract pgf) emptyScope (TTyp [] ty) dp) sel emptyMetaStore]
+        (ms,v) <- runGenM (abstract pgf) (prove emptyScope (TTyp [] ty) dp) sel emptyMetaStore]
 
 generateForMetas :: Selector sel => sel -> PGF -> Expr -> Maybe Int -> [Expr]
 generateForMetas sel pgf e dp =
-  case unTcM (infExpr emptyScope e) abs emptyMetaStore of
-    Ok ms (e,_) -> let gen = do fillinVariables (runTcM abs) $ \scope tty -> do 
-                                    v <- prove abs scope tty dp
-                                    return (value2expr (funs abs,lookupMeta ms) 0 v)
-                                runTcM abs (refineExpr e)
-                   in [e | (ms,e) <- runGenM gen sel ms]
-    Fail _      -> []
+  case unTcM (infExpr emptyScope e) abs sel emptyMetaStore of
+    Ok sel ms (e,_) -> let gen = do fillinVariables $ \scope tty -> do 
+                                      v <- prove scope tty dp
+                                      return (value2expr (funs abs,lookupMeta ms) 0 v)
+                                    refineExpr e
+                       in [e | (ms,e) <- runGenM abs gen sel ms]
+    Fail _          -> []
   where
     abs = abstract pgf
 
-prove :: Selector sel => Abstr -> Scope -> TType -> Maybe Int -> GenM sel MetaStore Value
-prove abs scope tty@(TTyp env (DTyp [] cat es)) dp = do
-  (fn,DTyp hypos cat es) <- clauses cat
+prove :: Selector sel => Scope -> TType -> Maybe Int -> TcM sel Value
+prove scope (TTyp env1 (DTyp [] cat es1)) dp = do
+  (fn,DTyp hypos _ es2) <- clauses cat
   case dp of
     Just 0 | not (null hypos) -> mzero
     _                         -> return ()
-  (env,args) <- mkEnv [] hypos
-  runTcM abs (eqType scope (scopeSize scope) 0 (TTyp env (DTyp [] cat es)) tty)
+  (env2,args) <- mkEnv [] hypos
+  vs1 <- mapM (PGF.TypeCheck.eval env1) es1
+  vs2 <- mapM (PGF.TypeCheck.eval env2) es2
+  sequence_ [eqValue mzero suspend (scopeSize scope) v1 v2 | (v1,v2) <- zip vs1 vs2]
   vs <- mapM descend args
   return (VApp fn vs)
   where
-    clauses cat =
-      do fn <- select abs cat
-         case Map.lookup fn (funs abs) of
-           Just (ty,_,_,_) -> return (fn,ty)
-           Nothing         -> mzero
+    suspend i c = do
+      mv <- getMeta i
+      case mv of
+        MBound e -> c e
+        MUnbound scope tty cs -> do v <- prove scope tty dp
+                                    e <- TcM (\abs sel ms -> Ok sel ms (value2expr (funs abs,lookupMeta ms) 0 v))
+                                    setMeta i (MBound e)
+                                    sequence_ [c e | c <- (c:cs)]
+
+    clauses cat = do
+      fn <- select cat
+      if fn == mkCId "plus" then mzero else return ()
+      ty <- lookupFunType fn
+      return (fn,ty)
 
     mkEnv env []                = return (env,[])
     mkEnv env ((bt,x,ty):hypos) = do
       (env,arg) <- if x /= wildCId
-                    then do i <- runTcM abs (newMeta scope (TTyp env ty))
+                    then do i <- newMeta scope (TTyp env ty)
                             let v = VMeta i env []
                             return (v : env,Right v)
                     else return (env,Left (TTyp env ty))
@@ -111,7 +122,7 @@ prove abs scope tty@(TTyp env (DTyp [] cat es)) dp = do
     descend (bt,arg) = do let dp' = fmap (flip (-) 1) dp
                           v <- case arg of
                                  Right v  -> return v
-                                 Left tty -> prove abs scope tty dp'
+                                 Left tty -> prove scope tty dp'
                           v <- case bt of
                                  Implicit -> return (VImplArg v)
                                  Explicit -> return v
@@ -121,75 +132,15 @@ prove abs scope tty@(TTyp env (DTyp [] cat es)) dp = do
 ------------------------------------------------------------------------------
 -- Generation Monad
 
-newtype GenM sel s a = GenM {unGen :: sel -> s -> Choice sel s a}
-data Choice sel s a = COk sel s a
-                    | CFail
-                    | CBranch (Choice sel s a) (Choice sel s a)
 
-instance Monad (GenM sel s) where
-  return x = GenM (\sel s -> COk sel s x)
-  f >>= g  = GenM (\sel s -> iter (unGen f sel s))
-    where
-      iter (COk sel s x)   = unGen (g x) sel s
-      iter (CBranch b1 b2) = CBranch (iter b1) (iter b2)
-      iter CFail           = CFail
-  fail _   = GenM (\sel s -> CFail)
-
-instance Selector sel => MonadPlus (GenM sel s) where
-  mzero = GenM (\sel s -> CFail)
-  mplus f g = GenM (\sel s -> let (sel1,sel2) = splitSelector sel
-                              in CBranch (unGen f sel1 s) (unGen g sel2 s))
-
-runGenM :: GenM sel s a -> sel -> s -> [(s,a)]
-runGenM f sel s = toList (unGen f sel s) []
+runGenM :: Abstr -> TcM s a -> s -> MetaStore s -> [(MetaStore s,a)]
+runGenM abs f s ms = toList (unTcM f abs s ms) []
   where
-    toList (COk sel s x)   xs = (s,x) : xs
-    toList (CFail)         xs = xs
-    toList (CBranch b1 b2) xs = toList b1 (toList b2 xs)
+    toList (Ok s ms x)  xs = (ms,x) : xs
+    toList (Fail _)     xs = xs
+    toList (Zero)       xs = xs
+    toList (Plus b1 b2) xs = toList b1 (toList b2 xs)
 
-runTcM :: Abstr -> TcM a -> GenM sel MetaStore a
-runTcM abs f = GenM (\sel ms ->
-  case unTcM f abs ms of
-    Ok ms a -> COk sel ms a
-    Fail _  -> CFail)
-
-
-------------------------------------------------------------------------------
--- Selectors
-
-class Selector sel where
-  splitSelector :: sel -> (sel,sel)
-  select        :: Abstr -> CId -> GenM sel s CId
-
-instance Selector () where
-  splitSelector sel = (sel,sel)
-  select abs cat = GenM (\sel s -> case Map.lookup cat (cats abs) of
-                                     Just (_,fns) -> iter s fns
-                                     Nothing      -> CFail)
-    where
-      iter s []           = CFail
-      iter s ((_,fn):fns) = CBranch (COk () s fn) (iter s fns)
-
-instance RandomGen g => Selector (Identity g) where
-  splitSelector (Identity g) = let (g1,g2) = split g
-                               in (Identity g1, Identity g2)
-
-  select abs cat = GenM (\(Identity g) s ->
-                                      case Map.lookup cat (cats abs) of
-                                        Just (_,fns) -> do_rand g s 1.0 fns
-                                        Nothing      -> CFail)
-    where
-      do_rand g s p []  = CFail
-      do_rand g s p fns = let (d,g')    = randomR (0.0,p) g
-                              (g1,g2)   = split g'
-                              (p',fn,fns') = hit d fns
-                          in CBranch (COk (Identity g1) s fn) (do_rand g2 s (p-p') fns')
-
-      hit :: Double -> [(Double,a)] -> (Double,a,[(Double,a)])
-      hit d (px@(p,x):xs)
-        | d < p     = (p,x,xs)
-        | otherwise = let (p',x',xs') = hit (d-p) xs
-                      in (p,x',px:xs')
 
 -- Helper function for random generation. After every
 -- success we must restart the search to find sufficiently different solution.
