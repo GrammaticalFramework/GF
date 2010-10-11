@@ -133,9 +133,9 @@ getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty =
                                                      case isLindefCId fn of
                                                        Just _  -> do arg <- go (Set.insert fid rec_) scope (head args) mb_tty
                                                                      return (mkAbs arg)
-                                                       Nothing -> do tty_fn <- runTcM abs fid (lookupFunType fn)
+                                                       Nothing -> do ty_fn <- runTcM abs fid (lookupFunType fn)
                                                                      (e,tty0) <- foldM (\(e1,tty) arg -> goArg (Set.insert fid rec_) scope fid e1 arg tty)
-                                                                                       (EFun fn,tty_fn) args
+                                                                                       (EFun fn,TTyp [] ty_fn) args
                                                                      case mb_tty of
                                                                        Just tty -> runTcM abs fid $ do
                                                                                      i <- newGuardedMeta e
@@ -183,7 +183,7 @@ getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty =
               | otherwise     = [x | PConst _ (EFun x) _ <- maybe [] Set.toList (IntMap.lookup fid forest)]
 
 
-newtype TcFM a = TcFM {unTcFM :: MetaStore -> ([(MetaStore,a)],[(FId,TcError)])}
+newtype TcFM a = TcFM {unTcFM :: MetaStore () -> ([(MetaStore (),a)],[(FId,TcError)])}
 
 instance Functor TcFM where
   fmap f g = TcFM (\ms -> let (res_g,err_g) = unTcFM g ms
@@ -201,10 +201,10 @@ instance MonadPlus TcFM where
                                (res_g,err_g) = unTcFM g ms
                            in (res_f++res_g,err_f++err_g))
 
-runTcM :: Abstr -> FId -> TcM a -> TcFM a
-runTcM abstr fid f = TcFM (\ms -> case unTcM f abstr ms of
-                                    Ok ms x  -> ([(ms,x)],[]         )
-                                    Fail err -> ([],      [(fid,err)]))
+runTcM :: Abstr -> FId -> TcM () a -> TcFM a
+runTcM abstr fid f = TcFM (\ms -> case unTcM f abstr () ms of
+                                    Ok _ ms x -> ([(ms,x)],[]         )
+                                    Fail err  -> ([],      [(fid,err)]))
 
 foldForest :: (FunId -> [PArg] -> b -> b) -> (Expr -> [String] -> b -> b) -> b -> FId -> IntMap.IntMap (Set.Set Production) -> b
 foldForest f g b fcat forest =

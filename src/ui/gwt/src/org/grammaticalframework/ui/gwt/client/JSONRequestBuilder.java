@@ -53,6 +53,36 @@ public class JSONRequestBuilder {
 		return new JSONRequest(request);
 	}
 
+	public static <T extends JavaScriptObject> JSONRequest sendDataRequest (String base, List<Arg> vars, String content, final JSONCallback<T> callback) {
+		String url = getQueryURL(base,vars);
+		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url);
+		builder.setRequestData(content);
+		builder.setTimeoutMillis(30000);
+		builder.setHeader("Accept","text/plain, text/html;q=0.5, */*;q=0.1");
+		Request request = null;
+
+		try {
+			request = builder.sendRequest(null, new RequestCallback() {
+				public void onError(Request request, Throwable e) {
+					callback.onError(e);
+				}
+
+				public void onResponseReceived(Request request, Response response) {
+					if (200 == response.getStatusCode()) {
+						callback.onResult(JSONRequestBuilder.<T>eval(response.getText()));
+					} else {
+						RequestException e = new RequestException("Response not OK: " + response.getStatusCode() + ". " + response.getText());
+						callback.onError(e);
+					}
+				}
+			});
+		} catch (RequestException e) {
+			callback.onError(e);
+		}
+
+		return new JSONRequest(request);
+	}
+
 	private static native <T extends JavaScriptObject> T eval(String json) /*-{ 
         return eval('(' + json + ')');
     }-*/;
