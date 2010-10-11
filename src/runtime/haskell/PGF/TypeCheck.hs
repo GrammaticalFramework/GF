@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts, RankNTypes #-}
+
 ----------------------------------------------------------------------
 -- |
 -- Module      : PGF.TypeCheck
@@ -16,7 +18,7 @@ module PGF.TypeCheck ( checkType, checkExpr, inferExpr
                      , ppTcError, TcError(..)
 
                      -- internals needed for the typechecking of forests
-                     , MetaStore, newMeta, newGuardedMeta
+                     , MetaStore, emptyMetaStore, newMeta, newGuardedMeta, fillinVariables
                      , Scope, emptyScope, scopeSize, scopeEnv, addScopedVar
                      , TcM(..), TcResult(..), TType(..), tcError
                      , tcExpr, infExpr, eqType
@@ -104,6 +106,9 @@ lookupFunType fun = TcM (\abstr ms -> case Map.lookup fun (funs abstr) of
                                         Just (ty,_,_,_) -> Ok ms (TTyp [] ty)
                                         Nothing         -> Fail (UnknownFun fun))
 
+emptyMetaStore :: MetaStore
+emptyMetaStore = IntMap.empty
+
 newMeta :: Scope -> TType -> TcM MetaId
 newMeta scope tty = TcM (\abstr ms -> let metaid = IntMap.size ms + 1
                                       in Ok (IntMap.insert metaid (MUnbound scope tty []) ms) metaid)
@@ -125,6 +130,16 @@ lookupMeta ms i =
                           | otherwise -> Nothing
     Just (MUnbound _ _ _)             -> Nothing
     Nothing                           -> Nothing
+
+fillinVariables :: Monad m => (forall a . TcM a -> m a) -> (Scope -> TType -> m Expr) -> m ()
+fillinVariables runTcM f = do
+  fvs <- runTcM (TcM (\abstr ms -> Ok ms [(i,scope,tty,cs) | (i,MUnbound scope tty cs) <- IntMap.toList ms]))
+  case fvs of
+    []                 -> return ()
+    (i,scope,tty,cs):_ -> do e <- f scope tty
+                             runTcM $ do setMeta i (MBound e)
+                                         sequence_ [c e | c <- cs]
+                             fillinVariables runTcM f
 
 tcError :: TcError -> TcM a
 tcError e = TcM (\abstr ms -> Fail e)
@@ -198,7 +213,7 @@ ppTcError (UnsolvableGoal xs metaid ty)= text "The goal:" <+> ppMeta metaid <+> 
 -- syntax of the grammar.
 checkType :: PGF -> Type -> Either TcError Type
 checkType pgf ty = 
-  case unTcM (tcType emptyScope ty >>= refineType) (abstract pgf) IntMap.empty of
+  case unTcM (tcType emptyScope ty >>= refineType) (abstract pgf) emptyMetaStore of
     Ok ms ty  -> Right ty
     Fail err  -> Left  err
 
@@ -260,7 +275,7 @@ checkExpr pgf e ty =
   case unTcM (do e <- tcExpr emptyScope e (TTyp [] ty)
                  e <- refineExpr e
                  checkResolvedMetaStore emptyScope e
-                 return e) (abstract pgf) IntMap.empty of
+                 return e) (abstract pgf) emptyMetaStore of
     Ok ms e  -> Right e
     Fail err -> Left err
 
@@ -316,7 +331,7 @@ inferExpr pgf e =
                  e <- refineExpr e
                  checkResolvedMetaStore emptyScope e
                  ty <- evalType 0 tty
-                 return (e,ty)) (abstract pgf) IntMap.empty of
+                 return (e,ty)) (abstract pgf) emptyMetaStore of
     Ok ms (e,ty) -> Right (e,ty)
     Fail err     -> Left err
 

@@ -38,7 +38,7 @@ generateFrom pgf ex = generateFromDepth pgf ex Nothing
 -- | A variant of 'generateFrom' which also takes as argument
 -- the upper limit of the depth of the generated subexpressions.
 generateFromDepth :: PGF -> Expr -> Maybe Int -> [Expr]
-generateFromDepth pgf e dp = generateForMetas False pgf (\ty -> generateAllDepth pgf ty dp) e
+generateFromDepth pgf e dp = generateForMetas () pgf e dp
 
 -- | Generates an infinite list of random abstract syntax expressions.
 -- This is usefull for tree bank generation which after that can be used
@@ -58,24 +58,7 @@ generateRandomFrom g pgf e = generateRandomFromDepth g pgf e Nothing
 -- | Random generation based on template with a limitation in the depth.
 generateRandomFromDepth :: RandomGen g => g -> PGF -> Expr -> Maybe Int -> [Expr]
 generateRandomFromDepth g pgf e dp = 
-  restart g (\g -> generateForMetas True pgf (\ty -> generate (Identity g) pgf ty dp) e)
-
-
-
--- generic algorithm for filling holes in a generator
--- for random, should be breadth-first, since otherwise first metas always get the same
--- value when a list is generated
-generateForMetas :: Bool -> PGF -> (Type -> [Expr]) -> Expr -> [Expr]
-generateForMetas breadth pgf gen exp = case exp of
-  EApp f (EMeta _) -> [EApp g a | g <- gener f, a <- genArg g]
-  EApp f x | breadth -> [EApp g a | (g,a) <- zip (gener f) (gener x)]
-  EApp f x           -> [EApp g a | g <- gener f, a <- gener x]
-  _ -> if breadth then repeat exp else [exp]
- where
-  gener    = generateForMetas breadth pgf gen
-  genArg f = case inferExpr pgf f of
-    Right (_,DTyp ((_,_,ty):_) _ _) -> gen ty
-    _ -> []
+  restart g (\g -> generateForMetas (Identity g) pgf e dp)
 
 
 ------------------------------------------------------------------------------
@@ -84,7 +67,19 @@ generateForMetas breadth pgf gen exp = case exp of
 generate :: Selector sel => sel -> PGF -> Type -> Maybe Int -> [Expr]
 generate sel pgf ty dp =
   [value2expr (funs (abstract pgf),lookupMeta ms) 0 v |
-        (ms,v) <- runGenM (prove (abstract pgf) emptyScope (TTyp [] ty) dp) sel IntMap.empty]
+        (ms,v) <- runGenM (prove (abstract pgf) emptyScope (TTyp [] ty) dp) sel emptyMetaStore]
+
+generateForMetas :: Selector sel => sel -> PGF -> Expr -> Maybe Int -> [Expr]
+generateForMetas sel pgf e dp =
+  case unTcM (infExpr emptyScope e) abs emptyMetaStore of
+    Ok ms (e,_) -> let gen = do fillinVariables (runTcM abs) $ \scope tty -> do 
+                                    v <- prove abs scope tty dp
+                                    return (value2expr (funs abs,lookupMeta ms) 0 v)
+                                runTcM abs (refineExpr e)
+                   in [e | (ms,e) <- runGenM gen sel ms]
+    Fail _      -> []
+  where
+    abs = abstract pgf
 
 prove :: Selector sel => Abstr -> Scope -> TType -> Maybe Int -> GenM sel MetaStore Value
 prove abs scope tty@(TTyp env (DTyp [] cat es)) dp = do
