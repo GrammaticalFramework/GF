@@ -306,14 +306,16 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("cat","generation category"),
        ("lang","uses only functions that have linearizations in all these languages"),
        ("number","number of trees generated"),
+       ("depth","the maximum generation depth"),
        ("probs", "file with biased probabilities (format 'f 0.4' one by line)")
        ],
      exec = \opts xs -> do
        pgf <- optProbs opts (optRestricted opts)
        gen <- newStdGen
+       let dp = valIntOpts "depth" 4 opts
        let ts  = case mexp xs of
-                   Just ex -> generateRandomFrom gen pgf ex
-                   Nothing -> generateRandom     gen pgf (optType opts)
+                   Just ex -> generateRandomFromDepth gen pgf ex (Just dp)
+                   Nothing -> generateRandomDepth     gen pgf (optType opts) (Just dp)
        returnFromExprs $ take (optNum opts) ts
      }),
   ("gt", emptyCommandInfo {
