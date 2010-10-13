@@ -148,5 +148,5 @@ restart :: RandomGen g => g -> (g -> [a]) -> [a]
 restart g f =
   let (g1,g2) = split g
   in case f g1 of
-       []     -> restart g2 f
+       []     -> []
        (x:xs) -> x : restart g2 f
