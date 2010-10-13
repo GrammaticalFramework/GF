@@ -52,7 +52,7 @@ public class FridgeApp implements EntryPoint {
 		int limit = updatePrefixes ? 0 : maxMagnets; 
 		completeRequest = pgf.complete(text + " " + prefix, 
 				limit, new PGF.CompleteCallback() {
-			public void onResult(PGF.Completions completions) {
+			public void onResult(IterableJsArray<PGF.Completion> completions) {
 				List<Magnet> magnets = new ArrayList<Magnet>();
 				for (PGF.Completion completion : completions.iterable()) {
 					for (String word : completion.getCompletions()) {
@@ -105,11 +105,11 @@ public class FridgeApp implements EntryPoint {
 		}
 		translateRequest = pgf.translate(getText(), 
 				new PGF.TranslateCallback() {
-			public void onResult (PGF.Translations translations) {
+			public void onResult (IterableJsArray<PGF.TranslationResult> translations) {
 				outputPanel.removeStyleDependentName("working");
 				for (PGF.TranslationResult tr : translations.iterable()) {
 					if (tr.getTranslations() != null)
-						for (PGF.Translation t : tr.getTranslations().iterable()) {
+						for (PGF.Linearizations t : tr.getTranslations().iterable()) {
 							for (PGF.Linearization l : t.getLinearizations().iterable()) {
 								outputPanel.add(createTranslation(l.getTo(), l.getText()));
 							}

@@ -13,13 +13,15 @@ import com.google.gwt.event.logical.shared.*;
 public class BrowsePanel extends Composite {
 
 	private PGFWrapper pgf;
+	private StatusPopup statusPopup;
 	private HTML sourceView;
 	private SuggestBox searchBox;
 	private CompletionOracle oracle;
 	private List<String> identifiers = null;
 
-	public BrowsePanel(PGFWrapper pgf) {
+	public BrowsePanel(PGFWrapper pgf, StatusPopup statusPopup) {
 		this.pgf = pgf;
+		this.statusPopup = statusPopup;
 
 		oracle = new CompletionOracle();
 
@@ -79,8 +81,8 @@ public class BrowsePanel extends Composite {
 				sourceView.setHTML(response.getText());
 			}
 
-			public void onError(Request request, java.lang.Throwable exception) {
-				// errorHandler.onError(e);
+			public void onError(Request request, java.lang.Throwable e) {
+				statusPopup.showError("Cannot load the page", e);
 			}
 		});
 	}

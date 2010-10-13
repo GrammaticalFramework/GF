@@ -52,26 +52,22 @@ public class PGF {
 		return sendGrammarRequest(pgfURL, "translate", args, callback);
 	}
 
-	public interface TranslateCallback extends JSONCallback<Translations> {  }
-
-	public static class Translations extends IterableJsArray<TranslationResult> {
-		protected Translations() { }
-	}
+	public interface TranslateCallback extends JSONCallback<IterableJsArray<TranslationResult>> {  }
 
 	public static class TranslationResult extends JavaScriptObject {
 		protected TranslationResult() { }
 
 		public final native String getFrom() /*-{ return this.from; }-*/;
 		public final native BracketedString getBracketedString() /*-{ return this.brackets; }-*/;
-                public final native IterableJsArray<Translation> getTranslations() /*-{ return this.translations; }-*/;
+                public final native IterableJsArray<Linearizations> getTranslations() /*-{ return this.translations; }-*/;
 		public final native TcError[] getTypeErrors() /*-{ return this.typeErrors; }-*/;
 	}
 
-	public static class Translation extends JavaScriptObject {
-		protected Translation() { }
+	public static class Linearizations extends JavaScriptObject {
+		protected Linearizations() { }
 
                 public final native String getTree() /*-{ return this.tree; }-*/;
-		public final native Linearizations getLinearizations() /*-{ return this.linearizations; }-*/;
+		public final native IterableJsArray<Linearization> getLinearizations() /*-{ return this.linearizations; }-*/;
 	}
 
 	/* Completion */
@@ -92,11 +88,7 @@ public class PGF {
 		return sendGrammarRequest(pgfURL, "complete", args, callback);
 	}
 
-	public interface CompleteCallback extends JSONCallback<Completions> { }
-
-	public static class Completions extends IterableJsArray<Completion> {
-		protected Completions() { }
-	}
+	public interface CompleteCallback extends JSONCallback<IterableJsArray<Completion>> { }
 
 	public static class Completion extends JavaScriptObject {
 		protected Completion() { }
@@ -117,11 +109,7 @@ public class PGF {
 		return sendGrammarRequest(pgfURL, "parse", args, callback);
 	}
 
-	public interface ParseCallback extends JSONCallback<ParseResults> { }
-
-	public static class ParseResults extends IterableJsArray<ParseResult> {
-		protected ParseResults() { }
-	}
+	public interface ParseCallback extends JSONCallback<IterableJsArray<ParseResult>> { }
 
 	public static class ParseResult extends JavaScriptObject {
 		protected ParseResult() { }
@@ -174,11 +162,7 @@ public class PGF {
 		return sendGrammarRequest(pgfURL, "linearize", args, callback);
 	}
 
-	public interface LinearizeCallback extends JSONCallback<Linearizations> { }
-	
-	public static class Linearizations extends IterableJsArray<Linearization> {
-		protected Linearizations() { }
-	}
+	public interface LinearizeCallback extends JSONCallback<IterableJsArray<Linearization>> { }
 	
 	public static class Linearization extends JavaScriptObject {
 		protected Linearization() { }
@@ -229,19 +213,25 @@ public class PGF {
 		return request;
 	}
 	
-	public JSONRequest query(String pgfURL, String query, QueryCallback callback) {
+	public JSONRequest generateAll(String pgfURL, String cat, int depth, int limit, String toLang, GenerationCallback callback) {
 		List<Arg> args = new ArrayList<Arg>();
-		args.add(new Arg("cat", query));
-		return sendGrammarRequest(pgfURL, "query", args, callback);
+		args.add(new Arg("cat", cat));
+		args.add(new Arg("depth", depth));
+		args.add(new Arg("limit", limit));
+		args.add(new Arg("to", toLang));
+		return sendGrammarRequest(pgfURL, "generate", args, callback);
 	}
-	
-	public interface QueryCallback extends JSONCallback<QueryResult> {}
 
-	public static class QueryResult extends JavaScriptObject {
-		protected QueryResult() { }
-
-		public final native String[] getRows() /*-{ return this.rows; }-*/;
+	public JSONRequest generateRandom(String pgfURL, String cat, int depth, int limit, String toLang, GenerationCallback callback) {
+		List<Arg> args = new ArrayList<Arg>();
+		args.add(new Arg("cat", cat));
+		args.add(new Arg("depth", depth));
+		args.add(new Arg("limit", limit));
+		args.add(new Arg("to", toLang));
+		return sendGrammarRequest(pgfURL, "random", args, callback);
 	}
+
+	public interface GenerationCallback extends JSONCallback<IterableJsArray<Linearizations>> {}
 
 	public <T extends JavaScriptObject> JSONRequest sendGrammarRequest(String pgfURL, String resource, List<Arg> args, final JSONCallback<T> callback) {
 		args.add(new Arg("command", resource));
