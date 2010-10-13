@@ -13,7 +13,7 @@ public class LinearizationsPanel extends Composite {
 
 	protected PGFWrapper pgf;
 	
-	public LinearizationsPanel(PGFWrapper pgf, String tree, PGF.Linearizations lins) {
+	public LinearizationsPanel(PGFWrapper pgf, PGF.Linearizations lins) {
 		this.pgf = pgf;
 		
 		HorizontalPanel hPanel = new HorizontalPanel();
@@ -23,13 +23,13 @@ public class LinearizationsPanel extends Composite {
 		HorizontalPanel btnPanel = new HorizontalPanel();
 		btnPanel.addStyleName("my-translation-btns");
 		btnPanel.setSpacing(4);
-		btnPanel.add(createAbsTreeButton(tree));
-		btnPanel.add(createAlignButton(tree));
+		btnPanel.add(createAbsTreeButton(lins.getTree()));
+		btnPanel.add(createAlignButton(lins.getTree()));
 		hPanel.add(btnPanel);
 		hPanel.setCellHorizontalAlignment(btnPanel,HasHorizontalAlignment.ALIGN_RIGHT);
 
-		for (PGF.Linearization l : lins.iterable()) {
-			linsPanel.add(createTranslation(l.getTo(), tree, l.getText()));
+		for (PGF.Linearization l : lins.getLinearizations().iterable()) {
+			linsPanel.add(createTranslation(l.getTo(), lins.getTree(), l.getText()));
 		}
 		
 		initWidget(hPanel);

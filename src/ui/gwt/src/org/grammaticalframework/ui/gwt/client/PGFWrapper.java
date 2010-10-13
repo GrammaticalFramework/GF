@@ -158,8 +158,12 @@ public class PGFWrapper {
 		return pgf.browse(grammarURL, id, href, cssClass, callback);
 	}
 
-	public JSONRequest query(String query, PGF.QueryCallback callback) {
-		return pgf.query(grammarURL, query, callback);
+	public JSONRequest generateAll(String cat, int depth, int limit, PGF.GenerationCallback callback) {
+		return pgf.generateAll(grammarURL, cat, depth, limit, outputLanguage, callback);
+	}
+
+	public JSONRequest generateRandom(String cat, int depth, int limit, PGF.GenerationCallback callback) {
+		return pgf.generateRandom(grammarURL, cat, depth, limit, outputLanguage, callback);
 	}
 
 	//

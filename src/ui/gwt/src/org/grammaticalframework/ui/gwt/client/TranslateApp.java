@@ -38,31 +38,15 @@ public class TranslateApp implements EntryPoint {
 		outputPanel.addStyleDependentName("working");
 		pgf.translate(getText(), 
 				new PGF.TranslateCallback() {
-			public void onResult (PGF.Translations translations) {
+			public void onResult (IterableJsArray<PGF.TranslationResult> translations) {
 				outputPanel.clear();
 				outputPanel.removeStyleDependentName("working");
 				for (PGF.TranslationResult tr : translations.iterable()) {
-					if (tr.getTranslations() != null)
-						for (PGF.Translation t : tr.getTranslations().iterable()) {
-							HorizontalPanel hPanel = new HorizontalPanel();
-							hPanel.addStyleName("my-translation-frame");
-							VerticalPanel linsPanel = new VerticalPanel();
-							linsPanel.addStyleName("my-translation-bar");
-							hPanel.add(linsPanel);
-							HorizontalPanel btnPanel = new HorizontalPanel();
-							btnPanel.addStyleName("my-translation-btns");
-							btnPanel.setSpacing(4);
-							btnPanel.add(createAbsTreeButton(t.getTree()));
-							btnPanel.add(createAlignButton(t.getTree()));
-							hPanel.add(btnPanel);
-							hPanel.setCellHorizontalAlignment(btnPanel,
-							HasHorizontalAlignment.ALIGN_RIGHT);
-							outputPanel.add(hPanel);
-
-							for (PGF.Linearization l : t.getLinearizations().iterable()) {
-								linsPanel.add(createTranslation(l.getTo(), t.getTree(), l.getText()));
-							}
+					if (tr.getTranslations() != null) {
+						for (PGF.Linearizations t : tr.getTranslations().iterable()) {
+							outputPanel.add(new LinearizationsPanel(pgf, t));
 						}
+					}
 
 					if (tr.getTypeErrors() != null && tr.getTypeErrors().length > 0) {
 						for (PGF.TcError error : tr.getTypeErrors()) {

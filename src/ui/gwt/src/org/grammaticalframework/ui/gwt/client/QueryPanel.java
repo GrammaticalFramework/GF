@@ -8,9 +8,14 @@ import com.google.gwt.user.client.ui.*;
 public class QueryPanel extends Composite {
 
 	private PGFWrapper pgf;
+	private StatusPopup statusPopup;
+	private TextArea queryBox;
+	private VerticalPanel outputPanel;
+	private JSONRequest executeRequest = null;
 
-	public QueryPanel(PGFWrapper pgf) {
+	public QueryPanel(PGFWrapper pgf, StatusPopup statusPopup) {
 		this.pgf = pgf;
+		this.statusPopup = statusPopup;
 
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.add(createQueryPanel());
@@ -18,61 +23,46 @@ public class QueryPanel extends Composite {
 		initWidget(vPanel);
 		setStylePrimaryName("my-QueryPanel");
 
-		pgf.addSettingsListener(new MySettingsListener(pgf));
+		pgf.addSettingsListener(new MySettingsListener());
 	}
 
 	protected Widget createQueryPanel() {
-		final TextArea queryBox = new TextArea();
+		queryBox = new TextArea();
 		queryBox.setStylePrimaryName("my-QueryBox");
+		queryBox.setTitle("Goal category");
+
+		HorizontalPanel boxPanel = new HorizontalPanel();
+		boxPanel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+		boxPanel.setSpacing(5);
 		
-		final Grid resultGrid = new Grid(0, 1);
-		resultGrid.setStylePrimaryName("my-ResultGrid");
-		resultGrid.setBorderWidth(3);
+		final TextBox limitBox = new TextBox();
+		limitBox.setTitle("Upper limit of the number of examples generated");
+		limitBox.setWidth("5em");
+		limitBox.setText("10");
+		boxPanel.add(new Label("limit:"));
+		boxPanel.add(limitBox);
+
+		boxPanel.add(new HTML(""));
+
+		final TextBox depthBox = new TextBox();
+		depthBox.setTitle("Maximal depth for every example");
+		depthBox.setWidth("5em");
+		depthBox.setText("4");
+		boxPanel.add(new Label("depth:"));
+		boxPanel.add(depthBox);
 		
+		boxPanel.add(new HTML(""));
+
+		final CheckBox randomBox = new CheckBox();
+		randomBox.setTitle("random/exhaustive generation");
+		randomBox.setText("random");
+		boxPanel.add(randomBox);
+
+		outputPanel = new VerticalPanel();
+		outputPanel.addStyleName("my-translations");
+		outputPanel.addStyleDependentName("working");
+
 		Button execButton = new Button("Execute");
-		execButton.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
-				pgf.query(queryBox.getText(), new PGF.QueryCallback() {
-					public void onResult(PGF.QueryResult result) {
-						while (resultGrid.getRowCount() > 0) {
-							resultGrid.removeRow(resultGrid.getRowCount() - 1);
-						}
-
-						ClickListener labelClickListener = new ClickListener() {
-							public void onClick(Widget sender) {
-								final Label label = (Label) sender;
-								pgf.linearize(label.getText(), new PGF.LinearizeCallback() {
-					public void onResult(PGF.Linearizations result) {
-						final PopupPanel popup = new PopupPanel(true);
-						popup.setWidget(new LinearizationsPanel(pgf, label.getText(), result));
-						popup.setPopupPosition(label.getAbsoluteLeft(),
-							               label.getAbsoluteTop()+label.getOffsetHeight());
-						popup.show();
-					}
-
-					public void onError(Throwable e) {
-
-					}
-				});
-							}
-						};
-						
-						int row = 0;
-						for (String tree : result.getRows()) {
-							Label label = new Label(tree);
-							label.addClickListener(labelClickListener);
-							resultGrid.insertRow(row);
-							resultGrid.setWidget(row, 0, label);
-							row++;
-						}
-					}
-
-					public void onError(Throwable e) {
-
-					}
-				});
-			}
-		});
 
 		DecoratorPanel queryDecorator = new DecoratorPanel();
 		VerticalPanel vPanel = new VerticalPanel();
@@ -81,26 +71,70 @@ public class QueryPanel extends Composite {
 		hPanel.add(queryBox);
 		hPanel.add(execButton);
 		vPanel.add(hPanel);
+		vPanel.add(boxPanel);
 		queryDecorator.add(vPanel);
 
 		VerticalPanel queryPanel = new VerticalPanel();
 		queryPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		queryPanel.add(queryDecorator);
-		queryPanel.add(resultGrid);
+		queryPanel.add(outputPanel);
+		
+		execButton.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				if (executeRequest != null) {
+					executeRequest.cancel();
+				}
+		
+				PGF.GenerationCallback callback = new PGF.GenerationCallback() {
+					public void onResult(IterableJsArray<PGF.Linearizations> result) {
+						executeRequest = null;
+						
+						outputPanel.clear();
+						outputPanel.removeStyleDependentName("working");
+
+						for (PGF.Linearizations lins : result.iterable()) {
+							LinearizationsPanel lin = new LinearizationsPanel(pgf, lins);
+							lin.setWidth("100%");
+							outputPanel.add(lin);
+						}
+					}
+
+					public void onError(Throwable e) {
+						executeRequest = null;
+						statusPopup.showError("The execution failed", e);
+					}
+				};
+			
+				int depth, limit;
+				try {
+					depth = Integer.parseInt(depthBox.getText());
+					limit = Integer.parseInt(limitBox.getText());
+				} catch (NumberFormatException e) {
+					return;
+				}
+
+				if (randomBox.getValue())
+					executeRequest = pgf.generateRandom(queryBox.getText(), depth, limit, callback);
+				else
+					executeRequest = pgf.generateAll(queryBox.getText(), depth, limit, callback);
+			}
+		});
 		
 		return queryPanel;
 	}
 
 	protected class MySettingsListener implements PGFWrapper.SettingsListener {
 
-		private PGFWrapper pgf;
-
-		public MySettingsListener(PGFWrapper pgf) {
-			this.pgf = pgf;
+		public MySettingsListener() {
 		}
 
 		public void onAvailableGrammarsChanged() { }
-		public void onSelectedGrammarChanged() { }
+
+		public void onSelectedGrammarChanged() {
+			queryBox.setText("");
+			outputPanel.clear();
+		}
+
 		public void onInputLanguageChanged() { }
 		public void onOutputLanguageChanged() {	}
 		public void onStartCategoryChanged() { }

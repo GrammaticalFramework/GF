@@ -57,7 +57,7 @@ public class EditorApp implements EntryPoint {
 		outputPanel.addStyleDependentName("working");
 		translateRequest = pgf.translate(textPanel.getText(),
 				new PGF.TranslateCallback() {
-			public void onResult (PGF.Translations translations) {
+			public void onResult (IterableJsArray<PGF.TranslationResult> translations) {
 				translateRequest = null;
 
 				outputPanel.clear();
@@ -66,8 +66,8 @@ public class EditorApp implements EntryPoint {
 					textPanel.renderBracketedString(tr.getBracketedString());
 
 					if (tr.getTranslations() != null)
-						for (PGF.Translation t : tr.getTranslations().iterable()) {
-							LinearizationsPanel lin = new LinearizationsPanel(pgf, t.getTree(), t.getLinearizations());
+						for (PGF.Linearizations lins : tr.getTranslations().iterable()) {
+							LinearizationsPanel lin = new LinearizationsPanel(pgf, lins);
 							lin.setWidth("100%");
 							outputPanel.add(lin);
 						}
@@ -89,7 +89,7 @@ public class EditorApp implements EntryPoint {
 			public void onError (Throwable e) {
 				translateRequest = null;
 
-				showError("Translation failed", e);
+				statusPopup.showError("Translation failed", e);
 			}
 		});
 	}
@@ -155,7 +155,7 @@ public class EditorApp implements EntryPoint {
 		bagPanel.clear();
 		completeRequest = pgf.complete(query, LIMIT_SCALE_FACTOR * maxMagnets,
 					 new PGF.CompleteCallback() {
-			public void onResult(PGF.Completions completions) {
+			public void onResult(IterableJsArray<PGF.Completion> completions) {
 				completeRequest = null;
 
 				cachedPrefix = query;
@@ -188,26 +188,9 @@ public class EditorApp implements EntryPoint {
 			public void onError(Throwable e) {
 				completeRequest = null;
 
-				showError("Getting completions failed", e);
+				statusPopup.showError("Getting completions failed", e);
 			}
 		});
-	}
-
-
-	//
-	// Status stuff
-	//
-
-	protected void setStatus(String msg) {
-		statusPopup.setStatus(msg);
-	}
-
-	protected void showError(String msg, Throwable e) {
-		statusPopup.showError(msg, e);
-	}
-
-	protected void clearStatus() {
-		statusPopup.clearStatus();
 	}
 
 	//
@@ -313,11 +296,11 @@ public class EditorApp implements EntryPoint {
 	}
 
 	protected BrowsePanel createBrowsePanel() {
-		return new BrowsePanel(pgf);
+		return new BrowsePanel(pgf, statusPopup);
 	}
 
 	protected QueryPanel createQueryPanel() {
-		return new QueryPanel(pgf);
+		return new QueryPanel(pgf, statusPopup);
 	}
 
 	protected DocumentsPanel createDocumentsPanel() {
@@ -435,7 +418,7 @@ public class EditorApp implements EntryPoint {
 			update();
 		}
 		public void onSettingsError(String msg, Throwable e) {
-			showError(msg,e);
+			statusPopup.showError(msg,e);
 		}
 	}
 

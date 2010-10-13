@@ -118,7 +118,7 @@ public class CompletionOracle extends SuggestOracle {
 
 		jsonRequest = pgf.complete(request.getQuery(), LIMIT_SCALE_FACTOR * request.getLimit(), 
 				new PGF.CompleteCallback() {
-			public void onResult(PGF.Completions completions) {
+			public void onResult(IterableJsArray<PGF.Completion> completions) {
 				jsonRequest = null;
 				List<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();
 				for (PGF.Completion completion : completions.iterable()) {
