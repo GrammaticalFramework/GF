@@ -110,6 +110,7 @@ public class QueryPanel extends Composite {
 					depth = Integer.parseInt(depthBox.getText());
 					limit = Integer.parseInt(limitBox.getText());
 				} catch (NumberFormatException e) {
+					statusPopup.showError("Invalid depth/limit parameter", e);
 					return;
 				}
 
