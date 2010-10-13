@@ -88,7 +88,8 @@ pgfMain pgf command =
          "parse"          -> outputJSONP =<< doParse pgf `fmap` getText `ap` getCat `ap` getFrom 
          "complete"       -> outputJSONP =<< doComplete pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit
          "linearize"      -> outputJSONP =<< doLinearize pgf `fmap` getTree `ap` getTo
-         "random"         -> getCat >>= \c -> getLimit >>= liftIO . doRandom pgf c >>= outputJSONP
+         "random"         -> getCat >>= \c -> getDepth >>= \dp -> getLimit >>= \l -> getTo >>= \to -> liftIO (doRandom pgf c dp l to) >>= outputJSONP
+         "generate"       -> outputJSONP =<< doGenerate pgf `fmap` getCat `ap` getDepth `ap` getLimit `ap` getTo
          "translate"      -> outputJSONP =<< doTranslate pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo
          "translategroup" -> outputJSONP =<< doTranslateGroup pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo
          "grammar"        -> outputJSONP =<< doGrammar pgf `fmap` requestAcceptLanguage
@@ -143,6 +144,9 @@ pgfMain pgf command =
 
     getLimit :: CGI (Maybe Int)
     getLimit = readInput "limit"
+
+    getDepth :: CGI (Maybe Int)
+    getDepth = readInput "depth"
 
     getLang :: String -> CGI (Maybe PGF.Language)
     getLang i = 
@@ -264,11 +268,30 @@ doLinearize :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
 doLinearize pgf tree mto = showJSON $ map toJSObject
      [[("to", PGF.showLanguage to),("text",text)] | (to,text) <- linearize' pgf mto tree]
 
-doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> IO JSValue
-doRandom pgf mcat mlimit = 
-    do trees <- random' pgf mcat
-       return $ showJSON $ map toJSObject [[("tree", PGF.showExpr [] tree)] | tree <- limit trees]
-  where limit = take (fromMaybe 1 mlimit)
+doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> Maybe PGF.Language -> IO JSValue
+doRandom pgf mcat mdepth mlimit mto =
+  do g <- newStdGen
+     let trees = PGF.generateRandomDepth g pgf cat (Just depth)
+     return $ showJSON $
+          [toJSObject [("tree", showJSON (PGF.showExpr [] tree)),
+                       ("linearizations", showJSON [toJSObject [("to", PGF.showLanguage to),("text",text)] 
+                                                          | (to,text) <- linearize' pgf mto tree])]
+                 | tree <- limit trees]
+  where cat = fromMaybe (PGF.startCat pgf) mcat
+        limit = take (fromMaybe 1 mlimit)
+        depth = fromMaybe 4 mdepth
+
+doGenerate :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> Maybe PGF.Language -> JSValue
+doGenerate pgf mcat mdepth mlimit mto = 
+  let trees = PGF.generateAllDepth pgf cat (Just depth)
+  in showJSON $
+          [toJSObject [("tree", showJSON (PGF.showExpr [] tree)),
+                       ("linearizations", showJSON [toJSObject [("to", PGF.showLanguage to),("text",text)] 
+                                                          | (to,text) <- linearize' pgf mto tree])]
+                 | tree <- limit trees]
+  where cat = fromMaybe (PGF.startCat pgf) mcat
+        limit = take (fromMaybe 1 mlimit)
+        depth = fromMaybe 4 mdepth
 
 doGrammar :: PGF -> Maybe (Accept Language) -> JSValue
 doGrammar pgf macc = showJSON $ toJSObject
@@ -465,11 +488,6 @@ linearizeAndBind pgf mto t = [(la, binds s) | (la,s) <- linearize' pgf mto t]
       u:"&+":v:ws2 -> bs ((u ++ v):ws2)
       u:ws2        -> u : bs ws2
       _            -> []
-
-random' :: PGF -> Maybe PGF.Type -> IO [PGF.Tree]
-random' pgf mcat = do
-  g <- newStdGen
-  return $ PGF.generateRandom g pgf (fromMaybe (PGF.startCat pgf) mcat)
 
 selectLanguage :: PGF -> Maybe (Accept Language) -> PGF.Language
 selectLanguage pgf macc = case acceptable of
