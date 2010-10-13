@@ -6,7 +6,7 @@ cat [Nat] ;
 cat Vec (s,l : Nat) [Nat] ;
 cat Sat Nat Nat [Nat] ;
 
-data queens : Matrix (succ (succ (succ (succ (succ (succ (succ (succ zero)))))))) -> S ;
+data nqueens : (n : Nat) -> Matrix n -> S ;
 
 data nilV  : ({s} : Nat) -> ({c} : [Nat]) -> Vec s zero c ;
      consV : ({l},j,k : Nat) -> 
