@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts, RankNTypes #-}
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, RankNTypes #-}
 
 ----------------------------------------------------------------------
 -- |
@@ -20,7 +20,7 @@ module PGF.TypeCheck ( checkType, checkExpr, inferExpr
                      -- internals needed for the typechecking of forests
                      , MetaStore, emptyMetaStore, newMeta, newGuardedMeta, fillinVariables, getMeta, setMeta, MetaValue(..)
                      , Scope, emptyScope, scopeSize, scopeEnv, addScopedVar
-                     , TcM(..), TcResult(..), TType(..), Selector(..), tcError
+                     , TcM(..), TcResult(..), runTcM, TType(..), Selector(..)
                      , tcExpr, infExpr, eqType, eqValue
                      , lookupFunType, eval
                      , refineExpr, checkResolvedMetaStore, lookupMeta
@@ -38,8 +38,9 @@ import Data.Maybe as Maybe
 import Data.List as List
 import Control.Monad
 import Control.Monad.Identity
+import Control.Monad.State
+import Control.Monad.Error
 import Text.PrettyPrint
-import System.Random as Random
 
 -----------------------------------------------------
 -- The Scope
@@ -85,16 +86,20 @@ data MetaValue s
 newtype TcM s a = TcM {unTcM :: Abstr -> s -> MetaStore s -> TcResult s a}
 data TcResult s a
   = Ok s (MetaStore s) a
-  | Fail TcError
+  | Fail s TcError
   | Zero
   | Plus (TcResult s a) (TcResult s a)
+
+class Selector s where
+  splitSelector :: s -> (s,s)
+  select        :: CId -> Maybe Int -> TcM s (Expr,Type)
 
 instance Monad (TcM s) where
   return x = TcM (\abstr s ms -> Ok s ms x)
   f >>= g  = TcM (\abstr s ms -> iter abstr (unTcM f abstr s ms))
     where
       iter abstr (Ok s ms x)  = unTcM (g x) abstr s ms
-      iter abstr (Fail e)     = Fail e
+      iter abstr (Fail s e)   = Fail s e
       iter abstr Zero         = Zero
       iter abstr (Plus b1 b2) = Plus (iter abstr b1) (iter abstr b2)
 
@@ -103,23 +108,44 @@ instance Selector s => MonadPlus (TcM s) where
   mplus f g = TcM (\abstr s ms -> let (s1,s2) = splitSelector s
                                   in Plus (unTcM f abstr s1 ms) (unTcM g abstr s2 ms))
 
+instance MonadState s (TcM s) where
+  get = TcM (\abstr s ms -> Ok s ms s)
+  put s = TcM (\abstr _ ms -> Ok s ms ())
+
+instance MonadError TcError (TcM s) where
+  throwError e = TcM (\abstr s ms -> Fail s e)
+  catchError f h = TcM (\abstr s ms -> iter abstr ms (unTcM f abstr s ms))
+    where
+      iter abstr _  (Ok s ms x)  = Ok s ms x
+      iter abstr ms (Fail s e)   = unTcM (h e) abstr s ms
+      iter abstr _  Zero         = Zero
+      iter abstr ms (Plus b1 b2) = Plus (iter abstr ms b1) (iter abstr ms b2)
+
 instance Functor (TcM s) where
   fmap f x = TcM (\abstr s ms -> iter (unTcM x abstr s ms))
     where
       iter (Ok s ms x)  = Ok s ms (f x)
-      iter (Fail e)     = Fail e
+      iter (Fail s e)   = Fail s e
       iter Zero         = Zero
       iter (Plus b1 b2) = Plus (iter b1) (iter b2)
+
+runTcM :: Abstr -> TcM s a -> s -> MetaStore s -> ([(s,TcError)],[(s,MetaStore s,a)])
+runTcM abs f s ms = collect (unTcM f abs s ms) ([],[])
+  where
+    collect (Ok _ ms x)  (es,xs) = (es,(s,ms,x) : xs)
+    collect (Fail s e)   (es,xs) = ((s,e) : es,xs)
+    collect (Zero)       exs     = exs
+    collect (Plus b1 b2) exs     = collect b1 (collect b2 exs)
 
 lookupCatHyps :: CId -> TcM s [Hypo]
 lookupCatHyps cat = TcM (\abstr s ms -> case Map.lookup cat (cats abstr) of
                                           Just (hyps,_) -> Ok s ms hyps
-                                          Nothing       -> Fail (UnknownCat cat))
+                                          Nothing       -> Fail s (UnknownCat cat))
 
 lookupFunType :: CId -> TcM s Type
 lookupFunType fun = TcM (\abstr s ms -> case Map.lookup fun (funs abstr) of
                                           Just (ty,_,_,_) -> Ok s ms ty
-                                          Nothing         -> Fail (UnknownFun fun))
+                                          Nothing         -> Fail s (UnknownFun fun))
 
 emptyMetaStore :: MetaStore s
 emptyMetaStore = IntMap.empty
@@ -156,9 +182,6 @@ fillinVariables f = do
                              setMeta i (MBound e)
                              sequence_ [c e | c <- cs]
                              fillinVariables f
-
-tcError :: TcError -> TcM s a
-tcError e = TcM (\abstr s ms -> Fail e)
 
 addConstraint :: MetaId -> MetaId -> (Expr -> TcM s ()) -> TcM s ()
 addConstraint i j c = do
@@ -221,43 +244,6 @@ ppTcError (UnexpectedImplArg xs e)     = braces (ppExpr 0 xs e) <+> text "is imp
 ppTcError (UnsolvableGoal xs metaid ty)= text "The goal:" <+> ppMeta metaid <+> colon <+> ppType 0 xs ty $$
                                          text "cannot be solved"
 
-------------------------------------------------------------------------------
--- Selectors
-
-class Selector s where
-  splitSelector :: s -> (s,s)
-  select        :: CId -> TcM s CId
-
-instance Selector () where
-  splitSelector s = (s,s)
-  select cat = TcM (\abstr s ms -> case Map.lookup cat (cats abstr) of
-                                     Just (_,fns) -> iter ms fns
-                                     Nothing      -> Fail (UnknownCat cat))
-    where
-      iter ms []           = Zero
-      iter ms ((_,fn):fns) = Plus (Ok () ms fn) (iter ms fns)
-
-instance RandomGen g => Selector (Identity g) where
-  splitSelector (Identity g) = let (g1,g2) = Random.split g
-                               in (Identity g1, Identity g2)
-
-  select cat = TcM (\abstr (Identity g) ms ->
-                               case Map.lookup cat (cats abstr) of
-                                 Just (_,fns) -> do_rand g ms 1.0 fns
-                                 Nothing      -> Fail (UnknownCat cat))
-    where
-      do_rand g ms p []  = Zero
-      do_rand g ms p fns = let (d,g')    = randomR (0.0,p) g
-                               (g1,g2)   = Random.split g'
-                               (p',fn,fns') = hit d fns
-                           in Plus (Ok (Identity g1) ms fn) (do_rand g2 ms (p-p') fns')
-
-      hit :: Double -> [(Double,a)] -> (Double,a,[(Double,a)])
-      hit d (px@(p,x):xs)
-        | d < p     = (p,x,xs)
-        | otherwise = let (p',x',xs') = hit (d-p) xs
-                      in (p,x',px:xs')
-
 -----------------------------------------------------
 -- checkType
 -----------------------------------------------------
@@ -268,7 +254,7 @@ checkType :: PGF -> Type -> Either TcError Type
 checkType pgf ty = 
   case unTcM (tcType emptyScope ty >>= refineType) (abstract pgf) () emptyMetaStore of
     Ok s ms ty -> Right ty
-    Fail err   -> Left  err
+    Fail _ err -> Left  err
 
 tcType :: Scope -> Type -> TcM s Type
 tcType scope ty@(DTyp hyps cat es) = do
@@ -294,7 +280,7 @@ tcHypo scope (b,x,ty) = do
     else return (addScopedVar x (TTyp (scopeEnv scope) ty) scope,(b,x,ty))
 
 tcCatArgs scope []              delta []                   ty0 n m = return (delta,[])
-tcCatArgs scope (EImplArg e:es) delta ((Explicit,x,ty):hs) ty0 n m = tcError (UnexpectedImplArg (scopeVars scope) e)
+tcCatArgs scope (EImplArg e:es) delta ((Explicit,x,ty):hs) ty0 n m = throwError (UnexpectedImplArg (scopeVars scope) e)
 tcCatArgs scope (EImplArg e:es) delta ((Implicit,x,ty):hs) ty0 n m = do
   e <- tcExpr scope e (TTyp delta ty)
   (delta,es) <- if x == wildCId
@@ -316,7 +302,7 @@ tcCatArgs scope (e:es) delta ((Explicit,x,ty):hs) ty0 n m = do
                           tcCatArgs scope es (v:delta) hs ty0 n m
   return (delta,e:es)
 tcCatArgs scope _ delta _ ty0@(DTyp _ cat _) n m = do
-  tcError (WrongCatArgs (scopeVars scope) ty0 cat n m)
+  throwError (WrongCatArgs (scopeVars scope) ty0 cat n m)
 
 -----------------------------------------------------
 -- checkExpr
@@ -329,8 +315,8 @@ checkExpr pgf e ty =
                  e <- refineExpr e
                  checkResolvedMetaStore emptyScope e
                  return e) (abstract pgf) () emptyMetaStore of
-    Ok _ ms e -> Right e
-    Fail err  -> Left err
+    Ok _ ms e  -> Right e
+    Fail _ err -> Left err
 
 tcExpr :: Scope -> Expr -> TType -> TcM s Expr
 tcExpr scope e0@(EAbs Implicit x e) tty =
@@ -342,7 +328,7 @@ tcExpr scope e0@(EAbs Implicit x e) tty =
                                                                          e (TTyp ((VGen (scopeSize scope) []):delta) (DTyp hs c es))
                                                       return (EAbs Implicit x e)
     _                                           -> do ty <- evalType (scopeSize scope) tty
-                                                      tcError (NotFunType (scopeVars scope) e0 ty)
+                                                      throwError (NotFunType (scopeVars scope) e0 ty)
 tcExpr scope e0 (TTyp delta (DTyp ((Implicit,y,ty):hs) c es)) = do
   e0 <- if y == wildCId
           then tcExpr (addScopedVar wildCId (TTyp delta ty) scope)
@@ -359,7 +345,7 @@ tcExpr scope e0@(EAbs Explicit x e) tty =
                                                                          e (TTyp ((VGen (scopeSize scope) []):delta) (DTyp hs c es))
                                                       return (EAbs Explicit x e)
     _                                           -> do ty <- evalType (scopeSize scope) tty
-                                                      tcError (NotFunType (scopeVars scope) e0 ty)
+                                                      throwError (NotFunType (scopeVars scope) e0 ty)
 tcExpr scope (EMeta _) tty = do
   i <- newMeta scope tty
   return (EMeta i)
@@ -386,7 +372,7 @@ inferExpr pgf e =
                  ty <- evalType 0 tty
                  return (e,ty)) (abstract pgf) () emptyMetaStore of
     Ok _ ms (e,ty) -> Right (e,ty)
-    Fail err       -> Left err
+    Fail _ err     -> Left err
 
 infExpr :: Scope -> Expr -> TcM s (Expr,TType)
 infExpr scope e0@(EApp e1 e2) = do
@@ -413,12 +399,12 @@ infExpr scope (ETyped e ty) = do
 infExpr scope (EImplArg e) = do
   (e,tty)  <- infExpr scope e
   return (EImplArg e,tty)
-infExpr scope e = tcError (CannotInferType (scopeVars scope) e)
+infExpr scope e = throwError (CannotInferType (scopeVars scope) e)
 
 tcArg scope e1 e2 delta ty0@(DTyp [] c es) = do
   ty1 <- evalType (scopeSize scope) (TTyp delta ty0)
-  tcError (NotFunType (scopeVars scope) e1 ty1)
-tcArg scope e1 (EImplArg e2) delta ty0@(DTyp ((Explicit,x,ty):hs) c es) = tcError (UnexpectedImplArg (scopeVars scope) e2)
+  throwError (NotFunType (scopeVars scope) e1 ty1)
+tcArg scope e1 (EImplArg e2) delta ty0@(DTyp ((Explicit,x,ty):hs) c es) = throwError (UnexpectedImplArg (scopeVars scope) e2)
 tcArg scope e1 (EImplArg e2) delta ty0@(DTyp ((Implicit,x,ty):hs) c es) = do
   e2 <- tcExpr scope e2 (TTyp delta ty)
   if x == wildCId
@@ -450,7 +436,7 @@ eqType scope k i0 tty1@(TTyp delta1 ty1@(DTyp hyps1 cat1 es1)) tty2@(TTyp delta2
     raiseTypeMatchError = do ty1 <- evalType k tty1
                              ty2 <- evalType k tty2
                              e   <- refineExpr (EMeta i0)
-                             tcError (TypeMismatch (scopeVars scope) e ty1 ty2)
+                             throwError (TypeMismatch (scopeVars scope) e ty1 ty2)
 
     eqHyps :: Int -> Env -> [Hypo] -> Env -> [Hypo] -> TcM s (Int,Env,Env)
     eqHyps k delta1 []                 delta2 []                 =
@@ -558,7 +544,7 @@ checkResolvedMetaStore scope e = TcM (\abstr s ms ->
   let xs = [i | (i,mv) <- IntMap.toList ms, not (isResolved mv)]
   in if List.null xs
        then Ok s ms ()
-       else Fail (UnresolvedMetaVars (scopeVars scope) e xs))
+       else Fail s (UnresolvedMetaVars (scopeVars scope) e xs))
   where
     isResolved (MUnbound _ _ []) = True
     isResolved (MGuarded  _ _ _) = True

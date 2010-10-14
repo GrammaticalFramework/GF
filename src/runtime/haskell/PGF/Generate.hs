@@ -12,11 +12,16 @@ import PGF.Macros
 import PGF.TypeCheck
 import PGF.Probabilistic
 
+import Data.Maybe (fromMaybe)
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import Control.Monad
 import Control.Monad.Identity
 import System.Random
+
+
+------------------------------------------------------------------------------
+-- The API
 
 -- | Generates an exhaustive possibly infinite list of
 -- abstract syntax expressions.
@@ -66,24 +71,23 @@ generateRandomFromDepth g pgf e dp =
 
 generate :: Selector sel => sel -> PGF -> Type -> Maybe Int -> [Expr]
 generate sel pgf ty dp =
-  [value2expr (funs (abstract pgf),lookupMeta ms) 0 v |
-        (ms,v) <- runGenM (abstract pgf) (prove emptyScope (TTyp [] ty) dp) sel emptyMetaStore]
+  [e | (_,ms,e) <- snd $ runTcM (abstract pgf) (prove emptyScope (TTyp [] ty) dp >>= refineExpr) sel emptyMetaStore]
 
 generateForMetas :: Selector sel => sel -> PGF -> Expr -> Maybe Int -> [Expr]
 generateForMetas sel pgf e dp =
   case unTcM (infExpr emptyScope e) abs sel emptyMetaStore of
     Ok sel ms (e,_) -> let gen = do fillinVariables $ \scope tty -> do 
-                                      v <- prove scope tty dp
-                                      return (value2expr (funs abs,lookupMeta ms) 0 v)
+                                       prove scope tty dp
                                     refineExpr e
-                       in [e | (ms,e) <- runGenM abs gen sel ms]
-    Fail _          -> []
+                       in [e | (_,ms,e) <- snd $ runTcM abs gen sel ms]
+    Fail _ _        -> []
   where
     abs = abstract pgf
 
-prove :: Selector sel => Scope -> TType -> Maybe Int -> TcM sel Value
+prove :: Selector sel => Scope -> TType -> Maybe Int -> TcM sel Expr
 prove scope (TTyp env1 (DTyp [] cat es1)) dp = do
-  (fn,DTyp hypos _ es2) <- clauses cat
+  (fe,DTyp hypos _ es2) <- select cat dp
+  if fe == EFun (mkCId "plus") then mzero else return ()
   case dp of
     Just 0 | not (null hypos) -> mzero
     _                         -> return ()
@@ -91,55 +95,34 @@ prove scope (TTyp env1 (DTyp [] cat es1)) dp = do
   vs1 <- mapM (PGF.TypeCheck.eval env1) es1
   vs2 <- mapM (PGF.TypeCheck.eval env2) es2
   sequence_ [eqValue mzero suspend (scopeSize scope) v1 v2 | (v1,v2) <- zip vs1 vs2]
-  vs <- mapM descend args
-  return (VApp fn vs)
+  es <- mapM descend args
+  return (foldl EApp fe es)
   where
     suspend i c = do
       mv <- getMeta i
       case mv of
         MBound e -> c e
-        MUnbound scope tty cs -> do v <- prove scope tty dp
-                                    e <- TcM (\abs sel ms -> Ok sel ms (value2expr (funs abs,lookupMeta ms) 0 v))
+        MUnbound scope tty cs -> do e <- prove scope tty dp
                                     setMeta i (MBound e)
                                     sequence_ [c e | c <- (c:cs)]
-
-    clauses cat = do
-      fn <- select cat
-      if fn == mkCId "plus" then mzero else return ()
-      ty <- lookupFunType fn
-      return (fn,ty)
 
     mkEnv env []                = return (env,[])
     mkEnv env ((bt,x,ty):hypos) = do
       (env,arg) <- if x /= wildCId
                     then do i <- newMeta scope (TTyp env ty)
-                            let v = VMeta i env []
-                            return (v : env,Right v)
+                            return (VMeta i env [] : env,Right (EMeta i))
                     else return (env,Left (TTyp env ty))
       (env,args) <- mkEnv env hypos
       return (env,(bt,arg):args)
 
     descend (bt,arg) = do let dp' = fmap (flip (-) 1) dp
-                          v <- case arg of
-                                 Right v  -> return v
+                          e <- case arg of
+                                 Right e  -> return e
                                  Left tty -> prove scope tty dp'
-                          v <- case bt of
-                                 Implicit -> return (VImplArg v)
-                                 Explicit -> return v
-                          return v
-
-
-------------------------------------------------------------------------------
--- Generation Monad
-
-
-runGenM :: Abstr -> TcM s a -> s -> MetaStore s -> [(MetaStore s,a)]
-runGenM abs f s ms = toList (unTcM f abs s ms) []
-  where
-    toList (Ok s ms x)  xs = (ms,x) : xs
-    toList (Fail _)     xs = xs
-    toList (Zero)       xs = xs
-    toList (Plus b1 b2) xs = toList b1 (toList b2 xs)
+                          e <- case bt of
+                                 Implicit -> return (EImplArg e)
+                                 Explicit -> return e
+                          return e
 
 
 -- Helper function for random generation. After every
@@ -150,3 +133,57 @@ restart g f =
   in case f g1 of
        []     -> []
        (x:xs) -> x : restart g2 f
+
+
+------------------------------------------------------------------------------
+-- Selectors
+
+instance Selector () where
+  splitSelector s = (s,s)
+  select cat dp
+    | cat == cidInt    = return (ELit (LInt 999),  DTyp [] cat [])
+    | cat == cidFloat  = return (ELit (LFlt 3.14), DTyp [] cat [])
+    | cat == cidString = return (ELit (LStr "Foo"),DTyp [] cat [])
+    | otherwise        = TcM (\abstr s ms -> case Map.lookup cat (cats abstr) of
+                                               Just (_,fns) -> iter abstr ms fns
+                                               Nothing      -> Fail s (UnknownCat cat))
+    where
+      iter abstr ms []           = Zero
+      iter abstr ms ((_,fn):fns) = Plus (select_helper fn abstr () ms) (iter abstr ms fns)
+
+instance RandomGen g => Selector (Identity g) where
+  splitSelector (Identity g) = let (g1,g2) = split g
+                               in (Identity g1, Identity g2)
+
+  select cat dp
+    | cat == cidInt    = TcM (\abstr (Identity g) ms ->
+                                  let (n,g') = maybe random (\d -> randomR ((-10)*d,10*d)) dp g
+                                  in Ok (Identity g) ms (ELit (LInt n),DTyp [] cat []))
+    | cat == cidFloat  = TcM (\abstr (Identity g) ms ->
+                                  let (d,g') = maybe random (\d' -> let d = fromIntegral d'
+                                                                    in randomR ((-pi)*d,pi*d)) dp g
+                                  in Ok (Identity g) ms (ELit (LFlt d),DTyp [] cat []))
+    | cat == cidString = TcM (\abstr (Identity g) ms ->
+                                  let (g1,g2) = split g
+                                      s = take (fromMaybe 10 dp) (randomRs ('A','Z') g1)
+                                  in Ok (Identity g2) ms (ELit (LStr s),DTyp [] cat []))
+    | otherwise        = TcM (\abstr (Identity g) ms ->
+                                  case Map.lookup cat (cats abstr) of
+                                    Just (_,fns) -> do_rand abstr g ms 1.0 fns
+                                    Nothing      -> Fail (Identity g) (UnknownCat cat))
+    where
+      do_rand abstr g ms p []  = Zero
+      do_rand abstr g ms p fns = let (d,g')    = randomR (0.0,p) g
+                                     (g1,g2)   = split g'
+                                     (p',fn,fns') = hit d fns
+                                 in Plus (select_helper fn abstr (Identity g1) ms) (do_rand abstr g2 ms (p-p') fns')
+
+      hit :: Double -> [(Double,a)] -> (Double,a,[(Double,a)])
+      hit d (px@(p,x):xs)
+        | d < p     = (p,x,xs)
+        | otherwise = let (p',x',xs') = hit (d-p) xs
+                      in (p,x',px:xs')
+
+select_helper fn = unTcM $ do
+  ty <- lookupFunType fn
+  return (EFun fn,ty)
