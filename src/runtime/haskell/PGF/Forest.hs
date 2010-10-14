@@ -1,3 +1,5 @@
+{-# LANGUAGE TypeSynonymInstances #-}
+
 -------------------------------------------------
 -- |
 -- Module      : PGF
@@ -29,6 +31,7 @@ import qualified Data.Map as Map
 import qualified Data.IntSet as IntSet
 import qualified Data.IntMap as IntMap
 import Control.Monad
+import Control.Monad.State
 import GF.Data.SortedList
 
 data Forest
@@ -114,41 +117,39 @@ isLindefCId id
 -- the same as the startup category.
 getAbsTrees :: Forest -> PArg -> Maybe Type -> Either [(FId,TcError)] [Expr]
 getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty =
-  let (res,err) = unTcFM (do e <- go Set.empty emptyScope arg (fmap (TTyp []) ty)
-                             e <- runTcM abs fid (refineExpr e)
-                             runTcM abs fid (checkResolvedMetaStore emptyScope e)
-                             return e) IntMap.empty
+  let (err,res) = runTcM abs (do e <- go Set.empty emptyScope (fmap (TTyp []) ty) arg
+                                 e <- refineExpr e
+                                 checkResolvedMetaStore emptyScope e
+                                 return e) fid IntMap.empty
   in if null res
        then Left  (nub err)
-       else Right (nubsort (map snd res))
+       else Right (nubsort [e | (_,_,e) <- res])
   where
-    go rec_ scope_ (PArg hypos fid) mb_tty_
+    go rec_ scope_ mb_tty_ (PArg hypos fid)
       | fid < totalCats cnc = case mb_tty of
-                                Just tty -> do i <- runTcM abs fid (newMeta scope tty)
+                                Just tty -> do i <- newMeta scope tty
                                                return (mkAbs (EMeta i))
                                 Nothing  -> mzero
       | Set.member fid rec_ = mzero
       | otherwise           = foldForest (\funid args trees ->
                                                   do let CncFun fn lins = cncfuns cnc ! funid
                                                      case isLindefCId fn of
-                                                       Just _  -> do arg <- go (Set.insert fid rec_) scope (head args) mb_tty
+                                                       Just _  -> do arg <- bracket (go (Set.insert fid rec_) scope mb_tty) arg
                                                                      return (mkAbs arg)
-                                                       Nothing -> do ty_fn <- runTcM abs fid (lookupFunType fn)
+                                                       Nothing -> do ty_fn <- lookupFunType fn
                                                                      (e,tty0) <- foldM (\(e1,tty) arg -> goArg (Set.insert fid rec_) scope fid e1 arg tty)
                                                                                        (EFun fn,TTyp [] ty_fn) args
                                                                      case mb_tty of
-                                                                       Just tty -> runTcM abs fid $ do
-                                                                                     i <- newGuardedMeta e
-                                                                                     eqType scope (scopeSize scope) i tty tty0
+                                                                       Just tty -> do i <- newGuardedMeta e
+                                                                                      eqType scope (scopeSize scope) i tty tty0
                                                                        Nothing  -> return ()
                                                                      return (mkAbs e)
                                                   `mplus`
                                                   trees)
                                          (\const _ trees -> do
-                                                  const <- runTcM abs fid $
-                                                             case mb_tty of
-                                                               Just tty ->            tcExpr  scope const tty
-                                                               Nothing  -> fmap fst $ infExpr scope const
+                                                  const <- case mb_tty of
+                                                             Just tty ->            tcExpr  scope const tty
+                                                             Nothing  -> fmap fst $ infExpr scope const
                                                   return (mkAbs const)
                                                   `mplus`
                                                   trees)
@@ -157,13 +158,13 @@ getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty =
         (scope,mkAbs,mb_tty) = updateScope hypos scope_ id mb_tty_
 
     goArg rec_ scope fid e1 arg (TTyp delta (DTyp ((bt,x,ty):hs) c es)) = do
-      e2' <- go rec_ scope arg (Just (TTyp delta ty))
+      e2' <- bracket (go rec_ scope (Just (TTyp delta ty))) arg
       let e2 = case bt of
                  Explicit -> e2'
                  Implicit -> EImplArg e2'
       if x == wildCId
         then return (EApp e1 e2,TTyp delta (DTyp hs c es))
-        else do v2 <- runTcM abs fid (eval (scopeEnv scope) e2')
+        else do v2 <- eval (scopeEnv scope) e2'
                 return (EApp e1 e2,TTyp (v2:delta) (DTyp hs c es))
 
     updateScope []              scope mkAbs mb_tty = (scope,mkAbs,mb_tty)
@@ -181,30 +182,14 @@ getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty =
       where
         (x:_) | fid == fidVar = [wildCId]
               | otherwise     = [x | PConst _ (EFun x) _ <- maybe [] Set.toList (IntMap.lookup fid forest)]
+              
+    bracket f arg@(PArg _ fid) = do
+      fid0 <- get
+      put fid
+      x <- f arg
+      put fid0
+      return x
 
-
-newtype TcFM a = TcFM {unTcFM :: MetaStore () -> ([(MetaStore (),a)],[(FId,TcError)])}
-
-instance Functor TcFM where
-  fmap f g = TcFM (\ms -> let (res_g,err_g) = unTcFM g ms
-                          in ([(ms,f x) | (ms,x) <- res_g],err_g))
-
-instance Monad TcFM where
-  return x = TcFM (\ms -> ([(ms,x)],[]))
-  f >>= g  = TcFM (\ms -> case unTcFM f ms of
-                            (res,err) -> let (res',err') = unzip [unTcFM (g x) ms | (ms,x) <- res]
-                                         in (concat res',concat (err:err')))
-
-instance MonadPlus TcFM where
-  mzero = TcFM (\ms -> ([],[]))
-  mplus f g = TcFM (\ms -> let (res_f,err_f) = unTcFM f ms
-                               (res_g,err_g) = unTcFM g ms
-                           in (res_f++res_g,err_f++err_g))
-
-runTcM :: Abstr -> FId -> TcM () a -> TcFM a
-runTcM abstr fid f = TcFM (\ms -> case unTcM f abstr () ms of
-                                    Ok _ ms x -> ([(ms,x)],[]         )
-                                    Fail err  -> ([],      [(fid,err)]))
 
 foldForest :: (FunId -> [PArg] -> b -> b) -> (Expr -> [String] -> b -> b) -> b -> FId -> IntMap.IntMap (Set.Set Production) -> b
 foldForest f g b fcat forest =
@@ -215,3 +200,20 @@ foldForest f g b fcat forest =
     foldProd (PCoerce fcat)        b = foldForest f g b fcat forest
     foldProd (PApply funid args)   b = f funid args b
     foldProd (PConst _ const toks) b = g const toks b
+
+
+------------------------------------------------------------------------------
+-- Selectors
+
+instance Selector FId where
+  splitSelector s = (s,s)
+  select cat dp = TcM (\abstr s ms -> case Map.lookup cat (cats abstr) of
+                                        Just (_,fns) -> iter abstr s ms fns
+                                        Nothing      -> Fail s (UnknownCat cat))
+    where
+      iter abstr s ms []           = Zero
+      iter abstr s ms ((_,fn):fns) = Plus (select_helper fn abstr s ms) (iter abstr s ms fns)
+
+select_helper fn = unTcM $ do
+  ty <- lookupFunType fn
+  return (EFun fn,ty)
