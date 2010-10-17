@@ -18,6 +18,7 @@ var options={
     default_source_language: null,
     try_google: true,
     feedback_url: null,
+    random_button: true,
     help_url: null
 }
 
@@ -108,8 +109,9 @@ function show_grammarlist(grammars) {
 		   [text(" From: "), empty_id("select","language_menu"),
 		    text(" To: "), empty_id("select","to_menu"),
 		    button(options.delete_button_text,"delete_last()","H"),
-		    button("Clear","clear_all()","L"),
-		    button("Random","generate_random()","R")]);
+		    button("Clear","clear_all()","L")]);
+    if(options.random_button)
+	menubar.appendChild(button("Random","generate_random()","R"));
     if(options.help_url)
 	menubar.appendChild(button("Help","open_help()"));
     select_grammar(grammars[0]);
@@ -273,9 +275,6 @@ function get_completions(menu) {
 }
 
 function word(s) {
-  //var w=div_class("word",text(s));
-  //w.setAttribute("onclick",'add_word("'+s+'")');
-  //return w;
   return button(s,'add_word("'+s+'")');
 }
 
