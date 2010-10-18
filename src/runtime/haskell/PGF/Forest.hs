@@ -47,16 +47,16 @@ data Forest
 -- Rendering of bracketed strings
 --------------------------------------------------------------------
 
-linearizeWithBrackets :: Forest -> BracketedString
-linearizeWithBrackets = head . snd . untokn "" . bracketedTokn
+linearizeWithBrackets :: Maybe Int -> Forest -> BracketedString
+linearizeWithBrackets dp = head . snd . untokn "" . bracketedTokn dp
 
 ---------------------------------------------------------------
 -- Internally we have to do everything with Tokn first because
 -- we must handle the pre {...} construction.
 --
 
-bracketedTokn :: Forest -> BracketedTokn
-bracketedTokn f@(Forest abs cnc forest root) =
+bracketedTokn :: Maybe Int -> Forest -> BracketedTokn
+bracketedTokn dp f@(Forest abs cnc forest root) =
   case [computeSeq isTrusted seq (map (render forest) args) | (seq,args) <- root] of
     ([bs@(Bracket_ _ _ _ _ _)]:_) -> bs
     (bss:_)                       -> Bracket_ wildCId 0 0 [] bss
@@ -79,7 +79,7 @@ bracketedTokn f@(Forest abs cnc forest root) =
                                                                        Just (DTyp _ cat _,_,_,_) -> cat
                                                  largs  = map (render forest) args
                                                  ltable = mkLinTable cnc isTrusted [] funid largs
-                                             in ((cat,fid),either (const []) id $ getAbsTrees f arg Nothing,ltable)
+                                             in ((cat,fid),either (const []) id $ getAbsTrees f arg Nothing dp,ltable)
         descend forest (PCoerce fid)       = render forest (PArg [] fid)
         descend forest (PConst cat e ts)   = ((cat,fid),[e],([],listArray (0,0) [[LeafKS ts]]))
 
@@ -116,10 +116,10 @@ isLindefCId id
 -- that spans the whole input consumed so far. The trees are also
 -- limited by the category specified, which is usually
 -- the same as the startup category.
-getAbsTrees :: Forest -> PArg -> Maybe Type -> Either [(FId,TcError)] [Expr]
-getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty =
+getAbsTrees :: Forest -> PArg -> Maybe Type -> Maybe Int -> Either [(FId,TcError)] [Expr]
+getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty dp =
   let (err,res) = runTcM abs (do e <- go Set.empty emptyScope (fmap (TTyp []) ty) arg
-                                 generateForForest (prove (Just 20)) e) fid IntMap.empty
+                                 generateForForest (prove dp) e) fid IntMap.empty
   in if null res
        then Left  (nub err)
        else Right (nubsort [e | (_,_,e) <- res])
