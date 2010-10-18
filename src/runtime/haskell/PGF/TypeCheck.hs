@@ -548,7 +548,6 @@ generateForMetas prove e = do
   infExpr emptyScope e
   fillinVariables
   refineExpr e
-  return e
   where
     fillinVariables = do
       fvs <- TcM (\abstr s ms -> Ok s ms [(i,s,scope,tty,cs) | (i,MUnbound s scope tty cs) <- IntMap.toList ms])
@@ -563,7 +562,6 @@ generateForForest :: (Scope -> TType -> TcM FId Expr) -> Expr -> TcM FId Expr
 generateForForest prove e = do
   fillinVariables
   refineExpr e
-  return e
   where
     fillinVariables = do
       fvs <- TcM (\abstr s ms -> Ok s ms [(i,s,scope,tty,cs) | (i,MUnbound s scope tty cs) <- IntMap.toList ms])
