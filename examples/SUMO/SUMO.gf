@@ -17,7 +17,8 @@ abstract SUMO =
   QoSontology,
   WMD,
   WorldAirportsA_K,
-  WorldAirportsL_Z
+  WorldAirportsL_Z,
+  Birds
   ** {
   
 flags startcat = Stmt ;
