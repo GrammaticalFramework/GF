@@ -349,35 +349,42 @@ function target_lang() {
 }
 
 function show_translations(translationResults) {
-  var trans=element("translations");
-  var grammar=element("language_menu").grammar;
-  var to=target_lang();
-  var cnt=translationResults.length;
-  //trans.translations=translations;
-  trans.single_translation=[];
-  trans.innerHTML="";
-  trans.appendChild(wrap("h3",text(cnt<1 ? "No translations?" :
-				   cnt>1 ? ""+cnt+" translations:":
-				   "One translation:")));
-  for(p=0;p<cnt;p++) {
-    var tra=translationResults[p];
-    if (tra.translations != null) {
-      for (q = 0; q < tra.translations.length; q++) {
-        var t = tra.translations[q];
-        var lin=t.linearizations;
-        var tbody=empty("tbody");
-        if(options.show_abstract && t.tree)
-          tbody.appendChild(tr([th(text("Abstract: ")),
-			        tdt(abstree_button(t.tree),text(" "+t.tree))]));
-        for(var i=0;i<lin.length;i++) 
-	  if(to=="-1" || lin[i].to==to)
-	      tbody.appendChild(tr([th(text(langpart(lin[i].to,grammar.name)+": ")),
-				    tdt(parsetree_button(t.tree,lin[i].to),
-				        text(lin[i].text))]));
-        trans.appendChild(wrap("table",tbody));
-      }
+    var trans=element("translations");
+    var grammar=element("language_menu").grammar;
+    var to=target_lang();
+    var cnt=translationResults.length;
+    //trans.translations=translations;
+    trans.single_translation=[];
+    trans.innerHTML="";
+    /*
+    trans.appendChild(wrap("h3",text(cnt<1 ? "No translations?" :
+				     cnt>1 ? ""+cnt+" translations:":
+				     "One translation:")));
+    */
+    for(p=0;p<cnt;p++) {
+	var tra=translationResults[p];
+	if (tra.translations != null) {
+	    for (q = 0; q < tra.translations.length; q++) {
+		var t = tra.translations[q];
+		var lin=t.linearizations;
+		var tbody=empty("tbody");
+		if(options.show_abstract && t.tree)
+		    tbody.appendChild(tr([th(text("Abstract: ")),
+					  tdt(abstree_button(t.tree),text(" "+t.tree))]));
+		for(var i=0;i<lin.length;i++) 
+		    if(to=="-1" || lin[i].to==to)
+			tbody.appendChild(tr([th(text(langpart(lin[i].to,grammar.name)+": ")),
+					      tdt(parsetree_button(t.tree,lin[i].to),
+						  text(lin[i].text))]));
+		trans.appendChild(wrap("table",tbody));
+	    }
+	}
+	else if(tra.typeErrors) {
+	    var errs=tra.typeErrors;
+	    for(var i=0;i<errs.length;i++)
+		trans.appendChild(wrap("pre",text(errs[i].msg)))
+	}
     }
-  }
 }
 
 function show_groupedtranslations(translations) {
