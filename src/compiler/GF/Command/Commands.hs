@@ -492,7 +492,8 @@ allCommands env@(pgf, mos) = Map.fromList [
      flags = [
        ("cat","target category of parsing"),
        ("lang","the languages of parsing (comma-separated, no spaces)"),
-       ("openclass","list of open-class categories for robust parsing")
+       ("openclass","list of open-class categories for robust parsing"),
+       ("depth","maximal depth for proof search if the abstract syntax tree has meta variables")
        ],
      options = [
        ("bracket","prints the bracketed string from the parser")
@@ -902,8 +903,10 @@ allCommands env@(pgf, mos) = Map.fromList [
   ]
  where
    par opts s = case optOpenTypes opts of
-                  []        -> [parse_ pgf lang (optType opts) s | lang <- optLangs opts]
-                  open_typs -> [parseWithRecovery pgf lang (optType opts) open_typs s | lang <- optLangs opts]
+                  []        -> [parse_ pgf lang (optType opts) (Just dp) s | lang <- optLangs opts]
+                  open_typs -> [parseWithRecovery pgf lang (optType opts) open_typs (Just dp) s | lang <- optLangs opts]
+     where
+       dp = valIntOpts "depth" 4 opts
  
    void = ([],[])
 
@@ -993,7 +996,7 @@ allCommands env@(pgf, mos) = Map.fromList [
           Just ty -> case checkType pgf ty of
                        Left tcErr -> error $ render (ppTcError tcErr)
                        Right ty   -> ty
-          Nothing -> error ("Can't parse '"++str++"' as type")
+          Nothing -> error ("Can't parse '"++str++"' as a type")
    optComm opts = valStrOpts "command" "" opts
    optViewFormat opts = valStrOpts "format" "png" opts
    optViewGraph opts = valStrOpts "view" "open" opts

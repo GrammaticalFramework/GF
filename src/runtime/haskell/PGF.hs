@@ -182,10 +182,10 @@ parseAll     :: PGF -> Type -> String -> [[Tree]]
 parseAllLang :: PGF -> Type -> String -> [(Language,[Tree])]
 
 -- | The same as 'parse' but returns more detailed information
-parse_       :: PGF -> Language -> Type -> String -> (Parse.ParseOutput,BracketedString)
+parse_       :: PGF -> Language -> Type -> Maybe Int -> String -> (Parse.ParseOutput,BracketedString)
 
 -- | This is an experimental function. Use it on your own risk
-parseWithRecovery :: PGF -> Language -> Type -> [Type] -> String -> (Parse.ParseOutput,BracketedString)
+parseWithRecovery :: PGF -> Language -> Type -> [Type] -> Maybe Int -> String -> (Parse.ParseOutput,BracketedString)
 
 -- | List of all languages available in the given grammar.
 languages    :: PGF -> [Language]
@@ -227,21 +227,21 @@ functionType :: PGF -> CId -> Maybe Type
 readPGF f = decodeFile f
 
 parse pgf lang typ s =
-  case parse_ pgf lang typ s of
+  case parse_ pgf lang typ (Just 4) s of
     (Parse.ParseOk ts,_) -> ts
     _                    -> []
 
 parseAll mgr typ = map snd . parseAllLang mgr typ
 
 parseAllLang mgr typ s = 
-  [(lang,ts) | lang <- languages mgr, (Parse.ParseOk ts,_) <- [parse_ mgr lang typ s]]
+  [(lang,ts) | lang <- languages mgr, (Parse.ParseOk ts,_) <- [parse_ mgr lang typ (Just 4) s]]
 
-parse_ pgf lang typ s = 
+parse_ pgf lang typ dp s = 
   case Map.lookup lang (concretes pgf) of
-    Just cnc -> Parse.parse pgf lang typ (words s)
+    Just cnc -> Parse.parse pgf lang typ dp (words s)
     Nothing  -> error ("Unknown language: " ++ showCId lang)
 
-parseWithRecovery pgf lang typ open_typs s = Parse.parseWithRecovery pgf lang typ open_typs (words s)
+parseWithRecovery pgf lang typ open_typs dp s = Parse.parseWithRecovery pgf lang typ open_typs dp (words s)
 
 groupResults :: [[(Language,String)]] -> [(Language,[String])]
 groupResults = Map.toList . foldr more Map.empty . start . concat

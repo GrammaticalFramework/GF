@@ -52,25 +52,25 @@ data ParseOutput
                                    -- The list should be non-empty.
   | ParseIncomplete                -- ^ The sentence is not complete. Only partial output is produced
 
-parse :: PGF -> Language -> Type -> [Token] -> (ParseOutput,BracketedString)
-parse pgf lang typ toks = loop (initState pgf lang typ) toks
+parse :: PGF -> Language -> Type -> Maybe Int -> [Token] -> (ParseOutput,BracketedString)
+parse pgf lang typ dp toks = loop (initState pgf lang typ) toks
   where
-    loop ps []     = getParseOutput ps typ
+    loop ps []     = getParseOutput ps typ dp
     loop ps (t:ts) = case nextState ps (simpleParseInput t) of
                        Left  es -> case es of
-                                     EState _ _ chart -> (ParseFailed (offset chart),snd (getParseOutput ps typ))
+                                     EState _ _ chart -> (ParseFailed (offset chart),snd (getParseOutput ps typ dp))
                        Right ps -> loop ps ts
 
-parseWithRecovery :: PGF -> Language -> Type -> [Type] -> [String] -> (ParseOutput,BracketedString)
-parseWithRecovery pgf lang typ open_typs toks = accept (initState pgf lang typ) toks
+parseWithRecovery :: PGF -> Language -> Type -> [Type] -> Maybe Int -> [String] -> (ParseOutput,BracketedString)
+parseWithRecovery pgf lang typ open_typs dp toks = accept (initState pgf lang typ) toks
   where
-    accept ps []     = getParseOutput ps typ
+    accept ps []     = getParseOutput ps typ dp
     accept ps (t:ts) =
       case nextState ps (simpleParseInput t) of
         Right ps -> accept ps ts
         Left  es -> skip (recoveryStates open_typs es) ts
 
-    skip ps_map []     = getParseOutput (fst ps_map) typ
+    skip ps_map []     = getParseOutput (fst ps_map) typ dp
     skip ps_map (t:ts) =
       case Map.lookup t (snd ps_map) of
         Just ps -> accept ps ts
@@ -210,19 +210,19 @@ recoveryStates open_types (EState pgf cnc chart) =
 -- that spans the whole input consumed so far. The trees are also
 -- limited by the category specified, which is usually
 -- the same as the startup category.
-getParseOutput :: ParseState -> Type -> (ParseOutput,BracketedString)
-getParseOutput (PState pgf cnc chart items) ty@(DTyp _ start _) =
+getParseOutput :: ParseState -> Type -> Maybe Int -> (ParseOutput,BracketedString)
+getParseOutput (PState pgf cnc chart items) ty@(DTyp _ start _) dp =
   let froots | null roots = getPartialSeq (sequences cnc) (reverse (active chart1 : actives chart1)) seq
              | otherwise  = [([SymCat 0 lbl],[PArg [] fid]) | AK fid lbl <- roots]
 
       f     = Forest (abstract pgf) cnc (forest chart1) froots
       
-      bs    = linearizeWithBrackets f
+      bs    = linearizeWithBrackets dp f
                 
       res   | not (null es)   = ParseOk es
             | not (null errs) = TypeError errs
             | otherwise       = ParseIncomplete
-            where xs   = [getAbsTrees f (PArg [] fid) (Just ty) | (AK fid lbl) <- roots]
+            where xs   = [getAbsTrees f (PArg [] fid) (Just ty) dp | (AK fid lbl) <- roots]
                   es   = concat [es   | Right es   <- xs]
                   errs = concat [errs | Left  errs <- xs]
 
