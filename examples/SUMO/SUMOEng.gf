@@ -7,7 +7,8 @@ concrete SUMOEng of SUMO =
         EngineeringEng,
         MondialEng,
         CountriesAndRegionsEng,
-        QoSontologyEng
+        QoSontologyEng,
+        BirdsEng
 
 ** {
 
