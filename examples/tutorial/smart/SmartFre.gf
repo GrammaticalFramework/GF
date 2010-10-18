@@ -19,17 +19,17 @@ lincat
   Action = {s : VForm => Str} ;
   Device = {s : Str ; g : Gender ; n : Number} ;
   Location = {s : Number => Str ; g : Gender} ; 
-  Switchable = SS ;
-  Dimmable = SS ;
-  Statelike = SS ;
+  Switchable = {} ;
+  Dimmable = {} ;
+  Statelike = {} ;
 
 lin
   UCommand  c = c ;
   UQuestion q = q ;
 
   CAction _ act dev = ss (act.s ! VInf ++ dev.s) ;
-  QAction _ act st dev = 
-    ss (dev.s ++ est dev.g dev.n ++ act.s ! VPart dev.g dev.n ++ st.s) ;
+  QAction _ act _ dev = 
+    ss (dev.s ++ est dev.g dev.n ++ act.s ! VPart dev.g dev.n) ;
 
   DKindOne  k = {
     s = defArt k.g ++ k.s ! Sg ; 
@@ -50,10 +50,10 @@ lin
   light = mkNoun "lampe" Fem ;
   fan = mkNoun "ventilateur" Masc ;
 
-  switchOn _ proof = mkVerb proof.s "allumer" "allumé" ;
-  switchOff _ proof = mkVerb proof.s "éteindre" "éteint" ;
+  switchOn _ _ = mkVerb "allumer" "allumé" ;
+  switchOff _ _ = mkVerb "éteindre" "éteint" ;
 
-  dim _ proof = mkVerb proof.s "baisser" "baissé" ;
+  dim _ _ = mkVerb "baisser" "baissé" ;
 
   kitchen = mkNoun "cuisine" Fem ;
   livingRoom = mkNoun "salon" Masc ;
@@ -67,13 +67,13 @@ oper
     g = g
     } ;
   
-  mkVerb : (_,_,_ : Str) -> {s : VForm => Str} = \proof,venir,venu -> {
+  mkVerb : (_,_ : Str) -> {s : VForm => Str} = \venir,venu -> {
     s = table {
-      VInf => proof++venir ;
-      VPart Masc Sg => proof++venu ;
-      VPart Masc Pl => proof++venu + "s" ;
-      VPart Fem  Sg => proof++venu + "e" ;
-      VPart Fem  Pl => proof++venu + "es"
+      VInf => venir ;
+      VPart Masc Sg => venu ;
+      VPart Masc Pl => venu + "s" ;
+      VPart Fem  Sg => venu + "e" ;
+      VPart Fem  Pl => venu + "es"
       }
     } ;
 
@@ -85,14 +85,6 @@ oper
     } ;
 
   defArt : Gender -> Str = \g -> case g of {Masc => "le" ; Fem => "la"} ;
-
-lin
-  switchable_light = ss [] ;
-  switchable_fan  = ss [] ;
-  dimmable_light  = ss [] ;
-
-  statelike_switchOn _ _ = ss [] ;
-  statelike_switchOff _ _ = ss [] ;
 
 }
 
