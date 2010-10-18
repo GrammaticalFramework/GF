@@ -158,6 +158,17 @@ oper
       = \s,n -> {s = \\nform => s ++ n.s ! nform ; g=n.g ; anim=n.anim ; lock_N = <>} ;
     compoundN : N -> Str -> N 
       = \n,s -> {s = \\nform => s ++ n.s ! nform ; g=n.g ; anim=n.anim ; lock_N = <>} ;
+    compoundN : N -> N -> N 
+      = \n1,n2 -> lin N
+                {s = table {
+                       NF num spec => n1.s ! (NF num spec) ++ n2.s ! (NF num Indef) ;
+                       NFSgDefNom  => n1.s ! NFSgDefNom    ++ n2.s ! (NF Sg Indef) ;
+                       NFPlCount   => n1.s ! NFPlCount     ++ n2.s ! (NF Pl Indef) ;
+                       NFVocative  => n1.s ! NFVocative    ++ n2.s ! (NF Sg Indef)
+                     } ;
+                 g = n1.g ;
+                 g = n1.anim
+                } ;
   } ;
   
 
