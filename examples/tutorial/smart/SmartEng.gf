@@ -18,16 +18,16 @@ lincat
   Action = {s : VForm => Str ; part : Str} ;
   Device = {s : Str ; n : Number} ;
   Location = SS ;
-  Switchable = SS ;
-  Dimmable = SS ;
-  Statelike = SS ;
+  Switchable = {} ;
+  Dimmable = {} ;
+  Statelike = {} ;
 
 lin
   UCommand  c = c ;
   UQuestion q = q ;
 
   CAction _ act dev = ss (act.s ! VImp ++ bothWays act.part dev.s) ;
-  QAction _ act st dev = ss (be dev.n ++ dev.s ++ act.s ! VPart ++ act.part ++ st.s) ;
+  QAction _ act _ dev = ss (be dev.n ++ dev.s ++ act.s ! VPart ++ act.part) ;
 
   DKindOne  k = {
     s = "the" ++ k.s ! Sg ; 
@@ -45,10 +45,10 @@ lin
   light = mkNoun "light" ;
   fan = mkNoun "fan" ;
 
-  switchOn _ proof = mkVerb proof.s "switch" "switched" "on" ;
-  switchOff _ proof = mkVerb proof.s "switch" "switched" "off" ;
+  switchOn _ _ = mkVerb "switch" "switched" "on" ;
+  switchOff _ _ = mkVerb "switch" "switched" "off" ;
 
-  dim _ proof = mkVerb proof.s "dim" "dimmed" [] ;
+  dim _ _ = mkVerb "dim" "dimmed" [] ;
 
   kitchen = ss "kitchen" ;
   livingRoom = ss ["living room"] ;
@@ -61,10 +61,10 @@ oper
       }
     } ;
   
-  mkVerb : (_,_,_,_ : Str) -> {s : VForm => Str ; part : Str} = \proof,go,gone,away -> {
+  mkVerb : (_,_,_ : Str) -> {s : VForm => Str ; part : Str} = \go,gone,away -> {
     s = table {
-      VImp => proof++go ;
-      VPart => proof++gone
+      VImp => go ;
+      VPart => gone
       } ;
     part = away
     } ;
@@ -73,15 +73,6 @@ oper
     Sg => "is" ;
     Pl => "are"
     } ;
-
-  hidden : SS = ss [] ;
-lin
-  switchable_light = hidden ;
-  switchable_fan = hidden ;
-  dimmable_light = hidden ;
-
-  statelike_switchOn _ _ = hidden ;
-  statelike_switchOff _ _ = hidden ;
 
 }
 

@@ -14,18 +14,21 @@ lincat
   Action = V2 ;
   Device = NP ;
   Location = N ;
+  Switchable = {} ;
+  Dimmable = {} ;
+  Statelike = {} ;
 
 lin
   UCommand  c = mkUtt politeImpForm c ;
   UQuestion q = mkUtt q ;
 
   CAction _ act dev = mkImp act dev ;
-  QAction _ act st dev = 
-    mkQS anteriorAnt (mkQCl (mkCl dev (passiveVP act))) ; ---- show empty proof
+  QAction _ act _ dev = 
+    mkQS anteriorAnt (mkQCl (mkCl dev (passiveVP act))) ;
 
-  DKindOne k = mkNP defSgDet k ;
-  DKindMany k = mkNP defPlDet k ;
-  DLoc _ dev loc = mkNP dev (mkAdv in_Prep (mkNP defSgDet loc)) ;
+  DKindOne k = mkNP the_Det k ;
+  DKindMany k = mkNP thePl_Det k ;
+  DLoc _ dev loc = mkNP dev (mkAdv in_Prep (mkNP the_Det loc)) ;
 
   light = light_N ;
   fan = fan_N ;
@@ -37,14 +40,5 @@ lin
 
   kitchen = kitchen_N ;
   livingRoom = livingRoom_N ;
-  
-lin
-  switchable_light = ss [] ;
-  switchable_fan  = ss [] ;
-  dimmable_light  = ss [] ;
-
-  statelike_switchOn _ _ = ss [] ;
-  statelike_switchOff _ _ = ss [] ;
-
 
 }
