@@ -18,12 +18,13 @@ module PGF.TypeCheck ( checkType, checkExpr, inferExpr
                      , ppTcError, TcError(..)
 
                      -- internals needed for the typechecking of forests
-                     , MetaStore, emptyMetaStore, newMeta, newGuardedMeta, fillinVariables, getMeta, setMeta, MetaValue(..)
+                     , MetaStore, emptyMetaStore, newMeta, newGuardedMeta
+                     , getMeta, setMeta, lookupMeta, MetaValue(..)
                      , Scope, emptyScope, scopeSize, scopeEnv, addScopedVar
                      , TcM(..), TcResult(..), runTcM, TType(..), Selector(..)
                      , tcExpr, infExpr, eqType, eqValue
                      , lookupFunType, eval
-                     , refineExpr, checkResolvedMetaStore, lookupMeta
+                     , generateForMetas, generateForForest, checkResolvedMetaStore
                      ) where
 
 import PGF.Data
@@ -78,7 +79,7 @@ scopeSize (Scope gamma) = length gamma
 
 type MetaStore s = IntMap (MetaValue s)
 data MetaValue s
-  = MUnbound Scope TType [Expr -> TcM s ()]
+  = MUnbound s Scope TType [Expr -> TcM s ()]
   | MBound   Expr
   | MGuarded Expr  [Expr -> TcM s ()] {-# UNPACK #-} !Int   -- the Int is the number of constraints that have to be solved 
                                                             -- to unlock this meta variable
@@ -152,7 +153,7 @@ emptyMetaStore = IntMap.empty
 
 newMeta :: Scope -> TType -> TcM s MetaId
 newMeta scope tty = TcM (\abstr s ms -> let metaid = IntMap.size ms + 1
-                                        in Ok s (IntMap.insert metaid (MUnbound scope tty []) ms) metaid)
+                                        in Ok s (IntMap.insert metaid (MUnbound s scope tty []) ms) metaid)
 
 newGuardedMeta :: Expr -> TcM s MetaId
 newGuardedMeta e = TcM (\abstr s ms -> let metaid = IntMap.size ms + 1
@@ -170,24 +171,14 @@ lookupMeta ms i =
     Just (MBound   t)                 -> Just t
     Just (MGuarded t _ x) | x == 0    -> Just t
                           | otherwise -> Nothing
-    Just (MUnbound _ _ _)             -> Nothing
+    Just (MUnbound _ _ _ _)           -> Nothing
     Nothing                           -> Nothing
-
-fillinVariables :: (Scope -> TType -> TcM s Expr) -> TcM s ()
-fillinVariables f = do
-  fvs <- TcM (\abstr s ms -> Ok s ms [(i,scope,tty,cs) | (i,MUnbound scope tty cs) <- IntMap.toList ms])
-  case fvs of
-    []                 -> return ()
-    (i,scope,tty,cs):_ -> do e <- f scope tty
-                             setMeta i (MBound e)
-                             sequence_ [c e | c <- cs]
-                             fillinVariables f
 
 addConstraint :: MetaId -> MetaId -> (Expr -> TcM s ()) -> TcM s ()
 addConstraint i j c = do
   mv   <- getMeta j
   case mv of
-    MUnbound scope tty cs       -> addRef >> setMeta j (MUnbound scope tty ((\e -> release >> c e) : cs))
+    MUnbound s scope tty cs       -> addRef >> setMeta j (MUnbound s scope tty ((\e -> release >> c e) : cs))
     MBound   e                  -> c e
     MGuarded e cs x | x == 0    -> c e
                     | otherwise -> addRef >> setMeta j (MGuarded e ((\e -> release >> c e) : cs) x)
@@ -312,9 +303,7 @@ tcCatArgs scope _ delta _ ty0@(DTyp _ cat _) n m = do
 checkExpr :: PGF -> Expr -> Type -> Either TcError Expr
 checkExpr pgf e ty =
   case unTcM (do e <- tcExpr emptyScope e (TTyp [] ty)
-                 e <- refineExpr e
-                 checkResolvedMetaStore emptyScope e
-                 return e) (abstract pgf) () emptyMetaStore of
+                 checkResolvedMetaStore emptyScope e) (abstract pgf) () emptyMetaStore of
     Ok _ ms e  -> Right e
     Fail _ err -> Left err
 
@@ -367,8 +356,7 @@ tcExpr scope e0        tty = do
 inferExpr :: PGF -> Expr -> Either TcError (Expr,Type)
 inferExpr pgf e =
   case unTcM (do (e,tty) <- infExpr emptyScope e
-                 e <- refineExpr e
-                 checkResolvedMetaStore emptyScope e
+                 e <- checkResolvedMetaStore emptyScope e
                  ty <- evalType 0 tty
                  return (e,ty)) (abstract pgf) () emptyMetaStore of
     Ok _ ms (e,ty) -> Right (e,ty)
@@ -468,7 +456,7 @@ eqValue fail suspend k v1 v2 = do
         MBound   e                 -> apply env e vs
         MGuarded e _ x | x == 0    -> apply env e vs
                        | otherwise -> return v
-        MUnbound _ _ _             -> return v
+        MUnbound _ _ _ _           -> return v
     deRef v = return v
 
     eqValue' k (VSusp i env vs1 c)            v2                             = suspend i (\e -> apply env e vs1 >>= \v1 -> eqValue fail suspend k (c v1) v2)
@@ -476,16 +464,16 @@ eqValue fail suspend k v1 v2 = do
     eqValue' k (VMeta i env1 vs1)             (VMeta j env2 vs2) | i  == j   = zipWithM_ (eqValue fail suspend k) vs1 vs2
     eqValue' k (VMeta i env1 vs1)             v2                             = do mv <- getMeta i
                                                                                   case mv of
-                                                                                    MUnbound scopei _ cs -> do e2 <- mkLam i scopei env1 vs1 v2
-                                                                                                               setMeta i (MBound e2)
-                                                                                                               sequence_ [c e2 | c <- cs]
-                                                                                    MGuarded e cs x      -> setMeta i (MGuarded e ((\e -> apply env1 e vs1 >>= \v1 -> eqValue' k v1 v2) : cs) x)
+                                                                                    MUnbound _ scopei _ cs -> do e2 <- mkLam i scopei env1 vs1 v2
+                                                                                                                 setMeta i (MBound e2)
+                                                                                                                 sequence_ [c e2 | c <- cs]
+                                                                                    MGuarded e cs x        -> setMeta i (MGuarded e ((\e -> apply env1 e vs1 >>= \v1 -> eqValue' k v1 v2) : cs) x)
     eqValue' k v1                             (VMeta i env2 vs2)             = do mv <- getMeta i
                                                                                   case mv of
-                                                                                    MUnbound scopei _ cs -> do e1 <- mkLam i scopei env2 vs2 v1
-                                                                                                               setMeta i (MBound e1)
-                                                                                                               sequence_ [c e1 | c <- cs]
-                                                                                    MGuarded e cs x      -> setMeta i (MGuarded e ((\e -> apply env2 e vs2 >>= \v2 -> eqValue' k v1 v2) : cs) x)
+                                                                                    MUnbound _ scopei _ cs -> do e1 <- mkLam i scopei env2 vs2 v1
+                                                                                                                 setMeta i (MBound e1)
+                                                                                                                 sequence_ [c e1 | c <- cs]
+                                                                                    MGuarded e cs x        -> setMeta i (MGuarded e ((\e -> apply env2 e vs2 >>= \v2 -> eqValue' k v1 v2) : cs) x)
     eqValue' k (VApp f1 vs1)                  (VApp f2 vs2)   | f1 == f2     = zipWithM_ (eqValue fail suspend k) vs1 vs2
     eqValue' k (VConst f1 vs1)                (VConst f2 vs2) | f1 == f2     = zipWithM_ (eqValue fail suspend k) vs1 vs2
     eqValue' k (VLit l1)                      (VLit l2    )   | l1 == l2     = return ()
@@ -518,11 +506,11 @@ eqValue fail suspend k v1 v2 = do
                                                else return ()
                                              mv <- getMeta i
                                              case mv of
-                                               MBound   e                                 -> apply env e vs >>= occurCheck i0 k xs
-                                               MGuarded e _ _                             -> apply env e vs >>= occurCheck i0 k xs
-                                               MUnbound scopei _ _ | scopeSize scopei > k -> fail
-                                                                   | otherwise            -> do vs <- mapM (occurCheck i0 k xs) vs
-                                                                                                return (VMeta i env vs)
+                                               MBound   e                                   -> apply env e vs >>= occurCheck i0 k xs
+                                               MGuarded e _ _                               -> apply env e vs >>= occurCheck i0 k xs
+                                               MUnbound _ scopei _ _ | scopeSize scopei > k -> fail
+                                                                     | otherwise            -> do vs <- mapM (occurCheck i0 k xs) vs
+                                                                                                  return (VMeta i env vs)
     occurCheck i0 k xs (VSusp i env vs cnt) = do suspend i (\e -> apply env e vs >>= \v -> occurCheck i0 k xs (cnt v) >> return ())
                                                  return (VSusp i env vs cnt)
     occurCheck i0 k xs (VGen  i vs)     = case List.findIndex (==i) xs of
@@ -536,20 +524,60 @@ eqValue fail suspend k v1 v2 = do
 
 
 -----------------------------------------------------------
--- check for meta variables that still have to be resolved
+-- three ways of dealing with meta variables that
+-- still have to be resolved
 -----------------------------------------------------------
 
-checkResolvedMetaStore :: Scope -> Expr -> TcM s ()
-checkResolvedMetaStore scope e = TcM (\abstr s ms -> 
-  let xs = [i | (i,mv) <- IntMap.toList ms, not (isResolved mv)]
-  in if List.null xs
-       then Ok s ms ()
-       else Fail s (UnresolvedMetaVars (scopeVars scope) e xs))
+checkResolvedMetaStore :: Scope -> Expr -> TcM s Expr
+checkResolvedMetaStore scope e = do
+  e <- refineExpr e
+  TcM (\abstr s ms -> 
+           let xs = [i | (i,mv) <- IntMap.toList ms, not (isResolved mv)]
+           in if List.null xs
+                then Ok s ms ()
+                else Fail s (UnresolvedMetaVars (scopeVars scope) e xs))
+  return e
   where
-    isResolved (MUnbound _ _ []) = True
-    isResolved (MGuarded  _ _ _) = True
-    isResolved (MBound    _)     = True
-    isResolved _                 = False
+    isResolved (MUnbound _ _ _ []) = True
+    isResolved (MGuarded  _ _ _)   = True
+    isResolved (MBound    _)       = True
+    isResolved _                   = False
+
+generateForMetas :: Selector s => (Scope -> TType -> TcM s Expr) -> Expr -> TcM s Expr
+generateForMetas prove e = do
+  infExpr emptyScope e
+  fillinVariables
+  refineExpr e
+  return e
+  where
+    fillinVariables = do
+      fvs <- TcM (\abstr s ms -> Ok s ms [(i,s,scope,tty,cs) | (i,MUnbound s scope tty cs) <- IntMap.toList ms])
+      case fvs of
+        []                   -> return ()
+        (i,_,scope,tty,cs):_ -> do e <- prove scope tty
+                                   setMeta i (MBound e)
+                                   sequence_ [c e | c <- cs]
+                                   fillinVariables
+
+generateForForest :: (Scope -> TType -> TcM FId Expr) -> Expr -> TcM FId Expr
+generateForForest prove e = do
+  fillinVariables
+  refineExpr e
+  return e
+  where
+    fillinVariables = do
+      fvs <- TcM (\abstr s ms -> Ok s ms [(i,s,scope,tty,cs) | (i,MUnbound s scope tty cs) <- IntMap.toList ms])
+      case fvs of
+        []                   -> return ()
+        (i,s,scope,tty,cs):_ -> TcM (\abstr s0 ms ->
+                                        case snd $ runTcM abstr (prove scope tty) s ms of
+                                          []           -> unTcM (do ty <- evalType (scopeSize scope) tty
+                                                                    throwError (UnsolvableGoal (scopeVars scope) s ty)
+                                                                ) abstr s ms
+                                          ((_,ms,e):_) -> unTcM (do setMeta i (MBound e)
+                                                                    sequence_ [c e | c <- cs]
+                                                                    fillinVariables
+                                                                ) abstr s ms)
 
 -----------------------------------------------------
 -- evalType
