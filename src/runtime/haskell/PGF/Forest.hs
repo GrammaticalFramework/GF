@@ -24,6 +24,7 @@ import PGF.CId
 import PGF.Data
 import PGF.Macros
 import PGF.TypeCheck
+import PGF.Generate
 import Data.List
 import Data.Array.IArray
 import qualified Data.Set as Set
@@ -118,9 +119,7 @@ isLindefCId id
 getAbsTrees :: Forest -> PArg -> Maybe Type -> Either [(FId,TcError)] [Expr]
 getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty =
   let (err,res) = runTcM abs (do e <- go Set.empty emptyScope (fmap (TTyp []) ty) arg
-                                 e <- refineExpr e
-                                 checkResolvedMetaStore emptyScope e
-                                 return e) fid IntMap.empty
+                                 generateForForest (prove (Just 20)) e) fid IntMap.empty
   in if null res
        then Left  (nub err)
        else Right (nubsort [e | (_,_,e) <- res])
@@ -131,10 +130,12 @@ getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty =
                                                return (mkAbs (EMeta i))
                                 Nothing  -> mzero
       | Set.member fid rec_ = mzero
-      | otherwise           = foldForest (\funid args trees ->
+      | otherwise           = do fid0 <- get
+                                 put fid
+                                 x <- foldForest (\funid args trees ->
                                                   do let CncFun fn lins = cncfuns cnc ! funid
                                                      case isLindefCId fn of
-                                                       Just _  -> do arg <- bracket (go (Set.insert fid rec_) scope mb_tty) arg
+                                                       Just _  -> do arg <- go (Set.insert fid rec_) scope mb_tty arg
                                                                      return (mkAbs arg)
                                                        Nothing -> do ty_fn <- lookupFunType fn
                                                                      (e,tty0) <- foldM (\(e1,tty) arg -> goArg (Set.insert fid rec_) scope fid e1 arg tty)
@@ -146,19 +147,22 @@ getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty =
                                                                      return (mkAbs e)
                                                   `mplus`
                                                   trees)
-                                         (\const _ trees -> do
+                                            (\const _ trees -> do
                                                   const <- case mb_tty of
                                                              Just tty ->            tcExpr  scope const tty
                                                              Nothing  -> fmap fst $ infExpr scope const
                                                   return (mkAbs const)
                                                   `mplus`
                                                   trees)
-                                         mzero fid forest
+                                            mzero fid forest
+                                 put fid0
+                                 return x
+
       where
         (scope,mkAbs,mb_tty) = updateScope hypos scope_ id mb_tty_
 
     goArg rec_ scope fid e1 arg (TTyp delta (DTyp ((bt,x,ty):hs) c es)) = do
-      e2' <- bracket (go rec_ scope (Just (TTyp delta ty))) arg
+      e2' <- go rec_ scope (Just (TTyp delta ty)) arg
       let e2 = case bt of
                  Explicit -> e2'
                  Implicit -> EImplArg e2'
@@ -182,14 +186,6 @@ getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty =
       where
         (x:_) | fid == fidVar = [wildCId]
               | otherwise     = [x | PConst _ (EFun x) _ <- maybe [] Set.toList (IntMap.lookup fid forest)]
-              
-    bracket f arg@(PArg _ fid) = do
-      fid0 <- get
-      put fid
-      x <- f arg
-      put fid0
-      return x
-
 
 foldForest :: (FunId -> [PArg] -> b -> b) -> (Expr -> [String] -> b -> b) -> b -> FId -> IntMap.IntMap (Set.Set Production) -> b
 foldForest f g b fcat forest =

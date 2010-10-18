@@ -3,6 +3,7 @@ module PGF.Generate
          , generateFrom,        generateFromDepth
          , generateRandom,      generateRandomDepth
          , generateRandomFrom,  generateRandomFromDepth
+         , prove
          ) where
 
 import PGF.CId
@@ -43,7 +44,10 @@ generateFrom pgf ex = generateFromDepth pgf ex Nothing
 -- | A variant of 'generateFrom' which also takes as argument
 -- the upper limit of the depth of the generated subexpressions.
 generateFromDepth :: PGF -> Expr -> Maybe Int -> [Expr]
-generateFromDepth pgf e dp = generateForMetas () pgf e dp
+generateFromDepth pgf e dp = 
+  [e | (_,_,e) <- snd $ runTcM (abstract pgf)
+                               (generateForMetas (prove dp) e)
+                               () emptyMetaStore]
 
 -- | Generates an infinite list of random abstract syntax expressions.
 -- This is usefull for tree bank generation which after that can be used
@@ -63,7 +67,9 @@ generateRandomFrom g pgf e = generateRandomFromDepth g pgf e Nothing
 -- | Random generation based on template with a limitation in the depth.
 generateRandomFromDepth :: RandomGen g => g -> PGF -> Expr -> Maybe Int -> [Expr]
 generateRandomFromDepth g pgf e dp = 
-  restart g (\g -> generateForMetas (Identity g) pgf e dp)
+  restart g (\g -> [e | (_,ms,e) <- snd $ runTcM (abstract pgf)
+                                                 (generateForMetas (prove dp) e)
+                                                 (Identity g) emptyMetaStore])
 
 
 ------------------------------------------------------------------------------
@@ -71,21 +77,12 @@ generateRandomFromDepth g pgf e dp =
 
 generate :: Selector sel => sel -> PGF -> Type -> Maybe Int -> [Expr]
 generate sel pgf ty dp =
-  [e | (_,ms,e) <- snd $ runTcM (abstract pgf) (prove emptyScope (TTyp [] ty) dp >>= refineExpr) sel emptyMetaStore]
+  [e | (_,ms,e) <- snd $ runTcM (abstract pgf)
+                                (prove dp emptyScope (TTyp [] ty) >>= checkResolvedMetaStore emptyScope)
+                                sel emptyMetaStore]
 
-generateForMetas :: Selector sel => sel -> PGF -> Expr -> Maybe Int -> [Expr]
-generateForMetas sel pgf e dp =
-  case unTcM (infExpr emptyScope e) abs sel emptyMetaStore of
-    Ok sel ms (e,_) -> let gen = do fillinVariables $ \scope tty -> do 
-                                       prove scope tty dp
-                                    refineExpr e
-                       in [e | (_,ms,e) <- snd $ runTcM abs gen sel ms]
-    Fail _ _        -> []
-  where
-    abs = abstract pgf
-
-prove :: Selector sel => Scope -> TType -> Maybe Int -> TcM sel Expr
-prove scope (TTyp env1 (DTyp [] cat es1)) dp = do
+prove :: Selector sel => Maybe Int -> Scope -> TType -> TcM sel Expr
+prove dp scope (TTyp env1 (DTyp [] cat es1)) = do
   (fe,DTyp hypos _ es2) <- select cat dp
   if fe == EFun (mkCId "plus") then mzero else return ()
   case dp of
@@ -102,9 +99,9 @@ prove scope (TTyp env1 (DTyp [] cat es1)) dp = do
       mv <- getMeta i
       case mv of
         MBound e -> c e
-        MUnbound scope tty cs -> do e <- prove scope tty dp
-                                    setMeta i (MBound e)
-                                    sequence_ [c e | c <- (c:cs)]
+        MUnbound _ scope tty cs -> do e <- prove dp scope tty
+                                      setMeta i (MBound e)
+                                      sequence_ [c e | c <- (c:cs)]
 
     mkEnv env []                = return (env,[])
     mkEnv env ((bt,x,ty):hypos) = do
@@ -118,7 +115,7 @@ prove scope (TTyp env1 (DTyp [] cat es1)) dp = do
     descend (bt,arg) = do let dp' = fmap (flip (-) 1) dp
                           e <- case arg of
                                  Right e  -> return e
-                                 Left tty -> prove scope tty dp'
+                                 Left tty -> prove dp' scope tty
                           e <- case bt of
                                  Implicit -> return (EImplArg e)
                                  Explicit -> return e
