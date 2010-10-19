@@ -133,10 +133,10 @@ instance Functor (TcM s) where
 runTcM :: Abstr -> TcM s a -> s -> MetaStore s -> ([(s,TcError)],[(s,MetaStore s,a)])
 runTcM abs f s ms = collect (unTcM f abs s ms) ([],[])
   where
-    collect (Ok _ ms x)  (es,xs) = (es,(s,ms,x) : xs)
-    collect (Fail s e)   (es,xs) = ((s,e) : es,xs)
-    collect (Zero)       exs     = exs
-    collect (Plus b1 b2) exs     = collect b1 (collect b2 exs)
+    collect (Ok _ ms x)  ~(es,xs) = (es,(s,ms,x) : xs)
+    collect (Fail s e)   ~(es,xs) = ((s,e) : es,xs)
+    collect (Zero)       exs      = exs
+    collect (Plus b1 b2) exs      = collect b1 (collect b2 exs)
 
 lookupCatHyps :: CId -> TcM s [Hypo]
 lookupCatHyps cat = TcM (\abstr s ms -> case Map.lookup cat (cats abstr) of
