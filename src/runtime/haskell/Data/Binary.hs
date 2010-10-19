@@ -62,7 +62,7 @@ import Data.Word
 
 import Data.Binary.Put
 import Data.Binary.Get
-
+import Data.Binary.IEEE754 ( putFloat64be, getFloat64be)
 import Control.Monad
 import Control.Exception
 import Foreign
@@ -747,9 +747,13 @@ instance (Binary e) => Binary (Seq.Seq e) where
 ------------------------------------------------------------------------
 -- Floating point
 
+-- instance Binary Double where
+--     put d = put (decodeFloat d)
+--     get   = liftM2 encodeFloat get get
+
 instance Binary Double where
-    put d = put (decodeFloat d)
-    get   = liftM2 encodeFloat get get
+    put = putFloat64be
+    get = getFloat64be
 
 instance Binary Float where
     put f = put (decodeFloat f)

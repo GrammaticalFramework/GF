@@ -59,6 +59,7 @@ library
     Data.Binary.Put
     Data.Binary.Get
     Data.Binary.Builder
+    Data.Binary.IEEE754
 
 executable gf
   build-depends: base >= 4.2,
