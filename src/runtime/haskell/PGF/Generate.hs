@@ -107,7 +107,7 @@ prove dp scope (TTyp env1 (DTyp [] cat es1)) = do
     mkEnv env ((bt,x,ty):hypos) = do
       (env,arg) <- if x /= wildCId
                     then do i <- newMeta scope (TTyp env ty)
-                            return (VMeta i env [] : env,Right (EMeta i))
+                            return (VMeta i (scopeEnv scope) [] : env,Right (EMeta i))
                     else return (env,Left (TTyp env ty))
       (env,args) <- mkEnv env hypos
       return (env,(bt,arg):args)
