@@ -60,8 +60,9 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     { s = table {
         RC _ Gen    => "whose" ; 
         RC _ _      => "that" ;
-        RPrep Neutr => "which" ;
-        RPrep _     => "whom"
+        _           => "that"   ---- "in that" ?
+--        RPrep Neutr => "which" ;
+--        RPrep _     => "whom"
         } ;
       a = RNoAg
       } ;
@@ -97,38 +98,10 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
 
     IAdvAdv adv = {s = "how" ++ adv.s} ;
 
-  lincat
-    [CN] = {s1,s2 : Number => Case => Str} ;
-
-  lin
-    BaseCN = twoTable2 Number Case ;
-    ConsCN = consrTable2 Number Case comma ;
-    ConjCN co ns = conjunctDistrTable2 Number Case co ns ** {g = Neutr} ; --- gender?
-
     PartVP vp = {
       s = \\a => vp.ad ++ vp.prp ++ vp.s2 ! a ;
       isPre = False ---- depends on whether there are complements
       } ;
-
-  lincat 
-    QVP = ResEng.VP ;
-    [IAdv] = {s1,s2 : Str} ;
-  lin
-    ComplSlashIP vp np = insertObjPre (\\_ => vp.c2 ++ np.s ! Acc) vp ;
-    AdvQVP vp adv = insertObj (\\_ => adv.s) vp ;
-    AddAdvQVP vp adv = insertObj (\\_ => adv.s) vp ;
-
-    QuestQVP qp vp = 
-      let cl = mkClause (qp.s ! Nom) (agrP3 qp.n) vp
-      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
-
-    BaseIAdv = twoSS ;
-    ConsIAdv = consrSS comma ;
-    ConjIAdv = conjunctDistrSS ;   
-
-    AdvAP ap adv = {s = \\a => ap.s ! a ++ adv.s ; isPre = False} ;
-
-    UseCopula = predAux auxBe ;
 
     UttVPShort vp = {s = infVP True vp (agrP3 Sg)} ;
 } 

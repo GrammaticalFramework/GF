@@ -54,6 +54,11 @@ incomplete concrete AdjectiveScand of Adjective =
       isPre = ap.isPre
       } ;
 
+    AdvAP ap adv = {
+      s = \\a => ap.s ! a ++ adv.s ;
+      isPre = ap.isPre
+      } ;
+
     UseA2 a = {
       s = \\ap => a.s ! AF (APosit ap) Nom ;
       isPre = True

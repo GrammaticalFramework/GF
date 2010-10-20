@@ -133,4 +133,4 @@ abstract Noun = Cat ** {
     ApposCN : CN -> NP -> CN ;    -- city Paris (, numbers x and y)
 
 
-} ;
+}

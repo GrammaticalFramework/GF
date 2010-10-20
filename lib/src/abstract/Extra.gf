@@ -63,26 +63,7 @@ abstract Extra = Cat ** {
     
     UseFoc : Temp -> Pol -> Foc -> Utt ;
 
-  cat
-    [CN] {2} ;
   fun
-    ConjCN : Conj -> [CN] -> CN ; -- (every) man and woman
-
     PartVP : VP -> AP ; -- looking at Mary
 
-  cat 
-    QVP ;          -- buy what where
-    [IAdv] {2} ;   -- when and where
-  fun
-    ComplSlashIP  : VPSlash -> IP -> QVP ;   -- buys what 
-    AdvQVP        : VP  ->   IAdv -> QVP ;   -- lives where 
-    AddAdvQVP     : QVP ->   IAdv -> QVP ;   -- buys what where 
-
-    QuestQVP      : IP -> QVP -> QCl ;       -- who buys what where
-
-    ConjIAdv      : Conj -> [IAdv] -> IAdv ; -- when, where and with whom
-
-    AdvAP : AP -> Adv -> AP ;  -- hungry as a wolf
-
-    UseCopula : VP ;
 }

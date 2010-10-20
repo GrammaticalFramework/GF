@@ -98,4 +98,23 @@ incomplete concrete QuestionScand of Question =
     CompIAdv a = {s = \\_ => a.s} ;
     CompIP ip = {s = \\_ => ip.s ! nominative} ;
 
+  lincat 
+    QVP = CommonScand.VP ;
+  lin
+    ComplSlashIP vp np = insertObj (\\_ => vp.c2.s ++ np.s ! accusative) vp ;
+    AdvQVP vp adv = insertObjPost (\\_ => adv.s) vp ;
+    AddAdvQVP vp adv = insertObjPost (\\_ => adv.s) vp ;
+
+    QuestQVP qp vp = {
+      s = \\t,a,b,q => 
+        let 
+          somo = case q of {
+            QIndir => <"som",Sub> ;
+            _      => <[],   Main>
+            } ;
+          cl = mkClause (qp.s ! nominative ++ somo.p1) {g = qp.g ; n = qp.n ; p = P3} vp  
+        in
+        cl.s ! t ! a ! b ! somo.p2
+      } ;   
+
 }

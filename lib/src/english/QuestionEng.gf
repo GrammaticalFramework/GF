@@ -54,4 +54,16 @@ concrete QuestionEng of Question = CatEng ** open ResEng, Prelude in {
     CompIAdv a = a ;
     CompIP p = ss (p.s ! Nom) ;
 
+  lincat 
+    QVP = ResEng.VP ;
+  lin
+    ComplSlashIP vp np = insertObjPre (\\_ => vp.c2 ++ np.s ! Acc) vp ;
+    AdvQVP vp adv = insertObj (\\_ => adv.s) vp ;
+    AddAdvQVP vp adv = insertObj (\\_ => adv.s) vp ;
+
+    QuestQVP qp vp = 
+      let cl = mkClause (qp.s ! Nom) (agrP3 qp.n) vp
+      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
+
+
 }

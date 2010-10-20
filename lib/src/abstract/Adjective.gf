@@ -29,6 +29,10 @@ abstract Adjective = Cat ** {
 
     AdAP    : AdA -> AP -> AP ; -- very warm
 
+-- It can also be postmodified by an adverb, typically a prepositional phrase.
+
+    AdvAP   : AP -> Adv -> AP ; -- warm by nature
+
 -- The formation of adverbs from adjective (e.g. "quickly") is covered
 -- in [Adverb Adverb.html].
 
