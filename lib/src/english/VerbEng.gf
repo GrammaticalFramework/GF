@@ -52,4 +52,6 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
       }
     } ;
 
+    UseCopula = predAux auxBe ;
+
 }

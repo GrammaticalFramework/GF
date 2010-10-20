@@ -50,4 +50,6 @@ concrete AdjectiveEng of Adjective = CatEng ** open ResEng, Prelude in {
       isPre = True
       } ;
 
+    AdvAP ap adv = {s = \\a => ap.s ! a ++ adv.s ; isPre = False} ;
+
 }

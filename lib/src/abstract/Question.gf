@@ -42,4 +42,14 @@ abstract Question = Cat ** {
 
 -- More $IP$, $IDet$, and $IAdv$ are defined in $Structural$.
 
+-- Wh questions with two or more question words require a new, special category.
+
+  cat 
+    QVP ;          -- buy what where
+  fun
+    ComplSlashIP  : VPSlash -> IP -> QVP ;   -- buys what 
+    AdvQVP        : VP  ->   IAdv -> QVP ;   -- lives where 
+    AddAdvQVP     : QVP ->   IAdv -> QVP ;   -- buys what where 
+
+    QuestQVP      : IP -> QVP -> QCl ;       -- who buys what where
 }

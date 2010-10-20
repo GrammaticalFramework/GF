@@ -69,4 +69,7 @@ abstract Verb = Cat ** {
     CompAdv  : Adv -> Comp ;            -- (be) here
     CompCN   : CN  -> Comp ;            -- (be) a man/men
 
+-- Copula alone
+
+    UseCopula : VP ;                    -- be
 }

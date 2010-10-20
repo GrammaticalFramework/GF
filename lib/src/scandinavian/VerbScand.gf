@@ -50,15 +50,14 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand i
         ** {n3 = vp.n3 ; c2 = v.c2} ;
 
     UseComp comp = insertObj 
-      (\\a => comp.s ! agrAdjNP a DIndef) (predV verbBe) ;
+      comp.s (predV verbBe) ;
 
-    CompAP ap = ap ;
+    CompAP ap = {s = \\a => ap.s ! agrAdjNP a DIndef} ;
     CompNP np = {s = \\_ => np.s ! accusative} ;
     CompAdv a = {s = \\_ => a.s} ;
 
     AdvVP vp adv = insertAdv adv.s vp ;
     AdVVP adv vp = insertAdV adv.s vp ;
-
 
     ReflVP vp = insertObj (\\a => vp.c2.s ++ reflPron a ++ vp.n3 ! a) vp ;
 
@@ -66,5 +65,13 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand i
       insertObj 
         (\\a => v.s ! VI (VPtPret (agrAdjNP a DIndef) Nom)) 
         (predV verbBecome) ;
+
+    CompCN cn = {s = \\a => case a.n of { 
+      Sg => artIndef ! cn.g ++ cn.s ! Sg ! DIndef ! Nom ;
+      Pl => cn.s ! Pl ! DIndef ! Nom
+      }
+    } ;
+
+    UseCopula = predV verbBe ;
 
 }

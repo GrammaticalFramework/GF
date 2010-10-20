@@ -52,7 +52,7 @@ incomplete concrete CatScand of Cat =
       n3 : Agr => Str ;  -- object-control complement
       c2 : Complement
       } ;
-    Comp = {s : AFormPos => Str} ; 
+    Comp = {s : Agr => Str} ; 
 
 
 -- Adjective

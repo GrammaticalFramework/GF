@@ -17,11 +17,13 @@ abstract Conjunction = Cat ** {
 --2 Rules
 
   fun
-    ConjS   : Conj -> [S] -> S ;     -- "he walks and she runs"
-    ConjRS  : Conj -> [RS] -> RS ;   -- "who walks and whose mother runs"
-    ConjAP  : Conj -> [AP] -> AP ;   -- "cold and warm"
-    ConjNP  : Conj -> [NP] -> NP ;   -- "she or we"
-    ConjAdv : Conj -> [Adv] -> Adv ; -- "here or there"
+    ConjS    : Conj -> [S] -> S ;       -- "he walks and she runs"
+    ConjRS   : Conj -> [RS] -> RS ;     -- "who walks and whose mother runs"
+    ConjAP   : Conj -> [AP] -> AP ;     -- "cold and warm"
+    ConjNP   : Conj -> [NP] -> NP ;     -- "she or we"
+    ConjAdv  : Conj -> [Adv] -> Adv ;   -- "here or there"
+    ConjIAdv : Conj -> [IAdv] -> IAdv ; -- "where and with whom"
+    ConjCN   : Conj -> [CN] -> CN ;     -- "man and woman"
 
 --2 Categories
 
@@ -33,6 +35,8 @@ abstract Conjunction = Cat ** {
     [Adv]{2} ; 
     [NP]{2} ; 
     [AP]{2} ;
+    [IAdv]{2} ;
+    [CN] {2} ;
 
 --2 List constructors
 
