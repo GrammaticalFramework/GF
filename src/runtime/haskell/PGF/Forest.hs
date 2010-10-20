@@ -135,7 +135,7 @@ getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty dp =
                                  x <- foldForest (\funid args trees ->
                                                   do let CncFun fn lins = cncfuns cnc ! funid
                                                      case isLindefCId fn of
-                                                       Just _  -> do arg <- go (Set.insert fid rec_) scope mb_tty arg
+                                                       Just _  -> do arg <- go (Set.insert fid rec_) scope mb_tty (head args)
                                                                      return (mkAbs arg)
                                                        Nothing -> do ty_fn <- lookupFunType fn
                                                                      (e,tty0) <- foldM (\(e1,tty) arg -> goArg (Set.insert fid rec_) scope fid e1 arg tty)
