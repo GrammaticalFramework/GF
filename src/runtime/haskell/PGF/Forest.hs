@@ -119,7 +119,7 @@ isLindefCId id
 getAbsTrees :: Forest -> PArg -> Maybe Type -> Maybe Int -> Either [(FId,TcError)] [Expr]
 getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty dp =
   let (err,res) = runTcM abs (do e <- go Set.empty emptyScope (fmap (TTyp []) ty) arg
-                                 generateForForest (prove dp) e) fid IntMap.empty
+                                 generateForForest (prove dp) e) emptyMetaStore fid
   in if null res
        then Left  (nub err)
        else Right (nubsort [e | (_,_,e) <- res])
@@ -205,7 +205,7 @@ instance Selector FId where
   splitSelector s = (s,s)
   select cat scope dp = do
     gens <- typeGenerators scope cat
-    TcM (\abstr s ms -> iter s ms gens)
+    TcM (\abstr k h -> iter k gens)
     where
-      iter s ms []              = Zero
-      iter s ms ((_,e,tty):fns) = Plus (Ok s ms (e,tty)) (iter s ms fns)
+      iter k []              ms s = id
+      iter k ((_,e,tty):fns) ms s = k (e,tty) ms s . iter k fns ms s

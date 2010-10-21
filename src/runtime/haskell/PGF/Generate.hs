@@ -47,7 +47,7 @@ generateFromDepth :: PGF -> Expr -> Maybe Int -> [Expr]
 generateFromDepth pgf e dp = 
   [e | (_,_,e) <- snd $ runTcM (abstract pgf)
                                (generateForMetas (prove dp) e)
-                               () emptyMetaStore]
+                               emptyMetaStore ()]
 
 -- | Generates an infinite list of random abstract syntax expressions.
 -- This is usefull for tree bank generation which after that can be used
@@ -69,7 +69,7 @@ generateRandomFromDepth :: RandomGen g => g -> PGF -> Expr -> Maybe Int -> [Expr
 generateRandomFromDepth g pgf e dp = 
   restart g (\g -> [e | (_,ms,e) <- snd $ runTcM (abstract pgf)
                                                  (generateForMetas (prove dp) e)
-                                                 (Identity g) emptyMetaStore])
+                                                 emptyMetaStore (Identity g)])
 
 
 ------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ generate :: Selector sel => sel -> PGF -> Type -> Maybe Int -> [Expr]
 generate sel pgf ty dp =
   [e | (_,ms,e) <- snd $ runTcM (abstract pgf)
                                 (prove dp emptyScope (TTyp [] ty) >>= checkResolvedMetaStore emptyScope)
-                                sel emptyMetaStore]
+                                emptyMetaStore sel]
 
 prove :: Selector sel => Maybe Int -> Scope -> TType -> TcM sel Expr
 prove dp scope (TTyp env1 (DTyp hypos1 cat es1)) = do
@@ -150,10 +150,10 @@ instance Selector () where
   splitSelector s = (s,s)
   select cat scope dp = do
     gens <- typeGenerators scope cat
-    TcM (\abstr s ms -> iter ms gens)
+    TcM (\abstr k h -> iter k gens)
     where
-      iter ms []              = Zero
-      iter ms ((_,e,tty):fns) = Plus (Ok () ms (e,tty)) (iter ms fns)
+      iter k []              ms s = id
+      iter k ((_,e,tty):fns) ms s = k (e,tty) ms s . iter k fns ms s
 
 
 instance RandomGen g => Selector (Identity g) where
@@ -162,13 +162,13 @@ instance RandomGen g => Selector (Identity g) where
 
   select cat scope dp = do
     gens <- typeGenerators scope cat
-    TcM (\abstr (Identity g) ms -> do_rand abstr g ms 1.0 gens)
+    TcM (\abstr k h -> iter k 1.0 gens)
     where
-      do_rand abstr g ms p []   = Zero
-      do_rand abstr g ms p gens = let (d,g')    = randomR (0.0,p) g
-                                      (g1,g2)   = split g'
-                                      (p',e_ty,gens') = hit d gens
-                                  in Plus (Ok (Identity g1) ms e_ty) (do_rand abstr g2 ms (p-p') gens')
+      iter k p []   ms (Identity g) = id
+      iter k p gens ms (Identity g) = let (d,g')    = randomR (0.0,p) g
+                                          (g1,g2)   = split g'
+                                          (p',e_ty,gens') = hit d gens
+                                      in k e_ty ms (Identity g1) . iter k (p-p') gens' ms (Identity g2)
 
       hit :: Double -> [(Double,Expr,TType)] -> (Double,(Expr,TType),[(Double,Expr,TType)])
       hit d (gen@(p,e,ty):gens)

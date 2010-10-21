@@ -21,7 +21,7 @@ module PGF.TypeCheck ( checkType, checkExpr, inferExpr
                      , MetaStore, emptyMetaStore, newMeta, newGuardedMeta
                      , getMeta, setMeta, lookupMeta, MetaValue(..)
                      , Scope, emptyScope, scopeSize, scopeEnv, addScopedVar
-                     , TcM(..), TcResult(..), runTcM, TType(..), Selector(..)
+                     , TcM(..), runTcM, TType(..), Selector(..)
                      , tcExpr, infExpr, eqType, eqValue
                      , lookupFunType, typeGenerators, eval
                      , generateForMetas, generateForForest, checkResolvedMetaStore
@@ -84,69 +84,50 @@ data MetaValue s
   | MGuarded Expr  [Expr -> TcM s ()] {-# UNPACK #-} !Int   -- the Int is the number of constraints that have to be solved 
                                                             -- to unlock this meta variable
 
-newtype TcM s a = TcM {unTcM :: Abstr -> s -> MetaStore s -> TcResult s a}
-data TcResult s a
-  = Ok s (MetaStore s) a
-  | Fail s TcError
-  | Zero
-  | Plus (TcResult s a) (TcResult s a)
+newtype TcM s a = TcM {unTcM :: forall b . Abstr -> (a -> MetaStore s -> s -> b -> b) 
+                                                 -> (TcError          -> s -> b -> b) 
+                                                 -> (MetaStore s      -> s -> b -> b)}
 
 class Selector s where
   splitSelector :: s -> (s,s)
   select        :: CId -> Scope -> Maybe Int -> TcM s (Expr,TType)
 
 instance Monad (TcM s) where
-  return x = TcM (\abstr s ms -> Ok s ms x)
-  f >>= g  = TcM (\abstr s ms -> iter abstr (unTcM f abstr s ms))
-    where
-      iter abstr (Ok s ms x)  = unTcM (g x) abstr s ms
-      iter abstr (Fail s e)   = Fail s e
-      iter abstr Zero         = Zero
-      iter abstr (Plus b1 b2) = Plus (iter abstr b1) (iter abstr b2)
+  return x = TcM (\abstr k h -> k x)
+  f >>= g  = TcM (\abstr k h -> unTcM f abstr (\x -> unTcM (g x) abstr k h) h)
 
 instance Selector s => MonadPlus (TcM s) where
-  mzero = TcM (\abstr s ms -> Zero)
-  mplus f g = TcM (\abstr s ms -> let (s1,s2) = splitSelector s
-                                  in Plus (unTcM f abstr s1 ms) (unTcM g abstr s2 ms))
+  mzero = TcM (\abstr k h ms s -> id)
+  mplus f g = TcM (\abstr k h ms s -> let (s1,s2) = splitSelector s
+                                      in unTcM f abstr k h ms s1 . unTcM g abstr k h ms s2)
 
 instance MonadState s (TcM s) where
-  get = TcM (\abstr s ms -> Ok s ms s)
-  put s = TcM (\abstr _ ms -> Ok s ms ())
+  get = TcM (\abstr k h ms s -> k s ms s)
+  put s = TcM (\abstr k h ms _ -> k () ms s)
 
 instance MonadError TcError (TcM s) where
-  throwError e = TcM (\abstr s ms -> Fail s e)
-  catchError f h = TcM (\abstr s ms -> iter abstr ms (unTcM f abstr s ms))
-    where
-      iter abstr _  (Ok s ms x)  = Ok s ms x
-      iter abstr ms (Fail s e)   = unTcM (h e) abstr s ms
-      iter abstr _  Zero         = Zero
-      iter abstr ms (Plus b1 b2) = Plus (iter abstr ms b1) (iter abstr ms b2)
+  throwError e    = TcM (\abstr k h ms -> h e)
+  catchError f fh = TcM (\abstr k h ms -> unTcM f abstr k (\e s -> unTcM (fh e) abstr k h ms s) ms)
 
 instance Functor (TcM s) where
-  fmap f x = TcM (\abstr s ms -> iter (unTcM x abstr s ms))
-    where
-      iter (Ok s ms x)  = Ok s ms (f x)
-      iter (Fail s e)   = Fail s e
-      iter Zero         = Zero
-      iter (Plus b1 b2) = Plus (iter b1) (iter b2)
+  fmap f m = TcM (\abstr k h -> unTcM m abstr (k . f) h)
 
-runTcM :: Abstr -> TcM s a -> s -> MetaStore s -> ([(s,TcError)],[(s,MetaStore s,a)])
-runTcM abs f s ms = collect (unTcM f abs s ms) ([],[])
-  where
-    collect (Ok _ ms x)  ~(es,xs) = (es,(s,ms,x) : xs)
-    collect (Fail s e)   ~(es,xs) = ((s,e) : es,xs)
-    collect (Zero)       exs      = exs
-    collect (Plus b1 b2) exs      = collect b1 (collect b2 exs)
+runTcM :: Abstr -> TcM s a -> MetaStore s -> s -> ([(s,TcError)],[(MetaStore s,s,a)])
+runTcM abstr f ms s = unTcM f abstr (\x ms s cp b -> let (es,xs) = cp b
+                                                     in (es,(ms,s,x) : xs))
+                                    (\e    s cp b -> let (es,xs) = cp b
+                                                     in ((s,e) : es,xs))
+                                    ms s id ([],[])
 
 lookupCatHyps :: CId -> TcM s [Hypo]
-lookupCatHyps cat = TcM (\abstr s ms -> case Map.lookup cat (cats abstr) of
-                                          Just (hyps,_) -> Ok s ms hyps
-                                          Nothing       -> Fail s (UnknownCat cat))
+lookupCatHyps cat = TcM (\abstr k h ms -> case Map.lookup cat (cats abstr) of
+                                            Just (hyps,_) -> k hyps ms
+                                            Nothing       -> h (UnknownCat cat))
 
 lookupFunType :: CId -> TcM s Type
-lookupFunType fun = TcM (\abstr s ms -> case Map.lookup fun (funs abstr) of
-                                          Just (ty,_,_,_) -> Ok s ms ty
-                                          Nothing         -> Fail s (UnknownFun fun))
+lookupFunType fun = TcM (\abstr k h ms -> case Map.lookup fun (funs abstr) of
+                                            Just (ty,_,_,_) -> k ty ms
+                                            Nothing         -> h (UnknownFun fun))
 
 typeGenerators :: Scope -> CId -> TcM s [(Double,Expr,TType)]
 typeGenerators scope cat = fmap normalize (liftM2 (++) x y)
@@ -160,10 +141,10 @@ typeGenerators scope cat = fmap normalize (liftM2 (++) x y)
     y | cat == cidInt    = return [(1.0,ELit (LInt 999),  TTyp [] (DTyp [] cat []))]
       | cat == cidFloat  = return [(1.0,ELit (LFlt 3.14), TTyp [] (DTyp [] cat []))]
       | cat == cidString = return [(1.0,ELit (LStr "Foo"),TTyp [] (DTyp [] cat []))]
-      | otherwise        = TcM (\abstr s ms ->
+      | otherwise        = TcM (\abstr k h ms ->
                                     case Map.lookup cat (cats abstr) of
-                                      Just (_,fns) -> unTcM (mapM helper fns) abstr s ms
-                                      Nothing      -> Fail s (UnknownCat cat))
+                                      Just (_,fns) -> unTcM (mapM helper fns) abstr k h ms
+                                      Nothing      -> h (UnknownCat cat))
 
     helper (p,fn) = do
       ty <- lookupFunType fn
@@ -177,19 +158,19 @@ emptyMetaStore :: MetaStore s
 emptyMetaStore = IntMap.empty
 
 newMeta :: Scope -> TType -> TcM s MetaId
-newMeta scope tty = TcM (\abstr s ms -> let metaid = IntMap.size ms + 1
-                                        in Ok s (IntMap.insert metaid (MUnbound s scope tty []) ms) metaid)
+newMeta scope tty = TcM (\abstr k h ms s -> let metaid = IntMap.size ms + 1
+                                            in k metaid (IntMap.insert metaid (MUnbound s scope tty []) ms) s)
 
 newGuardedMeta :: Expr -> TcM s MetaId
-newGuardedMeta e = TcM (\abstr s ms -> let metaid = IntMap.size ms + 1
-                                       in Ok s (IntMap.insert metaid (MGuarded e [] 0) ms) metaid)
+newGuardedMeta e = TcM (\abstr k h ms s -> let metaid = IntMap.size ms + 1
+                                           in k metaid (IntMap.insert metaid (MGuarded e [] 0) ms) s)
 
 getMeta :: MetaId -> TcM s (MetaValue s)
-getMeta i = TcM (\abstr s ms -> Ok s ms $! case IntMap.lookup i ms of
-                                             Just mv  -> mv)
+getMeta i = TcM (\abstr k h ms -> case IntMap.lookup i ms of
+                                    Just mv -> k mv ms)
 
 setMeta :: MetaId -> MetaValue s -> TcM s ()
-setMeta i mv = TcM (\abstr s ms -> Ok s (IntMap.insert i mv ms) ())
+setMeta i mv = TcM (\abstr k h ms -> k () (IntMap.insert i mv ms))
 
 lookupMeta ms i =
   case IntMap.lookup i ms of
@@ -208,13 +189,13 @@ addConstraint i j c = do
     MGuarded e cs x | x == 0    -> c e
                     | otherwise -> addRef >> setMeta j (MGuarded e ((\e -> release >> c e) : cs) x)
   where
-    addRef  = TcM (\abstr s ms -> case IntMap.lookup i ms of
-                                    Just (MGuarded e cs x) -> Ok s (IntMap.insert i (MGuarded e cs (x+1)) ms) ())
+    addRef  = TcM (\abstr k h ms -> case IntMap.lookup i ms of
+                                      Just (MGuarded e cs x) -> k () $! IntMap.insert i (MGuarded e cs (x+1)) ms)
 
-    release = TcM (\abstr s ms -> case IntMap.lookup i ms of
-                                    Just (MGuarded e cs x) -> if x == 1
-                                                                then unTcM (sequence_ [c e | c <- cs]) abstr s (IntMap.insert i (MGuarded e [] 0) ms)
-                                                                else Ok s (IntMap.insert i (MGuarded e cs (x-1)) ms) ())
+    release = TcM (\abstr k h ms -> case IntMap.lookup i ms of
+                                      Just (MGuarded e cs x) -> if x == 1
+                                                                  then unTcM (sequence_ [c e | c <- cs]) abstr k h $! IntMap.insert i (MGuarded e [] 0) ms
+                                                                  else k () $! IntMap.insert i (MGuarded e cs (x-1)) ms)
 
 -----------------------------------------------------
 -- Type errors
@@ -268,9 +249,12 @@ ppTcError (UnsolvableGoal xs metaid ty)= text "The goal:" <+> ppMeta metaid <+> 
 -- syntax of the grammar.
 checkType :: PGF -> Type -> Either TcError Type
 checkType pgf ty = 
-  case unTcM (tcType emptyScope ty >>= refineType) (abstract pgf) () emptyMetaStore of
-    Ok s ms ty -> Right ty
-    Fail _ err -> Left  err
+  unTcM (do ty <- tcType emptyScope ty
+            refineType ty)
+        (abstract pgf)
+        (\ty ms s _ -> Right ty)
+        (\err  s _ -> Left err)
+        emptyMetaStore () (error "checkType")
 
 tcType :: Scope -> Type -> TcM s Type
 tcType scope ty@(DTyp hyps cat es) = do
@@ -327,10 +311,12 @@ tcCatArgs scope _ delta _ ty0@(DTyp _ cat _) n m = do
 -- | Checks an expression against a specified type.
 checkExpr :: PGF -> Expr -> Type -> Either TcError Expr
 checkExpr pgf e ty =
-  case unTcM (do e <- tcExpr emptyScope e (TTyp [] ty)
-                 checkResolvedMetaStore emptyScope e) (abstract pgf) () emptyMetaStore of
-    Ok _ ms e  -> Right e
-    Fail _ err -> Left err
+  unTcM (do e <- tcExpr emptyScope e (TTyp [] ty)
+            checkResolvedMetaStore emptyScope e)
+        (abstract pgf)
+        (\e ms s _ -> Right e)
+        (\err  s _ -> Left err)
+        emptyMetaStore () (error "checkExpr")
 
 tcExpr :: Scope -> Expr -> TType -> TcM s Expr
 tcExpr scope e0@(EAbs Implicit x e) tty =
@@ -380,12 +366,14 @@ tcExpr scope e0        tty = do
 -- In this case the function returns the 'CannotInferType' error.
 inferExpr :: PGF -> Expr -> Either TcError (Expr,Type)
 inferExpr pgf e =
-  case unTcM (do (e,tty) <- infExpr emptyScope e
-                 e <- checkResolvedMetaStore emptyScope e
-                 ty <- evalType 0 tty
-                 return (e,ty)) (abstract pgf) () emptyMetaStore of
-    Ok _ ms (e,ty) -> Right (e,ty)
-    Fail _ err     -> Left err
+  unTcM (do (e,tty) <- infExpr emptyScope e
+            e <- checkResolvedMetaStore emptyScope e
+            ty <- evalType 0 tty
+            return (e,ty))
+        (abstract pgf)
+        (\e_ty ms s _ -> Right e_ty)
+        (\err     s _ -> Left err)
+        emptyMetaStore () (error "inferExpr")
 
 infExpr :: Scope -> Expr -> TcM s (Expr,TType)
 infExpr scope e0@(EApp e1 e2) = do
@@ -556,11 +544,11 @@ eqValue fail suspend k v1 v2 = do
 checkResolvedMetaStore :: Scope -> Expr -> TcM s Expr
 checkResolvedMetaStore scope e = do
   e <- refineExpr e
-  TcM (\abstr s ms -> 
+  TcM (\abstr k h ms -> 
            let xs = [i | (i,mv) <- IntMap.toList ms, not (isResolved mv)]
            in if List.null xs
-                then Ok s ms ()
-                else Fail s (UnresolvedMetaVars (scopeVars scope) e xs))
+                then k () ms
+                else h (UnresolvedMetaVars (scopeVars scope) e xs))
   return e
   where
     isResolved (MUnbound _ _ _ []) = True
@@ -575,7 +563,7 @@ generateForMetas prove e = do
   refineExpr e
   where
     fillinVariables = do
-      fvs <- TcM (\abstr s ms -> Ok s ms [(i,s,scope,tty,cs) | (i,MUnbound s scope tty cs) <- IntMap.toList ms])
+      fvs <- TcM (\abstr k h ms -> k [(i,s,scope,tty,cs) | (i,MUnbound s scope tty cs) <- IntMap.toList ms] ms)
       case fvs of
         []                   -> return ()
         (i,_,scope,tty,cs):_ -> do e <- prove scope tty
@@ -589,18 +577,18 @@ generateForForest prove e = do
   refineExpr e
   where
     fillinVariables = do
-      fvs <- TcM (\abstr s ms -> Ok s ms [(i,s,scope,tty,cs) | (i,MUnbound s scope tty cs) <- IntMap.toList ms])
+      fvs <- TcM (\abstr k h ms -> k [(i,s,scope,tty,cs) | (i,MUnbound s scope tty cs) <- IntMap.toList ms] ms)
       case fvs of
         []                   -> return ()
-        (i,s,scope,tty,cs):_ -> TcM (\abstr s0 ms ->
-                                        case snd $ runTcM abstr (prove scope tty) s ms of
+        (i,s,scope,tty,cs):_ -> TcM (\abstr k h ms s0 ->
+                                        case snd $ runTcM abstr (prove scope tty) ms s of
                                           []           -> unTcM (do ty <- evalType (scopeSize scope) tty
                                                                     throwError (UnsolvableGoal (scopeVars scope) s ty)
-                                                                ) abstr s ms
-                                          ((_,ms,e):_) -> unTcM (do setMeta i (MBound e)
+                                                                ) abstr k h ms s
+                                          ((ms,_,e):_) -> unTcM (do setMeta i (MBound e)
                                                                     sequence_ [c e | c <- cs]
                                                                     fillinVariables
-                                                                ) abstr s ms)
+                                                                ) abstr k h ms s)
 
 -----------------------------------------------------
 -- evalType
@@ -628,7 +616,7 @@ evalType k (TTyp delta ty) = evalTy funs k delta ty
 -----------------------------------------------------
 
 refineExpr :: Expr -> TcM s Expr
-refineExpr e = TcM (\abstr s ms -> Ok s ms (refineExpr_ ms e))
+refineExpr e = TcM (\abstr k h ms -> k (refineExpr_ ms e) ms)
 
 refineExpr_ ms e = refine e
   where
@@ -645,15 +633,15 @@ refineExpr_ ms e = refine e
     refine (EImplArg e)  = EImplArg (refine e)
 
 refineType :: Type -> TcM s Type
-refineType ty = TcM (\abstr s ms -> Ok s ms (refineType_ ms ty))
+refineType ty = TcM (\abstr k h ms -> k (refineType_ ms ty) ms)
 
 refineType_ ms (DTyp hyps cat es) = DTyp [(b,x,refineType_ ms ty) | (b,x,ty) <- hyps] cat (List.map (refineExpr_ ms) es)
 
 eval :: Env -> Expr -> TcM s Value
-eval env e = TcM (\abstr s ms -> Ok s ms (Expr.eval (funs abstr,lookupMeta ms) env e))
+eval env e = TcM (\abstr k h ms -> k (Expr.eval (funs abstr,lookupMeta ms) env e) ms)
 
 apply :: Env -> Expr -> [Value] -> TcM s Value
-apply env e vs = TcM (\abstr s ms -> Ok s ms (Expr.apply (funs abstr,lookupMeta ms) env e vs))
+apply env e vs = TcM (\abstr k h ms -> k (Expr.apply (funs abstr,lookupMeta ms) env e vs) ms)
 
 value2expr :: Int -> Value -> TcM s Expr
-value2expr i v = TcM (\abstr s ms -> Ok s ms (Expr.value2expr (funs abstr,lookupMeta ms) i v))
+value2expr i v = TcM (\abstr k h ms -> k (Expr.value2expr (funs abstr,lookupMeta ms) i v) ms)
