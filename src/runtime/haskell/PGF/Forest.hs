@@ -203,13 +203,9 @@ foldForest f g b fcat forest =
 
 instance Selector FId where
   splitSelector s = (s,s)
-  select cat dp = TcM (\abstr s ms -> case Map.lookup cat (cats abstr) of
-                                        Just (_,fns) -> iter abstr s ms fns
-                                        Nothing      -> Fail s (UnknownCat cat))
+  select cat scope dp = do
+    gens <- typeGenerators scope cat
+    TcM (\abstr s ms -> iter s ms gens)
     where
-      iter abstr s ms []           = Zero
-      iter abstr s ms ((_,fn):fns) = Plus (select_helper fn abstr s ms) (iter abstr s ms fns)
-
-select_helper fn = unTcM $ do
-  ty <- lookupFunType fn
-  return (EFun fn,ty)
+      iter s ms []              = Zero
+      iter s ms ((_,e,tty):fns) = Plus (Ok s ms (e,tty)) (iter s ms fns)

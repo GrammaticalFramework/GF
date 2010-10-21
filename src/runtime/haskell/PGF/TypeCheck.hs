@@ -23,14 +23,14 @@ module PGF.TypeCheck ( checkType, checkExpr, inferExpr
                      , Scope, emptyScope, scopeSize, scopeEnv, addScopedVar
                      , TcM(..), TcResult(..), runTcM, TType(..), Selector(..)
                      , tcExpr, infExpr, eqType, eqValue
-                     , lookupFunType, eval
+                     , lookupFunType, typeGenerators, eval
                      , generateForMetas, generateForForest, checkResolvedMetaStore
                      ) where
 
 import PGF.Data
 import PGF.Expr hiding (eval, apply, value2expr)
 import qualified PGF.Expr as Expr
-import PGF.Macros (typeOfHypo)
+import PGF.Macros (typeOfHypo, cidInt, cidFloat, cidString)
 import PGF.CId
 
 import Data.Map as Map
@@ -93,7 +93,7 @@ data TcResult s a
 
 class Selector s where
   splitSelector :: s -> (s,s)
-  select        :: CId -> Maybe Int -> TcM s (Expr,Type)
+  select        :: CId -> Scope -> Maybe Int -> TcM s (Expr,TType)
 
 instance Monad (TcM s) where
   return x = TcM (\abstr s ms -> Ok s ms x)
@@ -147,6 +147,31 @@ lookupFunType :: CId -> TcM s Type
 lookupFunType fun = TcM (\abstr s ms -> case Map.lookup fun (funs abstr) of
                                           Just (ty,_,_,_) -> Ok s ms ty
                                           Nothing         -> Fail s (UnknownFun fun))
+
+typeGenerators :: Scope -> CId -> TcM s [(Double,Expr,TType)]
+typeGenerators scope cat = fmap normalize (liftM2 (++) x y)
+  where
+    x = return
+           [(0.25,EVar i,tty) | (i,(_,tty@(TTyp _ (DTyp _ cat' _)))) <- zip [0..] gamma
+                              , cat == cat']
+         where
+           Scope gamma = scope
+
+    y | cat == cidInt    = return [(1.0,ELit (LInt 999),  TTyp [] (DTyp [] cat []))]
+      | cat == cidFloat  = return [(1.0,ELit (LFlt 3.14), TTyp [] (DTyp [] cat []))]
+      | cat == cidString = return [(1.0,ELit (LStr "Foo"),TTyp [] (DTyp [] cat []))]
+      | otherwise        = TcM (\abstr s ms ->
+                                    case Map.lookup cat (cats abstr) of
+                                      Just (_,fns) -> unTcM (mapM helper fns) abstr s ms
+                                      Nothing      -> Fail s (UnknownCat cat))
+
+    helper (p,fn) = do
+      ty <- lookupFunType fn
+      return (p,EFun fn,TTyp [] ty)
+      
+    normalize gens = [(p/s,e,tty) | (p,e,tty) <- gens]
+      where
+        s = sum [p | (p,_,_) <- gens]
 
 emptyMetaStore :: MetaStore s
 emptyMetaStore = IntMap.empty
