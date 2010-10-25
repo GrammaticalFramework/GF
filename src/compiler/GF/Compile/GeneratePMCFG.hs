@@ -497,7 +497,7 @@ emptyGrammarEnv gr (m,mo) =
       | cat == cString = (index,(fidString,fidString,CRec [(theLinLabel,Identity (CStr 0))]))
       | cat == cInt    = (index,(fidInt,   fidInt,   CRec [(theLinLabel,Identity (CStr 0))]))
       | cat == cFloat  = (index,(fidFloat, fidFloat, CRec [(theLinLabel,Identity (CStr 0))]))
-      | cat == cVar    = (index,(fidFloat, fidFloat, CStr 0))
+      | cat == cVar    = (index,(fidVar,   fidVar,   CStr 0))
       | otherwise      = (index+size,(index,index+size-1,schema))
       where
         ((_,size),schema) = compute (0,1) ctype
