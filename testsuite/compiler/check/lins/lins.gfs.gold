@@ -2,25 +2,26 @@ checking module linsCnc
    Warning: no linearization type for C, inserting default {s : Str}
    Warning: no linearization of test
 abstract lins {
-  cat C Nat
-  cat Float
-  cat Int
-  cat Nat
-  cat String
-  fun test : C zero
-  fun zero : Nat
+  cat C Nat ;
+  cat Float ;
+  cat Int ;
+  cat Nat ;
+  cat String ;
+  fun test : C zero ;
+  fun zero : Nat ;
 }
 concrete linsCnc {
   productions
-    C0 -> F0[CVar]
-    C1 -> F1[CVar]
     C1 -> F2[]
-  functions
-    F0 := (S0) [__gfV]
-    F1 := () [__gfV]
+  lindefs
+    C0 -> F0
+    C1 -> F1
+  lin
+    F0 := (S0) [lindef C]
+    F1 := () [lindef Nat]
     F2 := () [zero]
   sequences
-    S0 := <0,0>
+    S0 := {0,0}
   categories
     C := range  [C0 .. C0]
          labels ["s"]
@@ -33,5 +34,6 @@ concrete linsCnc {
     String := range  [CString .. CString]
               labels ["s"]
     __gfVar := range  [CVar .. CVar]
-               labels ["s"]
+               labels [""]
+  printnames
 }
