@@ -169,7 +169,7 @@ showBracketedString :: BracketedString -> String
 showBracketedString = render . ppBracketedString
 
 ppBracketedString (Leaf t) = text t
-ppBracketedString (Bracket cat fcat index _ bss) = parens (ppCId cat <+> hsep (map ppBracketedString bss))
+ppBracketedString (Bracket cat fid index _ bss) = parens (ppCId cat <> colon <> int fid <+> hsep (map ppBracketedString bss))
 
 -- | The length of the bracketed string in number of tokens.
 lengthBracketedString :: BracketedString -> Int
