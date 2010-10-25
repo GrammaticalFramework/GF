@@ -261,6 +261,7 @@ concrete WordsFin of Words = SentencesFin **
 ----      (mkNP (E.PartCN a)  ---- partitive works in questions )
         (mkNP (mkNP a_Det a)
            (SyntaxFin.mkAdv for_Prep (mkNP n (mkN "henki" "henkiä")))) ;
+----       (SyntaxFin.mkAdv for_Prep (mkNP (mkDet n)))) ; -- 60s faster compile 25/10/2010
 
     open_Adv = ParadigmsFin.mkAdv "avoinna" ;
     closed_Adv = ParadigmsFin.mkAdv "kiinni" ;

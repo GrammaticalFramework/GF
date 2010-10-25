@@ -142,12 +142,27 @@ param
 
   appCompl : Bool -> Polarity -> Compl -> NP -> Str = \isFin,b,co,np ->
     let
+      c = case co.c of {
+        NPAcc => case b of {
+          Neg => NPCase Part ; -- en näe taloa/sinua
+          Pos => case isFin of {
+               True => NPAcc ; -- näen/täytyy nähdä sinut
+               _ => case np.isPron of {
+                  False => NPCase Nom ;  -- täytyy nähdä talo
+                  _ => NPAcc
+                  }
+               }
+          } ;
+        _        => co.c
+        } ;
+{-
       c = case <isFin, b, co.c, np.isPron> of {
         <_,    Neg, NPAcc,_>      => NPCase Part ; -- en näe taloa/sinua
         <_,    Pos, NPAcc,True>   => NPAcc ;       -- näen/täytyy sinut
         <False,Pos, NPAcc,False>  => NPCase Nom ;  -- täytyy nähdä talo
         <_,_,coc,_>               => coc
         } ;
+-}
       nps = np.s ! c
     in
     preOrPost co.isPre co.s nps ;
