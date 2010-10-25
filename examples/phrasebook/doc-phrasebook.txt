@@ -16,6 +16,7 @@ Showcase for project FP7-ICT-247914, Deliverable D10.2.
 #BSMALL
 
 History
+- 1 September. Version 1.1: bug fixes, some new constructions.
 - 2 June. Version 1.0 released!
 - 29 May. Link to Google translate with the current language pair and phrase.
 - 27 May. Polish added.

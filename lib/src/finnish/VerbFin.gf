@@ -69,7 +69,8 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
 
     SlashV2VNP v np vp = 
       insertObj 
-        (\\fin,b,a => appCompl fin b v.c2 np ++ infVP v.sc b a vp v.vi) 
+        (\\fin,b,a => appCompl True b v.c2 np ++ ---- fin -> stack overflow
+                      infVP v.sc b a vp v.vi) 
           (predV v) ** {c2 = vp.c2} ;
 
     AdvVP vp adv = insertObj (\\_,_,_ => adv.s) vp ;
