@@ -58,7 +58,7 @@ link opts cnc gr = do
   putPointE Normal opts "linking ... " $ do
     pgf <- ioeIO (mkCanon2pgf opts cnc gr)
     probs <- ioeIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
-    ioeIO $ putStrLn "OK"     
+    ioeIO $ when (verbAtLeast opts Normal) $ putStrFlush "OK"     
     return $ setProbabilities probs 
            $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
 
