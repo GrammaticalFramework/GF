@@ -19,13 +19,13 @@ Expression: <\m, n -> vector (plus m n) : (m : Nat) -> (n : Nat) -> Vector (plus
 Type:       (m : Nat) -> (n : Nat) -> Vector (plus m n)
 
 Expression: mkMorph (\x -> succ zero)
-Type:       Morph (\x -> succ zero)
+Type:       Morph (\v0 -> succ zero)
 
 Expression: idMorph (mkMorph (\x -> x))
 Type:       Nat
 
-Couldn't match expected type Morph (\x -> x)
-       against inferred type Morph (\x -> succ zero)
+Couldn't match expected type Morph (\v0 -> v0)
+       against inferred type Morph (\v0 -> succ zero)
 In the expression: mkMorph (\x -> succ zero)
 Expression: <append zero (succ zero) : Vector zero -> Vector (succ zero) -> Vector (succ zero)>
 Type:       Vector zero -> Vector (succ zero) -> Vector (succ zero)

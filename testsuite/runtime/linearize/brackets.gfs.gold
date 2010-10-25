@@ -1,28 +1,28 @@
-(S (E (String ?1)) is even)
+(S:2 (E:1 (_:0 ?1)) is even)
 
 
-(S exists (S (String x)) such that (S (S (E (String x)) is even)))
+(S:3 exists x such that (S:2 (E:1 (_:0 x)) is even))
 
 
-(S (E a))
+(S:1 (E:0 a))
 
 
-(S (E aa) a)
+(S:1 (E:0 aa) a)
 
 
-(S (E a) b)
+(S:1 (E:0 a) b)
 
 
-(S (String abcd) is string)
+(S:1 (String:0 abcd) is string)
 
 
-(S (Int 100) is integer)
+(S:1 (Int:0 100) is integer)
 
 
-(S (Float 12.4) is float)
+(S:1 (Float:0 12.4) is float)
 
 
-(S (String xyz) is string)
+(S:1 (String:0 xyz) is string)
 
 
 cannot linearize

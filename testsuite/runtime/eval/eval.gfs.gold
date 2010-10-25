@@ -1,4 +1,4 @@
-\x -> x 1
+\v0 -> v0 1
 
 ?1 1
 
@@ -6,7 +6,7 @@
 
 f 1 2
 
-\x -> x
+\v0 -> v0
 
 ?1
 
@@ -18,7 +18,7 @@ f 1 2
 
 g 0
 
-\x -> g x
+\v0 -> g v0
 
 g ?1
 
@@ -44,7 +44,7 @@ dec (succF zeroF)
 
 dec zeroF
 
-\x -> dec x
+\v0 -> dec v0
 
 dec ?1
 
@@ -60,5 +60,5 @@ dec2 0 err
 
 succ err
 
-\x -> dec (dec x)
+\v0 -> dec (dec v0)
 
