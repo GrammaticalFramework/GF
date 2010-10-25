@@ -184,7 +184,7 @@ addConstraint :: MetaId -> MetaId -> (Expr -> TcM s ()) -> TcM s ()
 addConstraint i j c = do
   mv   <- getMeta j
   case mv of
-    MUnbound s scope tty cs       -> addRef >> setMeta j (MUnbound s scope tty ((\e -> release >> c e) : cs))
+    MUnbound s scope tty cs     -> addRef >> setMeta j (MUnbound s scope tty ((\e -> release >> c e) : cs))
     MBound   e                  -> c e
     MGuarded e cs x | x == 0    -> c e
                     | otherwise -> addRef >> setMeta j (MGuarded e ((\e -> release >> c e) : cs) x)
@@ -477,15 +477,11 @@ eqValue fail suspend k v1 v2 = do
     eqValue' k (VMeta i env1 vs1)             (VMeta j env2 vs2) | i  == j   = zipWithM_ (eqValue fail suspend k) vs1 vs2
     eqValue' k (VMeta i env1 vs1)             v2                             = do mv <- getMeta i
                                                                                   case mv of
-                                                                                    MUnbound _ scopei _ cs -> do e2 <- mkLam i scopei env1 vs1 v2
-                                                                                                                 setMeta i (MBound e2)
-                                                                                                                 sequence_ [c e2 | c <- cs]
+                                                                                    MUnbound _ scopei _ cs -> bind i scopei cs env1 vs1 v2
                                                                                     MGuarded e cs x        -> setMeta i (MGuarded e ((\e -> apply env1 e vs1 >>= \v1 -> eqValue' k v1 v2) : cs) x)
     eqValue' k v1                             (VMeta i env2 vs2)             = do mv <- getMeta i
                                                                                   case mv of
-                                                                                    MUnbound _ scopei _ cs -> do e1 <- mkLam i scopei env2 vs2 v1
-                                                                                                                 setMeta i (MBound e1)
-                                                                                                                 sequence_ [c e1 | c <- cs]
+                                                                                    MUnbound _ scopei _ cs -> bind i scopei cs env2 vs2 v1
                                                                                     MGuarded e cs x        -> setMeta i (MGuarded e ((\e -> apply env2 e vs2 >>= \v2 -> eqValue' k v1 v2) : cs) x)
     eqValue' k (VApp f1 vs1)                  (VApp f2 vs2)   | f1 == f2     = zipWithM_ (eqValue fail suspend k) vs1 vs2
     eqValue' k (VConst f1 vs1)                (VConst f2 vs2) | f1 == f2     = zipWithM_ (eqValue fail suspend k) vs1 vs2
@@ -495,16 +491,17 @@ eqValue fail suspend k v1 v2 = do
                                                                                in eqExpr fail suspend (k+1) (v:env1) e1 (v:env2) e2
     eqValue' k v1                             v2                             = fail
 
-    mkLam i scope env vs0 v = do
+    bind i scope cs env vs0 v = do
       let k  = scopeSize scope
           vs  = reverse (take k env) ++ vs0
           xs  = nub [i | VGen i [] <- vs]
-      if length vs == length xs
-        then return ()
-        else fail
-      v <- occurCheck i k xs v
-      e <- value2expr (length xs) v
-      return (addLam vs0 e)
+      if length vs /= length xs
+        then suspend i (\e -> apply env e vs0 >>= \iv -> eqValue fail suspend k iv v)
+        else do v <- occurCheck i k xs v
+                e0 <- value2expr (length xs) v
+                let e = addLam vs0 e0
+                setMeta i (MBound e)
+                sequence_ [c e | c <- cs]
       where
         addLam []     e = e
         addLam (v:vs) e = EAbs Explicit var (addLam vs e)
