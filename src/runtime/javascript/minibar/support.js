@@ -54,20 +54,23 @@ function GetXmlHttpObject(handler)
 }
 
 function ajax_http_get(url,callback) {
-  var http=GetXmlHttpObject()
-  if (http==null) {
-    alert ("Browser does not support HTTP Request")
-    return
-  } 
-  var statechange=function() {
-      if (http.readyState==4 || http.readyState=="complete")
-	  callback(http.responseText)
-  }
-  http.onreadystatechange=statechange
-  http.open("GET",url,true)
-  http.send(null)
-  //dump("http get "+url+"\n")
-  return http
+    var http=GetXmlHttpObject()
+    if (http==null) {
+	alert ("Browser does not support HTTP Request")
+	return
+    } 
+    var statechange=function() {
+	if (http.readyState==4 || http.readyState=="complete") {
+	    if(http.status==200) callback(http.responseText);
+	    else alert("Request for "+url+" failed: "
+		       +http.status+" "+http.statusText);
+	}
+    }
+    http.onreadystatechange=statechange;
+    http.open("GET",url,true)
+    http.send(null)
+    //dump("http get "+url+"\n")
+    return http
 }
 
 // JSON via AJAX
@@ -89,10 +92,17 @@ function http_get_json(url,cont) {
 /* --- HTML construction ---------------------------------------------------- */
 function text(s) { return document.createTextNode(s); }
 
+function node(tag,as,ds) {
+    var n=document.createElement(tag);
+    for(var a in as) n.setAttribute(a,as[a]);
+    for(var i in ds) n.appendChild(ds[i]);
+    return n;
+}
+
 function empty(tag,name,value) {
-  var el=document.createElement(tag);
-  if(name && value) el.setAttribute(name,value);
-  return el;
+    var el=node(tag,{},[])
+    if(name && value) el.setAttribute(name,value);
+    return el;
 }
 
 function empty_id(tag,id) { return empty(tag,"id",id); }
@@ -101,11 +111,7 @@ function empty_class(tag,cls) { return empty(tag,"class",cls); }
 function div_id(id) { return empty_id("div",id); }
 function span_id(id) { return empty_id("span",id); }
 
-function wrap(tag,contents) {
-  var el=empty(tag);
-  el.appendChild(contents);
-  return el;
-}
+function wrap(tag,contents) { return node(tag,{},[contents]); }
 
 function wrap_class(tag,cls,contents) {
   var el=empty_class(tag,cls);
@@ -123,38 +129,35 @@ function li(contents) { return wrap("li",contents); }
 function th(contents) { return wrap("th",contents); }
 function td(contents) { return wrap("td",contents); }
 
-function tr(cells) {
-  var tr=empty("tr");
-  for(var i=0;i<cells.length;i++)
-    tr.appendChild(cells[i]);
-  return tr;
-}
+function tr(cells) { return node("tr",{},cells); }
 
 function button(label,action,key) {
-  var el=empty("input","type","button");
-  el.setAttribute("value",label);
-  el.setAttribute("onclick",action);
-  if(key) el.setAttribute("accesskey",key);
-  return el;
-}
-
-function option(label,value) {
-    var el=empty("option","value",value);
-    el.innerHTML=label;
+    var el=node("input",{"type":"button","value":label},[]);
+    if(typeof action=="string") el.setAttribute("onclick",action);
+    else el.onclick=action;
+    if(key) el.setAttribute("accesskey",key);
     return el;
 }
 
-function appendChildren(el,cs) {
-  for(var i=0;i<cs.length;i++)
-    el.appendChild(cs[i]);
-  return el;
+function option(label,value) {
+    return node("option",{"value":value},[text(label)]);
 }
 
-function tda(cs) { return appendChildren(empty("td"),cs); }
+function appendChildren(el,ds) {
+    for(var i in ds) el.appendChild(ds[i]);
+    return el;
+}
+
+function tda(cs) { return node("td",{},cs); }
 
 function img(src) { return empty("img","src",src); }
 
 /* --- Debug ---------------------------------------------------------------- */
+
+function debug(s) {
+    var d=element("debug");
+    if(d) d.appendChild(text(s+"\n"))
+}
 
 function show_props(obj, objName) {
    var result = "";
