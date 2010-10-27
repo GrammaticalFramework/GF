@@ -66,9 +66,9 @@ Type:       Vector (succ (succ zero))
 Couldn't match expected type Vector (plus (succ (succ (succ zero))) (succ (succ zero)))
        against inferred type Vector (succ (succ (succ (succ zero))))
 In the expression: vector (succ (succ (succ (succ zero))))
-Couldn't match expected type Vector ?1
-       against inferred type Vector zero
-In the expression: vector zero
+Expression: idMorph (mkMorph2 (\x -> x) (vector zero))
+Type:       Nat
+
 Couldn't match expected type Vector zero
        against inferred type Vector n
 In the expression: x
