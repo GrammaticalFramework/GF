@@ -314,7 +314,8 @@ function start_minibar(server,opts,target) {
     function show_translations(translationResults) {
 	var trans=translations;
 	var grammar=language_menu.grammar;
-	var to=target_lang();
+	//var to=target_lang(); // wrong
+	var to=to_menu.value;
 	var cnt=translationResults.length;
 	//trans.translations=translations;
 	trans.single_translation=[];
@@ -354,6 +355,7 @@ function start_minibar(server,opts,target) {
 	var trans=translations;
 	var grammar=language_menu.grammar;
 	var to=target_lang();
+	//var to=to_menu.value // wrong
 	var cnt=translationsResult.length;
 	//trans.translations=translationsResult;
 	trans.single_translation=[];
