@@ -102,7 +102,7 @@ function start_minibar(server,opts,target) {
 	set_initial_language(options,menu,grammar)
 	to_menu.onchange=get_translations
 
-	to_menu.innerHMTL="";
+	to_menu.innerHTML="";
 	to_menu.appendChild(option("All","-1"));
 	for(var i=0; i<lang.length; i++)
 	    if(!hasPrefix(lang[i].name,"Disamb"))
