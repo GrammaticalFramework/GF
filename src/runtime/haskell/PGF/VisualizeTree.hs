@@ -21,6 +21,7 @@ module PGF.VisualizeTree
              , graphvizDependencyTree
              , graphvizBracketedString
              , graphvizAlignment
+             , gizaAlignment
              , getDepLabels
              ) where
 
@@ -211,55 +212,122 @@ graphvizBracketedString = render . lin2tree
         fields cs = hsep (intersperse (char '|') [tbrackets (tag id) <> text c | (_,_,id,c) <- cs])
 
 
-graphvizAlignment :: PGF -> [Language] -> Expr -> String
-graphvizAlignment pgf langs = render . lin2graph . linsBracketed
-  where
-    linsBracketed t = [bracketedLinearize pgf lang t | lang <- langs]
+type Rel = (Int,[Int])
+-- possibly needs changes after clearing about many-to-many on this level
 
-    lin2graph :: [BracketedString] -> Doc
-    lin2graph bss =
-      text "digraph {" $$
+type IndexedSeq = (Int,[String])
+type LangSeq = [IndexedSeq]
+
+data PreAlign = PreAlign [LangSeq] [[Rel]]
+  deriving Show
+-- alignment structure for a phrase in 2 languages, along with the 
+-- many-to-many relations
+
+
+genPreAlignment :: PGF -> [Language] -> Expr -> PreAlign
+genPreAlignment pgf langs = lin2align . linsBracketed
+ where  
+      linsBracketed t = [bracketedLinearize pgf lang t | lang <- langs]
+
+      lin2align :: [BracketedString] -> PreAlign
+      lin2align bss =  PreAlign langSeqs langRels
+          where
+           (langSeqs,langRels) = mkLayers leaves
+           nil = -1
+           leaves = map (groupAndIndexIt 0 . getLeaves nil) bss
+
+           groupAndIndexIt id []          = []
+           groupAndIndexIt id ((p,w):pws) = let (ws,pws1) = collect pws
+                                             in (p,id,unwords (w:ws)) : groupAndIndexIt (id+1) pws1
+            where
+              collect pws@((p1,w):pws1)
+                | p == p1   = let (ws,pws2) = collect pws1
+                                in (w:ws,pws2)
+              collect pws   = ([],pws)
+
+           getLeaves parent bs =
+                  case bs of
+                    Leaf w                -> [(parent,w)]
+                    Bracket _ fid _ _ bss -> concatMap (getLeaves fid) bss
+
+           mkLayers (cs:css:rest) = let (lrest, rrest) =  mkLayers (css:rest)
+                                     in ((fields cs) : lrest, (map (mkLinks css) cs) : rrest)    
+           mkLayers [cs] = ([fields cs], [])
+           mkLayers _ = ([],[])
+
+           mkLinks cs (p0,id0,_) = (id0,indices)
+                    where 
+                     indices = [id1 | (p1,id1,_) <- cs, p1 == p0]
+
+           fields cs = [(id, [w]) | (_,id,w) <- cs]
+
+
+-- we assume we have 2 languages - source and target
+gizaAlignment :: PGF -> (Language,Language) -> Expr -> (String,String,String)
+gizaAlignment pgf (l1,l2) e = let PreAlign [rl1,rl2] rels = genPreAlignment pgf [l1,l2] e
+                                   in 
+                                     (unwords (map showIndSeq rl1), unwords (concat $ map snd rl2),
+                                        unwords $ words $ showRels rl2 (concat rels))
+
+
+showIndSeq (_,l) = let ww = map words l
+                       w_ = map (intersperse "_")  ww
+                      in 
+                       concat $ concat w_
+
+showRels inds2 [] = []
+showRels inds2 ((ind,is):rest) = 
+                       let lOffs = computeOffset inds2 0
+                           ltemp = [(i,getOffsetIndex i lOffs) | i <- is] 
+                           lcurr = concat $ map (\(offset,ncomp) -> [show ind ++ "-" ++ show (-1 + offset + ii)  ++ " "| ii <- [1..ncomp]]) (map snd ltemp)
+                           lrest = showRels inds2 rest
+                            in 
+                             (unwords lcurr) ++ lrest
+                               
+                            
+                           
+                         
+
+
+
+getOffsetIndex i lst = let ll = filter (\(x,_) -> x == i) lst
+                           in 
+                           snd $ head ll                           
+
+computeOffset [] transp = []
+computeOffset ((i,l):rest) transp = let nw = (length $ words $ concat l) 
+                                     in (i,(transp,nw)) : (computeOffset rest (transp + nw))  
+
+
+
+-- alignment in the Graphviz format from the intermediate structure 
+-- same effect as the old direct function 
+graphvizAlignment :: PGF -> [Language] -> Expr -> String
+graphvizAlignment pgf langs exp = 
+    render (text "digraph {" $$
       space $$
       nest 2 (text "rankdir=LR ;" $$
               text "node [shape = record] ;" $$
               space $$
-              mkLayers 0 leaves) $$
-      text "}"
-      where
-        nil = -1
+              renderList 0 lrels rrels) $$
+      text "}")
+  where             
+     (PreAlign lrels rrels) = genPreAlignment pgf langs exp 
+     
+             
+     renderList ii (l:ls) (r:rs) = struct ii <> text "[label = \"" <> fields l <> text "\"] ;" $$
+                                 (case ls of 
+                                       [] -> empty 
+                                       _  -> vcat [struct ii  <> colon <> tag id0 
+                                               <> colon <> char 'e' <+> text "->" <+> struct (ii+1) 
+                                               <> colon <> tag id1 <> colon <> char 'w' <+> semi 
+                                                   | (id0,ids) <- r, id1 <- ids] $$ renderList (ii + 1) ls rs)
+     renderList ii [] _ = empty                                           
+     renderList ii [l] [] = struct ii <> text "[label = \"" <> fields l <> text "\"] ;"
+ 
+     fields cs = hsep (intersperse (char '|') [tbrackets (tag id) <> text w | (id,ws) <- cs, w <- ws])
 
-        leaves = map (groupAndIndexIt 0 . getLeaves nil) bss
-
-        groupAndIndexIt id []          = []
-        groupAndIndexIt id ((p,w):pws) = let (ws,pws1) = collect pws
-                                         in (p,id,unwords (w:ws)) : groupAndIndexIt (id+1) pws1
-          where
-            collect pws@((p1,w):pws1)
-              | p == p1   = let (ws,pws2) = collect pws1
-                            in (w:ws,pws2)
-            collect pws   = ([],pws)
-
-        getLeaves parent bs =
-          case bs of
-            Leaf w                -> [(parent,w)]
-            Bracket _ fid _ _ bss -> concatMap (getLeaves fid) bss
-
-        mkLayers l []       = empty
-        mkLayers l (cs:css) = struct l <> text "[label = \"" <> fields cs <> text "\"] ;" $$
-                              (case css of
-                                 (ncs:_) -> vcat (map (mkLinks l ncs) cs)
-                                 _       -> empty)  $$
-                              mkLayers (l+1) css
-
-        mkLinks l cs (p0,id0,_) = 
-          vcat (map (\id1 -> struct l     <> colon <> tag id0 <> colon <> char 'e' <+>
-                             text "->" <+>
-                             struct (l+1) <> colon <> tag id1 <> colon <> char 'w' <+> semi) indices)
-          where
-            indices = [id1 | (p1,id1,_) <- cs, p1 == p0]
-
-        fields cs = hsep (intersperse (char '|') [tbrackets (tag id) <> text w | (_,id,w) <- cs])
-
+  
 
 -- auxiliaries for graphviz syntax
 struct l = text ("struct" ++ show l)
@@ -267,6 +335,7 @@ tbrackets d = char '<' <> d  <> char '>'
 tag i
   | i < 0     = char 'r' <> int (negate i)
   | otherwise = char 'n' <> int i
+
 
 
 --------------------------------------------------------------------
