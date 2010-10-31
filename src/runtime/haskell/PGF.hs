@@ -116,7 +116,8 @@ module PGF(
            graphvizDependencyTree,
            graphvizBracketedString,
            graphvizAlignment,
-
+           gizaAlignment,
+ 
            -- * Probabilities
            Probabilities,
            mkProbabilities,

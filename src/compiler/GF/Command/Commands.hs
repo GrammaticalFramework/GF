@@ -172,6 +172,28 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("view","program to open the resulting file (default \"open\")")
        ] 
     }),
+ ("ga", emptyCommandInfo {
+     longname = "giza_alignment",
+     synopsis = "show the giza alignment between 2 languages",
+     explanation = unlines [
+       "Prints a set of alignments in the .txt format.",
+       "The graph can be saved in a file by the wf command as usual."
+       ],
+     exec = \opts es -> do
+         let giz = map (gizaAlignment pgf (head $ languages pgf, head $ tail $ languages pgf)) es
+         let lsrc = unlines $ map (\(x,_,_) -> x) giz
+         let ltrg = unlines $ map (\(_,x,_) -> x) giz
+         let align = unlines $ map (\(_,_,x) -> x) giz
+         let grph = if null es then [] else lsrc ++ "\n--end_source--\n\n"++ltrg++"\n-end_target--\n\n"++align
+         return $ fromString grph,
+     examples = [
+       "gr | ga              -- generate a tree and show giza alignments"
+       ],
+     options = [
+       ],
+     flags = [
+       ] 
+    }),
 
   ("cc", emptyCommandInfo {
      longname = "compute_concrete",
