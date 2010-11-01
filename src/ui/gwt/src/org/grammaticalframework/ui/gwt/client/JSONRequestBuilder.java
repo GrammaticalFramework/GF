@@ -56,13 +56,13 @@ public class JSONRequestBuilder {
 	public static <T extends JavaScriptObject> JSONRequest sendDataRequest (String base, List<Arg> vars, String content, final JSONCallback<T> callback) {
 		String url = getQueryURL(base,vars);
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url);
-		builder.setRequestData(content);
 		builder.setTimeoutMillis(30000);
+		builder.setHeader("Content-Length", Integer.toString(content.length()));
 		builder.setHeader("Accept","text/plain, text/html;q=0.5, */*;q=0.1");
 		Request request = null;
 
 		try {
-			request = builder.sendRequest(null, new RequestCallback() {
+			request = builder.sendRequest(content, new RequestCallback() {
 				public void onError(Request request, Throwable e) {
 					callback.onError(e);
 				}

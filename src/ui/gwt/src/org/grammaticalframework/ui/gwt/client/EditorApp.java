@@ -12,7 +12,9 @@ import com.google.gwt.event.shared.*;
 public class EditorApp implements EntryPoint {
 
 	protected static final String pgfBaseURL = "/grammars";
+	protected static final String contentBaseURL = "/content.fcgi";
 
+	protected ContentService contentService;
 	protected PGFWrapper pgf;
 
 	protected VerticalPanel outputPanel;
@@ -24,6 +26,7 @@ public class EditorApp implements EntryPoint {
 	protected TextInputPanel textPanel;
 	protected FridgeBagPanel bagPanel;
 	protected MagnetFactory magnetFactory;
+	protected TabBar tabBar;
 
 	private JSONRequest completeRequest = null;
 	private JSONRequest translateRequest = null;
@@ -233,7 +236,7 @@ public class EditorApp implements EntryPoint {
 	}
 
 	protected Widget createEditorPanel() {
-		textPanel = new TextInputPanel();
+		textPanel = new TextInputPanel(contentService, statusPopup);
 		textPanel.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
 				update();
@@ -304,11 +307,18 @@ public class EditorApp implements EntryPoint {
 	}
 
 	protected DocumentsPanel createDocumentsPanel() {
-		return new DocumentsPanel(pgf);
+		DocumentsPanel panel = new DocumentsPanel(pgf, contentService, statusPopup);
+		panel.addSelectionHandler(new SelectionHandler<Object>() {
+			public void onSelection(SelectionEvent<Object> event) {
+				tabBar.selectTab(1);
+				textPanel.load(event.getSelectedItem());
+			}
+		});
+		return panel;
 	}
 
 	protected TabBar createLinksPanel(final Panel parent) {
-		TabBar tabBar = new TabBar();
+		tabBar = new TabBar();
 		tabBar.setStylePrimaryName("my-LinksPanel");
 		tabBar.addTab("Documents");
 		tabBar.addTab("Editor");
@@ -426,6 +436,7 @@ public class EditorApp implements EntryPoint {
 		statusPopup = new StatusPopup();
 
 		pgf = new PGFWrapper(pgfBaseURL);
+		contentService = new ContentService(contentBaseURL);
 		RootPanel.get().add(createUI());
 		pgf.addSettingsListener(new MySettingsListener());
 		pgf.updateAvailableGrammars();
