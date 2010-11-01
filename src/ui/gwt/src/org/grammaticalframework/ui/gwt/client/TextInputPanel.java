@@ -11,6 +11,8 @@ import com.google.gwt.event.shared.*;
 
 public class TextInputPanel extends Composite implements Focusable, HasValueChangeHandlers<String>, HasSelectionHandlers<String> {
 
+	protected ContentService contentService;
+	protected StatusPopup statusPopup;
 	protected FlowPanel textPanel = null;
 	protected FlowPanel mainPanel = null;
 	protected FocusPanel focusPanel = null;
@@ -28,8 +30,13 @@ public class TextInputPanel extends Composite implements Focusable, HasValueChan
 	private Map<Integer, Phrase> mapFId2Phrase   = new HashMap<Integer, Phrase>();
 
 	private ChangeListenerCollection changeListeners = null;
+	
+	private Integer docId = null;
 
-	public TextInputPanel() {
+	public TextInputPanel(ContentService contentService, StatusPopup statusPopup) {
+		this.contentService = contentService;
+		this.statusPopup = statusPopup;
+
 		mainPanel = new FlowPanel();
 		mainPanel.setStylePrimaryName("wordspanel");
 
@@ -72,7 +79,7 @@ public class TextInputPanel extends Composite implements Focusable, HasValueChan
 
 		Image clearButton = new Image("org.grammaticalframework.ui.gwt.EditorApp/textinput-buttons.png",0,0,20,20);
 		clearButton.setTitle("Clears the whole document.");
-		clearButton.setStylePrimaryName("button");
+		clearButton.setStylePrimaryName("toolbar-button");
 		clearButton.addClickListener(new ClickListener () {
 			public void onClick(Widget sender) {
 				clear();
@@ -82,7 +89,7 @@ public class TextInputPanel extends Composite implements Focusable, HasValueChan
 
  		Image saveButton = new Image("org.grammaticalframework.ui.gwt.EditorApp/textinput-buttons.png",20,0,20,20);
 		saveButton.setTitle("Save the document.");
-		saveButton.setStylePrimaryName("button");
+		saveButton.setStylePrimaryName("toolbar-button");
 		saveButton.addClickListener(new ClickListener () {
 			public void onClick(Widget sender) {
 				save();
@@ -92,7 +99,7 @@ public class TextInputPanel extends Composite implements Focusable, HasValueChan
 
  		Image deleteLastButton = new Image("org.grammaticalframework.ui.gwt.EditorApp/textinput-buttons.png",40,0,20,20);
 		deleteLastButton.setTitle("Removes the last word.");
-		deleteLastButton.setStylePrimaryName("button");
+		deleteLastButton.setStylePrimaryName("toolbar-button");
 		deleteLastButton.addClickListener(new ClickListener () {
 			public void onClick(Widget sender) {
 				deleteLast();
@@ -168,10 +175,43 @@ public class TextInputPanel extends Composite implements Focusable, HasValueChan
 		focusedPanel = null;
 		errorPanels = null;
 		tempPanel = null;
+		docId = null;
 		fireValueChange();
 	}
 	
 	public void save() {
+		statusPopup.setStatus("Saving...");
+		
+		contentService.save(docId, getText(), new ContentService.SaveCallback() {
+			public void onResult(ContentService.DocumentSignature sign) {
+				docId = new Integer(sign.getId());
+				statusPopup.clearStatus();
+			}
+
+			public void onError(Throwable e) {
+				statusPopup.showError("Saving failed", e);
+			}
+		});
+	}
+	
+	public void load(Object id) {
+		statusPopup.setStatus("Loading...");
+		
+		contentService.load(id, new ContentService.LoadCallback() {
+			public void onResult(ContentService.Document document) {
+				clear();
+				
+				docId = new Integer(document.getId());
+				showSearchBox();
+				searchBox.setText(document.getContent());
+				
+				statusPopup.clearStatus();
+			}
+
+			public void onError(Throwable e) {
+				statusPopup.showError("Saving failed", e);
+			}
+		});
 	}
 
 	public void addMagnet(Magnet magnet) {

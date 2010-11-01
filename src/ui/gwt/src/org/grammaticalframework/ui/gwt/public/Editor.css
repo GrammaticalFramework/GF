@@ -77,12 +77,12 @@
   background-repeat: repeat-x;
 }
 
-.my-TextInputPanel .toolbar .button {
+.toolbar-button {
   float: left;
   margin: 2px;
 }
 
-.my-TextInputPanel .toolbar .button:hover {
+.toolbar-button:hover {
   margin: 1px;
   border: 1px solid rgb(147,194,241);
 }
