@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<LINK REL="stylesheet" TYPE="text/css" HREF="css/modernL.css">
+<TITLE>Punjabi Resources in Shahmukhi script</TITLE>
+</HEAD>
+<BODY>
+
+<DIV CLASS="header" ID="header">
+<H1>Punjabi Resources in Shahmukhi script</H1>
+<H2>2010</H2>
+<H3>Muhammad Humayoun &lt;humayoun{@}gmail.com&gt;</H3>
+</DIV>
+
+<DIV CLASS="toc" ID="toc">
+  <UL>
+  <LI><A HREF="#toc1">Introduction</A>
+  <LI><A HREF="#toc2">Resources</A>
+  <LI><A HREF="#toc3">Running Morphology</A>
+  </UL>
+
+</DIV>
+<DIV CLASS="body" ID="body">
+<A NAME="toc1"></A>
+<H1>Introduction</H1>
+<P>
+Welcome to the homepage of Punjabi resources in Shahmukhi script. These resources are reported in the following publication and made available under <A HREF="downloads/gpl.txt">GNU General Public License</A>.
+</P>
+<UL>
+<LI>M. Humayoun and A. Ranta. <B>Developing Punjabi Morphology, Corpus and Lexicon.</B> <I>The 24th Pacific Asia conference on Language, Information and Computation</I> (<A HREF="http://www.compling.jp/paclic24/">http://www.compling.jp/paclic24/</A>). <A HREF="downloads/Punjabi-paper-paclic24.pdf">draft</A>
+</UL>
+
+<A NAME="toc2"></A>
+<H1>Resources</H1>
+<UL>
+<LI>An implementation of inflectional morphology for Punjabi in <A HREF="http://www.grammaticalframework.org/">GF</A>. <A HREF="morphology">Online browsing</A> or <A HREF="downloads/morphology.zip">download zip</A>
+</UL>
+
+<UL>
+<LI>A corpus containing 0.9 million words (941,284), which is collected partly from Wikipedia. <A HREF="downloads/literature-wikipedia.corpus.sentence.uniq.sorted">view text</A> or <A HREF="downloads/literature-wikipedia.corpus.sentence.uniq.sorted.zip">download zip</A>
+<P></P>
+<LI>A lexicon of 13,600 words (named entities:63%, lemmas of inflected words:37%; a lemma is also known as a dictionary form or a base form) <A HREF="downloads/punjabi.shahmukhi.lexicon">view text</A> or <A HREF="downloads/punjabi.shahmukhi.lexicon.zip">download zip</A>. The paradigms are defined in the paper, but a detailed version with examples can be found <A HREF="downloads/Paradigms.pdf">here</A>. 
+<P></P>
+<LI>Frequency list for Punjabi. <A HREF="downloads/literature-wikipedia.corpus.fqlist">view text</A> or <A HREF="downloads/literature-wikipedia.corpus.fqlist.zip">download zip</A> 
+</UL>
+
+<A NAME="toc3"></A>
+<H1>Running Morphology</H1>
+<P>
+  First you need to install <A HREF="http://www.grammaticalframework.org/download/index.html">Grammatical Framework (GF)</A> first.  
+  Instructions to install could be found <A HREF="http://www.grammaticalframework.org/download/index.html">here</A>.
+</P>
+<P>
+  Now to run morphology, after unzipping <CODE>morphology.zip</CODE>, run following commands in console:
+</P>
+<PRE>
+  cd morphology
+  gf MainPnb.gf 
+  ma "پینا"
+</PRE>
+<P></P>
+<P>
+where ma stands for morphological analysis and <CODE>MainPnb.gf</CODE> is the main file.
+</P>
+<P>
+To see a complete paradigm do following:
+</P>
+<PRE>
+  gf MainPnb.gf
+  i -retain MorphoPnb.gf
+  cc mkAdj1 "بَھیڑا"
+</PRE>
+<P></P>
+<P>
+The result will be as followed:
+</P>
+<PRE>
+variants {variants {{s : ResPnb.Gender =&gt; ResPnb.Number =&gt; ResPnb.Case =&gt; Str
+                       = table ResPnb.Gender {
+                           ResPnb.Masc =&gt; table ResPnb.Number {
+                                            ResPnb.Sg =&gt; table ResPnb.Case {
+                                                           ResPnb.Dir =&gt; "بَھیڑا";
+                                                           ResPnb.Obl =&gt; "بَھیڑے";
+                                                           ResPnb.Voc =&gt; "بَھیڑیا";
+                                                           ResPnb.Abl =&gt; "بَھیڑیوں"
+                                                         };
+                                            ResPnb.Pl =&gt; table ResPnb.Case {
+                                                           ResPnb.Dir =&gt; "بَھیڑے";
+                                                           ResPnb.Obl =&gt; "بَھیڑیاں";
+                                                           ResPnb.Voc =&gt; "بَھیڑیو";
+                                                           ResPnb.Abl =&gt; []
+                                                         }
+                                          };
+                           ResPnb.Fem =&gt; table ResPnb.Number {
+                                           ResPnb.Sg =&gt; table ResPnb.Case {
+                                                          ResPnb.Dir =&gt; "بَھیڑی";
+                                                          ResPnb.Obl =&gt; "بَھیڑی";
+                                                          ResPnb.Voc =&gt; "بَھیڑی";
+                                                          ResPnb.Abl =&gt; "بَھیڑیوں"
+                                                        };
+                                           ResPnb.Pl =&gt; table ResPnb.Case {
+                                                          ResPnb.Dir =&gt; "بَھیڑی";
+                                                          ResPnb.Obl =&gt; "بَھیڑیاں";
+                                                          ResPnb.Voc =&gt; "بَھیڑیو";
+                                                          ResPnb.Abl =&gt; []
+                                                        }
+                                         }
+                         }};
+                    {s : ResPnb.Gender =&gt; ResPnb.Number =&gt; ResPnb.Case =&gt; Str
+                       = table ResPnb.Gender {
+                           ResPnb.Masc =&gt; table ResPnb.Number {
+                                            ResPnb.Sg =&gt; table ResPnb.Case {
+                                                           ResPnb.Dir =&gt; "بَھیڑا";
+                                                           ResPnb.Obl =&gt; "بَھیڑے";
+                                                           ResPnb.Voc =&gt; "بَھیڑے";
+                                                           ResPnb.Abl =&gt; "بَھیڑیوں"
+                                                         };
+                                            ResPnb.Pl =&gt; table ResPnb.Case {
+                                                           ResPnb.Dir =&gt; "بَھیڑے";
+                                                           ResPnb.Obl =&gt; "بَھیڑیاں";
+                                                           ResPnb.Voc =&gt; "بَھیڑیو";
+                                                           ResPnb.Abl =&gt; []
+                                                         }
+                                          };
+                           ResPnb.Fem =&gt; table ResPnb.Number {
+                                           ResPnb.Sg =&gt; table ResPnb.Case {
+                                                          ResPnb.Dir =&gt; "بَھیڑی";
+                                                          ResPnb.Obl =&gt; "بَھیڑی";
+                                                          ResPnb.Voc =&gt; "بَھیڑی";
+                                                          ResPnb.Abl =&gt; "بَھیڑیوں"
+                                                        };
+                                           ResPnb.Pl =&gt; table ResPnb.Case {
+                                                          ResPnb.Dir =&gt; "بَھیڑی";
+                                                          ResPnb.Obl =&gt; "بَھیڑیاں";
+                                                          ResPnb.Voc =&gt; "بَھیڑیو";
+                                                          ResPnb.Abl =&gt; []
+                                                        }
+                                         }
+                         }}};
+          variants {{s : ResPnb.Gender =&gt; ResPnb.Number =&gt; ResPnb.Case =&gt; Str
+                       = table ResPnb.Gender {
+                           ResPnb.Masc =&gt; table ResPnb.Number {
+                                            ResPnb.Sg =&gt; table ResPnb.Case {
+                                                           ResPnb.Dir =&gt; "بَھیڑا";
+                                                           ResPnb.Obl =&gt; "بَھیڑے";
+                                                           ResPnb.Voc =&gt; "بَھیڑیا";
+                                                           ResPnb.Abl =&gt; "بَھیڑیوں"
+                                                         };
+                                            ResPnb.Pl =&gt; table ResPnb.Case {
+                                                           ResPnb.Dir =&gt; "بَھیڑے";
+                                                           ResPnb.Obl =&gt; "بَھیڑیاں";
+                                                           ResPnb.Voc =&gt; "بَھیڑیو";
+                                                           ResPnb.Abl =&gt; []
+                                                         }
+                                          };
+                           ResPnb.Fem =&gt; table ResPnb.Number {
+                                           ResPnb.Sg =&gt; table ResPnb.Case {
+                                                          ResPnb.Dir =&gt; "بَھیڑی";
+                                                          ResPnb.Obl =&gt; "بَھیڑی";
+                                                          ResPnb.Voc =&gt; "بَھیڑیے";
+                                                          ResPnb.Abl =&gt; "بَھیڑیوں"
+                                                        };
+                                           ResPnb.Pl =&gt; table ResPnb.Case {
+                                                          ResPnb.Dir =&gt; "بَھیڑی";
+                                                          ResPnb.Obl =&gt; "بَھیڑیاں";
+                                                          ResPnb.Voc =&gt; "بَھیڑیو";
+                                                          ResPnb.Abl =&gt; []
+                                                        }
+                                         }
+                         }};
+                    {s : ResPnb.Gender =&gt; ResPnb.Number =&gt; ResPnb.Case =&gt; Str
+                       = table ResPnb.Gender {
+                           ResPnb.Masc =&gt; table ResPnb.Number {
+                                            ResPnb.Sg =&gt; table ResPnb.Case {
+                                                           ResPnb.Dir =&gt; "بَھیڑا";
+                                                           ResPnb.Obl =&gt; "بَھیڑے";
+                                                           ResPnb.Voc =&gt; "بَھیڑے";
+                                                           ResPnb.Abl =&gt; "بَھیڑیوں"
+                                                         };
+                                            ResPnb.Pl =&gt; table ResPnb.Case {
+                                                           ResPnb.Dir =&gt; "بَھیڑے";
+                                                           ResPnb.Obl =&gt; "بَھیڑیاں";
+                                                           ResPnb.Voc =&gt; "بَھیڑیو";
+                                                           ResPnb.Abl =&gt; []
+                                                         }
+                                          };
+                           ResPnb.Fem =&gt; table ResPnb.Number {
+                                           ResPnb.Sg =&gt; table ResPnb.Case {
+                                                          ResPnb.Dir =&gt; "بَھیڑی";
+                                                          ResPnb.Obl =&gt; "بَھیڑی";
+                                                          ResPnb.Voc =&gt; "بَھیڑیے";
+                                                          ResPnb.Abl =&gt; "بَھیڑیوں"
+                                                        };
+                                           ResPnb.Pl =&gt; table ResPnb.Case {
+                                                          ResPnb.Dir =&gt; "بَھیڑی";
+                                                          ResPnb.Obl =&gt; "بَھیڑیاں";
+                                                          ResPnb.Voc =&gt; "بَھیڑیو";
+                                                          ResPnb.Abl =&gt; []
+                                                        }
+                                         }
+                         }}}}
+</PRE>
+<P></P>
+<P>
+Please send your feedback and suggestions at <I>humayoun{@}gmail.com</I>
+</P>
+<HR NOSHADE SIZE=1>
+<P>
+Last update: Tue Nov  2 19:01:42 2010
+</P>
+</DIV>
+
+<!-- html code generated by txt2tags 2.5 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -t html -\-toc index.txt -->
+</BODY></HTML>
