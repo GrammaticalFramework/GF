@@ -10,8 +10,12 @@ NoVoc 0.98
 
 PredVP 0.9
 
-DetCN 0.7
-UsePron 0.2
+DetCN 0.8
+UsePron 0.1
+something_NP 0.01
+somebody_NP 0.01
+everything_NP 0.01
+everybody_NP 0.01
 
 SlashV2 0.8
 
@@ -30,3 +34,6 @@ PPos 0.7
 
 ApposCN 0.01
 
+ExistNP 0.0001
+UseCopula 0.01
+ConjS 0.1
