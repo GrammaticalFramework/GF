@@ -148,6 +148,10 @@ function appendChildren(el,ds) {
     return el;
 }
 
+function insertFirst(parent,child) {
+    parent.insertBefore(child,parent.firstChild);
+}
+
 function tda(cs) { return node("td",{},cs); }
 
 function img(src) { return empty("img","src",src); }
@@ -215,6 +219,11 @@ function implode(cs) { // array of strings to string
 }
 
 function hasPrefix(s,pre) { return s.substr(0,pre.length)==pre; }
+
+function commonPrefix(s1,s2) {
+    for(var i=0;i<s1.length && i<s2.length && s1[i]==s2[i];i++);
+    return s1.substr(0,i);
+}
 
 /*
 function all(p,xs) {
