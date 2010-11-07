@@ -65,7 +65,7 @@ public class BrowsePanel extends Composite {
 
 	private static void callBrowse(BrowsePanel panel, String id) {
 		panel.browse(id);
-		History.newItem("browse:"+id);
+		History.newItem("browse:"+id, false);
 	}
 
 	public void browse(final String id) {

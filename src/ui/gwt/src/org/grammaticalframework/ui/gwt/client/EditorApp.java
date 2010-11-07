@@ -226,8 +226,6 @@ public class EditorApp implements EntryPoint {
 		vPanel.add(hPanel);
 		vPanel.add(editorPanel);
 
-		History.addHistoryListener(new MyHistoryListener(linksPanel));
-
 		return vPanel;
 	}
 
@@ -325,48 +323,52 @@ public class EditorApp implements EntryPoint {
 		tabBar.addTab("Query");
 		tabBar.addTab("Browse");
 		
-		tabBar.addSelectionHandler(new SelectionHandler<Integer>() {
-			public void onSelection(SelectionEvent<Integer> event) {
-				parent.remove(documentsPanel);
-				parent.remove(editorPanel);
-				parent.remove(queryPanel);
-				parent.remove(browsePanel);
-
-				switch (event.getSelectedItem().intValue()) {
-					case 0: parent.add(documentsPanel); History.newItem("documents"); break;
-					case 1: parent.add(editorPanel);  History.newItem("editor"); break;
-					case 2: parent.add(queryPanel);  History.newItem("query"); break;
-					case 3: parent.add(browsePanel);  History.newItem("browse"); break;
-				}
-			}
-		});
+		NavigationHandler handler = new NavigationHandler(tabBar, parent);
+		tabBar.addSelectionHandler(handler);
+		History.addHistoryListener(handler);
 
 		return tabBar;
-	}
-
-	protected Widget createErrorMsg(final PGF.TcError error) {
-		HTML msgHTML = new HTML("<pre>"+error.getMsg()+"</pre>");
-		msgHTML.addStyleName("content");
-		msgHTML.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
-				textPanel.showError(error.getFId());
-			}
-		});
-		return msgHTML;
 	}
 
 	//
 	// History stuff
 	//
 
-	protected class MyHistoryListener implements HistoryListener {
+	protected class NavigationHandler implements HistoryListener, SelectionHandler<Integer> {
 		private final TabBar linksPanel;
+		private final Panel parent;
+		private int level = 0;
 
-		public MyHistoryListener(TabBar linksPanel) {
+		public NavigationHandler(TabBar linksPanel, Panel parent) {
 			this.linksPanel = linksPanel;
+			this.parent = parent;
+		}
+
+		public void onSelection(SelectionEvent<Integer> event) {
+			parent.remove(documentsPanel);
+			parent.remove(editorPanel);
+			parent.remove(queryPanel);
+			parent.remove(browsePanel);
+
+			switch (event.getSelectedItem().intValue()) {
+				case 0: parent.add(documentsPanel); 
+				        if (level == 0) History.newItem("documents", false);
+				        break;
+				case 1: parent.add(editorPanel);
+					if (level == 0) History.newItem("editor", false);
+					break;
+				case 2: parent.add(queryPanel);
+					if (level == 0) History.newItem("query", false);
+					break;
+				case 3: parent.add(browsePanel);
+					if (level == 0) History.newItem("browse", false);
+					break;
+			}
 		}
 
 		public void onHistoryChanged(String token) {
+			level++;
+			
 			if (token.equals("documents")) {
 				linksPanel.selectTab(0);
 			} else if (token.equals("editor")) {
@@ -378,11 +380,24 @@ public class EditorApp implements EntryPoint {
 				browsePanel.onActivate();
 				browsePanel.browse(null);
 			} else if (token.startsWith("browse:")) {
-				linksPanel.selectTab(4);
+				linksPanel.selectTab(3);
 				browsePanel.browse(token.substring(7));
 			}
+			
+			level--;
 		}
 	};
+
+	protected Widget createErrorMsg(final PGF.TcError error) {
+		HTML msgHTML = new HTML("<pre>"+error.getMsg()+"</pre>");
+		msgHTML.addStyleName("content");
+		msgHTML.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				textPanel.showError(error.getFId());
+			}
+		});
+		return msgHTML;
+	}
 
 	protected void setPGFName (String pgfName) {
 		if (pgfName != null && !pgfName.equals(pgf.getPGFName())) {
