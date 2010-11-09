@@ -37,5 +37,6 @@ executable pgf-server
     ghc-options: -optl-mwindows
 
 executable content-server
+  buildable: False
   build-depends: base >=4.2 && <5
   main-is: ContentService.hs
