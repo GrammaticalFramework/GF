@@ -447,7 +447,7 @@ cat pgf mcat = fromMaybe (PGF.startCat pgf) mcat
 
 parse' :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [(PGF.Language,PGF.ParseOutput,PGF.BracketedString)]
 parse' pgf input mcat mfrom = 
-   [(from,po,bs) | from <- froms, (po,bs) <- [PGF.parse_ pgf from cat input]]
+   [(from,po,bs) | from <- froms, (po,bs) <- [PGF.parse_ pgf from cat Nothing input]]
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
         cat = fromMaybe (PGF.startCat pgf) mcat
 
@@ -457,7 +457,7 @@ complete' pgf from typ mlimit input =
   let (ws,prefix) = tokensAndPrefix input
       ps0 = PGF.initState pgf from typ
       (ps,ws') = loop ps0 ws
-      bs       = snd (PGF.getParseOutput ps typ)
+      bs       = snd (PGF.getParseOutput ps typ Nothing)
   in if not (null ws')
        then (bs, unwords (if null prefix then ws' else ws'++[prefix]), [])
        else (bs, prefix, maybe id take mlimit $ order $ Map.keys (PGF.getCompletions ps prefix))
