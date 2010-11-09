@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>PGF online server example</title>
+<style type="text/css">
+body { background: #ddd; }
+</style>
+<script type="text/JavaScript" src="http://www.grammaticalframework.org/src/runtime/javascript/minibar/support.js"></script>
+<script type="text/JavaScript" src="http://www.grammaticalframework.org/src/runtime/javascript/minibar/pgf_online.js"></script>
+<script type="text/JavaScript">
+
+var server_options={
+  grammars_url: "http://www.grammaticalframework.org/grammars/",
+  grammar_list: ["Syllogism.pgf"]
+}
+var pgf_server = pgf_online(server_options);
+
+function call_server() {
+  pgf_server.parse("SyllogismEng",document.forms[0].input.value,show_output)
+}
+
+function show_output(parsed) {
+  document.getElementById("output").innerHTML=parsed[0].trees[0]
+}
+
+</script>
+
+</head>
+
+<body>
+<h1>PGF online server example</h1>
+
+<form onsubmit="call_server(); return false">
+Input:
+<input name=input size=50 value="some humans are not human">
+<input type=submit value=Parse>
+
+<p>
+Output:
+<span id=output></span>
+</form>
+
+
+<h2>Documentation</h2>
+<ul>
+  <li><a href="http://www.grammaticalframework.org/~hallgren/gf-web-api-examples.html">GF Web API examples</a>
+</ul>
+
+<hr>
+<address></address>
+<!-- hhmts start --> Last modified: Tue Nov  9 21:54:50 CET 2010 <!-- hhmts end -->
+</body> </html>
