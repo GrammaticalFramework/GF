@@ -3,6 +3,19 @@
 var default_server="http://www.grammaticalframework.org:41296"
 var tree_icon=default_server+"/translate/se.chalmers.cs.gf.gwt.TranslateApp/tree-btn.png";
 
+/*
+// This is essentially what happens when you call start_minibar:
+if(server.grammar_list) grammars=server.grammar_list;
+else grammars=server.get_grammarlist();
+show_grammarlist(grammars)
+select_grammar(grammars[0])
+grammar_info=server.get_languages()
+show_languages(grammar_info)
+new_language()
+complete_output=get_completions()
+show_completions(complete_output)
+*/
+
 function start_minibar(server,opts,target) {
     // Typically called when the HTML document is loaded
 
@@ -21,9 +34,10 @@ function start_minibar(server,opts,target) {
 	help_url: null
     }
 
-    /* --- Creating user interface elements --------------------------------- */
-
+    // Apply supplied options
     if(opts) for(var o in opts) options[o]=opts[o];
+
+    /* --- Creating user interface elements --------------------------------- */
 
     var surface=div_id("surface");
     var extra=div_id("extra");
@@ -35,11 +49,13 @@ function start_minibar(server,opts,target) {
     minibar.innerHTML="";
     appendChildren(minibar,[menubar,surface,words,translations,extra]);
 
-    // Added later:
-    var language_menu=empty_id("select","language_menu");
+    // Filled in and added to minibar later:
+    var grammar_menu=empty_id("select","grammar_menu");
+    var from_menu=empty_id("select","from_menu");
     var to_menu=empty_id("select","to_menu");
 
     /* --- Minibar client state initialisation ------------------------------ */
+    var grammar=null;
     var current={from: null, input: ""};
     var previous=null;
 
@@ -49,21 +65,14 @@ function start_minibar(server,opts,target) {
 	//debug("show_grammarlist ")
 	menubar.innerHTML="";
 	if(grammars.length>1) {
-	    var menu=empty("select");
-	    for(var i=0;i<grammars.length;i++) {
-		var opt=empty("option");
-		opt.setAttribute("value",grammars[i]);
-		opt.innerHTML=grammars[i];
-		menu.appendChild(opt);
-	    }
-    	    menu.onchange=function() {
-		select_grammar(menu.options[menu.selectedIndex].value);
-	    };
-	    menubar.innerHTML="Grammar: ";
-	    menubar.appendChild(menu);
+	    function opt(g) { return option(g,g); }
+	    appendChildren(grammar_menu,map(opt,grammars));
+    	    grammar_menu.onchange=
+		function() { select_grammar(grammar_menu.value); };
+	    appendChildren(menubar,[text("Grammar: "),grammar_menu]);
 	}
 	appendChildren(menubar,
-		       [text(" From: "), language_menu,
+		       [text(" From: "), from_menu,
 			text(" To: "), to_menu,
 			button(options.delete_button_text,delete_last,"H"),
 			button("Clear",clear_all,"L")]);
@@ -80,33 +89,24 @@ function start_minibar(server,opts,target) {
 	server.switch_grammar(grammar_name,get_languages);
     }
 
-    function show_languages(grammar) {
+    function show_languages(grammar_info) {
 	//debug("show_languages ");
-	var r="";
-	var lang=grammar.languages;
-	var menu=language_menu;
-	menu.grammar=grammar;
+	grammar=grammar_info;
+
 	var new_language=function () {
-	    var ix=menu.options[menu.selectedIndex].value;
-	    var langname=grammar.languages[ix].name;
-	    current.from=langname;
+	    current.from=from_menu.value;
 	    clear_all();
 	}
-	menu.onchange=new_language;
+	from_menu.onchange=new_language;
+	update_language_menu(from_menu,grammar);
+	set_initial_language(options,from_menu,grammar);
 
-	menu.innerHTML="";
-	
-	for(var i=0; i<lang.length; i++)
-	    if(!hasPrefix(lang[i].name,"Disamb"))
-		menu.appendChild(option(langpart(lang[i].name,grammar.name),""+i));
-	set_initial_language(options,menu,grammar)
-	to_menu.onchange=get_translations
+	to_menu.onchange=get_translations;
 
-	to_menu.innerHTML="";
-	to_menu.appendChild(option("All","-1"));
-	for(var i=0; i<lang.length; i++)
-	    if(!hasPrefix(lang[i].name,"Disamb"))
-		to_menu.appendChild(option(langpart(lang[i].name,grammar.name),lang[i].name));
+	update_language_menu(to_menu,grammar);
+	insertFirst(to_menu,option("All","All"));
+	to_menu.value="All";
+
 	new_language();
     }
 
@@ -198,10 +198,7 @@ function start_minibar(server,opts,target) {
 	    server.translate(c.from,c.input,show_translations);
     }
 
-    function target_lang() {
-	return langpart(to_menu.options[to_menu.selectedIndex].value,
-			language_menu.grammar.name);
-    }
+    function target_lang() { return langpart(to_menu.value,grammar.name); }
 
     function add_typed_input() {
 	var inp;
@@ -244,7 +241,6 @@ function start_minibar(server,opts,target) {
 
 	function show_random(random) {
 	    clear_all1();
-	    var menu=language_menu;
 	    add_words(random[0].text);
 	}
 
@@ -313,7 +309,6 @@ function start_minibar(server,opts,target) {
 
     function show_translations(translationResults) {
 	var trans=translations;
-	var grammar=language_menu.grammar;
 	//var to=target_lang(); // wrong
 	var to=to_menu.value;
 	var cnt=translationResults.length;
@@ -336,7 +331,7 @@ function start_minibar(server,opts,target) {
 			tbody.appendChild(tr([th(text("Abstract: ")),
 					      tdt(abstree_button(t.tree),text(" "+t.tree))]));
 		    for(var i=0;i<lin.length;i++) 
-			if(to=="-1" || lin[i].to==to)
+			if(to=="All" || lin[i].to==to)
 			    tbody.appendChild(tr([th(text(langpart(lin[i].to,grammar.name)+": ")),
 						  tdt(parsetree_button(t.tree,lin[i].to),
 						      text(lin[i].text))]));
@@ -353,7 +348,6 @@ function start_minibar(server,opts,target) {
     
     function show_groupedtranslations(translationsResult) {
 	var trans=translations;
-	var grammar=language_menu.grammar;
 	var to=target_lang();
 	//var to=to_menu.value // wrong
 	var cnt=translationsResult.length;
@@ -362,12 +356,12 @@ function start_minibar(server,opts,target) {
 	trans.innerHTML="";
 	for(p=0;p<cnt;p++) {
 	    var t=translationsResult[p];
-	    if(to=="-1" || t.to==to) {
+	    if(to=="All" || t.to==to) {
 		var lin=t.linearizations;
 		var tbody=empty("tbody");
-		if(to=="-1") tbody.appendChild(tr([th(text(t.to+":"))]));
+		if(to=="All") tbody.appendChild(tr([th(text(t.to+":"))]));
 		for(var i=0;i<lin.length;i++) {
-		    if(to!="-1") trans.single_translation[i]=lin[i].text;
+		    if(to!="All") trans.single_translation[i]=lin[i].text;
 		    tbody.appendChild(tr([td(text(lin[i].text))]));
 		    if (lin.length > 1) tbody.appendChild(tr([td(text(lin[i].tree))]));
 		}
@@ -385,22 +379,24 @@ function start_minibar(server,opts,target) {
 
     function try_google() {
 	var to=target_lang();
-	var grammar=language_menu.grammar;
 	var s=current.input;
 	if(surface.typed) s+=surface.typed.value;
 	var url="http://translate.google.com/?sl="
 	        +langpart(current.from,grammar.name);
-	if(to!="-1") url+="&tl="+to;
+	if(to!="All") url+="&tl="+to;
 	url+="&q="+encodeURIComponent(s);
 	window.open(url);
     }
 
     function open_help() { open_popup(options.help_url,"help"); }
+
     function open_feedback() {
-	language_menu.current=current;
+	// make the minibar state easily accessible from the feedback page:
+	minibar.state={grammar:grammar,current:current,to:to_menu.value,
+		       translations:translations};
 	open_popup(options.feedback_url,'feedback');
     }
-    
+
     /* --- Main program, this gets things going ----------------------------- */
     append_extra_buttons(extra,options);
 
@@ -408,29 +404,32 @@ function start_minibar(server,opts,target) {
     else server.get_grammarlist(show_grammarlist);
 }
 
-function commonPrefix(s1,s2) {
-    for(var i=0;i<s1.length && i<s2.length && s1[i]==s2[i];i++);
-    return s1.substr(0,i);
+function update_language_menu(menu,grammar) {
+    // Replace the options in the menu with the languages in the grammar
+    var lang=grammar.languages;
+    menu.innerHTML="";
+	
+    for(var i=0; i<lang.length; i++) {
+	var ln=lang[i].name;
+	if(!hasPrefix(ln,"Disamb")) {
+	    var lp=langpart(ln,grammar.name);
+	    menu.appendChild(option(lp,ln));
+	}
+    }
 }
 
 function set_initial_language(options,menu,grammar) {
-    if(grammar.userLanguage) {
-	for(var i=0;i<menu.options.length;i++) {
-	    var ix=menu.options[i].value;
-	    var l=grammar.languages[ix].name;
-	    if(l==grammar.userLanguage) menu.selectedIndex=i;
-	}
-    }
+    if(grammar.userLanguage) menu.value=grammar.userLanguage;
     else if(options.default_source_language) {
 	for(var i=0;i<menu.options.length;i++) {
-	    var ix=menu.options[i].value;
-	    var l=langpart(grammar.languages[ix].name,grammar.name);
-	    if(l==options.default_source_language) menu.selectedIndex=i;
+	    var o=menu.options[i].value;
+	    var l=langpart(o,grammar.name);
+	    if(l==options.default_source_language) menu.value=o;
 	}
     }
 }
 
-function langpart(conc,abs) { // langpart("FoodsEng","Food") == "Eng"
+function langpart(conc,abs) { // langpart("FoodsEng","Foods") == "Eng"
     return hasPrefix(conc,abs) ? conc.substr(abs.length) : conc;
 }
 
@@ -468,25 +467,21 @@ function setField(form,name,value) {
 
 function opener_element(id) { with(window.opener) return element(id); }
 
+// This function is called from feedback.html
 function prefill_feedback_form() {
-    var to_menu=opener_element("to_menu");
-    var trans=opener_element("translations");
-    var menu=opener_element("language_menu")
-    var grammar=menu.grammar;
-    var gn=grammar.name;
+    var state=opener_element("minibar").state;
+    var trans=state.translations;
+    var gn=state.grammar.name
+    var to=langpart(state.to,gn);
+
     var form=document.forms.namedItem("feedback");
-    var from=langpart(menu.current.from,gn);
-    var to=langpart(to_menu.options[to_menu.selectedIndex].value,gn);
-
     setField(form,"grammar",gn);
-    setField(form,"from",from);
-    setField(form,"input",menu.current.input);
-    setField(form,"to",to=="-1" ? "All" : to);
-    if(to=="-1") 
-	element("translation_box").style.display="none";
-    else 
-	setField(form,"translation",trans.single_translation.join(" / "));
-
+    setField(form,"from",langpart(state.current.from,gn));
+    setField(form,"input",state.current.input);
+    setField(form,"to",to);
+    if(to=="All") element("translation_box").style.display="none";
+    else setField(form,"translation",trans.single_translation.join(" / "));
+    
     // Browser info:
     form["inner_size"].value=window.innerWidth+"×"+window.innerHeight;
     form["outer_size"].value=window.outerWidth+"×"+window.outerHeight;
@@ -497,6 +492,7 @@ function prefill_feedback_form() {
 
     window.focus();
 }
+    
 
 /*
 se.chalmers.cs.gf.gwt.TranslateApp/align-btn.png
