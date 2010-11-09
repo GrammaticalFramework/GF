@@ -11,7 +11,7 @@ function pgf_online(options) {
 	// Methods:
 	switch_grammar: function(grammar_url,cont) {
  	    this.current_grammar_url=this.grammars_url+grammar_url;
-	    cont();
+	    if(cont) cont();
 	},
 	get_grammarlist: function(cont) {
 	    http_get_json(this.grammars_url+"grammars.cgi",cont);
@@ -47,5 +47,7 @@ function pgf_online(options) {
 	
     };
     for(var o in options) server[o]=options[o];
+    if(server.grammar_list && server.grammar_list.length>0)
+	server.switch_grammar(server.grammar_list[0]);
     return server;
 }
