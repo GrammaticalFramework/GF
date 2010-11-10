@@ -254,6 +254,8 @@ fun impVP : VP -> Text ;            -- go to the bank!
 fun numeralCard : Numeral -> Card ; -- fifteen banks
 fun digitsCard : Digits -> Card ;   -- 8 banks
 fun have_V2 : V2 ;                  -- has (an apple)
+fun v2_byVP : V2 -> NP -> VP ;      -- is bought by a customer
+
 
 }
 

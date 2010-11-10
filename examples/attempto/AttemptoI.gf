@@ -251,6 +251,7 @@ lin impVP vp = mkText (mkImp vp) ;
 lin numeralCard n = mkCard <lin Numeral n : Numeral> ;
 lin digitsCard n = mkCard <lin Digits n : Digits> ;
 lin have_V2 = Syntax.have_V2 ;
+lin v2_byVP v2 np = mkVP (passiveVP v2) (mkAdv by8agent_Prep np) ;
 
 }
 
