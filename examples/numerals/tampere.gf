@@ -4,9 +4,9 @@ concrete tampere of Numerals = {
 param Place = attr  | indep  ;
 param Nm = sg  | pl  ;
 oper sata : Nm => Str =
-  table {{sg} => "sata" ; {pl} => "sataa"} ;
+  table {sg => "sata" ; pl => "sataa"} ;
 oper tuhat : Nm => Str =
-  table {{sg} => "tuhat" ; {pl} => "tuhatta"} ;
+  table {sg => "tuhat" ; pl => "tuhatta"} ;
 lincat Numeral = {s : Str} ;
 lincat Digit = {s : Place => Str} ;
 lincat Sub10 = {inh : Nm ; s : Place => Str} ;
@@ -18,21 +18,21 @@ lin num x0 =
 lin n2  =
   {s = table {p => "kaks"}} ;
 lin n3  =
-  {s = table {{attr} => "kol" ; {indep} => "kolme"}} ;
+  {s = table {attr => "kol" ; indep => "kolme"}} ;
 lin n4  =
-  {s = table {{attr} => "nel" ; {indep} => "neliä"}} ;
+  {s = table {attr => "nel" ; indep => "neliä"}} ;
 lin n5  =
   {s = table {p => "viis"}} ;
 lin n6  =
   {s = table {p => "kuus"}} ;
 lin n7  =
-  {s = table {{attr} => "seit" ; {indep} => "seittämän"}} ;
+  {s = table {attr => "seit" ; indep => "seittämän"}} ;
 lin n8  =
   {s = table {p => "kahreksan"}} ;
 lin n9  =
   {s = table {p => "yhreksän"}} ;
 lin pot01  =
-  {inh = sg ; s = table {{attr} => [] ; {indep} => "yks"}} ;
+  {inh = sg ; s = table {attr => [] ; indep => "yks"}} ;
 lin pot0 d =
   {inh = pl ; s = table {p => d.s ! indep}} ;
 lin pot110  =

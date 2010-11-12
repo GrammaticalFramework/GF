@@ -4,9 +4,9 @@ concrete finnish of Numerals = {
 param Place = indep | attr  ;
 param Nm = sg  | pl  ;
 oper sata : Nm => Str =
-  table {{sg} => "sata" ; {pl} => "sataa"} ;
+  table {sg => "sata" ; pl => "sataa"} ;
 oper tuhat : Nm => Str =
-  table {{sg} => "tuhat" ; {pl} => "tuhatta"} ;
+  table {sg => "tuhat" ; pl => "tuhatta"} ;
 lincat Numeral = {s : Str} ;
 lincat Digit = {s : Str} ;
 lincat Sub10 = {inh : Nm ; s : Place => Str} ;
@@ -32,7 +32,7 @@ lin n8  =
 lin n9  =
   {s = "yhdeksän"} ;
 lin pot01  =
-  {inh = sg ; s = table {{attr} => [] ; {indep} => "yksi"}} ;
+  {inh = sg ; s = table {attr => [] ; indep => "yksi"}} ;
 lin pot0 d =
   {inh = pl ; s = table {p => d.s}} ;
 lin pot110  =

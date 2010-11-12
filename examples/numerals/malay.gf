@@ -20,10 +20,10 @@ lincat
 
 oper
  ratus : Nm => Str =                               -- 100
-   table {{sg} => "seratus" ; {pl} => "ratus"} ;
+   table {sg => "seratus" ; pl => "ratus"} ;
 
  ribu : Nm => Str =                                -- 1000
-   table {{sg} => "seribu" ; {pl} => "ribu"} ;
+   table {sg => "seribu" ; pl => "ribu"} ;
 
  mkTab : Str -> Place => Str = \s -> table { _ => s } ;
 
@@ -43,7 +43,7 @@ lin
  n8  = ss "delapan"  ;
  n9  = ss "sembilan" ;
 
- pot01 = {inh = sg ; s = table {{attr} => [] ; {indep} => "satu"}} ;
+ pot01 = {inh = sg ; s = table {attr => [] ; indep => "satu"}} ;
 
  pot0 d = mkNum d.s  ;
 
