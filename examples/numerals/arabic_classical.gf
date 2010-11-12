@@ -95,7 +95,6 @@ lin pot3plus n m =
   {s = n.s ! attr ++ Alf ! n.size ++ "و" ++ m.s ! indep} ;
 
 oper Alf : Size => Str = 
-  table {{pl} => "آلاف" ; {dual} => "الفان" ; {eleventonineteen} => "الفا" ; sg => "الف"} ;
+  table {pl => "آلاف" ; dual => "الفان" ; eleventonineteen => "الفا" ; sg => "الف"} ;
  
-
 }
