@@ -76,8 +76,8 @@ mapSourceModule f (i,mi) = (i, f mi)
 -- and indirection to module (/INDIR/)
 data Info =
 -- judgements in abstract syntax
-   AbsCat   (Maybe (L Context))                                -- ^ (/ABS/) context of a category
- | AbsFun   (Maybe (L Type)) (Maybe Int) (Maybe [L Equation])  -- ^ (/ABS/) type, arrity and definition of a function
+   AbsCat   (Maybe (L Context))                                            -- ^ (/ABS/) context of a category
+ | AbsFun   (Maybe (L Type)) (Maybe Int) (Maybe [L Equation]) (Maybe Bool) -- ^ (/ABS/) type, arrity and definition of a function
 
 -- judgements in resource
  | ResParam (Maybe [L Param]) (Maybe [Term])     -- ^ (/RES/) the second parameter is list of all possible values

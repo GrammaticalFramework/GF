@@ -105,7 +105,7 @@ renameIdentTerm env@(act,imps) t =
 
 info2status :: Maybe Ident -> (Ident,Info) -> StatusInfo
 info2status mq (c,i) = case i of
-  AbsFun _ _ Nothing -> maybe Con (curry QC) mq
+  AbsFun _ _ Nothing _ -> maybe Con (curry QC) mq
   ResValue _  -> maybe Con (curry QC) mq
   ResParam _ _  -> maybe Con (curry QC) mq
   AnyInd True m -> maybe Con (const (curry QC m)) mq
@@ -141,7 +141,7 @@ renameInfo :: Status -> Ident -> Ident -> Info -> Check Info
 renameInfo status m i info =
   case info of
     AbsCat pco -> liftM AbsCat (renPerh (renameContext status) pco)
-    AbsFun  pty pa ptr -> liftM3 AbsFun (renTerm pty) (return pa) (renMaybe (mapM (renLoc (renEquation status))) ptr)
+    AbsFun  pty pa ptr poper -> liftM4 AbsFun (renTerm pty) (return pa) (renMaybe (mapM (renLoc (renEquation status))) ptr) (return poper)
     ResOper pty ptr -> liftM2 ResOper (renTerm pty) (renTerm ptr)
     ResOverload os tysts -> liftM (ResOverload os) (mapM (renPair (renameTerm status [])) tysts)
     ResParam (Just pp) m -> do

@@ -86,7 +86,6 @@ prove dp scope (TTyp env1 (DTyp hypos1 cat es1)) = do
   vs1 <- mapM (PGF.TypeCheck.eval env1) es1
   let scope' = exScope scope env1 hypos1
   (fe,TTyp env2 (DTyp hypos2 _ es2)) <- select cat scope' dp
-  if fe == EFun (mkCId "plus") then mzero else return ()
   case dp of
     Just 0 | not (null hypos2) -> mzero
     _                          -> return ()
