@@ -88,7 +88,7 @@ instance Binary Options where
 
 instance Binary Info where
   put (AbsCat x)       = putWord8 0 >> put x
-  put (AbsFun x y z)   = putWord8 1 >> put (x,y,z)
+  put (AbsFun w x y z) = putWord8 1 >> put (w,x,y,z)
   put (ResParam x y)   = putWord8 2 >> put (x,y)
   put (ResValue x)     = putWord8 3 >> put x
   put (ResOper x y)    = putWord8 4 >> put (x,y)
@@ -98,15 +98,15 @@ instance Binary Info where
   put (AnyInd x y)     = putWord8 8 >> put (x,y)
   get = do tag <- getWord8
            case tag of
-             0 -> get >>= \x       -> return (AbsCat x)
-             1 -> get >>= \(x,y,z) -> return (AbsFun x y z)
-             2 -> get >>= \(x,y)   -> return (ResParam x y)
-             3 -> get >>= \x       -> return (ResValue x)
-             4 -> get >>= \(x,y)   -> return (ResOper x y)
-             5 -> get >>= \(x,y)   -> return (ResOverload x y)
-             6 -> get >>= \(x,y,z) -> return (CncCat x y z)
-             7 -> get >>= \(x,y,z) -> return (CncFun x y z)
-             8 -> get >>= \(x,y)   -> return (AnyInd x y)
+             0 -> get >>= \x         -> return (AbsCat x)
+             1 -> get >>= \(w,x,y,z) -> return (AbsFun w x y z)
+             2 -> get >>= \(x,y)     -> return (ResParam x y)
+             3 -> get >>= \x         -> return (ResValue x)
+             4 -> get >>= \(x,y)     -> return (ResOper x y)
+             5 -> get >>= \(x,y)     -> return (ResOverload x y)
+             6 -> get >>= \(x,y,z)   -> return (CncCat x y z)
+             7 -> get >>= \(x,y,z)   -> return (CncFun x y z)
+             8 -> get >>= \(x,y)     -> return (AnyInd x y)
              _ -> decodingError
 
 instance Binary a => Binary (L a) where

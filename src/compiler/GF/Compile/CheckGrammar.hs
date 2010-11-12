@@ -94,7 +94,7 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
   where
    checkAbs js i@(c,info) =
      case info of
-       AbsFun (Just (L loc ty)) _ _ 
+       AbsFun (Just (L loc ty)) _ _ _ 
                             -> do let mb_def = do
                                         let (cxt,(_,i),_) = typeForm ty
                                         info <- lookupIdent i js
@@ -138,7 +138,7 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
    checkCnc js i@(c,info) =
      case info of
        CncFun _ d pn -> case lookupOrigInfo gr (am,c) of
-                          Ok (_,AbsFun (Just (L _ ty)) _ _) -> 
+                          Ok (_,AbsFun (Just (L _ ty)) _ _ _) -> 
                                      do (cont,val) <- linTypeOfType gr cm ty
                                         let linty = (snd (valCat ty),cont,val)
                                         return $ updateTree (c,CncFun (Just linty) d pn) js
@@ -161,7 +161,7 @@ checkInfo ms (m,mo) c info = do
       mkCheck loc "category" $ 
         checkContext gr cont
 
-    AbsFun (Just (L loc typ0)) ma md -> do
+    AbsFun (Just (L loc typ0)) ma md moper -> do
       typ <- compAbsTyp [] typ0   -- to calculate let definitions
       mkCheck loc "type of function" $
         checkTyp gr typ
@@ -169,7 +169,7 @@ checkInfo ms (m,mo) c info = do
         Just eqs -> mapM_ (\(L loc eq) -> mkCheck loc "definition of function" $
 	                                        checkDef gr (m,c) typ eq) eqs
         Nothing  -> return ()
-      return (AbsFun (Just (L loc typ)) ma md)
+      return (AbsFun (Just (L loc typ)) ma md moper)
 
     CncFun linty@(Just (cat,cont,val)) (Just (L loc trm)) mpr -> chIn loc "linearization of" $ do
       (trm',_) <- checkLType gr [] trm (mkFunType (map (\(_,_,ty) -> ty) cont) val)  -- erases arg vars

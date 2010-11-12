@@ -624,7 +624,7 @@ allDependencies ism b =
       ResParam (Just ps) _ -> [Just (L loc t) | L loc (_,cont) <- ps, (_,_,t) <- cont]
       CncCat pty _ _ -> [pty]
       CncFun _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
-      AbsFun pty _ ptr -> [pty] --- ptr is def, which can be mutual
+      AbsFun pty _ ptr _ -> [pty] --- ptr is def, which can be mutual
       AbsCat (Just (L loc co)) -> [Just (L loc ty) | (_,_,ty) <- co]
       _              -> []
 

@@ -1,0 +1,13 @@
+zero
+succ zero
+succ (succ zero)
+succ (succ (succ zero))
+succ (succ (succ (succ zero)))
+succ (succ (succ (succ (succ zero))))
+succ (succ (succ (succ (succ (succ zero)))))
+succ (succ (succ (succ (succ (succ (succ zero))))))
+succ (succ (succ (succ (succ (succ (succ (succ zero)))))))
+succ (succ (succ (succ (succ (succ (succ (succ (succ zero))))))))
+
+succ (succ zero)
+

@@ -156,9 +156,9 @@ lookupAbsDef gr m c = errIn (render (text "looking up absdef of" <+> ppIdent c))
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    AbsFun _ a d -> return (a,fmap (map unLoc) d)
-    AnyInd _ n   -> lookupAbsDef gr n c
-    _            -> return (Nothing,Nothing)
+    AbsFun _ a d _ -> return (a,fmap (map unLoc) d)
+    AnyInd _ n     -> lookupAbsDef gr n c
+    _              -> return (Nothing,Nothing)
 
 lookupLincat :: SourceGrammar -> Ident -> Ident -> Err Type
 lookupLincat gr m c | isPredefCat c = return defLinType --- ad hoc; not needed?
@@ -176,9 +176,9 @@ lookupFunType gr m c = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    AbsFun (Just (L _ t)) _ _ -> return t
-    AnyInd _ n                -> lookupFunType gr n c
-    _                         -> Bad (render (text "cannot find type of" <+> ppIdent c))
+    AbsFun (Just (L _ t)) _ _ _ -> return t
+    AnyInd _ n                  -> lookupFunType gr n c
+    _                           -> Bad (render (text "cannot find type of" <+> ppIdent c))
 
 -- | this is needed at compile time
 lookupCatContext :: SourceGrammar -> Ident -> Ident -> Err Context

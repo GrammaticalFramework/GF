@@ -161,7 +161,7 @@ extendMod gr isCompl (name,cond) base old new = foldM try new $ Map.toList old
       (b,n') = case info of
         ResValue _ -> (True,n)
         ResParam _ _ -> (True,n)
-        AbsFun _ _ Nothing -> (True,n) 
+        AbsFun _ _ Nothing _ -> (True,n) 
         AnyInd b k -> (b,k)
         _ -> (False,n) ---- canonical in Abs
 
@@ -169,8 +169,8 @@ unifyAnyInfo :: Ident -> Info -> Info -> Err Info
 unifyAnyInfo m i j = case (i,j) of
   (AbsCat mc1, AbsCat mc2) -> 
     liftM AbsCat (unifMaybeL mc1 mc2)
-  (AbsFun mt1 ma1 md1, AbsFun mt2 ma2 md2) -> 
-    liftM3 AbsFun (unifMaybeL mt1 mt2) (unifAbsArrity ma1 ma2) (unifAbsDefs md1 md2) -- adding defs
+  (AbsFun mt1 ma1 md1 moper1, AbsFun mt2 ma2 md2 moper2) -> 
+    liftM4 AbsFun (unifMaybeL mt1 mt2) (unifAbsArrity ma1 ma2) (unifAbsDefs md1 md2) (unifMaybe moper1 moper2) -- adding defs
 
   (ResParam mt1 mv1, ResParam mt2 mv2) ->
     liftM2 ResParam (unifMaybe mt1 mt2) (unifMaybe mv1 mv2)

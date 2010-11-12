@@ -112,7 +112,7 @@ ModDef
                                           (mtype,id) = $2
                                           (extends,with,content) = $4
                                           (opens,jments,opts) = case content of { Just c -> c; Nothing -> ([],[],noOptions) }
-                                      mapM_ (checkInfoType mtype) jments
+                                      jments <- mapM (checkInfoType mtype) jments
                                       defs <- case buildAnyTree id jments of
                                                 Ok x    -> return x
                                                 Bad msg -> fail msg
@@ -233,19 +233,19 @@ CatDef
 
 FunDef :: { [(Ident,Info)] }
 FunDef
-  : Posn ListIdent ':' Exp Posn { [(fun, AbsFun (Just (mkL $1 $5 $4)) Nothing (Just [])) | fun <- $2] } 
+  : Posn ListIdent ':' Exp Posn { [(fun, AbsFun (Just (mkL $1 $5 $4)) Nothing (Just []) (Just True)) | fun <- $2] } 
 
 DefDef :: { [(Ident,Info)] }
 DefDef
-  : Posn ListName '=' Exp         Posn { [(f, AbsFun Nothing (Just 0)           (Just [mkL $1 $5 ([],$4)])) | f <- $2] }
-  | Posn Name ListPatt '=' Exp    Posn { [($2,AbsFun Nothing (Just (length $3)) (Just [mkL $1 $6 ($3,$5)]))] }
+  : Posn ListName '=' Exp         Posn { [(f, AbsFun Nothing (Just 0)           (Just [mkL $1 $5 ([],$4)]) Nothing) | f <- $2] }
+  | Posn Name ListPatt '=' Exp    Posn { [($2,AbsFun Nothing (Just (length $3)) (Just [mkL $1 $6 ($3,$5)]) Nothing)] }
 
 DataDef :: { [(Ident,Info)] }
 DataDef
   : Posn Ident '=' ListDataConstr Posn { ($2,   AbsCat Nothing) :
-                                         [(fun, AbsFun Nothing   Nothing Nothing) | fun <- $4] }
+                                         [(fun, AbsFun Nothing Nothing Nothing  (Just True)) | fun <- $4] }
   | Posn ListIdent ':' Exp Posn        { -- (snd (valCat $4), AbsCat Nothing) :
-                                         [(fun, AbsFun (Just (mkL $1 $5 $4)) Nothing Nothing) | fun <- $2] }                                         
+                                         [(fun, AbsFun (Just (mkL $1 $5 $4)) Nothing Nothing (Just True)) | fun <- $2] }                                         
 
 ParamDef :: { [(Ident,Info)] }
 ParamDef
@@ -620,8 +620,8 @@ listCatDef (L loc (id,cont,size)) = [catd,nilfund,consfund]
     consId = mkConsId id
 
     catd     = (listId, AbsCat (Just (L loc cont')))
-    nilfund  = (baseId, AbsFun (Just (L loc niltyp))  Nothing Nothing)
-    consfund = (consId, AbsFun (Just (L loc constyp)) Nothing Nothing)
+    nilfund  = (baseId, AbsFun (Just (L loc niltyp))  Nothing Nothing (Just True))
+    consfund = (consId, AbsFun (Just (L loc constyp)) Nothing Nothing (Just True))
 
     cont' = [(b,mkId x i,ty) | (i,(b,x,ty)) <- zip [0..] cont]
     xs = map (\(b,x,t) -> Vr x) cont'
@@ -671,34 +671,34 @@ isOverloading t =
     Vr keyw | showIdent keyw == "overload" -> True      -- overload is a "soft keyword"
     _                                      -> False
 
-checkInfoType mt (id,info) =
+checkInfoType mt jment@(id,info) =
   case info of
-    AbsCat pcont      -> ifAbstract mt (locPerh pcont)
-    AbsFun pty _ pde  -> ifAbstract mt (locPerh pty ++ maybe [] locAll pde)
-    CncCat pty pd ppn -> ifConcrete mt (locPerh pty ++ locPerh pd ++ locPerh ppn)
-    CncFun _   pd ppn -> ifConcrete mt (locPerh pd ++ locPerh ppn)
-    ResParam pparam _ -> ifResource mt (maybe [] locAll pparam)
-    ResValue ty       -> ifResource mt (locL ty)
-    ResOper  pty pt   -> ifResource mt (locPerh pty ++ locPerh pt)
-    ResOverload _ xs  -> ifResource mt (concat [[loc1,loc2] | (L loc1 _,L loc2 _) <- xs])
+    AbsCat pcont       -> ifAbstract mt (locPerh pcont)
+    AbsFun pty _ pde _ -> ifAbstract mt (locPerh pty ++ maybe [] locAll pde)
+    CncCat pty pd ppn  -> ifConcrete mt (locPerh pty ++ locPerh pd ++ locPerh ppn)
+    CncFun _   pd ppn  -> ifConcrete mt (locPerh pd ++ locPerh ppn)
+    ResParam pparam _  -> ifResource mt (maybe [] locAll pparam)
+    ResValue ty        -> ifResource mt (locL ty)
+    ResOper  pty pt    -> return (id,AbsFun pty (fmap (const 0) pt) (Just (maybe [] (\(L l t) -> [L l ([],t)]) pt)) (Just False))
+    ResOverload _ xs   -> ifResource mt (concat [[loc1,loc2] | (L loc1 _,L loc2 _) <- xs])
   where
     locPerh = maybe [] locL
     locAll xs = [loc | L loc x <- xs]
     locL (L loc x) = [loc]
     
     illegal ((s,e):_) = failLoc (Pn s 0) "illegal definition"
-    illegal _         = return ()
+    illegal _         = return jment
 
-    ifAbstract MTAbstract     locs = return ()
+    ifAbstract MTAbstract     locs = return jment
     ifAbstract _              locs = illegal locs
 
-    ifConcrete (MTConcrete _) locs = return ()
+    ifConcrete (MTConcrete _) locs = return jment
     ifConcrete _              locs = illegal locs
 
-    ifResource (MTConcrete _) locs = return ()
-    ifResource (MTInstance _) locs = return ()
-    ifResource MTInterface    locs = return ()
-    ifResource MTResource     locs = return ()
+    ifResource (MTConcrete _) locs = return jment
+    ifResource (MTInstance _) locs = return jment
+    ifResource MTInterface    locs = return jment
+    ifResource MTResource     locs = return jment
     ifResource _              locs = illegal locs
 
 mkAlts cs = case cs of

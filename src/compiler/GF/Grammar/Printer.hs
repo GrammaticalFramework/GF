@@ -78,9 +78,13 @@ ppJudgement q (id, AbsCat pcont ) =
   (case pcont of
      Just (L _ cont) -> hsep (map (ppDecl q) cont)
      Nothing         -> empty) <+> semi
-ppJudgement q (id, AbsFun ptype _ pexp) =
+ppJudgement q (id, AbsFun ptype _ pexp poper) =
+  let kind | isNothing pexp      = "data"
+           | poper == Just False = "oper"
+           | otherwise           = "fun"
+  in
   (case ptype of
-     Just (L _ typ) -> text (if isNothing pexp then "data" else "fun") <+> ppIdent id <+> colon <+> ppTerm q 0 typ <+> semi
+     Just (L _ typ) -> text kind <+> ppIdent id <+> colon <+> ppTerm q 0 typ <+> semi
      Nothing        -> empty) $$
   (case pexp of
      Just []  -> empty
