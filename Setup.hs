@@ -176,6 +176,7 @@ rgl_dst_dir lbi = buildDir lbi </> "rgl"
 -- don't support all flags needed; they are used in tests
  
 langsCoding = [
+  (("amharic",  "Amh"),""),
   (("arabic",   "Ara"),""),
   (("bulgarian","Bul"),""),
   (("catalan",  "Cat"),""),
@@ -203,7 +204,7 @@ langsCoding = [
 langs = map fst langsCoding
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Ara","Lat","Tur"]
+langsLang = langs `except` ["Amh","Ara","Lat","Hin","Tha","Tur"]
 
 -- languages for which to compile Try 
 langsAPI  = langsLang `except` ["Hin","Ina","Rus","Tha"]
@@ -299,7 +300,7 @@ unlexer abstr ls =
 -- | Runs the gf executable in compile mode with the given arguments.
 run_gfc :: PackageDescription -> LocalBuildInfo -> [String] -> IO ()
 run_gfc pkg lbi args = 
-    do let args' = ["-batch","-gf-lib-path="++rgl_src_dir,"+RTS","-K16M","-RTS"] ++ filter (not . null) args
+    do let args' = ["-batch","-src","-gf-lib-path="++rgl_src_dir,"+RTS","-K32M","-RTS"] ++ filter (not . null) args
            gf = default_gf pkg lbi
        putStrLn $ "Running: " ++ gf ++ " " ++ unwords (map showArg args')
        e <- rawSystem gf args'
