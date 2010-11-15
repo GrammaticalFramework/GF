@@ -679,7 +679,7 @@ checkInfoType mt jment@(id,info) =
     CncFun _   pd ppn  -> ifConcrete mt (locPerh pd ++ locPerh ppn)
     ResParam pparam _  -> ifResource mt (maybe [] locAll pparam)
     ResValue ty        -> ifResource mt (locL ty)
-    ResOper  pty pt    -> return (id,AbsFun pty (fmap (const 0) pt) (Just (maybe [] (\(L l t) -> [L l ([],t)]) pt)) (Just False))
+    ResOper  pty pt    -> ifOper mt pty pt
     ResOverload _ xs   -> ifResource mt (concat [[loc1,loc2] | (L loc1 _,L loc2 _) <- xs])
   where
     locPerh = maybe [] locL
@@ -700,6 +700,9 @@ checkInfoType mt jment@(id,info) =
     ifResource MTInterface    locs = return jment
     ifResource MTResource     locs = return jment
     ifResource _              locs = illegal locs
+    
+    ifOper MTAbstract pty pt = return (id,AbsFun pty (fmap (const 0) pt) (Just (maybe [] (\(L l t) -> [L l ([],t)]) pt)) (Just False))
+    ifOper _          pty pt = return jment
 
 mkAlts cs = case cs of
   _:_ -> do
