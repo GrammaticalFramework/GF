@@ -9,14 +9,18 @@ cat
   Move ;     -- top-level utterance,    e.g. "give me all Bulgarian persons that work at Google"
   Query ;   
   Answer ;
-  Set ;      -- the set requested,      e.g. "all persons"
-  Interrogative ; -- interrog. pron.    e.g. "who" 
-  Function ; -- something of something, e.g. "subregion of Bulgaria"
-  Kind ;     -- type of things,         e.g. "person"
-  Relation ; -- relation between things,e.g. "employed at"
-  Property ; -- property of things,     e.g. "employed at Google"
-  Individual ; -- one entity,           e.g. "Google"
-  Name ;       -- person, company...    e.g. "Eric Schmidt"
+  Set ;           -- the set requested,      e.g. "all persons"
+  Interrogative ; -- interrog. pron.         e.g. "who" 
+  Function ;      -- something of something, e.g. "subregion of Bulgaria"
+  Kind ;          -- type of things,         e.g. "person"
+  Relation ;      -- relation between things,e.g. "employed at"
+  Property ;      -- property of things,     e.g. "employed at Google"
+  Individual ;    -- one entity,             e.g. "Google"
+--  Activity ;      -- action property,        e.g. "work at Google"
+  Name ;          -- person, company...      e.g. "Eric Schmidt"
+  Loc ;
+  Org ;
+  Pers ;
   [Individual] {2} ; -- list of entities, e.g. "Larry Page, Sergey Brin"
 
 fun
@@ -39,6 +43,7 @@ fun
   AInd   : Set  -> Individual -> Answer ; -- S is I
   AName  : Set  -> Name     -> Answer ; -- N is the name of S
   AProp  : Set  -> Property -> Answer ; -- S is P
+--  AAct   : Set  -> Activity -> Answer ; -- S As --+
 
   SAll   : Kind -> Set ;  -- all Ks | the Ks
   SFun   : Set  -> Function -> Set ;  -- S's Rs
@@ -59,9 +64,14 @@ fun
   KFunKind : Kind -> Function -> Set -> Kind ; -- K that is R of S
   KFunPair : Kind -> Function -> Kind ; -- S's with their R's
   KProp    : Property -> Kind -> Kind ; -- P K | K that is P
+--  KAct     : Activity -> Kind -> Kind ; -- K that Ps
   KFun     : Function -> Kind ; -- R ---??
 
   IName    : Name -> Individual ;
+
+  NLoc : Loc -> Name ;
+  NOrg : Org -> Name ;
+  NPers : Pers -> Name ;
 
   PCalled  : Individual   -> Property ;  -- also called I
   PCalleds : [Individual] -> Property ;  -- also called I or J
@@ -100,10 +110,10 @@ fun
   Region : Function ;
   Subregion : Function ;
 
-  USA : Country ;
-  California : Country ;
-  Bulgaria : Country ;
-  OblastSofiya : Name ;
+--  USA : Country ;
+--  California : Country ;
+--  Bulgaria : Country ;
+--  OblastSofiya : Name ;
 
   FName     : Function ;
   FNickname : Function ;
@@ -111,20 +121,46 @@ fun
 
   SJobTitle : JobTitle -> Set ; -- a programmer
 
-  CEO : JobTitle ;
-  ChiefInformationOfficer : JobTitle ;
-  
-  Microsoft : Name ;
-  Google : Name ;
+-- JobTitles
+   JobTitle1 : JobTitle ;
+   JobTitle2 : JobTitle ;
+   JobTitle3 : JobTitle ;
+   JobTitle4 : JobTitle ;
 
-  SergeyBrin : Name ;
-  LarryPage : Name ;
-  EricSchmidt : Name ;
-  MarissaMayer : Name ;
-  UdiManber : Name ;
-  CarlGustavJung : Name ;
-  Jung : Name ;
-  BenFried : Name ;
+-- Locations
+   Location1 : Loc ;
+   Location2 : Loc ;
+   Location3 : Loc ;
+   Location4 : Loc ;
+
+-- Organizations
+   Organization1 : Org ;
+   Organization2 : Org ;
+   Organization3 : Org ;
+   Organization4 : Org ;
+
+-- Persons
+   Person1 : Pers ;
+   Person2 : Pers ;
+   Person3 : Pers ;
+   Person4 : Pers ;
+
+--  CEO : JobTitle ;
+--  ChiefInformationOfficer : JobTitle ;
+  
+--  Microsoft : Name ;
+--  Google : Name ;
+
+--  SergeyBrin : Name ;
+--  LarryPage : Name ;
+--  EricSchmidt : Name ;
+--  MarissaMayer : Name ;
+--  UdiManber : Name ;
+--  CarlGustavJung : Name ;
+--  Jung : Name ;
+--  BenFried : Name ;
+
+
 }
 
 

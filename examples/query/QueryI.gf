@@ -17,6 +17,9 @@ lincat
   Relation = Rel ; -- = {ap : AP ; vp : VP ; prep : Prep} ;
   Individual = NP ;
   Name = NP ;
+  Loc = NP ;
+  Org = NP ;
+  Pers = NP ;
   [Individual] = [NP] ;
 
 lin
@@ -176,5 +179,8 @@ lin
   NCountry c = c.np ;
   PCountry c = propAP (mkAP c.a) ;
 
+  NLoc n = n ;
+  NOrg n = n ;
+  NPers n = n;
 }
 

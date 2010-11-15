@@ -90,26 +90,6 @@ lin
 
   SJobTitle t = mkNP a_Det t ;
 
-  USA = mkCountry "USA" "amerikansk" ;
-  Bulgaria = mkCountry "Bulgarien" "bulgarisk" ;
-  California = mkCountry "Kalifornien" "Kalifornisk" ;
-  OblastSofiya = mkName "Oblast Sofiya" ;
-
-  CEO = mkCN (mkN "VD" "VD:ar") ;
-  ChiefInformationOfficer = mkCN (mkN "chefsinformatör" "chefsinformatörer") ;
-
-  Microsoft = mkName "Microsoft" ;
-  Google = mkName "Google" ;
-
-  SergeyBrin = mkName "Sergey Brin" ;
-  LarryPage = mkName "Larry Page" ;
-  EricSchmidt = mkName "Eric Schmidt" ;
-  MarissaMayer = mkName "Marissa Mayer" ;
-  UdiManber = mkName "Udi Manber" ;
-  CarlGustavJung = mkName "Carl Gustav Jung" ;
-  Jung = mkName "Jung" ;
-  BenFried = mkName "Ben Fried" ;
-
 oper
   mkCountry : Str -> Str -> {np : NP ; a : A} = 
     \n,a -> {np = mkNP (mkPN n) ; a = mkA a} ;
@@ -120,5 +100,31 @@ oper
     \s -> {cn = mkCN (mkN s) ; prep = possess_Prep} ;
   mkFunctionP : N -> Prep -> Fun =
     \n,p -> {cn = mkCN n ; prep = p} ;
+
+
+lin
+-- JobTitles
+  JobTitle1 = mkCN (mkN "'JobTitle1") ;
+  JobTitle2 = mkCN (mkN "'JobTitle2") ;
+  JobTitle3 = mkCN (mkN "'JobTitle3") ;
+  JobTitle4 = mkCN (mkN "'JobTitle4") ;
+
+-- Locations
+  Location1 = mkName "'Location1" ;
+  Location2 = mkName "'Location2" ;
+  Location3 = mkName "'Location3" ;
+  Location4 = mkName "'Location4" ;
+
+-- Organizations
+  Organization1 = mkName "'Organization1" ;
+  Organization2 = mkName "'Organization2" ;
+  Organization3 = mkName "'Organization3" ;
+  Organization4 = mkName "'Organization4" ;
+
+-- Persons
+  Person1 = mkName "'Person1" ;
+  Person2 = mkName "'Person2" ;
+  Person3 = mkName "'Person3" ;
+  Person4 = mkName "'Person4" ;
 
 }
