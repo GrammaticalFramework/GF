@@ -46,8 +46,10 @@ translationList mex pgf ig og typ number = do
                              Nothing -> generateRandom     gen pgf typ
   return $ map mkOne $ ts
  where
-   mkOne t = (norml (linearize pgf ig t), map (norml . linearize pgf og) (homonyms t))
+   mkOne t = (norml (linearize pgf ig t), 
+              map norml (concatMap lins (homonyms t)))
    homonyms = parse pgf ig typ . linearize pgf ig
+   lins = nub . concatMap (map snd) . tabularLinearizes pgf og
 
 morphologyList :: 
   Maybe Expr -> PGF -> Language -> Type -> Int -> IO [(String,[String])]

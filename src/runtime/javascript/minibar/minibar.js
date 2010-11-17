@@ -1,6 +1,8 @@
 // minibar.js, assumes that support.js has also been loaded
 
-var default_server="http://www.grammaticalframework.org:41296"
+//var default_server="http://www.grammaticalframework.org:41296"
+var default_server="http://localhost:41296"
+
 var tree_icon=default_server+"/translate/se.chalmers.cs.gf.gwt.TranslateApp/tree-btn.png";
 
 /*
