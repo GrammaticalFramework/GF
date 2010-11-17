@@ -686,8 +686,8 @@ allCommands env@(pgf, mos) = Map.fromList [
      syntax   = "tq -from=LANG -to=LANG (-cat=CAT)? (-probs=FILE)? TREE?",
      synopsis = "start a translation quiz",
      exec = \opts xs -> do
-         let from = valCIdOpts "from" (optLang opts) opts
-         let to   = valCIdOpts "to"   (optLang opts) opts
+         let from = optLangFlag "from" opts
+         let to   = optLangFlag "to" opts
          let typ  = optType opts
          let mt   = mexp xs
          pgf <- optProbs opts pgf
@@ -990,7 +990,10 @@ allCommands env@(pgf, mos) = Map.fromList [
    optRestricted opts = 
      restrictPGF (\f -> and [hasLin pgf la f | la <- optLangs opts]) pgf
 
-   optLangs opts = case valStrOpts "lang" "" opts of
+   optLang  = optLangFlag "lang"
+   optLangs = optLangsFlag "lang"
+
+   optLangsFlag f opts = case valStrOpts f "" opts of
      "" -> languages pgf
      lang -> map completeLang (chunks ',' lang)
    completeLang la = let cla = (mkCId la) in
@@ -998,7 +1001,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        then cla 
        else (mkCId (showCId (abstractName pgf) ++ la))
 
-   optLang opts = head $ optLangs opts ++ [wildCId]
+   optLangFlag f opts = head $ optLangsFlag f opts ++ [wildCId]
 
    optOpenTypes opts = case valStrOpts "openclass" "" opts of
      ""   -> []
