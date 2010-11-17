@@ -23,17 +23,18 @@ abstract Phrase = Cat ** {
 -- Moreover, in many languages e.g. noun phrases in different cases
 -- can be used.
 
-    UttIP   : IP   -> Utt ;                 -- who
-    UttIAdv : IAdv -> Utt ;                 -- why
-    UttNP   : NP   -> Utt ;                 -- this man
-    UttAdv  : Adv  -> Utt ;                 -- here
-    UttVP   : VP   -> Utt ;                 -- to sleep
-    UttCN   : CN   -> Utt ;                 -- house
-    UttCard : Card -> Utt ;                 -- five
-    UttAP   : AP   -> Utt ;                 -- fine
+    UttIP     : IP   -> Utt ;               -- who
+    UttIAdv   : IAdv -> Utt ;               -- why
+    UttNP     : NP   -> Utt ;               -- this man
+    UttAdv    : Adv  -> Utt ;               -- here
+    UttVP     : VP   -> Utt ;               -- to sleep
+    UttCN     : CN   -> Utt ;               -- house
+    UttCard   : Card -> Utt ;               -- five
+    UttAP     : AP   -> Utt ;               -- fine
+    UttInterj : Interj -> Utt ;             -- alas
 
 -- The phrasal conjunction is optional. A sentence conjunction
--- can also used to prefix an utterance.
+-- can also be used to prefix an utterance.
 
     NoPConj   : PConj ;                      
     PConjConj : Conj -> PConj ;             -- and

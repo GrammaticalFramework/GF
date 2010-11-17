@@ -17,6 +17,7 @@ concrete PhraseEng of Phrase = CatEng ** open Prelude, ResEng in {
     UttCN n = {s = n.s ! Sg ! Nom} ;
     UttCard n = {s = n.s ! Nom} ;
     UttAP ap = {s = ap.s ! agrP3 Sg} ;
+    UttInterj i = i ;
 
     NoPConj = {s = []} ;
     PConjConj conj = {s = conj.s2} ; ---

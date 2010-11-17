@@ -2,6 +2,7 @@ abstract Lexicon = Cat ** {
 fun
   add_V3 : V3 ;
   airplane_N : N ;
+  alas_Interj : Interj ;
   already_Adv : Adv ;
   animal_N : N ;
   answer_V2S : V2S ;

@@ -15,10 +15,11 @@ abstract Common = {
 
 -- Constructed in [``Phrase`` Phrase.html]:
 
-    Phr ;   -- phrase in a text                    e.g. "but be quiet please"
-    Utt ;   -- sentence, question, word...         e.g. "be quiet"
-    Voc ;   -- vocative or "please"                e.g. "my darling"
-    PConj ; -- phrase-beginning conjunction        e.g. "therefore"
+    Phr ;    -- phrase in a text                   e.g. "but be quiet please"
+    Utt ;    -- sentence, question, word...        e.g. "be quiet"
+    Voc ;    -- vocative or "please"               e.g. "my darling"
+    PConj ;  -- phrase-beginning conjunction       e.g. "therefore"
+    Interj ; -- interjection                       e.g. "alas"
 
 -- Constructed in [``Sentence`` Sentence.html]:
 

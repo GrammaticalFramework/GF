@@ -60,6 +60,10 @@ oper
 -- Prepositions are used in many-argument functions for rection.
 -- The resource category $Prep$ is used.
 
+-- The number of a noun phrase can be extracted with the following
+-- function.
+
+  npNumber : NP -> Number ;
 
 
 --2 Nouns
@@ -340,6 +344,8 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ;
   plural = Pl ;
   nominative = Nom ;
   genitive = Gen ;
+
+  npNumber np = (fromAgr np.a).n ;
 
   Preposition : Type = Str ; -- obsolete
 

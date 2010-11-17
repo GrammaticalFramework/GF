@@ -8,6 +8,7 @@ flags
 
 lin
   airplane_N = regN "airplane" ;
+  alas_Interj = ss "alas" ;
   answer_V2S = mkV2S (mkV "answer" "answered") toP ;
   apartment_N = regN "apartment" ;
   apple_N = regN "apple" ;
