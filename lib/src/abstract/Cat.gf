@@ -12,7 +12,7 @@
 -- implementation in all languages in the resource (typically,
 -- just a string). These categories are
 -- $AdA, AdN, AdV, Adv, Ant, CAdv, IAdv, PConj, Phr$, 
--- $Pol, SC, Tense, Text, Utt, Voc$.
+-- $Pol, SC, Tense, Text, Utt, Voc, Interj$.
 --
 -- Moreover, the list categories $ListAdv, ListAP, ListNP, ListS$
 -- are defined on $Conjunction$ and only used locally there.
