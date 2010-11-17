@@ -626,7 +626,7 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ;
 
   prepV2 : V -> Prep -> V2 ;
   dirV2 : V -> V2 ;
-  prefixV : Str -> V -> V = \p,v -> v ** { s = p + v.s } ;
+  prefixV : Str -> V -> V = \p,v -> lin V { s = \\vform => p + v.s ! vform; isRefl = v.isRefl } ;
 
   mkV2 = overload {
     mkV2  : V -> V2 = dirV2 ;
