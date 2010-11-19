@@ -33,7 +33,7 @@ abstract Adjective = Cat ** {
 
     AdvAP   : AP -> Adv -> AP ; -- warm by nature
 
--- The formation of adverbs from adjective (e.g. "quickly") is covered
--- in [Adverb Adverb.html].
+-- The formation of adverbs from adjectives (e.g. "quickly") is covered
+-- in [Adverb Adverb.html]; the same concerns adadjectives (e.g. "extremely").
 
 }

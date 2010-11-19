@@ -20,6 +20,10 @@ abstract Adverb = Cat ** {
 
     AdAdv  : AdA -> Adv -> Adv ;             -- very quickly
 
+-- Like adverbs, adadjectives can be produced by adjectives.
+
+    PositAdAAdj : A -> AdA ;                 -- extremely
+
 -- Subordinate clauses can function as adverbs.
 
     SubjS  : Subj -> S -> Adv ;              -- when she sleeps
@@ -27,6 +31,5 @@ abstract Adverb = Cat ** {
 -- Comparison adverbs also work as numeral adverbs.
 
     AdnCAdv : CAdv -> AdN ;                  -- less (than five)
-
 
 }

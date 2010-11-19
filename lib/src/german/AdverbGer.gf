@@ -14,6 +14,8 @@ concrete AdverbGer of Adverb = CatGer ** open ResGer, Prelude in {
 
     AdAdv = cc2 ;
 
+    PositAdAAdj a = {s = a.s ! Posit ! APred} ;
+
     SubjS subj s = {s = subj.s ++ s.s ! Sub} ;
 
     AdnCAdv cadv = {s = cadv.s ++ conjThan} ;

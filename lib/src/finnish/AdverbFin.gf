@@ -13,6 +13,8 @@ concrete AdverbFin of Adverb = CatFin ** open ResFin, Prelude in {
 
     AdAdv = cc2 ;
 
+    PositAdAAdj a = {s = a.s ! Posit ! AN (NCase Sg Gen)} ; -- älyttömän
+
     SubjS = cc2 ;
 ----b    AdvSC s = s ;
 

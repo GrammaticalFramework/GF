@@ -15,6 +15,8 @@ concrete AdverbDut of Adverb = CatDut ** open ResDut, Prelude in {
 
     AdAdv = cc2 ;
 
+    PositAdAAdj a = {s = a.s ! Posit ! APred} ;
+
     SubjS subj s = {s = subj.s ++ s.s ! Sub} ;
 
     AdnCAdv cadv = {s = cadv.s ++ conjThan} ;
