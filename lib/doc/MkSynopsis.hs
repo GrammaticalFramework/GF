@@ -1,6 +1,7 @@
 import System
 import Char
 import List
+import qualified Data.ByteString.Char8 as BS
 
 type Cats = [(String,String,String)]
 type Rules = [(String,String,String)]
@@ -39,6 +40,8 @@ main = do
   link "Source 2:" structuralAPI
   space
   rs <- getRules syntaxAPI
+---  putStrLn $ unlines ["p -cat=" ++ last (words t) ++ 
+---               " \"" ++ e ++ "\"" | (_,t,e) <- rs, not (null e)] ----
   rs2 <- getRules structuralAPI
   delimit $ mkSplitTables True isLatex cs $ rs ++ rs2
   space
@@ -50,7 +53,7 @@ main = do
 --  delimit rs
   space
   title "Lexical Paradigms"
-  mapM_ (putParadigms isLatex cs) paradigmFiles
+----  mapM_ (putParadigms isLatex cs) paradigmFiles
   space
   include "synopsis-browse.txt"
   space
@@ -89,7 +92,7 @@ rulesTable hasEx isLatex cs file = do
 
 getRules :: FilePath -> IO Rules
 getRules file = do
-  ss <- readFile file >>= return . lines
+  ss <- readFileC file >>= return . lines
   return $ getrs [] ss
  where
    getrs rs ss = case ss of
@@ -244,3 +247,9 @@ showTyp cs = unwords . map f . words
         isCat cat = cat `notElem` ["Str","Int"]
                     && all (\c -> isAlphaNum c || c == '\'') cat
                     && isUpper (head cat)
+
+-- to work around GHC 6.12 file input
+readFileC file = do
+  let tmp = file ++ ".tmp"
+  system $ "iconv -f ISO-8859-1 -t UTF-8 " ++ file ++ " >" ++ tmp
+  readFile tmp
