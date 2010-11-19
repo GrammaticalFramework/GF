@@ -15,6 +15,10 @@ incomplete concrete AdverbScand of Adverb = CatScand ** open CommonScand, ResSca
 
     AdAdv = cc2 ;
 
+    PositAdAAdj a = {
+      s = a.s ! adverbForm
+      } ;
+
     SubjS subj s = {
       s = subj.s ++ s.s ! Sub
       }  ;

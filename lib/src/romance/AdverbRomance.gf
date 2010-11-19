@@ -16,6 +16,10 @@ incomplete concrete AdverbRomance of Adverb =
 
     AdAdv = cc2 ;
 
+    PositAdAAdj a = {
+      s = a.s ! Posit ! AA
+      } ;
+
     SubjS subj s = {
       s = subj.s ++ s.s ! subj.m
       }  ;

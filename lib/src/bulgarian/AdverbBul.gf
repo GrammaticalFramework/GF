@@ -14,6 +14,8 @@ concrete AdverbBul of Adverb = CatBul ** open ResBul, Prelude in {
 
     AdAdv = cc2 ;
 
+    PositAdAAdj a = {s = a.adv} ;
+
     SubjS = cc2 ;
 
     AdnCAdv cadv = {s = cadv.sn ++ "от"} ;
