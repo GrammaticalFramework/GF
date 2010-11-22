@@ -1,0 +1,1 @@
+abstract TestSemantics = Test, Semantics ;
