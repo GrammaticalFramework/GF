@@ -1,4 +1,4 @@
---# -path=alltenses
+--# -path=.:present
 
 concrete GeometryEng of Geometry = LogicEng ** 
   open SyntaxEng, ParadigmsEng in {

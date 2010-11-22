@@ -1,4 +1,4 @@
-resource Exx = {
+resource DefArtGer = {
 
   param DetForm = DSg Gender Case | DPl Case ;
   param Gender = Masc | Fem | Neutr ;

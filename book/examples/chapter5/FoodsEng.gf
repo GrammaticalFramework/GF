@@ -1,18 +1,19 @@
---# -path=.:../foods:minimal:present
+--# -path=.:present
 
-concrete FoodsEng of Foods = open SyntaxEng,ParadigmsEng in {
+concrete FoodsEng of Foods = 
+    open SyntaxEng,ParadigmsEng in {
   lincat
-    Phrase = Cl ; 
+    Comment = Utt ; 
     Item = NP ;
     Kind = CN ;
     Quality = AP ;
   lin
-    Is item quality = mkCl item quality ;
+    Pred item quality = mkUtt (mkCl item quality) ;
     This kind = mkNP this_Quant kind ;
     That kind = mkNP that_Quant kind ;
     These kind = mkNP this_Quant plNum kind ;
     Those kind = mkNP that_Quant plNum kind ;
-    QKind quality kind = mkCN quality kind ;
+    Mod quality kind = mkCN quality kind ;
     Wine = mkCN (mkN "wine") ;
     Pizza = mkCN (mkN "pizza") ;
     Cheese = mkCN (mkN "cheese") ;
