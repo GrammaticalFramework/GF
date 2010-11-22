@@ -167,7 +167,7 @@ oper
 
     compoundA : A -> A ; -- -/more/most ditto
     simpleA   : A -> A ; -- young,younger,youngest
-
+    irregAdv  : A -> Str -> A ;
 
 --3 Two-place adjectives
 
@@ -455,17 +455,19 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ;
         "e" => happy ;
         _   => duplFinal happy + "e"
         } ;
-      happily : Str = case happy of {
-        _ + "ble" => init happy + "y" ;
-        _ + "y" => happ + "ily" ;
-        _ + "ll" => happy + "y" ;
-        _   => happy + "ly"
-        } ;
-    in mkADeg happy (happie + "r") (happie + "st") happily ;
+    in mkADeg happy (happie + "r") (happie + "st") (adj2adv happy) ;
+    
+  adj2adv : Str -> Str = \happy ->
+    case happy of {
+      _ + "ble" => init happy + "y" ;
+      _ + "y"   => init happy + "ily" ;
+      _ + "ll"  => happy + "y" ;
+      _         => happy + "ly"
+      } ;
 
   duplADeg fat = 
     mkADeg fat 
-    (fat + last fat + "er") (fat + last fat + "est") (fat + "ly") ;
+    (fat + last fat + "er") (fat + last fat + "est") (adj2adv fat) ;
 
   compoundADeg a =
     let ad = (a.s ! AAdj Posit Nom) 
@@ -591,7 +593,7 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ;
   mkA = overload {
     mkA : Str -> A = regA ;
     mkA : (fat,fatter : Str) -> A = \fat,fatter -> 
-      mkAdjective fat fatter (init fatter + "st") (fat + "ly") ;
+      mkAdjective fat fatter (init fatter + "st") (adj2adv fat) ;
     mkA : (good,better,best,well : Str) -> A = \a,b,c,d ->
       mkAdjective a b c d
     } ;
@@ -600,6 +602,8 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ;
   simpleA a = 
     let ad = (a.s ! AAdj Posit Nom) 
     in regADeg ad ;
+    
+  irregAdv a adv = lin A {s = table {AAdv => adv; aform => a.s ! aform}} ;
 
   prepA2 : A -> Prep -> A2 ;
 
