@@ -18,8 +18,8 @@ lin
   Fan = mkCN (mkN "fan") ;
   Switchable, Dimmable = <> ;
   
-  SwitchOn = mkV2 (mkV "on" (mkV "switch")) ;
-  SwitchOff = mkV2 (mkV "off" (mkV "switch")) ;
+  SwitchOn = mkV2 (partV (mkV "switch") "on") ;
+  SwitchOff = mkV2 (partV (mkV "switch") "off") ;
   Dim = mkV2 (mkV "dim") ;
 
   switchable_Light = <> ;
