@@ -151,7 +151,8 @@ allCommands env@(pgf, mos) = Map.fromList [
        "flag -format."
        ],
      exec = \opts es -> do
-         let grph = if null es then [] else graphvizAlignment pgf (languages pgf) (head es)
+         let langs = optLangs opts
+         let grph = if null es then [] else graphvizAlignment pgf langs (head es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts
@@ -169,7 +170,8 @@ allCommands env@(pgf, mos) = Map.fromList [
        ],
      flags = [
        ("format","format of the visualization file (default \"png\")"),
-       ("view","program to open the resulting file (default \"open\")")
+       ("lang", "alignments for this list of languages (default: all)"),
+       ("view",  "program to open the resulting file (default \"open\")")
        ] 
     }),
  ("ga", emptyCommandInfo {
