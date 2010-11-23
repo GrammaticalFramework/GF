@@ -2,6 +2,8 @@
 <html> <head>
 <title>About Minibar</title>
 <link rel=stylesheet type="text/css" href="minibar.css">
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<meta charset="UTF-8">
 </head>
 
 <body>
@@ -104,11 +106,48 @@ Some implementation details:
   <li>[Added 2010-09-10] The default input language is now the user's preferred
   language, if possible. This is implemented by consulting the
   <code>userLanguage</code> field in the grammar info output by pgf-server.
+  <li>[Added 2010-10-27] Keyboard input and completion should now work much
+      more smoothly:
+  <ul>
+    <li>When you press space, the current word will be completed (if incomplete)
+      and a new magnet will be created. If there is more than one possible
+      completion, no magnet is created, but the common prefix of the possible
+      completions is added to the text box.
+    <li>Instead of asking the server for possible completions every time a new
+      letter is added to the curent word, minibar only ask for completions for
+      whole words and then filters the list locally when more letters are entered,
+      speeding things up when server responses are slow.
+  </ul>
+  <li>[Added 2010-10-27] Code restructuring:
+    <ul>
+    <li>The PGF server API has been moved to its own file:
+      <a href="pgf_online.js">pgf_online.js</a>. This
+      allows it to be reused in other applicaitons without importing the entire
+      minibar. It also allows minibar to be used with different server
+      interfaces. <a href="minibar.html">minibar.html</a> has been updated to
+      show how you use the new <a href="minibar.js">minibar.js</a> and
+      <a href="pgf_online.js">pgf_online.js</a>.
+    <li>The minibar code has been rewritten to avoid storing state information
+      in the document tree and accessing it by referring to named document
+      elements. The code now also avoids using string literals contaning
+      the names of top-level functions to specify event handlers for buttons
+      and menus. (The code is no longer introspective, so &alpha; conversion
+      will not change its meaning.)
+   </ul>
+ <li>[Added 2010-11-09] Some new documentation:
+   <ul>
+     <li><a href="gf-web-api-examples.html">gf-web-api-examples.html</a>:
+     examples illustrating the PGF server API provided by
+     <a href="pgf_online.js">pgf_online.js</a>.
+     <li><a href="example.html">example.html</a>: a minimal example of a web
+     page that uses <a href="pgf_online.js">pgf_online.js</a> to talk to the
+     PGF server.
+   </ul>
 </ul>
 
 <hr>
 <small class=modtime>
-<!-- hhmts start --> Last modified: Tue Sep 28 13:44:00 CEST 2010 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Tue Nov 23 13:06:40 CET 2010 <!-- hhmts end -->
 </small>
 <address>
 <a href="http://www.cs.chalmers.se/~hallgren/">TH</a>
