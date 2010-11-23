@@ -1,0 +1,2032 @@
+an Italian became the world's greatest tenor
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN (DetQuant IndefArt NumSg) (UseN italian_N)) (ComplSlash (SlashV2a become_V2) (DetCN (DetQuantOrd (GenNP (DetCN (DetQuant DefArt NumSg) (UseN world_N))) NumSg (OrdSuperl great_A)) (UseN tenor_N)))))
+
+was there an Italian who became the world's greatest tenor
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt NumSg) (RelCN (UseN italian_N) (UseRCl (TTAnt TPast ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2a become_V2) (DetCN (DetQuantOrd (GenNP (DetCN (DetQuant DefArt NumSg) (UseN world_N))) NumSg (OrdSuperl great_A)) (UseN tenor_N))))))))))
+
+every Italian man wants to be a great tenor
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (AdjCN (PositA italian_A) (UseN man_N))) (ComplVV want_VV (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA great_A) (UseN tenor_N))))))))
+
+some Italian men are great tenors
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN somePl_Det (AdjCN (PositA italian_A) (UseN man_N))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA great_A) (UseN tenor_N)))))))
+
+are there Italian men who want to be a great tenor
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA italian_A) (RelCN (UseN man_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplVV want_VV (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA great_A) (UseN tenor_N))))))))))))))
+
+all Italian men want to be a great tenor
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (AdjCN (PositA italian_A) (UseN man_N))) (ComplVV want_VV (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA great_A) (UseN tenor_N))))))))
+
+some Italian men are great tenors
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN somePl_Det (AdjCN (PositA italian_A) (UseN man_N))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA great_A) (UseN tenor_N)))))))
+
+are there Italian men who want to be a great tenor
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA italian_A) (RelCN (UseN man_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplVV want_VV (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA great_A) (UseN tenor_N))))))))))))))
+
+each Italian tenor wants to be great
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN each_Det (AdjCN (PositA italian_A) (UseN tenor_N))) (ComplVV want_VV (UseComp (CompAP (PositA great_A))))))
+
+some Italian tenors are great
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN somePl_Det (AdjCN (PositA italian_A) (UseN tenor_N))) (UseComp (CompAP (PositA great_A)))))
+
+are there Italian tenors who want to be great
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt NumPl) (RelCN (AdjCN (PositA italian_A) (UseN tenor_N)) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplVV want_VV (UseComp (CompAP (PositA great_A)))))))))))
+
+the really ambitious tenors are Italian
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN (DetQuant DefArt NumPl) (AdjCN (AdAP (PositAdAAdj real_A) (PositA ambitious_A)) (UseN tenor_N))) (UseComp (CompAP (PositA italian_A)))))
+
+are there really ambitious tenors who are Italian
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt NumPl) (RelCN (AdjCN (AdAP (PositAdAAdj real_A) (PositA ambitious_A)) (UseN tenor_N)) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (PositA italian_A))))))))))
+
+no really great tenors are modest
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN (DetQuant no_Quant NumPl) (AdjCN (AdAP (PositAdAAdj real_A) (PositA great_A)) (UseN tenor_N))) (UseComp (CompAP (PositA modest_A)))))
+
+are there really great tenors who are modest
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt NumPl) (RelCN (AdjCN (AdAP (PositAdAAdj real_A) (PositA great_A)) (UseN tenor_N)) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (PositA modest_A))))))))))
+
+some great tenors are Swedish
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN somePl_Det (AdjCN (PositA great_A) (UseN tenor_N))) (UseComp (CompAP (PositA swedish_A)))))
+
+are there great tenors who are Swedish
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA great_A) (RelCN (UseN tenor_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (PositA swedish_A)))))))))))
+
+many great tenors are German
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN many_Det (AdjCN (PositA great_A) (UseN tenor_N))) (UseComp (CompAP (PositA german_A)))))
+
+are there great tenors who are German
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA great_A) (RelCN (UseN tenor_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (PositA german_A)))))))))))
+
+several great tenors are British
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN several_Det (AdjCN (PositA great_A) (UseN tenor_N))) (UseComp (CompAP (PositA british_A)))))
+
+are there great tenors who are British
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA great_A) (RelCN (UseN tenor_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (PositA british_A)))))))))))
+
+most great tenors are Italian
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN most_Det (AdjCN (PositA great_A) (UseN tenor_N))) (UseComp (CompAP (PositA italian_A)))))
+
+are there great tenors who are Italian
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA great_A) (RelCN (UseN tenor_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (PositA italian_A)))))))))))
+
+a few great tenors sing popular music
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN a8few_Det (AdjCN (PositA great_A) (UseN tenor_N))) (ComplSlash (SlashV2a sing_V2) (MassNP (AdjCN (PositA popular_A) (UseN music_N))))))
+
+some great tenors like popular music
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN somePl_Det (AdjCN (PositA great_A) (UseN tenor_N))) (ComplSlash (SlashV2a like_V2) (MassNP (AdjCN (PositA popular_A) (UseN music_N))))))
+
+are there great tenors who sing popular music
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA great_A) (RelCN (UseN tenor_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2a sing_V2) (MassNP (AdjCN (PositA popular_A) (UseN music_N))))))))))))
+
+few great tenors are poor
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN few_Det (AdjCN (PositA great_A) (UseN tenor_N))) (UseComp (CompAP (PositA poor_A)))))
+
+are there great tenors who are poor
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA great_A) (RelCN (UseN tenor_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (PositA poor_A)))))))))))
+
+both leading tenors are excellent
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN both_Det (VerbCN lead_V (UseN tenor_N))) (UseComp (CompAP (PositA excellent_A)))))
+
+leading tenors who are excellent are indispensable
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN (DetQuant IndefArt NumPl) (RelCN (VerbCN lead_V (UseN tenor_N)) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (PositA excellent_A))))))) (UseComp (CompAP (PositA indispensable_A)))))
+
+are both leading tenors indispensable
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (DetCN both_Det (AdjCN (PositA leading_A) (UseN tenor_N))) (UseComp (CompAP (PositA indispensable_A))))))
+
+neither leading tenor comes cheap
+
+one of the leading tenors is pavarotti
+
+is pavarotti a leading tenor who comes cheap
+
+at least three tenors will take part in the concert
+UttS (UseCl (TTAnt TFut ASimul) PPos (PredVP (DetCN (DetQuant IndefArt (NumCard (AdNum at_least_AdN (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n3))))))))) (UseN tenor_N)) (ComplSlash (SlashV2a take_V2) (AdvNP (MassNP (UseN part_N)) (PrepNP in_Prep (DetCN (DetQuant DefArt NumSg) (UseN concert_N)))))))
+
+are there tenors who will take part in the concert
+
+at most two tenors will contribute their fees to charity
+UttS (UseCl (TTAnt TFut ASimul) PPos (PredVP (DetCN (DetQuant IndefArt (NumCard (AdNum at_most_AdN (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))))))) (UseN tenor_N)) (AdvVP (ComplSlash (SlashV2a contribute_V2) (DetCN (DetQuant (PossPron they_Pron) NumPl) (UseN fee_N))) (PrepNP to_Prep (MassNP (UseN charity_N))))))
+
+*** are there tenors who will contribute their fees to charity
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (AdvNP (DetCN (DetQuant IndefArt NumPl) (RelCN (UseN tenor_N) (UseRCl (TTAnt TFut ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2a contribute_V2) (DetCN (DetQuant (PossPron they_Pron) NumPl) (UseN fee_N))))))) (PrepNP to_Prep (MassNP (UseN charity_N)))))))
+
+an irishman won the nobel prize for literature
+
+did an irishman win a nobel prize
+
+every European has the right to live in Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (UseN european_N)) (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant DefArt NumSg) (AdvCN (SentCN (UseN right_N) (EmbedVP (UseV live_V))) (PrepNP in_Prep (UsePN europe_PN)))))))
+
+every European is a person
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (UseN european_N)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN person_N))))))
+
+every person who has the right to live in Europe can travel freely within Europe
+
+can every European travel freely within Europe
+
+all Europeans have the right to live in Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (UseN european_N)) (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant DefArt NumSg) (AdvCN (SentCN (UseN right_N) (EmbedVP (UseV live_V))) (PrepNP in_Prep (UsePN europe_PN)))))))
+
+every European is a person
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (UseN european_N)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN person_N))))))
+
+every person who has the right to live in Europe can travel freely within Europe
+
+can all Europeans travel freely within Europe
+
+each European has the right to live in Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN each_Det (UseN european_N)) (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant DefArt NumSg) (AdvCN (SentCN (UseN right_N) (EmbedVP (UseV live_V))) (PrepNP in_Prep (UsePN europe_PN)))))))
+
+every European is a person
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (UseN european_N)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN person_N))))))
+
+every person who has the right to live in Europe can travel freely within Europe
+
+can each European travel freely within Europe
+
+the residents of member states have the right to live in Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (AdvNP (DetCN (DetQuant DefArt NumPl) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant IndefArt NumPl) (CompoundCN (UseN member_N) (UseN state_N))))) (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant DefArt NumSg) (AdvCN (SentCN (UseN right_N) (EmbedVP (UseV live_V))) (PrepNP in_Prep (UsePN europe_PN)))))))
+
+all residents of member states are individuals
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (AdvNP (DetCN all_Det (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant IndefArt NumPl) (CompoundCN (UseN member_N) (UseN state_N))))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (UseN individual_N))))))
+
+every individual who has the right to live in Europe can travel freely within Europe
+
+can the residents of member states travel freely within Europe
+
+no delegate finished the report on time
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN (DetQuant no_Quant NumSg) (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN report_N))) (PrepNP on_Prep (MassNP (UseN time_N))))))
+
+did no delegate finish the report
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN (DetQuant no_Quant NumSg) (UseN delegate_N)) (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN report_N))))))
+
+some delegates finished the survey on time
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN somePl_Det (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN survey_N))) (PrepNP on_Prep (MassNP (UseN time_N))))))
+
+did some delegates finish the survey
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN somePl_Det (UseN delegate_N)) (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN survey_N))))))
+
+many delegates obtained interesting results from the survey
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN many_Det (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a obtain_V2) (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA interesting_A) (UseN result_N)))) (PrepNP from_Prep (DetCN (DetQuant DefArt NumSg) (UseN survey_N))))))
+
+did many delegates obtain results from the survey
+
+several delegates got the results published in major national newspapers
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN several_Det (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a get_V2) (PPartNP (DetCN (DetQuant DefArt NumPl) (UseN result_N)) publish_V2)) (PrepNP in_Prep (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA major_A) (AdjCN (PositA national_A) (UseN newspaper_N))))))))
+
+did several delegates get the results published
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN several_Det (UseN delegate_N)) (ComplSlash (SlashV2a get_V2) (PPartNP (DetCN (DetQuant DefArt NumPl) (UseN result_N)) publish_V2)))))
+
+most Europeans are resident in Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN most_Det (UseN european_N)) (UseComp (CompAP (AdvAP (PositA resident_A) (PrepNP in_Prep (UsePN europe_PN)))))))
+
+all Europeans are people
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (UseN european_N)) (UseComp (CompNP (MassNP (UseN people_N))))))
+
+all people who are resident in Europe can travel freely within Europe
+
+can most Europeans travel freely within Europe
+
+a few committee members are from Sweden
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN a8few_Det (CompoundCN (UseN committee_N) (UseN member_N))) (UseComp (CompAdv (PrepNP from_Prep (UsePN sweden_PN))))))
+
+all committee members are people
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (CompoundCN (UseN committee_N) (UseN member_N))) (UseComp (CompNP (MassNP (UseN people_N))))))
+
+all people who are from Sweden are from Scandinavia
+
+are at least a few committee members from Scandinavia
+
+few committee members are from Portugal
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN few_Det (CompoundCN (UseN committee_N) (UseN member_N))) (UseComp (CompAdv (PrepNP from_Prep (UsePN portugal_PN))))))
+
+all committee members are people
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (CompoundCN (UseN committee_N) (UseN member_N))) (UseComp (CompNP (MassNP (UseN people_N))))))
+
+all people who are from Portugal are from southern Europe
+
+are there few committee members from southern Europe
+
+both commissioners used to be leading businessmen
+
+did both commissioners used to be businessmen
+
+neither commissioner spends a lot of time at home
+
+does neither commissioner spend time at home
+
+at least three commissioners spend a lot of time at home
+
+do at least three commissioners spend time at home
+
+at most ten commissioners spend a lot of time at home
+
+do at most ten commissioners spend time at home
+
+an irishman won a nobel prize
+
+did an irishman win the nobel prize for literature
+
+every European can travel freely within Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (UseN european_N)) (AdvVP (AdvVP (ComplVV can_VV (UseV travel_V)) (PositAdvAdj free_A)) (PrepNP within_Prep (UsePN europe_PN)))))
+
+every European is a person
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (UseN european_N)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN person_N))))))
+
+every person who has the right to live in Europe can travel freely within Europe
+
+does every European have the right to live in Europe
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (DetCN every_Det (UseN european_N)) (AdvVP (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant DefArt NumSg) (SentCN (UseN right_N) (EmbedVP (UseV live_V))))) (PrepNP in_Prep (UsePN europe_PN))))))
+
+all Europeans can travel freely within Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (UseN european_N)) (AdvVP (AdvVP (ComplVV can_VV (UseV travel_V)) (PositAdvAdj free_A)) (PrepNP within_Prep (UsePN europe_PN)))))
+
+every European is a person
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (UseN european_N)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN person_N))))))
+
+every person who has the right to live in Europe can travel freely within Europe
+
+do all Europeans have the right to live in Europe
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (DetCN all_Det (UseN european_N)) (AdvVP (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant DefArt NumSg) (SentCN (UseN right_N) (EmbedVP (UseV live_V))))) (PrepNP in_Prep (UsePN europe_PN))))))
+
+each European can travel freely within Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN each_Det (UseN european_N)) (AdvVP (AdvVP (ComplVV can_VV (UseV travel_V)) (PositAdvAdj free_A)) (PrepNP within_Prep (UsePN europe_PN)))))
+
+every European is a person
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (UseN european_N)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN person_N))))))
+
+every person who has the right to live in Europe can travel freely within Europe
+
+does each European have the right to live in Europe
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (DetCN each_Det (UseN european_N)) (AdvVP (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant DefArt NumSg) (SentCN (UseN right_N) (EmbedVP (UseV live_V))))) (PrepNP in_Prep (UsePN europe_PN))))))
+
+the residents of member states can travel freely within Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (AdvNP (DetCN (DetQuant DefArt NumPl) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant IndefArt NumPl) (CompoundCN (UseN member_N) (UseN state_N))))) (AdvVP (AdvVP (ComplVV can_VV (UseV travel_V)) (PositAdvAdj free_A)) (PrepNP within_Prep (UsePN europe_PN)))))
+
+all residents of member states are individuals
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (AdvNP (DetCN all_Det (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant IndefArt NumPl) (CompoundCN (UseN member_N) (UseN state_N))))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (UseN individual_N))))))
+
+every individual who has the right to live anywhere in Europe can travel freely within Europe
+
+do the residents of member states have the right to live anywhere in Europe
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (AdvNP (DetCN (DetQuant DefArt NumPl) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant IndefArt NumPl) (CompoundCN (UseN member_N) (UseN state_N))))) (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant DefArt NumSg) (SentCN (UseN right_N) (EmbedVP (AdvVP (AdvVP (UseV live_V) anywhere_Adv) (PrepNP in_Prep (UsePN europe_PN)))))))))) 
+
+no delegate finished the report
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN (DetQuant no_Quant NumSg) (UseN delegate_N)) (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN report_N)))))
+
+did any delegate finish the report on time
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (PredetNP any_Predet (MassNP (UseN delegate_N))) (AdvVP (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN report_N))) (PrepNP on_Prep (MassNP (UseN time_N)))))))
+
+some delegates finished the survey
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN somePl_Det (UseN delegate_N)) (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN survey_N)))))
+
+did some delegates finish the survey on time
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN somePl_Det (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN survey_N))) (PrepNP on_Prep (MassNP (UseN time_N)))))))
+
+many delegates obtained results from the survey
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN many_Det (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a obtain_V2) (DetCN (DetQuant IndefArt NumPl) (UseN result_N))) (PrepNP from_Prep (DetCN (DetQuant DefArt NumSg) (UseN survey_N))))))
+
+did many delegates obtain interesting results from the survey
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN many_Det (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a obtain_V2) (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA interesting_A) (UseN result_N)))) (PrepNP from_Prep (DetCN (DetQuant DefArt NumSg) (UseN survey_N)))))))
+
+several delegates got the results published
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN several_Det (UseN delegate_N)) (ComplSlash (SlashV2a get_V2) (PPartNP (DetCN (DetQuant DefArt NumPl) (UseN result_N)) publish_V2))))
+
+did several delegates get the results published in major national newspapers
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN several_Det (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a get_V2) (PPartNP (DetCN (DetQuant DefArt NumPl) (UseN result_N)) publish_V2)) (PrepNP in_Prep (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA major_A) (AdjCN (PositA national_A) (UseN newspaper_N)))))))))
+
+most Europeans can travel freely within Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN most_Det (UseN european_N)) (AdvVP (AdvVP (ComplVV can_VV (UseV travel_V)) (PositAdvAdj free_A)) (PrepNP within_Prep (UsePN europe_PN)))))
+
+all Europeans are people
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (UseN european_N)) (UseComp (CompNP (MassNP (UseN people_N))))))
+
+all people who are resident in Europe can travel freely within Europe
+
+are most Europeans resident in Europe
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (DetCN most_Det (UseN european_N)) (UseComp (CompAP (AdvAP (PositA resident_A) (PrepNP in_Prep (UsePN europe_PN))))))))
+
+a few committee members are from scandinavia
+
+all committee members are people
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (CompoundCN (UseN committee_N) (UseN member_N))) (UseComp (CompNP (MassNP (UseN people_N))))))
+
+all people who are from Sweden are from scandinavia
+
+are at least a few committee members from Sweden
+
+few committee members are from southern Europe
+
+all committee members are people
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (CompoundCN (UseN committee_N) (UseN member_N))) (UseComp (CompNP (MassNP (UseN people_N))))))
+
+all people who are from Portugal are from southern Europe
+
+are there few committee members from Portugal
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (AdvNP (DetCN few_Det (CompoundCN (UseN committee_N) (UseN member_N))) (PrepNP from_Prep (UsePN portugal_PN))))))
+
+both commissioners used to be businessmen
+
+did both commissioners used to be leading businessmen
+
+neither commissioner spends time at home
+
+does either commissioner spend a lot of time at home
+
+at least three commissioners spend time at home
+
+do at least three commissioners spend a lot of time at home
+
+at most ten commissioners spend time at home
+
+do at most ten commissioners spend a lot of time at home
+
+a Swede won a nobel prize
+
+every Swede is a Scandinavian
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (UseN swede_N)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN scandinavian_N))))))
+
+did a scandinavian win a nobel prize
+
+every Canadian resident can travel freely within Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (AdjCN (PositA canadian_A) (UseN resident_N))) (AdvVP (AdvVP (ComplVV can_VV (UseV travel_V)) (PositAdvAdj free_A)) (PrepNP within_Prep (UsePN europe_PN)))))
+
+every Canadian resident is a resident of the north American continent
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (AdjCN (PositA canadian_A) (UseN resident_N))) (UseComp (CompNP (AdvNP (DetCN (DetQuant IndefArt NumSg) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant DefArt NumSg) (AdjCN (PositA north_A) (AdjCN (PositA american_A) (UseN continent_N))))))))))
+
+can every resident of the north american continent travel freely within Europe
+
+all Canadian residents can travel freely within Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (AdjCN (PositA canadian_A) (UseN resident_N))) (AdvVP (AdvVP (ComplVV can_VV (UseV travel_V)) (PositAdvAdj free_A)) (PrepNP within_Prep (UsePN europe_PN)))))
+
+every Canadian resident is a resident of the north American continent
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (AdjCN (PositA canadian_A) (UseN resident_N))) (UseComp (CompNP (AdvNP (DetCN (DetQuant IndefArt NumSg) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant DefArt NumSg) (AdjCN (PositA north_A) (AdjCN (PositA american_A) (UseN continent_N))))))))))
+
+can all residents of the north american continent travel freely within Europe
+
+each Canadian resident can travel freely within Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN each_Det (AdjCN (PositA canadian_A) (UseN resident_N))) (AdvVP (AdvVP (ComplVV can_VV (UseV travel_V)) (PositAdvAdj free_A)) (PrepNP within_Prep (UsePN europe_PN)))))
+
+every Canadian resident is a resident of the north American continent
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (AdjCN (PositA canadian_A) (UseN resident_N))) (UseComp (CompNP (AdvNP (DetCN (DetQuant IndefArt NumSg) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant DefArt NumSg) (AdjCN (PositA north_A) (AdjCN (PositA american_A) (UseN continent_N))))))))))
+
+can each resident of the north american continent travel freely within Europe
+
+the residents of major western countries can travel freely within Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (AdvNP (DetCN (DetQuant DefArt NumPl) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA major_A) (AdjCN (PositA western_A) (UseN country_N)))))) (AdvVP (AdvVP (ComplVV can_VV (UseV travel_V)) (PositAdvAdj free_A)) (PrepNP within_Prep (UsePN europe_PN)))))
+
+all residents of major western countries are residents of western countries
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (AdvNP (DetCN all_Det (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA major_A) (AdjCN (PositA western_A) (UseN country_N)))))) (UseComp (CompNP (AdvNP (DetCN (DetQuant IndefArt NumPl) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA western_A) (UseN country_N)))))))))
+
+do the residents of western countries have the right to live in Europe
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (AdvNP (DetCN (DetQuant DefArt NumPl) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant IndefArt NumPl) (CompoundCN (UseN member_N) (UseN state_N))))) (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant DefArt NumSg) (SentCN (UseN right_N) (EmbedVP (AdvVP (UseV live_V) (PrepNP in_Prep (UsePN europe_PN)))))))))) 
+
+no Scandinavian delegate finished the report on time
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN (DetQuant no_Quant NumSg) (AdjCN (PositA scandinavian_A) (UseN delegate_N))) (AdvVP (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN report_N))) (PrepNP on_Prep (MassNP (UseN time_N))))))
+
+did any delegate finish the report on time
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (PredetNP any_Predet (MassNP (UseN delegate_N))) (AdvVP (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN report_N))) (PrepNP on_Prep (MassNP (UseN time_N)))))))
+
+some irish delegates finished the survey on time
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN somePl_Det (AdjCN (PositA irish_A) (UseN delegate_N))) (AdvVP (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN survey_N))) (PrepNP on_Prep (MassNP (UseN time_N))))))
+
+did any delegates finish the survey on time
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA any_A) (UseN delegate_N))) (AdvVP (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN survey_N))) (PrepNP on_Prep (MassNP (UseN time_N)))))))
+
+many British delegates obtained interesting results from the survey
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN many_Det (AdjCN (PositA british_A) (UseN delegate_N))) (AdvVP (ComplSlash (SlashV2a obtain_V2) (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA interesting_A) (UseN result_N)))) (PrepNP from_Prep (DetCN (DetQuant DefArt NumSg) (UseN survey_N))))))
+
+did many delegates obtain interesting results from the survey
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN many_Det (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a obtain_V2) (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA interesting_A) (UseN result_N)))) (PrepNP from_Prep (DetCN (DetQuant DefArt NumSg) (UseN survey_N)))))))
+
+several Portuguese delegates got the results published in major national newspapers
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN several_Det (AdjCN (PositA portuguese_A) (UseN delegate_N))) (AdvVP (ComplSlash (SlashV2a get_V2) (PPartNP (DetCN (DetQuant DefArt NumPl) (UseN result_N)) publish_V2)) (PrepNP in_Prep (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA major_A) (AdjCN (PositA national_A) (UseN newspaper_N))))))))
+
+did several delegates get the results published in major national newspapers
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN several_Det (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a get_V2) (PPartNP (DetCN (DetQuant DefArt NumPl) (UseN result_N)) publish_V2)) (PrepNP in_Prep (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA major_A) (AdjCN (PositA national_A) (UseN newspaper_N)))))))))
+
+most Europeans who are resident in Europe can travel freely within europe
+
+can most Europeans travel freely within Europe
+
+a few female committee members are from scandinavia
+
+are at least a few committee members from scandinavia
+
+few female committee members are from southern Europe
+
+are few committee members from southern Europe
+
+both female commissioners used to be in business
+
+did both commissioners used to be in business
+
+neither female commissioner spends a lot of time at home
+
+does either commissioner spend a lot of time at home
+
+at least three female commissioners spend time at home
+
+do at least three commissioners spend time at home
+
+at most ten female commissioners spend time at home
+
+do at most ten commissioners spend time at home
+
+a Scandinavian won a nobel prize
+
+every Swede is a Scandinavian
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (UseN swede_N)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN scandinavian_N))))))
+
+did a Swede win a nobel prize
+
+every resident of the north American continent can travel freely within Europe
+
+every Canadian resident is a resident of the north American continent
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (AdjCN (PositA canadian_A) (UseN resident_N))) (UseComp (CompNP (AdvNP (DetCN (DetQuant IndefArt NumSg) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant DefArt NumSg) (AdjCN (PositA north_A) (AdjCN (PositA american_A) (UseN continent_N))))))))))
+
+can every Canadian resident travel freely within Europe
+
+all residents of the north American continent can travel freely within Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (AdvCN (UseN resident_N) (PrepNP of_Prep (DetCN (DetQuant DefArt NumSg) (AdjCN (PositA north_A) (AdjCN (PositA american_A) (UseN continent_N))))))) (AdvVP (AdvVP (ComplVV can_VV (UseV travel_V)) (PositAdvAdj free_A)) (PrepNP within_Prep (UsePN europe_PN)))))
+
+every Canadian resident is a resident of the north American continent
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (AdjCN (PositA canadian_A) (UseN resident_N))) (UseComp (CompNP (AdvNP (DetCN (DetQuant IndefArt NumSg) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant DefArt NumSg) (AdjCN (PositA north_A) (AdjCN (PositA american_A) (UseN continent_N))))))))))
+
+can all Canadian residents travel freely within Europe
+
+each resident of the north American continent can travel freely within Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN each_Det (AdvCN (UseN resident_N) (PrepNP of_Prep (DetCN (DetQuant DefArt NumSg) (AdjCN (PositA north_A) (AdjCN (PositA american_A) (UseN continent_N))))))) (AdvVP (AdvVP (ComplVV can_VV (UseV travel_V)) (PositAdvAdj free_A)) (PrepNP within_Prep (UsePN europe_PN)))))
+
+every Canadian resident is a resident of the north American continent
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (AdjCN (PositA canadian_A) (UseN resident_N))) (UseComp (CompNP (AdvNP (DetCN (DetQuant IndefArt NumSg) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant DefArt NumSg) (AdjCN (PositA north_A) (AdjCN (PositA american_A) (UseN continent_N))))))))))
+
+can each Canadian resident travel freely within Europe
+
+the residents of western countries can travel freely within Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (AdvNP (DetCN (DetQuant DefArt NumPl) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA western_A) (UseN country_N))))) (AdvVP (AdvVP (ComplVV can_VV (UseV travel_V)) (PositAdvAdj free_A)) (PrepNP within_Prep (UsePN europe_PN)))))
+
+all residents of major western countries are residents of western countries
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (AdvNP (DetCN all_Det (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA major_A) (AdjCN (PositA western_A) (UseN country_N)))))) (UseComp (CompNP (AdvNP (DetCN (DetQuant IndefArt NumPl) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA western_A) (UseN country_N)))))))))
+
+do the residents of major western countries have the right to live in Europe
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (AdvNP (DetCN (DetQuant DefArt NumPl) (UseN resident_N)) (PrepNP of_Prep (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA major_A) (AdjCN (PositA western_A) (UseN country_N)))))) (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant DefArt NumSg) (SentCN (UseN right_N) (EmbedVP (AdvVP (UseV live_V) (PrepNP in_Prep (UsePN europe_PN)))))))))) 
+
+no delegate finished the report on time
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN (DetQuant no_Quant NumSg) (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN report_N))) (PrepNP on_Prep (MassNP (UseN time_N))))))
+
+did any Scandinavian delegate finish the report on time
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (PredetNP any_Predet (MassNP (AdjCN (PositA scandinavian_A) (UseN delegate_N)))) (AdvVP (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN report_N))) (PrepNP on_Prep (MassNP (UseN time_N)))))))
+
+some delegates finished the survey on time
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN somePl_Det (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN survey_N))) (PrepNP on_Prep (MassNP (UseN time_N))))))
+
+did any irish delegates finish the survey on time
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (PredetNP any_Predet (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA irish_A) (UseN delegate_N)))) (AdvVP (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt NumSg) (UseN survey_N))) (PrepNP on_Prep (MassNP (UseN time_N)))))))
+
+many delegates obtained interesting results from the survey
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN many_Det (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a obtain_V2) (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA interesting_A) (UseN result_N)))) (PrepNP from_Prep (DetCN (DetQuant DefArt NumSg) (UseN survey_N))))))
+
+did many British delegates obtain interesting results from the survey
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN many_Det (AdjCN (PositA british_A) (UseN delegate_N))) (AdvVP (ComplSlash (SlashV2a obtain_V2) (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA interesting_A) (UseN result_N)))) (PrepNP from_Prep (DetCN (DetQuant DefArt NumSg) (UseN survey_N)))))))
+
+several delegates got the results published in major national newspapers
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN several_Det (UseN delegate_N)) (AdvVP (ComplSlash (SlashV2a get_V2) (PPartNP (DetCN (DetQuant DefArt NumPl) (UseN result_N)) publish_V2)) (PrepNP in_Prep (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA major_A) (AdjCN (PositA national_A) (UseN newspaper_N))))))))
+
+did several Portuguese delegates get the results published in major national newspapers
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN several_Det (AdjCN (PositA portuguese_A) (UseN delegate_N))) (AdvVP (ComplSlash (SlashV2a get_V2) (PPartNP (DetCN (DetQuant DefArt NumPl) (UseN result_N)) publish_V2)) (PrepNP in_Prep (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA major_A) (AdjCN (PositA national_A) (UseN newspaper_N)))))))))
+
+most Europeans can travel freely within Europe
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN most_Det (UseN european_N)) (AdvVP (AdvVP (ComplVV can_VV (UseV travel_V)) (PositAdvAdj free_A)) (PrepNP within_Prep (UsePN europe_PN)))))
+
+can most Europeans who are resident outside Europe travel freely within Europe
+
+a few committee members are from Scandinavia
+
+are at least a few female committee members from Scandinavia
+
+few committee members are from southern Europe
+
+are few female committee members from southern Europe
+
+both commissioners used to be in business
+
+did both female commissioners used to be in business
+
+neither commissioner spends a lot of time at home
+
+does either female commissioner spend a lot of time at home
+
+at least three commissioners spend time at home
+
+do at least three male commissioners spend time at home
+
+at most ten commissioners spend time at home
+
+do at most ten female commissioners spend time at home
+
+Smith, Jones and Anderson signed the contract
+
+did Jones sign the contract
+
+Smith, Jones and several lawyers signed the contract
+
+did Jones sign the contract
+
+either Smith, Jones or Anderson signed the contract
+
+did Jones sign the contract
+
+either Smith, Jones or Anderson signed the contract
+
+if Smith and Anderson did not sign the contract, did Jones sign the contract
+
+exactly two lawyers and three accountants signed the contract
+
+did six lawyers sign the contract
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n6)))))))) (UseN lawyer_N)) (ComplSlash (SlashV2a sign_V2) (DetCN (DetQuant DefArt NumSg) (UseN contract_N))))))
+
+exactly two lawyers and three accountants signed the contract
+
+did six accountants sign the contract
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n6)))))))) (UseN accountant_N)) (ComplSlash (SlashV2a sign_V2) (DetCN (DetQuant DefArt NumSg) (UseN contract_N))))))
+
+every representative and client was at the meeting
+
+was every representative at the meeting
+
+every representative and client was at the meeting
+
+was every representative at the meeting
+
+every representative or client was at the meeting
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN every_Det (ConjCN or_Conj (BaseCN (UseN representative_N) (UseN client_N)))) (UseComp (CompAdv (PrepNP at_Prep (DetCN (DetQuant DefArt NumSg) (UseN meeting_N)))))))
+
+was every representative and every client at the meeting
+
+the chairman read out the items on the agenda
+
+did the chairman read out every item on the agenda
+
+the people who were at the meeting voted for a new chairman
+
+did everyone at the meeting vote for a new chairman
+
+all the people who were at the meeting voted for a new chairman
+
+did everyone at the meeting vote for a new chairman
+
+the people who were at the meeting all voted for a new chairman
+
+did everyone at the meeting vote for a new chairman
+
+the inhabitants of Cambridge voted for a labour mp
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (AdvNP (DetCN (DetQuant DefArt NumPl) (UseN inhabitant_N)) (PrepNP of_Prep (UsePN cambridge_PN))) (AdvVP (UseV vote_V) (PrepNP for_Prep (DetCN (DetQuant IndefArt NumSg) (CompoundCN (UseN labour_N) (UseN mp_N)))))))
+
+did every inhabitant of Cambridge vote for a labour mp
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (AdvNP (DetCN every_Det (UseN inhabitant_N)) (PrepNP of_Prep (UsePN cambridge_PN))) (AdvVP (UseV vote_V) (PrepNP for_Prep (DetCN (DetQuant IndefArt NumSg) (CompoundCN (UseN labour_N) (UseN mp_N)))))))) 
+
+the ancient Greeks were noted philosophers
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN (DetQuant DefArt NumPl) (AdjCN (PositA ancient_A) (UseN greek_N))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA noted_A) (UseN philosopher_N)))))))
+
+was every ancient Greek a noted philosopher
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN every_Det (AdjCN (PositA ancient_A) (UseN greek_N))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA noted_A) (UseN philosopher_N))))))))
+
+the ancient Greeks were all noted philosophers
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN (DetQuant DefArt NumPl) (AdjCN (PositA ancient_A) (UseN greek_N))) (UseComp (CompNP (DetCN all_Det (AdjCN (PositA noted_A) (UseN philosopher_N)))))))
+
+was every ancient Greek a noted philosopher
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN every_Det (AdjCN (PositA ancient_A) (UseN greek_N))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA noted_A) (UseN philosopher_N))))))))
+
+software faults were blamed for the system failure
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN (DetQuant IndefArt NumPl) (CompoundCN (UseN software_N) (UseN fault_N))) (AdvVP (PassV2 blame_V2) (PrepNP for_Prep (DetCN (DetQuant DefArt NumSg) (CompoundCN (UseN system_N) (UseN failure_N)))))))
+
+was the system failure blamed on one or more software faults
+
+software faults were blamed for the system failure
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN (DetQuant IndefArt NumPl) (CompoundCN (UseN software_N) (UseN fault_N))) (AdvVP (PassV2 blame_V2) (PrepNP for_Prep (DetCN (DetQuant DefArt NumSg) (CompoundCN (UseN system_N) (UseN failure_N)))))))
+
+bug # 32-985 is a known software fault
+
+was bug # 32-985 blamed for the system failure
+
+clients at the demonstration were all impressed by the system's performance
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (AdvNP (DetCN (DetQuant IndefArt NumPl) (UseN client_N)) (PrepNP at_Prep (DetCN (DetQuant DefArt NumSg) (UseN demonstration_N)))) (AdvVP (UseComp (CompNP (PPartNP (DetNP all_Det) impress_V2))) (PrepNP by8means_Prep (DetCN (DetQuant (GenNP (DetCN (DetQuant DefArt NumSg) (UseN system_N))) NumSg) (UseN performance_N))))))
+
+Smith was a client at the demonstration
+
+was smith impressed by the system's performance
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (AdvVP (PassV2 impress_V2) (PrepNP by8agent_Prep (DetCN (DetQuant (GenNP (DetCN (DetQuant DefArt NumSg) (UseN system_N))) NumSg) (UseN performance_N)))))))
+
+clients at the demonstration were impressed by the system's performance
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (AdvNP (DetCN (DetQuant IndefArt NumPl) (UseN client_N)) (PrepNP at_Prep (DetCN (DetQuant DefArt NumSg) (UseN demonstration_N)))) (AdvVP (PassV2 impress_V2) (PrepNP by8means_Prep (DetCN (DetQuant (GenNP (DetCN (DetQuant DefArt NumSg) (UseN system_N))) NumSg) (UseN performance_N))))))
+
+were most clients at the demonstration impressed by the system's performance
+
+university graduates make poor stock-market traders
+
+smith is a university graduate
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (MassNP (UseN smith_N)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (CompoundCN (UseN university_N) (UseN graduate_N)))))))
+
+is smith likely to make a poor stock market trader
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (MassNP (ApposCN (SentCN (AdvCN (UseN smith_N) (PositAdvAdj like_A)) (EmbedVP (ComplSlash (SlashV2a make_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA poor_A) (UseN stock_N)))))) (MassNP (UseN market_N)))) (UseComp (CompNP (MassNP (UseN trader_N)))))))
+
+university graduates make poor stock-market traders
+
+smith is a university graduate
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (MassNP (UseN smith_N)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (CompoundCN (UseN university_N) (UseN graduate_N)))))))
+
+will Smith make a poor stock market trader
+
+all apcom managers have company cars
+
+Jones is an apcom manager
+
+does Jones have a company car
+
+all apcom managers have company cars
+
+Jones is an apcom manager
+
+does Jones have more than one company car
+
+just one accountant attended the meeting
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (PredetNP only_Predet (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01))))))) (UseN accountant_N))) (ComplSlash (SlashV2a attend_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N)))))
+
+did no accountants attend the meeting
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN (DetQuant no_Quant NumPl) (UseN accountant_N)) (ComplSlash (SlashV2a attend_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N))))))
+
+just one accountant attended the meeting
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (PredetNP only_Predet (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01))))))) (UseN accountant_N))) (ComplSlash (SlashV2a attend_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N)))))
+
+did no accountant attend the meeting
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN (DetQuant no_Quant NumSg) (UseN accountant_N)) (ComplSlash (SlashV2a attend_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N))))))
+
+just one accountant attended the meeting
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (PredetNP only_Predet (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01))))))) (UseN accountant_N))) (ComplSlash (SlashV2a attend_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N)))))
+
+did any accountants attend the meeting
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (PredetNP any_Predet (DetCN (DetQuant IndefArt NumPl) (UseN accountant_N))) (ComplSlash (SlashV2a attend_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N))))))
+
+just one accountant attended the meeting
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (PredetNP only_Predet (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01))))))) (UseN accountant_N))) (ComplSlash (SlashV2a attend_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N)))))
+
+did any accountant attend the meeting
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (PredetNP any_Predet (MassNP (UseN accountant_N))) (ComplSlash (SlashV2a attend_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N))))))
+
+just one accountant attended the meeting
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (PredetNP only_Predet (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01))))))) (UseN accountant_N))) (ComplSlash (SlashV2a attend_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N)))))
+
+did some accountants attend the meeting
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN somePl_Det (UseN accountant_N)) (ComplSlash (SlashV2a attend_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N))))))
+
+just one accountant attended the meeting
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (PredetNP only_Predet (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01))))))) (UseN accountant_N))) (ComplSlash (SlashV2a attend_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N)))))
+
+did some accountant attend the meeting
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN someSg_Det (UseN accountant_N)) (ComplSlash (SlashV2a attend_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N))))))
+
+smith signed one contract
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a sign_V2) (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01))))))) (UseN contract_N)))))
+
+Jones signed another contract
+
+did Smith and Jones sign two contracts
+
+smith signed two contracts
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a sign_V2) (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2)))))))) (UseN contract_N)))))
+
+Jones signed two contracts
+
+did Smith and Jones sign two contracts
+
+smith signed two contracts
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a sign_V2) (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2)))))))) (UseN contract_N)))))
+
+Jones also signed them
+
+did Smith and Jones sign two contracts
+
+Mary used her workstation
+
+was Mary's workstation used
+
+Mary used her workstation
+
+does Mary have a workstation
+
+Mary used her workstation
+
+is Mary female
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN mary_PN) (UseComp (CompAP (PositA female_A))))))
+
+every student used her workstation
+
+Mary is a student
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN mary_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN student_N))))))
+
+did Mary use her workstation
+
+every student used her workstation
+
+Mary is a student
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN mary_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN student_N))))))
+
+does Mary have a workstation
+
+no student used her workstation
+
+Mary is a student
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN mary_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN student_N))))))
+
+did Mary use a workstation
+
+Smith attended a meeting
+
+she chaired it
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (SlashV2a chair_V2) (UsePron it_Pron))))
+
+did smith chair a meeting
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a chair_V2) (DetCN (DetQuant IndefArt NumSg) (UseN meeting_N))))))
+
+Smith delivered a report to Itel
+
+she also delivered them an invoice
+
+and she delivered them a project proposal
+
+did Smith deliver a report, an invoice and a project proposal to Itel
+
+every committee has a chairman
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (UseN committee_N)) (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant IndefArt NumSg) (UseN chairman_N)))))
+
+he is appointed its members
+
+does every committee have a chairman appointed by members of the committee
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (DetCN every_Det (UseN committee_N)) (ComplSlash (SlashV2a have_V2) (AdvNP (PPartNP (DetCN (DetQuant IndefArt NumSg) (UseN chairman_N)) appoint_V2) (PrepNP by8agent_Prep (DetCN (DetQuant IndefArt NumPl) (AdvCN (UseN member_N) (PrepNP of_Prep (DetCN (DetQuant DefArt NumSg) (UseN committee_N)))))))))))
+
+Itel has sent most of the reports Smith needs
+
+they are on her desk
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron they_Pron) (UseComp (CompAdv (PrepNP on_Prep (DetCN (DetQuant (PossPron she_Pron) NumSg) (UseN desk_N)))))))
+
+are there some reports from Itel on Smith's desk
+
+two out of ten machines are missing
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (AdvNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))))))) (PrepNP out_of_Prep (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 pot110)))))) (UseN machine_N)))) (ProgrVP (UseV miss_V))))
+
+they have been removed
+UttS (UseCl (TTAnt TPres AAnter) PPos (PredVP (UsePron they_Pron) (PassV2 remove_V2)))
+
+have two machines been removed
+UttQS (UseQCl (TTAnt TPres AAnter) PPos (QuestCl (PredVP (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2)))))))) (UseN machine_N)) (PassV2 remove_V2))))
+
+two out of ten machines are missing
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (AdvNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))))))) (PrepNP out_of_Prep (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 pot110)))))) (UseN machine_N)))) (ProgrVP (UseV miss_V))))
+
+they have been removed
+UttS (UseCl (TTAnt TPres AAnter) PPos (PredVP (UsePron they_Pron) (PassV2 remove_V2)))
+
+have eight machines been removed
+UttQS (UseQCl (TTAnt TPres AAnter) PPos (QuestCl (PredVP (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8)))))))) (UseN machine_N)) (PassV2 remove_V2))))
+
+two out of ten machines are missing
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (AdvNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))))))) (PrepNP out_of_Prep (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 pot110)))))) (UseN machine_N)))) (ProgrVP (UseV miss_V))))
+
+they were all here yesterday
+
+were ten machines here yesterday
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 pot110)))))) (UseN machine_N)) (AdvVP (UseComp (CompAdv here_Adv)) yesterday_Adv))))
+
+Smith took a machine on Tuesday , and Jones took a machine on Wednesday
+
+they put them in the lobby
+UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron they_Pron) (AdvVP (ComplSlash (SlashV2a put_V2) (UsePron they_Pron)) (PrepNP in_Prep (DetCN (DetQuant DefArt NumSg) (UseN lobby_N))))) 
+
+did Smith and Jones put two machines in the lobby
+
+John and his colleagues went to a meeting
+
+they hated it
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron they_Pron) (ComplSlash (SlashV2a hate_V2) (UsePron it_Pron))))
+
+did John's colleagues hate the meeting
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN (DetQuant (GenNP (UsePN john_PN)) NumPl) (UseN colleague_N)) (ComplSlash (SlashV2a hate_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N))))))
+
+John and his colleagues went to a meeting
+
+they hated it
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron they_Pron) (ComplSlash (SlashV2a hate_V2) (UsePron it_Pron))))
+
+did John hate the meeting
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (ComplSlash (SlashV2a hate_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N))))))
+
+John and his colleagues went to a meeting
+
+they hated it
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron they_Pron) (ComplSlash (SlashV2a hate_V2) (UsePron it_Pron))))
+
+did John hate the meeting
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (ComplSlash (SlashV2a hate_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N))))))
+
+each department has a dedicated line
+
+they rent them from BT
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron they_Pron) (AdvVP (ComplSlash (SlashV2a rent_V2) (UsePron they_Pron)) (PrepNP from_Prep (UsePN bt_PN)))))
+
+does every department rent a line from BT
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (DetCN every_Det (UseN department_N)) (AdvVP (ComplSlash (SlashV2a rent_V2) (DetCN (DetQuant IndefArt NumSg) (UseN line_N))) (PrepNP from_Prep (UsePN bt_PN))))))
+
+each department has a dedicated line
+
+the sales department rents it from BT
+
+does the sales department rent a line from BT
+
+gfi owns several computers
+
+Itel maintains them
+
+does Itel maintain all the computers that gfi owns
+
+every customer who owns a computer has a service contract for it
+
+mfi is a customer that owns exactly one computer
+
+does mfi have a service contract for all its computers
+
+every customer who owns a computer has a service contract for it
+
+mfi is a customer that owns several computers
+
+does mfi have a service contract for all its computers
+
+every executive who had a laptop computer brought it to take notes at the meeting
+
+Smith is a executive who owns five different laptop computers
+
+did Smith take five laptop computers to the meeting
+
+there are 100 companies
+
+icm is one of the companies and owns 150 computers
+
+it does not have service contracts for any of its computers
+
+each of the other 99 companies owns one computer
+
+they have service contracts for them
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron they_Pron) (AdvVP (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant IndefArt NumPl) (CompoundCN (UseN service_N) (UseN contract_N)))) (PrepNP for_Prep (UsePron they_Pron)))))
+
+*** do most companies that own a computer have a service contract for it
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (DetCN most_Det (RelCN (UseN company_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (UseN computer_N))))))) (AdvVP (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant IndefArt NumSg) (ApposCN (UseN service_N) (MassNP (UseN contract_N))))) (PrepNP for_Prep (UsePron it_Pron))))))
+
+every report has a cover page
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (UseN report_N)) (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant IndefArt NumSg) (CompoundCN (UseN cover_N) (UseN page_N))))))
+
+r-95-103 is a report
+
+Smith signed the cover page
+
+did Smith sign the cover page of r-95-103
+
+a company director awarded himself a large payrise
+
+has a company director awarded and been awarded a payrise
+
+John said Bill had hurt himself
+
+did John say Bill had been hurt
+
+John said Bill had hurt himself
+
+did anyone say John had been hurt
+
+John spoke to Mary
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN)))))
+
+so did Bill
+
+did Bill speak to Mary
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN))))))
+
+John spoke to Mary
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN)))))
+
+so did Bill
+
+John spoke to Mary at four o'clock
+
+did Bill speak to Mary at four o'clock
+
+John spoke to Mary at four o'clock
+
+so did Bill
+
+did Bill speak to Mary at four o'clock
+
+John spoke to Mary at four o'clock
+
+and Bill did at five o'clock
+
+did Bill speak to Mary at five o'clock
+
+John has spoken to Mary
+UttS (UseCl (TTAnt TPres AAnter) PPos (PredVP (UsePN john_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN)))))
+
+Bill is going to
+
+will Bill speak to Mary
+
+John spoke to Mary on Monday
+
+Bill didn't
+
+did Bill speak to Mary on Monday
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (AdvVP (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN))) (PrepNP on_Prep (UsePN monday_PN))))))
+
+has John spoken to Mary
+UttQS (UseQCl (TTAnt TPres AAnter) PPos (QuestCl (PredVP (UsePN john_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN))))))
+
+Bill has
+
+has Bill spoken to Mary
+UttQS (UseQCl (TTAnt TPres AAnter) PPos (QuestCl (PredVP (UsePN bill_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN))))))
+
+John has spoken to Mary
+UttS (UseCl (TTAnt TPres AAnter) PPos (PredVP (UsePN john_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN)))))
+
+the students have too
+
+have the students spoken to Mary
+UttQS (UseQCl (TTAnt TPres AAnter) PPos (QuestCl (PredVP (DetCN (DetQuant DefArt NumPl) (UseN student_N)) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN))))))
+
+John went to Paris by car , and Bill by train
+
+did Bill go to Paris by train
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (AdvVP (AdvVP (UseV go_V) (PrepNP to_Prep (UsePN paris_PN))) (PrepNP by8means_Prep (MassNP (UseN train_N)))))))
+
+John went to Paris by car, and Bill by train to Berlin
+
+did Bill go to Berlin by train
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (AdvVP (AdvVP (UseV go_V) (PrepNP to_Prep (UsePN berlin_PN))) (PrepNP by8means_Prep (MassNP (UseN train_N)))))))
+
+John went to Paris by car, and Bill to Berlin
+
+did Bill go to Berlin by car
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (AdvVP (AdvVP (UseV go_V) (PrepNP to_Prep (UsePN berlin_PN))) (PrepNP by8means_Prep (MassNP (UseN car_N)))))))
+
+John is going to Paris by car, and the students by train
+
+are the students going to Paris by train
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (DetCN (DetQuant DefArt NumPl) (UseN student_N)) (AdvVP (AdvVP (ProgrVP (UseV go_V)) (PrepNP to_Prep (UsePN paris_PN))) (PrepNP by8means_Prep (MassNP (UseN train_N)))))))
+
+John went to Paris by car
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (AdvVP (AdvVP (UseV go_V) (PrepNP to_Prep (UsePN paris_PN))) (PrepNP by8means_Prep (MassNP (UseN car_N))))))
+
+Bill by train
+
+did Bill go to Paris by train
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (AdvVP (AdvVP (UseV go_V) (PrepNP to_Prep (UsePN paris_PN))) (PrepNP by8means_Prep (MassNP (UseN train_N)))))))
+
+John owns a car
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (UseN car_N)))))
+
+Bill owns one too
+
+does Bill own a car
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (UseN car_N))))))
+
+John owns a car
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (UseN car_N)))))
+
+Bill owns one too
+
+is there a car that John and Bill own
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt NumSg) (RelCN (UseN car_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (ConjNP and_Conj (BaseNP (UsePN john_PN) (UsePN bill_PN))) (SlashV2a own_V2)))))))))
+
+John owns a red car
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN car_N))))))
+
+Bill owns a blue one
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (ApposCN (UseN blue_N) (DetNP (DetQuant IndefArt NumSg)))))))
+
+does Bill own a blue car
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA blue_A) (UseN car_N)))))))
+
+John owns a red car
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN car_N))))))
+
+Bill owns a blue one
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (ApposCN (UseN blue_N) (DetNP (DetQuant IndefArt NumSg)))))))
+
+does Bill own a red car
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN car_N)))))))
+
+John owns a red car
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN car_N))))))
+
+Bill owns a fast one
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (ApposCN (UseN fast_N) (DetNP (DetQuant IndefArt NumSg)))))))
+
+does Bill own a fast car
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA fast_A) (UseN car_N)))))))
+
+John owns a red car
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN car_N))))))
+
+Bill owns a fast one
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (ApposCN (UseN fast_N) (DetNP (DetQuant IndefArt NumSg)))))))
+
+does Bill own a fast red car
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA fast_A) (AdjCN (PositA red_A) (UseN car_N))))))))
+
+John owns a red car
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN car_N))))))
+
+Bill owns a fast one
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (ApposCN (UseN fast_N) (DetNP (DetQuant IndefArt NumSg)))))))
+
+does Bill own a fast red car
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA fast_A) (AdjCN (PositA red_A) (UseN car_N))))))))
+
+John owns a fast red car
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA fast_A) (AdjCN (PositA red_A) (UseN car_N)))))))
+
+Bill owns a slow one
+
+does Bill own a slow red car
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA slow_A) (AdjCN (PositA red_A) (UseN car_N))))))))
+
+John had his paper accepted
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a have_V2) (PPartNP (DetCN (DetQuant (PossPron he_Pron) NumSg) (UseN paper_N)) accept_V2))))
+
+Bill doesn't know why
+
+does Bill know why John had his paper accepted
+
+John spoke to Mary
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN)))))
+
+and to Sue
+
+did John speak to Sue
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN sue_PN))))))
+
+John spoke to Mary
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN)))))
+
+on Friday
+
+did John speak to Mary on Friday
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (AdvVP (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN))) (PrepNP on_Prep (UsePN friday_PN))))))
+
+John spoke to Mary on Thursday
+
+and on Friday
+
+did John speak to Mary on Friday
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (AdvVP (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN))) (PrepNP on_Prep (UsePN friday_PN))))))
+
+twenty men work in the sales department
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot1 n2))))))) (UseN man_N)) (AdvVP (UseV work_V) (PrepNP in_Prep (DetCN (DetQuant DefArt NumPl) (ApposCN (UseN sale_N) (MassNP (UseN department_N))))))))
+
+but only one woman
+
+do two women work in the sales department
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2)))))))) (UseN woman_N)) (AdvVP (UseV work_V) (PrepNP in_Prep (DetCN (DetQuant DefArt NumPl) (ApposCN (UseN sale_N) (MassNP (UseN department_N)))))))))
+
+five men work part time
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (UseN man_N)) (ComplSlash (SlashV2a work_V2) (MassNP (CompoundCN (UseN part_N) (UseN time_N))))))
+
+and forty five women
+
+do forty five women work part time
+
+John found Mary before Bill
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (AdvVP (ComplSlash (SlashV2a find_V2) (UsePN mary_PN)) (PrepNP before_Prep (UsePN bill_PN)))))
+
+did John find Mary before Bill found Mary
+
+John found Mary before Bill
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (AdvVP (ComplSlash (SlashV2a find_V2) (UsePN mary_PN)) (PrepNP before_Prep (UsePN bill_PN)))))
+
+did John find Mary before John found Bill
+
+John wants to know how many men work part time
+
+and women
+
+does John want to know how many women work part time
+
+John wants to know how many men work part time, and which
+
+does John want to know which men work part time
+
+Bill spoke to everyone that John did
+
+John spoke to Mary
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN)))))
+
+did Bill speak to Mary
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN))))))
+
+Bill spoke to everyone that John did
+
+Bill spoke to Mary
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN bill_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN)))))
+
+did John speak to Mary
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (AdvVP (UseV speak_V) (PrepNP to_Prep (UsePN mary_PN))))))
+
+John said Mary wrote a report, and Bill did too
+
+did Bill say Mary wrote a report
+
+John said Mary wrote a report, and Bill did too
+
+did John say Bill wrote a report
+
+John said that Mary wrote a report, and that Bill did too
+
+did Bill say Mary wrote a report
+
+John wrote a report, and Bill said peter did too
+
+did Bill say peter wrote a report
+
+if John wrote a report, then Bill did too
+
+John wrote a report
+UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a write_V2) (DetCN (DetQuant IndefArt NumSg) (UseN report_N)))))
+
+did Bill write a report
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a write_V2) (DetCN (DetQuant IndefArt NumSg) (UseN report_N))))))
+
+John wanted to buy a car, and he did
+
+did John buy a car
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (ComplSlash (SlashV2a buy_V2) (DetCN (DetQuant IndefArt NumSg) (UseN car_N))))))
+
+John needed to buy a car, and Bill did
+
+did Bill buy a car
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (ComplSlash (SlashV2a buy_V2) (DetCN (DetQuant IndefArt NumSg) (UseN car_N))))))
+
+Smith represents his company and so does Jones
+
+does Jones represent Jones' company
+
+Smith represents his company and so does Jones
+
+does Jones represent Smith's company
+
+Smith represents his company and so does Jones
+
+does Smith represent Jones' company
+
+Smith claimed he had costed his proposal and so did Jones
+
+did Jones claim he had costed his own proposal
+
+Smith claimed he had costed his proposal and so did Jones
+
+did Jones claim he had costed Smith's proposal
+
+Smith claimed he had costed his proposal and so did Jones
+
+did Jones claim Smith had costed Smith's proposal
+
+Smith claimed he had costed his proposal and so did Jones
+
+did Jones claim Smith had costed Jones' proposal
+
+John is a man and Mary is a woman
+
+John represents his company and so does Mary
+
+does Mary represent her own company
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN mary_PN) (ComplSlash (SlashV2a represent_V2) (DetCN (DetQuant (PossPron she_Pron) NumSg) (AdjCN (PositA own_A) (UseN company_N)))))))
+
+John is a man and Mary is a woman
+
+John represents his company and so does Mary
+
+does Mary represent John's company
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN mary_PN) (ComplSlash (SlashV2a represent_V2) (DetCN (DetQuant (GenNP (UsePN john_PN)) NumSg) (UseN company_N))))))
+
+Bill suggested to frank's boss that they should go to the meeting together, and carl to alan's wife
+
+if it was suggested that Bill and frank should go together, was it suggested that carl and alan should go together
+
+Bill suggested to frank's boss that they should go to the meeting together, and carl to alan's wife
+
+if it was suggested that Bill and frank should go together, was it suggested that carl and alan's wife should go together
+
+Bill suggested to frank's boss that they should go to the meeting together, and carl to alan's wife
+
+if it was suggested that Bill and frank's boss should go together, was it suggested that carl and alan's wife should go together
+
+Bill suggested to frank's boss that they should go to the meeting together, and carl to alan's wife
+
+if it was suggested that Bill and frank's boss should go together, was it suggested that carl and alan should go together
+
+Bill suggested to frank's boss that they should go to the meeting together, and carl to alan's wife
+
+if it was suggested that Bill, frank and frank's boss should go together, was it suggested that carl, alan and alan's wife should go together
+
+a lawyer signed every report, and so did an auditor
+
+that is, there was one lawyer who signed all the reports
+
+was there one auditor who signed all the reports
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (ExistNP (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01))))))) (ApposCN (ApposCN (RelCN (UseN auditor_N) (UseRCl (TTAnt TPast ASimul) PPos (RelVP IdRP (UseV sign_V)))) (DetNP all_Det)) (DetCN (DetQuant DefArt NumPl) (UseN report_N)))))))
+
+John has a genuine diamond
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA genuine_A) (UseN diamond_N))))))
+
+does John have a diamond
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant IndefArt NumSg) (UseN diamond_N))))))
+
+John is a former university student
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA former_A) (ApposCN (UseN university_N) (MassNP (UseN student_N)))))))))
+
+is John a university student
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (CompoundCN (UseN university_N) (UseN student_N))))))))
+
+John is a successful former university student
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA successful_A) (AdjCN (PositA former_A) (ApposCN (UseN university_N) (MassNP (UseN student_N))))))))))
+
+is John successful
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (UseComp (CompAP (PositA successful_A))))))
+
+John is a former successful university student
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA former_A) (AdjCN (PositA successful_A) (ApposCN (UseN university_N) (MassNP (UseN student_N))))))))))
+
+is John successful
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (UseComp (CompAP (PositA successful_A))))))
+
+John is a former successful university student
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA former_A) (AdjCN (PositA successful_A) (ApposCN (UseN university_N) (MassNP (UseN student_N))))))))))
+
+is John a university student
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (CompoundCN (UseN university_N) (UseN student_N))))))))
+
+every mammal is an animal
+
+is every four-legged mammal a four-legged animal
+
+dumbo is a four-legged animal
+
+is dumbo four-legged
+
+Mickey is a small animal
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN mickey_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA small_A) (UseN animal_N)))))))
+
+is Mickey a large animal
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN mickey_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA large_A) (UseN animal_N))))))))
+
+dumbo is a large animal
+
+is dumbo a small animal
+
+fido is not a small animal
+
+is fido a large animal
+
+fido is not a large animal
+
+is fido a small animal
+
+Mickey is a small animal
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN mickey_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA small_A) (UseN animal_N)))))))
+
+dumbo is a large animal
+
+is Mickey smaller than dumbo
+
+Mickey is a small animal
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN mickey_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA small_A) (UseN animal_N)))))))
+
+dumbo is a large animal
+
+is Mickey larger than dumbo
+
+all mice are small animals
+
+Mickey is a large mouse
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN mickey_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA large_A) (UseN mouse_N)))))))
+
+is Mickey a large animal
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN mickey_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA large_A) (UseN animal_N))))))))
+
+all elephants are large animals
+
+dumbo is a small elephant
+
+is dumbo a small animal
+
+all mice are small animals
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (UseN mouse_N)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA small_A) (UseN animal_N)))))))
+
+all elephants are large animals
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (UseN elephant_N)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA large_A) (UseN animal_N)))))))
+
+Mickey is a large mouse
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN mickey_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA large_A) (UseN mouse_N)))))))
+
+dumbo is a small elephant
+
+is dumbo larger than Mickey
+
+all mice are small animals
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (UseN mouse_N)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA small_A) (UseN animal_N)))))))
+
+Mickey is a large mouse
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN mickey_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA large_A) (UseN mouse_N)))))))
+
+is Mickey small
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN mickey_PN) (UseComp (CompAP (PositA small_A))))))
+
+all legal authorities are law lecturers
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (AdjCN (PositA legal_A) (UseN authority_N))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (CompoundCN (UseN law_N) (UseN lecturer_N)))))))
+
+all law lecturers are legal authorities
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (CompoundCN (UseN law_N) (UseN lecturer_N))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA legal_A) (UseN authority_N)))))))
+
+are all fat legal authorities fat law lecturers
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (DetCN all_Det (AdjCN (PositA fat_A) (AdjCN (PositA legal_A) (UseN authority_N)))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA fat_A) (CompoundCN (UseN law_N) (UseN lecturer_N))))))))) 
+
+all legal authorities are law lecturers
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (AdjCN (PositA legal_A) (UseN authority_N))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (CompoundCN (UseN law_N) (UseN lecturer_N)))))))
+
+all law lecturers are legal authorities
+UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN all_Det (CompoundCN (UseN law_N) (UseN lecturer_N))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA legal_A) (UseN authority_N)))))))
+
+are all competent legal authorities competent law lecturers
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (DetCN all_Det (AdjCN (PositA competent_A) (AdjCN (PositA legal_A) (UseN authority_N)))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA competent_A) (CompoundCN (UseN law_N) (UseN lecturer_N))))))))) 
+
+John is a fatter politician than Bill
+
+is John fatter than Bill
+
+John is a cleverer politician than Bill
+
+is John cleverer than Bill
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (UseComp (CompAP (ComparA clever_A (UsePN bill_PN)))))))
+
+kim is a clever person
+
+is kim clever
+
+kim is a clever politician
+
+is kim clever
+
+the pc-6082 is faster than the itel-xz
+
+the itel-xz is fast
+
+is the pc-6082 fast
+
+the pc-6082 is faster than the itel-xz
+
+is the pc-6082 fast
+
+the pc-6082 is faster than the itel-xz
+
+the pc-6082 is fast
+
+is the itel-xz fast
+
+the pc-6082 is faster than the itel-xz
+
+the pc-6082 is slow
+
+is the itel-xz fast
+
+the pc-6082 is as fast as the itel-xz
+
+the itel-xz is fast
+
+is the pc-6082 fast
+
+the pc-6082 is as fast as the itel-xz
+
+is the pc-6082 fast
+
+the pc-6082 is as fast as the itel-xz
+
+the pc-6082 is fast
+
+is the itel-xz fast
+
+the pc-6082 is as fast as the itel-xz
+
+the pc-6082 is slow
+
+is the itel-xz fast
+
+the pc-6082 is as fast as the itel-xz
+
+is the pc-6082 faster than the itel-xz
+
+the pc-6082 is as fast as the itel-xz
+
+is the pc-6082 slower than the itel-xz
+
+Itel won more orders than apcom did
+
+did Itel win some orders
+
+Itel won more orders than apcom did
+
+did apcom win some orders
+
+Itel won more orders than apcom did
+
+apcom won ten orders
+
+did Itel win at least eleven orders
+
+Itel won more orders than apcom
+
+did Itel win some orders
+
+Itel won more orders than apcom
+
+did apcom win some orders
+
+Itel won more orders than apcom
+
+apcom won ten orders
+
+did Itel win at least eleven orders
+
+Itel won more orders than the apcom contract
+
+did Itel win the apcom contract
+
+Itel won more orders than the apcom contract
+
+did Itel win more than one order
+
+Itel won twice as many orders than apcom
+
+apcom won ten orders
+
+did Itel win twenty orders
+
+Itel won more orders than apcom lost
+
+did Itel win some orders
+
+Itel won more orders than apcom lost
+
+did apcom lose some orders
+
+Itel won more orders than apcom lost
+
+apcom lost ten orders
+
+did Itel win at least eleven orders
+
+the pc-6082 is faster than 500 mips
+
+the Itel-zx is slower than 500 mips
+
+is the pc-6082 faster than the Itel-zx
+
+Itel sold 3000 more computers than apcom
+
+apcom sold exactly 2500 computers
+
+did Itel sell 5500 computers
+
+apcom has a more important customer than Itel
+
+does apcom have a more important customer than Itel is
+
+apcom has a more important customer than Itel
+
+does apcom has a more important customer than Itel has
+
+the pc-6082 is faster than every Itel computer
+
+the Itel-zx is an Itel computer
+
+is the pc-6082 faster than the Itel-zx
+
+the pc-6082 is faster than some Itel computer
+
+the Itel-zx is an Itel computer
+
+is the pc-6082 faster than the Itel-zx
+
+the pc-6082 is faster than any Itel computer
+
+the Itel-zx is an Itel computer
+
+is the pc-6082 faster than the Itel-zx
+
+the pc-6082 is faster than the Itel-zx and the Itel-zy
+
+is the pc-6082 faster than the Itel-zx
+
+the pc-6082 is faster than the Itel-zx or the Itel-zy
+
+is the pc-6082 faster than the Itel-zx
+
+Itel has a factory in birmingham
+
+does Itel currently have a factory in birmingham
+
+since 1992 Itel has been in birmingham
+
+it is now 1996
+
+was Itel in birmingham in 1993
+
+Itel has developed a new editor since 1992
+
+it is now 1996
+
+did Itel develop a new editor in 1993
+
+Itel has expanded since 1992
+
+it is now 1996
+
+did Itel expand in 1993
+
+since 1992 Itel has made a loss
+
+it is now 1996
+
+did Itel make a loss in 1993
+
+Itel has made a loss since 1992
+
+it is now 1996
+
+did Itel make a loss in 1993
+
+Itel has made a loss since 1992
+
+it is now 1996
+
+did Itel make a loss in 1993
+
+in march 1993 apcom founded Itel
+
+did Itel exist in 1992
+
+the conference started on july 4th, 1994
+
+it lasted 2 days
+
+was the conference over on july 8th, 1994
+
+yesterday apcom signed the contract
+
+today is saturday, july 14th
+
+did apcom sign the contract Friday , 13th
+
+Smith left before Jones left
+
+Jones left before anderson left
+
+did Smith leave before anderson left
+
+Smith left after Jones left
+
+Jones left after anderson left
+
+did Smith leave after anderson left
+
+Smith was present after Jones left
+
+Jones left after anderson was present
+
+was Smith present after anderson was present
+
+Smith left
+
+Jones left
+
+Smith left before Jones left
+
+did Jones leave after Smith left
+
+Smith left
+
+Jones left
+
+Smith left after Jones left
+
+did Jones leave before Smith left
+
+Smith left
+
+Jones left
+
+Jones left before Smith left
+
+did Smith leave after Jones left
+
+Jones revised the contract
+
+Smith revised the contract
+
+Jones revised the contract before Smith did
+
+did Smith revise the contract after Jones did
+
+Jones revised the contract
+
+Smith revised the contract
+
+Jones revised the contract after Smith did
+
+did Smith revise the contract before Jones did
+
+Smith swam
+
+Jones swam
+
+Smith swam before Jones swam
+
+did Jones swim after Smith swam
+
+Smith swam to the shore
+
+Jones swam to the shore
+
+Smith swam to the shore before Jones swam to the shore
+
+did Jones swim to the shore after Smith swam to the shore
+
+Smith was present
+
+Jones was present
+
+Smith was present after Jones was present
+
+was Jones present before Smith was present
+
+Smith was present
+
+Jones was present
+
+Smith was present before Jones was present
+
+was Jones present after Smith was present
+
+Smith was writing a report
+
+Jones was writing a report
+
+Smith was writing a report before Jones was writing a report
+
+was Jones writing a report after Smith was writing a report
+
+Smith was writing a report
+
+Jones was writing a report
+
+Smith was writing a report after Jones was writing a report
+
+was Jones writing a report before Smith was writing a report
+
+Smith left the meeting before he lost his temper
+
+did smith lose his temper
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a lose_V2) (DetCN (DetQuant (PossPron he_Pron) NumSg) (UseN temper_N))))))
+
+Smith lived in birmingham in 1991
+
+did Smith live in birmingham in 1992
+
+Smith wrote his first novel in 1991
+
+did Smith write his first novel in 1992
+
+Smith wrote a novel in 1991
+
+did Smith write it in 1992
+
+Smith wrote a novel in 1991
+
+did Smith write a novel in 1992
+
+Smith was running a business in 1991
+
+was Smith running it in 1992
+
+Smith discovered a new species in 1991
+
+did Smith discover it in 1992
+
+Smith discovered a new species in 1991
+
+did Smith discover a new species in 1992
+
+Smith wrote a report in two hours
+
+Smith started writing the report at 8 am
+
+had Smith finished writing the report by 11 am
+
+Smith wrote a report in two hours
+
+did smith spend two hours writing the report
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a spend_V2) (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2)))))))) (AdjCN (PartVP (ComplSlash (SlashV2a write_V2) (DetCN (DetQuant DefArt NumSg) (UseN report_N)))) (UseN hour_N)))))))
+
+Smith wrote a report in two hours
+
+did smith spend more than two hours writing the report
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a spend_V2) (DetCN (DetQuant IndefArt (NumCard (AdNum (AdnCAdv more_CAdv) (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))))))) (AdjCN (PartVP (ComplSlash (SlashV2a write_V2) (DetCN (DetQuant DefArt NumSg) (UseN report_N)))) (UseN hour_N)))))))
+
+Smith wrote a report in two hours
+
+did smith write a report in one hour
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (AdvVP (ComplSlash (SlashV2a write_V2) (DetCN (DetQuant IndefArt NumSg) (UseN report_N))) (PrepNP in_Prep (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01))))))) (UseN hour_N)))))))
+
+Smith wrote a report in two hours
+
+did smith write a report
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a write_V2) (DetCN (DetQuant IndefArt NumSg) (UseN report_N))))))
+
+Smith discovered a new species in two hours
+
+did smith spend two hours discovering the new species
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a spend_V2) (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2)))))))) (AdjCN (PartVP (ComplSlash (SlashV2a discover_V2) (DetCN (DetQuant DefArt NumPl) (AdjCN (PositA new_A) (UseN species_N))))) (UseN hour_N)))))))
+
+Smith discovered a new species in two hours
+
+did smith discover a new species
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a discover_V2) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA new_A) (UseN species_N)))))))
+
+Smith discovered many new species in two hours
+
+did smith spend two hours discovering new species
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a spend_V2) (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2)))))))) (AdjCN (PartVP (ComplSlash (SlashV2a discover_V2) (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA new_A) (UseN species_N))))) (UseN hour_N)))))))
+
+Smith was running his own business in two years
+
+did smith spend two years running his own business
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a spend_V2) (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2)))))))) (AdjCN (PartVP (ComplSlash (SlashV2a run_V2) (DetCN (DetQuant (PossPron he_Pron) NumSg) (AdjCN (PositA own_A) (UseN business_N))))) (UseN year_N)))))))
+
+Smith was running his own business in two years
+
+did smith spend more than two years running his own business
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a spend_V2) (DetCN (DetQuant IndefArt (NumCard (AdNum (AdnCAdv more_CAdv) (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))))))) (AdjCN (PartVP (ComplSlash (SlashV2a run_V2) (DetCN (DetQuant (PossPron he_Pron) NumSg) (AdjCN (PositA own_A) (UseN business_N))))) (UseN year_N)))))))
+
+Smith was running his own business in two years
+
+did smith run his own business
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a run_V2) (DetCN (DetQuant (PossPron he_Pron) NumSg) (AdjCN (PositA own_A) (UseN business_N)))))))
+
+in two years Smith owned a chain of businesses
+
+did smith own a chain of business for two years
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (AdvVP (AdvVP (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (UseN chain_N))) (PrepNP of_Prep (MassNP (UseN business_N)))) (PrepNP for_Prep (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2)))))))) (UseN year_N)))))))
+
+in two years Smith owned a chain of businesses
+
+did smith own a chain of business for more than two years
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (AdvVP (AdvVP (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (UseN chain_N))) (PrepNP of_Prep (MassNP (UseN business_N)))) (PrepNP for_Prep (DetCN (DetQuant IndefArt (NumCard (AdNum (AdnCAdv more_CAdv) (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))))))) (UseN year_N)))))))
+
+in two years Smith owned a chain of businesses
+
+did smith own a chain of business
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (AdvVP (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (UseN chain_N))) (PrepNP of_Prep (MassNP (UseN business_N)))))))
+
+Smith lived in birmingham for two years
+
+did Smith live in birmingham for a year
+
+Smith lived in birmingham for two years
+
+did Smith live in birmingham for exactly a year
+
+Smith lived in birmingham for two years
+
+did Smith live in birmingham
+
+Smith ran his own business for two years
+
+did smith run his own business for a year
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (AdvVP (ComplSlash (SlashV2a run_V2) (DetCN (DetQuant (PossPron he_Pron) NumSg) (AdjCN (PositA own_A) (UseN business_N)))) (PrepNP for_Prep (DetCN (DetQuant IndefArt NumSg) (UseN year_N)))))))
+
+Smith ran his own business for two years
+
+did smith run his own business
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a run_V2) (DetCN (DetQuant (PossPron he_Pron) NumSg) (AdjCN (PositA own_A) (UseN business_N)))))))
+
+Smith wrote a report for two hours
+
+did smith write a report for an hour
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (AdvVP (ComplSlash (SlashV2a write_V2) (DetCN (DetQuant IndefArt NumSg) (UseN report_N))) (PrepNP for_Prep (DetCN (DetQuant IndefArt NumSg) (UseN hour_N)))))))
+
+Smith wrote a report for two hours
+
+did smith write a report
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a write_V2) (DetCN (DetQuant IndefArt NumSg) (UseN report_N))))))
+
+Smith discovered new species for two years
+
+did smith discover new species
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a discover_V2) (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA new_A) (UseN species_N)))))))
+
+in 1994 Itel sent a progress report every month
+
+did Itel send a progress report in july 1994
+
+Smith wrote to a representative every week
+
+is there a representative that smith wrote to every week
+UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (ExistNP (AdvNP (DetCN (DetQuant IndefArt NumSg) (RelCN (UseN representative_N) (UseRCl (TTAnt TPast ASimul) PPos (RelSlash IdRP (SlashVP (MassNP (UseN smith_N)) (SlashV2a write_V2)))))) (PrepNP to_Prep (DetCN every_Det (UseN week_N)))))))
+
+Smith had left the house at a quarter past five
+
+then she took a taxi to the station
+
+did smith leave the house before she took a taxi to the station
+
+Itel always delivers reports late
+
+in 1993 Itel delivered reports
+
+did Itel delivered reports late in 1993
+
+Itel never delivers reports late
+
+in 1993 Itel delivered reports
+
+did Itel delivered reports late in 1993
+
+Smith arrived in Paris on the 5th of May , 1995
+
+today is the 15th of May , 1995
+
+she is still in Paris
+
+was Smith in Paris on the 7th of may, 1995
+
+when Smith arrived in katmandu she had been travelling for three days
+
+had Smith been travelling the day before she arrived in katmandu
+
+Jones graduated in march and has been employed ever since
+
+Jones has been unemployed in the past
+
+was Jones unemployed at some time before he graduated
+
+every representative has read this report
+
+no two representatives have read it at the same time
+
+no representative took less than half a day to read the report
+
+there are sixteen representatives
+
+did it take the representatives more than a week to read the report
+
+while Jones was updating the program, Mary came in and told him about the board meeting
+
+she finished before he did
+
+did Mary's story last as long as Jones's updating the program
+
+before apcom bought its present office building, it had been paying mortgage interest on the previous one for 8 years
+
+since apcom bought its present office building it has been paying mortgage interest on it for more than 10 years
+
+has apcom been paying mortgage interest for a total of 15 years or more
+
+when Jones got his job at the cia, he knew that he would never be allowed to write his memoirs
+
+is it the case that Jones is not and will never be allowed to write his memoirs
+
+Smith has been to florence twice in the past
+
+Smith will go to florence twice in the coming year
+
+two years from now will Smith have been to florence at least four times
+
+last week i already knew that when, in a month's time, Smith would discover that she had been duped she would be furious
+
+will it be the case that in a few weeks Smith will discover that she has been duped; and will she be furious
+
+no one gambling seriously stops until he is broke
+
+no one can gamble when he is broke
+
+does everyone who starts gambling seriously stop the moment he is broke
+
+no one who starts gambling seriously stops until he is broke
+
+does everyone who starts gambling seriously continue until he is broke
+
+nobody who is asleep ever knows that he is asleep
+
+but some people know that they have been asleep after they have been asleep
+
+do some people discover that they have been asleep
+
+Itel built mtalk in 1993
+
+did Itel finish mtalk in 1993
+
+Itel was building mtalk in 1993
+
+did Itel finish mtalk in 1993
+
+Itel won the contract from apcom in 1993
+
+did Itel win a contract in 1993
+
+Itel was winning the contract from apcom in 1993
+
+did Itel win a contract in 1993
+
+Itel owned apcom from 1988 to 1992
+
+did Itel own apcom in 1990
+
+Smith and Jones left the meeting
+
+did smith leave the meeting
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (MassNP (UseN smith_N)) (ComplSlash (SlashV2a leave_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N))))))
+
+Smith and Jones left the meeting
+
+did Jones leave the meeting
+
+Smith, Anderson and Jones met
+
+was there a group of people that met
+UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (ExistNP (AdvNP (DetCN (DetQuant IndefArt NumSg) (UseN group_N)) (PrepNP of_Prep (MassNP (RelCN (UseN people_N) (UseRCl (TTAnt TPast ASimul) PPos (EmptyRelSlash (SlashVP (DetNP (DetQuant that_Quant NumSg)) (SlashV2a meet_V2))))))))))) 
+
+Smith knew that Itel had won the contract in 1992
+
+did Itel win the contract in 1992
+
+Smith believed that Itel had won the contract in 1992
+
+did Itel win the contract in 1992
+
+Itel managed to win the contract in 1992
+
+did Itel win the contract in 1992
+
+Itel tried to win the contract in 1992
+
+did Itel win the contract in 1992
+
+it is true that Itel won the contract in 1992
+
+did Itel win the contract in 1992
+
+it is false that Itel won the contract in 1992
+
+did Itel win the contract in 1992
+
+Smith saw Jones sign the contract
+
+if Jones signed the contract, his heart was beating
+
+did Smith see Jones' heart beat
+
+Smith saw Jones sign the contract
+
+when Jones signed the contract, his heart was beating
+
+did Smith see Jones' heart beat
+
+Smith saw Jones sign the contract
+
+did Jones sign the contract
+
+Smith saw Jones sign the contract
+
+Jones is the chairman of Itel
+
+did Smith see the chairman of Itel sign the contract
+
+Helen saw the chairman of the department answer the phone
+
+the chairman of the department is a person
+UseCl (TTAnt TPres ASimul) PPos (PredVP (AdvNP (DetCN (DetQuant DefArt NumSg) (UseN chairman_N)) (PrepNP of_Prep (DetCN (DetQuant DefArt NumSg) (UseN department_N)))) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN person_N))))) 
+
+is there anyone whom Helen saw answer the phone
+
+Smith saw Jones sign the contract and his secretary make a copy
+
+did Smith see Jones sign the contract
+
+Smith saw Jones sign the contract or cross out the crucial clause
+
+did Smith either see Jones sign the contract or see Jones cross out the crucial clause
+
