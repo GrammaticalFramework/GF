@@ -902,21 +902,24 @@ allCommands env@(pgf, mos) = Map.fromList [
      exec = \opts arg -> do
        case arg of
          [EFun id] -> case Map.lookup id (funs (abstract pgf)) of
-                        Just fd -> return $ fromString $
-                                      render (ppFun id fd)
+                        Just fd -> do putStrLn $ render (ppFun id fd)
+                                      putStrLn ("Probability: "++show (probTree pgf (EFun id)))
+                                      return void
                         Nothing -> case Map.lookup id (cats (abstract pgf)) of
-                                     Just hyps -> do return $ fromString $
+                                     Just hyps -> do putStrLn $
                                                         render (ppCat id hyps $$
                                                                 if null (functionsToCat pgf id)
                                                                   then empty
                                                                   else space $$
                                                                        vcat [ppFun fid (ty,0,Just [],0) | (fid,ty) <- functionsToCat pgf id])
+                                                     return void
                                      Nothing   -> do putStrLn ("unknown category of function identifier "++show id)
                                                      return void
          [e]         -> case inferExpr pgf e of
                           Left tcErr   -> error $ render (ppTcError tcErr)
-                          Right (e,ty) -> do putStrLn ("Expression: "++showExpr [] e)
-                                             putStrLn ("Type:       "++showType [] ty)
+                          Right (e,ty) -> do putStrLn ("Expression:  "++showExpr [] e)
+                                             putStrLn ("Type:        "++showType [] ty)
+                                             putStrLn ("Probability: "++show (probTree pgf e))
                                              return void
          _           -> do putStrLn "a single identifier or expression is expected from the command"
                            return void,
