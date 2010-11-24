@@ -1,4 +1,0 @@
-abstract Main = 
-  Cat,
-  Lexicon
-  **{  } ;
