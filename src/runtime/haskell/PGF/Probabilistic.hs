@@ -7,8 +7,8 @@ module PGF.Probabilistic
          , showProbabilities               -- :: Probabilities -> String
          , readProbabilitiesFromFile       -- :: FilePath -> PGF -> IO Probabilities
 
-         , probTree                -- :: Probabilities -> Tree -> Double
-         , rankTreesByProbs        -- :: Probabilities -> [Tree] -> [Tree]
+         , probTree
+         , rankTreesByProbs
          ) where
 
 import PGF.CId
