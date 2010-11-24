@@ -1,24 +1,21 @@
---# -path=.:prelude
+--# -path=.:../../prelude
 --
 ----1 A Simple Punjabi Resource Morphology
 ----
-----  Muhammad Humayoun 2010
+----  Shafqat Virk, Aarne Ranta,2010
 ----
 ---- This resource morphology contains definitions needed in the resource
 ---- syntax. To build a lexicon, it is better to use $ParadigmsPnb$, which
 ---- gives a higher-level access to this module.
 --
-resource MorphoPnb = Cat ** open ResPnb, Prelude, Predef in {
+resource MorphoPnb = ResPnb ** open Prelude,Predef in {
 
-   flags optimize=noexpand ;
+  flags optimize=all ;
    coding = utf8;
 
- oper
-
-------------------------------------------------------------------
-----Nouns
-------------------------------------------------------------------
-
+----2 Nouns
+oper
+   
     mkN : (x1,_,_,_,_,_,_,x8 : Str) -> Gender -> Noun = 
       \sd,so,sv,sa, pd,po,pv,pa, g -> {
       s = table {
@@ -39,14 +36,10 @@ resource MorphoPnb = Cat ** open ResPnb, Prelude, Predef in {
       g = g
       } ;
 
-{-
-1. masculine nouns end with alif, choTi_hay, ain
-   Arabic nouns ends with h. also taken as Masc
-   e.g.
-   koRa, munda, wela, bistra, braamda
-   brqa', 
--} 
-
+    
+    
+-- masculine nouns end with alif, choTi_hay, ain Translitration: (a, h, e)
+-- Arabic nouns ends with h. also taken as Masc
   mkN01 : Str -> Noun ;
   mkN01 koRa = let end = last (koRa) ;
                    koR = if_then_else Str (eq end "ع") koRa (tk 1 koRa)
@@ -118,6 +111,181 @@ resource MorphoPnb = Cat ** open ResPnb, Prelude, Predef in {
                 x x x ""
              Fem ;
 
+----2 Determiners
+
+  IDeterminer = {s:Gender => Str ; n : Number};
+  makeDet : Str -> Str -> Str -> Str -> Number -> Determiner = \s1,s2,s3,s4,n -> {
+   s = table {
+      Sg => table {
+        Masc => s1 ;
+        Fem => s2 
+	  } ;
+      Pl => table {
+        Masc => s3 ;
+        Fem => s4 
+	  }
+      } ;
+
+      n = n
+	};	
+	
+  makeIDet : Str -> Str -> Number -> IDeterminer = \s1,s2,n -> {
+   s = table {
+        Masc => s1;
+		Fem  => s2
+	 };
+	 n = n
+    };		
+    
+-- Proposition  
+ 
+  makePrep : Str -> Preposition = \str -> {s = str } **  { lock_Prep = <>};
+   
+----2 Pronouns
+   PronForm = {s:Pronoun => Str};
+{-   makeDemPron : (x1,x2,x3,x4,x5,x6:Str) -> PronForm = 
+    \y1,y2,y3,y4,y5,y6 -> {
+	 s = table {
+         P Sg _ Dir _ => y1;
+         P Sg _ Obl _ => y2;
+         P Sg _ Voc _ => y3;
+         P Pl _ Dir _ => y4;
+         P Pl _ Obl _ => y5;
+         P Pl _ Voc _ => y6
+         };
+      };
+-}
+--   DemonPronForm = {s:DemPronForm => Str};
+  mkDemonPronForm : (x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16:Str) -> DemPronForm =
+  \y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16 -> {
+   s = table {
+	        Sg => table {
+				Masc => table {
+				  Dir => y1 ;
+				  Obl => y2 ;
+				  Voc => y3 ;
+				  Abl => y4
+							 };
+				Fem => table {
+				  Dir => y5 ;
+				  Obl => y6 ;
+				  Voc => y7 ;
+				  Abl => y8
+							 }
+						};
+			Pl => table {
+				Masc => table {
+				  Dir => y9 ;
+				  Obl => y10 ;
+				  Voc => y11 ;
+				  Abl => y12
+							 };
+				Fem => table {
+				  Dir  => y13 ;
+				  Obl => y14 ;
+				  Voc => y15 ;
+				  Abl => y16
+ 							 }
+					} 
+				}
+               };    
+   makeDemonPronForm : Str -> Str -> Str -> DemPronForm ;
+   makeDemonPronForm  yeh is inn = mkDemonPronForm 	yeh	is	"" yeh is "" yeh inn "" yeh inn "" "" "" "" "";	
+--   makePossPronForm myra myry hmara hmary = mkDemonPronForm myra myra myra myry myry myry hmara hmara hmara hmary hmary hmary;
+{- 
+ 
+   PersPron = {s: PersPronForm => Str};
+   
+   mkPersPron:(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32,x33,x34,x35,x36,x37,x38,x39,x40:Str) -> PersPron = 
+    \y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16,y17,y18,y19,y20,y21,y22,y23,y24,y25,y26,y27,y28,y29,y30,y31,y32,y33,y34,y35,y36,y37,y38,y39,y40 -> {
+     s = 
+	  table {
+	      PPF Sg Pers1 Dir => y1;
+	      PPF Sg Pers1 Obl => y2;
+	      PPF Sg Pers1 Voc => y3;
+	      PPF Sg Pers1 Abl => y4;
+	      PPF Sg Pers2_Casual Dir => y5;
+	      PPF Sg Pers2_Casual Obl => y6;
+	      PPF Sg Pers2_Casual Voc => y7;
+	      PPF Sg Pers2_Casual Abl => y8;
+	      PPF Sg Pers2_Respect Dir => y9;
+	      PPF Sg Pers2_Respect Obl => y10;
+	      PPF Sg Pers2_Respect Voc => y11;
+	      PPF Sg Pers2_Respect Abl => y12;
+	      PPF Sg Pers3_Near Dir => y13;
+	      PPF Sg Pers3_Near Obl => y14;
+	      PPF Sg Pers3_Near Voc => y15;
+	      PPF Sg Pers3_Near Abl => y16;
+	      PPF Sg Pers3_Distant Dir => y17;
+	      PPF Sg Pers3_Distant Obl => y18;
+	      PPF Sg Pers3_Distant Voc => y19;
+	      PPF Sg Pers3_Distant Abl => y20;
+	      PPF Pl Pers1 Dir => y21;
+	      PPF Pl Pers1 Obl => y22;
+	      PPF Pl Pers1 Voc => y23;
+	      PPF Pl Pers1 Abl => y24;
+	      PPF Pl Pers2_Casual Dir => y25;
+	      PPF Pl Pers2_Casual Obl => y26;
+	      PPF Pl Pers2_Casual Voc => y27;
+	      PPF Pl Pers2_Casual Abl => y28;
+	      PPF Pl Pers2_Respect Dir => y29;
+	      PPF Pl Pers2_Respect Obl => y30;
+	      PPF Pl Pers2_Respect Voc => y31;
+	      PPF Pl Pers2_Respect Abl => y32;
+	      PPF Pl Pers3_Near Dir => y33;
+	      PPF Pl Pers3_Near Obl => y34;
+	      PPF Pl Pers3_Near Voc => y35;
+	      PPF Pl Pers3_Near Abl => y36;
+	      PPF Pl Pers3_Distant Dir => y37;
+	      PPF Pl Pers3_Distant Obl => y38;
+	      PPF Pl Pers3_Distant Voc => y39;
+	      PPF Pl Pers3_Distant Abl => y40
+		 }; 
+      };
+	  
+   makePersPron : PersPron;
+   makePersPron     = mkPersPron	"میں"		""		""		"میتوں"
+					"توں"		""		""		"تیتوں"
+					"تسی"		""		""		"تواتوں"
+					"او"		""		""		"او"
+					"او"		""		""		"او"
+					"اسی"		"" 		""		"ساتوں"
+					"تسی"		""		""		"تواتوں"
+					"تسی"		""		""		"تواتوں"
+					"او"		""		""		"او"
+					"او"		""		""		"او";
+-}
+
+  mkPron : (x1,x2,x3,x4:Str) -> {s:Case => Str} = 
+     \y1,y2,y3,y4 -> { s =
+                      table {
+                        Dir => y1;
+                        Obl => y2;
+                        Voc => y3;
+			Abl => y4
+                        }
+                      };  
+                                   
+	------- PossPronForm yet to be implemented
+	
+ 
+-- IntPronForm = {s:InterrPronForm => Str};
+  IntPronForm = {s: Case => Str};
+  mkIntPronForm : (x1,x2,x3,x4:Str) -> IntPronForm =
+  \y1,y2,y3,y4 -> {
+   s = 
+    table {
+	            Dir => y1;
+	            Obl => y2;
+	            Voc => y3;
+		    Abl => y4
+		 }
+	};
+	
+
+----2 Adjectives
+-- defined in ResPnb
+
 ------------------------------------------------------------------
 ----Verbs
 ------------------------------------------------------------------
@@ -125,10 +293,10 @@ resource MorphoPnb = Cat ** open ResPnb, Prelude, Predef in {
 --1. Basic stem form, direct & indirect causatives exists
 -- v1 nechna nechaana nechwana
 
-  mkV1 : (_,_,_: Str) -> Verb1 = \inf, c1, c2 ->
+  mkVerb : (_: Str) -> Verb = \inf ->
    let root  = (tk 2 inf) ; 
-       root1 = (tk 2 c1)  ;  
-       root2 = (tk 2 c2) ;  
+--       root1 = (tk 2 c1)  ;  
+--       root2 = (tk 2 c2) ;  
     in { 
      s = table {
 
@@ -139,7 +307,7 @@ resource MorphoPnb = Cat ** open ResPnb, Prelude, Predef in {
      Inf_Obl  => (tk 1 inf) ;
      Ablative => ((tk 1 inf) + "وں") ;
 
-     Caus1_Inf => c1 ;
+{-     Caus1_Inf => c1 ;
      Caus1_Fem => ((tk 1 c1) + "ی") ;
      Caus1_Obl => (tk 1 c1) ;
      Caus1_Ablative => ((tk 1 c1) + "وں") ;
@@ -148,22 +316,22 @@ resource MorphoPnb = Cat ** open ResPnb, Prelude, Predef in {
      Caus2_Fem => ((tk 1 c2) + "ی") ;
      Caus2_Obl => (tk 1 c2) ;
      Caus2_Ablative => ((tk 1 c2) + "وں") ;
-
-     MVF1 tense person number gender  => (mkCmnVF root tense person number gender).s ;
-     Caus1 tense person number gender => (mkCmnVF root1 tense person number gender).s ;
-     Caus2 tense person number gender => (mkCmnVF root2 tense person number gender).s 
+-}
+     VF tense person number gender  => (mkCmnVF root tense person number gender).s 
+--     Caus1 tense person number gender => (mkCmnVF root1 tense person number gender).s ;
+--     Caus2 tense person number gender => (mkCmnVF root2 tense person number gender).s 
     }
   } ;
 
 
-mkCmnVF : Str -> Tense -> Person -> Number -> Gender -> {s:Str}= \root,t,p,n,g ->
+mkCmnVF : Str -> VTense -> PPerson -> Number -> Gender -> {s:Str}= \root,t,p,n,g ->
   {s = case (last root) of {
      ("ا"|"آ"|"و"|"ی") => (mkCmnVF1 root t p n g).s ;
      _ => (mkCmnVF2 root t p n g).s
    }
   };
 
- mkCmnVF1 : Str -> Tense -> Person -> Number -> Gender -> {s:Str}= \root,t,p,n,g ->
+ mkCmnVF1 : Str -> VTense -> PPerson -> Number -> Gender -> {s:Str}= \root,t,p,n,g ->
   {s = let nadaa = root + "ندا" ; --root + variants{"ندا";"وندا"};
            nadii = root + "ندی" ; --root + variants{"ندی";"وندی"} ;
            nade  = root + "ندے" ; --root + variants{"ندے";"وندے"} ;
@@ -214,7 +382,7 @@ mkCmnVF : Str -> Tense -> Person -> Number -> Gender -> {s:Str}= \root,t,p,n,g -
  } ;
   
 
- mkCmnVF2 : Str -> Tense -> Person -> Number -> Gender -> {s:Str}= \root,t,p,n,g ->
+ mkCmnVF2 : Str -> VTense -> PPerson -> Number -> Gender -> {s:Str}= \root,t,p,n,g ->
   {s = let daa = root + "دا" ;
            dii = root + "دی" ;
            de  = root + "دے" ;
@@ -263,13 +431,13 @@ mkCmnVF : Str -> Tense -> Person -> Number -> Gender -> {s:Str}= \root,t,p,n,g -
     <Imperf, _,             Pl, Fem>  => diiaaN
   }
  } ;
- 
+
 
 --v4
- mkV4 : Str -> Verb4 = \inf ->
+{- mkV4 : Str -> Verb4 = \inf ->
    let root  = (tk 2 inf); 
     in { s = table {
-     Root4     => root ;
+     Root     => root ;
 
      Inf4      => inf ;
      Inf_Fem4  => ((tk 1 inf) + "ی") ;
@@ -279,206 +447,5 @@ mkCmnVF : Str -> Tense -> Person -> Number -> Gender -> {s:Str}= \root,t,p,n,g -
      MVF4 tense person number gender   => (mkCmnVF root tense person number gender).s 
     }
   } ;
-
-
-
-----------------------------------------------------------------
-  mkPN : Str -> {s:Str} = \x -> {s = x};
-  mkAdj3 : Str -> {s:Str} = \x -> {s = x}; 
-  mkAdv : Str -> {s:Str} = \x -> {s = x};
-
-  mkAdj1 : Str -> Adjective1 ;
-  mkAdj1 piilaa = let end = last (piilaa) ;
-                   piil = if_then_else Str (eq end "ع") piilaa (tk 1 piilaa)
-                in adj1 (piilaa)    (piil+"ے")  (variants{piil+"یا"; piil+"ے"}) (piil+"یوں")  (piil+"ے")  (piil+"یاں")   (piil+"یو")   ""
-                        (piil++"ی") (piil++"ی") (variants{piil+"ی" ; piil+"یے"})  (piil+"یوں") (piil++"ی")  (piil++"یاں")   (piil++"یو") "" ;
-
-  adj1 :(x1,_,_,_,_,_,_, _,_,_,_,_,_,_,_, x16 : Str) -> {s : Gender => Number => Case => Str} = 
-   \msd,mso,msv,msa, mpd,mpo,mpv,mpa, fsd,fso,fsv,fsa, fpd,fpo,fpv,fpa -> {
-    s = table {
-     Masc => (cmnAdj msd mso msv msa mpd mpo mpv mpa).s ;
-     Fem  => (cmnAdj fsd fso fsv fsa fpd fpo fpv fpa).s
-     }
-   };
- 
-  mkAdj2 : Str -> Adjective2 ;
-  mkAdj2 romii = cmnAdj romii romii         (romii+"ا")  (romii+"یوں")
-                        romii (romii++"اں") (romii++"و")  "" ;
-
- cmnAdj : (x1,_,_,_,_,_,_,x8 : Str) -> {s : Number => Case => Str} = 
-      \sd,so,sv,sa, pd,po,pv,pa -> {
-      s = table {
-      Sg => table {
-        Dir => sd ;
-        Obl => so ;
-        Voc => sv ;
-        Abl => sa 
-	  } ;
-      Pl => table {
-        Dir => pd ;
-        Obl => po ;
-        Voc => pv ;
-        Abl => pa 
-	  }
-      } 
-   } ;
- 
-      
-}
-
-
-{-
-
-
-----2 Determiners
-  IDeterminer = {s:Gender => Str ; n : Number};
-  makeDet : Str -> Str -> Str -> Str -> Number -> Determiner = \s1,s2,s3,s4,n -> {
-   s = table {
-      Sg => table {
-        Masc => s1 ;
-        Fem => s2 
-	  } ;
-      Pl => table {
-        Masc => s3 ;
-        Fem => s4 
-	  }
-      } ;
-
-      n = n
-	};	
-	
-  makeIDet : Str -> Str -> Number -> IDeterminer = \s1,s2,n -> {
-   s = table {
-        Masc => s1;
-		Fem  => s2
-	 };
-	 n = n
-    };		
-    
--- Proposition  
- 
-  makePrep : Str -> Preposition = \str -> {s = str};
-   
-----2 Pronouns
-   PronForm = {s:Pronoun => Str};
-   makeDemPron : (x1,x2,x3,x4,x5,x6:Str) -> PronForm = 
-    \y1,y2,y3,y4,y5,y6 -> {
-	 s = table {
-         P Sg _ Dir _ => y1;
-         P Sg _ Obl _ => y2;
-         P Sg _ Voc _ => y3;
-         P Pl _ Dir _ => y4;
-         P Pl _ Obl _ => y5;
-         P Pl _ Voc _ => y6
-         };
-      };
-
---   DemonPronForm = {s:DemPronForm => Str};
-  mkDemonPronForm : (x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12:Str) -> DemPronForm =
-  \y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12 -> {
-   s = table {
-	        Sg => table {
-				Masc => table {
-						     Dir => y1 ;
-                             Obl => y2 ;
-                             Voc => y3
-							 };
-				Fem => table {
-						     Dir => y4 ;
-                             Obl => y5 ;
-                             Voc => y6
-							 }
-						};
-			Pl => table {
-				Masc => table {
-						     Dir => y7 ;
-                             Obl => y8 ;
-                             Voc => y9
-							 };
-				Fem => table {
-						     Dir  => y10 ;
-                             Obl => y11 ;
-                             Voc => y12
-							 }
-					} 
-				}
-               };    
-   makeDemonPronForm : Str -> Str -> Str -> DemPronForm ;
-   makeDemonPronForm  yeh is inn = mkDemonPronForm 	yeh	is	"" yeh is "" yeh inn "" yeh inn "";	
---   makePossPronForm myra myry hmara hmary = mkDemonPronForm myra myra myra myry myry myry hmara hmara hmara hmary hmary hmary;
-   
-   PersPron = {s: PersPronForm => Str};
-   
-   mkPersPron:(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32,x33,x34,x35,x36:Str) -> PersPron = 
-    \y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16,y17,y18,y19,y20,y21,y22,y23,y24,y25,y26,y27,y28,y29,y30,y31,y32,y33,y34,y35,y36 -> {
-     s = 
-	  table {
-	      PPF Sg Pers1 Dir => y1;
-          PPF Sg Pers1 Obl => y2;
-	      PPF Sg Pers1 Voc => y3;
-	      PPF Sg Pers2_Casual Dir => y4;
-	      PPF Sg Pers2_Casual Obl => y5;
-          PPF Sg Pers2_Casual Voc => y6;
-	      PPF Sg Pers2_Familiar Dir => y7;
-	      PPF Sg Pers2_Familiar Obl => y8;
-	      PPF Sg Pers2_Familiar Voc => y9;
-          PPF Sg Pers2_Respect Dir => y10;
-	      PPF Sg Pers2_Respect Obl => y11;
-	      PPF Sg Pers2_Respect Voc => y12;
-	      PPF Sg Pers3_Near Dir => y13;
-          PPF Sg Pers3_Near Obl => y14;
-	      PPF Sg Pers3_Near Voc => y15;
-	      PPF Sg Pers3_Distant Dir => y16;
-	      PPF Sg Pers3_Distant Obl => y17;
-          PPF Sg Pers3_Distant Voc => y18;
-	      PPF Pl Pers1 Dir => y19;
-          PPF Pl Pers1 Obl => y20;
-	      PPF Pl Pers1 Voc => y21;
-	      PPF Pl Pers2_Casual Dir => y22;
-	      PPF Pl Pers2_Casual Obl => y23;
-          PPF Pl Pers2_Casual Voc => y24;
-	      PPF Pl Pers2_Familiar Dir => y25;
-	      PPF Pl Pers2_Familiar Obl => y26;
-	      PPF Pl Pers2_Familiar Voc => y27;
-          PPF Pl Pers2_Respect Dir => y28;
-	      PPF Pl Pers2_Respect Obl => y29;
-	      PPF Pl Pers2_Respect Voc => y30;
-	      PPF Pl Pers3_Near Dir => y31;
-          PPF Pl Pers3_Near Obl => y32;
-	      PPF Pl Pers3_Near Voc => y33;
-	      PPF Pl Pers3_Distant Dir => y34;
-	      PPF Pl Pers3_Distant Obl => y35;
-          PPF Pl Pers3_Distant Voc => y36
-		 }; 
-      };
-	  
-   makePersPron : PersPron;
-   makePersPron     = mkPersPron	"m(a)yN"	"m(o)j'|h"		""		"t(o)w "		"t(o)j|h"		"t(o)w "		"t(o)m"		"t(o)m"		"t(o)m"		"Ap"		"Ap"		"Ap"		"y(i)h"		"a(i)s"		""		"w(o)h"		"a(o)s"		""
-									"h(a)m"		"h(a)m"			""		"t(o)m" 		"t(o)m"			"t(o)m"			"t(o)m"		"t(o)m"		"t(o)m"		"Ap"		"Ap"		"Ap"		"y(i)h"		"a(i)n"		""		"w(o)h"		"a(o)n"		"" ;
-						
-  mkPron : (x1,x2,x3:Str) -> {s:Case => Str} = 
-     \y1,y2,y3 -> { s =
-                      table {
-                        Dir => y1;
-                        Obl => y2;
-                        Voc => y3
-                        }
-                      };  
-                                   
-	------- PossPronForm yet to be implemented
-  
--- IntPronForm = {s:InterrPronForm => Str};
-  IntPronForm = {s: Case => Str};
-  mkIntPronForm : (x1,x2,x3:Str) -> IntPronForm =
-  \y1,y2,y3 -> {
-   s = 
-
-
-    table {
-	            Dir => y1;
-	            Obl => y2;
-	            Voc => y3
-		 }
-	}; 
-
 -}
+}

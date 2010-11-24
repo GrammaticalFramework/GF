@@ -1,0 +1,15 @@
+rf -file=src/AdjectivePnb.gf | ps -env=quotes -to_urdu | wf -file=AdjectivePnb.gf
+rf -file=src/AdverbPnb.gf | ps -env=quotes -to_urdu | wf -file=AdverbPnb.gf
+rf -file=src/ExtraPnb.gf | ps -env=quotes -to_urdu | wf -file=ExtraPnb.gf
+rf -file=src/IdiomPnb.gf | ps -env=quotes -to_urdu | wf -file=IdiomPnb.gf
+rf -file=src/LexiconPnb.gf | ps -env=quotes -to_urdu | wf -file=LexiconPnb.gf
+rf -file=src/MorphoPnb.gf | ps -env=quotes -to_urdu | wf -file=MorphoPnb.gf
+rf -file=src/NumeralPnb.gf | ps -env=quotes -to_urdu | wf -file=NumeralPnb.gf
+rf -file=src/QuestionPnb.gf | ps -env=quotes -to_urdu | wf -file=QuestionPnb.gf
+rf -file=src/RelativePnb.gf | ps -env=quotes -to_urdu | wf -file=RelativePnb.gf
+rf -file=src/ResPnb.gf | ps -env=quotes -to_urdu | wf -file=ResPnb.gf
+rf -file=src/SentencePnb.gf | ps -env=quotes -to_urdu | wf -file=SentencePnb.gf
+rf -file=src/StructuralPnb.gf | ps -env=quotes -to_urdu | wf -file=StructuralPnb.gf
+rf -file=src/SymbolPnb.gf | ps -env=quotes -to_urdu | wf -file=SymbolPnb.gf
+rf -file=src/VerbPnb.gf | ps -env=quotes -to_urdu | wf -file=VerbPnb.gf
+
