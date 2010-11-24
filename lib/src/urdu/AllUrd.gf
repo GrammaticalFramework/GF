@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:../abstract:../common:../prelude:../hindustani
 
 concrete AllUrd of AllUrdAbs =
   LangUrd,

@@ -1,30 +1,39 @@
-concrete IdiomHin of Idiom = CatHin ** open Prelude, ResHin in {
---
---  flags optimize=all_subs ;
---
---  lin
---    ImpersCl vp = mkClause "it" (agrP3 Sg) vp ;
---    GenericCl vp = mkClause "one" (agrP3 Sg) vp ;
---
---    CleftNP np rs = mkClause "it" (agrP3 Sg) 
---      (insertObj (\\_ => rs.s ! np.a)
---        (insertObj (\\_ => np.s ! rs.c) (predAux auxBe))) ;
---
---    CleftAdv ad s = mkClause "it" (agrP3 Sg) 
---      (insertObj (\\_ => optStr conjThat ++ s.s)
---        (insertObj (\\_ => ad.s) (predAux auxBe))) ;
---
---    ExistNP np = 
---      mkClause "there" (agrP3 (fromAgr np.a).n) 
---        (insertObj (\\_ => np.s ! Acc) (predAux auxBe)) ;
---
---    ExistIP ip = 
---      mkQuestion (ss (ip.s ! Nom)) 
---        (mkClause "there" (agrP3 ip.n) (predAux auxBe)) ;
---
---    ProgrVP vp = insertObj (\\a => vp.ad ++ vp.prp ++ vp.s2 ! a) (predAux auxBe) ;
---
---    ImpPl1 vp = {s = "let's" ++ infVP True vp (AgP1 Pl)} ;
---
+concrete IdiomHin of Idiom = CatHin ** open Prelude,Predef, ResHin,ParamX,CommonHindustani in {
+
+  flags optimize=all_subs ;
+  flags coding = utf8;
+
+  lin
+    ImpersCl vp = mkSClause " " (agrP3 Masc Sg) vp ;
+    GenericCl vp = mkSClause "कwय" (agrP3 Masc Sg) vp ;
+
+   CleftNP np rs = 
+	 let cl = mkSClause (np.s ! NPC rs.c) (np.a) (predAux auxBe);
+	  in 
+	   {s = \\t,p,o =>  cl.s ! t ! p ! o ++ rs.s ! np.a };
+	  
+--    CleftAdv ad ss = { s = \\t,b,o => ad.s ! Masc ++ ss.s};
+        
+--     ExistNP np = 
+--      mkSClause "wहं" (agrP3 (fromAgr np.a).g (fromAgr np.a).n) 
+--        (insertObj (\\_ => np.s ! NPC Obl) (predAux auxBe)) ;
+
+   ExistIP ip = 
+     let cl = mkSClause ("wहं" ++ ip.s ! Dir) (agrP3 ip.g ip.n) (predAux auxBe); 
+	   in {
+       s = \\t,p,qf => case qf of { 
+	      QDir =>   cl.s ! t ! p ! ODir;
+          QIndir => cl.s ! t! p ! ODir
+		  }
+		};
+
+--    ProgrVP vp = insertObj (\\a => vp.obj.s ++ vp.ad ++ vp.comp ! a ++ (vp.s ! VPStem).inf ++ raha (fromAgr a).g (fromAgr a).n ) (predAux auxBe) ;
+      ProgrVP vp =  (predProg vp) ;
+
+
+    ImpPl1 vp = {s = "ाw" ++ infVP True vp (agrP1 Masc Pl)} ;
+	ImpP3 np vp = {s = np.s!NPC Dir ++ "कw" ++ (vp.s ! VPImp ).inf ++ "दw"};
+
+
 }
 

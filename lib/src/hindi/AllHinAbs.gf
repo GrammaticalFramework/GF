@@ -1,1 +1,4 @@
-abstract AllHinAbs = Lang ;
+abstract AllHinAbs =
+  Lang,
+  ExtraHinAbs
+  ** {} ;

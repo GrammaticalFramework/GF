@@ -1,10 +1,10 @@
-concrete IdiomUrd of Idiom = CatUrd ** open Prelude,Predef, ResUrd in {
+concrete IdiomUrd of Idiom = CatUrd ** open Prelude,Predef, ResUrd,ParamX,CommonHindustani in {
 
   flags optimize=all_subs ;
   flags coding = utf8;
 
   lin
-    ImpersCl vp = mkSClause [] (agrP3 Masc Sg) vp ;
+    ImpersCl vp = mkSClause " " (agrP3 Masc Sg) vp ;
     GenericCl vp = mkSClause "كوی" (agrP3 Masc Sg) vp ;
 
     CleftNP np rs = 
@@ -12,7 +12,7 @@ concrete IdiomUrd of Idiom = CatUrd ** open Prelude,Predef, ResUrd in {
 	  in 
 	   {s = \\t,p,o =>  cl.s ! t ! p ! o ++ rs.s ! np.a };
 	  
-    CleftAdv ad ss = { s = \\t,b,o => ad.s ++ ss.s};
+    CleftAdv ad ss = { s = \\t,b,o => ad.s ! Masc ++ ss.s};
         
     ExistNP np = 
       mkSClause "وہاں" (agrP3 (fromAgr np.a).g (fromAgr np.a).n) 
@@ -27,7 +27,8 @@ concrete IdiomUrd of Idiom = CatUrd ** open Prelude,Predef, ResUrd in {
 		  }
 		};
 
-    ProgrVP vp = insertObj (\\a => vp.obj.s ++ vp.ad ++ vp.comp ! a ++ (vp.s ! VPStem).inf ++ raha (fromAgr a).g (fromAgr a).n ) (predAux auxBe) ;
+--    ProgrVP vp = insertObj (\\a => vp.obj.s ++ vp.ad ++ vp.comp ! a ++ (vp.s ! VPStem).inf ++ raha (fromAgr a).g (fromAgr a).n ) (predAux auxBe) ;
+    ProgrVP vp =  (predProg vp) ;
 
 
     ImpPl1 vp = {s = "آو" ++ infVP True vp (agrP1 Masc Pl)} ;

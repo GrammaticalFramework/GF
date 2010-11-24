@@ -1,3 +1,6 @@
---# -path=.:../abstract:../common:prelude
+--# -path=.:../abstract:../common:../prelude:../hindustani
 
-concrete AllHin of AllHinAbs = LangHin ;
+concrete AllHin of AllHinAbs =
+  LangHin,
+  ExtraHin
+  ** {} ;

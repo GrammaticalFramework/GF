@@ -6,7 +6,9 @@ resource ParadigmsUrd = open
   Predef, 
   Prelude, 
   MorphoUrd,
-  CatUrd
+  CatUrd,
+  CommonHindustani,
+  ParamX
   in {
 
 --2 Parameters 
@@ -33,10 +35,10 @@ oper
       = \sd,so,sv,pd,po,pv,g -> mkNoun sd so sv pd po pv g ** {lock_N = <>} ;
     } ;
   mkN2 : N -> Prep -> Str -> N2;
-  mkN2 = \n,p,c -> n ** {lock_N2 = <> ; c2 = p.s ; c3 = c } ; 
+  mkN2 = \n,p,c -> n ** {lock_N2 = <> ; c2 = p.s ! n.g ; c3 = c } ; 
   
   mkN3 : N -> Prep -> Str -> Str-> N3 ;
-  mkN3 = \n,p,q,r -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q ; c4 = r} ;
+  mkN3 = \n,p,q,r -> n ** {lock_N3 = <> ; c2 = p.s ! n.g ; c3 = q ; c4 = r} ;
   
 -- Compound Nouns  
 
@@ -51,6 +53,8 @@ oper
   mkDet : Str -> Str -> Str -> Str -> Number -> Det = \s1,s2,s3,s4,nb -> let dt = makeDet s1 s2 s3 s4 nb in {s = dt.s ; n = nb ; lock_Det = <>};
   mkIP : (x1,x2,x3:Str) -> Number -> Gender -> IP = \s1,s2,s3,n,g -> let p = mkIntPronForm s1 s2 s3 in { s = p.s ; n = n ; g = g ;  lock_IP = <>}; 
 
+-- AdN
+  mkAdN : Str -> AdN = \s -> {s = s ; p = False ; lock_AdN = <>} ; 
 --2 Adjectives
 
   mkA = overload {
@@ -59,6 +63,8 @@ oper
 	mkA : Str -> Str -> A2
 	  = \a,c -> let n = regAdjective a in {s = n.s; c2 = c} ** {lock_A2 = <>} ;
     } ;
+  mkA2 : A -> Str -> A2 ;
+  mkA2 a str = a ** {c2=str ; lock_A2 = <>} ;
 
 --2 Verbs
 
@@ -73,11 +79,14 @@ oper
     mkV2 : V -> Str -> V2 
       = \v,p -> v ** {c2 = {s = p ; c = VTrans} ; lock_V2 = <>} ;
     } ;
+  dirV2 : V -> V2 = \v -> v ** {c2 = {s = [] ; c = VTrans} ; lock_V2 = <>} ;
   
   mkV3 : V -> Str -> Str -> V3;
     mkV3 v p q = v ** { c2 = p ; c3 = q ; lock_V3 = <>} ;
   mkV2V : V -> Str -> Str -> Bool -> V2V ;
     mkV2V v s1 s2 b = v ** {isAux = b ; c1 = s1 ; c2 = s2 ; lock_V2V = <>} ;
+  dirdirV3 : V -> V3 ;
+  dirdirV3 v = v ** { c2 = [] ; c3 = [] ; lock_V3 = <>} ;
   
 -- compund verbs
    compoundV = overload {
@@ -87,12 +96,24 @@ oper
  
 
 ----2 Adverbs
-  mkAdv : Str -> Adv = \str -> {s = str ; lock_Adv = <>};
+  mkAdv : Str -> Adv = \str -> {s = \\_ => str ; lock_Adv = <>};
 
 ----2 Prepositions
 
-  mkPrep : Str -> Prep ;
-    mkPrep str = lin Prep (makePrep str) ;
+  mkPrep : Str -> Str -> Prep ;
+    mkPrep s1 s2 = makePrep s1 s2 ** {lock_Prep = <>};
+    
+--3 Determiners and quantifiers
+
+--  mkQuant : overload {
+--    mkQuant : Pron -> Quant ;
+--    mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant ;
+--  } ;
+  
+--  mkQuant = overload {
+--    mkQuant : Pron -> Quant = \p -> {s = \\_,_,c => p.s!c ;a = p.a ; lock_Quant = <>};
+--    mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant = mkQuantifier;
+--  } ;
 
 --2 Conjunctions
   mkConj : overload {
@@ -112,15 +133,22 @@ oper
     lin Conj (sd2 x y ** {n = n}) ;  
 
 --  mkV0  : V -> V0 ;
---  mkVS  : V -> VS ;
+  mkVS  : V -> VS;
+  mkVS v = v ;
 --  mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV = \v ->  lin VV (v ** {isAux = False});
     
+  mkAdA : Str -> AdA ;
+--  mkAdv x = lin Adv (ss x) ;
+--  mkAdV x = lin AdV (ss x) ;
+  mkAdA x = lin AdA (ss x) ;
+--  mkAdN x = lin AdN (ss x) ;
 
 --  mkV2V : V -> Prep -> Prep -> V2V ;
 --  mkVA  : V -> VA ;
 --  mkV2A : V -> Prep -> V2A ;
---  mkVQ  : V -> VQ ;
+  mkVQ  : V -> VQ ;
+  mkVQ v = v ;
 --  mkV2Q : V -> Prep -> V2Q ;
 --
 --  mkAS  : A -> AS ;

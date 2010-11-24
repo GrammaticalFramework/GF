@@ -8,7 +8,7 @@
 ---- syntax. To build a lexicon, it is better to use $ParadigmsUrd$, which
 ---- gives a higher-level access to this module.
 --
-resource MorphoUrd = ResUrd ** open Prelude,Predef in {
+resource MorphoUrd = ResUrd ** open CommonHindustani,Prelude,Predef,ParamX in {
 
   flags optimize=all ;
    coding = utf8;
@@ -42,6 +42,7 @@ oper
                  _ + "ی" => mkN03 (s);
                  _ + ("اں"|"وں") => mkN04 (s);
                  _ + "ؤ" => mkN12 (s);
+		 _ + "ت" => mkN10 s ;
              _			  => regNoun2 (s)				 
                  };
 	regNoun2 : Str -> Noun;
@@ -195,7 +196,11 @@ oper
     
 -- Proposition  
  
-  makePrep : Str -> Preposition = \str -> {s = str};
+  makePrep : Str -> Str -> Preposition = \s1,s2 -> {s =
+  table {
+                Masc => s1;
+		Fem  => s2
+	 }; } **  { lock_Prep = <>};
    
 ----2 Pronouns
    PronForm = {s:Pronoun => Str};
