@@ -804,6 +804,7 @@ UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron they_Pron) (AdvVP (ComplSlash (
 did Smith and Jones put two machines in the lobby
 
 John and his colleagues went to a meeting
+UseCl (TTAnt TPast ASimul) PPos (PredVP (ConjNP and_Conj (BaseNP (UsePN john_PN) (DetCN (DetQuant (PossPron he_Pron) NumPl) (UseN colleague_N)))) (AdvVP (UseV go_V) (PrepNP to_Prep (DetCN (DetQuant IndefArt NumSg) (UseN meeting_N)))))
 
 they hated it
 UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron they_Pron) (ComplSlash (SlashV2a hate_V2) (UsePron it_Pron))))
@@ -812,6 +813,7 @@ did John's colleagues hate the meeting
 UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (DetCN (DetQuant (GenNP (UsePN john_PN)) NumPl) (UseN colleague_N)) (ComplSlash (SlashV2a hate_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N))))))
 
 John and his colleagues went to a meeting
+UseCl (TTAnt TPast ASimul) PPos (PredVP (ConjNP and_Conj (BaseNP (UsePN john_PN) (DetCN (DetQuant (PossPron he_Pron) NumPl) (UseN colleague_N)))) (AdvVP (UseV go_V) (PrepNP to_Prep (DetCN (DetQuant IndefArt NumSg) (UseN meeting_N)))))
 
 they hated it
 UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron they_Pron) (ComplSlash (SlashV2a hate_V2) (UsePron it_Pron))))
@@ -820,6 +822,7 @@ did John hate the meeting
 UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN john_PN) (ComplSlash (SlashV2a hate_V2) (DetCN (DetQuant DefArt NumSg) (UseN meeting_N))))))
 
 John and his colleagues went to a meeting
+UseCl (TTAnt TPast ASimul) PPos (PredVP (ConjNP and_Conj (BaseNP (UsePN john_PN) (DetCN (DetQuant (PossPron he_Pron) NumPl) (UseN colleague_N)))) (AdvVP (UseV go_V) (PrepNP to_Prep (DetCN (DetQuant IndefArt NumSg) (UseN meeting_N)))))
 
 they hated it
 UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron they_Pron) (ComplSlash (SlashV2a hate_V2) (UsePron it_Pron))))
@@ -848,12 +851,14 @@ Itel maintains them
 does Itel maintain all the computers that gfi owns
 
 every customer who owns a computer has a service contract for it
+UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (RelCN (UseN customer_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (UseN computer_N))))))) (ComplSlash (SlashV2a have_V2) (AdvNP (DetCN (DetQuant IndefArt NumSg) (CompoundCN (UseN service_N) (UseN contract_N))) (PrepNP for_Prep (UsePron it_Pron)))))
 
 mfi is a customer that owns exactly one computer
 
 does mfi have a service contract for all its computers
 
 every customer who owns a computer has a service contract for it
+UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN every_Det (RelCN (UseN customer_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2a own_V2) (DetCN (DetQuant IndefArt NumSg) (UseN computer_N))))))) (ComplSlash (SlashV2a have_V2) (AdvNP (DetCN (DetQuant IndefArt NumSg) (CompoundCN (UseN service_N) (UseN contract_N))) (PrepNP for_Prep (UsePron it_Pron)))))
 
 mfi is a customer that owns several computers
 
@@ -865,7 +870,8 @@ Smith is a executive who owns five different laptop computers
 
 did Smith take five laptop computers to the meeting
 
-there are 100 companies
+there are 1 0 0 companies
+UseCl (TTAnt TPres ASimul) PPos (ExistNP (DetCN (DetQuant IndefArt (NumCard (NumDigits (IIDig D_1 (IIDig D_0 (IDig D_0)))))) (UseN company_N)))
 
 icm is one of the companies and owns 150 computers
 
@@ -964,17 +970,17 @@ John went to Paris by car , and Bill by train
 did Bill go to Paris by train
 UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (AdvVP (AdvVP (UseV go_V) (PrepNP to_Prep (UsePN paris_PN))) (PrepNP by8means_Prep (MassNP (UseN train_N)))))))
 
-John went to Paris by car, and Bill by train to Berlin
+John went to Paris by car , and Bill by train to Berlin
 
 did Bill go to Berlin by train
 UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (AdvVP (AdvVP (UseV go_V) (PrepNP to_Prep (UsePN berlin_PN))) (PrepNP by8means_Prep (MassNP (UseN train_N)))))))
 
-John went to Paris by car, and Bill to Berlin
+John went to Paris by car , and Bill to Berlin
 
 did Bill go to Berlin by car
 UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePN bill_PN) (AdvVP (AdvVP (UseV go_V) (PrepNP to_Prep (UsePN berlin_PN))) (PrepNP by8means_Prep (MassNP (UseN car_N)))))))
 
-John is going to Paris by car, and the students by train
+John is going to Paris by car , and the students by train
 
 are the students going to Paris by train
 UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (DetCN (DetQuant DefArt NumPl) (UseN student_N)) (AdvVP (AdvVP (ProgrVP (UseV go_V)) (PrepNP to_Prep (UsePN paris_PN))) (PrepNP by8means_Prep (MassNP (UseN train_N)))))))
