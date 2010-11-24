@@ -53,7 +53,7 @@ main = do
 --  delimit rs
   space
   title "Lexical Paradigms"
-----  mapM_ (putParadigms isLatex cs) paradigmFiles
+  mapM_ (putParadigms isLatex cs) paradigmFiles
   space
   include "synopsis-browse.txt"
   space
@@ -180,6 +180,7 @@ paradigmFiles = [
   ("Bulgarian", srcPath "/bulgarian/ParadigmsBul.gf"),
   ("Catalan", srcPath "/catalan/ParadigmsCat.gf"),
   ("Danish", srcPath "/danish/ParadigmsDan.gf"),
+  ("Dutch", srcPath "/dutch/ParadigmsDut.gf"),
   ("English", srcPath "/english/ParadigmsEng.gf"),
   ("Finnish", srcPath "/finnish/ParadigmsFin.gf"),
   ("French",  srcPath "/french/ParadigmsFre.gf"),
