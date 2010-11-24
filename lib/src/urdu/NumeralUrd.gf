@@ -1,13 +1,14 @@
-concrete NumeralUrd of Numeral = CatUrd ** open ResUrd in {
+concrete NumeralUrd of Numeral = CatUrd ** open ResUrd,CommonHindustani,ParamX, Prelude in {
 -- By Harald Hammarström
 -- Modification for Urdu Shafqat Virk
- flags coding=utf8 ;
---- still old Devanagari coding
 
+-- still old Devanagari coding
+
+flags coding=utf8 ;
 
 param DForm = unit | ten ;
 param DSize = sg | r2 | r3 | r4 | r5 | r6 | r7 | r8 | r9 ;
-param Size = sing | less100 | more100 ; 
+param Size = singl | less100 | more100 ; 
 
 oper LinDigit = {s : DForm => Str ; size : DSize ; n : Number} ;
 
@@ -22,20 +23,10 @@ lincat Sub1000000 = { s : Str ; n : Number } ;
 lin num x0 = 
     {s = table {
           NCard =>   x0.s ; 
-          NOrd =>  x0.s ++ "واں" -- need to use mkOrd which will make irregular ordinals but it gives path error
+          NOrd =>  x0.s ++ "واں" -- need to use mkOrd x0.s but it gives linking error 
           };
        n = x0.n
     } ;
-oper mkOrd : Str -> Str =
- \s -> case s of {
-                    "عك"                  => "پہلا";
-                    "دo"                  => "دوسرا";
-                    "تi:ن"                => "تعسرا";
-                    "چa:ر"                => "چوتھا";
-                    ("چحاہ"|"چحا"|"چحاi") => "چھٹا";
-                    _                     =>  s ++ "واں"
-                  };
---  {s = \\_ => x0.s ; n = x0.n} ; 
 
 
 oper mkNum : Str -> Str -> DSize -> LinDigit = 
@@ -54,18 +45,18 @@ lin n9 = mkNum "نو" "نوے" r9 ;
 
 oper mkR : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> DSize => Str = \a1 -> \a2 -> \a3 -> \a4 -> \a5 -> \a6 -> \a7 -> \a8 -> \a9 -> table {
   sg => a1 + "اہ" ;
-  r2 => a2 + "i:س" ;
-  r3 => a3 + "تi:س" ;
-  r4 => a4 + "a:لi:س" ;
-  r5 => a5 + "ان" ;
-  r6 => a6 + "ساٹح" ;
-  r7 => a7 + "ہاتتار" ;
-  r8 => a8 + "a:سi:" ;
-  r9 => a9 + "a:ناvع"
+  r2 => a2 + "یس" ;
+  r3 => a3 + "تیس" ;
+  r4 => a4 + "الیس" ;
+  r5 => a5 + "ن" ;
+  r6 => a6 + "ساٹھ" ;
+  r7 => a7 + "ہتر" ;
+  r8 => a8 + "اسی" ;
+  r9 => a9 + "انوے"
 } ;
 
 oper rows : DSize => DSize => Str = table {
-  sg => mkR "گیارہ" "iكك" "iكات" "عكت" "iكیاو" "iك" "iك" "iكی" "iكی" ; 
+  sg => mkR "گیارہ" "اك" "اكت" "اكت" "اكیاو" "اك" "اك" "اكی" "اكی" ; 
   r2 => mkR "بارہ" "بای" "بات" "بای" "باو" "با" "با" "بای" "ب" ;
   r3 => mkR "تیر" "تی" "تین" "تنت" "ترپ" "تری" "ت" "تر" "تر" ;
   r4 => mkR "چود" "چوب" "چون" "چوا" "چوو" "چون" "چوہ" "چور" "چور" ;
@@ -81,17 +72,17 @@ oper rows : DSize => DSize => Str = table {
 
 oper ss : Str -> {s : Str} = \s -> {s = s} ;
 
-lin pot01 = {s = table {unit => "ایك" ; _ => "دuممی" } ; size = sg ; n = Sg} ;
+lin pot01 = {s = table {unit => "ایك" ; _ => "دمی" } ; size = sg ; n = Sg} ;
 lin pot0 d = d ; 
 lin pot110 = {s = "داس" ; size = less100 ; n = Pl} ; 
 lin pot111 = {s = rows ! sg ! sg ; size = less100 ; n = Pl} ;
 lin pot1to19 d = {s = rows ! d.size ! sg ; size = less100 ; n = d.n} ;
-lin pot0as1 n = {s = n.s ! unit ; size = table {sg => sing ; _ => less100} ! n.size ; n = n.n } ;
+lin pot0as1 n = {s = n.s ! unit ; size = table {sg => singl ; _ => less100} ! n.size ; n = n.n } ;
 
 lin pot1 d = {s = d.s ! ten ; size = less100 ; n = d.n} ;
 lin pot1plus d e = {s = rows ! e.size ! d.size ; size = less100 ; n = d.n} ;
 
-lin pot1as2 n = {s = n.s ; s2 = "دuممی" ; size = n.size ; n = n.n} ;
+lin pot1as2 n = {s = n.s ; s2 = "دمی" ; size = n.size ; n = n.n} ;
 lin pot2 d = {s = (mksau (d.s ! unit) d.size) ; 
               s2 = d.s ! unit ++ "لاكھ" ; size = more100 ; n = d.n} ;
 lin pot2plus d e = 
@@ -100,28 +91,28 @@ lin pot2plus d e =
    size = more100 ; n = d.n} ;
 
 lin pot2as3 n = {s = n.s ; n = n.n} ;
-lin pot3 n = {s = table { sing => ekhazar ;
+lin pot3 n = {s = table { singl => ekhazar ;
                           less100 => n.s ++ "ہزار" ; 
                           more100 => n.s2 } ! n.size ; n = n.n} ;
 lin pot3plus n m = 
-  {s = table {sing => ekhazar ;
+  {s = table {singl => ekhazar ;
               less100 => n.s ++ "ہزار" ; 
               more100 => n.s2 } ! n.size ++ m.s ; n = n.n} ;
 
-lin D_0 = { s = "0" ; n = Sg};
-lin D_1 = { s = "1" ; n = Sg};
-lin D_2 = { s = "2" ; n = Pl};
-lin D_3 = { s = "3" ; n = Pl};
-lin D_4 = { s = "4" ; n = Pl};
-lin D_5 = { s = "5" ; n = Pl};
-lin D_6 = { s = "6" ; n = Pl};
-lin D_7 = { s = "7" ; n = Pl};
-lin D_8 = { s = "8" ; n = Pl};
-lin D_9 = { s = "9" ; n = Pl};
+lin D_0 = { s = "۰" ; n = Sg};
+lin D_1 = { s = "۱" ; n = Sg};
+lin D_2 = { s = "۲" ; n = Pl};
+lin D_3 = { s = "۳" ; n = Pl};
+lin D_4 = { s = "۴" ; n = Pl};
+lin D_5 = { s = "۵" ; n = Pl};
+lin D_6 = { s = "۶" ; n = Pl};
+lin D_7 = { s = "۷" ; n = Pl};
+lin D_8 = { s = "۸" ; n = Pl};
+lin D_9 = { s = "۹" ; n = Pl};
 lin IDig d = { s = \\_ => d.s ; n = d.n} ;
-lin IIDig d dg = { s = \\df => dg.s ! df ++ d.s ; n = Pl }; -- need to use + rather than ++, but gives error need to discuss
+lin IIDig d dg = { s = \\df => Prelude.glue (dg.s ! df) d.s ; n = Pl }; 
 
 oper ekhazar : Str = variants {"ہزار" ; "ایك" ++ "ہزار"} ; 
-oper mkhazar : Str -> Size -> Str = \s -> \sz -> table {sing => ekhazar ; _ => s ++ "ہزار"} ! sz ;
+oper mkhazar : Str -> Size -> Str = \s -> \sz -> table {singl => ekhazar ; _ => s ++ "ہزار"} ! sz ;
 oper mksau : Str -> DSize -> Str = \s -> \sz -> table {sg => "سو" ; _ => s ++ "سو"} ! sz ;
 }

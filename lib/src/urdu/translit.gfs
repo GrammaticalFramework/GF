@@ -1,0 +1,11 @@
+rf -file=../hindustani/CommonHindustani.gf | ps -env=quotes -to_urdu | wf -file=CommonHindustani.gf
+rf -file=../hindustani/ExtraHindustani.gf | ps -env=quotes -to_urdu | wf -file=ExtraHindustani.gf
+rf -file=../hindustani/ResHindustani.gf | ps -env=quotes -to_urdu | wf -file=ResHindustani.gf
+rf -file=../hindustani/StringsHindustani.gf | ps -env=quotes -to_urdu | wf -file=StringsHindustani.gf
+rf -file=src/DiffUrd.gf | ps -env=quotes -to_urdu | wf -file=DiffUrd.gf
+rf -file=src/ExtraUrd.gf | ps -env=quotes -to_urdu | wf -file=ExtraUrd.gf
+rf -file=src/IdiomUrd.gf | ps -env=quotes -to_urdu | wf -file=IdiomUrd.gf
+rf -file=src/LexiconUrd.gf | ps -env=quotes -to_urdu | wf -file=LexiconUrd.gf
+rf -file=src/MorphoUrd.gf | ps -env=quotes -to_urdu | wf -file=MorphoUrd.gf
+rf -file=src/StructuralUrd.gf | ps -env=quotes -to_urdu | wf -file=StructuralUrd.gf
+

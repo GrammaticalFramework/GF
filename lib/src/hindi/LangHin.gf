@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:../abstract:../common:../hindustani
 
 concrete LangHin of Lang = 
   GrammarHin,

@@ -1,0 +1,11 @@
+rf -file=../hindustani/CommonHindustani.gf | ps -env=quotes -to_devanagari | wf -file=CommonHindustani.gf
+rf -file=../hindustani/ExtraHindustani.gf | ps -env=quotes -to_devanagari | wf -file=ExtraHindustani.gf
+rf -file=../hindustani/ResHindustani.gf | ps -env=quotes -to_devanagari | wf -file=ResHindustani.gf
+rf -file=../hindustani/StringsHindustani.gf | ps -env=quotes -to_devanagari | wf -file=StringsHindustani.gf
+rf -file=src/DiffHin.gf | ps -env=quotes -to_devanagari | wf -file=DiffHin.gf
+rf -file=src/ExtraHin.gf | ps -env=quotes -to_devanagari | wf -file=ExtraHin.gf
+rf -file=src/IdiomHin.gf | ps -env=quotes -to_devanagari | wf -file=IdiomHin.gf
+rf -file=src/LexiconHin.gf | ps -env=quotes -to_devanagari | wf -file=LexiconHin.gf
+rf -file=src/MorphoHin.gf | ps -env=quotes -to_devanagari | wf -file=MorphoHin.gf
+rf -file=src/StructuralHin.gf | ps -env=quotes -to_devanagari | wf -file=StructuralHin.gf
+

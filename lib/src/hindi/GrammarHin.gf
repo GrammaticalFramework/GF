@@ -1,6 +1,6 @@
---# -path=.:../abstract:../common:prelude
+--# -path=.:../abstract:../common:../prelude:c:/gf_unicoded/hindustani
 
-concrete GrammarHin of Grammar = 
+ concrete GrammarHin of Grammar = 
   NounHin, 
   VerbHin, 
   AdjectiveHin,
@@ -11,12 +11,14 @@ concrete GrammarHin of Grammar =
   RelativeHin,
   ConjunctionHin,
   PhraseHin,
-  TextX,
+  TextX - [Adv,AdN],
   StructuralHin,
-  IdiomHin,
-  TenseX
+  TenseX - [Adv,AdN],
+  IdiomHin
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;
 
 }
+
+
