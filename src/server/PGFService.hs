@@ -19,7 +19,7 @@ import Control.Exception
 import Control.Monad
 import Data.Char
 import Data.Function (on)
-import Data.List (sortBy,intersperse,mapAccumL)
+import Data.List (sortBy,intersperse,mapAccumL,nub)
 import qualified Data.Map as Map
 import Data.Maybe
 import System.Directory
@@ -88,6 +88,7 @@ pgfMain pgf command =
          "parse"          -> outputJSONP =<< doParse pgf `fmap` getText `ap` getCat `ap` getFrom 
          "complete"       -> outputJSONP =<< doComplete pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit
          "linearize"      -> outputJSONP =<< doLinearize pgf `fmap` getTree `ap` getTo
+         "linearizeAll"   -> outputJSONP =<< doLinearizes pgf `fmap` getTree `ap` getTo
          "random"         -> getCat >>= \c -> getDepth >>= \dp -> getLimit >>= \l -> getTo >>= \to -> liftIO (doRandom pgf c dp l to) >>= outputJSONP
          "generate"       -> outputJSONP =<< doGenerate pgf `fmap` getCat `ap` getDepth `ap` getLimit `ap` getTo
          "translate"      -> outputJSONP =<< doTranslate pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo
@@ -267,6 +268,10 @@ doComplete pgf input mcat mfrom mlimit = showJSON $ map toJSObject
 doLinearize :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
 doLinearize pgf tree mto = showJSON $ map toJSObject
      [[("to", PGF.showLanguage to),("text",text)] | (to,text) <- linearize' pgf mto tree]
+
+doLinearizes :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
+doLinearizes pgf tree mto = showJSON $ map toJSObject
+     [("to", PGF.showLanguage to):[("text",text) | text <- texts] | (to,texts) <- linearizes' pgf mto tree]
 
 doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> Maybe PGF.Language -> IO JSValue
 doRandom pgf mcat mdepth mlimit mto =
@@ -480,6 +485,14 @@ linearize' pgf mto tree =
     case mto of
       Nothing -> PGF.linearizeAllLang pgf tree
       Just to -> [(to,PGF.linearize pgf to tree)]
+
+-- all variants and their forms
+linearizes' :: PGF -> Maybe PGF.Language -> PGF.Tree -> [(PGF.Language,[String])]
+linearizes' pgf mto tree = case mto of
+  Nothing -> [(to,lins to tree) | to <- PGF.languages pgf]
+  Just to -> [(to,lins to tree)]
+ where
+   lins to = nub . concatMap (map snd) . PGF.tabularLinearizes pgf to
 
 linearizeAndBind pgf mto t = [(la, binds s) | (la,s) <- linearize' pgf mto t]
   where
