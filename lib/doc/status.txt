@@ -14,6 +14,7 @@ are marked in the table
 
 || Lang | Darcs | Mini | Parad | Lex | Lang | API | Symb | Irreg | Dict | authors       ||
 | Afr   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *LPs,LPj
+| Amh   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | *MK
 | Ara   | +     | +    | +     | +   | -    | -   | -    | -     | -    | AD
 | Bul   | +     | +    | +     | +   | +    | +   | +    | +     | +    | *KA
 | Cat   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *JS
@@ -24,11 +25,14 @@ are marked in the table
 | Fre   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
 | Ger   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,HH
 % | Heb   | -   | -    | -     | -   | -    | -   | -    | -     | -    | DD
-| Hin   | +     | -    | -     | -   | -    | -   | -    | -     | -    | AR,SV
+| Hin   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,*KP,MH,AR
 | Ina   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | JB
 | Ita   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *AR,*RE,GP
 | Lat   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
+| Lav   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *NG
+| Mon   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *NE
 | Nor   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Pnb   | +     | +    | +     | +   | +    | +   | +    | -     | -    | *SV,MH
 | Pol   | +     | +    | +     | +   | +    | +   | +    | -     | -    | IN,*AS
 | Ron   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *RE
 | Rus   | +     | +    | ++    | +   | +    | +   | -    | -     | -    | JK
@@ -79,10 +83,14 @@ JB Jean-Philippe Bernardy,
 JK Janna Khegai,
 JS Jordi Saludes,
 KA Krasimir Angelov,
+KP Kuchi Prasad,
 LPj Laurette Pretorius Jr,
 LPs Laurette Pretorius Sr,
 MF Markus Forsberg,
+MK Markos Kassa Gobena,
 MH Muhammad Humayoun,
+NE Nyamsuren Erdenebadrakh,
+NG Normunds Gruzitis,
 RE Ramona Enache,
 SC Server Cimen,
 SV Shafqat Virk,

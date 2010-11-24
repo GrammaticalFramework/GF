@@ -9,18 +9,12 @@ to the relevant source files, which give more information. Some of the files hav
 not yet been prepared so that the machine generated documentation has the right 
 format.
 
-Since the character encoding is UTF-8 for Russian and Latin-1 for other 
-languages, you
-may have to change the encoding preference of your browser when reading different
-parts of the document.
-
 The second-last chapter gives instructions on how to "browse" the library by 
 loading the grammars into the ``gf`` command editor.
-
-**New**: Browsing by syntax editor 
-[directly on the web ../../../demos/resource-api/editor.html].
 
 The last chapter contains a brief example of how application grammars can
 import resource modules. At the same time, it illustrates a "design pattern" for 
 using the resource API to build functor-based applications
 
+The current status of resource grammar completion for different languages is shown
+in [``status.html`` ./status.html].

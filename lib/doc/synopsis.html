@@ -46,6 +46,7 @@
     <LI><A HREF="#IQuant">IQuant</A>
     <LI><A HREF="#Imp" TITLE="Imp - imperative">Imp - imperative</A>
     <LI><A HREF="#ImpForm">ImpForm</A>
+    <LI><A HREF="#Interj" TITLE="Interj - interjection">Interj - interjection</A>
     <LI><A HREF="#ListAP">ListAP</A>
     <LI><A HREF="#ListAdv">ListAdv</A>
     <LI><A HREF="#ListNP">ListNP</A>
@@ -94,26 +95,27 @@
     <LI><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV - verb-phrase-complement verb</A>
     <LI><A HREF="#Voc" TITLE="Voc - vocative or "please"">Voc - vocative or "please"</A>
     </UL>
-  <LI><A HREF="#toc78">Lexical Paradigms</A>
+  <LI><A HREF="#toc79">Lexical Paradigms</A>
     <UL>
-    <LI><A HREF="#toc79">Paradigms for Bulgarian</A>
-    <LI><A HREF="#toc80">Paradigms for Catalan</A>
-    <LI><A HREF="#toc81">Paradigms for Danish</A>
-    <LI><A HREF="#toc82">Paradigms for English</A>
-    <LI><A HREF="#toc83">Paradigms for Finnish</A>
-    <LI><A HREF="#toc84">Paradigms for French</A>
-    <LI><A HREF="#toc85">Paradigms for German</A>
-    <LI><A HREF="#toc86">Paradigms for Italian</A>
-    <LI><A HREF="#toc87">Paradigms for Norwegian</A>
-    <LI><A HREF="#toc88">Paradigms for Polish</A>
-    <LI><A HREF="#toc89">Paradigms for Romanian</A>
-    <LI><A HREF="#toc90">Paradigms for Russian</A>
-    <LI><A HREF="#toc91">Paradigms for Spanish</A>
-    <LI><A HREF="#toc92">Paradigms for Swedish</A>
-    <LI><A HREF="#toc93">Paradigms for Urdu</A>
+    <LI><A HREF="#toc80">Paradigms for Bulgarian</A>
+    <LI><A HREF="#toc81">Paradigms for Catalan</A>
+    <LI><A HREF="#toc82">Paradigms for Danish</A>
+    <LI><A HREF="#toc83">Paradigms for Dutch</A>
+    <LI><A HREF="#toc84">Paradigms for English</A>
+    <LI><A HREF="#toc85">Paradigms for Finnish</A>
+    <LI><A HREF="#toc86">Paradigms for French</A>
+    <LI><A HREF="#toc87">Paradigms for German</A>
+    <LI><A HREF="#toc88">Paradigms for Italian</A>
+    <LI><A HREF="#toc89">Paradigms for Norwegian</A>
+    <LI><A HREF="#toc90">Paradigms for Polish</A>
+    <LI><A HREF="#toc91">Paradigms for Romanian</A>
+    <LI><A HREF="#toc92">Paradigms for Russian</A>
+    <LI><A HREF="#toc93">Paradigms for Spanish</A>
+    <LI><A HREF="#toc94">Paradigms for Swedish</A>
+    <LI><A HREF="#toc95">Paradigms for Urdu</A>
     </UL>
-  <LI><A HREF="#toc94">Browsing the libraries with GF commands</A>
-  <LI><A HREF="#toc95">An Example of Usage</A>
+  <LI><A HREF="#toc96">Browsing the libraries with GF commands</A>
+  <LI><A HREF="#toc97">An Example of Usage</A>
   </UL>
 
 <P></P>
@@ -129,23 +131,17 @@ not yet been prepared so that the machine generated documentation has the right
 format.
 </P>
 <P>
-Since the character encoding is UTF-8 for Russian and Latin-1 for other 
-languages, you
-may have to change the encoding preference of your browser when reading different
-parts of the document.
-</P>
-<P>
 The second-last chapter gives instructions on how to "browse" the library by 
 loading the grammars into the <CODE>gf</CODE> command editor.
-</P>
-<P>
-<B>New</B>: Browsing by syntax editor 
-<A HREF="../../../demos/resource-api/editor.html">directly on the web</A>.
 </P>
 <P>
 The last chapter contains a brief example of how application grammars can
 import resource modules. At the same time, it illustrates a "design pattern" for 
 using the resource API to build functor-based applications
+</P>
+<P>
+The current status of resource grammar completion for different languages is shown
+in <A HREF="./status.html"><CODE>status.html</CODE></A>.
 </P>
 <A NAME="toc2"></A>
 <H1>Categories</H1>
@@ -341,6 +337,11 @@ also in the <CODE>Paradigms</CODE> modules.
 <TD><A HREF="#Imp" TITLE="Imp - imperative">Imp</A></TD>
 <TD>imperative</TD>
 <TD><I>look at this</I></TD>
+</TR>
+<TR>
+<TD><A HREF="#Interj" TITLE="Interj - interjection">Interj</A></TD>
+<TD>interjection</TD>
+<TD><I>alas</I></TD>
 </TR>
 <TR>
 <TD><A HREF="#N" TITLE="N - common noun">N</A></TD>
@@ -1509,6 +1510,11 @@ Lexical category, constructors given in
 <TD><I>in which city</I></TD>
 </TR>
 <TR>
+<TD><CODE>mkIAdv</CODE></TD>
+<TD><A HREF="#IAdv" TITLE="IAdv - interrogative adverb">IAdv</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#IAdv" TITLE="IAdv - interrogative adverb">IAdv</A></TD>
+<TD><I>where in Paris</I></TD>
+</TR>
+<TR>
 <TD><CODE>when_IAdv</CODE></TD>
 <TD><A HREF="#IAdv" TITLE="IAdv - interrogative adverb">IAdv</A></TD>
 <TD><I>when</I></TD>
@@ -1656,6 +1662,12 @@ Lexical category, constructors given in
 </TR>
 </TABLE>
 
+<A NAME="Interj"></A>
+<H2>Interj - interjection</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="ListAP"></A>
 <H2>ListAP</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -3156,9 +3168,9 @@ Lexical category, constructors given in
 </TR>
 </TABLE>
 
-<A NAME="toc78"></A>
-<H1>Lexical Paradigms</H1>
 <A NAME="toc79"></A>
+<H1>Lexical Paradigms</H1>
+<A NAME="toc80"></A>
 <H2>Paradigms for Bulgarian</H2>
 <P>
 <a name="RParadigms"></a>
@@ -3840,12 +3852,16 @@ source <A HREF="../src/bulgarian/ParadigmsBul.gf"><CODE>http://www.grammaticalfr
 <TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#VTable">VTable</A></TD>
 </TR>
 <TR>
+<TD><CODE>mkV188</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#VTable">VTable</A></TD>
+</TR>
+<TR>
 <TD><CODE>adjAdv</CODE></TD>
 <TD><A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>=</CODE></TD>
 </TR>
 </TABLE>
 
-<A NAME="toc80"></A>
+<A NAME="toc81"></A>
 <H2>Paradigms for Catalan</H2>
 <P>
 <a name="RParadigms"></a>
@@ -4080,7 +4096,7 @@ source <A HREF="../src/catalan/ParadigmsCat.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc81"></A>
+<A NAME="toc82"></A>
 <H2>Paradigms for Danish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -4331,7 +4347,290 @@ source <A HREF="../src/danish/ParadigmsDan.gf"><CODE>http://www.grammaticalframe
 </TR>
 </TABLE>
 
-<A NAME="toc82"></A>
+<A NAME="toc83"></A>
+<H2>Paradigms for Dutch</H2>
+<P>
+<a name="RParadigms"></a>
+</P>
+<P>
+source <A HREF="../src/dutch/ParadigmsDut.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/dutch/ParadigmsDut.gf</CODE></A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH COLSPAN="2">Type</TH>
+</TR>
+<TR>
+<TD><CODE>masculine</CODE></TD>
+<TD><A HREF="#Gender">Gender</A></TD>
+</TR>
+<TR>
+<TD><CODE>feminine</CODE></TD>
+<TD><A HREF="#Gender">Gender</A></TD>
+</TR>
+<TR>
+<TD><CODE>neuter</CODE></TD>
+<TD><A HREF="#Gender">Gender</A></TD>
+</TR>
+<TR>
+<TD><CODE>utrum</CODE></TD>
+<TD><A HREF="#Gender">Gender</A></TD>
+</TR>
+<TR>
+<TD><CODE>de,het</CODE></TD>
+<TD><A HREF="#Gender">Gender</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(muis</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(bit</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#Gender">Gender</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(gat,gaten</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#Gender">Gender</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(muis</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>=</CODE> <CODE>\a</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>(regNoun</CODE> <CODE>a)</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(bit</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#Gender">Gender</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>=</CODE> <CODE>\a,b</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>(regNounG</CODE> <CODE>a</CODE> <CODE>b)</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(gat,gaten</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#Gender">Gender</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>=</CODE> <CODE>\a,b,c</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>(mkNoun</CODE> <CODE>a</CODE> <CODE>b</CODE> <CODE>c)</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#N2" TITLE="N2 - relational noun">N2</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#N2" TITLE="N2 - relational noun">N2</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#N2" TITLE="N2 - relational noun">N2</A> <CODE>=</CODE> <CODE>\n</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#N2" TITLE="N2 - relational noun">N2</A> <CODE>(n</CODE> <CODE>**</CODE> <CODE>{c2</CODE> <CODE>=</CODE> <CODE>"van"})</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#N2" TITLE="N2 - relational noun">N2</A> <CODE>=</CODE> <CODE>\n,p</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#N2" TITLE="N2 - relational noun">N2</A> <CODE>(n</CODE> <CODE>**</CODE> <CODE>{c2</CODE> <CODE>=</CODE> <CODE>p.s})</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkN3</CODE></TD>
+<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#N3" TITLE="N3 - three-place relational noun">N3</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#PN" TITLE="PN - proper name">PN</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#PN" TITLE="PN - proper name">PN</A> <CODE>=</CODE> <CODE>\s</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#PN" TITLE="PN - proper name">PN</A> <CODE>{s</CODE> <CODE>=</CODE> <CODE>\\_</CODE> <CODE>=&gt;</CODE> <CODE>s}</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(vers</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(goed,goede,goeds,beter,best</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(vers</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>=</CODE> <CODE>\a</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>(regAdjective</CODE> <CODE>a)</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(goed,goede,goeds,beter,best</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>=</CODE> <CODE>\a,b,c,d,e</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>(mkAdjective</CODE> <CODE>a</CODE> <CODE>b</CODE> <CODE>c</CODE> <CODE>d</CODE> <CODE>e)</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>invarA</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkA2</CODE></TD>
+<TD><A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#A2" TITLE="A2 - two-place adjective">A2</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkPrep</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+</TR>
+<TR>
+<TD><CODE>van_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+</TR>
+<TR>
+<TD><CODE>te_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(aaien</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(breken,brak,gebroken</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(breken,brak,braken,gebroken</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(aai,aait,aaien,aaide,aaide,aaiden,geaaid</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(aaien</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>=</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(breken,brak,gebroken</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>=</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(breken,brak,braken,gebroken</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>=</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(aai,aait,aaien,aaide,aaiden,geaaid</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>=</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>=</CODE> <CODE>\v,s</CODE> <CODE>-&gt;lin</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>(prefixV</CODE> <CODE>v</CODE> <CODE>s)</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>zijnV</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+</TR>
+<TR>
+<TD><CODE>reflV</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+</TR>
+<TR>
+<TD><CODE>zijn_V</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>=</CODE> <CODE>lin</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>ResDut.zijn_V</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>hebben_V</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>=</CODE> <CODE>lin</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>ResDut.hebben_V</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>=</CODE> <CODE>\s</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>(v2vv</CODE> <CODE>(regVerb</CODE> <CODE>s)</CODE> <CODE>**</CODE> <CODE>{c2</CODE> <CODE>=</CODE> <CODE>[]})</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>=</CODE> <CODE>\s</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>(s</CODE> <CODE>**</CODE> <CODE>{c2</CODE> <CODE>=</CODE> <CODE>[]})</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>=</CODE> <CODE>\s,p</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>(s</CODE> <CODE>**</CODE> <CODE>{c2</CODE> <CODE>=</CODE> <CODE>p.s})</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A> <CODE>=</CODE> <CODE>mkmaxV3</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A> <CODE>=</CODE> <CODE>\v,p</CODE> <CODE>-&gt;</CODE> <CODE>mkmaxV3</CODE> <CODE>v</CODE> <CODE>(mkPrep</CODE> <CODE>[])</CODE> <CODE>p</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A> <CODE>=</CODE> <CODE>\v</CODE> <CODE>-&gt;</CODE> <CODE>mkmaxV3</CODE> <CODE>v</CODE> <CODE>(mkPrep</CODE> <CODE>[])</CODE> <CODE>(mkPrep</CODE> <CODE>[])</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkmaxV3</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A> <CODE>=</CODE> <CODE>\v,c,d</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A> <CODE>(v</CODE> <CODE>**</CODE> <CODE>{c2</CODE> <CODE>=</CODE> <CODE>c.s</CODE> <CODE>c3</CODE> <CODE>=</CODE> <CODE>d.s})</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkV0</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V0">V0</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkVS</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#VS" TITLE="VS - sentence-complement verb">VS</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2S</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V2S" TITLE="V2S - verb with NP and S complement">V2S</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkVV</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2V</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V2V" TITLE="V2V - verb with NP and V complement">V2V</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkVA</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#VA" TITLE="VA - adjective-complement verb">VA</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2A</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V2A" TITLE="V2A - verb with NP and AP complement">V2A</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkVQ</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#VQ" TITLE="VQ - question-complement verb">VQ</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2Q</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V2Q" TITLE="V2Q - verb with NP and Q complement">V2Q</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkOrd</CODE></TD>
+<TD><A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#Ord" TITLE="Ord - ordinal number (used in Det)">Ord</A> <CODE>=</CODE> <CODE>\a</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#Ord" TITLE="Ord - ordinal number (used in Det)">Ord</A> <CODE>{s</CODE> <CODE>=</CODE> <CODE>a.s</CODE> <CODE>!</CODE> <CODE>Posit}</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>prepV2</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A></TD>
+</TR>
+<TR>
+<TD><CODE>V0</CODE></TD>
+<TD><A HREF="#Type">Type</A> <CODE>=</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+</TR>
+</TABLE>
+
+<A NAME="toc84"></A>
 <H2>Paradigms for English</H2>
 <P>
 <a name="RParadigms"></a>
@@ -4387,6 +4686,10 @@ source <A HREF="../src/english/ParadigmsEng.gf"><CODE>http://www.grammaticalfram
 <TR>
 <TD><CODE>genitive</CODE></TD>
 <TD><A HREF="#Case">Case</A></TD>
+</TR>
+<TR>
+<TD><CODE>npNumber</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Number">Number</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
@@ -4471,6 +4774,10 @@ source <A HREF="../src/english/ParadigmsEng.gf"><CODE>http://www.grammaticalfram
 <TR>
 <TD><CODE>simpleA</CODE></TD>
 <TD><A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
+</TR>
+<TR>
+<TD><CODE>irregAdv</CODE></TD>
+<TD><A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>
@@ -4670,7 +4977,7 @@ source <A HREF="../src/english/ParadigmsEng.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc83"></A>
+<A NAME="toc85"></A>
 <H2>Paradigms for Finnish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -4769,11 +5076,11 @@ source <A HREF="../src/finnish/ParadigmsFin.gf"><CODE>http://www.grammaticalfram
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
-<TD><CODE>(vesi,veden,vesi‰</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>(vesi,veden,vesi√§</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
-<TD><CODE>(vesi,veden,vesi‰,vett‰</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>(vesi,veden,vesi√§,vett√§</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
@@ -4817,7 +5124,7 @@ source <A HREF="../src/finnish/ParadigmsFin.gf"><CODE>http://www.grammaticalfram
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
-<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <CODE>(kivempaa,kivinta</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
+<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <CODE>(kivempi,kivin</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
@@ -4949,7 +5256,7 @@ source <A HREF="../src/finnish/ParadigmsFin.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc84"></A>
+<A NAME="toc86"></A>
 <H2>Paradigms for French</H2>
 <P>
 <a name="RParadigms"></a>
@@ -5188,7 +5495,7 @@ source <A HREF="../src/french/ParadigmsFre.gf"><CODE>http://www.grammaticalframe
 </TR>
 </TABLE>
 
-<A NAME="toc85"></A>
+<A NAME="toc87"></A>
 <H2>Paradigms for German</H2>
 <P>
 <a name="RParadigms"></a>
@@ -5235,6 +5542,22 @@ source <A HREF="../src/german/ParadigmsGer.gf"><CODE>http://www.grammaticalframe
 </TR>
 <TR>
 <TD><CODE>genitive</CODE></TD>
+<TD><A HREF="#Case">Case</A></TD>
+</TR>
+<TR>
+<TD><CODE>anDat_Case</CODE></TD>
+<TD><A HREF="#Case">Case</A></TD>
+</TR>
+<TR>
+<TD><CODE>inAcc_Case</CODE></TD>
+<TD><A HREF="#Case">Case</A></TD>
+</TR>
+<TR>
+<TD><CODE>inDat_Case</CODE></TD>
+<TD><A HREF="#Case">Case</A></TD>
+</TR>
+<TR>
+<TD><CODE>zuDat_Case</CODE></TD>
 <TD><A HREF="#Case">Case</A></TD>
 </TR>
 <TR>
@@ -5315,7 +5638,7 @@ source <A HREF="../src/german/ParadigmsGer.gf"><CODE>http://www.grammaticalframe
 </TR>
 <TR>
 <TD><CODE>mkPrep</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Case">Case</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#PCase">PCase</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
 </TR>
 <TR>
 <TD><CODE>accPrep</CODE></TD>
@@ -5338,16 +5661,28 @@ source <A HREF="../src/german/ParadigmsGer.gf"><CODE>http://www.grammaticalframe
 <TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
 </TR>
 <TR>
-<TD><CODE>mkV</CODE></TD>
-<TD><CODE>(f¸hren</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+<TD><CODE>anDat_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+</TR>
+<TR>
+<TD><CODE>inDat_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+</TR>
+<TR>
+<TD><CODE>inAcc_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
-<TD><CODE>(sehen,sieht,sah,s‰he,gesehen</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+<TD><CODE>(f√ºhren</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
-<TD><CODE>(geben,</CODE> <CODE>gibt,</CODE> <CODE>gib,</CODE> <CODE>gab,</CODE> <CODE>g‰be,</CODE> <CODE>gegeben</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+<TD><CODE>(sehen,sieht,sah,s√§he,gesehen</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(geben,</CODE> <CODE>gibt,</CODE> <CODE>gib,</CODE> <CODE>gab,</CODE> <CODE>g√§be,</CODE> <CODE>gegeben</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
@@ -5459,7 +5794,7 @@ source <A HREF="../src/german/ParadigmsGer.gf"><CODE>http://www.grammaticalframe
 </TR>
 </TABLE>
 
-<A NAME="toc86"></A>
+<A NAME="toc88"></A>
 <H2>Paradigms for Italian</H2>
 <P>
 <a name="RParadigms"></a>
@@ -5698,7 +6033,7 @@ source <A HREF="../src/italian/ParadigmsIta.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc87"></A>
+<A NAME="toc89"></A>
 <H2>Paradigms for Norwegian</H2>
 <P>
 <a name="RParadigms"></a>
@@ -5949,7 +6284,7 @@ source <A HREF="../src/norwegian/ParadigmsNor.gf"><CODE>http://www.grammaticalfr
 </TR>
 </TABLE>
 
-<A NAME="toc88"></A>
+<A NAME="toc90"></A>
 <H2>Paradigms for Polish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -5964,479 +6299,479 @@ source <A HREF="../src/polish/ParadigmsPol.gf"><CODE>http://www.grammaticalframe
 </TR>
 <TR>
 <TD><CODE>Gender</CODE></TD>
-<TD><A HREF="#Type">Type</A></TD>
+<TD><CODE>Type;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>masculineP</CODE></TD>
-<TD><A HREF="#Gender">Gender</A></TD>
+<TD><CODE>Gender;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>masculineA</CODE></TD>
-<TD><A HREF="#Gender">Gender</A></TD>
+<TD><CODE>Gender;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>masculineI</CODE></TD>
-<TD><A HREF="#Gender">Gender</A></TD>
+<TD><CODE>Gender;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>feminine</CODE></TD>
-<TD><A HREF="#Gender">Gender</A></TD>
+<TD><CODE>Gender;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>neuter</CODE></TD>
-<TD><A HREF="#Gender">Gender</A></TD>
+<TD><CODE>Gender;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>personal</CODE></TD>
-<TD><A HREF="#Animacy">Animacy</A></TD>
+<TD><CODE>Animacy;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>Case</CODE></TD>
-<TD><A HREF="#Type">Type</A></TD>
+<TD><CODE>Type;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nominative</CODE></TD>
-<TD><A HREF="#Case">Case</A></TD>
+<TD><CODE>Case;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>genitive</CODE></TD>
-<TD><A HREF="#Case">Case</A></TD>
+<TD><CODE>Case;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>dative</CODE></TD>
-<TD><A HREF="#Case">Case</A></TD>
+<TD><CODE>Case;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>accusative</CODE></TD>
-<TD><A HREF="#Case">Case</A></TD>
+<TD><CODE>Case;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>instrumental</CODE></TD>
-<TD><A HREF="#Case">Case</A></TD>
+<TD><CODE>Case;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>locative</CODE></TD>
-<TD><A HREF="#Case">Case</A></TD>
+<TD><CODE>Case;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>vocative</CODE></TD>
-<TD><A HREF="#Case">Case</A></TD>
+<TD><CODE>Case;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>Number</CODE></TD>
-<TD><A HREF="#Type">Type</A></TD>
+<TD><CODE>Type;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>singular</CODE></TD>
-<TD><A HREF="#Number">Number</A></TD>
+<TD><CODE>Number;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>plural</CODE></TD>
-<TD><A HREF="#Number">Number</A></TD>
+<TD><CODE>Number;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKapiel</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nLodz</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nSul</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKonew</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nWies</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nDlon</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nSiec</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nDrzwi</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKosc</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nNoc</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nWesz</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKrolowa</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nReka</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nApteka</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nDroga</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nMatka</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nZiemia</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nFala</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nLilia</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKobieta</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nLiczba</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nSila</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nDoba</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nWoda</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nSzkola</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nWojna</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nWiosna</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nMgla</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nGwiazda</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nUlica</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nOwca</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nDanie</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nSerce</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nNasienie</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nMorze</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nImie</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nCiele</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nUdo</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nPiwo</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nZero</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nNiebo</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nTlo</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nZebro</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nOkno</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nGniazdo</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nWojsko</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nJajo</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nJablko</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nStudio</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nDziecko</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nUcho</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nOko</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nFacet</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nArab</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nPrzyjaciel</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKowal</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nLekarz</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKrol</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nMaz</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nWrog</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKsiadz</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nOjciec</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nBrat</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nBog</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nChlopiec</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nMezczyzna</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKon</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nWaz</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nPtak</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKot</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nPies</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nBat</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nChleb</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nSer</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nZab</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKosciol</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nCien</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nPien</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nLisc</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKoc</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nWiersz</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nDzien</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKajak</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nMlotek</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nMiech</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nSad</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nDym</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nWal</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nDol</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nOgrod</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nKwiat</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nLas</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nWiatr</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nPopiol</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nPokoj</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nGaj</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nBrzeg</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nRok</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nProg</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nStatek</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nDom</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>N;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
@@ -6448,115 +6783,115 @@ source <A HREF="../src/polish/ParadigmsPol.gf"><CODE>http://www.grammaticalframe
 </TR>
 <TR>
 <TD><CODE>mkFun</CODE></TD>
-<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#N2" TITLE="N2 - relational noun">N2</A></TD>
+<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <CODE>N2;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>nullPrep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>=</CODE> <CODE>{s</CODE> <CODE>=</CODE> <CODE>[]</CODE> <CODE>c=</CODE> <A HREF="#GenNoPrep">GenNoPrep</A> <CODE>lock_Prep=&lt;&gt;}</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>=</CODE> <CODE>{s</CODE> <CODE>=</CODE> <CODE>[];</CODE> <CODE>c=</CODE> <CODE>GenNoPrep;</CODE> <CODE>lock_Prep=&lt;&gt;};</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>mkN3</CODE></TD>
-<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#N3" TITLE="N3 - three-place relational noun">N3</A></TD>
+<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <CODE>N3;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>mkPrep</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Case">Case</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Case">Case</A> <CODE>-&gt;</CODE> <CODE>Prep;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>genPrep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD><CODE>Prep;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>datPrep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD><CODE>Prep;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>accPrep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD><CODE>Prep;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>instrPrep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD><CODE>Prep;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>bez_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--without</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--without</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>dla_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--for</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--for</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>do_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--to</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--to</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>dookola_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--(a)round</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--(a)round</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>kolo_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--near</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--near</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>obok_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--beside,</CODE> <CODE>next</CODE> <CODE>to</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--beside,</CODE> <CODE>next</CODE> <CODE>to</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>od_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--from</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--from</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>oprocz_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--out</CODE> <CODE>of</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--out</CODE> <CODE>of</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>podczas_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--during</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--during</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>mimo_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD><CODE>Prep;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>spod_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--under</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--under</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>u_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--by,</CODE> <CODE>with</CODE> <CODE>(I</CODE> <CODE>was</CODE> <CODE>by</CODE> <A HREF="#Peter">Peter</A> <CODE>last</CODE> <CODE>sunday.)</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--by,</CODE> <CODE>with</CODE> <CODE>(I</CODE> <CODE>was</CODE> <CODE>by</CODE> <A HREF="#Peter">Peter</A> <CODE>last</CODE> <CODE>sunday.)</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>wzdluz_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--along</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--along</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>z_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--from</CODE> <CODE>(I</CODE> <CODE>come</CODE> <CODE>from</CODE> <CODE>Italy.),</CODE> <CODE>of/</CODE> <CODE>from</CODE> <CODE>(The</CODE> <CODE>ring</CODE> <CODE>is</CODE> <CODE>made</CODE> <CODE>of</CODE> <CODE>silver.)</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--from</CODE> <CODE>(I</CODE> <CODE>come</CODE> <CODE>from</CODE> <CODE>Italy.),</CODE> <CODE>of/</CODE> <CODE>from</CODE> <CODE>(The</CODE> <CODE>ring</CODE> <CODE>is</CODE> <CODE>made</CODE> <CODE>of</CODE> <CODE>silver.)</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>zamiast_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--instead</CODE> <CODE>of</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--instead</CODE> <CODE>of</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>znad_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--over,</CODE> <CODE>above</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--over,</CODE> <CODE>above</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>zza_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>--behind</CODE></TD>
+<TD><CODE>Prep;</CODE> <CODE>--behind</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>dzieki_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD><CODE>Prep;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>przeciw_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD><CODE>Prep;</CODE></TD>
 </TR>
 </TABLE>
 
-<A NAME="toc89"></A>
+<A NAME="toc91"></A>
 <H2>Paradigms for Romanian</H2>
 <P>
 <a name="RParadigms"></a>
@@ -6642,6 +6977,10 @@ source <A HREF="../src/romanian/ParadigmsRon.gf"><CODE>http://www.grammaticalfra
 <TD><A HREF="#NCase">NCase</A></TD>
 </TR>
 <TR>
+<TD><CODE>Nom</CODE></TD>
+<TD><A HREF="#NCase">NCase</A></TD>
+</TR>
+<TR>
 <TD><CODE>mkPrep</CODE></TD>
 <TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>NCase-&gt;</CODE> <A HREF="#Bool">Bool</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
 </TR>
@@ -6703,7 +7042,7 @@ source <A HREF="../src/romanian/ParadigmsRon.gf"><CODE>http://www.grammaticalfra
 </TR>
 </TABLE>
 
-<A NAME="toc90"></A>
+<A NAME="toc92"></A>
 <H2>Paradigms for Russian</H2>
 <P>
 <a name="RParadigms"></a>
@@ -6846,7 +7185,7 @@ source <A HREF="../src/russian/ParadigmsRus.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc91"></A>
+<A NAME="toc93"></A>
 <H2>Paradigms for Spanish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -7085,7 +7424,7 @@ source <A HREF="../src/spanish/ParadigmsSpa.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc92"></A>
+<A NAME="toc94"></A>
 <H2>Paradigms for Swedish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -7224,7 +7563,7 @@ source <A HREF="../src/swedish/ParadigmsSwe.gf"><CODE>http://www.grammaticalfram
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
-<TD><CODE>(st‰mmer</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+<TD><CODE>(st√§mmer</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
@@ -7232,7 +7571,7 @@ source <A HREF="../src/swedish/ParadigmsSwe.gf"><CODE>http://www.grammaticalfram
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
-<TD><CODE>(gÂ,gÂr,gÂ,gick,gÂtt,gÂngen</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+<TD><CODE>(g√•,g√•r,g√•,gick,g√•tt,g√•ngen</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
@@ -7253,6 +7592,10 @@ source <A HREF="../src/swedish/ParadigmsSwe.gf"><CODE>http://www.grammaticalfram
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
@@ -7332,7 +7675,7 @@ source <A HREF="../src/swedish/ParadigmsSwe.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc93"></A>
+<A NAME="toc95"></A>
 <H2>Paradigms for Urdu</H2>
 <P>
 <a name="RParadigms"></a>
@@ -7406,12 +7749,20 @@ source <A HREF="../src/urdu/ParadigmsUrd.gf"><CODE>http://www.grammaticalframewo
 <TD><CODE>(x1,x2,x3:Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#Number">Number</A> <CODE>-&gt;</CODE> <A HREF="#Gender">Gender</A> <CODE>-&gt;</CODE> <A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>=</CODE> <CODE>\s1,s2,s3,n,g</CODE> <CODE>-&gt;</CODE> <CODE>let</CODE> <CODE>p</CODE> <CODE>=</CODE> <CODE>mkIntPronForm</CODE> <CODE>s1</CODE> <CODE>s2</CODE> <CODE>s3</CODE> <CODE>in</CODE> <CODE>{</CODE> <CODE>s</CODE> <CODE>=</CODE> <CODE>p.s</CODE> <CODE>n</CODE> <CODE>=</CODE> <CODE>n</CODE> <CODE>g</CODE> <CODE>=</CODE> <CODE>g</CODE> <CODE>lock_IP</CODE> <CODE>=</CODE> <CODE>&lt;&gt;};</CODE></TD>
 </TR>
 <TR>
+<TD><CODE>mkAdN</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#AdN" TITLE="AdN - numeral-modifying adverb">AdN</A> <CODE>=</CODE> <CODE>\s</CODE> <CODE>-&gt;</CODE> <CODE>{s</CODE> <CODE>=</CODE> <CODE>s</CODE> <CODE>p</CODE> <CODE>=</CODE> <A HREF="#False">False</A> <CODE>lock_AdN</CODE> <CODE>=</CODE> <CODE>&lt;&gt;}</CODE></TD>
+</TR>
+<TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>Str-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#A2" TITLE="A2 - two-place adjective">A2</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkA2</CODE></TD>
+<TD><A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#A2" TITLE="A2 - two-place adjective">A2</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
@@ -7430,12 +7781,20 @@ source <A HREF="../src/urdu/ParadigmsUrd.gf"><CODE>http://www.grammaticalframewo
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A></TD>
 </TR>
 <TR>
+<TD><CODE>dirV2</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>=</CODE> <CODE>\v</CODE> <CODE>-&gt;</CODE> <CODE>v</CODE> <CODE>**</CODE> <CODE>{c2</CODE> <CODE>=</CODE> <CODE>{s</CODE> <CODE>=</CODE> <CODE>[]</CODE> <CODE>c</CODE> <CODE>=</CODE> <CODE>VTrans}</CODE> <CODE>lock_V2</CODE> <CODE>=</CODE> <CODE>&lt;&gt;}</CODE></TD>
+</TR>
+<TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>V3;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>mkV2V</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Bool">Bool</A> <CODE>-&gt;</CODE> <A HREF="#V2V" TITLE="V2V - verb with NP and V complement">V2V</A></TD>
+</TR>
+<TR>
+<TD><CODE>dirdirV3</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A></TD>
 </TR>
 <TR>
 <TD><CODE>compoundV</CODE></TD>
@@ -7447,11 +7806,11 @@ source <A HREF="../src/urdu/ParadigmsUrd.gf"><CODE>http://www.grammaticalframewo
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>=</CODE> <CODE>\str</CODE> <CODE>-&gt;</CODE> <CODE>{s</CODE> <CODE>=</CODE> <CODE>str</CODE> <CODE>lock_Adv</CODE> <CODE>=</CODE> <CODE>&lt;&gt;};</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>=</CODE> <CODE>\str</CODE> <CODE>-&gt;</CODE> <CODE>{s</CODE> <CODE>=</CODE> <CODE>\\_</CODE> <CODE>=&gt;</CODE> <CODE>str</CODE> <CODE>lock_Adv</CODE> <CODE>=</CODE> <CODE>&lt;&gt;};</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>mkPrep</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkConj</CODE></TD>
@@ -7490,12 +7849,24 @@ source <A HREF="../src/urdu/ParadigmsUrd.gf"><CODE>http://www.grammaticalframewo
 <TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Number">Number</A> <CODE>-&gt;</CODE> <A HREF="#Conj" TITLE="Conj - conjunction">Conj</A> <CODE>=</CODE> <CODE>\x,y,n</CODE> <CODE>-&gt;</CODE></TD>
 </TR>
 <TR>
+<TD><CODE>mkVS</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <CODE>VS;</CODE></TD>
+</TR>
+<TR>
 <TD><CODE>mkVV</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A> <CODE>=</CODE> <CODE>\v</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A> <CODE>(v</CODE> <CODE>**</CODE> <CODE>{isAux</CODE> <CODE>=</CODE> <CODE>False});</CODE></TD>
 </TR>
+<TR>
+<TD><CODE>mkAdA</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#AdA" TITLE="AdA - adjective-modifying adverb">AdA</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkVQ</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#VQ" TITLE="VQ - question-complement verb">VQ</A></TD>
+</TR>
 </TABLE>
 
-<A NAME="toc94"></A>
+<A NAME="toc96"></A>
 <H1>Browsing the libraries with GF commands</H1>
 <P>
 <B>New</B>: Browsing by syntax editor 
@@ -7522,7 +7893,7 @@ To try out overloaded syntax, test lexicon, and inflection paradigms:
     &gt; cc mkCl (mkNP this_Quant (mkN "Farbe")) (mkA "dunkel")
 </PRE>
 <P></P>
-<A NAME="toc95"></A>
+<A NAME="toc97"></A>
 <H1>An Example of Usage</H1>
 <P>
 The standard way of building an application has the following modules.
