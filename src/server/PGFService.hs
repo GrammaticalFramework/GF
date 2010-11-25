@@ -266,12 +266,15 @@ doComplete pgf input mcat mfrom mlimit = showJSON $ map toJSObject
     cat = fromMaybe (PGF.startCat pgf) mcat
 
 doLinearize :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
-doLinearize pgf tree mto = showJSON $ map toJSObject
-     [[("to", PGF.showLanguage to),("text",text)] | (to,text) <- linearize' pgf mto tree]
+doLinearize pgf tree mto = showJSON $
+    [toJSObject [("to", PGF.showLanguage to),("text",text)]
+      | (to,text) <- linearize' pgf mto tree]
 
 doLinearizes :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
-doLinearizes pgf tree mto = showJSON $ map toJSObject
-     [("to", PGF.showLanguage to):[("text",text) | text <- texts] | (to,texts) <- linearizes' pgf mto tree]
+doLinearizes pgf tree mto = showJSON $ 
+    [toJSObject [("to", showJSON $ PGF.showLanguage to),
+                 ("texts",showJSON texts)]
+      | (to,texts) <- linearizes' pgf mto tree]
 
 doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> Maybe PGF.Language -> IO JSValue
 doRandom pgf mcat mdepth mlimit mto =
