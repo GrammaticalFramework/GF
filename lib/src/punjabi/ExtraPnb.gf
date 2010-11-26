@@ -8,8 +8,8 @@ concrete ExtraPnb of ExtraPnbAbs = CatPnb **
 
     each_Det = mkDet  "ہر كوی" "ہر كوی" "ہر كوی" "ہر كوی" Sg ;
     have_V = mkV "راكh-نا";
-    IAdvAdv adv = {s = "كتنی" ++ adv.s} ;
-    ICompAP ap = {s = "كتنے" ++ ap.s ! Sg ! Masc ! Dir ! Posit} ;
+----    IAdvAdv adv = {s = "كتنی" ++ adv.s} ;
+----    ICompAP ap = {s = "كتنے" ++ ap.s ! Sg ! Masc ! Dir ! Posit} ;
     cost_V = mkV "قیمت" ;
     
     -- added for causitives
