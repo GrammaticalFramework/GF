@@ -6,7 +6,21 @@ license: GPL
 license-file: LICENSE
 synopsis: FastCGI Server for Grammatical Framework
 
-executable pgf-server
+flag fastcgi
+  Description: Build pgf-fcgi (requires the fastcgi package)
+  Default:     True
+
+executable pgf-fcgi
+  main-is: pgf-fcgi.hs
+  other-modules: PGFService FastCGIUtils Cache URLEncoding
+  ghc-options: -threaded
+
+  if flag(fastcgi)
+    build-depends: fastcgi >= 3001.0.2.2
+    buildable: True
+  else
+    buildable: False
+
   build-depends: base >=4.2 && <5,
                  old-time,
                  directory,
@@ -15,7 +29,32 @@ executable pgf-server
                  process,
                  gf >= 3.1,
                  cgi >= 3001.1.8.0,
-                 fastcgi >= 3001.0.2.2,
+                 network,
+                 json >= 0.3.3,
+                 utf8-string >= 0.3.1.1,
+                 bytestring,
+                 pretty,
+                 random
+  if os(windows)
+    ghc-options: -optl-mwindows
+  else
+    build-depends: unix
+
+
+executable pgf-http
+  main-is: pgf-http.hs
+  other-modules: PGFService FastCGIUtils Cache URLEncoding
+                 RunHTTP ServeStaticFile
+  ghc-options: -threaded
+
+  build-depends: base >=4.2 && <5,
+                 old-time,
+                 directory,
+                 filepath,
+                 containers,
+                 process,
+                 gf >= 3.1,
+                 cgi >= 3001.1.8.0,
                  httpd-shed,
                  network,
                  json >= 0.3.3,
@@ -23,18 +62,10 @@ executable pgf-server
                  bytestring,
                  pretty,
                  random
-  if !os(windows)
-    build-depends: unix
-  main-is: PGFService.hs
-  other-modules:
-    FastCGIUtils
-    Cache
-    URLEncoding
-    RunHTTP
-    ServeStaticFile
-  ghc-options: -threaded
   if os(windows)
     ghc-options: -optl-mwindows
+  else
+    build-depends: unix
 
 executable content-server
   buildable: False
