@@ -3,7 +3,7 @@
 concrete SymbolPnb of Symbol = CatPnb ** open Prelude, ResPnb in {
 
   flags coding = utf8;
-
+{-
  lin
 -- SymbPN i = {s = \\_ => i.s ; g = Masc} ;
   SymbPN i = {s = addGenitiveS i.s ; g = Masc} ;
@@ -42,6 +42,6 @@ oper
     -- not mauch we can do about that.
     addGenitiveS : Str -> Case => Str = \s -> 
      table {_ => s ++ "دا" } ;
-
+-}
 
 }

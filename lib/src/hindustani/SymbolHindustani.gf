@@ -2,7 +2,7 @@
 
 --concrete SymbolUrd of Symbol = CatUrd ** open Prelude, ResUrd, StringsHindustani in {
 incomplete concrete SymbolHindustani of Symbol = 
-  CatHindustani ** open Prelude, ResHindustani, CommonHindustani in {
+  CatHindustani ** open Prelude, ResHindustani, StringsHindustani, CommonHindustani in {
 
  lin
 -- SymbPN i = {s = \\_ => i.s ; g = Masc} ;
