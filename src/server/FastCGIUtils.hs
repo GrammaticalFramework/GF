@@ -1,5 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable, CPP #-}
-module FastCGIUtils (initFastCGI, loopFastCGI,
+module FastCGIUtils (--initFastCGI, loopFastCGI,
                      throwCGIError, handleCGIErrors,
                      stderrToFile,
                      outputJSONP,
@@ -13,7 +13,6 @@ import Control.Monad
 import Data.Dynamic
 import Data.IORef
 import Prelude hiding (catch)
-import System.Directory
 import System.Environment
 import System.Exit
 import System.IO
@@ -21,15 +20,15 @@ import System.IO.Unsafe
 #ifndef mingw32_HOST_OS
 import System.Posix
 #endif
-import System.Time
 
-import Network.FastCGI
+--import Network.FastCGI
+import Network.CGI
 
 import Text.JSON
-import qualified Codec.Binary.UTF8.String as UTF8 (encodeString, decodeString)
+import qualified Codec.Binary.UTF8.String as UTF8 (encodeString)
 import qualified Data.ByteString.Lazy as BS
 
-
+{- -- There are used in MorphoService.hs, but not in PGFService.hs
 initFastCGI :: IO ()
 initFastCGI = installSignalHandlers
 
@@ -40,7 +39,7 @@ loopFastCGI f =
            restartIfModified) 
          `catchAborted` logError "Request aborted"
        loopFastCGI f
-
+-}
 
 -- Signal handling for FastCGI programs.
 

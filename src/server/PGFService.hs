@@ -1,17 +1,18 @@
 {-# LANGUAGE DeriveDataTypeable, CPP #-}
+module PGFService(cgiMain,cgiMain',getPath,
+                  logFile,stderrToFile,
+                  newPGFCache) where
 
 import PGF (PGF)
 import qualified PGF
 import Cache
 import FastCGIUtils
 import URLEncoding
-import RunHTTP
-import ServeStaticFile
 
-import Network.FastCGI
+import Network.CGI
 import Text.JSON
 import Text.PrettyPrint (render, text, (<+>))
-import qualified Codec.Binary.UTF8.String as UTF8 (encodeString, decodeString)
+import qualified Codec.Binary.UTF8.String as UTF8 (decodeString)
 import qualified Data.ByteString.Lazy as BS
 
 import Control.Concurrent
@@ -22,53 +23,15 @@ import Data.Function (on)
 import Data.List (sortBy,intersperse,mapAccumL,nub)
 import qualified Data.Map as Map
 import Data.Maybe
-import System.Directory
 import System.Random
-import System.FilePath
 import System.Process
 import System.Exit
 import System.IO
-import System.Environment(getArgs)
 
 logFile :: FilePath
 logFile = "pgf-error.log"
 
-
-main :: IO ()
-main = do stderrToFile logFile
-          cache <- newCache PGF.readPGF
-          args <- getArgs
-          case args of
-            [] -> fcgiMain cache
-            ["http"] -> httpMain cache 41296
-            ["http",port] -> httpMain cache =<< readIO port
-
-httpMain cache port = runHTTP port (do log ; serve =<< getPath)
-  where
-    log = do method <- requestMethod
-             uri    <- getVarWithDefault "REQUEST_URI" "-"
-             logCGI $ method++" "++uri
-
-    serve path =
-        handleErrors . handleCGIErrors $
-        if takeExtension path==".pgf"
-        then cgiMain' cache path
-        else if takeFileName path=="grammars.cgi"
-             then grammarList (takeDirectory path)
-             else serveStaticFile path
-
-    grammarList dir =
-        do paths <- liftIO $ getDirectoryContents dir
-           let pgfs = [path|path<-paths, takeExtension path==".pgf"]
-           outputJSONP pgfs
-
-fcgiMain :: Cache PGF -> IO ()
-fcgiMain cache =
-#ifndef mingw32_HOST_OS
-          runFastCGIConcurrent' forkIO 100 (cgiMain cache)
-#else
-          runFastCGI (cgiMain cache)
-#endif
+newPGFCache = newCache PGF.readPGF
 
 getPath = getVarWithDefault "SCRIPT_FILENAME" ""
 
