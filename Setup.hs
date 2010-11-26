@@ -8,6 +8,7 @@ import Distribution.Simple.Setup
 import Distribution.PackageDescription hiding (Flag)
 import Control.Monad
 import Data.Maybe
+import Data.List(isPrefixOf)
 import System.IO
 import System.Cmd
 import System.FilePath
@@ -82,8 +83,8 @@ rglCommands =
 checkRGLArgs args flags = do
   let args' = filter (\arg -> not (arg == "present" ||
                                    arg == "minimal" ||
-                                   take (length rgl_prefix) arg == rgl_prefix ||
-                                   take (length langs_prefix) arg == langs_prefix)) args
+                                   rgl_prefix `isPrefixOf` arg ||
+                                   langs_prefix `isPrefixOf` arg)) args
   if null args'
     then return emptyHookedBuildInfo
     else die $ "Unrecognised flags: " ++ intercalate ", " args'
@@ -225,8 +226,8 @@ gfc mode pkg lbi file = do
   let dir = getRGLBuildDir lbi mode
       preproc = case mode of
                   AllTenses -> ""
-                  Present   -> "-preproc="++(rgl_src_dir </> "mkPresent")
-                  Minimal   -> "-preproc="++(rgl_src_dir </> "mkMinimal")
+                  Present   -> "-preproc="++({-rgl_src_dir </>-} "mkPresent")
+                  Minimal   -> "-preproc="++({-rgl_src_dir </>-} "mkMinimal")
   createDirectoryIfMissing True dir
   putStrLn $ "Compiling [" ++ show mode ++ "] " ++ file
   run_gfc pkg lbi ["-s", preproc, "--gfo-dir="++dir, file]
