@@ -1,4 +1,4 @@
-concrete MergeEng of Merge = BasicEng ** open DictLangEng, DictEng, ParadigmsEng, ResEng, ParamBasic in {
+concrete MergeEng of Merge = BasicEng ** open DictLangEng, DictEng, ParadigmsEng, ResEng, ParamBasic,ExtensionEng in {
    
 lin
   -- single instances 

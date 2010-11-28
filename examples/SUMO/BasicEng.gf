@@ -1,30 +1,30 @@
 --# -path=.:englishExtended:abstract:common:
-concrete BasicEng of Basic = CatEng - [Text] ** open DictLangEng, DictEng, ParadigmsEng, ResEng, Coordination, Prelude, ParamBasic, NounEng in {
+concrete BasicEng of Basic = open CatEng, ExtensionEng, DictLangEng, DictEng, ParadigmsEng, ResEng, Coordination, Prelude, ParamBasic, ConjunctionEng, NounEng in {
 
 lincat 
-  Class = CN ;
-  El = NP ;
-  Ind = NP ;
-  Var = PN ;
+  Class = CatEng.CN ;
+  El = CatEng.NP ;
+  Ind = CatEng.NP ;
+  Var = CatEng.PN ;
   SubClass = {} ;
   Inherits = {} ;
-  Desc = CN ;
-  Formula = PolSentence;
-  [El] = [NP];
-  [Class] = [CN];
-  Stmt = StmtS ;
+  Desc = CatEng.CN ;
+  Formula = ExtensionEng.PolSentence;
+  [El] = ConjunctionEng.ListNP;
+  [Class] =ExtensionEng.ListCN ;
+  Stmt = ExtensionEng.StmtS ;
 
 lin 
   BaseClass = {s1,s2 = \\_,_ => "";   
                g  =  Neutr;
                lock_ListCN=<>};  
-  ConsClass xs x = ConsCN xs x ;   
+  ConsClass xs x = ExtensionEng.ConsCN xs x ;   
   
   BaseEl c = {s1,s2 = \\_ => "";
               a = agrP3 Sg;
               lock_ListNP=<>};
          
-  ConsEl c xs x = ConsNP xs x ;     
+  ConsEl c xs x = ConjunctionEng.ConsNP xs x ;     
 
   and f1 f2 = {s = \\f,c => f1.s ! Indep ! c ++ "and" ++ f2.s ! Indep ! c; flag = NothingS; lock_PolSentence = <>};
   or f1 f2 = {s = \\f,c => f1.s ! Indep ! c ++ "or" ++ f2.s ! Indep ! c; flag = NothingS; lock_PolSentence = <>};

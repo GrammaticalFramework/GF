@@ -1,4 +1,4 @@
-concrete MidLevelOntologyEng of MidLevelOntology = MergeEng, ElementsEng ** open DictLangEng, DictEng, ParadigmsEng in {
+concrete MidLevelOntologyEng of MidLevelOntology = MergeEng, ElementsEng ** open DictLangEng, DictEng, ParadigmsEng,ExtensionEng in {
 
 lin
   -- individual instances :

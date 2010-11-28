@@ -1,7 +1,7 @@
 
 -- other functions needed for parsing 
 
-abstract Extension = Cat ** {
+abstract Extension =  {
 
 
 
@@ -9,6 +9,7 @@ cat
   PolSentence;
   StmtS ;
   [CN]{2};
+  N; N2; A; V; V2; CN; NP; Cl; Pol; Prep; Conj; -- redefined from Cat
 fun 
 
 VerbToNounV2 : V2 -> N2 ; -- discovering
@@ -21,7 +22,7 @@ sentToNoun : PolSentence -> NP ;
 UsePolSentence : Pol -> PolSentence -> StmtS ;
 
 at_Prep : Prep ; 
-per_Prep : Prep ;
+per_Prep : Prep ; 
 O1 : NP ;
 O2 : NP ;
 O3 : NP ;
