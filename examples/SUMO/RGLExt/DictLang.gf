@@ -6,8 +6,7 @@
 -- which may be more suitable to open in applications.
 
 abstract DictLang = 
-  Grammar,
-  Extension
-  ** {
+  Grammar
+  ** open Extension in {
  -- flags startcat=NP ;
   } ;
