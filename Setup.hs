@@ -76,7 +76,7 @@ rglCommands =
        return ()
   ]
   where
-    optl ls args = fromMaybe ls $ getOptLangs args
+    optl ls args = getOptLangs ls args
 
 --------------------------------------------------------
 
@@ -262,12 +262,21 @@ getOptMode args
   | otherwise           = AllTenses
 
 -- list of languages overriding the definitions above
-getOptLangs args = case [ls | arg <- args, let (f,ls) = splitAt (length langs_prefix) arg, f==langs_prefix] of
-  ls:_ -> return $ findLangs $ seps ls
-  _    -> Nothing
- where
-  seps = words . map (\c -> if c==',' then ' ' else c)
-  findLangs ls = [lang | lang@(_,la) <- langs, elem la ls]
+getOptLangs defaultLangs args =
+    case [ls | arg <- args,
+               let (f,ls) = splitAt (length langs_prefix) arg,
+               f==langs_prefix] of
+      ('+':ls):_ -> foldr addLang defaultLangs (seps ls)
+      ('-':ls):_ -> foldr removeLang defaultLangs (seps ls)
+      ls:_ -> findLangs langs (seps ls)
+      _    -> defaultLangs
+  where
+    seps = words . map (\c -> if c==',' then ' ' else c)
+    findLangs langs ls = [lang | lang@(_,la) <- langs, la `elem` ls]
+    removeLang l ls = [lang | lang@(_,la) <- ls, la/=l]
+    addLang l ls = if null (findLangs ls [l])
+                   then findLangs langs [l]++ls
+                   else ls
 
 getRGLBuildSubDir lbi mode =
   case mode of
