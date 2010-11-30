@@ -407,6 +407,9 @@ allCommands env@(pgf, mos) = Map.fromList [
        "If a grammar with the same concrete name is already in the state",
        "it is overwritten - but only if compilation succeeds.",
        "The grammar parser depends on the file name suffix:",
+       "  .cf    context-free (labelled BNF) source",
+       "  .ebnf  extended BNF source",
+       "  .gfm   multi-module GF source",
        "  .gf    normal GF source",
        "  .gfo   compiled GF source",
        "  .pgf   precompiled grammar in Portable Grammar Format"

@@ -4,7 +4,7 @@ concrete FoodIta of Food = {
     Phrase, Item, Kind, Quality = {s : Str} ;
 
   lin
-    Is item quality = {s = item.s ++ "è" ++ quality.s} ;
+    Is item quality = {s = item.s ++ "Ã¨" ++ quality.s} ;
     This kind = {s = "questo" ++ kind.s} ;
     That kind = {s = "quel" ++ kind.s} ;
     QKind quality kind = {s = kind.s ++ quality.s} ;

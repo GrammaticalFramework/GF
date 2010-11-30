@@ -1,12 +1,13 @@
-module Main where
+module GF.Compile.Multi (readMulti) where
 
-import List
-import Char
-import System
+import Data.List
+import Data.Char
 
+-- AR 29 November 2010
 -- quick way of writing a multilingual lexicon and (with some more work) a grammar
+-- also several modules in one file
+-- file suffix .gfm (GF Multi)
 
-usage = "usage: runghc Multi (-pgf)? file"
 
 {-
 -- This multi-line comment is a possible file in the format.
@@ -28,29 +29,41 @@ cheers ; skål ; terveydeksi, kippis
 -- verbatim concrete rules prefixed by ">" and comma-separated language list
 > Eng,Swe lin Gin = "gin" ; 
 
+-- multiple modules: modules as usual. Each module has to start from a new line.
+-- Should be UTF-8 encoded.
+
 -}
 
-
+{-
 main = do
- xx <- getArgs
- if null xx putStrLn usage else do
-  let (opts,file) = (init xx, last xx)
+  xx <- getArgs
+  if null xx then putStrLn usage else do 
+    let (opts,file) = (init xx, last xx)
+    (absn,cncns) <- readMulti opts file
+    if elem "-pgf" xx 
+      then do
+         system ("gf -make -s -optimize-pgf " ++ unwords (map gfFile cncns))
+         putStrLn $ "wrote " ++ absn ++ ".pgf"
+      else return ()
+-}
+
+readMulti :: FilePath -> IO (FilePath,[FilePath])
+readMulti file = do
   src <- readFile file
   let multi = getMulti (takeWhile (/='.') file) src
       absn  = absName multi
       cncns = cncNames multi
+      raws  = rawModules multi
   writeFile (gfFile absn) (absCode multi)
   mapM_ (uncurry writeFile) 
         [(gfFile cncn, cncCode absn cncn cod) | 
           cncn <- cncNames multi, let cod = [r | (la,r) <- cncRules multi, la == cncn]]
   putStrLn $ "wrote " ++ unwords (map gfFile (absn:cncns))
-  if elem "-pgf" xx 
-    then do
-       system ("gf -make -s -optimize-pgf " ++ unwords (map gfFile cncns))
-       putStrLn $ "wrote " ++ absn ++ ".pgf"
-    else return ()
+  mapM_ (uncurry writeFile) [(gfFile n,s) | (n,s) <- raws] --- overwrites those above
+  return (gfFile absn, map gfFile cncns)
 
 data Multi = Multi {
+  rawModules :: [(String,String)],
   absName  :: String,
   cncNames :: [String],
   startCat :: String,
@@ -60,6 +73,7 @@ data Multi = Multi {
 
 emptyMulti :: Multi 
 emptyMulti = Multi {
+  rawModules = [],
   absName  = "Abs",
   cncNames = [],
   startCat = "S",
@@ -78,7 +92,7 @@ cncCode ab cnc rules = unlines $ header : (reverse rules ++ ["}"]) where
   header = "concrete " ++ cnc ++ " of " ++ ab ++ " = {"
 
 getMulti :: String -> String -> Multi
-getMulti m s = foldl (flip addMulti) (emptyMulti{absName = m}) (lines s)
+getMulti m s = foldl (flip addMulti) (emptyMulti{absName = m}) (modlines (lines s))
 
 addMulti :: String -> Multi -> Multi
 addMulti line multi = case line of
@@ -97,11 +111,15 @@ addMulti line multi = case line of
      langs:ws   -> multi {
        cncRules = [(absName multi ++ la, unwords ws) | la <- chop ',' langs] ++ cncRules multi
        }
-  _ -> let (cat,fun,lins) = getRules (startCat multi) line 
-       in multi {
-         absRules = ("fun " ++ fun ++ " : " ++ cat ++ " ;") : absRules multi,
-         cncRules = zip (cncNames multi) lins ++ cncRules multi
-         }
+  _ -> case words line of
+        m:name:_ | isModule m -> multi {
+          rawModules = (name,line):rawModules multi
+          } 
+        _ -> let (cat,fun,lins) = getRules (startCat multi) line in 
+              multi {
+               absRules = ("fun " ++ fun ++ " : " ++ cat ++ " ;") : absRules multi,
+               cncRules = zip (cncNames multi) lins ++ cncRules multi
+               }
 
 getRules :: String -> String -> (String,String,[String])
 getRules cat line = (cat, fun, map lin rss) where
@@ -134,4 +152,14 @@ idChar c =
 gfFile :: FilePath -> FilePath
 gfFile f = f ++ ".gf"
 
+isModule :: String -> Bool
+isModule = flip elem 
+  ["abstract","concrete","incomplete","instance","interface","resource"]
 
+modlines :: [String] -> [String]
+modlines ss = case ss of
+  l:ls -> case words l of
+    w:_ | isModule w -> case break (isModule . concat . take 1 . words) ls of
+      (ms,rest) -> unlines (l:ms) : modlines rest
+    _ -> l : modlines ls
+  _ -> []
