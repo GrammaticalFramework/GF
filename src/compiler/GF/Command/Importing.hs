@@ -4,6 +4,7 @@ import PGF
 import PGF.Data
 
 import GF.Compile
+import GF.Compile.Multi (readMulti)
 import GF.Grammar (identC, SourceGrammar) -- for cc command
 import GF.Grammar.CF
 import GF.Grammar.EBNF
@@ -20,8 +21,12 @@ importGrammar :: PGF -> Options -> [FilePath] -> IO PGF
 importGrammar pgf0 _ [] = return pgf0
 importGrammar pgf0 opts files =
   case takeExtensions (last files) of
-    ".cf" -> importCF opts files getCF
+    ".cf"   -> importCF opts files getCF
     ".ebnf" -> importCF opts files getEBNF
+    ".gfm"  -> do
+      ascss <- mapM readMulti files
+      let cs = concatMap snd ascss
+      importGrammar pgf0 opts cs
     s | elem s [".gf",".gfo"] -> do
       res <- appIOE $ compileToPGF opts files
       case res of
