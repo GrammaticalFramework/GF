@@ -15,13 +15,13 @@ complete_output=get_completions()
 show_completions(complete_output)
 */
 
-function start_minibar(server,opts,target) {
+function Minibar(server,opts,target) {
     // Typically called when the HTML document is loaded
 
     /* --- Configuration ---------------------------------------------------- */
 
     // default values for options:
-    var options={
+    this.options={
 	show_abstract: false,
 	show_trees: false,
 	show_grouped_translations: true,
@@ -34,61 +34,81 @@ function start_minibar(server,opts,target) {
     }
 
     // Apply supplied options
-    if(opts) for(var o in opts) options[o]=opts[o];
+    if(opts) for(var o in opts) this.options[o]=opts[o];
 
     /* --- Creating user interface elements --------------------------------- */
 
-    var surface=div_id("surface");
-    var extra=div_id("extra");
-    var menubar=div_id("menubar");
-    var words=div_id("words");
-    var translations=div_id("translations");
+    this.surface=div_id("surface");
+    this.extra=div_id("extra");
+    this.menubar=div_id("menubar");
+    this.words=div_id("words");
+    this.translations=div_id("translations");
 
-    var minibar=element(target || "minibar");
-    minibar.innerHTML="";
-    appendChildren(minibar,[menubar,surface,words,translations,extra]);
+    this.minibar=element(target || "minibar");
+    this.minibar.innerHTML="";
+    with(this) {
+	appendChildren(minibar,[menubar,surface,words,translations,extra]);
+	append_extra_buttons(extra,options);
+    }
 
     // Filled in and added to minibar later:
-    var grammar_menu=empty_id("select","grammar_menu");
-    var from_menu=empty_id("select","from_menu");
-    var to_menu=empty_id("select","to_menu");
+    this.grammar_menu=empty_id("select","grammar_menu");
+    this.from_menu=empty_id("select","from_menu");
+    this.to_menu=empty_id("select","to_menu");
 
     /* --- Minibar client state initialisation ------------------------------ */
-    var grammar=null;
-    var current={from: null, input: ""};
-    var previous=null;
+    this.grammar=null;
+    this.current={from: null, input: ""};
+    this.previous=null;
 
-    /* --- Auxiliary functions ---------------------------------------------- */
+    this.server=server;
 
-    function show_grammarlist(grammars) {
+    /* --- Main program, this gets things going ----------------------------- */
+    with(this) {
+	if(server.grammar_list) show_grammarlist(server.grammar_list);
+	else server.get_grammarlist(bind(show_grammarlist,this));
+    }
+}
+
+/* --- Auxiliary functions ---------------------------------------------- */
+
+Minibar.prototype.show_grammarlist=function(grammars) {
+    debug(this)
+    with(this) {
 	//debug("show_grammarlist ")
 	menubar.innerHTML="";
 	if(grammars.length>1) {
 	    function opt(g) { return option(g,g); }
 	    appendChildren(grammar_menu,map(opt,grammars));
     	    grammar_menu.onchange=
-		function() { select_grammar(grammar_menu.value); };
+		bind(function() { select_grammar(grammar_menu.value); },this);
 	    appendChildren(menubar,[text("Grammar: "),grammar_menu]);
 	}
 	appendChildren(menubar,
 		       [text(" From: "), from_menu,
 			text(" To: "), to_menu,
-			button(options.delete_button_text,delete_last,"H"),
-			button("Clear",clear_all,"L")]);
+			button(options.delete_button_text,bind(delete_last,this),"H"),
+			button("Clear",bind(clear_all,this),"L")]);
 	if(options.random_button)
-	    menubar.appendChild(button("Random",generate_random,"R"));
+	    menubar.appendChild(button("Random",bind(generate_random,this),"R"));
 	if(options.help_url)
-	    menubar.appendChild(button("Help",open_help));
+	    menubar.appendChild(button("Help",bind(open_help,this)));
 	select_grammar(grammars[0]);
     }
+}
 
-    function select_grammar(grammar_name) {
-	//debug("select_grammar ");
-	function get_languages() { server.get_languages(show_languages); }
-	server.switch_grammar(grammar_name,get_languages);
+Minibar.prototype.select_grammar=function(grammar_name) {
+    var t=this;
+    //debug("select_grammar ");
+    function get_languages() {
+	t.server.get_languages(bind(t.show_languages,t));
     }
+    t.server.switch_grammar(grammar_name,get_languages);
+}
 
-    function show_languages(grammar_info) {
+Minibar.prototype.show_languages=function(grammar_info) {
+    var t=this;
+    with(t) {
 	//debug("show_languages ");
 	grammar=grammar_info;
 
@@ -96,11 +116,11 @@ function start_minibar(server,opts,target) {
 	    current.from=from_menu.value;
 	    clear_all();
 	}
-	from_menu.onchange=new_language;
+	from_menu.onchange=bind(new_language,t);
 	update_language_menu(from_menu,grammar);
 	set_initial_language(options,from_menu,grammar);
 
-	to_menu.onchange=get_translations;
+	to_menu.onchange=bind(get_translations,t);
 
 	update_language_menu(to_menu,grammar);
 	insertFirst(to_menu,option("All","All"));
@@ -108,27 +128,35 @@ function start_minibar(server,opts,target) {
 
 	new_language();
     }
+}
 
-    function clear_all1() {
+Minibar.prototype.clear_all1=function() {
+    with(this) {
 	remove_typed_input();
 	current.input="";
 	previous=null;
 	surface.innerHTML="";
 	translations.innerHTML="";
     }
+}
 
-    function clear_all() {
+Minibar.prototype.clear_all=function() {
+    with(this) {
 	clear_all1();
 	get_completions();
     }
+}
 
-    function get_completions() {
+Minibar.prototype.get_completions=function() {
+    with(this) {
 	//debug("get_completions ");
 	words.innerHTML="...";
-	server.complete(current.from,current.input,show_completions);
+	server.complete(current.from,current.input,bind(show_completions,this));
     }
+}
 
-    function show_completions(complete_output) {
+Minibar.prototype.show_completions=function(complete_output) {
+    with(this) {
 	//debug("show_completions ");
 	var completions=complete_output[0].completions;
 	var emptycnt=add_completions(completions)
@@ -139,8 +167,10 @@ function start_minibar(server,opts,target) {
 	}
 	else add_typed_input();
     }
+}
 
-    function add_completions(completions) {
+Minibar.prototype.add_completions=function(completions) {
+    with(this) {
 	if(words.timeout) clearTimeout(words.timeout),words.timeout=null;
 	words.innerHTML="";
 	words.completions=completions;
@@ -159,8 +189,10 @@ function start_minibar(server,opts,target) {
 	filter_completions(t,true);
 	return emptycnt;
     }
+}
 
-    function filter_completions(t,dim) {
+Minibar.prototype.filter_completions=function(t,dim) {
+    with(this) {
 	if(words.timeout) clearTimeout(words.timeout),words.timeout=null;
 	words.filtered=t;
 	//if(dim) debug('filter "'+t+'"');
@@ -188,18 +220,24 @@ function start_minibar(server,opts,target) {
 	if(dimmed>0)
 	    words.timeout=setTimeout(function(){ filter_completions(t,false)},1000);
     }
-    
-    function get_translations() {
+}
+ 
+Minibar.prototype.get_translations=function() {
+    with(this) {
 	var c=current;
 	if(options.show_grouped_translations)
-	    server.translategroup(c.from,c.input,show_groupedtranslations);
+	    server.translategroup(c.from,c.input,bind(show_groupedtranslations,this));
 	else
-	    server.translate(c.from,c.input,show_translations);
+	    server.translate(c.from,c.input,bind(show_translations,this));
     }
+}
 
-    function target_lang() { return langpart(to_menu.value,grammar.name); }
+Minibar.prototype.target_lang=function() {
+    with(this) return langpart(to_menu.value,grammar.name);
+}
 
-    function add_typed_input() {
+Minibar.prototype.add_typed_input=function() {
+    with(this) {
 	var inp;
 	if(surface.typed) inp=surface.typed;
 	else {
@@ -207,21 +245,25 @@ function start_minibar(server,opts,target) {
 	    inp.value="";
 	    inp.setAttribute("accesskey","t");
 	    inp.style.width="10em";
-	    inp.onkeyup=complete_typed;
+	    inp.onkeyup=bind(complete_typed,this);
 	    surface.appendChild(inp);
 	    surface.typed=inp;
 	}
 	inp.focus();
     }
+}
 
-    function remove_typed_input() {
+Minibar.prototype.remove_typed_input=function() {
+    with(this) {
 	if(surface.typed) {
 	    surface.typed.parentNode.removeChild(surface.typed);
 	    surface.typed=null;
 	}
     }
+}
 
-    function complete_typed(event) {
+Minibar.prototype.complete_typed=function(event) {
+    with(this) {
 	//element("debug").innerHTML=show_props(event,"event");
 	var inp=surface.typed;
 	//debug('"'+inp.value+'"');
@@ -235,36 +277,41 @@ function start_minibar(server,opts,target) {
 	}
 	else if(s!=words.filtered) filter_completions(s,true)
     }
+}
 
-    function generate_random() {
-
-	function show_random(random) {
-	    clear_all1();
-	    add_words(random[0].text);
-	}
-
-	function lin_random(abs) {
-	    server.linearize(abs[0].tree,current.from,show_random);
-	}
-	server.get_random(lin_random);
+Minibar.prototype.generate_random=function() {
+    var t=this;
+    function show_random(random) {
+	t.clear_all1();
+	t.add_words(random[0].text);
     }
+    
+    function lin_random(abs) {
+	t.server.linearize(abs[0].tree,t.current.from,show_random);
+    }
+    t.server.get_random(lin_random);
+}
 
-    function add_words(s) {
-	var words=s.split(" ");
-	for(var i=0;i<words.length;i++)
-	    add_word1(words[i]+" ");
+Minibar.prototype.add_words=function(s) {
+    with(this) {
+	var ws=s.split(" ");
+	for(var i=0;i<ws.length;i++)
+	    add_word1(ws[i]+" ");
 	get_completions();
     }
+}
 
-    function word(s) { 
-	function click_word() {
-	    if(surface.typed) surface.typed.value="";
-	    add_word(s);
-	}
-	return button(s,click_word);
+Minibar.prototype.word=function(s) { 
+    var t=this;
+    function click_word() {
+	if(t.surface.typed) t.surface.typed.value="";
+	t.add_word(s);
     }
+    return button(s,click_word);
+}
 
-    function add_word(s) {
+Minibar.prototype.add_word=function(s) {
+    with(this) {
 	add_word1(s+" ");
 	if(surface.typed) {
 	    var s2;
@@ -277,16 +324,20 @@ function start_minibar(server,opts,target) {
 	}
 	get_completions();
     }
-    
-    function add_word1(s) {
+}
+
+Minibar.prototype.add_word1=function(s) {
+    with(this) {
 	previous={ input: current.input, previous: previous };
 	current.input+=s;
 	var w=span_class("word",text(s));
 	if(surface.typed) surface.insertBefore(w,surface.typed);
 	else surface.appendChild(w);
     }
+}
 
-    function delete_last() {
+Minibar.prototype.delete_last=function() {
+    with(this) {
 	if(surface.typed && surface.typed.value!="")
 	    surface.typed.value="";
 	else if(previous) {
@@ -301,12 +352,16 @@ function start_minibar(server,opts,target) {
 	    get_completions();
 	}
     }
+}
 
-    function tdt(tree_btn,txt) {
+Minibar.prototype.tdt=function(tree_btn,txt) {
+    with(this) {
 	return options.show_trees ? tda([tree_btn,txt]) : td(txt);
     }
+}
 
-    function show_translations(translationResults) {
+Minibar.prototype.show_translations=function(translationResults) {
+    with(this) {
 	var trans=translations;
 	//var to=target_lang(); // wrong
 	var to=to_menu.value;
@@ -344,8 +399,10 @@ function start_minibar(server,opts,target) {
 	    }
 	}
     }
-    
-    function show_groupedtranslations(translationsResult) {
+}
+
+Minibar.prototype.show_groupedtranslations=function(translationsResult) {
+    with(this) {
 	var trans=translations;
 	var to=target_lang();
 	//var to=to_menu.value // wrong
@@ -368,15 +425,19 @@ function start_minibar(server,opts,target) {
 	    }
 	}
     }
+}
 
-    function append_extra_buttons(extra,options) {
+Minibar.prototype.append_extra_buttons=function(extra,options) {
+    with(this) {
 	if(options.try_google)
-	    extra.appendChild(button("Try Google Translate",try_google));
+	    extra.appendChild(button("Try Google Translate",bind(try_google,this)));
 	if(options.feedback_url)
-	    appendChildren(extra,[text(" "),button("Feedback",open_feedback)]);
+	    appendChildren(extra,[text(" "),button("Feedback",bind(open_feedback,this))]);
     }
+}
 
-    function try_google() {
+Minibar.prototype.try_google=function() {
+    with(this) {
 	var to=target_lang();
 	var s=current.input;
 	if(surface.typed) s+=surface.typed.value;
@@ -386,21 +447,19 @@ function start_minibar(server,opts,target) {
 	url+="&q="+encodeURIComponent(s);
 	window.open(url);
     }
+}
 
-    function open_help() { open_popup(options.help_url,"help"); }
+Minibar.prototype.open_help=function() {
+    with(this) open_popup(options.help_url,"help");
+}
 
-    function open_feedback() {
+Minibar.prototype.open_feedback=function() {
+    with(this) {
 	// make the minibar state easily accessible from the feedback page:
 	minibar.state={grammar:grammar,current:current,to:to_menu.value,
 		       translations:translations};
 	open_popup(options.feedback_url,'feedback');
     }
-
-    /* --- Main program, this gets things going ----------------------------- */
-    append_extra_buttons(extra,options);
-
-    if(server.grammar_list) show_grammarlist(server.grammar_list);
-    else server.get_grammarlist(show_grammarlist);
 }
 
 function update_language_menu(menu,grammar) {
