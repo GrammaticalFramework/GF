@@ -1,4 +1,11 @@
--- baseline
+-- Full .gfm format: multi-module files (see Words.gfm for a baseline format)
+-- The compiler recognizes the suffix .gfm and a file for each module.
+--   Food.gf, FoodEng.gf, FoodIta.gf
+-- The first non-comment line must give a list of lang names for the top modules.
+-- This modules are the ones imported in 'import Food.gfm'.
+-- Their prefix comes from this file.
+-- This file must be UTF-8 encoded.
+
 
 > langs Eng Ita
 
