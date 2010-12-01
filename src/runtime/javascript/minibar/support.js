@@ -4,6 +4,14 @@ function element(id) {
   return document.getElementById(id);
 }
 
+/* --- JavaScript tricks ---------------------------------------------------- */
+
+// To be able to object methods that refer to "this" as callbacks
+// See section 3.3 of https://github.com/spencertipping/js-in-ten-minutes/raw/master/js-in-ten-minutes.pdf
+function bind(f, this_value) {
+    return function () {return f.apply (this_value, arguments)};
+};
+
 /* --- JSONP ---------------------------------------------------------------- */
 
 // Inspired by the function jsonp from 
