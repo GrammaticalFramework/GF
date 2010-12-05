@@ -126,7 +126,10 @@ module PGF(
            readProbabilitiesFromFile,
            
            -- * Browsing
-           browse
+           browse,
+           -- * ToAPI 
+           exprToAPI, 
+           stringToAPI 
           ) where
 
 import PGF.CId
@@ -141,6 +144,7 @@ import PGF.Expr (Tree)
 import PGF.Morphology
 import PGF.Data
 import PGF.Binary
+import PGF.ToAPI
 import qualified PGF.Forest as Forest
 import qualified PGF.Parse as Parse
 

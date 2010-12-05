@@ -46,6 +46,8 @@ library
     PGF.Probabilistic
     PGF.Forest
     PGF.Optimize
+    PGF.Signature
+    PGF.ToAPI
     GF.Data.TrieMap
     GF.Data.Utilities
     GF.Data.SortedList
