@@ -75,10 +75,14 @@
     <LI><A HREF="#RS" TITLE="RS - relative">RS - relative</A>
     <LI><A HREF="#S" TITLE="S - declarative sentence">S - declarative sentence</A>
     <LI><A HREF="#SC" TITLE="SC - embedded sentence or question">SC - embedded sentence or question</A>
+    <LI><A HREF="#SSlash">SSlash</A>
+    <LI><A HREF="#Sub100">Sub100</A>
+    <LI><A HREF="#Sub1000">Sub1000</A>
     <LI><A HREF="#Subj" TITLE="Subj - subjunction">Subj - subjunction</A>
     <LI><A HREF="#Temp" TITLE="Temp - temporal and aspectual features">Temp - temporal and aspectual features</A>
     <LI><A HREF="#Tense" TITLE="Tense - tense">Tense - tense</A>
     <LI><A HREF="#Text" TITLE="Text - text consisting of several phrases">Text - text consisting of several phrases</A>
+    <LI><A HREF="#Unit">Unit</A>
     <LI><A HREF="#Utt" TITLE="Utt - sentence, question, word...">Utt - sentence, question, word...</A>
     <LI><A HREF="#V" TITLE="V - one-place verb">V - one-place verb</A>
     <LI><A HREF="#V2" TITLE="V2 - two-place verb">V2 - two-place verb</A>
@@ -95,27 +99,27 @@
     <LI><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV - verb-phrase-complement verb</A>
     <LI><A HREF="#Voc" TITLE="Voc - vocative or "please"">Voc - vocative or "please"</A>
     </UL>
-  <LI><A HREF="#toc79">Lexical Paradigms</A>
+  <LI><A HREF="#toc83">Lexical Paradigms</A>
     <UL>
-    <LI><A HREF="#toc80">Paradigms for Bulgarian</A>
-    <LI><A HREF="#toc81">Paradigms for Catalan</A>
-    <LI><A HREF="#toc82">Paradigms for Danish</A>
-    <LI><A HREF="#toc83">Paradigms for Dutch</A>
-    <LI><A HREF="#toc84">Paradigms for English</A>
-    <LI><A HREF="#toc85">Paradigms for Finnish</A>
-    <LI><A HREF="#toc86">Paradigms for French</A>
-    <LI><A HREF="#toc87">Paradigms for German</A>
-    <LI><A HREF="#toc88">Paradigms for Italian</A>
-    <LI><A HREF="#toc89">Paradigms for Norwegian</A>
-    <LI><A HREF="#toc90">Paradigms for Polish</A>
-    <LI><A HREF="#toc91">Paradigms for Romanian</A>
-    <LI><A HREF="#toc92">Paradigms for Russian</A>
-    <LI><A HREF="#toc93">Paradigms for Spanish</A>
-    <LI><A HREF="#toc94">Paradigms for Swedish</A>
-    <LI><A HREF="#toc95">Paradigms for Urdu</A>
+    <LI><A HREF="#toc84">Paradigms for Bulgarian</A>
+    <LI><A HREF="#toc85">Paradigms for Catalan</A>
+    <LI><A HREF="#toc86">Paradigms for Danish</A>
+    <LI><A HREF="#toc87">Paradigms for Dutch</A>
+    <LI><A HREF="#toc88">Paradigms for English</A>
+    <LI><A HREF="#toc89">Paradigms for Finnish</A>
+    <LI><A HREF="#toc90">Paradigms for French</A>
+    <LI><A HREF="#toc91">Paradigms for German</A>
+    <LI><A HREF="#toc92">Paradigms for Italian</A>
+    <LI><A HREF="#toc93">Paradigms for Norwegian</A>
+    <LI><A HREF="#toc94">Paradigms for Polish</A>
+    <LI><A HREF="#toc95">Paradigms for Romanian</A>
+    <LI><A HREF="#toc96">Paradigms for Russian</A>
+    <LI><A HREF="#toc97">Paradigms for Spanish</A>
+    <LI><A HREF="#toc98">Paradigms for Swedish</A>
+    <LI><A HREF="#toc99">Paradigms for Urdu</A>
     </UL>
-  <LI><A HREF="#toc96">Browsing the libraries with GF commands</A>
-  <LI><A HREF="#toc97">An Example of Usage</A>
+  <LI><A HREF="#toc100">Browsing the libraries with GF commands</A>
+  <LI><A HREF="#toc101">An Example of Usage</A>
   </UL>
 
 <P></P>
@@ -162,7 +166,7 @@ of <I>C</I> that takes <I>D</I> as an argument. What the constructors exactly ar
 and what other arguments they take, is described by separate tables for
 each category.
 </P>
-<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
+<TABLE ALIGN="center" BORDER="1" CELLPADDING="4">
 <TR>
 <TD ALIGN="right"><center><IMG ALIGN="middle" SRC="categories.png" USEMAP="#categories" BORDER="0" ALT=""></center></TD>
 </TR>
@@ -227,7 +231,7 @@ also in the <CODE>Paradigms</CODE> modules.
 </P>
 <A NAME="toc4"></A>
 <H2>Explanations</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Category</TH>
 <TH>Explanation</TH>
@@ -572,7 +576,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="AP"></A>
 <H2>AP - adjectival phrase</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -586,12 +590,12 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkAP</CODE></TD>
 <TD><A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A></TD>
-<TD><I>old</I></TD>
+<TD><I>warm</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkAP</CODE></TD>
 <TD><A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A></TD>
-<TD><I>older than John</I></TD>
+<TD><I>warmer than Paris</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkAP</CODE></TD>
@@ -616,6 +620,11 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkAP</CODE></TD>
 <TD><A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A></TD>
+<TD><I>ready to go</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#SC" TITLE="SC - embedded sentence or question">SC</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A></TD>
 <TD><I>ready to go</I></TD>
 </TR>
 <TR>
@@ -657,7 +666,7 @@ Lexical category, constructors given in
 
 <A NAME="AdA"></A>
 <H2>AdA - adjective-modifying adverb</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -692,7 +701,7 @@ Lexical category, constructors given in
 
 <A NAME="AdN"></A>
 <H2>AdN - numeral-modifying adverb</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -722,7 +731,7 @@ Lexical category, constructors given in
 
 <A NAME="AdV"></A>
 <H2>AdV - adverb directly attached to verb</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -737,7 +746,7 @@ Lexical category, constructors given in
 
 <A NAME="Adv"></A>
 <H2>Adv - verb-phrase-modifying adverb</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -771,7 +780,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
 <TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
-<TD><I>with John</I></TD>
+<TD><I>in the house</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
@@ -786,7 +795,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
 <TD><A HREF="#CAdv" TITLE="CAdv - comparative adverb">CAdv</A> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
-<TD><I>more warmly than John walks</I></TD>
+<TD><I>more warmly than he runs</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
@@ -827,7 +836,7 @@ Lexical category, constructors given in
 
 <A NAME="Ant"></A>
 <H2>Ant - anteriority</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -836,18 +845,18 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>anteriorAnt</CODE></TD>
 <TD><A HREF="#Ant" TITLE="Ant - anteriority">Ant</A></TD>
-<TD><I>(John has walked)</I></TD>
+<TD><I>John has walked</I></TD>
 </TR>
 <TR>
 <TD><CODE>simultaneousAnt</CODE></TD>
 <TD><A HREF="#Ant" TITLE="Ant - anteriority">Ant</A></TD>
-<TD><I>(John walks) [default]</I></TD>
+<TD><I>John walks [default]</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="CAdv"></A>
 <H2>CAdv - comparative adverb</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -872,7 +881,7 @@ Lexical category, constructors given in
 
 <A NAME="CN"></A>
 <H2>CN - common noun (without determiner)</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -896,12 +905,12 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkCN</CODE></TD>
 <TD><A HREF="#N2" TITLE="N2 - relational noun">N2</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A></TD>
-<TD><I>son</I></TD>
+<TD><I>mother</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCN</CODE></TD>
 <TD><A HREF="#N3" TITLE="N3 - three-place relational noun">N3</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A></TD>
-<TD><I>flight</I></TD>
+<TD><I>distance</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCN</CODE></TD>
@@ -926,7 +935,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkCN</CODE></TD>
 <TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#RS" TITLE="RS - relative">RS</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A></TD>
-<TD><I>house that John loves</I></TD>
+<TD><I>house that John owns</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCN</CODE></TD>
@@ -936,12 +945,12 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkCN</CODE></TD>
 <TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A></TD>
-<TD><I>house in the city</I></TD>
+<TD><I>house on the hill</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCN</CODE></TD>
 <TD><A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A></TD>
-<TD><I>big house in the city</I></TD>
+<TD><I>big house on the hill</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCN</CODE></TD>
@@ -960,6 +969,11 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkCN</CODE></TD>
+<TD><A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#SC" TITLE="SC - embedded sentence or question">SC</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A></TD>
+<TD><I>reason to walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
 <TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A></TD>
 <TD><I>king John</I></TD>
 </TR>
@@ -972,7 +986,7 @@ Lexical category, constructors given in
 
 <A NAME="Card"></A>
 <H2>Card - cardinal number</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -981,12 +995,12 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkCard</CODE></TD>
 <TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Card" TITLE="Card - cardinal number">Card</A></TD>
-<TD><I>thirty-five (given by "35")</I></TD>
+<TD><I>thirty-five (given as "35")</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCard</CODE></TD>
 <TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A> <CODE>-&gt;</CODE> <A HREF="#Card" TITLE="Card - cardinal number">Card</A></TD>
-<TD><I>thirty-five (given in any way)</I></TD>
+<TD><I>twenty</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCard</CODE></TD>
@@ -996,13 +1010,13 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkCard</CODE></TD>
 <TD><A HREF="#AdN" TITLE="AdN - numeral-modifying adverb">AdN</A> <CODE>-&gt;</CODE> <A HREF="#Card" TITLE="Card - cardinal number">Card</A> <CODE>-&gt;</CODE> <A HREF="#Card" TITLE="Card - cardinal number">Card</A></TD>
-<TD><I>mkCard</I></TD>
+<TD><I>almost fifty</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="Cl"></A>
 <H2>Cl - declarative clause, with all tenses</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1036,12 +1050,12 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkCl</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VS" TITLE="VS - sentence-complement verb">VS</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
-<TD><I>John says that it is good</I></TD>
+<TD><I>John says that she walks</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCl</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VQ" TITLE="VQ - question-complement verb">VQ</A> <CODE>-&gt;</CODE> <A HREF="#QS" TITLE="QS - question">QS</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
-<TD><I>John wonders if it is good</I></TD>
+<TD><I>John wonders who walks</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCl</CODE></TD>
@@ -1056,17 +1070,17 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkCl</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#V2S" TITLE="V2S - verb with NP and S complement">V2S</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
-<TD><I>John tells her that we are here</I></TD>
+<TD><I>John tells her that we walk</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCl</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#V2Q" TITLE="V2Q - verb with NP and Q complement">V2Q</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QS" TITLE="QS - question">QS</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
-<TD><I>John asks her who is here</I></TD>
+<TD><I>John asks her who walks</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCl</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#V2V" TITLE="V2V - verb with NP and V complement">V2V</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
-<TD><I>John forces us to sleep</I></TD>
+<TD><I>John forces her to walk</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCl</CODE></TD>
@@ -1090,6 +1104,11 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkCl</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
+<TD><I>John is the man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
 <TD><I>John is a man</I></TD>
 </TR>
@@ -1100,18 +1119,38 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkCl</CODE></TD>
-<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
-<TD><I>John is the man</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkCl</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
 <TD><I>John is here</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCl</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
-<TD><I>John walks here</I></TD>
+<TD><I>John always walks here</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
+<TD><I>there is a house</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
+<TD><I>there is an old house</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
+<TD><I>there are five houses</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#RS" TITLE="RS - relative">RS</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
+<TD><I>it is John who walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
+<TD><I>it is here he walks</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkCl</CODE></TD>
@@ -1125,34 +1164,14 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkCl</CODE></TD>
-<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
-<TD><I>there is a house</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkCl</CODE></TD>
-<TD><A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
-<TD><I>there is an old houses</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkCl</CODE></TD>
-<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
-<TD><I>there are five houses</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkCl</CODE></TD>
-<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#RS" TITLE="RS - relative">RS</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
-<TD><I>it is John that walks</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkCl</CODE></TD>
-<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
-<TD><I>it is here John walks</I></TD>
+<TD><A HREF="#SC" TITLE="SC - embedded sentence or question">SC</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
+<TD><I>mkCl</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="ClSlash"></A>
 <H2>ClSlash</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1160,35 +1179,64 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkClSlash</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VPSlash" TITLE="VPSlash - verb phrase missing complement">VPSlash</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A></TD>
+<TD><I>(whom) he sees here</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkClSlash</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A></TD>
-<TD><I>(whom) John loves</I></TD>
+<TD><I>(whom) he sees</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkClSlash</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A></TD>
-<TD><I>(whom) John wants to see</I></TD>
+<TD><I>(whom) he wants to see</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkClSlash</CODE></TD>
 <TD><A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A></TD>
-<TD><I>(with whom) John walks</I></TD>
+<TD><I>(with whom) he walks</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkClSlash</CODE></TD>
 <TD><A HREF="#ClSlash">ClSlash</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A></TD>
-<TD><I>(whom) John loves today</I></TD>
+<TD><I>(whom) he sees tomorrow</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkClSlash</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VS" TITLE="VS - sentence-complement verb">VS</A> <CODE>-&gt;</CODE> <A HREF="#SSlash">SSlash</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A></TD>
+<TD><I>(whom) she says that he loves</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="Comp"></A>
 <H2>Comp - complement of copula, such as AP</H2>
-<P>
-Lexical category, constructors given in
-<A HREF="#RParadigms">lexical paradigms</A>.
-</P>
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>mkComp</CODE></TD>
+<TD><A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#Comp" TITLE="Comp - complement of copula, such as AP">Comp</A></TD>
+<TD><I>very old</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkComp</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Comp" TITLE="Comp - complement of copula, such as AP">Comp</A></TD>
+<TD><I>this man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkComp</CODE></TD>
+<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#Comp" TITLE="Comp - complement of copula, such as AP">Comp</A></TD>
+<TD><I>here</I></TD>
+</TR>
+</TABLE>
+
 <A NAME="Conj"></A>
 <H2>Conj - conjunction</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1223,7 +1271,7 @@ Lexical category, constructors given in
 
 <A NAME="Det"></A>
 <H2>Det - determiner phrase</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1266,23 +1314,18 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkDet</CODE></TD>
-<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> (<A HREF="#Ord" TITLE="Ord - ordinal number (used in Det)">Ord</A>) <CODE>-&gt;</CODE> <A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
-<TD><I>this first</I></TD>
+<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> <A HREF="#Card" TITLE="Card - cardinal number">Card</A> <CODE>-&gt;</CODE> <A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
+<TD><I>these five</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkDet</CODE></TD>
-<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> <A HREF="#Num" TITLE="Num - number determining element">Num</A> <CODE>-&gt;</CODE> <A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
-<TD><I>these</I></TD>
+<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> <A HREF="#Ord" TITLE="Ord - ordinal number (used in Det)">Ord</A> <CODE>-&gt;</CODE> <A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
+<TD><I>the best</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkDet</CODE></TD>
-<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> <A HREF="#Num" TITLE="Num - number determining element">Num</A> <CODE>-&gt;</CODE> (<A HREF="#Ord" TITLE="Ord - ordinal number (used in Det)">Ord</A>) <CODE>-&gt;</CODE> <A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
+<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> <A HREF="#Num" TITLE="Num - number determining element">Num</A> <CODE>-&gt;</CODE> <A HREF="#Ord" TITLE="Ord - ordinal number (used in Det)">Ord</A> <CODE>-&gt;</CODE> <A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
 <TD><I>these five best</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkDet</CODE></TD>
-<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> <A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
-<TD><I>this</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkDet</CODE></TD>
@@ -1292,12 +1335,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkDet</CODE></TD>
 <TD><A HREF="#Card" TITLE="Card - cardinal number">Card</A> <CODE>-&gt;</CODE> <A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
-<TD><I>almost twenty</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkDet</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A> <CODE>-&gt;</CODE> <A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
-<TD><I>five</I></TD>
+<TD><I>forty</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkDet</CODE></TD>
@@ -1306,13 +1344,18 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkDet</CODE></TD>
+<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A> <CODE>-&gt;</CODE> <A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
+<TD><I>five</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkDet</CODE></TD>
 <TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A> <CODE>-&gt;</CODE> <A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
-<TD><I>my (house)</I></TD>
+<TD><I>my</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkDet</CODE></TD>
 <TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A> <CODE>-&gt;</CODE> <A HREF="#Num" TITLE="Num - number determining element">Num</A> <CODE>-&gt;</CODE> <A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
-<TD><I>my (houses)</I></TD>
+<TD><I>my five</I></TD>
 </TR>
 <TR>
 <TD><CODE>much_Det</CODE></TD>
@@ -1335,6 +1378,11 @@ Lexical category, constructors given in
 <TD><I>the (houses)</I></TD>
 </TR>
 <TR>
+<TD><CODE>theSg_Det</CODE></TD>
+<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
+<TD><I>the (houses)</I></TD>
+</TR>
+<TR>
 <TD><CODE>the_Det</CODE></TD>
 <TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
 <TD><I>the (house)</I></TD>
@@ -1343,7 +1391,7 @@ Lexical category, constructors given in
 
 <A NAME="Dig"></A>
 <H2>Dig</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1403,7 +1451,7 @@ Lexical category, constructors given in
 
 <A NAME="Digits"></A>
 <H2>Digits - cardinal or ordinal in digits</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1411,84 +1459,24 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkDigits</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
+<TD><I>35 (from string "35")</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkDigits</CODE></TD>
 <TD><A HREF="#Dig">Dig</A> <CODE>-&gt;</CODE> <A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>8</I></TD>
+<TD><I>4</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkDigits</CODE></TD>
 <TD><A HREF="#Dig">Dig</A> <CODE>-&gt;</CODE> <A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A> <CODE>-&gt;</CODE> <A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>876</I></TD>
-</TR>
-<TR>
-<TD><CODE>n1000_Digits</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>1,000</I></TD>
-</TR>
-<TR>
-<TD><CODE>n100_Digits</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>100</I></TD>
-</TR>
-<TR>
-<TD><CODE>n10_Digits</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>10</I></TD>
-</TR>
-<TR>
-<TD><CODE>n1_Digits</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>1</I></TD>
-</TR>
-<TR>
-<TD><CODE>n20_Digits</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>20</I></TD>
-</TR>
-<TR>
-<TD><CODE>n2_Digits</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>2</I></TD>
-</TR>
-<TR>
-<TD><CODE>n3_Digits</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>3</I></TD>
-</TR>
-<TR>
-<TD><CODE>n4_Digits</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>4</I></TD>
-</TR>
-<TR>
-<TD><CODE>n5_Digits</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>5</I></TD>
-</TR>
-<TR>
-<TD><CODE>n6_Digits</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>6</I></TD>
-</TR>
-<TR>
-<TD><CODE>n7_Digits</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>7</I></TD>
-</TR>
-<TR>
-<TD><CODE>n8_Digits</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>8</I></TD>
-</TR>
-<TR>
-<TD><CODE>n9_Digits</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A></TD>
-<TD><I>9</I></TD>
+<TD><I>1,233,432</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="IAdv"></A>
 <H2>IAdv - interrogative adverb</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1539,7 +1527,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="IDet"></A>
 <H2>IDet - interrogative determiner</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1550,11 +1538,31 @@ Lexical category, constructors given in
 <TD><A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A></TD>
 <TD><I>how8many</I></TD>
 </TR>
+<TR>
+<TD><CODE>mkIDet</CODE></TD>
+<TD><A HREF="#IQuant">IQuant</A> <CODE>-&gt;</CODE> <A HREF="#Num" TITLE="Num - number determining element">Num</A> <CODE>-&gt;</CODE> <A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A></TD>
+<TD><I>which (songs)</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkIDet</CODE></TD>
+<TD><A HREF="#IQuant">IQuant</A> <CODE>-&gt;</CODE> <A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A></TD>
+<TD><I>mkIDet</I></TD>
+</TR>
+<TR>
+<TD><CODE>whichPl_IDet</CODE></TD>
+<TD><A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A></TD>
+<TD><I>whichPl</I></TD>
+</TR>
+<TR>
+<TD><CODE>which_IDet</CODE></TD>
+<TD><A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A></TD>
+<TD><I>which</I></TD>
+</TR>
 </TABLE>
 
 <A NAME="IP"></A>
 <H2>IP - interrogative pronoun</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1562,13 +1570,33 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkIP</CODE></TD>
-<TD><A HREF="#IQuant">IQuant</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
-<TD><I>which city</I></TD>
+<TD><A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
+<TD><I>which five big cities</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkIP</CODE></TD>
-<TD><A HREF="#IQuant">IQuant</A> <CODE>-&gt;</CODE> (<A HREF="#Num" TITLE="Num - number determining element">Num</A>) <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
-<TD><I>which five big cities</I></TD>
+<TD><A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
+<TD><I>which five cities</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkIP</CODE></TD>
+<TD><A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A> <CODE>-&gt;</CODE> <A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
+<TD><I>which five</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkIP</CODE></TD>
+<TD><A HREF="#IQuant">IQuant</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
+<TD><I>which big cities</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkIP</CODE></TD>
+<TD><A HREF="#IQuant">IQuant</A> <CODE>-&gt;</CODE> <A HREF="#Num" TITLE="Num - number determining element">Num</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
+<TD><I>which five cities</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkIP</CODE></TD>
+<TD><A HREF="#IQuant">IQuant</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
+<TD><I>which city</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkIP</CODE></TD>
@@ -1586,6 +1614,11 @@ Lexical category, constructors given in
 <TD><I>what (singular)</I></TD>
 </TR>
 <TR>
+<TD><CODE>what_IP</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
+<TD><I>what (singular)</I></TD>
+</TR>
+<TR>
 <TD><CODE>whoPl_IP</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
 <TD><I>who (plural)</I></TD>
@@ -1595,11 +1628,16 @@ Lexical category, constructors given in
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
 <TD><I>who (singular)</I></TD>
 </TR>
+<TR>
+<TD><CODE>who_IP</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
+<TD><I>who (singular)</I></TD>
+</TR>
 </TABLE>
 
 <A NAME="IQuant"></A>
 <H2>IQuant</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1614,7 +1652,7 @@ Lexical category, constructors given in
 
 <A NAME="Imp"></A>
 <H2>Imp - imperative</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1622,24 +1660,24 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkImp</CODE></TD>
-<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Imp" TITLE="Imp - imperative">Imp</A></TD>
+<TD><A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#Imp" TITLE="Imp - imperative">Imp</A></TD>
 <TD><I>go</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkImp</CODE></TD>
-<TD><A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Imp" TITLE="Imp - imperative">Imp</A></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Imp" TITLE="Imp - imperative">Imp</A></TD>
 <TD><I>take it</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkImp</CODE></TD>
-<TD><A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#Imp" TITLE="Imp - imperative">Imp</A></TD>
-<TD><I>go there now</I></TD>
+<TD><A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Imp" TITLE="Imp - imperative">Imp</A></TD>
+<TD><I>come here now</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="ImpForm"></A>
 <H2>ImpForm</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1648,17 +1686,17 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>pluralImpForm</CODE></TD>
 <TD><A HREF="#ImpForm">ImpForm</A></TD>
-<TD><I>(help yourselves)</I></TD>
+<TD><I>help yourselves</I></TD>
 </TR>
 <TR>
 <TD><CODE>politeImpForm</CODE></TD>
 <TD><A HREF="#ImpForm">ImpForm</A></TD>
-<TD><I>(help yourself) (polite singular)</I></TD>
+<TD><I>help yourself <A HREF="singular">polite</A></I></TD>
 </TR>
 <TR>
 <TD><CODE>singularImpForm</CODE></TD>
 <TD><A HREF="#ImpForm">ImpForm</A></TD>
-<TD><I>(help yourself) [default]</I></TD>
+<TD><I>help yourself [default]</I></TD>
 </TR>
 </TABLE>
 
@@ -1670,7 +1708,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="ListAP"></A>
 <H2>ListAP</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1679,18 +1717,18 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkListAP</CODE></TD>
 <TD><A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#ListAP">ListAP</A></TD>
-<TD><I>old, big</I></TD>
+<TD><I>mkListAP</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkListAP</CODE></TD>
 <TD><A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#ListAP">ListAP</A> <CODE>-&gt;</CODE> <A HREF="#ListAP">ListAP</A></TD>
-<TD><I>old, big, warm</I></TD>
+<TD><I>mkListAP</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="ListAdv"></A>
 <H2>ListAdv</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1699,18 +1737,18 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkListAdv</CODE></TD>
 <TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#ListAdv">ListAdv</A></TD>
-<TD><I>here, now</I></TD>
+<TD><I>mkListAdv</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkListAdv</CODE></TD>
 <TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#ListAdv">ListAdv</A> <CODE>-&gt;</CODE> <A HREF="#ListAdv">ListAdv</A></TD>
-<TD><I>to me, here, now</I></TD>
+<TD><I>mkListAdv</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="ListNP"></A>
 <H2>ListNP</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1719,18 +1757,18 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkListNP</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#ListNP">ListNP</A></TD>
-<TD><I>John, I</I></TD>
+<TD><I>mkListNP</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkListNP</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#ListNP">ListNP</A> <CODE>-&gt;</CODE> <A HREF="#ListNP">ListNP</A></TD>
-<TD><I>John, I, that</I></TD>
+<TD><I>mkListNP</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="ListRS"></A>
 <H2>ListRS</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1739,18 +1777,18 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkListRS</CODE></TD>
 <TD><A HREF="#RS" TITLE="RS - relative">RS</A> <CODE>-&gt;</CODE> <A HREF="#RS" TITLE="RS - relative">RS</A> <CODE>-&gt;</CODE> <A HREF="#ListRS">ListRS</A></TD>
-<TD><I>who walks, who runs</I></TD>
+<TD><I>mkListRS</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkListRS</CODE></TD>
 <TD><A HREF="#RS" TITLE="RS - relative">RS</A> <CODE>-&gt;</CODE> <A HREF="#ListRS">ListRS</A> <CODE>-&gt;</CODE> <A HREF="#ListRS">ListRS</A></TD>
-<TD><I>who walks, who runs, who sleeps</I></TD>
+<TD><I>mkListRS</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="ListS"></A>
 <H2>ListS</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1759,12 +1797,12 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkListS</CODE></TD>
 <TD><A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#ListS">ListS</A></TD>
-<TD><I>he walks, I run</I></TD>
+<TD><I>mkListS</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkListS</CODE></TD>
 <TD><A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#ListS">ListS</A> <CODE>-&gt;</CODE> <A HREF="#ListS">ListS</A></TD>
-<TD><I>John walks, I run, you sleep</I></TD>
+<TD><I>mkListS</I></TD>
 </TR>
 </TABLE>
 
@@ -1788,7 +1826,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="NP"></A>
 <H2>NP - noun phrase (subject or object)</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1807,17 +1845,22 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkNP</CODE></TD>
 <TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>this men</I></TD>
+<TD><I>this man</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
-<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> (<A HREF="#Num" TITLE="Num - number determining element">Num</A>) <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD><I>this old man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> <A HREF="#Num" TITLE="Num - number determining element">Num</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
 <TD><I>these five old men</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
-<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>the first man</I></TD>
+<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> <A HREF="#Num" TITLE="Num - number determining element">Num</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD><I>these five men</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
@@ -1826,43 +1869,48 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>twenty men</I></TD>
+<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD><I>the first man</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
 <TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>twenty old men</I></TD>
+<TD><I>fifty old men</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
-<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>45 men</I></TD>
+<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD><I>fifty men</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
 <TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>45 old men</I></TD>
+<TD><I>51 old men</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
-<TD><A HREF="#Card" TITLE="Card - cardinal number">Card</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>almost twenty men</I></TD>
+<TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD><I>51 men</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
 <TD><A HREF="#Card" TITLE="Card - cardinal number">Card</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>almost twenty old men</I></TD>
+<TD><I>forty-five old men</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
-<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>my man</I></TD>
+<TD><A HREF="#Card" TITLE="Card - cardinal number">Card</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD><I>forty-five men</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
 <TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
 <TD><I>my old man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD><I>my man</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
@@ -1881,8 +1929,18 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
-<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> <A HREF="#Num" TITLE="Num - number determining element">Num</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
 <TD><I>these five</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD><I>these five best</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD><I>old beer</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
@@ -1891,23 +1949,18 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
-<TD><A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>beer</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkNP</CODE></TD>
 <TD><A HREF="#Predet" TITLE="Predet - predeterminer (prefixed Quant)">Predet</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>only John</I></TD>
+<TD><I>only the man</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>John killed</I></TD>
+<TD><I>the man seen</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>John in Paris</I></TD>
+<TD><I>Paris today</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
@@ -1917,12 +1970,12 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkNP</CODE></TD>
 <TD><A HREF="#Conj" TITLE="Conj - conjunction">Conj</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>John and I</I></TD>
+<TD><I>mkNP</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
 <TD><A HREF="#Conj" TITLE="Conj - conjunction">Conj</A> <CODE>-&gt;</CODE> <A HREF="#ListNP">ListNP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-<TD><I>John, I, and that</I></TD>
+<TD><I>mkNP</I></TD>
 </TR>
 <TR>
 <TD><CODE>nobody_NP</CODE></TD>
@@ -1948,7 +2001,7 @@ Lexical category, constructors given in
 
 <A NAME="Num"></A>
 <H2>Num - number determining element</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1967,7 +2020,12 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkNum</CODE></TD>
 <TD><A HREF="#Digits" TITLE="Digits - cardinal or ordinal in digits">Digits</A> <CODE>-&gt;</CODE> <A HREF="#Num" TITLE="Num - number determining element">Num</A></TD>
-<TD><I>51</I></TD>
+<TD><I>21</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNum</CODE></TD>
+<TD><A HREF="#Digit">Digit</A> <CODE>-&gt;</CODE> <A HREF="#Num" TITLE="Num - number determining element">Num</A></TD>
+<TD><I>five</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNum</CODE></TD>
@@ -1980,12 +2038,12 @@ Lexical category, constructors given in
 <TD><I>almost ten</I></TD>
 </TR>
 <TR>
-<TD><CODE>plNum</CODE></TD>
+<TD><CODE>pluralNum</CODE></TD>
 <TD><A HREF="#Num" TITLE="Num - number determining element">Num</A></TD>
 <TD><I>plural</I></TD>
 </TR>
 <TR>
-<TD><CODE>sgNum</CODE></TD>
+<TD><CODE>singularNum</CODE></TD>
 <TD><A HREF="#Num" TITLE="Num - number determining element">Num</A></TD>
 <TD><I>singular</I></TD>
 </TR>
@@ -1993,7 +2051,7 @@ Lexical category, constructors given in
 
 <A NAME="Numeral"></A>
 <H2>Numeral - cardinal or ordinal in words</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2001,79 +2059,29 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkNumeral</CODE></TD>
+<TD><A HREF="#Sub1000">Sub1000</A> <CODE>-&gt;</CODE> <A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
+<TD><I>coerce 1..999</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNumeral</CODE></TD>
+<TD><A HREF="#Sub1000">Sub1000</A> <CODE>-&gt;</CODE> <A HREF="#Sub1000">Sub1000</A> <CODE>-&gt;</CODE> <A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
+<TD><I>1000m + n</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNumeral</CODE></TD>
 <TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
 <TD><I>thirty-five (given by "35")</I></TD>
 </TR>
 <TR>
-<TD><CODE>n1000_Numeral</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
-<TD><I>thousand</I></TD>
-</TR>
-<TR>
-<TD><CODE>n100_Numeral</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
-<TD><I>hundred</I></TD>
-</TR>
-<TR>
-<TD><CODE>n10_Numeral</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
-<TD><I>ten</I></TD>
-</TR>
-<TR>
-<TD><CODE>n1_Numeral</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
-<TD><I>one</I></TD>
-</TR>
-<TR>
-<TD><CODE>n20_Numeral</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
-<TD><I>twenty</I></TD>
-</TR>
-<TR>
-<TD><CODE>n2_Numeral</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
-<TD><I>two</I></TD>
-</TR>
-<TR>
-<TD><CODE>n3_Numeral</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
-<TD><I>three</I></TD>
-</TR>
-<TR>
-<TD><CODE>n4_Numeral</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
-<TD><I>four</I></TD>
-</TR>
-<TR>
-<TD><CODE>n5_Numeral</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
-<TD><I>five</I></TD>
-</TR>
-<TR>
-<TD><CODE>n6_Numeral</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
-<TD><I>six</I></TD>
-</TR>
-<TR>
-<TD><CODE>n7_Numeral</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
-<TD><I>seven</I></TD>
-</TR>
-<TR>
-<TD><CODE>n8_Numeral</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
-<TD><I>eight</I></TD>
-</TR>
-<TR>
-<TD><CODE>n9_Numeral</CODE></TD>
-<TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
-<TD><I>nine</I></TD>
+<TD><CODE>thousandfoldNumeral</CODE></TD>
+<TD><A HREF="#Sub1000">Sub1000</A> <CODE>-&gt;</CODE> <A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A></TD>
+<TD><I>1000n</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="Ord"></A>
 <H2>Ord - ordinal number (used in Det)</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2091,14 +2099,19 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkOrd</CODE></TD>
+<TD><A HREF="#Digit">Digit</A> <CODE>-&gt;</CODE> <A HREF="#Ord" TITLE="Ord - ordinal number (used in Det)">Ord</A></TD>
+<TD><I>fifth</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkOrd</CODE></TD>
 <TD><A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#Ord" TITLE="Ord - ordinal number (used in Det)">Ord</A></TD>
-<TD><I>best</I></TD>
+<TD><I>largest</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="PConj"></A>
 <H2>PConj - phrase-beginning conjunction</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2134,7 +2147,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="Phr"></A>
 <H2>Phr - phrase in a text</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2142,39 +2155,34 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkPhr</CODE></TD>
-<TD><A HREF="#Utt" TITLE="Utt - sentence, question, word...">Utt</A> <CODE>-&gt;</CODE> <A HREF="#Phr" TITLE="Phr - phrase in a text">Phr</A></TD>
-<TD><I>why</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkPhr</CODE></TD>
 <TD>(<A HREF="#PConj" TITLE="PConj - phrase-beginning conjunction">PConj</A>) <CODE>-&gt;</CODE> <A HREF="#Utt" TITLE="Utt - sentence, question, word...">Utt</A> <CODE>-&gt;</CODE> (<A HREF="#Voc" TITLE="Voc - vocative or "please"">Voc</A>) <CODE>-&gt;</CODE> <A HREF="#Phr" TITLE="Phr - phrase in a text">Phr</A></TD>
-<TD><I>but why John</I></TD>
+<TD><I>but come here John</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkPhr</CODE></TD>
 <TD><A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#Phr" TITLE="Phr - phrase in a text">Phr</A></TD>
-<TD><I>John walked</I></TD>
+<TD><I>I go home</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkPhr</CODE></TD>
 <TD><A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A> <CODE>-&gt;</CODE> <A HREF="#Phr" TITLE="Phr - phrase in a text">Phr</A></TD>
-<TD><I>John walks</I></TD>
+<TD><I>I go home</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkPhr</CODE></TD>
 <TD><A HREF="#QS" TITLE="QS - question">QS</A> <CODE>-&gt;</CODE> <A HREF="#Phr" TITLE="Phr - phrase in a text">Phr</A></TD>
-<TD><I>did John walk</I></TD>
+<TD><I>I go home</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkPhr</CODE></TD>
 <TD><A HREF="#Imp" TITLE="Imp - imperative">Imp</A> <CODE>-&gt;</CODE> <A HREF="#Phr" TITLE="Phr - phrase in a text">Phr</A></TD>
-<TD><I>walk</I></TD>
+<TD><I>I go home</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="Pol"></A>
 <H2>Pol - polarity</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2183,18 +2191,18 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>negativePol</CODE></TD>
 <TD><A HREF="#Pol" TITLE="Pol - polarity">Pol</A></TD>
-<TD><I>(John doesn't walk)</I></TD>
+<TD><I>John doesn't walk</I></TD>
 </TR>
 <TR>
 <TD><CODE>positivePol</CODE></TD>
 <TD><A HREF="#Pol" TITLE="Pol - polarity">Pol</A></TD>
-<TD><I>(John walks) [default]</I></TD>
+<TD><I>John walks [default]</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="Predet"></A>
 <H2>Predet - predeterminer (prefixed Quant)</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2224,7 +2232,7 @@ Lexical category, constructors given in
 
 <A NAME="Prep"></A>
 <H2>Prep - preposition, or just case</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2339,7 +2347,7 @@ Lexical category, constructors given in
 
 <A NAME="Pron"></A>
 <H2>Pron - personal pronoun</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2394,7 +2402,7 @@ Lexical category, constructors given in
 
 <A NAME="Punct"></A>
 <H2>Punct</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2419,7 +2427,7 @@ Lexical category, constructors given in
 
 <A NAME="QCl"></A>
 <H2>QCl - question clause, with all tenses</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2437,13 +2445,108 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who loves her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who sends it to her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who wants to walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#VS" TITLE="VS - sentence-complement verb">VS</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who says that she walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#VQ" TITLE="VQ - question-complement verb">VQ</A> <CODE>-&gt;</CODE> <A HREF="#QS" TITLE="QS - question">QS</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who wonders who walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#VA" TITLE="VA - adjective-complement verb">VA</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who becomes old</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#V2A" TITLE="V2A - verb with NP and AP complement">V2A</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who paints it red</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#V2S" TITLE="V2S - verb with NP and S complement">V2S</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who tells her that we walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#V2Q" TITLE="V2Q - verb with NP and Q complement">V2Q</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QS" TITLE="QS - question">QS</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who asks her who walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#V2V" TITLE="V2V - verb with NP and V complement">V2V</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who forces her to walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who is old</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who is older than her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#A2" TITLE="A2 - two-place adjective">A2</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who is married to her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who is very old</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who is the man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who is a man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who is an old man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who is here</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>whom does John love</I></TD>
+<TD><I>who does John love</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>whom does John love today</I></TD>
+<TD><I>who does John today</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
@@ -2453,7 +2556,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>with who does John walk</I></TD>
+<TD><I>with whom does John walk</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
@@ -2462,28 +2565,23 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
-<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>what is there</I></TD>
+<TD><A HREF="#IComp" TITLE="IComp - interrogative complement of copula">IComp</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>who is this man</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
-<TD><A HREF="#IComp" TITLE="IComp - interrogative complement of copula">IComp</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who is John</I></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
+<TD><I>which houses are there</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="QS"></A>
 <H2>QS - question</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
 <TH COLSPAN="2">Example</TH>
-</TR>
-<TR>
-<TD><CODE>mkQS</CODE></TD>
-<TD><A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A> <CODE>-&gt;</CODE> <A HREF="#QS" TITLE="QS - question">QS</A></TD>
-<TD><I>who walks</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkQS</CODE></TD>
@@ -2493,13 +2591,13 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkQS</CODE></TD>
 <TD><A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A> <CODE>-&gt;</CODE> <A HREF="#QS" TITLE="QS - question">QS</A></TD>
-<TD><I>does John walk</I></TD>
+<TD><I>mkQS</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="Quant"></A>
 <H2>Quant - quantifier ('nucleus' of Det)</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2539,7 +2637,7 @@ Lexical category, constructors given in
 
 <A NAME="RCl"></A>
 <H2>RCl - relative clause, with all tenses</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2548,17 +2646,17 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkRCl</CODE></TD>
 <TD><A HREF="#RP" TITLE="RP - relative pronoun">RP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#RCl" TITLE="RCl - relative clause, with all tenses">RCl</A></TD>
-<TD><I>that walk</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkRCl</CODE></TD>
-<TD><A HREF="#RP" TITLE="RP - relative pronoun">RP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>-&gt;</CODE> <A HREF="#RCl" TITLE="RCl - relative clause, with all tenses">RCl</A></TD>
-<TD><I>which John loves</I></TD>
+<TD><I>that loves John</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkRCl</CODE></TD>
 <TD><A HREF="#RP" TITLE="RP - relative pronoun">RP</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A> <CODE>-&gt;</CODE> <A HREF="#RCl" TITLE="RCl - relative clause, with all tenses">RCl</A></TD>
-<TD><I>which John loves today</I></TD>
+<TD><I>whom John loves today</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkRCl</CODE></TD>
+<TD><A HREF="#RP" TITLE="RP - relative pronoun">RP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>-&gt;</CODE> <A HREF="#RCl" TITLE="RCl - relative clause, with all tenses">RCl</A></TD>
+<TD><I>whom John loves</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkRCl</CODE></TD>
@@ -2569,7 +2667,7 @@ Lexical category, constructors given in
 
 <A NAME="RP"></A>
 <H2>RP - relative pronoun</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2589,16 +2687,11 @@ Lexical category, constructors given in
 
 <A NAME="RS"></A>
 <H2>RS - relative</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
 <TH COLSPAN="2">Example</TH>
-</TR>
-<TR>
-<TD><CODE>mkRS</CODE></TD>
-<TD><A HREF="#RCl" TITLE="RCl - relative clause, with all tenses">RCl</A> <CODE>-&gt;</CODE> <A HREF="#RS" TITLE="RS - relative">RS</A></TD>
-<TD><I>that walk</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkRS</CODE></TD>
@@ -2608,27 +2701,22 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkRS</CODE></TD>
 <TD><A HREF="#Conj" TITLE="Conj - conjunction">Conj</A> <CODE>-&gt;</CODE> <A HREF="#RS" TITLE="RS - relative">RS</A> <CODE>-&gt;</CODE> <A HREF="#RS" TITLE="RS - relative">RS</A> <CODE>-&gt;</CODE> <A HREF="#RS" TITLE="RS - relative">RS</A></TD>
-<TD><I>who walks and whom I know</I></TD>
+<TD><I>who walks and whose mother runsx</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkRS</CODE></TD>
 <TD><A HREF="#Conj" TITLE="Conj - conjunction">Conj</A> <CODE>-&gt;</CODE> <A HREF="#ListRS">ListRS</A> <CODE>-&gt;</CODE> <A HREF="#RS" TITLE="RS - relative">RS</A></TD>
-<TD><I>who walks, whose son runs, and whom I know</I></TD>
+<TD><I>who walks, whom I see and who sleeps</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="S"></A>
 <H2>S - declarative sentence</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
 <TH COLSPAN="2">Example</TH>
-</TR>
-<TR>
-<TD><CODE>mkS</CODE></TD>
-<TD><A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A></TD>
-<TD><I>John walks</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkS</CODE></TD>
@@ -2654,13 +2742,97 @@ Lexical category, constructors given in
 
 <A NAME="SC"></A>
 <H2>SC - embedded sentence or question</H2>
-<P>
-Lexical category, constructors given in
-<A HREF="#RParadigms">lexical paradigms</A>.
-</P>
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>mkSC</CODE></TD>
+<TD><A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#SC" TITLE="SC - embedded sentence or question">SC</A></TD>
+<TD><I>that he walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkSC</CODE></TD>
+<TD><A HREF="#QS" TITLE="QS - question">QS</A> <CODE>-&gt;</CODE> <A HREF="#SC" TITLE="SC - embedded sentence or question">SC</A></TD>
+<TD><I>whether he walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkSC</CODE></TD>
+<TD><A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#SC" TITLE="SC - embedded sentence or question">SC</A></TD>
+<TD><I>to walk</I></TD>
+</TR>
+</TABLE>
+
+<A NAME="SSlash"></A>
+<H2>SSlash</H2>
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>mkSSlash</CODE></TD>
+<TD><A HREF="#Temp" TITLE="Temp - temporal and aspectual features">Temp</A> <CODE>-&gt;</CODE> <A HREF="#Pol" TITLE="Pol - polarity">Pol</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A> <CODE>-&gt;</CODE> <A HREF="#SSlash">SSlash</A></TD>
+<TD><I>mkSSlash</I></TD>
+</TR>
+</TABLE>
+
+<A NAME="Sub100"></A>
+<H2>Sub100</H2>
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>mkSub100</CODE></TD>
+<TD><A HREF="#Unit">Unit</A> <CODE>-&gt;</CODE> <A HREF="#Sub100">Sub100</A></TD>
+<TD><I>coerce 1..9</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkSub100</CODE></TD>
+<TD><A HREF="#Unit">Unit</A> <CODE>-&gt;</CODE> <A HREF="#Unit">Unit</A> <CODE>-&gt;</CODE> <A HREF="#Sub100">Sub100</A></TD>
+<TD><I>10m + n</I></TD>
+</TR>
+<TR>
+<TD><CODE>tenfoldSub100</CODE></TD>
+<TD><A HREF="#Unit">Unit</A> <CODE>-&gt;</CODE> <A HREF="#Sub100">Sub100</A></TD>
+<TD><I>10n</I></TD>
+</TR>
+</TABLE>
+
+<A NAME="Sub1000"></A>
+<H2>Sub1000</H2>
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>mkSub1000</CODE></TD>
+<TD><A HREF="#Sub100">Sub100</A> <CODE>-&gt;</CODE> <A HREF="#Sub1000">Sub1000</A></TD>
+<TD><I>coerce 1..99</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkSub1000</CODE></TD>
+<TD><A HREF="#Sub10">Sub10</A> <CODE>-&gt;</CODE> <A HREF="#Sub1000">Sub1000</A></TD>
+<TD><I>100n</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkSub1000</CODE></TD>
+<TD><A HREF="#Sub10">Sub10</A> <CODE>-&gt;</CODE> <A HREF="#Sub100">Sub100</A> <CODE>-&gt;</CODE> <A HREF="#Sub1000">Sub1000</A></TD>
+<TD><I>100m + n</I></TD>
+</TR>
+</TABLE>
+
 <A NAME="Subj"></A>
 <H2>Subj - subjunction</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2701,7 +2873,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="Tense"></A>
 <H2>Tense - tense</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2710,28 +2882,28 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>conditionalTense</CODE></TD>
 <TD><A HREF="#Tense" TITLE="Tense - tense">Tense</A></TD>
-<TD><I>(John would walk)</I></TD>
+<TD><I>John would walk</I></TD>
 </TR>
 <TR>
 <TD><CODE>futureTense</CODE></TD>
 <TD><A HREF="#Tense" TITLE="Tense - tense">Tense</A></TD>
-<TD><I>(John will walk)</I></TD>
+<TD><I>John will walk</I></TD>
 </TR>
 <TR>
 <TD><CODE>pastTense</CODE></TD>
 <TD><A HREF="#Tense" TITLE="Tense - tense">Tense</A></TD>
-<TD><I>(John walked)</I></TD>
+<TD><I>John walked</I></TD>
 </TR>
 <TR>
 <TD><CODE>presentTense</CODE></TD>
 <TD><A HREF="#Tense" TITLE="Tense - tense">Tense</A></TD>
-<TD><I>(John walks) [default]</I></TD>
+<TD><I>John walks [default]</I></TD>
 </TR>
 </TABLE>
 
 <A NAME="Text"></A>
 <H2>Text - text consisting of several phrases</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2744,18 +2916,13 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkText</CODE></TD>
-<TD><A HREF="#Phr" TITLE="Phr - phrase in a text">Phr</A> <CODE>-&gt;</CODE> <A HREF="#Text" TITLE="Text - text consisting of several phrases">Text</A></TD>
-<TD><I>But John walks.</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkText</CODE></TD>
 <TD><A HREF="#Phr" TITLE="Phr - phrase in a text">Phr</A> <CODE>-&gt;</CODE> (<A HREF="#Punct">Punct</A>) <CODE>-&gt;</CODE> (<A HREF="#Text" TITLE="Text - text consisting of several phrases">Text</A>) <CODE>-&gt;</CODE> <A HREF="#Text" TITLE="Text - text consisting of several phrases">Text</A></TD>
 <TD><I>John walks? Yes.</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkText</CODE></TD>
 <TD><A HREF="#Utt" TITLE="Utt - sentence, question, word...">Utt</A> <CODE>-&gt;</CODE> <A HREF="#Text" TITLE="Text - text consisting of several phrases">Text</A></TD>
-<TD><I>John.</I></TD>
+<TD><I>Yes.</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkText</CODE></TD>
@@ -2774,7 +2941,7 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkText</CODE></TD>
-<TD><A HREF="#Imp" TITLE="Imp - imperative">Imp</A> <CODE>-&gt;</CODE> <A HREF="#Text" TITLE="Text - text consisting of several phrases">Text</A></TD>
+<TD>(<A HREF="#Pol" TITLE="Pol - polarity">Pol</A>) <CODE>-&gt;</CODE> <A HREF="#Imp" TITLE="Imp - imperative">Imp</A> <CODE>-&gt;</CODE> <A HREF="#Text" TITLE="Text - text consisting of several phrases">Text</A></TD>
 <TD><I>Walk!</I></TD>
 </TR>
 <TR>
@@ -2784,9 +2951,64 @@ Lexical category, constructors given in
 </TR>
 </TABLE>
 
+<A NAME="Unit"></A>
+<H2>Unit</H2>
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>n1_Unit</CODE></TD>
+<TD><A HREF="#Unit">Unit</A></TD>
+<TD><I>one</I></TD>
+</TR>
+<TR>
+<TD><CODE>n2_Unit</CODE></TD>
+<TD><A HREF="#Unit">Unit</A></TD>
+<TD><I>two</I></TD>
+</TR>
+<TR>
+<TD><CODE>n3_Unit</CODE></TD>
+<TD><A HREF="#Unit">Unit</A></TD>
+<TD><I>three</I></TD>
+</TR>
+<TR>
+<TD><CODE>n4_Unit</CODE></TD>
+<TD><A HREF="#Unit">Unit</A></TD>
+<TD><I>four</I></TD>
+</TR>
+<TR>
+<TD><CODE>n5_Unit</CODE></TD>
+<TD><A HREF="#Unit">Unit</A></TD>
+<TD><I>five</I></TD>
+</TR>
+<TR>
+<TD><CODE>n6_Unit</CODE></TD>
+<TD><A HREF="#Unit">Unit</A></TD>
+<TD><I>six</I></TD>
+</TR>
+<TR>
+<TD><CODE>n7_Unit</CODE></TD>
+<TD><A HREF="#Unit">Unit</A></TD>
+<TD><I>seven</I></TD>
+</TR>
+<TR>
+<TD><CODE>n8_Unit</CODE></TD>
+<TD><A HREF="#Unit">Unit</A></TD>
+<TD><I>eight</I></TD>
+</TR>
+<TR>
+<TD><CODE>n9_Unit</CODE></TD>
+<TD><A HREF="#Unit">Unit</A></TD>
+<TD><I>nine</I></TD>
+</TR>
+</TABLE>
+
 <A NAME="Utt"></A>
 <H2>Utt - sentence, question, word...</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2819,11 +3041,6 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkUtt</CODE></TD>
-<TD><A HREF="#Imp" TITLE="Imp - imperative">Imp</A> <CODE>-&gt;</CODE> <A HREF="#Utt" TITLE="Utt - sentence, question, word...">Utt</A></TD>
-<TD><I>love yourself</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkUtt</CODE></TD>
 <TD>(<A HREF="#ImpForm">ImpForm</A>) <CODE>-&gt;</CODE> (<A HREF="#Pol" TITLE="Pol - polarity">Pol</A>) <CODE>-&gt;</CODE> <A HREF="#Imp" TITLE="Imp - imperative">Imp</A> <CODE>-&gt;</CODE> <A HREF="#Utt" TITLE="Utt - sentence, question, word...">Utt</A></TD>
 <TD><I>don't love yourselves</I></TD>
 </TR>
@@ -2840,7 +3057,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkUtt</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Utt" TITLE="Utt - sentence, question, word...">Utt</A></TD>
-<TD><I>John</I></TD>
+<TD><I>this man</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkUtt</CODE></TD>
@@ -2850,7 +3067,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkUtt</CODE></TD>
 <TD><A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#Utt" TITLE="Utt - sentence, question, word...">Utt</A></TD>
-<TD><I>to walk</I></TD>
+<TD><I>to sleep</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkUtt</CODE></TD>
@@ -2860,7 +3077,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkUtt</CODE></TD>
 <TD><A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#Utt" TITLE="Utt - sentence, question, word...">Utt</A></TD>
-<TD><I>fine</I></TD>
+<TD><I>good</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkUtt</CODE></TD>
@@ -2887,7 +3104,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="V2"></A>
 <H2>V2 - two-place verb</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2938,7 +3155,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="VP"></A>
 <H2>VP - verb phrase</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2947,37 +3164,37 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkVP</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
-<TD><I>walk</I></TD>
+<TD><I>sleep</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVP</CODE></TD>
 <TD><A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
-<TD><I>love her</I></TD>
+<TD><I>love it</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVP</CODE></TD>
 <TD><A HREF="#V3" TITLE="V3 - three-place verb">V3</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
-<TD><I>send it to her</I></TD>
+<TD><I>send a message to her</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVP</CODE></TD>
 <TD><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
-<TD><I>want to walk</I></TD>
+<TD><I>want to run</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVP</CODE></TD>
 <TD><A HREF="#VS" TITLE="VS - sentence-complement verb">VS</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
-<TD><I>know that she walks</I></TD>
+<TD><I>know that she runs</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVP</CODE></TD>
 <TD><A HREF="#VQ" TITLE="VQ - question-complement verb">VQ</A> <CODE>-&gt;</CODE> <A HREF="#QS" TITLE="QS - question">QS</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
-<TD><I>ask if she walks</I></TD>
+<TD><I>wonder if she runs</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVP</CODE></TD>
 <TD><A HREF="#VA" TITLE="VA - adjective-complement verb">VA</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
-<TD><I>become old</I></TD>
+<TD><I>become red</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVP</CODE></TD>
@@ -2986,13 +3203,23 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkVP</CODE></TD>
-<TD><A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
-<TD><I>be warm</I></TD>
+<TD><A HREF="#V2S" TITLE="V2S - verb with NP and S complement">V2S</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
+<TD><I>tell her that we walk</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVP</CODE></TD>
-<TD><A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
-<TD><I>be very warm</I></TD>
+<TD><A HREF="#V2Q" TITLE="V2Q - verb with NP and Q complement">V2Q</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QS" TITLE="QS - question">QS</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
+<TD><I>ask her who walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><A HREF="#V2V" TITLE="V2V - verb with NP and V complement">V2V</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
+<TD><I>force her to walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
+<TD><I>be warm</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVP</CODE></TD>
@@ -3003,6 +3230,11 @@ Lexical category, constructors given in
 <TD><CODE>mkVP</CODE></TD>
 <TD><A HREF="#A2" TITLE="A2 - two-place adjective">A2</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
 <TD><I>be married to her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
+<TD><I>be warm</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVP</CODE></TD>
@@ -3017,7 +3249,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkVP</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
-<TD><I>be the man</I></TD>
+<TD><I>be this man</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVP</CODE></TD>
@@ -3045,6 +3277,11 @@ Lexical category, constructors given in
 <TD><I>paint itself black</I></TD>
 </TR>
 <TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><A HREF="#Comp" TITLE="Comp - complement of copula, such as AP">Comp</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
+<TD><I>be warm</I></TD>
+</TR>
+<TR>
 <TD><CODE>passiveVP</CODE></TD>
 <TD><A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
 <TD><I>be loved</I></TD>
@@ -3068,7 +3305,7 @@ Lexical category, constructors given in
 
 <A NAME="VPSlash"></A>
 <H2>VPSlash - verb phrase missing complement</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -3104,6 +3341,16 @@ Lexical category, constructors given in
 <TD><A HREF="#V2V" TITLE="V2V - verb with NP and V complement">V2V</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#VPSlash" TITLE="VPSlash - verb phrase missing complement">VPSlash</A></TD>
 <TD><I>(whom) (John) forces to sleep</I></TD>
 </TR>
+<TR>
+<TD><CODE>mkVPSlash</CODE></TD>
+<TD><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A> <CODE>-&gt;</CODE> <A HREF="#VPSlash" TITLE="VPSlash - verb phrase missing complement">VPSlash</A> <CODE>-&gt;</CODE> <A HREF="#VPSlash" TITLE="VPSlash - verb phrase missing complement">VPSlash</A></TD>
+<TD><I>want always to buy</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVPSlash</CODE></TD>
+<TD><A HREF="#V2V" TITLE="V2V - verb with NP and V complement">V2V</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VPSlash" TITLE="VPSlash - verb phrase missing complement">VPSlash</A> <CODE>-&gt;</CODE> <A HREF="#VPSlash" TITLE="VPSlash - verb phrase missing complement">VPSlash</A></TD>
+<TD><I>beg me always to buy</I></TD>
+</TR>
 </TABLE>
 
 <A NAME="VQ"></A>
@@ -3120,7 +3367,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="VV"></A>
 <H2>VV - verb-phrase-complement verb</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -3150,7 +3397,7 @@ Lexical category, constructors given in
 
 <A NAME="Voc"></A>
 <H2>Voc - vocative or "please"</H2>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -3168,9 +3415,9 @@ Lexical category, constructors given in
 </TR>
 </TABLE>
 
-<A NAME="toc79"></A>
+<A NAME="toc83"></A>
 <H1>Lexical Paradigms</H1>
-<A NAME="toc80"></A>
+<A NAME="toc84"></A>
 <H2>Paradigms for Bulgarian</H2>
 <P>
 <a name="RParadigms"></a>
@@ -3178,7 +3425,7 @@ Lexical category, constructors given in
 <P>
 source <A HREF="../src/bulgarian/ParadigmsBul.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/bulgarian/ParadigmsBul.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -3861,7 +4108,7 @@ source <A HREF="../src/bulgarian/ParadigmsBul.gf"><CODE>http://www.grammaticalfr
 </TR>
 </TABLE>
 
-<A NAME="toc81"></A>
+<A NAME="toc85"></A>
 <H2>Paradigms for Catalan</H2>
 <P>
 <a name="RParadigms"></a>
@@ -3869,7 +4116,7 @@ source <A HREF="../src/bulgarian/ParadigmsBul.gf"><CODE>http://www.grammaticalfr
 <P>
 source <A HREF="../src/catalan/ParadigmsCat.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/catalan/ParadigmsCat.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -4096,7 +4343,7 @@ source <A HREF="../src/catalan/ParadigmsCat.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc82"></A>
+<A NAME="toc86"></A>
 <H2>Paradigms for Danish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -4104,7 +4351,7 @@ source <A HREF="../src/catalan/ParadigmsCat.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/danish/ParadigmsDan.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/danish/ParadigmsDan.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -4347,7 +4594,7 @@ source <A HREF="../src/danish/ParadigmsDan.gf"><CODE>http://www.grammaticalframe
 </TR>
 </TABLE>
 
-<A NAME="toc83"></A>
+<A NAME="toc87"></A>
 <H2>Paradigms for Dutch</H2>
 <P>
 <a name="RParadigms"></a>
@@ -4355,7 +4602,7 @@ source <A HREF="../src/danish/ParadigmsDan.gf"><CODE>http://www.grammaticalframe
 <P>
 source <A HREF="../src/dutch/ParadigmsDut.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/dutch/ParadigmsDut.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -4630,7 +4877,7 @@ source <A HREF="../src/dutch/ParadigmsDut.gf"><CODE>http://www.grammaticalframew
 </TR>
 </TABLE>
 
-<A NAME="toc84"></A>
+<A NAME="toc88"></A>
 <H2>Paradigms for English</H2>
 <P>
 <a name="RParadigms"></a>
@@ -4638,7 +4885,7 @@ source <A HREF="../src/dutch/ParadigmsDut.gf"><CODE>http://www.grammaticalframew
 <P>
 source <A HREF="../src/english/ParadigmsEng.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/english/ParadigmsEng.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -4977,7 +5224,7 @@ source <A HREF="../src/english/ParadigmsEng.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc85"></A>
+<A NAME="toc89"></A>
 <H2>Paradigms for Finnish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -4985,7 +5232,7 @@ source <A HREF="../src/english/ParadigmsEng.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/finnish/ParadigmsFin.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/finnish/ParadigmsFin.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -5256,7 +5503,7 @@ source <A HREF="../src/finnish/ParadigmsFin.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc86"></A>
+<A NAME="toc90"></A>
 <H2>Paradigms for French</H2>
 <P>
 <a name="RParadigms"></a>
@@ -5264,7 +5511,7 @@ source <A HREF="../src/finnish/ParadigmsFin.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/french/ParadigmsFre.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/french/ParadigmsFre.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -5495,7 +5742,7 @@ source <A HREF="../src/french/ParadigmsFre.gf"><CODE>http://www.grammaticalframe
 </TR>
 </TABLE>
 
-<A NAME="toc87"></A>
+<A NAME="toc91"></A>
 <H2>Paradigms for German</H2>
 <P>
 <a name="RParadigms"></a>
@@ -5503,7 +5750,7 @@ source <A HREF="../src/french/ParadigmsFre.gf"><CODE>http://www.grammaticalframe
 <P>
 source <A HREF="../src/german/ParadigmsGer.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/german/ParadigmsGer.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -5794,7 +6041,7 @@ source <A HREF="../src/german/ParadigmsGer.gf"><CODE>http://www.grammaticalframe
 </TR>
 </TABLE>
 
-<A NAME="toc88"></A>
+<A NAME="toc92"></A>
 <H2>Paradigms for Italian</H2>
 <P>
 <a name="RParadigms"></a>
@@ -5802,7 +6049,7 @@ source <A HREF="../src/german/ParadigmsGer.gf"><CODE>http://www.grammaticalframe
 <P>
 source <A HREF="../src/italian/ParadigmsIta.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/italian/ParadigmsIta.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -6033,7 +6280,7 @@ source <A HREF="../src/italian/ParadigmsIta.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc89"></A>
+<A NAME="toc93"></A>
 <H2>Paradigms for Norwegian</H2>
 <P>
 <a name="RParadigms"></a>
@@ -6041,7 +6288,7 @@ source <A HREF="../src/italian/ParadigmsIta.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/norwegian/ParadigmsNor.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/norwegian/ParadigmsNor.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -6284,7 +6531,7 @@ source <A HREF="../src/norwegian/ParadigmsNor.gf"><CODE>http://www.grammaticalfr
 </TR>
 </TABLE>
 
-<A NAME="toc90"></A>
+<A NAME="toc94"></A>
 <H2>Paradigms for Polish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -6292,7 +6539,7 @@ source <A HREF="../src/norwegian/ParadigmsNor.gf"><CODE>http://www.grammaticalfr
 <P>
 source <A HREF="../src/polish/ParadigmsPol.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/polish/ParadigmsPol.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -6891,7 +7138,7 @@ source <A HREF="../src/polish/ParadigmsPol.gf"><CODE>http://www.grammaticalframe
 </TR>
 </TABLE>
 
-<A NAME="toc91"></A>
+<A NAME="toc95"></A>
 <H2>Paradigms for Romanian</H2>
 <P>
 <a name="RParadigms"></a>
@@ -6899,7 +7146,7 @@ source <A HREF="../src/polish/ParadigmsPol.gf"><CODE>http://www.grammaticalframe
 <P>
 source <A HREF="../src/romanian/ParadigmsRon.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/romanian/ParadigmsRon.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -7042,7 +7289,7 @@ source <A HREF="../src/romanian/ParadigmsRon.gf"><CODE>http://www.grammaticalfra
 </TR>
 </TABLE>
 
-<A NAME="toc92"></A>
+<A NAME="toc96"></A>
 <H2>Paradigms for Russian</H2>
 <P>
 <a name="RParadigms"></a>
@@ -7050,7 +7297,7 @@ source <A HREF="../src/romanian/ParadigmsRon.gf"><CODE>http://www.grammaticalfra
 <P>
 source <A HREF="../src/russian/ParadigmsRus.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/russian/ParadigmsRus.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -7185,7 +7432,7 @@ source <A HREF="../src/russian/ParadigmsRus.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc93"></A>
+<A NAME="toc97"></A>
 <H2>Paradigms for Spanish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -7193,7 +7440,7 @@ source <A HREF="../src/russian/ParadigmsRus.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/spanish/ParadigmsSpa.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/spanish/ParadigmsSpa.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -7424,7 +7671,7 @@ source <A HREF="../src/spanish/ParadigmsSpa.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc94"></A>
+<A NAME="toc98"></A>
 <H2>Paradigms for Swedish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -7432,7 +7679,7 @@ source <A HREF="../src/spanish/ParadigmsSpa.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/swedish/ParadigmsSwe.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/swedish/ParadigmsSwe.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -7675,7 +7922,7 @@ source <A HREF="../src/swedish/ParadigmsSwe.gf"><CODE>http://www.grammaticalfram
 </TR>
 </TABLE>
 
-<A NAME="toc95"></A>
+<A NAME="toc99"></A>
 <H2>Paradigms for Urdu</H2>
 <P>
 <a name="RParadigms"></a>
@@ -7683,7 +7930,7 @@ source <A HREF="../src/swedish/ParadigmsSwe.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/urdu/ParadigmsUrd.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/urdu/ParadigmsUrd.gf</CODE></A>
 </P>
-<TABLE CELLPADDING="4" BORDER="1">
+<TABLE BORDER="1" CELLPADDING="4">
 <TR>
 <TH>Function</TH>
 <TH COLSPAN="2">Type</TH>
@@ -7866,7 +8113,7 @@ source <A HREF="../src/urdu/ParadigmsUrd.gf"><CODE>http://www.grammaticalframewo
 </TR>
 </TABLE>
 
-<A NAME="toc96"></A>
+<A NAME="toc100"></A>
 <H1>Browsing the libraries with GF commands</H1>
 <P>
 <B>New</B>: Browsing by syntax editor 
@@ -7893,7 +8140,7 @@ To try out overloaded syntax, test lexicon, and inflection paradigms:
     &gt; cc mkCl (mkNP this_Quant (mkN "Farbe")) (mkA "dunkel")
 </PRE>
 <P></P>
-<A NAME="toc97"></A>
+<A NAME="toc101"></A>
 <H1>An Example of Usage</H1>
 <P>
 The standard way of building an application has the following modules.
@@ -7958,6 +8205,6 @@ For each language, an instantiation of the functor:
 </PRE>
 <P></P>
 
-<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.5 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml -\-toc synopsis.txt -->
 </BODY></HTML>

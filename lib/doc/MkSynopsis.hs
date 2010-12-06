@@ -6,6 +6,9 @@ import qualified Data.ByteString.Char8 as BS
 type Cats = [(String,String,String)]
 type Rules = [(String,String,String)]
 
+-- the file generated
+synopsis = "synopsis.txt"
+
 main = do
   xx <- getArgs
   let isLatex = case xx of
@@ -92,7 +95,7 @@ rulesTable hasEx isLatex cs file = do
 
 getRules :: FilePath -> IO Rules
 getRules file = do
-  ss <- readFileC file >>= return . lines
+  ss <- readFileC file >>= return . filter (not . hiddenLine) . lines
   return $ getrs [] ss
  where
    getrs rs ss = case ss of
@@ -105,7 +108,7 @@ getRules file = do
        _ -> getrs rs ss2
    rule s = (name, typ, ex)
        where 
-         ws = takeWhile (/="--#") $ words s
+         ws = takeWhile (flip notElem ["--#", "--:"]) $ words s
          name = head ws
          (t,e) = span (/="--") (tail ws)
          typ = unwords $ filtype (drop 1 t)
@@ -171,7 +174,6 @@ mkCatTable isLatex cs = inChunks chsize (\rs -> header ++ map mk1 rs) cs
 
 srcPath = ("../src" ++)
 
-synopsis = "synopsis.txt"
 commonAPI = srcPath "/abstract/Common.gf"
 catAPI    = srcPath "/abstract/Cat.gf"
 syntaxAPI = srcPath "/api/Constructors.gf"
@@ -207,6 +209,10 @@ link s f = append $ s ++ " [``" ++ fa ++ "`` " ++ f ++ "]" where
 
 ttf s = "``" ++ s ++ "``"
 itf s = "//" ++ s ++ "//"
+
+hiddenLine s = case reverse (words s) of
+  "--%":_ -> True
+  _ -> False
 
 -----------------
 

@@ -1,9 +1,17 @@
 --1 Constructors: the Resource Syntax API 
 
-incomplete resource Constructors = open Grammar in {  
+incomplete resource Constructors = open Grammar in {  --%
 
-  flags optimize=noexpand ;  
+  flags optimize=noexpand ;  --%
 
+-- For developers: this document is tagged to support GF-Doc and synopsis    --%
+-- generation:    --%
+--  --% ignore this line in documentation    --%  
+--  --: this is a ground constructor  --%
+-- Moreover, follow the format  --%
+--   oper : Typ                 --%
+--   = def ; --%                --%
+--
 -- This module gives access to the syntactic constructions of the
 -- GF Resource Grammar library. Its main principle is simple:
 -- to construct an object of type $C$, use the function $mkC$.
@@ -66,7 +74,7 @@ incomplete resource Constructors = open Grammar in {
 
   oper   
     mkText = overload {  --%
-      mkText : Phr -> (Punct) -> (Text) -> Text  -- John walks? Yes. 
+      mkText : Phr -> (Punct) -> (Text) -> Text  -- John walks? Yes. --:
         = \phr,punct,text -> case punct of {  --%
           PFullStop => TFullStop phr text ;   --%
           PExclMark => TExclMark phr text ;   --%
@@ -108,18 +116,18 @@ incomplete resource Constructors = open Grammar in {
 
 -- A text can also be empty.
 
-      emptyText : Text  -- (empty text) 
+      emptyText : Text  -- (empty text)  --:
         = TEmpty ; --%
 
 --3 Punct: punctuation marks 
 
 -- There are three punctuation marks that can separate phrases in a text.
 
-      fullStopPunct  : Punct   -- . 
+      fullStopPunct  : Punct   -- .   --:
         = PFullStop ; --%  
-      questMarkPunct : Punct   -- ?
+      questMarkPunct : Punct   -- ?   --:
         = PQuestMark ; --%
-      exclMarkPunct  : Punct   -- ! 
+      exclMarkPunct  : Punct   -- !   --:
         = PExclMark ; --%
 
 -- Internally, they are handled with a parameter type. --%
@@ -134,7 +142,7 @@ incomplete resource Constructors = open Grammar in {
 -- and a vocative, both of which are by default empty.
 
     mkPhr = overload { --%
-      mkPhr : (PConj) -> Utt -> (Voc) -> Phr   -- but come here John 
+      mkPhr : (PConj) -> Utt -> (Voc) -> Phr   -- but come here John  --: 
       = PhrUtt ; --%
       mkPhr : Utt -> Voc -> Phr -- come here John --%
       = \u,v -> PhrUtt NoPConj u v ; --% 
@@ -162,7 +170,7 @@ incomplete resource Constructors = open Grammar in {
 -- Any conjunction can be used as a phrasal conjunction.
 -- More phrasal conjunctions are defined in $Structural$.
 
-      mkPConj : Conj -> PConj   -- and 
+      mkPConj : Conj -> PConj   -- and   --:
         = PConjConj ; --%
       noPConj : PConj --% 
         = NoPConj ; --%
@@ -173,7 +181,7 @@ incomplete resource Constructors = open Grammar in {
 -- Any noun phrase can be turned into a vocative.
 -- More vocatives are defined in $Structural$.
 
-    mkVoc : NP -> Voc  -- John
+    mkVoc : NP -> Voc  -- John   --:
       = VocNP ; --% 
     noVoc : Voc --% 
       = NoVoc ; --% 
@@ -184,16 +192,16 @@ incomplete resource Constructors = open Grammar in {
 -- Utterances are formed from sentences, clauses, questions, and imperatives.
 
     mkUtt = overload { 
-      mkUtt : S -> Utt                     -- John walked  
+      mkUtt : S -> Utt                     -- John walked   --:  
       = UttS ; --%  
       mkUtt : Cl -> Utt                     -- John walks  
       = \c -> UttS (TUseCl TPres ASimul PPos c) ; --%  
-      mkUtt : QS -> Utt                    -- did John walk  
+      mkUtt : QS -> Utt                    -- did John walk   --:
       = UttQS   ; --%  
       mkUtt : QCl -> Utt                   -- does John walk  
       = \c -> UttQS (TUseQCl TPres ASimul PPos c) ; --%  
 
-      mkUtt : (ImpForm) -> (Pol) -> Imp -> Utt  -- don't love yourselves 
+      mkUtt : (ImpForm) -> (Pol) -> Imp -> Utt  -- don't love yourselves   --: 
       = mkUttImp  ; --%
       mkUtt : ImpForm -> Imp -> Utt -- love yourselves --% 
       = \f -> mkUttImp f PPos ; --% 
@@ -205,27 +213,27 @@ incomplete resource Constructors = open Grammar in {
 -- Utterances can also be formed from interrogative phrases and
 -- interrogative adverbials, noun phrases, adverbs, and verb phrases.
 
-      mkUtt : IP   -> Utt     -- who  
+      mkUtt : IP   -> Utt     -- who   --:
       = UttIP    ; --%  
-      mkUtt : IAdv -> Utt     -- why  
+      mkUtt : IAdv -> Utt     -- why   --:
       = UttIAdv  ; --%  
-      mkUtt : NP   -> Utt     -- this man  
+      mkUtt : NP   -> Utt     -- this man  --: 
       = UttNP    ; --%  
-      mkUtt : Adv  -> Utt     -- here  
+      mkUtt : Adv  -> Utt     -- here   --:
       = UttAdv   ; --%  
-      mkUtt : VP   -> Utt     -- to sleep 
+      mkUtt : VP   -> Utt     -- to sleep  --:
       = UttVP ; --%  
-      mkUtt : CN   -> Utt     -- beer     
+      mkUtt : CN   -> Utt     -- beer      --:
       =    UttCN ; --% 
-      mkUtt : AP   -> Utt     -- good
+      mkUtt : AP   -> Utt     -- good   --:
       =    UttAP ; --%    
-      mkUtt : Card -> Utt     -- five
+      mkUtt : Card -> Utt     -- five   --:
       =    UttCard ; --%  
     } ; --%
 
 -- The plural first-person imperative is a special construction.
 
-      lets_Utt : VP ->  Utt  -- let's walk 
+      lets_Utt : VP ->  Utt  -- let's walk    --:
       = ImpPl1 ; --%
 
 
@@ -236,9 +244,9 @@ incomplete resource Constructors = open Grammar in {
 -- Polarity is a parameter that sets a clause to positive or negative
 -- form. Since positive is the default, it need never be given explicitly.
 
-      positivePol : Pol   -- John walks [default] 
+      positivePol : Pol   -- John walks [default]   --: 
         = PPos ; --%
-      negativePol : Pol   -- John doesn't walk 
+      negativePol : Pol   -- John doesn't walk    --:
         = PNeg ; --%
 
 --3 Ant, anteriority 
@@ -247,9 +255,9 @@ incomplete resource Constructors = open Grammar in {
 -- anterior to some other reference time.
 -- Since simultaneous is the default, it need never be given explicitly.
 
-      simultaneousAnt : Ant   -- John walks [default] 
+      simultaneousAnt : Ant   -- John walks [default]   --: 
         = ASimul ; --%
-      anteriorAnt : Ant   -- John has walked       --# notpresent 
+      anteriorAnt : Ant   -- John has walked       --# notpresent  --: 
         = AAnter ; --# notpresent --%
 
 --3 Tense, tense 
@@ -258,13 +266,13 @@ incomplete resource Constructors = open Grammar in {
 -- to the time of speaking about it.
 -- Since present is the default, it need never be given explicitly.
 
-      presentTense     : Tense  -- John walks [default]
+      presentTense     : Tense  -- John walks [default]   --:
         = TPres ; --% 
-      pastTense        : Tense  -- John walked           --# notpresent 
+      pastTense        : Tense  -- John walked           --# notpresent  --: 
         = TPast ; --# notpresent --% 
-      futureTense      : Tense  -- John will walk        --# notpresent 
+      futureTense      : Tense  -- John will walk        --# notpresent  --:
         = TFut ; --# notpresent --% 
-      conditionalTense : Tense  -- John would walk       --# notpresent 
+      conditionalTense : Tense  -- John would walk       --# notpresent   --:
         = TCond ; --# notpresent --% 
 
 --3 ImpForm, imperative form 
@@ -273,11 +281,11 @@ incomplete resource Constructors = open Grammar in {
 -- by reference to the person or persons addressed.
 -- Since singular is the default, it need never be given explicitly.
 
-      singularImpForm : ImpForm   -- help yourself [default]
+      singularImpForm : ImpForm   -- help yourself [default]   --:
       = IFSg ;  --%
-      pluralImpForm   : ImpForm   -- help yourselves 
+      pluralImpForm   : ImpForm   -- help yourselves  --:
       = IFPl ;  --%
-      politeImpForm   : ImpForm   -- help yourself [polite singular] 
+      politeImpForm   : ImpForm   -- help yourself [polite singular]  --:
       = IFPol ;  --%
 
 -- This is how imperatives are implemented internally. --%
@@ -314,7 +322,7 @@ incomplete resource Constructors = open Grammar in {
       = \t,p -> TUseCl t ASimul p ;   --%  
       mkS : Ant -> Pol -> Cl -> S   --%  
       = \a,p -> TUseCl TPres a p ;   --%  
-      mkS : (Tense) -> (Ant) -> (Pol) -> Cl  -> S -- John wouldn't have walked 
+      mkS : (Tense) -> (Ant) -> (Pol) -> Cl  -> S -- John wouldn't have walked  --:
       = \t,a -> TUseCl t a ;   --%  
 
 -- Sentences can be combined with conjunctions. This can apply to a pair
@@ -322,12 +330,12 @@ incomplete resource Constructors = open Grammar in {
 
       mkS : Conj -> S -> S -> S   -- John walks and I run    
       = \c,x,y -> ConjS c (BaseS x y) ; --% 
-      mkS : Conj -> ListS  -> S   -- John walks, I run and you sleep 
+      mkS : Conj -> ListS  -> S   -- John walks, I run and you sleep  --:
       = \c,xy -> ConjS c xy ; --% 
 
 -- A sentence can be prefixed by an adverb.
 
-      mkS : Adv -> S -> S           -- today, John walks
+      mkS : Adv -> S -> S           -- today, John walks   --:
       = AdvS ; --%
       } ; 
 
@@ -382,7 +390,7 @@ incomplete resource Constructors = open Grammar in {
 -- As the general rule, a clause can be built from a subject noun phrase and 
 -- a verb phrase.
 
-      mkCl : NP -> VP -> Cl   -- John always walks here
+      mkCl : NP -> VP -> Cl   -- John always walks here   --:
       = PredVP  ; --%
 
 -- Existentials are a special form of clauses.
@@ -391,23 +399,25 @@ incomplete resource Constructors = open Grammar in {
       = \y -> ExistNP (DetArtSg IndefArt (UseN y)) ; --% 
       mkCl : CN -> Cl          -- there is an old house 
       = \y -> ExistNP (DetArtSg IndefArt y) ; --% 
-      mkCl : NP -> Cl          -- there are five houses 
+      mkCl : NP -> Cl          -- there are five houses   --:
       = ExistNP ; --% 
 
 -- There are also special forms in which a noun phrase or an adverb is
 -- emphasized.
 
-      mkCl : NP  -> RS -> Cl   -- it is John who walks 
+      mkCl : NP  -> RS -> Cl   -- it is John who walks   --: 
       = CleftNP    ; --% 
-      mkCl : Adv -> S  -> Cl   -- it is here he walks 
+      mkCl : Adv -> S  -> Cl   -- it is here he walks    --:
       = CleftAdv   ; --% 
 
 -- Subjectless verb phrases are used for impersonal actions.
 
       mkCl : V -> Cl   -- it rains 
       = \v -> ImpersCl (UseV v) ; --%
-      mkCl : VP -> Cl  -- it is raining 
+      mkCl : VP -> Cl  -- it is raining    --:
       = ImpersCl   ;  --%
+      mkCl : SC -> VP -> Cl  --:
+      = PredSCVP ; --%
 
       } ; 
 
@@ -423,19 +433,19 @@ incomplete resource Constructors = open Grammar in {
 -- A verb phrase is formed from a verb with appropriate arguments.
 
     mkVP = overload { 
-      mkVP : V   -> VP                -- sleep 
+      mkVP : V   -> VP                -- sleep --:
       = UseV      ; --% 
       mkVP : V2  -> NP -> VP          -- love it 
       = ComplV2   ; --% 
       mkVP : V3  -> NP -> NP -> VP    -- send a message to her 
       = ComplV3   ; --% 
-      mkVP : VV  -> VP -> VP          -- want to run 
+      mkVP : VV  -> VP -> VP          -- want to run  --:
       = ComplVV   ; --% 
-      mkVP : VS  -> S  -> VP          -- know that she runs 
+      mkVP : VS  -> S  -> VP          -- know that she runs  --: 
       = ComplVS   ; --% 
-      mkVP : VQ  -> QS -> VP          -- wonder if she runs 
+      mkVP : VQ  -> QS -> VP          -- wonder if she runs  --:
       = ComplVQ   ; --% 
-      mkVP : VA  -> AP -> VP          -- become red 
+      mkVP : VA  -> AP -> VP          -- become red  --:
       = ComplVA   ; --% 
       mkVP : V2A -> NP -> AP -> VP    -- paint it red 
       = ComplV2A  ; --% 
@@ -468,17 +478,20 @@ incomplete resource Constructors = open Grammar in {
 
 -- A verb phrase can be modified with a postverbal or a preverbal adverb.
 
-      mkVP : VP -> Adv -> VP          -- sleep here 
+      mkVP : VP -> Adv -> VP          -- sleep here   --: 
       = AdvVP     ; --% 
-      mkVP : AdV -> VP -> VP          -- always sleep 
+      mkVP : AdV -> VP -> VP          -- always sleep   --:
       = AdVVP ; --% 
 
 -- Objectless verb phrases can be taken to verb phrases in two ways.
 
-      mkVP : VPSlash -> NP -> VP      -- paint it black
+      mkVP : VPSlash -> NP -> VP      -- paint it black  --:
       = ComplSlash ; --% 
-      mkVP : VPSlash -> VP            -- paint itself black
-        = ReflVP 
+      mkVP : VPSlash -> VP            -- paint itself black --:
+        = ReflVP ; --%
+      mkVP : Comp -> VP               -- be warm --:
+        = UseComp ; --%
+
       } ; --% 
 
 -- Two-place verbs can be used reflexively.
@@ -494,12 +507,37 @@ incomplete resource Constructors = open Grammar in {
       = PassV2 ; --%  
       passiveVP : V2 -> NP -> VP   -- be loved by her 
       = \v,np -> (AdvVP (PassV2 v) (PrepNP by8agent_Prep np)) ; --%
+      -- passiveVP : VPSlash -> VP --: --%
+
       } ; --% 
 
 -- A verb phrase can be turned into the progressive form.
 
       progressiveVP : VP -> VP   -- be sleeping 
       = ProgrVP ; --%
+
+--3 Comp, verb phrase complements
+
+   mkComp = overload { --%
+     mkComp : AP -> Comp -- very old --:
+     = CompAP ; --%
+     mkComp : NP -> Comp -- this man --:
+     = CompNP ; --%
+     mkComp : Adv -> Comp -- here --:
+     = CompAdv ; --%
+     } ; --%
+
+--3 SC, embedded sentence
+
+   mkSC = overload { --%
+     mkSC : S -> SC -- that he walks --:
+     = EmbedS ; --%
+     mkSC : QS -> SC -- whether he walks --:
+     = EmbedQS ; --%
+     mkSC : VP -> SC -- to walk --:
+     = EmbedVP ; --%
+     } ; --%
+
 
 --3 Imp, imperatives 
 
@@ -534,7 +572,7 @@ incomplete resource Constructors = open Grammar in {
           = \q,nu,n -> DetCN (DetQuant q nu) n ; --%  
       mkNP : Quant -> Num -> N  -> NP   -- these five men
           = \q,nu,n -> DetCN (DetQuant q nu) (UseN n) ; --%  
-      mkNP : Det -> CN -> NP      -- the first old man   
+      mkNP : Det -> CN -> NP      -- the first old man   --:
           =  DetCN    ; --%   
       mkNP : Det -> N -> NP       -- the first man   
           =  \d,n -> DetCN d (UseN n)   ; --%   
@@ -561,9 +599,9 @@ incomplete resource Constructors = open Grammar in {
 
 -- Proper names and pronouns can be used as noun phrases.
 
-      mkNP : PN -> NP             -- John  
+      mkNP : PN -> NP             -- John  --:
       = UsePN    ; --%  
-      mkNP : Pron -> NP           -- he  
+      mkNP : Pron -> NP           -- he  --:
       = UsePron  ; --%  
 
 -- Determiners alone can form noun phrases.
@@ -572,12 +610,12 @@ incomplete resource Constructors = open Grammar in {
           =  \q -> DetNP (DetQuant q sgNum) ; --%  
       mkNP : Quant -> Num -> NP    -- these five  
           =  \q,n -> DetNP (DetQuant q n) ; --%  
-      mkNP : Det -> NP             -- these five best
+      mkNP : Det -> NP             -- these five best  --:
           =  DetNP ; --% 
 
 -- Determinesless mass noun phrases.
 
-      mkNP : CN -> NP  -- old beer   
+      mkNP : CN -> NP  -- old beer   --:
           = MassNP ; --%   
       mkNP : N -> NP  -- beer   
           = \n -> MassNP (UseN n) ; --%   
@@ -585,13 +623,13 @@ incomplete resource Constructors = open Grammar in {
 -- A noun phrase once formed can be prefixed by a predeterminer and
 -- suffixed by a past participle or an adverb.
 
-      mkNP : Predet -> NP -> NP  -- only the man  
+      mkNP : Predet -> NP -> NP  -- only the man --:  
       = PredetNP  ; --%  
-      mkNP : NP -> V2  -> NP     -- the man found
+      mkNP : NP -> V2  -> NP     -- the man seen --:
       = PPartNP  ; --% 
-      mkNP : NP -> Adv -> NP     -- Paris today
+      mkNP : NP -> Adv -> NP     -- Paris today --:
       = AdvNP ; --% 
-      mkNP : NP -> RS -> NP      -- John, who lives in Paris
+      mkNP : NP -> RS -> NP      -- John, who lives in Paris --:
       = RelNP ; --% 
 
 -- A conjunction can be formed both from two noun phrases and a longer
@@ -599,7 +637,7 @@ incomplete resource Constructors = open Grammar in {
 
       mkNP : Conj -> NP -> NP -> NP 
       = \c,x,y -> ConjNP c (BaseNP x y) ; --% 
-      mkNP : Conj -> ListNP -> NP 
+      mkNP : Conj -> ListNP -> NP --: 
       = \c,xy -> ConjNP c xy ; --% 
 
 -- backward compat --%
@@ -626,9 +664,9 @@ incomplete resource Constructors = open Grammar in {
         = \d,nu -> (DetQuant d (NumCard nu)) ; --% 
       mkDet : Quant ->  Ord -> Det     -- the best
         = \q,o -> DetQuantOrd q NumSg o  ; --% 
-      mkDet : Quant -> Num -> Ord -> Det  -- these five best 
+      mkDet : Quant -> Num -> Ord -> Det  -- these five best --: 
         = DetQuantOrd  ; --% 
-      mkDet : Quant -> Num -> Det -- these five  
+      mkDet : Quant -> Num -> Det -- these five  --:
         = DetQuant ; --%  
 
 -- Numerals, their special cases integers and digits, and possessive pronouns can be
@@ -667,13 +705,13 @@ incomplete resource Constructors = open Grammar in {
 -- There are definite and indefinite articles.
 
     mkQuant = overload { --%
-      mkQuant : Pron -> Quant   -- my
+      mkQuant : Pron -> Quant   -- my  --:
       = PossPron ; --% 
       } ; --% 
 
-    the_Quant : Quant    -- the
+    the_Quant : Quant    -- the --:
       = DefArt ; --% 
-    a_Quant   : Quant    -- a 
+    a_Quant   : Quant    -- a  --:
       = IndefArt ; --%
 
 --3 Num, cardinal numerals  
@@ -690,7 +728,7 @@ incomplete resource Constructors = open Grammar in {
         = \d -> NumCard (NumDigits d)      ; --% 
       mkNum : Digit -> Num -- five
         = \d -> NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 d)))))) ; --% 
-      mkNum : Card -> Num  -- almost ten
+      mkNum : Card -> Num  -- almost ten --:
         = NumCard ; --%  
 
 -- A numeral can be modified by an adnumeral.
@@ -701,9 +739,9 @@ incomplete resource Constructors = open Grammar in {
 
 -- Dummy numbers are sometimes to select the grammatical number of a determiner.
 
-      singularNum : Num              -- singular
+      singularNum : Num              -- singular --:
       = NumSg       ; --% 
-      pluralNum : Num                -- plural 
+      pluralNum : Num                -- plural --:
       = NumPl       ; --% 
 
 
@@ -712,9 +750,9 @@ incomplete resource Constructors = open Grammar in {
     mkCard = overload {  --%
       mkCard : Str -> Card   -- thirty-five (given as "35")
         = str2card ; --%
-      mkCard : Numeral -> Card   -- twenty
+      mkCard : Numeral -> Card   -- twenty  --:
         = NumNumeral ; --%  
-      mkCard : Digits -> Card      -- 51  
+      mkCard : Digits -> Card      -- 51  --:
         = NumDigits ; --%  
       mkCard : AdN -> Card -> Card  -- almost fifty
         = AdNum ; --%
@@ -726,16 +764,16 @@ incomplete resource Constructors = open Grammar in {
 -- and from symbolic integers.
 
     mkOrd = overload { --% 
-      mkOrd : Numeral -> Ord   -- twentieth
+      mkOrd : Numeral -> Ord   -- twentieth  --:
       = OrdNumeral ; --% 
-      mkOrd : Digits -> Ord         -- 51st 
+      mkOrd : Digits -> Ord         -- 51st --:
       = OrdDigits      ; --% 
       mkOrd : Digit -> Ord       -- fifth 
       = \d -> OrdNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 d))))) ; --% 
 
 -- Also adjectives in the superlative form can appear on ordinal positions.
 
-      mkOrd : A -> Ord           -- largest 
+      mkOrd : A -> Ord           -- largest  --:
       = OrdSuperl ; --% 
       } ; --% 
 
@@ -744,113 +782,118 @@ incomplete resource Constructors = open Grammar in {
 
 -- Comparison adverbs can be used as adnumerals.
 
-      mkAdN : CAdv -> AdN  -- more than 
+      mkAdN : CAdv -> AdN  -- more than --: 
       = AdnCAdv ; --%
 
 --3 Numeral, number words 
 
-
--- Numerals can be extracted from strings at compile time.
+-- Numerals are divided to classes Sub1000000 (= Numeral), Sub1000, Sub100, Sub10.
 
     mkNumeral = overload {  --%       
+
+-- Number words up to 999,999 can be built as follows.
+
+      mkNumeral : Sub1000 -> Numeral -- coerce 1..999 --: 
+      = \n -> num (pot3 n) ; --%
+      mkNumeral : Sub1000 -> Sub1000 -> Numeral -- 1000m + n --: 
+      = \m,n -> num (pot3plus m n) ; --%
+
+-- Some numerals can also be extracted from strings at compile time.
+
       mkNumeral : Str -> Numeral   -- thirty-five (given by "35") 
       = str2numeral ; --% 
-    } ; --%      
+      } ; --%      
 
+    thousandfoldNumeral : Sub1000 -> Numeral -- 1000n  --:
+      = \n -> num (pot3 n) ;  --%
 
--- Some "round" numbers are here given as shorthands.
+    mkSub1000 = overload {  --% 
+      mkSub1000 : Sub100 -> Sub1000 -- coerce 1..99  --:
+      = pot1as2 ; --% 
+      mkSub1000 : Sub10 -> Sub1000 -- 100n  --:
+      = pot2 ; --% 
+      mkSub1000 : Sub10 -> Sub100 -> Sub1000 -- 100m + n  --:
+      = pot2plus ; --% 
+      } ; --%
 
-    n1_Numeral : Numeral 
-    = num (pot2as3 (pot1as2 (pot0as1 pot01))) ; --%  
-    n2_Numeral : Numeral 
-    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n2)))) ; --%  
-    n3_Numeral : Numeral 
-    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n3)))) ; --%  
-    n4_Numeral : Numeral 
-    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n4)))) ; --%  
-    n5_Numeral : Numeral 
-    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))) ; --%  
-    n6_Numeral : Numeral 
-    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n6)))) ; --%  
-    n7_Numeral : Numeral 
-    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n7)))) ; --%  
-    n8_Numeral : Numeral 
-    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n8)))) ; --%  
-    n9_Numeral : Numeral 
-    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n9)))) ; --%  
-    n10_Numeral : Numeral 
-    = num (pot2as3 (pot1as2 pot110)) ; --%  
-    n20_Numeral : Numeral 
-    = num (pot2as3 (pot1as2 (pot1 n2))) ; --%  
-    n100_Numeral : Numeral 
-    = num (pot2as3 (pot2 pot01)) ; --%  
-    n1000_Numeral : Numeral 
-    = num (pot3 (pot1as2 (pot0as1 pot01))) ; --%  
+    mkSub100 = overload {  --% 
+      mkSub100 : Unit -> Sub100            -- coerce 1..9  --:
+      = \n -> pot0as1 n.n ; --% 
+      mkSub100 : Unit -> Unit -> Sub100    -- 10m + n  --:
+      = \m,n -> case m.isOne of {
+         Predef.PFalse => pot1plus m.d n.n ; --%
+         _ => case n.isOne of { 
+            Predef.PFalse => pot1to19 n.d ; --%
+            _ => pot111
+            }
+         }
+      } ; --%
 
--- See $Numeral$ for the full set of constructors, and use the category 
--- $Digits$ for other numbers from one million.
+    tenfoldSub100 : Unit -> Sub100 -- 10n  --:
+      = \n -> case n.isOne of {  --%
+        Predef.PTrue => pot110 ; --%
+        _ => pot1 n.d  --%
+        } ; --%
+
+-- We introduce the internal type $Unit$ for 1..9
+
+    Unit : Type --%
+      = {n : Sub10 ; d : Digit ; isOne : Predef.PBool} ; --%
+
+    n1_Unit : Unit -- one --:
+      = {n = pot01 ; d = n2 ; isOne = Predef.PTrue} ; --%
+    n2_Unit : Unit -- two --: 
+      = {n = pot0 n2 ; d = n2 ; isOne = Predef.PFalse} ; --%
+    n3_Unit : Unit -- three --: 
+      = {n = pot0 n3 ; d = n3 ; isOne = Predef.PFalse} ; --%
+    n4_Unit : Unit -- four --: 
+      = {n = pot0 n4 ; d = n4 ; isOne = Predef.PFalse} ; --%
+    n5_Unit : Unit -- five --: 
+      = {n = pot0 n5 ; d = n5 ; isOne = Predef.PFalse} ; --%
+    n6_Unit : Unit -- six --: 
+      = {n = pot0 n6 ; d = n6 ; isOne = Predef.PFalse} ; --%
+    n7_Unit : Unit -- seven --: 
+      = {n = pot0 n7 ; d = n7 ; isOne = Predef.PFalse} ; --%
+    n8_Unit : Unit -- eight --: 
+      = {n = pot0 n8 ; d = n8 ; isOne = Predef.PFalse} ; --%
+    n9_Unit : Unit -- nine --: 
+      = {n = pot0 n9 ; d = n9 ; isOne = Predef.PFalse} ; --%
+
+-- Use the category $Digits$ for numbers above one million.
 
 
 --3 Digits, numerals as sequences of digits
 
    mkDigits = overload { --%
-      mkDigits : Str -> Digits 
+      mkDigits : Str -> Digits -- 35 (from string "35")
       = str2digits ; --% 
-      mkDigits : Dig -> Digits 
+      mkDigits : Dig -> Digits -- 4  --:
       = IDig ; --%  
-      mkDigits : Dig -> Digits -> Digits 
+      mkDigits : Dig -> Digits -> Digits -- 1,233,432  --:
       = IIDig ; --%  
       } ; --% 
 
-    n1_Digits : Digits 
-    = IDig D_1 ; --% 
-    n2_Digits : Digits 
-    = IDig D_2 ; --% 
-    n3_Digits : Digits 
-    = IDig D_3 ; --% 
-    n4_Digits : Digits 
-    = IDig D_4 ; --% 
-    n5_Digits : Digits 
-    = IDig D_5 ; --% 
-    n6_Digits : Digits 
-    = IDig D_6 ; --% 
-    n7_Digits : Digits 
-    = IDig D_7 ; --% 
-    n8_Digits : Digits 
-    = IDig D_8 ; --% 
-    n9_Digits : Digits 
-    = IDig D_9 ; --% 
-    n10_Digits : Digits 
-    = IIDig D_1 (IDig D_0) ; --% 
-    n20_Digits : Digits  
-    = IIDig D_2 (IDig D_0) ; --% 
-    n100_Digits : Digits 
-    = IIDig D_1 (IIDig D_0 (IDig D_0)) ; --% 
-    n1000_Digits : Digits 
-    = IIDig D_1 (IIDig D_0 (IIDig D_0 (IDig D_0))) ; --% 
-
-
 --3 Dig, single digits 
 
-      n0_Dig : Dig 
+      n0_Dig : Dig   -- 0 --: 
       = D_0 ; --% 
-      n1_Dig : Dig 
+      n1_Dig : Dig   -- 1 --: 
       = D_1 ; --% 
-      n2_Dig : Dig    
+      n2_Dig : Dig   -- 2 --:  
       = D_2 ; --% 
-      n3_Dig : Dig    
+      n3_Dig : Dig   -- 3 --:     
       = D_3 ; --% 
-      n4_Dig : Dig    
+      n4_Dig : Dig   -- 4 --: 
       = D_4 ; --% 
-      n5_Dig : Dig    
+      n5_Dig : Dig   -- 5 --:     
       = D_5 ; --% 
-      n6_Dig : Dig        
+      n6_Dig : Dig   -- 6 --:     
       = D_6 ; --% 
-      n7_Dig : Dig        
+      n7_Dig : Dig   -- 7 --:          
       = D_7 ; --% 
-      n8_Dig : Dig        
+      n8_Dig : Dig   -- 8 --:     
       = D_8 ; --% 
-      n9_Dig : Dig        
+      n9_Dig : Dig   -- 9 --: 
       = D_9 ; --% 
       
 --2 Nouns 
@@ -861,14 +904,14 @@ incomplete resource Constructors = open Grammar in {
 
 -- The simplest way of forming common noun phrases is from atomic nouns $N$.
 
-      mkCN : N  -> CN            -- house  
+      mkCN : N  -> CN            -- house  --:
       = UseN     ; --%  
 
 -- Common noun phrases can be formed from relational nouns by providing arguments.
 
-      mkCN : N2 -> NP -> CN      -- mother of John 
+      mkCN : N2 -> NP -> CN      -- mother of John  --: 
       = ComplN2  ; --% 
-      mkCN : N3 -> NP -> NP -> CN      -- distance from this city to Paris
+      mkCN : N3 -> NP -> NP -> CN      -- distance from this city to Paris --:
       = \f,x -> ComplN2 (ComplN3 f x)  ; --% 
 
 -- Relational nouns can also be used without their arguments.
@@ -890,7 +933,7 @@ incomplete resource Constructors = open Grammar in {
       = \x,y -> AdjCN x (UseN y) ; --%  
       mkCN : AP -> CN  -> CN     -- very big blue house  
       = AdjCN    ; --%  
-      mkCN : CN -> AP  -> CN     -- very big blue house --%
+      mkCN : CN -> AP  -> CN     -- very big blue house --: --%
       = \x,y -> AdjCN y x    ; --% 
       mkCN :  N -> AP  -> CN     -- very big house --%
       = \x,y -> AdjCN y (UseN x)    ; --% 
@@ -899,7 +942,7 @@ incomplete resource Constructors = open Grammar in {
 
       mkCN :  N -> RS  -> CN     -- house that John owns 
       = \x,y -> RelCN (UseN x) y   ; --% 
-      mkCN : CN -> RS  -> CN     -- big house that John loves 
+      mkCN : CN -> RS  -> CN     -- big house that John loves --:
       = RelCN    ; --% 
       mkCN :  N -> Adv -> CN     -- house on the hill 
       = \x,y -> AdvCN (UseN x) y  ; --% 
@@ -910,13 +953,14 @@ incomplete resource Constructors = open Grammar in {
 -- questions, or infinitives. But syntactically this is possible for
 -- all nouns.
 
-
       mkCN : CN -> S   -> CN     -- rule that John walks 
       = \cn,s -> SentCN cn (EmbedS s) ; --% 
       mkCN : CN -> QS  -> CN     -- question if John walks 
       = \cn,s -> SentCN cn (EmbedQS s) ; --% 
       mkCN : CN -> VP  -> CN     -- reason to walk 
       = \cn,s -> SentCN cn (EmbedVP s) ; --% 
+      mkCN : CN -> SC  -> CN     -- reason to walk --: 
+      = \cn,s -> SentCN cn s ; --% 
 
 -- A noun can be used in apposition to a noun phrase, especially a proper name.
 
@@ -936,16 +980,16 @@ incomplete resource Constructors = open Grammar in {
 -- Adjectival phrases can be formed from atomic adjectives by using the positive form or
 -- the comparative with a complement
 
-      mkAP : A -> AP           -- warm   
+      mkAP : A -> AP           -- warm   --:
       = PositA   ; --%   
-      mkAP : A -> NP -> AP     -- warmer than Paris   
+      mkAP : A -> NP -> AP     -- warmer than Paris --:   
       = ComparA  ; --%   
 
 -- Relational adjectives can be used with a complement or a reflexive
 
-      mkAP : A2 -> NP -> AP    -- married to her 
+      mkAP : A2 -> NP -> AP    -- married to her --:
       = ComplA2  ; --% 
-      mkAP : A2 -> AP          -- married
+      mkAP : A2 -> AP          -- married --:
       = UseA2   ; --% 
 
 -- Some adjectival phrases can take as complements sentences, 
@@ -958,19 +1002,21 @@ incomplete resource Constructors = open Grammar in {
       =  \ap,s -> SentAP ap (EmbedQS s) ; --% 
       mkAP : AP -> VP -> AP    -- ready to go 
       =  \ap,s -> SentAP ap (EmbedVP s) ; --% 
+      mkAP : AP -> SC -> AP    -- ready to go --: 
+      =  \ap,s -> SentAP ap s ; --% 
 
 -- An adjectival phrase can be modified by an adadjective.
 
       mkAP : AdA -> A -> AP   -- very old
       =\x,y -> AdAP x (PositA y) ; --%
-      mkAP : AdA -> AP -> AP   -- very very old
+      mkAP : AdA -> AP -> AP   -- very very old  --:
       = AdAP ; --%
 
 -- Conjunction can be formed from two or more adjectival phrases.
 
       mkAP : Conj -> AP -> AP -> AP -- old and big 
       = \c,x,y -> ConjAP c (BaseAP x y) ; --% 
-      mkAP : Conj -> ListAP -> AP   -- old, big and warm 
+      mkAP : Conj -> ListAP -> AP   -- old, big and warm --:
       = \c,xy -> ConjAP c xy ; --% 
 
 -- Two more constructions.
@@ -981,7 +1027,7 @@ incomplete resource Constructors = open Grammar in {
       = CAdvAP ; --%
       } ; --% 
 
-      reflAP   : A2 -> AP             -- married to himself
+      reflAP   : A2 -> AP             -- married to himself --:
       = ReflA2 ; --% 
       comparAP : A -> AP              -- warmer 
       = UseComparA ; --%
@@ -992,36 +1038,36 @@ incomplete resource Constructors = open Grammar in {
 
 -- Adverbs can be formed from adjectives.
 
-      mkAdv : A -> Adv            -- warmly   
+      mkAdv : A -> Adv            -- warmly   --:
       = PositAdvAdj  ; --%   
 
 -- Prepositional phrases are treated as adverbs.
 
-      mkAdv : Prep -> NP -> Adv          -- in the house   
+      mkAdv : Prep -> NP -> Adv          -- in the house --:   
       = PrepNP       ; --%   
 
 -- Subordinate sentences are treated as adverbs.
 
-      mkAdv : Subj -> S -> Adv   -- when John walks 
+      mkAdv : Subj -> S -> Adv   -- when John walks  --:
       = SubjS ; --% 
 
 -- An adjectival adverb can be compared to a noun phrase or a sentence.
 
-      mkAdv : CAdv -> A -> NP -> Adv   -- more warmly than John 
+      mkAdv : CAdv -> A -> NP -> Adv   -- more warmly than John --: 
       = ComparAdvAdj   ; --% 
-      mkAdv : CAdv -> A -> S -> Adv    -- more warmly than he runs 
+      mkAdv : CAdv -> A -> S -> Adv    -- more warmly than he runs --:
       = ComparAdvAdjS  ; --% 
 
 -- Adverbs can be modified by adadjectives.
 
-      mkAdv : AdA -> Adv -> Adv        -- very warmly 
+      mkAdv : AdA -> Adv -> Adv        -- very warmly --:
       = AdAdv   ; --% 
 
 -- Conjunction can be formed from two or more adverbial phrases.
 
       mkAdv : Conj -> Adv -> Adv -> Adv  -- here and now
       = \c,x,y -> ConjAdv c (BaseAdv x y) ; --% 
-      mkAdv : Conj -> ListAdv -> Adv   -- with John, here and now 
+      mkAdv : Conj -> ListAdv -> Adv   -- with John, here and now --: 
       = \c,xy -> ConjAdv c xy ; --% 
       } ; --% 
 
@@ -1071,7 +1117,7 @@ incomplete resource Constructors = open Grammar in {
 
 -- 'Yes-no' question clauses are built from 'declarative' clauses.
 
-      mkQCl : Cl -> QCl -- does John walk  
+      mkQCl : Cl -> QCl -- does John walk  --:  
       = QuestCl ; --%  
  
 -- 'Wh' questions are built from interrogative pronouns in subject 
@@ -1080,7 +1126,7 @@ incomplete resource Constructors = open Grammar in {
 -- The latter uses the 'slash' category of objectless clauses 
 -- (see below); we give the common special case with a two-place verb.
 
-      mkQCl : IP -> VP -> QCl               -- who walks  
+      mkQCl : IP -> VP -> QCl               -- who walks  --:    
       = QuestVP ; --%  
       mkQCl : IP -> V -> QCl                -- who walks   
       = \s,v -> QuestVP s (UseV v); --%   
@@ -1122,13 +1168,13 @@ incomplete resource Constructors = open Grammar in {
 	= \x,y -> QuestVP x (UseComp (CompAdv y)) ; --%   
       mkQCl : IP -> NP -> V2 -> QCl        -- who does John love 
       = \ip,np,v -> QuestSlash ip (SlashVP np (SlashV2a v)) ; --%
-      mkQCl : IP -> ClSlash -> QCl         -- who does John today 
+      mkQCl : IP -> ClSlash -> QCl         -- who does John today   --:   
       = QuestSlash   ; --% 
 
 -- Adverbial 'wh' questions are built with interrogative adverbials, with the
 -- special case of prepositional phrases with interrogative pronouns.
 
-      mkQCl : IAdv -> Cl -> QCl            -- why does John walk  
+      mkQCl : IAdv -> Cl -> QCl            -- why does John walk   --:  
       = QuestIAdv    ; --%  
       mkQCl : Prep -> IP -> Cl -> QCl      -- with whom does John walk 
       = \p,ip -> QuestIAdv (PrepIP p ip)  ; --% 
@@ -1140,12 +1186,12 @@ incomplete resource Constructors = open Grammar in {
 
 -- Asking about a known subject.
 
-      mkQCl : IComp -> NP -> QCl   -- who is this man 
+      mkQCl : IComp -> NP -> QCl   -- who is this man  --:  
       = \a -> QuestIComp a   ; --% 
 
 -- Existentials are a special construction.
 
-      mkQCl : IP -> QCl         -- which houses are there 
+      mkQCl : IP -> QCl         -- which houses are there  --:  
       = ExistIP ; --% 
       } ; --% 
 
@@ -1157,10 +1203,12 @@ incomplete resource Constructors = open Grammar in {
 -- Interrogative pronouns 
 -- can be formed much like noun phrases, by using interrogative quantifiers.
 
-      mkIP : IDet -> CN -> IP          -- which five big cities 
+      mkIP : IDet -> CN -> IP          -- which five big cities  --:  
       = IdetCN ; --% 
       mkIP : IDet -> N -> IP      -- which five cities
       = \i,n -> IdetCN i (UseN n)  ; --% 
+      mkIP : IDet -> IP      -- which five --:
+      = IdetIP  ; --% 
       mkIP : IQuant -> CN -> IP    -- which big cities
                      =  \i,n -> IdetCN (IdetQuant i NumSg) n ; --%  
       mkIP : IQuant -> Num -> CN -> IP          -- which five cities 
@@ -1171,7 +1219,7 @@ incomplete resource Constructors = open Grammar in {
 
 -- An interrogative pronoun can be modified by an adverb.
 
-      mkIP : IP -> Adv -> IP        -- who in Paris 
+      mkIP : IP -> Adv -> IP        -- who in Paris --:
       = AdvIP ; --%
       } ; --% 
 
@@ -1245,7 +1293,7 @@ incomplete resource Constructors = open Grammar in {
       = TUseRCl ; --% 
       mkRS : Conj -> RS -> RS -> RS -- who walks and whose mother runsx
       = \c,x,y -> ConjRS c (BaseRS x y) ; --% 
-      mkRS : Conj -> ListRS -> RS -- who walks, whom I see and who sleeps
+      mkRS : Conj -> ListRS -> RS -- who walks, whom I see and who sleeps --:
       = \c,xy -> ConjRS c xy ; --% 
       } ; --% 
 
@@ -1259,9 +1307,9 @@ incomplete resource Constructors = open Grammar in {
 -- The latter uses the 'slash' category of objectless clauses (see below); 
 -- we give the common special case with a two-place verb.
 
-      mkRCl : RP -> VP -> RCl        -- that loves John 
+      mkRCl : RP -> VP -> RCl        -- that loves John   --:   
       = RelVP     ; --% 
-      mkRCl : RP -> ClSlash -> RCl     -- whom John loves today 
+      mkRCl : RP -> ClSlash -> RCl     -- whom John loves today   --:   
       = RelSlash ; --% 
       mkRCl : RP -> NP -> V2 -> RCl     -- whom John loves 
       = \rp,np,v2 -> RelSlash rp (SlashVP np (SlashV2a v2)) ; --% 
@@ -1277,18 +1325,23 @@ incomplete resource Constructors = open Grammar in {
 
 -- There is an atomic relative pronoun
 
-    which_RP : RP                        -- which 
+    which_RP : RP                        -- which  --:
       = IdRP ; --% 
 
 -- A relative pronoun can be made into a kind of a prepositional phrase.
 
-    mkRP : Prep -> NP -> RP -> RP    -- all the houses in which 
+    mkRP : Prep -> NP -> RP -> RP    -- all the houses in which --: 
       = FunRP ; --% 
 
 
+--3 SSlash, objectless sentences 
 
+    mkSSlash = overload { --%
+      mkSSlash : Temp -> Pol -> ClSlash -> SSlash  --:
+      = UseSlash --%
+      } ; --%
 
---3 ClSlash, objectless sentences 
+--3 ClSlash, objectless clauses
 
     mkClSlash = overload { --%
 
@@ -1296,7 +1349,7 @@ incomplete resource Constructors = open Grammar in {
 -- The most common way of constructing them is by using a two-place verb
 -- with a subject but without an object.
 
-      mkClSlash : NP -> VPSlash -> ClSlash        -- (whom) he sees here 
+      mkClSlash : NP -> VPSlash -> ClSlash        -- (whom) he sees here --: 
       = \np,vps -> SlashVP np vps ; --% 
       mkClSlash : NP -> V2 -> ClSlash        -- (whom) he sees 
       = \np,v2 -> SlashVP np (SlashV2a v2) ; --% 
@@ -1308,13 +1361,19 @@ incomplete resource Constructors = open Grammar in {
 
 -- The missing object can also be the noun phrase in a prepositional phrase.
 
-      mkClSlash : Cl -> Prep -> ClSlash      -- (with whom) he walks 
+      mkClSlash : Cl -> Prep -> ClSlash      -- (with whom) he walks --:
       = SlashPrep ; --% 
 
 -- An objectless sentence can be modified by an adverb.
 
-      mkClSlash : ClSlash -> Adv -> ClSlash    -- (whom) he sees tomorrow 
+      mkClSlash : ClSlash -> Adv -> ClSlash    -- (whom) he sees tomorrow  --: 
       = AdvSlash ; --% 
+
+-- Slash can be transferred to an embedded sentence.
+
+      mkClSlash : NP -> VS -> SSlash -> ClSlash -- (whom) she says that he loves --:
+      = SlashVS --%
+
       } ; --% 
 
 
@@ -1324,18 +1383,22 @@ incomplete resource Constructors = open Grammar in {
 
 -- This is the deep level of many-argument predication, permitting extraction.
 
-      mkVPSlash : V2  -> VPSlash         --  (whom) (John) loves 
+      mkVPSlash : V2  -> VPSlash         --  (whom) (John) loves --:
         = SlashV2a ; --% 
-      mkVPSlash : V3  -> NP -> VPSlash   --  (whom) (John) gives an apple 
+      mkVPSlash : V3  -> NP -> VPSlash   --  (whom) (John) gives an apple  --: 
         = Slash2V3 ; --% 
-      mkVPSlash : V2A -> AP -> VPSlash   --  (whom) (John) paints red 
+      mkVPSlash : V2A -> AP -> VPSlash   --  (whom) (John) paints red  --:
         = SlashV2A ; --% 
-      mkVPSlash : V2Q -> QS -> VPSlash   --  (whom) (John) asks who sleeps 
+      mkVPSlash : V2Q -> QS -> VPSlash   --  (whom) (John) asks who sleeps  --: 
         = SlashV2Q ; --% 
-      mkVPSlash : V2S -> S  -> VPSlash   --  (whom) (John) tells that we sleep 
+      mkVPSlash : V2S -> S  -> VPSlash   --  (whom) (John) tells that we sleep  --:
         = SlashV2S ; --% 
-      mkVPSlash : V2V -> VP -> VPSlash   -- (whom) (John) forces to sleep 
+      mkVPSlash : V2V -> VP -> VPSlash   -- (whom) (John) forces to sleep  --:
         = SlashV2V ; --% 
+      mkVPSlash : VV  -> VPSlash -> VPSlash  -- want always to buy --:
+        = SlashVV ; --%
+      mkVPSlash : V2V -> NP -> VPSlash -> VPSlash -- beg me always to buy --:
+        = SlashV2VNP ; --%
       } ; --% 
 
 
@@ -1347,18 +1410,18 @@ incomplete resource Constructors = open Grammar in {
 --3 ListS, sentence lists 
 
   mkListS = overload { --%
-   mkListS : S -> S -> ListS 
+   mkListS : S -> S -> ListS  --:
    = BaseS ; --% 
-   mkListS : S -> ListS -> ListS 
+   mkListS : S -> ListS -> ListS  --:
    = ConsS  ; --% 
    } ; --% 
 
 --3 ListAdv, adverb lists 
 
   mkListAdv = overload {  --%
-   mkListAdv : Adv -> Adv -> ListAdv 
+   mkListAdv : Adv -> Adv -> ListAdv  --:
    = BaseAdv ; --% 
-   mkListAdv : Adv -> ListAdv -> ListAdv 
+   mkListAdv : Adv -> ListAdv -> ListAdv  --:
    = ConsAdv  ; --% 
    } ; --% 
 
@@ -1367,9 +1430,9 @@ incomplete resource Constructors = open Grammar in {
 --3 ListAP, adjectival phrase lists 
 
   mkListAP = overload {  --%
-   mkListAP : AP -> AP -> ListAP 
+   mkListAP : AP -> AP -> ListAP  --:
    = BaseAP ; --% 
-   mkListAP : AP -> ListAP -> ListAP 
+   mkListAP : AP -> ListAP -> ListAP  --:
    = ConsAP  ; --% 
    } ; --% 
 
@@ -1378,18 +1441,18 @@ incomplete resource Constructors = open Grammar in {
 --3 ListNP, noun phrase lists 
 
   mkListNP = overload {  --%
-   mkListNP : NP -> NP -> ListNP 
+   mkListNP : NP -> NP -> ListNP  --:
    = BaseNP ; --% 
-   mkListNP : NP -> ListNP -> ListNP 
+   mkListNP : NP -> ListNP -> ListNP  --:
    = ConsNP  ; --% 
    } ; --% 
 
 --3 ListRS, relative clause lists 
 
   mkListRS = overload {  --%
-   mkListRS : RS -> RS -> ListRS 
+   mkListRS : RS -> RS -> ListRS  --:
    = BaseRS ; --% 
-   mkListRS : RS -> ListRS -> ListRS 
+   mkListRS : RS -> ListRS -> ListRS  --:
    = ConsRS  ; --% 
    } ; --% 
 
@@ -1567,5 +1630,61 @@ oper
     _   => Predef.error ("not a valid digit" ++ s)
     } ;
   } ;
+
+    n1_Digits : Digits -- 1 
+    = IDig D_1 ; --% 
+    n2_Digits : Digits -- 2 
+    = IDig D_2 ; --% 
+    n3_Digits : Digits -- 3
+    = IDig D_3 ; --% 
+    n4_Digits : Digits -- 4
+    = IDig D_4 ; --% 
+    n5_Digits : Digits -- 5
+    = IDig D_5 ; --% 
+    n6_Digits : Digits -- 6
+    = IDig D_6 ; --% 
+    n7_Digits : Digits -- 7
+    = IDig D_7 ; --% 
+    n8_Digits : Digits -- 8
+    = IDig D_8 ; --% 
+    n9_Digits : Digits -- 9
+    = IDig D_9 ; --% 
+    n10_Digits : Digits -- 10
+    = IIDig D_1 (IDig D_0) ; --% 
+    n20_Digits : Digits   -- 20
+    = IIDig D_2 (IDig D_0) ; --% 
+    n100_Digits : Digits -- 100
+    = IIDig D_1 (IIDig D_0 (IDig D_0)) ; --% 
+    n1000_Digits : Digits -- 1000
+    = IIDig D_1 (IIDig D_0 (IIDig D_0 (IDig D_0))) ; --% 
+
+-- Some "round" numbers are here given as shorthands.
+
+    n1_Numeral : Numeral 
+    = num (pot2as3 (pot1as2 (pot0as1 pot01))) ; --%  
+    n2_Numeral : Numeral 
+    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n2)))) ; --%  
+    n3_Numeral : Numeral 
+    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n3)))) ; --%  
+    n4_Numeral : Numeral 
+    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n4)))) ; --%  
+    n5_Numeral : Numeral 
+    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))) ; --%  
+    n6_Numeral : Numeral 
+    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n6)))) ; --%  
+    n7_Numeral : Numeral 
+    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n7)))) ; --%  
+    n8_Numeral : Numeral 
+    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n8)))) ; --%  
+    n9_Numeral : Numeral 
+    = num (pot2as3 (pot1as2 (pot0as1 (pot0 n9)))) ; --%  
+    n10_Numeral : Numeral 
+    = num (pot2as3 (pot1as2 pot110)) ; --%  
+    n20_Numeral : Numeral 
+    = num (pot2as3 (pot1as2 (pot1 n2))) ; --%  
+    n100_Numeral : Numeral 
+    = num (pot2as3 (pot2 pot01)) ; --%  
+    n1000_Numeral : Numeral 
+    = num (pot3 (pot1as2 (pot0as1 pot01))) ; --%  
 
 }  
