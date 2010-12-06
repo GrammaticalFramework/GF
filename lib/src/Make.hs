@@ -28,6 +28,7 @@ presSymbolPath = "" -- "-path=.:abstract:present:common:romance:scandinavian" --
 -- we also give the functors implied
  
 langsCoding = [
+  (("amharic",  "Amh"),""),
   (("arabic",   "Ara"),""),
   (("bulgarian","Bul"),""),
   (("catalan",  "Cat"),"Romance"),
@@ -36,20 +37,21 @@ langsCoding = [
   (("english",  "Eng"),""),
   (("finnish",  "Fin"),""),
   (("french",   "Fre"),"Romance"),
-  (("hindi",    "Hin"),""),
+  (("hindi",    "Hin"),"Hindustani"),
   (("german",   "Ger"),""),
   (("interlingua","Ina"),""),
   (("italian",  "Ita"),"Romance"),
   (("latin",    "Lat"),""),
   (("norwegian","Nor"),"Scand"),
   (("polish",   "Pol"),""),
+  (("punjabi",  "Pnb"),""),
   (("romanian", "Ron"),""),
   (("russian",  "Rus"),""),
   (("spanish",  "Spa"),"Romance"),
   (("swedish",  "Swe"),"Scand"), 
   (("thai",     "Tha"),""),
   (("turkish",  "Tur"),""),
-  (("urdu",     "Urd"),"")
+  (("urdu",     "Urd"),"Hindustani")
   ]
 
 implied (_,lan) = [fun | ((_,la),fun) <- langsCoding, la == lan, fun /= ""]
@@ -63,7 +65,7 @@ langsLangAll = langs
 langsLang = langs `except` langsIncomplete ---- []
 
 -- languages for which Lang can be compiled but which are incomplete
-langsIncomplete = ["Ara","Hin","Lat","Tha","Tur"]
+langsIncomplete = ["Amh","Ara","Hin","Lat","Pnb","Tha","Tur","Urd"]
 
 -- languages for which to compile Try 
 langsAPI = langsLang `except` (langsIncomplete ++ ["Ina"])
@@ -149,13 +151,13 @@ make xx = do
   return ()
 
 gfc pres ppath file = do
-  let preproc = if pres then "-preproc=./mkPresent" else ""
+  let preproc = if pres then "-preproc=mkPresent" else ""
   let path    = if pres then ppath else ""
   putStrLn $ "Compiling " ++ file
   run_gfc ["-s","-src", preproc, path, file]
 
 gfcmin path file = do
-  let preproc = "-preproc=./mkMinimal"
+  let preproc = "-preproc=mkMinimal"
   putStrLn $ "Compiling minimal " ++ file
   run_gfc ["-s","-src", preproc, path, file]
 
