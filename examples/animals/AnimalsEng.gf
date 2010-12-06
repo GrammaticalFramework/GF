@@ -1,16 +1,15 @@
---# -path=.:present:prelude
---resource/english:resource/abstract:resource/../prelude
+--# -path=.:present
 
 concrete AnimalsEng of Animals = QuestionsEng **
-  open LangEng, ParadigmsEng, IrregEng in {
+  open SyntaxEng, ParadigmsEng, IrregEng in {
 
   lin
-    Dog = regN "dog" ;
-    Cat = regN "cat" ;
-    Mouse = mk2N "mouse" "mice" ;
-    Lion = regN "lion" ;
-    Zebra = regN "zebra" ;
-    Chase = dirV2 (regV "chase") ;
-    Eat = dirV2 eat_V ;
-    See = dirV2 see_V ;
+    Dog = mkN "dog" ;
+    Cat = mkN "cat" ;
+    Mouse = mkN "mouse" "mice" ;
+    Lion = mkN "lion" ;
+    Zebra = mkN "zebra" ;
+    Chase = mkV2 "chase" ;
+    Eat = mkV2 eat_V ;
+    See = mkV2 see_V ;
 }

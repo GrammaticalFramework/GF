@@ -1462,6 +1462,8 @@ incomplete resource Constructors = open Grammar in {
       ; --# notminimal
 
     mkClSlash = overload { --# notminimal
+      mkClSlash : NP -> VPSlash -> ClSlash        -- (whom) he sees --# notminimal
+               = \np,vps -> SlashVP np vps ; --# notminimal
       mkClSlash : NP -> V2 -> ClSlash        -- (whom) he sees --# notminimal
                = \np,v2 -> SlashVP np (SlashV2a v2) ; --# notminimal
       mkClSlash : NP -> VV -> V2 -> ClSlash  -- (whom) he wants to see --# notminimal

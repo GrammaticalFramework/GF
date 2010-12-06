@@ -1,4 +1,5 @@
--- to compile: echo "eb -probs=probs -api -file=QuestionsI.gfe" | gf $GF_LIB_PATH/present/LangEng.gfo
+-- to compile: 
+-- echo "eb -probs=probs -api -file=QuestionsI.gfe" | gf $GF_LIB_PATH/present/LangEng.gfo
 -- or use directly gf <mkAnimals.gfs
 
 incomplete concrete QuestionsI of Questions = open Syntax in {
