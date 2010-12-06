@@ -6,6 +6,7 @@ module GF.Compile.ExampleBased (
 import PGF
 import PGF.Probabilistic
 import PGF.Morphology
+import PGF.ToAPI
 
 import Data.List
 
@@ -55,11 +56,16 @@ convertFile conf src file = do
         return []
       ParseOk ts ->
         case rank ts of
-          (t:tt) -> appv ("WARNING: ambiguous example " ++ ex) >>
-                    appn t >> mapM_ (appn . ("  --- " ++)) tt >> return []
-    appn ")"
+          (t:tt) -> do
+            if null tt 
+              then return ()
+              else appv ("WARNING: ambiguous example " ++ ex) 
+            appn t 
+            mapM_ (appn . ("  --- " ++)) tt
+            appn ")" 
+            return [] 
     return ws
-  rank ts = [showExpr [] t ++ "  -- " ++ show p | (t,p) <- rankTreesByProbs pgf ts]
+  rank ts = [printExp conf t ++ "  -- " ++ show p | (t,p) <- rankTreesByProbs pgf ts]
   appf = appendFile file
   appn s = appf s >> appf "\n"
   appv s = appn ("--- " ++ s) >> putStrLn s
@@ -68,9 +74,10 @@ data ExConfiguration = ExConf {
   resource_pgf    :: PGF,
   resource_morpho :: Morpho,
   verbose  :: Bool,
-  language :: Language
+  language :: Language,
+  printExp :: Tree -> String
   }
 
-configureExBased :: PGF -> Morpho -> Language -> ExConfiguration
-configureExBased pgf morpho lang = ExConf pgf morpho False lang
+configureExBased :: PGF -> Morpho -> Language -> (Tree -> String) -> ExConfiguration
+configureExBased pgf morpho lang pr = ExConf pgf morpho False lang pr
 
