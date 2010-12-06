@@ -107,7 +107,7 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
 
         profilesToTerm :: [Profile] -> CFTerm
         profilesToTerm ps = CFObj f (zipWith profileToTerm argTypes ps)
-            where (argTypes,_) = catSkeleton $ lookType pgf f
+            where (argTypes,_) = catSkeleton $ lookType (abstract pgf) f
 
         profileToTerm :: CId -> Profile -> CFTerm
         profileToTerm t [] = CFMeta t

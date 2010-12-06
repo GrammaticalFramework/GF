@@ -985,7 +985,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        Fun cid [] -> t
        Fun cid ts -> Fun (mk cid) (map t2m ts)
        _ -> t
-     mk = mkCId . ("mk" ++) . showCId . lookValCat pgf
+     mk = mkCId . ("mk" ++) . showCId . lookValCat (abstract pgf)
 
    unlex opts lang = stringOps Nothing (getUnlex opts lang ++ map prOpt opts) ----
 
