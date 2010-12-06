@@ -296,6 +296,9 @@ allCommands env@(pgf, mos) = Map.fromList [
        "gr and rt. Notice that the command doesn't change the environment,",
        "but the resulting .gf file must be imported separately."
        ],
+     options = [
+       ("api","convert trees to overloaded API expressions (using Syntax not Lang)")
+       ],
      flags = [
        ("file","the file to be converted (suffix .gfe must be given)"),
        ("lang","the language in which to parse"),
@@ -304,7 +307,8 @@ allCommands env@(pgf, mos) = Map.fromList [
      exec = \opts _ -> do
        let file = optFile opts
        pgf <- optProbs opts pgf
-       let conf = configureExBased pgf (optMorpho opts) (optLang opts)
+       let printer = if (isOpt "api" opts) then exprToAPI else (showExpr []) 
+       let conf = configureExBased pgf (optMorpho opts) (optLang opts) printer
        (file',ws) <- parseExamplesInGrammar conf file
        if null ws then return () else putStrLn ("unknown words: " ++ unwords ws)
        return (fromString ("wrote " ++ file')),
