@@ -65,7 +65,7 @@ graphvizAbstractTree pgf (funs,cats) = render . tree2graph
     getApp e            es = (e,es)
 
     getLbl scope (EFun f)     = let fun = if funs then ppCId f else empty
-                                    cat = if cats then ppCId (lookValCat pgf f) else empty
+                                    cat = if cats then ppCId (lookValCat (abstract pgf) f) else empty
                                     sep = if funs && cats then colon else empty
                                 in fun <+> sep <+> cat
     getLbl scope (ELit l)     = text (escapeStr (render (ppLit l)))
@@ -503,7 +503,7 @@ graphvizDependencyTree format debug mlab ms pgf lang tr = case format of
 
   wnodes = [[show i, maltws ws, showCId fun, pos, pos, morph, show dom, lab, unspec, unspec] | 
               (i, ((fun,p),ws)) <- tail nodeWords,
-              let pos = showCId $ lookValCat pgf fun,
+              let pos = showCId $ lookValCat (abstract pgf) fun,
               let morph = unspec,
               let (dom,lab) = lookDomLab p
            ]

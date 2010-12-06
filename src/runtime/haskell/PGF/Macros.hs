@@ -18,24 +18,24 @@ import Text.PrettyPrint
 mapConcretes :: (Concr -> Concr) -> PGF -> PGF
 mapConcretes f pgf = pgf { concretes = Map.map f (concretes pgf) }
 
-lookType :: PGF -> CId -> Type
-lookType pgf f = 
-  case lookMap (error $ "lookType " ++ show f) f (funs (abstract pgf)) of
+lookType :: Abstr -> CId -> Type
+lookType abs f = 
+  case lookMap (error $ "lookType " ++ show f) f (funs abs) of
     (ty,_,_,_) -> ty
 
-lookDef :: PGF -> CId -> Maybe [Equation]
-lookDef pgf f = 
-  case lookMap (error $ "lookDef " ++ show f) f (funs (abstract pgf)) of
+lookDef :: Abstr -> CId -> Maybe [Equation]
+lookDef abs f = 
+  case lookMap (error $ "lookDef " ++ show f) f (funs abs) of
     (_,a,eqs,_) -> eqs
 
-isData :: PGF -> CId -> Bool
-isData pgf f =
-  case Map.lookup f (funs (abstract pgf)) of
+isData :: Abstr -> CId -> Bool
+isData abs f =
+  case Map.lookup f (funs abs) of
     Just (_,_,Nothing,_) -> True             -- the encoding of data constrs
     _                    -> False
 
-lookValCat :: PGF -> CId -> CId
-lookValCat pgf = valCat . lookType pgf
+lookValCat :: Abstr -> CId -> CId
+lookValCat abs = valCat . lookType abs
 
 lookStartCat :: PGF -> CId
 lookStartCat pgf = mkCId $
@@ -119,7 +119,7 @@ showPrintName :: PGF -> Language -> CId -> String
 showPrintName pgf lang id = lookMap (showCId id) id $ printnames $ lookMap (error "no lang") lang $ concretes pgf
 
 -- lookup with default value
-lookMap :: (Show i, Ord i) => a -> i -> Map.Map i a -> a 
+lookMap :: Ord i => a -> i -> Map.Map i a -> a 
 lookMap d c m = Map.findWithDefault d c m
 
 --- from Operations
