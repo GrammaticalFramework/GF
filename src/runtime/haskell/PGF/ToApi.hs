@@ -1,5 +1,5 @@
 module PGF.ToAPI 
- (stringToAPI,exprToAPI)
+ (stringToAPI,exprToAPI,exprToAPIIO)
   where
 
 import PGF.Expr
@@ -13,6 +13,10 @@ import Data.Map(Map)
 import qualified Data.Map as Map
 import PGF.Signature
 
+
+--- this will be changed
+exprToAPIIO :: Expr -> IO String
+exprToAPIIO = exprToAPI   -- return . exprToAPI
 
 
 -- intermediate structure for representing the translated expression
