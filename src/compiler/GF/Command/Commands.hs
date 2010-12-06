@@ -854,7 +854,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        then return $ fromString $ unlines $ map (tree2mk pgf) es  
        else if isOpt "api" opts
        then do 
-         ss <- mapM exprToAPIIO es
+         let ss = map exprToAPI es
          mapM_ putStrLn ss
          return void
        else do
