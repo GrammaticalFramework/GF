@@ -20,6 +20,7 @@ import PGF.Macros
 import PGF.Data ----
 import PGF.Morphology
 import PGF.Printer
+import PGF.ToAPI
 import PGF.Probabilistic -- (getProbsFromFile,prProbabilities,defaultProbabilities)
 import PGF.Generate (generateRandomFrom) ----
 import PGF.Tree (Tree(Fun), expr2tree, tree2expr)
@@ -851,6 +852,11 @@ allCommands env@(pgf, mos) = Map.fromList [
      exec = \opts es ->
        if isOpt "mk" opts
        then return $ fromString $ unlines $ map (tree2mk pgf) es  
+       else if isOpt "api" opts
+       then do 
+         ss <- mapM exprToAPIIO es
+         mapM_ putStrLn ss
+         return void
        else do
          let funs = not (isOpt "nofun" opts)
          let cats = not (isOpt "nocat" opts)
@@ -869,7 +875,8 @@ allCommands env@(pgf, mos) = Map.fromList [
        "p \"hello\" | vt -view=\"open\" -- parse a string and display trees on a Mac"
        ],
      options = [
-       ("mk", "show the tree with function names converted to 'mkC' with value cats C"),
+       ("api", "show the tree with function names converted to 'mkC' with value cats C"),
+       ("mk",  "similar to -api, deprecated"),
        ("nofun","don't show functions but only categories"),
        ("nocat","don't show categories but only functions")
        ],
