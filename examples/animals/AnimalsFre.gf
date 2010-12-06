@@ -1,15 +1,15 @@
---# -path=.:present:prelude
+--# -path=.:present
 
 concrete AnimalsFre of Animals = QuestionsFre **
-  open LangFre, ParadigmsFre, IrregFre in {
+  open SyntaxFre, ParadigmsFre, IrregFre in {
 
   lin
-    Dog   = regN "chien" ;
-    Cat   = regN "chat" ;
-    Mouse = regGenN "souris" feminine ;
+    Dog   = mkN "chien" ;
+    Cat   = mkN "chat" ;
+    Mouse = mkN "souris" feminine ;
     Lion  = mkN "lion" masculine ;
-    Zebra = regGenN "zèbre" masculine ;
-    Chase = dirV2 (regV "chasser") ;
-    Eat   = dirV2 (regV "manger") ;
+    Zebra = mkN "zèbre" masculine ;
+    Chase = mkV2 (mkV "chasser") ;
+    Eat   = mkV2 (mkV "manger") ;
     See   = voir_V2 ;
 }
