@@ -1,33 +1,30 @@
-concrete GreetingsCat of Greetings = open Prelude in {
-
-lincat 
-  Greeting = SS ;
+concrete GreetingsCat of Greetings = SentencesCat [Greeting,mkGreeting] ** open Prelude in {
 
 lin 
-  GBye = ss "adéu" ;
-  GCheers = ss "salut" ;
-  GDamn = ss "merda" ;
-  GExcuse = ss "perdona" ;
-  GExcusePol = ss ("perdoni" | "disculpi") ;
-  GCongratulations = ss "felicitats" ;
-  GHappyBirthday = ss "feliç aniversari" ;
-  GGoodLuck = ss "sort" ;
-  GGoodDay = ss "bon dia" ;
-  GGoodEvening = ss "bona tarda" ;
-  GGoodMorning = ss "bon dia" ;
-  GGoodNight = ss "bona nit" ;
-  GGoodbye = ss "a reveure" ;
-  GHello = ss "hola" ;
-  GHelp = ss "socors" ;
-  GHowAreYou = ss "què tal" ;
-  GLookOut = ss "compte" ;
-  GNiceToMeetYou = ss "encantat de conèixer-lo" ; -- make distinction Masc/Fem
-  GPleaseGive = ss "si et plau" ;
-  GPleaseGivePol = ss "si us plau" ;
-  GSeeYouSoon = ss "fins aviat" ; 
-  GSorry = ss "perdoni" ;
-  GSorryPol = ss "em sap greu" ; 
-  GThanks = ss "gràcies" ;
-  GTheCheck = ss "el compte" ;
+  GBye = mkGreeting "adéu" ;
+  GCheers = mkGreeting "salut" ;
+  GDamn = mkGreeting "merda" ;
+  GExcuse = mkGreeting "perdona" ;
+  GExcusePol = mkGreeting ("perdoni" | "disculpi") ;
+  GCongratulations = mkGreeting "felicitats" ;
+  GHappyBirthday = mkGreeting "feliç aniversari" ;
+  GGoodLuck = mkGreeting "sort" ;
+  GGoodDay = mkGreeting "bon dia" ;
+  GGoodEvening = mkGreeting "bona tarda" ;
+  GGoodMorning = mkGreeting "bon dia" ;
+  GGoodNight = mkGreeting "bona nit" ;
+  GGoodbye = mkGreeting "a reveure" ;
+  GHello = mkGreeting "hola" ;
+  GHelp = mkGreeting "socors" ;
+  GHowAreYou = mkGreeting "què tal" ;
+  GLookOut = mkGreeting "compte" ;
+  GNiceToMeetYou = mkGreeting "encantat de conèixer-lo" ; -- make distinction Masc/Fem
+  GPleaseGive = mkGreeting "si et plau" ;
+  GPleaseGivePol = mkGreeting "si us plau" ;
+  GSeeYouSoon = mkGreeting "fins aviat" ; 
+  GSorry = mkGreeting "perdoni" ;
+  GSorryPol = mkGreeting "em sap greu" ; 
+  GThanks = mkGreeting "gràcies" ;
+  GTheCheck = mkGreeting "el compte" ;
 
 }

@@ -5,7 +5,4 @@ abstract Phrasebook =
 
 flags startcat = Phrase ;
 
-fun
-  PGreeting : Greeting -> Phrase ;
-
 }

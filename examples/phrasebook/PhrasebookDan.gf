@@ -6,7 +6,4 @@ concrete PhrasebookDan of Phrasebook =
     SyntaxDan,
     Prelude in {
 
-lin
-  PGreeting g = lin Text (ss g.s) ;
-
 }

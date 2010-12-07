@@ -6,7 +6,5 @@ concrete PhrasebookDut of Phrasebook =
     SyntaxDut,
     Prelude in {
 
-lin
-  PGreeting g = lin Text (ss g.s) ;
 
 }

@@ -6,7 +6,5 @@ concrete PhrasebookGer of Phrasebook =
     SyntaxGer,
     Prelude in {
 
-lin
-  PGreeting g = lin Text (ss g.s) ;
 
 }

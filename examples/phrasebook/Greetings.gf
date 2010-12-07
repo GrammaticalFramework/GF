@@ -1,7 +1,4 @@
-abstract Greetings = {
-
-cat 
-  Greeting ; -- idiomatic phrase, not inflected, e.g. "hello"
+abstract Greetings = Sentences [Greeting] ** {
 
 fun
   GBye : Greeting ;

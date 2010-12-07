@@ -1,30 +1,27 @@
-concrete GreetingsPol of Greetings = open Prelude in {
+concrete GreetingsPol of Greetings = SentencesPol [Greeting,mkGreeting] ** open Prelude in {
 
 flags
   optimize =values ; coding =utf8 ; 
 
-lincat 
-  Greeting = SS ; 
-
 lin 
-  GBye = ss "cześć" ;
-  GCheers = ss "na zdrowie" ;
-  GDamn = ss "cholera" ; -- not polite
-  GExcuse, GExcusePol, GSorry, GSorryPol = ss "przepraszam" ;
-  GGoodDay, GGoodMorning = ss "dzień dobry" ;
-  GGoodEvening = ss "dobry wieczór" ;
-  GGoodNight = ss "dobranoc" ;
-  GGoodbye = ss "do widzenia" ;
-  GHello = ss "cześć" ;
-  GHelp = ss "pomocy" ;
-  GHowAreYou = ss "jak się masz" ;
-  GLookOut = ss "uwaga" ;
-  GNiceToMeetYou = ss "miło mi" ; 
-  GPleaseGive, GPleaseGivePol = ss "poproszę" ;
-  GSeeYouSoon = ss "do zobaczenia" ;
-  GThanks = ss "dziękuję" ;
-  GTheCheck = ss "rachunek" ;
-  GCongratulations = ss "gratulacje";
-  GHappyBirthday = ss "wszystkiego najlepszego z okazji urodzin" ;
-  GGoodLuck = ss "powodzenia" ; 
+  GBye = mkGreeting "cześć" ;
+  GCheers = mkGreeting "na zdrowie" ;
+  GDamn = mkGreeting "cholera" ; -- not polite
+  GExcuse, GExcusePol, GSorry, GSorryPol = mkGreeting "przepraszam" ;
+  GGoodDay, GGoodMorning = mkGreeting "dzień dobry" ;
+  GGoodEvening = mkGreeting "dobry wieczór" ;
+  GGoodNight = mkGreeting "dobranoc" ;
+  GGoodbye = mkGreeting "do widzenia" ;
+  GHello = mkGreeting "cześć" ;
+  GHelp = mkGreeting "pomocy" ;
+  GHowAreYou = mkGreeting "jak się masz" ;
+  GLookOut = mkGreeting "uwaga" ;
+  GNiceToMeetYou = mkGreeting "miło mi" ; 
+  GPleaseGive, GPleaseGivePol = mkGreeting "poproszę" ;
+  GSeeYouSoon = mkGreeting "do zobaczenia" ;
+  GThanks = mkGreeting "dziękuję" ;
+  GTheCheck = mkGreeting "rachunek" ;
+  GCongratulations = mkGreeting "gratulacje";
+  GHappyBirthday = mkGreeting "wszystkiego najlepszego z okazji urodzin" ;
+  GGoodLuck = mkGreeting "powodzenia" ; 
 }

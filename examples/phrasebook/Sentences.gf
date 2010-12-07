@@ -14,9 +14,11 @@ abstract Sentences = Numeral ** {
 
   cat
     Phrase ;      -- complete phrase, the unit of translation  e.g. "Where are you?"
+    Word ;        -- word that could be used as phrase         e.g. "Monday"
+    Message ;     -- sequence of phrases, longest unit         e.g. "Hello! Where are you?"
+    Greeting ;    -- idiomatic greeting                        e.g. "hello"
     Sentence ;    -- declarative sentence                      e.g. "I am in the bar"
     Question ;    -- question, either yes/no or wh             e.g. "where are you"
-    -- Greeting ; -- idiomatic phrase, not inflected,          e.g. "hello"
     Proposition ; -- can be turned into sentence or question   e.g. "this pizza is good"
     Object ;      -- the object of wanting, ordering, etc      e.g. "three pizzas and a beer"
     PrimObject ;  -- single object of wanting, ordering, etc   e.g. "three pizzas"
@@ -43,30 +45,45 @@ abstract Sentences = Numeral ** {
     ByTransport ; -- mean of transportation                    e.g. "by tram"
     Superlative ; -- superlative modifiers of places           e.g. "the best restaurant"
 
- 
--- Many of the categories are accessible as Phrases, i.e. as translation units.
 
-  fun
+  fun 
+
+-- To build a whole message
+
+    MPhrase   : Phrase -> Message ;
+    MContinue : Phrase -> Message -> Message ;
+
+-- Many of the categories are accessible as Phrases, i.e. as translation units.
+-- To regulate whether words appear on the top level, change their status between
+-- Word and Phrase, or uncomment PWord,
+
+    --    PWord : Word -> Phrase ;
+
+    PGreeting    : Greeting -> Phrase ;
     PSentence    : Sentence -> Phrase ;
     PQuestion    : Question -> Phrase ;
 
-    PObject      : Object      -> Phrase ;
-    PKind        : Kind        -> Phrase ;
-    PMassKind    : MassKind    -> Phrase ;
-    PQuality     : Quality     -> Phrase ;
     PNumber      : Number      -> Phrase ;
-    PPlace       : Place       -> Phrase ;
-    PPlaceKind   : PlaceKind   -> Phrase ;
-    PCurrency    : Currency    -> Phrase ;
     PPrice       : Price       -> Phrase ;
-    PLanguage    : Language    -> Phrase ;
-    PCitizenship : Citizenship -> Phrase ;
-    PCountry     : Country     -> Phrase ;
-    PDay         : Day         -> Phrase ;
-    PByTransport : ByTransport -> Phrase ;
-    PTransport   : Transport   -> Phrase ;
+    PObject      : Object      -> Word ;
+    PKind        : Kind        -> Word ;
+    PMassKind    : MassKind    -> Word ;
+    PQuality     : Quality     -> Word ;
+    PPlace       : Place       -> Word ;
+    PPlaceKind   : PlaceKind   -> Word ;
+    PCurrency    : Currency    -> Word ;
+    PLanguage    : Language    -> Word ;
+    PCitizenship : Citizenship -> Word ;
+    PCountry     : Country     -> Word ;
+    PDay         : Day         -> Word ;
+    PByTransport : ByTransport -> Word ;
+    PTransport   : Transport   -> Word ;
 
-    PYes, PNo, PYesToNo : Phrase ;  -- yes, no, si/doch (pos. answer to neg. question)
+    PYes, PNo, PYesToNo : Greeting ;  -- yes, no, si/doch (pos. answer to neg. question)
+
+-- To order something.
+
+    GObjectPlease : Object -> Greeting ;           -- a pizza and beer, please!
 
 -- This is the way to build propositions about inanimate items.
 

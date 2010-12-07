@@ -11,6 +11,9 @@ incomplete concrete SentencesI of Sentences = Numeral **
   in {
   lincat
     Phrase = Text ;
+    Word = Text ;
+    Message = Text ;
+    Greeting = Text ;
     Sentence = S ;
     Question = QS ;
     Proposition = Cl ;
@@ -39,18 +42,26 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Transport = {name : CN ; by : Adv} ;
     Superlative = Det ;
   lin
+    MPhrase p = p ;
+    MContinue p m = mkText p m ;
+
     PSentence s = mkText s | lin Text (mkUtt s) ;  -- optional '.'
     PQuestion s = mkText s | lin Text (mkUtt s) ;  -- optional '?'
+
+    PGreeting g = mkText (lin Phr g) exclMarkPunct | g ;
+
+    -- PWord w = w ;
+
+    PNumber x = mkSentence (mkUtt x) ;
+    PPrice x = mkSentence (mkUtt x) ;
 
     PObject x = mkPhrase (mkUtt x) ;
     PKind x = mkPhrase (mkUtt x) ;
     PMassKind x = mkPhrase (mkUtt x) ;
     PQuality x = mkPhrase (mkUtt x) ;
-    PNumber x = mkPhrase (mkUtt x) ;
     PPlace x = mkPhrase (mkUtt x.name) ;
     PPlaceKind x = mkPhrase (mkUtt x.name) ;
     PCurrency x = mkPhrase (mkUtt x) ;
-    PPrice x = mkPhrase (mkUtt x) ;
     PLanguage x = mkPhrase (mkUtt x) ;
     PCountry x = mkPhrase (mkUtt x) ;
     PCitizenship x = mkPhrase (mkUtt (mkAP x)) ;
@@ -61,6 +72,8 @@ incomplete concrete SentencesI of Sentences = Numeral **
     PYes = mkPhrase yes_Utt ;
     PNo = mkPhrase no_Utt ;
     PYesToNo = mkPhrase yes_Utt ;
+
+    GObjectPlease o = lin Text (mkPhr noPConj (mkUtt o) please_Voc) ;
 
     Is = mkCl ;
     IsMass m q = mkCl (mkNP m) q ;
@@ -143,6 +156,8 @@ oper
 -- These operations are used internally in Sentences.
 
   mkPhrase : Utt -> Text = \u -> lin Text u ; -- no punctuation
+  mkGreeting : Str -> Text = \s -> lin Text (ss s) ; -- no punctuation
+  mkSentence : Utt -> Text = \t -> lin Text (postfixSS "." t | t) ; -- optional .
 
   mkPerson : Pron -> {name : NP ; isPron : Bool ; poss : Quant} = \p -> 
     {name = mkNP p ; isPron = True ; poss = mkQuant p} ;

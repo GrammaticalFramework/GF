@@ -6,7 +6,4 @@ concrete PhrasebookBul of Phrasebook =
     SyntaxBul,
     Prelude in {
 
-lin
-  PGreeting g = lin Text g ;
-
 }

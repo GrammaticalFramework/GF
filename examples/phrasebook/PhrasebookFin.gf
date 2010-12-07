@@ -6,7 +6,4 @@ concrete PhrasebookFin of Phrasebook =
     SyntaxFin,
     Prelude in {
 
-lin
-  PGreeting g = lin Text (ss g.s) ;
-
 }

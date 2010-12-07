@@ -1,33 +1,30 @@
-concrete GreetingsIta of Greetings = open Prelude in {
-
-lincat 
-  Greeting = SS ;
+concrete GreetingsIta of Greetings = SentencesIta [Greeting,mkGreeting] ** open Prelude in {
 
 lin 
-  GBye = ss "ciao" ;
-  GCheers = ss "cincin" ;
-  GDamn = ss "maledizione" ;
-  GExcuse = ss "scusa" ;
-  GExcusePol = ss "scusi" ;
-  GGoodDay = ss "buongiorno" ;
-  GGoodEvening = ss "buona sera" ;
-  GGoodMorning = ss "buongiorno" ;
-  GGoodNight = ss "buona notte" ;
-  GGoodbye = ss "arrivederci" ;
-  GHello = ss "ciao" ;
-  GHelp = ss "aiuto" ;
-  GHowAreYou = ss "come sta" ;
-  GLookOut = ss "attenzione" ;
-  GNiceToMeetYou = ss "piacere di conoscerti" ;
-  GNiceToMeetYouPol = ss "piacere di conoscerLa" ;
-  GPleaseGive, GPleaseGivePol = ss "per favore" ;
-  GSeeYouSoon = ss "a presto" ; ----
-  GSorry = ss "scusami" ; ----
-  GSorryPol = ss "scusimi" ; ----
-  GThanks = ss "grazie" ;
-  GTheCheck = ss "il conto" ;
-  GCongratulations = ss "congratulazioni";
-  GHappyBirthday = ss "buon compleanno" ;
-  GGoodLuck = ss "buona fortuna" ; 
+  GBye = mkGreeting "ciao" ;
+  GCheers = mkGreeting "cincin" ;
+  GDamn = mkGreeting "maledizione" ;
+  GExcuse = mkGreeting "scusa" ;
+  GExcusePol = mkGreeting "scusi" ;
+  GGoodDay = mkGreeting "buongiorno" ;
+  GGoodEvening = mkGreeting "buona sera" ;
+  GGoodMorning = mkGreeting "buongiorno" ;
+  GGoodNight = mkGreeting "buona notte" ;
+  GGoodbye = mkGreeting "arrivederci" ;
+  GHello = mkGreeting "ciao" ;
+  GHelp = mkGreeting "aiuto" ;
+  GHowAreYou = mkGreeting "come sta" ;
+  GLookOut = mkGreeting "attenzione" ;
+  GNiceToMeetYou = mkGreeting "piacere di conoscerti" ;
+  GNiceToMeetYouPol = mkGreeting "piacere di conoscerLa" ;
+  GPleaseGive, GPleaseGivePol = mkGreeting "per favore" ;
+  GSeeYouSoon = mkGreeting "a presto" ; ----
+  GSorry = mkGreeting "scusami" ; ----
+  GSorryPol = mkGreeting "scusimi" ; ----
+  GThanks = mkGreeting "grazie" ;
+  GTheCheck = mkGreeting "il conto" ;
+  GCongratulations = mkGreeting "congratulazioni";
+  GHappyBirthday = mkGreeting "buon compleanno" ;
+  GGoodLuck = mkGreeting "buona fortuna" ; 
 
 }

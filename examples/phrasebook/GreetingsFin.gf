@@ -1,30 +1,27 @@
-concrete GreetingsFin of Greetings = open Prelude in {
-
-lincat 
-  Greeting, Politeness = SS ;
+concrete GreetingsFin of Greetings = SentencesFin [Greeting,mkGreeting] ** open Prelude in {
 
 lin 
-  GBye = ss "hei hei" ;
-  GCheers = ss "terveydeksi" ;
-  GDamn = ss "hitto" ;
-  GExcuse, GExcusePol = ss "anteeksi" ;
-  GGoodDay = ss "hyv‰‰ p‰iv‰‰" ;
-  GGoodEvening = ss "hyv‰‰ iltaa" ;
-  GGoodMorning = ss "hyv‰‰ huomenta" ;
-  GGoodNight = ss "hyv‰‰ yˆt‰" ;
-  GGoodbye = ss "n‰kemiin" ;
-  GHello = ss "hei" ;
-  GHelp = ss "apua" ;
-  GHowAreYou = ss "mit‰ kuuluu" ;
-  GLookOut = ss "varo" ;
-  GNiceToMeetYou = ss "hauska tutustua" ;
-  GPleaseGive = ss "ole hyv‰" ;
-  GPleaseGivePol = ss "olkaa hyv‰" ;
-  GSeeYouSoon = ss "n‰hd‰‰n pian" ;
-  GSorry, GSorryPol = ss "anteeksi" ;
-  GThanks = ss "kiitos" ;
-  GTheCheck = ss "lasku" ;
-  GCongratulations = ss "onnittelut";
-  GHappyBirthday = ss "hyv‰‰ syntym‰p‰iv‰‰" ;
-  GGoodLuck = ss "onnea" ; 
+  GBye = mkGreeting "hei hei" ;
+  GCheers = mkGreeting "terveydeksi" ;
+  GDamn = mkGreeting "hitto" ;
+  GExcuse, GExcusePol = mkGreeting "anteeksi" ;
+  GGoodDay = mkGreeting "hyv‰‰ p‰iv‰‰" ;
+  GGoodEvening = mkGreeting "hyv‰‰ iltaa" ;
+  GGoodMorning = mkGreeting "hyv‰‰ huomenta" ;
+  GGoodNight = mkGreeting "hyv‰‰ yˆt‰" ;
+  GGoodbye = mkGreeting "n‰kemiin" ;
+  GHello = mkGreeting "hei" ;
+  GHelp = mkGreeting "apua" ;
+  GHowAreYou = mkGreeting "mit‰ kuuluu" ;
+  GLookOut = mkGreeting "varo" ;
+  GNiceToMeetYou = mkGreeting "hauska tutustua" ;
+  GPleaseGive = mkGreeting "ole hyv‰" ;
+  GPleaseGivePol = mkGreeting "olkaa hyv‰" ;
+  GSeeYouSoon = mkGreeting "n‰hd‰‰n pian" ;
+  GSorry, GSorryPol = mkGreeting "anteeksi" ;
+  GThanks = mkGreeting "kiitos" ;
+  GTheCheck = mkGreeting "lasku" ;
+  GCongratulations = mkGreeting "onnittelut";
+  GHappyBirthday = mkGreeting "hyv‰‰ syntym‰p‰iv‰‰" ;
+  GGoodLuck = mkGreeting "onnea" ; 
 }

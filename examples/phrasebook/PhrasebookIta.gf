@@ -9,8 +9,5 @@ concrete PhrasebookIta of Phrasebook =
 
 flags language = it_IT ;
 
-lin
-  PGreeting g = lin Text (ss g.s) ;
-
 }
 
