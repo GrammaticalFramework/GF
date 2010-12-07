@@ -1,4 +1,4 @@
-module PGF.ToAPI 
+module GF.Compile.ToAPI 
  (stringToAPI,exprToAPI)
   where
 

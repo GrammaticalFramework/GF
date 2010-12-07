@@ -47,7 +47,6 @@ library
     PGF.Forest
     PGF.Optimize
     PGF.Signature
-    PGF.ToAPI
     GF.Data.TrieMap
     GF.Data.Utilities
     GF.Data.SortedList
@@ -124,6 +123,7 @@ executable gf
     GF.Compile.Rename
     GF.Compile.ReadFiles
     GF.Compile.GrammarToPGF
+    GF.Compile.ToAPI
     GF.Compile.TypeCheck.Abstract
     GF.Compile.TypeCheck.Concrete
     GF.Compile.TypeCheck.TC

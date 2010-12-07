@@ -5,6 +5,8 @@ concrete WordsFin of Words = SentencesFin **
     SyntaxFin, ParadigmsFin, (L = LexiconFin), 
     Prelude, (E = ExtraFin) in {
 
+  flags optimize = noexpand ;
+
   lin
 
 -- kinds

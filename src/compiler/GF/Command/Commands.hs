@@ -20,11 +20,11 @@ import PGF.Macros
 import PGF.Data ----
 import PGF.Morphology
 import PGF.Printer
-import PGF.ToAPI
 import PGF.Probabilistic -- (getProbsFromFile,prProbabilities,defaultProbabilities)
 import PGF.Generate (generateRandomFrom) ----
 import PGF.Tree (Tree(Fun), expr2tree, tree2expr)
 import GF.Compile.Export
+import GF.Compile.ToAPI
 import GF.Compile.ExampleBased
 import GF.Infra.Option (noOptions, readOutputFormat)
 import GF.Infra.UseIO

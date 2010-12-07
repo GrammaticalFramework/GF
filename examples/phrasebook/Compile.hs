@@ -36,7 +36,9 @@ main = do
     _ -> return ()
 
 compileOne modu = do
-  let comm = "gf -make -s -optimize-pgf -name=" ++ modu ++ " " ++ modu ++ ".gf"
+  let comm = "gf -make -s -optimize-pgf -name=" ++ 
+             modu ++ " " ++ modu ++ ".gf" ++
+             " +RTS -K32M"
   putStrLn comm
   system comm
 

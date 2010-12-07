@@ -8,6 +8,8 @@ concrete SentencesFin of Sentences = NumeralFin ** SentencesI -
   (Lexicon = LexiconFin) ** 
     open SyntaxFin, ExtraFin, (P = ParadigmsFin), (V = VerbFin), Prelude in {
 
+  flags optimize = noexpand ;
+
   lin 
     Is item prop = mkCl item (V.UseComp (CompPartAP prop)) ; -- tämä pizza on herkullista
     IsMass mass prop = mkCl (mkNP a_Det mass) (V.UseComp (CompPartAP prop)) ; -- pizza on herkullista
