@@ -168,6 +168,7 @@ concrete VerbRon of Verb =
     UseComp comp = insertSimpObj comp.s copula ;
 
     CompAP ap = {s = \\ag => ap.s ! AF ag.g ag.n Indef ANomAcc} ;
+    CompCN cn = { s = \\ag => cn.s ! ag.n ! Indef ! ANomAcc }; --- RE 7/12/2010
     CompNP np = {s = \\_  => (np.s ! No).comp} ;
     CompAdv a = {s = \\_  => a.s} ;
 
