@@ -153,10 +153,10 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYouDate d = mkText (lin Text (ss ("Wir sehen uns"))) (mkPhrase (mkUtt d)) ;
-    PSeeYouPlace p = mkText (lin Text (ss ("Wir sehen uns"))) (mkPhrase (mkUtt p.at)) ;
+    PSeeYouDate d = mkText (lin Text (ss ("wir sehen uns"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlace p = mkText (lin Text (ss ("wir sehen uns"))) (mkPhrase (mkUtt p.at)) ;
     PSeeYouPlaceDate p d = 
-      mkText (lin Text (ss ("Wir sehen uns"))) 
+      mkText (lin Text (ss ("wir sehen uns"))) 
         (mkText (mkPhrase (mkUtt d)) (mkPhrase (mkUtt p.at))) ;
 
 
