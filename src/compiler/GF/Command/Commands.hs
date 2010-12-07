@@ -34,6 +34,7 @@ import GF.Command.Messages
 import GF.Text.Lexing
 import GF.Text.Transliterations
 import GF.Quiz
+import GFC (writePGF)
 
 import GF.Command.TreeOperations ---- temporary place for typecheck and compute
 
@@ -555,6 +556,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("fullform", "print the fullform lexicon"),
        ("funs",   "show just the names and types of abstract syntax functions"),
        ("missing","show just the names of functions that have no linearization"),
+       ("pgf",    "write current pgf image in file"),
        ("words", "print the list of words")
        ],
      examples = [
@@ -1075,6 +1077,7 @@ allCommands env@(pgf, mos) = Map.fromList [
      _  -> fromExprs es
 
    prGrammar opts
+     | isOpt "pgf"      opts = dieIOE (writePGF noOptions pgf) >> return void ---- opts
      | isOpt "cats"     opts = return $ fromString $ unwords $ map showCId $ categories pgf
      | isOpt "funs"     opts = return $ fromString $ unlines $ map showFun $ funsigs pgf
      | isOpt "fullform" opts = return $ fromString $ concatMap (morpho "" prFullFormLexicon) $ optLangs opts
