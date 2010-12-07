@@ -63,14 +63,18 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer in {
             insertObj (\\_ => appPrep v.c2 np.s) (
               predV v)))) ** {c2 = v.c2} ;
 
-    UseComp comp = insertAdv (comp.s ! agrP3 Sg) (predV sein_V) ; -- agr not used
+    UseComp comp = insertObj comp.s (predV sein_V) ; -- agr not used
     -- we want to say "ich liebe sie nicht" but not "ich bin alt nicht"
 
     CompAP ap = {s = \\_ => ap.s ! APred} ;
     CompNP np = {s = \\_ => np.s ! NPC Nom} ;
     CompAdv a = {s = \\_ => a.s} ;
 
---    CompCN cn 
+    CompCN cn = {s = \\a => case numberAgr a of {
+        Sg => "ein" + pronEnding ! GSg cn.g ! Nom ++ cn.s ! Strong ! Sg ! Nom ;
+        Pl => cn.s ! Strong ! Pl ! Nom
+        }
+      } ;
 
     AdvVP vp adv = insertAdv adv.s vp ;
     AdVVP adv vp = insertAdV adv.s vp ;

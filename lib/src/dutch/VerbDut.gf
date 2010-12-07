@@ -63,7 +63,8 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
             insertObj (\\_ => appPrep v.c2 np.s) (
               predVv v)))) ** {c2 = v.c2} ;
 
-    UseComp comp = insertAdv (comp.s ! agrP3 Sg) (predV zijn_V) ; -- agr not used
+    UseComp comp = insertObj comp.s (predV zijn_V) ; -- agr not used
+    CompCN cn = {s = \\a => cn.s ! Strong ! NF a.n Nom} ;
     CompAP ap = {s = \\_ => ap.s ! APred} ;
     CompNP np = {s = \\_ => np.s ! NPNom} ;
     CompAdv a = {s = \\_ => a.s} ;
