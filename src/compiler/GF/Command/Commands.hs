@@ -23,6 +23,7 @@ import PGF.Printer
 import PGF.Probabilistic -- (getProbsFromFile,prProbabilities,defaultProbabilities)
 import PGF.Generate (generateRandomFrom) ----
 import PGF.Tree (Tree(Fun), expr2tree, tree2expr)
+import PGF.Optimize
 import GF.Compile.Export
 import GF.Compile.ToAPI
 import GF.Compile.ExampleBased
@@ -34,12 +35,12 @@ import GF.Command.Messages
 import GF.Text.Lexing
 import GF.Text.Transliterations
 import GF.Quiz
-import GFC (writePGF)
 
 import GF.Command.TreeOperations ---- temporary place for typecheck and compute
 
 import GF.Data.Operations
 
+import Data.Binary (encodeFile)
 import Data.List
 import Data.Maybe
 import qualified Data.Map as Map
@@ -548,6 +549,7 @@ allCommands env@(pgf, mos) = Map.fromList [
      exec  = \opts _ -> prGrammar opts,
      flags = [
        --"cat",
+       ("file",   "set the file name when printing with -pgf option"),
        ("lang",   "select languages for the some options (default all languages)"),
        ("printer","select the printing format (see gfc --help)")
        ],
@@ -556,6 +558,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("fullform", "print the fullform lexicon"),
        ("funs",   "show just the names and types of abstract syntax functions"),
        ("missing","show just the names of functions that have no linearization"),
+       ("opt",    "optimize the generated pgf"),
        ("pgf",    "write current pgf image in file"),
        ("words", "print the list of words")
        ],
@@ -1077,7 +1080,12 @@ allCommands env@(pgf, mos) = Map.fromList [
      _  -> fromExprs es
 
    prGrammar opts
-     | isOpt "pgf"      opts = dieIOE (writePGF noOptions pgf) >> return void ---- opts
+     | isOpt "pgf"      opts = do
+          let pgf1 = if isOpt "opt" opts then optimizePGF pgf else pgf
+          let outfile = valStrOpts "file" (showCId (abstractName pgf) ++ ".pgf") opts 
+          encodeFile outfile pgf1
+          putStrLn $ "wrote file " ++ outfile
+          return void
      | isOpt "cats"     opts = return $ fromString $ unwords $ map showCId $ categories pgf
      | isOpt "funs"     opts = return $ fromString $ unlines $ map showFun $ funsigs pgf
      | isOpt "fullform" opts = return $ fromString $ concatMap (morpho "" prFullFormLexicon) $ optLangs opts
