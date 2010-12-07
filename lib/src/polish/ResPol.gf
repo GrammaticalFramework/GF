@@ -221,6 +221,12 @@
 -- possible problem: dzieci ,ktorych piecioro bawilo sie... / okna, ktorych piec stalo opartych o sciane...
   param GenNum = MascPersSg | MascAniSg | MascInaniSg | FemSg | NeutSg | MascPersPl | OthersPl;
 
+  --- AR 7/12/2010 for VerbPol.CompCN
+  oper numGenNum : GenNum -> Number = \n -> case n of {
+    MascPersPl | OthersPl => Pl ;
+    _ => Sg
+    } ;
+
   param MaybeGenNum = NoGenNum | JustGenNum GenNum;
 
   oper

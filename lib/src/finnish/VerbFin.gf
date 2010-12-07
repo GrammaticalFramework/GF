@@ -99,6 +99,16 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
               }            --- definiteness of NP ?
           in ap.s ! False ! (NCase n c)
       } ;
+    CompCN cn = {
+      s = \\agr => 
+          let
+            n = complNumAgr agr ;
+            c = case n of {
+              Sg => Nom ;  -- minä olen iso ; te olette iso
+              Pl => Part   -- me olemme isoja ; te olette isoja
+              }            --- definiteness of NP ?
+          in cn.s ! (NCase n c)
+      } ;
     CompNP np = {s = \\_ => np.s ! NPCase Nom} ;
     CompAdv a = {s = \\_ => a.s} ;
 
