@@ -1,4 +1,4 @@
-module GFC (mainGFC) where
+module GFC (mainGFC, writePGF) where
 -- module Main where
 
 import PGF
