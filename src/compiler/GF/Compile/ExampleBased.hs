@@ -6,7 +6,7 @@ module GF.Compile.ExampleBased (
 import PGF
 import PGF.Probabilistic
 import PGF.Morphology
-import PGF.ToAPI
+import GF.Compile.ToAPI
 
 import Data.List
 
