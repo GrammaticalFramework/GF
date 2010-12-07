@@ -15,6 +15,11 @@ complete_output=get_completions()
 show_completions(complete_output)
 */
 
+// For backward compatibility:
+function start_minibar(server,opts,target) {
+    return new Minibar(server,opts,target);
+}
+
 function Minibar(server,opts,target) {
     // Typically called when the HTML document is loaded
 
