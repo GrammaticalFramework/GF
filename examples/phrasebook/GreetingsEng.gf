@@ -1,29 +1,26 @@
-concrete GreetingsEng of Greetings = open Prelude in {
-
-lincat 
-  Greeting = SS ;
+concrete GreetingsEng of Greetings = SentencesEng [Greeting,mkGreeting] ** open Prelude in {
 
 lin 
-  GBye = ss "bye" ;
-  GCheers = ss "cheers" ;
-  GDamn = ss "damn" ;
-  GExcuse, GExcusePol = ss "excuse me" ;
-  GGoodDay = ss "good afternoon" ; ----
-  GGoodEvening = ss "good evening" ;
-  GGoodMorning = ss "good morning" ;
-  GGoodNight = ss "good night" ;
-  GGoodbye = ss "goodbye" ;
-  GHello = ss "hello" ;
-  GHelp = ss "help" ;
-  GHowAreYou = ss "how are you" ;
-  GLookOut = ss "look out" ;
-  GNiceToMeetYou, GNiceToMeetYouPol = ss "nice to meet you" ;
-  GPleaseGive, GPleaseGivePol = ss "please" ;
-  GSeeYouSoon = ss "see you soon" ;
-  GSorry, GSorryPol = ss "sorry" ;
-  GThanks = ss "thank you" ;
-  GTheCheck = ss "the bill" ;
-  GCongratulations = ss "congratulations";
-  GHappyBirthday = ss "happy birthday" ;
-  GGoodLuck = ss "good luck" ; 
+  GBye = mkGreeting "bye" ;
+  GCheers = mkGreeting "cheers" ;
+  GDamn = mkGreeting "damn" ;
+  GExcuse, GExcusePol = mkGreeting "excuse me" ;
+  GGoodDay = mkGreeting "good afternoon" ; ----
+  GGoodEvening = mkGreeting "good evening" ;
+  GGoodMorning = mkGreeting "good morning" ;
+  GGoodNight = mkGreeting "good night" ;
+  GGoodbye = mkGreeting "goodbye" ;
+  GHello = mkGreeting "hello" ;
+  GHelp = mkGreeting "help" ;
+  GHowAreYou = mkGreeting "how are you" ;
+  GLookOut = mkGreeting "look out" ;
+  GNiceToMeetYou, GNiceToMeetYouPol = mkGreeting "nice to meet you" ;
+  GPleaseGive, GPleaseGivePol = mkGreeting "please" ;
+  GSeeYouSoon = mkGreeting "see you soon" ;
+  GSorry, GSorryPol = mkGreeting "sorry" ;
+  GThanks = mkGreeting "thank you" ;
+  GTheCheck = mkGreeting "the bill" ;
+  GCongratulations = mkGreeting "congratulations";
+  GHappyBirthday = mkGreeting "happy birthday" ;
+  GGoodLuck = mkGreeting "good luck" ; 
 }

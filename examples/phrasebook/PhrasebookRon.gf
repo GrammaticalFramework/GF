@@ -7,7 +7,5 @@ concrete PhrasebookRon of Phrasebook =
     SyntaxRon,
     Prelude in {
 
-lin
-  PGreeting g = lin Text (ss g.s) ;
 
 }

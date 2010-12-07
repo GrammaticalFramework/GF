@@ -1,10 +1,12 @@
 concrete SentencesFin of Sentences = NumeralFin ** SentencesI - 
   [Is, IsMass, NameNN, ObjMass,
-   IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale
+   IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
+   GObjectPlease
   ] with 
   (Syntax = SyntaxFin),
   (Symbolic = SymbolicFin),
-  (Lexicon = LexiconFin) ** open SyntaxFin, ExtraFin, (P = ParadigmsFin), (V = VerbFin) in {
+  (Lexicon = LexiconFin) ** 
+    open SyntaxFin, ExtraFin, (P = ParadigmsFin), (V = VerbFin), Prelude in {
 
   lin 
     Is item prop = mkCl item (V.UseComp (CompPartAP prop)) ; -- tämä pizza on herkullista
@@ -19,5 +21,8 @@ concrete SentencesFin of Sentences = NumeralFin ** SentencesI -
         {name = mkNP (ProDrop youPol_Pron) ; isPron = True ; poss = ProDropPoss youPol_Pron} ;
 
     ObjMass = PartCN ;
+
+    GObjectPlease o = lin Text (mkPhr noPConj (mkUtt o) (lin Voc (ss "kiitos"))) ;
+
 
   }

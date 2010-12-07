@@ -1,32 +1,29 @@
 --# -path=.:abstract:prelude:german:api:common
-concrete GreetingsGer of Greetings = open Prelude in {
-
-lincat 
-  Greeting = SS ;
+concrete GreetingsGer of Greetings = SentencesGer [Greeting,mkGreeting] ** open Prelude in {
 
 lin 
-  GBye = ss "tschüß" ;
-  GCheers = ss "zum Wohl" ;
-  GDamn = ss "verdammt" ;
-  GExcuse, GExcusePol = ss "Entschuldigung" ;
-  GGoodDay = ss "guten Tag" ;
-  GGoodEvening = ss "guten Abend" ;
-  GGoodMorning = ss "guten Morgen" ;
-  GGoodNight = ss "gute Nacht" ;
-  GGoodbye = ss "auf Wiedersehen" ;
-  GHello = ss "Hallo" ;
-  GHelp = ss "Hilfe" ;
-  GHowAreYou = ss "wie geht's" ;
-  GLookOut = ss "Achtung" ;
-  GNiceToMeetYou = ss "nett, Sie zu treffen" ;
-  GPleaseGive, GPleaseGivePol = ss "bitte" ;
-  GSeeYouSoon = ss "bis bald" ;
-  GSorry, GSorryPol = ss "Entschuldigung" ;
-  GThanks = ss "Danke" ;
-  GTheCheck = ss "die Rechnung" ;
-  GCongratulations = ss "herzlichen Glückwunsch";
-  GHappyBirthday = ss "alles Gute zum Geburtstag" ;
-  GGoodLuck = ss "viel Glück" ; 
+  GBye = mkGreeting "tschüß" ;
+  GCheers = mkGreeting "zum Wohl" ;
+  GDamn = mkGreeting "verdammt" ;
+  GExcuse, GExcusePol = mkGreeting "Entschuldigung" ;
+  GGoodDay = mkGreeting "guten Tag" ;
+  GGoodEvening = mkGreeting "guten Abend" ;
+  GGoodMorning = mkGreeting "guten Morgen" ;
+  GGoodNight = mkGreeting "gute Nacht" ;
+  GGoodbye = mkGreeting "auf Wiedersehen" ;
+  GHello = mkGreeting "Hallo" ;
+  GHelp = mkGreeting "Hilfe" ;
+  GHowAreYou = mkGreeting "wie geht's" ;
+  GLookOut = mkGreeting "Achtung" ;
+  GNiceToMeetYou = mkGreeting "nett, Sie zu treffen" ;
+  GPleaseGive, GPleaseGivePol = mkGreeting "bitte" ;
+  GSeeYouSoon = mkGreeting "bis bald" ;
+  GSorry, GSorryPol = mkGreeting "Entschuldigung" ;
+  GThanks = mkGreeting "Danke" ;
+  GTheCheck = mkGreeting "die Rechnung" ;
+  GCongratulations = mkGreeting "herzlichen Glückwunsch";
+  GHappyBirthday = mkGreeting "alles Gute zum Geburtstag" ;
+  GGoodLuck = mkGreeting "viel Glück" ; 
 
 }
 

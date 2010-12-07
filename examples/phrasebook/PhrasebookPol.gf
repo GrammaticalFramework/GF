@@ -10,8 +10,4 @@ flags
   language = pl_PL ; optimize =values ; coding =utf8 ; 
       
 
-
-lin
-  PGreeting g = lin Text g ;
-
 }

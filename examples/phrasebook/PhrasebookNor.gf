@@ -6,7 +6,4 @@ concrete PhrasebookNor of Phrasebook =
     SyntaxNor,
     Prelude in {
 
-lin
-  PGreeting g = lin Text (ss g.s) ;
-
 }

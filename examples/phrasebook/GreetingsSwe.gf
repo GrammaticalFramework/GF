@@ -1,30 +1,27 @@
-concrete GreetingsSwe of Greetings = open Prelude in {
-
-lincat 
-  Greeting = SS ;
+concrete GreetingsSwe of Greetings = SentencesSwe [Greeting,mkGreeting] ** open Prelude in {
 
 lin 
-  GBye = ss "hej då" ;
-  GCheers = ss "skål" ;
-  GDamn = ss "fan" ;
-  GExcuse, GExcusePol = ss "ursäkta" ;
-  GGoodDay = ss "god dag" ;
-  GGoodEvening = ss "god afton" ;
-  GGoodMorning = ss "god morgon" ;
-  GGoodNight = ss "god natt" ;
-  GGoodbye = ss "hej då" ;
-  GHello = ss "hej" ;
-  GHelp = ss "hjälp" ;
-  GHowAreYou = ss "hur står det till" ;
-  GLookOut = ss "se upp" ;
-  GNiceToMeetYou, GNiceToMeetYouPol = ss "trevligt att träffas" ;
-  GPleaseGive, GPleaseGivePol = ss "var så god" ;
-  GSeeYouSoon = ss "vi ses snart" ;
-  GSorry, GSorryPol = ss "förlåt" ;
-  GThanks = ss "tack" ;
-  GTheCheck = ss "notan" ;
-  GCongratulations = ss "grattis";
-  GHappyBirthday = ss "grattis på födelsedagen" ;
-  GGoodLuck = ss "lycka till" ; 
+  GBye = mkGreeting "hej då" ;
+  GCheers = mkGreeting "skål" ;
+  GDamn = mkGreeting "fan" ;
+  GExcuse, GExcusePol = mkGreeting "ursäkta" ;
+  GGoodDay = mkGreeting "god dag" ;
+  GGoodEvening = mkGreeting "god afton" ;
+  GGoodMorning = mkGreeting "god morgon" ;
+  GGoodNight = mkGreeting "god natt" ;
+  GGoodbye = mkGreeting "hej då" ;
+  GHello = mkGreeting "hej" ;
+  GHelp = mkGreeting "hjälp" ;
+  GHowAreYou = mkGreeting "hur står det till" ;
+  GLookOut = mkGreeting "se upp" ;
+  GNiceToMeetYou, GNiceToMeetYouPol = mkGreeting "trevligt att träffas" ;
+  GPleaseGive, GPleaseGivePol = mkGreeting "var så god" ;
+  GSeeYouSoon = mkGreeting "vi ses snart" ;
+  GSorry, GSorryPol = mkGreeting "förlåt" ;
+  GThanks = mkGreeting "tack" ;
+  GTheCheck = mkGreeting "notan" ;
+  GCongratulations = mkGreeting "grattis";
+  GHappyBirthday = mkGreeting "grattis på födelsedagen" ;
+  GGoodLuck = mkGreeting "lycka till" ; 
 
 }

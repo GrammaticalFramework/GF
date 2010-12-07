@@ -9,7 +9,4 @@ concrete PhrasebookEng of Phrasebook =
 flags 
   language = en_US ;
 
-lin
-  PGreeting g = lin Text g ;
-
 }

@@ -1,33 +1,30 @@
-concrete GreetingsBul of Greetings = open Prelude in {
+concrete GreetingsBul of Greetings = SentencesBul [Greeting,mkGreeting] ** open Prelude in {
 
 flags
   coding=utf8;
 
-lincat 
-  Greeting = SS ;
-
 lin 
-  GBye = ss "чао" ;
-  GCheers = ss "наздраве" ;
-  GDamn = ss "по дяволите" ;
-  GExcuse, GExcusePol = ss "извинете" ;
-  GGoodDay = ss "добър ден" ;
-  GGoodEvening = ss "добра вечер" ;
-  GGoodMorning = ss "добро утро" ;
-  GGoodNight = ss "лека нощ" ;
-  GGoodbye = ss "довиждане" ;
-  GHello = ss "здравей" ;
-  GHelp = ss "помощ" ;
-  GHowAreYou = ss "как си" ;
-  GLookOut = ss "погледни" ;
-  GNiceToMeetYou = ss "радвам се да се видим" ;
-  GPleaseGive, GPleaseGivePol = ss "моля" ;
-  GSeeYouSoon = ss "до скоро" ;
-  GSorry, GSorryPol = ss "извинете" ;
-  GThanks = ss "благодаря ти" ;
-  GTheCheck = ss "сметката" ;
-  GCongratulations = ss "поздравления";
-  GHappyBirthday = ss "честит рожден ден" ;
-  GGoodLuck = ss "успех" ; 
+  GBye = mkGreeting "чао" ;
+  GCheers = mkGreeting "наздраве" ;
+  GDamn = mkGreeting "по дяволите" ;
+  GExcuse, GExcusePol = mkGreeting "извинете" ;
+  GGoodDay = mkGreeting "добър ден" ;
+  GGoodEvening = mkGreeting "добра вечер" ;
+  GGoodMorning = mkGreeting "добро утро" ;
+  GGoodNight = mkGreeting "лека нощ" ;
+  GGoodbye = mkGreeting "довиждане" ;
+  GHello = mkGreeting "здравей" ;
+  GHelp = mkGreeting "помощ" ;
+  GHowAreYou = mkGreeting "как си" ;
+  GLookOut = mkGreeting "погледни" ;
+  GNiceToMeetYou = mkGreeting "радвам се да се видим" ;
+  GPleaseGive, GPleaseGivePol = mkGreeting "моля" ;
+  GSeeYouSoon = mkGreeting "до скоро" ;
+  GSorry, GSorryPol = mkGreeting "извинете" ;
+  GThanks = mkGreeting "благодаря ти" ;
+  GTheCheck = mkGreeting "сметката" ;
+  GCongratulations = mkGreeting "поздравления";
+  GHappyBirthday = mkGreeting "честит рожден ден" ;
+  GGoodLuck = mkGreeting "успех" ; 
 
 }

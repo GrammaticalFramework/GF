@@ -7,7 +7,5 @@ concrete PhrasebookSwe of Phrasebook =
     Prelude in {
 flags  
   language = sv_SE ;
-lin
-  PGreeting g = lin Text (ss g.s) ;
 
 }
