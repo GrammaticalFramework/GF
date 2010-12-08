@@ -381,9 +381,9 @@ incomplete resource Constructors = open Grammar in {  --%
       mkCl : NP -> NP -> Cl    -- John is the man   
         = \x,y -> PredVP x (UseComp (CompNP y)) ; --%   
       mkCl : NP -> N -> Cl    -- John is a man   
-        = \x,y -> PredVP x (UseComp (CompNP (DetArtSg IndefArt (UseN y)))) ; --%   
+        = \x,y -> PredVP x (UseComp (CompCN (UseN y))) ; --% 
       mkCl : NP -> CN -> Cl    -- John is an old man   
-	= \x,y -> PredVP x (UseComp (CompNP (DetArtSg IndefArt y))) ; --%   
+	= \x,y -> PredVP x (UseComp (CompCN y)) ; --%   
       mkCl : NP -> Adv -> Cl   -- John is here   
 	= \x,y -> PredVP x (UseComp (CompAdv y)) ; --%   
 
@@ -468,9 +468,9 @@ incomplete resource Constructors = open Grammar in {  --%
       mkVP : AP -> VP              -- be warm 
       = \a -> UseComp (CompAP a)   ; --% 
       mkVP : N -> VP               -- be a man 
-      = \y -> (UseComp (CompNP (DetArtSg IndefArt (UseN y)))) ; --% 
+      = \y -> UseComp (CompCN (UseN y)) ; --% 
       mkVP : CN -> VP              -- be an old man 
-      = \y -> (UseComp (CompNP (DetArtSg IndefArt y))) ; --% 
+      = \y -> UseComp (CompCN y) ; --% 
       mkVP : NP -> VP              -- be this man 
       = \a -> UseComp (CompNP a)   ; --% 
       mkVP : Adv -> VP             -- be here 
@@ -1161,9 +1161,9 @@ incomplete resource Constructors = open Grammar in {  --%
       mkQCl : IP -> NP -> QCl    -- who is the man   
         = \x,y -> QuestVP x (UseComp (CompNP y)) ; --%   
       mkQCl : IP -> N -> QCl    -- who is a man   
-        = \x,y -> QuestVP x (UseComp (CompNP (DetArtSg IndefArt (UseN y)))) ; --%   
+        = \x,y -> QuestVP x (UseComp (CompCN (UseN y))) ; --%   
       mkQCl : IP -> CN -> QCl    -- who is an old man   
-	= \x,y -> QuestVP x (UseComp (CompNP (DetArtSg IndefArt y))) ; --%   
+	= \x,y -> QuestVP x (UseComp (CompCN y)) ; --%   
       mkQCl : IP -> Adv -> QCl   -- who is here   
 	= \x,y -> QuestVP x (UseComp (CompAdv y)) ; --%   
       mkQCl : IP -> NP -> V2 -> QCl        -- who does John love 
