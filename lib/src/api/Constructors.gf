@@ -1023,7 +1023,7 @@ incomplete resource Constructors = open Grammar in {  --%
 
       mkAP : Ord   -> AP              -- oldest 
       = AdjOrd ; --%
-      mkAP : CAdv -> AP -> NP -> AP  -- as old as John
+      mkAP : CAdv -> AP -> NP -> AP   -- as old as John
       = CAdvAP ; --%
       } ; --% 
 
