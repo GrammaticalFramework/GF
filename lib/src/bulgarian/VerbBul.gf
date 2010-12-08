@@ -89,4 +89,6 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     CompAP ap = {s = \\agr => ap.s ! aform agr.gn Indef (RObj Acc)} ;
     CompNP np = {s = \\_ => np.s ! RObj Acc} ;
     CompAdv a = {s = \\_ => a.s} ;
+    CompCN cn = {s = \\agr => cn.s ! (NF (numGenNum agr.gn) Indef)} ;
+
 }
