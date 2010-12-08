@@ -3,12 +3,14 @@ concrete SentencesPol of Sentences =
     Day,PDay,OnDay,Language,PLanguage,Citizenship,
     PCitizenship,CitiNat,PropCit,ACitizen,
     Nationality,Transport,PTransport,ByTransp,
-    IFemale,YouFamFemale,YouPolFemale,YouPolMale] 
+    IFemale,YouFamFemale,YouPolFemale,YouPolMale,
+    IMale, YouFamMale --- AR, for pro drop
+    ] 
     with 
   (Syntax = SyntaxPol),
   (Symbolic = SymbolicPol),
   (Lexicon = LexiconPol) ** 
-  open (N = NounPol),(R = ResPol), (Pron = PronounMorphoPol), Prelude in {
+  open (N = NounPol),(R = ResPol), (Pron = PronounMorphoPol), (E = ExtraPol), Prelude in {
     
   flags  
     optimize =values ; coding =utf8 ; 
@@ -33,8 +35,18 @@ concrete SentencesPol of Sentences =
           R.MascPersSg=>n.citizenMSg; R.FemSg=>n.citizenF; _=>n.citizenMPl
         };
          lock_Adv=<>};
-    IFemale = mkPerson (Pron.pronJaFoo (R.PGen R.Fem));
-    YouFamFemale = mkPerson (Pron.pronTyFoo (R.PGen R.Fem));
-    YouPolFemale = mkPerson (Pron.pronPani);
-    YouPolMale = mkPerson (Pron.pronPan);
+
+--- AR 8/12/2010: using pro drop
+    IMale = mkPerson (E.ProDrop Pron.pronJa);
+    IFemale = mkPerson (E.ProDrop (Pron.pronJaFoo (R.PGen R.Fem)));
+    YouFamMale = mkPerson (E.ProDrop (Pron.pronTy));
+    YouFamFemale = mkPerson (E.ProDrop (Pron.pronTyFoo (R.PGen R.Fem)));
+    YouPolFemale = mkPerson (E.ProDrop (Pron.pronPani));
+    YouPolMale = mkPerson (E.ProDrop (Pron.pronPan));
+
+--- original
+---    IFemale = mkPerson (Pron.pronJaFoo (R.PGen R.Fem));
+---    YouFamFemale = mkPerson (Pron.pronTyFoo (R.PGen R.Fem));
+---    YouPolFemale = mkPerson (Pron.pronPani);
+---    YouPolMale = mkPerson (Pron.pronPan);
 }
