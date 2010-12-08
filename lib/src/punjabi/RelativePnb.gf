@@ -15,7 +15,7 @@ concrete RelativePnb of Relative = CatPnb ** open ResPnb in {
       } ;
 -- RelVP and RelSlash slows the linking process a lot this is why it is commented for test purposes
 
- {-   RelVP rp vp = {
+    RelVP rp vp = {
       s = \\t,p,o,ag => 
         let 
           agr = case rp.a of {
@@ -45,7 +45,7 @@ concrete RelativePnb of Relative = CatPnb ** open ResPnb in {
 --		   };
       c = Dir
       } ;
--}
+
     FunRP p np rp = {
       s = \\n,c => rp.s ! n ! c ++ np.s ! NPC c ++ p.s  ;
       a = RAg np.a
