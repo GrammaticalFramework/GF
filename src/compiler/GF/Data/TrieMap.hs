@@ -17,10 +17,15 @@ module GF.Data.TrieMap
          
          , elems
          , toList
+         , fromList, fromListWith
+
+         , map
+         , mapWithKey
          ) where
 
-import Prelude hiding (lookup, null)
+import Prelude hiding (lookup, null, map)
 import qualified Data.Map as Map
+import Data.List (foldl')
 
 data TrieMap k v = Tr (Maybe v) (Map.Map k (TrieMap k v))
 
@@ -80,3 +85,15 @@ toList :: TrieMap k v -> [([k],v)]
 toList tr = collect [] tr []
   where
     collect ks (Tr mb_v m) xs = maybe id (\v -> (:) (ks,v)) mb_v (Map.foldWithKey (\k -> collect (k:ks)) xs m)
+
+fromListWith :: Ord k => (v -> v -> v) -> [([k],v)] -> TrieMap k v
+fromListWith f xs = foldl' (\trie (ks,v) -> insertWith f ks v trie) empty xs
+
+fromList :: Ord k => [([k],v)] -> TrieMap k v
+fromList xs = fromListWith const xs
+
+map :: (a -> b) -> TrieMap k a -> TrieMap k b
+map f (Tr mb_v m) = Tr (fmap f mb_v) (Map.map (map f) m)
+
+mapWithKey :: ([k] -> a -> b) -> TrieMap k a -> TrieMap k b
+mapWithKey f (Tr mb_v m) = Tr (fmap (f []) mb_v) (Map.mapWithKey (\k -> mapWithKey (f . (k:))) m)
