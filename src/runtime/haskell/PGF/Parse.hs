@@ -48,7 +48,7 @@ data ParseOutput
                                    -- The forest id ('FId') points to the bracketed string from the parser
                                    -- where the type checking failed. More than one error is returned
                                    -- if there are many analizes for some phrase but they all are not type correct.
-  | ParseOk [Tree]                 -- ^ If the parsing and the type checkeing are successful we get a list of abstract syntax trees.
+  | ParseOk [Tree]                 -- ^ If the parsing and the type checking are successful we get a list of abstract syntax trees.
                                    -- The list should be non-empty.
   | ParseIncomplete                -- ^ The sentence is not complete. Only partial output is produced
 
@@ -81,12 +81,12 @@ parseWithRecovery pgf lang typ open_typs dp toks = accept (initState pgf lang ty
 initState :: PGF -> Language -> Type -> ParseState
 initState pgf lang (DTyp _ start _) = 
   let items = case Map.lookup start (cnccats cnc) of
-                Just (CncCat s e labels) -> do cat <- range (s,e)
+                Just (CncCat s e labels) -> do fid <- range (s,e)
                                                (funid,args) <- foldForest (\funid args -> (:) (funid,args)) (\_ _ args -> args)
-                                                                          [] cat (pproductions cnc)
+                                                                          [] fid (pproductions cnc)
                                                let CncFun fn lins = cncfuns cnc ! funid
                                                (lbl,seqid) <- assocs lins
-                                               return (Active 0 0 funid seqid args (AK cat lbl))
+                                               return (Active 0 0 funid seqid args (AK fid lbl))
                 Nothing                  -> mzero
 
       cnc = lookConcrComplete pgf lang
@@ -98,7 +98,7 @@ initState pgf lang (DTyp _ start _) =
 
 -- | This function constructs the simplest possible parser input. 
 -- It checks the tokens for exact matching and recognizes only @String@, @Int@ and @Float@ literals.
--- The @Int@ and @Float@ literals matche only if the token passed is some number.
+-- The @Int@ and @Float@ literals match only if the token passed is some number.
 -- The @String@ literal always match but the length of the literal could be only one token.
 simpleParseInput :: Token -> ParseInput
 simpleParseInput t = ParseInput (==t) (matchLit t)
