@@ -16,7 +16,7 @@ incomplete concrete RelativeHindustani of Relative =
       c = Dir
       } ;
 
-{-   RelVP rp vp = {
+   RelVP rp vp = {
       s = \\t,p,o,ag => 
         let 
           agr = case rp.a of {
@@ -41,7 +41,7 @@ incomplete concrete RelativeHindustani of Relative =
 --		   };
       c = Dir
       } ;
--}
+
     FunRP p np rp = {
       s = \\n,c => rp.s ! n ! c ++ np.s ! NPC c ++ p.s ! Masc  ;
       a = RAg np.a
