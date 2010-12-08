@@ -40,6 +40,7 @@ concrete VerbPnb of Verb = CatPnb ** open ResPnb in {
     CompAP ap ={s = \\a => ap.s ! giveNumber a ! giveGender a ! Dir } ;
     CompNP np = {s = \\_ => np.s ! NPObj} ;
     CompAdv adv = {s = \\a => adv.s ! (fromAgr a).g } ;
+    CompCN cn = {s = \\a => cn.s ! giveNumber a ! Dir} ;
 
 
 }
