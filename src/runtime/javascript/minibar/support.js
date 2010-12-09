@@ -61,7 +61,7 @@ function GetXmlHttpObject(handler)
   return objXMLHttp
 }
 
-function ajax_http_get(url,callback) {
+function ajax_http_get(url,callback,errorcallback) {
     var http=GetXmlHttpObject()
     if (http==null) {
 	alert ("Browser does not support HTTP Request")
@@ -69,7 +69,8 @@ function ajax_http_get(url,callback) {
     } 
     var statechange=function() {
 	if (http.readyState==4 || http.readyState=="complete") {
-	    if(http.status==200) callback(http.responseText);
+	    if(http.status<300) callback(http.responseText,http.status);
+	    else if(errorcallback) errorcallback(http.responseText,http.status);
 	    else alert("Request for "+url+" failed: "
 		       +http.status+" "+http.statusText);
 	}
