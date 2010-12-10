@@ -46,7 +46,9 @@ main = do
 ---  putStrLn $ unlines ["p -cat=" ++ last (words t) ++ 
 ---               " \"" ++ e ++ "\"" | (_,t,e) <- rs, not (null e)] ----
   rs2 <- getRules structuralAPI
-  delimit $ mkSplitTables True isLatex cs $ rs ++ rs2
+  let rss = rs ++ rs2
+  mapM_ putStrLn [f ++ " " ++ e | (f,_,e) <- rss]
+  delimit $ mkSplitTables True isLatex cs rss 
   space
 --  title "Structural Words"
 --  space

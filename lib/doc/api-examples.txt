@@ -1,0 +1,367 @@
+      mkText : Phr -> (Punct) -> (Text) -> Text  -- Does she sleep? Yes. 
+mkText (mkPhr (mkQS (mkCl she_NP sleep_V))) questMarkPunct (mkText (mkPhr yes_Utt) fullStopPunct)
+      mkText : Utt ->  Text    -- Yes. 
+mkText yes_Utt
+      mkText : S   ->  Text    -- She slept. 
+mkText (mkS pastTense (mkCl she_NP sleep_V))
+      mkText : Cl  ->  Text    -- She sleeps.
+mkText (mkCl she_NP sleep_V)
+      mkText : QS  ->  Text    -- Did she sleep? 
+mkText (mkQS pastTense (mkQCl (mkCl she_NP sleep_V)))
+      mkText : (Pol) -> Imp ->  Text    -- Don't sleep!
+mkText negativePol (mkImp sleep_V)
+      mkText : Text -> Text -> Text  -- Where? Here. When? Now! 
+mkText (mkText (mkPhr (mkUtt where_IAdv)) questMarkPunct (mkText (mkPhr (mkUtt here_Adv)))) (mkText (mkPhr (mkUtt when_IAdv)) questMarkPunct (mkText (mkPhr (mkUtt now_Adv)) exclMarkPunct))
+--      emptyText : Text  -- (empty text)  
+--emptyText
+--      fullStopPunct  : Punct   -- .   
+--fullStopPunct
+--      questMarkPunct : Punct   -- ?   
+--questMarkPunct
+--      exclMarkPunct  : Punct   -- !   
+--exclMarkPunct
+--      mkPhr : (PConj) -> Utt -> (Voc) -> Phr   -- but sleep, my friend   
+mkPhr but_PConj (mkUtt (mkImp sleep_V)) (mkVoc (mkNP i_Pron friend_N))
+      mkPhr : S -> Phr   -- she won't sleep
+mkPhr (mkS futureTense negativePol (mkCl she_NP sleep_V))
+      mkPhr : Cl -> Phr   -- she sleeps
+mkPhr (mkCl she_NP sleep_V)
+      mkPhr : QS -> Phr   -- would she sleep
+mkPhr (mkQS conditionalTense (mkQCl (mkCl she_NP sleep_V)))  
+      mkPhr : Imp -> Phr  -- sleep
+mkPhr (mkImp sleep_V)
+      mkPConj : Conj -> PConj   -- and   
+mkPConj and_Conj
+      mkVoc : NP -> Voc  -- my friend
+mkVoc (mkNP i_Pron friend_N)
+      mkUtt : S -> Utt                     -- she slept     
+mkUtt (mkS pastTense (mkCl she_NP sleep_V))
+      mkUtt : Cl -> Utt                     -- she sleeps  
+mkUtt (mkCl she_NP sleep_V)
+      mkUtt : QS -> Utt                    -- who didn't sleep
+mkUtt (mkQS pastTense negativePol (mkQCl who_IP sleep_V))   
+      mkUtt : QCl -> Utt                   -- who sleeps 
+mkUtt (mkQCl who_IP sleep_V) 
+      mkUtt : (ImpForm) -> (Pol) -> Imp -> Utt  -- don't be men
+mkUtt pluralImpForm negativePol (mkImp (mkVP man_N))
+      mkUtt : IP   -> Utt     -- who
+mkUtt who_IP
+      mkUtt : IAdv -> Utt     -- why   
+mkUtt why_IAdv
+      mkUtt : NP   -> Utt     -- this man   
+mkUtt (mkNP this_Det man_N)
+      mkUtt : Adv  -> Utt     -- here
+mkUtt here_Adv   
+      mkUtt : VP   -> Utt     -- to sleep  
+mkUtt (mkVP sleep_V)
+      mkUtt : CN   -> Utt     -- beer
+mkUtt (mkCN beer_N)      
+      mkUtt : AP   -> Utt     -- good
+mkUtt (mkAP good_A)   
+      mkUtt : Card -> Utt     -- five  
+mkUtt (mkCard (mkNumeral "5")) 
+      lets_Utt : VP ->  Utt  -- let's sleep
+mkPhr (lets_Utt (mkVP sleep_V))
+      positivePol : Pol   -- she sleeps [default]    
+mkS positivePol (mkCl she_NP sleep_V)
+      negativePol : Pol   -- she doesn't sleep    
+mkS negativePol (mkCl she_NP sleep_V)
+      simultaneousAnt : Ant   -- she sleeps [default]
+mkS simultaneousAnt (mkCl she_NP sleep_V)
+      anteriorAnt : Ant   -- she has slept       --# notpresent   
+mkS anteriorAnt (mkCl she_NP sleep_V)
+      presentTense     : Tense  -- she sleeps [default]   
+mkS presentTense (mkCl she_NP sleep_V)
+      pastTense        : Tense  -- she slept           --# notpresent   
+mkS pastTense (mkCl she_NP sleep_V)
+      futureTense      : Tense  -- she will sleep        --# notpresent  
+mkS futureTense (mkCl she_NP sleep_V)
+      conditionalTense : Tense  -- she would sleep       --# notpresent   
+mkS conditionalTense (mkCl she_NP sleep_V)
+      singularImpForm : ImpForm   -- be a man [default]
+mkUtt singularImpForm (mkImp (mkVP man_N))
+      pluralImpForm   : ImpForm   -- be men 
+mkUtt pluralImpForm (mkImp (mkVP man_N)) 
+      politeImpForm   : ImpForm   -- be a man [polite singular]  
+mkUtt politeImpForm (mkImp (mkVP man_N))
+      mkS : (Tense) -> (Ant) -> (Pol) -> Cl  -> S -- she wouldn't have slept  
+mkS conditionalTense anteriorAnt negativePol (mkCl she_NP sleep_V)
+
+
+
+      mkS : Conj -> S -> S -> S   -- she sleeps and I run    
+      mkS : Conj -> ListS  -> S   -- she sleeps, I run and you sleep  
+      mkS : Adv -> S -> S           -- today, she sleeps   
+      mkCl : NP -> V -> Cl                -- she sleeps   
+      mkCl : NP -> V2 -> NP -> Cl         -- she loves him
+      mkCl : NP -> V3 -> NP -> NP -> Cl   -- she sends it to him
+      mkCl : NP  -> VV -> VP -> Cl        -- she wants to sleep
+      mkCl : NP  -> VS -> S  -> Cl        -- she says that she sleeps
+      mkCl : NP  -> VQ -> QS -> Cl        -- she wonders who sleeps
+      mkCl : NP  -> VA -> AP -> Cl        -- she becomes old
+      mkCl : NP  -> V2A -> NP -> AP -> Cl -- she paints it red
+      mkCl : NP  -> V2S -> NP -> S -> Cl          -- she tells him that we sleep
+      mkCl : NP  -> V2Q -> NP -> QS -> Cl         -- she asks him who sleeps 
+      mkCl : NP  -> V2V -> NP -> VP -> Cl         -- she forces him to sleep
+      mkCl : NP -> A  -> Cl    -- she is old
+      mkCl : NP -> A -> NP -> Cl -- she is older than him   
+      mkCl : NP -> A2 -> NP -> Cl -- she is married to him 
+      mkCl : NP -> AP -> Cl    -- she is very old 
+      mkCl : NP -> NP -> Cl    -- she is the man   
+      mkCl : NP -> N -> Cl    -- she is a man   
+      mkCl : NP -> CN -> Cl    -- she is an old man   
+      mkCl : NP -> Adv -> Cl   -- she is here   
+      mkCl : NP -> VP -> Cl   -- she always sleeps here   
+      mkCl : N -> Cl           -- there is a house 
+      mkCl : CN -> Cl          -- there is an old house 
+      mkCl : NP -> Cl          -- there are five houses   
+      mkCl : NP  -> RS -> Cl   -- it is she who sleeps    
+      mkCl : Adv -> S  -> Cl   -- it is here he sleeps    
+      mkCl : V -> Cl   -- it rains 
+      mkCl : VP -> Cl  -- it is raining    
+      mkCl : SC -> VP -> Cl  
+      genericCl : VP ->  Cl    -- one sleeps               
+      mkVP : V   -> VP                -- sleep 
+      mkVP : V2  -> NP -> VP          -- love it 
+      mkVP : V3  -> NP -> NP -> VP    -- send a message to him 
+      mkVP : VV  -> VP -> VP          -- want to run  
+      mkVP : VS  -> S  -> VP          -- know that she runs   
+      mkVP : VQ  -> QS -> VP          -- wonder if she runs  
+      mkVP : VA  -> AP -> VP          -- become red  
+      mkVP : V2A -> NP -> AP -> VP    -- paint it red 
+      mkVP : V2S -> NP -> S  -> VP          -- tell him that we sleep 
+      mkVP : V2Q -> NP -> QS -> VP         -- ask him who sleeps
+      mkVP : V2V -> NP -> VP -> VP         -- force him to sleep
+      mkVP : A -> VP               -- be warm 
+      mkVP : A -> NP -> VP         -- be older than him 
+      mkVP : A2 -> NP -> VP        -- be married to him 
+      mkVP : AP -> VP              -- be warm 
+      mkVP : N -> VP               -- be a man 
+      mkVP : CN -> VP              -- be an old man 
+      mkVP : NP -> VP              -- be this man 
+      mkVP : Adv -> VP             -- be here 
+      mkVP : VP -> Adv -> VP          -- sleep here    
+      mkVP : AdV -> VP -> VP          -- always sleep   
+      mkVP : VPSlash -> NP -> VP      -- paint it black  
+      mkVP : VPSlash -> VP            -- paint itself black 
+      mkVP : Comp -> VP               -- be warm 
+      reflexiveVP : V2 -> VP        -- love itself 
+      passiveVP : V2 ->       VP   -- be loved
+      passiveVP : V2 -> NP -> VP   -- be loved by her 
+      progressiveVP : VP -> VP   -- be sleeping 
+     mkComp : AP -> Comp -- very old 
+     mkComp : NP -> Comp -- this man 
+     mkComp : Adv -> Comp -- here 
+     mkSC : S -> SC -- that he sleeps 
+     mkSC : QS -> SC -- whether he sleeps 
+     mkSC : VP -> SC -- to sleep 
+      mkImp : VP -> Imp                -- go 
+      mkImp : V  -> Imp                -- take it
+      mkImp : V2 -> NP -> Imp          -- come here now
+      mkNP : Quant -> N  -> NP          -- this man
+      mkNP : Quant -> CN -> NP          -- this old man
+      mkNP : Quant -> Num -> CN -> NP   -- these five old men
+      mkNP : Quant -> Num -> N  -> NP   -- these five men
+      mkNP : Det -> CN -> NP      -- the first old man   
+      mkNP : Det -> N -> NP       -- the first man   
+      mkNP : Numeral -> CN -> NP      -- fifty old men   
+      mkNP : Numeral -> N -> NP       -- fifty men  
+      mkNP : Digits -> CN -> NP      -- 51 old men 
+      mkNP : Digits -> N -> NP       -- 51 men 
+      mkNP : Card -> CN -> NP     -- forty-five old men   
+      mkNP : Card -> N -> NP       -- forty-five men   
+      mkNP : Pron -> CN -> NP   -- my old man
+      mkNP : Pron -> N  -> NP   -- my man
+      mkNP : PN -> NP             -- she  
+      mkNP : Pron -> NP           -- he  
+      mkNP : Quant -> NP           -- this  
+      mkNP : Quant -> Num -> NP    -- these five  
+      mkNP : Det -> NP             -- these five best  
+      mkNP : CN -> NP  -- old beer   
+      mkNP : N -> NP  -- beer   
+      mkNP : Predet -> NP -> NP  -- only the man   
+      mkNP : NP -> V2  -> NP     -- the man seen 
+      mkNP : NP -> Adv -> NP     -- Paris today 
+      mkNP : NP -> RS -> NP      -- John, who lives in Paris 
+      mkNP : Conj -> NP -> NP -> NP 
+      mkNP : Conj -> ListNP -> NP  
+      mkDet : Quant ->  Det       -- this  
+      mkDet : Quant -> Card -> Det   -- these five
+      mkDet : Quant ->  Ord -> Det     -- the best
+      mkDet : Quant -> Num -> Ord -> Det  -- these five best  
+      mkDet : Quant -> Num -> Det -- these five  
+      mkDet : Card ->  Det     -- forty  
+      mkDet : Digits -> Det    -- 51
+      mkDet : Numeral -> Det  -- five 
+      mkDet : Pron -> Det     -- my
+      mkDet : Pron -> Num -> Det -- my five
+      the_Det   : Det -- the (house)
+      a_Det     : Det -- a (house)
+      theSg_Det : Det -- the (houses)
+      thePl_Det : Det -- the (houses)
+      aSg_Det   : Det -- a (house)
+      aPl_Det   : Det -- (houses)
+      mkQuant : Pron -> Quant   -- my  
+    the_Quant : Quant    -- the 
+    a_Quant   : Quant    -- a  
+      mkNum : Str -> Num   -- thirty-five (given by "35") 
+      mkNum : Numeral -> Num  -- twenty  
+      mkNum : Digits -> Num   -- 21 
+      mkNum : Digit -> Num -- five
+      mkNum : Card -> Num  -- almost ten 
+      mkNum : AdN -> Card -> Num  -- almost ten
+      singularNum : Num              -- singular 
+      pluralNum : Num                -- plural 
+      mkCard : Str -> Card   -- thirty-five (given as "35")
+      mkCard : Numeral -> Card   -- twenty  
+      mkCard : Digits -> Card      -- 51  
+      mkCard : AdN -> Card -> Card  -- almost fifty
+      mkOrd : Numeral -> Ord   -- twentieth  
+      mkOrd : Digits -> Ord         -- 51st 
+      mkOrd : Digit -> Ord       -- fifth 
+      mkOrd : A -> Ord           -- largest  
+      mkAdN : CAdv -> AdN  -- more than  
+      mkNumeral : Sub1000 -> Numeral -- coerce 1..999  
+      mkNumeral : Sub1000 -> Sub1000 -> Numeral -- 1000m + n  
+      mkNumeral : Str -> Numeral   -- thirty-five (given by "35") 
+    thousandfoldNumeral : Sub1000 -> Numeral -- 1000n  
+      mkSub1000 : Sub100 -> Sub1000 -- coerce 1..99  
+      mkSub1000 : Sub10 -> Sub1000 -- 100n  
+      mkSub1000 : Sub10 -> Sub100 -> Sub1000 -- 100m + n  
+      mkSub100 : Unit -> Sub100            -- coerce 1..9  
+      mkSub100 : Unit -> Unit -> Sub100    -- 10m + n  
+    tenfoldSub100 : Unit -> Sub100 -- 10n  
+    n1_Unit : Unit -- one 
+    n2_Unit : Unit -- two  
+    n3_Unit : Unit -- three  
+    n4_Unit : Unit -- four  
+    n5_Unit : Unit -- five  
+    n6_Unit : Unit -- six  
+    n7_Unit : Unit -- seven  
+    n8_Unit : Unit -- eight  
+    n9_Unit : Unit -- nine  
+      mkDigits : Str -> Digits -- 35 (from string "35")
+      mkDigits : Dig -> Digits -- 4  
+      mkDigits : Dig -> Digits -> Digits -- 1,233,432  
+      n0_Dig : Dig   -- 0  
+      n1_Dig : Dig   -- 1  
+      n2_Dig : Dig   -- 2   
+      n3_Dig : Dig   -- 3      
+      n4_Dig : Dig   -- 4  
+      n5_Dig : Dig   -- 5      
+      n6_Dig : Dig   -- 6      
+      n7_Dig : Dig   -- 7           
+      n8_Dig : Dig   -- 8      
+      n9_Dig : Dig   -- 9  
+      mkCN : N  -> CN            -- house  
+      mkCN : N2 -> NP -> CN      -- mother of John   
+      mkCN : N3 -> NP -> NP -> CN      -- distance from this city to Paris 
+      mkCN : N2 -> CN            -- mother 
+      mkCN : N3 -> CN            -- distance 
+      mkCN :  A ->  N  -> CN     -- big house  
+      mkCN :  A -> CN  -> CN     -- big blue house  
+      mkCN : AP ->  N  -> CN     -- very big house  
+      mkCN : AP -> CN  -> CN     -- very big blue house  
+      mkCN :  N -> RS  -> CN     -- house that she owns 
+      mkCN : CN -> RS  -> CN     -- big house that she loves 
+      mkCN :  N -> Adv -> CN     -- house on the hill 
+      mkCN : CN -> Adv -> CN     -- big house on the hill 
+      mkCN : CN -> S   -> CN     -- rule that she sleeps 
+      mkCN : CN -> QS  -> CN     -- question if she sleeps 
+      mkCN : CN -> VP  -> CN     -- reason to sleep 
+      mkCN : CN -> SC  -> CN     -- reason to sleep  
+      mkCN :  N -> NP  -> CN     -- king John 
+      mkCN : CN -> NP  -> CN     -- old king John
+      mkAP : A -> AP           -- warm   
+      mkAP : A -> NP -> AP     -- warmer than Paris    
+      mkAP : A2 -> NP -> AP    -- married to her 
+      mkAP : A2 -> AP          -- married 
+      mkAP : AP -> S -> AP    -- probable that she sleeps  
+      mkAP : AP -> QS -> AP    -- uncertain if she sleeps  
+      mkAP : AP -> VP -> AP    -- ready to go 
+      mkAP : AP -> SC -> AP    -- ready to go  
+      mkAP : AdA -> A -> AP   -- very old
+      mkAP : AdA -> AP -> AP   -- very very old  
+      mkAP : Conj -> AP -> AP -> AP -- old and big 
+      mkAP : Conj -> ListAP -> AP   -- old, big and warm 
+      mkAP : Ord   -> AP              -- oldest 
+      mkAP : CAdv -> AP -> NP -> AP   -- as old as she
+      reflAP   : A2 -> AP             -- married to himself 
+      comparAP : A -> AP              -- warmer 
+      mkAdv : A -> Adv            -- warmly   
+      mkAdv : Prep -> NP -> Adv          -- in the house    
+      mkAdv : Subj -> S -> Adv   -- when she sleeps  
+      mkAdv : CAdv -> A -> NP -> Adv   -- more warmly than she  
+      mkAdv : CAdv -> A -> S -> Adv    -- more warmly than he runs 
+      mkAdv : AdA -> Adv -> Adv        -- very warmly 
+      mkAdv : Conj -> Adv -> Adv -> Adv  -- here and now
+      mkAdv : Conj -> ListAdv -> Adv   -- with John, here and now  
+      mkQS : (Tense) -> (Ant) -> (Pol) -> QCl -> QS -- who wouldn't have slept 
+      mkQS : Cl -> QS                    
+      mkQCl : Cl -> QCl -- does she sleep    
+      mkQCl : IP -> VP -> QCl               -- who sleeps      
+      mkQCl : IP -> V -> QCl                -- who sleeps   
+      mkQCl : IP -> V2 -> NP -> QCl         -- who loves her
+      mkQCl : IP -> V3 -> NP -> NP -> QCl   -- who sends it to her
+      mkQCl : IP  -> VV -> VP -> QCl        -- who wants to sleep
+      mkQCl : IP  -> VS -> S  -> QCl        -- who says that she sleeps
+      mkQCl : IP  -> VQ -> QS -> QCl        -- who wonders who sleeps
+      mkQCl : IP  -> VA -> AP -> QCl        -- who becomes old
+      mkQCl : IP  -> V2A -> NP -> AP -> QCl -- who paints it red
+      mkQCl : IP  -> V2S -> NP -> S -> QCl          -- who tells her that we sleep
+      mkQCl : IP  -> V2Q -> NP -> QS -> QCl         -- who asks her who sleeps 
+      mkQCl : IP  -> V2V -> NP -> VP -> QCl         -- who forces her to sleep
+      mkQCl : IP -> A  -> QCl    -- who is old
+      mkQCl : IP -> A -> NP -> QCl -- who is older than her   
+      mkQCl : IP -> A2 -> NP -> QCl -- who is married to her 
+      mkQCl : IP -> AP -> QCl    -- who is very old 
+      mkQCl : IP -> NP -> QCl    -- who is the man   
+      mkQCl : IP -> N -> QCl    -- who is a man   
+      mkQCl : IP -> CN -> QCl    -- who is an old man   
+      mkQCl : IP -> Adv -> QCl   -- who is here   
+      mkQCl : IP -> NP -> V2 -> QCl        -- who does she love 
+      mkQCl : IP -> ClSlash -> QCl         -- who does she today      
+      mkQCl : IAdv -> Cl -> QCl            -- why does she sleep     
+      mkQCl : Prep -> IP -> Cl -> QCl      -- with whom does she sleep 
+      mkQCl : IAdv -> NP -> QCl   -- where is she 
+      mkQCl : IComp -> NP -> QCl   -- who is this man    
+      mkQCl : IP -> QCl         -- which houses are there    
+      mkIP : IDet -> CN -> IP          -- which five big cities    
+      mkIP : IDet -> N -> IP      -- which five cities
+      mkIP : IDet -> IP      -- which five 
+      mkIP : IQuant -> CN -> IP    -- which big cities
+      mkIP : IQuant -> Num -> CN -> IP          -- which five cities 
+      mkIP : IQuant -> N -> IP      -- which city
+      mkIP : IP -> Adv -> IP        -- who in Paris 
+    what_IP : IP  -- what (singular)
+    who_IP : IP   -- who (singular)
+      mkIAdv : Prep -> IP -> IAdv --  in which city 
+      mkIAdv : IAdv -> Adv -> IAdv --  where in Paris  
+      mkIDet : IQuant -> Num -> IDet          -- which (songs) 
+      mkIDet : IQuant -> IDet      
+    which_IDet : IDet 
+    whichPl_IDet : IDet 
+      mkRS : (Tense) -> (Ant) -> (Pol) -> RCl -> RS -- that wouldn't have slept 
+      mkRS : Conj -> RS -> RS -> RS -- who sleeps and whose mother runsx
+      mkRS : Conj -> ListRS -> RS -- who sleeps, whom I see and who sleeps 
+      mkRCl : RP -> VP -> RCl        -- that loves she      
+      mkRCl : RP -> ClSlash -> RCl     -- whom she loves today      
+      mkRCl : RP -> NP -> V2 -> RCl     -- whom she loves 
+      mkRCl : Cl -> RCl              -- such that she loves him 
+    which_RP : RP                        -- which  
+    mkRP : Prep -> NP -> RP -> RP    -- all the houses in which  
+      mkSSlash : Temp -> Pol -> ClSlash -> SSlash  
+      mkClSlash : NP -> VPSlash -> ClSlash        -- (whom) he sees here  
+      mkClSlash : NP -> V2 -> ClSlash        -- (whom) he sees 
+      mkClSlash : NP -> VV -> V2 -> ClSlash  -- (whom) he wants to see 
+      mkClSlash : Cl -> Prep -> ClSlash      -- (with whom) he sleeps 
+      mkClSlash : ClSlash -> Adv -> ClSlash    -- (whom) he sees tomorrow   
+      mkClSlash : NP -> VS -> SSlash -> ClSlash -- (whom) she says that he loves 
+      mkVPSlash : V2  -> VPSlash         -- (whom) (she) loves 
+      mkVPSlash : V3  -> NP -> VPSlash   -- (whom) (she) gives an apple   
+      mkVPSlash : V2A -> AP -> VPSlash   -- (whom) (she) paints red  
+      mkVPSlash : V2Q -> QS -> VPSlash   -- (whom) (she) asks who sleeps   
+      mkVPSlash : V2S -> S  -> VPSlash   -- (whom) (she) tells that we sleep  
+      mkVPSlash : V2V -> VP -> VPSlash   -- (whom) (she) forces to sleep  
+      mkVPSlash : VV  -> VPSlash -> VPSlash  -- want always to buy 
+      mkVPSlash : V2V -> NP -> VPSlash -> VPSlash -- beg me always to buy 

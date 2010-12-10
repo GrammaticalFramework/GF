@@ -13,6 +13,7 @@ showTerm gr style q t = render $
   case style of
     TermPrintTable   -> vcat [p <+> s | (p,s) <- ppTermTabular gr q t]
     TermPrintAll     -> vcat [      s | (p,s) <- ppTermTabular gr q t]
+    TermPrintOne     -> vcat [      s | (p,s) <- take 1 (ppTermTabular gr q t)]
     TermPrintDefault -> ppTerm q 0 t
 
 ppTermTabular :: SourceGrammar -> TermPrintQual -> Term -> [(Doc,Doc)]
@@ -37,4 +38,5 @@ ppTermTabular gr q = pr where
 data TermPrintStyle
   = TermPrintTable
   | TermPrintAll
+  | TermPrintOne
   | TermPrintDefault

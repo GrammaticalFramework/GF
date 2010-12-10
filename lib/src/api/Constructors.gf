@@ -74,13 +74,13 @@ incomplete resource Constructors = open Grammar in {  --%
 
   oper   
     mkText = overload {  --%
-      mkText : Phr -> (Punct) -> (Text) -> Text  -- John walks? Yes. --:
+      mkText : Phr -> (Punct) -> (Text) -> Text  -- Does she sleep? Yes. --:
         = \phr,punct,text -> case punct of {  --%
           PFullStop => TFullStop phr text ;   --%
           PExclMark => TExclMark phr text ;   --%
           PQuestMark => TQuestMark phr text   --%
           } ;  --%
-      mkText : Phr -> Text -> Text  -- 1. But John walks. Yes!  --%
+      mkText : Phr -> Text -> Text  -- But she sleeps. Yes!  --%
         =    \x,t -> TFullStop x t  ;  --%
       mkText : Phr -> Punct -> Text   --%
         = \phr,punct -> case punct of {   --%
@@ -88,7 +88,7 @@ incomplete resource Constructors = open Grammar in {  --%
           PExclMark => TExclMark phr TEmpty ;   --%
           PQuestMark => TQuestMark phr TEmpty   --%
           } ;   --%
-      mkText : Phr -> Text  -- 1. But John walks.  --%
+      mkText : Phr -> Text  -- But she sleeps.  --%
         =    \x -> TFullStop x TEmpty  ;  --%
 
 
@@ -98,19 +98,20 @@ incomplete resource Constructors = open Grammar in {  --%
 
       mkText : Utt ->  Text    -- Yes. 
         = \u -> TFullStop (PhrUtt NoPConj u NoVoc) TEmpty ;  --%  
-      mkText : S   ->  Text    -- John walked. 
+      mkText : S   ->  Text    -- She slept. 
         = \s -> TFullStop (PhrUtt NoPConj (UttS s) NoVoc) TEmpty ; --%  
-      mkText : Cl  ->  Text    -- John walks. 
+      mkText : Cl  ->  Text    -- She sleeps. 
         = \c -> TFullStop (PhrUtt NoPConj (UttS (TUseCl TPres ASimul PPos c)) NoVoc) TEmpty ; --%  
-      mkText : QS  ->  Text    -- Did John walk? 
+      mkText : QS  ->  Text    -- Did she sleep? 
         = \q -> TQuestMark (PhrUtt NoPConj (UttQS q) NoVoc) TEmpty ;  --%
-      mkText : (Pol) -> Imp ->  Text    -- Walk!
+      mkText : (Pol) -> Imp ->  Text    -- Don't sleep!
         = \p,i -> TExclMark (PhrUtt NoPConj (UttImpSg p i) NoVoc) TEmpty; --%  
-      mkText : Imp ->  Text    -- Walk! --%
+      mkText : Imp ->  Text    -- Sleep! --%
         = \i -> TExclMark (PhrUtt NoPConj (UttImpSg PPos i) NoVoc) TEmpty; --%  
+
 -- Finally, two texts can be combined into a text.
 
-      mkText : Text -> Text -> Text  -- Where? When? Here. Now! 
+      mkText : Text -> Text -> Text  -- Where? Here. When? Here. Now! 
         = \t,u -> {s = t.s ++ u.s ; lock_Text = <>} ; --%
       } ; --%
 
@@ -142,7 +143,7 @@ incomplete resource Constructors = open Grammar in {  --%
 -- and a vocative, both of which are by default empty.
 
     mkPhr = overload { --%
-      mkPhr : (PConj) -> Utt -> (Voc) -> Phr   -- but come here John  --: 
+      mkPhr : (PConj) -> Utt -> (Voc) -> Phr   -- but sleep, my friend  --: 
       = PhrUtt ; --%
       mkPhr : Utt -> Voc -> Phr -- come here John --%
       = \u,v -> PhrUtt NoPConj u v ; --% 
@@ -154,13 +155,13 @@ incomplete resource Constructors = open Grammar in {  --%
 -- A phrase can also be directly built by a sentence, a present-tense
 -- clause, a question, or a positive singular imperative. 
 
-      mkPhr : S -> Phr   -- I go home  
+      mkPhr : S -> Phr   -- she won't sleep
          = \s -> PhrUtt NoPConj (UttS s) NoVoc ; --%  
-      mkPhr : Cl -> Phr   -- I go home  
+      mkPhr : Cl -> Phr   -- she sleeps
          = \s -> PhrUtt NoPConj (UttS (TUseCl TPres ASimul PPos s)) NoVoc ; --%  
-      mkPhr : QS -> Phr   -- I go home  
+      mkPhr : QS -> Phr   -- would she sleep  
          =    \s -> PhrUtt NoPConj (UttQS s) NoVoc ;  --%
-      mkPhr : Imp -> Phr   -- I go home  
+      mkPhr : Imp -> Phr  -- sleep
          =  \s -> PhrUtt NoPConj (UttImpSg PPos s) NoVoc --%   
       } ; --%
 
@@ -172,7 +173,7 @@ incomplete resource Constructors = open Grammar in {  --%
 
       mkPConj : Conj -> PConj   -- and   --:
         = PConjConj ; --%
-      noPConj : PConj --% 
+      noPConj : PConj --: --% 
         = NoPConj ; --%
 
 
@@ -181,7 +182,7 @@ incomplete resource Constructors = open Grammar in {  --%
 -- Any noun phrase can be turned into a vocative.
 -- More vocatives are defined in $Structural$.
 
-    mkVoc : NP -> Voc  -- John   --:
+    mkVoc : NP -> Voc  -- my friend   --:
       = VocNP ; --% 
     noVoc : Voc --% 
       = NoVoc ; --% 
@@ -192,20 +193,19 @@ incomplete resource Constructors = open Grammar in {  --%
 -- Utterances are formed from sentences, clauses, questions, and imperatives.
 
     mkUtt = overload { 
-      mkUtt : S -> Utt                     -- John walked   --:  
+      mkUtt : S -> Utt                     -- she slept   --:  
       = UttS ; --%  
-      mkUtt : Cl -> Utt                     -- John walks  
+      mkUtt : Cl -> Utt                     -- she sleeps  
       = \c -> UttS (TUseCl TPres ASimul PPos c) ; --%  
-      mkUtt : QS -> Utt                    -- did John walk   --:
+      mkUtt : QS -> Utt                    -- who didn't sleep   --:
       = UttQS   ; --%  
-      mkUtt : QCl -> Utt                   -- does John walk  
+      mkUtt : QCl -> Utt                   -- who sleeps  
       = \c -> UttQS (TUseQCl TPres ASimul PPos c) ; --%  
-
-      mkUtt : (ImpForm) -> (Pol) -> Imp -> Utt  -- don't love yourselves   --: 
+      mkUtt : (ImpForm) -> (Pol) -> Imp -> Utt  -- don't be men   --: 
       = mkUttImp  ; --%
-      mkUtt : ImpForm -> Imp -> Utt -- love yourselves --% 
+      mkUtt : ImpForm -> Imp -> Utt -- be men --% 
       = \f -> mkUttImp f PPos ; --% 
-      mkUtt : Pol -> Imp -> Utt  -- don't love yourself --% 
+      mkUtt : Pol -> Imp -> Utt  -- don't be men --% 
       = UttImpSg  ;  --%
       mkUtt : Imp -> Utt  -- love yourself --%  
       = UttImpSg PPos  ;  --%
@@ -233,7 +233,7 @@ incomplete resource Constructors = open Grammar in {  --%
 
 -- The plural first-person imperative is a special construction.
 
-      lets_Utt : VP ->  Utt  -- let's walk    --:
+      lets_Utt : VP ->  Utt  -- let's sleep    --:
       = ImpPl1 ; --%
 
 
@@ -244,9 +244,9 @@ incomplete resource Constructors = open Grammar in {  --%
 -- Polarity is a parameter that sets a clause to positive or negative
 -- form. Since positive is the default, it need never be given explicitly.
 
-      positivePol : Pol   -- John walks [default]   --: 
+      positivePol : Pol   -- she sleeps [default]   --: 
         = PPos ; --%
-      negativePol : Pol   -- John doesn't walk    --:
+      negativePol : Pol   -- she doesn't sleep    --:
         = PNeg ; --%
 
 --3 Ant, anteriority 
@@ -255,9 +255,9 @@ incomplete resource Constructors = open Grammar in {  --%
 -- anterior to some other reference time.
 -- Since simultaneous is the default, it need never be given explicitly.
 
-      simultaneousAnt : Ant   -- John walks [default]   --: 
+      simultaneousAnt : Ant   -- she sleeps [default]   --: 
         = ASimul ; --%
-      anteriorAnt : Ant   -- John has walked       --# notpresent  --: 
+      anteriorAnt : Ant   -- she has slept       --# notpresent  --: 
         = AAnter ; --# notpresent --%
 
 --3 Tense, tense 
@@ -266,13 +266,13 @@ incomplete resource Constructors = open Grammar in {  --%
 -- to the time of speaking about it.
 -- Since present is the default, it need never be given explicitly.
 
-      presentTense     : Tense  -- John walks [default]   --:
+      presentTense     : Tense  -- she sleeps [default]   --:
         = TPres ; --% 
-      pastTense        : Tense  -- John walked           --# notpresent  --: 
+      pastTense        : Tense  -- she slept           --# notpresent  --: 
         = TPast ; --# notpresent --% 
-      futureTense      : Tense  -- John will walk        --# notpresent  --:
+      futureTense      : Tense  -- she will sleep        --# notpresent  --:
         = TFut ; --# notpresent --% 
-      conditionalTense : Tense  -- John would walk       --# notpresent   --:
+      conditionalTense : Tense  -- she would sleep       --# notpresent   --:
         = TCond ; --# notpresent --% 
 
 --3 ImpForm, imperative form 
@@ -281,11 +281,11 @@ incomplete resource Constructors = open Grammar in {  --%
 -- by reference to the person or persons addressed.
 -- Since singular is the default, it need never be given explicitly.
 
-      singularImpForm : ImpForm   -- help yourself [default]   --:
+      singularImpForm : ImpForm   -- be a man [default]   --:
       = IFSg ;  --%
-      pluralImpForm   : ImpForm   -- help yourselves  --:
+      pluralImpForm   : ImpForm   -- be men  --:
       = IFPl ;  --%
-      politeImpForm   : ImpForm   -- help yourself [polite singular]  --:
+      politeImpForm   : ImpForm   -- be a man [polite singular]  --:
       = IFPol ;  --%
 
 -- This is how imperatives are implemented internally. --%
@@ -322,20 +322,20 @@ incomplete resource Constructors = open Grammar in {  --%
       = \t,p -> TUseCl t ASimul p ;   --%  
       mkS : Ant -> Pol -> Cl -> S   --%  
       = \a,p -> TUseCl TPres a p ;   --%  
-      mkS : (Tense) -> (Ant) -> (Pol) -> Cl  -> S -- John wouldn't have walked  --:
+      mkS : (Tense) -> (Ant) -> (Pol) -> Cl  -> S -- she wouldn't have slept  --:
       = \t,a -> TUseCl t a ;   --%  
 
 -- Sentences can be combined with conjunctions. This can apply to a pair
 -- of sentences, but also to a list of more than two.
 
-      mkS : Conj -> S -> S -> S   -- John walks and I run    
+      mkS : Conj -> S -> S -> S   -- she sleeps and I run    
       = \c,x,y -> ConjS c (BaseS x y) ; --% 
-      mkS : Conj -> ListS  -> S   -- John walks, I run and you sleep  --:
+      mkS : Conj -> ListS  -> S   -- she sleeps, I run and you sleep  --:
       = \c,xy -> ConjS c xy ; --% 
 
 -- A sentence can be prefixed by an adverb.
 
-      mkS : Adv -> S -> S           -- today, John walks   --:
+      mkS : Adv -> S -> S           -- today, she sleeps   --:
       = AdvS ; --%
       } ; 
 
@@ -347,50 +347,50 @@ incomplete resource Constructors = open Grammar in {  --%
 
     mkCl = overload { 
 
-      mkCl : NP -> V -> Cl                -- John walks   
+      mkCl : NP -> V -> Cl                -- she sleeps   
       = \s,v -> PredVP s (UseV v); --%   
-      mkCl : NP -> V2 -> NP -> Cl         -- John loves her
+      mkCl : NP -> V2 -> NP -> Cl         -- she loves him
       = \s,v,o -> PredVP s (ComplV2 v o); --%   
-      mkCl : NP -> V3 -> NP -> NP -> Cl   -- John sends it to her
+      mkCl : NP -> V3 -> NP -> NP -> Cl   -- she sends it to him
       = \s,v,o,i -> PredVP s (ComplV3 v o i); --%   
 
-      mkCl : NP  -> VV -> VP -> Cl        -- John wants to walk
+      mkCl : NP  -> VV -> VP -> Cl        -- she wants to sleep
         = \s,v,vp -> PredVP s (ComplVV v vp) ; --% 
-      mkCl : NP  -> VS -> S  -> Cl        -- John says that she walks
+      mkCl : NP  -> VS -> S  -> Cl        -- she says that she sleeps
         = \s,v,p -> PredVP s (ComplVS v p) ; --% 
-      mkCl : NP  -> VQ -> QS -> Cl        -- John wonders who walks
+      mkCl : NP  -> VQ -> QS -> Cl        -- she wonders who sleeps
         = \s,v,q -> PredVP s (ComplVQ v q) ; --% 
-      mkCl : NP  -> VA -> AP -> Cl        -- John becomes old
+      mkCl : NP  -> VA -> AP -> Cl        -- she becomes old
         = \s,v,q -> PredVP s (ComplVA v q) ; --% 
-      mkCl : NP  -> V2A -> NP -> AP -> Cl -- John paints it red
+      mkCl : NP  -> V2A -> NP -> AP -> Cl -- she paints it red
         = \s,v,n,q -> PredVP s (ComplV2A v n q) ; --% 
-      mkCl : NP  -> V2S -> NP -> S -> Cl          -- John tells her that we walk
+      mkCl : NP  -> V2S -> NP -> S -> Cl          -- she tells him that we sleep
         = \s,v,n,q -> PredVP s (ComplSlash (SlashV2S v q) n) ; --% 
-      mkCl : NP  -> V2Q -> NP -> QS -> Cl         -- John asks her who walks 
+      mkCl : NP  -> V2Q -> NP -> QS -> Cl         -- she asks him who sleeps 
         = \s,v,n,q -> PredVP s (ComplSlash (SlashV2Q v q) n) ; --% 
-      mkCl : NP  -> V2V -> NP -> VP -> Cl         -- John forces her to walk
+      mkCl : NP  -> V2V -> NP -> VP -> Cl         -- she forces him to sleep
         = \s,v,n,q -> PredVP s (ComplSlash (SlashV2V v q) n) ; --% 
-      mkCl : NP -> A  -> Cl    -- John is old
+      mkCl : NP -> A  -> Cl    -- she is old
         = \x,y -> PredVP x (UseComp (CompAP (PositA y))) ; --%   
-      mkCl : NP -> A -> NP -> Cl -- John is older than her   
+      mkCl : NP -> A -> NP -> Cl -- she is older than him   
         = \x,y,z -> PredVP x (UseComp (CompAP (ComparA y z))) ; --% 
-      mkCl : NP -> A2 -> NP -> Cl -- John is married to her 
+      mkCl : NP -> A2 -> NP -> Cl -- she is married to him 
 	= \x,y,z -> PredVP x (UseComp (CompAP (ComplA2 y z))) ; --% 
-      mkCl : NP -> AP -> Cl    -- John is very old 
+      mkCl : NP -> AP -> Cl    -- she is very old 
 	= \x,y -> PredVP x (UseComp (CompAP y)) ; --% 
-      mkCl : NP -> NP -> Cl    -- John is the man   
+      mkCl : NP -> NP -> Cl    -- she is the man   
         = \x,y -> PredVP x (UseComp (CompNP y)) ; --%   
-      mkCl : NP -> N -> Cl    -- John is a man   
+      mkCl : NP -> N -> Cl    -- she is a man   
         = \x,y -> PredVP x (UseComp (CompCN (UseN y))) ; --% 
-      mkCl : NP -> CN -> Cl    -- John is an old man   
+      mkCl : NP -> CN -> Cl    -- she is an old man   
 	= \x,y -> PredVP x (UseComp (CompCN y)) ; --%   
-      mkCl : NP -> Adv -> Cl   -- John is here   
+      mkCl : NP -> Adv -> Cl   -- she is here   
 	= \x,y -> PredVP x (UseComp (CompAdv y)) ; --%   
 
 -- As the general rule, a clause can be built from a subject noun phrase and 
 -- a verb phrase.
 
-      mkCl : NP -> VP -> Cl   -- John always walks here   --:
+      mkCl : NP -> VP -> Cl   -- she always sleeps here   --:
       = PredVP  ; --%
 
 -- Existentials are a special form of clauses.
@@ -405,9 +405,9 @@ incomplete resource Constructors = open Grammar in {  --%
 -- There are also special forms in which a noun phrase or an adverb is
 -- emphasized.
 
-      mkCl : NP  -> RS -> Cl   -- it is John who walks   --: 
+      mkCl : NP  -> RS -> Cl   -- it is she who sleeps   --: 
       = CleftNP    ; --% 
-      mkCl : Adv -> S  -> Cl   -- it is here he walks    --:
+      mkCl : Adv -> S  -> Cl   -- it is here he sleeps    --:
       = CleftAdv   ; --% 
 
 -- Subjectless verb phrases are used for impersonal actions.
@@ -423,7 +423,7 @@ incomplete resource Constructors = open Grammar in {  --%
 
 -- Generic clauses are those with an impersonal subject.
 
-      genericCl : VP ->  Cl    -- one walks               
+      genericCl : VP ->  Cl    -- one sleeps               
       = GenericCl ; --%
 
 --2 Verb phrases and imperatives 
@@ -437,7 +437,7 @@ incomplete resource Constructors = open Grammar in {  --%
       = UseV      ; --% 
       mkVP : V2  -> NP -> VP          -- love it 
       = ComplV2   ; --% 
-      mkVP : V3  -> NP -> NP -> VP    -- send a message to her 
+      mkVP : V3  -> NP -> NP -> VP    -- send a message to him 
       = ComplV3   ; --% 
       mkVP : VV  -> VP -> VP          -- want to run  --:
       = ComplVV   ; --% 
@@ -449,11 +449,11 @@ incomplete resource Constructors = open Grammar in {  --%
       = ComplVA   ; --% 
       mkVP : V2A -> NP -> AP -> VP    -- paint it red 
       = ComplV2A  ; --% 
-      mkVP : V2S -> NP -> S  -> VP          -- tell her that we walk 
+      mkVP : V2S -> NP -> S  -> VP          -- tell him that we sleep 
         = \v,n,q -> (ComplSlash (SlashV2S v q) n) ; --% 
-      mkVP : V2Q -> NP -> QS -> VP         -- ask her who walks
+      mkVP : V2Q -> NP -> QS -> VP         -- ask him who sleeps
         = \v,n,q -> (ComplSlash (SlashV2Q v q) n) ; --% 
-      mkVP : V2V -> NP -> VP -> VP         -- force her to walk
+      mkVP : V2V -> NP -> VP -> VP         -- force him to sleep
         = \v,n,q -> (ComplSlash (SlashV2V v q) n) ; --% 
 
 -- The verb can also be a copula ("be"), and the relevant argument is
@@ -461,9 +461,9 @@ incomplete resource Constructors = open Grammar in {  --%
 
       mkVP : A -> VP               -- be warm 
       = \a -> UseComp (CompAP (PositA a)) ; --% 
-      mkVP : A -> NP -> VP         -- be older than her 
+      mkVP : A -> NP -> VP         -- be older than him 
       = \y,z -> (UseComp (CompAP (ComparA y z))) ; --% 
-      mkVP : A2 -> NP -> VP        -- be married to her 
+      mkVP : A2 -> NP -> VP        -- be married to him 
       = \y,z -> (UseComp (CompAP (ComplA2 y z))) ; --% 
       mkVP : AP -> VP              -- be warm 
       = \a -> UseComp (CompAP a)   ; --% 
@@ -530,11 +530,11 @@ incomplete resource Constructors = open Grammar in {  --%
 --3 SC, embedded sentence
 
    mkSC = overload { --%
-     mkSC : S -> SC -- that he walks --:
+     mkSC : S -> SC -- that he sleeps --:
      = EmbedS ; --%
-     mkSC : QS -> SC -- whether he walks --:
+     mkSC : QS -> SC -- whether he sleeps --:
      = EmbedQS ; --%
-     mkSC : VP -> SC -- to walk --:
+     mkSC : VP -> SC -- to sleep --:
      = EmbedVP ; --%
      } ; --%
 
@@ -599,7 +599,7 @@ incomplete resource Constructors = open Grammar in {  --%
 
 -- Proper names and pronouns can be used as noun phrases.
 
-      mkNP : PN -> NP             -- John  --:
+      mkNP : PN -> NP             -- she  --:
       = UsePN    ; --%  
       mkNP : Pron -> NP           -- he  --:
       = UsePron  ; --%  
@@ -940,9 +940,9 @@ incomplete resource Constructors = open Grammar in {  --%
 
 -- A common noun phrase can be modified by a relative clause or an adverb.
 
-      mkCN :  N -> RS  -> CN     -- house that John owns 
+      mkCN :  N -> RS  -> CN     -- house that she owns 
       = \x,y -> RelCN (UseN x) y   ; --% 
-      mkCN : CN -> RS  -> CN     -- big house that John loves --:
+      mkCN : CN -> RS  -> CN     -- big house that she loves --:
       = RelCN    ; --% 
       mkCN :  N -> Adv -> CN     -- house on the hill 
       = \x,y -> AdvCN (UseN x) y  ; --% 
@@ -953,13 +953,13 @@ incomplete resource Constructors = open Grammar in {  --%
 -- questions, or infinitives. But syntactically this is possible for
 -- all nouns.
 
-      mkCN : CN -> S   -> CN     -- rule that John walks 
+      mkCN : CN -> S   -> CN     -- rule that she sleeps 
       = \cn,s -> SentCN cn (EmbedS s) ; --% 
-      mkCN : CN -> QS  -> CN     -- question if John walks 
+      mkCN : CN -> QS  -> CN     -- question if she sleeps 
       = \cn,s -> SentCN cn (EmbedQS s) ; --% 
-      mkCN : CN -> VP  -> CN     -- reason to walk 
+      mkCN : CN -> VP  -> CN     -- reason to sleep 
       = \cn,s -> SentCN cn (EmbedVP s) ; --% 
-      mkCN : CN -> SC  -> CN     -- reason to walk --: 
+      mkCN : CN -> SC  -> CN     -- reason to sleep --: 
       = \cn,s -> SentCN cn s ; --% 
 
 -- A noun can be used in apposition to a noun phrase, especially a proper name.
@@ -996,9 +996,9 @@ incomplete resource Constructors = open Grammar in {  --%
 -- questions, or infinitives. Syntactically this is possible for
 -- all adjectives.
 
-      mkAP : AP -> S -> AP    -- probable that John walks  
+      mkAP : AP -> S -> AP    -- probable that she sleeps  
       =  \ap,s -> SentAP ap (EmbedS s) ; --% 
-      mkAP : AP -> QS -> AP    -- uncertain if John walks  
+      mkAP : AP -> QS -> AP    -- uncertain if she sleeps  
       =  \ap,s -> SentAP ap (EmbedQS s) ; --% 
       mkAP : AP -> VP -> AP    -- ready to go 
       =  \ap,s -> SentAP ap (EmbedVP s) ; --% 
@@ -1023,7 +1023,7 @@ incomplete resource Constructors = open Grammar in {  --%
 
       mkAP : Ord   -> AP              -- oldest 
       = AdjOrd ; --%
-      mkAP : CAdv -> AP -> NP -> AP   -- as old as John
+      mkAP : CAdv -> AP -> NP -> AP   -- as old as she
       = CAdvAP ; --%
       } ; --% 
 
@@ -1048,12 +1048,12 @@ incomplete resource Constructors = open Grammar in {  --%
 
 -- Subordinate sentences are treated as adverbs.
 
-      mkAdv : Subj -> S -> Adv   -- when John walks  --:
+      mkAdv : Subj -> S -> Adv   -- when she sleeps  --:
       = SubjS ; --% 
 
 -- An adjectival adverb can be compared to a noun phrase or a sentence.
 
-      mkAdv : CAdv -> A -> NP -> Adv   -- more warmly than John --: 
+      mkAdv : CAdv -> A -> NP -> Adv   -- more warmly than she --: 
       = ComparAdvAdj   ; --% 
       mkAdv : CAdv -> A -> S -> Adv    -- more warmly than he runs --:
       = ComparAdvAdjS  ; --% 
@@ -1098,7 +1098,7 @@ incomplete resource Constructors = open Grammar in {  --%
       = \t,p -> TUseQCl t ASimul p ; --% 
       mkQS : Ant -> Pol -> QCl -> QS --%
       = \a,p -> TUseQCl TPres a p ; --% 
-      mkQS : (Tense) -> (Ant) -> (Pol) -> QCl -> QS -- who wouldn't have walked 
+      mkQS : (Tense) -> (Ant) -> (Pol) -> QCl -> QS -- who wouldn't have slept 
       = TUseQCl ; --%
 
 -- Since 'yes-no' question clauses can be built from clauses (see below), 
@@ -1117,7 +1117,7 @@ incomplete resource Constructors = open Grammar in {  --%
 
 -- 'Yes-no' question clauses are built from 'declarative' clauses.
 
-      mkQCl : Cl -> QCl -- does John walk  --:  
+      mkQCl : Cl -> QCl -- does she sleep  --:  
       = QuestCl ; --%  
  
 -- 'Wh' questions are built from interrogative pronouns in subject 
@@ -1126,29 +1126,29 @@ incomplete resource Constructors = open Grammar in {  --%
 -- The latter uses the 'slash' category of objectless clauses 
 -- (see below); we give the common special case with a two-place verb.
 
-      mkQCl : IP -> VP -> QCl               -- who walks  --:    
+      mkQCl : IP -> VP -> QCl               -- who sleeps  --:    
       = QuestVP ; --%  
-      mkQCl : IP -> V -> QCl                -- who walks   
+      mkQCl : IP -> V -> QCl                -- who sleeps   
       = \s,v -> QuestVP s (UseV v); --%   
       mkQCl : IP -> V2 -> NP -> QCl         -- who loves her
       = \s,v,o -> QuestVP s (ComplV2 v o); --%   
       mkQCl : IP -> V3 -> NP -> NP -> QCl   -- who sends it to her
       = \s,v,o,i -> QuestVP s (ComplV3 v o i); --%   
-      mkQCl : IP  -> VV -> VP -> QCl        -- who wants to walk
+      mkQCl : IP  -> VV -> VP -> QCl        -- who wants to sleep
         = \s,v,vp -> QuestVP s (ComplVV v vp) ; --% 
-      mkQCl : IP  -> VS -> S  -> QCl        -- who says that she walks
+      mkQCl : IP  -> VS -> S  -> QCl        -- who says that she sleeps
         = \s,v,p -> QuestVP s (ComplVS v p) ; --% 
-      mkQCl : IP  -> VQ -> QS -> QCl        -- who wonders who walks
+      mkQCl : IP  -> VQ -> QS -> QCl        -- who wonders who sleeps
         = \s,v,q -> QuestVP s (ComplVQ v q) ; --% 
       mkQCl : IP  -> VA -> AP -> QCl        -- who becomes old
         = \s,v,q -> QuestVP s (ComplVA v q) ; --% 
       mkQCl : IP  -> V2A -> NP -> AP -> QCl -- who paints it red
         = \s,v,n,q -> QuestVP s (ComplV2A v n q) ; --% 
-      mkQCl : IP  -> V2S -> NP -> S -> QCl          -- who tells her that we walk
+      mkQCl : IP  -> V2S -> NP -> S -> QCl          -- who tells her that we sleep
         = \s,v,n,q -> QuestVP s (ComplSlash (SlashV2S v q) n) ; --% 
-      mkQCl : IP  -> V2Q -> NP -> QS -> QCl         -- who asks her who walks 
+      mkQCl : IP  -> V2Q -> NP -> QS -> QCl         -- who asks her who sleeps 
         = \s,v,n,q -> QuestVP s (ComplSlash (SlashV2Q v q) n) ; --% 
-      mkQCl : IP  -> V2V -> NP -> VP -> QCl         -- who forces her to walk
+      mkQCl : IP  -> V2V -> NP -> VP -> QCl         -- who forces her to sleep
         = \s,v,n,q -> QuestVP s (ComplSlash (SlashV2V v q) n) ; --% 
       mkQCl : IP -> A  -> QCl    -- who is old
         = \x,y -> QuestVP x (UseComp (CompAP (PositA y))) ; --%   
@@ -1166,22 +1166,22 @@ incomplete resource Constructors = open Grammar in {  --%
 	= \x,y -> QuestVP x (UseComp (CompCN y)) ; --%   
       mkQCl : IP -> Adv -> QCl   -- who is here   
 	= \x,y -> QuestVP x (UseComp (CompAdv y)) ; --%   
-      mkQCl : IP -> NP -> V2 -> QCl        -- who does John love 
+      mkQCl : IP -> NP -> V2 -> QCl        -- who does she love 
       = \ip,np,v -> QuestSlash ip (SlashVP np (SlashV2a v)) ; --%
-      mkQCl : IP -> ClSlash -> QCl         -- who does John today   --:   
+      mkQCl : IP -> ClSlash -> QCl         -- who does she today   --:   
       = QuestSlash   ; --% 
 
 -- Adverbial 'wh' questions are built with interrogative adverbials, with the
 -- special case of prepositional phrases with interrogative pronouns.
 
-      mkQCl : IAdv -> Cl -> QCl            -- why does John walk   --:  
+      mkQCl : IAdv -> Cl -> QCl            -- why does she sleep   --:  
       = QuestIAdv    ; --%  
-      mkQCl : Prep -> IP -> Cl -> QCl      -- with whom does John walk 
+      mkQCl : Prep -> IP -> Cl -> QCl      -- with whom does she sleep 
       = \p,ip -> QuestIAdv (PrepIP p ip)  ; --% 
 
 -- An interrogative adverbial can serve as the complement of a copula.
 
-      mkQCl : IAdv -> NP -> QCl   -- where is John 
+      mkQCl : IAdv -> NP -> QCl   -- where is she 
       = \a -> QuestIComp (CompIAdv a)   ; --% 
 
 -- Asking about a known subject.
@@ -1289,11 +1289,11 @@ incomplete resource Constructors = open Grammar in {  --%
       = \t,p -> TUseRCl t ASimul p ; --% 
       mkRS : Ant -> Pol -> RCl -> RS --%
       = \a,p -> TUseRCl TPres a p ; --% 
-      mkRS : (Tense) -> (Ant) -> (Pol) -> RCl -> RS -- that wouldn't have walked 
+      mkRS : (Tense) -> (Ant) -> (Pol) -> RCl -> RS -- that wouldn't have slept 
       = TUseRCl ; --% 
-      mkRS : Conj -> RS -> RS -> RS -- who walks and whose mother runsx
+      mkRS : Conj -> RS -> RS -> RS -- who sleeps and whose mother runsx
       = \c,x,y -> ConjRS c (BaseRS x y) ; --% 
-      mkRS : Conj -> ListRS -> RS -- who walks, whom I see and who sleeps --:
+      mkRS : Conj -> ListRS -> RS -- who sleeps, whom I see and who sleeps --:
       = \c,xy -> ConjRS c xy ; --% 
       } ; --% 
 
@@ -1307,17 +1307,17 @@ incomplete resource Constructors = open Grammar in {  --%
 -- The latter uses the 'slash' category of objectless clauses (see below); 
 -- we give the common special case with a two-place verb.
 
-      mkRCl : RP -> VP -> RCl        -- that loves John   --:   
+      mkRCl : RP -> VP -> RCl        -- that loves she   --:   
       = RelVP     ; --% 
-      mkRCl : RP -> ClSlash -> RCl     -- whom John loves today   --:   
+      mkRCl : RP -> ClSlash -> RCl     -- whom she loves today   --:   
       = RelSlash ; --% 
-      mkRCl : RP -> NP -> V2 -> RCl     -- whom John loves 
+      mkRCl : RP -> NP -> V2 -> RCl     -- whom she loves 
       = \rp,np,v2 -> RelSlash rp (SlashVP np (SlashV2a v2)) ; --% 
 
 -- There is a simple 'such that' construction for forming relative 
 -- clauses from clauses.
 
-      mkRCl : Cl -> RCl              -- such that John loves her 
+      mkRCl : Cl -> RCl              -- such that she loves him 
       = RelCl ; --% 
       } ; --% 
 
@@ -1361,7 +1361,7 @@ incomplete resource Constructors = open Grammar in {  --%
 
 -- The missing object can also be the noun phrase in a prepositional phrase.
 
-      mkClSlash : Cl -> Prep -> ClSlash      -- (with whom) he walks --:
+      mkClSlash : Cl -> Prep -> ClSlash      -- (with whom) he sleeps --:
       = SlashPrep ; --% 
 
 -- An objectless sentence can be modified by an adverb.
@@ -1383,17 +1383,17 @@ incomplete resource Constructors = open Grammar in {  --%
 
 -- This is the deep level of many-argument predication, permitting extraction.
 
-      mkVPSlash : V2  -> VPSlash         --  (whom) (John) loves --:
+      mkVPSlash : V2  -> VPSlash         -- (whom) (she) loves --:
         = SlashV2a ; --% 
-      mkVPSlash : V3  -> NP -> VPSlash   --  (whom) (John) gives an apple  --: 
+      mkVPSlash : V3  -> NP -> VPSlash   -- (whom) (she) gives an apple  --: 
         = Slash2V3 ; --% 
-      mkVPSlash : V2A -> AP -> VPSlash   --  (whom) (John) paints red  --:
+      mkVPSlash : V2A -> AP -> VPSlash   -- (whom) (she) paints red  --:
         = SlashV2A ; --% 
-      mkVPSlash : V2Q -> QS -> VPSlash   --  (whom) (John) asks who sleeps  --: 
+      mkVPSlash : V2Q -> QS -> VPSlash   -- (whom) (she) asks who sleeps  --: 
         = SlashV2Q ; --% 
-      mkVPSlash : V2S -> S  -> VPSlash   --  (whom) (John) tells that we sleep  --:
+      mkVPSlash : V2S -> S  -> VPSlash   -- (whom) (she) tells that we sleep  --:
         = SlashV2S ; --% 
-      mkVPSlash : V2V -> VP -> VPSlash   -- (whom) (John) forces to sleep  --:
+      mkVPSlash : V2V -> VP -> VPSlash   -- (whom) (she) forces to sleep  --:
         = SlashV2V ; --% 
       mkVPSlash : VV  -> VPSlash -> VPSlash  -- want always to buy --:
         = SlashVV ; --%
@@ -1686,5 +1686,9 @@ oper
     = num (pot2as3 (pot2 pot01)) ; --%  
     n1000_Numeral : Numeral 
     = num (pot3 (pot1as2 (pot0as1 pot01))) ; --%  
+
+-- for testing
+
+  she_NP : NP = mkNP she_Pron ;
 
 }  
