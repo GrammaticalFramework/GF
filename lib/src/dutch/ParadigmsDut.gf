@@ -39,10 +39,6 @@ oper
 
   de,het : Gender ;
 
-  masculine = Utr ;
-  feminine  = Utr ;
-  het,neuter = Neutr ;
-  de,utrum = Utr ;
 
   
 --2 Nouns
@@ -52,11 +48,6 @@ oper
     mkN : (bit : Str) -> Gender -> N ;
     mkN : (gat,gaten : Str) -> Gender -> N ;
   } ;
-  mkN = overload {
-    mkN : (muis : Str) -> N = \a -> lin N (regNoun a) ;
-    mkN : (bit : Str) -> Gender -> N = \a,b -> lin N (regNounG a b) ;
-    mkN : (gat,gaten : Str) -> Gender -> N = \a,b,c -> lin N (mkNoun a b c) ;
-  } ;
 
 -- Relational nouns need a preposition. The most common is "van".
 
@@ -65,10 +56,6 @@ oper
     mkN2 : N -> Prep -> N2
     } ;   
 
-  mkN2 = overload {
-    mkN2 : N -> N2 = \n -> lin N2 (n ** {c2 = "van"}) ; 
-    mkN2 : N -> Prep -> N2 = \n,p -> lin N2 (n ** {c2 = p.s}) ; 
-    } ;   
 
 ---- Use the function $mkPrep$ or see the section on prepositions below to  
 ---- form other prepositions.
@@ -77,16 +64,11 @@ oper
 ---- Three-place relational nouns ("die Verbindung von x nach y") need two prepositions.
 --
   mkN3 : N -> Prep -> Prep -> N3 ;
-  mkN3 n p q = lin N3 (n ** {c2 = p.s ; c3 = q.s}) ; 
 
 --3 Proper names and noun phrases
 
   mkPN : overload {
     mkPN : Str -> PN ;
-    } ;
-
-  mkPN = overload {
-    mkPN : Str -> PN = \s -> lin PN {s = \\_ => s} ;
     } ;
 
 
@@ -97,10 +79,6 @@ oper
     mkA : (goed,goede,goeds,beter,best : Str) -> A ;
     } ;
 
-  mkA = overload {
-    mkA : (vers : Str) -> A = \a -> lin A (regAdjective a) ;
-    mkA : (goed,goede,goeds,beter,best : Str) -> A = \a,b,c,d,e -> lin A (mkAdjective a b c d e) ;
-    } ;
 
 -- Invariable adjective are a special case. 
 
@@ -124,14 +102,14 @@ oper
 -- A preposition is formed from a string.
 
   mkPrep : Str -> Prep ;
-  mkPrep s = lin Prep (ss s) ;
+
   
 ---- A couple of common prepositions (always with the dative).
 --
   van_Prep : Prep ;
-  van_Prep = mkPrep "van" ;
   te_Prep  : Prep ;
-  te_Prep = mkPrep "te" ;
+
+
 --
 --2 Verbs
 
@@ -146,40 +124,9 @@ oper
     mkV : Str -> V -> V
     } ;
 
-  mkV = overload {
-    mkV : (aaien : Str) -> V = 
-      \s -> lin V (v2vv (regVerb s)) ;
-    mkV : (breken,brak,gebroken : Str) -> V = 
-      \a,b,c -> lin V (v2vv (irregVerb a b c)) ;
-    mkV : (breken,brak,braken,gebroken : Str) -> V = 
-      \a,b,c,d -> lin V (v2vv (irregVerb2 a b c d)) ;
-    mkV : (aai,aait,aaien,aaide,aaiden,geaaid : Str) -> V =
-      \a,b,c,d,f,g -> lin V (v2vv (mkVerb a b c d d f g)) ;
-    mkV : Str -> V -> V = \v,s ->lin V (prefixV v s) ;
-    } ;
-
   zijnV  : V -> V ;
-  zijnV v = lin V (v2vvAux v VZijn) ;
 
   reflV  : V -> V ;
-  reflV v = lin V {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = VRefl} ;
-
-  zijn_V : V = lin V ResDut.zijn_V ;
-  hebben_V : V = lin V ResDut.hebben_V ;
-
---3 Two-place verbs
-
-  mkV2 : overload {
-    mkV2 : Str -> V2 ;
-    mkV2 : V -> V2 ;
-    mkV2 : V -> Prep -> V2 ;
-    } ;
-
-  mkV2 = overload {
-    mkV2 : Str -> V2 = \s -> lin V2 (v2vv (regVerb s) ** {c2 = []}) ;
-    mkV2 : V -> V2 = \s -> lin V2 (s ** {c2 = []}) ;
-    mkV2 : V -> Prep -> V2  = \s,p -> lin V2 (s ** {c2 = p.s}) ;
-    } ;
 
 
 --
@@ -195,12 +142,6 @@ oper
     mkV3 : V -> Prep -> Prep -> V3 ;  -- sprechen, mit, über
     } ;
 
-  mkV3 = overload {
-    mkV3 : V -> Prep -> Prep -> V3 = mkmaxV3 ;
-    mkV3 : V -> Prep -> V3 = \v,p -> mkmaxV3 v (mkPrep []) p ; 
-    mkV3 : V -> V3 = \v -> mkmaxV3 v (mkPrep []) (mkPrep []) ; 
-    } ;
-  mkmaxV3 : V -> Prep -> Prep -> V3 = \v,c,d -> lin V3 (v ** {c2 = c.s ; c3 = d.s}) ;
 
 ----3 Other complement patterns
 ----
@@ -231,9 +172,88 @@ oper
 --
 --
 
+
+--.
+
   mkOrd : A -> Ord = \a -> lin Ord {s = a.s ! Posit} ;
 
-----.
+  mkN = overload {
+    mkN : (muis : Str) -> N 
+    = \a -> lin N (regNoun a) ;
+    mkN : (bit : Str) -> Gender -> N 
+    = \a,b -> lin N (regNounG a b) ;
+    mkN : (gat,gaten : Str) -> Gender -> N 
+    = \a,b,c -> lin N (mkNoun a b c) ;
+  } ;
+
+  mkN2 = overload {
+    mkN2 : N -> N2 
+    = \n -> lin N2 (n ** {c2 = "van"}) ; 
+    mkN2 : N -> Prep -> N2 
+    = \n,p -> lin N2 (n ** {c2 = p.s}) ; 
+    } ;   
+  mkN3 n p q = lin N3 (n ** {c2 = p.s ; c3 = q.s}) ; 
+
+  mkPN = overload {
+    mkPN : Str -> PN = \s -> lin PN {s = \\_ => s} ;
+    } ;
+
+  masculine = Utr ;
+  feminine  = Utr ;
+  het,neuter = Neutr ;
+  de,utrum = Utr ;
+
+  mkA = overload {
+    mkA : (vers : Str) -> A = \a -> lin A (regAdjective a) ;
+    mkA : (goed,goede,goeds,beter,best : Str) -> A = \a,b,c,d,e -> lin A (mkAdjective a b c d e) ;
+    } ;
+
+  mkPrep s = lin Prep (ss s) ;
+  van_Prep = mkPrep "van" ;
+  te_Prep = mkPrep "te" ;
+
+  mkV = overload {
+    mkV : (aaien : Str) -> V = 
+      \s -> lin V (v2vv (regVerb s)) ;
+    mkV : (breken,brak,gebroken : Str) -> V = 
+      \a,b,c -> lin V (v2vv (irregVerb a b c)) ;
+    mkV : (breken,brak,braken,gebroken : Str) -> V = 
+      \a,b,c,d -> lin V (v2vv (irregVerb2 a b c d)) ;
+    mkV : (aai,aait,aaien,aaide,aaiden,geaaid : Str) -> V =
+      \a,b,c,d,f,g -> lin V (v2vv (mkVerb a b c d d f g)) ;
+    mkV : Str -> V -> V = \v,s ->lin V (prefixV v s) ;
+    } ;
+  zijnV v = lin V (v2vvAux v VZijn) ;
+  reflV v = lin V {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = VRefl} ;
+
+  zijn_V : V = lin V ResDut.zijn_V ;
+  hebben_V : V = lin V ResDut.hebben_V ;
+
+  mkV2 = overload {
+    mkV2 : Str -> V2 = \s -> lin V2 (v2vv (regVerb s) ** {c2 = []}) ;
+    mkV2 : V -> V2 = \s -> lin V2 (s ** {c2 = []}) ;
+    mkV2 : V -> Prep -> V2  = \s,p -> lin V2 (s ** {c2 = p.s}) ;
+    } ;
+
+
+--3 Two-place verbs
+
+  mkV2 : overload {
+    mkV2 : Str -> V2 ;
+    mkV2 : V -> V2 ;
+    mkV2 : V -> Prep -> V2 ;
+    } ;
+  mkV3 = overload {
+    mkV3 : V -> Prep -> Prep -> V3 = mkmaxV3 ;
+    mkV3 : V -> Prep -> V3 = \v,p -> mkmaxV3 v (mkPrep []) p ; 
+    mkV3 : V -> V3 = \v -> mkmaxV3 v (mkPrep []) (mkPrep []) ; 
+    } ;
+  mkmaxV3 : V -> Prep -> Prep -> V3 = \v,c,d -> lin V3 (v ** {c2 = c.s ; c3 = d.s}) ;
+
+
+
+
+
 ----2 Definitions of paradigms
 ----
 ---- The definitions should not bother the user of the API. So they are

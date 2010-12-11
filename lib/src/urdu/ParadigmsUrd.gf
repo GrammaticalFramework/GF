@@ -47,14 +47,20 @@ oper
  
 
 -- Proper names     
-  mkPN : Str -> PN = \s -> let n = regNoun s in {s = n.s ! Sg ; g = n.g ; lock_PN = <>} ;
-  personalPN : Str -> Str -> Str -> Str -> Number -> Gender -> UPerson -> Pron = \s1,s2,s3,sp,nn,g,p -> let n = mkPron s1 s2 s3 in {s = n.s ; a = toAgr nn p g ; ps = sp ; lock_Pron = <>};
-  demoPN : Str -> Str -> Str -> Quant = \s1,s2,s3 -> let n = makeDemonPronForm s1 s2 s3 in {s = n.s ; a = defaultAgr ; lock_Quant = <>};
-  mkDet : Str -> Str -> Str -> Str -> Number -> Det = \s1,s2,s3,s4,nb -> let dt = makeDet s1 s2 s3 s4 nb in {s = dt.s ; n = nb ; lock_Det = <>};
-  mkIP : (x1,x2,x3:Str) -> Number -> Gender -> IP = \s1,s2,s3,n,g -> let p = mkIntPronForm s1 s2 s3 in { s = p.s ; n = n ; g = g ;  lock_IP = <>}; 
+  mkPN : Str -> PN 
+  = \s -> let n = regNoun s in {s = n.s ! Sg ; g = n.g ; lock_PN = <>} ;
+  personalPN : Str -> Str -> Str -> Str -> Number -> Gender -> UPerson -> Pron --% 
+  = \s1,s2,s3,sp,nn,g,p -> let n = mkPron s1 s2 s3 in {s = n.s ; a = toAgr nn p g ; ps = sp ; lock_Pron = <>};
+  demoPN : Str -> Str -> Str -> Quant --%
+  = \s1,s2,s3 -> let n = makeDemonPronForm s1 s2 s3 in {s = n.s ; a = defaultAgr ; lock_Quant = <>};
+  mkDet : Str -> Str -> Str -> Str -> Number -> Det --% 
+  = \s1,s2,s3,s4,nb -> let dt = makeDet s1 s2 s3 s4 nb in {s = dt.s ; n = nb ; lock_Det = <>};
+  mkIP : (x1,x2,x3:Str) -> Number -> Gender -> IP --% 
+  = \s1,s2,s3,n,g -> let p = mkIntPronForm s1 s2 s3 in { s = p.s ; n = n ; g = g ;  lock_IP = <>}; 
 
 -- AdN
-  mkAdN : Str -> AdN = \s -> {s = s ; p = False ; lock_AdN = <>} ; 
+  mkAdN : Str -> AdN  --%
+  = \s -> {s = s ; p = False ; lock_AdN = <>} ; 
 --2 Adjectives
 
   mkA = overload {
@@ -79,7 +85,7 @@ oper
     mkV2 : V -> Str -> V2 
       = \v,p -> v ** {c2 = {s = p ; c = VTrans} ; lock_V2 = <>} ;
     } ;
-  dirV2 : V -> V2 = \v -> v ** {c2 = {s = [] ; c = VTrans} ; lock_V2 = <>} ;
+  dirV2 : V -> V2 = \v -> v ** {c2 = {s = [] ; c = VTrans} ; lock_V2 = <>} ; --%
   
   mkV3 : V -> Str -> Str -> V3;
     mkV3 v p q = v ** { c2 = p ; c3 = q ; lock_V3 = <>} ;
@@ -90,13 +96,16 @@ oper
   
 -- compund verbs
    compoundV = overload {
-   compoundV : Str -> V -> V = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;     
-   compoundV : Str -> V2 -> V = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;
+   compoundV : Str -> V -> V 
+   = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;     
+   compoundV : Str -> V2 -> V 
+   = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;
    };
  
 
 ----2 Adverbs
-  mkAdv : Str -> Adv = \str -> {s = \\_ => str ; lock_Adv = <>};
+  mkAdv : Str -> Adv 
+  = \str -> {s = \\_ => str ; lock_Adv = <>};
 
 ----2 Prepositions
 
@@ -122,21 +131,13 @@ oper
     mkConj : Str -> Str -> Conj ;           -- both ... and (plural)
     mkConj : Str -> Str -> Number -> Conj ; -- either ... or (agrement number given as argument)
   } ;
- mkConj = overload {
-    mkConj : Str -> Conj = \y -> mk2Conj [] y plural ;
-    mkConj : Str -> Number -> Conj = \y,n -> mk2Conj [] y n ;
-    mkConj : Str -> Str -> Conj = \x,y -> mk2Conj x y plural ;
-    mkConj : Str -> Str -> Number -> Conj = mk2Conj ;
-  } ;
-
-  mk2Conj : Str -> Str -> Number -> Conj = \x,y,n -> 
-    lin Conj (sd2 x y ** {n = n}) ;  
 
 --  mkV0  : V -> V0 ;
   mkVS  : V -> VS;
   mkVS v = v ;
 --  mkV2S : V -> Prep -> V2S ;
-  mkVV  : V -> VV = \v ->  lin VV (v ** {isAux = False});
+  mkVV  : V -> VV 
+  = \v ->  lin VV (v ** {isAux = False});
     
   mkAdA : Str -> AdA ;
 --  mkAdv x = lin Adv (ss x) ;
@@ -180,4 +181,18 @@ oper
 --  nominative = Nom ;
 --  genitive = Gen ;
   
+ mkConj = overload {
+    mkConj : Str -> Conj 
+    = \y -> mk2Conj [] y plural ;
+    mkConj : Str -> Number -> Conj 
+    = \y,n -> mk2Conj [] y n ;
+    mkConj : Str -> Str -> Conj 
+    = \x,y -> mk2Conj x y plural ;
+    mkConj : Str -> Str -> Number -> Conj 
+    = mk2Conj ;
+  } ;
+
+  mk2Conj : Str -> Str -> Number -> Conj = \x,y,n -> 
+    lin Conj (sd2 x y ** {n = n}) ;  
+
 }

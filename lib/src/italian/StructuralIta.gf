@@ -42,9 +42,9 @@ lin
     mkPronoun
       "lui" "lo" "gli" "glie" "lui" "suo" "sua" "suoi" "sue"
       Masc Sg P3 ;
-  here7from_Adv = ss ["da quÃ¬"] ;
-  here7to_Adv = ss "quÃ¬" ;
-  here_Adv = ss "quÃ¬" ;
+  here7from_Adv = ss ["da quà"] ;
+  here7to_Adv = ss "quà" ;
+  here_Adv = ss "quà" ;
   how_IAdv = ss "come" ;
   how8much_IAdv = ss "quanto" ;
   how8many_IDet = {s = \\g,c => prepCase c ++ genForms "quanti" "quante" ! g ; n = Pl} ;

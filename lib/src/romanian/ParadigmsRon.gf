@@ -86,13 +86,18 @@ mkN3 n p q = n ** {lock_N3 = <> ; c2 = p ; c3 = q };
 -- feminine is used for strings ending with "e", the masculine for other strings.
 
   mkPN  = overload {
-    mkPN : Str -> PN = mkPropN ;
-    mkPN : Str -> Str -> Gender -> Number -> PN = mkPropNI ;
-    mkPN : Str -> Gender -> PN = mkPropNoun ;
-    mkPN : Str -> Gender -> Number -> PN = mkProperNoun;  
+    mkPN : Str -> PN 
+    = mkPropN ;
+    mkPN : Str -> Str -> Gender -> Number -> PN 
+    = mkPropNI ;
+    mkPN : Str -> Gender -> PN 
+    = mkPropNoun ;
+    mkPN : Str -> Gender -> Number -> PN 
+    = mkProperNoun;  
    } ;
 
-mkInAn : PN -> PN = \romania ->
+mkInAn : PN -> PN
+   = \romania ->
    {s = table {No | Ac | Vo => romania.s ! No ;
                _ => case romania.g of
                        { Fem => romania.s ! Ge ;
@@ -103,24 +108,27 @@ mkInAn : PN -> PN = \romania ->
     lock_PN = <>
     };
 
-mkPropNI : Str -> Str -> Gender -> Number -> PN =
-\romania, romaniei,g,n ->
+mkPropNI : Str -> Str -> Gender -> Number -> PN --% 
+ = \romania, romaniei,g,n ->
 {s = table {Ge | Da => romaniei;
             _       => romania  };
 g = g; n = n;
 a = Inanimate;
 lock_PN = <>
 };
-mkPropN : Str -> PN = \Ion ->
+mkPropN : Str -> PN --%
+ = \Ion ->
 case last Ion of
 { "a" => mkPropNoun Ion Feminine ;
    _  => mkPropNoun Ion Masculine
 };
 
-mkPropNoun : Str -> Gender -> PN = \Ion, gen ->
+mkPropNoun : Str -> Gender -> PN 
+= \Ion, gen ->
  mkProperNoun Ion gen singular ;
 
-mkProperNoun : Str -> Gender -> Number -> PN = \Ion, gen, num ->
+mkProperNoun : Str -> Gender -> Number -> PN --%
+= \Ion, gen, num ->
 {s = table {No => Ion;
             Ac => Ion;
             Ge => case <last Ion,gen> of
@@ -147,6 +155,26 @@ lock_PN = <>
 
  mkA2 : A -> Prep -> A2 ;
  mkA2 a p = a ** {c2 = p ; lock_A2 = <>} ;
+
+ mkV : Str -> V 
+ = \s -> mkNV (regV s) ; 
+
+
+
+  mkV2S : V -> Prep -> V2S ;  
+  mkV2V : V -> Prep -> Prep -> V2V ;
+  mkVA  : V -> VA ;
+  mkV2A : V -> Prep -> Prep -> V2A ;
+  mkVQ  : V -> VQ ;
+  mkV2Q : V -> Prep -> V2Q ;
+
+  mkAS  : A -> AS ;
+  mkA2S : A -> Prep -> A2S ;
+  mkAV  : A -> Prep -> AV ;
+  mkA2V : A -> Prep -> Prep -> A2V ;
+
+
+
 
 --.
 --2 Definitions of the paradigms
@@ -208,7 +236,7 @@ regN : Str -> NGender -> N ;
 regN s g = mkInanimate (mkNomReg s g) ** {lock_N = <>};
              
 
-mkVI : Str -> Str -> Str -> N;
+mkVI : Str -> Str -> Str -> N ;
 mkVI s ss sss = mkInanimate (mkNomVIrreg s ss sss) ** {lock_N = <>};
 
 mkIn : N -> N ;
@@ -343,23 +371,7 @@ case s of
   x + "î"   => mkV141 s
 };
 
-oper mkV : Str -> V = \s -> mkNV (regV s) ; 
-
-
-
-  mkV2S : V -> Prep -> V2S ;  
-  mkV2V : V -> Prep -> Prep -> V2V ;
-  mkVA  : V -> VA ;
-  mkV2A : V -> Prep -> Prep -> V2A ;
-  mkVQ  : V -> VQ ;
-  mkV2Q : V -> Prep -> V2Q ;
-
-  mkAS  : A -> AS ;
-  mkA2S : A -> Prep -> A2S ;
-  mkAV  : A -> Prep -> AV ;
-  mkA2V : A -> Prep -> Prep -> A2V ;
-
-
+oper 
   mmkV3 : V -> Prep -> Prep -> V3;
   mmkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
   

@@ -195,7 +195,7 @@ incomplete resource Constructors = open Grammar in {  --%
     mkUtt = overload { 
       mkUtt : S -> Utt                     -- she slept   --:  
       = UttS ; --%  
-      mkUtt : Cl -> Utt                     -- she sleeps  
+      mkUtt : Cl -> Utt                    -- she sleeps  
       = \c -> UttS (TUseCl TPres ASimul PPos c) ; --%  
       mkUtt : QS -> Utt                    -- who didn't sleep   --:
       = UttQS   ; --%  
@@ -330,7 +330,7 @@ incomplete resource Constructors = open Grammar in {  --%
 
       mkS : Conj -> S -> S -> S   -- she sleeps and I run    
       = \c,x,y -> ConjS c (BaseS x y) ; --% 
-      mkS : Conj -> ListS  -> S   -- she sleeps, I run and you sleep  --:
+      mkS : Conj -> ListS  -> S   -- she sleeps, I run and you walk  --:
       = \c,xy -> ConjS c xy ; --% 
 
 -- A sentence can be prefixed by an adverb.
@@ -353,22 +353,25 @@ incomplete resource Constructors = open Grammar in {  --%
       = \s,v,o -> PredVP s (ComplV2 v o); --%   
       mkCl : NP -> V3 -> NP -> NP -> Cl   -- she sends it to him
       = \s,v,o,i -> PredVP s (ComplV3 v o i); --%   
-
       mkCl : NP  -> VV -> VP -> Cl        -- she wants to sleep
         = \s,v,vp -> PredVP s (ComplVV v vp) ; --% 
       mkCl : NP  -> VS -> S  -> Cl        -- she says that she sleeps
         = \s,v,p -> PredVP s (ComplVS v p) ; --% 
       mkCl : NP  -> VQ -> QS -> Cl        -- she wonders who sleeps
         = \s,v,q -> PredVP s (ComplVQ v q) ; --% 
-      mkCl : NP  -> VA -> AP -> Cl        -- she becomes old
+      mkCl : NP  -> VA -> A -> Cl         -- she becomes old
+        = \s,v,q -> PredVP s (ComplVA v (PositA q)) ; --% 
+      mkCl : NP  -> VA -> AP -> Cl        -- she becomes very old
         = \s,v,q -> PredVP s (ComplVA v q) ; --% 
-      mkCl : NP  -> V2A -> NP -> AP -> Cl -- she paints it red
+      mkCl : NP  -> V2A -> NP -> A -> Cl  -- she paints it red
+        = \s,v,n,q -> PredVP s (ComplV2A v n (PositA q)) ; --% 
+      mkCl : NP  -> V2A -> NP -> AP -> Cl -- she paints it very red
         = \s,v,n,q -> PredVP s (ComplV2A v n q) ; --% 
-      mkCl : NP  -> V2S -> NP -> S -> Cl          -- she tells him that we sleep
+      mkCl : NP  -> V2S -> NP -> S -> Cl          -- she answers to him that we sleep
         = \s,v,n,q -> PredVP s (ComplSlash (SlashV2S v q) n) ; --% 
       mkCl : NP  -> V2Q -> NP -> QS -> Cl         -- she asks him who sleeps 
         = \s,v,n,q -> PredVP s (ComplSlash (SlashV2Q v q) n) ; --% 
-      mkCl : NP  -> V2V -> NP -> VP -> Cl         -- she forces him to sleep
+      mkCl : NP  -> V2V -> NP -> VP -> Cl         -- she begs him to sleep
         = \s,v,n,q -> PredVP s (ComplSlash (SlashV2V v q) n) ; --% 
       mkCl : NP -> A  -> Cl    -- she is old
         = \x,y -> PredVP x (UseComp (CompAP (PositA y))) ; --%   
@@ -378,11 +381,11 @@ incomplete resource Constructors = open Grammar in {  --%
 	= \x,y,z -> PredVP x (UseComp (CompAP (ComplA2 y z))) ; --% 
       mkCl : NP -> AP -> Cl    -- she is very old 
 	= \x,y -> PredVP x (UseComp (CompAP y)) ; --% 
-      mkCl : NP -> NP -> Cl    -- she is the man   
+      mkCl : NP -> NP -> Cl    -- she is the woman   
         = \x,y -> PredVP x (UseComp (CompNP y)) ; --%   
-      mkCl : NP -> N -> Cl    -- she is a man   
+      mkCl : NP -> N -> Cl    -- she is a woman   
         = \x,y -> PredVP x (UseComp (CompCN (UseN y))) ; --% 
-      mkCl : NP -> CN -> Cl    -- she is an old man   
+      mkCl : NP -> CN -> Cl    -- she is an old woman   
 	= \x,y -> PredVP x (UseComp (CompCN y)) ; --%   
       mkCl : NP -> Adv -> Cl   -- she is here   
 	= \x,y -> PredVP x (UseComp (CompAdv y)) ; --%   
@@ -390,7 +393,7 @@ incomplete resource Constructors = open Grammar in {  --%
 -- As the general rule, a clause can be built from a subject noun phrase and 
 -- a verb phrase.
 
-      mkCl : NP -> VP -> Cl   -- she always sleeps here   --:
+      mkCl : NP -> VP -> Cl   -- she always sleeps   --:
       = PredVP  ; --%
 
 -- Existentials are a special form of clauses.
@@ -399,7 +402,7 @@ incomplete resource Constructors = open Grammar in {  --%
       = \y -> ExistNP (DetArtSg IndefArt (UseN y)) ; --% 
       mkCl : CN -> Cl          -- there is an old house 
       = \y -> ExistNP (DetArtSg IndefArt y) ; --% 
-      mkCl : NP -> Cl          -- there are five houses   --:
+      mkCl : NP -> Cl          -- there are many houses   --:
       = ExistNP ; --% 
 
 -- There are also special forms in which a noun phrase or an adverb is
@@ -407,7 +410,7 @@ incomplete resource Constructors = open Grammar in {  --%
 
       mkCl : NP  -> RS -> Cl   -- it is she who sleeps   --: 
       = CleftNP    ; --% 
-      mkCl : Adv -> S  -> Cl   -- it is here he sleeps    --:
+      mkCl : Adv -> S  -> Cl   -- it is here that she sleeps    --:
       = CleftAdv   ; --% 
 
 -- Subjectless verb phrases are used for impersonal actions.
@@ -416,7 +419,7 @@ incomplete resource Constructors = open Grammar in {  --%
       = \v -> ImpersCl (UseV v) ; --%
       mkCl : VP -> Cl  -- it is raining    --:
       = ImpersCl   ;  --%
-      mkCl : SC -> VP -> Cl  --:
+      mkCl : SC -> VP -> Cl  -- that she sleeps is good --:
       = PredSCVP ; --%
 
       } ; 
@@ -435,25 +438,25 @@ incomplete resource Constructors = open Grammar in {  --%
     mkVP = overload { 
       mkVP : V   -> VP                -- sleep --:
       = UseV      ; --% 
-      mkVP : V2  -> NP -> VP          -- love it 
+      mkVP : V2  -> NP -> VP          -- love him 
       = ComplV2   ; --% 
       mkVP : V3  -> NP -> NP -> VP    -- send a message to him 
       = ComplV3   ; --% 
-      mkVP : VV  -> VP -> VP          -- want to run  --:
+      mkVP : VV  -> VP -> VP          -- want to sleep  --:
       = ComplVV   ; --% 
-      mkVP : VS  -> S  -> VP          -- know that she runs  --: 
+      mkVP : VS  -> S  -> VP          -- know that she sleeps  --: 
       = ComplVS   ; --% 
-      mkVP : VQ  -> QS -> VP          -- wonder if she runs  --:
+      mkVP : VQ  -> QS -> VP          -- wonder if she sleeps  --:
       = ComplVQ   ; --% 
       mkVP : VA  -> AP -> VP          -- become red  --:
       = ComplVA   ; --% 
       mkVP : V2A -> NP -> AP -> VP    -- paint it red 
       = ComplV2A  ; --% 
-      mkVP : V2S -> NP -> S  -> VP          -- tell him that we sleep 
+      mkVP : V2S -> NP -> S  -> VP         -- answer to him that we sleep 
         = \v,n,q -> (ComplSlash (SlashV2S v q) n) ; --% 
       mkVP : V2Q -> NP -> QS -> VP         -- ask him who sleeps
         = \v,n,q -> (ComplSlash (SlashV2Q v q) n) ; --% 
-      mkVP : V2V -> NP -> VP -> VP         -- force him to sleep
+      mkVP : V2V -> NP -> VP -> VP         -- beg him to sleep
         = \v,n,q -> (ComplSlash (SlashV2V v q) n) ; --% 
 
 -- The verb can also be a copula ("be"), and the relevant argument is
@@ -471,7 +474,7 @@ incomplete resource Constructors = open Grammar in {  --%
       = \y -> UseComp (CompCN (UseN y)) ; --% 
       mkVP : CN -> VP              -- be an old man 
       = \y -> UseComp (CompCN y) ; --% 
-      mkVP : NP -> VP              -- be this man 
+      mkVP : NP -> VP              -- be the man 
       = \a -> UseComp (CompNP a)   ; --% 
       mkVP : Adv -> VP             -- be here 
       = \a -> UseComp (CompAdv a)   ; --% 
@@ -489,15 +492,19 @@ incomplete resource Constructors = open Grammar in {  --%
       = ComplSlash ; --% 
       mkVP : VPSlash -> VP            -- paint itself black --:
         = ReflVP ; --%
+
       mkVP : Comp -> VP               -- be warm --:
         = UseComp ; --%
 
       } ; --% 
 
--- Two-place verbs can be used reflexively.
-
+-- Two-place verbs can be used reflexively, and VPSlash more generally.
+    reflexiveVP = overload { --%
       reflexiveVP : V2 -> VP        -- love itself 
       = \v -> ReflVP (SlashV2a v) ; --% 
+      reflexiveVP : VPSlash -> VP   -- paint itself black
+        = ReflVP ; --%
+      } ; --%
 
 
 -- Two-place verbs can also be used in the passive, with or without an agent.
@@ -648,6 +655,27 @@ incomplete resource Constructors = open Grammar in {  --%
 
       } ; --% 
 
+-- Pronouns can be used as noun phrases.
+
+      i_NP : NP          -- I
+      = mkNP i_Pron ;
+      you_NP : NP        -- you (singular)
+      = mkNP youSg_Pron ;
+      youPol_NP : NP     -- you (polite singular)
+      = mkNP youPol_Pron ;
+      he_NP : NP         -- he
+      = mkNP he_Pron ;
+      she_NP : NP        -- she
+      = mkNP she_Pron ;
+      it_NP : NP         -- it
+      = mkNP it_Pron ;
+      we_NP : NP         -- we
+      = mkNP we_Pron ;
+      youPl_NP : NP      -- you (plural)
+      = mkNP she_Pron ;
+      they_NP : NP       -- they
+      = mkNP they_Pron ;
+
 
 --3 Det, determiners 
 
@@ -793,8 +821,12 @@ incomplete resource Constructors = open Grammar in {  --%
 
 -- Number words up to 999,999 can be built as follows.
 
-      mkNumeral : Sub1000 -> Numeral -- coerce 1..999 --: 
-      = \n -> num (pot3 n) ; --%
+      mkNumeral : Unit -> Numeral -- eight (coerce 1..9) --: 
+      = \n -> num (pot2as3 (pot1as2 (pot0as1 n.n))) ; --%
+      mkNumeral : Sub100 -> Numeral -- twenty-five (coerce 1..99) --: 
+      = \n -> num (pot2as3 (pot1as2 n)) ; --%
+      mkNumeral : Sub1000 -> Numeral -- six hundred (coerce 1..999) --: 
+      = \n -> num (pot2as3 n) ; --%
       mkNumeral : Sub1000 -> Sub1000 -> Numeral -- 1000m + n --: 
       = \m,n -> num (pot3plus m n) ; --%
 
@@ -810,10 +842,10 @@ incomplete resource Constructors = open Grammar in {  --%
     mkSub1000 = overload {  --% 
       mkSub1000 : Sub100 -> Sub1000 -- coerce 1..99  --:
       = pot1as2 ; --% 
-      mkSub1000 : Sub10 -> Sub1000 -- 100n  --:
-      = pot2 ; --% 
-      mkSub1000 : Sub10 -> Sub100 -> Sub1000 -- 100m + n  --:
-      = pot2plus ; --% 
+      mkSub1000 : Unit -> Sub1000 -- 100n  --:
+      = \n -> pot2 n.n ; --% 
+      mkSub1000 : Unit -> Sub100 -> Sub1000 -- 100m + n  --:
+      = \m,n -> pot2plus m.n n ; --% 
       } ; --%
 
     mkSub100 = overload {  --% 
@@ -1495,7 +1527,7 @@ incomplete resource Constructors = open Grammar in {  --%
 
   ComplV2 : V2 -> NP -> VP = \v,np -> ComplSlash (SlashV2a v) np ;
   ComplV2A : V2A -> NP -> AP -> VP = \v,np,ap -> ComplSlash (SlashV2A v ap) np ; 
-  ComplV3 : V3 -> NP -> NP -> VP = \v,o,d -> ComplSlash (Slash3V3 v o) d ; 
+  ComplV3 : V3 -> NP -> NP -> VP = \v,o,d -> ComplSlash (Slash3V3 v d) o ; 
 
     that_NP : NP = DetNP (DetQuant that_Quant sgNum) ; 
     this_NP : NP = DetNP (DetQuant this_Quant sgNum) ; 
@@ -1687,8 +1719,5 @@ oper
     n1000_Numeral : Numeral 
     = num (pot3 (pot1as2 (pot0as1 pot01))) ; --%  
 
--- for testing
-
-  she_NP : NP = mkNP she_Pron ;
 
 }  
