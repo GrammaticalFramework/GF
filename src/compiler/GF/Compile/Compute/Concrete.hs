@@ -193,10 +193,17 @@ computeTermOpt rec gr = comput True where
        a' <- comp g a
        b' <- comp g b
        case (a',b') of
-         (Alts _ _, K a) -> checks [do
+         (Alts _ _, K d) -> checks [do
             as <- strsFromTerm a' -- this may fail when compiling opers
             return $ variants [
-              foldr1 C (map K (str2strings (plusStr v (str a)))) | v <- as]
+              foldr1 C (map K (str2strings (plusStr v (str d)))) | v <- as]
+            ,
+            return $ C a' b'
+           ]
+         (Alts _ _, C (K d) e) -> checks [do
+            as <- strsFromTerm a' -- this may fail when compiling opers
+            return $ C (variants [
+              foldr1 C (map K (str2strings (plusStr v (str d)))) | v <- as]) e
             ,
             return $ C a' b'
            ]
