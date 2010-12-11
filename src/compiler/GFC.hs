@@ -5,6 +5,7 @@ import PGF
 import PGF.CId
 import PGF.Data
 import PGF.Optimize
+import GF.Index
 import GF.Compile
 import GF.Compile.Export
 
@@ -59,7 +60,8 @@ unionPGFFiles :: Options -> [FilePath] -> IOE ()
 unionPGFFiles opts fs = 
     do pgfs <- mapM readPGFVerbose fs
        let pgf0 = foldl1 unionPGF pgfs
-           pgf = if flag optOptimizePGF opts then optimizePGF pgf0 else pgf0
+           pgf1 = if flag optOptimizePGF opts then optimizePGF pgf0 else pgf0
+           pgf = if flag optMkIndexPGF opts then addIndex pgf1 else pgf1
            pgfFile = grammarName opts pgf <.> "pgf"
        if pgfFile `elem` fs 
          then putStrLnE $ "Refusing to overwrite " ++ pgfFile

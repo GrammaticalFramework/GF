@@ -145,6 +145,7 @@ executable gf
     GF.Compile.PGFtoProlog
     GF.Compile.PGFtoJS
     GF.Compile
+    GF.Index
     GF.Quiz
     PGF
     PGF.CId
