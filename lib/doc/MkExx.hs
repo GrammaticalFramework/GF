@@ -1,9 +1,9 @@
 -- make a script for computing examples
 -- usage: runghc MkExx.hs <koe.txt >koe.gfs
 -- then:  gf -retain -s ../alltenses/TryRon.gfo <koe.gfs
+-- called automatically by 'make exx'
 
-
-main = interact (unlines . concatMap mkScript . lines)
+main = interact (unlines . concatMap mkScript . takeWhile (/="--.") . lines)
 
 mkScript l = case l of
   ' ':_ -> 
@@ -12,7 +12,8 @@ mkScript l = case l of
   '-':_ -> []
   _ -> [
      add $ psq l,
-     add $ "cc -one " ++ l
+     add $ "cc -one " ++ l,
+     add $ psq "*"
      ]
 
 add = ('\n':)
