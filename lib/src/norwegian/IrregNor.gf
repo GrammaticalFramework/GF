@@ -8,7 +8,8 @@ concrete IrregNor of IrregNorAbs = CatNor ** open ParadigmsNor in {
 
   lin be_V = mkV "be" "ber" "bes" "bad" "bedt" "be" ;
   lin bite_V = irregV "bite" (variants {"bet" ; "beit"}) "bitt" ;
-  lin bli_V = irregV "bli" (variants {"ble" ; "blei"}) "blitt" ;
+  lin bli_V = irregV "bli" "ble" "blitt" ;
+---  lin bli_V = irregV "bli" (variants {"ble" ; "blei"}) "blitt" ;
   lin brenne_V = irregV "brenne" (variants {"brant" ; "brente"}) "brent" ;
   lin bringe_V = irregV "bringe" "brakte" "brakt" ;
   lin burde_V = irregV "burde" "burde" "burdet" ;
