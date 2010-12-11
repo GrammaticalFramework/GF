@@ -1,0 +1,26 @@
+/* Popup boxes will have a light yellow background and a black border */
+div.popup {
+  display: none;
+  background: #ffc;
+  border: 1px solid black;
+}
+
+div.expand { display: none }
+
+div.reveal:hover div.popup {
+  display: block;
+  position: absolute;
+  margin-left: 3em;
+}
+.popup dl { margin: 5px; }
+
+tr:hover div.expand {
+  display: block;
+}
+
+/* Just some optional color and border styles: */
+body { background: #eee; }
+table { border-collapse: collapse; }
+td, th { padding: 5px; }
+th { background: #9df; }
+td { background: white }
