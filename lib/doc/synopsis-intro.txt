@@ -6,15 +6,28 @@
 This document contains the most important parts of the GF Resource Grammar API.
 It has been machine-generated from the source files; each chapter gives a link
 to the relevant source files, which give more information. Some of the files have
-not yet been prepared so that the machine generated documentation has the right 
-format.
-
-The second-last chapter gives instructions on how to "browse" the library by 
-loading the grammars into the ``gf`` command editor.
-
-The last chapter contains a brief example of how application grammars can
-import resource modules. At the same time, it illustrates a "design pattern" for 
-using the resource API to build functor-based applications
+not yet been prepared so that the machine generated documentation has the nicest
+possible format.
 
 The current status of resource grammar completion for different languages is shown
 in [``status.html`` ./status.html].
+
+The [first chapter #toc2] shows the categories, with links to the functions for
+constructing trees in them.
+
+The [second chapter #toc5] shows the construction functions, with cross-links and
+examples. Most examples can be seen in multiple languages by hovering the
+mouse over the example, as shown in the following screenshot:
+
+[hovering.png]
+
+The [third chapter #toc83] shows morphological paradigms.
+
+The [fourth chapter #toc100] gives instructions on how to "browse" the library by 
+loading the grammars into the ``gf`` command editor.
+
+The [last chapter #toc101] contains a brief example of how application grammars can
+import resource modules. At the same time, it illustrates a "design pattern" for 
+using the resource API to build functor-based applications
+
+The [table of contents #toc102] is at the end of the file.

@@ -552,11 +552,11 @@ incomplete resource Constructors = open Grammar in {  --%
 -- rule, from verb phrases.
 
     mkImp = overload {  --%
-      mkImp : VP -> Imp                -- go 
+      mkImp : VP -> Imp                -- come to my house
       = ImpVP      ;  --%
-      mkImp : V  -> Imp                -- take it
+      mkImp : V  -> Imp                -- come
       = \v -> ImpVP (UseV v)  ;   --%
-      mkImp : V2 -> NP -> Imp          -- come here now
+      mkImp : V2 -> NP -> Imp          -- buy it
       = \v,np -> ImpVP (ComplV2 v np) ; --%
       } ;  --%
 
@@ -636,7 +636,7 @@ incomplete resource Constructors = open Grammar in {  --%
       = PPartNP  ; --% 
       mkNP : NP -> Adv -> NP     -- Paris today --:
       = AdvNP ; --% 
-      mkNP : NP -> RS -> NP      -- John, who lives in Paris --:
+      mkNP : NP -> RS -> NP      -- John, who walks --:
       = RelNP ; --% 
 
 -- A conjunction can be formed both from two noun phrases and a longer

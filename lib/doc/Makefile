@@ -1,6 +1,6 @@
 .PHONY: abstract synopsis
 
-all: synopsis abstract
+all: exx synopsis
 
 index:
 	txt2tags -thtml index.txt
