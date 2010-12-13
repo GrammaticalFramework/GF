@@ -1172,8 +1172,12 @@ incomplete resource Constructors = open Grammar in {  --%
         = \s,v,p -> QuestVP s (ComplVS v p) ; --% 
       mkQCl : IP  -> VQ -> QS -> QCl        -- who wonders who sleeps
         = \s,v,q -> QuestVP s (ComplVQ v q) ; --% 
+      mkQCl : IP  -> VA -> A -> QCl        -- who becomes old
+        = \s,v,q -> QuestVP s (ComplVA v (PositA q)) ; --% 
       mkQCl : IP  -> VA -> AP -> QCl        -- who becomes old
         = \s,v,q -> QuestVP s (ComplVA v q) ; --% 
+      mkQCl : IP  -> V2A -> NP -> A -> QCl -- who paints it red
+        = \s,v,n,q -> QuestVP s (ComplV2A v n (PositA q)) ; --% 
       mkQCl : IP  -> V2A -> NP -> AP -> QCl -- who paints it red
         = \s,v,n,q -> QuestVP s (ComplV2A v n q) ; --% 
       mkQCl : IP  -> V2S -> NP -> S -> QCl          -- who tells her that we sleep
@@ -1200,7 +1204,7 @@ incomplete resource Constructors = open Grammar in {  --%
 	= \x,y -> QuestVP x (UseComp (CompAdv y)) ; --%   
       mkQCl : IP -> NP -> V2 -> QCl        -- who does she love 
       = \ip,np,v -> QuestSlash ip (SlashVP np (SlashV2a v)) ; --%
-      mkQCl : IP -> ClSlash -> QCl         -- who does she today   --:   
+      mkQCl : IP -> ClSlash -> QCl         -- who does she love today   --:   
       = QuestSlash   ; --% 
 
 -- Adverbial 'wh' questions are built with interrogative adverbials, with the
@@ -1223,10 +1227,19 @@ incomplete resource Constructors = open Grammar in {  --%
 
 -- Existentials are a special construction.
 
-      mkQCl : IP -> QCl         -- which houses are there  --:  
+      mkQCl : IP -> QCl         -- which cities are there  --:  
       = ExistIP ; --% 
       } ; --% 
 
+
+--3 IComp, interrogative complements
+
+    mkIComp = overload { --%
+      mkIComp : IAdv -> IComp  -- where (is it) --:
+      = CompIAdv ; --%
+      mkIComp : IP -> IComp    -- who (is it) --:
+      = CompIP ; --%
+      } ; --% 
 
 --3 IP, interrogative pronouns 
 
@@ -1241,9 +1254,9 @@ incomplete resource Constructors = open Grammar in {  --%
       = \i,n -> IdetCN i (UseN n)  ; --% 
       mkIP : IDet -> IP      -- which five --:
       = IdetIP  ; --% 
-      mkIP : IQuant -> CN -> IP    -- which big cities
+      mkIP : IQuant -> CN -> IP    -- which big city
                      =  \i,n -> IdetCN (IdetQuant i NumSg) n ; --%  
-      mkIP : IQuant -> Num -> CN -> IP          -- which five cities 
+      mkIP : IQuant -> Num -> CN -> IP          -- which five big cities 
                      =  \i,nu,n -> IdetCN (IdetQuant i nu) n ; --% 
       mkIP : IQuant -> N -> IP      -- which city
                      =  \i,n -> IdetCN (IdetQuant i NumSg) (UseN n) ; --%  
@@ -1341,10 +1354,53 @@ incomplete resource Constructors = open Grammar in {  --%
 
       mkRCl : RP -> VP -> RCl        -- that loves she   --:   
       = RelVP     ; --% 
-      mkRCl : RP -> ClSlash -> RCl     -- whom she loves today   --:   
-      = RelSlash ; --% 
-      mkRCl : RP -> NP -> V2 -> RCl     -- whom she loves 
-      = \rp,np,v2 -> RelSlash rp (SlashVP np (SlashV2a v2)) ; --% 
+
+      mkRCl : RP -> V -> RCl                -- who sleeps   
+      = \s,v -> RelVP s (UseV v); --%   
+      mkRCl : RP -> V2 -> NP -> RCl         -- who loves her
+      = \s,v,o -> RelVP s (ComplV2 v o); --%   
+      mkRCl : RP -> V3 -> NP -> NP -> RCl   -- who sends it to her
+      = \s,v,o,i -> RelVP s (ComplV3 v o i); --%   
+      mkRCl : RP  -> VV -> VP -> RCl        -- who wants to sleep
+        = \s,v,vp -> RelVP s (ComplVV v vp) ; --% 
+      mkRCl : RP  -> VS -> S  -> RCl        -- who says that she sleeps
+        = \s,v,p -> RelVP s (ComplVS v p) ; --% 
+      mkRCl : RP  -> VQ -> QS -> RCl        -- who wonders who sleeps
+        = \s,v,q -> RelVP s (ComplVQ v q) ; --% 
+      mkRCl : RP  -> VA -> A -> RCl        -- who becomes old
+        = \s,v,q -> RelVP s (ComplVA v (PositA q)) ; --% 
+      mkRCl : RP  -> VA -> AP -> RCl        -- who becomes old
+        = \s,v,q -> RelVP s (ComplVA v q) ; --% 
+      mkRCl : RP  -> V2A -> NP -> A -> RCl -- who paints it red
+        = \s,v,n,q -> RelVP s (ComplV2A v n (PositA q)) ; --% 
+      mkRCl : RP  -> V2A -> NP -> AP -> RCl -- who paints it red
+        = \s,v,n,q -> RelVP s (ComplV2A v n q) ; --% 
+      mkRCl : RP  -> V2S -> NP -> S -> RCl          -- who tells her that we sleep
+        = \s,v,n,q -> RelVP s (ComplSlash (SlashV2S v q) n) ; --% 
+      mkRCl : RP  -> V2Q -> NP -> QS -> RCl         -- who asks her who sleeps 
+        = \s,v,n,q -> RelVP s (ComplSlash (SlashV2Q v q) n) ; --% 
+      mkRCl : RP  -> V2V -> NP -> VP -> RCl         -- who forces her to sleep
+        = \s,v,n,q -> RelVP s (ComplSlash (SlashV2V v q) n) ; --% 
+      mkRCl : RP -> A  -> RCl    -- who is old
+        = \x,y -> RelVP x (UseComp (CompAP (PositA y))) ; --%   
+      mkRCl : RP -> A -> NP -> RCl -- who is older than her   
+        = \x,y,z -> RelVP x (UseComp (CompAP (ComparA y z))) ; --% 
+      mkRCl : RP -> A2 -> NP -> RCl -- who is married to her 
+	= \x,y,z -> RelVP x (UseComp (CompAP (ComplA2 y z))) ; --% 
+      mkRCl : RP -> AP -> RCl    -- who is very old 
+	= \x,y -> RelVP x (UseComp (CompAP y)) ; --% 
+      mkRCl : RP -> NP -> RCl    -- who is the man   
+        = \x,y -> RelVP x (UseComp (CompNP y)) ; --%   
+      mkRCl : RP -> N -> RCl    -- who is a man   
+        = \x,y -> RelVP x (UseComp (CompCN (UseN y))) ; --%   
+      mkRCl : RP -> CN -> RCl    -- who is an old man   
+	= \x,y -> RelVP x (UseComp (CompCN y)) ; --%   
+      mkRCl : RP -> Adv -> RCl   -- who is here   
+	= \x,y -> RelVP x (UseComp (CompAdv y)) ; --%   
+      mkRCl : RP -> NP -> V2 -> RCl        -- who does she love 
+      = \ip,np,v -> RelSlash ip (SlashVP np (SlashV2a v)) ; --%
+      mkRCl : RP -> ClSlash -> RCl         -- who does she love today   --:   
+      = RelSlash   ; --% 
 
 -- There is a simple 'such that' construction for forming relative 
 -- clauses from clauses.

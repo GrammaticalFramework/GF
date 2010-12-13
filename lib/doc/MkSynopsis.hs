@@ -12,6 +12,10 @@ type Rules = [(String,String,String)]
 -- the file generated
 synopsis = "synopsis.txt"
 
+-- the language in which revealed examples are shown
+revealedLang = "Eng"
+
+-- all languages shown
 apiExxFiles = ["api-examples-" ++ lang ++ ".txt" | lang <- words 
   "Bul Cat Dan Dut Eng Fin Fre Ger Ita Nor Pol Ron Rus Spa Swe Urd"]
 
@@ -193,7 +197,7 @@ mkTable hasEx isLatex aexx cs = inChunks chsize (\rs -> header : map (unwords . 
 -- make an example with hover-popup translations
 mkExample es ex = unwords [
   "#divreveal",
-  itf ex,
+  itf (maybe ex id (M.lookup revealedLang es)), 
   "#divpopup",
   "#UL",
   unwords ["#LI" ++ e | e <- prApiEx es],
