@@ -2,6 +2,7 @@ import PGF
 import Data.Maybe
 import System.IO
 import System.CPUTime
+import System.Random
 import Control.Monad
 import Data.Set as Set (fromList,toList)
 
@@ -9,14 +10,15 @@ start_cat = fromJust (readType "Phr")
 
 main = do
   pgf <- readPGF "Lang.pgf"
-  trees0 <- generateRandom pgf start_cat
+  g <- newStdGen
+  let trees0 = generateRandomDepth g pgf start_cat (Just 5)
   let trees = Set.toList (Set.fromList (take 5000 trees0))
   hPutStrLn stderr ("Number of trees: "++show (length trees))
   mapM_ (\l -> doTestLang pgf l trees) (languages pgf)
 
 doTestLang pgf l ts = do
   hPutStrLn stderr (show l)
-  ss <- foldM (doTest pgf l (fromJust (readType "Phr"))) [] ts
+  ss <- foldM (doTest pgf l start_cat) [] ts
   mapM_ (hPutStrLn stderr . show) [(fromIntegral s / fromIntegral n)/1000000000 | (s,n) <- ss]
   putStrLn "Done."
   
@@ -34,7 +36,7 @@ doTest pgf lang cat ss t = do
 
 doParse st t1 ts []       = return (Just (st,reverse ts))
 doParse st t1 ts (tk:tks) = do
-  case nextState st tk of
+  case nextState st (simpleParseInput tk) of
     Left _   -> return Nothing
     Right st -> do t2 <- getCPUTime
                    doParse st t1 ((t2-t1):ts) tks
