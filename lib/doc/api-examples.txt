@@ -424,8 +424,9 @@ mkAP warm_A (mkNP paris_PN)
 mkAP married_A2 she_NP 
       mkAP : A2 -> AP          -- married 
 mkAP married_A2
---      mkAP : AP -> S -> AP    -- probable that she sleeps  
---      mkAP : AP -> QS -> AP    -- uncertain if she sleeps  
+      mkAP : AP -> S -> AP    -- probable that she sleeps  
+mkCl (mkVP (mkAP (mkAP good_A) (mkS (mkCl she_NP sleep_V))))
+--      mkAP : AP -> QS -> AP    -- uncertain who sleeps  
 --      mkAP : AP -> VP -> AP    -- ready to go 
 --      mkAP : AP -> SC -> AP    -- ready to go  
       mkAP : AdA -> A -> AP   -- very old
@@ -457,61 +458,161 @@ mkAdv very_AdA (mkAdv warm_A)
 mkAdv and_Conj here_Adv now_Adv
       mkAdv : Conj -> ListAdv -> Adv   -- with her, here and now  
 mkAdv and_Conj (mkListAdv (mkAdv with_Prep she_NP) (mkListAdv here_Adv now_Adv))
---.
       mkQS : (Tense) -> (Ant) -> (Pol) -> QCl -> QS -- who wouldn't have slept 
-      mkQS : Cl -> QS                    
-      mkQCl : Cl -> QCl -- does she sleep    
+mkQS conditionalTense anteriorAnt negativePol (mkQCl who_IP sleep_V)
+      mkQS : Cl -> QS -- 
+mkQS (mkQCl who_IP sleep_V)
+      mkQCl : Cl -> QCl -- does she sleep
+mkQCl (mkCl she_NP sleep_V)
       mkQCl : IP -> VP -> QCl               -- who sleeps      
-      mkQCl : IP -> V -> QCl                -- who sleeps   
+mkQCl who_IP (mkVP (mkVP sleep_V) here_Adv)
+      mkQCl : IP -> V -> QCl                -- who sleeps
+mkQCl who_IP sleep_V
       mkQCl : IP -> V2 -> NP -> QCl         -- who loves her
+mkQCl who_IP love_V2 she_NP
       mkQCl : IP -> V3 -> NP -> NP -> QCl   -- who sends it to her
+mkQCl who_IP send_V3 it_NP she_NP
       mkQCl : IP  -> VV -> VP -> QCl        -- who wants to sleep
-      mkQCl : IP  -> VS -> S  -> QCl        -- who says that she sleeps
-      mkQCl : IP  -> VQ -> QS -> QCl        -- who wonders who sleeps
-      mkQCl : IP  -> VA -> AP -> QCl        -- who becomes old
-      mkQCl : IP  -> V2A -> NP -> AP -> QCl -- who paints it red
-      mkQCl : IP  -> V2S -> NP -> S -> QCl          -- who tells her that we sleep
-      mkQCl : IP  -> V2Q -> NP -> QS -> QCl         -- who asks her who sleeps 
-      mkQCl : IP  -> V2V -> NP -> VP -> QCl         -- who forces her to sleep
-      mkQCl : IP -> A  -> QCl    -- who is old
-      mkQCl : IP -> A -> NP -> QCl -- who is older than her   
-      mkQCl : IP -> A2 -> NP -> QCl -- who is married to her 
-      mkQCl : IP -> AP -> QCl    -- who is very old 
-      mkQCl : IP -> NP -> QCl    -- who is the man   
-      mkQCl : IP -> N -> QCl    -- who is a man   
-      mkQCl : IP -> CN -> QCl    -- who is an old man   
-      mkQCl : IP -> Adv -> QCl   -- who is here   
+mkQCl who_IP want_VV (mkVP sleep_V)
+      mkQCl : IP  -> VS -> S  -> Cl        -- who says that I sleep
+mkQCl who_IP say_VS (mkS (mkCl i_NP sleep_V))
+      mkQCl : IP  -> VQ -> QS -> Cl        -- who wonders who sleeps
+mkQCl who_IP wonder_VQ (mkQS (mkQCl who_IP sleep_V))
+      mkQCl : IP  -> VA -> A  -> Cl        -- who becomes old
+mkQCl who_IP become_VA old_A
+      mkQCl : IP  -> VA -> AP -> Cl        -- who becomes very old
+mkQCl who_IP become_VA (mkAP very_AdA old_A)
+      mkQCl : IP  -> V2A -> NP -> A  -> Cl -- who paints it red
+mkQCl who_IP paint_V2A it_NP red_A
+      mkQCl : IP  -> V2A -> NP -> AP -> Cl -- who paints it very red
+mkQCl who_IP paint_V2A it_NP (mkAP very_AdA red_A)
+      mkQCl : IP  -> V2S -> NP -> S -> Cl  -- who answers to him that we sleep
+mkQCl who_IP answer_V2S he_NP (mkS (mkCl we_NP sleep_V))
+      mkQCl : IP  -> V2Q -> NP -> QS -> Cl -- who asks him who sleeps 
+mkQCl who_IP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V))
+      mkQCl : IP  -> V2V -> NP -> VP -> Cl -- who begs him to sleep
+mkQCl who_IP beg_V2V he_NP (mkVP sleep_V)
+      mkQCl : IP -> A  -> Cl       -- who is old
+mkQCl who_IP old_A
+      mkQCl : IP -> A -> NP -> Cl  -- who is older than he   
+mkQCl who_IP old_A he_NP
+      mkQCl : IP -> A2 -> NP -> Cl -- who is married to him 
+mkQCl who_IP married_A2 he_NP
+      mkQCl : IP -> AP -> Cl    -- who is very old 
+mkQCl who_IP (mkAP very_AdA old_A)
+      mkQCl : IP -> NP -> Cl    -- who is the woman   
+mkQCl who_IP (mkNP the_Det woman_N)
+      mkQCl : IP -> N -> Cl     -- who is a woman   
+mkQCl who_IP woman_N
+      mkQCl : IP -> CN -> Cl    -- who is an old woman   
+mkQCl who_IP (mkCN old_A woman_N)
+      mkQCl : IP -> Adv -> Cl   -- who is here   
+mkQCl who_IP here_Adv
+      mkQCl : IP -> VP -> Cl    -- who always sleeps
+mkQCl who_IP (mkVP always_AdV (mkVP sleep_V))
+      mkQCl : IAdv -> Cl -> QCl            -- why does she sleep
+mkQCl why_IAdv (mkCl she_NP sleep_V)     
+      mkQCl : Prep -> IP -> Cl -> QCl      -- with whom does she sleep
+mkQCl with_Prep who_IP (mkCl she_NP sleep_V)      
+      mkQCl : IAdv -> NP -> QCl   -- where is she
+mkQCl where_IAdv she_NP 
+      mkQCl : IComp -> NP -> QCl   -- who is this man
+mkQCl (mkIComp who_IP) (mkNP this_Det man_N)
+      mkQCl : IP -> QCl         -- which cities are there
+mkQCl (mkIP which_IQuant city_N)
       mkQCl : IP -> NP -> V2 -> QCl        -- who does she love 
-      mkQCl : IP -> ClSlash -> QCl         -- who does she today      
-      mkQCl : IAdv -> Cl -> QCl            -- why does she sleep     
-      mkQCl : Prep -> IP -> Cl -> QCl      -- with whom does she sleep 
-      mkQCl : IAdv -> NP -> QCl   -- where is she 
-      mkQCl : IComp -> NP -> QCl   -- who is this man    
-      mkQCl : IP -> QCl         -- which houses are there    
-      mkIP : IDet -> CN -> IP          -- which five big cities    
+mkQCl who_IP she_NP
+      mkQCl : IP -> ClSlash -> QCl         -- who does she love today   --:   
+mkQCl who_IP (mkClSlash (mkClSlash she_NP love_V2) today_Adv)
+      mkIP : IDet -> CN -> IP          -- which five big cities
+mkIP (mkIDet which_IQuant (mkNum (mkNumeral n5_Unit))) (mkCN big_A city_N)    
       mkIP : IDet -> N -> IP      -- which five cities
+mkIP (mkIDet which_IQuant (mkNum (mkNumeral n5_Unit))) city_N    
       mkIP : IDet -> IP      -- which five 
-      mkIP : IQuant -> CN -> IP    -- which big cities
-      mkIP : IQuant -> Num -> CN -> IP          -- which five cities 
+mkIP (mkIDet which_IQuant (mkNum (mkNumeral n5_Unit)))
+      mkIP : IQuant -> CN -> IP    -- which big city
+mkIP which_IQuant (mkCN big_A city_N)    
+      mkIP : IQuant -> Num -> CN -> IP          -- which five big cities
+mkIP which_IQuant (mkNum (mkNumeral n5_Unit)) (mkCN big_A city_N)    
       mkIP : IQuant -> N -> IP      -- which city
-      mkIP : IP -> Adv -> IP        -- who in Paris 
-    what_IP : IP  -- what (singular)
-    who_IP : IP   -- who (singular)
+mkIP which_IQuant city_N
+      mkIP : IP -> Adv -> IP        -- who in Paris
+mkIP who_IP (mkAdv in_Prep (mkNP paris_PN))
+      what_IP : IP  -- what (singular)
+mkUtt what_IP
+      who_IP : IP   -- who (singular)
+mkUtt who_IP
       mkIAdv : Prep -> IP -> IAdv --  in which city 
-      mkIAdv : IAdv -> Adv -> IAdv --  where in Paris  
+mkIAdv in_Prep (mkIP which_IQuant city_N)
+      mkIAdv : IAdv -> Adv -> IAdv --  where in Paris
+mkIAdv where_IAdv (mkAdv in_Prep (mkNP paris_PN))  
       mkIDet : IQuant -> Num -> IDet          -- which (songs) 
-      mkIDet : IQuant -> IDet      
-    which_IDet : IDet 
-    whichPl_IDet : IDet 
+mkIDet which_IQuant pluralNum
+      mkIDet : IQuant -> IDet
+mkIDet which_IQuant      
+      which_IDet : IDet 
+mkIP which_IDet
+      whichPl_IDet : IDet 
+mkIP whichPl_IDet
       mkRS : (Tense) -> (Ant) -> (Pol) -> RCl -> RS -- that wouldn't have slept 
-      mkRS : Conj -> RS -> RS -> RS -- who sleeps and whose mother runsx
-      mkRS : Conj -> ListRS -> RS -- who sleeps, whom I see and who sleeps 
-      mkRCl : RP -> VP -> RCl        -- that loves she      
-      mkRCl : RP -> ClSlash -> RCl     -- whom she loves today      
-      mkRCl : RP -> NP -> V2 -> RCl     -- whom she loves 
-      mkRCl : Cl -> RCl              -- such that she loves him 
-    which_RP : RP                        -- which  
-    mkRP : Prep -> NP -> RP -> RP    -- all the houses in which  
+mkRS conditionalTense anteriorAnt negativePol (mkRCl which_RP sleep_V)
+      mkRS : RCl -> RS -- 
+mkRS (mkRCl which_RP sleep_V)
+      mkRCl : RP -> VP -> RCl               -- who sleeps      
+mkRCl which_RP (mkVP (mkVP sleep_V) here_Adv)
+      mkRCl : RP -> V -> RCl                -- who sleeps
+mkRCl which_RP sleep_V
+      mkRCl : RP -> V2 -> NP -> RCl         -- who loves her
+mkRCl which_RP love_V2 she_NP
+      mkRCl : RP -> V3 -> NP -> NP -> RCl   -- who sends it to her
+mkRCl which_RP send_V3 it_NP she_NP
+      mkRCl : RP  -> VV -> VP -> RCl        -- who wants to sleep
+mkRCl which_RP want_VV (mkVP sleep_V)
+      mkRCl : RP  -> VS -> S  -> RCl        -- who says that I sleep
+mkRCl which_RP say_VS (mkS (mkCl i_NP sleep_V))
+      mkRCl : RP  -> VQ -> QS -> RCl        -- who wonders who sleeps
+mkRCl which_RP wonder_VQ (mkQS (mkQCl who_IP sleep_V))
+      mkRCl : RP  -> VA -> A  -> RCl        -- who becomes old
+mkRCl which_RP become_VA old_A
+      mkRCl : RP  -> VA -> AP -> RCl        -- who becomes very old
+mkRCl which_RP become_VA (mkAP very_AdA old_A)
+      mkRCl : RP  -> V2A -> NP -> A  -> RCl -- who paints it red
+mkRCl which_RP paint_V2A it_NP red_A
+      mkRCl : RP  -> V2A -> NP -> AP -> RCl -- who paints it very red
+mkRCl which_RP paint_V2A it_NP (mkAP red_A)
+      mkRCl : RP  -> V2S -> NP -> S -> RCl  -- who answers to him that we sleep
+mkRCl which_RP answer_V2S he_NP (mkS (mkCl we_NP sleep_V))
+      mkRCl : RP  -> V2Q -> NP -> QS -> RCl -- who asks him who sleeps 
+mkRCl which_RP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V))
+      mkRCl : RP  -> V2V -> NP -> VP -> RCl -- who begs him to sleep
+mkRCl which_RP beg_V2V he_NP (mkVP sleep_V)
+      mkRCl : RP -> A  -> RCl       -- who is old
+mkRCl which_RP old_A
+      mkRCl : RP -> A -> NP -> RCl  -- who is older than he   
+mkRCl which_RP old_A he_NP
+      mkRCl : RP -> A2 -> NP -> RCl -- who is married to him 
+mkRCl which_RP married_A2 he_NP
+      mkRCl : RP -> AP -> RCl    -- who is very old 
+mkRCl which_RP (mkAP very_AdA old_A)
+      mkRCl : RP -> NP -> RCl    -- who is the woman   
+mkRCl which_RP (mkNP the_Det woman_N)
+      mkRCl : RP -> N -> RCl     -- who is a woman   
+mkRCl which_RP woman_N
+      mkRCl : RP -> CN -> RCl    -- who is an old woman   
+mkRCl which_RP (mkCN old_A woman_N)
+      mkRCl : RP -> Adv -> RCl   -- who is here   
+mkRCl which_RP here_Adv
+      mkRCl : RP -> VP -> RCl    -- who always sleeps
+mkRCl which_RP (mkVP always_AdV (mkVP sleep_V))
+      mkRCl : RP -> NP -> V2 -> RCl        -- who she loves 
+mkRCl which_RP she_NP love_V2
+      mkRCl : RP -> ClSlash -> RCl         -- who she loves today   --:   
+mkRCl which_RP (mkClSlash (mkClSlash she_NP love_V2) today_Adv)
+      which_RP : RP                        -- which 
+which_RP
+      mkRP : Prep -> NP -> RP -> RP    -- all the cities in which
+mkRP in_Prep (mkNP all_Predet (mkNP the_Quant pluralNum city_N)) which_RP
+--.
       mkSSlash : Temp -> Pol -> ClSlash -> SSlash  
       mkClSlash : NP -> VPSlash -> ClSlash        -- (whom) he sees here  
       mkClSlash : NP -> V2 -> ClSlash        -- (whom) he sees 

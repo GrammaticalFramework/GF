@@ -261,6 +261,14 @@ oper
     qp = vp.qp
     } ;
 
+  insertObjPre : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
+    s = vp.s ;
+    s2 = \\fin,b,a => obj ! fin ! b ! a ++ vp.s2 ! fin ! b ! a ;
+    ext = vp.ext ;
+    sc = vp.sc ; 
+    qp = vp.qp
+    } ;
+
   insertExtrapos : Str -> VP -> VP = \obj,vp -> {
     s = vp.s ;
     s2 = vp.s2 ;

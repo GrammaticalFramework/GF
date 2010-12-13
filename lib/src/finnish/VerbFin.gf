@@ -50,7 +50,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
           ap.s ! False ! (NCase Sg (npform2case Sg v.c3.c))) ----agr to obj
         (predV v) ** {c2 = v.c2} ;
 
-    ComplSlash vp np = insertObj (\\fin,b,_ => appCompl fin b vp.c2 np) vp ;
+    ComplSlash vp np = insertObjPre (\\fin,b,_ => appCompl fin b vp.c2 np) vp ;
 
     UseComp comp = 
       insertObj (\\_,_ => comp.s) (predV (verbOlla ** {sc = NPCase Nom ; qp = "ko"})) ;
@@ -68,7 +68,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
          ) ** {c2 = vp.c2} ; ---- correct ??
 
     SlashV2VNP v np vp = 
-      insertObj 
+      insertObjPre 
         (\\fin,b,a => appCompl True b v.c2 np ++ ---- fin -> stack overflow
                       infVP v.sc b a vp v.vi) 
           (predV v) ** {c2 = vp.c2} ;
@@ -77,7 +77,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
 
     AdVVP adv vp = insertObj (\\_,_,_ => adv.s) vp ;
 
-    ReflVP v = insertObj (\\fin,b,agr => appCompl fin b v.c2 (reflPron agr)) v ;
+    ReflVP v = insertObjPre (\\fin,b,agr => appCompl fin b v.c2 (reflPron agr)) v ;
 
     PassV2 v = let vp = predV v in {
       s = \\_ => vp.s ! VIPass ;

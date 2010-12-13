@@ -12,7 +12,7 @@ main = do
 getApiExx :: [FilePath] -> IO ApiExx
 getApiExx xx = do
   s  <- readFile (head xx)
-  let aet = getApiExxTrees $ dropInit $ lines s 
+  let aet = getApiExxTrees $ filter validOutput $ lines s 
   aeos <- mapM readApiExxOne xx
   let aexx = mkApiExx $ ("API",aet) : aeos
   putStrLn $ prApiExx aexx
@@ -21,7 +21,7 @@ getApiExx xx = do
 readApiExxOne file = do
   s <- readFile file
   let lang = reverse (take 3 (drop 4 (reverse file))) -- api-exx-*Eng*.txt
-  let api = getApiExxOne (dropInit $ lines s)
+  let api = getApiExxOne $ filter validOutput $ lines s
   putStrLn $ unlines $ prApiEx api
   return (lang,api)
 
@@ -48,10 +48,10 @@ getApiExxTrees = M.fromList . pairs . map cleanUp
      _ -> []
 
 -- remove leading prompts and spaces
-cleanUp = dropWhile (\c -> not (isAlpha c || c == '*'))
+cleanUp = dropWhile (\c -> not (isAlpha c || elem c "*'"))
 
--- drop GF welcome
-dropInit = dropWhile ((/=">") . take 1)
+-- only accept lines starting with prompts (to eliminate multi-line gf uncomputed output)
+validOutput = (==">") . take 1
 
 mkApiExx :: [(String,ApiExxOne)] -> ApiExx
 mkApiExx ltes = 
