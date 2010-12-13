@@ -29,5 +29,7 @@ exx: exx-script
 	gf -retain -s ../alltenses/TryNor.gfo <api-examples.gfs >api-examples-Nor.txt
 	gf -retain -s ../alltenses/TryPol.gfo <api-examples.gfs >api-examples-Pol.txt
 	gf -retain -s ../alltenses/TryRon.gfo <api-examples.gfs >api-examples-Ron.txt
+	gf -retain -s ../alltenses/TryRus.gfo <api-examples.gfs >api-examples-Rus.txt
 	gf -retain -s ../alltenses/TrySpa.gfo <api-examples.gfs >api-examples-Spa.txt
 	gf -retain -s ../alltenses/TrySwe.gfo <api-examples.gfs >api-examples-Swe.txt
+	gf -retain -s ../alltenses/TryUrd.gfo <api-examples.gfs >api-examples-Urd.txt

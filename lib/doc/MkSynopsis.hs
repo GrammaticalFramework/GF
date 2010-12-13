@@ -13,7 +13,7 @@ type Rules = [(String,String,String)]
 synopsis = "synopsis.txt"
 
 apiExxFiles = ["api-examples-" ++ lang ++ ".txt" | lang <- words 
-  "Bul Cat Dan Dut Eng Fin Fre Ger Ita Nor Pol Ron Spa Swe"]
+  "Bul Cat Dan Dut Eng Fin Fre Ger Ita Nor Pol Ron Rus Spa Swe Urd"]
 
 main = do
   xx <- getArgs
