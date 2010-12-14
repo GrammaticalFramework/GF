@@ -37,7 +37,7 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
     cnc = lookConcr pgf lang
 
     rules :: [(FId,Production)]
-    rules = [(fcat,prod) | (fcat,set) <- IntMap.toList (PGF.pproductions cnc)
+    rules = [(fcat,prod) | (fcat,set) <- IntMap.toList (PGF.productions cnc)
                          , prod <- Set.toList set]
 
     fcatCats :: Map FId Cat
@@ -58,7 +58,7 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
 
     topdownRules cat = f cat []
       where
-        f cat rules = maybe rules (Set.fold g rules) (IntMap.lookup cat (pproductions cnc))
+        f cat rules = maybe rules (Set.fold g rules) (IntMap.lookup cat (productions cnc))
 	 
         g (PApply funid args) rules = (cncfuns cnc ! funid,args) : rules
         g (PCoerce cat)       rules = f cat rules
