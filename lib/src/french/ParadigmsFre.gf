@@ -45,21 +45,21 @@ oper
 
 -- To abstract over number names, we define the following.
 
-  Number : Type ; 
+  Number : Type ;  --%
 
-  singular : Number ;
-  plural   : Number ;
+  singular : Number ; --%
+  plural   : Number ; --%
 
 -- Prepositions used in many-argument functions are either strings
 -- (including the 'accusative' empty string) or strings that
 -- amalgamate with the following word (the 'genitive' "de" and the
 -- 'dative' "à").
 
-  accusative : Prep ;
-  genitive   : Prep ;
-  dative     : Prep ;
+  accusative : Prep ; -- direct object case
+  genitive   : Prep ; -- genitive, constructed with "de"
+  dative     : Prep ; -- dative, usually constructed with "à"
 
-  mkPrep : Str -> Prep ;
+  mkPrep : Str -> Prep ; -- preposition (other than "de" and "à")
 
 
 --2 Nouns
@@ -74,15 +74,15 @@ oper
 -- The gender heuristic is less reliable: it treats as feminine all
 -- nouns ending with "e" and "ion", all others as masculine.
 
-    mkN : (cheval : Str) -> N ;
+    mkN : (cheval : Str) -> N ;  -- predictable, with variations like cheval-chevaux
 
 -- Adding gender information widens the scope of the regular pattern.
 
-    mkN : (foie : Str) -> Gender -> N ; 
+    mkN : (foie : Str) -> Gender -> N ; --%
 
 -- In the worst case, both singular and plural forms and the gender are needed. 
 
-    mkN : (oeil,yeux : Str) -> Gender -> N ;
+    mkN : (oeil,yeux : Str) -> Gender -> N ; -- worst-case noun
 
 --3 Compound nouns 
 --
@@ -91,7 +91,7 @@ oper
 -- They could be formed in syntax, but we give a shortcut here since
 -- they are frequent in lexica.
 
-    mkN : N -> Str -> N
+    mkN : N -> Str -> N -- compound noun, e.g. numéro + de téléphone
   } ; 
 
 
@@ -101,17 +101,17 @@ oper
 -- 
 -- Relational nouns ("fille de x") need a case and a preposition. 
 
-  mkN2 : N -> Prep -> N2 ;
+  mkN2 : N -> Prep -> N2 ; -- e.g. fille + genitive
 
 -- The most common cases are the genitive "de" and the dative "à", 
 -- with the empty preposition.
 
-  deN2 : N -> N2 ;
-  aN2  : N -> N2 ;
+  deN2 : N -> N2 ; --%
+  aN2  : N -> N2 ; --%
 
 -- Three-place relational nouns ("la connection de x à y") need two prepositions.
 
-  mkN3 : N -> Prep -> Prep -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ; -- e.g. connection + genitive + dative
 
 
 --3 Relational common noun phrases
@@ -128,8 +128,8 @@ oper
 -- feminine is used for strings ending with "e", the masculine for other strings.
 
   mkPN  : overload {
-    mkPN : Str -> PN ;
-    mkPN : Str -> Gender -> PN
+    mkPN : Str -> PN ; -- feminine if ends with "e", otherwise masculine
+    mkPN : Str -> Gender -> PN -- gender deviant from the simple rule
     } ;
 
 
@@ -144,21 +144,21 @@ oper
 -- "heureux-heureuse-heureux", "italien-italienne", "jeune-jeune",
 -- "amer-amère", "carré- - -carrément", "joli- - -joliment".
 
-    mkA : (cher : Str) -> A ;
+    mkA : (cher : Str) -> A ; -- predictable, e.g. cher-chère
 
 -- Often just the feminine singular is deviant.
 
-    mkA : (sec,seche : Str) -> A ;
+    mkA : (sec,seche : Str) -> A ; -- unpredictable feminine
 
 -- This is the worst-case paradigm for the positive forms.
 
-    mkA : (banal,banale,banaux,banalement : Str) -> A ;
+    mkA : (banal,banale,banaux,banalement : Str) -> A ; -- worst-case adjective
 
 -- If comparison forms are irregular (i.e. not formed by "plus", e.g.
 -- "bon-meilleur"), the positive and comparative can be given as separate
 -- adjectives.
 
-    mkA : A -> A -> A
+    mkA : A -> A -> A -- irregular comparison, e.g. bon-meilleur
   } ;
 
 -- The functions create by default postfix adjectives. To switch
@@ -166,14 +166,14 @@ oper
 -- modification, as in "petite maison"), the following function is
 -- provided.
 
-  prefixA : A -> A ;
+  prefixA : A -> A ; -- adjective that comes before noun, e.g. petit
 
 
 --3 Two-place adjectives
 --
 -- Two-place adjectives need a preposition for their second argument.
 
-  mkA2 : A -> Prep -> A2 ;
+  mkA2 : A -> Prep -> A2 ; -- e.g. supérieur + dative
 
 
 --2 Adverbs
@@ -181,15 +181,15 @@ oper
 -- Adverbs are not inflected. Most lexical ones have position
 -- after the verb. 
 
-  mkAdv : Str -> Adv ;
+  mkAdv : Str -> Adv ; -- ordinary adverb
 
 -- Some appear next to the verb (e.g. "toujours").
 
-  mkAdV : Str -> AdV ;
+  mkAdV : Str -> AdV ; -- sentential adverb, e.g. toujours
 
 -- Adverbs modifying adjectives and sentences can also be formed.
 
-  mkAdA : Str -> AdA ;
+  mkAdA : Str -> AdA ; -- modify adjective, e.g. très
 
 
 --2 Verbs
@@ -210,23 +210,23 @@ oper
 -- (("il") "jette", "jettera") as second argument.
 
   mkV : overload {
-    mkV : (finir : Str) -> V ;
-    mkV : (jeter,jette,jettera : Str) -> V ;
+    mkV : (finir : Str) -> V ; -- regular 1/2/3 conjugation
+    mkV : (jeter,jette,jettera : Str) -> V ; -- 1st conjugation variations
 
 -- The $IrregFre$ list gives some verbs as two-place. These verbs can be
 -- reused as one-place verbs.
 
-    mkV : V2 -> V
+    mkV : V2 -> V ; -- make 2-place to 1-place (e.g. from IrregFre)
   } ;
 
 -- The function $mkV$ gives the default compound auxiliary "avoir".
 -- To change it to "être", use the following function. 
 
-  etreV : V -> V ;
+  etreV : V -> V ; -- force auxiliary to be être (default avoir)
 
 -- This function turns a verb into reflexive, which implies the auxiliary "être".
 
-  reflV : V -> V ;
+  reflV : V -> V ; -- reflexive, implies auxiliary être, e.g. se demander
 
 
 --3 Two-place verbs
@@ -235,11 +235,11 @@ oper
 -- (transitive verbs). 
 
   mkV2 = overload {
-    mkV2 : Str -> V2 
+    mkV2 : Str -> V2  --%
     = \s -> dirV2 (regV s) ;
-    mkV2 : V -> V2 
+    mkV2 : V -> V2  -- direct transitive
     = dirV2 ;  
-    mkV2 : V -> Prep -> V2 
+    mkV2 : V -> Prep -> V2 -- e.g. se fier + genitive
     = mmkV2
   } ;
 
@@ -250,9 +250,9 @@ oper
 -- the first one or both can be absent.
 
   mkV3 : overload {
-    mkV3 : V -> V3 ;                -- donner,_,_
-    mkV3 : V -> Prep -> V3 ;        -- placer,_,dans
-    mkV3 : V -> Prep -> Prep -> V3  -- parler, à, de
+    mkV3 : V -> V3 ;                -- donner (+ accusative + dative)    
+    mkV3 : V -> Prep -> V3 ;        -- placer (+ accusative) + dans
+    mkV3 : V -> Prep -> Prep -> V3  -- parler + dative + genitive
     } ;
 
 --3 Other complement patterns
@@ -260,7 +260,7 @@ oper
 -- Verbs and adjectives can take complements such as sentences,
 -- questions, verb phrases, and adjectives.
 
-  mkV0  : V -> V0 ;
+  mkV0  : V -> V0 ;  --%
   mkVS  : V -> VS ;
   mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;  -- plain infinitive: "je veux parler"
@@ -272,17 +272,17 @@ oper
   mkVQ  : V -> VQ ;
   mkV2Q : V -> Prep -> V2Q ;
 
-  mkAS  : A -> AS ;
-  mkA2S : A -> Prep -> A2S ;
-  mkAV  : A -> Prep -> AV ;
-  mkA2V : A -> Prep -> Prep -> A2V ;
+  mkAS  : A -> AS ; --%
+  mkA2S : A -> Prep -> A2S ; --%
+  mkAV  : A -> Prep -> AV ; --%
+  mkA2V : A -> Prep -> Prep -> A2V ; --%
 
 -- Notice: categories $AS, A2S, AV, A2V$ are just $A$,
 -- and the second argument is given as an adverb. Likewise 
 -- $V0$ is just $V$.
 
-  V0 : Type ;
-  AS, A2S, AV, A2V : Type ;
+  V0 : Type ; --%
+  AS, A2S, AV, A2V : Type ; --%
 
 --.
 --2 Definitions of the paradigms
