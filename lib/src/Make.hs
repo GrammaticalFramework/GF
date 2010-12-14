@@ -65,10 +65,10 @@ langsLangAll = langs
 langsLang = langs `except` langsIncomplete ---- []
 
 -- languages for which Lang can be compiled but which are incomplete
-langsIncomplete = ["Amh","Ara","Hin","Lat","Pnb","Tha","Tur","Urd"]
+langsIncomplete = ["Amh","Ara","Hin","Lat","Pnb","Tha","Tur"]
 
 -- languages for which to compile Try 
-langsAPI = langsLang `except` (langsIncomplete ++ ["Ina"])
+langsAPI = langsLang `except` langsIncomplete
 
 -- languages for which to compile Symbolic
 langsSymbolic = langsLang `except` (langsIncomplete ++ ["Rus","Ina"])

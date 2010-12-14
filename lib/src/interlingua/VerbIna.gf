@@ -61,6 +61,7 @@ concrete VerbIna of Verb = CatIna ** open ResIna, Prelude in {
 
     CompAP ap = ap ;
     CompNP np = {s = \\_ => np.s ! Acc} ;
+    CompCN cn = {s = \\a => cn.s ! a.n} ;
     CompAdv a = {s = \\_ => a.s} ;
 
 }

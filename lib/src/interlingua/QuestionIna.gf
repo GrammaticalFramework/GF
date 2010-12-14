@@ -47,6 +47,8 @@ concrete QuestionIna of Question = CatIna ** open ResIna, Prelude in {
       n = num.n
       } ;
 
+    AdvIAdv i a = ss (i.s ++ a.s) ;
+
     CompIAdv a = a ;
 
     CompIP ip = ss (ip.s ! Nom) ;

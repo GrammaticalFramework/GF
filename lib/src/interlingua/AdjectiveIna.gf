@@ -13,6 +13,20 @@ concrete AdjectiveIna of Adjective = CatIna ** open ResIna, Prelude in {
       isPre = False
       } ;
 
+    UseComparA a = {
+      s = \\_ => a.s ! AAdj Compar ;
+      isPre = False
+      } ;
+
+    AdjOrd ord = {
+      s = \\_ => ord.s ;
+      isPre = False
+      } ;
+
+    CAdvAP ad ap np = {
+      s = \\a => ad.s ++ ap.s ! a ++ ad.p ++ np.s ! Nom ; 
+      isPre = False
+      } ;
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
     ComplA2 a np = {
