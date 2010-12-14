@@ -103,7 +103,7 @@ oper
 --3 Relational nouns 
 
   mkN2 : overload {
-    mkN2 : Str -> N2 -- reg. noun, prep. "of" --% 
+    mkN2 : Str -> N2 ; -- reg. noun, prep. "of" --% 
     mkN2 : N -> N2 ; -- e.g. wife of (default prep. to)
     mkN2 : N -> Str -> N2 ; -- access to --%
     mkN2 : N -> Prep -> N2 ; -- e.g. access to
