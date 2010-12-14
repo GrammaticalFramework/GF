@@ -15,7 +15,7 @@ getApiExx xx = do
   let aet = getApiExxTrees $ filter validOutput $ lines s 
   aeos <- mapM readApiExxOne xx
   let aexx = mkApiExx $ ("API",aet) : aeos
-  putStrLn $ prApiExx aexx
+--  putStrLn $ prApiExx aexx
   return aexx
 
 readApiExxOne file = do
