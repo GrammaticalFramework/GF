@@ -47,10 +47,10 @@ oper
   dative     : Case ;
   genitive   : Case ;
 
-  anDat_Case : Case ;
-  inAcc_Case : Case ;
-  inDat_Case : Case ;
-  zuDat_Case : Case ;
+  anDat_Case : Case ; -- preposition "an" accusative with contraction "am" --%
+  inAcc_Case : Case ; -- preposition "in" accusative with contraction "ins" --%
+  inDat_Case : Case ; -- preposition "in" dative with contraction "am" --%
+  zuDat_Case : Case ; -- preposition "zu" dative with contractions "zum", "zur" --%
 
 -- To abstract over number names, we define the following.
 
@@ -69,19 +69,18 @@ mkN : overload {
 -- feminine with plural ending "-n, -en", and the rest are masculines
 -- with the plural "-e" (without Umlaut).
 
-  mkN : (Stufe : Str) -> N ;
+  mkN : (Stufe : Str) -> N ;  -- die Stufe-Stufen, der Tisch-Tische
 
 -- The 'almost regular' case is much like the information given in an ordinary
 -- dictionary. It takes the singular and plural nominative and the
 -- gender, and infers the other forms from these.
 
-  mkN : (Bild,Bilder : Str) -> Gender -> N ;
+  mkN : (Bild,Bilder : Str) -> Gender -> N ; -- sg and pl nom, and gender
 
 -- Worst case: give all four singular forms, two plural forms (others + dative),
 -- and the gender.
 
-  mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N
-                       -- mann, mann, manne, mannes, männer, männern
+  mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N -- worst case: mann, mann, manne, mannes, männer, männern
   };
 
 
@@ -89,9 +88,9 @@ mkN : overload {
 -- the dative, and there is a special case for regular nouns.
 
   mkN2 : overload {
-    mkN2 : Str -> N2 ;
-    mkN2 : N ->   N2 ; 
-    mkN2 : N -> Prep -> N2
+    mkN2 : Str -> N2 ; --%
+    mkN2 : N ->   N2 ; -- noun + von
+    mkN2 : N -> Prep -> N2 -- noun + other preposition
     } ;   
 
 -- Use the function $mkPrep$ or see the section on prepositions below to  
@@ -100,7 +99,7 @@ mkN : overload {
 --
 -- Three-place relational nouns ("die Verbindung von x nach y") need two prepositions.
 
-  mkN3 : N -> Prep -> Prep -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ; -- noun + two prepositions
 
 
 --3 Proper names and noun phrases
@@ -110,15 +109,15 @@ mkN : overload {
 -- taken into account.
 
   mkPN : overload {
-    mkPN : Str -> PN ;
+    mkPN : Str -> PN ; -- regular name with genitive in "s"
 
 -- If only the genitive differs, two strings are needed.
 
-    mkPN : (nom,gen : Str) -> PN ;
+    mkPN : (nom,gen : Str) -> PN ;  -- name with other genitive
 
 -- In the worst case, all four forms are needed.
 
-    mkPN : (nom,acc,dat,gen : Str) -> PN
+    mkPN : (nom,acc,dat,gen : Str) -> PN -- name with all case forms
     } ;
 
 
@@ -130,52 +129,52 @@ mkN : overload {
 -- The regular adjective formation works for most cases, and includes
 -- variations such as "teuer - teurer", "böse - böser".
 
-    mkA : Str -> A ;
+    mkA : Str -> A ; -- regular adjective, works for most cases
 
 -- Irregular adjectives need three forms - one for each degree.
 
-    mkA : (gut,besser,beste : Str) -> A ;
+    mkA : (gut,besser,beste : Str) -> A ; -- irregular comparison
 
 -- Sometimes an extra form is needed for positive forms.
 
-    mkA : (gut,gute,besser,beste : Str) -> A
+    mkA : (gut,gute,besser,beste : Str) -> A -- irregular positive if ending added
 
     } ;
 
 -- Invariable adjective are a special case. 
 
-  invarA : Str -> A ;            -- prima
+  invarA : Str -> A ;            -- invariable, e.g. prima
 
 -- Two-place adjectives are formed by adding a preposition to an adjective.
 
-  mkA2 : A -> Prep -> A2 ;
+  mkA2 : A -> Prep -> A2 ; -- e.g. teilbar + durch
 
 --2 Adverbs
 
 -- Adverbs are formed from strings.
 
-  mkAdv : Str -> Adv ;
+  mkAdv : Str -> Adv ; -- adverbs have just one form anyway
 
 
 --2 Prepositions
 
 -- A preposition is formed from a string and a case.
 
-  mkPrep : Str -> PCase -> Prep ;
+  mkPrep : Str -> Case -> Prep ; -- e.g. "durch" + accusative
   
 -- Often just a case with the empty string is enough.
 
-  accPrep : Prep ;
-  datPrep : Prep ;
-  genPrep : Prep ;
+  accPrep : Prep ; -- no string, just accusative case
+  datPrep : Prep ; -- no string, just dative case
+  genPrep : Prep ; -- no string, just genitive case
 
 -- A couple of common prepositions (the first two always with the dative).
 
-  von_Prep : Prep ;
-  zu_Prep  : Prep ;
-  anDat_Prep : Prep ;
-  inDat_Prep : Prep ;
-  inAcc_Prep : Prep ;
+  von_Prep : Prep ; -- von + dative
+  zu_Prep  : Prep ; -- zu + dative, with contractions zum, zur
+  anDat_Prep : Prep ; -- an + dative, with contraction am
+  inDat_Prep : Prep ; -- in + dative, with contraction ins
+  inAcc_Prep : Prep ; -- in + accusative, with contraction im
 
 --2 Verbs
 
@@ -183,11 +182,11 @@ mkV : overload {
 
 -- Regular verbs ("weak verbs") need just the infinitive form.
 
-  mkV : (führen : Str) -> V ;
+  mkV : (führen : Str) -> V ; -- regular verb
 
 -- Irregular verbs use Ablaut and, in the worst cases, also Umlaut.
 
-  mkV : (sehen,sieht,sah,sähe,gesehen : Str) -> V ;
+  mkV : (sehen,sieht,sah,sähe,gesehen : Str) -> V ; -- irregular verb theme
 
 -- The worst-case constructor needs six forms:
 -- - Infinitive, 
@@ -199,32 +198,32 @@ mkV : overload {
 --
 --
 
-  mkV : (geben, gibt, gib, gab, gäbe, gegeben : Str) -> V ; 
+  mkV : (geben, gibt, gib, gab, gäbe, gegeben : Str) -> V ;  -- worst-case verb
 
 -- To add a movable prefix e.g. "auf(fassen)".
 
-  mkV : Str -> V -> V
+  mkV : Str -> V -> V -- movable prefix, e.g. auf+fassen
 };
 
 
 -- To remove the past participle prefix "ge", e.g. for the verbs
 -- prefixed by "be-, ver-".
 
-  no_geV : V -> V ;
+  no_geV : V -> V ;  -- no participle "ge", e.g. "bedeuten"
 
 -- To add a fixed prefix such as "be-, ver-"; this implies $no_geV$.
 
-  fixprefixV : Str -> V -> V ;
+  fixprefixV : Str -> V -> V ; -- add prefix such as "be"; implies no_ge
 
 -- To change the auxiliary from "haben" (default) to "sein" and
 -- vice-versa.
 
-  seinV  : V -> V ;
-  habenV : V -> V ;
+  seinV  : V -> V ; -- force "sein" as auxiliary
+  habenV : V -> V ; -- force "haben" as auxiliary
 
 -- Reflexive verbs can take reflexive pronouns of different cases.
 
-  reflV  : V -> Case -> V ;
+  reflV  : V -> Case -> V ; -- reflexive, with case
 
 
 --3 Two-place verbs
@@ -233,19 +232,19 @@ mkV2 : overload {
 
 -- Two-place regular verbs with direct object (accusative, transitive verbs).
 
-  mkV2 : Str -> V2 ;
+  mkV2 : Str -> V2 ; --%
 
 -- Two-place verbs with direct object.
 
-  mkV2 : V -> V2 ;
+  mkV2 : V -> V2 ; -- direct object
 
 -- Two-place verbs with a preposition.
 
-  mkV2 : V -> Prep -> V2 ;
+  mkV2 : V -> Prep -> V2 ; -- preposition for complement
 
 -- Two-place verbs with object in the given case.
 
-  mkV2 : V -> Case -> V2
+  mkV2 : V -> Case -> V2 ; -- just case for complement
 };
 
 
@@ -254,16 +253,17 @@ mkV2 : overload {
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Prep -> Prep -> V3 ;  -- sprechen, mit, über
-  dirV3    : V -> Prep -> V3 ;          -- senden,(accusative),nach
-  accdatV3 : V -> V3 ;                  -- give,accusative,dative
+  accdatV3 : V -> V3 ;                  -- geben + acc + dat
+  dirV3    : V -> Prep -> V3 ;          -- senden + acc + nach
+  mkV3     : V -> Prep -> Prep -> V3 ;  -- sprechen + mit + über
+
 
 --3 Other complement patterns
 --
 -- Verbs and adjectives can take complements such as sentences,
 -- questions, verb phrases, and adjectives.
 
-  mkV0  : V -> V0 ;
+  mkV0  : V -> V0 ; --%
   mkVS  : V -> VS ;
   mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;
@@ -273,17 +273,17 @@ mkV2 : overload {
   mkVQ  : V -> VQ ;
   mkV2Q : V -> Prep -> V2Q ;
 
-  mkAS  : A -> AS ;
-  mkA2S : A -> Prep -> A2S ;
-  mkAV  : A -> AV ;
-  mkA2V : A -> Prep -> A2V ;
+  mkAS  : A -> AS ; --%
+  mkA2S : A -> Prep -> A2S ; --%
+  mkAV  : A -> AV ; --%
+  mkA2V : A -> Prep -> A2V ; --%
 
 -- Notice: categories $AS, A2S, AV, A2V$ are just $A$, 
 -- and the second argument is given as an adverb. Likewise 
 -- $V0$ is just $V$.
 
-  V0 : Type ;
-  AS, A2S, AV, A2V : Type ;
+  V0 : Type ; --%
+  AS, A2S, AV, A2V : Type ; --%
 
 
 --.

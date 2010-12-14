@@ -41,8 +41,8 @@ resource ParadigmsSwe =
 oper
   Gender : Type ; 
 
-  utrum     : Gender ;
-  neutrum   : Gender ;
+  utrum     : Gender ;  -- the "en" gender
+  neutrum   : Gender ;  -- the "ett" gender
 
 -- To abstract over number names, we define the following.
 
@@ -53,14 +53,14 @@ oper
 
 -- To abstract over case names, we define the following.
 
-  Case : Type ;
+  Case : Type ; --%
 
-  nominative : Case ;
-  genitive   : Case ;
+  nominative : Case ; --%
+  genitive   : Case ; --%
 
 -- Prepositions used in many-argument functions can be constructed from strings.
 
-  mkPrep : Str -> Prep ;
+  mkPrep : Str -> Prep ;  -- e.g. "till"
   noPrep : Prep ;         -- empty string
 
 
@@ -75,22 +75,22 @@ oper
 -- to treat all words ending with "a" like "apa-apor", with "e" like "rike-riken",
 -- and otherwise like "bil-bilar".
 
-    mkN : (apa : Str) -> N ;
+    mkN : (apa : Str) -> N ; -- predictable nouns: apa-apor, rike-riken, or bil-bilar
 
 -- The case with a string and gender makes it possible to treat 
 -- "lik" (neutrum) and "pojke" (utrum).
 
-    mkN : (lik : Str) -> Gender -> N ; 
+    mkN : (lik : Str) -> Gender -> N ; --%
 
 -- Giving two forms - the singular and plural indefinite - is sufficient for
 -- most nouns. The paradigm deals correctly with the vowel contractions in 
 -- "nyckel - nycklar" such as "pojke - pojkar".
 
-    mkN : (nyckel,nycklar : Str) -> N ; 
+    mkN : (nyckel,nycklar : Str) -> N ; -- singular and plural suffice for most nouns
 
 -- In the worst case, four forms are needed.
 
-    mkN : (museum,museet,museer,museerna : Str) -> N
+    mkN : (museum,museet,museer,museerna : Str) -> N -- worst case for nouns
   } ;
 
 -- All the functions above work quite as well to form *compound nouns*,
@@ -105,14 +105,14 @@ oper
 -- with the preposition "av". 
 
   mkN2 : overload {
-    mkN2 : Str -> N2 ;
-    mkN2 : N -> Prep -> N2
+--    mkN2 : Str -> N2 ;
+    mkN2 : N -> Prep -> N2 -- e.g. syster - till
   } ;
 
 -- Three-place relational nouns ("förbindelse från x till y") 
 -- need two prepositions.
 
-  mkN3 : N -> Prep -> Prep -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ; -- e.g. flyg - från - till
 
 
 --3 Relational common noun phrases
@@ -129,12 +129,12 @@ oper
 -- have the default gender utrum. 
 
   mkPN : overload {
-    mkPN : Str -> PN ;
-    mkPN : Str -> Gender -> PN ;
+    mkPN : Str -> PN ;   -- default gender utrum
+    mkPN : Str -> Gender -> PN ; -- set other gender
 
 -- In the worst case, the genitive form is irregular.
 
-    mkPN : (jesus,jesu : Str) -> Gender -> PN
+    mkPN : (jesus,jesu : Str) -> Gender -> PN -- irregular genitive
     } ;
 
 
@@ -152,24 +152,24 @@ oper
 -- also recognizes the neuter formation "galen-galet" and forms the
 -- proper plural and comparison forms "galna-galnare-galnast".
 
-    mkA : (bred,brett : Str) -> A ;
+    mkA : (bred,brett : Str) -> A ; -- predictable adjective
 
 -- Umlaut in comparison forms is 
 
-    mkA : (tung,tyngre,tyngst : Str) -> A ;
+    mkA : (tung,tyngre,tyngst : Str) -> A ; -- irregular comparison
 
 -- A few adjectives need 5 forms.
-    mkA : (god,gott,goda,battre,bast : Str) -> A ;
+    mkA : (god,gott,goda,battre,bast : Str) -> A ; -- very irregular
 
 -- Hardly any other adjective than "liten" needs the full 7 forms.
  
-    mkA : (liten,litet,lilla,sma,mindre,minst,minsta : Str) -> A
+    mkA : (liten,litet,lilla,sma,mindre,minst,minsta : Str) -> A -- worst case
     } ;
 
 -- Comparison forms may be compound ("mera svensk" - "mest svensk");
 -- this behaviour can be forced on any adjective.
 
-  compoundA : A -> A ;
+  compoundA : A -> A ; -- force comparison by mera - mest
 
 
 
@@ -178,7 +178,7 @@ oper
 --
 -- Two-place adjectives need a preposition for their second argument.
 
-  mkA2 : A -> Prep -> A2 ;
+  mkA2 : A -> Prep -> A2 ; -- e.g. delbar - med
 
 
 --2 Adverbs
@@ -187,12 +187,12 @@ oper
 -- after the verb. Some can be preverbal in subordinate position
 -- (e.g. "alltid").
 
-  mkAdv : Str -> Adv ;  -- här
-  mkAdV : Str -> AdV ;  -- alltid
+  mkAdv : Str -> Adv ;  -- postverbal, e.g. här
+  mkAdV : Str -> AdV ;  -- preverbal, e.g. alltid
 
 -- Adverbs modifying adjectives and sentences can also be formed.
 
-  mkAdA : Str -> AdA ;
+  mkAdA : Str -> AdA ; -- modify adjective, e.g. tämligen
 
 --2 Verbs
 --
@@ -210,19 +210,19 @@ oper
 -- as if they were implicitly suffixed by "r". Moreover, deponent verbs
 -- are recognized from the final "s" ("hoppas").
 
-    mkV : (stämmer : Str) -> V ;
+    mkV : (stämmer : Str) -> V ; -- predictable verb: use present indicative
 
 -- Most irregular verbs need just the conventional three forms.
 
-    mkV : (dricka,drack,druckit : Str) -> V ;
+    mkV : (dricka,drack,druckit : Str) -> V ; -- the theme of an irregular verb
 
 -- In the worst case, six forms are given.
 
-    mkV : (gå,går,gå,gick,gått,gången : Str) -> V ;
+    mkV : (gå,går,gå,gick,gått,gången : Str) -> V ; -- worst case
 
 -- Particle verbs, such as "passa på", are formed by adding a string to a verb.
 
-    mkV : V -> Str -> V
+    mkV : V -> Str -> V -- particle verb, e.g. passa - på
     } ;
 
 
@@ -232,8 +232,8 @@ oper
 -- reflexive e.g. "ångra sig". Regular deponent verbs are also
 -- handled by $mkV$ and recognized from the ending "s".
 
-  depV  : V -> V ;
-  reflV : V -> V ;
+  depV  : V -> V ; -- deponent verb, e.g. andas
+  reflV : V -> V ; -- reflexive verb, e.g. ångra sig
 
 
 --3 Two-place verbs
@@ -244,10 +244,10 @@ oper
 -- Notice that, if a particle is needed, it comes from the $V$.
 
   mkV2 : overload {
-    mkV2 : Str -> V2 ;
-    mkV2 : V   -> V2 ;
-    mkV2 : Str -> Prep -> V2 ;
-    mkV2 : V   -> Prep -> V2
+    mkV2 : Str -> V2 ; --%
+    mkV2 : V   -> V2 ; -- direct transitive
+    mkV2 : Str -> Prep -> V2 ; --%
+    mkV2 : V   -> Prep -> V2 ; -- preposition for complement
     } ;
 
 
@@ -258,10 +258,10 @@ oper
 -- verb (as in $mkV$) with no prepositions.
 
   mkV3 : overload {
-    mkV3 : Str -> V3 ;
-    mkV3 : V   -> V3 ;
-    mkV3 : V   -> Prep -> V3 ;
-    mkV3 : V   -> Prep -> Prep -> V3
+    mkV3 : Str -> V3 ; --%
+    mkV3 : V   -> V3 ; -- direct ditransitive
+    mkV3 : V   -> Prep -> V3 ; -- preposition for last argument
+    mkV3 : V   -> Prep -> Prep -> V3 -- prepositions for both complements
     } ;
 
 --3 Other complement patterns
@@ -269,8 +269,8 @@ oper
 -- Verbs and adjectives can take complements such as sentences,
 -- questions, verb phrases, and adjectives.
 
-  mkV0  : V -> V0 ;
-  mkVS  : V -> VS ;
+  mkV0  : V -> V0 ; --%
+  mkVS  : V -> VS ; 
   mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;
   mkV2V : V -> Prep -> Prep -> V2V ;
@@ -279,16 +279,16 @@ oper
   mkVQ  : V -> VQ ;
   mkV2Q : V -> Prep -> V2Q ;
 
-  mkAS  : A -> AS ;
-  mkA2S : A -> Prep -> A2S ;
-  mkAV  : A -> AV ;
-  mkA2V : A -> Prep -> A2V ;
+  mkAS  : A -> AS ; --%
+  mkA2S : A -> Prep -> A2S ; --%
+  mkAV  : A -> AV ; --%
+  mkA2V : A -> Prep -> A2V ; --%
 
 -- Notice: categories $AS, A2S, AV, A2V$ are just $A$.
 -- $V0$ is just $V$.
 
-  V0 : Type ;
-  AS, A2S, AV, A2V : Type ;
+  V0 : Type ; --%
+  AS, A2S, AV, A2V : Type ; --%
 
 --.
 --2 Definitions of the paradigms
