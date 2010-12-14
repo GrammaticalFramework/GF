@@ -149,7 +149,7 @@ oper
 ---- as an adverb. Likewise $AS, A2S, AV, A2V$ are just $A$.
 ---- $V0$ is just $V$.
 --
-  V0, V2S, V2V, V2Q : Type ;
+  V0 : Type ; --- V2S, V2V, V2Q : Type ;
   AS, A2S, AV, A2V : Type ;
 --
 ----.
@@ -222,16 +222,16 @@ oper
     mkVQ  v = v ** {lock_VQ = <>} ;
   
     V0 : Type = V ;
-    V2S, V2V, V2Q : Type = V2 ;
+---    V2S, V2V, V2Q : Type = V2 ;
     AS, A2S, AV : Type = A ;
     A2V : Type = A2 ;
 --
     mkV0  v = v ** {lock_V = <>} ;
 --  mkV2S v p = prepV2 v p ** {lock_V2 = <>} ;
-    mkV2V p t v = prepV2 p v ** {s4 = t ; lock_V2 = <>} ;
+    mkV2V p t v = prepV2 p v ** {s4 = t ; lock_V2V = <>} ;
     mkVA  v = v ** {lock_VA = <>} ;
     mkV2A p2 p3 v = (prepV3 p3 (prepV2 p2 v)) ** {lock_V2A = <>} ;
-    mkV2Q p v = prepV2 p v ** {lock_V2 = <>} ;
+    mkV2Q p v = prepV2 p v ** {lock_V2Q = <>} ;
     mkAS  v = v ** {lock_A = <>} ;
 --  mkA2S v p = mkA2 v p ** {lock_A = <>} ;
     mkAV  v = v ** {lock_A = <>} ;

@@ -15,6 +15,11 @@ concrete PhraseIna of Phrase = CatIna ** open Prelude, ResIna in {
     UttVP vp = {s = infVP vp} ;
     UttAdv adv = adv ;
 
+    UttCN n = {s = n.s ! Sg} ;
+    UttCard n = {s = n.s} ;
+    UttAP ap = {s = ap.s ! agrP3 Sg} ;
+    UttInterj i = i ;
+
     NoPConj = {s = []} ;
     PConjConj conj = ss conj.s2 ;
     
