@@ -3,9 +3,11 @@ module GF.Infra.Option
      -- * Option types
      Options, 
      Flags(..), 
-     Mode(..), Phase(..), Verbosity(..), OutputFormat(..), 
+     Mode(..), Phase(..), Verbosity(..), 
+     OutputFormat(..), 
      SISRFormat(..), Optimization(..), CFGTransform(..), HaskellOption(..),
      Dump(..), Printer(..), Recomp(..),
+     outputFormatsExpl, 
      -- * Option parsing 
      parseOptions, parseModuleOptions, fixRelativeLibPaths,
      -- * Option pretty-printing
@@ -435,27 +437,31 @@ optDescr =
        set = return . Options
 
 outputFormats :: [(String,OutputFormat)]
-outputFormats = 
-    [("pgf_pretty",   FmtPGFPretty),
-     ("js",           FmtJavaScript),
-     ("haskell",      FmtHaskell),
-     ("prolog",       FmtProlog),
-     ("prolog_abs",   FmtProlog_Abs),
-     ("lambda_prolog",FmtLambdaProlog),
-     ("bnf",          FmtBNF),
-     ("ebnf",         FmtEBNF),
-     ("regular",      FmtRegular),
-     ("nolr",         FmtNoLR),
-     ("srgs_xml",     FmtSRGS_XML),
-     ("srgs_xml_nonrec",     FmtSRGS_XML_NonRec),
-     ("srgs_abnf",    FmtSRGS_ABNF),
-     ("srgs_abnf_nonrec",    FmtSRGS_ABNF_NonRec),
-     ("jsgf",         FmtJSGF),
-     ("gsl",          FmtGSL),
-     ("vxml",         FmtVoiceXML),
-     ("slf",          FmtSLF),
-     ("regexp",       FmtRegExp),
-     ("fa",           FmtFA)]
+outputFormats = map fst outputFormatsExpl
+
+outputFormatsExpl :: [((String,OutputFormat),String)]
+outputFormatsExpl = 
+    [(("pgf_pretty",   FmtPGFPretty),"human-readable pgf"),
+     (("js",           FmtJavaScript),"JavaScript (whole grammar)"),
+     (("haskell",      FmtHaskell),"Haskell (abstract syntax)"),
+     (("prolog",       FmtProlog),"Prolog (whole grammar)"),
+     (("prolog_abs",   FmtProlog_Abs),"Prolog (abstract syntax)"),
+     (("lambda_prolog",FmtLambdaProlog),"LambdaProlog (abstract syntax)"),
+     (("bnf",          FmtBNF),"BNF (context-free grammar)"),
+     (("ebnf",         FmtEBNF),"Extended BNF"),
+     (("regular",      FmtRegular),"* regular grammar"),
+     (("nolr",         FmtNoLR),"* context-free with no left recursion"),
+     (("srgs_xml",     FmtSRGS_XML),"* SRGS XML speech recognition format"),
+     (("srgs_xml_nonrec",     FmtSRGS_XML_NonRec),"* SRGS XML, recursion eliminated"),
+     (("srgs_abnf",    FmtSRGS_ABNF),"* ABNF speech recognition format"),
+     (("srgs_abnf_nonrec",    FmtSRGS_ABNF_NonRec),"* ABNF, recursion eliminated"),
+     (("jsgf",         FmtJSGF),"* JSGF speech recognition format"),
+     (("gsl",          FmtGSL),"Nuance speech recognition format"),
+     (("vxml",         FmtVoiceXML),"Voice XML based on abstract syntax"),
+     (("slf",          FmtSLF),"* SLF speech recognition format"),
+     (("regexp",       FmtRegExp),"* regular expression"),
+     (("fa",           FmtFA),"* finite automaton in graphviz format")
+     ]
 
 instance Show OutputFormat where
     show = lookupShow outputFormats

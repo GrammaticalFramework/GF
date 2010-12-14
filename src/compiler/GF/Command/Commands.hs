@@ -27,7 +27,7 @@ import PGF.Optimize
 import GF.Compile.Export
 import GF.Compile.ToAPI
 import GF.Compile.ExampleBased
-import GF.Infra.Option (noOptions, readOutputFormat)
+import GF.Infra.Option (noOptions, readOutputFormat, outputFormatsExpl)
 import GF.Infra.UseIO
 import GF.Data.ErrM ----
 import GF.Command.Abstract
@@ -545,15 +545,20 @@ allCommands env@(pgf, mos) = Map.fromList [
        "The -printer=P flag sets the format in which the grammar is printed.",
        "N.B.1 Since grammars are compiled when imported, this command",
        "generally shows a grammar that looks rather different from the source.",
-       "N.B.2 This command is slightly obsolete: to produce different formats",
-       "the batch compiler gfc is recommended, and has many more options."
+       "N.B.2 Another way to produce different formats is to use 'gf -make',",
+       "the batch compiler. The following values are available both for",
+       "the batch compiler (flag -output-format) and the print_grammar",
+       "command (flag -printer) ; * = not supported at the moment:",
+       ""
+       ] ++ unlines [
+        " " ++ opt ++ "\t\t" ++ expl | ((opt,_),expl) <- outputFormatsExpl 
        ],
      exec  = \opts _ -> prGrammar opts,
      flags = [
        --"cat",
        ("file",   "set the file name when printing with -pgf option"),
        ("lang",   "select languages for the some options (default all languages)"),
-       ("printer","select the printing format (see gfc --help)")
+       ("printer","select the printing format (see flag values above)")
        ],
      options = [
        ("cats",   "show just the names of abstract syntax categories"),
