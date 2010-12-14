@@ -4,7 +4,7 @@ import Char
 import List
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Map as M
-import Debug.Trace ----
+---import Debug.Trace ----
 
 type Cats = [(String,String,String)]
 type Rules = [(String,String,String)]
@@ -181,18 +181,19 @@ mkTable hasEx isLatex aexx cs = inChunks chsize (\rs -> header : map (unwords . 
  where
   chsize = if isLatex then 40 else 1000
   header = if hasEx then "|| Function  | Type  | Example  ||" 
-                    else "|| Function  | Type  ||"
+                    else "|| Function  | Type  | Explanation ||"
   row (name,typ,ex) =
          let ntyp = mkIdent (name ++ " : " ++ typ) in
          if hasEx then ["|", name', "|", typ', "|", ex' ntyp, "|"]
-                  else ["|", name', "|", typ', "|"]
+                  else ["|", name', "|", typ', "|", expl ntyp, "|"]
    where 
      name' = ttf name
      typ' = showTyp cs typ
      ex' typ = if null ex then itf (takeWhile (/='_') name) else 
            case M.lookup typ aexx of
              Just es -> mkExample es ex
-             _ -> trace typ $ itf ex
+             _ -> itf ex
+     expl typ = if null ex then itf "-" else itf ex 
 
 -- make an example with hover-popup translations
 mkExample es ex = unwords [
