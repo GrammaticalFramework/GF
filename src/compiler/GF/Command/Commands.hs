@@ -548,11 +548,12 @@ allCommands env@(pgf, mos) = Map.fromList [
        "N.B.2 Another way to produce different formats is to use 'gf -make',",
        "the batch compiler. The following values are available both for",
        "the batch compiler (flag -output-format) and the print_grammar",
-       "command (flag -printer) ; * = not supported at the moment:",
+       "command (flag -printer):",
        ""
-       ] ++ unlines [
-        " " ++ opt ++ "\t\t" ++ expl | ((opt,_),expl) <- outputFormatsExpl 
-       ],
+       ] ++ unlines (sort [
+        " " ++ opt ++ "\t\t" ++ expl | 
+           ((opt,_),expl) <- outputFormatsExpl, take 1 expl /= "*"
+       ]),
      exec  = \opts _ -> prGrammar opts,
      flags = [
        --"cat",
