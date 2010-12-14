@@ -17,6 +17,7 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.IntSet as IntSet
 import qualified Data.IntMap as IntMap
+import qualified GF.Data.TrieMap as TrieMap
 import qualified Data.List as List
 import Control.Monad.ST
 import GF.Data.Utilities(sortNub)
@@ -195,10 +196,41 @@ filterProductions prods0 hoc0 prods
     accumHOC (PApply funid args) hoc = List.foldl' (\hoc (PArg hypos _) -> List.foldl' (\hoc (_,fid) -> IntSet.insert fid hoc) hoc hypos) hoc args
     accumHOC _                   hoc = hoc
 
+splitLexicalRules cnc p_prods =
+  IntMap.foldWithKey split (IntMap.empty,IntMap.empty) p_prods
+  where
+    split fid set (lex,syn) =
+      let (lex0,syn0) = Set.partition isLexical set
+          !lex' = if Set.null lex0
+                    then lex
+                    else let !mp = IntMap.unionsWith (TrieMap.unionWith IntSet.union)
+                                                     [words funid | PApply funid [] <- Set.toList lex0]
+                         in IntMap.insert fid mp lex
+          !syn' = if Set.null syn0
+                    then syn
+                    else IntMap.insert fid syn0 syn
+      in (lex', syn')
+      
+    
+    isLexical (PApply _ []) = True
+    isLexical _             = False
+    
+    words funid = IntMap.fromList [(lbl,seq2prefix (elems (sequences cnc ! seqid)))
+                                            | (lbl,seqid) <- assocs lins]
+      where
+        CncFun _ lins = cncfuns cnc ! funid
+        
+        wf ts = (ts,IntSet.singleton funid)
+        
+        seq2prefix []                   = TrieMap.fromList [wf []]
+        seq2prefix (SymKS ts     :syms) = TrieMap.fromList [wf ts]
+        seq2prefix (SymKP ts alts:syms) = TrieMap.fromList (wf ts : [wf ts | Alt ts ps <- alts])
+
 updateConcrete abs cnc = 
-  let p_prods   = filterProductions IntMap.empty IntSet.empty (productions cnc)
-      l_prods   = linIndex cnc p_prods
-  in cnc{pproductions = p_prods, lproductions = l_prods}
+  let p_prods0      = filterProductions IntMap.empty IntSet.empty (productions cnc)
+      (lex,p_prods) = splitLexicalRules cnc p_prods0
+      l_prods       = linIndex cnc p_prods0
+  in cnc{pproductions = p_prods, lproductions = l_prods, lexicon = lex}
   where
     linIndex cnc productions = 
       Map.fromListWith (IntMap.unionWith Set.union)

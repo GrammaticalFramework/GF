@@ -17,7 +17,6 @@ module PGF.Forest( Forest(..)
                  , BracketedString, showBracketedString, lengthBracketedString
                  , linearizeWithBrackets
                  , getAbsTrees
-                 , foldForest
                  ) where
 
 import PGF.CId
