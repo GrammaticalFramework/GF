@@ -45,6 +45,8 @@ computeLType gr g0 t = comp (reverse [(b,x, Vr x) | (b,x,_) <- g0] ++ g0) t
       b' <- comp ((bt,x,Vr x):g) b
       return $ Abs bt x b'
 
+    Let (x,(_,a)) b -> comp ((Explicit,x,a):g) b
+
     ExtR r s -> do
       r' <- comp g r
       s' <- comp g s
