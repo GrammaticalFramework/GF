@@ -7,6 +7,8 @@ import PGF.Type
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.IntMap as IntMap
+import qualified Data.IntSet as IntSet
+import qualified GF.Data.TrieMap as TMap
 import Data.Array.IArray
 import Data.Array.Unboxed
 import Data.List
@@ -42,6 +44,7 @@ data Concr = Concr {
   pproductions :: IntMap.IntMap (Set.Set Production),                -- productions needed for parsing
   lproductions :: Map.Map CId (IntMap.IntMap (Set.Set Production)),  -- productions needed for linearization
   cnccats      :: Map.Map CId CncCat,
+  lexicon      :: IntMap.IntMap (IntMap.IntMap (TMap.TrieMap Token IntSet.IntSet)),
   totalCats    :: {-# UNPACK #-} !FId
   }
 

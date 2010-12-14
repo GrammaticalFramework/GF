@@ -29,7 +29,7 @@ buildMorpho pgf lang = Morpho $
 collectWords pinfo = Map.fromListWith (++)
   [(t, [(fun,lbls ! l)]) | (CncCat s e lbls) <- Map.elems (cnccats pinfo)
                          , fid <- [s..e]
-                         , PApply funid _ <- maybe [] Set.toList (IntMap.lookup fid (pproductions pinfo))
+                         , PApply funid _ <- maybe [] Set.toList (IntMap.lookup fid (productions pinfo))
                          , let CncFun fun lins = cncfuns pinfo ! funid
                          , (l,seqid) <- assocs lins
                          , sym <- elems (sequences pinfo ! seqid)

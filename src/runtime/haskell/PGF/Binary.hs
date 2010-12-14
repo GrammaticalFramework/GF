@@ -68,6 +68,7 @@ instance Binary Concr where
                         , productions=productions
                         , pproductions = IntMap.empty
                         , lproductions = Map.empty
+                        , lexicon = IntMap.empty
                         , cnccats=cnccats, totalCats=totalCats
                         })
 
