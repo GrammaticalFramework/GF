@@ -44,28 +44,30 @@ oper
   plural   : Number ;
 
   Case        : Type ;
-  nominative  : Case ; 
-  genitive    : Case ; 
-  partitive   : Case ; 
-  essive      : Case ; 
-  translative : Case ; 
-  inessive    : Case ; 
-  elative     : Case ; 
-  illative    : Case ; 
-  adessive    : Case ; 
-  ablative    : Case ; 
-  allative    : Case ;
+  nominative  : Case ; -- e.g. "talo"
+  genitive    : Case ; -- e.g. "talon"
+  partitive   : Case ;  -- e.g. "taloa"
+  essive      : Case ;  -- e.g. "talona"
+  translative : Case ;  -- e.g. "taloksi"
+  inessive    : Case ;  -- e.g. "talossa"
+  elative     : Case ;  -- e.g. "talosta"
+  illative    : Case ;  -- e.g. "taloon"
+  adessive    : Case ;  -- e.g. "talolla"
+  ablative    : Case ;  -- e.g. "talolta"
+  allative    : Case ; -- e.g. "talolle"
 
-  infFirst, infElat, infIllat : InfForm ;
+  infFirst : InfForm ; -- e.g. "tehdä"
+  infElat : InfForm ;  -- e.g. "tekemästä"
+  infIllat : InfForm ; -- e.g. "tekemään"
 
 -- The following type is used for defining *rection*, i.e. complements
 -- of many-place verbs and adjective. A complement can be defined by
 -- just a case, or a pre/postposition and a case.
 
-  prePrep     : Case -> Str -> Prep ;  -- ilman, partitive
-  postPrep    : Case -> Str -> Prep ;  -- takana, genitive
-  postGenPrep :         Str -> Prep ;  -- takana
-  casePrep    : Case ->        Prep ;  -- adessive
+  prePrep     : Case -> Str -> Prep ;  -- preposition, e.g. partitive "ilman"
+  postPrep    : Case -> Str -> Prep ;  -- postposition, e.g. genitive "takana"
+  postGenPrep :         Str -> Prep ;  -- genitive postposition, e.g. "takana"
+  casePrep    : Case ->        Prep ;  -- just case, e.g. adessive
 
 --2 Nouns
 
@@ -88,31 +90,31 @@ oper
 -- "auto - audon".
 
   mkN : overload {
-    mkN : (talo : Str) -> N ;
-    mkN : (savi,savia : Str) -> N ;
-    mkN : (vesi,veden,vesiä : Str) -> N ;
-    mkN : (vesi,veden,vesiä,vettä : Str) -> N ;
-    mkN : (olo,olon,olona,oloa,oloon,olojen,oloja,oloina,oloissa,oloihin : Str) -> N ;
-    mkN : (pika : Str) -> (juna  : N) -> N ;
-    mkN : (oma : N)    -> (tunto : N) -> N ; 
+    mkN : (kukko : Str) -> N ;  -- predictable nouns, covers 82%
+    mkN : (savi,savia : Str) -> N ; -- different pl.part
+    mkN : (vesi,veden,vesiä : Str) -> N ; -- also different sg.gen
+    mkN : (vesi,veden,vesiä,vettä : Str) -> N ; -- also different sg.part
+    mkN : (olo,n,na,a,oon,jen,ja,ina,issa,ihin : Str) -> N ; -- worst case, 10 forms
+    mkN : (pika : Str) -> (juna  : N) -> N ; -- compound with invariable prefix
+    mkN : (oma : N)    -> (tunto : N) -> N ; -- compound with inflecting prefix
   } ;
 
 -- Nouns used as functions need a case, of which the default is
 -- the genitive.
 
   mkN2 : overload {
-    mkN2 : N -> N2 ;
-    mkN2 : N -> Prep -> N2
+    mkN2 : N -> N2 ;        -- relational noun with genitive
+    mkN2 : N -> Prep -> N2  -- relational noun another prep.
     } ;
 
-  mkN3  : N -> Prep -> Prep -> N3 ;
+  mkN3  : N -> Prep -> Prep -> N3 ; -- relation with two complements
 
 -- Proper names can be formed by using declensions for nouns.
 -- The plural forms are filtered away by the compiler.
 
   mkPN : overload {
-    mkPN : Str -> PN ;
-    mkPN : N -> PN
+    mkPN : Str -> PN ;  -- predictable noun made into name
+    mkPN : N -> PN      -- any noun made into name
     } ;
 
 --2 Adjectives
@@ -125,15 +127,16 @@ oper
 -- enough (except for the superlative "paras" of "hyvä").
 
   mkA : overload {
-    mkA : Str -> A ;
-    mkA : N -> A ;
-    mkA : N -> (kivempi,kivin : Str) -> A ;
-    mkA : (hyva,parempi,paras : N) -> (hyvin,paremmin,parhaiten : Str) -> A ;
+    mkA : Str -> A ;  -- regular noun made into adjective
+    mkA : N -> A ;    -- any noun made into adjective
+    mkA : N -> (kivempi,kivin : Str) -> A ; -- deviating comparison forms
+    mkA : (hyva,prmpi,pras : N) -> (hyvin,pmmin,prhten : Str) -> A ; -- worst case adj
   } ;
 
 -- Two-place adjectives need a case for the second argument.
 
-  mkA2 : A -> Prep -> A2 = \a,p -> a ** {c2 = p ; lock_A2 = <>};
+  mkA2 : A -> Prep -> A2  -- e.g. "jaollinen" casePrep adessive
+    = \a,p -> a ** {c2 = p ; lock_A2 = <>};
 
 
 
@@ -145,22 +148,20 @@ oper
 -- The worst case needs twelve forms, as shown in the following.
 
   mkV : overload {
-    mkV : (huutaa : Str) -> V ;
-    mkV : (huutaa,huusi : Str) -> V ;
-    mkV : (huutaa,huudan,huusi : Str) -> V ;
-    mkV : (
-      huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
-      huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V ;
+    mkV : (huutaa : Str) -> V ;     -- predictable verbs, covers 90%
+    mkV : (huutaa,huusi : Str) -> V ; -- deviating past 3sg
+    mkV : (huutaa,huudan,huusi : Str) -> V ; -- also deviating pres. 1sg
+    mkV : (huutaa,dan,taa,tavat,takaa,detaan,sin,si,sisi,tanut,dettu,tanee : Str) -> V ; -- worst-case verb
   } ;
 
 -- All the patterns above have $nominative$ as subject case.
 -- If another case is wanted, use the following.
 
-  caseV : Case -> V -> V ;
+  caseV : Case -> V -> V ;  -- deviating subj. case, e.g. genitive "täytyä"
 
 -- The verbs "be" is special.
 
-  vOlla : V ;
+  vOlla : V ; -- the verb "be"
 
 
 --3 Two-place verbs
@@ -171,10 +172,10 @@ oper
 -- accusative object.
 
   mkV2 : overload {
-    mkV2 : Str -> V2 ;
-    mkV2 : V -> V2 ;
-    mkV2 : V -> Case -> V2 ;
-    mkV2 : V -> Prep -> V2 ;
+    mkV2 : Str -> V2 ;  -- predictable direct transitive
+    mkV2 : V -> V2 ;    -- direct transitive
+    mkV2 : V -> Case -> V2 ; -- complement just case
+    mkV2 : V -> Prep -> V2 ; -- complement pre/postposition
     } ;
 
 
@@ -183,7 +184,7 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Prep -> Prep -> V3 ;  -- puhua, allative, elative
+  mkV3     : V -> Prep -> Prep -> V3 ;  -- e.g. puhua, allative, elative
   dirV3    : V -> Case -> V3 ;          -- siirtää, (accusative), illative
   dirdirV3 : V         -> V3 ;          -- antaa, (accusative), (allative)
 
@@ -193,30 +194,30 @@ oper
 -- Verbs and adjectives can take complements such as sentences,
 -- questions, verb phrases, and adjectives.
 
-  mkV0  : V -> V0 ;
+  mkV0  : V -> V0 ; --%
   mkVS  : V -> VS ;
-  mkV2S : V -> Prep -> V2S ;
-  mkVV  : V -> VV ;
-  mkVVf : V -> InfForm -> VV ;
-  mkV2V : V -> Prep -> V2V ;
-  mkV2Vf : V -> Prep -> InfForm -> V2V ;
-  mkVA  : V -> Prep -> VA ;
-  mkV2A : V -> Prep -> Prep -> V2A ;
-  mkVQ  : V -> VQ ;
-  mkV2Q : V -> Prep -> V2Q ;
+  mkV2S : V -> Prep -> V2S ; -- e.g. "sanoa" allative
+  mkVV  : V -> VV ;  -- e.g. "alkaa"
+  mkVVf : V -> InfForm -> VV ; -- e.g. "ruveta" infIllat
+  mkV2V : V -> Prep -> V2V ;  -- e.g. "käskeä" genitive
+  mkV2Vf : V -> Prep -> InfForm -> V2V ; -- e.g. "kieltää" partitive infElat  
+  mkVA  : V -> Prep -> VA ; -- e.g. "maistua" ablative
+  mkV2A : V -> Prep -> Prep -> V2A ; -- e.g. "maalata" accusative translative
+  mkVQ  : V -> VQ ; 
+  mkV2Q : V -> Prep -> V2Q ; -- e.g. "kysyä" ablative 
 
-  mkAS  : A -> AS ;
-  mkA2S : A -> Prep -> A2S ;
-  mkAV  : A -> AV ;
-  mkA2V : A -> Prep -> A2V ;
+  mkAS  : A -> AS ; --%
+  mkA2S : A -> Prep -> A2S ; --%
+  mkAV  : A -> AV ; --%
+  mkA2V : A -> Prep -> A2V ; --%
 
 -- Notice: categories $AS, A2S, AV, A2V$ are just $A$, 
 -- and the second argument is given
 -- as an adverb. Likewise 
 -- $V0$ is just $V$.
 
-  V0 : Type ;
-  AS, A2S, AV, A2V : Type ;
+  V0 : Type ; --%
+  AS, A2S, AV, A2V : Type ; --%
 
 --.
 -- The definitions should not bother the user of the API. So they are
