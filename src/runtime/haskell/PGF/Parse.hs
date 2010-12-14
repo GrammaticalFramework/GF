@@ -93,11 +93,12 @@ initState pgf lang (DTyp _ start _) =
                                         (Map.empty,[])
                                         keys
                       Nothing -> (Map.empty,[])
-  in PState pgf
+  in PState abs
             cnc
             (Chart emptyAC [] emptyPC (pproductions cnc) (totalCats cnc) 0)
             (TrieMap.compose (Just (Set.fromList items)) acc)
   where
+    abs = abstract pgf
     cnc = lookConcrComplete pgf lang
 
     flit _ = Nothing
@@ -143,7 +144,7 @@ mkParseInput pgf lang ftok flits = \x -> ParseInput (ftok x) (flit x)
 -- If the new token cannot be accepted then an error state 
 -- is returned.
 nextState :: ParseState -> ParseInput -> Either ErrorState ParseState
-nextState (PState pgf cnc chart cnt0) input =
+nextState (PState abs cnc chart cnt0) input =
   let (mb_agenda,map_items) = TrieMap.decompose cnt0
       agenda = maybe [] Set.toList mb_agenda
       cnt    = fromMaybe TrieMap.empty (piToken input map_items)
@@ -154,8 +155,8 @@ nextState (PState pgf cnc chart cnt0) input =
                      , offset =offset chart1+1
                      }
   in if TrieMap.null cnt1
-       then Left  (EState pgf cnc chart2)
-       else Right (PState pgf cnc chart2 cnt1)
+       then Left  (EState abs cnc chart2)
+       else Right (PState abs cnc chart2 cnt1)
   where
     flit = piLiteral input
 
@@ -169,7 +170,7 @@ nextState (PState pgf cnc chart cnt0) input =
 -- next words and the consequent states. This is used for word completions in
 -- the GF interpreter.
 getCompletions :: ParseState -> String -> Map.Map Token ParseState
-getCompletions (PState pgf cnc chart cnt0) w =
+getCompletions (PState abs cnc chart cnt0) w =
   let (mb_agenda,map_items) = TrieMap.decompose cnt0
       agenda = maybe [] Set.toList mb_agenda
       acc    = Map.filterWithKey (\tok _ -> isPrefixOf w tok) map_items
@@ -179,7 +180,7 @@ getCompletions (PState pgf cnc chart cnt0) w =
                      , passive=emptyPC
                      , offset =offset chart1+1
                      }
-  in fmap (PState pgf cnc chart2) acc'
+  in fmap (PState abs cnc chart2) acc'
   where
     flit _ = Nothing
 
@@ -188,7 +189,7 @@ getCompletions (PState pgf cnc chart cnt0) w =
                     (Map.filterWithKey (\tok _ -> isPrefixOf w tok) choices)
 
 recoveryStates :: [Type] -> ErrorState -> (ParseState, Map.Map Token ParseState)
-recoveryStates open_types (EState pgf cnc chart) =
+recoveryStates open_types (EState abs cnc chart) =
   let open_fcats = concatMap type2fcats open_types
       agenda = foldl (complete open_fcats) [] (actives chart)
       (acc,chart1) = process flit ftok cnc agenda Map.empty chart
@@ -197,7 +198,7 @@ recoveryStates open_types (EState pgf cnc chart) =
                      , passive=emptyPC
                      , offset =offset chart1+1
                      }
-  in (PState pgf cnc chart (TrieMap.singleton [] (Set.fromList agenda)), fmap (PState pgf cnc chart2) acc)
+  in (PState abs cnc chart (TrieMap.singleton [] (Set.fromList agenda)), fmap (PState abs cnc chart2) acc)
   where
     type2fcats (DTyp _ cat _) = case Map.lookup cat (cnccats cnc) of
                                   Just (CncCat s e labels) -> range (s,e)
@@ -217,11 +218,11 @@ recoveryStates open_types (EState pgf cnc chart) =
 -- limited by the category specified, which is usually
 -- the same as the startup category.
 getParseOutput :: ParseState -> Type -> Maybe Int -> (ParseOutput,BracketedString)
-getParseOutput (PState pgf cnc chart cnt) ty@(DTyp _ start _) dp =
+getParseOutput (PState abs cnc chart cnt) ty@(DTyp _ start _) dp =
   let froots | null roots = getPartialSeq (sequences cnc) (reverse (active chart1 : actives chart1)) seq
              | otherwise  = [([SymCat 0 lbl],[PArg [] fid]) | AK fid lbl <- roots]
 
-      f     = Forest (abstract pgf) cnc (forest chart1) froots
+      f     = Forest abs cnc (forest chart1) froots
       
       bs    = linearizeWithBrackets dp f
                 
@@ -480,7 +481,7 @@ insertPC key fcat chart = Map.insert key fcat chart
 
 -- | An abstract data type whose values represent
 -- the current state in an incremental parser.
-data ParseState = PState PGF Concr Chart Continuation
+data ParseState = PState Abstr Concr Chart Continuation
 
 data Chart
   = Chart
@@ -501,4 +502,4 @@ type Continuation = TrieMap.TrieMap Token ActiveSet
 
 -- | An abstract data type whose values represent
 -- the state in an incremental parser after an error.
-data ErrorState = EState PGF Concr Chart
+data ErrorState = EState Abstr Concr Chart
