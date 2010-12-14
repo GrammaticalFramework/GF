@@ -111,6 +111,7 @@ loop opts gfenv0 = do
              let
                pOpts style q ("-table"  :ws) = pOpts TermPrintTable   q           ws
                pOpts style q ("-all"    :ws) = pOpts TermPrintAll     q           ws
+               pOpts style q ("-list"   :ws) = pOpts TermPrintList    q           ws
                pOpts style q ("-one"    :ws) = pOpts TermPrintOne     q           ws
                pOpts style q ("-default":ws) = pOpts TermPrintDefault q           ws
                pOpts style q ("-unqual" :ws) = pOpts style            Unqualified ws

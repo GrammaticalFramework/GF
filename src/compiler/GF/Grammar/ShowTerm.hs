@@ -9,12 +9,13 @@ import Text.PrettyPrint
 import Data.List  (intersperse)
 
 showTerm :: SourceGrammar -> TermPrintStyle -> TermPrintQual -> Term -> String
-showTerm gr style q t = render $
-  case style of
-    TermPrintTable   -> vcat [p <+> s | (p,s) <- ppTermTabular gr q t]
-    TermPrintAll     -> vcat [      s | (p,s) <- ppTermTabular gr q t]
-    TermPrintOne     -> vcat [      s | (p,s) <- take 1 (ppTermTabular gr q t)]
-    TermPrintDefault -> ppTerm q 0 t
+showTerm gr sty q t = case sty of
+    TermPrintTable -> render $ vcat [p <+> s | (p,s) <- ppTermTabular gr q t]
+    TermPrintAll   -> render $ vcat [      s | (p,s) <- ppTermTabular gr q t]
+    TermPrintList  -> renderStyle (style{mode = OneLineMode}) $ 
+      vcat (punctuate comma [s | (p,s) <- ppTermTabular gr q t])
+    TermPrintOne   -> render $ vcat [      s | (p,s) <- take 1 (ppTermTabular gr q t)]
+    TermPrintDefault -> render $ ppTerm q 0 t
 
 ppTermTabular :: SourceGrammar -> TermPrintQual -> Term -> [(Doc,Doc)]
 ppTermTabular gr q = pr where
@@ -38,5 +39,6 @@ ppTermTabular gr q = pr where
 data TermPrintStyle
   = TermPrintTable
   | TermPrintAll
+  | TermPrintList
   | TermPrintOne
   | TermPrintDefault
