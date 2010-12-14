@@ -61,7 +61,8 @@ expr2tree e = abs [] [] e
                | List.null as = Meta n
                | otherwise    = error "meta variables of function type are not allowed in trees"
     app xs as (EAbs _ x e)    = error "beta redexes are not allowed in trees"
-    app xs as (EVar i)        = Var (xs !! i)
+    app xs as (EVar i)        = if length xs > i then Var (xs !! i) else Meta i
+                         ---- AR 14/12/2010: work-around needed in PGF.Paraphrase.fromDef
     app xs as (EFun f)        = Fun f as
     app xs as (ETyped e _)    = app xs as e
 

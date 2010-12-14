@@ -24,7 +24,7 @@ import qualified Data.Map as Map
 import Debug.Trace ----
 
 paraphrase :: PGF -> Expr -> [Expr]
-paraphrase pgf = nub . paraphraseN 2 pgf
+paraphrase pgf t = nub (paraphraseN 2 pgf t)
 
 paraphraseN :: Int -> PGF -> Expr -> [Expr]
 paraphraseN i pgf = map tree2expr . paraphraseN' i pgf . expr2tree
@@ -53,8 +53,9 @@ fromDef pgf t@(Fun f ts) = defDown t ++ defUp t where
               isClosed d || (length equs == 1 && isLinear d)]
 
   equss = [(f,[(Fun f (map patt2tree ps), expr2tree d) | (Equ ps d) <- eqs]) | 
-                       (f,(_,_,Just eqs,_)) <- Map.assocs (funs (abstract pgf)), not (null eqs)]
-
+                   (f,(_,_,Just eqs,_)) <- Map.assocs (funs (abstract pgf)), not (null eqs)]
+  ---- AR 14/12/2010: (expr2tree d) fails unless we send the variable list from ps in eqs;
+  ---- cf. PGF.Tree.expr2tree
   trequ s f e = True ----trace (s ++ ": " ++ show f ++ "  " ++ show e) True
 
 subst :: Subst -> Tree -> Tree
