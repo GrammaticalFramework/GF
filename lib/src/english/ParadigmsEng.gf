@@ -77,37 +77,37 @@ oper
 -- "s","sh","x","z" or "y": "kiss - kisses", "flash - flashes"; 
 -- "fly - flies" (but "toy - toys"),
 
-    mkN : (flash : Str) -> N ;
+    mkN : (flash : Str) -> N ;  -- plural s, incl. flash-flashes, fly-flies 
 
 -- In practice the worst case is to give singular and plural nominative.
 
-    mkN : (man,men : Str) -> N ;
+    mkN : (man,men : Str) -> N ; -- irregular plural
 
 -- The theoretical worst case: give all four forms.
 
-    mkN : (man,men,man's,men's : Str) -> N ;
+    mkN : (man,men,man's,men's : Str) -> N ; -- irregular genitives
 
 -- Change gender from the default $nonhuman$.
 
-    mkN : Gender -> N -> N ;
+    mkN : Gender -> N -> N ;  -- default nonhuman
 
 --3 Compound nouns 
 --
 -- A compound noun is an uninflected string attached to an inflected noun,
 -- such as "baby boom", "chief executive officer".
 
-    mkN : Str -> N -> N
+    mkN : Str -> N -> N -- e.g. baby + boom
   } ;
 
 
 --3 Relational nouns 
 
   mkN2 : overload {
-    mkN2 : N -> Prep -> N2 ; -- access to
-    mkN2 : N -> Str -> N2 ; -- access to
-    mkN2 : Str -> Str -> N2 ; -- access to
-    mkN2 : N -> N2 ; -- wife of
-    mkN2 : Str -> N2 -- daughter of
+    mkN2 : Str -> N2 -- reg. noun, prep. "of" --% 
+    mkN2 : N -> N2 ; -- e.g. wife of (default prep. to)
+    mkN2 : N -> Str -> N2 ; -- access to --%
+    mkN2 : N -> Prep -> N2 ; -- e.g. access to
+    mkN2 : Str -> Str -> N2 ; -- access to (regular noun) --%
   } ;
 
 -- Use the function $mkPrep$ or see the section on prepositions below to  
@@ -115,7 +115,7 @@ oper
 --
 -- Three-place relational nouns ("the connection from x to y") need two prepositions.
 
-  mkN3 : N -> Prep -> Prep -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ; -- e.g. connection from x to y
 
 
 
@@ -129,17 +129,17 @@ oper
 
 -- Sometimes a common noun can be reused as a proper name, e.g. "Bank"
 
-    mkPN : N -> PN
+    mkPN : N -> PN --%
   } ;
 
 --3 Determiners and quantifiers
 
   mkQuant : overload {
-    mkQuant : (this, these : Str) -> Quant ;
-    mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant ;
+    mkQuant : (this, these : Str) -> Quant ; --%
+    mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant ; --%
   } ;
 
-  mkOrd : Str -> Ord ;
+  mkOrd : Str -> Ord ; --%
 
 --2 Adjectives
 
@@ -149,33 +149,33 @@ oper
 -- even for cases with the variations "happy - happily - happier - happiest",
 -- "free - freely - freer - freest", and "rude - rudest".
 
-    mkA : (happy : Str) -> A ;
+    mkA : (happy : Str) -> A ; -- regular adj, incl. happy-happier, rude-ruder
 
 -- However, the duplication of the final consonant cannot be predicted,
 -- but a separate case is used to give the comparative
 
-    mkA : (fat,fatter : Str) -> A ;
+    mkA : (fat,fatter : Str) -> A ; -- irreg. comparative
 
 -- As many as four forms may be needed.
 
-    mkA : (good,better,best,well : Str) -> A 
+    mkA : (good,better,best,well : Str) -> A  -- completely irreg.
     } ;
 
 -- Regular comparison is formed by "more - most" for words with two vowels separated
 -- and terminated by some other letters. To force this or the opposite, 
 -- the following can be used:  
 
-    compoundA : A -> A ; -- -/more/most ditto
-    simpleA   : A -> A ; -- young,younger,youngest
-    irregAdv  : A -> Str -> A ;
+    compoundA : A -> A ; -- force comparison with more/most
+    simpleA   : A -> A ; -- force comparison with -er,-est
+    irregAdv  : A -> Str -> A ;  -- adverb irreg, e.g. "fast"
 
 --3 Two-place adjectives
 
   mkA2 : overload {
-    mkA2 : A -> Prep -> A2 ; -- absent from
-    mkA2 : A -> Str -> A2 ; -- absent from
-    mkA2 : Str -> Prep -> A2 ; -- absent from
-    mkA2 : Str -> Str -> A2 -- absent from
+    mkA2 : A -> Prep -> A2 ; -- absent from 
+    mkA2 : A -> Str -> A2 ; -- absent from --%
+    mkA2 : Str -> Prep -> A2 ; -- absent from --%
+    mkA2 : Str -> Str -> A2 -- absent from --%
 
   } ;
 
@@ -185,24 +185,24 @@ oper
 -- Adverbs are not inflected. Most lexical ones have position
 -- after the verb. Some can be preverbal (e.g. "always").
 
-  mkAdv : Str -> Adv ;
-  mkAdV : Str -> AdV ;
+  mkAdv : Str -> Adv ; -- e.g. today
+  mkAdV : Str -> AdV ; -- e.g. always
 
 -- Adverbs modifying adjectives and sentences can also be formed.
 
-  mkAdA : Str -> AdA ;
+  mkAdA : Str -> AdA ; -- e.g. quite
 
 -- Adverbs modifying numerals
 
-  mkAdN : Str -> AdN ;
+  mkAdN : Str -> AdN ; -- e.g. approximately
 
 --2 Prepositions
 --
 -- A preposition as used for rection in the lexicon, as well as to
 -- build $PP$s in the resource API, just requires a string.
 
-  mkPrep : Str -> Prep ;
-  noPrep : Prep ;
+  mkPrep : Str -> Prep ; -- e.g. "in front of"
+  noPrep : Prep ;  -- no preposition
 
 -- (These two functions are synonyms.)
 
@@ -210,10 +210,10 @@ oper
 --
 
   mkConj : overload {
-    mkConj : Str -> Conj ;                  -- and (plural agreement)
-    mkConj : Str -> Number -> Conj ;        -- or (agrement number given as argument)
-    mkConj : Str -> Str -> Conj ;           -- both ... and (plural)
-    mkConj : Str -> Str -> Number -> Conj ; -- either ... or (agrement number given as argument)
+    mkConj : Str -> Conj ;                  -- and (plural agreement) --%
+    mkConj : Str -> Number -> Conj ;        -- or (agrement number given as argument) --%
+    mkConj : Str -> Str -> Conj ;           -- both ... and (plural) --%
+    mkConj : Str -> Str -> Number -> Conj ; -- either ... or (agrement number given as argument) --%
   } ;
 
 --2 Verbs
@@ -229,45 +229,45 @@ oper
 -- ("kiss-"kisses", "jazz-jazzes", "rush-rushes", "munch - munches", 
 -- "fix - fixes").
 
-    mkV : (cry : Str) -> V ;
+    mkV : (cry : Str) -> V ; -- regular, incl. cry-cries, kiss-kisses etc
 
 -- Give the present and past forms for regular verbs where
 -- the last letter is duplicated in some forms,
 -- e.g. "rip - ripped - ripping".
 
-    mkV : (stop, stopped : Str) -> V ;
+    mkV : (stop, stopped : Str) -> V ; -- reg. with consonant duplication
 
 -- There is an extensive list of irregular verbs in the module $IrregularEng$.
 -- In practice, it is enough to give three forms, 
 -- e.g. "drink - drank - drunk".
 
-    mkV : (drink, drank, drunk  : Str) -> V ;
+    mkV : (drink, drank, drunk  : Str) -> V ; -- ordinary irregular
 
 -- Irregular verbs with duplicated consonant in the present participle.
  
-    mkV : (run, ran, run, running  : Str) -> V ;
+    mkV : (run, ran, run, running  : Str) -> V ; -- irregular with duplication --%
 
 -- Except for "be", the worst case needs five forms: the infinitive and
 -- the third person singular present, the past indicative, and the
 -- past and present participles.
 
-    mkV : (go, goes, went, gone, going : Str) -> V ;
+    mkV : (go, goes, went, gone, going : Str) -> V ; -- totally irregular
 
 -- Adds a prefix to an exisiting verb. This is most useful to create
 -- prefix-variants of irregular verbs from $IrregEng$, e.g. "undertake".
 
-    mkV : Str -> V -> V ;
+    mkV : Str -> V -> V ;  -- fix compound, e.g. under+take
   };
 
 -- Verbs with a particle.
 -- The particle, such as in "switch on", is given as a string.
 
-  partV  : V -> Str -> V ;
+  partV  : V -> Str -> V ; -- with particle, e.g. switch + on
 
 -- Reflexive verbs.
 -- By default, verbs are not reflexive; this function makes them that.
 
-  reflV  : V -> V ;
+  reflV  : V -> V ;  -- reflexive e.g. behave oneself
 
 --3 Two-place verbs
 --
@@ -275,12 +275,12 @@ oper
 -- (transitive verbs). Notice that a particle comes from the $V$.
 
   mkV2 : overload {
-    mkV2  : Str -> V2 ;       -- kill
-    mkV2  : V -> V2 ;         -- hit
-    mkV2  : V -> Prep -> V2 ; -- believe in
-    mkV2  : V -> Str -> V2 ;  -- believe in
-    mkV2  : Str -> Prep -> V2 ; -- believe in
-    mkV2  : Str -> Str -> V2  -- believe in
+    mkV2  : Str -> V2 ;       -- kill --%
+    mkV2  : V -> V2 ;         -- transitive, e.g. hit
+    mkV2  : V -> Prep -> V2 ; -- with preposiiton, e.g. believe in
+    mkV2  : V -> Str -> V2 ;  -- believe in --%
+    mkV2  : Str -> Prep -> V2 ; -- believe in --%
+    mkV2  : Str -> Str -> V2  -- believe in --%
   };
 
 --3 Three-place verbs
@@ -289,12 +289,12 @@ oper
 -- the first one or both can be absent.
 
   mkV3 : overload {
-    mkV3  : V -> Prep -> Prep -> V3 ;   -- speak, with, about
-    mkV3  : V -> Prep -> V3 ;           -- give,_,to
-    mkV3  : V -> Str -> V3 ;            -- give,_,to
-    mkV3  : Str -> Str -> V3 ;          -- give,_,to
-    mkV3  : V -> V3 ;                   -- give,_,_
-    mkV3  : Str -> V3 ;                 -- give,_,_
+    mkV3  : V -> V3 ;                   -- ditransitive, e.g. give,_,_
+    mkV3  : V -> Prep -> Prep -> V3 ;   -- two prepositions, e.g. speak, with, about
+    mkV3  : V -> Prep -> V3 ;           -- give,_,to --%
+    mkV3  : V -> Str -> V3 ;            -- give,_,to --%
+    mkV3  : Str -> Str -> V3 ;          -- give,_,to --%
+    mkV3  : Str -> V3 ;                 -- give,_,_ --%
   };
 
 --3 Other complement patterns
@@ -302,30 +302,30 @@ oper
 -- Verbs and adjectives can take complements such as sentences,
 -- questions, verb phrases, and adjectives.
 
-  mkV0  : V -> V0 ;
-  mkVS  : V -> VS ;
-  mkV2S : V -> Prep -> V2S ;
-  mkVV  : V -> VV ;
-  mkV2V : V -> Prep -> Prep -> V2V ;
-  mkVA  : V -> VA ;
-  mkV2A : V -> Prep -> V2A ;
-  mkVQ  : V -> VQ ;
-  mkV2Q : V -> Prep -> V2Q ;
+  mkV0  : V -> V0 ; --%
+  mkVS  : V -> VS ; -- sentence-compl e.g. say (that S)
+  mkV2S : V -> Prep -> V2S ; -- e.g. tell (NP) (that S)
+  mkVV  : V -> VV ; -- e.g. want (to VP)
+  mkV2V : V -> Prep -> Prep -> V2V ; -- e.g. want (NP) (to VP)
+  mkVA  : V -> VA ; -- e.g. become (AP)
+  mkV2A : V -> Prep -> V2A ; -- e.g. paint (NP) (AP)
+  mkVQ  : V -> VQ ; -- e.g. wonder (QS)
+  mkV2Q : V -> Prep -> V2Q ; -- e.g. ask (NP) (QS)
 
-  mkAS  : A -> AS ;
-  mkA2S : A -> Prep -> A2S ;
-  mkAV  : A -> AV ;
-  mkA2V : A -> Prep -> A2V ;
+  mkAS  : A -> AS ; --%
+  mkA2S : A -> Prep -> A2S ; --%
+  mkAV  : A -> AV ; --%
+  mkA2V : A -> Prep -> A2V ; --%
 
 -- Notice: Categories $V0, AS, A2S, AV, A2V$ are just $A$.
 -- $V0$ is just $V$; the second argument is treated as adverb.
 
-  V0 : Type ;
-  AS, A2S, AV, A2V : Type ;
+  V0 : Type ; --%
+  AS, A2S, AV, A2V : Type ; --%
 
 --2 Other categories
 
-mkSubj : Str -> Subj = \s -> lin Subj {s = s} ;
+mkSubj : Str -> Subj = \s -> lin Subj {s = s} ; --%
 
 --.
 --2 Definitions of paradigms

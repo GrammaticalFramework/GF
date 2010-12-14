@@ -9,7 +9,7 @@ resource ParadigmsBul = MorphoFunsBul ** open
   flags coding=cp1251 ;
 
 oper
-  mkN001 : Str -> N ;
+  mkN001 : Str -> N ; -- numbers refer to Krustev, Bulg. Morph. in 187 Tables
   mkN001 base = {s = table {
                        NF Sg Indef => base ;
                        NF Sg Def   => base+"à" ;
