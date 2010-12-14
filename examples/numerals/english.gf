@@ -1,4 +1,5 @@
 concrete english of Numerals = {
+flags language = en_US ;
 -- include numerals.Abs.gf ;
 
 param DForm = unit  | teen  | ten  ;

@@ -1,4 +1,5 @@
 concrete swedish of Numerals = {
+flags language = sv_SE ;
 -- include numerals.Abs.gf ;
 
 param DForm = ental  | ton  | tiotal  ;

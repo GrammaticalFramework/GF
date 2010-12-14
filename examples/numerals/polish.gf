@@ -1,4 +1,5 @@
 concrete polish of Numerals = {
+flags language = pl_PL ;
 -- numerals in Polish, author Wojciech Mostowski, 20/9/2002
 
 -- include numerals.Abs.gf ;

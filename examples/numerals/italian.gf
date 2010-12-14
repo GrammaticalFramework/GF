@@ -1,4 +1,5 @@
 concrete italian of Numerals = {
+flags language = it_IT ;
 -- include numerals.Abs.gf ;
 
 param DForm = ental Pred | ton | tiotal  ;
