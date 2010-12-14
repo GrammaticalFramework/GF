@@ -216,6 +216,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        ],
      options = [
        ("all","pick all strings (forms and variants) from records and tables"),
+       ("list","all strings, comma-separated on one line"),
        ("one","pick the first strings, if there is any, from records and tables"),
        ("table","show all strings labelled by parameters"),
        ("unqual","hide qualifying module names")
