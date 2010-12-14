@@ -451,16 +451,16 @@ outputFormatsExpl =
      (("ebnf",         FmtEBNF),"Extended BNF"),
      (("regular",      FmtRegular),"* regular grammar"),
      (("nolr",         FmtNoLR),"* context-free with no left recursion"),
-     (("srgs_xml",     FmtSRGS_XML),"* SRGS XML speech recognition format"),
-     (("srgs_xml_nonrec",     FmtSRGS_XML_NonRec),"* SRGS XML, recursion eliminated"),
-     (("srgs_abnf",    FmtSRGS_ABNF),"* ABNF speech recognition format"),
-     (("srgs_abnf_nonrec",    FmtSRGS_ABNF_NonRec),"* ABNF, recursion eliminated"),
-     (("jsgf",         FmtJSGF),"* JSGF speech recognition format"),
+     (("srgs_xml",     FmtSRGS_XML),"SRGS speech recognition format in XML"),
+     (("srgs_xml_nonrec",     FmtSRGS_XML_NonRec),"SRGS XML, recursion eliminated"),
+     (("srgs_abnf",    FmtSRGS_ABNF),"SRGS speech recognition format in ABNF"),
+     (("srgs_abnf_nonrec",    FmtSRGS_ABNF_NonRec),"SRGS ABNF, recursion eliminated"),
+     (("jsgf",         FmtJSGF),"JSGF speech recognition format"),
      (("gsl",          FmtGSL),"Nuance speech recognition format"),
      (("vxml",         FmtVoiceXML),"Voice XML based on abstract syntax"),
-     (("slf",          FmtSLF),"* SLF speech recognition format"),
-     (("regexp",       FmtRegExp),"* regular expression"),
-     (("fa",           FmtFA),"* finite automaton in graphviz format")
+     (("slf",          FmtSLF),"SLF speech recognition format"),
+     (("regexp",       FmtRegExp),"regular expression"),
+     (("fa",           FmtFA),"finite automaton in graphviz format")
      ]
 
 instance Show OutputFormat where
