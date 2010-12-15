@@ -48,7 +48,7 @@ getApiExxTrees = M.fromList . pairs . map cleanUp
      _ -> []
 
 -- remove leading prompts and spaces
-cleanUp = dropWhile (\c -> not (isAlpha c || elem c "*'"))
+cleanUp = dropWhile (flip elem " >")
 
 -- only accept lines starting with prompts (to eliminate multi-line gf uncomputed output)
 validOutput = (==">") . take 1
