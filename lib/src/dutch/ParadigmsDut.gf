@@ -32,28 +32,29 @@ resource ParadigmsDut = open
 -- To abstract over gender names, we define the following identifiers.
 
 oper
-  masculine : Gender ;
-  feminine  : Gender ;
-  neuter    : Gender ;
-  utrum     : Gender ;
+  masculine : Gender ; --%
+  feminine  : Gender ; --%
+  neuter    : Gender ; --%
+  utrum     : Gender ; --%
 
-  de,het : Gender ;
+  de  : Gender ; -- non-neutrum
+  het : Gender ; -- neutrum
 
 
   
 --2 Nouns
 
   mkN : overload {
-    mkN : (muis : Str) -> N ;
-    mkN : (bit : Str) -> Gender -> N ;
-    mkN : (gat,gaten : Str) -> Gender -> N ;
+    mkN : (muis : Str) -> N ;   -- de muis-muisen, with some predictable exceptions
+    mkN : (bit : Str) -> Gender -> N ; -- if gender is not predictable
+    mkN : (gat,gaten : Str) -> Gender -> N ; -- worst-case for nouns
   } ;
 
 -- Relational nouns need a preposition. The most common is "van".
 
   mkN2 : overload {
-    mkN2 : N -> N2 ; 
-    mkN2 : N -> Prep -> N2
+    mkN2 : N -> N2 ;        -- relational noun with preposition van
+    mkN2 : N -> Prep -> N2  -- other preposition than van
     } ;   
 
 
@@ -63,31 +64,31 @@ oper
 ----
 ---- Three-place relational nouns ("die Verbindung von x nach y") need two prepositions.
 --
-  mkN3 : N -> Prep -> Prep -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ; -- e.g. afstand + van + naar
 
 --3 Proper names and noun phrases
 
   mkPN : overload {
-    mkPN : Str -> PN ;
+    mkPN : Str -> PN ; -- proper name
     } ;
 
 
 --2 Adjectives
 
   mkA : overload {
-    mkA : (vers : Str) -> A ;
-    mkA : (goed,goede,goeds,beter,best : Str) -> A ;
+    mkA : (vers : Str) -> A ; -- regular adjective
+    mkA : (goed,goede,goeds,beter,best : Str) -> A ; -- irregular adjective
     } ;
 
 
 -- Invariable adjective are a special case. 
 
-  invarA : Str -> A ;            -- prima
+  invarA : Str -> A ;            -- adjective with just one form
 
 
 ---- Two-place adjectives are formed by adding a preposition to an adjective.
 
-  mkA2 : A -> Prep -> A2 ;
+  mkA2 : A -> Prep -> A2 ;  -- e.g. getrouwd + met
 
 --2 Adverbs
 
@@ -114,19 +115,19 @@ oper
 --2 Verbs
 
   mkV : overload {
-    mkV : (aaien : Str) -> V ;
-    mkV : (breken,brak,gebroken : Str) -> V ;
-    mkV : (breken,brak,braken,gebroken : Str) -> V ;
-    mkV : (aai,aait,aaien,aaide,aaide,aaiden,geaaid : Str) -> V ;
+    mkV : (aaien : Str) -> V ;  -- regular verb
+    mkV : (breken,brak,gebroken : Str) -> V ; -- theme of irregular verb
+    mkV : (breken,brak,braken,gebroken : Str) -> V ; -- also past plural irregular
+    mkV : (aai,aait,aaien,aaide,aaide,aaiden,geaaid : Str) -> V ; -- worst-case verb
 
 -- To add a movable suffix e.g. "auf(fassen)".
 
-    mkV : Str -> V -> V
+    mkV : Str -> V -> V -- add movable suffix, e.g. af + stappen
     } ;
 
-  zijnV  : V -> V ;
+  zijnV  : V -> V ; -- force zijn as auxiliary (default hebben)
 
-  reflV  : V -> V ;
+  reflV  : V -> V ; -- reflexive verb e.g. zich afvragen
 
 
 --
@@ -137,9 +138,9 @@ oper
 -- the first one or both can be absent.
 
   mkV3 : overload {
-    mkV3 : V -> V3 ;                  -- give,accusative,dative
-    mkV3 : V -> Prep -> V3 ;          -- senden,(accusative),nach
-    mkV3 : V -> Prep -> Prep -> V3 ;  -- sprechen, mit, über
+    mkV3 : V -> V3 ;                  -- geven,(accusative),(dative)
+    mkV3 : V -> Prep -> V3 ;          -- sturen,(accusative),naar
+    mkV3 : V -> Prep -> Prep -> V3 ;  -- praten, met, over
     } ;
 
 
@@ -148,7 +149,7 @@ oper
 ---- Verbs and adjectives can take complements such as sentences,
 ---- questions, verb phrases, and adjectives.
 
-  mkV0  : V -> V0 ;
+  mkV0  : V -> V0 ; --%
   mkVS  : V -> VS ;
   mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;

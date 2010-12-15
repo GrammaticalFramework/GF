@@ -50,7 +50,7 @@ lin
   say_VS = mkVS zeggen_V ;
   see_V2 = mkV2 zien_V ;
   sell_V3 = mkV3 (mkV "verkopen" "verkocht" "verkocht") ;
-  send_V3 = mkV3 (mkV "sturen") ;
+  send_V3 = mkV3 (mkV "sturen") (mkPrep "naar") ;
   sleep_V = slapen_V ;
   small_A = mkA "klein" ;
   talk_V3 = mkV3 (mkV "praten") (mkPrep "met") (mkPrep "over") ;
