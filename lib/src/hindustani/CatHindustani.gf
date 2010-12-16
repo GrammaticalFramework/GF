@@ -24,8 +24,9 @@ incomplete concrete CatHindustani of Cat =
 ---- Question
     QCl = {s : CommonHindustani.VPHTense => Polarity => QForm => Str} ;
     IP = {s: Case => Str ; g : Gender ; n : Number};
-    IDet = {s :Gender => Str ; n : Number} ;
-    IQuant = {s : Number => Str} ;
+    IDet = {s :Gender => Case => Str ; n : Number} ;
+--  IQuant = {s : Number => Str} ;
+    IQuant = {s : Number => Gender => Case => Str} ;
 
 ---- Relative
 

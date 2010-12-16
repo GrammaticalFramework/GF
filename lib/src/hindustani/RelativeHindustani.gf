@@ -35,7 +35,7 @@ incomplete concrete RelativeHindustani of Relative =
       } ;
       
     RelSlash rp slash = {
-      s = \\t,p,o,agr => rp.s ! (giveNumber agr) ! Dir ++ slash.c2.s ++  slash.s ! t ! p ! o  ;--case t of {
+      s = \\t,p,o,agr => rp.s ! (giveNumber agr) ! Obl ++ slash.c2.s ++  slash.s ! t ! p ! o  ;--case t of {
 --	       VPImpPast => rp.s !  (giveNumber agr) Obl ++ slash.c2.s ++  slash.s ! t ! p ! o ;
 --		   _         => rp.s !  (giveNumber agr) Dir ++ slash.c2.s ++  slash.s ! t ! p ! o 
 --		   };

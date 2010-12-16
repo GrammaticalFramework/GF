@@ -9,12 +9,12 @@ concrete StructuralUrd of Structural = CatUrd **
   after_Prep = mkPrep ["kE bed"] ["kE bed"] ;
   all_Predet = ss "tmam" ;
   almost_AdA, almost_AdN = mkAdN "tqryba" ;
-  although_Subj = ss "agrch-" ;
+  although_Subj = ss "agrch" ;
   always_AdV = ss "hmyXh" ;
   and_Conj = sd2 [] "awr" ** {n = Pl} ;
-  because_Subj = ss "kywnkh-" ;
+  because_Subj = ss "kywnkh" ;
   before_Prep = mkPrep "phlE" "phlE" ;
-  behind_Prep = mkPrep "pych-E" "pych-E" ;
+  behind_Prep = mkPrep "pych'E" "pych'E" ;
   between_Prep = mkPrep "drmyaN" "drmyaN" ;
   both7and_DConj = sd2 "dwnwN" "awr" ** {n = Pl} ;
   but_PConj = ss "lykn" ;
@@ -40,12 +40,12 @@ concrete StructuralUrd of Structural = CatUrd **
   how8much_IAdv  = ss "ktna" ;
   if_Subj = ss "agr" ;
   in8front_Prep = mkPrep ["kE samnE"] ["kE samnE"] ;
-  i_Pron = personalPN "myN" "mjh-" "" "myra" Sg Masc Pers1;
-  in_Prep = mkPrep "meN" "meN" ;
-  it_Pron  = personalPN "yh" "yh" "yh" "as ka" Sg Masc Pers3_Near;
+  i_Pron = personalPN "myN" "mjh'" "" "myra" Sg Masc Pers1;
+  in_Prep = mkPrep "myN" "myN" ;
+  it_Pron  = personalPN "yh" "as" "as" "as ka" Sg Masc Pers3_Near;
   less_CAdv = {s = "km" ; p = ""} ;
   many_Det = mkDet "bht zyadh" "bht zyadh" "bht zyadh" "bht zyadh" Pl ;
-  more_CAdv = {s = "zyadh-" ; p = "" } ;
+  more_CAdv = {s = "zyadh" ; p = "sE" } ;
   most_Predet = ss "zyadh tr" ;
   much_Det = mkDet "bht" "bht" "bht" "bht" Sg  ;
 --  must_VV = {
@@ -64,20 +64,20 @@ concrete StructuralUrd of Structural = CatUrd **
   no_Utt = ss "nhyN" ;
   on_Prep = mkPrep "pr" "pr" ;
 --  one_Quant = demoPN "ayk" "ayk" "ayk" ; -- DEPRECATED
-  only_Predet = ss "srf" ;
+  only_Predet = ss "Srf" ;
   or_Conj = sd2 [] "ya" ** {n = Sg} ;
-  otherwise_PConj = ss "ya ph-r" ;
+  otherwise_PConj = ss "ya ph'r" ;
   part_Prep = mkPrep "" "" ;
-  please_Voc = ss "mhrbani" ;
+  please_Voc = ss "mhrbany" ;
   possess_Prep = mkPrep "ka" "ky" ;
-  quite_Adv = ss "khamosh" ;
+  quite_Adv = ss "KamwX" ;
   she_Pron = personalPN "wh" "as" "wh" "as ky" Sg Fem Pers3_Distant ;
-  so_AdA = ss "so" ;
+  so_AdA = ss "[as lyE]" ;
   somebody_NP = MassNP (UseN (ParadigmsUrd.mkN "kwy" "kwy" "kwy" "kwy" "kwy" "kwy" Masc ));
-  someSg_Det = mkDet "kch-" "kch-" "kch-" "kch-" Sg ;
-  somePl_Det = mkDet "kch-" "kch-" "kch-" "kch-" Pl ;
-  something_NP = MassNP (UseN (ParadigmsUrd.mkN "kwy cyz" "kwy cyz" "kwy cyz" "kh- cyzyN" "kh- cyzwN" "kh- cyzw" Masc ));
-  somewhere_Adv = mkAdv ["khin pr"] ;
+  someSg_Det = mkDet "kch'" "kch'" "kch'" "kch'" Sg ;
+  somePl_Det = mkDet "kch'" "kch'" "kch'" "kch'" Pl ;
+  something_NP = MassNP (UseN (ParadigmsUrd.mkN "kwy cyz" "kwy cyz" "kwy cyz" "kh' cyzyN" "kh' cyzwN" "kh' cyzw" Masc ));
+  somewhere_Adv = mkAdv ["khyN pr"] ;
   that_Quant = demoPN "wh" "as" "an" ;
   that_Subj = ss "kh";
   there_Adv = mkAdv "whaN" ;
@@ -93,24 +93,25 @@ concrete StructuralUrd of Structural = CatUrd **
   very_AdA = ss "bht" ;
   want_VV = mkV "cahna" ** { isAux = False} ;
   we_Pron = personalPN "hm" "hm" "hm" "hmara" Pl Masc Pers1 ;
-  whatSg_IP = mkIP "kya" "kis" "kis" Sg Masc ;
-  whatPl_IP = mkIP "kya" "kin" "kin" Pl Masc ;
+  whatSg_IP = mkIP "kya" "ks" "ks" Sg Masc ;
+  whatPl_IP = mkIP "kya" "kn" "kn" Pl Masc ;
   when_IAdv = ss "kb" ;
-  when_Subj = ss "kb" ;
+  when_Subj = ss "jb" ;
   where_IAdv = ss "khaN" ;
-  which_IQuant = {s = \\_ => "kwn sy"} ;
+--  which_IQuant = {s = \\_ => "kwn sy"} ;
+  which_IQuant = mkIQuant "kwn" ;
 --  whichPl_IDet = makeDet "kwn sa" "kwn sy" "kwn sE" "kwn sy" ;
 --  whichSg_IDet = makeDet "kwn sa" "kwn sy" "kwn sE" "kwn sy" ;
-  whoSg_IP = mkIP "kwn" "kis" "kis" Sg Masc  ;
+  whoSg_IP = mkIP "kwn" "ks" "ks" Sg Masc  ;
   whoPl_IP = mkIP "kwn" "kn" "knhwN" Pl Masc ;
   why_IAdv = ss "kywN" ;
   without_Prep = mkPrep ["kE bGyr"] ["kE bGyr"] ;
-  with_Prep = mkPrep ["kE sath-"] ["kE sath-"] ;
+  with_Prep = mkPrep ["kE sath'"] ["kE sath'"] ;
 --  yes_Phr = ss "haN" ;
   yes_Utt = ss "haN" ;
-  youSg_Pron = personalPN "tm" "tm" "tm" "tmh-ara" Sg Masc Pers2_Casual ;
-  youPl_Pron = personalPN "tm" "tm" "tm" "tmh-ara" Pl Masc Pers2_Casual ;
-  youPol_Pron = personalPN "Ap" "AP" "AP" "Ap ka" Sg Masc Pers2_Respect  ;
+  youSg_Pron = personalPN "tw" "tw" "tw" "tyra" Sg Masc Pers2_Casual ;
+  youPl_Pron = personalPN "tm" "tm" "tm" "tmh'ara" Pl Masc Pers2_Casual ;
+  youPol_Pron = personalPN "Ap" "Ap" "Ap" "Ap ka" Sg Masc Pers2_Respect  ;
   no_Quant =  demoPN " kwy nhyN" "kwy nhyN" "kwy nhyN" ; 
   not_Predet = {s="nhyN"} ;
   if_then_Conj = sd2 "agr" "tw" ** {n = Sg} ; 
@@ -120,9 +121,9 @@ concrete StructuralUrd of Structural = CatUrd **
   except_Prep = mkPrep "swaE" "swaE" ;
   nobody_NP = MassNP (UseN (ParadigmsUrd.mkN "kwy nhyN" "kwy nhyN" "kwy nhyN" "kwy nhyN" "kwy nhyN" "kwy nhyN" Masc ));  
 
-  as_CAdv = {s = "etna" ; p = "jtna"} ;
+  as_CAdv = {s = "atna" ; p = "jtna"} ;
 
-  have_V2 = mkV2 (mkV "rakh-na") "" ;
+  have_V2 = mkV2 (mkV "rakh'na") "" ;
 
  language_title_Utt = ss "ardw" ;
 

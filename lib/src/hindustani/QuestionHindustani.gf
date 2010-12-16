@@ -19,8 +19,8 @@ incomplete concrete QuestionHindustani of Question =
            qp1 = qp.s ! Dir;
            qp2 = qp.s ! Obl ++ nE
           in { s = \\t,p,o => case t of {
-		             VPImpPast => qp2 ++ cl.s ! t ! p ! ODir;
-					 _         => qp1 ++ cl.s ! t ! p ! ODir
+		             VPImpPast => case vp.subj of {VIntrans => qp1 ++ cl.s ! t ! p ! ODir; _ => qp2 ++ cl.s ! t ! p ! ODir};
+			      _         => qp1 ++ cl.s ! t ! p ! ODir
 					 }
 					}; 
     QuestSlash ip slash = 
@@ -46,7 +46,7 @@ incomplete concrete QuestionHindustani of Question =
 		  }
 		};
 
-    PrepIP p ip = {s = ip.s ! Voc ++ p.s ! ip.g} ;
+    PrepIP p ip = {s = ip.s ! Obl ++ p.s ! ip.g} ;
 
     AdvIP ip adv = {
       s = \\c => adv.s ! ip.g ++ ip.s ! c ;
@@ -55,19 +55,19 @@ incomplete concrete QuestionHindustani of Question =
       } ;
  
     IdetCN idet cn = {
-      s = \\c => idet.s ! cn.g ++ cn.s ! idet.n ! c ; 
+      s = \\c => idet.s ! cn.g  ! c ++ cn.s ! idet.n ! c ; 
       g = cn.g;
 	  n = idet.n;
       } ;
 
     IdetIP idet = {
-     s = \\_ => idet.s ! Masc ; 
+     s = \\c => idet.s ! Masc ! c ; 
       n = idet.n;
 	  g = Masc;
       } ;
 
     IdetQuant iqant num = {
-      s = \\g => iqant.s ! num.n ++ num.s ; 
+      s = \\g,c => iqant.s ! num.n ! g ! c ++ num.s ; 
       n = num.n
       } ;
 

@@ -170,7 +170,7 @@ oper
                           (bhao)      (bhao)     (bhao)
                     Masc ;
 ----2 Determiners
-  IDeterminer = {s:Gender => Str ; n : Number};
+  IDeterminer = {s:Gender => Case => Str ; n : Number};
   makeDet : Str -> Str -> Str -> Str -> Number -> Determiner = \s1,s2,s3,s4,n -> {
    s = table {
       Sg => table {
@@ -188,11 +188,37 @@ oper
 	
   makeIDet : Str -> Str -> Number -> IDeterminer = \s1,s2,n -> {
    s = table {
-        Masc => s1;
-		Fem  => s2
+        Masc => table {_ =>s1};
+	Fem  => table {_ =>s2} 
 	 };
 	 n = n
-    };		
+    };
+    
+-- IQuant
+  
+makeIQuant : Str -> {s : Number => Gender => Case => Str} = \str -> {
+  s = table {
+	        Sg => table {
+				Masc => table {
+						     Dir => str ++ "sa" ;
+						      _ => str ++ "sE" 
+                             
+							 };
+				Fem => table {
+						     _ => str ++ "sy"
+							 }
+						};
+		Pl => table {
+				Masc => table {
+						     _ => str ++ "sE"
+							 };
+				Fem => table {
+						     _ => str ++ "sy"
+							 }
+					} 
+				}
+               };    
+   
     
 -- Proposition  
  
@@ -379,7 +405,7 @@ oper
         <Imperf,Pers2_Respect,Pl,Fem>         => root+"tyN";
 		<Imperf,_,Sg,Masc>					  => root+"ta";
 		<Imperf,_,Sg,Fem>					  => root+"ty";
-		<Imperf,_,Pl,Masc>					  => root+"te";
+		<Imperf,_,Pl,Masc>					  => root+"tE";
 		<Imperf,_,Pl,Fem>					  => root+"tyN"
         }
        

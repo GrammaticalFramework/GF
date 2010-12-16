@@ -14,7 +14,7 @@ incomplete concrete PhraseHindustani of Phrase =
     UttIP ip = {s = ip.s ! Dir} ; --- Acc also
     UttIAdv iadv = iadv ;
     UttNP np = {s = np.s ! NPC Dir} ;
-    UttVP vp = {s = infVP False vp (agrP3 Masc Sg)} ;
+    UttVP vp = {s = vp.ad ++ infVP False vp (agrP3 Masc Sg) ++ vp.embComp} ;
     UttAdv adv = {s = adv.s ! Masc} ;
 	UttCN cn = {s = cn.s ! Sg ! Dir};
     UttCard n = n ;

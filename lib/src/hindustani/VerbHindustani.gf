@@ -34,7 +34,7 @@ incomplete concrete VerbHindustani of Verb = CatHindustani ** open CommonHindust
     ReflVP v = insertObjPre (\\_ =>  RefPron) v ;
     PassV2 v = predV v ; -- need to be fixed
     CompAP ap ={s = \\a => ap.s ! giveNumber a ! giveGender a ! Dir ! Posit } ;
-    CompNP np = {s = \\_ => np.s ! NPObj} ;
+    CompNP np = {s = \\_ => np.s ! NPC Dir} ;
     CompAdv adv = {s = \\a => adv.s ! giveGender a} ;
     CompCN cn = {s = \\a => cn.s ! giveNumber a ! Dir} ;
 

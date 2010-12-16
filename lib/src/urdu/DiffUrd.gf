@@ -81,7 +81,7 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
 		    VPPerfPresCont => {fin = copula CPresent n p g ; inf = (vp.s ! VPStem).inf ++ raha g n } ; 
 		    VPPerfPastCont => {fin = copula CPast n p g ; inf = (vp.s ! VPStem).inf ++ raha g n } ; 
 		    VPPerfFutCont =>  {fin = copula CFuture n p g ; inf = (vp.s ! VPStem).inf ++ raha g n ++ hw p n } ;
-		    VPSubj   => {fin = insertSubj p (vp.s ! VPStem).inf ; inf = "ژاید"  }
+		    VPSubj   => {fin = insertSubj p (vp.s ! VPStem).inf ; inf = "شاید"  }
                     
 			  };
 
