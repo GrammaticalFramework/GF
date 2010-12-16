@@ -70,7 +70,7 @@ lin
     in
       mkUtt (mkImp (giveMe info))
     | mkUtt (mkQCl whatSg_IP 
-        (mkClSlash (mkClSlash (mkNP youSg_Pron) know_V2) (mkAdv about_Prep s)))
+        (mkClSlash (mkClSlash (mkNP youSg_Pron) LexQuery.know_V2) (mkAdv about_Prep s)))
     | mkUtt info ;
 
   QCalled i = mkUtt (mkQS (mkQCl how_IAdv (mkCl i 
