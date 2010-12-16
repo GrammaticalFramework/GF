@@ -2,7 +2,7 @@ interface LexQuery = open Syntax in {
 
 oper
   located_A : A ;
-  give_V3 : V3 ;
+  giveMe : NP -> VP ;
   know_V2 : V2 ;
 
 -- structural words

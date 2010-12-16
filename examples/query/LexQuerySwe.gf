@@ -4,7 +4,7 @@ instance LexQuerySwe of LexQuery =
 oper
   located_A : A = compoundA (mkA "belägen" "beläget" "belägna" [] []) ;
 
-  give_V3 : V3 = mkV3 giva_V ;
+  giveMe : NP -> VP = \np -> mkVP (mkV3 giva_V) (mkNP i_Pron) np ; 
   know_V2 = mkV2 veta_V ;
 
 -- structural words
@@ -12,7 +12,7 @@ oper
   all_NP : NP = mkNP (mkPN "allt") ; ---
   also_AdV : AdV = mkAdV "också" ;
   also_AdA : AdA = mkAdA "även" ;
-  as_Prep : Prep = mkPrep "som" ;
+  as_Prep : Prep = mkPrep "för" ; --- only used for "vad har X för Y"
   at_Prep : Prep = mkPrep "på" ; --- | mkPrep "hos" | mkPrep "vid" ;
   that_RP = which_RP ;
 

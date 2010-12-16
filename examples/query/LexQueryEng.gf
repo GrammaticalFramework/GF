@@ -4,7 +4,7 @@ instance LexQueryEng of LexQuery =
 oper
   located_A : A = mkA "located" | mkA "situated" ;
 
-  give_V3 : V3 = mkV3 give_V ;
+  giveMe : NP -> VP = \np -> mkVP (mkV3 give_V) (mkNP i_Pron) np ; 
   know_V2 = mkV2 know_V ;
 
 -- structural words

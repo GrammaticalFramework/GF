@@ -44,27 +44,27 @@ lin
     ;
 
   HaveTitle = 
-      relAP (mkAP (mkA "anställd" "anställt")) as_Prep
+      relAP (mkAP (mkA "anställd" "anställt")) som_Prep
     | relVP UseCopula noPrep
-    | relVP (mkVP (mkV "arbeta")) as_Prep
-    | relVP (mkVP (mkV "jobba")) as_Prep
+    | relVP (mkVP (mkV "arbeta")) som_Prep
+    | relVP (mkVP (mkV "jobba")) som_Prep
     | relVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "titel" "titlar") noPrep)))) 
         possess_Prep
     ;
 
   EmployedAt s = 
-      relAP (mkAP (mkA2 (mkA "anställd" "anställt") at_Prep) s) as_Prep
-    | relAP (mkAP (mkA2 (mkA "anställd" "anställt") by8agent_Prep) s) as_Prep
-    | relVP (mkVP (mkV2 (mkV "arbeta") at_Prep) s) as_Prep 
-    | relVP (mkVP (mkV2 (mkV "jobba") at_Prep) s) as_Prep 
+      relAP (mkAP (mkA2 (mkA "anställd" "anställt") at_Prep) s) som_Prep
+    | relAP (mkAP (mkA2 (mkA "anställd" "anställt") by8agent_Prep) s) som_Prep
+    | relVP (mkVP (mkV2 (mkV "arbeta") at_Prep) s) som_Prep 
+    | relVP (mkVP (mkV2 (mkV "jobba") at_Prep) s) som_Prep 
     ;
 
   HaveTitleAt t = 
-      relAP (mkAP (mkA2 (mkA "anställd" "anställt") as_Prep) (mkNP t)) at_Prep
-    | relAP (mkAP (mkA2 (mkA "anställd" "anställt") as_Prep) (mkNP t)) by8agent_Prep
+      relAP (mkAP (mkA2 (mkA "anställd" "anställt") som_Prep) (mkNP t)) at_Prep
+    | relAP (mkAP (mkA2 (mkA "anställd" "anställt") som_Prep) (mkNP t)) by8agent_Prep
     | relVP (mkVP (mkNP a_Det t)) at_Prep
-    | relVP (mkVP (mkV2 (mkV "arbeta") as_Prep) (mkNP t)) at_Prep 
-    | relVP (mkVP (mkV2 (mkV "jobba") as_Prep) (mkNP t)) at_Prep 
+    | relVP (mkVP (mkV2 (mkV "arbeta") som_Prep) (mkNP t)) at_Prep 
+    | relVP (mkVP (mkV2 (mkV "jobba") som_Prep) (mkNP t)) at_Prep 
     | relVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "titel" "titlar") noPrep) 
         (mkNP t)))) at_Prep 
     ;
@@ -101,6 +101,7 @@ oper
   mkFunctionP : N -> Prep -> Fun =
     \n,p -> {cn = mkCN n ; prep = p} ;
 
+  som_Prep = mkPrep "som" ;
 
 lin
 -- JobTitles
