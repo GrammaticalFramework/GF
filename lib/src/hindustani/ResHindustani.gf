@@ -267,7 +267,7 @@ param
 		    VPPerfPresCont => {fin = copula CPresent n p g ; inf = (vp.s ! VPStem).inf ++ raha g n } ; 
 		    VPPerfPastCont => {fin = copula CPast n p g ; inf = (vp.s ! VPStem).inf ++ raha g n } ; 
 		    VPPerfFutCont =>  {fin = copula CFuture n p g ; inf = (vp.s ! VPStem).inf ++ raha g n ++ hw p n } ;
-		    VPSubj   => {fin = insertSubj p (vp.s ! VPStem).inf ; inf = "xayd"  }
+		    VPSubj   => {fin = insertSubj p (vp.s ! VPStem).inf ; inf = "Xayd"  }
                     
 			  };
 
@@ -337,7 +337,7 @@ param
    infVV : Bool -> VPH -> Str = \isAux,vp -> 
       case isAux of {False =>  vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ vp.inf ; True => vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPImp).fin } ;
     infV2V : Bool -> VPH -> Str = \isAux,vp -> 
-      case isAux of {False =>  vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ vp.inf ++ "ky"  ; True => vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPImp).fin  ++ "ky"};
+      case isAux of {False =>  vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPInf).fin ++ "ky"  ; True => vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPImp).fin  ++ "ky"};
 
 
     insertObject : NP -> VPHSlash -> VPH = \np,vps -> {

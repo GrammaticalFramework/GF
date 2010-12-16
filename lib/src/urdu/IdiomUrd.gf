@@ -16,7 +16,7 @@ concrete IdiomUrd of Idiom = CatUrd ** open Prelude,Predef, ResUrd,ParamX,Common
         
     ExistNP np = 
       mkSClause "وہاں" (agrP3 (fromAgr np.a).g (fromAgr np.a).n) 
-        (insertObj (\\_ => np.s ! NPC Obl) (predAux auxBe)) ;
+        (insertObj (\\_ => np.s ! NPC Dir) (predAux auxBe)) ;
 
     ExistIP ip = 
      let cl = mkSClause ("وہاں" ++ ip.s ! Dir) (agrP3 ip.g ip.n) (predAux auxBe); 
@@ -30,9 +30,10 @@ concrete IdiomUrd of Idiom = CatUrd ** open Prelude,Predef, ResUrd,ParamX,Common
 --    ProgrVP vp = insertObj (\\a => vp.obj.s ++ vp.ad ++ vp.comp ! a ++ (vp.s ! VPStem).inf ++ raha (fromAgr a).g (fromAgr a).n ) (predAux auxBe) ;
     ProgrVP vp =  (predProg vp) ;
 
-
-    ImpPl1 vp = {s = "آو" ++ infVP True vp (agrP1 Masc Pl)} ;
-	ImpP3 np vp = {s = np.s!NPC Dir ++ "كو" ++ (vp.s ! VPImp ).inf ++ "دو"};
+--    ImpPl1 vp = {s = "آو" ++ infVP True vp (agrP1 Masc Pl)} ; -- inf form is not used e.g Aw swna instead Aw swyyN (Imp.fin)
+   ImpPl1 vp = {s = "آو" ++ (vp.s ! VPImp).fin} ;
+--	ImpP3 np vp = {s = np.s!NPC Dir ++ "كو" ++ (vp.s ! VPImp ).inf ++ "دو"}; here VPImp form is not correct e.g jan ko sw do, rather jan ko swnE do, and swnE is stored in vp.VPInf.fin
+  ImpP3 np vp = {s = np.s!NPC Dir ++ "كو" ++ (vp.s ! VPInf ).fin ++ "دو"};
 
 
 }

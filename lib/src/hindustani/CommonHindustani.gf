@@ -158,12 +158,12 @@ resource CommonHindustani = ParamX  ** open Prelude,Predef in {
   Adjective = { s: Number => Gender => Case => Degree => Str };
   regAdjective : Str -> Adjective; 
   regAdjective x =  case x of {
-	              acch + ("a"|"aN") => mkAdjective x  ("bht" ++ x)          ("sab sE" ++ x)          (acch + "E") ("bht" ++ acch + "E") ("sab sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sab sE" ++ acch + "E")
-		                                      (acch + "y") ("bht" ++ acch + "y") ("sab sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sab sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sab sE" ++ acch + "y")
-						      (acch +"E")  ("bht" ++ acch + "E") ("sab sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sab sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sab sE" ++ acch + "E")
-		                                      (acch + "y") ("bht" ++ acch + "y") ("sab sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sab sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sab sE" ++ acch + "y");
+	              acch + ("a"|"aN") => mkAdjective x  ("bht" ++ x)          ("sb sE" ++ x)          (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E")
+		                                      (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y")
+						      (acch +"E")  ("bht" ++ acch + "E") ("sb sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E")
+		                                      (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y");
 									
-                      _                 => mkAdjective  x x x x x x x x x
+                        _                 => mkAdjective  x x x x x x x x x
                                                         x x x x x x x x x
                                                         x x x x x x x x x
                                                         x x x x x x x x x									 
@@ -259,6 +259,8 @@ resource CommonHindustani = ParamX  ** open Prelude,Predef in {
 		 VPTense VPFutr (Ag g n p) =>  {fin = copula CFuture n p g ; inf =  v.s ! VF Subj p n g } ;
 		 VPTense VPPerf (Ag g n p) => { fin = [] ; inf = v.s ! Root ++ cka g n } ; 
 		 VPStem => {fin = []  ; inf =  v.s ! Root};
+		 VPInf => {fin = v.s ! Inf_Obl  ; inf =  v.s ! Root}; -- for V2V like sonE ky altja krna , check if it is being used anywhere else
+		 VPImp => {fin = v.s ! VF Subj Pers3_Near Pl Masc  ; inf =  v.s ! Root};
 		 _ => {fin = [] ; inf = v.s ! Root} 
 		 };
 	    obj = {s = [] ; a = defaultAgr} ;
