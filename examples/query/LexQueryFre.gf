@@ -5,7 +5,7 @@ oper
   located_A : A = mkA "situé" ;
 
   giveMe = \np -> mkVP (mkV2 (mkV "montrer")) np ; ---
-  know_V2 = connaître_V2 ;
+  know_V2 = IrregFre.savoir_V2 ;
 
 -- structural words
   about_Prep : Prep = mkPrep "sur" ;

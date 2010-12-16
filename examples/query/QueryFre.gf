@@ -1,6 +1,8 @@
 --# -path=.:present
 
-concrete QueryFre of Query = QueryI - [namePrep, propCalled, SFun] with 
+concrete QueryFre of Query = QueryI - 
+  [namePrep, propCalled, SFun, SAll, IWhat] 
+with 
   (Syntax = SyntaxFre),
   (Lang = LangFre),
   (LexQuery = LexQueryFre) **
@@ -18,13 +20,15 @@ in {
 -- deviations from functor
 oper
 -- prep not "av"
-  namePrep = on_Prep ;
+  namePrep = possess_Prep ;
 -- verb "heta"
   propCalled : NP -> Prop = \i -> 
-      propVP (mkVP (mkAdV "aussi") (mkVP (mkV2 (reflV (mkV "appeler")) for_Prep) i)) ;
+      propVP (mkVP (mkAdV "aussi") (mkVP (mkV2 (reflV (mkV "appeler"))) i)) ;
 
 lin
+  SAll k = mkNP all_Predet (mkNP thePl_Det k) | mkNP thePl_Det k ;
   SFun s r = mkNP (mkNP the_Quant plNum r.cn) (mkAdv r.prep s) ;
+  IWhat = mkIP (mkIDet which_IQuant) | mkIP (mkIDet which_IQuant pluralNum) ;
 
 
 -- lexicon
@@ -38,7 +42,7 @@ lin
       relAP (mkAP (mkA "employé")) by8agent_Prep
     | relAP (mkAP (mkA "payé")) by8agent_Prep
     | relAP (mkAP (mkA "actif")) at_Prep
-    | relAP (mkAP (mkA "professionnellement aktif")) at_Prep
+    | relAP (mkAP (mkA "professionnellement actif")) at_Prep
     | relVP (mkVP (mkV "travailler")) at_Prep
     ;
 
