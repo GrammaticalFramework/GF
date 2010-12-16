@@ -34,7 +34,7 @@ lin
 ----        | mkNP (GenNP s) sgNum Lang.name_N 
 ----        | mkNP (GenNP s) plNum Lang.name_N ;
     in 
-      mkUtt (mkImp (mkVP LexQuery.give_V3 ss (mkNP i_Pron)))
+      mkUtt (mkImp (giveMe ss))
     | mkUtt (mkQS (mkQCl (Lang.CompIP whatSg_IP) ss))
     | mkUtt (mkQS (mkQCl (Lang.CompIP (Lang.IdetIP (mkIDet which_IQuant))) ss))
     | mkUtt ss ;
@@ -47,11 +47,10 @@ lin
 
   QFun r s = 
       mkUtt 
-        (mkImp (mkVP LexQuery.give_V3 
-          (mkNP and_Conj s (detSet s r.cn)) (mkNP i_Pron)))
+        (mkImp (giveMe (mkNP and_Conj s (detSet s r.cn))))
     | mkUtt (mkQS (mkQCl (mkIP what_IQuant plNum r.cn) s have_V2))
     | mkUtt (mkQS (mkQCl whatSg_IP 
-        (mkClSlash (mkClSlash s have_V2) (mkAdv as_Prep (mkNP aPl_Det r.cn))))) ; 
+        (mkClSlash (mkClSlash s have_V2) (mkAdv LexQuery.as_Prep (mkNP aPl_Det r.cn))))) ; 
 
   QFunPair s f = 
     let 
@@ -60,7 +59,7 @@ lin
      ss  : NP = mkNP and_Conj ss0 (mkNP (mkQuant they_Pron) plNum f.cn)
               | mkNP ss0 (mkAdv with_Prep (mkNP (mkQuant they_Pron) plNum f.cn))
     in 
-      mkUtt (mkImp (mkVP LexQuery.give_V3 ss (mkNP i_Pron)))
+      mkUtt (mkImp (giveMe ss))
     | mkUtt (mkQS (mkQCl (Lang.CompIP whatPl_IP) ss))
     | mkUtt (mkQS (mkQCl (Lang.CompIP (Lang.IdetIP (mkIDet which_IQuant))) ss))
     | mkUtt ss ;
@@ -69,7 +68,7 @@ lin
     let
       info : NP = mkNP (all_NP | (mkNP information_N)) (mkAdv about_Prep s) ;
     in
-      mkUtt (mkImp (mkVP LexQuery.give_V3 info (mkNP i_Pron)))
+      mkUtt (mkImp (giveMe info))
     | mkUtt (mkQCl whatSg_IP 
         (mkClSlash (mkClSlash (mkNP youSg_Pron) know_V2) (mkAdv about_Prep s)))
     | mkUtt info ;
