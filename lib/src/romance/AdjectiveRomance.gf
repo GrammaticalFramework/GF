@@ -56,4 +56,10 @@ incomplete concrete AdjectiveRomance of Adjective =
       isPre = False ---- A2 has no isPre
       } ;
 
+    AdvAP ap adv = {
+      s = \\a => ap.s ! a ++ adv.s ;
+      isPre = False
+      } ;
+
+
 }

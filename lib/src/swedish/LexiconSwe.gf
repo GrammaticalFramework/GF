@@ -165,7 +165,7 @@ lin
   ship_N = regGenN "skepp" neutrum ;
   shirt_N = regGenN "skjorta" utrum ;
   shoe_N = mk2N "sko" "skor" ;
-  shop_N = mk2N "affär" "affären" ;
+  shop_N = mk2N "affär" "affärer" ;
   short_A = regA "kort" ;
   silver_N = mkN "silver" "silvret" "silver" "silvren" ;
   sister_N = mk2N "syster" "systrar" ;

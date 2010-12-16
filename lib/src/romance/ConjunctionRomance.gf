@@ -20,6 +20,9 @@ incomplete concrete ConjunctionRomance of Conjunction =
       c = ss.c
       } ;
 
+    ConjIAdv = conjunctDistrSS ;
+
+    ConjCN co ns = conjunctDistrTable Number co ns ** {g = ns.g} ;
 
 -- These fun's are generated from the list cat's.
 
@@ -41,12 +44,18 @@ incomplete concrete ConjunctionRomance of Conjunction =
     ConsAP xs x = consrTable AForm comma xs x ** {isPre = andB xs.isPre x.isPre} ;
     BaseRS x y = twoTable2 Mood Agr x y ** {c = y.c} ;
     ConsRS xs x = consrTable2 Mood Agr comma xs x ** {c = xs.c} ;
+    BaseIAdv = twoSS ;
+    ConsIAdv = consrSS comma ;
+    BaseCN x y = twoTable Number x y ** {g = conjGender x.g y.g} ;
+    ConsCN x xs = consrTable Number comma x xs ** {g = conjGender x.g xs.g} ;
 
   lincat
     [S] = {s1,s2 : Mood => Str} ;
     [Adv] = {s1,s2 : Str} ;
+    [IAdv] = {s1,s2 : Str} ;
     [NP] = {s1,s2 : Case => Str ; a : Agr} ;
     [AP] = {s1,s2 : AForm  => Str ; isPre : Bool} ;
     [RS] = {s1,s2 : Mood => Agr => Str ; c : Case} ;
+    [CN] = {s1,s2 : Number => Str ; g : Gender} ;
 
 }
