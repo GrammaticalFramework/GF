@@ -99,16 +99,20 @@ incomplete concrete QuestionRomance of Question =
 
     CompIP p = {s = \\_  => p.s ! Nom} ;
 
+  lincat 
+    QVP = ResRomance.VP ;
+  lin
+    ComplSlashIP vp ip = insertObject vp.c2 (heavyNP {s = ip.s ; a = ip.a ** {p = P3}}) vp ;
+    AdvQVP vp adv = insertAdv adv.s vp ;
+    AddAdvQVP vp adv = insertAdv adv.s vp ;
+
+    QuestQVP qp vp = { 
+      s = \\t,a,b,_ => 
+        let
+          cl = mkClause (qp.s ! Nom) False False (agrP3 qp.a.g qp.a.n) vp  
+        in
+        cl.s ! DDir ! t ! a ! b ! Indic
+      } ;   
+
 }
 
-{- ---b 
-    IDetCN idet num ord cn = 
-      let 
-        g = cn.g ;
-        n = idet.n ;
-        a = aagr g n
-      in {
-      s = \\c => idet.s ! g ! c ++ num.s ! g ++ ord.s ! a ++ cn.s ! n ; 
-      a = a
-      } ;
--}

@@ -24,7 +24,7 @@ incomplete concrete ConjunctionScand of Conjunction =
     ConjIAdv = conjunctDistrSS ;   
 
     ConjCN co ns = conjunctDistrTable3 Number DetSpecies Case co ns ** 
-      {g = utrum ; isMod = True} ; ----
+      {g = neutrum ; isMod = False} ; ----
 
 
 -- These fun's are generated from the list cat's.
