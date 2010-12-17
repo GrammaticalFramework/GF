@@ -1,7 +1,7 @@
 name: gf-server
 version: 1.0
 cabal-version: >= 1.2
-build-type: Simple
+build-type: Custom
 license: GPL
 license-file: LICENSE
 synopsis: FastCGI Server for Grammatical Framework
