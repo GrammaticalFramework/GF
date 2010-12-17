@@ -76,8 +76,8 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
     V, VS, VQ, VA = Verb ; -- = {s : VForm => Str} ;
     V2, V2A, V2Q, V2S = Verb ** {c2 : Str} ;
     V3 = Verb ** {c2, c3 : Str} ;
-    VV = {s : VVForm => Str ; isAux : Bool} ;
-    V2V = Verb ** {c2 : Str ; isAux : Bool} ;
+    VV = {s : VVForm => Str ; typ : VVType} ;
+    V2V = Verb ** {c2 : Str ; typ : VVType} ;
 
     A = {s : AForm => Str} ;
     A2 = {s : AForm => Str ; c2 : Str} ;

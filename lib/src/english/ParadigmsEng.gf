@@ -306,6 +306,7 @@ oper
   mkVS  : V -> VS ; -- sentence-compl e.g. say (that S)
   mkV2S : V -> Prep -> V2S ; -- e.g. tell (NP) (that S)
   mkVV  : V -> VV ; -- e.g. want (to VP)
+  ingVV : V -> VV ; -- e.g. start (VPing)
   mkV2V : V -> Prep -> Prep -> V2V ; -- e.g. want (NP) (to VP)
   mkVA  : V -> VA ; -- e.g. become (AP)
   mkV2A : V -> Prep -> V2A ; -- e.g. paint (NP) (AP)
@@ -539,8 +540,11 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ; --%
   mkVS  v = lin VS v ;
   mkVV  v = lin VV {
     s = table {VVF vf => v.s ! vf ; _ => v.s ! VInf} ;
-                                          --- variants {}} ; not used 
-    isAux = False
+    typ = VVInf
+    } ;
+  ingVV  v = lin VV {
+    s = table {VVF vf => v.s ! vf ; _ => v.s ! VInf} ;
+    typ = VVPresPart
     } ;
   mkVQ  v = lin VQ v ;
 
@@ -551,7 +555,7 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ; --%
 
   mkV0  v = v ;
   mkV2S v p = lin V2S (prepV2 v p) ;
-  mkV2V v p t = lin V2V (prepV2 v p ** {isAux = False}) ;
+  mkV2V v p t = lin V2V (prepV2 v p ** {typ = VVInf}) ;
   mkVA  v = lin VA v ;
   mkV2A v p = lin V2A (prepV2 v p) ;
   mkV2Q v p = lin V2Q (prepV2 v p) ;

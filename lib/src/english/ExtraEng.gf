@@ -33,7 +33,9 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       } ;
     ConjVPI = conjunctDistrTable2 VPIForm Agr ;
     ComplVPIVV vv vpi = 
-      insertObj (\\a => (if_then_Str vv.isAux [] "to") ++ vpi.s ! VPIInf ! a) (predVV vv) ;
+----      insertObj (\\a => infVP vv.typ vpi a) (predVV vv) ;
+      let isAux = case vv.typ of {VVAux => True ; _ => False} in 
+      insertObj (\\a => (if_then_Str isAux [] "to") ++ vpi.s ! VPIInf ! a) (predVV vv) ;
 
     UncNegCl t p cl = {
       s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! unc p.p ! ODir
@@ -103,5 +105,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       isPre = False ---- depends on whether there are complements
       } ;
 
-    UttVPShort vp = {s = infVP True vp (agrP3 Sg)} ;
+    EmbedPresPart vp = {s = infVP VVPresPart vp (agrP3 Sg)} ; --- agr
+
+    UttVPShort vp = {s = infVP VVAux vp (agrP3 Sg)} ;
 } 
