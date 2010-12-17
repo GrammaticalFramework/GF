@@ -1,5 +1,5 @@
 name: gf
-version: 3.1.90
+version: 3.1.91
 
 cabal-version: >= 1.8
 build-type: Custom
@@ -163,31 +163,3 @@ executable gf
     other-modules: GF.System.UseSignal
   else
     other-modules: GF.System.NoSignal
-
-
-executable pgf-http
-  hs-source-dirs: src/server
-  main-is: pgf-http.hs
-  other-modules: PGFService FastCGIUtils Cache URLEncoding
-                 RunHTTP ServeStaticFile
-  ghc-options: -threaded
-
-  build-depends: base >=4.2 && <5,
-                 old-time,
-                 directory,
-                 filepath,
-                 containers,
-                 process,
-                 gf,
-                 cgi >= 3001.1.8.0,
-                 httpd-shed,
-                 network,
-                 json >= 0.3.3,
-                 utf8-string >= 0.3.1.1,
-                 bytestring,
-                 pretty,
-                 random
-  if os(windows)
-    ghc-options: -optl-mwindows
-  else
-    build-depends: unix
