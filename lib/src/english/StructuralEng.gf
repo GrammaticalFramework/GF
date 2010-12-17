@@ -31,7 +31,7 @@ concrete StructuralEng of Structural = CatEng **
       VVPastNeg => "couldn't" ;   --# notpresent
       VVPresNeg => "can't"
       } ;
-    isAux = True
+    typ = VVAux
     } ;
   during_Prep = mkPrep "during" ;
   either7or_DConj = mkConj "either" "or" singular ;
@@ -70,7 +70,7 @@ concrete StructuralEng of Structural = CatEng **
       VVPastNeg => ["hadn't to"] ;      --# notpresent
       VVPresNeg => "mustn't"
       } ;
-    isAux = True
+    typ = VVAux
     } ;
 ---b  no_Phr = ss "no" ;
   no_Utt = ss "no" ;

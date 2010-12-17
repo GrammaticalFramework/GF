@@ -64,6 +64,7 @@ abstract Extra = Cat ** {
     UseFoc : Temp -> Pol -> Foc -> Utt ;
 
   fun
-    PartVP : VP -> AP ; -- looking at Mary
+    PartVP : VP -> AP ; -- (the man) looking at Mary
+    EmbedPresPart : VP -> SC ; -- looking at Mary (is fun)
 
 }

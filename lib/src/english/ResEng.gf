@@ -56,6 +56,9 @@ resource ResEng = ParamX ** open Prelude in {
 
     Order = ODir | OQuest ;
 
+-- The type of complement of a VV
+
+    VVType = VVAux | VVInf | VVPresPart ; -- can do / try to do / start doing
 
 --2 For $Adjective$
 
@@ -332,11 +335,11 @@ resource ResEng = ParamX ** open Prelude in {
 
 -- 
 
-  predVV : {s : VVForm => Str ; isAux : Bool} -> VP = \verb ->
+  predVV : {s : VVForm => Str ; typ : VVType} -> VP = \verb ->
     let verbs = verb.s
     in
-    case verb.isAux of {
-      True => predAux {
+    case verb.typ of {
+      VVAux => predAux {
         pres = table {
           Pos => \\_ => verbs ! VVF VPres ;
           Neg => \\_ => verbs ! VVPresNeg
@@ -355,10 +358,14 @@ resource ResEng = ParamX ** open Prelude in {
   presVerb : {s : VForm => Str} -> Agr -> Str = \verb -> 
     agrVerb (verb.s ! VPres) (verb.s ! VInf) ;
 
-  infVP : Bool -> VP -> Agr -> Str = \isAux,vp,a ->
+  infVP : VVType -> VP -> Agr -> Str = \typ,vp,a ->
     vp.ad ++ 
-    case isAux of {True => [] ; False => "to"} ++ 
-    vp.inf ++ vp.s2 ! a ;
+    case typ of {
+      VVAux => vp.inf ; 
+      VVInf => "to" ++ vp.inf ;
+      _ => vp.prp
+      } ++ 
+    vp.s2 ! a ;
 
   agrVerb : Str -> Str -> Agr -> Str = \has,have,agr -> 
     case agr of {
