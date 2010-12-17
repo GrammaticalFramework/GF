@@ -6,7 +6,7 @@ function element(id) {
 
 /* --- JavaScript tricks ---------------------------------------------------- */
 
-// To be able to object methods that refer to "this" as callbacks
+// To be able to use object methods that refer to "this" as callbacks
 // See section 3.3 of https://github.com/spencertipping/js-in-ten-minutes/raw/master/js-in-ten-minutes.pdf
 function bind(f, this_value) {
     return function () {return f.apply (this_value, arguments)};
@@ -35,7 +35,7 @@ function jsonp(url,callback)
 
 var json = {next:0};
 
-// Like jsonp, but instead of passing the name of the ballback function, you 
+// Like jsonp, but instead of passing the name of the callback function, you 
 // pass the callback function directly, making it possible to use anonymous
 // functions.
 function jsonpf(url,callback)
@@ -52,6 +52,8 @@ function GetXmlHttpObject(handler)
   var objXMLHttp=null
   if (window.XMLHttpRequest)
   {
+    // See http://www.w3.org/TR/XMLHttpRequest/
+    //     https://developer.mozilla.org/en/xmlhttprequest
     objXMLHttp=new XMLHttpRequest()
   }
   else if (window.ActiveXObject)
