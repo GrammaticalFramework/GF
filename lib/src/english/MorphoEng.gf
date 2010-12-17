@@ -16,10 +16,13 @@ resource MorphoEng = open Prelude, (Predef=Predef), ResEng in {
 
   oper 
 
-  mkDeterminer : Number -> Str -> {s : Str ; sp : Case => Str; n : Number} = \n,s ->
+  mkDeterminer : Number -> Str -> 
+    {s : Str ; sp : Case => Str; n : Number ; hasNum : Bool} = \n,s ->
     {s = s; 
      sp = regGenitiveS s ;
-     n = n} ;
+     n = n ;
+     hasNum = True ; -- doesn't matter since s = sp
+     } ;
 
 --2 Pronouns
 
