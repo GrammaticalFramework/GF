@@ -80,7 +80,7 @@ setProbabilities probs pgf = pgf {
   }}
   where
     mapUnionWith f map1 map2 = 
-      Map.mapWithKey (\k v -> f v (fromJust (Map.lookup k map2))) map1
+      Map.mapWithKey (\k v -> maybe v (f v) (Map.lookup k map2)) map1
 
 -- | compute the probability of a given tree
 probTree :: PGF -> Expr -> Double
