@@ -568,6 +568,7 @@ getConcr flags printnames (GrammarEnv last_id catSet seqSet funSet lindefSet crc
         , productions = IntMap.union prodSet coercions
         , pproductions = IntMap.empty
         , lproductions = Map.empty
+        , lexicon      = IntMap.empty
         , cnccats = Map.fromList [(i2i cat,PGF.Data.CncCat start end (mkArray (map (renderStyle style{mode=OneLineMode} . ppPath) (getStrPaths schema))))
                                      | (cat,(start,end,schema)) <- Map.toList catSet]
         , totalCats   = last_id+1
