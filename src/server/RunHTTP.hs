@@ -1,4 +1,4 @@
-module RunHTTP(runHTTP) where
+module RunHTTP(runHTTP,Options(..)) where
 import Network.URI(uriPath,uriQuery)
 import Network.CGI(ContentType(..))
 import Network.CGI.Protocol(CGIResult(..),CGIRequest(..),Input(..),
@@ -8,11 +8,11 @@ import Network.Shed.Httpd(initServer,Request(..),Response(..),queryToArguments)
 import qualified Data.ByteString.Lazy.Char8 as BS(pack,unpack)
 import qualified Data.Map as M(fromList)
 
-documentRoot = "www"
+data Options = Options { documentRoot :: String, port :: Int } deriving Show
 
-runHTTP port = initServer port . cgiHandler
+runHTTP (Options root port) = initServer port . cgiHandler root
 
-cgiHandler h = fmap httpResp . runCGIT h . cgiReq
+cgiHandler root h = fmap httpResp . runCGIT h . cgiReq root
 
 httpResp :: (Headers,CGIResult) -> Response
 httpResp (hdrs,r) = Response code (map name hdrs) (body r)
@@ -23,12 +23,12 @@ httpResp (hdrs,r) = Response code (map name hdrs) (body r)
 
     name (HeaderName n,v) = (n,v)
 
-cgiReq :: Request -> CGIRequest
-cgiReq (Request method uri hdrs body) = CGIRequest vars inputs body'
+cgiReq :: String -> Request -> CGIRequest
+cgiReq root (Request method uri hdrs body) = CGIRequest vars inputs body'
   where
     vars = M.fromList [("REQUEST_METHOD",method),
                        ("REQUEST_URI",show uri),
-                       ("SCRIPT_FILENAME",documentRoot++uriPath uri),
+                       ("SCRIPT_FILENAME",root++uriPath uri),
                        ("QUERY_STRING",qs),
                        ("HTTP_ACCEPT_LANGUAGE",al)]
     qs = case uriQuery uri of
