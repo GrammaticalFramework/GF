@@ -1,33 +1,54 @@
 
 
 
+
+
+
+
 =Introduction=
 
-This document contains the most important parts of the GF Resource Grammar API.
-It has been machine-generated from the source files; each chapter gives a link
+The GF Resource Grammar Library is the standard library for Grammatical Framework.
+It covers the morphology and basic syntax of currently 16 languages.
+
+This document contains the most important parts of the GF Resource Grammar API,
+as needed by a GF application programmer.
+It has been machine-generated from the source files; there are links
 to the relevant source files, which give more information. Some of the files have
 not yet been prepared so that the machine generated documentation has the nicest
 possible format.
 
-The current status of resource grammar completion for different languages is shown
-in [``status.html`` ./status.html].
-
-The [first chapter #toc2] shows the categories, with links to the functions for
+The main contents are:
+- [Chapter 1 #toc2]: categories, with links to the functions for
 constructing trees in them.
+- [Chapter 2 #toc5]: syntactic construction functions, with cross-links and
+examples. 
+- [Chapter 3 #toc83]: morphological paradigms.
+- [Chapter 4 #toc100]: how to "browse" the library by 
+loading the grammars into the ``gf`` command editor.
+- [Chapter 5 #toc101]: a brief example of how application grammars can
+use the resource modules. 
+- [Detailed table of contents #toc102].
 
-The [second chapter #toc5] shows the construction functions, with cross-links and
-examples. Most examples can be seen in multiple languages by hovering the
+
+Many examples in [Chapter 2 #toc5] can be seen in multiple languages by hovering the
 mouse over the example, as shown in the following screenshot:
 
 [hovering.png]
 
-The [third chapter #toc83] shows morphological paradigms.
+Other relevant documents:
+- [``status.html`` ./status.html]: the current status of different languages
+  and the authors of each grammar
+- [Resource Grammar Tutorial http://www.grammaticalframework.org/doc/gf-lrec-2010.pdf]
+  as presented in LREC-2010.
+- Paper "The GF Resource Grammar Library" by A. Ranta
+  (//Linguistic Issues in Language Technology//, 2 (2), 2009). An overview of
+  the library with linguistic motivations.
+  [PDF http://elanguage.net/journals/index.php/lilt/article/viewFile/214/158]
+- Paper "Grammars as Software Libraries" by A. Ranta
+  (In Y. Bertot, G. Huet, J-J. Lévy, and G. Plotkin (eds.),
+   //From Semantics to Computer Science//, Cambridge University Press, 
+   Cambridge, pp. 281--308, 2009).
+  The library from a software engineering point of view.
+  [PDF http://www.cse.chalmers.se/~aarne/old/articles/libraries-kahn.pdf]
 
-The [fourth chapter #toc100] gives instructions on how to "browse" the library by 
-loading the grammars into the ``gf`` command editor.
 
-The [last chapter #toc101] contains a brief example of how application grammars can
-import resource modules. At the same time, it illustrates a "design pattern" for 
-using the resource API to build functor-based applications
-
-The [table of contents #toc102] is at the end of the file.
