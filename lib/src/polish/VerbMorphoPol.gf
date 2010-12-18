@@ -13,7 +13,7 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
 
 -- According to "Czasownik polski. Odmiana. Slownik." by Zygmunt Saloni 2001 
 -- there are 106 schemes of verb inflection in Polish. I implement only 
--- these, which are necessery. Numeration as in mentioned book.
+-- these, which are necessery. Numeration as in the book mentioned above.
 
 -- opers for the building of the whole paradigm of a verb
 -- in all tenses

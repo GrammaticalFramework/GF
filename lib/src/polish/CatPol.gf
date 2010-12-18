@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:../prelude
 
--- Adam Slaski, 2009 <adam.slaski@gmail.com>
+-- Adam Slaski, 2009, 2010 <adam.slaski@gmail.com>
 
 concrete CatPol of Cat = CommonX - [CAdv] ** open ResPol, Prelude, (R = ParamX) in {
 
@@ -116,11 +116,11 @@ concrete CatPol of Cat = CommonX - [CAdv] ** open ResPol, Prelude, (R = ParamX) 
 
 
 -- Substantives moreover have an inherent gender. 
-    N  = {s : SubstForm => Str; g : Gender};   
+    N  = CommNoun;   
 
-    N2 = {s : SubstForm => Str; g : Gender} ** { c : Complement } ;
+    N2 = CommNoun2;
 
-    N3 = {s : SubstForm => Str; g : Gender} ** { c, c2 : Complement } ;
+    N3 = CommNoun3;-- ** { c, c2 : Complement } ;
 
     PN = NounPhrase;
     

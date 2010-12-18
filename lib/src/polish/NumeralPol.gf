@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:../prelude
 
--- Adam Slaski, 2009 <adam.slaski@gmail.com>
+-- Adam Slaski, 2009, 2010 <adam.slaski@gmail.com>
 
 concrete NumeralPol of Numeral = CatPol ** open ResPol,Prelude, AdjectiveMorphoPol in {
 
@@ -364,7 +364,11 @@ n9 = { unit = table {
     pot01 = {
     unit = table {
         (<(Nom|VocP),Masc _>|<Acc,Masc Inanimate>) => "jeden";
-        <(Nom|Acc|VocP),Neut|NeutGr|Plur> => "jedno";
+        <(Nom|Acc|VocP),Neut|NeutGr> => "jedno";
+        <(Nom|Acc|VocP),Plur> => "jedne";
+        <(Gen|Loc),Plur> => "jednych";
+        <Dat,Plur> => "jednym";
+        <Instr,Plur> => "jednymi";
         <(Nom|VocP),Fem> => "jedna";
         <(Gen|Dat|Loc),Fem> => "jednej";
         <(Acc|Instr),Fem> => "jedną";
