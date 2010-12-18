@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:../prelude
 
--- Adam Slaski, 2009 <adam.slaski@gmail.com>
+-- Adam Slaski, 2009, 2010 <adam.slaski@gmail.com>
 
 concrete NounPol of Noun = CatPol ** open ResPol, Prelude, PronounMorphoPol in {
 

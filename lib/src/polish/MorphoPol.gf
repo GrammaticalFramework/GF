@@ -5,26 +5,56 @@
 --
 -- Ilona Nowak, Wintersemester 2007/08
 --
--- Adam Slaski, 2009 <adam.slaski@gmail.com>
---
--- This resource morphology contains definitions 
--- of the lexical entries needed in the resource syntax. 
--- It moreover contains copies of the most usual inflectional patterns.
+-- Adam Slaski, 2009, 2010 <adam.slaski@gmail.com>
 
--- I use the parameter types and word classes defined for morphology.
+-- Description of the Polish morphology
 
 resource MorphoPol = 
     ResPol, 
     VerbMorphoPol, 
     PronounMorphoPol,
     AdjectiveMorphoPol,
-    NounMorphoPol ** open Prelude, (Predef=Predef) in {
+    NounMorphoPol ** {
 
      flags  coding=utf8; 
 
+oper
+
+  mkAdv : Str -> { s :Str };
+  mkAdv x = { s = x };
+
+-- Nouns used as functions need a preposition. The most common is with Genitive.
+
+  mkN2 : CommNoun -> CommNoun2 ;
+  mkN2 n = mkFun n nullPrep ;
+
+  mkFun  : CommNoun -> Complement -> CommNoun2;
+  mkFun f p = { s = f.s; g = f.g; c = { c = p.c; s=p.s}; lock_N2=<> } ;
+
+  mkN3 : CommNoun -> Complement -> Complement -> CommNoun3;
+  mkN3 f p r = { s = f.s; g = f.g; c = {s=p.s; c=p.c} ; c2 = {s=r.s; c=r.c}; lock_N3=<>}; 
+
+-- Prepositions   
+
+-- The commonest cases are functions with Genitive.
+  nullPrep   : Complement = mkPrep []    Gen; --{s = []; c= GenNoPrep; lock_Prep=<>};  
+  nadPrep    : Complement = mkPrep "nad" Instr; 
+  zGenPrep   : Complement = mkPrep "z"   Gen;
+  zInstrPrep : Complement = mkPrep "z"   Instr;
+  doPrep     : Complement = mkPrep "do"  Gen;
+  naAccPrep  : Complement = mkPrep "na"  Acc;
+
+  
+
+
+-- A preposition is formed from a string and a case.
+
+  mkPrep : Str -> Case -> Complement;
+  mkPrep s c = mkCompl s c ** {lock_Prep = <>};
+
+
 -- definitions for structural objects
 
-  oper
     wszyscy : NounPhrase = {
       nom = "wszyscy" ;
       voc = "wszyscy" ;

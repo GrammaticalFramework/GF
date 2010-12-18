@@ -2,19 +2,19 @@
 
 -- Ilona Nowak Wintersemester 2007/08  
 
--- Adam Slaski, 2009 <adam.slaski@gmail.com>
+-- Adam Slaski, 2009, 2010 <adam.slaski@gmail.com>
 
 -- In Polish language they aren't determiners like in english or german.
 
 concrete StructuralPol of Structural = CatPol ** 
-  open ResPol, MorphoPol, ParadigmsPol, Prelude in {
+  open ResPol, MorphoPol, Prelude in {
 
 
   flags optimize=all; coding=utf8;
 
 lin
 
-  above_Prep = mkPrep "nad" Instr; 
+  above_Prep = nadPrep;
   after_Prep = mkPrep "po"  Loc;
 
   all_Predet = { s=wszystek; np=wszystko; adj=True };
@@ -34,7 +34,7 @@ lin
   by8means_Prep = mkPrep "przez" Acc;
   can8know_VV = mkItVerb (mkMonoVerb "umieć" conj101 Imperfective);
   can_VV  = mkItVerb (mkMonoVerb "móc" conj27 Imperfective);
-  during_Prep  = mkPrep "podczas" Gen; -- def. in ParadigmsPol
+  during_Prep  = mkPrep "podczas" Gen; 
   either7or_DConj = {s1="albo"; s2="albo";  sent1="albo"; sent2=[", albo"]};
   every_Det  = kazdyDet;
   everybody_NP = wszyscy ** {lock_NP=<>};
@@ -43,7 +43,7 @@ lin
   except_Prep = mkPrep "z wyjątkiem" Acc;
   few_Det = pareDet;
   for_Prep = mkPrep "dla" Gen;
-  from_Prep  = mkPrep "z" Gen; -- def. in ParadigmsPol
+  from_Prep  = zGenPrep; 
   have_V2 = dirV2 (mkMonoVerb "mieć" conj100 Imperfective); 
   he_Pron  = pronOn;
   here_Adv = ss "tutaj";
@@ -94,7 +94,7 @@ lin
   they_Pron = pronOni;-- pronOneFem; pronOneNeut};
   this_Quant = demPronTen "ten";
   through_Prep  = mkPrep "przez" Acc;
-  to_Prep = mkPrep "do" Gen; -- def. in ParadigmsPol.gf
+  to_Prep = doPrep; 
   too_AdA = ss "za"; 
   under_Prep = mkPrep "pod" Instr; -- with Acc too
   very_AdA = ss "bardzo";
@@ -110,7 +110,7 @@ lin
   whoSg_IP = kto;
   why_IAdv = ss "dlaczego";
   with_Prep = mkPrep "z" Instr;
-  without_Prep = mkPrep "bez" Gen; -- def. in ParadigmsPol.gf
+  without_Prep = mkPrep "bez" Gen;
   youPl_Pron = pronWy;
   yes_Utt = ss "tak";
   youSg_Pron = pronTy;

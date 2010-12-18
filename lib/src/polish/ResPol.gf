@@ -3,7 +3,7 @@
 
 -- Ilona Nowak Wintersemester 2007/08  
 
--- Adam Slaski, 2009 <adam.slaski@gmail.com>
+-- Adam Slaski, 2009, 2010 <adam.slaski@gmail.com>
 
 -- 1 Polish auxiliary operations.
 
@@ -31,8 +31,8 @@
 
   param 
     Gender     = Masc Animacy | Fem | NeutGr | Neut | Plur ; 
-	Animacy    = Animate | Inanimate | Personal ;
-	Case       = Nom | Gen | Dat | Acc | Instr | Loc | VocP ;   
+    Animacy    = Animate | Inanimate | Personal ;
+    Case       = Nom | Gen | Dat | Acc | Instr | Loc | VocP ;   
 
 -- Nouns are declined according to number and case.
 -- For the sake of shorter description, these parameters are 
@@ -42,7 +42,10 @@
 
 
     -- oper used in NounMorphoPol.gf
-    oper CommNoun = {s : SubstForm => Str; g : Gender};  
+    -- type of N, _not_ CN
+  oper CommNoun = {s : SubstForm => Str; g : Gender};
+  oper CommNoun2 = CommNoun ** { c : Complement } ;
+  oper CommNoun3 = CommNoun2 ** { c2 : Complement } ;
 
 
 --2 Verbs   
