@@ -40,26 +40,26 @@ resource ParadigmsDan =
 oper
   Gender : Type ; 
 
-  utrum   : Gender ;
-  neutrum : Gender ;
+  utrum   : Gender ;  -- "en" gender
+  neutrum : Gender ;  -- "et" gender
 
 -- To abstract over number names, we define the following.
 
-  Number : Type ; 
+  Number : Type ; --%
 
-  singular : Number ;
-  plural   : Number ;
+  singular : Number ; --%
+  plural   : Number ; --%
 
 -- To abstract over case names, we define the following.
 
-  Case : Type ;
+  Case : Type ; --%
 
-  nominative : Case ;
-  genitive   : Case ;
+  nominative : Case ; --%
+  genitive   : Case ; --%
 
 -- Prepositions used in many-argument functions are just strings.
 
-  mkPrep : Str -> Prep ;
+  mkPrep : Str -> Prep ;  -- e.g. "til"
   noPrep : Prep ;         -- empty string
 
 --2 Nouns
@@ -71,26 +71,26 @@ oper
 -- The heuristic is that all nouns are $utrum$ with the
 -- plural ending "er" or "r".
 
-    mkN : (bil : Str) -> N ;
+    mkN : (bil : Str) -> N ; -- regular noun: "en" gender with plural "-er" or "-r"
 
 -- Giving gender manually makes the heuristic more reliable.
 
-    mkN : (hus : Str) -> Gender -> N ;
+    mkN : (hus : Str) -> Gender -> N ; -- regular possibly of "et" gender --%
 
 -- This function takes the singular indefinite and definite forms; the
 -- gender is computed from the definite form.
 
-    mkN : (bil,bilen : Str) -> N ;
+    mkN : (bil,bilen : Str) -> N ; -- better prediction from both singular and plural
 
 -- This function takes the singular indefinite and definite and the plural
 -- indefinite
 
-    mkN : (bil,bilen,biler : Str) -> N ;
+    mkN : (bil,bilen,biler : Str) -> N ; --%
 
 -- Worst case: give all four forms. The gender is computed from the
 -- last letter of the second form (if "n", then $utrum$, otherwise $neutrum$).
 
-    mkN : (dreng,drengen,drenge,drengene : Str) -> N ;
+    mkN : (dreng,drengen,drenge,drengene : Str) -> N ; -- worst case
   } ;
 
 
@@ -106,12 +106,12 @@ oper
 -- 
 -- Relational nouns ("datter til x") need a preposition. 
 
-  mkN2 : N -> Prep -> N2 ;
+  mkN2 : N -> Prep -> N2 ; -- e.g. datter + til
 
 -- The most common preposition is "af", and the following is a
 -- shortcut for regular relational nouns with "af".
 
-  regN2 : Str -> Gender -> N2 ;
+  regN2 : Str -> Gender -> N2 ; --%
 
 -- Use the function $mkPrep$ or see the section on prepositions below to  
 -- form other prepositions.
@@ -119,7 +119,7 @@ oper
 -- Three-place relational nouns ("forbindelse fra x til y") 
 -- need two prepositions.
 
-  mkN3 : N -> Prep -> Prep -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ; -- e.g. forbindelse + fra + til
 
 
 --3 Relational common noun phrases
@@ -135,9 +135,9 @@ oper
 -- Proper names, with a regular genitive, are formed as follows
 
   mkPN : overload {
-    mkPN : Str -> PN ;       -- utrum
-    mkPN : Str -> Gender -> PN ;  
-    mkPN : N -> PN ;
+    mkPN : Str -> PN ;           -- utrum gender
+    mkPN : Str -> Gender -> PN ; -- other gender
+    mkPN : N -> PN ; --%
     } ;
 
 
@@ -147,22 +147,22 @@ oper
 -- with "ig". Two, five, or at worst five forms are sometimes needed.
 
   mkA : overload {
-    mkA : (fin : Str) -> A ;
-    mkA : (fin,fint : Str) -> A ;
-    mkA : (galen,galet,galne : Str) -> A ;
-    mkA : (stor,stort,store,storre,storst : Str) -> A ;
+    mkA : (fin : Str) -> A ;  -- regular adjective
+    mkA : (fin,fint : Str) -> A ;  -- deviant neuter
+    mkA : (galen,galet,galne : Str) -> A ; -- also deviant plural
+    mkA : (stor,stort,store,storre,storst : Str) -> A ; -- worst case
 
 -- If comparison is formed by "mer", "mest", as in general for
 -- long adjective, the following pattern is used:
 
-    mkA : A -> A ; -- -/mer/mest norsk
+    mkA : A -> A ; -- force comparison with mer/mest 
   } ;
 
 --3 Two-place adjectives
 --
 -- Two-place adjectives need a preposition for their second argument.
 
-  mkA2 : A -> Prep -> A2 ;
+  mkA2 : A -> Prep -> A2 ; -- e.g. gift + med
 
 
 
@@ -172,12 +172,12 @@ oper
 -- after the verb. Some can be close to the verb like the negation
 -- "ikke" (e.g. "altid").
 
-  mkAdv : Str -> Adv ;
-  mkAdV : Str -> AdV ;
+  mkAdv : Str -> Adv ;  -- after verb, e.g. "idag"
+  mkAdV : Str -> AdV ;  -- close to verb, e.g. "altid"
 
 -- Adverbs modifying adjectives and sentences can also be formed.
 
-  mkAdA : Str -> AdA ;
+  mkAdA : Str -> AdA ; -- modify adjective, e.g. "meget"
 
 
 --2 Verbs
@@ -187,27 +187,27 @@ oper
 
 -- The 'regular verb' function is the first conjugation.
 
-    mkV : (snakke : Str) -> V ;
+    mkV : (snakke : Str) -> V ; -- regular verb
 
 -- The almost regular verb function needs the infinitive and the preteritum.
 
-    mkV : (leve,levde : Str) -> V ;
+    mkV : (leve,levde : Str) -> V ; -- also give past tense
 
 -- There is an extensive list of irregular verbs in the module $IrregDan$.
 -- In practice, it is enough to give three forms, as in school books.
 
-    mkV : (drikke, drakk, drukket  : Str) -> V ;
+    mkV : (drikke, drakk, drukket  : Str) -> V ; -- theme of irregular verb
 
 -- The worst case needs six forms.
 
-    mkV : (spise,spiser,spises,spiste,spist,spis : Str) -> V ;
+    mkV : (spise,spiser,spises,spiste,spist,spis : Str) -> V ; -- worst case
 
 
 --3 Verbs with a particle.
 --
 -- The particle, such as in "lukke op", is given as a string.
 
-    mkV : V -> Str -> V ;
+    mkV : V -> Str -> V ; -- particle verb, e.g. lukke + op
   } ;
 
 
@@ -216,7 +216,7 @@ oper
 --
 -- By default, the auxiliary is "have". This function changes it to "være".
 
-  vaereV : V -> V ;
+  vaereV : V -> V ; -- force auxiliary "være"
 
 
 
@@ -226,8 +226,8 @@ oper
 -- Some words are used in passive forms only, e.g. "undres", some as
 -- reflexive e.g. "forestille sig".
 
-  depV  : V -> V ;
-  reflV : V -> V ;
+  depV  : V -> V ; -- deponent, e.g. "undres"
+  reflV : V -> V ; -- reflexive, e.g. "forestille sig"
 
 
 --3 Two-place verbs
@@ -236,9 +236,9 @@ oper
 -- (transitive verbs). Notice that, if a particle is needed, it comes from the $V$.
 
   mkV2 : overload {
-    mkV2 : Str -> V2 ;
-    mkV2 : V -> V2 ;
-    mkV2 : V -> Prep -> V2 ;
+    mkV2 : Str -> V2 ; --%
+    mkV2 : V -> V2 ;  -- direct object
+    mkV2 : V -> Prep -> V2 ; -- prepositional object
   } ;
 
 
@@ -256,7 +256,7 @@ oper
 -- Verbs and adjectives can take complements such as sentences,
 -- questions, verb phrases, and adjectives.
 
-  mkV0  : V -> V0 ;
+  mkV0  : V -> V0 ; --%
   mkVS  : V -> VS ;
   mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;
@@ -266,17 +266,17 @@ oper
   mkVQ  : V -> VQ ;
   mkV2Q : V -> Prep -> V2Q ;
 
-  mkAS  : A -> AS ;
-  mkA2S : A -> Prep -> A2S ;
-  mkAV  : A -> AV ;
-  mkA2V : A -> Prep -> A2V ;
+  mkAS  : A -> AS ; --%
+  mkA2S : A -> Prep -> A2S ; --%
+  mkAV  : A -> AV ; --%
+  mkA2V : A -> Prep -> A2V ; --%
 
 -- Notice: categories $AS, A2S, AV, A2V$ are just $A$, 
 -- and the second argument is given as an adverb..
 -- $V0$ is just $V$.
 
-  V0 : Type ;
-  AS, A2S, AV, A2V : Type ;
+  V0 : Type ; --%
+  AS, A2S, AV, A2V : Type ; --%
 
 --.
 
