@@ -58,15 +58,21 @@ oper
 
   --Prep : Type ;
 
-  accusative : Prep ;
-  genitive   : Prep ;
-  dative     : Prep ;
-
-  mkPrep : Str -> Prep ;
+  accusative : Prep ; -- direct object
+  genitive   : Prep ; -- preposition "di" and its contractions
+  dative     : Prep ; -- preposition "a" and its contractions
 
 -- The following prepositions also have special contracted forms.
 
-  con_Prep, da_Prep, in_Prep, su_Prep : Prep ;
+  con_Prep : Prep ; -- preposition "con" and its contractions
+  da_Prep : Prep ; -- preposition "da" and its contractions
+  in_Prep : Prep ; -- preposition "in" and its contractions
+  su_Prep : Prep ; -- preposition "su" and its contractions
+
+-- other prepositions
+
+  mkPrep : Str -> Prep ; -- other prepositions, e.g. "dopo"
+
 
 --2 Nouns
 
@@ -77,22 +83,22 @@ oper
 -- The heuristic says that the gender is feminine for nouns
 -- ending with "a", and masculine for all other words.
 
-    mkN : (cane : Str) -> N ;
+    mkN : (cane : Str) -> N ; -- regular noun; fem for -"a", masc otherwise
 
 -- To force a different gender, give it explicitly.
 
-    mkN : (carne : Str) -> Gender -> N ; 
+    mkN : (carne : Str) -> Gender -> N ; -- override default gender
 
 -- Worst case: give both two forms and the gender. 
 
-    mkN : (uomo,uomini : Str) -> Gender -> N ;
+    mkN : (uomo,uomini : Str) -> Gender -> N ; -- worst case
 
 -- In *compound nouns*, the first part is inflected as a noun but
 -- the second part is not inflected. e.g. "numero di telefono". 
 -- They could be formed in syntax, but we give a shortcut here since
 -- they are frequent in lexica.
 
-    mkN : N -> Str -> N
+    mkN : N -> Str -> N -- compound such as "numero" + "di telefono"
     } ;
 
 
@@ -104,13 +110,13 @@ oper
 -- The default is regular nouns with the genitive "di".
 
   mkN2 : overload {
-    mkN2 : Str -> N2 ;
-    mkN2 : N -> Prep -> N2
+    mkN2 : Str -> N2 ; -- regular with genitive, e.g. "figlio" + "di"
+    mkN2 : N -> Prep -> N2 -- arbitrary noun and preposition
   } ;
 
 -- Three-place relational nouns ("la connessione di x a y") need two prepositions.
 
-  mkN3 : N -> Prep -> Prep -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ; -- e.g. volo + da + per
 
 
 --3 Relational common noun phrases
@@ -127,8 +133,8 @@ oper
 -- the name ends with an "a", and masculine otherwise.
 
   mkPN : overload {
-    mkPN : Str -> PN ;
-    mkPN : Str -> Gender -> PN
+    mkPN : Str -> PN ; -- femininne for "-a", otherwise masculine
+    mkPN : Str -> Gender -> PN -- set gender manually
   } ;
 
 
@@ -140,18 +146,18 @@ oper
 -- For regular adjectives, all forms are derived from the
 -- masculine singular. Comparison is formed by "più".
 
-    mkA : (bianco : Str) -> A ;
+    mkA : (bianco : Str) -> A ; -- predictable adjective
 
 -- Five forms are needed in the worst
 -- case (masc and fem singular, masc plural, adverbial), given that
 -- comparison is formed by "più".
 
-    mkA : (solo,sola,soli,sole,solamente : Str) -> A ;
+    mkA : (solo,sola,soli,sole,solamente : Str) -> A ; -- irregular adjective
 
 -- With irregular comparison, there are as it were two adjectives:
 -- the positive ("buono") and the comparative ("migliore"). 
 
-    mkA : A -> A -> A
+    mkA : A -> A -> A -- special comparison, e.g. buono - migliore
     } ;
 
 -- All the functions above create postfix adjectives. To switch
@@ -159,7 +165,8 @@ oper
 -- modification, as in "vecchia chiesa"), the following function is
 -- provided.
 
-    prefixA : A -> A = prefA ;
+    prefixA : A -> A -- adjective that comes before noun (default: after) 
+    = prefA ;
 
 
 
@@ -167,7 +174,7 @@ oper
 --
 -- Two-place adjectives need a preposition for their second argument.
 
-  mkA2 : A -> Prep -> A2 ;
+  mkA2 : A -> Prep -> A2 ; -- e.g. divisibile + per
 
 
 
@@ -197,26 +204,26 @@ oper
 -- these endings, as well as the variations among
 -- "amare, cominciare, mangiare, legare, cercare".
 
-    mkV : Str -> V ;
+    mkV : Str -> V ; -- regular verbs in "-are"/"-ire"
  
 -- The module $BeschIta$ gives (almost) all the patterns of the "Bescherelle"
 -- book. To use them in the category $V$, wrap them with the function
 
-    mkV : Verbo -> V ;
+    mkV : Verbo -> V ; -- verbs formed by BeschIta
 
 -- If $BeschIta$ does not give the desired result or feels difficult
 -- to consult, here is a worst-case function for "-ire" and "-ere" verbs,
 -- taking 11 arguments.
 
-    mkV : (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V 
+    mkV : (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V -- worst case
     } ;
 
 -- The function $regV$ gives all verbs the compound auxiliary "avere".
 -- To change it to "essere", use the following function.
 -- Reflexive implies "essere".
 
-  essereV : V -> V ;
-  reflV : V -> V ;
+  essereV : V -> V ; -- force "essere" as auxiliary (default avere)
+  reflV : V -> V ; -- reflexive verb (implies essere)
 
 
 --3 Two-place verbs
@@ -225,14 +232,14 @@ oper
 -- (transitive verbs). Notice that a particle comes from the $V$.
 
   mkV2 : overload {
-    mkV2 : Str -> V2 ;
-    mkV2 : V -> V2 ;
-    mkV2 : V -> Prep -> V2
+    mkV2 : Str -> V2 ; -- regular verb, direct object 
+    mkV2 : V -> V2 ;   -- direct object
+    mkV2 : V -> Prep -> V2 -- prepositional object
     } ;
 
 -- You can reuse a $V2$ verb in $V$.
 
-  v2V : V2 -> V ;
+  v2V : V2 -> V ; --%
 
 --3 Three-place verbs
 --
@@ -249,7 +256,7 @@ oper
 -- Verbs and adjectives can take complements such as sentences,
 -- questions, verb phrases, and adjectives.
 
-  mkV0  : V -> V0 ;
+  mkV0  : V -> V0 ; --%
   mkVS  : V -> VS ;
   mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;  -- plain infinitive: "voglio parlare"
@@ -261,18 +268,18 @@ oper
   mkVQ  : V -> VQ ;
   mkV2Q : V -> Prep -> V2Q ;
 
-  mkAS  : A -> AS ;
-  mkA2S : A -> Prep -> A2S ;
-  mkAV  : A -> Prep -> AV ;
-  mkA2V : A -> Prep -> Prep -> A2V ;
+  mkAS  : A -> AS ; --%
+  mkA2S : A -> Prep -> A2S ; --%
+  mkAV  : A -> Prep -> AV ; --%
+  mkA2V : A -> Prep -> Prep -> A2V ; --%
 
 -- Notice: categories $AS, A2S, AV, A2V$ are just $A$, 
 -- and the second argument is given
 -- as an adverb. Likewise 
 -- $V0$ is just $V$.
 
-  V0 : Type ;
-  AS, A2S, AV, A2V : Type ;
+  V0 : Type ; --%
+  AS, A2S, AV, A2V : Type ; --%
 
 
 --.

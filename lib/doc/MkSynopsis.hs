@@ -121,7 +121,7 @@ rulesTable aexx hasEx isLatex cs file = do
 
 getRules :: ApiExx -> FilePath -> IO Rules
 getRules aexx file = do
-  ss <- readFileC file >>= return . filter (not . hiddenLine) . lines
+  ss <- readFileC (coding file) file >>= return . filter (not . hiddenLine) . lines
   return $ getrs [] ss
  where
    getrs rs ss = case ss of
@@ -311,7 +311,18 @@ showTyp cs = unwords . map f . words
                     && isUpper (head cat)
 
 -- to work around GHC 6.12 file input
-readFileC file = do
+readFileC cod file = do
   let tmp = file ++ ".tmp"
-  system $ "iconv -f ISO-8859-1 -t UTF-8 " ++ file ++ " >" ++ tmp
-  readFile tmp
+  case cod of
+    "utf8" -> readFile file
+    _ -> do
+      system $ "iconv -f ISO-8859-1 -t UTF-8 " ++ file ++ " >" ++ tmp
+      readFile tmp
+
+coding file = case language file of
+  "Pol" -> "utf8"
+  "Rus" -> "utf8"
+  _     -> "latin1"
+
+language = reverse . take 3 . drop 3 . reverse
+

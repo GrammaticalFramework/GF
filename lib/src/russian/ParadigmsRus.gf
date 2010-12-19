@@ -197,9 +197,7 @@ perfective: Aspect ;
 -- Inherent aspect should also be specified.
 
 --   mkVerbum : Aspect -> (presentSgP1,presentSgP2,presentSgP3,
-   mkV : Aspect -> (presentSgP1,presentSgP2,presentSgP3,
-                         presentPlP1,presentPlP2,presentPlP3,
-                         pastSgMasculine,imperative,infinitive: Str) -> V ;
+   mkV : Aspect -> (presSg1,presSg2,presSg3,presPl1,presPl2,presPl3,pastSgMasc,imp,inf: Str) -> V ;
 
 -- Common conjugation patterns are two conjugations: 
 --  first - verbs ending with "-ать/-ять" and second - "-ить/-еть".
@@ -212,8 +210,7 @@ perfective: Aspect ;
 -- So the definition for verb "любить"  looks like:
 -- regV Imperfective Second "люб" "лю" "любил" "люби" "любить";
 
-   regV :Aspect -> Conjugation -> (stemPresentSgP1,endingPresentSgP1,
-                         pastSgP1,imperative,infinitive : Str) -> V ; 
+   regV :Aspect -> Conjugation -> (stemPresSg1,endPresSg1,pastSg1,imp,inf : Str) -> V ; 
 
 
 -- Two-place verbs, and the special case with direct object. Notice that

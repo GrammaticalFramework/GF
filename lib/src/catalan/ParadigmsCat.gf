@@ -58,11 +58,11 @@ oper
 -- amalgamate with the following word (the 'genitive' "de" and the
 -- 'dative' "a").
 
-  accusative : Prep ;
-  genitive   : Prep ;
-  dative     : Prep ;
+  accusative : Prep ; -- direct object
+  genitive   : Prep ; -- preposition "de"
+  dative     : Prep ; -- preposition "a"
 
-  mkPrep : Str -> Prep ;
+  mkPrep : Str -> Prep ; -- other preposition
 
 
 --2 Nouns
@@ -77,15 +77,15 @@ oper
 -- those ending with "z" have "ces" in plural; all other nouns
 -- have "es" as plural ending. The accent is not dealt with. TODO
 
-    mkN : (llum : Str) -> N ;
+    mkN : (llum : Str) -> N ; -- regular, with heuristics for plural and gender
 
 -- A different gender can be forced.
 
-    mkN : Str -> Gender -> N ;
+    mkN : Str -> Gender -> N ; -- force gender
 
 -- The worst case has two forms (singular + plural) and the gender.
 
-    mkN : (disc,discos : Str) -> Gender -> N 
+    mkN : (disc,discos : Str) -> Gender -> N -- worst case
     } ;
 
 
@@ -96,24 +96,24 @@ oper
 -- They could be formed in syntax, but we give a shortcut here since
 -- they are frequent in lexica.
 
-  compN : N -> Str -> N ;
+  compN : N -> Str -> N ; -- compound, e.g. "número" +  "de telèfon"
 
 
 --3 Relational nouns 
 -- 
 -- Relational nouns ("filla de x") need a case and a preposition. 
 
-  mkN2 : N -> Prep -> N2 ;
+  mkN2 : N -> Prep -> N2 ; -- e.g. filla + genitive
 
 -- The most common cases are the genitive "de" and the dative "a", 
 -- with the empty preposition.
 
-  deN2 : N -> N2 ;
-  aN2  : N -> N2 ;
+  deN2 : N -> N2 ; -- relation with genitive
+  aN2  : N -> N2 ; -- relation with dative
 
 -- Three-place relational nouns ("la connexió de x a y") need two prepositions.
 
-  mkN3 : N -> Prep -> Prep -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ; -- e.g. connexió + genitive + dative
 
 
 --3 Relational common noun phrases
@@ -130,8 +130,8 @@ oper
 -- The default gender is feminine for names ending with "a", otherwise masculine. TODO 
 
   mkPN : overload {
-    mkPN : (Anna : Str) -> PN ;
-    mkPN : (Pilar : Str) -> Gender -> PN
+    mkPN : (Anna : Str) -> PN ; -- feminine for "-a", otherwise masculine
+    mkPN : (Pilar : Str) -> Gender -> PN -- force gender
     } ;
 
 
@@ -143,17 +143,17 @@ oper
 -- masculine singular. The types of adjectives that are recognized are
 -- "alto", "fuerte", "util". Comparison is formed by "mas".
 
-    mkA : (sol : Str) -> A ;
+    mkA : (sol : Str) -> A ; -- regular
 
 -- One-place adjectives compared with "mas" need five forms in the worst
 -- case (masc and fem singular, masc plural, adverbial).
 
-    mkA : (fort,forta,forts,fortes,fortament : Str) -> A ;
+    mkA : (fort,forta,forts,fortes,fortament : Str) -> A ; -- worst case
 
 -- In the worst case, two separate adjectives are given: 
 -- the positive ("bo"), and the comparative ("millor"). 
 
-    mkA : (bo : A) -> (millor : A) -> A
+    mkA : (bo : A) -> (millor : A) -> A -- special comparison (default with "mas")
     } ;
 
 -- The functions above create postfix adjectives. To switch
@@ -162,14 +162,14 @@ oper
 -- provided.
 -- JS: What about vi bÛ -> bon vi ?
 
-  prefixA : A -> A ;
+  prefixA : A -> A ; -- adjective before noun (default: after)
 
 
 --3 Two-place adjectives
 --
 -- Two-place adjectives need a preposition for their second argument.
 
-  mkA2 : A -> Prep -> A2 ;
+  mkA2 : A -> Prep -> A2 ; -- e.g. "casat" + dative
 
 
 
@@ -197,7 +197,7 @@ oper
 -- The regular verb function works for models I, IIa, IIb and IIa
 -- The module $BeschCat$ gives the complete set of "Bescherelle" conjugations.
 
-    mkV : (cantar : Str) -> V ;
+    mkV : (cantar : Str) -> V ; -- regular in models I, IIa, IIb
 
 -- Verbs with vowel alternatition in the stem - easiest to give with
 -- two forms, e.g. "mostrar"/"muestro". TODO
@@ -208,17 +208,17 @@ oper
 -- the module $BeschCat$ gives all the patterns of the "Bescherelle"
 -- book. To use them in the category $V$, wrap them with the function
 
-    mkV : Verbum -> V 
+    mkV : Verbum -> V  -- use verb constructed in BeschCat
     } ;
 
 -- To form reflexive verbs:
 
-  reflV : V -> V ;
+  reflV : V -> V ; -- reflexive verb
 
 -- Verbs with a deviant passive participle: just give the participle
 -- in masculine singular form as second argument.
 
-  special_ppV : V -> Str -> V ; 
+  special_ppV : V -> Str -> V ;  --%
 
 
 
@@ -228,15 +228,15 @@ oper
 -- (transitive verbs). 
 
   mkV2 : overload {
-    mkV2 : Str -> V2 ;
-    mkV2 : V -> V2 ;  
-    mkV2 : V -> Prep -> V2
+    mkV2 : Str -> V2 ; -- regular verb, direct object
+    mkV2 : V -> V2 ;   -- any verb, direct object
+    mkV2 : V -> Prep -> V2 -- preposition for complement
     } ;
 
 
 -- You can reuse a $V2$ verb in $V$.
 
-  v2V : V2 -> V ;
+  v2V : V2 -> V ; --%
 
 --3 Three-place verbs
 --
@@ -252,7 +252,7 @@ oper
 -- Verbs and adjectives can take complements such as sentences,
 -- questions, verb phrases, and adjectives.
 
-  mkV0  : V -> V0 ;
+  mkV0  : V -> V0 ; --%
   mkVS  : V -> VS ;
   mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;  -- plain infinitive: "vull parlar"
@@ -264,18 +264,18 @@ oper
   mkVQ  : V -> VQ ;
   mkV2Q : V -> Prep -> V2Q ;
 
-  mkAS  : A -> AS ;
-  mkA2S : A -> Prep -> A2S ;
-  mkAV  : A -> Prep -> AV ;
-  mkA2V : A -> Prep -> Prep -> A2V ;
+  mkAS  : A -> AS ; --%
+  mkA2S : A -> Prep -> A2S ; --%
+  mkAV  : A -> Prep -> AV ; --%
+  mkA2V : A -> Prep -> Prep -> A2V ; --%
 
 -- Notice: categories $AS, A2S, AV, A2V$ are just $A$, 
 -- and the second argument is given
 -- as an adverb. Likewise 
 -- $V0$ is just $V$.
 
-  V0 : Type ;
-  AS, A2S, AV, A2V  : Type ;
+  V0 : Type ; --%
+  AS, A2S, AV, A2V  : Type ; --%
 
 
 --.

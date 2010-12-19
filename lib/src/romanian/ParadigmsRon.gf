@@ -64,6 +64,26 @@ noPrep : NCase -> Prep ;
 
 --2 Nouns
 
+ mkN = overload {
+    mkN : Str -> N -- Singular, infers gender and Plural 
+    = mkSPN; 
+    mkN : Str -> Str -> NGender -> N -- worst case: Singular + Plural + gender
+    = mkNI; 
+    mkN : Str -> Str -> Str -> N -- very irregular nouns - feminine 
+    = mkVI; 
+    mkN : Str -> Str -> N -- Singular + Plural, infers gender
+    = mkNN; 
+    mkN : Str -> NGender -> N -- Singular +  gender, infers Plural 
+    = regN;  
+ } ; 
+
+--because the plurals ending in "uri" are becoming less and less frequent for neuter nouns,
+--and because there is no way of infering the plural form by looking at the structure of the word
+--we treat this case separately :
+   
+mkNR : Str -> N;
+mkNR s = mkInanimate (mkNomNeut s) ** {lock_N = <>} ;
+
 
 
 --3 Relational nouns 
@@ -147,6 +167,17 @@ lock_PN = <>
 };
 
 
+--3 Adjectives
+--
+mkA = overload {
+   mkA : Str -> A -- regular adjectives 
+   = regA; 
+   mkA : Str -> Str -> Str -> Str -> Str -> A --worst case -- all 4 forms are needed + form for adverb
+   = mk5A ; 
+   mkA : Str -> Str -> Str -> Str -> A -- 4 forms are needed 
+   = mk4A; 
+};
+
 
 
 --3 Two-place adjectives
@@ -168,10 +199,10 @@ lock_PN = <>
   mkVQ  : V -> VQ ;
   mkV2Q : V -> Prep -> V2Q ;
 
-  mkAS  : A -> AS ;
-  mkA2S : A -> Prep -> A2S ;
-  mkAV  : A -> Prep -> AV ;
-  mkA2V : A -> Prep -> Prep -> A2V ;
+  mkAS  : A -> AS ; --%
+  mkA2S : A -> Prep -> A2S ; --%
+  mkAV  : A -> Prep -> AV ; --%
+  mkA2V : A -> Prep -> Prep -> A2V ; --%
 
 
 
@@ -272,28 +303,9 @@ mkNN s ss = case s of
                           }
      };
 
- mkN = overload {
-    mkN : Str -> Str -> NGender -> N = mkNI; -- worst case - we need Singular + Plural form + gender
-    mkN : Str -> Str -> Str -> N = mkVI; -- very irregular nouns - feminine
-    mkN : Str -> Str -> N = mkNN; -- needed Singular + Plural form, infers gender
-    mkN : Str -> NGender -> N = regN;  -- needed Singular +  gender, infers Plural form
-    mkN : Str -> N = mkSPN; -- needed Singular form, infers gender and Plural form
- } ; 
-
---because the plurals ending in "uri" are becoming less and less frequent for neuter nouns,
---and because there is no way of infering the plural form by looking at the structure of the word
---we treat this case separately :
-   
-mkNR : Str -> N;
-mkNR s = mkInanimate (mkNomNeut s) ** {lock_N = <>} ;
 
 --------------------------------------------------------------------
 
-mkA = overload {
-   mkA : Str -> Str -> Str -> Str -> Str -> A = mk5A ;--worst case -- all 4 forms are needed + form for adverb
-   mkA : Str -> Str -> Str -> Str -> A = mk4A; -- 4 forms are needed
-   mkA : Str -> A = regA; -- regular adjectives
-};
 
 mk4A : Str -> Str -> Str -> Str -> A;
 mk4A a b c d =  

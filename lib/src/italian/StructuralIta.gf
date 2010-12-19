@@ -129,8 +129,8 @@ lin
   we_Pron = 
     mkPronoun "noi" "ci" "ci" "ce" "noi" "nostro" "nostra" "nostri" "nostre"
     Masc Pl P1 ;
-  whatSg_IP = {s = \\c => prepCase c ++ ["che cosa"] ; a = aagr Fem Sg} ;
-  whatPl_IP = {s = \\c => prepCase c ++ ["che cose"] ; a = aagr Fem Pl} ; ---
+  whatSg_IP = {s = \\c => prepCase c ++ ["che"] ; a = aagr Fem Sg} ;
+  whatPl_IP = {s = \\c => prepCase c ++ ["che"] ; a = aagr Fem Pl} ; ---
   when_IAdv = ss "quando" ;
   when_Subj = ss "quando" ** {m = Indic} ;
   where_IAdv = ss "dove" ;

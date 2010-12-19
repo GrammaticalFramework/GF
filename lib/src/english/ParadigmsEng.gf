@@ -40,22 +40,22 @@ oper
 
   human     : Gender ;
   nonhuman  : Gender ;
-  masculine : Gender ;
-  feminine : Gender ;
+  masculine : Gender ; --%
+  feminine : Gender ; --%
 
 -- To abstract over number names, we define the following.
 
   Number : Type ; 
 
-  singular : Number ;
+  singular : Number ; 
   plural   : Number ;
 
 -- To abstract over case names, we define the following.
 
-  Case : Type ;
+  Case : Type ; --%
 
-  nominative : Case ;
-  genitive   : Case ;
+  nominative : Case ; --%
+  genitive   : Case ; --%
 
 -- Prepositions are used in many-argument functions for rection.
 -- The resource category $Prep$ is used.
@@ -63,7 +63,7 @@ oper
 -- The number of a noun phrase can be extracted with the following
 -- function.
 
-  npNumber : NP -> Number ;
+  npNumber : NP -> Number ; -- exctract the number of a noun phrase
 
 
 --2 Nouns
