@@ -87,7 +87,7 @@ of <I>C</I> that takes <I>D</I> as an argument. What the constructors exactly ar
 and what other arguments they take, is described by separate tables for
 each category.
 </P>
-<TABLE ALIGN="center" BORDER="1" CELLPADDING="4">
+<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
 <TR>
 <TD ALIGN="right"><center><IMG ALIGN="middle" SRC="categories.png" USEMAP="#categories" BORDER="0" ALT=""></center></TD>
 </TR>
@@ -152,7 +152,7 @@ also in the <CODE>Paradigms</CODE> modules.
 </P>
 <A NAME="toc4"></A>
 <H2>Explanations</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Category</TH>
 <TH>Explanation</TH>
@@ -497,7 +497,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="AP"></A>
 <H2>AP - adjectival phrase</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -536,12 +536,12 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkAP</CODE></TD>
 <TD><A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#QS" TITLE="QS - question">QS</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A></TD>
-<TD><I>uncertain if she sleeps</I></TD>
+<TD><div class=reveal> <I>it is uncertain who sleeps</I> <div class=popup> <ul> <li>API: <CODE>mkCl (mkVP (mkAP (mkAP uncertain_A) (mkQS (mkQCl who_IP sleep_V))))</CODE> <li>Bul: <I>е неясно който спи</I> <li>Cat: <I>és incert qui dorm</I> <li>Dan: <I>atomic term uncertain_A</I> <li>Dut: <I>'t is onzeker wie slaapt</I> <li>Eng: <I>it is uncertain who sleeps</I> <li>Fin: <I>on epävarma kuka nukkuu</I> <li>Fre: <I>il est incertain qui dort</I> <li>Ger: <I>es ist unsicher wer schläft</I> <li>Ita: <I>è insicuro chi dorme</I> <li>Nor: <I>atomic term uncertain_A</I> <li>Pol: <I>jest niepewnie , kto śpi</I> <li>Ron: <I>este nesigur cine doarme</I> <li>Rus: <I>atomic term uncertain_A</I> <li>Spa: <I>atomic term uncertain_A</I> <li>Swe: <I>det är osäkert vem som sover</I> <li>Urd: <I>غیریقینی كون سوتا ہے ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkAP</CODE></TD>
 <TD><A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A></TD>
-<TD><I>ready to go</I></TD>
+<TD><div class=reveal> <I>she is ready to sleep</I> <div class=popup> <ul> <li>API: <CODE>mkCl she_NP (mkAP (mkAP ready_A) (mkVP sleep_V))</CODE> <li>Bul: <I>тя е готова да спя</I> <li>Cat: <I>ella és preparata dormir</I> <li>Dan: <I>atomic term ready_A</I> <li>Dut: <I>ze is klaar te slapen</I> <li>Eng: <I>she is ready to sleep</I> <li>Fin: <I>hän on valmis nukkua</I> <li>Fre: <I>elle est prête dormir</I> <li>Ger: <I>sie ist fertig zu schlafen</I> <li>Ita: <I>lei è pronta dormire</I> <li>Nor: <I>atomic term ready_A</I> <li>Pol: <I>ona jest <A HREF="exist"> gotowy : the adverb positive form does not</A> spać</I> <li>Ron: <I>ea este pregătită sã doarmă</I> <li>Rus: <I>atomic term ready_A</I> <li>Spa: <I>atomic term ready_A</I> <li>Swe: <I>hon är färdig att sova</I> <li>Urd: <I>atomic term ready_A</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkAP</CODE></TD>
@@ -561,33 +561,33 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkAP</CODE></TD>
 <TD><A HREF="#Conj" TITLE="Conj - conjunction">Conj</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A></TD>
-<TD><I>old and big</I></TD>
+<TD><div class=reveal> <I>old or young</I> <div class=popup> <ul> <li>API: <CODE>mkAP or_Conj (mkAP old_A) (mkAP young_A)</CODE> <li>Bul: <I>стар или млад</I> <li>Cat: <I>vell o jove</I> <li>Dan: <I>gammel eller ung</I> <li>Dut: <I>oud of jong</I> <li>Eng: <I>old or young</I> <li>Fin: <I>vanha tai nuori</I> <li>Fre: <I>vieux ou jeune</I> <li>Ger: <I>alt oder jung</I> <li>Ita: <I>vecchio o giovane</I> <li>Nor: <I>gammel eller ung</I> <li>Pol: <I>stary lub młody</I> <li>Ron: <I>vechi sau tânăr</I> <li>Rus: <I>старый или молодой</I> <li>Spa: <I>viejo o joven</I> <li>Swe: <I>gammal eller ung</I> <li>Urd: <I>بوڑھا یا جوان</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkAP</CODE></TD>
 <TD><A HREF="#Conj" TITLE="Conj - conjunction">Conj</A> <CODE>-&gt;</CODE> <A HREF="#ListAP">ListAP</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A></TD>
-<TD><I>old, big and warm</I></TD>
+<TD><div class=reveal> <I>old , big and warm</I> <div class=popup> <ul> <li>API: <CODE>mkAP and_Conj (mkListAP (mkAP old_A) (mkListAP (mkAP big_A) (mkAP warm_A)))</CODE> <li>Bul: <I>стар , голям и топъл</I> <li>Cat: <I>vell , gros i tebi</I> <li>Dan: <I>gammel , stor og varm</I> <li>Dut: <I>oud , groot en warm</I> <li>Eng: <I>old , big and warm</I> <li>Fin: <I>vanha , suuri ja lämmin</I> <li>Fre: <I>vieux , grand et chaud</I> <li>Ger: <I>alt , groß und warm</I> <li>Ita: <I>vecchio , grande e caldo</I> <li>Nor: <I>gammel , stor og varm</I> <li>Pol: <I>stary , duży i ciepły</I> <li>Ron: <I>vechi , mare şi călduţ</I> <li>Rus: <I>большой , тёплый и старый</I> <li>Spa: <I>viejo , grande y tibio</I> <li>Swe: <I>gammal , stor och varm</I> <li>Urd: <I>بوڑھا , بڑا اور گرم</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkAP</CODE></TD>
 <TD><A HREF="#Ord" TITLE="Ord - ordinal number (used in Det)">Ord</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A></TD>
-<TD><I>oldest</I></TD>
+<TD><div class=reveal> <I>oldest</I> <div class=popup> <ul> <li>API: <CODE>mkAP (mkOrd old_A)</CODE> <li>Bul: <I>най - стар</I> <li>Cat: <I>més vell</I> <li>Dan: <I>ældste</I> <li>Dut: <I>oudst</I> <li>Eng: <I>oldest</I> <li>Fin: <I>vanhin</I> <li>Fre: <I>plus vieux</I> <li>Ger: <I>ältest</I> <li>Ita: <I>più vecchio</I> <li>Nor: <I>eldste</I> <li>Pol: <I>najstarszy</I> <li>Ron: <I>cel mai vechi</I> <li>Rus: <I>старый</I> <li>Spa: <I>más viejo</I> <li>Swe: <I>äldsta</I> <li>Urd: <I>ساب سے بوڑھا</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkAP</CODE></TD>
 <TD><A HREF="#CAdv" TITLE="CAdv - comparative adverb">CAdv</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A></TD>
-<TD><I>as old as she</I></TD>
+<TD><div class=reveal> <I>as old as she</I> <div class=popup> <ul> <li>API: <CODE>mkAP as_CAdv (mkAP old_A) she_NP</CODE> <li>Bul: <I>atomic term as_CAdv</I> <li>Cat: <I>tan vell com ella</I> <li>Dan: <I>atomic term as_CAdv</I> <li>Dut: <I>zo oud als ze</I> <li>Eng: <I>as old as she</I> <li>Fin: <I>yhtä vanha kuin hän</I> <li>Fre: <I>aussi vieux qu' elle</I> <li>Ger: <I>ebenso alt wie sie</I> <li>Ita: <I>così vecchio di lei</I> <li>Nor: <I>atomic term as_CAdv</I> <li>Pol: <I>tak stary jak ona</I> <li>Ron: <I>cel la fel de vechi ca ea</I> <li>Rus: <I>atomic term as_CAdv</I> <li>Spa: <I>si viejo que ella</I> <li>Swe: <I>lika gammal som hon</I> <li>Urd: <I>اتنا بوڑھا جتنا وہ</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>reflAP</CODE></TD>
 <TD><A HREF="#A2" TITLE="A2 - two-place adjective">A2</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A></TD>
-<TD><I>married to himself</I></TD>
+<TD><div class=reveal> <I>married to itself</I> <div class=popup> <ul> <li>API: <CODE>mkUtt (reflAP married_A2)</CODE> <li>Bul: <I>женен за себе си</I> <li>Cat: <I>casat a sÌ</I> <li>Dan: <I>gift med sig</I> <li>Dut: <I>getrouwd met zich</I> <li>Eng: <I>married to itself</I> <li>Fin: <I>avioitunut itsensä kanssa</I> <li>Fre: <I>marié à soi</I> <li>Ger: <I>verheiratet mit sich</I> <li>Ita: <I>sposato con se</I> <li>Nor: <I>gift med seg</I> <li>Pol: <I>zaślubiony sobie</I> <li>Ron: <I>căsătorit cu sine însuşi</I> <li>Rus: <I>замужем за собой</I> <li>Spa: <I>casado a sí</I> <li>Swe: <I>gift med sig</I> <li>Urd: <I>[شادی كرنa] خود سے</I> </ul> </div> </div></TD>
 </TR>
 </TABLE>
 
 <A NAME="AdA"></A>
 <H2>AdA - adjective-modifying adverb</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -622,7 +622,7 @@ Lexical category, constructors given in
 
 <A NAME="AdN"></A>
 <H2>AdN - numeral-modifying adverb</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -646,13 +646,13 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkAdN</CODE></TD>
 <TD><A HREF="#CAdv" TITLE="CAdv - comparative adverb">CAdv</A> <CODE>-&gt;</CODE> <A HREF="#AdN" TITLE="AdN - numeral-modifying adverb">AdN</A></TD>
-<TD><I>more than</I></TD>
+<TD><div class=reveal> <I>AdverbEng.AdnCAdv {s = "more"; p = "than"; lock_CAdv : {} = &lt;&gt;}</I> <div class=popup> <ul> <li>API: <CODE>mkAdN more_CAdv</CODE> <li>Bul: <I>AdverbBul.AdnCAdv {s : Str = []; sn : Str = "повече";</I> <li>Cat: <I>AdverbCat.AdnCAdv {s = "més"; p = "que"; lock_CAdv : {} = &lt;&gt;}</I> <li>Dan: <I>AdverbDan.AdnCAdv {s = "mer"; p = "end"; lock_CAdv : {} = &lt;&gt;}</I> <li>Dut: <I>AdverbDut.AdnCAdv {s = "meer"; p = "dan"; lock_CAdv : {} = &lt;&gt;}</I> <li>Eng: <I>AdverbEng.AdnCAdv {s = "more"; p = "than"; lock_CAdv : {} = &lt;&gt;}</I> <li>Fin: <I>AdverbFin.AdnCAdv {s = "enemmän"; p = "kuin"; lock_CAdv : {} = &lt;&gt;}</I> <li>Fre: <I>AdverbFre.AdnCAdv {s = "plus";</I> <li>Ger: <I>AdverbGer.AdnCAdv {s = "mehr"; p = "als"; lock_CAdv : {} = &lt;&gt;}</I> <li>Ita: <I>AdverbIta.AdnCAdv {s = "più"; p = "di"; lock_CAdv : {} = &lt;&gt;}</I> <li>Nor: <I>AdverbNor.AdnCAdv {s = "mer"; p = "enn"; lock_CAdv : {} = &lt;&gt;}</I> <li>Pol: <I>AdverbPol.AdnCAdv {s : Str = "bardziej"; p : Str = "niż";</I> <li>Ron: <I>AdverbRon.AdnCAdv {s : Str = "mai"; p : Str = "decât";</I> <li>Rus: <I>AdverbRus.AdnCAdv {s : Str = "более"; p : Str = [];</I> <li>Spa: <I>AdverbSpa.AdnCAdv {s = "más"; p = "que"; lock_CAdv : {} = &lt;&gt;}</I> <li>Swe: <I>AdverbSwe.AdnCAdv {s = "mer"; p = "än"; lock_CAdv : {} = &lt;&gt;}</I> <li>Urd: <I>AdverbUrd.AdnCAdv {s : Str = "زیادہ"; p : Str = "سے";</I> </ul> </div> </div></TD>
 </TR>
 </TABLE>
 
 <A NAME="AdV"></A>
 <H2>AdV - adverb directly attached to verb</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -667,7 +667,7 @@ Lexical category, constructors given in
 
 <A NAME="Adv"></A>
 <H2>Adv - verb-phrase-modifying adverb</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -757,7 +757,7 @@ Lexical category, constructors given in
 
 <A NAME="Ant"></A>
 <H2>Ant - anteriority</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -777,7 +777,7 @@ Lexical category, constructors given in
 
 <A NAME="CAdv"></A>
 <H2>CAdv - comparative adverb</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -802,7 +802,7 @@ Lexical category, constructors given in
 
 <A NAME="CN"></A>
 <H2>CN - common noun (without determiner)</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -876,38 +876,38 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkCN</CODE></TD>
 <TD><A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A></TD>
-<TD><I>rule that she sleeps</I></TD>
+<TD><div class=reveal> <I>almost five</I> <div class=popup> <ul> <li>API: <CODE>mkNum (mkCard almost_AdN (mkCard (mkNumeral n5_Unit)))</CODE> <li>Bul: <I>почти петима</I> <li>Cat: <I>{s = table CommonRomance.Gender {</I> <li>Dan: <I>næsten fem</I> <li>Dut: <I>bijna vijf</I> <li>Eng: <I>almost five</I> <li>Fin: <I>melkein viisi</I> <li>Fre: <I>presque cinq</I> <li>Ger: <I>fast fünf</I> <li>Ita: <I>quasi cinque</I> <li>Nor: <I>nesten fem</I> <li>Pol: <I>prawie pięć</I> <li>Ron: <I>aproape cinci</I> <li>Rus: <I>почти пять</I> <li>Spa: <I>casi cinco</I> <li>Swe: <I>nästan fem</I> <li>Urd: <I>تقریبا پانچ</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkCN</CODE></TD>
 <TD><A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#QS" TITLE="QS - question">QS</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A></TD>
-<TD><I>question if she sleeps</I></TD>
+<TD><div class=reveal> <I>almost five</I> <div class=popup> <ul> <li>API: <CODE>mkNum (mkCard almost_AdN (mkCard (mkNumeral n5_Unit)))</CODE> <li>Bul: <I>почти петима</I> <li>Cat: <I>{s = table CommonRomance.Gender {</I> <li>Dan: <I>næsten fem</I> <li>Dut: <I>bijna vijf</I> <li>Eng: <I>almost five</I> <li>Fin: <I>melkein viisi</I> <li>Fre: <I>presque cinq</I> <li>Ger: <I>fast fünf</I> <li>Ita: <I>quasi cinque</I> <li>Nor: <I>nesten fem</I> <li>Pol: <I>prawie pięć</I> <li>Ron: <I>aproape cinci</I> <li>Rus: <I>почти пять</I> <li>Spa: <I>casi cinco</I> <li>Swe: <I>nästan fem</I> <li>Urd: <I>تقریبا پانچ</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkCN</CODE></TD>
 <TD><A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A></TD>
-<TD><I>reason to sleep</I></TD>
+<TD><div class=reveal> <I>reason to sleep</I> <div class=popup> <ul> <li>API: <CODE>mkCN (mkCN reason_N) (mkVP sleep_V)</CODE> <li>Bul: <I>причина да спя</I> <li>Cat: <I>raó dormir</I> <li>Dan: <I>atomic term reason_N</I> <li>Dut: <I>reden te slapen</I> <li>Eng: <I>reason to sleep</I> <li>Fin: <I>syy nukkua</I> <li>Fre: <I>raison dormir</I> <li>Ger: <I>Grund zu schlafen</I> <li>Ita: <I>ragione dormire</I> <li>Nor: <I>atomic term reason_N</I> <li>Pol: <I>powód spać</I> <li>Ron: <I>motiv sã doarmă</I> <li>Rus: <I>причина спать</I> <li>Spa: <I>atomic term reason_N</I> <li>Swe: <I>anledning att sova</I> <li>Urd: <I>وجہ سونا</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkCN</CODE></TD>
 <TD><A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#SC" TITLE="SC - embedded sentence or question">SC</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A></TD>
-<TD><I>reason to sleep</I></TD>
+<TD><div class=reveal> <I>reason to sleep</I> <div class=popup> <ul> <li>API: <CODE>mkCN (mkCN reason_N) (mkVP sleep_V)</CODE> <li>Bul: <I>причина да спя</I> <li>Cat: <I>raó dormir</I> <li>Dan: <I>atomic term reason_N</I> <li>Dut: <I>reden te slapen</I> <li>Eng: <I>reason to sleep</I> <li>Fin: <I>syy nukkua</I> <li>Fre: <I>raison dormir</I> <li>Ger: <I>Grund zu schlafen</I> <li>Ita: <I>ragione dormire</I> <li>Nor: <I>atomic term reason_N</I> <li>Pol: <I>powód spać</I> <li>Ron: <I>motiv sã doarmă</I> <li>Rus: <I>причина спать</I> <li>Spa: <I>atomic term reason_N</I> <li>Swe: <I>anledning att sova</I> <li>Urd: <I>وجہ سونا</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkCN</CODE></TD>
 <TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A></TD>
-<TD><I>king John</I></TD>
+<TD><div class=reveal> <I>king John</I> <div class=popup> <ul> <li>API: <CODE>mkCN king_N (mkNP john_PN)</CODE> <li>Bul: <I>цар Джон</I> <li>Cat: <I>rei Joan</I> <li>Dan: <I>konge John</I> <li>Dut: <I>koning Jan</I> <li>Eng: <I>king John</I> <li>Fin: <I>kuningas Jussi</I> <li>Fre: <I>roi Jean</I> <li>Ger: <I>König Johann</I> <li>Ita: <I>ré Giovanni</I> <li>Nor: <I>konge John</I> <li>Pol: <I>król Jan</I> <li>Ron: <I>rege Ion</I> <li>Rus: <I>король Иван</I> <li>Spa: <I>rey Juan</I> <li>Swe: <I>kung Johan</I> <li>Urd: <I>بادشاہ جان</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkCN</CODE></TD>
 <TD><A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A></TD>
-<TD><I>old king John</I></TD>
+<TD><div class=reveal> <I>old king John</I> <div class=popup> <ul> <li>API: <CODE>mkCN (mkCN old_A king_N) (mkNP john_PN)</CODE> <li>Bul: <I>стар цар Джон</I> <li>Cat: <I>rei vell Joan</I> <li>Dan: <I>gammel konge John</I> <li>Dut: <I>oude koning Jan</I> <li>Eng: <I>old king John</I> <li>Fin: <I>vanha kuningas Jussi</I> <li>Fre: <I>vieux roi Jean</I> <li>Ger: <I>alter König Johann</I> <li>Ita: <I>vecchio ré Giovanni</I> <li>Nor: <I>gammel konge John</I> <li>Pol: <I>stary król Jan</I> <li>Ron: <I>rege vechi Ion</I> <li>Rus: <I>старый король Иван</I> <li>Spa: <I>viejo rey Juan</I> <li>Swe: <I>gammal kung Johan</I> <li>Urd: <I>بوڑھا بادشاہ جان</I> </ul> </div> </div></TD>
 </TR>
 </TABLE>
 
 <A NAME="Card"></A>
 <H2>Card - cardinal number</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -921,7 +921,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkCard</CODE></TD>
 <TD><A HREF="#Numeral" TITLE="Numeral - cardinal or ordinal in words">Numeral</A> <CODE>-&gt;</CODE> <A HREF="#Card" TITLE="Card - cardinal number">Card</A></TD>
-<TD><I>twenty</I></TD>
+<TD><div class=reveal> <I>seven</I> <div class=popup> <ul> <li>API: <CODE>mkCard (mkNumeral n7_Unit)</CODE> <li>Bul: <I>седмина</I> <li>Cat: <I>set</I> <li>Dan: <I>syv</I> <li>Dut: <I>zeven</I> <li>Eng: <I>seven</I> <li>Fin: <I>seitsemän</I> <li>Fre: <I>sept</I> <li>Ger: <I>sieben</I> <li>Ita: <I>sette</I> <li>Nor: <I>sju</I> <li>Pol: <I>siedem</I> <li>Ron: <I>şapte</I> <li>Rus: <I>семь</I> <li>Spa: <I>siete</I> <li>Swe: <I>sju</I> <li>Urd: <I>سات</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkCard</CODE></TD>
@@ -937,7 +937,7 @@ Lexical category, constructors given in
 
 <A NAME="Cl"></A>
 <H2>Cl - declarative clause, with all tenses</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -961,7 +961,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkCl</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A></TD>
-<TD><div class=reveal> <I>she sends it to him</I> <div class=popup> <ul> <li>API: <CODE>mkCl she_NP send_V3 it_NP he_NP</CODE> <li>Bul: <I>тя праща него до него</I> <li>Cat: <I>ella ho li envia</I> <li>Dan: <I>hun sender det til ham</I> <li>Dut: <I>ze stuurt het hem</I> <li>Eng: <I>she sends it to him</I> <li>Fin: <I>hän lähettää sen hänelle</I> <li>Fre: <I>elle le lui envoie</I> <li>Ger: <I>sie schickt es ihm</I> <li>Ita: <I>lei lo gli manda</I> <li>Nor: <I>hun sender det til ham</I> <li>Pol: <I>ona wysyła do niego je</I> <li>Ron: <I>ea i -l trimite</I> <li>Rus: <I>она посылает нему его</I> <li>Spa: <I>ella lo le manda</I> <li>Swe: <I>hon skickar det till honom</I> <li>Urd: <I>وہ اس كو اس كو بھیجتی ہے</I> </ul> </div> </div></TD>
+<TD><div class=reveal> <I>she sends it to him</I> <div class=popup> <ul> <li>API: <CODE>mkCl she_NP send_V3 it_NP he_NP</CODE> <li>Bul: <I>тя праща него до него</I> <li>Cat: <I>ella ho li envia</I> <li>Dan: <I>hun sender det til ham</I> <li>Dut: <I>ze stuurt het naar hem</I> <li>Eng: <I>she sends it to him</I> <li>Fin: <I>hän lähettää sen hänelle</I> <li>Fre: <I>elle le lui envoie</I> <li>Ger: <I>sie schickt es ihm</I> <li>Ita: <I>lei lo gli manda</I> <li>Nor: <I>hun sender det til ham</I> <li>Pol: <I>ona wysyła do niego je</I> <li>Ron: <I>ea i -l trimite</I> <li>Rus: <I>она посылает нему его</I> <li>Spa: <I>ella lo le manda</I> <li>Swe: <I>hon skickar det till honom</I> <li>Urd: <I>وہ اس كو اس كو بھیجتی ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkCl</CODE></TD>
@@ -1102,7 +1102,7 @@ Lexical category, constructors given in
 
 <A NAME="ClSlash"></A>
 <H2>ClSlash</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1111,38 +1111,38 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkClSlash</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VPSlash" TITLE="VPSlash - verb phrase missing complement">VPSlash</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A></TD>
-<TD><I>(whom) he sees here</I></TD>
+<TD><div class=reveal> <I>whom does she see</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP (mkClSlash she_NP (mkVPSlash see_V2))</CODE> <li>Bul: <I>кого вижда тя</I> <li>Cat: <I>qui veu ella</I> <li>Dan: <I>hvem ser hun</I> <li>Dut: <I>wie zit ze</I> <li>Eng: <I>whom does she see</I> <li>Fin: <I>kenet hän näkee</I> <li>Fre: <I>qui voit elle</I> <li>Ger: <I>wen sieht sie</I> <li>Ita: <I>chi vede lei</I> <li>Nor: <I>hvem ser hun</I> <li>Pol: <I>kogo widzi ona</I> <li>Ron: <I>pe cine vede ea</I> <li>Rus: <I>кого она видит</I> <li>Spa: <I>quién ve ella</I> <li>Swe: <I>vem ser hon</I> <li>Urd: <I>كون وہ دیكھتی ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkClSlash</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A></TD>
-<TD><I>(whom) he sees</I></TD>
+<TD><div class=reveal> <I>whom does she see</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP (mkClSlash she_NP see_V2)</CODE> <li>Bul: <I>кого вижда тя</I> <li>Cat: <I>qui veu ella</I> <li>Dan: <I>hvem ser hun</I> <li>Dut: <I>wie zit ze</I> <li>Eng: <I>whom does she see</I> <li>Fin: <I>kenet hän näkee</I> <li>Fre: <I>qui voit elle</I> <li>Ger: <I>wen sieht sie</I> <li>Ita: <I>chi vede lei</I> <li>Nor: <I>hvem ser hun</I> <li>Pol: <I>kogo widzi ona</I> <li>Ron: <I>pe cine vede ea</I> <li>Rus: <I>кого она видит</I> <li>Spa: <I>quién ve ella</I> <li>Swe: <I>vem ser hon</I> <li>Urd: <I>كون وہ دیكھتی ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkClSlash</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A> <CODE>-&gt;</CODE> <A HREF="#V2" TITLE="V2 - two-place verb">V2</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A></TD>
-<TD><I>(whom) he wants to see</I></TD>
+<TD><div class=reveal> <I>whom does she want to see</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP (mkClSlash she_NP want_VV see_V2)</CODE> <li>Bul: <I>кого иска да види тя</I> <li>Cat: <I>qui vol ella veure</I> <li>Dan: <I>hvem vil hun se</I> <li>Dut: <I>wie wil ze zien</I> <li>Eng: <I>whom does she want to see</I> <li>Fin: <I>kenet hän tahtoo nähdä</I> <li>Fre: <I>qui veut elle voir</I> <li>Ger: <I>wen will sie sehen</I> <li>Ita: <I>chi vuole lei vedere</I> <li>Nor: <I>hvem vil hun se</I> <li>Pol: <I>kogo ona chce widzieć</I> <li>Ron: <I>pe cine vrea ea sã vadă</I> <li>Rus: <I>кого она хоччет видеть</I> <li>Spa: <I>quién quiere ella ver</I> <li>Swe: <I>vem vill hon se</I> <li>Urd: <I>كون وہ دیكھنا چاہتی ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkClSlash</CODE></TD>
 <TD><A HREF="#Cl" TITLE="Cl - declarative clause, with all tenses">Cl</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A></TD>
-<TD><I>(with whom) he sleeps</I></TD>
+<TD><div class=reveal> <I>with whom does she sleep</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP (mkClSlash (mkCl she_NP sleep_V) with_Prep)</CODE> <li>Bul: <I>с кого спи тя</I> <li>Cat: <I>amb qui dorm ella</I> <li>Dan: <I>med hvem sover hun</I> <li>Dut: <I>met wie slaapt ze</I> <li>Eng: <I>with whom does she sleep</I> <li>Fin: <I>kenen kanssa hän nukkuu</I> <li>Fre: <I>avec qui dort elle</I> <li>Ger: <I>mit wem schläft sie</I> <li>Ita: <I>con chi dorme lei</I> <li>Nor: <I>med hvem sover hun</I> <li>Pol: <I>z kim ona śpi</I> <li>Ron: <I>cu cine doarme ea</I> <li>Rus: <I>с кем она спдит</I> <li>Spa: <I>con quién duerme ella</I> <li>Swe: <I>med vem sover hon</I> <li>Urd: <I>كون وہ سوتی ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkClSlash</CODE></TD>
 <TD><A HREF="#ClSlash">ClSlash</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A></TD>
-<TD><I>(whom) he sees tomorrow</I></TD>
+<TD><div class=reveal> <I>whom does she see today</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP (mkClSlash (mkClSlash she_NP see_V2) today_Adv)</CODE> <li>Bul: <I>кого вижда тя днес</I> <li>Cat: <I>qui veu ella avui</I> <li>Dan: <I>hvem ser hun idag</I> <li>Dut: <I>wie zit ze vandaag</I> <li>Eng: <I>whom does she see today</I> <li>Fin: <I>kenet hän näkee tänään</I> <li>Fre: <I>qui voit elle aujourd'hui</I> <li>Ger: <I>wen sieht sie heute</I> <li>Ita: <I>chi vede lei oggi</I> <li>Nor: <I>hvem ser hun idag</I> <li>Pol: <I>kogo dziś widzi ona</I> <li>Ron: <I>pe cine vede ea astăzi</I> <li>Rus: <I>atomic term today_Adv</I> <li>Spa: <I>quién ve ella hoy</I> <li>Swe: <I>vem ser hon idag</I> <li>Urd: <I>كون آج وہ دیكھتی ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkClSlash</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VS" TITLE="VS - sentence-complement verb">VS</A> <CODE>-&gt;</CODE> <A HREF="#SSlash">SSlash</A> <CODE>-&gt;</CODE> <A HREF="#ClSlash">ClSlash</A></TD>
-<TD><I>(whom) she says that he loves</I></TD>
+<TD><div class=reveal> <I>whom does she know that we hadn't seen</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP (mkClSlash she_NP know_VS (mkSSlash (mkTemp pastTense anteriorAnt) negativePol (mkClSlash we_NP (mkVPSlash see_V2))))</CODE> <li>Bul: <I>кого знае че ние не бяхме видeли тя</I> <li>Cat: <I>qui sap ella que nosaltres no havíem vist</I> <li>Dan: <I>hvem ved hun at vi ikke havde set</I> <li>Dut: <I>wie weet ze dat we niet gezien hadden</I> <li>Eng: <I>whom does she know that we hadn't seen</I> <li>Fin: <I>kenet hän tietää että me emme olleet nähneet</I> <li>Fre: <I>qui sait elle que nous n' avions pas vu</I> <li>Ger: <I>wen weiß sie daß wir nicht gesehen hatten</I> <li>Ita: <I>chi sa lei che noi non avevamo visto</I> <li>Nor: <I>hvem vet hun at vi ikke hadde sett</I> <li>Pol: <I>kogo ona wie , że nie zobaczyliśmy my</I> <li>Ron: <I>pe cine ştie ea cã noi nu văzuserăm</I> <li>Rus: <I>atomic term know_VS</I> <li>Spa: <I>quién sabe ella que nosotros no habíamos visto</I> <li>Swe: <I>vem vet hon att vi inte hade sett</I> <li>Urd: <I>كون وہ جانتی ہے كہ ہم نہیں دیكھ چكے تh-ے</I> </ul> </div> </div></TD>
 </TR>
 </TABLE>
 
 <A NAME="Comp"></A>
 <H2>Comp - complement of copula, such as AP</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1167,7 +1167,7 @@ Lexical category, constructors given in
 
 <A NAME="Conj"></A>
 <H2>Conj - conjunction</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1202,7 +1202,7 @@ Lexical category, constructors given in
 
 <A NAME="Det"></A>
 <H2>Det - determiner phrase</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1322,7 +1322,7 @@ Lexical category, constructors given in
 
 <A NAME="Dig"></A>
 <H2>Dig</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1382,7 +1382,7 @@ Lexical category, constructors given in
 
 <A NAME="Digits"></A>
 <H2>Digits - cardinal or ordinal in digits</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1407,7 +1407,7 @@ Lexical category, constructors given in
 
 <A NAME="IAdv"></A>
 <H2>IAdv - interrogative adverb</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1452,7 +1452,7 @@ Lexical category, constructors given in
 
 <A NAME="IComp"></A>
 <H2>IComp - interrogative complement of copula</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1472,7 +1472,7 @@ Lexical category, constructors given in
 
 <A NAME="IDet"></A>
 <H2>IDet - interrogative determiner</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1507,7 +1507,7 @@ Lexical category, constructors given in
 
 <A NAME="IP"></A>
 <H2>IP - interrogative pronoun</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1561,7 +1561,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>what_IP</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
-<TD><div class=reveal> <I>what</I> <div class=popup> <ul> <li>API: <CODE>mkUtt what_IP</CODE> <li>Bul: <I>какъв</I> <li>Cat: <I>què</I> <li>Dan: <I>hvad</I> <li>Dut: <I>wat</I> <li>Eng: <I>what</I> <li>Fin: <I>mikä</I> <li>Fre: <I>quoi</I> <li>Ger: <I>was</I> <li>Ita: <I>che cosa</I> <li>Nor: <I>hva</I> <li>Pol: <I>co</I> <li>Ron: <I>ce</I> <li>Rus: <I>что</I> <li>Spa: <I>qué</I> <li>Swe: <I>vad</I> <li>Urd: <I>كیا</I> </ul> </div> </div></TD>
+<TD><div class=reveal> <I>what</I> <div class=popup> <ul> <li>API: <CODE>mkUtt what_IP</CODE> <li>Bul: <I>какъв</I> <li>Cat: <I>què</I> <li>Dan: <I>hvad</I> <li>Dut: <I>wat</I> <li>Eng: <I>what</I> <li>Fin: <I>mikä</I> <li>Fre: <I>pre {"que"; "qu'" / strs {"a"; "à"; "â"; "e"; "é"; "è"; "ê¨"; "h";</I> <li>Ger: <I>was</I> <li>Ita: <I>che</I> <li>Nor: <I>hva</I> <li>Pol: <I>co</I> <li>Ron: <I>ce</I> <li>Rus: <I>что</I> <li>Spa: <I>qué</I> <li>Swe: <I>vad</I> <li>Urd: <I>كیا</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>whoPl_IP</CODE></TD>
@@ -1582,7 +1582,7 @@ Lexical category, constructors given in
 
 <A NAME="IQuant"></A>
 <H2>IQuant</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1597,7 +1597,7 @@ Lexical category, constructors given in
 
 <A NAME="Imp"></A>
 <H2>Imp - imperative</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1622,7 +1622,7 @@ Lexical category, constructors given in
 
 <A NAME="ImpForm"></A>
 <H2>ImpForm</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1653,7 +1653,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="ListAP"></A>
 <H2>ListAP</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1673,7 +1673,7 @@ Lexical category, constructors given in
 
 <A NAME="ListAdv"></A>
 <H2>ListAdv</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1693,7 +1693,7 @@ Lexical category, constructors given in
 
 <A NAME="ListNP"></A>
 <H2>ListNP</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1713,7 +1713,7 @@ Lexical category, constructors given in
 
 <A NAME="ListRS"></A>
 <H2>ListRS</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1733,7 +1733,7 @@ Lexical category, constructors given in
 
 <A NAME="ListS"></A>
 <H2>ListS</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1771,7 +1771,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="NP"></A>
 <H2>NP - noun phrase (subject or object)</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -1991,7 +1991,7 @@ Lexical category, constructors given in
 
 <A NAME="Num"></A>
 <H2>Num - number determining element</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2020,12 +2020,12 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkNum</CODE></TD>
 <TD><A HREF="#Card" TITLE="Card - cardinal number">Card</A> <CODE>-&gt;</CODE> <A HREF="#Num" TITLE="Num - number determining element">Num</A></TD>
-<TD><I>almost ten</I></TD>
+<TD><div class=reveal> <I>almost five</I> <div class=popup> <ul> <li>API: <CODE>mkNum (mkCard almost_AdN (mkCard (mkNumeral n5_Unit)))</CODE> <li>Bul: <I>почти петима</I> <li>Cat: <I>{s = table CommonRomance.Gender {</I> <li>Dan: <I>næsten fem</I> <li>Dut: <I>bijna vijf</I> <li>Eng: <I>almost five</I> <li>Fin: <I>melkein viisi</I> <li>Fre: <I>presque cinq</I> <li>Ger: <I>fast fünf</I> <li>Ita: <I>quasi cinque</I> <li>Nor: <I>nesten fem</I> <li>Pol: <I>prawie pięć</I> <li>Ron: <I>aproape cinci</I> <li>Rus: <I>почти пять</I> <li>Spa: <I>casi cinco</I> <li>Swe: <I>nästan fem</I> <li>Urd: <I>تقریبا پانچ</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkNum</CODE></TD>
 <TD><A HREF="#AdN" TITLE="AdN - numeral-modifying adverb">AdN</A> <CODE>-&gt;</CODE> <A HREF="#Card" TITLE="Card - cardinal number">Card</A> <CODE>-&gt;</CODE> <A HREF="#Num" TITLE="Num - number determining element">Num</A></TD>
-<TD><I>almost ten</I></TD>
+<TD><div class=reveal> <I>almost five</I> <div class=popup> <ul> <li>API: <CODE>mkNum (mkCard almost_AdN (mkCard (mkNumeral n5_Unit)))</CODE> <li>Bul: <I>почти петима</I> <li>Cat: <I>{s = table CommonRomance.Gender {</I> <li>Dan: <I>næsten fem</I> <li>Dut: <I>bijna vijf</I> <li>Eng: <I>almost five</I> <li>Fin: <I>melkein viisi</I> <li>Fre: <I>presque cinq</I> <li>Ger: <I>fast fünf</I> <li>Ita: <I>quasi cinque</I> <li>Nor: <I>nesten fem</I> <li>Pol: <I>prawie pięć</I> <li>Ron: <I>aproape cinci</I> <li>Rus: <I>почти пять</I> <li>Spa: <I>casi cinco</I> <li>Swe: <I>nästan fem</I> <li>Urd: <I>تقریبا پانچ</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>pluralNum</CODE></TD>
@@ -2041,7 +2041,7 @@ Lexical category, constructors given in
 
 <A NAME="Numeral"></A>
 <H2>Numeral - cardinal or ordinal in words</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2081,7 +2081,7 @@ Lexical category, constructors given in
 
 <A NAME="Ord"></A>
 <H2>Ord - ordinal number (used in Det)</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2105,13 +2105,13 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkOrd</CODE></TD>
 <TD><A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#Ord" TITLE="Ord - ordinal number (used in Det)">Ord</A></TD>
-<TD><I>largest</I></TD>
+<TD><div class=reveal> <I>smallest</I> <div class=popup> <ul> <li>API: <CODE>mkOrd small_A</CODE> <li>Bul: <I>най - малък</I> <li>Cat: <I>més petit</I> <li>Dan: <I>mindste</I> <li>Dut: <I>kleinst</I> <li>Eng: <I>smallest</I> <li>Fin: <I>pienin</I> <li>Fre: <I>plus petit</I> <li>Ger: <I>kleinst</I> <li>Ita: <I>più piccolo</I> <li>Nor: <I>minste</I> <li>Pol: <I>najmniejszy</I> <li>Ron: <I>cel mai mic</I> <li>Rus: <I>маленький</I> <li>Spa: <I>más pequeño</I> <li>Swe: <I>minsta</I> <li>Urd: <I>ساب سے چھوٹا</I> </ul> </div> </div></TD>
 </TR>
 </TABLE>
 
 <A NAME="PConj"></A>
 <H2>PConj - phrase-beginning conjunction</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2147,7 +2147,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="Phr"></A>
 <H2>Phr - phrase in a text</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2182,7 +2182,7 @@ Lexical category, constructors given in
 
 <A NAME="Pol"></A>
 <H2>Pol - polarity</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2202,7 +2202,7 @@ Lexical category, constructors given in
 
 <A NAME="Predet"></A>
 <H2>Predet - predeterminer (prefixed Quant)</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2232,7 +2232,7 @@ Lexical category, constructors given in
 
 <A NAME="Prep"></A>
 <H2>Prep - preposition, or just case</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2347,7 +2347,7 @@ Lexical category, constructors given in
 
 <A NAME="Pron"></A>
 <H2>Pron - personal pronoun</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2402,7 +2402,7 @@ Lexical category, constructors given in
 
 <A NAME="Punct"></A>
 <H2>Punct</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2427,7 +2427,7 @@ Lexical category, constructors given in
 
 <A NAME="QCl"></A>
 <H2>QCl - question clause, with all tenses</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2441,7 +2441,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><div class=reveal> <I>who sleeps here</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP (mkVP (mkVP sleep_V) here_Adv)</CODE> <li>Bul: <I>кой спи тук</I> <li>Cat: <I>qui dorm aquí</I> <li>Dan: <I>hvem sover her</I> <li>Dut: <I>wie slaapt hier</I> <li>Eng: <I>who sleeps here</I> <li>Fin: <I>kuka nukkuu täällä</I> <li>Fre: <I>qui dort ici</I> <li>Ger: <I>wer schläft hier</I> <li>Ita: <I>chi dorme quà</I> <li>Nor: <I>hvem sover her</I> <li>Pol: <I>kto tutaj śpi</I> <li>Ron: <I>cine doarme aici</I> <li>Rus: <I>кто здесь спдит</I> <li>Spa: <I>quién duerme aquí</I> <li>Swe: <I>vem sover här</I> <li>Urd: <I>كون یہاں سوتا ہے</I> </ul> </div> </div></TD>
+<TD><div class=reveal> <I>who always sleeps</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP (mkVP always_AdV (mkVP sleep_V))</CODE> <li>Bul: <I>кой винаги спи</I> <li>Cat: <I>qui dorm sempre</I> <li>Dan: <I>hvem sover altid</I> <li>Dut: <I>wie slaapt altijd</I> <li>Eng: <I>who always sleeps</I> <li>Fin: <I>kuka nukkuu aina</I> <li>Fre: <I>qui dort toujours</I> <li>Ger: <I>wer schläft immer</I> <li>Ita: <I>chi dorme sempre</I> <li>Nor: <I>hvem sover altid</I> <li>Pol: <I>kto zawsze śpi</I> <li>Ron: <I>cine doarme mereu</I> <li>Rus: <I>кто всегда спдит</I> <li>Spa: <I>quién duerme siempre</I> <li>Swe: <I>vem sover alltid</I> <li>Urd: <I>كون ہمیشہ سوتا ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
@@ -2456,7 +2456,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><div class=reveal> <I>who sends it to her</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP send_V3 it_NP she_NP</CODE> <li>Bul: <I>кой праща него до нея</I> <li>Cat: <I>qui ho li envia</I> <li>Dan: <I>hvem sender det til hende</I> <li>Dut: <I>wie stuurt het haar</I> <li>Eng: <I>who sends it to her</I> <li>Fin: <I>kuka lähettää sen hänelle</I> <li>Fre: <I>qui le lui envoie</I> <li>Ger: <I>wer schickt es ihr</I> <li>Ita: <I>chi lo le manda</I> <li>Nor: <I>hvem sender det til henne</I> <li>Pol: <I>kto wysyła do niej je</I> <li>Ron: <I>cine i -l trimite</I> <li>Rus: <I>кто посылает ней его</I> <li>Spa: <I>quién lo le manda</I> <li>Swe: <I>vem skickar det till henne</I> <li>Urd: <I>كون اس كو اس كو بھیجتا ہے</I> </ul> </div> </div></TD>
+<TD><div class=reveal> <I>who sends it to her</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP send_V3 it_NP she_NP</CODE> <li>Bul: <I>кой праща него до нея</I> <li>Cat: <I>qui ho li envia</I> <li>Dan: <I>hvem sender det til hende</I> <li>Dut: <I>wie stuurt het naar haar</I> <li>Eng: <I>who sends it to her</I> <li>Fin: <I>kuka lähettää sen hänelle</I> <li>Fre: <I>qui le lui envoie</I> <li>Ger: <I>wer schickt es ihr</I> <li>Ita: <I>chi lo le manda</I> <li>Nor: <I>hvem sender det til henne</I> <li>Pol: <I>kto wysyła do niej je</I> <li>Ron: <I>cine i -l trimite</I> <li>Rus: <I>кто посылает ней его</I> <li>Spa: <I>quién lo le manda</I> <li>Swe: <I>vem skickar det till henne</I> <li>Urd: <I>كون اس كو اس كو بھیجتا ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
@@ -2466,87 +2466,87 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#VS" TITLE="VS - sentence-complement verb">VS</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who says that she sleeps</I></TD>
+<TD><div class=reveal> <I>who says that I sleep</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP say_VS (mkS (mkCl i_NP sleep_V))</CODE> <li>Bul: <I>кой казва , че аз спя</I> <li>Cat: <I>qui diu que jo dormo</I> <li>Dan: <I>hvem siger at jeg sover</I> <li>Dut: <I>wie zegt dat ik slaap</I> <li>Eng: <I>who says that I sleep</I> <li>Fin: <I>kuka sanoo että minä nukun</I> <li>Fre: <I>qui dit que je dors</I> <li>Ger: <I>wer sagt daß ich schlafe</I> <li>Ita: <I>chi dice che io dormo</I> <li>Nor: <I>hvem sier at jeg sover</I> <li>Pol: <I>kto mówi , że ja śpię</I> <li>Ron: <I>cine spune cã eu dorm</I> <li>Rus: <I>кто говордит , что я сплю</I> <li>Spa: <I>quién dice que yo duermo</I> <li>Swe: <I>vem säger att jag sover</I> <li>Urd: <I>كون كہتا ہے كہ میں سوتا ہوں</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#VQ" TITLE="VQ - question-complement verb">VQ</A> <CODE>-&gt;</CODE> <A HREF="#QS" TITLE="QS - question">QS</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who wonders who sleeps</I></TD>
+<TD><div class=reveal> <I>who wonders who sleeps</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP wonder_VQ (mkQS (mkQCl who_IP sleep_V))</CODE> <li>Bul: <I>кой се учудва кой спи</I> <li>Cat: <I>qui se pregunta qui dorm</I> <li>Dan: <I>hvem undres hvem som sover</I> <li>Dut: <I>wie vraagt zich af wie slaapt</I> <li>Eng: <I>who wonders who sleeps</I> <li>Fin: <I>kuka ihmettelee kuka nukkuu</I> <li>Fre: <I>qui s' étonne qui dort</I> <li>Ger: <I>wer wundert sich wer schläft</I> <li>Ita: <I>chi si domanda chi dorme</I> <li>Nor: <I>hvem undrer hvem som sover</I> <li>Pol: <I>kto zastanawia się , kto śpi</I> <li>Ron: <I>cine se întreabă cine doarme</I> <li>Rus: <I>кто интересует кто спдит</I> <li>Spa: <I>quién se pregunta quién duerme</I> <li>Swe: <I>vem undrar vem som sover</I> <li>Urd: <I>كون حیران ہوتا ہے كہ كون سوتا ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#VA" TITLE="VA - adjective-complement verb">VA</A> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who becomes old</I></TD>
+<TD><div class=reveal> <I>who becomes old</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP become_VA old_A</CODE> <li>Bul: <I>кой става стар</I> <li>Cat: <I>qui se torna vell</I> <li>Dan: <I>hvem bliver gammel</I> <li>Dut: <I>wie wordt oud</I> <li>Eng: <I>who becomes old</I> <li>Fin: <I>kuka tulee vanhaksi</I> <li>Fre: <I>qui devient vieux</I> <li>Ger: <I>wer wird alt</I> <li>Ita: <I>chi diventa vecchio</I> <li>Nor: <I>hvem blir gammel</I> <li>Pol: <I>kto staje się stary</I> <li>Ron: <I>cine devine vechi</I> <li>Rus: <I>кто становдит старым</I> <li>Spa: <I>quién se converte viejo</I> <li>Swe: <I>vem blir gammal</I> <li>Urd: <I>كون بوڑھا بنتا ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#VA" TITLE="VA - adjective-complement verb">VA</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who becomes old</I></TD>
+<TD><div class=reveal> <I>who becomes very old</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP become_VA (mkAP very_AdA old_A)</CODE> <li>Bul: <I>кой става много стар</I> <li>Cat: <I>qui se torna molt vell</I> <li>Dan: <I>hvem bliver meget gammel</I> <li>Dut: <I>wie wordt erg oud</I> <li>Eng: <I>who becomes very old</I> <li>Fin: <I>kuka tulee erittäin vanhaksi</I> <li>Fre: <I>qui devient très vieux</I> <li>Ger: <I>wer wird sehr alt</I> <li>Ita: <I>chi diventa molto vecchio</I> <li>Nor: <I>hvem blir mye gammel</I> <li>Pol: <I>kto staje się bardzo stary</I> <li>Ron: <I>cine devine foarte vechi</I> <li>Rus: <I>кто становдит очень старым</I> <li>Spa: <I>quién se converte muy viejo</I> <li>Swe: <I>vem blir mycket gammal</I> <li>Urd: <I>كون بہت بوڑھا بنتا ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#V2A" TITLE="V2A - verb with NP and AP complement">V2A</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who paints it red</I></TD>
+<TD><div class=reveal> <I>who paints it red</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP paint_V2A it_NP red_A</CODE> <li>Bul: <I>кой рисува него червено</I> <li>Cat: <I>qui ho pinta en vermell</I> <li>Dan: <I>hvem maler det rødt</I> <li>Dut: <I>wie schildeert het rood</I> <li>Eng: <I>who paints it red</I> <li>Fin: <I>kuka maalaa sen punaiseksi</I> <li>Fre: <I>qui le peint en rouge</I> <li>Ger: <I>wer malt es rot</I> <li>Ita: <I>chi lo dipinge rosso</I> <li>Nor: <I>hvem maler det rødt</I> <li>Pol: <I>kto maluje je na czerwono</I> <li>Ron: <I>cine îl pictează roşu</I> <li>Rus: <I>кто рисует красным его</I> <li>Spa: <I>quién lo pinta en rojo</I> <li>Swe: <I>vem målar det rött</I> <li>Urd: <I>كون اس كو لال رنگ كرتا ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#V2A" TITLE="V2A - verb with NP and AP complement">V2A</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who paints it red</I></TD>
+<TD><div class=reveal> <I>who paints it very red</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP paint_V2A it_NP (mkAP very_AdA red_A)</CODE> <li>Bul: <I>кой рисува него много червено</I> <li>Cat: <I>qui ho pinta en molt vermell</I> <li>Dan: <I>hvem maler det meget rødt</I> <li>Dut: <I>wie schildeert het erg rood</I> <li>Eng: <I>who paints it very red</I> <li>Fin: <I>kuka maalaa sen erittäin punaiseksi</I> <li>Fre: <I>qui le peint en très rouge</I> <li>Ger: <I>wer malt es sehr rot</I> <li>Ita: <I>chi lo dipinge molto rosso</I> <li>Nor: <I>hvem maler det mye rødt</I> <li>Pol: <I>kto maluje je na bardzo czerwono</I> <li>Ron: <I>cine îl pictează foarte roşu</I> <li>Rus: <I>кто рисует очень красным его</I> <li>Spa: <I>quién lo pinta en muy rojo</I> <li>Swe: <I>vem målar det mycket rött</I> <li>Urd: <I>كون اس كو بہت لال رنگ كرتا ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#V2S" TITLE="V2S - verb with NP and S complement">V2S</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#S" TITLE="S - declarative sentence">S</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who tells her that we sleep</I></TD>
+<TD><div class=reveal> <I>who answers to him that we sleep</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP answer_V2S he_NP (mkS (mkCl we_NP sleep_V))</CODE> <li>Bul: <I>кой отговаря му , че ние спим</I> <li>Cat: <I>qui li respon que nosaltres dormim</I> <li>Dan: <I>hvem svarer til ham at vi sover</I> <li>Dut: <I>wie antwoordt hem dat we slapen</I> <li>Eng: <I>who answers to him that we sleep</I> <li>Fin: <I>kuka vastaa hänelle että me nukumme</I> <li>Fre: <I>qui lui répond que nous dormons</I> <li>Ger: <I>wer antwortet ihm daß wir schlafen</I> <li>Ita: <I>chi gli risponde che noi dormiamo</I> <li>Nor: <I>hvem svarer til ham at vi sover</I> <li>Pol: <I>kto odpowiada jemu , że my śpimy</I> <li>Ron: <I>cine îi răspunde cã noi dormim</I> <li>Rus: <I>кто отвечает , что мы спдим его</I> <li>Spa: <I>quién le responde que nosotros dormimos</I> <li>Swe: <I>vem svarar till honom att vi sover</I> <li>Urd: <I>كون اس كو جواب دیتا ہے كہ ہم سوتے ہیں</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#V2Q" TITLE="V2Q - verb with NP and Q complement">V2Q</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QS" TITLE="QS - question">QS</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who asks her who sleeps</I></TD>
+<TD><div class=reveal> <I>who asks him who sleeps</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V))</CODE> <li>Bul: <I>кой пита него кой спи</I> <li>Cat: <I>qui li pregunta qui dorm</I> <li>Dan: <I>hvem spørger ham hvem som sover</I> <li>Dut: <I>wie vraagt hem wie slaapt</I> <li>Eng: <I>who asks him who sleeps</I> <li>Fin: <I>kuka kysyy häneltä kuka nukkuu</I> <li>Fre: <I>qui lui demande qui dort</I> <li>Ger: <I>wer fragt ihn wer schläft</I> <li>Ita: <I>chi gli chiede chi dorme</I> <li>Nor: <I>hvem spørr ham hvem som sover</I> <li>Pol: <I>kto pyta jego , kto śpi</I> <li>Ron: <I>cine îl întreabă cine doarme</I> <li>Rus: <I>кто спрашивает кто спдит его</I> <li>Spa: <I>quién le pregunta quién duerme</I> <li>Swe: <I>vem frågar honom vem som sover</I> <li>Urd: <I>كون اس سے پوچھتا ہے كہ كون سوتا ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#V2V" TITLE="V2V - verb with NP and V complement">V2V</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who forces her to sleep</I></TD>
+<TD><div class=reveal> <I>who begs him to sleep</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP beg_V2V he_NP (mkVP sleep_V)</CODE> <li>Bul: <I>кой моли него да спи</I> <li>Cat: <I>qui el demana a dormir</I> <li>Dan: <I>hvem beder ham at sove</I> <li>Dut: <I>wie smeekt hem te slapen</I> <li>Eng: <I>who begs him to sleep</I> <li>Fin: <I>kuka pyytää häntä nukkumaan</I> <li>Fre: <I>qui le demande à dormir</I> <li>Ger: <I>wer bittet ihn zu schlafen</I> <li>Ita: <I>chi lo prega di dormire</I> <li>Nor: <I>hvem ber ham att sove</I> <li>Pol: <I>atomic term beg_V2V</I> <li>Ron: <I>cine îl roagă sã doarmă</I> <li>Rus: <I>кто просит спать его</I> <li>Spa: <I>quién lo roga a dormir</I> <li>Swe: <I>vem ber honom att sova</I> <li>Urd: <I>كون اس سے سونا كی التجا كرتا ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who is old</I></TD>
+<TD><div class=reveal> <I>who is old</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP old_A</CODE> <li>Bul: <I>кой е стар</I> <li>Cat: <I>qui és vell</I> <li>Dan: <I>hvem er gammel</I> <li>Dut: <I>wie is oud</I> <li>Eng: <I>who is old</I> <li>Fin: <I>kuka on vanha</I> <li>Fre: <I>qui est vieux</I> <li>Ger: <I>wer ist alt</I> <li>Ita: <I>chi è vecchio</I> <li>Nor: <I>hvem er gammel</I> <li>Pol: <I>kto jest stary</I> <li>Ron: <I>cine este vechi</I> <li>Rus: <I>кто старый</I> <li>Spa: <I>quién es viejo</I> <li>Swe: <I>vem är gammal</I> <li>Urd: <I>كون بوڑھا ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who is older than her</I></TD>
+<TD><div class=reveal> <I>who is older than he</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP old_A he_NP</CODE> <li>Bul: <I>кой е по - стар от него</I> <li>Cat: <I>qui és més vell que ell</I> <li>Dan: <I>hvem er ældre end han</I> <li>Dut: <I>wie is ouder dan hij</I> <li>Eng: <I>who is older than he</I> <li>Fin: <I>kuka on vanhempi kuin hän</I> <li>Fre: <I>qui est plus vieux que lui</I> <li>Ger: <I>wer ist älter als er</I> <li>Ita: <I>chi è più vecchio di lui</I> <li>Nor: <I>hvem er eldre enn han</I> <li>Pol: <I>kto jest starszy niż on</I> <li>Ron: <I>cine este mai vechi decât el</I> <li>Rus: <I>кто старше него</I> <li>Spa: <I>quién es más viejo que él</I> <li>Swe: <I>vem är äldre än han</I> <li>Urd: <I>كون اس سے بوڑھا ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#A2" TITLE="A2 - two-place adjective">A2</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who is married to her</I></TD>
+<TD><div class=reveal> <I>who is married to him</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP married_A2 he_NP</CODE> <li>Bul: <I>кой е женен за него</I> <li>Cat: <I>qui és casata a ell</I> <li>Dan: <I>hvem er gift med ham</I> <li>Dut: <I>wie is getrouwd met hem</I> <li>Eng: <I>who is married to him</I> <li>Fin: <I>kuka on avioitunut hänen kanssa</I> <li>Fre: <I>qui est marié à lui</I> <li>Ger: <I>wer ist verheiratet mit ihm</I> <li>Ita: <I>chi è sposato con lui</I> <li>Nor: <I>hvem er gift med ham</I> <li>Pol: <I>kto jest zaślubiony jemu</I> <li>Ron: <I>cine este căsătorit cu el</I> <li>Rus: <I>кто замужем за им</I> <li>Spa: <I>quién es casado a él</I> <li>Swe: <I>vem är gift med honom</I> <li>Urd: <I>كون اس سے [شادی كرنa] ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#AP" TITLE="AP - adjectival phrase">AP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who is very old</I></TD>
+<TD><div class=reveal> <I>who is very old</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP (mkAP very_AdA old_A)</CODE> <li>Bul: <I>кой е много стар</I> <li>Cat: <I>qui és molt vell</I> <li>Dan: <I>hvem er meget gammel</I> <li>Dut: <I>wie is erg oud</I> <li>Eng: <I>who is very old</I> <li>Fin: <I>kuka on erittäin vanha</I> <li>Fre: <I>qui est très vieux</I> <li>Ger: <I>wer ist sehr alt</I> <li>Ita: <I>chi è molto vecchio</I> <li>Nor: <I>hvem er mye gammel</I> <li>Pol: <I>kto jest bardzo stary</I> <li>Ron: <I>cine este foarte vechi</I> <li>Rus: <I>кто очень старый</I> <li>Spa: <I>quién es muy viejo</I> <li>Swe: <I>vem är mycket gammal</I> <li>Urd: <I>كون بہت بوڑھا ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who is the man</I></TD>
+<TD><div class=reveal> <I>who is the woman</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP (mkNP the_Det woman_N)</CODE> <li>Bul: <I>кой е жената</I> <li>Cat: <I>qui és la dona</I> <li>Dan: <I>hvem er kvinden</I> <li>Dut: <I>wie is de vrouw</I> <li>Eng: <I>who is the woman</I> <li>Fin: <I>kuka on nainen</I> <li>Fre: <I>qui est la femme</I> <li>Ger: <I>wer ist die Frau</I> <li>Ita: <I>chi è la donna</I> <li>Nor: <I>hvem er kvinna</I> <li>Pol: <I>kto jest kobietą</I> <li>Ron: <I>cine este femeia</I> <li>Rus: <I>кто женщина</I> <li>Spa: <I>quién es la mujer</I> <li>Swe: <I>vem är kvinnan</I> <li>Urd: <I>كون عورت ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who is a man</I></TD>
+<TD><div class=reveal> <I>who is a woman</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP woman_N</CODE> <li>Bul: <I>кой е жена</I> <li>Cat: <I>qui és dona</I> <li>Dan: <I>hvem er en kvinde</I> <li>Dut: <I>wie is vrouw</I> <li>Eng: <I>who is a woman</I> <li>Fin: <I>kuka on nainen</I> <li>Fre: <I>qui est femme</I> <li>Ger: <I>wer ist eine Frau</I> <li>Ita: <I>chi è donna</I> <li>Nor: <I>hvem er ei kvinne</I> <li>Pol: <I>kto jest kobieta</I> <li>Ron: <I>cine este femeie</I> <li>Rus: <I>кто женщина</I> <li>Spa: <I>quién es mujer</I> <li>Swe: <I>vem är en kvinna</I> <li>Urd: <I>كون عورت ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who is an old man</I></TD>
+<TD><div class=reveal> <I>who is an old woman</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP (mkCN old_A woman_N)</CODE> <li>Bul: <I>кой е стара жена</I> <li>Cat: <I>qui és dona vell</I> <li>Dan: <I>hvem er en gammel kvinde</I> <li>Dut: <I>wie is oude vrouw</I> <li>Eng: <I>who is an old woman</I> <li>Fin: <I>kuka on vanha nainen</I> <li>Fre: <I>qui est vieille femme</I> <li>Ger: <I>wer ist eine alte Frau</I> <li>Ita: <I>chi è vecchia donna</I> <li>Nor: <I>hvem er ei gammel kvinne</I> <li>Pol: <I>kto jest stara kobieta</I> <li>Ron: <I>cine este femeie veche</I> <li>Rus: <I>кто старая женщина</I> <li>Spa: <I>quién es vieja mujer</I> <li>Swe: <I>vem är en gammal kvinna</I> <li>Urd: <I>كون بوڑھی عورت ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#QCl" TITLE="QCl - question clause, with all tenses">QCl</A></TD>
-<TD><I>who is here</I></TD>
+<TD><div class=reveal> <I>who is here</I> <div class=popup> <ul> <li>API: <CODE>mkQCl who_IP here_Adv</CODE> <li>Bul: <I>кой е тук</I> <li>Cat: <I>qui és aquí</I> <li>Dan: <I>hvem er her</I> <li>Dut: <I>wie is hier</I> <li>Eng: <I>who is here</I> <li>Fin: <I>kuka on täällä</I> <li>Fre: <I>qui est ici</I> <li>Ger: <I>wer ist hier</I> <li>Ita: <I>chi è quà</I> <li>Nor: <I>hvem er her</I> <li>Pol: <I>kto jest tutaj</I> <li>Ron: <I>cine este aici</I> <li>Rus: <I>кто здесь</I> <li>Spa: <I>quién es aquí</I> <li>Swe: <I>vem är här</I> <li>Urd: <I>كون یہاں ہے</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkQCl</CODE></TD>
@@ -2587,7 +2587,7 @@ Lexical category, constructors given in
 
 <A NAME="QS"></A>
 <H2>QS - question</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2607,7 +2607,7 @@ Lexical category, constructors given in
 
 <A NAME="Quant"></A>
 <H2>Quant - quantifier ('nucleus' of Det)</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2647,7 +2647,7 @@ Lexical category, constructors given in
 
 <A NAME="RCl"></A>
 <H2>RCl - relative clause, with all tenses</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2671,7 +2671,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkRCl</CODE></TD>
 <TD><A HREF="#RP" TITLE="RP - relative pronoun">RP</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#RCl" TITLE="RCl - relative clause, with all tenses">RCl</A></TD>
-<TD><div class=reveal> <I>who send it to her</I> <div class=popup> <ul> <li>API: <CODE>mkRCl which_RP send_V3 it_NP she_NP</CODE> <li>Bul: <I>който пращам него до нея</I> <li>Cat: <I>que ho li envio</I> <li>Dan: <I>som sender det til hende</I> <li>Dut: <I>die het haar stuurt</I> <li>Eng: <I>who send it to her</I> <li>Fin: <I>joka lähetän sen hänelle</I> <li>Fre: <I>qui le lui envoie</I> <li>Ger: <I>der es ihr schickt</I> <li>Ita: <I>che lo le mando</I> <li>Nor: <I>som sender det til henne</I> <li>Pol: <I>, który wysyła do niej je</I> <li>Ron: <I>care i -l trimit</I> <li>Rus: <I>который посылает ней его</I> <li>Spa: <I>que lo le mando</I> <li>Swe: <I>som skickar det till henne</I> <li>Urd: <I>جو اس كو اس كو بھیجتا ہوں</I> </ul> </div> </div></TD>
+<TD><div class=reveal> <I>who send it to her</I> <div class=popup> <ul> <li>API: <CODE>mkRCl which_RP send_V3 it_NP she_NP</CODE> <li>Bul: <I>който пращам него до нея</I> <li>Cat: <I>que ho li envio</I> <li>Dan: <I>som sender det til hende</I> <li>Dut: <I>die het naar haar stuurt</I> <li>Eng: <I>who send it to her</I> <li>Fin: <I>joka lähetän sen hänelle</I> <li>Fre: <I>qui le lui envoie</I> <li>Ger: <I>der es ihr schickt</I> <li>Ita: <I>che lo le mando</I> <li>Nor: <I>som sender det til henne</I> <li>Pol: <I>, który wysyła do niej je</I> <li>Ron: <I>care i -l trimit</I> <li>Rus: <I>который посылает ней его</I> <li>Spa: <I>que lo le mando</I> <li>Swe: <I>som skickar det till henne</I> <li>Urd: <I>جو اس كو اس كو بھیجتا ہوں</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkRCl</CODE></TD>
@@ -2782,7 +2782,7 @@ Lexical category, constructors given in
 
 <A NAME="RP"></A>
 <H2>RP - relative pronoun</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2802,7 +2802,7 @@ Lexical category, constructors given in
 
 <A NAME="RS"></A>
 <H2>RS - relative</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2827,7 +2827,7 @@ Lexical category, constructors given in
 
 <A NAME="S"></A>
 <H2>S - declarative sentence</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2857,7 +2857,7 @@ Lexical category, constructors given in
 
 <A NAME="SC"></A>
 <H2>SC - embedded sentence or question</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2882,7 +2882,7 @@ Lexical category, constructors given in
 
 <A NAME="SSlash"></A>
 <H2>SSlash</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2897,7 +2897,7 @@ Lexical category, constructors given in
 
 <A NAME="Sub100"></A>
 <H2>Sub100</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2922,7 +2922,7 @@ Lexical category, constructors given in
 
 <A NAME="Sub1000"></A>
 <H2>Sub1000</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2947,7 +2947,7 @@ Lexical category, constructors given in
 
 <A NAME="Subj"></A>
 <H2>Subj - subjunction</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -2982,13 +2982,22 @@ Lexical category, constructors given in
 
 <A NAME="Temp"></A>
 <H2>Temp - temporal and aspectual features</H2>
-<P>
-Lexical category, constructors given in
-<A HREF="#RParadigms">lexical paradigms</A>.
-</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>mkTemp</CODE></TD>
+<TD><A HREF="#Tense" TITLE="Tense - tense">Tense</A> <CODE>-&gt;</CODE> <A HREF="#Ant" TITLE="Ant - anteriority">Ant</A> <CODE>-&gt;</CODE> <A HREF="#Temp" TITLE="Temp - temporal and aspectual features">Temp</A></TD>
+<TD><I>mkTemp</I></TD>
+</TR>
+</TABLE>
+
 <A NAME="Tense"></A>
 <H2>Tense - tense</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -3018,7 +3027,7 @@ Lexical category, constructors given in
 
 <A NAME="Text"></A>
 <H2>Text - text consisting of several phrases</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -3068,7 +3077,7 @@ Lexical category, constructors given in
 
 <A NAME="Unit"></A>
 <H2>Unit</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -3123,7 +3132,7 @@ Lexical category, constructors given in
 
 <A NAME="Utt"></A>
 <H2>Utt - sentence, question, word...</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -3219,7 +3228,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="V2"></A>
 <H2>V2 - two-place verb</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -3270,7 +3279,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="VP"></A>
 <H2>VP - verb phrase</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -3289,7 +3298,7 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>mkVP</CODE></TD>
 <TD><A HREF="#V3" TITLE="V3 - three-place verb">V3</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#VP" TITLE="VP - verb phrase">VP</A></TD>
-<TD><div class=reveal> <I>to send it to him</I> <div class=popup> <ul> <li>API: <CODE>mkUtt (mkVP send_V3 it_NP he_NP)</CODE> <li>Bul: <I>да прати него до него</I> <li>Cat: <I>enviar ho li</I> <li>Dan: <I>at sende det til ham</I> <li>Dut: <I>hem sturen</I> <li>Eng: <I>to send it to him</I> <li>Fin: <I>lähettää sen hänelle</I> <li>Fre: <I>l' envoyer lui</I> <li>Ger: <I>es ihm schicken</I> <li>Ita: <I>mandare lo gli</I> <li>Nor: <I>å sende det til ham</I> <li>Pol: <I>wysłać do niego je</I> <li>Ron: <I>sã i -l trimită</I> <li>Rus: <I>посылать нему его</I> <li>Spa: <I>mandar lo le</I> <li>Swe: <I>att skicka det till honom</I> <li>Urd: <I>اس كو بھیجنا اس كو</I> </ul> </div> </div></TD>
+<TD><div class=reveal> <I>to send it to him</I> <div class=popup> <ul> <li>API: <CODE>mkUtt (mkVP send_V3 it_NP he_NP)</CODE> <li>Bul: <I>да прати него до него</I> <li>Cat: <I>enviar ho li</I> <li>Dan: <I>at sende det til ham</I> <li>Dut: <I>naar hem sturen</I> <li>Eng: <I>to send it to him</I> <li>Fin: <I>lähettää sen hänelle</I> <li>Fre: <I>l' envoyer lui</I> <li>Ger: <I>es ihm schicken</I> <li>Ita: <I>mandare lo gli</I> <li>Nor: <I>å sende det til ham</I> <li>Pol: <I>wysłać do niego je</I> <li>Ron: <I>sã i -l trimită</I> <li>Rus: <I>посылать нему его</I> <li>Spa: <I>mandar lo le</I> <li>Swe: <I>att skicka det till honom</I> <li>Urd: <I>اس كو بھیجنا اس كو</I> </ul> </div> </div></TD>
 </TR>
 <TR>
 <TD><CODE>mkVP</CODE></TD>
@@ -3425,7 +3434,7 @@ Lexical category, constructors given in
 
 <A NAME="VPSlash"></A>
 <H2>VPSlash - verb phrase missing complement</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -3487,7 +3496,7 @@ Lexical category, constructors given in
 </P>
 <A NAME="VV"></A>
 <H2>VV - verb-phrase-complement verb</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -3517,7 +3526,7 @@ Lexical category, constructors given in
 
 <A NAME="Voc"></A>
 <H2>Voc - vocative or "please"</H2>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -3545,7 +3554,7 @@ Lexical category, constructors given in
 <P>
 source <A HREF="../src/bulgarian/ParadigmsBul.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/bulgarian/ParadigmsBul.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -4406,7 +4415,7 @@ source <A HREF="../src/bulgarian/ParadigmsBul.gf"><CODE>http://www.grammaticalfr
 <P>
 source <A HREF="../src/catalan/ParadigmsCat.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/catalan/ParadigmsCat.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -4657,7 +4666,7 @@ source <A HREF="../src/catalan/ParadigmsCat.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/danish/ParadigmsDan.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/danish/ParadigmsDan.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -4883,7 +4892,7 @@ source <A HREF="../src/danish/ParadigmsDan.gf"><CODE>http://www.grammaticalframe
 <P>
 source <A HREF="../src/dutch/ParadigmsDut.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/dutch/ParadigmsDut.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -5074,7 +5083,7 @@ source <A HREF="../src/dutch/ParadigmsDut.gf"><CODE>http://www.grammaticalframew
 <P>
 source <A HREF="../src/english/ParadigmsEng.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/english/ParadigmsEng.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -5335,7 +5344,7 @@ source <A HREF="../src/english/ParadigmsEng.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/finnish/ParadigmsFin.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/finnish/ParadigmsFin.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -5661,7 +5670,7 @@ source <A HREF="../src/finnish/ParadigmsFin.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/french/ParadigmsFre.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/french/ParadigmsFre.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -5892,7 +5901,7 @@ source <A HREF="../src/french/ParadigmsFre.gf"><CODE>http://www.grammaticalframe
 <P>
 source <A HREF="../src/german/ParadigmsGer.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/german/ParadigmsGer.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -6203,7 +6212,7 @@ source <A HREF="../src/german/ParadigmsGer.gf"><CODE>http://www.grammaticalframe
 <P>
 source <A HREF="../src/italian/ParadigmsIta.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/italian/ParadigmsIta.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -6484,7 +6493,7 @@ source <A HREF="../src/italian/ParadigmsIta.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/norwegian/ParadigmsNor.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/norwegian/ParadigmsNor.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -6735,7 +6744,7 @@ source <A HREF="../src/norwegian/ParadigmsNor.gf"><CODE>http://www.grammaticalfr
 <P>
 source <A HREF="../src/polish/ParadigmsPol.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/polish/ParadigmsPol.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -7346,7 +7355,7 @@ source <A HREF="../src/polish/ParadigmsPol.gf"><CODE>http://www.grammaticalframe
 <P>
 source <A HREF="../src/romanian/ParadigmsRon.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/romanian/ParadigmsRon.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -7597,7 +7606,7 @@ source <A HREF="../src/romanian/ParadigmsRon.gf"><CODE>http://www.grammaticalfra
 <P>
 source <A HREF="../src/russian/ParadigmsRus.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/russian/ParadigmsRus.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -7768,7 +7777,7 @@ source <A HREF="../src/russian/ParadigmsRus.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/spanish/ParadigmsSpa.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/spanish/ParadigmsSpa.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -8029,7 +8038,7 @@ source <A HREF="../src/spanish/ParadigmsSpa.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/swedish/ParadigmsSwe.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/swedish/ParadigmsSwe.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -8270,7 +8279,7 @@ source <A HREF="../src/swedish/ParadigmsSwe.gf"><CODE>http://www.grammaticalfram
 <P>
 source <A HREF="../src/urdu/ParadigmsUrd.gf"><CODE>http://www.grammaticalframework.org/lib/resource/src/urdu/ParadigmsUrd.gf</CODE></A>
 </P>
-<TABLE BORDER="1" CELLPADDING="4">
+<TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
 <TH>Type</TH>
@@ -8674,6 +8683,6 @@ For each language, an instantiation of the functor:
 
 <P></P>
 
-<!-- html code generated by txt2tags 2.5 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml -\-toc synopsis.txt -->
 </BODY></HTML>
