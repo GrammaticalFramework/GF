@@ -275,6 +275,14 @@ incomplete resource Constructors = open Grammar in {  --%
       conditionalTense : Tense  -- she would sleep       --# notpresent   --:
         = TCond ; --# notpresent --% 
 
+--3 Temp, temporal and aspectual features
+
+-- Temp is a combination of Tense and Ant. In extra modules for some
+-- languages, it can also involve aspect and other things.
+
+      mkTemp : Tense -> Ant -> Temp
+        = TTAnt ; --%
+
 --3 ImpForm, imperative form 
 
 -- Imperative form is a parameter that sets the form of imperative
