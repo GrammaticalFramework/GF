@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>GF Translation Quiz</title>
+
+<link rel=stylesheet type="text/css" href="minibar_quiz.css">
+
+<meta name = "viewport" content = "width = device-width">
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<meta charset="UTF-8">
+
+<script type="text/JavaScript" src="support.js"></script>
+<script type="text/JavaScript" src="minibar_quiz.js"></script>
+<script type="text/JavaScript" src="pgf_online.js"></script>
+<script type="text/JavaScript" src="quiz_support.js"></script>
+<script type="text/javascript" src="translation_quiz.js"></script>
+<script type="text/JavaScript" src="quiz_pre_start.js"></script>
+
+</head>
+
+<body onLoad="pre_start()">
+
+<div id = "info" >
+<a href="javascript:popUp('quiz_about.html', 'about')">About GF Translation Quiz</a>
+<h2 style=" padding-left: 35px;"><i> Welcome to <b>GF Translation Quiz </i></b></h2>
+
+<p style="font-size:20px;"> 
+    To start the quiz choose a grammar, From and To languages
+	<br/>  as well as a quiz mode, then press the "Start Quiz" button. 
+	<br/> <b>Note:</b> You may not change these settings in the middle of
+    <br/>  a quiz.
+	The quiz is over when you have done at least
+	<span style="color:#2E8B57;"><b><script type="text/javascript"> document.write(min_no_questions); </script></b></span> 
+	<br/>examples with a minimum success of  
+	<span style="color:#2E8B57;"><b><script type="text/javascript"> document.write(pass_percentage * 100); </script> % </b></span> 
+	. However <br/> you can restart or quit the quiz 
+	at any time by clicking <br/>on the "Restart Quiz" or "End Quiz" buttons.
+</p>
+
+<a style="font-size:18px;" href="javascript:popUp('quiz_help.html', 'help')">Click here to learn more about how the Quiz works.</a>
+<br/>
+
+</div>
+
+<div id = "toggle_hide"; class="shift_left"; ><a href="javascript: toggle_info()">Hide Information</a></div>
+<div id = "toggle_show"; class="shift_left"; ><a href="javascript: toggle_info()">Show Information</a></div>
+
+<hr noshade size=0 />
+
+<div id = "minibar1" class="bold">
+</div>
+
+<hr noshade size=0 /> 
+
+<table  frame="void" cellpadding="5" >
+		<tr>
+			<td><b>Quiz  Question:</b></td>
+		</tr>
+		<tr>
+		  <td>
+			<form name="question">
+				<textarea class="quest" name="question_text" wrap="virtual" readonly="true">
+				</textarea>
+			</form>
+		  </td>
+		</tr>
+</table>
+
+<form name="answer" onsubmit="check_answer_quiz(); return false;">
+  <fieldset>
+  
+   <legend><b>Your Answer: </b></legend>
+    <div id = "minibar_buttons" class="shift_left";></div>
+    <div id = "minibar_contin"></div>
+	<table cellpadding="2">
+			<tr>
+			  <td>
+				<input class="answer1" type="text" id="user_answer" name="answer_text" value="" />
+			  </td>
+			</tr>
+			<tr>
+				<td>
+					<div id="hint_txt" class="hint">
+				</td>
+			</tr>
+			
+			<tr>
+			  <td>
+				<div id = "buttons_bar"></div>
+			  </td>
+			</tr> 
+            <tr>
+			  <td>
+				<div id = "history_bar"></div>
+			  </td>
+			</tr> 			
+	</table>		
+		
+  </fieldset>
+</form>
+
+
+<table  frame="void" cellpadding="5" >
+		<tr>
+			<td><b>Explanation:</b></td>
+		</tr>
+		<tr>
+		  <td>
+			<form name="explanation">
+				<textarea class="explain" name="explanation_text" wrap="virtual" readonly="true">
+				</textarea>
+			</form>
+		  </td>
+		</tr>
+</table>
+
+<table cellpadding="1" cellspacing="10">
+		<tr>
+		    <td><b>Current Quiz Mode:</b></td>
+			<td><b>Answered Questions</b></td>
+			<td><b>Your Score</b></td>
+		</tr>   
+		<tr>
+		    <td><input type="text" id="mode" style="border: 0; text-align:left; color:#CD5C5C; background-color:#ccc;"  class="number" size="18" readonly="true"/></td>
+			<td><input type="text" id="counter_display" class="number" size="4" readonly="true"  value="0" /></td>
+			<td><input type="text" id="score_display"  style="color:#2E8B57" class="number" size="3" readonly="true" value="0" /></td>
+		</tr>
+</table>
+ 
+<div id="history_part">
+</div>
+
+<script type="text/javascript">
+
+var online_options={
+  grammars_url: "http://www.grammaticalframework.org/grammars/"
+//grammars_url: "http://tournesol.cs.chalmers.se:41296/grammars",
+//grammars_url: "http://localhost:41296/grammars",
+//grammar_list: ["Foods.pgf"], // leave undefined to get list from server
+}
+
+var server=pgf_online(online_options);
+
+var minibar_options= {
+  show_abstract: false,
+  show_trees: false,
+  show_grouped_translations: false,
+  default_source_language: "Eng",
+  try_google: false
+} 
+
+var minibar=new Minibar(server,minibar_options,"minibar1");
+
+</script>
+
+</body>
+
+</html>
