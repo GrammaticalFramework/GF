@@ -1,0 +1,93 @@
+body {
+    background: #eee url("brushed-metal.png");
+}
+
+/*th, td { vertical-align: baseline; text-align: left; }*/
+
+div#surface {
+    min-height: 3ex;
+    margin: 5px;
+    padding: 5px;
+    border: 3px dashed #e0e0e0;
+}
+
+div#words {
+    min-height: 3ex;
+    margin: 5px;
+    padding: 6px;
+    border: 3px solid #e0e0e0;
+}
+
+div.word, span.word, div#words input[type=button] {
+    display: inline-block;
+    font-family: sans-serif;
+    font-size: 100%;
+    background-color: white;
+    border: 1px solid black;
+    padding: 3px;
+    margin: 3px;
+}
+
+/* added for quiz */
+ textarea.quest {
+   width: 452px;
+   height: 35px;
+   font-size:16px;
+ }
+
+ textarea.explain {
+   width: 452px;
+   height: 70px;
+   font-size:16px;
+ }
+ 
+  input.answer1 {
+   width: 442px;
+   height: 20px;
+   font-size:16px;
+ }
+ 
+ div.hint {
+ font-family: Verdana; 
+ font-weight: bold; 
+ font-size:16px;
+ }
+ 
+ div.bold { 
+ font-weight: bold; 
+ font-size:16px;
+ }
+ 
+ input.number {
+ text-align:center; 
+ font-family: Verdana; 
+ font-weight: bold; 
+ font-size:16px;
+ }
+ 
+  div.shift_left {
+   padding-left: 320px;
+ }
+ /* default for all links */
+ a:link {color: #2E8B57; font-size:16px; font-weight: bold; text-decoration: underline; }
+ a:active {color: #2E8B57; font-size:16px; font-weight: bold; text-decoration: underline; }
+ a:visited {color: #2E8B57; font-size:16px; font-weight: bold; text-decoration: underline; }
+ a:hover {color: #CD853F; font-size:16px; font-weight: bold; text-decoration: none; }
+
+.invalid { color: red; }
+
+div.modtime { float: right; }
+.modtime { color: #444; white-space: nowrap; }
+
+ul.space>li { margin-top: 0.5ex; }
+
+div#saldospel input[type=button] { font-size: 100%; }
+
+div#saldospel input.correct { color: green; }
+div#saldospel input.incorrect { color: red; }
+
+#surface input[type=text] { width: 5em; }
+
+
+span.field { background-color: #eee; }
+
