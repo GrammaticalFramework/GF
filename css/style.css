@@ -1,0 +1,18 @@
+
+body { background-color: #f2f2f2; }
+
+h1,h2,h3 { font-family: sans-serif; }
+h2 { border-bottom: 2px solid black; clear: right; }
+
+div.center { text-align: center; }
+div.news { font-size: small; }
+
+table { border-collapse: collapse; }
+
+
+th,td { border: 1px solid #333; }
+
+td { background: white; }
+th { background: #9df; }
+
+h1>img { float: right; }
