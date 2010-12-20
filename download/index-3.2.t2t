@@ -1,0 +1,76 @@
+Grammatical Framework Download and Installation
+
+
+%!style:../css/style.css
+%!postproc(html): <TD><B> <TH>
+%!postproc(html): </B></TD> </TH>
+%!postproc(html): <H1> <H1><IMG src="../doc/Logos/gf0.png">
+
+**GF 3.2** was released on 23 December 2010.
+
+What's new? See the [Release notes release-3.2.html].
+
+
+== Binary packages for the latest release ==
+
+
+| **Platform** | **Download** | **How to install**
+| MacOS X | [gf-3.2-leopard.pkg gf-3.2-leopard.pkg] | Double-click on the package icon and follow the instructions
+| MacOS X | [gf-3.2-bin-intel-mac.tar.gz gf-3.2-bin-intel-mac.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-intel-mac.tar.gz``
+| Windows | [gf-3.2-bin-i486-windows.zip gf-3.2-bin-i486-windows.zip] | ``unzip gf-3.2-bin-i486-windows.zip``
+| Linux | [gf-3.2-bin-i486-linux.tar.gz gf-3.2-bin-i486-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-i486-linux.tar.gz``
+
+===Notes===
+
+The Windows package is installed by just unpacking it anywhere. 
+It finds the libraries relative to the ``.exe`` file.
+
+The MacOS and Linux packages are designed to be installed in ``/usr/local``.
+You can install them in other locations, but then you need to set the
+``GF_LIB_PATH`` environment variable:
+
+```
+  export GF_LIB_PATH=/usr/local/share/gf-3.2/lib
+```
+
+where ``/usr/local`` should be replaced with the path to the location where you
+unpacked the package.
+
+
+==Installing the latest release from source==
+
+GF is on [Hackage http://hackage.haskell.org/package/gf], so the prodedure is
+fairly simple:
+
++ Install the
+  [Haskell Platform 2010.2.0.0 (July 2010) http://hackage.haskell.org/platform].
++ ``cabal update``
++ ``cabal install gf``
+
+
+=== Notes ===
+
+The above steps installs GF for a single user and does not require root
+privileges. The executables are put in ``$HOME/.cabal/bin``, so it is a good
+idea to put a line in your ``.bash_profile`` to add that directory to you path:
+
+```
+  PATH=$HOME/.cabal/bin:$PATH
+```
+
+==Older releases==
+
+- [GF 3.1.6 index.html] (April 2010).
+- [GF 3.1 old-index.html] (December 2009).
+
+
+==Latest developer code==
+
+```
+  darcs get --lazy http://www.grammaticalframework.org
+```
+
+--------------------
+
+[www.grammaticalframework.org http://www.grammaticalframework.org]
+ 
