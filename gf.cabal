@@ -3,7 +3,7 @@ version: 3.1.91
 
 cabal-version: >= 1.8
 build-type: Custom
-license: GPL
+license: OtherLicense
 license-file: LICENSE
 category: Natural Language Processing, Compiler
 synopsis: Grammatical Framework
