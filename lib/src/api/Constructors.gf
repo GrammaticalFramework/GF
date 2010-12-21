@@ -756,7 +756,7 @@ incomplete resource Constructors = open Grammar in {  --%
 -- and from symbolic integers.
 
     mkNum = overload { --%  
-      mkNum : Str -> Num   -- thirty-five (given by "35") 
+      mkNum : Str -> Num   -- thirty-five (given by "35"; range 1-999) 
         = \s -> NumCard (str2card s) ; --%
       mkNum : Numeral -> Num  -- twenty  
         = \d -> NumCard (NumNumeral d) ; --%  
@@ -784,7 +784,7 @@ incomplete resource Constructors = open Grammar in {  --%
 -- Cardinals are the non-dummy numerals.
 
     mkCard = overload {  --%
-      mkCard : Str -> Card   -- thirty-five (given as "35")
+      mkCard : Str -> Card   -- thirty-five (given as "35"; range 1-999) 
         = str2card ; --%
       mkCard : Numeral -> Card   -- twenty  --:
         = NumNumeral ; --%  
@@ -840,7 +840,7 @@ incomplete resource Constructors = open Grammar in {  --%
 
 -- Some numerals can also be extracted from strings at compile time.
 
-      mkNumeral : Str -> Numeral   -- thirty-five (given by "35") 
+      mkNumeral : Str -> Numeral   -- thirty-five (given by "35"; range 1-999)  
       = str2numeral ; --% 
       } ; --%      
 
@@ -905,7 +905,7 @@ incomplete resource Constructors = open Grammar in {  --%
 --3 Digits, numerals as sequences of digits
 
    mkDigits = overload { --%
-      mkDigits : Str -> Digits -- 35 (from string "35")
+      mkDigits : Str -> Digits -- 35 (from string "35"; ; range 1-9999999)
       = str2digits ; --% 
       mkDigits : Dig -> Digits -- 4  --:
       = IDig ; --%  
@@ -1650,6 +1650,7 @@ oper
 (\s -> case s of {
     ? => num (pot2as3 (pot1as2 (pot0as1 (s2s10 s)))) ;
     ? + ? => num (pot2as3 (pot1as2 (s2s100 s))) ;
+    ? + ? + ? => num (pot2as3 (s2s1000 s)) ;
 
 --    m@(? + _) + "000"            => num (pot3 (s2s1000 m)) ;
 --    m@(? + _) + "00" + n@?       => num (pot3plus (s2s1000 m) (s2s1000 n)) ; 
@@ -1686,14 +1687,14 @@ oper
     d@#idigit + n@? => pot1plus (s2d d) (s2s10 n) ;
     _               => pot0as1 (s2s10 s)
     } ;
-{-
+
   s2s1000 : Str -> Sub1000 = \s -> case s of {
     d@? + "00"      => pot2 (s2s10 d) ;
     d@? + "0" + n@? => pot2plus (s2s10 d) (s2s100 n) ;
     d@? + n@(? + ?) => pot2plus (s2s10 d) (s2s100 n) ;
     _ => pot1as2 (s2s100 s)
     } ;
--}
+
   } ;
   idigit : pattern Str = #("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9") ;
   digit : pattern Str = #("0" | #idigit) ;
