@@ -3,10 +3,14 @@ module GF.Command.Messages where
 licenseMsg = unlines [
  "Copyright (c)", 
  "Krasimir Angelov, Bj\246rn Bringert, H\229kan Burden, Hans-Joachim Daniels,",
- "Markus Forsberg, Thomas Hallgren, Harald Hammarstr\246m, Kristofer Johannisson,",
- "Janna Khegai, Peter Ljungl\246f, Petri M\228enp\228\228, and", 
- "Aarne Ranta, 1998-2008, under GNU General Public License (GPL)",
- "see LICENSE in GF distribution, or http://www.gnu.org/licenses/gpl.html."
+ "Ramona Enache, Markus Forsberg, Thomas Hallgren, Harald Hammarstr\246m,",
+ "Kristofer Johannisson, Janna Khegai, Peter Ljungl\246f, Petri M\228enp\228\228, and", 
+ "Aarne Ranta, 1998-2010.",
+ "",
+ "The compiler is under GNU General Public License (GPL)",
+ "while all Haskell and most GF libraries that come with the distribution are",
+ "under dual GNU Lesser General Public License (LGPL) and BSD License,",
+ "see LICENSE in the GF source distribution for details."
  ]
 
 codingMsg = unlines [
