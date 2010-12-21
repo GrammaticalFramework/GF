@@ -642,7 +642,6 @@ mkQCl who_IP (mkClSlash (mkCl she_NP sleep_V) with_Prep)
 mkQCl who_IP (mkClSlash (mkClSlash she_NP see_V2) today_Adv)
       mkClSlash : NP -> VS -> SSlash -> ClSlash -- (whom)she says that he s
 mkQCl who_IP (mkClSlash she_NP know_VS (mkSSlash (mkTemp pastTense anteriorAnt) negativePol (mkClSlash we_NP (mkVPSlash see_V2))))
---.
       mkVPSlash : V2  -> VPSlash         -- (whom) (she) loves 
 mkQCl who_IP (mkClSlash she_NP (mkVPSlash see_V2))
       mkVPSlash : V3  -> NP -> VPSlash   -- (whom) (she) gives an apple 
@@ -655,5 +654,207 @@ mkQCl who_IP (mkClSlash she_NP (mkVPSlash ask_V2Q (mkQS (mkQCl where_IAP (mkCl i
 mkQCl who_IP (mkClSlash she_NP (mkVPSlash answer_V2S (mkS (mkCl i_NP sleep_V))))   
       mkVPSlash : V2V -> VP -> VPSlash   -- (whom) (she) forces to sleep  
 mkQCl who_IP (mkClSlash she_NP (mkVPSlash beg_V2V (mkVP sleep_V)))
-      mkVPSlash : VV  -> VPSlash -> VPSlash  -- want always to buy 
-      mkVPSlash : V2V -> NP -> VPSlash -> VPSlash -- beg me always to buy 
+--      mkVPSlash : VV  -> VPSlash -> VPSlash  -- want always to buy 
+--      mkVPSlash : V2V -> NP -> VPSlash -> VPSlash -- beg me always to buy 
+    above_Prep : Prep   
+above_Prep
+    after_Prep : Prep 
+after_Prep
+    all_Predet : Predet 
+all_Predet
+    almost_AdA : AdA    
+almost_AdA
+    almost_AdN : AdN    
+almost_AdN
+    although_Subj : Subj 
+although_Subj
+    always_AdV : AdV 
+always_AdV
+    and_Conj : Conj 
+and_Conj
+    because_Subj : Subj 
+because_Subj
+    before_Prep : Prep 
+before_Prep
+    behind_Prep : Prep 
+behind_Prep
+    between_Prep : Prep 
+between_Prep
+    both7and_DConj : Conj  -- both...and
+both7and_DConj
+    but_PConj : PConj 
+but_PConj
+    by8agent_Prep : Prep  -- by (agent)
+by8agent_Prep
+    by8means_Prep : Prep  -- by (means of)
+by8means_Prep
+    can8know_VV : VV  -- can (capacity)
+can8know_VV
+    can_VV : VV       -- can (possibility)
+can_VV
+    during_Prep : Prep 
+during_Prep
+    either7or_DConj : Conj  -- either...or
+either7or_DConj
+    every_Det : Det 
+every_Det
+    everybody_NP : NP   -- everybody
+everybody_NP
+    everything_NP : NP 
+everything_NP
+    everywhere_Adv : Adv 
+everywhere_Adv
+    few_Det : Det 
+few_Det
+    for_Prep : Prep 
+for_Prep
+    from_Prep : Prep 
+from_Prep
+    he_Pron : Pron 
+he_Pron
+    here_Adv : Adv 
+here_Adv
+    here7to_Adv : Adv  -- to here
+here7to_Adv
+    here7from_Adv : Adv   -- from here
+here7from_Adv
+    how_IAdv : IAdv 
+mkUtt how_IAdv
+    how8many_IDet : IDet 
+how8many_IDet
+    how8much_IAdv : IAdv 
+mkUtt how8much_IAdv
+    i_Pron : Pron 
+i_Pron
+    if_Subj : Subj 
+if_Subj
+    in8front_Prep : Prep  -- in front of
+in8front_Prep
+    in_Prep : Prep 
+in_Prep
+    it_Pron : Pron 
+it_Pron
+    less_CAdv : CAdv 
+less_CAdv
+    many_Det : Det 
+many_Det
+    more_CAdv : CAdv 
+more_CAdv
+    most_Predet : Predet 
+most_Predet
+    much_Det : Det 
+much_Det
+    must_VV : VV 
+must_VV
+    no_Utt : Utt 
+no_Utt
+    on_Prep : Prep 
+on_Prep
+    only_Predet : Predet 
+only_Predet
+    or_Conj : Conj 
+or_Conj
+    otherwise_PConj : PConj 
+otherwise_PConj
+    part_Prep : Prep 
+part_Prep
+    please_Voc : Voc 
+please_Voc
+    possess_Prep : Prep  -- of (possessive)
+possess_Prep
+    quite_Adv : AdA 
+quite_Adv
+    she_Pron : Pron 
+she_Pron
+    so_AdA : AdA 
+so_AdA
+    someSg_Det : Det 
+someSg_Det
+    somePl_Det : Det 
+somePl_Det
+    somebody_NP : NP 
+somebody_NP
+    something_NP : NP 
+something_NP
+    somewhere_Adv : Adv 
+somewhere_Adv
+    that_Quant : Quant 
+that_Quant
+    that_Subj : Subj 
+that_Subj
+    there_Adv : Adv 
+there_Adv
+    there7to_Adv : Adv  -- to there
+there7to_Adv
+    there7from_Adv : Adv  -- from there
+there7from_Adv
+    therefore_PConj : PConj 
+therefore_PConj
+    they_Pron : Pron  
+they_Pron
+    this_Quant : Quant 
+this_Quant
+    through_Prep : Prep 
+through_Prep
+    to_Prep : Prep 
+to_Prep
+    too_AdA : AdA 
+too_AdA
+    under_Prep : Prep 
+under_Prep
+    very_AdA : AdA 
+very_AdA
+    want_VV : VV 
+want_VV
+    we_Pron : Pron 
+we_Pron
+    whatPl_IP : IP  -- what (plural)
+whatPl_IP
+    whatSg_IP : IP  -- what (singular)
+whatSg_IP
+    when_IAdv : IAdv 
+mkUtt when_IAdv
+    when_Subj : Subj 
+when_Subj
+    where_IAdv : IAdv 
+mkUtt where_IAdv
+    which_IQuant : IQuant 
+which_IQuant
+    whoPl_IP : IP   -- who (plural)
+whoPl_IP
+    whoSg_IP : IP   -- who (singular)
+whoSg_IP
+    why_IAdv : IAdv 
+mkUtt why_IAdv
+    with_Prep : Prep 
+with_Prep
+    without_Prep : Prep 
+without_Prep
+    yes_Utt : Utt 
+yes_Utt
+    youSg_Pron : Pron  -- you (singular)
+youSg_Pron
+    youPl_Pron : Pron  -- you (plural)
+youPl_Pron
+    youPol_Pron : Pron  -- you (polite)
+youPol_Pron
+    no_Quant : Quant  
+no_Quant
+    not_Predet : Predet 
+not_Predet
+    if_then_Conj : Conj 
+if_then_Conj
+    at_least_AdN : AdN 
+at_least_AdN
+    at_most_AdN : AdN 
+at_most_AdN
+    nobody_NP : NP 
+nobody_NP
+    nothing_NP : NP 
+nothing_NP
+    except_Prep : Prep 
+except_Prep
+    as_CAdv : CAdv 
+as_CAdv
+    have_V2 : V2 
+have_V2
