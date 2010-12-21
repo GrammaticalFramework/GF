@@ -94,7 +94,7 @@ oper
     mkN : (savi,savia : Str) -> N ; -- different pl.part
     mkN : (vesi,veden,vesiä : Str) -> N ; -- also different sg.gen
     mkN : (vesi,veden,vesiä,vettä : Str) -> N ; -- also different sg.part
-    mkN : (olo,n,na,a,oon,jen,ja,ina,issa,ihin : Str) -> N ; -- worst case, 10 forms
+    mkN : (olo,n,a,na,oon,jen,ja,ina,issa,ihin : Str) -> N ; -- worst case, 10 forms
     mkN : (pika : Str) -> (juna  : N) -> N ; -- compound with invariable prefix
     mkN : (oma : N)    -> (tunto : N) -> N ; -- compound with inflecting prefix
   } ;

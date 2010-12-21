@@ -60,7 +60,7 @@ rglCommands =
        mapM_ (gfc mode pkg lbi . compat) (optl langsCompat args)
   , RGLCommand "api"     True  $ \mode args pkg lbi -> do
        mapM_ (gfc mode pkg lbi . try) (optl langsAPI args)
-       mapM_ (gfc mode pkg lbi . symbolic) (optl langsAPI args)
+       mapM_ (gfc mode pkg lbi . symbolic) (optl langsSymbolic args)
   , RGLCommand "pgf"     False $ \mode args pkg lbi -> do
        let dir = getRGLBuildDir lbi mode
        createDirectoryIfMissing True dir
@@ -208,7 +208,10 @@ langs = map fst langsCoding
 langsLang = langs `except` ["Amh","Ara","Lat","Hin","Tha","Tur","Urd"]
 
 -- languages for which to compile Try 
-langsAPI  = langsLang `except` ["Hin","Ina","Rus","Tha"]
+langsAPI  = langsLang `except` ["Hin","Ina","Tha"]
+
+-- languages for which to compile Symbolic 
+langsSymbolic  = langsAPI `except` ["Rus"]
 
 -- languages for which to run demo test
 langsDemo = langsLang `except` ["Ara","Hin","Ina","Tha"]
@@ -310,7 +313,7 @@ unlexer abstr ls =
 -- | Runs the gf executable in compile mode with the given arguments.
 run_gfc :: PackageDescription -> LocalBuildInfo -> [String] -> IO ()
 run_gfc pkg lbi args = 
-    do let args' = ["-batch","-src","-gf-lib-path="++rgl_src_dir,"+RTS","-K32M","-RTS"] ++ filter (not . null) args
+    do let args' = ["-batch","-gf-lib-path="++rgl_src_dir,"+RTS","-K32M","-RTS"] ++ filter (not . null) args
            gf = default_gf pkg lbi
        putStrLn $ "Running: " ++ gf ++ " " ++ unwords (map showArg args')
        e <- rawSystem gf args'

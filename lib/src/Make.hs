@@ -154,7 +154,7 @@ gfc pres ppath file = do
   let preproc = if pres then "-preproc=mkPresent" else ""
   let path    = if pres then ppath else ""
   putStrLn $ "Compiling " ++ file
-  run_gfc ["-s","-src", preproc, path, file]
+  run_gfc ["-s","-src",preproc, path, file]
 
 gfcmin path file = do
   let preproc = "-preproc=mkMinimal"

@@ -91,9 +91,9 @@ oper
       sada = init sadas
     in
     mkN 
-      sadas (sada + "nnen") (sada + "nten" + a) (sada + "tt" + a) (sada + "nteen")
-      (sada + "nsin" + a) (sada + "nsiss" + a) (sada + "nsien")
-      (sada + "nsi" + a) (sada + "nsiin") ;
+      sadas (sada + "nnen") (sada + "tt" + a) (sada + "nten" + a) (sada + "nteen")
+      (sada + "nsien") (sada + "nsi" + a) (sada + "nsin" + a)
+      (sada + "nsiss" + a) (sada + "nsiin") ;
 
 param 
   NumPlace = NumIndep | NumAttr  ;
