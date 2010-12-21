@@ -1646,13 +1646,18 @@ oper
     Predef.PFalse => NumDigits (str2digits s)
     } ;
 
-  str2numeral : Str -> Numeral = (\s -> case s of {
-    m@(? + _) + "000"            => num (pot3 (s2s1000 m)) ;
-    m@(? + _) + "00" + n@?       => num (pot3plus (s2s1000 m) (s2s1000 n)) ; 
-    m@(? + _) + "0"  + n@(? + ?) => num (pot3plus (s2s1000 m) (s2s1000 n)) ; 
-    m@(? + _) + n@(? + ? + ?)    => num (pot3plus (s2s1000 m) (s2s1000 n)) ; 
-    _ => num (pot2as3 (s2s1000 s))
-    }) 
+  str2numeral : Str -> Numeral = 
+(\s -> case s of {
+    ? => num (pot2as3 (pot1as2 (pot0as1 (s2s10 s)))) ;
+    ? + ? => num (pot2as3 (pot1as2 (s2s100 s))) ;
+
+--    m@(? + _) + "000"            => num (pot3 (s2s1000 m)) ;
+--    m@(? + _) + "00" + n@?       => num (pot3plus (s2s1000 m) (s2s1000 n)) ; 
+--    m@(? + _) + "0"  + n@(? + ?) => num (pot3plus (s2s1000 m) (s2s1000 n)) ; 
+--    m@(? + _) + n@(? + ? + ?)    => num (pot3plus (s2s1000 m) (s2s1000 n)) ; 
+--    _ => num (pot2as3 (s2s1000 s))
+    _ => Predef.error ("no numeral for string" ++ s)
+    })
   where {
 
   s2d : Str -> Digit = \s -> case s of {
@@ -1681,13 +1686,14 @@ oper
     d@#idigit + n@? => pot1plus (s2d d) (s2s10 n) ;
     _               => pot0as1 (s2s10 s)
     } ;
-
+{-
   s2s1000 : Str -> Sub1000 = \s -> case s of {
     d@? + "00"      => pot2 (s2s10 d) ;
     d@? + "0" + n@? => pot2plus (s2s10 d) (s2s100 n) ;
     d@? + n@(? + ?) => pot2plus (s2s10 d) (s2s100 n) ;
     _ => pot1as2 (s2s100 s)
     } ;
+-}
   } ;
   idigit : pattern Str = #("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9") ;
   digit : pattern Str = #("0" | #idigit) ;
