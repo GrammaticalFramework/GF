@@ -189,10 +189,10 @@ mkTable hasEx isLatex aexx cs = inChunks chsize (\rs -> header : map (unwords . 
    where 
      name' = ttf name
      typ' = showTyp cs typ
-     ex' typ = if null ex then itf (takeWhile (/='_') name) else 
+     ex' typ = let ex0 = if null ex then itf (takeWhile (/='_') name) else ex in 
            case M.lookup typ aexx of
-             Just es -> mkExample es ex
-             _ -> itf ex
+             Just es -> mkExample es ex0
+             _ -> itf ex0
      expl typ = if null ex then itf "-" else itf ex 
 
 -- make an example with hover-popup translations
@@ -259,8 +259,8 @@ stitle s = append $ "==" ++ s ++ "=="
 include s = append $ "%!include: " ++ s
 space = append "\n"
 delimit ss = mapM_ append ss
-link s f = append $ s ++ " [``" ++ fa ++ "`` " ++ f ++ "]" where
-  fa = "http://www.grammaticalframework.org/lib/resource" ++ dropWhile (=='.') f
+link s f = append $ s ++ " [``" ++ f ++ "`` " ++ fa ++ "]" where
+  fa = "http://www.grammaticalframework.org/lib" ++ dropWhile (=='.') f
 
 ttf s = "``" ++ s ++ "``"
 itf s = "//" ++ s ++ "//"

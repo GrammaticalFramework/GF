@@ -6,5 +6,5 @@ concrete ClothesEng of Clothes = CommentsEng **
     Shirt = mkCN (mkN "shirt") ;
     Jacket = mkCN (mkN "jacket") ;
     Comfortable = mkAP (mkA "comfortable") ;
-    Elegant = mkAP (mkA "elega") ;
+    Elegant = mkAP (mkA "elegant") ;
 }

@@ -1,0 +1,14 @@
+Pred.      Comment ::= Item "è" Quality
+This.      Item    ::= "questo" Kind 
+That.      Item    ::= "quel" Kind
+Mod.       Kind    ::= Kind Quality
+Wine.      Kind    ::= "vino" 
+Cheese.    Kind    ::= "formaggio"
+Fish.      Kind    ::= "pesce"
+Very.      Quality ::= "molto" Quality
+Fresh.     Quality ::= "fresco" 
+Warm.      Quality ::= "caldo" 
+Italian.   Quality ::= "italiano" 
+Expensive. Quality ::= "caro" 
+Delicious. Quality ::= "delizioso" 
+Boring.    Quality ::= "noioso"
