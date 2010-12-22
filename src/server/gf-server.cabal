@@ -8,7 +8,7 @@ synopsis: FastCGI Server for Grammatical Framework
 
 flag fastcgi
   Description: Build the fcgi services (requires the fastcgi package)
-  Default:     True
+  Default:     False
 
 executable pgf-http
   main-is: pgf-http.hs
