@@ -18,6 +18,8 @@ div.news { font-size: small; }
 Version 3.1.6
 <br>
 April 2010
+<br>
+<font color="red">Version 3.2 coming before Xmas 2010!</font>
 <P>
 <font size=+2>
 [ <A HREF="demos/index.html">Demos</A>
@@ -32,35 +34,23 @@ April 2010
 | <A HREF="doc/gf-people.html">People</A>
 | <A HREF="doc/gf-bibliography.html">Publications</A>
 | <A HREF="doc/gf-reference.html">QuickRefCard</A>
-| <A HREF="doc/resource-tutorial.pdf">LibTutorial</A>
+| <A HREF="doc/gf-lrec-2010.pdf">LibTutorial</A>
+| <A HREF="http://www.molto-project.eu">MOLTO</A>
+| <A HREF="http://school.grammaticalframework.org">SummerSchool</A>
 ] 
 </div>
 <H2>News</H2>
 
 <div class=news>
 
-7 May 2010: GF tutorial in <a href="http://www.lrec-conf.org/lrec2010/">LREC-2010</a>
-  (on 17 May in Valletta). 
-  See <a href="http://www.lrec-conf.org/lrec2010/IMG/html/gf-lrec-2010-tutorial.html">tutorial homepage</a> and
-  <a href="doc/gf-lrec-2010.pdf">course material</a>.
+<p>
 
-<p>
-23 April 2010: <strong>version 3.1.6 released</strong>.
-   See <a href="download/">download page</a> and 
-<a href="download/release-3.1.6.html">release notes</a>.
-<p>
-1 March 2010: the <a href="http://www.molto-project.eu">MOLTO</a> project.
-<p>15 December 2009:
-<ul class=news>
-  <li><strong>GF version 3.1 released</strong>.
-    See the <a href="download/index.html">Download</a> page.
-  <li>There is now a
-    <a href="http://groups.google.com/group/gf-dev">GF Google Group</a>
-    where developers and users can discuss GF.
-  <li>There is now a
-    <a href="http://code.google.com/p/grammatical-framework/">GF Project page on
-      Google Code</a>, with a bug tracker among other things.
-</ul>
+22/12/2010
+  <A HREF="http://school.grammaticalframework.org">GF Summer School</A> in Barcelona,
+  15-26 August 2011.
+
+  
+
 </div>
 
 <H2>What is GF</H2>
@@ -90,26 +80,25 @@ least one, it may help you to get a first idea of what GF is.
 GF can be used for building
 </P>
 <UL>
-<LI><A HREF="http://tournesol.cs.chalmers.se:41296">text translators</A>
-<LI><A HREF="http://tournesol.cs.chalmers.se:41296/fridge">multilingual web gadgets</A>
-<LI><A HREF="http://www.cs.chalmers.se/~bringert/gf/translatespeech.html">speech translators</A>
+<LI><A HREF="http://grammaticalframework.org:41296">translation systems</A>
+<LI><A HREF="http://grammaticalframework.org:41296/minibar/minibar.html">multilingual web gadgets</A>
 <LI><A HREF="http://www.cs.chalmers.se/~hallgren/Alfa/Tutorial/GFplugin.html">natural-language interfaces</A>
-<LI><A HREF="http://www.cs.chalmers.se/~markus/gramlets/letter-applet.html">multilingual authoring systems</A>
-<LI><A HREF="http://www.cs.chalmers.se/~bringert/xv/pizza/">dialogue systems</A>
-<LI><A HREF="lib/resource/doc/synopsis.html">natural language resources</A>
+<LI><A HREF="http://www.youtube.com/watch?v=1bfaYHWS6zU">dialogue systems</A>
+<LI><A HREF="lib/doc/synopsis.html">natural language resources</A>
 </UL>
 
 <H2>Availability</H2>
 <P>
 GF is <B>open-source</B>, licensed under <A HREF="LICENSE">GPL</A> (the program) and 
-<A HREF="lib/LICENSE">LGPL</A> (the libraries). It
+<A HREF="./LICENSE">LGPL</A> and <A HREF="./LICENSE">BSD</A> (the libraries). It
 is available for 
 </P>
 <UL>
 <LI>Linux
 <LI>Mac OS X
 <LI>Windows
-<LI>via compilation to JavaScript, almost any platform that has a web browser
+<li>Android mobile platform (via Java; runtime)
+<LI>via compilation to JavaScript, almost any platform that has a web browser (runtime)
 </UL>
 
 <H2>Projects</H2>
@@ -139,7 +128,7 @@ Later projects using GF and involving third parties include, in chronological or
   multilingual generation of mathematical exercises (commercial project)
 <LI><A HREF="http://spraakbanken.gu.se/sal/">SALDO</A>: 
   Swedish morphological dictionary based on rules developed for GF and
-  <A HREF="http://www.cs.chalmers.se/~markus/FM/">Functional Morphology</A>
+  <A HREF="http://www.cse.chalmers.se/alumni/markus/FM/">Functional Morphology</A>
 <LI><a href="http://www.molto-project.eu">MOLTO</a>:
   multilingual online translation.
 </UL>
@@ -161,6 +150,7 @@ in other programming languages. The formats currently supported are:
 </P>
 <UL>
 <LI>Haskell
+<li>Java, in particular the Android platform
 <LI>JavaScript
 <LI>Speech recognition: HTK/ATK, Nuance, JSGF
 </UL>
@@ -185,6 +175,7 @@ syntax, lexicon, and inflection. The
 support for an increasing number of languages, currently including
 </P>
 <OL>
+<LI>Amharic (partial)
 <LI>Arabic (partial)
 <LI>Bulgarian
 <LI>Catalan
@@ -200,6 +191,7 @@ support for an increasing number of languages, currently including
 <LI>Latin (fragments)
 <LI>Norwegian bokmål
 <LI>Polish
+<li>Punjabi
 <LI>Romanian
 <LI>Russian
 <LI>Spanish
@@ -212,7 +204,7 @@ support for an increasing number of languages, currently including
 <P>
 Adding a language to the resource library takes 3 to 9 
 months - contributions 
-are welcome! You can start with the <A HREF="doc/resource-tutorial.pdf">resource grammarian's tutorial</A>.
+are welcome! You can start with the <A HREF="doc/gf-lrec-2010.pdf">resource grammarian's tutorial</A>.
 </P>
 
 <!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
