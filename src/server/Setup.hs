@@ -76,10 +76,12 @@ setupWWW args dest pkg lbi =
 
     create_root_index = writeFile (www_dir</>"index.html") index_html
 
-    index_html = "<h2>Available demos</h2>\n"
+    index_html = "<h1>PGF service</h1>\n<h2>Available demos</h2>\n"
                  ++"<ul><li><a href=\"minibar/minibar.html\">Minibar</a></ul>"
                  ++"Additional grammars can be installed in"
                  ++"<blockquote><code>"++grammars_dir++"</code></blockquote>"
+                 ++"<a href=\"http://www.grammaticalframework.org/\">"
+                 ++"Grammatical Framework</a>"
 execute command =
   do putStrLn command
      e <- system command
