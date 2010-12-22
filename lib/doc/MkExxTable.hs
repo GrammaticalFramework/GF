@@ -22,7 +22,7 @@ readApiExxOne file = do
   s <- readFile file
   let lang = reverse (take 3 (drop 4 (reverse file))) -- api-exx-*Eng*.txt
   let api = getApiExxOne $ filter validOutput $ lines s
-  putStrLn $ unlines $ prApiEx api
+  putStrLn $ unlines $ prApiEx api ---
   return (lang,api)
 
 -- map function -> language -> example
@@ -68,9 +68,12 @@ prApiExx aexx = unlines
 prApiEx :: M.Map String String -> [String]
 prApiEx apexx = case M.toList apexx of
   (a,e):lexx -> (a ++ ": ``" ++ unwords (words e) ++ "``"):
-                [l ++ ": //" ++ doBind e ++ "//" | (l,e) <- lexx]
+                [l ++ ": //" ++ mkEx e ++ "//" | (l,e) <- lexx]
 
-doBind = unwords . bind . words
+mkEx e = case words e of
+  "atomic":"term":_ -> "*"
+  "[]":_ -> "''"
+  es -> unwords (bind es)
 
 bind ws = case ws of
          w : "&+" : u : ws2 -> bind ((w ++ u) : ws2)
