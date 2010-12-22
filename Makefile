@@ -25,3 +25,5 @@ gf:
 	runghc Setup.hs build rgl-none
 	strip dist/build/gf/gf
 
+html::
+	bash bin/update_html
