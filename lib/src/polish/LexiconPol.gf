@@ -5,7 +5,7 @@
 -- Adam Slaski, 2009, 2010 <adam.slaski@gmail.com>
 
   concrete LexiconPol of Lexicon = CatPol, LexiconNounPol **  
-    open Prelude, MorphoPol in { 
+    open Prelude, MorphoPol, (PP = ParadigmsPol) in { 
 
     flags  
       optimize =values ; coding =utf8 ; 

@@ -30,7 +30,8 @@
    resource ParadigmsPol = open 
      (Predef=Predef), 
      Prelude, 
-     MorphoPol,
+     OrigMorphoPol,
+     (MorphoPol = OrigMorphoPol),
      CatPol
   in 
      {
