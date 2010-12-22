@@ -1,8 +1,0 @@
-#! /bin/sh
-
-JGUILIB=$GFHOME/src/JavaGUI
-GF=$GFHOME/bin/gf
-JGUI=GFEditor2
-
-java -cp $JGUILIB $JGUI "$GF -java $*"
-
