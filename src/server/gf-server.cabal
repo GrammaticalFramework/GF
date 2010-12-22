@@ -3,14 +3,40 @@ version: 1.0
 cabal-version: >= 1.2
 build-type: Custom
 license: GPL
-license-file: LICENSE
+license-file: ../../LICENSE
 synopsis: FastCGI Server for Grammatical Framework
 
 flag fastcgi
-  Description: Build pgf-fcgi (requires the fastcgi package)
+  Description: Build the fcgi services (requires the fastcgi package)
   Default:     True
 
-executable pgf-fcgi
+executable pgf-http
+  main-is: pgf-http.hs
+  other-modules: PGFService FastCGIUtils Cache URLEncoding
+                 RunHTTP ServeStaticFile
+  ghc-options: -threaded
+
+  build-depends: base >=4.2 && <5,
+                 old-time,
+                 directory,
+                 filepath,
+                 containers,
+                 process,
+                 gf >= 3.1,
+                 cgi >= 3001.1.8.0,
+                 httpd-shed,
+                 network,
+                 json >= 0.3.3,
+                 utf8-string >= 0.3.1.1,
+                 bytestring,
+                 pretty,
+                 random
+  if os(windows)
+    ghc-options: -optl-mwindows
+  else
+    build-depends: unix
+
+executable pgf-service
   main-is: pgf-fcgi.hs
   other-modules: PGFService FastCGIUtils Cache URLEncoding
   ghc-options: -threaded
@@ -40,34 +66,13 @@ executable pgf-fcgi
   else
     build-depends: unix
 
-
-executable pgf-http
-  main-is: pgf-http.hs
-  other-modules: PGFService FastCGIUtils Cache URLEncoding
-                 RunHTTP ServeStaticFile
-  ghc-options: -threaded
+executable content-service
+  if flag(fastcgi)
+    build-depends: fastcgi >= 3001.0.2.2
+    buildable: True
+  else
+    buildable: False
 
   build-depends: base >=4.2 && <5,
-                 old-time,
-                 directory,
-                 filepath,
-                 containers,
-                 process,
-                 gf >= 3.1,
-                 cgi >= 3001.1.8.0,
-                 httpd-shed,
-                 network,
-                 json >= 0.3.3,
-                 utf8-string >= 0.3.1.1,
-                 bytestring,
-                 pretty,
-                 random
-  if os(windows)
-    ghc-options: -optl-mwindows
-  else
-    build-depends: unix
-
-executable content-server
-  buildable: False
-  build-depends: base >=4.2 && <5
+                 hsql, hsql-mysql, old-locale
   main-is: ContentService.hs
