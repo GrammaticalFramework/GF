@@ -32,17 +32,15 @@ main = defaultMainWithHooks simpleUserHooks{ preBuild =checkRGLArgs
 -- Commands for building the Resource Grammar Library
 --------------------------------------------------------
 
-data Mode
-  = AllTenses
-  | Present
-  | Minimal
-  deriving Show
+data Mode = AllTenses | Present | Minimal deriving Show
+all_modes = ["minimal","present","alltenses"]
+default_modes = [Present,AllTenses]
 
 data RGLCommand
   = RGLCommand
       { cmdName   :: String
       , cmdIsDef  :: Bool
-      , cmdAction :: Mode -> [String] -> PackageDescription -> LocalBuildInfo -> IO ()
+      , cmdAction :: [Mode] -> [String] -> PackageDescription -> LocalBuildInfo -> IO ()
       }
 
 rglCommands =
@@ -61,11 +59,16 @@ rglCommands =
   , RGLCommand "api"     True  $ \mode args pkg lbi -> do
        mapM_ (gfc mode pkg lbi . try) (optl langsAPI args)
        mapM_ (gfc mode pkg lbi . symbolic) (optl langsSymbolic args)
-  , RGLCommand "pgf"     False $ \mode args pkg lbi -> do
-       let dir = getRGLBuildDir lbi mode
-       createDirectoryIfMissing True dir
-       sequence_ [run_gfc pkg lbi ["-s","-make","-name=Lang"++la,dir ++ "/Lang" ++ la ++ ".gfo"] | (_,la) <- optl langsPGF args]
-       run_gfc pkg lbi (["-s","-make","-name=Lang"]++["Lang" ++ la ++ ".pgf" | (_,la) <- optl langsPGF args])
+  , RGLCommand "pgf"     False $ \modes args pkg lbi ->
+     sequence_ [
+       do let dir = getRGLBuildDir lbi mode
+          createDirectoryIfMissing True dir
+          sequence_ [run_gfc pkg lbi ["-s","-make","-name=Lang"++la,
+                                       dir ++ "/Lang" ++ la ++ ".gfo"] 
+                      | (_,la) <- optl langsPGF args]
+          run_gfc pkg lbi (["-s","-make","-name=Lang"]++
+                           ["Lang" ++ la ++ ".pgf"|(_,la)<-optl langsPGF args])
+       | mode <- modes]
   , RGLCommand "demo"    False $ \mode args pkg lbi -> do
        let ls = optl langsDemo args
        gf (demos "Demo" ls) ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls] pkg lbi
@@ -81,8 +84,7 @@ rglCommands =
 --------------------------------------------------------
 
 checkRGLArgs args flags = do
-  let args' = filter (\arg -> not (arg == "present" ||
-                                   arg == "minimal" ||
+  let args' = filter (\arg -> not (arg `elem` all_modes ||
                                    rgl_prefix `isPrefixOf` arg ||
                                    langs_prefix `isPrefixOf` arg)) args
   if null args'
@@ -91,23 +93,23 @@ checkRGLArgs args flags = do
 
 buildRGL args flags pkg lbi = do
   let cmds = getRGLCommands args
-  let mode = getOptMode args
-  mapM_ (\cmd -> cmdAction cmd mode args pkg lbi) cmds
+  let modes = getOptMode args
+  mapM_ (\cmd -> cmdAction cmd modes args pkg lbi) cmds
 
 installRGL args flags pkg lbi = do
-  let mode = getOptMode args
+  let modes = getOptMode args
   let inst_gf_lib_dir = datadir (absoluteInstallDirs pkg lbi NoCopyDest) </> "lib"
   copyAll "prelude"   (rgl_dst_dir lbi </> "prelude") (inst_gf_lib_dir </> "prelude")
-  copyAll (show mode) (getRGLBuildDir lbi mode) (inst_gf_lib_dir </> getRGLBuildSubDir lbi mode)
+  sequence_ [copyAll (show mode) (getRGLBuildDir lbi mode) (inst_gf_lib_dir </> getRGLBuildSubDir lbi mode)|mode<-modes]
 
 copyRGL args flags pkg lbi = do
-  let mode = getOptMode args
+  let modes = getOptMode args
       dest = case copyDest flags of
                NoFlag -> NoCopyDest
                Flag d -> d
   let inst_gf_lib_dir = datadir (absoluteInstallDirs pkg lbi dest) </> "lib"
   copyAll "prelude"   (rgl_dst_dir lbi </> "prelude") (inst_gf_lib_dir </> "prelude")
-  copyAll (show mode) (getRGLBuildDir lbi mode) (inst_gf_lib_dir </> getRGLBuildSubDir lbi mode)
+  sequence_ [copyAll (show mode) (getRGLBuildDir lbi mode) (inst_gf_lib_dir </> getRGLBuildSubDir lbi mode)|mode<-modes]
 
 copyAll s from to = do
   putStrLn $ "Installing [" ++ s ++ "] " ++ to
@@ -204,6 +206,9 @@ langsCoding = [
 
 langs = map fst langsCoding
 
+-- default set of languages to compile
+-- defaultLangs = langs `only` words "Eng Fre Ger Ita Spa Swe"
+
 -- languagues for which to compile Lang
 langsLang = langs `except` ["Amh","Ara","Lat","Hin","Tha","Tur","Urd"]
 --langsLang = langs `only` ["Fin"] --test
@@ -226,7 +231,8 @@ langsPGF = langsLang `except` ["Ara","Hin","Ron","Tha"]
 -- languages for which Compatibility exists (to be extended)
 langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Spa","Swe"]
 
-gfc mode pkg lbi file = do
+gfc modes pkg lbi file = sequence_ [gfc1 mode pkg lbi file | mode<-modes]
+gfc1 mode pkg lbi file = do
   let dir = getRGLBuildDir lbi mode
       preproc = case mode of
                   AllTenses -> ""
@@ -260,10 +266,17 @@ parse    (lla,la) = rgl_src_dir </> "parse" </> ("Parse"    ++ la ++ ".gf")
 except ls es = filter (flip notElem es . snd) ls
 only   ls es = filter (flip elem es . snd) ls
 
-getOptMode args
-  | elem "present" args = Present
-  | elem "minimal" args = Minimal
-  | otherwise           = AllTenses
+getOptMode args =
+    if null explicit_modes
+    then default_modes
+    else explicit_modes
+  where
+    explicit_modes = 
+      [Minimal|have "minimal"]++
+      [Present|have "present"]++
+      [AllTenses|have "alltenses"]
+
+    have mode = mode `elem` args
 
 -- list of languages overriding the definitions above
 getOptLangs defaultLangs args =

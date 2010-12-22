@@ -18,11 +18,6 @@ runhaskell Setup.hs configure --user --prefix /usr/local
 runhaskell Setup.hs build $langs
 runhaskell Setup.hs copy --destdir=$destdir $langs
 
-## These steps can be skipped when Setup.hs has been updated to build both
-## alltenses and present by default 
-runhaskell Setup.hs build $langs present
-runhaskell Setup.hs copy --destdir=$destdir $langs present
-
 (
 cd src/server
 
