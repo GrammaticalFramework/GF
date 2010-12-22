@@ -32,6 +32,7 @@ are marked in the table
 | Lav   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *NG
 | Mon   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *NE
 | Nor   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Pes   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *SM
 | Pnb   | +     | +    | +     | +   | +    | +   | +    | -     | -    | *SV,MH
 | Pol   | +     | +    | +     | +   | +    | +   | +    | -     | -    | IN,*AS
 | Ron   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *RE
@@ -93,6 +94,7 @@ NE Nyamsuren Erdenebadrakh,
 NG Normunds Gruzitis,
 RE Ramona Enache,
 SC Server Cimen,
+SM Sofy Moradi,
 SV Shafqat Virk,
 TH Therese Söderberg
 
