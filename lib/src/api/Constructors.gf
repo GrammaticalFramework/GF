@@ -280,7 +280,7 @@ incomplete resource Constructors = open Grammar in {  --%
 -- Temp is a combination of Tense and Ant. In extra modules for some
 -- languages, it can also involve aspect and other things.
 
-      mkTemp : Tense -> Ant -> Temp
+      mkTemp : Tense -> Ant -> Temp -- e.g. past + anterior
         = TTAnt ; --%
 
 --3 ImpForm, imperative form 
@@ -1421,7 +1421,7 @@ incomplete resource Constructors = open Grammar in {  --%
 
 -- There is an atomic relative pronoun
 
-    which_RP : RP                        -- which  --:
+    which_RP : RP                        -- which/who  --:
       = IdRP ; --% 
 
 -- A relative pronoun can be made into a kind of a prepositional phrase.
@@ -1506,18 +1506,18 @@ incomplete resource Constructors = open Grammar in {  --%
 --3 ListS, sentence lists 
 
   mkListS = overload { --%
-   mkListS : S -> S -> ListS  --:
+   mkListS : S -> S -> ListS  -- list of two --:
    = BaseS ; --% 
-   mkListS : S -> ListS -> ListS  --:
+   mkListS : S -> ListS -> ListS  -- list of more --:
    = ConsS  ; --% 
    } ; --% 
 
 --3 ListAdv, adverb lists 
 
   mkListAdv = overload {  --%
-   mkListAdv : Adv -> Adv -> ListAdv  --:
+   mkListAdv : Adv -> Adv -> ListAdv  -- list of two --:
    = BaseAdv ; --% 
-   mkListAdv : Adv -> ListAdv -> ListAdv  --:
+   mkListAdv : Adv -> ListAdv -> ListAdv  -- list of more --:
    = ConsAdv  ; --% 
    } ; --% 
 
@@ -1526,9 +1526,9 @@ incomplete resource Constructors = open Grammar in {  --%
 --3 ListAP, adjectival phrase lists 
 
   mkListAP = overload {  --%
-   mkListAP : AP -> AP -> ListAP  --:
+   mkListAP : AP -> AP -> ListAP  -- list of two --:
    = BaseAP ; --% 
-   mkListAP : AP -> ListAP -> ListAP  --:
+   mkListAP : AP -> ListAP -> ListAP  -- list of more --:
    = ConsAP  ; --% 
    } ; --% 
 
@@ -1537,18 +1537,18 @@ incomplete resource Constructors = open Grammar in {  --%
 --3 ListNP, noun phrase lists 
 
   mkListNP = overload {  --%
-   mkListNP : NP -> NP -> ListNP  --:
+   mkListNP : NP -> NP -> ListNP  -- list of two --:
    = BaseNP ; --% 
-   mkListNP : NP -> ListNP -> ListNP  --:
+   mkListNP : NP -> ListNP -> ListNP  -- list of more --:
    = ConsNP  ; --% 
    } ; --% 
 
 --3 ListRS, relative clause lists 
 
   mkListRS = overload {  --%
-   mkListRS : RS -> RS -> ListRS  --:
+   mkListRS : RS -> RS -> ListRS  -- list of two --:
    = BaseRS ; --% 
-   mkListRS : RS -> ListRS -> ListRS  --:
+   mkListRS : RS -> ListRS -> ListRS  -- list of more --:
    = ConsRS  ; --% 
    } ; --% 
 

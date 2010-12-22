@@ -1,0 +1,14 @@
+Pred.      Comment ::= Item "is" Quality
+This.      Item    ::= "this" Kind 
+That.      Item    ::= "that" Kind
+Mod.       Kind    ::= Quality Kind 
+Wine.      Kind    ::= "wine" 
+Cheese.    Kind    ::= "cheese" 
+Fish.      Kind    ::= "fish"
+Very.      Quality ::= "very" Quality
+Fresh.     Quality ::= "fresh" 
+Warm.      Quality ::= "warm" 
+Italian.   Quality ::= "Italian" 
+Expensive. Quality ::= "expensive" 
+Delicious. Quality ::= "delicious" 
+Boring.    Quality ::= "boring"
