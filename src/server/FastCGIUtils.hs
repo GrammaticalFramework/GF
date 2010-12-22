@@ -165,7 +165,7 @@ outputJSONP x =
        let str = case mc of
                    Nothing -> encode x
                    Just c  -> c ++ "(" ++ encode x ++ ")"
-       setHeader "Content-Type" "text/json; charset=utf-8"
+       setHeader "Content-Type" "text/javascript; charset=utf-8"
        outputStrict $ UTF8.encodeString str
 
 outputPNG :: BS.ByteString -> CGI CGIResult
