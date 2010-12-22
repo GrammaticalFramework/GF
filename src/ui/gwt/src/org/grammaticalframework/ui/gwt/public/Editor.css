@@ -40,6 +40,11 @@
   background-color: rgb(147, 194, 241);
 }
 
+.my-GrammarsPanel {
+  padding: 1em;
+  width: 100%;
+}
+
 .my-EditorPanel {
   padding-top: 1em;
   padding-bottom: 1em

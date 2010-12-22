@@ -12,7 +12,7 @@ import com.google.gwt.event.shared.*;
 public class EditorApp implements EntryPoint {
 
 	protected static final String pgfBaseURL = "/grammars";
-	protected static final String contentBaseURL = "/content.fcgi";
+	protected static final String contentBaseURL = "/grammars.content";
 
 	protected ContentService contentService;
 	protected PGFWrapper pgf;
@@ -22,6 +22,7 @@ public class EditorApp implements EntryPoint {
 	protected BrowsePanel browsePanel;
 	protected QueryPanel queryPanel;
 	protected DocumentsPanel documentsPanel;
+	protected GrammarsPanel grammarsPanel;
 	protected StatusPopup statusPopup;
 	protected TextInputPanel textPanel;
 	protected FridgeBagPanel bagPanel;
@@ -205,6 +206,7 @@ public class EditorApp implements EntryPoint {
 		browsePanel = createBrowsePanel();
 		queryPanel = createQueryPanel();
 		documentsPanel = createDocumentsPanel();
+		grammarsPanel = createGrammarsPanel();
 
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setWidth("100%");
@@ -315,6 +317,10 @@ public class EditorApp implements EntryPoint {
 		return panel;
 	}
 
+	protected GrammarsPanel createGrammarsPanel() {
+		return new GrammarsPanel(pgf, contentService, statusPopup);
+	}
+
 	protected TabBar createLinksPanel(final Panel parent) {
 		tabBar = new TabBar();
 		tabBar.setStylePrimaryName("my-LinksPanel");
@@ -322,6 +328,7 @@ public class EditorApp implements EntryPoint {
 		tabBar.addTab("Editor");
 		tabBar.addTab("Query");
 		tabBar.addTab("Browse");
+		tabBar.addTab("Grammars");
 		
 		NavigationHandler handler = new NavigationHandler(tabBar, parent);
 		tabBar.addSelectionHandler(handler);
@@ -349,6 +356,7 @@ public class EditorApp implements EntryPoint {
 			parent.remove(editorPanel);
 			parent.remove(queryPanel);
 			parent.remove(browsePanel);
+			parent.remove(grammarsPanel);
 
 			switch (event.getSelectedItem().intValue()) {
 				case 0: parent.add(documentsPanel); 
@@ -362,6 +370,9 @@ public class EditorApp implements EntryPoint {
 					break;
 				case 3: parent.add(browsePanel);
 					if (level == 0) History.newItem("browse", false);
+					break;
+				case 4: parent.add(grammarsPanel);
+					if (level == 0) History.newItem("grammars", false);
 					break;
 			}
 		}
@@ -382,6 +393,8 @@ public class EditorApp implements EntryPoint {
 			} else if (token.startsWith("browse:")) {
 				linksPanel.selectTab(3);
 				browsePanel.browse(token.substring(7));
+			} else if (token.equals("grammars")) {
+				linksPanel.selectTab(4);
 			}
 			
 			level--;
