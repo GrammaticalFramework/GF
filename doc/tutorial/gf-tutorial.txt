@@ -1,6 +1,6 @@
 Grammatical Framework Tutorial
 Aarne Ranta
-Version 3.1.2, November 2008
+December 2010 (November 2008)
 
 
 % NOTE: this is a txt2tags file.
@@ -626,7 +626,7 @@ You can chop this tutorial into a set of slides by the command
 ```
 where the program ``htmls`` is distributed with GF (see below), in
 
-  [``GF/src/tools/Htmls.hs`` http://digitalgrammars.com/gf/src/tools/Htmls.hs]
+  [``GF/src/tools/Htmls.hs`` http://grammaticalframework.org/src/tools/Htmls.hs]
 
 The slides will appear as a set of files beginning with ``01-gf-tutorial.htmls``.
 
@@ -700,7 +700,7 @@ In general, a GF grammar is **multilingual**:
 
 Open-source free software, downloaded via the GF Homepage:
 
-[``digitalgrammars.com/gf`` http://digitalgrammars.com/gf/]
+[``grammaticalframework.org`` http://grammaticalframework.org/]
 
 There you find
 - binaries for Linux, Mac OS X, and Windows
@@ -709,11 +709,11 @@ There you find
 
 
 Many examples in this tutorial are
-[online http://digitalgrammars.com/gf/examples/tutorial].
+[online http://grammaticalframework.org/examples/tutorial].
 
 Normally you don't have to compile GF yourself.
 But, if you do want to compile GF from source follow the
-instructions in the [Developers Guide gf-developers.html].
+instructions in the [Developers Guide ../gf-developers.html].
 
 
 #NEW
@@ -2453,7 +2453,7 @@ can be used to read a text and return for each word its analyses
 ```
 The command ``morpho_quiz = mq`` generates inflection exercises. 
 ```
-  % gf -path=alltenses:prelude $GF_LIB_PATH/alltenses/IrregFre.gfc
+  % gf -path=alltenses:prelude $GF_LIB_PATH/alltenses/IrregFre.gfo
 
   > morpho_quiz -cat=V
 
@@ -2970,7 +2970,7 @@ Language-specific and language-independent parts - roughly,
 
 Full API documentation on-line: the **resource synopsis**,
 
-[``digitalgrammars.com/gf/lib/resource/doc/synopsis.html`` http://digitalgrammars.com/gf/lib/resource/doc/synopsis.html]
+[``grammaticalframework.org/lib/resource/doc/synopsis.html`` http://grammaticalframework.org/lib/doc/synopsis.html]
 
 
 #NEW
@@ -4530,10 +4530,10 @@ This facility is based on several components:
 
 The portable format is called PGF, "Portable Grammar Format".
 
-This format is produced by the GF batch compiler ``gfc``, 
+This format is produced by the GF batch compiler ``gf``, 
 executable from the operative system shell:
 ```
-  % gfc --make SOURCE.gf
+  % gf --make SOURCE.gf
 ```
 PGF is the recommended format in 
 which final grammar products are distributed, because they
@@ -4605,12 +4605,12 @@ For this, you need the Haskell compiler [GHC http://www.haskell.org/ghc].
 
 #NEW
 
-===Producing GFCC for the translator===
+===Producing PGF for the translator===
 
-Then produce a GFCC file. For instance, the ``Food`` grammar set can be 
+Then produce a PGF file. For instance, the ``Food`` grammar set can be 
 compiled as follows:
 ```
-  % gfc --make FoodEng.gf FoodIta.gf
+  % gf --make FoodEng.gf FoodIta.gf
 ```
 This produces the file ``Food.pgf`` (its name comes from the abstract syntax).
 
@@ -4714,11 +4714,11 @@ abstract Query = {
 To make it easy to define a transfer function, we export the
 abstract syntax to a system of Haskell datatypes:
 ```
-  % gfc --output-format=haskell Query.pgf
+  % gf --output-format=haskell Query.pgf
 ```
-It is also possible to produce the Haskell file together with GFCC, by
+It is also possible to produce the Haskell file together with PGF, by
 ```
-  % gfc --make --output-format=haskell QueryEng.gf
+  % gf --make --output-format=haskell QueryEng.gf
 ```
 The result is a file named ``Query.hs``, containing a 
 module named ``Query``. 
@@ -4871,7 +4871,7 @@ translate tr gr s = case parseAllLang gr (startCat gr) s of
 To automate the production of the system, we write a ``Makefile`` as follows:
 ```
 all:
-        gfc --make --output-format=haskell QueryEng
+        gf --make --output-format=haskell QueryEng
         ghc --make -o ./math TransferLoop.hs
         strip math
 ```
@@ -4928,7 +4928,7 @@ program compiled from GF grammars as run on an iPhone.
 JavaScript is one of the output formats of the GF batch compiler. Thus the following
 command generates a JavaScript file from two ``Food`` grammars.
 ```
-  % gfc --make --output-format=js FoodEng.gf FoodIta.gf
+  % gf --make --output-format=js FoodEng.gf FoodIta.gf
 ```
 The name of the generated file is ``Food.js``, derived from the top-most abstract
 syntax name. This file contains the multilingual grammar as a JavaScript object.
@@ -4944,7 +4944,7 @@ some other JavaScript and HTML files; these files can be used
 as templates for building applications.
 
 An example of usage is 
-[``translator.html`` ../lib/javascript/translator.html], 
+[``translator.html`` http://grammaticalframework.org:41296], 
 which is in fact initialized with
 a pointer to the Food grammar, so that it provides translation between the English
 and Italian grammars:
@@ -4969,12 +4969,12 @@ The standard way of using GF in speech recognition is by building
 GF supports several formats, including
 GSL, the formatused in the [Nuance speech recognizer www.nuance.com].
 
-GSL is produced from GF by running ``gfc`` with the flag
+GSL is produced from GF by running ``gf`` with the flag
 ``--output-format=gsl``. 
 
 Example: GSL  generated from ``FoodsEng.gf``.
 ```
-  % gfc --make --output-format=gsl FoodsEng.gf
+  % gf --make --output-format=gsl FoodsEng.gf
   % more FoodsEng.gsl
 
   ;GSL2.0
@@ -5017,6 +5017,6 @@ Other formats available via the ``--output-format`` flag include:
     | ``slf``            | finite automaton in the HTK SLF format
     | ``slf_sub``        | finite automaton with sub-automata in HTK SLF
 
-All currently available formats can be seen with ``gfc --help``.
+All currently available formats can be seen with ``gf --help``.
 
 
