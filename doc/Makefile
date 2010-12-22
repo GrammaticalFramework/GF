@@ -21,14 +21,3 @@ Logos/gf00.png: Logos/gf00.svg Makefile
 
 Logos/gf0.png: Logos/gf0.svg Makefile
 	convert -background 'rgba(255,255,255,0)' -size 320x240 -depth 8 $< $@
-
-### Updating automatically generated HTML files
-
-GENERATED_HTML=gf-developers.html
-
-%.html: %.txt
-	txt2tags $<
-
-generated_html:: $(GENERATED_HTML)
-
-gf-developers.html: gf-developers.txt

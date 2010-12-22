@@ -1,7 +1,9 @@
 
 body { background-color: #f2f2f2; }
 
+
 h1,h2,h3 { font-family: sans-serif; }
+h1 { text-align: center; }
 h2 { border-bottom: 2px solid black; clear: right; }
 
 div.center { text-align: center; }

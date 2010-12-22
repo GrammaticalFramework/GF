@@ -1,13 +1,14 @@
 GF Quick Reference
 Aarne Ranta
-%%date(%c)
+April 4, 2006
 
 % NOTE: this is a txt2tags file.
 % Create an html file from this file using:
 % txt2tags -thtml --toc gf-reference.html
 
+%!style:../css/style.css
 %!target:html
-
+%!options: --toc
 
 This is a quick reference on GF grammars. It aims to
 cover all forms of expression available when writing

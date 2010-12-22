@@ -1,0 +1,11 @@
+#!/bin/bash
+
+### This script finds all .t2t (txt2tags) files and updates the corresponding
+### .html file, if it is out-of-date.
+
+find . -name '*.t2t' | while read t2t ; do
+  html="${t2t%.t2t}.html"
+  if [ "$t2t" -nt "$html" ] ; then
+    txt2tags -thtml "$t2t"
+  fi
+done
