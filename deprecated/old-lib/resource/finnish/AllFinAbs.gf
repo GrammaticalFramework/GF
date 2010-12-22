@@ -1,4 +1,0 @@
-abstract AllFinAbs = 
-  Lang,
-  ExtraFinAbs
-  ** {} ;
