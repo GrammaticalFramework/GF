@@ -5,24 +5,35 @@ GF Version 3.2 Release Notes
 
 ==Installation==
 
-...
+See the [download page http://www.grammaticalframework.org/download/index.html].
 
 ==New features==
 
-- faster parsing
-- dep types lexicon
-- exhaustive rdm generation with dep types
-- 16 languages
-- new synopsis
-- bracketed strings data structure
-- example based
-- probabilities in pgf
-- giza alignments
-- license scheme
-- language quiz
-- new darcs repo
+- Faster parsing.
+- Faster handling of grammars with big lexicons.
+- Dependent types.
+- Exhaustive random generation with dependent types.
+- Bracketed strings data structure.
+%- example based
+- Probabilities in PGF files.
+%- giza alignments
+%- language quiz
+- The Resource Grammar Library now supports 16 languages and has an
+  [updated synopsis ../lib/doc/synopsis.html].
+- The darcs repo is now availble from ``www.grammaticalframework.org`` and
+  should be a lot faster than ``code.haskell.org``.
+- Build of web services simplified and a instantly usable demo is included
+  in the binary distribution (see [Quickstart ../doc/gf-quickstart.html]).
+- Clarified license scheme.
+- ...
 
 
-Licenses:
-- gf/src/compiler GPL
-- all the rest LGPL + BSD
+===Licenses===
+
+- GF compiler: GPL
+- Run-time libraries and Resource Grammar Library: LGPL + BSD
+
+
+--------------------
+
+[www.grammaticalframework.org http://www.grammaticalframework.org]
