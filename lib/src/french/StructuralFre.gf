@@ -103,7 +103,7 @@ lin
       } ;
     sp = table {
       Sg => \\g,c => prepCase c ++ genForms "celui-là" "celle-là" ! g ;
-      Pl => \\g,c => prepCase c ++ genForms "celui-là" "celle-là" ! g
+      Pl => \\g,c => prepCase c ++ genForms "ceux-là" "celles-là" ! g
       } ;
     s2 = [] ---- "-là"
     } ;
@@ -126,7 +126,7 @@ lin
       } ;
     sp = table {
       Sg => \\g,c => prepCase c ++ genForms "celui-ci" "celle-ci" ! g ;
-      Pl => \\g,c => prepCase c ++ genForms "celui-ci" "celle-ci" ! g
+      Pl => \\g,c => prepCase c ++ genForms "ceux-ci" "celles-ci" ! g
       } ;
     s2 = [] ---- "-ci"
     } ;
@@ -150,7 +150,7 @@ lin
     where {a = aagr Masc Pl} ;
   when_IAdv = ss "quand" ;
   when_Subj = ss "quand" ** {m = Indic} ;
-  where_IAdv = ss "où" ;
+  where_IAdv = ss "oÃ¹" ;
   which_IQuant = {
     s = \\n,g,c => 
         prepCase c ++ aagrForms "quel" "quelle" "quels" "quelles" ! aagr g n
