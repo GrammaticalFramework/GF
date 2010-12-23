@@ -302,6 +302,14 @@ mkUtt youPl_NP
 mkUtt they_NP
       mkDet : Quant ->  Det       -- this  
 mkDet this_Quant
+      this_NP : NP 
+mkUtt this_NP
+      that_NP : NP 
+mkUtt that_NP
+      these_NP : NP 
+mkUtt these_NP
+      those_NP : NP 
+mkUtt those_NP
       mkDet : Quant -> Card -> Det   -- these five
 mkDet this_Quant (mkCard (mkNumeral n5_Unit))
       mkDet : Quant ->  Ord -> Det     -- the best
@@ -331,6 +339,14 @@ mkNP thePl_Det house_N
 mkNP aSg_Det woman_N
       aPl_Det   : Det -- (houses)
 mkNP aPl_Det woman_N
+      this_Det : Det 
+mkNP this_Det woman_N
+      that_Det : Det 
+mkNP that_Det woman_N
+      these_Det : Det 
+mkNP these_Det woman_N
+      those_Det : Det 
+mkNP those_Det woman_N
       mkQuant : Pron -> Quant   -- my  
 mkNP (mkQuant i_Pron) house_N
       the_Quant : Quant    -- the 

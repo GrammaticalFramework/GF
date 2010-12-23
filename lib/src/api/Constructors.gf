@@ -684,6 +684,15 @@ incomplete resource Constructors = open Grammar in {  --%
       they_NP : NP       -- they
       = mkNP they_Pron ;
 
+    this_NP : NP -- this
+    = DetNP (DetQuant this_Quant sgNum) ;  --% 
+    that_NP : NP -- that 
+    = DetNP (DetQuant that_Quant sgNum) ;  --% 
+    these_NP : NP 
+    = DetNP (DetQuant this_Quant plNum) ;  --% 
+    those_NP : NP 
+    = DetNP (DetQuant that_Quant plNum) ;  --% 
+
 
 --3 Det, determiners 
 
@@ -734,6 +743,15 @@ incomplete resource Constructors = open Grammar in {  --%
         = DetQuant IndefArt NumSg ; --% 
       aPl_Det   : Det -- (houses)
         = DetQuant IndefArt NumPl ; --% 
+      this_Det : Det 
+      = (DetQuant this_Quant sgNum) ; --% 
+      that_Det : Det 
+      = (DetQuant that_Quant sgNum) ; --% 
+      these_Det : Det 
+      = (DetQuant this_Quant plNum) ; --% 
+      those_Det : Det 
+      = (DetQuant that_Quant plNum) ; --% 
+
 
 
 --3 Quant, quantifiers 
@@ -1592,16 +1610,6 @@ incomplete resource Constructors = open Grammar in {  --%
   ComplV2 : V2 -> NP -> VP = \v,np -> ComplSlash (SlashV2a v) np ;
   ComplV2A : V2A -> NP -> AP -> VP = \v,np,ap -> ComplSlash (SlashV2A v ap) np ; 
   ComplV3 : V3 -> NP -> NP -> VP = \v,o,d -> ComplSlash (Slash3V3 v d) o ; 
-
-    that_NP : NP = DetNP (DetQuant that_Quant sgNum) ; 
-    this_NP : NP = DetNP (DetQuant this_Quant sgNum) ; 
-    those_NP : NP = DetNP (DetQuant that_Quant plNum) ; 
-    these_NP : NP = DetNP (DetQuant this_Quant plNum) ; 
-
-    that_Det : Det = (DetQuant that_Quant sgNum) ;
-    this_Det : Det = (DetQuant this_Quant sgNum) ;
-    those_Det : Det = (DetQuant that_Quant plNum) ;
-    these_Det : Det = (DetQuant this_Quant plNum) ;
 
 
 
