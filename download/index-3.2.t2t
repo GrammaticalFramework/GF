@@ -15,10 +15,11 @@ What's new? See the [Release notes release-3.2.html].
 
 
 | **Platform** | **Download** | **How to install**
+| Linux (32-bit) | [gf-3.2-bin-i386-linux.tar.gz gf-3.2-bin-i386-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-i386-linux.tar.gz``
+| Linux (64-bit) | [gf-3.2-bin-x86_64-linux.tar.gz gf-3.2-bin-x86_64-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-x86_64-linux.tar.gz``
 %| MacOS X | [gf-3.2-leopard.pkg gf-3.2-leopard.pkg] | Double-click on the package icon and follow the instructions
 | MacOS X | [gf-3.2-bin-intel-mac.tar.gz gf-3.2-bin-intel-mac.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-intel-mac.tar.gz``
 | Windows | [gf-3.2-bin-i386-windows.zip gf-3.2-bin-i386-windows.zip] | ``unzip gf-3.2-bin-i386-windows.zip``
-| Linux | [gf-3.2-bin-i386-linux.tar.gz gf-3.2-bin-i386-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-i386-linux.tar.gz``
 
 More packages might be added later.
 
@@ -47,6 +48,7 @@ fairly simple:
 + Install the
   [Haskell Platform 2010.2.0.0 (July 2010) http://hackage.haskell.org/platform].
 + ``cabal update``
++ On Linux: install some C libraries from your Linux distribution (see below)
 + ``cabal install gf``
 
 
@@ -59,6 +61,14 @@ idea to put a line in your ``.bash_profile`` to add that directory to you path:
 ```
   PATH=$HOME/.cabal/bin:$PATH
 ```
+
+GF uses ``haskeline``, which depends some non-Haskell libraries that
+won't be installed automatically by cabal, so you need to install
+them manually. Here is one way to do this:
+
+- On Ubuntu: ``sudo apt-get install libghc6-terminfo-dev``
+- On Fedora: ``sudo yum install ghc-terminfo-devel``
+
 
 ==Older releases==
 
