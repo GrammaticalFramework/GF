@@ -680,7 +680,7 @@ incomplete resource Constructors = open Grammar in {  --%
       we_NP : NP         -- we
       = mkNP we_Pron ;
       youPl_NP : NP      -- you (plural)
-      = mkNP she_Pron ;
+      = mkNP youPl_Pron ;
       they_NP : NP       -- they
       = mkNP they_Pron ;
 
