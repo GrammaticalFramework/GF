@@ -52,6 +52,9 @@ fairly simple:
 + ``cabal install gf``
 
 
+You can also download the full source package from here:
+[``gf-3.2.tar.gz`` gf-3.2.tar.gz].
+
 === Notes ===
 
 The above steps installs GF for a single user and does not require root
@@ -72,7 +75,7 @@ them manually. Here is one way to do this:
 
 ==Older releases==
 
-- [GF 3.1.6 index.html] (April 2010).
+- [GF 3.1.6 index-3.1.6.html] (April 2010).
 - [GF 3.1 old-index.html] (December 2009).
 
 

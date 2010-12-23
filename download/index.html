@@ -2,101 +2,123 @@
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<LINK REL="stylesheet" TYPE="text/css" HREF="../css/style.css">
 <TITLE>Grammatical Framework Download and Installation</TITLE>
 </HEAD><BODY BGCOLOR="white" TEXT="black">
-<P ALIGN="center"><CENTER><H1>Grammatical Framework Download and Installation</H1>
+<P ALIGN="center"><CENTER><H1><IMG src="../doc/Logos/gf0.png">Grammatical Framework Download and Installation</H1>
 <FONT SIZE="4">
-<I>Version 3.1.6, 23 April 2010</I><BR>
 </FONT></CENTER>
 
-<H2>Latest developer code</H2>
 <P>
-<A HREF="../doc/darcs.html">GF darcs repository</A>
+<B>GF 3.2</B> was released on 23 December 2010.
 </P>
-<H2>Latest release</H2>
 <P>
-GF 3.1.6 released 23 April 2010.
+What's new? See the <A HREF="release-3.2.html">Release notes</A>.
 </P>
-<UL>
-<LI>MacOS X installer package:
-  <A HREF="gf-3.1.6-leopard.pkg"><CODE>gf-3.1.6-leopard.pkg</CODE></A> (7.7MB)
-<LI>MacOS X (gzipped executable, Leopard and Snow Leopard):
-  <A HREF="gf-3.1.6-bin-intel-mac.gz"><CODE>gf-3.1.6-bin-intel-mac.gz</CODE></A> (1.9MB)
-<LI>Windows (zipped executable):
-  <A HREF="gf-3.1.6-bin-i486-windows.zip"><CODE>gf-3.1.6-bin-i486-windows.zip</CODE></A>
-  (1.6 MB)
-<LI>Ubuntu Linux (gzipped executable): 
-  <A HREF="gf-3.1.6-bin-i486-linux.gz"><CODE>gf-3.1.6-bin-i486-linux.gz</CODE></A>
-  (1.7 MB)
-<LI>compiled library package:
-  <A HREF="gf-3.1.6-lib.tar.gz"><CODE>gf-3.1.6-lib.tar.gz</CODE></A>
-  (4.4 MB)
-<LI>full source package (GF system, libraries, examples, documentation):
-  <A HREF="gf-3.1.6-src.tar.gz"><CODE>gf-3.1.6-src.tar.gz</CODE></A>
-  (11 MB)
-<P></P>
-GF is also on <A HREF="http://hackage.haskell.org/package/gf">Hackage</A>
-</UL>
+<H2>Binary packages for the latest release</H2>
+<TABLE CELLPADDING="4">
+<TR>
+<TH>Platform</TH>
+<TH>Download</TH>
+<TH>How to install</TH>
+</TR>
+<TR>
+<TD>Linux (32-bit)</TD>
+<TD><A HREF="gf-3.2-bin-i386-linux.tar.gz">gf-3.2-bin-i386-linux.tar.gz</A></TD>
+<TD><CODE>sudo tar -C /usr/local -zxf gf-3.2-bin-i386-linux.tar.gz</CODE></TD>
+</TR>
+<TR>
+<TD>Linux (64-bit)</TD>
+<TD><A HREF="gf-3.2-bin-x86_64-linux.tar.gz">gf-3.2-bin-x86_64-linux.tar.gz</A></TD>
+<TD><CODE>sudo tar -C /usr/local -zxf gf-3.2-bin-x86_64-linux.tar.gz</CODE></TD>
+</TR>
+<TR>
+<TD>MacOS X</TD>
+<TD><A HREF="gf-3.2-bin-intel-mac.tar.gz">gf-3.2-bin-intel-mac.tar.gz</A></TD>
+<TD><CODE>sudo tar -C /usr/local -zxf gf-3.2-bin-intel-mac.tar.gz</CODE></TD>
+</TR>
+<TR>
+<TD>Windows</TD>
+<TD><A HREF="gf-3.2-bin-i386-windows.zip">gf-3.2-bin-i386-windows.zip</A></TD>
+<TD><CODE>unzip gf-3.2-bin-i386-windows.zip</CODE></TD>
+</TR>
+</TABLE>
 
 <P>
-What's new? See the <A HREF="release-3.1.6.html">release notes</A>.
+More packages might be added later.
 </P>
-<H2>Previous releases</H2>
-<P>
-<A HREF="old-index.html">Follow this link</A>.
-</P>
-<H2>Installation instructions</H2>
+<H3>Notes</H3>
 <P>
 The Windows package is installed by just unpacking it anywhere. 
 It finds the libraries relative to the <CODE>.exe</CODE> file.
 </P>
 <P>
-To install a binary package for MacOS X or Linux: uncompress the executable and
-put it somewhere on your path, renaming it to just <CODE>gf</CODE>. For instance:
+The MacOS and Linux packages are designed to be installed in <CODE>/usr/local</CODE>.
+You can install them in other locations, but then you need to set the
+<CODE>GF_LIB_PATH</CODE> environment variable:
 </P>
 <PRE>
-    gunzip gf-bin-[version].gz
-    sudo mv gf-bin-[version] /usr/local/bin/gf
-</PRE>
-<P>
-To install the libraries (if done separately), unpack them in the place to which your
-<CODE>GF_LIB_PATH</CODE> points.
-</P>
-<PRE>
-    cd $GF_LIB_PATH
-    gtar xvfz gf-lib-[VERSION].tgz
-</PRE>
-<P>
-If this variable hasn't been defined, it is useful define it, e.g.
-</P>
-<PRE>
-    export GF_LIB_PATH=/usr/local/lib/gf/
+    export GF_LIB_PATH=/usr/local/share/gf-3.2/lib
 </PRE>
 <P></P>
 <P>
-To compile and install from source on Mac or Linux, do:
+where <CODE>/usr/local</CODE> should be replaced with the path to the location where you
+unpacked the package.
+</P>
+<H2>Installing the latest release from source</H2>
+<P>
+GF is on <A HREF="http://hackage.haskell.org/package/gf">Hackage</A>, so the prodedure is
+fairly simple:
+</P>
+<OL>
+<LI>Install the
+  <A HREF="http://hackage.haskell.org/platform">Haskell Platform 2010.2.0.0 (July 2010)</A>.
+<LI><CODE>cabal update</CODE>
+<LI>On Linux: install some C libraries from your Linux distribution (see below)
+<LI><CODE>cabal install gf</CODE>
+</OL>
+
+<P>
+You can also download the full source package from here:
+<A HREF="gf-3.2.tar.gz"><CODE>gf-3.2.tar.gz</CODE></A>.
+</P>
+<H3>Notes</H3>
+<P>
+The above steps installs GF for a single user and does not require root
+privileges. The executables are put in <CODE>$HOME/.cabal/bin</CODE>, so it is a good
+idea to put a line in your <CODE>.bash_profile</CODE> to add that directory to you path:
 </P>
 <PRE>
-    tar xvfz gf-[VERSION].tgz
-    cd GF/src
-    runghc Setup configure --user
-    runghc Setup build
-    runghc Setup install
+    PATH=$HOME/.cabal/bin:$PATH
 </PRE>
+<P></P>
 <P>
-The last command must be prefixed by <CODE>sudo</CODE>, if the installation is outside
-user-writeable area.
+GF uses <CODE>haskeline</CODE>, which depends some non-Haskell libraries that
+won't be installed automatically by cabal, so you need to install
+them manually. Here is one way to do this:
+</P>
+<UL>
+<LI>On Ubuntu: <CODE>sudo apt-get install libghc6-terminfo-dev</CODE>
+<LI>On Fedora: <CODE>sudo yum install ghc-terminfo-devel</CODE>
+</UL>
+
+<H2>Older releases</H2>
+<UL>
+<LI><A HREF="index-3.1.6.html">GF 3.1.6</A> (April 2010).
+<LI><A HREF="old-index.html">GF 3.1</A> (December 2009).
+</UL>
+
+<H2>Latest developer code</H2>
+<PRE>
+    darcs get --lazy http://www.grammaticalframework.org/
+</PRE>
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P>
+<A HREF="http://www.grammaticalframework.org">www.grammaticalframework.org</A>
 </P>
 
 <!-- html code generated by txt2tags 2.5 (http://txt2tags.sf.net) -->
-<!-- cmdline: txt2tags -thtml index.txt -->
+<!-- cmdline: txt2tags -thtml ./download/index.t2t -->
 </BODY></HTML>
-<script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-try {
-var pageTracker = _gat._getTracker("UA-7811807-3");
-pageTracker._trackPageview();
-} catch(err) {}</script>
