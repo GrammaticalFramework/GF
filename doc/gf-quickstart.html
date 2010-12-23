@@ -9,7 +9,7 @@
 <p>
 Aarne Ranta
 <p>
-22 December 2010 (3 September, 2007)
+December 2010 for GF 3.2
 
 <p>
 
@@ -42,12 +42,12 @@ GF sources.
 
 <li> <b>Translation</b>. Try your first translation by giving the GF command
 <pre>
-  parse "this cheese is very very Italian" | tree_bank
+  parse "this cheese is very very Italian" | linearize -treebank
 </pre>
 
 <li> <b>Generation</b>. Random-generate sentences in two languages:
 <pre>
-  generate_random | l -multi
+  generate_random | linearize
 </pre>
 
 <li> <b>Grammar development</b>. Add words to the <tt>Food</tt>
@@ -66,6 +66,35 @@ grammar development, go to the one of the tutorials:
 <li> <a href="tutorial/gf-tutorial.html">GF Tutorial</a>: older, more programmer-oriented
 <li> <a href="gf-lrec-2010.pdf">GF Resource Tutorial</a>: newer, more linguist-oriented
 </ul>
+To learn about how GF is used for easily writing grammars for 16 languages, consult the
+<ul>
+<li> <a href="../lib/doc/synopsis.html">GF Resource Grammar Library</a>.
+</ul>
+
+
+
+<h2>Run-time grammars and web applications</h2>
+
+GF has its own "machine language", PGF (Portable Grammar Format),
+which is recommended for use in applications at run time. To produce a PGF file from
+the two grammars above, do
+<pre>
+  gf -make FoodIta.gf FoodEng.gf
+  wrote Food.pgf
+</pre>
+You can use this in Haskell and Java programs, and also on web services, as shown in
+<a href="http://www.grammaticalframework.org:41296/minibar/minibar.html">here</a>.
+To build your own web application, consult the
+<a href="http://code.google.com/p/grammatical-framework/wiki/SideBar?tm=6">developer wiki</a>.
+
+
+<h2>User Group</h2>
+
+You are welcome to join the <A HREF="http://groups.google.com/group/gf-dev">User Group</A>
+to get help and discuss GF-related issues!
+
+
+
 
 
 </body></html>

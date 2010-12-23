@@ -35,10 +35,10 @@ incomplete concrete ExtFoodsI of ExtFoods = FoodsI ** open Syntax, LexFoods in {
     You = mkNP youPol_Pron ;
     We = mkNP we_Pron ;
 
-    GThis = mkNP this_QuantSg ;
-    GThat = mkNP that_QuantSg ;
-    GThese = mkNP these_QuantPl ;
-    GThose = mkNP those_QuantPl ;
+    GThis = mkNP this_Det ;
+    GThat = mkNP that_Det ;
+    GThese = mkNP these_Det ;
+    GThose = mkNP those_Det ;
 
     Eat = eat_V2 ;
     Drink = drink_V2 ;

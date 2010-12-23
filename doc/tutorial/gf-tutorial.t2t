@@ -1,6 +1,6 @@
 Grammatical Framework Tutorial
 Aarne Ranta
-December 2010 (November 2008)
+December 2010 for GF 3.2 
 
 
 % NOTE: this is a txt2tags file.
@@ -64,6 +64,7 @@ December 2010 (November 2008)
 
 %!postproc(tex): #MYTREE "input{mytree}"
 %!preproc(html): #MYTREE [mytree.png]
+%!preproc(html): #MYPARSE [myparse.png]
 %!postproc(tex): #FOODMARKET "input{foodmarket}"
 %!preproc(html): #FOODMARKET [foodmarket.png]
 %!postproc(tex): #CATEGORIES "input{categories}"
@@ -1283,7 +1284,13 @@ program (from the Graphviz package).
 ```
   % dot -Tpng _grph.dot > mytree.png
 ```
+You can also visualize **parse trees**, which show categories and words instead of
+function symbols. The command is ``visualize_parse = vp``:
+``` 
+  > parse "this delicious cheese is very Italian" | visualize_parse
+```
 
+#MYPARSE
 
 #NEW
 
@@ -1296,9 +1303,9 @@ You can give a **system command** without leaving GF:
   > ! open mytree.png
 ```
 A system command may also receive its argument from
-a GF pipes. It then has the name ``sp`` = ``system_pipe``:
+a GF pipes. It then uses the symbol ``?``:
 ```
-  > generate_trees -depth=4 | sp -command="wc -l"
+  > generate_trees -depth=4 | ? wc -l
 ```
 This command example returns the number of generated trees.
 
@@ -2766,23 +2773,27 @@ Goals:
 
 ==The coverage of the library==
 
-The current 12 resource languages are
+The current 16 resource languages (GF version 3.2, December 2010) are
 - ``Bul``garian
 - ``Cat``alan
 - ``Dan``ish
+- ``Dut``ch
 - ``Eng``lish
 - ``Fin``nish
 - ``Fre``nch
 - ``Ger``man
 - ``Ita``lian
 - ``Nor``wegian
+- ``Pol``ish
+- ``Ron``, Romanian 
 - ``Rus``sian
 - ``Spa``nish
 - ``Swe``dish
+- ``Urd``u
 
 
 The first three letters (``Eng`` etc) are used in grammar module names
-(ISO 639 standard).
+(ISO 639-3 standard).
 
 
 #NEW
@@ -2832,8 +2843,7 @@ Two kinds of lexical categories:
   - structural words / function words, e.g.
 ```
     Conj ;     -- conjunction           e.g. "and"
-    QuantSg ;  -- singular quantifier   e.g. "this"
-    QuantPl ;  -- plural quantifier     e.g. "this"
+    Det ;      -- determiner            e.g. "this"
 ```
 
 - **open**:
@@ -2852,8 +2862,7 @@ Two kinds of lexical categories:
 
 Closed classes: module ``Syntax``. In the ``Foods`` grammar, we need
 ```
-  this_QuantSg, that_QuantSg : QuantSg ; 
-  these_QuantPl, those_QuantPl : QuantPl ; 
+  this_Det, that_Det, these_Det, those_Det : Det ; 
   very_AdA  : AdA ;
 ```
 Naming convention: word followed by the category (so we can
@@ -2917,8 +2926,7 @@ Common nouns are made into noun phrases by adding determiners.
 We need the following combinations:
 ```
   mkCl : NP -> AP -> Cl ;      -- e.g. "this pizza is very warm"
-  mkNP : QuantSg -> CN -> NP ; -- e.g. "this pizza" 
-  mkNP : QuantPl -> CN -> NP ; -- e.g. "these pizzas"
+  mkNP : Det -> CN -> NP ;     -- e.g. "this pizza" 
   mkCN : AP -> CN -> CN ;      -- e.g. "warm pizza"
   mkAP : AdA -> AP -> AP ;     -- e.g. "very warm" 
 ```
@@ -2944,7 +2952,7 @@ The sentence
 can be built as follows:
 ```
   mkCl 
-    (mkNP these_QuantPl 
+    (mkNP these_Det 
        (mkCN (mkAP very_AdA (mkAP warm_A)) (mkCN pizza_CN)))
     (mkAP italian_AP) 
 ```
@@ -2970,7 +2978,7 @@ Language-specific and language-independent parts - roughly,
 
 Full API documentation on-line: the **resource synopsis**,
 
-[``grammaticalframework.org/lib/resource/doc/synopsis.html`` http://grammaticalframework.org/lib/doc/synopsis.html]
+[``grammaticalframework.org/lib/doc/synopsis.html`` http://grammaticalframework.org/lib/doc/synopsis.html]
 
 
 #NEW
@@ -2983,8 +2991,7 @@ Full API documentation on-line: the **resource synopsis**,
 | ``CN`` | common noun (without determiner) | //red house// |
 | ``NP`` | noun phrase (subject or object) | //the red house// |
 | ``AdA`` | adjective-modifying adverb, | //very// |
-| ``QuantSg`` | singular quantifier | //these// |
-| ``QuantPl`` | plural quantifier | //this// |
+| ``Det`` | determiner | //these// |
 | ``A`` | one-place adjective | //warm// |
 | ``N`` | common noun | //house// |
 
@@ -2995,8 +3002,7 @@ Full API documentation on-line: the **resource synopsis**,
 
 || Function  | Type  | Example  ||
 | ``mkCl``  | ``NP -> AP -> Cl`` | //John is very old// |
-| ``mkNP``  | ``QuantSg -> CN -> NP`` | //this old man// |
-| ``mkNP``  | ``QuantPl -> CN -> NP`` | //these old man// |
+| ``mkNP``  | ``Det -> CN -> NP`` | //these old man// |
 | ``mkCN``  | ``N -> CN`` | //house// |
 | ``mkCN``  | ``AP -> CN -> CN`` | //very big blue house// |
 | ``mkAP``  | ``A -> AP`` | //old// |
@@ -3007,10 +3013,10 @@ Full API documentation on-line: the **resource synopsis**,
 ===A miniature resource API: structural words===
 
 || Function      | Type       | In English  ||
-| ``this_QuantSg`` | ``QuantSg``  | //this// |
-| ``that_QuantSg`` | ``QuantSg``  | //that// |
-| ``these_QuantPl`` | ``QuantPl``  | //this// |
-| ``those_QuantPl`` | ``QuantPl``  | //that// |
+| ``this_Det`` | ``Det``  | //this// |
+| ``that_Det`` | ``Det``  | //that// |
+| ``these_Det`` | ``Det``  | //this// |
+| ``those_Det`` | ``Det``  | //that// |
 | ``very_AdA``   | ``AdA``    | //very// |
 
 
@@ -3112,10 +3118,10 @@ Now the combination rules we need almost write themselves automatically:
 ```
   lin
     Is item quality = mkCl item quality ;
-    This kind = mkNP this_QuantSg kind ;
-    That kind = mkNP that_QuantSg kind ;
-    These kind = mkNP these_QuantPl kind ;
-    Those kind = mkNP those_QuantPl kind ;
+    This kind = mkNP this_Det kind ;
+    That kind = mkNP that_Det kind ;
+    These kind = mkNP these_Det kind ;
+    Those kind = mkNP those_Det kind ;
     QKind quality kind = mkCN quality kind ;
     Very quality = mkAP very_AdA quality ;
 ```
@@ -3234,10 +3240,10 @@ we can write a **functor instantiation**,
     Quality = AP ;
   lin
     Is item quality = mkCl item quality ;
-    This kind = mkNP this_QuantSg kind ;
-    That kind = mkNP that_QuantSg kind ;
-    These kind = mkNP these_QuantPl kind ;
-    Those kind = mkNP those_QuantPl kind ;
+    This kind = mkNP this_Det kind ;
+    That kind = mkNP that_Det kind ;
+    These kind = mkNP these_Det kind ;
+    Those kind = mkNP those_Det kind ;
     QKind quality kind = mkCN quality kind ;
     Very quality = mkAP very_AdA quality ;
 
@@ -4530,10 +4536,10 @@ This facility is based on several components:
 
 The portable format is called PGF, "Portable Grammar Format".
 
-This format is produced by the GF batch compiler ``gf``, 
-executable from the operative system shell:
+This format is produced by using GF as batch compiler, with the option ``-make``, 
+from the operative system shell:
 ```
-  % gf --make SOURCE.gf
+  % gf -make SOURCE.gf
 ```
 PGF is the recommended format in 
 which final grammar products are distributed, because they
@@ -4598,7 +4604,7 @@ translate gr s = case parseAllLang gr (startCat gr) s of
 ```
 To run the translator, first compile it by
 ```
-  % ghc --make -o trans Translator.hs 
+  % ghc -make -o trans Translator.hs 
 ```
 For this, you need the Haskell compiler [GHC http://www.haskell.org/ghc].
 
@@ -4610,7 +4616,7 @@ For this, you need the Haskell compiler [GHC http://www.haskell.org/ghc].
 Then produce a PGF file. For instance, the ``Food`` grammar set can be 
 compiled as follows:
 ```
-  % gf --make FoodEng.gf FoodIta.gf
+  % gf -make FoodEng.gf FoodIta.gf
 ```
 This produces the file ``Food.pgf`` (its name comes from the abstract syntax).
 
@@ -4718,7 +4724,7 @@ abstract syntax to a system of Haskell datatypes:
 ```
 It is also possible to produce the Haskell file together with PGF, by
 ```
-  % gf --make --output-format=haskell QueryEng.gf
+  % gf -make --output-format=haskell QueryEng.gf
 ```
 The result is a file named ``Query.hs``, containing a 
 module named ``Query``. 
@@ -4871,7 +4877,7 @@ translate tr gr s = case parseAllLang gr (startCat gr) s of
 To automate the production of the system, we write a ``Makefile`` as follows:
 ```
 all:
-        gf --make --output-format=haskell QueryEng
+        gf -make --output-format=haskell QueryEng
         ghc --make -o ./math TransferLoop.hs
         strip math
 ```
@@ -4928,7 +4934,7 @@ program compiled from GF grammars as run on an iPhone.
 JavaScript is one of the output formats of the GF batch compiler. Thus the following
 command generates a JavaScript file from two ``Food`` grammars.
 ```
-  % gf --make --output-format=js FoodEng.gf FoodIta.gf
+  % gf -make --output-format=js FoodEng.gf FoodIta.gf
 ```
 The name of the generated file is ``Food.js``, derived from the top-most abstract
 syntax name. This file contains the multilingual grammar as a JavaScript object.
@@ -4974,7 +4980,7 @@ GSL is produced from GF by running ``gf`` with the flag
 
 Example: GSL  generated from ``FoodsEng.gf``.
 ```
-  % gf --make --output-format=gsl FoodsEng.gf
+  % gf -make --output-format=gsl FoodsEng.gf
   % more FoodsEng.gsl
 
   ;GSL2.0
