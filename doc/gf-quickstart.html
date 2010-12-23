@@ -21,14 +21,14 @@ December 2010 for GF 3.2
 
 </center>
 
-This Quick Start shows two examples of how GF can be used.
+This Quick Start shows a few examples of how GF can be used.
 We assume that you have downloaded and installed GF, so that
 the command <tt>gf</tt> works for you. See download and install
 instructions <a href="../download/index.html">here</a>.
 
 
 
-<h2>Translation and generation</h2>
+<h2>Using GF for translation and generation</h2>
 
 When you have downloaded and installed GF:
 <ol>
@@ -39,22 +39,45 @@ When you have downloaded and installed GF:
 Or go to <tt>GF/examples/tutorial/food/</tt>, if you have downloaded the
 GF sources.
 
- <li> Start GF with the command
+ <li> Start GF with the shell command (without the prompt <tt>$</tt>)
 <pre>
-  gf FoodIta.gf FoodEng.gf
+  $ gf FoodIta.gf FoodEng.gf
 </pre>
 
 <li> <b>Translation</b>. Try your first translation by giving the GF command
 <pre>
-  parse "this cheese is very very Italian" | linearize -treebank
+  parse "this cheese is very very Italian" | linearize
 </pre>
+Notice that the parser accept the tabulator for word completion.
 
 <li> <b>Generation</b>. Random-generate sentences in two languages:
 <pre>
   generate_random | linearize
 </pre>
 
-<li> <b>Grammar development</b>. Add words to the <tt>Food</tt>
+<li> <b>Other commands</b>. Use the help command
+<pre>
+  help
+</pre>
+<li> <b>More examples</b>. Go to <tt>GF/examples/phrasebook</tt> or some other
+subdirectory of  <tt>GF/examples/</tt>. Or try a resource grammar by, for instance,
+<pre>
+  import alltenses/LangEng.gfo alltenses/LangGer.gfo
+
+  parse -lang=Eng "I love you" | linearize -treebank
+</pre>
+The resource grammars are found relative to the value of <tt>GF_LIB_PATH</tt>, which
+you may have to set; see <a href="../download/index.html">here</a> for instructions.
+
+
+
+</ol>
+
+
+
+<h2>Grammar development</h2>
+
+Add words to the <tt>Food</tt>
 grammars and try the above commands again. For instance, add the following lines:
 <pre>
   Bread : Kind ;          -- in Food.gf
@@ -86,13 +109,32 @@ the two grammars above, do
   gf -make FoodIta.gf FoodEng.gf
   wrote Food.pgf
 </pre>
-You can use this in Haskell and Java programs, and also on web services, as shown in
-<a href="http://www.grammaticalframework.org:41296/minibar/minibar.html">here</a>.
-To build your own web application, consult the
+You can use this in Haskell and Java programs, and also on web services, such as
+<ul>
+<li> the 
+  <a href="http://www.grammaticalframework.org:41296/minibar/minibar.html">minibar</a>
+  fridge magnets
+</ul>
+
+The quickest way to provide a GF web service is to start the program <tt>pgh-http</tt>
+<pre>
+  $ pgh-http
+  Starting HTTP server, open http://localhost:41296/ in your web browser
+
+  Options {documentRoot = "/home/aarne/.cabal/share/gf-server-1.0/www", port = 41296}
+</pre>
+which resides next to your <tt>gf</tt> program. You can view it locally by pointing your
+browser to the URL shown. You can add your own <tt>.pgf</tt> grammar to the service by
+copying it over to the <tt>documentRoot</tt> directory. Just push "reload" in 
+your browser after each such update.
+
+<p>
+
+To build more customized web application, consult the
 <a href="http://code.google.com/p/grammatical-framework/wiki/SideBar?tm=6">developer wiki</a>.
 
 
-<h2>User Group</h2>
+<h2>User group</h2>
 
 You are welcome to join the <A HREF="http://groups.google.com/group/gf-dev">User Group</A>
 to get help and discuss GF-related issues!
