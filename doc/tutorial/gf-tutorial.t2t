@@ -1263,11 +1263,12 @@ Human eye may prefer to see a visualization: ``visualize_tree = vt``:
   > parse "this delicious cheese is very Italian" | visualize_tree
 ```
 The tree is generated in postscript (``.ps``) file. The ``-view`` option is used for
-telling what command to use to view the file. Its default is ``"gv"``, which works
-on most Linux installations. On a Mac, one would probably write
+telling what command to use to view the file. Its default is ``"open"``, which works
+on Mac OS X. On Ubuntu Linux, one can write
 ``` 
-  > parse "this delicious cheese is very Italian" | visualize_tree -view="open"
+  > parse "this delicious cheese is very Italian" | visualize_tree -view="eog"
 ```
+
 
 
 
@@ -1364,6 +1365,17 @@ Thus Italian says ``vino italiano`` for ``Italian wine``.
 (Some Italian adjectives
 are put before the noun. This distinction can be controlled by parameters, 
 which are introduced in #Rchapfour.)
+
+Multilingual grammars have yet another visualization option:
+**word alignment**, which shows what words correspond to each other.
+Technically, this means words that have the same smallest spanning subtrees
+in abstract syntax. The command is ``align_words = aw``:
+``` 
+  > parse "this delicious cheese is very Italian" | align_words
+```
+
+[align2.png]
+
 
 #NEW
 
