@@ -2,6 +2,7 @@ GF Version 3.2 Release Notes
 23 December 2010
 
 %!style:../css/style.css
+%!postproc(html): <H1> <H1><IMG src="../doc/Logos/gf0.png">
 
 ==Installation==
 
