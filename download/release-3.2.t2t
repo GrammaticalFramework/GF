@@ -1,11 +1,28 @@
 GF Version 3.2 Release Notes
 23 December 2010
 
+%!style:../css/style.css
 
-=Installation=
-
-...
-
-=New features=
+==Installation==
 
 ...
+
+==New features==
+
+- faster parsing
+- dep types lexicon
+- exhaustive rdm generation with dep types
+- 16 languages
+- new synopsis
+- bracketed strings data structure
+- example based
+- probabilities in pgf
+- giza alignments
+- license scheme
+- language quiz
+- new darcs repo
+
+
+Licenses:
+- gf/src/compiler GPL
+- all the rest LGPL + BSD

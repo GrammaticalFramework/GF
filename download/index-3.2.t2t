@@ -20,7 +20,7 @@ What's new? See the [Release notes release-3.2.html].
 | Windows | [gf-3.2-bin-i386-windows.zip gf-3.2-bin-i386-windows.zip] | ``unzip gf-3.2-bin-i386-windows.zip``
 | Linux | [gf-3.2-bin-i386-linux.tar.gz gf-3.2-bin-i386-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-i386-linux.tar.gz``
 
-More packages might be added later
+More packages might be added later.
 
 ===Notes===
 
@@ -69,7 +69,7 @@ idea to put a line in your ``.bash_profile`` to add that directory to you path:
 ==Latest developer code==
 
 ```
-  darcs get --lazy http://www.grammaticalframework.org
+  darcs get --lazy http://www.grammaticalframework.org/
 ```
 
 --------------------
