@@ -210,7 +210,7 @@ langs = map fst langsCoding
 -- defaultLangs = langs `only` words "Eng Fre Ger Ita Spa Swe"
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Amh","Ara","Lat","Hin","Tha","Tur","Urd"]
+langsLang = langs `except` ["Amh","Ara","Lat","Hin","Tha","Tur"]
 --langsLang = langs `only` ["Fin"] --test
 
 -- languages for which to compile Try 
