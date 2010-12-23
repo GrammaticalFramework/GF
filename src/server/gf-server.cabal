@@ -68,11 +68,10 @@ executable pgf-service
 
 executable content-service
   if flag(fastcgi)
-    build-depends: fastcgi >= 3001.0.2.2, hsql-mysql
+    build-depends: base >=4.2 && <5,
+                   fastcgi >= 3001.0.2.2, hsql-mysql, hsql, old-locale
     buildable: True
   else
     buildable: False
 
-  build-depends: base >=4.2 && <5,
-                 hsql, old-locale
   main-is: ContentService.hs
