@@ -196,6 +196,10 @@ resource MorphoFin = ResFin ** open Prelude in {
         raetta = case <rae : Str> of {
           _ + "e" => 
             <rae + "tt" + a, rakee + "seen"> ;  -- raetta,rakeeseen
+          _ + "u" => 
+            <rae + "tt" + a, rakee + "seen"> ;  -- kiiru, kiiruuseen
+          _ + "i" => 
+            <rae + "tt" + a, rakee + "seen"> ;  -- ori, oriin
           _ + "s" => 
             <rae + "t" + a,  rakee + "seen"> ;  -- rengasta,renkaaseen
           _ + "t" => 
@@ -804,9 +808,12 @@ resource MorphoFin = ResFin ** open Prelude in {
       "ll" + a => "lt" + a ;
       h@("h" | "l") + "je" + e => h + "ke" ; -- pohje/lahje impossible
       ("tk" | "hk" | "sk" | "sp" | "st") + _ => nke ;       -- viuhke,kuiske 
-      a + k@("k"|"p"|"t") + e@("e"|"a"|"ä"|"u"|"i"|"o"|"ö")  => a + k + k + e ;
+      a + k@("k"|"p"|"t") + e@("e"|"a"|"ä"|"u"|"y"|"i"|"o"|"ö")  => a + k + k + e ;
       a + "d" + e@("e"|"a"|"ä"|"u"|"i"|"o"|"ö")  => a + "t" + e ; 
       s + a@("a" | "ä") + "e" => s + a + "ke" ;       -- säe, tae
+      s + "ui"                      => s + "uki" ;     -- ruis
+      s + "aa"                      => s + "aka" ;       -- taata
+      s + "i" + a@("a" | "e" | "i") => s + "ik" + a ;       -- liata, siitä, pietä
       a + "v" + e@("e"|"a"|"ä"|"u"|"i") => a + "p" + e ;  -- taive/toive imposs
       ase => ase
       } ;

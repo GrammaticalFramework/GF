@@ -1,6 +1,6 @@
 --# -path=.:alltenses
 
-resource Kotus = Declensions ** open MorphoFin,CatFin,Prelude in {
+resource Kotus = open MorphoFin, Prelude in {
 
 oper vowelHarmony = vowHarmony ;
 
@@ -18,7 +18,10 @@ oper
     = \s -> let ws = weakGrade s in 
       dSilakka s (ws + "n") (ws + "it" + getHarmony (last s)) ;
   d05 : Str -> NForms -- 3212 öljymaali
-    = \s -> dPaatti s (s + "n") ;
+    = \s -> case last s of {
+              "i" => dPaatti s (s + "n") ;
+              _   => dUnix s
+              } ;
   d05A : Str -> NForms -- 1959 öylätti
     = \s -> dPaatti s (weakGrade s + "n") ;
   d06 : Str -> NForms -- 1231 öykkäri
@@ -176,7 +179,7 @@ oper
   d47 : Str -> NForms -- 46 ylirasittunut
     = dOttanut ;
   d48 : Str -> NForms -- 346 äpäre
-    = \s -> dRae s (s + "en") ;
+    = \s -> dRae s (s + last s + "n") ;
   d48A : Str -> NForms -- 481 äänne
     = \s -> dRae s (strongGrade s + "en") ;
   d49 : Str -> NForms -- 31 vempele
@@ -267,29 +270,32 @@ oper
     = \s -> cValjeta s (Predef.tk 2 s + "ni") ;
   c72A : Str -> VForms -- 52 yhdetä
     = \s -> cValjeta s (strongGrade (Predef.tk 2 s) + "ni") ;
-{-
   c73 : Str -> VForms -- 600 äkseerata
-    = \s ->  ;
+    = \s -> cPudota s (Predef.tk 2 s + "si") ;
   c73A : Str -> VForms -- 313 änkätä
-    = \s ->  ;
+    = \s -> cPudota s (strongGrade (Predef.tk 2 s) + "si") ;
   c74 : Str -> VForms -- 99 öljytä
-    = \s ->  ;
+    = \s -> cPudota s (Predef.tk 2 s + "si") ;
   c74A : Str -> VForms -- 72 ängetä
-    = \s ->  ;
+    = \s -> cPudota s (strongGrade (Predef.tk 2 s) + "si") ;
   c75 : Str -> VForms -- 39 viritä
-    = \s ->  ;
+    = \s -> cPudota s (Predef.tk 2 s + "si") ;
   c75A : Str -> VForms -- 9 siitä
-    = \s ->  ;
+    = \s -> cPudota s (strongGrade (Predef.tk 2 s) + "si") ;
   c76A : Str -> VForms -- 2 tietää
-    = \s ->  ;
+    = \s -> let tieta = init s ; tieda = weakGrade tieta ; ties = Predef.tk 2 tieta + "s" in 
+      cOttaa s (tieda + "n") (ties + "in") (ties + "i") ; -- only tietaa, taitaa
+-- defective verbs
   c77 : Str -> VForms -- 3 vipajaa
-    = \s ->  ;
+    = c56A ; ----
   c78 : Str -> VForms -- 31 ähkää
-    = \s ->  ;
+    = c56A ; ----
   c78A : Str -> VForms -- 1 tuikkaa
-    = \s ->  ;
-  c99 : Str -> VForms -- 5453 öykkärimäisesti
-    = \s ->  ;
--}
+    = c56A ; ----
+  c99 : Str -> {s : Str} -- 5453 öykkärimäisesti
+    = \s -> {s = s} ;
+
+  c101 : Str -> {s : Str} -- pronouns etc
+    = c99 ; -- dummy
 }
 
