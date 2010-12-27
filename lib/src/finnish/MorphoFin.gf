@@ -643,6 +643,7 @@ resource MorphoFin = ResFin ** open Prelude in {
       kuunnel = Predef.tk 2 kuunnella ;
       kuuntel = Predef.tk 2 kuuntelin ;
       u       = uyHarmony a ;
+      l       = last kuunnel
     in vForms12
       kuunnella
       (kuuntel + "en")
@@ -653,9 +654,9 @@ resource MorphoFin = ResFin ** open Prelude in {
       (kuuntel + "in")
       (kuuntel + "i")
       (kuuntel + "isi")
-      (kuunnel + "l" + u + "t")
+      (kuunnel + l + u + "t")
       (kuunnel + "t" + u)
-      (kuunnel + "lee") ;
+      (kuunnel + l + "ee") ;
 
 -- auxiliaries
 

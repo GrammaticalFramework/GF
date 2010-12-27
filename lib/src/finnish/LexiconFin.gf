@@ -147,7 +147,7 @@ lin
   policeman_N = mkN "poliisi" ;
   priest_N = mkN "pappi" ;
   probable_AS = mkAS --- for vowel harmony
-    (mkA (mkN "todennäköinen") "tonennäköisempi" "todennälöisin") ; ---- sta
+    (mkA (mkN "todennäköinen") "tonennäköisempi" "todennäköisin") ; ---- sta
   queen_N = mkN "kuningatar" ;
   radio_N = mk2N "radio" "radioita" ;
   rain_V0 = mkV0 (mk2V "sataa" "satoi") ;
