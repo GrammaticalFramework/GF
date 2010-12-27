@@ -1,0 +1,7 @@
+--# -path=.:alltenses
+
+concrete DictFin of DictFinAbs = open MorphoFin, Kotus, Prelude in {
+
+flags coding = utf8 ;
+
+lincat NK = NForms ; VK = VForms ;AdvK = SS ;

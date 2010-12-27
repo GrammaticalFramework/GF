@@ -12,3 +12,10 @@ tuntea_V =
 nahda_V
 
 tehda_V
+
+tietaa_V
+
+taitaa_V
+
+siita_V
+
