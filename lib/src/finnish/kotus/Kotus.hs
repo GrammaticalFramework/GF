@@ -2,7 +2,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import System
 
--- build DictFin from KOTUS word list. See Makefile.
+-- build DictFin from KOTUS word list. See Makefile for how to run
 -- AR 28/12/2010
 
 main = do
@@ -20,13 +20,16 @@ main = do
                           Just (end,beg) <- [lookCompound (whole,e) dictMap]]
 ---  mapM_ (\ (x,(y,_)) -> putStrLn (unwords [x,"-", word y])) compoundList -- to see compounds
   let (adjSet,advSet) = let (adjs,advs) = unzip adjList in (S.fromList adjs,S.fromList advs)
-  let dictList1 = map (mkAdjAdv adjSet advSet) dictList
-  let dictList2 = case xx of 
-        "-compounds":_ -> concatMap (mkCompound (M.fromList compoundList)) dictList1
-        "-all":_  -> dictList1 ++ concatMap (mkCompound (M.fromList compoundList)) dictList1
-        _ -> dictList1
-  let dict2 = map snd dictList2
-  mapM_ mkRules dict2
+  let compoundMap  = M.fromList compoundList
+  let dictList1    = map (mkAdjAdv adjSet advSet) dictList
+  let dictListComp = concatMap (mkCompound compoundMap) dictList1
+  let dictList2    = filter (flip M.notMember compoundMap . fst) dictList1
+  let dictList3 = case xx of 
+        "-compounds":_ -> dictListComp
+        "-all":_  -> dictList2 ++ dictListComp
+        _ -> dictList2
+  let dict3 = map snd dictList3
+  mapM_ mkRules dict3
 
 
 
@@ -95,7 +98,6 @@ adjCandidates adj = case reverse adj of
   _ -> [adj]
 
 
-
 -------------------------------------------------
 -- produce rules
 
@@ -104,7 +106,7 @@ mkRules e = do
   putRule $ mkLin (fun e) (par e) (word e)
  where
    putRule
-    | isDummy e = putStrLn . ("-- " ++)
+    | isDummy e = const (return ()) -- putStrLn . ("-- " ++)
     | isDerived e = putStrLn . ("--+ " ++)
     | isPlurTant e = putStrLn . ("--? " ++)
     | otherwise = putStrLn 

@@ -1,17 +1,19 @@
-gf: abs cnc
+all: dict
 
-src:
+dict:
 	runghc Kotus.hs src/kotus-sanalista_v1.xml >src.tmp
-
-compounds:
-	runghc Kotus.hs src/kotus-sanalista_v1.xml -compounds >src.tmp
-
-abs: src
 	cp prelDictFinAbs DictFinAbs.gf
 	grep ":" src.tmp >>DictFinAbs.gf
 	echo "}" >>DictFinAbs.gf
-
-cnc: src
 	cp prelDictFin DictFin.gf
 	grep "=" src.tmp >>DictFin.gf
 	echo "}" >>DictFin.gf
+
+compounds:
+	runghc Kotus.hs src/kotus-sanalista_v1.xml -compounds >src-comp.tmp
+	cp prelDictCompFinAbs DictCompFinAbs.gf
+	grep ":" src-comp.tmp >>DictCompFinAbs.gf
+	echo "}" >>DictCompFinAbs.gf
+	cp prelDictCompFin DictCompFin.gf
+	grep "=" src-comp.tmp >>DictCompFin.gf
+	echo "}" >>DictCompFin.gf

@@ -1,0 +1,6 @@
+--# -path=.:alltenses
+
+concrete DictCompFin of DictCompFinAbs = DictFin ** open MorphoFin, Kotus, Prelude in {
+
+flags coding = utf8 ;
+
