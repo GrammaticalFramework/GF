@@ -297,5 +297,10 @@ oper
 
   c101 : Str -> {s : Str} -- pronouns etc
     = c99 ; -- dummy
+
+-- compound nouns, latter part inflected
+  compoundNK : (Str -> NForms) -> Str -> Str -> NForms = \d,x,y -> 
+    let ys = d y in \\v => x + ys ! v ;
+
 }
 
