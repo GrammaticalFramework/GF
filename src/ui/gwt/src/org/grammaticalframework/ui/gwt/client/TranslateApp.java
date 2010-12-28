@@ -203,7 +203,7 @@ public class TranslateApp implements EntryPoint {
 		vPanel.setWidth("100%");
 		vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		vPanel.add(createSuggestPanel());
-        vPanel.add(createSettingsPanel());
+		vPanel.add(createSettingsPanel());
 		vPanel.add(createTranslationsPanel());
 
 		return vPanel;
@@ -221,7 +221,7 @@ public class TranslateApp implements EntryPoint {
 	}
 
 	protected Widget createSettingsPanel () {
-		return new SettingsPanel(pgf);
+		return new SettingsPanel(pgf, null, statusPopup);
 	}
 
 	protected Widget createTranslationsPanel () {
@@ -276,7 +276,7 @@ public class TranslateApp implements EntryPoint {
 	// Initialization
 	//
 
-	protected class MySettingsListener implements PGFWrapper.SettingsListener {
+	protected class MySettingsListener implements SettingsListener {
 		// Will only happen on load
 		public void onAvailableGrammarsChanged() {
 			if (pgf.getPGFName() == null) {

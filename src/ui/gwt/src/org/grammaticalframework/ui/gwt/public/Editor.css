@@ -15,16 +15,6 @@
     margin: 0 0.4em;
 }
 
-.my-DocumentsHeader {
-  width: 100%;
-  background-attachement: scroll;
-  background-color: #E5E5E5;
-  background-image: url("background.png");
-  background-position: 0px -192px;
-  background-repeat: repeat-x;
-  font-size: 150%;
-}
-
 .my-DocumentsTable {
   width: 100%;
   border: 1px solid #E5E5E5;
@@ -43,6 +33,29 @@
 .my-GrammarsPanel {
   padding: 1em;
   width: 100%;
+}
+
+.my-GrammarInfoPanel {
+  width: 100%;
+  border: 1px solid #E5E5E5;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.my-GrammarInfoPanel .descr-label {
+  width: 100%;
+  height: 50px;
+  padding: 3px;
+}
+
+.my-TableHeader {
+  width: 100%;
+  background-attachement: scroll;
+  background-color: #E5E5E5;
+  background-image: url("background.png");
+  background-position: 0px -192px;
+  background-repeat: repeat-x;
+  font-size: 150%;
 }
 
 .my-EditorPanel {

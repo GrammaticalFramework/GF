@@ -124,7 +124,7 @@ public class QueryPanel extends Composite {
 		return queryPanel;
 	}
 
-	protected class MySettingsListener implements PGFWrapper.SettingsListener {
+	protected class MySettingsListener implements SettingsListener {
 
 		public MySettingsListener() {
 		}

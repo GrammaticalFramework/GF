@@ -44,7 +44,7 @@ public class DocumentsPanel extends Composite implements HasSelectionHandlers<Ob
 		});
 
 		FlexTable header = new FlexTable();
-		header.setStylePrimaryName("my-DocumentsHeader");
+		header.setStylePrimaryName("my-TableHeader");
 		header.setText(0,0,"Documents");
 		header.setWidget(0,1,deleteButton);
 		header.getColumnFormatter().setWidth(1,"20px");

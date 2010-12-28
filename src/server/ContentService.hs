@@ -50,15 +50,21 @@ cgiMain' cache path =
     do c <- liftIO $ readCache cache path
        mb_command <- liftM (liftM (urlDecodeUnicode . UTF8.decodeString)) (getInput "command")
        case mb_command of
+         Just "update_grammar"
+                       -> do mb_pgf <- getFile
+                             id  <- getGrammarId
+                             name   <- getFileName
+                             descr  <- getDescription
+                             doUpdateGrammar c mb_pgf id name descr
+         Just "delete_grammar"
+                       -> do id <- getGrammarId
+                             doDeleteGrammar c id
+         Just "grammars"
+                       -> doGrammars c
          Just "save"   -> doSave c =<< getId
          Just "load"   -> doLoad c =<< getId
          Just "search" -> doSearch c =<< getQuery
          Just "delete" -> doDelete c =<< getIds
-         Just "update_grammar"
-                       -> do mb_pgf <- getFile
-                             name   <- getFileName
-                             descr  <- getDescription
-                             doUpdateGrammar c mb_pgf name descr
          Just cmd      -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show cmd]
          Nothing       -> throwCGIError 400 "No command given" ["No command given"]
   where
@@ -70,18 +76,70 @@ cgiMain' cache path =
 
     getQuery :: CGI String
     getQuery = fmap (fromMaybe "") (getInput "query")
-    
+
+    getGrammarId :: CGI String
+    getGrammarId = do 
+      mb_url <- getInput "url"
+      return (maybe "null" (reverse . drop 4 . reverse) mb_url)
+
     getFile :: CGI (Maybe BS.ByteString)
-    getFile = getInputFPS "file"
+    getFile = do
+      getInputFPS "file"
 
     getFileName :: CGI String
     getFileName = do
-      mb_name <- getInput "name"
+      mb_name0 <- getInput "name"
+      let mb_name | mb_name0 == Just "" = Nothing
+                  | otherwise           = mb_name0
       mb_file <- getInputFilename "file"
       return (fromMaybe "" (mb_name `mplus` mb_file))
 
     getDescription :: CGI String
     getDescription = fmap (fromMaybe "") (getInput "description")
+
+doGrammars c = do
+  r <- liftIO $ handleSql (return . Left) $ do
+         s <- query c "call getGrammars()"
+         rows <- collectRows getGrammar s
+         return (Right rows)
+  case r of
+    Right rows -> outputJSONP rows
+    Left  e    -> throwCGIError 400 "Loading failed" (lines (show e))
+  where
+    getGrammar s = do
+      id <- getFieldValue s "id"
+      name <- getFieldValue s "name"
+      description <- getFieldValue s "description"
+      return $ toJSObject [ ("url",  showJSON (addExtension (show (id :: Int)) "pgf"))
+                          , ("name", showJSON (name :: String))
+                          , ("description", showJSON (description :: String))
+                          ]
+
+doUpdateGrammar c mb_pgf id name descr = do
+  r <- liftIO $ handleSql (return . Left) $ do
+         s <- query c ("call updateGrammar("++id++","++toSqlValue name++","++toSqlValue descr++")")
+         [id] <- collectRows (\s -> getFieldValue s "id") s
+         return (Right id)
+  nid <- case r of
+           Right id -> return (id :: Int)
+           Left  e  -> throwCGIError 400 "Saving failed" (lines (show e))
+  path <- pathTranslated
+  case mb_pgf of
+    Just pgf -> if pgf /= BS.empty
+                  then liftIO (BS.writeFile (dropExtension  path </> addExtension (show nid) "pgf") pgf)
+                  else if id == "null"
+                         then throwCGIError 400 "Grammar update failed" []
+                         else return ()
+    Nothing  -> return ()
+  outputHTML ""
+
+doDeleteGrammar c id = do
+  r <- liftIO $ handleSql (return . Left) $ do
+         execute c ("call deleteGrammar("++id++")")
+         return (Right "")
+  case r of
+    Right x -> outputJSONP ([] :: [(String,String)])
+    Left  e -> throwCGIError 400 "Saving failed" (lines (show e))
 
 doSave c mb_id = do
   body <- getBody
@@ -151,20 +209,6 @@ doDelete c ids = do
       mapM_ (\id -> execute c ("DELETE FROM Documents WHERE id = "++toSqlValue id)) ids
   outputJSONP (toJSObject ([] :: [(String,String)]))
 
-doUpdateGrammar c mb_pgf name descr = do
-  r <- liftIO $ handleSql (return . Left) $ do
-         s <- query c ("call updateGrammar(null,"++toSqlValue name++","++toSqlValue descr++")")
-         [id] <- collectRows (\s -> getFieldValue s "id") s
-         return (Right id)
-  id <- case r of
-          Right id -> return (id :: Int)
-          Left  e  -> throwCGIError 400 "Saving failed" (lines (show e))
-  path <- pathTranslated
-  case mb_pgf of
-    Just pgf -> liftIO (BS.writeFile (path </> ".." </> "grammars" </> addExtension (show id) "pgf") pgf)
-    Nothing  -> return ()
-  outputHTML "<H1>Done.</H1>"
-
 dbConnect fpath = do
   [host,db,user,pwd] <- fmap words $ readFile fpath
   connect host db user pwd
@@ -206,4 +250,14 @@ dbInit c =
                  "     UPDATE Grammars gr SET name = name, description=description, modified=NOW() WHERE gr.id = id;\n"++
                  "     select id;\n"++
                  "   END IF;\n"++
+                 "END")
+      execute c "DROP PROCEDURE IF EXISTS deleteGrammar"
+      execute c ("CREATE PROCEDURE deleteGrammar(IN grammarId INTEGER)\n"++
+                 "BEGIN\n"++
+                 "   DELETE FROM Grammars WHERE id = grammarId;\n"++
+                 "END")
+      execute c "DROP PROCEDURE IF EXISTS getGrammars"
+      execute c ("CREATE PROCEDURE getGrammars()\n"++
+                 "BEGIN\n"++
+                 "  SELECT id,name,description FROM Grammars ORDER BY name;\n"++
                  "END")

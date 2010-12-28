@@ -8,12 +8,62 @@ import com.google.gwt.core.client.*;
 public class ContentService {
 	String contentBaseURL;
 	
+	// Event listeners
+	private List<SettingsListener> listeners = new LinkedList<SettingsListener>();
+	private List<GrammarInfo> grammars = null;
+
+	
 	public ContentService(String contentBaseURL) {
 		this.contentBaseURL = contentBaseURL;
 	}
 	
 	public String getBaseURL() {
 		return contentBaseURL;
+	}
+	
+	public void addSettingsListener(SettingsListener listener) {
+		listeners.add(listener);
+	}
+	
+	public void updateAvailableGrammars() {
+		List<Arg> args = new ArrayList<Arg>();
+		args.add(new Arg("command", "grammars"));
+		JSONRequestBuilder.sendRequest(contentBaseURL, args, new GrammarsCallback() {
+			public void onResult(IterableJsArray<ContentService.GrammarInfo> grammars_) {
+				grammars = new ArrayList<GrammarInfo>();
+				for (ContentService.GrammarInfo grammar : grammars_.iterable()) {
+					grammars.add(grammar);
+				}
+				
+				for (SettingsListener listener : listeners) {
+					listener.onAvailableGrammarsChanged();
+				}
+			}
+
+			public void onError(Throwable e) {
+			}
+		});
+	}
+
+	public List<GrammarInfo> getGrammars() {
+		return grammars;
+	}
+
+	public interface GrammarsCallback extends JSONCallback<IterableJsArray<GrammarInfo>> {}
+
+	public static class GrammarInfo extends JavaScriptObject {
+		protected GrammarInfo() { }
+
+		public final native String getURL() /*-{ return this.url; }-*/;
+		public final native String getName() /*-{ return this.name; }-*/;
+		public final native String getDescription() /*-{ return this.description; }-*/;
+	}
+
+	public JSONRequest deleteGrammar(String grammarURL, DeleteCallback callback) {
+		List<Arg> args = new ArrayList<Arg>();
+		args.add(new Arg("url", grammarURL));
+		args.add(new Arg("command", "delete_grammar"));
+		return JSONRequestBuilder.sendRequest(contentBaseURL, args, callback);
 	}
 
 	public JSONRequest save(Object id, String content, SaveCallback callback) {

@@ -5,31 +5,29 @@ import com.google.gwt.user.client.ui.*;
 public class SettingsPanel extends Composite {
 
 	private PGFWrapper pgf;
+	private ContentService contentService;
+	private StatusPopup statusPopup;
 
 	private MyListBox grammarBox;
 	private MyListBox fromLangBox;
 	private MyListBox toLangBox;
 
-	public SettingsPanel (PGFWrapper pgf) {
-		this(pgf, true, true);
-	}
-
-	public SettingsPanel (PGFWrapper pgf, boolean showPGFName, boolean showOutputLanguage) {
+	public SettingsPanel (PGFWrapper pgf, ContentService contentService, StatusPopup statusPopup) {
 		this.pgf = pgf;
-		
+		this.contentService = contentService;
+		this.statusPopup = statusPopup;
+
 		HorizontalPanel settingsPanel = new HorizontalPanel();
 		settingsPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 		settingsPanel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 
-		if (showPGFName) {
-			grammarBox = new MyListBox();
-			grammarBox.addChangeListener(new ChangeListener() {
-				public void onChange(Widget sender) {
-					SettingsPanel.this.pgf.setPGFName(grammarBox.getSelectedValue());
-				}
-			});			
-			settingsPanel.add(new FormWidget("Grammar:", grammarBox));
-		}
+		grammarBox = new MyListBox();
+		grammarBox.addChangeListener(new ChangeListener() {
+			public void onChange(Widget sender) {
+				SettingsPanel.this.pgf.setPGFName(grammarBox.getSelectedValue());
+			}
+		});			
+		settingsPanel.add(new FormWidget("Grammar:", grammarBox));
 
 		fromLangBox = new MyListBox();
 		fromLangBox.addChangeListener(new ChangeListener() {
@@ -39,20 +37,19 @@ public class SettingsPanel extends Composite {
 		});
 		settingsPanel.add(new FormWidget("From:", fromLangBox));
 
-		if (showOutputLanguage) {
-			toLangBox = new MyListBox();
-			toLangBox.addChangeListener(new ChangeListener() {
-				public void onChange(Widget sender) {
-					SettingsPanel.this.pgf.setOutputLanguage(toLangBox.getSelectedValue());
-				}
-			});
-			settingsPanel.add(new FormWidget("To:", toLangBox));
-		}
+		toLangBox = new MyListBox();
+		toLangBox.addChangeListener(new ChangeListener() {
+			public void onChange(Widget sender) {
+				SettingsPanel.this.pgf.setOutputLanguage(toLangBox.getSelectedValue());
+			}
+		});
+		settingsPanel.add(new FormWidget("To:", toLangBox));
 
 		initWidget(settingsPanel);
 		setStylePrimaryName("my-SettingsPanel");
 
 		pgf.addSettingsListener(new MySettingsListener());
+		contentService.addSettingsListener(new MySettingsListener());
 	}
 
 	private static class FormWidget extends HorizontalPanel {
@@ -64,11 +61,15 @@ public class SettingsPanel extends Composite {
 		}
 	}
 	
-	private class MySettingsListener implements PGFWrapper.SettingsListener {
+	private class MySettingsListener implements SettingsListener {
 		public void onAvailableGrammarsChanged() {
 			if (grammarBox != null) {
 				grammarBox.clear();
-				grammarBox.addItems(pgf.getGrammars());
+				
+				for (ContentService.GrammarInfo grammar : contentService.getGrammars()) {
+					grammarBox.addItem(grammar.getName(), grammar.getURL());
+				}
+				pgf.setPGFName(grammarBox.getSelectedValue());
 			}
 		}
 		public void onSelectedGrammarChanged() {
