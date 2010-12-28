@@ -585,6 +585,8 @@ incomplete resource Constructors = open Grammar in {  --%
           = \q,n -> DetCN (DetQuant q NumSg) n ; --%   
       mkNP : Quant -> Num -> CN -> NP   -- these five old men
           = \q,nu,n -> DetCN (DetQuant q nu) n ; --%  
+      mkNP : Quant -> Num -> Ord -> CN -> NP   -- these five best old men --%
+          = \q,nu,or,n -> DetCN (DetQuantOrd q nu or) n ; --%  
       mkNP : Quant -> Num -> N  -> NP   -- these five men
           = \q,nu,n -> DetCN (DetQuant q nu) (UseN n) ; --%  
       mkNP : Det -> CN -> NP      -- the first old man   --:
