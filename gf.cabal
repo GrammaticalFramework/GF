@@ -81,6 +81,8 @@ executable gf
   else
     build-depends: unix
   ghc-options: -O2
+  if impl(ghc>=7.0)
+    ghc-options: -rtsopts
   hs-source-dirs: src/compiler src/runtime/haskell
   extensions:
   main-is: GF.hs
