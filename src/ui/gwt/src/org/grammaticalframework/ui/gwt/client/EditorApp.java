@@ -17,6 +17,7 @@ public class EditorApp implements EntryPoint {
 	protected ContentService contentService;
 	protected PGFWrapper pgf;
 
+	protected SettingsPanel settingsPanel;
 	protected VerticalPanel outputPanel;
 	protected Widget editorPanel;
 	protected BrowsePanel browsePanel;
@@ -221,7 +222,7 @@ public class EditorApp implements EntryPoint {
 		hPanel.setCellHorizontalAlignment(linksPanel,HorizontalPanel.ALIGN_LEFT);
 		linksPanel.selectTab(1);
 
-		Widget settingsPanel = createSettingsPanel();
+		settingsPanel = createSettingsPanel();
 		hPanel.add(settingsPanel);
 		hPanel.setCellHorizontalAlignment(settingsPanel,HorizontalPanel.ALIGN_RIGHT);
 
@@ -231,8 +232,8 @@ public class EditorApp implements EntryPoint {
 		return vPanel;
 	}
 
-	protected Widget createSettingsPanel () {
-		return new SettingsPanel(pgf);
+	protected SettingsPanel createSettingsPanel () {
+		return new SettingsPanel(pgf, contentService, statusPopup);
 	}
 
 	protected Widget createEditorPanel() {
@@ -412,23 +413,11 @@ public class EditorApp implements EntryPoint {
 		return msgHTML;
 	}
 
-	protected void setPGFName (String pgfName) {
-		if (pgfName != null && !pgfName.equals(pgf.getPGFName())) {
-			pgf.setPGFName(pgfName);
-		}
-	}
-
-	protected void setInputLanguage (String inputLanguage) {
-		if (inputLanguage != null && !inputLanguage.equals(pgf.getInputLanguage())) {
-			pgf.setInputLanguage(inputLanguage);
-		}
-	}
-
 	//
 	// Initialization
 	//
 
-	protected class MySettingsListener implements PGFWrapper.SettingsListener {
+	protected class MySettingsListener implements SettingsListener {
 		// Will only happen on load
 		public void onAvailableGrammarsChanged() {
 			if (pgf.getPGFName() == null) {
@@ -459,7 +448,7 @@ public class EditorApp implements EntryPoint {
 			statusPopup.showError(msg,e);
 		}
 	}
-
+	
 	public void onModuleLoad() {
 		statusPopup = new StatusPopup();
 
@@ -467,7 +456,7 @@ public class EditorApp implements EntryPoint {
 		contentService = new ContentService(contentBaseURL);
 		RootPanel.get().add(createUI());
 		pgf.addSettingsListener(new MySettingsListener());
-		pgf.updateAvailableGrammars();
+		contentService.updateAvailableGrammars();
 
 		textPanel.setFocus(true);
 	}

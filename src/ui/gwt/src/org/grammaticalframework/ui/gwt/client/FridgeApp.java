@@ -202,11 +202,11 @@ public class FridgeApp implements EntryPoint {
 		prefixPanel.setStylePrimaryName("my-PrefixPanel");
 		bagPanel = new FridgeBagPanel();
 		outputPanel = new TranslationsPanel();
-		SettingsPanel settingsPanel = new SettingsPanel(pgf, true, false);
+		SettingsPanel settingsPanel = new SettingsPanel(pgf, null, statusPopup);
 		
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-        vPanel.setWidth("100%");
+		vPanel.setWidth("100%");
 		vPanel.add(prefixPanel);
 		vPanel.add(bagPanel);
 
@@ -295,7 +295,7 @@ public class FridgeApp implements EntryPoint {
 	// Initialization
 	//
 
-	protected class MySettingsListener implements PGFWrapper.SettingsListener {
+	protected class MySettingsListener implements SettingsListener {
 		// Will only happen on load
 		public void onAvailableGrammarsChanged() {
 			if (pgf.getPGFName() == null) {

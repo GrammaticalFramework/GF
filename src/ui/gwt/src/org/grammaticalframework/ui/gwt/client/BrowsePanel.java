@@ -234,7 +234,7 @@ public class BrowsePanel extends Composite {
 		}
 	}
 
-	protected class MySettingsListener implements PGFWrapper.SettingsListener {
+	protected class MySettingsListener implements SettingsListener {
 
 		private PGFWrapper pgf;
 

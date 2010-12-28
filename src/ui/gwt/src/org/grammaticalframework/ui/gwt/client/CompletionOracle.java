@@ -28,7 +28,7 @@ public class CompletionOracle extends SuggestOracle {
 	public CompletionOracle (PGFWrapper pgf, ErrorHandler errorHandler) {
 		this.pgf = pgf;
 		this.errorHandler = errorHandler;
-		pgf.addSettingsListener(new PGFWrapper.SettingsListener() {
+		pgf.addSettingsListener(new SettingsListener() {
 			public void onAvailableGrammarsChanged() { clearState(); }
 			public void onSelectedGrammarChanged() { clearState(); }
 			public void onInputLanguageChanged() { clearState(); }

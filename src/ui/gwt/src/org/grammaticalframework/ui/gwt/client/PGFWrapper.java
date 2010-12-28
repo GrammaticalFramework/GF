@@ -100,6 +100,9 @@ public class PGFWrapper {
 	}
 	
 	protected void updateSelectedGrammar () {
+		if (grammarURL == null)
+			return;
+
 		clearCachedInfo();
 		pgf.grammar(grammarURL, new PGF.GrammarCallback() {
 			public void onResult(PGF.Grammar grammar) {
@@ -176,7 +179,7 @@ public class PGFWrapper {
 
 	public void setPGFName(String pgfName) {
 		this.pgfName = pgfName;
-		this.grammarURL = baseURL + "/" + pgfName;
+		this.grammarURL = (pgfName == null) ? null : baseURL + "/" + pgfName;
 		this.inputLanguage = null;
 		this.outputLanguage = null;
 		this.cat = null;
@@ -262,15 +265,6 @@ public class PGFWrapper {
 	//
 	// Listeners
 	//
-	
-	public interface SettingsListener {
-		public void onAvailableGrammarsChanged();
-		public void onSelectedGrammarChanged();
-		public void onInputLanguageChanged();
-		public void onOutputLanguageChanged();
-		public void onStartCategoryChanged();
-		public void onSettingsError(String msg, Throwable e);
-	}
 	
 	public static class SettingsAdapter implements SettingsListener {
 		public void onAvailableGrammarsChanged() {}
