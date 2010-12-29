@@ -56,7 +56,7 @@ mkCompound compMap (w,ent) =
     Just (e,b) -> return (w, ent {
             word = word e,
             tn = tn e, 
-            par = "compoundNK " ++ par e ++ " " ++ quoted b,
+            par = unwords ["compoundNK",par e,quoted b],
             isDummy = tn e == 0
             }
           )
@@ -112,7 +112,9 @@ mkRules e = do
     | otherwise = putStrLn 
 
 mkFun fun cat = unwords ["fun",fun,":",cat,";"]
-mkLin fun par w = unwords ["lin",fun,"=",par,quoted w,";"]
+mkLin fun par w = case words par of
+  f@"compoundNK":p:v:_ -> unwords ["lin",fun,"=",f,v,"("++ p,quoted w ++")",";"]
+  _ -> unwords ["lin",fun,"=",par,quoted w,";"]
 
 mkId = concatMap trim where
   trim c = case fromEnum c of

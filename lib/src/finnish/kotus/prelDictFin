@@ -2,6 +2,9 @@
 
 concrete DictFin of DictFinAbs = open MorphoFin, Kotus, Prelude in {
 
+-- extracted from http://kaino.kotus.fi/sanat/nykysuomi/, licensed under LGPL
+-- compounds in DictCompFin
+
 flags coding = utf8 ;
 
 lincat NK = NForms ; AK = NForms ; VK = VForms ; AdvK = SS ;
