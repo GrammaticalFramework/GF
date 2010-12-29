@@ -2,5 +2,8 @@
 
 concrete DictCompFin of DictCompFinAbs = DictFin ** open MorphoFin, Kotus, Prelude in {
 
+-- extracted from http://kaino.kotus.fi/sanat/nykysuomi/, licensed under LGPL
+-- non-compounds in DictFin (inherited)
+
 flags coding = utf8 ;
 

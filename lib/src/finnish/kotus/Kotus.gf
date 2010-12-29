@@ -299,7 +299,11 @@ oper
     = c99 ; -- dummy
 
 -- compound nouns, latter part inflected
-  compoundNK : (Str -> NForms) -> Str -> Str -> NForms = \d,x,y -> 
+  compoundNK : Str -> NForms -> NForms = \x,y -> 
+    \\v => x + y ! v ;
+
+--- this is a lot slower
+  fcompoundNK : (Str -> NForms) -> Str -> Str -> NForms = \d,x,y -> 
     let ys = d y in \\v => x + ys ! v ;
 
 }
