@@ -6,7 +6,8 @@ main = do
   let funSet = S.fromList (map (head . words) (lines kotus))
   mapM_ putStrLn $ concatMap (prEntry funSet . mkOne) $ lines src
 
-stoplist = S.fromList ["ei","olla","ei_ihme","eikä"]
+stoplist = S.fromList 
+  ["ei","olla","ei_ihme","eikä","ettei","ellei","vaikkei","muttei","miksei","jollei","jottei"]
 
 prEntry funSet (f,c,w,p@(k,n),i) = if n == 0 then [] else [
    unwords ["fun",f, " : ", c,";"],
