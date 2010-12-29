@@ -330,8 +330,10 @@ incomplete resource Constructors = open Grammar in {  --%
       = \t,p -> TUseCl t ASimul p ;   --%  
       mkS : Ant -> Pol -> Cl -> S   --%  
       = \a,p -> TUseCl TPres a p ;   --%  
-      mkS : (Tense) -> (Ant) -> (Pol) -> Cl  -> S -- she wouldn't have slept  --:
+      mkS : (Tense) -> (Ant) -> (Pol) -> Cl  -> S -- she wouldn't have slept
       = \t,a -> TUseCl t a ;   --%  
+      mkS : Temp -> Pol -> Cl -> S -- she wouldn't have slept  --:
+      = UseCl ; --%
 
 -- Sentences can be combined with conjunctions. This can apply to a pair
 -- of sentences, but also to a list of more than two.

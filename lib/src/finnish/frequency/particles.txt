@@ -1,0 +1,32 @@
+-- AR 29/12/2010
+
+Pas ::= pas | pa | han | kos | ko | kohan | pahan -- free
+Kin ::= kin/kaan                  -- dep. on polarity
+
+-- declaratives and questions
+
+ari    Pas? ei? (juo Kin maitoa nyt | juo maitoa Kin nyt | juo maitoa nyt Kin?)
+maitoa Pas? ei? (ari Kin juo    nyt | ari juo    Kin nyt | ari juo    nyt Kin?)
+nyt    Pas? ei? (ari Kin juo maitoa | ari juo Kin maitoa | ari juo    maitoa Kin?)
+
+ari    Kin  Pas? ei? juo maitoa nyt 
+maitoa Kin  Pas? ari ei? juo nyt
+nyt    Kin  Pas? ari ei? juo maitoa
+
+juo    Pas? (ari Kin maitoa nyt | ari maitoa Kin nyt | ari maitoa nyt Kin?)
+ei     Pas? (ari Kin juo maitoa nyt | ari juo Kin maitoa nyt | ari juo maitoa Kin nyt |
+             ari juo maitoa nyt Kin?)
+
+-- imperatives
+
+juo    Pas-? (ari Kin maitoa nyt | ari maitoa Kin nyt | ari maitoa nyt Kin?)
+älä    Pas-? (ari Kin juo maitoa nyt | ari juo Kin maitoa nyt | ari juo maitoa Kin nyt 
+              | ari juo maitoa nyt Kin?)
+
+Pas- ::= pa | pas | han | pahan 
+
+-- negation word
+
+*enkään, *etkään, *eikään, ?emmekään, ?ettekään, ?eivätkään (quite some Google hits)
+
+
