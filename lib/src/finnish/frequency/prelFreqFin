@@ -1,0 +1,6 @@
+--# -path=.:alltenses:..
+
+concrete FreqFin of FreqFinAbs = CatFin, StructuralFin ** open ParadigmsFin, DictCompFin in {
+
+flags coding = utf8 ;
+
