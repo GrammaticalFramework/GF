@@ -2,6 +2,8 @@
 
 resource Kotus = open MorphoFin, Prelude in {
 
+-- interpretations of paradigms in KOTUS word list, used in DictFin.
+
 oper vowelHarmony = vowHarmony ;
 
 oper
@@ -292,10 +294,10 @@ oper
     = c56A ; ----
   c78A : Str -> VForms -- 1 tuikkaa
     = c56A ; ----
-  c99 : Str -> {s : Str} -- 5453 öykkärimäisesti
-    = \s -> {s = s} ;
+  c99 : Str -> Str -- 5453 öykkärimäisesti
+    = \s -> s ;
 
-  c101 : Str -> {s : Str} -- pronouns etc
+  c101 : Str -> Str -- pronouns etc
     = c99 ; -- dummy
 
 -- compound nouns, latter part inflected

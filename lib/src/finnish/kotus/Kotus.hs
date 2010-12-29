@@ -113,8 +113,8 @@ mkRules e = do
 
 mkFun fun cat = unwords ["fun",fun,":",cat,";"]
 mkLin fun par w = case words par of
-  f@"compoundNK":p:v:_ -> unwords ["lin",fun,"=",f,v,"("++ p,quoted w ++")",";"]
-  _ -> unwords ["lin",fun,"=",par,quoted w,";"]
+  f@"compoundNK":p:v:_ -> unwords ["lin",fun,"=","{s","=",f,v,"("++ p,quoted w ++")}",";"]
+  _ -> unwords ["lin",fun,"=","{s","=",par,quoted w ++"}",";"]
 
 mkId = concatMap trim where
   trim c = case fromEnum c of

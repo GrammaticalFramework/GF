@@ -7,5 +7,5 @@ concrete DictFin of DictFinAbs = open MorphoFin, Kotus, Prelude in {
 
 flags coding = utf8 ;
 
-lincat NK = NForms ; AK = NForms ; VK = VForms ; AdvK = SS ;
+lincat NK = {s : NForms} ; AK = {s : NForms} ; VK = {s : VForms} ; AdvK = {s : Str} ;
 

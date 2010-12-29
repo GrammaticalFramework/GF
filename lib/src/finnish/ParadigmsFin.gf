@@ -69,6 +69,11 @@ oper
   postGenPrep :         Str -> Prep ;  -- genitive postposition, e.g. "takana"
   casePrep    : Case ->        Prep ;  -- just case, e.g. adessive
 
+  NK : Type ;   -- Noun from DictFin (Kotus)
+  AK : Type ;   -- Adjective from DictFin (Kotus)
+  VK : Type ;   -- Verb from DictFin (Kotus)
+  AdvK : Type ; -- Adverb from DictFin (Kotus)
+
 --2 Nouns
 
 -- The worst case gives ten forms.
@@ -97,6 +102,7 @@ oper
     mkN : (olo,n,a,na,oon,jen,ja,ina,issa,ihin : Str) -> N ; -- worst case, 10 forms
     mkN : (pika : Str) -> (juna  : N) -> N ; -- compound with invariable prefix
     mkN : (oma : N)    -> (tunto : N) -> N ; -- compound with inflecting prefix
+    mkN : NK -> N ;  -- noun from DictFin (Kotus)
   } ;
 
 -- Nouns used as functions need a case, of which the default is
@@ -131,6 +137,7 @@ oper
     mkA : N -> A ;    -- any noun made into adjective
     mkA : N -> (kivempi,kivin : Str) -> A ; -- deviating comparison forms
     mkA : (hyva,prmpi,pras : N) -> (hyvin,pmmin,prhten : Str) -> A ; -- worst case adj
+    mkA : AK -> A ;  -- adjective from DictFin (Kotus)
   } ;
 
 -- Two-place adjectives need a case for the second argument.
@@ -152,6 +159,7 @@ oper
     mkV : (huutaa,huusi : Str) -> V ; -- deviating past 3sg
     mkV : (huutaa,huudan,huusi : Str) -> V ; -- also deviating pres. 1sg
     mkV : (huutaa,dan,taa,tavat,takaa,detaan,sin,si,sisi,tanut,dettu,tanee : Str) -> V ; -- worst-case verb
+    mkV : VK -> V ;  -- verb from DictFin (Kotus)
   } ;
 
 -- All the patterns above have $nominative$ as subject case.
@@ -253,6 +261,12 @@ oper
     \c -> {c = NPCase c ; s = [] ; isPre = True ; lock_Prep = <>} ;
   accPrep =  {c = NPAcc ; s = [] ; isPre = True ; lock_Prep = <>} ;
 
+  NK = {s : NForms ; lock_NK : {}} ;
+  AK = {s : NForms ; lock_AK : {}} ;
+  VK = {s : VForms ; lock_VK : {}} ;
+  AdvK = {s : Str ; lock_AdvK : {}} ;
+
+
   mkN = overload {
     mkN : (talo : Str) -> N = mk1N ;
     --  \s -> nForms2N (nForms1 s) ;
@@ -267,6 +281,7 @@ oper
         : Str) -> N = mk10N ;
     mkN : (sora : Str) -> (tie : N) -> N = mkStrN ;
     mkN : (oma,tunto : N) -> N = mkNN ;
+    mkN : (sana : NK) -> N = \w -> nForms2N w.s ;
   } ;
 
   mk1A : Str -> A = \jalo -> aForms2A (nforms2aforms (nForms1 jalo)) ;
@@ -446,6 +461,8 @@ oper
     mkA : Str -> A  = mkA_1 ;
     mkA : N -> A = \n -> noun2adjDeg n ** {lock_A = <>} ;
     mkA : N -> (kivempaa,kivinta : Str) -> A = regAdjective ;
+    mkA : (sana : AK) -> A = \w -> noun2adjDeg (nForms2N w.s) ;
+
 --    mkA : (hyva,parempi,paras : N) -> (hyvin,paremmin,parhaiten : Str) -> A ;
   } ;
 
@@ -483,6 +500,7 @@ oper
     mkV : (
       huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
       huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = mk12V ;
+    mkV : (sana : VK) -> V = \w -> vforms2V w.s ** {sc = NPCase Nom ; lock_V = <>} ;
   } ;
 
   mk1V : Str -> V = \s -> 
@@ -566,7 +584,10 @@ oper
   caseV2 : V -> Case -> V2 = \v,c -> mk2V2 v (casePrep c) ; 
   dirV2 v = mk2V2 v accPrep ;
 
-  mkAdv : Str -> Adv = \s -> {s = s ; lock_Adv = <>} ;
+  mkAdv = overload { 
+    mkAdv : Str -> Adv = \s -> {s = s ; lock_Adv = <>} ;
+    mkAdv : AdvK -> Adv = \s -> {s = s.s ; lock_Adv = <>} ;
+    } ;
 
   mkV2 = overload {
     mkV2 : Str -> V2 = \s -> dirV2 (mk1V s) ;

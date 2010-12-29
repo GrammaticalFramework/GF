@@ -1,11 +1,19 @@
-main = interact (unlines . map mkOne . lines)
+main = interact (unlines . concatMap (prEntry . mkOne) . lines)
+
+prEntry (f,c,w) = [
+   unwords [f, ":", c]
+
+  ]
 
 mkOne line = case words line of
-  _:_:_:w:c0:_ -> let c = cat c0 in unwords [mkId w ++ "_" ++ c, ":", c]
+  _:_:_:w:c0:_ -> let c = mkCat c0 in (mkFun w c, c, w, mkLin c)
   _ -> []
 
-cat c = case c of
-  "(adjektiivi)" -> "A"
+mkCat = fst . catlin
+mkLin = snd . catlin
+
+catlin c = case c of
+  "(adjektiivi)" -> "A", 
   "(adverbi)" -> "Adv"
   "(erisnimi)" -> "PN"
   "(interjektio)" -> "Interj"
@@ -18,6 +26,7 @@ cat c = case c of
   "(verbi)" -> "V"
   _ -> "Junk"
 
+mkFun w c = mkId w ++ "_" ++ c
 
 mkId = concatMap trim where
   trim c = case fromEnum c of
