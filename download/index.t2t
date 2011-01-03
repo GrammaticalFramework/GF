@@ -15,6 +15,8 @@ What's new? See the [Release notes release-3.2.html].
 
 
 | **Platform** | **Download** | **How to install**
+| Ubuntu 10.10 (32-bit) | [gf_3.2-4_i386.deb gf_3.2-4_i386.deb] | Double-click on the package icon, or use ``sudo dpkg -i gf_3.2-4_i386.deb``
+| Ubuntu 10.10 (64-bit) | [gf_3.2-4_amd64.deb gf_3.2-4_amd64.deb] | Double-click on the package icon, or use ``sudo dpkg -i gf_3.2-4_amd64.deb``
 | Linux (32-bit) | [gf-3.2-bin-i386-linux.tar.gz gf-3.2-bin-i386-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-i386-linux.tar.gz``
 | Linux (64-bit) | [gf-3.2-bin-x86_64-linux.tar.gz gf-3.2-bin-x86_64-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-x86_64-linux.tar.gz``
 %| MacOS X | [gf-3.2-leopard.pkg gf-3.2-leopard.pkg] | Double-click on the package icon and follow the instructions
