@@ -81,11 +81,25 @@ them manually. Here is one way to do this:
 - [GF 3.1 old-index.html] (December 2009).
 
 
-==Latest developer code==
+==Installing from the latest developer code==
+
+The first time:
 
 ```
-  darcs get --lazy http://www.grammaticalframework.org/
+  darcs get --lazy http://www.grammaticalframework.org/ GF
+  cd GF
+  cabal install
 ```
+
+Subsequently:
+
+```
+  cd GF
+  darcs pull -a
+  cabal install
+```
+
+The above notes for installing from source apply also in this case.
 
 --------------------
 
