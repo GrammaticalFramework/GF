@@ -8,3 +8,4 @@ ai <\x -> x : ({m},n : Node) -> Node>
 ai <n1 : ({m} : Node) -> Node>
 ai <? : ({m} : Node) -> Node>
 ai <link id : Path n1 n1>
+pt -compute <\{n} -> n : ({n} : Node) -> Node> {n1}

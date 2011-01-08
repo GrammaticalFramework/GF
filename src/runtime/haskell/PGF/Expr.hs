@@ -354,7 +354,9 @@ apply sig env (EFun f)     vs     = case Map.lookup f (fst sig) of
                                                              Nothing  -> VApp f vs
                                       Nothing           -> error ("unknown function "++showCId f)
 apply sig env (EApp e1 e2) vs     = apply sig env e1 (eval sig env e2 : vs)
-apply sig env (EAbs _ x e) (v:vs) = apply sig (v:env) e vs
+apply sig env (EAbs b x e) (v:vs) = case (b,v) of
+                                      (Implicit,VImplArg v) -> apply sig (v:env) e vs
+                                      (Explicit,         v) -> apply sig (v:env) e vs
 apply sig env (EMeta i)    vs     = case snd sig i of
                                       Just e  -> apply sig env e vs
                                       Nothing -> VMeta i env vs
@@ -369,7 +371,9 @@ applyValue sig (VMeta i env vs0)         vs       = VMeta i env (vs0++vs)
 applyValue sig (VGen  i vs0)             vs       = VGen  i (vs0++vs)
 applyValue sig (VSusp i env vs0 k)       vs       = VSusp i env vs0 (\v -> applyValue sig (k v) vs)
 applyValue sig (VConst f vs0)            vs       = VConst f (vs0++vs)
-applyValue sig (VClosure env (EAbs b x e)) (v:vs) = apply sig (v:env) e vs
+applyValue sig (VClosure env (EAbs b x e)) (v:vs) = case (b,v) of
+                                                      (Implicit,VImplArg v) -> apply sig (v:env) e vs
+                                                      (Explicit,         v) -> apply sig (v:env) e vs
 applyValue sig (VImplArg _)              vs       = error "implicit argument in function position"
 
 -----------------------------------------------------
