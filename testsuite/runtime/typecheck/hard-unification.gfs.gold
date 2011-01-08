@@ -1,5 +1,6 @@
-Expression: s (\v0 -> v0) (app (\v0 -> v0)) ex
-Type:       S
+Expression:  s (\v0 -> v0) (app (\v0 -> v0)) ex
+Type:        S
+Probability: 1.0
 
 Meta variable(s) ?2 should be resolved
 in the expression: s ?2 (app ?2) ?4

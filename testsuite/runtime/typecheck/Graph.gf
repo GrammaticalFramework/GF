@@ -16,4 +16,6 @@ fun
   
   link : ({n,m} : Node) -> Link n m -> Path n m ;
   join : ({n,p,m} : Node) -> Link n p -> Path p m -> Path n m ;
+  
+  id : ({n} : Node) -> Link n n ;
 }

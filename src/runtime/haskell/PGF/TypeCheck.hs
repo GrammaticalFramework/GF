@@ -351,6 +351,7 @@ tcExpr scope (EMeta _) tty = do
   return (EMeta i)
 tcExpr scope e0        tty = do
   (e0,tty0) <- infExpr scope e0
+  (e0,tty0) <- appImplArg scope e0 tty0
   i <- newGuardedMeta e0
   eqType scope (scopeSize scope) i tty tty0
   return (EMeta i)
@@ -423,6 +424,14 @@ tcArg scope e1 e2 delta ty0@(DTyp ((Implicit,x,ty):hs) c es) = do
   if x == wildCId
     then tcArg scope (EApp e1 (EImplArg (EMeta i))) e2                                delta  (DTyp hs c es)
     else tcArg scope (EApp e1 (EImplArg (EMeta i))) e2 (VMeta i (scopeEnv scope) [] : delta) (DTyp hs c es)
+
+appImplArg scope e (TTyp delta (DTyp ((Implicit,x,ty1):hypos) cat es)) = do
+  i <- newMeta scope (TTyp delta ty1)
+  let delta' = if x == wildCId
+                 then                               delta  
+                 else VMeta i (scopeEnv scope) [] : delta
+  appImplArg scope (EApp e (EImplArg (EMeta i))) (TTyp delta' (DTyp hypos cat es))
+appImplArg scope e tty                                                 = return (e,tty)
 
 -----------------------------------------------------
 -- eqType
