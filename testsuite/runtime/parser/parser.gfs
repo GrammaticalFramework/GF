@@ -1,0 +1,3 @@
+i -src testsuite/runtime/parser/DummyNatCnc.gf
+p -cat=Nat -depth=3 "z"
+p -cat=Nat -depth=2 "z z"
