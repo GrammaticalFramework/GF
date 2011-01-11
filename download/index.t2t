@@ -4,7 +4,7 @@ Grammatical Framework Download and Installation
 %!style:../css/style.css
 %!postproc(html): <TD><B> <TH>
 %!postproc(html): </B></TD> </TH>
-%!postproc(html): <H1> <H1><IMG src="../doc/Logos/gf0.png">
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
 **GF 3.2** was released on 23 December 2010.
 
