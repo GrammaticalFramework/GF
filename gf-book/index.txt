@@ -1,0 +1,101 @@
+Grammatical Framework: Programming with Multilingual Grammars
+Aarne Ranta
+**Web page work in progress**
+
+
+This is the web page of the book 
+- Aarne Ranta,
+  //Grammatical Framework: Programming with Multilingual Grammars//,
+  CSLI Publications, 
+  Stanford, 
+  2011 (to appear).
+
+
+==Book description==
+
+Grammars of natural languages are complex systems, and their 
+computer implementation requires both programming skills and 
+linguistic knowledge, especially when dealing with other languages
+than English. This book makes such tasks accessible for a wide 
+range of programmers. It introduces GF (Grammatical Framework),
+which is a programming language designed for writing grammars, which
+may moreover address several languages in parallel. 
+The book shows how to write grammars in GF and use them in applications 
+such as tourist phrasebooks, spoken dialogue systems, and natural 
+language interfaces. The examples and exercises address several 
+languages, and the readers are guided to look at their own languages 
+from the computational perspective.
+
+With an emphasis on good engineering, the book promotes modularity
+and division of labour - in particular, the use of libraries. It 
+introduces the GF Resource Grammar Library, which currently addresses 
+16 languages. This number is constantly growing due to contributions 
+from the international GF community. The library makes it painless to 
+build applications and to port them to new languages. The book 
+introduces a wide range of such applications, which run on platforms 
+ranging from web servers to mobile phones. But the book also gives 
+guidance for those readers who want to understand the underlying 
+linguistics and implement resource grammars for new languages.
+
+The book starts with a hands-on tutorial, continues with a selection 
+of advanced topics, and ends with a complete reference manual 
+of GF. Requiring very little background knowledge, it is accessible 
+for second-year students that have experience with computers and an 
+interest for languages. At the same time, its novel and advanced 
+material makes it interesting for senior researchers in computer science, 
+linguistics, and related fields. 
+
+
+==Publisher's information==
+
+Forthcoming at http://www-csli.stanford.edu/pubs/
+
+==How to cite==
+
+```
+@Book{ranta-2011,
+  author = {Aarne Ranta},
+  title =  {{Grammatical Framework:
+             Programming with Multilingual Grammars}},
+  publisher = {{CSLI Publications}},
+  year = {2011},
+  note = "to appear"
+}
+```
+
+==Table of Contents==
+
+[Preliminary Table of Contents toc-gf-book.txt]
+
+
+==Supporting material==
+
+Slides for teaching the book chapter by chapter are forthcoming. 
+The following should be useful before that.
+- [GF Tutorial ../doc/tutorial/gf-tutorial.html]: programmer-oriented,
+  covering parts of chapters 2-8 
+- [GF Resource Tutorial ../doc/gf-lrec-2010.pdf]: linguist-oriented,
+  covering parts of chapters 2-5, 9-10
+
+
+[Code examples ./examples]
+
+Demos 
+- [on-line translator http://www.grammaticalframework.org:41296/minibar/minibar.html] (Section 7.12)
+- [syntax editor http://www.grammaticalframework.org/demos/resource-api/editor.html] (Section 7.13)
+- [multimodal dialogue system http://www.youtube.com/watch?v=1bfaYHWS6zU] (Section 7.15)
+
+
+[Works mentioned in references http://www.grammaticalframework.org/doc/gf-bibliography.html],
+download links to more works forthcoming.
+
+[Resource Grammar Library API http://www.grammaticalframework.org/lib/doc/synopsis.html]
+
+[Sources and binaries http://www.grammaticalframework.org/download] 
+for GF 3.2, which exactly matches the book.
+
+GF Home Page: http://www.grammaticalframework.org/
+
+Author's email: aarne'at'chalmers'dot'se
+
+Author's home page: http://www.cse.chalmers.se/~aarne/

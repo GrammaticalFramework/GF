@@ -1,0 +1,263 @@
+1 Introduction
+1.1 What this book is about 
+1.2 How to use this book 
+1.3 The role of grammars in language processing 
+1.4 The cost of grammars 
+1.5 Multilinguality 
+1.6 Semantic actions and interoperability 
+1.7 Application grammars and resource grammars 
+1.8 History of GF and its applications 
+1.9 Related work 
+
+part I A GF Tutorial
+
+2 Basic concepts of multilingual grammars 
+2.1 The BNF grammar format 
+2.2 Using the GF system 
+2.3 Testing a grammar in the GF system 
+2.4 A BNF grammar for Italian 
+2.5 BNF grammars and translation 
+2.6 Abstract and concrete syntax 
+2.7 Translating in GF 
+2.8 The structure of grammar modules 
+2.9 On the limitations of BNF grammars 
+2.10 Suppression and metavariables 
+2.11 Free variation 
+2.12 Ambiguity 
+2.13 Remaining problems 
+2.14 Graph-based visualization and shell escapes 
+2.15 Lexing and unlexing 
+2.16 Character encoding 
+
+3 Parameters, tables, and records 
+3.1 The problem of morphological variation 
+3.2 Parameters and tables 
+3.3 Variable vs. inherent features 
+3.4 Records and record types 
+3.5 Linearization types and agreement 
+3.6 Functional programming in GF: operation definitions 
+3.7 The Food grammar revisited 
+3.8 Testing inflection and operations in GF 
+3.9 Partial application 
+3.10 Discontinuous constituents 
+3.11 Non-concatenative morphology 
+
+4 Modular and scalable grammar writing 
+4.1 Reusable resource modules 
+4.2 Data abstraction 
+4.3 Case expressions and string matching 
+4.4 Smart paradigms 
+4.5 Arabic morphology revisited 
+4.6 Separating operation types and definitions 
+4.7 Overloading of operations 
+4.8 Module extension and inheritance 
+4.9 Inheritance and opening 
+4.10 Dependency graphs 
+4.11 Algebraic datatypes for parameters 
+4.12 Record extension and subtyping 
+4.13 Tuples and product types 
+4.14 Prefix-dependent choices and pattern macros 
+4.15 Strings at compile time vs. run time 
+
+5 Using the Resource Grammar Library 
+5.1 The purpose and coverage of the library 
+5.2 Lexical vs. phrasal rules 
+5.3 Lexical categories and rules 
+5.4 Phrasal categories and rules 
+5.5 The resource API 
+5.6 The library path 
+5.7 Example: English 
+5.8 Functor implementation of multilingual grammars 
+5.9 Interfaces and instances 
+5.10 A design pattern for multilingual grammars 
+5.11 Division of labour revisited 
+5.12 Overriding a functor 
+5.13 Compile-time transfer 
+5.14 The resource grammar as a linguistic ontology 
+5.15 A tour of the resource API 
+5.16 Flattening of constructions 
+5.17 Tense and polarity 
+5.18 Browsing the library 
+
+6 Semantic actions and conditions in abstract syntax 
+6.1 GF as a logical framework 
+6.2 Dependent types 
+6.3 Selectional restrictions 
+6.4 Polymorphism 
+6.5 Dependent types in concrete syntax 
+6.6 Proof objects 
+6.7 Proof-carrying documents 
+6.8 Restricted polymorphism 
+6.9 Variable bindings and higher-order abstract syntax 
+6.10 Anaphoric expressions 
+6.11 Semantic definitions 
+6.12 Intensional and extensional equality 
+6.13 Semantic actions and run-time transfer 
+6.14 Predefined categories 
+6.15 Probabilistic GF grammars 
+
+part II Larger Grammars and Applications
+
+7 Embedded grammars and code generation 
+7.1 The portable grammar format 
+7.2 The embedded interpreter and its API 
+7.3 Embedded GF applications in Haskell 
+7.4 The module PGF 
+7.5 A stand-alone translator 
+7.6 A translator loop 
+7.7 A question-answer system 
+7.8 Exporting GF datatypes 
+7.9 Putting it all together 
+7.10 Web server applications 
+7.11 Embedded grammars in other host languages 
+7.12 Multilingual syntax editing 
+7.13 Language models for speech recognition 
+7.14 Statistical language models 
+7.15 Multimodal dialogue systems 
+
+8 Interfacing formal and natural languages 
+8.1 Arithmetic expressions 
+8.2 Code generation as linearization 
+8.3 Programs with variables 
+8.4 The concrete syntax of assignments 
+8.5 A liberal syntax of variables 
+8.6 Is GF useful for defining formal languages? 
+8.7 Natural language generation from logic 
+8.8 Logical semantics of natural language 
+8.9 Grammars for fractals 
+
+9 Getting started with resource grammar programming 
+9.1 Overview 
+9.2 The miniature resource grammar 
+9.3 Feature design 
+9.4 Predication 
+9.5 Complementation 
+9.6 Determination 
+9.7 Modification 
+9.8 Lexical insertion 
+9.9 The miniature resource in Italian 
+9.10 Implementing morphology 
+9.11 Implementing modification and determination 
+9.12 Implementing verb phrases and complementation 
+9.13 Implementing predication 
+9.14 Implementing the rest 
+9.15 Coordination and extraction 
+
+10 Extending the Resource Grammar Library 
+10.1 The module structure of a resource grammar 
+10.2 Effort statistics 
+10.3 Workflow for a new language 
+10.4 Reusing code from the miniature resource 
+10.5 The development-test cycle 
+10.6 Non-ASCII alphabets and transliterations 
+10.7 Coding discipline 
+10.8 Functors in the resource grammar 
+10.9 Widening the coverage for parsing text 
+10.10 Bootstrapping a resource lexicon 
+
+A A miniature resource grammar 
+A.1 Abstract syntax 
+A.2 Auxiliary resource module for Italian 
+A.3 Italian concrete syntax 
+A.4 Morphological paradigms API for Italian 
+A.5 Test lexicon 
+A.6 Syntax API 
+
+B A glossary of linguistic terms 
+
+part III GF Reference Manual
+
+C The GF Programming Language 
+
+C.1 Overview of GF 
+C.2 The module system 
+C.2.1 Top-level and supplementary module structure 
+C.2.2 Compilation units 
+C.2.3 Names 
+C.2.4 The structure of a module 
+C.2.5 Module types, headers, and bodies 
+C.2.6 Digression: the logic of module types 
+C.2.7 Inheritance 
+C.2.8 Opening 
+C.2.9 Name resolution 
+C.2.10 Functor instantiations 
+C.2.11 Completeness 
+C.3 Judgements 
+C.3.1 Overview of the forms of judgement 
+C.3.2 Category declarations, cat  
+C.3.3 Hypotheses and contexts 
+C.3.4 Function declarations, fun  
+C.3.5 Function definitions, def  
+C.3.6 Data constructor declarations, data  
+C.3.7 The semantic status of an abstract syntax function 
+C.3.8 Linearization type definitions, lincat  
+C.3.9 Linearization definitions, lin  
+C.3.10 Linearization default definitions, lindef  
+C.3.11 Printname definitions, printname cat/fun  
+C.3.12 Parameter type definitions, param  
+C.3.13 Parameter values 
+C.3.14 Operation definitions, oper  
+C.3.15 Operation overloading 
+C.3.16 Flag definitions, flags  
+C.4 Types and expressions 
+C.4.1 Overview of expression forms 
+C.4.2 The functional fragment: expressions in abstract syntax 
+C.4.3 List categories 
+C.4.4 Conversions 
+C.4.5 Syntax trees 
+C.4.6 Predefined types in abstract syntax 
+C.4.7 Overview of expressions in concrete syntax 
+C.4.8 Values, canonical forms, and run-time variables 
+C.4.9 Token lists, tokens, and strings 
+C.4.10 Records and record types 
+C.4.11 Subtyping 
+C.4.12 Tables and table types 
+C.4.13 Pattern matching 
+C.4.14 Free variation 
+C.4.15 Local definitions 
+C.4.16 Function applications in concrete syntax 
+C.4.17 Reusing top-level grammars as resources 
+C.4.18 Predefined concrete syntax types 
+C.4.19 Predefined concrete syntax operations 
+C.5 Flags and pragmas 
+C.5.1 Some flags and their values 
+C.5.2 Compiler pragmas 
+C.6 The grammar of GF 
+C.6.1 The lexical structure of GF 
+C.6.2 The syntactic structure of GF 
+
+D The GF Resource Grammar Library 
+D.1 The category system 
+D.1.1 Phrasal and closed lexical categories 
+D.1.2 Open lexical categories 
+D.2 Syntax rules 
+D.2.1 Suprasentential level: texts and utterances 
+D.2.2 Sentential level: polarity, tense, and mood 
+D.2.3 Predication, complementation, and extraction 
+D.2.4 Question and relative clause formation 
+D.2.5 Interrogative and relative pronouns 
+D.2.6 Noun phrases and determiners 
+D.2.7 The numeral system 
+D.2.8 Common nouns, adjectives, and adverbs 
+D.2.9 Coordination 
+D.2.10 Structural words 
+D.3 Lexical Paradigms 
+D.3.1 Paradigms for regular words 
+D.3.2 Paradigms for verb, adjective, and noun subcategories 
+D.4 Other library modules 
+D.4.1 The Prelude module 
+D.4.2 The Formal module 
+D.4.3 The Symbolic module 
+D.4.4 The Combinators module 
+
+E The GF Software System 
+E.1 The GF shell 
+E.2 The GF batch compiler 
+
+F Bibliography 
+F.1 Publications on GF 
+F.2 Background and related work 
+
+Index
+
+

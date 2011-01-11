@@ -28,6 +28,7 @@ presSymbolPath = "" -- "-path=.:abstract:present:common:romance:scandinavian" --
 -- we also give the functors implied
  
 langsCoding = [
+  (("afrikaans","Afr"),""),
   (("amharic",  "Amh"),""),
   (("arabic",   "Ara"),""),
   (("bulgarian","Bul"),""),
