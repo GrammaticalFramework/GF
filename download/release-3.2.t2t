@@ -21,10 +21,11 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 %- language quiz
 - The Resource Grammar Library now supports 16 languages and has an
   [updated synopsis ../lib/doc/synopsis.html].
-- The darcs repo is now availble from ``www.grammaticalframework.org`` and
+- The darcs repo is now available from ``www.grammaticalframework.org`` and
   should be a lot faster than ``code.haskell.org``.
-- Build of web services simplified and a instantly usable demo is included
-  in the binary distribution (see [Quickstart ../doc/gf-quickstart.html]).
+- Build of the web services is simplified and an instantly usable demo is
+  included in the binary distribution
+  (see [Quickstart ../doc/gf-quickstart.html]).
 - Clarified license scheme.
 - ...
 
