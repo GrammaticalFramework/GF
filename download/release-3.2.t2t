@@ -14,7 +14,7 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 - Faster handling of grammars with big lexicons.
 - Dependent types.
 - Exhaustive random generation with dependent types.
-- Bracketed strings data structure.
+- [Bracketed strings data structure http://code.google.com/p/grammatical-framework/wiki/BracketingAPI].
 %- example based
 - Probabilities in PGF files.
 %- giza alignments
