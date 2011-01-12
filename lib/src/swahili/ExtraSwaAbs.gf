@@ -1,0 +1,4 @@
+abstract ExtraSwaAbs = Extra ** {
+
+
+}
