@@ -38,6 +38,7 @@ are marked in the table
 | Ron   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *RE
 | Rus   | +     | +    | ++    | +   | +    | +   | -    | -     | -    | JK
 | Spa   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,IA,TS
+| Swa   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *WN, JM
 | Swe   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,MF
 | Tha   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
 | Tsn   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *LPs,AB
@@ -85,6 +86,7 @@ JK Janna Khegai,
 JS Jordi Saludes,
 KA Krasimir Angelov,
 KP Kuchi Prasad,
+JM Juliet Mutahi,
 LPj Laurette Pretorius Jr,
 LPs Laurette Pretorius Sr,
 MF Markus Forsberg,
@@ -96,8 +98,8 @@ RE Ramona Enache,
 SC Server Cimen,
 SM Sofy Moradi,
 SV Shafqat Virk,
-TH Therese Söderberg
-
+TH Therese Söderberg,
+WN Wanjiku Ng'ang'a
 
 
 
