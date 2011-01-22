@@ -4,7 +4,7 @@ April 4, 2006
 
 % NOTE: this is a txt2tags file.
 % Create an html file from this file using:
-% txt2tags -thtml --toc gf-reference.html
+% txt2tags -thtml gf-reference.t2t
 
 %!style:../css/style.css
 %!target:html
@@ -14,7 +14,7 @@ This is a quick reference on GF grammars. It aims to
 cover all forms of expression available when writing
 grammars. It assumes basic knowledge of GF, which
 can be acquired from the 
-[GF Tutorial http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/].
+[GF Tutorial http://www.grammaticalframework.org/doc/tutorial/gf-tutorial.html].
 Help on GF commands is obtained on line by the
 help command (``help``), and help on invoking
 GF with (``gf -help``).
@@ -472,7 +472,7 @@ and the result is written to ``foo.gf``.
 
 ===References===
 
-[GF Homepage http://www.cs.chalmers.se/~aarne/GF/]
+[GF Homepage http://www.grammaticalframework.org/]
 
 A. Ranta, Grammatical Framework: A Type-Theoretical Grammar Formalism.
 //The Journal of Functional Programming//, vol. 14:2. 2004, pp. 145-189. 
