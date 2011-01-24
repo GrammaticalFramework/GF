@@ -13,7 +13,7 @@ are marked in the table
 
 
 || Lang | Darcs | Mini | Parad | Lex | Lang | API | Symb | Irreg | Dict | authors       ||
-| Afr   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *LPs,LPj
+| Afr   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *LPs,LPj
 | Amh   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | *MK
 | Ara   | +     | +    | +     | +   | -    | -   | -    | -     | -    | AD
 | Bul   | +     | +    | +     | +   | +    | +   | +    | +     | +    | *KA

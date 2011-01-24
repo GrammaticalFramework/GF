@@ -598,7 +598,7 @@ param
 
   infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp -> 
     <
-     \\agr => vp.n2 ! agr ++  vp.a2,
+     \\agr => vp.n0 ! agr ++  vp.n2 ! agr ++  vp.a2,
      vp.a1 ! Pos ++ 
      if_then_Str isAux [] "te" ++ vp.s.s ! VInf,
      vp.inf.p1 ++ vp.ext
