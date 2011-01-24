@@ -127,8 +127,8 @@ lin
       a = agrP3 Sg
       } ;
 
-    CompCN cn = { s = \\a => let n = (fromAgr a).n
-		              in IndefArt.s ! False ! n ++ cn.s ! n ! Acc} ;
+--    CompCN cn = { s = \\a => let n = (fromAgr a).n
+--		              in IndefArt.s ! False ! n ++ cn.s ! n ! Acc} ;
 
 -- Lexical additions
 
@@ -154,7 +154,7 @@ lin
 	VVPastNeg => ["shouldn't have"] ;
 	VVPresNeg => "shouldn't"
 	} ;
-      isAux = True
+      typ = VVAux
     } ;
     several_Det = mkDeterminer plural "several" ;
 

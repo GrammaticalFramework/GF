@@ -27,7 +27,7 @@ fun NumOfNP : Num -> NP -> NP ; -- ten of the dogs
 fun CAdvNP  : CAdv -> CN -> NP -> NP ; -- more wine than the professor
 fun CAdvSSlash  : CAdv -> CN -> SSlash -> NP ; -- more wine than the professor drank
 
-fun CompCN : CN -> Comp ; -- "(every man is) a dog", "(all men are) dogs"
+--fun CompCN : CN -> Comp ; -- "(every man is) a dog", "(all men are) dogs"
 
 -- Lexical additions
 
