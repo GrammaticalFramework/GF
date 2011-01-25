@@ -51,7 +51,7 @@ function Minibar(server,opts,target) {
     this.translations=div_id("translations");
 
     this.minibar=element(target || "minibar");
-    this.minibar_contin=element("minibar_contin");
+	this.minibar_contin=element("minibar_contin");
     this.minibar_buttons=element("minibar_buttons");
     this.minibar.innerHTML="";
 	
@@ -146,7 +146,7 @@ Minibar.prototype.show_languages=function(grammar_info) {
 		
 		//var langname = element("to_menu").value;
 	    //to_menu.current={to: langname, input: ""};
-		clear_all();
+		//clear_all();
 	}
 	
 	from_menu.onchange=bind(new_language,t);
