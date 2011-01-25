@@ -2,7 +2,7 @@ body {
     background: #eee url("brushed-metal.png");
 }
 
-/*th, td { vertical-align: baseline; text-align: left; }*/
+/* th, td { vertical-align: baseline; text-align: left; } */
 
 div#surface {
     min-height: 3ex;

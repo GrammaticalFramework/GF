@@ -33,7 +33,7 @@ function show_word_magnets()
     {
      show_element("words");
      words_hidden= false;
-     var buttons_bar=element("buttons_bar")
+	 var buttons_bar=element("buttons_bar");
      buttons_bar.removeChild(buttons_bar.lastChild);
 	 } 
 }
@@ -46,7 +46,7 @@ function hide_word_magnets()
       words_hidden= true;
   
      //add "Show magnets" button
-     var buttons_bar=element("buttons_bar")
+	 var buttons_bar=element("buttons_bar");
      appendChildren(buttons_bar,
 		   [ button("Show Magnets","show_word_magnets()","M", "show_magnets")]);
 	 }

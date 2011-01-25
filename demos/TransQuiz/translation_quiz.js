@@ -521,7 +521,7 @@ function exam_continue()
 	 exam_result();
   else			 
 	{ 
-		//clears the question and answer display areas
+		//clears the question and answer and the explanation and hint display areas
           clearing();				  
 				   
 		document.getElementById('counter_display').value = counter + "/" + exam_quesNo;   
