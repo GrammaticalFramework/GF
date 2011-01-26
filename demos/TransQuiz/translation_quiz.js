@@ -109,7 +109,7 @@ function start_quiz()
 	answer_lang= minibar.to_menu.value;
       
    //removes the start button  	
-     minibar.menubar.removeChild(minibar.menubar.lastChild);	  	
+     minibar.quizbar.removeChild(minibar.quizbar.lastChild);	  	
    
    set_mode();
    	 
@@ -192,7 +192,7 @@ function restart_quiz()
 	      reset_mode();
 			
 	      //add the start button
-		    appendChildren(minibar.menubar,[ button("Start Quiz","start_quiz()","S")]);
+		    appendChildren(minibar.quizbar,[ button("Start Quiz","start_quiz()","S")]);
 		  
 		  //removes the History button
 	      var history_bar=element("history_bar");
@@ -380,9 +380,10 @@ function parse_answer(right_answer)
   server.parse(question_lang,right_answer[0].text, parse_answer2);
 }
 
+var trees_to_go;
 function parse_answer2(parsed_answer)
 {
-  parsed_trees = parsed_answer[0].trees.length; 
+  trees_to_go = parsed_trees = parsed_answer[0].trees.length; 
   var j =0;
   for (j= 0; j < parsed_trees ; j++)
        {
@@ -400,7 +401,8 @@ function collect_answers(lin_answer)
         all_answers[next]= lin_answer[0].texts[i];
        }
 	   
-	if ( all_answers.length > (parsed_trees - 1) * i) 
+	trees_to_go--;
+    if(trees_to_go == 0)	
 	     continue_checking();
 }	   
 	   
