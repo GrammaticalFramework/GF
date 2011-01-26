@@ -10,9 +10,8 @@ function pre_start()
   var quiz_mode=empty_id("select","quiz_mode");
 
   //adds the  "Quiz Mode" and "Restart Quiz" and "End Quiz" and "Start Quiz"  
-  appendChildren(minibar.menubar,
-		    [empty("br"),
-		    text(" Quiz Mode: "), quiz_mode, 
+  appendChildren(minibar.quizbar,
+		    [text(" Quiz Mode: "), quiz_mode, 
 			button("Restart Quiz","restart_quiz()","R"),
 			button("End Quiz","end_quiz(true)","E"),
 			button("Start Quiz","start_quiz()","S")]);

@@ -47,6 +47,7 @@ function Minibar(server,opts,target) {
     this.surface=div_id("surface");
     this.extra=div_id("extra");
     this.menubar=div_id("menubar");
+	this.quizbar=div_id("quizbar");
     this.words=div_id("words");
     this.translations=div_id("translations");
 
@@ -57,7 +58,7 @@ function Minibar(server,opts,target) {
 	
 	//modified for quiz
     with(this) {
-	appendChildren(minibar,[menubar]);
+	appendChildren(minibar,[menubar, quizbar]);
 	appendChildren(minibar_contin,[surface,words]);
 	append_extra_buttons(extra,options);
     }
