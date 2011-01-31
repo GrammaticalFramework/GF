@@ -189,31 +189,29 @@ transGreek = mkTransliteration "modern Greek" allTrans allCodes where
 
 transAncientGreek :: Transliteration
 transAncientGreek = mkTransliteration "ancient Greek" allTrans allCodes where
-  allTrans = words $
-    "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - " ++
-    "i= A  B  G  D  E  Z  H  V  I  K  L  M  N  X  O  " ++
-    "P  R  -  S  T  Y  F  C  Q  W  I- Y- -  -  -  -  " ++
-    "y= a  b  g  d  e  z  h  v  i  k  l  m  n  x  o  " ++
-    "p  r  s* s  t  y  f  c  q  w  i- y- -  -  -  -  " ++   
-    "a)  a(  a)` a(` a)' a(' a)~ a(~ A)  A(  A)` A(` A)' A(' A)~ A(~ " ++
-    "e)  e(  e)` e(` e)' e(' -   -   E)  E(  E)` E(` E)' E(' -   -   " ++
-    "h)  h(  h)` h(` h)' h(' h)~ h(~ H)  H(  H)` H(` H)' H(' H)~ H(~ " ++
-    "i)  i(  i)` i(` i)' i(' i)~ i(~ I)  I(  I)` I(` I)' I(' I)~ I(~ " ++
-    "o)  o(  o)` o(` o)' o(' -   -   O)  O(  O)` O(` O)' O(' -   -   " ++
-    "y)  y(  y)` y(` y)' y(' y)~ y(~ -   Y(  -   Y(` -   Y(' -   Y(~ " ++
-    "w)  w(  w)` w(` w)' w(' w)~ w(~ W)  W(  W)` W(` W)' W(' W)~ W(~ " ++
-    "a`  a'  e`  e'  h`  h'  i`  i'  o`  o'  y`  y'  w`  w'  -   -   " ++
-    "a|( a|) a|)` a|(` a|)' a|(' a|)~ a|(~ - - - - - - - - " ++ -- 1f80- 
-    "h|( h|) h|)` h|(` h|)' h|(' h|)~ h|(~ - - - - - - - - " ++ -- 1f90- 
-    "w|( w|) w|)` w|(` w|)' w|(' w|)~ w|(~ - - - - - - - - " ++ -- 1fa0-
-    "a.  a_  a|` a|  a|'  -  a~ a|~ - - - - - - - - " ++ -- 1fb0-
-    "-  -  h|` h|  h|'  -  h~ h|~ - - - - - - - - " ++ -- 1fc0-
-    "i. i_ i=` i=' -    -  i~ i=~ - - - - - - - - " ++ -- 1fd0-
-    "y. y_ y=` y=' r)   r( y~ y|~ - - - - - - - - " ++ -- 1fe0-
-    "-  -  w|` w|  w|'  -  w~ w|~ - - - - - - - - "    -- 1ff0-
-  allCodes = [0x0380 .. 0x03cf] ++ [0x1f00 .. 0x1fff]
-
-
+ allTrans = words $
+   "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - " ++
+   "i= A  B  G  D  E  Z  H  V  I  K  L  M  N  X  O  " ++
+   "P  R  -  S  T  Y  F  C  Q  W  I- Y- -  -  -  -  " ++
+   "y= a  b  g  d  e  z  h  v  i  k  l  m  n  x  o  " ++
+   "p  r  s* s  t  y  f  c  q  w  i- y- -  -  -  -  " ++
+   "a)  a(  a)` a(` a)' a(' a)~ a(~ A)  A(  A)` A(` A)' A(' A)~ A(~ " ++
+   "e)  e(  e)` e(` e)' e(' -   -   E)  E(  E)` E(` E)' E(' -   -   " ++
+   "h)  h(  h)` h(` h)' h(' h)~ h(~ H)  H(  H)` H(` H)' H(' H)~ H(~ " ++
+   "i)  i(  i)` i(` i)' i(' i)~ i(~ I)  I(  I)` I(` I)' I(' I)~ I(~ " ++
+   "o)  o(  o)` o(` o)' o(' -   -   O)  O(  O)` O(` O)' O(' -   -   " ++
+   "y)  y(  y)` y(` y)' y(' y)~ y(~ -   Y(  -   Y(` -   Y(' -   Y(~ " ++
+   "w)  w(  w)` w(` w)' w(' w)~ w(~ W)  W(  W)` W(` W)' W(' W)~ W(~ " ++
+   "a`  a'  e`  e'  h`  h'  i`  i'  o`  o'  y`  y'  w`  w'  -   -   " ++
+   "a|) a|( a|)` a|(` a|)' a|(' a|)~ a|(~ - - - - - - - - " ++ -- 1f80-  -- HL: a|) a|( for a|( a|)
+   "h|) h|( h|)` h|(` h|)' h|(' h|)~ h|(~ - - - - - - - - " ++ -- 1f90-  -- HL: h|) h|( for h|( h|)
+   "w|) w|( w|)` w|(` w|)' w|(' w|)~ w|(~ - - - - - - - - " ++ -- 1fa0-  -- HL: w|) w|( for w|( w|)
+   "a.  a_  a|` a|  a|'  -  a~ a|~ - - - - - - - - " ++ -- 1fb0-
+   "-  -  h|` h|  h|'  -  h~ h|~ - - - - - - - - " ++ -- 1fc0-
+   "i. i_ i=` i=' -    -  i~ i=~ - - - - - - - - " ++ -- 1fd0-
+   "y. y_ y=` y=' r)   r( y~ y=~ - - - - - - - - " ++ -- 1fe0-   -- HL: y=~ for y|~
+   "-  -  w|` w|  w|'  -  w~ w|~ - - - - - - - - "    -- 1ff0-
+ allCodes = [0x0380 .. 0x03cf] ++ [0x1f00 .. 0x1fff]
 
  
 transAmharic :: Transliteration
