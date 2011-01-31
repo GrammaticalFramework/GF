@@ -23,7 +23,8 @@ lin
   In = relVP UseCopula in_Prep ;
 
   Employed = 
-      relAP (mkAP (mkA "employed")) by8agent_Prep
+      relAP (mkAP (mkA "employed")) at_Prep
+--    | relAP (mkAP (mkA "employed")) by8agent_Prep
     | relAP (mkAP (mkA "paid")) by8agent_Prep
     | relAP (mkAP (mkA "active")) at_Prep
     | relAP (mkAP (mkA "professionally active")) at_Prep
@@ -33,23 +34,23 @@ lin
 
   HaveTitle = 
       relAP (mkAP (mkA "employed")) as_Prep
-    | relVP UseCopula noPrep
+--    | relVP UseCopula noPrep
     | relVP (mkVP (mkV "work")) as_Prep
-    | relVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "title"))))) possess_Prep
+--    | relVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "title"))))) possess_Prep
     ;
 
   EmployedAt s = 
       relAP (mkAP (mkA2 (mkA "employed") at_Prep) s) as_Prep
-    | relAP (mkAP (mkA2 (mkA "employed") by8agent_Prep) s) as_Prep
+--    | relAP (mkAP (mkA2 (mkA "employed") by8agent_Prep) s) as_Prep
     | relVP (mkVP (mkV2 (mkV "work") at_Prep) s) as_Prep 
     ;
 
   HaveTitleAt t = 
       relAP (mkAP (mkA2 (mkA "employed") as_Prep) (mkNP t)) at_Prep
-    | relAP (mkAP (mkA2 (mkA "employed") as_Prep) (mkNP t)) by8agent_Prep
+--    | relAP (mkAP (mkA2 (mkA "employed") as_Prep) (mkNP t)) by8agent_Prep
     | relVP (mkVP (mkNP a_Det t)) at_Prep
     | relVP (mkVP (mkV2 (mkV "work") as_Prep) (mkNP t)) at_Prep 
-    | relVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "title")) (mkNP t)))) at_Prep 
+--    | relVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "title")) (mkNP t)))) at_Prep 
     ;
 
   Named n = propAP  (mkAP (mkA2 (mkA "named") []) n) ;
