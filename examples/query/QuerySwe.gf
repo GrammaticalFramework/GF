@@ -1,6 +1,6 @@
 --# -path=.:present
 
-concrete QuerySwe of Query = QueryI - [namePrep, propCalled] with 
+concrete QuerySwe of Query = QueryI - [namePrep, propCalled, KFunPair] with 
   (Syntax = SyntaxSwe),
   (Lang = LangSwe),
   (LexQuery = LexQuerySwe) **
@@ -24,7 +24,11 @@ oper
       propVP (mkVP (mkAdV "även") (mkVP (mkV2 (depV (mkV "kalla")) for_Prep) i))
     | propVP (mkVP (mkAdV "även") (mkVP (mkV2 "heter") i)) ;
 
+lin
+  KFunPair k r = mkCN k (mkAdv with_Prep (sina r.cn)) ;
 
+oper
+  sina : CN -> NP = \cn -> mkNP (M.mkPredet "sin" "sitt" "sina") (mkNP a_Quant plNum cn) ; ---- should be in ExtraSwe
 
 -- lexicon
 
@@ -34,8 +38,9 @@ lin
   In = relVP UseCopula in_Prep ;
 
   Employed = 
-      relAP (mkAP (mkA "anställd" "anställt")) by8agent_Prep
-    | relAP (mkAP (mkA "betald" "betalt")) by8agent_Prep
+      relAP (mkAP (mkA "anställd" "anställt")) at_Prep
+--    | relAP (mkAP (mkA "anställd" "anställt")) by8agent_Prep
+--    | relAP (mkAP (mkA "betald" "betalt")) by8agent_Prep
     | relAP (mkAP (mkA "aktiv")) at_Prep
     | relAP (mkAP (mkA "professionellt aktiv")) at_Prep
     | relVP (mkVP (mkV "arbeta")) at_Prep
@@ -45,28 +50,26 @@ lin
 
   HaveTitle = 
       relAP (mkAP (mkA "anställd" "anställt")) som_Prep
-    | relVP UseCopula noPrep
+--    | relVP UseCopula noPrep
     | relVP (mkVP (mkV "arbeta")) som_Prep
     | relVP (mkVP (mkV "jobba")) som_Prep
-    | relVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "titel" "titlar") noPrep)))) 
-        possess_Prep
+--    | relVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "titel" "titlar") noPrep)))) possess_Prep
     ;
 
   EmployedAt s = 
       relAP (mkAP (mkA2 (mkA "anställd" "anställt") at_Prep) s) som_Prep
-    | relAP (mkAP (mkA2 (mkA "anställd" "anställt") by8agent_Prep) s) som_Prep
+--    | relAP (mkAP (mkA2 (mkA "anställd" "anställt") by8agent_Prep) s) som_Prep
     | relVP (mkVP (mkV2 (mkV "arbeta") at_Prep) s) som_Prep 
     | relVP (mkVP (mkV2 (mkV "jobba") at_Prep) s) som_Prep 
     ;
 
   HaveTitleAt t = 
       relAP (mkAP (mkA2 (mkA "anställd" "anställt") som_Prep) (mkNP t)) at_Prep
-    | relAP (mkAP (mkA2 (mkA "anställd" "anställt") som_Prep) (mkNP t)) by8agent_Prep
+--    | relAP (mkAP (mkA2 (mkA "anställd" "anställt") som_Prep) (mkNP t)) by8agent_Prep
     | relVP (mkVP (mkNP a_Det t)) at_Prep
     | relVP (mkVP (mkV2 (mkV "arbeta") som_Prep) (mkNP t)) at_Prep 
     | relVP (mkVP (mkV2 (mkV "jobba") som_Prep) (mkNP t)) at_Prep 
-    | relVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "titel" "titlar") noPrep) 
-        (mkNP t)))) at_Prep 
+--    | relVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "titel" "titlar") noPrep) (mkNP t)))) at_Prep 
     ;
 
   Named n = propAP  (mkAP (mkA2 called_A (mkPrep [])) n) ;
