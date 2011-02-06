@@ -1,5 +1,5 @@
 module PGF.Morphology(Lemma,Analysis,Morpho,
-                      buildMorpho,
+                      buildMorpho,isInMorpho,
                       lookupMorpho,fullFormLexicon,
                       morphoMissing,missingWordMsg) where
 
@@ -41,6 +41,9 @@ collectWords pinfo = Map.fromListWith (++)
 
 lookupMorpho :: Morpho -> String -> [(Lemma,Analysis)]
 lookupMorpho (Morpho mo) s = maybe [] id $ Map.lookup s mo
+
+isInMorpho :: Morpho -> String -> Bool
+isInMorpho (Morpho mo) s = maybe False (const True) $ Map.lookup s mo
 
 fullFormLexicon :: Morpho -> [(String,[(Lemma,Analysis)])]
 fullFormLexicon (Morpho mo) = Map.toList mo

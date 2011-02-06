@@ -33,6 +33,7 @@ import GF.Data.ErrM ----
 import GF.Command.Abstract
 import GF.Command.Messages
 import GF.Text.Lexing
+import GF.Text.Clitics
 import GF.Text.Transliterations
 import GF.Quiz
 
@@ -199,6 +200,38 @@ allCommands env@(pgf, mos) = Map.fromList [
      flags = [
        ] 
     }),
+
+  ("ca", emptyCommandInfo {
+     longname = "clitic_analyse",
+     synopsis = "print the analyses of all words into stems and clitics",
+     explanation = unlines [
+       "Analyses all words into all possible combinations of stem + clitics.",
+       "The analysis is returned in the format stem &+ clitic1 &+ clitic2 ...",
+       "which is hence the inverse of 'pt -bind'. The list of clitics is give",
+       "by the flag '-clitics'. The list of stems is given as the list of words",
+       "of the language given by the '-lang' flag."
+       ],
+     exec  = \opts -> case opts of
+               _ | isOpt "raw" opts ->
+                    return . fromString .  
+                    unlines . map (unwords . map (concat . intersperse "+")) .
+                    map (getClitics (isInMorpho (optMorpho opts)) (optClitics opts)) . 
+                    concatMap words . toStrings
+               _ -> 
+                    return . fromStrings . 
+                    getCliticsText (isInMorpho (optMorpho opts)) (optClitics opts) . 
+                    concatMap words . toStrings,
+     flags = [
+       ("clitics","the list of possible clitics (comma-separated, no spaces)"),
+       ("lang",   "the language of analysis")
+       ],
+     options = [
+       ("raw", "analyse each word separately (not suitable input for parser)")
+       ],
+     examples = [
+       "ca -lang=Fin -clitics=ko,ni \"nukkuuko minun vaimoni\" | p  -- to parse Finnish"
+       ]
+     }),
 
   ("cc", emptyCommandInfo {
      longname = "compute_concrete",
@@ -1112,6 +1145,10 @@ allCommands env@(pgf, mos) = Map.fromList [
    morpho z f la = maybe z f $ Map.lookup la mos
 
    optMorpho opts = morpho (error "no morpho") id (head (optLangs opts))
+
+   optClitics opts = case valStrOpts "clitics" "" opts of
+     "" -> []
+     cs -> map reverse $ chunks ',' cs
 
    mexp xs = case xs of
      t:_ -> Just t
