@@ -19,11 +19,9 @@ What's new? See the [Release notes release-3.2.html].
 | Ubuntu (64-bit) | [gf_3.2-4_amd64.deb gf_3.2-4_amd64.deb] | Double-click on the package icon, or use ``sudo dpkg -i gf_3.2-4_amd64.deb``
 | Linux (32-bit) | [gf-3.2-bin-i386-linux.tar.gz gf-3.2-bin-i386-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-i386-linux.tar.gz``
 | Linux (64-bit) | [gf-3.2-bin-x86_64-linux.tar.gz gf-3.2-bin-x86_64-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-x86_64-linux.tar.gz``
-%| MacOS X | [gf-3.2-leopard.pkg gf-3.2-leopard.pkg] | Double-click on the package icon and follow the instructions
+| MacOS X | [gf-3.2-snowleopard.pkg gf-3.2-snowleopard.pkg] | Double-click on the package icon and follow the instructions
 | MacOS X | [gf-3.2-bin-intel-mac.tar.gz gf-3.2-bin-intel-mac.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-intel-mac.tar.gz``
 | Windows | [gf-3.2-bin-i386-windows.zip gf-3.2-bin-i386-windows.zip] | ``unzip gf-3.2-bin-i386-windows.zip``
-
-The ``.deb`` packages work on Ubuntu 10.04 and 10.10.
 
 More packages might be added later.
 
@@ -32,7 +30,12 @@ More packages might be added later.
 The Windows package is installed by just unpacking it anywhere. 
 It finds the libraries relative to the ``.exe`` file.
 
-The MacOS and Linux packages are designed to be installed in ``/usr/local``.
+The ``.deb`` packages work on Ubuntu 10.04 and 10.10.
+
+The ``.pkg`` package works on MacOS X 10.6 (Snow Leopard). The MacOS tar
+package works on 10.5 (Leopard) and 10.6 (Snow Leopard).
+
+The MacOS and Linux tar packages are designed to be installed in ``/usr/local``.
 You can install them in other locations, but then you need to set the
 ``GF_LIB_PATH`` environment variable:
 
