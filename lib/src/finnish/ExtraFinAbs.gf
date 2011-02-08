@@ -19,4 +19,17 @@ abstract ExtraFinAbs = Extra [
 
     ProDropPoss : Pron -> Quant ;         -- vaimoni
 
+  cat
+    ClPlus ;      -- clause with more variation
+
+  fun
+    S_SVO  : Temp -> Pol -> ClPlus  -> S ;  -- me juomme maitoa
+    S_SOV  : Temp -> Pol -> ClPlus  -> S ;  -- me maitoa juomme
+    S_OSV  : Temp -> Pol -> ClPlus  -> S ;  -- maitoa me juomme
+    S_OVS  : Temp -> Pol -> ClPlus  -> S ;  -- maitoa juomme me
+    S_VSO  : Temp -> Pol -> ClPlus  -> S ;  -- juomme me maitoa
+    S_VOS  : Temp -> Pol -> ClPlus  -> S ;  -- juomme maitoa me
+
+    PredClPlus : NP -> VP -> ClPlus ;
+
 }

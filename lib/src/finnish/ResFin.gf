@@ -283,9 +283,22 @@ oper
     s : Tense => Anteriority => Polarity => SType => Str
     } ;
 
-  mkClause : (Polarity -> Str) -> Agr -> VP -> Clause =
+  ClausePlus : Type = {
+    s : Tense => Anteriority => Polarity => {subj,fin,inf,compl,ext,qp : Str}
+    } ;
+
+  mkClause : (Polarity -> Str) -> Agr -> VP -> Clause = 
     \sub,agr,vp -> {
-      s = \\t,a,b,o => 
+      s = \\t,a,b => let c = (mkClausePlus sub agr vp).s ! t ! a ! b in 
+         table {
+           SDecl  => c.subj ++ c.fin ++ c.inf ++ c.compl ++ c.ext ;
+           SQuest => c.fin ++ BIND ++ c.qp ++ c.subj ++ c.inf ++ c.compl ++ c.ext
+           }
+      } ;
+
+  mkClausePlus : (Polarity -> Str) -> Agr -> VP -> ClausePlus =
+    \sub,agr,vp -> {
+      s = \\t,a,b => 
         let 
           subj = sub b ;
           agrfin = case vp.sc of {
@@ -293,20 +306,17 @@ oper
                     _ => <agrP3 Sg,False>      -- minun täytyy, minulla on
                     } ;
           verb  = vp.s ! VIFin t ! a ! b ! agrfin.p1 ;
-          compl = vp.s2 ! agrfin.p2 ! b ! agr ++ vp.ext
-        in
-        case o of {
-          SDecl  => subj ++ verb.fin ++ verb.inf ++ compl ;
-          SQuest => questPart vp a b verb.fin ++ subj ++ verb.inf ++ compl
-          }
-    } ;
+          compl = vp.s2 ! agrfin.p2 ! b ! agr ;
+          complext = compl ++ vp.ext
+        in {subj = subj ; fin = verb.fin ; inf = verb.inf ; compl = compl ; ext = vp.ext ; qp = questPart vp a b}
+     } ;
 
 -- This is used for subjects of passives: therefore isFin in False.
 
   subjForm : NP -> NPForm -> Polarity -> Str = \np,sc,b -> 
     appCompl False b {s = [] ; c = sc ; isPre = True} np ;
 
-  questPart : VP -> Anteriority -> Polarity -> Str -> Str = \vp,a,p,on -> on ++ BIND ++ 
+  questPart : VP -> Anteriority -> Polarity -> Str = \vp,a,p -> 
     case p of {
       Neg => "kö" ;  -- eikö tule
       _ => case a of {
