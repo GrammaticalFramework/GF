@@ -53,7 +53,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
     ComplSlash vp np = insertObjPre (\\fin,b,_ => appCompl fin b vp.c2 np) vp ;
 
     UseComp comp = 
-      insertObj (\\_,_ => comp.s) (predV (verbOlla ** {sc = NPCase Nom ; qp = "ko"})) ;
+      insertObj (\\_,_ => comp.s) (predV (verbOlla ** {sc = NPCase Nom ; qp = True})) ;
 
     SlashVV v vp = 
       insertObj 

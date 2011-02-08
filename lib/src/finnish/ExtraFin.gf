@@ -27,7 +27,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     AdvExistNP adv np = 
       mkClause (\_ -> adv.s) np.a (insertObj 
-        (\\_,b,_ => np.s ! NPCase Nom) (predV (verbOlla ** {sc = NPCase Nom ; qp = "ko"}))) ;
+        (\\_,b,_ => np.s ! NPCase Nom) (predV (verbOlla ** {sc = NPCase Nom ; qp = True}))) ;
 
     RelExistNP prep rp np = {
       s = \\t,ant,bo,ag => 
@@ -38,7 +38,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
           np.a 
           (insertObj 
             (\\_,b,_ => np.s ! NPCase Nom) 
-            (predV (verbOlla ** {sc = NPCase Nom ; qp = "ko"}))) ;
+            (predV (verbOlla ** {sc = NPCase Nom ; qp = True}))) ;
       in 
       cl.s ! t ! ant ! bo ! SDecl ;
       c = NPCase Nom
