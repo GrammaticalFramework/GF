@@ -1,7 +1,7 @@
 --# -path=.:../abstract:../common:../prelude
 
 concrete LangFin of Lang = 
-  GrammarFin,
+  GrammarFin, ---  - [SlashV2VNP,SlashVV], ---- to speed up parsing grammar
   LexiconFin
   ** {
 

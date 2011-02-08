@@ -103,4 +103,36 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       isPoss = True ;
       isDef = True  --- "minun kolme autoani ovat" ; thus "...on" is missing
       } ;
+
+  lincat ClPlus = ClausePlus ;
+
+  lin 
+    S_SVO t p clp = 
+      let cl = clp.s ! t.t ! t.a ! p.p
+      in
+      {s = t.s ++ p.s ++ cl.subj ++ cl.fin ++ cl.inf ++ cl.compl ++ cl.ext} ; 
+    S_SOV t p clp = 
+      let cl = clp.s ! t.t ! t.a ! p.p
+      in
+      {s = t.s ++ p.s ++ cl.subj ++ cl.compl ++ cl.fin ++ cl.inf ++ cl.ext} ; 
+    S_OSV t p clp = 
+      let cl = clp.s ! t.t ! t.a ! p.p
+      in
+      {s = t.s ++ p.s ++ cl.compl ++ cl.subj ++ cl.fin ++ cl.inf ++ cl.ext} ; 
+    S_OVS t p clp = 
+      let cl = clp.s ! t.t ! t.a ! p.p
+      in
+      {s = t.s ++ p.s ++ cl.compl ++ cl.fin ++ cl.inf ++ cl.subj ++ cl.ext} ; 
+    S_VSO t p clp = 
+      let cl = clp.s ! t.t ! t.a ! p.p
+      in
+      {s = t.s ++ p.s ++ cl.fin ++ cl.subj ++ cl.inf ++ cl.compl ++ cl.ext} ; 
+    S_VOS t p clp = 
+      let cl = clp.s ! t.t ! t.a ! p.p
+      in
+      {s = t.s ++ p.s ++ cl.fin ++ cl.inf ++ cl.compl ++ cl.subj ++ cl.ext} ; 
+
+    PredClPlus np vp = mkClausePlus (subjForm np vp.sc) np.a vp ;
+
+
 } 
