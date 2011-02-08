@@ -10,7 +10,7 @@ concrete DiscourseEng of Discourse =
 
 lincat
   Clause  = {subj : NP ; vp : VP} ;
-  Part    = Adv ;
+  Part    = {a : Adv ; isPre : Bool} ;
 
 lin
   ClauseS part temp pol cl = 
@@ -29,23 +29,12 @@ lin
     mkS adv (mkS part (mkS temp pol (mkCl (mkNP cl.subj (kin.s ! pol.p)) cl.vp))) ;
   PreAdvVerbKinS  part temp pol adv cl = 
     mkS adv (mkS part (mkS temp pol (mkCl cl.subj (mkVP cl.vp (kin.s ! pol.p))))) ;
-  PreAdvAdvKinS  part temp pol adv1 adv2 cl = 
-    mkS adv1 (mkS part (mkS temp pol (mkCl cl.subj (mkVP (mkVP cl.vp adv2) (kin.s ! pol.p))))) ;
 
   PredClause subj v = {subj = subj ; vp = v} ;
 
----  AnterVerbS part kin t pol cl = 
----    mkS t anteriorAnt pol (mkCl (mkNP cl.subj part) (mkVP cl.vp (kin.s ! pol.p))) ;
-
-  noPart     = P.mkAdv [] ;
-  han_Part   = P.mkAdv "as you know" ;
-  pa_Part    = P.mkAdv "and nobody else" ;
-  pas_Part   = P.mkAdv "and nobody else" ;
-  ko_Part    = P.mkAdv "whether" ;
-  kos_Part   = P.mkAdv "whether" ;
-  kohan_Part = P.mkAdv "whether" ;
-  pahan_Part = P.mkAdv "and nobody else as you know" ;
-
+  noPart     = {a = P.mkAdv [] ; isPre = False} ;
+  han_Part   = {a = P.mkAdv "as you know" ; isPre = True} ;
+  pas_Part   = {a = P.mkAdv "no" ; isPre = True} ;
 
 oper 
   kin : {s : R.Polarity => Adv}  = 
