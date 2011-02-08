@@ -578,7 +578,7 @@ oper
 
   caseV c v = {s = v.s ; sc = NPCase c ; qp = v.qp ; lock_V = <>} ;
 
-  vOlla = verbOlla ** {sc = NPCase Nom ; qp = "ko" ; lock_V = <>} ; ---- lieneekö
+  vOlla = verbOlla ** {sc = NPCase Nom ; qp = True ; lock_V = <>} ; ---- lieneekö
 
   mk2V2 : V -> Prep -> V2 = \v,c -> v ** {c2 = c ; lock_V2 = <>} ;
   caseV2 : V -> Case -> V2 = \v,c -> mk2V2 v (casePrep c) ; 

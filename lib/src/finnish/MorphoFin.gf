@@ -688,7 +688,7 @@ resource MorphoFin = ResFin ** open Prelude in {
        11 => lienee
       } ;
 
-    vforms2V : VForms -> Verb ** {qp : Str} = \vh -> 
+    vforms2V : VForms -> Verb ** {qp : Bool} = \vh -> 
     let
       tulla = vh ! 0 ; 
       tulen = vh ! 1 ; 
@@ -753,7 +753,7 @@ resource MorphoFin = ResFin ** open Prelude in {
       Inf Inf3Abess => tulema + "tt" + a 
       } ;
     sc = NPCase Nom ;
-    qp = Predef.dp 2 tulko ;
+    qp = pbool2bool (Predef.eqStr (last tulko) "o") ;
     lock_V = <>
     } ;
 

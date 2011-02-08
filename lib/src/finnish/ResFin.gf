@@ -187,10 +187,10 @@ oper
     s2  : Bool => Polarity => Agr => Str ; -- talo/talon/taloa
     ext : Str ;
     sc  : NPForm ;
-    qp  : Str
+    qp  : Bool -- True = back vowel
     } ;
     
-  predV : (Verb ** {sc : NPForm ; qp : Str}) -> VP = \verb -> {
+  predV : (Verb ** {sc : NPForm ; qp : Bool}) -> VP = \verb -> {
     s = \\vi,ant,b,agr0 => 
       let
 
@@ -284,7 +284,7 @@ oper
     } ;
 
   ClausePlus : Type = {
-    s : Tense => Anteriority => Polarity => {subj,fin,inf,compl,ext,qp : Str}
+    s : Tense => Anteriority => Polarity => {subj,fin,inf,compl,ext : Str ; qp : Bool}
     } ;
 
   mkClause : (Polarity -> Str) -> Agr -> VP -> Clause = 
@@ -292,7 +292,7 @@ oper
       s = \\t,a,b => let c = (mkClausePlus sub agr vp).s ! t ! a ! b in 
          table {
            SDecl  => c.subj ++ c.fin ++ c.inf ++ c.compl ++ c.ext ;
-           SQuest => c.fin ++ BIND ++ c.qp ++ c.subj ++ c.inf ++ c.compl ++ c.ext
+           SQuest => c.fin ++ BIND ++ questPart c.qp ++ c.subj ++ c.inf ++ c.compl ++ c.ext
            }
       } ;
 
@@ -300,15 +300,18 @@ oper
     \sub,agr,vp -> {
       s = \\t,a,b => 
         let 
-          subj = sub b ;
           agrfin = case vp.sc of {
                     NPCase Nom => <agr,True> ;
                     _ => <agrP3 Sg,False>      -- minun täytyy, minulla on
                     } ;
           verb  = vp.s ! VIFin t ! a ! b ! agrfin.p1 ;
-          compl = vp.s2 ! agrfin.p2 ! b ! agr ;
-          complext = compl ++ vp.ext
-        in {subj = subj ; fin = verb.fin ; inf = verb.inf ; compl = compl ; ext = vp.ext ; qp = questPart vp a b}
+        in {subj = sub b ; 
+            fin  = verb.fin ; 
+            inf  = verb.inf ; 
+            compl = vp.s2 ! agrfin.p2 ! b ! agr ; 
+            ext  = vp.ext ; 
+            qp   = selectPart vp a b
+            }
      } ;
 
 -- This is used for subjects of passives: therefore isFin in False.
@@ -316,11 +319,13 @@ oper
   subjForm : NP -> NPForm -> Polarity -> Str = \np,sc,b -> 
     appCompl False b {s = [] ; c = sc ; isPre = True} np ;
 
-  questPart : VP -> Anteriority -> Polarity -> Str = \vp,a,p -> 
+  questPart : Bool -> Str = \b -> if_then_Str b "ko" "kö" ;
+
+  selectPart : VP -> Anteriority -> Polarity -> Bool = \vp,a,p -> 
     case p of {
-      Neg => "kö" ;  -- eikö tule
+      Neg => False ;  -- eikö tule
       _ => case a of {
-        Anter => "ko" ; -- onko mennyt --# notpresent
+        Anter => True ; -- onko mennyt --# notpresent
         _ => vp.qp  -- tuleeko, meneekö
         }
       } ;
