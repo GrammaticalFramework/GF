@@ -22,29 +22,17 @@ lin
   PreAdvS marker temp pol cl = 
     E.S_ASV marker temp pol cl ;
 
-  NoFocClause np vp = 
-    E.PredClPlus np vp ;
-  FocSubjClause np vp = 
-    E.PredClPlusFocSubj np vp ;
-  FocVerbClause np vp = 
-    E.PredClPlusFocVerb np vp ;
-  FocObjClause np vp obj = 
-    lin ClPlus (E.PredClPlusFocObj np vp obj) ;
-  FocAdvS np vp adv = 
-    lin ClPlus (E.PredClPlusFocAdv np vp adv) ;
+  NoFocClause np vps obj adv = 
+    E.PredClPlus np (mkVP (mkVP vps obj) adv) ;
+  FocSubjClause np vps obj adv = 
+    E.PredClPlusFocSubj np (mkVP (mkVP vps obj) adv) ;
+  FocVerbClause np vps obj adv = 
+    E.PredClPlusFocVerb np (mkVP (mkVP vps obj) adv) ;
+--  FocObjClause np vps obj adv = 
+--    lin ClPlus (E.PredClPlusFocObj np (mkVP vps adv) obj) ;
+  FocAdvClause np vps obj adv = 
+    lin ClPlus (E.PredClPlusFocAdv np (mkVP vps obj) adv) ;
 
-{-
-  ClauseS marker temp pol np vp = 
-    E.S_SVO marker temp pol (E.PredClPlus np vp) ;
-  FocSubjS marker temp pol np vp = 
-    E.S_SVO marker temp pol (E.PredClPlusFocSubj np vp) ;
-  FocVerbS marker temp pol np vp = 
-    E.S_SVO marker temp pol (E.PredClPlusFocVerb np vp) ;
-  FocObjS marker temp pol np vp obj = 
-    E.S_SVO marker temp pol (E.PredClPlusFocObj np vp obj) ;
-  FocAdvS marker temp pol np vp adv = 
-    E.S_SVO marker temp pol (E.PredClPlusFocAdv np vp adv) ;
--}
   neutralMarker  = E.noPart ;
   remindMarker   = E.han_Part ;
   contrastMarker = E.pas_Part ;
