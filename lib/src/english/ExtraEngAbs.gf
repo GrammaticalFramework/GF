@@ -21,4 +21,7 @@ abstract ExtraEngAbs = Extra - [ProDrop] ** {
 
     UttVPShort : VP -> Utt ;
 
+-- emphasizing "do", e.g. "John does walk"
+
+   do_VV : VV ;
 }

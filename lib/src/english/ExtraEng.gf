@@ -108,4 +108,18 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     EmbedPresPart vp = {s = infVP VVPresPart vp (agrP3 Sg)} ; --- agr
 
     UttVPShort vp = {s = infVP VVAux vp (agrP3 Sg)} ;
+
+  do_VV = {
+    s = table {
+      VVF VInf => ["do"] ;
+      VVF VPres => "does" ;
+      VVF VPPart => ["done"] ; ----
+      VVF VPresPart => ["doing"] ;
+      VVF VPast => ["did"] ;      --# notpresent
+      VVPastNeg => ["didn't"] ;      --# notpresent
+      VVPresNeg => "doesn't"
+      } ;
+    typ = VVAux
+    } ;
+
 } 

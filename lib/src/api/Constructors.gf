@@ -1366,6 +1366,8 @@ incomplete resource Constructors = open Grammar in {  --%
       = \a,p -> TUseRCl TPres a p ; --% 
       mkRS : (Tense) -> (Ant) -> (Pol) -> RCl -> RS -- that wouldn't have slept 
       = TUseRCl ; --% 
+      mkRS : Temp -> (Pol) -> RCl -> RS -- that wouldn't have slept 
+      = UseRCl ; --% 
       mkRS : Conj -> RS -> RS -> RS -- who sleeps and whose mother runsx
       = \c,x,y -> ConjRS c (BaseRS x y) ; --% 
       mkRS : Conj -> ListRS -> RS -- who sleeps, whom I see and who sleeps --:
