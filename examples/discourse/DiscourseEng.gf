@@ -1,43 +1,56 @@
---# -path=.:alltenses
+--# -path=.:present
 
 concrete DiscourseEng of Discourse = 
   LexiconEng,
-  NounEng, VerbEng,
-  AdjectiveEng, AdverbEng,
-  StructuralEng - [nobody_NP, nothing_NP],
+  NounEng, VerbEng - [SlashV2VNP,SlashVV, Slash2V3, Slash3V3],
+  AdjectiveEng, AdverbEng,  
+  StructuralEng - [nobody_NP,nothing_NP],
   TenseX
-** open SyntaxEng, (P = ParadigmsEng), (R = ParamX), Prelude in {
+** open SyntaxEng, (P = ParadigmsEng), (R = ParamX), (E = ExtraEng), (L = LangEng), Prelude in {
 
 lincat
-  Clause  = {subj : NP ; vp : VP} ;
-  Part    = {a : Adv ; isPre : Bool} ;
+  Clause = {s : R.Polarity => {subj : NP ; vps : VPSlash ; obj : NP ; adv : Adv}} ;
+  Marker = Adv ;
 
 lin
-  ClauseS part temp pol cl = 
-    mkS temp pol (mkCl (mkNP cl.subj part) cl.vp) ;
-  SubjKinS part temp pol cl = 
-    mkS temp pol (mkCl (mkNP (mkNP cl.subj (kin.s ! pol.p)) part) cl.vp) ;
-  VerbKinS part temp pol cl = 
-    mkS temp pol (mkCl (mkNP cl.subj part) (mkVP cl.vp (kin.s ! pol.p))) ;
-  AdvKinS  part temp pol adv cl = 
-    mkS temp pol (mkCl (mkNP cl.subj part) (mkVP (mkVP cl.vp adv) (kin.s ! pol.p))) ;
-  PreAdvS part temp pol adv cl = 
-    mkS adv (mkS part (mkS temp pol (mkCl cl.subj cl.vp))) ;
-  PreAdvKinS part temp pol adv cl = 
-    mkS adv (mkS part (mkS (kin.s ! pol.p) (mkS temp pol (mkCl cl.subj cl.vp)))) ;
-  PreAdvSubjKinS  part temp pol adv cl = 
-    mkS adv (mkS part (mkS temp pol (mkCl (mkNP cl.subj (kin.s ! pol.p)) cl.vp))) ;
-  PreAdvVerbKinS  part temp pol adv cl = 
-    mkS adv (mkS part (mkS temp pol (mkCl cl.subj (mkVP cl.vp (kin.s ! pol.p))))) ;
+  PreSubjS marker temp pol cla = 
+    let cl = cla.s ! pol.p in
+    mkS marker (mkS temp pol 
+      (mkCl cl.subj (mkVP (mkVP cl.vps cl.obj) cl.adv))) ;
 
-  PredClause subj v = {subj = subj ; vp = v} ;
+  PreVerbS marker temp pol cla = 
+    let cl = cla.s ! pol.p in
+    mkS marker (mkS temp pol 
+      (mkCl cl.subj (mkVP actually_AdV (mkVP (mkVP E.do_VV (mkVP cl.vps cl.obj)) cl.adv)))) ;
 
-  noPart     = {a = P.mkAdv [] ; isPre = False} ;
-  han_Part   = {a = P.mkAdv "as you know" ; isPre = True} ;
-  pas_Part   = {a = P.mkAdv "no" ; isPre = True} ;
+  PreObjS marker temp pol cla = 
+    let cl = cla.s ! pol.p in
+    mkS marker (mkS (mkCl cl.obj
+      (mkRS temp pol (mkRCl E.that_RP (mkClSlash cl.subj (L.AdvVPSlash cl.vps cl.adv)))))) ;
 
-oper 
-  kin : {s : R.Polarity => Adv}  = 
-    {s = table {R.Pos => P.mkAdv "too" ; R.Neg => P.mkAdv "either"}} ;
+  PreAdvS marker temp pol cla = 
+    let cl = cla.s ! pol.p in
+    mkS marker (mkS cl.adv
+      (mkS temp pol (mkCl cl.subj (mkVP cl.vps cl.obj)))) ;
+
+  NoFocClause np vps obj adv = 
+    {s = \\p => {subj = np ; vps = vps ; obj = obj ; adv = adv}} ;
+  FocSubjClause np vps obj adv = 
+    {s = \\p => {subj = mkNP np (too p) ; vps = vps ; obj = obj ; adv = adv}} ;
+  FocVerbClause np vps obj adv = 
+    {s = \\p => {subj = np ; vps = L.AdVVPSlash even_AdV vps ; obj = obj ; adv = adv}} ;
+  FocObjClause np vps obj adv = 
+    {s = \\p => {subj = np ; vps = vps ; obj = mkNP obj (too p) ; adv = adv}} ;
+  FocAdvClause np vps obj adv = 
+    {s = \\p => {subj = np ; vps = vps ; obj = obj ; adv = lin Adv (ss (adv.s ++ (too p).s))}} ;
+
+  neutralMarker  = P.mkAdv [] ;
+  remindMarker   = P.mkAdv "as we know" ;
+  contrastMarker = P.mkAdv "no but" ;
+
+oper
+  too : R.Polarity -> Adv = \p -> case p of {R.Pos => P.mkAdv "too" ; R.Neg => P.mkAdv "either"} ;
+  even_AdV = P.mkAdV "even" ;
+  actually_AdV = P.mkAdV "actually" ;
 
 }
