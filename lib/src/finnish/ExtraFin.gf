@@ -1,7 +1,7 @@
 --# -path=.:abstract:common:prelude
 
 concrete ExtraFin of ExtraFinAbs = CatFin ** 
-  open ResFin, MorphoFin, Coordination, Prelude, NounFin, StructuralFin in {
+  open ResFin, MorphoFin, Coordination, Prelude, NounFin, StructuralFin, (R = ParamX) in {
 
   lin
     GenNP np = {
@@ -48,7 +48,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       mkClause (\_ -> adv.s) np.a (insertObj 
         (\\_,b,_ => np.s ! NPCase Nom) (predV v)) ;
 
-    i_implicPron = mkPronoun [] "minun" "minua" "minuna" "minuun" Sg P1 ;
+--    i_implicPron = mkPronoun [] "minun" "minua" "minuna" "minuun" Sg P1 ;
     whatPart_IP = {
       s = table {
         NPCase Nom | NPAcc => "mitä" ;
@@ -104,35 +104,58 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       isDef = True  --- "minun kolme autoani ovat" ; thus "...on" is missing
       } ;
 
-  lincat ClPlus = ClausePlus ;
+  lincat 
+    ClPlus, ClPlusObj, ClPlusAdv = ClausePlus ;
+    Part = {s : Bool => Str} ;
 
   lin 
-    S_SVO t p clp = 
-      let cl = clp.s ! t.t ! t.a ! p.p
+    S_SVO part t p clp = 
+      let 
+         cl = clp.s ! t.t ! t.a ! p.p ;
+         pa = part.s ! True ----
       in
-      {s = t.s ++ p.s ++ cl.subj ++ cl.fin ++ cl.inf ++ cl.compl ++ cl.ext} ; 
-    S_SOV t p clp = 
-      let cl = clp.s ! t.t ! t.a ! p.p
+      {s = t.s ++ p.s ++ cl.subj ++ pa ++ cl.fin ++ cl.inf ++ cl.compl ++ cl.adv ++ cl.ext} ; 
+    S_OSV part t p clp = 
+      let 
+         cl = clp.s ! t.t ! t.a ! p.p ;
+         pa = part.s ! True ----
       in
-      {s = t.s ++ p.s ++ cl.subj ++ cl.compl ++ cl.fin ++ cl.inf ++ cl.ext} ; 
-    S_OSV t p clp = 
-      let cl = clp.s ! t.t ! t.a ! p.p
+      {s = t.s ++ p.s ++ cl.compl ++ pa ++ cl.subj ++ cl.fin ++ cl.inf ++ cl.adv ++ cl.ext} ; 
+    S_VSO part t p clp = 
+      let 
+         cl = clp.s ! t.t ! t.a ! p.p ;
+         pa = part.s ! cl.qp
       in
-      {s = t.s ++ p.s ++ cl.compl ++ cl.subj ++ cl.fin ++ cl.inf ++ cl.ext} ; 
-    S_OVS t p clp = 
-      let cl = clp.s ! t.t ! t.a ! p.p
+      {s = t.s ++ p.s ++ cl.fin ++ pa ++ cl.subj ++ cl.inf ++ cl.compl ++ cl.adv ++ cl.ext} ; 
+    S_ASV part t p clp = 
+      let 
+         cl = clp.s ! t.t ! t.a ! p.p ;
+         pa = part.s ! cl.qp
       in
-      {s = t.s ++ p.s ++ cl.compl ++ cl.fin ++ cl.inf ++ cl.subj ++ cl.ext} ; 
-    S_VSO t p clp = 
-      let cl = clp.s ! t.t ! t.a ! p.p
-      in
-      {s = t.s ++ p.s ++ cl.fin ++ cl.subj ++ cl.inf ++ cl.compl ++ cl.ext} ; 
-    S_VOS t p clp = 
-      let cl = clp.s ! t.t ! t.a ! p.p
-      in
-      {s = t.s ++ p.s ++ cl.fin ++ cl.inf ++ cl.compl ++ cl.subj ++ cl.ext} ; 
+      {s = t.s ++ p.s ++ cl.adv ++ pa ++ cl.subj ++ cl.fin ++ cl.inf ++ cl.compl ++ cl.ext} ; 
 
     PredClPlus np vp = mkClausePlus (subjForm np vp.sc) np.a vp ;
+    PredClPlusFocSubj np vp = insertKinClausePlus 0 (mkClausePlus (subjForm np vp.sc) np.a vp) ;
+    PredClPlusFocVerb np vp = insertKinClausePlus 1 (mkClausePlus (subjForm np vp.sc) np.a vp) ;
+    PredClPlusObj  np vps obj = 
+      insertObjClausePlus 0 False (\\b => appCompl True b vps.c2 obj) (mkClausePlus (subjForm np vps.sc) np.a vps) ;
+    PredClPlusFocObj  np vps obj = 
+      insertObjClausePlus 0 True (\\b => appCompl True b vps.c2 obj) (mkClausePlus (subjForm np vps.sc) np.a vps) ;
+    PredClPlusAdv  np vp  adv = 
+      insertObjClausePlus 1 False (\\_ => adv.s) (mkClausePlus (subjForm np vp.sc) np.a vp) ;
+    PredClPlusFocAdv  np vp  adv = 
+      insertObjClausePlus 1 True (\\_ => adv.s) (mkClausePlus (subjForm np vp.sc) np.a vp) ;
 
+    ClPlusWithObj c = c ;
+    ClPlusWithAdv c = c ;
+
+  noPart     = {s = \\_ => []} ;
+  han_Part   = mkPart "han" "hän" ;
+  pa_Part    = mkPart "pa" "pä" ;
+  pas_Part   = mkPart "pas" "päs" ;
+  ko_Part    = mkPart "ko" "kö" ;
+  kos_Part   = mkPart "kos" "kös" ;
+  kohan_Part = mkPart "kohan" "köhän" ;
+  pahan_Part = mkPart "pahan" "pähän" ;
 
 } 
