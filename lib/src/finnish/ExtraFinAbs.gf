@@ -8,7 +8,7 @@ abstract ExtraFinAbs = Extra [
 
     RelExistNP : Prep -> RP -> NP -> RCl ; -- jossa on jazzia
 
-    i_implicPron : Pron ;                 -- (minä), minut, ...
+--    i_implicPron : Pron ;                 -- (minä), minut, ...
     whatPart_IP : IP ;
 
     PartCN : CN -> NP ;                   -- olutta
@@ -21,19 +21,33 @@ abstract ExtraFinAbs = Extra [
 
   cat
     ClPlus ;      -- clause with more variation
+    ClPlusObj ;   -- which has a focusable object
+    ClPlusAdv ;   -- which has a focusable adverb
     Part ;        -- discourse particle
 
   fun
-    S_SVO  : Temp -> Pol -> ClPlus  -> S ;  -- mepäs juomme maitoa
-    S_SOV  : Temp -> Pol -> ClPlus  -> S ;  -- mepäs maitoa juomme
-    S_OSV  : Temp -> Pol -> ClPlus  -> S ;  -- maitoapas me juomme
-    S_OVS  : Temp -> Pol -> ClPlus  -> S ;  -- maitoapas juomme me
-    S_VSO  : Temp -> Pol -> ClPlus  -> S ;  -- juommepas me maitoa
-    S_VOS  : Temp -> Pol -> ClPlus  -> S ;  -- juommepas maitoa me
+    S_SVO  : Part -> Temp -> Pol -> ClPlus     -> S ;  -- mepäs juomme maitoa nyt
+    S_OSV  : Part -> Temp -> Pol -> ClPlusObj  -> S ;  -- maitoapas me juomme nyt
+    S_VSO  : Part -> Temp -> Pol -> ClPlus     -> S ;  -- juommepas me maitoa nyt
+    S_ASV  : Part -> Temp -> Pol -> ClPlusAdv  -> S ;  -- nytpäs me juomme maitoa
 
-    PredClPlus : NP -> VP -> ClPlus ;
+--    S_SOV  : Part -> Temp -> Pol -> ClPlus  -> S ;  -- mepäs maitoa juomme
+--    S_OVS  : Part -> Temp -> Pol -> ClPlus  -> S ;  -- maitoapas juomme me
+--    S_VOS  : Part -> Temp -> Pol -> ClPlus  -> S ;  -- juommepas maitoa me
 
-----    noPart, han_Part, pa_Part, pas_Part, ko_Part, kos_Part, 
-----      kohan_Part, pahan_Part : Part ; 
+
+    PredClPlus        : NP -> VP            -> ClPlus ;      -- me nukumme
+    PredClPlusFocSubj : NP -> VP            -> ClPlus ;      -- mekin nukumme
+    PredClPlusFocVerb : NP -> VP            -> ClPlus ;      -- me nukummekin
+    PredClPlusObj     : NP -> VPSlash -> NP -> ClPlusObj ;   -- maitoa me juomme
+    PredClPlusFocObj  : NP -> VPSlash -> NP -> ClPlusObj ;   -- maitoakin me juomme
+    PredClPlusAdv     : NP -> VP -> Adv     -> ClPlusAdv ;   -- nyt me nukumme
+    PredClPlusFocAdv  : NP -> VP -> Adv     -> ClPlusAdv ;   -- nytkin me nukumme
+
+    ClPlusWithObj : ClPlusObj -> ClPlus ;   -- to make non-fronted obj focusable
+    ClPlusWithAdv : ClPlusAdv -> ClPlus ;   -- to make non-fronted adv focusable
+
+    noPart, han_Part, pa_Part, pas_Part, ko_Part, kos_Part, 
+      kohan_Part, pahan_Part : Part ; 
 
 }

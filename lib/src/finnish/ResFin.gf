@@ -185,6 +185,7 @@ oper
   VP = {
     s   : VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ; 
     s2  : Bool => Polarity => Agr => Str ; -- talo/talon/taloa
+    adv : Polarity => Str ; -- ainakin/ainakaan
     ext : Str ;
     sc  : NPForm ;
     qp  : Bool -- True = back vowel
@@ -248,6 +249,7 @@ oper
         } ;
 
     s2 = \\_,_,_ => [] ;
+    adv = \\_ => [] ;
     ext = [] ;
     sc = verb.sc ;
     qp = verb.qp
@@ -256,6 +258,7 @@ oper
   insertObj : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
     s2 = \\fin,b,a => vp.s2 ! fin ! b ! a  ++ obj ! fin ! b ! a ;
+    adv = vp.adv ;
     ext = vp.ext ;
     sc = vp.sc ; 
     qp = vp.qp
@@ -264,7 +267,17 @@ oper
   insertObjPre : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
     s2 = \\fin,b,a => obj ! fin ! b ! a ++ vp.s2 ! fin ! b ! a ;
+    adv = vp.adv ;
     ext = vp.ext ;
+    sc = vp.sc ; 
+    qp = vp.qp
+    } ;
+
+  insertAdv : (Polarity => Str) -> VP -> VP = \adv,vp -> {
+    s = vp.s ;
+    s2 = vp.s2 ;
+    ext = vp.ext ;
+    adv = \\b => vp.adv ! b ++ adv ! b ;
     sc = vp.sc ; 
     qp = vp.qp
     } ;
@@ -273,6 +286,7 @@ oper
     s = vp.s ;
     s2 = vp.s2 ;
     ext = vp.ext ++ obj ;
+    adv = vp.adv ;
     sc = vp.sc ; 
     qp = vp.qp
     } ;
@@ -284,15 +298,15 @@ oper
     } ;
 
   ClausePlus : Type = {
-    s : Tense => Anteriority => Polarity => {subj,fin,inf,compl,ext : Str ; qp : Bool}
+    s : Tense => Anteriority => Polarity => {subj,fin,inf,compl,adv,ext : Str ; qp : Bool}
     } ;
 
   mkClause : (Polarity -> Str) -> Agr -> VP -> Clause = 
     \sub,agr,vp -> {
       s = \\t,a,b => let c = (mkClausePlus sub agr vp).s ! t ! a ! b in 
          table {
-           SDecl  => c.subj ++ c.fin ++ c.inf ++ c.compl ++ c.ext ;
-           SQuest => c.fin ++ BIND ++ questPart c.qp ++ c.subj ++ c.inf ++ c.compl ++ c.ext
+           SDecl  => c.subj ++ c.fin ++ c.inf ++ c.compl ++ c.adv ++ c.ext ;
+           SQuest => c.fin ++ BIND ++ questPart c.qp ++ c.subj ++ c.inf ++ c.compl ++ c.adv ++ c.ext
            }
       } ;
 
@@ -308,11 +322,48 @@ oper
         in {subj = sub b ; 
             fin  = verb.fin ; 
             inf  = verb.inf ; 
-            compl = vp.s2 ! agrfin.p2 ! b ! agr ; 
+            compl = vp.s2 ! agrfin.p2 ! b ! agr ;
+            adv  = vp.adv ! b ; 
             ext  = vp.ext ; 
             qp   = selectPart vp a b
             }
      } ;
+
+  insertKinClausePlus : Predef.Ints 1 -> ClausePlus -> ClausePlus = \p,cl -> { 
+    s = \\t,a,b =>
+      let 
+         c = cl.s ! t ! a ! b   
+      in
+      case p of {
+         0 => {subj = c.subj ++ kin b True ; fin = c.fin ; inf = c.inf ;  -- Jussikin nukkuu
+               compl = c.compl ; adv = c.adv ; ext = c.ext ; qp = c.qp} ;
+         1 => {subj = c.subj ; fin = c.fin ++ kin b c.qp ; inf = c.inf ;  -- Jussi nukkuukin
+               compl = c.compl ; adv = c.adv ; ext = c.ext ; qp = c.qp}
+         }
+    } ;
+
+  insertObjClausePlus : Predef.Ints 1 -> Bool -> (Polarity => Str) -> ClausePlus -> ClausePlus = 
+   \p,ifKin,obj,cl -> { 
+    s = \\t,a,b =>
+      let 
+         c = cl.s ! t ! a ! b ;
+         co = obj ! b ++ if_then_Str ifKin (kin b True) [] ;
+      in case p of {
+         0 => {subj = c.subj ; fin = c.fin ; inf = c.inf ; 
+               compl = co ; adv = c.compl ++ c.adv ; ext = c.ext ; qp = c.qp} ; -- Jussi juo maitoakin
+         1 => {subj = c.subj ; fin = c.fin ; inf = c.inf ; 
+               compl = c.compl ; adv = co ; ext = c.adv ++ c.ext ; qp = c.qp}   -- Jussi nukkuu nytkin
+         }
+     } ;
+
+  kin : Polarity -> Bool -> Str  = 
+    \p,b -> case p of {Pos => (mkPart "kin" "kin").s ! b ; Neg => (mkPart "kaan" "kään").s ! b} ;
+
+  mkPart : Str -> Str -> {s : Bool => Str} = \ko,koe ->
+    {s = table {True => glueTok ko ; False => glueTok koe}} ;
+
+  glueTok : Str -> Str = \s -> "&+" ++ s ;
+
 
 -- This is used for subjects of passives: therefore isFin in False.
 

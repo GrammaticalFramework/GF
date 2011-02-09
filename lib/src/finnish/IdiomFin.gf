@@ -40,6 +40,7 @@ concrete IdiomFin of Idiom = CatFin **
     GenericCl vp = mkClause noSubj (agrP3 Sg) {
       s = \\_ => vp.s ! VIPass ;
       s2 = vp.s2 ;
+      adv = vp.adv ;
       ext = vp.ext ;
       sc = vp.sc ; 
       qp = vp.qp
@@ -52,6 +53,7 @@ concrete IdiomFin of Idiom = CatFin **
       in {
         s = on.s ;
         s2 = \\b,p,a => inf ++ vp.s2 ! b ! p ! a ;
+        adv = vp.adv ;
         ext = vp.ext ;
         sc = vp.sc ; 
         qp = vp.qp

@@ -73,15 +73,16 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
                       infVP v.sc b a vp v.vi) 
           (predV v) ** {c2 = vp.c2} ;
 
-    AdvVP vp adv = insertObj (\\_,_,_ => adv.s) vp ;
+    AdvVP vp adv = insertAdv (\\_ => adv.s) vp ;
 
-    AdVVP adv vp = insertObj (\\_,_,_ => adv.s) vp ;
+    AdVVP adv vp = insertAdv (\\_ => adv.s) vp ;
 
     ReflVP v = insertObjPre (\\fin,b,agr => appCompl fin b v.c2 (reflPron agr)) v ;
 
     PassV2 v = let vp = predV v in {
       s = \\_ => vp.s ! VIPass ;
       s2 = \\_,_,_ => [] ;
+      adv = \\_ => [] ;
       ext = [] ;
       qp = v.qp ;
       sc = v.c2.c  -- minut valitaan ; minua rakastetaan ; minulle kuiskataan 

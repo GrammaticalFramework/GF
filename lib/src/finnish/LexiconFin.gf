@@ -67,10 +67,10 @@ lin
   doctor_N = mk2N "tohtori" "tohtoreita" ;
   dog_N = mkN "koira" ;
   door_N = mkN "ovi" "ovia" ;
-  drink_V2 = mkV2 (mkV "juoda") ;
+  drink_V2 = mkV2 (mkV "juoda") (casePrep partitive) ;
   easy_A2V = mkA2 (mkA (mkN "helppo") "helpompi" "helpoin") 
     (casePrep allative) ;
-  eat_V2 = mkV2 (mkV "syödä") ;
+  eat_V2 = mkV2 (mkV "syödä") (casePrep partitive) ;
   empty_A = mkA (mkN "tyhjä") "tyhjempi" "tyhjin" ;
   enemy_N = mkN "vihollinen" ;
   factory_N = mkN "tehdas" ;
