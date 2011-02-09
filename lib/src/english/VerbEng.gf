@@ -34,8 +34,10 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
     UseComp comp = insertObj comp.s (predAux auxBe) ;
 
     AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
-
     AdVVP adv vp = insertAdV adv.s vp ;
+
+    AdvVPSlash vp adv = insertObj (\\_ => adv.s) vp ** {c2 = vp.c2} ;
+    AdVVPSlash adv vp = insertAdV adv.s vp ** {c2 = vp.c2} ;
 
     ReflVP v = insertObjPre (\\a => v.c2 ++ reflPron ! a) v ;
 
