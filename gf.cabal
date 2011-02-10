@@ -22,6 +22,7 @@ flag interrupt
 library
   build-depends: base >= 4.2 && <5,
                  array,
+                 fst,
                  containers,
                  bytestring,
                  random,
@@ -42,6 +43,7 @@ library
     PGF.Expr
     PGF.Type
     PGF.Tree
+    PGF.Tokenizer
     PGF.Paraphrase
     PGF.TypeCheck
     PGF.Binary
@@ -72,6 +74,7 @@ executable gf
                  containers,
                  bytestring,
                  filepath,
+                 fst,
                  directory,
                  random,
                  old-time,
