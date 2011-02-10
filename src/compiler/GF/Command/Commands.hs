@@ -964,6 +964,13 @@ allCommands env@(pgf, mos) = Map.fromList [
        ],
      flags = [("file","the output filename")] 
      }),
+  ("t", emptyCommandInfo {
+     longname = "tokenize",
+     synopsis = "Tokenize string usng the vocabulary",
+     exec = execToktok env,
+     options = [],
+     flags = [("lang","The name of the concrete to use")] 
+     }),
   ("ai", emptyCommandInfo {
      longname = "abstract_info",
      syntax = "ai IDENTIFIER  or  ai EXPR",
@@ -1251,3 +1258,26 @@ prMorphoAnalysis (w,lps) =
   unlines (w:[showCId l ++ " : " ++ p | (l,p) <- lps])
 
 
+-- This function is to be excuted when the command 'tok' is parsed
+execToktok :: PGFEnv -> [Option] -> [Expr] -> IO CommandOutput
+execToktok (pgf, _) opts exprs = do
+  let tokenizers = Map.fromList [ (l, mkTokenizer pgf l) | l <- languages pgf]
+  case getLang opts of
+    Nothing -> do
+      let output = concatMap toStringList [t input | (_,t) <- Map.toList tokenizers]
+      return ([ELit $ LStr o | o <- output],unlines output)
+    Just lang -> case Map.lookup lang tokenizers of
+      Just tok -> do
+        let output = toStringList $ tok input
+        return ([ELit $ LStr o | o <- output],unlines output)
+      Nothing -> return ([],"Unknown language: " ++ show lang)
+  where input = case exprs of
+          [ELit (LStr s)] -> s
+          _ -> ""
+        toStringList :: Maybe [String] -> [String]
+        toStringList Nothing = []
+        toStringList (Just l) = l
+        getLang :: [Option] -> Maybe Language
+        getLang [] = Nothing
+        getLang (OFlag "lang" (VId l):_) = readLanguage l
+        getLang (_:os) = getLang os
