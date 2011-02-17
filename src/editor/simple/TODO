@@ -26,3 +26,6 @@
 
 - Bug! After adding a 2nd def of a fun with a different type and then deleting
   the old fun, the corresponding lin will have the wrong lhs.
+
+- Bug! The startcat menu shows the first category by default, but the startcat
+  flag is actually not set until a selection is made from the menu.
