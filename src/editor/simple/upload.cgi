@@ -11,10 +11,10 @@ export LC_CTYPE="UTF-8"
 style_url="editor.css"
 
 make_dir() {
-  dir="$(mktemp -d ../tmp/gfse.XXXXXXXX)"
+  dir="$(mktemp -d "$tmp/gfse.XXXXXXXX")"
 # chmod a+rxw "$dir"
   chmod a+rx "$dir"
-  ln "$dir/../../grammars/grammars.cgi" "$dir"
+  ln "$grammars/grammars.cgi" "$dir"
 }
 
 
@@ -49,12 +49,21 @@ check_grammar() {
   endall
 }
 
+if [ -z "$tmp" ] || [ -z "$grammars" ] ||
+   ! [ -d "$tmp" ] || ! [ -d "$grammars" ] ; then
+  pagestart "Error"
+  echo "upload.cgi is not properly configured"
+
+  # cgiconfig.sh must define tmp and grammars.
+  # cgiconfig.sh should minibar and gfshell to allow grammars to be tested.
+  endall
+else
 case "$REQUEST_METHOD" in
   POST)
     case "$PATH_INFO" in
       /tmp/gfse.*)
 	style_url="../../$style_url"
-        dir="../tmp/${PATH_INFO##*/}"
+        dir="$tmp/${PATH_INFO##*/}"
 	check_grammar
 	;;
       *)
@@ -75,3 +84,4 @@ case "$REQUEST_METHOD" in
 	   endall
     esac
 esac
+fi
