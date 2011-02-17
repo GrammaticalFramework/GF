@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>About: GF online editor for simple multilingual grammars</title>
+<link rel=stylesheet href="editor.css">
+
+<link rel=author href="http://www.cse.chalmers.se/~hallgren/" title="Thomas Hallgren">
+
+<meta name = "viewport" content = "width = device-width">
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<meta charset="UTF-8">
+
+<script type="text/javascript" src="slideshow.js"></script>
+
+</head>
+
+<body>
+<h1>GF online editor for simple multilingual grammars</h1>
+
+<div class=right>
+  <div class=slideshow>
+    <img onload="start_slideshow(this,{delay:5,fade:0.3})" src="P/w1s.jpg" alt="[GF online editor screen shoot]">
+    <img class=hidden src="P/w2s.jpg" alt="[GF online editor screen shoot]">
+    <img class=hidden src="P/w3s.jpg" alt="[GF online editor screen shoot]">
+    <img class=hidden src="P/w4s.jpg" alt="[GF online editor screen shoot]">
+  </div>
+</div>
+<h2>About</h2>
+
+Traditionally, <a href="http://www.grammaticalframework.org/">GF</a>
+grammars are created in a text editor and tested in the
+GF shell. Text editors know very little (if anything) about the syntax of
+GF grammars, and thus provide little guidance for novice GF users. Also, the
+grammar author has to download and install the GF software on his/her own
+computer.
+
+<p>
+In contrast, the
+<a href="."><em>GF online editor for simple multilingual grammars</em></a>
+is available online, making it easier to get started. All that
+is needed is a reasonably modern web browser. Even Android and iOS devices
+can be used.
+<p>
+The editor
+also guides the grammar author by showing a skeleton grammar file and
+hinting how the parts should be filled in. When a new part is added to the
+grammar, it is immediately checked for errors.
+
+<p>
+Editing operations are accessed by clicking on editing symbols embedded
+in the grammar display:
+<span class=more>+</span>=Add an item,
+<span class=delete>×</span>=Delete an item,
+<span class=edit>%</span>=Edit an item.
+These are revealed when hovering over items. On touch devices, hovering is
+in some cases simulated by tapping, but there is also a button at the bottom
+of the display to "Enabile editing on touch devices" that reveals all editing
+symbols.
+
+<p>
+In spite of its name, the editor runs entierly in the web
+browser, so once you have opened the web page, you can
+<strong>continue editing</strong> grammars even while you are
+<strong>offline</strong>.
+
+<h3>Limitations</h3>
+
+<p>
+At the moment, the editor supports only a small subset of the GF grammar
+notation.
+Proper error checking is done for abstract syntax, but not (yet) for concrete
+syntax. The resource grammar library is not available.
+
+<p>
+The grammars created with this editor always consists of one file for the
+abstract syntax, and one file for each concrete syntax.
+
+<h4>Abstract syntax</h4>
+
+The supported abstract syntax corresponds to context-free grammars
+(no dependent types). The definition of an abstract syntax is limited to
+<ul>
+  <li>a list of <em>category names</em>,
+  <var>Cat<sub>1</sub></var> ; ... ; <var>Cat<sub>n</sub></var>,
+  <li>a list of <em>functions</em> of the form
+  <var>Fun</var> : <var>Cat<sub>1</sub></var> -> ... ->
+  <var>Cat<sub>n</sub></var>,
+  <li>and a <em>start category</em>.
+</ul>
+
+Available editing operations:
+<ul>
+  <li>Categories can be added, removed and renamed. When renaming a category,
+  occurences of it in function types will be updated accordingly.
+  <li>Functions can be added, removed and edited. Concrete syntaxes are updated
+  to reflect changes.
+</ul>
+
+Error checks:
+
+<ul>
+  <li>Syntactically incorrect function definitions are refused.
+  <li>Semantic problem such as duplicated definitions or references to
+  undefined categories, are highlighted.
+</ul>
+
+<h4>Concrete syntax</h4>
+
+At the moment, concrete syntax definitions are limited to
+<ul>
+  <li><em>parameter types</em>,
+  <var>P</var> = <var>C<sub>1</sub></var> | ... |<var>C<sub>n</sub></var>,
+  <li><em>linearization types</em> for the categories in the abstract syntax,
+  <li><em>operation definitions</em>, <var>op</var> = <var>expr</var>,
+  <li>and <em>linearizations</em> for the functions in the abstract syntax.
+</ul>
+
+Available editing operations:
+<ul>
+  <li>The LHSs of the linearization types and linearizations are determined by
+  the abstract syntax and do not need to be entered manually.
+  The RHSs can
+  be edited.
+  <li>Parameter types can be added, removed and edited.
+  <li>Operation definitons can be added, removed and edited.
+</ul>
+
+Error checks:
+<ul>
+  <li>The RHSs in the concrete syntax are not checked for errors. Arbitrary
+  strings can be entered.
+</ul>
+
+<h3>Future work</h3>
+
+This prototype gives an idea of how a web based GF grammar editor could work.
+We do not expect to create a full implementation of GF that runs in the
+web browser, but let the editor communicate with a server running GF.
+<p>
+By developing a GF server with an appropriate API, it should
+be possible to extend the editor to support a larger fragment of GF,
+to do proper error checking, and to allow grammars to be tested in the GF
+shell or the minibar.
+<p>
+Grammars are currently stored locally in the browser, but a future version
+could allow grammars to be stored "in the cloud", allowing the same grammars
+to be accessed from multiple devices.
+
+<hr>
+<div class=modtime><small>
+<!-- hhmts start --> Last modified: Mon Jan 24 17:20:37 CET 2011 <!-- hhmts end -->
+  </small></div>
+<address>
+<a href="http://www.cse.chalmers.se/~hallgren/">TH</a>
+<img src="http://www.altocumulus.org/~hallgren/online.cgi?icon" alt="">
+</address>
+</body> </html>

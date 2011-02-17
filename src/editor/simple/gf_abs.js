@@ -1,0 +1,1 @@
+/* Abstract syntax for a small subset of GF grammars in JavaScript */

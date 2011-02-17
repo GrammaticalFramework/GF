@@ -1,0 +1,72 @@
+body { background: #eee; }
+h1 { font-size: 175%; }
+h1,h2,h3,h4,small { font-family: sans-serif; }
+h1:first-child, h2:first-child { margin-top: 0; margin-bottom: 1ex; }
+
+#editor { max-width: 50em; }
+div.grammar { border: 1px solid black; background: white; background: #9df; }
+div.files { margin: 0 8px 8px 8px; }
+
+div#file { border: 2px solid #009; border-top-width: 0; }
+pre.plain { border: 2px solid #009; }
+div#file, pre.plain { background: white; padding: 0.6ex; }
+
+.slideshow .hidden { display: none; }
+
+img.right, div.right, div.modtime { float: right; }
+.modtime { color: #999; white-space: nowrap; }
+
+div.namebar { background: #9df; }
+div.namebar table { width: 100%; }
+.namebar h3 { margin: 0; color: #009; }
+
+td.right { text-align: right; }
+
+.kw { font-weight: bold; font-family: sans-serif; color: #009; }
+.sep { font-weight: bold; color: #009; }
+
+div.indent { padding-left: 1em; min-width: 1em; min-height: 1em; }
+
+
+.more, .delete { font-weight: bold; font-family: sans-serif; }
+.more, .delete, .edit { cursor: pointer; }
+
+.hover .more, .hover .delete, .hover .edit { visibility: hidden }
+
+.hover .hidden, .nohover .ifhover { display: none; }
+
+.editable:hover, .deletable:hover { background: #ff9; }
+
+.extensible:hover .more,.editable:hover > .edit ,.deletable:hover > .delete 
+  { visibility: visible; }
+
+.more { color: green; }
+.edit { color: orange; }
+.delete { color: red; }
+.error_message,.inError { color: red; }
+.template, .template .sep { color: #999; }
+form { display: inline-block; }
+
+table.tabs {
+    width: 100%;
+    border-width: 0; border-spacing: 0; empty-cells: show;
+}
+
+table.tabs td { text-align: center; border: 2px solid #009; padding: 2px; }
+table.tabs td.active { background: white; border-bottom-width: 0; }
+table.tabs td.inactive {
+    background: #cef;
+    border-top-color: #66c; border-left-color: #66c; border-right-color: #66c;
+}
+
+ table.tabs td.gap
+{ border-top-width: 0; border-left-width: 0; border-right-width: 0; }
+
+table.tabs input[type=button] {
+    border: 0;
+    background: inherit;
+    color: #009;
+    font-size: inherit;
+    font-weight: bold;
+    /*text-decoration: underline;*/
+}
