@@ -94,7 +94,7 @@ Minibar.prototype.show_grammarlist=function(grammars) {
     with(this) {
 	//debug("show_grammarlist ")
 	menubar.innerHTML="";
-	if(grammars.length>1) {
+	if(grammars.length>0) {
 	    function opt(g) { return option(g,g); }
 	    appendChildren(grammar_menu,map(opt,grammars));
     	    grammar_menu.onchange=
