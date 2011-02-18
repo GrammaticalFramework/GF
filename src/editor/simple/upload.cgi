@@ -29,6 +29,7 @@ check_grammar() {
     h3 OK
     begin ul
     [ -z "$minibar" ] || { li; link "$minibar?/tmp/${dir##*/}/" "Minibar"; }
+    [ -z "$transquiz" ] || { li; link "$transquiz?/tmp/${dir##*/}/" "Translation Quiz"; }
     [ -z "$gfshell" ] || { li; link "$gfshell?dir=${dir##*/}" "GF Shell"; }
     end
     begin pre
