@@ -139,6 +139,10 @@
   //grammar_list: ["Foods.pgf"], // leave undefined to get list from server
   }
 
+  if(/^\?\/tmp\//.test(location.search)) {
+    online_options.grammars_url=location.search.substr(1);
+  }
+
   var server=pgf_online(online_options);
 
   var minibar_options= {
