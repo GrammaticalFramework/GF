@@ -248,13 +248,17 @@ function draw_abstract(g) {
     var flags=g.abstract.startcat || g.abstract.cats.length>1
 	? draw_startcat(g)
 	: text("");
+    function sort_funs() {
+	g.abstract.funs=sort_list(this,g.abstract.funs,"name");
+	save_grammar(g);
+    }
     return div_id("file",
 		  [kw("abstract "),ident(g.basename),sep(" = "),
 		   flags,
 		   indent([extensible([kw_cat,
 				       indent(draw_cats(g))]),
 			   extensible([kw_fun,
-				       indent(draw_funs(g))])])]);
+				       indent_sortable(draw_funs(g),sort_funs)])])]);
 }
 
 function add_cat(g,el) {
@@ -371,7 +375,7 @@ function draw_funs(g) {
     }
 //  for(var i=0;i<funs.length;i++) {
     for(var i in funs) {
-	es.push(div_class("fun",[deletable(del(i),draw_efun(i,df),"Delete this function")]));
+	es.push(node_sortable("fun",funs[i].name,[deletable(del(i),draw_efun(i,df),"Delete this function")]));
 	df[funs[i].name]=true;
     }
     es.push(more(g,add_fun,"Add a new function"));
@@ -525,14 +529,18 @@ function draw_lincats(g,i) {
 	var l2= err ? deletable(del(cat),l1,"Delete this lincat") : l1;
 	var l=ifError(err,"lincat for undefined category",l2);
 	delete dc[cat];
-	return wrap("div",l);
+	return node_sortable("lincat",cat,[l]);
     }
     function dtmpl(c) {	
 	return wrap("div",dlc({cat:c,type:"",template:true},"template")); }
     var lcs=map(draw_lincat,conc.lincats);
     for(var c in dc)
 	lcs.push(dtmpl(c));
-    return indent(lcs);
+    function sort_lincats() {
+	conc.lincats=sort_list(this,conc.lincats,"cat");
+	save_grammar(g);
+    }
+    return indent_sortable(lcs,sort_lincats);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -591,12 +599,18 @@ function draw_opers(g,ci) {
 	return editable("span",draw_oper(opers[i],dp),g,edit_oper(ci,i),"Edit this operator definition");
     }
     for(var i in opers) {
-	es.push(div_class("oper",[deletable(del(i),draw_eoper(i,dp),"Delete this operator definition")]));
+	es.push(node_sortable("oper",opers[i].name,
+			      [deletable(del(i),draw_eoper(i,dp),
+					 "Delete this operator definition")]));
 	dp[opers[i].name]=true;
     }
     es.push(more(g,function(g,el) { return add_oper(g,ci,el)},
 		 "Add a new operator definition"));
-    return indent(es);
+    function sort_opers() {
+	conc.opers=sort_list(this,conc.opers,"name");
+	save_grammar(g);
+    }
+    return indent_sortable(es,sort_opers);
 }
 
 function delete_lin(g,ci,fun) {
@@ -654,7 +668,7 @@ function draw_lins(g,i) {
 	var l= err ? deletable(del(fun),dl(f,"lin"),"Delete this function") : dl(f,"lin")
 	var l=ifError(err,"Function "+fun+" is not part of the abstract syntax",l);
 	delete df[fun];
-	return wrap("div",l);
+	return node_sortable("lin",fun,[l]);
     }
     function largs(f) {
 	var funs=g.abstract.funs;
@@ -665,10 +679,14 @@ function draw_lins(g,i) {
 	return wrap("div",
 		    dl({fun:f,args:largs(f),lin:"",template:true},"template"));
     }
+    function sort_lins() {
+	conc.lins=sort_list(this,conc.lins,"fun");
+	save_grammar(g);
+    }
     var ls=map(draw_lin,conc.lins);
     for(var f in df)
 	ls.push(dtmpl(f));
-    return indent(ls);
+    return indent_sortable(ls,sort_lins);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -699,6 +717,29 @@ function hidden(name,value) {
 }
 
 /* -------------------------------------------------------------------------- */
+
+function sort_list(list,olditems,key) {
+    var items=[];
+    function find(fun) {
+	for(var i=0;i<olditems.length;i++)
+	    if(olditems[i][key]==fun) return olditems[i];
+	return null;
+    }
+    for(var el=list.firstChild;el;el=el.nextSibling) {
+	var name=el.getAttribute("ident")
+	if(name) {
+	    var old=find(name);
+	    if(old) items.push(old)
+	    else debug("Bug: did not find "+name+" while sorting");
+	}
+    }
+    if(items.length==olditems.length)
+	return items;
+    else {
+	debug("Bug: length changed while sorting")
+	return olditems;
+    }
+}
 
 function string_editor(el,init,ok) {
     var p=el.parentNode;
@@ -742,6 +783,16 @@ function kw(txt) { return wrap_class("span","kw",text(txt)); }
 function sep(txt) { return wrap_class("span","sep",text(txt)); }
 function ident(txt) { return wrap_class("span","ident",text(txt)); }
 function indent(cs) { return div_class("indent",cs); }
+
+function indent_sortable(cs,sort) {
+    var n= indent(cs);
+    n.onsort=sort;
+    return n;
+}
+
+function node_sortable(cls,name,ls) {
+    return node("div",{"class":cls,"ident":name},ls);
+}
 
 function extensible(cs) { return div_class("extensible",cs); }
 
