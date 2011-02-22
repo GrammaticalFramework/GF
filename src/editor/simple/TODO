@@ -9,7 +9,7 @@
 
 - Allow languages other than the ones in the given list to be added
 + Export as plain text
-- Allow definitions to be reordered
++ Allow definitions to be reordered
 
 + 1. possibility to compile the grammar set, returning a URL to a translator app
 - 2. possibility to import modules - both resource libraries and user's own
@@ -18,7 +18,7 @@
 + 4. access to the created files in an on-line shell (making testing possible)
 - 5. rule-to-rule type checking and guidance (e.g. with library oper
      suggestions)
--    Try grammars in the Translation Quiz
++    Try grammars in the Translation Quiz
 
 + compile only the uploaded grammar even if other grammars are present
 + 'flags startcat' is needed for grammars with only one category (since the
