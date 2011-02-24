@@ -86,6 +86,7 @@ concrete StructuralBul of Structural = CatBul **
   something_NP = mkNP "нещо" (GSg Neut) P3 ;
   somewhere_Adv = ss "някъде" ;
   that_Quant = mkQuant "онзи" "онази" "онова" "онези" ;
+  that_Subj = ss "че" ;
   there_Adv = ss "там" ;
   there7to_Adv = ss ["до там"] ;
   there7from_Adv = ss ["от там"] ;
