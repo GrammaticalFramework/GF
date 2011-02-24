@@ -298,7 +298,7 @@ oper
     } ;
 
   ClausePlus : Type = {
-    s : Tense => Anteriority => Polarity => {subj,fin,inf,compl,adv,ext : HStr}
+    s : Tense => Anteriority => Polarity => {subj,fin,inf,compl,adv,ext : Str ; qp : Bool}
     } ;
 
   mkClause : (Polarity -> Str) -> Agr -> VP -> Clause = 

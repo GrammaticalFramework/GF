@@ -108,6 +108,7 @@ concrete StructuralFin of Structural = CatFin **
           } ;
     s2 = [] ; isNum,isPoss = False ; isDef = True ; 
     } ;
+  that_Subj = ss "että" ;
   there_Adv = ss "siellä" ; --- tuolla
   there7to_Adv = ss "sinne" ;
   there7from_Adv = ss "sieltä" ;
