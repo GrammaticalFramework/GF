@@ -12,7 +12,7 @@
 -- Computation of source terms. Used in compilation and in @cc@ command.
 -----------------------------------------------------------------------------
 
-module GF.Compile.Compute.Concrete (computeConcrete, computeTerm,computeConcreteRec) where
+module GF.Compile.Compute.Concrete (computeConcrete, computeTerm,computeConcreteRec,checkPredefError) where
 
 import GF.Data.Operations
 import GF.Grammar.Grammar
@@ -20,6 +20,7 @@ import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Infra.Modules
 import GF.Data.Str
+import GF.Grammar.ShowTerm
 import GF.Grammar.Printer
 import GF.Grammar.Predef
 import GF.Grammar.Macros
@@ -466,3 +467,10 @@ getArgType t = case t of
   V ty _ -> return ty
   T (TComp ty) _ -> return ty
   _ -> Bad (render (text "cannot get argument type of table" $$ nest 2 (ppTerm Unqualified 0 t)))
+
+
+checkPredefError :: SourceGrammar -> Term -> Err Term
+checkPredefError sgr t = case t of
+  App (Q (mod,f)) s | mod == cPredef && f == cError -> Bad $ showTerm sgr TermPrintOne Unqualified s
+  _ -> composOp (checkPredefError sgr) t
+  
