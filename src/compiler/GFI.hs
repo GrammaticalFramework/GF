@@ -12,7 +12,7 @@ import GF.Grammar hiding (Ident)
 import GF.Grammar.Parser (runP, pExp)
 import GF.Grammar.ShowTerm
 import GF.Compile.Rename
-import GF.Compile.Compute.Concrete (computeConcrete)
+import GF.Compile.Compute.Concrete (computeConcrete,checkPredefError)
 import GF.Compile.TypeCheck.Concrete (inferLType)
 import GF.Infra.Dependencies
 import GF.Infra.CheckM
@@ -124,7 +124,8 @@ loop opts gfenv0 = do
                  mo <- maybe (Bad "no source grammar in scope") return $ greatestResource gr
                  ((t,_),_) <- runCheck $ do t <- renameSourceTerm gr mo t
                                             inferLType gr [] t
-                 computeConcrete sgr t
+                 t1 <- computeConcrete sgr t
+                 checkPredefError sgr t1
 
              case runP pExp (encodeUnicode utf8 s) of
                Left (_,msg) -> putStrLn msg
