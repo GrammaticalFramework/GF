@@ -133,6 +133,8 @@ that_Quant = {
   isDef = False ; isPost = False ; hasRef = False
 };
 
+  that_Subj = ss "că" ;
+
   there7from_Adv = ss ["de acolo"] ;
   there7to_Adv = ss "până acolo" ; 
   there_Adv = ss "acolo" ;

@@ -156,51 +156,41 @@ allCommands env@(pgf, mos) = Map.fromList [
        ],
      exec = \opts es -> do
          let langs = optLangs opts
-         let grph = if null es then [] else graphvizAlignment pgf langs (head es)
-         if isFlag "view" opts || isFlag "format" opts then do
-           let file s = "_grph." ++ s
-           let view = optViewGraph opts
-           let format = optViewFormat opts 
-           writeUTF8File (file "dot") grph
-           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
-           system $ view ++ " " ++ file format
-           return void
-          else return $ fromString grph,
+         if isOpt "giza" opts 
+           then do
+             let giz = map (gizaAlignment pgf (head $ langs, head $ tail $ langs)) es
+             let lsrc = unlines $ map (\(x,_,_) -> x) giz
+             let ltrg = unlines $ map (\(_,x,_) -> x) giz
+             let align = unlines $ map (\(_,_,x) -> x) giz
+             let grph = if null es then [] else lsrc ++ "\n--end_source--\n\n"++ltrg++"\n-end_target--\n\n"++align
+             return $ fromString grph
+           else do
+             let grph = if null es then [] else graphvizAlignment pgf langs (head es)
+             if isFlag "view" opts || isFlag "format" opts 
+               then do
+                 let file s = "_grph." ++ s
+                 let view = optViewGraph opts
+                 let format = optViewFormat opts 
+                 writeUTF8File (file "dot") grph
+                 system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
+                 system $ view ++ " " ++ file format
+                 return void
+               else return $ fromString grph,
      examples = [
-       "gr | aw              -- generate a tree and show word alignment as graph script",
-       "gr | vt -view=\"open\" -- generate a tree and display alignment on a Mac"
+       "gr | aw                         -- generate a tree and show word alignment as graph script",
+       "gr | aw -view=\"open\"            -- generate a tree and display alignment on Mac",
+       "gr | aw -view=\"eog\"             -- generate a tree and display alignment on Ubuntu",
+       "gt | aw -giza | wf -file=aligns -- generate trees, send giza alignments to file"
        ],
      options = [
+       ("giza",  "show alignments in the Giza format; the first two languages")
        ],
      flags = [
        ("format","format of the visualization file (default \"png\")"),
-       ("lang", "alignments for this list of languages (default: all)"),
-       ("view",  "program to open the resulting file (default \"open\")")
+       ("lang",  "alignments for this list of languages (default: all)"),
+       ("view",  "program to open the resulting file")
        ] 
     }),
- ("ga", emptyCommandInfo {
-     longname = "giza_alignment",
-     synopsis = "show the giza alignment between 2 languages",
-     explanation = unlines [
-       "Prints a set of alignments in the .txt format.",
-       "The graph can be saved in a file by the wf command as usual."
-       ],
-     exec = \opts es -> do
-         let giz = map (gizaAlignment pgf (head $ languages pgf, head $ tail $ languages pgf)) es
-         let lsrc = unlines $ map (\(x,_,_) -> x) giz
-         let ltrg = unlines $ map (\(_,x,_) -> x) giz
-         let align = unlines $ map (\(_,_,x) -> x) giz
-         let grph = if null es then [] else lsrc ++ "\n--end_source--\n\n"++ltrg++"\n-end_target--\n\n"++align
-         return $ fromString grph,
-     examples = [
-       "gr | ga              -- generate a tree and show giza alignments"
-       ],
-     options = [
-       ],
-     flags = [
-       ] 
-    }),
-
   ("ca", emptyCommandInfo {
      longname = "clitic_analyse",
      synopsis = "print the analyses of all words into stems and clitics",
