@@ -21,6 +21,8 @@ lin
   become_VA = mkVA (irregV "become" "became" "become") ;
   beer_N = regN "beer" ;
   beg_V2V = mkV2V (regDuplV "beg") noPrep toP ;
+  -- prevent_V2V = ingV2V (mkV "prevent") noPrep (mkPrep "from") ;
+  -- make_V2V = mkV2V make_V noPrep noPrep ;
   big_A = duplADeg "big" ;
   bike_N = regN "bike" ;
   bird_N = regN "bird" ;
