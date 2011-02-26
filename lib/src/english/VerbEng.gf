@@ -16,7 +16,7 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
     ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
     ComplVA v ap = insertObj (ap.s) (predV v) ;
 
-    SlashV2V v vp = insertObjc (\\a => infVP v.typ vp a) (predVc v) ;
+    SlashV2V v vp = insertObjc (\\a => v.c3 ++ infVP v.typ vp a) (predVc v) ;
     SlashV2S v s  = insertObjc (\\_ => conjThat ++ s.s) (predVc v) ;
     SlashV2Q v q  = insertObjc (\\_ => q.s ! QIndir) (predVc v) ;
     SlashV2A v ap = insertObjc (\\a => ap.s ! a) (predVc v) ; ----
@@ -28,7 +28,7 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
         {c2 = vp.c2} ;
     SlashV2VNP vv np vp = 
       insertObjPre (\\_ => vv.c2 ++ np.s ! Acc)
-        (insertObjc (\\a => infVP vv.typ vp a) (predVc vv)) **
+        (insertObjc (\\a => vv.c3 ++ infVP vv.typ vp a) (predVc vv)) **
           {c2 = vp.c2} ;
 
     UseComp comp = insertObj comp.s (predAux auxBe) ;
