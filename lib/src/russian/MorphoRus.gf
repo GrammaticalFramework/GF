@@ -1073,7 +1073,8 @@ oper verbMoch : Verbum = verbDeclMoch Imperfective First "мог" "у" "мог" 
 --oper verbPoranit : Verbum = verbDecl Perfective Second "поран" "ю" "поранил" "порань" "поранить";
 --
 -- Irregular Mixed:
-oper verbKhotet : Verbum = verbDecl Imperfective Mixed "хоч" "у" "хотел" "хоти" "хотеть";
+oper verbKhotet : Verbum = verbDecl Imperfective Mixed "хо" "у" "хотел" "хоти" "хотеть";
+--AR oper verbKhotet : Verbum = verbDecl Imperfective Mixed "хоч" "у" "хотел" "хоти" "хотеть";
 
 -- Irregular
 oper verbDolzhen : Verbum = verbDecl Imperfective Dolzhen "долж" "ен" "долж" ["будь должен"] ["быть должным"] ;
@@ -1103,7 +1104,8 @@ oper presentConjDolzhen: Str -> Str -> PresentVerb = \del, sgP1End ->
 -- +++ MG_UR: changed! +++
 oper presentConjMixed: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
-    PRF (GSg _) P1 => del+ sgP1End ; -- sgP1End "чу"
+    PRF (GSg _) P1 => del+ "чу" ;
+--AR    PRF (GSg _) P1 => del+ sgP1End ; -- sgP1End "чу"
     PRF (GSg _) P2 => del+ "чешь" ;
     PRF (GSg _) P3 => del+ "чет" ;
     PRF GPl P1 => del+ "тим" ;
