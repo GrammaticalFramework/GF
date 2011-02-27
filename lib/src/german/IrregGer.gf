@@ -70,7 +70,7 @@ in {
   lin glimmen_V =  irregV "glimmen" "glimmt" "glomm" "glimmte" "glömme" ;
   lin graben_V =  irregV "graben" "gräbt" "grub" "grübe" "gegraben" ;
   lin greifen_V =  irregV "greifen" "greift" "griff" "griffe" "gegriffen" ;
-  lin haben_V =  irregV "haben" "hat" "hatte" "hatte" "gehabt" ;
+  lin haben_V =  irregV "haben" "hat" "hatte" "hätte" "gehabt" ;
   lin halten_V =  irregV "halten" "hält" "hielt" "hielte" "gehalten" ;
   lin hängen_V =  irregV "hängen" "hängt" "hing" "hinge" "gehangen" ;
   lin hauen_V =  irregV "hauen" "haut" (variants {"haute" ; "hieb"}) (variants {"haute" ; "hiebe"}) "gehauen" ;

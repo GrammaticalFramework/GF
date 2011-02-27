@@ -1684,13 +1684,13 @@ oper
     "7" => n7 ;
     "8" => n8 ;
     "9" => n9 ;
-    _   => Predef.error ("not a valid digit" ++ s)
+    _   => Predef.error ("str2numeral: not a valid Digit" ++ s)
     } ;
 
   s2s10 : Str -> Sub10 = \s -> case s of {
     "1" => pot01 ;
     #idigit => pot0 (s2d s) ;
-    _   => Predef.error ("not a valid digit" ++ s)
+    _   => Predef.error ("str2numeral: not a valid Sub10" ++ s)
     } ;
 
   s2s100 : Str -> Sub100 = \s -> case s of {
@@ -1744,7 +1744,7 @@ oper
     "7" => D_7 ;
     "8" => D_8 ;
     "9" => D_9 ;
-    _   => Predef.error ("not a valid digit" ++ s)
+    _   => Predef.error ("s2d: not a valid digit" ++ s)
     } ;
   } ;
 
