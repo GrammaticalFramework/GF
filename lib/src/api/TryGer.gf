@@ -1,3 +1,3 @@
 --# -path=.:alltenses:prelude
 
-resource TryGer = SyntaxGer, LexiconGer, ParadigmsGer - [mkAdv] ;
+resource TryGer = SyntaxGer, ExtraGer, LexiconGer, ParadigmsGer - [mkAdv], MakeStructuralGer ;
