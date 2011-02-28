@@ -164,7 +164,7 @@ function add_concrete(g,el) {
 	    list.push(li([a(jsurl("add_concrete2("+g.index+",'"+c+"')"),
 			    [text(l.name)])]));
     }
-    file.appendChild(text("Pick a language for the new concrete syntax:"));
+    file.appendChild(p(text("Pick a language for the new concrete syntax:")));
     file.appendChild(node("ul",{},list));
 }
 
@@ -276,13 +276,6 @@ function add_cat(g,el) {
     string_editor(el,"",add);
 }
 
-function delete_ix(old,ix) {
-    var a=[];
-//  for(var i=0;i<old.length;i++) if(i!=ix) a.push(old[i]);
-    for(var i in old) if(i!=ix) a.push(old[i]);
-    return a;
-}
-
 function delete_cat(g,ix) {
     with(g.abstract) cats=delete_ix(cats,ix);
     reload_grammar(g);
@@ -315,7 +308,6 @@ function draw_cats(g) {
 	return ifError(defined[cat],"Same category named twice",el);
     }
     function del(i) { return function() { delete_cat(g,i); }}
-//  for(var i=0; i<cs.length;i++) {
     for(var i in cs) {
 	es.push(deletable(del(i),check(cs[i],eident(cs[i])),"Delete this category"));
 	defined[cs[i]]=true;
@@ -424,6 +416,7 @@ function draw_concrete(g,i) {
     return div_id("file",
 		  [kw("concrete "),ident(g.basename+conc.langcode),
 		   kw(" of "),ident(g.basename),sep(" = "),
+		   indent([extensible([kw("open "),draw_opens(g,i)])]),
 		   indent([extensible([kw("param"),draw_params(g,i)])]),
 		   indent([kw("lincat"),draw_lincats(g,i)]),
 		   indent([extensible([kw("oper"),draw_opers(g,i)])]),
@@ -431,6 +424,58 @@ function draw_concrete(g,i) {
 		  ])
 }
 
+var rgl_modules=["Paradigms","Syntax"];
+
+function add_open(ci) {
+    return function (g,el) {
+	var conc=g.concretes[ci];
+	var os=conc.opens;
+	var ds={};
+	for(var i in os) ds[os[i]]=true;
+	var list=[]
+	for(var i in rgl_modules) {
+	    var b=rgl_modules[i], m=b+conc.langcode;
+	    if(!ds[m])
+		list.push(li([a(jsurl("add_open2("+g.index+","+ci+",'"+m+"')"),
+				[text(m)])]));
+	}
+	if(list.length>0) {
+	    var file=element("file");
+	    file.innerHTML="";
+	    file.appendChild(p(text("Pick a resource library module to open:")));
+	    file.appendChild(node("ul",{},list));
+	}
+    }
+}
+
+function add_open2(ix,ci,m) {
+    var g=local.get(ix);
+    var conc=g.concretes[ci];
+    conc.opens || (conc.opens=[]);
+    conc.opens.push(m);
+    save_grammar(g);
+    open_concrete(g,ci);
+}
+
+function delete_open(g,ci,ix) {
+    with(g.concretes[ci]) opens=delete_ix(opens,ix);
+    reload_grammar(g);
+}
+
+function draw_opens(g,ci) {
+    var conc=g.concretes[ci];
+    var os=conc.opens || [] ;
+    var es=[];
+    function del(i) { return function() { delete_open(g,ci,i); }}
+    var first=true;
+    for(var i in os) {
+	if(!first) es.push(sep(", "))
+	es.push(deletable(del(i),ident(os[i]),"Don't open this module"));
+	first=false;
+    }
+    es.push(more(g,add_open(ci),"Open more modules"));
+    return indent(es);
+}
 
 function draw_param(p,dp) {
     function check(el) {
@@ -717,6 +762,13 @@ function hidden(name,value) {
 }
 
 /* -------------------------------------------------------------------------- */
+
+function delete_ix(old,ix) {
+    var a=[];
+//  for(var i=0;i<old.length;i++) if(i!=ix) a.push(old[i]);
+    for(var i in old) if(i!=ix) a.push(old[i]);
+    return a;
+}
 
 function sort_list(list,olditems,key) {
     var items=[];

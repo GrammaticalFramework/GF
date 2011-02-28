@@ -176,8 +176,9 @@ function show_concretes(g) {
 
 function show_concrete(basename) {
     return function(conc) {
-	return "concrete "+basename+conc.langcode+" of "+basename+" = {\n\n"
-	    +"flags coding = utf8 ;\n\n"
+	return "concrete "+basename+conc.langcode+" of "+basename+" ="
+            +show_opens(conc.opens)
+	    +" {\n\nflags coding = utf8 ;\n\n"
 	    +show_params(conc.params)
 	    +show_lincats(conc.lincats)
 	    +show_opers(conc.opers)
@@ -190,6 +191,10 @@ function show_list(kw,show1,list) {
     return list.length>0 
 	? kw+"\n    "+map(show1,list).join(";\n    ")+";\n\n"
 	: ""
+}
+
+function show_opens(opens) {
+    return opens && opens.length>0 ? "\n\nopen "+opens.join(", ")+" in" : ""
 }
 
 function show_params(params) { return show_list("param",show_param,params); }
