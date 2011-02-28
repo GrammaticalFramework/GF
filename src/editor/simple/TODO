@@ -12,8 +12,8 @@
 + Allow definitions to be reordered
 
 + 1. possibility to compile the grammar set, returning a URL to a translator app
-- 2. possibility to import modules - both resource libraries and user's own
-     auxiliaries
++ 2a. possibility to import modules - resource libraries
+- 2b. possibility to import modules - user's own auxiliaries
 - 3. possibility to upload own modules
 + 4. access to the created files in an on-line shell (making testing possible)
 - 5. rule-to-rule type checking and guidance (e.g. with library oper
@@ -27,5 +27,5 @@
 - Bug! After adding a 2nd def of a fun with a different type and then deleting
   the old fun, the corresponding lin will have the wrong lhs.
 
-- Bug! The startcat menu shows the first category by default, but the startcat
++ Bug! The startcat menu shows the first category by default, but the startcat
   flag is actually not set until a selection is made from the menu.

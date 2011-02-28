@@ -109,7 +109,10 @@ Error checks:
 
 At the moment, concrete syntax definitions are limited to
 <ul>
-  <li><em>parameter types</em>,
+  <li>opening the Resource Grammar Library modules
+  <code>Syntax</code><var>L</var> and <code>Paradigms</code><var>L</var>
+  for the appropriate language <var>L</var>,
+  <li><em>parameter type definitions</em>,
   <var>P</var> = <var>C<sub>1</sub></var> | ... |<var>C<sub>n</sub></var>,
   <li><em>linearization types</em> for the categories in the abstract syntax,
   <li><em>operation definitions</em>, <var>op</var> = <var>expr</var>,
@@ -150,8 +153,7 @@ web browser, but let the editor communicate with a server running GF.
 <p>
 By developing a GF server with an appropriate API, it should
 be possible to extend the editor to support a larger fragment of GF,
-to do proper error checking, and to allow grammars to be tested in the GF
-shell or the minibar.
+to do proper error checking.
 <p>
 Grammars are currently stored locally in the browser, but a future version
 could allow grammars to be stored "in the cloud", allowing the same grammars
@@ -159,7 +161,7 @@ to be accessed from multiple devices.
 
 <hr>
 <div class=modtime><small>
-<!-- hhmts start --> Last modified: Wed Feb 23 17:37:16 CET 2011 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Mon Feb 28 17:44:19 CET 2011 <!-- hhmts end -->
   </small></div>
 <address>
 <a href="http://www.cse.chalmers.se/~hallgren/">TH</a>

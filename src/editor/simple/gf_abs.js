@@ -151,7 +151,8 @@ function show_grammar(g) {
 }
 
 function show_abstract(g) {
-    var startcat= g.abstract.cats.length==1 ? g.abstract.cats[0] : g.abstract.startcat;
+//  var startcat= g.abstract.cats.length==1 ? g.abstract.cats[0] : g.abstract.startcat;
+    var startcat= g.abstract.startcat || g.abstract.cats[0];
     return "abstract "+g.basename+" = {\n\n"
 	+"flags coding = utf8 ;\n\n"
 	+show_startcat(startcat)
