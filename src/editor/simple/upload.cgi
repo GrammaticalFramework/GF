@@ -21,6 +21,9 @@ make_dir() {
 check_grammar() {
   pagestart "Uploaded"
 # echo "$PATH_INFO"
+  chgrp everyone "$dir"
+  chmod g+ws "$dir"
+  umask 002
   files=$(Reg from-url | LC_CTYPE=sv_SE.ISO8859-1 ./save "$dir")
   cd $dir
   begin pre
