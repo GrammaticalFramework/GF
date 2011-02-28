@@ -176,7 +176,8 @@ function show_concretes(g) {
 
 function show_concrete(basename) {
     return function(conc) {
-	return "concrete "+basename+conc.langcode+" of "+basename+" ="
+	return "--# -path=.:present\n"
+            + "concrete "+basename+conc.langcode+" of "+basename+" ="
             +show_opens(conc.opens)
 	    +" {\n\nflags coding = utf8 ;\n\n"
 	    +show_params(conc.params)
