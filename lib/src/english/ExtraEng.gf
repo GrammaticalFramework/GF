@@ -2,22 +2,22 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
   open ResEng, Coordination, Prelude, MorphoEng in {
 
   lin
-    GenNP np = {s = \\_,_ => np.s ! Gen ; sp = \\_,_,_ => np.s ! Gen} ;
+    GenNP np = {s = \\_,_ => np.s ! npGen ; sp = \\_,_,_ => np.s ! npGen} ;
     ComplBareVS v s  = insertObj (\\_ => s.s) (predV v) ;
 
     StrandRelSlash rp slash = {
       s = \\t,a,p,ag => 
-        rp.s ! RC (fromAgr ag).g Acc ++ slash.s ! t ! a ! p ! ODir ++ slash.c2 ;
-      c = Acc
+        rp.s ! RC (fromAgr ag).g NPAcc ++ slash.s ! t ! a ! p ! ODir ++ slash.c2 ;
+      c = NPAcc
       } ;
     EmptyRelSlash slash = {
       s = \\t,a,p,_ => slash.s ! t ! a ! p ! ODir ++ slash.c2 ;
-      c = Acc
+      c = NPAcc
       } ;
 
     StrandQuestSlash ip slash = 
       {s = \\t,a,b,q => 
-         (mkQuestion (ss (ip.s ! Acc)) slash).s ! t ! a ! b ! q ++ slash.c2
+         (mkQuestion (ss (ip.s ! NPAcc)) slash).s ! t ! a ! b ! q ++ slash.c2
       };
 
   lincat
@@ -60,7 +60,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
   lin
     that_RP = 
     { s = table {
-        RC _ Gen    => "whose" ; 
+        RC _ (NCase Gen)    => "whose" ; 
         RC _ _      => "that" ;
         _           => "that"   ---- "in that" ?
 --        RPrep Neutr => "which" ;
@@ -84,7 +84,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     BaseVPS = twoTable Agr ;
     ConsVPS = consrTable Agr comma ;
 
-    PredVPS np vpi = {s = np.s ! Nom ++ vpi.s ! np.a} ;
+    PredVPS np vpi = {s = np.s ! npNom ++ vpi.s ! np.a} ;
 
     MkVPS t p vp = {
       s = \\a => 

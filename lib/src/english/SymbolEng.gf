@@ -8,15 +8,15 @@ lin
   FloatPN i = {s = addGenitiveS i.s ; g = Neutr} ;
   NumPN i = {s = i.s ; g = Neutr} ;
   CNIntNP cn i = {
-    s = \\c => cn.s ! Sg ! Nom ++ (addGenitiveS i.s) ! c ;
+    s = \\c => cn.s ! Sg ! Nom ++ (addGenitiveS i.s) ! npcase2case c ;
     a = agrgP3 Sg cn.g
     } ;
   CNSymbNP det cn xs = {
-    s = \\c => det.s ++ cn.s ! det.n ! Nom ++ (addGenitiveS xs.s) ! c ; 
+    s = \\c => det.s ++ cn.s ! det.n ! Nom ++ (addGenitiveS xs.s) ! npcase2case c ; 
     a = agrgP3 det.n cn.g
     } ;
   CNNumNP cn i = {
-    s = \\c => cn.s ! Sg ! Nom ++ i.s ! c ;
+    s = \\c => cn.s ! Sg ! Nom ++ i.s ! npcase2case c ;
     a = agrgP3 Sg cn.g
     } ;
 

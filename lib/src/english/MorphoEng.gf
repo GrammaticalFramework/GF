@@ -17,9 +17,9 @@ resource MorphoEng = open Prelude, (Predef=Predef), ResEng in {
   oper 
 
   mkDeterminer : Number -> Str -> 
-    {s : Str ; sp : Case => Str; n : Number ; hasNum : Bool} = \n,s ->
+    {s : Str ; sp : NPCase => Str; n : Number ; hasNum : Bool} = \n,s ->
     {s = s; 
-     sp = regGenitiveS s ;
+     sp = \\c => regGenitiveS s ! npcase2case c ;
      n = n ;
      hasNum = True ; -- doesn't matter since s = sp
      } ;
@@ -28,12 +28,12 @@ resource MorphoEng = open Prelude, (Predef=Predef), ResEng in {
 
 
   mkPron : (i,me,my,mine : Str) -> Number -> Person -> Gender -> 
-    {s : Case => Str ; sp : Case => Str ; a : Agr} =
+    {s : NPCase => Str ; sp : Case => Str ; a : Agr} =
      \i,me,my,mine,n,p,g -> {
      s = table {
-       Nom => i ;
-       Acc => me ;
-       Gen => my
+       NCase Nom => i ;
+       NPAcc => me ;
+       NCase Gen => my
        } ;
      a = toAgr n p g ;
      sp = regGenitiveS mine

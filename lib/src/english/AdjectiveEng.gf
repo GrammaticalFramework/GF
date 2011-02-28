@@ -7,7 +7,7 @@ concrete AdjectiveEng of Adjective = CatEng ** open ResEng, Prelude in {
       isPre = True
       } ;
     ComparA a np = {
-      s = \\_ => a.s ! AAdj Compar Nom ++ "than" ++ np.s ! Nom ; 
+      s = \\_ => a.s ! AAdj Compar Nom ++ "than" ++ np.s ! npNom ; 
       isPre = False
       } ;
     UseComparA a = {
@@ -21,12 +21,12 @@ concrete AdjectiveEng of Adjective = CatEng ** open ResEng, Prelude in {
       } ;
 
     CAdvAP ad ap np = {
-      s = \\a => ad.s ++ ap.s ! a ++ ad.p ++ np.s ! Nom ; 
+      s = \\a => ad.s ++ ap.s ! a ++ ad.p ++ np.s ! npNom ; 
       isPre = False
       } ;
 
     ComplA2 a np = {
-      s = \\_ => a.s ! AAdj Posit Nom ++ a.c2 ++ np.s ! Acc ; 
+      s = \\_ => a.s ! AAdj Posit Nom ++ a.c2 ++ np.s ! NPAcc ; 
       isPre = False
       } ;
 

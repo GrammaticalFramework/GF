@@ -14,20 +14,20 @@ concrete QuestionEng of Question = CatEng ** open ResEng, Prelude in {
       } ;
 
     QuestVP qp vp = 
-      let cl = mkClause (qp.s ! Nom) (agrP3 qp.n) vp
+      let cl = mkClause (qp.s ! npNom) (agrP3 qp.n) vp
       in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
 
     QuestSlash ip slash = 
-      mkQuestion (ss (slash.c2 ++ ip.s ! Acc)) slash ;
+      mkQuestion (ss (slash.c2 ++ ip.s ! NPAcc)) slash ;
       --- stranding in ExratEng 
 
     QuestIAdv iadv cl = mkQuestion iadv cl ;
 
     QuestIComp icomp np = 
-      mkQuestion icomp (mkClause (np.s ! Nom) np.a (predAux auxBe)) ;
+      mkQuestion icomp (mkClause (np.s ! npNom) np.a (predAux auxBe)) ;
 
 
-    PrepIP p ip = {s = p.s ++ ip.s ! Acc} ;
+    PrepIP p ip = {s = p.s ++ ip.s ! NPAcc} ;
 
     AdvIP ip adv = {
       s = \\c => ip.s ! c ++ adv.s ;
@@ -35,7 +35,7 @@ concrete QuestionEng of Question = CatEng ** open ResEng, Prelude in {
       } ;
  
     IdetCN idet cn = {
-      s = \\c => idet.s ++ cn.s ! idet.n ! c ; 
+      s = \\c => idet.s ++ cn.s ! idet.n ! npcase2case c ; 
       n = idet.n
       } ;
 
@@ -52,17 +52,17 @@ concrete QuestionEng of Question = CatEng ** open ResEng, Prelude in {
     AdvIAdv i a = ss (i.s ++ a.s) ;
 
     CompIAdv a = a ;
-    CompIP p = ss (p.s ! Nom) ;
+    CompIP p = ss (p.s ! npNom) ;
 
   lincat 
     QVP = ResEng.VP ;
   lin
-    ComplSlashIP vp np = insertObjPre (\\_ => vp.c2 ++ np.s ! Acc) vp ;
+    ComplSlashIP vp np = insertObjPre (\\_ => vp.c2 ++ np.s ! NPAcc) vp ;
     AdvQVP vp adv = insertObj (\\_ => adv.s) vp ;
     AddAdvQVP vp adv = insertObj (\\_ => adv.s) vp ;
 
     QuestQVP qp vp = 
-      let cl = mkClause (qp.s ! Nom) (agrP3 qp.n) vp
+      let cl = mkClause (qp.s ! npNom) (agrP3 qp.n) vp
       in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
 
 

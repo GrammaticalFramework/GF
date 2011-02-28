@@ -16,10 +16,22 @@ resource ResEng = ParamX ** open Prelude in {
 
 --2 For $Noun$
 
--- This is the worst-case $Case$ needed for pronouns.
+-- This is case as needed when inflecting nouns.
 
   param
-    Case = Nom | Acc | Gen ;
+    Case = Nom | Gen ;
+
+-- This is the worst-case $Case$ needed for pronouns.
+
+    NPCase = NCase Case | NPAcc ;
+
+-- Useful macros and conversions:
+
+  oper
+    npNom : NPCase = NCase Nom ;
+    npGen : NPCase = NCase Gen ;
+
+    npcase2case : NPCase -> Case = \nc -> case nc of {NCase c => c ; _ => Nom} ;
 
 -- Agreement of $NP$ has 8 values. $Gender$ is needed for "who"/"which" and
 -- for "himself"/"herself"/"itself".
@@ -67,7 +79,7 @@ resource ResEng = ParamX ** open Prelude in {
 --2 For $Relative$
  
     RAgr = RNoAg | RAg Agr ;
-    RCase = RPrep Gender | RC Gender Case ;
+    RCase = RPrep Gender | RC Gender NPCase ;
 
 --2 For $Numeral$
 
@@ -145,23 +157,23 @@ resource ResEng = ParamX ** open Prelude in {
       isRefl = False
       } ;
 
-    mkIP : (i,me,my : Str) -> Number -> {s : Case => Str ; n : Number} =
+    mkIP : (i,me,my : Str) -> Number -> {s : NPCase => Str ; n : Number} =
      \i,me,my,n -> let who = mkNP i me my n P3 Neutr in {
         s = who.s ; 
         n = n
         } ;
 
     mkNP : (i,me,my : Str) -> Number -> Person -> Gender -> 
-     {s : Case => Str ; a : Agr} = \i,me,my,n,p,g -> 
+     {s : NPCase => Str ; a : Agr} = \i,me,my,n,p,g -> 
    { s = table {
-       Nom => i ;
-       Acc => me ;
-       Gen => my
+       NCase Nom => i ;
+       NPAcc => me ;
+       NCase Gen => my
        } ;
      a = toAgr n p g ;
    };
 
-    regNP : Str -> Number -> {s : Case => Str ; a : Agr} = \that,n ->
+    regNP : Str -> Number -> {s : NPCase => Str ; a : Agr} = \that,n ->
       mkNP that that (that + "'s") n P3 Neutr ;
 
     regGenitiveS : Str -> Case => Str = \s -> 

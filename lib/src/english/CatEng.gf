@@ -8,7 +8,7 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 
     S  = {s : Str} ;
     QS = {s : QForm => Str} ;
-    RS = {s : Agr => Str ; c : Case} ; -- c for it clefts
+    RS = {s : Agr => Str ; c : NPCase} ; -- c for it clefts
     SSlash = {s : Str ; c2 : Str} ;
 
 -- Sentence
@@ -23,7 +23,7 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 -- Question
 
     QCl = {s : ResEng.Tense => Anteriority => CPolarity => QForm => Str} ;
-    IP = {s : Case => Str ; n : Number} ;
+    IP = {s : NPCase => Str ; n : Number} ;
     IComp = {s : Str} ;    
     IDet = {s : Str ; n : Number} ;
     IQuant = {s : Number => Str} ;
@@ -32,7 +32,7 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 
     RCl = {
       s : ResEng.Tense => Anteriority => CPolarity => Agr => Str ; 
-      c : Case
+      c : NPCase
       } ;
     RP = {s : RCase => Str ; a : RAgr} ;
 
@@ -49,14 +49,14 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 -- Noun
 
     CN = {s : Number => Case => Str ; g : Gender} ;
-    NP = {s : Case => Str ; a : Agr} ;
-    Pron = {s : Case => Str ; sp : Case => Str ; a : Agr} ;
-    Det = {s : Str ; sp : Case => Str ; n : Number ; hasNum : Bool} ;
+    NP = {s : NPCase => Str ; a : Agr} ;
+    Pron = {s : NPCase => Str ; sp : Case => Str ; a : Agr} ;
+    Det = {s : Str ; sp : NPCase => Str ; n : Number ; hasNum : Bool} ;
     Predet = {s : Str} ;
     Ord = { s : Case => Str } ;
     Num  = {s : Case => Str ; n : Number ; hasCard : Bool} ;
     Card = {s : Case => Str ; n : Number} ;
-    Quant = {s : Bool => Number => Str ; sp : Bool => Number => Case => Str} ;
+    Quant = {s : Bool => Number => Str ; sp : Bool => Number => NPCase => Str} ;
 
 -- Numeral
 
