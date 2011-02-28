@@ -781,6 +781,29 @@ allCommands env@(pgf, mos) = Map.fromList [
        "gt | l | sp -command=\"grep \\\"who\\\"\" | sp -command=\"wc\""
        ]
      }),
+
+  ("so", emptyCommandInfo {
+     longname = "show_operations",
+     syntax = "so (-grep=STRING)* TYPE?",
+     synopsis = "show all operations in scope, possibly restricted to a value type",
+     explanation = unlines [
+       "Show the names and type signatures of all operations available in the current resource.",
+       "This command requires a source grammar to be in scope, imported with 'import -retain'.",
+       "The operations include the parameter constructors that are in scope.",
+       "The optional TYPE filters according to the value type.",
+       "The grep STRINGs filter according to other substrings of the type signatures.",
+       "This command must be a line of its own, and thus cannot be a part",
+       "of a pipe."
+       ],
+     flags = [
+       ("grep","substring used for filtering (the command can have many of these)")
+       ],
+     options = [
+       ("raw","show the types in computed forms (instead of category names)")
+       ],
+     needsTypeCheck = False
+     }),
+
   ("ut", emptyCommandInfo {
      longname = "unicode_table",
      synopsis = "show a transliteration table for a unicode character set",

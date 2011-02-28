@@ -28,7 +28,8 @@ module GF.Grammar.Lookup (
            lookupAbsDef, 
            lookupLincat, 
            lookupFunType,
-           lookupCatContext
+           lookupCatContext,
+           allOpers, allOpersTo
 	      ) where
 
 import GF.Data.Operations
@@ -43,6 +44,7 @@ import GF.Grammar.Lockfield
 import Data.List (nub,sortBy)
 import Control.Monad
 import Text.PrettyPrint
+import qualified Data.Map as Map
 
 -- whether lock fields are added in reuse
 lock c = lockRecType c -- return
@@ -189,3 +191,39 @@ lookupCatContext gr m c = do
     AbsCat (Just (L _ co)) -> return co
     AnyInd _ n             -> lookupCatContext gr n c
     _                      -> Bad (render (text "unknown category" <+> ppIdent c))
+
+
+-- this gives all opers and param constructors, also overloaded opers and funs, and the types, and locations
+-- notice that it only gives the modules that are reachable and the opers that are included
+
+allOpers :: SourceGrammar -> [((Ident,Ident),Type,(Int,Int))]
+allOpers gr = 
+  [((mo,op),typ,loc) | 
+      (mo,minc)  <- reachable,
+      Ok minfo   <- [lookupModule gr mo],
+      (op,info)  <- Map.toList $ jments minfo,
+      isInherited minc op, 
+      L loc typ  <- typesIn info
+  ] 
+ where
+  typesIn info = case info of
+    AbsFun  (Just ltyp) _ _ _ -> [ltyp] 
+    ResOper (Just ltyp) _     -> [ltyp] 
+    ResValue ltyp             -> [ltyp]
+    ResOverload _ tytrs       -> [ltyp | (ltyp,_) <- tytrs]
+    _                         -> []
+  reachable = case greatestResource gr of
+    Just r -> allExtendSpecs gr r
+    _ -> []
+
+--- not for dependent types
+allOpersTo :: SourceGrammar -> Type -> [((Ident,Ident),Type,(Int,Int))]
+allOpersTo gr ty = [op | op@(_,typ,_) <- allOpers gr, isProdTo ty typ] where
+  isProdTo t typ = eqProd typ t || case typ of
+    Prod _ _ a b -> isProdTo t b
+    _ -> False
+  eqProd f g = case (f,g) of
+    (Prod _ _ a1 b1, Prod _ _ a2 b2) -> eqProd a1 a2 && eqProd b1 b2
+    _ -> f == g
+
+ 
