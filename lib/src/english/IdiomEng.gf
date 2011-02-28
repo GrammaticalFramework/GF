@@ -16,17 +16,17 @@ concrete IdiomEng of Idiom = CatEng ** open Prelude, ResEng in {
 
     ExistNP np = 
       mkClause "there" (agrP3 (fromAgr np.a).n) 
-        (insertObj (\\_ => np.s ! Acc) (predAux auxBe)) ;
+        (insertObj (\\_ => np.s ! NPAcc) (predAux auxBe)) ;
 
     ExistIP ip = 
-      mkQuestion (ss (ip.s ! Nom)) 
+      mkQuestion (ss (ip.s ! npNom)) 
         (mkClause "there" (agrP3 ip.n) (predAux auxBe)) ;
 
     ProgrVP vp = insertObj (\\a => vp.ad ++ vp.prp ++ vp.s2 ! a) (predAux auxBe) ;
 
     ImpPl1 vp = {s = "let's" ++ infVP VVAux vp (AgP1 Pl)} ;
 
-    ImpP3 np vp = {s = "let" ++ np.s ! Acc ++ infVP VVAux vp np.a} ;
+    ImpP3 np vp = {s = "let" ++ np.s ! NPAcc ++ infVP VVAux vp np.a} ;
 
 }
 

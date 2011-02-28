@@ -7,9 +7,9 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
 
     SlashV2a v = predVc v ;
     Slash2V3 v np = 
-      insertObjc (\\_ => v.c2 ++ np.s ! Acc) (predV v ** {c2 = v.c3}) ;
+      insertObjc (\\_ => v.c2 ++ np.s ! NPAcc) (predV v ** {c2 = v.c3}) ;
     Slash3V3 v np = 
-      insertObjc (\\_ => v.c3 ++ np.s ! Acc) (predVc v) ; ----
+      insertObjc (\\_ => v.c3 ++ np.s ! NPAcc) (predVc v) ; ----
 
     ComplVV v vp = insertObj (\\a => infVP v.typ vp a) (predVV v) ;
     ComplVS v s  = insertObj (\\_ => conjThat ++ s.s) (predV v) ;
@@ -21,13 +21,13 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
     SlashV2Q v q  = insertObjc (\\_ => q.s ! QIndir) (predVc v) ;
     SlashV2A v ap = insertObjc (\\a => ap.s ! a) (predVc v) ; ----
 
-    ComplSlash vp np = insertObjPre (\\_ => vp.c2 ++ np.s ! Acc) vp ;
+    ComplSlash vp np = insertObjPre (\\_ => vp.c2 ++ np.s ! NPAcc) vp ;
 
     SlashVV vv vp = 
       insertObj (\\a => infVP vv.typ vp a) (predVV vv) **
         {c2 = vp.c2} ;
     SlashV2VNP vv np vp = 
-      insertObjPre (\\_ => vv.c2 ++ np.s ! Acc)
+      insertObjPre (\\_ => vv.c2 ++ np.s ! NPAcc)
         (insertObjc (\\a => vv.c3 ++ infVP vv.typ vp a) (predVc vv)) **
           {c2 = vp.c2} ;
 
@@ -46,7 +46,7 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
 ---b    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; isRefl = vv.isRefl} ; -- no "to"
 
     CompAP ap = ap ;
-    CompNP np = {s = \\_ => np.s ! Acc} ;
+    CompNP np = {s = \\_ => np.s ! NPAcc} ;
     CompAdv a = {s = \\_ => a.s} ;
     CompCN cn = {s = \\a => case (fromAgr a).n of { 
       Sg => artIndef ++ cn.s ! Sg ! Nom ;

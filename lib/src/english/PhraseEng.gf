@@ -9,9 +9,9 @@ concrete PhraseEng of Phrase = CatEng ** open Prelude, ResEng in {
     UttImpPl pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Pl False} ;
     UttImpPol pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Sg True} ;
 
-    UttIP ip = {s = ip.s ! Nom} ; --- Acc also
+    UttIP ip = {s = ip.s ! npNom} ; --- Acc also
     UttIAdv iadv = iadv ;
-    UttNP np = {s = np.s ! Nom} ;
+    UttNP np = {s = np.s ! npNom} ;
     UttVP vp = {s = infVP VVInf vp (agrP3 Sg)} ;
     UttAdv adv = adv ;
     UttCN n = {s = n.s ! Sg ! Nom} ;
@@ -23,6 +23,6 @@ concrete PhraseEng of Phrase = CatEng ** open Prelude, ResEng in {
     PConjConj conj = {s = conj.s2} ; ---
 
     NoVoc = {s = []} ;
-    VocNP np = {s = "," ++ np.s ! Nom} ;
+    VocNP np = {s = "," ++ np.s ! npNom} ;
 
 }

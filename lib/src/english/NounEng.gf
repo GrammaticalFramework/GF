@@ -4,11 +4,11 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
 
   lin
     DetCN det cn = {
-      s = \\c => det.s ++ cn.s ! det.n ! c ; 
+      s = \\c => det.s ++ cn.s ! det.n ! npcase2case c ; 
       a = agrgP3 det.n cn.g
       } ;
 
-    UsePN pn = pn ** {a = agrgP3 Sg pn.g} ;
+    UsePN pn = {s = \\c => pn.s ! npcase2case c ; a = agrgP3 Sg pn.g} ;
     UsePron p = p ;
 
     PredetNP pred np = {
@@ -35,7 +35,7 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       s  = quant.s ! num.hasCard ! num.n ++ num.s ! Nom;
       sp = \\c => case num.hasCard of {
                      False => quant.sp ! num.hasCard ! num.n ! c ++ num.s ! Nom ;
-                     True  => quant.sp ! num.hasCard ! num.n ! Nom ++ num.s ! c
+                     True  => quant.sp ! num.hasCard ! num.n ! npNom ++ num.s ! npcase2case c
                   } ;
       n  = num.n ;
       hasNum = num.hasCard
@@ -43,19 +43,19 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
 
     DetQuantOrd quant num ord = {
       s  = quant.s ! num.hasCard ! num.n ++ num.s ! Nom ++ ord.s ! Nom; 
-      sp = \\c => quant.sp ! num.hasCard ! num.n ! Nom ++ num.s ! Nom ++ ord.s ! c ; 
+      sp = \\c => quant.sp ! num.hasCard ! num.n ! npNom ++ num.s ! Nom ++ ord.s ! npcase2case c ; 
       n  = num.n ;
       hasNum = True
       } ;
 
     DetNP det = {
-      s = case det.hasNum of {True => \\_ => det.s ; _ => det.sp} ;
+      s = case det.hasNum of {True => \\_ => det.s ; _ => \\c => det.sp ! c} ;
       a = agrP3 det.n
       } ;
 
     PossPron p = {
-      s = \\_,_ => p.s ! Gen ;
-      sp = \\_,_ => p.sp 
+      s = \\_,_ => p.s ! NCase Gen ;
+      sp = \\_,_,c => p.sp ! npcase2case c 
       } ;
 
     NumSg = {s = \\c => []; n = Sg ; hasCard = False} ;
@@ -77,8 +77,8 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
     DefArt = {
       s  = \\hasCard,n => artDef ;
       sp = \\hasCard,n => case <n,hasCard> of {
-        <Sg,False> => table { Gen => "its"; _ => "it" } ;
-        <Pl,False> => table { Nom => "they"; Acc => "them"; Gen => "theirs" } ;
+        <Sg,False> => table { NCase Gen => "its"; _ => "it" } ;
+        <Pl,False> => table { NCase Nom => "they"; NPAcc => "them"; NCase Gen => "theirs" } ;
         _          => \\c => artDef
         }
       } ;
@@ -89,14 +89,14 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
         _          => []
         } ;
       sp = \\hasCard,n => case <n,hasCard> of {
-        <Sg,False> => table { Gen => "one's"; _ => "one" };
-        <Pl,False> => table { Gen => "ones'"; _ => "ones" } ;
+        <Sg,False> => table {NCase Gen => "one's"; _ => "one" };
+        <Pl,False> => table {NCase Gen => "ones'"; _ => "ones" } ;
         _          => \\c => []
         }
       } ;
 
     MassNP cn = {
-      s = cn.s ! Sg ;
+      s = \\c => cn.s ! Sg ! npcase2case c ;
       a = agrP3 Sg
       } ;
 
@@ -116,9 +116,9 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       c2 = f.c3
       } ;
 
-    ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; g = f.g} ;
+    ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! NPAcc ; g = f.g} ;
     ComplN3 f x = {
-      s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ;
+      s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! NPAcc ;
       g = f.g ;
       c2 = f.c3
       } ;
@@ -135,6 +135,6 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
 
     SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s ; g = cn.g} ;
 
-    ApposCN cn np = {s = \\n,c => cn.s ! n ! Nom ++ np.s ! c ; g = cn.g} ;
+    ApposCN cn np = {s = \\n,c => cn.s ! n ! Nom ++ np.s ! NCase c ; g = cn.g} ;
 
 }

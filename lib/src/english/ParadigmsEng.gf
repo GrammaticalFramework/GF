@@ -337,15 +337,15 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ; --%
 
   Gender = ResEng.Gender ; 
   Number = ResEng.Number ;
-  Case = ResEng.Case ;
+  Case = ResEng.NPCase ;
   human = Masc ; 
   nonhuman = Neutr ;
   masculine = Masc ;
   feminine = Fem ;
   singular = Sg ;
   plural = Pl ;
-  nominative = Nom ;
-  genitive = Gen ;
+  nominative = npNom ;
+  genitive = npGen ;
 
   npNumber np = (fromAgr np.a).n ;
 
@@ -429,7 +429,8 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ; --%
   mkQuantifier : Str -> Str -> Str -> Str -> Quant = 
    \sg,pl,sg',pl' -> lin Quant {
     s = \\_  => table { Sg => sg ; Pl => pl } ;
-    sp = \\_ => table { Sg => regGenitiveS sg' ; Pl => regGenitiveS pl'}
+    sp = \\_ => table { 
+      Sg => \\c => regGenitiveS sg' ! npcase2case c ; Pl => \\c => regGenitiveS pl' ! npcase2case c}
     } ;
 
   mkOrd : Str -> Ord = \x -> lin Ord { s = regGenitiveS x};

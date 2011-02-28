@@ -4,7 +4,7 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
 
   lin
 
-    PredVP np vp = mkClause (np.s ! Nom) np.a vp ;
+    PredVP np vp = mkClause (np.s ! npNom) np.a vp ;
 
     PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
 
@@ -23,7 +23,7 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
     } ;
 
     SlashVP np vp = 
-      mkClause (np.s ! Nom) np.a vp ** {c2 = vp.c2} ;
+      mkClause (np.s ! npNom) np.a vp ** {c2 = vp.c2} ;
 
     AdvSlash slash adv = {
       s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
@@ -33,7 +33,7 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
     SlashPrep cl prep = cl ** {c2 = prep.s} ;
 
     SlashVS np vs slash = 
-      mkClause (np.s ! Nom) np.a 
+      mkClause (np.s ! npNom) np.a 
         (insertObj (\\_ => conjThat ++ slash.s) (predV vs))  **
         {c2 = slash.c2} ;
 
