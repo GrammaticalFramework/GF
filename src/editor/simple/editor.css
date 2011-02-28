@@ -27,6 +27,8 @@ td.right { text-align: right; }
 
 div.indent { padding-left: 1em; min-width: 1em; min-height: 1em; }
 
+div.fun, div.param, div.lincat, div.oper, div.lin
+{ padding-left: 2em; text-indent: -2em; }
 
 .more, .delete { font-weight: bold; font-family: sans-serif; }
 .more, .delete, .edit { cursor: pointer; }
