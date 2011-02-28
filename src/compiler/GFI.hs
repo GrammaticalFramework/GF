@@ -7,13 +7,14 @@ import GF.Command.Commands
 import GF.Command.Abstract
 import GF.Command.Parse
 import GF.Data.ErrM
-import GF.Data.Operations (chunks)
+import GF.Data.Operations (chunks,err)
 import GF.Grammar hiding (Ident)
 import GF.Grammar.Parser (runP, pExp)
 import GF.Grammar.ShowTerm
+import GF.Grammar.Lookup (allOpers,allOpersTo)
 import GF.Compile.Rename
 import GF.Compile.Compute.Concrete (computeConcrete,checkPredefError)
-import GF.Compile.TypeCheck.Concrete (inferLType)
+import GF.Compile.TypeCheck.Concrete (inferLType,ppType)
 import GF.Infra.Dependencies
 import GF.Infra.CheckM
 import GF.Infra.UseIO
@@ -30,7 +31,7 @@ import PGF.Macros
 
 import Data.Char
 import Data.Maybe
-import Data.List(isPrefixOf)
+import Data.List(isPrefixOf,isInfixOf,partition)
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
 import qualified Text.ParserCombinators.ReadP as RP
@@ -41,6 +42,7 @@ import System.Directory
 import Control.Exception
 import Control.Monad
 import Data.Version
+import Text.PrettyPrint (render)
 import GF.System.Signal
 --import System.IO.Error (try)
 #ifdef mingw32_HOST_OS
@@ -120,19 +122,34 @@ loop opts gfenv0 = do
                
                (style,q,s) = pOpts TermPrintDefault Qualified (tail (words s0))
 
-               checkComputeTerm gr (L _ t) = do
-                 mo <- maybe (Bad "no source grammar in scope") return $ greatestResource gr
-                 ((t,_),_) <- runCheck $ do t <- renameSourceTerm gr mo t
-                                            inferLType gr [] t
-                 t1 <- computeConcrete sgr t
-                 checkPredefError sgr t1
-
              case runP pExp (encodeUnicode utf8 s) of
                Left (_,msg) -> putStrLn msg
-               Right t      -> case checkComputeTerm sgr (codeTerm (decodeUnicode utf8 . BS.pack) (L (0,0) t)) of
+               Right t      -> case checkComputeTerm sgr (unLoc (codeTerm (decodeUnicode utf8 . BS.pack) (L (0,0) t))) of
                                  Ok  x -> putStrLn $ showTerm sgr style q x
                                  Bad s -> putStrLn $ s
              loopNewCPU gfenv
+
+          "so":ws -> case greatestResource sgr of
+             Nothing -> putStrLn "no source grammar in scope" >> loopNewCPU gfenv
+             Just mo -> do
+               let (os,ts) = partition (isPrefixOf "-") ws
+               let greps = [drop 6 o | o <- os, take 6 o == "-grep="]
+               let isRaw = elem "-raw" os 
+               ops <- case ts of
+                  _:_ -> do
+                    let Right t = runP pExp (encodeUnicode utf8 (unwords ts))
+                    ty <- err error return $ checkComputeTerm sgr t
+                    return $ allOpersTo sgr ty
+                  _   -> return $ allOpers sgr 
+               let sigs = [(op,ty) | ((mo,op),ty,pos) <- ops]
+               let printer = if isRaw 
+                               then showTerm sgr TermPrintDefault Qualified
+                               else (render . GF.Compile.TypeCheck.Concrete.ppType)
+               let printed = [unwords [showIdent op, ":", printer ty] | (op,ty) <- sigs]
+               mapM_ putStrLn [l | l <- printed, all (flip isInfixOf l) greps]
+               loopNewCPU gfenv
+
+
           "dg":ws -> do
              let stop = case ws of
                    ('-':'o':'n':'l':'y':'=':fs):_ -> Just $ chunks ',' fs
@@ -205,6 +222,13 @@ loop opts gfenv0 = do
 --        gfenv' <- return $ either (const gfenv) id r
         gfenv' <- either (\e -> (print e >> return gfenv)) return r
         loop opts gfenv'
+
+checkComputeTerm sgr t = do
+                 mo <- maybe (Bad "no source grammar in scope") return $ greatestResource sgr
+                 ((t,_),_) <- runCheck $ do t <- renameSourceTerm sgr mo t
+                                            inferLType sgr [] t
+                 t1 <- computeConcrete sgr t
+                 checkPredefError sgr t1
 
 fetchCommand :: GFEnv -> IO String
 fetchCommand gfenv = do
