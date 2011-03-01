@@ -472,9 +472,9 @@ allCommands env@(pgf, mos) = Map.fromList [
        "sequences; see example."
        ],
      examples = [
-       "l -langs=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor",
-       "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -to_utf8 -- hindi table",
-       "l -unlexer=\"LangSwe=to_utf8 LangHin=to_devanagari,to_utf8\" -- different lexers"
+       "l -lang=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor",
+       "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -- hindi table",
+       "l -unlexer=\"LangAra=to_arabic LangHin=to_devanagari\" -- different unlexers"
        ],
      exec = \opts -> return . fromStrings . optLins opts,
      options = [
