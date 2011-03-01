@@ -464,14 +464,20 @@ oper
         se  + "dd" => se  + "tt" ; 
         pla + "tt" => pla + "tt" ; 
         gla + "d"  => gla + "tt" ;
+        _ + ("a"|"e"|"o") => fin ;
         _          => fin + "t" 
       } ;
       fina : Str = case fin of {
         unk@(? + ? + ? + _) + "e" + n@("l" | "n" | "r") => unk + n + "a" ;
+        _ + ("a"|"e"|"o") => fin ;
         _ => fin + "a"
-      }
+      } ;
+      comp : Bool = case fin of {
+        _ + ("a"|"e"|"o") => True ;
+        _ => False
+        }
     in
-    mk3A fin fint fina ;
+    lin A {s = (mk3A fin fint fina).s ; isComp = comp} ;
   irregA ung yngre yngst = 
     mk7A ung (ung + "t") (ung + "a") (ung + "a") yngre yngst (yngst+"a") ;
 
