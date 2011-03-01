@@ -90,7 +90,9 @@ function ajax_http_get_json(url,cont) {
 }
 
 function sameOrigin(url) {
-    return hasPrefix(url,location.protocol+"//"+location.host+"/");
+    var a=empty("a");
+    a.href=url; // converts to an absolute URL
+    return hasPrefix(a.href,location.protocol+"//"+location.host+"/");
 }
 
 // Use AJAX when possible, fallback to JSONP
