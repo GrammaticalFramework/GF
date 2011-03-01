@@ -389,11 +389,14 @@ Minibar.prototype.show_translations=function(translationResults) {
 		    if(options.show_abstract && t.tree)
 			tbody.appendChild(tr([th(text("Abstract: ")),
 					      tdt(abstree_button(t.tree),text(" "+t.tree))]));
-		    for(var i=0;i<lin.length;i++) 
+		    for(var i=0;i<lin.length;i++) {
+			if(lin[i].to==to)
+			    trans.single_translation.push(lin[i].text);
 			if(to=="All" || lin[i].to==to)
 			    tbody.appendChild(tr([th(text(langpart(lin[i].to,grammar.name)+": ")),
 						  tdt(parsetree_button(t.tree,lin[i].to),
 						      text(lin[i].text))]));
+		    }
 		    trans.appendChild(wrap("table",tbody));
 		}
 	    }
