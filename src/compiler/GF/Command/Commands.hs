@@ -588,6 +588,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("cats",   "show just the names of abstract syntax categories"),
        ("fullform", "print the fullform lexicon"),
        ("funs",   "show just the names and types of abstract syntax functions"),
+       ("lexc", "print the lexicon in Xerox LEXC format"),
        ("missing","show just the names of functions that have no linearization"),
        ("opt",    "optimize the generated pgf"),
        ("pgf",    "write current pgf image in file"),
@@ -1143,6 +1144,7 @@ allCommands env@(pgf, mos) = Map.fromList [
      | isOpt "cats"     opts = return $ fromString $ unwords $ map showCId $ categories pgf
      | isOpt "funs"     opts = return $ fromString $ unlines $ map showFun $ funsigs pgf
      | isOpt "fullform" opts = return $ fromString $ concatMap (morpho "" prFullFormLexicon) $ optLangs opts
+     | isOpt "lexc"     opts = return $ fromString $ concatMap (morpho "" prLexcLexicon) $ optLangs opts
      | isOpt "missing"  opts = return $ fromString $ unlines $ [unwords (showCId la:":": map showCId cs) | 
                                                                   la <- optLangs opts, let cs = missingLins pgf la]
      | isOpt "words" opts = return $ fromString $ concatMap (morpho "" prAllWords) $ optLangs opts
@@ -1224,6 +1226,16 @@ morphologyQuiz mex pgf ig typ = do
 -- | the maximal number of precompiled quiz problems
 infinity :: Int
 infinity = 256
+
+prLexcLexicon :: Morpho -> String
+prLexcLexicon mo = 
+  unlines $ "LEXICON" : [w ++ ":" ++ prLexc l p | (w,lps) <- morpho, (l,p) <- lps] ++ ["END"]
+ where
+  morpho = fullFormLexicon mo
+  prLexc l p = showCId l ++ mkTags (words p) ++ " # ;"
+  mkTags p = case p of
+    "s":ws -> mkTags ws   --- remove record field
+    ws -> concat $ "+" : intersperse "+" ws
 
 prFullFormLexicon :: Morpho -> String
 prFullFormLexicon mo = 
