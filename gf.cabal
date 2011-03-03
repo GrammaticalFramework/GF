@@ -1,5 +1,5 @@
 name: gf
-version: 3.2
+version: 3.2.1-darcs
 
 cabal-version: >= 1.8
 build-type: Custom
@@ -8,8 +8,12 @@ license-file: LICENSE
 category: Natural Language Processing, Compiler
 synopsis: Grammatical Framework
 description: GF, Grammatical Framework, is a programming language for multilingual grammar applications
-homepage: http://www.grammaticalframework.org
+homepage: http://www.grammaticalframework.org/
 bug-reports: http://code.google.com/p/grammatical-framework/issues/list
+
+source-repository head
+  type:     darcs
+  location: http://www.grammaticalframework.org/
 
 flag interrupt
   Description: Enable Ctrl+Break in the shell
