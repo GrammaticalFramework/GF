@@ -621,7 +621,7 @@ allDependencies ism b =
     opty _ = []
     pts i = case i of
       ResOper pty pt -> [pty,pt]
----      ResOverload _ tyts -> concat [[Just ty, Just tr] | (ty,tr) <- tyts]
+      ResOverload _ tyts -> concat [[Just ty, Just tr] | (ty,tr) <- tyts]
       ResParam (Just ps) _ -> [Just (L loc t) | L loc (_,cont) <- ps, (_,_,t) <- cont]
       CncCat pty _ _ -> [pty]
       CncFun _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
