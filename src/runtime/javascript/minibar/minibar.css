@@ -49,3 +49,5 @@ div#saldospel input.incorrect { color: red; }
 span.field { background-color: #eee; }
 
 pre.feedbacklist { background: white }
+
+img.button { padding: 1px; }

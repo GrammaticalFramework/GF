@@ -1,6 +1,7 @@
 // minibar.js, assumes that support.js has also been loaded
 
 var tree_icon="tree-btn.png";
+var alignment_icon="align-btn.png";
 
 /*
 // This is essentially what happens when you call start_minibar:
@@ -387,8 +388,11 @@ Minibar.prototype.show_translations=function(translationResults) {
 		    var lin=t.linearizations;
 		    var tbody=empty("tbody");
 		    if(options.show_abstract && t.tree)
-			tbody.appendChild(tr([th(text("Abstract: ")),
-					      tdt(abstree_button(t.tree),text(" "+t.tree))]));
+			tbody.appendChild(
+			    tr([th(text("Abstract: ")),
+				tdt(node("span",{},[abstree_button(t.tree),
+						    alignment_button(t.tree)]),
+				    text(" "+t.tree))]));
 		    for(var i=0;i<lin.length;i++) {
 			if(lin[i].to==to)
 			    trans.single_translation.push(lin[i].text);
@@ -499,16 +503,30 @@ function langpart(conc,abs) { // langpart("FoodsEng","Foods") == "Eng"
     return hasPrefix(conc,abs) ? conc.substr(abs.length) : conc;
 }
 
+function button_img(url,action) {
+    var i=img(url);
+    i.setAttribute("class","button");
+    i.setAttribute("onclick",action);
+    return i;
+}
+
 function abstree_button(abs) {
-  var i=img(tree_icon);
-  i.setAttribute("onclick","toggle_img(this)");
+  var i=button_img(tree_icon,"toggle_img(this)");
+  i.title="Click to display abstract syntax tree"
   i.other=server.current_grammar_url+"?command=abstrtree&tree="+encodeURIComponent(abs);
   return i;
 }
 
+function alignment_button(abs) {
+  var i=button_img(alignment_icon,"toggle_img(this)");
+  i.title="Click to display word alignment"
+  i.other=server.current_grammar_url+"?command=alignment&tree="+encodeURIComponent(abs);
+  return i;
+}
+
 function parsetree_button(abs,lang) {
-  var i=img(tree_icon);
-  i.setAttribute("onclick","toggle_img(this)");
+  var i=button_img(tree_icon,"toggle_img(this)");
+  i.title="Click to display parse tree"
   i.other=server.current_grammar_url
           +"?command=parsetree&from="+lang+"&tree="+encodeURIComponent(abs);
   return i;
