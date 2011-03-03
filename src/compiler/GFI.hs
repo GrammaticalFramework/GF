@@ -36,7 +36,6 @@ import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
 import qualified Text.ParserCombinators.ReadP as RP
 import System.IO
-import System.Cmd
 import System.CPUTime
 import System.Directory
 import Control.Exception
@@ -107,7 +106,7 @@ loop opts gfenv0 = do
         r <- runInterruptibly $ case pwords of
 
           "!":ws -> do
-             system $ unwords ws
+             restrictedSystem $ unwords ws
              loopNewCPU gfenv
           "cc":ws -> do
              let
@@ -154,7 +153,7 @@ loop opts gfenv0 = do
              let stop = case ws of
                    ('-':'o':'n':'l':'y':'=':fs):_ -> Just $ chunks ',' fs
                    _ -> Nothing
-             writeFile "_gfdepgraph.dot" (depGraph stop sgr)
+             restricted $ writeFile "_gfdepgraph.dot" (depGraph stop sgr)
              putStrLn "wrote graph in file _gfdepgraph.dot"
              loopNewCPU gfenv
           "eh":w:_ -> do
@@ -220,8 +219,10 @@ loop opts gfenv0 = do
             interpretCommandLine env s0
             loopNewCPU gfenv
 --        gfenv' <- return $ either (const gfenv) id r
-        gfenv' <- either (\e -> (print e >> return gfenv)) return r
+        gfenv' <- either (\e -> (printException e >> return gfenv)) return r
         loop opts gfenv'
+
+printException e = maybe (print e) (putStrLn . ioErrorText) (fromException e)
 
 checkComputeTerm sgr t = do
                  mo <- maybe (Bad "no source grammar in scope") return $ greatestResource sgr

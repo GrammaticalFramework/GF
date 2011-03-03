@@ -45,7 +45,7 @@ import Data.Binary (encodeFile)
 import Data.List
 import Data.Maybe
 import qualified Data.Map as Map
-import System.Cmd
+--import System.Cmd(system) -- use GF.Infra.UseIO.restricedSystem instead!
 import Text.PrettyPrint
 import Data.List (sort)
 import Debug.Trace
@@ -172,8 +172,8 @@ allCommands env@(pgf, mos) = Map.fromList [
                  let view = optViewGraph opts
                  let format = optViewFormat opts 
                  writeUTF8File (file "dot") grph
-                 system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
-                 system $ view ++ " " ++ file format
+                 restrictedSystem $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
+                 restrictedSystem $ view ++ " " ++ file format
                  return void
                else return $ fromString grph,
      examples = [
@@ -769,9 +769,9 @@ allCommands env@(pgf, mos) = Map.fromList [
      exec = \opts arg -> do
        let tmpi = "_tmpi" ---
        let tmpo = "_tmpo"
-       writeFile tmpi $ toString arg
+       restricted $ writeFile tmpi $ toString arg
        let syst = optComm opts ++ " " ++ tmpi
-       system $ syst ++ " <" ++ tmpi ++ " >" ++ tmpo 
+       restrictedSystem $ syst ++ " <" ++ tmpi ++ " >" ++ tmpo 
        s <- readFile tmpo
        return $ fromString s,
      flags = [
@@ -843,9 +843,9 @@ allCommands env@(pgf, mos) = Map.fromList [
            let file s = "_grphd." ++ s
            let view = optViewGraph opts
            let format = optViewFormat opts 
-           writeUTF8File (file "dot") grphs
-           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
-           system $ view ++ " " ++ file format
+           restricted $ writeUTF8File (file "dot") grphs
+           restrictedSystem $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
+           restrictedSystem $ view ++ " " ++ file format
            return void
           else return $ fromString grphs,
      examples = [
@@ -884,9 +884,9 @@ allCommands env@(pgf, mos) = Map.fromList [
            let file s = "_grph." ++ s
            let view = optViewGraph opts
            let format = optViewFormat opts 
-           writeUTF8File (file "dot") grph
-           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
-           system $ view ++ " " ++ file format
+           restricted $ writeUTF8File (file "dot") grph
+           restrictedSystem $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
+           restrictedSystem $ view ++ " " ++ file format
            return void
           else return $ fromString grph,
      examples = [
@@ -929,9 +929,9 @@ allCommands env@(pgf, mos) = Map.fromList [
            let file s = "_grph." ++ s
            let view = optViewGraph opts
            let format = optViewFormat opts 
-           writeUTF8File (file "dot") grph
-           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
-           system $ view  ++ " " ++ file format
+           restricted $ writeUTF8File (file "dot") grph
+           restrictedSystem $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
+           restrictedSystem $ view  ++ " " ++ file format
            return void
           else return $ fromString grph,
      examples = [
@@ -955,8 +955,8 @@ allCommands env@(pgf, mos) = Map.fromList [
      exec = \opts arg -> do
          let file = valStrOpts "file" "_gftmp" opts
          if isOpt "append" opts 
-           then appendFile file (toString arg)
-           else writeUTF8File file (toString arg)
+           then restricted $ appendFile file (toString arg)
+           else restricted $ writeUTF8File file (toString arg)
          return void,
      options = [
        ("append","append to file, instead of overwriting it")
