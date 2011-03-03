@@ -26,6 +26,7 @@ import System.IO.Error
 import System.Environment
 import System.Exit
 import System.CPUTime
+import System.Cmd
 import Text.Printf
 import Control.Monad
 import Control.Exception(evaluate)
@@ -191,3 +192,19 @@ writeUTF8File fpath content = do
   hSetEncoding h utf8
   hPutStr h content
   hClose h
+
+-- * Functions to limit acesss to arbitrary IO and system commands
+restricted io =
+    either (const io) (const $ fail message) =<< try (getEnv "GF_RESTRICTED")
+  where
+    message =
+      "This operation is not allowed when GF is running in restricted mode."
+
+restrictedSystem = restricted . system
+
+
+-- Because GHC adds the confusing text "user error" for failures cased by
+-- calls to fail.
+ioErrorText e = if isUserError e
+                then ioeGetErrorString e
+                else show e
