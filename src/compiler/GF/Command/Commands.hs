@@ -1229,10 +1229,10 @@ infinity = 256
 
 prLexcLexicon :: Morpho -> String
 prLexcLexicon mo = 
-  unlines $ "LEXICON" : [w ++ ":" ++ prLexc l p | (w,lps) <- morpho, (l,p) <- lps] ++ ["END"]
+  unlines $ "LEXICON" : [prLexc l p ++ ":" ++ w  ++ " # ;" | (w,lps) <- morpho, (l,p) <- lps] ++ ["END"]
  where
   morpho = fullFormLexicon mo
-  prLexc l p = showCId l ++ mkTags (words p) ++ " # ;"
+  prLexc l p = showCId l ++ mkTags (words p)
   mkTags p = case p of
     "s":ws -> mkTags ws   --- remove record field
     ws -> concat $ "+" : intersperse "+" ws
