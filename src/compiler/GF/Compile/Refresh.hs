@@ -60,6 +60,8 @@ refresh e = case e of
   
   T i cc -> liftM2 T (refreshTInfo i) (mapM refreshCase cc)
 
+  App f a -> liftM2 App (inBlockSTM (refresh f)) (refresh a)
+
   _ -> composOp refresh e
 
 refreshCase :: (Patt,Term) -> STM IdState (Patt,Term)
@@ -130,4 +132,15 @@ refreshModule (k,ms) mi@(i,mo)
       (k',trm') <- refreshTermKN k trm
       return $ (k', (c, CncFun mt (Just (L loc trm')) pn):cs)
     _ -> return (k, ci:cs)
+
+
+-- running monad and returning to initial state
+
+inBlockSTM :: STM s a -> STM s a
+inBlockSTM mo = do
+  s <- readSTM
+  v <- mo
+  writeSTM s
+  return v
+
 
