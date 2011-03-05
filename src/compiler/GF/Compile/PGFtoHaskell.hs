@@ -34,7 +34,7 @@ grammar2haskell :: Options
                 -> PGF
                 -> String
 grammar2haskell opts name gr = foldr (++++) [] $  
-  pragmas ++ haskPreamble name ++ [types, gfinstances gId lexical gr']
+  pragmas ++ haskPreamble gadt name ++ [types, gfinstances gId lexical gr'] ++ compos
     where gr' = hSkeleton gr
           gadt = haskellOption opts HaskellGADT
           lexical cat = haskellOption opts HaskellLexical && isLexicalCat opts cat
@@ -44,11 +44,19 @@ grammar2haskell opts name gr = foldr (++++) [] $
                   | otherwise = []
           types | gadt = datatypesGADT gId lexical gr'
                 | otherwise = datatypes gId lexical gr'
+          compos | gadt = prCompos gId lexical gr' ++ composClass
+                 | otherwise = []
 
-haskPreamble name =
+haskPreamble gadt name =
  [
   "module " ++ name ++ " where",
-  "",
+  ""
+ ] ++
+ (if gadt then [
+  "import Control.Monad.Identity",
+  "import Data.Monoid"
+  ] else []) ++
+ [
   "import PGF hiding (Tree)",
   "import qualified PGF",
   "----------------------------------------------------",
@@ -134,6 +142,25 @@ hDatatypeGADT gId lexical (cat, rules)
         ++ if lexical cat then [lexicalConstructor cat +++ ":: String ->"+++ t] else []
   where t = "Tree" +++ gId cat ++ "_"
 
+prCompos :: Prefix -> (OIdent -> Bool) -> (String,HSkeleton) -> [String]
+prCompos gId lexical (_,catrules) =
+    ["instance Compos Tree where",
+     "  compos r a f t = case t of"]
+    ++ 
+    ["    " ++ prComposCons (gId f) xs | (c,rs) <- catrules, (f,xs) <- rs, not (null xs)] 
+    ++ 
+    ["    _ -> r t"]
+  where
+    prComposCons f xs = let vs = mkVars (length xs) in 
+                        f +++ unwords vs +++ "->" +++ rhs f (zip vs xs)
+    rhs f vcs = "r" +++ f +++ unwords (map prRec vcs)
+    prRec (v,c) 
+      | isList c  = "`a` foldr (a . a (r (:)) . f) (r [])" +++ v
+      | otherwise = "`a`" +++ "f" +++ v
+    isList c = case lookup c catrules of
+      Just rs -> isListCat (c,rs)
+      _ -> False
+
 gfInstance :: Prefix -> (OIdent -> Bool) -> String -> (OIdent, [(OIdent, [OIdent])]) -> String
 gfInstance gId lexical m crs = hInstance gId lexical m crs ++++ fInstance gId lexical m crs
 
@@ -158,10 +185,10 @@ hInstance gId lexical m (cat,rules)
    mkInst f xx = let xx' = mkVars (length xx) in "  gf " ++
      (if length xx == 0 then gId f else prParenth (gId f +++ foldr1 (+++) xx')) +++
      "=" +++ mkRHS f xx'
-   mkVars n = ["x" ++ show i | i <- [1..n]]
    mkRHS f vars = "mkApp (mkCId \"" ++ f ++ "\")" +++ 
 		   "[" ++ prTList ", " ["gf" +++ x | x <- vars] ++ "]"
 
+mkVars n = ["x" ++ show i | i <- [1..n]]
 
 ----fInstance m ("Cn",_) = "" ---
 fInstance _ _ m (cat,[]) = ""
@@ -228,3 +255,33 @@ isConsFun f = "Cons" `isPrefixOf` f
 baseSize :: (OIdent, [(OIdent, [OIdent])]) -> Int
 baseSize (_,rules) = length bs
     where Just (_,bs) = find (("Base" `isPrefixOf`) . fst) rules
+
+composClass :: [String]
+composClass = 
+    [
+     "",
+     "class Compos t where",
+     "  compos :: (forall a. a -> m a) -> (forall a b. m (a -> b) -> m a -> m b)",
+     "         -> (forall a. t a -> m (t a)) -> t c -> m (t c)",
+     "",
+     "composOp :: Compos t => (forall a. t a -> t a) -> t c -> t c",
+     "composOp f = runIdentity . composOpM (Identity . f)",
+     "",
+     "composOpM :: (Compos t, Monad m) => (forall a. t a -> m (t a)) -> t c -> m (t c)",
+     "composOpM = compos return ap",
+     "",
+     "composOpM_ :: (Compos t, Monad m) => (forall a. t a -> m ()) -> t c -> m ()",
+     "composOpM_ = composOpFold (return ()) (>>)",
+     "",
+     "composOpMonoid :: (Compos t, Monoid m) => (forall a. t a -> m) -> t c -> m",
+     "composOpMonoid = composOpFold mempty mappend",
+     "",
+     "composOpMPlus :: (Compos t, MonadPlus m) => (forall a. t a -> m b) -> t c -> m b",
+     "composOpMPlus = composOpFold mzero mplus",
+     "",
+     "composOpFold :: Compos t => b -> (b -> b -> b) -> (forall a. t a -> b) -> t c -> b",
+     "composOpFold z c f = unC . compos (\\_ -> C z) (\\(C x) (C y) -> C (c x y)) (C . f)",
+     "",
+     "newtype C b a = C { unC :: b }"
+    ]
+
