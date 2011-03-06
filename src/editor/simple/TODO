@@ -19,6 +19,8 @@
 - 5. rule-to-rule type checking and guidance (e.g. with library oper
      suggestions)
 +    Try grammars in the Translation Quiz
++    Show lincat and lin before params and opers below
+-    Create a new concrete syntax by copying an existing one.
 
 + compile only the uploaded grammar even if other grammars are present
 + 'flags startcat' is needed for grammars with only one category (since the
