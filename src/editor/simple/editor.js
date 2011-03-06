@@ -417,10 +417,10 @@ function draw_concrete(g,i) {
 		  [kw("concrete "),ident(g.basename+conc.langcode),
 		   kw(" of "),ident(g.basename),sep(" = "),
 		   indent([extensible([kw("open "),draw_opens(g,i)])]),
-		   indent([extensible([kw("param"),draw_params(g,i)])]),
 		   indent([kw("lincat"),draw_lincats(g,i)]),
-		   indent([extensible([kw("oper"),draw_opers(g,i)])]),
-		   indent([kw("lin"),draw_lins(g,i)])
+		   indent([kw("lin"),draw_lins(g,i)]),
+		   indent([extensible([kw("param"),draw_params(g,i)])]),
+		   indent([extensible([kw("oper"),draw_opers(g,i)])])
 		  ])
 }
 
@@ -809,12 +809,13 @@ function string_editor(el,init,ok) {
     function start(msg) {
 	el.style.display="none";
 	m.innerHTML=msg;
-	p.insertBefore(e,el);
+	insertAfter(e,el);
 	e.it.focus();
     }
     var m=empty_class("span","error_message");
-    var i=node("input",{name:"it",value:init},[]);
+    var i=node("input",{"class":"string_edit",name:"it",value:init},[]);
     if(init.length>10) i.size=init.length+5;
+//  var i=node("textarea",{name:"it",rows:"2",cols:"60"},[text(init)]);
     var e=node("form",{},
 	       [i,
 		node("input",{type:"submit",value:"OK"},[]),
