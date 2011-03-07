@@ -11,11 +11,7 @@ import com.google.gwt.core.client.*;
 
 public class PGFWrapper {
 
-	private String baseURL;
-
-	private String grammarURL;
-
-	private String pgfName = null;
+	private String grammarURL = null;
 
 	private PGF pgf;
 
@@ -44,17 +40,11 @@ public class PGFWrapper {
 	
 
 	public PGFWrapper() {
-		this.baseURL = null;
-		this.pgf = new PGF();
-	}
-
-	public PGFWrapper(String baseURL) {
-		this.baseURL = baseURL;
 		this.pgf = new PGF();
 	}
 
 	public void updateAvailableGrammars() {
-		String url = baseURL+"/grammars.xml";
+		String url = "/grammars.xml";
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(url));
 		try
 		{
@@ -172,26 +162,12 @@ public class PGFWrapper {
 	//
 	// Settings
 	//
-	
-	public String getPGFName() {
-		return pgfName;
-	}
-
-	public void setPGFName(String pgfName) {
-		this.pgfName = pgfName;
-		this.grammarURL = (pgfName == null) ? null : baseURL + "/" + pgfName;
-		this.inputLanguage = null;
-		this.outputLanguage = null;
-		this.cat = null;
-		updateSelectedGrammar();
-	}
 
 	public String getGrammarURL() {
 		return grammarURL;
 	}
 
 	public void setGrammarURL(String grammarURL) {
-		this.pgfName = null;
 		this.grammarURL = grammarURL;
 		this.inputLanguage = null;
 		this.outputLanguage = null;

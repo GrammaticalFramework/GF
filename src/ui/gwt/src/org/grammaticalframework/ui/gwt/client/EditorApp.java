@@ -11,9 +11,6 @@ import com.google.gwt.event.shared.*;
 
 public class EditorApp implements EntryPoint {
 
-	protected static final String pgfBaseURL = "/grammars";
-	protected static final String contentBaseURL = "/grammars.content";
-
 	protected ContentService contentService;
 	protected PGFWrapper pgf;
 
@@ -420,10 +417,10 @@ public class EditorApp implements EntryPoint {
 	protected class MySettingsListener implements SettingsListener {
 		// Will only happen on load
 		public void onAvailableGrammarsChanged() {
-			if (pgf.getPGFName() == null) {
+			if (pgf.getGrammarURL() == null) {
 				List<String> grammars = pgf.getGrammars();
 				if (!grammars.isEmpty()) {
-					pgf.setPGFName(grammars.get(0));
+					pgf.setGrammarURL(grammars.get(0));
 				}
 			}
 		}
@@ -452,8 +449,8 @@ public class EditorApp implements EntryPoint {
 	public void onModuleLoad() {
 		statusPopup = new StatusPopup();
 
-		pgf = new PGFWrapper(pgfBaseURL);
-		contentService = new ContentService(contentBaseURL);
+		pgf = new PGFWrapper();
+		contentService = new ContentService();
 		RootPanel.get().add(createUI());
 		pgf.addSettingsListener(new MySettingsListener());
 		contentService.updateAvailableGrammars();

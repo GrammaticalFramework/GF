@@ -112,7 +112,7 @@ public class GrammarsPanel extends Composite {
 			form.setWidth("100%");
 			form.setEncoding(FormPanel.ENCODING_MULTIPART);
 			form.setMethod(FormPanel.METHOD_POST);
-			form.setAction(contentService.getBaseURL());
+			form.setAction(ContentService.getInit().getContentURL());
 			form.addSubmitHandler(uploadFormHandler);
 			form.addSubmitCompleteHandler(uploadFormHandler);
 
@@ -120,7 +120,8 @@ public class GrammarsPanel extends Composite {
 			vPanel.setWidth("100%");
 			form.add(vPanel);
 
-			vPanel.add(new HTML("<input type=\"hidden\" name=\"command\" value=\"update_grammar\"/>"));
+			vPanel.add(new HTML("<input type=\"hidden\" name=\"userId\" value=\""+ContentService.getInit().getUserId()+"\"/>\n"+
+			                    "<input type=\"hidden\" name=\"command\" value=\"update_grammar\"/>"));
 		
 			HorizontalPanel hPanel = new HorizontalPanel();
 			hPanel.setSpacing(8);

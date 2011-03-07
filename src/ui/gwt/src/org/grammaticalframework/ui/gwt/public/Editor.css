@@ -152,8 +152,15 @@
   font-size: 150%;
 }
 
-.my-SettingsPanel * {
+.my-SettingsPanel {
+}
+
+.my-SettingsPanel .form-widget {
     margin: 0 0.4em;
+}
+
+.my-SettingsPanel .form-widget * {
+    margin: 0 0.1em;
 }
 
 .my-LinksPanel * {
