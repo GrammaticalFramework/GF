@@ -164,6 +164,10 @@ function add_concrete(g,el) {
 	    list.push(li([a(jsurl("add_concrete2("+g.index+",'"+c+"')"),
 			    [text(l.name)])]));
     }
+    var from= g.current>0 
+	? "a copy of "+langname[g.concretes[g.current-1].langcode]
+	:"scratch";
+    file.appendChild(p(text("You are about to create a new concrete syntax by starting from "+from+".")));
     file.appendChild(p(text("Pick a language for the new concrete syntax:")));
     file.appendChild(node("ul",{},list));
 }
@@ -175,11 +179,26 @@ function new_concrete(code) {
 function add_concrete2(ix,code) {
     var g=local.get(ix);
     var cs=g.concretes;
-    var i;
-    for(var i=0;i<cs.length;i++) if(cs[i].langcode==code) break;
-    if(i==cs.length) cs.push(new_concrete(code))
-    save_grammar(g);
-    open_concrete(g,i);
+    var ci;
+    for(var ci=0;ci<cs.length;ci++) if(cs[ci].langcode==code) break;
+    if(ci==cs.length) {
+	if(g.current>0) {
+	    cs.push(cs[g.current-1]); // old and new are shared at this point
+	    save_grammar(g); // serialization loses sharing
+	    g=local.get(ix); // old and new are separate now
+	    var oldcode=cs[g.current-1].langcode;
+	    var cnc=g.concretes[ci];
+	    cnc.langcode=code;
+	    for(var oi in cnc.opens)
+		for(var li in rgl_modules)
+		    if(cnc.opens[oi]==rgl_modules[li]+oldcode)
+			cnc.opens[oi]=rgl_modules[li]+code;
+	}
+	else
+	    cs.push(new_concrete(code))
+	save_grammar(g);
+    }
+    open_concrete(g,ci);
 }
 
 function open_abstract(g) { g.current=0; reload_grammar(g); }

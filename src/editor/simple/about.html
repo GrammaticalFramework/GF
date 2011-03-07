@@ -107,16 +107,15 @@ Error checks:
 
 <h4>Concrete syntax</h4>
 
-At the moment, concrete syntax definitions are limited to
+At the moment, the concrete syntax for a language <var>L</var> is limited to
 <ul>
   <li>opening the Resource Grammar Library modules
-  <code>Syntax</code><var>L</var> and <code>Paradigms</code><var>L</var>
-  for the appropriate language <var>L</var>,
+  <code>Syntax</code><var>L</var> and <code>Paradigms</code><var>L</var>,
+  <li><em>linearization types</em> for the categories in the abstract syntax,
+  <li><em>linearizations</em> for the functions in the abstract syntax,
   <li><em>parameter type definitions</em>,
   <var>P</var> = <var>C<sub>1</sub></var> | ... |<var>C<sub>n</sub></var>,
-  <li><em>linearization types</em> for the categories in the abstract syntax,
-  <li><em>operation definitions</em>, <var>op</var> = <var>expr</var>,
-  <li>and <em>linearizations</em> for the functions in the abstract syntax.
+  <li>and <em>operation definitions</em>, <var>op</var> = <var>expr</var>.
 </ul>
 
 Available editing operations:
@@ -129,6 +128,15 @@ Available editing operations:
   <li>Operation definitons can be added, removed and edited.
   <li>Definitions can be reordered (using drag-and-drop)
 </ul>
+Also,
+
+<ul>
+  <li>When a new concrete syntax is added to the grammar, a copy of the
+  currently open concrete syntax is created, since copying and modifying
+  is usually easier than creating something new from scratch.
+  (If the abstract syntax is currently open, the new conrete syntax will
+  start out empty.)
+</ul>
 
 Error checks:
 <ul>
@@ -140,20 +148,23 @@ Error checks:
 
 By pressing the <strong>Upload</strong> button, a grammar can be uploaded to
 the GF server.
-It will then be compiled with GF, and any errors not checked by the editor
-will be detected and reported. If the grammar is free from errors, the user
+It will then be compiled with GF, and any errors not detected by the editor
+will be reported. If the grammar is free from errors, the user
 can test the grammar by clicking on links to the online GF shell, the Minibar
 or the Translation Quiz.
 
 <h3>Future work</h3>
 
 This prototype gives an idea of how a web based GF grammar editor could work.
-We do not expect to create a full implementation of GF that runs in the
+While this editor is implemented in JavaScript and runs entirely in the
+web browser,
+we do not expect to create a full implementation of GF that runs in the
 web browser, but let the editor communicate with a server running GF.
 <p>
 By developing a GF server with an appropriate API, it should
 be possible to extend the editor to support a larger fragment of GF,
-to do proper error checking.
+to do proper error checking and make more of the existing GF shell functionality
+accessible directly from the editor.
 <p>
 Grammars are currently stored locally in the browser, but a future version
 could allow grammars to be stored "in the cloud", allowing the same grammars
@@ -161,7 +172,7 @@ to be accessed from multiple devices.
 
 <hr>
 <div class=modtime><small>
-<!-- hhmts start --> Last modified: Mon Feb 28 17:44:19 CET 2011 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Mon Mar  7 18:46:49 CET 2011 <!-- hhmts end -->
   </small></div>
 <address>
 <a href="http://www.cse.chalmers.se/~hallgren/">TH</a>
