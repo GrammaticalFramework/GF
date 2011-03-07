@@ -30,10 +30,12 @@ check_grammar() {
   if gf -s -make $files 2>&1 ; then
     end
     h3 OK
-    begin ul
-    [ -z "$minibar" ] || { li; link "$minibar?/tmp/${dir##*/}/" "Minibar"; }
-    [ -z "$transquiz" ] || { li; link "$transquiz?/tmp/${dir##*/}/" "Translation Quiz"; }
-    [ -z "$gfshell" ] || { li; link "$gfshell?dir=${dir##*/}" "GF Shell"; }
+    begin dl
+    [ -z "$minibar" ] || { dt; echo "▸"; link "$minibar?/tmp/${dir##*/}/" "Minibar"; }
+    [ -z "$transquiz" ] || { dt; echo "▸"; link "$transquiz?/tmp/${dir##*/}/" "Translation Quiz"; }
+    [ -z "$gfshell" ] || { dt; echo "▸"; link "$gfshell?dir=${dir##*/}" "GF Shell"; }
+    dt ; echo "◂"; link "javascript:history.back()" "Back to Editor"
+
     end
     begin pre
     ls -l *.pgf
@@ -59,7 +61,7 @@ if [ -z "$tmp" ] || [ -z "$grammars" ] ||
   echo "upload.cgi is not properly configured"
 
   # cgiconfig.sh must define tmp and grammars.
-  # cgiconfig.sh should minibar and gfshell to allow grammars to be tested.
+  # cgiconfig.sh should define minibar & gfshell to allow grammars to be tested.
   endall
 else
 case "$REQUEST_METHOD" in
