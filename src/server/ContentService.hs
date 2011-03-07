@@ -52,22 +52,30 @@ cgiMain' cache path =
        case mb_command of
          Just "update_grammar"
                        -> do mb_pgf <- getFile
-                             id  <- getGrammarId
+                             id     <- getGrammarId
                              name   <- getFileName
                              descr  <- getDescription
-                             doUpdateGrammar c mb_pgf id name descr
+                             userId <- getUserId
+                             doUpdateGrammar c mb_pgf id name descr userId
          Just "delete_grammar"
                        -> do id <- getGrammarId
-                             doDeleteGrammar c id
+                             userId <- getUserId
+                             doDeleteGrammar c id userId
          Just "grammars"
-                       -> doGrammars c
+                       -> do userId <- getUserId
+                             doGrammars c userId
          Just "save"   -> doSave c =<< getId
          Just "load"   -> doLoad c =<< getId
          Just "search" -> doSearch c =<< getQuery
          Just "delete" -> doDelete c =<< getIds
          Just cmd      -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show cmd]
-         Nothing       -> throwCGIError 400 "No command given" ["No command given"]
+         Nothing       -> do mb_uri <- getIdentity
+                             mb_email <- getEMail
+                             doLogin c mb_uri mb_email
   where
+    getUserId :: CGI (Maybe String)
+    getUserId = getInput "userId"
+
     getId :: CGI (Maybe Int)
     getId = readInput "id"
 
@@ -80,7 +88,7 @@ cgiMain' cache path =
     getGrammarId :: CGI String
     getGrammarId = do 
       mb_url <- getInput "url"
-      return (maybe "null" (reverse . drop 4 . reverse) mb_url)
+      return (maybe "null" (reverse . takeWhile (/='/') . drop 4 . reverse) mb_url)
 
     getFile :: CGI (Maybe BS.ByteString)
     getFile = do
@@ -97,27 +105,49 @@ cgiMain' cache path =
     getDescription :: CGI String
     getDescription = fmap (fromMaybe "") (getInput "description")
 
-doGrammars c = do
+    getIdentity :: CGI (Maybe String)
+    getIdentity = getInput "openid.identity"
+
+    getEMail :: CGI (Maybe String)
+    getEMail = getInput "openid.ext1.value.email"
+
+
+doLogin c mb_uri mb_email = do
+  path <- scriptName
   r <- liftIO $ handleSql (return . Left) $ do
-         s <- query c "call getGrammars()"
-         rows <- collectRows getGrammar s
+         s <- query c ("call getUserId("++toSqlValue mb_uri++","++toSqlValue mb_email++")")
+         [id] <- collectRows getUserId s
+         return (Right id)
+  case r of
+    Right mb_id -> outputHTML (startupHTML mb_id mb_uri mb_email (Just path))
+    Left  e     -> throwCGIError 400 "Login failed" (lines (show e))
+  where
+    getUserId s = do
+      id <- getFieldValueMB s "userId"
+      return (id :: Maybe Int)
+
+doGrammars c mb_userId = do
+  path <- scriptName
+  r <- liftIO $ handleSql (return . Left) $ do
+         s <- query c ("call getGrammars("++toSqlValue mb_userId++")")
+         rows <- collectRows (getGrammar path) s
          return (Right rows)
   case r of
     Right rows -> outputJSONP rows
     Left  e    -> throwCGIError 400 "Loading failed" (lines (show e))
   where
-    getGrammar s = do
+    getGrammar path s = do
       id <- getFieldValue s "id"
       name <- getFieldValue s "name"
       description <- getFieldValue s "description"
-      return $ toJSObject [ ("url",  showJSON (addExtension (show (id :: Int)) "pgf"))
+      return $ toJSObject [ ("url",  showJSON (dropExtension path ++ '/':addExtension (show (id :: Int)) "pgf"))
                           , ("name", showJSON (name :: String))
                           , ("description", showJSON (description :: String))
                           ]
 
-doUpdateGrammar c mb_pgf id name descr = do
+doUpdateGrammar c mb_pgf id name descr mb_userId = do
   r <- liftIO $ handleSql (return . Left) $ do
-         s <- query c ("call updateGrammar("++id++","++toSqlValue name++","++toSqlValue descr++")")
+         s <- query c ("call updateGrammar("++id++","++toSqlValue name++","++toSqlValue descr++","++toSqlValue mb_userId++")")
          [id] <- collectRows (\s -> getFieldValue s "id") s
          return (Right id)
   nid <- case r of
@@ -133,9 +163,9 @@ doUpdateGrammar c mb_pgf id name descr = do
     Nothing  -> return ()
   outputHTML ""
 
-doDeleteGrammar c id = do
+doDeleteGrammar c id mb_userId = do
   r <- liftIO $ handleSql (return . Left) $ do
-         execute c ("call deleteGrammar("++id++")")
+         execute c ("call deleteGrammar("++id++","++toSqlValue mb_userId++")")
          return (Right "")
   case r of
     Right x -> outputJSONP ([] :: [(String,String)])
@@ -213,22 +243,56 @@ dbConnect fpath = do
   [host,db,user,pwd] <- fmap words $ readFile fpath
   connect host db user pwd
 
+startupHTML mb_id mb_uri mb_email mb_path = unlines [
+  "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">",
+  "<html>",
+  "   <head>",
+  "      <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">",
+  "      <title>Editor</title>",
+  "      <script type=\"text/javascript\" language=\"javascript\" src=\"org.grammaticalframework.ui.gwt.EditorApp/org.grammaticalframework.ui.gwt.EditorApp.nocache.js\"></script>",
+  "   </head>",
+  "   <body onload=\"window.__gfInit = new Object(); "++
+                    maybe "" (\id    -> "window.__gfInit.userId = "++show id++"; ") mb_id++
+                    maybe "" (\uri   -> "window.__gfInit.userURI = '"++uri++"'; ") mb_uri++
+                    maybe "" (\email -> "window.__gfInit.userEMail = '"++email++"'; ") mb_email++
+                    maybe "" (\path  -> "window.__gfInit.contentURL = '"++path++"'; ") mb_path++
+                    "\">",
+  "      <iframe src=\"javascript:''\" id=\"__gwt_historyFrame\" tabIndex='-1' style=\"position:absolute;width:0;height:0;border:0\"></iframe>",
+  "   </body>",
+  "</html>"]
+
 dbInit c = 
   handleSql (fail . show) $ do
     inTransaction c $ \c -> do
-      execute c "DROP TABLE IF EXISTS Documents"
-      execute c ("CREATE TABLE Documents(id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"++
-                 "                       title VARCHAR(256) NOT NULL,\n"++
-                 "                       created TIMESTAMP NOT NULL DEFAULT 0,\n"++
-                 "                       modified TIMESTAMP NOT NULL DEFAULT 0,\n"++
-                 "                       content TEXT NOT NULL,\n"++
-                 "                       FULLTEXT INDEX (content)) TYPE=MyISAM")
+      execute c "DROP TABLE IF EXISTS GrammarUsers"
+      execute c "DROP TABLE IF EXISTS Users"
       execute c "DROP TABLE IF EXISTS Grammars"
-      execute c ("CREATE TABLE Grammars(id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"++
-                 "                      name VARCHAR(64) NOT NULL,\n"++
-                 "                      description VARCHAR(512) NOT NULL,\n"++
-                 "                      created TIMESTAMP NOT NULL DEFAULT 0,\n"++
-                 "                      modified TIMESTAMP NOT NULL DEFAULT 0)")
+      execute c "DROP TABLE IF EXISTS Documents"
+      execute c ("CREATE TABLE Users"++
+                 "                (id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,\n"++
+                 "                 identity VARCHAR(256) NOT NULL,\n"++
+                 "                 email VARCHAR(128) NOT NULL,\n"++
+                 "                 UNIQUE INDEX (identity))")
+      execute c ("CREATE TABLE Grammars"++
+                 "                (id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"++
+                 "                 name VARCHAR(64) NOT NULL,\n"++
+                 "                 description VARCHAR(512) NOT NULL,\n"++
+                 "                 created TIMESTAMP NOT NULL DEFAULT 0,\n"++
+                 "                 modified TIMESTAMP NOT NULL DEFAULT 0)")
+      execute c ("CREATE TABLE Documents"++
+                 "                (id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"++
+                 "                 title VARCHAR(256) NOT NULL,\n"++
+                 "                 created TIMESTAMP NOT NULL DEFAULT 0,\n"++
+                 "                 modified TIMESTAMP NOT NULL DEFAULT 0,\n"++
+                 "                 content TEXT NOT NULL,\n"++
+                 "                 FULLTEXT INDEX (content)) TYPE=MyISAM")
+      execute c ("CREATE TABLE GrammarUsers"++
+                 "                (userId INTEGER NOT NULL,\n"++
+                 "                 grammarId INTEGER NOT NULL,\n"++
+                 "                 flags INTEGER NOT NULL,\n"++
+                 "                 PRIMARY KEY (userId, grammarId),\n"++
+                 "                 FOREIGN KEY (userId) REFERENCES Users(id) ON DELETE CASCADE,\n"++
+                 "                 FOREIGN KEY (grammarId) REFERENCES Grammars(id) ON DELETE RESTRICT)")
       execute c "DROP PROCEDURE IF EXISTS saveDocument"
       execute c ("CREATE PROCEDURE saveDocument(IN id INTEGER, content TEXT)\n"++
                  "BEGIN\n"++
@@ -241,23 +305,51 @@ dbInit c =
                  "   END IF;\n"++
                  "END")
       execute c "DROP PROCEDURE IF EXISTS updateGrammar"
-      execute c ("CREATE PROCEDURE updateGrammar(IN id INTEGER, name VARCHAR(64), description VARCHAR(512))\n"++
+      execute c ("CREATE PROCEDURE updateGrammar(IN id INTEGER, name VARCHAR(64), description VARCHAR(512), userId INTEGER)\n"++
                  "BEGIN\n"++
                  "   IF id IS NULL THEN\n"++
                  "     INSERT INTO Grammars(name,description,created,modified) VALUES (name,description,NOW(),NOW());\n"++
-                 "     SELECT LAST_INSERT_ID() as id;\n"++
+                 "     SET id = LAST_INSERT_ID();\n"++
+                 "     INSERT INTO GrammarUsers(grammarId,userId,flags) VALUES (id,userId,0);\n"++
                  "   ELSE\n"++
                  "     UPDATE Grammars gr SET name = name, description=description, modified=NOW() WHERE gr.id = id;\n"++
-                 "     select id;\n"++
                  "   END IF;\n"++
+                 "   SELECT id;\n"++
                  "END")
       execute c "DROP PROCEDURE IF EXISTS deleteGrammar"
-      execute c ("CREATE PROCEDURE deleteGrammar(IN grammarId INTEGER)\n"++
+      execute c ("CREATE PROCEDURE deleteGrammar(IN aGrammarId INTEGER, aUserId INTEGER)\n"++
                  "BEGIN\n"++
-                 "   DELETE FROM Grammars WHERE id = grammarId;\n"++
+                 "   DECLARE deleted INTEGER;\n"++
+                 "   DELETE FROM GrammarUsers\n"++
+                 "   WHERE grammarId = aGrammarId AND userId = aUserId;\n"++
+                 "   IF NOT EXISTS(SELECT * FROM GrammarUsers gu WHERE gu.grammarId = aGrammarId) THEN\n"++
+                 "     DELETE FROM Grammars WHERE id = aGrammarId;\n"++
+                 "     SET deleted = 1;\n"++
+                 "   ELSE\n"++
+                 "     SET deleted = 0;\n"++
+                 "   END IF;\n"++
+                 "   SELECT deleted;\n"++
                  "END")
       execute c "DROP PROCEDURE IF EXISTS getGrammars"
-      execute c ("CREATE PROCEDURE getGrammars()\n"++
+      execute c ("CREATE PROCEDURE getGrammars(IN userId INTEGER)\n"++
                  "BEGIN\n"++
-                 "  SELECT id,name,description FROM Grammars ORDER BY name;\n"++
+                 "  SELECT g.id,g.name,g.description\n"++
+                 "  FROM Grammars g JOIN GrammarUsers gu ON g.id = gu.grammarId\n"++
+                 "  WHERE gu.userId = userId\n"++
+                 "  ORDER BY g.name;\n"++
+                 "END")
+      execute c "DROP PROCEDURE IF EXISTS getUserId"
+      execute c ("CREATE PROCEDURE getUserId(identity VARCHAR(256), email VARCHAR(128))\n"++
+                 "BEGIN\n"++
+                 "  DECLARE userId INTEGER;\n"++
+                 "  IF identity IS NULL OR email IS NULL THEN\n"++
+                 "    SET userId = NULL;\n"++
+                 "  ELSE\n"++
+                 "    SELECT id INTO userId FROM Users u WHERE u.identity = identity;\n"++
+                 "    IF userId IS NULL THEN\n"++
+                 "      INSERT INTO Users(identity, email) VALUES (identity, email);\n"++
+                 "      SET userId = LAST_INSERT_ID();\n"++
+                 "    END IF;\n"++
+                 "  END IF;\n"++
+                 "  SELECT userId;\n"++
                  "END")

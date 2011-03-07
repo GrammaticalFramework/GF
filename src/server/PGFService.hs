@@ -46,7 +46,7 @@ cgiMain' cache path =
        pgfMain pgf command
 
 pgfMain :: PGF -> String -> CGI CGIResult
-pgfMain pgf command = 
+pgfMain pgf command = do
        case command of
          "parse"          -> outputJSONP =<< doParse pgf `fmap` getText `ap` getCat `ap` getFrom 
          "complete"       -> outputJSONP =<< doComplete pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit

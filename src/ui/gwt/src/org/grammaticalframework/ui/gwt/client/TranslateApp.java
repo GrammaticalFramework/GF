@@ -253,16 +253,16 @@ public class TranslateApp implements EntryPoint {
 	
 	protected void updateSettingsFromHistoryToken(String[] tokenParts) {
 		if (tokenParts.length >= 1 && tokenParts[0].length() > 0) {
-			setPGFName(tokenParts[0]);
+			setGrammarURL(tokenParts[0]);
 		}
 		if (tokenParts.length >= 2 && tokenParts[1].length() > 0) {
 			setInputLanguage(tokenParts[1]);
 		}
 	}
 
-	protected void setPGFName (String pgfName) {
-		if (pgfName != null && !pgfName.equals(pgf.getPGFName())) {
-			pgf.setPGFName(pgfName);
+	protected void setGrammarURL (String url) {
+		if (url != null && !url.equals(pgf.getGrammarURL())) {
+			pgf.setGrammarURL(url);
 		}
 	}
 
@@ -279,10 +279,10 @@ public class TranslateApp implements EntryPoint {
 	protected class MySettingsListener implements SettingsListener {
 		// Will only happen on load
 		public void onAvailableGrammarsChanged() {
-			if (pgf.getPGFName() == null) {
+			if (pgf.getGrammarURL() == null) {
 				List<String> grammars = pgf.getGrammars();
 				if (!grammars.isEmpty()) {
-					pgf.setPGFName(grammars.get(0));
+					pgf.setGrammarURL(grammars.get(0));
 				}
 			}			
 		}
@@ -310,7 +310,7 @@ public class TranslateApp implements EntryPoint {
 	public void onModuleLoad() {
 		statusPopup = new StatusPopup();
 
-		pgf = new PGFWrapper(pgfBaseURL);
+		pgf = new PGFWrapper();
 		RootPanel.get().add(createUI());
 		pgf.addSettingsListener(new MySettingsListener());
 		History.addHistoryListener(new MyHistoryListener());

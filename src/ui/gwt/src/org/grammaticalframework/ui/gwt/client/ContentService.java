@@ -6,29 +6,37 @@ import java.util.*;
 import com.google.gwt.core.client.*;
 
 public class ContentService {
-	String contentBaseURL;
 	
 	// Event listeners
 	private List<SettingsListener> listeners = new LinkedList<SettingsListener>();
 	private List<GrammarInfo> grammars = null;
 
 	
-	public ContentService(String contentBaseURL) {
-		this.contentBaseURL = contentBaseURL;
+	public ContentService() {
 	}
-	
-	public String getBaseURL() {
-		return contentBaseURL;
+
+	public static class Init extends JavaScriptObject {
+		protected Init() { }
+
+		public final native String getUserId() /*-{ return this.userId; }-*/;
+		public final native String getUserURL() /*-{ return this.userURL; }-*/;
+		public final native String getUserEMail() /*-{ return this.userEMail; }-*/;
+		public final native String getContentURL() /*-{ return this.contentURL; }-*/;
 	}
-	
+
+	public static final native Init getInit() /*-{
+		return $wnd.__gfInit;
+	}-*/;
+
 	public void addSettingsListener(SettingsListener listener) {
 		listeners.add(listener);
 	}
 	
 	public void updateAvailableGrammars() {
 		List<Arg> args = new ArrayList<Arg>();
+		args.add(new Arg("userId", getInit().getUserId()));
 		args.add(new Arg("command", "grammars"));
-		JSONRequestBuilder.sendRequest(contentBaseURL, args, new GrammarsCallback() {
+		JSONRequestBuilder.sendRequest(getInit().getContentURL(), args, new GrammarsCallback() {
 			public void onResult(IterableJsArray<ContentService.GrammarInfo> grammars_) {
 				grammars = new ArrayList<GrammarInfo>();
 				for (ContentService.GrammarInfo grammar : grammars_.iterable()) {
@@ -62,8 +70,9 @@ public class ContentService {
 	public JSONRequest deleteGrammar(String grammarURL, DeleteCallback callback) {
 		List<Arg> args = new ArrayList<Arg>();
 		args.add(new Arg("url", grammarURL));
+		args.add(new Arg("userId", getInit().getUserId()));
 		args.add(new Arg("command", "delete_grammar"));
-		return JSONRequestBuilder.sendRequest(contentBaseURL, args, callback);
+		return JSONRequestBuilder.sendRequest(getInit().getContentURL(), args, callback);
 	}
 
 	public JSONRequest save(Object id, String content, SaveCallback callback) {
@@ -71,7 +80,7 @@ public class ContentService {
 		if (id != null)
 		  args.add(new Arg("id", id.toString()));
 		args.add(new Arg("command", "save"));
-		return JSONRequestBuilder.sendDataRequest(contentBaseURL, args, content, callback);
+		return JSONRequestBuilder.sendDataRequest(getInit().getContentURL(), args, content, callback);
 	}
 
 	public interface SaveCallback extends JSONCallback<DocumentSignature> {}
@@ -80,7 +89,7 @@ public class ContentService {
 		List<Arg> args = new ArrayList<Arg>();
 		args.add(new Arg("command", "load"));
 		args.add(new Arg("id", id.toString()));
-		return JSONRequestBuilder.sendRequest(contentBaseURL, args, callback);
+		return JSONRequestBuilder.sendRequest(getInit().getContentURL(), args, callback);
 	}
 
 	public interface LoadCallback extends JSONCallback<Document> {}
@@ -89,7 +98,7 @@ public class ContentService {
 		List<Arg> args = new ArrayList<Arg>();
 		args.add(new Arg("command", "search"));
 		args.add(new Arg("query", fullTextQuery));
-		return JSONRequestBuilder.sendRequest(contentBaseURL, args, callback);
+		return JSONRequestBuilder.sendRequest(getInit().getContentURL(), args, callback);
 	}
 	
 	public interface SearchCallback extends JSONCallback<IterableJsArray<DocumentSignature>> {}
@@ -115,7 +124,7 @@ public class ContentService {
 		for (Object id : ids) {
 			args.add(new Arg("id", id.toString()));
 		}
-		return JSONRequestBuilder.sendRequest(contentBaseURL, args, callback);
+		return JSONRequestBuilder.sendRequest(getInit().getContentURL(), args, callback);
 	}
 	
 	public interface DeleteCallback extends JSONCallback<DeleteResult> {}
