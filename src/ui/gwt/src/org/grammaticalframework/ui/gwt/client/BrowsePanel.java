@@ -42,7 +42,7 @@ public class BrowsePanel extends Composite {
 	public native void onActivate() /*-{
 		$doc.browsePanel = this;
 		$doc.callBrowse = @org.grammaticalframework.ui.gwt.client.BrowsePanel::callBrowse(Lorg/grammaticalframework/ui/gwt/client/BrowsePanel;Ljava/lang/String;);
-	 }-*/;
+	}-*/;
 
 	protected Widget createSearchPanel(CompletionOracle oracle) {
 		searchBox = new SuggestBox(oracle);
