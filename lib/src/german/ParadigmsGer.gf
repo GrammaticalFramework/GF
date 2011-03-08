@@ -427,7 +427,10 @@ mkV2 : overload {
       frag    = stemVerb fragen ;
       fragt   = verbT frag ;
       fragte  = fragt + "e" ;
-      gefragt = "ge" + fragt ;
+      gefragt : Str = case frag of {
+        _ + "ier" => fragt ;
+        _ => "ge" + fragt
+        } ;
     in
     mk6V fragen fragt (frag + "e") fragte fragte gefragt ;
 
