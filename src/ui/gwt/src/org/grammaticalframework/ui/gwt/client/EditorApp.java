@@ -368,6 +368,7 @@ public class EditorApp implements EntryPoint {
 					break;
 				case 3: parent.add(browsePanel);
 					if (level == 0) History.newItem("browse", false);
+					browsePanel.onActivate();
 					break;
 				case 4: parent.add(grammarsPanel);
 					if (level == 0) History.newItem("grammars", false);
