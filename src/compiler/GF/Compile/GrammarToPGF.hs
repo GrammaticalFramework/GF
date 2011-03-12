@@ -156,7 +156,7 @@ reorder abs cg =
             | cnc <- M.allConcretes cg abs, let (cflags,cdefs) = concr cnc]
   where
     aflags = 
-      concatOptions [M.flags mo | (_,mo) <- M.modules cg, M.isModAbs mo]
+      concatOptions (reverse [M.flags mo | (_,mo) <- M.modules cg, M.isModAbs mo])
 
     adefs = 
       Map.fromList (predefADefs ++ Look.allOrigInfos cg abs)
