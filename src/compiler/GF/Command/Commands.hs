@@ -649,7 +649,8 @@ allCommands env@(pgf, mos) = Map.fromList [
        "are type checking and semantic computation."
        ], 
      examples = [
-       "pt -compute (plus one two)   -- compute value"
+       "pt -compute (plus one two)                               -- compute value",
+       "p \"4 dogs love 5 cats\" | pt -transfer=digits2numeral | l -- four...five..."
        ],
      exec = \opts -> 
             returnFromExprs . takeOptNum opts . treeOps opts,
