@@ -132,11 +132,11 @@ ComplMod
 
 ModType :: { (ModuleType,Ident) }
 ModType
-  : 'abstract'  Ident                    { (MTAbstract,      $2) } 
-  | 'resource'  Ident                    { (MTResource,      $2) }
-  | 'interface' Ident                    { (MTInterface,     $2) }
-  | 'concrete'  Ident 'of' Ident         { (MTConcrete $4,   $2) }
-  | 'instance'  Ident 'of' Ident         { (MTInstance $4,   $2) }
+  : 'abstract'  Ident                     { (MTAbstract,      $2) } 
+  | 'resource'  Ident                     { (MTResource,      $2) }
+  | 'interface' Ident                     { (MTInterface,     $2) }
+  | 'concrete'  Ident 'of' Ident          { (MTConcrete $4,   $2) }
+  | 'instance'  Ident 'of' Included       { (MTInstance $4,   $2) }
 
 ModHeaderBody :: { ( [(Ident,MInclude)]
                    , Maybe (Ident,MInclude,[(Ident,Ident)])

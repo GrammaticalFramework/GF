@@ -74,7 +74,7 @@ data ModuleType =
   | MTConcrete Ident
     -- ^ up to this, also used in GFO. Below, source only.
   | MTInterface
-  | MTInstance Ident
+  | MTInstance (Ident,MInclude)
   deriving (Eq,Show)
 
 data MInclude = MIAll | MIOnly [Ident] | MIExcept [Ident]
@@ -145,7 +145,7 @@ depPathModule m = fors m ++ exts m ++ opens m
     fors m = 
       case mtype m of
         MTConcrete i   -> [OSimple i]
-        MTInstance i   -> [OSimple i]
+        MTInstance (i,_)   -> [OSimple i]
         _              -> []
     exts m = map OSimple (extends m)
 
@@ -189,7 +189,7 @@ allExtendsPlus gr i =
     Ok m -> i : concatMap (allExtendsPlus gr) (exts m)
     _    -> []
   where
-    exts m = extends m ++ [j | MTInstance j <- [mtype m]]
+    exts m = extends m ++ [j | MTInstance (j,_) <- [mtype m]]
 
 -- | conversely: all modules that extend a given module, incl. instances of interface
 allExtensions :: MGrammar a -> Ident -> [Ident]
@@ -198,9 +198,11 @@ allExtensions gr i =
     Ok m -> let es = exts i in es ++ concatMap (allExtensions gr) es
     _    -> []
  where
-   exts i = [j | (j,m) <- mods, elem i (extends m) 
-                             || elem (MTInstance i) [mtype m]]
+   exts i = [j | (j,m) <- mods, elem i (extends m) || isInstanceOf i m]
    mods = modules gr
+   isInstanceOf i m = case mtype m of
+     MTInstance (j,_) -> j == i
+     _ -> False
 
 -- | initial search path: the nonqualified dependencies
 searchPathModule :: ModInfo a -> [Ident]
