@@ -178,7 +178,7 @@ importsOfModule (m,mi) = (modName m,depModInfo mi [])
     depModType (MTResource)       xs = xs
     depModType (MTInterface)      xs = xs
     depModType (MTConcrete m2)    xs = modName m2:xs
-    depModType (MTInstance m2)    xs = modName m2:xs
+    depModType (MTInstance (m2,_))    xs = modName m2:xs
 
     depExtends es xs = foldr depInclude xs es
 

@@ -58,7 +58,7 @@ grammar2moddeps monly gr = [(i,depMod i m) | (i,m) <- modules gr, yes i]
           modtype = mtype m,
           ofs     = case mtype m of 
                      MTConcrete i -> [i | yes i]
-                     MTInstance i -> [i | yes i]
+                     MTInstance (i,_) -> [i | yes i]
                      _ -> [],
           extendeds = nub $ filter yes $ map fst (extend m),
           openeds = nub $ filter yes $ map openedModule (opens m),

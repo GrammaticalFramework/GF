@@ -61,7 +61,7 @@ ppModule q (mn, ModInfo mtype mstat opts exts with opens _ jments) =
           MTResource         -> text "resource"  <+> ppIdent mn
           MTConcrete abs     -> text "concrete"  <+> ppIdent mn <+> text "of" <+> ppIdent abs
           MTInterface        -> text "interface" <+> ppIdent mn
-          MTInstance int     -> text "instance"  <+> ppIdent mn <+> text "of" <+> ppIdent int
+          MTInstance ie      -> text "instance"  <+> ppIdent mn <+> text "of" <+> ppExtends ie
 
       ppExtends (id,MIAll        ) = ppIdent id
       ppExtends (id,MIOnly   incs) = ppIdent id              <+> brackets (commaPunct ppIdent incs)

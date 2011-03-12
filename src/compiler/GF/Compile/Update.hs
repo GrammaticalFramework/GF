@@ -89,10 +89,10 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_)) = do
               ("module" +++ showIdent i +++ 
                "has open interfaces and must therefore be declared incomplete") 
       case mt of
-        MTInstance i0 -> do
+        MTInstance (i0,mincl) -> do
           m1 <- lookupModule gr i0
           testErr (isModRes m1) ("interface expected instead of" +++ showIdent i0)
-          js' <- extendMod gr False (i0,const True) i (jments m1) (jments mi)
+          js' <- extendMod gr False (i0, isInherited mincl) i (jments m1) (jments mi)
           --- to avoid double inclusions, in instance I of I0 = J0 ** ...
           case extends mi of
             []  -> return $ replaceJudgements mi js'
