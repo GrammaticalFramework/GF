@@ -55,6 +55,7 @@ abstract Noun = Cat ** {
 
 -- $Card$ consists of either digits or numeral words.
 
+  data
     NumDigits  : Digits  -> Card ;  -- 51
     NumNumeral : Numeral -> Card ;  -- fifty-one
 
@@ -62,6 +63,7 @@ abstract Noun = Cat ** {
 
 -- A $Card$ can  be modified by certain adverbs.
 
+  fun
     AdNum : AdN -> Card -> Card ;   -- almost 51
 
 -- An $Ord$ consists of either digits or numeral words.

@@ -1,4 +1,9 @@
-abstract NumeralTransfer = Numeral ** {
+abstract NumeralTransfer = Numeral, Noun ** {
+
+fun digits2numeral : Card -> Card ;
+def 
+  digits2numeral (NumDigits d) = NumNumeral (digits2num d) ;
+  digits2numeral n = n ;
 
 fun digits2num : Digits -> Numeral ;
 def digits2num                                                    (IDig d1)       = num (pot2as3 (pot1as2 (pot0as1 (dn10 d1)))) ;

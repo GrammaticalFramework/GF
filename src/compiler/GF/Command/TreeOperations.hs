@@ -16,8 +16,8 @@ allTreeOps :: PGF -> [(String,(String,Either TreeOp (CId -> TreeOp)))]
 allTreeOps pgf = [
    ("compute",("compute by using semantic definitions (def)",
       Left  $ map (compute pgf))),
-   ("transfer",("syntactic transfer by applying function and computing",
-      Right $ \f -> map (compute pgf . EApp (EFun f)))),
+   ("transfer",("syntactic transfer by applying function, recursively in subtrees",
+      Right $ \f -> map (transfer pgf f))),
    ("paraphrase",("paraphrase by using semantic definitions (def)",
       Left  $ nub . concatMap (paraphrase pgf))),
    ("smallest",("sort trees from smallest to largest, in number of nodes",
@@ -30,3 +30,17 @@ smallest = sortBy (\t u -> compare (size t) (size u)) where
     EAbs _ _ e -> size e + 1
     EApp e1 e2 -> size e1 + size e2 + 1
     _ -> 1
+
+
+--- simple-minded transfer; should use PGF.Expr.match
+
+transfer :: PGF -> CId -> Expr -> Expr
+transfer pgf f e = case transf e of
+  v | v /= appf e -> v
+  _ -> case e of
+    EApp g a -> EApp (transfer pgf f g) (transfer pgf f a)
+    _ -> e
+ where
+  appf = EApp (EFun f)
+  transf = compute pgf . appf
+
