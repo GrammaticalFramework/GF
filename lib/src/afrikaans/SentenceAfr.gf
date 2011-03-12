@@ -16,7 +16,7 @@ concrete SentenceAfr of Sentence = CatAfr ** open ResAfr, Prelude in {
             ImpF Sg True  => <VInf,[],Sg> ;
             ImpF Sg False => <VInf,[],Sg>
             } ;
-          agr  = {g = Utr ; n = ps.p3 ; p = P2} ; ---- P2? -- g does not matter
+          agr  = {g = Neutr ; n = ps.p3 ; p = P2} ; ---- P2? -- g does not matter
           verb = vp.s.s ! ps.p1 ;
           inf  = vp.inf.p1 ;
         in

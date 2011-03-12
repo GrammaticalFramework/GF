@@ -14,16 +14,16 @@ lin
   n2 = mkDigit  "twee"  "twaalf"  "twintig"  "tweede" ;
   n3 = mkDigit  "drie"  "dertien" "dertig"  "derde" ;
   n4 = mkDigit  "vier"  "veertien" "veertig" "vierde" ;
-  n5 = mkDigit  "vijf"  "vijftien" "vijftig" "vijfde" ;
-  n6 = mkDigit  "zes"   "zestien" "zestig" "zesde" ;
-  n7 = mkDigit  "zeven" "zeventien" "zeventig" "zevende" ;
-  n8 = mkDigit  "acht"  "achttien"   "tachtig"  "achtste" ;
-  n9 = mkDigit  "negen" "negentien" "negentig" "negende" ;
+  n5 = mkDigit  "vyf"  "vyftien" "vyftig" "vyfde" ;
+  n6 = mkDigit  "ses"   "sestien" "sestig" "sesde" ;
+  n7 = mkDigit  "seven" "seventien" "seventig" "sevende" ;
+  n8 = mkDigit  "agt"  "agtien"   "tagtig"  "agtste" ;
+  n9 = mkDigit  "nege" "negentien" "negentig" "negende" ;
 
   pot01 = {
     s = \\f => table {
           NCard g _ => "een" ; ---- "één" ;
-          NOrd af => (regAdjective "eerst").s ! Posit ! af
+          NOrd af => (regAdjective "eerste").s ! Posit ! af
           } ; 
     n = Sg ;
     attr = [] ;
@@ -44,9 +44,9 @@ lin
     addAttr {s = \\g => d.attr ++ "honderd" ++ BIND ++ e.s ! g ; n = Pl} ;
   pot2as3 n = n ;
   pot3 n = 
-    addAttr {s = \\g => n.attr ++ cardOrd "duizend" "duizendste" ! g ; n = Pl} ; 
+    addAttr {s = \\g => n.attr ++ cardOrd "duisend" "duisendste" ! g ; n = Pl} ; 
   pot3plus n m = 
-    addAttr {s = \\g => n.attr ++ "duizend" ++ m.s ! g ; n = Pl} ;
+    addAttr {s = \\g => n.attr ++ "duisend" ++ m.s ! g ; n = Pl} ;
 
 
   lincat 
@@ -103,7 +103,7 @@ lin
            } ;
      en = case drei of {_ + "e" => "ën" ; _ => "en"}
      } ;
-  invNum : CardOrd = NCard Utr Nom ;
+  invNum : CardOrd = NCard Neutr Nom ;
 
   addAttr : {s : CardOrd => Str ; n : Number} -> 
     {s : CardOrd => Str ; n : Number ; attr : Str} = \n -> n ** {attr = n.s ! invNum ++ BIND} ;

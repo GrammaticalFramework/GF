@@ -11,7 +11,7 @@ concrete AdjectiveAfr of Adjective = CatAfr ** open ResAfr, Prelude in
       isPre = True
       } ;
     ComparA a np = {
-      s = \\af => a.s ! Compar ! af ++ "dan" ++ np.s ! NPNom ;
+      s = \\af => a.s ! Compar ! af ++ "as" ++ np.s ! NPNom ;	--afr
       isPre = True
       } ;
     CAdvAP ad ap np = {

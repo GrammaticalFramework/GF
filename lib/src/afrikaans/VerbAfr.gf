@@ -64,7 +64,15 @@ concrete VerbAfr of Verb = CatAfr ** open Prelude, ResAfr in {
               predVv v)))) ** {c2 = v.c2} ;
 
     UseComp comp = insertObj comp.s (predV zijn_V) ; -- agr not used
-    CompCN cn = {s = \\a => cn.s ! Strong ! NF a.n Nom} ;
+    
+--edited
+    CompCN cn = {s = \\a => case a.n of {
+        Sg => "'n" ++ cn.s ! Strong ! NF a.n Nom ;
+        Pl => cn.s ! Strong ! NF a.n Nom
+        }
+      } ;
+
+
     CompAP ap = {s = \\_ => ap.s ! APred} ;
     CompNP np = {s = \\_ => np.s ! NPNom} ;
     CompAdv a = {s = \\_ => a.s} ;
@@ -72,7 +80,7 @@ concrete VerbAfr of Verb = CatAfr ** open Prelude, ResAfr in {
     AdvVP vp adv = insertAdv adv.s vp ;
     AdVVP adv vp = insertAdV adv.s vp ;
 
-    ReflVP vp = insertObj (\\a => appPrep vp.c2 (\\_ => reflPron ! a)) vp ;
+    ReflVP vp = insertObj (\\a => appPrep vp.c2 (\\_ => reflPron ! a )) vp ;
 
     PassV2 v = insertInf (v.s ! VPerf) (predV word_V) ;
 

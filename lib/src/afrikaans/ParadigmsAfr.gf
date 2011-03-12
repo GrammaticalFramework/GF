@@ -36,9 +36,10 @@ oper
   feminine  : Gender ; --%
   neuter    : Gender ; --%
   utrum     : Gender ; --%
-
+--afr!
   de  : Gender ; -- non-neutrum
   het : Gender ; -- neutrum
+  --die : Gender ;
 
 
   
@@ -77,6 +78,7 @@ oper
 
   mkA : overload {
     mkA : (vers : Str) -> A ; -- regular adjective
+    mkA : (sag, sagte : Str) -> A ; --"semi-irregular"
     mkA : (goed,goede,goeds,beter,best : Str) -> A ; -- irregular adjective
     } ;
 
@@ -199,13 +201,14 @@ oper
     mkPN : Str -> PN = \s -> lin PN {s = \\_ => s} ;
     } ;
 
-  masculine = Utr ;
-  feminine  = Utr ;
+  masculine = Neutr ;
+  feminine  = Neutr ;
   het,neuter = Neutr ;
-  de,utrum = Utr ;
+  de,utrum = Neutr ;
 
   mkA = overload {
     mkA : (vers : Str) -> A = \a -> lin A (regAdjective a) ;
+    mkA : (sag, sagte : Str) -> A = \a,b -> lin A (semregAdjective a b) ;
     mkA : (goed,goede,goeds,beter,best : Str) -> A = \a,b,c,d,e -> lin A (mkAdjective a b c d e) ;
     } ;
 
