@@ -12,7 +12,7 @@ resource ResAfr = ParamX ** open Prelude in {
 
   param
     Case = Nom | Gen ;
-    Gender = Utr | Neutr ; --!
+    Gender = Neutr ; --!
 --    Gender = Utr | Neutr ; --!
 
     NForm = NF Number Case ;
@@ -32,18 +32,47 @@ resource ResAfr = ParamX ** open Prelude in {
      g = g
      } ;
 
+--Volgens Afrikaanse Woordelys & Spelreëls, 2009
+--
+-- Uitsonderings wat in die leksikon hanteer moet word:
+-- 
+-- * enige uitsonderings wat in die AWS vermeld word
+-- * enige woord wat in die mv. "te" kry, soos lig, ligte
+-- * enige meerlettergrepige woord wat met "ie","ël","el","em","en","ng","ior","er","êr","erd","aar","aard","ier"
+--    eindig wat nie 'n "s" in die mv. kry nie
+-- * eiename wat nie reëlmatig verbuig
+-- * woorde met wisselvorme in die mv. moet as sinonieme in die leksikon hanteer word
+--
     regNoun : Str -> Noun = \s -> case s of {
-      _ + ("a" | "o" | "y" | "u" | "oe" | "é") => mkNoun s (s + "'s") Utr ;
-      _ + ("oir" | "ion" | "je") => mkNoun s (s + "s") Neutr ;
+      _ + #cons + ("i" | "o" | "u" ) => mkNoun s (s + "'s") Neutr ; --ski, ski's --R13.7
+      #cons* + ("ie" | "oe") =>mkNoun s (s + "ë") Neutr ; --knie, knieë --R13.10
+      #cons* + ("ee") =>mkNoun s (init s + "ë") Neutr ; --fee, feë --R13.10
+      #cons* + "a" => mkNoun s (s + "'s") Neutr ; --ma, ma's R13.7
+      _ + ("a" | "e" | "ie" | "ee" | "é" | "ê" | "ô") => mkNoun s (s + "s") Neutr ; --gogga, goggas --R13.5
+      
+      b + v@("oo") + "g" => mkNoun s (b + init v + "ë") Neutr ; --boog, boë --R13.11
+      b + v@("e"|"ie"|"o"|"oe") + "g" => mkNoun s (b + v + "ë") Neutr ; --kroeg, kroeë --R13.11
+      b + v@("aa") + "g" => mkNoun s (b + init v + "e") Neutr ; --kraag, krae --R13.11
+      b + v@("a") + "g" => mkNoun s (b + v + "e") Neutr ; --dag, dae --R13.11
+      b + v@("ei"|"eu"|"oe"|"ou"|"ie"|"y"|"ui") + "g" => mkNoun s (b + v + "e") Neutr ; --tuig, tuie --R13.1
+      
+      _ + ("oir" | "ion" | "je") => mkNoun s (s + "s") Neutr ; --uit Nederlandse reël
+      
+      _ + ("rm" | "lm") => mkNoun s (s + "s") Neutr ; --R13.3
+      
       ? + ? + ? + _ + 
-        ("el" | "em" | "en" | "er" | "erd" | "aar" | "aard" | "ie") => -- unstressed
-                                            mkNoun s (s + "s") Utr ;
-      _ +                     ("i"|"u")  => mkNoun s (endCons s + "en") Utr ;
-      b + v@("aa"|"ee"|"oo"|"uu") + c@?  => mkNoun s (b + shortVoc v c + "en") Utr ; 
-      b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ? => mkNoun s (endCons s + "en") Utr ;
-      _ + "ie" => mkNoun s (s + "ën") Utr ;
-      b + v@("a"|"e"|"i"|"o"|"u" ) + c@? => mkNoun s (b + v + c + c + "en") Utr ;
-      _ => mkNoun s (endCons s + "en") Utr
+        ("ël" |"el" | "em" | "um" | "ing" | "or" | "ior" | "er" | "êr" | "erd" | "aar" | "aard" | "ier") => -- unstressed
+                                            mkNoun s (s + "s") Neutr ; --R13.3
+      
+      ? + ? + _ + (#cons + "en") => mkNoun s (s + "s") Neutr ; --R13.3
+        
+      
+      _ +                     ("i"|"u")  => mkNoun s (s + "e") Neutr ; --R13.4
+      b + v@("aa"|"ee"|"oo"|"uu") + c@?  => mkNoun s (b + shortVoc v c + "e") Neutr ; --brood, brode --R13.1
+      b + ("ei"|"eu"|"oe"|"ou"|"ie"|"y"|"ui") + ? => mkNoun s (endCons s + "e") Neutr ; --geluid, geluide --R13.1
+      b + v@("a"|"e"|"i"|"o"|"u" ) + "f" => mkNoun s (b + v + "ww" + "e") Neutr ; --stof, stowwe --R13.1
+      b + v@("a"|"e"|"i"|"o"|"u" ) + c@? => mkNoun s (b + v + c + c + "e") Neutr ; --dak, dakke --R13.1
+      _ => mkNoun s (endCons s + "e") Neutr --R13.1
       } ;
 
     regNounG : Str -> Gender -> Noun = \s,g -> {
@@ -55,16 +84,18 @@ resource ResAfr = ParamX ** open Prelude in {
 
     endCons : Str -> Str = \s -> case s of {
       _ + ("ts" |"rs" | "ls" | "ds" | "ns" | "ms") => s ;
-      b + "s" => b + "z" ;
-      b + "f" => b + "v" ;
+      b + "f" => b + "w" ;
       _ => s
       } ;
 
+    vowel : pattern Str = #("a"|"e"|"i"|"o"|"u") ;
+    cons : pattern Str = #("b"|"c"|"d"|"f"|"g"|"h"|"j"|"k"|"l"|"m"|"n"|"p"|"q"|"r"|"s"|"t"|"v"|"w"|"x"|"z") ;
     dupCons : pattern Str = #("b"|"d"|"f"|"g"|"k"|"l"|"m"|"n"|"p"|"r"|"s"|"t") ;
 
+--afr! untested because something "breaks" in other languages
     add_s : Str -> Str = \s -> case s of {
-      _ + "s" => s ;
-      _       => s + "s"
+      _ + "s" => s ++ "se";
+      _       => s ++ "se"
       } ; 
 
   param 
@@ -76,30 +107,54 @@ resource ResAfr = ParamX ** open Prelude in {
     mkAdjective : (_,_,_,_,_ : Str) -> Adjective = \ap,aa,ag,ac,as -> {
       s = table {
         Posit  => table {APred => ap ; AAttr => aa ; AGen => ag} ; 
-        Compar => table {APred => ac ; AAttr => ac + "e" ; AGen => ac + "es"} ; ----
-        Superl => table {APred => as ; AAttr => as + "e" ; AGen => as + "es"}   ----
+        Compar => table {APred => ac ; AAttr => ac ; AGen => ac + "s"} ; ----
+        Superl => table {APred => as ; AAttr => as ; AGen => as + "s"}   ----
         }
       } ;
+      
+--Volgens Afrikaanse Morfologie: Capital Exemplaria, Combrinck, 1990
     regAdjective : Str -> Adjective = \s ->  ----
       let 
         se : Str = case s of {
-          _ + "er"      => s + "e" ; ---- 
-          _ + ("i"|"u") => endCons s + "e" ;
-          b + v@("aa"|"ee"|"oo"|"uu") + c@?             => b + shortVoc v c + "e" ;
-          b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ?  => endCons s + "e" ;
-          b + v@("a"|"e"|"i"|"o"|"u" )            + c@? => b + v + c + c + "e" ;
-          _ => endCons s + "e"
+          b + v@("aal"|"baar"|"eel"|"loos") => b + init (init v) + last v + "e" ; --p288
+          _ + ("agtig"|"ant"|"ent"|"êr"|"ies"|"ig"|"lik"|"matig"|"s") => s + "e" ; --p288
+          b + "ief" => b + "iewe" ; --p288
+          
+          --b + ("ei"|"eu"|"oe"|"ou"|"ie"|"y"|"ui") + ?  => endCons s + "e" ;
+          b + v@("ou"|"y") + "d"  => b + v + "e" ; --koud, koue / wyd, wye
+          
+          --b + v@("oo"|"ee") + "d" => b + init v + "ë" ; --leeg, leë
+          b + v@("oo"|"ee") + ("g"|"d") => b + init v + "ë" ; --leeg, leë
+          b + v@("e"|"ie"|"o"|"oe") + "g" => b + v + "ë" ; --moeg, moeë
+          b + v@("aa") + "g" => b + init v + "e" ; --vaag, vae
+          b + v@("a") + "g" => b + v + "e" ; --kan nog nie aan 'n voorbeeld dink nie
+          
+          b + v@("aa"|"ee"|"oo"|"uu") + "r" => s ; --duur, duur
+          b + v@("aa"|"ee"|"oo"|"uu") + c@#cons => b + shortVoc v c + "e" ; --gaaf, gawe
+          b + v@("a"|"e"|"i"|"o"|"u" ) + "f" => b + v + "ww" + "e" ; --grof, growwe
+          --b + v@("a"|"e"|"i"|"o"|"u" ) + c@? => b + v + c + c + "e" ; --stom, growwe
+          _ + "d" => s + "e" ; --p286
+          _ => s 
           } ;
-        ser : Str = case s of {
-          _ + "r" => s + "der" ;
-          _ => se + "r"
+        ser : Str = case se of {
+          b + v@("aa"|"ee"|"oo"|"uu") + "r" => se + "der" ;
+          b + v@("a"|"i"|"o"|"u" ) + c@#cons => b + v + c + c + "er" ; --dom, dommer
+          _ + "r" => se + "der" ;
+          _ + "ë" => se + "r" ;
+          _ + "e" => se + "r" ;
+          _ => se + "er"
           } ;
         sst : Str = case s of {
-          _ + "s" => s + "t" ;
-          _ => s + "st"
+          _ + "s" => s + "te" ;
+          _ => s + "ste"
           } ;
       in
       mkAdjective s se (s + "s") ser sst ;
+      
+      
+    semregAdjective : Str -> Str -> Adjective = \ap,aa -> mkAdjective ap aa (ap + "s") (aa + "r") (ap + "ste") ;
+      
+      --shortVoc : Str -> Str -> Str = \v,s -> init v + endCons s ;
 
   param 
     VForm =         --!
@@ -119,7 +174,7 @@ resource ResAfr = ParamX ** open Prelude in {
     	s = table {
     		VInf        => aaien; -- hij/zij/het/wij aaien
     		VPres       => aai;   -- ik aai
-    		VPast       => aaide; -- ik aaide  --# notpresent
+    		VPast       => aai; -- ik aaide  --# notpresent --!afr!	lyk vir nou soos VPres
     		VPerf       => geaaid -- ik heb geaaid 
     	}
     };
@@ -160,9 +215,9 @@ resource ResAfr = ParamX ** open Prelude in {
 
   hebben_V : VVerb = {
     s = table {
-       VInf      => "hê" ;
+       VInf      => "het" ;
        VPres     => "het" ; 
-       VPast     => "hat" ; --# notpresent
+       VPast     => "had" ; --# notpresent
        VPerf     => "gehad" 
        } ;
     aux = VHebben ;
@@ -181,7 +236,7 @@ resource ResAfr = ParamX ** open Prelude in {
        VInf      => "sal" ;
        VPres     => "sal" ; 
        VPast     => "sou" ; --# notpresent
-       VPerf     => "gesou" 
+       VPerf     => "sou" --!afr!	perfektum moet hom soos past gedra
        } ;
     aux = VHebben ;
     prefix = [] ;
@@ -208,7 +263,7 @@ resource ResAfr = ParamX ** open Prelude in {
          a = {g = g ; n = n ; p = p}
          } ;
 
-    het_Pron : Pronoun = mkPronoun "'t" "'t" "ze" "hij" "hem" "zijn" "zijne" Neutr Sg P3 ;
+    het_Pron : Pronoun = mkPronoun "dit" "dit" "hy" "hy" "hom" "sy" "syne" Neutr Sg P3 ;
 
 
 -- Complex $CN$s, like adjectives, have strong and weak forms.
@@ -305,18 +360,18 @@ param
 
   negation : Polarity => Str = table {
       Pos => [] ;
-      Neg => "niet"
+      Neg => "nie"
       } ;
 
--- Extending a verb phrase with new constituents.
+-- Extending a verb phrase with new constituents
 
   insertObj : (Agr => Str) -> VP -> VP = insertObjNP False ;
 
   insertObjNP : Bool -> (Agr => Str) -> VP -> VP = \isPron, obj,vp -> {
     s = vp.s ;
     a1 = vp.a1 ;
-    n0 = \\a => case isPron of {True  => obj ! a ; _ => []} ++ vp.n0 ! a ;
-    n2 = \\a => case isPron of {False => obj ! a ; _ => []} ++ vp.n2 ! a ;
+    n0 = \\a => case isPron of {True  => obj ! a ; _ => []} ++ vp.n0 ! a;
+    n2 = \\a => case isPron of {False => obj ! a ; _ => []} ++ vp.n2 ! a;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
     inf = vp.inf ;
@@ -393,7 +448,7 @@ param
           neg   = vp.a1 ! b ;
           obj0  = vp.n0 ! agr ;
           obj   = vp.n2 ! agr ;
-          compl = obj0 ++ neg ++ obj ++ vp.a2 ++ vp.s.prefix ;
+          compl = obj0 ++ neg ++ obj ++ vp.a2 ++ vp.s.prefix ++ neg;
           inf   = 
             case <vp.isAux, vp.inf.p2, a> of {                  --# notpresent
               <True,True,Anter> => vp.s.s ! VInf ++ vp.inf.p1 ; --# notpresent
@@ -423,7 +478,7 @@ param
 
   infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp -> 
     <
-     \\agr => vp.n2 ! agr ++  vp.a2,
+     \\agr => vp.n0 ! agr ++  vp.n2 ! agr ++  vp.a2,
      vp.a1 ! Pos ++ 
      if_then_Str isAux [] "te" ++ vp.s.s ! VInf,
      vp.inf.p1 ++ vp.ext
@@ -434,20 +489,22 @@ param
     vpi.p1 ! agrP3 Sg ++ vpi.p3 ++ vpi.p2 ;
 
   reflPron : Agr => Str = table {
-    {n = Sg ; p = P1} => "me" ;
-    {n = Sg ; p = P2} => "je" ;
-    {n = Sg ; p = P3} => "zich" ;
-    {n = Pl ; p = P1} => "ons" ;
-    {n = Pl ; p = P2} => "je" ;
-    {n = Pl ; p = P3} => "zich"
+    {n = Sg ; p = P1} => "my" ;	--afr
+    {n = Sg ; p = P2} => "jou" ;	--afr
+    {n = Sg ; p = P3} => "hom" ;	--afr
+    {g = masculine ; n = Sg ; p = P3} => "hom" ;	--afr
+    {g = feminine ; n = Sg ; p = P3} => "haar" ;	--afr
+    {n = Pl ; p = P1} => "ons" ;	--afr
+    {n = Pl ; p = P2} => "julle" ;	--afr
+    {n = Pl ; p = P3} => "hulle"	--afr
     } ;
 
-  conjThat : Str = "dat" ;
+  conjThat : Str = "dat" ;	--afr
 
-  conjThan : Str = "dan" ;
+  conjThan : Str = "as" ;	--afr
 
   conjAgr : Agr -> Agr -> Agr = \a,b -> {
-      g = Utr ; ----
+      g = Neutr ; ----
       n = conjNumber a.n b.n ;
       p = conjPerson a.p b.p
       } ;

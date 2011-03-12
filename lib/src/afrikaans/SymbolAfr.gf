@@ -44,6 +44,6 @@ lin
   ConsSymb = infixSS "," ;
 
 oper
-  artDef : Number -> Gender -> Str = \n,g -> case <n,g> of {<Sg,Neutr> => "het" ; _ => "de"} ;
+  artDef : Number -> Gender -> Str = \n,g -> case <n,g> of {<Sg,Neutr> => "die" ; _ => "die"} ;	--afr
 
 }

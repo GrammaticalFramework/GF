@@ -6,7 +6,7 @@ concrete RelativeAfr of Relative = CatAfr ** open ResAfr in {
   lin
 
     RelCl cl = {
-      s = \\t,a,b,_,_ => "zodat" ++ cl.s ! t ! a ! b ! Sub
+      s = \\t,a,b,_,_ => "sodat" ++ cl.s ! t ! a ! b ! Sub
       } ;
 
     RelVP rp vp = {
@@ -14,7 +14,7 @@ concrete RelativeAfr of Relative = CatAfr ** open ResAfr in {
         let 
           agr = case rp.a of {
             RNoAg   => agrgP3 g n ;
-            RAg rn p => {g = Utr ; n = rn ; p = p} ---- g 
+            RAg rn p => {g = Neutr ; n = rn ; p = p} ---- g 
             } ;
           cl = mkClause (rp.s ! g ! n) agr vp
         in
@@ -37,8 +37,8 @@ concrete RelativeAfr of Relative = CatAfr ** open ResAfr in {
   oper
     relPron : Gender => Number => Str = \\g,n =>
       case <g,n> of {
-        <Neutr,Sg> => "dat" ;
-        _ => "die"
+        <Neutr,Sg> => "wat" ;
+        _ => "wat"
       } ;
 
 }

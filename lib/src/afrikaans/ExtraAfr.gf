@@ -28,3 +28,11 @@ concrete ExtraAfr of ExtraAfrAbs = CatAfr **
 --      Fem => "zur"
 --      } ++ cn.s ! adjfCase Weak Dat ! Sg ! Dat 
 --    } ;
+
+
+lin
+    ICompAP ap = {s = \\_ => "hoe" ++ ap.s ! APred} ; 
+
+    IAdvAdv adv = {s = "hoe" ++ adv.s} ;
+
+}

@@ -4,7 +4,7 @@ concrete NounAfr of Noun = CatAfr ** open ResAfr, Prelude in {
 
   lin
     DetCN det cn = {
-      s = \\c => det.s ! cn.g ++ cn.s ! det.a ! NF det.n Nom ;
+      s = \\c => det.s ! cn.g ++ cn.s ! det.a ! NF det.n Nom ; -- kan dalk vereenvoudig (2011-01-14)
       a = agrP3 det.n ;
       isPron = False
       } ;
@@ -69,7 +69,7 @@ concrete NounAfr of Noun = CatAfr ** open ResAfr, Prelude in {
       a = Strong
       } ;
 
-    NumCard n = {s = n.s ! Utr ! Nom ; n = n.n ; isNum = True} ;
+    NumCard n = {s = n.s ! Neutr ! Nom ; n = n.n ; isNum = True} ;
 
     NumPl = {s = []; n = Pl ; isNum = False} ; 
     NumSg = {s = []; n = Sg ; isNum = False} ; 
@@ -85,8 +85,8 @@ concrete NounAfr of Noun = CatAfr ** open ResAfr, Prelude in {
     OrdSuperl a = {s = a.s ! Superl} ;
 
     DefArt = {
-      s = \\_,n,g  => case <n,g> of {<Sg,Neutr> => "het" ; _ => "de"} ;
-      sp = \\n,g => "die" ;
+      s = \\_,n,g  => case <n,g> of {<Sg,Neutr> => "die" ; _ => "die"} ;	--afr
+      sp = \\n,g => "hulle" ;	--afr
       a = Weak
       } ;
 
@@ -94,13 +94,13 @@ concrete NounAfr of Noun = CatAfr ** open ResAfr, Prelude in {
       s = table {
         True => \\_,_ => [] ; 
         False => table {
-          Sg => \\g => "een" ;
+          Sg => \\g => "'n" ;	--afr
           Pl =>  \\_ => []
           }
         } ; 
       sp = table {
-        Sg => \\g => "een" ;
-        Pl => \\_ => "een" ----
+        Sg => \\g => "'n" ;	--afr
+        Pl => \\_ => "'n" ----	--afr
         } ;
       a = Strong
       } ;

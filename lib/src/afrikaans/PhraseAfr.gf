@@ -19,7 +19,7 @@ concrete PhraseAfr of Phrase = CatAfr ** open Prelude, ResAfr in
     UttVP vp = {s = useInfVP True vp} ;  -- without zu
     UttAdv adv = adv ;
     UttCN n = {s = n.s ! Strong ! NF Sg Nom} ;
-    UttCard n = {s = n.s ! Utr ! Nom} ;
+    UttCard n = {s = n.s ! Neutr ! Nom} ;
     UttAP ap = {s = ap.s ! APred} ;
 
     NoPConj = {s = []} ;

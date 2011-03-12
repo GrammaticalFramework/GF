@@ -4,19 +4,19 @@ concrete IdiomAfr of Idiom = CatAfr **
   flags optimize=all_subs ;
 
   lin
-    ImpersCl vp = mkClause "'t" (agrP3 Sg) vp ;
-    GenericCl vp = mkClause "men" (agrP3 Sg) vp ;
+    ImpersCl vp = mkClause "dit" (agrP3 Sg) vp ;
+    GenericCl vp = mkClause "mens" (agrP3 Sg) vp ;	--afr
 
-    CleftNP np rs = mkClause "'t" (agrP3 Sg) 
+    CleftNP np rs = mkClause "dit" (agrP3 Sg) 
       (insertExtrapos (rs.s ! np.a.g ! np.a.n) ----
         (insertObj (\\_ => np.s ! NPNom) (predV zijn_V))) ;
 
-    CleftAdv ad s = mkClause "'t" (agrP3 Sg) 
+    CleftAdv ad s = mkClause "dit" (agrP3 Sg) 
       (insertExtrapos (conjThat ++ s.s ! Sub)
         (insertObj (\\_ => ad.s) (predV zijn_V))) ;
 
     ExistNP np = 
-      mkClause "er" (agrP3 np.a.n) 
+      mkClause "daar" (agrP3 np.a.n) 	--afr
         (insertObj (\\_ => np.s ! NPNom) 
           (predV zijn_V)) ;
 
@@ -24,7 +24,7 @@ concrete IdiomAfr of Idiom = CatAfr **
       s = \\t,a,p => 
             let 
               cls = 
-                (mkClause "er" (agrP3 ip.n)  (predV zijn_V)).s ! t ! a ! p ;
+                (mkClause "daar" (agrP3 ip.n)  (predV zijn_V)).s ! t ! a ! p ;	--afr
               who = ip.s ! NPNom
             in table {
               QDir   => who ++ cls ! Inv ;
@@ -32,7 +32,7 @@ concrete IdiomAfr of Idiom = CatAfr **
               }
       } ;
 
-    ProgrVP vp = insertAdv ("aan" ++ "het" ++ useInfVP True vp) (predV zijn_V) ;
+    ProgrVP vp = insertAdv ("aan" ++ "die" ++ useInfVP True vp) (predV zijn_V) ;	--afr
 
     ImpPl1 vp =
       let 
@@ -43,7 +43,7 @@ concrete IdiomAfr of Idiom = CatAfr **
                   insertObj vpi.p1 (
                     predVGen True v))) ;
       in 
-      {s = (mkClause "we" {g = Utr ; n = Pl ; p = P1} vvp).s ! 
+      {s = (mkClause "ons" {g = Neutr ; n = Pl ; p = P1} vvp).s ! 
                            Pres ! Simul ! Pos ! Inv 
       } ;
 
