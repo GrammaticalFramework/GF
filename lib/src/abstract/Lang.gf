@@ -6,7 +6,7 @@
 -- which may be more suitable to open in applications.
 
 abstract Lang = 
-  Grammar,
+  Grammar, 
   Lexicon
   ** {
   flags startcat=Phr ;

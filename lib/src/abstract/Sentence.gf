@@ -9,7 +9,7 @@ abstract Sentence = Cat ** {
 -- Clauses are converted to $S$ (with fixed tense) with the
 -- $UseCl$ function below.
 
-  fun
+  data
     PredVP    : NP -> VP -> Cl ;         -- John walks
 
 -- Using an embedded sentence as a subject is treated separately.
