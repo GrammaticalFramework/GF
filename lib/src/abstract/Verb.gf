@@ -7,7 +7,7 @@ abstract Verb = Cat ** {
 -- Verb phrases are constructed from verbs by providing their
 -- complements. There is one rule for each verb category.
 
-  fun
+  data
     UseV     : V   -> VP ;        -- sleep
 
     ComplVV  : VV  -> VP -> VP ;  -- want to run
