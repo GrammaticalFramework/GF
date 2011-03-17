@@ -1,4 +1,4 @@
-concrete ExtraSwe of ExtraSweAbs = ExtraScandSwe ** open CommonScand, ResSwe, ParamX in {
+concrete ExtraSwe of ExtraSweAbs = ExtraScandSwe ** open CommonScand, ResSwe, ParamX, Prelude in {
 
 lin
     FocVP vp np = {
@@ -21,5 +21,21 @@ lin
         vinf ++ comp ++ vfin ++ subj ++ neg
       } ;
 
+lin
+
+  CompoundNomN a b = {
+    s = \\n,d,c => a.s ! Sg ! Indef ! Nom ++ BIND ++ b.s ! n ! d ! c ;
+    g = b.g
+    } ;
+
+  CompoundGenN a b = {
+    s = \\n,d,c => a.s ! Sg ! Indef ! Gen ++ BIND ++ b.s ! n ! d ! c ;
+    g = b.g
+    } ;
+
+  CompoundAdjN a b = {
+    s = \\n,d,c => a.s ! AF (APosit (Strong (GSg Utr))) Nom ++ BIND ++ b.s ! n ! d ! c ;
+    g = b.g
+    } ;
 
 }
