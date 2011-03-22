@@ -244,18 +244,16 @@ Minibar.prototype.target_lang=function() {
 
 Minibar.prototype.add_typed_input=function() {
     with(this) {
-	var inp;
-	if(surface.typed) inp=surface.typed;
-	else {
-	    inp=empty("input","type","text");
+	if(!surface.typed) {
+	    var inp=empty("input","type","text");
 	    inp.value="";
 	    inp.setAttribute("accesskey","t");
 	    inp.style.width="10em";
 	    inp.onkeyup=bind(complete_typed,this);
 	    surface.appendChild(inp);
 	    surface.typed=inp;
+	    inp.focus();
 	}
-	inp.focus();
     }
 }
 
