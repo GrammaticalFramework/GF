@@ -6,15 +6,16 @@ charset="UTF-8"
 AUTOHEADER=no
 
 . $bin/cgistart.sh
-PATH=$PATH:/Users/hallgren/.cabal/bin
 export LC_CTYPE="UTF-8"
 style_url="editor.css"
+
+tmp="$documentRoot/tmp"
 
 make_dir() {
   dir="$(mktemp -d "$tmp/gfse.XXXXXXXX")"
 # chmod a+rxw "$dir"
   chmod a+rx "$dir"
-  ln "$grammars/grammars.cgi" "$dir"
+  cp "grammars.cgi" "$dir"
 }
 
 
@@ -31,9 +32,9 @@ check_grammar() {
     end
     h3 OK
     begin dl
-    [ -z "$minibar" ] || { dt; echo "▸"; link "$minibar?/tmp/${dir##*/}/" "Minibar"; }
-    [ -z "$transquiz" ] || { dt; echo "▸"; link "$transquiz?/tmp/${dir##*/}/" "Translation Quiz"; }
-    [ -z "$gfshell" ] || { dt; echo "▸"; link "$gfshell?dir=${dir##*/}" "GF Shell"; }
+    [ -z "$minibar_url" ] || { dt; echo "▸"; link "$minibar_url?/tmp/${dir##*/}/" "Minibar"; }
+    [ -z "$transquiz_url" ] || { dt; echo "▸"; link "$transquiz_url?/tmp/${dir##*/}/" "Translation Quiz"; }
+    [ -z "$gfshell_url" ] || { dt; echo "▸"; link "$gfshell_url?dir=${dir##*/}" "GF Shell"; }
     dt ; echo "◂"; link "javascript:history.back()" "Back to Editor"
 
     end
@@ -55,12 +56,15 @@ check_grammar() {
   endall
 }
 
-if [ -z "$tmp" ] || [ -z "$grammars" ] ||
-   ! [ -d "$tmp" ] || ! [ -d "$grammars" ] ; then
+if [ -z "$tmp" ] || ! [ -d "$tmp" ] ; then
   pagestart "Error"
-  echo "upload.cgi is not properly configured"
-
-  # cgiconfig.sh must define tmp and grammars.
+  begin pre
+  echo "upload.cgi is not properly configured:"
+  if [ -z "$tmp" ] ; then
+    echo "cgiconfig.sh must define tmp"
+  elif [ ! -d "$tmp" ] || [ ! -w "$tmp" ] ; then
+    echo "$tmp must be a writeable directory"
+  fi
   # cgiconfig.sh should define minibar & gfshell to allow grammars to be tested.
   endall
 else
