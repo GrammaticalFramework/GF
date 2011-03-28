@@ -1,0 +1,82 @@
+body { color: #413b36;
+       background: #fffcfa;
+ }
+h1 { font-size: 175%; }
+h1,h2,h3,h4,small { font-family: sans-serif; }
+h1,h2,h3,h4,a { color: #5c1a1a; }
+
+h1:first-child, h2:first-child { margin-top: 0; margin-bottom: 1ex; }
+
+#editor { max-width: 50em; }
+div.grammar { border: 2px solid #b09779; background: #642121; }
+div.files { margin: 0 8px 8px 8px; }
+
+div#file { border: 2px solid #b0977d; border-top-width: 0; }
+pre.plain { border: 2px solid #b0977d; }
+div#file, pre.plain { background: #fffcfa; padding: 0.6ex; }
+
+.slideshow .hidden { display: none; }
+
+img.right, div.right, div.modtime { float: right; }
+.modtime { color: #999; white-space: nowrap; }
+
+/*div.namebar { background: #642121; }*/
+div.namebar table { width: 100%; }
+.namebar h3 { margin: 0; color: white; }
+
+td.right { text-align: right; }
+
+.kw { font-weight: bold; font-family: sans-serif; color: #642121; }
+.sep { font-weight: bold; color: #642121; }
+
+div.indent { padding-left: 1em; min-width: 1em; min-height: 1em; }
+
+/*
+div.fun, div.param, div.lincat, div.oper, div.lin
+{ padding-left: 2em; text-indent: -2em; }
+*/
+.more, .delete { font-weight: bold; font-family: sans-serif; }
+.more, .delete, .edit { cursor: pointer; }
+
+.hover .more, .hover .delete, .hover .edit { visibility: hidden }
+
+.hover .hidden, .nohover .ifhover { display: none; }
+
+.editable:hover, .deletable:hover { background: #ff9; }
+.namebar .editable:hover { background: #04b; }
+
+.extensible:hover .more,.editable:hover > .edit ,.deletable:hover > .delete 
+  { visibility: visible; }
+
+.more { color: green; }
+.edit { color: orange; }
+.delete { color: red; }
+.error_message,.inError { color: red; }
+.template, .template .sep { color: #999; }
+form { display: inline-block; }
+
+table.tabs {
+    width: 100%;
+    border-width: 0; border-spacing: 0; empty-cells: show;
+}
+
+table.tabs td { text-align: center; border: 2px solid #b09779; padding: 2px; }
+table.tabs td.active { background: white; border-bottom-width: 0; }
+table.tabs td.inactive {
+    background: #e1e1e1;
+    border-top-color: #b09779; border-left-color: #b09779; border-right-color: #b09779;
+}
+
+ table.tabs td.gap
+{ border-top-width: 0; border-left-width: 0; border-right-width: 0; }
+
+table.tabs input[type=button] {
+    border: 0;
+    background: inherit;
+    color: #642121;
+    font-size: inherit;
+    font-weight: bold;
+    /*text-decoration: underline;*/
+}
+
+input.string_edit { font-family: inherit; font-size: inherit; }
