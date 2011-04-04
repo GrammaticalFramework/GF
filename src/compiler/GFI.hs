@@ -55,18 +55,28 @@ import Paths_gf
 mainRunGFI :: Options -> [FilePath] -> IO ()
 mainRunGFI opts files = do
   let opts1 = addOptions (modifyFlags (\f -> f{optVerbosity=Quiet})) opts
-  gfenv <- emptyGFEnv
-  gfenv <- importInEnv gfenv opts1 files
-  loop opts1 gfenv
-  return ()
+  shell opts1 files
 
 mainGFI :: Options -> [FilePath] -> IO ()
 mainGFI opts files = do
   putStrLn welcome
-  gfenv <- emptyGFEnv
-  gfenv <- importInEnv gfenv opts files
-  loop opts gfenv
-  return ()
+  shell opts files
+
+shell opts files = loop opts =<< importInEnv emptyGFEnv opts files
+
+-- | Read end execute commands until it is time to quit
+loop :: Options -> GFEnv -> IO ()
+loop opts gfenv = maybe (return ()) (loop opts) =<< readAndExecute1 opts gfenv
+
+-- | Read and execute one command, returning Just an updated environment for
+-- | the next command, or Nothing when it is time to quit
+readAndExecute1 :: Options -> GFEnv -> IO (Maybe GFEnv)
+readAndExecute1 opts gfenv = execute1 opts gfenv =<< readCommand opts gfenv
+
+readCommand opts gfenv0 =
+    case flag optMode opts of
+      ModeRun -> tryGetLine
+      _       -> fetchCommand gfenv0
 
 loopOptNewCPU opts gfenv' 
  | not (verbAtLeast opts Normal) = return gfenv'
@@ -75,21 +85,19 @@ loopOptNewCPU opts gfenv'
      putStrLnFlush (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
      return $ gfenv' {cputime = cpu'}
 
-loop :: Options -> GFEnv -> IO GFEnv
-loop opts gfenv0 = do
-  let loopNewCPU = loopOptNewCPU opts
-  let isv = verbAtLeast opts Normal
-  let ifv act = if isv then act else return ()
-  let env = commandenv gfenv0
-  let sgr = sourcegrammar gfenv0
-  s0 <- case flag optMode opts of
-          ModeRun -> tryGetLine
-          _       -> fetchCommand gfenv0
-  let gfenv = gfenv0 {history = s0 : history gfenv0}
-  let 
-    pwords = case words s0 of
-      w:ws -> getCommandOp w :ws
-      ws -> ws
+-- | Execute a given command, returning Just an updated environment for
+-- | the next command, or Nothing when it is time to quit
+execute1 :: Options -> GFEnv -> String -> IO (Maybe GFEnv)
+execute1 opts gfenv0 s0 = do
+  let loopNewCPU = fmap Just . loopOptNewCPU opts
+      isv = verbAtLeast opts Normal
+      ifv act = if isv then act else return ()
+      env = commandenv gfenv0
+      sgr = sourcegrammar gfenv0
+      gfenv = gfenv0 {history = s0 : history gfenv0}
+      pwords = case words s0 of
+                 w:ws -> getCommandOp w :ws
+                 ws -> ws
   
   -- special commands, requiring source grammar in env
 
@@ -101,7 +109,7 @@ loop opts gfenv0 = do
              loopNewCPU gfenv'
 -}
 
-      "q":_  -> ifv (putStrLn "See you.") >> return gfenv
+      "q":_  -> ifv (putStrLn "See you.") >> return Nothing
 
       _ -> do
         r <- runInterruptibly $ case pwords of
@@ -220,8 +228,7 @@ loop opts gfenv0 = do
             interpretCommandLine env s0
             loopNewCPU gfenv
 --        gfenv' <- return $ either (const gfenv) id r
-        gfenv' <- either (\e -> (printException e >> return gfenv)) return r
-        loop opts gfenv'
+        either (\e -> (printException e >> return (Just gfenv))) return r
 
 printException e = maybe (print e) (putStrLn . ioErrorText) (fromException e)
 
@@ -298,9 +305,9 @@ data GFEnv = GFEnv {
   cputime    :: Integer
   }
 
-emptyGFEnv :: IO GFEnv
-emptyGFEnv = do
-  return $ GFEnv emptySourceGrammar{modules=[(identW,emptyModInfo)]} (mkCommandEnv emptyPGF) [] 0
+emptyGFEnv :: GFEnv
+emptyGFEnv =
+  GFEnv emptySourceGrammar{modules=[(identW,emptyModInfo)]} (mkCommandEnv emptyPGF) [] 0
 
 wordCompletion gfenv (left,right) = do
   case wc_type (reverse left) of
