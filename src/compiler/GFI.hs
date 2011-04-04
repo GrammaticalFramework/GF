@@ -20,6 +20,7 @@ import GF.Infra.CheckM
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Infra.Modules (greatestResource, modules, emptyModInfo)
+import GF.Infra.BuildInfo (buildInfo)
 import qualified System.Console.Haskeline as Haskeline
 import GF.Text.Coding
 
@@ -279,6 +280,7 @@ welcome = unlines [
   "         *  *  *              ",
   "                              ",
   "This is GF version "++showVersion version++". ",
+  buildInfo,
   "License: see help -license.   ",
   "Bug reports: http://code.google.com/p/grammatical-framework/issues/list"
   ]
