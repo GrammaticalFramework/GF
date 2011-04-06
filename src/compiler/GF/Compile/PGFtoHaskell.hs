@@ -129,16 +129,28 @@ predefTypeSkel = [(c,[]) | c <- ["String", "Int", "Float"]]
 
 -- GADT version of data types
 datatypesGADT :: Prefix -> (OIdent -> Bool) -> (String,HSkeleton) -> String
-datatypesGADT gId lexical (_,skel) = 
-    unlines (concatMap (hCatTypeGADT gId) (skel ++ predefTypeSkel))
-    +++++
-    "data Tree :: * -> * where" ++++ 
-    unlines (concatMap (map ("  "++) . hDatatypeGADT gId lexical) skel) ++++
-    unlines [
+datatypesGADT gId lexical (_,skel) = unlines $ 
+    concatMap (hCatTypeGADT gId) (skel ++ predefTypeSkel) ++
+    [ 
+      "", 
+      "data Tree :: * -> * where"
+    ] ++ 
+    concatMap (map ("  "++) . hDatatypeGADT gId lexical) skel ++
+    [
       "  GString :: String -> Tree GString_",
       "  GInt :: Int -> Tree GInt_",
-      "  GFloat :: Double -> Tree GFloat_"
-      ]
+      "  GFloat :: Double -> Tree GFloat_",
+      "",
+      "instance Eq (Tree a) where",
+      "  i == j = case (i,j) of"
+    ] ++
+    concatMap (map ("    "++) . hEqGADT gId lexical) skel ++
+    [
+      "    (GString x, GString y) -> x == y",
+      "    (GInt x, GInt y) -> x == y",
+      "    (GFloat x, GFloat y) -> x == y",
+      "    _ -> False"
+    ]
 
 hCatTypeGADT :: Prefix -> (OIdent, [(OIdent, [OIdent])]) -> [String]
 hCatTypeGADT gId (cat,rules)
@@ -153,6 +165,17 @@ hDatatypeGADT gId lexical (cat, rules)
           | (f,args) <- nonLexicalRules (lexical cat) rules ]
         ++ if lexical cat then [lexicalConstructor cat +++ ":: String ->"+++ t] else []
   where t = "Tree" +++ gId cat ++ "_"
+
+hEqGADT :: Prefix -> (OIdent -> Bool) -> (OIdent, [(OIdent, [OIdent])]) -> [String]
+hEqGADT gId lexical (cat, rules)
+  | isListCat (cat,rules) = let r = listr cat in ["(" ++ patt "x" r ++ "," ++ patt "y" r ++ ") -> " ++ listeqs] 
+  | otherwise = ["(" ++ patt "x" r ++ "," ++ patt "y" r ++ ") -> " ++ eqs r | r <- rules] 
+ where
+   patt s (f,xs) = unwords (gId f : mkSVars s (length xs))
+   eqs (_,xs) = unwords ("and" : "[" : intersperse "," [x ++ " == " ++ y | 
+     (x,y) <- zip (mkSVars "x" (length xs)) (mkSVars "y" (length xs)) ] ++ ["]"])
+   listr c = (c,["foo"]) -- foo just for length = 1
+   listeqs = "and [x == y | (x,y) <- zip x1 y1]"
 
 prCompos :: Prefix -> (OIdent -> Bool) -> (String,HSkeleton) -> [String]
 prCompos gId lexical (_,catrules) =
@@ -201,7 +224,8 @@ hInstance gId lexical m (cat,rules)
    mkRHS f vars = "mkApp (mkCId \"" ++ f ++ "\")" +++ 
 		   "[" ++ prTList ", " ["gf" +++ x | x <- vars] ++ "]"
 
-mkVars n = ["x" ++ show i | i <- [1..n]]
+mkVars = mkSVars "x"
+mkSVars s n = [s ++ show i | i <- [1..n]]
 
 ----fInstance m ("Cn",_) = "" ---
 fInstance _ _ m (cat,[]) = ""
