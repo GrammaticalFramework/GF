@@ -67,11 +67,11 @@ haskPreamble gadt name =
   "  gf :: a -> PGF.Tree",
   "  fg :: PGF.Tree -> a",
   "",
-  predefInst "GString" "String"  "unStr"    "mkStr",
+  predefInst gadt "GString" "String"  "unStr"    "mkStr",
   "",
-  predefInst "GInt"    "Int"     "unInt"    "mkInt",
+  predefInst gadt "GInt"    "Int"     "unInt"    "mkInt",
   "",
-  predefInst "GFloat"  "Double"  "unDouble" "mkDouble",
+  predefInst gadt "GFloat"  "Double"  "unDouble" "mkDouble",
   "",
   "----------------------------------------------------",
   "-- below this line machine-generated",
@@ -79,8 +79,12 @@ haskPreamble gadt name =
   ""
  ]
 
-predefInst gtyp typ destr consr = 
-  "newtype" +++ gtyp +++ "=" +++ gtyp +++ typ +++ " deriving Show" +++++
+predefInst gadt gtyp typ destr consr = 
+  (if gadt
+    then [] 
+    else ("newtype" +++ gtyp +++ "=" +++ gtyp +++ typ +++ " deriving Show\n\n") 
+    ) 
+  ++
   "instance Gf" +++ gtyp +++ "where" ++++
   "  gf (" ++ gtyp +++ "x) =" +++ consr +++ "x" ++++
   "  fg t =" ++++
@@ -121,12 +125,20 @@ nonLexicalRules True rules = [r | r@(f,t) <- rules, not (null t)]
 lexicalConstructor :: OIdent -> String
 lexicalConstructor cat = "Lex" ++ cat
 
+predefTypeSkel = [(c,[]) | c <- ["String", "Int", "Float"]]
+
 -- GADT version of data types
 datatypesGADT :: Prefix -> (OIdent -> Bool) -> (String,HSkeleton) -> String
 datatypesGADT gId lexical (_,skel) = 
-    unlines (concatMap (hCatTypeGADT gId) skel)
+    unlines (concatMap (hCatTypeGADT gId) (skel ++ predefTypeSkel))
     +++++
-    "data Tree :: * -> * where" ++++ unlines (concatMap (map ("  "++) . hDatatypeGADT gId lexical) skel)
+    "data Tree :: * -> * where" ++++ 
+    unlines (concatMap (map ("  "++) . hDatatypeGADT gId lexical) skel) ++++
+    unlines [
+      "  GString :: String -> Tree GString_",
+      "  GInt :: Int -> Tree GInt_",
+      "  GFloat :: Double -> Tree GFloat_"
+      ]
 
 hCatTypeGADT :: Prefix -> (OIdent, [(OIdent, [OIdent])]) -> [String]
 hCatTypeGADT gId (cat,rules)
@@ -147,19 +159,20 @@ prCompos gId lexical (_,catrules) =
     ["instance Compos Tree where",
      "  compos r a f t = case t of"]
     ++ 
-    ["    " ++ prComposCons (gId f) xs | (c,rs) <- catrules, (f,xs) <- rs, not (null xs)] 
+    ["    " ++ prComposCons (gId f) xs | (c,rs) <- catrules, not (isListCat (c,rs)),
+                                         (f,xs) <- rs, not (null xs)] 
+    ++ 
+    ["    " ++ prComposCons (gId c) ["x1"] | (c,rs) <- catrules, isListCat (c,rs)]
     ++ 
     ["    _ -> r t"]
   where
     prComposCons f xs = let vs = mkVars (length xs) in 
                         f +++ unwords vs +++ "->" +++ rhs f (zip vs xs)
-    rhs f vcs = "r" +++ f +++ unwords (map prRec vcs)
-    prRec (v,c) 
-      | isList c  = "`a` foldr (a . a (r (:)) . f) (r [])" +++ v
+    rhs f vcs = "r" +++ f +++ unwords (map (prRec f) vcs)
+    prRec f (v,c) 
+      | isList f  = "`a` foldr (a . a (r (:)) . f) (r [])" +++ v
       | otherwise = "`a`" +++ "f" +++ v
-    isList c = case lookup c catrules of
-      Just rs -> isListCat (c,rs)
-      _ -> False
+    isList f = (gId "List") `isPrefixOf` f
 
 gfInstance :: Prefix -> (OIdent -> Bool) -> String -> (OIdent, [(OIdent, [OIdent])]) -> String
 gfInstance gId lexical m crs = hInstance gId lexical m crs ++++ fInstance gId lexical m crs
@@ -194,28 +207,27 @@ mkVars n = ["x" ++ show i | i <- [1..n]]
 fInstance _ _ m (cat,[]) = ""
 fInstance gId lexical m (cat,rules) =
   "  fg t =" ++++
-  "    case unApp t of" ++++
+  (if isList 
+    then "    " ++ gId cat ++ " (fgs t) where\n     fgs t = case unApp t of"
+    else "    case unApp t of") ++++
   unlines [mkInst f xx | (f,xx) <- nonLexicalRules (lexical cat) rules] ++++
   (if lexical cat then "      (i,[]) -> " ++ lexicalConstructor cat +++ "(prCId i)" else "") ++++
   "      _ -> error (\"no" +++ cat ++ " \" ++ show t)"
    where
+    isList = isListCat (cat,rules)
     mkInst f xx =
      "      Just (i," ++
      "[" ++ prTList "," xx' ++ "])" +++
      "| i == mkCId \"" ++ f ++ "\" ->" +++ mkRHS f xx'
        where xx' = ["x" ++ show i | (_,i) <- zip xx [1..]]
 	     mkRHS f vars 
-		 | isListCat (cat,rules) =
-		     if "Base" `isPrefixOf` f then
-			gId cat +++ "[" ++ prTList ", " [ "fg" +++ x | x <- vars ] ++ "]"
-		      else
-                       let (i,t) = (init vars,last vars)
-                        in "let" +++ gId cat +++ "xs = fg " ++ t +++ "in" +++ 
-                          gId cat +++ prParenth (prTList ":" (["fg"+++v | v <- i] ++ ["xs"]))
+		 | isList =
+		     if "Base" `isPrefixOf` f 
+                       then "[" ++ prTList ", " [ "fg" +++ x | x <- vars ] ++ "]"
+		       else "fg" +++ (vars !! 0) +++ ":" +++ "fgs" +++ (vars !! 1)
 		 | otherwise = 
 		     gId f +++  
 		     prTList " " [prParenth ("fg" +++ x) | x <- vars]
-
 
 --type HSkeleton = [(OIdent, [(OIdent, [OIdent])])]
 hSkeleton :: PGF -> (String,HSkeleton)
