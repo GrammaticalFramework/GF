@@ -171,7 +171,7 @@ allCommands env@(pgf, mos) = Map.fromList [
                  let file s = "_grph." ++ s
                  let view = optViewGraph opts
                  let format = optViewFormat opts 
-                 writeUTF8File (file "dot") grph
+                 restricted $ writeUTF8File (file "dot") grph
                  restrictedSystem $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
                  restrictedSystem $ view ++ " " ++ file format
                  return void
