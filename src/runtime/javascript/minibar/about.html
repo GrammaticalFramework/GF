@@ -90,7 +90,7 @@ Some implementation details:
   browsers.
   <li>[Added 2010-05-26] The text entry field is now visible from the start,
   and it is removed when no more words can be added to the sentence. When you
-  press enter, the a word is added if there is only one magnet left,
+  press enter, a word is added if there is only one magnet left,
   <em>or</em> if what you have entered exactly matches one of the remaining
   magnet.
   <li>[Added 2010-05-28] Added a link to make it easy to try the same sentence in
@@ -145,11 +145,16 @@ Some implementation details:
      page that uses <a href="pgf_online.js">pgf_online.js</a> to talk to the
      PGF server.
    </ul>
+ <li>[Added 2011-03-03] Added a button to display word alignment.
+ <li>[Changed 2011-03-22] Don't force focus to the typed input field
+   after every word on touch-based devices, the on-screen keyboard kept
+   popping up after every word, which was very annoying if you were
+   entering a sentence by tapping on the magnets.
 </ul>
 
 <hr>
 <small class=modtime>
-<!-- hhmts start --> Last modified: Sun Nov 28 12:49:43 CET 2010 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Mon Apr 11 15:00:25 CEST 2011 <!-- hhmts end -->
 </small>
 <address>
 <a href="http://www.cs.chalmers.se/~hallgren/">TH</a>
