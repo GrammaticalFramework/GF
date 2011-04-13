@@ -74,6 +74,7 @@ errors = fail . unlines
 -- Types
 
 data Mode = ModeVersion | ModeHelp | ModeInteractive | ModeRun | ModeCompiler
+          | ModeServer
   deriving (Show,Eq,Ord)
 
 data Verbosity = Quiet | Normal | Verbose | Debug
@@ -293,6 +294,7 @@ optDescr =
      Option [] ["batch"] (NoArg (mode ModeCompiler)) "Run in batch compiler mode.",
      Option [] ["interactive"] (NoArg (mode ModeInteractive)) "Run in interactive mode (default).",
      Option [] ["run"] (NoArg (mode ModeRun)) "Run in interactive mode, showing output only (no other messages).",
+     Option [] ["server"] (NoArg (mode ModeServer)) "Run in HTTP server mode.",
      Option ['E'] [] (NoArg (phase Preproc)) "Stop after preprocessing (with --preproc).",
      Option ['C'] [] (NoArg (phase Convert)) "Stop after conversion to .gf.",
      Option ['c'] [] (NoArg (phase Compile)) "Stop after compiling to .gfo (default) .",
