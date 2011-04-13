@@ -570,13 +570,18 @@ function draw_lincats(g,i) {
     var conc=g.concretes[i];
     function edit(c) {
 	return function(g,el) {
-	    function ok(s) {
-		if(c.template) conc.lincats.push({cat:c.cat,type:s});
-		else c.type=s;
-		reload_grammar(g);
-		return null;
+	    function check(s,cont) {
+		function check2(msg) {
+		    if(!msg) {
+			if(c.template) conc.lincats.push({cat:c.cat,type:s});
+			else c.type=s;
+			reload_grammar(g);
+		    }
+		    cont(msg);
+		}
+		check_exp(s,check2);
 	    }
-	    string_editor(el,c.type,ok)
+	    string_editor(el,c.type,check,true)
 	}
     }
     function del(c) { return function() { delete_lincat(g,i,c); } }
@@ -703,14 +708,19 @@ function draw_lins(g,i) {
     var conc=g.concretes[i];
     function edit(f) {
 	return function(g,el) {
-	    function ok(s) {
-		if(f.template)
-		    conc.lins.push({fun:f.fun,args:f.args,lin:s});
-		else f.lin=s;
-		reload_grammar(g);
-		return null;
+	    function check(s,cont) {
+		function check2(msg) {
+		    if(!msg) {
+			if(f.template)
+			    conc.lins.push({fun:f.fun,args:f.args,lin:s});
+			else f.lin=s;
+			reload_grammar(g);
+		    }
+		    cont(msg);
+		}
+		check_exp(s,check2);
 	    }
-	    string_editor(el,f.lin,ok)
+	    string_editor(el,f.lin,check,true)
 	}
     }
     function del(fun) { return function () { delete_lin(g,i,fun); } }
@@ -755,25 +765,55 @@ function draw_lins(g,i) {
 
 /* -------------------------------------------------------------------------- */
 
-function upload(g) {
+function with_dir(cont) {
     var dir=local.get("dir","");
-    if(dir) upload2(g,dir);
-    else ajax_http_get("upload.cgi?dir",
+    if(/^\/tmp\//.test(dir)) cont(dir);
+    else ajax_http_get("/new",
 		       function(dir) {
 			   local.put("dir",dir);
-			   upload2(g,dir);
+			   cont(dir);
 		       });
 }
 
-function upload2(g,dir) {
-    var form=node("form",{method:"post",action:"upload.cgi"+dir},
-		  [hidden(g.basename,show_abstract(g))])
-    for(var i in g.concretes)
-	form.appendChild(hidden(g.basename+g.concretes[i].langcode,
-				show_concrete(g.basename)(g.concretes[i])));
-    editor.appendChild(form);
-    form.submit();
-    form.parentNode.removeChild(form);
+// Send a command to the GF shell
+function gfshell(cmd,cont) {
+    with_dir(function(dir) {
+	var enc=encodeURIComponent;
+	ajax_http_get("/gfshell?dir="+enc(dir)+"&command="+enc(cmd),cont)
+    })
+}
+
+// Check the syntax of an expression
+function check_exp(s,cont) {
+    function check(gf_message) {
+	debug("cc "+s+" = "+gf_message);
+	cont(/parse error/.test(gf_message) ? "parse error" : null);
+    }
+    gfshell("cc "+s,check);
+}
+
+// Upload the grammar to the server and check it for errors
+function upload(g) {
+    function upload2(dir) {
+	var form=node("form",{method:"post",action:"/upload"},
+		      [hidden("dir",dir),hidden(g.basename,show_abstract(g))])
+	var files = [g.basename+".gf"]
+	for(var i in g.concretes) {
+	    var cname=g.basename+g.concretes[i].langcode;
+	    files.push(cname+".gf");
+	    form.appendChild(hidden(cname,
+				    show_concrete(g.basename)(g.concretes[i])));
+	}
+	editor.appendChild(form);
+	form.submit();
+	form.parentNode.removeChild(form);
+	/* wait until upload is done */
+	gfshell("i -retain "+files.join(" "),upload3)
+    }
+    
+    function upload3(message) {	if(message) alert(message); }
+
+    with_dir(upload2)
 }
 
 function hidden(name,value) {
@@ -812,7 +852,7 @@ function sort_list(list,olditems,key) {
     }
 }
 
-function string_editor(el,init,ok) {
+function string_editor(el,init,ok,async) {
     var p=el.parentNode;
     function restore() {
 	e.parentNode.removeChild(e);
@@ -821,8 +861,9 @@ function string_editor(el,init,ok) {
     function done() {
 	var edited=e.it.value;
 	restore();
-	var msg=ok(edited);
-	if(msg) start(msg);
+	function cont(msg) { if(msg) start(msg); }
+	if(async) ok(edited,cont)
+	else cont(ok(edited));
 	return false;
     }
     function start(msg) {
