@@ -186,12 +186,17 @@ putPointE v opts msg act = do
 
   return a
 
+-- * File IO
+
 writeUTF8File :: FilePath -> String -> IO ()
 writeUTF8File fpath content = do
   h <- openFile fpath WriteMode
   hSetEncoding h utf8
   hPutStr h content
   hClose h
+
+readBinaryFile path = hGetContents =<< openBinaryFile path ReadMode
+writeBinaryFile path s = withBinaryFile path WriteMode (flip hPutStr s)
 
 -- * Functions to limit acesss to arbitrary IO and system commands
 restricted io =
