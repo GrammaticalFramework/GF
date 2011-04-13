@@ -45,5 +45,5 @@ mainOpts opts files =
       ModeHelp        -> putStrLn helpMessage
       ModeInteractive -> mainGFI opts files
       ModeRun         -> mainRunGFI opts files
+      ModeServer      -> mainServerGFI opts files
       ModeCompiler    -> dieIOE (mainGFC opts files)
-

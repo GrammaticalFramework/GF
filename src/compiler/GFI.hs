@@ -1,5 +1,5 @@
 {-# LANGUAGE ScopedTypeVariables, CPP #-}
-module GFI (mainGFI,mainRunGFI) where
+module GFI (mainGFI,mainRunGFI,mainServerGFI) where
 
 import GF.Command.Interpreter
 import GF.Command.Importing
@@ -44,6 +44,9 @@ import Control.Monad
 import Data.Version
 import Text.PrettyPrint (render)
 import GF.System.Signal
+#ifdef SERVER_MODE
+import GFServer(server)
+#endif
 --import System.IO.Error (try)
 #ifdef mingw32_HOST_OS
 import System.Win32.Console
@@ -53,9 +56,9 @@ import System.Win32.NLS
 import Paths_gf
 
 mainRunGFI :: Options -> [FilePath] -> IO ()
-mainRunGFI opts files = do
-  let opts1 = addOptions (modifyFlags (\f -> f{optVerbosity=Quiet})) opts
-  shell opts1 files
+mainRunGFI opts files = shell (beQuiet opts) files
+
+beQuiet = addOptions (modifyFlags (\f -> f{optVerbosity=Quiet}))
 
 mainGFI :: Options -> [FilePath] -> IO ()
 mainGFI opts files = do
@@ -63,6 +66,15 @@ mainGFI opts files = do
   shell opts files
 
 shell opts files = loop opts =<< importInEnv emptyGFEnv opts files
+
+#ifdef SERVER_MODE
+mainServerGFI opts0 files =
+    server (execute1 opts) =<< importInEnv emptyGFEnv opts files
+  where opts = beQuiet opts0
+#else
+mainServerGFI opts files =
+  error "GF has not been compiled with server mode support"
+#endif
 
 -- | Read end execute commands until it is time to quit
 loop :: Options -> GFEnv -> IO ()
