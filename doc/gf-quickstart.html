@@ -26,6 +26,15 @@ We assume that you have downloaded and installed GF, so that
 the command <tt>gf</tt> works for you. See download and install
 instructions <a href="../download/index.html">here</a>.
 
+<h2>Want to try without downloading?</h2>
+
+<a href="../demos/phrasebook/">Using GF translation</a> with an existing grammar.
+
+<p>
+
+<a href="../demos/gfse/">Writing GF grammars</a> in the cloud, without installing GF.
+
+
 
 
 <h2>Using GF for translation and generation</h2>
@@ -43,6 +52,7 @@ GF sources.
 <pre>
   $ gf FoodIta.gf FoodEng.gf
 </pre>
+Alternatively, start GF with <tt>gf</tt> and give the GF command <tt>import FoodIta.gf FoodEng.gf</tt>.
 
 <li> <b>Translation</b>. Try your first translation by giving the GF command
 <pre>
@@ -81,8 +91,8 @@ Add words to the <tt>Food</tt>
 grammars and try the above commands again. For instance, add the following lines:
 <pre>
   Bread : Kind ;          -- in Food.gf
-  Black = {s = "bread"} ; -- in FoodEng.gf
-  Black = {s = "pane"} ;  -- in FoodIta.gf
+  Bread = {s = "bread"} ; -- in FoodEng.gf
+  Bread = {s = "pane"} ;  -- in FoodIta.gf
 </pre>
 and start GF again with the same command. Now you can even translate
 <i>this bread is very Italian</i>.
@@ -118,7 +128,7 @@ You can use this in Haskell and Java programs, and also on web services, such as
 
 The quickest way to provide a GF web service is to start the program <tt>pgh-http</tt>
 <pre>
-  $ pgh-http
+  $ pgf-http
   Starting HTTP server, open http://localhost:41296/ in your web browser
 
   Options {documentRoot = "/home/aarne/.cabal/share/gf-server-1.0/www", port = 41296}

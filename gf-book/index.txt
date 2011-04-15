@@ -1,6 +1,10 @@
 Grammatical Framework: Programming with Multilingual Grammars
 Aarne Ranta
-**Web page work in progress**
+
+%!postproc(html): "#BOOKCOVER" '<center><img width=200mm src="gf-book-cover.png"></center>'
+
+
+#BOOKCOVER
 
 
 This is the web page of the book 
@@ -8,7 +12,24 @@ This is the web page of the book
   //Grammatical Framework: Programming with Multilingual Grammars//,
   CSLI Publications, 
   Stanford, 
-  2011 (to appear).
+  2011,
+  ISBN-10: 1-57586-626-9 (Paper), 1-57586-627-7 (Cloth).
+
+
+
+
+==Publisher's information==
+
+Forthcoming at http://www-csli.stanford.edu/pubs/
+
+Direct order (demonstrably available 15 April 2011): 
+
+  http://press.uchicago.edu/ucp/books/book/distributed/G/bo12469871.html
+
+Amazon order (may be still not active):
+
+  http://www.amazon.com/Grammatical-Framework-Programming-Multilingual-Information/dp/1575866269/ref=sr_1_2?ie=UTF8&s=books&qid=1302811905&sr=8-2
+
 
 
 ==Book description==
@@ -59,7 +80,8 @@ Forthcoming at http://www-csli.stanford.edu/pubs/
              Programming with Multilingual Grammars}},
   publisher = {{CSLI Publications}},
   year = {2011},
-  note = "to appear"
+  address = "Stanford",
+  note = "ISBN-10: 1-57586-626-9 (Paper), 1-57586-627-7 (Cloth)"
 }
 ```
 
