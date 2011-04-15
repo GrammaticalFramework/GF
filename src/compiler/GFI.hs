@@ -47,7 +47,6 @@ import GF.System.Signal
 #ifdef SERVER_MODE
 import GFServer(server)
 #endif
---import System.IO.Error (try)
 #ifdef mingw32_HOST_OS
 import System.Win32.Console
 import System.Win32.NLS
@@ -85,162 +84,197 @@ loop opts gfenv = maybe (return ()) (loop opts) =<< readAndExecute1 opts gfenv
 readAndExecute1 :: Options -> GFEnv -> IO (Maybe GFEnv)
 readAndExecute1 opts gfenv = execute1 opts gfenv =<< readCommand opts gfenv
 
+-- | Read a command
+readCommand :: Options -> GFEnv -> IO String
 readCommand opts gfenv0 =
     case flag optMode opts of
       ModeRun -> tryGetLine
       _       -> fetchCommand gfenv0
 
+-- | Optionally show how much CPU time was used to run an IO action
+optionallyShowCPUTime :: Options -> IO a -> IO a
+optionallyShowCPUTime opts act 
+  | not (verbAtLeast opts Normal) = act
+  | otherwise = do t0 <- getCPUTime
+                   r <- act
+                   t1 <- getCPUTime
+                   let dt = t1-t0
+                   putStrLnFlush $ show (dt `div` 1000000000) ++ " msec"
+                   return r
+
+{-
 loopOptNewCPU opts gfenv' 
  | not (verbAtLeast opts Normal) = return gfenv'
  | otherwise = do 
      cpu' <- getCPUTime
      putStrLnFlush (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
      return $ gfenv' {cputime = cpu'}
+-}
 
 -- | Execute a given command, returning Just an updated environment for
 -- | the next command, or Nothing when it is time to quit
 execute1 :: Options -> GFEnv -> String -> IO (Maybe GFEnv)
-execute1 opts gfenv0 s0 = do
-  let loopNewCPU = fmap Just . loopOptNewCPU opts
-      isv = verbAtLeast opts Normal
-      ifv act = if isv then act else return ()
-      env = commandenv gfenv0
-      sgr = sourcegrammar gfenv0
-      gfenv = gfenv0 {history = s0 : history gfenv0}
-      pwords = case words s0 of
-                 w:ws -> getCommandOp w :ws
-                 ws -> ws
-  
-  -- special commands, requiring source grammar in env
-
+execute1 opts gfenv0 s0 =
+  interruptible $ optionallyShowCPUTime opts $
   case pwords of
-{-
-    "eh":w:_ -> do
+ -- special commands, requiring source grammar in env
+  {-"eh":w:_ -> do
              cs <- readFile w >>= return . map words . lines
              gfenv' <- foldM (flip (process False benv)) gfenv cs
-             loopNewCPU gfenv'
--}
+             loopNewCPU gfenv' -}
+    "q" :_   -> quit
+    "!" :ws  -> system_command ws
+    "cc":ws  -> compute_concrete ws
+    "so":ws  -> show_operations ws
+    "dg":ws  -> dependency_graph ws
+    "eh":ws  -> eh ws
+    "i" :ws  -> import_ ws
+ -- other special commands, working on GFEnv
+    "e" :_   -> empty
+    "dc":ws  -> define_command ws
+    "dt":ws  -> define_tree ws
+    "ph":_   -> print_history
+    "se":ws  -> set_encoding ws
+ -- ordinary commands, working on CommandEnv
+    _        -> do interpretCommandLine env s0
+                   continue gfenv
+  where
+--  loopNewCPU = fmap Just . loopOptNewCPU opts
+    continue = return . Just
+    stop = return Nothing
+    env = commandenv gfenv0
+    sgr = sourcegrammar gfenv0
+    gfenv = gfenv0 {history = s0 : history gfenv0}
+    pwords = case words s0 of
+               w:ws -> getCommandOp w :ws
+               ws -> ws
 
-      "q":_  -> ifv (putStrLn "See you.") >> return Nothing
+    interruptible act =
+      either (\e -> printException e >> return (Just gfenv)) return
+        =<< runInterruptibly act 
 
-      _ -> do
-        r <- runInterruptibly $ case pwords of
+  -- Special commands:
 
-          "!":ws -> do
-             restrictedSystem $ unwords ws
-             loopNewCPU gfenv
-          "cc":ws -> do
-             let
-               pOpts style q ("-table"  :ws) = pOpts TermPrintTable   q           ws
-               pOpts style q ("-all"    :ws) = pOpts TermPrintAll     q           ws
-               pOpts style q ("-list"   :ws) = pOpts TermPrintList    q           ws
-               pOpts style q ("-one"    :ws) = pOpts TermPrintOne     q           ws
-               pOpts style q ("-default":ws) = pOpts TermPrintDefault q           ws
-               pOpts style q ("-unqual" :ws) = pOpts style            Unqualified ws
-               pOpts style q ("-qual"   :ws) = pOpts style            Qualified   ws
-               pOpts style q             ws  = (style,q,unwords ws)
-               
-               (style,q,s) = pOpts TermPrintDefault Qualified (tail (words s0))
+    quit = do when (verbAtLeast opts Normal) $ putStrLn "See you."
+              stop
 
-             case runP pExp (encodeUnicode utf8 s) of
-               Left (_,msg) -> putStrLn msg
-               Right t      -> case checkComputeTerm sgr (unLoc (codeTerm (decodeUnicode utf8 . BS.pack) (L (0,0) t))) of
-                                 Ok  x -> putStrLn $ showTerm sgr style q x
-                                 Bad s -> putStrLn $ s
-             loopNewCPU gfenv
+    system_command ws = do restrictedSystem $ unwords ws ; continue gfenv
 
-          "so":ws -> case greatestResource sgr of
-             Nothing -> putStrLn "no source grammar in scope" >> loopNewCPU gfenv
-             Just mo -> do
-               let (os,ts) = partition (isPrefixOf "-") ws
-               let greps = [drop 6 o | o <- os, take 6 o == "-grep="]
-               let isRaw = elem "-raw" os 
-               ops <- case ts of
-                  _:_ -> do
-                    let Right t = runP pExp (encodeUnicode utf8 (unwords ts))
-                    ty <- err error return $ checkComputeTerm sgr t
-                    return $ allOpersTo sgr ty
-                  _   -> return $ allOpers sgr 
-               let sigs = [(op,ty) | ((mo,op),ty,pos) <- ops]
-               let printer = if isRaw 
-                               then showTerm sgr TermPrintDefault Qualified
-                               else (render . GF.Compile.TypeCheck.Concrete.ppType)
-               let printed = [unwords [showIdent op, ":", printer ty] | (op,ty) <- sigs]
-               mapM_ putStrLn [l | l <- printed, all (flip isInfixOf l) greps]
-               loopNewCPU gfenv
+    compute_concrete ws = do
+      let
+        pOpts style q ("-table"  :ws) = pOpts TermPrintTable   q           ws
+        pOpts style q ("-all"    :ws) = pOpts TermPrintAll     q           ws
+        pOpts style q ("-list"   :ws) = pOpts TermPrintList    q           ws
+        pOpts style q ("-one"    :ws) = pOpts TermPrintOne     q           ws
+        pOpts style q ("-default":ws) = pOpts TermPrintDefault q           ws
+        pOpts style q ("-unqual" :ws) = pOpts style            Unqualified ws
+        pOpts style q ("-qual"   :ws) = pOpts style            Qualified   ws
+        pOpts style q             ws  = (style,q,unwords ws)
 
+        (style,q,s) = pOpts TermPrintDefault Qualified (tail (words s0))
 
-          "dg":ws -> do
-             let stop = case ws of
-                   ('-':'o':'n':'l':'y':'=':fs):_ -> Just $ chunks ',' fs
-                   _ -> Nothing
-             restricted $ writeFile "_gfdepgraph.dot" (depGraph stop sgr)
-             putStrLn "wrote graph in file _gfdepgraph.dot"
-             loopNewCPU gfenv
-          "eh":w:_ -> do
-             cs <- readFile w >>= return . map (interpretCommandLine env) . lines
-             loopNewCPU gfenv
+      case runP pExp (encodeUnicode utf8 s) of
+        Left (_,msg) -> putStrLn msg
+        Right t      -> case checkComputeTerm sgr (unLoc (codeTerm (decodeUnicode utf8 . BS.pack) (L (0,0) t))) of
+                          Ok  x -> putStrLn $ showTerm sgr style q x
+                          Bad s -> putStrLn $ s
+      continue gfenv
 
-          "i":args -> do
-              gfenv' <- case parseOptions args of
-                          Ok (opts',files) -> do
-                            curr_dir <- getCurrentDirectory
-                            lib_dir  <- getLibraryDirectory (addOptions opts opts')
-                            importInEnv gfenv (addOptions opts (fixRelativeLibPaths curr_dir lib_dir opts')) files
-                          Bad err -> do 
-                            putStrLn $ "Command parse error: " ++ err
-                            return gfenv
-              loopNewCPU gfenv'
+    show_operations ws =
+      case greatestResource sgr of
+        Nothing -> putStrLn "no source grammar in scope" >> continue gfenv
+        Just mo -> do
+          let (os,ts) = partition (isPrefixOf "-") ws
+          let greps = [drop 6 o | o <- os, take 6 o == "-grep="]
+          let isRaw = elem "-raw" os 
+          ops <- case ts of
+             _:_ -> do
+               let Right t = runP pExp (encodeUnicode utf8 (unwords ts))
+               ty <- err error return $ checkComputeTerm sgr t
+               return $ allOpersTo sgr ty
+             _   -> return $ allOpers sgr 
+          let sigs = [(op,ty) | ((mo,op),ty,pos) <- ops]
+          let printer = if isRaw 
+                          then showTerm sgr TermPrintDefault Qualified
+                          else (render . GF.Compile.TypeCheck.Concrete.ppType)
+          let printed = [unwords [showIdent op, ":", printer ty] | (op,ty) <- sigs]
+          mapM_ putStrLn [l | l <- printed, all (flip isInfixOf l) greps]
+          continue gfenv
 
-  -- other special commands, working on GFEnv
-          "e":_ -> loopNewCPU $ gfenv {
-             commandenv=emptyCommandEnv, sourcegrammar = emptySourceGrammar
+    dependency_graph ws =
+      do let stop = case ws of
+               ('-':'o':'n':'l':'y':'=':fs):_ -> Just $ chunks ',' fs
+               _ -> Nothing
+         restricted $ writeFile "_gfdepgraph.dot" (depGraph stop sgr)
+         putStrLn "wrote graph in file _gfdepgraph.dot"
+         continue gfenv
+
+    eh [w] = -- Ehhh? Reads commands from a file, but does not execute them
+      do cs <- readFile w >>= return . map (interpretCommandLine env) . lines
+         continue gfenv
+    eh _   = do putStrLn "eh command not parsed"
+                continue gfenv
+
+    import_ args = 
+      do gfenv' <- case parseOptions args of
+                     Ok (opts',files) -> do
+                       curr_dir <- getCurrentDirectory
+                       lib_dir  <- getLibraryDirectory (addOptions opts opts')
+                       importInEnv gfenv (addOptions opts (fixRelativeLibPaths curr_dir lib_dir opts')) files
+                     Bad err -> do 
+                       putStrLn $ "Command parse error: " ++ err
+                       return gfenv
+         continue gfenv'
+
+    empty = continue $ gfenv {
+              commandenv=emptyCommandEnv, sourcegrammar = emptySourceGrammar
              }
 
-          "dc":f:ws -> do
-             case readCommandLine (unwords ws) of
-               Just comm -> loopNewCPU $ gfenv {
-                 commandenv = env {
-                   commandmacros = Map.insert f comm (commandmacros env)
-                   }
-                 }
-               _ -> putStrLn "command definition not parsed" >> loopNewCPU gfenv
+    define_command (f:ws) =
+        case readCommandLine (unwords ws) of
+           Just comm -> continue $ gfenv {
+             commandenv = env {
+               commandmacros = Map.insert f comm (commandmacros env)
+               }
+             }
+           _ -> dc_not_parsed
+    define_command _ = dc_not_parsed
 
-          "dt":f:ws -> do
-             case readExpr (unwords ws) of
-               Just exp -> loopNewCPU $ gfenv {
-                 commandenv = env {
-                   expmacros = Map.insert f exp (expmacros env)
-                   }
-                 }
-               _ -> putStrLn "value definition not parsed" >> loopNewCPU gfenv
+    dc_not_parsed = putStrLn "command definition not parsed" >> continue gfenv
 
-          "ph":_ -> 
-            mapM_ putStrLn (reverse (history gfenv0)) >> loopNewCPU gfenv
-          "se":c:_ -> do
-             let cod = renameEncoding c
+    define_tree (f:ws) =
+        case readExpr (unwords ws) of
+          Just exp -> continue $ gfenv {
+            commandenv = env {
+              expmacros = Map.insert f exp (expmacros env)
+              }
+            }
+          _ -> dt_not_parsed
+    define_tree _ = dt_not_parsed
+
+    dt_not_parsed = putStrLn "value definition not parsed" >> continue gfenv
+
+    print_history = mapM_ putStrLn (reverse (history gfenv0))>> continue gfenv
+
+    set_encoding [c] =
+      do let cod = renameEncoding c
 #ifdef mingw32_HOST_OS
-             case cod of
-               'C':'P':c -> case reads c of
-                              [(cp,"")] -> do setConsoleCP cp
-                                              setConsoleOutputCP cp
-                              _         -> return ()
-               "UTF-8"   -> do setConsoleCP 65001
-                               setConsoleOutputCP 65001
-               _         -> return ()
+         case cod of
+           'C':'P':c -> case reads c of
+                          [(cp,"")] -> do setConsoleCP cp
+                                          setConsoleOutputCP cp
+                          _         -> return ()
+           "UTF-8"   -> do setConsoleCP 65001
+                           setConsoleOutputCP 65001
+           _         -> return ()
 #endif
-             enc <- mkTextEncoding cod
-             hSetEncoding stdin  enc
-             hSetEncoding stdout enc
-             hSetEncoding stderr enc
-             loopNewCPU gfenv
+         enc <- mkTextEncoding cod
+         hSetEncoding stdin  enc
+         hSetEncoding stdout enc
+         hSetEncoding stderr enc
+         continue gfenv
+    set_encoding _ = putStrLn "se command not parsed" >> continue gfenv
 
-  -- ordinary commands, working on CommandEnv
-          _ -> do
-            interpretCommandLine env s0
-            loopNewCPU gfenv
---        gfenv' <- return $ either (const gfenv) id r
-        either (\e -> (printException e >> return (Just gfenv))) return r
 
 printException e = maybe (print e) (putStrLn . ioErrorText) (fromException e)
 
@@ -313,13 +347,13 @@ prompt env
 data GFEnv = GFEnv {
   sourcegrammar :: SourceGrammar, -- gfo grammar -retain
   commandenv :: CommandEnv,
-  history    :: [String],
-  cputime    :: Integer
+  history    :: [String]--,
+--cputime    :: Integer
   }
 
 emptyGFEnv :: GFEnv
 emptyGFEnv =
-  GFEnv emptySourceGrammar{modules=[(identW,emptyModInfo)]} (mkCommandEnv emptyPGF) [] 0
+  GFEnv emptySourceGrammar{modules=[(identW,emptyModInfo)]} (mkCommandEnv emptyPGF) [] {-0-}
 
 wordCompletion gfenv (left,right) = do
   case wc_type (reverse left) of
