@@ -120,8 +120,8 @@ incomplete concrete NounScand of Noun =
         Pl => \\_,bn,_ => []
         } ; 
       sp = table {
-        Sg => \\_,bn,g => artIndef ! g ; 
-        Pl => \\_,bn,_ => detIndefPl
+        Sg => \\_,bn,g => if_then_Str bn [] (artIndef ! g) ; 
+        Pl => \\_,bn,_ => if_then_Str bn [] detIndefPl
         } ; 
       det = DIndef
       } ;
