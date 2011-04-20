@@ -294,10 +294,11 @@ fetchCommand gfenv = do
           Haskeline.historyFile = Just path,
           Haskeline.autoAddHistory = True
         }
-  res <- Haskeline.runInputT settings (Haskeline.getInputLine (prompt (commandenv gfenv)))
+  res <- runInterruptibly $ Haskeline.runInputT settings (Haskeline.getInputLine (prompt (commandenv gfenv)))
   case res of
-    Nothing -> return "q"
-    Just s  -> return s
+    Left  _        -> return ""
+    Right Nothing  -> return "q"
+    Right (Just s) -> return s
 
 importInEnv :: GFEnv -> Options -> [FilePath] -> IO GFEnv
 importInEnv gfenv opts files
