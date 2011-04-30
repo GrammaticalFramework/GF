@@ -7,7 +7,8 @@ concrete AdjectivePnb of Adjective = CatPnb ** open ResPnb, Prelude in {
 	UseComparA a = a;
 
     ComparA a np = {
-        s = \\n,g,c => np.s ! NPC Obl ++ "twN" ++ a.s ! n ! g ! c  ;                       
+--        s = \\n,g,c => np.s ! NPC Obl ++ "twN" ++ a.s ! n ! g ! c  ;
+       s = \\n,g,c => np.s ! NPC Abl ++ "twN" ++ a.s ! n ! g ! c  ;                       
        } ;
 
 ---- $SuperlA$ belongs to determiner syntax in $Noun$.

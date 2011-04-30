@@ -16,7 +16,8 @@ concrete IdiomPnb of Idiom = CatPnb ** open Prelude,Predef, ResPnb in {
         
     ExistNP np = 
       mkSClause "awth'E" (agrP3 (fromAgr np.a).g (fromAgr np.a).n) 
-        (insertObj (\\_ => np.s ! NPC Obl) (predAux auxBe)) ;
+--        (insertObj (\\_ => np.s ! NPC Obl) (predAux auxBe)) ;
+        (insertObj (\\_ => np.s ! NPC Dir) (predAux auxBe)) ;
 
     ExistIP ip = 
      let cl = mkSClause ("awth'E" ++ ip.s ! Dir) (agrP3 ip.g ip.n) (predAux auxBe); 
@@ -31,8 +32,11 @@ concrete IdiomPnb of Idiom = CatPnb ** open Prelude,Predef, ResPnb in {
     ProgrVP vp =  (predProg vp) ;
 
 
-    ImpPl1 vp = {s = "Aw" ++ infVP True vp (agrP1 Masc Pl)} ;
-	ImpP3 np vp = {s = np.s!NPC Dir ++ "nwN" ++ (vp.s ! VPImp ).inf ++ "dyw"};
+--    ImpPl1 vp = {s = "Aw" ++ infVP True vp (agrP1 Masc Pl)} ;
+    ImpPl1 vp = {s = "Aw" ++ (vp.s ! VPImp).fin} ;
+--	ImpP3 np vp = {s = np.s!NPC Dir ++ "kw" ++ (vp.s ! VPImp ).inf ++ "dw"}; here VPImp form is not correct e.g jan ko sw do, rather jan ko swnE do, and swnE is stored in vp.VPInf.fin
+  ImpP3 np vp = {s = np.s!NPC Dir ++ "nwN" ++ (vp.s ! VPInf ).fin ++ "dyw"};
+
 
 
 }

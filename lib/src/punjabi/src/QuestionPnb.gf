@@ -16,7 +16,7 @@ concrete QuestionPnb of Question = CatPnb ** open ResPnb, Prelude in {
            qp1 = qp.s ! Dir;
            qp2 = qp.s ! Obl ++ "nE"
           in { s = \\t,p,o => case t of {
-		             VPImpPast => qp2 ++ cl.s ! t ! p ! ODir;
+		             VPImpPast => case vp.subj of {VIntrans => qp1 ++ cl.s ! t ! p ! ODir; _ => qp2 ++ cl.s ! t ! p ! ODir};
 					 _         => qp1 ++ cl.s ! t ! p ! ODir
 					 }
 					}; 
@@ -64,7 +64,7 @@ concrete QuestionPnb of Question = CatPnb ** open ResPnb, Prelude in {
       } ;
 
     IdetQuant iqant num = {
-      s = \\g => iqant.s ! num.n ++ num.s ; 
+      s = \\g => iqant.s ! num.n ! g ++ num.s ; 
       n = num.n
       } ;
 

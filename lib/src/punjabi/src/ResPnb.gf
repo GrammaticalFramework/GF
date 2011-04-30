@@ -83,6 +83,9 @@ resource ResPnb = ParamX  ** open Prelude,Predef in {
 --  mkAdj2 : Str -> Adjective2 ;
 --  mkAdj2 romii = cmnAdj romii romii         (romii+"a")  (romii+"ywN")
 --                        romii (romii++"aN") (romii++"w")  "" ;
+  mkAdj3 : Str -> Adjective1 ;
+  mkAdj3 lal = adj1 lal lal lal lal lal lal lal lal lal lal lal lal lal lal lal lal ;
+
 
  cmnAdj : (x1,_,_,_,_,_,_,x8 : Str) -> {s : Gender => Case => Str} = 
       \sd,so,sv,sa, pd,po,pv,pa -> {
@@ -304,6 +307,8 @@ oper
 		 VPTense VPFutr (Ag g n p) =>  {fin = copula CFuture n p g ; inf =  verb.s ! VF Subj p n g } ;
 		 VPTense VPPerf (Ag g n p) => { fin = [] ; inf = verb.s ! Root ++ cka g n } ; 
 		 VPStem => {fin = []  ; inf =  verb.s ! Root};
+		 VPInf => {fin = verb.s!Inf_Obl  ; inf =  verb.s ! Root};
+		 VPImp => {fin = verb.s!VF Subj Pers3_Near Pl Masc  ; inf =  verb.s ! Root};
 		 _ => {fin = [] ; inf = verb.s ! Root} 
 		 };
 	    obj = {s = [] ; a = defaultAgr} ;
@@ -329,7 +334,7 @@ oper
 	   (mkAdj1 "pya").s ! n ! g ! Dir ;	   
 
 	cka : Gender -> Number -> Str = \g,n -> 
-	  (mkAdj1 "cka").s ! n ! g ! Dir ;
+	  (mkAdj1 "gya").s ! n ! g ! Dir ;
 	  
 	hw : PPerson -> Number -> Str = \pp,n ->    
 	 case <pp,n> of {

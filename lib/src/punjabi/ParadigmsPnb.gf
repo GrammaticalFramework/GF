@@ -37,9 +37,13 @@ oper
      = \s,noun -> {s =\\n,c => s ++ noun.s ! n ! c ; g = noun.g ; lock_N = <>};
  
 
--- Proper names     
+-- Proper names
+mkPN = overload {
   mkPN : Str -> PN =
      \s -> let n = mkN11 s in {s = n.s ! Sg ; g = n.g ; lock_PN = <>} ;
+  mkPN : Str -> Gender -> PN =
+     \s,g -> let n = mkN11 s in {s = n.s ! Sg ; g = g ; lock_PN = <>} ;   
+  };   
 -- Personal Pronouns     
   personalPN : Str -> Str -> Str -> Str -> Str -> Number -> Gender -> PPerson -> Pron =
      \s1,s2,s3,s4,sp,nn,g,p -> let n = mkPron s1 s2 s3 s4 in {s = n.s ; a = toAgr nn p g ; ps = sp ; lock_Pron = <>};
@@ -102,12 +106,14 @@ oper
 --3 Determiners and quantifiers
 
 --  mkQuant : overload {
-    mkQuant : Pron -> Quant ;
+    mkQuant1 : Pron -> Quant ;
 --    mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant ;
 --  } ;
+  mkIQuant : Str -> Str -> Str -> Str -> IQuant ;
+  mkIQuant s1 s2 s3 s4 = let n = makeIQuant s1 s2 s3 s4 in {s = n.s; lock_IQuant = <>} ;
   
 --  mkQuant = overload {
-    mkQuant : Pron -> Quant = \p -> {s = \\_,_,c => p.s!c ;a = p.a ; lock_Quant = <>};
+    mkQuant1 : Pron -> Quant = \p -> {s = \\_,_,c => p.s!c ;a = p.a ; lock_Quant = <>};
 --    mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant = mkQuantifier;
 --  } ;
 
