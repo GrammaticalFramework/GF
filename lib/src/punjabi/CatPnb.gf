@@ -23,7 +23,7 @@ concrete CatPnb of Cat = CommonX - [Adv] ** open ResPnb, Prelude in {
     QCl = {s : ResPnb.VPHTense => Polarity => QForm => Str} ;
     IP = {s: Case => Str ; g : Gender ; n : Number};
     IDet = {s :Gender => Str ; n : Number} ;
-    IQuant = {s : Number => Str} ;
+    IQuant = {s : Number => Gender => Str} ;
 
 ---- Relative
 
@@ -31,7 +31,7 @@ concrete CatPnb of Cat = CommonX - [Adv] ** open ResPnb, Prelude in {
       s : ResPnb.VPHTense => Polarity => Order => Agr => Str ; 
       c : Case
       } ;
-    RP = {s: Number => Case => Str ; a:RAgr};
+    RP = {s: Number => Gender => Case => Str ; a:RAgr};
 
 ---- Verb
 

@@ -22,6 +22,6 @@ concrete PhrasePnb of Phrase = CatPnb ** open Prelude, ResPnb in {
     PConjConj conj = {s = conj.s2} ; ---
 
     NoVoc = {s = []} ;
-    VocNP np = {s = np.s ! NPC Dir} ;
+    VocNP np = {s = np.s ! NPC Voc} ;
 
 }

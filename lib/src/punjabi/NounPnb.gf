@@ -19,7 +19,7 @@ concrete NounPnb of Noun = CatPnb ** open ResPnb, Prelude in {
       } ;
 
     PPartNP np v2 = {
-      s = \\c => v2.s ! VF Imperf Pers1 Sg Fem   ++ np.s ! c   ;
+      s = \\c => v2.s ! VF Perf (fromAgr np.a).p (fromAgr np.a).n (fromAgr np.a).g   ++ np.s ! c   ;
       a = np.a ;
       isPron = np.isPron
       } ;

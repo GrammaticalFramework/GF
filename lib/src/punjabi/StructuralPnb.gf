@@ -17,7 +17,7 @@ concrete StructuralPnb of Structural = CatPnb **
   behind_Prep = ss "پیچھے" ;
   between_Prep = ss "وچكار" ;
   both7and_DConj = sd2 "دوویں" "تے" ** {n = Pl} ;
-  but_PConj = ss "لیكن" ;
+  but_PConj = ss "مگر" ;
   by8agent_Prep = ss "" ;
   by8means_Prep = ss "" ;
   can8know_VV,can_VV = mkV "سكنا" ** { isAux = True} ;
@@ -31,7 +31,7 @@ concrete StructuralPnb of Structural = CatPnb **
   first_Ord = {s = "پعہلا" ; n = Sg} ; --DEPRECATED
   for_Prep = ss "[دے واسطE]" ;
   from_Prep = ss "توں" ;
-  he_Pron = personalPN "او" "اینوں" "او" "" "اورا"  Sg Masc Pers3_Distant ;
+  he_Pron = personalPN "او" "اونوں" "او" "اورے" "اورا"  Sg Masc Pers3_Distant ;
   here_Adv = mkAdv "ایتھے" ;
   here7to_Adv = mkAdv "ایتھے" ;
   here7from_Adv = mkAdv "ایتھوں" ;
@@ -64,53 +64,54 @@ concrete StructuralPnb of Structural = CatPnb **
   no_Utt = ss "نیں" ;
   on_Prep = ss "اتے" ;
   one_Quant = demoPN "اك" "اك" "اك"  ; -- DEPRECATED
-  only_Predet = ss "سرف" ;
+  only_Predet = ss "صرف" ;
   or_Conj = sd2 [] "یا" ** {n = Sg} ;
   otherwise_PConj = ss "یا فیر" ;
   part_Prep = ss "ہصہ" ;
   please_Voc = ss "مہربانi" ;
   possess_Prep = ss "دا" ;
   quite_Adv = ss "كہامoسہ" ;
-  she_Pron = personalPN "او" "اونوں" "اونو" "" "اورا" Sg Fem Pers3_Distant ;
+  she_Pron = personalPN "او" "اونوں" "اونو" "اورے" "اورا" Sg Fem Pers3_Distant ;
   so_AdA = ss "سo" ;
   somebody_NP = MassNP (UseN (MorphoPnb.mkN11 "كوی" ));
   someSg_Det = mkDet "كچھ" "كچھ" "كچھ" "كچھ" Sg ;
   somePl_Det = mkDet "كچھ" "كچھ" "كچھ" "كچھ" Pl ;
   something_NP = MassNP (UseN (MorphoPnb.mkN11 "كوی شے"));
   somewhere_Adv = mkAdv "كتلے" ;
-  that_Quant = demoPN "وہ" "اس" "ان" ;
+  that_Quant = demoPN "او" "اس" "ان" ;
   that_Subj = ss "كہ";
   there_Adv = mkAdv "اوتھے" ;
   there7to_Adv = mkAdv "اوتھے" ;
   there7from_Adv = mkAdv "اوتھوں" ;
   therefore_PConj = ss "اس لی" ;
-  they_Pron = personalPN "او" "[اوناں نوN]" "او" "" "اوناں دا" Pl Masc Pers3_Distant ; ---- 
-  this_Quant = demoPN "یہ" "اس" "ان";      
+  they_Pron = personalPN "او" "[اوناں نوN]" "او" "اوناں" "اوناں دا" Pl Masc Pers3_Distant ; ---- 
+  this_Quant = demoPN "اے" "ایرا" "ایناں";      
   through_Prep = ss "وچوں" ;
   too_AdA = ss "بہت" ;
-  to_Prep = ss "اونوں" ** {lock_Prep = <>};
+--  to_Prep = ss "اونوں" ** {lock_Prep = <>};
+  to_Prep = ss "نوں" ** {lock_Prep = <>};
   under_Prep = ss "تھلے" ** {lock_Prep = <>};
   very_AdA = ss "بہت" ;
   want_VV = mkV "چانا" ** { isAux = False} ;
   we_Pron = personalPN "اسی" "سانوں" "سانوں" "ساتوں" "ساڈا" Pl Masc Pers1 ;
---  whatSg_IP = mkIP "كیا" "كiس" "كiس" Sg Masc ;
+  whatSg_IP = mkIP "كیا" "كرا" "كرا" "كرا" Sg Masc ; -- check it
 --  whatPl_IP = mkIP "كیا" "كiن" "كiن" Pl Masc ;
   when_IAdv = ss "كدوں" ;
   when_Subj = ss "كدوں" ;
   where_IAdv = ss "كتھے" ;
-  which_IQuant = {s = \\_ => "كیڑی"} ;
+  which_IQuant = mkIQuant "كیڑا" "كیڑی" "كیڑے" "كیڑی" ;
 --  whichPl_IDet = makeDet "كون سا" "كون سی" "كون سے" "كون سی" ;
 --  whichSg_IDet = makeDet "كون سا" "كون سی" "كون سے" "كون سی" ;
---  whoSg_IP = mkIP "كون" "كiس" "كiس" Sg Masc  ;
+  whoSg_IP = mkIP "كون" "كرا" "كرا" "كرا" Sg Masc  ;
 --  whoPl_IP = mkIP "كون" "كن" "كنہوں" Pl Masc ;
   why_IAdv = ss "كیوں" ;
   without_Prep = ss ["توں بغیر"] ;
   with_Prep = ss ["دے نال"] ;
 --  yes_Phr = ss "ہاں" ;
   yes_Utt = ss "ہاں" ;
-  youSg_Pron = personalPN "توں" "تینوں" "تینوں" "تیتوں" "توواڈا" Sg Masc Pers2_Casual ;
-  youPl_Pron = personalPN "تسی" "توانوں" "توانوں" "تواتوں" "توواڈا" Pl Masc Pers2_Casual ;
-  youPol_Pron = personalPN "تسی" "توانوں" "توانوں" "تواتوں" "توواڈا" Sg Masc Pers2_Respect  ;
+  youSg_Pron = personalPN "توں" "تینوں" "تینوں" "تیرے" "توواڈا" Sg Masc Pers2_Casual ;
+  youPl_Pron = personalPN "تسی" "توانوں" "توانوں" "تواڈے" "توواڈا" Pl Masc Pers2_Casual ;
+  youPol_Pron = personalPN "تسی" "توانوں" "توانوں" "تواڈے" "توواڈا" Sg Masc Pers2_Respect  ;
   no_Quant =  demoPN " كوی نہیں" "كوی نہیں" "كوی نہیں" ; 
   not_Predet = {s="نہیں"} ;
   if_then_Conj = sd2 "اگر" "تے" ** {n = Sg} ; 

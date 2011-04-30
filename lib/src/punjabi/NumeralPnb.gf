@@ -42,13 +42,13 @@ oper mkNum : Str -> Str -> DSize -> LinDigit =
   {s = table {unit => do ; ten => bis } ; 
    size = sz ; n = Pl} ;
 
-lin n2 = mkNum "دو" "vی" r2 ;
+lin n2 = mkNum "دو" "وی" r2 ;
 lin n3 = mkNum "تن" "تری" r3 ;
 lin n4 = mkNum "چار" "چالی" r4 ;
 lin n5 = mkNum "پنج" "پنجاہ" r5 ;
-lin n6 = mkNum "چh-" "سٹh-" r6 ; 
+lin n6 = mkNum "چھ" "سٹھ" r6 ; 
 lin n7 = mkNum "ست" "ستر" r7; 
-lin n8 = mkNum "اٹh-" "اسی" r8;
+lin n8 = mkNum "اٹھ" "اسی" r8;
 lin n9 = mkNum "نو" "نبے" r9 ;
 
 oper mkR : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> DSize => Str = \a1 -> \a2 -> \a3 -> \a4 -> \a5 -> \a6 -> \a7 -> \a8 -> \a9 -> table {
@@ -69,7 +69,7 @@ oper rows : DSize => DSize => Str = table {
   r3 => mkR "تیر" "تی" "تیت" "تنت" "ترت" "ترو" "تیہ" "تیر" "تر" ;
   r4 => mkR "چود" "چوب" "چوت" "چوا" "چوت" "چور" "چوہ" "چور" "چور" ;
   r5 => mkR "پندر" "پنج" "پینت" "پنتا" "پچو" "پین" "پنج" "پنج" "پچ" ;
-  r6 => mkR "سول" "چھب" "چھت" "چh-ی" "چھو" "چھیا" "چھہ" "چھی" "چھی" ;
+  r6 => mkR "سول" "چھب" "چھت" "چھی" "چھو" "چھیا" "چھہ" "چھی" "چھی" ;
   r7 => mkR "ستار" "ستا" "سینت" "سنت" "سنت" "ستو" "ست" "ست" "ست" ;
   r8 => mkR "اٹھار" "اٹھا" "اٹھت" "اڑت" "اٹھو" "اٹھا" "اٹھ" "اٹھ" "اٹھ" ; 
   r9 => table {sg => "انی" ; r2 => "انتی" ; r3 => "انتالی" ; 

@@ -110,6 +110,11 @@ oper
   mkN11 x = mkN x x x x
                 x x x ""
              Fem ;
+  -- 12 Masc no inflection
+  mkN12 : Str -> Noun ;
+  mkN12 x = mkN x x x x
+                x x x ""
+             Masc ;	     
 
 ----2 Determiners
 
@@ -135,7 +140,20 @@ oper
 		Fem  => s2
 	 };
 	 n = n
-    };		
+    };
+  
+  makeIQuant : Str -> Str -> Str -> Str -> {s:Number => Gender => Str} = \s1,s2,s3,s4 -> {
+   s = table {
+      Sg => table {
+        Masc => s1 ;
+        Fem => s2 
+	  } ;
+      Pl => table {
+        Masc => s3 ;
+        Fem => s4 
+	  }
+      } 
+	};	
     
 -- Proposition  
  

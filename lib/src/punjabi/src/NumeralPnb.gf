@@ -42,13 +42,13 @@ oper mkNum : Str -> Str -> DSize -> LinDigit =
   {s = table {unit => do ; ten => bis } ; 
    size = sz ; n = Pl} ;
 
-lin n2 = mkNum "dw" "vy" r2 ;
+lin n2 = mkNum "dw" "wy" r2 ;
 lin n3 = mkNum "tn" "try" r3 ;
 lin n4 = mkNum "car" "caly" r4 ;
 lin n5 = mkNum "pnj" "pnjah" r5 ;
-lin n6 = mkNum "ch-" "sTh-" r6 ; 
+lin n6 = mkNum "ch'" "sTh'" r6 ; 
 lin n7 = mkNum "st" "str" r7; 
-lin n8 = mkNum "aTh-" "asy" r8;
+lin n8 = mkNum "aTh'" "asy" r8;
 lin n9 = mkNum "nw" "nbE" r9 ;
 
 oper mkR : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> DSize => Str = \a1 -> \a2 -> \a3 -> \a4 -> \a5 -> \a6 -> \a7 -> \a8 -> \a9 -> table {
@@ -69,7 +69,7 @@ oper rows : DSize => DSize => Str = table {
   r3 => mkR "tyr" "ty" "tyt" "tnt" "trt" "trw" "tyh" "tyr" "tr" ;
   r4 => mkR "cwd" "cwb" "cwt" "cwa" "cwt" "cwr" "cwh" "cwr" "cwr" ;
   r5 => mkR "pndr" "pnj" "pynt" "pnta" "pcw" "pyn" "pnj" "pnj" "pc" ;
-  r6 => mkR "swl" "ch'b" "ch't" "ch-y" "ch'w" "ch'ya" "ch'h" "ch'y" "ch'y" ;
+  r6 => mkR "swl" "ch'b" "ch't" "ch'y" "ch'w" "ch'ya" "ch'h" "ch'y" "ch'y" ;
   r7 => mkR "star" "sta" "synt" "snt" "snt" "stw" "st" "st" "st" ;
   r8 => mkR "aTh'ar" "aTh'a" "aTh't" "aRt" "aTh'w" "aTh'a" "aTh'" "aTh'" "aTh'" ; 
   r9 => table {sg => "any" ; r2 => "anty" ; r3 => "antaly" ; 

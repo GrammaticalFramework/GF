@@ -6,23 +6,26 @@ concrete RelativePnb of Relative = CatPnb ** open ResPnb in {
   lin
 
     RelCl cl = {
-      s = \\t,p,o,agr => case <t,giveNumber agr> of {
-	                    <VPImpPast,Sg> => "js" ++ cl.s ! t ! p ! o ; 
-						<VPImpPast,Pl> => "jn" ++ cl.s ! t ! p ! o ;
-						<_,_>          => "jw" ++ cl.s ! t ! p ! o 
+      s = \\t,p,o,agr => case <t,giveNumber agr,giveGender agr> of {
+	                    <VPImpPast,Sg,_> => "jnE" ++ cl.s ! t ! p ! o ; 
+			    <VPImpPast,Pl,_> => "jnaN" ++ cl.s ! t ! p ! o ;
+			    <_,Sg,Masc>          => "jeRa" ++ cl.s ! t ! p ! o ;
+			    <_,Sg,Fem>          => "jeRy" ++ cl.s ! t ! p ! o ;
+			    <_,Pl,Masc>          => "jeRE" ++ cl.s ! t ! p ! o ;
+			    <_,Pl,Fem>          => "jeRyaN" ++ cl.s ! t ! p ! o 
 			};
       c = Dir
       } ;
 -- RelVP and RelSlash slows the linking process a lot this is why it is commented for test purposes
 
- {-   RelVP rp vp = {
+    RelVP rp vp = {
       s = \\t,p,o,ag => 
         let 
           agr = case rp.a of {
             RNoAg => ag ;
             RAg a => a
             } ;
-		 cl = mkSClause (rp.s ! (giveNumber agr) ! Dir) agr vp;
+		 cl = mkSClause (rp.s ! (giveNumber agr) ! (giveGender agr) ! Dir) agr vp;
 		  
 --          cl = case t of {
 --                VPImpPast =>  mkSClause (rp.s ! (giveNumber agr) ! Obl) agr vp;
@@ -39,33 +42,50 @@ concrete RelativePnb of Relative = CatPnb ** open ResPnb in {
 ---- "we are looking at").
 --
     RelSlash rp slash = {
-      s = \\t,p,o,agr => rp.s ! (giveNumber agr) ! Dir ++ slash.c2.s ++  slash.s ! t ! p ! o  ;--case t of {
+      s = \\t,p,o,agr => rp.s ! (giveNumber agr) ! (giveGender agr) ! Obl ++ slash.c2.s ++  slash.s ! t ! p ! o  ;--case t of {
 --	       VPImpPast => rp.s !  (giveNumber agr) Obl ++ slash.c2.s ++  slash.s ! t ! p ! o ;
 --		   _         => rp.s !  (giveNumber agr) Dir ++ slash.c2.s ++  slash.s ! t ! p ! o 
 --		   };
       c = Dir
       } ;
--}
+
     FunRP p np rp = {
-      s = \\n,c => rp.s ! n ! c ++ np.s ! NPC c ++ p.s  ;
+      s = \\n,g,c => rp.s ! n ! g ! c ++ np.s ! NPC c ++ p.s  ;
       a = RAg np.a
       } ;
 
     IdRP = {
       s = table {
         Sg => table {
+	  Masc => table {
 		
-    	    ResPnb.Dir  => "jeRa" ; 
-            ResPnb.Obl  => "jeRE" ;
-            ResPnb.Voc  => "jeRE" ;
-	    ResPnb.Abl => "jeRE"
+    	    ResPnb.Dir  => "jyRa" ; 
+            ResPnb.Obl  => "jn" ;
+            ResPnb.Voc  => "jyRE" ;
+	    ResPnb.Abl => "jyRE"
 	    };
-		Pl => table {
-            ResPnb.Dir  => "jeRE" ;
-		    ResPnb.Obl  => "jeRE" ;
-		    ResPnb.Voc  => "jeRE" ;
-		    ResPnb.Abl => "jeRE"
+	  Fem => table {
+		
+    	    ResPnb.Dir  => "jyRy" ; 
+            ResPnb.Obl  => "jn" ;
+            ResPnb.Voc  => "jyRy" ;
+	    ResPnb.Abl => "jyRy"
+	    }
+	    };
+	Pl => table {
+	    Masc => table {
+                    ResPnb.Dir  => "jyRE" ;
+		    ResPnb.Obl  => "jyRE" ;
+		    ResPnb.Voc  => "jyRE" ;
+		    ResPnb.Abl => "jyRE"
+			};
+	    Fem => table {
+                    ResPnb.Dir  => "jyRy" ;
+		    ResPnb.Obl  => "jyRy" ;
+		    ResPnb.Voc  => "jyRy" ;
+		    ResPnb.Abl => "jyRy"
 			}
+	  }
        }; 
       a = RNoAg
       } ;
