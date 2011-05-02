@@ -628,14 +628,18 @@ allCommands env@(pgf, mos) = Map.fromList [
        "gr -cat=QCl | l | ps -bind      -- linearization output from LangFin", 
        "ps -to_devanagari \"A-p\"         -- show Devanagari in UTF8 terminal",
        "rf -file=Hin.gf | ps -env=quotes -to_devanagari -- convert translit to UTF8",
-       "rf -file=Ara.gf | ps -from_utf8 -env=quotes -from_arabic -- convert UTF8 to transliteration"
+       "rf -file=Ara.gf | ps -from_utf8 -env=quotes -from_arabic -- convert UTF8 to transliteration",
+       "ps -to=chinese.trans \"abc\"      -- apply transliteration defined in file chinese.trans"
        ],
-     exec = \opts -> 
-               let (os,fs) = optsAndFlags opts in
-               return . fromString . stringOps (envFlag fs) (map prOpt os) . toString,
+     exec = \opts x -> do
+               let (os,fs) = optsAndFlags opts
+               trans <- optTranslit opts 
+               return ((fromString . trans . stringOps (envFlag fs) (map prOpt os) . toString) x),
      options = stringOpOptions,
      flags = [
-       ("env","apply in this environment only")
+       ("env","apply in this environment only"),
+       ("from","backward-apply transliteration defined in this file (format 'unicode translit' per line)"),
+       ("to",  "forward-apply transliteration defined in this file")
        ]
      }),
   ("pt", emptyCommandInfo {
@@ -1099,6 +1103,15 @@ allCommands env@(pgf, mos) = Map.fromList [
      file -> do
        probs <- readProbabilitiesFromFile file pgf
        return (setProbabilities probs pgf)
+
+   optTranslit opts = case (valStrOpts "to" "" opts, valStrOpts "from" "" opts) of
+     ("","")  -> return id
+     (file,"") -> do
+       src <- readFile file 
+       return $ transliterateWithFile file src False
+     (_,file) -> do
+       src <- readFile file 
+       return $ transliterateWithFile file src True
 
    optFile opts = valStrOpts "file" "_gftmp" opts
 

@@ -1,5 +1,6 @@
 module GF.Text.Transliterations (
   transliterate,
+  transliterateWithFile,
   transliteration,
   characterTable,
   transliterationPrintNames
@@ -26,6 +27,10 @@ transliterate s = case s of
   'f':'r':'o':'m':'_':t -> fmap appTransFromUnicode $ transliteration t
   't':'o':'_':t -> fmap appTransToUnicode $ transliteration t
   _ -> Nothing
+
+transliterateWithFile :: String -> String -> Bool -> (String -> String)
+transliterateWithFile name src isFrom =
+  (if isFrom then appTransFromUnicode else appTransToUnicode) (getTransliterationFile name src)
 
 transliteration :: String -> Maybe Transliteration
 transliteration s = Map.lookup s allTransliterations 
@@ -82,6 +87,14 @@ mkTransliteration name ts us =
     tzip ts us = [(t,u) | (t,u) <- zip ts us, t /= "-"]
     uzip us ts = [(u,t) | (u,t) <- zip us ts, t /= "-"]
 
+getTransliterationFile :: String -> String -> Transliteration
+getTransliterationFile name = uncurry (mkTransliteration name) . codes
+ where
+  codes = unzip . map (mkOne . words) . lines
+  mkOne ws = case ws of
+    [c]:t:_ -> (t,fromEnum c)  -- ä a:
+    u:t:_   -> (t,read u)      -- 228 a: OR 0xe4
+    _ -> error $ "not a valid transliteration:" ++ unwords ws
 
 unchar :: String -> [String]
 unchar s = case s of
