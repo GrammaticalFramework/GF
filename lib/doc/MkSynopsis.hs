@@ -17,7 +17,7 @@ revealedLang = "Eng"
 
 -- all languages shown
 apiExxFiles = ["api-examples-" ++ lang ++ ".txt" | lang <- words 
-  "Bul Cat Dan Dut Eng Fin Fre Ger Ita Nor Pol Ron Rus Spa Swe Urd"]
+  "Afr Bul Cat Dan Dut Eng Fin Fre Ger Ita Nor Pnb Pol Ron Rus Spa Swe Urd"]
 
 main = do
   xx <- getArgs
@@ -79,6 +79,8 @@ main = do
   space
   title "Lexical Paradigms"
   mapM_ (putParadigms isLatex cs) paradigmFiles
+  space
+  include "synopsis-additional.txt"
   space
   include "synopsis-browse.txt"
   space
@@ -234,6 +236,7 @@ catAPI    = srcPath "/abstract/Cat.gf"
 syntaxAPI = srcPath "/api/Constructors.gf"
 structuralAPI = srcPath "/abstract/Structural.gf"
 paradigmFiles = [
+  ("Afrikaans", srcPath "/afrikaans/ParadigmsAfr.gf"),
   ("Bulgarian", srcPath "/bulgarian/ParadigmsBul.gf"),
   ("Catalan", srcPath "/catalan/ParadigmsCat.gf"),
   ("Danish", srcPath "/danish/ParadigmsDan.gf"),
@@ -246,6 +249,7 @@ paradigmFiles = [
   ("Italian",  srcPath "/italian/ParadigmsIta.gf"),
   ("Norwegian", srcPath "/norwegian/ParadigmsNor.gf"),
   ("Polish", srcPath "/polish/ParadigmsPol.gf"),
+  ("Punjabi", srcPath "/punjabi/ParadigmsPnb.gf"),
   ("Romanian", srcPath "/romanian/ParadigmsRon.gf"),
   ("Russian", srcPath "/russian/ParadigmsRus.gf"),
   ("Spanish",  srcPath "/spanish/ParadigmsSpa.gf"),

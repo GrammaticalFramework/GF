@@ -1,0 +1,115 @@
+
+
+
+
+=Additional Libraries=
+
+
+==The Prelude module==
+
+The ``Prelude`` defines commonly used utility functions, in particular for
+strings and booleans.
+
+|| Oper | Type               | Explanation            ||
+| ``SS`` | ``Type`` | the type ``{s : Str}``
+| ``ss`` | ``Str -> SS`` | record from string
+| ``nonExist`` | ``Str`` | missing form
+| ``optStr`` | ``Str -> Str`` | optional string
+| ``bothWays`` | ``(x,y : Str) -> Str`` | either ``x ++ y`` or ``y ++ x``
+| ``Bool`` | ``PType`` | values ``True`` and ``False``
+| ``andB`` | ``(_,_ : Bool) -> Bool`` | conjunction 
+| ``orB`` | ``(_,_ : Bool) -> Bool`` | disjunction
+| ``notB`` | ``Bool -> Bool`` | negation
+| ``if_then_else`` | ``(A:Type)->Bool->A->A->A`` | conditional 
+| ``init`` | ``Str -> Str`` | drop last character
+| ``last`` | ``Str -> Str`` | return last character
+| ``glue`` | ``Str -> Str -> Str`` | glue tokens together
+
+
+==The Predefined module==
+
+These functions are hard-coded in GF. They are available without explicit opening, by the used of qualified names, e.g. ``Predef.tk``.
+
+|| operation | type | explanation ||
+| ``PBool`` | ``PType`` | ``PTrue | PFalse``
+| ``Error`` | ``Type`` | the empty type
+| ``Integer`` | ``Type`` | the type of integers
+| ``Ints`` | ``Integer -> Type`` | integers from 0 to n
+| ``error`` | ``Str -> Error`` | forms error message
+| ``length`` | ``Str -> Int`` | length of string
+| ``drop`` | ``Integer -> Str -> Str`` | drop prefix of length
+| ``take`` | ``Integer -> Str -> Str`` | take prefix of length
+| ``tk`` | ``Integer -> Str -> Str`` | drop suffix of length
+| ``dp`` | ``Integer -> Str -> Str`` | take suffix of length
+| ``eqInt`` | ``Integer -> Integer -> PBool`` | test if equal integers
+| ``lessInt`` | ``Integer -> Integer -> PBool`` | test order of integers
+| ``plus`` | ``Integer -> Integer -> Integer`` | add integers
+| ``eqStr`` | ``Str -> Str -> PBool`` | test if equal strings
+| ``occur`` | ``Str -> Str -> PBool`` | test if occurs as substring
+| ``occurs`` | ``Str -> Str -> PBool`` | test if any char occurs
+| ``show`` | ``(P : Type) -> P -> Str`` | convert param to string
+| ``toStr`` | ``(L : Type) -> L -> Str`` | find the "first" string
+
+
+
+==The Formal module==
+
+This module is used for defining formal languages, in particular ones that
+use precedence levels and parentheses for grouping subexpressions.
+
+|| Oper | Type               | Explanation            ||
+| ``Prec`` | ``PType``    | precedence levels 0..4
+| ``TermPrec`` | ``Type`` | string with precedence
+| ``mkPrec`` | ``Prec -> Str -> TermPrec`` | construct a ``TermPrec``
+| ``top`` | ``TermPrec -> Str`` | top term (lowest prec.)
+| ``constant`` | ``Str -> TermPrec`` | atomic (highest prec.)
+| ``infixl`` | ``Prec->Str->(_,_:TermPrec)->TermPrec`` | left-assoc. infix
+| ``infixr`` | ``Prec->Str->(_,_:TermPrec)->TermPrec`` | right-assoc. infix
+| ``infixn`` | ``Prec->Str->(_,_:TermPrec)->TermPrec`` | non-assoc. infix
+| ``usePrec`` | ``Prec -> TermPrec -> Str`` | use term on given level
+
+
+==The Symbolic module==
+
+This module is used for embedding symbolic notation in natural-language
+text constructed by the resource grammar API. It works for all resource
+languages.
+
+|| Function | Type | Example ||
+| ``symb`` | ``Str -> NP`` |                       //x//
+| ``symb`` | ``Int -> NP`` |                       //23//
+| ``symb`` | ``Float -> NP`` |                     //0.99//
+| ``symb`` | ``CN  -> Numeral -> NP`` |            //level four//
+| ``symb`` | ``Det -> N+  -> Numeral -> NP`` |     //the level four//
+| ``symb`` | ``Det -> CN -> [Symb] -> NP`` |       //the levels i, j and k//
+| ``symb`` | ``Symb -> S`` |                       //A// (formula)
+| ``symb`` | ``Symb -> Card`` |                    //n// (number)
+| ``mkSymb`` | ``Str -> Symb`` |                   //x//
+
+
+==The Combinators module==
+
+This module gives shortcuts for defining predicates (``pred``) and function 
+expressions (``app``). It works for all resource languages.
+
+|| Function | Type | Example ||
+| ``pred`` | ``V  -> NP -> Cl`` |          //x converges//
+| ``pred`` | ``V2 -> NP -> NP -> Cl`` |    //x intersects y//
+| ``pred`` | ``V  -> NP -> NP -> Cl`` |    //x and y intersect//
+| ``pred`` | ``A  -> NP -> Cl`` |          //x is even//
+| ``pred`` | ``A2 -> NP -> NP -> Cl`` |    //x is divisible by y//
+| ``pred`` | ``A  -> NP -> NP -> Cl`` |    //x and y are equal//
+| ``pred`` | ``N  -> NP -> Cl`` |          //x is a maximum//
+| ``pred`` | ``N  -> NP -> NP -> Cl`` |    //x and y are inverses// 
+| ``pred`` | ``Adv -> NP -> Cl`` |         //x is in scope//
+| ``pred`` | ``Prep -> NP -> NP -> Cl`` |  //x is outside y//
+| ``app`` | ``N  -> NP`` |              //the bottom//
+| ``app`` | ``N2 -> NP -> NP`` |        //the successor of x//
+| ``app`` | ``N3 -> NP -> NP -> NP`` |  //the distance from x to y//
+| ``app`` | ``N2 -> NP -> NP -> NP`` |  //the sum of x and y//
+| ``app`` | ``N2 -> N  -> CN`` |        //set of integers//
+| ``app`` | ``N2 -> NP -> CN`` |        //divisor of x//
+| ``app`` | ``N3 -> NP -> NP -> CN`` |  //path from x to y//
+| ``app`` | ``N2 -> NP -> NP -> CN`` |  //path between x and y//
+
+

@@ -17,6 +17,7 @@ abstract:
 exx-script:
 	runghc MkExx.hs <api-examples.txt >api-examples.gfs
 exx: exx-script
+	gf -retain -s ../alltenses/TryAfr.gfo <api-examples.gfs >api-examples-Afr.txt
 	gf -retain -s ../alltenses/TryBul.gfo <api-examples.gfs >api-examples-Bul.txt
 	gf -retain -s ../alltenses/TryCat.gfo <api-examples.gfs >api-examples-Cat.txt
 	gf -retain -s ../alltenses/TryDan.gfo <api-examples.gfs >api-examples-Dan.txt
@@ -27,6 +28,7 @@ exx: exx-script
 	gf -retain -s ../alltenses/TryGer.gfo <api-examples.gfs >api-examples-Ger.txt
 	gf -retain -s ../alltenses/TryIta.gfo <api-examples.gfs >api-examples-Ita.txt
 	gf -retain -s ../alltenses/TryNor.gfo <api-examples.gfs >api-examples-Nor.txt
+	gf -retain -s ../alltenses/TryPnb.gfo <api-examples.gfs >api-examples-Pnb.txt
 	gf -retain -s ../alltenses/TryPol.gfo <api-examples.gfs >api-examples-Pol.txt
 	gf -retain -s ../alltenses/TryRon.gfo <api-examples.gfs >api-examples-Ron.txt
 	gf -retain -s ../alltenses/TryRus.gfo <api-examples.gfs >api-examples-Rus.txt
