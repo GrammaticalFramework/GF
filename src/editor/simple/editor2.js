@@ -142,21 +142,22 @@ function lang1(name) {
 }
 var languages =
     map(lang1,"Amharic Arabic Bulgarian Catalan Danish Dutch English Finnish French German Hindi Ina/Interlingua Italian Latin Norwegian Polish Ron/Romanian Russian Spanish Swedish Thai Turkish Urdu".split(" "));
-languages.push(lang("Other","Other"));
+//languages.push(lang("Other","Other"));
 
 var langname={};
+//for(var i=0;i<languages.length;i++)
 for(var i in languages)
     langname[languages[i].code]=languages[i].name
-
-function concname(code) { return langname[code] || code; }
 
 function add_concrete(g,el) {
     var file=element("file");
     file.innerHTML="";
     var dc={};
+//  for(var i=0;i<g.concretes.length;i++)
     for(var i in g.concretes)
 	dc[g.concretes[i].langcode]=true;
     var list=[]
+//  for(var i=0;i<languages.length;i++) {
     for(var i in languages) {
 	var l=languages[i], c=l.code;
 	if(!dc[c])
@@ -164,22 +165,15 @@ function add_concrete(g,el) {
 			    [text(l.name)])]));
     }
     var from= g.current>0 
-	? "a copy of "+concname(g.concretes[g.current-1].langcode)
+	? "a copy of "+langname[g.concretes[g.current-1].langcode]
 	:"scratch";
     file.appendChild(p(text("You are about to create a new concrete syntax by starting from "+from+".")));
     file.appendChild(p(text("Pick a language for the new concrete syntax:")));
-    file.appendChild(node("ul",{class:"languages"},list));
+    file.appendChild(node("ul",{},list));
 }
 
 function new_concrete(code) {
     return { langcode:code,params:[],lincats:[],opers:[],lins:[] };
-}
-
-function adjust_opens(cnc,oldcode,code) {
-    for(var oi in cnc.opens)
-	for(var li in rgl_modules)
-	    if(cnc.opens[oi]==rgl_modules[li]+oldcode)
-		cnc.opens[oi]=rgl_modules[li]+code;
 }
 
 function add_concrete2(ix,code) {
@@ -195,7 +189,10 @@ function add_concrete2(ix,code) {
 	    var oldcode=cs[g.current-1].langcode;
 	    var cnc=g.concretes[ci];
 	    cnc.langcode=code;
-	    adjust_opens(cnc,oldcode,code);
+	    for(var oi in cnc.opens)
+		for(var li in rgl_modules)
+		    if(cnc.opens[oi]==rgl_modules[li]+oldcode)
+			cnc.opens[oi]=rgl_modules[li]+code;
 	}
 	else
 	    cs.push(new_concrete(code))
@@ -219,7 +216,7 @@ function delete_concrete(g,ci) {
     var ok=c.params.length==0 && c.lincats.length==0 && c.opers.length==0
 	   && c.lins.length==0
 	|| confirm("Do you really want to delete the concrete syntax for "+
-		   concname(c.langcode)+"?");
+		   langname[c.langcode]+"?");
     if(ok) {
 	g.concretes=delete_ix(g.concretes,ci)
 	if(g.current && g.current-1>=ci) g.current--;
@@ -236,10 +233,11 @@ function draw_filebar(g) {
     var cs=g.concretes;
     function del(ci) { return function() { delete_concrete(g,ci); }}
     function open_conc(i) { return function() {open_concrete(g,1*i); }}
+//  for(var i=0;i<cs.length;i++)
     for(var i in cs) {
 	filebar.appendChild(gap());
 	filebar.appendChild(
-	    tab(i==cur,deletable(del(i),button(concname(cs[i].langcode),open_conc(i)),"Delete this concrete syntax")));
+	    tab(i==cur,deletable(del(i),button(langname[cs[i].langcode],open_conc(i)),"Delete this concrete syntax")));
     }
     filebar.appendChild(td_gap(more(g,add_concrete,"Add a concrete syntax")));
     return wrap_class("table","tabs",filebar);
@@ -386,6 +384,7 @@ function draw_funs(g) {
     function draw_efun(i,df) {
 	return editable("span",draw_fun(funs[i],dc,df),g,edit_fun(i),"Edit this function");
     }
+//  for(var i=0;i<funs.length;i++) {
     for(var i in funs) {
 	es.push(node_sortable("fun",funs[i].name,[deletable(del(i),draw_efun(i,df),"Delete this function")]));
 	df[funs[i].name]=true;
@@ -409,6 +408,7 @@ function draw_type(t,dc) {
     function check(t,el) {
 	return ifError(!dc[t],"Undefined category",el);
     }
+//  for(var i=0;i<t.length;i++) {
     for(var i in t) {
 	if(i>0) el.appendChild(sep(" → "));
 	el.appendChild(check(t[i],ident(t[i])));
@@ -432,21 +432,8 @@ function edit_name(g,el) {
 
 function draw_concrete(g,i) {
     var conc=g.concretes[i];
-    function edit_langcode(g,el) {
-	function change_langcode(code) {
-	    var err=check_name(g.basename+code,"Name of concrete syntax");
-	    if(err) return err;
-	    adjust_opens(conc,conc.langcode,code);
-	    conc.langcode=code;
-	    reload_grammar(g);
-	}
-	string_editor(el,conc.langcode,change_langcode)
-    }
     return div_id("file",
-		  [kw("concrete "),
-		   ident(g.basename),
-		   editable("span",ident(conc.langcode),g,
-			    edit_langcode,"Change language"),
+		  [kw("concrete "),ident(g.basename+conc.langcode),
 		   kw(" of "),ident(g.basename),sep(" = "),
 		   indent([extensible([kw("open "),draw_opens(g,i)])]),
 		   indent([kw("lincat"),draw_lincats(g,i)]),
@@ -583,13 +570,18 @@ function draw_lincats(g,i) {
     var conc=g.concretes[i];
     function edit(c) {
 	return function(g,el) {
-	    function ok(s) {
-		if(c.template) conc.lincats.push({cat:c.cat,type:s});
-		else c.type=s;
-		reload_grammar(g);
-		return null;
+	    function check(s,cont) {
+		function check2(msg) {
+		    if(!msg) {
+			if(c.template) conc.lincats.push({cat:c.cat,type:s});
+			else c.type=s;
+			reload_grammar(g);
+		    }
+		    cont(msg);
+		}
+		check_exp(s,check2);
 	    }
-	    string_editor(el,c.type,ok)
+	    string_editor(el,c.type,check,true)
 	}
     }
     function del(c) { return function() { delete_lincat(g,i,c); } }
@@ -716,14 +708,19 @@ function draw_lins(g,i) {
     var conc=g.concretes[i];
     function edit(f) {
 	return function(g,el) {
-	    function ok(s) {
-		if(f.template)
-		    conc.lins.push({fun:f.fun,args:f.args,lin:s});
-		else f.lin=s;
-		reload_grammar(g);
-		return null;
+	    function check(s,cont) {
+		function check2(msg) {
+		    if(!msg) {
+			if(f.template)
+			    conc.lins.push({fun:f.fun,args:f.args,lin:s});
+			else f.lin=s;
+			reload_grammar(g);
+		    }
+		    cont(msg);
+		}
+		check_exp(s,check2);
 	    }
-	    string_editor(el,f.lin,ok)
+	    string_editor(el,f.lin,check,true)
 	}
     }
     function del(fun) { return function () { delete_lin(g,i,fun); } }
@@ -768,25 +765,55 @@ function draw_lins(g,i) {
 
 /* -------------------------------------------------------------------------- */
 
-function upload(g) {
+function with_dir(cont) {
     var dir=local.get("dir","");
-    if(dir) upload2(g,dir);
-    else ajax_http_get("upload.cgi?dir",
+    if(/^\/tmp\//.test(dir)) cont(dir);
+    else ajax_http_get("/new",
 		       function(dir) {
 			   local.put("dir",dir);
-			   upload2(g,dir);
+			   cont(dir);
 		       });
 }
 
-function upload2(g,dir) {
-    var form=node("form",{method:"post",action:"upload.cgi"+dir},
-		  [hidden(g.basename,show_abstract(g))])
-    for(var i in g.concretes)
-	form.appendChild(hidden(g.basename+g.concretes[i].langcode,
-				show_concrete(g.basename)(g.concretes[i])));
-    editor.appendChild(form);
-    form.submit();
-    form.parentNode.removeChild(form);
+// Send a command to the GF shell
+function gfshell(cmd,cont) {
+    with_dir(function(dir) {
+	var enc=encodeURIComponent;
+	ajax_http_get("/gfshell?dir="+enc(dir)+"&command="+enc(cmd),cont)
+    })
+}
+
+// Check the syntax of an expression
+function check_exp(s,cont) {
+    function check(gf_message) {
+	debug("cc "+s+" = "+gf_message);
+	cont(/parse error/.test(gf_message) ? "parse error" : null);
+    }
+    gfshell("cc "+s,check);
+}
+
+// Upload the grammar to the server and check it for errors
+function upload(g) {
+    function upload2(dir) {
+	var form=node("form",{method:"post",action:"/upload"},
+		      [hidden("dir",dir),hidden(g.basename,show_abstract(g))])
+	var files = [g.basename+".gf"]
+	for(var i in g.concretes) {
+	    var cname=g.basename+g.concretes[i].langcode;
+	    files.push(cname+".gf");
+	    form.appendChild(hidden(cname,
+				    show_concrete(g.basename)(g.concretes[i])));
+	}
+	editor.appendChild(form);
+	form.submit();
+	form.parentNode.removeChild(form);
+	/* wait until upload is done */
+	gfshell("i -retain "+files.join(" "),upload3)
+    }
+    
+    function upload3(message) {	if(message) alert(message); }
+
+    with_dir(upload2)
 }
 
 function hidden(name,value) {
@@ -797,6 +824,7 @@ function hidden(name,value) {
 
 function delete_ix(old,ix) {
     var a=[];
+//  for(var i=0;i<old.length;i++) if(i!=ix) a.push(old[i]);
     for(var i in old) if(i!=ix) a.push(old[i]);
     return a;
 }
@@ -824,7 +852,7 @@ function sort_list(list,olditems,key) {
     }
 }
 
-function string_editor(el,init,ok) {
+function string_editor(el,init,ok,async) {
     var p=el.parentNode;
     function restore() {
 	e.parentNode.removeChild(e);
@@ -833,8 +861,9 @@ function string_editor(el,init,ok) {
     function done() {
 	var edited=e.it.value;
 	restore();
-	var msg=ok(edited);
-	if(msg) start(msg);
+	function cont(msg) { if(msg) start(msg); }
+	if(async) ok(edited,cont)
+	else cont(ok(edited));
 	return false;
     }
     function start(msg) {
@@ -913,6 +942,7 @@ function touch_edit() {
     b.onchange=touch;
     insertAfter(b,editor);
     insertAfter(wrap("small",text("Enable editing on touch devices. ")),b);
+    
 }
 
 /* --- Initialization ------------------------------------------------------- */
