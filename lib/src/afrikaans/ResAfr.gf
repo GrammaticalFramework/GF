@@ -296,8 +296,8 @@ param
 
   oper
     vForm : Tense -> VForm = \t -> case t of {
-      Pres  => VPres ;
-      Fut   => VPres  --# notpresent
+      Pres  => VPres 
+     ; Fut   => VPres  --# notpresent
      ;  Past | Cond => VPast   -- Fut and Cond affect zullen --# notpresent
       } ;
 
