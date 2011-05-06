@@ -163,12 +163,12 @@ transPersian = (mkTransliteration "Persian/Farsi" allTrans allCodes)
   allTrans = words $
     "   V  A: A? w? A- y? A  b  t. t  t-  j  H  K  d " ++  -- 0621 - 062f
     "W  r  z  s  C  S  D  T  Z  c  G "                 ++  -- 0630 - 063a
-    "   f  q  k  l  m  n  h  v  y. y a. u. i. a  u "   ++  -- 0641 - 064f
+    "   f  q  -  l  m  n  h  v  -  y. a. u. i. a  u "   ++  -- 0640 - 064f
     "i  v2 o  a: V+ V- i: a+ " ++                          -- 0650 - 0657 
-    "p  c^ J  g "
+    "p  c^ J  k  g  y "
   allCodes = [0x0621..0x062f] ++ [0x0630..0x063a] ++ 
              [0x0641..0x064f] ++ [0x0650..0x0657] ++ 
-             [0x067e,0x0686,0x0698,0x06af]
+             [0x067e,0x0686,0x0698,0x06a9,0x06af,0x06cc]
 
 transHebrew :: Transliteration
 transHebrew = mkTransliteration "unvocalized Hebrew" allTrans allCodes where
