@@ -22,6 +22,8 @@
 +    Show lincat and lin before params and opers below
 +    Create a new concrete syntax by copying an existing one.
 -    Easy access to compute_concrete from the editor
+-    Instead of starting with an empty grammar, start a new grammar by copying
+     an example.
 
 + compile only the uploaded grammar even if other grammars are present
 + 'flags startcat' is needed for grammars with only one category (since the
