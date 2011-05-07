@@ -168,7 +168,7 @@ function add_concrete(g,el) {
 	:"scratch";
     file.appendChild(p(text("You are about to create a new concrete syntax by starting from "+from+".")));
     file.appendChild(p(text("Pick a language for the new concrete syntax:")));
-    file.appendChild(node("ul",{class:"languages"},list));
+    file.appendChild(node("ul",{"class":"languages"},list));
 }
 
 function new_concrete(code) {
