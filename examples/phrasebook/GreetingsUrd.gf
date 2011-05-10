@@ -1,26 +1,29 @@
-concrete GreetingsUrd of Greetings = SentencesUrd [Greeting,mkGreeting] ** open Prelude in {
+concrete GreetingsUrd of Greetings = SentencesUrd [mkGreeting] ** open Prelude in {
 
+-- lincat 
+--  Greeting = {s : Str; lock_Text : {}} ;
+flags coding = utf8 ;
 lin 
-  GBye = mkGreeting "bye" ;
-  GCheers = mkGreeting "cheers" ;
-  GDamn = mkGreeting "damn" ;
-  GExcuse, GExcusePol = mkGreeting "excuse me" ;
-  GGoodDay = mkGreeting "good afternoon" ; ----
-  GGoodEvening = mkGreeting "good evening" ;
-  GGoodMorning = mkGreeting "good morning" ;
-  GGoodNight = mkGreeting "good night" ;
-  GGoodbye = mkGreeting "goodbye" ;
-  GHello = mkGreeting "hello" ;
-  GHelp = mkGreeting "help" ;
-  GHowAreYou = mkGreeting "how are you" ;
-  GLookOut = mkGreeting "look out" ;
-  GNiceToMeetYou, GNiceToMeetYouPol = mkGreeting "nice to meet you" ;
-  GPleaseGive, GPleaseGivePol = mkGreeting "please" ;
-  GSeeYouSoon = mkGreeting "see you soon" ;
-  GSorry, GSorryPol = mkGreeting "sorry" ;
-  GThanks = mkGreeting "thank you" ;
-  GTheCheck = mkGreeting "the bill" ;
-  GCongratulations = mkGreeting "congratulations";
-  GHappyBirthday = mkGreeting "happy birthday" ;
-  GGoodLuck = mkGreeting "good luck" ; 
+  GBye = ss "خدا حافظ" ;
+  GCheers = ss "چیرز" ;
+  GDamn = ss "اف" ;
+  GExcuse, GExcusePol = ss "معاف كیجیے گا" ;
+  GGoodDay = ss "دن بخیر" ; ----
+  GGoodEvening = ss "شام بخیر" ;
+  GGoodMorning = ss "صبح بخیر" ;
+  GGoodNight = ss "رات بخیر" ;
+  GGoodbye = ss "خدا حافظ" ;
+  GHello = ss "اسلام علیكم" ;
+  GHelp = ss "مدد" ;
+  GHowAreYou = ss "آپ كیسی ہو" ;
+  GLookOut = ss "دیكھ كر" ;
+  GNiceToMeetYou, GNiceToMeetYouPol = ss "آپ سے مل كر اچھا لگا" ;
+  GPleaseGive, GPleaseGivePol = ss "مہربانی كر كے" ;
+  GSeeYouSoon = ss "ملتے ہیں" ;
+  GSorry, GSorryPol = ss "معاف كیجیے گا" ;
+  GThanks = ss "شكریہ" ;
+  GTheCheck = ss "بل" ;
+  GCongratulations = ss "مبارك ہو";
+  GHappyBirthday = ss "سالگرہ مبارك" ;
+  GGoodLuck = ss "گڈ لك" ; 
 }
