@@ -28,7 +28,7 @@ lin num x0 =
     } ;
 oper mkOrd : Str -> Str =
  \s -> case s of {
-                    "عك"                  => "پیلا";
+                    "اك"                  => "پیلا";
                     "دو"                  => "دوجا";
                     "تن"                => "دوجا";
                     "چار"                => "چوتھا";
@@ -64,7 +64,7 @@ oper mkR : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> DSize 
 } ;
 
 oper rows : DSize => DSize => Str = table {
-  sg => mkR "گیار" "iكك" "iكت" "عكتا" "iكو" "iكا" "iكہ" "iك" "iكی" ; 
+  sg => mkR "گیار" "اكك" "اكت" "اكتا" "اكو" "اكا" "اكہ" "اك" "اكی" ; 
   r2 => mkR "بار" "با" "بت" "بای" "بی" "بو" "بہ" "بی" "ب" ;
   r3 => mkR "تیر" "تی" "تیت" "تنت" "ترت" "ترو" "تیہ" "تیر" "تر" ;
   r4 => mkR "چود" "چوب" "چوت" "چوا" "چوت" "چور" "چوہ" "چور" "چور" ;
@@ -80,9 +80,9 @@ oper rows : DSize => DSize => Str = table {
 
 oper ss : Str -> {s : Str} = \s -> {s = s} ;
 
-lin pot01 = {s = table {unit => "اك" ; _ => "دuممی" } ; size = sg ; n = Sg} ;
+lin pot01 = {s = table {unit => "اك" ; _ => "دمی" } ; size = sg ; n = Sg} ;
 lin pot0 d = d ; 
-lin pot110 = {s = "داس" ; size = less100 ; n = Pl} ; 
+lin pot110 = {s = "دس" ; size = less100 ; n = Pl} ; 
 lin pot111 = {s = rows ! sg ! sg ; size = less100 ; n = Pl} ;
 lin pot1to19 d = {s = rows ! d.size ! sg ; size = less100 ; n = d.n} ;
 lin pot0as1 n = {s = n.s ! unit ; size = table {sg => singl ; _ => less100} ! n.size ; n = n.n } ;
@@ -90,7 +90,7 @@ lin pot0as1 n = {s = n.s ! unit ; size = table {sg => singl ; _ => less100} ! n.
 lin pot1 d = {s = d.s ! ten ; size = less100 ; n = d.n} ;
 lin pot1plus d e = {s = rows ! e.size ! d.size ; size = less100 ; n = d.n} ;
 
-lin pot1as2 n = {s = n.s ; s2 = "دuممی" ; size = n.size ; n = n.n} ;
+lin pot1as2 n = {s = n.s ; s2 = "دمی" ; size = n.size ; n = n.n} ;
 lin pot2 d = {s = (mksau (d.s ! unit) d.size) ; 
               s2 = d.s ! unit ++ "لكھ" ; size = more100 ; n = d.n} ;
 lin pot2plus d e = 
@@ -122,5 +122,5 @@ lin IIDig d dg = { s = \\df => Prelude.glue (dg.s ! df) d.s ; n = Pl };
 
 oper ekhazar : Str = variants {"ہزار" ; "اك" ++ "ہزار"} ; 
 oper mkhazar : Str -> Size -> Str = \s -> \sz -> table {singl => ekhazar ; _ => s ++ "ہزار"} ! sz ;
-oper mksau : Str -> DSize -> Str = \s -> \sz -> table {sg => "سو" ; _ => s ++ "سو"} ! sz ;
+oper mksau : Str -> DSize -> Str = \s -> \sz -> table {sg => "اك" ++ "سو" ; _ => s ++ "سو"} ! sz ;
 }

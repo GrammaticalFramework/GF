@@ -12,7 +12,7 @@ concrete SymbolPnb of Symbol = CatPnb ** open Prelude, ResPnb in {
   NumPN i = {s = \\_ =>i.s ; g = Masc} ;
   CNIntNP cn i = {
     s = \\c => cn.s ! Sg ! Dir ++ i.s ;
-    a = agrP3 cn.g Sg;
+    a = agrP3 cn.g Sg ;
     isPron = False
     } ;
   CNSymbNP det cn xs = {
