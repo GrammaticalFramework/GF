@@ -1,9 +1,8 @@
-concrete NumeralUrd of Numeral = CatUrd ** open ResUrd,CommonHindustani,ParamX, Prelude in {
--- By Harald Hammarström
+-- By Harald Hammarstr
 -- Modification for Urdu Shafqat Virk
 
--- still old Devanagari coding
 
+concrete NumeralUrd of Numeral = CatUrd ** open ResUrd,CommonHindustani,ParamX, Prelude in {
 flags coding=utf8 ;
 
 param DForm = unit | ten ;
@@ -38,13 +37,13 @@ lin n2 = mkNum "دو" "بیس" r2 ;
 lin n3 = mkNum "تین" "تیس" r3 ;
 lin n4 = mkNum "چار" "چالیس" r4 ;
 lin n5 = mkNum "پانچ" "پچاس" r5 ;
-lin n6 = mkNum "چھ" "ساتھ" r6 ; 
+lin n6 = mkNum "چھ" "ساٹھ" r6 ; 
 lin n7 = mkNum "سات" "ستر" r7; 
-lin n8 = mkNum "آتھ" "اسی" r8;
+lin n8 = mkNum "آٹھ" "اسی" r8;
 lin n9 = mkNum "نو" "نوے" r9 ;
 
 oper mkR : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> DSize => Str = \a1 -> \a2 -> \a3 -> \a4 -> \a5 -> \a6 -> \a7 -> \a8 -> \a9 -> table {
-  sg => a1 + "اہ" ;
+  sg => a1 + "ہ" ;
   r2 => a2 + "یس" ;
   r3 => a3 + "تیس" ;
   r4 => a4 + "الیس" ;
@@ -56,14 +55,14 @@ oper mkR : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> DSize 
 } ;
 
 oper rows : DSize => DSize => Str = table {
-  sg => mkR "گیارہ" "اك" "اكت" "اكت" "اكیاو" "اك" "اك" "اكی" "اكی" ; 
-  r2 => mkR "بارہ" "بای" "بات" "بای" "باو" "با" "با" "بای" "ب" ;
+  sg => mkR "گیار" "اك" "اكت" "اكت" "اكیاو" "اك" "اك" "اكی" "اكی" ; 
+  r2 => mkR "بار" "بای" "بات" "بای" "باو" "با" "با" "بای" "ب" ;
   r3 => mkR "تیر" "تی" "تین" "تنت" "ترپ" "تری" "ت" "تر" "تر" ;
   r4 => mkR "چود" "چوب" "چون" "چوا" "چوو" "چون" "چوہ" "چور" "چور" ;
-  r5 => mkR "پند" "پچی" "پین" "پنتا" "پچپ" "پین" "پہ" "پچ" "پچ" ;
+  r5 => mkR "پندر" "پچی" "پین" "پنتا" "پچپ" "پین" "پہ" "پچ" "پچ" ;
   r6 => mkR "سول" "چھب" "چھت" "چھی" "چھپ" "چھیا" "چھ" "چھی" "چھی" ;
   r7 => mkR "ستر" "ستا" "سین" "سنت" "ستاو" "ستا" "سر" "ست" "ستا" ;
-  r8 => mkR "اتھار" "اتھای" "اڑ" "اڑت" "اتھاو" "اڑ" "اتھ" "اتھ" "اتھ" ; 
+  r8 => mkR "اٹھار" "اٹھای" "اڑ" "اڑت" "اٹھاو" "اڑ" "اٹھ" "اٹھ" "اٹھ" ; 
   r9 => table {sg => "انیس" ; r2 => "انتیس" ; r3 => "انتالیس" ; 
                r4 => "انچاس" ; r5 => "انستھ" ; r6 => "انہتر" ; 
                r7 => "اناسی" ; 
@@ -74,7 +73,7 @@ oper ss : Str -> {s : Str} = \s -> {s = s} ;
 
 lin pot01 = {s = table {unit => "ایك" ; _ => "دمی" } ; size = sg ; n = Sg} ;
 lin pot0 d = d ; 
-lin pot110 = {s = "داس" ; size = less100 ; n = Pl} ; 
+lin pot110 = {s = "دس" ; size = less100 ; n = Pl} ; 
 lin pot111 = {s = rows ! sg ! sg ; size = less100 ; n = Pl} ;
 lin pot1to19 d = {s = rows ! d.size ! sg ; size = less100 ; n = d.n} ;
 lin pot0as1 n = {s = n.s ! unit ; size = table {sg => singl ; _ => less100} ! n.size ; n = n.n } ;
@@ -114,5 +113,5 @@ lin IIDig d dg = { s = \\df => Prelude.glue (dg.s ! df) d.s ; n = Pl };
 
 oper ekhazar : Str = variants {"ہزار" ; "ایك" ++ "ہزار"} ; 
 oper mkhazar : Str -> Size -> Str = \s -> \sz -> table {singl => ekhazar ; _ => s ++ "ہزار"} ! sz ;
-oper mksau : Str -> DSize -> Str = \s -> \sz -> table {sg => "سو" ; _ => s ++ "سو"} ! sz ;
+oper mksau : Str -> DSize -> Str = \s -> \sz -> table {sg => "ایك" ++ "سو" ; _ => s ++ "سو"} ! sz ;
 }

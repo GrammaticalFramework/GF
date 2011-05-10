@@ -6,7 +6,7 @@ incomplete concrete ExtraHindustani of ExtraHindustaniAbs = CatHindustani **
     GenNP np = {s = \\_,_,_ => np.s ! NPC Obl ++ "كا" ; a = np.a} ;
 
     each_Det = mkDet  "ہر كوی" "ہر كوی" "ہر كوی" "ہر كوی" Sg ;
-    have_V = mkV "راكh-نا";
+    have_V = mkV "راكھنا";
     IAdvAdv adv = {s = "كتنی" ++ adv.s} ;
     ICompAP ap = {s = "كتنے" ++ ap.s ! Sg ! Masc ! Dir ! Posit} ;
     cost_V = mkV "قیمت" ;

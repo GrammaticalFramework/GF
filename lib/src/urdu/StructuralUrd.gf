@@ -123,7 +123,7 @@ concrete StructuralUrd of Structural = CatUrd **
 
   as_CAdv = {s = "اتنا" ; p = "جتنا"} ;
 
-  have_V2 = mkV2 (mkV "راكھنا") "" ;
+  have_V2 = mkV2 (mkV "ركھنا") "" ;
 
  language_title_Utt = ss "اردو" ;
 

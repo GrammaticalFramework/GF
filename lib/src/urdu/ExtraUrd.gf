@@ -4,7 +4,14 @@ concrete ExtraUrd of ExtraUrdAbs = CatUrd **
 flags coding = utf8 ;
 
   lin
-    GenNP np = {s = \\_,_,_ => np.s ! NPC Obl ++ "كا" ; a = np.a} ;
+ --   GenNP np = {s = \\_,_,_ => np.s ! NPC Obl ++ "كا" ; a = np.a} ;
+  GenNP np = {s = \\n,g,c => 
+     case <n,g,c> of {
+     <_,Masc,_> => np.s ! NPC Obl ++ "كا" ;
+     <_,Fem,_> => np.s ! NPC Obl ++ "كی"
+     };
+     
+   a = np.a} ;
 
     each_Det = mkDet  "ہر كوی" "ہر كوی" "ہر كوی" "ہر كوی" Sg ;
     have_V = mkV "راكh-نا";
