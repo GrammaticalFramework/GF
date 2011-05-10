@@ -9,6 +9,7 @@ concrete WordsUrd of Words = SentencesUrd **
 --      IrregUrd, 
       ExtraUrd, 
       Prelude in {
+flags coding = utf8 ;
   lin
 
 -- Kinds; many of them are in the resource lexicon, others can be built by $mkN$.
@@ -16,27 +17,27 @@ concrete WordsUrd of Words = SentencesUrd **
     Apple = mkCN L.apple_N ;
     Beer = mkCN L.beer_N ;
     Bread = mkCN L.bread_N ;
-    Cheese = mkCN (mkN "pnyr") ;
-    Chicken = mkCN (mkN "mrGy") ;
-    Coffee = mkCN (mkN "kafy") ;
+    Cheese = mkCN (mkN "پنیر") ;
+    Chicken = mkCN (mkN "مرغی") ;
+    Coffee = mkCN (mkN "كافی") ;
     Fish = mkCN L.fish_N ;
-    Meat = mkCN (mkN "gwXt") ;
+    Meat = mkCN (mkN "گوشت") ;
     Milk = mkCN L.milk_N ;
-    Pizza = mkCN (mkN "pyzh") ;
+    Pizza = mkCN (mkN "پیزہ") ;
     Salt = mkCN L.salt_N ;
-    Tea = mkCN (mkN "caE") ;
+    Tea = mkCN (mkN "چاے") ;
     Water = mkCN L.water_N ;
     Wine = mkCN L.wine_N ;
 
 -- Properties; many of them are in the resource lexicon, others can be built by $mkA$.
 
     Bad = L.bad_A ;
-    Boring = mkA "fZ-wl" ;
-    Cheap = mkA "ssta" ;
+    Boring = mkA "فضول" ;
+    Cheap = mkA "سستا" ;
     Cold = L.cold_A ;
-    Delicious = mkA "mzydar" ;
-    Expensive = mkA "mhnga" ;
-    Fresh = mkA "tazh" ;
+    Delicious = mkA "مزیدار" ;
+    Expensive = mkA "مہنگا" ;
+    Fresh = mkA "تازہ" ;
     Good = L.good_A ;
     Suspect = mkA "" ;
     Warm = L.warm_A ;
@@ -45,109 +46,110 @@ concrete WordsUrd of Words = SentencesUrd **
 -- also the directional preposition varies, but in English we use $to$, as
 -- defined by $mkPlace$.
 
-    Airport = mkPlace "hway aDh" "pr" ;
---    AmusementPark = mkCompoundPlace "amusement" "park" "at" ;
-    Bank = mkPlace "bynk" "myn" ;
-    Bar = mkPlace "bar" "myn" ;
-    Cafeteria = mkPlace "kntyn" "myn" ;
-    Center = mkPlace "cnTr" "pr" ;
-    Cinema = mkPlace "synma" "myn" ;
-    Church = mkPlace "crc" "myn" ;
-    Disco = mkPlace "Dskw" "myn" ;
-    Hospital = mkPlace "hsptal" "myn" ;
-    Hotel = mkPlace "hwTl" "myn" ;
-    Museum = mkPlace "museum" "at" ;
-    Park = mkPlace "park" "myn" ;
---    Parking = mkCompoundPlace "car" "park" "in" ; 
-    Pharmacy = mkPlace "pharmacy" "at" ;
---    PostOffice = mkCompoundPlace "post" "office" "at" ;
-    Pub = mkPlace "pb" "myN" ;
-    Restaurant = mkPlace "hwTl" "myn" ;
-    School = mkPlace "skwl" "myn" ;
-    Shop = mkPlace "dwkan" "myn" ;
-    Station = mkPlace "sTyXn" "pr" ;
-    Supermarket = mkPlace "spr markyT" "myn" ; 
-    Theatre = mkPlace "th-Tr" "pr" ;
-    Toilet = mkPlace "Gsl Kanh" "myn" ;
-    University = mkPlace "ynywrsTy" "myn" ;
-    Zoo = mkPlace "cRya gh-r" "myn" ;
+    Airport = mkPlace "ہوای اڈہ" "پر" ;
+    AmusementPark = mkCompoundPlace "ایمیوزیم" "پارك" "میں" ;
+    Bank = mkPlace "بینك" "میں" ;
+    Bar = mkPlace "بار" "میں" ;
+    Cafeteria = mkPlace "كنتین" "میں" ;
+    Center = mkPlace "سنٹر" "پر" ;
+    Cinema = mkPlace "سینما" "میں" ;
+    Church = mkPlace "چرچ" "میں" ;
+    Disco = mkPlace "ڈسكو" "میں" ;
+    Hospital = mkPlace "ہسپتال" "میں" ;
+    Hotel = mkPlace "ہوٹل" "میں" ;
+    Museum = mkPlace "میوزیم" "پر" ;
+    Park = mkPlace "پارك" "میں" ;
+    Parking = mkCompoundPlace "كار" "پارك" "میں" ; 
+    Pharmacy = mkPlace "فارمیسی" "پر" ;
+    PostOffice = mkCompoundPlace "ڈاك" "خانہ" "پر" ;
+    Pub = mkPlace "پب" "میں" ;
+    Restaurant = mkPlace "ہوٹل" "میں" ;
+    School = mkPlace "سكول" "میں" ;
+    Shop = mkPlace "دوكان" "میں" ;
+    Station = mkPlace "سٹیشن" "پر" ;
+    Supermarket = mkPlace "سپر ماركیٹ" "میں" ; 
+    Theatre = mkPlace "تھیٹر" "پر" ;
+    Toilet = mkPlace "غسل خانہ" "میں" ;
+    University = mkPlace "یونیورسٹی" "میں" ;
+    Zoo = mkPlace "چڑیا گھر" "میں" ;
    
-    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "hwTl")) in_Prep to_Prep ;
+    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "ہوٹل")) in_Prep to_Prep ;
 
 
 -- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
 
-    DanishCrown = mkCN (mkA "DynX") (mkN "crawn") | mkCN (mkN "crawn") ;
-    Dollar = mkCN (mkN "Dalr") ;
-    Euro = mkCN (mkN "ywrw") ; -- to prevent euroes
-    Lei = mkCN (mkN "leu") ;
-    Leva = mkCN (mkN "lev") ;
-    NorwegianCrown = mkCN (mkA "narwyjn") (mkN "crawn") | mkCN (mkN "crawn") ;
-    Pound = mkCN (mkN "pawnD") ;
-    Rouble = mkCN (mkN "rwbl") ;
-    SwedishCrown = mkCN (mkA "swyDX") (mkN "crawn") | mkCN (mkN "crawn") ;
-    Zloty = mkCN (mkN "zlwTy") ;
+    DanishCrown = mkCN (mkA "ڈینش") (mkN "كراون") | mkCN (mkN "كراون") ;
+    Dollar = mkCN (mkN "ڈالر") ;
+    Euro = mkCN (mkN "یورو") ; -- to prevent euroes
+    Lei = mkCN (mkN "لی") ;
+    Leva = mkCN (mkN "لیوا") ;
+    NorwegianCrown = mkCN (mkA "نارویجن") (mkN "كراون") | mkCN (mkN "كراون") ;
+    Pound = mkCN (mkN "پاونڈ") ;
+    Rouble = mkCN (mkN "روبل") ;
+    SwedishCrown = mkCN (mkA "سویڈش") (mkN "كراون") | mkCN (mkN "كراون") ;
+    Zloty = mkCN (mkN "زلوٹی") ;
 
 -- Nationalities
 
-    Belgian = mkA "bljym" ;
-    Belgium = mkNP (mkPN "bljym") ;
-    Bulgarian = mkNat "blGaryn" "blGaryh" ;
-    Catalan = mkNPNationality (mkNP (mkPN "cyTalan")) (mkNP (mkPN "caTalan")) (mkA "caTalanyn") ;
-    Danish = mkNat "DynX" "Dnmark" ;
-    Dutch =  mkNPNationality (mkNP (mkPN "Dwc")) (mkNP the_Quant (mkN "nydrlynD")) (mkA "Dwc") ;
-    English = mkNat "English" "anglynD" ;
-    Finnish = mkNat "Finnish" "fnlynD" ;
-    Flemish = mkNP (mkPN "flymX") ;
-    French = mkNat "fransysy" "frans" ; 
-    German = mkNat "grmn" "grmny" ;
-    Italian = mkNat "at-lwy" "aTly" ;
-    Norwegian = mkNat "narwyjn" "narwE" ;
-    Polish = mkNat "pwlX" "pwlynD" ;
-    Romanian = mkNat "rwmanyn" "rwmanyh" ;
-    Russian = mkNat "rwsy" "rws" ;
-    Spanish = mkNat "spyny" "spyn" ;
-    Swedish = mkNat "swDX" "swyDn" ;
+    Belgian = mkA "بلجیم" ;
+    Belgium = mkNP (mkPN "بلجیم") ;
+    Bulgarian = mkNat "بلغارین" "بلغاریہ" ;
+    Catalan = mkNPNationality (mkNP (mkPN "كیٹالان")) (mkNP (mkPN "كاٹالان")) (mkA "كاٹالانین") ;
+    Danish = mkNat "ڈینش" "ڈنمارك" ;
+    Dutch =  mkNPNationality (mkNP (mkPN "ڈچ")) (mkNP the_Quant (mkN "نیدرلینڈ")) (mkA "ڈچ") ;
+    English = mkNat "انگلش" "انگلینڈ" ;
+    Finnish = mkNat "فنش" "فنلینڈ" ;
+    Flemish = mkNP (mkPN "فلیمش") ;
+    French = mkNat "فرانسیسی" "فرانس" ; 
+    German = mkNat "جرمن" "جرمنی" ;
+    Italian = mkNat "اطالوی" "اٹلی" ;
+    Norwegian = mkNat "نارویجن" "ناروے" ;
+    Polish = mkNat "پولش" "پولینڈ" ;
+    Romanian = mkNat "رومانین" "رومانیہ" ;
+    Russian = mkNat "روسی" "روس" ;
+    Spanish = mkNat "سپینی" "سپین" ;
+    Swedish = mkNat "سویڈش" "سویڈن" ;
 
 -- Means of transportation 
  
    Bike = mkTransport L.bike_N ;
-   Bus = mkTransport (mkN "bs") ;
+   Bus = mkTransport (mkN "بس") ;
    Car = mkTransport L.car_N ;
-   Ferry = mkTransport (mkN "fyry") ;
+   Ferry = mkTransport (mkN "فیری") ;
    Plane = mkTransport L.airplane_N ;
-   Subway = mkTransport (mkN "sb wE") ;
-   Taxi = mkTransport (mkN "Tyksy") ;
-   Train = mkTransport (mkN "ryl GaRy") ;
-   Tram = mkTransport (mkN "Tram") ;
+   Subway = mkTransport (mkN "سب وے") ;
+   Taxi = mkTransport (mkN "ٹیكسی") ;
+   Train = mkTransport (mkN "ریل گاڑی") ;
+   Tram = mkTransport (mkN "ٹرام") ;
 
-   ByFoot = P.mkAdv "pydl" ;
+   ByFoot = P.mkAdv "پیدل" ;
 
 -- Actions: the predication patterns are very often language-dependent.
 
-    AHasAge p num = mkCl p.name (mkNP (mkNP num L.year_N) (ParadigmsUrd.mkAdv "ka"));
+--    AHasAge p num = mkCl p.name (mkNP (mkNP num L.year_N) (ParadigmsUrd.mkAdv "كا"));
+    AHasAge p num = mkCl p.name  (mkNP num (mkCN (modN L.year_N)));
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
     AHasRoom p num = mkCl p.name have_V2 
-      (mkNP (mkNP a_Det (mkN "kmrh")) (SyntaxUrd.mkAdv for_Prep (mkNP num (mkN "XKS")))) ;
+      (mkNP (mkNP a_Det (mkN "كمرہ")) (SyntaxUrd.mkAdv for_Prep (mkNP num (mkN "شخص")))) ;
     AHasTable p num = mkCl p.name have_V2 
-      (mkNP (mkNP a_Det (mkN "table")) (SyntaxUrd.mkAdv for_Prep (mkNP num (mkN "person")))) ;
+      (mkNP (mkNP a_Det (mkN "میز")) (SyntaxUrd.mkAdv for_Prep (mkNP num (mkN "شخص")))) ;
     AHasName p name = mkCl (nameOf p) name ;
-    AHungry p = mkCl p.name (mkA "bh-wka") ;
-    AIll p = mkCl p.name (mkA "bymar") ;
-    AKnow p = mkCl p.name (mkV "janna") ;
+    AHungry p = mkCl p.name (mkA "بھوكا") ;
+    AIll p = mkCl p.name (mkA "بیمار") ;
+    AKnow p = mkCl p.name (mkV "جاننا") ;
     ALike p item = mkCl p.name (L.like_V2) item ;
     ALive p co = mkCl p.name (mkVP (mkVP (L.live_V)) (SyntaxUrd.mkAdv in_Prep co)) ;
     ALove p q = mkCl p.name (L.love_V2) q.name ;
-    AMarried p = mkCl p.name (mkA "XaXdy Xdh") ;
-    AReady p = mkCl p.name (mkA "tyar") ;
-    AScared p = mkCl p.name (mkA "dra hwa") ;
+    AMarried p = mkCl p.name (mkA "شادی شدہ") ;
+    AReady p = mkCl p.name (mkA "تیار") ;
+    AScared p = mkCl p.name (mkA "ڈرا ہوا") ;
     ASpeak p lang = mkCl p.name  L.speak_V2 lang ;
-    AThirsty p = mkCl p.name (mkA "pyasa") ;
-    ATired p = mkCl p.name (mkA "th-ka hwa") ;
-    AUnderstand p = mkCl p.name (mkV "smjh-na") ;
-    AWant p obj = mkCl p.name (mkV2 (mkV "cahna")) obj ;
+    AThirsty p = mkCl p.name (mkA "پیاسا") ;
+    ATired p = mkCl p.name (mkA "تھكا ہوا") ;
+    AUnderstand p = mkCl p.name (mkV "سمجھنا") ;
+    AWant p obj = mkCl p.name (mkV2 (mkV "چاہنا")) obj ;
 --    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.name) ;
---    AWantGo p place = mkCl p.name (mkVP (mkVP want_VV (mkVP L.go_V)) place.name) ;
+    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
 
 -- miscellaneous
 
@@ -166,41 +168,41 @@ concrete WordsUrd of Words = SentencesUrd **
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYouDate d = mkText (lin Text (ss ("mltE hyN"))) (mkPhrase (mkUtt d)) ;
-    PSeeYouPlace p = mkText (lin Text (ss ("mltE hyN"))) (mkPhrase (mkUtt p.at)) ;
+    PSeeYouDate d = mkText (lin Text (ss ("ملتے ہیں"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlace p = mkText (lin Text (ss ("ملتے ہیں"))) (mkPhrase (mkUtt p.at)) ;
     PSeeYouPlaceDate p d = 
-      mkText (lin Text (ss ("mltE hyN"))) 
+      mkText (lin Text (ss ("ملتے ہیں"))) 
         (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
 
--- Relations are expressed as "my wife" or "my son's wife", as defined by $xOf$
+-- Relations are expressed as "می وiفع" or "می سon'س وiفع", as defined by $xOf$
 -- below. Languages without productive genitives must use an equivalent of
--- "the wife of my son" for non-pronouns.
+-- "تہع وiفع oف می سoن" for non-pronouns.
 
-    Wife = xOf ssing (mkN "bywy") ;
-    Husband = xOf ssing (mkN "Xwhr") ;
-    Son = xOf ssing (mkN "byTa") ;
-    Daughter = xOf ssing (mkN "byTy") ;
+    Wife = xOf ssing (mkN "بیوی") ;
+    Husband = xOf ssing (mkN "شوہر") ;
+    Son = xOf ssing (mkN "بیٹا") ;
+    Daughter = xOf ssing (mkN "بیٹی") ;
     Children = xOf plur L.child_N ;
 
 -- week days
 
-    Monday = mkDay "swmwar" ;
-    Tuesday = mkDay "mngl" ;
-    Wednesday = mkDay "bdh-" ;
-    Thursday = mkDay "jmerat" ;
-    Friday = mkDay "jmeh" ;
-    Saturday = mkDay "hfth" ;
-    Sunday = mkDay "atwar" ;
+    Monday = mkDay "سوموار" ;
+    Tuesday = mkDay "منگل" ;
+    Wednesday = mkDay "بدھ" ;
+    Thursday = mkDay "جمعرات" ;
+    Friday = mkDay "جمعہ" ;
+    Saturday = mkDay "ہفتہ" ;
+    Sunday = mkDay "اتوار" ;
  
-    Tomorrow = P.mkAdv "kl" ;
+    Tomorrow = P.mkAdv "كل" ;
 
 -- modifiers of places
 
     TheBest = mkSuperl L.good_A ;
     TheClosest = mkSuperl L.near_A ; 
-    TheCheapest = mkSuperl (mkA "ssta") ;
-    TheMostExpensive = mkSuperl (mkA "mhnga") ;
-    TheMostPopular = mkSuperl (mkA "mXhwr") ;
+    TheCheapest = mkSuperl (mkA "سستا") ;
+    TheMostExpensive = mkSuperl (mkA "مہنگا") ;
+    TheMostPopular = mkSuperl (mkA "مشہور") ;
     TheWorst = mkSuperl L.bad_A ;
 
     SuperlPlace sup p = placeNP sup p ;
@@ -208,13 +210,13 @@ concrete WordsUrd of Words = SentencesUrd **
 
 -- transports
 
-{-
+
     HowFar place = mkQS (mkQCl far_IAdv place.name) ;
     HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP y.name (SyntaxUrd.mkAdv from_Prep x.name))) ;
     HowFarFromBy x y t = 
       mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxUrd.mkAdv from_Prep x.name)) t)) ;
     HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t)) ;
--} 
+ 
 --    WhichTranspPlace trans place = 
 --      mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
@@ -232,22 +234,23 @@ concrete WordsUrd of Words = SentencesUrd **
 
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
       let day = mkNP (mkPN d) in 
-      mkNPDay day (SyntaxUrd.mkAdv on_Prep day) 
-        (SyntaxUrd.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
+      mkNPDay day (SyntaxUrd.mkAdv to_Prep day) 
+        (SyntaxUrd.mkAdv to_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
     
---    mkCompoundPlace : Str -> Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \comp, p, i ->
+    mkCompoundPlace : Str -> Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \comp, p, i ->
 --     mkCNPlace (mkCN (P.mkN comp (mkN p))) (P.mkPrep i) to_Prep ;
+      mkCNPlace (mkCN (mkN (comp++p))) (P.mkPrep i i) to_Prep ;
 
     mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i -> 
-      mkCNPlace (mkCN (mkN p)) (P.mkPrep i i) to_Prep ; ---- AR mkPrep i i
+      mkCNPlace (mkCN (mkN p)) (P.mkPrep i i) to_Prep ; 
 
-    open_Adv = P.mkAdv "open" ;
-    closed_Adv = P.mkAdv "closed" ;
+    open_Adv = P.mkAdv "كھلا" ;
+    closed_Adv = P.mkAdv "بند" ;
 
     xOf : SentencesUrd.GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
       relativePerson n (mkCN x) (\a,b,c -> mkNP (GenNP b) a c) p ;
 
-    nameOf : NPPerson -> NP = \p -> (xOf ssing (mkN "nam") p).name ;
+    nameOf : NPPerson -> NP = \p -> (xOf ssing (mkN "نام") p).name ;
     ssing = False ;
 
     mkTransport : N -> {name : CN ; by : Adv} = \n -> {
@@ -257,6 +260,8 @@ concrete WordsUrd of Words = SentencesUrd **
 
     mkSuperl : A -> Det = \a -> SyntaxUrd.mkDet the_Art (SyntaxUrd.mkOrd a) ;
     
-----   far_IAdv = ExtraUrd.IAdvAdv (ss "dwr") ;
+   far_IAdv = ExtraUrd.IAdvAdv (P.mkAdv "دور") ;
+-------------------
+modN : N -> N = \noun -> lin N {s = \\n,c =>noun.s!n!c++"كا" ; g =noun.g} ;
 
 }
