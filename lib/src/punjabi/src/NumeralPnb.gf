@@ -28,7 +28,7 @@ lin num x0 =
     } ;
 oper mkOrd : Str -> Str =
  \s -> case s of {
-                    "ek"                  => "pyla";
+                    "ak"                  => "pyla";
                     "dw"                  => "dwja";
                     "tn"                => "dwja";
                     "car"                => "cwth'a";
@@ -64,7 +64,7 @@ oper mkR : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> DSize 
 } ;
 
 oper rows : DSize => DSize => Str = table {
-  sg => mkR "gyar" "ikk" "ikt" "ekta" "ikw" "ika" "ikh" "ik" "iky" ; 
+  sg => mkR "gyar" "akk" "akt" "akta" "akw" "aka" "akh" "ak" "aky" ; 
   r2 => mkR "bar" "ba" "bt" "bay" "by" "bw" "bh" "by" "b" ;
   r3 => mkR "tyr" "ty" "tyt" "tnt" "trt" "trw" "tyh" "tyr" "tr" ;
   r4 => mkR "cwd" "cwb" "cwt" "cwa" "cwt" "cwr" "cwh" "cwr" "cwr" ;
@@ -80,9 +80,9 @@ oper rows : DSize => DSize => Str = table {
 
 oper ss : Str -> {s : Str} = \s -> {s = s} ;
 
-lin pot01 = {s = table {unit => "ak" ; _ => "dummy" } ; size = sg ; n = Sg} ;
+lin pot01 = {s = table {unit => "ak" ; _ => "dmy" } ; size = sg ; n = Sg} ;
 lin pot0 d = d ; 
-lin pot110 = {s = "das" ; size = less100 ; n = Pl} ; 
+lin pot110 = {s = "ds" ; size = less100 ; n = Pl} ; 
 lin pot111 = {s = rows ! sg ! sg ; size = less100 ; n = Pl} ;
 lin pot1to19 d = {s = rows ! d.size ! sg ; size = less100 ; n = d.n} ;
 lin pot0as1 n = {s = n.s ! unit ; size = table {sg => singl ; _ => less100} ! n.size ; n = n.n } ;
@@ -90,7 +90,7 @@ lin pot0as1 n = {s = n.s ! unit ; size = table {sg => singl ; _ => less100} ! n.
 lin pot1 d = {s = d.s ! ten ; size = less100 ; n = d.n} ;
 lin pot1plus d e = {s = rows ! e.size ! d.size ; size = less100 ; n = d.n} ;
 
-lin pot1as2 n = {s = n.s ; s2 = "dummy" ; size = n.size ; n = n.n} ;
+lin pot1as2 n = {s = n.s ; s2 = "dmy" ; size = n.size ; n = n.n} ;
 lin pot2 d = {s = (mksau (d.s ! unit) d.size) ; 
               s2 = d.s ! unit ++ "lkh'" ; size = more100 ; n = d.n} ;
 lin pot2plus d e = 
@@ -122,5 +122,5 @@ lin IIDig d dg = { s = \\df => Prelude.glue (dg.s ! df) d.s ; n = Pl };
 
 oper ekhazar : Str = variants {"hzar" ; "ak" ++ "hzar"} ; 
 oper mkhazar : Str -> Size -> Str = \s -> \sz -> table {singl => ekhazar ; _ => s ++ "hzar"} ! sz ;
-oper mksau : Str -> DSize -> Str = \s -> \sz -> table {sg => "sw" ; _ => s ++ "sw"} ! sz ;
+oper mksau : Str -> DSize -> Str = \s -> \sz -> table {sg => "ak" ++ "sw" ; _ => s ++ "sw"} ! sz ;
 }
