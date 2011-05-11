@@ -3,10 +3,17 @@
 incomplete concrete ExtraHindustani of ExtraHindustaniAbs = CatHindustani ** 
    open CommonHindustani,Coordination,ResHindustani, ParamX in {
   lin
-    GenNP np = {s = \\_,_,_ => np.s ! NPC Obl ++ "ka" ; a = np.a} ;
+--    GenNP np = {s = \\_,_,_ => np.s ! NPC Obl ++ "ka" ; a = np.a} ;
+   GenNP np = {s = \\n,g,c => 
+     case <n,g,c> of {
+     <_,Masc,_> => np.s ! NPC Obl ++ "ka" ;
+     <_,Fem,_> => np.s ! NPC Obl ++ "ky"
+     };
+     
+   a = np.a} ;
 
     each_Det = mkDet  "hr kwy" "hr kwy" "hr kwy" "hr kwy" Sg ;
-    have_V = mkV "rakh-na";
+    have_V = mkV "rakh'na";
     IAdvAdv adv = {s = "ktny" ++ adv.s} ;
     ICompAP ap = {s = "ktnE" ++ ap.s ! Sg ! Masc ! Dir ! Posit} ;
     cost_V = mkV "qymt" ;
