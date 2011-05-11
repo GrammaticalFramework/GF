@@ -130,7 +130,7 @@ flags coding = utf8 ;
     AHasAge p num = mkCl p.name  (mkNP num (mkCN (modN L.year_N)));
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
     AHasRoom p num = mkCl p.name have_V2 
-      (mkNP (mkNP a_Det (mkN "كمرہ")) (SyntaxUrd.mkAdv for_Prep (mkNP num (mkN "شخص")))) ;
+      (mkNP (mkNP a_Det (mkN "كمرہ")) (SyntaxUrd.mkAdv for_Prep (mkNP num (P.mkN "شخص" "شخص" "شخص" "اشخاص" "اشخاص" "شخصو" masculine)))) ;
     AHasTable p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (mkN "میز")) (SyntaxUrd.mkAdv for_Prep (mkNP num (mkN "شخص")))) ;
     AHasName p name = mkCl (nameOf p) name ;
@@ -160,10 +160,10 @@ flags coding = utf8 ;
 
     PropOpen p = mkCl p.name open_Adv ;
     PropClosed p = mkCl p.name closed_Adv ;
-    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_Adv) d) ; 
-    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_Adv) d) ; 
-    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_Adv) d.habitual) ; 
-    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_Adv) d.habitual) ; 
+    PropOpenDate p d = mkCl p.name (mkVP (mkVP d) open_Adv) ; 
+    PropClosedDate p d = mkCl p.name (mkVP (mkVP d) closed_Adv) ; 
+    PropOpenDay p d = mkCl p.name (mkVP (mkVP  d.habitual) open_Adv); 
+    PropClosedDay p d = mkCl p.name (mkVP (mkVP d.habitual) closed_Adv) ; 
 
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;

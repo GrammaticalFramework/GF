@@ -50,7 +50,15 @@ oper
 
 -- Proper names     
   mkPN : Str -> PN = \s -> let n = regNoun s in {s = n.s ! Sg ; g = n.g ; lock_PN = <>} ;
-  personalPN : Str -> Str -> Str -> Str -> Number -> Gender -> UPerson -> Pron = \s1,s2,s3,sp,nn,g,p -> let n = mkPron s1 s2 s3 in {s = n.s ; a = toAgr nn p g ; ps = sp ; lock_Pron = <>};
+  personalPN : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Number -> Gender -> UPerson -> Pron =
+    \s1,s2,s3,smp,sfp,pmp,pfp,nn,g,p -> let n = mkPron s1 s2 s3 in
+      {s = n.s ;
+       a = toAgr nn p g ;
+       ps = \\n,g => case <n,g> of {
+                        <Sg,Masc> =>smp ;
+			<Sg,Fem> => sfp ;
+			<Pl,Masc> => pmp ;
+			<Pl,Fem> => pfp } ; lock_Pron = <>};
   demoPN : Str -> Str -> Str -> Quant = \s1,s2,s3 -> let n = makeDemonPronForm s1 s2 s3 in {s = n.s ; a = defaultAgr ; lock_Quant = <>};
   mkDet : Str -> Str -> Str -> Str -> Number -> Det = \s1,s2,s3,s4,nb -> let dt = makeDet s1 s2 s3 s4 nb in {s = dt.s ; n = nb ; lock_Det = <>};
   mkIP : (x1,x2,x3:Str) -> Number -> Gender -> IP = \s1,s2,s3,n,g -> let p = mkIntPronForm s1 s2 s3 in { s = p.s ; n = n ; g = g ;  lock_IP = <>}; 

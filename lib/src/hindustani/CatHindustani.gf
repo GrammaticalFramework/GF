@@ -55,7 +55,8 @@ incomplete concrete CatHindustani of Cat =
 
     CN = ResHindustani.Noun ;
     NP = CommonHindustani.NP ;
-    Pron = {s : Case => Str ; ps : Str ; a : Agr};
+ --   Pron = {s : Case => Str ; ps : Str ; gs : Str ; a : Agr};
+    Pron = {s : Case => Str ; ps : Number => Gender => Str ; a : Agr};
     Det = ResHindustani.Determiner ;
     Predet = {s : Str} ;
     Num  = {s : Str ; n : Number} ;

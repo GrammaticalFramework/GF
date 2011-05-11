@@ -51,7 +51,7 @@ incomplete concrete NounHindustani of Noun =
       a = agrP3 Masc Sg
       } ;
 
-    PossPron p = {s = \\_,_,_ => p.ps ; a = p.a} ;
+    PossPron p = {s = \\n,g,_ => p.ps ! n ! g ; a = p.a} ;
 
     NumSg = {s = []; n = Sg} ;
     NumPl = {s = []; n = Pl} ;
