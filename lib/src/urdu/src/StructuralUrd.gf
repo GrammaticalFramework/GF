@@ -111,7 +111,7 @@ concrete StructuralUrd of Structural = CatUrd **
   yes_Utt = ss "haN" ;
   youSg_Pron = personalPN "tw" "tw" "tw" "tyra" "tyry" "tyrE" "tyry" Sg Masc Pers2_Casual ;
   youPl_Pron = personalPN "tm" "tm" "tm" "tmh'ara" "tmh'ary" "tmh'arE" "tmh'ary" Pl Masc Pers2_Casual ;
-  youPol_Pron = personalPN "Ap" "Ap" "Ap" ["Ap ka"] ["Ap ky"] ["Ap kE"] ["Ap ky"] Sg Masc Pers2_Respect  ;
+  youPol_Pron = personalPN "Ap" "Ap" "Ap" ["Ap ka"] ["Ap ky"] ["Ap kE"] ["Ap ky"] Pl Masc Pers2_Respect  ;
   no_Quant =  demoPN " kwy nhyN" "kwy nhyN" "kwy nhyN" ; 
   not_Predet = {s="nhyN"} ;
   if_then_Conj = sd2 "agr" "tw" ** {n = Sg} ; 

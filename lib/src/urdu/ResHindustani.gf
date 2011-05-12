@@ -44,7 +44,7 @@ param
     Preposition = {s : Gender => Str};
     DemPronForm = {s : Number => Gender => Case => Str};
     PossPronForm = {s : Number => Gender => Case => Str};
-    Determiner = {s : Number => Gender => Str ; n : Number};
+    Determiner = {s : Number => Gender => Case => Str ; n : Number};
   
 -- a useful oper
     eq : Str -> Str -> Bool = \s1,s2-> (pbool2bool (eqStr s1 s2)) ; 
@@ -64,14 +64,14 @@ param
       } ;
   detcn2NP : (Determiner) -> Noun -> NPCase -> Number -> Str = \dt,cn,npc,nn -> case npc of {
 --       NPC c => dt.s ! Sg ! Masc ++ cn.s ! nn ! c ; --changed while phrasebook e.g tyry beti where gender of determiner 'tyry' should be dependent on gender of common noum e.g 'beti' 
-       NPC c => dt.s ! nn ! cn.g ++ cn.s ! nn ! c ;
-       NPObj => dt.s ! nn ! cn.g ++ cn.s ! nn ! Dir ;
-       NPErg => dt.s ! nn ! cn.g ++ cn.s ! nn ! Obl ++ "نے"
+       NPC c => dt.s ! nn ! cn.g ! c ++ cn.s ! nn ! c ;
+       NPObj => dt.s ! nn ! cn.g ! Dir ++ cn.s ! nn ! Dir ;
+       NPErg => dt.s ! nn ! cn.g ! Obl ++ cn.s ! nn ! Obl ++ "نے"
       } ;  
   det2NP : (Determiner) -> NPCase -> Str = \dt,npc -> case npc of {
-       NPC c => dt.s ! Sg ! Masc ;
-       NPObj => dt.s ! Sg ! Masc ;
-       NPErg => dt.s ! Sg  ! Masc ++ "نے"
+       NPC c => dt.s ! Sg ! Masc ! c ;
+       NPObj => dt.s ! Sg ! Masc ! Dir ;
+       NPErg => dt.s ! Sg  ! Masc ! Obl ++ "نے"
       } ;    
 	  
 ------------------------------------------

@@ -2,7 +2,8 @@
 
 concrete WordsUrd of Words = SentencesUrd ** 
     open 
-      SyntaxUrd, 
+      SyntaxUrd,
+      CommonHindustani,
       ParadigmsUrd, 
       (L = LexiconUrd), 
       (P = ParadigmsUrd), 
@@ -65,12 +66,12 @@ flags coding = utf8 ;
     Pub = mkPlace "پب" "میں" ;
     Restaurant = mkPlace "ہوٹل" "میں" ;
     School = mkPlace "سكول" "میں" ;
-    Shop = mkPlace "دوكان" "میں" ;
+    Shop = mkPlaceFem "دوكان" "میں" Fem;
     Station = mkPlace "سٹیشن" "پر" ;
     Supermarket = mkPlace "سپر ماركیٹ" "میں" ; 
     Theatre = mkPlace "تھیٹر" "پر" ;
     Toilet = mkPlace "غسل خانہ" "میں" ;
-    University = mkPlace "یونیورسٹی" "میں" ;
+    University = mkPlaceFem "یونیورسٹی" "میں" Fem;
     Zoo = mkPlace "چڑیا گھر" "میں" ;
    
     CitRestaurant cit = mkCNPlace (mkCN cit (mkN "ہوٹل")) in_Prep to_Prep ;
@@ -142,10 +143,10 @@ flags coding = utf8 ;
     ALove p q = mkCl p.name (L.love_V2) q.name ;
     AMarried p = mkCl p.name (mkA "شادی شدہ") ;
     AReady p = mkCl p.name (mkA "تیار") ;
-    AScared p = mkCl p.name (mkA "ڈرا ہوا") ;
+    AScared p = mkCl p.name (P.mkCompoundA "ڈرا" "ہوا") ;
     ASpeak p lang = mkCl p.name  L.speak_V2 lang ;
     AThirsty p = mkCl p.name (mkA "پیاسا") ;
-    ATired p = mkCl p.name (mkA "تھكا ہوا") ;
+    ATired p = mkCl p.name (P.mkCompoundA "تھكا" "ہوا") ;
     AUnderstand p = mkCl p.name (mkV "سمجھنا") ;
     AWant p obj = mkCl p.name (mkV2 (mkV "چاہنا")) obj ;
 --    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.name) ;
@@ -154,7 +155,7 @@ flags coding = utf8 ;
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
-----    QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
+--    QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
 --    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregUrd.cost_V)) ; 
 --    ItCost item price = mkCl item (mkV2 IrregUrd.cost_V) price ;
 
@@ -168,10 +169,10 @@ flags coding = utf8 ;
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYouDate d = mkText (lin Text (ss ("ملتے ہیں"))) (mkPhrase (mkUtt d)) ;
-    PSeeYouPlace p = mkText (lin Text (ss ("ملتے ہیں"))) (mkPhrase (mkUtt p.at)) ;
+    PSeeYouDate d = mkText (lin Text (Prelude.ss ("ملتے ہیں"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlace p = mkText (lin Text (Prelude.ss ("ملتے ہیں"))) (mkPhrase (mkUtt p.at)) ;
     PSeeYouPlaceDate p d = 
-      mkText (lin Text (ss ("ملتے ہیں"))) 
+      mkText (lin Text (Prelude.ss ("ملتے ہیں"))) 
         (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
 
 -- Relations are expressed as "می وiفع" or "می سon'س وiفع", as defined by $xOf$
@@ -235,16 +236,18 @@ flags coding = utf8 ;
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
       let day = mkNP (mkPN d) in 
       mkNPDay day (SyntaxUrd.mkAdv to_Prep day) 
-        (SyntaxUrd.mkAdv to_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
+        (SyntaxUrd.mkAdv to_Prep (mkNP a_Quant sgNum (mkCN (mkN d)))) ; --changed from plNum to sgNum
     
     mkCompoundPlace : Str -> Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \comp, p, i ->
 --     mkCNPlace (mkCN (P.mkN comp (mkN p))) (P.mkPrep i) to_Prep ;
       mkCNPlace (mkCN (mkN (comp++p))) (P.mkPrep i i) to_Prep ;
 
     mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i -> 
-      mkCNPlace (mkCN (mkN p)) (P.mkPrep i i) to_Prep ; 
+      mkCNPlace (mkCN (mkN p)) (P.mkPrep i i) to_Prep ;
+    mkPlaceFem : Str -> Str -> Gender -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i,g -> 
+      mkCNPlace (mkCN (P.mkN p g)) (P.mkPrep i i) to_Prep ;  
 
-    open_Adv = P.mkAdv "كھلا" ;
+    open_Adv = P.mkAdv "كھلا" "كھلی";
     closed_Adv = P.mkAdv "بند" ;
 
     xOf : SentencesUrd.GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 

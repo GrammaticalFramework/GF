@@ -75,6 +75,10 @@ oper
     } ;
   mkA2 : A -> Str -> A2 ;
   mkA2 a str = a ** {c2=str ; lock_A2 = <>} ;
+  
+-- compound Adjectives
+  mkCompoundA : Str -> Str -> A ; -- e.g dra hwa
+  mkCompoundA s1 s2 = compoundAdj s1 s2 ;
 
 --2 Verbs
 
@@ -108,8 +112,12 @@ oper
  
 
 ----2 Adverbs
+mkAdv = overload {
   mkAdv : Str -> Adv -- e.g yhaN
     = \str -> {s = \\_ => str ; lock_Adv = <>};
+  mkAdv : Str -> Str -> Adv
+    = \m,f -> {s = table {Masc => m ; Fem => f} ; lock_Adv = <>};
+    };
 
 ----2 Prepositions
 

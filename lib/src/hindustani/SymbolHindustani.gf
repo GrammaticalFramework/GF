@@ -15,7 +15,7 @@ incomplete concrete SymbolHindustani of Symbol =
     a = agrP3 cn.g Sg
     } ;
   CNSymbNP det cn xs = {
-    s = \\c => det.s!Sg!Masc ++ cn.s ! det.n ! Dir ++  xs.s ; 
+    s = \\c => det.s ! det.n ! Masc ! Dir ++ cn.s ! det.n ! Dir ++  xs.s ;  -- may be need to refine it i.e instead of using \\c should use table and then corresponding forms from det 
     a = agrP3 cn.g det.n
     } ;
   CNNumNP cn i = {
