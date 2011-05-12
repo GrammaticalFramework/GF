@@ -173,13 +173,13 @@ oper
   IDeterminer = {s:Gender => Case => Str ; n : Number};
   makeDet : Str -> Str -> Str -> Str -> Number -> Determiner = \s1,s2,s3,s4,n -> {
    s = table {
-      Sg => table {
-        Masc => s1 ;
-        Fem => s2 
+      Sg => table { 
+        Masc => table {_ => s1} ;
+        Fem => table {_ => s2} 
 	  } ;
       Pl => table {
-        Masc => s3 ;
-        Fem => s4 
+        Masc => table { _ => s3} ;
+        Fem => table {_ => s4} 
 	  }
       } ;
 

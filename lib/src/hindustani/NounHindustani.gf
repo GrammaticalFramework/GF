@@ -36,13 +36,13 @@ incomplete concrete NounHindustani of Noun =
 
     DetQuantOrd quant num ord = {
 --      s = \\ c => detquant2det quant.s num.s c  ++ ord.s ; 
-        s = \\n,g => quant.s!n!g!Dir ++ num.s ++ ord.s ;
+        s = \\n,g,c => quant.s!n!g!c ++ num.s ++ ord.s ;
       n = num.n
       } ;
 
     DetQuant quant num = {
 --      s = \\c => detquant2det quant.s num.s c; 
-        s = \\n,g => quant.s!n!g!Dir ++ num.s;
+        s = \\n,g,c => quant.s!n!g!c ++ num.s;
 	  n = num.n
       } ;
 
@@ -51,7 +51,12 @@ incomplete concrete NounHindustani of Noun =
       a = agrP3 Masc Sg
       } ;
 
-    PossPron p = {s = \\n,g,_ => p.ps ! n ! g ; a = p.a} ;
+--    PossPron p = {s = \\n,g,_ => p.ps ! n ! g ; a = p.a} ;
+    PossPron p = {s = \\n,g,c =>  case c of {
+                                   Obl => p.ps ! Pl ! g ;
+				   _   => p.ps ! n ! g
+				   };
+		  a = p.a} ;
 
     NumSg = {s = []; n = Sg} ;
     NumPl = {s = []; n = Pl} ;

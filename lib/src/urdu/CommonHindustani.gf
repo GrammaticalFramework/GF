@@ -247,6 +247,10 @@ resource CommonHindustani = ParamX  ** open Prelude,Predef in {
                         }
                     }
             };
+	    
+   compoundAdj : Str -> Str -> Adjective = \s1,s2 -> mkCompoundAdj (regAdjective s1) (regAdjective s2) ;
+   mkCompoundAdj : Adjective -> Adjective -> Adjective ;
+   mkCompoundAdj adj1 adj2 = {s = \\n,g,c,d => adj1.s ! n ! g ! c ! d ++ adj2.s ! n ! g ! c ! d} ;
 	
    Verb : Type = {s : VerbForm => Str} ;
 

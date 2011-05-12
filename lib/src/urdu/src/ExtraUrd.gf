@@ -7,7 +7,9 @@ flags coding = utf8 ;
  --   GenNP np = {s = \\_,_,_ => np.s ! NPC Obl ++ "ka" ; a = np.a} ;
   GenNP np = {s = \\n,g,c => 
      case <n,g,c> of {
-     <_,Masc,_> => np.s ! NPC Obl ++ "ka" ;
+     <Sg,Masc,Obl> => np.s ! NPC Obl ++ "kE" ;
+     <Sg,Masc,_> => np.s ! NPC Obl ++ "ka" ;
+     <Pl,Masc,_> => np.s ! NPC Obl ++ "kE" ;
      <_,Fem,_> => np.s ! NPC Obl ++ "ky"
      };
      

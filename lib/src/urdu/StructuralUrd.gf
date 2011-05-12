@@ -111,7 +111,7 @@ concrete StructuralUrd of Structural = CatUrd **
   yes_Utt = ss "ہاں" ;
   youSg_Pron = personalPN "تو" "تو" "تو" "تیرا" "تیری" "تیرے" "تیری" Sg Masc Pers2_Casual ;
   youPl_Pron = personalPN "تم" "تم" "تم" "تمھارا" "تمھاری" "تمھارے" "تمھاری" Pl Masc Pers2_Casual ;
-  youPol_Pron = personalPN "آپ" "آپ" "آپ" ["آپ كا"] ["آپ كی"] ["آپ كے"] ["آپ كی"] Sg Masc Pers2_Respect  ;
+  youPol_Pron = personalPN "آپ" "آپ" "آپ" ["آپ كا"] ["آپ كی"] ["آپ كے"] ["آپ كی"] Pl Masc Pers2_Respect  ;
   no_Quant =  demoPN " كوی نہیں" "كوی نہیں" "كوی نہیں" ; 
   not_Predet = {s="نہیں"} ;
   if_then_Conj = sd2 "اگر" "تو" ** {n = Sg} ; 

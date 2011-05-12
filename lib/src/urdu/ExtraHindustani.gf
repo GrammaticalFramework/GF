@@ -4,12 +4,12 @@ incomplete concrete ExtraHindustani of ExtraHindustaniAbs = CatHindustani **
    open CommonHindustani,Coordination,ResHindustani, ParamX in {
   lin
 --    GenNP np = {s = \\_,_,_ => np.s ! NPC Obl ++ "كا" ; a = np.a} ;
-   GenNP np = {s = table {
-     case <g,n,c> of {
-     <Masc,_,_> => np.s ! NPC Obl ++ "كا" ;
-     <Fem,_,_> => np.s ! NPC Obl ++ "كی"
+   GenNP np = {s = \\n,g,c => 
+     case <n,g,c> of {
+     <_,Masc,_> => np.s ! NPC Obl ++ "كا" ;
+     <_,Fem,_> => np.s ! NPC Obl ++ "كی"
      };
-     };
+     
    a = np.a} ;
 
     each_Det = mkDet  "ہر كوی" "ہر كوی" "ہر كوی" "ہر كوی" Sg ;
