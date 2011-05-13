@@ -86,10 +86,10 @@ lin RelSlash rp slash = variants { RelativeEng.RelSlash rp slash; StrandRelSlash
 -- Allow both "who"/"which" and "that"
 lin IdRP = 
      { s = table {
-        RC _ Gen    => "whose" ; 
+        RC _ (NCase Gen)    => "whose" ; 
         RC Neutr _  => variants { "which"; "that"; {- for dictionary entries with the wrong gender -} "who" } ;
-        RC _ Acc    => variants { "whom"; "that"; {- incorrect but common -} "who" } ;
-        RC _ Nom    => variants { "who" ; "that" } ;
+        RC _ NPAcc    => variants { "whom"; "that"; {- incorrect but common -} "who" } ;
+        RC _ (NCase Nom)    => variants { "who" ; "that" } ;
         RPrep _     => variants { "which"; "whom"; {- incorrect but common -}  "who" }
         } ;
       a = RNoAg
@@ -118,12 +118,12 @@ lin
       } ;
 
     CAdvNP ad cn np = {
-      s = \\c => ad.s ++ cn.s ! Sg ! c ++ ad.p ++ np.s ! Nom ; 
+      s = \\c => ad.s ++ cn.s ! Sg ! npcase2case c ++ ad.p ++ np.s ! npNom ; 
       a = agrP3 Sg
       } ;
 
     CAdvSSlash ad cn slash = {
-      s = \\c => ad.s ++ cn.s ! Sg ! c ++ ad.p ++ slash.s ++ slash.c2;
+      s = \\c => ad.s ++ cn.s ! Sg ! npcase2case c ++ ad.p ++ slash.s ++ slash.c2;
       a = agrP3 Sg
       } ;
 
