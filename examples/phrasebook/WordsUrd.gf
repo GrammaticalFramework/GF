@@ -155,9 +155,9 @@ flags coding = utf8 ;
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
---    QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
---    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregUrd.cost_V)) ; 
---    ItCost item price = mkCl item (mkV2 IrregUrd.cost_V) price ;
+    QWhatAge p = mkQS (mkQCl (mkCl (mkNP (modQuant p.poss)) (mkAdv "عمر"))) ;
+    HowMuchCost item = mkQS (mkQCl (mkCl (modNP item) (mkAdv ["كی قیمت"]))) ; 
+    ItCost item price = mkCl item (mkV2 (mkV "قیمت")) price ;
 
     PropOpen p = mkCl p.name open_Adv ;
     PropClosed p = mkCl p.name closed_Adv ;
@@ -218,8 +218,8 @@ flags coding = utf8 ;
       mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxUrd.mkAdv from_Prep x.name)) t)) ;
     HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t)) ;
  
---    WhichTranspPlace trans place = 
---      mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
+    WhichTranspPlace trans place = 
+      mkQS (mkQCl (SyntaxUrd.mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
     IsTranspPlace trans place =
       mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
@@ -261,10 +261,13 @@ flags coding = utf8 ;
       by = SyntaxUrd.mkAdv by8means_Prep (mkNP n)
       } ;
 
-    mkSuperl : A -> Det = \a -> SyntaxUrd.mkDet the_Art (SyntaxUrd.mkOrd a) ;
+--    mkSuperl : A -> Det = \a -> SyntaxUrd.mkDet the_Art (SyntaxUrd.mkOrd a) ;
+      mkSuperl : A -> Det = \a -> lin Det { s = \\n,g,c => a.s ! n ! g ! c ! Posit ; n = Sg } ;
     
    far_IAdv = ExtraUrd.IAdvAdv (P.mkAdv "دور") ;
 -------------------
 modN : N -> N = \noun -> lin N {s = \\n,c =>noun.s!n!c++"كا" ; g =noun.g} ;
+modQuant : Quant -> Quant = \q -> lin Quant {s = \\n,g,c => q.s ! n ! Fem ! c ; a = q.a};
+modNP : NP -> NP = \np -> lin NP {s = \\_ => np.s ! NPC Obl  ; a = np.a};
 
 }

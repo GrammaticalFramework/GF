@@ -65,7 +65,7 @@ param
   detcn2NP : (Determiner) -> Noun -> NPCase -> Number -> Str = \dt,cn,npc,nn -> case npc of {
 --       NPC c => dt.s ! Sg ! Masc ++ cn.s ! nn ! c ; --changed while phrasebook e.g tyry beti where gender of determiner 'tyry' should be dependent on gender of common noum e.g 'beti' 
        NPC c => dt.s ! nn ! cn.g ! c ++ cn.s ! nn ! c ;
-       NPObj => dt.s ! nn ! cn.g ! Dir ++ cn.s ! nn ! Dir ;
+       NPObj => dt.s ! nn ! cn.g ! Obl ++ cn.s ! nn ! Dir ; 
        NPErg => dt.s ! nn ! cn.g ! Obl ++ cn.s ! nn ! Obl ++ "نے"
       } ;  
   det2NP : (Determiner) -> NPCase -> Str = \dt,npc -> case npc of {
