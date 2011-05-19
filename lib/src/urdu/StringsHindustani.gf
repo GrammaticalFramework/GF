@@ -16,5 +16,6 @@ oper
   waN = "واں" ;
 
   comma = "," ;
+  indfArt = "ایك" ;
 
 }

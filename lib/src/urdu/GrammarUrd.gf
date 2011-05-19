@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../prelude:c:/gf_unicoded/hindustani
+--# -path=.:../abstract:../common:../prelude
 
  concrete GrammarUrd of Grammar = 
   NounUrd, 
@@ -11,7 +11,8 @@
   RelativeUrd,
   ConjunctionUrd,
   PhraseUrd,
-  TextX - [Adv,AdN],
+  TextUrd - [Adv,AdN],
+--  TextX - [Adv,AdN],
   StructuralUrd,
   TenseX - [Adv,AdN],
   IdiomUrd
