@@ -16,5 +16,6 @@ oper
   waN = "waN" ;
 
   comma = "," ;
+  indfArt = "ayk" ;
 
 }

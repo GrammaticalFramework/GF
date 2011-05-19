@@ -18,7 +18,7 @@ flags coding = utf8 ;
     Apple = mkCN L.apple_N ;
     Beer = mkCN L.beer_N ;
     Bread = mkCN L.bread_N ;
-    Cheese = mkCN (mkN "پنیر") ;
+    Cheese = mkCN (mkN "پنیر" Fem) ;
     Chicken = mkCN (mkN "مرغی") ;
     Coffee = mkCN (mkN "كافی") ;
     Fish = mkCN L.fish_N ;
@@ -26,8 +26,8 @@ flags coding = utf8 ;
     Milk = mkCN L.milk_N ;
     Pizza = mkCN (mkN "پیزہ") ;
     Salt = mkCN L.salt_N ;
-    Tea = mkCN (mkN "چاے") ;
-    Water = mkCN L.water_N ;
+    Tea = mkCN (mkN "چاے" Fem) ;
+    Water = mkCN L.water_N;
     Wine = mkCN L.wine_N ;
 
 -- Properties; many of them are in the resource lexicon, others can be built by $mkA$.
@@ -88,7 +88,7 @@ flags coding = utf8 ;
     Pound = mkCN (mkN "پاونڈ") ;
     Rouble = mkCN (mkN "روبل") ;
     SwedishCrown = mkCN (mkA "سویڈش") (mkN "كراون") | mkCN (mkN "كراون") ;
-    Zloty = mkCN (mkN "زلوٹی") ;
+    Zloty = mkCN (mkN "زلوٹی" Fem) ;
 
 -- Nationalities
 
@@ -114,14 +114,14 @@ flags coding = utf8 ;
 -- Means of transportation 
  
    Bike = mkTransport L.bike_N ;
-   Bus = mkTransport (mkN "بس") ;
+   Bus = mkTransport (mkN "بس" Fem) ;
    Car = mkTransport L.car_N ;
    Ferry = mkTransport (mkN "فیری") ;
    Plane = mkTransport L.airplane_N ;
    Subway = mkTransport (mkN "سب وے") ;
    Taxi = mkTransport (mkN "ٹیكسی") ;
    Train = mkTransport (mkN "ریل گاڑی") ;
-   Tram = mkTransport (mkN "ٹرام") ;
+   Tram = mkTransport (mkN "ٹرام" Fem) ;
 
    ByFoot = P.mkAdv "پیدل" ;
 
@@ -133,7 +133,7 @@ flags coding = utf8 ;
     AHasRoom p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (mkN "كمرہ")) (SyntaxUrd.mkAdv for_Prep (mkNP num (P.mkN "شخص" "شخص" "شخص" "اشخاص" "اشخاص" "شخصو" masculine)))) ;
     AHasTable p num = mkCl p.name have_V2 
-      (mkNP (mkNP a_Det (mkN "میز")) (SyntaxUrd.mkAdv for_Prep (mkNP num (mkN "شخص")))) ;
+      (mkNP (mkNP a_Det (mkN "میز")) (SyntaxUrd.mkAdv for_Prep (mkNP num (P.mkN "شخص" "شخص" "شخص" "اشخاص" "اشخاص" "شخصو" masculine)))) ;
     AHasName p name = mkCl (nameOf p) name ;
     AHungry p = mkCl p.name (mkA "بھوكا") ;
     AIll p = mkCl p.name (mkA "بیمار") ;

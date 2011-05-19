@@ -86,7 +86,7 @@ incomplete concrete NounHindustani of Noun =
       } ;
 
     DefArt = {s = \\_,_,_ => [] ; a = defaultAgr} ;
-    IndefArt = {s = \\_,_,_ => [] ; a =defaultAgr } ;
+    IndefArt = {s = \\n,_,_ => case n of {Sg => indfArt ; Pl => []} ; a =defaultAgr } ;
 
     MassNP cn = {s = \\c => toNP (cn.s ! Sg) c ; a = agrP3 cn.g Sg} ;
 
