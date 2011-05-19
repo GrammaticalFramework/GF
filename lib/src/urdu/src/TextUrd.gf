@@ -4,8 +4,8 @@ concrete TextUrd of Text = CommonX - [Temp,TTAnt,Tense,TPres,TPast,TFut,TCond] *
 
   lin
     TEmpty = {s = []} ;
-    TFullStop x xs = {s = x.s ++ "." ++ xs.s} ;
-    TQuestMark x xs = {s = x.s ++ "?" ++ xs.s} ;
+    TFullStop x xs = {s = x.s ++ "" ++ xs.s} ;
+    TQuestMark x xs = {s = x.s ++ "" ++ xs.s} ;
     TExclMark x xs = {s = x.s ++ "" ++ xs.s} ;
 
 }

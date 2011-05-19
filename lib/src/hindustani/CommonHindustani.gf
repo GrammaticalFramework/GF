@@ -163,10 +163,11 @@ resource CommonHindustani = ParamX  ** open Prelude,Predef in {
 						      (acch +"E")  ("bht" ++ acch + "E") ("sb sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E")
 		                                      (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y");
 									
-                        _                 => mkAdjective  x x x x x x x x x
-                                                        x x x x x x x x x
-                                                        x x x x x x x x x
-                                                        x x x x x x x x x									 
+                        _                 => mkAdjective  x  ("bht" ++ x)  	("sb sE" ++ x)  x ("bht" ++ x) ("sb sE" ++ x) x ("bht" ++ x) ("sb sE" ++ x)
+							  x  ("bht" ++ x) 	("sb sE" ++ x) 	x ("bht" ++ x) ("sb sE" ++ x) x ("bht" ++ x) ("sb sE" ++ x)
+							  x  ("bht" ++ x) 	("sb sE" ++ x)  x ("bht" ++ x) ("sb sE" ++ x) x ("bht" ++ x) ("sb sE" ++ x)
+							  x  ("bht" ++ x) 	("sb sE" ++ x)  x ("bht" ++ x) ("sb sE" ++ x) x ("bht" ++ x) ("sb sE" ++ x)
+																 
                             }; 
 					 
 
