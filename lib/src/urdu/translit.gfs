@@ -9,5 +9,6 @@ rf -file=src/LexiconUrd.gf | ps -env=quotes -to_urdu | wf -file=LexiconUrd.gf
 rf -file=src/MorphoUrd.gf | ps -env=quotes -to_urdu | wf -file=MorphoUrd.gf
 rf -file=src/StructuralUrd.gf | ps -env=quotes -to_urdu | wf -file=StructuralUrd.gf
 rf -file=src/NumeralUrd.gf | ps -env=quotes -to_urdu | wf -file=NumeralUrd.gf
+rf -file=src/TextUrd.gf | ps -env=quotes -to_urdu | wf -file=TextUrd.gf
 
 
