@@ -206,7 +206,7 @@ lin
    village_N = regMN "poble" ;
    wait_V2 = mkV2 (regV "esperar") dative ;
    walk_V = regV "caminar" ;
-   warm_A = regADeg "tebi" ;
+   warm_A = compADeg (mkA "tebi" "tèbia" "tebis" "tèbies" "tèbiament") ;
    war_N = regFN "guerra" ;
    watch_V2 = dirV2 (regV "mirar") ;
    water_N = regFN "aigua" ;
