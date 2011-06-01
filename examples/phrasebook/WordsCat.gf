@@ -39,7 +39,7 @@ lin
     Expensive = expensive_A ; 
     Fresh = mkA "fresc" ;
     Good = L.good_A ;
-    Suspect = mkA "sospitós" ;
+    Suspect = mkA "sospitós" "sospitosa" "sospitosos" "sospitoses" "sospitosament" ;
     Warm = L.warm_A ;
 
 -- places
@@ -92,24 +92,24 @@ lin
 
 -- nationalities
 
-    Belgian = mkA "belga" ;
+    Belgian = mkA "belga" "belga" "belgues" "belgues" "a la Belga" ;
     Belgium = mkNP (mkPN "Bèlgica") ;
-	Bulgarian = mkNat "búlgar" "Bulgària" ;
-	Catalan = mkNat "català" "Catalunya" ; -- "catalana" "catalans" "catalanes" "a la catalana" ;
-	Danish = mkNat "danès" "Dinamarca" ; -- mkA "danès" "danesa" "danesos" "daneses" "a la danesa" ;
-	Dutch = mkNat "holandès" "Holanda" ; 
-    English = mkNat "anglès" "Anglaterra" ;
-    Finnish = mkNat "finès" "Finlàndia" ;
+	Bulgarian = mkNat3 "búlgar" "búlgara" "búlgars" "búlgueres" "Bulgària" ;
+	Catalan = mkNat5 "catal" "Catalunya" ;
+	Danish = mkNat4 "dan" "Dinamarca" ; 
+	Dutch = mkNat4 "holand" "Holanda" ; 
+    English = mkNat4 "angl" "Anglaterra" ;
+    Finnish = mkNat4 "fin" "Finlàndia" ;
     Flemish = mkNP (mkPN "flamenc") ;
-    French = mkNat "francès" "França" ;
-    German = mkNat "alemany" "Alemania" ;
-    Italian = mkNat "italià" "Itàlia" ;
-    Norwegian = mkNat "noruec" "Noruega" ; -- mkA "noruec" "noruega" "noruecs" "noruegues" "a la noruega" ;
-    Polish = mkNat "polonès" "Polònia" ; 
-    Romanian = mkNat "romanès" "Romania" ;
-    Russian = mkNat "rus" "Rússia" ;
-    Spanish = mkNat "espanyol" "Espanya" ;
-    Swedish = mkNat "suec" "Suècia" ;
+    French = mkNat4 "franc" "França" ;
+    German = mkNat3 "alemany" "alemenya" "alemanys" "alemanyes" "Alemania" ;
+    Italian = mkNat5 "itali" "Itàlia" ;
+    Norwegian = mkNat3 "noruec" "noruega" "noruecs" "noruegues" "Noruega" ;
+    Polish = mkNat4 "polon" "Polònia" ; 
+    Romanian = mkNat4 "roman" "Romania" ;
+    Russian = mkNat3 "rus" "russa" "russos" "russes" "Rússia" ;
+    Spanish = mkNat3 "espanyol" "espanyola" "espanyols" "espanyoles" "Espanya" ;
+    Swedish = mkNat3 "suec" "sueca" "suecs" "sueques" "Suècia" ;
 
 
 -- means of transportation 
@@ -251,6 +251,18 @@ lin
     mkNat : Str -> Str -> NPNationality = \nat,co -> 
       mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
 
+    mkNat2 : A -> Str -> Str -> NPNationality = \adj,nat,co -> 
+      mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) adj ;
+
+	mkNat3 : (_,_,_,_:Str) -> Str -> NPNationality = \ms,fs,mp,fp,co -> 
+      mkNPNationality (mkNP (mkPN ms)) (mkNP (mkPN co)) (mkA ms fs mp fp ("a la" ++ fs)) ;
+
+	mkNat4 : Str -> Str -> NPNationality = \angl,co ->
+	  mkNat3 (angl+"ès") (angl+"esa") (angl+"esos") (angl+"eses") co ;
+	
+	mkNat5 : Str -> Str -> NPNationality = \catal,co ->
+	  mkNat3 (catal+"à") (catal+"ana") (catal+"ans") (catal+"anes") co ;
+	
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
       let day = mkNP (mkPN d)
       in mkNPDay day (P.mkAdv ("el" ++ d)) (P.mkAdv ("el" ++ d)) ; ---- ?
