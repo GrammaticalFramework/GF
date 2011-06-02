@@ -6,13 +6,14 @@ concrete ParseEng of ParseEngAbs =
   AdjectiveEng,
   AdverbEng,
   NumeralEng,
-  SentenceEng - [UseCl, UseQCl, UseRCl],
+  SentenceEng, --- - [UseCl, UseQCl, UseRCl],
   QuestionEng,
   RelativeEng - [IdRP, RelSlash],
   ConjunctionEng,
-  PhraseEng - [UttImpSg, UttImpPl],
-  TextX,
-  TenseX,
+  PhraseEng, --- - [UttImpSg, UttImpPl],
+  TextX - [Pol,PNeg,PPos],
+  TenseX - [Pol,PNeg,PPos],
+  GrammarEng [Pol,PNeg,PPos],
   StructuralEng - [above_Prep, everywhere_Adv, everybody_NP, every_Det, only_Predet, somebody_NP],
   IdiomEng,
 
@@ -43,6 +44,9 @@ flags startcat = Phr ; unlexer = text ; lexer = text ;
 -- Allow both "hope that he runs" and "hope he runs".
 lin ComplVS v s = variants { VerbEng.ComplVS v s; ComplBareVS v s } ;
 
+{-
+--- this can now be done by just using ExtraEng.UncNeg : Pol
+
 -- Allow both contracted and uncontracted negated clauses.
 lin UseCl t p cl = 
       case p.p of {
@@ -64,15 +68,16 @@ lin UseRCl t p cl =
 
 lin UttImpSg p i = 
       case p.p of {
-	Pos => PhraseEng.UttImpSg p i;
-	Neg => variants { PhraseEng.UttImpSg p i ; UncNegImpSg p i }
+	CPos => PhraseEng.UttImpSg p i;
+	CNeg _ => variants { PhraseEng.UttImpSg p i ; UncNegImpSg p i }
       } ;
 
 lin UttImpPl p i = 
       case p.p of {
-	Pos => PhraseEng.UttImpPl p i;
-	Neg => variants { PhraseEng.UttImpPl p i ; UncNegImpPl p i }
+	CPos => PhraseEng.UttImpPl p i;
+	CNeg _ => variants { PhraseEng.UttImpPl p i ; UncNegImpPl p i }
       } ;
+-}
 
 -- Two different forms of relative clauses:
 -- Pied piping: "at which we are looking". 
