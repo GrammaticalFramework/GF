@@ -1,13 +1,8 @@
 abstract ExtraEngAbs = Extra - [ProDrop] ** {
 
--- uncontracted negations; contracted are the default
-  fun
-    UncNegCl  : Temp -> Pol -> Cl  -> S ;
-    UncNegQCl : Temp -> Pol -> QCl -> QS ;
-    UncNegRCl : Temp -> Pol -> RCl -> RS ;
-
-    UncNegImpSg : Pol -> Imp -> Utt;           -- do not help yourself
-    UncNegImpPl : Pol -> Imp -> Utt;           -- do not help yourselves
+-- uncontracted negative polarity; contracted is the default for PNeg
+  fun 
+    UncNeg : Pol ;
 
 -- freely compounded nouns
 
@@ -24,4 +19,17 @@ abstract ExtraEngAbs = Extra - [ProDrop] ** {
 -- emphasizing "do", e.g. "John does walk"
 
    do_VV : VV ;
+
+
+--- these are obsolete: use UncNeg : Pol instead
+
+  fun
+    UncNegCl  : Temp -> Pol -> Cl  -> S ;
+    UncNegQCl : Temp -> Pol -> QCl -> QS ;
+    UncNegRCl : Temp -> Pol -> RCl -> RS ;
+
+    UncNegImpSg : Pol -> Imp -> Utt;           -- do not help yourself
+    UncNegImpPl : Pol -> Imp -> Utt;           -- do not help yourselves
+
+
 }
