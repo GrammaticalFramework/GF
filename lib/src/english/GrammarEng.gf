@@ -11,12 +11,17 @@ concrete GrammarEng of Grammar =
   RelativeEng,
   ConjunctionEng,
   PhraseEng,
-  TextX,
+  TextX - [Pol,PPos,PNeg],
   StructuralEng,
   IdiomEng,
-  TenseX
-  ** {
+  TenseX - [Pol,PPos,PNeg]
+  ** open ResEng, Prelude in {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;
+
+lin
+  PPos = {s = [] ; p = CPos} ;
+  PNeg = {s = [] ; p = CNeg True} ; -- contracted: don't
+
 
 } ;

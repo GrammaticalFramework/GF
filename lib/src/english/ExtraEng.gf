@@ -37,26 +37,6 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       let isAux = case vv.typ of {VVAux => True ; _ => False} in 
       insertObj (\\a => (if_then_Str isAux [] "to") ++ vpi.s ! VPIInf ! a) (predVV vv) ;
 
-    UncNegCl t p cl = {
-      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! unc p.p ! ODir
-    } ;
-    UncNegQCl t p cl = {
-      s = \\q => t.s ++ p.s ++ cl.s ! t.t ! t.a ! unc p.p ! q
-    } ;
-    UncNegRCl t p cl = {
-      s = \\r => t.s ++ p.s ++ cl.s ! t.t ! t.a ! unc p.p ! r ;
-      c = cl.c
-    } ;
-
-    UncNegImpSg p imp = {s = p.s ++ imp.s ! unc p.p ! ImpF Sg False} ;
-    UncNegImpPl p imp = {s = p.s ++ imp.s ! unc p.p ! ImpF Pl False} ;
-
-    CompoundCN a b = {s = \\n,c => a.s ! Sg ! Nom ++ b.s ! n ! c ; g = b.g} ;
-
-  oper
-    unc = contrNeg False ; 
-
-
   lin
     that_RP = 
     { s = table {
@@ -89,7 +69,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     MkVPS t p vp = {
       s = \\a => 
             let 
-              verb = vp.s ! t.t ! t.a ! contrNeg True p.p ! ODir ! a ;
+              verb = vp.s ! t.t ! t.a ! p.p ! ODir ! a ;
               verbf = verb.aux ++ verb.adv ++ verb.fin ++ verb.inf ;
             in t.s ++ p.s ++ vp.ad ++ verbf ++ vp.s2 ! a
       } ;
@@ -121,5 +101,33 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       } ;
     typ = VVAux
     } ;
+
+
+lin
+  UncNeg = {s = [] ; p = CNeg False} ; 
+
+--- obsolete: use UncNeg : Pol
+
+    UncNegCl t p cl = {
+      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! unc p.p ! ODir
+    } ;
+    UncNegQCl t p cl = {
+      s = \\q => t.s ++ p.s ++ cl.s ! t.t ! t.a ! unc p.p ! q
+    } ;
+    UncNegRCl t p cl = {
+      s = \\r => t.s ++ p.s ++ cl.s ! t.t ! t.a ! unc p.p ! r ;
+      c = cl.c
+    } ;
+
+    UncNegImpSg p imp = {s = p.s ++ imp.s ! unc p.p ! ImpF Sg False} ;
+    UncNegImpPl p imp = {s = p.s ++ imp.s ! unc p.p ! ImpF Pl False} ;
+
+    CompoundCN a b = {s = \\n,c => a.s ! Sg ! Nom ++ b.s ! n ! c ; g = b.g} ;
+
+  oper
+    unc : CPolarity -> CPolarity = \x -> case x of {
+      CNeg _ => CNeg False ; 
+      _ => x
+      } ;
 
 } 

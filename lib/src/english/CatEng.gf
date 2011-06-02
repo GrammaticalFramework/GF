@@ -1,8 +1,12 @@
-concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
+concrete CatEng of Cat = CommonX - [Pol] ** open ResEng, Prelude in {
 
   flags optimize=all_subs ;
 
   lincat
+
+-- exception to CommonX, due to the distinction contracted/uncontracted negation
+
+    Pol = {s : Str ; p : CPolarity} ;
 
 -- Tensed/Untensed
 
