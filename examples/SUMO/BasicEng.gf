@@ -29,8 +29,8 @@ lin
   and f1 f2 = {s = \\f,c => f1.s ! Indep ! c ++ "and" ++ f2.s ! Indep ! c; flag = NothingS; lock_PolSentence = <>};
   or f1 f2 = {s = \\f,c => f1.s ! Indep ! c ++ "or" ++ f2.s ! Indep ! c; flag = NothingS; lock_PolSentence = <>};
   not f1 = {s = \\f => table {
-                         Neg  => "it is not true that" ++ f1.s ! f ! Neg ; 
-                         Pos  => f1.s ! Indep ! Neg
+                         CNeg _ => "it is not true that" ++ f1.s ! f ! CPos ; 
+                         CPos  => f1.s ! Indep ! CNeg False
                        }; 
             flag = f1.flag;  
             lock_PolSentence = <>
@@ -45,11 +45,11 @@ lin
 
   exists C f = let np = DetCN (DetQuant IndefArt NumSg) C 
                in { s = \\form,c => case <form, f.flag> of {
-                                      <Indep, ExistS _>    => "there" ++ "exists" ++ np.s ! Nom ++ f.$0 ++ f.s ! Attrib ! c ;
-                                      <Attrib, ExistS One> => "and" ++ np.s ! Nom ++ f.$0 ++ f.s ! Attrib ! c ;
-                                      <Attrib, ExistS _>   => "," ++ np.s ! Nom ++ f.$0 ++ f.s ! Attrib ! c ;
-                                      <Indep,_>            => "there" ++ "exists" ++ np.s ! Nom ++ f.$0 ++ "such" ++ "that" ++ f.s ! Indep ! c ; 
-                                      _                    => "and" ++ np.s ! Nom ++ f.$0 ++ "such" ++ "that" ++ f.s ! Indep ! c
+                                      <Indep, ExistS _>    => "there" ++ "exists" ++ np.s ! npNom ++ f.$0 ++ f.s ! Attrib ! c ;
+                                      <Attrib, ExistS One> => "and" ++ np.s ! npNom ++ f.$0 ++ f.s ! Attrib ! c ;
+                                      <Attrib, ExistS _>   => "," ++ np.s ! npNom ++ f.$0 ++ f.s ! Attrib ! c ;
+                                      <Indep,_>            => "there" ++ "exists" ++ np.s ! npNom ++ f.$0 ++ "such" ++ "that" ++ f.s ! Indep ! c ; 
+                                      _                    => "and" ++ np.s ! npNom ++ f.$0 ++ "such" ++ "that" ++ f.s ! Indep ! c
                                     }; 
                     flag = case f.flag of {
                              ExistS _   => ExistS Many;
@@ -88,8 +88,8 @@ lin
   desc2desc c1 c2 i d = d;                
 
   subClassStm c1 c2 sc = lin StmtS (ss (c1. s ! Sg ! Nom ++ "is a subclass of" ++ c2.s ! Sg ! Nom)) ;
-  instStm c i = lin StmtS (ss (i.s ! Nom ++ "is an instance of" ++ c.s ! Sg ! Nom)) ;
-  formStm f = lin StmtS (ss (f.s ! Indep ! Pos)) ;
+  instStm c i = lin StmtS (ss (i.s ! npNom ++ "is an instance of" ++ c.s ! Sg ! Nom)) ;
+  formStm f = lin StmtS (ss (f.s ! Indep ! CPos)) ;
 
 lindef
   Ind = \x -> {s = \\_ => x; a = agrP3 Sg; lock_NP = <>} ;

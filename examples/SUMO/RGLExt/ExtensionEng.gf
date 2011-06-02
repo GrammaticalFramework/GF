@@ -4,8 +4,8 @@ concrete ExtensionEng of Extension = open CatEng, MorphoEng, ResEng, Conjunction
 
 
 lincat 
-    PolSentence = {s : SentForm => Polarity => Str ; flag : Flag};
-    [CN] = {s1,s2 : Number => Case => Str ; g : Gender} ;   
+    PolSentence = {s : SentForm => CPolarity => Str ; flag : Flag};
+    [CN] = {s1,s2 : Number => ResEng.Case => Str ; g : Gender} ;   
     StmtS = {s : Str};
     NP = CatEng.NP;
     CN = CatEng.CN; 
@@ -30,21 +30,21 @@ VerbToGerundA v = {s = \\_ => v.s ! VPresPart; lock_A=<>};
 VerbToParticipeA v = {s = \\_ => v.s ! VPPart; lock_A=<>};
 
 mkPolSent cl = {s = \\f,b => case b of 
-                              {Pos => cl.s ! Pres ! Simul ! CPos ! ODir;
+                              {CPos => cl.s ! Pres ! Simul ! CPos ! ODir;
                                _   => cl.s ! Pres ! Simul ! CNeg False ! ODir};
                 flag = NothingS ;
                 lock_PolSentence = <>};
                
-sentToNoun ps = {s = \\_ => "\"" ++ ps.s ! Indep ! Pos ++ "\"";
+sentToNoun ps = {s = \\_ => "\"" ++ ps.s ! Indep ! CPos ++ "\"";
                  a = agrP3 Sg; lock_NP=<>};               
                
-ConjCN conj ss = conjunctDistrTable2 Number Case conj ss ** {g = ss.g;lock_CN=<>};               
+ConjCN conj ss = conjunctDistrTable2 Number ResEng.Case conj ss ** {g = ss.g;lock_CN=<>};               
 
 BaseCN x y ={s1 = \\n,c => x.s ! n ! c ;
              s2 = \\n,c => y.s ! n ! c ;   
              g  =  x.g} ;  
 
-ConsCN xs x = consrTable2 Number Case comma xs x ** {g = Masc} ;               
+ConsCN xs x = consrTable2 Number ResEng.Case comma xs x ** {g = Masc} ;               
 
 
 UsePolSentence p ps = {s = ps.s ! Indep ! p.p};
