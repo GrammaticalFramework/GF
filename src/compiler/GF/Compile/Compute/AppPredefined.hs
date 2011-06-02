@@ -26,6 +26,7 @@ import GF.Grammar.Predef
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
 import Text.PrettyPrint
+import Data.Char (isUpper,toUpper,toLower)
 
 -- predefined function type signatures and definitions. AR 12/3/2003.
 
@@ -67,6 +68,11 @@ primitives = Map.fromList
   , (cEqStr    , ResOper (Just (noLoc (mkFunType [typeTok,typeTok] typePBool))) Nothing)
   , (cOccur    , ResOper (Just (noLoc (mkFunType [typeTok,typeTok] typePBool))) Nothing)
   , (cOccurs   , ResOper (Just (noLoc (mkFunType [typeTok,typeTok] typePBool))) Nothing)
+
+  , (cToUpper  , ResOper (Just (noLoc (mkFunType [typeTok] typeTok))) Nothing)
+  , (cToLower  , ResOper (Just (noLoc (mkFunType [typeTok] typeTok))) Nothing)
+  , (cIsUpper  , ResOper (Just (noLoc (mkFunType [typeTok] typePBool))) Nothing)
+
 ----  "read"   -> 
   , (cRead     , ResOper (Just (noLoc (mkProd -- (P : Type) -> Tok -> P
                                          [(Explicit,varP,typePType),(Explicit,identW,typeStr)] (Vr varP) []))) Nothing)
@@ -94,7 +100,11 @@ appPredefined t = case t of
     -- one-place functions
     Q (mod,f) | mod == cPredef ->
       case x of
-        (K s) | f == cLength -> retb $ EInt $ length s
+        (K s) | f == cLength  -> retb $ EInt $ length s
+        (K s) | f == cIsUpper -> retb $ if (all isUpper s) then predefTrue else predefFalse
+        (K s) | f == cToUpper -> retb $ K $ map toUpper s
+        (K s) | f == cToLower -> retb $ K $ map toLower s
+
         _                    -> retb t
 
     -- two-place functions
