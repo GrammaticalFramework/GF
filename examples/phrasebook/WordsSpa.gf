@@ -106,7 +106,7 @@ lin
     Polish = mkNat (mkA "polaco") "polaco" "Polonia" ;
     Romanian = mkNat (mkA "rumano") "rumano" "Rumania" ;
     Russian = mkNat (mkA "ruso") "ruso" "Rusia" ;
-    Spanish = mkNat (mkA "español") "español" "España" ;
+    Spanish = mkNat spanish_A "español" "España" ;
     Swedish = mkNat (mkA "sueco") "sueco" "Suecia" ;
 
 -- means of transportation 
@@ -308,5 +308,6 @@ lin
     finnish_A = mkA "finlandés" "finlandesa" "finlandeses" "finlandesas" "finlandesamente" ;
     french_A  = mkA "francés" "francesa" "franceses" "francesas" "francesamente" ;
     german_A  = mkA "alemán" "alemana" "alemanes" "alemanas" "alemanamente" ;
+    spanish_A = mkA "español" "española" "españoles" "españolas" "españolamente" ;
     
 }

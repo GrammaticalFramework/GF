@@ -13,3 +13,4 @@ PhrasebookPol :
 PhrasebookRon :
 PhrasebookSpa :
 PhrasebookSwe :
+PhrasebookUrd :
