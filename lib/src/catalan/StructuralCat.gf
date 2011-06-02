@@ -40,7 +40,7 @@ lin
   from_Prep = complGen ; ---
   he_Pron = 
     mkPronoun 
-     "ell" "el" "li" "ell" ["el seu"] ["la seva"] "ses"
+     "ell" "el" "li" "ell" ["el seu"] ["la seva"] ["els seus"] ["les seves"]
       Masc Sg P3 ;
   here_Adv = mkAdv "aquí" ;		-- acÌ
   here7to_Adv = mkAdv ["cap aquí"] ;
@@ -54,12 +54,12 @@ lin
   i_Pron = 
     mkPronoun
       "jo" "em" "em" "mi"
-      ["el meu"] ["la meva"] "mes"
+      ["el meu"] ["la meva"] ["els meus"] ["les meves"]
       Fem Sg P1 ;
   in_Prep = mkPrep "en" ;
   it_Pron = mkPronoun 
      "ell" "ho" "li" "ell"
-     ["el seu"] ["la seva"] ["els seus"]
+     ["el seu"] ["la seva"] ["els seus"] ["les seves"]
      Masc Sg P3 ;
 
   less_CAdv = X.mkCAdv "menys" conjThan ; ----
@@ -85,7 +85,7 @@ lin
   she_Pron = 
     mkPronoun
       "ella" "la" "li" "ella"
-      ["el seu"] ["la seva"] "ses"
+      ["el seu"] ["la seva"] ["els seus"] ["les seves"]
       Fem Sg P3 ;
   so_AdA = ss "tan" ;
   somebody_NP = pn2np (mkPN ["alg˙"] Masc) ;
@@ -111,7 +111,7 @@ lin
   therefore_PConj = ss ["per tant"] ;
   they_Pron = mkPronoun
     "elles" "les" "les" "elles"
-    "llur" "llur" "llurs"
+    "llur" "llur" "llurs" "llurs"
     Fem Pl P3 ;
 
   this_Quant =
@@ -133,7 +133,7 @@ lin
   we_Pron = 
     mkPronoun 
       "nosaltres" "ens" "ens" "nosaltres"
-      ["el nostre"] ["la nostra"] ["els nostres"]
+      ["el nostre"] ["la nostra"] ["els nostres"] ["les nostres"]
       Fem Pl P1 ;
    whatSg_IP = {s = \\c => prepCase c ++ ["què"] ; a = aagr Masc Sg} ;
    whatPl_IP = {s = \\c => prepCase c ++ ["què"] ; a = aagr Masc Pl} ; ---
@@ -153,16 +153,16 @@ lin
   yes_Utt = ss "sí" ;  
   youSg_Pron = mkPronoun 
     "tu" "et" "et" "tu"
-    ["el teu"] ["la teva"] ["les teves"]
+    ["el teu"] ["la teva"] ["els teus"] ["les teves"]
     Masc Sg P2 ;
   youPl_Pron =
     mkPronoun
       "vosaltres" "us" "us" "vosaltres"
-      ["el vostre"] ["la vostra"] ["els vostres"]
+      ["el vostre"] ["la vostra"] ["els vostres"] ["les vostres"]
       Masc Pl P2 ;
   youPol_Pron = mkPronoun
       "vosté" "el" "li" "vosté"
-      ["el seu"] ["la seva"] ["els seus"]
+      ["el seu"] ["la seva"] ["els seus"] ["les seves"]
       Masc Pl P2 ;
    not_Predet = {s = \\a,c => prepCase c ++ "no pas" ; c = Nom ;
     a = PNoAg} ;

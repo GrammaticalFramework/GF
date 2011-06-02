@@ -131,9 +131,9 @@ oper
 -- All the eight personal pronouns can be built by the following macro.
 -- The use of "en" as atonic genitive is debatable.
 
-  mkPronoun : (_,_,_,_,_,_,_ : Str) -> 
+  mkPronoun : (_,_,_,_,_,_,_,_ : Str) -> 
               Gender -> Number -> Person -> Pronoun =
-    \ell,el,li,Ell,son,sa,ses,g,n,p ->
+    \ell,el,li,Ell,son,sa,elsSeus,lesSeves,g,n,p ->
     let
       aell : Case -> Str = \x -> prepCase x ++ Ell ;
     in {
@@ -146,7 +146,8 @@ oper
     poss = \\n,g => case <n,g> of {
       <Sg,Masc> => son ;
       <Sg,Fem>  => sa ;
-      _         => ses
+	  <Pl,Masc> => elsSeus ;
+      <Pl,Fem>  => lesSeves
       } ;
     a = Ag g n p ;
     hasClit = True ; isPol = False
