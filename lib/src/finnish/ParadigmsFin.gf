@@ -365,6 +365,7 @@ oper
         ukon = weakGrade ukko + "n" ;
       in
       case <ukko,ukkoja> of {
+        <_, _ + ":" + ? + ("a" | "ä")> => dSDP ukko ;
         <_ + "ea", _ + "oita"> => 
           dSilakka ukko ukon ukkoja ;  -- idea, but not korkea
         <_ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" | 
@@ -380,7 +381,6 @@ oper
         <_ + ("ut" | "yt"),_ + ("uita" | "yitä")>  => dRae ukko (init ukko + "en") ;
         <_ + "e", nuk + ("eja" | "ejä")> => 
           dNukke ukko ukon ;
-        <_, _ + ":" + _ + ("a" | "ä")> => dSDP ukko ;
         <_ + ("l" | "n" | "r" | "s"), _ + ("eja" | "ejä")> => dUnix ukko ;
         <_, _ + ("a" | "ä")> => ukot ;
         _ => 
@@ -394,6 +394,7 @@ oper
         ukot = nForms2 ukko ukkoja ;
       in
       case <ukko,ukon> of {
+        <_, _ + ":n"> => dSDP ukko ;
         <_ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" | 
               "ie" | "uo" | "yö" | "ea" | "eä" | 
               "ia" | "iä" | "io" | "iö" | "ja" | "jä"), _ + "n"> => 
@@ -409,7 +410,6 @@ oper
         <nukk + "e", nuk + "een"> => dRae ukko ukon ;
         <arp + "i", arv + "en"> => dArpi ukko ukon ;
         <_ + ("us" | "ys"), _ + "den"> => dLujuus ukko ;
-        <_, _ + ":n"> => dSDP ukko ;
         <_, _ + "n"> => ukot ;
         _ => 
           Predef.error (["second argument should end in n, not"] ++ ukon)
