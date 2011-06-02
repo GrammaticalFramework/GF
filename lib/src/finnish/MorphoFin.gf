@@ -277,7 +277,7 @@ resource MorphoFin = ResFin ** open Prelude in {
 
   dSDP : Str -> NForms = \SDP ->
     let 
-      c = case last SDP of {
+      c = case Predef.toUpper (last SDP) of {
         "A" => 
            <"n","ta","na","han","iden","ita","ina","issa","ihin"> ;
         "B" | "C" | "D" | "E" | "G" | "P" | "T" | "V" | "W" => 
@@ -296,6 +296,8 @@ resource MorphoFin = ResFin ** open Prelude in {
            <"n","tä","nä","hän","iden","itä","inä","issä","ihin"> ;
         "Ö" => 
            <"n","tä","nä","hön","iden","itä","inä","issä","ihin"> ;
+        "Y" => 
+           <"n","tä","nä","hyn","iden","itä","inä","issä","ihin"> ;
         _ => Predef.error (["illegal abbreviation"] ++ SDP)
         } ;
     in nForms10
