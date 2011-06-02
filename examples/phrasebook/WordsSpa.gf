@@ -22,7 +22,7 @@ lin
     Bread = mkCN L.bread_N ;
     Cheese = mkCN (mkN "queso") ;
     Chicken = mkCN (mkN "pollo") ;
-    Coffee = mkCN (mkN "café") ;
+    Coffee = mkCN (mkN "café" "cafés" masculine) ;
     Fish = mkCN L.fish_N ;
     Meat = mkCN (mkN "carne" feminine) ;
     Milk = mkCN L.milk_N ;
@@ -90,24 +90,24 @@ lin
 
 -- nationalities
 
-    Belgian = mkA "belga" ;
+    Belgian = belgian_A ;
     Belgium = mkNP (mkPN "Bélgica") ;
-    Bulgarian = mkNat "bulgaro" "Bulgaria" ;
-    Catalan = mkNat "catalán" "Cataluña" ;
-    Danish = mkNat "danés" "Dinamarca" ;
-    Dutch = mkNat "neerlandés" "Holanda" ;
-    English = mkNat "inglés" "Inglaterra" ;
-    Finnish = mkNat "finlandés" "Finlandia" ;
+    Bulgarian = mkNat (mkA "bulgaro") "bulgaro" "Bulgaria" ;
+    Catalan = mkNat catalan_A "catalán" "Cataluña" ;
+    Danish = mkNat danish_A "danés" "Dinamarca" ;
+    Dutch = mkNat dutch_A "neerlandés" "Holanda" ;
+    English = mkNat english_A "inglés" "Inglaterra" ;
+    Finnish = mkNat finnish_A "finés" "Finlandia" ;
     Flemish = mkNP (mkPN "flamenco") ;
-    French = mkNat "francés" "Francia" ;
-    German = mkNat "alemán" "Alemania" ;
-    Italian = mkNat "italiano" "Italia" ;
-    Norwegian = mkNat "noruego" "Noruega" ;
-    Polish = mkNat "polaco" "Polonia" ;
-    Romanian = mkNat "rumano" "Rumania" ;
-    Russian = mkNat "ruso" "Rusia" ;
-    Spanish = mkNat "español" "España" ;
-    Swedish = mkNat "sueco" "Suecia" ;
+    French = mkNat french_A "francés" "Francia" ;
+    German = mkNat german_A "alemán" "Alemania" ;
+    Italian = mkNat (mkA "italiano") "italiano" "Italia" ;
+    Norwegian = mkNat (mkA "noruego") "noruego" "Noruega" ;
+    Polish = mkNat (mkA "polaco") "polaco" "Polonia" ;
+    Romanian = mkNat (mkA "rumano") "rumano" "Rumania" ;
+    Russian = mkNat (mkA "ruso") "ruso" "Rusia" ;
+    Spanish = mkNat (mkA "español") "español" "España" ;
+    Swedish = mkNat (mkA "sueco") "sueco" "Suecia" ;
 
 -- means of transportation 
 
@@ -115,7 +115,7 @@ lin
     Bus = mkTransport (mkN "autobús" "autobuses" masculine) ;
     Car = mkTransport L.car_N | mkTransport (mkN "coche") ; 
     Ferry = mkTransport (mkN "ferry") | mkTransport (mkN "transbordador") ;
-    Plane = mkTransport (mkN "avión") ;
+    Plane = mkTransport (mkN "avión" "aviones" feminine) ;
     Subway = mkTransport (mkN "metro") ; 
     Taxi = mkTransport (mkN "taxi" masculine) ; 
     Train = mkTransport (mkN "tren") ;
@@ -251,7 +251,7 @@ lin
     TheCheapest = mkSuperl cheap_A False ;
     TheMostExpensive = mkSuperl expensive_A False ;
     TheMostPopular =
-      let popular = mkA "popular" "popular" "populars" "populars" "popularment"
+      let popular = mkA "popular" "popular" "populares" "populares" "popularmente"
       in  mkSuperl popular False ;
     TheWorst = mkSuperl L.bad_A True ;
 
@@ -261,8 +261,8 @@ lin
 -- auxiliaries
 
   oper
-    mkNat : Str -> Str -> NPNationality = \nat,co -> 
-      mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
+    mkNat : A -> Str -> Str -> NPNationality = \nat,lang,co -> 
+      mkNPNationality (mkNP (mkPN lang)) (mkNP (mkPN co)) nat ;
 
 
     -- not the most elegant solution, but it works
@@ -297,4 +297,16 @@ lin
     open_A = mkA "abierto" ;
     closed_A = mkA "cerrado" ;
 
+    -- The nationalities
+    -- There is no constructor in resource grammar that handles the accent correctly in "francés - francesa - franceses" etc.
+    -- The fifth form (adverb) is of course not needed, but the constructor wants 5 forms
+    belgian_A = mkA "belga" "belga" "belgas" "belgas" "belgamente" ;
+    catalan_A = mkA "catalán" "catalana" "catalanes" "catalanas" "catalanamente" ;
+    danish_A  = mkA "danés" "danesa" "daneses" "danesas" "danesamente" ;
+    dutch_A   = mkA "neerlandés" "neerlandesa" "neerlandeses" "neerlandesas" "neerlandesamente" ;
+    english_A = mkA "inglés" "inglesa" "ingleses" "inglesas" "inglesamente" ;
+    finnish_A = mkA "finlandés" "finlandesa" "finlandeses" "finlandesas" "finlandesamente" ;
+    french_A  = mkA "francés" "francesa" "franceses" "francesas" "francesamente" ;
+    german_A  = mkA "alemán" "alemana" "alemanes" "alemanas" "alemanamente" ;
+    
 }
