@@ -12,9 +12,16 @@ function table(rows) { return node("table",{},rows); }
 function td_right(cs) { return node("td",{"class":"right"},cs); }
 function jsurl(js) { return "javascript:"+js; }
 
+function hidden(name,value) {
+    return node("input",{type:"hidden",name:name,value:value},[])
+}
+
+function insertBefore(el,ref) { ref.parentNode.insertBefore(el,ref); }
+
 function insertAfter(el,ref) {
     ref.parentNode.insertBefore(el,ref.nextSibling);
 }
+
 /* -------------------------------------------------------------------------- */
 
 function initial_view() {
@@ -27,7 +34,24 @@ function initial_view() {
 function draw_grammar_list() {
     local.put("current",0);
     editor.innerHTML="";
-    editor.appendChild(node("h3",{},[text("Your grammars")]));
+    var cloud_upload=
+	    a(jsurl("upload_json()"),
+	      [node("img",{"class":"cloud",
+			   src:"P/1306856253_weather_06.png",alt:"[Up Cloud]",
+			   title:"Click to store your grammars in the cloud"},
+		    [])]);
+    var home=div_class("home",[node("h3",{},
+				    [text("Your grammars"),cloud_upload])]);
+    if(local.get("json_uploaded")) {
+	var cloud_download=
+	    a(jsurl("download_json()"),
+	      [node("img",{"class":"cloud",
+			   src:"P/1307545089_weather_04.png",alt:"[Down Cloud]",
+			   title:"Click to download grammar updates from the cloud"},
+		    [])]);
+	insertAfter(cloud_download,cloud_upload);
+    }
+    editor.appendChild(home)
     var gs=ul([]);
     function del(i) { return function () { delete_grammar(i); } }
     for(var i=0;i<local.count;i++) {
@@ -42,9 +66,9 @@ function draw_grammar_list() {
 	editor.appendChild(text("You have not created any grammars yet."));
     else if(local.count==0)
 	editor.appendChild(text("Your grammar list is empty."));
-    editor.appendChild(gs);
+    home.appendChild(gs);
 
-    editor.appendChild(
+    home.appendChild(
 	ul([li([a(jsurl("new_grammar()"),[text("New grammar")])])]));
     //editor.appendChild(text(local.count));
 }
@@ -196,6 +220,7 @@ function add_concrete2(ix,code) {
 	    var cnc=g.concretes[ci];
 	    cnc.langcode=code;
 	    adjust_opens(cnc,oldcode,code);
+	    timestamp(cnc)
 	}
 	else
 	    cs.push(new_concrete(code))
@@ -257,7 +282,13 @@ function draw_startcat(g) {
     function opt(cat) { return option(cat,cat); }
     var m= node("select",{},map(opt,abs.cats));
     m.value=startcat;
-    m.onchange=function() { abs.startcat=m.value; save_grammar(g); }
+    m.onchange=function() { 
+	if(m.value!=abs.startcat) {
+	    abs.startcat=m.value;
+	    timestamp(abs);
+	    save_grammar(g); 
+	}
+    }
     return indent([kw("flags startcat"),sep(" = "),m]);
 }
 
@@ -271,10 +302,12 @@ function draw_abstract(g) {
 	: text("");
     function sort_funs() {
 	g.abstract.funs=sort_list(this,g.abstract.funs,"name");
+	timestamp(g.abstract);
 	save_grammar(g);
     }
     return div_id("file",
 		  [kw("abstract "),ident(g.basename),sep(" = "),
+		   draw_timestamp(g.abstract),
 		   flags,
 		   indent([extensible([kw_cat,
 				       indent(draw_cats(g))]),
@@ -291,6 +324,7 @@ function add_cat(g,el) {
 	    if(err) return err;
 	}
 	for(var i in cats) g.abstract.cats.push(cats[i]);
+	timestamp(g.abstract);
 	reload_grammar(g);
 	return null;
     }
@@ -299,6 +333,7 @@ function add_cat(g,el) {
 
 function delete_cat(g,ix) {
     with(g.abstract) cats=delete_ix(cats,ix);
+    timestamp(g.abstract);
     reload_grammar(g);
 }
 
@@ -310,6 +345,7 @@ function rename_cat(g,el,cat) {
 	    var dc=defined_cats(g);
 	    if(dc[newcat]) return newcat+" is already in use";
 	    g=rename_category(g,cat,newcat);
+	    timestamp(g.abstract);
 	    reload_grammar(g);
 	}
 	return null;
@@ -343,6 +379,7 @@ function add_fun(g,el) {
 	var p=parse_fun(s);
 	if(p.ok) {
 	    g.abstract.funs.push(p.ok);
+	    timestamp(g.abstract);
 	    reload_grammar(g);
 	    return null;
 	}
@@ -362,6 +399,7 @@ function edit_fun(i) {
 		if(p.ok.name!=old.name) g=rename_function(g,old.name,p.ok.name);
 		if(show_type(p.ok.type)!=show_type(old.type))
 		    g=change_lin_lhs(g,p.ok);
+		timestamp(g.abstract);
 		reload_grammar(g);
 		return null;
 	    }
@@ -374,6 +412,7 @@ function edit_fun(i) {
 
 function delete_fun(g,ix) {
     with(g.abstract) funs=delete_ix(funs,ix);
+    timestamp(g.abstract);
     reload_grammar(g);
 }
 
@@ -438,6 +477,7 @@ function draw_concrete(g,i) {
 	    if(err) return err;
 	    adjust_opens(conc,conc.langcode,code);
 	    conc.langcode=code;
+	    timestamp(conc);
 	    reload_grammar(g);
 	}
 	string_editor(el,conc.langcode,change_langcode)
@@ -448,6 +488,7 @@ function draw_concrete(g,i) {
 		   editable("span",ident(conc.langcode),g,
 			    edit_langcode,"Change language"),
 		   kw(" of "),ident(g.basename),sep(" = "),
+		   draw_timestamp(conc),
 		   indent([extensible([kw("open "),draw_opens(g,i)])]),
 		   indent([kw("lincat"),draw_lincats(g,i)]),
 		   indent([kw("lin"),draw_lins(g,i)]),
@@ -485,12 +526,14 @@ function add_open2(ix,ci,m) {
     var conc=g.concretes[ci];
     conc.opens || (conc.opens=[]);
     conc.opens.push(m);
+    timestamp(conc);
     save_grammar(g);
     open_concrete(g,ci);
 }
 
 function delete_open(g,ci,ix) {
     with(g.concretes[ci]) opens=delete_ix(opens,ix);
+    timestamp(g.concretes[ci]);
     reload_grammar(g);
 }
 
@@ -521,6 +564,7 @@ function add_param(g,ci,el) {
 	var p=parse_param(s);
 	if(p.ok) {
 	    g.concretes[ci].params.push(p.ok);
+	    timestamp(g.concretes[ci]);
 	    reload_grammar(g);
 	    return null;
 	}
@@ -536,6 +580,7 @@ function edit_param(ci,i) {
 	    var p=parse_param(s);
 	    if(p.ok) {
 		g.concretes[ci].params[i]=p.ok;
+		timestamp(g.concretes[ci]);
 		reload_grammar(g);
 		return null;
 	    }
@@ -549,6 +594,7 @@ function edit_param(ci,i) {
 
 function delete_param(g,ci,ix) {
     with(g.concretes[ci]) params=delete_ix(params,ix);
+    timestamp(g.concretes[ci]);
     reload_grammar(g);
 }
 
@@ -576,6 +622,7 @@ function delete_lincat(g,ci,cat) {
     var c=g.concretes[ci];
     for(i=0;i<c.lincats.length && c.lincats[i].cat!=cat;i++);
     if(i<c.lincats.length) c.lincats=delete_ix(c.lincats,i);
+    timestamp(c);
     reload_grammar(g);
 }
 
@@ -586,6 +633,7 @@ function draw_lincats(g,i) {
 	    function ok(s) {
 		if(c.template) conc.lincats.push({cat:c.cat,type:s});
 		else c.type=s;
+		timestamp(conc);
 		reload_grammar(g);
 		return null;
 	    }
@@ -615,6 +663,7 @@ function draw_lincats(g,i) {
 	lcs.push(dtmpl(c));
     function sort_lincats() {
 	conc.lincats=sort_list(this,conc.lincats,"cat");
+	timestamp(conc);
 	save_grammar(g);
     }
     return indent_sortable(lcs,sort_lincats);
@@ -634,6 +683,7 @@ function add_oper(g,ci,el) {
 	var p=parse_oper(s);
 	if(p.ok) {
 	    g.concretes[ci].opers.push(p.ok);
+	    timestamp(g.concretes[ci]);
 	    reload_grammar(g);
 	    return null;
 	}
@@ -649,6 +699,7 @@ function edit_oper(ci,i) {
 	    var p=parse_oper(s);
 	    if(p.ok) {
 		g.concretes[ci].opers[i]=p.ok;
+		timestamp(g.concretes[ci]);
 		reload_grammar(g);
 		return null;
 	    }
@@ -662,6 +713,7 @@ function edit_oper(ci,i) {
 
 function delete_oper(g,ci,ix) {
     with(g.concretes[ci]) opers=delete_ix(opers,ix);
+    timestamp(g.concretes[ci]);
     reload_grammar(g);
 }
 
@@ -685,6 +737,7 @@ function draw_opers(g,ci) {
 		 "Add a new operator definition"));
     function sort_opers() {
 	conc.opers=sort_list(this,conc.opers,"name");
+	timestamp(conc);
 	save_grammar(g);
     }
     return indent_sortable(es,sort_opers);
@@ -695,6 +748,7 @@ function delete_lin(g,ci,fun) {
     var c=g.concretes[ci];
     for(i=0;i<c.lins.length && c.lins[i].fun!=fun;i++);
     if(i<c.lins.length) c.lins=delete_ix(c.lins,i);
+    timestamp(c);
     reload_grammar(g);
 }
 
@@ -720,6 +774,7 @@ function draw_lins(g,i) {
 		if(f.template)
 		    conc.lins.push({fun:f.fun,args:f.args,lin:s});
 		else f.lin=s;
+		timestamp(conc);
 		reload_grammar(g);
 		return null;
 	    }
@@ -758,6 +813,7 @@ function draw_lins(g,i) {
     }
     function sort_lins() {
 	conc.lins=sort_list(this,conc.lins,"fun");
+	timestamp(conc);
 	save_grammar(g);
     }
     var ls=map(draw_lin,conc.lins);
@@ -768,29 +824,128 @@ function draw_lins(g,i) {
 
 /* -------------------------------------------------------------------------- */
 
-function upload(g) {
+function get_dir(cont) {
     var dir=local.get("dir","");
-    if(dir) upload2(g,dir);
+    if(dir) cont(dir);
     else ajax_http_get("upload.cgi?dir",
 		       function(dir) {
 			   local.put("dir",dir);
-			   upload2(g,dir);
+			   cont(dir);
 		       });
 }
 
-function upload2(g,dir) {
-    var form=node("form",{method:"post",action:"upload.cgi"+dir},
-		  [hidden(g.basename,show_abstract(g))])
-    for(var i in g.concretes)
-	form.appendChild(hidden(g.basename+g.concretes[i].langcode,
-				show_concrete(g.basename)(g.concretes[i])));
-    editor.appendChild(form);
-    form.submit();
-    form.parentNode.removeChild(form);
+function upload(g) {
+
+    function upload2(dir) {
+	var form=node("form",{method:"post",action:"upload.cgi"+dir},
+		      [hidden(g.basename+".gf",show_abstract(g))])
+	for(var i in g.concretes)
+	    form.appendChild(hidden(g.basename+g.concretes[i].langcode+".gf",
+				    show_concrete(g.basename)(g.concretes[i])));
+	editor.appendChild(form);
+	form.submit();
+	form.parentNode.removeChild(form);
+    }
+
+    get_dir(upload2);
 }
 
-function hidden(name,value) {
-    return node("input",{type:"hidden",name:name,value:value},[])
+function upload_json() {
+    function upload2(dir) {
+	var form=node("form",{method:"post",action:"upload.cgi"+dir},
+		      [hidden("count.json",local.count)])
+	for(var i=0;i<local.count;i++) {
+	    var g=local.get(i,null);
+	    if(g) form.appendChild(hidden(i+".json",JSON.stringify(g)));
+	}
+	editor.appendChild(form);
+	form.submit();
+	form.parentNode.removeChild(form);
+	local.put("json_uploaded",Date.now());
+    }
+
+    get_dir(upload2);
+}
+
+function find_langcode(concs,langcode) {
+    for(var ci in concs)
+	if(concs[ci].langcode==langcode)
+	    return concs[ci];
+    return null;
+}
+
+
+function merge_grammar(i,newg) {
+    var oldg=local.get(i);
+    var keep="";
+    if(oldg) {
+	oldg.basename=newg.basename;
+	if(newg.abstract.timestamp<oldg.abstract.timestamp) {
+	    newg.abstract=newg.abstract
+	    keep+=" "+oldg.basename
+	}
+	for(var ci in newg.concretes) {
+	    var conc=newg.concretes[ci];
+	    var oldconc=find_langcode(oldg.concretes,conc.langcode);
+	    if(oldconc && conc.timestamp<oldconc.timestamp) {
+		newg.concretes[ci]=oldconc;
+		keep+=" "+oldg.basename+conc.langcode;
+	    }
+	}
+    }
+    local.put(i,newg)
+    return keep;
+}
+
+function download_json(dir) {
+
+    var new_count;
+    dir || (dir=local.get("dir"));
+
+    function get_file(file,ok,err) {
+	ajax_http_get("upload.cgi?download="+encodeURIComponent(dir+"/"+file),ok,err);
+    }
+    function download_files_from(count) {
+	debug(count);
+	var i=count-1;
+	function file_ok(grammar) {
+	    var keep=merge_grammar(i,JSON.parse(grammar));
+	    if(keep) debug("Keeping "+keep);
+	    download_files_from(i);
+	}
+	function file_err() { local.remove(i); download_files_from(i); }
+	if(count>0) get_file(i+".json",file_ok,file_err)
+	else {
+	    local.count=new_count;
+	    //alert("Download finished");
+	    setTimeout(function(){location.href="."},3000);
+	}
+    }
+    function download_files(count) {
+	new_count=count;
+	local.put("current",0);
+	download_files_from(count);
+    }
+    get_file("count.json",download_files);
+}
+
+function download_from_cloud() {
+    var olddir=local.get("dir",null)
+    var newdir="/tmp/"+location.hash.substr(1)
+    if(newdir==olddir || confirm("Cloud grammars will replace your local grammars")) {
+	local.put("dir",newdir);
+	download_json(newdir)
+    }
+}
+
+function timestamp(obj,prop) {
+    obj[prop || "timestamp"]=Date.now();
+}
+
+function draw_timestamp(obj) {
+    var t=obj.timestamp;
+    return node("small",{"class":"modtime"},
+		[text(t ? " -- "+new Date(t).toLocaleString() : "")]);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -919,5 +1074,7 @@ function touch_edit() {
 
 //document.body.appendChild(empty_id("div","debug"));
 
-initial_view();
-touch_edit();
+if(editor) {
+    initial_view();
+    touch_edit();
+}
