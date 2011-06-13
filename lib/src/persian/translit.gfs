@@ -1,0 +1,11 @@
+rf -file=src/LexiconPes.gf | ps -env=quotes -to_persian | wf -file=LexiconPes.gf
+rf -file=src/ParadigmsPes.gf | ps -env=quotes -to_persian | wf -file=ParadigmsPes.gf
+rf -file=src/MorphoPes.gf | ps -env=quotes -to_persian | wf -file=MorphoPes.gf
+rf -file=src/StructuralPes.gf | ps -env=quotes -to_persian | wf -file=StructuralPes.gf
+rf -file=src/ResPes.gf | ps -env=quotes -to_persian | wf -file=ResPes.gf
+rf -file=src/AdjectivePes.gf | ps -env=quotes -to_persian | wf -file=AdjectivePes.gf
+rf -file=src/IdiomPes.gf | ps -env=quotes -to_persian | wf -file=IdiomPes.gf
+rf -file=src/RelativePes.gf | ps -env=quotes -to_persian | wf -file=RelativePes.gf
+rf -file=src/AdverbPes.gf | ps -env=quotes -to_persian | wf -file=AdverbPes.gf
+rf -file=src/SentencePes.gf | ps -env=quotes -to_persian | wf -file=SentencePes.gf
+rf -file=src/NumeralPes.gf | ps -env=quotes -to_persian | wf -file=NumeralPes.gf

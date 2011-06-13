@@ -1,0 +1,4 @@
+abstract AllPerAbs =
+  Lang
+--  ExtraPnbAbs
+  ** {} ;
