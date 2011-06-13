@@ -1,4 +1,4 @@
-abstract AllPerAbs =
+abstract AllPesAbs =
   Lang
---  ExtraPnbAbs
+--  ExtraPesAbs
   ** {} ;
