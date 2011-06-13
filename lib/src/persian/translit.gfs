@@ -8,4 +8,3 @@ rf -file=src/IdiomPes.gf | ps -env=quotes -to_persian | wf -file=IdiomPes.gf
 rf -file=src/RelativePes.gf | ps -env=quotes -to_persian | wf -file=RelativePes.gf
 rf -file=src/AdverbPes.gf | ps -env=quotes -to_persian | wf -file=AdverbPes.gf
 rf -file=src/SentencePes.gf | ps -env=quotes -to_persian | wf -file=SentencePes.gf
-rf -file=src/NumeralPes.gf | ps -env=quotes -to_persian | wf -file=NumeralPes.gf
