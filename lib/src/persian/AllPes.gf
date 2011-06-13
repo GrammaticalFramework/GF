@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:../prelude
 
-concrete AllPer of AllPerAbs =
-  LangPer
---  ExtraPer
+concrete AllPes of AllPesAbs =
+  LangPes
+--  ExtraPes
   ** {} ;
