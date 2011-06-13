@@ -71,16 +71,16 @@ lin pot3plus n m = {
  --     tail = inc i.tail
     } ;
 -}
-    D_0 = mkDig "?" ;
-    D_1 = mk3Dig "?" "" Pl;
-    D_2 = mk2Dig "?" "";
-    D_3 = mk2Dig "?" "سوم" ;
-    D_4 = mkDig "?" ;
-    D_5 = mkDig "?" ;
-    D_6 = mkDig "?" ;
-    D_7 = mkDig "?" ;
-    D_8 = mkDig "?" ;
-    D_9 = mkDig "?" ;
+    D_0 = mkDig "0" ;
+    D_1 = mk3Dig "1" "" Pl;
+    D_2 = mk2Dig "2" "";
+    D_3 = mk2Dig "3" "سوم" ;
+    D_4 = mkDig "4" ;
+    D_5 = mkDig "5" ;
+    D_6 = mkDig "6" ;
+    D_7 = mkDig "7" ;
+    D_8 = mkDig "8" ;
+    D_9 = mkDig "9" ;
    
   --  lin IDig d = { s = \\_ => d.s ; n = Sg} ;
     lin IIDig d dg = { s = \\df => d.s ! NCard ++ dg.s ! df   ; n = Pl}; 
