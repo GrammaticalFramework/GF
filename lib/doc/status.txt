@@ -21,7 +21,7 @@ are marked in the table
 | Dan   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
 | Dut   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,FJ
 | Eng   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,BB
-| Fin   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *AR
+| Fin   | +     | +    | ++    | +   | +    | +   | +    | -     | +    | *AR
 | Fre   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
 | Ger   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,HH
 % | Heb   | -   | -    | -     | -   | -    | -   | -    | -     | -    | DD
@@ -31,6 +31,7 @@ are marked in the table
 | Lat   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
 | Lav   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *NG
 | Mon   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *NE
+| Nep   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | *DS
 | Nor   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
 | Pes   | +     | -    | +     | +   | +    | +   | -    | -     | -    | *SV,*EA,SM
 | Pnb   | +     | +    | +     | +   | +    | +   | +    | -     | -    | *SV,MH
@@ -76,6 +77,7 @@ AD Ali El Dada,
 AR Aarne Ranta,
 AS Adam Slaski,
 BB Björn Bringert,
+DS Dinesh Simk,
 EA Elnaz Abolahrar,
 FJ Femke Johansson,
 HH Harald Hammarström,
