@@ -17,7 +17,7 @@ revealedLang = "Eng"
 
 -- all languages shown
 apiExxFiles = ["api-examples-" ++ lang ++ ".txt" | lang <- words 
-  "Afr Bul Cat Dan Dut Eng Fin Fre Ger Ita Nor Pnb Pol Ron Rus Spa Swe Urd"]
+  "Afr Bul Cat Dan Dut Eng Fin Fre Ger Ita Nor Pes Pnb Pol Ron Rus Spa Swe Urd"]
 
 main = do
   xx <- getArgs
