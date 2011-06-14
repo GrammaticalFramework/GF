@@ -1,0 +1,9 @@
+Some of the sources are transliterated, in
+
+ ./src
+
+Before compilation, do
+
+  gf -s <translit.gfs
+
+to get unicode.
