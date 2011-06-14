@@ -90,7 +90,7 @@ mkTransliteration name ts us =
 getTransliterationFile :: String -> String -> Transliteration
 getTransliterationFile name = uncurry (mkTransliteration name) . codes
  where
-  codes = unzip . map (mkOne . words) . lines
+  codes = unzip . map (mkOne . words) . filter (not . all isSpace) . lines
   mkOne ws = case ws of
     [c]:t:_ -> (t,fromEnum c)  -- ä a:
     u:t:_   -> (t,read u)      -- 228 a: OR 0xe4
