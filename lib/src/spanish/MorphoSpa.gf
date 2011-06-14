@@ -50,6 +50,7 @@ oper
       _   => mkNoun (nomPilar mec) Masc
       } ;
 
+
 --2 Adjectives
 --
 -- Adjectives are conveniently seen as gender-dependent nouns.
@@ -71,16 +72,47 @@ oper
     in
     mkAdj solo (sol + "a") (sol + "os") (sol + "as") (sol + "amente") ;
 
+  -- masculine and feminine are identical: 
+  -- adjectives ending with -e, -a and many but not all that end in a consonant
   adjUtil : Str -> Str -> Adj = \util,utiles -> 
     mkAdj util util utiles utiles (util + "mente") ;
+
+  -- adjectives that end in consonant but have different masc and fem forms
+  -- español, hablador ...
+  adjEspanol : Str -> Str -> Adj = \espanol,espanola ->
+    mkAdj espanol espanola (espanol + "es") (espanol + "as") (espanola + "mente") ;
 
   adjBlu : Str -> Adj = \blu -> 
     mkAdj blu blu blu blu blu ; --- 
 
+ -- francés francesa franceses francesas
+  adjEs : Str -> Adj = \francEs ->
+    let franc  : Str = Predef.tk 2 francEs ;
+        frances : Str = franc + "es" ;
+    in mkAdj francEs (frances + "a") (frances + "es") (frances + "as") (frances + "amente") ;
+ 
+
+   -- alemán alemana alemanes alemanas
+  adjVn : Str -> Adj = \alemAn ->
+    let alemA : Str = init alemAn ;
+        alem  : Str = init alemA ;
+        A : Str = last alemA ;
+        V : Str = case A of {
+          "á" => "a" ;
+          "é" => "e" ;
+          "í­" => "i" ;
+          "ó" => "o"
+        } ;
+        alemVn : Str = alem + V + "n" ;
+    in mkAdj alemAn (alemVn + "a") (alemVn + "es")
+            (alemVn + "as") (alemVn + "amente") ;
+
   mkAdjReg : Str -> Adj = \solo -> 
-    case last solo of {
-      "o" => adjSolo solo ;
-      "e" => adjUtil solo (solo + "s") ;
+    case solo of {
+      _ + "o" => adjSolo solo ;
+      _ + ("e" | "a") => adjUtil solo (solo + "s") ;
+      _ + "és" => adjEs solo ;
+      _ + ("á" | "é­" | "í" | "ó")  + "n" => adjVn solo ;
       _   => adjUtil solo (solo + "es")
 ----      _   => adjBlu solo
       } ;

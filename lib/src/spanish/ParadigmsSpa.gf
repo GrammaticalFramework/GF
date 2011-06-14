@@ -142,6 +142,10 @@ oper
 
     mkA : (util : Str) -> A ; -- predictable adjective
 
+-- Some adjectives need the feminine form separately.
+
+    mkA : (espanol,espanola : Str) -> A ;
+
 -- One-place adjectives compared with "mas" need five forms in the worst
 -- case (masc and fem singular, masc plural, adverbial).
 
@@ -168,6 +172,14 @@ oper
   mkA2 : A -> Prep -> A2 ; -- e.g. "casado" + dative
 
 
+-- Quantifiers
+
+  mkQuant : (ese,esa,esos,esas : Str) -> Quant ;
+
+  mkDet : (mucho,mucha : Str) -> Number -> Det ;
+
+  mkOrd : A -> Ord ;
+
 
 --2 Adverbs
 
@@ -184,6 +196,8 @@ oper
 
   mkAdA : Str -> AdA ;
 
+  mkAdN : Str -> AdN ;
+  
 
 --2 Verbs
 
@@ -318,6 +332,10 @@ oper
 
   mk5A a b c d e = 
    compADeg {s = \\_ => (mkAdj a b c d e).s ; isPre = False ; lock_A = <>} ;
+
+  mk2A a b =
+   compADeg {s = \\_ => (adjEspanol a b).s ; isPre = False ; lock_A = <>} ;
+
   regA a = compADeg {s = \\_ => (mkAdjReg a).s ; isPre = False ; lock_A = <>} ;
   prefA a = {s = a.s ; isPre = True ; lock_A = <>} ;
 
@@ -335,6 +353,38 @@ oper
   mkAdv x = ss x ** {lock_Adv = <>} ;
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
+  mkAdN x = ss x ** {lock_AdN = <>} ;
+
+  mkOrd adj = lin Ord {
+    s = \\ag => adj.s ! Posit ! AF ag.g ag.n ;
+    } ;
+
+  mkQuant ese esa esos esas = 
+    let 
+      se  : Str = Predef.drop 1 ese ;
+      sa  : Str = Predef.drop 1 esa ;
+      sos : Str = Predef.drop 1 esos ;
+      sas : Str = Predef.drop 1 esas ;
+      E   : Str = "é" ;
+      attrforms : Number => Gender => Case => Str = table {
+        Sg => \\g,c => prepCase c ++ genForms ese esa ! g ;
+        Pl => \\g,c => prepCase c ++ genForms esos esas ! g ---- 
+        } ;
+      npforms : Number => Gender => Case => Str = table {
+        Sg => \\g,c => prepCase c ++ genForms (E + se)  (E + sa)  ! g ;
+        Pl => \\g,c => prepCase c ++ genForms (E + sos) (E + sas) ! g }
+    in lin Quant {
+      s = \\_ => attrforms ;
+      s2 = [] ;
+      sp = npforms 
+      } ;
+
+  mkDet mucho mucha number = 
+    lin Det {
+      s,sp = \\g,c => prepCase c ++ genForms mucho mucha ! g ;
+      n = number;
+      s2 = []
+      } ;
 
   regV x = -- cortar actuar cazar guiar pagar sacar
     let 
@@ -428,11 +478,13 @@ oper
 
   mkA = overload {
     mkA : (util : Str) -> A  = regA ;
+    mkA : (espanol,espanola : Str) -> A  = mk2A ;
     mkA : (solo,sola,solos,solas,solamente : Str) -> A = mk5A ;
     mkA : (bueno : A) -> (mejor : A) -> A = mkADeg ;
     } ;
 
-  mk5A : (solo,sola,solos,solas, solamente : Str) -> A ;
+  mk5A : (solo,sola,solos,solas,solamente : Str) -> A ;
+  mk2A : (espanol,espanola : Str) -> A ;
   regA : Str -> A ;
   mkADeg : A -> A -> A ;
   compADeg : A -> A ;
