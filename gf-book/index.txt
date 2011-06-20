@@ -13,6 +13,7 @@ This is the web page of the book
   CSLI Publications, 
   Stanford, 
   2011,
+  340 pp,
   ISBN-10: 1-57586-626-9 (Paper), 1-57586-627-7 (Cloth).
 
 
@@ -20,15 +21,21 @@ This is the web page of the book
 
 ==Publisher's information==
 
-Forthcoming at http://www-csli.stanford.edu/pubs/
+Publisher's web page (look for "Series" -> "CSLI Studies in Computational Linguistics")
 
-Direct order (demonstrably available 15 April 2011): 
+  http://www-csli.stanford.edu/pubs/
+
+
+==Order==
+
+Direct order ($32.50 paperback, $70 hardcover):
 
   http://press.uchicago.edu/ucp/books/book/distributed/G/bo12469871.html
 
-Amazon order (may be still not active):
+Amazon order ($32.50 paperback, $70 hardcover):
 
-  http://www.amazon.com/Grammatical-Framework-Programming-Multilingual-Information/dp/1575866269/ref=sr_1_2?ie=UTF8&s=books&qid=1302811905&sr=8-2
+  http://www.amazon.com/Grammatical-Framework-Programming-Multilingual-Information/dp/1575866269/ref=sr_1_2?ie=UTF8&qid=1308585697&sr=8-2
+
 
 
 
@@ -67,10 +74,6 @@ material makes it interesting for senior researchers in computer science,
 linguistics, and related fields. 
 
 
-==Publisher's information==
-
-Forthcoming at http://www-csli.stanford.edu/pubs/
-
 ==How to cite==
 
 ```
@@ -87,13 +90,16 @@ Forthcoming at http://www-csli.stanford.edu/pubs/
 
 ==Table of Contents==
 
-[Preliminary Table of Contents toc-gf-book.txt]
+[Detailed Table of Contents toc-gf-book.txt]
 
 
 ==Supporting material==
 
-Slides for teaching the book chapter by chapter are forthcoming. 
-The following should be useful before that.
+Slides for teaching the book chapter by chapter are forthcoming by the
+[Second GF Summer School http://school.grammaticalframework.org/] 
+starting on August 15, 2011.
+ 
+The following should be useful before that:
 - [GF Tutorial ../doc/tutorial/gf-tutorial.html]: programmer-oriented,
   covering parts of chapters 2-8 
 - [GF Resource Tutorial ../doc/gf-lrec-2010.pdf]: linguist-oriented,
@@ -108,8 +114,8 @@ Demos
 - [multimodal dialogue system http://www.youtube.com/watch?v=1bfaYHWS6zU] (Section 7.15)
 
 
-[Works mentioned in references http://www.grammaticalframework.org/doc/gf-bibliography.html],
-download links to more works forthcoming.
+[Works mentioned in references http://www.grammaticalframework.org/doc/gf-bibliography.html];
+more download links will be added.
 
 [Resource Grammar Library API http://www.grammaticalframework.org/lib/doc/synopsis.html]
 
