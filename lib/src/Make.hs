@@ -43,7 +43,9 @@ langsCoding = [
   (("interlingua","Ina"),""),
   (("italian",  "Ita"),"Romance"),
   (("latin",    "Lat"),""),
+  (("nepali",   "Nep"),""),
   (("norwegian","Nor"),"Scand"),
+  (("persian",  "Pes"),""),
   (("polish",   "Pol"),""),
   (("punjabi",  "Pnb"),""),
   (("romanian", "Ron"),""),
@@ -65,6 +67,9 @@ langsLangAll = langs
 -- languagues that are almost complete and for which Lang is normally compiled
 langsLang = langs `except` langsIncomplete ---- []
 
+-- languagues that have notpresent marked
+langsPresent = langsLang `except` ["Nep","Pes"]
+
 -- languages for which Lang can be compiled but which are incomplete
 langsIncomplete = ["Amh","Ara","Hin","Lat","Tha","Tur"]
 
@@ -72,7 +77,7 @@ langsIncomplete = ["Amh","Ara","Hin","Lat","Tha","Tur"]
 langsAPI = langsLang `except` langsIncomplete
 
 -- languages for which to compile Symbolic
-langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Ina","Pnb","Rus"])
+langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Ina","Pes","Pnb","Rus"])
 
 -- languages for which to compile minimal Syntax
 langsMinimal = langs `only` ["Ara","Eng","Bul","Rus"]
@@ -109,7 +114,7 @@ make xx = do
   let optl ls = maybe ls id $ getOptLangs xx
 
   ifx "lang" $ do
-    let lans = optl langsLang
+    let lans = optl $ if pres then langsPresent else langsLang
     mapM_ (gfc pres [] . lang) lans
     mapM_ (gfc pres presSymbolPath . symbol) lans ---- (optl langsAPI)
     copyl lans "*.gfo" dir
