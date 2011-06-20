@@ -43,6 +43,7 @@ allTransliterations = Map.fromAscList [
   ("greek", transGreek),
   ("hebrew", transHebrew),
   ("persian", transPersian),
+  ("nepali", transNepali),
   ("telugu", transTelugu),
   ("thai", transThai),
   ("urdu", transUrdu)
@@ -169,6 +170,21 @@ transPersian = (mkTransliteration "Persian/Farsi" allTrans allCodes)
   allCodes = [0x0621..0x062f] ++ [0x0630..0x063a] ++ 
              [0x0641..0x064f] ++ [0x0650..0x0657] ++ 
              [0x067e,0x0686,0x0698,0x06a9,0x06af,0x06cc]
+
+transNepali :: Transliteration
+transNepali = mkTransliteration "Nepali" allTrans allCodes where
+  allTrans = words $
+    "z+  z= " ++ 
+    "-  V  M  h: -  H  A  i: I: f  F  Z  -  -  -  e: " ++
+    "E: -  -  O  W  k  K  g  G  n: C  c  j  J  Y  q  " ++
+    "Q  x  X  N  t  T  d  D  n  -  p  P  b  B  m  y  " ++
+    "r  -  l  L  -  v  S  z  s  h  -  -  ~  `  a  i  " ++
+    "I  u  U  R  -  -  -  e  E  -  -  o  w  x: -  -  " ++
+    "O: -  _  -  -  -  -  -  -  -  -  -  -  -  -  -  " ++
+    "-  -  -  -  .  >  0  1  2  3  4  5  6  7  8  9  " ++
+    "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  "
+  allCodes = [0x200c,0x200d] ++ [0x0900 .. 0x097f]
+
 
 transHebrew :: Transliteration
 transHebrew = mkTransliteration "unvocalized Hebrew" allTrans allCodes where

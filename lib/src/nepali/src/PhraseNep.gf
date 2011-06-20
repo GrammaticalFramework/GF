@@ -5,6 +5,7 @@ concrete PhraseNep of Phrase = CatNep ** open Prelude, ResNep in {
 
     UttS s = s ;
     UttQS qs = {s = qs.s ! QDir} ;
+    
     -- be a man -> (मन्छे हउ)
     UttImpSg pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Sg False ++ "hf"} ;
     
