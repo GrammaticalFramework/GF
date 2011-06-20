@@ -1,4 +1,4 @@
 abstract AllNepAbs =
   Lang
---  ExtraPnbAbs
+--  ExtraNepAbs
   ** {} ;

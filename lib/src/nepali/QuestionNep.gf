@@ -11,10 +11,10 @@ concrete QuestionNep of Question = CatNep ** open ResNep, Prelude in {
 	        QDir   => cl.s ! t ! p ! OQuest;
             QIndir => "येदि" ++ cl.s ! t ! p ! ODir
 			}
-		} ;	  
+		 } ;	  
 
     QuestVP qp vp = 
-       let cl  = mkSClause ("") (Ag Masc qp.n Pers3_L) vp;
+       let cl  = mkSClause ("") (Ag Masc qp.n Pers3_M) vp; -- Pers3_M
            qp1 = qp.s ! Nom;
            qp2 = qp.s ! Ins
            in { s = \\t,p,o => 
@@ -31,7 +31,7 @@ concrete QuestionNep of Question = CatNep ** open ResNep, Prelude in {
           in {
           s = \\t,p,o => case t of { 
 --            VPSmplPast => ip2 ++ slash.s ! t ! p ! ODir ;
-              _          => ip1 ++ slash.s ! t ! p ! ODir
+              _          => ip2 ++ slash.s ! t ! p ! ODir
             }
         };
 
@@ -40,8 +40,8 @@ concrete QuestionNep of Question = CatNep ** open ResNep, Prelude in {
         } ;
 
     QuestIComp icomp np = 
-     let cl = mkSClause (np.s ! NPC Nom ++ icomp.s) np.a (predAux auxBe); 
-	   in {
+     let cl =  mkSClause (np.s ! NPC Nom ++ icomp.s) np.a (predAux NonLiving) ;--(predAux np.t); to test mkQCl-IAdv-NP-QCl                     
+	   in {                                                                    -- eg उनी कहाँ छिन् - (छिन् - NonLiving case) 
        s = \\t,p,qf => case qf of { 
 	      QDir   => cl.s ! t ! p ! ODir;
           QIndir => cl.s ! t ! p ! ODir
@@ -78,6 +78,18 @@ concrete QuestionNep of Question = CatNep ** open ResNep, Prelude in {
     AddAdvQVP qvp iadv = insertObj (\\_ => iadv.s) qvp ;
     ComplSlashIP vpslash ip = insertObj (\\_ => ip.s ! Nom) vpslash ;
     
-   lincat QVP = CatNep.VP ; 
-
+   --QuestQVP      : IP -> QVP -> QCl ;       -- who buys what where
+   QuestQVP ip qvp = 
+     let cl  = mkSClause ("") (Ag Masc ip.n Pers3_M) qvp ; -- Pers3_M
+         qp1 = ip.s ! Nom ;
+         qp2 = ip.s ! Ins
+         in { s = \\t,p,o => 
+            case t of {
+-- 	        VPSmplPast => qp2 ++ cl.s ! t ! p ! ODir ;
+	        _          => qp1 ++ cl.s ! t ! p ! ODir
+            }
+		} ; 
+   
+   lincat QVP = CatNep.VP ;
+   
 }

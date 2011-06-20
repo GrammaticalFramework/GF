@@ -1,12 +1,9 @@
 --# -path=.:../../prelude
 --
-----1 A Simple Punjabi Resource Morphology
-----
-----  Shafqat Virk, Aarne Ranta,2010
-----
----- This resource morphology contains definitions needed in the resource
----- syntax. To build a lexicon, it is better to use $ParadigmsPnb$, which
----- gives a higher-level access to this module.
+-- 1 Morpholical inflection of Noun and Verbs of Nepali
+--
+--  by Dinesh Simkhada, Shafqat Virk - 2011
+--
 
 resource MorphoNep = ResNep ** open Prelude,Predef in {
 
@@ -24,9 +21,8 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
 --1 Nouns
   oper
     
-    -- mkN : (x1,_,_,_,_,_,_,_,_,_,_,x12 : Str) -> Gender -> Bool -> Noun = 
-    mkN : (x1,_,_,_,_,_,_,_,_,_,_,x12 : Str) -> Gender -> Noun = 
-      \sn,sa,si,sd,sab,sl,pn,pa,pi,pd,pab,pl, g -> {
+    mkN : (x1,_,_,_,_,_,_,_,_,_,_,x12 : Str) -> Gender -> NType -> NPerson -> Noun = 
+      \sn,sa,si,sd,sab,sl,pn,pa,pi,pd,pab,pl,g,t,h -> {
       s = table {
       Sg => table {
         Nom => sn ;
@@ -45,38 +41,38 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
         Loc => pl
         }
       } ;
-
-      g = g 
-      -- isHum = h
+      g = g ;
+      t = t ;
+      h = h
     } ;    
 
   -- TODO
   -- ?? NEED TO ADD CASE IF ENDS WITH 'o' (PG. 99 Jaya)
   
   -- Regular nouns
-  mkNMF : Str -> Gender -> Noun ;
-  mkNMF str g = mkN str (str + "laI:") (str + "le") (str + "laI:") (str + "baq") (str + "ma") 
-                   (str + "hru") (str + "hrulaI:") (str + "hrule") (str + "hrulaI:") (str + "hrubaq") (str + "hruma") g ;  
+  mkNMF : Str -> Gender -> NType -> NPerson -> Noun ;
+  mkNMF str g t h = mkN str (str + "laI:") (str + "le") (str + "laI:") (str + "baq") (str + "ma") 
+                   (str + "hru") (str + "hrulaI:") (str + "hrule") (str + "hrulaI:") (str + "hrubaq") (str + "hruma") g t h ;  
   
   -- Regular Nouns
-  mkNReg : Str ->  Noun ;
-  mkNReg str = mkNMF str Masc ;
+  mkNReg : Str -> NType -> NPerson -> Noun ;
+  mkNReg str typ hnr = mkNMF str Masc typ hnr ;
   
   -- Faminine nouns
-  mkNFem : Str ->  Noun ;
-  mkNFem str = mkNMF str Fem ; 
+  mkNFem : Str -> NType -> NPerson -> Noun ;
+  mkNFem str typ hnr = mkNMF str Fem typ hnr ; 
   
   
   -- Uncountable nouns, which have same singular and plular form
   -- eg water
-  mkNUnc : Str -> Gender -> Noun ;
-  mkNUnc str g = mkN str (str + "laI:") (str + "le") (str + "laI:") (str + "baq") (str + "ma") 
-                     str (str + "laI:") (str + "le") (str + "laI:") (str + "baq") (str + "ma")  g ;  
+  mkNUnc : Str -> Gender -> NType -> NPerson -> Noun ;
+  mkNUnc str g t h = mkN str (str + "laI:") (str + "le") (str + "laI:") (str + "baq") (str + "ma") 
+                     str (str + "laI:") (str + "le") (str + "laI:") (str + "baq") (str + "ma")  g t h ;  
 
   -- Proper Names
-  regN1 : Str -> Gender -> Noun ;
-  regN1 str g = mkN str (str + "laI:") (str + "le") (str + "laI:") (str + "baq") (str + "ma")
-                    str str str str str str g ;
+  regN1 : Str -> Gender -> NType -> NPerson -> Noun ;
+  regN1 str g t h = mkN str (str + "laI:") (str + "le") (str + "laI:") (str + "baq") (str + "ma")
+                    str str str str str str g t h ;
 
 
 -- pronouns
@@ -90,13 +86,12 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
               Abl => ab ;
               Loc => l
             }
-    } ;
+        } ;
     
   makePronReg : Str -> {s : Case => Str} ;
   makePronReg str = makePron str (str + "laI:") (str + "le") (str + "laI:") (str + "baq") (str + "ma") ;
 
---2. Derminers
-  
+--2. Derminers  
   makeDet : Str -> Str -> Str -> Str -> Number -> Determiner = 
    \s1,s2,s3, s4, n -> {
      s = table {
@@ -104,35 +99,18 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
                        Fem  => s2 } ;
          Pl => table { Masc => s3 ;
                        Fem  => s4 }
-	     } ;
+	     }  ;
       n = n
-	};	
+	} ;	
 
-  	
-  IDeterminer = {s : Gender => Str ; n : Number};
-  makeIDet : Str -> Str -> Number -> IDeterminer = 
-   \s1,s2,n -> {
-     s = table {
-         Masc => s1;
-		 Fem  => s2
-	     } ;
-	  n = n
-     };
-{-
-  makeIQuant : Str -> Str -> Str -> Str -> {s:Number => Gender => Str} = \s1,s2,s3,s4 -> {
-   s = table {
-      Sg => table {
-        Masc => s1 ;
-        Fem => s2 
-	  } ;
-      Pl => table {
-        Masc => s3 ;
-        Fem => s4 
-	  }
-      } 
-	};	
-
--}
+-- maIdetn helper    
+  makeIDet : Str -> Str -> {s : Gender => Str} = 
+    \s1,s2 -> {
+      s = table {
+          Masc => s1 ;
+		  Fem  => s2
+	      } 
+     } ;
 
 -- Quantifiers
   makeQuant : Str -> Str -> Str -> Str -> {s : Number => Gender => Str } =
@@ -161,7 +139,7 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
          Imp      => (mkImpForm root).s ;
          ProgRoot aspect number gender => (mkProgRoot root aspect number gender).s ;
 
-         VF tense aspect polarity person number gender  => 
+         VF tense aspect polarity person number gender => 
             case aspect of {
                  Imperf => (mkVImperf root tense polarity person number gender).s ;
                  Perf   => (mkVPerf root tense polarity person number gender).s
@@ -181,6 +159,7 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
       };
     };
     
+  
   --For the progressive root case
   mkProgRoot : Str -> Aspect -> Number -> Gender -> {s : Str } = 
    \root,aspect,number,gender -> 
@@ -221,7 +200,6 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
       } ;       
        
    --need to check for want_VV <- Not inflected correctly
-
    rootCheck : Str -> {root1:Str; root2:Str; vcase: VCase} = 
      \root -> {
      {-
@@ -282,7 +260,7 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
              NPresent       => (mkVPreNP  root root1 vcase po pn n g).s ;
              NPast Simpl    => (mkVPstSNP root root2 vcase po pn n g).s ;
              NPast Hab      => (mkVPstHNP root root1 vcase po pn n g).s ;
-             NPast Unknown  => (mkVPstUNP root root2 vcase po pn n g).s ;
+             --NPast Unknown  => (mkVPstUNP root root2 vcase po pn n g).s ;
              NFuture Defin  => (mkVFutDNP root po pn n g).s ;
              NFuture NDefin => (mkVFutNDNP root root2 vcase po pn n g).s 
             } 
@@ -301,7 +279,7 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
              NPresent       => (mkVPreP  root root2 vcase po pn n g).s ;
              NPast Simpl    => (mkVPstSP root root2 vcase po pn n g).s ;
              NPast Hab      => (mkVPstHP root root2 vcase po pn n g).s ;
-             NPast Unknown  => (mkVPstUP root root2 vcase po pn n g).s ;             
+             --NPast Unknown  => (mkVPstUP root root2 vcase po pn n g).s ;             
              NFuture Defin  => (mkVFutDefP root root2 vcase po pn n g).s ;
              NFuture NDefin => (mkVFutNDefP root root2 vcase po pn n g).s         
             }
@@ -508,7 +486,7 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
           }
       };
    
-
+{-
 -- Past Unknown, Nonprogressive mode, nonperfective aspect     
    mkVPstUNP : Str -> Str -> VCase -> Polarity -> NPerson -> Number -> Gender -> {s:Str} = 
      \ root, root2, vc, po, p, n, g -> 
@@ -567,7 +545,7 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
            <      _,  _,   _>  => root  + "nuBe:" + na +"c" -- नुभएनछ
            }
      } ;
-     
+-}     
 
 -- Future Definitive, Nonprogressive mode, nonperfective aspect
    -- Handles Both cases
@@ -651,7 +629,7 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
            <Pos,       _,  _,   _>  => root + "nuhola" ; -- नुहोला
            
            -- TODO : NOT CLEAR DEFINITION IN BOOK
-          <Neg,       _,  _,   _>  => "quxu" 
+           <Neg,       _,  _,   _>  => "quxu" 
            }
         } ;
    
@@ -745,7 +723,7 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
         }
       };
       
-   
+{-   
 -- Past Unknown, Perfective aspect, Nonprogressive Mode
    mkVPstUP : Str -> Str -> VCase -> Polarity -> NPerson -> Number -> Gender -> {s:Str} = 
      \root, root2, vc, po, pn, n, g ->
@@ -781,7 +759,7 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
         }
       };
 
-
+-}
 -- Present, Perfective aspect, Nonprogressive Mode
    mkVPreP : Str -> Str -> VCase -> Polarity -> NPerson -> Number -> Gender -> {s:Str} = 
      \root, root2, vc, po, pn, n, g ->

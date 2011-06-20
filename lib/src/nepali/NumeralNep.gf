@@ -1,6 +1,6 @@
 concrete NumeralNep of Numeral = CatNep ** open ResNep, Prelude in {
 -- By Harald Hammarstroem
--- Modification for Nepali by Dinesh and Shafqat Virk
+-- Modification for Nepali by Dinesh Simkhada and Shafqat Virk - 2011
  flags coding=utf8 ;
 
 
@@ -21,7 +21,7 @@ lincat Sub1000000 = {s : Str ; n : Number } ;
 lin num x0 = 
     {s = table {
           NCard => x0.s ; 
-          NOrd  => x0.s ++ "ौँ"  -- need to use mkOrd x0.s but it gives linking error 
+          NOrd  => Prelude.glue x0.s "ौँ"  -- need to use mkOrd x0.s but it gives linking error 
           };
        n = x0.n
     } ; 

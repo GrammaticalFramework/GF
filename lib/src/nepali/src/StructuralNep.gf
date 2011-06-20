@@ -25,9 +25,9 @@ concrete StructuralNep of Structural = CatNep **
     can8know_VV,can_VV = mkV "skx:nu" ** { isAux = True} ;
     during_Prep = mkPrep "prx:yanx:t" ; -- पर्यान्त
     either7or_DConj = sd2 "HTva" "ya" ** {n = Sg} ; -- अथवा , या
-    everybody_NP =  MassNP (UseN (regN "svw jana")) ; -- not a good way coz need to include Noun (सवौ जाना)
+    everybody_NP =  MassNP (UseN (regN "svw jana" Living)) ; -- not a good way coz need to include Noun (सवौ जाना)
     every_Det = mkDet "sbE" "hrek" Sg ; -- सबै, हरेक
-    everything_NP = MassNP (UseN (regN "harek kura")) ; -- हारेक कुरा
+    everything_NP = MassNP (UseN (regN "harek kura" NonLiving)) ; -- हारेक कुरा
     everywhere_Adv = mkAdv "jata ttE" ; -- जाता ततै
     few_Det = mkDet "TorE" "HliktI" Pl ; -- थोरै, अलिकती
 --  d    first_Ord = {s = "pehla" ; n = Sg} ; --DEPRECATED
@@ -49,7 +49,7 @@ concrete StructuralNep of Structural = CatNep **
     here7from_Adv = mkAdv ["yhaV baq"] ; -- यहाँ बाट
     how_IAdv = ss "ksrI" ; -- कसरी
     how8much_IAdv  = ss "ktI" ; -- कती
-    --how8many_IDet = mkDet "ktI vqa" "ktI vqI" Pl ;  -- काती वटा, कती वटी (incase of humans it becomes, 'kati jana') NEEDS FIX
+    how8many_IDet = mkIDetn "ktI vqa" "ktI vqI" Pl ;  -- काती वटा, कती वटी (incase of humans it becomes, 'kati jana') NEEDS FIX
     if_Subj = ss "ydi" ; -- यदि
     in8front_Prep = mkPrep "samu" ; -- सामु      
     in_Prep = mkPrep "ma" ; -- मा    
@@ -84,10 +84,10 @@ concrete StructuralNep of Structural = CatNep **
     possess_Prep = mkPrep "DarNa grx:nu" ; -- धारणा गर्नु
     quite_Adv = ss "e:kdm" ; -- एकदम    
     so_AdA = mkAdA "ys karN" ; -- यस कारण ???? NEED TO CHECK
-    somebody_NP = MassNP (UseN (regN "kohI")); -- कोही
+    somebody_NP = MassNP (UseN (regN "kohI" Living)); -- कोही
     someSg_Det = mkDet "kohI" "kehI" Sg ;
     somePl_Det = mkDet "kohI" "kehI" Pl ;
-    something_NP = MassNP (UseN (regN "kehI  kura")) ;
+    something_NP = MassNP (UseN (regN "kehI  kura" NonLiving)) ;
     somewhere_Adv = mkAdv "khIM" ; -- कहीं
     that_Quant = mkQuant "tx:ye" "yinIhru" ;
     that_Subj = ss "tx:yo"; -- त्यो
@@ -123,7 +123,7 @@ concrete StructuralNep of Structural = CatNep **
     at_least_AdN = mkAdN "kmsekm" ; -- कमसेकम
     at_most_AdN = mkAdN "bXIma" ; -- बढीमा
     nothing_NP = MassNP (UseN (regN "kehI pnI")) ; -- केही पनी
-    nobody_NP = MassNP (UseN (regN "kehI pnI")) ; --कोही पनी
+    nobody_NP = MassNP (UseN (regN "kehI pnI" living)) ; --कोही पनी
     except_Prep = mkPrep "bahek" ; -- बाहेक
     as_CAdv = {s = "jtx:tIkE" ; p = ""} ;  -- जत्तीकै
     have_V2 = mkV2 (mkV "hunu") "" ; -- हुनु

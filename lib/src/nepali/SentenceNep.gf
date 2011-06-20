@@ -12,8 +12,8 @@ concrete SentenceNep of Sentence = CatNep ** open Prelude, ResNep in {
     ImpVP vp = {
       s = \\pol,n => 
         let 
-          agr   = Ag Masc (numImp n) Pers2_M ;
-          verb  = vp.obj.s ++ (vp.s! PVForm).inf ++ vp.comp ! agr ;
+          agr   = Ag Masc (numImp n) Pers2_M ; 
+          verb  = vp.obj.s ++ (vp.s ! Root).inf ++ vp.comp ! agr ;
           dont  = case pol of {
             CNeg True => "नगर" ;
             CNeg False => "नगर" ;
@@ -52,7 +52,7 @@ concrete SentenceNep of Sentence = CatNep ** open Prelude, ResNep in {
           <Fut,Simul>  => temp.s ++ p.s ++ cl.s ! VPFut ! p.p ! ODir;
           <Fut,Anter>  => temp.s ++ p.s ++ cl.s ! VPPerfFut ! p.p ! ODir;
           <Cond,Simul> => temp.s ++ p.s ++ cl.s ! VPCondPres ! p.p ! ODir;
-          <Cond,Anter> => temp.s ++ p.s ++ cl.s ! VPCondPast ! p.p ! ODir -- this needs to be fixed by making SubjPerf in ResPnb		  
+          <Cond,Anter> => temp.s ++ p.s ++ cl.s ! VPCondPast ! p.p ! ODir 
 
    };
   } ;
