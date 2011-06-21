@@ -33,7 +33,11 @@ logFile = "pgf-error.log"
 
 newPGFCache = newCache PGF.readPGF
 
-getPath = getVarWithDefault "SCRIPT_FILENAME" ""
+getPath =
+    do path <- getVarWithDefault "PATH_TRANSLATED" "" -- apache mod_fastcgi
+       if null path
+          then getVarWithDefault "SCRIPT_FILENAME" "" -- lighttpd
+          else return path
 
 cgiMain :: Cache PGF -> CGI CGIResult
 cgiMain cache = handleErrors . handleCGIErrors $
