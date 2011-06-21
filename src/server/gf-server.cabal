@@ -7,7 +7,11 @@ license-file: ../../LICENSE
 synopsis: FastCGI Server for Grammatical Framework
 
 flag fastcgi
-  Description: Build the fastcgi and content services (requires fastcgi and hsql-mysql packages)
+  Description: Build the fastcgi service (requires the fastcgi package)
+  Default:     False
+
+flag content
+  Description: Build content service (requires fastcgi and hsql-mysql packages)
   Default:     False
 
 executable pgf-http
@@ -67,7 +71,7 @@ executable pgf-service
     build-depends: unix
 
 executable content-service
-  if flag(fastcgi)
+  if flag(content)
     build-depends: base >=4.2 && <5,
                    fastcgi >= 3001.0.2.2, hsql-mysql, hsql, old-locale
     buildable: True
