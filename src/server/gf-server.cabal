@@ -19,6 +19,8 @@ executable pgf-http
   other-modules: PGFService FastCGIUtils Cache URLEncoding
                  RunHTTP ServeStaticFile
   ghc-options: -threaded
+  if impl(ghc>=7.0)
+    ghc-options: -rtsopts
 
   build-depends: base >=4.2 && <5,
                  old-time,
@@ -44,6 +46,8 @@ executable pgf-service
   main-is: pgf-fcgi.hs
   other-modules: PGFService FastCGIUtils Cache URLEncoding
   ghc-options: -threaded
+  if impl(ghc>=7.0)
+    ghc-options: -rtsopts
 
   if flag(fastcgi)
     build-depends: fastcgi >= 3001.0.2.2
