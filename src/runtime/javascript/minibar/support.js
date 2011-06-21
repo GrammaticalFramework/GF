@@ -63,25 +63,36 @@ function GetXmlHttpObject(handler)
   return objXMLHttp
 }
 
-function ajax_http_get(url,callback,errorcallback) {
+function ajax_http(method,url,body,callback,errorcallback) {
     var http=GetXmlHttpObject()
-    if (http==null) {
-	alert ("Browser does not support HTTP Request")
-	return
-    } 
-    var statechange=function() {
-	if (http.readyState==4 || http.readyState=="complete") {
-	    if(http.status<300) callback(http.responseText,http.status);
-	    else if(errorcallback) errorcallback(http.responseText,http.status);
-	    else alert("Request for "+url+" failed: "
-		       +http.status+" "+http.statusText);
-	}
+    if (!http) {
+	var errortext="Browser does not support HTTP Request";
+	if(errorcallback) errorcallback(errortext,500)
+	else alert(errortext)
     }
-    http.onreadystatechange=statechange;
-    http.open("GET",url,true)
-    http.send(null)
-    //dump("http get "+url+"\n")
+    else {
+	var statechange=function() {
+	    if (http.readyState==4 || http.readyState=="complete") {
+		if(http.status<300) callback(http.responseText,http.status);
+		else if(errorcallback) errorcallback(http.responseText,http.status);
+		else alert("Request for "+url+" failed: "
+			   +http.status+" "+http.statusText);
+	    }
+	}
+	http.onreadystatechange=statechange;
+	http.open(method,url,true)
+	http.send(body)
+    }
     return http
+}
+
+function ajax_http_get(url,callback,errorcallback) {
+    ajax_http("GET",url,null,callback,errorcallback)
+}
+
+function ajax_http_post(url,formdata,callback,errorcallback) {
+    ajax_http("POST",url,formdata,callback,errorcallback)
+    // See https://developer.mozilla.org/En/XMLHttpRequest/Using_XMLHttpRequest#Using_FormData_objects
 }
 
 // JSON via AJAX
