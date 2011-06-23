@@ -37,8 +37,8 @@ lin
   during_Prep  = mkPrep "podczas" Gen; 
   either7or_DConj = {s1="albo"; s2="albo";  sent1="albo"; sent2=[", albo"]};
   every_Det  = kazdyDet;
-  everybody_NP = wszyscy ** {lock_NP=<>};
-  everything_NP  = wszystko ** {lock_NP=<>};
+  everybody_NP = wszyscy;
+  everything_NP  = wszystko;
   everywhere_Adv = ss "wszędzie";
   except_Prep = mkPrep "z wyjątkiem" Acc;
   few_Det = pareDet;
@@ -81,10 +81,10 @@ lin
   quite_Adv = ss "całkiem";
   she_Pron   = pronOna;
   so_AdA = ss "tak";
-  somebody_NP = ktos ** {lock_NP = <>};
+  somebody_NP = ktos ;
   someSg_Det = pewienDet;
   somePl_Det = pewniDet;
-  something_NP  = cos ** {lock_NP = <>};
+  something_NP  = cos ;
   somewhere_Adv  = ss "gdzieś";
   that_Quant = demPronTen "tamten";
   there_Adv = ss "tam";

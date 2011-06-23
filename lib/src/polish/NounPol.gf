@@ -2,7 +2,7 @@
 
 -- Adam Slaski, 2009, 2010 <adam.slaski@gmail.com>
 
-concrete NounPol of Noun = CatPol ** open ResPol, Prelude, PronounMorphoPol in {
+concrete NounPol of Noun = CatPol ** open ResPol, Prelude, PronounMorphoPol, MorphoPol in {
 
   flags optimize=all_subs ;
 
