@@ -292,81 +292,81 @@
       };
 
 
-  ktory : AForm => Str = table {
-	     AF (MascPersSg|MascAniSg|MascInaniSg) Nom => "który"; 
-	     AF (MascPersSg|MascAniSg|MascInaniSg) Gen => "którego";
-	     AF (MascPersSg|MascAniSg|MascInaniSg) Dat => "któremu"; 
-	     AF MascInaniSg Acc => "który"; -- który stół widzę
-	     AF (MascPersSg|MascAniSg) Acc => "którego"; -- którego psa / przyjaciela widzę
-	     AF (MascPersSg|MascAniSg|MascInaniSg) Instr => "którym";
-	     AF (MascPersSg|MascAniSg|MascInaniSg) Loc => "którym"; 
-	     AF (MascPersSg|MascAniSg|MascInaniSg) VocP => "który";
+  -- ktory : AForm => Str = table {
+  -- 	     AF (MascPersSg|MascAniSg|MascInaniSg) Nom => "który"; 
+  -- 	     AF (MascPersSg|MascAniSg|MascInaniSg) Gen => "którego";
+  -- 	     AF (MascPersSg|MascAniSg|MascInaniSg) Dat => "któremu"; 
+  -- 	     AF MascInaniSg Acc => "który"; -- który stół widzę
+  -- 	     AF (MascPersSg|MascAniSg) Acc => "którego"; -- którego psa / przyjaciela widzę
+  -- 	     AF (MascPersSg|MascAniSg|MascInaniSg) Instr => "którym";
+  -- 	     AF (MascPersSg|MascAniSg|MascInaniSg) Loc => "którym"; 
+  -- 	     AF (MascPersSg|MascAniSg|MascInaniSg) VocP => "który";
 	     
-	     AF FemSg Nom => "która" ; 
-	     AF FemSg Gen => "której";
-	     AF FemSg Dat => "której"; 
-	     AF FemSg Acc => "którą"; 
-	     AF FemSg Instr => "którą";
-	     AF FemSg Loc => "której";
-	     AF FemSg VocP => "która";   
+  -- 	     AF FemSg Nom => "która" ; 
+  -- 	     AF FemSg Gen => "której";
+  -- 	     AF FemSg Dat => "której"; 
+  -- 	     AF FemSg Acc => "którą"; 
+  -- 	     AF FemSg Instr => "którą";
+  -- 	     AF FemSg Loc => "której";
+  -- 	     AF FemSg VocP => "która";   
 	         
-	     AF NeutSg Nom => "które" ; 
-	     AF NeutSg Gen => "którego";
-	     AF NeutSg Dat  => "któremu"; 
-	     AF NeutSg Acc => "które"; 
-	     AF NeutSg Instr => "którym";
-	     AF NeutSg Loc => "którym";
-	     AF NeutSg VocP => "które"; 
+  -- 	     AF NeutSg Nom => "które" ; 
+  -- 	     AF NeutSg Gen => "którego";
+  -- 	     AF NeutSg Dat  => "któremu"; 
+  -- 	     AF NeutSg Acc => "które"; 
+  -- 	     AF NeutSg Instr => "którym";
+  -- 	     AF NeutSg Loc => "którym";
+  -- 	     AF NeutSg VocP => "które"; 
 	
-     	 AF MascPersPl Nom => "którzy"; 
-	     AF (MascPersPl|OthersPl) Nom => "które"; 
-	     AF (MascPersPl|OthersPl) Gen => "których";
-	     AF (MascPersPl|OthersPl) Dat => "którym"; 
-	     AF MascPersPl Acc => "których"; 
-	     AF (MascPersPl|OthersPl) Acc => "które"; 
-	     AF (MascPersPl|OthersPl) Instr => "którymi";
-	     AF (MascPersPl|OthersPl) Loc => "których";
-	     AF MascPersPl VocP => "którzy"; 
-	     AF (MascPersPl|OthersPl) VocP=> "które"
-	   };
+  --    	 AF MascPersPl Nom => "którzy"; 
+  -- 	     AF (MascPersPl|OthersPl) Nom => "które"; 
+  -- 	     AF (MascPersPl|OthersPl) Gen => "których";
+  -- 	     AF (MascPersPl|OthersPl) Dat => "którym"; 
+  -- 	     AF MascPersPl Acc => "których"; 
+  -- 	     AF (MascPersPl|OthersPl) Acc => "które"; 
+  -- 	     AF (MascPersPl|OthersPl) Instr => "którymi";
+  -- 	     AF (MascPersPl|OthersPl) Loc => "których";
+  -- 	     AF MascPersPl VocP => "którzy"; 
+  -- 	     AF (MascPersPl|OthersPl) VocP=> "które"
+  -- 	   };
 	   
-  jaki : AForm => Str = table {
-	     AF (MascPersSg|MascAniSg|MascInaniSg) Nom => "jaki"; 
-	     AF (MascPersSg|MascAniSg|MascInaniSg) Gen => "jakiego";
-	     AF (MascPersSg|MascAniSg|MascInaniSg) Dat => "jakiemu"; 
-	     AF MascInaniSg Acc => "jaki"; -- jakiy stół widzę
-	     AF (MascPersSg|MascAniSg) Acc => "jakiego"; -- jakiego psa / przyjaciela widzę
-	     AF (MascPersSg|MascAniSg|MascInaniSg) Instr => "jakim";
-	     AF (MascPersSg|MascAniSg|MascInaniSg) Loc => "jakim"; 
-	     AF (MascPersSg|MascAniSg|MascInaniSg) VocP => "jaki";
+  -- jaki : AForm => Str = table {
+  -- 	     AF (MascPersSg|MascAniSg|MascInaniSg) Nom => "jaki"; 
+  -- 	     AF (MascPersSg|MascAniSg|MascInaniSg) Gen => "jakiego";
+  -- 	     AF (MascPersSg|MascAniSg|MascInaniSg) Dat => "jakiemu"; 
+  -- 	     AF MascInaniSg Acc => "jaki"; -- jakiy stół widzę
+  -- 	     AF (MascPersSg|MascAniSg) Acc => "jakiego"; -- jakiego psa / przyjaciela widzę
+  -- 	     AF (MascPersSg|MascAniSg|MascInaniSg) Instr => "jakim";
+  -- 	     AF (MascPersSg|MascAniSg|MascInaniSg) Loc => "jakim"; 
+  -- 	     AF (MascPersSg|MascAniSg|MascInaniSg) VocP => "jaki";
 	     
-	     AF FemSg Nom => "jaka" ; 
-	     AF FemSg Gen => "jakiej";
-	     AF FemSg Dat => "jakiej"; 
-	     AF FemSg Acc => "jaką"; 
-	     AF FemSg Instr => "jaką";
-	     AF FemSg Loc => "jakej";
-	     AF FemSg VocP => "jaka";   
+  -- 	     AF FemSg Nom => "jaka" ; 
+  -- 	     AF FemSg Gen => "jakiej";
+  -- 	     AF FemSg Dat => "jakiej"; 
+  -- 	     AF FemSg Acc => "jaką"; 
+  -- 	     AF FemSg Instr => "jaką";
+  -- 	     AF FemSg Loc => "jakej";
+  -- 	     AF FemSg VocP => "jaka";   
 	         
-	     AF NeutSg Nom => "jakie" ; 
-	     AF NeutSg Gen => "jakiego";
-	     AF NeutSg Dat  => "jakiemu"; 
-	     AF NeutSg Acc => "jakie"; 
-	     AF NeutSg Instr => "jakim";
-	     AF NeutSg Loc => "jakim";
-	     AF NeutSg VocP => "jakie"; 
+  -- 	     AF NeutSg Nom => "jakie" ; 
+  -- 	     AF NeutSg Gen => "jakiego";
+  -- 	     AF NeutSg Dat  => "jakiemu"; 
+  -- 	     AF NeutSg Acc => "jakie"; 
+  -- 	     AF NeutSg Instr => "jakim";
+  -- 	     AF NeutSg Loc => "jakim";
+  -- 	     AF NeutSg VocP => "jakie"; 
 	
-     	 AF MascPersPl Nom => "jacy"; 
-	     AF (MascPersPl|OthersPl) Nom => "jakie"; 
-	     AF (MascPersPl|OthersPl) Gen => "jakich";
-	     AF (MascPersPl|OthersPl) Dat => "jakim"; 
-	     AF MascPersPl Acc => "jakich"; 
-	     AF (MascPersPl|OthersPl) Acc => "jakie"; 
-	     AF (MascPersPl|OthersPl) Instr => "jakimi";
-	     AF (MascPersPl|OthersPl) Loc => "jakich";
-	     AF MascPersPl VocP => "jacy"; 
-	     AF (MascPersPl|OthersPl) VocP=> "jakie"
-	   };
+  --    	 AF MascPersPl Nom => "jacy"; 
+  -- 	     AF (MascPersPl|OthersPl) Nom => "jakie"; 
+  -- 	     AF (MascPersPl|OthersPl) Gen => "jakich";
+  -- 	     AF (MascPersPl|OthersPl) Dat => "jakim"; 
+  -- 	     AF MascPersPl Acc => "jakich"; 
+  -- 	     AF (MascPersPl|OthersPl) Acc => "jakie"; 
+  -- 	     AF (MascPersPl|OthersPl) Instr => "jakimi";
+  -- 	     AF (MascPersPl|OthersPl) Loc => "jakich";
+  -- 	     AF MascPersPl VocP => "jacy"; 
+  -- 	     AF (MascPersPl|OthersPl) VocP=> "jakie"
+  -- 	   };
  
   siebie : Case => Str = table {
     Nom => "się";
