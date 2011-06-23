@@ -2,7 +2,7 @@
 
 -- Adam Slaski, 2009 <adam.slaski@gmail.com>
 
-concrete RelativePol of Relative = CatPol ** open ResPol, VerbMorphoPol in {
+concrete RelativePol of Relative = CatPol ** open ResPol, MorphoPol in {
 
  flags optimize=all_subs ; coding=utf8 ;
 
@@ -15,8 +15,10 @@ concrete RelativePol of Relative = CatPol ** open ResPol, VerbMorphoPol in {
 
 --     RelCl    : Cl -> RCl ;            -- such that John loves her
     RelCl cl = {
-      s = \\_,pol, ant, ten => ["tak, że"] ++ cl.s ! pol ! ant ! ten
+      s = \\gn, pol, ant, ten => ["tak , że"] ++ cl.s ! pol ! ant ! ten
     };
+	-- this is only sometimes correct. there is no way to find a case for 'taki' ('such') so rp 'taki' was substituted with sentence adv 'tak'
+
 
 --     RelVP    : RP -> VP -> RCl ;      -- who loves John
 -- enormous memory usage !!! 

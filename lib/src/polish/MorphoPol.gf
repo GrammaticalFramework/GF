@@ -2,10 +2,8 @@
 --# -coding=utf8
 
 --1 A polish Resource Morphology 
---
--- Ilona Nowak, Wintersemester 2007/08
---
--- Adam Slaski, 2009, 2010 <adam.slaski@gmail.com>
+
+-- Adam Slaski, 2009, 2010, 2011 <adam.slaski@gmail.com>
 
 -- Description of the Polish morphology
 
@@ -29,15 +27,15 @@ oper
   mkN2 n = mkFun n nullPrep ;
 
   mkFun  : CommNoun -> Complement -> CommNoun2;
-  mkFun f p = { s = f.s; g = f.g; c = { c = p.c; s=p.s}; lock_N2=<> } ;
+  mkFun f p = { s = f.s; g = f.g; c = { c = p.c; s=p.s} } ;
 
   mkN3 : CommNoun -> Complement -> Complement -> CommNoun3;
-  mkN3 f p r = { s = f.s; g = f.g; c = {s=p.s; c=p.c} ; c2 = {s=r.s; c=r.c}; lock_N3=<>}; 
+  mkN3 f p r = { s = f.s; g = f.g; c = {s=p.s; c=p.c} ; c2 = {s=r.s; c=r.c} }; 
 
 -- Prepositions   
 
 -- The commonest cases are functions with Genitive.
-  nullPrep   : Complement = mkPrep []    Gen; --{s = []; c= GenNoPrep; lock_Prep=<>};  
+  nullPrep   : Complement = mkPrep []    Gen; --{s = []; c= GenNoPrep};  
   nadPrep    : Complement = mkPrep "nad" Instr; 
   zGenPrep   : Complement = mkPrep "z"   Gen;
   zInstrPrep : Complement = mkPrep "z"   Instr;
@@ -50,10 +48,14 @@ oper
 -- A preposition is formed from a string and a case.
 
   mkPrep : Str -> Case -> Complement;
-  mkPrep s c = mkCompl s c ** {lock_Prep = <>};
+  mkPrep s c = mkCompl s c;
 
 
 -- definitions for structural objects
+
+    ktory = mkAtable (mkCompAdj "który").pos;
+	jaki = mkAtable (mkCompAdj "jaki").pos;
+	taki = mkAtable (mkCompAdj "taki").pos;
 
     wszyscy : NounPhrase = {
       nom = "wszyscy" ;
