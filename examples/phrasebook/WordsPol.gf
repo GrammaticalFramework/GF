@@ -5,7 +5,6 @@ concrete WordsPol of Words = SentencesPol **
       ResPol,
       SyntaxPol, 
       (L = LexiconPol), 
-      (P = ParadigmsPol), 
       (Q = QuestionPol),
       (N = NounPol),
       MorphoPol,
@@ -22,41 +21,14 @@ concrete WordsPol of Words = SentencesPol **
     Beer = mkCN L.beer_N ;
     Bread = mkCN L.bread_N ;
     Cheese = mkCN L.cheese_N ;
-    Chicken = mkCN (P.nPtak "kurczak") ;
-    Coffee = mkCN ({ s = table { 
-	     SF Sg Nom => "kawa";
-	     SF Sg (Acc|Gen) => "kawę";
-	     SF Sg Instr => "kawą";
-	     SF Sg VocP => "kawo"; 
-	     SF Sg _ => "kawie"; 
-	     SF Pl Gen => "kawy"; 
-	     SF Pl Dat => "kawom";
-	     SF Pl Instr => "kawami";
-	     SF Pl Loc => "kawach";
-	     SF Pl _ => "kawy" 
-	     };
-	   g = Fem;
-	   lock_N : {} = <>});
+    Chicken = mkCN kurczak ;
+    Coffee = mkCN kawa;
     Fish = mkCN L.fish_N ;
     Meat = mkCN L.meat_N ;
     Milk = mkCN L.milk_N ;
-    Pizza = mkCN ({ s = table { 
-	     SF Sg Nom => "pizza";
-	     SF Sg (Acc) => "pizzę";
-	     SF Sg Instr => "pizzą";
-	     SF Sg (Dat|Gen) => "pizzy";
-	     SF Sg VocP => "pizzo"; 
-	     SF Sg _ => "pizzie"; 
-	     SF Pl Gen => "pizz"; 
-	     SF Pl Dat => "pizzom";
-	     SF Pl Instr => "pizzami";
-	     SF Pl Loc => "pizzach";
-	     SF Pl _ => "pizze" 
-	     };
-	   g = Fem;
-	   lock_N : {} = <>});
+    Pizza = mkCN pizza;
     Salt = mkCN L.salt_N ;
-    Tea = mkCN (P.nWoda "herbata") ;
+    Tea = mkCN herbata ;
     Water = mkCN L.water_N ;
     Wine = mkCN L.wine_N ;
 
@@ -77,7 +49,7 @@ concrete WordsPol of Words = SentencesPol **
 -- also the directional preposition varies, but in English we use $to$, as
 -- defined by $mkPlace$.
 
-    Airport = mkPlaceNa (P.nWojsko "lotnisko") ;
+    Airport = mkPlaceNa lotnisko ;
     AmusementPark = mkPlaceDo ["wesołe miasteczko"] ["wesołego miasteczka"] ["wesołym miasteczku"] Neut;
     Bank = mkPlaceDo "bank" "banku" "banku" (Masc Inanimate);
     Bar = mkPlaceDo "bar" "baru" "barze" (Masc Inanimate);
@@ -111,7 +83,7 @@ concrete WordsPol of Words = SentencesPol **
 -- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
 
     DanishCrown = mkCN (mkCurrency "korona duńska" "korony duńskie" "koron duńskich" Fem);
-    Dollar = mkCN (P.nSer "dolar") ;
+    Dollar = mkCN dolar ;
     Euro = mkCN (mkCurrency "euro" "euro" "euro" Neut);
     Lei = mkCN (mkCurrency "leja" "leje" "lei" Fem);
     Leva = mkCN (mkCurrency "lew" "lewy" "lewów" (Masc Animate));
@@ -124,23 +96,23 @@ concrete WordsPol of Words = SentencesPol **
 -- Nationalities
 --  język, po języku, obywatelstwo, kraj, obywatelem, obywatelami, obywatelką
     Belgian = {prop=mkA (mkCompAdj "belgijski"); citizenMSg="Belgiem"; citizenMPl="Belgami"; citizenF="Belgijką"};
-    Belgium = mkNP (P.nLilia "Belgia") ;
-    Bulgarian = mkNat "bułgarski" ["po bułgarsku"] "bułgarski" (P.nLilia "Bułgaria") "Bułgarem" "Bułgarami" "Bułgarką";
-    Catalan = mkNat "kataloński" ["po katalońsku"] "kataloński" (P.nLilia "Katalonia") "Katalończykiem" "Katalończykami" "Katalonką";
-    Danish = mkNat "duński" ["po duńsku"] "duński" (P.nLilia "Dania") "Duńczykiem" "Duńczykami" "Dunką";
-    Dutch =  mkNat "holenderski" ["po holendersku"] "holenderski" (P.nLilia "Holandia") "Holendrem" "Holendrami" "Holenderką";
-    English = mkNat "angielski" ["po angielsku"] "angielski" (P.nLilia "Anglia") "Anglikiem" "Anglikami" "Angielką";
-    Finnish = mkNat "fiński" ["po fińsku"] "finladzki" (P.nLilia "Finlandia") "Finem" "Finami" "Finką";
+    Belgium = mkNP belgia ;
+    Bulgarian = mkNat "bułgarski" ["po bułgarsku"] "bułgarski" bulgaria "Bułgarem" "Bułgarami" "Bułgarką";
+    Catalan = mkNat "kataloński" ["po katalońsku"] "kataloński" katalonia "Katalończykiem" "Katalończykami" "Katalonką";
+    Danish = mkNat "duński" ["po duńsku"] "duński" katalonia "Duńczykiem" "Duńczykami" "Dunką";
+    Dutch =  mkNat "holenderski" ["po holendersku"] "holenderski" holandia "Holendrem" "Holendrami" "Holenderką";
+    English = mkNat "angielski" ["po angielsku"] "angielski" anglia "Anglikiem" "Anglikami" "Angielką";
+    Finnish = mkNat "fiński" ["po fińsku"] "finladzki" finlandia "Finem" "Finami" "Finką";
     Flemish = mkA (mkCompAdj "flamandzki" ["po flamandzku"]);
-    French = mkNat "francuski" ["po francusku"] "francuski" (P.nLilia "Francja") "Framcuzem" "Francuzami" "Francuzką";
-    German = mkNat "niemiecki" ["po niemiecku"] "niemiecki" (mkCountry "Niemcy" "Niemczech" Plur) "Niemcem" "Niemcami" "Niemką";
-    Italian = mkNat "włoski" ["po włosku"] "włoski" (mkCountry "Włochy" "Włoszech" Plur)"Włochem" "Włochami" "Włoszką";
-    Norwegian = mkNat "norweski" ["po norwesku"] "norweski" (P.nLilia "Norwegia") "Norwegiem" "Norwegami" "Norweszką";
-    Polish = mkNat "polski" ["po polsku"] "polski" (mkCountry "Polska" "Polsce" Fem) "Polakiem" "Polakami" "Polką";
-    Romanian = mkNat "rumuński" ["po rumuńsku"] "rumuński" (P.nLilia "Rumunia") "Rumunem" "Rumunami" "Rumunką";
-    Russian = mkNat "rosyjski" ["po rosyjsku"] "rosyjski" (P.nLilia "Rosja") "Rosjaninem" "Rosjanami"  "Rosjanką";
-    Spanish = mkNat "hiszpański" ["po hiszpańsku"] "hiszpański" (P.nLilia "Hiszpania") "Hiszpanem" "Hiszpanami"  "Hiszpanką";
-    Swedish = mkNat "szwedzki" ["po szwedzku"] "szwedzki" (P.nLilia "Szwecja") "Szwedem" "Szwedami" "Szwedką";
+    French = mkNat "francuski" ["po francusku"] "francuski" francja "Framcuzem" "Francuzami" "Francuzką";
+    German = mkNat "niemiecki" ["po niemiecku"] "niemiecki" niemcy "Niemcem" "Niemcami" "Niemką";
+    Italian = mkNat "włoski" ["po włosku"] "włoski" wlochy "Włochem" "Włochami" "Włoszką";
+    Norwegian = mkNat "norweski" ["po norwesku"] "norweski" norwegia "Norwegiem" "Norwegami" "Norweszką";
+    Polish = mkNat "polski" ["po polsku"] "polski" polska "Polakiem" "Polakami" "Polką";
+    Romanian = mkNat "rumuński" ["po rumuńsku"] "rumuński" rumunia "Rumunem" "Rumunami" "Rumunką";
+    Russian = mkNat "rosyjski" ["po rosyjsku"] "rosyjski" rosja "Rosjaninem" "Rosjanami"  "Rosjanką";
+    Spanish = mkNat "hiszpański" ["po hiszpańsku"] "hiszpański" hiszpania "Hiszpanem" "Hiszpanami"  "Hiszpanką";
+    Swedish = mkNat "szwedzki" ["po szwedzku"] "szwedzki" szwecja "Szwedem" "Szwedami" "Szwedką";
 
 -- Means of transportation 
 
@@ -161,7 +133,7 @@ concrete WordsPol of Words = SentencesPol **
     AHasAge p num = mkCl p.name have_V2 (mkNP (mkDet num) (mkCN L.year_N)) ;
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ; 
     AHasRoom p num = mkCl p.name have_V2 
-      (mkNP (mkNP a_Det (P.nPokoj "pokój")) (SyntaxPol.mkAdv for_Prep (mkNP num (L.person_N)))) ;
+      (mkNP (mkNP a_Det (mkN (mkNTable0950 "pokój") (Masc Inanimate))) (SyntaxPol.mkAdv for_Prep (mkNP num (L.person_N)))) ;
     AHasTable p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (L.table_N)) (SyntaxPol.mkAdv for_Prep (mkNP num (L.person_N)))) ;
 
@@ -269,6 +241,31 @@ concrete WordsPol of Words = SentencesPol **
 
 -- auxiliaries
 
+  oper kurczak = mkN (mkNTable0173 "kurczak") (Masc Animate) ;
+  oper kawa = mkN (mkNTable0021 "kawa") (Fem) ;
+  oper pizza = mkN (mkNTable0175 "pizza") (Fem) ;
+  oper herbata = mkN (mkNTable0026 "herbata") (Fem) ;
+  oper lotnisko = mkN (mkNTable0265 "lotnisko") (Neut) ;
+  oper lilja = mkN (mkNTable0060 "lilia") (Fem) ;
+  oper niemcy = mkN (mkNTable0387 "Niemcy") (Plur) ;
+  oper wlochy = mkN (mkNTable0482 "Włochy") (Plur) ;
+  oper belgia = mkN (mkNTable0005 "Belgia") (Fem) ;
+  oper bulgaria = mkN (mkNTable0005 "Bułgaria") (Fem) ;
+  oper katalonia = mkN (mkNTable0005 "Katalonia") (Fem) ;
+  oper dania = mkN (mkNTable0055 "Dania") (Fem) ;
+  oper anglia = mkN (mkNTable0005 "Anglia") (Fem) ;
+  oper holandia = mkN (mkNTable0005 "Holandia") (Fem) ;
+  oper finlandia = mkN (mkNTable0005 "Finlandia") (Fem) ;
+  oper francja = mkN (mkNTable0005 "Francja") (Fem) ;
+  oper norwegia = mkN (mkNTable0005 "Norwegia") (Fem) ;
+  oper polska = mkN (mkNTable0041 "Polska") (Fem) ;
+  oper rumunia = mkN (mkNTable0032 "Rumunia") (Fem) ;
+  oper rosja = mkN (mkNTable0005 "Rosja") (Fem) ;
+  oper hiszpania = mkN (mkNTable0032 "Hiszpania") (Fem) ;
+  oper szwecja = mkN (mkNTable0005 "Szwecja") (Fem) ;
+  oper pokoj = mkN (mkNTable0526 "pokój") (Masc Inanimate) ;
+  oper dolar = mkN (mkNTable0064 "dolar") (Masc Animate) ;
+
   oper
   
   mkA : Adj -> A = \adj -> adj ** { lock_A = <> };
@@ -319,12 +316,6 @@ concrete WordsPol of Words = SentencesPol **
     };
   };
   
-  mkCountry : Str -> Str -> Gender -> N = \nom,loc,g -> {
-    s = table {SF Sg Nom => nom; SF Sg Loc => loc; _ => ["not implemented"]};
-    g = g;
-    lock_N=<>
-  };
-
   mkPer : Str -> Str -> Str -> Gender -> N = \nom,gen,acc,g -> {
     s = table {SF Sg Nom => nom; SF Sg Gen => gen; SF Sg Acc => acc; _ => ["not implemented"]};
     g = g;
