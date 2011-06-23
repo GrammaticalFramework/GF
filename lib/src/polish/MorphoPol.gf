@@ -209,7 +209,7 @@ oper
 	    Loc => table { _ => "ilu" };
 	    VocP => table {Masc Personal => "ilu"; _ => "ile" }
 	  };
-	  n = Sg;
+	  n = Pl;
 	  a = StoA
 	};
 	
