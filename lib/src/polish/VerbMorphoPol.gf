@@ -68,6 +68,10 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
     \wzmoc -> let wzm = Predef.tk 2 wzmoc 
     in mkRegConjCl wzmoc wzm "óż" "óżmy" "óżcie" "ogę" "ożesz" "oże" "ożemy" "ożecie" "ogą" "ógł" "ogła" "ogło" "ogli" "ogły" "ożon" "ożen";
   
+  oper conj29 : ConjCl = 
+    \wiesc -> let wi = Predef.tk 3 wiesc
+    in mkRegConjCl wiesc wi "edź" "edźmy" "edźcie" "odę" "edziesz" "edzie" "edziemy" "edziecie" "odą" "ódł" "odła" "odło" "edli" "odły" "edzion" "edzen";
+
   oper conj40 : ConjCl = 
     \znalezc -> let zna = Predef.tk 4 znalezc 
     in mkRegConjCl znalezc zna "jdź" "jdźmy" "jdźcie" "jdę" "jdziesz" "jdzie" "jdziemy" "jdziecie" "jdą" "lazł" "lazła" "lazło" "leźli" "lazły" "lezion" "lezien";
@@ -108,6 +112,10 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
     \skazywac -> let skaz = Predef.tk 4 skazywac 
     in mkRegConjCl skazywac skaz "uj" "ujmy" "ujcie" "uję" "ujesz" "uje" "ujemy" "ujecie" "ują" "ywał" "ywała" "ywało" "ywali" "ywały" "ywan" "ywan";
   
+  oper conj55 : ConjCl = 
+    \oszukiwac -> let oszuk = Predef.tk 4 oszukiwac
+    in mkRegConjCl oszukiwac oszuk "uj" "ujmy" "ujcie" "uję" "ujesz" "uje" "ujemy" "ujecie" "ują" "iwał" "iwała" "iwało" "iwali" "iwały" "iwan" "iwan";
+ 
   oper conj57 : ConjCl = 
     \dawac -> let da = Predef.tk 3 dawac
     in mkRegConjCl dawac da "waj" "wajmy" "wajcie" "ję" "jesz" "je" "jemy" "jecie" "ją" "wał" "wała" "wało" "wali" "wały" "wan" "wan";
@@ -128,6 +136,10 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
     \rwac -> let rw = Predef.tk 2 rwac 
     in mkRegConjCl rwac rw "ij" "ijmy" "ijcie" "ę" "iesz" "ie" "iemy" "iecie" "ą" "ał" "ała" "ało" "ali" "ały" "an" "an";
     
+  oper conj66 : ConjCl = 
+    \brac -> let b = Predef.tk 3 brac
+    in mkRegConjCl brac b "ierz" "ierzmy" "ierzcie" "iorę" "ierzesz" "ierze" "ierzemy" "ierzecie" "iorą" "rał" "rała" "rało" "rali" "rały" "ran" "ran";
+
   oper conj67 : ConjCl = 
     \wyslac -> let wy = Predef.tk 4 wyslac 
     in mkRegConjCl wyslac wy "ślij" "ślijmy" "ślijcie" "ślę" "ślesz" "śle" "ślemy" "ślecie" "ślą" "słał" "słała" "słało" "słali" "słały" "słan" "słan";
@@ -144,6 +156,10 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
     \lubic -> let lub = Predef.tk 2 lubic 
     in mkRegConjCl lubic lub "" "my" "cie" "ię" "isz" "i" "imy" "icie" "ią" "ił" "iła" "iło" "ili" "iły" "ian" "ian";
   
+  oper conj74 : ConjCl = 
+    \wasnic -> let wasni = Predef.tk 1 wasnic
+    in mkRegConjCl wasnic wasni "j" "jmy" "jcie" "ę" "isz" "i" "imy" "icie" "ą" "ił" "iła" "iło" "ili" "iły" "on" "en";
+
   oper conj75 : ConjCl = 
     \dzielic -> let dziel = Predef.tk 2 dzielic 
     in mkRegConjCl dzielic dziel "" "my" "cie" "ę" "isz" "i" "imy" "icie" "ą" "ił" "iła" "iło" "ili" "iły" "on" "en";
@@ -160,6 +176,10 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
     \budzic -> let bud = Predef.tk 3 budzic 
     in mkRegConjCl budzic bud "ź" "źmy" "źcie" "zę" "zisz" "zi" "zimy" "zicie" "zą" "ził" "ziła" "ziło" "zili" "ziły" "zon" "zen";
   
+  oper conj80em : ConjCl = 
+    \dowodzic -> let dow = Predef.tk 5 dowodzic 
+    in mkRegConjCl dowodzic dow "ódź" "ódźmy" "ódźcie" "odzę" "odzisz" "odzi" "odzimy" "odzicie" "odzą" "odził" "odziła" "odziło" "odzili" "odziły" "odzon" "odzen";
+
   oper conj81 : ConjCl = 
     \tracic -> let tra = Predef.tk 3 tracic 
     in mkRegConjCl tracic tra "ć" "ćmy" "ćcie" "cę" "cisz" "ci" "cimy" "cicie" "cą" "cił" "ciła" "ciło" "cili" "ciły" "con" "cen";
@@ -380,10 +400,10 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
 -- a particle can be included in a $V$.
   
   mkV2 : Verb -> Str -> Case -> V2;  
-  mkV2 v p cas = v ** { c = mkCompl p cas; lock_V2 = <>}; 
+  mkV2 v p cas = v ** { c = mkCompl p cas; lock_V2 = <> }; 
   
   mkV3 : Verb -> Str -> Str -> Case -> Case -> V3; 
-  mkV3 v s1 s2 c1 c2 = v ** { c = mkCompl s1 c1; c2 = mkCompl s2 c2; lock_V3 = <>};  
+  mkV3 v s1 s2 c1 c2 = v ** { c = mkCompl s1 c1; c2 = mkCompl s2 c2; lock_V3 = <> };  
   
   dirV2 : Verb -> V2; -- a typical case ie. "kochać", "pisać"
   dirV2 v = mkV2 v [] Acc;
