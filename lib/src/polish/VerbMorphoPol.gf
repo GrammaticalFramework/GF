@@ -72,6 +72,10 @@ resource VerbMorphoPol = ResPol ** open Prelude, CatPol, (Predef=Predef), (Adj=A
     \wiesc -> let wi = Predef.tk 3 wiesc
     in mkRegConjCl wiesc wi "edź" "edźmy" "edźcie" "odę" "edziesz" "edzie" "edziemy" "edziecie" "odą" "ódł" "odła" "odło" "edli" "odły" "edzion" "edzen";
 
+  oper conj31 : ConjCl = 
+    \niesc -> let ni = Predef.tk 3 niesc
+    in mkRegConjCl niesc ni "eś" "eśmy" "eście" "osę" "esiesz" "esie" "esiemy" "esiecie" "osą" "ósł" "osła" "osło" "eśli" "osły" "esion" "esien";
+
   oper conj40 : ConjCl = 
     \znalezc -> let zna = Predef.tk 4 znalezc 
     in mkRegConjCl znalezc zna "jdź" "jdźmy" "jdźcie" "jdę" "jdziesz" "jdzie" "jdziemy" "jdziecie" "jdą" "lazł" "lazła" "lazło" "leźli" "lazły" "lezion" "lezien";
