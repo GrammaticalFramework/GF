@@ -13,7 +13,9 @@ concrete SentenceNep of Sentence = CatNep ** open Prelude, ResNep in {
       s = \\pol,n => 
         let 
           agr   = Ag Masc (numImp n) Pers2_M ; 
+          --verb  = vp.obj.s ++ (vp.s ! PVForm).inf ++ vp.comp ! agr ;
           verb  = vp.obj.s ++ (vp.s ! Root).inf ++ vp.comp ! agr ;
+          --verb  = vp.obj.s ++ vp.comp ! agr ++ (vp.s ! Root).inf ;
           dont  = case pol of {
             CNeg True => "नगर" ;
             CNeg False => "नगर" ;

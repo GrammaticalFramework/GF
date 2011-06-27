@@ -1,8 +1,9 @@
 concrete StructuralNep of Structural = CatNep ** 
   open MorphoNep, ParadigmsNep, Prelude, NounNep in {
 
-  flags optimize=all ;
-  coding = utf8;
+  flags 
+    optimize = all ;
+    coding = utf8;
 
   lin
 
@@ -24,7 +25,7 @@ concrete StructuralNep of Structural = CatNep **
     by8means_Prep = mkPrep "le" ; 
     can8know_VV,can_VV = mkV "skx:nu" ** { isAux = True} ;
     during_Prep = mkPrep "prx:yanx:t" ; -- पर्यान्त
-    either7or_DConj = sd2 "HTva" "ya" ** {n = Sg} ; -- अथवा , या
+    either7or_DConj = sd2 "kI" "HTva" ** {n = Sg} ; -- की,  अथवा 
     everybody_NP =  MassNP (UseN (regN "svw jana" Living)) ; -- not a good way coz need to include Noun (सवौ जाना)
     every_Det = mkDet "sbE" "hrek" Sg ; -- सबै, हरेक
     everything_NP = MassNP (UseN (regN "harek kura" NonLiving)) ; -- हारेक कुरा
@@ -53,7 +54,7 @@ concrete StructuralNep of Structural = CatNep **
     if_Subj = ss "ydi" ; -- यदि
     in8front_Prep = mkPrep "samu" ; -- सामु      
     in_Prep = mkPrep "ma" ; -- मा    
-    less_CAdv = {s = "km" ; p = "Bnx:da"} ; -- ?? NOT CLEAR
+    less_CAdv = {s = "km" ; p = "Bnx:da"} ; -- भन्दा कम
     many_Det = mkDet "DerE" "Tupx:rE" Pl ; -- धेरै, थुप्रै
     more_CAdv = {s = "bXI" ; p = "Bnx:da" } ;
     most_Predet = ss "jx:yadE" ; -- ज्यादै
@@ -95,10 +96,10 @@ concrete StructuralNep of Structural = CatNep **
     there7to_Adv = mkAdv "tx:yhaV smx:m" ; -- त्यहाँ सम्म
     there7from_Adv = mkAdv "tx:yhaV baq" ; -- त्यहाँ बाट
     therefore_PConj = ss "Hth:" ; -- अतः    
-    this_Quant = mkQuant "yo" "yi" ;
+    this_Quant = mkQuant "yo" "yI" ; -- यो,  यी
     through_Prep = mkPrep "marx:Pt" ; -- मार्फत
     too_AdA = mkAdA "pni" ; -- पनि
-    to_Prep = ss "smx:m" ; --
+    to_Prep = ss "smx:m" ; -- सम्म
     under_Prep = mkPrep "Hnx:trx:gt" ; -- अन्तर्गत
     very_AdA = mkAdA "DerE" ; -- धेरै
     want_VV = mkV "Cahnu" ** { isAux = False} ;    

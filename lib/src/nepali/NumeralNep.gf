@@ -109,8 +109,10 @@ lin D_6 = { s = "६" ; n = Pl};
 lin D_7 = { s = "७" ; n = Pl};
 lin D_8 = { s = "८" ; n = Pl};
 lin D_9 = { s = "९" ; n = Pl};
+
 lin IDig d = { s = \\_ => d.s ; n = d.n} ;
-lin IIDig d dg = { s = \\df => Prelude.glue (dg.s ! df) d.s ; n = Pl }; 
+
+lin IIDig d dg = { s = \\df => Prelude.glue d.s (dg.s ! df) ; n = Pl }; 
 
 oper ekhazar : Str = variants {"एक" ++ "हजार" ; "हजार"} ; 
 oper mkhazar : Str -> Size -> Str = \s -> \sz -> table {singl => ekhazar ; _ => s ++ "हजार"} ! sz ;

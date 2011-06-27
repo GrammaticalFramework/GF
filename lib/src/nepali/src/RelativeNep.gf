@@ -6,7 +6,7 @@ concrete RelativeNep of Relative = CatNep ** open ResNep in {
   lin
 
     RelCl cl = {
-      s = \\t,p,o,agr => "jsx:tikI" ++ cl.s ! t ! p ! o ;
+      s = \\t,p,o,agr => "jsx:tokI" ++ cl.s ! t ! p ! o ;
       c = Nom
       } ;
 

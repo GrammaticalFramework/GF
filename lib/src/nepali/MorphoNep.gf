@@ -229,6 +229,7 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
           "जा"                => root + "न्" ;
           "हु"                => root + "न्" ;
           rot + "्"          => root ;
+          rot + ("ह")         => root + "न्" ; --cmnt
           rot + ("ा"|"ि"|"ी") => root + "न्" ;
           rot + ("े"|"ु"|"ू") => root + "न्" ;
           rot + ("उ"|"ऊ")     => root + "ँ" ;
@@ -239,13 +240,14 @@ resource MorphoNep = ResNep ** open Prelude,Predef in {
           "हु"                => "भ" ;
           rot + "्"          => rot ;
           rot + ("ा"|"ि"|"ी") => root ;
+          rot + ("ह")         => root + "न्" ; --cmnt
           rot + ("े"|"ु"|"ू") => rot + "ो" ;
           rot + ("उ"|"ऊ")     => rot ;
           _                   => root
         } ; 
     vcase = case root of {
           rot + "्" => VReg;   
-          rot + "ह"  => VReg;   
+          --rot + "ह"  => VReg;   
           _          => VIReg
         }
     } ;
