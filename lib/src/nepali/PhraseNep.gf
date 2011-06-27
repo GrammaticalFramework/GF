@@ -1,4 +1,6 @@
 concrete PhraseNep of Phrase = CatNep ** open Prelude, ResNep in {
+  
+  flags coding = utf8 ;
 
   lin
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;
@@ -7,11 +9,15 @@ concrete PhraseNep of Phrase = CatNep ** open Prelude, ResNep in {
     UttQS qs = {s = qs.s ! QDir} ;
     
     -- be a man -> (मन्छे हउ)
-    UttImpSg pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Sg False ++ "हउ"} ;
+    -- issue in mkPhr-Imp-Phr
+    --          mkPhr-PConj-Utt-Voc-Phr
+    -- Need to diff between singularImpForm-ImpForm
+    --                      pluralImpForm-ImpForm and above cases
+    UttImpSg pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Sg False ++ "होउ"} ;
     
-    UttImpPl pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Pl False ++ "हआ"} ;
+    UttImpPl pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Pl False ++ "हऔ"} ;
     
-    UttImpPol pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Sg True ++ "हउ"} ;
+    UttImpPol pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Sg True ++ "होउ"} ;
 
     UttIP ip = {s = ip.s ! Nom} ; --- Acc also
     UttIAdv iadv = iadv ;

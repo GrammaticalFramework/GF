@@ -6,7 +6,7 @@ concrete RelativeNep of Relative = CatNep ** open ResNep in {
   lin
 
     RelCl cl = {
-      s = \\t,p,o,agr => "जस्तिकी" ++ cl.s ! t ! p ! o ;
+      s = \\t,p,o,agr => "जस्तोकी" ++ cl.s ! t ! p ! o ;
       c = Nom
       } ;
 

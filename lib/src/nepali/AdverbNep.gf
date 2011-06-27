@@ -3,7 +3,7 @@ concrete AdverbNep of Adverb = CatNep ** open ResNep, Prelude, Predef in {
   flags coding = utf8;
   
   lin
-    PositAdvAdj a = {s = a.s ! Sg ! Masc ++ "रि" } ;
+    PositAdvAdj a = {s = a.s ! Sg ! Masc ++ "गरी" } ;
     
     ComparAdvAdj cadv a np = {
       s = np.s ! NPObj  ++ cadv.p ++ cadv.s ++ a.s ! Sg ! Masc ;  
@@ -19,6 +19,6 @@ concrete AdverbNep of Adverb = CatNep ** open ResNep, Prelude, Predef in {
 
     SubjS sub snt = {s = sub.s ++ snt.s } ;
     
-    AdnCAdv cadv = {s = cadv.s} ;
+    AdnCAdv cadv = {s = cadv.p ++ cadv.s } ;
 
 }

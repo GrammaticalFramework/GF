@@ -109,8 +109,10 @@ lin D_6 = { s = "6" ; n = Pl};
 lin D_7 = { s = "7" ; n = Pl};
 lin D_8 = { s = "8" ; n = Pl};
 lin D_9 = { s = "9" ; n = Pl};
+
 lin IDig d = { s = \\_ => d.s ; n = d.n} ;
-lin IIDig d dg = { s = \\df => Prelude.glue (dg.s ! df) d.s ; n = Pl }; 
+
+lin IIDig d dg = { s = \\df => Prelude.glue d.s (dg.s ! df) ; n = Pl }; 
 
 oper ekhazar : Str = variants {"e:k" ++ "hjar" ; "hjar"} ; 
 oper mkhazar : Str -> Size -> Str = \s -> \sz -> table {singl => ekhazar ; _ => s ++ "hjar"} ! sz ;
