@@ -78,3 +78,5 @@ table.tabs input[type=button] {
 input.string_edit { font-family: inherit; font-size: inherit; }
 
 ul.languages { -moz-column-width: 20em; }
+
+#sharing h1, #sharing .footer { display: none; }
