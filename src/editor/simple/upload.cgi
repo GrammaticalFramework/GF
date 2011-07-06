@@ -25,7 +25,8 @@ check_grammar() {
   chgrp everyone "$dir"
   chmod g+ws "$dir"
   umask 002
-  files=( $(Reg from-url | LC_CTYPE=sv_SE.ISO8859-1 ./save "$dir") )
+# files=( $(Reg from-url | LC_CTYPE=sv_SE.ISO8859-1 ./save "$dir") )
+  files=( $(LC_CTYPE=sv_SE.ISO8859-1 ./save "$dir") )
   gffiles=( )
   otherfiles=( )
   for f in ${files[*]} ; do
@@ -46,9 +47,9 @@ check_grammar() {
         cloudurl="$parent/share.html#${dir##*/}"
         li; link "$cloudurl" "$cloudurl"
       end
-      begin dl
-      dt ; echo "◂"; link "javascript:history.back()" "Back to Editor"
-      end
+      #begin dl
+      #dt ; echo "◂"; link "javascript:history.back()" "Back to Editor"
+      #end
   fi
 
   cd $dir
@@ -67,6 +68,7 @@ check_grammar() {
       end
       begin pre
       ls -l *.pgf
+      end
     else
       end
       begin h3 class=error_message; echo Error; end
@@ -78,8 +80,10 @@ check_grammar() {
       done
     fi
   fi
+  begin div class=footer
   hr
   date
+  end
 # begin pre ; env
   endall
 }
@@ -120,6 +124,7 @@ case "$REQUEST_METHOD" in
 	;;
       *)
         make_dir
+	echo >&2 "Using temporary directory $dir"
 	check_grammar
         rm -rf "$dir"
     esac
@@ -131,6 +136,23 @@ case "$REQUEST_METHOD" in
 	     cgiheaders
 	     echo_n "/tmp/${dir##*/}"
              ;;
+	ls=*)
+	     dir=$(qparse "$QUERY_STRING" ls)
+	     case "$dir" in
+		 /tmp/gfse.*) # shouldn't allow .. in path !!!
+		     path="$documentRoot$dir"
+		     if [ -d "$path" ] ; then
+			 ContentType="text/plain; charset=$charset"
+			 cgiheaders
+			 cd "$path"
+			 echo_n *-*.json
+		     else
+			 error404
+		     fi
+		     ;;
+                *) error400
+	     esac
+	     ;;
 	download=*)
 	     file=$(qparse "$QUERY_STRING" download)
 	     case "$file" in
