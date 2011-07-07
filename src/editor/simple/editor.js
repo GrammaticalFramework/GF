@@ -969,7 +969,12 @@ function download_from_cloud() {
     var newdir="/tmp/"+location.hash.substr(1)
     local.put("dir",newdir);
     if(olddir && uploaded && newdir!=olddir) {
-	upload_json(function(){download_json(newdir)})
+	function download() { download_json(newdir) }
+	function rmolddir(){
+	    ajax_http_get("upload.cgi?rmdir="+olddir+"&newdir="+newdir,
+			  download,download)
+	}
+	upload_json(rmolddir)
     }
     else download_json(newdir)
 }
