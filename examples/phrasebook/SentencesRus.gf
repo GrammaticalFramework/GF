@@ -3,4 +3,5 @@ concrete SentencesRus of Sentences = NumeralRus ** SentencesI - [
  ]  with 
   (Syntax = SyntaxRus),
 --  (Symbolic = SymbolicRus),
-  (Lexicon = LexiconRus) ;
+  (Lexicon = LexiconRus) ** open Prelude, SyntaxRus in {
+}

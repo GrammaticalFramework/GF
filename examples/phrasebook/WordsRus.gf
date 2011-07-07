@@ -55,9 +55,9 @@ flags coding = utf8 ;
     Hotel = mkPlace (P.mkN "отель") in_Prep ; 
     Museum = mkPlace (P.mkN "музей") in_Prep ; 
     Park = mkPlace (P.mkN "парк") in_Prep ; 
-    Parking = mkPlace (P.mkN "автостоянки") on_Prep ; 
+    Parking = mkPlace (P.mkN "автостоянка") on_Prep ; 
     Pharmacy = mkPlace (P.mkN "аптека") in_Prep ;
-    PostOffice = mkPlace (P.mkN "почтовое") in_Prep ;
+    PostOffice = mkPlace (P.mkN "почта") on_Prep ;
     Pub = mkPlace (P.mkN "паб") in_Prep ;
     Restaurant = mkPlace (P.mkN "ресторан") in_Prep ; 
     Shop = mkPlace (P.mkN "магазин") in_Prep ;  
@@ -76,38 +76,37 @@ flags coding = utf8 ;
 
 -- currencies
 
-    DanishCrown = mkCN (P.mkA "датско") (P.mkN "венец") ;
+    DanishCrown = mkCN (P.mkA "датский") (P.mkN "крона") ;
     Dollar = mkCN (P.mkN "доллар") ;
     Euro = mkCN (P.mkN "евро") ;
     Lei = mkCN (P.mkN "лей") ;
-    Leva = mkCN (P.mkN "левов") ;
-    NorwegianCrown = mkCN (P.mkA "норвежец") (P.mkN "венец") ;  
+    Leva = mkCN (P.mkN "лев") ;
+    NorwegianCrown = mkCN (P.mkA "норвежский") (P.mkN "крона") ;  
     Pound = mkCN (P.mkN "фунт");
     Rouble = mkCN (P.mkN "рубль") ;
-    SwedishCrown = mkCN (P.mkA "шведский") (P.mkN "венец") ;
+    SwedishCrown = mkCN (P.mkA "шведский") (P.mkN "крона") ;
     Zloty = mkCN (P.mkN "злотый") ;
 
 
 -- Nationalities
 
-    Belgian = P.mkA "Belgisch" ;
-    Belgium = mkNP (P.mkPN "België") ;
-    Bulgarian = mkNat "болгарском" "Болгарии" ;
-    Catalan = mkNat "каталонский" "Каталонии" ;
-    Danish = mkNat "датском" "Дании" ;
-    Dutch = mkNat "голландский" "Нидерландов" ;
-    English = mkNat "английский" "Англии" ;
-    Finnish = mkNat "финском" "Финляндии" ;
-    Flemish = mkNP (P.mkPN "Vlaams") ;
-    French = mkNat "французском" "Франции" ; 
-    German = mkNat "немецкого" "Германии" ;
-    Italian = mkNat "итальянский" "Италии" ;
-    Norwegian = mkNat "норвежец" "Норвегии" ;
-    Polish = mkNat "польский" "Польши" ;
-    Romanian = mkNat "румынском" "Румынии" ;
-    Russian = mkNat "русский." "России" ;
-    Spanish = mkNat "испанском" "Испании" ;
-    Swedish = mkNat "шведский" "Швеции" ;
+--    Belgian = mkNat "бельгийский" (P.mkN "Бельгия" "Бельгии" "Бельгию" "Бельгию" "Бельгией" "Бельгии" "Бельгии" "Бельгии" "Бельгий" "Бельгиям" "Бельгии" "Бельгиями" "Бельгиях" P.feminine P.animate) ;
+    Bulgarian = mkNat "болгарский" (P.mkN "Болгария" "Болгарии" "Болгарию" "Болгарию" "Болгарией" "Болгарии" "Болгарии" "Болгарии" "Болгарий" "Болгариям" "Болгарии" "Болгариями" "Болгариях" P.feminine P.animate) ;
+    Catalan = mkNat "каталонский" (P.mkN "Каталония" "Каталонии" "Каталонию" "Каталонию" "Каталонией" "Каталонии" "Каталонии" "Каталонии" "Каталоний" "Каталониям" "Каталонии" "Каталониями" "Каталониях" P.feminine P.animate) ;
+    Danish = mkNat "датский" (P.mkN "Дания" "Дании" "Данию" "Данию" "Данией" "Дании" "Дании" "Дании" "Даний" "Даниям" "Дании" "Даниями" "Даниях" P.feminine P.animate) ;
+    Dutch = mkNat "нидерландский" (P.mkN "Нидерланды" P.animate) ;
+    English = mkNat "английский" (P.mkN "Англия" "Англии" "Англию" "Англию" "Англией" "Англии" "Англии" "Англии" "Англий" "Англиям" "Англии" "Англиями" "Англиях" P.feminine P.animate) ;
+    Finnish = mkNat "финский" (P.mkN "Финляндия" "Финляндии" "Финляндию" "Финляндию" "Финляндией" "Финляндии" "Финляндии" "Финляндии" "Финляндий" "Финляндиям" "Финляндии" "Финляндиями" "Финляндиях" P.feminine P.animate) ;
+--    Flemish = mkNat "фландрийский" (P.mkN "Фландрия" "Фландрии" "Фландрию" "Фландрию" "Фландрией" "Фландрии" "Фландрии" "Фландрии" "Фландрий" "Фландриям" "Фландрии" "Фландриями" "Фландриях" P.feminine P.animate) ;
+    French = mkNat "французский" (P.mkN "Франция" "Франции" "Францию" "Францию" "Францией" "Франции" "Франции" "Франции" "Франций" "Франциям" "Франции" "Франциями" "Франциях" P.feminine P.animate) ;
+    German = mkNat "немецкий" (P.mkN "Германия" "Германии" "Германию" "Германию" "Германией" "Германии" "Германии" "Германии" "Германий" "Германиям" "Германии" "Германиями" "Германиях" P.feminine P.animate) ;
+    Italian = mkNat "итальянский" (P.mkN "Италия" "Италии" "Италию" "Италию" "Италией" "Италии" "Италии" "Италии" "Италий" "Италиям" "Италии" "Италиями" "Италиях" P.feminine P.animate) ;
+    Norwegian = mkNat "норвежский" (P.mkN "Норвегия" "Норвегии" "Норвегию" "Норвегию" "Норвегией" "Норвегии" "Норвегии" "Норвегии" "Норвегий" "Норвегиям" "Норвегии" "Норвегиями" "Норвегиях" P.feminine P.animate) ;
+    Polish = mkNat "польский" (P.mkN "Польша" "Польши" "Польшу" "Польшу" "Польшей" "Польше" "Польше" "Польши" "Польш" "Польшам" "Польши" "Польшами" "Польшах" P.feminine P.animate) ;
+    Romanian = mkNat "румынский" (P.mkN "Румыния" "Румынии" "Румынию" "Румынию" "Румынией" "Румынии" "Румынии" "Румынии" "Румыний" "Румыниям" "Румынии" "Румыниями" "Румыниях" P.feminine P.animate) ;
+    Russian = mkNat "русский" (P.mkN "Россия" "России" "Россию" "Россию" "Россией" "России" "России" "России" "Россий" "Россиям" "России" "Россиями" "Россиях" P.feminine P.animate) ;
+    Spanish = mkNat "испанский" (P.mkN "Испания" "Испании" "Испанию" "Испанию" "Испанией" "Испании" "Испании" "Испании" "Испаний" "Испаниям" "Испании" "Испаниями" "Испаниях" P.feminine P.animate) ;
+    Swedish = mkNat "шведский" (P.mkN "Швеция" "Швеции" "Швецию" "Швецию" "Швецией" "Швеции" "Швеции" "Швеции" "Швеций" "Швециям" "Швеции" "Швециями" "Швециях" P.feminine P.animate) ;
 
 
 -- Means of transportation
@@ -138,7 +137,7 @@ flags coding = utf8 ;
       (mkNP (mkNP a_Det (P.mkN "стол")) 
         (SyntaxRus.mkAdv for_Prep (mkNP num (P.mkN "человек")))) ;
     AHungry p = mkCl p.name (P.mkAdv "голоден") ;    
-    AIll p = mkCl p.name (P.mkA "олен") ; 
+    AIll p = mkCl p.name (P.mkA "болен") ; 
     AKnow p = mkCl p.name (P.regV P.imperfective P.first "зна" "ю" "знал" "знай" "знать" ) ; 
     ALike p item = mkCl p.name (P.dirV2 (P.regV P.imperfective P.second "нрав" "лю" "нравил" "нравь" "нравить" )) item ; 
     ALive p co = mkCl p.name (mkVP (mkVP (P.regV P.imperfective P.firstE "жив" "у" "жил" "живи" "жить")) (SyntaxRus.mkAdv in_Prep co)) ; 
@@ -150,7 +149,7 @@ flags coding = utf8 ;
                "на" P.prepositional) lang ; 
     AThirsty p = mkCl p.name (P.mkA "жажду") ; 
     ATired p = mkCl p.name (P.mkA "устал") ; 
-    AUnderstand p = mkCl p.name (P.regV P.imperfective P.first "понима" "ю" "понимал" "понимай" "понимать"); ; 
+    AUnderstand p = mkCl p.name (P.regV P.imperfective P.first "понима" "ю" "понимал" "понимай" "понимать") ;
     AWant p obj = mkCl p.name want_VV (mkVP have_V2 obj) ; 
     AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ; 
 
@@ -192,13 +191,13 @@ flags coding = utf8 ;
  
 -- week days
 
-    Monday = mkDay "понедельник" ;
-    Tuesday = mkDay "вторник" ;
-    Wednesday = mkDay "среда" ;
-    Thursday = mkDay "четверг" ;
-    Friday = mkDay "пятница" ;
-    Saturday = mkDay "суббота" ;
-    Sunday = mkDay "воскресенье" ;
+    Monday = mkDay "понедельник" P.masculine ;
+    Tuesday = mkDay "вторник" P.masculine ;
+    Wednesday = mkDay "среда" P.feminine ;
+    Thursday = mkDay "четверг" P.masculine ;
+    Friday = mkDay "пятница" P.feminine ;
+    Saturday = mkDay "суббота" P.feminine ;
+    Sunday = mkDay "воскресенье" P.neuter ;
 
   Tomorrow = P.mkAdv "завтра" ;
 
@@ -230,19 +229,22 @@ flags coding = utf8 ;
 
 
   oper
-    mkNat : Str -> Str -> NPNationality = \nat,co -> 
-      mkNPNationality (mkNP (P.mkPN nat)) (mkNP (P.mkPN co)) (P.mkA nat) ;
+    mkNat : Str -> N -> NPNationality = \la,co -> 
+      mkNPNationality (mkNP (P.mkPN la P.masculine P.animate)) (mkNP co) (P.mkA la) ;
 
-    mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d -> 
-      mkNPDay (mkNP (P.mkPN d)) (mkAdv (P.mkPrep []) (mkNP (P.mkPN d))) 
+    mkDay : Str -> P.Gender -> {name : NP ; point : Adv ; habitual : Adv} = \d,g -> 
+      mkNPDay (mkNP (P.mkPN d g P.inanimate)) (mkAdv (P.mkPrep [] P.nominative) (mkNP (P.mkPN d g P.inanimate))) 
                                 ---- (mkAdv on_Prep (mkNP (P.mkPN d))) 
-        (mkAdv on_Prep (mkNP a_Quant plNum (mkCN (P.mkN d (d + "en") P.utrum)))) ;
+        (mkAdv on_Prep (mkNP a_Quant plNum (mkCN (P.mkN d)))) ;
 
-    mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
-      mkCNPlace (mkCN p) (P.mkPrep i) to_Prep ;
+--    mkPlace : N -> Str -> {name : CN ; at : Prep ; to : Prep} = \p,i -> 
+--      mkCNPlace (mkCN p) (P.mkPrep i P.prepositional) to_Prep ;
+    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep ; isPl : Bool} = \p,i -> 
+      mkCNPlace (mkCN p) i to_Prep;
 
---    open_A = P.mkA ? ;  seem to use a verb
---    closed_A = P.mkA ? ;
+
+   open_A = P.mkA "открыт" ;
+   closed_A = P.mkA "закрыт" ;
 
    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
       relativePerson n (mkCN x) (\a,b,c -> mkNP (mkNP the_Quant a c) (SyntaxRus.mkAdv possess_Prep b)) p ;
@@ -253,7 +255,7 @@ flags coding = utf8 ;
       } ;
 
   far_IAdv = ss "как далеко" ** {lock_IAdv = <>} ;
-  long_IAdv = ss "Как долго" ** {lock_IAdv = <>};
+  long_IAdv = ss "как долго" ** {lock_IAdv = <>};
 
   mkSuperl : A -> Det = \a -> SyntaxRus.mkDet the_Art (SyntaxRus.mkOrd a) ;
 
