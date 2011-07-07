@@ -39,6 +39,7 @@ lin
   everywhere_Adv = ss "везде" ;
   few_Det = nemnogoSgDet **{lock_Det= <>; n= Sg; g = PNoGen; c = Nom};
 --- DEPREC  first_Ord = (uy_j_EndDecl  "перв" ) ** {lock_A = <>};  --AStaruyj 
+  for_Prep = { s = "для" ; c = Gen };
   from_Prep  = { s = "от" ; c = Gen };
   he_Pron  = pronOn ;
   here_Adv = ss "здесь" ;

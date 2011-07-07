@@ -157,6 +157,9 @@ oper
 
   mkAdv : Str -> Adv ;
 
+--2 Prepositions
+  mkPrep : Str -> Case -> Prep ; -- as in German
+
 --2 Verbs
 --
 -- In our lexicon description ("Verbum") there are 62 forms: 
@@ -218,6 +221,8 @@ perfective: Aspect ;
 
    mkV2     : V   -> Str -> Case -> V2 ;   -- "войти в дом"; "в", accusative
    mkV3  : V -> Str -> Str -> Case -> Case -> V3 ; -- "сложить письмо в конверт"
+   mkVS  : V -> VS ;
+   mkVQ  : V -> VQ ;   
    dirV2    : V -> V2 ;                    -- "видеть", "любить"
    tvDirDir : V -> V3 ; 
                             
@@ -412,6 +417,9 @@ foreign = Foreign; -- +++ MG_UR: added +++
 
   mkAdv x = ss x ** {lock_Adv = <>} ;
 
+-- Prepositions definitions
+  mkPrep s c = {s = s ; c = c ; lock_Prep = <>} ;
+
 -- Verb definitions 
 
 --   mkVerbum = \asp, sgP1, sgP2, sgP3, plP1, plP2, plP3, 
@@ -462,6 +470,10 @@ foreign = Foreign; -- +++ MG_UR: added +++
 -- verb takes both complements to form a verb phrase.
 
    mkV3 v s1 s2 c1 c2 = v ** {c2 = {s=s1; c=c1}; c3={s=s2; c=c2}; lock_V3 = <>};  
+
+
+   mkVS v = v ** {lock_VS = <>} ;
+   mkVQ v = v ** {lock_VQ = <>} ;
 
 } ;
 

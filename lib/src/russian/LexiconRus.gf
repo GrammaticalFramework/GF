@@ -163,6 +163,8 @@ lin
   king_N = mkN "король" "короля" "королю" "короля" "королем" "короле" "короле" "короли" "королей" "королям" "королей" "королями" "королях"  masculine animate ;
   knee_N = mkN "колено" "колена" "колену" "колена" "коленом" "колене" "колене" "колени" "колен" "коленам" "колен" "коленями" "коленях"  neuter inanimate ;
   know_V2= dirV2 (regV imperfective first "зна" "ю" "знал" "знай" "знать" );
+  know_VS= mkVQ (regV imperfective first "зна" "ю" "знал" "знай" "знать" );
+  know_VQ= mkVQ (regV imperfective first "зна" "ю" "знал" "знай" "знать" );
   lake_N = mkN "озеро" ; -- gen pl "озёр"
   lamp_N = mkN "лампа" ;
   language_N = mkN "язык" ;
