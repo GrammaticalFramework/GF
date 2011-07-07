@@ -150,14 +150,50 @@ Error checks:
   strings can be entered.
 </ul>
 
-<h3>Testing grammars</h3>
+<h3>Compiling and testing grammars</h3>
 
-By pressing the <strong>Upload</strong> button, a grammar can be uploaded to
-the GF server.
-It will then be compiled with GF, and any errors not detected by the editor
-will be reported. If the grammar is free from errors, the user
-can test the grammar by clicking on links to the online GF shell, the Minibar
-or the Translation Quiz.
+When pressing the <strong>Compile</strong> button, the grammar will be compiled
+with GF, and any errors not detected by the editor will be reported.
+If the grammar is free from errors the user can then
+test the grammar by clicking on links to the online GF shell, the Minibar or
+the Translation Quiz.
+
+<h3><img class=right src="P/1307545089_weather_04.png" alt="">
+<img class=right src="P/1306856253_weather_06.png" alt="">Grammars in the
+cloud</h3>
+
+While the editor normally stores grammars locally in the browser, it is also
+possible to store grammars in the cloud.  Grammars can be stored in the cloud
+just for backup, or to accessed them from multiple devices.
+
+<p>
+There is no automatic synchronization between local grammars and the cloud.
+Instead, the user should press
+<img src="P/1306856253_weather_06.png" alt="[Cloud Upload]">
+to upload the grammars to the cloud, and press
+<img src="P/1307545089_weather_04.png" alt="[Cloud download]">
+to download grammars from the cloud. In both cases, complete grammars
+are copied and older versions at the destination will be overwritten.
+When a grammar is deleted, both the local copy and the copy in the cloud
+is deleted.
+
+<p>
+Each device is initially assigned to its own unique cloud. Each device can thus
+have its own set of grammars that are not available on other devices.  It is
+also possible to merge clouds and share a common set of grammars between
+multiple devices: when uploading grammars to the cloud, a link to this grammar
+cloud appears. Accessing this link from another device will cause the clouds of
+the two devices to be merged. After this, grammars uploaded from one of the
+devices can be downloaded on the other devices. Any number devices can join the
+same grammar cloud in this way.
+
+<p>
+<strong>Note</strong> that while it is possible to copy grammars between
+multiple devices, there is no way to merge concurrent edits from multiple
+devices. If the same grammar is uploaded to the
+cloud from multiple devices, the last upload wins. Thus the current
+implementation is suitable for a single user switching between different
+devices, but not recommended for sharing grammars between multiple users.
 
 <h3>Future work</h3>
 
@@ -172,9 +208,8 @@ be possible to extend the editor to support a larger fragment of GF,
 to do proper error checking and make more of the existing GF shell functionality
 accessible directly from the editor.
 <p>
-Grammars are currently stored locally in the browser, but a future version
-could allow grammars to be stored "in the cloud", allowing the same grammars
-to be accessed from multiple devices.
+The current grammar cloud service is very primitive. In particular, it is not
+suitable for multiple users developing  a grammar in collaboration.
 
 <h3>Related documents</h3>
 <ul>
@@ -185,7 +220,7 @@ to be accessed from multiple devices.
 
 <hr>
 <div class=modtime><small>
-<!-- hhmts start --> Last modified: Fri May  6 17:24:02 CEST 2011 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Thu Jul  7 18:55:55 CEST 2011 <!-- hhmts end -->
   </small></div>
 <address>
 <a href="http://www.cse.chalmers.se/~hallgren/">TH</a>
