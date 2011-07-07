@@ -153,6 +153,32 @@ case "$REQUEST_METHOD" in
                 *) error400
 	     esac
 	     ;;
+	rmdir=*)
+	     dir=$(qparse "$QUERY_STRING" rmdir)
+	     case "$dir" in
+		 /tmp/gfse.*) # shouldn't allow .. in path !!!
+		     path="$documentRoot$dir"
+		     if [ -d "$path" ] ; then
+			 ContentType="text/plain; charset=$charset"
+			 cgiheaders
+			 cd "$path"
+			 rm *.gf *.gfo *-*.json *.pgf grammars.cgi
+			 cd ..
+			 rmdir "$path"
+			 newdir=$(qparse "$QUERY_STRING" newdir)
+			 case "$newdir" in
+			     /tmp/gfse.*) # shouldn't allow .. in path !!!
+				 newnode="${newdir##*/}"
+				 oldnode="${path##*/}"
+				 ln -s "$newnode" "$oldnode"
+			 esac
+		     else
+			 error404
+		     fi
+		     ;;
+                *) error400
+	     esac
+	     ;;
 	download=*)
 	     file=$(qparse "$QUERY_STRING" download)
 	     case "$file" in
