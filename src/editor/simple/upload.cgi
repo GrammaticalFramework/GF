@@ -145,6 +145,7 @@ case "$REQUEST_METHOD" in
 			 ContentType="text/plain; charset=$charset"
 			 cgiheaders
 			 cd "$path"
+			 shopt -s nullglob
 			 echo_n *-*.json
 		     else
 			 error404
@@ -162,6 +163,7 @@ case "$REQUEST_METHOD" in
 			 ContentType="text/plain; charset=$charset"
 			 cgiheaders
 			 cd "$path"
+			 shopt -s nullglob
 			 rm *.gf *.gfo *-*.json *.pgf grammars.cgi
 			 cd ..
 			 rmdir "$path"
@@ -188,6 +190,22 @@ case "$REQUEST_METHOD" in
 			 ContentType="text/javascript; charset=$charset"
 			 cgiheaders
 			 cat "$path"
+		     else
+			 error404
+		     fi
+		     ;;
+                *) error400
+	     esac
+	     ;;
+	rm=*)
+	     file=$(qparse "$QUERY_STRING" rm)
+	     case "$file" in
+		 /tmp/gfse.*/*.json) # shouldn't allow .. in path !!!
+		     path="$documentRoot$file"
+		     if [ -r "$path" ] ; then
+			 ContentType="text/javascript; charset=$charset"
+			 cgiheaders
+			 rm "$path"
 		     else
 			 error404
 		     fi

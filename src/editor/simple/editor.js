@@ -34,7 +34,7 @@ function initial_view() {
 function draw_grammar_list() {
     local.put("current",0);
     editor.innerHTML="";
-    var uploaded=local.get("json_uploaded");
+    var uploaded=local.get("dir") && local.get("json_uploaded");
     var cloud_upload=
 	a(jsurl("upload_json()"),
 	  [node("img",{"class":"cloud",
@@ -84,13 +84,22 @@ function new_grammar() {
     edit_grammar(g);
 }
 
+function remove_local_grammar(i) {
+    local.remove(i);
+    while(local.count>0 && !local.get(local.count-1))
+	local.count--;
+}
+
 function delete_grammar(i) {
     var g=local.get(i);
     var ok=confirm("Do you really want to delete the grammar "+g.basename+"?")
     if(ok) {
-	local.remove(i);
-	while(local.count>0 && !local.get(local.count-1))
-	    local.count--;
+	remove_local_grammar(i)
+	var dir=local.get("dir")
+	if(dir && g.unique_name) {
+	    var path=dir+"/"+g.unique_name+".json"
+	    ajax_http_get("upload.cgi?rm="+encodeURIComponent(path),debug);
+	}
 	initial_view();
     }
 }
@@ -158,7 +167,7 @@ function draw_plainbutton(g,files) {
 }
 
 function upload_button(g) {
-    var b=button("Upload",function(){upload(g);});
+    var b=button("Compile",function(){upload(g);});
     b.title="Upload the grammar to the server to check it in GF and test it in the minibar";
     return b;
 }
@@ -889,6 +898,20 @@ function find_langcode(concs,langcode) {
     return null;
 }
 
+function cleanup_deleted(files) {
+    var keep={}
+    for(var i in files) keep[files[i]]=true;
+    //debug("cleanup_deleted "+JSON.stringify(files))
+    //debug("keep "+JSON.stringify(keep))
+    for(var i=0;i<local.count;i++) {
+	var g=local.get(i,null)
+	if(g && g.unique_name && !keep[g.unique_name+".json"]) {
+	    debug("cleanup "+i+" "+g.unique_name);
+	    remove_local_grammar(i)
+	}
+    }
+}
+
 function grammar_index() {
     var index={}
     var count=local.count
@@ -922,8 +945,8 @@ function merge_grammar(i,newg) {
     return keep;
 }
 
-function download_json(dir0) {
-    var dir= dir0 || local.get("dir");
+function download_json() {
+    var dir=local.get("dir");
     var index=grammar_index();
     var downloading=0;
 
@@ -951,32 +974,43 @@ function download_json(dir0) {
 	    newg.index=null;
 	    save_grammar(newg);
 	}
-	if(downloading==0) setTimeout(function(){location.href="."},3000);
+	if(downloading==0) done()
+    }
+
+    function done() {
+	setTimeout(function(){location.href="."},2000);
     }
 
     function download_files(ls) {
 	local.put("current",0);
-	var files=ls.split(" ");
-	for(var i in files) get_file(files[i],file_downloaded,file_failed);
+	if(ls) {
+	    var files=ls.split(" ");
+	    cleanup_deleted(files);
+	    for(var i in files) get_file(files[i],file_downloaded,file_failed);
+	}
+	else {
+	    debug("No grammars in the cloud")
+	    done()
+	}
     }
 
     get_list(download_files);
 }
 
 function download_from_cloud() {
-    var olddir=local.get("dir",null)
-    var uploaded=local.get("json_uploaded");
     var newdir="/tmp/"+location.hash.substr(1)
-    local.put("dir",newdir);
-    if(olddir && uploaded && newdir!=olddir) {
-	function download() { download_json(newdir) }
-	function rmolddir(){
+
+    function download2(olddir) {
+	if(newdir!=olddir) {
 	    ajax_http_get("upload.cgi?rmdir="+olddir+"&newdir="+newdir,
-			  download,download)
+			  download3)
 	}
-	upload_json(rmolddir)
+	else download4()
     }
-    else download_json(newdir)
+    function download3() { upload_json(download4) }
+    function download4() { download_json() }
+
+    get_dir(download2)
 }
 
 function timestamp(obj,prop) {
