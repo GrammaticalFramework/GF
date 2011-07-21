@@ -69,4 +69,8 @@ abstract Extra = Cat ** {
     PartVP : VP -> AP ; -- (the man) looking at Mary
     EmbedPresPart : VP -> SC ; -- looking at Mary (is fun)
 
+-- this is a generalization of Verb.PassV2 and should replace it in the future.
+
+    PassVPSlash : VPSlash -> VP ; -- be forced to sleep
+
 }

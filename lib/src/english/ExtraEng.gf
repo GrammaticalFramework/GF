@@ -117,6 +117,19 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
 lin
   UncNeg = {s = [] ; p = CNeg False} ; 
 
+  PassVPSlash vps = 
+    let 
+      be = predAux auxBe ;
+      ppt = (vps.s ! Pres ! Anter ! CPos ! ODir ! agrP3 Pl).inf 
+    in {
+    s = be.s ;
+    prp = be.prp ++ ppt ;
+    inf = be.inf ++ ppt ;
+    ad = vps.ad ;
+    s2 = \\a => ppt ++ vps.s2 ! a ---- order
+    } ;
+
+------------
 --- obsolete: use UncNeg : Pol
 
     UncNegCl t p cl = {
@@ -140,5 +153,7 @@ lin
       CNeg _ => CNeg False ; 
       _ => x
       } ;
+-------
+
 
 } 
