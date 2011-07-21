@@ -1,8 +1,18 @@
 concrete ExtraEng of ExtraEngAbs = CatEng ** 
-  open ResEng, Coordination, Prelude, MorphoEng in {
+  open ResEng, Coordination, Prelude, MorphoEng, ParadigmsEng in {
 
   lin
     GenNP np = {s = \\_,_ => np.s ! npGen ; sp = \\_,_,_ => np.s ! npGen} ;
+    GenIP ip = {s = \\_ => ip.s ! NCase Gen} ;
+    GenRP nu cn = {
+      s = \\c => "whose" ++ nu.s ! Nom ++ 
+                 case c of {
+                   RC _ (NCase Gen) => cn.s ! nu.n ! Gen ;
+                   _ => cn.s ! nu.n ! Nom
+                   } ;
+      a = RAg (agrP3 Sg)
+      } ;
+
     ComplBareVS v s  = insertObj (\\_ => s.s) (predV v) ;
 
     StrandRelSlash rp slash = {
@@ -50,6 +60,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       } ;
 
     each_Det = mkDeterminer Sg "each" ;
+    any_Quant = mkQuant "any" "any" ;
 
 -- for VP conjunction
 

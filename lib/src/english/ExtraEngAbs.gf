@@ -11,6 +11,7 @@ abstract ExtraEngAbs = Extra - [ProDrop] ** {
     that_RP : RP ; -- "that" as a relational pronoun (IdRP is "which" / "who")
 
     each_Det : Det ;
+    any_Quant : Quant ;
 
 -- infinitive without to
 
