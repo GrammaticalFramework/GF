@@ -8,6 +8,8 @@ abstract Extra = Cat ** {
 
   fun
     GenNP       : NP -> Quant ;       -- this man's
+    GenIP       : IP -> IQuant ;      -- whose
+    GenRP       : Num -> CN -> RP ;   -- whose car
     ComplBareVS : VS -> S -> VP ;     -- know you go
 
     StrandRelSlash   : RP -> ClSlash -> RCl ;   -- that he lives in

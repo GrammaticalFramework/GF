@@ -5,6 +5,7 @@ module GF.Grammar.Parser
          , pModDef
          , pModHeader
          , pExp
+	 , pTopDef
          ) where
 
 import GF.Infra.Ident
@@ -20,6 +21,7 @@ import GF.Compile.Update (buildAnyTree)
 }
 
 %name pModDef ModDef
+%name pTopDef TopDef
 %partial pModHeader ModHeader
 %name pExp Exp
 

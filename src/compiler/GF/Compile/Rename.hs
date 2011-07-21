@@ -24,6 +24,7 @@
 
 module GF.Compile.Rename (
 	       renameSourceTerm,
+	       renameSourceJudgement,
 	       renameModule
 	      ) where
 
@@ -49,6 +50,14 @@ renameSourceTerm g m t = do
   mo     <- checkErr $ lookupModule g m
   status <- buildStatus g m mo
   renameTerm status [] t
+
+-- | this gives top-level access to renaming term input in the cj command
+renameSourceJudgement :: SourceGrammar -> Ident -> (Ident,Info) -> Check (Ident,Info)
+renameSourceJudgement g m (i,t) = do
+  mo     <- checkErr $ lookupModule g m
+  status <- buildStatus g m mo
+  t2 <- renameInfo status m i t
+  return (i,t2)
 
 renameModule :: [SourceModule] -> SourceModule -> Check SourceModule
 renameModule ms (name,mo) = checkIn (text "renaming module" <+> ppIdent name) $ do
