@@ -224,6 +224,7 @@ resource ResEng = ParamX ** open Prelude in {
   VP : Type = {
     s   : VerbForms ;
     prp : Str ;   -- present participle 
+    ptp : Str ;   -- past participle
     inf : Str ;   -- the infinitive form ; VerbForms would be the logical place
     ad  : Str ;   -- sentence adverb
     s2  : Agr => Str -- complement
@@ -263,6 +264,7 @@ resource ResEng = ParamX ** open Prelude in {
         <Pres,Simul,CNeg c,_>    => vfn c (does agr) (doesnt agr) inf
         } ;
     prp  = verb.s ! VPresPart ;
+    ptp  = verb.s ! VPPart ;
     inf  = verb.s ! VInf ;
     ad   = [] ;
     s2 = \\a => if_then_Str verb.isRefl (reflPron ! a) []
@@ -299,6 +301,7 @@ resource ResEng = ParamX ** open Prelude in {
         <Pres,Simul,CNeg c,  _>  => vfn c finp fin          [] 
         } ;
     prp = verb.prpart ;
+    ptp = verb.ppart ;
     inf = verb.inf ;
     ad = [] ;
     s2 = \\_ => []
@@ -319,6 +322,7 @@ resource ResEng = ParamX ** open Prelude in {
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
     prp = vp.prp ;
+    ptp = vp.ptp ;
     inf = vp.inf ;
     ad = vp.ad ;
     s2 = \\a => vp.s2 ! a ++ obj ! a
@@ -327,6 +331,7 @@ resource ResEng = ParamX ** open Prelude in {
   insertObjPre : (Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
     prp = vp.prp ;
+    ptp = vp.ptp ;
     inf = vp.inf ;
     ad = vp.ad ;
     s2 = \\a => obj ! a ++ vp.s2 ! a 
@@ -340,6 +345,7 @@ resource ResEng = ParamX ** open Prelude in {
   insertAdV : Str -> VP -> VP = \ad,vp -> {
     s = vp.s ;
     prp = vp.prp ;
+    ptp = vp.ptp ;
     inf = vp.inf ;
     ad  = vp.ad ++ ad ;
     s2 = \\a => vp.s2 ! a
