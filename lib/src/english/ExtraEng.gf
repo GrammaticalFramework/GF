@@ -120,11 +120,12 @@ lin
   PassVPSlash vps = 
     let 
       be = predAux auxBe ;
-      ppt = (vps.s ! Pres ! Anter ! CPos ! ODir ! agrP3 Pl).inf 
+      ppt = vps.ptp
     in {
     s = be.s ;
-    prp = be.prp ++ ppt ;
-    inf = be.inf ++ ppt ;
+    prp = be.prp ;
+    ptp = be.ptp ;
+    inf = be.inf ;
     ad = vps.ad ;
     s2 = \\a => ppt ++ vps.s2 ! a ---- order
     } ;
