@@ -162,11 +162,17 @@ case "$REQUEST_METHOD" in
 		     if [ -d "$path" ] ; then
 			 ContentType="text/plain; charset=$charset"
 			 cgiheaders
-			 cd "$path"
-			 shopt -s nullglob
-			 rm *.gf *.gfo *-*.json *.pgf grammars.cgi
-			 cd ..
-			 rmdir "$path"
+			 if [ -h "$path" ] ; then
+			     cd "$path"
+			     cd ..
+			     rm "$path"
+			 else
+			   cd "$path"
+			   shopt -s nullglob
+			   rm *.gf *.gfo *-*.json *.pgf grammars.cgi
+			   cd ..
+			   rmdir "$path"
+			 fi
 			 newdir=$(qparse "$QUERY_STRING" newdir)
 			 case "$newdir" in
 			     /tmp/gfse.*) # shouldn't allow .. in path !!!
