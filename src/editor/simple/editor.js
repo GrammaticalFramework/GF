@@ -66,9 +66,9 @@ function draw_grammar_list() {
 	}
     }
     if(local.get("count",null)==null)
-	editor.appendChild(text("You have not created any grammars yet."));
+	home.appendChild(text("You have not created any grammars yet."));
     else if(local.count==0)
-	editor.appendChild(text("Your grammar list is empty."));
+	home.appendChild(text("Your grammar list is empty."));
     home.appendChild(gs);
 
     home.appendChild(
@@ -866,6 +866,7 @@ function upload(g) {
 function upload_json(cont) {
     function upload3(resptext,status) {
 	local.put("json_uploaded",Date.now());
+	//debug("Upload complete")
 	if(cont) cont();
 	else {
 	    var sharing=element("sharing");
@@ -874,7 +875,10 @@ function upload_json(cont) {
     }
     function upload2(dir) {
 	var prefix=dir.substr(10)+"-" // skip "/tmp/gfse."
-	var form=new FormData();
+	//debug("New form data");
+	//var form=new FormData(); // !!! Doesn't work on Android 2.2!
+	var form="",sep="";
+	//debug("Preparing form data");
 	for(var i=0;i<local.count;i++) {
 	    var g=local.get(i,null);
 	    if(g) {
@@ -882,9 +886,13 @@ function upload_json(cont) {
 		    g.unique_name=prefix+i;
 		    save_grammar(g)
 		}
-		form.append(g.unique_name+".json",JSON.stringify(g));
+		//form.append(g.unique_name+".json",JSON.stringify(g));
+		form+=sep+encodeURIComponent(g.unique_name+".json")+"="+
+		    encodeURIComponent(JSON.stringify(g))
+		sep="&"
 	    }
 	}
+	//debug("Upload to "+prefix);
 	ajax_http_post("upload.cgi"+dir,form,upload3,cont)
     }
 
@@ -984,6 +992,7 @@ function download_json() {
     function download_files(ls) {
 	local.put("current",0);
 	if(ls) {
+	    //debug("Downloading "+ls);
 	    var files=ls.split(" ");
 	    cleanup_deleted(files);
 	    for(var i in files) get_file(files[i],file_downloaded,file_failed);
@@ -1001,14 +1010,21 @@ function download_from_cloud() {
     var newdir="/tmp/"+location.hash.substr(1)
 
     function download2(olddir) {
+	//debug("Starting grammar sharing in the cloud")
 	if(newdir!=olddir) {
 	    ajax_http_get("upload.cgi?rmdir="+olddir+"&newdir="+newdir,
 			  download3)
 	}
 	else download4()
     }
-    function download3() { upload_json(download4) }
-    function download4() { download_json() }
+    function download3() {
+	//debug("Uploading local grammars to cloud");
+	upload_json(download4)
+    }
+    function download4() {
+	//debug("Downloading grammars from the cloud");
+	download_json()
+    }
 
     get_dir(download2)
 }
@@ -1149,7 +1165,26 @@ function touch_edit() {
 
 //document.body.appendChild(empty_id("div","debug"));
 
+function dir_bugfix() {
+    // remove trailing newline caused by bug in older version
+    var dir=local.get("dir");
+    if(dir) {
+	var n=dir.length;
+	while(dir[dir.length-1]=="\n" || dir[dir.length-1]=="\r")
+	    dir=dir.substr(0,dir.length-1)
+	if(dir.length<n) {
+	    debug("removing trailing newline")
+	    local.put("dir",dir);
+	}
+	//debug("Server directory: "+JSON.stringify(dir))
+    }
+    else debug("No server directory yet")
+}
+
 if(editor) {
     initial_view();
     touch_edit();
+    dir_bugfix();
 }
+
+//console.log("hi")
