@@ -3,26 +3,6 @@
 var editor=element("editor");
 
 /* -------------------------------------------------------------------------- */
-function div_id(id,cs) { return node("div",{id:id},cs); }
-function div_class(cls,cs) { return node("div",{"class":cls},cs); }
-function a(url,linked) { return node("a",{href:url},linked); }
-function ul(lis) { return node("ul",{},lis); }
-function li(xs) { return node("li",{},xs); }
-function table(rows) { return node("table",{},rows); }
-function td_right(cs) { return node("td",{"class":"right"},cs); }
-function jsurl(js) { return "javascript:"+js; }
-
-function hidden(name,value) {
-    return node("input",{type:"hidden",name:name,value:value},[])
-}
-
-function insertBefore(el,ref) { ref.parentNode.insertBefore(el,ref); }
-
-function insertAfter(el,ref) {
-    ref.parentNode.insertBefore(el,ref.nextSibling);
-}
-
-/* -------------------------------------------------------------------------- */
 
 function initial_view() {
     var current=local.get("current");
@@ -95,11 +75,7 @@ function delete_grammar(i) {
     var ok=confirm("Do you really want to delete the grammar "+g.basename+"?")
     if(ok) {
 	remove_local_grammar(i)
-	var dir=local.get("dir")
-	if(dir && g.unique_name) {
-	    var path=dir+"/"+g.unique_name+".json"
-	    ajax_http_get("upload.cgi?rm="+encodeURIComponent(path),debug);
-	}
+	remove_cloud_grammar(g)
 	initial_view();
     }
 }
@@ -643,14 +619,18 @@ function draw_lincats(g,i) {
     var conc=g.concretes[i];
     function edit(c) {
 	return function(g,el) {
-	    function ok(s) {
-		if(c.template) conc.lincats.push({cat:c.cat,type:s});
-		else c.type=s;
-		timestamp(conc);
-		reload_grammar(g);
-		return null;
+	    function check(s,cont) {
+		function check2(msg) {
+		    if(!msg) {
+			if(c.template) conc.lincats.push({cat:c.cat,type:s});
+			else c.type=s;
+			reload_grammar(g);
+		    }
+		    cont(msg);
+		}
+		check_exp(s,check2);
 	    }
-	    string_editor(el,c.type,ok)
+	    string_editor(el,c.type,check,true)
 	}
     }
     function del(c) { return function() { delete_lincat(g,i,c); } }
@@ -783,15 +763,19 @@ function draw_lins(g,i) {
     var conc=g.concretes[i];
     function edit(f) {
 	return function(g,el) {
-	    function ok(s) {
-		if(f.template)
-		    conc.lins.push({fun:f.fun,args:f.args,lin:s});
-		else f.lin=s;
-		timestamp(conc);
-		reload_grammar(g);
-		return null;
+	    function check(s,cont) {
+		function check2(msg) {
+		    if(!msg) {
+			if(f.template)
+			    conc.lins.push({fun:f.fun,args:f.args,lin:s});
+			else f.lin=s;
+			reload_grammar(g);
+		    }
+		    cont(msg);
+		}
+		check_exp(s,check2);
 	    }
-	    string_editor(el,f.lin,ok)
+	    string_editor(el,f.lin,check,true)
 	}
     }
     function del(fun) { return function () { delete_lin(g,i,fun); } }
@@ -836,68 +820,6 @@ function draw_lins(g,i) {
 }
 
 /* -------------------------------------------------------------------------- */
-
-function get_dir(cont) {
-    var dir=local.get("dir","");
-    if(dir) cont(dir);
-    else ajax_http_get("upload.cgi?dir",
-		       function(dir) {
-			   local.put("dir",dir);
-			   cont(dir);
-		       });
-}
-
-function upload(g) {
-
-    function upload2(dir) {
-	var form=node("form",{method:"post",action:"upload.cgi"+dir},
-		      [hidden(g.basename+".gf",show_abstract(g))])
-	for(var i in g.concretes)
-	    form.appendChild(hidden(g.basename+g.concretes[i].langcode+".gf",
-				    show_concrete(g.basename)(g.concretes[i])));
-	editor.appendChild(form);
-	form.submit();
-	form.parentNode.removeChild(form);
-    }
-
-    get_dir(upload2);
-}
-
-function upload_json(cont) {
-    function upload3(resptext,status) {
-	local.put("json_uploaded",Date.now());
-	//debug("Upload complete")
-	if(cont) cont();
-	else {
-	    var sharing=element("sharing");
-	    if(sharing) sharing.innerHTML=resptext;
-	}
-    }
-    function upload2(dir) {
-	var prefix=dir.substr(10)+"-" // skip "/tmp/gfse."
-	//debug("New form data");
-	//var form=new FormData(); // !!! Doesn't work on Android 2.2!
-	var form="",sep="";
-	//debug("Preparing form data");
-	for(var i=0;i<local.count;i++) {
-	    var g=local.get(i,null);
-	    if(g) {
-		if(!g.unique_name) {
-		    g.unique_name=prefix+i;
-		    save_grammar(g)
-		}
-		//form.append(g.unique_name+".json",JSON.stringify(g));
-		form+=sep+encodeURIComponent(g.unique_name+".json")+"="+
-		    encodeURIComponent(JSON.stringify(g))
-		sep="&"
-	    }
-	}
-	//debug("Upload to "+prefix);
-	ajax_http_post("upload.cgi"+dir,form,upload3,cont)
-    }
-
-    get_dir(upload2);
-}
 
 function find_langcode(concs,langcode) {
     for(var ci in concs)
@@ -953,82 +875,6 @@ function merge_grammar(i,newg) {
     return keep;
 }
 
-function download_json() {
-    var dir=local.get("dir");
-    var index=grammar_index();
-    var downloading=0;
-
-    function get_list(ok,err) {
-	ajax_http_get("upload.cgi?ls="+dir,ok,err);
-    }
-
-    function get_file(file,ok,err) {
-	downloading++;
-	ajax_http_get("upload.cgi?download="+encodeURIComponent(dir+"/"+file),ok,err);
-    }
-
-    function file_failed(errormsg,status) {
-	debug(errormsg)
-	downloading--;
-    }
-    function file_downloaded(grammar) {
-	downloading--;
-	var newg=JSON.parse(grammar);
-	debug("Downloaded "+newg.unique_name)
-	var i=index[newg.unique_name];
-	if(i!=undefined) merge_grammar(i,newg)
-	else {
-	    debug("New")
-	    newg.index=null;
-	    save_grammar(newg);
-	}
-	if(downloading==0) done()
-    }
-
-    function done() {
-	setTimeout(function(){location.href="."},2000);
-    }
-
-    function download_files(ls) {
-	local.put("current",0);
-	if(ls) {
-	    //debug("Downloading "+ls);
-	    var files=ls.split(" ");
-	    cleanup_deleted(files);
-	    for(var i in files) get_file(files[i],file_downloaded,file_failed);
-	}
-	else {
-	    debug("No grammars in the cloud")
-	    done()
-	}
-    }
-
-    get_list(download_files);
-}
-
-function download_from_cloud() {
-    var newdir="/tmp/"+location.hash.substr(1)
-
-    function download2(olddir) {
-	//debug("Starting grammar sharing in the cloud")
-	if(newdir!=olddir) {
-	    ajax_http_get("upload.cgi?rmdir="+olddir+"&newdir="+newdir,
-			  download3)
-	}
-	else download4()
-    }
-    function download3() {
-	//debug("Uploading local grammars to cloud");
-	upload_json(download4)
-    }
-    function download4() {
-	//debug("Downloading grammars from the cloud");
-	download_json()
-    }
-
-    get_dir(download2)
-}
-
 function timestamp(obj,prop) {
     obj[prop || "timestamp"]=Date.now();
 }
@@ -1070,7 +916,7 @@ function sort_list(list,olditems,key) {
     }
 }
 
-function string_editor(el,init,ok) {
+function string_editor(el,init,ok,async) {
     var p=el.parentNode;
     function restore() {
 	e.parentNode.removeChild(e);
@@ -1079,8 +925,9 @@ function string_editor(el,init,ok) {
     function done() {
 	var edited=e.it.value;
 	restore();
-	var msg=ok(edited);
-	if(msg) start(msg);
+	function cont(msg) { if(msg) start(msg); }
+	if(async) ok(edited,cont)
+	else cont(ok(edited));
 	return false;
     }
     function start(msg) {
@@ -1159,6 +1006,47 @@ function touch_edit() {
     b.onchange=touch;
     insertAfter(b,editor);
     insertAfter(wrap("small",text("Enable editing on touch devices. ")),b);
+}
+/* --- DOM Support ---------------------------------------------------------- */
+
+function div_id(id,cs) { return node("div",{id:id},cs); }
+function div_class(cls,cs) { return node("div",{"class":cls},cs); }
+function a(url,linked) { return node("a",{href:url},linked); }
+function ul(lis) { return node("ul",{},lis); }
+function li(xs) { return node("li",{},xs); }
+function table(rows) { return node("table",{},rows); }
+function td_right(cs) { return node("td",{"class":"right"},cs); }
+function jsurl(js) { return "javascript:"+js; }
+
+function hidden(name,value) {
+    return node("input",{type:"hidden",name:name,value:value},[])
+}
+
+function insertBefore(el,ref) { ref.parentNode.insertBefore(el,ref); }
+
+function insertAfter(el,ref) {
+    ref.parentNode.insertBefore(el,ref.nextSibling);
+}
+/* -------------------------------------------------------------------------- */
+
+function download_from_cloud() {
+    var newdir="/tmp/"+location.hash.substr(1)
+
+    function download2(olddir) {
+	//debug("Starting grammar sharing in the cloud")
+	if(newdir!=olddir) link_directories(olddir,newdir,download3)
+	else download4()
+    }
+    function download3() {
+	//debug("Uploading local grammars to cloud");
+	upload_json(download4)
+    }
+    function download4() {
+	//debug("Downloading grammars from the cloud");
+	download_json()
+    }
+
+    with_dir(download2)
 }
 
 /* --- Initialization ------------------------------------------------------- */
