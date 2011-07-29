@@ -671,38 +671,49 @@ function draw_oper(p,dp) {
     return node("span",{},[check(ident(p.name)),text(" "),text(p.rhs)]);
 }
 
+function check_oper(s,ok,err) {
+    var p=parse_oper(s);
+    function check2(msg) {
+	if(msg) err(msg);
+	else ok(p.ok)
+    }
+    if(p.ok) {
+	// Checking oper syntax by checking an expression with a local
+	// definition. Some valid opers will be rejected!!
+	var e=p.ok.name+" where { "+p.ok.name+" "+p.ok.rhs+" }";
+	check_exp(e,check2);
+    }
+    else
+	err(p.error);
+}
+
 function add_oper(g,ci,el) {
-    function add(s) {
-	var p=parse_oper(s);
-	if(p.ok) {
-	    g.concretes[ci].opers.push(p.ok);
+    function check(s,cont) {
+	function ok(oper) {
+	    g.concretes[ci].opers.push(oper);
 	    timestamp(g.concretes[ci]);
 	    reload_grammar(g);
-	    return null;
+	    cont(null);
 	}
-	else
-	    return p.error
+	check_oper(s,ok,cont)
     }
-    string_editor(el,"",add);
+    string_editor(el,"",check,true);
 }
 
 function edit_oper(ci,i) {
     return function (g,el) {
-	function replace(s) {
-	    var p=parse_oper(s);
-	    if(p.ok) {
-		g.concretes[ci].opers[i]=p.ok;
+	function check(s,cont) {
+	    function ok(oper) {
+		g.concretes[ci].opers[i]=oper;
 		timestamp(g.concretes[ci]);
 		reload_grammar(g);
-		return null;
+		cont(null);
 	    }
-	    else
-		return p.error;
+	    check_oper(s,ok,cont)
 	}
-	string_editor(el,show_oper(g.concretes[ci].opers[i]),replace);
+	string_editor(el,show_oper(g.concretes[ci].opers[i]),check,true);
     }
 }
-
 
 function delete_oper(g,ci,ix) {
     with(g.concretes[ci]) opers=delete_ix(opers,ix);
