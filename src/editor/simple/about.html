@@ -116,7 +116,8 @@ At the moment, the concrete syntax for a language <var>L</var> is limited to
   <li><em>linearizations</em> for the functions in the abstract syntax,
   <li><em>parameter type definitions</em>,
   <var>P</var> = <var>C<sub>1</sub></var> | ... |<var>C<sub>n</sub></var>,
-  <li>and <em>operation definitions</em>, <var>op</var> = <var>expr</var>.
+  <li>and <em>operation definitions</em>, <var>op</var> = <var>expr</var>,
+   <var>op</var> : <var>type</var> = <var>expr</var>,
 </ul>
 
 Available editing operations:
@@ -146,8 +147,11 @@ Also,
 
 Error checks:
 <ul>
-  <li>The RHSs in the concrete syntax are not checked for errors. Arbitrary
-  strings can be entered.
+  <li>The RHSs in the concrete syntax are checked
+  for syntactic correctness by the editor as they are entered.
+  (TODO: the syntax of parameter types is not check at the moment.)
+  <li>Duplicated definitions are highlighted. Checks for other
+  semantic errors are delayed until the grammar is compiled.
 </ul>
 
 <h3>Compiling and testing grammars</h3>
@@ -164,7 +168,7 @@ cloud</h3>
 
 While the editor normally stores grammars locally in the browser, it is also
 possible to store grammars in the cloud.  Grammars can be stored in the cloud
-just for backup, or to accessed them from multiple devices.
+just for backup, or to make them accessible from multiple devices.
 
 <p>
 There is no automatic synchronization between local grammars and the cloud.
@@ -197,14 +201,13 @@ devices, but not recommended for sharing grammars between multiple users.
 
 <p>
 Also <strong>note</strong> that each grammar is assigned a unique identity
-when it is created. Renaming a grammar does not change its identity. This means
-that name changes are propagated between devices like other changes.
+when it is first created. Renaming a grammar does not change its identity.
+This means that name changes are propagated between devices like other changes.
 
 <h3>Future work</h3>
 
 This prototype gives an idea of how a web based GF grammar editor could work.
-While this editor is implemented in JavaScript and runs entirely in the
-web browser,
+While this editor is implemented in JavaScript and runs in the web browser,
 we do not expect to create a full implementation of GF that runs in the
 web browser, but let the editor communicate with a server running GF.
 <p>
@@ -214,7 +217,7 @@ to do proper error checking and make more of the existing GF shell functionality
 accessible directly from the editor.
 <p>
 The current grammar cloud service is very primitive. In particular, it is not
-suitable for multiple users developing  a grammar in collaboration.
+suitable for multiple users developing a grammar in collaboration.
 
 <h3>Related documents</h3>
 <ul>
@@ -225,7 +228,7 @@ suitable for multiple users developing  a grammar in collaboration.
 
 <hr>
 <div class=modtime><small>
-<!-- hhmts start --> Last modified: Tue Jul 26 17:01:22 CEST 2011 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Fri Jul 29 17:44:00 CEST 2011 <!-- hhmts end -->
   </small></div>
 <address>
 <a href="http://www.cse.chalmers.se/~hallgren/">TH</a>

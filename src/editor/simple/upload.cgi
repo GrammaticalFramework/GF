@@ -219,6 +219,13 @@ case "$REQUEST_METHOD" in
                 *) error400
 	     esac
 	     ;;
+	cc=*)
+	     # Just to check an expression for syntax errors
+	     exp=$(qparse "$QUERY_STRING" cc)
+	     ContentType="text/plain; charset=$charset"
+	     cgiheaders
+	     echo "cc $exp" | GF_RESTRICTED=True gf -run
+	     ;;
         *) error400
     esac
 esac
