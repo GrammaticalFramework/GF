@@ -34,7 +34,7 @@ lin
   either7or_DConj = {s1,s2 = "ou" ; n = Pl} ;
   everybody_NP = pn2np (mkPN ["tout le monde"] Masc) ;
   every_Det = {
-    s  = \\_,_ => "chaque" ;
+    s  = \\_,c => prepCase c ++ "chaque" ;
     sp = \\g,c => prepCase c ++ genForms "chacun" "chacune" ! g ;
     n = Sg ; 
     s2 = []
@@ -91,7 +91,7 @@ lin
   so_AdA = ss "si" ;
   somebody_NP = pn2np (mkPN ["quelqu'un"] Masc) ;
   somePl_Det = {s,sp = \\_,c => prepCase c ++ "quelques" ; n = Pl ; s2 = []} ; ---- sp
-  someSg_Det = {s,sp = \\_,c => prepCase c ++ elision "quelqu" ; n = Sg ; s2 = []} ; ----sp
+  someSg_Det = {s,sp = \\_,c => prepCase c ++ "quelque" ; n = Sg ; s2 = []} ; ----sp
   something_NP = pn2np (mkPN ["quelque chose"] Masc) ;
   somewhere_Adv = ss ["quelque part"] ; --- ne - pas
 
