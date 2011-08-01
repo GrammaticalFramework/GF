@@ -66,8 +66,12 @@ check_grammar() {
       dt ; echo "◂"; link "javascript:history.back()" "Back to Editor"
 
       end
+      sed=();
+      for pgf in *.pgf ; do
+	  sed=("${sed[@]}" -e "s%$pgf%<a href=\"${dir##*/}/$pgf\">$pgf</a>%")
+      done
       begin pre
-      ls -l *.pgf
+        ls -l *.pgf | sed "${sed[@]}"
       end
     else
       end
@@ -226,6 +230,22 @@ case "$REQUEST_METHOD" in
 	     cgiheaders
 	     echo "cc $exp" | GF_RESTRICTED=True gf -run
 	     ;;
+	"")
+	    case "$PATH_INFO" in
+		/tmp/gfse.*/*.pgf)
+		    path="$documentRoot$PATH_INFO"
+		    if [ -r $path ] ; then
+			ContentType="application/binary"
+			cgiheaders
+			cat "$path"
+		    else 
+			error404
+		    fi
+		    ;;
+		*)
+		  error400
+	    esac
+	    ;;
         *) error400
     esac
 esac
