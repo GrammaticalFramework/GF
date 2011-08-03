@@ -31,4 +31,8 @@ abstract ExtraFreAbs = ExtraRomanceAbs - [ProDrop] ** {
     youPl8fem_Pron : Pron ;
     youPol8fem_Pron : Pron ;
 
+-- The determiner "tout" in the special use "tout nombre"
+
+    tout_Det : Det ;
+
 }
