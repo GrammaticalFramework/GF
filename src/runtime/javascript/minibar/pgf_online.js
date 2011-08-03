@@ -18,7 +18,9 @@ function pgf_online(options) {
 	},
 	pgf_call: function(cmd,args,cont) {
 	    var url=this.current_grammar_url+"?command="+cmd;
-	    for(var arg in args) url+="&"+arg+"="+encodeURIComponent(args[arg]);
+	    for(var arg in args)
+		if(args[arg]!=undefined)
+		    url+="&"+arg+"="+encodeURIComponent(args[arg]);
 	    http_get_json(url,cont);
 	},
 	
@@ -26,22 +28,22 @@ function pgf_online(options) {
 	    this.pgf_call("grammar",{},cont);
 	},
 	
-	get_random: function(cont) {
+	get_random: function(cont) { // cat, limit
 	    this.pgf_call("random",{random:Math.random()},cont);
 	},
-	linearize: function(tree,to,cont) {
+	linearize: function(tree,to,cont) { // tree, to
 	    this.pgf_call("linearize",{tree:tree,to:to},cont);
 	},
-	complete: function(from,input,cont) {
+	complete: function(from,input,cont) { // from, input, cat, limit
 	    this.pgf_call("complete",{from:from,input:input},cont);
 	},
-	parse: function(from,input,cont) {
+	parse: function(from,input,cont) { // from, input cat
 	    this.pgf_call("parse",{from:from,input:input},cont);
 	},
-	translate: function(from,input,cont) {
+	translate: function(from,input,cont) { // from, input, cat, to
 	    this.pgf_call("translate",{from:from,input:input},cont);
 	},
-	translategroup: function(from,input,cont) {
+	translategroup: function(from,input,cont) { // from, input, cat, to
 	    this.pgf_call("translategroup",{from:from,input:input},cont);
 	}
 	

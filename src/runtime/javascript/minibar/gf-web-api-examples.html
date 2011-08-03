@@ -1,10 +1,12 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <title>GF web services API examples</title>
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<meta charset="UTF-8">
+
 <style type="text/css">
 body { background: #ddd; }
+h1, h2, h3, small, th { font-family: sans-serif; }
 
 dt { background: #ffc; }
 dt.js { background: #cef; margin-bottom: 1ex; }
@@ -12,6 +14,9 @@ dd { background: white; margin-top: 1ex; margin-bottom: 1ex; }
 
 dl.apiexamples>dt, dl.apiexamples>dd { font-family: monospace; }
 dl.apiexamples>dd {  white-space: pre; }
+
+div.modtime { float: right; }
+.modtime { color: #666; white-space: nowrap; }
 
 </style>
 
@@ -24,7 +29,7 @@ availiable in the GF shell is also available via the GF web services API.
 <p>
 The
 <a href="http://code.google.com/p/grammatical-framework/wiki/GFWebServiceAPI">GF
-Web Service API</a> page describes the calls supported by the GF web service
+Web Service API page</a> describes the calls supported by the GF web service
 API. Below, we illustrate these calls by examples, and also show
 how to make these calls from JavaScript using the API defined in
 <a href="http://www.grammaticalframework.org/src/runtime/javascript/minibar/pgf_online.js">pgf_online.js</a>.
@@ -63,7 +68,8 @@ incomplete and might be made more complete in a future version...
   <dd>["Foods.pgf","Phrasebook.pgf"]
   <dt class=js> // Select which grammar to use
     <br>server.switch_grammar("Foods.pgf")
-  <dt class=js>// Get grammar info (this method could be renamed)
+  <dt class=js>// Get concrete language list and other grammar info
+                (this method could be renamed)
     <br>server.get_languages(callback)
   <dt>http://localhost:41296/grammars/Foods.pgf
   <dd>{"name":"Foods",
@@ -120,7 +126,9 @@ incomplete and might be made more complete in a future version...
   "text":""}]
 </dl>
 <hr>
-<!-- hhmts start --> Last modified: Mon Apr 11 14:47:59 CEST 2011 <!-- hhmts end -->
+<div class=modtime><small>
+<!-- hhmts start --> Last modified: Wed Aug  3 15:33:17 CEST 2011 <!-- hhmts end -->
+  </small></div>
 <address>
-<a href="http://www.cse.chalmers.se/~hallgren/>Thomas Hallgren</a>
+<a href="http://www.cse.chalmers.se/~hallgren/">TH</a>
 </address>

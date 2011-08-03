@@ -1,8 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<!DOCTYPE html>
 <html> <head>
 <title>About Minibar</title>
 <link rel=stylesheet type="text/css" href="minibar.css">
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 <meta charset="UTF-8">
 </head>
 
@@ -33,7 +32,9 @@ Some implementation details:
   There seems to be some rendering bugs in Chrome 5.0.342.9 β.
   <li>The implementation consist of two JavaScript files:
   <a href="minibar.js">minibar.js</a> and <a href="support.js">support.js</a>
-  The latter is also used in a small web app based on the
+  The latter is also used in
+  <a href="http://spraakbanken.gu.se/swe/forskning/saldo/ordspel">a couple of
+  small web apps</a> based on the
   <a href="http://spraakbanken.gu.se/sal/ws/">SALDO web services</a>.
   <li>To access the GF web service, it uses the
   <a href="http://en.wikipedia.org/wiki/JSON#JSONP">JSONP method</a>
@@ -94,17 +95,17 @@ Some implementation details:
   <em>or</em> if what you have entered exactly matches one of the remaining
   magnet.
   <li>[Added 2010-05-28] Added a link to make it easy to try the same sentence in
-  <a href="http://translate.google.com">Google Translate</a>.
-  This can be turned of by passing the option <code>{try_google:false}</code> to
+  <a href="http://translate.google.com">Google Translate</a>.This can be
+  turned off by passing the option <code>{try_google:false}</code> to
   <code>start_minibar</code>.
   <li>[Added 2010-06-02] Added support for Help and Feedback buttons, controlled
   by the options <code>feedback_url</code> and <code>help_url</code> passed to
   <code>start_minibar</code>.
   <li>[Added 2010-06-02] New option: <code>default_source_language</code>.
   <li>[Added 2010-09-10] Minibar now automatically uses
-      <a href="http://en.wikipedia.org/wiki/Ajax_(programming)">AJAX</a>
+      <a href="http://en.wikipedia.org/wiki/XMLHttpRequest">XHR</a>
       instead of JSONP when possible (i.e. when the HTML document and the
-      PGF server are on the same server).
+      PGF service are on the same server).
   <li>[Added 2010-09-10] The default input language is now the user's preferred
   language, if possible. This is implemented by consulting the
   <code>userLanguage</code> field in the grammar info output by pgf-server.
@@ -131,7 +132,7 @@ Some implementation details:
       <a href="pgf_online.js">pgf_online.js</a>.
     <li>The minibar code has been rewritten to avoid storing state information
       in the document tree and accessing it by referring to named document
-      elements. The code now also avoids using string literals contaning
+      elements. The code now also avoids using string literals containing
       the names of top-level functions to specify event handlers for buttons
       and menus. (The code is no longer introspective, so &alpha; conversion
       will not change its meaning.)
@@ -150,11 +151,13 @@ Some implementation details:
    after every word. On touch-based devices, the on-screen keyboard kept
    popping up after every word, which was very annoying if you were
    entering a sentence by tapping on the magnets.
+ <li>[Changed 2011-08-03] Moved the initialization code in minibar.html to
+   <a href="minibar_online.js">minibar_online.js</a>.
 </ul>
 
 <hr>
 <small class=modtime>
-<!-- hhmts start --> Last modified: Mon Apr 11 15:03:31 CEST 2011 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Wed Aug  3 16:14:22 CEST 2011 <!-- hhmts end -->
 </small>
 <address>
 <a href="http://www.cs.chalmers.se/~hallgren/">TH</a>
