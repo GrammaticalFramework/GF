@@ -157,7 +157,8 @@ Minibar.prototype.get_completions=function() {
     with(this) {
 	//debug("get_completions ");
 	words.innerHTML="...";
-	server.complete(current.from,current.input,bind(show_completions,this));
+	server.complete({from:current.from,input:current.input},
+			bind(show_completions,this));
     }
 }
 
@@ -232,9 +233,11 @@ Minibar.prototype.get_translations=function() {
     with(this) {
 	var c=current;
 	if(options.show_grouped_translations)
-	    server.translategroup(c.from,c.input,bind(show_groupedtranslations,this));
+	    server.translategroup({from:c.from,input:c.input},
+				  bind(show_groupedtranslations,this));
 	else
-	    server.translate(c.from,c.input,bind(show_translations,this));
+	    server.translate({from:c.from,input:c.input},
+			     bind(show_translations,this));
     }
 }
 
@@ -291,9 +294,9 @@ Minibar.prototype.generate_random=function() {
     }
     
     function lin_random(abs) {
-	t.server.linearize(abs[0].tree,t.current.from,show_random);
+	t.server.linearize({tree:abs[0].tree,to:t.current.from},show_random);
     }
-    t.server.get_random(lin_random);
+    t.server.get_random({},lin_random);
 }
 
 Minibar.prototype.add_words=function(s) {

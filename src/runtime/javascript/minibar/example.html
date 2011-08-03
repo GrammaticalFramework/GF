@@ -1,21 +1,25 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<!DOCTYPE html>
 <html> <head>
 <title>PGF online server example</title>
 <style type="text/css">
 body { background: #ddd; }
+h1, h2, h3, small, th { font-family: sans-serif; }
+div.modtime { float: right; }
+.modtime { color: #666; white-space: nowrap; }
 </style>
-<script type="text/JavaScript" src="http://www.grammaticalframework.org/src/runtime/javascript/minibar/support.js"></script>
-<script type="text/JavaScript" src="http://www.grammaticalframework.org/src/runtime/javascript/minibar/pgf_online.js"></script>
+<script type="text/JavaScript" src="support.js"></script>
+<script type="text/JavaScript" src="pgf_online.js"></script>
 <script type="text/JavaScript">
 
 var server_options={
   grammars_url: "http://www.grammaticalframework.org/grammars/",
-  grammar_list: ["Syllogism.pgf"]
+  grammar_list: ["Foods.pgf"]
 }
 var pgf_server = pgf_online(server_options);
 
 function call_server() {
-  pgf_server.parse("SyllogismEng",document.forms[0].input.value,show_output)
+  pgf_server.parse({from:"FoodsEng",input:document.forms[0].input.value},
+                   show_output)
 }
 
 function show_output(parsed) {
@@ -31,7 +35,7 @@ function show_output(parsed) {
 
 <form onsubmit="call_server(); return false">
 Input:
-<input name=input size=50 value="some humans are not human">
+<input name=input size=50 value="this cheese is expensive">
 <input type=submit value=Parse>
 
 <p>
@@ -46,6 +50,8 @@ Output:
 </ul>
 
 <hr>
-<address></address>
-<!-- hhmts start --> Last modified: Mon Apr 11 14:53:21 CEST 2011 <!-- hhmts end -->
+<div class=modtime><small>
+<!-- hhmts start --> Last modified: Wed Aug  3 16:52:51 CEST 2011 <!-- hhmts end -->
+  </small></div>
+<address><a href="http://www.cse.chalmers.se/~hallgren/">TH</a></address>
 </body> </html>
