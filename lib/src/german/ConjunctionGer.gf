@@ -24,8 +24,15 @@ concrete ConjunctionGer of Conjunction =
 
 -- These fun's are generated from the list cat's.
 
-    BaseS = twoTable Order ;
-    ConsS = consrTable Order comma ;
+    BaseS x y = { -- twoTable Order ;
+      s1 = x.s ;
+      s2 = table {Inv => y.s ! Main ; o => y.s ! o}
+      } ;
+    ConsS x xs = { -- consrTable Order comma ;
+      s1 = \\o => x.s ! Inv ++ comma ++ xs.s1 ! case o of {Inv => Main ; _ => o} ;
+      s2 = xs.s2
+      } ;
+
     BaseAdv = twoSS ;
     ConsAdv = consrSS comma ;
     BaseNP x y = twoTable PCase x y ** {a = conjAgr x.a y.a} ;
