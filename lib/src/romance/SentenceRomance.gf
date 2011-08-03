@@ -67,7 +67,8 @@ incomplete concrete SentenceRomance of Sentence =
       c2 = cl.c2
     } ;
 
-    AdvS a s = {s = \\o => a.s ++ "," ++ s.s ! o} ;
+    AdvS a s = {s = \\o => a.s ++ s.s ! o} ;
+    ExtAdvS a s = {s = \\o => a.s ++ "," ++ s.s ! o} ;
 
     SSubjS a s b = {s = \\m => a.s ! m ++ s.s ++ b.s ! s.m} ;
 

@@ -60,6 +60,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
     } ;
 
     AdvS a s = {s = a.s ++ s.s} ;
+    ExtAdvS a s = {s = a.s ++ "," ++ s.s} ;
 
     RelS s r = {s = s.s ++ "," ++ r.s ! agrP3 Sg} ; ---- mikä
 

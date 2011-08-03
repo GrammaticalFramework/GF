@@ -62,9 +62,11 @@ abstract Sentence = Cat ** {
     UseRCl   : Temp -> Pol -> RCl -> RS ;
     UseSlash : Temp -> Pol -> ClSlash -> SSlash ;
 
--- An adverb can be added to the beginning of a sentence.
+-- An adverb can be added to the beginning of a sentence, either with comma ("externally")
+-- or without:
 
-    AdvS     : Adv -> S  -> S ;            -- today, I will go home
+    AdvS     : Adv -> S  -> S ;            -- then I will go home
+    ExtAdvS  : Adv -> S  -> S ;            -- next week, I will go home
 
 -- This covers subjunctive clauses, but they can also be added to the end.
 

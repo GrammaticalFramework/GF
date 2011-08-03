@@ -58,6 +58,7 @@ incomplete concrete SentenceScand of Sentence =
     } ;
 
     AdvS a s = {s = \\o => a.s ++ s.s ! Inv} ;
+    ExtAdvS a s = {s = \\o => a.s ++ "," ++ s.s ! Inv} ;
 
     RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! agrP3 Neutr Sg} ; --- vilket
 
