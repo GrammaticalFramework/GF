@@ -33,7 +33,7 @@ div.word, span.word, div#words div, div#words input[type=button] {
 .invalid { color: red; }
 
 div.modtime { float: right; }
-.modtime { color: #444; white-space: nowrap; }
+.modtime { color: #666; white-space: nowrap; }
 
 ul.space>li { margin-top: 0.75ex; }
 
