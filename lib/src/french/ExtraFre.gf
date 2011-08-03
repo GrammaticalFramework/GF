@@ -56,5 +56,12 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
       _   => elisQue
       } ;
 
+  lin
+    tout_Det = {
+    s  = \\g,c => prepCase c ++ genForms "tout" "toute" ! g ;
+    sp = \\g,c => prepCase c ++ genForms "tout" "toute" ! g ;
+    n = Sg ; 
+    s2 = []
+    } ;
 
 }
