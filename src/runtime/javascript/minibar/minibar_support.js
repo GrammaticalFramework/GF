@@ -1,0 +1,46 @@
+
+/* --- Auxiliary functions -------------------------------------------------- */
+
+function langpart(conc,abs) { // langpart("FoodsEng","Foods") == "Eng"
+    return hasPrefix(conc,abs) ? conc.substr(abs.length) : conc;
+}
+
+function update_language_menu(menu,grammar) {
+    // Replace the options in the menu with the languages in the grammar
+    var lang=grammar.languages;
+    menu.innerHTML="";
+	
+    for(var i=0; i<lang.length; i++) {
+	var ln=lang[i].name;
+	if(!hasPrefix(ln,"Disamb")) {
+	    var lp=langpart(ln,grammar.name);
+	    menu.appendChild(option(lp,ln));
+	}
+    }
+}
+
+function button_img(url,action) {
+    var i=img(url);
+    i.setAttribute("class","button");
+    i.setAttribute("onclick",action);
+    return i;
+}
+
+function toggle_img(i) {
+  var tmp=i.src;
+  i.src=i.other;
+  i.other=tmp;
+}
+
+function setField(form,name,value) {
+    form[name].value=value;
+    var el=element(name);
+    if(el) el.innerHTML=value;
+}
+
+function open_popup(url,target) {
+    var w=window.open(url,target,'toolbar=no,location=no,status=no,menubar=no');
+    w.focus();
+}
+
+function opener_element(id) { with(window.opener) return element(id); }

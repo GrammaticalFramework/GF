@@ -153,11 +153,18 @@ Some implementation details:
    entering a sentence by tapping on the magnets.
  <li>[Changed 2011-08-03] Moved the initialization code in minibar.html to
    <a href="minibar_online.js">minibar_online.js</a>.
+ <li>[Changed 2011-08-08] For improved modularity and reusability,
+   two smaller objects have been factored out from the Minibar object:
+   Input and Translations. These have been placed in two separate files:
+   <a href="minibar_input.js">minibar_input.js</a> and
+   <a href="minibar_translations.js">minibar_translations.js</a>.
+   Some common auxiliary functions have also been moved to a separate file:
+   <a href="minibar_support.js">minibar_support.js</a>.
 </ul>
 
 <hr>
 <small class=modtime>
-<!-- hhmts start --> Last modified: Wed Aug  3 16:14:22 CEST 2011 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Mon Aug  8 19:27:14 CEST 2011 <!-- hhmts end -->
 </small>
 <address>
 <a href="http://www.cs.chalmers.se/~hallgren/">TH</a>
