@@ -1,6 +1,6 @@
 #!/bin/bash
 
-bin=../bin
+bin=bin
 AUTOHEADER=no
 . $bin/cgistart.sh
 
