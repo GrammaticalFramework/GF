@@ -145,28 +145,6 @@ Minibar.prototype.open_feedback=function() {
     }
 }
 
-function abstree_button(abs) {
-  var i=button_img(tree_icon,"toggle_img(this)");
-  i.title="Click to display abstract syntax tree"
-  i.other=server.current_grammar_url+"?command=abstrtree&tree="+encodeURIComponent(abs);
-  return i;
-}
-
-function alignment_button(abs) {
-  var i=button_img(alignment_icon,"toggle_img(this)");
-  i.title="Click to display word alignment"
-  i.other=server.current_grammar_url+"?command=alignment&tree="+encodeURIComponent(abs);
-  return i;
-}
-
-function parsetree_button(abs,lang) {
-  var i=button_img(tree_icon,"toggle_img(this)");
-  i.title="Click to display parse tree"
-  i.other=server.current_grammar_url
-          +"?command=parsetree&from="+lang+"&tree="+encodeURIComponent(abs);
-  return i;
-}
-
 // This function is called from feedback.html
 function prefill_feedback_form() {
     var state=opener_element("minibar").state;
