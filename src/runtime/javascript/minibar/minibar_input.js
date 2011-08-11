@@ -1,11 +1,21 @@
 
 /* --- Input object --------------------------------------------------------- */
 
-function Input(server,options,translations) {
-    // Input object constructor
-    this.options=options;
+function Input(server,translations,opts) { // Input object constructor
     this.server=server;
     this.translations=translations;
+
+    // Default values for options:
+    this.options={
+	delete_button_text: "⌫",
+	default_source_language: null,
+	random_button: true,
+    }
+
+    // Apply supplied options
+    if(opts) for(var o in opts) this.options[o]=opts[o];
+
+    // User interface elements
     this.main=empty("div");
     this.menus=empty("span");
     this.buttons=empty("span");

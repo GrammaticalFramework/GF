@@ -18,25 +18,21 @@ show_completions(complete_output)
 
 // For backward compatibility:
 function start_minibar(server,opts,target) {
-    return new Minibar(server,opts,target);
+    if(target) opts.target=target;
+    return new Minibar(server,opts);
 }
 
 /* --- Main Minibar object -------------------------------------------------- */
-function Minibar(server,opts,target) {
+function Minibar(server,opts) {
     // Contructor, typically called when the HTML document is loaded
 
     /* --- Configuration ---------------------------------------------------- */
 
     // default values for options:
     this.options={
-	show_abstract: false,
-	show_trees: false,
-	show_grouped_translations: true,
-	delete_button_text: "⌫",
-	default_source_language: null,
+	target: "minibar",
 	try_google: true,
 	feedback_url: null,
-	random_button: true,
 	help_url: null
     }
 
@@ -45,14 +41,14 @@ function Minibar(server,opts,target) {
 
     /* --- Creating the components of the minibar --------------------------- */
     this.translations=new Translations(server,this.options)
-    this.input=new Input(server,this.options,this.translations)
+    this.input=new Input(server,this.translations,this.options)
 
     /* --- Creating user interface elements --------------------------------- */
 
     this.menubar=empty("div");
     this.extra=div_id("extra");
 
-    this.minibar=element(target || "minibar");
+    this.minibar=element(this.options.target);
     this.minibar.innerHTML="";
     with(this) {
 	appendChildren(menubar,[input.menus,translations.menus,input.buttons])
