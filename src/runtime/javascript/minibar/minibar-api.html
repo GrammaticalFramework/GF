@@ -29,7 +29,7 @@ div.modtime { float: right; }
 <body>
 <h1>Minibar API</h1>
 
-The minibar is structured as three object:
+The Minibar web app consists of the following objects:
 
 <ul>
   <li><a href="#Minibar">Minibar</a>
@@ -42,10 +42,10 @@ They are described below.
 <h2 id=Minibar>The Minibar object</h2>
 
 <p>
-This is the complete Minibar web app. It is defined in
+This object implements the complete Minibar web app. It is defined in
 <a href="minibar.js">minibar.js</a>. It also uses the <code>Input</code>
-and <code>Translations</code> objects, and some auxiliary functions defined
-in <a href="minibar_support.js">minibar_support.js</a>
+and <code>Translations</code> objects described below, and some auxiliary
+functions defined in <a href="minibar_support.js">minibar_support.js</a>
 and <a href="support.js">support.js</a>, so to use it in an
 HTML file, you would normally include at least the following:
 
@@ -116,7 +116,7 @@ HTML file, you would normally include at least the following:
 
 <h3>Constructor</h3>
 
-<code>var input=new Input(server,options,translations)</code>
+<code>var input=new Input(server,translations,options)</code>
 
 <ul>
   <li><code>server</code> is the PGF service object
@@ -134,17 +134,22 @@ HTML file, you would normally include at least the following:
     </table>
 
   <li><code>translations</code> is the object that is notified when the input
-  has changed. In the minibar, this is the object that display translations.
+  has changed. In the minibar, this is the object that display translations, but
+  other apps might of course use the entered text for other purposes.
   The following methods will be called:
   <ul>
-    <li><code>translations.clear()</code>
+    <li><code>translations.clear()</code> is called when there no entered
+    text.
     <li><code>translations.translateFrom({from:<var>conc</var>,input:<var>string</code>})</code>
+    is called when the user has entered some text. The <code>from</code>
+    property is the name of the concrete syntax and the <code>input</code>
+    property is the entered text.
   </ul>
 </ul>
 
 <h3>Properties and user interface</h3>
 
-The <code>input</code> object created by the <code>Input</code>constructor
+The <code>input</code> object created by the <code>Input</code> constructor
 contains two field that the caller should add to the user interface:
 <ul>
   <li><code>input.main</code> is the main user interface where the current
@@ -221,7 +226,7 @@ should add to the user interface:
 <hr>
 <div class=modtime>
 <small class=modtime>
-HTML <!-- hhmts start --> Last modified: Tue Aug  9 17:55:19 CEST 2011 <!-- hhmts end -->
+HTML <!-- hhmts start --> Last modified: Thu Aug 11 17:14:37 CEST 2011 <!-- hhmts end -->
 </small>
 </div>
 

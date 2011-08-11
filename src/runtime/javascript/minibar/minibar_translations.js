@@ -1,8 +1,17 @@
 /* --- Translations object -------------------------------------------------- */
 
-function Translations(server,options) {
+function Translations(server,opts) {
     this.server=server;
-    this.options=options;
+
+    // Default values for options:
+    this.options={
+	show_abstract: false,
+	show_trees: false,
+	show_grouped_translations: true,
+    }
+
+    // Apply supplied options
+    if(opts) for(var o in opts) this.options[o]=opts[o];
 
     this.main=empty("div");
     this.menus=empty("span");

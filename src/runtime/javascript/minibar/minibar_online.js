@@ -22,4 +22,4 @@ var minibar_options= {
 //feedback_url: "feedback.html",
   try_google: true
 }
-var minibar=new Minibar(server,minibar_options,"minibar");
+var minibar=new Minibar(server,minibar_options);
