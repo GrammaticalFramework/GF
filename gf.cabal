@@ -1,5 +1,5 @@
 name: gf
-version: 3.2.1-darcs
+version: 3.2.8-darcs
 
 cabal-version: >= 1.8
 build-type: Custom
@@ -90,7 +90,7 @@ executable gf
     build-depends: httpd-shed, network, silently, utf8-string
     cpp-options: -DSERVER_MODE
     other-modules: GFServer
-  build-tools: happy, alex
+  build-tools: happy, alex>=2 && <3
   if os(windows)
     build-depends: Win32
   else
