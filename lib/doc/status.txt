@@ -24,12 +24,12 @@ are marked in the table
 | Fin   | +     | +    | ++    | +   | +    | +   | +    | -     | +    | *AR
 | Fre   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
 | Ger   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,HH
-% | Heb   | -   | -    | -     | -   | -    | -   | -    | -     | -    | DD
+| Heb   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *DD
 | Hin   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,*KP,MH,AR
 | Ina   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | JB
 | Ita   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *AR,*RE,GP
 | Lat   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
-| Lav   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *NG
+| Lav   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *NG
 | Mon   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *NE
 | Nep   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | *DS
 | Nor   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
@@ -77,6 +77,7 @@ AD Ali El Dada,
 AR Aarne Ranta,
 AS Adam Slaski,
 BB Björn Bringert,
+DD Dana Dannélls,
 DS Dinesh Simk,
 EA Elnaz Abolahrar,
 FJ Femke Johansson,
