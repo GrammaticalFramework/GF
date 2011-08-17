@@ -635,7 +635,7 @@ function draw_lincats(g,i) {
     }
     function del(c) { return function() { delete_lincat(g,i,c); } }
     function dlc(c,cls) {
-	var t=editable("span",text(c.type),g,edit(c),"Edit lincat for "+c.cat);
+	var t=editable("span",text_ne(c.type),g,edit(c),"Edit lincat for "+c.cat);
 	return node("span",{"class":cls},
 		    [ident(c.cat),sep(" = "),t]);
     }
@@ -797,7 +797,7 @@ function draw_lins(g,i) {
 	    l.push(ident(f.args[i]));
 	}
 	l.push(sep(" = "));
-	var t=editable("span",text(f.lin),g,edit(f),"Edit lin for "+f.fun);
+	var t=editable("span",text_ne(f.lin),g,edit(f),"Edit lin for "+f.fun);
 	l.push(t);
 	return node("span",{"class":cls},l);
     }
@@ -989,6 +989,10 @@ function more(g,action,hint) {
 	       [text(" + ")]);
     b.onclick=function() { action(g,b); }
     return b;
+}
+
+function text_ne(s) { // like text(s), but force it to be non-empty
+    return text(s ? s : "\xa0\xa0\xa0")
 }
 
 function editable(tag,cs,g,f,hint) {
