@@ -119,8 +119,8 @@ oper
 
   mkAdjReg : Str -> Adj = \prim ->
 	case prim of {
-		_ + "e" + ("r"|"l") => adjPrim prim ;
-		_ + ("r"|"l")       => adjFidel prim ;
+	--	_ + "e" + ("r"|"l") => adjPrim prim ;
+		_ + "l"             => adjFidel prim ;
 		_ + ("e"|"u"|"o")   => adjFondo prim ;
 		_                   => adjPrim prim  
 	} ;
