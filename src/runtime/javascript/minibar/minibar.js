@@ -1,7 +1,6 @@
-// minibar.js, assumes that support.js has also been loaded
-
-var tree_icon="tree-btn.png";
-var alignment_icon="align-btn.png";
+/* minibar.js
+needs: minibar_support.js, minibar_input.js, minibar_translations.js, support.js
+*/
 
 /*
 // This is essentially what happens when you call start_minibar:
@@ -116,11 +115,11 @@ Minibar.prototype.append_extra_buttons=function(extra,options) {
 
 Minibar.prototype.try_google=function() {
     with(this) {
-	var to=target_lang();
-	var s=current.input;
-	if(surface.typed) s+=surface.typed.value;
+	var to=translations.target_lang();
+	var s=input.current.input;
+	if(input.surface.typed) s+=input.surface.typed.value;
 	var url="http://translate.google.com/?sl="
-	        +langpart(current.from,grammar.name);
+	        +langpart(input.current.from,grammar.name);
 	if(to!="All") url+="&tl="+to;
 	url+="&q="+encodeURIComponent(s);
 	window.open(url);

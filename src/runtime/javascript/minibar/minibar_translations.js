@@ -1,5 +1,8 @@
 /* --- Translations object -------------------------------------------------- */
 
+var tree_icon="tree-btn.png";
+var alignment_icon="align-btn.png";
+
 function Translations(server,opts) {
     this.server=server;
 
