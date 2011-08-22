@@ -1,10 +1,11 @@
 {-# LANGUAGE DeriveDataTypeable, CPP #-}
 module FastCGIUtils (--initFastCGI, loopFastCGI,
                      throwCGIError, handleCGIErrors,
-                     stderrToFile,
-                     outputJSONP,
+                     stderrToFile,logError,
+                     outputJSONP,outputEncodedJSONP,
                      outputPNG,
                      outputHTML,
+                     outputPlain,
                      splitBy) where
 
 import Control.Concurrent
@@ -160,11 +161,14 @@ handleCGIErrors x = x `catchCGI` \e -> case fromException e of
 -- * General CGI and JSON stuff
 
 outputJSONP :: JSON a => a -> CGI CGIResult
-outputJSONP x = 
+outputJSONP = outputEncodedJSONP . encode
+
+outputEncodedJSONP :: String -> CGI CGIResult
+outputEncodedJSONP json = 
     do mc <- getInput "jsonp"
        let str = case mc of
-                   Nothing -> encode x
-                   Just c  -> c ++ "(" ++ encode x ++ ")"
+                   Nothing -> json
+                   Just c  -> c ++ "(" ++ json ++ ")"
        setHeader "Content-Type" "text/javascript; charset=utf-8"
        outputStrict $ UTF8.encodeString str
 
@@ -176,6 +180,11 @@ outputPNG x = do
 outputHTML :: String -> CGI CGIResult
 outputHTML x = do
        setHeader "Content-Type" "text/html"
+       outputStrict $ UTF8.encodeString x
+
+outputPlain :: String -> CGI CGIResult
+outputPlain x = do
+       setHeader "Content-Type" "text/plain"
        outputStrict $ UTF8.encodeString x
 
 outputStrict :: String -> CGI CGIResult
