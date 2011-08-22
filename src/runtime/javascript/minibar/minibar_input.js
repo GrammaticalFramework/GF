@@ -180,6 +180,7 @@ Input.prototype.complete_typed=function(event) {
 	if(ws.length>1 || event.keyCode==13) {
 	    if(ws[0]!=words.filtered) filter_completions(ws[0],true);
 	    if(words.count==1) add_word(words.theword);
+	    else if(event.keyCode==13) add_word(ws[0]) // for literals
 	    else if(elem(ws[0],words.completions)) add_word(ws[0]);
 	    else if(words.theword.length>ws[0].length) inp.value=words.theword;
 	}
