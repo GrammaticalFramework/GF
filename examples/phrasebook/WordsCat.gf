@@ -55,7 +55,7 @@ lin
     Church = mkPlace (mkN "església")  ;
     Disco = mkPlace (mkN "discoteca") ;
     Hospital = mkPlace (mkN "hospital")  ;
-    Hotel = mkPlace (mkN "alberg")  ;
+    Hotel = mkPlace (mkN "hotel")  ;
     Museum = mkPlace (mkN "museu")  ;
     Park = mkPlace (mkN "parc") ;
     Parking = mkPlace (mkN "pàrking" masculine) ;
