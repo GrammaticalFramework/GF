@@ -35,12 +35,15 @@ import Data.List (nub,intersperse)
 import Control.Monad (liftM2, liftM)
 import Text.PrettyPrint
 
+----import Debug.Trace
+
 -- | computation of concrete syntax terms into normal form
 -- used mainly for partial evaluation
 computeConcrete :: SourceGrammar -> Term -> Err Term
 computeConcrete    g t = {- refreshTerm t >>= -} computeTerm g [] t
 computeConcreteRec g t = {- refreshTerm t >>= -} computeTermOpt True g [] t
 
+-- False means: no evaluation under Abs
 computeTerm :: SourceGrammar -> Substitution -> Term -> Err Term
 computeTerm = computeTermOpt False
 
@@ -50,20 +53,22 @@ computeTerm = computeTermOpt False
 computeTermOpt :: Bool -> SourceGrammar -> Substitution -> Term -> Err Term
 computeTermOpt rec gr = comput True where
 
+   -- full = True means full evaluation under Abs
    comput full g t = ---- errIn ("subterm" +++ prt t) $ --- for debugging 
               case t of
 
-     Q (p,c) | p == cPredef -> return t
+     Q (p,c) | p == cPredef -> return t    -- qualified constant
              | otherwise    -> look (p,c) 
 
-     Vr x -> do
-       t' <- maybe (Bad (render (text "no value given to variable" <+> ppIdent x))) return $ lookup x g
+     Vr x -> do  -- local variable
+       t' <- maybe (Bad (render (text "no value given to variable" <+> ppIdent x))) 
+             return $ lookup x g
        case t' of 
          _ | t == t' -> return t
          _ -> comp g t'
 
      -- Abs x@(IA _) b -> do 
-     Abs _ _ _ | full -> do 
+     Abs _ _ _ | full -> do   -- \xs -> b
        let (xs,b1) = termFormCnc t   
        b' <- comp ([(x,Vr x) | (_,x) <- xs] ++ g) b1
        return $ mkAbs xs b'
@@ -71,17 +76,26 @@ computeTermOpt rec gr = comput True where
      --  return $ Abs x b'
      Abs _ _ _ -> return t -- hnf
 
-     Let (x,(_,a)) b -> do
+     Let (x,(ty,a)) b -> do  -- let x : ty = a in b
        a' <- comp g a
        comp (ext x a' g) b
 
-     Prod b x a t -> do
+{- -- trying to prevent Let expansion with non-evaluated exps. AR 19/8/2011
+     Let (x,(ty,a)) b -> do
+       a' <- comp g a
+       let ea' = checkNoArgVars a'
+       case ea' of
+         Ok v -> comp (ext x v g) b
+         _ -> return $ Let (x,(ty,a')) b
+-}
+
+     Prod b x a t -> do  -- (x : a) -> t ; b for hiding
        a' <- comp g a
        t' <- comp (ext x (Vr x) g) t
        return $ Prod b x a' t'
 
-     -- beta-convert
-     App f a -> case appForm t of
+     -- beta-convert: simultaneous for as many arguments as possible
+     App f a -> case appForm t of   -- (f a) --> (h as)
       (h,as) | length as > 1 -> do
         h' <- hnf g h
         as' <- mapM (comp g) as
@@ -104,19 +118,20 @@ computeTermOpt rec gr = comput True where
           _ -> compApp g (mkApp h' as')
       _ -> compApp g t
 
-     P t l | isLockLabel l -> return $ R [] 
+     P t l | isLockLabel l -> return $ R []  -- t.lock_C
      ---- a workaround 18/2/2005: take this away and find the reason
      ---- why earlier compilation destroys the lock field
 
 
-     P t l  -> do
+     P t l  -> do     -- t.l
        t' <- comp g t
        case t' of
-         FV rs -> mapM (\c -> comp g (P c l)) rs >>= returnC . variants
-         R r   -> maybe (Bad (render (text "no value for label" <+> ppLabel l))) (comp g . snd) $ 
+         FV rs -> mapM (\c -> comp g (P c l)) rs >>= returnC . variants -- (r| r').l
+         R r   -> maybe (Bad (render (text "no value for label" <+> ppLabel l))) --{...}.l
+                    (comp g . snd) $ 
                     lookup l $ reverse r 
 
-         ExtR a (R b) ->                 
+         ExtR a (R b) ->    -- (a ** {...}).l             
            case comp g (P (R b) l) of
              Ok v -> return v
              _ -> comp g (P a l)
@@ -128,12 +143,12 @@ computeTermOpt rec gr = comput True where
              _ -> comp g (P b l)
 --- - } ---
 
-         S (T i cs) e -> prawitz g i (flip P l) cs e
-         S (V i cs) e -> prawitzV g i (flip P l) cs e
+         S (T i cs) e -> prawitz  g i (flip P l) cs e  -- ((table i branches) ! e).l
+         S (V i cs) e -> prawitzV g i (flip P l) cs e  -- ((table i values) ! e).l
 
          _   -> returnC $ P t' l
 
-     S t v -> do
+     S t v -> do         -- t ! v
        t' <- compTable g t
        v' <- comp g v
        t1 <- case t' of
@@ -143,32 +158,32 @@ computeTermOpt rec gr = comput True where
        compSelect g t1
 
      -- normalize away empty tokens
-     K "" -> return Empty
+     K "" -> return Empty  -- []
 
      -- glue if you can
-     Glue x0 y0 -> do
+     Glue x0 y0 -> do  -- x0 + y0
        x <- comp g x0
        y <- comp g y0
        case (x,y) of
-         (FV ks,_)         -> do
+         (FV ks,_)         -> do                               -- (k|k') + y
            kys <- mapM (comp g . flip Glue y) ks
            return $ variants kys
-         (_,FV ks)         -> do
+         (_,FV ks)         -> do                               -- x + (k|k')
            xks <- mapM (comp g . Glue x) ks
            return $ variants xks
 
-         (S (T i cs) e, s) -> prawitz g i (flip Glue s) cs e
-         (s, S (T i cs) e) -> prawitz g i (Glue s) cs e
-         (S (V i cs) e, s) -> prawitzV g i (flip Glue s) cs e
+         (S (T i cs) e, s) -> prawitz g i (flip Glue s) cs e   -- (table cs ! e) + s
+         (s, S (T i cs) e) -> prawitz g i (Glue s) cs e        -- s + (table cs ! e)
+         (S (V i cs) e, s) -> prawitzV g i (flip Glue s) cs e  -- same with values
          (s, S (V i cs) e) -> prawitzV g i (Glue s) cs e
-         (_,Empty)         -> return x
+         (_,Empty)         -> return x                         -- x + []
          (Empty,_)         -> return y
-         (K a, K b)        -> return $ K (a ++ b)
-         (_, Alts d vs)    -> do
+         (K a, K b)        -> return $ K (a ++ b)              -- "foo" + "bar"
+         (_, Alts d vs)    -> do                               -- x + pre {...}
 ----         (K a, Alts (d,vs)) -> do
             let glx = Glue x
             comp g $ Alts (glx d) [(glx v,c) | (v,c) <- vs]
-         (Alts _ _, ka) -> checks [do
+         (Alts _ _, ka) -> checks [do                          -- pre {...} + ka
             y' <- strsFromTerm ka
 ----         (Alts _, K a) -> checks [do
             x' <- strsFromTerm x -- this may fail when compiling opers
@@ -177,46 +192,46 @@ computeTermOpt rec gr = comput True where
 ----              foldr1 C (map K (str2strings (glueStr v (str a)))) | v <- x']
            ,return $ Glue x y
            ]
-         (C u v,_) -> comp g $ C u (Glue v y)
+         (C u v,_) -> comp g $ C u (Glue v y)  -- (u ++ v) + y
 
          _ -> do
            mapM_ checkNoArgVars [x,y]
            r <- composOp (comp g) t
            returnC r
 
-     Alts d aa -> do
+     Alts d aa -> do   -- pre {...}
        d' <- comp g d
        aa' <- mapM (compInAlts g) aa
        returnC (Alts d' aa')
 
      -- remove empty
-     C a b    -> do
+     C a b    -> do    -- a ++ b
        a' <- comp g a
        b' <- comp g b
        case (a',b') of
-         (Alts _ _, K d) -> checks [do
+         (Alts _ _, K d) -> checks [do                      -- pre {...} ++ "d"
             as <- strsFromTerm a' -- this may fail when compiling opers
             return $ variants [
               foldr1 C (map K (str2strings (plusStr v (str d)))) | v <- as]
             ,
             return $ C a' b'
            ]
-         (Alts _ _, C (K d) e) -> checks [do
+         (Alts _ _, C (K d) e) -> checks [do                -- pre {...} ++ ("d" ++ e)
             as <- strsFromTerm a' -- this may fail when compiling opers
             return $ C (variants [
               foldr1 C (map K (str2strings (plusStr v (str d)))) | v <- as]) e
             ,
             return $ C a' b'
            ]
-         (Empty,_) -> returnC b'
-         (_,Empty) -> returnC a'
+         (Empty,_) -> returnC b'        -- [] ++ b'
+         (_,Empty) -> returnC a'        -- a' ++ []
          _     -> returnC $ C a' b'
 
      -- reduce free variation as much as you can
-     FV ts -> mapM (comp g) ts >>= returnC . variants
+     FV ts -> mapM (comp g) ts >>= returnC . variants   -- variants {...}
 
      -- merge record extensions if you can
-     ExtR r s -> do
+     ExtR r s -> do                                     -- r ** s
        r' <- comp g r
        s' <- comp g s
        case (r',s') of
@@ -224,31 +239,31 @@ computeTermOpt rec gr = comput True where
          (RecType rs, RecType ss) -> plusRecType r' s'
          _ -> return $ ExtR r' s'
 
-     ELin c r -> do
+     ELin c r -> do                                     -- lin c r
        r' <- comp g r
        unlockRecord c r'
 
-     T _ _ -> compTable g t
-     V _ _ -> compTable g t
+     T _ _ -> compTable g t         -- table { ... p => t ... }
+     V _ _ -> compTable g t         -- table [ ... v ... ]
 
      -- otherwise go ahead
      _ -> composOp (comp g) t >>= returnC
 
     where
 
-     compApp g (App f a) = do
+     compApp g (App f a) = do    -- (f a)
        f' <- hnf g f
        a' <- comp g a
        case (f',a') of
-         (Abs _ x b, FV as) -> 
+         (Abs _ x b, FV as) ->   -- (\x -> b) (variants {...})
            mapM (\c -> comp (ext x c g) b) as >>= return . variants
          (_, FV as)  -> mapM (\c -> comp g (App f' c)) as >>= return . variants
          (FV fs, _)  -> mapM (\c -> comp g (App c a')) fs >>= return . variants
-         (Abs _ x b,_) -> comp (ext x a' g) b
+         (Abs _ x b,_) -> comp (ext x a' g) b  -- (\x -> b) a -- normal beta conv.
 
-         (QC _,_)  -> returnC $ App f' a'
+         (QC _,_)  -> returnC $ App f' a'  -- (C a') -- constructor application
 
-         (S (T i cs) e,_) -> prawitz g i (flip App a') cs e
+         (S (T i cs) e,_) -> prawitz g i (flip App a') cs e  -- (table cs ! e) a'
          (S (V i cs) e,_) -> prawitzV g i (flip App a') cs e
 
 	 _ -> do
@@ -262,7 +277,7 @@ computeTermOpt rec gr = comput True where
        | rec       = lookupResDef gr c >>= comp []
        | otherwise = lookupResDef gr c
 
-     ext x a g = (x,a):g
+     ext x a g = (x,a):g  -- extend environment with new variable and its value
 
      returnC = return --- . computed
 
@@ -270,7 +285,7 @@ computeTermOpt rec gr = comput True where
        [t] -> t
        ts  -> FV ts
 
-     isCan v = case v of
+     isCan v = case v of    -- is canonical (and should be matched by a pattern)
        Con _    -> True
        QC _     -> True
        App f a  -> isCan f && isCan a
@@ -304,7 +319,7 @@ computeTermOpt rec gr = comput True where
 
        _ -> return p
 
-     compSelect g (S t' v') = case v' of
+     compSelect g (S t' v') = case v' of  -- t' ! v'
        FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . variants    
 
 ----       S (T i cs) e -> prawitz g i (S t') cs e  -- AR 8/7/2010 sometimes better
@@ -314,26 +329,26 @@ computeTermOpt rec gr = comput True where
        _ -> case t' of
          FV ccs -> mapM (\c -> comp g (S c v')) ccs >>= returnC . variants
 
-         T _ [(PW,c)] -> comp g c           --- an optimization
-         T _ [(PT _ PW,c)] -> comp g c
+         T _ [(PW,c)] -> comp g c           -- (\\_ => c) ! v'
+         T _ [(PT _ PW,c)] -> comp g c      -- (\\(_ : typ) => c) ! v'
 
-         T _ [(PV z,c)] -> comp (ext z v' g) c --- another optimization
+         T _ [(PV z,c)] -> comp (ext z v' g) c        -- (\\z => c) ! v'
          T _ [(PT _ (PV z),c)] -> comp (ext z v' g) c
 
          -- course-of-values table: look up by index, no pattern matching needed
 
-         V ptyp ts -> do
+         V ptyp ts -> do                      -- (table [...ts...]) ! v'
              vs <- allParamValues gr ptyp
              case lookupR v' (zip vs [0 .. length vs - 1]) of
                Just i -> comp g $ ts !! i
                _ -> return $ S t' v' -- if v' is not canonical
-         T _ cc -> do
+         T _ cc -> do                         -- (table {...cc...}) ! v'
            case matchPattern cc v' of
              Ok (c,g') -> comp (g' ++ g) c
              _ | isCan v' -> Bad (render (text "missing case" <+> ppTerm Unqualified 0 v' <+> text "in" <+> ppTerm Unqualified 0 t))
              _ -> return $ S t' v' -- if v' is not canonical
 
-         S (T i cs) e -> prawitz g i (flip S v') cs e
+         S (T i cs) e -> prawitz g i (flip S v') cs e  -- (table {...cs...} ! e) ! v'
          S (V i cs) e -> prawitzV g i (flip S v') cs e
          _    -> returnC $ S t' v'
 
@@ -344,7 +359,7 @@ computeTermOpt rec gr = comput True where
                                 [([(x,y) | (x,(_,y)) <- rs],v) | (R rs,v) <- vs]
        _ -> lookup v vs
 
-     -- case-expand tables
+     -- case-expand tables: branches for every value of argument type
      -- if already expanded, don't expand again
      compTable g t = case t of
          T i@(TComp ty) cs -> do
@@ -374,14 +389,16 @@ computeTermOpt rec gr = comput True where
                return $ T (TComp ptyp) (zip ps' ts)
              _ -> do
                ps0  <- mapM (compPatternMacro . fst) cs
+
                cs'  <- mapM (compBranch g) (zip ps0 (map snd cs))
+-----               cs'  <- return (zip ps0 (map snd cs)) --- probably right AR 22/8/2011
 
 ----               cs' <- mapM (compBranch g) cs
                return $ T i cs'  -- happens with variable types
          _ -> comp g t
 
-     compBranch g (p,v) = do
-       let g' = contP p ++ g
+     compBranch g (p,v) = do  -- compute a branch in a table
+       let g' = contP p ++ g  -- add the pattern's variables to environment
        v' <- comp g' v
        return (p,v')
 
@@ -389,6 +406,7 @@ computeTermOpt rec gr = comput True where
        [] -> return c
        _ -> err (const (return c)) return $ compBranch g c
 
+     -- collect the context of variables of a pattern
      contP p = case p of
        PV x -> [(x,Vr x)]
        PC _ ps -> concatMap contP ps
