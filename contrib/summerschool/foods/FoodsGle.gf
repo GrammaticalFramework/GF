@@ -36,8 +36,8 @@ concrete FoodsGle of Foods = open MutationsGle, CharactersGle in {
 						s = table{Sg => (mutate sg); Pl => (mutate pl)};
 						g = g;
 						pe = case pl of {
-							_ + v@(#broadVowel) + c@(#consonant*) => Broad;
-							_ + v@(#slenderVowel) + c@(#consonant*) => Slender;
+							_ + v@(#broadVowel) + c@(#consonant*) + #consonant => Broad;
+							_ + v@(#slenderVowel) + c@(#consonant*) + #consonant => Slender;
 							_ => NoBreadth
 						}
 					} ;
