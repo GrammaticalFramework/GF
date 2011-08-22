@@ -16,7 +16,7 @@ import qualified Codec.Binary.UTF8.String as UTF8 (decodeString)
 import qualified Data.ByteString.Lazy as BS
 
 import Control.Concurrent
-import Control.Exception
+import Control.Exception(evaluate)
 import Control.Monad
 import Data.Char
 import Data.Function (on)
@@ -27,6 +27,7 @@ import System.Random
 import System.Process
 import System.Exit
 import System.IO
+import System.Directory(removeFile)
 
 logFile :: FilePath
 logFile = "pgf-error.log"
@@ -65,6 +66,9 @@ pgfMain pgf command = do
          "parsetree"      -> getTree >>= \t -> getFrom >>= \(Just l) -> liftIO (doGraphvizParseTree pgf l t) >>= outputPNG
          "alignment"      -> getTree >>= liftIO . doGraphvizAlignment pgf >>= outputPNG
          "browse"         -> outputHTML =<< doBrowse pgf `fmap` getId `ap` getCSSClass `ap` getHRef
+         "external"       -> do cmd <- getInput "external"
+                                input <- getText
+                                doExternal cmd input
          _                -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show command]
   where
     getText :: CGI String
@@ -126,6 +130,30 @@ pgfMain pgf command = do
                          Nothing -> throwCGIError 400 "Bad language" ["Bad language: " ++ l]
                          Just lang | lang `elem` PGF.languages pgf -> return $ Just lang
                                    | otherwise -> throwCGIError 400 "Unknown language" ["Unknown language: " ++ l]
+
+-- Hook for simple extensions of the PGF service
+doExternal Nothing input = throwCGIError 400 "Unknown external command" ["Unknown external command"]
+doExternal (Just cmd) input =
+  do liftIO $ logError ("External command: "++cmd)
+     cmds <- liftIO $ (readIO =<< readFile "external_services")
+                        `catch` const (return [])
+     liftIO $ logError ("External services: "++show cmds)
+     maybe err ok (lookup cmd cmds)
+  where
+    err = throwCGIError 400 "Unknown external command" ["Unknown external command: "++cmd]
+    ok output_type =
+      do let tmpfile1 = "external_input.txt"
+             tmpfile2 = "external_output.txt"
+         liftIO $ writeFile "external_input.txt" input
+         liftIO $ system $ cmd ++ " " ++ tmpfile1 ++ " > " ++ tmpfile2
+         liftIO $ removeFile tmpfile1
+         r <- case output_type of
+                "jsonp" -> outputEncodedJSONP =<< liftIO (readFile tmpfile2)
+                "image/png" -> outputPNG =<< liftIO (BS.readFile tmpfile2)
+                "text/html" -> outputHTML =<< liftIO (readFile tmpfile2)
+                _ ->  outputPlain =<< liftIO (readFile tmpfile2)
+         liftIO $ removeFile tmpfile2
+         return r
 
 doTranslate :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
 doTranslate pgf input mcat mfrom mto =
