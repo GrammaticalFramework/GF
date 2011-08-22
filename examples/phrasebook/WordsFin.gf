@@ -60,7 +60,7 @@ concrete WordsFin of Words = SentencesFin **
     School = mkPlace (mkN "koulu") lla ;
 
     CitRestaurant cit = {
-      name = mkCN cit (mkN "ravintola") ; at = casePrep inessive ; to = casePrep illative; isPl = False
+      name = mkCN cit (mkN "ravintola") ; at = casePrep inessive ; to = casePrep illative; from = casePrep elative ; isPl = False
       } ;
     Parking = mkPlace (mkN "pysäköinti" (mkN "alue")) lla ;
     Supermarket = mkPlace (mkN "supermarket") ssa ;
@@ -198,10 +198,10 @@ concrete WordsFin of Words = SentencesFin **
 
     HowFar place = mkQS (mkQCl far_IAdv place.name) ;
     HowFarFrom x y = 
-      mkQS (mkQCl far_IAdv (mkCl y.name (SyntaxFin.mkAdv from_Prep x.name))) ;
+      mkQS (mkQCl far_IAdv (mkCl y.name x.from)) ;
     HowFarFromBy x y t = 
       mkQS (mkQCl far_IAdv (mkCl y.name 
-        (mkVP (mkVP (SyntaxFin.mkAdv from_Prep x.name)) t))) ;
+        (mkVP (mkVP x.from) t))) ;
     HowFarBy place t = 
       mkQS (mkQCl far_IAdv (mkCl place.name t)) ;
       -- mkQS (mkQCl (mkIAdv far_IAdv t) y.name) ; 
@@ -242,10 +242,11 @@ concrete WordsFin of Words = SentencesFin **
        habitual = ParadigmsFin.mkAdv s
       } ;
 
-    mkPlace : N -> Bool -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,e -> {
+    mkPlace : N -> Bool -> {name : CN ; at : Prep ; to : Prep; from : Prep ; isPl : Bool} = \p,e -> {
       name = mkCN p ;
       at = casePrep (if_then_else Case e adessive inessive) ;  -- True: external
       to = casePrep (if_then_else Case e allative illative) ;
+      from = casePrep (if_then_else Case e ablative elative) ;
       isPl = False   
    } ;
     ssa = False ;

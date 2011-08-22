@@ -208,9 +208,9 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
 
 
     HowFar place = mkQS (mkQCl far_IAdv place.name) ;
-    HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxGer.mkAdv from_Prep x.name)) (ParadigmsGer.mkAdv "entfernt"))) ;
+    HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxGer.mkAdv von_Prep x.name)) (ParadigmsGer.mkAdv "entfernt"))) ;
     HowFarFromBy x y t = 
-      mkQS (mkQCl far_IAdv (mkCl (mkVP (SyntaxGer.mkAdv zu_Prep (mkNP (mkNP y.name (SyntaxGer.mkAdv from_Prep x.name)) t))))) ;
+      mkQS (mkQCl far_IAdv (mkCl (mkVP (SyntaxGer.mkAdv zu_Prep (mkNP (mkNP y.name (SyntaxGer.mkAdv von_Prep x.name)) t))))) ;
     HowFarBy y t = mkQS (mkQCl far_IAdv (mkCl (mkVP (SyntaxGer.mkAdv zu_Prep (mkNP y.name t))))) ;
  
     WhichTranspPlace trans place = 
