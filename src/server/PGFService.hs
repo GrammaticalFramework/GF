@@ -135,23 +135,19 @@ pgfMain pgf command = do
 doExternal Nothing input = throwCGIError 400 "Unknown external command" ["Unknown external command"]
 doExternal (Just cmd) input =
   do liftIO $ logError ("External command: "++cmd)
-     cmds <- liftIO $ (readIO =<< readFile "external_services")
+     cmds <- liftIO $ (fmap lines $ readFile "external_services")
                         `catch` const (return [])
      liftIO $ logError ("External services: "++show cmds)
-     maybe err ok (lookup cmd cmds)
+     if cmd `elem` cmds then ok else err
   where
     err = throwCGIError 400 "Unknown external command" ["Unknown external command: "++cmd]
-    ok output_type =
+    ok =
       do let tmpfile1 = "external_input.txt"
              tmpfile2 = "external_output.txt"
          liftIO $ writeFile "external_input.txt" input
          liftIO $ system $ cmd ++ " " ++ tmpfile1 ++ " > " ++ tmpfile2
          liftIO $ removeFile tmpfile1
-         r <- case output_type of
-                "jsonp" -> outputEncodedJSONP =<< liftIO (readFile tmpfile2)
-                "image/png" -> outputPNG =<< liftIO (BS.readFile tmpfile2)
-                "text/html" -> outputHTML =<< liftIO (readFile tmpfile2)
-                _ ->  outputPlain =<< liftIO (readFile tmpfile2)
+         r <- outputJSONP =<< liftIO (readFile tmpfile2)
          liftIO $ removeFile tmpfile2
          return r
 
