@@ -1,6 +1,7 @@
 concrete SentencesFin of Sentences = NumeralFin ** SentencesI - 
   [Is, IsMass, NameNN, ObjMass,
    IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
+   NPPlace, CNPlace, placeNP, mkCNPlace, mkCNPlacePl,
    GObjectPlease
   ] with 
   (Syntax = SyntaxFin),
@@ -9,6 +10,18 @@ concrete SentencesFin of Sentences = NumeralFin ** SentencesI -
     open SyntaxFin, ExtraFin, (P = ParadigmsFin), (V = VerbFin), Prelude in {
 
   flags optimize = noexpand ;
+
+  oper
+    NPPlace = {name : NP ; at : Adv ; to : Adv ; from : Adv} ;
+    CNPlace = {name : CN ; at : Prep ; to : Prep ; from : Prep ; isPl : Bool} ;
+
+  placeNP : Det -> CNPlace -> NPPlace = \det,kind ->
+    let name : NP = mkNP det kind.name in {
+      name = name ;
+      at = mkAdv kind.at name ;
+      to = mkAdv kind.to name ;
+      from = mkAdv kind.from name
+    } ;
 
   lin 
     Is item prop = mkCl item (V.UseComp (CompPartAP prop)) ; -- tämä pizza on herkullista

@@ -221,10 +221,10 @@ ik ga te voet/ ik ga lopend
 -- transports
 
     HowFar place = mkQS (mkQCl far_IAdv place.name) ; -- hoe ver is de dierentuin
-    HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP y.name (SyntaxDut.mkAdv from_Prep x.name))) ;
+    HowFarFrom x y = mkQS (mkQCl far_IAdv (mkNP y.name (SyntaxDut.mkAdv van_Prep x.name))) ;
 -- how far is the center from the hotel ? hoever is het centrum van het hotel
     HowFarFromBy x y t = 
-      mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxDut.mkAdv from_Prep x.name)) t)) ;
+      mkQS (mkQCl far_IAdv (mkNP (mkNP y.name (SyntaxDut.mkAdv van_Prep x.name)) t)) ;
 --hoelang duurt het om van het vliegveld naar het hotel te gaan per taxi
     HowFarBy y t = mkQS (mkQCl far_IAdv (mkNP y.name t)) ; --hoe ver is het museum per bus
  
@@ -265,6 +265,7 @@ ik ga te voet/ ik ga lopend
 
   mkSuperl : A -> Det = \a -> SyntaxDut.mkDet the_Art (SyntaxDut.mkOrd a) ;
 
+  van_Prep = P.mkPrep "van" ;
 
 {- 
     HowFarFrom : how far is the center from the hotel ? hoe ver is het centrum van het hotel
