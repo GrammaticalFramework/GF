@@ -1,23 +1,21 @@
 
 -- other functions needed for parsing 
 
-abstract Extension =  {
-
-
+abstract Extension =  Cat ** {
 
 cat
   PolSentence;
   StmtS ;
   [CN]{2};
-  N; N2; A; V; V2; CN; NP; Cl; Pol; Prep; Conj; -- redefined from Cat
-fun 
 
+fun 
 VerbToNounV2 : V2 -> N2 ; -- discovering
 VerbToNoun : V -> N ; -- walking is healthy
 VerbToGerundA : V -> A ; -- singing bird
 VerbToParticipeA : V -> A ; -- the required number 
 ConjCN  : Conj -> [CN] -> CN ;   -- set or class
 mkPolSent : Cl -> PolSentence ; 
+getSent : PolSentence -> S ;
 sentToNoun : PolSentence -> NP ;
 UsePolSentence : Pol -> PolSentence -> StmtS ;
 

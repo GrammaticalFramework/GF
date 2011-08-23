@@ -7,4 +7,6 @@ lin zero   = "" ;
 
 lincat NE = {} ;
 
+lin plus x y = x ++ y ;
+
 }

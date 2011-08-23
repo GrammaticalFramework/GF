@@ -1464,7 +1464,7 @@ lin
   quarter ob1 ob2 = mkPolSent (PredVP ob1 (AdvVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN quarter_N)))) (PrepNP part_Prep ob2))) ;
   third ob1 ob2 = mkPolSent (PredVP ob1 (AdvVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN (mkN "third"))))) (PrepNP part_Prep ob2))) ;
   fears ob1 ob2 = mkPolSent (PredVP ob1 (ComplSlash (SlashV2a fear_V2) (sentToNoun ob2))) ;
-  hopes ob1 ob2 = mkPolSent (PredVP ob1 (ComplSlash (SlashV2a hope_V2) (sentToNoun ob2))) ;
+  hopes ob1 ob2 = mkPolSent (PredVP ob1 (ComplVS hope_VS (getSent ob2))) ;
   plaintiff ob1 ob2 = mkPolSent (PredVP ob1 (AdvVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN plaintiff_N)))) (PrepNP part_Prep ob2))) ;
   brandName ob1 ob2 = mkPolSent (PredVP ob1 (AdvVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (ApposCN (UseN brand_N) (MassNP (UseN name_N)))))) (PrepNP part_Prep ob2))) ;
   formerName ob1 ob2 = mkPolSent (PredVP ob1 (AdvVP (UseComp (CompNP (DetCN (DetQuant DefArt NumSg) (AdjCN (PositA former_A) (UseN name_N))))) (PrepNP part_Prep ob2))) ;
