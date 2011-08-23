@@ -28,6 +28,7 @@ import System.Process
 import System.Exit
 import System.IO
 import System.Directory(removeFile)
+import Fold(fold) -- transfer function for OpenMath LaTeX
 
 logFile :: FilePath
 logFile = "pgf-error.log"
@@ -164,7 +165,7 @@ doTranslate pgf input mcat mfrom mto =
                                                             ("linearizations",showJSON 
                                                                [toJSObject [("to", showJSON to),
                                                                             ("text",showJSON output)]
-                                                                  | (to,output) <- linearizeAndBind pgf mto tree]
+                                                                  | (to,output) <- transferLinearizeAndBind pgf mto tree]
                                                             )]
                                                    | tree <- trees])]
     jsonParseOutput (PGF.ParseIncomplete)= []
@@ -495,6 +496,16 @@ linearizeAndBind pgf mto t = [(la, binds s) | (la,s) <- linearize' pgf mto t]
       u:"&+":v:ws2 -> bs ((u ++ v):ws2)
       u:ws2        -> u : bs ws2
       _            -> []
+
+-- Apply transfer function OpenMath LaTeX
+transferLinearizeAndBind pgf mto t = [(la, binds s) | (la,s) <- unfolded ++ folded, not (null s)]
+ where unfolded = linearize' pgf mto t
+       folded   = linearize' pgf mto (fold t)
+       binds = unwords . bs . words
+       bs ws = case ws of
+         u:"&+":v:ws2 -> bs ((u ++ v):ws2)
+         u:ws2        -> u : bs ws2
+         _            -> []
 
 selectLanguage :: PGF -> Maybe (Accept Language) -> PGF.Language
 selectLanguage pgf macc = case acceptable of
