@@ -16,8 +16,9 @@ flag content
 
 executable pgf-http
   main-is: pgf-http.hs
+  Hs-source-dirs: . transfer
   other-modules: PGFService FastCGIUtils Cache URLEncoding
-                 RunHTTP ServeStaticFile
+                 RunHTTP ServeStaticFile Fold
   ghc-options: -threaded
   if impl(ghc>=7.0)
     ghc-options: -rtsopts
@@ -44,7 +45,8 @@ executable pgf-http
 
 executable pgf-service
   main-is: pgf-fcgi.hs
-  other-modules: PGFService FastCGIUtils Cache URLEncoding
+  Hs-source-dirs: . transfer
+  other-modules: PGFService FastCGIUtils Cache URLEncoding Fold
   ghc-options: -threaded
   if impl(ghc>=7.0)
     ghc-options: -rtsopts
