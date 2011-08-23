@@ -1,25 +1,14 @@
 --# -path=.:RGLExt:alltenses:../../lib/src/english
 
-concrete ExtensionEng of Extension = open CatEng, MorphoEng, ResEng, ConjunctionEng, StructuralEng, Prelude, ParadigmsEng, Coordination, ParamBasic in {
+concrete ExtensionEng of Extension = CatEng ** open MorphoEng, ResEng, ConjunctionEng, StructuralEng, Prelude, ParadigmsEng, Coordination, ParamBasic in {
 
 
 lincat 
     PolSentence = {s : SentForm => CPolarity => Str ; flag : Flag};
     [CN] = {s1,s2 : Number => ResEng.Case => Str ; g : Gender} ;   
     StmtS = {s : Str};
-    NP = CatEng.NP;
-    CN = CatEng.CN; 
-    N = CatEng.N;
-    N2 = CatEng.N2;
-    A = CatEng.A;
-    V = CatEng.V;
-    V2 = CatEng.V2;
-    Cl = CatEng.Cl;
-    Pol = CatEng.Pol;
-    Prep = CatEng.Prep;
-    Conj = CatEng.Conj;
-lin 
 
+lin 
 VerbToNounV2 vs = VerbToNoun vs ** {c2 = vs.c2; lock_N2=<>};
 
 VerbToNoun v = {s = \\_,_ => v.s ! VPresPart;
@@ -35,6 +24,8 @@ mkPolSent cl = {s = \\f,b => case b of
                 flag = NothingS ;
                 lock_PolSentence = <>};
                
+getSent psel = {s = psel.s ! Indep ! CPos} ;
+
 sentToNoun ps = {s = \\_ => "\"" ++ ps.s ! Indep ! CPos ++ "\"";
                  a = agrP3 Sg; lock_NP=<>};               
                
