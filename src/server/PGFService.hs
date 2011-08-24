@@ -20,7 +20,7 @@ import Control.Exception(evaluate)
 import Control.Monad
 import Data.Char
 import Data.Function (on)
-import Data.List (sortBy,intersperse,mapAccumL,nub)
+import Data.List (sortBy,intersperse,mapAccumL,nub,isSuffixOf)
 import qualified Data.Map as Map
 import Data.Maybe
 import System.Random
@@ -165,7 +165,7 @@ doTranslate pgf input mcat mfrom mto =
                                                             ("linearizations",showJSON 
                                                                [toJSObject [("to", showJSON to),
                                                                             ("text",showJSON output)]
-                                                                  | (to,output) <- transferLinearizeAndBind pgf mto tree]
+                                                                  | (to,output) <- linearizeAndBind pgf mto tree]
                                                             )]
                                                    | tree <- trees])]
     jsonParseOutput (PGF.ParseIncomplete)= []
@@ -476,18 +476,22 @@ complete' pgf from typ mlimit input =
                        Right ps -> loop ps ws
 
 linearize' :: PGF -> Maybe PGF.Language -> PGF.Tree -> [(PGF.Language,String)]
-linearize' pgf mto tree = 
-    case mto of
-      Nothing -> PGF.linearizeAllLang pgf tree
-      Just to -> [(to,PGF.linearize pgf to tree)]
+linearize' pgf mto tree =
+    [(to,PGF.linearize pgf to (transfer to tree)) | to<-langs]
+  where
+    langs = maybe (PGF.languages pgf) (:[]) mto
+
+transfer lang = if "LaTeX" `isSuffixOf` show lang
+                then fold -- OpenMath LaTeX transfer
+                else id
 
 -- all variants and their forms
 linearizes' :: PGF -> Maybe PGF.Language -> PGF.Tree -> [(PGF.Language,[String])]
-linearizes' pgf mto tree = case mto of
-  Nothing -> [(to,lins to tree) | to <- PGF.languages pgf]
-  Just to -> [(to,lins to tree)]
- where
-   lins to = nub . concatMap (map snd) . PGF.tabularLinearizes pgf to
+linearizes' pgf mto tree =
+    [(to,lins to (transfer to tree)) | to <- langs]
+  where
+    langs = maybe (PGF.languages pgf) (:[]) mto
+    lins to = nub . concatMap (map snd) . PGF.tabularLinearizes pgf to
 
 linearizeAndBind pgf mto t = [(la, binds s) | (la,s) <- linearize' pgf mto t]
   where
@@ -496,16 +500,6 @@ linearizeAndBind pgf mto t = [(la, binds s) | (la,s) <- linearize' pgf mto t]
       u:"&+":v:ws2 -> bs ((u ++ v):ws2)
       u:ws2        -> u : bs ws2
       _            -> []
-
--- Apply transfer function OpenMath LaTeX
-transferLinearizeAndBind pgf mto t = [(la, binds s) | (la,s) <- unfolded ++ folded, not (null s)]
- where unfolded = linearize' pgf mto t
-       folded   = linearize' pgf mto (fold t)
-       binds = unwords . bs . words
-       bs ws = case ws of
-         u:"&+":v:ws2 -> bs ((u ++ v):ws2)
-         u:ws2        -> u : bs ws2
-         _            -> []
 
 selectLanguage :: PGF -> Maybe (Accept Language) -> PGF.Language
 selectLanguage pgf macc = case acceptable of
