@@ -36,10 +36,13 @@ cgiReq root (Request method uri hdrs body) = CGIRequest vars inputs body'
            '?':s -> s
            s -> s
     al = maybe "" id $ lookup "Accept-Language" hdrs
-    inputs = map input $ queryToArguments qs  -- assumes method=="GET"
+    inputs = map input $ queryToArguments $ fixplus qs  -- assumes method=="GET"
     body' = BS.pack body
 
-    input (name,val) = (name,Input (BS.pack (map decode val)) Nothing plaintext)
+    input (name,val) = (name,Input (BS.pack val) Nothing plaintext)
     plaintext = ContentType "text" "plain" []
-    decode '+' = ' ' -- httpd-shed bug workaround
-    decode c   = c
+
+    fixplus = concatMap decode
+      where
+        decode '+' = "%20" -- httpd-shed bug workaround
+        decode c   = [c]
