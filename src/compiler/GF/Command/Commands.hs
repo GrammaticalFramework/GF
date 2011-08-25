@@ -665,6 +665,10 @@ allCommands env@(pgf, mos) = Map.fromList [
      longname = "quit",
      synopsis = "exit GF interpreter"
      }),
+  ("r",  emptyCommandInfo {
+     longname = "reload",
+     synopsis = "repeat the latest import command"
+     }),
   ("rf",  emptyCommandInfo {
      longname = "read_file",
      synopsis = "read string or tree input from a file",
