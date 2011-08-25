@@ -116,7 +116,7 @@ loopOptNewCPU opts gfenv'
 execute1 :: Options -> GFEnv -> String -> IO (Maybe GFEnv)
 execute1 opts gfenv0 s0 =
   interruptible $ optionallyShowCPUTime opts $
-  case pwords of
+  case pwords s0 of
  -- special commands, requiring source grammar in env
   {-"eh":w:_ -> do
              cs <- readFile w >>= return . map words . lines
@@ -134,6 +134,7 @@ execute1 opts gfenv0 s0 =
     "dc":ws  -> define_command ws
     "dt":ws  -> define_tree ws
     "ph":_   -> print_history
+    "r" :_   -> reload_last
     "se":ws  -> set_encoding ws
  -- ordinary commands, working on CommandEnv
     _        -> do interpretCommandLine env s0
@@ -145,9 +146,9 @@ execute1 opts gfenv0 s0 =
     env = commandenv gfenv0
     sgr = sourcegrammar gfenv0
     gfenv = gfenv0 {history = s0 : history gfenv0}
-    pwords = case words s0 of
-               w:ws -> getCommandOp w :ws
-               ws -> ws
+    pwords s = case words s of
+                 w:ws -> getCommandOp w :ws
+                 ws -> ws
 
     interruptible act =
       either (\e -> printException e >> return (Just gfenv)) return
@@ -255,6 +256,16 @@ execute1 opts gfenv0 s0 =
     dt_not_parsed = putStrLn "value definition not parsed" >> continue gfenv
 
     print_history = mapM_ putStrLn (reverse (history gfenv0))>> continue gfenv
+
+    reload_last = do
+      let imports = [(s,ws) | s <- history gfenv0, ("i":ws) <- [pwords s]]
+      case imports of
+        (s,ws):_ -> do
+          putStrLn $ "repeating latest import: " ++ s
+          import_ ws
+        _ -> do
+          putStrLn $ "no import in history"  
+          continue gfenv
 
     set_encoding [c] =
       do let cod = renameEncoding c

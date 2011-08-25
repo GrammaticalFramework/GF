@@ -65,7 +65,7 @@ computeTermOpt rec gr = comput True where
              return $ lookup x g
        case t' of 
          _ | t == t' -> return t
-         _ -> comp g t'
+         _ -> comp g t' --- why compute again? AR 25/8/2011
 
      -- Abs x@(IA _) b -> do 
      Abs _ _ _ | full -> do   -- \xs -> b
@@ -391,7 +391,7 @@ computeTermOpt rec gr = comput True where
                ps0  <- mapM (compPatternMacro . fst) cs
 
                cs'  <- mapM (compBranch g) (zip ps0 (map snd cs))
------               cs'  <- return (zip ps0 (map snd cs)) --- probably right AR 22/8/2011
+-----               cs'  <- return (zip ps0 (map snd cs)) --- probably right AR 22/8/2011 but can leave uninstantiated variables :-(
 
 ----               cs' <- mapM (compBranch g) cs
                return $ T i cs'  -- happens with variable types
