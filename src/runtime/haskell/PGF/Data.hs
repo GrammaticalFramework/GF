@@ -79,12 +79,16 @@ data Alternative =
 -- merge two PGFs; fails is differens absnames; priority to second arg
 
 unionPGF :: PGF -> PGF -> PGF
-unionPGF one two = case absname one of
-  n | n == wildCId     -> two    -- extending empty grammar
-    | n == absname two -> one {  -- extending grammar with same abstract
+unionPGF one two = fst $ msgUnionPGF one two
+
+msgUnionPGF :: PGF -> PGF -> (PGF, Maybe String)
+msgUnionPGF one two = case absname one of
+  n | n == wildCId     -> (two, Nothing)    -- extending empty grammar
+    | n == absname two && haveSameFunsPGF one two -> (one { -- extending grammar with same abstract
       concretes = Map.union (concretes two) (concretes one)
-    }
-  _ -> one   -- abstracts don't match ---- print error msg
+    }, Nothing)
+  _ -> (two, -- abstracts don't match, discard the old one  -- error msg in Importing.ioUnionPGF
+        Just "Abstract changed, previous concretes discarded.")
 
 emptyPGF :: PGF
 emptyPGF = PGF {
@@ -93,6 +97,14 @@ emptyPGF = PGF {
   abstract  = error "empty grammar, no abstract",
   concretes = Map.empty
   }
+
+-- sameness of function type signatures, checked when importing a new concrete in env
+haveSameFunsPGF :: PGF -> PGF -> Bool
+haveSameFunsPGF one two = 
+  let 
+    fsone = [(f,t) | (f,(t,_,_,_)) <- Map.toList (funs (abstract one))]
+    fstwo = [(f,t) | (f,(t,_,_,_)) <- Map.toList (funs (abstract two))]
+  in fsone == fstwo
 
 -- | This is just a 'CId' with the language name.
 -- A language name is the identifier that you write in the 
