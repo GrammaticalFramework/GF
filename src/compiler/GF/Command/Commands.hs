@@ -436,7 +436,8 @@ allCommands env@(pgf, mos) = Map.fromList [
      synopsis = "import a grammar from source code or compiled .pgf file",
      explanation = unlines [
        "Reads a grammar from File and compiles it into a GF runtime grammar.",
-       "If a grammar with the same concrete name is already in the state",
+       "If its abstract is different from current state, old modules are discarded.",
+       "If its abstract is the same and a concrete with the same name is already in the state",
        "it is overwritten - but only if compilation succeeds.",
        "The grammar parser depends on the file name suffix:",
        "  .cf    context-free (labelled BNF) source",
@@ -588,6 +589,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("cats",   "show just the names of abstract syntax categories"),
        ("fullform", "print the fullform lexicon"),
        ("funs",   "show just the names and types of abstract syntax functions"),
+       ("langs",  "show just the names of top concrete syntax modules"),
        ("lexc", "print the lexicon in Xerox LEXC format"),
        ("missing","show just the names of functions that have no linearization"),
        ("opt",    "optimize the generated pgf"),
@@ -1169,6 +1171,8 @@ allCommands env@(pgf, mos) = Map.fromList [
      | isOpt "cats"     opts = return $ fromString $ unwords $ map showCId $ categories pgf
      | isOpt "funs"     opts = return $ fromString $ unlines $ map showFun $ funsigs pgf
      | isOpt "fullform" opts = return $ fromString $ concatMap (morpho "" prFullFormLexicon) $ optLangs opts
+     | isOpt "langs"    opts = return $ fromString $ unwords $ map showCId $ languages pgf
+  
      | isOpt "lexc"     opts = return $ fromString $ concatMap (morpho "" prLexcLexicon) $ optLangs opts
      | isOpt "missing"  opts = return $ fromString $ unlines $ [unwords (showCId la:":": map showCId cs) | 
                                                                   la <- optLangs opts, let cs = missingLins pgf la]

@@ -30,13 +30,18 @@ importGrammar pgf0 opts files =
     s | elem s [".gf",".gfo"] -> do
       res <- appIOE $ compileToPGF opts files
       case res of
-        Ok pgf2 -> do return $ unionPGF pgf0 pgf2
+        Ok pgf2 -> ioUnionPGF pgf0 pgf2
         Bad msg -> do putStrLn ('\n':'\n':msg)
                       return pgf0
     ".pgf" -> do
       pgf2 <- mapM readPGF files >>= return . foldl1 unionPGF
-      return $ unionPGF pgf0 pgf2
+      ioUnionPGF pgf0 pgf2
     ext -> die $ "Unknown filename extension: " ++ show ext
+
+ioUnionPGF :: PGF -> PGF -> IO PGF
+ioUnionPGF one two = case msgUnionPGF one two of
+  (pgf, Just msg) -> putStrLn msg >> return pgf
+  (pgf,_)         -> return pgf
 
 importSource :: SourceGrammar -> Options -> [FilePath] -> IO SourceGrammar
 importSource src0 opts files = do
