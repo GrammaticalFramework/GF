@@ -201,8 +201,8 @@ pArg = fmap EImplArg (RP.between (RP.char '{') (RP.char '}') pExpr)
 pFactor =       fmap EFun  pCId
         RP.<++  fmap ELit  pLit
         RP.<++  fmap EMeta pMeta
-        RP.<++  RP.between (RP.char '(') (RP.char ')') pExpr
-        RP.<++  RP.between (RP.char '<') (RP.char '>') pTyped
+        RP.<++  RP.between (RP.char '(') (RP.skipSpaces >> RP.char ')') pExpr
+        RP.<++  RP.between (RP.char '<') (RP.skipSpaces >> RP.char '>') pTyped
 
 pTyped = do RP.skipSpaces
             e <- pExpr
