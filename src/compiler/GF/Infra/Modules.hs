@@ -23,13 +23,13 @@ module GF.Infra.Modules (
         mGrammar,modules,
         extends, isInherited,inheritAll, 
         updateMGrammar, updateModule, replaceJudgements, addFlag,
-        addOpenQualif, flagsModule, allFlags, mapModules,
+        addOpenQualif, flagsModule, allFlags,
         OpenSpec(..),
         ModuleStatus(..),
         openedModule, depPathModule, allDepsModule, partOfGrammar,
         allExtends, allExtendSpecs, allExtendsPlus, allExtensions, 
         searchPathModule,
-     -- addModule,
+     -- addModule, mapModules,
         emptyMGrammar, emptyModInfo,
         abstractOfConcrete, abstractModOfConcrete,
         lookupModule, lookupModuleType, lookupInfo,
@@ -51,16 +51,15 @@ import Text.PrettyPrint
 
 -- The same structure will be used in both source code and canonical.
 -- The parameters tell what kind of data is involved.
--- No longer maintained invariant (TH 2011-08-30):
---      modules are stored in dependency order
+-- Invariant: modules are stored in dependency order
 
 --mGrammar = MGrammar
 --newtype MGrammar a = MGrammar {modules :: [(Ident,ModInfo a)]}
 
-newtype MGrammar a = MGrammar {moduleMap :: Map.Map Ident (ModInfo a)}
+data MGrammar a = MGrammar {moduleMap :: Map.Map Ident (ModInfo a),
+                            modules :: [(Ident,ModInfo a)] }
   deriving Show
-modules = Map.toList . moduleMap
-mGrammar = MGrammar . Map.fromList
+mGrammar ms = MGrammar (Map.fromList ms) ms
 
 data ModInfo a = ModInfo {
     mtype   :: ModuleType,
@@ -126,11 +125,10 @@ flagsModule (_,mi) = flags mi
 
 allFlags :: MGrammar a -> Options
 allFlags gr = concatOptions [flags m | (_,m) <- modules gr]
-
+{-
 mapModules :: (ModInfo a -> ModInfo a) -> MGrammar a -> MGrammar a 
---mapModules f (MGrammar ms) = MGrammar (map (onSnd f) ms)
-mapModules f (MGrammar ms) = MGrammar (fmap f ms)
-
+mapModules f = mGrammar . map (onSnd f) . modules
+-}
 data OpenSpec = 
    OSimple Ident
  | OQualif Ident Ident
