@@ -1,5 +1,5 @@
 --# -path=present
-concrete LogicEng of Logic = open (Eng=GrammarEng), ParadigmsEng, ResEng in {
+concrete LogicCnc of Logic = {
 
 lincat
   Ind = {s : Str};
