@@ -12,11 +12,13 @@ cat
   NP ((Ind -> Prop) -> Prop);
   AP (Ind -> Prop);
   VP (Ind -> Prop);
+  VPSlash (Ind -> Ind -> Prop);
   V  (Ind -> Prop);
   V2 (Ind -> Ind -> Prop);
   Comp (Ind -> Prop);
   Pol (Prop -> Prop);
   Cl Prop;
+  ClSlash (Ind -> Prop);
   S Prop;
   Utt;
 
@@ -32,10 +34,21 @@ fun
   UseV : ({v} : Ind -> Prop) ->
          V v -> VP v ;
 
-  ComplV2 : ({v2} : Ind -> Ind -> Prop) ->
-            ({np} : (Ind -> Prop) -> Prop) ->
-            V2 v2 -> NP np -> VP (\i -> np (v2 i)) ;
+  ComplSlash : ({v2} : Ind -> Ind -> Prop) ->
+               ({np} : (Ind -> Prop) -> Prop) ->
+               VPSlash v2 -> NP np -> VP (\i -> np (v2 i)) ;
+
+  SlashV2a : ({v2} : Ind -> Ind -> Prop) ->
+             V2 v2 -> VPSlash v2 ;
+             
+  SlashVP : ({np} : (Ind -> Prop) -> Prop) ->
+            ({v2} : Ind -> Ind -> Prop) ->
+            NP np -> VPSlash v2 -> ClSlash (\x -> np (v2 x));
             
+  ComplClSlash : ({sl} : Ind -> Prop) ->
+                 ({np} : (Ind -> Prop) -> Prop) ->
+                 ClSlash sl -> NP np -> Cl (np sl);
+
   UseComp : ({c} : Ind -> Prop) ->
             Comp c -> VP c ;
 
