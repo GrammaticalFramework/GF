@@ -146,7 +146,7 @@ isInConstantForm trm = case trm of
     Empty    -> True
     EInt _   -> True
     _       -> False ---- isInArgVarForm trm
-
+{- -- unused and suspicuous, see contP in GF.Compile.Compute.Concrete instead
 varsOfPatt :: Patt -> [Ident]
 varsOfPatt p = case p of
   PV x -> [x]
@@ -155,7 +155,7 @@ varsOfPatt p = case p of
   PR r    -> concat $ map (varsOfPatt . snd) r
   PT _ q -> varsOfPatt q
   _ -> []
-
+-}
 -- | to search matching parameter combinations in tables
 isMatchingForms :: [Patt] -> [Term] -> Bool
 isMatchingForms ps ts = all match (zip ps ts') where
