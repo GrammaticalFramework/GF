@@ -15,7 +15,7 @@ import GF.Grammar.Grammar
 import qualified GF.Grammar.Lookup as Look
 import qualified GF.Grammar as A
 import qualified GF.Grammar.Macros as GM
-import qualified GF.Compile.Compute.Concrete as Compute ---- 
+--import qualified GF.Compile.Compute.Concrete as Compute ---- 
 import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
@@ -29,7 +29,7 @@ import Data.Char (isDigit,isSpace)
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
 import Text.PrettyPrint
-import Debug.Trace ----
+--import Debug.Trace ----
 
 -- when developing, swap commenting
 --traceD s t = trace s t 
