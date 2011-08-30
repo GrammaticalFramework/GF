@@ -10,11 +10,13 @@ lincat
   NP = Eng.NP;
   AP = Eng.AP;
   VP = Eng.VP;
+  VPSlash = Eng.VPSlash;
   V2 = Eng.V2;
   V  = Eng.V;
   Comp=Eng.Comp;
   Pol= Eng.Pol;
   Cl = Eng.Cl;
+  ClSlash = Eng.ClSlash;
   S  = Eng.S;
   Utt= Eng.Utt;
   Conj = Eng.Conj;
@@ -25,7 +27,13 @@ lin
   DetCN _ _ = Eng.DetCN;
   UseN _ = Eng.UseN;
   UsePN _ = Eng.UsePN;
-  ComplV2 _ _ v2 np = Eng.ComplSlash (Eng.SlashV2a v2) np;
+  SlashV2a _ = Eng.SlashV2a;
+  ComplSlash _ _ = Eng.ComplSlash;
+  SlashVP _ _ = Eng.SlashVP;
+  ComplClSlash _ _ cl np = lin Cl {
+    s = \\t,a,p,o => cl.s ! t ! a ! p ! o ++ cl.c2 ++ np.s ! NCase Nom
+    } ;
+
   UseComp _ = Eng.UseComp ;
   CompAP _ = Eng.CompAP ;
   CompNP _ = Eng.CompNP ;
