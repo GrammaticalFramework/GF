@@ -28,7 +28,7 @@ module PGF.TypeCheck ( checkType, checkExpr, inferExpr
                      ) where
 
 import PGF.Data
-import PGF.Expr hiding (eval, apply, value2expr)
+import PGF.Expr hiding (eval, apply, applyValue, value2expr)
 import qualified PGF.Expr as Expr
 import PGF.Macros (typeOfHypo, cidInt, cidFloat, cidString)
 import PGF.CId
@@ -498,6 +498,14 @@ eqValue fail suspend k v1 v2 = do
     eqValue' k (VGen  i vs1)                  (VGen  j vs2)   | i  == j      = zipWithM_ (eqValue fail suspend k) vs1 vs2
     eqValue' k (VClosure env1 (EAbs _ x1 e1)) (VClosure env2 (EAbs _ x2 e2)) = let v = VGen k []
                                                                                in eqExpr fail suspend (k+1) (v:env1) e1 (v:env2) e2
+    eqValue' k (VClosure env1 (EAbs _ x1 e1)) v2                             = let v = VGen k []
+                                                                               in do v1 <- eval (v:env1) e1
+                                                                                     v2 <- applyValue v2 [v]
+                                                                                     eqValue fail suspend (k+1) v1 v2
+    eqValue' k v1                             (VClosure env2 (EAbs _ x2 e2)) = let v = VGen k []
+                                                                               in do v1 <- applyValue v1 [v]
+                                                                                     v2 <- eval (v:env2) e2
+                                                                                     eqValue fail suspend (k+1) v1 v2
     eqValue' k v1                             v2                             = fail
 
     bind i scope cs env vs0 v = do
@@ -648,6 +656,9 @@ eval env e = TcM (\abstr k h ms -> k (Expr.eval (funs abstr,lookupMeta ms) env e
 
 apply :: Env -> Expr -> [Value] -> TcM s Value
 apply env e vs = TcM (\abstr k h ms -> k (Expr.apply (funs abstr,lookupMeta ms) env e vs) ms)
+
+applyValue :: Value -> [Value] -> TcM s Value
+applyValue v vs = TcM (\abstr k h ms -> k (Expr.applyValue (funs abstr,lookupMeta ms) v vs) ms)
 
 value2expr :: Int -> Value -> TcM s Expr
 value2expr i v = TcM (\abstr k h ms -> k (Expr.value2expr (funs abstr,lookupMeta ms) i v) ms)
