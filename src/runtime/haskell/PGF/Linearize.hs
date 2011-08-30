@@ -74,7 +74,7 @@ linTree pgf lang e =
     lin mb_cty n_fid e0 ys xs (ETyped e _) es = lin   mb_cty n_fid e0 ys    xs  e      es
     lin mb_cty n_fid e0 ys xs (EFun f)     es = apply mb_cty n_fid e0 ys    xs  f      es
     lin mb_cty n_fid e0 ys xs (EMeta i)    es = def   mb_cty n_fid e0 ys    xs  ('?':show i)
-    lin mb_cty n_fid e0 ys xs (EVar  i)    [] = def   mb_cty n_fid e0 ys    xs  (showCId ((xs++ys) !! i))
+    lin mb_cty n_fid e0 ys xs (EVar  i)    _  = def   mb_cty n_fid e0 ys    xs  (showCId ((xs++ys) !! i))
     lin mb_cty n_fid e0 ys xs (ELit l)     [] = case l of
                                                    LStr s -> return (n_fid+1,((cidString,n_fid),[e0],([],ss s)))
                                                    LInt n -> return (n_fid+1,((cidInt,   n_fid),[e0],([],ss (show n))))
