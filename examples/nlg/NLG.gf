@@ -58,7 +58,7 @@ fun
   CompNP : ({np} : (Ind -> Prop) -> Prop) ->
            NP np -> Comp (\x -> np (\y -> eq x y)) ;
 
-  UsePN : (i : Ind) -> PN i -> NP (\f -> f i) ;
+  UsePN : ({i} : Ind) -> PN i -> NP (\f -> f i) ;
 
   DetCN : ({det} : (Ind -> Prop) -> (Ind -> Prop) -> Prop) ->
           ({cn} : Ind -> Prop) ->            
@@ -110,6 +110,6 @@ fun
           ({p} : Prop -> Prop) ->
           Pol p -> Cl cl -> S (p cl);
 
-  UttS : ({s} : Prop) -> S s -> Utt;
+  UttS : (s : Prop) -> S s -> Utt;
 
 }

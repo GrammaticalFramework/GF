@@ -1,5 +1,5 @@
 --# -path=present
-concrete NLGEng of NLG = LogicEng ** open (Eng=GrammarEng), ParadigmsEng, ResEng in {
+concrete NLGEng of NLG = LogicCnc ** open (Eng=GrammarEng), ParadigmsEng, ResEng in {
 
 lincat
   Det = Eng.Det;
