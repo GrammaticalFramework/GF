@@ -96,7 +96,7 @@ evalInfo opts ms m c info = do
 
   _ ->  return info
  where
-   gr = MGrammar (m : ms)
+   gr = mGrammar (m : ms)
    optim = flag optOptimizations opts
    param = OptParametrize `Set.member` optim
    eIn cat = errIn (render (text "Error optimizing" <+> cat <+> ppIdent c <+> colon))

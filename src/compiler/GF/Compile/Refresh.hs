@@ -108,7 +108,7 @@ refreshEquation pst = err Bad (return . fst) (appSTM (refr pst) initIdState) whe
 -- for concrete and resource in grammar, before optimizing
 
 refreshGrammar :: SourceGrammar -> Err SourceGrammar
-refreshGrammar = liftM (MGrammar . snd) . foldM refreshModule (0,[]) . modules
+refreshGrammar = liftM (mGrammar . snd) . foldM refreshModule (0,[]) . modules
 
 refreshModule :: (Int,[SourceModule]) -> SourceModule -> Err (Int,[SourceModule])
 refreshModule (k,ms) mi@(i,mo)

@@ -27,8 +27,8 @@ instance Binary Ident where
                 else return (identC bs)
 
 instance Binary a => Binary (MGrammar a) where
-  put (MGrammar ms) = put ms
-  get               = fmap MGrammar get
+  put = put . modules
+  get = fmap mGrammar get
 
 instance Binary a => Binary (ModInfo a) where
   put mi = do put (mtype mi,mstatus mi,flags mi,extend mi,mwith mi,opens mi,mexdeps mi,jments mi)
