@@ -99,9 +99,7 @@ prove dp scope (TTyp env1 (DTyp hypos1 cat es1)) = do
       mv <- getMeta i
       case mv of
         MBound e -> c e
-        MUnbound _ scope tty cs -> do e <- prove dp scope tty
-                                      setMeta i (MBound e)
-                                      sequence_ [c e | c <- (c:cs)]
+        MUnbound x scope tty cs -> setMeta i (MUnbound x scope tty (c:cs))
 
     abs []                e = e
     abs ((bt,x,ty):hypos) e = EAbs bt x (abs hypos e)

@@ -11,7 +11,7 @@ module PGF.Expr(Tree, BindType(..), Expr(..), Literal(..), Patt(..), Equation(..
                 normalForm,
 
                 -- needed in the typechecker
-                Value(..), Env, Sig, eval, apply, value2expr,
+                Value(..), Env, Sig, eval, apply, applyValue, value2expr,
 
                 MetaId,
 
