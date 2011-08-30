@@ -17,7 +17,7 @@
 
 module GF.Grammar.Lookup (
            lookupIdent,
-           lookupIdentInfo,
+--         lookupIdentInfo,
            lookupOrigInfo,
            allOrigInfos,
            lookupResDef,
@@ -60,14 +60,16 @@ lookupIdent c t =
 lookupIdentInfo :: ModInfo a -> Ident -> Err a
 lookupIdentInfo mo i = lookupIdent i (jments mo)
 
+lookupQIdentInfo :: MGrammar info -> QIdent -> Err info
+lookupQIdentInfo gr (m,c) = flip lookupIdentInfo c =<< lookupModule gr m
+
 lookupResDef :: SourceGrammar -> QIdent -> Err Term
 lookupResDef gr (m,c)
   | isPredefCat c = lock c defLinType 
   | otherwise     = look m c
   where 
     look m c = do
-      mo <- lookupModule gr m
-      info <- lookupIdentInfo mo c
+      info <- lookupQIdentInfo gr (m,c)
       case info of
         ResOper _ (Just (L _ t)) -> return t
         ResOper _ Nothing  -> return (Q (m,c))
@@ -84,8 +86,7 @@ lookupResDef gr (m,c)
 
 lookupResType :: SourceGrammar -> QIdent -> Err Type
 lookupResType gr (m,c) = do
-  mo <- lookupModule gr m
-  info <- lookupIdentInfo mo c
+  info <- lookupQIdentInfo gr (m,c)
   case info of
     ResOper (Just (L _ t)) _ -> return t
 
@@ -101,8 +102,7 @@ lookupResType gr (m,c) = do
 
 lookupOverload :: SourceGrammar -> QIdent -> Err [([Type],(Type,Term))]
 lookupOverload gr (m,c) = do
-    mo <- lookupModule gr m
-    info <- lookupIdentInfo mo c
+    info <- lookupQIdentInfo gr (m,c)
     case info of
       ResOverload os tysts -> do
             tss <- mapM (\x -> lookupOverload gr (x,c)) os
@@ -116,8 +116,7 @@ lookupOverload gr (m,c) = do
 -- | returns the original 'Info' and the module where it was found
 lookupOrigInfo :: SourceGrammar -> QIdent -> Err (Ident,Info)
 lookupOrigInfo gr (m,c) = do
-  mo <- lookupModule gr m
-  info <- lookupIdentInfo mo c
+  info <- lookupQIdentInfo gr (m,c)
   case info of
     AnyInd _ n  -> lookupOrigInfo gr (n,c)
     i           -> return (m,i)
@@ -155,8 +154,7 @@ allParamValues cnc ptyp =
 
 lookupAbsDef :: SourceGrammar -> Ident -> Ident -> Err (Maybe Int,Maybe [Equation])
 lookupAbsDef gr m c = errIn (render (text "looking up absdef of" <+> ppIdent c)) $ do
-  mo <- lookupModule gr m
-  info <- lookupIdentInfo mo c
+  info <- lookupQIdentInfo gr (m,c)
   case info of
     AbsFun _ a d _ -> return (a,fmap (map unLoc) d)
     AnyInd _ n     -> lookupAbsDef gr n c
@@ -165,8 +163,7 @@ lookupAbsDef gr m c = errIn (render (text "looking up absdef of" <+> ppIdent c))
 lookupLincat :: SourceGrammar -> Ident -> Ident -> Err Type
 lookupLincat gr m c | isPredefCat c = return defLinType --- ad hoc; not needed?
 lookupLincat gr m c = do
-  mo <- lookupModule gr m
-  info <- lookupIdentInfo mo c
+  info <- lookupQIdentInfo gr (m,c)
   case info of
     CncCat (Just (L _ t)) _ _ -> return t
     AnyInd _ n                -> lookupLincat gr n c
@@ -175,8 +172,7 @@ lookupLincat gr m c = do
 -- | this is needed at compile time
 lookupFunType :: SourceGrammar -> Ident -> Ident -> Err Type
 lookupFunType gr m c = do
-  mo <- lookupModule gr m
-  info <- lookupIdentInfo mo c
+  info <- lookupQIdentInfo gr (m,c)
   case info of
     AbsFun (Just (L _ t)) _ _ _ -> return t
     AnyInd _ n                  -> lookupFunType gr n c
@@ -185,8 +181,7 @@ lookupFunType gr m c = do
 -- | this is needed at compile time
 lookupCatContext :: SourceGrammar -> Ident -> Ident -> Err Context
 lookupCatContext gr m c = do
-  mo <- lookupModule gr m
-  info <- lookupIdentInfo mo c
+  info <- lookupQIdentInfo gr (m,c)
   case info of
     AbsCat (Just (L _ co)) -> return co
     AnyInd _ n             -> lookupCatContext gr n c
@@ -225,5 +220,3 @@ allOpersTo gr ty = [op | op@(_,typ,_) <- allOpers gr, isProdTo ty typ] where
   eqProd f g = case (f,g) of
     (Prod _ _ a1 b1, Prod _ _ a2 b2) -> eqProd a1 a2 && eqProd b1 b2
     _ -> f == g
-
- 
