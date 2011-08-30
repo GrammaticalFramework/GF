@@ -47,7 +47,7 @@ checkModule :: [SourceModule] -> SourceModule -> Check SourceModule
 checkModule ms m@(name,mo) = checkIn (text "checking module" <+> ppIdent name) $ do
   checkRestrictedInheritance ms m
   m <- case mtype mo of
-         MTConcrete a -> do let gr = MGrammar (m:ms)
+         MTConcrete a -> do let gr = mGrammar (m:ms)
                             abs <- checkErr $ lookupModule gr a
                             checkCompleteGrammar gr (a,abs) m
          _            -> return m
@@ -221,7 +221,7 @@ checkInfo ms (m,mo) c info = do
 
     _ ->  return info
  where
-   gr = MGrammar ((m,mo) : ms)
+   gr = mGrammar ((m,mo) : ms)
    chIn loc cat = checkIn (text "Happened in" <+> text cat <+> ppIdent c <+> ppPosition m loc <> colon)
 
    mkPar (L loc (f,co)) = 

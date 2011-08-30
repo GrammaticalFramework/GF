@@ -81,7 +81,7 @@ type CFFun = String
 --------------------------
 
 cf2gf :: String -> CF -> SourceGrammar
-cf2gf name cf = MGrammar [
+cf2gf name cf = mGrammar [
   (aname, addFlag (modifyFlags (\fs -> fs{optStartCat = Just cat}))
           (emptyModInfo{mtype = MTAbstract,       jments = abs})),
   (cname, emptyModInfo{mtype = MTConcrete aname, jments = cnc})

@@ -62,7 +62,7 @@ renameSourceJudgement g m (i,t) = do
 renameModule :: [SourceModule] -> SourceModule -> Check SourceModule
 renameModule ms (name,mo) = checkIn (text "renaming module" <+> ppIdent name) $ do
   let js1 = jments mo
-  status <- buildStatus (MGrammar ms) name mo
+  status <- buildStatus (mGrammar ms) name mo
   js2    <- checkMap (renameInfo status name) js1
   return (name, mo {opens = map forceQualif (opens mo), jments = js2})
 
@@ -128,7 +128,7 @@ tree2status o = case o of
 
 buildStatus :: SourceGrammar -> Ident -> SourceModInfo -> Check Status
 buildStatus gr c mo = let mo' = self2status c mo in do
-    let gr1 = MGrammar ((c,mo) : modules gr)
+    let gr1 = mGrammar ((c,mo) : modules gr)
         ops = [OSimple e | e <- allExtends gr1 c] ++ opens mo
     mods <- checkErr $ mapM (lookupModule gr1 . openedModule) ops
     let sts = map modInfo2status $ zip ops mods    

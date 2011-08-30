@@ -69,8 +69,8 @@ batchCompile opts files = do
 
 -- to compile a set of modules, e.g. an old GF or a .cf file
 compileSourceGrammar :: Options -> SourceGrammar -> IOE SourceGrammar
-compileSourceGrammar opts gr@(MGrammar ms) = do
-  (_,gr',_) <- foldM compOne (0,emptySourceGrammar,Map.empty) ms
+compileSourceGrammar opts gr = do
+  (_,gr',_) <- foldM compOne (0,emptySourceGrammar,Map.empty) (modules gr)
   return gr'
  where
   compOne env mo = do
@@ -215,19 +215,19 @@ generateModuleCode opts file minfo = do
 
 -- auxiliaries
 
-reverseModules (MGrammar ms) = MGrammar $ reverse ms
+--reverseModules (MGrammar ms) = MGrammar $ reverse ms
 
 emptyCompileEnv :: CompileEnv
 emptyCompileEnv = (0,emptyMGrammar,Map.empty)
 
-extendCompileEnvInt (_,MGrammar ss,menv) k mfile sm = do
+extendCompileEnvInt (_,gr,menv) k mfile sm = do
   let (mod,imps) = importsOfModule sm
   menv2 <- case mfile of
     Just file -> do
       t <- ioeIO $ getModificationTime file
       return $ Map.insert mod (t,imps) menv
     _ -> return menv
-  return (k,MGrammar (sm:ss),menv2) --- reverse later
+  return (k,mGrammar (sm:modules gr),menv2) --- reverse later
 
 extendCompileEnv e@(k,_,_) file sm = extendCompileEnvInt e k (Just file) sm
 

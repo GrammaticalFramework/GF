@@ -15,7 +15,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Grammar.Grammar (SourceGrammar,
-        emptySourceGrammar,                
+        emptySourceGrammar,mGrammar,
         SourceModInfo,
         SourceModule,
         mapSourceModule,
@@ -56,7 +56,7 @@ import qualified Data.ByteString.Char8 as BS
 -- | grammar as presented to the compiler
 type SourceGrammar = MGrammar Info
 
-emptySourceGrammar = MGrammar []
+emptySourceGrammar = mGrammar []
 
 type SourceModInfo = ModInfo Info
 

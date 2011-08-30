@@ -61,7 +61,7 @@ unsubexpModule sm@(i,mo)
       Q (m,c) | isOperIdent c -> --- name convention of subexp opers
         errVal t $ liftM unparTerm $ lookupResDef gr (m,c)
       _ -> C.composSafeOp unparTerm t
-    gr = M.MGrammar [sm] 
+    gr = M.mGrammar [sm]
     rebuild = buildTree . concat
 
 -- implementation

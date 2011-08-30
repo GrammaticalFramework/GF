@@ -15,12 +15,12 @@
 --
 -- The same structure will be used in both source code and canonical.
 -- The parameters tell what kind of data is involved.
--- Invariant: modules are stored in dependency order
 -----------------------------------------------------------------------------
 
 module GF.Infra.Modules (
-        MGrammar(..), ModInfo(..), ModuleType(..),
+        MGrammar, ModInfo(..), ModuleType(..),
         MInclude (..),
+        mGrammar,modules,
         extends, isInherited,inheritAll, 
         updateMGrammar, updateModule, replaceJudgements, addFlag,
         addOpenQualif, flagsModule, allFlags, mapModules,
@@ -28,7 +28,8 @@ module GF.Infra.Modules (
         ModuleStatus(..),
         openedModule, depPathModule, allDepsModule, partOfGrammar,
         allExtends, allExtendSpecs, allExtendsPlus, allExtensions, 
-        searchPathModule, addModule,
+        searchPathModule,
+     -- addModule,
         emptyMGrammar, emptyModInfo,
         abstractOfConcrete, abstractModOfConcrete,
         lookupModule, lookupModuleType, lookupInfo,
@@ -50,10 +51,16 @@ import Text.PrettyPrint
 
 -- The same structure will be used in both source code and canonical.
 -- The parameters tell what kind of data is involved.
--- Invariant: modules are stored in dependency order
+-- No longer maintained invariant (TH 2011-08-30):
+--      modules are stored in dependency order
 
-newtype MGrammar a = MGrammar {modules :: [(Ident,ModInfo a)]}
+--mGrammar = MGrammar
+--newtype MGrammar a = MGrammar {modules :: [(Ident,ModInfo a)]}
+
+newtype MGrammar a = MGrammar {moduleMap :: Map.Map Ident (ModInfo a)}
   deriving Show
+modules = Map.toList . moduleMap
+mGrammar = MGrammar . Map.fromList
 
 data ModInfo a = ModInfo {
     mtype   :: ModuleType,
@@ -94,9 +101,9 @@ inheritAll i = (i,MIAll)
 
 -- destructive update
 
--- | dep order preserved since old cannot depend on new
+-- | dep order preserved since old cannot depend on new (not anymore TH 2011-08-30)
 updateMGrammar :: MGrammar a -> MGrammar a -> MGrammar a
-updateMGrammar old new = MGrammar $
+updateMGrammar old new = mGrammar $
   [(i,m) | (i,m) <- os, notElem i (map fst ns)] ++ ns
  where
    os = modules old
@@ -121,7 +128,8 @@ allFlags :: MGrammar a -> Options
 allFlags gr = concatOptions [flags m | (_,m) <- modules gr]
 
 mapModules :: (ModInfo a -> ModInfo a) -> MGrammar a -> MGrammar a 
-mapModules f (MGrammar ms) = MGrammar (map (onSnd f) ms)
+--mapModules f (MGrammar ms) = MGrammar (map (onSnd f) ms)
+mapModules f (MGrammar ms) = MGrammar (fmap f ms)
 
 data OpenSpec = 
    OSimple Ident
@@ -159,7 +167,7 @@ allDepsModule gr m = iterFix add os0 where
 
 -- | select just those modules that a given one depends on, including itself
 partOfGrammar :: MGrammar a -> (Ident,ModInfo a) -> MGrammar a
-partOfGrammar gr (i,m) = MGrammar [mo | mo@(j,_) <- mods, elem j modsFor] 
+partOfGrammar gr (i,m) = mGrammar [mo | mo@(j,_) <- mods, elem j modsFor]
   where
     mods = modules gr
     modsFor = (i:) $ map openedModule $ allDepsModule gr m
@@ -208,12 +216,15 @@ allExtensions gr i =
 searchPathModule :: ModInfo a -> [Ident]
 searchPathModule m = [i | OSimple i <- depPathModule m]
 
+{-
 -- | a new module can safely be added to the end, since nothing old can depend on it
 addModule :: MGrammar a -> Ident -> ModInfo a -> MGrammar a
-addModule gr name mi = MGrammar $ (modules gr ++ [(name,mi)])
+--addModule gr name mi = MGrammar $ (modules gr ++ [(name,mi)])
+addModule gr name mi = MGrammar $ Map.insert name mi (moduleMap gr)
+-}
 
 emptyMGrammar :: MGrammar a
-emptyMGrammar = MGrammar []
+emptyMGrammar = mGrammar []
 
 emptyModInfo :: ModInfo a
 emptyModInfo = ModInfo MTResource MSComplete noOptions [] Nothing [] [] emptyBinTree
@@ -238,7 +249,8 @@ abstractModOfConcrete gr c = do
 --- canonFileName s = prt s ++ ".gfc"
 
 lookupModule :: MGrammar a -> Ident -> Err (ModInfo a)
-lookupModule gr m = case lookup m (modules gr) of
+--lookupModule gr m = case lookup m (modules gr) of
+lookupModule gr m = case Map.lookup m (moduleMap gr) of
   Just i  -> return i
   Nothing -> Bad $ render (text "unknown module" <+> ppIdent m <+> text "among" <+> hsep (map (ppIdent . fst) (modules gr)))
 

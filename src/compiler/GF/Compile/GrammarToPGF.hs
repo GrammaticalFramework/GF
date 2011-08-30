@@ -44,10 +44,13 @@ mkCanon2pgf opts cnc gr = (canon2pgf opts gr . reorder abs) gr
 
 -- Generate PGF from grammar.
 
-canon2pgf :: Options -> SourceGrammar -> SourceGrammar -> IO D.PGF
-canon2pgf opts gr cgr@(M.MGrammar (am:cms)) = do
+type AbsConcsGrammar = (IdModInfo,[IdModInfo]) -- (abstract,concretes)
+type IdModInfo = (Ident,SourceModInfo)
+
+canon2pgf :: Options -> SourceGrammar -> AbsConcsGrammar -> IO D.PGF
+canon2pgf opts gr (am,cms) = do
   if dump opts DumpCanon
-    then putStrLn (render (vcat (map (ppModule Qualified) (M.modules cgr))))
+    then putStrLn (render (vcat (map (ppModule Qualified) (am:cms))))
     else return ()
   (an,abs) <- mkAbstr am
   cncs     <- mapM (mkConcr am) cms
@@ -148,12 +151,12 @@ compilePatt eqs        = whilePP eqs Map.empty
 
 -- return just one module per language
 
-reorder :: Ident -> SourceGrammar -> SourceGrammar
+reorder :: Ident -> SourceGrammar -> AbsConcsGrammar
 reorder abs cg =
-  M.MGrammar $ 
-       (abs, M.ModInfo M.MTAbstract       M.MSComplete aflags [] Nothing [] [] adefs):
+--  M.MGrammar $
+       ((abs, M.ModInfo M.MTAbstract       M.MSComplete aflags [] Nothing [] [] adefs),
       [(cnc, M.ModInfo (M.MTConcrete abs) M.MSComplete cflags [] Nothing [] [] cdefs)
-            | cnc <- M.allConcretes cg abs, let (cflags,cdefs) = concr cnc]
+            | cnc <- M.allConcretes cg abs, let (cflags,cdefs) = concr cnc])
   where
     aflags = 
       concatOptions (reverse [M.flags mo | (_,mo) <- M.modules cg, M.isModAbs mo])

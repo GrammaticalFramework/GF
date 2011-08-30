@@ -365,7 +365,7 @@ data GFEnv = GFEnv {
 
 emptyGFEnv :: GFEnv
 emptyGFEnv =
-  GFEnv emptySourceGrammar{modules=[(identW,emptyModInfo)]} (mkCommandEnv emptyPGF) [] {-0-}
+  GFEnv (mGrammar [(identW,emptyModInfo)]) (mkCommandEnv emptyPGF) [] {-0-}
 
 wordCompletion gfenv (left,right) = do
   case wc_type (reverse left) of
