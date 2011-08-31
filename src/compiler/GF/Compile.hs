@@ -227,7 +227,7 @@ extendCompileEnvInt (_,gr,menv) k mfile sm = do
       t <- ioeIO $ getModificationTime file
       return $ Map.insert mod (t,imps) menv
     _ -> return menv
-  return (k,mGrammar (sm:modules gr),menv2) --- reverse later
+  return (k,prependModule gr sm,menv2) --- reverse later
 
 extendCompileEnv e@(k,_,_) file sm = extendCompileEnvInt e k (Just file) sm
 

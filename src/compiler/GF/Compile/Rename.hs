@@ -128,7 +128,7 @@ tree2status o = case o of
 
 buildStatus :: SourceGrammar -> Ident -> SourceModInfo -> Check Status
 buildStatus gr c mo = let mo' = self2status c mo in do
-    let gr1 = mGrammar ((c,mo) : modules gr)
+    let gr1 = prependModule gr (c,mo)
         ops = [OSimple e | e <- allExtends gr1 c] ++ opens mo
     mods <- checkErr $ mapM (lookupModule gr1 . openedModule) ops
     let sts = map modInfo2status $ zip ops mods    
