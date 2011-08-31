@@ -56,7 +56,7 @@ import qualified Data.ByteString.Char8 as BS
 -- | grammar as presented to the compiler
 type SourceGrammar = MGrammar Info
 
-emptySourceGrammar = mGrammar []
+emptySourceGrammar = emptyMGrammar
 
 type SourceModInfo = ModInfo Info
 

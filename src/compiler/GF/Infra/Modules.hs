@@ -20,16 +20,16 @@
 module GF.Infra.Modules (
         MGrammar, ModInfo(..), ModuleType(..),
         MInclude (..),
-        mGrammar,modules,
+        mGrammar,modules,prependModule,
         extends, isInherited,inheritAll, 
-        updateMGrammar, updateModule, replaceJudgements, addFlag,
+        updateModule, replaceJudgements, addFlag,
         addOpenQualif, flagsModule, allFlags,
         OpenSpec(..),
         ModuleStatus(..),
         openedModule, depPathModule, allDepsModule, partOfGrammar,
         allExtends, allExtendSpecs, allExtendsPlus, allExtensions, 
         searchPathModule,
-     -- addModule, mapModules,
+     -- addModule, mapModules, updateMGrammar, 
         emptyMGrammar, emptyModInfo,
         abstractOfConcrete, abstractModOfConcrete,
         lookupModule, lookupModuleType, lookupInfo,
@@ -56,8 +56,8 @@ import Text.PrettyPrint
 --mGrammar = MGrammar
 --newtype MGrammar a = MGrammar {modules :: [(Ident,ModInfo a)]}
 
-data MGrammar a = MGrammar {moduleMap :: Map.Map Ident (ModInfo a),
-                            modules :: [(Ident,ModInfo a)] }
+data MGrammar a = MGrammar { moduleMap :: Map.Map Ident (ModInfo a),
+                             modules :: [(Ident,ModInfo a)] }
   deriving Show
 mGrammar ms = MGrammar (Map.fromList ms) ms
 
@@ -99,15 +99,15 @@ inheritAll :: Ident -> (Ident,MInclude)
 inheritAll i = (i,MIAll)
 
 -- destructive update
-
--- | dep order preserved since old cannot depend on new (not anymore TH 2011-08-30)
+{-
+-- | dep order preserved since old cannot depend on new
 updateMGrammar :: MGrammar a -> MGrammar a -> MGrammar a
-updateMGrammar old new = mGrammar $
-  [(i,m) | (i,m) <- os, notElem i (map fst ns)] ++ ns
- where
-   os = modules old
-   ns = modules new
-
+updateMGrammar (MGrammar omap os) (MGrammar nmap ns) =
+  MGrammar (Map.union nmap omap) -- Map.union is left-biased
+           ([im | im@(i,m) <- os, i `notElem` nis] ++ ns)
+  where
+    nis = map fst ns
+-}
 updateModule :: ModInfo t -> Ident -> t -> ModInfo t
 updateModule (ModInfo mt ms fs me mw ops med js) i t = ModInfo mt ms fs me mw ops med (updateTree (i,t) js)
 
@@ -221,6 +221,8 @@ addModule :: MGrammar a -> Ident -> ModInfo a -> MGrammar a
 addModule gr name mi = MGrammar $ Map.insert name mi (moduleMap gr)
 -}
 
+prependModule (MGrammar mm ms) im@(i,m) = MGrammar (Map.insert i m mm) (im:ms)
+
 emptyMGrammar :: MGrammar a
 emptyMGrammar = mGrammar []
 
@@ -237,10 +239,7 @@ abstractOfConcrete gr c = do
     _ -> Bad $ render (text "expected concrete" <+> ppIdent c)
 
 abstractModOfConcrete :: MGrammar a -> Ident -> Err (ModInfo a)
-abstractModOfConcrete gr c = do
-  a <- abstractOfConcrete gr c
-  lookupModule gr a
-
+abstractModOfConcrete gr c = lookupModule gr =<< abstractOfConcrete gr c
 
 -- the canonical file name
 
@@ -253,9 +252,7 @@ lookupModule gr m = case Map.lookup m (moduleMap gr) of
   Nothing -> Bad $ render (text "unknown module" <+> ppIdent m <+> text "among" <+> hsep (map (ppIdent . fst) (modules gr)))
 
 lookupModuleType :: MGrammar a -> Ident -> Err ModuleType
-lookupModuleType gr m = do
-  mi <- lookupModule gr m
-  return $ mtype mi
+lookupModuleType gr m = mtype `fmap` lookupModule gr m
 
 lookupInfo :: ModInfo a -> Ident -> Err a
 lookupInfo mo i = lookupTree showIdent i (jments mo)
