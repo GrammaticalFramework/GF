@@ -47,10 +47,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
       _ => prepCase c ++ artDef g Sg (CPrep P_de)
       } ;
 
-    conjunctCase : NPForm -> NPForm = \c -> case c of {
-      Aton k => Ton k ;
-      _ => c
-      } ;
+    conjunctCase : Case -> Case = \c -> c ;
 
     auxVerb : VType -> (VF => Str) = \vtyp -> case vtyp of {
       VHabere => avoir_V.s ;

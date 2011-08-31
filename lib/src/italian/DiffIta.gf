@@ -62,9 +62,9 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
       _ => prepCase c ++ artDef g Sg (CPrep P_di)
       } ;
 
-    conjunctCase : NPForm -> NPForm = \c -> case c of {
-      Ton Nom | Aton Nom => Ton Nom ;
-      _ => Ton Acc 
+    conjunctCase : Case -> Case = \c -> case c of {
+      Nom => Nom ;
+      _ => Acc 
       } ;
 
     auxVerb : VType -> (VF => Str) = \vtyp -> case vtyp of {
