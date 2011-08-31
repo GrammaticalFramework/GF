@@ -47,9 +47,9 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
       } ;
 -}
 
-    conjunctCase : NPForm -> NPForm = \c -> case c of {
-      Ton Nom | Aton Nom => Ton Nom ;
-      _ => Ton Acc 
+    conjunctCase : Case -> Case = \c -> case c of {
+      Nom => Nom ;
+      _ => Acc 
       } ;
 
     auxVerb : VType -> (VF => Str) = \_ -> haber_V.s ;

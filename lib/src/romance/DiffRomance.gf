@@ -34,7 +34,7 @@ interface DiffRomance = open CommonRomance, Prelude in {
 -- Whether a preposition is repeated in conjunction
 -- (Fre "la somme de 3 et de 4", Ita "la somma di 3 e 4").
 
-  oper conjunctCase : NPForm -> NPForm ;
+  oper conjunctCase : Case -> Case ;
 
 -- How infinitives and clitics are placed relative to each other
 -- (Fre "la voir", Ita "vederla"). The $Bool$ is used for indicating

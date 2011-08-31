@@ -50,9 +50,9 @@ oper
       _ => prepCase c ++ artDef g Sg (CPrep P_de)
       } ;
 
-    conjunctCase : NPForm -> NPForm = \c -> case c of {
-      Ton Nom | Aton Nom => Ton Nom ;
-      _ => Ton Acc 
+    conjunctCase : Case -> Case = \c -> case c of {
+      Nom => Nom ;
+      _ => Acc 
       } ;
 
     auxVerb : VType -> (VF => Str) = \_ -> haver_V.s ;
