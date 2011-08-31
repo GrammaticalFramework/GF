@@ -176,7 +176,7 @@ execute1 opts gfenv0 s0 =
 
       case runP pExp (encodeUnicode utf8 s) of
         Left (_,msg) -> putStrLn msg
-        Right t      -> case checkComputeTerm sgr (unLoc (codeTerm (decodeUnicode utf8 . BS.pack) (L (0,0) t))) of
+        Right t      -> case checkComputeTerm sgr (codeTerm (decodeUnicode utf8 . BS.pack) t) of
                           Ok  x -> putStrLn $ showTerm sgr style q x
                           Bad s -> putStrLn $ s
       continue gfenv

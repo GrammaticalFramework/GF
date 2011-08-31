@@ -21,14 +21,19 @@ codeSourceModule :: (String -> String) -> SourceModule -> SourceModule
 codeSourceModule co (id,mo) = (id,replaceJudgements mo (mapTree codj (jments mo)))
  where
     codj (c,info) = case info of
-      ResOper     pty pt  -> ResOper (fmap (codeTerm co) pty) (fmap (codeTerm co) pt) 
-      ResOverload es tyts -> ResOverload es [(codeTerm co ty,codeTerm co t) | (ty,t) <- tyts]
-      CncCat pty pt mpr   -> CncCat pty (fmap (codeTerm co) pt) (fmap (codeTerm co) mpr)
-      CncFun mty pt mpr   -> CncFun mty (fmap (codeTerm co) pt) (fmap (codeTerm co) mpr)
+      ResOper     pty pt  -> ResOper (codeLTerms co pty) (codeLTerms co pt) 
+      ResOverload es tyts -> ResOverload es [(codeLTerm co ty,codeLTerm co t) | (ty,t) <- tyts]
+      CncCat pty pt mpr   -> CncCat pty (codeLTerms co pt) (codeLTerms co mpr)
+      CncFun mty pt mpr   -> CncFun mty (codeLTerms co pt) (codeLTerms co mpr)
       _ -> info
 
-codeTerm :: (String -> String) -> L Term -> L Term
-codeTerm co (L loc t) = L loc (codt t)
+codeLTerms co = fmap (codeLTerm co)
+
+codeLTerm :: (String -> String) -> L Term -> L Term
+codeLTerm = fmap . codeTerm
+
+codeTerm :: (String -> String) -> Term -> Term
+codeTerm co = codt
   where
     codt t = case t of
       K s -> K (co s)
