@@ -98,6 +98,7 @@ incomplete concrete SentenceHindustani of Sentence =
     } ;
 
     AdvS a s = {s = a.s ! Masc ++ s.s} ;
+    ExtAdvS a s = {s = a.s ! Masc ++ "," ++ s.s} ;
 
     RelS s r = {s = s.s ++ r.s ! agrP3 Masc Sg} ;
     SSubjS s sj s = { s = s.s ++ sj.s ++ s.s};

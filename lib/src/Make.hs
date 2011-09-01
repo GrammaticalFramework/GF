@@ -77,7 +77,7 @@ langsIncomplete = ["Amh","Ara","Hin","Lat","Tha","Tur"]
 langsAPI = langsLang `except` langsIncomplete
 
 -- languages for which to compile Symbolic
-langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Ina","Pes","Pnb","Rus"])
+langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Ina","Nep","Pes","Pnb","Rus"])
 
 -- languages for which to compile minimal Syntax
 langsMinimal = langs `only` ["Ara","Eng","Bul","Rus"]

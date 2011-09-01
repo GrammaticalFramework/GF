@@ -61,6 +61,7 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
       } ;
 
     AdvS a s = {s = \\o => a.s ++ s.s ! Inv} ;
+    ExtAdvS a s = {s = \\o => a.s ++ "," ++ s.s ! Inv} ;
 
     RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! Neutr ! Sg} ;
 

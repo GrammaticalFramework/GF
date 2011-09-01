@@ -92,6 +92,7 @@
     } ;
 
     AdvS a s = {s = \\o => a.s ++ s.s ! o} ;
+    ExtAdvS a s = {s = \\o => a.s ++ "," ++ s.s ! o} ;
 
     RelS s r = {
       s = \\o => s.s ! o ++ "," ++ r.s ! Indic ! agrP3 Masc Sg
