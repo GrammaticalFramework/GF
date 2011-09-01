@@ -23,6 +23,10 @@ flag server
   Description: Include --server mode
   Default:     True
 
+flag cclazy
+  Description: Switch to lazy compute_concrete (new, experimental)
+  Default: False
+
 library
   build-depends: base >= 4.2 && <5,
                  array,
@@ -181,3 +185,6 @@ executable gf
     other-modules: GF.System.UseSignal
   else
     other-modules: GF.System.NoSignal
+
+  if flag(cclazy)
+    cpp-options: -DCC_LAZY
