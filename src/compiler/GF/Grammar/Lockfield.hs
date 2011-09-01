@@ -32,7 +32,7 @@ lockRecType c t@(RecType rs) =
     else RecType (rs ++ [(lockLabel c,  RecType [])])
 lockRecType c t = plusRecType t $ RecType [(lockLabel c,  RecType [])]
 
-unlockRecord :: Ident -> Term -> Err Term
+unlockRecord :: Monad m => Ident -> Term -> m Term
 unlockRecord c ft = do
   let (xs,t) = termFormCnc ft
   let lock = R [(lockLabel c,  (Just (RecType []),R []))]
