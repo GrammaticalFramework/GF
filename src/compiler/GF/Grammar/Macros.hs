@@ -93,12 +93,12 @@ isHigherOrderType t = errVal True $ do  -- pessimistic choice
   co <- contextOfType t
   return $ not $ null [x | (_,x,Prod _ _ _ _) <- co]
 
-contextOfType :: Type -> Err Context
+contextOfType :: Monad m => Type -> m Context
 contextOfType typ = case typ of
   Prod b x a t -> liftM ((b,x,a):) $ contextOfType t
   _            -> return [] 
 
-termForm :: Term -> Err ([(BindType,Ident)], Term, [Term])
+termForm :: Monad m => Term -> m ([(BindType,Ident)], Term, [Term])
 termForm t = case t of
    Abs b x t  ->
      do (x', fun, args) <- termForm t
@@ -267,8 +267,8 @@ plusRecType t1 t2 = case (t1, t2) of
   (RecType r1, RecType r2) -> case
     filter (`elem` (map fst r1)) (map fst r2) of
       [] -> return (RecType (r1 ++ r2))
-      ls -> Bad $ render (text "clashing labels" <+> hsep (map ppLabel ls))
-  _ -> Bad $ render (text "cannot add record types" <+> ppTerm Unqualified 0 t1 <+> text "and" <+> ppTerm Unqualified 0 t2) 
+      ls -> fail $ render (text "clashing labels" <+> hsep (map ppLabel ls))
+  _ -> fail $ render (text "cannot add record types" <+> ppTerm Unqualified 0 t1 <+> text "and" <+> ppTerm Unqualified 0 t2) 
 
 plusRecord :: Term -> Term -> Err Term
 plusRecord t1 t2 =
@@ -277,7 +277,7 @@ plusRecord t1 t2 =
                               (l,v) <- r1, not (elem l (map fst r2)) ] ++ r2))
    (_,    FV rs) -> mapM (plusRecord t1) rs >>= return . FV
    (FV rs,_    ) -> mapM (`plusRecord` t2) rs >>= return . FV
-   _ -> Bad $ render (text "cannot add records" <+> ppTerm Unqualified 0 t1 <+> text "and" <+> ppTerm Unqualified 0 t2)
+   _ -> fail $ render (text "cannot add records" <+> ppTerm Unqualified 0 t1 <+> text "and" <+> ppTerm Unqualified 0 t2)
 
 -- | default linearization type
 defLinType :: Type
@@ -444,7 +444,7 @@ strsFromTerm t = case t of
            ]
   FV ts -> mapM strsFromTerm ts >>= return . concat
   Strs ts -> mapM strsFromTerm ts >>= return . concat  
-  _ -> Bad (render (text "cannot get Str from term" <+> ppTerm Unqualified 0 t))
+  _ -> fail (render (text "cannot get Str from term" <+> ppTerm Unqualified 0 t))
 
 -- | to print an Str-denoting term as a string; if the term is of wrong type, the error msg
 stringFromTerm :: Term -> String
