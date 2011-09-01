@@ -129,7 +129,8 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
     };
 
 
-    AdvS a s = {s = a.s ++ "," ++ s.s} ; ---- AR 19/6/2007
+    AdvS a s = {s = a.s ++ s.s} ; ---- AR 19/6/2007
+    ExtAdvS a s = {s = a.s ++ "," ++ s.s} ; ---- AR 1/9/2011
 
     ---- AR 17/12/2008
     RelS s r = {s = s.s ++ "," ++ r.s ! gennum Neut Sg ! Nom ! Inanimate} ; ---- ?
