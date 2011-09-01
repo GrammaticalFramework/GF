@@ -74,6 +74,7 @@ lin
     
 --     AdvS     : Adv -> S  -> S ;            -- today, I will go home
     AdvS adv s = { s = adv.s ++ s.s };
+    ExtAdvS adv s = { s = adv.s ++ "," ++ s.s };
     
 --     SlashPrep : Cl -> Prep -> ClSlash ;         -- (with whom) he walks 
     SlashPrep c p = { s=c.s; c=p };
