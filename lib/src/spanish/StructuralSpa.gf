@@ -16,7 +16,7 @@ lin
   almost_AdA, almost_AdN = ss "casi" ;
   always_AdV = ss "siempre" ;
   although_Subj = ss "benché" ** {m = Conjunct} ;
-  and_Conj = {s1 = [] ; s2 = "y" ; n = Pl} ;
+  and_Conj = {s1 = [] ; s2 = etConj.s ; n = Pl} ;
   because_Subj = ss "porque" ** {m = Indic} ;
   before_Prep = {s = "antes" ; c = MorphoSpa.genitive ; isDir = False} ;
   behind_Prep = {s = "detrás" ; c = MorphoSpa.genitive ; isDir = False} ;
