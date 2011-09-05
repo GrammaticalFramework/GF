@@ -13,3 +13,6 @@ buildInfo =
 #ifdef SERVER_MODE
     ++" server"
 #endif
+#ifdef CC_LAZY
+   ++ " cclazy"
+#endif
