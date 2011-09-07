@@ -27,7 +27,9 @@ import GF.Grammar.Values
 import GF.Grammar.Predef
 import GF.Grammar.Printer
 
-import Control.Monad (liftM, liftM2)
+import Control.Monad.Identity(Identity(..))
+import qualified Data.Traversable as T(mapM)
+import Control.Monad (liftM, liftM2, liftM3)
 import Data.Char (isDigit)
 import Data.List (sortBy,nub)
 import Text.PrettyPrint
@@ -453,98 +455,34 @@ stringFromTerm = err id (ifNull "" (sstr . head)) . strsFromTerm
 
 -- | to define compositional term functions
 composSafeOp :: (Term -> Term) -> Term -> Term
-composSafeOp op trm = case composOp (mkMonadic op) trm of
-  Ok t -> t
-  _ -> error "the operation is safe isn't it ?"
- where
- mkMonadic f = return . f
+composSafeOp op = runIdentity . composOp (return . op)
 
 -- | to define compositional term functions
 composOp :: Monad m => (Term -> m Term) -> Term -> m Term
 composOp co trm = 
  case trm of
-   App c a -> 
-     do c' <- co c
-        a' <- co a
-        return (App c' a')
-   Abs b x t ->
-     do t' <- co t
-        return (Abs b x t')
-   Prod b x a t -> 
-     do a' <- co a
-        t' <- co t
-        return (Prod b x a' t')
-   S c a -> 
-     do c' <- co c
-        a' <- co a
-        return (S c' a')
-   Table a c -> 
-     do a' <- co a
-        c' <- co c
-        return (Table a' c')
-   R r -> 
-     do r' <- mapAssignM co r
-        return (R r')
-   RecType r -> 
-     do r' <- mapPairListM (co . snd) r
-        return (RecType r')
-   P t i ->
-     do t' <- co t
-        return (P t' i)
-   ExtR a c -> 
-     do a' <- co a
-        c' <- co c
-        return (ExtR a' c')
-
-   T i cc -> 
-     do cc' <- mapPairListM (co . snd) cc
-        i'  <- changeTableType co i
-        return (T i' cc')
-
-   V ty vs ->
-     do ty' <- co ty
-        vs' <- mapM co vs
-        return (V ty' vs')
-
-   Let (x,(mt,a)) b -> 
-     do a'  <- co a
-        mt' <- case mt of
-                 Just t -> co t >>= (return . Just) 
-                 _ -> return mt
-        b'  <- co b
-        return (Let (x,(mt',a')) b')
-
-   C s1 s2 -> 
-     do v1 <- co s1 
-        v2 <- co s2
-        return (C v1 v2)
-   Glue s1 s2 -> 
-     do v1 <- co s1
-        v2 <- co s2
-        return (Glue v1 v2)
-   Alts t aa ->
-     do t' <- co t
-        aa' <- mapM (pairM co) aa
-        return (Alts t' aa')
-   FV ts -> mapM co ts >>= return . FV
-   Strs tt -> mapM co tt >>= return . Strs
-
-   EPattType ty -> 
-     do ty' <- co ty
-        return (EPattType ty')
-
-   ELincat c ty -> 
-     do ty' <- co ty
-        return (ELincat c ty')
-
-   ELin c ty -> 
-     do ty' <- co ty
-        return (ELin c ty')
-        
-   ImplArg t -> 
-     do t' <- co t
-        return (ImplArg t')
-
+   App c a          -> liftM2 App (co c) (co a)
+   Abs b x t        -> liftM (Abs b x) (co t)
+   Prod b x a t     -> liftM2 (Prod b x) (co a) (co t)
+   S c a            -> liftM2 S (co c) (co a)
+   Table a c        -> liftM2 Table (co a) (co c)
+   R r              -> liftM R (mapAssignM co r)
+   RecType r        -> liftM RecType (mapPairsM co r)
+   P t i            -> liftM2 P (co t) (return i)
+   ExtR a c         -> liftM2 ExtR (co a) (co c)
+   T i cc           -> liftM2 (flip T) (mapPairsM co cc) (changeTableType co i)
+   V ty vs          -> liftM2 V (co ty) (mapM co vs)
+   Let (x,(mt,a)) b -> liftM3 let' (co a) (T.mapM co mt) (co b)
+     where let' a' mt' b' = Let (x,(mt',a')) b'
+   C s1 s2          -> liftM2 C (co s1) (co s2)
+   Glue s1 s2       -> liftM2 Glue (co s1) (co s2)
+   Alts t aa        -> liftM2 Alts (co t) (mapM (pairM co) aa)
+   FV ts            -> liftM FV (mapM co ts)
+   Strs tt          -> liftM Strs (mapM co tt)
+   EPattType ty     -> liftM EPattType (co ty)
+   ELincat c ty     -> liftM (ELincat c) (co ty)
+   ELin c ty        -> liftM (ELin c) (co ty)
+   ImplArg t        -> liftM ImplArg (co t)
    _ -> return trm -- covers K, Vr, Cn, Sort, EPatt
 
 getTableType :: TInfo -> Err Type
