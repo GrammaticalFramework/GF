@@ -32,11 +32,13 @@ Direct order ($32.50 paperback, $70 hardcover):
 
   http://press.uchicago.edu/ucp/books/book/distributed/G/bo12469871.html
 
-Amazon order ($32.50 paperback, $70 hardcover):
+Amazon order USA ($32.50 paperback, $70 hardcover):
 
   http://www.amazon.com/Grammatical-Framework-Programming-Multilingual-Information/dp/1575866269/ref=sr_1_2?ie=UTF8&qid=1308585697&sr=8-2
 
+Amazon order UK (£21 paperback, £45 hardcover):
 
+  http://www.amazon.co.uk/Grammatical-Framework-Programming-Multilingual-Computational/dp/1575866269/ref=sr_1_6?ie=UTF8&qid=1315580083&sr=8-6
 
 
 ==Book description==
@@ -95,23 +97,24 @@ linguistics, and related fields.
 
 ==Supporting material==
 
-Slides for teaching the book chapter by chapter are forthcoming by the
-[Second GF Summer School http://school.grammaticalframework.org/] 
-starting on August 15, 2011.
- 
-The following should be useful before that:
-- [GF Tutorial ../doc/tutorial/gf-tutorial.html]: programmer-oriented,
-  covering parts of chapters 2-8 
-- [GF Resource Tutorial ../doc/gf-lrec-2010.pdf]: linguist-oriented,
-  covering parts of chapters 2-5, 9-10
-
+[Slides ./gf-book-slides.pdf] for teaching the book chapter by chapter.
 
 [Code examples ./examples]
+
+[GF Web IDE http://www.grammaticalframework.org/demos/gfse/]: 
+build grammars in the cloud, without installing GF.
 
 Demos 
 - [on-line translator http://www.grammaticalframework.org:41296/minibar/minibar.html] (Section 7.12)
 - [syntax editor http://www.grammaticalframework.org/demos/resource-api/editor.html] (Section 7.13)
 - [multimodal dialogue system http://www.youtube.com/watch?v=1bfaYHWS6zU] (Section 7.15)
+
+
+Other tutorials:
+- [GF Tutorial ../doc/tutorial/gf-tutorial.html]: programmer-oriented,
+  covering parts of chapters 2-8 
+- [GF Resource Tutorial ../doc/gf-lrec-2010.pdf]: linguist-oriented,
+  covering parts of chapters 2-5, 9-10
 
 
 [Works mentioned in references http://www.grammaticalframework.org/doc/gf-bibliography.html];
@@ -127,3 +130,4 @@ GF Home Page: http://www.grammaticalframework.org/
 Author's email: aarne'at'chalmers'dot'se
 
 Author's home page: http://www.cse.chalmers.se/~aarne/
+
