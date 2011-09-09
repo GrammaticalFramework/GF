@@ -1,5 +1,5 @@
 name: gf
-version: 3.2.8-darcs
+version: 3.2.9-darcs
 
 cabal-version: >= 1.8
 build-type: Custom
@@ -24,8 +24,8 @@ flag server
   Default:     True
 
 flag cclazy
-  Description: Switch to lazy compute_concrete (new, experimental)
-  Default: False
+  Description: Use the new, lazy compute_concrete (faster than the old, strict version)
+  Default: True
 
 library
   build-depends: base >= 4.2 && <5,
