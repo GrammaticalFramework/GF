@@ -12,7 +12,7 @@
 -- Computation of source terms. Used in compilation and in @cc@ command.
 -----------------------------------------------------------------------------
 
-module GF.Compile.Compute.ConcreteLazy (computeConcrete, computeTerm,computeConcreteRec,checkPredefError) where
+module GF.Compile.Compute.ConcreteLazy (computeConcrete, computeTerm,checkPredefError) where
 
 import GF.Data.Operations
 import GF.Grammar.Grammar
@@ -50,17 +50,12 @@ runtime_error = return . predef_error -- run-time error term
 -- used mainly for partial evaluation
 computeConcrete :: SourceGrammar -> Term -> Err Term
 computeConcrete    g t = {- refreshTerm t >>= -} computeTerm g [] t
-computeConcreteRec g t = {- refreshTerm t >>= -} computeTermOpt True g [] t
 
--- False means: no evaluation under Abs
 computeTerm :: SourceGrammar -> Substitution -> Term -> Err Term
-computeTerm gr g = return . runIdentity . computeTermOpt False gr g
+computeTerm gr g = return . runIdentity . computeTermOpt gr g
 
--- rec=True is used if it cannot be assumed that looked-up constants
--- have already been computed (mainly with -optimize=noexpand in .gfr)
-
-computeTermOpt :: Bool -> SourceGrammar -> Substitution -> Term -> Comp Term
-computeTermOpt rec gr = comput True where
+computeTermOpt :: SourceGrammar -> Substitution -> Term -> Comp Term
+computeTermOpt gr = comput True where
 
    -- full = True means full evaluation under Abs
    comput full g t = ---- errIn ("subterm" +++ prt t) $ --- for debugging 
@@ -282,9 +277,7 @@ computeTermOpt rec gr = comput True where
      hnf  = comput False
      comp = comput True
 
-     look c
-       | rec       = errr (lookupResDef gr c) >>= comp []
-       | otherwise = errr (lookupResDef gr c)
+     look c = errr (lookupResDef gr c)
 
      ext x a g = (x,a):g  -- extend environment with new variable and its value
 
