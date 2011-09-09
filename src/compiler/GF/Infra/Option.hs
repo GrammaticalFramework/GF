@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 module GF.Infra.Option
     (
      -- * Option types
@@ -268,7 +269,11 @@ defaultFlags = Flags {
       optResName         = Nothing,
       optPreprocessors   = [],
       optEncoding        = "latin1",
+#ifdef CC_LAZY
+      optOptimizations   = Set.fromList [OptStem,OptCSE],
+#else
       optOptimizations   = Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize],
+#endif
       optOptimizePGF     = False,
       optMkIndexPGF     = False,
       optCFGTransforms   = Set.fromList [CFGRemoveCycles, CFGBottomUpFilter, 
