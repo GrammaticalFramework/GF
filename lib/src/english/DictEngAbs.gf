@@ -18683,7 +18683,6 @@ fun inquisitor_N : N;
 fun inquisitorial_A : A;
 fun inroad_N : N;
 fun inrush_N : N;
-fun ins_N : N;
 fun insane_A : A;
 fun insanitary_A : A;
 fun insanity_N : N;
