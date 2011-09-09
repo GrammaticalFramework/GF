@@ -1,6 +1,9 @@
 Grammatical Framework: Programming with Multilingual Grammars
 Aarne Ranta
 
+
+%!Encoding:utf8
+
 %!postproc(html): "#BOOKCOVER" '<center><img width=200mm src="gf-book-cover.png"></center>'
 
 
