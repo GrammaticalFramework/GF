@@ -18700,7 +18700,6 @@ lin inquisitor_N = mkN "inquisitor" "inquisitors";
 lin inquisitorial_A = compoundA (mkA "inquisitorial");
 lin inroad_N = mkN "inroad" "inroads";
 lin inrush_N = mkN "inrush" "inrushes";
-lin ins_N = mkN "in" "ins" ;
 lin insane_A = compoundA (mkA "insane");
 lin insanitary_A = compoundA (mkA "insanitary");
 lin insanity_N = mkN "insanity" ;
