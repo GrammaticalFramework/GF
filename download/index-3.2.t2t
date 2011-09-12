@@ -6,14 +6,12 @@ Grammatical Framework Download and Installation
 %!postproc(html): </B></TD> </TH>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
-**GF 3.2.9** source-only snapshot was released on 12 September 2011.
-
 **GF 3.2** was released on 23 December 2010.
 
 What's new? See the [Release notes release-3.2.html].
 
 
-== Latest released binary packages ==
+== Binary packages for the latest release ==
 
 
 | **Platform** | **Download** | **How to install**
@@ -51,19 +49,18 @@ unpacked the package.
 
 ==Installing the latest release from source==
 
-[GF is on Hackage http://hackage.haskell.org/package/gf], so the prodedure is
+GF is on [Hackage http://hackage.haskell.org/package/gf], so the prodedure is
 fairly simple:
 
 + Install the
-  [Haskell Platform 2010.2.0.0 (July 2010) http://hackage.haskell.org/platform]
-  or newer.
+  [Haskell Platform 2010.2.0.0 (July 2010) http://hackage.haskell.org/platform].
 + ``cabal update``
 + On Linux: install some C libraries from your Linux distribution (see below)
 + ``cabal install gf``
 
 
 You can also download the full source package from here:
-[``gf-3.2.9.tar.gz`` gf-3.2.9.tar.gz].
+[``gf-3.2.tar.gz`` gf-3.2.tar.gz].
 
 === Notes ===
 
@@ -81,6 +78,12 @@ them manually. Here is one way to do this:
 
 - On Ubuntu: ``sudo apt-get install libghc6-terminfo-dev``
 - On Fedora: ``sudo yum install ghc-terminfo-devel``
+
+
+==Older releases==
+
+- [GF 3.1.6 index-3.1.6.html] (April 2010).
+- [GF 3.1 old-index.html] (December 2009).
 
 
 ==Installing from the latest developer code==
@@ -102,14 +105,6 @@ Subsequently:
 ```
 
 The above notes for installing from source apply also in this case.
-
-
-==Older releases==
-
-- [GF 3.2 index-3.2.html] (December 2011).
-- [GF 3.1.6 index-3.1.6.html] (April 2010).
-- [GF 3.1 old-index.html] (December 2009).
-
 
 --------------------
 
