@@ -37,12 +37,15 @@ function draw_grammar_list() {
     editor.appendChild(home)
     var gs=ul([]);
     function del(i) { return function () { delete_grammar(i); } }
+    function clone(i) { return function (g,b) { clone_grammar(i); } }
     for(var i=0;i<local.count;i++) {
 	var grammar=local.get(i,null);
 	if(grammar && grammar.basename) {
 	    var link=a(jsurl("open_grammar("+i+")"),[text(grammar.basename)]);
 	    gs.appendChild(
-		li([deletable(del(i),link,"Delete this grammar")]))
+		node("li",{"class":"extensible"},
+		     [deletable(del(i),link,"Delete this grammar"),
+		      more(grammar,clone(i),"Clone this grammar")]))
 	}
     }
     if(local.get("count",null)==null)
@@ -78,6 +81,13 @@ function delete_grammar(i) {
 	remove_cloud_grammar(g)
 	initial_view();
     }
+}
+
+function clone_grammar(i) {
+    var old=local.get(i);
+    var g={basename:old.basename,abstract:old.abstract,concretes:old.concretes}
+    save_grammar(g);
+    draw_grammar_list();
 }
 
 function open_grammar(i) {

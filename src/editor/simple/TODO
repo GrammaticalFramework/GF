@@ -7,7 +7,7 @@
 + Apply function alpha conversion in concrete syntax
 + Change lhs of lins when function type is changed
 
-- Allow languages other than the ones in the given list to be added
++ Allow languages other than the ones in the given list to be added
 + Export as plain text
 + Allow definitions to be reordered
 
@@ -24,6 +24,10 @@
 -    Easy access to compute_concrete from the editor
 -    Instead of starting with an empty grammar, start a new grammar by copying
      an example.
++ Cloning grammars
+- Allow grammars to contain a resoure module. Create the resource module by
+ factoring out common parts of the concrete syntaxes.
+- Integrate example-based concrete syntax construction (using Ramona's tool)
 
 + compile only the uploaded grammar even if other grammars are present
 + 'flags startcat' is needed for grammars with only one category (since the
@@ -34,3 +38,4 @@
 
 + Bug! The startcat menu shows the first category by default, but the startcat
   flag is actually not set until a selection is made from the menu.
+
