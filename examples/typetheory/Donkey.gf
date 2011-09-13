@@ -1,40 +1,48 @@
 abstract Donkey = Types ** {
 
+flags startcat = S ;
+
 cat 
   S ; 
   CN ;
   NP Set ;
+  VP Set ;
   V2 Set Set ;
   V  Set ;
 
 data
-  PredV2 : ({A,B} : Set) -> V2 A B -> NP A -> NP B -> S ;
-  PredV  : ({A} : Set)   -> V A -> NP A -> S ;
-  If     : (A : S) -> (El (iS A) -> S) -> S ;
-  An     : (A : CN) -> NP (iCN A) ;
-  The    : (A : CN)   -> El (iCN A) -> NP (iCN A) ;
-  Pron   : ({A} : CN) -> El (iCN A) -> NP (iCN A) ;
+  PredVP  : ({A} : Set) -> NP A -> VP A -> S ;
+  ComplV2 : ({A,B} : Set) -> V2 A B -> NP B -> VP A ;
+  UseV    : ({A} : Set)   -> V A -> VP A ;
+  If      : (A : S) -> (El (iS A) -> S) -> S ;
+  An      : (A : CN) -> NP (iCN A) ;
+  The     : (A : CN)   -> El (iCN A) -> NP (iCN A) ;
+  Pron    : ({A} : CN) -> El (iCN A) -> NP (iCN A) ;
 
   Man, Donkey : CN ;
   Own, Beat : V2 (iCN Man) (iCN Donkey) ;
   Walk, Talk : V (iCN Man) ;
 
+-- Montague semantics in type theory
+
 fun
   iS  : S -> Set ;
   iCN : CN -> Set ;
   iNP : ({A} : Set) -> NP A -> (El A -> Set) -> Set ;
-  iV2 : ({A,B} : Set) -> V2 A B -> (El A -> El B -> Set) ;
+  iVP : ({A} : Set) -> VP A -> (El A -> Set) ;
   iV  : ({A} : Set) -> V A -> (El A -> Set) ;
-
+  iV2 : ({A,B} : Set) -> V2 A B -> (El A -> El B -> Set) ;
 def
-  iS (PredV2 A B F Q R) = iNP A Q (\x -> iNP B R (\y -> iV2 A B F x y)) ;
-  iS (PredV A F Q) = iNP A Q (iV A F) ;
-  iS (If A B) = Pi (iS A) (\x -> iS (B x)) ;
+  iS  (PredVP A Q F) = iNP A Q (\x -> iVP A F x) ;
+  iS  (If A B) = Pi (iS A) (\x -> iS (B x)) ;
+  iVP _ (ComplV2 A B F R) x = iNP B R (\y -> iV2 A B F x y) ;
+  iVP _ (UseV A F) x = iV A F x ;
   iNP _ (An A) F = Sigma (iCN A) F ;
   iNP _ (Pron _ x) F = F x ;
   iNP _ (The _ x) F = F x ;
 
--- for the lexicon
+
+--- for the type-theoretical lexicon
 
 data
   Man', Donkey' : Set ;
