@@ -105,6 +105,10 @@ oper
     mkN : NK -> N ;  -- noun from DictFin (Kotus)
   } ;
 
+-- Some nouns are regular except for the singular nominative (e.g. "mies").
+
+    exceptNomN : N -> Str -> N ;
+
 -- Nouns used as functions need a case, of which the default is
 -- the genitive.
 
@@ -284,6 +288,14 @@ oper
     mkN : (sana : NK) -> N = \w -> nForms2N w.s ;
   } ;
 
+    exceptNomN : N -> Str -> N = \noun,nom -> lin N {
+      s = table {
+        NCase Sg Nom => nom ;
+        f => noun.s ! f
+        }
+      } ;
+
+
   mk1A : Str -> A = \jalo -> aForms2A (nforms2aforms (nForms1 jalo)) ;
   mkNA : N -> A = \suuri -> aForms2A (nforms2aforms (n2nforms suuri)) ;
 
@@ -328,26 +340,26 @@ oper
       _ + ("uus" | "yys" | "eus" | "eys") => dLujuus ukko ;
       _ + "s" => dJalas ukko ; 
 
-{- heuristics for 3-syllable nouns ending a/ä
+-- {- heuristics for 3-syllable nouns ending a/ä
       _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + ? + 
           _ + "i" + ? + a@("a" | "ä") =>  
-          dSilakka ukko (ukko + "n") (ukk + o + "it" + a) ;
+          dSilakka ukko (ukko + "n") (ukk + o + "it" + a) ;  -- pesijä
       _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + ? + _ + 
           ("a" | "e" | "o" | "u" | "y" | "ä" | "ö") + 
           ("l" | "r" | "n") + a@("a" | "ä") =>  
-          dSilakka ukko (ukko + "n") (ukk + o + "it" + a) ;
+          dSilakka ukko (ukko + "n") (ukk + o + "it" + a) ;  -- sarana, omena
       _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + ? + _ + 
           ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + 
           ("n" | "k" | "s") + "k" + a@("a" | "ä") =>  
-          dSilakka ukko (uko + "n") (init uko + o + "it" + a) ;
+          dSilakka ukko (uko + "n") (init uko + o + "it" + a) ;  -- silakka 
       _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + ? + _ + 
           ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + 
-          ("n" | "t" | "s") + "t" + a@("a" | "ä") =>  
-          dSilakka ukko (uko + "n") (ukk + o + "j" + a) ;
+          ("n" | "t" | "s") + "t" + a@("a" | "ä") =>   
+          dSilakka ukko (uko + "n") (ukk + o + "j" + a) ;  -- yhdyntä (but not isäntä)
       _ + ("a" | "e" | "i" | "o" | "u") + ? + _ + 
           ("a" | "e" | "o" | "u") + ? + "a" =>  
-          dSilakka ukko (ukko + "n") (ukk + "ia") ;
--}
+          dSilakka ukko (ukko + "n") (ukk + "ia") ;  -- asema, johtaja
+-- -}
       _ + "i" +o@("o"|"ö") => dSilakka ukko (ukko+"n") (ukko+"it"+getHarmony o);
       _ + "i" + "a" => dSilakka ukko (ukko + "n") (ukk + "oita") ;
       _ + "i" + "ä" => dSilakka ukko (ukko + "n") (ukk + "öitä") ;
@@ -381,6 +393,7 @@ oper
         <_ + ("ut" | "yt"),_ + ("uita" | "yitä")>  => dRae ukko (init ukko + "en") ;
         <_ + "e", nuk + ("eja" | "ejä")> => 
           dNukke ukko ukon ;
+        <_ + "s", _ + "ksi" + ?> => dJalas ukko ;
         <_ + ("l" | "n" | "r" | "s"), _ + ("eja" | "ejä")> => dUnix ukko ;
         <_, _ + ("a" | "ä")> => ukot ;
         _ => 

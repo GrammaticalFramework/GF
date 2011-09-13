@@ -10,7 +10,7 @@
 
 resource MorphoFin = ResFin ** open Prelude in {
 
-  flags optimize=all ;
+  flags optimize=noexpand ;
 
   oper
 
