@@ -4,8 +4,16 @@ abstract Types = {
 
 -- categories
 cat 
+  Judgement ;
   Set ; 
   El Set ;
+
+flags startcat = Judgement ;
+
+-- forms of judgement
+data
+  JSet   : Set -> Judgement ;
+  JElSet : (A : Set) -> El A -> Judgement ;
 
 -- basic forms of sets
 data
@@ -17,14 +25,14 @@ data
   Id     : (A : Set) -> (a,b : El A) -> Set ;
 
 -- defined forms of sets
-fun Impl : Set -> Set -> Set ;
-def Impl A B = Pi A (\x -> B) ;
+fun Funct : Set -> Set -> Set ;
+def Funct A B = Pi A (\x -> B) ;
 
-fun Conj : Set -> Set -> Set ;
-def Conj A B = Sigma A (\x -> B) ;
+fun Prod : Set -> Set -> Set ;
+def Prod A B = Sigma A (\x -> B) ;
 
 fun Neg : Set -> Set ;
-def Neg A = Impl A Falsum ;
+def Neg A = Funct A Falsum ;
 
 -- constructors
 
@@ -82,7 +90,7 @@ def
   Rec _ Zero d _ = d ;
   Rec C (Succ x) d e = e x (Rec C x d e) ;
 
-fun J : (A : Set) -> (a,b : El A) -> (C : (x,y : El A) -> El (Id A x y) -> Set) -> 
+fun J : (A : Set) -> (C : (x,y : El A) -> El (Id A x y) -> Set) -> (a,b : El A) -> 
           (c : El (Id A a b)) -> 
           (d : (x : El A) -> El (C x x (r A x))) ->
             El (C a b c) ;
@@ -108,7 +116,7 @@ def exp2 a = Rec (\x -> Nat) a one (\x,y -> plus y y) ;
 fun fast : El Nat -> El Nat ;  -- fast (Succ x) = exp2 (fast x)
 def fast a = Rec (\x -> Nat) a one (\_ -> exp2) ;
 
-fun test : El Nat ;
-def test = fast (fast two) ;
+fun big : El Nat ;
+def big = fast (fast two) ;
 
 }
