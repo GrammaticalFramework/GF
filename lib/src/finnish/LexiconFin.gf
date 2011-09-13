@@ -21,7 +21,7 @@ lin
   beer_N = mkN "olut" "oluita" ;
   beg_V2V = mkV2V (mk2V "pyytää" "pyysi") (casePrep partitive) ;
   big_A = mkA (mkN "suuri" "suuria") "suurempi" "suurin" ;
-  bike_N = mkN "polkupyörä" ; --- for correct vowel harmony
+  bike_N = mkN "polku" (mkN "pyörä") ; 
   bird_N = mkN "lintu" ;
   black_A = mkA (mkN "musta") "mustempi" "mustin" ;
   blue_A = mkA (mkN "sininen") "sinisempi" "sinisin" ;
