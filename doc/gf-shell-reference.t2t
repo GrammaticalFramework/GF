@@ -1,0 +1,103 @@
+The GF Software System
+
+
+%!style:../css/style.css
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+
+The GF software system implements the GF programming language. Its
+components are
+- the //compiler//, 
+translating ``.gf`` source files to ``.gfo`` object files, to
+``.pgf`` run-time grammars, and to various other formats
+- the //run-time system//,
+performing parsing, generation, translation and other functions with
+``.pgf`` grammars
+- the //command interpreter//, also known as the //GF shell//,
+executing user commands by calling the compiler and the run-time system
+
+
+This page describes the commands of the GF shell,
+as well as the use of the compiler in batch mode.
+
+
+==The GF shell==
+
+The GF shell is invoked by the command ``gf``, which takes arguments and
+options according to the following syntax:
+```
+  gf (OPTION | FLAG)* FILE*
+```
+The shell maintains a  //state//, to which belong
+- a multilingual PGF grammar
+- optionally, a set of compiled GF modules (retaining ``oper`` definitions)
+- a history of previous commands
+- a set of string, tree, and command macros
+
+
+Unless file arguments are provided to the ``gf`` command, the shell starts in an
+empty state, with no grammars and no history. 
+
+In the shell, a set of commands
+is available. Some of these commands may change the grammars in the state. The general
+syntax of commands is given by the following BNF grammar:
+```
+  COMMAND_LINE ::= COMMAND_PIPE
+  COMMAND_LINE ::= COMMAND_PIPE ";" COMMAND_LINE
+  COMMAND_PIPE ::= COMMAND
+  COMMAND_PIPE ::= COMMAND "|" COMMAND_PIPE
+  COMMAND      ::= COMMAND_ID (OPTION | FLAG)* ARGUMENT?
+  OPTION       ::= "-"OPTION_ID
+  FLAG         ::= "-"OPTION_ID "=" VALUE
+  ARGUMENT     ::= QUOTED_STRING | TREE
+  VALUE        ::= IDENT | QUOTED_STRING
+```
+A command pipe is a sequence of commands interpreted in such a way 
+that the output of each command
+is send as input to the next. The option ``-tr`` causes GF to show a trace,
+i.e. the intermediate result of the command to which it is attached.
+
+A command line is a sequence of pipes separated by ``;``. These pipes are
+executed one by one, in the order of appearance.
+
+===GF shell commands===
+
+The full set of GF shell commands is listed below with explanations. 
+This list can also be obtained in the GF shell by the command ``help -full``.
+
+%!include: ``gf-help-full.txt``
+
+==The GF batch compiler==
+
+With the option ``-batch``, GF can be invoked in batch mode, i.e.
+without opening the shell, to compile files from ``.gf`` to ``.gfo``. 
+The ``-s`` option ("silent") eliminates all messages except errors. 
+```
+  $ gf -batch -s LangIta.gf
+```
+With the option ``-make``, and as a set of
+top-level grammar files (with the same abstract syntax) as arguments,
+GF produces a ``.pgf`` file. The flag ``-optimize-pgf`` minimizes 
+the size of the ``.pgf`` file, and is recommended for grammars to be shipped.
+```
+  $ gf -make -optimize-pgf LangIta.gf LangEng.gf LangGer.gf
+```
+The flag ``-output-format`` changes the output format from ``.pgf`` to
+some other format. For instance
+```
+  $ gf -make -output-format=js LangEng.pgf LangGer.pgf
+```
+Notice that the arguments can be ``.pgf`` files, which in this case
+are merged and written into a JavaScript grammar file.
+
+More options and instructions are obtained with
+```
+  $ gf -help
+```
+To run GF from a //script//, redirection of standard input can be used:
+```
+  $ gf <script.gfs
+```
+The file ``script.gfs`` should then contain a sequence of GF commands, one per line.
+Unrecognized command lines are skipped without terminating GF.
+
+

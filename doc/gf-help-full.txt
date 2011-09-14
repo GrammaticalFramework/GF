@@ -1,0 +1,934 @@
+!, 
+system command: escape to system shell
+
+syntax:
+  ! SYSTEMCOMMAND
+
+
+options:
+
+flags:
+
+examples:
+  ! ls *.gf   -- list all GF files in the working directory
+
+
+?, 
+system pipe: send value from previous command to a system command
+
+syntax:
+  ? SYSTEMCOMMAND
+
+
+options:
+
+flags:
+
+examples:
+  gt | l | ? wc  -- generate, linearize, word-count
+
+
+ai, abstract_info
+Provides an information about a function, an expression or a category from the abstract syntax
+
+syntax:
+  ai IDENTIFIER  or  ai EXPR
+
+The command has one argument which is either function, expression or
+a category defined in the abstract syntax of the current grammar. 
+If the argument is a function then ?its type is printed out.
+If it is a category then the category definition is printed.
+If a whole expression is given it prints the expression with refined
+metavariables and the type of the expression.
+
+options:
+
+flags:
+
+examples:
+
+
+aw, align_words
+show word alignments between languages graphically
+
+syntax:
+  
+
+Prints a set of strings in the .dot format (the graphviz format).
+The graph can be saved in a file by the wf command as usual.
+If the -view flag is defined, the graph is saved in a temporary file
+which is processed by graphviz and displayed by the program indicated
+by the flag. The target format is postscript, unless overridden by the
+flag -format.
+
+options:
+ -giza	show alignments in the Giza format; the first two languages
+
+flags:
+ -format	format of the visualization file (default "png")
+ -lang	alignments for this list of languages (default: all)
+ -view	program to open the resulting file
+
+examples:
+  gr | aw                         -- generate a tree and show word alignment as graph script
+  gr | aw -view="open"            -- generate a tree and display alignment on Mac
+  gr | aw -view="eog"             -- generate a tree and display alignment on Ubuntu
+  gt | aw -giza | wf -file=aligns -- generate trees, send giza alignments to file
+
+
+ca, clitic_analyse
+print the analyses of all words into stems and clitics
+
+syntax:
+  
+
+Analyses all words into all possible combinations of stem + clitics.
+The analysis is returned in the format stem &+ clitic1 &+ clitic2 ...
+which is hence the inverse of 'pt -bind'. The list of clitics is give
+by the flag '-clitics'. The list of stems is given as the list of words
+of the language given by the '-lang' flag.
+
+options:
+ -raw	analyse each word separately (not suitable input for parser)
+
+flags:
+ -clitics	the list of possible clitics (comma-separated, no spaces)
+ -lang	the language of analysis
+
+examples:
+  ca -lang=Fin -clitics=ko,ni "nukkuuko minun vaimoni" | p  -- to parse Finnish
+
+
+cc, compute_concrete
+computes concrete syntax term using a source grammar
+
+syntax:
+  cc (-all | -table | -unqual)? TERM
+
+Compute TERM by concrete syntax definitions. Uses the topmost
+module (the last one imported) to resolve constant names.
+N.B.1 You need the flag -retain when importing the grammar, if you want
+the definitions to be retained after compilation.
+N.B.2 The resulting term is not a tree in the sense of abstract syntax
+and hence not a valid input to a Tree-expecting command.
+This command must be a line of its own, and thus cannot be a part
+of a pipe.
+
+options:
+ -all	pick all strings (forms and variants) from records and tables
+ -list	all strings, comma-separated on one line
+ -one	pick the first strings, if there is any, from records and tables
+ -table	show all strings labelled by parameters
+ -unqual	hide qualifying module names
+
+flags:
+
+examples:
+
+
+dc, define_command
+define a command macro
+
+syntax:
+  dc IDENT COMMANDLINE
+
+Defines IDENT as macro for COMMANDLINE, until IDENT gets redefined.
+A call of the command has the form %IDENT. The command may take an
+argument, which in COMMANDLINE is marked as ?0. Both strings and
+trees can be arguments. Currently at most one argument is possible.
+This command must be a line of its own, and thus cannot be a part
+of a pipe.
+
+options:
+
+flags:
+
+examples:
+
+
+dg, dependency_graph
+print module dependency graph
+
+syntax:
+  dg (-only=MODULES)?
+
+Prints the dependency graph of source modules.
+Requires that import has been done with the -retain flag.
+The graph is written in the file _gfdepgraph.dot
+which can be further processed by Graphviz (the system command 'dot').
+By default, all modules are shown, but the -only flag restricts them
+by a comma-separated list of patterns, where 'name*' matches modules
+whose name has prefix 'name', and other patterns match modules with
+exactly the same name. The graphical conventions are:
+  solid box = abstract, solid ellipse = concrete, dashed ellipse = other
+  solid arrow empty head = of, solid arrow = **, dashed arrow = open
+  dotted arrow = other dependency
+
+options:
+
+flags:
+ -only	list of modules included (default: all), literally or by prefix*
+
+examples:
+  dg -only=SyntaxEng,Food*  -- shows only SyntaxEng, and those with prefix Food
+
+
+dt, define_tree
+define a tree or string macro
+
+syntax:
+  dt IDENT (TREE | STRING | "<" COMMANDLINE)
+
+Defines IDENT as macro for TREE or STRING, until IDENT gets redefined.
+The defining value can also come from a command, preceded by "<".
+If the command gives many values, the first one is selected.
+A use of the macro has the form %IDENT. Currently this use cannot be
+a subtree of another tree. This command must be a line of its own
+and thus cannot be a part of a pipe.
+
+options:
+
+flags:
+
+examples:
+  dt ex "hello world"                    -- define ex as string
+  dt ex UseN man_N                         -- define ex as string
+  dt ex < p -cat=NP "the man in the car" -- define ex as parse result
+  l -lang=LangSwe %ex | ps -to_utf8        -- linearize the tree ex
+
+
+e, empty
+empty the environment
+
+syntax:
+  
+
+
+options:
+
+flags:
+
+examples:
+
+
+eb, example_based
+converts .gfe files to .gf files by parsing examples to trees
+
+syntax:
+  eb (-probs=FILE | -lang=LANG)* -file=FILE.gfe
+
+Reads FILE.gfe and writes FILE.gf. Each expression of form
+'%ex CAT QUOTEDSTRING' in FILE.gfe is replaced by a syntax tree.
+This tree is the first one returned by the parser; a biased ranking
+can be used to regulate the order. If there are more than one parses
+the rest are shown in comments, with probabilities if the order is biased.
+The probabilities flag and configuration file is similar to the commands
+gr and rt. Notice that the command doesn't change the environment,
+but the resulting .gf file must be imported separately.
+
+options:
+ -api	convert trees to overloaded API expressions (using Syntax not Lang)
+
+flags:
+ -file	the file to be converted (suffix .gfe must be given)
+ -lang	the language in which to parse
+ -probs	file with probabilities to rank the parses
+
+examples:
+
+
+gr, generate_random
+generate random trees in the current abstract syntax
+
+syntax:
+  gr [-cat=CAT] [-number=INT]
+
+Generates a list of random trees, by default one tree.
+If a tree argument is given, the command completes the Tree with values to
+all metavariables in the tree. The generation can be biased by probabilities,
+given in a file in the -probs flag.
+
+options:
+
+flags:
+ -cat	generation category
+ -lang	uses only functions that have linearizations in all these languages
+ -number	number of trees generated
+ -depth	the maximum generation depth
+ -probs	file with biased probabilities (format 'f 0.4' one by line)
+
+examples:
+  gr                     -- one tree in the startcat of the current grammar
+  gr -cat=NP -number=16  -- 16 trees in the category NP
+  gr -lang=LangHin,LangTha -cat=Cl  -- Cl, both in LangHin and LangTha
+  gr -probs=FILE         -- generate with bias
+  gr (AdjCN ? (UseN ?))  -- generate trees of form (AdjCN ? (UseN ?))
+
+
+gt, generate_trees
+generates a list of trees, by default exhaustive
+
+syntax:
+  
+
+Generates all trees of a given category, with increasing depth.
+By default, the depth is 4, but this can be changed by a flag.
+If a Tree argument is given, the command completes the Tree with values
+to all metavariables in the tree.
+
+options:
+
+flags:
+ -cat	the generation category
+ -depth	the maximum generation depth
+ -lang	excludes functions that have no linearization in this language
+ -number	the number of trees generated
+
+examples:
+  gt                     -- all trees in the startcat, to depth 4
+  gt -cat=NP -number=16  -- 16 trees in the category NP
+  gt -cat=NP -depth=2    -- trees in the category NP to depth 2
+  gt (AdjCN ? (UseN ?))  -- trees of form (AdjCN ? (UseN ?))
+
+
+h, help
+get description of a command, or a the full list of commands
+
+syntax:
+  h (-full)? COMMAND?
+
+Displays information concerning the COMMAND.
+Without argument, shows the synopsis of all commands.
+
+options:
+ -changes	give a summary of changes from GF 2.9
+ -coding	give advice on character encoding
+ -full	give full information of the commands
+ -license	show copyright and license information
+
+flags:
+
+examples:
+
+
+i, import
+import a grammar from source code or compiled .pgf file
+
+syntax:
+  
+
+Reads a grammar from File and compiles it into a GF runtime grammar.
+If its abstract is different from current state, old modules are discarded.
+If its abstract is the same and a concrete with the same name is already in the state
+it is overwritten - but only if compilation succeeds.
+The grammar parser depends on the file name suffix:
+  .cf    context-free (labelled BNF) source
+  .ebnf  extended BNF source
+  .gfm   multi-module GF source
+  .gf    normal GF source
+  .gfo   compiled GF source
+  .pgf   precompiled grammar in Portable Grammar Format
+
+options:
+ -retain	retain operations (used for cc command)
+ -src	force compilation from source
+ -v	be verbose - show intermediate status information
+
+flags:
+ -probs	file with biased probabilities for generation
+
+examples:
+
+
+l, linearize
+convert an abstract syntax expression to string
+
+syntax:
+  
+
+Shows the linearization of a Tree by the grammars in scope.
+The -lang flag can be used to restrict this to fewer languages.
+A sequence of string operations (see command ps) can be given
+as options, and works then like a pipe to the ps command, except
+that it only affect the strings, not e.g. the table labels.
+These can be given separately to each language with the unlexer flag
+whose results are prepended to the other lexer flags. The value of the
+unlexer flag is a space-separated list of comma-separated string operation
+sequences; see example.
+
+options:
+ -all	show all forms and variants, one by line (cf. l -list)
+ -bracket	show tree structure with brackets and paths to nodes
+ -groups	all languages, grouped by lang, remove duplicate strings
+ -list	show all forms and variants, comma-separated on one line (cf. l -all)
+ -multi	linearize to all languages (default)
+ -table	show all forms labelled by parameters
+ -treebank	show the tree and tag linearizations with language names
+ -bind	bind tokens separated by Prelude.BIND, i.e. &+
+ -chars	lexer that makes every non-space character a token
+ -from_amharic	from unicode to GF Amharic transliteration
+ -from_ancientgreek	from unicode to GF ancient Greek transliteration
+ -from_arabic	from unicode to GF Arabic transliteration
+ -from_cp1251	decode from cp1251 (Cyrillic used in Bulgarian resource)
+ -from_devanagari	from unicode to GF Devanagari transliteration
+ -from_greek	from unicode to GF modern Greek transliteration
+ -from_hebrew	from unicode to GF unvocalized Hebrew transliteration
+ -from_nepali	from unicode to GF Nepali transliteration
+ -from_persian	from unicode to GF Persian/Farsi transliteration
+ -from_telugu	from unicode to GF Telugu transliteration
+ -from_thai	from unicode to GF Thai transliteration
+ -from_urdu	from unicode to GF Urdu transliteration
+ -from_utf8	decode from utf8 (default)
+ -lexcode	code-like lexer
+ -lexmixed	mixture of text and code (code between $...$)
+ -lextext	text-like lexer
+ -to_amharic	from GF Amharic transliteration to unicode
+ -to_ancientgreek	from GF ancient Greek transliteration to unicode
+ -to_arabic	from GF Arabic transliteration to unicode
+ -to_cp1251	encode to cp1251 (Cyrillic used in Bulgarian resource)
+ -to_devanagari	from GF Devanagari transliteration to unicode
+ -to_greek	from GF modern Greek transliteration to unicode
+ -to_hebrew	from GF unvocalized Hebrew transliteration to unicode
+ -to_html	wrap in a html file with linebreaks
+ -to_nepali	from GF Nepali transliteration to unicode
+ -to_persian	from GF Persian/Farsi transliteration to unicode
+ -to_telugu	from GF Telugu transliteration to unicode
+ -to_thai	from GF Thai transliteration to unicode
+ -to_urdu	from GF Urdu transliteration to unicode
+ -to_utf8	encode to utf8 (default)
+ -unchars	unlexer that puts no spaces between tokens
+ -unlexcode	code-like unlexer
+ -unlexmixed	mixture of text and code (code between $...$)
+ -unlextext	text-like unlexer
+ -unwords	unlexer that puts a single space between tokens (default)
+ -words	lexer that assumes tokens separated by spaces (default)
+
+flags:
+ -lang	the languages of linearization (comma-separated, no spaces)
+ -unlexer	set unlexers separately to each language (space-separated)
+
+examples:
+  l -lang=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor
+  gr -lang=LangHin -cat=Cl | l -table -to_devanagari -- hindi table
+  l -unlexer="LangAra=to_arabic LangHin=to_devanagari" -- different unlexers
+
+
+ma, morpho_analyse
+print the morphological analyses of all words in the string
+
+syntax:
+  
+
+Prints all the analyses of space-separated words in the input string,
+using the morphological analyser of the actual grammar (see command pg)
+
+options:
+ -missing	show the list of unknown words in the input
+
+flags:
+ -lang	the languages of analysis (comma-separated, no spaces)
+
+examples:
+
+
+mq, morpho_quiz
+start a morphology quiz
+
+syntax:
+  mq (-cat=CAT)? (-probs=FILE)? TREE?
+
+
+options:
+
+flags:
+ -lang	language of the quiz
+ -cat	category of the quiz
+ -number	maximum number of questions
+ -probs	file with biased probabilities for generation
+
+examples:
+
+
+p, parse
+parse a string to abstract syntax expression
+
+syntax:
+  
+
+Shows all trees returned by parsing a string in the grammars in scope.
+The -lang flag can be used to restrict this to fewer languages.
+The default start category can be overridden by the -cat flag.
+See also the ps command for lexing and character encoding.
+
+The -openclass flag is experimental and allows some robustness in 
+the parser. For example if -openclass="A,N,V" is given, the parser
+will accept unknown adjectives, nouns and verbs with the resource grammar.
+
+options:
+ -bracket	prints the bracketed string from the parser
+
+flags:
+ -cat	target category of parsing
+ -lang	the languages of parsing (comma-separated, no spaces)
+ -openclass	list of open-class categories for robust parsing
+ -depth	maximal depth for proof search if the abstract syntax tree has meta variables
+
+examples:
+
+
+pg, print_grammar
+print the actual grammar with the given printer
+
+syntax:
+  
+
+Prints the actual grammar, with all involved languages.
+In some printers, this can be restricted to a subset of languages
+with the -lang=X,Y flag (comma-separated, no spaces).
+The -printer=P flag sets the format in which the grammar is printed.
+N.B.1 Since grammars are compiled when imported, this command
+generally shows a grammar that looks rather different from the source.
+N.B.2 Another way to produce different formats is to use 'gf -make',
+the batch compiler. The following values are available both for
+the batch compiler (flag -output-format) and the print_grammar
+command (flag -printer):
+
+ bnf		BNF (context-free grammar)
+ ebnf		Extended BNF
+ fa		finite automaton in graphviz format
+ gsl		Nuance speech recognition format
+ haskell		Haskell (abstract syntax)
+ js		JavaScript (whole grammar)
+ jsgf		JSGF speech recognition format
+ lambda_prolog		LambdaProlog (abstract syntax)
+ pgf_pretty		human-readable pgf
+ prolog		Prolog (whole grammar)
+ prolog_abs		Prolog (abstract syntax)
+ regexp		regular expression
+ slf		SLF speech recognition format
+ srgs_abnf		SRGS speech recognition format in ABNF
+ srgs_abnf_nonrec		SRGS ABNF, recursion eliminated
+ srgs_xml		SRGS speech recognition format in XML
+ srgs_xml_nonrec		SRGS XML, recursion eliminated
+ vxml		Voice XML based on abstract syntax
+
+options:
+ -cats	show just the names of abstract syntax categories
+ -fullform	print the fullform lexicon
+ -funs	show just the names and types of abstract syntax functions
+ -langs	show just the names of top concrete syntax modules
+ -lexc	print the lexicon in Xerox LEXC format
+ -missing	show just the names of functions that have no linearization
+ -opt	optimize the generated pgf
+ -pgf	write current pgf image in file
+ -words	print the list of words
+
+flags:
+ -file	set the file name when printing with -pgf option
+ -lang	select languages for the some options (default all languages)
+ -printer	select the printing format (see flag values above)
+
+examples:
+  pg -funs | ? grep " S ;"  -- show functions with value cat S
+
+
+ph, print_history
+print command history
+
+syntax:
+  
+
+Prints the commands issued during the GF session.
+The result is readable by the eh command.
+The result can be used as a script when starting GF.
+
+options:
+
+flags:
+
+examples:
+  ph | wf -file=foo.gfs  -- save the history into a file
+
+
+ps, put_string
+return a string, possibly processed with a function
+
+syntax:
+  ps OPT? STRING
+
+Returns a string obtained from its argument string by applying
+string processing functions in the order given in the command line
+option list. Thus 'ps -f -g s' returns g (f s). Typical string processors
+are lexers and unlexers, but also character encoding conversions are possible.
+The unlexers preserve the division of their input to lines.
+To see transliteration tables, use command ut.
+
+options:
+ -bind	bind tokens separated by Prelude.BIND, i.e. &+
+ -chars	lexer that makes every non-space character a token
+ -from_amharic	from unicode to GF Amharic transliteration
+ -from_ancientgreek	from unicode to GF ancient Greek transliteration
+ -from_arabic	from unicode to GF Arabic transliteration
+ -from_cp1251	decode from cp1251 (Cyrillic used in Bulgarian resource)
+ -from_devanagari	from unicode to GF Devanagari transliteration
+ -from_greek	from unicode to GF modern Greek transliteration
+ -from_hebrew	from unicode to GF unvocalized Hebrew transliteration
+ -from_nepali	from unicode to GF Nepali transliteration
+ -from_persian	from unicode to GF Persian/Farsi transliteration
+ -from_telugu	from unicode to GF Telugu transliteration
+ -from_thai	from unicode to GF Thai transliteration
+ -from_urdu	from unicode to GF Urdu transliteration
+ -from_utf8	decode from utf8 (default)
+ -lexcode	code-like lexer
+ -lexmixed	mixture of text and code (code between $...$)
+ -lextext	text-like lexer
+ -to_amharic	from GF Amharic transliteration to unicode
+ -to_ancientgreek	from GF ancient Greek transliteration to unicode
+ -to_arabic	from GF Arabic transliteration to unicode
+ -to_cp1251	encode to cp1251 (Cyrillic used in Bulgarian resource)
+ -to_devanagari	from GF Devanagari transliteration to unicode
+ -to_greek	from GF modern Greek transliteration to unicode
+ -to_hebrew	from GF unvocalized Hebrew transliteration to unicode
+ -to_html	wrap in a html file with linebreaks
+ -to_nepali	from GF Nepali transliteration to unicode
+ -to_persian	from GF Persian/Farsi transliteration to unicode
+ -to_telugu	from GF Telugu transliteration to unicode
+ -to_thai	from GF Thai transliteration to unicode
+ -to_urdu	from GF Urdu transliteration to unicode
+ -to_utf8	encode to utf8 (default)
+ -unchars	unlexer that puts no spaces between tokens
+ -unlexcode	code-like unlexer
+ -unlexmixed	mixture of text and code (code between $...$)
+ -unlextext	text-like unlexer
+ -unwords	unlexer that puts a single space between tokens (default)
+ -words	lexer that assumes tokens separated by spaces (default)
+
+flags:
+ -env	apply in this environment only
+ -from	backward-apply transliteration defined in this file (format 'unicode translit' per line)
+ -to	forward-apply transliteration defined in this file
+
+examples:
+  l (EAdd 3 4) | ps -code         -- linearize code-like output
+  ps -lexer=code | p -cat=Exp     -- parse code-like input
+  gr -cat=QCl | l | ps -bind      -- linearization output from LangFin
+  ps -to_devanagari "A-p"         -- show Devanagari in UTF8 terminal
+  rf -file=Hin.gf | ps -env=quotes -to_devanagari -- convert translit to UTF8
+  rf -file=Ara.gf | ps -from_utf8 -env=quotes -from_arabic -- convert UTF8 to transliteration
+  ps -to=chinese.trans "abc"      -- apply transliteration defined in file chinese.trans
+
+
+pt, put_tree
+return a tree, possibly processed with a function
+
+syntax:
+  ps OPT? TREE
+
+Returns a tree obtained from its argument tree by applying
+tree processing functions in the order given in the command line
+option list. Thus 'pt -f -g s' returns g (f s). Typical tree processors
+are type checking and semantic computation.
+
+options:
+ -compute	compute by using semantic definitions (def)
+ -paraphrase	paraphrase by using semantic definitions (def)
+ -smallest	sort trees from smallest to largest, in number of nodes
+
+flags:
+ -number	take at most this many trees
+ -transfer	syntactic transfer by applying function, recursively in subtrees
+
+examples:
+  pt -compute (plus one two)                               -- compute value
+  p "4 dogs love 5 cats" | pt -transfer=digits2numeral | l -- four...five...
+
+
+q, quit
+exit GF interpreter
+
+syntax:
+  
+
+
+options:
+
+flags:
+
+examples:
+
+
+r, reload
+repeat the latest import command
+
+syntax:
+  
+
+
+options:
+
+flags:
+
+examples:
+
+
+rf, read_file
+read string or tree input from a file
+
+syntax:
+  
+
+Reads input from file. The filename must be in double quotes.
+The input is interpreted as a string by default, and can hence be
+piped e.g. to the parse command. The option -tree interprets the
+input as a tree, which can be given e.g. to the linearize command.
+The option -lines will result in a list of strings or trees, one by line.
+
+options:
+ -lines	return the list of lines, instead of the singleton of all contents
+ -tree	convert strings into trees
+
+flags:
+ -file	the input file name
+
+examples:
+
+
+rt, rank_trees
+show trees in an order of decreasing probability
+
+syntax:
+  
+
+Order trees from the most to the least probable, using either
+even distribution in each category (default) or biased as specified
+by the file given by flag -probs=FILE, where each line has the form
+'function probability', e.g. 'youPol_Pron  0.01'.
+
+options:
+ -v	show all trees with their probability scores
+
+flags:
+ -probs	probabilities from this file (format 'f 0.6' per line)
+
+examples:
+  p "you are here" | rt -probs=probs | pt -number=1 -- most probable result
+  se utf8   -- set encoding to utf8 (default)
+
+
+se, set_encoding
+set the encoding used in current terminal
+
+syntax:
+  se ID
+
+
+options:
+
+flags:
+
+examples:
+  se cp1251 -- set encoding to cp1521
+  se utf8   -- set encoding to utf8 (default)
+
+
+so, show_operations
+show all operations in scope, possibly restricted to a value type
+
+syntax:
+  so (-grep=STRING)* TYPE?
+
+Show the names and type signatures of all operations available in the current resource.
+This command requires a source grammar to be in scope, imported with 'import -retain'.
+The operations include the parameter constructors that are in scope.
+The optional TYPE filters according to the value type.
+The grep STRINGs filter according to other substrings of the type signatures.
+This command must be a line of its own, and thus cannot be a part
+of a pipe.
+
+options:
+ -raw	show the types in computed forms (instead of category names)
+
+flags:
+ -grep	substring used for filtering (the command can have many of these)
+
+examples:
+
+
+sp, system_pipe
+send argument to a system command
+
+syntax:
+  sp -command="SYSTEMCOMMAND", alt. ? SYSTEMCOMMAND
+
+
+options:
+
+flags:
+ -command	the system command applied to the argument
+
+examples:
+  sp -command="wc" "foo"
+  gt | l | sp -command="grep \"who\"" | sp -command="wc"
+
+
+t, tokenize
+Tokenize string usng the vocabulary
+
+syntax:
+  
+
+
+options:
+
+flags:
+ -lang	The name of the concrete to use
+
+examples:
+
+
+tq, translation_quiz
+start a translation quiz
+
+syntax:
+  tq -from=LANG -to=LANG (-cat=CAT)? (-probs=FILE)? TREE?
+
+
+options:
+
+flags:
+ -from	translate from this language
+ -to	translate to this language
+ -cat	translate in this category
+ -number	the maximum number of questions
+ -probs	file with biased probabilities for generation
+
+examples:
+  tq -from=Eng -to=Swe                               -- any trees in startcat
+  tq -from=Eng -to=Swe (AdjCN (PositA ?2) (UseN ?))  -- only trees of this form
+
+
+ut, unicode_table
+show a transliteration table for a unicode character set
+
+syntax:
+  
+
+
+options:
+ -amharic	Amharic
+ -ancientgreek	ancient Greek
+ -arabic	Arabic
+ -devanagari	Devanagari
+ -greek	modern Greek
+ -hebrew	unvocalized Hebrew
+ -persian	Persian/Farsi
+ -nepali	Nepali
+ -telugu	Telugu
+ -thai	Thai
+ -urdu	Urdu
+
+flags:
+
+examples:
+
+
+vd, visualize_dependency
+show word dependency tree graphically
+
+syntax:
+  
+
+Prints a dependency tree in the .dot format (the graphviz format, default)
+or the MaltParser/CoNLL format (flag -output=malt for training, malt_input)
+for unanalysed input.
+By default, the last argument is the head of every abstract syntax
+function; moreover, the head depends on the head of the function above.
+The graph can be saved in a file by the wf command as usual.
+If the -view flag is defined, the graph is saved in a temporary file
+which is processed by graphviz and displayed by the program indicated
+by the flag. The target format is png, unless overridden by the
+flag -format.
+
+options:
+ -v	show extra information
+
+flags:
+ -file	configuration file for labels per fun, format 'fun l1 ... label ... l2'
+ -format	format of the visualization file (default "png")
+ -output	output format of graph source (default "dot")
+ -view	program to open the resulting file (default "open")
+
+examples:
+  gr | vd              -- generate a tree and show dependency tree in .dot
+  gr | vd -view=open   -- generate a tree and display dependency tree on a Mac
+  gr -number=1000 | vd -file=dep.labels -output=malt      -- generate training treebank
+  gr -number=100 | vd -file=dep.labels -output=malt_input -- generate test sentences
+
+
+vp, visualize_parse
+show parse tree graphically
+
+syntax:
+  
+
+Prints a parse tree the .dot format (the graphviz format).
+The graph can be saved in a file by the wf command as usual.
+If the -view flag is defined, the graph is saved in a temporary file
+which is processed by graphviz and displayed by the program indicated
+by the flag. The target format is png, unless overridden by the
+flag -format.
+
+options:
+
+flags:
+ -format	format of the visualization file (default "png")
+ -view	program to open the resulting file (default "open")
+
+examples:
+  p "John walks" | vp  -- generate a tree and show parse tree as .dot script
+  gr | vp -view="open" -- generate a tree and display parse tree on a Mac
+
+
+vt, visualize_tree
+show a set of trees graphically
+
+syntax:
+  
+
+Prints a set of trees in the .dot format (the graphviz format).
+The graph can be saved in a file by the wf command as usual.
+If the -view flag is defined, the graph is saved in a temporary file
+which is processed by graphviz and displayed by the program indicated
+by the flag. The target format is postscript, unless overridden by the
+flag -format.
+With option -mk, use for showing library style function names of form 'mkC'.
+
+options:
+ -api	show the tree with function names converted to 'mkC' with value cats C
+ -mk	similar to -api, deprecated
+ -nofun	don't show functions but only categories
+ -nocat	don't show categories but only functions
+
+flags:
+ -format	format of the visualization file (default "png")
+ -view	program to open the resulting file (default "open")
+
+examples:
+  p "hello" | vt              -- parse a string and show trees as graph script
+  p "hello" | vt -view="open" -- parse a string and display trees on a Mac
+
+
+wf, write_file
+send string or tree to a file
+
+syntax:
+  
+
+
+options:
+ -append	append to file, instead of overwriting it
+
+flags:
+ -file	the output filename
+
+examples:
