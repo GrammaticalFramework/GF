@@ -46,22 +46,13 @@ Example 2: parse and interpret a sentence, also showing the nice formula.
   (Σ v0 : man')(Σ v1 : donkey')own' (v0 , v1)
 
 
-Example 3: (to be revisited) parse of "the donkey sentence" fails, but should succeed
+Example 3: (to be revisited) parse of "the donkey sentence" returns some metavariables
 
-  Donkey> p -cat=S "if a man owns a donkey he beats it"
+  Donkey> dc interpret p ?0 | pt -transfer=iS | l -unlexcode
 
-  The sentence is not complete
+  Donkey> %interpret "if a man owns a donkey he beats it"
+
+  (Π v0 : (Σ v0 : man')(Σ v1 : donkey')own' (v0 , v1))beat' (?16 , ?22)
+  
+
  
-  Donkey> p -cat=S "if a man owns a donkey the man beats the donkey"
-
-  The sentence is not complete
-
-
-Example 4: problem that appears with CN's modified by polymorphic AP's (old), but not with monomorphic ones (pregnant)
-
-  Donkey> p "an old man walks"
-  src/runtime/haskell/PGF/TypeCheck.hs:(528,4)-(550,67): Non-exhaustive patterns in function occurCheck
-  -- this should build (ModCN Man (Old Man'))
-
-  Donkey> p "a pregnant woman loves John " | pt -transfer=iS | l -unlexcode
-  (Σ v0 : (Σ v0 : woman')pregnant' (v0))love' (v0 , john')

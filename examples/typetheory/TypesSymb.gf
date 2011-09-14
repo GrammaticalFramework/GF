@@ -23,7 +23,7 @@ lin
   Plus A B = parenss (infixSS "+" A B) ;
   Pi A B = ss (paren (capPi ++ B.$0 ++ ":" ++ A.s) ++ B.s) ;
   Sigma A B = ss (paren (capSigma ++ B.$0 ++ ":" ++ A.s) ++ B.s) ;
-  Falsum = ss "_|_" ;
+  Falsum = ss "Ø" ;
   Nat = ss "N" ; 
   Id A a b = apply "I" A a b ;
 
