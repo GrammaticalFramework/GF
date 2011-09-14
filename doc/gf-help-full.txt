@@ -5,19 +5,14 @@
 
 #TINY
 
-
 - Syntax: ``! SYSTEMCOMMAND``
-- Options:
-
-
-- Flags:
-
 
 - Examples:
-```
-  ! ls *.gf   -- list all GF files in the working directory
 
 ```
+  ! ls *.gf   -- list all GF files in the working directory
+```
+
 
 #NORMAL
 
@@ -29,19 +24,14 @@
 
 #TINY
 
-
 - Syntax: ``? SYSTEMCOMMAND``
-- Options:
-
-
-- Flags:
-
 
 - Examples:
-```
-  gt | l | ? wc  -- generate, linearize, word-count
 
 ```
+  gt | l | ? wc  -- generate, linearize, word-count
+```
+
 
 #NORMAL
 
@@ -61,16 +51,6 @@ If a whole expression is given it prints the expression with refined
 metavariables and the type of the expression.
 
 - Syntax: ``ai IDENTIFIER  or  ai EXPR``
-- Options:
-
-
-- Flags:
-
-
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -89,7 +69,7 @@ which is processed by graphviz and displayed by the program indicated
 by the flag. The target format is postscript, unless overridden by the
 flag -format.
 
-- Syntax: 
+
 - Options:
 
  | ``-giza`` | show alignments in the Giza format; the first two languages
@@ -101,13 +81,14 @@ flag -format.
  | ``-view`` | program to open the resulting file
 
 - Examples:
+
 ```
   gr | aw                         -- generate a tree and show word alignment as graph script
   gr | aw -view="open"            -- generate a tree and display alignment on Mac
   gr | aw -view="eog"             -- generate a tree and display alignment on Ubuntu
   gt | aw -giza | wf -file=aligns -- generate trees, send giza alignments to file
-
 ```
+
 
 #NORMAL
 
@@ -125,7 +106,7 @@ which is hence the inverse of 'pt -bind'. The list of clitics is give
 by the flag '-clitics'. The list of stems is given as the list of words
 of the language given by the '-lang' flag.
 
-- Syntax: 
+
 - Options:
 
  | ``-raw`` | analyse each word separately (not suitable input for parser)
@@ -136,10 +117,11 @@ of the language given by the '-lang' flag.
  | ``-lang`` | the language of analysis
 
 - Examples:
-```
-  ca -lang=Fin -clitics=ko,ni "nukkuuko minun vaimoni" | p  -- to parse Finnish
 
 ```
+  ca -lang=Fin -clitics=ko,ni "nukkuuko minun vaimoni" | p  -- to parse Finnish
+```
+
 
 #NORMAL
 
@@ -169,13 +151,6 @@ of a pipe.
  | ``-table`` | show all strings labelled by parameters
  | ``-unqual`` | hide qualifying module names
 
-- Flags:
-
-
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -195,16 +170,6 @@ This command must be a line of its own, and thus cannot be a part
 of a pipe.
 
 - Syntax: ``dc IDENT COMMANDLINE``
-- Options:
-
-
-- Flags:
-
-
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -229,18 +194,17 @@ exactly the same name. The graphical conventions are:
   dotted arrow = other dependency
 
 - Syntax: ``dg (-only=MODULES)?``
-- Options:
-
 
 - Flags:
 
  | ``-only`` | list of modules included (default: all), literally or by prefix*
 
 - Examples:
-```
-  dg -only=SyntaxEng,Food*  -- shows only SyntaxEng, and those with prefix Food
 
 ```
+  dg -only=SyntaxEng,Food*  -- shows only SyntaxEng, and those with prefix Food
+```
+
 
 #NORMAL
 
@@ -260,20 +224,16 @@ a subtree of another tree. This command must be a line of its own
 and thus cannot be a part of a pipe.
 
 - Syntax: ``dt IDENT (TREE | STRING | "<" COMMANDLINE)``
-- Options:
-
-
-- Flags:
-
 
 - Examples:
+
 ```
   dt ex "hello world"                    -- define ex as string
   dt ex UseN man_N                         -- define ex as string
   dt ex < p -cat=NP "the man in the car" -- define ex as parse result
   l -lang=LangSwe %ex | ps -to_utf8        -- linearize the tree ex
-
 ```
+
 
 #NORMAL
 
@@ -284,19 +244,6 @@ and thus cannot be a part of a pipe.
 ``e`` = ``empty``: //empty the environment.//
 
 #TINY
-
-
-- Syntax: 
-- Options:
-
-
-- Flags:
-
-
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -328,10 +275,6 @@ but the resulting .gf file must be imported separately.
  | ``-lang`` | the language in which to parse
  | ``-probs`` | file with probabilities to rank the parses
 
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -349,8 +292,6 @@ all metavariables in the tree. The generation can be biased by probabilities,
 given in a file in the -probs flag.
 
 - Syntax: ``gr [-cat=CAT] [-number=INT]``
-- Options:
-
 
 - Flags:
 
@@ -361,14 +302,15 @@ given in a file in the -probs flag.
  | ``-probs`` | file with biased probabilities (format 'f 0.4' one by line)
 
 - Examples:
+
 ```
   gr                     -- one tree in the startcat of the current grammar
   gr -cat=NP -number=16  -- 16 trees in the category NP
   gr -lang=LangHin,LangTha -cat=Cl  -- Cl, both in LangHin and LangTha
   gr -probs=FILE         -- generate with bias
   gr (AdjCN ? (UseN ?))  -- generate trees of form (AdjCN ? (UseN ?))
-
 ```
+
 
 #NORMAL
 
@@ -385,9 +327,6 @@ By default, the depth is 4, but this can be changed by a flag.
 If a Tree argument is given, the command completes the Tree with values
 to all metavariables in the tree.
 
-- Syntax: 
-- Options:
-
 
 - Flags:
 
@@ -397,13 +336,14 @@ to all metavariables in the tree.
  | ``-number`` | the number of trees generated
 
 - Examples:
+
 ```
   gt                     -- all trees in the startcat, to depth 4
   gt -cat=NP -number=16  -- 16 trees in the category NP
   gt -cat=NP -depth=2    -- trees in the category NP to depth 2
   gt (AdjCN ? (UseN ?))  -- trees of form (AdjCN ? (UseN ?))
-
 ```
+
 
 #NORMAL
 
@@ -425,15 +365,8 @@ Without argument, shows the synopsis of all commands.
  | ``-coding`` | give advice on character encoding
  | ``-full`` | give full information of the commands
  | ``-license`` | show copyright and license information
- | ``-t2t`` | format help for txt2tags
+ | ``-t2t`` | output help in txt2tags format
 
-- Flags:
-
-
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -457,7 +390,7 @@ The grammar parser depends on the file name suffix:
   .gfo   compiled GF source
   .pgf   precompiled grammar in Portable Grammar Format
 
-- Syntax: 
+
 - Options:
 
  | ``-retain`` | retain operations (used for cc command)
@@ -468,10 +401,6 @@ The grammar parser depends on the file name suffix:
 
  | ``-probs`` | file with biased probabilities for generation
 
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -493,7 +422,7 @@ whose results are prepended to the other lexer flags. The value of the
 unlexer flag is a space-separated list of comma-separated string operation
 sequences; see example.
 
-- Syntax: 
+
 - Options:
 
  | ``-all`` | show all forms and variants, one by line (cf. l -list)
@@ -548,12 +477,13 @@ sequences; see example.
  | ``-unlexer`` | set unlexers separately to each language (space-separated)
 
 - Examples:
+
 ```
   l -lang=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor
   gr -lang=LangHin -cat=Cl | l -table -to_devanagari -- hindi table
   l -unlexer="LangAra=to_arabic LangHin=to_devanagari" -- different unlexers
-
 ```
+
 
 #NORMAL
 
@@ -568,7 +498,7 @@ sequences; see example.
 Prints all the analyses of space-separated words in the input string,
 using the morphological analyser of the actual grammar (see command pg)
 
-- Syntax: 
+
 - Options:
 
  | ``-missing`` | show the list of unknown words in the input
@@ -577,10 +507,6 @@ using the morphological analyser of the actual grammar (see command pg)
 
  | ``-lang`` | the languages of analysis (comma-separated, no spaces)
 
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -592,10 +518,7 @@ using the morphological analyser of the actual grammar (see command pg)
 
 #TINY
 
-
 - Syntax: ``mq (-cat=CAT)? (-probs=FILE)? TREE?``
-- Options:
-
 
 - Flags:
 
@@ -604,10 +527,6 @@ using the morphological analyser of the actual grammar (see command pg)
  | ``-number`` | maximum number of questions
  | ``-probs`` | file with biased probabilities for generation
 
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -628,7 +547,7 @@ The -openclass flag is experimental and allows some robustness in
 the parser. For example if -openclass="A,N,V" is given, the parser
 will accept unknown adjectives, nouns and verbs with the resource grammar.
 
-- Syntax: 
+
 - Options:
 
  | ``-bracket`` | prints the bracketed string from the parser
@@ -640,10 +559,6 @@ will accept unknown adjectives, nouns and verbs with the resource grammar.
  | ``-openclass`` | list of open-class categories for robust parsing
  | ``-depth`` | maximal depth for proof search if the abstract syntax tree has meta variables
 
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -685,7 +600,7 @@ command (flag -printer):
  srgs_xml_nonrec		SRGS XML, recursion eliminated
  vxml		Voice XML based on abstract syntax
 
-- Syntax: 
+
 - Options:
 
  | ``-cats`` | show just the names of abstract syntax categories
@@ -705,10 +620,11 @@ command (flag -printer):
  | ``-printer`` | select the printing format (see flag values above)
 
 - Examples:
-```
-  pg -funs | ? grep " S ;"  -- show functions with value cat S
 
 ```
+  pg -funs | ? grep " S ;"  -- show functions with value cat S
+```
+
 
 #NORMAL
 
@@ -724,18 +640,13 @@ Prints the commands issued during the GF session.
 The result is readable by the eh command.
 The result can be used as a script when starting GF.
 
-- Syntax: 
-- Options:
-
-
-- Flags:
-
 
 - Examples:
-```
-  ph | wf -file=foo.gfs  -- save the history into a file
 
 ```
+  ph | wf -file=foo.gfs  -- save the history into a file
+```
+
 
 #NORMAL
 
@@ -803,6 +714,7 @@ To see transliteration tables, use command ut.
  | ``-to`` | forward-apply transliteration defined in this file
 
 - Examples:
+
 ```
   l (EAdd 3 4) | ps -code         -- linearize code-like output
   ps -lexer=code | p -cat=Exp     -- parse code-like input
@@ -811,8 +723,8 @@ To see transliteration tables, use command ut.
   rf -file=Hin.gf | ps -env=quotes -to_devanagari -- convert translit to UTF8
   rf -file=Ara.gf | ps -from_utf8 -env=quotes -from_arabic -- convert UTF8 to transliteration
   ps -to=chinese.trans "abc"      -- apply transliteration defined in file chinese.trans
-
 ```
+
 
 #NORMAL
 
@@ -842,11 +754,12 @@ are type checking and semantic computation.
  | ``-transfer`` | syntactic transfer by applying function, recursively in subtrees
 
 - Examples:
+
 ```
   pt -compute (plus one two)                               -- compute value
   p "4 dogs love 5 cats" | pt -transfer=digits2numeral | l -- four...five...
-
 ```
+
 
 #NORMAL
 
@@ -858,19 +771,6 @@ are type checking and semantic computation.
 
 #TINY
 
-
-- Syntax: 
-- Options:
-
-
-- Flags:
-
-
-- Examples:
-```
-
-```
-
 #NORMAL
 
 
@@ -880,19 +780,6 @@ are type checking and semantic computation.
 ``r`` = ``reload``: //repeat the latest import command.//
 
 #TINY
-
-
-- Syntax: 
-- Options:
-
-
-- Flags:
-
-
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -910,7 +797,7 @@ piped e.g. to the parse command. The option -tree interprets the
 input as a tree, which can be given e.g. to the linearize command.
 The option -lines will result in a list of strings or trees, one by line.
 
-- Syntax: 
+
 - Options:
 
  | ``-lines`` | return the list of lines, instead of the singleton of all contents
@@ -920,10 +807,6 @@ The option -lines will result in a list of strings or trees, one by line.
 
  | ``-file`` | the input file name
 
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -940,7 +823,7 @@ even distribution in each category (default) or biased as specified
 by the file given by flag -probs=FILE, where each line has the form
 'function probability', e.g. 'youPol_Pron  0.01'.
 
-- Syntax: 
+
 - Options:
 
  | ``-v`` | show all trees with their probability scores
@@ -950,11 +833,12 @@ by the file given by flag -probs=FILE, where each line has the form
  | ``-probs`` | probabilities from this file (format 'f 0.6' per line)
 
 - Examples:
+
 ```
   p "you are here" | rt -probs=probs | pt -number=1 -- most probable result
   se utf8   -- set encoding to utf8 (default)
-
 ```
+
 
 #NORMAL
 
@@ -966,20 +850,15 @@ by the file given by flag -probs=FILE, where each line has the form
 
 #TINY
 
-
 - Syntax: ``se ID``
-- Options:
-
-
-- Flags:
-
 
 - Examples:
+
 ```
   se cp1251 -- set encoding to cp1521
   se utf8   -- set encoding to utf8 (default)
-
 ```
+
 
 #NORMAL
 
@@ -1008,10 +887,6 @@ of a pipe.
 
  | ``-grep`` | substring used for filtering (the command can have many of these)
 
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -1023,21 +898,19 @@ of a pipe.
 
 #TINY
 
-
 - Syntax: ``sp -command="SYSTEMCOMMAND", alt. ? SYSTEMCOMMAND``
-- Options:
-
 
 - Flags:
 
  | ``-command`` | the system command applied to the argument
 
 - Examples:
+
 ```
   sp -command="wc" "foo"
   gt | l | sp -command="grep \"who\"" | sp -command="wc"
-
 ```
+
 
 #NORMAL
 
@@ -1049,19 +922,10 @@ of a pipe.
 
 #TINY
 
-
-- Syntax: 
-- Options:
-
-
 - Flags:
 
  | ``-lang`` | The name of the concrete to use
 
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -1073,10 +937,7 @@ of a pipe.
 
 #TINY
 
-
 - Syntax: ``tq -from=LANG -to=LANG (-cat=CAT)? (-probs=FILE)? TREE?``
-- Options:
-
 
 - Flags:
 
@@ -1087,11 +948,12 @@ of a pipe.
  | ``-probs`` | file with biased probabilities for generation
 
 - Examples:
+
 ```
   tq -from=Eng -to=Swe                               -- any trees in startcat
   tq -from=Eng -to=Swe (AdjCN (PositA ?2) (UseN ?))  -- only trees of this form
-
 ```
+
 
 #NORMAL
 
@@ -1103,8 +965,6 @@ of a pipe.
 
 #TINY
 
-
-- Syntax: 
 - Options:
 
  | ``-amharic`` | Amharic
@@ -1119,13 +979,6 @@ of a pipe.
  | ``-thai`` | Thai
  | ``-urdu`` | Urdu
 
-- Flags:
-
-
-- Examples:
-```
-
-```
 
 #NORMAL
 
@@ -1148,7 +1001,7 @@ which is processed by graphviz and displayed by the program indicated
 by the flag. The target format is png, unless overridden by the
 flag -format.
 
-- Syntax: 
+
 - Options:
 
  | ``-v`` | show extra information
@@ -1161,13 +1014,14 @@ flag -format.
  | ``-view`` | program to open the resulting file (default "open")
 
 - Examples:
+
 ```
   gr | vd              -- generate a tree and show dependency tree in .dot
   gr | vd -view=open   -- generate a tree and display dependency tree on a Mac
   gr -number=1000 | vd -file=dep.labels -output=malt      -- generate training treebank
   gr -number=100 | vd -file=dep.labels -output=malt_input -- generate test sentences
-
 ```
+
 
 #NORMAL
 
@@ -1186,9 +1040,6 @@ which is processed by graphviz and displayed by the program indicated
 by the flag. The target format is png, unless overridden by the
 flag -format.
 
-- Syntax: 
-- Options:
-
 
 - Flags:
 
@@ -1196,11 +1047,12 @@ flag -format.
  | ``-view`` | program to open the resulting file (default "open")
 
 - Examples:
+
 ```
   p "John walks" | vp  -- generate a tree and show parse tree as .dot script
   gr | vp -view="open" -- generate a tree and display parse tree on a Mac
-
 ```
+
 
 #NORMAL
 
@@ -1220,7 +1072,7 @@ by the flag. The target format is postscript, unless overridden by the
 flag -format.
 With option -mk, use for showing library style function names of form 'mkC'.
 
-- Syntax: 
+
 - Options:
 
  | ``-api`` | show the tree with function names converted to 'mkC' with value cats C
@@ -1234,11 +1086,12 @@ With option -mk, use for showing library style function names of form 'mkC'.
  | ``-view`` | program to open the resulting file (default "open")
 
 - Examples:
+
 ```
   p "hello" | vt              -- parse a string and show trees as graph script
   p "hello" | vt -view="open" -- parse a string and display trees on a Mac
-
 ```
+
 
 #NORMAL
 
@@ -1250,8 +1103,6 @@ With option -mk, use for showing library style function names of form 'mkC'.
 
 #TINY
 
-
-- Syntax: 
 - Options:
 
  | ``-append`` | append to file, instead of overwriting it
@@ -1260,10 +1111,6 @@ With option -mk, use for showing library style function names of form 'mkC'.
 
  | ``-file`` | the output filename
 
-- Examples:
-```
-
-```
 
 #NORMAL
 
