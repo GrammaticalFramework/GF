@@ -548,6 +548,8 @@ eqValue fail suspend k v1 v2 = do
                                              return (VConst f vs)
     occurCheck i0 k xs (VClosure env e) = do env <- mapM (occurCheck i0 k xs) env
                                              return (VClosure env e)
+    occurCheck i0 k xs (VImplArg e)     = do e <- occurCheck i0 k xs e
+                                             return (VImplArg e)
 
 
 -----------------------------------------------------------
@@ -587,7 +589,7 @@ generateForMetas prove e = do
 
 generateForForest :: (Scope -> TType -> TcM FId Expr) -> Expr -> TcM FId Expr
 generateForForest prove e = do
-  fillinVariables
+--  fillinVariables
   refineExpr e
   where
     fillinVariables = do
