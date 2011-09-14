@@ -83,8 +83,10 @@ lookCommand = Map.lookup
 
 commandHelpAll :: PGFEnv -> [Option] -> String
 commandHelpAll pgf opts = unlines
-  [commandHelp (isOpt "full" opts) (co,info)
+  [commandHelp' opts (isOpt "full" opts) (co,info)
     | (co,info) <- Map.assocs (allCommands pgf)]
+
+commandHelp' opts = if isOpt "t2t" opts then commandHelpTags else commandHelp
 
 commandHelp :: Bool -> (String,CommandInfo) -> String
 commandHelp full (co,info) = unlines $ [
@@ -104,11 +106,11 @@ commandHelp full (co,info) = unlines $ [
 commandHelpTags :: Bool -> (String,CommandInfo) -> String
 commandHelpTags full (co,info) = unlines $ [
   "#VSPACE","","#NOINDENT",
-  lit co ++ " = " ++ lit (longname info) ++ ": " ++
+  lit co ++ equal (lit (longname info)) ++ ": " ++
   "//" ++ synopsis info ++ ".//"] ++ if full then [
   "","#TINY","",
   explanation info,
-  "- Syntax: ``" ++ syntax info ++ "``",
+  "- Syntax: " ++ lit (syntax info),
   "- Options:\n" ++++ 
    unlines [" | ``-" ++ o ++ "`` | " ++ e | (o,e) <- options info],
   "- Flags:\n" ++++ 
@@ -119,6 +121,10 @@ commandHelpTags full (co,info) = unlines $ [
   "", "#NORMAL", ""
   ] else []
  where
+   equal "" = ""
+   equal s = " = " ++ s
+
+   lit "" = ""
    lit s = "``" ++ s ++ "``"
 
 type PGFEnv = (PGF, Map.Map Language Morpho)
@@ -415,7 +421,8 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("changes","give a summary of changes from GF 2.9"),
        ("coding","give advice on character encoding"),
        ("full","give full information of the commands"),
-       ("license","show copyright and license information")
+       ("license","show copyright and license information"),
+       ("t2t","output help in txt2tags format")
        ],
      exec = \opts ts -> 
        let
@@ -425,7 +432,7 @@ allCommands env@(pgf, mos) = Map.fromList [
           _ | isOpt "license" opts -> licenseMsg
           [t] -> let co = getCommandOp (showExpr [] t) in 
                  case lookCommand co (allCommands env) of   ---- new map ??!!
-                   Just info -> commandHelp True (co,info)
+                   Just info -> commandHelp' opts True (co,info)
                    _ -> "command not found"
           _ -> commandHelpAll env opts
        in return (fromString msg),
