@@ -3,6 +3,10 @@ The GF Software System
 
 %!style:../css/style.css
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+%!postproc(html): "#VSPACE" "<p>"
+%!postproc(html): "#NORMAL" ""
+%!postproc(html): "#TINY" ""
+%!postproc(html): "#NOINDENT" ""
 
 The GF software system implements the GF programming language. Its
 components are
@@ -64,7 +68,7 @@ executed one by one, in the order of appearance.
 The full set of GF shell commands is listed below with explanations. 
 This list can also be obtained in the GF shell by the command ``help -full``.
 
-%!include: ``gf-help-full.txt``
+%!include: gf-help-full.txt
 
 ==The GF batch compiler==
 
