@@ -2,6 +2,7 @@ The GF Software System
 
 
 %!style:../css/style.css
+%!options(html): --toc
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 %!postproc(html): "#VSPACE" "<hr>"
 %!postproc(html): "#NORMAL" ""
@@ -23,6 +24,7 @@ executing user commands by calling the compiler and the run-time system
 This page describes the commands of the GF shell,
 as well as the use of the compiler in batch mode.
 
+%%toc
 
 ==The GF shell==
 
