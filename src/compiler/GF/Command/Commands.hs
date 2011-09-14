@@ -89,43 +89,46 @@ commandHelpAll pgf opts = unlines
 commandHelp' opts = if isOpt "t2t" opts then commandHelpTags else commandHelp
 
 commandHelp :: Bool -> (String,CommandInfo) -> String
-commandHelp full (co,info) = unlines $ [
-  co ++ ", " ++ longname info,
+commandHelp full (co,info) = unlines . compact $ [
+  co ++ optionally (", " ++) (longname info),
   synopsis info] ++ if full then [
   "",
-  "syntax:" ++++ "  " ++ syntax info,
-  "",
+  optionally (("syntax:" ++++).("  "++).(++"\n")) (syntax info),
   explanation info,
-  "options:" ++++ unlines [" -" ++ o ++ "\t" ++ e | (o,e) <- options info],
-  "flags:" ++++ unlines [" -" ++ o ++ "\t" ++ e | (o,e) <- flags info],
-  "examples:" ++++ unlines ["  " ++ s | s <- examples info]
+  section "options:"  [" -" ++ o ++ "\t" ++ e | (o,e) <- options info],
+  section "flags:"    [" -" ++ o ++ "\t" ++ e | (o,e) <- flags info],
+  section "examples:" ["  " ++ s | s <- examples info]
   ] else []
 
 -- for printing with txt2tags formatting
 
 commandHelpTags :: Bool -> (String,CommandInfo) -> String
-commandHelpTags full (co,info) = unlines $ [
+commandHelpTags full (co,info) = unlines . compact $ [
   "#VSPACE","","#NOINDENT",
   lit co ++ equal (lit (longname info)) ++ ": " ++
   "//" ++ synopsis info ++ ".//"] ++ if full then [
   "","#TINY","",
   explanation info,
-  "- Syntax: " ++ lit (syntax info),
-  "- Options:\n" ++++ 
-   unlines [" | ``-" ++ o ++ "`` | " ++ e | (o,e) <- options info],
-  "- Flags:\n" ++++ 
-   unlines [" | ``-" ++ o ++ "`` | " ++ e | (o,e) <- flags info],
-  "- Examples:\n```" ++++ 
-   unlines ["  " ++ s | s <- examples info],
-  "```",
+  optionally ("- Syntax: "++) (lit (syntax info)),
+  section "- Options:\n" [" | ``-" ++ o ++ "`` | " ++ e | (o,e)<- options info],
+  section "- Flags:\n" [" | ``-" ++ o ++ "`` | " ++ e | (o,e) <- flags info],
+  section "- Examples:\n" (verbatim ["  " ++ s | s <- examples info]),
   "", "#NORMAL", ""
   ] else []
  where
-   equal "" = ""
-   equal s = " = " ++ s
+   lit = optionally (wrap "``")
+   equal = optionally (" = "++)
+   verbatim = optionally (wrap ["```"])
+   wrap d s = d++s++d
 
-   lit "" = ""
-   lit s = "``" ++ s ++ "``"
+section hdr = optionally ((hdr++++).unlines)
+
+optionally f [] = []
+optionally f s  = f s
+
+compact [] = []
+compact ([]:xs@([]:_)) = compact xs
+compact (x:xs) = x:compact xs
 
 type PGFEnv = (PGF, Map.Map Language Morpho)
 
