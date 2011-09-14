@@ -3,7 +3,7 @@ The GF Software System
 
 %!style:../css/style.css
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
-%!postproc(html): "#VSPACE" "<p>"
+%!postproc(html): "#VSPACE" "<hr>"
 %!postproc(html): "#NORMAL" ""
 %!postproc(html): "#TINY" ""
 %!postproc(html): "#NOINDENT" ""
