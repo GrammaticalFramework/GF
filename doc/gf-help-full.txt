@@ -1,5 +1,9 @@
+
+
+
 #VSPACE
 
+====!====
 #NOINDENT
 ``!``: //system command: escape to system shell.//
 
@@ -19,6 +23,7 @@
 
 #VSPACE
 
+====?====
 #NOINDENT
 ``?``: //system pipe: send value from previous command to a system command.//
 
@@ -38,6 +43,7 @@
 
 #VSPACE
 
+====ai = abstract_info====
 #NOINDENT
 ``ai`` = ``abstract_info``: //Provides an information about a function, an expression or a category from the abstract syntax.//
 
@@ -57,6 +63,7 @@ metavariables and the type of the expression.
 
 #VSPACE
 
+====aw = align_words====
 #NOINDENT
 ``aw`` = ``align_words``: //show word alignments between languages graphically.//
 
@@ -95,6 +102,7 @@ flag -format.
 
 #VSPACE
 
+====ca = clitic_analyse====
 #NOINDENT
 ``ca`` = ``clitic_analyse``: //print the analyses of all words into stems and clitics.//
 
@@ -128,6 +136,7 @@ of the language given by the '-lang' flag.
 
 #VSPACE
 
+====cc = compute_concrete====
 #NOINDENT
 ``cc`` = ``compute_concrete``: //computes concrete syntax term using a source grammar.//
 
@@ -157,6 +166,7 @@ of a pipe.
 
 #VSPACE
 
+====dc = define_command====
 #NOINDENT
 ``dc`` = ``define_command``: //define a command macro.//
 
@@ -176,6 +186,7 @@ of a pipe.
 
 #VSPACE
 
+====dg = dependency_graph====
 #NOINDENT
 ``dg`` = ``dependency_graph``: //print module dependency graph.//
 
@@ -211,6 +222,7 @@ exactly the same name. The graphical conventions are:
 
 #VSPACE
 
+====dt = define_tree====
 #NOINDENT
 ``dt`` = ``define_tree``: //define a tree or string macro.//
 
@@ -240,6 +252,7 @@ and thus cannot be a part of a pipe.
 
 #VSPACE
 
+====e = empty====
 #NOINDENT
 ``e`` = ``empty``: //empty the environment.//
 
@@ -250,6 +263,7 @@ and thus cannot be a part of a pipe.
 
 #VSPACE
 
+====eb = example_based====
 #NOINDENT
 ``eb`` = ``example_based``: //converts .gfe files to .gf files by parsing examples to trees.//
 
@@ -281,6 +295,7 @@ but the resulting .gf file must be imported separately.
 
 #VSPACE
 
+====gr = generate_random====
 #NOINDENT
 ``gr`` = ``generate_random``: //generate random trees in the current abstract syntax.//
 
@@ -317,6 +332,7 @@ given in a file in the -probs flag.
 
 #VSPACE
 
+====gt = generate_trees====
 #NOINDENT
 ``gt`` = ``generate_trees``: //generates a list of trees, by default exhaustive.//
 
@@ -350,6 +366,7 @@ to all metavariables in the tree.
 
 #VSPACE
 
+====h = help====
 #NOINDENT
 ``h`` = ``help``: //get description of a command, or a the full list of commands.//
 
@@ -373,6 +390,7 @@ Without argument, shows the synopsis of all commands.
 
 #VSPACE
 
+====i = import====
 #NOINDENT
 ``i`` = ``import``: //import a grammar from source code or compiled .pgf file.//
 
@@ -407,6 +425,7 @@ The grammar parser depends on the file name suffix:
 
 #VSPACE
 
+====l = linearize====
 #NOINDENT
 ``l`` = ``linearize``: //convert an abstract syntax expression to string.//
 
@@ -490,6 +509,7 @@ sequences; see example.
 
 #VSPACE
 
+====ma = morpho_analyse====
 #NOINDENT
 ``ma`` = ``morpho_analyse``: //print the morphological analyses of all words in the string.//
 
@@ -513,6 +533,7 @@ using the morphological analyser of the actual grammar (see command pg)
 
 #VSPACE
 
+====mq = morpho_quiz====
 #NOINDENT
 ``mq`` = ``morpho_quiz``: //start a morphology quiz.//
 
@@ -533,6 +554,7 @@ using the morphological analyser of the actual grammar (see command pg)
 
 #VSPACE
 
+====p = parse====
 #NOINDENT
 ``p`` = ``parse``: //parse a string to abstract syntax expression.//
 
@@ -565,6 +587,7 @@ will accept unknown adjectives, nouns and verbs with the resource grammar.
 
 #VSPACE
 
+====pg = print_grammar====
 #NOINDENT
 ``pg`` = ``print_grammar``: //print the actual grammar with the given printer.//
 
@@ -631,6 +654,7 @@ command (flag -printer):
 
 #VSPACE
 
+====ph = print_history====
 #NOINDENT
 ``ph`` = ``print_history``: //print command history.//
 
@@ -653,6 +677,7 @@ The result can be used as a script when starting GF.
 
 #VSPACE
 
+====ps = put_string====
 #NOINDENT
 ``ps`` = ``put_string``: //return a string, possibly processed with a function.//
 
@@ -731,6 +756,7 @@ To see transliteration tables, use command ut.
 
 #VSPACE
 
+====pt = put_tree====
 #NOINDENT
 ``pt`` = ``put_tree``: //return a tree, possibly processed with a function.//
 
@@ -766,6 +792,7 @@ are type checking and semantic computation.
 
 #VSPACE
 
+====q = quit====
 #NOINDENT
 ``q`` = ``quit``: //exit GF interpreter.//
 
@@ -776,6 +803,7 @@ are type checking and semantic computation.
 
 #VSPACE
 
+====r = reload====
 #NOINDENT
 ``r`` = ``reload``: //repeat the latest import command.//
 
@@ -786,6 +814,7 @@ are type checking and semantic computation.
 
 #VSPACE
 
+====rf = read_file====
 #NOINDENT
 ``rf`` = ``read_file``: //read string or tree input from a file.//
 
@@ -813,6 +842,7 @@ The option -lines will result in a list of strings or trees, one by line.
 
 #VSPACE
 
+====rt = rank_trees====
 #NOINDENT
 ``rt`` = ``rank_trees``: //show trees in an order of decreasing probability.//
 
@@ -845,6 +875,7 @@ by the file given by flag -probs=FILE, where each line has the form
 
 #VSPACE
 
+====se = set_encoding====
 #NOINDENT
 ``se`` = ``set_encoding``: //set the encoding used in current terminal.//
 
@@ -865,6 +896,7 @@ by the file given by flag -probs=FILE, where each line has the form
 
 #VSPACE
 
+====so = show_operations====
 #NOINDENT
 ``so`` = ``show_operations``: //show all operations in scope, possibly restricted to a value type.//
 
@@ -893,6 +925,7 @@ of a pipe.
 
 #VSPACE
 
+====sp = system_pipe====
 #NOINDENT
 ``sp`` = ``system_pipe``: //send argument to a system command.//
 
@@ -917,6 +950,7 @@ of a pipe.
 
 #VSPACE
 
+====t = tokenize====
 #NOINDENT
 ``t`` = ``tokenize``: //Tokenize string usng the vocabulary.//
 
@@ -932,6 +966,7 @@ of a pipe.
 
 #VSPACE
 
+====tq = translation_quiz====
 #NOINDENT
 ``tq`` = ``translation_quiz``: //start a translation quiz.//
 
@@ -960,6 +995,7 @@ of a pipe.
 
 #VSPACE
 
+====ut = unicode_table====
 #NOINDENT
 ``ut`` = ``unicode_table``: //show a transliteration table for a unicode character set.//
 
@@ -985,6 +1021,7 @@ of a pipe.
 
 #VSPACE
 
+====vd = visualize_dependency====
 #NOINDENT
 ``vd`` = ``visualize_dependency``: //show word dependency tree graphically.//
 
@@ -1028,6 +1065,7 @@ flag -format.
 
 #VSPACE
 
+====vp = visualize_parse====
 #NOINDENT
 ``vp`` = ``visualize_parse``: //show parse tree graphically.//
 
@@ -1059,6 +1097,7 @@ flag -format.
 
 #VSPACE
 
+====vt = visualize_tree====
 #NOINDENT
 ``vt`` = ``visualize_tree``: //show a set of trees graphically.//
 
@@ -1098,6 +1137,7 @@ With option -mk, use for showing library style function names of form 'mkC'.
 
 #VSPACE
 
+====wf = write_file====
 #NOINDENT
 ``wf`` = ``write_file``: //send string or tree to a file.//
 
