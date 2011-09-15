@@ -75,8 +75,8 @@ appTransToUnicode trans =
 appTransFromUnicode :: Transliteration -> String -> String
 appTransFromUnicode trans = 
   concat .
-  map (maybe "?" id . 
-       flip Map.lookup (trans_from_unicode trans)
+  map (\c -> maybe [toEnum c] id $ 
+             Map.lookup c (trans_from_unicode trans)
       ) . 
   map fromEnum
 
