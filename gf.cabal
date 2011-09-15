@@ -49,6 +49,7 @@ library
     PGF.Generate
     PGF.Linearize
     PGF.Parse
+    PGF.SortTop
     PGF.Expr
     PGF.Type
     PGF.Tree

@@ -109,7 +109,8 @@ module PGF(
            -- ** Morphological Analysis
            Lemma, Analysis, Morpho,
            lookupMorpho, buildMorpho, fullFormLexicon,
-           
+           morphoMissing,
+
            -- ** Tokenizing
            mkTokenizer,
 
@@ -128,12 +129,16 @@ module PGF(
            showProbabilities,
            readProbabilitiesFromFile,
            
+           -- ** SortTop
+           forExample,
+
            -- * Browsing
            browse
           ) where
 
 import PGF.CId
 import PGF.Linearize
+import PGF.SortTop
 import PGF.Generate
 import PGF.TypeCheck
 import PGF.Paraphrase
