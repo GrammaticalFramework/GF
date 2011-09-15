@@ -104,8 +104,10 @@ commandHelp full (co,info) = unlines . compact $ [
 
 commandHelpTags :: Bool -> (String,CommandInfo) -> String
 commandHelpTags full (co,info) = unlines . compact $ [
-  "#VSPACE","","#NOINDENT",
-  lit co ++ equal (lit (longname info)) ++ ": " ++
+  "#VSPACE","",
+  "===="++hdrname++"====",
+  "#NOINDENT",
+  name ++ ": " ++
   "//" ++ synopsis info ++ ".//"] ++ if full then [
   "","#TINY","",
   explanation info,
@@ -116,6 +118,9 @@ commandHelpTags full (co,info) = unlines . compact $ [
   "", "#NORMAL", ""
   ] else []
  where
+   hdrname = co ++ equal (longname info)
+   name = lit co ++ equal (lit (longname info))
+
    lit = optionally (wrap "``")
    equal = optionally (" = "++)
    verbatim = optionally (wrap ["```"])
