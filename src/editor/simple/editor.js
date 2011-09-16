@@ -496,7 +496,7 @@ function draw_concrete(g,i) {
 		  ])
 }
 
-var rgl_modules=["Paradigms","Syntax"];
+var rgl_modules=["Paradigms","Syntax","Lexicon","Extra"];
 
 function add_open(ci) {
     return function (g,el) {
