@@ -28,6 +28,8 @@
 - Allow grammars to contain a resoure module. Create the resource module by
  factoring out common parts of the concrete syntaxes.
 - Integrate example-based concrete syntax construction (using Ramona's tool)
+- Open lexicon modules? They are not installed by default!
+     DictEng, MorphalouFre, DictSwe, DictTur, DictBul, DictFun, DictLav
 
 + compile only the uploaded grammar even if other grammars are present
 + 'flags startcat' is needed for grammars with only one category (since the
