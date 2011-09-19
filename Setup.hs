@@ -156,20 +156,24 @@ testRGL args _ pkg lbi = do
                        putStr (in_file++" ... ")
                        hFlush stdout
                        res <- runTest in_file out_file gold_file
-                       putStrLn (if res then "OK" else "FAIL")
+                       putStrLn res
                else return ()
         else walk fpath
 
     runTest in_file out_file gold_file = do
-      inp <- readFile in_file
-      out <- readProcess (default_gf pkg lbi) ["-run"] inp
-      writeFile out_file out
+      writeFile out_file =<< readProcess (default_gf pkg lbi) ["-run"] =<< readFile in_file
       exists <- doesFileExist gold_file
       if exists
-        then do gold <- readFile gold_file
-                return $! (out == gold)
-        else return False
+        then do out <- compatReadFile out_file
+                gold <- compatReadFile gold_file
+                return $! if out == gold then "OK" else "FAIL"
+        else return "MISSING GOLD"
 
+    -- Avoid failures caused by Win32/Unix text file incompatibility
+    compatReadFile path =
+      do h <- openFile path ReadMode
+         hSetNewlineMode h universalNewlineMode
+         hGetContents h
 
 rgl_src_dir     = "lib" </> "src"
 rgl_dst_dir lbi = buildDir lbi </> "rgl"
