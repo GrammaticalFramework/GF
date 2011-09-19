@@ -3,8 +3,13 @@ abstract ExtraFinAbs = Extra [
   VV,VP,Conj,NP,Quant,IAdv,IComp,ICompAP,IAdvAdv,Adv,AP, Pron, ProDrop] ** {
 
   fun
+    GenCN : NP -> CN -> CN ;              -- auton merkki
+
     AdvExistNP : Adv -> NP -> Cl ;        -- kuvassa olemme me
     AdvPredNP  : Adv -> V  -> NP -> Cl ;  -- kuvassa hymyilee Veikko
+
+    ICompExistNP : IComp -> NP -> QCl ;     -- missä/kuka on Veikko
+    IAdvPredNP : IAdv -> V -> NP -> QCl ;   -- mistä alkaa Ruotsi
 
     RelExistNP : Prep -> RP -> NP -> RCl ; -- jossa on jazzia
 
