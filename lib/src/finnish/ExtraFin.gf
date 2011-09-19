@@ -12,6 +12,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       isDef  = True  --- "Jussin kolme autoa ovat" ; thus "...on" is missing
       } ;
 
+    GenCN n1 n2 = {s = \\nf => n1.s ! NPCase Gen ++ n2.s ! nf} ;
 
   lincat
     VPI   = {s : Str} ;
@@ -48,6 +49,20 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       mkClause (\_ -> adv.s) np.a (insertObj 
         (\\_,b,_ => np.s ! NPCase Nom) (predV v)) ;
 
+    ICompExistNP adv np = 
+      let cl = mkClause (\_ -> adv.s ! np.a) np.a (insertObj 
+        (\\_,b,_ => np.s ! NPCase Nom) (predV (verbOlla ** {sc = NPCase Nom ; qp = True}))) ;
+      in  {
+        s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
+      } ;
+
+    IAdvPredNP iadv v np =
+      let cl = mkClause (\_ -> iadv.s) np.a (insertObj 
+                 (\\_,b,_ => np.s ! v.sc) (predV v)) ;
+      in  {
+        s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
+      } ;
+x
 --    i_implicPron = mkPronoun [] "minun" "minua" "minuna" "minuun" Sg P1 ;
     whatPart_IP = {
       s = table {

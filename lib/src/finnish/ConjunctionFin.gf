@@ -20,6 +20,8 @@ concrete ConjunctionFin of Conjunction =
       c = ss.c
       } ;
 
+    ConjCN conj ss = conjunctDistrTable NForm conj ss ;
+
 -- These fun's are generated from the list cat's.
 
     BaseS = twoSS ;
@@ -32,6 +34,8 @@ concrete ConjunctionFin of Conjunction =
     ConsAP xs x = consrTable2 Bool NForm comma xs x ;
     BaseRS x y = twoTable Agr x y ** {c = y.c} ;
     ConsRS xs x = consrTable Agr comma xs x ** {c = xs.c} ;
+    BaseCN x y = twoTable NForm x y ;
+    ConsCN xs x = consrTable NForm comma xs x ;
 
   lincat
     [S] = {s1,s2 : Str} ;
@@ -39,5 +43,6 @@ concrete ConjunctionFin of Conjunction =
     [NP] = {s1,s2 : NPForm => Str ; a : Agr} ;
     [AP] = {s1,s2 : Bool => NForm => Str} ;
     [RS] = {s1,s2 : Agr => Str ; c : NPForm} ;
+    [CN] = {s1,s2 : NForm => Str} ;
 
 }
