@@ -111,12 +111,8 @@ oper
 -- lexicon
 
 lincat
-  Country = {np : NP ; a : A} ;
   JobTitle = CN ;
 lin
-  NCountry c = c.np ;
-  PCountry c = mkAP c.a ;
-
   Located i =
       mkAP (mkA2 (mkA "located") in_Prep) i
     | mkAP (mkA2 (mkA "situated") in_Prep) i ;

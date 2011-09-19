@@ -43,7 +43,6 @@ fun
   SInds  : [Individual] -> Set ; -- X and Y
 
   KRelSet  : Relation -> Set -> Kind ; -- R of S | S's R
-  KRelsSet : Relation -> Relation -> Set -> Kind ; -- R and Q of S
   KRelKind : Kind -> Relation -> Set -> Kind ; -- K that is R of S
   KRelPair : Kind -> Relation -> Kind ; -- S's with their R's
   KProp    : Property -> Kind -> Kind ; -- P K | K that is P
@@ -62,12 +61,8 @@ fun
 -- the test lexicon
 
 cat
-  Country ;
   JobTitle ;
 fun
-  NCountry : Country -> Name ;
-  PCountry : Country -> Property ;
-
   Located : Loc -> Property ;
   Employed : Org -> Property ;
 

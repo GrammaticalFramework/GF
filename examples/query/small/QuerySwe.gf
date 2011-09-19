@@ -117,21 +117,11 @@ oper
 -- lexicon
 
 lincat
-  Country = {np : NP ; a : A} ;
   JobTitle = CN ;
 lin
-  NCountry c = c.np ;
-  PCountry c = mkAP c.a ;
+  Located i = mkAP (mkA2 (mkA "belägen" "beläget") in_Prep) i ;
 
-  Located i =
-      mkAP (mkA2 (mkA "belägen" "beläget") in_Prep) i ;
---    | mkAP (mkA2 (mkA "situated") in_Prep) i ;
-
-  Employed i =
-      mkAP (mkA2 (mkA "anställd") by8agent_Prep) i
---    | mkAP (mkA2 (mkA "paid") by8agent_Prep) i
---    | mkAP (mkA2 (mkA "aktiv") at_Prep) i
-    | mkAP (mkA2 (mkA "professionellt aktiv") at_Prep) i ;
+  Employed i = mkAP (mkA2 (mkA "anställd") by8agent_Prep) i ;
 
   Work i =
       mkVP (mkV2 (mkV "jobba") at_Prep) i
@@ -177,9 +167,5 @@ lin
   Person2 = mkName "'Person2" ;
   Person3 = mkName "'Person3" ;
   Person4 = mkName "'Person4" ;
-
-oper
-  mkCountry : Str -> Str -> {np : NP ; a : A} =
-    \n,a -> {np = mkNP (mkPN n neutrum) ; a = mkA a} ;
 
 }
