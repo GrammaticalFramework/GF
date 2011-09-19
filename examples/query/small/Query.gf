@@ -57,7 +57,6 @@ fun
 
   ACalled  : [Individual] -> Activity ;
 
-
 -- the test lexicon
 
 cat
@@ -67,7 +66,8 @@ fun
   Employed : Org -> Property ;
 
   Work : Org -> Activity ;
-  HaveTitle : JobTitle -> Org -> Activity ;
+  HaveTitle : JobTitle -> Activity ;
+  HaveTitleOrg : JobTitle -> Org -> Activity ;
 
   Organization : Kind ;
   Place : Kind ;
