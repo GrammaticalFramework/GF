@@ -43,7 +43,7 @@ lin
   AProp s p = mkUtt (mkCl s p) ;
   AAct s p = mkUtt (mkCl s p) ;
 
-  SAll k = mkNP all_Predet (mkNP thePl_Det k) ; ---- | mkNP thePl_Det k ;
+  SAll k = mkNP all_Predet (mkNP thePl_Det k) ;
   SOne k = mkNP n1_Numeral k ;
   SIndef k = mkNP someSg_Det k ;
   SPlural k = mkNP aPl_Det k ;
@@ -56,11 +56,8 @@ lin
   KRelKind k r s = mkCN k (mkRS (mkRCl that_RP (mkVP (mkNP aPl_Det (GenCN s r.cn))))) ;
 
   KRelPair k r = G.ConjCN and_Conj (G.BaseCN k (GenCN these_NP r.cn)) ;
-  KProp p k =
-     mkCN p k ;
----   | mkCN k (mkRS (mkRCl that_RP (mkVP p))) ;
-  KAct p k =
-     mkCN k (mkRS (mkRCl that_RP p)) ;
+  KProp p k = mkCN p k ;
+  KAct p k = mkCN k (mkRS (mkRCl that_RP p)) ;
   KRel r = r.cn ;
 
   IName n = n ;
@@ -106,7 +103,8 @@ lin
 
   Work i = mkVP (mkV2 (mkV "työskennellä") in_Prep) i ;
 
-  HaveTitle t i = mkVP (mkVP (mkNP t)) (mkAdv in_Prep i) ;
+  HaveTitle t = mkVP have_V2 (mkNP the_Det (mkCN (mkN "asema") (mkNP the_Det t))) ;
+  HaveTitleOrg t i = mkVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN "asema") (mkNP the_Det t)))) (mkAdv in_Prep i) ;
 
   Organization = mkCN (mkN "organisaatio" "organisaatioita") ;
   Place = mkCN (mkN "paikka") ;
@@ -114,9 +112,9 @@ lin
 
   Location = mkRelation (mkN "sijainti") ;
   Region = mkRelation (mkN "alue") ;
-  Subregion = mkRelation (mkN "alue") ;
+  Subregion = mkRelation (mkN "osa") ;
   RName = mkRelation (mkN "nimi" "nimiä") ;
-  RNickname = mkRelation (mkN "lempinimi" "lempinimiä") ;
+  RNickname = mkRelation (mkN "lisänimi" "lisänimiä") ;
 
 -- JobTitles
   JobTitle1 = mkCN (mkN "'JobTitle1") ;

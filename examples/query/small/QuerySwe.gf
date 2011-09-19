@@ -46,7 +46,7 @@ lin
   QWhere s = mkUtt (mkQS (mkQCl where_IAdv s)) ;
   QInfo  s =
     let
-      info : NP = mkNP (all_NP | (mkNP information_N)) (mkAdv about_Prep s) ;
+      info : NP = mkNP all_Predet (mkNP (mkNP information_N) (mkAdv about_Prep s)) ;
     in
       mkUtt (mkImp (mkVP give_V3 (mkNP i_Pron) info))
     | mkUtt info ;
@@ -75,7 +75,7 @@ lin
   KRelKind k r s =
     mkCN k (mkRS (mkRCl that_RP (mkVP (mkNP aPl_Det (mkCN r.cn (mkAdv r.prep s)))))) ;
 
-  KRelPair k r = mkCN k (mkAdv with_Prep (sina r.cn)) ;
+  KRelPair k r = mkCN k (mkAdv with_Prep (mkNP (mkQuant they_Pron) plNum r.cn)) ;
   KProp p k =
      mkCN p k
    | mkCN k (mkRS (mkRCl that_RP (mkVP p))) ;
@@ -127,7 +127,11 @@ lin
       mkVP (mkV2 (mkV "jobba") at_Prep) i
     | mkVP (mkV2 (mkV "arbeta") in_Prep) i ;
 
-  HaveTitle t i =
+  HaveTitle t =
+      mkVP (mkAP (mkA2 (mkA "anställd") as_Prep) (mkNP t))
+    | mkVP (mkV2 (mkV "jobba") as_Prep) (mkNP t) ;
+
+  HaveTitleOrg t i =
       mkVP (mkVP (mkAP (mkA2 (mkA "anställd") as_Prep) (mkNP t))) (mkAdv at_Prep i)
     | mkVP (mkVP (mkV2 (mkV "jobba") as_Prep) (mkNP t)) (mkAdv at_Prep i) ;
 --    | mkVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "titel" "titlar") po) (mkNP t)))) (mkAdv at_Prep i) ;

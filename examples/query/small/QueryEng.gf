@@ -43,7 +43,7 @@ lin
   QWhere s = mkUtt (mkQS (mkQCl where_IAdv s)) ;
   QInfo  s =
     let
-      info : NP = mkNP (all_NP | (mkNP information_N)) (mkAdv about_Prep s) ;
+      info : NP = mkNP all_Predet (mkNP (mkNP information_N) (mkAdv about_Prep s)) ;
     in
       mkUtt (mkImp (mkVP give_V3 (mkNP i_Pron) info))
     | mkUtt info ;
@@ -127,7 +127,11 @@ lin
       mkVP (mkV2 (mkV "work") at_Prep) i
     | mkVP (mkV2 (mkV "collaborate") in_Prep) i ;
 
-  HaveTitle t i =
+  HaveTitle t =
+      mkVP (mkAP (mkA2 (mkA "employed") as_Prep) (mkNP t))
+    | mkVP (mkV2 (mkV "work") as_Prep) (mkNP t) ;
+
+  HaveTitleOrg t i =
       mkVP (mkVP (mkAP (mkA2 (mkA "employed") as_Prep) (mkNP t))) (mkAdv at_Prep i)
     | mkVP (mkVP (mkV2 (mkV "work") as_Prep) (mkNP t)) (mkAdv at_Prep i) ;
 --    | mkVP (mkVP have_V2 (mkNP the_Det (mkCN (mkN2 (mkN "title")) (mkNP t)))) (mkAdv at_Prep i) ;
