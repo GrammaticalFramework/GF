@@ -1,0 +1,64 @@
+Editor modes for GF
+
+
+%!style:../css/style.css
+%!options(html): --toc
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+
+We collect GF modes for various editors on this page. Contributions are
+welcome!
+
+==Emacs==
+
+[gf.el ../src/tools/gf.el] by Johan Bockgård provides syntax highlighting and
+automatic indentation and lets you run the GF Shell in an emacs buffer.
+See installation instructions inside.
+
+
+==Gedit==
+
+[John J. Camilleri http://johnjcamilleri.com/]
+provided the following syntax highlighting mode for
+[Gedit http://www.gedit.org/] (the default text editor in Ubuntu).
+
+Copy the file below to
+``~/.local/share/gtksourceview-2.0/language-specs/gf.lang`` (under Ubuntu).
+
+- [gf.lang ../src/tools/gf.lang]
+
+
+Some helpful notes/links:
+
+- The code is based heavily on the ``haskell.lang`` file which I found in
+  ``/usr/share/gtksourceview-2.0/language-specs/haskell.lang``.
+- Ruslan Osmanov recommends 
+  [registering your file extension as its own MIME type http://osmanov-dev-notes.blogspot.com/2011/04/how-to-add-new-highlight-mode-in-gedit.html]
+  (see also [here https://help.ubuntu.com/community/AddingMimeTypes]),
+  however on my system the ``.gf`` extension was already registered
+  as a generic font (``application/x-tex-gf``) and I didn't want to risk
+  messing any of that up.
+- This is a quick 5-minute job and might require some tweaking.
+  [The GtkSourceView language definition tutorial http://developer.gnome.org/gtksourceview/stable/lang-tutorial.html]
+  is the place to start looking.
+- Contributions are welcome!
+
+
+==Geany==
+
+[John J. Camilleri http://johnjcamilleri.com/] provided the following
+[custom filetype http://www.geany.org/manual/dev/index.html#custom-filetypes]
+config files for syntax highlighting in [Geany http://www.geany.org/].
+
+Copy one of the files below to ``/usr/share/geany/filetypes.GF.conf``
+(under Ubuntu). You will need to manually create the file.
+
+- [light-filetypes.GF.conf ../src/tools/light-filetypes.GF.conf]
+- [dark-filetypes.GF.conf ../src/tools/dark-filetypes.GF.conf]
+
+
+You will also need to edit the ``filetype_extensions.conf`` file and add the
+following line somewhere:
+
+```
+GF=*.gf
+```
