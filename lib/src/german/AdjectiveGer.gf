@@ -28,7 +28,10 @@ concrete AdjectiveGer of Adjective = CatGer ** open ResGer, Prelude in {
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
     ComplA2 a np = {
-      s = \\af => a.s ! Posit ! af ++ appPrep a.c2 np.s ; 
+      s = table {
+        APred => a.s ! Posit ! APred ++ appPrep a.c2 np.s ; 
+        af => appPrep a.c2 np.s ++ a.s ! Posit ! af
+        } ; 
       isPre = True
       } ;
 

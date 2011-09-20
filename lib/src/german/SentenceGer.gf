@@ -20,7 +20,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
           inf  = vp.inf ++ verb.inf ;
         in
         verb.fin ++ ps.p2 ++ 
-        vp.n2 ! agr ++ vp.a1 ! pol ++ vp.a2 ++ inf ++ vp.ext
+        vp.n0 ! agr ++ vp.n2 ! agr ++ vp.a1 ! pol ++ vp.a2 ++ inf ++ vp.ext
     } ;
 
     SlashVP np vp = 
