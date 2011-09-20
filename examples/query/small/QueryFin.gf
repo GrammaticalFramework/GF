@@ -1,4 +1,4 @@
---# -path=.:present
+--# -path=.:alltenses
 
 concrete QueryFin of Query = open
   ParadigmsFin,
