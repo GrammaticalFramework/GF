@@ -150,7 +150,7 @@ lin
     where {a = aagr Masc Pl} ;
   when_IAdv = ss "quand" ;
   when_Subj = ss "quand" ** {m = Indic} ;
-  where_IAdv = ss "oÃ¹" ;
+  where_IAdv = ss "où" ;
   which_IQuant = {
     s = \\n,g,c => 
         prepCase c ++ aagrForms "quel" "quelle" "quels" "quelles" ! aagr g n
