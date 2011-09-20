@@ -107,7 +107,7 @@ ppJudgement q (id, ResOper  ptype pexp) =
 ppJudgement q (id, ResOverload ids defs) =
   text "oper" <+> ppIdent id <+> equals <+> 
   (text "overload" <+> lbrace $$
-   nest 2 (vcat [ppIdent id <+> (colon <+> ppTerm q 0 ty $$ equals <+> ppTerm q 0 e) | (L _ ty,L _ e) <- defs]) $$
+   nest 2 (vcat [ppIdent id <+> (colon <+> ppTerm q 0 ty $$ equals <+> ppTerm q 0 e <+> semi) | (L _ ty,L _ e) <- defs]) $$
    rbrace) <+> semi
 ppJudgement q (id, CncCat  ptype pexp pprn) =
   (case ptype of
@@ -127,7 +127,7 @@ ppJudgement q (id, CncFun  ptype pdef pprn) =
   (case pprn of
      Just (L _ prn) -> text "printname" <+> text "fun" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
      Nothing        -> empty)
-ppJudgement q (id, AnyInd cann mid) = text "ind" <+> ppIdent id <+> equals <+> (if cann then text "canonical" else empty) <+> ppIdent mid <+> semi
+ppJudgement q (id, AnyInd cann mid) = text "-- ind" <+> ppIdent id <+> equals <+> (if cann then text "canonical" else empty) <+> ppIdent mid <+> semi
 
 ppTerm q d (Abs b v e)   = let (xs,e') = getAbs (Abs b v e)
                            in prec d 0 (char '\\' <> commaPunct ppBind xs <+> text "->" <+> ppTerm q 0 e')
