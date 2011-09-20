@@ -10,6 +10,7 @@ import GF.Data.ErrM
 import GF.Data.Operations (chunks,err)
 import GF.Grammar hiding (Ident)
 import GF.Grammar.Parser (runP, pExp)
+import GF.Grammar.Printer (ppGrammar, ppModule)
 import GF.Grammar.ShowTerm
 import GF.Grammar.Lookup (allOpers,allOpersTo)
 import GF.Compile.Rename
@@ -19,7 +20,8 @@ import GF.Infra.Dependencies
 import GF.Infra.CheckM
 import GF.Infra.UseIO
 import GF.Infra.Option
-import GF.Infra.Modules (greatestResource, modules, emptyModInfo)
+import GF.Infra.Modules (greatestResource, modules, emptyModInfo, mGrammar)
+import GF.Infra.Ident (showIdent)
 import GF.Infra.BuildInfo (buildInfo)
 import qualified System.Console.Haskeline as Haskeline
 import GF.Text.Coding
@@ -126,6 +128,7 @@ execute1 opts gfenv0 s0 =
     "!" :ws  -> system_command ws
     "cc":ws  -> compute_concrete ws
     "so":ws  -> show_operations ws
+    "ss":ws  -> show_source ws
     "dg":ws  -> dependency_graph ws
     "eh":ws  -> eh ws
     "i" :ws  -> import_ ws
@@ -183,7 +186,7 @@ execute1 opts gfenv0 s0 =
 
     show_operations ws =
       case greatestResource sgr of
-        Nothing -> putStrLn "no source grammar in scope" >> continue gfenv
+        Nothing -> putStrLn "no source grammar in scope; did you import with -retain?" >> continue gfenv
         Just mo -> do
           let (os,ts) = partition (isPrefixOf "-") ws
           let greps = [drop 6 o | o <- os, take 6 o == "-grep="]
@@ -201,7 +204,14 @@ execute1 opts gfenv0 s0 =
           let printed = [unwords [showIdent op, ":", printer ty] | (op,ty) <- sigs]
           mapM_ putStrLn [l | l <- printed, all (flip isInfixOf l) greps]
           continue gfenv
-
+    show_source ws = do
+      let (os,ts) = partition (isPrefixOf "-") ws
+      let strip = if elem "-strip" os then stripSourceGrammar else id
+      let mygr = strip $ case ts of
+            _:_ -> mGrammar [(i,m) | (i,m) <- modules sgr, elem (showIdent i) ts] 
+            [] -> sgr
+      putStrLn $ render $ ppGrammar mygr
+      continue gfenv
     dependency_graph ws =
       do let stop = case ws of
                ('-':'o':'n':'l':'y':'=':fs):_ -> Just $ chunks ',' fs

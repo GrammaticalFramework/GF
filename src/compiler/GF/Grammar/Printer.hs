@@ -10,6 +10,7 @@
 module GF.Grammar.Printer
            ( TermPrintQual(..)
            , ppLabel
+           , ppGrammar
            , ppModule
            , ppJudgement
            , ppTerm
@@ -32,6 +33,9 @@ import Data.List  (intersperse)
 import qualified Data.Map as Map
 
 data TermPrintQual = Qualified | Unqualified
+
+ppGrammar :: SourceGrammar -> Doc
+ppGrammar sgr = vcat $ map (ppModule Qualified) $ modules sgr
 
 ppModule :: TermPrintQual -> SourceModule -> Doc
 ppModule q (mn, ModInfo mtype mstat opts exts with opens _ jments) =

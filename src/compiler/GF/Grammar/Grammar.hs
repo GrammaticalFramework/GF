@@ -16,6 +16,7 @@
 
 module GF.Grammar.Grammar (SourceGrammar,
         emptySourceGrammar,mGrammar,
+        stripSourceGrammar,
         SourceModInfo,
         SourceModule,
         mapSourceModule,
@@ -239,3 +240,20 @@ ident2label c = LIdent (ident2bs c)
 label2ident :: Label -> Ident
 label2ident (LIdent s) = identC s
 label2ident (LVar i)   = identC (BS.pack ('$':show i))
+
+
+stripSourceGrammar :: SourceGrammar -> SourceGrammar
+stripSourceGrammar sgr = sgr --mGrammar [(i, m{jments = Map.map }) | (i,m) <- modules sgr]
+
+stripInfo :: Info -> Info
+stripInfo i = case i of
+  AbsCat _ -> i
+  AbsFun mt mi me mb -> AbsFun mt mi Nothing mb
+  ResParam mp mt -> ResParam mp Nothing
+  ResValue lt -> i ----
+  ResOper mt md -> ResOper mt Nothing
+  ResOverload is fs -> ResOverload is [(lty, L loc (EInt 0)) | (lty,L loc _) <- fs]
+  CncCat mty mte mtf -> CncCat mty Nothing Nothing
+  CncFun mict mte mtf -> CncFun mict Nothing Nothing
+  AnyInd b f -> i
+
