@@ -31,7 +31,7 @@ lin
   MQuery  q = q ;
   MAnswer a = a ;
 
-  QSet s = mkUtt (mkImp (mkV2 (mkV "luetella")) s) ;
+  QSet s = mkUtt (mkImp (mkV2 (mkV "näyttää")) s) ;
 
   QWhere s = mkUtt (mkQS (ICompExistNP (mkIComp where_IAdv) s)) ;
   QInfo s = mkUtt (mkImp (mkVP (mkV2 (mkV "antaa")) 
