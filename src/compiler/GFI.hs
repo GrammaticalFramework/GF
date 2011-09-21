@@ -224,13 +224,20 @@ execute1 opts gfenv0 s0 =
       let mygr = strip $ case ts of
             _:_ -> mGrammar [(i,m) | (i,m) <- modules sgr, elem (showIdent i) ts] 
             [] -> sgr
-      if elem "-save" os
-        then mapM_ 
-               (\ m@(i,_) -> let file = (showIdent i ++ ".gfh") in 
-                  writeFile file (render (ppModule Qualified m)) >> putStrLn ("wrote " ++ file))
-               (modules mygr)  
-        else putStrLn $ render $ ppGrammar mygr
+      case 0 of
+        _ | elem "-detailedsize" os -> putStrLn (printSizesGrammar mygr)
+        _ | elem "-size" os -> do
+               let sz = sizesGrammar mygr
+               putStrLn $ unlines $
+                 ("total\t" ++ show (fst sz)): 
+                 [showIdent j ++ "\t" ++ show (fst k) | (j,k) <- snd sz]
+        _ | elem "-save" os -> mapM_ 
+                 (\ m@(i,_) -> let file = (showIdent i ++ ".gfh") in 
+                    writeFile file (render (ppModule Qualified m)) >> putStrLn ("wrote " ++ file))
+                 (modules mygr)  
+        _ -> putStrLn $ render $ ppGrammar mygr
       continue gfenv
+
     dependency_graph ws =
       do let stop = case ws of
                ('-':'o':'n':'l':'y':'=':fs):_ -> Just $ chunks ',' fs
