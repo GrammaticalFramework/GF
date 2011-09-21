@@ -574,7 +574,7 @@ checkResolvedMetaStore scope e = do
 
 generateForMetas :: Selector s => (Scope -> TType -> TcM s Expr) -> Expr -> TcM s Expr
 generateForMetas prove e = do
-  infExpr emptyScope e
+  (e,_) <- infExpr emptyScope e
   fillinVariables
   refineExpr e
   where
