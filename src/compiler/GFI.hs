@@ -9,6 +9,7 @@ import GF.Command.Parse
 import GF.Data.ErrM
 import GF.Data.Operations (chunks,err)
 import GF.Grammar hiding (Ident)
+import GF.Grammar.Analyse
 import GF.Grammar.Parser (runP, pExp)
 import GF.Grammar.Printer (ppGrammar, ppModule)
 import GF.Grammar.ShowTerm
@@ -127,6 +128,7 @@ execute1 opts gfenv0 s0 =
     "q" :_   -> quit
     "!" :ws  -> system_command ws
     "cc":ws  -> compute_concrete ws
+    "sd":ws  -> show_deps ws
     "so":ws  -> show_operations ws
     "ss":ws  -> show_source ws
     "dg":ws  -> dependency_graph ws
@@ -184,6 +186,17 @@ execute1 opts gfenv0 s0 =
                           Bad s -> putStrLn $ s
       continue gfenv
 
+    show_deps ws = do
+          let (os,ts) = partition (isPrefixOf "-") ws
+          ops <- case ts of
+             _:_ -> do
+               let Right t = runP pExp (encodeUnicode utf8 (unwords ts))
+               err error return $ constantDepsTerm sgr t
+             _   -> error "give a term as argument"
+          let printer = showTerm sgr TermPrintDefault Qualified
+          putStrLn $ unwords $ map printer ops
+          continue gfenv
+
     show_operations ws =
       case greatestResource sgr of
         Nothing -> putStrLn "no source grammar in scope; did you import with -retain?" >> continue gfenv
@@ -204,13 +217,19 @@ execute1 opts gfenv0 s0 =
           let printed = [unwords [showIdent op, ":", printer ty] | (op,ty) <- sigs]
           mapM_ putStrLn [l | l <- printed, all (flip isInfixOf l) greps]
           continue gfenv
+
     show_source ws = do
       let (os,ts) = partition (isPrefixOf "-") ws
       let strip = if elem "-strip" os then stripSourceGrammar else id
       let mygr = strip $ case ts of
             _:_ -> mGrammar [(i,m) | (i,m) <- modules sgr, elem (showIdent i) ts] 
             [] -> sgr
-      putStrLn $ render $ ppGrammar mygr
+      if elem "-save" os
+        then mapM_ 
+               (\ m@(i,_) -> let file = (showIdent i ++ ".gfh") in 
+                  writeFile file (render (ppModule Qualified m)) >> putStrLn ("wrote " ++ file))
+               (modules mygr)  
+        else putStrLn $ render $ ppGrammar mygr
       continue gfenv
     dependency_graph ws =
       do let stop = case ws of
