@@ -778,6 +778,26 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("tq -from=Eng -to=Swe (AdjCN (PositA ?2) (UseN ?))  -- only trees of this form")
        ] 
      }),
+
+  ("sd", emptyCommandInfo {
+     longname = "show_dependencies",
+     syntax = "sd QUALIFIED_CONSTANT",
+     synopsis = "show all constants that the given constant depends on",
+     explanation = unlines [
+       "Show recursively all qualified constant names, by tracing back the types and definitions",
+       "of each constant encountered, but just listing every name once.",
+       "This command requires a source grammar to be in scope, imported with 'import -retain'.",
+       "Notice that the accuracy is better if the modules are compiled with the flag -optimize=noexpand.",
+       "This command must be a line of its own, and thus cannot be a part of a pipe."
+       ],
+     options = [
+       ],
+     examples = [
+       "sd ParadigmsEng.mkV    -- show all constants on which this one depends"
+       ],
+     needsTypeCheck = False
+     }),
+
   ("se", emptyCommandInfo {
      longname = "set_encoding",
      synopsis = "set the encoding used in current terminal",
@@ -827,6 +847,27 @@ allCommands env@(pgf, mos) = Map.fromList [
        ],
      options = [
        ("raw","show the types in computed forms (instead of category names)")
+       ],
+     needsTypeCheck = False
+     }),
+
+  ("ss", emptyCommandInfo {
+     longname = "show_source",
+     syntax = "ss (-strip)? (-save)? MODULE*",
+     synopsis = "show the source code of modules in scope, possibly just headers",
+     explanation = unlines [
+       "Show compiled source code, i.e. as it is included in GF object files.",
+       "This command requires a source grammar to be in scope, imported with 'import -retain'.",
+       "The optional MODULE arguments cause just these modules to be shown.",
+       "This command must be a line of its own, and thus cannot be a part of a pipe."
+       ],
+     options = [
+       ("save", "save each MODULE in file MODULE.gfh instead of printing it on terminal"),
+       ("strip","show only type signatures of oper's and lin's, not their definitions") 
+       ],
+     examples = [
+       "ss                         -- print complete current source grammar on terminal",
+       "ss -strip -save MorphoFin  -- print the headers in file MorphoFin.gfh"
        ],
      needsTypeCheck = False
      }),
