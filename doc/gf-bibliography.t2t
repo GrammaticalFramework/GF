@@ -6,8 +6,10 @@ Aarne Ranta
 % Create an html file from this file using:
 % txt2tags -thtml --toc gf-reference.html
 
+%!style:../css/style.css
 %!target:html
 %!postproc(html): #BR <br>
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
 ==Publications on GF==
 
@@ -44,7 +46,7 @@ In Y. Bertot, G. Huet, J-J. Lévy, and G. Plotkin (eds.),
 Cambridge University Press, Cambridge, 
 pp. 281-308,
 2009.
-[pdf (preliminary version) http://www.cs.chalmers.se/~aarne/articles/libraries-kahn.pdf]
+[pdf (preliminary version) http://www.cse.chalmers.se/~aarne/articles/libraries-kahn.pdf]
 #BR
 //Grammar-libraries from the software engineering point of view, with an example application to mathematical language.//
 
@@ -171,7 +173,7 @@ A. Ranta.
 Modular Grammar Engineering in GF.
 //Research on Language and Computation//, 
 5:133-158, 2007.
-Draft available as [pdf http://www.cs.chalmers.se/~aarne/articles/multieng3.pdf].
+Draft available as [pdf http://www.cse.chalmers.se/~aarne/articles/multieng3.pdf].
 #BR
 //Adapts library-based software engineering methods to grammar writing// 
 //and introduces the module system of GF.//
@@ -181,7 +183,7 @@ The GF Grammar Compiler.
 //Workshop on New Directions in Type-theoretic Grammars//,
 Dublin, August 2007 (ESSLLI workshop).
 2007.
-[pdf http://www.cs.chalmers.se/~aarne/articles/ar-compiler.pdf]
+[pdf http://www.cse.chalmers.se/~aarne/articles/ar-compiler.pdf]
 #BR
 //Describes the compilation of GF source code to lower-level run-time formats.//
 
@@ -198,7 +200,7 @@ Dialogue System Localization with the GF Resource Grammar Library.
 //SPEECHGRAM 2007: ACL Workshop on Grammar-Based Approaches to Spoken Language Processing//,
 June 29, 2007, Prague.
 2007.
-[pdf http://www.cs.chalmers.se/~aarne/articles/perera-ranta.pdf]
+[pdf http://www.cse.chalmers.se/~aarne/articles/perera-ranta.pdf]
 #BR
 //An experiment in porting an in-car dialogue system from two to six languages.// 
 
@@ -217,7 +219,7 @@ Features in Abstract and Concrete Syntax.
 //The 2nd International Workshop on Typed Feature Structure Grammars//,
 Tartu, 24 May 2007 (NODALIDA workshop).
 2007.
-[pdf http://www.cs.chalmers.se/~aarne/articles/ranta-tfsg2007.pdf]
+[pdf http://www.cse.chalmers.se/~aarne/articles/ranta-tfsg2007.pdf]
 #BR
 //Explores the design choices of incorporating features in a GF-like grammar,//
 //with comparisons to feature-based unification grammars.//
@@ -237,7 +239,7 @@ J. Khegai.
 Language engineering in Grammatical Framework (GF).
 Phd thesis, Computer Science, Chalmers University of Technology,
 2006.
-[pdf http://www.cs.chalmers.se/~janna/Janna_Khegai_phd.pdf]
+[pdf http://www.cse.chalmers.se/~janna/Janna_Khegai_phd.pdf]
 #BR
 //Collection of articles and technical reports on multilingual authoring//
 //and the Russian resource grammar.//
@@ -354,7 +356,7 @@ Expressivity and Complexity of the  Grammatical Framework.
 PhD thesis, Computer Science, 
 Göteborg University, 
 2004.
-[pdf http://www.cs.chalmers.se/~peb/pubs/p04-PhD-thesis.pdf]
+[pdf http://www.cse.chalmers.se/~peb/pubs/Ljunglof-2004a.pdf]
 #BR
 //Language-theoretical study of GF and its parsing problem.//
 
@@ -363,7 +365,7 @@ Grammatical Framework: A Type-Theoretical Grammar Formalism.
 //Journal of Functional Programming//, 14(2),
 pp. 145-189, 
 2004.
-Draft available as [ps.gz http://www.cs.chalmers.se/~aarne/articles/gf-jfp.ps.gz].
+Draft available as [ps.gz http://www.cse.chalmers.se/~aarne/articles/gf-jfp.ps.gz].
 #BR
 //Theoretical paper explaining the GF formalism and its implementation.//
 //The standard reference on GF, but doesn't cover the module system.//
@@ -374,7 +376,7 @@ Computational semantics in type theory.
 //Mathematics and Social Sciences//, 165,
 pp. 31-57, 
 2004.
-Draft available as [pdf http://www.cs.chalmers.se/~aarne/articles/3formsem.pdf].
+Draft available as [pdf http://www.cse.chalmers.se/~aarne/articles/3formsem.pdf].
 #BR
 // Shows how Montague-style grammars are implemented in GF and extends//
 //this to type-theoretical grammars for anaphoric expressions.//
@@ -410,7 +412,7 @@ Seoul, Korea, February 2003,
 Springer LNCS 945, 
 pp. 38-41,
 2004.
-[ps.gz http://www.cs.chalmers.se/~aarne/articles/mexico.ps.gz].
+[ps.gz http://www.cse.chalmers.se/~aarne/articles/mexico.ps.gz].
 #BR
 //An introduction to the GF resource grammar project, with Russian as prime example.//
 
@@ -421,7 +423,7 @@ Dialogue Systems as Proof Editors.
 pp. 225-240, 
 2004.
 Conference version (IJCAR/ICoS-3, Siena, June 2001) available as
-  [ps.gz http://www.cs.chalmers.se/~aarne/articles/dialogue3.ps.gz].
+  [ps.gz http://www.cse.chalmers.se/~aarne/articles/dialogue3.ps.gz].
 //Shows a close analogy between task-oriented dialogue systems//
 //and metavariable-based proof editors.//
 
@@ -434,7 +436,7 @@ Seoul, Korea, February 2003,
 Springer LNCS 945, 
 pp. 38-41,
 2004.
-[ps.gz http://www.cs.chalmers.se/~aarne/articles/mexico.ps.gz].
+[ps.gz http://www.cse.chalmers.se/~aarne/articles/mexico.ps.gz].
 #BR
 //Explains how the GF GUI is used in syntax editing and discusses//
 //how new grammars are created.//
@@ -462,7 +464,7 @@ Formal Verification of Multilingual Instructions.
 Departments of Computer Science and Computer Engineering,
 Chalmers University of Technology and Göteborg University.
 2001.
-[ps.gz http://www.cs.chalmers.se/~aarne/articles/aarne+krijo.ps.gz].
+[ps.gz http://www.cse.chalmers.se/~aarne/articles/aarne+krijo.ps.gz].
 #BR
 //Instructions for an alarm system in four languages, verified in the proof editor Alfa.//
 
@@ -483,7 +485,7 @@ Genova,
 T. Hallgren, "The Correctness of Insertion Sort",
 Manuscript, Chalmers University, Göteborg, 2001.
 Available in
-[ps http://www.cs.chalmers.se/~hallgren/Papers/insertion_sort.ps]
+[ps http://www.cse.chalmers.se/~hallgren/Papers/insertion_sort.ps]
 #BR
 //A seven-page text generated by GF-Alfa//.
 
@@ -503,7 +505,7 @@ LNCS/LNAI 1955,
 pp. 70-84,
 Springer Verlag, Heidelberg, 
 2000.
-[ps.gz http://www.cs.chalmers.se/~aarne/articles/lpar2000.ps.gz].
+[ps.gz http://www.cse.chalmers.se/~aarne/articles/lpar2000.ps.gz].
 #BR
 //Describes an interface to the proof editor Alfa written in GF//.
 
@@ -514,7 +516,7 @@ XML and multilingual document authoring: converging trends.
 pp. 243-249,
 Saarbruecken, 
 2000.
-[ps.gz http://www.cs.chalmers.se/~aarne/articles/coling2000.ps.gz].
+[ps.gz http://www.cse.chalmers.se/~aarne/articles/coling2000.ps.gz].
 #BR
 //Relates GF not only with XML but also with definite clause grammars//.
 
@@ -524,7 +526,7 @@ P. Mäenpää and A. Ranta.
 The type theory and type checker of GF.
 //Colloquium on Principles, Logics, and Implementations of High-Level Programming Languages, Workshop on Logical Frameworks and Meta-languages, Paris, 28 September 1999//.
 1999. 
-[ps.gz href=http://www.cs.chalmers.se/~aarne/papers/lfm1999.ps.gz].
+[ps.gz href=http://www.cse.chalmers.se/~aarne/papers/lfm1999.ps.gz].
 #BR
 //Concise theoretical presentation of GF, using the old notation prior to v0.9//.
 
@@ -590,7 +592,7 @@ Lecture Notes in Computer Science
 Springer-Verlag, 
 Heidelberg, 
 1995.
-[ps.gz http://www.cs.chalmers.se/~aarne/articles/baastad.ps.gz]
+[ps.gz http://www.cse.chalmers.se/~aarne/articles/baastad.ps.gz]
 #BR
 //Predecessor of GF: grammar defined in type theory and implemented in ALF//. 
 
@@ -604,7 +606,7 @@ Lecture Notes in Computer Science
 Springer-Verlag, 
 Heidelberg, 
 1996.
-[ps.gz http://www.cs.chalmers.se/~aarne/articles/torino.ps.gz].
+[ps.gz http://www.cse.chalmers.se/~aarne/articles/torino.ps.gz].
 #BR
 //Extending the theory of the previous paper. The implementation in ALF// 
 //eventually became so heavy that the need arose for GF.//
