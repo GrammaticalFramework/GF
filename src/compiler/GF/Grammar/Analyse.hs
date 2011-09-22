@@ -106,7 +106,7 @@ sizeInfo i = case i of
   ResOverload is fs -> 1 + sum [sizeTerm ty + sizeTerm tr | (L _ ty, L _ tr) <- fs]
   CncCat mty mte mtf -> 1 + msize mty   -- ignoring lindef and printname
   CncFun mict mte mtf -> 1 + msize mte  -- ignoring type and printname
-  AnyInd b f -> 0
+  AnyInd b f -> -1  -- just to ignore these in the size
   _ -> 0
  where 
   msize mt = case mt of
@@ -121,7 +121,7 @@ sizesModule :: SourceModule -> (Int, [(Ident,Int)])
 sizesModule (_,m) = 
   let 
     js = Map.toList (jments m) 
-    tb = [(i,sizeInfo j) | (i,j) <- js]
+    tb = [(i,k) | (i,j) <- js, let k = sizeInfo j, k >= 0]
   in (length tb + sum (map snd tb),tb)
 
 -- the size of a grammar
