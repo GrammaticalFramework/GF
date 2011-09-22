@@ -859,10 +859,13 @@ allCommands env@(pgf, mos) = Map.fromList [
        "Show compiled source code, i.e. as it is included in GF object files.",
        "This command requires a source grammar to be in scope, imported with 'import -retain'.",
        "The optional MODULE arguments cause just these modules to be shown.",
+       "The -size and -detailedsize options show code size as the number of constructor nodes.",
        "This command must be a line of its own, and thus cannot be a part of a pipe."
        ],
      options = [
+       ("detailedsize", "instead of code, show the sizes of all judgements and modules"),
        ("save", "save each MODULE in file MODULE.gfh instead of printing it on terminal"),
+       ("size", "instead of code, show the sizes of all modules"),
        ("strip","show only type signatures of oper's and lin's, not their definitions") 
        ],
      examples = [
