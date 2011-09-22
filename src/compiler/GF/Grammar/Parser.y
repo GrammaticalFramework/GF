@@ -554,7 +554,7 @@ ListBind
 Decl :: { [Hypo] }
 Decl
   : '(' ListBind ':' Exp ')' { [(b,x,$4) | (b,x) <- $2] } 
-  | Exp4                     { [mkHypo $1]              }
+  | Exp3                     { [mkHypo $1]              }
 
 ListTupleComp :: { [Term] }
 ListTupleComp

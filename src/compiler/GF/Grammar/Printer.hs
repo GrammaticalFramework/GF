@@ -240,7 +240,7 @@ ppEnv e = hcat (map (\(x,t) -> braces (ppIdent x <> text ":=" <> ppValue Unquali
 str s = doubleQuotes (text s)
 
 ppDecl q (_,id,typ)
-  | id == identW = ppTerm q 4 typ
+  | id == identW = ppTerm q 3 typ
   | otherwise    = parens (ppIdent id <+> colon <+> ppTerm q 0 typ)
 
 ppDDecl q (_,id,typ)
