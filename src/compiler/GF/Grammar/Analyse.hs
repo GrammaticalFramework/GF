@@ -2,6 +2,7 @@ module GF.Grammar.Analyse (
         stripSourceGrammar,
         constantDepsTerm,
         sizeTerm,
+        sizeConstant,
         sizesModule,
         sizesGrammar,
         printSizesGrammar
@@ -45,7 +46,7 @@ constantsInTerm = nub . consts where
 constantDeps :: SourceGrammar -> QIdent -> Err [Term]
 constantDeps sgr f = do
   ts <- deps f
-  let cs = [i | t <- ts, i <- getId t]
+  let cs = [i | t <- ts, Ok i <- [getIdTerm t]]
   ds <- mapM deps cs
   return $ nub $ concat $ ts:ds
  where
@@ -56,18 +57,25 @@ constantDeps sgr f = do
       ty <- lookupResType sgr c
       tr <- lookupResDef sgr c
       return $ constantsInTerm ty ++ constantsInTerm tr
-  getId t = case t of
-    Q i -> [i] 
-    QC i -> [i] 
-    _ -> [] 
 
-constantDepsTerm :: SourceGrammar -> Term -> Err [Term]
-constantDepsTerm sgr t = case t of
-  Q  i -> constantDeps sgr i
-  QC i -> constantDeps sgr i
-  P (Vr r) l -> constantDeps sgr $ (r,label2ident l) ---
+getIdTerm :: Term -> Err QIdent
+getIdTerm t = case t of
+  Q i  -> return i
+  QC i -> return i
+  P (Vr r) l -> return (r,label2ident l) --- needed if term is received from parser
   _ -> Bad ("expected qualified constant, not " ++ show t)
 
+constantDepsTerm :: SourceGrammar -> Term -> Err [Term]
+constantDepsTerm sgr t = do
+  i <- getIdTerm t
+  constantDeps sgr i
+
+sizeConstant :: SourceGrammar -> Term -> Int
+sizeConstant sgr t = err (const 0) id $ do
+  c  <- getIdTerm t
+  ty <- return $ err (const 0) sizeTerm $ lookupResType sgr c  -- if no type sig, return 0
+  tr <- return $ err (const 0) sizeTerm $ lookupResDef sgr c
+  return $ ty + tr
 
 -- the number of constructors in a term, ignoring position information and unnecessary types
 -- ground terms count as 1, i.e. as "one work" each
