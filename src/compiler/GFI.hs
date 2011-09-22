@@ -193,8 +193,15 @@ execute1 opts gfenv0 s0 =
                let Right t = runP pExp (encodeUnicode utf8 (unwords ts))
                err error return $ constantDepsTerm sgr t
              _   -> error "give a term as argument"
-          let printer = showTerm sgr TermPrintDefault Qualified
-          putStrLn $ unwords $ map printer ops
+          let prTerm = showTerm sgr TermPrintDefault Qualified
+          let size = sizeConstant sgr
+          let printed 
+                | elem "-size" os =
+                    let sz = map size ops in 
+                    unlines $ ("total: " ++ show (sum sz)) : 
+                              [prTerm f ++ "\t" ++ show s | (f,s) <- zip ops sz]
+                | otherwise = unwords $ map prTerm ops
+          putStrLn $ printed
           continue gfenv
 
     show_operations ws =

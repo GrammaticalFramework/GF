@@ -791,9 +791,11 @@ allCommands env@(pgf, mos) = Map.fromList [
        "This command must be a line of its own, and thus cannot be a part of a pipe."
        ],
      options = [
+       ("size","show the size of the source code for each constants (number of constructors)")
        ],
      examples = [
-       "sd ParadigmsEng.mkV    -- show all constants on which this one depends"
+       "sd ParadigmsEng.mkV          -- show all constants on which this one depends",
+       "sd -size ParadigmsEng.mkV    -- show all constants on which this one depends, together with size"
        ],
      needsTypeCheck = False
      }),
