@@ -1782,6 +1782,7 @@ lin aromatic_A = compoundA (mkA "aromatic");
 lin arose_V2 = mkV2 (mkV "arose");
 lin arose_VS = mkVS (mkV "arose");
 lin around_Adv = mkAdv "around";
+lin around_AdN = mkAdN "around";
 lin around_Prep = mkPrep "around";
 lin arouse_V2 = mkV2 (mkV "arouse" "arouses" "aroused" "aroused" "arousing");
 lin arouse_V2V = mkV2V (mkV "arouse") noPrep to_Prep ;
