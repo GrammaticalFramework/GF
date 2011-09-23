@@ -1011,7 +1011,6 @@ fun alpine_A : A;
 fun alpinist_N : N;
 fun already_Adv : Adv;
 fun already_AdV : AdV;
-fun alright_A : A;
 fun alright_Adv : Adv;
 fun alsatian_N : N;
 fun also_AdV : AdV;
