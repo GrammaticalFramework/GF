@@ -213,6 +213,10 @@ oper
     mkV : (finir : Str) -> V ; -- regular 1/2/3 conjugation
     mkV : (jeter,jette,jettera : Str) -> V ; -- 1st conjugation variations
 
+-- Here is a worst-case paradigm.
+
+  mkV : (tenir,tiens,tenons,tiennent,tint,tiendra,tenu : Str) -> V ;
+
 -- The $IrregFre$ list gives some verbs as two-place. These verbs can be
 -- reused as one-place verbs.
 
@@ -429,7 +433,11 @@ oper
   mkV = overload {
     mkV : Str -> V = regV ;
     mkV : (jeter,jette,jettera : Str) -> V = reg3V ;
-    mkV : V2 -> V = v2V
+    mkV : V2 -> V = v2V ;
+    mkV : (tenir,tiens,tenons,tiennent,tint,tiendra,tenu : Str) -> V
+    = \tenir,tiens,tenons,tiennent,tint,tiendra,tenu -> 
+      {s = vvf (mkVerb7 tenir tiens tenons tiennent tint tiendra tenu) ; vtyp = VHabere ; lock_V = <>} ;
+
   } ;
 
   regV : Str -> V ;

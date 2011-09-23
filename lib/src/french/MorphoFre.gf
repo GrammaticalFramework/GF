@@ -372,7 +372,7 @@ oper
     table {
       Inf                   => tenir  ;
       Indi  Presn    Sg p     => tien   + affpres ! p ;
-      Indi  Presn    Pl P3    => tienn  + affixPlOns ! P3 ;
+      Indi  Presn    Pl P3    => tienn  + "ent" ;
       Indi  Presn    Pl p     => ten    + affixPlOns ! p ;
       Indi  Imparf  n  p     => ten    + affixImparf ! n ! p ;
       Indi  Passe   n  p     => t      + affpasse.ps ! n ! p ;
@@ -398,7 +398,49 @@ oper
     \tien, ten, tienn, t, tiendr, tenu, tenir ->
     \affpres, affpasse ->
     verbAffixes tien ten tienn t tiendr tienn ten 
-                (tien + affpres ! P1) tenu (tenu+"s") tenir affpres affpasse ;
+                (tien + affpres ! P1) tenu 
+                (case tenu of {_ +"s" => tenu ; _ => tenu + "s"}) tenir affpres affpasse ;
+
+-- make this into a smart paradigm
+
+  mkVerb7 : (tenir,tiens,tenons,tiennent,tint,tiendra,tenu : Str) -> Verbe =
+    \tenir,tiens,tenons,tiennent,tint,tiendra,tenu -> 
+    let 
+      affpres : Affixe = case tiens of {
+        _ + "e"           => lesAffixes "e" "es" "e" ;
+        _ + "ds"          => lesAffixes "s" "s" [] ;
+        _ + "ts"          => lesAffixes "s" "s" [] ;
+        _ + s@("s" | "x") => lesAffixes s s "t"
+        } ;
+      affpasse : AffixPasse * Int = case tint of {
+        _ + "a"  => <affixPasseA,1> ;
+        _ + "it" => <affixPasseI,2> ;
+        _ + "ut" => <affixPasseU,2> ;
+        _ + "nt" => <affixPasse "in" "în",3> ;
+        _        => Predef.error ("cannot form past tense from" ++ tint)
+        } ;
+    in verbHabituel
+      (Predef.tk 1 tiens)
+      (Predef.tk 3 tenons)
+      (Predef.tk 3 tiennent)
+      (Predef.tk affpasse.p2 tint)
+      (Predef.tk 1 tiendra)
+      tenu
+      tenir
+      affpres
+      affpasse.p1 ;
+
+  AffixPasse : Type = {ps : Number => Affixe ; si : Number => Affixe} ;
+
+  affixPasse : (_,_ : Str) -> AffixPasse = \i, î ->
+    {ps = affixPasseS i î ; si = affixSImparfSse i î} ;
+
+  affixPasseA : AffixPasse = {ps = affixPasseAi ; si = affixSImparfSse "a" "â"} ;
+
+  affixPasseI : AffixPasse = affixPasse "i" "î" ;
+
+  affixPasseU : AffixPasse = affixPasse "u" "û" ;
+
 
 --3 The first conjugation
 --
@@ -610,10 +652,13 @@ oper
       } in
     table {
       Indi Presn Sg p   => fa + "u" + affixSgX ! p ;
-      Subjo SPres n p => fa + variants {"illiss" ; "ill"} + affixSPres ! n ! p ;
 
-      Indi Futur n p => variants {tfa ! Indi Futur n p ; faudr + affixFutur ! n ! p} ;
-      Condi      n p => variants {tfa ! Condi n p     ; faudr + affixImparf ! n ! p} ;
+      Subjo SPres n p => fa + "ill" + affixSPres ! n ! p ;
+      Indi Futur n p  => faudr + affixFutur ! n ! p ;
+      Condi      n p  => faudr + affixImparf ! n ! p ;
+---v      Subjo SPres n p => fa + variants {"illiss" ; "ill"} + affixSPres ! n ! p ;
+---v      Indi Futur n p => variants {tfa ! Indi Futur n p ; faudr + affixFutur ! n ! p} ;
+---v      Condi      n p => variants {tfa ! Condi n p     ; faudr + affixImparf ! n ! p} ;
 
       Imper _         => nonExist ;
       p               => tfa ! p
@@ -743,7 +788,8 @@ oper
       tpouvoir = auxConj3usX "eu" "ouv" "euv" "" "ourr" "uiss" "uiss" "ouv"
       } in
     table {
-      Indi Presn Sg P1 => p + variants {"eux" ; "uis"} ;
+      Indi Presn Sg P1 => p + "eux" ;
+---v      Indi Presn Sg P1 => p + variants {"eux" ; "uis"} ;
       t => p + tpouvoir ! t
       } ;
 
@@ -825,7 +871,8 @@ oper
       tassoir = auxConj3is "oi" "oy" "oi" "" "oir" "is" "is"
     } in 
     table {
-      Inf => ass + variants {"oir" ; "eoir"} ;
+      Inf => ass + "eoir" ;
+---v  Inf => ass + variants {"oir" ; "eoir"} ;
       t => ass + tassoir ! t
       } ;
 
@@ -876,7 +923,8 @@ oper
       e = Predef.tk 5 choir ;
       tchoir = 
         auxConj3usS "choi" "choy" "choi" "ch" 
-          (variants {"choir" ; "cherr"}) "choi" "choy" "ch"
+          "cherr" "choi" "choy" "ch"
+---v      (variants {"choir" ; "cherr"}) "choi" "choy" "ch"
     } in
     \\p => e + tchoir ! p ;
 
@@ -885,7 +933,8 @@ oper
     table {
       Indi _      _  P1 => nonExist ;
       Indi _      _  P2 => nonExist ;
-      Indi Presn Pl P3   => Predef.tk 3 échoir + variants {"oient" ; "éent"} ;
+      Indi Presn Pl P3   => Predef.tk 3 échoir + "éent" ;
+---v  Indi Presn Pl P3   => Predef.tk 3 échoir + variants {"oient" ; "éent"} ;
       Subjo _    _  P1 => nonExist ;
       Subjo _    _  P2 => nonExist ;
       Condi       _  P1 => nonExist ;
