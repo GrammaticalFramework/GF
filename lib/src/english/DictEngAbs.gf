@@ -1777,6 +1777,7 @@ fun aromatic_A : A;
 fun arose_V2 : V2;
 fun arose_VS : VS;
 fun around_Adv : Adv;
+fun around_AdN : AdN;
 fun around_Prep : Prep ;
 fun arouse_V2 : V2;
 fun arouse_V2V : V2V;
