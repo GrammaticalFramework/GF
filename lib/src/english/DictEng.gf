@@ -1016,7 +1016,6 @@ lin alpine_A = compoundA (mkA "alpine");
 lin alpinist_N = mkN "alpinist" "alpinists";
 lin already_Adv = mkAdv "already";
 lin already_AdV = mkAdV "already";
-lin alright_A = compoundA (mkA "alright");
 lin alright_Adv = mkAdv "alright";
 lin alsatian_N = mkN "alsatian" "alsatians";
 lin also_AdV = mkAdV "also";
