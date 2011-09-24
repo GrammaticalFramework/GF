@@ -36,27 +36,20 @@ stripInfo i = case i of
   CncFun mict mte mtf -> CncFun mict Nothing Nothing
   AnyInd b f -> i
 
-constantsInTerm :: Term -> [Term]
+constantsInTerm :: Term -> [QIdent]
 constantsInTerm = nub . consts where
   consts t = case t of
-    Q _  -> [t]
-    QC _ -> [t]
+    Q c  -> [c]
+    QC c -> [c]
     _ -> collectOp consts t
 
-constantDeps :: SourceGrammar -> QIdent -> Err [Term]
-constantDeps sgr f = do
-  ts <- deps f
-  let cs = [i | t <- ts, Ok i <- [getIdTerm t]]
-  ds <- mapM deps cs
-  return $ nub $ concat $ ts:ds
- where
-  deps c = case lookupOverload sgr c of
-    Ok tts -> 
-      return $ concat [constantsInTerm ty ++ constantsInTerm tr | (_,(ty,tr)) <- tts]
-    _ -> do  
-      ty <- lookupResType sgr c
-      tr <- lookupResDef sgr c
-      return $ constantsInTerm ty ++ constantsInTerm tr
+constantDeps :: SourceGrammar -> QIdent -> Err [QIdent]
+constantDeps sgr f = return $ nub $ iterFix more start where
+  start = constants f
+  more  = concatMap constants
+  constants c = (c :) $ errVal [] $ do
+    ts  <- termsOfConstant sgr c
+    return $ concatMap constantsInTerm ts
 
 getIdTerm :: Term -> Err QIdent
 getIdTerm t = case t of
@@ -68,14 +61,20 @@ getIdTerm t = case t of
 constantDepsTerm :: SourceGrammar -> Term -> Err [Term]
 constantDepsTerm sgr t = do
   i <- getIdTerm t
-  constantDeps sgr i
+  cs <- constantDeps sgr i
+  return $ map Q cs  --- losing distinction Q/QC
+
+termsOfConstant :: SourceGrammar -> QIdent -> Err [Term]
+termsOfConstant sgr c = case lookupOverload sgr c of
+  Ok tts -> return $ concat [[ty,tr] | (_,(ty,tr)) <- tts]
+  _ -> return $
+         [ty | Ok ty <- [lookupResType sgr c]] ++  -- type sig may be missing
+         [ty | Ok ty <- [lookupResDef sgr c]]
 
 sizeConstant :: SourceGrammar -> Term -> Int
 sizeConstant sgr t = err (const 0) id $ do
   c  <- getIdTerm t
-  ty <- return $ err (const 0) sizeTerm $ lookupResType sgr c  -- if no type sig, return 0
-  tr <- return $ err (const 0) sizeTerm $ lookupResDef sgr c
-  return $ ty + tr
+  fmap (sum . map sizeTerm) $ termsOfConstant sgr c
 
 -- the number of constructors in a term, ignoring position information and unnecessary types
 -- ground terms count as 1, i.e. as "one work" each

@@ -191,7 +191,7 @@ execute1 opts gfenv0 s0 =
           ops <- case ts of
              _:_ -> do
                let Right t = runP pExp (encodeUnicode utf8 (unwords ts))
-               err error return $ constantDepsTerm sgr t
+               err error (return . (t:)) $ constantDepsTerm sgr t
              _   -> error "give a term as argument"
           let prTerm = showTerm sgr TermPrintDefault Qualified
           let size = sizeConstant sgr
