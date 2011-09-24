@@ -29,6 +29,7 @@ resource ParadigmsFre =
     (Predef=Predef), 
     Prelude, 
     MorphoFre, 
+    BeschFre,
     CatFre in {
 
   flags optimize=all ;
@@ -150,6 +151,10 @@ oper
 
     mkA : (sec,seche : Str) -> A ; -- unpredictable feminine
 
+-- The masculine plural can also be deviant.
+
+    mkA : (banal,banale,banaux : Str) -> A ;
+
 -- This is the worst-case paradigm for the positive forms.
 
     mkA : (banal,banale,banaux,banalement : Str) -> A ; -- worst-case adjective
@@ -213,9 +218,13 @@ oper
     mkV : (finir : Str) -> V ; -- regular 1/2/3 conjugation
     mkV : (jeter,jette,jettera : Str) -> V ; -- 1st conjugation variations
 
+-- Here is a paradigm that works for most irregular verbs.
+
+    mkV : (tenir,tiens,tenons,tiennent,tint,tiendra,tenu : Str) -> V ;
+
 -- Here is a worst-case paradigm.
 
-  mkV : (tenir,tiens,tenons,tiennent,tint,tiendra,tenu : Str) -> V ;
+    mkV : (tenir,tiens,tient,tenons,tenez,tiennent,tienne,tenions,tiensI,tint,tiendra,tenu : Str) -> V ;
 
 -- The $IrregFre$ list gives some verbs as two-place. These verbs can be
 -- reused as one-place verbs.
@@ -361,6 +370,7 @@ oper
   mkA = overload {
     mkA : Str -> A = regA ;
     mkA : (sec,seche : Str) -> A = \sec,seche -> mk4A sec seche (sec + "s") (seche + "ment") ; 
+    mkA : (banal,banale,banaux : Str) -> A = \sec,seche,secs -> mk4A sec seche secs (seche + "ment") ; 
     mkA : (banal,banale,banaux,banalement : Str) -> A = mk4A ;
     mkA : A -> A -> A = mkADeg
   };
@@ -437,7 +447,10 @@ oper
     mkV : (tenir,tiens,tenons,tiennent,tint,tiendra,tenu : Str) -> V
     = \tenir,tiens,tenons,tiennent,tint,tiendra,tenu -> 
       {s = vvf (mkVerb7 tenir tiens tenons tiennent tint tiendra tenu) ; vtyp = VHabere ; lock_V = <>} ;
-
+    mkV : (tenir,tiens,tient,tenons,tenez,tiennent,tienne,tenions,tiensI,tint,tiendra,tenu : Str) -> V
+    = \tenir,tiens,tient,tenons,tenez,tiennent,tienne,tenions,tiensI,tint,tiendra,tenu -> 
+      {s = vvf (mkVerb12 tenir tiens tient tenons tenez tiennent tienne tenions tiensI tint tiendra tenu) ; 
+       vtyp = VHabere ; lock_V = <>} ;
   } ;
 
   regV : Str -> V ;
