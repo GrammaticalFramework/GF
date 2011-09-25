@@ -61,7 +61,7 @@ data CommandInfo = CommandInfo {
   longname :: String,
   options  :: [(String,String)],
   flags    :: [(String,String)],
-  examples :: [String],
+  examples :: [(String,String)],
   needsTypeCheck :: Bool
   }
 
@@ -97,7 +97,7 @@ commandHelp full (co,info) = unlines . compact $ [
   explanation info,
   section "options:"  [" -" ++ o ++ "\t" ++ e | (o,e) <- options info],
   section "flags:"    [" -" ++ o ++ "\t" ++ e | (o,e) <- flags info],
-  section "examples:" ["  " ++ s | s <- examples info]
+  section "examples:" ["  " ++ o ++ "\t--" ++ e | (o,e) <- examples info]
   ] else []
 
 -- for printing with txt2tags formatting
@@ -112,9 +112,9 @@ commandHelpTags full (co,info) = unlines . compact $ [
   "","#TINY","",
   explanation info,
   optionally ("- Syntax: "++) (lit (syntax info)),
-  section "- Options:\n" [" | ``-" ++ o ++ "`` | " ++ e | (o,e)<- options info],
-  section "- Flags:\n" [" | ``-" ++ o ++ "`` | " ++ e | (o,e) <- flags info],
-  section "- Examples:\n" (verbatim ["  " ++ s | s <- examples info]),
+  section "- Options:\n"  [" | ``-" ++ o ++ "`` | " ++ e | (o,e) <- options info],
+  section "- Flags:\n"    [" | ``-" ++ o ++ "`` | " ++ e | (o,e) <- flags info],
+  section "- Examples:\n" [" | ``"  ++ o ++ "`` | " ++ e | (o,e) <- examples info],
   "", "#NORMAL", ""
   ] else []
  where
@@ -137,6 +137,8 @@ compact (x:xs) = x:compact xs
 
 type PGFEnv = (PGF, Map.Map Language Morpho)
 
+mkEx s = let (command,expl) = break (=="--") (words s) in (unwords command, unwords (drop 1 expl))
+
 -- this list must no more be kept sorted by the command name
 allCommands :: PGFEnv -> Map.Map String CommandInfo
 allCommands env@(pgf, mos) = Map.fromList [
@@ -144,7 +146,7 @@ allCommands env@(pgf, mos) = Map.fromList [
      synopsis = "system command: escape to system shell",
      syntax   = "! SYSTEMCOMMAND",
      examples = [
-       "! ls *.gf   -- list all GF files in the working directory"
+       ("! ls *.gf",  "list all GF files in the working directory")
        ],
      needsTypeCheck = False
      }),
@@ -152,7 +154,7 @@ allCommands env@(pgf, mos) = Map.fromList [
      synopsis = "system pipe: send value from previous command to a system command",
      syntax   = "? SYSTEMCOMMAND",
      examples = [
-       "gt | l | ? wc  -- generate, linearize, word-count"
+       ("gt | l | ? wc",  "generate, linearize, word-count")
        ],
      needsTypeCheck = False
      }),
@@ -191,10 +193,10 @@ allCommands env@(pgf, mos) = Map.fromList [
                  return void
                else return $ fromString grph,
      examples = [
-       "gr | aw                         -- generate a tree and show word alignment as graph script",
-       "gr | aw -view=\"open\"            -- generate a tree and display alignment on Mac",
-       "gr | aw -view=\"eog\"             -- generate a tree and display alignment on Ubuntu",
-       "gt | aw -giza | wf -file=aligns -- generate trees, send giza alignments to file"
+       ("gr | aw"                         , "generate a tree and show word alignment as graph script"),
+       ("gr | aw -view=\"open\""          , "generate a tree and display alignment on Mac"),
+       ("gr | aw -view=\"eog\""           , "generate a tree and display alignment on Ubuntu"),
+       ("gt | aw -giza | wf -file=aligns" , "generate trees, send giza alignments to file")
        ],
      options = [
        ("giza",  "show alignments in the Giza format; the first two languages")
@@ -233,7 +235,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("raw", "analyse each word separately (not suitable input for parser)")
        ],
      examples = [
-       "ca -lang=Fin -clitics=ko,ni \"nukkuuko minun vaimoni\" | p  -- to parse Finnish"
+       mkEx "ca -lang=Fin -clitics=ko,ni \"nukkuuko minun vaimoni\" | p  -- to parse Finnish"
        ]
      }),
 
@@ -295,7 +297,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("only","list of modules included (default: all), literally or by prefix*")
        ],
      examples = [
-       "dg -only=SyntaxEng,Food*  -- shows only SyntaxEng, and those with prefix Food"
+       mkEx "dg -only=SyntaxEng,Food*  -- shows only SyntaxEng, and those with prefix Food"
        ],
      needsTypeCheck = False
      }),
@@ -312,10 +314,10 @@ allCommands env@(pgf, mos) = Map.fromList [
        "and thus cannot be a part of a pipe."
        ],
      examples = [
-       ("dt ex \"hello world\"                    -- define ex as string"),
-       ("dt ex UseN man_N                         -- define ex as string"),
-       ("dt ex < p -cat=NP \"the man in the car\" -- define ex as parse result"),
-       ("l -lang=LangSwe %ex | ps -to_utf8        -- linearize the tree ex")
+       mkEx ("dt ex \"hello world\"                    -- define ex as string"),
+       mkEx ("dt ex UseN man_N                         -- define ex as string"),
+       mkEx ("dt ex < p -cat=NP \"the man in the car\" -- define ex as parse result"),
+       mkEx ("l -lang=LangSwe %ex | ps -to_utf8        -- linearize the tree ex")
        ],
      needsTypeCheck = False
      }),
@@ -360,11 +362,11 @@ allCommands env@(pgf, mos) = Map.fromList [
      synopsis = "generate random trees in the current abstract syntax",
      syntax = "gr [-cat=CAT] [-number=INT]",
      examples = [
-       "gr                     -- one tree in the startcat of the current grammar",
-       "gr -cat=NP -number=16  -- 16 trees in the category NP",
-       "gr -lang=LangHin,LangTha -cat=Cl  -- Cl, both in LangHin and LangTha",
-       "gr -probs=FILE         -- generate with bias",
-       "gr (AdjCN ? (UseN ?))  -- generate trees of form (AdjCN ? (UseN ?))"
+       mkEx "gr                     -- one tree in the startcat of the current grammar",
+       mkEx "gr -cat=NP -number=16  -- 16 trees in the category NP",
+       mkEx "gr -lang=LangHin,LangTha -cat=Cl  -- Cl, both in LangHin and LangTha",
+       mkEx "gr -probs=FILE         -- generate with bias",
+       mkEx "gr (AdjCN ? (UseN ?))  -- generate trees of form (AdjCN ? (UseN ?))"
        ],
      explanation = unlines [
        "Generates a list of random trees, by default one tree.",
@@ -404,10 +406,10 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("number","the number of trees generated")
        ],
      examples = [
-       "gt                     -- all trees in the startcat, to depth 4",
-       "gt -cat=NP -number=16  -- 16 trees in the category NP",
-       "gt -cat=NP -depth=2    -- trees in the category NP to depth 2",
-       "gt (AdjCN ? (UseN ?))  -- trees of form (AdjCN ? (UseN ?))"
+       mkEx "gt                     -- all trees in the startcat, to depth 4",
+       mkEx "gt -cat=NP -number=16  -- 16 trees in the category NP",
+       mkEx "gt -cat=NP -depth=2    -- trees in the category NP to depth 2",
+       mkEx "gt (AdjCN ? (UseN ?))  -- trees of form (AdjCN ? (UseN ?))"
        ],
      exec = \opts xs -> do
        let pgfr = optRestricted opts
@@ -488,9 +490,9 @@ allCommands env@(pgf, mos) = Map.fromList [
        "sequences; see example."
        ],
      examples = [
-       "l -lang=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor",
-       "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -- hindi table",
-       "l -unlexer=\"LangAra=to_arabic LangHin=to_devanagari\" -- different unlexers"
+       mkEx "l -lang=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor",
+       mkEx "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -- hindi table",
+       mkEx "l -unlexer=\"LangAra=to_arabic LangHin=to_devanagari\" -- different unlexers"
        ],
      exec = \opts -> return . fromStrings . optLins opts,
      options = [
@@ -612,7 +614,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("words", "print the list of words")
        ],
      examples = [
-       ("pg -funs | ? grep \" S ;\"  -- show functions with value cat S")
+       mkEx ("pg -funs | ? grep \" S ;\"  -- show functions with value cat S")
        ]
      }),
   ("ph", emptyCommandInfo {
@@ -624,7 +626,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        "The result can be used as a script when starting GF."
        ],
      examples = [
-      "ph | wf -file=foo.gfs  -- save the history into a file"
+      mkEx "ph | wf -file=foo.gfs  -- save the history into a file"
       ]
      }),
   ("ps", emptyCommandInfo {
@@ -640,13 +642,13 @@ allCommands env@(pgf, mos) = Map.fromList [
        "To see transliteration tables, use command ut." 
        ], 
      examples = [
-       "l (EAdd 3 4) | ps -code         -- linearize code-like output",
-       "ps -lexer=code | p -cat=Exp     -- parse code-like input",
-       "gr -cat=QCl | l | ps -bind      -- linearization output from LangFin", 
-       "ps -to_devanagari \"A-p\"         -- show Devanagari in UTF8 terminal",
-       "rf -file=Hin.gf | ps -env=quotes -to_devanagari -- convert translit to UTF8",
-       "rf -file=Ara.gf | ps -from_utf8 -env=quotes -from_arabic -- convert UTF8 to transliteration",
-       "ps -to=chinese.trans \"abc\"      -- apply transliteration defined in file chinese.trans"
+       mkEx "l (EAdd 3 4) | ps -code         -- linearize code-like output",
+       mkEx "ps -lexer=code | p -cat=Exp     -- parse code-like input",
+       mkEx "gr -cat=QCl | l | ps -bind      -- linearization output from LangFin", 
+       mkEx "ps -to_devanagari \"A-p\"         -- show Devanagari in UTF8 terminal",
+       mkEx "rf -file=Hin.gf | ps -env=quotes -to_devanagari -- convert translit to UTF8",
+       mkEx "rf -file=Ara.gf | ps -from_utf8 -env=quotes -from_arabic -- convert UTF8 to transliteration",
+       mkEx "ps -to=chinese.trans \"abc\"      -- apply transliteration defined in file chinese.trans"
        ],
      exec = \opts x -> do
                let (os,fs) = optsAndFlags opts
@@ -670,8 +672,8 @@ allCommands env@(pgf, mos) = Map.fromList [
        "are type checking and semantic computation."
        ], 
      examples = [
-       "pt -compute (plus one two)                               -- compute value",
-       "p \"4 dogs love 5 cats\" | pt -transfer=digits2numeral | l -- four...five..."
+       mkEx "pt -compute (plus one two)                               -- compute value",
+       mkEx "p \"4 dogs love 5 cats\" | pt -transfer=digits2numeral | l -- four...five..."
        ],
      exec = \opts -> 
             returnFromExprs . takeOptNum opts . treeOps opts,
@@ -750,8 +752,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("v","show all trees with their probability scores")
        ],
      examples = [
-      "p \"you are here\" | rt -probs=probs | pt -number=1 -- most probable result",
-      "se utf8   -- set encoding to utf8 (default)"
+      mkEx "p \"you are here\" | rt -probs=probs | pt -number=1 -- most probable result"
       ]
      }),
   ("tq", emptyCommandInfo {
@@ -774,15 +775,15 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("probs","file with biased probabilities for generation")
        ], 
      examples = [
-       ("tq -from=Eng -to=Swe                               -- any trees in startcat"),
-       ("tq -from=Eng -to=Swe (AdjCN (PositA ?2) (UseN ?))  -- only trees of this form")
+       mkEx ("tq -from=Eng -to=Swe                               -- any trees in startcat"),
+       mkEx ("tq -from=Eng -to=Swe (AdjCN (PositA ?2) (UseN ?))  -- only trees of this form")
        ] 
      }),
 
   ("sd", emptyCommandInfo {
      longname = "show_dependencies",
-     syntax = "sd QUALIFIED_CONSTANT",
-     synopsis = "show all constants that the given constant depends on",
+     syntax = "sd QUALIFIED_CONSTANT+",
+     synopsis = "show all constants that the given constants depend on",
      explanation = unlines [
        "Show recursively all qualified constant names, by tracing back the types and definitions",
        "of each constant encountered, but just listing every name once.",
@@ -794,8 +795,8 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("size","show the size of the source code for each constants (number of constructors)")
        ],
      examples = [
-       "sd ParadigmsEng.mkV          -- show all constants on which this one depends",
-       "sd -size ParadigmsEng.mkV    -- show all constants on which this one depends, together with size"
+       mkEx "sd ParadigmsEng.mkV ParadigmsEng.mkN  -- show all constants on which mkV and mkN depend",
+       mkEx "sd -size ParadigmsEng.mkV    -- show all constants on which mkV depends, together with size"
        ],
      needsTypeCheck = False
      }),
@@ -805,8 +806,8 @@ allCommands env@(pgf, mos) = Map.fromList [
      synopsis = "set the encoding used in current terminal",
      syntax   = "se ID",
      examples = [
-      "se cp1251 -- set encoding to cp1521",
-      "se utf8   -- set encoding to utf8 (default)"
+      mkEx "se cp1251 -- set encoding to cp1521",
+      mkEx "se utf8   -- set encoding to utf8 (default)"
       ],
      needsTypeCheck = False
     }),
@@ -826,8 +827,7 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("command","the system command applied to the argument")
        ],
      examples = [
-       "sp -command=\"wc\" \"foo\"",
-       "gt | l | sp -command=\"grep \\\"who\\\"\" | sp -command=\"wc\""
+       mkEx "gt | l | ? wc  -- generate trees, linearize, and count words"
        ]
      }),
 
@@ -871,8 +871,8 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("strip","show only type signatures of oper's and lin's, not their definitions") 
        ],
      examples = [
-       "ss                         -- print complete current source grammar on terminal",
-       "ss -strip -save MorphoFin  -- print the headers in file MorphoFin.gfh"
+       mkEx "ss                         -- print complete current source grammar on terminal",
+       mkEx "ss -strip -save MorphoFin  -- print the headers in file MorphoFin.gfh"
        ],
      needsTypeCheck = False
      }),
@@ -921,10 +921,10 @@ allCommands env@(pgf, mos) = Map.fromList [
            return void
           else return $ fromString grphs,
      examples = [
-       "gr | vd              -- generate a tree and show dependency tree in .dot",
-       "gr | vd -view=open   -- generate a tree and display dependency tree on a Mac",
-       "gr -number=1000 | vd -file=dep.labels -output=malt      -- generate training treebank",
-       "gr -number=100 | vd -file=dep.labels -output=malt_input -- generate test sentences"
+       mkEx "gr | vd              -- generate a tree and show dependency tree in .dot",
+       mkEx "gr | vd -view=open   -- generate a tree and display dependency tree on a Mac",
+       mkEx "gr -number=1000 | vd -file=dep.labels -output=malt      -- generate training treebank",
+       mkEx "gr -number=100 | vd -file=dep.labels -output=malt_input -- generate test sentences"
        ],
      options = [
        ("v","show extra information")
@@ -962,8 +962,8 @@ allCommands env@(pgf, mos) = Map.fromList [
            return void
           else return $ fromString grph,
      examples = [
-       "p \"John walks\" | vp  -- generate a tree and show parse tree as .dot script",
-       "gr | vp -view=\"open\" -- generate a tree and display parse tree on a Mac"
+       mkEx "p \"John walks\" | vp  -- generate a tree and show parse tree as .dot script",
+       mkEx "gr | vp -view=\"open\" -- generate a tree and display parse tree on a Mac"
        ],
      options = [
        ],
@@ -1007,8 +1007,8 @@ allCommands env@(pgf, mos) = Map.fromList [
            return void
           else return $ fromString grph,
      examples = [
-       "p \"hello\" | vt              -- parse a string and show trees as graph script",
-       "p \"hello\" | vt -view=\"open\" -- parse a string and display trees on a Mac"
+       mkEx "p \"hello\" | vt              -- parse a string and show trees as graph script",
+       mkEx "p \"hello\" | vt -view=\"open\" -- parse a string and display trees on a Mac"
        ],
      options = [
        ("api", "show the tree with function names converted to 'mkC' with value cats C"),
