@@ -35,7 +35,7 @@ import PGF.Macros
 
 import Data.Char
 import Data.Maybe
-import Data.List(isPrefixOf,isInfixOf,partition)
+import Data.List(nub,isPrefixOf,isInfixOf,partition)
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
 import qualified Text.ParserCombinators.ReadP as RP
@@ -187,12 +187,12 @@ execute1 opts gfenv0 s0 =
       continue gfenv
 
     show_deps ws = do
-          let (os,ts) = partition (isPrefixOf "-") ws
-          ops <- case ts of
+          let (os,xs) = partition (isPrefixOf "-") ws
+          ops <- case xs of
              _:_ -> do
-               let Right t = runP pExp (encodeUnicode utf8 (unwords ts))
-               err error (return . (t:)) $ constantDepsTerm sgr t
-             _   -> error "give a term as argument"
+               let ts = [t | Right t <- map (runP pExp . encodeUnicode utf8) xs]
+               err error (return . nub . (ts ++) . concat) $ mapM (constantDepsTerm sgr) ts
+             _   -> error "expected one or more qualified constants as argument"
           let prTerm = showTerm sgr TermPrintDefault Qualified
           let size = sizeConstant sgr
           let printed 
