@@ -191,7 +191,7 @@ execute1 opts gfenv0 s0 =
           ops <- case xs of
              _:_ -> do
                let ts = [t | Right t <- map (runP pExp . encodeUnicode utf8) xs]
-               err error (return . nub . (ts ++) . concat) $ mapM (constantDepsTerm sgr) ts
+               err error (return . nub . concat) $ mapM (constantDepsTerm sgr) ts
              _   -> error "expected one or more qualified constants as argument"
           let prTerm = showTerm sgr TermPrintDefault Qualified
           let size = sizeConstant sgr
