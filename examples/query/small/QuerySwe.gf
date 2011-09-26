@@ -6,7 +6,7 @@ concrete QuerySwe of Query = open
   SyntaxSwe,
   ExtraSwe,
   (M = MakeStructuralSwe),
-  (L = LangSwe),
+  (L = GrammarSwe),
   Prelude
 in {
 
@@ -35,7 +35,7 @@ lin
   QSet s =
     let
      ss : NP = s
-        | mkNP (mkNP thePl_Det L.name_N) (mkAdv on_Prep s)
+        | mkNP (mkNP thePl_Det name_N) (mkAdv on_Prep s)
         ---- s's names
     in
       mkUtt (mkImp (mkVP give_V3 (mkNP i_Pron) ss))
@@ -51,7 +51,7 @@ lin
       mkUtt (mkImp (mkVP give_V3 (mkNP i_Pron) info))
     | mkUtt info ;
 
-  QCalled i = mkUtt (mkQS (mkQCl how_IAdv (mkCl i (mkVP also_AdV (mkVP called_A))))) ;
+  QCalled i = mkUtt (mkQS (mkQCl (mkIP whichSg_IDet (mkCN other_A name_N)) i have_V2)) ; 
 
   AKind s k = mkUtt (mkCl s (mkNP aPl_Det k)) ; ---- a, fun of s
   AProp s p = mkUtt (mkCl s p) ;
@@ -105,8 +105,7 @@ oper
   information_N = mkN "information" "informationer" ;
   other_A = compoundA (mkA "annan" "annat" "andra" "andra" "andra") ;
   that_RP = which_RP ;
-
-  sina : CN -> NP = \cn -> mkNP (M.mkPredet "sin" "sitt" "sina") (mkNP a_Quant plNum cn) ; ---- should be in ExtraSwe
+  name_N = mkN "namn" "namn" ;
 
 -- lexical constructors
   mkName : Str -> NP =
