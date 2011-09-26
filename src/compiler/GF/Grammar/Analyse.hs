@@ -80,7 +80,7 @@ sizeConstant sgr t = err (const 0) id $ do
 -- ground terms count as 1, i.e. as "one work" each
 sizeTerm :: Term -> Int
 sizeTerm t = case t of
-  App c a      -> 1 + sizeTerm c + sizeTerm a 
+  App c a      -> sizeTerm c + sizeTerm a  -- app nodes don't count 
   Abs _ _ b    -> 2 + sizeTerm b
   Prod _ _ a b -> 2 + sizeTerm a + sizeTerm b 
   S c a        -> 1 + sizeTerm c + sizeTerm a
