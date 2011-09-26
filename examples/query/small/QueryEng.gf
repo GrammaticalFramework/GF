@@ -5,7 +5,7 @@ concrete QueryEng of Query = open
   IrregEng,
   SyntaxEng,
   ExtraEng,
-  (L = LangEng),
+  (L = GrammarEng),
   Prelude
 in {
 
@@ -32,7 +32,7 @@ lin
   QSet s =
     let
      ss : NP = s
-        | mkNP (mkNP thePl_Det L.name_N) (mkAdv possess_Prep s)
+        | mkNP (mkNP thePl_Det name_N) (mkAdv possess_Prep s)
         ---- s's names
     in
       mkUtt (mkImp (mkVP give_V3 (mkNP i_Pron) ss))
@@ -101,6 +101,7 @@ oper
   give_V3 = mkV3 give_V ;
   information_N = mkN "information" ;
   other_A = mkA "other" ;
+  name_N = mkN "name" ;
 
 -- lexical constructors
   mkName : Str -> NP =
