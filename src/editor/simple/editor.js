@@ -492,7 +492,8 @@ function draw_concrete(g,i) {
 		   indent([kw("lincat"),draw_lincats(g,i)]),
 		   indent([kw("lin"),draw_lins(g,i)]),
 		   indent([extensible([kw("param"),draw_params(g,i)])]),
-		   indent([extensible([kw("oper"),draw_opers(g,i)])])
+		   indent([extensible([kw("oper"),draw_opers(g,i)])]),
+		   exb_extra(g,i)
 		  ])
 }
 
@@ -780,8 +781,8 @@ function arg_names(type) {
     return map(unique,names);
 }
 
-function draw_lins(g,i) {
-    var conc=g.concretes[i];
+function draw_lins(g,ci) {
+    var conc=g.concretes[ci];
     function edit(f) {
 	return function(g,el) {
 	    function check(s,cont) {
@@ -799,7 +800,7 @@ function draw_lins(g,i) {
 	    string_editor(el,f.lin,check,true)
 	}
     }
-    function del(fun) { return function () { delete_lin(g,i,fun); } }
+    function del(fun) { return function () { delete_lin(g,ci,fun); } }
     function dl(f,cls) {
 	var l=[ident(f.fun)]
 	for(var i in f.args) {
@@ -808,6 +809,7 @@ function draw_lins(g,i) {
 	}
 	l.push(sep(" = "));
 	var t=editable("span",text_ne(f.lin),g,edit(f),"Edit lin for "+f.fun);
+	appendChildren(t,exb_linbuttons(g,ci,f));
 	l.push(t);
 	return node("span",{"class":cls},l);
     }
