@@ -13,9 +13,7 @@
 
 - Examples:
 
-```
-  ! ls *.gf   -- list all GF files in the working directory
-```
+ | ``! ls *.gf`` | list all GF files in the working directory
 
 
 #NORMAL
@@ -33,9 +31,7 @@
 
 - Examples:
 
-```
-  gt | l | ? wc  -- generate, linearize, word-count
-```
+ | ``gt | l | ? wc`` | generate, linearize, word-count
 
 
 #NORMAL
@@ -89,12 +85,10 @@ flag -format.
 
 - Examples:
 
-```
-  gr | aw                         -- generate a tree and show word alignment as graph script
-  gr | aw -view="open"            -- generate a tree and display alignment on Mac
-  gr | aw -view="eog"             -- generate a tree and display alignment on Ubuntu
-  gt | aw -giza | wf -file=aligns -- generate trees, send giza alignments to file
-```
+ | ``gr | aw`` | generate a tree and show word alignment as graph script
+ | ``gr | aw -view="open"`` | generate a tree and display alignment on Mac
+ | ``gr | aw -view="eog"`` | generate a tree and display alignment on Ubuntu
+ | ``gt | aw -giza | wf -file=aligns`` | generate trees, send giza alignments to file
 
 
 #NORMAL
@@ -126,9 +120,7 @@ of the language given by the '-lang' flag.
 
 - Examples:
 
-```
-  ca -lang=Fin -clitics=ko,ni "nukkuuko minun vaimoni" | p  -- to parse Finnish
-```
+ | ``ca -lang=Fin -clitics=ko,ni "nukkuuko minun vaimoni" | p`` | to parse Finnish
 
 
 #NORMAL
@@ -212,9 +204,7 @@ exactly the same name. The graphical conventions are:
 
 - Examples:
 
-```
-  dg -only=SyntaxEng,Food*  -- shows only SyntaxEng, and those with prefix Food
-```
+ | ``dg -only=SyntaxEng,Food*`` | shows only SyntaxEng, and those with prefix Food
 
 
 #NORMAL
@@ -239,12 +229,10 @@ and thus cannot be a part of a pipe.
 
 - Examples:
 
-```
-  dt ex "hello world"                    -- define ex as string
-  dt ex UseN man_N                         -- define ex as string
-  dt ex < p -cat=NP "the man in the car" -- define ex as parse result
-  l -lang=LangSwe %ex | ps -to_utf8        -- linearize the tree ex
-```
+ | ``dt ex "hello world"`` | define ex as string
+ | ``dt ex UseN man_N`` | define ex as string
+ | ``dt ex < p -cat=NP "the man in the car"`` | define ex as parse result
+ | ``l -lang=LangSwe %ex | ps -to_utf8`` | linearize the tree ex
 
 
 #NORMAL
@@ -318,13 +306,11 @@ given in a file in the -probs flag.
 
 - Examples:
 
-```
-  gr                     -- one tree in the startcat of the current grammar
-  gr -cat=NP -number=16  -- 16 trees in the category NP
-  gr -lang=LangHin,LangTha -cat=Cl  -- Cl, both in LangHin and LangTha
-  gr -probs=FILE         -- generate with bias
-  gr (AdjCN ? (UseN ?))  -- generate trees of form (AdjCN ? (UseN ?))
-```
+ | ``gr`` | one tree in the startcat of the current grammar
+ | ``gr -cat=NP -number=16`` | 16 trees in the category NP
+ | ``gr -lang=LangHin,LangTha -cat=Cl`` | Cl, both in LangHin and LangTha
+ | ``gr -probs=FILE`` | generate with bias
+ | ``gr (AdjCN ? (UseN ?))`` | generate trees of form (AdjCN ? (UseN ?))
 
 
 #NORMAL
@@ -353,12 +339,10 @@ to all metavariables in the tree.
 
 - Examples:
 
-```
-  gt                     -- all trees in the startcat, to depth 4
-  gt -cat=NP -number=16  -- 16 trees in the category NP
-  gt -cat=NP -depth=2    -- trees in the category NP to depth 2
-  gt (AdjCN ? (UseN ?))  -- trees of form (AdjCN ? (UseN ?))
-```
+ | ``gt`` | all trees in the startcat, to depth 4
+ | ``gt -cat=NP -number=16`` | 16 trees in the category NP
+ | ``gt -cat=NP -depth=2`` | trees in the category NP to depth 2
+ | ``gt (AdjCN ? (UseN ?))`` | trees of form (AdjCN ? (UseN ?))
 
 
 #NORMAL
@@ -497,11 +481,9 @@ sequences; see example.
 
 - Examples:
 
-```
-  l -lang=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor
-  gr -lang=LangHin -cat=Cl | l -table -to_devanagari -- hindi table
-  l -unlexer="LangAra=to_arabic LangHin=to_devanagari" -- different unlexers
-```
+ | ``l -lang=LangSwe,LangNor no_Utt`` | linearize tree to LangSwe and LangNor
+ | ``gr -lang=LangHin -cat=Cl | l -table -to_devanagari`` | hindi table
+ | ``l -unlexer="LangAra=to_arabic LangHin=to_devanagari"`` | different unlexers
 
 
 #NORMAL
@@ -644,9 +626,7 @@ command (flag -printer):
 
 - Examples:
 
-```
-  pg -funs | ? grep " S ;"  -- show functions with value cat S
-```
+ | ``pg -funs | ? grep " S ;"`` | show functions with value cat S
 
 
 #NORMAL
@@ -667,9 +647,7 @@ The result can be used as a script when starting GF.
 
 - Examples:
 
-```
-  ph | wf -file=foo.gfs  -- save the history into a file
-```
+ | ``ph | wf -file=foo.gfs`` | save the history into a file
 
 
 #NORMAL
@@ -740,15 +718,13 @@ To see transliteration tables, use command ut.
 
 - Examples:
 
-```
-  l (EAdd 3 4) | ps -code         -- linearize code-like output
-  ps -lexer=code | p -cat=Exp     -- parse code-like input
-  gr -cat=QCl | l | ps -bind      -- linearization output from LangFin
-  ps -to_devanagari "A-p"         -- show Devanagari in UTF8 terminal
-  rf -file=Hin.gf | ps -env=quotes -to_devanagari -- convert translit to UTF8
-  rf -file=Ara.gf | ps -from_utf8 -env=quotes -from_arabic -- convert UTF8 to transliteration
-  ps -to=chinese.trans "abc"      -- apply transliteration defined in file chinese.trans
-```
+ | ``l (EAdd 3 4) | ps -code`` | linearize code-like output
+ | ``ps -lexer=code | p -cat=Exp`` | parse code-like input
+ | ``gr -cat=QCl | l | ps -bind`` | linearization output from LangFin
+ | ``ps -to_devanagari "A-p"`` | show Devanagari in UTF8 terminal
+ | ``rf -file=Hin.gf | ps -env=quotes -to_devanagari`` | convert translit to UTF8
+ | ``rf -file=Ara.gf | ps -from_utf8 -env=quotes -from_arabic`` | convert UTF8 to transliteration
+ | ``ps -to=chinese.trans "abc"`` | apply transliteration defined in file chinese.trans
 
 
 #NORMAL
@@ -781,10 +757,8 @@ are type checking and semantic computation.
 
 - Examples:
 
-```
-  pt -compute (plus one two)                               -- compute value
-  p "4 dogs love 5 cats" | pt -transfer=digits2numeral | l -- four...five...
-```
+ | ``pt -compute (plus one two)`` | compute value
+ | ``p "4 dogs love 5 cats" | pt -transfer=digits2numeral | l`` | four...five...
 
 
 #NORMAL
@@ -864,10 +838,36 @@ by the file given by flag -probs=FILE, where each line has the form
 
 - Examples:
 
-```
-  p "you are here" | rt -probs=probs | pt -number=1 -- most probable result
-  se utf8   -- set encoding to utf8 (default)
-```
+ | ``p "you are here" | rt -probs=probs | pt -number=1`` | most probable result
+
+
+#NORMAL
+
+
+#VSPACE
+
+====sd = show_dependencies====
+#NOINDENT
+``sd`` = ``show_dependencies``: //show all constants that the given constants depend on.//
+
+#TINY
+
+Show recursively all qualified constant names, by tracing back the types and definitions
+of each constant encountered, but just listing every name once.
+This command requires a source grammar to be in scope, imported with 'import -retain'.
+Notice that the accuracy is better if the modules are compiled with the flag -optimize=noexpand.
+This command must be a line of its own, and thus cannot be a part of a pipe.
+
+- Syntax: ``sd QUALIFIED_CONSTANT+``
+- Options:
+
+ | ``-size`` | show the size of the source code for each constants (number of constructors)
+
+
+- Examples:
+
+ | ``sd ParadigmsEng.mkV ParadigmsEng.mkN`` | show all constants on which mkV and mkN depend
+ | ``sd -size ParadigmsEng.mkV`` | show all constants on which mkV depends, together with size
 
 
 #NORMAL
@@ -885,10 +885,8 @@ by the file given by flag -probs=FILE, where each line has the form
 
 - Examples:
 
-```
-  se cp1251 -- set encoding to cp1521
-  se utf8   -- set encoding to utf8 (default)
-```
+ | ``se cp1251`` | set encoding to cp1521
+ | ``se utf8`` | set encoding to utf8 (default)
 
 
 #NORMAL
@@ -939,10 +937,39 @@ of a pipe.
 
 - Examples:
 
-```
-  sp -command="wc" "foo"
-  gt | l | sp -command="grep \"who\"" | sp -command="wc"
-```
+ | ``gt | l | ? wc`` | generate trees, linearize, and count words
+
+
+#NORMAL
+
+
+#VSPACE
+
+====ss = show_source====
+#NOINDENT
+``ss`` = ``show_source``: //show the source code of modules in scope, possibly just headers.//
+
+#TINY
+
+Show compiled source code, i.e. as it is included in GF object files.
+This command requires a source grammar to be in scope, imported with 'import -retain'.
+The optional MODULE arguments cause just these modules to be shown.
+The -size and -detailedsize options show code size as the number of constructor nodes.
+This command must be a line of its own, and thus cannot be a part of a pipe.
+
+- Syntax: ``ss (-strip)? (-save)? MODULE*``
+- Options:
+
+ | ``-detailedsize`` | instead of code, show the sizes of all judgements and modules
+ | ``-save`` | save each MODULE in file MODULE.gfh instead of printing it on terminal
+ | ``-size`` | instead of code, show the sizes of all modules
+ | ``-strip`` | show only type signatures of oper's and lin's, not their definitions
+
+
+- Examples:
+
+ | ``ss`` | print complete current source grammar on terminal
+ | ``ss -strip -save MorphoFin`` | print the headers in file MorphoFin.gfh
 
 
 #NORMAL
@@ -984,10 +1011,8 @@ of a pipe.
 
 - Examples:
 
-```
-  tq -from=Eng -to=Swe                               -- any trees in startcat
-  tq -from=Eng -to=Swe (AdjCN (PositA ?2) (UseN ?))  -- only trees of this form
-```
+ | ``tq -from=Eng -to=Swe`` | any trees in startcat
+ | ``tq -from=Eng -to=Swe (AdjCN (PositA ?2) (UseN ?))`` | only trees of this form
 
 
 #NORMAL
@@ -1052,12 +1077,10 @@ flag -format.
 
 - Examples:
 
-```
-  gr | vd              -- generate a tree and show dependency tree in .dot
-  gr | vd -view=open   -- generate a tree and display dependency tree on a Mac
-  gr -number=1000 | vd -file=dep.labels -output=malt      -- generate training treebank
-  gr -number=100 | vd -file=dep.labels -output=malt_input -- generate test sentences
-```
+ | ``gr | vd`` | generate a tree and show dependency tree in .dot
+ | ``gr | vd -view=open`` | generate a tree and display dependency tree on a Mac
+ | ``gr -number=1000 | vd -file=dep.labels -output=malt`` | generate training treebank
+ | ``gr -number=100 | vd -file=dep.labels -output=malt_input`` | generate test sentences
 
 
 #NORMAL
@@ -1086,10 +1109,8 @@ flag -format.
 
 - Examples:
 
-```
-  p "John walks" | vp  -- generate a tree and show parse tree as .dot script
-  gr | vp -view="open" -- generate a tree and display parse tree on a Mac
-```
+ | ``p "John walks" | vp`` | generate a tree and show parse tree as .dot script
+ | ``gr | vp -view="open"`` | generate a tree and display parse tree on a Mac
 
 
 #NORMAL
@@ -1126,10 +1147,8 @@ With option -mk, use for showing library style function names of form 'mkC'.
 
 - Examples:
 
-```
-  p "hello" | vt              -- parse a string and show trees as graph script
-  p "hello" | vt -view="open" -- parse a string and display trees on a Mac
-```
+ | ``p "hello" | vt`` | parse a string and show trees as graph script
+ | ``p "hello" | vt -view="open"`` | parse a string and display trees on a Mac
 
 
 #NORMAL
