@@ -1,0 +1,25 @@
+Name: gf-exb
+Version: 1.0
+Cabal-version: >= 1.8
+Build-type: Simple
+License: GPL
+Synopsis: Example-based grammar writing for the Grammatical Framework
+
+executable exb.fcgi
+  main-is: exb-fcgi.hs
+  Hs-source-dirs: . ../server ../compiler ../runtime/haskell
+  other-modules: ExampleService ExampleDemo
+                 FastCGIUtils Cache GF.Compile.ToAPI
+                 -- and a lot more...
+  ghc-options: -threaded
+  if impl(ghc>=7.0)
+    ghc-options: -rtsopts
+
+  build-depends: base >=4.2 && <5, json, cgi, fastcgi, random,
+                 containers, old-time, directory, bytestring, utf8-string,
+                 pretty, array, mtl, fst
+
+  if os(windows)
+    ghc-options: -optl-mwindows
+  else
+    build-depends: unix
