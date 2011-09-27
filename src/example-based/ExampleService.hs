@@ -42,7 +42,7 @@ doAbstractExample cache environ =
      parsePGF <- readParsePGF cache
      let lang:_ = languages parsePGF
      Just (e,_) <- liftIO $ abstractExample parsePGF environ lang t abs example
-     outputJSONP e --(showExpr [] (exprToAPI e))
+     outputJSONP (exprToAPI e)
 
 abstractExample parsePGF env lang cat abs example =
     E.searchGoodTree env abs (parse parsePGF lang cat example)
