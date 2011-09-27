@@ -14,6 +14,18 @@ function defined_funs(g) {
     return df;
 }
 
+function function_type(g,fun) {
+    with(g.abstract)
+	for(var i in funs) if(funs[i].name==fun) return funs[i].type
+    return null;
+}
+
+function cat_lincat(conc,cat) {
+    with(conc)
+	for(var i in lincats) if(lincats[i].cat==cat) return lincats[i].type
+    return null;
+}
+
 function rename_category(g,oldcat,newcat) {
     function rename_cats(cats) {
 	for(var i in cats) if(cats[i]==oldcat) cats[i]=newcat;
