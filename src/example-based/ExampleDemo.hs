@@ -1,4 +1,4 @@
-module ExampleDemo (Environ,initial,getNext, provideExample, testThis,mkFuncWithArg,searchGoodTree)
+module ExampleDemo (Environ,initial,getNext, provideExample, testThis,mkFuncWithArg,searchGoodTree,isMeta)
   where
 
 import PGF

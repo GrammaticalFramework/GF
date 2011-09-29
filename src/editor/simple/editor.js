@@ -790,7 +790,7 @@ function draw_lins(g,ci) {
 		    if(!msg) {
 			if(f.template)
 			    conc.lins.push({fun:f.fun,args:f.args,lin:s});
-			else f.lin=s;
+			else { f.lin=s; f.eb_lin=null; }
 			reload_grammar(g);
 		    }
 		    cont(msg);
