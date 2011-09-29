@@ -20,7 +20,7 @@ function exb_state(g,ci) {
 	return "("+lincat.cat+","+lincat.type+")"
     }
     function show_lin(lin) {
-	return "("+lin.fun+","+lin.lin+")"
+	return "("+lin.fun+","+(lin.eb_lin||"?")+")"
     }
     function show_funs(funs) { return show_list(show_fun,funs) }
     function show_lincats(lincats) { return show_list(show_lincat,lincats); }
@@ -88,11 +88,19 @@ function exb_linbuttons(g,ci,f) {
     var fun=f.fun;
     var eb=example_based[ci];
     var exb_output;
-    function fill_example(tree) {
-	exb_output.innerHTML="";
-	if(f.template) conc.lins.push({fun:f.fun,args:f.args,lin:tree});
-	else f.lin=s;
-	ask_possibilities(g,ci)
+    function fill_example(maybetree) {
+	var tree=maybetree.Just
+	if(tree) {
+	    if(f.template)
+		conc.lins.push({fun:f.fun,args:f.args,
+				lin:tree[0],eb_lin:tree[1]});
+	    else {
+		f.lin=tree[0];
+		f.eb_lin=tree[1];
+	    }
+	    ask_possibilities(g,ci)
+	}
+	else exb_output.innerHTML="Bug: no tree found"
     }
     function show_example(example){
 	exb_output.innerHTML="";
@@ -104,7 +112,9 @@ function exb_linbuttons(g,ci,f) {
 	    exb_output.innerHTML="...";
 	    //server.parse({from:"ParseEng",cat:cat,input:s},fill_example)
 	    exb_call(g,ci,"abstract_example",
-		     {cat:cat,input:s,abstract:example[0]},
+		     {cat:cat,input:s,
+		      params:"["+f.args.join(",")+"]",
+		      abstract:example[0]},
 		     fill_example)
 	}
     }
