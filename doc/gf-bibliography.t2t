@@ -15,10 +15,91 @@ Aarne Ranta
 
 In reverse temporal order:
 
+C. España-Bonet, R. Enache, A. Slaski, A. Ranta, L. Màrquez, and M. Gonzàlez.
+Patent translation within the MOLTO project.
+Proceedings of the 4th Workshop on Patent Translation, 
+MT Summit XIII, Xiamen, China, September 23, 2011.
+[PDF http://www.lsi.upc.edu/~cristinae/CV/docs/MTS11PatEspanaetal.pdf]
+#BR
+//First steps to a hybrid GF-SMT system.//
+
+S. Virk, M. Humayoun, and A. Ranta.
+An Open-Source Punjabi Resource Grammar.
+Proceedings of RANLP-2011, Recent Advances in Natural Language Processing,
+Hissar, Bulgaria, 12-14 September, 2011.
+pp. 70-76.
+[PDF http://lml.bas.bg/~iva/ranlp2011/RANLR2011_Proceedings.PDF]
+#BR
+//Punjabi syntax, building on Humayoun and Ranta 2010.//
+
 A. Ranta.
-The GF Resource Grammar Library,
-to appear in the on-line journal //Linguistics in Language Technology//,
+Translating between Language and Logic: What Is Easy and What is Difficult?
+In N. Bjørner and V. Sofronie-Stokkermans (eds.),
+//CADE-23. Automated Deduction//,
+LNCS/LNAI 6803,
+pp. 5-25,
+2011.
+[PDF at Springer http://www.springerlink.com/content/42n685777k846810/]
+[Draft PDF http://www.cse.chalmers.se/~aarne/articles/cade2011.pdf]
+#BR
+//Invited talk at the CADE conference, showing how GF can help writing natural language interfaces// 
+//to proof systems, and also exploring how to make the language richer, e.g. how to get from//
+//"for all numbers x, x is even or x is odd" to "every number is even or odd".//
+
+A. Ranta. //Grammatical Framework: Programming with Multilingual Grammars//, 
+  CSLI Publications, Stanford, 2011.
+  [Book web page http://www.grammaticalframework.org/gf-book/] 
+#BR
+//Meant as the standard reference and textbook on GF.//
+
+M. Humayoun and A. Ranta. 
+Developing Punjabi Morphology, Corpus and Lexicon. 
+//The 24th Pacific Asia conference on Language, Information and Computation (PACLIC24)//,
+2010.
+#BR
+//Yet another South-East Asian language, spoken by 88 million people.//
+
+S. Virk, M. Humayoun, and A. Ranta. 
+An Open Source Urdu Resource Grammar. 
+//Proceedings of the 8th Workshop on Asian Language Resources (Coling 2010 workshop)//,
+2010.
+#BR
+//The national language of Pakistan, spoken by 60 million people; almost the same as Hindi.//
+
+A. Ranta, K. Angelov, and T. Hallgren.
+Tools for multilingual grammar-based translation on the web.
+//Proceedings of the ACL 2010 System Demonstrations//,
+ACM Digital Library,
+2010.
+
+R. Enache, A. Ranta, and K. Angelov.
+An Open-Source Computational Grammar of Romanian.
+A. Gelbukh (ed.), //CiCLING-2010//,
+LNCS 6008,
+2010.
+#BR
+//A Romance language different enough not to follow the Romance functor.//
+
+K. Angelov and A. Ranta.
+Implementing Controlled Languages in GF.
+N. Fuchs (ed.), //CNL-2009 Controlled Natural Languages//,
+LNCS/LNAI 5972,
+2010.
+
+K. Angelov, B. Bringert and A. Ranta.
+PGF: A Portable Run-time Format for Type-theoretical Grammars,
+//Journal of Logic, Language and Information//,
+19(2),
+pp. 201-228,
 2009.
+[SpringerLink http://www.springerlink.com/content/y32q021028747k70/]
+
+A. Ranta.
+The GF Resource Grammar Library.
+//Linguistic Issues in Language Technology//, 
+2 (2),
+2009.
+[PDF http://elanguage.net/journals/index.php/lilt/article/viewFile/214/158]
 #BR
 //A systematic presentation of the library from the linguistic point of view.//
 
@@ -38,7 +119,7 @@ vol. 448,
 [on-line http://sunsite.informatik.rwth-aachen.de/Publications/CEUR-WS/Vol-448/],
 2009.
 #BR
-//Makes a case for using GF in controlled language implementation, illustrated by Attempto Controlled English ported to French, German, and Swedish.//
+//Makes a case for using GF in controlled language implementation, illustrated by Attempto Controlled English ported to French, German, and Swedish; longer version in 2010.//
 
 A. Ranta. Grammars as Software Libraries.
 In Y. Bertot, G. Huet, J-J. Lévy, and G. Plotkin (eds.),
