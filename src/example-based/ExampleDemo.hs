@@ -67,9 +67,11 @@ provideExample env myfunc parsePGF pgfFile lang =
    giveExample e_ = 
      let newexpr = head $ generateFromDepth pgfFile e_ (Just 5) -- change here with the new random generator
          ty = getType $ head $ filter (\x -> getName x == myfunc) $ getAll env
-         embeddedExpr = maybe "" (\x -> "\nas in :" ++ linearize pgfFile lang x) (embedInStart (getAll env) (Map.fromList [(ty,e_)]))     
+         embeddedExpr = maybe "" (\x -> ", as in: " ++ q (linearize pgfFile lang x)) (embedInStart (getAll env) (Map.fromList [(ty,e_)]))
          lexpr = linearize pgfFile lang newexpr  
-       in (newexpr,"\n" ++ lexpr ++ embeddedExpr)
+         q s = sq++s++sq
+         sq = "\""
+       in (newexpr,q lexpr ++ embeddedExpr)
 -- question, you need the IO monad for the random generator, how to do otherwise ??
 -- question can you make the expression bold/italic - somehow distinguishable from the rest ?
 

@@ -150,7 +150,7 @@ function exb_linbuttons(g,ci,f) {
 	    var b=button("Test it",test_it);
 	    buttons.push(b)
 	}
-	var exb_output=node("span",{class:"exb_output"},[]);
+	var exb_output=node("span",{"class":"exb_output"},[]);
 	buttons.push(exb_output)
     }
     return buttons
