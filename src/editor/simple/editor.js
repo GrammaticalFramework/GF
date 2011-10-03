@@ -293,9 +293,9 @@ function draw_startcat(g) {
 
 function draw_abstract(g) {
     var kw_cat = kw("cat");
-    kw_cat.title = "The categories (nonterminals) of the grammar are enumerated here.";
+    kw_cat.title = "The categories (nonterminals) of the grammar are enumerated here. [C.3.2]";
     var kw_fun = kw("fun");
-    kw_fun.title = "The functions (productions) of the grammar are enumerated here.";
+    kw_fun.title = "The functions (productions) of the grammar are enumerated here. [C.3.4]";
     var flags=g.abstract.startcat || g.abstract.cats.length>1
 	? draw_startcat(g)
 	: text("");
@@ -481,6 +481,14 @@ function draw_concrete(g,i) {
 	}
 	string_editor(el,conc.langcode,change_langcode)
     }
+    var kw_lincat=kw("lincat")
+    kw_lincat.title="The linearization type for each catagory in the abstract syntax is given here. [C.3.8]"
+    var kw_lin=kw("lin")
+    kw_lin.title="The linearization function for each function in the abstract syntax is given here. [C.3.9]"
+    var kw_param=kw("param")
+    kw_param.title="Parameter type definitions can be added here. [C.3.12]"
+    var kw_oper=kw("oper")
+    kw_oper.title="Operation definitions can be added here. [C.3.14]"
     return div_id("file",
 		  [kw("concrete "),
 		   ident(g.basename),
@@ -489,10 +497,10 @@ function draw_concrete(g,i) {
 		   kw(" of "),ident(g.basename),sep(" = "),
 		   draw_timestamp(conc),
 		   indent([extensible([kw("open "),draw_opens(g,i)])]),
-		   indent([kw("lincat"),draw_lincats(g,i)]),
-		   indent([kw("lin"),draw_lins(g,i)]),
-		   indent([extensible([kw("param"),draw_params(g,i)])]),
-		   indent([extensible([kw("oper"),draw_opers(g,i)])]),
+		   indent([kw_lincat,draw_lincats(g,i)]),
+		   indent([kw_lin,draw_lins(g,i)]),
+		   indent([extensible([kw_param,draw_params(g,i)])]),
+		   indent([extensible([kw_oper,draw_opers(g,i)])]),
 		   exb_extra(g,i)
 		  ])
 }
@@ -655,7 +663,7 @@ function draw_lincats(g,i) {
 	var cat=c.cat;
 	var err=!dc[cat];
 	var l1=dlc(c,"lincat");
-	var l2= err ? deletable(del(cat),l1,"Delete this lincat") : l1;
+	var l2= deletable(del(cat),l1,"Delete this lincat");
 	var l=ifError(err,"lincat for undefined category",l2);
 	delete dc[cat];
 	return node_sortable("lincat",cat,[l]);
@@ -817,7 +825,7 @@ function draw_lins(g,ci) {
     function draw_lin(f) {
 	var fun=f.fun;
 	var err= !df[fun];
-	var l= err ? deletable(del(fun),dl(f,"lin"),"Delete this function") : dl(f,"lin")
+	var l= deletable(del(fun),dl(f,"lin"),"Delete this linearization function")
 	var l=ifError(err,"Function "+fun+" is not part of the abstract syntax",l);
 	delete df[fun];
 	return node_sortable("lin",fun,[l]);
@@ -828,8 +836,8 @@ function draw_lins(g,ci) {
 	return arg_names(funs[i].type);
     }
     function dtmpl(f) {	
-	return wrap("div",
-		    dl({fun:f,args:largs(f),lin:"",template:true},"template"));
+	return div_class("template",
+			 [dl({fun:f,args:largs(f),lin:"",template:true},"template")]);
     }
     function sort_lins() {
 	conc.lins=sort_list(this,conc.lins,"fun");
@@ -1010,6 +1018,7 @@ function text_ne(s) { // like text(s), but force it to be non-empty
 function editable(tag,cs,g,f,hint) {
     var b=edit_button(function(){f(g,e)},hint);
     var e=node(tag,{"class":"editable"},[cs,b]);
+    //e.onclick=b.onclick;
     return e;
 }
 
