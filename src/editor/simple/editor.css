@@ -33,7 +33,7 @@ div.template:hover
 { background: #def;}
 
 .lin input[type=button],
-.template input[type=button] { float: right; clear: right; }
+.template input[type=button] { float: right; clear: right; margin: 0; }
 .exb_output { background: #dfd; float: right; margin: 0 10px; }
 
 .more, .delete { font-weight: bold; font-family: sans-serif; }
