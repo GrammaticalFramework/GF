@@ -13,7 +13,7 @@ concrete GrammarRon of Grammar =
   ConjunctionRon,
   PhraseRon,
   TextX - [CAdv,Temp,Tense],
-  Prelude, MorphoRon, Coordination,
+--  Prelude, MorphoRon, Coordination,
   StructuralRon,
   TenseRon
   ** {
