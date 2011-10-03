@@ -227,7 +227,7 @@ Rapid Development of Dialogue Systems by Grammar Compilation.
 //8th SIGdial Workshop on Discourse and Dialogue//, 
 Antwerp, Belgium, September 1-2, 
 2007.
-[pdf http://www.cs.chalmers.se/~bringert/publ/gf-voicexml/gf-voicexml.pdf]
+[pdf http://www.cse.chalmers.se/~bringert/publ/gf-voicexml/gf-voicexml.pdf]
 #BR
 //Shows how to build a web-based spoken dialogue system by generating VoiceXML and JavaScript.//
 
@@ -329,7 +329,7 @@ B. Bringert and A. Ranta.
 A Pattern for Almost Compositional Functions.
 //ICFP 2006, The 11th ACM SIGPLAN International Conference on Functional Programming, Portland, Oregon, September 18-20, 2006//,
 2006.
-[pdf http://www.cs.chalmers.se/~bringert/publ/composOp/composOp.pdf].
+[pdf http://www.cse.chalmers.se/~bringert/publ/composOp/composOp.pdf].
 #BR
 //A method of generic programming useful for compiler construction//
 //and transfer-based translation.//
@@ -416,7 +416,7 @@ B. Bringert, R. Cooper, P. Ljunglöf, A. Ranta,
 Multimodal Dialogue System Grammars.
 //Proceedings of DIALOR'05, Ninth Workshop on the Semantics and Pragmatics of Dialogue, Nancy, France, June 9-11, 2005//,
 2005.
-[pdf http://www.cs.chalmers.se/~bringert/publ/mm-grammars-dialor/mm-grammars-dialor.pdf].
+[pdf http://www.cse.chalmers.se/~bringert/publ/mm-grammars-dialor/mm-grammars-dialor.pdf].
 #BR
 //Shows how mouse clicks can be integrated in GF grammars//
 //alongside with speech input.//
@@ -428,7 +428,7 @@ Formal and Informal Software Specifications.
 PhD thesis,
 Computer Science, Göteborg University, 
 2005.
-[http://www.cs.chalmers.se/~krijo/thesis/thesisA4.pdf]
+[http://www.cse.chalmers.se/~krijo/thesis/thesisA4.pdf]
 #BR
 //Collection of articles in the GF-KeY project, with an introduction.//
 
@@ -531,7 +531,7 @@ Springer LNCS,
 vol. 2306,
 pp. 233--248, 
 2002.
-[pdf http://www.cs.chalmers.se/~krijo/GF/FASE.pdf]
+[pdf http://www.cse.chalmers.se/~krijo/GF/FASE.pdf]
 #BR
 //Describes a GF-based authoring tool for object-oriented//
 //specifications in OCL and English. Carries out in full//
@@ -555,7 +555,7 @@ Connecting OCL with the Rest of the World.
 //ETAPS 2001 Workshop on Transformations in UML (WTUML)//, 
 Genova, 
 2001.
-[ps.gz http://www.cs.chalmers.se/~reiner/papers/wtuml.ps.gz].
+[ps.gz http://www.cse.chalmers.se/~reiner/papers/wtuml.ps.gz].
 #BR
 //A position paper explaining how GF can be used to help in object-oriented//
 //modelling, with some examples on natural-language interaction with//
@@ -648,7 +648,7 @@ B. Nordström, K. Petersson, and J. Smith.
 //Programming in Martin-Löf's Type Theory: an Introduction//.
 Oxford University Press, 1990.
  The book is out of print, but a free version can be picked up from
-[www.cs.chalmers.se/Cs/Research/Logic/book/ http://www.cs.chalmers.se/Cs/Research/Logic/book/]
+[www.cse.chalmers.se/Cs/Research/Logic/book/ http://www.cse.chalmers.se/Cs/Research/Logic/book/]
 #BR
 //Standard reference on the subject//.
 
