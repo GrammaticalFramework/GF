@@ -146,11 +146,11 @@ function exb_linbuttons(g,ci,f) {
     if(conc.example_based && eb) {
 	if(eb.exready[fun])
 	    buttons.push(button("By example",by_example))
-	if(eb.testable[fun]) {
+	if(eb.testable[fun] && f.eb_lin) {
 	    var b=button("Test it",test_it);
 	    buttons.push(b)
 	}
-	var exb_output=empty("span");
+	var exb_output=node("span",{class:"exb_output"},[]);
 	buttons.push(exb_output)
     }
     return buttons
