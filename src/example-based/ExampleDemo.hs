@@ -158,7 +158,7 @@ embedInStart fss cs =
       nextmap = Map.union cs nextset
       maybeExpr = Map.lookup startCateg nextset
      in if isNothing maybeExpr then 
-               if Map.size nextmap == Map.size cs then error $ "could't build " ++ show startCateg ++ "with " ++ show fss 
+               if Map.size nextmap == Map.size cs then Nothing --error $ "could't build " ++ show startCateg ++ "with " ++ show fss 
                   else embedInStart fss nextmap
        else return $ fromJust maybeExpr
    where 
