@@ -32,8 +32,7 @@ function exb_state(g,ci) {
 
 function exb_call(g,ci,command,args,cont) {
     var url=window.exb_url || "exb/exb.fcgi";
-    var q=""
-    for(var arg in args) q+="&"+arg+"="+encodeURIComponent(args[arg]);
+    var q=encodeArgs(args);
     var cmd="?command="+command+"&state="+encodeURIComponent(exb_state(g,ci))+q;
     http_get_json(url+cmd,cont)
 }

@@ -123,8 +123,10 @@ function download_json() {
     get_list(download_files);
 }
 
-function link_directories(olddir,newdir,cont) {
-    ajax_http_get("upload.cgi?rmdir="+olddir+"&newdir="+newdir,cont)
+function link_directories(newdir,cont) {
+    with_dir(function(olddir) {
+	ajax_http_get("upload.cgi?rmdir="+olddir+"&newdir="+newdir,cont)
+    })
 }
 
 /* -------------------------------------------------------------------------- */
