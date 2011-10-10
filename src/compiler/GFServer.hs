@@ -7,8 +7,10 @@ import System.IO(stdout,stderr)
 import System.IO.Error(try,ioError)
 import System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
                         setCurrentDirectory,getCurrentDirectory,
-                        getDirectoryContents)
+                        getDirectoryContents,removeFile,removeDirectory)
 import System.FilePath(takeExtension,takeFileName,takeDirectory,(</>))
+import System.Posix.Files(getFileStatus,isSymbolicLink,removeLink,
+                          createSymbolicLink)
 import Control.Concurrent.MVar(newMVar,modifyMVar)
 import Network.URI(URI(..))
 import Network.Shed.Httpd(initServer,Request(..),Response(..),queryToArguments,
@@ -50,7 +52,7 @@ handle state0 cache execute1
 --       "/stop" ->
 --       "/start" ->
          "/gfshell" -> inDir qs $ look "command" . command
-         "/upload" -> inDir qs upload
+         "/cloud" -> inDir qs $ look "command" . cloud
          '/':rpath ->
            case (takeDirectory path,takeFileName path,takeExtension path) of
              (_  ,_             ,".pgf") -> wrapCGI $ PS.cgiMain' cache path
@@ -97,15 +99,51 @@ handle state0 cache execute1
          let state' = maybe state (flip (M.insert dir) state) st'
          return (state',ok200 output)
 
-    upload dir files=
+    cloud dir cmd qs =
+      case cmd of
+        "upload" -> upload qs
+        "ls" -> jsonList
+        "rm" -> look "file" rm qs
+        "download" -> look "file" download qs
+        "link_directories" -> look "newdir" (link_directories dir) qs
+        _ -> return (state,resp400 $ "cloud command "++cmd)
+
+    upload files =
       do let update (name,contents)= updateFile (name++".gf") contents
          mapM_ update files
          return (state,resp204)
 
-    grammarList dir =
-        do paths <- liftIO $ getDirectoryContents dir
-           let pgfs = [path|path<-paths, takeExtension path==".pgf"]
-           outputJSONP pgfs
+    jsonList =
+        do jsons <- ls_ext "." ".json"
+           return (state,ok200 (unwords jsons))
+
+    rm path _ | takeExtension path==".json" =
+      do b <- doesFileExist path
+         if b
+           then do removeFile path
+                   return (state,ok200 "")
+           else return (state,resp404 path)
+    rm path _ = return (state,resp400 $ "unacceptable file "++path)
+
+    download path _ = (,) state `fmap` serveStaticFile path
+
+    link_directories olddir newdir@('/':'t':'m':'p':'/':_) _ | olddir/=newdir =
+        do setCurrentDirectory ".."
+           st <- getFileStatus old
+           if isSymbolicLink st then removeLink old else removeDir old
+           createSymbolicLink new old
+           return (state,ok200 "")
+      where
+        old = takeFileName olddir
+        new = takeFileName newdir
+    link_directories olddir newdir _ =
+      return (state,resp400 $ "unacceptable directories "++olddir++" "++newdir)
+
+    grammarList dir = outputJSONP =<< liftIO (ls_ext dir ".pgf")
+
+    ls_ext dir ext =
+        do paths <- getDirectoryContents dir
+           return [path | path<-paths, takeExtension path==ext]
 
 -- * Static content
 
@@ -117,10 +155,13 @@ serveStaticFile path =
      serveStaticFile' path'
 
 serveStaticFile' path =
-  do b <- doesFileExist path
-     let (t,rdFile,encode) = contentTypeFromExt (takeExtension path)
-     if b then fmap (ok200' (ct t) . encode) $ rdFile path
-          else return (resp404 path)
+  do let ext = takeExtension path
+         (t,rdFile,encode) = contentTypeFromExt ext
+     if ext `elem` [".cgi",".fcgi",".sh",".php"]
+       then return $ resp400 $ "Unsupported file type: "++ext
+       else do b <- doesFileExist path
+               if b then fmap (ok200' (ct t) . encode) $ rdFile path
+                    else return (resp404 path)
 
 -- * Logging
 logPutStrLn = putStrLn
@@ -167,6 +208,12 @@ newDirectory =
      case b of
        Left _ -> newDirectory
        Right _ -> return ('/':path)
+
+-- | Remove a directory and the files in it, but not recursively
+removeDir dir =
+  do files <- filter (`notElem` [".",".."]) `fmap` getDirectoryContents dir
+     mapM (removeFile . (dir</>)) files
+     removeDirectory dir
 
 -- * misc utils
 
