@@ -1070,7 +1070,7 @@ function download_from_cloud() {
 
     function download2(olddir) {
 	//debug("Starting grammar sharing in the cloud")
-	if(newdir!=olddir) link_directories(olddir,newdir,download3)
+	if(newdir!=olddir) link_directories(newdir,download3)
 	else download4()
     }
     function download3() {
