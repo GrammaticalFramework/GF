@@ -17,7 +17,7 @@ executable exb.fcgi
 
   build-depends: base >=4.2 && <5, json, cgi, fastcgi, random,
                  containers, old-time, directory, bytestring, utf8-string,
-                 pretty, array, mtl, fst
+                 pretty, array, mtl, fst, filepath
 
   if os(windows)
     ghc-options: -optl-mwindows

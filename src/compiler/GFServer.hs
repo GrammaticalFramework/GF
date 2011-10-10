@@ -6,44 +6,67 @@ import System.Random(randomRIO)
 import System.IO(stdout,stderr)
 import System.IO.Error(try,ioError)
 import System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
-                        setCurrentDirectory,getCurrentDirectory)
-import System.FilePath(takeExtension,(</>))
+                        setCurrentDirectory,getCurrentDirectory,
+                        getDirectoryContents)
+import System.FilePath(takeExtension,takeFileName,takeDirectory,(</>))
 import Control.Concurrent.MVar(newMVar,modifyMVar)
 import Network.URI(URI(..))
 import Network.Shed.Httpd(initServer,Request(..),Response(..),queryToArguments,
                           noCache)
+import Network.CGI(handleErrors,liftIO)
+import FastCGIUtils(outputJSONP,handleCGIErrors)
 import System.IO.Silently(hCapture)
 import Codec.Binary.UTF8.String(encodeString)
 import GF.Infra.UseIO(readBinaryFile)
+import qualified PGFService as PS
+import qualified ExampleService as ES
+import Paths_gf(getDataDir)
+import RunHTTP(Options(..),cgiHandler)
 
 -- * Configuraiton
-port = 41295
-documentRoot = "."
+
+options = Options { documentRoot = "." {-datadir</>"www"-}, port = gfport }
+gfport = 41296
 
 -- * HTTP server
 server execute1 state0 = 
   do state <- newMVar M.empty
-     putStrLn $ "Starting server on port "++show port
-     initServer port (modifyMVar state . handle state0 execute1)
+     cache <- PS.newPGFCache
+     --datadir <- getDataDir
+     putStrLn $ "Starting server on port "++show gfport
+     initServer gfport (modifyMVar state . handle state0 cache execute1)
 
 -- * HTTP request handler
-handle state0 execute1 (Request method URI{uriPath=path,uriQuery=q} hdrs body) state =
+handle state0 cache execute1
+       rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) state =
     do let qs = decodeQ $ 
                 case method of
                   "GET" -> queryToArguments q
                   "POST" -> queryToArguments body
 
-       logPutStrLn $ method++" "++path++" "++show qs
-       case path of
+       logPutStrLn $ method++" "++upath++" "++show qs
+       case upath of
          "/new" -> new
 --       "/stop" ->
 --       "/start" ->
          "/gfshell" -> inDir qs $ look "command" . command
          "/upload" -> inDir qs upload
-         '/':rpath -> do resp <- serveStaticFile (translatePath rpath)
-                         return (state,resp)
-         _ -> return (state,resp400 path)
+         '/':rpath ->
+           case (takeDirectory path,takeFileName path,takeExtension path) of
+             (_  ,_             ,".pgf") -> wrapCGI $ PS.cgiMain' cache path
+             (dir,"grammars.cgi",_     ) -> wrapCGI $ grammarList dir
+             (dir  ,"exb.fcgi"  ,_     ) -> wrapCGI $ ES.cgiMain' root dir cache
+             _ -> do resp <- serveStaticFile path
+                     return (state,resp)
+           where path = translatePath rpath
+         _ -> return (state,resp400 upath)
   where
+    root = documentRoot options
+
+    wrapCGI cgi = 
+      do resp <- cgiHandler root (handleErrors . handleCGIErrors $ cgi) rq
+         return (state,resp)
+
     look field ok qs =
         case partition ((==field).fst) qs of
           ((_,value):qs1,qs2) -> ok value (qs1++qs2)
@@ -79,9 +102,14 @@ handle state0 execute1 (Request method URI{uriPath=path,uriQuery=q} hdrs body) s
          mapM_ update files
          return (state,resp204)
 
+    grammarList dir =
+        do paths <- liftIO $ getDirectoryContents dir
+           let pgfs = [path|path<-paths, takeExtension path==".pgf"]
+           outputJSONP pgfs
+
 -- * Static content
 
-translatePath path = documentRoot</>path -- hmm, check for ".."
+translatePath path = documentRoot options</>path -- hmm, check for ".."
 
 serveStaticFile path =
   do b <- doesDirectoryExist path

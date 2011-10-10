@@ -31,9 +31,11 @@ function exb_state(g,ci) {
 }
 
 function exb_call(g,ci,command,args,cont) {
-    var url="exb/exb.fcgi?command="+command+"&state="+exb_state(g,ci);
-    for(var arg in args) url+="&"+arg+"="+encodeURIComponent(args[arg]);
-    http_get_json(url,cont)
+    var url=window.exb_url || "exb/exb.fcgi";
+    var q=""
+    for(var arg in args) q+="&"+arg+"="+encodeURIComponent(args[arg]);
+    var cmd="?command="+command+"&state="+encodeURIComponent(exb_state(g,ci))+q;
+    http_get_json(url+cmd,cont)
 }
 
 function ask_possibilities(g,ci) {
@@ -126,7 +128,7 @@ function exb_linbuttons(g,ci,f) {
 		exb_call(g,ci,"provide_example",
 			 {lang:g.basename+conc.example_lang,
 			  fun:fun,
-			  grammar:"."+dir+"/"+g.basename+".pgf"},
+			  grammar:dir+"/"+g.basename+".pgf"},
 			 show_example)
 	    }
 	}

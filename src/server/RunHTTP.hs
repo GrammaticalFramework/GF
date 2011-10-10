@@ -1,4 +1,4 @@
-module RunHTTP(runHTTP,Options(..)) where
+module RunHTTP(runHTTP,Options(..),cgiHandler) where
 import Network.URI(uriPath,uriQuery)
 import Network.CGI(ContentType(..))
 import Network.CGI.Protocol(CGIResult(..),CGIRequest(..),Input(..),

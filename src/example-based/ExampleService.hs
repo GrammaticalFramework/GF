@@ -1,4 +1,5 @@
-module ExampleService(cgiMain,newPGFCache) where
+module ExampleService(cgiMain,cgiMain',newPGFCache) where
+import System.FilePath((</>),makeRelative)
 import Data.Map(fromList)
 import Data.Char(isDigit)
 import Data.Maybe(fromJust)
@@ -14,31 +15,30 @@ newPGFCache = newCache readPGF
 
 
 cgiMain :: Cache PGF -> CGI CGIResult
-cgiMain cache =
-    handleErrors . handleCGIErrors $
-    do command <- getInp "command"
-       environ <- parseEnviron =<< getInp "state"
-       cgiMain' cache command environ
+cgiMain = handleErrors . handleCGIErrors . cgiMain' "." "."
 
-cgiMain' cache command environ =
-  case command of
-    "possibilities" -> outputJSONP (E.getNext environ)
-    "provide_example" ->  doProvideExample cache environ
-    "abstract_example" -> doAbstractExample cache environ
-    "test_function" -> doTestFunction cache environ
-    _ -> throwCGIError 400 ("Unknown command: "++command) []
+cgiMain' root cwd cache =
+  do command <- getInp "command"
+     environ <- parseEnviron =<< getInp "state"
+     case command of
+       "possibilities" -> outputJSONP (E.getNext environ)
+       "provide_example" ->  doProvideExample root cwd cache environ
+       "abstract_example" -> doAbstractExample cwd cache environ
+       "test_function" -> doTestFunction cwd cache environ
+       _ -> throwCGIError 400 ("Unknown command: "++command) []
 
-doProvideExample cache environ =
+doProvideExample root cwd cache environ =
   do Just lang <- readInput "lang"
      fun <- getCId "fun"
-     parsePGF <- readParsePGF cache
-     pgf <- liftIO . readCache cache =<< getInp "grammar"
+     parsePGF <- readParsePGF cwd cache
+     let adjpath path = root</>makeRelative "/" (makeRelative root cwd</>path)
+     pgf <- liftIO . readCache cache . adjpath =<< getInp "grammar"
      let Just (e,s) = E.provideExample environ fun parsePGF pgf lang
          res = (showExpr [] e,s)
      liftIO $ logError $ "proveExample ... = "++show res
      outputJSONP res
 
-doAbstractExample cache environ =
+doAbstractExample cwd cache environ =
   do example <- getInp "input"
      Just params <- readInput "params"
      absstr <- getInp "abstract"
@@ -46,7 +46,7 @@ doAbstractExample cache environ =
      liftIO $ logError $ "abstract = "++showExpr [] abs
      Just cat <- readInput "cat"
      let t = mkType [] cat []
-     parsePGF <- readParsePGF cache
+     parsePGF <- readParsePGF cwd cache
      let lang:_ = languages parsePGF
      ae <- liftIO $ abstractExample parsePGF environ lang t abs example
      outputJSONP (fmap (\(e,_)->(exprToAPI (instExpMeta params e),e)) ae)
@@ -54,9 +54,9 @@ doAbstractExample cache environ =
 abstractExample parsePGF env lang cat abs example =
     E.searchGoodTree env abs (parse parsePGF lang cat example)
 
-doTestFunction cache environ =
+doTestFunction cwd cache environ =
   do fun <- getCId "fun"
-     parsePGF <- readParsePGF cache
+     parsePGF <- readParsePGF cwd cache
      let lang:_ = languages parsePGF
      Just txt <- return (E.testThis environ fun parsePGF lang)
      outputJSONP txt
@@ -70,7 +70,7 @@ getLimit = maybe err return =<< readInput "limit"
   where err = throwCGIError 400 "Missing/bad limit" []
 
 
-readParsePGF cache = liftIO $ readCache cache "ParseEngAbs.pgf"
+readParsePGF cwd cache = liftIO $ readCache cache (cwd</>"ParseEngAbs.pgf")
 
 parseEnviron s = do state <- liftIO $ readIO s
                     return $ environ state
