@@ -112,6 +112,15 @@ function http_get_json(url,cont) {
     else jsonpf(url,cont);
 }
 
+/* --- URL construction ----------------------------------------------------- */
+
+function encodeArgs(args) {
+    var q=""
+    for(var arg in args)
+	if(args[arg]!=undefined)
+	    q+="&"+arg+"="+encodeURIComponent(args[arg]);
+    return q;
+}
 
 /* --- HTML construction ---------------------------------------------------- */
 function text(s) { return document.createTextNode(s); }

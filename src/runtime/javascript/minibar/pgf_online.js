@@ -17,10 +17,7 @@ function pgf_online(options) {
 	    http_get_json(this.grammars_url+"grammars.cgi",cont);
 	},
 	pgf_call: function(cmd,args,cont) {
-	    var url=this.current_grammar_url+"?command="+cmd;
-	    for(var arg in args)
-		if(args[arg]!=undefined)
-		    url+="&"+arg+"="+encodeURIComponent(args[arg]);
+	    var url=this.current_grammar_url+"?command="+cmd+encodeArgs(args)
 	    http_get_json(url,cont);
 	},
 	
