@@ -137,7 +137,7 @@ function gfshell(cmd,cont) {
 // Check the syntax of an expression
 function check_exp(s,cont) {
     function check(gf_message) {
-	debug("cc "+s+" = "+gf_message);
+	//debug("cc "+s+" = "+gf_message);
 	cont(/parse error/.test(gf_message) ? "parse error" : null);
     }
     if(navigator.onLine)

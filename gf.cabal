@@ -1,5 +1,5 @@
 name: gf
-version: 3.2.9
+version: 3.2.10-darcs
 
 cabal-version: >= 1.8
 build-type: Custom
@@ -93,14 +93,19 @@ executable gf
                  mtl,
                  haskeline
   if flag(server)
-    build-depends: httpd-shed, network, silently, utf8-string
+    build-depends: httpd-shed, network, silently, utf8-string, json, cgi
     cpp-options: -DSERVER_MODE
     other-modules: GFServer
+    hs-source-dirs: src/server src/server/transfer src/example-based
+
   build-tools: happy, alex>=2 && <3
   if os(windows)
     build-depends: Win32
   else
     build-depends: unix
+
+  ghc-prof-options: -auto-all
+
   ghc-options: -O2
   if impl(ghc>=7.0)
     ghc-options: -rtsopts
