@@ -251,7 +251,7 @@ oper
 
   mkVerb12 : 
     (tenir,tiens,tient,tenons,tenez,tiennent,tienne,tenions,tiensI,tint,tiendra,tenu : Str) -> Verbe =
-    \tenir,tiens,tient,tenons,tenez,tiennent,tenions,tienne,tiensI,tint,tiendra,tenu -> 
+    \tenir,tiens,tient,tenons,tenez,tiennent,tienne,tenions,tiensI,tint,tiendra,tenu -> 
     let 
       tiens2 : Str = case tiens of {
         _ + "e" => tiens + "s" ;
