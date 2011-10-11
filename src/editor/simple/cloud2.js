@@ -21,20 +21,18 @@ function remove_cloud_grammar(g) {
 function upload(g) {
     function upload2(dir) {
 	var form=node("form",{method:"post",action:"/cloud"},
-		      [hidden("dir",dir),hidden("command","upload"),
-		       hidden(g.basename,show_abstract(g))])
+		      [hidden("dir",dir),hidden("command","make"),
+		       hidden(g.basename+".gf",show_abstract(g))])
 	var files = [g.basename+".gf"]
 	for(var i in g.concretes) {
-	    var cname=g.basename+g.concretes[i].langcode;
-	    files.push(cname+".gf");
+	    var cname=g.basename+g.concretes[i].langcode+".gf";
+	    files.push(cname);
 	    form.appendChild(hidden(cname,
 				    show_concrete(g.basename)(g.concretes[i])));
 	}
 	editor.appendChild(form);
 	form.submit();
 	form.parentNode.removeChild(form);
-	/* wait until upload is done */
-	gfshell("i -retain "+files.join(" "),upload3)
     }
     
     function upload3(message) {	if(message) alert(message); }

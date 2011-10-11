@@ -18,8 +18,10 @@ import Network.Shed.Httpd(initServer,Request(..),Response(..),queryToArguments,
 import Network.CGI(handleErrors,liftIO)
 import FastCGIUtils(outputJSONP,handleCGIErrors)
 import System.IO.Silently(hCapture)
+import System.Process(readProcessWithExitCode)
+import System.Exit(ExitCode(..))
 import Codec.Binary.UTF8.String(encodeString)
-import GF.Infra.UseIO(readBinaryFile)
+import GF.Infra.UseIO(readBinaryFile,writeBinaryFile)
 import qualified PGFService as PS
 import qualified ExampleService as ES
 import Paths_gf(getDataDir)
@@ -101,6 +103,7 @@ handle state0 cache execute1
 
     cloud dir cmd qs =
       case cmd of
+        "make" -> make dir qs
         "upload" -> upload qs
         "ls" -> jsonList
         "rm" -> look "file" rm qs
@@ -108,8 +111,15 @@ handle state0 cache execute1
         "link_directories" -> look "newdir" (link_directories dir) qs
         _ -> return (state,resp400 $ "cloud command "++cmd)
 
+    make dir files =
+      do (state,_) <- upload files
+         let args = "-s":"-make":map fst files
+             cmd = unwords ("gf":args)
+         out <- readProcessWithExitCode "gf" args ""
+         return (state,html200 (resultpage ('/':dir++"/") cmd out files))
+
     upload files =
-      do let update (name,contents)= updateFile (name++".gf") contents
+      do let update (name,contents)= updateFile name contents
          mapM_ update files
          return (state,resp204)
 
@@ -145,6 +155,40 @@ handle state0 cache execute1
         do paths <- getDirectoryContents dir
            return [path | path<-paths, takeExtension path==ext]
 
+-- * Dynamic content
+
+resultpage dir cmd (ecode,stdout,stderr) files =
+  unlines $ 
+    "<!DOCTYPE html>":
+    "<title>Uploaded</title>":
+    "<link rel=stylesheet type=\"text/css\" HREF=\"/gfse/editor.css\" title=\"Normal\">":
+    "<h1>Uploaded</h1>":
+    "<pre>":escape cmd:"":escape stderr:escape stdout:
+    "</pre>":
+    (if ecode==ExitSuccess
+     then "<h3>OK</h3>":links
+     else "<h3 class=error_message>Error</h3>":listing)
+  where
+    links = "<dl>":
+            ("<dt>▸ <a href=\"/minibar/minibar.html?"++dir++"\">Minibar</a>"):
+            "<dt>◂ <a href=\"javascript:history.back()\">Back to Editor</a>":
+            "</dl>":
+            []
+
+    listing = concatMap listfile files
+
+    listfile (name,source) = 
+      ("<h4>"++name++"</h4><pre class=plain>"):number source:"</pre>":[]
+
+    number = unlines . zipWith num [1..] . lines
+    num n s = pad (show n)++"  "++escape s
+    pad s = replicate (5-length s) ' '++s
+
+escape = concatMap escape1
+escape1 '<' = "&lt;"
+escape1 '&' = "&amp;"
+escape1 c   = [c]
+
 -- * Static content
 
 translatePath path = documentRoot options</>path -- hmm, check for ".."
@@ -167,8 +211,9 @@ serveStaticFile' path =
 logPutStrLn = putStrLn
 
 -- * Standard HTTP responses
-ok200 body   = Response 200 [plainUTF8,noCache] (encodeString body)
-ok200' t body = Response 200 [t] body
+ok200        = Response 200 [plainUTF8,noCache] . encodeString
+ok200' t     = Response 200 [t]
+html200      = ok200' htmlUTF8 . encodeString
 resp204      = Response 204 [] "" -- no content
 resp400 msg  = Response 400 [plain] $ "Bad request: "++msg++"\n"
 resp404 path = Response 404 [plain] $ "Not found: "++path++"\n"
@@ -176,6 +221,7 @@ resp404 path = Response 404 [plain] $ "Not found: "++path++"\n"
 -- * Content types
 plain = ct "text/plain"
 plainUTF8 = ct "text/plain; charset=UTF-8"
+htmlUTF8 = ct "text/html; charset=UTF-8"
 ct t = ("Content-Type",t)
 
 contentTypeFromExt ext =
@@ -195,10 +241,10 @@ contentTypeFromExt ext =
 
 -- * IO utilities
 updateFile path new =
-  do old <- try $ readFile path
+  do old <- try $ readBinaryFile path
      when (Right new/=old) $ do logPutStrLn $ "Updating "++path
                                 seq (either (const 0) length old) $
-                                    writeFile path new
+                                    writeBinaryFile path new
 
 
 newDirectory =
