@@ -27,21 +27,19 @@ import qualified ExampleService as ES
 import Paths_gf(getDataDir)
 import RunHTTP(Options(..),cgiHandler)
 
--- * Configuraiton
-
-options = Options { documentRoot = "." {-datadir</>"www"-}, port = gfport }
-gfport = 41296
-
 -- * HTTP server
 server execute1 state0 = 
   do state <- newMVar M.empty
      cache <- PS.newPGFCache
-     --datadir <- getDataDir
-     putStrLn $ "Starting server on port "++show gfport
-     initServer gfport (modifyMVar state . handle state0 cache execute1)
+     datadir <- getDataDir
+     let options = Options { documentRoot = datadir</>"www", port = 41296 }
+     putStrLn $ "Starting HTTP server, open http://localhost:"
+                ++show (port options)++"/ in your web browser."
+     initServer (port options)
+                (modifyMVar state . handle options state0 cache execute1)
 
 -- * HTTP request handler
-handle state0 cache execute1
+handle options state0 cache execute1
        rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) state =
     do let qs = decodeQ $ 
                 case method of
@@ -66,6 +64,8 @@ handle state0 cache execute1
          _ -> return (state,resp400 upath)
   where
     root = documentRoot options
+
+    translatePath rpath = root</>rpath -- hmm, check for ".."
 
     wrapCGI cgi = 
       do resp <- cgiHandler root (handleErrors . handleCGIErrors $ cgi) rq
@@ -190,8 +190,6 @@ escape1 '&' = "&amp;"
 escape1 c   = [c]
 
 -- * Static content
-
-translatePath path = documentRoot options</>path -- hmm, check for ".."
 
 serveStaticFile path =
   do b <- doesDirectoryExist path

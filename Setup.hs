@@ -1,4 +1,3 @@
-module Main where
 
 import Distribution.Simple
 import Distribution.Simple.LocalBuildInfo
@@ -7,26 +6,34 @@ import Distribution.Simple.Utils
 import Distribution.Simple.Setup
 import Distribution.PackageDescription hiding (Flag)
 import Control.Monad
-import Data.Maybe
 import Data.List(isPrefixOf)
 import System.IO
 import System.Cmd
 import System.FilePath
 import System.Directory
-import System.Environment
 import System.Process
 import System.Exit
+
+import WebSetup
 
 main :: IO ()
 main = defaultMainWithHooks simpleUserHooks{ preBuild =checkRGLArgs
                                            , postBuild=buildRGL
                                            , preInst  =checkRGLArgs
-                                           , postInst =installRGL
+                                           , postInst =gfPostInst
                                            , preCopy  =checkRGLArgs
-                                           , postCopy =copyRGL
+                                           , postCopy =gfPostCopy
                                            , sDistHook=sdistRGL
                                            , runTests =testRGL
                                            }
+  where
+    gfPostInst args flags pkg lbi =
+      do installWeb args flags pkg lbi 
+         installRGL args flags pkg lbi 
+
+    gfPostCopy args flags pkg lbi =
+      do copyWeb args flags pkg lbi 
+         copyRGL args flags pkg lbi 
 
 --------------------------------------------------------
 -- Commands for building the Resource Grammar Library
