@@ -25,21 +25,22 @@ import GF.Infra.UseIO(readBinaryFile,writeBinaryFile)
 import qualified PGFService as PS
 import qualified ExampleService as ES
 import Paths_gf(getDataDir)
-import RunHTTP(Options(..),cgiHandler)
+import RunHTTP(cgiHandler)
 
 -- * HTTP server
 server execute1 state0 = 
   do state <- newMVar M.empty
      cache <- PS.newPGFCache
      datadir <- getDataDir
-     let options = Options { documentRoot = datadir</>"www", port = 41296 }
+     let root = datadir</>"www"
+         port = 41296
      putStrLn $ "Starting HTTP server, open http://localhost:"
-                ++show (port options)++"/ in your web browser."
-     initServer (port options)
-                (modifyMVar state . handle options state0 cache execute1)
+                ++show port++"/ in your web browser."
+     setCurrentDirectory root
+     initServer port (modifyMVar state . handle state0 cache execute1)
 
 -- * HTTP request handler
-handle options state0 cache execute1
+handle state0 cache execute1
        rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) state =
     do let qs = decodeQ $ 
                 case method of
@@ -63,7 +64,7 @@ handle options state0 cache execute1
            where path = translatePath rpath
          _ -> return (state,resp400 upath)
   where
-    root = documentRoot options
+    root = "."
 
     translatePath rpath = root</>rpath -- hmm, check for ".."
 

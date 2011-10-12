@@ -28,12 +28,12 @@ main = defaultMainWithHooks simpleUserHooks{ preBuild =checkRGLArgs
                                            }
   where
     gfPostInst args flags pkg lbi =
-      do installWeb args flags pkg lbi 
-         installRGL args flags pkg lbi 
+      do installRGL args flags pkg lbi
+         installWeb args flags pkg lbi
 
     gfPostCopy args flags pkg lbi =
-      do copyWeb args flags pkg lbi 
-         copyRGL args flags pkg lbi 
+      do copyRGL args flags pkg lbi
+         copyWeb args flags pkg lbi
 
 --------------------------------------------------------
 -- Commands for building the Resource Grammar Library
