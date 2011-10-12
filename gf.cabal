@@ -12,9 +12,22 @@ homepage: http://www.grammaticalframework.org/
 bug-reports: http://code.google.com/p/grammatical-framework/issues/list
 tested-with: GHC==6.12.3, GHC==7.0.3
 
+data-dir: src
+data-files: www/index.html
+	    www/gfse/*.html
+	    www/gfse/*.css
+	    www/gfse/*.js
+	    www/gfse/P/*.png
+	    www/gfse/P/*.jpg
+	    www/minibar/*.html
+	    www/minibar/*.css
+	    www/minibar/*.js
+	    www/minibar/*.png
+
 source-repository head
   type:     darcs
   location: http://www.grammaticalframework.org/
+
 
 flag interrupt
   Description: Enable Ctrl+Break in the shell
