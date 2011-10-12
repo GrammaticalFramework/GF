@@ -24,7 +24,9 @@ import Codec.Binary.UTF8.String(encodeString)
 import GF.Infra.UseIO(readBinaryFile,writeBinaryFile)
 import qualified PGFService as PS
 import qualified ExampleService as ES
-import Paths_gf(getDataDir)
+import Data.Version(showVersion)
+import Paths_gf(getDataDir,version)
+import GF.Infra.BuildInfo (buildInfo)
 import RunHTTP(cgiHandler)
 
 -- * HTTP server
@@ -34,6 +36,9 @@ server execute1 state0 =
      datadir <- getDataDir
      let root = datadir</>"www"
          port = 41296
+     putStrLn $ "This is GF version "++showVersion version++"."
+     putStrLn buildInfo
+     putStrLn $ "Document root = "++root
      putStrLn $ "Starting HTTP server, open http://localhost:"
                 ++show port++"/ in your web browser."
      setCurrentDirectory root
