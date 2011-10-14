@@ -21,17 +21,17 @@ example_grammars =  -- :: [(pgf, tmp, src)]
     ("Letter.pgf","letter","examples"</>"letter"</>"Letter???.gf")]
 
 
-installWeb args flags pki lbi = setupWeb args dest pki lbi
+installWeb gf args flags pki lbi = setupWeb gf args dest pki lbi
   where
     dest = NoCopyDest
 
-copyWeb args flags pki lbi = setupWeb args dest pki lbi
+copyWeb gf args flags pki lbi = setupWeb gf args dest pki lbi
   where
     dest = case copyDest flags of
              NoFlag -> NoCopyDest
              Flag d -> d
 
-setupWeb args dest pkg lbi =
+setupWeb gf args dest pkg lbi =
     do putStrLn "setupWeb"
        mapM_ (createDirectoryIfMissing True) [grammars_dir,cloud_dir]
        mapM_ build_pgf example_grammars
@@ -49,7 +49,7 @@ setupWeb args dest pkg lbi =
          removeFile pgf
       where
         tmp_dir = gfo_dir</>tmp
-        cmd = "gf -make -s -optimize-pgf --gfo-dir="++tmp_dir++
+        cmd = gf++" -make -s -optimize-pgf --gfo-dir="++tmp_dir++
            -- " --output-dir="++grammars_dir++  -- has no effect?!
               " "++src
 
