@@ -499,14 +499,32 @@ oper mkQuaternaryCat : Str -> {ind : Str; attr : Str} -> {ind : Str; attr : Str}
 
 
 -----------------------------
-
------------------------------
 lin 
 
-testNoun i = mkCompCat ("noun"++ i.s) ;
-testA i = mkCompCat ("adj" ++ i.s) ;
-testV i = mkCompCat ("verb" ++ i.s) ;
-testV2 i = mkCompCat ("verb2" ++ i.s) ;
-testAdv i = mkCompCat ("adv" ++ i.s) ;
+testNoun_1 = mkSimpCat "noun_1" ;
+testNoun_2 = mkSimpCat "noun_2" ;
+testNoun_3 = mkSimpCat "noun_3" ;
+testNoun_4 = mkSimpCat "noun_4" ;
+testNoun_5 = mkSimpCat "noun_5" ;
+testA_1 = mkSimpCat "adj_1" ;
+testA_2 = mkSimpCat "adj_2" ;
+testA_3 = mkSimpCat "adj_3" ;
+testA_4 = mkSimpCat "adj_4" ;
+testA_5 = mkSimpCat "adj_5" ;
+testV_1 = mkSimpCat "verb_1" ;
+testV_2 = mkSimpCat "verb_2" ;
+testV_3 = mkSimpCat "verb_3" ;
+testV_4 = mkSimpCat "verb_4" ;
+testV_5 = mkSimpCat "verb_5" ;
+testV2_1 = mkSimpCat "verb2_1" ;
+testV2_2 = mkSimpCat "verb2_2" ;
+testV2_3 = mkSimpCat "verb2_3" ;
+testV2_4 = mkSimpCat "verb2_4" ;
+testV2_5 = mkSimpCat "verb2_5" ;
+testAdv_1 = mkSimpCat "adv_1" ;
+testAdv_2 = mkSimpCat "adv_2" ;
+testAdv_3 = mkSimpCat "adv_3" ;
+testAdv_4 = mkSimpCat "adv_4" ;
+testAdv_5 = mkSimpCat "adv_5" ;
 
 }

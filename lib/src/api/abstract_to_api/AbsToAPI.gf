@@ -464,11 +464,31 @@ those_NP : NP ;
 
 -----------------------------
 
-testNoun : Int -> N ;
-testA : Int -> A ;
-testV : Int -> V ;
-testV2 : Int -> V2 ;
-testAdv : Int -> Adv ;
+testNoun_1 : N ;
+testNoun_2 : N ;
+testNoun_3 : N ;
+testNoun_4 : N ;
+testNoun_5 : N ;
+testA_1 : A ;
+testA_2 : A ;
+testA_3 : A ;
+testA_4 : A ;
+testA_5 : A ;
+testV_1 : V ;
+testV_2 : V ;
+testV_3 : V ;
+testV_4 : V ;
+testV_5 : V ;
+testV2_1 : V2 ;
+testV2_2 : V2 ;
+testV2_3 : V2 ;
+testV2_4 : V2 ;
+testV2_5 : V2 ;
+testAdv_1 : Adv ;
+testAdv_2 : Adv ;
+testAdv_3 : Adv ;
+testAdv_4 : Adv ;
+testAdv_5 : Adv ;
 
 
 
