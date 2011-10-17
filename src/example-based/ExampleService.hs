@@ -1,4 +1,5 @@
 module ExampleService(cgiMain,cgiMain',newPGFCache) where
+import System.Random(newStdGen)
 import System.FilePath((</>),makeRelative)
 import Data.Map(fromList)
 import Data.Char(isDigit)
@@ -33,7 +34,8 @@ doProvideExample root cwd cache environ =
      parsePGF <- readParsePGF cwd cache
      let adjpath path = root</>makeRelative "/" (makeRelative root cwd</>path)
      pgf <- liftIO . readCache cache . adjpath =<< getInp "grammar"
-     let Just (e,s) = E.provideExample environ fun parsePGF pgf lang
+     gen <- liftIO newStdGen
+     let Just (e,s) = E.provideExample gen environ fun parsePGF pgf lang
          res = (showExpr [] e,s)
      liftIO $ logError $ "proveExample ... = "++show res
      outputJSONP res

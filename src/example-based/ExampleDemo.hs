@@ -10,7 +10,7 @@ import qualified Data.IntMap as IntMap
 import qualified Data.Set as Set
 import Data.Maybe
 import System.Environment (getArgs)
-import System.Random (newStdGen)
+import System.Random (RandomGen) --newStdGen
 
 
 type MyType = CId                                -- name of the categories from the program
@@ -39,8 +39,7 @@ data Environ = Env {getTypeMap :: TypeMap,                  -- mapping between a
                     getConcMap :: ConcMap,                  -- concrete expression after parsing          
                     getSigs :: Map.Map MyType [FuncWithArg], -- functions for which we have the concrete syntax already with args 
                     getAll :: [FuncWithArg]           -- all the functions with arguments  
-} 
- 
+                    }
 
 
 getNext :: Environ -> ([MyFunc],[MyFunc])
@@ -60,12 +59,12 @@ getNext env =
      in (exampleable,testeable)
 
 
-provideExample :: Environ -> MyFunc -> PGF -> PGF -> Language -> Maybe (Expr,String)
-provideExample env myfunc parsePGF pgfFile lang = 
+provideExample :: RandomGen gen => gen -> Environ -> MyFunc -> PGF -> PGF -> Language -> Maybe (Expr,String)
+provideExample gen env myfunc parsePGF pgfFile lang = 
       fmap giveExample $ getNameExpr myfunc env
  where 
    giveExample e_ = 
-     let newexpr = head $ generateFromDepth pgfFile e_ (Just 5) -- change here with the new random generator
+     let newexpr = head $ generateRandomFromDepth gen pgfFile e_ (Just 5) -- change here with the new random generator
          ty = getType $ head $ filter (\x -> getName x == myfunc) $ getAll env
          embeddedExpr = maybe "" (\x -> ", as in: " ++ q (linearize pgfFile lang x)) (embedInStart (getAll env) (Map.fromList [(ty,e_)]))
          lexpr = linearize pgfFile lang newexpr  
