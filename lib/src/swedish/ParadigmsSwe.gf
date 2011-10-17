@@ -459,25 +459,20 @@ oper
   mk7A a b c d e f g = mkAdjective a b c d e f g ** {isComp = False ; lock_A = <>} ;
   regA fin = 
     let 
-      fint : Str = case fin of {
-        ru  + "nd" => ru  + "nt" ; 
-        se  + "dd" => se  + "tt" ; 
-        pla + "tt" => pla + "tt" ; 
-        gla + "d"  => gla + "tt" ;
-        _ + ("a"|"e"|"o") => fin ;
-        _          => fin + "t" 
-      } ;
-      fina : Str = case fin of {
-        unk@(? + ? + ? + _) + "e" + n@("l" | "n" | "r") => unk + n + "a" ;
-        _ + ("a"|"e"|"o") => fin ;
-        _ => fin + "a"
-      } ;
-      comp : Bool = case fin of {
-        _ + ("a"|"e"|"o") => True ;
-        _ => False
-        }
-    in
-    lin A {s = (mk3A fin fint fina).s ; isComp = comp} ;
+      fint = fin + "t" ;
+      fina = fin + "a" ;
+    in case fin of {
+        unk@(? + ? + ? + _) + "en"                => mk3cA fin (unk  + "et") (unk + "na") True ;
+        unk@(? + ? + ? + _) + "e" + n@("l" | "r") => mk3A  fin fint (unk + n + "a") ;
+        kork@(? + ? + ? + _) + "ad"               => mk3cA fin (kork + "at") (kork + "ade") True ;
+        se  + "dd"                                => mk3cA fin (se  + "tt") fina True ;
+        ru  + "nd"                                => mk3A  fin (ru  + "nt") fina ; 
+        pla + "tt"                                => mk3A  fin (pla + "tt") fina ; 
+        aekt + "a"                                => mk3A  fin fin fin ;
+        puck + ("e"|"o")                          => mk3cA fin fin fin True ;
+        _                                         => mk3A  fin fint fina
+        } ;
+
   irregA ung yngre yngst = 
     mk7A ung (ung + "t") (ung + "a") (ung + "a") yngre yngst (yngst+"a") ;
 
@@ -485,9 +480,12 @@ oper
     mk7A
       ljummen ljummet ljumma ljumma 
       (ljumma + "re") (ljumma + "st") (ljumma + "ste") ;
-  mk2A vid vitt = case <vid,vitt> of {
-    <gal + "en", _ + "et"> => mk3A vid vitt (gal + "na") ;
-    _ => mk3A vid vitt (vid + "a")
+
+  mk2A vid vitt = 
+    case <vid,vitt> of {
+      <gal + "en", _ + "et">  => mk3cA vid vitt (gal + "na") True ;
+      <gal + "ad", _ + "at">  => mk3cA vid vitt (gal + "ade") True ;
+      _ => mk3A vid vitt (vid + "a")
     } ;
 
   compoundA adj = {s = adj.s ; isComp = True ; lock_A = <>} ;
@@ -645,6 +643,9 @@ oper
 -- Sometimes just the positive forms are irregular.
 
   mk3A : (galen,galet,galna : Str) -> A ;
+
+  mk3cA : (galen,galet,galna : Str) -> Bool -> A = 
+    \x,y,z,b -> lin A {s = (mk3A x y z).s ; isComp = b} ;
 
   mk6V : (supa,super,sup,söp,supit,supen : Str) -> V ;
   regV : (talar : Str) -> V ;
