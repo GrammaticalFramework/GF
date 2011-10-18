@@ -9,6 +9,7 @@ function Input(server,translations,opts) { // Input object constructor
     this.options={
 	delete_button_text: "⌫",
 	default_source_language: null,
+	startcat_menu: true,
 	random_button: true,
     }
 
@@ -22,9 +23,12 @@ function Input(server,translations,opts) { // Input object constructor
     this.surface=div_id("surface");
     this.words=div_id("words");
     this.from_menu=empty("select");
+    this.startcat_menu=empty("select")
 
     with(this) {
 	appendChildren(main,[surface,words]);
+	if(options.startcat_menu)
+	    appendChildren(menus,[text(" Startcat: "),startcat_menu])
 	appendChildren(menus,[text(" From: "),from_menu])
 	appendChildren(buttons,
 		       [button(options.delete_button_text,bind(delete_last,this),"H"),
@@ -38,12 +42,26 @@ function Input(server,translations,opts) { // Input object constructor
     this.previous=null;
 
     this.from_menu.onchange=bind(this.change_language,this);
+    this.startcat_menu.onchange=bind(this.clear_all,this);
 }
 
 Input.prototype.change_grammar=function (grammar) {
     update_language_menu(this.from_menu,grammar);
     set_initial_language(this.options,this.from_menu,grammar);
+    this.update_startcat_menu(grammar)
     this.change_language();
+}
+
+Input.prototype.update_startcat_menu=function (grammar) {
+    var menu=this.startcat_menu;
+    menu.innerHTML="";
+    var cats=grammar.categories;
+    for(var cat in cats) menu.appendChild(option(cats[cat],cats[cat]))
+    if(grammar.startcat) menu.value=grammar.startcat;
+    else {
+	insertFirst(menu,option("Default",""));
+	menu.value="";
+    }
 }
 
 Input.prototype.change_language=function () {
@@ -73,7 +91,8 @@ Input.prototype.get_completions=function() {
     with(this) {
 	//debug("get_completions ");
 	words.innerHTML="...";
-	server.complete({from:current.from,input:current.input},
+	server.complete({from:current.from,input:current.input,
+			 cat:startcat_menu.value},
 			bind(show_completions,this));
     }
 }
@@ -83,7 +102,7 @@ Input.prototype.show_completions=function(complete_output) {
 	//debug("show_completions ");
 	var completions=complete_output[0].completions;
 	var emptycnt=add_completions(completions)
-	if(true/*emptycnt>0*/) translations.translateFrom(current);
+	if(true/*emptycnt>0*/) translations.translateFrom(current,startcat_menu.value);
 	else translations.clear();
 	if(surface.typed && emptycnt==completions.length) {
 	    if(surface.typed.value=="") remove_typed_input();
@@ -198,7 +217,7 @@ Input.prototype.generate_random=function() {
     function lin_random(abs) {
 	t.server.linearize({tree:abs[0].tree,to:t.current.from},show_random);
     }
-    t.server.get_random({},lin_random);
+    t.server.get_random({cat:t.startcat_menu.value},lin_random);
 }
 
 Input.prototype.add_words=function(s) {
