@@ -75,6 +75,7 @@ Minibar.prototype.show_grammarlist=function(grammars) {
 	    appendChildren(grammar_menu,map(opt,grammars));
     	    grammar_menu.onchange=
 		bind(function() { select_grammar(grammar_menu.value); },this);
+	    insertFirst(menubar,button("i",bind(show_grammarinfo,this)))
 	    insertFirst(menubar,grammar_menu);
 	    insertFirst(menubar,text("Grammar: "));
 	}
@@ -102,6 +103,20 @@ Minibar.prototype.change_grammar=function(grammar_info) {
 	input.change_grammar(grammar)
 	translations.change_grammar(grammar)
     }
+}
+
+Minibar.prototype.show_grammarinfo=function() {
+    this.translations.main.innerHTML=""
+    var g=this.grammar;
+    appendChildren(this.translations.main,
+		   [wrap("h3",text(g.name)),
+		    node("dl",{},
+			 [dt(text("Start category")),
+			  dd(text(g.startcat || "")),
+			  dt(text("Categories")),
+			  dd(text(g.categories.join(", "))),
+			  dt(text("Functions")),
+			  dd(text(g.functions.join(", ")))])])
 }
 
 Minibar.prototype.append_extra_buttons=function(extra,options) {
