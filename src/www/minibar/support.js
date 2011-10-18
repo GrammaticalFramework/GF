@@ -157,6 +157,7 @@ function div_class(cls,contents)  { return wrap_class("div",cls,contents); }
 
 function p(contents) { return wrap("p",contents); }
 function dt(contents) { return wrap("dt",contents); }
+function dd(contents) { return wrap("dd",contents); }
 function li(contents) { return wrap("li",contents); }
 
 function th(contents) { return wrap("th",contents); }
