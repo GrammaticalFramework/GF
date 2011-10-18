@@ -297,6 +297,7 @@ doGrammar :: PGF -> Maybe (Accept Language) -> JSValue
 doGrammar pgf macc = showJSON $ toJSObject
              [("name", showJSON (PGF.abstractName pgf)),
               ("userLanguage", showJSON (selectLanguage pgf macc)),
+              ("startcat",showJSON (PGF.showType [] (PGF.startCat pgf))),
               ("categories", showJSON categories),
               ("functions", showJSON functions),
               ("languages", showJSON languages)]
