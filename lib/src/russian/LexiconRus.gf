@@ -157,7 +157,7 @@ lin
   important_A = mkA "важный" ;
   industry_N = mkN "промышленность" ; 
   iron_N = mkN "железо" ;
-  john_PN = mkPN "Иван" Masc Animate ;
+  john_PN = mkPN "Иван" Masc Sg Animate ;
   jump_V = regV imperfective first "прыга" "ю" "прыгал" "прыгай" "прыгать" ;
   kill_V2 = dirV2 (regV imperfective first "убива" "ю" "убивал" "убивай" "убивать" ) ;
   king_N = mkN "король" "короля" "королю" "короля" "королем" "короле" "короле" "короли" "королей" "королям" "королей" "королями" "королях"  masculine animate ;
@@ -211,7 +211,7 @@ lin
   paint_V2A = dirV2 (regV imperfective first "рису" "ю" "рисовал" "рисуй" "рисовать" ) ;
 ---  palace_N = nDvorec "двор" ; -- +++ MG_UR: added +++
   paper_N = mkN "бумага" ;
-  paris_PN = mkPN "Париж" Masc Inanimate ;
+  paris_PN = mkPN "Париж" Masc Sg Inanimate ;
   peace_N = mkN "мир" ;
   pen_N = mkN "ручка" ;
   person_N = mkN "лицo" animate ; -- irregular
@@ -317,7 +317,7 @@ lin
   think_V = regV imperfective first "дума" "ю" "думал" "думай" "думать" ;
   throw_V2 = dirV2 (regV imperfective first "броса" "ю" "бросал" "бросай" "бросать" ) ;
   tie_V2 = dirV2 (regV imperfective first "вяж" "у" "вязал" "вяжи" "вязать") ;
---  today_Adv = ;
+  today_Adv = mkAdv "сегодня" ;
   tongue_N = mkN "язык" ;
   tooth_N = mkN "зуб" ;
   train_N = mkN "поезд" ;
@@ -353,7 +353,7 @@ lin
   wood_N = mkN "дерево" ;
   worm_N = mkN "черв" ;
   write_V2 = dirV2 (regV imperfective first "пиш" "у" "писал" "пиши" "писать" );
-  year_N = mkN "годь" ;
+  year_N = mkN "год" ;
   yellow_A = mkA "жёлтый" ;
   young_A = mkA "молодой" "моложе";
 }

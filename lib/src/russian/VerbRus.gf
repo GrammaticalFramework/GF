@@ -53,7 +53,8 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
           };  
 -- infinitive does not save GenNum, 
 -- but indicative does for the sake of adjectival predication !
-        ClIndic Present _ =>  zloj.s ! AF Nom Animate gn ;
+--        ClIndic Present _ =>  zloj.s ! AF Nom Animate gn ;
+        ClIndic Present _ =>  zloj.s ! AFShort gn ;
         ClIndic PastRus _ => case gn of
        { (GSg Fem)   => "была" ++ zloj.s! AF Nom Animate (GSg Fem);
           (GSg Masc)  => "был" ++ zloj.s! AF Nom Animate (GSg Masc);

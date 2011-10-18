@@ -6,7 +6,7 @@ concrete PhrasebookRus of Phrasebook =
     SyntaxRus,
     Prelude in {
 
---lin
---  PGreeting g = lin Text g ;
+  -- lin
+  --   PGreeting g = lin Text g ;
 
 }

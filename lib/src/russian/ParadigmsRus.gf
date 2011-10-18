@@ -101,7 +101,7 @@ oper
 
 -- Proper names.
 
-  mkPN  : Str -> Gender -> Animacy -> PN ;          -- "Иван", "Маша"
+  mkPN  : Str -> Gender -> Number -> Animacy -> PN ;          -- "Иван", "Маша"
   nounPN : N -> PN ;
   
 
@@ -130,6 +130,7 @@ oper
 -- Adjectives with irregular comparative.
 
      mkA : (positive, comparative : Str) -> A ;
+
   } ;
 
 -- Two-place adjectives need a preposition and a case as extra arguments.
@@ -361,10 +362,13 @@ foreign = Foreign; -- +++ MG_UR: added +++
   mkN3 f p2 p3 = (UseN f) ** {c2 = p2; c3 = p3; lock_N3 = <>} ; 
 
 
-  mkPN = \ivan, g, anim -> 
-    case g of { 
-       Masc => mkProperNameMasc ivan anim ; 
-       _ => mkProperNameFem ivan anim
+  mkPN = \ivan, g, n, anim -> 
+    case n of {
+      Sg => case g of { 
+	Masc => mkProperNameMasc ivan anim ; 
+	_ => mkProperNameFem ivan anim
+	} ;
+      Pl => mkProperNamePl ivan anim
     } ** {lock_PN =<>};
   nounPN n = {s=\\c => n.s! NF Sg c; anim=n.anim; g=n.g; lock_PN=<>};
     
@@ -377,7 +381,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
 
   makeCN = UseN;
 
-  makeNP = \x,y,z -> UsePN (mkPN x y z) ;
+  makeNP = \x,y,z -> UsePN (mkPN x y singular z) ;
 
    mkA = overload {
      mkA : (positive : Str) -> A = mk1A ;
@@ -396,6 +400,12 @@ foreign = Foreign; -- +++ MG_UR: added +++
       stem+"ий"                       => mkAdjDeg (aRegSoft stem) comparative ;
       stem                            => mkAdjDeg (adjInvar stem) comparative
     } ;
+
+  -- mkParticiple : VP -> AP = \v, voice ->
+  --   case voice of {
+  --     Act => ;
+  --     Pass => ;
+  --   } ;
 
   -- khaki, mini, hindi, netto
   adjInvar : Str -> Adjective = \stem -> { s = \\_ => stem } ;
