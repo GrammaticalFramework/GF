@@ -29,7 +29,7 @@ example_grammars =
     ("Letter.pgf","letter",
      ".."</>".."</>"examples"</>"letter"</>"Letter???.gf")]
 
-minibar_src = ".."</>"runtime"</>"javascript"</>"minibar"
+minibar_src = ".."</>"www"</>"minibar"
 
 --------------------------------------------------------------------------------
 instWWW args flags pki lbi = setupWWW args dest pki lbi
