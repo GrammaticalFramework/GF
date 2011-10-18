@@ -34,7 +34,7 @@ oper pronTu : Pronoun =
 			      Prepos _ => "тебе" } }
    in pronYaTu nonPoss "тво" P2 ;
 
--- Pronouns ya, tu, svoj
+-- Pronouns ya, ty, svoj
 oper pronYaTu : { s : Case => Str } -> Str -> Person -> Pronoun =
   \nonPoss, mo, pers ->
   { s = table {
@@ -1312,5 +1312,16 @@ oper ProperName : Type = {s :  Case => Str ; g : Gender ; anim : Animacy} ;
                      Inst => masha + "ей";
                      (Prepos _) => masha + "е" };
           g = Fem ; anim = anim };
+
+  -- Люберцы, Нидерланды
+  mkProperNamePl : Str -> Animacy -> ProperName = \lubercy, anim ->
+    let a : Str = case lubercy of {_+("ч"|"щ"|"ш"|"ж") => "а"; _ => "о" } in
+       { s = table { Nom => lubercy + "ы";
+                     Gen => lubercy + a + "в";
+                     Dat => lubercy + "ам";
+                     Acc => lubercy + "ы";
+                     Inst => lubercy + "ей";
+                     (Prepos _) => lubercy + "ах" };
+          g = Neut ; anim = anim };
 
 };

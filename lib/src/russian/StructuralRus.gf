@@ -47,6 +47,7 @@ lin
   here7from_Adv = ss "отсюда" ;
   how_IAdv  = ss "как" ;
   how8many_IDet   = skolkoSgDet ** {n = Pl; g = (PGen Neut); c= Gen}; 
+  how8much_IAdv   = ss "сколько" ;
   i_Pron   = pronYa ;
   if_Subj    = ss "если" ;
   in8front_Prep  = { s = "перед" ; c = Inst};
@@ -114,6 +115,9 @@ lin
   youPol_Pron =  pronVu;
 
   have_V2= P.dirV2 (P.regV P.imperfective P.first "име" "ю" "имел" "имей" "иметь" );
+  have_V3 = P.mkV3 (P.mkV P.imperfective "есть" "есть" "есть" "есть" "есть" "есть" "был" "будь" "есть") "" "у" Nom Gen;
+
+  have_not_V3 = P.mkV3 (P.mkV P.imperfective "нет" "нет" "нет" "нет" "нет" "нет" "не было" "не будь" "нет") "" "у" Gen Gen;
 
 ---  NoDet    = nikakojDet ** {n = Sg; g = PNoGen; c= Nom} ;
 ---  AnyDet   = lubojDet ** {n = Sg; g = PNoGen; c= Nom} ;
