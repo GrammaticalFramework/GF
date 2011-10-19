@@ -99,7 +99,7 @@ lin mkV2Q_1 = mkBinaryCat "mkV2Q" ;
 
 oper mkUnaryStringCat : Str-> String -> {ind : Str ; attr : Str}  = 
       \s,str -> 
-            let sstr = s + "'" ++ str.s ++ "'" in 
+            let sstr = s ++ "'" ++ str.s ++ "'" in 
                      {ind  = sstr; attr  = "(" ++ sstr ++ ")"};
 
 oper mkBinaryStringCat : Str -> String -> String -> {ind : Str ; attr : Str} = 
