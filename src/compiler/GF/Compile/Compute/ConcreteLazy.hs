@@ -251,7 +251,7 @@ computeTermOpt gr = comput True where
     where
      --{...}.l
      project l = maybe (fail_project l) (comp g) . try_project l
-     try_project l = fmap snd . lookup l . reverse
+     try_project l = fmap snd . lookup l
      fail_project l = fail (render (text "no value for label" <+> ppLabel l))
 
      compApp g (App f a) = do    -- (f a)
