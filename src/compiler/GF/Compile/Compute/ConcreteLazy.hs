@@ -44,7 +44,7 @@ import Text.PrettyPrint
 type Comp a = Identity a -- inherit Haskell's laziness
 errr = err runtime_error return -- convert interpreter error to run-time error
 no_error = err fail return -- failure caused by interpreter/type checker bug (?)
-runtime_error = return . predef_error -- run-time error term
+runtime_error = return . Error -- run-time error term
 
 -- | computation of concrete syntax terms into normal form
 -- used mainly for partial evaluation
@@ -59,7 +59,8 @@ computeTermOpt gr = comput True where
 
    -- full = True means full evaluation under Abs
    comput full g t = ---- errIn ("subterm" +++ prt t) $ --- for debugging 
-              case t of
+    --trace ("comput "++show (map fst g)++" "++take 65 (show t)) $
+    case t of
 
      Q (p,c) | p == cPredef -> return t    -- qualified constant
              | otherwise    -> look (p,c) 
@@ -104,6 +105,7 @@ computeTermOpt gr = comput True where
         h' <- hnf g h
         as' <- mapM (comp g) as
         case h' of
+          Error{} -> return h'
           _ | not (null [() | FV _ <- as']) -> compApp g (mkApp h' as')
           c@(QC _) -> do
             return $ mkApp c as'
@@ -131,6 +133,7 @@ computeTermOpt gr = comput True where
      P t l  -> do     -- t.l
        t' <- comp g t
        case t' of
+         Error{} -> return t'
          FV rs -> mapM (\c -> comp g (P c l)) rs >>= returnC . variants -- (r| r').l
          R r   -> project l r --{...}.l
 
@@ -164,6 +167,8 @@ computeTermOpt gr = comput True where
        x <- comp g x0
        y <- comp g y0
        case (x,y) of
+         (Error{},_)       -> return x
+         (_,Error{})       -> return y
          (FV ks,_)         -> do                               -- (k|k') + y
            kys <- mapM (comp g . flip Glue y) ks
            return $ variants kys
@@ -208,6 +213,8 @@ computeTermOpt gr = comput True where
        a' <- comp g a
        b' <- comp g b
        case (a',b') of
+         (Error{},_) -> return a'
+         (_,Error{}) -> return b'
          (Alts _ _, K d) -> errr $ checks [do                      -- pre {...} ++ "d"
             as <- strsFromTerm a' -- this may fail when compiling opers
             return $ variants [
@@ -234,6 +241,8 @@ computeTermOpt gr = comput True where
        r' <- comp g r
        s' <- comp g s
        case (r',s') of
+         (Error{},_) -> return r'
+         (_,Error{}) -> return s'
          (R rs, R ss) -> errr $ plusRecord r' s'
          (RecType rs, RecType ss) -> errr $ plusRecType r' s'
          _ -> return $ ExtR r' s'
@@ -258,10 +267,11 @@ computeTermOpt gr = comput True where
        f' <- hnf g f
        a' <- comp g a
        case (f',a') of
+         (Error{},_) -> return f'
          (Abs _ x b, FV as) ->   -- (\x -> b) (variants {...})
-           mapM (\c -> comp (ext x c g) b) as >>= return . variants
-         (_, FV as)  -> mapM (\c -> comp g (App f' c)) as >>= return . variants
-         (FV fs, _)  -> mapM (\c -> comp g (App c a')) fs >>= return . variants
+           liftM variants $ mapM (\c -> comp (ext x c g) b) as
+         (_, FV as)  -> liftM variants $ mapM (\c -> comp g (App f' c)) as
+         (FV fs, _)  -> liftM variants $ mapM (\c -> comp g (App c a')) fs
          (Abs _ x b,_) -> comp (ext x a' g) b  -- (\x -> b) a -- normal beta conv.
 
          (QC _,_)  -> returnC $ App f' a'  -- (C a') -- constructor application
@@ -271,7 +281,7 @@ computeTermOpt gr = comput True where
 
 	 _ -> case appPredefined (App f' a') of
                 Ok (t',b) -> if b then return t' else comp g t'
-                Bad s -> fail s
+                Bad s -> runtime_error s
 
      hnf, comp :: Substitution -> Term -> Comp Term
      hnf  = comput False
@@ -329,6 +339,7 @@ computeTermOpt gr = comput True where
 
     
        _ -> case t' of
+         Error{} -> return t'
          FV ccs -> mapM (\c -> comp g (S c v')) ccs >>= returnC . variants
 
          T _ [(PW,c)] -> comp g c           -- (\\_ => c) ! v'
@@ -488,10 +499,17 @@ getArgType t = case t of
   T (TComp ty) _ -> return ty
   _ -> fail (render (text "cannot get argument type of table" $$ nest 2 (ppTerm Unqualified 0 t)))
 
-
 checkPredefError :: SourceGrammar -> Term -> Err Term
+checkPredefError sgr t =
+    case t of
+      Error s -> fail ("Error: "++s)
+      _ -> return t
+  
+{-
+-- Old
 checkPredefError sgr t = case t of
   App (Q (mod,f)) s | mod == cPredef && f == cError -> fail $ showTerm sgr TermPrintOne Unqualified s
   _ -> composOp (checkPredefError sgr) t
   
 predef_error s = App (Q (cPredef,cError)) (K s)
+-}
