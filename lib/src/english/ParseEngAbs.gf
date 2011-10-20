@@ -1,4 +1,4 @@
-abstract PennTreebank = 
+abstract ParseEngAbs = 
   Tense,
   Cat,
   Noun,
