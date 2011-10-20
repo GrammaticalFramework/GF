@@ -107,6 +107,7 @@ appPredefined t = case t of
         (K s) | f == cIsUpper -> retb $ if (all isUpper s) then predefTrue else predefFalse
         (K s) | f == cToUpper -> retb $ K $ map toUpper s
         (K s) | f == cToLower -> retb $ K $ map toLower s
+        (K s) | f == cError   -> retb $ Error s
 
         _                    -> retb t
 

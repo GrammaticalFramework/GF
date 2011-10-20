@@ -161,7 +161,7 @@ data Term =
 
  | Alts Term [(Term, Term)]      -- ^ alternatives by prefix: @pre {t ; s\/c ; ...}@
  | Strs [Term]                   -- ^ conditioning prefix strings: @strs {s ; ...}@
-
+ | Error String                  -- ^ error values returned by Predef.error
   deriving (Show, Eq, Ord)
 
 data Patt =
