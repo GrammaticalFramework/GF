@@ -52,26 +52,26 @@ primitives = Map.fromList
   [ (cErrorType, ResOper (Just (noLoc typeType)) Nothing)
   , (cInt      , ResOper (Just (noLoc typePType)) Nothing)
   , (cFloat    , ResOper (Just (noLoc typePType)) Nothing)
-  , (cInts     , ResOper (Just (noLoc (mkFunType [typeInt] typePType))) Nothing)
+  , (cInts     , fun [typeInt] typePType)
   , (cPBool    , ResParam (Just [noLoc (cPTrue,[]),noLoc (cPFalse,[])]) (Just [QC (cPredef,cPTrue), QC (cPredef,cPFalse)]))
   , (cPTrue    , ResValue (noLoc typePBool))
   , (cPFalse   , ResValue (noLoc typePBool))
-  , (cError    , ResOper (Just (noLoc (mkFunType [typeStr] typeError))) Nothing)  -- non-can. of empty set
-  , (cLength   , ResOper (Just (noLoc (mkFunType [typeTok] typeInt))) Nothing)
-  , (cDrop     , ResOper (Just (noLoc (mkFunType [typeInt,typeTok] typeTok))) Nothing)
-  , (cTake     , ResOper (Just (noLoc (mkFunType [typeInt,typeTok] typeTok))) Nothing)
-  , (cTk       , ResOper (Just (noLoc (mkFunType [typeInt,typeTok] typeTok))) Nothing)
-  , (cDp       , ResOper (Just (noLoc (mkFunType [typeInt,typeTok] typeTok))) Nothing)
-  , (cEqInt    , ResOper (Just (noLoc (mkFunType [typeInt,typeInt] typePBool))) Nothing)
-  , (cLessInt  , ResOper (Just (noLoc (mkFunType [typeInt,typeInt] typePBool))) Nothing)
-  , (cPlus     , ResOper (Just (noLoc (mkFunType [typeInt,typeInt] typeInt))) Nothing)
-  , (cEqStr    , ResOper (Just (noLoc (mkFunType [typeTok,typeTok] typePBool))) Nothing)
-  , (cOccur    , ResOper (Just (noLoc (mkFunType [typeTok,typeTok] typePBool))) Nothing)
-  , (cOccurs   , ResOper (Just (noLoc (mkFunType [typeTok,typeTok] typePBool))) Nothing)
+  , (cError    , fun [typeStr] typeError)  -- non-can. of empty set
+  , (cLength   , fun [typeTok] typeInt)
+  , (cDrop     , fun [typeInt,typeTok] typeTok)
+  , (cTake     , fun [typeInt,typeTok] typeTok)
+  , (cTk       , fun [typeInt,typeTok] typeTok)
+  , (cDp       , fun [typeInt,typeTok] typeTok)
+  , (cEqInt    , fun [typeInt,typeInt] typePBool)
+  , (cLessInt  , fun [typeInt,typeInt] typePBool)
+  , (cPlus     , fun [typeInt,typeInt] typeInt)
+  , (cEqStr    , fun [typeTok,typeTok] typePBool)
+  , (cOccur    , fun [typeTok,typeTok] typePBool)
+  , (cOccurs   , fun [typeTok,typeTok] typePBool)
 
-  , (cToUpper  , ResOper (Just (noLoc (mkFunType [typeTok] typeTok))) Nothing)
-  , (cToLower  , ResOper (Just (noLoc (mkFunType [typeTok] typeTok))) Nothing)
-  , (cIsUpper  , ResOper (Just (noLoc (mkFunType [typeTok] typePBool))) Nothing)
+  , (cToUpper  , fun [typeTok] typeTok)
+  , (cToLower  , fun [typeTok] typeTok)
+  , (cIsUpper  , fun [typeTok] typePBool)
 
 ----  "read"   -> 
   , (cRead     , ResOper (Just (noLoc (mkProd -- (P : Type) -> Tok -> P
@@ -84,6 +84,9 @@ primitives = Map.fromList
                                          [(Explicit,varL,typeType),(Explicit,identW,mkFunType [typeStr] typeStr),(Explicit,identW,Vr varL)] (Vr varL) []))) Nothing)
   ]
   where
+    fun from to = oper (mkFunType from to)
+    oper ty     = ResOper (Just (noLoc ty)) Nothing
+
     noLoc = L (0,0)
 
     varL :: Ident
