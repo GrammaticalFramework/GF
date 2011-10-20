@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 -------------------------------------------------
 -- |
 -- Module      : PGF
@@ -130,7 +131,7 @@ module PGF(
            readProbabilitiesFromFile,
            
            -- ** SortTop
-           forExample,
+--         forExample,
 
            -- * Browsing
            browse
@@ -138,7 +139,7 @@ module PGF(
 
 import PGF.CId
 import PGF.Linearize
-import PGF.SortTop
+--import PGF.SortTop
 import PGF.Generate
 import PGF.TypeCheck
 import PGF.Paraphrase
