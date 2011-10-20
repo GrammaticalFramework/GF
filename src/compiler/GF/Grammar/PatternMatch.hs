@@ -116,10 +116,7 @@ tryMatch (p,t) = do
         Bad _ -> return []
         _ -> Bad (render (text "no match with negative pattern" <+> ppPatt Unqualified 0 p))
 
-      (PSeq p1 p2, ([],K s, [])) -> do
-         let cuts = [splitAt n s | n <- [0 .. length s]] 
-         matches <- checks [mapM tryMatch [(p1,K s1),(p2,K s2)] | (s1,s2) <- cuts]
-         return (concat matches)
+      (PSeq p1 p2, ([],K s, [])) -> matchPSeq p1 p2 s
 
       (PRep p1, ([],K s, [])) -> checks [
          trym (foldr (const (PSeq p1)) (PString "") 
@@ -131,7 +128,26 @@ tryMatch (p,t) = do
       (PChars cs, ([],K [c], [])) | elem c cs -> return []
 
       _ -> Bad (render (text "no match in case expr for" <+> ppTerm Unqualified 0 t))
-  
+
+matchPSeq p1 p2 s =
+  do let min1 = 0 --minLength p1
+         min2 = length s -- -minLength p2
+         cuts = [splitAt n s | n <- [min1 .. min2]]
+     matches <- checks [mapM tryMatch [(p1,K s1),(p2,K s2)] | (s1,s2) <- cuts]
+     return (concat matches)
+{-
+-- | Estimate the minimal length of the string that a pattern will match
+minLength p =
+  case p of
+    PString s -> length s
+    PSeq p1 p2 -> minLength p1+minLength p2
+    PAlt p1 p2 -> min (minLength p1) (minLength p2)
+    PChar -> 1
+    PChars _ -> 1
+    PAs x p' -> minLength p' 
+    PT t p' -> minLength p' 
+    _ -> 0 -- safe underestimate
+-}
 isInConstantForm :: Term -> Bool
 isInConstantForm trm = case trm of
     Cn _     -> True

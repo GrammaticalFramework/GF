@@ -574,3 +574,14 @@ topoSortJments (m,mi) = do
           (\cyc -> Bad (render (text "circular definitions:" <+> fsep (map ppIdent (head cyc)))))
           (topoTest (allDependencies (==m) (jments mi)))
   return (reverse [(i,info) | i <- is, Ok info <- [lookupTree showIdent i (jments mi)]])
+{-
+-- | Smart constructor for PSeq
+pSeq p1 p2 =
+  case (p1,p2) of
+    (PString s1,PString s2) -> PString (s1++s2)
+    (PSeq p11 (PString s1),PString s2) -> PSeq p11 (PString (s1++s2))
+    (PString s1,PSeq (PString s2) p22) -> PSeq (PString (s1++s2)) p22
+    (PSeq p11 (PString s1),PSeq (PString s2) p22) ->
+        PSeq p11 (PSeq (PString (s1++s2)) p22)
+    _ -> PSeq p1 p2
+-}
