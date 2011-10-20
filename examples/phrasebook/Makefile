@@ -21,7 +21,7 @@ koe:
 	$(compile) Eng Fre DisambPhrasebookEng
 
 missing:
-	echo "pg -missing | wf -file=missing.txt" | gf Phrasebook.pgf 
+	echo "pg -missing | wf -file=missing.txt" | gf -run Phrasebook.pgf 
 
 doc:
 	cat Sentences.gf Words.gf >Ontology.gf
