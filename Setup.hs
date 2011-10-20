@@ -343,12 +343,15 @@ run_gfc :: PackageDescription -> LocalBuildInfo -> [String] -> IO ()
 run_gfc pkg lbi args = 
     do let args' = ["-batch","-gf-lib-path="++rgl_src_dir,"+RTS","-K32M","-RTS"] ++ filter (not . null) args
            gf = default_gf pkg lbi
-       putStrLn $ "Running: " ++ gf ++ " " ++ unwords (map showArg args')
+           gf_cmdline = gf ++ " " ++ unwords (map showArg args')
+--     putStrLn $ "Running: " ++ gf_cmdline
        e <- rawSystem gf args'
        case e of
          ExitSuccess   -> return ()
-         ExitFailure i -> die $ "gf exited with exit code: " ++ show i
-  where showArg arg = "'" ++ arg ++ "'"
+         ExitFailure i -> do putStrLn $ "Ran: " ++ gf_cmdline
+                             die $ "gf exited with exit code: " ++ show i
+  where
+    showArg arg = if ' ' `elem` arg then "'" ++ arg ++ "'" else arg
 
 default_gf pkg lbi = buildDir lbi </> exeName' </> exeNameReal
   where
