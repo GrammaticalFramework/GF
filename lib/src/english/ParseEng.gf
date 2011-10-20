@@ -1,5 +1,5 @@
---# -path=.:alltenses:/home/krasimir/www.grammaticalframework.org/lib/src/english
-concrete PennTreebankCnc of PennTreebank = 
+--# -path=alltenses
+concrete ParseEng of ParseEngAbs = 
   TenseX - [Pol, PNeg, PPos],
   CatEng,
   NounEng,
