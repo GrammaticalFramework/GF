@@ -72,7 +72,9 @@ getLimit = maybe err return =<< readInput "limit"
   where err = throwCGIError 400 "Missing/bad limit" []
 
 
-readParsePGF cwd cache = liftIO $ readCache cache (cwd</>"ParseEngAbs.pgf")
+readParsePGF cwd cache =
+    do parsepgf <- getInp "parser"
+       liftIO $ readCache cache (cwd</>parsepgf)
 
 parseEnviron s = do state <- liftIO $ readIO s
                     return $ environ state
