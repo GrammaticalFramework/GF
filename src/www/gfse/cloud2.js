@@ -42,16 +42,28 @@ function upload(g) {
 
 // Upload the grammar to store it in the cloud
 function upload_json(cont) {
-    function upload3(resptext,status) {
-	local.put("json_uploaded",Date.now());
-	//debug("Upload complete")
-	if(cont) cont();
-	else {
-	    var sharing=element("sharing");
-	    if(sharing) sharing.innerHTML=resptext;
-	}
-    }
     function upload2(dir) {
+	function upload3(resptext,status) {
+	    local.put("json_uploaded",Date.now());
+	    //debug("Upload complete")
+	    if(cont) cont();
+	    else {
+		var sharing=element("sharing");
+		if(sharing) {
+		    if(status==204) {
+			var a=empty("a");
+			a.href="share.html#"+dir.substr(5) // skip "/tmp/"
+			a.innerHTML=a.href;
+			sharing.innerHTML="";
+			sharing.appendChild(text("Use the following link for shared access to your grammars from multiple devices: "))
+			sharing.appendChild(a)
+		    }
+		    else
+			sharing.innerHTML=resptext;
+		}
+	    }
+	}
+
 	var prefix=dir.substr(10)+"-" // skip "/tmp/gfse."
 	//debug("New form data");
 	//var form=new FormData(); // !!! Doesn't work on Android 2.2!

@@ -48,12 +48,16 @@ function ask_possibilities(g,ci) {
 	for(var i in poss[1]) testable[poss[1][i]]=true;
 	example_based[ci]={exready:exready,testable:testable}
 	conc.example_based=true;
-	conc.example_lang=g.concretes[0].langcode;
+	if(!conc.example_lang) conc.example_lang=g.concretes[0].langcode;
 	reload_grammar(g);
     }
     
     exb_call(g,ci,"possibilities",{},show_poss)
 }
+
+var parser = { Eng: "ParseEngAbs.pgf",
+	       Swe: "AllSweAbs.pgf"
+	     }
 
 function exb_extra(g,ci) {
     var conc=g.concretes[ci];
@@ -66,14 +70,15 @@ function exb_extra(g,ci) {
 	function opt(conc) { return option(conc.langcode,conc.langcode); }
 	// skip target language
 	var m =node("select",{},map(opt,g.concretes));
-	m.onchange=function() { conc.example_lang=m.value }
+	if(conc.example_lang) m.value=conc.example_lang;
+	m.onchange=function() { conc.example_lang=m.value; save_grammar(g); }
 	return m
     }
 
     function ask_poss() { ask_possibilities(g,ci) }
 
-    if(navigator.onLine && conc.example_based && !example_based[ci]) ask_poss();
-    return conc.langcode=="Eng"
+    if(navigator.onLine && g.concretes.length>1 && conc.example_based && !example_based[ci]) ask_poss();
+    return parser[conc.langcode] && g.concretes.length>1
 	? indent([text("Example based editing: "),
 		  conc.example_based
 		  ? node("span",{},[button("Stop",stop_exb),
@@ -82,6 +87,12 @@ function exb_extra(g,ci) {
 				   ])
 		  : button("Start",ask_poss)])
 	: text("")
+}
+
+function fun_lincat(g,conc,fun) {
+    var t=function_type(g,fun);
+    var abscat=t[t.length-1]
+    return cat_lincat(conc,abscat)
 }
 
 function exb_linbuttons(g,ci,f) {
@@ -107,15 +118,14 @@ function exb_linbuttons(g,ci,f) {
 	exb_output.innerHTML="";
 	var s=prompt(example[1]);
 	if(s) {
-	    var t=function_type(g,fun);
-	    var abscat=t[t.length-1]
-	    var cat=cat_lincat(conc,abscat)
+	    var cat=fun_lincat(g,conc,fun)
 	    exb_output.innerHTML="...";
 	    //server.parse({from:"ParseEng",cat:cat,input:s},fill_example)
 	    exb_call(g,ci,"abstract_example",
 		     {cat:cat,input:s,
+		      parser:parser[conc.langcode],
 		      params:"["+f.args.join(",")+"]",
-		      abstract:example[0]},
+		      "abstract":example[0]},
 		     fill_example)
 	}
     }
@@ -126,6 +136,7 @@ function exb_linbuttons(g,ci,f) {
 		exb_output.innerHTML="...";
 		exb_call(g,ci,"provide_example",
 			 {lang:g.basename+conc.example_lang,
+			  parser:parser[conc.langcode],
 			  fun:fun,
 			  grammar:dir+"/"+g.basename+".pgf"},
 			 show_example)
@@ -140,12 +151,14 @@ function exb_linbuttons(g,ci,f) {
     function test_it(b) {
 	if(exb_output) {
 	    exb_output.innerHTML="...";
-	    exb_call(g,ci,"test_function",{fun:fun},show_test)
+	    exb_call(g,ci,"test_function",
+		     {fun:fun,parser:parser[conc.langcode]},
+		     show_test)
 	}
     }
     var buttons=[];
     if(conc.example_based && eb) {
-	if(eb.exready[fun])
+	if(eb.exready[fun] && fun_lincat(g,conc,fun))
 	    buttons.push(button("By example",by_example))
 	if(eb.testable[fun] && f.eb_lin) {
 	    var b=button("Test it",test_it);
