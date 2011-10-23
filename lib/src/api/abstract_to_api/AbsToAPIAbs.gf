@@ -1,7 +1,7 @@
 concrete AbsToAPIAbs of AbsToAPI = { 
 
 lincat 
-A, A2, AP, AdA, AdN, AdV, Adv, Ant, Art, CAdv, CN, Card, Cl, ClSlash, Comp, Conj, Det, Dig, Digit, Digits, IAdv, IComp, IDet, IP, IQuant, Imp, Interj, ListAP, ListAdv, ListCN, ListIAdv, ListNP, ListRS, ListS, N, N2, N3, NP, Num, Numeral, Ord, PConj, PN, Phr, Pol, Predet, Prep, Pron, QCl, QS, QVP, Quant, RCl, RP, RS, S, SC, SSlash, Subj, Temp, Tense, Text, Utt, V, V2, V2A, V2Q, V2S, V2V, V3, VA, VP, VPSlash, VQ, VS, VV, Voc, String, QuantSg, QuantPl  = {ind : Str; attr : Str} ;
+A, A2, A2V, AV, AS, AP, AdA, AdN, AdV, Adv, Ant, Art, CAdv, CN, Card, Cl, ClSlash, Comp, Conj, Det, Dig, Digit, Digits, IAdv, IComp, IDet, IP, IQuant, Imp, Interj, ListAP, ListAdv, ListCN, ListIAdv, ListNP, ListRS, ListS, N, N2, N3, NP, Num, Numeral, Ord, PConj, PN, Phr, Pol, Predet, Prep, Pron, QCl, QS, QVP, Quant, RCl, RP, RS, S, SC, SSlash, Subj, Temp, Tense, Text, Utt, V, V0, V2, V2A, V2Q, V2S, V2V, V3, VA, VP, VPSlash, VQ, VS, VV, Voc, String, QuantSg, QuantPl  = {ind : Str; attr : Str} ;
 
 ImpForm = {ind : Str; attr : Str; iform : IForm} ;
 Punct = {ind : Str; attr : Str; pform : PForm } ;

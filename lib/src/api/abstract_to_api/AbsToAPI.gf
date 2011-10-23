@@ -1,7 +1,7 @@
 abstract AbsToAPI = {
 
 cat 
-A; A2; AP; AdA; AdN; AdV; Adv; Ant; Art; CAdv; CN; Card; Cl; ClSlash; Comp; Conj; Det; Dig; Digit; Digits; IAdv; IComp; IDet; IP; IQuant; Imp; Interj; ListAP; ListAdv; ListCN; ListIAdv; ListNP; ListRS; ListS; N; N2; N3; NP; Num; Numeral; Ord; PConj; PN; Phr; Pol; Predet; Prep; Pron; QCl; QS; QVP; Quant; RCl; RP; RS; S; SC; SSlash; Subj; Temp; Tense; Text; Utt; V; V2; V2A; V2Q; V2S; V2V; V3; VA; VP; VPSlash; VQ; VS; VV; Voc; Punct; String ; ImpForm ; QuantSg; QuantPl ;
+A; A2; A2V; AV; AP; AS; AdA; AdN; AdV; Adv; Ant; Art; CAdv; CN; Card; Cl; ClSlash; Comp; Conj; Det; Dig; Digit; Digits; IAdv; IComp; IDet; IP; IQuant; Imp; Interj; ListAP; ListAdv; ListCN; ListIAdv; ListNP; ListRS; ListS; N; N2; N3; NP; Num; Numeral; Ord; PConj; PN; Phr; Pol; Predet; Prep; Pron; QCl; QS; QVP; Quant; RCl; RP; RS; S; SC; SSlash; Subj; Temp; Tense; Text; Utt; V; V0; V2; V2A; V2Q; V2S; V2V; V3; VA; VP; VPSlash; VQ; VS; VV; Voc; Punct; String ; ImpForm ; QuantSg; QuantPl ;
 
 fun
      
