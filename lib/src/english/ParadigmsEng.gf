@@ -506,7 +506,7 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ; --%
   reg2V fit fitted =
    let fitt = Predef.tk 2 fitted ;
    in 
-     if_then_else V (pbool2bool (Predef.eqStr (init fitt) fit))
+     if_then_else V (pbool2bool (Predef.eqStr (last fit) (last fitt)))
        (mk5V fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing")) 
        (regV fit) ;
 
