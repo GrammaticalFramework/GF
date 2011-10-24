@@ -210,11 +210,13 @@ computeTermOpt gr = comput True where
 
      -- remove empty
      C a b    -> do    -- a ++ b
-       a' <- comp g a
-       b' <- comp g b
+       a0 <- comp g a
+       b0 <- comp g b
+       let (a',b') = strForm (C a0 b0)
        case (a',b') of
          (Error{},_) -> return a'
          (_,Error{}) -> return b'
+
          (Alts _ _, K d) -> errr $ checks [do                      -- pre {...} ++ "d"
             as <- strsFromTerm a' -- this may fail when compiling opers
             return $ variants [
@@ -229,6 +231,7 @@ computeTermOpt gr = comput True where
             ,
             return $ C a' b'
            ]
+
          (Empty,_) -> returnC b'        -- [] ++ b'
          (_,Empty) -> returnC a'        -- a' ++ []
          _     -> returnC $ C a' b'
@@ -459,6 +462,16 @@ computeTermOpt gr = comput True where
            bs <- getPatts b
            return [K (s ++ t) | K s <- as, K t <- bs]
          _ -> fail (render (text "not valid pattern in pre expression" <+> ppPatt Unqualified 0 p))
+
+     strForm s = case s of
+       C (C a b) c -> let (a1,a2) = strForm a in (a1, ccStr a2 (ccStr b c))
+       C a b -> (a,b)
+       _ -> (s,Empty)
+
+     ccStr a b = case (a,b) of
+       (Empty,_) -> b
+       (_,Empty) -> a
+       _ -> C a b
 
 {- ----
      uncurrySelect g fs t v = do
