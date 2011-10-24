@@ -211,7 +211,7 @@ lin
   wine_N = regGenN "vin" masculine ;
   win_V2 = dirV2 (regV "gagner") ; ---- vaincre
   woman_N = regGenN "femme" feminine ;
-  wonder_VQ = mkVQ (reflV (regV "étonner")) ;
+  wonder_VQ = mkVQ (reflV (regV "demander")) ;
   wood_N = regGenN "bois" masculine ;
   write_V2 = écrire_V2 ;
   yellow_A = regA "jaune" ;

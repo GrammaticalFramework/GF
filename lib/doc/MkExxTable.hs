@@ -74,7 +74,7 @@ mkEx = unwords . bind . mkE . words where
   mkE e = case e of
     "atomic":"term":_ -> ["*"]
     "[]":_ -> ["''"]
-    "pre":p@('{':_):es -> init (init (drop 2 p)) : mkE es
+    "pre":p@('{':_):es -> init (init (drop 2 p)) : [] ---- mkE es -- occurs only on last position
     e0:es -> e0:mkE es
     _ -> e
 
