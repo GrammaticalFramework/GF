@@ -70,10 +70,13 @@ prApiEx apexx = case M.toList apexx of
   (a,e):lexx -> (a ++ ": ``" ++ unwords (words e) ++ "``"):
                 [l ++ ": //" ++ mkEx e ++ "//" | (l,e) <- lexx]
 
-mkEx e = case words e of
-  "atomic":"term":_ -> "*"
-  "[]":_ -> "''"
-  es -> unwords (bind es)
+mkEx = unwords . bind . mkE . words where 
+  mkE e = case e of
+    "atomic":"term":_ -> ["*"]
+    "[]":_ -> ["''"]
+    "pre":p@('{':_):es -> init (init (drop 2 p)) : mkE es
+    e0:es -> e0:mkE es
+    _ -> e
 
 bind ws = case ws of
          w : "&+" : u : ws2 -> bind ((w ++ u) : ws2)
