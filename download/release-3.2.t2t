@@ -1,5 +1,5 @@
-GF Version 3.2 Release Notes
-23 December 2010
+GF Version 3.2.x Release Notes
+October 2010
 
 %!style:../css/style.css
 %!postproc(html): <H1> <H1><IMG src="../doc/Logos/gf0.png">
@@ -10,6 +10,20 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 ==New features==
 
+===GF 3.2.10 (October 2011)===
+
+- ...
+- ``gf -server`` replaces ``pgf-http`` and makes it easy to test the minibar
+  and the web-based grammar editor.
+
+
+===GF 3.2.9 (September 2011)===
+
+- Faster grammar compilation.
+- Source-only snapshot.
+
+
+===GF 3.2 (December 2010)===
 - Faster parsing.
 - Faster handling of grammars with big lexicons.
 - Dependent types.
