@@ -291,6 +291,15 @@ computeTermOpt gr = comput True where
      comp = comput True
 
      look c = errr (lookupResDef gr c)
+     {- -- This seems to loop in the greek example:
+     look c = --trace ("look "++show c) $
+              optcomp =<< errr (lookupResDef gr c)
+       where
+         optcomp t = if t==Q c
+                     then --trace "looking up undefined oper" $
+                          return t
+                     else comp [] t -- g or []?
+     -}          
 
      ext x a g = (x,a):g  -- extend environment with new variable and its value
 
