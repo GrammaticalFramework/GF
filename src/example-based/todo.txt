@@ -1,0 +1,20 @@
+
+Editor improvements for example-based grammar writing:
+- Remove the same language from the example language menu
+- Send the other language environment to getNext
+- Compile a new .pgf automatically when needed
+- Update buttons automatically when functions are added or removed
+- Switch over to using AbsParadigmsEng.pgf instead of the old exprToAPI function
+
+Editor support for guided construction of linearization functions
+- enter api expressions by parsing them with AbsParadigmsEng.pgf in minibar
+- replace simpleParseInput with one that accepts quoted string literals
+- use lexcode/unlexcode in minibar
+- better support for literals in minibar (completion info from the PGF
+  library should indicate if literals are acceptable)
+
+Server support for example-based grammar writing:
+- Change getNext to use info from the example language
+- Random generator restricted to defined functions
+
+- More testing
