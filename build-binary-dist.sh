@@ -13,23 +13,10 @@ langs=""                           # which languages?
 set -e                             # Stop if an error occurs
 set -x                             # print commands before exuting them
 
-cabal install    # gf needs to be installed before building gf-server below
-
-runhaskell Setup.hs configure --user --prefix $prefix
+runhaskell Setup.hs configure --user --prefix $prefix -fserver
 runhaskell Setup.hs build $langs
 runhaskell Setup.hs copy --destdir=$destdir $langs
 
-(
-cd src/server
-
-## If you don't already have the packages gf-server depends on, this is
-## the easiest way to install them:
-#cabal install
-
-runhaskell Setup.hs configure --user --prefix $prefix
-runhaskell Setup.hs build
-runhaskell Setup.hs copy --destdir=$destdir
-)
 tar -C $destdir/$prefix -zcf $targz .
 echo "Created $targz, rename it to something more informative"
 rm -r $destdir

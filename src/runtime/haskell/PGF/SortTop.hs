@@ -2,25 +2,12 @@ module PGF.SortTop
     ( forExample
      ) where
 
-import PGF.Linearize
-import PGF.Macros
-import System.IO
 import PGF.CId
 import PGF.Data
-import PGF.Macros
 import PGF.Expr
-import Data.Array.IArray
-import Data.List
-import Control.Monad
 import qualified Data.Map as Map
-import qualified Data.IntMap as IntMap
 import qualified Data.Set as Set
 import Data.Maybe
-import System.Environment (getArgs)
-import Data.Binary
-
-
-
 
 
 arguments :: Type -> [CId]
@@ -89,8 +76,3 @@ returnCat abs cid =
 forExample :: PGF -> IO [[((CId,CId),[CId])]]
 forExample pgf = let abs = abstract pgf 
        in showInOrder abs Set.empty (Set.fromList $ Map.keys $ funs abs) Set.empty 
-
-
-
-
-
