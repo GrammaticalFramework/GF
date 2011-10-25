@@ -1,5 +1,5 @@
-GF Version 3.2.x Release Notes
-October 2010
+GF Version 3.2 Release Notes
+December 2010
 
 %!style:../css/style.css
 %!postproc(html): <H1> <H1><IMG src="../doc/Logos/gf0.png">
@@ -10,33 +10,6 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 ==New features==
 
-===GF 3.2.10 (October 2011)===
-
-- Source language extension: it is now possible to override the oper definitions in an interface, by using the 
-  header syntax ``instance Foo of Bar - [f,g,h]``.
-- New functionalities in GF shell commands (more information with ``help`` command-name).
-  - ``aw`` = ``align_words`` option ``-giza`` prints word alignments in Giza++ format.
-  - ``i`` = ``import`` now recognizes changes in abstract syntax without the need of ``empty``.
-  - ``pg`` = ``print_grammar`` option ``-lexc`` prints lexicon in Xerox LEXC format.
-  - ``ps`` = ``put_string`` now has flags for reading transliteration rules from a user-provided file.
-  - ``r`` = ``reload`` repeats the latest instance of ``import``.
-  - ``sd`` = ``show_dependencies`` shows all dependencies of a constant, and optionally their code sizes.
-  - ``so`` = ``show_operations`` shows the oper's in scope, optionally restricted to a value type.
-  - ``ss`` = ``show_source`` shows source code, or optionally just function headers or source code sizes.
-
-
-- Haskell output as Generalized Algebraic Datatypes: ``gf -make -output-format=haskell --haskell=gadt``
-- ``gf -server`` replaces ``pgf-http`` and makes it easy to test the minibar
-  and the web-based grammar editor.
-
-
-===GF 3.2.9 (September 2011)===
-
-- Faster grammar compilation.
-- Source-only snapshot.
-
-
-===GF 3.2 (December 2010)===
 - Faster parsing.
 - Faster handling of grammars with big lexicons.
 - Dependent types.
