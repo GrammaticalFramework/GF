@@ -92,6 +92,7 @@ renameIdentTerm env@(act,imps) t =
  where
    opens  = [st  | (OSimple _,st) <- imps]
    qualifs = [(m, st) | (OQualif m _, st) <- imps] ++ 
+             [(m, st) | (OQualif _ m, st) <- imps] ++ 
              [(m, st) | (OSimple m, st) <- imps] -- qualif is always possible
 
    -- this facility is mainly for BWC with GF1: you need not import PredefAbs
