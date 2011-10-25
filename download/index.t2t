@@ -6,24 +6,15 @@ Grammatical Framework Download and Installation
 %!postproc(html): </B></TD> </TH>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
-**GF 3.2.9** source-only snapshot was released on 12 September 2011.
+**GF 3.3** was released on 27 October 2011.
 
-**GF 3.2** was released on 23 December 2010.
-
-What's new? See the [Release notes release-3.2.html].
+What's new? See the [Release notes release-3.3.html].
 
 
-== Latest released binary packages ==
-
+== Binary packages ==
 
 | **Platform** | **Download** | **How to install**
-| Ubuntu (32-bit) | [gf_3.2-4_i386.deb gf_3.2-4_i386.deb] | Double-click on the package icon, or use ``sudo dpkg -i gf_3.2-4_i386.deb``
-| Ubuntu (64-bit) | [gf_3.2-4_amd64.deb gf_3.2-4_amd64.deb] | Double-click on the package icon, or use ``sudo dpkg -i gf_3.2-4_amd64.deb``
-| Linux (32-bit) | [gf-3.2-bin-i386-linux.tar.gz gf-3.2-bin-i386-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-i386-linux.tar.gz``
-| Linux (64-bit) | [gf-3.2-bin-x86_64-linux.tar.gz gf-3.2-bin-x86_64-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-x86_64-linux.tar.gz``
-| MacOS X | [gf-3.2-snowleopard.pkg gf-3.2-snowleopard.pkg] | Double-click on the package icon and follow the instructions
-| MacOS X | [gf-3.2-bin-intel-mac.tar.gz gf-3.2-bin-intel-mac.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.2-bin-intel-mac.tar.gz``
-| Windows | [gf-3.2-bin-i386-windows.zip gf-3.2-bin-i386-windows.zip] | ``unzip gf-3.2-bin-i386-windows.zip``
+| ... | ... | ...
 
 More packages might be added later.
 
@@ -42,7 +33,7 @@ You can install them in other locations, but then you need to set the
 ``GF_LIB_PATH`` environment variable:
 
 ```
-  export GF_LIB_PATH=/usr/local/share/gf-3.2/lib
+  export GF_LIB_PATH=/usr/local/share/gf-3.3/lib
 ```
 
 where ``/usr/local`` should be replaced with the path to the location where you
@@ -63,7 +54,7 @@ fairly simple:
 
 
 You can also download the full source package from here:
-[``gf-3.2.9.tar.gz`` gf-3.2.9.tar.gz].
+[``gf-3.3.tar.gz`` gf-3.3.tar.gz].
 
 === Notes ===
 
@@ -106,6 +97,7 @@ The above notes for installing from source apply also in this case.
 
 ==Older releases==
 
+- [GF 3.2.9 index-3.2.9.html] source-only snapshot (September 2011).
 - [GF 3.2 index-3.2.html] (December 2011).
 - [GF 3.1.6 index-3.1.6.html] (April 2010).
 - [GF 3.1 old-index.html] (December 2009).
