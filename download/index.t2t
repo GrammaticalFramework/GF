@@ -15,8 +15,13 @@ What's new? See the [Release notes release-3.3.html].
 
 | **Platform** | **Download** | **How to install**
 | Linux (32-bit) | [gf-3.3-bin-i386-linux.tar.gz gf-3.3-bin-i386-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3-bin-i386-linux.tar.gz``
+| Linux (64-bit) | [gf-3.3-bin-amd64-linux.tar.gz gf-3.3-bin-amd64-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3-bin-amd64-linux.tar.gz``
 | MacOS X | [gf-3.3-bin-intel-mac.tar.gz gf-3.3-bin-intel-mac.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3-bin-intel-mac.tar.gz``
-| Windows | [gf-3.3-bin-i386-windows.zip gf-3.3-bin-i386-windows.zip] | 
+| Ubuntu 11.10 (32-bit) | [gf_3.3-1_i386-oneiric.deb gf_3.3-1_i386-oneiric.deb] | Double-click on the package icon, or use ``sudo dpkg -i gf_3.3-1_i386-oneiric.deb``
+| Ubuntu 11.10 (64-bit) | [gf_3.3-1_amd64-oneiric.deb gf_3.3-1_amd64-oneiric.deb] | Double-click on the package icon, or use ``sudo dpkg -i gf_3.3-1_amd64-oneiric.deb``
+| Ubuntu 11.04 (32-bit) | gf_3.3-1_i386-natty.deb | Double-click on the package icon, or use ``sudo dpkg -i gf_3.3-1_i386-natty.deb``
+| Ubuntu 11.04 (64-bit) | [gf_3.3-1_amd64-natty.deb  gf_3.3-1_amd64-natty.deb] | Double-click on the package icon, or use ``sudo dpkg -i gf_3.3-1_amd64-natty.deb``
+| Windows | [gf-3.3-bin-i386-windows.zip gf-3.3-bin-i386-windows.zip] | ``unzip gf-3.3-bin-i386-windows.zip``
 
 More packages will be added later.
 
@@ -25,10 +30,11 @@ More packages will be added later.
 The Windows package is installed by just unpacking it anywhere. 
 It finds the libraries relative to the ``.exe`` file.
 
-The ``.deb`` packages work on Ubuntu 10.04 and 10.10.
+%The ``.deb`` packages work on Ubuntu 10.04 and 10.10.
 
-The ``.pkg`` package works on MacOS X 10.6 (Snow Leopard). The MacOS tar
-package works on 10.5 (Leopard) and 10.6 (Snow Leopard).
+%The ``.pkg`` package works on MacOS X 10.6 (Snow Leopard).
+The MacOS tar package works on 10.5 (Leopard), 10.6 (Snow Leopard) and probably
+also 10.7 (Lion).
 
 The MacOS and Linux ``.tar.gz`` packages are designed to be installed in ``/usr/local``.
 You can install them in other locations, but then you need to set the
