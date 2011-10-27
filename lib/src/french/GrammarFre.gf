@@ -11,7 +11,7 @@ concrete GrammarFre of Grammar =
   RelativeFre,
   ConjunctionFre,
   PhraseFre,
-  TextX - [Temp,Tense],
+  TextX - [SC,Temp,Tense],
   IdiomFre,
   StructuralFre,
   TenseFre

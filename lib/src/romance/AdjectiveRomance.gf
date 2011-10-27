@@ -42,7 +42,7 @@ incomplete concrete AdjectiveRomance of Adjective =
       } ;
 
     SentAP ap sc = {
-      s = \\a => ap.s ! a ++ sc.s ; --- mood 
+      s = \\a => ap.s ! a ++ sc.s ! dative ; -- prête à dormir --- mood 
       isPre = False
       } ;
 

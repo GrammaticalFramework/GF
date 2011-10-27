@@ -147,7 +147,7 @@ incomplete concrete NounRomance of Noun =
       g = g
       } ;
     SentCN  cn sc = let g = cn.g in {
-      s = \\n => cn.s ! n ++ sc.s ;
+      s = \\n => cn.s ! n ++ sc.s ! genitive ;  -- raison de dormir
       g = g
       } ;
     AdvCN  cn sc = let g = cn.g in {

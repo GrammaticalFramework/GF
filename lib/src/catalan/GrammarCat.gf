@@ -11,7 +11,7 @@ concrete GrammarCat of Grammar =
   RelativeCat,
   ConjunctionCat,
   PhraseCat,
-  TextX - [Temp,Tense],
+  TextX - [SC,Temp,Tense],
   IdiomCat,
   StructuralCat,
   TenseCat

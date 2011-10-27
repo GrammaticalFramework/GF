@@ -6,7 +6,7 @@ incomplete concrete SentenceRomance of Sentence =
   lin
     PredVP np vp = mkClause (np.s ! Nom).comp np.hasClit np.isPol np.a vp ;
 
-    PredSCVP sc vp = mkClause sc.s False False (agrP3 Masc Sg) vp ;
+    PredSCVP sc vp = mkClause (sc.s ! Nom) False False (agrP3 Masc Sg) vp ;
 
     ImpVP vp = {
       s = \\p,i,g => case i of {
@@ -47,9 +47,9 @@ incomplete concrete SentenceRomance of Sentence =
        c2 = slash.c2
       } ;
 
-    EmbedS  s  = {s = conjThat ++ s.s ! Indic} ; --- mood
-    EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = infVP vp (agrP3 Masc Sg)} ; --- agr ---- compl
+    EmbedS  s  = {s = \\_ => conjThat ++ s.s ! Indic} ; --- mood
+    EmbedQS qs = {s = \\_ => qs.s ! QIndir} ;
+    EmbedVP vp = {s = \\c => prepCase c ++ infVP vp (agrP3 Masc Sg)} ; --- agr ---- compl
 
     UseCl  t p cl = {
       s = \\o => t.s ++ p.s ++ cl.s ! DDir ! t.t ! t.a ! p.p ! o

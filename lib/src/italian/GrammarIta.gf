@@ -11,7 +11,7 @@ concrete GrammarIta of Grammar =
   RelativeIta,
   ConjunctionIta,
   PhraseIta,
-  TextX - [Temp,Tense],
+  TextX - [SC,Temp,Tense],
   IdiomIta,
   StructuralIta,
   TenseIta

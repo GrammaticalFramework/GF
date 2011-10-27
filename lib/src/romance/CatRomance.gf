@@ -1,4 +1,4 @@
-incomplete concrete CatRomance of Cat = CommonX
+incomplete concrete CatRomance of Cat = CommonX - [SC]
   ** open Prelude, CommonRomance, ResRomance, (R = ParamX) in {
 
   flags optimize=all_subs ;
@@ -15,6 +15,7 @@ incomplete concrete CatRomance of Cat = CommonX
       c2 : Compl
       } ;
 
+    SC = {s : Case => Str} ;  -- de dormir / à dormir
 
 -- Sentence
 
