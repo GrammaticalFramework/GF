@@ -706,7 +706,7 @@ mkAdv above_Prep it_NP
     after_Prep : Prep 
 mkAdv after_Prep it_NP
     all_Predet : Predet 
-mkNP all_Predet (mkNP thePl_Det man_N)
+mkUtt (mkNP all_Predet (mkNP thePl_Det man_N))
     almost_AdA : AdA    
 mkAP almost_AdA red_A
     almost_AdN : AdN
@@ -782,7 +782,7 @@ mkUtt (mkNP it_Pron)
     less_CAdv : CAdv 
 less_CAdv
     many_Det : Det 
-mkNP many_Det house_N
+mkUtt (mkNP many_Det house_N)
     more_CAdv : CAdv 
 more_CAdv
     most_Predet : Predet 
@@ -824,7 +824,7 @@ mkUtt something_NP
     somewhere_Adv : Adv 
 somewhere_Adv
     that_Quant : Quant 
-mkNP that_Quant house_N
+mkUtt (mkNP that_Quant house_N)
     that_Subj : Subj 
 mkAdv that_Subj (mkS (mkCl she_NP sleep_V))
     there_Adv : Adv 
@@ -838,7 +838,7 @@ therefore_PConj
     they_Pron : Pron  
 mkUtt (mkNP they_Pron)
     this_Quant : Quant 
-mkNP this_Quant house_N
+mkUtt (mkNP this_Quant house_N)
     through_Prep : Prep 
 mkAdv through_Prep it_NP
     to_Prep : Prep 
