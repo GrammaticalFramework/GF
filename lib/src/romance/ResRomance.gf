@@ -250,15 +250,16 @@ oper
 
   infVP : VP -> Agr -> Str = \vp,agr ->
       let
-----e        clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
-----e        iform = infForm agr.n agr.p vp.clAcc vp.clDat ;
-        clpr = <vp.clit1,vp.clit2, False> ; ----e
-        iform = False ; ----e
-        inf  = vp.s.s ! VInfin False ; ---- ! (aagr agr.g agr.n) ;
-        neg  = vp.neg ! Pos ; --- Neg not in API
-        obj  = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
+        iform = False ;                    ---- meaning: no clitics
+        inf   = vp.s.s ! VInfin iform ;    
+        neg   = vp.neg ! Pos ;             --- Neg not in API
+        obj   = neg.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ; ---- pol
+        refl  = case vp.s.vtyp of {
+            VRefl => reflPron agr.n agr.p Acc ; ---- case ?
+            _ => [] 
+            } ;
       in
-      clitInf clpr.p3 (clpr.p1 ++ vp.clit3) inf ++ obj ;
+      neg.p1 ++ clitInf iform (refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3) inf ++ obj ;
       
 }
 
