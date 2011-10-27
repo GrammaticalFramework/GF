@@ -11,7 +11,7 @@ concrete GrammarSpa of Grammar =
   RelativeSpa,
   ConjunctionSpa,
   PhraseSpa,
-  TextSpa - [Temp,Tense],      -- special punctuation
+  TextSpa - [SC,Temp,Tense],      -- special punctuation
   IdiomSpa,
   StructuralSpa,
   TenseSpa
