@@ -33,6 +33,15 @@ MT Summit XIII, Xiamen, China, September 23, 2011.
 #BR
 //First steps to a hybrid GF-SMT system.//
 
+Seyed M. Montazeri, Nivir Roy, and Gerardo Schneider. 
+From Contracts in Structured English to CL Specifications. 
+//5th International Workshop on Formal Languages and Analysis of Contract-Oriented Software (FLACOS'11)//, 
+volume 68 of EPTCS, pages 55-69, 
+Málaga, Spain, 22-23 September 2011.
+[PDF/DOI http://dx.doi.org/10.4204/EPTCS.68.6]
+#BR
+//Formal analysis of contracts written in controlled English.//
+
 S. Virk, M. Humayoun, and A. Ranta.
 An Open-Source Punjabi Resource Grammar.
 Proceedings of RANLP-2011, Recent Advances in Natural Language Processing,
@@ -56,11 +65,22 @@ pp. 5-25,
 //to proof systems, and also exploring how to make the language richer, e.g. how to get from//
 //"for all numbers x, x is even or x is odd" to "every number is even or odd".//
 
-A. Ranta. //Grammatical Framework: Programming with Multilingual Grammars//, 
+A. Ranta. 
+//Grammatical Framework: Programming with Multilingual Grammars//, 
   CSLI Publications, Stanford, 2011.
   [Book web page http://www.grammaticalframework.org/gf-book/] 
 #BR
 //Meant as the standard reference and textbook on GF.//
+
+
+Normunds Gruzitis and Guntis Barzdins.
+Towards a More Natural Multilingual Controlled Language Interface to OWL,
+//9th International Conference on Computational Semantics (IWCS)//,
+pp. 335-339,
+2011.
+[PDF http://www.aclweb.org/anthology/W/W11/W11-0138.pdf]
+#BR
+//Access to ontologies in English and Latvian.//
 
 M. Humayoun and A. Ranta. 
 Developing Punjabi Morphology, Corpus and Lexicon. 
@@ -68,6 +88,14 @@ Developing Punjabi Morphology, Corpus and Lexicon.
 2010.
 #BR
 //Yet another South-East Asian language, spoken by 88 million people.//
+
+J. Camilleri, Gordon J. Pace, and Mike Rosner.
+Playing Nomic using a Controlled Natural Language.
+//CNL 2010, Controlled Natural Language//,
+Marettimo,
+2010.
+#BR
+//Using GF for defining the rules of a game.//
 
 S. Virk, M. Humayoun, and A. Ranta. 
 An Open Source Urdu Resource Grammar. 
@@ -81,6 +109,32 @@ Tools for multilingual grammar-based translation on the web.
 //Proceedings of the ACL 2010 System Demonstrations//,
 ACM Digital Library,
 2010.
+#BR
+//An overview of of GF for developers and users of translation systems.//
+
+D. Dannélls and J. Camilleri. 
+Verb Morphology of Hebrew and Maltese - Towards an Open Source Type Theoretical Resource Grammar in GF.
+//Proceedings of the Language Resources (LRs) and Human Language Technologies (HLT) for Semitic Languages Status, Updates, and Prospects, LREC-2010 Workshop//,
+Malta, pp. 57-61.
+2010.
+[PDF http://spraakdata.gu.se/svedd/pub/lrec10.pdf]
+#BR
+//A study of Semitic non-concatenative morphology from the GF point of view.//
+
+M. Humayoun and C. Raffalli.
+MathNat - Mathematical Text in a Controlled Natural Language. 
+//Special issue: Natural Language Processing and its Applications. Journal on Research in Computing Science//, Volume 46. 
+2010.
+#BR
+//Natural language interface to a proof system, implemented in GF.//
+
+D. Dannélls.
+Discourse Generation from Formal Specifications Using the Grammatical Framework, GF. 
+//Special issue: Natural Language Processing and its Applications.  Journal on Research in Computing Science (RCS)//, 
+volume 46. pp. 167-178,
+2010.
+#BR
+//Interfacing GF with ontology, with a natural language generation perspective.//
 
 R. Enache, A. Ranta, and K. Angelov.
 An Open-Source Computational Grammar of Romanian.
