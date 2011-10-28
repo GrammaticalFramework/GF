@@ -31,13 +31,10 @@ use the resource modules.
 - [Detailed table of contents #toc111].
 
 
-Many examples in [Chapter 2 #toc5] can be seen in multiple languages by hovering the
-mouse over the example, as shown in the following screenshot:
-
-[hovering.png]
-
 Other relevant documents:
-- [``status.html`` ./status.html]: the current status of different languages
+- [More modules gfdoc/sources.html]: extra modules, dictionaries, and
+  the internals of the resource grammar
+- [The RGL Status Document ./status.html]: the current status of different languages
   and the authors of each grammar
 - [Resource Grammar Tutorial http://www.grammaticalframework.org/doc/gf-lrec-2010.pdf]
   as presented in LREC-2010.
@@ -51,5 +48,12 @@ Other relevant documents:
    Cambridge, pp. 281--308, 2009).
   The library from a software engineering point of view.
   [PDF http://www.cse.chalmers.se/~aarne/old/articles/libraries-kahn.pdf]
+
+
+Many examples in [Chapter 2 #toc5] can be seen in multiple languages by hovering the
+mouse over the example, as shown in the following screenshot:
+
+[hovering.png]
+
 
 

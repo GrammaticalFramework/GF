@@ -1,0 +1,40 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1> Relative clauses and pronouns</h1>
+
+<pre>
+  abstract Relative = Cat ** {
+  
+    fun
+</pre>
+
+The simplest way to form a relative clause is from a clause by
+a pronoun similar to <i>such that</i>.
+<pre>
+      RelCl    : Cl -> RCl ;            -- such that John loves her
+</pre>
+
+The more proper ways are from a verb phrase 
+(formed in [``Verb`` Verb.html]) or a sentence 
+with a missing noun phrase (formed in [``Sentence`` Sentence.html]).
+<pre>
+      RelVP    : RP -> VP -> RCl ;      -- who loves John
+      RelSlash : RP -> ClSlash -> RCl ; -- whom John loves
+</pre>
+
+Relative pronouns are formed from an 'identity element' by prefixing
+or suffixing (depending on language) prepositional phrases or genitives.
+<pre>
+      IdRP  : RP ;                      -- which
+      FunRP : Prep -> NP -> RP -> RP ;  -- the mother of whom
+  
+  }
+</pre>
+
+</body>
+</html>

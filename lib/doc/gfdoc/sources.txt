@@ -1,0 +1,100 @@
+More modules in the GF Resource Grammar Library
+
+
+
+
+[back to synopsis ../synopsis.html]
+
+==Extra syntax modules==
+
+These modules give language-specific extra constructs not available via the common API.
+
+[common repository ../../src/abstract/Extra.gf] 
+[Romance (Cat, Fre, Ita, Spa) ../../src/romance/ExtraRomanceAbs.gf] 
+[Scandinavian (Dan, Nor, Swe) ../../src/scandinavian/ExtraScandAbs.gf]  
+
+[Afrikaans ../../src/afrikaans/ExtraAfrAbs.gf]  
+[Bulgarian ../../src/bulgarian/ExtraBulAbs.gf]  
+[Catalan ../../src/catalan/ExtraCatAbs.gf]  
+[Danish ../../src/danish/ExtraDanAbs.gf]  
+[Dutch ../../src/dutch/ExtraDutAbs.gf] 
+[English ../../src/english/ExtraEngAbs.gf]  
+[Finnish ../../src/finnish/ExtraFinAbs.gf]  
+[French ../../src/french/ExtraFreAbs.gf]  
+[German ../../src/german/ExtraGerAbs.gf]  
+[Italian ../../src/italian/ExtraItaAbs.gf] 
+[Norwegian ../../src/norwegian/ExtraNorAbs.gf]  
+[Persian ../../src/persian/ExtraPesAbs.gf]  
+[Polish ../../src/polish/ExtraPolAbs.gf]  
+[Punjabi ../../src/punjabi/ExtraPnbAbs.gf]  
+[Romanian ../../src/romanian/ExtraRonAbs.gf] 
+[Russian ../../src/russian/ExtraRusAbs.gf]  
+[Spanish ../../src/spanish/ExtraSpaAbs.gf]  
+[Swedish ../../src/swedish/ExtraSweAbs.gf]
+
+
+==Irregular verbs and other words==
+
+These modules give lists of irregular words, mostly verbs. Their completeness varies.
+
+[Catalan ../../src/catalan/IrregCatAbs.gf]
+[Danish ../../src/danish/IrregDanAbs.gf]
+[Dutch ../../src/dutch/IrregDutAbs.gf]
+[English ../../src/english/IrregEngAbs.gf]
+[French ../../src/french/IrregFreAbs.gf]
+[German ../../src/german/IrregGerAbs.gf]
+[Norwegian ../../src/norwegian/IrregNorAbs.gf]
+[Spanish ../../src/spanish/IrregSpaAbs.gf]
+[Swedish ../../src/swedish/IrregSweAbs.gf]
+[Turkish ../../src/turkish/IrregTurAbs.gf]
+
+
+==Large-scale dictionaries==
+
+These morphological dictionaries are extracted from open source lexica by using the resource grammar paradigms. The figures give the approximate number of lemmas.
+
+[Bulgarian ../../src/bulgarian/DictBulAbs.gf] 53k
+[English ../../src/english/DictEngAbs.gf] 43k
+[Finnish ../../src/finnish/DictFinAbs.gf] 42k
+[French ../../src/french/DictFreAbs.gf] 92k
+[Swedish ../../src/swedish/DictSweAbs.gf] 43k
+[Turkish ../../src/turkish/DictTurAbs.gf] 24k
+
+
+
+==Abstract Syntax Modules==
+
+These modules are for internal use of resource grammarians, but the comments give some more linguistic explanation of the different constructs.
+
+|| module                    | contents |
+| [Adjective Adjective.html] | constructors for A, AP
+| [Adverb Adverb.html] | constructors for Adv, AdV
+| [Cat Cat.html] | lincats of all categories
+| [Common Common.html] | default lincats for string categories
+| [Conjunction Conjunction.html] | coordination rules
+| [Extra Extra.html] | constructs available in some languages only
+| [Grammar Grammar.html] | everything except content lexicon
+| [Idiom Idiom.html] | idiomatic constructions
+| [Lang Lang.html] | everything (Grammar and Lexicon)
+| [Lexicon Lexicon.html] | content word lexicon
+| [Noun Noun.html] | constructors for NP, CN, Det
+| [Numeral Numeral.html] | constructors for Numeral and Digits
+| [Phrase Phrase.html] | constructors for Phr, Utt
+| [Question Question.html] | constructors for QS, QCl, IP
+| [Relative Relative.html] | constructors for RS, RCl, RP
+| [Sentence Sentence.html] | constructors for S, Cl, SC
+| [Structural Structural.html] | structural word lexicon
+| [Symbol Symbol.html] | mixtures of verbal and symbolic expressions
+| [Tense Tense.html] | common API tense system
+| [Text Text.html] | constructors for Tex
+| [Verb Verb.html] | constructors for VP, VPSlash, Comp
+
+
+==The Module Dependency Tree==
+
+[Syntax.png]
+
+
+
+
+

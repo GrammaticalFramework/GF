@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.org">
+<TITLE>More modules in the GF Resource Grammar Library</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<CENTER>
+<H1>More modules in the GF Resource Grammar Library</H1>
+</CENTER>
+
+<P>
+<A HREF="../synopsis.html">back to synopsis</A>
+</P>
+
+<H2>Extra syntax modules</H2>
+
+<P>
+These modules give language-specific extra constructs not available via the common API.
+</P>
+<P>
+<A HREF="../../src/abstract/Extra.gf">common repository</A> 
+<A HREF="../../src/romance/ExtraRomanceAbs.gf">Romance (Cat, Fre, Ita, Spa)</A> 
+<A HREF="../../src/scandinavian/ExtraScandAbs.gf">Scandinavian (Dan, Nor, Swe)</A>  
+</P>
+<P>
+<A HREF="../../src/afrikaans/ExtraAfrAbs.gf">Afrikaans</A>  
+<A HREF="../../src/bulgarian/ExtraBulAbs.gf">Bulgarian</A>  
+<A HREF="../../src/catalan/ExtraCatAbs.gf">Catalan</A>  
+<A HREF="../../src/danish/ExtraDanAbs.gf">Danish</A>  
+<A HREF="../../src/dutch/ExtraDutAbs.gf">Dutch</A> 
+<A HREF="../../src/english/ExtraEngAbs.gf">English</A>  
+<A HREF="../../src/finnish/ExtraFinAbs.gf">Finnish</A>  
+<A HREF="../../src/french/ExtraFreAbs.gf">French</A>  
+<A HREF="../../src/german/ExtraGerAbs.gf">German</A>  
+<A HREF="../../src/italian/ExtraItaAbs.gf">Italian</A> 
+<A HREF="../../src/norwegian/ExtraNorAbs.gf">Norwegian</A>  
+<A HREF="../../src/persian/ExtraPesAbs.gf">Persian</A>  
+<A HREF="../../src/polish/ExtraPolAbs.gf">Polish</A>  
+<A HREF="../../src/punjabi/ExtraPnbAbs.gf">Punjabi</A>  
+<A HREF="../../src/romanian/ExtraRonAbs.gf">Romanian</A> 
+<A HREF="../../src/russian/ExtraRusAbs.gf">Russian</A>  
+<A HREF="../../src/spanish/ExtraSpaAbs.gf">Spanish</A>  
+<A HREF="../../src/swedish/ExtraSweAbs.gf">Swedish</A>
+</P>
+
+<H2>Irregular verbs and other words</H2>
+
+<P>
+These modules give lists of irregular words, mostly verbs. Their completeness varies.
+</P>
+<P>
+<A HREF="../../src/catalan/IrregCatAbs.gf">Catalan</A>
+<A HREF="../../src/danish/IrregDanAbs.gf">Danish</A>
+<A HREF="../../src/dutch/IrregDutAbs.gf">Dutch</A>
+<A HREF="../../src/english/IrregEngAbs.gf">English</A>
+<A HREF="../../src/french/IrregFreAbs.gf">French</A>
+<A HREF="../../src/german/IrregGerAbs.gf">German</A>
+<A HREF="../../src/norwegian/IrregNorAbs.gf">Norwegian</A>
+<A HREF="../../src/spanish/IrregSpaAbs.gf">Spanish</A>
+<A HREF="../../src/swedish/IrregSweAbs.gf">Swedish</A>
+<A HREF="../../src/turkish/IrregTurAbs.gf">Turkish</A>
+</P>
+
+<H2>Large-scale dictionaries</H2>
+
+<P>
+These morphological dictionaries are extracted from open source lexica by using the resource grammar paradigms. The figures give the approximate number of lemmas.
+</P>
+<P>
+<A HREF="../../src/bulgarian/DictBulAbs.gf">Bulgarian</A> 53k
+<A HREF="../../src/english/DictEngAbs.gf">English</A> 43k
+<A HREF="../../src/finnish/DictFinAbs.gf">Finnish</A> 42k
+<A HREF="../../src/french/DictFreAbs.gf">French</A> 92k
+<A HREF="../../src/swedish/DictSweAbs.gf">Swedish</A> 43k
+<A HREF="../../src/turkish/DictTurAbs.gf">Turkish</A> 24k
+</P>
+
+<H2>Abstract Syntax Modules</H2>
+
+<P>
+These modules are for internal use of resource grammarians, but the comments give some more linguistic explanation of the different constructs.
+</P>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>module</TH>
+<TH>contents</TH>
+</TR>
+<TR>
+<TD><A HREF="Adjective.html">Adjective</A></TD>
+<TD>constructors for A, AP</TD>
+</TR>
+<TR>
+<TD><A HREF="Adverb.html">Adverb</A></TD>
+<TD>constructors for Adv, AdV</TD>
+</TR>
+<TR>
+<TD><A HREF="Cat.html">Cat</A></TD>
+<TD>lincats of all categories</TD>
+</TR>
+<TR>
+<TD><A HREF="Common.html">Common</A></TD>
+<TD>default lincats for string categories</TD>
+</TR>
+<TR>
+<TD><A HREF="Conjunction.html">Conjunction</A></TD>
+<TD>coordination rules</TD>
+</TR>
+<TR>
+<TD><A HREF="Extra.html">Extra</A></TD>
+<TD>constructs available in some languages only</TD>
+</TR>
+<TR>
+<TD><A HREF="Grammar.html">Grammar</A></TD>
+<TD>everything except content lexicon</TD>
+</TR>
+<TR>
+<TD><A HREF="Idiom.html">Idiom</A></TD>
+<TD>idiomatic constructions</TD>
+</TR>
+<TR>
+<TD><A HREF="Lang.html">Lang</A></TD>
+<TD>everything (Grammar and Lexicon)</TD>
+</TR>
+<TR>
+<TD><A HREF="Lexicon.html">Lexicon</A></TD>
+<TD>content word lexicon</TD>
+</TR>
+<TR>
+<TD><A HREF="Noun.html">Noun</A></TD>
+<TD>constructors for NP, CN, Det</TD>
+</TR>
+<TR>
+<TD><A HREF="Numeral.html">Numeral</A></TD>
+<TD>constructors for Numeral and Digits</TD>
+</TR>
+<TR>
+<TD><A HREF="Phrase.html">Phrase</A></TD>
+<TD>constructors for Phr, Utt</TD>
+</TR>
+<TR>
+<TD><A HREF="Question.html">Question</A></TD>
+<TD>constructors for QS, QCl, IP</TD>
+</TR>
+<TR>
+<TD><A HREF="Relative.html">Relative</A></TD>
+<TD>constructors for RS, RCl, RP</TD>
+</TR>
+<TR>
+<TD><A HREF="Sentence.html">Sentence</A></TD>
+<TD>constructors for S, Cl, SC</TD>
+</TR>
+<TR>
+<TD><A HREF="Structural.html">Structural</A></TD>
+<TD>structural word lexicon</TD>
+</TR>
+<TR>
+<TD><A HREF="Symbol.html">Symbol</A></TD>
+<TD>mixtures of verbal and symbolic expressions</TD>
+</TR>
+<TR>
+<TD><A HREF="Tense.html">Tense</A></TD>
+<TD>common API tense system</TD>
+</TR>
+<TR>
+<TD><A HREF="Text.html">Text</A></TD>
+<TD>constructors for Tex</TD>
+</TR>
+<TR>
+<TD><A HREF="Verb.html">Verb</A></TD>
+<TD>constructors for VP, VPSlash, Comp</TD>
+</TR>
+</TABLE>
+
+<H2>The Module Dependency Tree</H2>
+
+<P>
+<IMG ALIGN="middle" SRC="Syntax.png" BORDER="0" ALT="">
+</P>
+
+<!-- html code generated by txt2tags 2.6 (http://txt2tags.org) -->
+<!-- cmdline: txt2tags -thtml sources.txt -->
+</BODY></HTML>

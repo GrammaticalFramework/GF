@@ -1,0 +1,59 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1> Conjunction: Coordination</h1>
+
+Coordination is defined for many different categories; here is
+a sample. The rules apply to <b>lists</b> of two or more elements,
+and define two general patterns: 
+- ordinary conjunction: X,...X and X
+- distributed conjunction: both X,...,X and X
+<p>
+<p>
+<tt>VP</tt> conjunctions are not covered here, because their applicability
+depends on language. Some special cases are defined in 
+[``Extra`` ../abstract/Extra.gf].
+<pre>
+  abstract Conjunction = Cat ** {
+</pre>
+
+<h2> Rules</h2>
+<pre>
+    fun
+      ConjS    : Conj -> [S] -> S ;       -- "he walks and she runs"
+      ConjRS   : Conj -> [RS] -> RS ;     -- "who walks and whose mother runs"
+      ConjAP   : Conj -> [AP] -> AP ;     -- "cold and warm"
+      ConjNP   : Conj -> [NP] -> NP ;     -- "she or we"
+      ConjAdv  : Conj -> [Adv] -> Adv ;   -- "here or there"
+      ConjIAdv : Conj -> [IAdv] -> IAdv ; -- "where and with whom"
+      ConjCN   : Conj -> [CN] -> CN ;     -- "man and woman"
+</pre>
+
+<h2> Categories</h2>
+These categories are only used in this module.
+<pre>
+    cat
+      [S]{2} ; 
+      [RS]{2} ; 
+      [Adv]{2} ; 
+      [NP]{2} ; 
+      [AP]{2} ;
+      [IAdv]{2} ;
+      [CN] {2} ;
+</pre>
+
+<h2> List constructors</h2>
+The list constructors are derived from the list notation and therefore
+not given explicitly. But here are their type signatures:
+<pre>
+    --  BaseC : C -> C   -> [C] ;  -- for C = S, AP, NP, Adv
+    --  ConsC : C -> [C] -> [C] ;
+  }
+</pre>
+
+</body>
+</html>

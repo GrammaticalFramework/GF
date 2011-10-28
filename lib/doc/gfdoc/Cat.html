@@ -1,0 +1,147 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1> Cat: the Category System</h1>
+
+The category system is central to the library in the sense
+that the other modules (<tt>Adjective</tt>, <tt>Adverb</tt>, <tt>Noun</tt>, <tt>Verb</tt> etc)
+communicate through it. This means that a e.g. a function using
+<tt>NP</tt>s in <tt>Verb</tt> need not know how <tt>NP</tt>s are constructed in <tt>Noun</tt>:
+it is enough that both <tt>Verb</tt> and <tt>Noun</tt> use the same type <tt>NP</tt>,
+which is given here in <tt>Cat</tt>.
+
+Some categories are inherited from [``Common`` Common.html].
+The reason they are defined there is that they have the same
+implementation in all languages in the resource (typically,
+just a string). These categories are
+<tt>AdA, AdN, AdV, Adv, Ant, CAdv, IAdv, PConj, Phr</tt>, 
+<tt>Pol, SC, Tense, Text, Utt, Voc, Interj</tt>.
+<p>
+Moreover, the list categories <tt>ListAdv, ListAP, ListNP, ListS</tt>
+are defined on <tt>Conjunction</tt> and only used locally there.
+<pre>
+  abstract Cat = Common ** {
+  
+    cat
+</pre>
+
+<h2> Sentences and clauses</h2>
+Constructed in [Sentence Sentence.html], and also in
+[Idiom Idiom.html].
+<pre>
+      S ;     -- declarative sentence                e.g. "she lived here"
+      QS ;    -- question                            e.g. "where did she live"
+      RS ;    -- relative                            e.g. "in which she lived"
+      Cl ;    -- declarative clause, with all tenses e.g. "she looks at this"
+      ClSlash;-- clause missing NP (S/NP in GPSG)    e.g. "she looks at"
+      SSlash ;-- sentence missing NP                 e.g. "she has looked at"
+      Imp ;   -- imperative                          e.g. "look at this"
+</pre>
+
+<h2> Questions and interrogatives</h2>
+Constructed in [Question Question.html].
+<pre>
+      QCl ;   -- question clause, with all tenses    e.g. "why does she walk"
+      IP ;    -- interrogative pronoun               e.g. "who"
+      IComp ; -- interrogative complement of copula  e.g. "where"
+      IDet ;  -- interrogative determiner            e.g. "how many"
+      IQuant; -- interrogative quantifier            e.g. "which"
+</pre>
+
+<h2> Relative clauses and pronouns</h2>
+Constructed in [Relative Relative.html].
+<pre>
+      RCl ;   -- relative clause, with all tenses    e.g. "in which she lives"
+      RP ;    -- relative pronoun                    e.g. "in which"
+</pre>
+
+<h2> Verb phrases</h2>
+Constructed in [Verb Verb.html].
+<pre>
+      VP ;      -- verb phrase                       e.g. "is very warm"
+      Comp ;    -- complement of copula, such as AP  e.g. "very warm"
+      VPSlash ; -- verb phrase missing complement    e.g. "give to John"
+</pre>
+
+<h2> Adjectival phrases</h2>
+Constructed in [Adjective Adjective.html].
+<pre>
+      AP ;    -- adjectival phrase                   e.g. "very warm"
+</pre>
+
+<h2> Nouns and noun phrases</h2>
+Constructed in [Noun Noun.html]. 
+Many atomic noun phrases e.g. <i>everybody</i>
+are constructed in [Structural Structural.html].
+The determiner structure is
+``` Predet (QuantSg | QuantPl Num) Ord
+as defined in [Noun Noun.html].
+<pre>
+      CN ;     -- common noun (without determiner)    e.g. "red house"
+      NP ;     -- noun phrase (subject or object)     e.g. "the red house"
+      Pron ;   -- personal pronoun                    e.g. "she"
+      Det ;    -- determiner phrase                   e.g. "those seven"
+      Predet ; -- predeterminer (prefixed Quant)      e.g. "all"
+      Quant ;  -- quantifier ('nucleus' of Det)       e.g. "this/these"
+      Num ;    -- number determining element          e.g. "seven"
+      Card ;   -- cardinal number                     e.g. "seven"
+      Ord ;    -- ordinal number (used in Det)        e.g. "seventh"
+</pre>
+
+<h2> Numerals</h2>
+Constructed in [Numeral Numeral.html].
+<pre>
+      Numeral ; -- cardinal or ordinal in words       e.g. "five/fifth"
+      Digits ;  -- cardinal or ordinal in digits      e.g. "1,000/1,000th"
+</pre>
+
+<h2> Structural words</h2>
+Constructed in [Structural Structural.html].
+<pre>
+      Conj ;  -- conjunction                         e.g. "and"
+</pre>
+
+-b    DConj ; -- distributed conjunction             e.g. <i>both - and</i>
+<pre>
+      Subj ;  -- subjunction                         e.g. "if"
+      Prep ;  -- preposition, or just case           e.g. "in"
+</pre>
+
+<h2> Words of open classes</h2>
+These are constructed in [Lexicon Lexicon.html] and in 
+additional lexicon modules.
+<pre>
+      V ;     -- one-place verb                      e.g. "sleep" 
+      V2 ;    -- two-place verb                      e.g. "love"
+      V3 ;    -- three-place verb                    e.g. "show"
+      VV ;    -- verb-phrase-complement verb         e.g. "want"
+      VS ;    -- sentence-complement verb            e.g. "claim"
+      VQ ;    -- question-complement verb            e.g. "wonder"
+      VA ;    -- adjective-complement verb           e.g. "look"
+      V2V ;   -- verb with NP and V complement       e.g. "cause"
+      V2S ;   -- verb with NP and S complement       e.g. "tell"
+      V2Q ;   -- verb with NP and Q complement       e.g. "ask"
+      V2A ;   -- verb with NP and AP complement      e.g. "paint"
+  
+      A ;     -- one-place adjective                 e.g. "warm"
+      A2 ;    -- two-place adjective                 e.g. "divisible"
+  
+      N ;     -- common noun                         e.g. "house"
+      N2 ;    -- relational noun                     e.g. "son"
+      N3 ;    -- three-place relational noun         e.g. "connection"
+      PN ;    -- proper name                         e.g. "Paris"
+</pre>
+
+DEPRECATED: QuantSg, QuantPl
+-    QuantSg ;-- quantifier ('nucleus' of sing. Det) e.g. <i>every</i>
+-    QuantPl ;-- quantifier ('nucleus' of plur. Det) e.g. <i>many</i>
+<pre>
+  }
+</pre>
+
+</body>
+</html>
