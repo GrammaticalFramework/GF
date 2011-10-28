@@ -1,0 +1,57 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1> Adjective: Adjectives and Adjectival Phrases</h1>
+
+<pre>
+  abstract Adjective = Cat ** {
+  
+    fun
+</pre>
+
+The principal ways of forming an adjectival phrase are
+positive, comparative, relational, reflexive-relational, and
+elliptic-relational.
+<pre>
+      PositA  : A  -> AP ;        -- warm
+      ComparA : A  -> NP -> AP ;  -- warmer than I
+      ComplA2 : A2 -> NP -> AP ;  -- married to her
+      ReflA2  : A2 -> AP ;        -- married to itself
+      UseA2   : A2 -> AP ;        -- married
+      UseComparA : A  -> AP ;     -- warmer
+      CAdvAP  : CAdv -> AP -> NP -> AP ; -- as cool as John
+</pre>
+
+The superlative use is covered in <tt>Ord</tt>.
+<pre>
+      AdjOrd  : Ord -> AP ;       -- warmest
+</pre>
+
+Sentence and question complements defined for all adjectival
+phrases, although the semantics is only clear for some adjectives.
+<pre>
+      SentAP  : AP -> SC -> AP ;  -- good that she is here
+</pre>
+
+An adjectival phrase can be modified by an <b>adadjective</b>, such as <i>very</i>.
+<pre>
+      AdAP    : AdA -> AP -> AP ; -- very warm
+</pre>
+
+It can also be postmodified by an adverb, typically a prepositional phrase.
+<pre>
+      AdvAP   : AP -> Adv -> AP ; -- warm by nature
+</pre>
+
+The formation of adverbs from adjectives (e.g. <i>quickly</i>) is covered
+in [Adverb Adverb.html]; the same concerns adadjectives (e.g. <i>extremely</i>).
+<pre>
+  }
+</pre>
+
+</body>
+</html>

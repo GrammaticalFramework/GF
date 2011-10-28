@@ -1,0 +1,60 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1> Symbolic expressions</h1>
+
+<b>Note</b>. This module is not automatically included in the main
+grammar [Lang Lang.html].
+<pre>
+  abstract Symbol = Cat, PredefAbs ** {
+</pre>
+
+<h2> Noun phrases with symbols and numbers</h2>
+<pre>
+  fun
+  
+    SymbPN   : Symb -> PN ;                -- x
+    IntPN    : Int -> PN ;                 -- 27
+    FloatPN  : Float -> PN ;               -- 3.14159
+    NumPN    : Card -> PN ;
+    CNNumNP  : CN -> Card -> NP ;          -- level five ; level 5
+    CNSymbNP : Det -> CN -> [Symb] -> NP ; -- (the) (2) numbers x and y
+</pre>
+
+<h2> Sentence consisting of a formula</h2>
+<pre>
+    SymbS    : Symb -> S ;                 -- A
+</pre>
+
+<h2> Symbols as numerals</h2>
+<pre>
+    SymbNum  : Symb -> Card ;              -- n
+    SymbOrd  : Symb -> Ord ;               -- n'th
+</pre>
+
+<h2> Symbol lists</h2>
+A symbol list has at least two elements. The last two are separated
+by a conjunction (<i>and</i> in English), the others by commas.
+This produces <i>x, y and z</i>, in English. 
+<pre>
+  cat
+    Symb ;
+    [Symb]{2} ;
+  
+  fun
+    MkSymb : String -> Symb ;
+</pre>
+
+<h2> Obsolescent</h2>
+<pre>
+    CNIntNP  : CN -> Int -> NP ;           -- level 53 (covered by CNNumNP)
+  
+  }
+</pre>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1> Text: Texts</h1>
+
+Texts are built from an empty text by adding <tt>Phr</tt>ases,
+using as constructors the punctuation marks <i>.</i>, <i>?</i>, and <i>!</i>.
+Any punctuation mark can be attached to any kind of phrase.
+<pre>
+  abstract Text = Common ** {
+  
+    fun
+      TEmpty     : Text ;                 --
+      TFullStop  : Phr -> Text -> Text ;  -- John walks. ...
+      TQuestMark : Phr -> Text -> Text ;  -- Are they here? ...
+      TExclMark  : Phr -> Text -> Text ;  -- Let's go! ...
+  
+  }
+</pre>
+
+</body>
+</html>

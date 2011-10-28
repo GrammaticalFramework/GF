@@ -2,6 +2,8 @@
 
 abstract Verb = Cat ** {
 
+  flags coding = utf8 ;
+
 --2 Complementization rules
 
 -- Verb phrases are constructed from verbs by providing their
@@ -41,8 +43,8 @@ abstract Verb = Cat ** {
 -- them. In many languages, the result is a participle that
 -- is used as complement to a copula ("is used"), but other
 -- auxiliary verbs are possible (Ger. "wird angewendet", It.
--- "viene usato"), as well as special verb forms (Fin. "k‰ytet‰‰n",
--- Swe. "anv‰nds").
+-- "viene usato"), as well as special verb forms (Fin. "k√§ytet√§√§n",
+-- Swe. "anv√§nds").
 --
 -- *Note*. the rule can be overgenerating, since the $V2$ need not
 -- take a direct object.

@@ -1,0 +1,93 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1> The construction of verb phrases</h1>
+
+<pre>
+  abstract Verb = Cat ** {
+  
+    flags coding = utf8 ;
+</pre>
+
+<h2> Complementization rules</h2>
+Verb phrases are constructed from verbs by providing their
+complements. There is one rule for each verb category.
+<pre>
+    data
+      UseV     : V   -> VP ;        -- sleep
+  
+      ComplVV  : VV  -> VP -> VP ;  -- want to run
+      ComplVS  : VS  -> S  -> VP ;  -- say that she runs
+      ComplVQ  : VQ  -> QS -> VP ;  -- wonder who runs
+      ComplVA  : VA  -> AP -> VP ;  -- they become red
+  
+      SlashV2a : V2        -> VPSlash ;  -- love (it)
+      Slash2V3 : V3  -> NP -> VPSlash ;  -- give it (to her)
+      Slash3V3 : V3  -> NP -> VPSlash ;  -- give (it) to her
+  
+      SlashV2V : V2V -> VP -> VPSlash ;  -- beg (her) to go
+      SlashV2S : V2S -> S  -> VPSlash ;  -- answer (to him) that it is good
+      SlashV2Q : V2Q -> QS -> VPSlash ;  -- ask (him) who came
+      SlashV2A : V2A -> AP -> VPSlash ;  -- paint (it) red
+  
+      ComplSlash : VPSlash -> NP -> VP ; -- love it
+  
+      SlashVV    : VV  -> VPSlash -> VPSlash ;       -- want to buy
+      SlashV2VNP : V2V -> NP -> VPSlash -> VPSlash ; -- beg me to buy
+</pre>
+
+<h2> Other ways of forming verb phrases</h2>
+Verb phrases can also be constructed reflexively and from
+copula-preceded complements.
+<pre>
+      ReflVP   : VPSlash -> VP ;         -- love himself
+      UseComp  : Comp -> VP ;            -- be warm
+</pre>
+
+Passivization of two-place verbs is another way to use
+them. In many languages, the result is a participle that
+is used as complement to a copula (<i>is used</i>), but other
+auxiliary verbs are possible (Ger. <i>wird angewendet</i>, It.
+<i>viene usato</i>), as well as special verb forms (Fin. <i>käytetään</i>,
+Swe. <i>används</i>).
+<p>
+<b>Note</b>. the rule can be overgenerating, since the <tt>V2</tt> need not
+take a direct object.
+<pre>
+      PassV2   : V2 -> VP ;               -- be loved
+</pre>
+
+Adverbs can be added to verb phrases. Many languages make
+a distinction between adverbs that are attached in the end
+vs. next to (or before) the verb.
+<pre>
+      AdvVP    : VP -> Adv -> VP ;        -- sleep here
+      AdVVP    : AdV -> VP -> VP ;        -- always sleep
+  
+      AdvVPSlash : VPSlash -> Adv -> VPSlash ;  -- use (it) here
+      AdVVPSlash : AdV -> VPSlash -> VPSlash ;  -- always use (it)
+</pre>
+
+<b>Agents of passives</b> are constructed as adverbs with the
+preposition [Structural Structural.html]<tt>.8agent_Prep</tt>.
+<h2> Complements to copula</h2>
+Adjectival phrases, noun phrases, and adverbs can be used.
+<pre>
+      CompAP   : AP  -> Comp ;            -- (be) small
+      CompNP   : NP  -> Comp ;            -- (be) the man
+      CompAdv  : Adv -> Comp ;            -- (be) here
+      CompCN   : CN  -> Comp ;            -- (be) a man/men
+</pre>
+
+Copula alone
+<pre>
+      UseCopula : VP ;                    -- be
+  }
+</pre>
+
+</body>
+</html>

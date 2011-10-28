@@ -1,0 +1,61 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1> Common: Structures with Common Implementations.</h1>
+
+This module defines the categories that uniformly have the linearization
+<tt>{s : Str}</tt> in all languages. 
+<pre>
+  abstract Common = {
+  
+    cat
+</pre>
+
+<h2> Top-level units</h2>
+Constructed in [``Text`` Text.html]: <tt>Text</tt>.
+<pre>
+      Text ;  -- text consisting of several phrases  e.g. "He is here. Why?"
+</pre>
+
+Constructed in [``Phrase`` Phrase.html]:
+<pre>
+      Phr ;    -- phrase in a text                   e.g. "but be quiet please"
+      Utt ;    -- sentence, question, word...        e.g. "be quiet"
+      Voc ;    -- vocative or "please"               e.g. "my darling"
+      PConj ;  -- phrase-beginning conjunction       e.g. "therefore"
+      Interj ; -- interjection                       e.g. "alas"
+</pre>
+
+Constructed in [``Sentence`` Sentence.html]:
+<pre>
+      SC ;    -- embedded sentence or question       e.g. "that it rains"
+</pre>
+
+<h2> Adverbs</h2>
+Constructed in [``Adverb`` Adverb.html].  
+Many adverbs are constructed in [``Structural`` Structural.html].
+<pre>
+      Adv ;   -- verb-phrase-modifying adverb        e.g. "in the house"
+      AdV ;   -- adverb directly attached to verb    e.g. "always"
+      AdA ;   -- adjective-modifying adverb          e.g. "very"
+      AdN ;   -- numeral-modifying adverb            e.g. "more than"
+      IAdv ;  -- interrogative adverb                e.g. "why"
+      CAdv ;  -- comparative adverb                  e.g. "more"
+</pre>
+
+<h2> Tense, polarity, and anteriority</h2>
+<pre>
+      Temp ;  -- temporal and aspectual features     e.g. past anterior
+      Tense ; -- tense                               e.g. present, past, future
+      Pol ;   -- polarity                            e.g. positive, negative
+      Ant ;   -- anteriority                         e.g. simultaneous, anterior
+  
+  }
+</pre>
+
+</body>
+</html>

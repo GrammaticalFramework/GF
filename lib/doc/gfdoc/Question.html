@@ -1,0 +1,74 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1> Question: Questions and Interrogative Pronouns</h1>
+
+<pre>
+  abstract Question = Cat ** {
+</pre>
+
+A question can be formed from a clause ('yes-no question') or
+with an interrogative.
+<pre>
+    fun
+      QuestCl     : Cl -> QCl ;            -- does John walk
+      QuestVP     : IP -> VP -> QCl ;      -- who walks
+      QuestSlash  : IP -> ClSlash -> QCl ; -- whom does John love
+      QuestIAdv   : IAdv -> Cl -> QCl ;    -- why does John walk
+      QuestIComp  : IComp -> NP -> QCl ;   -- where is John
+</pre>
+
+Interrogative pronouns can be formed with interrogative
+determiners, with or without a noun.
+<pre>
+      IdetCN    : IDet -> CN -> IP ;       -- which five songs
+      IdetIP    : IDet       -> IP ;       -- which five
+</pre>
+
+They can be modified with adverbs.
+<pre>
+      AdvIP     : IP -> Adv -> IP ;        -- who in Paris
+</pre>
+
+Interrogative quantifiers have number forms and can take number modifiers.
+<pre>
+      IdetQuant : IQuant -> Num -> IDet ;  -- which (five)
+</pre>
+
+Interrogative adverbs can be formed prepositionally.
+<pre>
+      PrepIP    : Prep -> IP -> IAdv ;     -- with whom
+</pre>
+
+They can be modified with other adverbs.
+<pre>
+      AdvIAdv   : IAdv -> Adv -> IAdv ;    -- where in Paris
+</pre>
+
+Interrogative complements to copulas can be both adverbs and
+pronouns.
+<pre>
+      CompIAdv  : IAdv -> IComp ;          -- where (is it)
+      CompIP    : IP   -> IComp ;          -- who (is it)
+</pre>
+
+More <tt>IP</tt>, <tt>IDet</tt>, and <tt>IAdv</tt> are defined in <tt>Structural</tt>.
+Wh questions with two or more question words require a new, special category.
+<pre>
+    cat 
+      QVP ;          -- buy what where
+    fun
+      ComplSlashIP  : VPSlash -> IP -> QVP ;   -- buys what 
+      AdvQVP        : VP  ->   IAdv -> QVP ;   -- lives where 
+      AddAdvQVP     : QVP ->   IAdv -> QVP ;   -- buys what where 
+  
+      QuestQVP      : IP -> QVP -> QCl ;       -- who buys what where
+  }
+</pre>
+
+</body>
+</html>

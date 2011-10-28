@@ -1,0 +1,156 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1> Noun: Nouns, noun phrases, and determiners</h1>
+
+<pre>
+  abstract Noun = Cat ** {
+</pre>
+
+<h2> Noun phrases</h2>
+The three main types of noun phrases are
+- common nouns with determiners
+- proper names
+- pronouns
+<p>
+<p>
+<pre>
+    fun
+      DetCN   : Det -> CN -> NP ;   -- the man
+      UsePN   : PN -> NP ;          -- John
+      UsePron : Pron -> NP ;        -- he
+</pre>
+
+Pronouns are defined in the module [``Structural`` Structural.html].
+A noun phrase already formed can be modified by a <tt>Predet</tt>erminer.
+<pre>
+      PredetNP : Predet -> NP -> NP; -- only the man 
+</pre>
+
+A noun phrase can also be postmodified by the past participle of a
+verb, by an adverb, or by a relative clause
+<pre>
+      PPartNP : NP -> V2  -> NP ;    -- the man seen
+      AdvNP   : NP -> Adv -> NP ;    -- Paris today
+      RelNP   : NP -> RS  -> NP ;    -- Paris, which is here
+</pre>
+
+Determiners can form noun phrases directly.
+<pre>
+      DetNP   : Det -> NP ;  -- these five
+</pre>
+
+<h2> Determiners</h2>
+The determiner has a fine-grained structure, in which a 'nucleus'
+quantifier and an optional numeral can be discerned.
+<pre>
+      DetQuant    : Quant -> Num ->        Det ;  -- these five
+      DetQuantOrd : Quant -> Num -> Ord -> Det ;  -- these five best
+</pre>
+
+Whether the resulting determiner is singular or plural depends on the
+cardinal.
+All parts of the determiner can be empty, except <tt>Quant</tt>, which is
+the <i>kernel</i> of a determiner. It is, however, the <tt>Num</tt> that determines
+the inherent number.
+<pre>
+      NumSg   : Num ;
+      NumPl   : Num ;
+      NumCard : Card -> Num ;
+</pre>
+
+<tt>Card</tt> consists of either digits or numeral words.
+<pre>
+    data
+      NumDigits  : Digits  -> Card ;  -- 51
+      NumNumeral : Numeral -> Card ;  -- fifty-one
+</pre>
+
+The construction of numerals is defined in [Numeral Numeral.html].
+A <tt>Card</tt> can  be modified by certain adverbs.
+<pre>
+    fun
+      AdNum : AdN -> Card -> Card ;   -- almost 51
+</pre>
+
+An <tt>Ord</tt> consists of either digits or numeral words.
+Also superlative forms of adjectives behave syntactically like ordinals.
+<pre>
+      OrdDigits  : Digits  -> Ord ;  -- 51st
+      OrdNumeral : Numeral -> Ord ;  -- fifty-first
+      OrdSuperl  : A       -> Ord ;  -- warmest
+</pre>
+
+Definite and indefinite noun phrases are sometimes realized as
+neatly distinct words (Spanish <i>un, unos ; el, los</i>) but also without
+any particular word (Finnish; Swedish definites).
+<pre>
+      IndefArt   : Quant ;
+      DefArt     : Quant ;
+</pre>
+
+Nouns can be used without an article as mass nouns. The resource does
+not distinguish mass nouns from other common nouns, which can result
+in semantically odd expressions.
+<pre>
+      MassNP     : CN -> NP ;            -- (beer)
+</pre>
+
+Pronouns have possessive forms. Genitives of other kinds
+of noun phrases are not given here, since they are not possible
+in e.g. Romance languages. They can be found in <tt>Extra</tt> modules.
+<pre>
+      PossPron : Pron -> Quant ;    -- my (house)
+</pre>
+
+Other determiners are defined in [Structural Structural.html].
+<h2> Common nouns</h2>
+Simple nouns can be used as nouns outright.
+<pre>
+      UseN : N -> CN ;              -- house
+</pre>
+
+Relational nouns take one or two arguments.
+<pre>
+      ComplN2 : N2 -> NP -> CN ;    -- mother of the king
+      ComplN3 : N3 -> NP -> N2 ;    -- distance from this city (to Paris)
+</pre>
+
+Relational nouns can also be used without their arguments.
+The semantics is typically derivative of the relational meaning.
+<pre>
+      UseN2   : N2 -> CN ;          -- mother
+      Use2N3  : N3 -> N2 ;          -- distance (from this city)
+      Use3N3  : N3 -> N2 ;          -- distance (to Paris)
+</pre>
+
+Nouns can be modified by adjectives, relative clauses, and adverbs
+(the last rule will give rise to many 'PP attachment' ambiguities
+when used in connection with verb phrases).
+<pre>
+      AdjCN   : AP -> CN  -> CN ;   -- big house
+      RelCN   : CN -> RS  -> CN ;   -- house that John bought
+      AdvCN   : CN -> Adv -> CN ;   -- house on the hill
+</pre>
+
+Nouns can also be modified by embedded sentences and questions.
+For some nouns this makes little sense, but we leave this for applications
+to decide. Sentential complements are defined in [Verb Verb.html].
+<pre>
+      SentCN  : CN -> SC  -> CN ;   -- question where she sleeps
+</pre>
+
+<h2> Apposition</h2>
+This is certainly overgenerating.
+<pre>
+      ApposCN : CN -> NP -> CN ;    -- city Paris (, numbers x and y)
+  
+  }
+</pre>
+
+</body>
+</html>
