@@ -1037,7 +1037,7 @@ allCommands env@(pgf, mos) = Map.fromList [
      }),
   ("t", emptyCommandInfo {
      longname = "tokenize",
-     synopsis = "Tokenize string usng the vocabulary",
+     synopsis = "Tokenize string using the vocabulary",
      exec = execToktok env,
      options = [],
      flags = [("lang","The name of the concrete to use")] 
