@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 module GFServer(server) where
 import Data.List(partition)
 import qualified Data.Map as M
@@ -9,8 +10,10 @@ import System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
                         setCurrentDirectory,getCurrentDirectory,
                         getDirectoryContents,removeFile,removeDirectory)
 import System.FilePath(takeExtension,takeFileName,takeDirectory,(</>))
-import System.Posix.Files(getFileStatus,isSymbolicLink,removeLink,
+#ifndef mingw32_HOST_OS
+import System.Posix.Files(getSymbolicLinkStatus,isSymbolicLink,removeLink,
                           createSymbolicLink)
+#endif
 import Control.Concurrent.MVar(newMVar,modifyMVar)
 import Network.URI(URI(..))
 import Network.Shed.Httpd(initServer,Request(..),Response(..),queryToArguments,
@@ -90,7 +93,10 @@ handle state0 cache execute1
           do cwd <- getCurrentDirectory
              b <- try $ setCurrentDirectory dir
              case b of
-               Left _ -> return (state,resp404 dir)
+               Left _ -> do b <- try $ readFile dir -- poor man's symbolic links
+                            case b of
+                              Left _ -> return (state,resp404 dir)
+                              Right dir' -> cd dir' qs'
                Right _ -> do logPutStrLn $ "cd "++dir
                              r <- try (ok dir qs')
                              setCurrentDirectory cwd
@@ -143,11 +149,20 @@ handle state0 cache execute1
 
     download path _ = (,) state `fmap` serveStaticFile path
 
-    link_directories olddir newdir@('/':'t':'m':'p':'/':_) _ | olddir/=newdir =
+    link_directories olddir newdir@('/':'t':'m':'p':'/':_) _ | old/=new =
         do setCurrentDirectory ".."
-           st <- getFileStatus old
-           if isSymbolicLink st then removeLink old else removeDir old
+           logPutStrLn =<< getCurrentDirectory
+           logPutStrLn $ "link_dirs new="++new++", old="++old
+#ifdef mingw32_HOST_OS
+           isDir <- doesDirectoryExist old
+           if isDir then removeDir old else removeFile old
+           writeFile old new -- poor man's symbolic links
+#else
+           isLink <- isSymbolicLink `fmap` getSymbolicLinkStatus old
+           logPutStrLn $ "old is link: "++show isLink
+           if isLink then removeLink old else removeDir old
            createSymbolicLink new old
+#endif
            return (state,ok200 "")
       where
         old = takeFileName olddir
