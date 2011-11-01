@@ -1,3 +1,5 @@
+// Copyright © Elnaz Abolahrar, 2011
+
 // pre_start: runs on load time before evrything else to prepare the quiz
 
 function pre_start()

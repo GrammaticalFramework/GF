@@ -1,3 +1,5 @@
+// Copyright © Elnaz Abolahrar, 2011
+
 // translation_quiz.js, assumes that quiz_support.js has also been loaded
 
 /*-------------------------------------- Configuration Variables --------------------------------------*/

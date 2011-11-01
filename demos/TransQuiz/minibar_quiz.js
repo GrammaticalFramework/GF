@@ -1,3 +1,5 @@
+// Copyright © Elnaz Abolahrar and Thomas Hallgren, 2011
+
 // minibar.js, assumes that support.js has also been loaded
 
 var tree_icon="tree-btn.png";

@@ -1,3 +1,4 @@
+// Copyright © Elnaz Abolahrar and Thomas Hallgren, 2011
 
 function hide_element(elem_id)
 {
