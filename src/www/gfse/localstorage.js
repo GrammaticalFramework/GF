@@ -1,6 +1,6 @@
 
-// We use localStorage to store the grammars,
-// see http://diveintohtml5.org/storage.html
+// Grammars are stored locally in the browser using localStorage.
+// See http://diveintohtml5.info/storage.html
 
 var local={
     prefix:"gf.editor.simple.grammar",
