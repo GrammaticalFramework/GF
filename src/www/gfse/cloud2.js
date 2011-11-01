@@ -1,11 +1,19 @@
 
 function with_dir(cont) {
+    function have_dir(dir) {
+	var unique_id=local.get("unique_id")
+	if(!unique_id) {
+	    unique_id=dir.substr(10) // skip "/tmp/gfse."
+	    local.put("unique_id",unique_id)
+	}
+	cont(dir,unique_id)
+    }
     var dir=local.get("dir","");
-    if(/^\/tmp\//.test(dir)) cont(dir);
+    if(/^\/tmp\//.test(dir)) have_dir(dir);
     else ajax_http_get("/new",
 		       function(dir) {
 			   local.put("dir",dir);
-			   cont(dir);
+			   have_dir(dir);
 		       });
 }
 
@@ -42,7 +50,7 @@ function upload(g) {
 
 // Upload the grammar to store it in the cloud
 function upload_json(cont) {
-    function upload2(dir) {
+    function upload2(dir,unique_id) {
 	function upload3(resptext,status) {
 	    local.put("json_uploaded",Date.now());
 	    //debug("Upload complete")
@@ -64,7 +72,6 @@ function upload_json(cont) {
 	    }
 	}
 
-	var prefix=dir.substr(10)+"-" // skip "/tmp/gfse."
 	//debug("New form data");
 	//var form=new FormData(); // !!! Doesn't work on Android 2.2!
 	var form={dir:dir};
@@ -73,14 +80,13 @@ function upload_json(cont) {
 	    var g=local.get(i,null);
 	    if(g) {
 		if(!g.unique_name) {
-		    g.unique_name=prefix+i;
+		    g.unique_name=unique_id+"-"+i;
 		    save_grammar(g)
 		}
 		//form.append(g.unique_name+".json",JSON.stringify(g));
 		form[encodeURIComponent(g.unique_name+".json")]=JSON.stringify(g)
 	    }
 	}
-	//debug("Upload to "+prefix);
 	ajax_http_post("/cloud","command=upload"+encodeArgs(form),upload3,cont)
     }
 

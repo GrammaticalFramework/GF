@@ -1075,6 +1075,7 @@ function download_from_cloud() {
     }
     function download3() {
 	//debug("Uploading local grammars to cloud");
+	local.put("dir",newdir);
 	upload_json(download4)
     }
     function download4() {
