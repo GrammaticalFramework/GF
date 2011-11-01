@@ -1,5 +1,5 @@
 name: gf
-version: 3.3
+version: 3.3-darcs
 
 cabal-version: >= 1.8
 build-type: Custom
@@ -36,10 +36,6 @@ flag interrupt
 flag server
   Description: Include --server mode
   Default:     True
-
-flag cclazy
-  Description: Use the new, lazy compute_concrete (faster than the old, strict version)
-  Default: True
 
 library
   build-depends: base >= 4.2 && <5,
@@ -205,6 +201,3 @@ executable gf
     other-modules: GF.System.UseSignal
   else
     other-modules: GF.System.NoSignal
-
-  if flag(cclazy)
-    cpp-options: -DCC_LAZY
