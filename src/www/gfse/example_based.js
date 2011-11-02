@@ -68,8 +68,8 @@ function exb_extra(g,ci) {
 
     function exblangmenu() {
 	function opt(conc) { return option(conc.langcode,conc.langcode); }
-	// skip target language
-	var m =node("select",{},map(opt,g.concretes));
+	function skip_target(c) { return c.langcode!=conc.langcode; }
+	var m =node("select",{},map(opt,filter(skip_target,g.concretes)));
 	if(conc.example_lang) m.value=conc.example_lang;
 	m.onchange=function() { conc.example_lang=m.value; save_grammar(g); }
 	return m
