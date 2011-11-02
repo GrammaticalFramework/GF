@@ -21,7 +21,6 @@ import GF.Infra.Dependencies
 import GF.Infra.CheckM
 import GF.Infra.UseIO
 import GF.Infra.Option
-import GF.Infra.Modules (greatestResource, modules, emptyModInfo, mGrammar)
 import GF.Infra.Ident (showIdent)
 import GF.Infra.BuildInfo (buildInfo)
 import qualified System.Console.Haskeline as Haskeline
@@ -402,13 +401,12 @@ prompt env
 data GFEnv = GFEnv {
   sourcegrammar :: SourceGrammar, -- gfo grammar -retain
   commandenv :: CommandEnv,
-  history    :: [String]--,
---cputime    :: Integer
+  history    :: [String]
   }
 
 emptyGFEnv :: GFEnv
 emptyGFEnv =
-  GFEnv (mGrammar [(identW,emptyModInfo)]) (mkCommandEnv emptyPGF) [] {-0-}
+  GFEnv emptySourceGrammar (mkCommandEnv emptyPGF) [] {-0-}
 
 wordCompletion gfenv (left,right) = do
   case wc_type (reverse left) of

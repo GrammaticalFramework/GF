@@ -17,7 +17,6 @@
 
 module GF.Grammar.Lookup (
            lookupIdent,
---         lookupIdentInfo,
            lookupOrigInfo,
            allOrigInfos,
            lookupResDef,
@@ -34,7 +33,6 @@ module GF.Grammar.Lookup (
 
 import GF.Data.Operations
 import GF.Infra.Ident
-import GF.Infra.Modules
 import GF.Grammar.Macros
 import GF.Grammar.Grammar
 import GF.Grammar.Printer
@@ -57,10 +55,10 @@ lookupIdent c t =
     Ok v  -> return v
     Bad _ -> Bad ("unknown identifier" +++ showIdent c)
 
-lookupIdentInfo :: ModInfo a -> Ident -> Err a
+lookupIdentInfo :: SourceModInfo -> Ident -> Err Info
 lookupIdentInfo mo i = lookupIdent i (jments mo)
 
-lookupQIdentInfo :: MGrammar info -> QIdent -> Err info
+lookupQIdentInfo :: SourceGrammar -> QIdent -> Err Info
 lookupQIdentInfo gr (m,c) = flip lookupIdentInfo c =<< lookupModule gr m
 
 lookupResDef :: SourceGrammar -> QIdent -> Err Term

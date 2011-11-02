@@ -17,7 +17,6 @@ module GF.Compile.Optimize (optimizeModule) where
 
 import GF.Grammar.Grammar
 import GF.Infra.Ident
-import GF.Infra.Modules
 import GF.Grammar.Printer
 import GF.Grammar.Macros
 import GF.Grammar.Lookup
@@ -49,11 +48,11 @@ optimizeModule opts ms m@(name,mi)
       return (name,mi)
   | otherwise = return m
  where
-   oopts = opts `addOptions` flagsModule m
+   oopts = opts `addOptions` mflags mi
 
    updateEvalInfo mi (i,info) = do
-     info' <- evalInfo oopts ms (name,mi) i info
-     return (updateModule mi i info')
+     info <- evalInfo oopts ms (name,mi) i info
+     return (mi{jments=updateTree (i,info) (jments mi)})
 
 evalInfo :: Options -> [SourceModule] -> SourceModule -> Ident -> Info -> Err Info
 evalInfo opts ms m c info = do

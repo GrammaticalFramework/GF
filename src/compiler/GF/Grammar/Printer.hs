@@ -22,7 +22,6 @@ module GF.Grammar.Printer
            ) where
 
 import GF.Infra.Ident
-import GF.Infra.Modules
 import GF.Infra.Option
 import GF.Grammar.Values
 import GF.Grammar.Grammar

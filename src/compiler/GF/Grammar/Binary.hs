@@ -16,7 +16,6 @@ import qualified Data.ByteString.Char8 as BS
 import GF.Data.Operations
 import GF.Infra.Ident
 import GF.Infra.Option
-import GF.Infra.Modules
 import GF.Grammar.Grammar
 
 instance Binary Ident where
@@ -26,12 +25,12 @@ instance Binary Ident where
                 then return identW
                 else return (identC bs)
 
-instance Binary a => Binary (MGrammar a) where
+instance Binary SourceGrammar where
   put = put . modules
   get = fmap mGrammar get
 
-instance Binary a => Binary (ModInfo a) where
-  put mi = do put (mtype mi,mstatus mi,flags mi,extend mi,mwith mi,opens mi,mexdeps mi,msrc mi,jments mi)
+instance Binary SourceModInfo where
+  put mi = do put (mtype mi,mstatus mi,mflags mi,mextend mi,mwith mi,mopens mi,mexdeps mi,msrc mi,jments mi)
   get    = do (mtype,mstatus,flags,extend,mwith,opens,med,src,jments) <- get
               return (ModInfo mtype mstatus flags extend mwith opens med src jments)
 

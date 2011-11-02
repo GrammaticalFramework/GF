@@ -68,17 +68,15 @@ moduleDeps :: [SourceModule] -> Err Dependencies
 moduleDeps ms = mapM deps ms where
   deps (c,m) = errIn ("checking dependencies of module" +++ prt c) $ case mtype m of
       MTConcrete a -> do
-        aty <- lookupModuleType gr a
-        testErr (aty == MTAbstract) "the of-module is not an abstract syntax" 
+        am <- lookupModuleType gr a
+        testErr (mtype am == MTAbstract) "the of-module is not an abstract syntax" 
         chDep (IdentM c (MTConcrete a)) 
               (extends m) (MTConcrete a) (opens m) MTResource
       t -> chDep (IdentM c t) (extends m) t (opens m) t
 
   chDep it es ety os oty = do
-    ests <- mapM (lookupModuleType gr) es
-    testErr (all (compatMType ety) ests) "inappropriate extension module type" 
-----    osts <- mapM (lookupModuleType gr . openedModule) os
-----    testErr (all (compatOType oty) osts) "inappropriate open module type"
+    ems <- mapM (lookupModuleType gr) es
+    testErr (all (compatMType ety . mtype) ests) "inappropriate extension module type" 
     let ab = case it of
                IdentM _ (MTConcrete a) -> [IdentM a MTAbstract]
                _ -> [] ---- 

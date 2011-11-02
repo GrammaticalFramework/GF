@@ -27,7 +27,6 @@ import GF.Grammar.Grammar
 import GF.Grammar.Lookup
 import GF.Infra.Ident
 import qualified GF.Grammar.Macros as C
-import qualified GF.Infra.Modules as M
 import GF.Data.Operations
 
 import Control.Monad
@@ -38,17 +37,17 @@ import Data.List
 
 subexpModule :: SourceModule -> SourceModule
 subexpModule (n,mo) = errVal (n,mo) $ do
-  let ljs = tree2list (M.jments mo)
+  let ljs = tree2list (jments mo)
   (tree,_) <- appSTM (getSubtermsMod n ljs) (Map.empty,0)
   js2 <- liftM buildTree $ addSubexpConsts n tree $ ljs
-  return (n,M.replaceJudgements mo js2)
+  return (n,mo{jments=js2})
 
 unsubexpModule :: SourceModule -> SourceModule
 unsubexpModule sm@(i,mo)
-  | hasSub ljs = (i,M.replaceJudgements mo (rebuild (map unparInfo ljs)))
+  | hasSub ljs = (i,mo{jments=rebuild (map unparInfo ljs)})
   | otherwise  = sm
   where
-    ljs = tree2list (M.jments mo) 
+    ljs = tree2list (jments mo) 
 
     -- perform this iff the module has opers
     hasSub ljs = not $ null [c | (c,ResOper _ _) <- ljs]
@@ -61,7 +60,7 @@ unsubexpModule sm@(i,mo)
       Q (m,c) | isOperIdent c -> --- name convention of subexp opers
         errVal t $ liftM unparTerm $ lookupResDef gr (m,c)
       _ -> C.composSafeOp unparTerm t
-    gr = M.mGrammar [sm]
+    gr = mGrammar [sm]
     rebuild = buildTree . concat
 
 -- implementation

@@ -2,7 +2,6 @@
 module GF.Compile.TypeCheck.Concrete( checkLType, inferLType, computeLType, ppType ) where
 
 import GF.Infra.CheckM
-import GF.Infra.Modules
 import GF.Data.Operations
 
 import GF.Grammar

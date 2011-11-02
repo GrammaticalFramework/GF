@@ -132,7 +132,6 @@ executable gf
     GF.JavaScript.AbsJS
     GF.JavaScript.PrintJS
     GF.Infra.Ident
-    GF.Infra.Modules
     GF.Infra.GetOpt
     GF.Infra.Option
     GF.Infra.UseIO

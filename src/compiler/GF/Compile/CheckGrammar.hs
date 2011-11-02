@@ -23,7 +23,6 @@
 module GF.Compile.CheckGrammar(checkModule) where
 
 import GF.Infra.Ident
-import GF.Infra.Modules
 
 import GF.Compile.TypeCheck.Abstract
 import GF.Compile.TypeCheck.Concrete
@@ -56,13 +55,13 @@ checkModule ms m@(name,mo) = checkIn (text "checking module" <+> ppIdent name) $
   where
     updateCheckInfo (name,mo) (i,info) = do
       info <- checkInfo ms (name,mo) i info
-      return (name,updateModule mo i info)
+      return (name,mo{jments=updateTree (i,info) (jments mo)})
 
 -- check if restricted inheritance modules are still coherent
 -- i.e. that the defs of remaining names don't depend on omitted names
 checkRestrictedInheritance :: [SourceModule] -> SourceModule -> Check ()
 checkRestrictedInheritance mos (name,mo) = do
-  let irs = [ii | ii@(_,mi) <- extend mo, mi /= MIAll]  -- names with restr. inh.
+  let irs = [ii | ii@(_,mi) <- mextend mo, mi /= MIAll]  -- names with restr. inh.
   let mrs = [((i,m),mi) | (i,m) <- mos, Just mi <- [lookup i irs]] 
                              -- the restr. modules themself, with restr. infos
   mapM_ checkRem mrs
@@ -90,7 +89,7 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
   -- check that all abstract constants are in concrete; build default lin and lincats
   jsc <- foldM checkAbs jsc (tree2list jsa)
   
-  return (cm,replaceJudgements cnc jsc)
+  return (cm,cnc{jments=jsc})
   where
    checkAbs js i@(c,info) =
      case info of

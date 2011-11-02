@@ -17,7 +17,6 @@ module GF.Grammar.CF (getCF,CFItem,CFCat,CFFun,cf2gf,CFRule) where
 import GF.Grammar.Grammar
 import GF.Grammar.Macros
 import GF.Infra.Ident
-import GF.Infra.Modules
 import GF.Infra.Option
 import GF.Infra.UseIO
 
@@ -84,9 +83,8 @@ type CFFun = String
 
 cf2gf :: FilePath -> CF -> SourceGrammar
 cf2gf fpath cf = mGrammar [
-  (aname, addFlag (modifyFlags (\fs -> fs{optStartCat = Just cat}))
-          (emptyModInfo{mtype = MTAbstract, msrc=fpath, jments = abs})),
-  (cname, emptyModInfo{mtype = MTConcrete aname, msrc=fpath, jments = cnc})
+  (aname, ModInfo MTAbstract MSComplete (modifyFlags (\fs -> fs{optStartCat = Just cat})) [] Nothing [] [] fpath abs),
+  (cname, ModInfo (MTConcrete aname) MSComplete noOptions [] Nothing [] [] fpath cnc)
   ]
  where
    name = justModuleName fpath

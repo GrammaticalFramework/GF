@@ -3,7 +3,6 @@ module GF.Infra.Dependencies (
   ) where
 
 import GF.Grammar.Grammar
-import GF.Infra.Modules
 import GF.Infra.Ident
 
 import Data.List (nub,isPrefixOf)
@@ -60,8 +59,8 @@ grammar2moddeps monly gr = [(i,depMod i m) | (i,m) <- modules gr, yes i]
                      MTConcrete i -> [i | yes i]
                      MTInstance (i,_) -> [i | yes i]
                      _ -> [],
-          extendeds = nub $ filter yes $ map fst (extend m),
-          openeds = nub $ filter yes $ map openedModule (opens m),
+          extendeds = nub $ filter yes $ map fst (mextend m),
+          openeds = nub $ filter yes $ map openedModule (mopens m),
           extrads = nub $ filter yes $ mexdeps m
           }
     yes i = case monly of 
