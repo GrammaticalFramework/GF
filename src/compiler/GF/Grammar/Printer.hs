@@ -17,7 +17,7 @@ module GF.Grammar.Printer
            , ppPatt
            , ppValue
            , ppConstrs
-           , ppPosition
+           , ppLocation
            , ppQIdent
            ) where
 
@@ -38,7 +38,7 @@ ppGrammar :: SourceGrammar -> Doc
 ppGrammar sgr = vcat $ map (ppModule Qualified) $ modules sgr
 
 ppModule :: TermPrintQual -> SourceModule -> Doc
-ppModule q (mn, ModInfo mtype mstat opts exts with opens _ jments) =
+ppModule q (mn, ModInfo mtype mstat opts exts with opens _ _ jments) =
     hdr $$ nest 2 (ppOptions opts $$ vcat (map (ppJudgement q) defs)) $$ ftr
     where
       defs = Map.toList jments
@@ -97,8 +97,8 @@ ppJudgement q (id, AbsFun ptype _ pexp poper) =
 ppJudgement q (id, ResParam pparams _) = 
   text "param" <+> ppIdent id <+>
   (case pparams of
-     Just ps -> equals <+> fsep (intersperse (char '|') (map (ppParam q) ps))
-     _       -> empty) <+> semi
+     Just (L _ ps) -> equals <+> fsep (intersperse (char '|') (map (ppParam q) ps))
+     _             -> empty) <+> semi
 ppJudgement q (id, ResValue pvalue) = empty
 ppJudgement q (id, ResOper  ptype pexp) =
   text "oper" <+> ppIdent id <+>
@@ -269,12 +269,14 @@ ppBind (Implicit,v) = braces (ppIdent v)
 
 ppAltern q (x,y) = ppTerm q 0 x <+> char '/' <+> ppTerm q 0 y
 
-ppParam q (L _ (id,cxt)) = ppIdent id <+> hsep (map (ppDDecl q) cxt)
+ppParam q (id,cxt) = ppIdent id <+> hsep (map (ppDDecl q) cxt)
 
-ppPosition :: Ident -> (Int,Int) -> Doc
-ppPosition m (b,e)
-  | b == e    = text "in" <+> ppIdent m <> text ".gf, line"  <+> int b
-  | otherwise = text "in" <+> ppIdent m <> text ".gf, lines" <+> int b <> text "-" <> int e
+ppLocation :: FilePath -> Location -> Doc
+ppLocation fpath NoLoc          = text fpath
+ppLocation fpath (External p l) = ppLocation p l
+ppLocation fpath (Local b e)
+  | b == e    = text fpath <> colon <> int b
+  | otherwise = text fpath <> colon <> int b <> text "-" <> int e
 
 commaPunct f ds = (hcat (punctuate comma (map f ds)))
 

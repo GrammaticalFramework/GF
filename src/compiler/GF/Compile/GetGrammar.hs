@@ -41,8 +41,11 @@ getSourceModule opts file0 = ioe $
                                  let location = file++":"++show l++":"++show c
                                  return (Bad (location++": "++msg))
          Right mo          -> do removeTemp tmp
-                                 return (Ok (addOptionsToModule opts mo))
+                                 return (Ok (addOptionsToModule opts (setSrcPath file0 mo)))
   `catch` (return . Bad . show)
+
+setSrcPath :: FilePath -> SourceModule -> SourceModule
+setSrcPath fpath = mapSourceModule (\m -> m{msrc=fpath})
 
 addOptionsToModule :: Options -> SourceModule -> SourceModule
 addOptionsToModule opts = mapSourceModule (\m -> m { flags = flags m `addOptions` opts })

@@ -19,15 +19,17 @@ import GF.Grammar.Macros
 import GF.Infra.Ident
 import GF.Infra.Modules
 import GF.Infra.Option
+import GF.Infra.UseIO
 
 import GF.Data.Operations
 
 import Data.Char
 import Data.List
 import qualified Data.ByteString.Char8 as BS
+import System.FilePath
 
-getCF :: String -> String -> Err SourceGrammar
-getCF name = fmap (cf2gf name) . pCF
+getCF :: FilePath -> String -> Err SourceGrammar
+getCF fpath = fmap (cf2gf fpath) . pCF
 
 ---------------------
 -- the parser -------
@@ -50,9 +52,9 @@ getCFRule :: String -> Err [CFRule]
 getCFRule s = getcf (wrds s) where
   getcf ws = case ws of
     fun : cat : a : its | isArrow a -> 
-      Ok [L (0,0) (init fun, (cat, map mkIt its))]
+      Ok [L NoLoc (init fun, (cat, map mkIt its))]
     cat : a : its | isArrow a -> 
-      Ok [L (0,0) (mkFun cat it, (cat, map mkIt it)) | it <- chunk its]
+      Ok [L NoLoc (mkFun cat it, (cat, map mkIt it)) | it <- chunk its]
     _ -> Bad (" invalid rule:" +++ s)
   isArrow a = elem a ["->", "::="] 
   mkIt w = case w of
@@ -80,13 +82,14 @@ type CFFun = String
 -- the compiler ----------
 --------------------------
 
-cf2gf :: String -> CF -> SourceGrammar
-cf2gf name cf = mGrammar [
+cf2gf :: FilePath -> CF -> SourceGrammar
+cf2gf fpath cf = mGrammar [
   (aname, addFlag (modifyFlags (\fs -> fs{optStartCat = Just cat}))
-          (emptyModInfo{mtype = MTAbstract,       jments = abs})),
-  (cname, emptyModInfo{mtype = MTConcrete aname, jments = cnc})
+          (emptyModInfo{mtype = MTAbstract, msrc=fpath, jments = abs})),
+  (cname, emptyModInfo{mtype = MTConcrete aname, msrc=fpath, jments = cnc})
   ]
  where
+   name = justModuleName fpath
    (abs,cnc,cat) = cf2grammar cf
    aname = identS $ name ++ "Abs"
    cname = identS name
@@ -99,7 +102,7 @@ cf2grammar rules = (buildTree abs, buildTree conc, cat) where
   cat   = case rules of
             (L _ (_,(c,_))):_ -> c  -- the value category of the first rule
             _ -> error "empty CF" 
-  cats  = [(cat, AbsCat (Just (L (0,0) []))) | 
+  cats  = [(cat, AbsCat (Just (L NoLoc []))) | 
              cat <- nub (concat (map cf2cat rules))] ----notPredef cat
   lincats = [(cat, CncCat (Just (L loc defLinType)) Nothing Nothing) | (cat,AbsCat (Just (L loc _))) <- cats]
   (funs,lins) = unzip (map cf2rule rules)

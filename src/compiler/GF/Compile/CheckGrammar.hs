@@ -112,14 +112,14 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
                                                   return $ updateTree (c,CncFun ty (Just def) pn) js
                                     Ok (CncFun ty Nothing    pn) ->
                                       case mb_def of
-                                        Ok def -> return $ updateTree (c,CncFun ty (Just (L (0,0) def)) pn) js
+                                        Ok def -> return $ updateTree (c,CncFun ty (Just (L NoLoc def)) pn) js
                                         Bad _  -> do checkWarn $ text "no linearization of" <+> ppIdent c
                                                      return js
                                     _ -> do
                                       case mb_def of
                                         Ok def -> do (cont,val) <- linTypeOfType gr cm ty
                                                      let linty = (snd (valCat ty),cont,val)
-                                                     return $ updateTree (c,CncFun (Just linty) (Just (L (0,0) def)) Nothing) js
+                                                     return $ updateTree (c,CncFun (Just linty) (Just (L NoLoc def)) Nothing) js
                                         Bad _  -> do checkWarn $ text "no linearization of" <+> ppIdent c
                                                      return js
        AbsCat (Just _) -> case lookupIdent c js of
@@ -128,11 +128,11 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
          Ok (CncCat _ mt mp) -> do
            checkWarn $ 
              text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}"
-           return $ updateTree (c,CncCat (Just (L (0,0) defLinType)) mt mp) js
+           return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) mt mp) js
          _ -> do
            checkWarn $ 
              text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}"
-           return $ updateTree (c,CncCat (Just (L (0,0) defLinType)) Nothing Nothing) js
+           return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) Nothing Nothing) js
        _ -> return js
      
    checkCnc js i@(c,info) =
@@ -158,15 +158,15 @@ checkInfo ms (m,mo) c info = do
   checkReservedId c
   case info of
     AbsCat (Just (L loc cont)) -> 
-      mkCheck loc "category" $ 
+      mkCheck loc "the category" $ 
         checkContext gr cont
 
     AbsFun (Just (L loc typ0)) ma md moper -> do
       typ <- compAbsTyp [] typ0   -- to calculate let definitions
-      mkCheck loc "type of function" $
+      mkCheck loc "the type of function" $
         checkTyp gr typ
       case md of
-        Just eqs -> mapM_ (\(L loc eq) -> mkCheck loc "definition of function" $
+        Just eqs -> mapM_ (\(L loc eq) -> mkCheck loc "the definition of function" $
 	                                        checkDef gr (m,c) typ eq) eqs
         Nothing  -> return ()
       return (AbsFun (Just (L loc typ)) ma md moper)
@@ -204,7 +204,7 @@ checkInfo ms (m,mo) c info = do
              checkError (text "No definition given to the operation")
       return (ResOper pty' pde')
 
-    ResOverload os tysts -> chIn (0,0) "overloading" $ do
+    ResOverload os tysts -> chIn NoLoc "overloading" $ do
       tysts' <- mapM (uncurry $ flip (\(L loc1 t) (L loc2 ty) -> checkLType gr [] t ty >>= \(t,ty) -> return (L loc1 t, L loc2 ty))) tysts  -- return explicit ones
       tysts0 <- checkErr $ lookupOverload gr (m,c)  -- check against inherited ones too
       tysts1 <- mapM (uncurry $ flip (checkLType gr [])) 
@@ -215,17 +215,17 @@ checkInfo ms (m,mo) c info = do
         sort [let (xs,t) = typeFormCnc x in t : map (\(b,x,t) -> t) xs | (_,x) <- tysts1]
       return (ResOverload os [(y,x) | (x,y) <- tysts'])
 
-    ResParam (Just pcs) _ -> do
-      ts <- liftM concat $ mapM mkPar pcs
-      return (ResParam (Just pcs) (Just ts))
+    ResParam (Just (L loc pcs)) _ -> do
+      ts <- chIn loc "parameter type" $ 
+              liftM concat $ mapM mkPar pcs
+      return (ResParam (Just (L loc pcs)) (Just ts))
 
     _ ->  return info
  where
    gr = mGrammar ((m,mo) : ms)
-   chIn loc cat = checkIn (text "Happened in" <+> text cat <+> ppIdent c <+> ppPosition m loc <> colon)
+   chIn loc cat = checkIn (ppLocation (msrc mo) loc <> colon $$ text "Happened in" <+> text cat <+> ppIdent c)
 
-   mkPar (L loc (f,co)) = 
-     chIn loc "parameter type" $ do
+   mkPar (f,co) = do
        vs <- checkErr $ liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
        return $ map (mkApp (QC (m,f))) vs
 
@@ -238,7 +238,7 @@ checkInfo ms (m,mo) c info = do
 
    mkCheck loc cat ss = case ss of
      [] -> return info
-     _  -> checkError (vcat ss $$ text "in" <+> text cat <+> ppIdent c <+> ppPosition m loc)
+     _  -> checkError (ppLocation (msrc mo) loc <> colon $$ text "Happened in" <+> text cat <+> ppIdent c $$ nest 3 (vcat ss))
 
    compAbsTyp g t = case t of
      Vr x -> maybe (checkError (text "no value given to variable" <+> ppIdent x)) return $ lookup x g

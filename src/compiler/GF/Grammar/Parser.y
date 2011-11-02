@@ -5,7 +5,7 @@ module GF.Grammar.Parser
          , pModDef
          , pModHeader
          , pExp
-	 , pTopDef
+         , pTopDef
          ) where
 
 import GF.Infra.Ident
@@ -118,14 +118,14 @@ ModDef
                                       defs <- case buildAnyTree id jments of
                                                 Ok x    -> return x
                                                 Bad msg -> fail msg
-                                      return (id, ModInfo mtype mstat opts extends with opens [] defs)  }
+                                      return (id, ModInfo mtype mstat opts extends with opens [] "" defs)  }
 
 ModHeader :: { SourceModule }
 ModHeader
   : ComplMod ModType '=' ModHeaderBody { let { mstat = $1 ;
                                                (mtype,id) = $2 ;
                                                (extends,with,opens) = $4 }
-                                         in (id, ModInfo mtype mstat noOptions extends with opens [] emptyBinTree) }
+                                         in (id, ModInfo mtype mstat noOptions extends with opens [] "" emptyBinTree) }
 
 ComplMod :: { ModuleStatus }
 ComplMod 
@@ -251,9 +251,9 @@ DataDef
 
 ParamDef :: { [(Ident,Info)] }
 ParamDef
-  : Ident '=' ListParConstr { ($1, ResParam (Just $3) Nothing) :
-                              [(f, ResValue (L loc (mkProdSimple co (Cn $1)))) | L loc (f,co) <- $3] }
-  | Ident                   { [($1, ResParam Nothing Nothing)] }
+  : Posn Ident '=' ListParConstr Posn { ($2, ResParam (Just (mkL $1 $5 [param | L loc param <- $4])) Nothing) :
+                                        [(f, ResValue (L loc (mkProdSimple co (Cn $2)))) | L loc (f,co) <- $4] }
+  | Posn Ident                   Posn { [($2, ResParam Nothing Nothing)] }
 
 OperDef :: { [(Ident,Info)] }
 OperDef
@@ -679,7 +679,7 @@ checkInfoType mt jment@(id,info) =
     AbsFun pty _ pde _ -> ifAbstract mt (locPerh pty ++ maybe [] locAll pde)
     CncCat pty pd ppn  -> ifConcrete mt (locPerh pty ++ locPerh pd ++ locPerh ppn)
     CncFun _   pd ppn  -> ifConcrete mt (locPerh pd ++ locPerh ppn)
-    ResParam pparam _  -> ifResource mt (maybe [] locAll pparam)
+    ResParam pparam _  -> ifResource mt (locPerh pparam)
     ResValue ty        -> ifResource mt (locL ty)
     ResOper  pty pt    -> ifOper mt pty pt
     ResOverload _ xs   -> ifResource mt (concat [[loc1,loc2] | (L loc1 _,L loc2 _) <- xs])
@@ -688,8 +688,8 @@ checkInfoType mt jment@(id,info) =
     locAll xs = [loc | L loc x <- xs]
     locL (L loc x) = [loc]
     
-    illegal ((s,e):_) = failLoc (Pn s 0) "illegal definition"
-    illegal _         = return jment
+    illegal (Local s e:_) = failLoc (Pn s 0) "illegal definition"
+    illegal _             = return jment
 
     ifAbstract MTAbstract     locs = return jment
     ifAbstract _              locs = illegal locs
@@ -729,6 +729,6 @@ mkAlts cs = case cs of
      _ -> fail "no strs from pattern"
 
 mkL :: Posn -> Posn -> x -> L x
-mkL (Pn l1 _) (Pn l2 _) x = L (l1,l2) x
+mkL (Pn l1 _) (Pn l2 _) x = L (Local l1 l2) x
 
 }

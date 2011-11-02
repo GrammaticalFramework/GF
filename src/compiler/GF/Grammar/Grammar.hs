@@ -20,7 +20,7 @@ module GF.Grammar.Grammar (SourceGrammar,
         SourceModule,
         mapSourceModule,
         Info(..),
-        L(..), unLoc,
+        Location(..), L(..), unLoc,
         Type,
         Cat,
         Fun,
@@ -80,7 +80,7 @@ data Info =
  | AbsFun   (Maybe (L Type)) (Maybe Int) (Maybe [L Equation]) (Maybe Bool) -- ^ (/ABS/) type, arrity and definition of a function
 
 -- judgements in resource
- | ResParam (Maybe [L Param]) (Maybe [Term])     -- ^ (/RES/) the second parameter is list of all possible values
+ | ResParam (Maybe (L [Param])) (Maybe [Term])   -- ^ (/RES/) the second parameter is list of all possible values
  | ResValue (L Type)                             -- ^ (/RES/) to mark parameter constructors for lookup
  | ResOper  (Maybe (L Type)) (Maybe (L Term))    -- ^ (/RES/)
 
@@ -94,8 +94,14 @@ data Info =
  | AnyInd Bool Ident                         -- ^ (/INDIR/) the 'Bool' says if canonical
   deriving Show
 
-data L a = L (Int,Int) a  -- location information
-  deriving (Eq,Show)
+data Location 
+  = NoLoc
+  | Local Int Int
+  | External FilePath Location
+  deriving (Show,Eq,Ord)
+
+data L a = L Location a  -- location information
+  deriving Show
 
 instance Functor L where
   fmap f (L loc x) = L loc (f x)

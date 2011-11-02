@@ -46,14 +46,14 @@ arrityPredefined f = do ty <- typPredefined f
                         return (length ctxt)
 
 predefModInfo :: SourceModInfo
-predefModInfo = ModInfo MTResource MSComplete noOptions [] Nothing [] [] primitives
+predefModInfo = ModInfo MTResource MSComplete noOptions [] Nothing [] [] "Predef.gf" primitives
 
 primitives = Map.fromList
   [ (cErrorType, ResOper (Just (noLoc typeType)) Nothing)
   , (cInt      , ResOper (Just (noLoc typePType)) Nothing)
   , (cFloat    , ResOper (Just (noLoc typePType)) Nothing)
   , (cInts     , fun [typeInt] typePType)
-  , (cPBool    , ResParam (Just [noLoc (cPTrue,[]),noLoc (cPFalse,[])]) (Just [QC (cPredef,cPTrue), QC (cPredef,cPFalse)]))
+  , (cPBool    , ResParam (Just (noLoc [(cPTrue,[]),(cPFalse,[])])) (Just [QC (cPredef,cPTrue), QC (cPredef,cPFalse)]))
   , (cPTrue    , ResValue (noLoc typePBool))
   , (cPFalse   , ResValue (noLoc typePBool))
   , (cError    , fun [typeStr] typeError)  -- non-can. of empty set
@@ -87,7 +87,7 @@ primitives = Map.fromList
     fun from to = oper (mkFunType from to)
     oper ty     = ResOper (Just (noLoc ty)) Nothing
 
-    noLoc = L (0,0)
+    noLoc = L NoLoc
 
     varL :: Ident
     varL = identC (BS.pack "L")

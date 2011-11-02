@@ -191,7 +191,7 @@ lookupCatContext gr m c = do
 -- this gives all opers and param constructors, also overloaded opers and funs, and the types, and locations
 -- notice that it only gives the modules that are reachable and the opers that are included
 
-allOpers :: SourceGrammar -> [((Ident,Ident),Type,(Int,Int))]
+allOpers :: SourceGrammar -> [((Ident,Ident),Type,Location)]
 allOpers gr = 
   [((mo,op),typ,loc) | 
       (mo,minc)  <- reachable,
@@ -212,7 +212,7 @@ allOpers gr =
     _ -> []
 
 --- not for dependent types
-allOpersTo :: SourceGrammar -> Type -> [((Ident,Ident),Type,(Int,Int))]
+allOpersTo :: SourceGrammar -> Type -> [((Ident,Ident),Type,Location)]
 allOpersTo gr ty = [op | op@(_,typ,_) <- allOpers gr, isProdTo ty typ] where
   isProdTo t typ = eqProd typ t || case typ of
     Prod _ _ a b -> isProdTo t b

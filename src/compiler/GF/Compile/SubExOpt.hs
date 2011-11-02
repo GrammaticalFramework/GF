@@ -89,7 +89,7 @@ addSubexpConsts mo tree lins = do
 
    list = Map.toList tree
 
-   oper id trm = (operIdent id, ResOper (Just (L (0,0) (EInt 8))) (Just (L (0,0) trm))) 
+   oper id trm = (operIdent id, ResOper (Just (L NoLoc (EInt 8))) (Just (L NoLoc trm))) 
    --- impossible type encoding generated opers
 
 getSubtermsMod :: Ident -> [(Ident,Info)] -> TermM (Map Term (Int,Int))

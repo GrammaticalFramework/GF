@@ -31,9 +31,9 @@ instance Binary a => Binary (MGrammar a) where
   get = fmap mGrammar get
 
 instance Binary a => Binary (ModInfo a) where
-  put mi = do put (mtype mi,mstatus mi,flags mi,extend mi,mwith mi,opens mi,mexdeps mi,jments mi)
-  get    = do (mtype,mstatus,flags,extend,mwith,opens,med,jments) <- get
-              return (ModInfo mtype mstatus flags extend mwith opens med jments)
+  put mi = do put (mtype mi,mstatus mi,flags mi,extend mi,mwith mi,opens mi,mexdeps mi,msrc mi,jments mi)
+  get    = do (mtype,mstatus,flags,extend,mwith,opens,med,src,jments) <- get
+              return (ModInfo mtype mstatus flags extend mwith opens med src jments)
 
 instance Binary ModuleType where
   put MTAbstract       = putWord8 0
@@ -108,6 +108,16 @@ instance Binary Info where
              7 -> get >>= \(x,y,z)   -> return (CncFun x y z)
              8 -> get >>= \(x,y)     -> return (AnyInd x y)
              _ -> decodingError
+
+instance Binary Location where
+  put NoLoc          = putWord8 0
+  put (Local x y)    = putWord8 1 >> put (x,y)
+  put (External x y) = putWord8 2 >> put (x,y)
+  get = do tag <- getWord8
+           case tag of
+             0 ->                   return NoLoc
+             1 -> get >>= \(x,y) -> return (Local x y)
+             2 -> get >>= \(x,y) -> return (External x y)
 
 instance Binary a => Binary (L a) where
   put (L x y) = put (x,y)
@@ -261,7 +271,7 @@ instance Binary Label where
 
 decodeModHeader :: FilePath -> IO SourceModule
 decodeModHeader fpath = do
-  (m,mtype,mstatus,flags,extend,mwith,opens,med) <- decodeFile fpath
-  return (m,ModInfo mtype mstatus flags extend mwith opens med Map.empty)
+  (m,mtype,mstatus,flags,extend,mwith,opens,med,src) <- decodeFile fpath
+  return (m,ModInfo mtype mstatus flags extend mwith opens med src Map.empty)
 
 decodingError = fail "This GFO file was compiled with different version of GF"

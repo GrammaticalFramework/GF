@@ -55,12 +55,11 @@ importSource src0 opts files = do
 -- for different cf formats
 importCF opts files get = do
        s  <- fmap unlines $ mapM readFile files 
-       let cnc = justModuleName (last files)
-       gf <- case get cnc s of
-               Ok g -> return g
+       gf <- case get (last files) s of
+               Ok gf -> return gf
                Bad s -> error s ---- 
        Ok gr <- appIOE $ compileSourceGrammar opts gf
-       epgf <- appIOE $ link opts (identC (BS.pack (cnc ++ "Abs"))) gr
+       epgf <- appIOE $ link opts (identC (BS.pack (justModuleName (last files) ++ "Abs"))) gr
        case epgf of
          Ok pgf -> return pgf
-         Bad s -> error s ----
+         Bad s  -> error s ----

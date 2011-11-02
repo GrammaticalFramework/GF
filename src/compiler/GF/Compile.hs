@@ -70,12 +70,11 @@ batchCompile opts files = do
 -- to compile a set of modules, e.g. an old GF or a .cf file
 compileSourceGrammar :: Options -> SourceGrammar -> IOE SourceGrammar
 compileSourceGrammar opts gr = do
-  (_,gr',_) <- foldM compOne (0,emptySourceGrammar,Map.empty) (modules gr)
+  (_,gr',_) <- foldM (\env -> compileSourceModule opts env Nothing)
+                     (0,emptySourceGrammar,Map.empty)
+                     (modules gr)
   return gr'
- where
-  compOne env mo = do
-    (k,mo') <- compileSourceModule opts env mo
-    extendCompileEnvInt env k Nothing mo'    --- file for the same of modif time...
+
 
 -- to output an intermediate stage
 intermOut :: Options -> Dump -> Doc -> IOE ()
@@ -161,18 +160,16 @@ compileOne opts env@(_,srcgr,_) file = do
        sm00 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
                                            getSourceModule opts file
        enc <- ioeIO $ mkTextEncoding (renameEncoding (flag optEncoding (flagsModule sm00)))
-       let sm0 = decodeStringsInModule enc sm00
+       let sm = decodeStringsInModule enc sm00
 
-       intermOut opts DumpSource (ppModule Qualified sm0)
+       intermOut opts DumpSource (ppModule Qualified sm)
 
-       (k',sm)  <- compileSourceModule opts env sm0
-       putPointE Verbose opts "  generating code... " $ generateModuleCode opts gfo sm
-       extendCompileEnvInt env k' (Just gfo) sm
+       compileSourceModule opts env (Just gfo) sm
   where
    isConcr (_,m) = isModCnc m && mstatus m /= MSIncomplete
 
-compileSourceModule :: Options -> CompileEnv -> SourceModule -> IOE (Int,SourceModule)
-compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
+compileSourceModule :: Options -> CompileEnv -> Maybe FilePath -> SourceModule -> IOE CompileEnv
+compileSourceModule opts env@(k,gr,_) mb_gfo mo@(i,mi) = do
 
   let puts  = putPointE Quiet opts
       putpp = putPointE Verbose opts
@@ -185,7 +182,13 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
 
   case mo1b of
     (_,n) | not (isCompleteModule n) -> do
-      return (k,mo1b)   -- refresh would fail, since not renamed
+      case mb_gfo of
+        Just gfo -> if flag optMode opts /= ModeTags
+                      then putPointE Verbose opts "  generating code... " $ generateModuleCode opts gfo mo1b
+                      else putStrLnE "" >> return mo1b
+        Nothing  -> return mo1b
+
+      extendCompileEnvInt env k mb_gfo mo1b
     _ -> do
       let mos = modules gr
 
@@ -197,13 +200,21 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
       if null warnings then return () else puts warnings $ return ()
       intermOut opts DumpTypeCheck (ppModule Qualified mo3)
 
-      (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
-      intermOut opts DumpRefresh (ppModule Qualified mo3r)
+      if flag optMode opts /= ModeTags
+        then do (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
+                intermOut opts DumpRefresh (ppModule Qualified mo3r)
 
-      mo4 <- putpp "  optimizing " $ ioeErr $ optimizeModule opts mos mo3r
-      intermOut opts DumpOptimize (ppModule Qualified mo4)
+                mo4 <- putpp "  optimizing " $ ioeErr $ optimizeModule opts mos mo3r
+                intermOut opts DumpOptimize (ppModule Qualified mo4)
 
-      return (k',mo4)
+                case mb_gfo of
+                  Just gfo -> putPointE Verbose opts "  generating code... " $ generateModuleCode opts gfo mo4
+                  Nothing  -> return mo4
+                  
+                extendCompileEnvInt env k' mb_gfo mo4
+        else do putStrLnE ""
+                extendCompileEnvInt env k  mb_gfo mo3
+
 
 generateModuleCode :: Options -> FilePath -> SourceModule -> IOE SourceModule
 generateModuleCode opts file minfo = do
