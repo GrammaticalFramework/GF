@@ -154,8 +154,8 @@ compilePatt eqs        = whilePP eqs Map.empty
 reorder :: Ident -> SourceGrammar -> AbsConcsGrammar
 reorder abs cg =
 --  M.MGrammar $
-       ((abs, M.ModInfo M.MTAbstract       M.MSComplete aflags [] Nothing [] [] adefs),
-      [(cnc, M.ModInfo (M.MTConcrete abs) M.MSComplete cflags [] Nothing [] [] cdefs)
+       ((abs, M.ModInfo M.MTAbstract       M.MSComplete aflags [] Nothing [] [] "" adefs),
+      [(cnc, M.ModInfo (M.MTConcrete abs) M.MSComplete cflags [] Nothing [] [] "" cdefs)
             | cnc <- M.allConcretes cg abs, let (cflags,cdefs) = concr cnc])
   where
     aflags = 
@@ -165,7 +165,7 @@ reorder abs cg =
       Map.fromList (predefADefs ++ Look.allOrigInfos cg abs)
       where
         predefADefs = 
-           [(c, AbsCat (Just (L (0,0) []))) | c <- [cFloat,cInt,cString]]
+           [(c, AbsCat (Just (L NoLoc []))) | c <- [cFloat,cInt,cString]]
 
     concr la = (flags, Map.fromList (predefCDefs ++ jments))
       where 
@@ -173,4 +173,4 @@ reorder abs cg =
                                                 Just r <- [lookup i (M.allExtendSpecs cg la)]]
         jments = Look.allOrigInfos cg la
         predefCDefs = 
-           [(c, CncCat (Just (L (0,0) GM.defLinType)) Nothing Nothing) | c <- [cInt,cFloat,cString]]
+           [(c, CncCat (Just (L NoLoc GM.defLinType)) Nothing Nothing) | c <- [cInt,cFloat,cString]]

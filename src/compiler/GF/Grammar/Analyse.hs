@@ -107,7 +107,7 @@ sizeInfo i = case i of
   AbsFun mt mi me mb -> 1 + msize mt + 
     sum [sum (map (sizeTerm . patt2term) ps) + sizeTerm t | Just es <- [me], L _ (ps,t) <- es]
   ResParam mp mt -> 
-    1 + sum [1 + sum [1 + sizeTerm ty | (_,_,ty) <- co] | Just ps <- [mp], L _ (_,co) <- ps]
+    1 + sum [1 + sum [1 + sizeTerm ty | (_,_,ty) <- co] | Just (L _ ps) <- [mp], (_,co) <- ps]
   ResValue lt -> 0
   ResOper mt md -> 1 + msize mt + msize md
   ResOverload is fs -> 1 + sum [sizeTerm ty + sizeTerm tr | (L _ ty, L _ tr) <- fs]

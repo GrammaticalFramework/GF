@@ -47,24 +47,23 @@ import Text.PrettyPrint
 -- | this gives top-level access to renaming term input in the cc command
 renameSourceTerm :: SourceGrammar -> Ident -> Term -> Check Term
 renameSourceTerm g m t = do
-  mo     <- checkErr $ lookupModule g m
-  status <- buildStatus g m mo
+  mi     <- checkErr $ lookupModule g m
+  status <- buildStatus g m mi
   renameTerm status [] t
 
 -- | this gives top-level access to renaming term input in the cj command
 renameSourceJudgement :: SourceGrammar -> Ident -> (Ident,Info) -> Check (Ident,Info)
 renameSourceJudgement g m (i,t) = do
-  mo     <- checkErr $ lookupModule g m
-  status <- buildStatus g m mo
-  t2 <- renameInfo status m i t
+  mi     <- checkErr $ lookupModule g m
+  status <- buildStatus g m mi
+  t2 <- renameInfo status (m,mi) i t
   return (i,t2)
 
 renameModule :: [SourceModule] -> SourceModule -> Check SourceModule
-renameModule ms (name,mo) = checkIn (text "renaming module" <+> ppIdent name) $ do
-  let js1 = jments mo
-  status <- buildStatus (mGrammar ms) name mo
-  js2    <- checkMap (renameInfo status name) js1
-  return (name, mo {opens = map forceQualif (opens mo), jments = js2})
+renameModule ms mo@(m,mi) = checkIn (text "renaming module" <+> ppIdent m) $ do
+  status <- buildStatus (mGrammar ms) m mi
+  js     <- checkMap (renameInfo status mo) (jments mi)
+  return (m, mi{opens = map forceQualif (opens mi), jments = js})
 
 type Status = (StatusTree, [(OpenSpec, StatusTree)])
 
@@ -147,15 +146,15 @@ forceQualif o = case o of
   OSimple i   -> OQualif i i
   OQualif _ i -> OQualif i i
   
-renameInfo :: Status -> Ident -> Ident -> Info -> Check Info
-renameInfo status m i info =
+renameInfo :: Status -> SourceModule -> Ident -> Info -> Check Info
+renameInfo status (m,mi) i info =
   case info of
     AbsCat pco -> liftM AbsCat (renPerh (renameContext status) pco)
     AbsFun  pty pa ptr poper -> liftM4 AbsFun (renTerm pty) (return pa) (renMaybe (mapM (renLoc (renEquation status))) ptr) (return poper)
     ResOper pty ptr -> liftM2 ResOper (renTerm pty) (renTerm ptr)
     ResOverload os tysts -> liftM (ResOverload os) (mapM (renPair (renameTerm status [])) tysts)
     ResParam (Just pp) m -> do
-      pp' <- mapM (renLoc (renParam status)) pp
+      pp' <- renLoc (mapM (renParam status)) pp
       return (ResParam (Just pp') m)
     ResValue t -> do
       t <- renLoc (renameTerm status []) t
@@ -172,7 +171,7 @@ renameInfo status m i info =
     renMaybe ren Nothing  = return Nothing
 
     renLoc ren (L loc x) =
-      checkIn (text "renaming of" <+> ppIdent i <+> ppPosition m loc) $ do
+      checkIn (ppLocation (msrc mi) loc <> colon $$ text "Happened in the renaming of" <+> ppIdent i) $ do
         x <- ren x
         return (L loc x)
 

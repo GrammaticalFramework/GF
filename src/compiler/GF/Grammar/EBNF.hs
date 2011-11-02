@@ -24,13 +24,14 @@ import GF.Grammar.Grammar
 
 import Data.Char
 import Data.List
+import System.FilePath
 
 
 
 -- AR 18/4/2000 - 31/3/2004
 
-getEBNF :: String -> String -> Err SourceGrammar
-getEBNF name = fmap (cf2gf name . ebnf2cf) . pEBNF
+getEBNF :: FilePath -> String -> Err SourceGrammar
+getEBNF fpath = fmap (cf2gf fpath . ebnf2cf) . pEBNF
 
 type EBNF = [ERule]
 type ERule = (ECat, ERHS)
@@ -54,7 +55,7 @@ type CFJustRule = (CFCat, CFRHS)
 
 ebnf2cf :: EBNF -> [CFRule]
 ebnf2cf ebnf = 
-  [L (0,0) (mkCFF i rule,rule) | (i,rule) <- zip [0..] (normEBNF ebnf)] where
+  [L NoLoc (mkCFF i rule,rule) | (i,rule) <- zip [0..] (normEBNF ebnf)] where
     mkCFF i (c, _) = ("Mk" ++ c ++ "_" ++ show i)
 
 normEBNF :: EBNF -> [CFJustRule]

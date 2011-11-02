@@ -3,6 +3,7 @@ module Main where
 
 import GFC
 import GFI
+import GFTags
 import GF.Data.ErrM
 import GF.Infra.Option
 import GF.Infra.UseIO
@@ -47,3 +48,4 @@ mainOpts opts files =
       ModeRun         -> mainRunGFI opts files
       ModeServer      -> mainServerGFI opts files
       ModeCompiler    -> dieIOE (mainGFC opts files)
+      ModeTags        -> dieIOE (mainTags opts files)

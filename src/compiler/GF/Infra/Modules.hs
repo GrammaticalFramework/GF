@@ -46,15 +46,10 @@ import GF.Data.Operations
 import Data.List
 import qualified Data.Map as Map
 import Text.PrettyPrint
+import System.FilePath
 
--- AR 29/4/2003
 
--- The same structure will be used in both source code and canonical.
--- The parameters tell what kind of data is involved.
 -- Invariant: modules are stored in dependency order
-
---mGrammar = MGrammar
---newtype MGrammar a = MGrammar {modules :: [(Ident,ModInfo a)]}
 
 data MGrammar a = MGrammar { moduleMap :: Map.Map Ident (ModInfo a),
                              modules :: [(Ident,ModInfo a)] }
@@ -69,6 +64,7 @@ data ModInfo a = ModInfo {
     mwith   :: Maybe (Ident,MInclude,[(Ident,Ident)]),
     opens   :: [OpenSpec],
     mexdeps :: [Ident],
+    msrc    :: FilePath,
     jments  :: Map.Map Ident a
   }
   deriving Show
@@ -109,13 +105,13 @@ updateMGrammar (MGrammar omap os) (MGrammar nmap ns) =
     nis = map fst ns
 -}
 updateModule :: ModInfo t -> Ident -> t -> ModInfo t
-updateModule (ModInfo mt ms fs me mw ops med js) i t = ModInfo mt ms fs me mw ops med (updateTree (i,t) js)
+updateModule (ModInfo mt ms fs me mw ops med src js) i t = ModInfo mt ms fs me mw ops med src (updateTree (i,t) js)
 
 replaceJudgements :: ModInfo t -> Map.Map Ident t -> ModInfo t
-replaceJudgements (ModInfo mt ms fs me mw ops med _) js = ModInfo mt ms fs me mw ops med js
+replaceJudgements (ModInfo mt ms fs me mw ops med src _) js = ModInfo mt ms fs me mw ops med src js
 
 addOpenQualif :: Ident -> Ident -> ModInfo t -> ModInfo t
-addOpenQualif i j (ModInfo mt ms fs me mw ops med js) = ModInfo mt ms fs me mw (OQualif i j : ops) med js
+addOpenQualif i j (ModInfo mt ms fs me mw ops med src js) = ModInfo mt ms fs me mw (OQualif i j : ops) med src js
 
 addFlag :: Options -> ModInfo t -> ModInfo t
 addFlag f mo = mo {flags = flags mo `addOptions` f} 
@@ -227,7 +223,7 @@ emptyMGrammar :: MGrammar a
 emptyMGrammar = mGrammar []
 
 emptyModInfo :: ModInfo a
-emptyModInfo = ModInfo MTResource MSComplete noOptions [] Nothing [] [] emptyBinTree
+emptyModInfo = ModInfo MTResource MSComplete noOptions [] Nothing [] [] "" emptyBinTree
 
 -- | we store the module type with the identifier
 

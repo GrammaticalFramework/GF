@@ -560,7 +560,7 @@ allDependencies ism b =
     pts i = case i of
       ResOper pty pt -> [pty,pt]
       ResOverload _ tyts -> concat [[Just ty, Just tr] | (ty,tr) <- tyts]
-      ResParam (Just ps) _ -> [Just (L loc t) | L loc (_,cont) <- ps, (_,_,t) <- cont]
+      ResParam (Just (L loc ps)) _ -> [Just (L loc t) | (_,cont) <- ps, (_,_,t) <- cont]
       CncCat pty _ _ -> [pty]
       CncFun _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
       AbsFun pty _ ptr _ -> [pty] --- ptr is def, which can be mutual

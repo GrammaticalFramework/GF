@@ -63,7 +63,7 @@ extendModule gr (name,m)
      let isCompl = isCompleteModule m0
 
      -- build extension in a way depending on whether the old module is complete
-     js1 <- extendMod gr isCompl (n, isInherited cond) name (jments m0) (jments mo)
+     js1 <- extendMod gr isCompl ((n,m0), isInherited cond) name (jments mo)
 
      -- if incomplete, throw away extension information
      return $ 
@@ -77,7 +77,7 @@ extendModule gr (name,m)
 -- | rebuilding instance + interface, and "with" modules, prior to renaming. 
 -- AR 24/10/2003
 rebuildModule :: SourceGrammar -> SourceModule -> Err SourceModule
-rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_)) = do
+rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ src_ js_)) = do
 ----  deps <- moduleDeps ms
 ----  is   <- openInterfaces deps i
   let is = [] ---- the method above is buggy: try "i -src" for two grs. AR 8/3/2005
@@ -92,7 +92,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_)) = do
         MTInstance (i0,mincl) -> do
           m1 <- lookupModule gr i0
           testErr (isModRes m1) ("interface expected instead of" +++ showIdent i0)
-          js' <- extendMod gr False (i0, isInherited mincl) i (jments m1) (jments mi)
+          js' <- extendMod gr False ((i0,m1), isInherited mincl) i (jments mi)
           --- to avoid double inclusions, in instance I of I0 = J0 ** ...
           case extends mi of
             []  -> return $ replaceJudgements mi js'
@@ -110,7 +110,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_)) = do
                     [i | i <- is, notElem i infs]
       testErr (stat' == MSComplete || stat == MSIncomplete) 
               ("module" +++ showIdent i +++ "remains incomplete")
-      ModInfo mt0 _ fs me' _ ops0 _ js <- lookupModule gr ext
+      ModInfo mt0 _ fs me' _ ops0 _ _ js <- lookupModule gr ext
       let ops1 = nub $
                    ops_ ++ -- N.B. js has been name-resolved already
                    [OQualif i j | (i,j) <- ops] ++
@@ -123,7 +123,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_)) = do
       let js0 = [ci | ci@(c,_) <- tree2list js, isInherited incl c]
       let js1 = buildTree (tree2list js_ ++ js0)
       let med1= nub (ext : infs ++ insts ++ med_)
-      return $ ModInfo mt0 stat' fs1 me Nothing ops1 med1 js1
+      return $ ModInfo mt0 stat' fs1 me Nothing ops1 med1 src_ js1
 
   return (i,mi')
 
@@ -131,12 +131,11 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_)) = do
 -- and the process is interrupted if unification fails.
 -- If the extended module is incomplete, its judgements are just copied.
 extendMod :: SourceGrammar ->
-             Bool -> (Ident,Ident -> Bool) -> Ident -> 
-             BinTree Ident Info -> BinTree Ident Info -> 
-             Err (BinTree Ident Info)
-extendMod gr isCompl (name,cond) base old new = foldM try new $ Map.toList old 
+             Bool -> (SourceModule,Ident -> Bool) -> Ident -> 
+             BinTree Ident Info -> Err (BinTree Ident Info)
+extendMod gr isCompl ((name,mi),cond) base new = foldM try new $ Map.toList (jments mi) 
   where
-    try new (c,i)
+    try new (c,i0)
       | not (cond c) = return new
       | otherwise    = case Map.lookup c new of
                          Just j -> case unifyAnyInfo name i j of
@@ -155,6 +154,8 @@ extendMod gr isCompl (name,cond) base old new = foldM try new $ Map.toList old
                          Nothing-> if isCompl
                                      then return $ updateTree (c,indirInfo name i) new
                                      else return $ updateTree (c,i) new
+      where
+        i = globalizeLoc (msrc mi) i0
 
     indirInfo :: Ident -> Info -> Info
     indirInfo n info = AnyInd b n' where 
@@ -165,6 +166,24 @@ extendMod gr isCompl (name,cond) base old new = foldM try new $ Map.toList old
         AnyInd b k -> (b,k)
         _ -> (False,n) ---- canonical in Abs
 
+globalizeLoc fpath i =
+  case i of
+    AbsCat mc             -> AbsCat (fmap gl mc)
+    AbsFun mt ma md moper -> AbsFun (fmap gl mt) ma (fmap (fmap gl) md) moper
+    ResParam mt mv        -> ResParam (fmap gl mt) mv
+    ResValue t            -> ResValue (gl t)
+    ResOper mt m          -> ResOper (fmap gl mt) (fmap gl m)
+    ResOverload ms os     -> ResOverload ms (map (\(x,y) -> (gl x,gl y)) os)
+    CncCat mc mf mp       -> CncCat (fmap gl mc)  (fmap gl mf) (fmap gl mp)
+    CncFun m mt md        -> CncFun m (fmap gl mt) (fmap gl md)
+    AnyInd b m            -> AnyInd b m
+  where
+    gl (L loc0 x) = loc `seq` L (External fpath loc) x
+      where
+        loc = case loc0 of
+                External _ loc -> loc
+                loc            -> loc
+
 unifyAnyInfo :: Ident -> Info -> Info -> Err Info
 unifyAnyInfo m i j = case (i,j) of
   (AbsCat mc1, AbsCat mc2) -> 
@@ -173,9 +192,9 @@ unifyAnyInfo m i j = case (i,j) of
     liftM4 AbsFun (unifMaybeL mt1 mt2) (unifAbsArrity ma1 ma2) (unifAbsDefs md1 md2) (unifMaybe moper1 moper2) -- adding defs
 
   (ResParam mt1 mv1, ResParam mt2 mv2) ->
-    liftM2 ResParam (unifMaybe mt1 mt2) (unifMaybe mv1 mv2)
-  (ResValue t1, ResValue t2) 
-      | t1==t2    -> return (ResValue t1)
+    liftM2 ResParam (unifMaybeL mt1 mt2) (unifMaybe mv1 mv2)
+  (ResValue (L l1 t1), ResValue (L l2 t2)) 
+      | t1==t2    -> return (ResValue (L l1 t1))
       | otherwise -> fail ""
   (_, ResOverload ms t) | elem m ms ->
     return $ ResOverload ms t
