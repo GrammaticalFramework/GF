@@ -1,6 +1,6 @@
 
 Editor improvements for example-based grammar writing:
-- Remove the same language from the example language menu
++ Remove the same language from the example language menu
 - Send the other language environment to getNext
 - Compile a new .pgf automatically when needed
 - Update buttons automatically when functions are added or removed
