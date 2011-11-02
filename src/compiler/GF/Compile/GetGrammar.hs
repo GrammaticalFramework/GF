@@ -12,12 +12,11 @@
 -- this module builds the internal GF grammar that is sent to the type checker
 -----------------------------------------------------------------------------
 
-module GF.Compile.GetGrammar (getSourceModule, addOptionsToModule) where
+module GF.Compile.GetGrammar (getSourceModule) where
 
 import GF.Data.Operations
 
 import GF.Infra.UseIO
-import GF.Infra.Modules
 import GF.Infra.Option
 import GF.Grammar.Lexer
 import GF.Grammar.Parser
@@ -40,15 +39,9 @@ getSourceModule opts file0 = ioe $
          Left (Pn l c,msg) -> do file <- writeTemp tmp
                                  let location = file++":"++show l++":"++show c
                                  return (Bad (location++": "++msg))
-         Right mo          -> do removeTemp tmp
-                                 return (Ok (addOptionsToModule opts (setSrcPath file0 mo)))
+         Right (i,mi)      -> do removeTemp tmp
+                                 return (Ok (i,mi{mflags=mflags mi `addOptions` opts, msrc=file0}))
   `catch` (return . Bad . show)
-
-setSrcPath :: FilePath -> SourceModule -> SourceModule
-setSrcPath fpath = mapSourceModule (\m -> m{msrc=fpath})
-
-addOptionsToModule :: Options -> SourceModule -> SourceModule
-addOptionsToModule opts = mapSourceModule (\m -> m { flags = flags m `addOptions` opts })
 
 runPreprocessor :: Temporary -> String -> IO Temporary
 runPreprocessor tmp0 p =

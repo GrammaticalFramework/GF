@@ -18,7 +18,6 @@ import GF.Data.Operations
 import GF.Grammar.Grammar
 import GF.Infra.Ident
 import GF.Infra.Option
-import GF.Infra.Modules
 import GF.Data.Str
 import GF.Grammar.ShowTerm
 import GF.Grammar.Printer

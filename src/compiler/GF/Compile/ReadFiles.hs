@@ -26,7 +26,6 @@ module GF.Compile.ReadFiles
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Infra.Ident
-import GF.Infra.Modules
 import GF.Data.Operations
 import GF.Grammar.Lexer
 import GF.Grammar.Parser
@@ -169,10 +168,10 @@ importsOfModule (m,mi) = (modName m,depModInfo mi [])
   where
     depModInfo mi =
       depModType (mtype mi)  .
-      depExtends (extend mi) .
+      depExtends (mextend mi) .
       depWith    (mwith mi)  .
       depExDeps  (mexdeps mi).
-      depOpens   (opens mi)
+      depOpens   (mopens mi)
 
     depModType (MTAbstract)       xs = xs
     depModType (MTResource)       xs = xs

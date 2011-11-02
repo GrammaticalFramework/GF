@@ -31,7 +31,6 @@ module GF.Compile.Rename (
 import GF.Grammar.Grammar
 import GF.Grammar.Values
 import GF.Grammar.Predef
-import GF.Infra.Modules
 import GF.Infra.Ident
 import GF.Infra.CheckM
 import GF.Grammar.Macros
@@ -63,7 +62,7 @@ renameModule :: [SourceModule] -> SourceModule -> Check SourceModule
 renameModule ms mo@(m,mi) = checkIn (text "renaming module" <+> ppIdent m) $ do
   status <- buildStatus (mGrammar ms) m mi
   js     <- checkMap (renameInfo status mo) (jments mi)
-  return (m, mi{opens = map forceQualif (opens mi), jments = js})
+  return (m, mi{mopens = map forceQualif (mopens mi), jments = js})
 
 type Status = (StatusTree, [(OpenSpec, StatusTree)])
 
@@ -129,7 +128,7 @@ tree2status o = case o of
 buildStatus :: SourceGrammar -> Ident -> SourceModInfo -> Check Status
 buildStatus gr c mo = let mo' = self2status c mo in do
     let gr1 = prependModule gr (c,mo)
-        ops = [OSimple e | e <- allExtends gr1 c] ++ opens mo
+        ops = [OSimple e | e <- allExtends gr1 c] ++ mopens mo
     mods <- checkErr $ mapM (lookupModule gr1 . openedModule) ops
     let sts = map modInfo2status $ zip ops mods    
     return $ if isModCnc mo

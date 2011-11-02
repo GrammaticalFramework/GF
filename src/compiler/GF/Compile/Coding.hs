@@ -3,7 +3,6 @@ module GF.Compile.Coding where
 import GF.Grammar.Grammar
 import GF.Grammar.Macros
 import GF.Text.Coding
-import GF.Infra.Modules
 import GF.Infra.Option
 import GF.Data.Operations
 
@@ -18,7 +17,7 @@ decodeStringsInModule :: TextEncoding -> SourceModule -> SourceModule
 decodeStringsInModule enc mo = codeSourceModule (decodeUnicode enc . BS.pack) mo
 
 codeSourceModule :: (String -> String) -> SourceModule -> SourceModule
-codeSourceModule co (id,mo) = (id,replaceJudgements mo (mapTree codj (jments mo)))
+codeSourceModule co (id,mo) = (id,mo{jments = mapTree codj (jments mo)})
  where
     codj (c,info) = case info of
       ResOper     pty pt  -> ResOper (codeLTerms co pty) (codeLTerms co pt) 

@@ -18,7 +18,6 @@ import GF.Infra.Ident
 import GF.Grammar.Grammar
 import GF.Grammar.Printer
 import GF.Grammar.Lookup
-import GF.Infra.Modules
 import GF.Infra.Option
 
 import GF.Data.Operations
@@ -50,7 +49,7 @@ extendModule gr (name,m)
   ---- compiled anyway), extensions are not built for them.
   ---- Should be replaced by real control. AR 4/2/2005
   | mstatus m == MSIncomplete && isModCnc m = return (name,m)
-  | otherwise                               = do m' <- foldM extOne m (extend m) 
+  | otherwise                               = do m' <- foldM extOne m (mextend m) 
                                                  return (name,m')
  where
    extOne mo (n,cond) = do
@@ -69,7 +68,7 @@ extendModule gr (name,m)
      return $ 
           if isCompl
             then mo {jments = js1}
-            else mo {extend = filter ((/=n) . fst) (extend mo)
+            else mo {mextend= filter ((/=n) . fst) (mextend mo)
                     ,mexdeps= nub (n : mexdeps mo)
                     ,jments = js1
                     }
@@ -95,12 +94,12 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ src_ js_)) = do
           js' <- extendMod gr False ((i0,m1), isInherited mincl) i (jments mi)
           --- to avoid double inclusions, in instance I of I0 = J0 ** ...
           case extends mi of
-            []  -> return $ replaceJudgements mi js'
+            []  -> return mi{jments=js'}
             j0s -> do
                 m0s <- mapM (lookupModule gr) j0s
                 let notInM0 c _  = all (not . isInBinTree c . jments) m0s
                 let js2 = filterBinTree notInM0 js'
-                return $ replaceJudgements mi js2
+                return mi{jments=js2}
         _ -> return mi
 
     -- add the instance opens to an incomplete module "with" instances

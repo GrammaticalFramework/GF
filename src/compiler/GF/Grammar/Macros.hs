@@ -21,7 +21,6 @@ module GF.Grammar.Macros where
 import GF.Data.Operations
 import GF.Data.Str
 import GF.Infra.Ident
-import GF.Infra.Modules
 import GF.Grammar.Grammar
 import GF.Grammar.Values
 import GF.Grammar.Predef

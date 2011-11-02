@@ -20,7 +20,6 @@ import GF.Grammar.Binary
 
 import GF.Infra.Ident
 import GF.Infra.Option
-import GF.Infra.Modules
 import GF.Infra.UseIO
 import GF.Infra.CheckM
 
@@ -139,7 +138,7 @@ compileOne opts env@(_,srcgr,_) file = do
     -- also undo common subexp optimization, to enable normal computations
     ".gfo" -> do
        sm00 <- putPointE Verbose opts ("+ reading" +++ file) $ ioeIO (decodeFile file)
-       let sm0 = addOptionsToModule opts sm00
+       let sm0 = (fst sm00, (snd sm00) {mflags = mflags (snd sm00) `addOptions` opts})
 
        intermOut opts DumpSource (ppModule Qualified sm0)
 
@@ -159,7 +158,7 @@ compileOne opts env@(_,srcgr,_) file = do
 
        sm00 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
                                            getSourceModule opts file
-       enc <- ioeIO $ mkTextEncoding (renameEncoding (flag optEncoding (flagsModule sm00)))
+       enc <- ioeIO $ mkTextEncoding (renameEncoding (flag optEncoding (mflags (snd sm00))))
        let sm = decodeStringsInModule enc sm00
 
        intermOut opts DumpSource (ppModule Qualified sm)
@@ -229,7 +228,7 @@ generateModuleCode opts file minfo = do
 --reverseModules (MGrammar ms) = MGrammar $ reverse ms
 
 emptyCompileEnv :: CompileEnv
-emptyCompileEnv = (0,emptyMGrammar,Map.empty)
+emptyCompileEnv = (0,emptySourceGrammar,Map.empty)
 
 extendCompileEnvInt (_,gr,menv) k mfile sm = do
   let (mod,imps) = importsOfModule sm

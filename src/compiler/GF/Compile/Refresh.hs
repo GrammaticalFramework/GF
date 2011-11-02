@@ -19,7 +19,6 @@ module GF.Compile.Refresh (refreshTerm, refreshTermN,
 import GF.Data.Operations
 import GF.Grammar.Grammar
 import GF.Infra.Ident
-import GF.Infra.Modules
 import GF.Grammar.Macros
 import Control.Monad
 
@@ -114,7 +113,7 @@ refreshModule :: (Int,[SourceModule]) -> SourceModule -> Err (Int,[SourceModule]
 refreshModule (k,ms) mi@(i,mo)
   | isModCnc mo || isModRes mo = do
       (k',js') <- foldM refreshRes (k,[]) $ tree2list $ jments mo
-      return (k', (i, replaceJudgements mo (buildTree js')) : ms)
+      return (k', (i,mo{jments=buildTree js'}) : ms)
   | otherwise = return (k, mi:ms)
  where
   refreshRes (k,cs) ci@(c,info) = case info of

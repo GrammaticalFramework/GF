@@ -17,7 +17,6 @@ import PGF.Data hiding (Type)
 
 import GF.Infra.Option
 import GF.Grammar hiding (Env, mkRecord, mkTable)
-import qualified GF.Infra.Modules as M
 import GF.Grammar.Lookup
 import GF.Grammar.Predef
 import GF.Data.BacktrackM
@@ -53,21 +52,21 @@ convertConcrete opts0 gr am cm = do
   where
     (m,mo) = cm
     
-    opts = addOptions (M.flags (snd am)) opts0
+    opts = addOptions (mflags (snd am)) opts0
 
     pflindefs = [
       ((m,id),term,lincat) |
-        (id,GF.Grammar.CncCat (Just (L _ lincat)) (Just (L _ term)) _) <- Map.toList (M.jments mo)]
+        (id,GF.Grammar.CncCat (Just (L _ lincat)) (Just (L _ term)) _) <- Map.toList (jments mo)]
 
     pfrules = [
       (PFRule id args ([],res) (map (\(_,_,ty) -> ty) cont) val term) |
-        (id,GF.Grammar.CncFun (Just (cat,cont,val)) (Just (L _ term)) _) <- Map.toList (M.jments mo),
+        (id,GF.Grammar.CncFun (Just (cat,cont,val)) (Just (L _ term)) _) <- Map.toList (jments mo),
         let (ctxt,res,_) = err error typeForm (lookupFunType gr (fst am) id)
             args         = [catSkeleton ty | (_,_,ty) <- ctxt]]
 
-    flags   = Map.fromList [(mkCId f,LStr x) | (f,x) <- optionsPGF (M.flags mo)]
+    flags = Map.fromList [(mkCId f,LStr x) | (f,x) <- optionsPGF (mflags mo)]
 
-    printnames = Map.fromAscList [(i2i id, name) | (id,info) <- Map.toList (M.jments mo), name <- prn info]
+    printnames = Map.fromAscList [(i2i id, name) | (id,info) <- Map.toList (jments mo), name <- prn info]
       where
         prn (GF.Grammar.CncFun _ _ (Just (L _ tr))) = [flatten tr]
         prn (GF.Grammar.CncCat _ _ (Just (L _ tr))) = [flatten tr]
@@ -519,7 +518,7 @@ emptyGrammarEnv gr (m,mo) =
     lincats =
       Map.insert cVar (Sort cStr) $
       Map.fromAscList 
-        [(c, ty) | (c,GF.Grammar.CncCat (Just (L _ ty)) _ _) <- Map.toList (M.jments mo)]
+        [(c, ty) | (c,GF.Grammar.CncCat (Just (L _ ty)) _ _) <- Map.toList (jments mo)]
 
 addApplication :: GrammarEnv -> FId -> (FunId,[FId]) -> GrammarEnv
 addApplication (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) fid p =

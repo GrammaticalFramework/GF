@@ -16,7 +16,6 @@ import qualified GF.Grammar.Lookup as Look
 import qualified GF.Grammar as A
 import qualified GF.Grammar.Macros as GM
 --import qualified GF.Compile.Compute.Concrete as Compute ---- 
-import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
 import GF.Infra.Ident
@@ -40,7 +39,7 @@ traceD s t = t
 mkCanon2pgf :: Options -> Ident -> SourceGrammar -> IO D.PGF
 mkCanon2pgf opts cnc gr = (canon2pgf opts gr . reorder abs) gr
   where
-    abs = err (const cnc) id $ M.abstractOfConcrete gr cnc
+    abs = err (const cnc) id $ abstractOfConcrete gr cnc
 
 -- Generate PGF from grammar.
 
@@ -58,17 +57,17 @@ canon2pgf opts gr (am,cms) = do
   where
     mkAbstr (a,abm) = return (i2i a, D.Abstr flags funs cats)
       where
-        flags = Map.fromList [(mkCId f,C.LStr x) | (f,x) <- optionsPGF (M.flags abm)]
+        flags = Map.fromList [(mkCId f,C.LStr x) | (f,x) <- optionsPGF (mflags abm)]
         
         funs = Map.fromAscList [(i2i f, (mkType [] ty, mkArrity ma, mkDef pty, 0)) | 
-                                   (f,AbsFun (Just (L _ ty)) ma pty _) <- Map.toAscList (M.jments abm)]
+                                   (f,AbsFun (Just (L _ ty)) ma pty _) <- Map.toAscList (jments abm)]
                                    
         cats = Map.fromAscList [(i2i c, (snd (mkContext [] cont),catfuns c)) |
-                                   (c,AbsCat (Just (L _ cont))) <- Map.toAscList (M.jments abm)]
+                                   (c,AbsCat (Just (L _ cont))) <- Map.toAscList (jments abm)]
 
         catfuns cat =
               (map (\x -> (0,snd x)) . sortBy (compare `on` fst))
-                 [(loc,i2i f) | (f,AbsFun (Just (L loc ty)) _ _ (Just True)) <- tree2list (M.jments abm), snd (GM.valCat ty) == cat]
+                 [(loc,i2i f) | (f,AbsFun (Just (L loc ty)) _ _ (Just True)) <- tree2list (jments abm), snd (GM.valCat ty) == cat]
 
     mkConcr am cm@(lang,mo) = do
       cnc <- convertConcrete opts gr am cm
@@ -154,12 +153,12 @@ compilePatt eqs        = whilePP eqs Map.empty
 reorder :: Ident -> SourceGrammar -> AbsConcsGrammar
 reorder abs cg =
 --  M.MGrammar $
-       ((abs, M.ModInfo M.MTAbstract       M.MSComplete aflags [] Nothing [] [] "" adefs),
-      [(cnc, M.ModInfo (M.MTConcrete abs) M.MSComplete cflags [] Nothing [] [] "" cdefs)
-            | cnc <- M.allConcretes cg abs, let (cflags,cdefs) = concr cnc])
+       ((abs, ModInfo MTAbstract       MSComplete aflags [] Nothing [] [] "" adefs),
+      [(cnc, ModInfo (MTConcrete abs) MSComplete cflags [] Nothing [] [] "" cdefs)
+            | cnc <- allConcretes cg abs, let (cflags,cdefs) = concr cnc])
   where
     aflags = 
-      concatOptions (reverse [M.flags mo | (_,mo) <- M.modules cg, M.isModAbs mo])
+      concatOptions (reverse [mflags mo | (_,mo) <- modules cg, isModAbs mo])
 
     adefs = 
       Map.fromList (predefADefs ++ Look.allOrigInfos cg abs)
@@ -169,8 +168,8 @@ reorder abs cg =
 
     concr la = (flags, Map.fromList (predefCDefs ++ jments))
       where 
-        flags  = concatOptions [M.flags mo | (i,mo) <- M.modules cg, M.isModCnc mo, 
-                                                Just r <- [lookup i (M.allExtendSpecs cg la)]]
+        flags  = concatOptions [mflags mo | (i,mo) <- modules cg, isModCnc mo, 
+                                                Just r <- [lookup i (allExtendSpecs cg la)]]
         jments = Look.allOrigInfos cg la
         predefCDefs = 
            [(c, CncCat (Just (L NoLoc GM.defLinType)) Nothing Nothing) | c <- [cInt,cFloat,cString]]

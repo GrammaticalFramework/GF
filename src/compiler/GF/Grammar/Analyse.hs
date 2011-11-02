@@ -11,7 +11,6 @@ module GF.Grammar.Analyse (
 import GF.Grammar.Grammar
 import GF.Infra.Ident
 import GF.Infra.Option ---
-import GF.Infra.Modules
 import GF.Grammar.Macros
 import GF.Grammar.Lookup
 

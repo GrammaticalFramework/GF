@@ -9,7 +9,6 @@ module GF.Grammar.Parser
          ) where
 
 import GF.Infra.Ident
-import GF.Infra.Modules
 import GF.Infra.Option
 import GF.Data.Operations
 import GF.Grammar.Predef

@@ -1,7 +1,6 @@
 module GFTags where
 
 import GF.Infra.Option
-import GF.Infra.Modules
 import GF.Infra.UseIO
 import GF.Grammar
 import GF.Compile

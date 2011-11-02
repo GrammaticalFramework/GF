@@ -11,7 +11,6 @@ import GF.Data.Str (sstrV)
 import GF.Data.Utilities
 import GF.Data.XML
 import GF.Infra.Ident
-import GF.Infra.Modules
 import PGF
 import PGF.Data
 import PGF.Macros
