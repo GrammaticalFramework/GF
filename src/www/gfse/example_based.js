@@ -51,8 +51,8 @@ function ask_possibilities(g,ci) {
 	if(!conc.example_lang) conc.example_lang=g.concretes[0].langcode;
 	reload_grammar(g);
     }
-    
-    exb_call(g,ci,"possibilities",{},show_poss)
+    var exci=conc_index(g,conc.example_lang);
+    exb_call(g,ci,"possibilities",{example_state:exb_state(g,exci)},show_poss)
 }
 
 var parser = { Eng: "ParseEngAbs.pgf",

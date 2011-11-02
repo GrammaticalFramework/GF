@@ -22,11 +22,15 @@ cgiMain' root cwd cache =
   do command <- getInp "command"
      environ <- parseEnviron =<< getInp "state"
      case command of
-       "possibilities" -> outputJSONP (E.getNext environ)
-       "provide_example" ->  doProvideExample root cwd cache environ
+       "possibilities"    -> doPossibilities environ
+       "provide_example"  -> doProvideExample root cwd cache environ
        "abstract_example" -> doAbstractExample cwd cache environ
-       "test_function" -> doTestFunction cwd cache environ
+       "test_function"    -> doTestFunction cwd cache environ
        _ -> throwCGIError 400 ("Unknown command: "++command) []
+
+doPossibilities environ =
+  do example_environ <- parseEnviron =<< getInp "example_state"
+     outputJSONP (E.getNext environ example_environ)
 
 doProvideExample root cwd cache environ =
   do Just lang <- readInput "lang"

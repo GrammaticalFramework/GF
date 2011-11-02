@@ -42,8 +42,8 @@ data Environ = Env {getTypeMap :: TypeMap,                  -- mapping between a
                     }
 
 
-getNext :: Environ -> ([MyFunc],[MyFunc])
-getNext env = 
+getNext :: Environ -> Environ -> ([MyFunc],[MyFunc])
+getNext env example_env = 
   let sgs = getSigs env
       allfuncs  = getAll env
       names = Set.fromList $ map getName $ concat $ Map.elems sgs

@@ -14,17 +14,28 @@ function defined_funs(g) {
     return df;
 }
 
+// Return the type of a named function in the abstract syntax
 function function_type(g,fun) {
     with(g.abstract)
 	for(var i in funs) if(funs[i].name==fun) return funs[i].type
     return null;
 }
 
+// Return the lincat defined in a given concrete syntax for an abstract category
 function cat_lincat(conc,cat) {
     with(conc)
 	for(var i in lincats) if(lincats[i].cat==cat) return lincats[i].type
     return null;
 }
+
+// Return the index of the concrete syntax with a given langcode
+function conc_index(g,langcode) {
+    var c=g.concretes;
+    for(var ix=0;ix<c.length;ix++)
+	if(c[ix].langcode==langcode) return ix
+    return null;
+}
+
 
 function rename_category(g,oldcat,newcat) {
     function rename_cats(cats) {
