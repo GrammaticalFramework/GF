@@ -17,7 +17,7 @@ mainTags opts files = do
   ioeIO (writeFile "tags" (unlines ((Set.toList . Set.fromList) tags)))
 
 getTags x (m,mi) = 
-  [showIdent i ++ "\t" ++ k ++ "\t" ++ l ++ "\t" ++ t 
+  [showIdent m ++ "." ++ showIdent i ++ "\t" ++ k ++ "\t" ++ l ++ "\t" ++ t 
        | (i,jment) <- Map.toList (jments mi),
          (k,l,t)   <- getLocations jment] ++ x
   where
