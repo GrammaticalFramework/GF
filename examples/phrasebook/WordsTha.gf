@@ -1,151 +1,150 @@
---2 Implementations of Words, with English as example
-
 concrete WordsTha of Words = SentencesTha ** 
     open 
---      SyntaxTha, 
---      ParadigmsTha, 
---      (L = LexiconTha), 
---      (P = ParadigmsTha), 
---      IrregTha, 
---      ExtraTha, 
+      (R = ResTha),
+      (S = StringsTha),
       Prelude in {
---  lin
+
+  flags coding = utf8 ;
+
+  lin
 
 -- Kinds; many of them are in the resource lexicon, others can be built by $mkN$.
 
 --    Apple = mkCN L.apple_N ;
---    Beer = mkCN L.beer_N ;
+    Beer = ss S.biar_s ;
 --    Bread = mkCN L.bread_N ;
---    Cheese = mkCN (mkN "cheese") ;
---    Chicken = mkCN (mkN "chicken") ;
---    Coffee = mkCN (mkN "coffee") ;
+--    Cheese = mkCN (mkN "จหเเสเ") ;
+--    Chicken = mkCN (mkN "จหิจกเน") ;
+--    Coffee = mkCN (mkN "จoฝฝเเ") ;
 --    Fish = mkCN L.fish_N ;
---    Meat = mkCN (mkN "meat") ;
+--    Meat = mkCN (mkN "มเัต") ;
 --    Milk = mkCN L.milk_N ;
---    Pizza = mkCN (mkN "pizza") ;
+--    Pizza = mkCN (mkN "ปิzzั") ;
 --    Salt = mkCN L.salt_N ;
---    Tea = mkCN (mkN "tea") ;
+--    Tea = mkCN (mkN "ตเั") ;
 --    Water = mkCN L.water_N ;
 --    Wine = mkCN L.wine_N ;
 
 -- Properties; many of them are in the resource lexicon, others can be built by $mkA$.
 
 --    Bad = L.bad_A ;
---    Boring = mkA "boring" ;
---    Cheap = mkA "cheap" ;
+--    Boring = mkA "บoรินง" ;
+--    Cheap = mkA "จหเัป" ;
 --    Cold = L.cold_A ;
---    Delicious = mkA "delicious" ;
---    Expensive = mkA "expensive" ;
---    Fresh = mkA "fresh" ;
---    Good = L.good_A ;
---    Suspect = mkA "suspect" ;
+    Delicious = ss "อร่อย" ;
+    Expensive = ss "แพง" ;
+--    Fresh = mkA "ฝรเสห" ;
+    Good = ss "ดี" ;
+--    Suspect = mkA "สุสปเจต" ;
 --    Warm = L.warm_A ;
 
 -- Places require different prepositions to express location; in some languages 
 -- also the directional preposition varies, but in English we use $to$, as
 -- defined by $mkPlace$.
 
---    Airport = mkPlace "airport" "at" ;
---    AmusementPark = mkCompoundPlace "amusement" "park" "at" ;
---    Bank = mkPlace "bank" "at" ;
---    Bar = mkPlace "bar" "in" ;
---    Cafeteria = mkPlace "canteen" "in" ;
---    Center = mkPlace "center" "in" ;
---    Cinema = mkPlace "cinema" "at" ;
---    Church = mkPlace "church" "in" ;
---    Disco = mkPlace "disco" "at" ;
---    Hospital = mkPlace "hospital" "in" ;
---    Hotel = mkPlace "hotel" "in" ;
---    Museum = mkPlace "museum" "at" ;
---    Park = mkPlace "park" "in" ;
---    Parking = mkCompoundPlace "car" "park" "in" ; 
---    Pharmacy = mkPlace "pharmacy" "at" ;
---    PostOffice = mkCompoundPlace "post" "office" "at" ;
---    Pub = mkPlace "pub" "at" ;
---    Restaurant = mkPlace "restaurant" "in" ;
---    School = mkPlace "school" "at" ;
---    Shop = mkPlace "shop" "at" ;
---    Station = mkPlace "station" "at" ;
---    Supermarket = mkPlace "supermarket" "at" ; 
---    Theatre = mkPlace "theatre" "at" ;
---    Toilet = mkPlace "toilet" "in" ;
---    University = mkPlace "university" "at" ;
---    Zoo = mkPlace "zoo" "at" ;
+--    Airport = mkPlace "ัิรปoรต" "ัต" ;
+--    AmusementPark = mkCompoundPlace "ัมุสเมเนต" "ปัรก" "ัต" ;
+--    Bank = mkPlace "บันก" "ัต" ;
+--    Bar = mkPlace "บัร" "ิน" ;
+--    Cafeteria = mkPlace "จันตเเน" "ิน" ;
+--    Center = mkPlace "จเนตเร" "ิน" ;
+--    Cinema = mkPlace "จินเมั" "ัต" ;
+--    Church = mkPlace "จหุรจห" "ิน" ;
+--    Disco = mkPlace "ดิสจo" "ัต" ;
+--    Hospital = mkPlace "หoสปิตัล" "ิน" ;
+--    Hotel = mkPlace "หoตเล" "ิน" ;
+--    Museum = mkPlace "มุสเุม" "ัต" ;
+--    Park = mkPlace "ปัรก" "ิน" ;
+--    Parking = mkCompoundPlace "จัร" "ปัรก" "ิน" ; 
+--    Pharmacy = mkPlace "ปหัรมัจย" "ัต" ;
+--    PostOffice = mkCompoundPlace "ปoสต" "oฝฝิจเ" "ัต" ;
+--    Pub = mkPlace "ปุบ" "ัต" ;
+--    Restaurant = mkPlace "รเสตัุรันต" "ิน" ;
+--    School = mkPlace "สจหooล" "ัต" ;
+--    Shop = mkPlace "สหoป" "ัต" ;
+--    Station = mkPlace "สตัติoน" "ัต" ;
+--    Supermarket = mkPlace "สุปเรมัรกเต" "ัต" ; 
+--    Theatre = mkPlace "ตหเัตรเ" "ัต" ;
+--    Toilet = mkPlace "ตoิลเต" "ิน" ;
+--    University = mkPlace "ุนิึเรสิตย" "ัต" ;
+--    Zoo = mkPlace "zoo" "ัต" ;
    
---    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "restaurant")) in_Prep to_Prep ;
+--    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "รเสตัุรันต")) in_Prep to_Prep ;
 
 
 -- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
 
---    DanishCrown = mkCN (mkA "Danish") (mkN "crown") | mkCN (mkN "crown") ;
---    Dollar = mkCN (mkN "dollar") ;
---    Euro = mkCN (mkN "euro" "euros") ; -- to prevent euroes
---    Lei = mkCN (mkN "leu" "lei") ;
---    Leva = mkCN (mkN "lev") ;
---    NorwegianCrown = mkCN (mkA "Norwegian") (mkN "crown") | mkCN (mkN "crown") ;
---    Pound = mkCN (mkN "pound") ;
---    Rouble = mkCN (mkN "rouble") ;
---    SwedishCrown = mkCN (mkA "Swedish") (mkN "crown") | mkCN (mkN "crown") ;
---    Zloty = mkCN (mkN "zloty" "zloty") ;
+--    DanishCrown = mkCN (mkA "Dันิสห") (mkN "จรoวน") | mkCN (mkN "จรoวน") ;
+--    Dollar = mkCN (mkN "ดoลลัร") ;
+--    Euro = mkCN (mkN "เุรo" "เุรoส") ; -- to prevent euroes
+--    Lei = mkCN (mkN "ลเุ" "ลเิ") ;
+--    Leva = mkCN (mkN "ลเึ") ;
+--    NorwegianCrown = mkCN (mkA "Noรวเงิัน") (mkN "จรoวน") | mkCN (mkN "จรoวน") ;
+--    Pound = mkCN (mkN "ปoุนด") ;
+--    Rouble = mkCN (mkN "รoุบลเ") ;
+--    SwedishCrown = mkCN (mkA "็วเดิสห") (mkN "จรoวน") | mkCN (mkN "จรoวน") ;
+--    Zloty = mkCN (mkN "zลoตย" "zลoตย") ;
 
 -- Nationalities
 
---    Belgian = mkA "Belgian" ;
---    Belgium = mkNP (mkPN "Belgium") ;
---    Bulgarian = mkNat "Bulgarian" "Bulgaria" ;
---    Catalan = mkNPNationality (mkNP (mkPN "Catalan")) (mkNP (mkPN "Catalonia")) (mkA "Catalonian") ;
---    Danish = mkNat "Danish" "Denmark" ;
---    Dutch =  mkNPNationality (mkNP (mkPN "Dutch")) (mkNP the_Quant (mkN "Netherlands")) (mkA "Dutch") ;
---    English = mkNat "English" "England" ;
---    Finnish = mkNat "Finnish" "Finland" ;
---    Flemish = mkNP (mkPN "Flemish") ;
---    French = mkNat "French" "France" ; 
---    German = mkNat "German" "Germany" ;
---    Italian = mkNat "Italian" "Italy" ;
---    Norwegian = mkNat "Norwegian" "Norway" ;
---    Polish = mkNat "Polish" "Poland" ;
---    Romanian = mkNat "Romanian" "Romania" ;
---    Russian = mkNat "Russian" "Russia" ;
---    Spanish = mkNat "Spanish" "Spain" ;
---    Swedish = mkNat "Swedish" "Sweden" ;
+--    Belgian = mkA "Bเลงิัน" ;
+--    Belgium = mkNP (mkPN "Bเลงิุม") ;
+--    Bulgarian = mkNat "Bุลงัริัน" "Bุลงัริั" ;
+--    Catalan = mkNPNationality (mkNP (mkPN "Cัตัลัน")) (mkNP (mkPN "Cัตัลoนิั")) (mkA "Cัตัลoนิัน") ;
+--    Danish = mkNat "Dันิสห" "Dเนมัรก" ;
+--    Dutch =  mkNPNationality (mkNP (mkPN "Dุตจห")) (mkNP the_Quant (mkN "Nเตหเรลันดส")) (mkA "Dุตจห") ;
+--    English = mkNat "Eนงลิสห" "Eนงลันด" ;
+--    Finnish = mkNat "Fินนิสห" "Fินลันด" ;
+--    Flemish = mkNP (mkPN "Fลเมิสห") ;
+--    French = mkNat "Fรเนจห" "Fรันจเ" ; 
+--    German = mkNat "Gเรมัน" "Gเรมันย" ;
+--    Italian = mkNat "Iตัลิัน" "Iตัลย" ;
+--    Norwegian = mkNat "Noรวเงิัน" "Noรวัย" ;
+--    Polish = mkNat "Poลิสห" "Poลันด" ;
+--    Romanian = mkNat "ๆoมันิัน" "ๆoมันิั" ;
+--    Russian = mkNat "ๆุสสิัน" "ๆุสสิั" ;
+--    Spanish = mkNat "็ปันิสห" "็ปัิน" ;
+--    Swedish = mkNat "็วเดิสห" "็วเดเน" ;
 
 -- Means of transportation 
 
 --   Bike = mkTransport L.bike_N ;
---   Bus = mkTransport (mkN "bus") ;
+--   Bus = mkTransport (mkN "บุส") ;
 --   Car = mkTransport L.car_N ;
---   Ferry = mkTransport (mkN "ferry") ;
+--   Ferry = mkTransport (mkN "ฝเรรย") ;
 --   Plane = mkTransport L.airplane_N ;
---   Subway = mkTransport (mkN "subway") ;
---   Taxi = mkTransport (mkN "taxi") ;
---   Train = mkTransport (mkN "train") ;
---   Tram = mkTransport (mkN "tram") ;
+--   Subway = mkTransport (mkN "สุบวัย") ;
+--   Taxi = mkTransport (mkN "ตัxิ") ;
+--   Train = mkTransport (mkN "ตรัิน") ;
+--   Tram = mkTransport (mkN "ตรัม") ;
 
---   ByFoot = P.mkAdv "by foot" ;
+--   ByFoot = P.mkAdv "บย ฝooต" ;
 
 -- Actions: the predication patterns are very often language-dependent.
 
---    AHasAge p num = mkCl p.name (mkNP (mkNP num L.year_N) (ParadigmsTha.mkAdv "old"));
---    AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
+--    AHasAge p num = mkCl p.name (mkNP (mkNP num L.year_N) (ParadigmsTha.mkAdv "oลด"));
+    AHasChildren p num = R.mkClause p 
+      (R.insertObj (R.mkVP (R.regV "มี")) 
+         (ss (R.thbind "ลูก" (num.s ++ S.khon_s)))) ; ---- bind num
 --    AHasRoom p num = mkCl p.name have_V2 
---      (mkNP (mkNP a_Det (mkN "room")) (SyntaxTha.mkAdv for_Prep (mkNP num (mkN "person")))) ;
+--      (mkNP (mkNP a_Det (mkN "รooม")) (SyntaxTha.mkAdv for_Prep (mkNP num (mkN "ปเรสoน")))) ;
 --    AHasTable p num = mkCl p.name have_V2 
---      (mkNP (mkNP a_Det (mkN "table")) (SyntaxTha.mkAdv for_Prep (mkNP num (mkN "person")))) ;
+--      (mkNP (mkNP a_Det (mkN "ตับลเ")) (SyntaxTha.mkAdv for_Prep (mkNP num (mkN "ปเรสoน")))) ;
 --    AHasName p name = mkCl (nameOf p) name ;
---    AHungry p = mkCl p.name (mkA "hungry") ;
---    AIll p = mkCl p.name (mkA "ill") ;
+--    AHungry p = mkCl p.name (mkA "หุนงรย") ;
+--    AIll p = mkCl p.name (mkA "ิลล") ;
 --    AKnow p = mkCl p.name IrregTha.know_V ;
---    ALike p item = mkCl p.name (mkV2 (mkV "like")) item ;
---    ALive p co = mkCl p.name (mkVP (mkVP (mkV "live")) (SyntaxTha.mkAdv in_Prep co)) ;
---    ALove p q = mkCl p.name (mkV2 (mkV "love")) q.name ;
---    AMarried p = mkCl p.name (mkA "married") ;
---    AReady p = mkCl p.name (mkA "ready") ;
---    AScared p = mkCl p.name (mkA "scared") ;
+--    ALike p item = mkCl p.name (mkV2 (mkV "ลิกเ")) item ;
+--    ALive p co = mkCl p.name (mkVP (mkVP (mkV "ลิึเ")) (SyntaxTha.mkAdv in_Prep co)) ;
+    ALove p q = R.mkClause p (R.insertObj (R.mkVP (R.regV "รัก")) q) ;
+--    AMarried p = mkCl p.name (mkA "มัรริเด") ;
+--    AReady p = mkCl p.name (mkA "รเัดย") ;
+--    AScared p = mkCl p.name (mkA "สจัรเด") ;
 --    ASpeak p lang = mkCl p.name  (mkV2 IrregTha.speak_V) lang ;
---    AThirsty p = mkCl p.name (mkA "thirsty") ;
---    ATired p = mkCl p.name (mkA "tired") ;
+--    AThirsty p = mkCl p.name (mkA "ตหิรสตย") ;
+--    ATired p = mkCl p.name (mkA "ติรเด") ;
 --    AUnderstand p = mkCl p.name IrregTha.understand_V ;
---    AWant p obj = mkCl p.name (mkV2 (mkV "want")) obj ;
+--    AWant p obj = mkCl p.name (mkV2 (mkV "วันต")) obj ;
 --    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP IrregTha.go_V) place.to) ;
 
 -- miscellaneous
@@ -165,41 +164,41 @@ concrete WordsTha of Words = SentencesTha **
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
---    PSeeYouDate d = mkText (lin Text (ss ("see you"))) (mkPhrase (mkUtt d)) ;
---    PSeeYouPlace p = mkText (lin Text (ss ("see you"))) (mkPhrase (mkUtt p.at)) ;
+--    PSeeYouDate d = mkText (lin Text (ss ("สเเ ยoุ"))) (mkPhrase (mkUtt d)) ;
+--    PSeeYouPlace p = mkText (lin Text (ss ("สเเ ยoุ"))) (mkPhrase (mkUtt p.at)) ;
 --    PSeeYouPlaceDate p d = 
---      mkText (lin Text (ss ("see you"))) 
+--      mkText (lin Text (ss ("สเเ ยoุ"))) 
 --        (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
 
--- Relations are expressed as "my wife" or "my son's wife", as defined by $xOf$
+-- Relations are expressed as "มย วิฝเ" or "มย สoณส วิฝเ", as defined by $xOf$
 -- below. Languages without productive genitives must use an equivalent of
--- "the wife of my son" for non-pronouns.
+-- "ตหเ วิฝเ oฝ มย สoน" for non-pronouns.
 
---    Wife = xOf sing (mkN "wife") ;
---    Husband = xOf sing (mkN "husband") ;
---    Son = xOf sing (mkN "son") ;
---    Daughter = xOf sing (mkN "daughter") ;
+    Wife = xOf "เมีย" ; ---- familiar
+    Husband = xOf "ผัว" ; ---- familiar
+    Son = xOf (R.thbind "ลูก จาย") ;
+    Daughter = xOf  (R.thbind "ลูก สาว") ;
 --    Children = xOf plur L.child_N ;
 
 -- week days
 
---    Monday = mkDay "Monday" ;
---    Tuesday = mkDay "Tuesday" ;
---    Wednesday = mkDay "Wednesday" ;
---    Thursday = mkDay "Thursday" ;
---    Friday = mkDay "Friday" ;
---    Saturday = mkDay "Saturday" ;
---    Sunday = mkDay "Sunday" ;
+--    Monday = mkDay "Moนดัย" ;
+--    Tuesday = mkDay "Tุเสดัย" ;
+--    Wednesday = mkDay "Wเดนเสดัย" ;
+--    Thursday = mkDay "Tหุรสดัย" ;
+--    Friday = mkDay "Fริดัย" ;
+--    Saturday = mkDay "็ัตุรดัย" ;
+--    Sunday = mkDay "็ุนดัย" ;
  
---    Tomorrow = P.mkAdv "tomorrow" ;
+--    Tomorrow = P.mkAdv "ตoมoรรoว" ;
 
 -- modifiers of places
 
 --    TheBest = mkSuperl L.good_A ;
 --    TheClosest = mkSuperl L.near_A ; 
---    TheCheapest = mkSuperl (mkA "cheap") ;
---    TheMostExpensive = mkSuperl (mkA "expensive") ;
---    TheMostPopular = mkSuperl (mkA "popular") ;
+--    TheCheapest = mkSuperl (mkA "จหเัป") ;
+--    TheMostExpensive = mkSuperl (mkA "เxปเนสิึเ") ;
+--    TheMostPopular = mkSuperl (mkA "ปoปุลัร") ;
 --    TheWorst = mkSuperl L.bad_A ;
 
 --    SuperlPlace sup p = placeNP sup p ;
@@ -224,7 +223,7 @@ concrete WordsTha of Words = SentencesTha **
 
 -- auxiliaries
 
---  oper
+  oper
 
 --    mkNat : Str -> Str -> NPNationality = \nat,co -> 
 --      mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
@@ -240,13 +239,13 @@ concrete WordsTha of Words = SentencesTha **
 --    mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i -> 
 --      mkCNPlace (mkCN (mkN p)) (P.mkPrep i) to_Prep ;
 
---    open_Adv = P.mkAdv "open" ;
---    closed_Adv = P.mkAdv "closed" ;
+--    open_Adv = P.mkAdv "oปเน" ;
+--    closed_Adv = P.mkAdv "จลoสเด" ;
 
---    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
---      relativePerson n (mkCN x) (\a,b,c -> mkNP (GenNP b) a c) p ;
+    xOf : Str -> R.NP -> R.NP = \x,p -> 
+      ss (R.thbind x "ของ" p.s) ;  ---- optional particle
 
---    nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "name") p).name ;
+--    nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "นัมเ") p).name ;
 
 
 --    mkTransport : N -> {name : CN ; by : Adv} = \n -> {
@@ -256,7 +255,7 @@ concrete WordsTha of Words = SentencesTha **
 
 --    mkSuperl : A -> Det = \a -> SyntaxTha.mkDet the_Art (SyntaxTha.mkOrd a) ;
     
---   far_IAdv = ExtraTha.IAdvAdv (ss "far") ;
+--   far_IAdv = ExtraTha.IAdvAdv (ss "ฝัร") ;
 
 --}
 }
