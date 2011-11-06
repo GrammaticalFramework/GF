@@ -1,4 +1,4 @@
-concrete NumeralTha of Numeral = CatTha ** open ResTha, StringsTha in {
+concrete NumeralTha of Numeral = CatTha ** open ResTha, StringsTha, Prelude in {
 
 lincat 
 --  Numeral    = {s : Str} ;
@@ -27,26 +27,26 @@ lin
 
   pot110 = {s = sip} ;
   pot111 = {s = table {
-    Unit => sip_s ++ et_s ;
-    Thousand => nvg_s ++ mvvn_s ++ nvg_s ++ phan_s
+    Unit => thbind sip_s et_s ;
+    Thousand => thbind nvg_s mvvn_s nvg_s phan_s
     }
   } ;
   pot1to19 d = {s = table {
-    Unit => sip_s ++ d.s ! After ; 
-    Thousand => nvg_s ++ mvvn_s ++ d.s ! Indep ++ phan_s
+    Unit => thbind sip_s (d.s ! After) ; 
+    Thousand => thbind nvg_s mvvn_s (d.s ! Indep) phan_s
     }
   } ;
-  pot0as1 d = {s = \\n => d.s ! Indep ++ phan ! n} ;
-  pot1 d = {s = \\n => d.s ! ModTen ++ sip ! n} ;
+  pot0as1 d = {s = \\n => thbind (d.s ! Indep) (phan ! n)} ;
+  pot1 d = {s = \\n => thbind (d.s ! ModTen) (sip ! n)} ;
   pot1plus d e = {
-    s = \\n => d.s ! ModTen ++ sip ! n ++ e.s ! After ++ phan ! n
+    s = \\n => thbind (d.s ! ModTen) (sip ! n) (e.s ! After) (phan ! n)
   } ;
   pot1as2 n = n ;
-  pot2 d = {s = \\n => d.s ! Indep ++ roy ! n} ;
-  pot2plus d e = {s = \\n => d.s ! Indep ++ roy ! n ++ e.s ! n} ;
+  pot2 d = {s = \\n => thbind (d.s ! Indep) (roy ! n)} ;
+  pot2plus d e = {s = \\n => thbind (d.s ! Indep) (roy ! n) (e.s ! n)} ;
   pot2as3 n = {s = n.s ! Unit} ;
   pot3 n = {s = n.s ! Thousand} ;
-  pot3plus n m = {s = n.s ! Thousand ++ m.s ! Unit} ;
+  pot3plus n m = {s = thbind (n.s ! Thousand) (m.s ! Unit)} ;
 
 param 
   DForm = Indep | ModTen | After ;

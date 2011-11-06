@@ -11,6 +11,22 @@ resource ResTha = ParamX ** open StringsTha, Prelude in {
 
   oper
 
+-- binding words together
+
+  thbind = overload {
+    thbind : Str -> Str = \s -> s ;
+    thbind : (s1,s2 : Str) -> Str = \s1,s2 -> s1 ++ BIND ++ s2 ;
+    thbind : (s1,_,s3 : Str) -> Str = \s1,s2,s3 -> s1 ++ BIND ++ s2 ++ BIND ++ s3 ;
+    thbind : (s1,_,_,s4 : Str) -> Str = 
+      \s1,s2,s3,s4 -> s1 ++ BIND ++ s2 ++ BIND ++ s3 ++ BIND ++ s4 ;
+    thbind : (s1,_,_,_,s5 : Str) -> Str = 
+      \s1,s2,s3,s4,s5 -> s1 ++ BIND ++ s2 ++ BIND ++ s3 ++ BIND ++ s4 ++ BIND ++ s5 ;
+    thbind : (s1,_,_,_,_,s6 : Str) -> Str = 
+      \s1,s2,s3,s4,s5,s6 -> 
+       s1 ++ BIND ++ s2 ++ BIND ++ s3 ++ BIND ++ s4 ++ BIND ++ s5 ++ BIND ++ s6 ;
+    } ;
+
+
 -- noun and classifier
 
     Noun = {s,c : Str} ;  
