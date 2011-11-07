@@ -1,5 +1,6 @@
 concrete SentencesTha of Sentences = NumeralTha ** open
-    ResTha,
+    (R = ResTha),
+    (S = StringsTha),
     Prelude
   in {
   lincat
@@ -7,23 +8,26 @@ concrete SentencesTha of Sentences = NumeralTha ** open
 --    Word = Text ;
 --    Message = Text ;
     Greeting = SS ;
+    Sentence = SS ;
+    Question = SS ;
+    Proposition = R.Clause ;
+    Item = SS ;
+    Kind = R.Noun ;
+
+    MassKind = SS ; --
+    Quality = R.Adj ;
+    Property = R.Adj ;
+    Object = R.NP ;
+    PrimObject = R.NP ;
 {-
-    Sentence = S ;
-    Question = QS ;
-    Proposition = Cl ;
-    Item = NP ;
-    Kind = CN ;
-    MassKind = CN ;
-    Quality = AP ;
-    Property = A ;
-    Object = NP ;
-    PrimObject = NP ;
     Place = NPPlace ; -- {name : NP ; at : Adv ; to : Adv} ;
     PlaceKind = CNPlace ; -- {name : CN ; at : Prep ; to : Prep} ;
     Currency = CN ;
     Price = NP ;
-    Action = Cl ;
-    Person = NPPerson ; -- {name : NP ; isPron : Bool ; poss : Quant} ;
+-}
+    Action = R.Clause ;
+    Person = R.NP ;
+{-
     Nationality = NPNationality ; -- {lang : NP ; country : NP ; prop : A} ; 
     Language = NP ;
     Citizenship = A ;
@@ -31,7 +35,9 @@ concrete SentencesTha of Sentences = NumeralTha ** open
     Day = NPDay ; -- {name : NP ; point : Adv ; habitual : Adv} ;
     Date = Adv ;
     Name = NP ;
-    Number = Card ;
+-}
+    Number = SS ;
+{-
     ByTransport = Adv ;
     Transport = {name : CN ; by : Adv} ;
     Superlative = Det ;
@@ -39,10 +45,10 @@ concrete SentencesTha of Sentences = NumeralTha ** open
   lin
     MPhrase p = p ;
 --    MContinue p m = mkText p m ;
-{-
-    PSentence s = mkText s | lin Text (mkUtt s) ;  -- optional '.'
-    PQuestion s = mkText s | lin Text (mkUtt s) ;  -- optional '?'
--}
+
+    PSentence s = s ;
+    PQuestion q = q ;
+
     PGreeting g = g ;
 
     PWord w = w ;
@@ -64,60 +70,71 @@ concrete SentencesTha of Sentences = NumeralTha ** open
     PDay d = mkPhrase (mkUtt d.name) ;
     PTransport t = mkPhrase (mkUtt t.name) ;
     PByTransport t = mkPhrase (mkUtt t) ;
+-}
+    PYes = ss S.chay_s ;
+    PNo = ss S.may_s ;
+    PYesToNo = ss S.chay_s ; ----
 
-    PYes = mkPhrase yes_Utt ;
-    PNo = mkPhrase no_Utt ;
-    PYesToNo = mkPhrase yes_Utt ;
+--    GObjectPlease o = lin Text (mkPhr noPConj (mkUtt o) please_Voc) ;
 
-    GObjectPlease o = lin Text (mkPhr noPConj (mkUtt o) please_Voc) ;
+    Is np q = R.mkClause np (R.adjVP q) ;
+    IsMass m q = R.mkClause m (R.adjVP q) ;
 
-    Is = mkCl ;
-    IsMass m q = mkCl (mkNP m) q ;
+    SProp p = ss (p.s ! R.ClDecl ! R.Pos) ;
+    SPropNot p = ss (p.s ! R.ClDecl ! R.Neg) ;
+    QProp p = ss (p.s ! R.ClQuest ! R.Pos) ;
 
-    SProp = mkS ;
-    SPropNot = mkS negativePol ;
-    QProp p = mkQS (mkQCl p) ;
-
-    WherePlace place = mkQS (mkQCl where_IAdv place.name) ;
-    WherePerson person = mkQS (mkQCl where_IAdv person.name) ;
+--    WherePlace place = mkQS (mkQCl where_IAdv place.name) ;
+--    WherePerson person = mkQS (mkQCl where_IAdv person.name) ;
 
     PropAction a = a ;
 
-    AmountCurrency num curr = mkNP num curr ;
+--    AmountCurrency num curr = mkNP num curr ;
 
     ObjItem i = i ;
+{-
     ObjNumber n k = mkNP n k ;
     ObjIndef k = mkNP a_Quant k ;
     ObjPlural k = mkNP aPl_Det k ;
     ObjMass k = mkNP k ;
     ObjAndObj = mkNP and_Conj ;
+-}
     OneObj o = o ; 
 
-    This kind = mkNP this_Quant kind ;
-    That kind = mkNP that_Quant kind ;
+    This kind = ss (R.thbind kind.s S.nii_s) ;
+    That kind = ss (R.thbind kind.s S.nan_s) ;
+{-
     These kind = mkNP this_Quant plNum kind ;
     Those kind = mkNP that_Quant plNum kind ;
     The kind = mkNP the_Quant kind ;
     Thes kind = mkNP the_Quant plNum kind ;
-    ThisMass kind = mkNP this_Quant kind ;
-    ThatMass kind = mkNP that_Quant kind ;
-    TheMass kind = mkNP the_Quant kind ;
+-}
+    ThisMass kind = ss (R.thbind kind.s S.nii_s) ;
+    ThatMass kind =  ss (R.thbind kind.s S.nan_s) ;
+    TheMass kind = kind ;
 
-    SuchKind quality kind = mkCN quality kind ;
-    SuchMassKind quality kind = mkCN quality kind ;
-    Very property = mkAP very_AdA (mkAP property) ;
-    Too property = mkAP too_AdA (mkAP property) ;
-    PropQuality property = mkAP property ;
+    SuchKind quality kind = {s = R.thbind kind.s quality.s ; c = kind.c} ; 
+    SuchMassKind quality kind = {s = R.thbind kind.s quality.s ; c = kind.c} ; 
 
+
+    Very property = ss (R.thbind property.s S.mak_s) ;
+--    Too property = ss (property.s ++ mak_s) ;
+    PropQuality property = property ;
+
+{-
     ThePlace kind = let dd = if_then_else Det kind.isPl thePl_Det theSg_Det 
                      in placeNP dd kind ;
     APlace kind = let dd = if_then_else Det kind.isPl aPl_Det aSg_Det 
                      in placeNP dd kind ;
+-}
 
-    IMale, IFemale = mkPerson i_Pron ;
-    YouFamMale, YouFamFemale = mkPerson youSg_Pron ;
-    YouPolMale, YouPolFemale = mkPerson youPol_Pron ;
+    IMale = ss S.phom_s ;
+    IFemale = ss (R.thbind S.di_s S.chan_s) ;
+    YouFamMale,
+    YouFamFemale, 
+    YouPolMale, YouPolFemale = ss S.khun_s ; ---- there are degrees
 
+{-
     LangNat n = n.lang ;
     CitiNat n = n.prop ;
     CountryNat n = n.country ;
@@ -130,9 +147,9 @@ concrete SentencesTha of Sentences = NumeralTha ** open
       {name = n ; isPron = False ; poss = mkQuant he_Pron} ; -- poss not used
 ----    NameString s = symb s ; --%
     NameNN = symb "NN" ;
-
-    NNumeral n = mkCard <lin Numeral n : Numeral>  ;
-
+-}
+    NNumeral n = n ;
+{-
     SHave   p obj = mkS (mkCl p.name have_V2 obj) ;
     SHaveNo p k = mkS negativePol (mkCl p.name have_V2 (mkNP aPl_Det k)) ;
     SHaveNoMass p m = mkS negativePol (mkCl p.name have_V2 (mkNP m)) ;
