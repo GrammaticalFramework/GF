@@ -18,6 +18,8 @@ oper
       = \s -> mkN s "คัน" ;
   houseN : Str -> N
       = \s -> mkN s "หลัง" ;
+  animalN : Str -> N
+      = \s -> mkN s "ตัว" ;
 
   mkA : Str -> A = \s -> lin A (mkAdj s) ;
 

@@ -104,5 +104,25 @@ concrete StructuralTha of Structural = CatTha **
 --    s = table Number [x ; y]
 --    } ;
 --
+
+-- from Swadesh
+  here_Adv = ss (thbind "ที่นี่") ;
+  there_Adv = ss (thbind "ที่นั่น") ;
+  when_IAdv = ss (thbind "เมื่อไร") ;
+  how_IAdv = ss (thbind "อย่างไร") ;
+  all_Predet = ss (thbind "ทั้ง" "หมด") ;
+  many_Det = {s1 = thbind "หลาย" ; s2 = [] ; hasC = True} ;
+  some_Det = {s1 = thbind "บ้าง" ; s2 = [] ; hasC = True} ;
+  few_Det = {s1 = thbind "สอง" "สาม" ; s2 = [] ; hasC = True} ;
+  right_Ord = ss (thbind "ขวา") ;
+  left_Ord = ss (thbind "ซ้าย") ;
+  at_Prep = ss (thbind "ที่") ;
+  in_Prep = ss (thbind "ใน") ;
+  with_Prep = ss (thbind "กับ") ;
+--  and_N = mkN (thbind "และ") ;
+  if_Subj = ss (thbind "ถ้า") ;
+  because_Subj = ss (thbind "เพราะ") ;
+  name_N = mkN (thbind "ชื่อ") ;
+
 }
 
