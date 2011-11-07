@@ -22,23 +22,23 @@ concrete WordsTha of Words = SentencesTha **
 --    Meat = mkCN (mkN "มเัต") ;
 --    Milk = mkCN L.milk_N ;
 --    Pizza = mkCN (mkN "ปิzzั") ;
---    Salt = mkCN L.salt_N ;
+    Salt = mkCN L.salt_N ;
 --    Tea = mkCN (mkN "ตเั") ;
---    Water = mkCN L.water_N ;
+    Water = mkCN L.water_N ;
 --    Wine = mkCN L.wine_N ;
 
 -- Properties; many of them are in the resource lexicon, others can be built by $mkA$.
 
---    Bad = L.bad_A ;
+    Bad = L.bad_A ;
 --    Boring = mkA "บoรินง" ;
 --    Cheap = mkA "จหเัป" ;
---    Cold = L.cold_A ;
+    Cold = L.cold_A ;
     Delicious = mkA "อร่อย" ;
     Expensive = mkA "แพง" ;
 --    Fresh = mkA "ฝรเสห" ;
     Good = mkA "ดี" ;
 --    Suspect = mkA "สุสปเจต" ;
---    Warm = L.warm_A ;
+    Warm = L.warm_A ;
 
 -- Places require different prepositions to express location; in some languages 
 -- also the directional preposition varies, but in English we use $to$, as
@@ -133,7 +133,7 @@ concrete WordsTha of Words = SentencesTha **
 --    AHasName p name = mkCl (nameOf p) name ;
 --    AHungry p = mkCl p.name (mkA "หุนงรย") ;
 --    AIll p = mkCl p.name (mkA "ิลล") ;
---    AKnow p = mkCl p.name IrregTha.know_V ;
+--    AKnow p = mkCl p.name (lin V L.know_V2) ;
 --    ALike p item = mkCl p.name (mkV2 (mkV "ลิกเ")) item ;
 --    ALive p co = mkCl p.name (mkVP (mkVP (mkV "ลิึเ")) (SyntaxTha.mkAdv in_Prep co)) ;
     ALove p q = mkCl p.name L.love_V2 q.name ;
@@ -245,7 +245,7 @@ concrete WordsTha of Words = SentencesTha **
     xOf : Str -> NPPerson -> NPPerson = \f,p -> 
       {name = mkNP the_Det (mkCN (personN f) (mkAdv possess_Prep p.name)) ; isPron = False ; poss = the_Quant} ; ---- poss not used
 
---    nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "นัมเ") p).name ;
+--    nameOf : NPPerson -> NP = \p -> (xOf L.name_N p).name ;
 
 
 --    mkTransport : N -> {name : CN ; by : Adv} = \n -> {
