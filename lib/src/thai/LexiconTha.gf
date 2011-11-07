@@ -4,7 +4,7 @@ concrete LexiconTha of Lexicon = CatTha **
   open ParadigmsTha, ResTha, Prelude in {
 
 flags 
-  optimize=values ;
+  coding = utf8 ;
 
 lin
 --  airplane_N = regN "airplane" ;
@@ -45,7 +45,7 @@ lin
 --  ceiling_N = regN "ceiling" ;
 --  chair_N = regN "chair" ;
 --  cheese_N = regN "cheese" ;
---  child_N = mk2N "child" "children" ;
+  child_N = personN "ลูก" ;
 --  church_N = regN "church" ;
 --  city_N = regN "city" ;
 --  clean_A = regADeg "clean" ;
@@ -101,7 +101,9 @@ lin
 --  industry_N = regN "industry" ;
 --  iron_N = regN "iron" ;
 --  king_N = regN "king" ;
---  know_V2 = dirV2 (irregV "know" "knew" "known") ;
+  know_V2 = mkV2 "รู้" ; -----
+  know_VQ = lin VQ (regV "รู้") ; -----
+  know_VS = lin VS (regV "รู้") ; -----
 --  lake_N = regN "lake" ;
 --  lamp_N = regN "lamp" ;
 --  learn_V2 = dirV2 (regV "learn") ;
@@ -114,7 +116,7 @@ lin
 --  long_A = regADeg "long" ;
 --  lose_V2 = dirV2 (irregV "lose" "lost" "lost") ;
 --  love_N = regN "love" ;
-  love_V2 = dirV2 (regV rak_s) ;
+  love_V2 = mkV2 (regV rak_s) ;
 --  man_N = mk2N "man" "men" ;
 --  married_A2 = mkA2 (regA "married") toP ;
 --  meat_N = regN "meat" ;
@@ -190,6 +192,7 @@ lin
 --  thick_A = regADeg "thick" ;
 --  thin_A = duplADeg "thin" ;
 --  train_N = regN "train" ;
+  today_Adv = ss (thbind "วัน" "นี้") ;
 --  travel_V = (regDuplV "travel") ;
 --  tree_N = regN "tree" ;
 -- ---- trousers_N = regN "trousers" ;
