@@ -1,5 +1,7 @@
 concrete NumeralTha of Numeral = CatTha ** open ResTha, StringsTha, Prelude in {
 
+flags coding = utf8 ;
+
 lincat 
 --  Numeral    = {s : Str} ;
   Digit      = {s : DForm => Str} ;
@@ -62,5 +64,26 @@ oper
   sip  = table {Unit => sip_s   ; Thousand => mvvn_s} ;
   roy  = table {Unit => rooy_s ; Thousand => seen_s} ;
   phan = table {Unit => []      ; Thousand => phan_s} ;
+
+-- numerals as sequences of digits
+
+  lincat 
+    Dig = SS ;
+
+  lin
+    IDig d = d ;
+
+    IIDig d i = thbind d i ;
+
+    D_0 = ss "๐" ;
+    D_1 = ss "๑" ;
+    D_2 = ss "๒" ;
+    D_3 = ss "๓" ;
+    D_4 = ss "๔" ;
+    D_5 = ss "๕" ;
+    D_6 = ss "๖" ;
+    D_7 = ss "๗" ;
+    D_8 = ss "๘" ;
+    D_9 = ss "๙" ;
 
 }

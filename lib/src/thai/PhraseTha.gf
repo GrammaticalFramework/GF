@@ -16,7 +16,7 @@ concrete PhraseTha of Phrase = CatTha ** open Prelude, ResTha in {
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;
-    PConjConj conj = conj ;
+    PConjConj conj = ss conj.s2 ;
 
     NoVoc = {s = []} ;
     VocNP np = {s = np.s} ; ---- ??

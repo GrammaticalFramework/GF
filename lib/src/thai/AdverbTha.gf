@@ -4,20 +4,16 @@ concrete AdverbTha of Adverb = CatTha **
   lin
     PositAdvAdj a = a ;
 
---    ComparAdvAdj cadv a np = {
---      s = cadv.s ++ a.s ! AAdv ++ "than" ++ np.s ! Nom
---      } ;
---    ComparAdvAdjS cadv a s = {
---      s = cadv.s ++ a.s ! AAdv ++ "than" ++ s.s
---      } ;
---
---    PrepNP prep np = {s = prep.s ++ np.s ! Acc} ;
---
---    AdAdv = cc2 ;
---
---    SubjS = cc2 ;
---    AdvSC s = s ; --- this rule give stack overflow in ordinary parsing
---
---    AdnCAdv cadv = {s = cadv.s ++ "than"} ;
---
+    PrepNP prep np = thbind prep np ;
+
+    ComparAdvAdj cadv a np = ss (thbind a.s cadv.s np.s) ;
+
+    ComparAdvAdjS cadv a s = ss (thbind a.s cadv.s s.s) ;
+
+    AdAdv adv ad = thbind ad adv ;
+
+    SubjS = thbind ;
+
+    AdnCAdv cadv = ss (thbind cadv.s conjThat) ; -----
+
 }

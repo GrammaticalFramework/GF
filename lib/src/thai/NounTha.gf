@@ -5,29 +5,22 @@ concrete NounTha of Noun = CatTha ** open StringsTha, ResTha, Prelude in {
   lin
     DetCN det cn = 
       let cnc = if_then_Str det.hasC cn.c []
-      in  ss (cn.s ++ det.s1 ++ cnc ++ det.s2) ;
+      in  mkNP (thbind cn.s det.s1 cnc det.s2) ;
     UsePN pn = pn ;
     UsePron p = p ;
---
---    PredetNP pred np = {
---      s = \\c => pred.s ++ np.s ! c ;
---      a = np.a
---      } ;
---
---    PPartNP np v2 = {
---      s = \\c => np.s ! c ++ v2.s ! VPPart ;
---      a = np.a
---      } ;
---
---    AdvNP np adv = {
---      s = \\c => np.s ! c ++ adv.s ;
---      a = np.a
---      } ;
+
+    DetNP det = mkNP (thbind det.s1 det.s2) ;
+
+    PredetNP pred np = thbind pred np ;
+
+    PPartNP np v2 = thbind np (ss ((predV v2).s ! Pos)) ; ---- ??
+
+    AdvNP np adv = thbind np adv ;
 
     DetQuant quant num = {
-      s1 = [] ;
-      s2 = quant.s ++ num.s ;
-      hasC = quant.hasC ;
+      s1 = num.s ;
+      s2 = quant.s ;
+      hasC = orB num.hasC quant.hasC ;
       } ;
     DetQuantOrd quant num ord = {
       s1 = num.s ;
@@ -43,34 +36,36 @@ concrete NounTha of Noun = CatTha ** open StringsTha, ResTha, Prelude in {
     NumSg, NumPl = {s = [] ; hasC = False} ;
 
     NumCard n = n ** {hasC = True} ;
---    OrdInt n = {s = n.s ++ "th"} ; ---
---
+    NumDigits d = d ;
+    OrdDigits d = {s = thbind thii_s d.s} ;
+
     NumNumeral numeral = numeral ** {hasC = True} ;
-    OrdNumeral numeral = {s = thii_s ++ numeral.s} ;
---
---    AdNum adn num = {s = adn.s ++ num.s} ;
---
---    OrdSuperl a = {s = a.s ! AAdj Superl} ;
---
+    OrdNumeral numeral = {s = thbind thii_s numeral.s} ;
+
+    AdNum adn num = thbind num adn ;
+
+    OrdSuperl a = {s = thbind a.s thii_s sut_s} ;
+
     DefArt = {s = [] ; hasC = False} ;
     IndefArt = {s = [] ; hasC = False} ;
 
     MassNP cn = cn ;
 
     UseN n = n ;
---    UseN2 n = n ;
---    UseN3 n = n ;
---
---    ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c} ;
---    ComplN3 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; c2 = f.c3} ;
+    UseN2 n = n ;
+    Use2N3 f = {s = thbind f.s ; c = f.c ; c2 = f.c2} ;
+    Use3N3 f = {s = thbind f.s ; c = f.c ; c2 = f.c3} ;
+
+    ComplN2 f x = {s = thbind f.s f.c2 x.s ; c = f.c} ;
+    ComplN3 f x = {s = thbind f.s f.c2 x.s ; c = f.c ; c2 = f.c3} ;
 
     AdjCN ap cn = {s = cn.s ++ ap.s ; c = cn.c} ;
 
---    RelCN cn rs = {s = \\n,c => cn.s ! n ! c ++ rs.s ! {n = n ; p = P3}} ;
---    AdvCN cn ad = {s = \\n,c => cn.s ! n ! c ++ ad.s} ;
---
---    SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s} ;
---
---    ApposCN cn np = {s = \\n,c => cn.s ! n ! Nom ++ np.s ! c} ;
---
+    RelCN cn rs = {s = thbind cn.s rs.s ; c = cn.s} ;
+    AdvCN cn ad = {s = thbind cn.s ad.s ; c = cn.s} ;
+    SentCN cn cs = {s = thbind cn.s cs.s ; c = cn.s} ;
+    ApposCN cn np = {s = thbind cn.s np.s ; c = cn.s} ;
+
+    RelNP np rs = thbind np rs ;
+
 }

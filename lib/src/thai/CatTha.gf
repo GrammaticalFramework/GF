@@ -8,70 +8,68 @@ concrete CatTha of Cat = CommonX ** open ResTha, Prelude in {
 
     S  = {s : Str} ;
     QS = {s : QForm => Str} ;
---    RS = {s : Agr => Str ; c : Case} ; -- c for it clefts
---
----- Sentence
---
-    Cl = {s : Polarity => Str} ;
---    Slash = {
---      s : Tense => Anteriority => CPolarity => Order => Str ;
---      c2 : Str
---      } ;
+    RS = {s : Str} ;
+    SSlash  = {s : Str ; c2 : Str} ;
+
+-- Sentence
+
+    Cl = ResTha.Clause ; -- {s : Polarity => Str} ;
+    ClSlash = {s : Polarity => Str ; c2 : Str} ;
     Imp = {s : Polarity => Str} ;
---
----- Question
---
+
+-- Question
+
     QCl = {s : Polarity => Str} ;
---    IP = {s : Case => Str ; n : Number} ;
---    IComp = {s : Str} ;    
---    IDet = {s : Str ; n : Number} ;
---
----- Relative
---
---    RCl = {s : Tense => Anteriority => CPolarity => Agr => Str ; c : Case} ;
---    RP = {s : RCase => Str ; a : RAgr} ;
---
----- Verb
---
+    IP = {s : Str} ;
+    IComp = {s : Str} ;    
+    IDet, IQuant = Determiner ;
+
+-- Relative
+
+    RCl = {s : Polarity => Str} ;
+    RP = {s : Str} ;
+
+-- Verb
+
     VP = ResTha.VP ; 
-    Comp = ResTha.VP ; 
---
----- Adjective
---
---    AP = {s : Agr => Str ; isPre : Bool} ; 
---
+    Comp = ResTha.VP ;
+    VPSlash = ResTha.VP ** {c2 : Str} ;
+
+-- Adjective
+
+    AP = ResTha.Adj ;
+
 -- Noun
---
-    CN = Noun ;
-    NP, Pron = SS ;
-    Det = Determiner ; 
---    Predet, Ord = {s : Str} ;
+
+    CN = ResTha.Noun ;
+    NP, Pron = ResTha.NP ;
+    Det = ResTha.Determiner ; 
+    Predet, Ord = {s : Str} ;
     Num, Quant = {s : Str ; hasC : Bool} ;
 
 -- Numeral
 
-    Numeral = {s : Str} ;
+    Numeral, Card, Digits = {s : Str} ;
 
----- Structural
---
---    Conj = {s : Str ; n : Number} ;
---    DConj = {s1,s2 : Str ; n : Number} ;
---    Subj = {s : Str} ;
---    Prep = {s : Str} ;
---
+-- Structural
+
+    Conj = {s1,s2 : Str} ;
+    Subj = {s : Str} ;
+    Prep = {s : Str} ;
+
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ; 
-    V2, V2A = Verb ** {c2 : Str} ;
+    V2, V2A, V2Q, V2S, V2V = Verb ** {c2 : Str} ;
     V3 = Verb ** {c2, c3 : Str} ;
     VV = VVerb ;
---
---    A = {s : AForm => Str} ;
---    A2 = {s : AForm => Str ; c2 : Str} ;
---
-    N = Noun ;
---    N2 = {s : Number => Case => Str} ** {c2 : Str} ;
---    N3 = {s : Number => Case => Str} ** {c2,c3 : Str} ;
---    PN = {s : Case => Str} ;
---
+
+    A = ResTha.Adj ;
+    A2 = ResTha.Adj ** {c2 : Str} ;
+
+    N = ResTha.Noun ;
+    N2 = ResTha.Noun ** {c2 : Str} ;
+    N3 = ResTha.Noun ** {c2,c3 : Str} ;
+    PN = ResTha.NP ;
+
 }
