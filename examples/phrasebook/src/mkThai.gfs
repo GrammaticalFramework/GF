@@ -1,2 +1,0 @@
-rf -file=src/GreetingsTha.gf | ps -env=quotes -to_thai | wf -file=GreetingsTha.gf
-rf -file=src/WordsTha.gf | ps -env=quotes -to_thai | wf -file=WordsTha.gf
