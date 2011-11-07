@@ -1,7 +1,9 @@
 concrete WordsTha of Words = SentencesTha ** 
     open 
+      SyntaxTha,
+      ParadigmsTha,
       (R = ResTha),
-      (S = StringsTha),
+      (L = LexiconTha),
       Prelude in {
 
   flags coding = utf8 ;
@@ -11,7 +13,7 @@ concrete WordsTha of Words = SentencesTha **
 -- Kinds; many of them are in the resource lexicon, others can be built by $mkN$.
 
 --    Apple = mkCN L.apple_N ;
-    Beer = ss S.biar_s ;
+    Beer = mkCN L.beer_N ;
 --    Bread = mkCN L.bread_N ;
 --    Cheese = mkCN (mkN "จหเเสเ") ;
 --    Chicken = mkCN (mkN "จหิจกเน") ;
@@ -31,10 +33,10 @@ concrete WordsTha of Words = SentencesTha **
 --    Boring = mkA "บoรินง" ;
 --    Cheap = mkA "จหเัป" ;
 --    Cold = L.cold_A ;
-    Delicious = ss "อร่อย" ;
-    Expensive = ss "แพง" ;
+    Delicious = mkA "อร่อย" ;
+    Expensive = mkA "แพง" ;
 --    Fresh = mkA "ฝรเสห" ;
-    Good = ss "ดี" ;
+    Good = mkA "ดี" ;
 --    Suspect = mkA "สุสปเจต" ;
 --    Warm = L.warm_A ;
 
@@ -123,9 +125,7 @@ concrete WordsTha of Words = SentencesTha **
 -- Actions: the predication patterns are very often language-dependent.
 
 --    AHasAge p num = mkCl p.name (mkNP (mkNP num L.year_N) (ParadigmsTha.mkAdv "oลด"));
-    AHasChildren p num = R.mkClause p 
-      (R.insertObj (R.mkVP (R.regV "มี")) 
-         (ss (R.thbind "ลูก" (num.s ++ S.khon_s)))) ; ---- bind num
+    AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
 --    AHasRoom p num = mkCl p.name have_V2 
 --      (mkNP (mkNP a_Det (mkN "รooม")) (SyntaxTha.mkAdv for_Prep (mkNP num (mkN "ปเรสoน")))) ;
 --    AHasTable p num = mkCl p.name have_V2 
@@ -136,7 +136,7 @@ concrete WordsTha of Words = SentencesTha **
 --    AKnow p = mkCl p.name IrregTha.know_V ;
 --    ALike p item = mkCl p.name (mkV2 (mkV "ลิกเ")) item ;
 --    ALive p co = mkCl p.name (mkVP (mkVP (mkV "ลิึเ")) (SyntaxTha.mkAdv in_Prep co)) ;
-    ALove p q = R.mkClause p (R.insertObj (R.mkVP (R.regV "รัก")) q) ;
+    ALove p q = mkCl p.name L.love_V2 q.name ;
 --    AMarried p = mkCl p.name (mkA "มัรริเด") ;
 --    AReady p = mkCl p.name (mkA "รเัดย") ;
 --    AScared p = mkCl p.name (mkA "สจัรเด") ;
@@ -242,8 +242,8 @@ concrete WordsTha of Words = SentencesTha **
 --    open_Adv = P.mkAdv "oปเน" ;
 --    closed_Adv = P.mkAdv "จลoสเด" ;
 
-    xOf : Str -> R.NP -> R.NP = \x,p -> 
-      ss (R.thbind x "ของ" p.s) ;  ---- optional particle
+    xOf : Str -> NPPerson -> NPPerson = \f,p -> 
+      {name = mkNP the_Det (mkCN (personN f) (mkAdv possess_Prep p.name)) ; isPron = False ; poss = the_Quant} ; ---- poss not used
 
 --    nameOf : NPPerson -> NP = \p -> (xOf sing (mkN "นัมเ") p).name ;
 
