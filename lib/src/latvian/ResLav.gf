@@ -13,7 +13,7 @@ resource ResLav = ParamX ** open Prelude in {
   param
   
   -- Nouns
-    Case = Nom | Gen | Dat | Acc | Loc ;
+    Case = Nom | Gen | Dat | Acc | Loc | Voc;
     Gender = Masc | Fem ;
 	Restriction = AllForms | SgOnly | PlOnly | SgGenOnly | PlGenOnly ; 
 	NounDecl = D0 | D1 | D2 | D3 | D4 | D5 | D6 | DR ;
@@ -21,6 +21,7 @@ resource ResLav = ParamX ** open Prelude in {
   -- Adjectives
 	Definite = Indef | Def ;
 	AdjType  = AdjQual | AdjRel | AdjIndecl ;
+    AForm = AAdj Degree Definite Gender Number Case | AAdv Degree; --TODO pârveidot uz ðâdu formu lai ir arî apstâkïa vârdi kas atvasinâti no îpaðîbas vârdiem
 	
   -- Verbs
   -- Ind  = Indicative
@@ -28,14 +29,18 @@ resource ResLav = ParamX ** open Prelude in {
   -- Deb  = Debitive (Latvian specific: http://www.isocat.org/rest/dc/3835)
   -- Condit = Conditional
   -- DebitiveRelative - the relative subtype of debitive
-	VerbForm = Infinitive | Indicative Person Number Tense | Relative Tense | Debitive |
-			   DebitiveRelative | Participle Gender Number Case ; -- Imperative nav pielikts, bet tur ir kaut kâdas îpatnîbas globâlajâ ParamsX modulî par imperatîvu
+	VerbForm = Infinitive | Indicative Person Number Tense | Relative Tense | Debitive | Imperative Number |
+			   DebitiveRelative | Participle Gender Number Case ; 
+										-- TODO - divdabim noteiktâ forma un arî pârâkâ / vispârâkâ pakâpe
 	VerbMood = Ind Anteriority Tense | Rel Anteriority Tense | Deb Anteriority Tense | Condit Anteriority ;
 	VerbConj = C2 | C3 ;
 	
-	Agr = Ag Gender Number ;
+	--Agr = Ag Gender Number ;
+	Agr = AgP1 Number | AgP2 Number | AgP3 Number Gender ;
 	
 	ThisOrThat = This | That ;
+    CardOrd = NCard | NOrd ;	
+	DForm = unit | teen | ten ;
 	
   oper	
 	
@@ -48,7 +53,40 @@ resource ResLav = ParamX ** open Prelude in {
 	
 	NON_EXISTENT : Str = "NON_EXISTENT" ;
 	
+	Verb     : Type = {s : Polarity => VerbForm => Str} ;	
+    VP = {v : Verb ; s2 : Agr => Str} ; -- s2 = object(s), complements, adverbial modifiers.
+	VPSlash = VP ** {p : prep} ; -- principâ rekur ir objekts kuram jau kaut kas ir bet ir vçl viena brîva valence..	
+	prep = {s : Str; c : Number => Case};
+	--Valence  : Type = { p : Prep; c: Number=>Case };  -- e.g. 'ar' + Sg-Acc or Pl-Dat; Preposition may be skipped for simple case-baced valences
 	
+    toAgr : Number -> Person -> Gender -> Agr = \n,p,g -> 
+      case p of {
+        P1 => AgP1 n ;
+        P2 => AgP2 n ;
+        P3 => AgP3 n g 
+      } ;	
+	fromAgr : Agr -> {n : Number ; p : Person ; g : Gender} = \a -> case a of {
+      AgP1 n => {n = n ; p = P1 ; g = Masc} ;  --fixme 'es esmu skaista' failos...
+      AgP2 n => {n = n ; p = P2 ; g = Masc} ;  -- fixme 'tu esi skaista' failos...
+      AgP3 n g => {n = n ; p = P3 ; g = g}
+      } ;
+
+	conjAgr : Agr -> Agr -> Agr = \a0,b0 -> 
+      let a = fromAgr a0 ; b = fromAgr b0 
+      in
+      toAgr
+        (conjNumber a.n b.n)
+        (conjPerson a.p b.p) --FIXME - personu apvienoðana ir tricky un ir jâuztaisa korekti
+		(conjGender a.g b.g) ;  
+		
+	conjGender : Gender -> Gender -> Gender = \a,b -> 
+      case a of {
+        Fem => b ;
+        _  => Masc 
+        } ;
+	 
+	agrgP3 : Number -> Gender -> Agr = \n,g -> toAgr n P3 g ;
+	  
 {-	
 -- Agreement of $NP$ has 8 values. $Gender$ is needed for "who"/"which" and
 -- for "himself"/"herself"/"itself".

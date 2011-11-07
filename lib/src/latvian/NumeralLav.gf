@@ -1,4 +1,6 @@
-concrete NumeralLav of Numeral = CatLav ** open ResLav in {
+concrete NumeralLav of Numeral = CatLav ** open ResLav, ParadigmsLav in {
+flags 
+  coding = utf8 ;
 {-
 lincat 
   Digit = {s : DForm => CardOrd => Case => Str} ;
@@ -6,22 +8,53 @@ lincat
   Sub100     = {s : CardOrd => Case => Str ; n : Number} ;
   Sub1000    = {s : CardOrd => Case => Str ; n : Number} ;
   Sub1000000 = {s : CardOrd => Case => Str ; n : Number} ;
+-}
+lincat --TODO - formas, kas pieprasa ģenitīvu - tūkstotis grāmatu, trīs simti meiteņu
+  Digit = {s : DForm => CardOrd => Gender => Case => Str} ;
+  Sub10 = {s : CardOrd => Gender => Case => Str ; n : Number};
+  Sub100 = {s : CardOrd => Gender => Case => Str ; n : Number};
+  Sub1000 = {s : CardOrd => Gender => Case => Str ; n : Number};
+  Sub1000000 = {s : CardOrd => Gender => Case => Str ; n : Number};
 
-lin num x = x ;
-lin n2 = let two = mkNum "two"   "twelve"   "twenty" "second" in
-         {s = \\f,o => case <f,o> of {
-             <teen,NOrd> => regGenitiveS "twelfth" ;
-             _ => two.s ! f ! o
-             }
-         } ;
+lin
+  num x = x;
+  n2 = mkNum "divi" "otrais" Pl;  
+  n3 = let trijs = mkNumSpec "trijs" "trešais" "trīs" "trīs" Pl in {
+	s = \\f, o, g, c => case <f, o, g, c> of {
+		<unit, NCard, _, Nom> => "trīs";
+		<unit, NCard, _, Dat> => "trim";
+		<unit, NCard, _, Loc> => "trīs";
+		_ => trijs.s ! f ! o ! g ! c
+	} 
+  } | {
+	s = \\f, o, g, c => case <f, o, g, c> of {
+		<unit, NCard, _, Nom> => "trīs";
+		_ => trijs.s ! f ! o ! g ! c
+	} 
+  };  
+  n4 = mkNum "četri" "ceturtais" Pl;
+  n5 = mkNum "pieci" "piektais" Pl;
+  n6 = mkNum "seši" "sestais" Pl;
+  n7 = mkNum "septiņi" "septītais" Pl;
+  n8 = mkNum "astoņi" "astotais" Pl;
+  n9 = mkNum "deviņi" "devītais" Pl;
+    
+  pot01 = {s = viens.s ! unit} ** {n = Sg} ;
+  pot0 d = {s = d.s ! unit} ** {n = Pl} ;
+  pot110 = {s = viens.s ! ten} ** {n = Pl} ;
+  pot111 = {s = viens.s ! teen} ** {n = Pl} ;
+  pot1to19 d = {s = d.s ! teen} ** {n = Pl} ;
+  pot0as1 n = { s = n.s ; n = n.n } ;
+  pot1 d = {s = d.s ! ten} ** {n = Pl} ;
+  pot1plus d e = {s = \\o, g, c => d.s ! ten ! NCard ! Masc ! Nom ++ e.s ! o ! g ! c; n = e.n} ;
+  pot1as2 n = n ;
+  pot2 d = { s = \\o,g,c => d.s ! NCard ! Masc ! Nom ++ simts ! o ! g ! d.n ! c; n = Pl} ; --FIXME - nav īsti labi, kārtas skaitlim ir jābūt 'trīssimtais' utml
+  pot2plus d e = { s = \\o,g,c => d.s ! NCard ! Masc ! Nom ++ simts ! NCard ! Masc ! d.n ! Nom ++ e.s ! o ! g ! c; n = e.n} ;
+  pot2as3 n = n ;
+  pot3 d = { s = \\o,g,c => d.s ! NCard ! Masc ! Nom ++ tuukstotis ! o ! g ! d.n ! c; n = Pl} ;
+  pot3plus d e ={ s = \\o,g,c => d.s ! NCard ! Masc ! Nom ++ tuukstotis ! NCard ! Masc ! d.n ! Nom ++ e.s ! o ! g ! c; n = e.n} ;
 
-lin n3 = mkNum "three" "thirteen" "thirty" "third" ;
-lin n4 = mkNum "four"  "fourteen" "forty" "fourth" ;
-lin n5 = mkNum "five"  "fifteen"  "fifty" "fifth" ;
-lin n6 = regNum "six" ;
-lin n7 = regNum "seven" ;
-lin n8 = mkNum "eight" "eighteen" "eighty" "eighth" ;
-lin n9 = mkNum "nine" "nineteen" "ninety" "ninth" ;
+{-
 
 lin pot01 = mkNum "one" "eleven" "ten" "first" ** {n = Sg} ;
 lin pot0 d = d ** {n = Pl} ;
@@ -41,25 +74,25 @@ lin pot3 n = {
   s = \\o,c => n.s ! NCard ! Nom ++ mkCard o "thousand" ! c ; n = Pl} ;
 lin pot3plus n m = {
   s = \\o,c => n.s ! NCard ! Nom ++ "thousand" ++ m.s ! o ! c; n = Pl} ;
+-}
 
 -- numerals as sequences of digits
 
   lincat 
-    Dig = TDigit ;
+    Dig = {n : Number; s : CardOrd => Str };
 
   lin
-    IDig d = d ** {tail = T1} ;
+    IDig d = d ;
 
     IIDig d i = {
-      s = \\o,c => d.s ! NCard ! Nom ++ commaIf i.tail ++ i.s ! o ! c ;
-      n = Pl ;
-      tail = inc i.tail
+      s = \\o => d.s ! NCard ++ i.s ! o ;
+      n = Pl ;  --FIXME 1 cilvēks    11 cilvēki    21 cilvēks ...
     } ;
 
     D_0 = mkDig "0" ;
-    D_1 = mk3Dig "1" "1st" Sg ;
-    D_2 = mk2Dig "2" "2nd" ;
-    D_3 = mk2Dig "3" "3rd" ;
+    D_1 = mk2Dig "1" Sg ;
+    D_2 = mkDig "2" ;
+    D_3 = mkDig "3" ;
     D_4 = mkDig "4" ;
     D_5 = mkDig "5" ;
     D_6 = mkDig "6" ;
@@ -68,28 +101,11 @@ lin pot3plus n m = {
     D_9 = mkDig "9" ;
 
   oper
-    commaIf : DTail -> Str = \t -> case t of {
-      T3 => "," ;
-      _ => []
-      } ;
+    mkDig : Str -> Dig = \c -> mk2Dig c Pl ;
 
-    inc : DTail -> DTail = \t -> case t of {
-      T1 => T2 ;
-      T2 => T3 ;
-      T3 => T1
-      } ;
-
-    mk2Dig : Str -> Str -> TDigit = \c,o -> mk3Dig c o Pl ;
-    mkDig : Str -> TDigit = \c -> mk2Dig c (c + "th") ;
-
-    mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
-      s = table {NCard => regGenitiveS c ; NOrd => regGenitiveS o} ;
+    mk2Dig : Str -> Number -> Dig = \c,n -> lin Dig {
+      s = table {NCard => c ; NOrd => c+"."} ;
       n = n
-      } ;
-
-    TDigit = {
-      n : Number ;
-      s : CardOrd => Case => Str
     } ;
--}
+
 }

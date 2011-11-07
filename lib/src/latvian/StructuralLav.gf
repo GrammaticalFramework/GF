@@ -1,6 +1,5 @@
 concrete StructuralLav of Structural = CatLav ** 
-  open MorphoLav, ResLav, ParadigmsLav, ParadigmsPronounsLav, MakeStructuralLav, 
-  (C = ConstructX), Prelude in {
+  open MorphoLav, ResLav, ParadigmsLav, ParadigmsPronounsLav, MakeStructuralLav, Prelude in {
 
 flags
   optimize = all ;
@@ -24,23 +23,349 @@ lin
 	n = Pl ;
 	d = Indef
   } ;
+  
+  this_Quant = {
+    s = (mkPronoun_ThisThat This).s ;
+	d = Def
+  } ;
+  
+  that_Quant = {
+    s = (mkPronoun_ThisThat That).s ;
+	d = Def
+  } ;
 
   
+  i_Pron = {
+    s = table {
+		Nom => "es";
+		Gen => "manis";
+		Dat => "man";
+		Acc => "mani";
+		Loc => "manī";
+		Voc => NON_EXISTENT
+		} ;
+	possessive = table {
+		Masc => table {
+			Sg => table {
+				Nom => "mans";
+				Gen => "mana";
+				Dat => "manam";
+				Acc => "manu";
+				Loc => "manā";
+				Voc => "mans"
+			};
+			Pl => table {
+				Nom => "mani";
+				Gen => "manu";
+				Dat => "maniem";
+				Acc => "manus";
+				Loc => "manos";
+				Voc => "mani"
+			}
+		} ;
+		Fem => table {
+			Sg => table {
+				Nom => "mana";
+				Gen => "manas";
+				Dat => "manai";
+				Acc => "manu";
+				Loc => "manā";
+				Voc => "mana"				
+			};
+			Pl => table {
+				Nom => "manas";
+				Gen => "manu";
+				Dat => "manām";
+				Acc => "manas";
+				Loc => "manās";
+				Voc => "manas"
+			}
+		}
+	} ;
+	a = AgP1 Sg ;
+  } ;
+
+  we_Pron = {
+    s = table {
+		Nom => "mēs";
+		Gen => "mūsu";
+		Dat => "mums";
+		Acc => "mūs";
+		Loc => "mūsos";
+		Voc => NON_EXISTENT
+		} ;	
+	possessive = table {
+		_ => table {
+			_ => table {
+				_ => "mūsu"
+			}
+		}
+	} ;		
+	a = AgP1 Pl ;
+  } ;
+
+  youSg_Pron = {
+    s = table {
+		Nom => "tu";
+		Gen => "tevis";
+		Dat => "tev";
+		Acc => "tevi";
+		Loc => "tevī";
+		Voc => "tu"
+		} ;
+	possessive = table {
+		Masc => table {
+			Sg => table {
+				Nom => "tavs";
+				Gen => "tava";
+				Dat => "tavam";
+				Acc => "tavu";
+				Loc => "tavā"				;
+				Voc => "tavs"
+			};
+			Pl => table {
+				Nom => "tavi";
+				Gen => "tavu";
+				Dat => "taviem";
+				Acc => "tavus";
+				Loc => "tavos";
+				Voc => "tavi"
+			}
+		} ;
+		Fem => table {
+			Sg => table {
+				Nom => "tava";
+				Gen => "tavas";
+				Dat => "tavai";
+				Acc => "tavu";
+				Loc => "tavā";
+				Voc => "tava"
+			};
+			Pl => table {
+				Nom => "tavas";
+				Gen => "tavu";
+				Dat => "tavām";
+				Acc => "tavas";
+				Loc => "tavās";
+				Voc => "tavas"
+			}
+		}
+	} ;		
+	a = AgP2 Sg ;
+  } ;
+
+  youPl_Pron = {
+    s = table {
+		Nom => "jūs";
+		Gen => "jūsu";
+		Dat => "jums";
+		Acc => "jūs";
+		Loc => "jūsos";
+		Voc => "jūs"
+		} ;
+	possessive = table {
+		_ => table {
+			_ => table {
+				_ => "jūsu"
+			}
+		}
+	} ;		
+	a = AgP2 Pl ;
+  } ;
+  
+  youPol_Pron = {
+    s = table {
+		Nom => "jūs";
+		Gen => "jūsu";
+		Dat => "jums";
+		Acc => "jūs";
+		Loc => "jūsos";
+		Voc => "jūs"
+		} ;
+	possessive = table {
+		_ => table {
+			_ => table {
+				_ => "jūsu"
+			}
+		}
+	} ;		
+	a = AgP2 Pl ;
+  } ;
+  
+  he_Pron = {
+    s = (\\c => (mkPronoun_Gend "viņš").s ! Masc ! Sg ! c) ;
+	possessive = table {
+		_ => table {
+			_ => table {
+				_ => "viņa"
+			}
+		}
+	} ;		
+	a = AgP3 Sg Masc ;
+  } ;
+
+  she_Pron = {
+    s = (\\c => (mkPronoun_Gend "viņš").s ! Fem ! Sg ! c) ;
+	possessive = table {
+		_ => table {
+			_ => table {
+				_ => "viņas"
+			}
+		}
+	} ;		
+	a = AgP3 Sg Fem ;
+  } ;
+  
+  they_Pron = {
+    s = (\\c => (mkPronoun_Gend "viņš").s ! Masc ! Pl ! c) ;
+	possessive = table {
+		_ => table {
+			_ => table {
+				_ => "viņu"
+			}
+		}
+	} ;		
+	a = AgP3 Pl Masc ;
+  } | 
+  {
+    s = (\\c => (mkPronoun_Gend "viņš").s ! Fem ! Pl ! c) ;
+	possessive = table {
+		_ => table {
+			_ => table {
+				_ => "viņu"
+			}
+		}
+	} ;		
+	a = AgP3 Pl Fem ;
+  } ;
+  
+  it_Pron = {
+	s = \\c => (mkPronoun_ThisThat That).s ! Masc ! Sg ! c;
+	possessive = table { _ => table { _ => table { _ => "tā" }}};
+	a = AgP3 Sg Masc
+  } | {
+  	s = \\c => (mkPronoun_ThisThat That).s ! Fem ! Sg ! c;
+	possessive = table { _ => table { _ => table { _ => "tās" }}};
+	a = AgP3 Sg Fem
+  }; 
+  
+  -- manuprāt prievārdi tomēr ir valodas-specifiski un nebūtu tieši 1-pret-1 jātulko    
+  above_Prep = mkPrep "virs" Gen Dat;
+  after_Prep = mkPrep "pēc" Gen Dat;
+  before_Prep = mkPrep "pirms" Gen Dat;
+  behind_Prep = mkPrep "aiz" Gen Dat;
+  between_Prep = mkPrep "starp" Acc Dat;
+  for_Prep = mkPrep "priekš" Gen Dat;  
+  from_Prep = mkPrep "no" Gen Dat;
+  on_Prep = mkPrep "uz" Gen Dat;
+  with_Prep = mkPrep "ar" Acc Dat; -- ar sievu, ar sievām
+  in_Prep = mkPrep Loc ;
+  to_Prep = mkPrep "līdz" Dat Dat; --FIXME - ļoti dažādi tulkojas
+  possess_Prep = mkPrep Gen ; --FIXME - reku vajadzētu vārdu secību otrādi, ka pirms paskaidrojamā vārda likt
+  under_Prep = mkPrep "zem" Gen Dat;
+  with_Prep = mkPrep "ar" Acc Dat;
+  without_Prep = mkPrep "bez" Gen Dat;
+    
+  very_AdA = mkAdA "ļoti" ;
+  almost_AdA = mkAdA "gandrīz" ;
+  so_AdA = mkAdA "tik" ;
+  too_AdA = mkAdA "pārāk" ;
+
+  and_Conj = mkConj "un" ;
+  or_Conj = mkConj "vai" Sg ;
+
+  but_PConj = ss "bet" ;
+  otherwise_PConj = ss "tomēr" ; --?
+  therefore_PConj = ss "tātad" ; --?
+  
+  more_CAdv = (mkCAdv [] "nekā" Compar) | (mkCAdv "vairāk" "nekā" Posit);  
+  less_CAdv = mkCAdv "mazāk" "nekā" Posit;  
+  as_CAdv = mkCAdv "tikpat" "kā" Posit;
+  
+  here_Adv = mkAdv "šeit" ;
+  there_Adv = mkAdv "tur" ;
+
+  both7and_DConj = mkConj "gan" ("," ++ "gan"); --FIXME - komati nav tā kā vajag
+  either7or_DConj = mkConj ("vai" ++ "nu") ("," ++ "vai") Sg ; --FIXME - komati nav tā kā vajag
+
+  want_VV = mkVV (mkV "gribēt" third_conjugation) ;
+
+  whoSg_IP = {
+	s = table {
+		Nom => "kurš"; -- FIXME - Fem?
+		Gen => "kura";
+		Dat => "kuram";
+		Acc => "kuru";
+		Loc => "kurā";
+		Voc => NON_EXISTENT
+	};
+	n = Sg
+  };
+  whoPl_IP = {
+	s = table {
+		Nom => "kuri";
+		Gen => "kuru";
+		Dat => "kuriem";
+		Acc => "kurus";
+		Loc => "kuros";
+		Voc => NON_EXISTENT
+	};
+	n = Pl
+  };
+  
+  why_IAdv = ss "kāpēc" ;
+  how_IAdv = ss "kā" ;
+  how8much_IAdv = ss "cik daudz" ;
+  when_IAdv = ss "kad" ;
+  where_IAdv = ss "kur" ;
+  
+  which_IQuant = {s = table {
+		Masc => table { Sg => "kurš"; Pl => "kuri"};
+		Fem => table { Sg => "kura"; Pl => "kuras"}
+	}
+  } ;
+  
+  when_Subj = ss "kad" ;    
+  although_Subj = ss "kaut arī" ;
+  because_Subj = ss "jo" ;
+  if_Subj = ss "ja" ;
+  that_Subj = ss "ka" ; -- ja pareizi saprotu šo konkrēto 'that' pielietojumu
+  
+  all_Predet = { s = table {
+	Masc => "visi";
+	Fem => "visas"
+	}
+  };
+  only_Predet = { s = table { _ => "tikai"} };    
+  most_Predet = { s = table { _ => "vairums"} };
+  
+  yes_Utt = ss "jā" ;
+  please_Voc = ss "lūdzu" ;
+
+  almost_AdN = mkAdN "gandrīz" ;
+  at_least_AdN = mkAdN "vismaz" ;
+  at_most_AdN = mkAdN "ne vairāk kā" ;
+  
+  always_AdV = mkAdV "vienmēr" ;
+  
+--FIXME placeholder
+  by8agent_Prep = mkPrep NON_EXISTENT Nom Nom;  
+  whatSg_IP = {s = \\_ => NON_EXISTENT; n= Sg};  
+  
+oper
+  reflPron : Case => Str = table {
+	Nom => NON_EXISTENT;
+	Gen => "sevis";
+	Dat => "sev";
+	Acc => "sevi";
+	Loc => "sevī";
+	Voc => NON_EXISTENT
+  } ;
+  
+  lai_Subj = ss "lai" ; 
+  kameer_Subj = ss "kamēr" ; 
+  
 {-
-  above_Prep = mkPrep "above" ;
-  after_Prep = mkPrep "after" ;
-  all_Predet = ss "all" ;
-  almost_AdA = mkAdA "almost" ;
-  almost_AdN = mkAdN "almost" ;
-  although_Subj = ss "although" ;
-  always_AdV = mkAdV "always" ;
-  and_Conj = mkConj "and" ;
-  because_Subj = ss "because" ;
-  before_Prep = mkPrep "before" ;
-  behind_Prep = mkPrep "behind" ;
-  between_Prep = mkPrep "between" ;
-  both7and_DConj = mkConj "both" "and";
-  but_PConj = ss "but" ;
   by8agent_Prep = mkPrep "by" ;
   by8means_Prep = mkPrep "by" ;
   can8know_VV, can_VV = {
@@ -56,31 +381,17 @@ lin
     isAux = True
     } ;
   during_Prep = mkPrep "during" ;
-  either7or_DConj = mkConj "either" "or" singular ;
   everybody_NP = regNP "everybody" singular ;
   every_Det = mkDeterminer singular "every" ;
   everything_NP = regNP "everything" singular ;
   everywhere_Adv = mkAdv "everywhere" ;
   few_Det = mkDeterminer plural "few" ;
 ---  first_Ord = ss "first" ; DEPRECATED
-  for_Prep = mkPrep "for" ;
-  from_Prep = mkPrep "from" ;
-  he_Pron = mkPron "he" "him" "his" "his" singular P3 masculine ;
-  here_Adv = mkAdv "here" ;
   here7to_Adv = mkAdv ["to here"] ;
   here7from_Adv = mkAdv ["from here"] ;
-  how_IAdv = ss "how" ;
-  how8much_IAdv = ss "how much" ;
   how8many_IDet = mkDeterminer plural ["how many"] ;
-  if_Subj = ss "if" ;
   in8front_Prep = mkPrep ["in front of"] ;
-  i_Pron  = mkPron "I" "me" "my" "mine" singular P1 human ;
-  in_Prep = mkPrep "in" ;
-  it_Pron  = mkPron "it" "it" "its" "its" singular P3 nonhuman ;
-  less_CAdv = C.mkCAdv "less" "than" ;
   many_Det = mkDeterminer plural "many" ;
-  more_CAdv = C.mkCAdv "more" "than" ;
-  most_Predet = ss "most" ;
   much_Det = mkDeterminer singular "much" ;
   must_VV = {
     s = table {
@@ -96,54 +407,26 @@ lin
     } ;
 ---b  no_Phr = ss "no" ;
   no_Utt = ss "no" ;
-  on_Prep = mkPrep "on" ;
 ----  one_Quant = mkDeterminer singular "one" ; -- DEPRECATED
-  only_Predet = ss "only" ;
-  or_Conj = mkConj "or" singular ;
-  otherwise_PConj = ss "otherwise" ;
   part_Prep = mkPrep "of" ;
-  please_Voc = ss "please" ;
-  possess_Prep = mkPrep "of" ;
   quite_Adv = mkAdv "quite" ;
-  she_Pron = mkPron "she" "her" "her" "hers" singular P3 feminine ;
-  so_AdA = mkAdA "so" ;
   somebody_NP = regNP "somebody" singular ;
-  someSg_Det = mkDeterminer singular "some" ;
-  somePl_Det = mkDeterminer plural "some" ;
   something_NP = regNP "something" singular ;
   somewhere_Adv = mkAdv "somewhere" ;
   that_Quant = mkQuant "that" "those" ;
-  there_Adv = mkAdv "there" ;
   there7to_Adv = mkAdv "there" ;
   there7from_Adv = mkAdv ["from there"] ;
-  therefore_PConj = ss "therefore" ;
-  they_Pron = mkPron "they" "them" "their" "theirs" plural P3 human ;
   this_Quant = mkQuant "this" "these" ;
   through_Prep = mkPrep "through" ;
-  too_AdA = mkAdA "too" ;
-  to_Prep = mkPrep "to" ;
-  under_Prep = mkPrep "under" ;
-  very_AdA = mkAdA "very" ;
-  want_VV = mkVV (regV "want") ;
-  we_Pron = mkPron "we" "us" "our" "ours" plural P1 human ;
+  
   whatPl_IP = mkIP "what" "what" "what's" plural ;
   whatSg_IP = mkIP "what" "what" "what's" singular ;
-  when_IAdv = ss "when" ;
-  when_Subj = ss "when" ;
-  where_IAdv = ss "where" ;
-  which_IQuant = {s = \\_ => "which"} ;
 ---b  whichPl_IDet = mkDeterminer plural ["which"] ;
 ---b  whichSg_IDet = mkDeterminer singular ["which"] ;
   whoPl_IP = mkIP "who" "whom" "whose" plural ;
   whoSg_IP = mkIP "who" "whom" "whose" singular ;
-  why_IAdv = ss "why" ;
-  without_Prep = mkPrep "without" ;
-  with_Prep = mkPrep "with" ;
+  
 ---b  yes_Phr = ss "yes" ;
-  yes_Utt = ss "yes" ;
-  youSg_Pron = mkPron "you" "you" "your" "yours" singular P2 human ;
-  youPl_Pron = mkPron "you" "you" "your" "yours" plural P2 human ;
-  youPol_Pron = mkPron "you" "you" "your" "yours" singular P2 human ;
 
   not_Predet = {s = "not" ; lock_Predet = <>} ;
   no_Quant = mkQuant "no" "no" "none" "none" ;
@@ -151,15 +434,9 @@ lin
   nobody_NP = regNP "nobody" singular ;
   nothing_NP = regNP "nothing" singular ;
 
-  at_least_AdN = mkAdN "at least" ;
-  at_most_AdN = mkAdN "at most" ;
-
   except_Prep = mkPrep "except" ;
-
-  as_CAdv = C.mkCAdv "as" "as" ;
-
+  
   have_V2 = dirV2 (mk5V "have" "has" "had" "had" "having") ;
-  that_Subj = ss "that" ;
   lin language_title_Utt = ss "English" ;
 -}
 }

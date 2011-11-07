@@ -1,42 +1,46 @@
-concrete RelativeLav of Relative = CatLav ** open ResLav in {
-{-
-  flags optimize=all_subs ;
+concrete RelativeLav of Relative = CatLav ** open ResLav, VerbLav in {
+flags optimize=all_subs ;
 
   lin
 
     RelCl cl = {
-      s = \\t,a,p,_ => "such" ++ "that" ++ cl.s ! t ! a ! p ! ODir ; 
-      c = Nom
-      } ;
-
+      s = \\m,p,_ => "ka" ++ cl.s ! m ! p 
+    } ;
+	  
     RelVP rp vp = {
-      s = \\t,ant,b,ag => 
-        let 
-          agr = case rp.a of {
-            RNoAg => ag ;
-            RAg a => a
-            } ;
-          cl = mkClause (rp.s ! RC (fromAgr agr).g Nom) agr vp
-        in
-        cl.s ! t ! ant ! b ! ODir ;
-      c = Nom
-      } ;
+      s = \\m,p,ag => rp.s ! Nom ++ buildVerb vp.v m p (toAgr (fromAgr ag).n P3 (fromAgr ag).g) ++ vp.s2 ! ag
+    } ;
+
+    RelSlash rp slash = { -- FIXME - vârdu secîba; nevis 'kas mîl viòu' bet 'kas viòu mîl' 
+      s = \\m,p,ag => 
+          slash.p.s ++ rp.s ! (slash.p.c ! Sg) ++  slash.s ! m ! p ;
+    } ;
+  {-
 
 -- Pied piping: "at which we are looking". Stranding and empty
 -- relative are defined in $ExtraEng.gf$ ("that we are looking at", 
 -- "we are looking at").
 
-    RelSlash rp slash = {
-      s = \\t,a,p,agr => 
-          slash.c2 ++ rp.s ! RPrep (fromAgr agr).g ++ slash.s ! t ! a ! p ! ODir ;
-      c = Acc
-      } ;
 
     FunRP p np rp = {
       s = \\c => np.s ! Acc ++ p.s ++ rp.s ! RPrep (fromAgr np.a).g ;
       a = RAg np.a
       } ;
-
+	-}
+	--FIXME placeholder
+	FunRP p np rp = { s = \\_ => NON_EXISTENT } ; 
+	
+	IdRP = {
+	  s = table {
+		Nom => "kas";
+		Gen => "kâ";
+		Dat => "kam";
+		Acc => "ko";
+		Loc => "kur";
+		ResLav.Voc => NON_EXISTENT		
+	  }
+	};
+	{-
     IdRP = 
      { s = table {
         RC _ Gen => "whose" ; 
@@ -47,6 +51,5 @@ concrete RelativeLav of Relative = CatLav ** open ResLav in {
         RPrep _     => "whom"
         } ;
       a = RNoAg
-      } ;
--}
+    } ; -}
 }

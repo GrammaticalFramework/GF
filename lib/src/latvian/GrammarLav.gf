@@ -11,10 +11,10 @@ concrete GrammarLav of Grammar =
   RelativeLav,
   ConjunctionLav,
   PhraseLav,
-  TextX,
+  TextX - [CAdv],
   StructuralLav,
   IdiomLav,
-  TenseX
+  TenseX - [CAdv]
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;

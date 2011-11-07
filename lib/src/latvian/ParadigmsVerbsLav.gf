@@ -1,4 +1,4 @@
--- Latvian verb paradigms - by Pēteris Paikens & Normunds Grūzītis, copied off mini-grammar as of 2011-07-12
+-- Latvian verb paradigms - by Pēteris Paikens & Normunds Grūzītis
 
 resource ParadigmsVerbsLav = open 
   (Predef=Predef), 
@@ -8,13 +8,10 @@ resource ParadigmsVerbsLav = open
   in {
 
 flags
-  coding = utf8;
+  coding = utf8 ;
   
-oper
-  Verb     : Type = {s : Polarity => VerbForm => Str} ;
+oper  
   Verb_TMP : Type = {s : VerbForm => Str} ;
-
--- VERBS
 
   -- Second and third conjugations
   mkVerb : Str -> VerbConj -> Verb = \lemma,conj -> {
@@ -84,7 +81,7 @@ oper
         Indicative P1 Pl Fut  => pal_C1_1 stem3 stem + "sim" ;
         Indicative P1 Pl Past    => stem3 + "ām" ;
 
-        Indicative P2 Sg Pres => pal_C1_2 stem3 stem2 ;
+        Indicative P2 Sg Pres => stem3 ;
         Indicative P2 Sg Fut  => pal_C1_1 stem3 stem + "si" ;
         Indicative P2 Sg Past    => stem3 + "i" ;
         Indicative P2 Pl Pres => stem2 + "at" ;
@@ -104,28 +101,11 @@ oper
 
         Debitive => "jā" + stem2 ;
         DebitiveRelative => "jā" + stem2 + "ot" ;
-
-        Participle Masc Sg Nom => pal_C1_4 stem3 + "is" ;
-        Participle Masc Sg Gen => pal_C1_3 stem3 + "uša" ;
-        Participle Masc Sg Dat => pal_C1_3 stem3 + "ušam" ;
-        Participle Masc Sg Acc => pal_C1_3 stem3 + "ušu" ;
-        Participle Masc Sg Loc => pal_C1_3 stem3 + "ušā" ;
-        Participle Masc Pl Nom => pal_C1_3 stem3 + "uši" ;
-        Participle Masc Pl Gen => pal_C1_3 stem3 + "ušu" ;
-        Participle Masc Pl Dat => pal_C1_3 stem3 + "ušiem" ;
-        Participle Masc Pl Acc => pal_C1_3 stem3 + "ušus" ;
-        Participle Masc Pl Loc => pal_C1_3 stem3 + "ušos" ;
-
-        Participle Fem Sg Nom => pal_C1_3 stem3 + "usi" ;
-        Participle Fem Sg Gen => pal_C1_3 stem3 + "ušas" ;
-        Participle Fem Sg Dat => pal_C1_3 stem3 + "ušai" ;
-        Participle Fem Sg Acc => pal_C1_3 stem3 + "ušu" ;
-        Participle Fem Sg Loc => pal_C1_3 stem3 + "ušā" ;
-        Participle Fem Pl Nom => pal_C1_3 stem3 + "ušas" ;
-        Participle Fem Pl Gen => pal_C1_3 stem3 + "ušu" ;
-        Participle Fem Pl Dat => pal_C1_3 stem3 + "ušām" ;
-        Participle Fem Pl Acc => pal_C1_3 stem3 + "ušas" ;
-        Participle Fem Pl Loc => pal_C1_3 stem3 + "ušās"
+		
+		Imperative Sg => stem3 ;
+		Imperative Pl => stem3 + "iet" ;
+		
+		Participle g n c => participle_normal_l g n c (pal_C1_3 stem3) (pal_C1_4 stem3) 
       }
     } ;
 
@@ -164,28 +144,11 @@ oper
 
         Debitive => "jā" + stem ;
         DebitiveRelative => "jā" + stem + "jot" ;
-
-        Participle Masc Sg Nom => stem + "jis" ;
-        Participle Masc Sg Gen => stem + "juša" ;
-        Participle Masc Sg Dat => stem + "jušam" ;
-        Participle Masc Sg Acc => stem + "jušu" ;
-        Participle Masc Sg Loc => stem + "jušā" ;
-        Participle Masc Pl Nom => stem + "juši" ;
-        Participle Masc Pl Gen => stem + "jušu" ;
-        Participle Masc Pl Dat => stem + "jušiem" ;
-        Participle Masc Pl Acc => stem + "jušus" ;
-        Participle Masc Pl Loc => stem + "jušos" ;
-
-        Participle Fem Sg Nom => stem + "jusi" ;
-        Participle Fem Sg Gen => stem + "jušas" ;
-        Participle Fem Sg Dat => stem + "jušai" ;
-        Participle Fem Sg Acc => stem + "jušu" ;
-        Participle Fem Sg Loc => stem + "jušā" ;
-        Participle Fem Pl Nom => stem + "jušas" ;
-        Participle Fem Pl Gen => stem + "jušu" ;
-        Participle Fem Pl Dat => stem + "jušām" ;
-        Participle Fem Pl Acc => stem + "jušas" ;
-        Participle Fem Pl Loc => stem + "jušās"
+		
+		Imperative Sg => stem ;
+		Imperative Pl => stem + "jiet";
+				
+		Participle g n c => participle_normal g n c (stem + "j")
       }
     } ;
 
@@ -224,28 +187,11 @@ oper
 
         Debitive => pal_C3_3 stem ;
         DebitiveRelative => pal_C3_3 stem + "ot" ;
+		
+		Imperative Sg => pal_C3_1 stem + "i" ;
+		Imperative Pl => pal_C3_1 stem + "iet";
 
-        Participle Masc Sg Nom => stem + "jis" ;
-        Participle Masc Sg Gen => stem + "juša" ;
-        Participle Masc Sg Dat => stem + "jušam" ;
-        Participle Masc Sg Acc => stem + "jušu" ;
-        Participle Masc Sg Loc => stem + "jušā" ;
-        Participle Masc Pl Nom => stem + "juši" ;
-        Participle Masc Pl Gen => stem + "jušu" ;
-        Participle Masc Pl Dat => stem + "jušiem" ;
-        Participle Masc Pl Acc => stem + "jušus" ;
-        Participle Masc Pl Loc => stem + "jušos" ;
-
-        Participle Fem Sg Nom => stem + "jusi" ;
-        Participle Fem Sg Gen => stem + "jušas" ;
-        Participle Fem Sg Dat => stem + "jušai" ;
-        Participle Fem Sg Acc => stem + "jušu" ;
-        Participle Fem Sg Loc => stem + "jušā" ;
-        Participle Fem Pl Nom => stem + "jušas" ;
-        Participle Fem Pl Gen => stem + "jušu" ;
-        Participle Fem Pl Dat => stem + "jušām" ;
-        Participle Fem Pl Acc => stem + "jušas" ;
-        Participle Fem Pl Loc => stem + "jušās"
+		Participle g n c => participle_normal g n c (stem + "j")
       }
     } ;
 
@@ -287,28 +233,11 @@ oper
 
         Debitive => "jā" + stem2 + "as" ;
         DebitiveRelative => "jā" + stem2 + "oties" ;
+		
+		Imperative Sg => pal_C1_2 stem3 stem2 + "ies" ;
+		Imperative Pl => pal_C1_2 stem3 stem2 + "ieties" ;
 
-        Participle Masc Sg Nom => pal_C1_4 stem3 + "ies" ;
-        Participle Masc Sg Gen => NON_EXISTENT ;
-        Participle Masc Sg Dat => NON_EXISTENT ;
-        Participle Masc Sg Acc => pal_C1_3 stem3 + "ušos" ;
-        Participle Masc Sg Loc => NON_EXISTENT ;
-        Participle Masc Pl Nom => pal_C1_3 stem3 + "ušies" ;
-        Participle Masc Pl Gen => pal_C1_3 stem3 + "ušos" ;
-        Participle Masc Pl Dat => NON_EXISTENT ;
-        Participle Masc Pl Acc => pal_C1_3 stem3 + "ušos" ;
-        Participle Masc Pl Loc => NON_EXISTENT ;
-
-        Participle Fem Sg Nom => pal_C1_3 stem3 + "usies" ;
-        Participle Fem Sg Gen => pal_C1_3 stem3 + "ušās" ;
-        Participle Fem Sg Dat => NON_EXISTENT ;
-        Participle Fem Sg Acc => pal_C1_3 stem3 + "ušos" ;
-        Participle Fem Sg Loc => NON_EXISTENT ;
-        Participle Fem Pl Nom => pal_C1_3 stem3 + "ušās" ;
-        Participle Fem Pl Gen => pal_C1_3 stem3 + "ušos" ;
-        Participle Fem Pl Dat => NON_EXISTENT ;
-        Participle Fem Pl Acc => pal_C1_3 stem3 + "ušos" ;
-        Participle Fem Pl Loc => NON_EXISTENT
+		Participle g n c => participle_reflexive_l g n c (pal_C1_3 stem3) (pal_C1_4 stem3) 
       }
     } ;
 
@@ -347,28 +276,11 @@ oper
 
         Debitive => "jā" + stem + "jas" ;
         DebitiveRelative => "jā" + stem + "joties" ;
+		
+		Imperative Sg => stem + "jies" ;
+		Imperative Pl => stem + "jieties" ;
 
-        Participle Masc Sg Nom => stem + "jies" ;
-        Participle Masc Sg Gen => NON_EXISTENT ;
-        Participle Masc Sg Dat => NON_EXISTENT ;
-        Participle Masc Sg Acc => stem + "jušos" ;
-        Participle Masc Sg Loc => NON_EXISTENT ;
-        Participle Masc Pl Nom => stem + "jušies" ;
-        Participle Masc Pl Gen => stem + "jušos" ;
-        Participle Masc Pl Dat => NON_EXISTENT ;
-        Participle Masc Pl Acc => stem + "jušos" ;
-        Participle Masc Pl Loc => NON_EXISTENT ;
-
-        Participle Fem Sg Nom => stem + "jusies" ;
-        Participle Fem Sg Gen => stem + "jušās" ;
-        Participle Fem Sg Dat => NON_EXISTENT ;
-        Participle Fem Sg Acc => stem + "jušos" ;
-        Participle Fem Sg Loc => NON_EXISTENT ;
-        Participle Fem Pl Nom => stem + "jušās" ;
-        Participle Fem Pl Gen => stem + "jušos" ;
-        Participle Fem Pl Dat => NON_EXISTENT ;
-        Participle Fem Pl Acc => stem + "jušās" ;
-        Participle Fem Pl Loc => NON_EXISTENT
+		Participle g n c => participle_reflexive g n c (stem + "j")
       }
     } ;
 
@@ -408,33 +320,18 @@ oper
         Debitive => pal_C3_6 stem + "s" ;
         DebitiveRelative => pal_C3_6 stem + "oties" ;
 
-        Participle Masc Sg Nom => stem + "jies" ;
-        Participle Masc Sg Gen => NON_EXISTENT ;
-        Participle Masc Sg Dat => NON_EXISTENT ;
-        Participle Masc Sg Acc => stem + "jušos" ;
-        Participle Masc Sg Loc => NON_EXISTENT ;
-        Participle Masc Pl Nom => stem + "jušies" ;
-        Participle Masc Pl Gen => stem + "jušos" ;
-        Participle Masc Pl Dat => NON_EXISTENT ;
-        Participle Masc Pl Acc => stem + "jušos" ;
-        Participle Masc Pl Loc => NON_EXISTENT ;
-
-        Participle Fem Sg Nom => stem + "jusies" ;
-        Participle Fem Sg Gen => stem + "jušās" ;
-        Participle Fem Sg Dat => NON_EXISTENT ;
-        Participle Fem Sg Acc => stem + "jušos" ;
-        Participle Fem Sg Loc => NON_EXISTENT ;
-        Participle Fem Pl Nom => stem + "jušās" ;
-        Participle Fem Pl Gen => stem + "jušos" ;
-        Participle Fem Pl Dat => NON_EXISTENT ;
-        Participle Fem Pl Acc => stem + "jušās" ;
-        Participle Fem Pl Loc => NON_EXISTENT
+		Imperative Sg => pal_C3_1 stem + "ies" ;
+		Imperative Pl => pal_C3_1 stem + "ieties" ;
+		
+		Participle g n c => participle_reflexive g n c (stem + "j")
       }
     } ;
 
   mkVerb_Irreg : Str -> Verb = \lemma ->
     case lemma of {
-      "būt" => mkVerb_toBe
+      "būt" => mkVerb_toBe ;
+	  "iet" => mkVerb_Walk ;
+	  "gulēt" => mkVerb_Sleep
     } ;
 
   mkVerb_toBe : Verb = {
@@ -456,6 +353,43 @@ oper
       }
     }
   } ;
+  
+  mkVerb_Walk : Verb = {
+    s = table {
+      Pos => table {
+        Indicative P3 _  Pres => "iet" ;
+        Debitive => "jāiet" ;
+        x => (mkVerb_C1 "iet" "eju" "gāju" ).s ! x			-- the incorrect form 'esu' will be overriden
+      } ;
+      Neg => table {
+        Indicative P3 _  Pres => "neiet" ;
+        Debitive => NON_EXISTENT;
+        DebitiveRelative => NON_EXISTENT;
+        x => (mkVerb_C1 "neiet" "neeju" "negāju" ).s ! x		-- the incorrect form 'neesu' will be overriden
+      }
+    }  
+  } ;
+  
+  mkVerb_Sleep : Verb = {
+    s = table {
+      Pos => table {
+		Indicative P2 Sg Pres => (mkVerb_C3 "gulēt").s ! Indicative P2 Sg Pres;			
+	    Indicative p n Pres => (mkVerb_C3 "guļēt").s ! Indicative p n Pres;			
+		Relative Pres => (mkVerb_C3 "guļēt").s ! Relative Pres;			
+		Debitive => (mkVerb_C3 "guļēt").s ! Debitive;			
+		DebitiveRelative => (mkVerb_C3 "guļēt").s ! DebitiveRelative;			
+        x => (mkVerb_C3 "gulēt").s ! x			
+      } ;
+      Neg => table {
+		Indicative P2 Sg Pres => (mkVerb_C3 "negulēt").s ! Indicative P2 Sg Pres;			
+	    Indicative p n Pres => (mkVerb_C3 "neguļēt").s ! Indicative p n Pres;
+		Relative Pres => (mkVerb_C3 "neguļēt").s ! Relative Pres;			
+		Debitive => NON_EXISTENT;			
+		DebitiveRelative => NON_EXISTENT;			
+        x => (mkVerb_C3 "negulēt").s ! x		
+      }
+    }
+  } ;
 
   -- Auxiliaries (palatalization rules)
 
@@ -465,9 +399,10 @@ oper
       s + "s" => case stem3 of {
         _ + "d" => s + "dī" ;
         _ + "t" => s + "tī" ;
-        _ + "s" => s + "sī" ;
+        _ + "s" => s + "sī" ;		
         _ => stem
       } ;
+	  s + "z" => s + "zī" ; -- lauzt -> lauzīs
       _ => stem
     } ;
 
@@ -478,7 +413,12 @@ oper
         _ + "s" => s + "s" ;
         _ => stem
       } ;
-      s + "ž"  => s + "d" ;
+	  s + "t" => case stem of {
+		_ + "met" => stem ;
+		_ + "cērt" => stem;
+		_ => s + "ti"
+	  } ;
+      -- s + "ž"  => s + "d" ;  -- aizkomentēts jo noveda pie laužu -> laud nevis lauz
       s + "ļ"  => s + "l" ;
       s + "mj" => s + "m" ;
       s + "bj" => s + "b" ;
@@ -520,14 +460,7 @@ oper
 
   -- Ref. to the Java implementation: mija5
   pal_C3_3 : Str -> Str = \stem ->
-    "jā" +
-    case stem of {
-      s + "dā" => s + "d" ;
-      s + "ā"  => s + "a" ;
-      s + "cī" => s + "ka" ;
-      s + "ī"  => s + "a" ;
-      _ => Predef.tk 1 stem
-    } ;
+    "jā" + pal_C3_5 stem ;
 
   -- Ref. to the Java implementation: mija8
   pal_C3_4 : Str -> Str = \stem ->
@@ -558,5 +491,89 @@ oper
       s + "inā" => s + "inā" ;
       _ => Predef.tk 1 stem + "a"
     } ;  
+
+
+  -- Participle paradigms
+  participle_normal : Gender -> Number -> Case -> Str -> Str  = \g,n,c, stem -> participle_normal_l g n c stem stem;
+  participle_normal_l : Gender -> Number -> Case -> Str -> Str -> Str = \g,n,c, stem, lemma_stem -> 
+    case g of {
+		Masc => case n of {
+			Sg => case c of {
+				Nom => lemma_stem + "is" ;
+				Gen => stem + "uša" ;
+				Dat => stem + "ušam" ;
+				Acc => stem + "ušu" ;
+				Loc => stem + "ušā" ;
+				Voc => NON_EXISTENT 
+			} ;
+			Pl => case c of {
+				Nom => stem + "uši" ;
+				Gen => stem + "ušu" ;
+				Dat => stem + "ušiem" ;
+				Acc => stem + "ušus" ;
+				Loc => stem + "ušos" ; 
+				Voc => NON_EXISTENT 
+			}
+		} ;
+		Fem => case n of {
+			Sg => case c of {
+				Nom => stem + "usi" ;
+				Gen => stem + "ušas" ;
+				Dat => stem + "ušai" ;
+				Acc => stem + "ušu" ;
+				Loc => stem + "ušā" ;
+				Voc => NON_EXISTENT 
+			};
+			Pl => case c of {
+				Nom => stem + "ušas" ;
+				Gen => stem + "ušu" ;
+				Dat => stem + "ušām" ;
+				Acc => stem + "ušas" ;
+				Loc => stem + "ušās" ;
+				Voc => NON_EXISTENT 
+			}
+		}
+	} ;
+
+  participle_reflexive : Gender -> Number -> Case -> Str -> Str  = \g,n,c, stem -> participle_reflexive_l g n c stem stem;
+  participle_reflexive_l : Gender -> Number -> Case -> Str -> Str -> Str = \g,n,c, stem, lemma_stem -> 
+    case g of {
+		Masc => case n of {
+			Sg => case c of {
+				Nom => lemma_stem + "ies" ;
+				Gen => NON_EXISTENT ;
+				Dat => NON_EXISTENT ;
+				Acc => stem + "ušos" ;
+				Loc => NON_EXISTENT ;
+				Voc => NON_EXISTENT 
+			} ;
+			Pl => case c of {
+				Nom => stem + "ušies" ;
+				Gen => stem + "ušos" ;
+				Dat => NON_EXISTENT ;
+				Acc => stem + "ušos" ;
+				Loc => NON_EXISTENT ;
+				Voc => NON_EXISTENT 
+			}
+		} ;
+		Fem => case n of {
+			Sg => case c of {
+				Nom => stem + "usies" ;
+				Gen => stem + "ušās" ;
+				Dat => NON_EXISTENT ;
+				Acc => stem + "ušos" ;
+				Loc => NON_EXISTENT ;
+				Voc => NON_EXISTENT 
+			};
+			Pl => case c of {
+				Nom => stem + "ušās" ;
+				Gen => stem + "ušos" ;
+				Dat => NON_EXISTENT ;
+				Acc => stem + "ušos" ;
+				Loc => NON_EXISTENT ;
+				Voc => NON_EXISTENT 
+			}
+		}
+	} ;
 	
 } ;

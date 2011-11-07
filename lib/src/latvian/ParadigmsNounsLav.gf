@@ -1,26 +1,52 @@
--- Latvian noun paradigms - by Normunds Grūzītis; copied off mini-grammar as of 2011-07-12
+-- Latvian noun paradigms - by Normunds Grūzītis & Pēteris Paikens
 
-resource ParadigmsNounsLav = open 
-  (Predef=Predef), 
-  Prelude, 
+resource ParadigmsNounsLav = open
+  (Predef=Predef),
+  Prelude,
   ResLav,
   CatLav
   in {
 
 flags
-  coding = utf8;
-  
+  coding = utf8 ;
+
 oper
   Noun     : Type = {s : Number => Case => Str ; g : Gender} ;
-
-  masculine : Gender = Masc ;
-  feminine  : Gender = Fem ;  
+  ProperNoun : Type = {s : Case => Str; g : Gender; n : Number} ;
   
--- NOUNS
+  masculine : Gender = Masc ;
+  feminine  : Gender = Fem ;
 
   -- No parameters - default assumptions (gender, declension, palatalization)
   mkNoun : Str -> Noun = \lemma ->
     mkNounByPal lemma True ;
+
+   mkProperNoun : Str -> Number -> ProperNoun = \lemma,number ->
+    let noun = mkNoun lemma
+	in {
+	  s = table {
+	    c => noun.s ! number ! c
+	  } ;
+	  g = noun.g ;
+	  n = number
+	} ;
+
+{-
+  mkCardinalNumeral : Str -> CardinalNumeral = \lemma ->
+    let
+		stem : Str = cutStem lemma;
+		masc = mkNoun_D1 lemma;
+		fem = mkNoun_D4 lemma + "a" Fem
+	in {
+		s = table {
+			Masc => table {
+
+			} ;
+			Fem => table {
+			} ;
+		}
+	}
+-}
 
   -- Specified palatalization; default gender and declension
   mkNounByPal : Str -> Bool -> Noun = \lemma,pal ->
@@ -94,23 +120,28 @@ oper
   -- Expected endings of a D1 lemma:
   --   Sg: -s, -š
   --   Pl: -i
+  --       should be provided only in the case of plural mass nouns
+  --       produces an incorrect Sg.Nom form if plural lemma is given
+  --       the incorrect Sg.Nom forms should be filtered out by a domain lexicon
   mkNoun_D1 : Str -> Noun = \lemma ->
     let stem : Str = cutStem lemma
     in {
       s = table {
         Sg => table {
-          Nom => lemma ;			-- FIXME: if Pl lemma (-i) => -s or -š?! (default rule, explicit parameter)
+          Nom => lemma ;
           Gen => stem + "a" ;
           Dat => stem + "am" ;
           Acc => stem + "u" ;
-          Loc => stem + "ā"
+          Loc => stem + "ā" ;
+		  Voc => stem
         } ;
         Pl => table {
           Nom => stem + "i" ;
           Gen => stem + "u" ;
           Dat => stem + "iem" ;
           Acc => stem + "us" ;
-          Loc => stem + "os"
+          Loc => stem + "os" ;
+		  Voc => stem + "i"
         }
       } ;
       g = Masc
@@ -118,25 +149,30 @@ oper
 
   -- Expected endings of a D2 lemma:
   --   Sg: -is, -s
+  --       -s is expected only in the case of few predefined exceptions
   --   Pl: -i
-  -- Note: ending -s is expected only in the case of few predefined exceptions
+  --       should be provided only in the case of plural mass nouns
+  --       produces an incorrect Sg.Nom form if plural lemma is given
+  --       the incorrect Sg.Nom forms should be filtered out by a domain lexicon 
   mkNoun_D2 : Str -> Bool -> Noun = \lemma,pal ->
     let stem : Str = cutStem lemma
     in {
       s = table {
         Sg => table {
-          Nom => lemma ;			-- FIXME: if Pl lemma (-i) => -is or -s?! (exceptions only - default rules only?)
+          Nom => lemma ;
           Gen => case lemma of {#exception_D2_1 + "s" => lemma ; _ => palatalize stem pal + "a"} ;
           Dat => stem + "im" ;
           Acc => stem + "i" ;
-          Loc => stem + "ī"
+          Loc => stem + "ī" ;
+		  Voc => stem + "i"
         } ;
         Pl => table {
           Nom => palatalize stem pal + "i" ;
           Gen => palatalize stem pal + "u" ;
           Dat => palatalize stem pal + "iem" ;
           Acc => palatalize stem pal + "us" ;
-          Loc => palatalize stem pal + "os"
+          Loc => palatalize stem pal + "os" ;
+		  Voc => palatalize stem pal + "i"
         }
       } ;
       g = Masc
@@ -154,14 +190,16 @@ oper
           Gen => stem + "us" ;
           Dat => stem + "um" ;
           Acc => stem + "u" ;
-          Loc => stem + "ū"
+          Loc => stem + "ū" ;
+		  Voc => stem + "u"
         } ;
         Pl => table {
           Nom => stem + "i" ;
           Gen => stem + "u" ;
           Dat => stem + "iem" ;
           Acc => stem + "us" ;
-          Loc => stem + "os"
+          Loc => stem + "os" ;
+		  Voc => stem + "i"
         }
       } ;
       g = Masc
@@ -179,14 +217,16 @@ oper
           Gen => stem + "as" ;
           Dat => case gend of {Fem => stem + "ai" ; Masc => stem + "am"} ;
           Acc => stem + "u" ;
-          Loc => stem + "ā"
+          Loc => stem + "ā" ;
+		  Vod => stem + "a"
         } ;
         Pl => table {
           Nom => stem + "as" ;
           Gen => stem + "u" ;
           Dat => stem + "ām" ;
           Acc => stem + "as" ;
-          Loc => stem + "ās"
+          Loc => stem + "ās" ;
+		  Voc => stem + "as"
         }
       } ;
       g = gend
@@ -204,14 +244,16 @@ oper
           Gen => stem + "es" ;
           Dat => case gend of {Fem => stem + "ei" ; Masc => stem + "em"} ;
           Acc => stem + "i" ;
-          Loc => stem + "ē"
+          Loc => stem + "ē" ;
+		  Voc => stem + "e"
         } ;
         Pl => table {
           Nom => stem + "es" ;
           Gen => palatalize stem pal + "u" ;
           Dat => stem + "ēm" ;
           Acc => stem + "es" ;
-          Loc => stem + "ēs"
+          Loc => stem + "ēs" ;
+		  Voc => stem + "es"
         }
       } ;
       g = gend
@@ -231,7 +273,8 @@ oper
             Gen => stem + "s" ;
             Dat => case gend of {Fem => stem + "ij" ; Masc => stem + "im"} ;
             Acc => stem + "i" ;
-            Loc => stem + "ī"
+            Loc => stem + "ī" ;
+			Voc => stem + "s"
           }
         } ;
         Pl => table {
@@ -239,7 +282,8 @@ oper
           Gen => palatalize stem pal + "u" ;
           Dat => stem + "īm" ;
           Acc => stem + "is" ;
-          Loc => stem + "īs"
+          Loc => stem + "īs" ;
+		  Voc => stem + "is"
         }
       } ;
       g = gend
@@ -256,14 +300,16 @@ oper
           Gen => stem + "šanās" ;
           Dat => NON_EXISTENT ;
           Acc => stem + "šanos" ;
-          Loc => NON_EXISTENT
+          Loc => NON_EXISTENT ;
+		  Voc => stem + "šanās"
         } ;
         Pl => table {
           Nom => stem + "šanās" ;
           Gen => stem + "šanos" ;
           Dat => NON_EXISTENT ;
           Acc => stem + "šanās" ;
-          Loc => NON_EXISTENT
+          Loc => NON_EXISTENT ;
+		  Voc => stem + "šanās"
         }
       } ;
       g = Fem
@@ -277,6 +323,8 @@ oper
   exception_D2_2_pal : pattern Str = #(_ + "suņ") ;
   exception_D4       : pattern Str = #(_ + "puik") ;
   exception_D6       : pattern Str = #(_ + "ļaud") ;
+
+
 
   -- Auxiliaries
 
