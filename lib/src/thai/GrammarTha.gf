@@ -8,12 +8,12 @@ concrete GrammarTha of Grammar =
   NumeralTha,
   SentenceTha,
   QuestionTha,
---  RelativeTha,
---  ConjunctionTha,
+  RelativeTha,
+  ConjunctionTha,
   PhraseTha,
---  TextX,
+  TextX,
   StructuralTha,
---  IdiomTha
+  IdiomTha,
   TenseX
   ** {
 

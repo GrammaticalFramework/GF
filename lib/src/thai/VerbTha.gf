@@ -3,9 +3,22 @@ concrete VerbTha of Verb = CatTha ** open ResTha, StringsTha, Prelude in {
   flags optimize=all_subs ;
 
   lin
-    UseV = mkVP ;
---    ComplV2 v np = insertObject (v.c2 ++ np.s) (mkVP v)  ;
---    ComplV3 v np np2 = insertObject (v.c2 ++ np.s ++ v.c3 ++ np2.s) (mkVP v)  ;
+    UseV = predV ;
+
+    SlashV2a v = predV v ** {c2 = v.c2} ;
+
+    Slash2V3 v np = insertObj np (predV v) ** {c2 = v.c3} ;
+    Slash3V3 v np = insertObj np (predV v) ** {c2 = v.c2} ;
+
+    SlashV2A v ap = 
+      insertObj (mkNP <thbind v.c2 ap.s : Str>) (predV v) ** {c2 = v.c2} ;
+
+    SlashV2V v vp = ---- looks too simple compared with ComplVV
+      insertObj (mkNP <thbind v.c2 (infVP vp) : Str>) (predV v) ** {c2 = v.c2} ;
+    SlashV2S v s  = 
+      insertObj (mkNP <thbind conjThat s.s : Str>) (predV v) ** {c2 = v.c2} ;
+    SlashV2Q v q  = 
+      insertObj (mkNP (q.s ! QDir)) (predV v) ** {c2 = v.c2} ;
 
     ComplVV vv vp = {
       s = \\p =>
@@ -14,38 +27,52 @@ concrete VerbTha of Verb = CatTha ** open ResTha, StringsTha, Prelude in {
           v = vp.s ! Pos
         in 
         case vv.typ of {
-          VVPre => vv.s ++ neg ++ v ; 
-          VVMid => neg ++ vv.s ++ v ; 
-          VVPost => v ++ neg ++ vv.s
+          VVPre => thbind vv.s neg v ; 
+          VVMid => thbind neg vv.s v ; 
+          VVPost => thbind v neg vv.s
           }
       } ;
 
---
---    ComplVS v s  = insertObj (\\_ => conjThat ++ s.s) (predV v) ;
---    ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
---
---    ComplVA  v    ap = insertObj (ap.s) (predV v) ;
---    ComplV2A v np ap = 
---      insertObj (\\_ => v.c2 ++ np.s ! Acc ++ ap.s ! np.a) (predV v) ;
---
-    UseComp comp = comp ;
---
---    AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
---
---    AdVVP adv vp = insertAdV adv.s vp ;
---
---    ReflV2 v = insertObj (\\a => v.c2 ++ reflPron ! a) (predV v) ;
---
---    PassV2 v = insertObj (\\_ => v.s ! VPPart) (predAux auxBe) ;
---
---    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; isRefl = vv.isRefl} ; 
+    ComplVS v s  = insertObj (mkNP (thbind conjThat s.s)) (predV v) ;
+    ComplVQ v q  = insertObj (mkNP (q.s ! QDir)) (predV v) ;
 
-    CompAP ap = {s = \\p => polStr may_s p ++ ap.s} ;
+
+    ComplVA  v    ap = insertObj ap (predV v) ; 
+
+    ComplSlash vp np = insertObj (mkNP (thbind vp.c2 np.s)) vp ;
+
+    UseComp comp = comp ;
+
+    SlashVV v vp = ---- too simple?
+      insertObj (mkNP (infVP vp)) (predV (regV v.s)) ** {c2 = vp.c2} ;
+
+    SlashV2VNP v np vp = 
+      insertObj np
+        (insertObj (mkNP (infVP vp)) (predV v)) ** {c2 = vp.c2} ;
+
+    AdvVP vp adv = insertObj adv vp ;
+
+    AdVVP adv vp = insertObj adv vp ; 
+    
+    ReflVP vp = insertObj (mkNP (thbind vp.c2 reflPron)) vp ;
+
+    PassV2 v = {s = \\p => thbind thuuk_s ((predV v).s ! p)} ;
+
+    CompAP ap = {s = \\p => thbind (polStr may_s p) ap.s} ;
+
     CompNP np = {s = table {
-      Pos => pen_s ++ np.s ;
-      Neg => may_s ++ chay_s ++ np.s
+      Pos => thbind pen_s np.s ;
+      Neg => thbind may_s chay_s np.s
       }
     } ;
+
+    CompCN np = {s = table {
+      Pos => thbind pen_s np.s ;
+      Neg => thbind may_s chay_s np.s
+      }
+    } ;
+
     CompAdv a = {s = \\p => polStr may_s p ++ a.s} ; --- ??
 
 }
+

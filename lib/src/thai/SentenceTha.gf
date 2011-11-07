@@ -5,57 +5,44 @@ concrete SentenceTha of Sentence = CatTha **
 
   lin
 
-    PredVP np vp = {s = \\p => np.s ++ vp.s ! p} ;
+    PredVP np vp = mkClause np vp ;
 
---    PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
+    PredSCVP sc vp = mkClause sc vp ;
 
     ImpVP vp = {
       s = table {
-        Pos => vp.s ! Pos ++ si_s ;
-        Neg => yaa_s ++ vp.s ! Pos
+        Pos => thbind (vp.s ! Pos) si_s ;
+        Neg => thbind yaa_s (vp.s ! Pos)
         }
       } ;
---    SlashV2 np v2 = 
---      mkClause (np.s ! Nom) np.a (predV v2) ** {c2 = v2.c2} ;
---
---    SlashVVV2 np vv v2 = 
---      mkClause (np.s ! Nom) np.a 
---        (insertObj (\\a => infVP vv.isAux (predV v2) a) (predVV vv))  **
---        {c2 = v2.c2} ;
---
---    AdvSlash slash adv = {
---      s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
---      c2 = slash.c2
---    } ;
---
---    SlashPrep cl prep = cl ** {c2 = prep.s} ;
---
---    EmbedS  s  = {s = conjThat ++ s.s} ;
---    EmbedQS qs = {s = qs.s ! QIndir} ;
---    EmbedVP vp = {s = infVP False vp (agrP3 Sg)} ; --- agr
---
-    UseCl  t p cl = {s = t.s ++ p.s ++ cl.s ! p.p} ;
-    UseQCl t p cl = {
-      s = \\q => t.s ++ p.s ++
-                 case q of {QIndir => waa_s ; _ => []} ++ 
-                 cl.s ! p.p
+
+    SlashVP np vp = mkPolClause np vp ** {c2 = vp.c2} ;
+
+    SlashVS np vs slash = 
+      mkPolClause np (insertObj (mkNP <thbind conjThat slash.s : Str>) (predV vs))  ** {c2 = slash.c2} ;
+
+    AdvSlash slash adv = {
+      s  = \\p => thbind (slash.s ! p) adv.s ;
+      c2 = slash.c2
       } ;
---    UseRCl t a p cl = {
---      s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! r ;
---      c = cl.c
---      } ;
---
---    AdvS a s = {s = a.s ++ "," ++ s.s} ;
---
---  oper
---    ctr = contrNeg True ;  -- contracted negations
---}
---
---{-
------ todo: tense of embedded Slash
---
---    SlashVSS np vs s = 
---      mkClause (np.s ! Nom) np.a 
---        (insertObj (\\_ => conjThat ++ s.s) (predV vs)) **
---        {c2 = s.c2} ;
+  
+    SlashPrep cl prep = {s = cl.s ! ClDecl ; c2 = prep.s} ;
+  
+    EmbedS  s  = {s = thbind conjThat s.s} ;
+    EmbedQS qs = {s = qs.s ! QIndir} ;
+    EmbedVP vp = {s = infVP vp} ;
+
+    UseCl  t p cl = {s = thbind t.s p.s (cl.s ! ClDecl ! p.p)} ;
+    UseQCl t p cl = {
+      s = \\q => thbind t.s p.s
+                 (case q of {QIndir => waa_s ; _ => []}) (cl.s ! p.p)
+      } ;
+    UseRCl t p cl = {
+      s = thbind t.s p.s (cl.s ! p.p) ;
+      } ;
+    UseSlash  t p cl = {s = thbind t.s p.s (cl.s ! p.p) ; c2 = cl.c2} ;
+
+    AdvS a s = thbind a s ;
+
+    RelS s r = thbind s r ;
 }

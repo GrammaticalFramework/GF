@@ -7,35 +7,39 @@ concrete QuestionTha of Question = CatTha **
 
 -- pos. may, neg. chay may - not always the proper forms ---
 
-    QuestCl cl = {s = \\p => cl.s ! Pos ++ polStr chay_s p ++ m'ay_s} ; 
+    QuestCl cl = {s = cl.s ! ClQuest} ; 
 
---
---    QuestVP qp vp = 
---      let cl = mkClause (qp.s ! Nom) {n = qp.n ; p = P3} vp
---      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
---
---    QuestSlash ip slash = 
---      mkQuestion (ss (slash.c2 ++ ip.s ! Acc)) slash ;
---      --- stranding in ExratTha 
---
---    QuestIAdv iadv cl = mkQuestion iadv cl ;
---
---    QuestIComp icomp np = 
---      mkQuestion icomp (mkClause (np.s ! Nom) np.a (predAux auxBe)) ;
---
---
---    PrepIP p ip = {s = p.s ++ ip.s ! Nom} ;
---
---    AdvIP ip adv = {
---      s = \\c => ip.s ! c ++ adv.s ;
---      n = ip.n
---      } ;
--- 
---    IDetCN idet num ord cn = {
---      s = \\c => idet.s ++ num.s ++ ord.s ++ cn.s ! idet.n ! c ; 
---      n = idet.n
---      } ;
---
---    CompIAdv a = a ;
---
+---- order of IP and VP to be revisited: Smyth p. 160
+
+    QuestVP qp vp = {s = (mkClause qp vp).s ! ClQuest} ;
+
+    QuestSlash ip slash = {s = \\p => thbind (slash.s ! p) slash.c2 ip.s} ; 
+
+    QuestIAdv iadv cl = {s = \\p => thbind (cl.s ! ClDecl ! p) iadv.s} ; 
+
+    QuestIComp icomp np = {s = \\p => thbind np.s icomp.s} ; 
+
+    PrepIP p ip = thbind p ip ;
+
+    AdvIP ip adv = thbind ip adv ;
+
+    IdetCN det cn = 
+      let cnc = if_then_Str det.hasC cn.c []
+      in  mkNP (thbind cn.s det.s1 cnc det.s2) ;
+
+    IdetIP idet = mkNP (thbind idet.s1 idet.s2) ;
+
+    IdetQuant iquant num = {
+      s1 = iquant.s1 ++ num.s ;
+      s2 = iquant.s2 ;
+      hasC = iquant.hasC
+      } ;
+
+    AdvIAdv i a = thbind i a ;
+
+    CompIAdv a = a ;
+
+    CompIP ip = ip ;
+
 }
+
