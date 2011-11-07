@@ -11,7 +11,7 @@ concrete GrammarTha of Grammar =
   RelativeTha,
   ConjunctionTha,
   PhraseTha,
-  TextX,
+  TextTha,
   StructuralTha,
   IdiomTha,
   TenseX

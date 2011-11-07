@@ -3,30 +3,25 @@
 concrete SymbolTha of Symbol = CatTha ** open Prelude, ResTha in {
 
   flags coding = utf8;
-{-
+
  lin
--- SymbPN i = {s = \\_ => i.s ; g = Masc} ;
-  SymbPN i = {s = addGenitiveS i.s ; g = Masc} ;
-  IntPN i  = {s = addGenitiveS i.s ; g = Masc} ;
-  FloatPN i = {s = addGenitiveS i.s ; g = Masc} ;
-  NumPN i = {s = \\_ =>i.s ; g = Masc} ;
+  SymbPN i = i ;
+  IntPN i  = i ;
+  FloatPN i = i ;
+  NumPN i = i ;
   CNIntNP cn i = {
-    s = \\c => cn.s ! Sg ! Dir ++ i.s ;
-    a = agrP3 cn.g Sg
+    s = thbind cn.s ++ i.s ;
+    c = cn.c
     } ;
-  CNSymbNP det cn xs = {
-    s = \\c => det.s!Sg!Masc ++ cn.s ! det.n ! Dir ++  xs.s ; 
-    a = agrP3 cn.g det.n
-    } ;
+  CNSymbNP det cn xs = ss (thbind det.s1 cn.s xs.s) ; ----  
   CNNumNP cn i = {
-    s = \\c => cn.s ! Sg ! Dir ++ i.s ;
-    a = agrP3 cn.g Sg
+    s = thbind cn.s ++ i.s ;
+    c = cn.c
     } ;
 
   SymbS sy = sy ; 
-  SymbNum sy = { s = sy.s ; n = Pl } ;
-  SymbOrd sy = { s = sy.s ++ "waN" ; n = Pl} ;
--}
+  SymbNum sy = sy ;
+  SymbOrd sy = sy ;
 
 lincat 
 

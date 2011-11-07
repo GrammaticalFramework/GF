@@ -10,6 +10,15 @@ oper
       = \s,c -> lin N {s = s ; c = c} ;
     } ;
 
+  personN : Str -> N
+      = \s -> mkN s "คน" ;
+  fooddishN : Str -> N
+      = \s -> mkN s "จาน" ;
+  vehicleN : Str -> N
+      = \s -> mkN s "คัน" ;
+  houseN : Str -> N
+      = \s -> mkN s "หลัง" ;
+
   mkA : Str -> A = \s -> lin A (mkAdj s) ;
 
   mkV = overload {

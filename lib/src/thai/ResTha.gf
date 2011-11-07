@@ -39,7 +39,7 @@ resource ResTha = ParamX, StringsTha ** open Prelude in {
 
     Noun = {s,c : Str} ;  
 
-    mkN : Str -> Str -> Noun = \s,c -> {s = s ; c = c} ;
+    mkNoun : Str -> Str -> Noun = \s,c -> {s = s ; c = c} ;
 
 -- before and after classifier; whether classifier needed (default)
 

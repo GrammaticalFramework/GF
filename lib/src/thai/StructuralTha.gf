@@ -1,5 +1,5 @@
 concrete StructuralTha of Structural = CatTha ** 
-  open StringsTha, ResTha, Prelude in {
+  open ParadigmsTha, ResTha, Prelude in {
 
   flags coding = utf8 ;
 
@@ -31,6 +31,7 @@ concrete StructuralTha of Structural = CatTha **
 --  first_Ord = ss "first" ;
 --  for_Prep = ss "for" ;
 --  from_Prep = ss "from" ;
+  have_V2 = mkV2 "มี" ;
   he_Pron = ss khaw_s ;
 --  here_Adv = ss "here" ;
 --  here7to_Adv = ss ["to here"] ;
@@ -48,15 +49,15 @@ concrete StructuralTha of Structural = CatTha **
 --  most_Predet = ss "most" ;
 --  much_Det = mkDeterminer Sg "much" ;
   must_VV = {s = tog_s ; typ = VVPre} ;
---  no_Phr = ss "no" ;
+  no_Utt = ss may_s ;
 --  on_Prep = ss "on" ;
 --  one_Quant = mkDeterminer Sg "one" ;
 --  only_Predet = ss "only" ;
 --  or_Conj = ss "or" ** {n = Sg} ;
 --  otherwise_PConj = ss "otherwise" ;
 --  part_Prep = ss "of" ;
---  please_Voc = ss "please" ;
---  possess_Prep = ss "of" ;
+  please_Voc = ss "ขอ" ;
+  possess_Prep = ss "ของ" ;
 --  quite_Adv = ss "quite" ;
   she_Pron = ss khaw_s ;
 --  so_AdA = ss "so" ;
@@ -77,22 +78,22 @@ concrete StructuralTha of Structural = CatTha **
 --  this_NP = regNP "this" Sg ;
 --  those_NP = regNP "those" Pl ;
 --  through_Prep = ss "through" ;
---  too_AdA = ss "too" ;
+  too_AdA = ss (thbind "เกิน" "ไป") ;
 --  to_Prep = ss "to" ;
 --  under_Prep = ss "under" ;
---  very_AdA = ss "very" ;
+  very_AdA = ss "มาก" ;
   want_VV = {s = yaak_s ; typ = VVMid} ;
   we_Pron = ss raw_s ;
   whatPl_IP, whatSg_IP = ss (thbind "อะ" "ไร") ;
 --  when_IAdv = ss "when" ;
 --  when_Subj = ss "when" ;
---  where_IAdv = ss "where" ;
+  where_IAdv = ss (thbind "ฑี" "ไหน") ;
   which_IQuant = {s1 = "ไหน" ; s2 = [] ; hasC = True} ;
   whoPl_IP, whoSg_IP = ss "ไคร" ;
 --  why_IAdv = ss "why" ;
 --  without_Prep = ss "without" ;
 --  with_Prep = ss "with" ;
---  yes_Phr = ss "yes" ;
+  yes_Utt = ss chay_s ;
   youSg_Pron = ss khun_s ;
   youPl_Pron = ss khun_s ;
   youPol_Pron = ss khun_s ;
