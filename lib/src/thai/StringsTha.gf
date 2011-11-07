@@ -44,6 +44,7 @@ laa_s = "ลา" ; -- bye1
 lag_s = "หลัง" ; -- houses Classif
 lap_s = "หลับ" ; -- sleep2 
 lem_s = "เล่ม" ; -- books Classif
+mak_s = "มาก" ; -- very
 may_s = "ไม่" ; -- not
 m'ay_s = "ไหม" ; -- Question
 mvvn_s = "หมื่น" ; -- ten thousand

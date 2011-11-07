@@ -44,6 +44,7 @@ laa_s = "la:" ; -- bye1
 lag_s = "hlag" ; -- houses Classif
 lap_s = "hlab" ; -- sleep2 
 lem_s = "elT1m" ; -- books Classif
+mak_s = "ma:k" ; -- very
 may_s = "a&mT1" ; -- not
 m'ay_s = "a&hm" ; -- Question
 mvvn_s = "hmv:T1n" ; -- ten thousand
