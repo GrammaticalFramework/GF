@@ -1,7 +1,7 @@
 concrete StructuralTha of Structural = CatTha ** 
   open StringsTha, ResTha, Prelude in {
 
-  flags optimize=all ;
+  flags coding = utf8 ;
 
   lin
 --  above_Prep = ss "above" ;
@@ -10,14 +10,14 @@ concrete StructuralTha of Structural = CatTha **
 --  almost_AdA, almost_AdN = ss "almost" ;
 --  although_Subj = ss "although" ;
 --  always_AdV = ss "always" ;
---  and_Conj = ss "and" ** {n = Pl} ;
+  and_Conj = {s1 = [] ; s2 = "และ"} ;
 --  because_Subj = ss "because" ;
 --  before_Prep = ss "before" ;
 --  behind_Prep = ss "behind" ;
 --  between_Prep = ss "between" ;
 --  both7and_DConj = sd2 "both" "and" ** {n = Pl} ;
 --  but_PConj = ss "but" ;
---  by8agent_Prep = ss "by" ;
+  by8agent_Prep = ss [] ;
 --  by8means_Prep = ss "by" ;
   can8know_VV = {s = pen_s ; typ = VVPost} ;
   can_VV = {s = way_s ; typ = VVPost} ;
@@ -41,7 +41,7 @@ concrete StructuralTha of Structural = CatTha **
 --  in8front_Prep = ss ["in front of"] ;
   i_Pron  = ss chan_s ;
 --  in_Prep = ss "in" ;
---  it_Pron  = mkNP "it" "it" "its" Sg P3 ;
+  it_Pron  = ss "มัน" ;
 --  less_CAdv = ss "less" ;
 --  many_Det = mkDeterminer Pl "many" ;
 --  more_CAdv = ss "more" ;
@@ -72,8 +72,8 @@ concrete StructuralTha of Structural = CatTha **
 --  there7from_Adv = ss ["from there"] ;
 --  therefore_PConj = ss "therefore" ;
 --  these_NP = regNP "these" Pl ;
---  they_Pron = mkNP "they" "them" "their" Pl P3 ; 
---  this_Quant = mkQuant "this" "these" ;
+  they_Pron = mkNP khaw_s ;
+  this_Quant = ss nii_s ** {hasC = True} ;
 --  this_NP = regNP "this" Sg ;
 --  those_NP = regNP "those" Pl ;
 --  through_Prep = ss "through" ;
@@ -83,15 +83,12 @@ concrete StructuralTha of Structural = CatTha **
 --  very_AdA = ss "very" ;
   want_VV = {s = yaak_s ; typ = VVMid} ;
   we_Pron = ss raw_s ;
---  whatPl_IP = mkIP "what" "what" "what's" Sg ;
---  whatSg_IP = mkIP "what" "what" "what's" Sg ;
+  whatPl_IP, whatSg_IP = ss (thbind "อะ" "ไร") ;
 --  when_IAdv = ss "when" ;
 --  when_Subj = ss "when" ;
 --  where_IAdv = ss "where" ;
---  whichPl_IDet = mkDeterminer Pl ["which"] ;
---  whichSg_IDet = mkDeterminer Sg ["which"] ;
---  whoSg_IP = mkIP "who" "whom" "whose" Sg ;
---  whoPl_IP = mkIP "who" "whom" "whose" Pl ;
+  which_IQuant = {s1 = "ไหน" ; s2 = [] ; hasC = True} ;
+  whoPl_IP, whoSg_IP = ss "ไคร" ;
 --  why_IAdv = ss "why" ;
 --  without_Prep = ss "without" ;
 --  with_Prep = ss "with" ;

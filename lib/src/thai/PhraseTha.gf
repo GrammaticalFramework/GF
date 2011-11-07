@@ -12,6 +12,9 @@ concrete PhraseTha of Phrase = CatTha ** open Prelude, ResTha in {
     UttIP ip = ip ;
     UttIAdv iadv = iadv ;
     UttNP np = np ;
+    UttCN cn = cn ;
+    UttAP ap = ap ;
+    UttCard x = x ;
     UttVP vp = {s = vp.s ! Pos} ;
     UttAdv adv = adv ;
 
