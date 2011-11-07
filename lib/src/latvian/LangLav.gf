@@ -5,6 +5,9 @@ concrete LangLav of Lang =
   LexiconLav
   ** {
 
-flags startcat = Phr ; unlexer = text ; lexer = text ;
+flags
+  startcat = Phr ;
+  unlexer = text ;
+  lexer = text ;
 
 } ;

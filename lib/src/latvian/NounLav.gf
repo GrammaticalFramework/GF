@@ -4,147 +4,130 @@ flags optimize=all_subs ;
   lin
 
     UseN n   = {s = \\_ => n.s ; g = n.g} ;
-  
+	UsePN pn = { s = pn.s ; a = agrgP3 Sg pn.g } ;
+	UsePron p = p ;
+	
+    PredetNP pred np = {
+      s = \\c => pred.s ! (fromAgr np.a).g ++ np.s ! c ;
+      a = np.a
+    } ;
+
+	UseN2 n = {s = \\_ => n.s ; g = n.g};
+	UseN3 n = n;
+	
+    ComplN2 f x = {
+		s = \\_,n,c => preOrPost f.isPre (f.p.s ++ x.s ! (f.p.c ! (fromAgr x.a).n)) (f.s ! n ! c); 
+		g = f.g
+	} ;
+    ComplN3 f x = {
+	  s = \\n,c => preOrPost f.isPre1 (f.p1.s ++ x.s ! (f.p1.c ! (fromAgr x.a).n)) (f.s ! n ! c);
+      g = f.g ;
+      p = f.p2 ;
+	  isPre = f.isPre2
+    } ;
+	Use2N3 n = { s = n.s ; g = n.g ; p = n.p1 ; isPre = n.isPre1 };
+	Use3N3 n = { s = n.s ; g = n.g ; p = n.p2 ; isPre = n.isPre2 };
+	  
+    AdvNP np adv = {
+      s = \\c => np.s ! c ++ adv.s ;
+      a = np.a
+    } ;	
+    RelNP np rs = {
+      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ;
+      a = np.a
+    } ;  
+	
 	DetCN det cn = {
 		s = \\c => det.s ! cn.g ! c ++ cn.s ! det.d ! det.n ! c ;
-		g = cn.g ;
-		n = det.n ;
-		p = P3 ;
-	  } ;
-	  
-	  
-	  
+		a = AgP3 det.n cn.g;
+	} ;
+	
+    DetQuant quant num = {
+      s  = \\g,c => quant.s ! g ! num.n ! c ++ num.s ! g ! c;
+	  n = num.n ;
+	  d = quant.d  --FIXME - ja ir kârtas skaitïa vârds, tad tikai noteiktâs formas drîkst bût
+	} ;
+	
+    DetQuantOrd quant num ord = {
+      s  = \\g,c => quant.s ! g ! num.n ! c ++ num.s ! g ! c ++ ord.s ! g ! c;       
+      n  = num.n;
+	  d  = quant.d  --FIXME - ja ir kârtas skaitïa vârds, tad tikai noteiktâs formas drîkst bût
+    } ;
+
+	DetNP det = {
+      s = \\c => det.s ! Masc ! c ;  
+      a = AgP3 det.n Masc
+    } | { 
+      s = \\c => det.s ! Fem ! c ;  
+      a = AgP3 det.n Fem	
+	};
+	 	
+    AdjCN ap cn = {
+		s = \\d,n,c => ap.s ! d ! cn.g ! n ! c ++ cn.s ! d ! n ! c ;
+		g = cn.g
+    } ;
+	
+	DefArt = {
+		s = \\_,_,_ =>[];
+		d = Def
+	} ;
+	
+	IndefArt = {
+		s = \\_,_,_ => [];
+		d = Indef
+	} ;
+	
+    PossPron p = {
+      s = p.possessive ;
+	  d = Def ;
+    } ;
+
+    MassNP cn = {
+      s = cn.s ! Indef ! Sg ;   -- FIXME a 'ðis alus'? der tak gan 'zaïð alus' gan 'zaïais alus'
+      a = AgP3 Sg cn.g
+      } ;	
+	
+    NumSg = {s = \\_,_ => []; n = Sg ; hasCard = False} ;
+    NumPl = {s = \\_,_ => []; n = Pl ; hasCard = False} ;
+	
+	NumCard n = n ** {hasCard = True} ;
+
+    NumDigits n = {s = \\g,c => n.s ! NCard ; n = n.n} ;
+    OrdDigits n = {s = \\g,c => n.s ! NOrd} ;
+	
+	NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n} ;
+    OrdNumeral numeral = {s = numeral.s ! NOrd} ;
+	
+    OrdSuperl a = {s = \\g,c => a.s ! (AAdj Superl Def g Sg c) } ;
+	
+	AdNum adn num = {s = \\g,c => adn.s ++ num.s!g!c ; n = num.n; hasCard = num.n} ;
+
+    AdvCN cn ad = {s = \\d,n,c => cn.s ! d ! n ! c ++ ad.s ; g = cn.g} ;
+
+    ApposCN cn np = {                    -- 'Pielikums'
+		s = \\d,n,c => case (fromAgr np.a).n of {
+			n => cn.s ! d ! n ! c ++ np.s ! c; -- FIXME - comparison not working
+			_ => NON_EXISTENT };
+		g = cn.g
+	} ; 
+
+    RelCN cn rs = {
+      s = \\d, n,c => cn.s ! d ! n ! c ++ "," ++ rs.s ! AgP3 n cn.g ;
+      g = cn.g
+    } ;
+
+	-- FIXME - placeholder
+	SentCN cn sc = {s = \\_,_,_ => NON_EXISTENT ; g = cn.g};
+	PPartNP np v2 = {s = \\_ => NON_EXISTENT ; a = np.a};
+	
 {-
-    DetCN det cn = {
-      s = \\c => det.s ++ cn.s ! det.n ! c ; 
-      a = agrgP3 det.n cn.g
-      } ;
-
-    UsePN pn = pn ** {a = agrgP3 Sg pn.g} ;
-    UsePron p = p ;
-
-    PredetNP pred np = {
-      s = \\c => pred.s ++ np.s ! c ;
-      a = np.a
-      } ;
-
+     TODO - ðim vajag -ts -ta divdabjus (+ noteiktâs formas tiem)
     PPartNP np v2 = {
       s = \\c => np.s ! c ++ v2.s ! VPPart ;
       a = np.a
       } ;
 
-    RelNP np rs = {
-      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ;
-      a = np.a
-      } ;
-
-    AdvNP np adv = {
-      s = \\c => np.s ! c ++ adv.s ;
-      a = np.a
-      } ;
-
-    DetQuant quant num = {
-      s  = quant.s ! num.hasCard ! num.n ++ num.s ! Nom;
-      sp = \\c => case num.hasCard of {
-                     False => quant.sp ! num.hasCard ! num.n ! c ++ num.s ! Nom ;
-                     True  => quant.sp ! num.hasCard ! num.n ! Nom ++ num.s ! c
-                  } ;
-      n  = num.n
-      } ;
-
-    DetQuantOrd quant num ord = {
-      s  = quant.s ! num.hasCard ! num.n ++ num.s ! Nom ++ ord.s ! Nom; 
-      sp = \\c => quant.sp ! num.hasCard ! num.n ! Nom ++ num.s ! Nom ++ ord.s ! c ; 
-      n  = num.n
-      } ;
-
-    DetNP det = {
-      s = det.sp ;
-      a = agrP3 det.n
-      } ;
-
-    PossPron p = {
-      s = \\_,_ => p.s ! Gen ;
-      sp = \\_,_ => p.sp 
-      } ;
-
-    NumSg = {s = \\c => []; n = Sg ; hasCard = False} ;
-    NumPl = {s = \\c => []; n = Pl ; hasCard = False} ;
----b    NoOrd = {s = []} ;
-
-    NumCard n = n ** {hasCard = True} ;
-
-    NumDigits n = {s = n.s ! NCard ; n = n.n} ;
-    OrdDigits n = {s = n.s ! NOrd} ;
-
-    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n} ;
-    OrdNumeral numeral = {s = numeral.s ! NOrd} ;
-
-    AdNum adn num = {s = \\c => adn.s ++ num.s!c ; n = num.n} ;
-
-    OrdSuperl a = {s = \\c => a.s ! AAdj Superl c } ;
-
-    DefArt = {
-      s  = \\hasCard,n => artDef ;
-      sp = \\hasCard,n => case <n,hasCard> of {
-        <Sg,False> => table { Gen => "its"; _ => "it" } ;
-        <Pl,False> => table { Nom => "they"; Acc => "them"; Gen => "theirs" } ;
-        _          => \\c => artDef
-        }
-      } ;
-
-    IndefArt = {
-      s = \\hasCard,n => case <n,hasCard> of {
-        <Sg,False> => artIndef ;
-        _          => []
-        } ;
-      sp = \\hasCard,n => case <n,hasCard> of {
-        <Sg,False> => table { Gen => "one's"; _ => "one" };
-        <Pl,False> => table { Gen => "ones'"; _ => "ones" } ;
-        _          => \\c => []
-        }
-      } ;
-
-    MassNP cn = {
-      s = cn.s ! Sg ;
-      a = agrP3 Sg
-      } ;
-
-    UseN n = n ;
-    UseN2 n = n ;
----b    UseN3 n = n ;
-
-    Use2N3 f = {
-      s = \\n,c => f.s ! n ! Nom ;
-      g = f.g ;
-      c2 = f.c2
-      } ;
-
-    Use3N3 f = {
-      s = \\n,c => f.s ! n ! Nom ;
-      g = f.g ;
-      c2 = f.c3
-      } ;
-
-    ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; g = f.g} ;
-    ComplN3 f x = {
-      s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ;
-      g = f.g ;
-      c2 = f.c3
-      } ;
-
-    AdjCN ap cn = {
-      s = \\n,c => preOrPost ap.isPre (ap.s ! agrgP3 n cn.g) (cn.s ! n ! c) ;
-      g = cn.g
-      } ;
-    RelCN cn rs = {
-      s = \\n,c => cn.s ! n ! c ++ rs.s ! agrgP3 n cn.g ;
-      g = cn.g
-      } ;
-    AdvCN cn ad = {s = \\n,c => cn.s ! n ! c ++ ad.s ; g = cn.g} ;
-
     SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s ; g = cn.g} ;
 
-    ApposCN cn np = {s = \\n,c => cn.s ! n ! Nom ++ np.s ! c ; g = cn.g} ;
 -}
 }

@@ -11,8 +11,7 @@ flags
   coding = utf8;
   
 oper
-  Pron     : Type = {s : Number => Case => Str ; p : Person} ;
-  PronGend : Type = {s : Gender => Number => Case => Str ; p : Person} ;
+  PronGend : Type = {s : Gender => Number => Case => Str} ;	
 
 -- PRONOUNS (incl. 'determiners')
 
@@ -35,14 +34,16 @@ oper
             Gen => stem + "a" ;
             Dat => stem + "am" ;
             Acc => stem + "u" ;
-            Loc => stem + "ā"
+            Loc => stem + "ā" ;
+			Voc => NON_EXISTENT
           } ;
           Pl => table {
             Nom => stem + "i" ;
             Gen => stem + "u" ;
             Dat => stem + "iem" ;
             Acc => stem + "us" ;
-            Loc => stem + "os"
+            Loc => stem + "os" ;
+			Voc => NON_EXISTENT
           }
         } ;
         Fem => table {
@@ -51,18 +52,19 @@ oper
             Gen => stem + "as" ;
             Dat => stem + "ai" ;
             Acc => stem + "u" ;
-            Loc => stem + "ā"
+            Loc => stem + "ā" ;
+			Voc => NON_EXISTENT
           } ;
           Pl => table {
             Nom => stem + "as" ;
             Gen => stem + "u" ;
             Dat => stem + "ām" ;
             Acc => stem + "as" ;
-            Loc => stem + "ās"
+            Loc => stem + "ās" ;
+			Voc => NON_EXISTENT
           }
         }
       } ;
-      p = P3
     } ;
 
   -- A special case (paradigm) of Gender=>Number=>Case P3 pronouns
@@ -80,14 +82,16 @@ oper
             Gen => stem + suff2 ;
             Dat => stem + suff1 + "m" ;
             Acc => stem + "o" ;
-            Loc => stem + "ajā"
+            Loc => stem + "ajā" ;
+			Voc => NON_EXISTENT
           } ;
           Pl => table {
             Nom => stem + "ie" ;
             Gen => stem + "o" ;
             Dat => stem + "iem" ;
             Acc => stem + "os" ;
-            Loc => stem + "ajos"
+            Loc => stem + "ajos" ;
+			Voc => NON_EXISTENT
           }
         } ;
         Fem => table {
@@ -96,18 +100,19 @@ oper
             Gen => stem + suff2 + "s" ;
             Dat => stem + "ai" ;
             Acc => stem + "o" ;
-            Loc => stem + "ajā"
+            Loc => stem + "ajā" ;
+			Voc => NON_EXISTENT
           } ;
           Pl => table {
             Nom => stem + suff2 + "s" ;
             Gen => stem + "o" ;
             Dat => stem + suff2 + "m" ;
             Acc => stem + suff2 + "s" ;
-            Loc => stem + "ajās"
+            Loc => stem + "ajās" ;
+			Voc => NON_EXISTENT
           }
         }
       } ;
-      p = P3
     } ;
 	
 } ;

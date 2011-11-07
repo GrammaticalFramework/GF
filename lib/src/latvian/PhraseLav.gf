@@ -1,29 +1,29 @@
-concrete PhraseLav of Phrase = CatLav ** open Prelude, ResLav in {
+concrete PhraseLav of Phrase = CatLav ** open Prelude, ResLav, VerbLav in {
+flags
+  coding = utf8;
+
   lin
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;
-    UttS s = s ;
+	
+    UttS s = {s = s.s} ;
+    UttQS qs = {s = qs.s } ;
+    UttImpSg pol imp = {s = pol.s ++ imp.s ! pol.p ! Sg } ;
+    UttImpPl pol imp = {s = pol.s ++ imp.s ! pol.p ! Pl } ;
+    UttImpPol pol imp = {s = pol.s ++ "lūdzu" ++ imp.s ! pol.p ! Pl } ;
+	
+    UttNP np = {s = np.s ! Nom} ;
+    UttCN n = {s = n.s ! Indef ! Sg ! Nom} ;
+    UttAP ap = {s = ap.s ! Indef ! Masc ! Sg ! Nom} ;
+    UttAdv adv = adv ;
+	UttVP vp = {s = build_VP vp Pos Infinitive (AgP3 Pl Masc)} ;  --FIXME - neesmu līdz galam drošs vai agreement ir tieši (AgPr Pl)
+	UttIP ip = { s = ip.s ! Nom };
+	UttIAdv iadv = iadv ;    
+	UttCard n = { s = n.s ! Masc ! Nom};
 
     NoPConj = {s = []} ;
     NoVoc = {s = []} ;
-  
-{-
-
-    UttQS qs = {s = qs.s ! QDir} ;
-    UttImpSg pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Sg False} ;
-    UttImpPl pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Pl False} ;
-    UttImpPol pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Sg True} ;
-
-    UttIP ip = {s = ip.s ! Nom} ; --- Acc also
-    UttIAdv iadv = iadv ;
-    UttNP np = {s = np.s ! Nom} ;
-    UttVP vp = {s = infVP False vp (agrP3 Sg)} ;
-    UttAdv adv = adv ;
-    UttCN n = {s = n.s ! Sg ! Nom} ;
-    UttCard n = {s = n.s ! Nom} ;
-    UttAP ap = {s = ap.s ! agrP3 Sg} ;
-
-    PConjConj conj = {s = conj.s2} ; ---
-
-    VocNP np = {s = "," ++ np.s ! Nom} ;
--}
+	
+	VocNP np = {s = "," ++ np.s ! ResLav.Voc} ;
+    PConjConj conj = {s = conj.s2} ; 
+	
 }

@@ -1,55 +1,51 @@
-concrete QuestionLav of Question = CatLav ** open ResLav, Prelude in {
-{-
-  flags optimize=all_subs ;
+concrete QuestionLav of Question = CatLav ** open ResLav, VerbLav, Prelude, ParadigmsVerbsLav in {
+  flags 
+	optimize=all_subs ;
+	coding = utf8;
 
   lin
-
     QuestCl cl = {
-      s = \\t,a,p => 
-            let cls = cl.s ! t ! a ! p 
-            in table {
-              QDir   => cls ! OQuest ;
-              QIndir => "if" ++ cls ! ODir
-              } ---- "whether" in ExtEng
-      } ;
+      s = \\m,p => "vai" ++ cl.s ! m ! p
+    } ;
+	
+	QuestVP ip vp = {
+	  s = \\m,p => ip.s ! Nom ++ buildVerb vp.v m p (AgP3 ip.n Masc)
+	} ;
+	
+	QuestSlash ip slash = {
+	  s = \\m,p => slash.p.s ++ ip.s ! (slash.p.c ! ip.n) ++ slash.s ! m ! p
+	} ;
+	
+	QuestIAdv iadv cl = {
+		s = \\m,p => iadv.s ++ cl.s ! m ! p ;
+	};
+	
+    QuestIComp icomp np = {
+		s = \\m,p => icomp.s ++ buildVerb mkVerb_toBe m p np.a ++ np.s ! Nom
+	};
 
-    QuestVP qp vp = 
-      let cl = mkClause (qp.s ! Nom) (agrP3 qp.n) vp
-      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
-
-    QuestSlash ip slash = 
-      mkQuestion (ss (slash.c2 ++ ip.s ! Acc)) slash ;
-      --- stranding in ExratEng 
-
-    QuestIAdv iadv cl = mkQuestion iadv cl ;
-
-    QuestIComp icomp np = 
-      mkQuestion icomp (mkClause (np.s ! Nom) np.a (predAux auxBe)) ;
-
-
-    PrepIP p ip = {s = p.s ++ ip.s ! Acc} ;
+	IdetQuant idet num = {
+      s = \\g => idet.s ! g ! num.n ++ num.s ! g ! Nom ; 
+      n = num.n
+    } ;
 
     AdvIP ip adv = {
       s = \\c => ip.s ! c ++ adv.s ;
       n = ip.n
-      } ;
- 
+    } ;
+
+    PrepIP p ip = {s = p.s ++ ip.s ! (p.c ! ip.n)} ;
+
     IdetCN idet cn = {
-      s = \\c => idet.s ++ cn.s ! idet.n ! c ; 
+      s = \\c => idet.s ! cn.g ++ cn.s ! Def ! idet.n ! c ; 
       n = idet.n
-      } ;
+    } ;
 
     IdetIP idet = {
-      s = \\c => idet.s ; 
+      s = \\c => (idet.s ! Masc) | (idet.s ! Fem) ; 
       n = idet.n
-      } ;
+    } ;
 
-    IdetQuant idet num = {
-      s = idet.s ! num.n ++ num.s ! Nom ; 
-      n = num.n
-      } ;
-
-    CompIAdv a = a ;
+	CompIAdv a = a ;
     CompIP p = ss (p.s ! Nom) ;
--}
 }

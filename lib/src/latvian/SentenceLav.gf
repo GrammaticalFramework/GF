@@ -1,91 +1,52 @@
-concrete SentenceLav of Sentence = CatLav ** open Prelude, ResLav, ParadigmsVerbsLav in {
+concrete SentenceLav of Sentence = CatLav ** open Prelude, ResLav, VerbLav in {
   flags optimize=all_subs ;
 
-  lin
+lin
+  PredVP np vp = mkClause np vp;
+	  
+  ImpVP vp = {
+	s = \\pol, n => vp.v.s ! pol ! (Imperative n) ++ vp.s2 ! (AgP2 n)
+  } ;
+  
+  SlashVP np vp = 
+      mkClause np vp ** {p = vp.p} ;
+  AdvSlash slash adv = {
+      s  = \\m,p => slash.s ! m ! p ++ adv.s ;
+      p = slash.p
+  } ;
+  SlashPrep cl prep = cl ** {p = prep};  
+  SlashVS np vs slash = mkClause np (lin VP {v = vs; s2 = \\_ => "," ++ vs.subj.s ++ slash.s}) ** {p = slash.p};	
+		
+  ComplVS v s  = {v = v; s2 = \\_ => "," ++ v.subj.s ++ s.s};		
+  
+  EmbedS  s  = {s = "ka" ++ s.s} ; --TODO - noèekot kâpçc te ir tieði 'ka'
+  EmbedQS qs = {s = qs.s } ;
+  EmbedVP vp = {s = build_VP vp Pos Infinitive (AgP3 Pl Masc)} ;  --FIXME - neesmu lîdz galam droðs vai agreement ir tieði (AgPr Pl)
 
   UseCl t p cl = {s = t.s ++ p.s ++ cl.s ! (Ind t.a t.t) ! p.p} ;
+  UseQCl t p cl = {s = t.s ++ p.s ++ cl.s ! (Ind t.a t.t) ! p.p} ;
+  UseRCl t p cl = 
+	{ s = \\ag => t.s ++ p.s ++ cl.s ! (Ind t.a t.t) ! p.p ! ag } |
+	{ s = \\ag => t.s ++ p.s ++ cl.s ! (Rel t.a t.t) ! p.p ! ag };
+  UseSlash t p slash = {s = t.s ++ p.s ++ slash.s ! (Ind t.a t.t) ! p.p;  p = slash.p};
   
-  PredVP np vp =
-    let
-      part = vp.v.s ! ResLav.Pos ! (Participle np.g np.n Nom) ;
-      obj  = vp.obj ! (Ag np.g np.n)
-    in {
+  --FIXME placeholder
+  AdvS a s = { s = NON_EXISTENT } ;
+  
+oper
+    mkClause : NP -> VP -> Cl = \np,vp -> lin Cl {
       s = \\mood,pol =>
-        case mood of {		-- Subject
-          Deb _ _ => np.s ! Dat ;
+        case mood of {		-- Subject 
+          Deb _ _ => np.s ! Dat ; -- FIXME jâèeko valences, reizçm arî îstenîbas izteiksmç - 'man patîk kaut kas'
           _ => np.s ! Nom
-        } ++
-        case mood of {		-- Verb
-          Ind Simul tense  => vp.v.s ! pol ! (Indicative np.p np.n tense) ;
-          Ind Anter tense => mkVerb_toBe.s ! pol ! (Indicative np.p np.n tense) ++ part ;
-
-          Rel _       Past  => ResLav.NON_EXISTENT ;		-- FIXME (?)
-          Rel Simul tense => vp.v.s ! pol ! (Relative tense) ;
-          Rel Anter tense => mkVerb_toBe.s ! pol ! (Relative tense) ++ part ;
-
-          Deb Simul tense => mkVerb_toBe.s ! pol ! (Indicative P3 Sg tense) ++
-            vp.v.s ! ResLav.Pos ! Debitive ;
-          Deb Anter tense => mkVerb_toBe.s ! pol ! (Indicative P3 Sg tense) ++
-            mkVerb_toBe.s ! ResLav.Pos ! (Participle Masc Sg Nom) ++ vp.v.s ! ResLav.Pos ! Debitive ;
-
-          Condit Simul  => vp.v.s ! pol ! (Indicative np.p np.n Cond) ;
-          Condit Anter => mkVerb_toBe.s ! pol ! (Indicative np.p np.n Cond) ++ part
-        } ++
-        obj					-- Object
+        } ++ 
+		buildVerb vp.v mood pol np.a ++ -- Verb
+        vp.s2 ! np.a					-- Object(s), complements, adverbial modifiers; 
     } ;
-  
+	
 {-  
-    PredVP np vp = mkClause (np.s ! Nom) np.a vp ;
-
     PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
 
-    ImpVP vp = {
-      s = \\pol,n => 
-        let 
-          agr   = AgP2 (numImp n) ;
-          verb  = infVP True vp agr ;
-          dont  = case pol of {
-            CNeg True => "don't" ;
-            CNeg False => "do" ++ "not" ;
-            _ => []
-            }
-        in
-        dont ++ verb
-    } ;
-
-    SlashVP np vp = 
-      mkClause (np.s ! Nom) np.a vp ** {c2 = vp.c2} ;
-
-    AdvSlash slash adv = {
-      s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
-      c2 = slash.c2
-    } ;
-
-    SlashPrep cl prep = cl ** {c2 = prep.s} ;
-
-    SlashVS np vs slash = 
-      mkClause (np.s ! Nom) np.a 
-        (insertObj (\\_ => conjThat ++ slash.s) (predV vs))  **
-        {c2 = slash.c2} ;
-
-    EmbedS  s  = {s = conjThat ++ s.s} ;
-    EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = infVP False vp (agrP3 Sg)} ; --- agr
-
-    UseCl  t p cl = {
-      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p ! ODir
-    } ;
-    UseQCl t p cl = {
-      s = \\q => t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p ! q
-    } ;
-    UseRCl t p cl = {
-      s = \\r => t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p ! r ;
-      c = cl.c
-    } ;
-    UseSlash t p cl = {
-      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p  ! ODir ;
-      c2 = cl.c2
-    } ;
 
     AdvS a s = {s = a.s ++ "," ++ s.s} ;
 
