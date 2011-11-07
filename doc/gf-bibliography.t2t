@@ -51,6 +51,16 @@ pp. 70-76.
 #BR
 //Punjabi syntax, building on Humayoun and Ranta 2010.//
 
+D. Dannélls, M. Damova, R.Enache, M. Chechev.
+A Framework for Improved Access to Museum Databases in the Semantic Web.
+Proceedings of the Workshop on Language Technologies for Digital Humanities and Cultural Heritage,
+RANLP-2011, Recent Advances in Natural Language Processing, 
+Hissar, Bulgaria, 12-14 September, 2011,
+pp 8-15
+[PDF http://publications.lib.chalmers.se/cpl/record/index.xsql?pubid=145395]
+#BR
+//Representing and verbalizing in GF of an Cultural Heritage ontology.// 
+
 A. Ranta.
 Translating between Language and Logic: What Is Easy and What is Difficult?
 In N. Bjørner and V. Sofronie-Stokkermans (eds.),
@@ -72,6 +82,21 @@ A. Ranta.
 #BR
 //Meant as the standard reference and textbook on GF.//
 
+O. Caprotti, K. Angelov, R. Enache, T. Hallgren, A. Ranta.
+The MOLTO Phrasebook.
+Swedish Language Technology Conference SLTC 2010.
+[PDF http://publications.lib.chalmers.se/cpl/record/index.xsql?pubid=131251]
+#BR
+//Tourist Phrasebook grammar, available in 14 European languages.//
+
+
+G. Détrez and R. Enache.
+A Framework for Multilingual Applications on the Android Platform
+Swedish Language Technology Conference SLTC 2010.
+[PDF http://www.grammaticalframework.org/doc/archive/sltc10_submission_24.pdf]
+#BR
+//A description of the Java implementation of the GF runtime system, which makes it possible//
+to create grammar-based applications running on an Android phone.//
 
 Normunds Gruzitis and Guntis Barzdins.
 Towards a More Natural Multilingual Controlled Language Interface to OWL,
@@ -96,6 +121,15 @@ Marettimo,
 2010.
 #BR
 //Using GF for defining the rules of a game.//
+
+R. Enache and K. Angelov
+Typeful Ontologies with Direct Multilingual Verbalization.
+//CNL 2010, Controlled Natural Language//,
+Marettimo, 
+2010.
+#BR
+//Investigating the benefits of using GF as a language for representing ontologies.//
+[PDF http://www.grammaticalframework.org/doc/archive/cnl2010_submission_2.pdf]
 
 S. Virk, M. Humayoun, and A. Ranta. 
 An Open Source Urdu Resource Grammar. 
