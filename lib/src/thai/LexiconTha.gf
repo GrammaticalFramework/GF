@@ -1,7 +1,7 @@
 --# -path=.:prelude
 
 concrete LexiconTha of Lexicon = CatTha ** 
-  open StringsTha, ResTha, Prelude in {
+  open ParadigmsTha, ResTha, Prelude in {
 
 flags 
   optimize=values ;
