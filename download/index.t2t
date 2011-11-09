@@ -67,11 +67,17 @@ You can also download the full source package from here:
 === Notes ===
 
 The above steps installs GF for a single user and does not require root
-privileges. The executables are put in ``$HOME/.cabal/bin``, so it is a good
+privileges. The executables are put in ``$HOME/.cabal/bin``
+(or, with recent versions of the Haskell platform on Mac OS X,
+in ``$HOME/Library/Haskell/bin``), so it is a good
 idea to put a line in your ``.bash_profile`` to add that directory to you path:
 
 ```
   PATH=$HOME/.cabal/bin:$PATH
+```
+or
+```
+  PATH=$HOME/Library/Haskell/bin:$PATH
 ```
 
 GF uses ``haskeline``, which depends some non-Haskell libraries that
