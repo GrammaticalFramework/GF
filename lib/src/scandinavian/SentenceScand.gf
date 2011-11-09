@@ -48,7 +48,7 @@ incomplete concrete SentenceScand of Sentence =
       s = \\q => t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! q
     } ;
     UseRCl t p cl = {
-      s = \\r => t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! r ;
+      s = \\r,rc => t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! r ! rc ;
       c = cl.c
     } ;
     UseSlash t p cl = {
@@ -60,6 +60,6 @@ incomplete concrete SentenceScand of Sentence =
     AdvS a s = {s = \\o => a.s ++ s.s ! Inv} ;
     ExtAdvS a s = {s = \\o => a.s ++ "," ++ s.s ! Inv} ;
 
-    RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! agrP3 Neutr Sg} ; --- vilket
+    RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! agrP3 Neutr Sg ! RPrep True } ; --- vilket
 
 }

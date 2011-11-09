@@ -16,15 +16,20 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
 
     Noun = {s : Number => Species => Case => Str ; g : NGender} ;
 
--- This function is here because it depends on $verbHave, auxFut, auxCond$.
+-- needed for VP conjunction
+  param
+    VPIForm = VPIInf | VPISup ; ---- sup not yet used
 
-   predV : Verb -> VP = \verb -> 
+
+-- This function is here because it depends on $verbHave, auxFut, auxCond$.
+ oper
+  predV : Verb -> VP = \verb -> 
     let
       diath = case verb.vtype of {
         VPass => Pass ;
         _ => Act
         } ;
-      vfin : Tense -> Str = \t -> verb.s ! vFin t diath ;
+      vfin : STense -> Str = \t -> verb.s ! vFin t diath ;
       vsup = verb.s ! VI (VSupin diath) ; --# notpresent  
       vinf = verb.s ! VI (VInfin diath) ;
 
@@ -32,8 +37,9 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
         True => verbBe.s ;
         _ => verbHave.s
         } ;
+ 
 
-      har : Tense -> Str = \t -> auxv ! vFin t Act ;
+      har : STense -> Str = \t -> auxv ! vFin t Act ;
       ha  : Str = auxv ! VI (VInfin Act) ;
 
       vf : Str -> Str -> {fin,inf : Str} = \fin,inf -> {
@@ -43,16 +49,18 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
     in {
     s = table {
       VPFinite t Simul => case t of {
---        Pres | Past => vf (vfin t) [] ; -- the general rule
-        Past => vf (vfin t) [] ;    --# notpresent
-        Fut  => vf auxFut vinf ;    --# notpresent
-        Cond => vf auxCond vinf ;   --# notpresent
-        Pres => vf (vfin t) []
+--        SPres | SPast => vf (vfin t) [] ; -- the general rule
+        SPast => vf (vfin t) [] ;    --# notpresent
+        SFut  => vf auxFut vinf ;    --# notpresent
+        SFutKommer => vf auxFutKommer (auxFutPart ++ infMark ++ vinf) ;   --# notpresent
+        SCond => vf auxCond vinf ;   --# notpresent
+        SPres => vf (vfin t) []
         } ;
       VPFinite t Anter => case t of {    --# notpresent
-        Pres | Past => vf (har t) vsup ; --# notpresent
-        Fut  => vf auxFut (ha ++ vsup) ; --# notpresent
-        Cond => vf auxCond (ha ++ vsup)  --# notpresent
+        SPres | SPast => vf (har t) vsup ; --# notpresent
+        SFut  => vf auxFut (ha ++ vsup) ; --# notpresent
+        SFutKommer => vf auxFutKommer (auxFutPart ++ infMark ++ ha ++ vsup) ; --# notpresent
+        SCond => vf auxCond (ha ++ vsup)  --# notpresent
         } ;                              --# notpresent
       VPImperat => vf (verb.s ! VF (VImper diath)) [] ;
       VPInfinit Anter => vf [] (ha ++ vsup) ;  --# notpresent
@@ -67,10 +75,6 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
     ext : Str = [] ;
     en2,ea2,eext : Bool = False   -- indicate if the field exists
     } ;
-
--- needed for VP conjunction
-  param
-    VPIForm = VPIInf | VPISup ; ---- sup not yet used
 
 
 }

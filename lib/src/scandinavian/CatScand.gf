@@ -1,5 +1,5 @@
 incomplete concrete CatScand of Cat = 
-  CommonX ** open ResScand, Prelude, CommonScand, (R = ParamX) in {
+  CommonX -[Tense,Temp] ** open (RS = ResScand), Prelude, CommonScand, (R = ParamX) in {
 
   flags optimize=all_subs ;
 
@@ -9,14 +9,14 @@ incomplete concrete CatScand of Cat =
 
     S  = {s : Order => Str} ;
     QS = {s : QForm => Str} ;
-    RS = {s : Agr => Str ; c : NPForm} ;
+    RS = {s : Agr => RCase => Str ; c : NPForm} ;
     SSlash = {s : Order => Str ; n3 : Agr => Str ; c2 : Complement} ;
 
 -- Sentence
 
-    Cl = {s : R.Tense => Anteriority => Polarity => Order => Str} ;
+    Cl = {s : STense => Anteriority => Polarity => Order => Str} ;
     ClSlash = {
-      s : R.Tense => Anteriority => Polarity => Order => Str ; 
+      s : STense => Anteriority => Polarity => Order => Str ; 
       n3 : Agr => Str ;
       c2 : Complement
       } ;
@@ -24,7 +24,7 @@ incomplete concrete CatScand of Cat =
 
 -- Question
 
-    QCl = {s : R.Tense => Anteriority => Polarity => QForm => Str} ;
+    QCl = {s : STense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : NPForm => Str ; g : Gender ; n : Number} ;
     IComp = {s : AFormPos => Str} ; 
     IDet = {s : NGender => Str ; n : Number ; det : DetSpecies} ;
@@ -32,7 +32,7 @@ incomplete concrete CatScand of Cat =
 
 -- Relative; the case $c$ is for "det" clefts.
 
-    RCl = {s : R.Tense => Anteriority => Polarity => Agr => Str ; c : NPForm} ;
+    RCl = {s : STense => Anteriority => Polarity => Agr => RCase => Str ; c : NPForm} ;
     RP  = {s : Gender => Number => RCase => Str ; a : RAgr} ;
 
 -- Verb
@@ -102,4 +102,9 @@ incomplete concrete CatScand of Cat =
     N3   = Noun  ** {c2,c3 : Complement} ;
     PN = {s : Case => Str ; g : Gender} ;
 
+
+
+  lincat
+    Temp  = {s : Str ; t : STense ; a : Anteriority} ;
+    Tense = {s : Str ; t : STense} ;
 }

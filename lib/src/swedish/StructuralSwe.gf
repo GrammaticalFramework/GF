@@ -28,7 +28,7 @@ concrete StructuralSwe of Structural = CatSwe **
   everybody_NP = regNP "alla" "allas" Utr Pl ;
   every_Det = {
     s = \\_,_ => "varje" ; 
-    sp = \\_,_ => "var och en" ; ----
+    sp = \\_ => genderForms ["var och en"] ["vart och ett"] ; ----
     n = Sg ; 
     det = DIndef
     } ;

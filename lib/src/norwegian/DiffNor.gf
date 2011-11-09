@@ -57,6 +57,8 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
     noPart = {part = []} ;
 
     auxFut = "vil" ;      -- "skal" in ExtNor
+    auxFutKommer = "kommer" ; 
+    auxFutPart = "til" ; 
     auxCond = "ville" ;
 
     negation : Polarity => Str = table {

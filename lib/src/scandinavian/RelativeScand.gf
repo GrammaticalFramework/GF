@@ -6,19 +6,19 @@ incomplete concrete RelativeScand of Relative =
   lin
 
     RelCl cl = {
-      s = \\t,a,p,ag => 
+      s = \\t,a,p,ag,_ => 
             pronSuch ! gennumAgr ag ++ conjThat ++ cl.s ! t ! a ! p ! Sub ;
       c = NPAcc
       } ;
 
     RelVP rp vp = {
-      s = \\t,ant,b,ag => 
+      s = \\t,ant,b,ag,rc => 
         let 
           agr = case rp.a of {
             RNoAg => ag ;
             RAg g n p => {g = g ; n = n ; p = p}
             } ;
-          cl = mkClause (rp.s ! ag.g ! ag.n ! RNom) agr vp
+          cl = mkClause (rp.s ! ag.g ! ag.n ! rc) agr vp
         in
         cl.s ! t ! ant ! b ! Sub ;
       c = NPNom
@@ -29,7 +29,7 @@ incomplete concrete RelativeScand of Relative =
 -- and the empty relative ("huset hon bor i") are defined in $ExtraScand$.
 
     RelSlash rp slash = {
-      s = \\t,a,p,ag => 
+      s = \\t,a,p,ag,_ => 
         let 
           agr = case rp.a of {
             RNoAg => ag ;
