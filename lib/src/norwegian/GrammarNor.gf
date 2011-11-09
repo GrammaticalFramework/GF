@@ -11,10 +11,10 @@ concrete GrammarNor of Grammar =
   RelativeNor,
   ConjunctionNor,
   PhraseNor,
-  TextX,
+  TextX - [Tense,Temp] ,
   IdiomNor,
   StructuralNor,
-  TenseX
+  TenseNor
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;

@@ -11,10 +11,10 @@ concrete GrammarDan of Grammar =
   RelativeDan,
   ConjunctionDan,
   PhraseDan,
-  TextX,
+  TextX - [Tense,Temp] ,
   IdiomDan,
   StructuralDan,
-  TenseX
+  TenseDan
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;
