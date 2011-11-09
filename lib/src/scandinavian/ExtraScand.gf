@@ -2,19 +2,20 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
    open CommonScand,Coordination,ResScand, ParamX in {
   lin
     GenNP np = {
-      s,sp = \\n,_,_,g => np.s ! NPPoss (gennum (ngen2gen g) n) Nom ; 
+      s = \\n,_,_,g  => np.s ! NPPoss (gennum (ngen2gen g) n) Nom ; 
+      sp = \\_,_,_,_ => NONEXIST ;
       det = DDef Indef
       } ;
 
     ComplBareVS v s  = insertObj (\\_ => s.s ! Sub) (predV v) ;
 
     StrandRelSlash rp slash  = {
-      s = \\t,a,p,ag => 
+      s = \\t,a,p,ag,_ => 
           rp.s ! ag.g ! ag.n ! RNom ++ slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
       c = NPAcc
       } ;
     EmptyRelSlash slash = {
-      s = \\t,a,p,ag => 
+      s = \\t,a,p,ag,_ => 
           slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
       c = NPAcc
       } ;
@@ -86,7 +87,7 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
     IAdvAdv adv = {s = hur_IAdv.s ++ adv.s} ;
 
   lincat
-    Foc = {s : ParamX.Tense => Anteriority => Polarity => Str} ;
+    Foc = {s : STense => Anteriority => Polarity => Str} ;
 
   lin
     FocObj np cls = {
@@ -104,4 +105,5 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
     
     UseFoc t p foc = {s = t.s ++ p.s ++ foc.s ! t.t ! t.a ! p.p} ;
 
+  oper NONEXIST : Str = "#¿@§X?X&%/" ;
 } 
