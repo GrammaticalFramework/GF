@@ -19,6 +19,7 @@ instance DiffSwe of DiffScand = open CommonScand, Prelude in {
     hasAuxBe _ = False ;
 
 
+
 -- Strings.
 
     conjThat = "att" ;
@@ -48,6 +49,8 @@ instance DiffSwe of DiffScand = open CommonScand, Prelude in {
     noPart = {part = []} ;
 
     auxFut = "ska" ;      -- "skall" in ExtSwe
+    auxFutKommer = "kommer" ; 
+    auxFutPart = "" ; 
     auxCond = "skulle" ;
 
     negation : Polarity => Str = table {

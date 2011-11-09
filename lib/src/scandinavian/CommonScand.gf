@@ -59,7 +59,7 @@ param
    ;
 
   VPForm = 
-     VPFinite Tense Anteriority
+     VPFinite STense Anteriority
    | VPImperat
    | VPInfinit Anteriority ;
 
@@ -72,6 +72,17 @@ param
   RAgr = RNoAg | RAg Gender Number Person ;
 
   PredetAgr = PNoAg | PAg Number ;
+
+   STense =
+     SPres 
+   | SPast   --# notpresent
+   | SFut    --# notpresent
+   | SFutKommer   --# notpresent -- komma att
+   | SCond   --# notpresent
+   ;
+
+
+
 
 oper
   Complement : Type = {s : Str ; hasPrep : Bool} ;
@@ -121,10 +132,10 @@ oper
 
 -- Used in $DiffScand.predV$.
 
-  vFin : Tense -> Voice -> VForm = \t,v -> case t of {
-    Pres => VF (VPres v) 
+  vFin : STense -> Voice -> VForm = \t,v -> case t of {
+    SPres => VF (VPres v) 
       ; --# notpresent
-    Past => VF (VPret v) ;  --# notpresent
+    SPast => VF (VPret v) ;  --# notpresent
     _ => VI (VInfin v) --# notpresent
     } ;
     
@@ -315,7 +326,7 @@ oper
 -- For $Sentence$.
 
   Clause : Type = {
-    s : Tense => Anteriority => Polarity => Order => Str
+    s : STense => Anteriority => Polarity => Order => Str
     } ;
 
   mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp -> {

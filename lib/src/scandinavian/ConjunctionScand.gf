@@ -17,7 +17,7 @@ incomplete concrete ConjunctionScand of Conjunction =
       isPre = ss.isPre
       } ;
 
-    ConjRS conj ss = conjunctDistrTable Agr conj ss ** {
+    ConjRS conj ss = conjunctDistrTable2 Agr RCase conj ss ** {
       c = ss.c
       } ;
 
@@ -43,8 +43,8 @@ incomplete concrete ConjunctionScand of Conjunction =
     ConsNP xs x = consrTable NPForm comma xs x ** {a = conjAgr xs.a x.a} ;
     BaseAP x y = twoTable AFormPos x y ** {isPre = andB x.isPre y.isPre} ;
     ConsAP xs x = consrTable AFormPos comma xs x ** {isPre = andB xs.isPre x.isPre} ;
-    BaseRS x y = twoTable Agr x y ** {c = y.c} ;
-    ConsRS xs x = consrTable Agr comma xs x ** {c = xs.c} ;
+    BaseRS x y = twoTable2 Agr RCase x y ** {c = y.c} ;
+    ConsRS xs x = consrTable2 Agr RCase comma xs x ** {c = xs.c} ;
     BaseIAdv = twoSS ;
     ConsIAdv = consrSS comma ;
     BaseCN = twoTable3 Number DetSpecies Case ;
@@ -56,7 +56,7 @@ incomplete concrete ConjunctionScand of Conjunction =
     [IAdv] = {s1,s2 : Str} ;
     [NP] = {s1,s2 : NPForm => Str ; a : Agr} ;
     [AP] = {s1,s2 : AFormPos => Str ; isPre : Bool} ;
-    [RS] = {s1,s2 : Agr => Str ; c : NPForm} ;
+    [RS] = {s1,s2 : Agr => RCase => Str ; c : NPForm} ;
     [CN] = {s1,s2 : Number => DetSpecies => Case => Str} ; --- g : NGender ; isMod : Bool} ;
 
 }

@@ -47,6 +47,8 @@ instance DiffDan of DiffScand = open CommonScand, Prelude in {
       {part = [] ; isVaere = True} ;
 
     auxFut = "vil" ;      -- "skal" in ExtDan
+    auxFutKommer    = "vil" ;
+    auxFutPart = "" ;
     auxCond = "ville" ;
 
     negation : Polarity => Str = table {

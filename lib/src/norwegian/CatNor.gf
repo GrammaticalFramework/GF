@@ -1,2 +1,2 @@
-concrete CatNor of Cat = CommonX ** CatScand with
+concrete CatNor of Cat = CommonX - [Tense, Temp] ** CatScand with
   (ResScand = ResNor) ;

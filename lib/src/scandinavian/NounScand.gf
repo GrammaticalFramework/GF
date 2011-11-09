@@ -176,13 +176,13 @@ incomplete concrete NounScand of Noun =
       } ;
 
     RelCN cn rs = let g = cn.g in {
-      s = \\n,d,c => cn.s ! n ! d ! c ++ rs.s ! agrP3 (ngen2gen g) n ;
+      s = \\n,d,c => cn.s ! n ! d ! c ++ rs.s ! agrP3 (ngen2gen g) n ! RNom ;
       g = g ;
       isMod = cn.isMod
       } ;
 
     RelNP np rs = {
-      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ;
+      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ! RNom ;
       a = np.a ;
       isMod = np.isMod
       } ;
