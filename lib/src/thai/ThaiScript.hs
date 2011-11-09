@@ -3,6 +3,18 @@ module ThaiScript where
 import Data.Char
 import qualified Data.Map as Map
 
+test = do
+  s <- readFile "src/swadesh.txt"
+  mapM_ (testOne . tabs) $ lines s
+
+testOne ws = case ws of
+  _:_:t:p:_ -> putStrLn $ concat [t,"\t",p,"\t", unwords (map thai2pron (words t))]
+  _ -> return ()
+
+tabs s = case break (=='\t') s of
+  ([], _:ws) -> tabs ws
+  (w , _:ws) -> w:tabs ws
+  _ -> [s]
 
 -- heuristics for finding syllables
 uniSyllables :: [Int] -> [[Int]]
@@ -43,31 +55,31 @@ uni2thai = map toEnum
 
 uni2pron :: [Int] -> String
 uni2pron is = case is of
-  0xe40:c:0xe35:0xe22:cs -> pron c ++ tone c cs "i:a" ++ uni2pron cs
-  0xe40:c:0xe37:0xe2d:cs -> pron c ++ tone c cs "ü:a" ++ uni2pron cs
-  0xe40:c:0xe32:cs -> pron c ++ tone c cs "ao" ++ uni2pron cs
-  0xe40:c:0xe34:cs -> pron c ++ tone c cs "ö:" ++ uni2pron cs
+  0xe40:c:0xe35:0xe22:cs -> pron c ++ tone c cs "iia" ++ uni2pron cs
+  0xe40:c:0xe37:0xe2d:cs -> pron c ++ tone c cs "\649\649" ++ uni2pron cs
+  0xe40:c:0xe32:cs -> pron c ++ tone c cs "aw" ++ uni2pron cs
+  0xe40:c:0xe34:cs -> pron c ++ tone c cs "\601\601" ++ uni2pron cs
   0xe40:c:0xe47:cs -> pron c ++ tone c cs "e" ++ uni2pron cs
-  0xe40:c:cs -> pron c ++ tone c cs "e:" ++ uni2pron cs
+  0xe40:c:cs -> pron c ++ tone c cs "ee" ++ uni2pron cs
 
-  0xe41:c:0xe47:cs -> pron c ++ tone c cs "ä" ++ uni2pron cs
-  0xe41:c:cs -> pron c ++ tone c cs "ä:" ++ uni2pron cs
+  0xe41:c:0xe47:cs -> pron c ++ tone c cs "\x25b" ++ uni2pron cs
+  0xe41:c:cs -> pron c ++ tone c cs "\x25b\x25b" ++ uni2pron cs
 
   0xe42:c:cs -> pron c ++ tone c cs "o:" ++ uni2pron cs
-  0xe43:c:cs -> pron c ++ tone c cs "ai" ++ uni2pron cs
-  0xe44:c:cs -> pron c ++ tone c cs "ai" ++ uni2pron cs
+  0xe43:c:cs -> pron c ++ tone c cs "ay" ++ uni2pron cs
+  0xe44:c:cs -> pron c ++ tone c cs "ay" ++ uni2pron cs
 
   c:0xe30:cs -> pron c ++ tone c cs "a"  ++ uni2pron cs
-  c:0xe31:0xe27:cs -> pron c ++ tone c cs "u:a"  ++ uni2pron cs
+  c:0xe31:0xe27:cs -> pron c ++ tone c cs "uua" ++ uni2pron cs
   c:0xe31:cs -> pron c ++ tone c cs "a"  ++ uni2pron cs
-  c:0xe32:cs -> pron c ++ tone c cs "a:" ++ uni2pron cs
+  c:0xe32:cs -> pron c ++ tone c cs "aa" ++ uni2pron cs
   c:0xe33:cs -> pron c ++ tone c cs "am" ++ uni2pron cs
   c:0xe34:cs -> pron c ++ tone c cs "i"  ++ uni2pron cs
-  c:0xe35:cs -> pron c ++ tone c cs "i:" ++ uni2pron cs
-  c:0xe36:cs -> pron c ++ tone c cs "ü"  ++ uni2pron cs
-  c:0xe37:cs -> pron c ++ tone c cs "ü:" ++ uni2pron cs
+  c:0xe35:cs -> pron c ++ tone c cs "ii" ++ uni2pron cs
+  c:0xe36:cs -> pron c ++ tone c cs "\649" ++ uni2pron cs
+  c:0xe37:cs -> pron c ++ tone c cs "\649\649" ++ uni2pron cs
   c:0xe38:cs -> pron c ++ tone c cs "u"  ++ uni2pron cs
-  c:0xe39:cs -> pron c ++ tone c cs "u:" ++ uni2pron cs
+  c:0xe39:cs -> pron c ++ tone c cs "uu" ++ uni2pron cs
 
   [c] -> enc c
   c:cs -> pron c ++ uni2pron cs
@@ -103,7 +115,10 @@ toneMark is = case is of
   _ -> 0  -- no tone mark in is
 
 isLong :: String -> Bool
-isLong s = elem ':' s 
+isLong s = case s of
+  c:d:_ | c == d -> True  --- must be vowels
+  _:cs           -> isLong cs
+  _ -> False 
 
 isLive :: [Int] -> Bool
 isLive is = case is of
@@ -113,6 +128,16 @@ isLive is = case is of
 
 mid, high, low, falling, rising :: String -> String
 mid s = s
+high = accent '\x301'
+low  = accent '\x300'
+rising = accent '\x306'
+falling = accent '\x302'
+
+accent a s = case s of
+  c:cs -> c:a:cs
+  _ -> s
+ 
+{-
 high = toneMap "á" "é" "í" "ó" "ú" "ǘ" "ä'" "ö'"
 low  = toneMap "à" "è" "ì" "ò" "ù" "ǜ" "ä`" "ö`"
 rising  = toneMap "ã" "ẽ" "ĩ" "õ" "ũ" "ü~" "ä~" "ö~"
@@ -128,7 +153,7 @@ toneMap a e i o u ue ae oe s = case s of
   'ä':cs -> ae++cs
   'ö':cs -> oe++cs
   _ -> s
-
+-}
 
 lookThai :: a -> (ThaiChar -> a) -> Int -> a
 lookThai v f i = maybe v f (Map.lookup i thaiMap)
@@ -173,8 +198,8 @@ allThaiChars = [
   TC {unicode = 3586, translit = "k1", cclass = High, liveness = False, pronunc = "kh", pronunc_end = "k"},
   TC {unicode = 3588, translit = "k2", cclass = Low, liveness = False, pronunc = "kh", pronunc_end = "k"},
   TC {unicode = 3590, translit = "k3", cclass = Low, liveness = False, pronunc = "kh", pronunc_end = "k"},
-  TC {unicode = 3591, translit = "g", cclass = Low, liveness = True, pronunc = "ng", pronunc_end = "ng"},
-  TC {unicode = 3592, translit = "c", cclass = Mid, liveness = False, pronunc = "j", pronunc_end = "t"},
+  TC {unicode = 3591, translit = "g", cclass = Low, liveness = True, pronunc = "\331", pronunc_end = "\331"},
+  TC {unicode = 3592, translit = "c", cclass = Mid, liveness = False, pronunc = "c", pronunc_end = "t"},
   TC {unicode = 3593, translit = "c1", cclass = High, liveness = False, pronunc = "ch", pronunc_end = "t"},
   TC {unicode = 3594, translit = "c2", cclass = Low, liveness = False, pronunc = "ch", pronunc_end = "t"},
   TC {unicode = 3595, translit = "s'", cclass = Low, liveness = False, pronunc = "s", pronunc_end = "t"},
@@ -209,22 +234,22 @@ allThaiChars = [
   TC {unicode = 3626, translit = "s", cclass = High, liveness = False, pronunc = "s", pronunc_end = "t"},
   TC {unicode = 3627, translit = "h", cclass = High, liveness = True, pronunc = "h", pronunc_end = ""},
   TC {unicode = 3628, translit = "l'", cclass = Low, liveness = True, pronunc = "l", pronunc_end = "n"},
-  TC {unicode = 3629, translit = "O", cclass = Mid, liveness = True, pronunc = "O", pronunc_end = "O"},
+  TC {unicode = 3629, translit = "O", cclass = Mid, liveness = True, pronunc = "\596", pronunc_end = "\596"},
   TC {unicode = 3630, translit = "h'", cclass = Low, liveness = True, pronunc = "h", pronunc_end = ""},
 
   TC {unicode = 3632, translit = "a.", cclass = Low, liveness = True, pronunc = "a", pronunc_end = "a"},
   TC {unicode = 3633, translit = "a", cclass = Low, liveness = True, pronunc = "a", pronunc_end = "a"},
-  TC {unicode = 3634, translit = "a:", cclass = Low, liveness = True, pronunc = "a:", pronunc_end = "a:"},
+  TC {unicode = 3634, translit = "a:", cclass = Low, liveness = True, pronunc = "aa", pronunc_end = "aa"},
   TC {unicode = 3635, translit = "a+", cclass = Low, liveness = True, pronunc = "am", pronunc_end = "am"},
   TC {unicode = 3636, translit = "i", cclass = Low, liveness = True, pronunc = "i", pronunc_end = "i"},
-  TC {unicode = 3637, translit = "i:", cclass = Low, liveness = True, pronunc = "i:", pronunc_end = "i:"},
-  TC {unicode = 3638, translit = "v", cclass = Low, liveness = True, pronunc = "ü", pronunc_end = "ü"},
-  TC {unicode = 3639, translit = "v:", cclass = Low, liveness = True, pronunc = "ü:", pronunc_end = "ü:"},
+  TC {unicode = 3637, translit = "i:", cclass = Low, liveness = True, pronunc = "ii", pronunc_end = "ii"},
+  TC {unicode = 3638, translit = "v", cclass = Low, liveness = True, pronunc = "\x289", pronunc_end = "\x289"},
+  TC {unicode = 3639, translit = "v:", cclass = Low, liveness = True, pronunc = "\x289\x289", pronunc_end = "\x289\x289"},
   TC {unicode = 3640, translit = "u", cclass = Low, liveness = True, pronunc = "u", pronunc_end = "u"},
-  TC {unicode = 3641, translit = "u:", cclass = Low, liveness = True, pronunc = "u:", pronunc_end = "u:"},
-  TC {unicode = 3648, translit = "e", cclass = Low, liveness = True, pronunc = "e:", pronunc_end = "e:"},
-  TC {unicode = 3649, translit = "e'", cclass = Low, liveness = True, pronunc = "ä:", pronunc_end = "ä:"},
-  TC {unicode = 3650, translit = "o:", cclass = Low, liveness = True, pronunc = "o:", pronunc_end = "o:"},
+  TC {unicode = 3641, translit = "u:", cclass = Low, liveness = True, pronunc = "uu", pronunc_end = "uu"},
+  TC {unicode = 3648, translit = "e", cclass = Low, liveness = True, pronunc = "ee", pronunc_end = "ee"},
+  TC {unicode = 3649, translit = "e'", cclass = Low, liveness = True, pronunc = "\x25b\x25b", pronunc_end = "0x25b\x25b"},
+  TC {unicode = 3650, translit = "o:", cclass = Low, liveness = True, pronunc = "oo", pronunc_end = "oo"},
   TC {unicode = 3651, translit = "a%", cclass = Low, liveness = True, pronunc = "ai", pronunc_end = "ai"},
   TC {unicode = 3652, translit = "a&", cclass = Low, liveness = True, pronunc = "ai", pronunc_end = "ai"},
   TC {unicode = 3653, translit = "L", cclass = Low, liveness = True, pronunc = "l", pronunc_end = "n"},
