@@ -1,5 +1,5 @@
 abstract ExtraScandAbs = Extra ** {
  
- fun 
+ fun                  --# notpresent
  TFutKommer : Tense ; --# notpresent
 }

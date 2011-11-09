@@ -11,10 +11,10 @@ concrete GrammarSwe of Grammar =
   RelativeSwe,
   ConjunctionSwe,
   PhraseSwe,
-  TextX,
+  TextX -[Tense,Temp],
   IdiomSwe,
   StructuralSwe,
-  TenseX
+  TenseSwe
   ** {
 
 flags startcat = Phr ;  unlexer = text ; lexer = text ;
