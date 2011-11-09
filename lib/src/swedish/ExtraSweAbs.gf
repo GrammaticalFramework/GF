@@ -1,4 +1,4 @@
---# -path=./gf:.:swedish:prelude:alltenses:abstract:scandinavian:common
+--# -path=.:../scandinavian:../abstract:../common:prelude
 -- Structures special for Swedish. These are not implemented in other
 -- Scandinavian languages.
 
@@ -21,7 +21,7 @@ fun
   RelVS : S -> RelVSCl -> S ; -- hon sover, vilket vi vet
   RelSlashVS : Temp -> Pol -> VS -> NP -> RelVSCl ;  -- vilket vi vet
 
-  FocAP : Comp -> NP -> Foc ; 
+  FocAP : Comp -> NP -> Foc ;
 
   DetNP_utr : Det -> NP ; -- den här
 
@@ -61,12 +61,6 @@ fun
 
   AdvComp : Comp -> Adv -> Comp ; -- jag är redan här
 
-  dethaer_NP : NP ;
-  detdaer_NP : NP ;
-  dedaer8utr_NP : NP ;
-  dedaer8neut_NP : NP ;
-  denhaer_NP : NP ;
-  dendaer_NP : NP ;
 
 ----------------- Predeterminers,Quantifiers,Determiners
 
@@ -74,10 +68,8 @@ fun
 
   sadana_PronAQ : PronAQ ;
   fler_PronAD : PronAD ;
-  -- overgenerating: alla hela katter. should not be ok.
-  -- predets should be able to decide definites?
-  hela_Predet : Predet ;  --hela horder/hela katten  -- both
-  sjaelva_Quant : Quant ; -- själva kungen/själva öronen -- def
+  hela_Predet : Predet ;  --hela horder/hela katten 
+  sjaelva_Quant : Quant ; -- själva kungen/själva öronen 
   samma_Predet : Predet ; -- samma katter/samma öra 
   varenda_Det : Det ;
   vardera_Det : Det ;

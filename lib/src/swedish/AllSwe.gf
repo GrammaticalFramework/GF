@@ -1,7 +1,7 @@
 --# -path=.:../scandinavian:../abstract:../common:prelude
 
 concrete AllSwe of AllSweAbs = 
-  LangSwe,
+  LangSwe - [PassV2],
   IrregSwe,
   ExtraSwe 
   ** {} ;

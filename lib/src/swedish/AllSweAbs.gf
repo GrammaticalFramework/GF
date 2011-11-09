@@ -1,5 +1,5 @@
 abstract AllSweAbs = 
-  Lang,
+  Lang - [PassV2] ,
   IrregSweAbs,
   ExtraSweAbs
   ** {} ;

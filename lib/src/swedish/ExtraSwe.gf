@@ -1,4 +1,4 @@
---# -path=./gf:.:swedish:prelude:alltenses:abstract:scandinavian:common
+--# -path=.:../scandinavian:../abstract:../common:prelude
 concrete ExtraSwe of ExtraSweAbs = ExtraScandSwe - [FocAdv] ,
                                    ParadigmsSwe - [nominative] **
  open CommonScand, ResSwe, ParamX, VerbSwe, Prelude, DiffSwe, StructuralSwe, MorphoSwe,
@@ -74,12 +74,12 @@ lin
           agr  = np.a ;
           vps  = vp.s ! VPFinite t a ;  
           vf = case <<t,a> : STense * Anteriority> of {
-            <SPres,Simul> => vps.fin;
-            <SPast,Simul> => vps.fin;
-            <_    ,Simul> => vps.inf;
-            <SPres,Anter> => vps.inf;
-            <SPast,Anter> => vps.inf;
-            <_    ,Anter> => (vp.s ! VPFinite SPast Anter).inf
+            <SPres,Simul> => vps.fin
+            ;<SPast,Simul> => vps.fin;  --# notpresent 
+            <_    ,Simul> => vps.inf;  --# notpresent
+            <SPres,Anter> => vps.inf;  --# notpresent
+            <SPast,Anter> => vps.inf;  --# notpresent
+            <_    ,Anter> => (vp.s ! VPFinite SPast Anter).inf   --# notpresent
             };
           verb = mkClause subj agr (predV do_V) ;                        
           comp = vp.n2 ! agr ++ vp.a2 ++ vp.ext     
@@ -142,11 +142,11 @@ lin
     ;
 
 
-  SupCl np vp pol = let sub = np.s ! nominative ;
-                        verb = (vp.s ! VPFinite SPres Anter).inf ;
-                        neg  = vp.a1 ! pol.p ++ pol.s ;
-                        compl = vp.n2 ! np.a ++ vp.a2 ++ vp.ext in
-    {s = \\_ => sub ++ neg ++ verb ++ compl };
+  SupCl np vp pol = let sub = np.s ! nominative ;                     --# notpresent
+                        verb = (vp.s ! VPFinite SPres Anter).inf ;    --# notpresent
+                        neg  = vp.a1 ! pol.p ++ pol.s ;               --# notpresent
+                        compl = vp.n2 ! np.a ++ vp.a2 ++ vp.ext in    --# notpresent
+    {s = \\_ => sub ++ neg ++ verb ++ compl };                        --# notpresent
     
 
   PassV2 v2 = predV (depV v2);
@@ -240,10 +240,6 @@ lin
     varenda_Det     = {s  = \\_ => genderForms ["varenda"] ["vartenda"] ; 
                        sp = \\_ => genderForms ["varenda en"] ["vartenda ett"] ; 
                        n = Sg ; det = DDef Indef};
-
-    most_Det = {s,sp = \\ismod,_ => let av = case ismod of {True => "av" ; False = ""} in
-          detForms ["den mesta"] ["det mesta"] ["de flesta"] ; 
-                n = Sg ; det = DDef Indef} ;
 
     noll_Det = {s,sp = \\_,_ => "noll" ; n = Pl ; det = DDef Indef};
 
