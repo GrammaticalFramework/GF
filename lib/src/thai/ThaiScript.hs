@@ -55,39 +55,38 @@ uni2thai = map toEnum
 
 uni2pron :: [Int] -> String
 uni2pron is = case is of
-  0xe40:c:0xe35:0xe22:cs -> pron c ++ tone c cs "iia" ++ uni2pron cs
+  0xe40:c:0xe32      :cs -> pron c ++ tone c cs "aw"       ++ uni2pron cs
+  0xe40:c:0xe34      :cs -> pron c ++ tone c cs "\601\601" ++ uni2pron cs
+  0xe40:c:0xe35:0xe22:cs -> pron c ++ tone c cs "iia"      ++ uni2pron cs
   0xe40:c:0xe37:0xe2d:cs -> pron c ++ tone c cs "\649\649" ++ uni2pron cs
-  0xe40:c:0xe32:cs -> pron c ++ tone c cs "aw" ++ uni2pron cs
-  0xe40:c:0xe34:cs -> pron c ++ tone c cs "\601\601" ++ uni2pron cs
-  0xe40:c:0xe47:cs -> pron c ++ tone c cs "e" ++ uni2pron cs
-  0xe40:c:cs -> pron c ++ tone c cs "ee" ++ uni2pron cs
+  0xe40:c:0xe47      :cs -> pron c ++ tone c cs "e"        ++ uni2pron cs
+  0xe41:c:0xe47      :cs -> pron c ++ tone c cs "\x25b"    ++ uni2pron cs
 
-  0xe41:c:0xe47:cs -> pron c ++ tone c cs "\x25b" ++ uni2pron cs
-  0xe41:c:cs -> pron c ++ tone c cs "\x25b\x25b" ++ uni2pron cs
+  v:0xe2b:c:cs | isConsonant c && bvow v  
+                         -> pron c ++ tone 0xe2b cs (pron v) ++ uni2pron cs  -- h-
+  v:b:c:cs | clust b c && bvow v                                             -- kr- etc
+                         -> pron b ++ pron c ++ tone c cs (pron v) ++ uni2pron cs
+  v:c:cs | bvow v        -> pron c ++ tone c cs (pron v)   ++ uni2pron cs  -- e .. ay
 
-  0xe42:c:cs -> pron c ++ tone c cs "o:" ++ uni2pron cs
-  0xe43:c:cs -> pron c ++ tone c cs "ay" ++ uni2pron cs
-  0xe44:c:cs -> pron c ++ tone c cs "ay" ++ uni2pron cs
+  c:0xe31:0xe27:cs       -> pron c ++ tone c cs "uua"      ++ uni2pron cs
 
-  c:0xe30:cs -> pron c ++ tone c cs "a"  ++ uni2pron cs
-  c:0xe31:0xe27:cs -> pron c ++ tone c cs "uua" ++ uni2pron cs
-  c:0xe31:cs -> pron c ++ tone c cs "a"  ++ uni2pron cs
-  c:0xe32:cs -> pron c ++ tone c cs "aa" ++ uni2pron cs
-  c:0xe33:cs -> pron c ++ tone c cs "am" ++ uni2pron cs
-  c:0xe34:cs -> pron c ++ tone c cs "i"  ++ uni2pron cs
-  c:0xe35:cs -> pron c ++ tone c cs "ii" ++ uni2pron cs
-  c:0xe36:cs -> pron c ++ tone c cs "\649" ++ uni2pron cs
-  c:0xe37:cs -> pron c ++ tone c cs "\649\649" ++ uni2pron cs
-  c:0xe38:cs -> pron c ++ tone c cs "u"  ++ uni2pron cs
-  c:0xe39:cs -> pron c ++ tone c cs "uu" ++ uni2pron cs
+  0xe2b:c:v:cs | isConsonant c && cvow v  
+                         -> pron c ++ tone 0xe2b cs (pron v) ++ uni2pron cs  -- h-
+  b:c:v:cs | clust b c && cvow v                                             -- kr- etc
+                         -> pron b ++ pron c ++ tone c cs (pron v) ++ uni2pron cs
+  0xe2d:v:cs   | cvow v  ->           tone 0xe2d cs (pron v) ++ uni2pron cs  -- O-
+  c:v:cs       | cvow v  -> pron c ++ tone c     cs (pron v) ++ uni2pron cs  -- a .. u:
 
   [c] -> enc c
-  c:cs -> pron c ++ uni2pron cs
+  c:cs -> pron c ++ uni2pron cs  --- shouldn't happen if syllabified ??
   [] -> []
  where
    enc  c = lookThai [] pronunc_end c
    pron c = lookThai [] pronunc c
-
+   cvow v = (0xe30 <= v && v <= 0xe39) || v == 0xe2d -- central vowels
+   bvow v = 0xe40 <= v && v <= 0xe44  -- begin vowels
+   clust b c = isConsonant b && (elem c [0xe23, 0xe25])
+ 
 tone :: Int -> [Int] -> String -> String
 tone c cs v = case (lookThai Low cclass c, isLive cs, toneMark (c:cs)) of
   (_,_,3) -> high v
@@ -136,24 +135,6 @@ falling = accent '\x302'
 accent a s = case s of
   c:cs -> c:a:cs
   _ -> s
- 
-{-
-high = toneMap "á" "é" "í" "ó" "ú" "ǘ" "ä'" "ö'"
-low  = toneMap "à" "è" "ì" "ò" "ù" "ǜ" "ä`" "ö`"
-rising  = toneMap "ã" "ẽ" "ĩ" "õ" "ũ" "ü~" "ä~" "ö~"
-falling  = toneMap "â" "ê" "î" "ô" "û" "ü^" "ä^" "ö^"
-
-toneMap a e i o u ue ae oe s = case s of
-  'a':cs -> a++cs
-  'e':cs -> e++cs
-  'i':cs -> i++cs
-  'o':cs -> o++cs
-  'u':cs -> u++cs
-  'ü':cs -> ue++cs
-  'ä':cs -> ae++cs
-  'ö':cs -> oe++cs
-  _ -> s
--}
 
 lookThai :: a -> (ThaiChar -> a) -> Int -> a
 lookThai v f i = maybe v f (Map.lookup i thaiMap)
@@ -205,13 +186,13 @@ allThaiChars = [
   TC {unicode = 3595, translit = "s'", cclass = Low, liveness = False, pronunc = "s", pronunc_end = "t"},
   TC {unicode = 3596, translit = "c3", cclass = Low, liveness = False, pronunc = "ch", pronunc_end = "t"},
   TC {unicode = 3597, translit = "y'", cclass = Low, liveness = False, pronunc = "y", pronunc_end = "n"},
-  TC {unicode = 3598, translit = "d'", cclass = Mid, liveness = False, pronunc = "d", pronunc_end = "d'"},
-  TC {unicode = 3599, translit = "t'", cclass = Mid, liveness = False, pronunc = "t'", pronunc_end = "t'"},
+  TC {unicode = 3598, translit = "d'", cclass = Mid, liveness = False, pronunc = "d", pronunc_end = "t"},
+  TC {unicode = 3599, translit = "t'", cclass = Mid, liveness = False, pronunc = "t", pronunc_end = "t"},
   TC {unicode = 3600, translit = "t1", cclass = High, liveness = False, pronunc = "th", pronunc_end = "t"},
   TC {unicode = 3601, translit = "t2", cclass = Low, liveness = False, pronunc = "th", pronunc_end = "t"},
   TC {unicode = 3602, translit = "t3", cclass = Low, liveness = False, pronunc = "th", pronunc_end = "t"},
   TC {unicode = 3603, translit = "n'", cclass = Low, liveness = True, pronunc = "n", pronunc_end = "n"},
-  TC {unicode = 3604, translit = "d", cclass = Mid, liveness = False, pronunc = "d", pronunc_end = "d"},
+  TC {unicode = 3604, translit = "d", cclass = Mid, liveness = False, pronunc = "d", pronunc_end = "t"},
   TC {unicode = 3605, translit = "t", cclass = Mid, liveness = False, pronunc = "t", pronunc_end = "t"},
   TC {unicode = 3606, translit = "t4", cclass = High, liveness = False, pronunc = "th", pronunc_end = "t"},
   TC {unicode = 3607, translit = "t5", cclass = Low, liveness = False, pronunc = "th", pronunc_end = "t"},
@@ -229,8 +210,8 @@ allThaiChars = [
   TC {unicode = 3619, translit = "r", cclass = Low, liveness = True, pronunc = "r", pronunc_end = "n"},
   TC {unicode = 3621, translit = "l", cclass = Low, liveness = True, pronunc = "l", pronunc_end = "n"},
   TC {unicode = 3623, translit = "w", cclass = Low, liveness = True, pronunc = "w", pronunc_end = "w"},
-  TC {unicode = 3624, translit = "s-", cclass = High, liveness = False, pronunc = "sh", pronunc_end = "t"},
-  TC {unicode = 3625, translit = "s.", cclass = High, liveness = False, pronunc = "sh", pronunc_end = "t"},
+  TC {unicode = 3624, translit = "s-", cclass = High, liveness = False, pronunc = "s", pronunc_end = "t"},
+  TC {unicode = 3625, translit = "s.", cclass = High, liveness = False, pronunc = "s", pronunc_end = "t"},
   TC {unicode = 3626, translit = "s", cclass = High, liveness = False, pronunc = "s", pronunc_end = "t"},
   TC {unicode = 3627, translit = "h", cclass = High, liveness = True, pronunc = "h", pronunc_end = ""},
   TC {unicode = 3628, translit = "l'", cclass = Low, liveness = True, pronunc = "l", pronunc_end = "n"},
@@ -250,8 +231,8 @@ allThaiChars = [
   TC {unicode = 3648, translit = "e", cclass = Low, liveness = True, pronunc = "ee", pronunc_end = "ee"},
   TC {unicode = 3649, translit = "e'", cclass = Low, liveness = True, pronunc = "\x25b\x25b", pronunc_end = "0x25b\x25b"},
   TC {unicode = 3650, translit = "o:", cclass = Low, liveness = True, pronunc = "oo", pronunc_end = "oo"},
-  TC {unicode = 3651, translit = "a%", cclass = Low, liveness = True, pronunc = "ai", pronunc_end = "ai"},
-  TC {unicode = 3652, translit = "a&", cclass = Low, liveness = True, pronunc = "ai", pronunc_end = "ai"},
+  TC {unicode = 3651, translit = "a%", cclass = Low, liveness = True, pronunc = "ay", pronunc_end = "ay"},
+  TC {unicode = 3652, translit = "a&", cclass = Low, liveness = True, pronunc = "ay", pronunc_end = "ay"},
   TC {unicode = 3653, translit = "L", cclass = Low, liveness = True, pronunc = "l", pronunc_end = "n"},
   TC {unicode = 3654, translit = "R", cclass = Low, liveness = True, pronunc = "r", pronunc_end = "n"},
   TC {unicode = 3655, translit = "S", cclass = Low, liveness = True, pronunc = "", pronunc_end = ""},
@@ -272,136 +253,3 @@ allThaiChars = [
   TC {unicode = 3673, translit = "N9", cclass = Low, liveness = False, pronunc = "9", pronunc_end = "9"}
  ]
 
-
-
---[TC u t Low False t t | 
- -- (u,t) <- Map.toList (trans_from_unicode transThai)]
-
-pronChar :: Int -> String 
-pronChar i = show i
-
-
-
-
-data Transliteration = Trans {
-  trans_to_unicode   :: Map.Map String Int,
-  trans_from_unicode :: Map.Map Int String,
-  invisible_chars    :: [String],
-  printname          :: String
-  }
-
-appTransToUnicode :: Transliteration -> String -> String
-appTransToUnicode trans = 
-  concat .
-  map (\c -> maybe c (return . toEnum) $
-             Map.lookup c (trans_to_unicode trans)
-      ) . 
-  filter (flip notElem (invisible_chars trans)) . 
-  unchar
-
-appTransFromUnicode :: Transliteration -> String -> String
-appTransFromUnicode trans = 
-  concat .
-  map (\c -> maybe [toEnum c] id $ 
-             Map.lookup c (trans_from_unicode trans)
-      ) . 
-  map fromEnum
-
-
-mkTransliteration :: String -> [String] -> [Int] -> Transliteration
-mkTransliteration name ts us = 
- Trans (Map.fromList (tzip ts us)) (Map.fromList (uzip us ts)) [] name
-  where
-    tzip ts us = [(t,u) | (t,u) <- zip ts us, t /= "-"]
-    uzip us ts = [(u,t) | (u,t) <- zip us ts, t /= "-"]
-
-
-transThai :: Transliteration
-transThai = mkTransliteration "Thai" allTrans allCodes where
-  allTrans = words $
-    "-  k  k1 -  k2 -  k3 g  c  c1 c2 s' c3 y' d' t' " ++
-    "t1 t2 t3 n' d  t  t4 t5 t6 n  b  p  p1 f  p2 f' " ++
-    "p3 m  y  r  -  l  -  w  s- s. s  h  l' O  h' -  " ++
-    "a. a  a: a+ i  i: v  v: u  u: -  -  -  -  -  -  " ++
-    "e  e' o: a% a& L  R  S  T1 T2 T3 T4 K  -  -  -  " ++
-    "N0 N1 N2 N3 N4 N5 N6 N7 N8 N9 -  -  -  -  -  -  "
-  allCodes = [0x0e00 .. 0x0e7f]
-
-{-
-| e01 | ก | k | M
-| e02 | ข | k1 | H
-| e04 | ค | k2 |
-| e06 | ฆ | k3 |
-| e07 | ง | g |
-| e08 | จ | c | M
-| e09 | ฉ | c1 | H
-| e0a | ช | c2 |
-| e0b | ซ | s' |
-| e0c | ฌ | c3 |
-| e0d | ญ | y' |
-| e0e | ฎ | d' | M
-| e0f | ฏ | t' | M
-| e10 | ฐ | t1 | H
-| e11 | ฑ | t2 |
-| e12 | ฒ | t3 |
-| e13 | ณ | n' |
-| e14 | ด | d | M
-| e15 | ต | t | M
-| e16 | ถ | t4 | H
-| e17 | ท | t5 |
-| e18 | ธ | t6 |
-| e19 | น | n |
-| e1a | บ | b | M
-| e1b | ป | p | M
-| e1c | ผ | p1 | H
-| e1d | ฝ | f | H
-| e1e | พ | p2 |
-| e1f | ฟ | f' |
-| e20 | ภ | p3 |
-| e21 | ม | m |
-| e22 | ย | y |
-| e23 | ร | r |
-| e25 | ล | l |
-| e27 | ว | w |
-| e28 | ศ | s- | H
-| e29 | ษ | s. | H
-| e2a | ส | s | H
-| e2b | ห | h | H
-| e2c | ฬ | l' |
-| e2d | อ | O | M
-| e2e | ฮ | h' |
-
-| e30 | ะ | a. |
-| e31 | ั | a |
-| e32 | า | a: |
-| e33 | ำ | a+ |
-| e34 | ิ | i |
-| e35 | ี | i: |
-| e36 | ึ | v |
-| e37 | ื | v: |
-| e38 | ุ | u |
-| e39 | ู | u: |
-| e40 | เ | e |
-| e41 | แ | e' |
-| e42 | โ | o: |
-| e43 | ใ | a% |
-| e44 | ไ | a& |
-| e45 | ๅ | L |
-| e46 | ๆ | R |
-| e47 | ็ | S |
-| e48 | ่ | T1 |
-| e49 | ้ | T2 |
-| e4a | ๊ | T3 |
-| e4b | ๋ | T4 |
-| e4c | ์ | K |
-| e50 | ๐ | N0 |
-| e51 | ๑ | N1 |
-| e52 | ๒ | N2 |
-| e53 | ๓ | N3 |
-| e54 | ๔ | N4 |
-| e55 | ๕ | N5 |
-| e56 | ๖ | N6 |
-| e57 | ๗ | N7 |
-| e58 | ๘ | N8 |
-| e59 | ๙ | N9 |
--}
