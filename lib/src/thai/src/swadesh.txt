@@ -1,7 +1,7 @@
 -- http://en.wiktionary.org/wiki/Appendix:Thai_Swadesh_list, 7/11/2011
 
-1	I	ฉัน, กู	chǎn, kuu
-2	you (singular)	เธอ, มึง	thəə, mʉŋ
+1	I	ฉัน , กู	chǎn , kuu
+2	you (singular)	เธอ , มึง	thəə , mʉŋ
 3	he	เขา	kháo
 4	we	เรา	rao
 5	you (plural)	พวกคุณ	phûakkhun
@@ -26,45 +26,45 @@
 24	three	สาม	sǎam
 25	four	สี่	sìi
 26	five	ห้า	hâa
-27	big	ใหญ่, โต	yày, too
+27	big	ใหญ่ , โต	yày , too
 28	long	ยาว	yaaw
 29	wide	กว้าง	kwâaŋ
 30	thick	หนา	nǎa
 31	heavy	หนัก	nàk
-32	small	เล็ก, น้อย	lék, nɔ́ɔy
-33	short	สั้น, เตี้ย	sân, tîa
+32	small	เล็ก , น้อย	lék , nɔ́ɔy
+33	short	สั้น , เตี้ย	sân , tîa
 34	narrow	แคบ	khâeaep
 35	thin	บาง	baaŋ
 36	woman	หญิง	yǐŋ
 37	man (adult male)	ชาย	chaay
-38	man (human being)	ผู้, คน	phûu, khon
-39	child	เด็ก, ศิศุ	dèk, sìsù
-40	wife	เมีย, ภรรยา	mia, phanrayaa
-41	husband	ผัว, สามี	phǔa, sǎamii
+38	man (human being)	ผู้ , คน	phûu , khon
+39	child	เด็ก , ศิศุ	dèk , sìsù
+40	wife	เมีย , ภรรยา	mia , phanrayaa
+41	husband	ผัว , สามี	phǔa , sǎamii
 42	mother	แม่	mâeae
-43	father	พ่อ, บิดา	phɔ̂ɔ, bìdaa
+43	father	พ่อ , บิดา	phɔ̂ɔ , bìdaa
 44	animal	สัตว์	sàt
 45	fish	ปลา	plaa
-46	bird	นก; วิหค (Sanskrit)	nók, wíhòk
-47	dog	หมา; สุนัข (Sanskrit)	mǎa, sùnák
-48	louse	เล็น, เหา	len, hǎo
+46	bird	นก; วิหค (Sanskrit)	nók , wíhòk
+47	dog	หมา; สุนัข (Sanskrit)	mǎa , sùnák
+48	louse	เล็น , เหา	len , hǎo
 49	snake	งู	ŋuu
 50	worm	หนอน	nɔ̌ɔn
 51	tree	ไม้	máay
-52	forest	ดง, ป่า	doŋ, pàa
+52	forest	ดง , ป่า	doŋ , pàa
 53	stick	กิ่ง	kìŋ
 54	fruit	หมาก	màak
 55	seed	เม็ด	mét
 56	leaf	ใบ	bay
 57	root	ราก	râak
-58	bark (of a tree)	เปลือก, ผิว	plʉ̀ak, phǐw
-59	flower	ดอก, ปลี	dɔ̀ɔk, plii
+58	bark (of a tree)	เปลือก , ผิว	plʉ̀ak , phǐw
+59	flower	ดอก , ปลี	dɔ̀ɔk , plii
 60	grass	หญ้า	yâa
 61	rope	เชือก	chʉ̂ak
 62	skin	หนัง	nǎŋ
 63	meat	เนื้อ	nʉ́a
-64	blood	เลือด, โลหิต	lʉ̂at, loohìt
-65	bone	กระดูก, ก้าง	kradùuk, kâaŋ
+64	blood	เลือด , โลหิต	lʉ̂at , loohìt
+65	bone	กระดูก , ก้าง	kradùuk , kâaŋ
 66	fat (noun)	มัน	man
 67	egg	ไข่	khày
 68	horn	เขา	khǎo
@@ -79,14 +79,14 @@
 77	tooth	ฟัน	fan
 78	tongue (organ)	ลิ้น	lín
 79	fingernail	เล็บ	lép
-80	foot	เท้า, ตีน	tháaw, tiin
+80	foot	เท้า , ตีน	tháaw , tiin
 81	leg	ขา	khǎa
 82	knee	เข่า	khào
 83	hand	มือ	mʉʉ
 84	wing	ปิก	pìik
 85	belly	พุง	phuŋ
 86	guts	ไส้	sây
-87	neck	คอ, ศอ	khɔɔ, sɔ̌ɔ
+87	neck	คอ , ศอ	khɔɔ , sɔ̌ɔ
 88	back	หลัง	lǎŋ
 89	breast	นม	nom
 90	heart	ใจ	cay
@@ -95,27 +95,27 @@
 93	to eat	กิน	kin
 94	to bite	กัด	kàt
 95	to suck	ดูด	dùut
-96	to spit	ถ่ม, คาย	thòm, khaay
-97	to vomit	อ้วก, อาเจียน	 ?ûak, ?aacian
+96	to spit	ถ่ม , คาย	thòm , khaay
+97	to vomit	อ้วก , อาเจียน	 ?ûak , ?aacian
 98	to blow	พัด	phát
 99	to breathe	หายใจ	hǎaycay
 100	to laugh	หัวเราะ	hǔarɔ́
 101	to see	เห็น	hěn
-102	to hear	ยิน, ฟัง	yin, faŋ
+102	to hear	ยิน , ฟัง	yin , faŋ
 103	to know	รู้	rúu
-104	to think	คิด	khít, ?àan
+104	to think	คิด	khít , ?àan
 105	to smell	มีกลิ่น	miiklìn
-106	fear	กลัว, ยั่น	klua, yân
+106	fear	กลัว , ยั่น	klua , yân
 107	to sleep	นอน	nɔɔn
-108	to live	อยู่, อาศัย	yùu, ?aasǎi
-109	to die	ตาย, วาย	taay, waay
-110	to kill	ฆ่า, มล้าง	khâa, maláaŋ
-111	to fight	สู้, รบ	sûu, róp
+108	to live	อยู่ , อาศัย	yùu , ?aasǎi
+109	to die	ตาย , วาย	taay , waay
+110	to kill	ฆ่า , มล้าง	khâa , maláaŋ
+111	to fight	สู้ , รบ	sûu , róp
 112	to hunt	ล่า	lâa
 113	to hit	ตี	tii
-114	to cut	ตัด, บาด	tàt, bàat
+114	to cut	ตัด , บาด	tàt , bàat
 115	to split	ผ่า	phàa
-116	to stab	แทง, เสียบ	thaeaeŋ, sìap
+116	to stab	แทง , เสียบ	thaeaeŋ , sìap
 117	to scratch	เกา	kao
 118	to dig	ขุด	khùt
 119	to swim	ว่าย	wâay
@@ -126,51 +126,51 @@
 124	to sit	นั่ง	nâŋ
 125	to stand	ยืน	yʉʉn
 126	to turn (intransitive)	หัน	hǎn
-127	to fall	ตก, หล่น	tòk, lòn
+127	to fall	ตก , หล่น	tòk , lòn
 128	to give	ให้	hây
 129	to hold	อุ้ม	 ?ûm
 130	to squeeze	คั้น	khán
-131	to rub	ถู, นวด	thǔu, nûat
+131	to rub	ถู , นวด	thǔu , nûat
 132	to wash	ล้าง	láaŋ
 133	to wipe	เช็ด	chét
-134	to pull	ดึง, ลาก	dʉŋ, lâak
+134	to pull	ดึง , ลาก	dʉŋ , lâak
 135	to push	ผลัก	phlàk
-136	to throw	ขว้าง, ปา	khwâaŋ, paa
-137	to tie	ผูก, ล่าม	phùuk, lâam
+136	to throw	ขว้าง , ปา	khwâaŋ , paa
+137	to tie	ผูก , ล่าม	phùuk , lâam
 138	to sew	เย็บ	yép
 139	to count	นับ	náp
-140	to say	พูด, บอก	phûut, bɔ̀ɔk
-141	to sing	ร้อง	rɔ́ɔŋ, khàp
+140	to say	พูด , บอก	phûut , bɔ̀ɔk
+141	to sing	ร้อง	rɔ́ɔŋ , khàp
 142	to play	เล่น	lên
 143	to float	ลอย	lɔɔy
 144	to flow	ไหล	lǎy
 145	to freeze	แข็ง	khǎeŋ
 146	to swell	ตุ่ม	tùm
-147	sun	ตะวัน; พระอาทิตย์ (Sanskrit)	tawan, phrá?aathít
-148	moon	เดือน; พระจันทร์ (Sanskrit)	dʉan, phrácan
-149	star	ดาว; ดารา (Sanskrit)	daaw, daaraa
-150	water	น้ำ; ชล (Sanskrit)	náam, chon
+147	sun	ตะวัน; พระอาทิตย์ (Sanskrit)	tawan , phrá?aathít
+148	moon	เดือน; พระจันทร์ (Sanskrit)	dʉan , phrácan
+149	star	ดาว; ดารา (Sanskrit)	daaw , daaraa
+150	water	น้ำ; ชล (Sanskrit)	náam , chon
 151	rain	ฝน	fǒn
-152	river	แม่น้ำ, นที (Sanskrit)	mâenáam, náthii
+152	river	แม่น้ำ , นที (Sanskrit)	mâenáam , náthii
 153	lake	ทะเลสาบ	thaleesàap
-154	sea	ทะเล; มหาสมุทร (Sanskrit)	thalee, mahǎasamùt
+154	sea	ทะเล; มหาสมุทร (Sanskrit)	thalee , mahǎasamùt
 155	salt	เกลือ	klʉa
 156	stone	หิน	hǐn
 157	sand	ทราย	saay
-158	dust	ฝุ่น; ธุลี (Sanskrit)	fùn, thúlii
+158	dust	ฝุ่น; ธุลี (Sanskrit)	fùn , thúlii
 159	earth	ดิน	din
 160	cloud	เมฆ	mêek
 161	fog	หมอก	mɔ̀ɔk
-162	sky	ฟ้า, นภา	fáa, napā
+162	sky	ฟ้า , นภา	fáa , napā
 163	wind	ลม	lom
 164	snow	หิมะ	himá
 165	ice	น้ำแข็ง	náamkhǎeŋ
 166	smoke	ควัน	khwan
-167	fire	ไฟ, อัคนี	fay, akkhanii
+167	fire	ไฟ , อัคนี	fay , akkhanii
 168	ash	เถ้า	thâo
 169	to burn	เผา	phǎo
-170	road	ทาง, หน	thaaŋ, hǒn
-171	mountain	เขา, ภู, ดอย, คิริ	phuu, khǎo, dɔɔy, khìrì
+170	road	ทาง , หน	thaaŋ , hǒn
+171	mountain	เขา , ภู , ดอย , คิริ	phuu , khǎo , dɔɔy , khìrì
 172	red	แดง	daeaeŋ
 173	green	เขียว	khǐaw
 174	yellow	เหลือง	lʉ̌aŋ
@@ -178,32 +178,32 @@
 176	black	ดำ	dam
 177	night	กลางคืน	klaaŋkhʉʉn
 178	day	กลางวัน	klaaŋwan
-179	year	ปี,ขวบ	pii, khùap
-180	warm	ร้อน, อุ่น	rɔ́ɔn, ?ùn
-181	cold	หนาว, เซ็ง	nǎaw, sen
+179	year	ปี ,ขวบ	pii , khùap
+180	warm	ร้อน , อุ่น	rɔ́ɔn , ?ùn
+181	cold	หนาว , เซ็ง	nǎaw , sen
 182	full	เต็ม	tem
 183	new	ใหม่	mày
-184	old	แก่, เฒ่า	kàeae, thâo
+184	old	แก่ , เฒ่า	kàeae , thâo
 185	good	ดี	dii
-186	bad	เลว, ร้้าย	leew, ráay
+186	bad	เลว , ร้้าย	leew , ráay
 187	rotten	เน่า	nâo
 188	dirty	สกปรก	sòkkapròk
-189	straight	ดิ่ง, ตรง	dìŋ, troŋ
-190	round	กลม, มน	klom, mon
+189	straight	ดิ่ง , ตรง	dìŋ , troŋ
+190	round	กลม , มน	klom , mon
 191	sharp (as a knife)	คม	khom
 192	dull (as a knife)	ทื่อ	thʉ̂ʉ
 193	smooth	ละมุน	lamun
 194	wet	เปียก	pìak
 195	dry	แห้ง	hâeaeŋ
-196	correct	แท้, แม่น	tháeae, mâeaen
+196	correct	แท้ , แม่น	tháeae , mâeaen
 197	near	ใกล้	klây
 198	far	ไกล	klay
 199	right	ขวา	khwǎa
 200	left	ซ้าย	sáay
 201	at	ที่	thîi
 202	in	ใน	nay
-203	with	กับ, ด้วย	kàp, dûay
+203	with	กับ , ด้วย	kàp , dûay
 204	and	และ	láe
-205	if	ถ้า, เผื่อ	thâa, phʉ̀a
-206	because	เพราะ, ด้วย	phrɔ́, dûay
-207	name	ชื่อ, เรียก	chʉ̂ʉ, rîak
+205	if	ถ้า , เผื่อ	thâa , phʉ̀a
+206	because	เพราะ , ด้วย	phrɔ́ , dûay
+207	name	ชื่อ , เรียก	chʉ̂ʉ , rîak
