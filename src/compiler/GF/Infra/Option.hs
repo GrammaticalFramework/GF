@@ -6,7 +6,7 @@ module GF.Infra.Option
      Mode(..), Phase(..), Verbosity(..), 
      OutputFormat(..), 
      SISRFormat(..), Optimization(..), CFGTransform(..), HaskellOption(..),
-     Dump(..), Printer(..), Recomp(..),
+     Dump(..), Recomp(..),
      outputFormatsExpl, 
      -- * Option parsing 
      parseOptions, parseModuleOptions, fixRelativeLibPaths,
@@ -133,10 +133,6 @@ data Warning = WarnMissingLincat
 data Dump = DumpSource | DumpRebuild | DumpExtend | DumpRename | DumpTypeCheck | DumpRefresh | DumpOptimize | DumpCanon
   deriving (Show,Eq,Ord)
 
--- | Pretty-printing options
-data Printer = PrinterStrip -- ^ Remove name qualifiers.
-  deriving (Show,Eq,Ord)
-
 data Recomp = AlwaysRecomp | RecompIfNewer | NeverRecomp
   deriving (Show,Eq,Ord)
 
@@ -146,7 +142,6 @@ data Flags = Flags {
       optVerbosity       :: Verbosity,
       optProf            :: Bool,
       optShowCPUTime     :: Bool,
-      optEmitGFO         :: Bool,
       optOutputFormats   :: [OutputFormat],
       optSISR            :: Maybe SISRFormat,
       optHaskellOptions  :: Set HaskellOption,
@@ -157,13 +152,9 @@ data Flags = Flags {
       optOutputDir       :: Maybe FilePath,
       optGFLibPath       :: Maybe FilePath,
       optRecomp          :: Recomp,
-      optPrinter         :: [Printer],
       optProbsFile       :: Maybe FilePath,
       optRetainResource  :: Bool,
       optName            :: Maybe String,
-      optAbsName         :: Maybe String,
-      optCncName         :: Maybe String,
-      optResName         :: Maybe String,
       optPreprocessors   :: [String],
       optEncoding        :: String,
       optOptimizations   :: Set Optimization,
@@ -247,7 +238,6 @@ defaultFlags = Flags {
       optVerbosity       = Normal,
       optProf            = False,
       optShowCPUTime     = False,
-      optEmitGFO         = True,
       optOutputFormats   = [],
       optSISR            = Nothing,
       optHaskellOptions  = Set.empty,
@@ -258,14 +248,10 @@ defaultFlags = Flags {
       optOutputDir       = Nothing,
       optGFLibPath       = Nothing,
       optRecomp          = RecompIfNewer,
-      optPrinter         = [],
       optProbsFile       = Nothing,
       optRetainResource  = False,
 
       optName            = Nothing,
-      optAbsName         = Nothing,
-      optCncName         = Nothing,
-      optResName         = Nothing,
       optPreprocessors   = [],
       optEncoding        = "latin1",
 -- #ifdef CC_LAZY
@@ -307,8 +293,6 @@ optDescr =
      Option [] ["prof"] (NoArg (prof True)) "Dump profiling information when compiling to PMCFG",
      Option [] ["cpu"] (NoArg (cpu True)) "Show compilation CPU time statistics.",
      Option [] ["no-cpu"] (NoArg (cpu False)) "Don't show compilation CPU time statistics (default).",
-     Option [] ["emit-gfo"] (NoArg (emitGFO True)) "Create .gfo files (default).",
-     Option [] ["no-emit-gfo"] (NoArg (emitGFO False)) "Do not create .gfo files.",
      Option [] ["gfo-dir"] (ReqArg gfoDir "DIR") "Directory to put .gfo files in (default = '.').",
      Option ['f'] ["output-format"] (ReqArg outFmt "FMT") 
         (unlines ["Output format. FMT can be one of:",
@@ -337,23 +321,12 @@ optDescr =
                  "(default) Recompile from source if the source is newer than the .gfo file.",
      Option [] ["gfo","no-recomp"] (NoArg (recomp NeverRecomp)) 
                  "Never recompile from source, if there is already .gfo file.",
-     Option [] ["strip"] (NoArg (printer PrinterStrip))
-                 "Remove name qualifiers when pretty-printing.",
      Option [] ["retain"] (NoArg (set $ \o -> o { optRetainResource = True })) "Retain opers.",
      Option [] ["probs"] (ReqArg probsFile "file.probs") "Read probabilities from file.",
      Option ['n'] ["name"] (ReqArg name "NAME") 
            (unlines ["Use NAME as the name of the output. This is used in the output file names, ",
                      "with suffixes depending on the formats, and, when relevant, ",
                      "internally in the output."]),
-     Option [] ["abs"] (ReqArg absName "NAME")
-            ("Use NAME as the name of the abstract syntax module generated from "
-             ++ "a grammar in GF 1 format."),
-     Option [] ["cnc"] (ReqArg cncName "NAME")
-            ("Use NAME as the name of the concrete syntax module generated from "
-             ++ "a grammar in GF 1 format."),
-     Option [] ["res"] (ReqArg resName "NAME")
-            ("Use NAME as the name of the resource module generated from "
-             ++ "a grammar in GF 1 format."),
      Option ['i'] [] (ReqArg addLibDir "DIR") "Add DIR to the library search path.",
      Option [] ["path"] (ReqArg setLibPath "DIR:DIR:...") "Set the library search path.",
      Option [] ["preproc"] (ReqArg preproc "CMD") 
@@ -393,7 +366,6 @@ optDescr =
                                         Nothing -> fail $ "Bad verbosity: " ++ show v
        prof        x = set $ \o -> o { optProf = x }
        cpu         x = set $ \o -> o { optShowCPUTime = x }
-       emitGFO     x = set $ \o -> o { optEmitGFO = x }
        gfoDir      x = set $ \o -> o { optGFODir = Just x }
        outFmt      x = readOutputFormat x >>= \f ->
                          set $ \o -> o { optOutputFormats = optOutputFormats o ++ [f] }
@@ -411,13 +383,9 @@ optDescr =
        outDir      x = set $ \o -> o { optOutputDir = Just x }
        gfLibPath   x = set $ \o -> o { optGFLibPath = Just x }
        recomp      x = set $ \o -> o { optRecomp = x }
-       printer     x = set $ \o -> o { optPrinter = x : optPrinter o }
        probsFile   x = set $ \o -> o { optProbsFile = Just x }
 
        name        x = set $ \o -> o { optName = Just x }
-       absName     x = set $ \o -> o { optAbsName = Just x }
-       cncName     x = set $ \o -> o { optCncName = Just x }
-       resName     x = set $ \o -> o { optResName = Just x }
        addLibDir   x = set $ \o -> o { optLibraryPath = x:optLibraryPath o }
        setLibPath  x = set $ \o -> o { optLibraryPath = splitInModuleSearchPath x }
        preproc     x = set $ \o -> o { optPreprocessors = optPreprocessors o ++ [x] }
