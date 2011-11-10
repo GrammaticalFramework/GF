@@ -52,7 +52,7 @@ unsubexpModule sm@(i,mo)
     -- perform this iff the module has opers
     hasSub ljs = not $ null [c | (c,ResOper _ _) <- ljs]
     unparInfo (c,info) = case info of
-      CncFun xs (Just (L loc t)) m -> [(c, CncFun xs (Just (L loc (unparTerm t))) m)]
+      CncFun xs (Just (L loc t)) m pf -> [(c, CncFun xs (Just (L loc (unparTerm t))) m pf)]
       ResOper (Just (L loc (EInt 8))) _ -> [] -- subexp-generated opers
       ResOper pty (Just (L loc t)) -> [(c, ResOper pty (Just (L loc (unparTerm t))))]
       _ -> [(c,info)]
@@ -75,9 +75,9 @@ addSubexpConsts mo tree lins = do
   mapM mkOne $ opers ++ lins
  where
    mkOne (f,def) = case def of
-     CncFun xs (Just (L loc trm)) pn -> do
+     CncFun xs (Just (L loc trm)) pn pf -> do
        trm' <- recomp f trm
-       return (f,CncFun xs (Just (L loc trm')) pn)
+       return (f,CncFun xs (Just (L loc trm')) pn pf)
      ResOper ty (Just (L loc trm)) -> do
        trm' <- recomp f trm
        return (f,ResOper ty (Just (L loc trm')))
@@ -98,7 +98,7 @@ getSubtermsMod mo js = do
   return $ Map.filter (\ (nu,_) -> nu > 1) tree0
  where
    getInfo get fi@(f,i) = case i of
-     CncFun xs (Just (L _ trm)) pn -> do
+     CncFun xs (Just (L _ trm)) pn _ -> do
        get trm
        return $ fi
      ResOper ty (Just (L _ trm)) -> do

@@ -45,7 +45,7 @@ arrityPredefined f = do ty <- typPredefined f
                         return (length ctxt)
 
 predefModInfo :: SourceModInfo
-predefModInfo = ModInfo MTResource MSComplete noOptions [] Nothing [] [] "Predef.gf" primitives
+predefModInfo = ModInfo MTResource MSComplete noOptions [] Nothing [] [] "Predef.gf" Nothing primitives
 
 primitives = Map.fromList
   [ (cErrorType, ResOper (Just (noLoc typeType)) Nothing)

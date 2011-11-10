@@ -61,7 +61,7 @@ evalInfo opts ms m c info = do
 
  errIn ("optimizing " ++ showIdent c) $ case info of
 
-  CncCat ptyp pde ppr -> do
+  CncCat ptyp pde ppr mpmcfg -> do
     pde' <- case (ptyp,pde) of
       (Just (L _ typ), Just (L loc de)) -> do
         de <- partEval opts gr ([(Explicit, varStr, typeStr)], typ) de
@@ -74,16 +74,16 @@ evalInfo opts ms m c info = do
 
     ppr' <- evalPrintname gr ppr
 
-    return (CncCat ptyp pde' ppr')
+    return (CncCat ptyp pde' ppr' mpmcfg)
 
-  CncFun (mt@(Just (_,cont,val))) pde ppr -> --trace (prt c) $
+  CncFun (mt@(Just (_,cont,val))) pde ppr mpmcfg -> --trace (prt c) $
        eIn (text "linearization in type" <+> ppTerm Unqualified 0 (mkProd cont val []) $$ text "of function") $ do
     pde' <- case pde of
       Just (L loc de) -> do de <- partEval opts gr (cont,val) de
                             return (Just (L loc (factor param c 0 de)))
       Nothing -> return pde
     ppr' <-  evalPrintname gr ppr
-    return $ CncFun mt pde' ppr' -- only cat in type actually needed
+    return $ CncFun mt pde' ppr' mpmcfg -- only cat in type actually needed
 
   ResOper pty pde 
     | OptExpand `Set.member` optim -> do

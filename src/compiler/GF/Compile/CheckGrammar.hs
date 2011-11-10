@@ -102,52 +102,52 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
                                                                      return info
                                                   _            -> return info
                                         case info of
-                                          CncCat (Just (L loc (RecType []))) _ _ -> return (foldr (\_ -> Abs Explicit identW) (R []) cxt)
-                                          _                                      -> Bad "no def lin"
+                                          CncCat (Just (L loc (RecType []))) _ _ _ -> return (foldr (\_ -> Abs Explicit identW) (R []) cxt)
+                                          _                                        -> Bad "no def lin"
                                              
                                   case lookupIdent c js of
                                     Ok (AnyInd _ _) -> return js
-                                    Ok (CncFun ty (Just def) pn) -> 
-                                                  return $ updateTree (c,CncFun ty (Just def) pn) js
-                                    Ok (CncFun ty Nothing    pn) ->
+                                    Ok (CncFun ty (Just def) mn mf) -> 
+                                                  return $ updateTree (c,CncFun ty (Just def) mn mf) js
+                                    Ok (CncFun ty Nothing    mn mf) ->
                                       case mb_def of
-                                        Ok def -> return $ updateTree (c,CncFun ty (Just (L NoLoc def)) pn) js
+                                        Ok def -> return $ updateTree (c,CncFun ty (Just (L NoLoc def)) mn mf) js
                                         Bad _  -> do checkWarn $ text "no linearization of" <+> ppIdent c
                                                      return js
                                     _ -> do
                                       case mb_def of
                                         Ok def -> do (cont,val) <- linTypeOfType gr cm ty
                                                      let linty = (snd (valCat ty),cont,val)
-                                                     return $ updateTree (c,CncFun (Just linty) (Just (L NoLoc def)) Nothing) js
+                                                     return $ updateTree (c,CncFun (Just linty) (Just (L NoLoc def)) Nothing Nothing) js
                                         Bad _  -> do checkWarn $ text "no linearization of" <+> ppIdent c
                                                      return js
        AbsCat (Just _) -> case lookupIdent c js of
          Ok (AnyInd _ _) -> return js
-         Ok (CncCat (Just _) _ _) -> return js
-         Ok (CncCat _ mt mp) -> do
+         Ok (CncCat (Just _) _ _ _) -> return js
+         Ok (CncCat _ mt mp mpmcfg) -> do
            checkWarn $ 
              text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}"
-           return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) mt mp) js
+           return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) mt mp mpmcfg) js
          _ -> do
            checkWarn $ 
              text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}"
-           return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) Nothing Nothing) js
+           return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) Nothing Nothing Nothing) js
        _ -> return js
      
    checkCnc js i@(c,info) =
      case info of
-       CncFun _ d pn -> case lookupOrigInfo gr (am,c) of
-                          Ok (_,AbsFun (Just (L _ ty)) _ _ _) -> 
-                                     do (cont,val) <- linTypeOfType gr cm ty
-                                        let linty = (snd (valCat ty),cont,val)
-                                        return $ updateTree (c,CncFun (Just linty) d pn) js
-                          _       -> do checkWarn $ text "function" <+> ppIdent c <+> text "is not in abstract"
+       CncFun _ d mn mf -> case lookupOrigInfo gr (am,c) of
+                             Ok (_,AbsFun (Just (L _ ty)) _ _ _) -> 
+                                        do (cont,val) <- linTypeOfType gr cm ty
+                                           let linty = (snd (valCat ty),cont,val)
+                                           return $ updateTree (c,CncFun (Just linty) d mn mf) js
+                             _       -> do checkWarn $ text "function" <+> ppIdent c <+> text "is not in abstract"
+                                           return js
+       CncCat _ _ _ _   -> case lookupOrigInfo gr (am,c) of
+                             Ok _ -> return $ updateTree i js
+                             _    -> do checkWarn $ text "category" <+> ppIdent c <+> text "is not in abstract"
                                         return js
-       CncCat _ _ _  -> case lookupOrigInfo gr (am,c) of
-                          Ok _ -> return $ updateTree i js
-                          _    -> do checkWarn $ text "category" <+> ppIdent c <+> text "is not in abstract"
-                                     return js
-       _             -> return $ updateTree i js
+       _                -> return $ updateTree i js
 
 
 -- | General Principle: only Just-values are checked. 
@@ -170,21 +170,41 @@ checkInfo ms (m,mo) c info = do
         Nothing  -> return ()
       return (AbsFun (Just (L loc typ)) ma md moper)
 
-    CncFun linty@(Just (cat,cont,val)) (Just (L loc trm)) mpr -> chIn loc "linearization of" $ do
-      (trm',_) <- checkLType gr [] trm (mkFunType (map (\(_,_,ty) -> ty) cont) val)  -- erases arg vars
-      mpr <- checkPrintname gr mpr
-      return (CncFun linty (Just (L loc trm')) mpr)
+    CncCat mty mdef mpr mpmcfg -> do
+      mty  <- case mty of
+                Just (L loc typ) -> chIn loc "linearization type of" $ do
+                                       (typ,_) <- checkLType gr [] typ typeType
+                                       typ  <- computeLType gr [] typ
+                                       return (Just (L loc typ))
+                Nothing          -> return Nothing
+      mdef <- case (mty,mdef) of
+                (Just (L _ typ),Just (L loc def)) -> 
+                    chIn loc "default linearization of" $ do
+                       (def,_) <- checkLType gr [] def (mkFunType [typeStr] typ)
+                       return (Just (L loc def))
+                _ -> return Nothing
+      mpr  <- case mpr of
+                (Just (L loc t)) -> 
+                    chIn loc "print name of" $ do
+                       (t,_) <- checkLType gr [] t typeStr
+                       return (Just (L loc t))
+                _ -> return Nothing
+      return (CncCat mty mdef mpr mpmcfg)
 
-    CncCat (Just (L loc typ)) mdef mpr -> chIn loc "linearization type of" $ do
-      (typ,_) <- checkLType gr [] typ typeType
-      typ  <- computeLType gr [] typ
-      mdef <- case mdef of
-        Just (L loc def) -> do
-          (def,_) <- checkLType gr [] def (mkFunType [typeStr] typ)
-          return $ Just (L loc def)
-        _ -> return mdef
-      mpr <- checkPrintname gr mpr
-      return (CncCat (Just (L loc typ)) mdef mpr)
+    CncFun mty mt mpr mpmcfg -> do
+      mt <- case (mty,mt) of
+              (Just (cat,cont,val),Just (L loc trm)) -> 
+                  chIn loc "linearization of" $ do
+                     (trm,_) <- checkLType gr [] trm (mkProd cont val [])
+                     return (Just (L loc trm))
+              _ -> return mt
+      mpr  <- case mpr of
+                (Just (L loc t)) -> 
+                    chIn loc "print name of" $ do
+                       (t,_) <- checkLType gr [] t typeStr
+                       return (Just (L loc t))
+                _ -> return Nothing
+      return (CncFun mty mt mpr mpmcfg)
 
     ResOper pty pde -> do
       (pty', pde') <- case (pty,pde) of
@@ -251,11 +271,6 @@ checkInfo ms (m,mo) c info = do
      Abs _ _ _ -> return t
      _ -> composOp (compAbsTyp g) t  
 
-
-checkPrintname :: SourceGrammar -> Maybe (L Term) -> Check (Maybe (L Term))
-checkPrintname gr (Just (L loc t)) = do (t,_) <- checkLType gr [] t typeStr
-                                        return (Just (L loc t))
-checkPrintname gr Nothing          = return Nothing
 
 -- | for grammars obtained otherwise than by parsing ---- update!!
 checkReservedId :: Ident -> Check ()

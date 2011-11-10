@@ -6,6 +6,7 @@ import GF.Compile.Rename
 import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
 import GF.Compile.SubExOpt
+import GF.Compile.GeneratePMCFG
 import GF.Compile.GrammarToPGF
 import GF.Compile.ReadFiles
 import GF.Compile.Update
@@ -55,7 +56,8 @@ link :: Options -> Ident -> SourceGrammar -> IOE PGF
 link opts cnc gr = do
   let isv = (verbAtLeast opts Normal)
   putPointE Normal opts "linking ... " $ do
-    pgf <- ioeIO (mkCanon2pgf opts cnc gr)
+    let abs = err (const cnc) id $ abstractOfConcrete gr cnc
+    pgf <- ioeIO (mkCanon2pgf opts gr abs)
     probs <- ioeIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
     ioeIO $ when (verbAtLeast opts Normal) $ putStrFlush "OK"     
     return $ setProbabilities probs 
@@ -183,9 +185,9 @@ compileSourceModule opts env@(k,gr,_) mb_gfo mo@(i,mi) = do
     (_,n) | not (isCompleteModule n) -> do
       case mb_gfo of
         Just gfo -> if flag optMode opts /= ModeTags
-                      then putPointE Verbose opts "  generating code... " $ generateModuleCode opts gfo mo1b
-                      else putStrLnE "" >> return mo1b
-        Nothing  -> return mo1b
+                      then writeGFO opts gfo mo1b
+                      else putStrLnE ""
+        Nothing  -> return ()
 
       extendCompileEnvInt env k mb_gfo mo1b
     _ -> do
@@ -206,22 +208,26 @@ compileSourceModule opts env@(k,gr,_) mb_gfo mo@(i,mi) = do
                 mo4 <- putpp "  optimizing " $ ioeErr $ optimizeModule opts mos mo3r
                 intermOut opts DumpOptimize (ppModule Qualified mo4)
 
+                mo5 <- if isModCnc (snd mo4) && flag optPMCFG opts
+                         then putpp "  generating PMCFG " $ ioeIO $ generatePMCFG opts mos mo4
+                         else return mo4
+                intermOut opts DumpCanon (ppModule Qualified mo5)
+
                 case mb_gfo of
-                  Just gfo -> putPointE Verbose opts "  generating code... " $ generateModuleCode opts gfo mo4
-                  Nothing  -> return mo4
-                  
-                extendCompileEnvInt env k' mb_gfo mo4
+                  Just gfo -> writeGFO opts gfo mo5
+                  Nothing  -> return ()
+
+                extendCompileEnvInt env k' mb_gfo mo5
         else do putStrLnE ""
                 extendCompileEnvInt env k  mb_gfo mo3
 
 
-generateModuleCode :: Options -> FilePath -> SourceModule -> IOE SourceModule
-generateModuleCode opts file minfo = do
-  let minfo1 = subexpModule minfo
-      minfo2 = case minfo1 of
-                 (m,mi) -> (m,mi{jments=Map.filter (\x -> case x of {AnyInd _ _ -> False; _ -> True}) (jments mi)})
-  putPointE Normal opts ("  wrote file" +++ file) $ ioeIO $ encodeFile file minfo2
-  return minfo1
+writeGFO :: Options -> FilePath -> SourceModule -> IOE ()
+writeGFO opts file mo = do
+  let mo1 = subexpModule mo
+      mo2 = case mo1 of
+              (m,mi) -> (m,mi{jments=Map.filter (\x -> case x of {AnyInd _ _ -> False; _ -> True}) (jments mi)})
+  putPointE Normal opts ("  write file" +++ file) $ ioeIO $ encodeFile file mo2
 
 -- auxiliaries
 
