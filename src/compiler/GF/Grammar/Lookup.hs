@@ -71,11 +71,11 @@ lookupResDef gr (m,c)
       case info of
         ResOper _ (Just (L _ t)) -> return t
         ResOper _ Nothing  -> return (Q (m,c))
-        CncCat (Just (L _ ty)) _ _ -> lock c ty
-        CncCat _ _ _         -> lock c defLinType
+        CncCat (Just (L _ ty)) _ _ _ -> lock c ty
+        CncCat _ _ _ _         -> lock c defLinType
       
-        CncFun (Just (cat,_,_)) (Just (L _ tr)) _ -> unlock cat tr
-        CncFun _                (Just (L _ tr)) _ -> return tr
+        CncFun (Just (cat,_,_)) (Just (L _ tr)) _ _ -> unlock cat tr
+        CncFun _                (Just (L _ tr)) _ _ -> return tr
 
         AnyInd _ n        -> look n c
         ResParam _ _      -> return (QC (m,c))
@@ -89,8 +89,8 @@ lookupResType gr (m,c) = do
     ResOper (Just (L _ t)) _ -> return t
 
     -- used in reused concrete
-    CncCat _ _ _ -> return typeType
-    CncFun (Just (cat,cont,val)) _ _ -> do
+    CncCat _ _ _ _ -> return typeType
+    CncFun (Just (cat,cont,val)) _ _ _ -> do
           val' <- lock cat val 
           return $ mkProd cont val' []
     AnyInd _ n        -> lookupResType gr (n,c)
@@ -119,10 +119,10 @@ lookupOrigInfo gr (m,c) = do
     AnyInd _ n  -> lookupOrigInfo gr (n,c)
     i           -> return (m,i)
 
-allOrigInfos :: SourceGrammar -> Ident -> [(Ident,Info)]
+allOrigInfos :: SourceGrammar -> Ident -> [(QIdent,Info)]
 allOrigInfos gr m = errVal [] $ do
   mo <- lookupModule gr m
-  return [(c,i) | (c,_) <- tree2list (jments mo), Ok (_,i) <- [lookupOrigInfo gr (m,c)]]
+  return [((m,c),i) | (c,_) <- tree2list (jments mo), Ok (m,i) <- [lookupOrigInfo gr (m,c)]]
 
 lookupParamValues :: SourceGrammar -> QIdent -> Err [Term]
 lookupParamValues gr c = do
@@ -163,9 +163,9 @@ lookupLincat gr m c | isPredefCat c = return defLinType --- ad hoc; not needed?
 lookupLincat gr m c = do
   info <- lookupQIdentInfo gr (m,c)
   case info of
-    CncCat (Just (L _ t)) _ _ -> return t
-    AnyInd _ n                -> lookupLincat gr n c
-    _                         -> Bad (render (ppIdent c <+> text "has no linearization type in" <+> ppIdent m))
+    CncCat (Just (L _ t)) _ _ _ -> return t
+    AnyInd _ n                  -> lookupLincat gr n c
+    _                           -> Bad (render (ppIdent c <+> text "has no linearization type in" <+> ppIdent m))
 
 -- | this is needed at compile time
 lookupFunType :: SourceGrammar -> Ident -> Ident -> Err Type

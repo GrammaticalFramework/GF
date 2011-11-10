@@ -10,10 +10,11 @@
 -----------------------------------------------------------------------------
 
 module GF.Compile.GeneratePMCFG
-    (convertConcrete) where
+    (generatePMCFG, pgfCncCat
+    ) where
 
 import PGF.CId
-import PGF.Data hiding (Type)
+import PGF.Data hiding (Type, Production)
 
 import GF.Infra.Option
 import GF.Grammar hiding (Env, mkRecord, mkTable)
@@ -28,9 +29,11 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.List as List
 import qualified Data.IntMap as IntMap
+import qualified Data.IntSet as IntSet
 import qualified Data.ByteString.Char8 as BS
 import Text.PrettyPrint hiding (Str)
 import Data.Array.IArray
+import Data.Array.Unboxed
 import Data.Maybe
 import Data.Char (isDigit)
 import Control.Monad
@@ -40,155 +43,83 @@ import Control.Exception
 ----------------------------------------------------------------------
 -- main conversion function
 
-
-convertConcrete :: Options -> SourceGrammar -> SourceModule -> SourceModule -> IO Concr
-convertConcrete opts0 gr am cm = do
-  let env = emptyGrammarEnv gr cm
-  when (flag optProf opts) $ do
-    profileGrammar cm env pfrules
-  env <- foldM (convertLinDef gr opts) env pflindefs
-  env <- foldM (convertRule gr opts) env pfrules
-  return $ getConcr flags printnames env
+generatePMCFG :: Options -> [SourceModule] -> SourceModule -> IO SourceModule
+generatePMCFG opts mos cmo@(cm,cmi) = do
+  (seqs,js) <- mapAccumWithKeyM (addPMCFG opts gr am cm) Map.empty (jments cmi)
+  when (verbAtLeast opts Verbose) $ hPutStrLn stderr ""
+  return (cm,cmi{mseqs = Just (mkSetArray seqs), jments = js})
   where
-    (m,mo) = cm
-    
-    opts = addOptions (mflags (snd am)) opts0
+    gr = mGrammar (cmo:mos)
+    MTConcrete am = mtype cmi
 
-    pflindefs = [
-      ((m,id),term,lincat) |
-        (id,GF.Grammar.CncCat (Just (L _ lincat)) (Just (L _ term)) _) <- Map.toList (jments mo)]
-
-    pfrules = [
-      (PFRule id args ([],res) (map (\(_,_,ty) -> ty) cont) val term) |
-        (id,GF.Grammar.CncFun (Just (cat,cont,val)) (Just (L _ term)) _) <- Map.toList (jments mo),
-        let (ctxt,res,_) = err error typeForm (lookupFunType gr (fst am) id)
-            args         = [catSkeleton ty | (_,_,ty) <- ctxt]]
-
-    flags = Map.fromList [(mkCId f,LStr x) | (f,x) <- optionsPGF (mflags mo)]
-
-    printnames = Map.fromAscList [(i2i id, name) | (id,info) <- Map.toList (jments mo), name <- prn info]
-      where
-        prn (GF.Grammar.CncFun _ _ (Just (L _ tr))) = [flatten tr]
-        prn (GF.Grammar.CncCat _ _ (Just (L _ tr))) = [flatten tr]
-        prn _                                       = []
-
-        flatten (K s)      = s
-        flatten (Alts x _) = flatten x
-        flatten (C x y)    = flatten x +++ flatten y
-
-i2i :: Ident -> CId
-i2i = CId . ident2bs
-
-profileGrammar (m,mo) env@(GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) pfrules = do
-  hPutStrLn stderr ""
-  hPutStrLn stderr ("Language: " ++ showIdent m)
-  hPutStrLn stderr ""
-  hPutStrLn stderr "Categories                 Count"
-  hPutStrLn stderr "--------------------------------"
-  mapM_ profileCat (Map.toList catSet)
-  hPutStrLn stderr "--------------------------------"
-  hPutStrLn stderr ""
-  hPutStrLn stderr "Rules                      Count"
-  hPutStrLn stderr "--------------------------------"
-  mapM_ profileRule pfrules
-  hPutStrLn stderr "--------------------------------"
+mapAccumWithKeyM :: (Monad m, Ord k) => (a -> k -> b -> m (a,c)) -> a
+                                     -> Map.Map k b -> m (a,Map.Map k c)
+mapAccumWithKeyM f a m = do let xs = Map.toAscList m
+                            (a,ys) <- mapAccumM f a xs
+                            return (a,Map.fromAscList ys)
   where
-    profileCat (cid,(fcat1,fcat2,_)) = do
-      hPutStrLn stderr (lformat 23 (showIdent cid) ++ rformat 9 (show (fcat2-fcat1+1)))
+    mapAccumM f a []          = return (a,[])
+    mapAccumM f a ((k,x):kxs) = do (a,y ) <- f a k x
+                                   (a,kys) <- mapAccumM f a kxs
+                                   return (a,(k,y):kys)
 
-    profileRule (PFRule fun args res ctypes ctype term) = do
-      let pargs = map (protoFCat env) args
-      hPutStrLn stderr (lformat 23 (showIdent fun) ++ rformat 9 (show (product (map (catFactor env) args))))
-      where
-        catFactor (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) (n,(_,cat)) =
-          case Map.lookup cat catSet of
-            Just (s,e,_) -> e-s+1
-            Nothing      -> 0
 
-    lformat :: Int -> String -> String
-    lformat n s = s ++ replicate (n-length s) ' '
+addPMCFG :: Options -> SourceGrammar -> Ident -> Ident -> SeqSet -> Ident -> Info -> IO (SeqSet, Info)
+addPMCFG opts gr am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin@(Just (L _ term)) mprn _) = do
+  let pres  = protoFCat gr res val
+      pargs = [protoFCat gr (snd $ catSkeleton ty) lincat | ((_,_,ty),(_,_,lincat)) <- zip ctxt cont]
 
-    rformat :: Int -> String -> String
-    rformat n s = replicate (n-length s) ' ' ++ s
+      pmcfgEnv0   = emptyPMCFGEnv
 
-data ProtoFRule = PFRule Ident         {- function -}
-                         [([Cat],Cat)] {- argument types: context size and category -}
-                         ([Cat],Cat)   {- result   type : context size (always 0) and category  -}
-                         [Type]        {- argument lin-types representation -}
-                         Type          {- result   lin-type  representation -}
-                         Term          {- body -}
+      b          = runCnvMonad gr (unfactor term >>= convertTerm opts CNil val) (pargs,[])
+      (seqs1,b1) = addSequencesB seqs b
+      pmcfgEnv1  = foldBM addRule
+                          pmcfgEnv0
+                          (goB b1 CNil [])
+                          (pres,pargs)
+      pmcfg      = getPMCFG pmcfgEnv1
+      
+      stats      = let PMCFG prods funs = pmcfg
+                       (s,e)            = bounds funs
+                       !prods_cnt       = length prods
+                       !funs_cnt        = e-s+1
+                   in (prods_cnt,funs_cnt)
 
-optimize :: [ProtoFCat] -> GrammarEnv -> GrammarEnv
-optimize pargs (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) =
-  IntMap.foldWithKey optimize (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet IntMap.empty prodSet) appSet
+  when (verbAtLeast opts Verbose) $ hPutStr stderr ("\n+ "++showIdent id ++ " " ++ show (product (map catFactor pargs)))
+  seqs1 `seq` stats `seq` return ()
+  when (verbAtLeast opts Verbose) $ hPutStr stderr (" "++show stats)
+  return (seqs1,GF.Grammar.CncFun mty mlin mprn (Just pmcfg))
   where
-    optimize cat ps env = IntMap.foldWithKey ff env (IntMap.fromListWith (++) [(funid,[args]) | (funid,args) <- Set.toList ps])
-      where
-        ff :: FunId -> [[FId]] -> GrammarEnv -> GrammarEnv
-        ff funid xs env
-          | product (map Set.size ys) == count
-                      = case List.mapAccumL (\env c -> addCoercion env (Set.toList c)) env ys of
-                          (env,args) -> let xs = sequence (zipWith addContext pargs args)
-                                        in List.foldl (\env x -> addProduction env cat (PApply funid x)) env xs
-          | otherwise = List.foldl (\env args -> let xs = sequence (zipWith addContext pargs args)
-                                                 in List.foldl (\env x -> addProduction env cat (PApply funid x)) env xs) env xs
-          where
-            count = length xs
-            ys    = foldr (zipWith Set.insert) (repeat Set.empty) xs
-
-        addContext (PFCat ctxt _ _) fid = do hyps <- mapM toCncHypo ctxt
-                                             return (PArg hyps fid)
-
-        toCncHypo cat =
-          case Map.lookup cat catSet of
-            Just (s,e,_) -> do fid <- range (s,e)
-                               guard (fid `IntMap.member` lindefSet)
-                               return (fidVar,fid)
-            Nothing      -> mzero
-
-convertRule :: SourceGrammar -> Options -> GrammarEnv -> ProtoFRule -> IO GrammarEnv
-convertRule gr opts grammarEnv (PFRule fun args res ctypes ctype term) = do
-  let pres  = protoFCat grammarEnv res
-      pargs = map (protoFCat grammarEnv) args
-
-      b     = runCnvMonad gr (unfactor term >>= convertTerm opts CNil ctype) (pargs,[])
-      (grammarEnv1,b1) = addSequencesB grammarEnv b
-      grammarEnv2 = foldBM addRule
-                           grammarEnv1
-                           (goB b1 CNil [])
-                           (pres,pargs)
-      grammarEnv3 = optimize pargs grammarEnv2
-  when (verbAtLeast opts Verbose) $ hPutStrLn stderr ("+ "++showIdent fun)
-  return $! grammarEnv3
-  where
-    addRule lins (newCat', newArgs') env0 =
-      let [newCat]        = getFIds env0 newCat'
-          (env1, newArgs) = List.mapAccumL (\env -> addCoercion env . getFIds env) env0 newArgs'
-
-          (env2,funid) = addCncFun env1 (PGF.Data.CncFun (i2i fun) (mkArray lins))
-
-      in addApplication env2 newCat (funid,newArgs)
-
-convertLinDef :: SourceGrammar -> Options -> GrammarEnv -> (Cat,Term,Type) -> IO GrammarEnv
-convertLinDef gr opts grammarEnv (cat,lindef,lincat) = do
-  let pres = protoFCat grammarEnv ([],cat)
-      parg = protoFCat grammarEnv ([],(identW,cVar))
-
-      b     = runCnvMonad gr (unfactor lindef >>= convertTerm opts CNil lincat) ([parg],[])
-      (grammarEnv1,b1) = addSequencesB grammarEnv b
-      grammarEnv2 = foldBM addRule
-                           grammarEnv1
-                           (goB b1 CNil [])
-                           (pres,[parg])
-  when (verbAtLeast opts Verbose) $ hPutStrLn stderr ("+ "++showCId lindefCId)
-  return $! grammarEnv2
-  where
-    lindefCId = mkCId ("lindef "++showIdent (snd cat))
+    (ctxt,res,_) = err error typeForm (lookupFunType gr am id)
 
     addRule lins (newCat', newArgs') env0 =
-      let [newCat]     = getFIds env0 newCat'
-          (env1,funid) = addCncFun env0 (PGF.Data.CncFun lindefCId (mkArray lins))
-      in addLinDef env1 newCat funid
+      let [newCat] = getFIds newCat'
+          !fun     = mkArray lins
+          newArgs  = map getFIds newArgs'
+      in addFunction env0 newCat fun newArgs
+
+addPMCFG opts gr am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) mdef@(Just (L _ term)) mprn _) = do
+  let pres = protoFCat gr (am,id) lincat
+      parg = protoFCat gr (identW,cVar) typeStr
+
+      pmcfgEnv0  = emptyPMCFGEnv
+
+      b          = runCnvMonad gr (unfactor term >>= convertTerm opts CNil lincat) ([parg],[])
+      (seqs1,b1) = addSequencesB seqs b
+      pmcfgEnv1  = foldBM addRule
+                          pmcfgEnv0
+                          (goB b1 CNil [])
+                          (pres,[parg])
+      pmcfg     = getPMCFG pmcfgEnv1
+  when (verbAtLeast opts Verbose) $ hPutStr stderr ("\n+ "++showIdent id++" "++show (catFactor pres))
+  seqs1 `seq` pmcfg `seq` return (seqs1,GF.Grammar.CncCat mty mdef mprn (Just pmcfg))
+  where
+    addRule lins (newCat', newArgs') env0 =
+      let [newCat] = getFIds newCat'
+          !fun     = mkArray lins
+      in addFunction env0 newCat fun [[fidVar]]
+
+addPMCFG opts gr am cm seqs id info = return (seqs, info)
 
 unfactor :: Term -> CnvMonad Term
 unfactor t = CM (\gr c -> c (unfac gr t))
@@ -201,6 +132,22 @@ unfactor t = CM (\gr c -> c (unfac gr t))
         restore x u t = case t of
                           Vr y | y == x -> u
                           _             -> composSafeOp (restore x u) t
+
+pgfCncCat :: SourceGrammar -> Type -> Int -> PGF.Data.CncCat
+pgfCncCat gr lincat index =
+  let ((_,size),schema) = computeCatRange gr lincat
+  in PGF.Data.CncCat index
+                     (index+size-1)
+                     (mkArray (map (renderStyle style{mode=OneLineMode} . ppPath) 
+                                   (getStrPaths schema)))
+  where
+    getStrPaths :: Schema Identity s c -> [Path]
+    getStrPaths = collect CNil []
+      where
+        collect path paths (CRec rs)   = foldr (\(lbl,Identity t) paths -> collect (CProj lbl path) paths t) paths rs
+        collect path paths (CTbl _ cs) = foldr (\(trm,Identity t) paths -> collect (CSel  trm path) paths t) paths cs
+        collect path paths (CStr _)    = reversePath path : paths
+        collect path paths (CPar _)    = paths
 
 ----------------------------------------------------------------------
 -- CnvMonad monad
@@ -248,7 +195,7 @@ variants xs = CM (\gr c s -> Variant [c x s | x <- xs])
 choices :: Int -> Path -> CnvMonad Term
 choices nr path = do (args,_) <- get
                      let PFCat _ _ schema = args !! nr
-		     descend schema path CNil
+                     descend schema path CNil
   where
     descend (CRec rs)     (CProj lbl path) rpath = case lookup lbl rs of
                                                      Just (Identity t) -> descend t path (CProj lbl rpath)
@@ -305,15 +252,43 @@ data Path
 -- The annotations are as follows: the strings are annotated with
 -- their index in the PMCFG tuple, the parameters are annotated
 -- with their value both as term and as index.
-data ProtoFCat  = PFCat [Ident] Ident Proto
+data ProtoFCat  = PFCat Ident Int (Schema Identity Int (Int,[(Term,Int)]))
 type Env        = (ProtoFCat, [ProtoFCat])
 
-protoFCat :: GrammarEnv -> ([Cat],Cat) -> ProtoFCat
-protoFCat (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) (ctxt,(_,cat)) =
-  case Map.lookup cat catSet of
-    Just (_,_,proto) -> PFCat (map snd ctxt) cat proto
-    Nothing          -> error "unknown category"
-  
+protoFCat :: SourceGrammar -> Cat -> Type -> ProtoFCat
+protoFCat gr cat lincat =
+  case computeCatRange gr lincat of
+    ((_,f),schema) -> PFCat (snd cat) f schema
+
+getFIds :: ProtoFCat -> [FId]
+getFIds (PFCat _ _ schema) =
+  reverse (solutions (variants schema) ())
+  where
+    variants (CRec rs)         = fmap sum $ mapM (\(lbl,Identity t) -> variants t) rs
+    variants (CTbl _ cs)       = fmap sum $ mapM (\(trm,Identity t) -> variants t) cs
+    variants (CStr _)          = return 0
+    variants (CPar (m,values)) = do (value,index) <- member values
+                                    return (m*index)
+
+catFactor :: ProtoFCat -> Int
+catFactor (PFCat _ f _) = f
+
+computeCatRange gr lincat = compute (0,1) lincat
+  where
+    compute st (RecType  rs) = let (st',rs') = List.mapAccumL (\st (lbl,t) -> let (st',t') = compute st t
+                                                                              in (st',(lbl,Identity t'))) st rs
+                               in (st',CRec rs')
+    compute st (Table pt vt) = let vs        = err error id (allParamValues gr pt)
+                                   (st',cs') = List.mapAccumL (\st v       -> let (st',vt') = compute st vt
+                                                                              in (st',(v,Identity vt'))) st vs
+                               in (st',CTbl pt cs')
+    compute st (Sort s)
+                   | s == cStr = let (index,m) = st
+                                 in ((index+1,m),CStr index)
+    compute st t               = let vs = err error id (allParamValues gr t)
+                                     (index,m) = st
+                                 in ((index,m*length vs),CPar (m,zip vs [0..]))
+
 ppPath (CProj lbl path) = ppLabel lbl              <+> ppPath path
 ppPath (CSel  trm path) = ppTerm Unqualified 5 trm <+> ppPath path
 ppPath CNil             = empty
@@ -363,7 +338,7 @@ convertArg opts (Table pt vt) nr path = do
   mkTable pt (map (\v -> (v,convertArg opts vt nr (CSel v path))) vs)
 convertArg opts (Sort _)      nr path = do
   (args,_) <- get
-  let PFCat _ cat schema = args !! nr
+  let PFCat cat _ schema = args !! nr
       l = index (reversePath path) schema
       sym | CProj (LVar i) CNil <- path = SymVar nr i
           | isLiteralCat opts cat       = SymLit nr l
@@ -411,26 +386,31 @@ goV (CTbl _ xs)  rpath ss = foldM (\ss (trm,b) -> goB b (CSel  trm rpath) ss) ss
 goV (CStr seqid) rpath ss = return (seqid : ss)
 goV (CPar t)     rpath ss = restrictHead (reversePath rpath) t >> return ss
 
-addSequencesB :: GrammarEnv -> Branch (Value [Symbol]) -> (GrammarEnv, Branch (Value SeqId))
-addSequencesB env (Case nr path bs) = let (env1,bs1) = List.mapAccumL (\env (trm,b) -> let (env',b') = addSequencesB env b
-                                                                                       in (env',(trm,b'))) env bs
-                                      in (env1,Case nr path bs1)
-addSequencesB env (Variant bs)      = let (env1,bs1) = List.mapAccumL addSequencesB env bs
-                                      in (env1,Variant bs1)
-addSequencesB env (Return  v)       = let (env1,v1) = addSequencesV env v
-                                      in (env1,Return v1)
 
-addSequencesV :: GrammarEnv -> Value [Symbol] -> (GrammarEnv, Value SeqId)
-addSequencesV env (CRec vs)  = let (env1,vs1) = List.mapAccumL (\env (lbl,b) -> let (env',b') = addSequencesB env b
-                                                                                in (env',(lbl,b'))) env vs
-                               in (env1,CRec vs1)
-addSequencesV env (CTbl pt vs)=let (env1,vs1) = List.mapAccumL (\env (trm,b) -> let (env',b') = addSequencesB env b
-                                                                                in (env',(trm,b'))) env vs
-                               in (env1,CTbl pt vs1)
-addSequencesV env (CStr lin) = let (env1,seqid) = addSequence env (optimizeLin lin)
-                               in (env1,CStr seqid)
-addSequencesV env (CPar i)   = (env,CPar i)
+----------------------------------------------------------------------
+-- SeqSet
 
+type SeqSet   = Map.Map Sequence SeqId
+
+addSequencesB :: SeqSet -> Branch (Value [Symbol]) -> (SeqSet, Branch (Value SeqId))
+addSequencesB seqs (Case nr path bs) = let (seqs1,bs1) = List.mapAccumL (\seqs (trm,b) -> let (seqs',b') = addSequencesB seqs b
+                                                                                          in (seqs',(trm,b'))) seqs bs
+                                       in (seqs1,Case nr path bs1)
+addSequencesB seqs (Variant bs)      = let (seqs1,bs1) = List.mapAccumL addSequencesB seqs bs
+                                       in (seqs1,Variant bs1)
+addSequencesB seqs (Return  v)       = let (seqs1,v1) = addSequencesV seqs v
+                                       in (seqs1,Return v1)
+
+addSequencesV :: SeqSet -> Value [Symbol] -> (SeqSet, Value SeqId)
+addSequencesV seqs (CRec vs)  = let (seqs1,vs1) = List.mapAccumL (\seqs (lbl,b) -> let (seqs',b') = addSequencesB seqs b
+                                                                                   in (seqs',(lbl,b'))) seqs vs
+                                in (seqs1,CRec vs1)
+addSequencesV seqs (CTbl pt vs)=let (seqs1,vs1) = List.mapAccumL (\seqs (trm,b) -> let (seqs',b') = addSequencesB seqs b
+                                                                                   in (seqs',(trm,b'))) seqs vs
+                                in (seqs1,CTbl pt vs1)
+addSequencesV seqs (CStr lin) = let (seqs1,seqid) = addSequence seqs (optimizeLin lin)
+                                in (seqs1,CStr seqid)
+addSequencesV seqs (CPar i)   = (seqs,CPar i)
 
 optimizeLin [] = []
 optimizeLin lin@(SymKS _ : _) = 
@@ -441,6 +421,15 @@ optimizeLin lin@(SymKS _ : _) =
                                in (ts++ts1,lin')
     getRest             lin  = ([],lin)
 optimizeLin (sym : lin) = sym : optimizeLin lin
+
+addSequence :: SeqSet -> [Symbol] -> (SeqSet,SeqId)
+addSequence seqs lst =
+  case Map.lookup seq seqs of
+    Just id -> (seqs,id)
+    Nothing -> let !last_seq = Map.size seqs
+               in (Map.insert seq last_seq seqs, last_seq)
+  where
+    seq = mkArray lst
 
 
 ------------------------------------------------------------
@@ -478,124 +467,36 @@ getVarIndex (IC s) | isDigit (BS.last s) = (read . BS.unpack . snd . BS.spanEnd 
 ----------------------------------------------------------------------
 -- GrammarEnv
 
-data GrammarEnv = GrammarEnv {-# UNPACK #-} !Int CatSet SeqSet FunSet LinDefSet CoerceSet AppSet ProdSet
-type Proto    = Schema Identity Int (Int,[(Term,Int)])
-type CatSet   = Map.Map Ident (FId,FId,Proto)
-type SeqSet   = Map.Map Sequence SeqId
-type FunSet   = Map.Map CncFun FunId
-type LinDefSet= IntMap.IntMap [FunId]
-type CoerceSet= Map.Map [FId] FId
-type AppSet   = IntMap.IntMap (Set.Set (FunId,[FId]))
-type ProdSet  = IntMap.IntMap (Set.Set Production)
+data PMCFGEnv = PMCFGEnv !ProdSet !FunSet
+type ProdSet  = Set.Set Production
+type FunSet   = Map.Map (UArray LIndex SeqId) FunId
 
-emptyGrammarEnv gr (m,mo) =
-  let (last_id,catSet) = Map.mapAccumWithKey computeCatRange 0 lincats
-  in GrammarEnv last_id catSet Map.empty Map.empty IntMap.empty Map.empty IntMap.empty IntMap.empty
-  where
-    computeCatRange index cat ctype
-      | cat == cString = (index,(fidString,fidString,CRec [(theLinLabel,Identity (CStr 0))]))
-      | cat == cInt    = (index,(fidInt,   fidInt,   CRec [(theLinLabel,Identity (CStr 0))]))
-      | cat == cFloat  = (index,(fidFloat, fidFloat, CRec [(theLinLabel,Identity (CStr 0))]))
-      | cat == cVar    = (index,(fidVar,   fidVar,   CStr 0))
-      | otherwise      = (index+size,(index,index+size-1,schema))
-      where
-        ((_,size),schema) = compute (0,1) ctype
- 
-    compute st (RecType  rs) = let (st',rs') = List.mapAccumL (\st (lbl,t) -> let (st',t') = compute st t
-                                                                              in (st',(lbl,Identity t'))) st rs
-                               in (st',CRec rs')
-    compute st (Table pt vt) = let vs        = err error id (allParamValues gr pt)
-                                   (st',cs') = List.mapAccumL (\st v       -> let (st',vt') = compute st vt
-                                                                              in (st',(v,Identity vt'))) st vs
-                               in (st',CTbl pt cs')
-    compute st (Sort s)
-                   | s == cStr = let (index,m) = st
-                                 in ((index+1,m),CStr index)
-    compute st t               = let vs = err error id (allParamValues gr t)
-                                     (index,m) = st
-                                 in ((index,m*length vs),CPar (m,zip vs [0..]))
+emptyPMCFGEnv =
+  PMCFGEnv Set.empty Map.empty
 
-    lincats =
-      Map.insert cVar (Sort cStr) $
-      Map.fromAscList 
-        [(c, ty) | (c,GF.Grammar.CncCat (Just (L _ ty)) _ _) <- Map.toList (jments mo)]
-
-addApplication :: GrammarEnv -> FId -> (FunId,[FId]) -> GrammarEnv
-addApplication (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) fid p =
-  GrammarEnv last_id catSet seqSet funSet lindefSet crcSet (IntMap.insertWith Set.union fid (Set.singleton p) appSet) prodSet
-
-addProduction :: GrammarEnv -> FId -> Production -> GrammarEnv
-addProduction (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) cat p =
-  GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet (IntMap.insertWith Set.union cat (Set.singleton p) prodSet)
-
-addSequence :: GrammarEnv -> [Symbol] -> (GrammarEnv,SeqId)
-addSequence env@(GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) lst =
-  case Map.lookup seq seqSet of
-    Just id -> (env,id)
-    Nothing -> let !last_seq = Map.size seqSet
-               in (GrammarEnv last_id catSet (Map.insert seq last_seq seqSet) funSet lindefSet crcSet appSet prodSet,last_seq)
-  where
-    seq = mkArray lst
-
-addCncFun :: GrammarEnv -> CncFun -> (GrammarEnv,FunId)
-addCncFun env@(GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) fun = 
+addFunction :: PMCFGEnv -> FId -> UArray LIndex SeqId -> [[FId]] -> PMCFGEnv
+addFunction (PMCFGEnv prodSet funSet) !fid fun args =
   case Map.lookup fun funSet of
-    Just id -> (env,id)
-    Nothing -> let !last_funid = Map.size funSet
-               in (GrammarEnv last_id catSet seqSet (Map.insert fun last_funid funSet) lindefSet crcSet appSet prodSet,last_funid)
+    Just !funid -> PMCFGEnv (Set.insert (Production fid funid args) prodSet)
+                            funSet
+    Nothing     -> let !funid = Map.size funSet
+                   in PMCFGEnv (Set.insert (Production fid funid args) prodSet)
+                               (Map.insert fun funid funSet)
 
-addCoercion :: GrammarEnv -> [FId] -> (GrammarEnv,FId)
-addCoercion env@(GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) sub_fcats =
-  case sub_fcats of
-    [fcat] -> (env,fcat)
-    _      -> case Map.lookup sub_fcats crcSet of
-                Just fcat -> (env,fcat)
-                Nothing   -> let !fcat = last_id+1
-                             in (GrammarEnv fcat catSet seqSet funSet lindefSet (Map.insert sub_fcats fcat crcSet) appSet prodSet,fcat)
-
-addLinDef :: GrammarEnv -> FId -> FunId -> GrammarEnv
-addLinDef (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) fid funid =
-  GrammarEnv last_id catSet seqSet funSet (IntMap.insertWith (++) fid [funid] lindefSet) crcSet appSet prodSet
-
-getConcr :: Map.Map CId Literal -> Map.Map CId String -> GrammarEnv -> Concr
-getConcr flags printnames (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) =
-  Concr { cflags = flags
-        , printnames = printnames
-        , cncfuns   = mkSetArray funSet
-        , lindefs = lindefSet
-        , sequences   = mkSetArray seqSet
-        , productions = IntMap.union prodSet coercions
-        , pproductions = IntMap.empty
-        , lproductions = Map.empty
-        , lexicon      = IntMap.empty
-        , cnccats = Map.fromList [(i2i cat,PGF.Data.CncCat start end (mkArray (map (renderStyle style{mode=OneLineMode} . ppPath) (getStrPaths schema))))
-                                     | (cat,(start,end,schema)) <- Map.toList catSet]
-        , totalCats   = last_id+1
-        }
+getPMCFG :: PMCFGEnv -> PMCFG
+getPMCFG (PMCFGEnv prodSet funSet) =
+  PMCFG (optimize prodSet) (mkSetArray funSet)
   where
-    mkSetArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]
-    
-    coercions = IntMap.fromList [(fcat,Set.fromList (map PCoerce sub_fcats)) | (sub_fcats,fcat) <- Map.toList crcSet]
-
-    getStrPaths :: Schema Identity s c -> [Path]
-    getStrPaths = collect CNil []
+    optimize ps = Map.foldWithKey ff [] (Map.fromListWith (++) [((fid,funid),[args]) | (Production fid funid args) <- Set.toList ps])
       where
-        collect path paths (CRec rs)   = foldr (\(lbl,Identity t) paths -> collect (CProj lbl path) paths t) paths rs
-        collect path paths (CTbl _ cs) = foldr (\(trm,Identity t) paths -> collect (CSel  trm path) paths t) paths cs
-        collect path paths (CStr _)    = reversePath path : paths
-        collect path paths (CPar _)    = paths
-
-
-getFIds :: GrammarEnv -> ProtoFCat -> [FId]
-getFIds (GrammarEnv last_id catSet seqSet funSet lindefSet crcSet appSet prodSet) (PFCat ctxt cat schema) =
-  case Map.lookup cat catSet of
-    Just (start,end,_) -> reverse (solutions (fmap (start +) $ variants schema) ())
-  where
-    variants (CRec rs)         = fmap sum $ mapM (\(lbl,Identity t) -> variants t) rs
-    variants (CTbl _ cs)       = fmap sum $ mapM (\(trm,Identity t) -> variants t) cs
-    variants (CStr _)          = return 0
-    variants (CPar (m,values)) = do (value,index) <- member values
-                                    return (m*index)
+        ff :: (FId,FunId) -> [[[FId]]] -> [Production] -> [Production]
+        ff (fid,funid) xs prods
+          | product (map IntSet.size ys) == count
+                      = (Production fid funid (map IntSet.toList ys)) : prods
+          | otherwise = map (Production fid funid) xs ++ prods
+          where
+            count = sum (map (product . map length) xs)
+            ys    = foldl (zipWith (foldr IntSet.insert)) (repeat IntSet.empty) xs
 
 ------------------------------------------------------------
 -- updating the MCF rule
@@ -613,9 +514,9 @@ restrictHead path term = do
   put (head, args)
 
 restrictProtoFCat :: (Functor m, MonadPlus m) => Path -> Term -> ProtoFCat -> m ProtoFCat
-restrictProtoFCat path v (PFCat ctxt cat schema) = do
+restrictProtoFCat path v (PFCat cat f schema) = do
   schema <- addConstraint path v schema
-  return (PFCat ctxt cat schema)
+  return (PFCat cat f schema)
   where
     addConstraint (CProj lbl path) v (CRec rs)     = fmap CRec      $ update lbl (addConstraint path v) rs
     addConstraint (CSel  trm path) v (CTbl pt cs)  = fmap (CTbl pt) $ update trm (addConstraint path v) cs
@@ -631,4 +532,5 @@ restrictProtoFCat path v (PFCat ctxt cat schema) = do
       | otherwise  = do xs <- update k0 f xs
                         return (x:xs)
 
-mkArray lst = listArray (0,length lst-1) lst
+mkArray    lst = listArray (0,length lst-1) lst
+mkSetArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]

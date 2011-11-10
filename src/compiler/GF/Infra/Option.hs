@@ -140,7 +140,6 @@ data Flags = Flags {
       optMode            :: Mode,
       optStopAfterPhase  :: Phase,
       optVerbosity       :: Verbosity,
-      optProf            :: Bool,
       optShowCPUTime     :: Bool,
       optOutputFormats   :: [OutputFormat],
       optSISR            :: Maybe SISRFormat,
@@ -157,9 +156,10 @@ data Flags = Flags {
       optName            :: Maybe String,
       optPreprocessors   :: [String],
       optEncoding        :: String,
+      optPMCFG           :: Bool,
       optOptimizations   :: Set Optimization,
       optOptimizePGF     :: Bool,
-      optMkIndexPGF     :: Bool,
+      optMkIndexPGF      :: Bool,
       optCFGTransforms   :: Set CFGTransform,
       optLibraryPath     :: [FilePath],
       optStartCat        :: Maybe String,
@@ -236,7 +236,6 @@ defaultFlags = Flags {
       optMode            = ModeInteractive,
       optStopAfterPhase  = Compile,
       optVerbosity       = Normal,
-      optProf            = False,
       optShowCPUTime     = False,
       optOutputFormats   = [],
       optSISR            = Nothing,
@@ -254,6 +253,7 @@ defaultFlags = Flags {
       optName            = Nothing,
       optPreprocessors   = [],
       optEncoding        = "latin1",
+      optPMCFG           = True,
 -- #ifdef CC_LAZY
 --       optOptimizations   = Set.fromList [OptStem,OptCSE],
 -- #else
@@ -290,7 +290,6 @@ optDescr =
      Option ['C'] [] (NoArg (phase Convert)) "Stop after conversion to .gf.",
      Option ['c'] [] (NoArg (phase Compile)) "Stop after compiling to .gfo (default) .",
      Option [] ["make"] (NoArg (liftM2 addOptions (mode ModeCompiler) (phase Link))) "Build .pgf file and other output files and exit.",
-     Option [] ["prof"] (NoArg (prof True)) "Dump profiling information when compiling to PMCFG",
      Option [] ["cpu"] (NoArg (cpu True)) "Show compilation CPU time statistics.",
      Option [] ["no-cpu"] (NoArg (cpu False)) "Don't show compilation CPU time statistics (default).",
      Option [] ["gfo-dir"] (ReqArg gfoDir "DIR") "Directory to put .gfo files in (default = '.').",
@@ -338,6 +337,8 @@ optDescr =
      Option [] ["language"] (ReqArg language "LANG") "Set the speech language flag to LANG in the generated grammar.",
      Option [] ["lexer"] (ReqArg lexer "LEXER") "Use lexer LEXER.",
      Option [] ["unlexer"] (ReqArg unlexer "UNLEXER") "Use unlexer UNLEXER.",
+     Option [] ["pmcfg"] (NoArg (pmcfg True)) "Generate PMCFG (default).",
+     Option [] ["no-pmcfg"] (NoArg (pmcfg False)) "Don't generate PMCFG (useful for libraries).",
      Option [] ["optimize"] (ReqArg optimize "OPT") 
                 "Select an optimization package. OPT = all | values | parametrize | none",
      Option [] ["optimize-pgf"] (NoArg (optimize_pgf True))
@@ -364,7 +365,6 @@ optDescr =
                            Just v  -> case readMaybe v >>= toEnumBounded of
                                         Just i  -> set $ \o -> o { optVerbosity = i }
                                         Nothing -> fail $ "Bad verbosity: " ++ show v
-       prof        x = set $ \o -> o { optProf = x }
        cpu         x = set $ \o -> o { optShowCPUTime = x }
        gfoDir      x = set $ \o -> o { optGFODir = Just x }
        outFmt      x = readOutputFormat x >>= \f ->
@@ -394,6 +394,8 @@ optDescr =
        language    x = set $ \o -> o { optSpeechLanguage = Just x }
        lexer       x = set $ \o -> o { optLexer = Just x }
        unlexer     x = set $ \o -> o { optUnlexer = Just x }
+
+       pmcfg       x = set $ \o -> o { optPMCFG = x }
 
        optimize    x = case lookup x optimizationPackages of
                          Just p  -> set $ \o -> o { optOptimizations = p }

@@ -31,11 +31,11 @@ getTags x (m,mi) =
                                                   maybe (loc "oper-def")     mb_def
     getLocations (ResOverload _ defs)           = list (\(x,y) -> ltype "overload-type" x ++ 
                                                                   loc   "overload-def"  y) defs
-    getLocations (CncCat mb_type mb_def mb_prn) = maybe (loc "lincat")       mb_type ++ 
-                                                  maybe (loc "lindef")       mb_def  ++ 
-                                                  maybe (loc "printname")    mb_prn
-    getLocations (CncFun _ mb_lin mb_prn)       = maybe (loc "lin")          mb_lin ++
-                                                  maybe (loc "printname")    mb_prn
+    getLocations (CncCat mty mdef mprn _)       = maybe (loc "lincat")       mty ++ 
+                                                  maybe (loc "lindef")       mdef  ++ 
+                                                  maybe (loc "printname")    mprn
+    getLocations (CncFun _ mlin mprn _)         = maybe (loc "lin")          mlin ++
+                                                  maybe (loc "printname")    mprn
     getLocations _                              = []
 
     loc kind (L loc _) = [(kind,render (ppLocation (msrc mi) loc),"")]

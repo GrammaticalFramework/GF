@@ -117,14 +117,14 @@ ModDef
                                       defs <- case buildAnyTree id jments of
                                                 Ok x    -> return x
                                                 Bad msg -> fail msg
-                                      return (id, ModInfo mtype mstat opts extends with opens [] "" defs)  }
+                                      return (id, ModInfo mtype mstat opts extends with opens [] "" Nothing defs)  }
 
 ModHeader :: { SourceModule }
 ModHeader
   : ComplMod ModType '=' ModHeaderBody { let { mstat = $1 ;
                                                (mtype,id) = $2 ;
                                                (extends,with,opens) = $4 }
-                                         in (id, ModInfo mtype mstat noOptions extends with opens [] "" emptyBinTree) }
+                                         in (id, ModInfo mtype mstat noOptions extends with opens [] "" Nothing emptyBinTree) }
 
 ComplMod :: { ModuleStatus }
 ComplMod 
@@ -219,11 +219,11 @@ TopDef
   | 'data'            ListDataDef     { Left  $2 }
   | 'param'           ListParamDef    { Left  $2 }
   | 'oper'            ListOperDef     { Left  $2 }
-  | 'lincat'          ListTermDef     { Left  [(f, CncCat (Just e) Nothing    Nothing   ) | (f,e) <- $2] }
-  | 'lindef'          ListTermDef     { Left  [(f, CncCat Nothing    (Just e) Nothing   ) | (f,e) <- $2] }
+  | 'lincat'          ListTermDef     { Left  [(f, CncCat (Just e) Nothing    Nothing Nothing) | (f,e) <- $2] }
+  | 'lindef'          ListTermDef     { Left  [(f, CncCat Nothing    (Just e) Nothing Nothing) | (f,e) <- $2] }
   | 'lin'             ListLinDef      { Left  $2 }
-  | 'printname' 'cat' ListTermDef     { Left  [(f, CncCat Nothing    Nothing (Just e)) | (f,e) <- $3] }
-  | 'printname' 'fun' ListTermDef     { Left  [(f, CncFun Nothing Nothing (Just e)) | (f,e) <- $3] }
+  | 'printname' 'cat' ListTermDef     { Left  [(f, CncCat Nothing    Nothing (Just e) Nothing) | (f,e) <- $3] }
+  | 'printname' 'fun' ListTermDef     { Left  [(f, CncFun Nothing Nothing (Just e) Nothing) | (f,e) <- $3] }
   | 'flags'           ListFlagDef     { Right $2 }
 
 CatDef :: { [(Ident,Info)] }
@@ -263,8 +263,8 @@ OperDef
 
 LinDef :: { [(Ident,Info)] }
 LinDef
-  : Posn ListName '=' Exp         Posn { [(f,  CncFun Nothing (Just (mkL $1 $5 $4)) Nothing) | f <- $2] }
-  | Posn Name ListArg '=' Exp     Posn { [($2, CncFun Nothing (Just (mkL $1 $6 (mkAbs $3 $5))) Nothing)] }
+  : Posn ListName '=' Exp         Posn { [(f,  CncFun Nothing (Just (mkL $1 $5 $4)) Nothing Nothing) | f <- $2] }
+  | Posn Name ListArg '=' Exp     Posn { [($2, CncFun Nothing (Just (mkL $1 $6 (mkAbs $3 $5))) Nothing Nothing)] }
 
 TermDef :: { [(Ident,L Term)] }
 TermDef
@@ -674,14 +674,14 @@ isOverloading t =
 
 checkInfoType mt jment@(id,info) =
   case info of
-    AbsCat pcont       -> ifAbstract mt (locPerh pcont)
-    AbsFun pty _ pde _ -> ifAbstract mt (locPerh pty ++ maybe [] locAll pde)
-    CncCat pty pd ppn  -> ifConcrete mt (locPerh pty ++ locPerh pd ++ locPerh ppn)
-    CncFun _   pd ppn  -> ifConcrete mt (locPerh pd ++ locPerh ppn)
-    ResParam pparam _  -> ifResource mt (locPerh pparam)
-    ResValue ty        -> ifResource mt (locL ty)
-    ResOper  pty pt    -> ifOper mt pty pt
-    ResOverload _ xs   -> ifResource mt (concat [[loc1,loc2] | (L loc1 _,L loc2 _) <- xs])
+    AbsCat pcont         -> ifAbstract mt (locPerh pcont)
+    AbsFun pty _ pde _   -> ifAbstract mt (locPerh pty ++ maybe [] locAll pde)
+    CncCat pty pd ppn _  -> ifConcrete mt (locPerh pty ++ locPerh pd ++ locPerh ppn)
+    CncFun _   pd ppn _  -> ifConcrete mt (locPerh pd ++ locPerh ppn)
+    ResParam pparam _    -> ifResource mt (locPerh pparam)
+    ResValue ty          -> ifResource mt (locL ty)
+    ResOper  pty pt      -> ifOper mt pty pt
+    ResOverload _ xs     -> ifResource mt (concat [[loc1,loc2] | (L loc1 _,L loc2 _) <- xs])
   where
     locPerh = maybe [] locL
     locAll xs = [loc | L loc x <- xs]

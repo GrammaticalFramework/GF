@@ -76,7 +76,7 @@ extendModule gr (name,m)
 -- | rebuilding instance + interface, and "with" modules, prior to renaming. 
 -- AR 24/10/2003
 rebuildModule :: SourceGrammar -> SourceModule -> Err SourceModule
-rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ src_ js_)) = do
+rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ src_ env_ js_)) = do
 ----  deps <- moduleDeps ms
 ----  is   <- openInterfaces deps i
   let is = [] ---- the method above is buggy: try "i -src" for two grs. AR 8/3/2005
@@ -109,7 +109,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ src_ js_)) = do
                     [i | i <- is, notElem i infs]
       testErr (stat' == MSComplete || stat == MSIncomplete) 
               ("module" +++ showIdent i +++ "remains incomplete")
-      ModInfo mt0 _ fs me' _ ops0 _ _ js <- lookupModule gr ext
+      ModInfo mt0 _ fs me' _ ops0 _ _ _ js <- lookupModule gr ext
       let ops1 = nub $
                    ops_ ++ -- N.B. js has been name-resolved already
                    [OQualif i j | (i,j) <- ops] ++
@@ -122,7 +122,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ src_ js_)) = do
       let js0 = [ci | ci@(c,_) <- tree2list js, isInherited incl c]
       let js1 = buildTree (tree2list js_ ++ js0)
       let med1= nub (ext : infs ++ insts ++ med_)
-      return $ ModInfo mt0 stat' fs1 me Nothing ops1 med1 src_ js1
+      return $ ModInfo mt0 stat' fs1 me Nothing ops1 med1 src_ env_ js1
 
   return (i,mi')
 
@@ -173,8 +173,8 @@ globalizeLoc fpath i =
     ResValue t            -> ResValue (gl t)
     ResOper mt m          -> ResOper (fmap gl mt) (fmap gl m)
     ResOverload ms os     -> ResOverload ms (map (\(x,y) -> (gl x,gl y)) os)
-    CncCat mc mf mp       -> CncCat (fmap gl mc)  (fmap gl mf) (fmap gl mp)
-    CncFun m mt md        -> CncFun m (fmap gl mt) (fmap gl md)
+    CncCat mc mf mp mpmcfg-> CncCat (fmap gl mc)  (fmap gl mf) (fmap gl mp) mpmcfg
+    CncFun m  mt md mpmcfg-> CncFun m (fmap gl mt) (fmap gl md) mpmcfg
     AnyInd b m            -> AnyInd b m
   where
     gl (L loc0 x) = loc `seq` L (External fpath loc) x
@@ -200,10 +200,10 @@ unifyAnyInfo m i j = case (i,j) of
   (ResOper mt1 m1, ResOper mt2 m2) -> 
     liftM2 ResOper (unifMaybeL mt1 mt2) (unifMaybeL m1 m2)
 
-  (CncCat mc1 mf1 mp1, CncCat mc2 mf2 mp2) -> 
-    liftM3 CncCat (unifMaybeL mc1 mc2) (unifMaybeL mf1 mf2) (unifMaybeL mp1 mp2)
-  (CncFun m mt1 md1, CncFun _ mt2 md2) -> 
-    liftM2 (CncFun m) (unifMaybeL mt1 mt2) (unifMaybeL md1 md2) ---- adding defs
+  (CncCat mc1 mf1 mp1 mpmcfg1, CncCat mc2 mf2 mp2 mpmcfg2) -> 
+    liftM4 CncCat (unifMaybeL mc1 mc2) (unifMaybeL mf1 mf2) (unifMaybeL mp1 mp2)  (unifMaybe mpmcfg1 mpmcfg2)
+  (CncFun m mt1 md1 mpmcfg1, CncFun _ mt2 md2 mpmcfg2) -> 
+    liftM3 (CncFun m) (unifMaybeL mt1 mt2) (unifMaybeL md1 md2) (unifMaybe mpmcfg1 mpmcfg2)
 
   (AnyInd b1 m1, AnyInd b2 m2) -> do
     testErr (b1 == b2) $ "indirection status"

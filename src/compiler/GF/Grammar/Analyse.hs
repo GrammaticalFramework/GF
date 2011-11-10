@@ -31,8 +31,8 @@ stripInfo i = case i of
   ResValue lt -> i ----
   ResOper mt md -> ResOper mt Nothing
   ResOverload is fs -> ResOverload is [(lty, L loc (EInt 0)) | (lty,L loc _) <- fs]
-  CncCat mty mte mtf -> CncCat mty Nothing Nothing
-  CncFun mict mte mtf -> CncFun mict Nothing Nothing
+  CncCat mty mte mtf mpmcfg -> CncCat mty Nothing Nothing Nothing
+  CncFun mict mte mtf mpmcfg -> CncFun mict Nothing Nothing Nothing
   AnyInd b f -> i
 
 constantsInTerm :: Term -> [QIdent]
@@ -110,8 +110,8 @@ sizeInfo i = case i of
   ResValue lt -> 0
   ResOper mt md -> 1 + msize mt + msize md
   ResOverload is fs -> 1 + sum [sizeTerm ty + sizeTerm tr | (L _ ty, L _ tr) <- fs]
-  CncCat mty mte mtf -> 1 + msize mty   -- ignoring lindef and printname
-  CncFun mict mte mtf -> 1 + msize mte  -- ignoring type and printname
+  CncCat mty mte mtf _ -> 1 + msize mty   -- ignoring lindef and printname
+  CncFun mict mte mtf _ -> 1 + msize mte  -- ignoring type and printname
   AnyInd b f -> -1  -- just to ignore these in the size
   _ -> 0
  where 

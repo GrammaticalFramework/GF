@@ -158,8 +158,8 @@ renameInfo status (m,mi) i info =
     ResValue t -> do
       t <- renLoc (renameTerm status []) t
       return (ResValue t)
-    CncCat pty ptr ppr -> liftM3 CncCat (renTerm pty) (renTerm ptr) (renTerm ppr)
-    CncFun mt  ptr ppr -> liftM2 (CncFun mt)          (renTerm ptr) (renTerm ppr)
+    CncCat mty mtr mpr mpmcfg -> liftM4 CncCat (renTerm mty) (renTerm mtr) (renTerm mpr) (return mpmcfg)
+    CncFun mty mtr mpr mpmcfg -> liftM3 (CncFun mty)         (renTerm mtr) (renTerm mpr) (return mpmcfg)
     _ -> return info
   where
     renTerm = renPerh (renameTerm status [])

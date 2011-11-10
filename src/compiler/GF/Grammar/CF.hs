@@ -83,8 +83,8 @@ type CFFun = String
 
 cf2gf :: FilePath -> CF -> SourceGrammar
 cf2gf fpath cf = mGrammar [
-  (aname, ModInfo MTAbstract MSComplete (modifyFlags (\fs -> fs{optStartCat = Just cat})) [] Nothing [] [] fpath abs),
-  (cname, ModInfo (MTConcrete aname) MSComplete noOptions [] Nothing [] [] fpath cnc)
+  (aname, ModInfo MTAbstract MSComplete (modifyFlags (\fs -> fs{optStartCat = Just cat})) [] Nothing [] [] fpath Nothing abs),
+  (cname, ModInfo (MTConcrete aname) MSComplete noOptions [] Nothing [] [] fpath Nothing cnc)
   ]
  where
    name = justModuleName fpath
@@ -102,7 +102,7 @@ cf2grammar rules = (buildTree abs, buildTree conc, cat) where
             _ -> error "empty CF" 
   cats  = [(cat, AbsCat (Just (L NoLoc []))) | 
              cat <- nub (concat (map cf2cat rules))] ----notPredef cat
-  lincats = [(cat, CncCat (Just (L loc defLinType)) Nothing Nothing) | (cat,AbsCat (Just (L loc _))) <- cats]
+  lincats = [(cat, CncCat (Just (L loc defLinType)) Nothing Nothing Nothing) | (cat,AbsCat (Just (L loc _))) <- cats]
   (funs,lins) = unzip (map cf2rule rules)
 
 cf2cat :: CFRule -> [Ident]
@@ -119,6 +119,7 @@ cf2rule (L loc (fun, (cat, items))) = (def,ldef) where
                Nothing 
                (Just (L loc (mkAbs (map fst args) 
                       (mkRecord (const theLinLabel) [foldconcat (map mkIt args0)]))))
+               Nothing
                Nothing)
   mkIt (v, Left _) = P (Vr v) theLinLabel
   mkIt (_, Right a) = K a

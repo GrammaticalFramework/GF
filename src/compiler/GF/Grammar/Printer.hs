@@ -26,10 +26,15 @@ import GF.Infra.Option
 import GF.Grammar.Values
 import GF.Grammar.Grammar
 
+import PGF.Printer (ppFId, ppFunId, ppSeqId, ppSeq)
+
 import Text.PrettyPrint
 import Data.Maybe (maybe, isNothing)
 import Data.List  (intersperse)
 import qualified Data.Map as Map
+import qualified Data.IntMap as IntMap
+import qualified Data.Set as Set
+import qualified Data.Array.IArray as Array
 
 data TermPrintQual = Qualified | Unqualified
 
@@ -37,11 +42,13 @@ ppGrammar :: SourceGrammar -> Doc
 ppGrammar sgr = vcat $ map (ppModule Qualified) $ modules sgr
 
 ppModule :: TermPrintQual -> SourceModule -> Doc
-ppModule q (mn, ModInfo mtype mstat opts exts with opens _ _ jments) =
-    hdr $$ nest 2 (ppOptions opts $$ vcat (map (ppJudgement q) defs)) $$ ftr
+ppModule q (mn, ModInfo mtype mstat opts exts with opens _ _ mseqs jments) =
+    hdr $$ 
+    nest 2 (ppOptions opts $$ 
+            vcat (map (ppJudgement q) (Map.toList jments)) $$
+            maybe empty ppSequences mseqs) $$
+    ftr
     where
-      defs = Map.toList jments
-
       hdr = complModDoc <+> modTypeDoc <+> equals <+> 
             hsep (intersperse (text "**") $
                   filter (not . isEmpty)  $ [ commaPunct ppExtends exts
@@ -108,7 +115,7 @@ ppJudgement q (id, ResOverload ids defs) =
   (text "overload" <+> lbrace $$
    nest 2 (vcat [ppIdent id <+> (colon <+> ppTerm q 0 ty $$ equals <+> ppTerm q 0 e <+> semi) | (L _ ty,L _ e) <- defs]) $$
    rbrace) <+> semi
-ppJudgement q (id, CncCat  ptype pexp pprn) =
+ppJudgement q (id, CncCat  ptype pexp pprn mpmcfg) =
   (case ptype of
      Just (L _ typ) -> text "lincat" <+> ppIdent id <+> equals <+> ppTerm q 0 typ <+> semi
      Nothing        -> empty) $$
@@ -116,17 +123,37 @@ ppJudgement q (id, CncCat  ptype pexp pprn) =
      Just (L _ exp) -> text "lindef" <+> ppIdent id <+> equals <+> ppTerm q 0 exp <+> semi
      Nothing        -> empty) $$
   (case pprn of
-     Just (L _ prn) -> text "printname" <+> text "cat" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
+     Just (L _ prn) -> text "printname" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
+     Nothing        -> empty) $$
+  (case mpmcfg of
+     Just (PMCFG prods funs)
+                    -> text "pmcfg" <+> ppIdent id <+> equals <+> char '{' $$
+                       nest 2 (vcat (map ppProduction prods) $$
+                               space $$
+                               vcat (map (\(funid,arr) -> ppFunId funid <+> text ":=" <+> 
+                                                          parens (hcat (punctuate comma (map ppSeqId (Array.elems arr)))))
+                                         (Array.assocs funs))) $$
+                       char '}'
      Nothing        -> empty)
-ppJudgement q (id, CncFun  ptype pdef pprn) =
+ppJudgement q (id, CncFun  ptype pdef pprn mpmcfg) =
   (case pdef of
      Just (L _ e) -> let (xs,e') = getAbs e
                      in text "lin" <+> ppIdent id <+> hsep (map ppBind xs) <+> equals <+> ppTerm q 0 e' <+> semi
      Nothing      -> empty) $$
   (case pprn of
-     Just (L _ prn) -> text "printname" <+> text "fun" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
+     Just (L _ prn) -> text "printname" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
+     Nothing        -> empty) $$
+  (case mpmcfg of
+     Just (PMCFG prods funs)
+                    -> text "pmcfg" <+> ppIdent id <+> equals <+> char '{' $$
+                       nest 2 (vcat (map ppProduction prods) $$
+                               space $$
+                               vcat (map (\(funid,arr) -> ppFunId funid <+> text ":=" <+> 
+                                                          parens (hcat (punctuate comma (map ppSeqId (Array.elems arr)))))
+                                         (Array.assocs funs))) $$
+                       char '}'
      Nothing        -> empty)
-ppJudgement q (id, AnyInd cann mid) = text "-- ind" <+> ppIdent id <+> equals <+> (if cann then text "canonical" else empty) <+> ppIdent mid <+> semi
+ppJudgement q (id, AnyInd cann mid) = text "ind" <+> ppIdent id <+> equals <+> (if cann then text "canonical" else empty) <+> ppIdent mid <+> semi
 
 ppTerm q d (Abs b v e)   = let (xs,e') = getAbs (Abs b v e)
                            in prec d 0 (char '\\' <> commaPunct ppBind xs <+> text "->" <+> ppTerm q 0 e')
@@ -277,6 +304,18 @@ ppLocation fpath (Local b e)
   | b == e    = text fpath <> colon <> int b
   | otherwise = text fpath <> colon <> int b <> text "-" <> int e
 
+ppProduction (Production fid funid args) =
+  ppFId fid <+> text "->" <+> ppFunId funid <> 
+  brackets (hcat (punctuate comma (map (hsep . intersperse (char '|') . map ppFId) args)))
+
+ppSequences seqsArr
+  | null seqs = empty
+  | otherwise = text "sequences" <+> char '{' $$
+                nest 2 (vcat (map ppSeq seqs)) $$
+                char '}'
+  where
+    seqs = Array.assocs seqsArr
+
 commaPunct f ds = (hcat (punctuate comma (map f ds)))
 
 prec d1 d2 doc
@@ -299,3 +338,4 @@ getLet :: Term -> ([LocalDef], Term)
 getLet (Let l e) = let (ls,e') = getLet e
                    in (l:ls,e')
 getLet e         = ([],e)
+

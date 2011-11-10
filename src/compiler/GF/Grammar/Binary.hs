@@ -18,6 +18,8 @@ import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Grammar.Grammar
 
+import PGF.Binary hiding (decodingError)
+
 instance Binary Ident where
   put id = put (ident2bs id)
   get    = do bs <- get
@@ -30,9 +32,9 @@ instance Binary SourceGrammar where
   get = fmap mGrammar get
 
 instance Binary SourceModInfo where
-  put mi = do put (mtype mi,mstatus mi,mflags mi,mextend mi,mwith mi,mopens mi,mexdeps mi,msrc mi,jments mi)
-  get    = do (mtype,mstatus,flags,extend,mwith,opens,med,src,jments) <- get
-              return (ModInfo mtype mstatus flags extend mwith opens med src jments)
+  put mi = do put (mtype mi,mstatus mi,mflags mi,mextend mi,mwith mi,mopens mi,mexdeps mi,msrc mi,mseqs mi,jments mi)
+  get    = do (mtype,mstatus,mflags,mextend,mwith,mopens,med,msrc,mseqs,jments) <- get
+              return (ModInfo mtype mstatus mflags mextend mwith mopens med msrc mseqs jments)
 
 instance Binary ModuleType where
   put MTAbstract       = putWord8 0
@@ -85,6 +87,19 @@ instance Binary Options where
              Ok  x   -> return x
              Bad msg -> fail msg
 
+instance Binary Production where
+  put (Production res funid args) = put (res,funid,args)
+  get = do res   <- get
+           funid <- get
+           args  <- get
+           return (Production res funid args)
+
+instance Binary PMCFG where
+  put (PMCFG prods funs) = put (prods,funs)
+  get = do prods <- get
+           funs  <- get
+           return (PMCFG prods funs)
+
 instance Binary Info where
   put (AbsCat x)       = putWord8 0 >> put x
   put (AbsFun w x y z) = putWord8 1 >> put (w,x,y,z)
@@ -92,8 +107,8 @@ instance Binary Info where
   put (ResValue x)     = putWord8 3 >> put x
   put (ResOper x y)    = putWord8 4 >> put (x,y)
   put (ResOverload x y)= putWord8 5 >> put (x,y)
-  put (CncCat x y z)   = putWord8 6 >> put (x,y,z)
-  put (CncFun x y z)   = putWord8 7 >> put (x,y,z)
+  put (CncCat w x y z) = putWord8 6 >> put (w,x,y,z)
+  put (CncFun w x y z) = putWord8 7 >> put (w,x,y,z)
   put (AnyInd x y)     = putWord8 8 >> put (x,y)
   get = do tag <- getWord8
            case tag of
@@ -103,8 +118,8 @@ instance Binary Info where
              3 -> get >>= \x         -> return (ResValue x)
              4 -> get >>= \(x,y)     -> return (ResOper x y)
              5 -> get >>= \(x,y)     -> return (ResOverload x y)
-             6 -> get >>= \(x,y,z)   -> return (CncCat x y z)
-             7 -> get >>= \(x,y,z)   -> return (CncFun x y z)
+             6 -> get >>= \(w,x,y,z) -> return (CncCat w x y z)
+             7 -> get >>= \(w,x,y,z) -> return (CncFun w x y z)
              8 -> get >>= \(x,y)     -> return (AnyInd x y)
              _ -> decodingError
 
@@ -121,15 +136,6 @@ instance Binary Location where
 instance Binary a => Binary (L a) where
   put (L x y) = put (x,y)
   get = get >>= \(x,y) -> return (L x y)
-
-instance Binary BindType where
-  put Explicit = putWord8 0
-  put Implicit = putWord8 1
-  get = do tag <- getWord8
-           case tag of
-             0 -> return Explicit
-             1 -> return Implicit
-             _ -> decodingError
 
 instance Binary Term where
   put (Vr x)        = putWord8 0  >> put x
@@ -270,7 +276,7 @@ instance Binary Label where
 
 decodeModHeader :: FilePath -> IO SourceModule
 decodeModHeader fpath = do
-  (m,mtype,mstatus,flags,extend,mwith,opens,med,src) <- decodeFile fpath
-  return (m,ModInfo mtype mstatus flags extend mwith opens med src Map.empty)
+  (m,mtype,mstatus,mflags,mextend,mwith,mopens,med,msrc) <- decodeFile fpath
+  return (m,ModInfo mtype mstatus mflags mextend mwith mopens med msrc Nothing Map.empty)
 
 decodingError = fail "This GFO file was compiled with different version of GF"

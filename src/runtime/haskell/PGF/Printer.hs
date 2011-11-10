@@ -1,4 +1,4 @@
-module PGF.Printer (ppPGF,ppCat,ppFun) where
+module PGF.Printer (ppPGF,ppCat,ppFId,ppFunId,ppSeqId,ppSeq,ppFun) where
 
 import PGF.CId
 import PGF.Data

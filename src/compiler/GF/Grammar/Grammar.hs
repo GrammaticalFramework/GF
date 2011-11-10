@@ -32,7 +32,9 @@ module GF.Grammar.Grammar (
         abstractOfConcrete,
 
         ModuleStatus(..),
-
+        
+        PMCFG(..), Production(..), FId, FunId, SeqId, LIndex, Sequence,
+        
         Info(..),
         Location(..), L(..), unLoc,
         Type,
@@ -64,18 +66,25 @@ import GF.Infra.Option ---
 
 import GF.Data.Operations
 
+import PGF.Data (FId, FunId, SeqId, LIndex, Sequence, BindType(..))
+
 import Data.List
+import Data.Array.IArray
+import Data.Array.Unboxed
 import qualified Data.Map as Map
+import qualified Data.Set as Set
+import qualified Data.IntMap as IntMap
 import qualified Data.ByteString.Char8 as BS
 import Text.PrettyPrint
 import System.FilePath
+import Control.Monad.Identity
+
 
 
 data SourceGrammar = MGrammar { 
     moduleMap :: Map.Map Ident SourceModInfo,
     modules :: [(Ident,SourceModInfo)]
   }
-  deriving Show
 
 data SourceModInfo = ModInfo {
     mtype   :: ModuleType,
@@ -86,9 +95,9 @@ data SourceModInfo = ModInfo {
     mopens  :: [OpenSpec],
     mexdeps :: [Ident],
     msrc    :: FilePath,
+    mseqs   :: Maybe (Array SeqId Sequence),
     jments  :: Map.Map Ident Info
   }
-  deriving Show
 
 type SourceModule = (Ident, SourceModInfo)
 
@@ -115,9 +124,6 @@ isInherited c i = case c of
 
 inheritAll :: Ident -> (Ident,MInclude)
 inheritAll i = (i,MIAll)
-
-addOpenQualif :: Ident -> Ident -> SourceModInfo -> SourceModInfo
-addOpenQualif i j (ModInfo mt ms fs me mw ops med src js) = ModInfo mt ms fs me mw (OQualif i j : ops) med src js
 
 data OpenSpec = 
    OSimple Ident
@@ -313,6 +319,14 @@ allConcreteModules gr =
   [i | (i, m) <- modules gr, MTConcrete _ <- [mtype m], isCompleteModule m]
 
 
+data Production = Production {-# UNPACK #-} !FId
+                             {-# UNPACK #-} !FunId
+                             [[FId]]
+                  deriving (Eq,Ord,Show)
+
+data PMCFG = PMCFG [Production]
+                   (Array FunId (UArray LIndex SeqId)) 
+             deriving (Eq,Show)
 
 -- | the constructors are judgements in 
 --
@@ -336,8 +350,8 @@ data Info =
  | ResOverload [Ident] [(L Type,L Term)]         -- ^ (/RES/) idents: modules inherited
 
 -- judgements in concrete syntax
- | CncCat  (Maybe (L Type))             (Maybe (L Term)) (Maybe (L Term))  -- ^ (/CNC/) lindef ini'zed, 
- | CncFun  (Maybe (Ident,Context,Type)) (Maybe (L Term)) (Maybe (L Term))  -- ^ (/CNC/) type info added at 'TC'
+ | CncCat  (Maybe (L Type))             (Maybe (L Term)) (Maybe (L Term)) (Maybe PMCFG) -- ^ (/CNC/) lindef ini'zed, 
+ | CncFun  (Maybe (Ident,Context,Type)) (Maybe (L Term)) (Maybe (L Term)) (Maybe PMCFG) -- ^ (/CNC/) type info added at 'TC'
 
 -- indirection to module Ident
  | AnyInd Bool Ident                         -- ^ (/INDIR/) the 'Bool' says if canonical
@@ -363,11 +377,6 @@ type Cat  = QIdent
 type Fun  = QIdent
 
 type QIdent = (Ident,Ident)
-
-data BindType = 
-    Explicit
-  | Implicit
-  deriving (Eq,Ord,Show)
 
 data Term =
    Vr Ident                      -- ^ variable

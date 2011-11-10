@@ -69,9 +69,8 @@ valTypeCnc typ = snd (typeFormCnc typ)
 
 typeSkeleton :: Type -> ([(Int,Cat)],Cat)
 typeSkeleton typ =
-  let (cont,cat,_) = typeForm typ
-      args = map (\(b,x,t) -> typeSkeleton t) cont
-  in ([(length c, v) | (c,v) <- args], cat)
+  let (ctxt,cat,_) = typeForm typ
+  in ([(length c, v) | (b,x,t) <- ctxt, let (c,v) = typeSkeleton t], cat)
 
 catSkeleton :: Type -> ([Cat],Cat)
 catSkeleton typ =
@@ -560,8 +559,8 @@ allDependencies ism b =
       ResOper pty pt -> [pty,pt]
       ResOverload _ tyts -> concat [[Just ty, Just tr] | (ty,tr) <- tyts]
       ResParam (Just (L loc ps)) _ -> [Just (L loc t) | (_,cont) <- ps, (_,_,t) <- cont]
-      CncCat pty _ _ -> [pty]
-      CncFun _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
+      CncCat pty _ _ _ -> [pty]
+      CncFun _   pt _ _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
       AbsFun pty _ ptr _ -> [pty] --- ptr is def, which can be mutual
       AbsCat (Just (L loc co)) -> [Just (L loc ty) | (_,_,ty) <- co]
       _              -> []
