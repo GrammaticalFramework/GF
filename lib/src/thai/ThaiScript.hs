@@ -4,12 +4,20 @@ import Data.Char
 import Data.List
 import qualified Data.Map as Map
 
+testFile   = "src/test.txt"
+resultFile = "src/results.txt"
+
 test = do
-  s <- readFile "src/swadesh.txt"
+  s <- readFile testFile
+  writeFile resultFile []
   mapM_ (testOne . tabs) $ lines s
 
 testOne ws = case ws of
-  _:_:t:p:_ -> putStrLn $ concat [t,"\t",p,"\t", unwords (map thai2pron (words t))]
+  m:t:p:r:_ -> appendFile resultFile $ concat [mn,"\t",t,"\t",p,"\t",r,"\t",result,"\n"] where
+                   result = unwords (map thai2pron (words t))
+                   mn = if result == r 
+                      then m
+                      else if result == p then (m ++ "+") else (m ++ "-") 
   _ -> return ()
 
 tabs s = case break (=='\t') s of
@@ -53,42 +61,6 @@ thai2uni = map fromEnum
 
 uni2thai :: [Int] -> String
 uni2thai = map toEnum
-
-{-
-uni2pron :: [Int] -> String
-uni2pron is = case is of
-  0xe40:c:0xe34      :cs -> pron c ++ tone c cs "\601\601" ++ uni2pron cs
-  0xe40:c:0xe35:0xe22:cs -> pron c ++ tone c cs "iia"      ++ uni2pron cs
-  0xe40:c:0xe37:0xe2d:cs -> pron c ++ tone c cs "\649\649" ++ uni2pron cs
-  0xe40:c:0xe47      :cs -> pron c ++ tone c cs "e"        ++ uni2pron cs
-  0xe41:c:0xe47      :cs -> pron c ++ tone c cs "\x25b"    ++ uni2pron cs
-
-  v:0xe2b:c:cs | bvow v && isConsonant c  
-                         -> pron c ++ tone 0xe2b cs (pron v) ++ uni2pron cs  -- h-
-  v:b:c:cs | clust b c && bvow v                                             -- kr- etc
-                         -> pron b ++ pron c ++ tone b (c:cs) (pron v) ++ uni2pron cs
-  v:c:cs | bvow v        -> pron c ++ tone c cs (pron v)   ++ uni2pron cs  -- e .. ay
-
-  c:0xe31:0xe27:cs       -> pron c ++ tone c cs "ua"      ++ uni2pron cs
-
-  0xe2b:c:v:cs | isConsonant c && cvow v  
-                         -> pron c ++ tone 0xe2b cs (pron v) ++ uni2pron cs  -- h-
-  b:c:v:cs | clust b c && cvow v                                             -- kr- etc
-                         -> pron b ++ pron c ++ tone b (c:cs) (pron v) ++ uni2pron cs
-  0xe2d:v:cs   | cvow v  ->           tone 0xe2d cs (pron v) ++ uni2pron cs  -- O-
-  c:v:cs       | cvow v  -> pron c ++ tone c     cs (pron v) ++ uni2pron cs  -- a .. u:
-
-  [c] -> enc c
-  c:cs -> pron c ++ uni2pron cs  --- shouldn't happen if syllabified ??
-  [] -> []
- where
-   enc  c = lookThai [] pronunc_end c
-   pron c = lookThai [] pronunc c
-   cvow v = (0xe30 <= v && v <= 0xe39) || v == 0xe2d -- central vowels
-   bvow v = 0xe40 <= v && v <= 0xe44  -- begin vowels
-   clust b c = isConsonant b && (elem c [0xe23, 0xe25, 0xe27])
--}
-
 
 uni2pron :: [Int] -> String
 uni2pron is = case getSyllable is of
@@ -331,3 +303,39 @@ allThaiChars = [
   TC {unicode = 3673, translit = "N9", cclass = Low, liveness = False, pronunc = "9", pronunc_end = "9"}
  ]
 
+
+
+{-
+uni2pron :: [Int] -> String
+uni2pron is = case is of
+  0xe40:c:0xe34      :cs -> pron c ++ tone c cs "\601\601" ++ uni2pron cs
+  0xe40:c:0xe35:0xe22:cs -> pron c ++ tone c cs "iia"      ++ uni2pron cs
+  0xe40:c:0xe37:0xe2d:cs -> pron c ++ tone c cs "\649\649" ++ uni2pron cs
+  0xe40:c:0xe47      :cs -> pron c ++ tone c cs "e"        ++ uni2pron cs
+  0xe41:c:0xe47      :cs -> pron c ++ tone c cs "\x25b"    ++ uni2pron cs
+
+  v:0xe2b:c:cs | bvow v && isConsonant c  
+                         -> pron c ++ tone 0xe2b cs (pron v) ++ uni2pron cs  -- h-
+  v:b:c:cs | clust b c && bvow v                                             -- kr- etc
+                         -> pron b ++ pron c ++ tone b (c:cs) (pron v) ++ uni2pron cs
+  v:c:cs | bvow v        -> pron c ++ tone c cs (pron v)   ++ uni2pron cs  -- e .. ay
+
+  c:0xe31:0xe27:cs       -> pron c ++ tone c cs "ua"      ++ uni2pron cs
+
+  0xe2b:c:v:cs | isConsonant c && cvow v  
+                         -> pron c ++ tone 0xe2b cs (pron v) ++ uni2pron cs  -- h-
+  b:c:v:cs | clust b c && cvow v                                             -- kr- etc
+                         -> pron b ++ pron c ++ tone b (c:cs) (pron v) ++ uni2pron cs
+  0xe2d:v:cs   | cvow v  ->           tone 0xe2d cs (pron v) ++ uni2pron cs  -- O-
+  c:v:cs       | cvow v  -> pron c ++ tone c     cs (pron v) ++ uni2pron cs  -- a .. u:
+
+  [c] -> enc c
+  c:cs -> pron c ++ uni2pron cs  --- shouldn't happen if syllabified ??
+  [] -> []
+ where
+   enc  c = lookThai [] pronunc_end c
+   pron c = lookThai [] pronunc c
+   cvow v = (0xe30 <= v && v <= 0xe39) || v == 0xe2d -- central vowels
+   bvow v = 0xe40 <= v && v <= 0xe44  -- begin vowels
+   clust b c = isConsonant b && (elem c [0xe23, 0xe25, 0xe27])
+-}
