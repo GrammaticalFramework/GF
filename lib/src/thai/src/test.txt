@@ -1,0 +1,207 @@
+-	ฉัน , กู	chǎn , kuu	chăn , kuu
+-	เธอ , มึง	thəə , mʉŋ	thəə , mʉŋ
+-	เขา	kháw	khăw
++	เรา	raw	raw
+-	พวกคุณ	phûakkhun	phwkkhun
+-	พวกเขา	phûakkháo	phwkkhăw
++	นิ้	ní	ní
+-	นั่น	nán	nân
+-	ที่นี่	thîinîi	thîinii
+-	ที่นั่น	thîinân	thîinan
+-	ผู้ใด	phûuday	phûuaydo
+-	อะไร	aray	aayro
+-	ที่ใด	thîiday	thîiaydo
+-	เมื่อไร	mʉ̂aray	eemʉʉɔɔayr
+-	อย่างไร	yàaŋray	yaaŋayr
+-	ไม่	mây	mây
+-	ทั้งหมด	tháŋmòt	tháŋmt
+-	หลาย	lǎay	lăay
+-	บ้าง	bâaŋ	bâaŋ
+-	สองสาม	sɔ̌ɔŋsǎam	sɔ̆ɔŋsăam
++	อื่น	ʉ̀ʉn	ʉ̀ʉn
++	หนึ่ง	nʉ̀ŋ	nʉ̀ŋ
+-	สอง	sɔ̌ɔŋ	sɔ̆ɔŋ
+-	สาม	sǎam	săam
+-	สี่	sìi	sìi
+-	ห้า	hâa	hâa
+-	ใหญ่ , โต	yày , too	yày , too
++	ยาว	yaaw	yaaw
+-	กว้าง	kwâaŋ	kwâaŋ
+-	หนา	nǎa	năa
+-	หนัก	nàk	nàk
+-	เล็ก , น้อย	lék , nɔ́ɔy	lék , nɔ́ɔy
+-	สั้น , เตี้ย	sân , tîa	sân , tîa
+-	แคบ	khâeaep	khɛɛ
++	บาง	baaŋ	baaŋ
++	หญิง	yĭŋ	yĭŋ
++	ชาย	chaay	chaay
+-	ผู้ , คน	phûu , khon	phûu  khon
+-	เด็ก , ศิศุ	dèk , sìsù	dèk , sìtu
+-	เมีย , ภรรยา	mia , phanrayaa	mia , phrnyaa
+-	ผัว , สามี	phǔa , sǎamii	phăw , săamii
++	แม่	mɛ̂ɛ	mɛ̂ɛ
+-	พ่อ , บิดา	phɔ̂ɔ , bìdaa	phɔ̂ɔ , bìtaa
+-	สัตว์	sàt	sàtwo
++	ปลา	plaa	plaa
+-	นก; วิหค (Sanskrit)	nók , wíhòk	nk , wikho 
+-	หมา; สุนัข (Sanskrit)	mǎa , sùnák	màa , sŭnakh 
+-	เล็น , เหา	len , hǎw	len  , hăw
++	งู	ŋuu	ŋuu
+-	หนอน	nɔ̌ɔn	nɔ̆ɔn
+-	ไม้	máay	máy
+-	ดง , ป่า	doŋ , pàa	doŋ , pàa
+-	กิ่ง	kìŋ	kìŋ
+-	หมาก	màak	màak
+-	เม็ด	mét	mét
++	ใบ	bay	bay
+-	ราก	râak	râak
+-	เปลือก , ผิว	plʉ̀ak , phĭw	eeplʉʉɔɔk , phĭw
+-	ดอก , ปลี	dɔ̀ɔk , plii	dɔ̀ɔk , plii
+-	หญ้า	yâa	yâa
+-	เชือก	chʉ̂ak	eechʉʉɔɔk
+-	หนัง	nǎŋ	năŋ
+-	เนื้อ	nʉ́a	eenʉʉɔɔ
+-	เลือด , โลหิต	lʉ̂at , loohìt	eelʉʉɔɔd , looit
+-	กระดูก , ก้าง	kradùuk , kâaŋ	kràtuuk , kâaŋ
++	มัน	man	man
+-	ไข่	khày	khày
+-	เขา	khǎw	khăw
+-	หาง	hǎaŋ	hăaŋ
+-	ขน	khǒn	khon
+-	ผม	phǒm	phom
+-	หัว	hǔa	hăw
+-	หู	hǔu	hŭu
++	ตา	taa	taa
+-	จมูก	camùuk	cmuuk
+-	ปาก	pàak	pàak
++	ฟัน	fan	fan
++	ลิ้น	lín	lín
+-	เล็บ	lép	lép
+-	เท้า , ตีน	tháaw , tiin	tháw , tiin
+-	ขา	khǎa	khăa
+-	เข่า	khàw	khàw
+-	มือ	mʉʉ	mʉʉɔɔ
++	ปิก	pìk	pìk
++	พุง	phuŋ	phuŋ
+-	ไส้	sây	sây
+-	คอ , ศอ	khɔɔ , sɔ̌ɔ	khɔɔ , sɔ̆ɔ
+-	หลัง	lǎŋ	lăŋ
++	นม	nom	nom
++	ใจ	cay	cay
+-	ตับ	tàp	tàp
++	ดื่ม	dʉ̀ʉm	dʉ̀ʉm
++	กิน	kin	kin
+-	กัด	kàt	kàt
+-	ดูด	dùut	dùut
+-	ถ่ม , คาย	thòm , khaay	thm , khaay
+-	อ้วก , อาเจียน	ûak , aacian	wko , aaeeciiyno
+-	พัด	phát	phát
+-	หายใจ	hǎaycay	hăaycay
+-	หัวเราะ	hǔarɔ́	hăwrɔ
+-	เห็น	hěn	hĕn
+-	ยิน , ฟัง	yin , faŋ	yin , faŋ
+-	รู้	rúu	rúu
+-	คิด	khít	khít
+-	มีกลิ่น	miiklìn	mîiklîn
+-	กลัว , ยั่น	klua , yân	klaw , yân
++	นอน	nɔɔn	nɔɔn
+-	อยู่ , อาศัย	yùu , aasǎi	yuu , àatay
+-	ตาย , วาย	taay , waay	taay , waay
+-	ฆ่า , มล้าง	khâa , maláaŋ	khâa , mláaŋ
+-	สู้ , รบ	sûu , róp	sûu , rop
+-	ล่า	lâa	lâa
++	ตี	tii	tii
+-	ตัด , บาด	tàt , bàat	tàt , bàat
+-	ผ่า	phàa	phàa
+-	แทง , เสียบ	thɛɛŋ , sìap	thɛɛ , sìap
++	เกา	kaw	kaw
+-	ขุด	khùt	khùt
+-	ว่าย	wâay	wâay
++	บิน	bin	bin
++	เดิน	dəən	dəən
++	มา	maa	maa
++	นอน	nɔɔn	nɔɔn
+-	นั่ง	nâŋ	nâŋ
++	ยืน	yʉʉn	yʉʉn
+-	หัน	hǎn	hăn
+-	ตก , หล่น	tòk , lòn	tok , ln
+-	ให้	hây	hây
+-	อุ้ม	ûm	ûm
+-	คั้น	khán	khán
+-	ถู , นวด	thǔu , nûat	thŭu , nwt
+-	ล้าง	láaŋ	láaŋ
+-	เช็ด	chét	chét
+-	ดึง , ลาก	dʉŋ , lâak	dʉŋ , lâak
+-	ผลัก	phlàk	phlàk
+-	ขว้าง , ปา	khwâaŋ , paa	khwâaŋ , paa
+-	ผูก , ล่าม	phùuk , lâam	phùuk , lâam
+-	เย็บ	yép	yép
+-	นับ	náp	náp
+-	พูด , บอก	phûut , bɔ̀ɔk	phûut , bɔ̀ɔk
++	ร้อง	rɔ́ɔŋ	rɔ́ɔŋ
+-	เล่น	lên	lêen
++	ลอย	lɔɔy	lɔɔy
+-	ไหล	lǎy	lăy
+-	แข็ง	khǎeŋ	khɛ̆ŋ
+-	ตุ่ม	tùm	tùm
+-	ตะวัน , พระอาทิตย์	tawan , phrá?aathít	tawan , phrâɔɔaatity 
+-	เดือน , พระจันทร์	dʉan , phrácan	eedʉʉɔɔn , phrátanthr 
+-	ดาว , ดารา	daaw , daaraa	daaw , daanaa 
+-	น้ำ , ชล	náam , chon	nám , chlo 
+-	ฝน	fǒn	fon
+-	แม่น้ำ , นที	mɛ̂ɛnám , náthii	mɛ̂ɛnam , ntii 
+-	ทะเลสาบ	thaleesàap	thaeeltaab
+-	ทะเล , มหาสมุทร	thalee , mahǎasamùt	thaeel , maasmuthr 
+-	เกลือ	klʉa	eeklʉʉɔɔ
++	หิน	hĭn	hĭn
+-	ทราย	saay	thraay
+-	ฝุ่น; ธุลี (Sanskrit)	fùn , thúlii	fùn , thunii 
++	ดิน	din	din
+-	เมฆ	mêek	mee
++	หมอก	mɔ̀ɔk	mɔ̀ɔk
+-	ฟ้า , นภา	fáa , napaa	fáa , npaa
++	ลม	lom	lom
+-	หิมะ	himá	hĭma
+-	น้ำแข็ง	náamkhǎeŋ	nám0x25bɛkhŋ
++	ควัน	khwan	khwan
+-	ไฟ , อัคนี	fay , akkhanii	fay , àknii
+-	เถ้า	thâw	thâw
+-	เผา	phǎw	phăw
+-	ทาง , หน	thaaŋ , hǒn	thaaŋ , no
+-	เขา , ภู , ดอย , คิริ	phuu , khǎo , dɔɔy , khìrì	khăw , phuu , dɔɔy , khini
+-	แดง	dɛɛŋ	dɛɛ
++	เขียว	khĭaw	khĭaw
+-	เหลือง	lʉ̌aŋ	eehlʉʉɔɔŋ
+-	ขาว	khǎaw	khăaw
++	ดำ	dam	dam
++	กลางคืน	klaaŋkhʉʉn	klaaŋkhʉʉn
++	กลางวัน	klaaŋwan	klaaŋwan
+-	ปี ,ขวบ	pii , khùap	pii , khwb
+-	ร้อน , อุ่น	rɔ́ɔn , ùn	rɔ́ɔn , ùn
+-	หนาว , เซ็ง	nǎaw , sen	năaw , seŋ
++	เต็ม	tem	tem
+-	ใหม่	mày	mày
+-	แก่ , เฒ่า	kɛ̀ɛ , thâo	kɛ̀ɛ , thâw
++	ดี	dii	dii
+-	เลว , ร้้าย	leew , ráay	lwee  ráay
+-	เน่า	nâo	nâw
+-	สกปรก	sòkkapròk	skprk
+-	ดิ่ง , ตรง	dìŋ , troŋ	dìŋ , trŋ
+-	กลม , มน	klom , mon	klm ,  mon
++	คม	khom	khom
+-	ทื่อ	thʉ̂ʉ	thʉ̂ʉɔɔ
++	ละมุน	lamun	lamun
+-	เปียก	pìak	pìak
++	แห้ง	hɛ̂ɛŋ	hɛ̂ɛŋ
+-	แท้ , แม่น	thɛ́ɛ , mɛ̂ɛn	thɛ́ɛ , mɛ̂ɛn
+-	ใกล้	klây	klây
++	ไกล	klay	klay
+-	ขวา	khwǎa	khwăa
+-	ซ้าย	sáay	sáay
++	ที่	thîi	thîi
++	ใน	nay	nay
+-	กับ , ด้วย	kàp , dûay	kàp , dwyo
+-	และ	láe	lɛ
+-	ถ้า , เผื่อ	thâa , phʉ̀a	thâa , eephʉʉɔɔ
+-	เพราะ , ด้วย	phrɔ́ , dûay	phrɔ , dwyo
+-	ชื่อ , เรียก	chʉ̂ʉ , rîak	chʉ̂ʉɔɔ , rîak
