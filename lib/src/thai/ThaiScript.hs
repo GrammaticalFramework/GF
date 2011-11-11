@@ -14,10 +14,18 @@ test = do
 
 testOne ws = case ws of
   m:t:p:r:_ -> appendFile resultFile $ concat [mn,"\t",t,"\t",p,"\t",r,"\t",result,"\n"] where
-                   result = unwords (map thai2pron (words t))
+                   result = unwords (intersperse "," (map thai2pron (filter (/=",") (words t))))
                    mn = if result == r 
                       then m
                       else if result == p then (m ++ "+") else (m ++ "-") 
+  _ -> return ()
+
+testOneS ws = case ws of
+  m:t:p:r:_ -> appendFile resultFile $ concat [m,"\t",t,"\t",pn,"\t",r,"\n"] where
+                   result = unwords (intersperse "," (map thai2pron (filter (/=",") (words t))))
+                   pn = if m == "+" 
+                      then r
+                      else p
   _ -> return ()
 
 tabs s = case break (=='\t') s of
