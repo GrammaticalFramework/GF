@@ -147,7 +147,6 @@ data Flags = Flags {
       optLexicalCats     :: Set String,
       optLiteralCats     :: Set Ident,
       optGFODir          :: Maybe FilePath,
-      optOutputFile      :: Maybe FilePath,
       optOutputDir       :: Maybe FilePath,
       optGFLibPath       :: Maybe FilePath,
       optRecomp          :: Recomp,
@@ -244,7 +243,6 @@ defaultFlags = Flags {
       optLiteralCats     = Set.fromList [cString,cInt,cFloat,cVar],
       optLexicalCats     = Set.empty,
       optGFODir          = Nothing,
-      optOutputFile      = Nothing,
       optOutputDir       = Nothing,
       optGFLibPath       = Nothing,
       optRecomp          = RecompIfNewer,
@@ -310,8 +308,6 @@ optDescr =
             "Treat CAT as a lexical category.",
      Option [] ["literal"] (ReqArg literalCat "CAT[,CAT[...]]") 
             "Treat CAT as a literal category.",
-     Option ['o'] ["output-file"] (ReqArg outFile "FILE") 
-           "Save output in FILE (default is out.X, where X depends on output format.",
      Option ['D'] ["output-dir"] (ReqArg outDir "DIR") 
            "Save output files (other than .gfo files) in DIR.",
      Option [] ["gf-lib-path"] (ReqArg gfLibPath "DIR") 
@@ -381,7 +377,6 @@ optDescr =
                                             ++ " Known: " ++ show (map fst haskellOptionNames)
        literalCat  x = set $ \o -> o { optLiteralCats = foldr Set.insert (optLiteralCats o) ((map (identC . BS.pack) . splitBy (==',')) x) }
        lexicalCat  x = set $ \o -> o { optLexicalCats = foldr Set.insert (optLexicalCats o) (splitBy (==',') x) }
-       outFile     x = set $ \o -> o { optOutputFile = Just x }
        outDir      x = set $ \o -> o { optOutputDir = Just x }
        gfLibPath   x = set $ \o -> o { optGFLibPath = Just x }
        recomp      x = set $ \o -> o { optRecomp = x }
