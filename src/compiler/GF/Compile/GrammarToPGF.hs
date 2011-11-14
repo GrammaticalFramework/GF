@@ -196,7 +196,7 @@ genCncFuns gr am cm cdefs fid_cnt cnccats =
       let !funs_cnt'     = let (s_funid, e_funid) = bounds funs0
                            in funs_cnt+(e_funid-s_funid+1)
           lindefs'       = foldl' (toLinDef (am,id) funs_cnt) lindefs prods0
-          !(seqs',funs') = foldl' (toCncFun funs_cnt (m,id)) (seqs,funs) (assocs funs0)
+          !(seqs',funs') = foldl' (toCncFun funs_cnt (m,mkLinDefId id)) (seqs,funs) (assocs funs0)
       in mkCncCats cdefs fid_cnt funs_cnt' seqs' funs' lindefs'
     mkCncCats (_                                                :cdefs) fid_cnt funs_cnt seqs funs lindefs = 
       mkCncCats cdefs fid_cnt funs_cnt seqs funs lindefs
@@ -236,6 +236,9 @@ genCncFuns gr am cm cdefs fid_cnt cnccats =
             (hargs_C,arg_C) = GM.catSkeleton ty
             ctxt = mapM (mkCtxt lindefs) hargs_C
             fids = map (mkFId arg_C) fid0s
+
+    mkLinDefId id = 
+      identC (BS.append (BS.pack "lindef ") (ident2bs id))
 
     toLinDef res offs lindefs (Production fid0 funid0 _) =
       IntMap.insertWith (++) fid [offs+funid0] lindefs
