@@ -62,7 +62,7 @@ renameModule :: [SourceModule] -> SourceModule -> Check SourceModule
 renameModule ms mo@(m,mi) = checkIn (text "renaming module" <+> ppIdent m) $ do
   status <- buildStatus (mGrammar ms) m mi
   js     <- checkMap (renameInfo status mo) (jments mi)
-  return (m, mi{mopens = map forceQualif (mopens mi), jments = js})
+  return (m, mi{jments = js})
 
 type Status = (StatusTree, [(OpenSpec, StatusTree)])
 
@@ -141,9 +141,6 @@ modInfo2status (o,mo) = (o,tree2status o (jments mo))
 self2status :: Ident -> SourceModInfo -> StatusTree
 self2status c m = mapTree (info2status (Just c)) (jments m)
 
-forceQualif o = case o of
-  OSimple i   -> OQualif i i
-  OQualif _ i -> OQualif i i
   
 renameInfo :: Status -> SourceModule -> Ident -> Info -> Check Info
 renameInfo status (m,mi) i info =

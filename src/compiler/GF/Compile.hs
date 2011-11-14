@@ -11,8 +11,8 @@ import GF.Compile.GrammarToPGF
 import GF.Compile.ReadFiles
 import GF.Compile.Update
 import GF.Compile.Refresh
-
 import GF.Compile.Coding
+import GF.Compile.Tags
 
 import GF.Grammar.Grammar
 import GF.Grammar.Lookup
@@ -23,7 +23,6 @@ import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Infra.UseIO
 import GF.Infra.CheckM
-
 import GF.Data.Operations
 
 import Control.Monad
@@ -130,11 +129,10 @@ compileOne opts env@(_,srcgr,_) file = do
        | verbAtLeast opts Normal  = ioeIO (putStrFlush m) >> act
        | otherwise                = putPointE Verbose opts v act
 
-  let gf   = takeExtensions file
   let path = dropFileName file
   let name = dropExtension file
 
-  case gf of
+  case takeExtensions file of
 
     -- for compiled gf, read the file and update environment
     -- also undo common subexp optimization, to enable normal computations
@@ -146,16 +144,19 @@ compileOne opts env@(_,srcgr,_) file = do
 
        let sm1 = unsubexpModule sm0
        sm <- {- putPointE Normal opts "creating indirections" $ -} ioeErr $ extendModule srcgr sm1
-       
+
+       if flag optTagsOnly opts
+         then writeTags opts srcgr (gf2gftags opts file) sm1
+         else return ()
+
        extendCompileEnv env file sm
 
     -- for gf source, do full compilation and generate code
     _ -> do
 
-      let gfo = gf2gfo opts file
       b1 <- ioeIO $ doesFileExist file
       if not b1
-        then compileOne opts env $ gfo
+        then compileOne opts env $ (gf2gfo opts file)
         else do
 
        sm00 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
@@ -165,16 +166,16 @@ compileOne opts env@(_,srcgr,_) file = do
 
        intermOut opts DumpSource (ppModule Qualified sm)
 
-       compileSourceModule opts env (Just gfo) sm
+       compileSourceModule opts env (Just file) sm
   where
    isConcr (_,m) = isModCnc m && mstatus m /= MSIncomplete
 
 compileSourceModule :: Options -> CompileEnv -> Maybe FilePath -> SourceModule -> IOE CompileEnv
-compileSourceModule opts env@(k,gr,_) mb_gfo mo@(i,mi) = do
+compileSourceModule opts env@(k,gr,_) mb_gfFile mo@(i,mi) = do
 
   let puts  = putPointE Quiet opts
       putpp = putPointE Verbose opts
-
+      
   mo1   <- ioeErr $ rebuildModule gr mo
   intermOut opts DumpRebuild (ppModule Qualified mo1)
 
@@ -182,14 +183,17 @@ compileSourceModule opts env@(k,gr,_) mb_gfo mo@(i,mi) = do
   intermOut opts DumpExtend (ppModule Qualified mo1b)
 
   case mo1b of
-    (_,n) | not (isCompleteModule n) -> do
-      case mb_gfo of
-        Just gfo -> if flag optMode opts /= ModeTags
-                      then writeGFO opts gfo mo1b
-                      else putStrLnE ""
-        Nothing  -> return ()
-
-      extendCompileEnvInt env k mb_gfo mo1b
+    (_,n) | not (isCompleteModule n) ->
+      if not (flag optTagsOnly opts)
+        then do let mb_gfo = fmap (gf2gfo opts) mb_gfFile
+                case mb_gfo of
+                  Just gfo -> writeGFO opts gfo mo1b
+                  Nothing  -> return ()
+                extendCompileEnvInt env k mb_gfo mo1b
+        else do case mb_gfFile of
+                  Just gfFile -> writeTags opts gr (gf2gftags opts gfFile) mo1b
+                  Nothing     -> return ()
+                extendCompileEnvInt env k Nothing mo1b
     _ -> do
       let mos = modules gr
 
@@ -201,7 +205,7 @@ compileSourceModule opts env@(k,gr,_) mb_gfo mo@(i,mi) = do
       if null warnings then return () else puts warnings $ return ()
       intermOut opts DumpTypeCheck (ppModule Qualified mo3)
 
-      if flag optMode opts /= ModeTags
+      if not (flag optTagsOnly opts)
         then do (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
                 intermOut opts DumpRefresh (ppModule Qualified mo3r)
 
@@ -213,13 +217,16 @@ compileSourceModule opts env@(k,gr,_) mb_gfo mo@(i,mi) = do
                          else return mo4
                 intermOut opts DumpCanon (ppModule Qualified mo5)
 
+                let mb_gfo = fmap (gf2gfo opts) mb_gfFile
                 case mb_gfo of
                   Just gfo -> writeGFO opts gfo mo5
                   Nothing  -> return ()
 
                 extendCompileEnvInt env k' mb_gfo mo5
-        else do putStrLnE ""
-                extendCompileEnvInt env k  mb_gfo mo3
+        else do case mb_gfFile of
+                  Just gfFile -> writeTags opts gr (gf2gftags opts gfFile) mo3
+                  Nothing     -> return ()
+                extendCompileEnvInt env k Nothing mo3
 
 
 writeGFO :: Options -> FilePath -> SourceModule -> IOE ()
@@ -236,15 +243,13 @@ writeGFO opts file mo = do
 emptyCompileEnv :: CompileEnv
 emptyCompileEnv = (0,emptySourceGrammar,Map.empty)
 
-extendCompileEnvInt (_,gr,menv) k mfile sm = do
-  let (mod,imps) = importsOfModule sm
+extendCompileEnvInt (_,gr,menv) k mfile mo = do
   menv2 <- case mfile of
     Just file -> do
+      let (mod,imps) = importsOfModule mo
       t <- ioeIO $ getModificationTime file
       return $ Map.insert mod (t,imps) menv
     _ -> return menv
-  return (k,prependModule gr sm,menv2) --- reverse later
+  return (k,prependModule gr mo,menv2) --- reverse later
 
-extendCompileEnv e@(k,_,_) file sm = extendCompileEnvInt e k (Just file) sm
-
-
+extendCompileEnv e@(k,_,_) file mo = extendCompileEnvInt e k (Just file) mo
