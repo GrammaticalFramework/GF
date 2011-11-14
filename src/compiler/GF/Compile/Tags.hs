@@ -1,23 +1,28 @@
-module GFTags where
+module GF.Compile.Tags
+         ( writeTags
+         , gf2gftags
+         ) where
 
 import GF.Infra.Option
 import GF.Infra.UseIO
+import GF.Data.Operations
 import GF.Grammar
-import GF.Compile
 
 import Data.List
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Control.Monad
 import Text.PrettyPrint
+import System.FilePath
 
-mainTags opts files = do
-  gr <- batchCompile opts files
-  let tags = foldl getTags [] (modules gr)
-  ioeIO (writeFile "tags" (unlines ((Set.toList . Set.fromList) tags)))
+writeTags opts gr file mo = do
+  let imports = getImports opts gr mo
+      locals  = getLocalTags [] mo
+      txt     = unlines ((Set.toList . Set.fromList) (imports++locals))
+  putPointE Normal opts ("  write file" +++ file) $ ioeIO $ writeFile file txt
 
-getTags x (m,mi) = 
-  [showIdent m ++ "." ++ showIdent i ++ "\t" ++ k ++ "\t" ++ l ++ "\t" ++ t 
+getLocalTags x (m,mi) = 
+  [showIdent i ++ "\t" ++ k ++ "\t" ++ l ++ "\t" ++ t 
        | (i,jment) <- Map.toList (jments mi),
          (k,l,t)   <- getLocations jment] ++ x
   where
@@ -48,3 +53,31 @@ getTags x (m,mi) =
     list f xs = concatMap f xs
     
     render = renderStyle style{mode=OneLineMode}
+
+
+getImports opts gr mo@(m,mi) = concatMap toDep allOpens
+  where
+    allOpens = [(OSimple m,incl) | (m,incl) <- mextend mi] ++ 
+               [(o,MIAll) | o <- mopens mi]
+
+    toDep (OSimple m,incl)     =
+      let Ok mi = lookupModule gr m
+      in [showIdent id ++ "\t" ++ "indir" ++ "\t" ++ showIdent m ++ "\t\t" ++ gf2gftags opts (msrc mi)
+            | id <- Map.keys (jments mi), filter incl id]
+    toDep (OQualif m1 m2,incl) =
+      let Ok mi = lookupModule gr m2
+      in [showIdent id ++ "\t" ++ "indir" ++ "\t" ++ showIdent m2 ++ "\t" ++ showIdent m1 ++ "\t" ++ gf2gftags opts (msrc mi) 
+            | id <- Map.keys (jments mi), filter incl id]
+
+    filter MIAll          id = True
+    filter (MIOnly   ids) id = elem id ids
+    filter (MIExcept ids) id = not (elem id ids)
+
+
+gftagsFile :: FilePath -> FilePath
+gftagsFile f = addExtension f "gf-tags"
+
+gf2gftags :: Options -> FilePath -> FilePath
+gf2gftags opts file = maybe (gftagsFile (dropExtension file))
+                            (\dir -> dir </> gftagsFile (dropExtension (takeFileName file)))
+                            (flag optOutputDir opts)
