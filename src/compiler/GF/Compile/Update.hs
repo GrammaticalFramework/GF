@@ -15,10 +15,11 @@
 module GF.Compile.Update (buildAnyTree, extendModule, rebuildModule) where
 
 import GF.Infra.Ident
+import GF.Infra.Option
+import GF.Infra.CheckM
 import GF.Grammar.Grammar
 import GF.Grammar.Printer
 import GF.Grammar.Lookup
-import GF.Infra.Option
 
 import GF.Data.Operations
 
@@ -43,21 +44,22 @@ buildAnyTree m = go Map.empty
 		                             text "in module" <+> ppIdent m)
         Nothing -> go (Map.insert c j map) is
 
-extendModule :: SourceGrammar -> SourceModule -> Err SourceModule
+extendModule :: SourceGrammar -> SourceModule -> Check SourceModule
 extendModule gr (name,m)
   ---- Just to allow inheritance in incomplete concrete (which are not
   ---- compiled anyway), extensions are not built for them.
   ---- Should be replaced by real control. AR 4/2/2005
   | mstatus m == MSIncomplete && isModCnc m = return (name,m)
-  | otherwise                               = do m' <- foldM extOne m (mextend m) 
+  | otherwise                               = checkIn (ppLocation (msrc m) NoLoc <> colon) $ do
+                                                 m' <- foldM extOne m (mextend m) 
                                                  return (name,m')
  where
    extOne mo (n,cond) = do
-     m0 <- lookupModule gr n
+     m0 <- checkErr $ lookupModule gr n
 
      -- test that the module types match, and find out if the old is complete
-     testErr (sameMType (mtype m) (mtype mo)) 
-             ("illegal extension type to module" +++ showIdent name)
+     unless (sameMType (mtype m) (mtype mo)) 
+            (checkError (text "illegal extension type to module" <+> ppIdent name))
 
      let isCompl = isCompleteModule m0
 
@@ -75,8 +77,10 @@ extendModule gr (name,m)
 
 -- | rebuilding instance + interface, and "with" modules, prior to renaming. 
 -- AR 24/10/2003
-rebuildModule :: SourceGrammar -> SourceModule -> Err SourceModule
-rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ src_ env_ js_)) = do
+rebuildModule :: SourceGrammar -> SourceModule -> Check SourceModule
+rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ msrc_ env_ js_)) = 
+  checkIn (ppLocation msrc_ NoLoc <> colon) $ do
+
 ----  deps <- moduleDeps ms
 ----  is   <- openInterfaces deps i
   let is = [] ---- the method above is buggy: try "i -src" for two grs. AR 8/3/2005
@@ -84,19 +88,20 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ src_ env_ js_)) =
 
     -- add the information given in interface into an instance module
     Nothing -> do
-      testErr (null is || mstatus mi == MSIncomplete) 
-              ("module" +++ showIdent i +++ 
-               "has open interfaces and must therefore be declared incomplete") 
+      unless (null is || mstatus mi == MSIncomplete) 
+             (checkError (text "module" <+> ppIdent i <+> 
+                          text "has open interfaces and must therefore be declared incomplete"))
       case mt of
         MTInstance (i0,mincl) -> do
-          m1 <- lookupModule gr i0
-          testErr (isModRes m1) ("interface expected instead of" +++ showIdent i0)
+          m1 <- checkErr $ lookupModule gr i0
+          unless (isModRes m1)
+                 (checkError (text "interface expected instead of" <+> ppIdent i0))
           js' <- extendMod gr False ((i0,m1), isInherited mincl) i (jments mi)
           --- to avoid double inclusions, in instance I of I0 = J0 ** ...
           case extends mi of
             []  -> return mi{jments=js'}
             j0s -> do
-                m0s <- mapM (lookupModule gr) j0s
+                m0s <- checkErr $ mapM (lookupModule gr) j0s
                 let notInM0 c _  = all (not . isInBinTree c . jments) m0s
                 let js2 = filterBinTree notInM0 js'
                 return mi{jments=js2}
@@ -107,9 +112,9 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ src_ env_ js_)) =
       let (infs,insts) = unzip ops
       let stat' = ifNull MSComplete (const MSIncomplete)
                     [i | i <- is, notElem i infs]
-      testErr (stat' == MSComplete || stat == MSIncomplete) 
-              ("module" +++ showIdent i +++ "remains incomplete")
-      ModInfo mt0 _ fs me' _ ops0 _ _ _ js <- lookupModule gr ext
+      unless (stat' == MSComplete || stat == MSIncomplete) 
+             (checkError (text "module" <+> ppIdent i <+> text "remains incomplete"))
+      ModInfo mt0 _ fs me' _ ops0 _ _ _ js <- checkErr $ lookupModule gr ext
       let ops1 = nub $
                    ops_ ++ -- N.B. js has been name-resolved already
                    [OQualif i j | (i,j) <- ops] ++
@@ -122,7 +127,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ src_ env_ js_)) =
       let js0 = [ci | ci@(c,_) <- tree2list js, isInherited incl c]
       let js1 = buildTree (tree2list js_ ++ js0)
       let med1= nub (ext : infs ++ insts ++ med_)
-      return $ ModInfo mt0 stat' fs1 me Nothing ops1 med1 src_ env_ js1
+      return $ ModInfo mt0 stat' fs1 me Nothing ops1 med1 msrc_ env_ js1
 
   return (i,mi')
 
@@ -131,7 +136,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ src_ env_ js_)) =
 -- If the extended module is incomplete, its judgements are just copied.
 extendMod :: SourceGrammar ->
              Bool -> (SourceModule,Ident -> Bool) -> Ident -> 
-             BinTree Ident Info -> Err (BinTree Ident Info)
+             BinTree Ident Info -> Check (BinTree Ident Info)
 extendMod gr isCompl ((name,mi),cond) base new = foldM try new $ Map.toList (jments mi) 
   where
     try new (c,i0)
@@ -140,16 +145,16 @@ extendMod gr isCompl ((name,mi),cond) base new = foldM try new $ Map.toList (jme
                          Just j -> case unifyAnyInfo name i j of
 		                     Ok k  -> return $ updateTree (c,k) new
 		                     Bad _ -> do (base,j) <- case j of 
-		                                               AnyInd _ m -> lookupOrigInfo gr (m,c)
+		                                               AnyInd _ m -> checkErr $ lookupOrigInfo gr (m,c)
 		                                               _          -> return (base,j)
 		                                 (name,i) <- case i of 
-                                                               AnyInd _ m -> lookupOrigInfo gr (m,c)
+                                                               AnyInd _ m -> checkErr $ lookupOrigInfo gr (m,c)
                                                                _          -> return (name,i)
-		                                 fail $ render (text "cannot unify the information" $$ 
-		                                                nest 4 (ppJudgement Qualified (c,i)) $$
-		                                                text "in module" <+> ppIdent name <+> text "with" $$
-		                                                nest 4 (ppJudgement Qualified (c,j)) $$
-		                                                text "in module" <+> ppIdent base)
+		                                 checkError (text "cannot unify the information" $$ 
+		                                             nest 4 (ppJudgement Qualified (c,i)) $$
+		                                             text "in module" <+> ppIdent name <+> text "with" $$
+		                                             nest 4 (ppJudgement Qualified (c,j)) $$
+		                                             text "in module" <+> ppIdent base)
                          Nothing-> if isCompl
                                      then return $ updateTree (c,indirInfo name i) new
                                      else return $ updateTree (c,i) new

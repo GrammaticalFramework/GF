@@ -150,7 +150,8 @@ compileOne opts env@(_,srcgr,_) file = do
        intermOut opts DumpSource (ppModule Qualified sm0)
 
        let sm1 = unsubexpModule sm0
-       sm <- {- putPointE Normal opts "creating indirections" $ -} ioeErr $ extendModule srcgr sm1
+       (sm,warnings) <- {- putPointE Normal opts "creating indirections" $ -} ioeErr $ runCheck $ extendModule srcgr sm1
+       warnOut opts warnings
 
        if flag optTagsOnly opts
          then writeTags opts srcgr (gf2gftags opts file) sm1
@@ -182,10 +183,12 @@ compileSourceModule opts env@(k,gr,_) mb_gfFile mo@(i,mi) = do
 
   let putpp = putPointE Verbose opts
       
-  mo1   <- ioeErr $ rebuildModule gr mo
+  (mo1,warnings)   <- ioeErr $ runCheck $ rebuildModule gr mo
+  warnOut opts warnings
   intermOut opts DumpRebuild (ppModule Qualified mo1)
 
-  mo1b  <- ioeErr $ extendModule gr mo1
+  (mo1b,warnings)  <- ioeErr $ runCheck $ extendModule gr mo1
+  warnOut opts warnings
   intermOut opts DumpExtend (ppModule Qualified mo1b)
 
   case mo1b of
