@@ -38,7 +38,7 @@ getSourceModule opts file0 = ioe $
        case runP pModDef content of
          Left (Pn l c,msg) -> do file <- writeTemp tmp
                                  let location = file++":"++show l++":"++show c
-                                 return (Bad (location++": "++msg))
+                                 return (Bad (location++":\n   "++msg))
          Right (i,mi)      -> do removeTemp tmp
                                  return (Ok (i,mi{mflags=mflags mi `addOptions` opts, msrc=file0}))
   `catch` (return . Bad . show)

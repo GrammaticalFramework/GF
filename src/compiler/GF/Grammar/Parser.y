@@ -603,7 +603,7 @@ Posn
 {
 
 happyError :: P a
-happyError = fail "parse error"
+happyError = fail "syntax error"
 
 mkListId,mkConsId,mkBaseId  :: Ident -> Ident
 mkListId = prefixId (BS.pack "List")

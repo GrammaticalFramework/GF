@@ -24,7 +24,6 @@
 
 module GF.Compile.Rename (
 	       renameSourceTerm,
-	       renameSourceJudgement,
 	       renameModule
 	      ) where
 
@@ -47,20 +46,12 @@ import Text.PrettyPrint
 renameSourceTerm :: SourceGrammar -> Ident -> Term -> Check Term
 renameSourceTerm g m t = do
   mi     <- checkErr $ lookupModule g m
-  status <- buildStatus g m mi
+  status <- buildStatus g (m,mi)
   renameTerm status [] t
 
--- | this gives top-level access to renaming term input in the cj command
-renameSourceJudgement :: SourceGrammar -> Ident -> (Ident,Info) -> Check (Ident,Info)
-renameSourceJudgement g m (i,t) = do
-  mi     <- checkErr $ lookupModule g m
-  status <- buildStatus g m mi
-  t2 <- renameInfo status (m,mi) i t
-  return (i,t2)
-
 renameModule :: [SourceModule] -> SourceModule -> Check SourceModule
-renameModule ms mo@(m,mi) = checkIn (text "renaming module" <+> ppIdent m) $ do
-  status <- buildStatus (mGrammar ms) m mi
+renameModule ms mo@(m,mi) = do
+  status <- buildStatus (mGrammar ms) mo
   js     <- checkMap (renameInfo status mo) (jments mi)
   return (m, mi{jments = js})
 
@@ -71,42 +62,45 @@ type StatusTree = BinTree Ident StatusInfo
 type StatusInfo = Ident -> Term
 
 renameIdentTerm :: Status -> Term -> Check Term
-renameIdentTerm env@(act,imps) t = 
- checkIn (text "atomic term" <+> ppTerm Qualified 0 t $$ text "given" <+> hsep (punctuate comma (map (ppIdent . fst) qualifs))) $
-   case t of
-  Vr c -> ident predefAbs c
-  Cn c -> ident (\_ s -> checkError s) c
-  Q (m',c) | m' == cPredef {- && isInPredefined c -} -> return t
-  Q (m',c) -> do
-    m <- checkErr (lookupErr m' qualifs)
-    f <- lookupTree showIdent c m
-    return $ f c
-  QC (m',c) | m' == cPredef {- && isInPredefined c -} -> return t
-  QC (m',c) -> do
-    m <- checkErr (lookupErr m' qualifs)
-    f <- lookupTree showIdent c m
-    return $ f c
-  _ -> return t
- where
-   opens  = [st  | (OSimple _,st) <- imps]
-   qualifs = [(m, st) | (OQualif m _, st) <- imps] ++ 
-             [(m, st) | (OQualif _ m, st) <- imps] ++ 
-             [(m, st) | (OSimple m, st) <- imps] -- qualif is always possible
+renameIdentTerm env@(act,imps) t0 = 
+  case t0 of
+    Vr c -> ident predefAbs c
+    Cn c -> ident (\_ s -> checkError s) c
+    Q (m',c) | m' == cPredef {- && isInPredefined c -} -> return t0
+    Q (m',c) -> do
+      m <- checkErr (lookupErr m' qualifs)
+      f <- lookupTree showIdent c m
+      return $ f c
+    QC (m',c) | m' == cPredef {- && isInPredefined c -} -> return t0
+    QC (m',c) -> do
+      m <- checkErr (lookupErr m' qualifs)
+      f <- lookupTree showIdent c m
+      return $ f c
+    _ -> return t0
+  where
+    opens   = [st  | (OSimple _,st) <- imps]
+    qualifs = [(m, st) | (OQualif m _, st) <- imps] ++ 
+              [(m, st) | (OQualif _ m, st) <- imps] ++ 
+              [(m, st) | (OSimple m, st) <- imps] -- qualif is always possible
 
-   -- this facility is mainly for BWC with GF1: you need not import PredefAbs
-   predefAbs c s
-     | isPredefCat c = return $ Q (cPredefAbs,c)
-     | otherwise     = checkError s
+    -- this facility is mainly for BWC with GF1: you need not import PredefAbs
+    predefAbs c s
+      | isPredefCat c = return (Q (cPredefAbs,c))
+      | otherwise     = checkError s
 
-   ident alt c = case lookupTree showIdent c act of
-      Ok f -> return $ f c
-      _ -> case lookupTreeManyAll showIdent opens c of
-        [f] -> return $ f c
-        []  -> alt c (text "constant not found:" <+> ppIdent c)
-        fs -> case nub [f c | f <- fs]  of
-          [tr] -> return tr
-          ts@(t:_) -> do checkWarn (text "conflict" <+> hsep (punctuate comma (map (ppTerm Qualified 0) ts)))
-                         return t
+    ident alt c = 
+      case lookupTree showIdent c act of
+        Ok f -> return (f c)
+        _    -> case lookupTreeManyAll showIdent opens c of
+                  [f]  -> return (f c)
+                  []   -> alt c (text "constant not found:" <+> ppIdent c $$
+                                 text "given" <+> fsep (punctuate comma (map (ppIdent . fst) qualifs)))
+                  fs   -> case nub [f c | f <- fs]  of
+                            [tr]     -> return tr
+                            ts@(t:_) -> do checkWarn (text "atomic term" <+> ppTerm Qualified 0 t0 $$
+                                                      text "conflict" <+> hsep (punctuate comma (map (ppTerm Qualified 0) ts)) $$
+                                                      text "given" <+> fsep (punctuate comma (map (ppIdent . fst) qualifs)))
+                                           return t
             -- a warning will be generated in CheckGrammar, and the head returned
             -- in next V: 
             -- Bad $ "conflicting imports:" +++ unwords (map prt ts) 
@@ -125,15 +119,15 @@ tree2status o = case o of
   OSimple i   -> mapTree (info2status (Just i))
   OQualif i j -> mapTree (info2status (Just j))
 
-buildStatus :: SourceGrammar -> Ident -> SourceModInfo -> Check Status
-buildStatus gr c mo = let mo' = self2status c mo in do
-    let gr1 = prependModule gr (c,mo)
-        ops = [OSimple e | e <- allExtends gr1 c] ++ mopens mo
-    mods <- checkErr $ mapM (lookupModule gr1 . openedModule) ops
-    let sts = map modInfo2status $ zip ops mods    
-    return $ if isModCnc mo
-      then (emptyBinTree, reverse sts) -- the module itself does not define any names
-      else (mo',reverse sts) -- so the empty ident is not needed
+buildStatus :: SourceGrammar -> SourceModule -> Check Status
+buildStatus gr mo@(m,mi) = checkIn (ppLocation (msrc mi) NoLoc <> colon) $ do
+  let gr1 = prependModule gr mo
+      ops = [OSimple e | e <- allExtends gr1 m] ++ mopens mi
+  mods <- checkErr $ mapM (lookupModule gr1 . openedModule) ops
+  let sts = map modInfo2status $ zip ops mods    
+  return (if isModCnc mi
+            then (emptyBinTree,    reverse sts)  -- the module itself does not define any names
+            else (self2status m mi,reverse sts)) -- so the empty ident is not needed
 
 modInfo2status :: (OpenSpec,SourceModInfo) -> (OpenSpec, StatusTree)
 modInfo2status (o,mo) = (o,tree2status o (jments mo))
@@ -143,7 +137,7 @@ self2status c m = mapTree (info2status (Just c)) (jments m)
 
   
 renameInfo :: Status -> SourceModule -> Ident -> Info -> Check Info
-renameInfo status (m,mi) i info =
+renameInfo status (m,mi) i info = 
   case info of
     AbsCat pco -> liftM AbsCat (renPerh (renameContext status) pco)
     AbsFun  pty pa ptr poper -> liftM4 AbsFun (renTerm pty) (return pa) (renMaybe (mapM (renLoc (renEquation status))) ptr) (return poper)
@@ -171,9 +165,9 @@ renameInfo status (m,mi) i info =
         x <- ren x
         return (L loc x)
 
-    renPair ren (L locx x, L locy y) = do x <- ren x
-                                          y <- ren y
-                                          return (L locx x, L locy y)
+    renPair ren (x, y) = do x <- renLoc ren x
+                            y <- renLoc ren y
+                            return (x, y)
 
     renEquation :: Status -> Equation -> Check Equation
     renEquation b (ps,t) = do

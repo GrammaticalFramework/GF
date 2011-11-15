@@ -24,15 +24,21 @@ import System.IO
 import Control.Exception
 
 
-mainGFC :: Options -> [FilePath] -> IOE ()
-mainGFC opts fs = 
-    case () of
-      _ | null fs -> fail $ "No input files."
-      _ | all (extensionIs ".cf")  fs -> compileCFFiles opts fs
-      _ | all (\f -> extensionIs ".gf" f || extensionIs ".gfo" f)  fs -> compileSourceFiles opts fs
-      _ | all (extensionIs ".pgf") fs -> unionPGFFiles opts fs
-      _ -> fail $ "Don't know what to do with these input files: " ++ unwords fs
- where extensionIs ext = (== ext) .  takeExtension
+mainGFC :: Options -> [FilePath] -> IO ()
+mainGFC opts fs = do
+  r <- appIOE (case () of
+                 _ | null fs -> fail $ "No input files."
+                 _ | all (extensionIs ".cf")  fs -> compileCFFiles opts fs
+                 _ | all (\f -> extensionIs ".gf" f || extensionIs ".gfo" f)  fs -> compileSourceFiles opts fs
+                 _ | all (extensionIs ".pgf") fs -> unionPGFFiles opts fs
+                 _ -> fail $ "Don't know what to do with these input files: " ++ unwords fs)
+  case r of
+    Ok x    -> return x
+    Bad msg -> die $ if flag optVerbosity opts == Normal
+                       then ('\n':msg)
+                       else msg
+ where
+   extensionIs ext = (== ext) .  takeExtension
 
 compileSourceFiles :: Options -> [FilePath] -> IOE ()
 compileSourceFiles opts fs = 
