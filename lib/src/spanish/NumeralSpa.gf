@@ -72,8 +72,8 @@ oper
        <ental _, NOrd g n> => pronForms (adjSolo secondo) g n ;
        <tiotal,  NCard _>  => venti ;
        <tiotal,  NOrd g n> => regCard ventesimo g n ;
-       <ton,     NCard _>  => venti ;
-       <ton,     NOrd g n> => regCard ventesimo g n ;
+       <ton,     NCard _>  => dodici ;
+       <ton,     NOrd g n> => regCard dodicesimo g n ;
        <hundra _,  NCard Masc> => ducento ;
        <hundra _,  NCard Fem> => Predef.tk 2 ducento + "as" ;
        <hundra _,  NOrd g n> => regCard ducentesimo g n
