@@ -62,17 +62,22 @@ getImports opts gr mo@(m,mi) = concatMap toDep allOpens
 
     toDep (OSimple m,incl)     =
       let Ok mi = lookupModule gr m
-      in [showIdent id ++ "\t" ++ "indir" ++ "\t" ++ showIdent m ++ "\t\t" ++ gf2gftags opts (msrc mi)
-            | id <- Map.keys (jments mi), filter incl id]
+      in [showIdent id ++ "\t" ++ "indir" ++ "\t" ++ showIdent m ++ "\t\t" ++ gf2gftags opts (orig mi info)
+            | (id,info) <- Map.toList (jments mi), filter incl id]
     toDep (OQualif m1 m2,incl) =
       let Ok mi = lookupModule gr m2
-      in [showIdent id ++ "\t" ++ "indir" ++ "\t" ++ showIdent m2 ++ "\t" ++ showIdent m1 ++ "\t" ++ gf2gftags opts (msrc mi) 
-            | id <- Map.keys (jments mi), filter incl id]
+      in [showIdent id ++ "\t" ++ "indir" ++ "\t" ++ showIdent m2 ++ "\t" ++ showIdent m1 ++ "\t" ++ gf2gftags opts (orig mi info) 
+            | (id,info) <- Map.toList (jments mi), filter incl id]
 
     filter MIAll          id = True
     filter (MIOnly   ids) id = elem id ids
     filter (MIExcept ids) id = not (elem id ids)
 
+    orig mi info =
+      case info of
+        AnyInd _ m0 -> let Ok mi0 = lookupModule gr m0
+                       in msrc mi0
+        _           ->    msrc mi 
 
 gftagsFile :: FilePath -> FilePath
 gftagsFile f = addExtension f "gf-tags"
