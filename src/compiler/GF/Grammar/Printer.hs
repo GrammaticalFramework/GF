@@ -36,7 +36,9 @@ import qualified Data.IntMap as IntMap
 import qualified Data.Set as Set
 import qualified Data.Array.IArray as Array
 
-data TermPrintQual = Qualified | Unqualified
+data TermPrintQual 
+  = Unqualified | Qualified | Internal
+  deriving Eq                 
 
 ppGrammar :: SourceGrammar -> Doc
 ppGrammar sgr = vcat $ map (ppModule Qualified) $ modules sgr
@@ -46,7 +48,7 @@ ppModule q (mn, ModInfo mtype mstat opts exts with opens _ _ mseqs jments) =
     hdr $$ 
     nest 2 (ppOptions opts $$ 
             vcat (map (ppJudgement q) (Map.toList jments)) $$
-            maybe empty ppSequences mseqs) $$
+            maybe empty (ppSequences q) mseqs) $$
     ftr
     where
       hdr = complModDoc <+> modTypeDoc <+> equals <+> 
@@ -125,8 +127,8 @@ ppJudgement q (id, CncCat  ptype pexp pprn mpmcfg) =
   (case pprn of
      Just (L _ prn) -> text "printname" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
      Nothing        -> empty) $$
-  (case mpmcfg of
-     Just (PMCFG prods funs)
+  (case (mpmcfg,q) of
+     (Just (PMCFG prods funs),Internal)
                     -> text "pmcfg" <+> ppIdent id <+> equals <+> char '{' $$
                        nest 2 (vcat (map ppProduction prods) $$
                                space $$
@@ -134,7 +136,7 @@ ppJudgement q (id, CncCat  ptype pexp pprn mpmcfg) =
                                                           parens (hcat (punctuate comma (map ppSeqId (Array.elems arr)))))
                                          (Array.assocs funs))) $$
                        char '}'
-     Nothing        -> empty)
+     _              -> empty)
 ppJudgement q (id, CncFun  ptype pdef pprn mpmcfg) =
   (case pdef of
      Just (L _ e) -> let (xs,e') = getAbs e
@@ -143,8 +145,8 @@ ppJudgement q (id, CncFun  ptype pdef pprn mpmcfg) =
   (case pprn of
      Just (L _ prn) -> text "printname" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
      Nothing        -> empty) $$
-  (case mpmcfg of
-     Just (PMCFG prods funs)
+  (case (mpmcfg,q) of
+     (Just (PMCFG prods funs),Internal)
                     -> text "pmcfg" <+> ppIdent id <+> equals <+> char '{' $$
                        nest 2 (vcat (map ppProduction prods) $$
                                space $$
@@ -152,8 +154,11 @@ ppJudgement q (id, CncFun  ptype pdef pprn mpmcfg) =
                                                           parens (hcat (punctuate comma (map ppSeqId (Array.elems arr)))))
                                          (Array.assocs funs))) $$
                        char '}'
-     Nothing        -> empty)
-ppJudgement q (id, AnyInd cann mid) = text "ind" <+> ppIdent id <+> equals <+> (if cann then text "canonical" else empty) <+> ppIdent mid <+> semi
+     _              -> empty)
+ppJudgement q (id, AnyInd cann mid) =
+  case q of
+    Internal -> text "ind" <+> ppIdent id <+> equals <+> (if cann then text "canonical" else empty) <+> ppIdent mid <+> semi
+    _        -> empty
 
 ppTerm q d (Abs b v e)   = let (xs,e') = getAbs (Abs b v e)
                            in prec d 0 (char '\\' <> commaPunct ppBind xs <+> text "->" <+> ppTerm q 0 e')
@@ -276,8 +281,10 @@ ppDDecl q (_,id,typ)
 
 ppQIdent q (m,id) =
   case q of
-    Qualified   -> ppIdent m <> char '.' <> ppIdent id
     Unqualified ->                          ppIdent id
+    Qualified   -> ppIdent m <> char '.' <> ppIdent id
+    Internal    -> ppIdent m <> char '.' <> ppIdent id
+    
 
 ppLabel = ppIdent . label2ident
 
@@ -308,11 +315,11 @@ ppProduction (Production fid funid args) =
   ppFId fid <+> text "->" <+> ppFunId funid <> 
   brackets (hcat (punctuate comma (map (hsep . intersperse (char '|') . map ppFId) args)))
 
-ppSequences seqsArr
-  | null seqs = empty
-  | otherwise = text "sequences" <+> char '{' $$
-                nest 2 (vcat (map ppSeq seqs)) $$
-                char '}'
+ppSequences q seqsArr
+  | null seqs || q /= Internal = empty
+  | otherwise                  = text "sequences" <+> char '{' $$
+                                 nest 2 (vcat (map ppSeq seqs)) $$
+                                 char '}'
   where
     seqs = Array.assocs seqsArr
 

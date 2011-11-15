@@ -147,7 +147,7 @@ compileOne opts env@(_,srcgr,_) file = do
        sm00 <- putPointE Verbose opts ("+ reading" +++ file) $ ioeIO (decodeFile file)
        let sm0 = (fst sm00, (snd sm00) {mflags = mflags (snd sm00) `addOptions` opts})
 
-       intermOut opts DumpSource (ppModule Qualified sm0)
+       intermOut opts DumpSource (ppModule Internal sm0)
 
        let sm1 = unsubexpModule sm0
        (sm,warnings) <- {- putPointE Normal opts "creating indirections" $ -} ioeErr $ runCheck $ extendModule srcgr sm1
@@ -172,7 +172,7 @@ compileOne opts env@(_,srcgr,_) file = do
        enc <- ioeIO $ mkTextEncoding (renameEncoding (flag optEncoding (mflags (snd sm00))))
        let sm = decodeStringsInModule enc sm00
 
-       intermOut opts DumpSource (ppModule Qualified sm)
+       intermOut opts DumpSource (ppModule Internal sm)
 
        compileSourceModule opts env (Just file) sm
   where
@@ -185,11 +185,11 @@ compileSourceModule opts env@(k,gr,_) mb_gfFile mo@(i,mi) = do
       
   (mo1,warnings)   <- ioeErr $ runCheck $ rebuildModule gr mo
   warnOut opts warnings
-  intermOut opts DumpRebuild (ppModule Qualified mo1)
+  intermOut opts DumpRebuild (ppModule Internal mo1)
 
   (mo1b,warnings)  <- ioeErr $ runCheck $ extendModule gr mo1
   warnOut opts warnings
-  intermOut opts DumpExtend (ppModule Qualified mo1b)
+  intermOut opts DumpExtend (ppModule Internal mo1b)
 
   case mo1b of
     (_,n) | not (isCompleteModule n) ->
@@ -208,23 +208,23 @@ compileSourceModule opts env@(k,gr,_) mb_gfFile mo@(i,mi) = do
 
       (mo2,warnings) <- putpp "  renaming " $ ioeErr $ runCheck (renameModule mos mo1b)
       warnOut opts warnings
-      intermOut opts DumpRename (ppModule Qualified mo2)
+      intermOut opts DumpRename (ppModule Internal mo2)
 
       (mo3,warnings) <- putpp "  type checking" $ ioeErr $ runCheck (checkModule mos mo2)
       warnOut opts warnings
-      intermOut opts DumpTypeCheck (ppModule Qualified mo3)
+      intermOut opts DumpTypeCheck (ppModule Internal mo3)
 
       if not (flag optTagsOnly opts)
         then do (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
-                intermOut opts DumpRefresh (ppModule Qualified mo3r)
+                intermOut opts DumpRefresh (ppModule Internal mo3r)
 
                 mo4 <- putpp "  optimizing " $ ioeErr $ optimizeModule opts mos mo3r
-                intermOut opts DumpOptimize (ppModule Qualified mo4)
+                intermOut opts DumpOptimize (ppModule Internal mo4)
 
                 mo5 <- if isModCnc (snd mo4) && flag optPMCFG opts
                          then putpp "  generating PMCFG " $ ioeIO $ generatePMCFG opts mos mo4
                          else return mo4
-                intermOut opts DumpCanon (ppModule Qualified mo5)
+                intermOut opts DumpCanon (ppModule Internal mo5)
 
                 let mb_gfo = fmap (gf2gfo opts) mb_gfFile
                 case mb_gfo of
