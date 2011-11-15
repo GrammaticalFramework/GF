@@ -108,13 +108,22 @@ getAllFiles opts ps env file = do
       let mb_envmod = Map.lookup name env
           (st,t) = selectFormat opts (fmap fst mb_envmod) gfTime gfoTime
 
-      (mname,imps) <- case st of
-                        CSEnv  -> return (name, maybe [] snd mb_envmod)
-                        CSRead -> ioeIO $ fmap importsOfModule (decodeModHeader ((if isGFO file then id else gf2gfo opts) file))
+      (st,(mname,imps)) <-
+                      case st of
+                        CSEnv  -> return (st, (name, maybe [] snd mb_envmod))
+                        CSRead -> do mb_mo <- ioeIO $ decodeModuleHeader ((if isGFO file then id else gf2gfo opts) file)
+                                     case mb_mo of
+                                       Just mo -> return (st,importsOfModule mo)
+                                       Nothing
+                                         | isGFO file -> ioeErr $ Bad (file ++ " is compiled with different GF version and I cannot find the source file")
+                                         | otherwise  -> do s <- ioeIO $ BS.readFile file
+                                                            case runP pModHeader s of
+                                                              Left (Pn l c,msg) -> ioeBad (file ++ ":" ++ show l ++ ":" ++ show c ++ ": " ++ msg)
+                                                              Right mo          -> return (CSComp,importsOfModule mo)
                         CSComp -> do s <- ioeIO $ BS.readFile file
                                      case runP pModHeader s of
                                        Left (Pn l c,msg) -> ioeBad (file ++ ":" ++ show l ++ ":" ++ show c ++ ": " ++ msg)
-                                       Right mo          -> return (importsOfModule mo)
+                                       Right mo          -> return (st,importsOfModule mo)
       ioeErr $ testErr (mname == name)
                        ("module name" +++ mname +++ "differs from file name" +++ name)
       return (name,st,t,isJust gfTime,imps,dropFileName file)

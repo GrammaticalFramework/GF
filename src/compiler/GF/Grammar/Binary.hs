@@ -9,7 +9,9 @@
 
 module GF.Grammar.Binary where
 
+import Data.Char
 import Data.Binary
+import Control.Monad
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
 
@@ -18,7 +20,11 @@ import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Grammar.Grammar
 
-import PGF.Binary hiding (decodingError)
+import PGF.Binary
+
+-- Please change this every time when the GFO format is changed
+gfoVersion = "GF01"
+
 
 instance Binary Ident where
   put id = put (ident2bs id)
@@ -274,9 +280,24 @@ instance Binary Label where
              1 -> fmap LVar   get
              _ -> decodingError
 
-decodeModHeader :: FilePath -> IO SourceModule
-decodeModHeader fpath = do
-  (m,mtype,mstatus,mflags,mextend,mwith,mopens,med,msrc) <- decodeFile fpath
+
+putGFOVersion = mapM_ (putWord8 . fromIntegral . ord) gfoVersion
+getGFOVersion = replicateM (length gfoVersion) (fmap (chr . fromIntegral) getWord8)
+
+decodeModule :: FilePath -> IO SourceModule
+decodeModule fpath = do
+  (m,mtype,mstatus,mflags,mextend,mwith,mopens,med,msrc) <- decodeFile_ fpath (getGFOVersion >> get)
   return (m,ModInfo mtype mstatus mflags mextend mwith mopens med msrc Nothing Map.empty)
 
-decodingError = fail "This GFO file was compiled with different version of GF"
+decodeModuleHeader fpath = decodeFile_ fpath getVersionedMod
+  where
+    getVersionedMod = do
+      ver <- getGFOVersion
+      if ver == gfoVersion
+        then do (m,mtype,mstatus,mflags,mextend,mwith,mopens,med,msrc) <- get
+                return (Just (m,ModInfo mtype mstatus mflags mextend mwith mopens med msrc Nothing Map.empty))
+        else return Nothing
+
+encodeModule :: FilePath -> SourceModule -> IO ()
+encodeModule fpath mo =
+  encodeFile_ fpath (putGFOVersion >> put mo)
