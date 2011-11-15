@@ -82,6 +82,13 @@ intermOut opts d doc
   | dump opts d = ioeIO (hPutStrLn stderr (render (text "\n\n--#" <+> text (show d) $$ doc)))
   | otherwise   = return ()
 
+warnOut opts warnings
+  | null warnings = return ()
+  | otherwise     = ioeIO (hPutStrLn stderr $ 
+                                     if flag optVerbosity opts == Normal
+                                       then ('\n':warnings)
+                                       else warnings)
+
 -- | the environment
 type CompileEnv = (Int,SourceGrammar,ModEnv)
 
@@ -173,8 +180,7 @@ compileOne opts env@(_,srcgr,_) file = do
 compileSourceModule :: Options -> CompileEnv -> Maybe FilePath -> SourceModule -> IOE CompileEnv
 compileSourceModule opts env@(k,gr,_) mb_gfFile mo@(i,mi) = do
 
-  let puts  = putPointE Quiet opts
-      putpp = putPointE Verbose opts
+  let putpp = putPointE Verbose opts
       
   mo1   <- ioeErr $ rebuildModule gr mo
   intermOut opts DumpRebuild (ppModule Qualified mo1)
@@ -198,11 +204,11 @@ compileSourceModule opts env@(k,gr,_) mb_gfFile mo@(i,mi) = do
       let mos = modules gr
 
       (mo2,warnings) <- putpp "  renaming " $ ioeErr $ runCheck (renameModule mos mo1b)
-      if null warnings then return () else puts warnings $ return ()
+      warnOut opts warnings
       intermOut opts DumpRename (ppModule Qualified mo2)
 
       (mo3,warnings) <- putpp "  type checking" $ ioeErr $ runCheck (checkModule mos mo2)
-      if null warnings then return () else puts warnings $ return ()
+      warnOut opts warnings
       intermOut opts DumpTypeCheck (ppModule Qualified mo3)
 
       if not (flag optTagsOnly opts)

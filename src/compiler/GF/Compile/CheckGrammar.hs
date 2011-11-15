@@ -43,26 +43,26 @@ import Text.PrettyPrint
 
 -- | checking is performed in the dependency order of modules
 checkModule :: [SourceModule] -> SourceModule -> Check SourceModule
-checkModule ms m@(name,mo) = checkIn (text "checking module" <+> ppIdent name) $ do
-  checkRestrictedInheritance ms m
-  m <- case mtype mo of
-         MTConcrete a -> do let gr = mGrammar (m:ms)
-                            abs <- checkErr $ lookupModule gr a
-                            checkCompleteGrammar gr (a,abs) m
-         _            -> return m
-  infos <- checkErr $ topoSortJments m
-  foldM updateCheckInfo m infos
+checkModule mos mo@(m,mi) = do
+  checkRestrictedInheritance mos mo
+  mo <- case mtype mi of
+          MTConcrete a -> do let gr = mGrammar (mo:mos)
+                             abs <- checkErr $ lookupModule gr a
+                             checkCompleteGrammar gr (a,abs) mo
+          _            -> return mo
+  infos <- checkErr $ topoSortJments mo
+  foldM updateCheckInfo mo infos
   where
-    updateCheckInfo (name,mo) (i,info) = do
-      info <- checkInfo ms (name,mo) i info
-      return (name,mo{jments=updateTree (i,info) (jments mo)})
+    updateCheckInfo mo@(m,mi) (i,info) = do
+      info <- checkInfo mos mo i info
+      return (m,mi{jments=updateTree (i,info) (jments mi)})
 
 -- check if restricted inheritance modules are still coherent
 -- i.e. that the defs of remaining names don't depend on omitted names
 checkRestrictedInheritance :: [SourceModule] -> SourceModule -> Check ()
-checkRestrictedInheritance mos (name,mo) = do
+checkRestrictedInheritance mos (name,mo) = checkIn (ppLocation (msrc mo) NoLoc <> colon) $ do
   let irs = [ii | ii@(_,mi) <- mextend mo, mi /= MIAll]  -- names with restr. inh.
-  let mrs = [((i,m),mi) | (i,m) <- mos, Just mi <- [lookup i irs]] 
+  let mrs = [((i,m),mi) | (i,m) <- mos, Just mi <- [lookup i irs]]
                              -- the restr. modules themself, with restr. infos
   mapM_ checkRem mrs
  where
@@ -79,7 +79,7 @@ checkRestrictedInheritance mos (name,mo) = do
    allDeps = concatMap (allDependencies (const True) . jments . snd) mos
 
 checkCompleteGrammar :: SourceGrammar -> SourceModule -> SourceModule -> Check SourceModule
-checkCompleteGrammar gr (am,abs) (cm,cnc) = do
+checkCompleteGrammar gr (am,abs) (cm,cnc) = checkIn (ppLocation (msrc cnc) NoLoc <> colon) $ do
   let jsa = jments abs
   let jsc = jments cnc
 
@@ -112,25 +112,23 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
                                     Ok (CncFun ty Nothing    mn mf) ->
                                       case mb_def of
                                         Ok def -> return $ updateTree (c,CncFun ty (Just (L NoLoc def)) mn mf) js
-                                        Bad _  -> do checkWarn $ text "no linearization of" <+> ppIdent c
+                                        Bad _  -> do checkWarn (text "no linearization of" <+> ppIdent c)
                                                      return js
                                     _ -> do
                                       case mb_def of
                                         Ok def -> do (cont,val) <- linTypeOfType gr cm ty
                                                      let linty = (snd (valCat ty),cont,val)
                                                      return $ updateTree (c,CncFun (Just linty) (Just (L NoLoc def)) Nothing Nothing) js
-                                        Bad _  -> do checkWarn $ text "no linearization of" <+> ppIdent c
+                                        Bad _  -> do checkWarn (text "no linearization of" <+> ppIdent c)
                                                      return js
        AbsCat (Just _) -> case lookupIdent c js of
          Ok (AnyInd _ _) -> return js
          Ok (CncCat (Just _) _ _ _) -> return js
-         Ok (CncCat _ mt mp mpmcfg) -> do
-           checkWarn $ 
-             text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}"
+         Ok (CncCat Nothing mt mp mpmcfg) -> do
+           checkWarn (text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}")
            return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) mt mp mpmcfg) js
          _ -> do
-           checkWarn $ 
-             text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}"
+           checkWarn (text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}")
            return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) Nothing Nothing Nothing) js
        _ -> return js
      
@@ -141,11 +139,11 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
                                         do (cont,val) <- linTypeOfType gr cm ty
                                            let linty = (snd (valCat ty),cont,val)
                                            return $ updateTree (c,CncFun (Just linty) d mn mf) js
-                             _       -> do checkWarn $ text "function" <+> ppIdent c <+> text "is not in abstract"
+                             _       -> do checkWarn (text "function" <+> ppIdent c <+> text "is not in abstract")
                                            return js
        CncCat _ _ _ _   -> case lookupOrigInfo gr (am,c) of
                              Ok _ -> return $ updateTree i js
-                             _    -> do checkWarn $ text "category" <+> ppIdent c <+> text "is not in abstract"
+                             _    -> do checkWarn (text "category" <+> ppIdent c <+> text "is not in abstract")
                                         return js
        _                -> return $ updateTree i js
 
@@ -154,7 +152,8 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
 -- A May-value has always been checked in its origin module.
 checkInfo :: [SourceModule] -> SourceModule -> Ident -> Info -> Check Info
 checkInfo ms (m,mo) c info = do
-  checkReservedId c
+  checkIn (ppLocation (msrc mo) NoLoc <> colon) $
+    checkReservedId c
   case info of
     AbsCat (Just (L loc cont)) -> 
       mkCheck loc "the category" $ 
@@ -242,7 +241,8 @@ checkInfo ms (m,mo) c info = do
     _ ->  return info
  where
    gr = mGrammar ((m,mo) : ms)
-   chIn loc cat = checkIn (ppLocation (msrc mo) loc <> colon $$ text "Happened in" <+> text cat <+> ppIdent c)
+   chIn loc cat = checkIn (ppLocation (msrc mo) loc <> colon $$ 
+                           nest 2 (text "Happened in" <+> text cat <+> ppIdent c))
 
    mkPar (f,co) = do
        vs <- checkErr $ liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
@@ -257,7 +257,9 @@ checkInfo ms (m,mo) c info = do
 
    mkCheck loc cat ss = case ss of
      [] -> return info
-     _  -> checkError (ppLocation (msrc mo) loc <> colon $$ text "Happened in" <+> text cat <+> ppIdent c $$ nest 3 (vcat ss))
+     _  -> checkError (ppLocation (msrc mo) loc <> colon $$ 
+                       nest 2 (text "Happened in" <+> text cat <+> ppIdent c $$ 
+                               nest 2 (vcat ss)))
 
    compAbsTyp g t = case t of
      Vr x -> maybe (checkError (text "no value given to variable" <+> ppIdent x)) return $ lookup x g

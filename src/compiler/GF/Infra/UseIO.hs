@@ -158,9 +158,6 @@ foldIOE f s xs = case xs of
       Ok v  -> foldIOE f v xx
       Bad m -> return $ (s, Just m)
 
-dieIOE :: IOE a -> IO a
-dieIOE x = appIOE x >>= err die return
-
 die :: String -> IO a
 die s = do hPutStrLn stderr s
            exitFailure
