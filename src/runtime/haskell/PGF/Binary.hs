@@ -200,4 +200,4 @@ getArray2 = do n  <- get                       -- read the length
                xs <- replicateM n getArray     -- now the elems.
                return (listArray (0,n-1) xs)
 
-decodingError = fail "This PGF file was compiled with different version of GF"
+decodingError = fail "This file was compiled with different version of GF"

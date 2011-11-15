@@ -33,7 +33,6 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Data.List(nub)
 import Data.Maybe (isNothing)
-import Data.Binary
 import qualified Data.ByteString.Char8 as BS
 import Text.PrettyPrint
 
@@ -144,7 +143,7 @@ compileOne opts env@(_,srcgr,_) file = do
     -- for compiled gf, read the file and update environment
     -- also undo common subexp optimization, to enable normal computations
     ".gfo" -> do
-       sm00 <- putPointE Verbose opts ("+ reading" +++ file) $ ioeIO (decodeFile file)
+       sm00 <- putPointE Verbose opts ("+ reading" +++ file) $ ioeIO (decodeModule file)
        let sm0 = (fst sm00, (snd sm00) {mflags = mflags (snd sm00) `addOptions` opts})
 
        intermOut opts DumpSource (ppModule Internal sm0)
@@ -243,7 +242,7 @@ writeGFO opts file mo = do
   let mo1 = subexpModule mo
       mo2 = case mo1 of
               (m,mi) -> (m,mi{jments=Map.filter (\x -> case x of {AnyInd _ _ -> False; _ -> True}) (jments mi)})
-  putPointE Normal opts ("  write file" +++ file) $ ioeIO $ encodeFile file mo2
+  putPointE Normal opts ("  write file" +++ file) $ ioeIO $ encodeModule file mo2
 
 -- auxiliaries
 

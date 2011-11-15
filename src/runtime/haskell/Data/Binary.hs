@@ -48,6 +48,9 @@ module Data.Binary (
     , encodeFile                -- :: Binary a => FilePath -> a -> IO ()
     , decodeFile                -- :: Binary a => FilePath -> IO a
 
+    , encodeFile_               -- :: FilePath -> Put   -> IO ()
+    , decodeFile_               -- :: FilePath -> Get a -> IO a
+
 -- Lazy put and get
 --  , lazyPut
 --  , lazyGet
@@ -254,6 +257,9 @@ decode = runGet get
 encodeFile :: Binary a => FilePath -> a -> IO ()
 encodeFile f v = L.writeFile f (encode v)
 
+encodeFile_ :: FilePath -> Put -> IO ()
+encodeFile_ f m = L.writeFile f (runPut m)
+
 -- | Lazily reconstruct a value previously written to a file.
 --
 -- This is just a convenience function, it's defined simply as:
@@ -268,6 +274,11 @@ decodeFile :: Binary a => FilePath -> IO a
 decodeFile f = bracket (openBinaryFile f ReadMode) hClose $ \h -> do
     s <- L.hGetContents h
     evaluate $ runGet get s
+
+decodeFile_ :: FilePath -> Get a -> IO a
+decodeFile_ f m = bracket (openBinaryFile f ReadMode) hClose $ \h -> do
+    s <- L.hGetContents h
+    evaluate $ runGet m s
 
 -- needs bytestring 0.9.1.x to work 
 
