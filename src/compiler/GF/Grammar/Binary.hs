@@ -285,9 +285,8 @@ putGFOVersion = mapM_ (putWord8 . fromIntegral . ord) gfoVersion
 getGFOVersion = replicateM (length gfoVersion) (fmap (chr . fromIntegral) getWord8)
 
 decodeModule :: FilePath -> IO SourceModule
-decodeModule fpath = do
-  (m,mtype,mstatus,mflags,mextend,mwith,mopens,med,msrc) <- decodeFile_ fpath (getGFOVersion >> get)
-  return (m,ModInfo mtype mstatus mflags mextend mwith mopens med msrc Nothing Map.empty)
+decodeModule fpath =
+  decodeFile_ fpath (getGFOVersion >> get)
 
 decodeModuleHeader fpath = decodeFile_ fpath getVersionedMod
   where
