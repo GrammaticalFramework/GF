@@ -115,7 +115,7 @@ getAllFiles opts ps env file = do
                                      case mb_mo of
                                        Just mo -> return (st,importsOfModule mo)
                                        Nothing
-                                         | isGFO file -> ioeErr $ Bad (file ++ " is compiled with different GF version and I cannot find the source file")
+                                         | isGFO file -> ioeErr $ Bad (file ++ " is compiled with different GF version and I can't find the source file")
                                          | otherwise  -> do s <- ioeIO $ BS.readFile file
                                                             case runP pModHeader s of
                                                               Left (Pn l c,msg) -> ioeBad (file ++ ":" ++ show l ++ ":" ++ show c ++ ": " ++ msg)
