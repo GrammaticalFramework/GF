@@ -1,6 +1,6 @@
 --# -path=.:alltenses
 
-concrete FoodsTha of Foods = open SyntaxTha, LexiconTha, 
+concrete FoodsThai of Foods = open SyntaxTha, LexiconTha, 
   ParadigmsTha, (R=ResTha) in {
 
         flags coding = utf8 ;
