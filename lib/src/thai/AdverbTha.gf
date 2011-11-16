@@ -12,7 +12,7 @@ concrete AdverbTha of Adverb = CatTha **
 
     AdAdv adv ad = thbind ad adv ;
 
-    SubjS = thbind ;
+    SubjS x y = thbind x y ;
 
     AdnCAdv cadv = ss (thbind cadv.s conjThat) ; -----
 
