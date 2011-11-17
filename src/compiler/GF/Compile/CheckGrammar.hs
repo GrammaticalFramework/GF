@@ -194,7 +194,7 @@ checkInfo ms (m,mo) c info = do
       mt <- case (mty,mt) of
               (Just (cat,cont,val),Just (L loc trm)) -> 
                   chIn loc "linearization of" $ do
-                     (trm,_) <- checkLType gr [] trm (mkProd cont val [])
+                     (trm,_) <- checkLType gr [] trm (mkFunType (map (\(_,_,ty) -> ty) cont) val)  -- erases arg vars
                      return (Just (L loc trm))
               _ -> return mt
       mpr  <- case mpr of
