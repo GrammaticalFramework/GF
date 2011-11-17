@@ -114,7 +114,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ msrc_ env_ js_)) 
                     [i | i <- is, notElem i infs]
       unless (stat' == MSComplete || stat == MSIncomplete) 
              (checkError (text "module" <+> ppIdent i <+> text "remains incomplete"))
-      ModInfo mt0 _ fs me' _ ops0 _ _ _ js <- checkErr $ lookupModule gr ext
+      ModInfo mt0 _ fs me' _ ops0 _ fpath _ js <- checkErr $ lookupModule gr ext
       let ops1 = nub $
                    ops_ ++ -- N.B. js has been name-resolved already
                    [OQualif i j | (i,j) <- ops] ++
@@ -124,7 +124,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ msrc_ env_ js_)) 
 
       --- check if me is incomplete
       let fs1 = fs `addOptions` fs_                           -- new flags have priority
-      let js0 = [ci | ci@(c,_) <- tree2list js, isInherited incl c]
+      let js0 = [(c,globalizeLoc fpath j) | (c,j) <- tree2list js, isInherited incl c]
       let js1 = buildTree (tree2list js_ ++ js0)
       let med1= nub (ext : infs ++ insts ++ med_)
       return $ ModInfo mt0 stat' fs1 me Nothing ops1 med1 msrc_ env_ js1
