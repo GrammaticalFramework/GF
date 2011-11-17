@@ -40,6 +40,7 @@
 <li>Definition outlining, jump to declaration, find usage</li>
 <li>Warnings for problems in module dependancy hierarchy</li>
 <li>Launch configurations, i.e. compilation directly from IDE</li>
+<li>Use GF Shell from within Eclipse</li>
 <li>Auto-completion for declared identifiers</li>
 <li>Background compilation (shallow) using project builder</li>
 </ul>
@@ -69,7 +70,7 @@
 <h2>Update history</h2>
 
 <dl>
-<dt><strong>16/11/11</strong></dt>
+<dt><strong>17/11/11</strong></dt>
 <dd>Third BETA released, overhauled to take advantage of new compiler features. Tag-based scoping for better performance.</dd>
 
 <dt><strong>11/10/11</strong></dt>
@@ -95,8 +96,14 @@
 <h3>System requirements</h3>
 
 <ol>
+<li>The plugin makes use of the newest GF features, and <strong>requires the latest developer version of GF</strong> to be installed on your system.</li>
+<li>Paths to GF must be set within the plugin, meaning:
+
+<ul>
+<li>you don&#8217;t necessarily need to have GF in your <code>PATH</code> environment variable</li>
+<li>you can use a separate GF installation for GFEP if you wish</li>
+</ul></li>
 <li>The plugin was developed using Eclipse 3.7, and has <strong>not</strong> been tested with older versions of Eclipse.</li>
-<li>GFEP makes use of the newest GF features, and requires that the latest developer version of GF is already installed on your system. Paths to GF must be set within the Eclipse plugin (meaning you don&#8217;t necessarily need to have GF in your <code>PATH</code> environment variable).</li>
 </ol>
 
 <h3>Installing the plugin for the first time</h3>
@@ -180,6 +187,24 @@ files and manually add them to your Eclipse workspace. To experiment with some o
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-compileroutput.png" alt="Output from the GF compiler" /></p>
 
+<h3>Usage hints</h3>
+
+<h4>Consoles</h4>
+
+<p>The plugin provides its own console view named <em>GFEP Log</em>, which shows log messages based on the <strong>Log Level</strong> preference (<strong>Window &rarr; Preferences &rarr; Grammatical Framework</strong>).</p>
+
+<p>Additionally, everytime a grammar is <strong>Run</strong> a <em>new</em> console is opened to display the output. This console may also serve as the interactive GF Shell, depending on the <strong>Interactive Mode</strong> checkbox in your <strong>Run Configuration</strong>.</p>
+
+<p>Eclipse does not make it obvious when multiple console windows open; click on the <strong>Display Selected Console</strong> button to switch between open consoles:</p>
+
+<p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-console-icon.png" alt="Display Selected Console icon" /></p>
+
+<p><em>The Eclipse console implementation does not support command history (up arrow) or auto-completion (tab).</em></p>
+
+<h4>Logs</h4>
+
+<p>You can set the log verbosity from <strong>Window &rarr; Preferences &rarr; Grammatical Framework</strong>. This setting also affects the verbosity of the log file <code>gfep.log</code>.</p>
+
 <hr />
 
 <h2>Evaluation &amp; feedback</h2>
@@ -192,7 +217,7 @@ Do not hesitate to contact me on <code>john.j.camilleri</code> at domain <code>c
 <ol>
 <li>The in-editor validation often needs to be triggered/updated by a keystroke. So if you can still see errors which you believe should be correct, try adding a space character to ensure the validation has been re-triggered.</li>
 <li>Validation expects to have the project&#8217;s <strong>Build Automatically</strong> option checked (turned on).</li>
-<li>Sometimes you may get an entire file marked with errors, even though in fact there is only a single error which is causing the internal builder to fail. In such cases referring to the <strong>Problems</strong> view should help you locate the cause. This behaviour will hopefully be improved in future versions.</li>
+<li>Sometimes you may get an entire file marked with errors, even though in fact there is only a single error which is causing the internal builder to fail. In such cases referring to the <strong>Problems</strong> view should help you locate the cause. This issue is particularly relevant when changes made to one module may induce errors in its descendants (e.g. renaming a parameter in a resource module). This behaviour will hopefully be improved in future versions. </li>
 </ol>
 
 <h3>Criteria</h3>
