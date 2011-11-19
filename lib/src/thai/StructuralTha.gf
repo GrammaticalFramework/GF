@@ -4,12 +4,12 @@ concrete StructuralTha of Structural = CatTha **
   flags coding = utf8 ;
 
   lin
---  above_Prep = ss "above" ;
+  above_Prep = ss (thbind "ข้าง" "บน") ;
 --  after_Prep = ss "after" ;
 --  all_Predet = ss "all" ;
---  almost_AdA, almost_AdN = ss "almost" ;
+  almost_AdA, almost_AdN = ss (thbind "เกิ" "อบ") ;
 --  although_Subj = ss "although" ;
---  always_AdV = ss "always" ;
+  always_AdV = ss (thbind "ตลอด" "ไป") ;
   and_Conj = {s1 = [] ; s2 = "และ"} ;
 --  because_Subj = ss "because" ;
 --  before_Prep = ss "before" ;
@@ -53,7 +53,7 @@ concrete StructuralTha of Structural = CatTha **
 --  on_Prep = ss "on" ;
 --  one_Quant = mkDeterminer Sg "one" ;
 --  only_Predet = ss "only" ;
---  or_Conj = ss "or" ** {n = Sg} ;
+  or_Conj = {s1 = [] ; s2 = "หริอ"} ;
 --  otherwise_PConj = ss "otherwise" ;
 --  part_Prep = ss "of" ;
   please_Voc = ss "ขอ" ;
@@ -90,7 +90,7 @@ concrete StructuralTha of Structural = CatTha **
   where_IAdv = ss (thbind "ฑี" "ไหน") ;
   which_IQuant = {s1 = "ไหน" ; s2 = [] ; hasC = True} ;
   whoPl_IP, whoSg_IP = ss "ไคร" ;
---  why_IAdv = ss "why" ;
+  why_IAdv = ss (thbind "ฑำ" "ไม") ;
 --  without_Prep = ss "without" ;
 --  with_Prep = ss "with" ;
   yes_Utt = ss chay_s ;
