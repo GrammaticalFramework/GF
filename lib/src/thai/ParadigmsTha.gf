@@ -20,6 +20,10 @@ oper
       = \s -> mkN s "หลัง" ;
   animalN : Str -> N
       = \s -> mkN s "ตัว" ;
+  placeN : Str -> N
+      = \s -> mkN s "แห่ง" ;
+  verbalN : Str -> N
+      = \s -> mkN s "ข้อ" ;
 
   mkN2 : N -> Str -> N2
       = \n,p -> lin N2 (n ** {c2 = p}) ;
@@ -78,4 +82,11 @@ oper
   mkV2A : V -> Str -> V2A =
     \v,p -> lin V2A (v ** {c2 = p}) ; 
 
+  mkAdv : Str -> Adv = 
+    \s -> lin Adv (ss s) ;
+
+  mkPrep : Str -> Prep = 
+    \s -> lin Prep (ss s) ;
+
+  
 }

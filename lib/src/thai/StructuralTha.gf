@@ -18,7 +18,7 @@ concrete StructuralTha of Structural = CatTha **
 --  both7and_DConj = sd2 "both" "and" ** {n = Pl} ;
 --  but_PConj = ss "but" ;
   by8agent_Prep = ss [] ;
---  by8means_Prep = ss "by" ;
+  by8means_Prep = ss "ผ่าน" ;
   can8know_VV = {s = pen_s ; typ = VVPost} ;
   can_VV = {s = way_s ; typ = VVPost} ;
 --  during_Prep = ss "during" ;
@@ -38,21 +38,21 @@ concrete StructuralTha of Structural = CatTha **
 --  here7from_Adv = ss ["from here"] ;
   how_IAdv = ss (thword "อย่าง" "ไร") ;
 --  how8many_IDet = mkDeterminer Pl ["how many"] ;
---  if_Subj = ss "if" ;
 --  in8front_Prep = ss ["in front of"] ;
   i_Pron  = ss chan_s ;
---  in_Prep = ss "in" ;
+  if_Subj = ss (thword "ถ้า") ;
+  in_Prep = ss (thword "ใน") ;
   it_Pron  = ss "มัน" ;
 --  less_CAdv = ss "less" ;
   many_Det = mkDet "หลาย" [] ;
---  more_CAdv = ss "more" ;
+  more_CAdv = {s = thword "มาก" "กว่า" ; p = []} ; ----
 --  most_Predet = ss "most" ;
 --  much_Det = mkDeterminer Sg "much" ;
   must_VV = {s = tog_s ; typ = VVPre} ;
   no_Utt = ss may_s ;
---  on_Prep = ss "on" ;
+  on_Prep = ss "บน" ;
 --  one_Quant = mkDeterminer Sg "one" ;
---  only_Predet = ss "only" ;
+  only_Predet = ss (thword "เฑา" "นั้น") ;
   or_Conj = {s1 = [] ; s2 = "หริอ"} ;
 --  otherwise_PConj = ss "otherwise" ;
 --  part_Prep = ss "of" ;
@@ -100,9 +100,5 @@ concrete StructuralTha of Structural = CatTha **
 
   right_Ord = ss (thword "ขวา") ;
   left_Ord = ss (thword "ซ้าย") ;
-  at_Prep = ss (thword "ที่") ;
-  in_Prep = ss (thword "ใน") ;
-  if_Subj = ss (thword "ถ้า") ;
-
 }
 

@@ -8,12 +8,12 @@ flags
 
 lin
 --  add_V3 = dirV3 (regV "add") toP ;
---  airplane_N = regN "airplane" ;
+  airplane_N = mkN (thword "เครึอง" "บิน") "ลำ" ;
 --  already_Adv = mkAdv "already" ;
   animal_N = animalN (thword "สัตว์") ;
---  answer_V2S = mkV2S (regV "answer") toP ;
+  answer_V2S = mkV2S (regV "ขาน") [] ; ---- prep
 --  apartment_N = regN "apartment" ;
---  apple_N = regN "apple" ;
+  apple_N = mkN (thbind "แอป" "เิ้ปล") "ลูก" ;
 --  art_N = regN "art" ;
   ashes_N = mkN (thword "เถ้า") ;
   ask_V2Q = regV "ถาน" ** {c2 = []} ;
@@ -24,7 +24,7 @@ lin
 --  bank_N = regN "bank" ;
   bark_N = mkN (thword "เปลือก") ;
 --  beautiful_A = regADeg "beautiful" ;
---  become_VA = mkVA (irregV "become" "became" "become") ;
+  become_VA = mkVA (regV "กลาย") ; -- pen
   beer_N = mkN biar_s kew_s ; 
   beg_V2V = regV "ขอ" ** {c2 = []} ;
   belly_N = mkN (thword "พุง") ;
@@ -42,7 +42,7 @@ lin
 --  boot_N = regN "boot" ;
 --  boss_N = regN "boss" ;
 --  boy_N = regN "boy" ;
---  bread_N = regN "bread" ;
+  bread_N = mkN (thword "ขนม" "ปัง") "ห่อ" ;
 --  break_V2 = dirV2 (irregV "break" "broke" "broken") ;
   breast_N = mkN (thword "นม") ;
   breathe_V = mkV (thword "หาย" "ใจ") ;
@@ -54,12 +54,12 @@ lin
 --  buy_V2 = dirV2 (irregV "buy" "bought" "bought") ;
 --  camera_N = regN "camera" ;
 --  cap_N = regN "cap" ;
---  car_N = regN "car" ;
+  car_N = mkN "รถ" "คัน" ;
 --  carpet_N = regN "carpet" ;
 --  cat_N = regN "cat" ;
 --  ceiling_N = regN "ceiling" ;
 --  chair_N = regN "chair" ;
---  cheese_N = regN "cheese" ;
+  cheese_N = mkN (thword "เนย" "แข็ง") "ก้อน" ; 
   child_N = mkN (thword "เด็ก") ;
 --  church_N = regN "church" ;
   city_N = mkN "นคร" "แห่ง" ;
@@ -196,7 +196,7 @@ lin
   man_N = personN (thword "ชาย") ;
   married_A2 = mkA2 (mkA (thword "แต่ง" "งัน" "แล้ว")) "กับ" ;
   meat_N = mkN (thword "เนื้อ") ;
---  milk_N = regN "milk" ;
+  milk_N = mkN (thword "นาม" "นม") kew_s ;
   moon_N = mkN (thword "เดือน") ;
   mother_N2 = personN "แม่" ** {c2 = []} ;
   mountain_N = mkN (thword "เขา") ;
@@ -211,7 +211,7 @@ lin
 --  newspaper_N = regN "newspaper" ;
   night_N = mkN (thword "กลาง" "คืน") ;
   nose_N = mkN (thword "จมูก") ;
---  now_Adv = mkAdv "now" ;
+  now_Adv = mkAdv (thword "เดี่ยว" "นี้") ;
 --  number_N = regN "number" ;
 --  oil_N = regN "oil" ;
   old_A = mkA (thword "แก่") ;
@@ -237,11 +237,13 @@ lin
 --  queen_N = regN "queen" ;
 --  radio_N = regN "radio" ;
   rain_N = mkN (thword "ฝน") ;
---  rain_V0 = mkV0 (regV "rain") ;
+  rain_V0 = mkV "มี" "ฝน" ; ----
+  ready_A = mkA "พร้อม" ;
+  reason_N = verbalN "เหตู" ;
 --  read_V2 = dirV2 (irregV "read" "read" "read") ;
   red_A = mkA (thword "แดง") ;
 --  religion_N = regN "religion" ;
---  restaurant_N = regN "restaurant" ;
+  restaurant_N = placeN "เหลา" ;
 --  right_Ord = ss "right" ;
   river_N = mkN (thword "แม่" "น้ำ") ;
   road_N = mkN (thword "ทาง") ;
@@ -254,11 +256,11 @@ lin
   rub_V2 = mkV2 (thword "ถู") ;
 --  rubber_N = regN "rubber" ;
 --  rule_N = regN "rule" ;
---  run_V = (irregDuplV "run" "ran" "run") ;
+  run_V = mkV "วิง" ;
   salt_N = mkN (thword "เกลือ") ;
   sand_N = mkN (thword "ทราย") ;
----  say_VS = lin VS (mkV (thword "พูด")) ;
---  school_N = regN "school" ;
+  say_VS = mkVS (regV ("ว่า")) ;
+  school_N = placeN (thword "อาศ" "รม") ;
 --  science_N = regN "science" ;
   scratch_V2 = mkV2 (thword "เกา") ;
   sea_N = mkN (thword "ทะ" "เล") ;
@@ -273,7 +275,7 @@ lin
 --  ship_N = regN "ship" ;
 --  shirt_N = regN "shirt" ;
 --  shoe_N = regN "shoe" ;
---  shop_N = regN "shop" ;
+  shop_N = placeN (thword "ร้าน" "ค้า") ;
   short_A = mkA (thword "สั้น") ;
 --  silver_N = regN "silver" ;
   sing_V = mkV (thword "ร้อง") ;
@@ -290,7 +292,7 @@ lin
   snow_N = mkN (thword "หิมะ") ;
 --  sock_N = regN "sock" ;
 --  song_N = regN "song" ;
---  speak_V2 = dirV2 (irregV "speak" "spoke" "spoken") ;
+  speak_V2 = mkV2 "พูด" ;
   spit_V = mkV (thword "ถ่ม") ;
   split_V2 = mkV2 (thword "ผ่า") ;
   squeeze_V2 = mkV2 (thword "คั้น") ;
@@ -326,13 +328,13 @@ lin
   today_Adv = ss (thword "วัน" "นี้") ;
   tongue_N = mkN (thword "ลิ้น") ;
   tooth_N = mkN (thword "ฟัน") ;
---  train_N = regN "train" ;
+  train_N = mkN (thword "รถ" "ไฟ") "ขนาน" ;
 --  travel_V = (regDuplV "travel") ;
   tree_N = mkN (thword "ไม้") ;
   turn_V = mkV (thword "หัน") ;
 --  ugly_A = regADeg "ugly" ;
---  understand_V2 = dirV2 (irregV "understand" "understood" "understood") ;
---  university_N = regN "university" ;
+  understand_V2 = mkV2 (mkV (thword "เข้า" "ไจ")) ;
+  university_N = placeN (thword "มหา" "วิ" "ฑยา" "ลัย") ;
 --  village_N = regN "village" ;
   vomit_V = mkV (thword "อ้วก") ;
 --  wait_V2 = mkV2 (regV "wait") forP ;
@@ -349,11 +351,11 @@ lin
 --  win_V2 = dirV2 (irregDuplV "win" "won" "won") ;
   wind_N = mkN (thword "ลม") ;
 --  window_N = regN "window" ;
---  wine_N = regN "wine" ;
+  wine_N = mkN (thword "เหล้าอ" "งุ่น") "ขวด" ;
   wing_N = mkN (thword "ปิก") ;
   wipe_V2 = mkV2 (thword "เช็ด") ;
   woman_N = personN (thword "หญิง") ;
---  wonder_VQ = mkVQ (regV "wonder") ;
+  wonder_VQ = mkVQ (regV (thword "ประ" "หลาด" "ไจ")) ; ----
 --  wood_N = regN "wood" ;
   worm_N = animalN (thword "หนอน") ;
 --  write_V2 = dirV2 (irregV "write" "wrote" "written") ;
