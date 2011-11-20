@@ -34,6 +34,13 @@ resource ResTha = ParamX, StringsTha ** open Prelude in {
       \s1,s2,s3,s4 -> ss (s1.s ++ bIND ++ s2.s ++ bIND ++ s3.s ++ bIND ++ s4.s) ;
     } ;
 
+  thword = overload {
+    thword : Str -> Str = \s -> s ;
+    thword : (s1,s2 : Str) -> Str = \s1,s2 -> s1 + s2 ;
+    thword : (s1,_,s3 : Str) -> Str = \s1,s2,s3 -> s1 + s2 + s3 ;
+    thword : (s1,_,_,s4 : Str) -> Str = 
+      \s1,s2,s3,s4 -> s1 + s2 + s3 + s4 ;
+    } ;
 
 -- noun and classifier
 
