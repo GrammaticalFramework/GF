@@ -6,7 +6,7 @@ concrete StructuralTha of Structural = CatTha **
   lin
   above_Prep = ss (thbind "ข้าง" "บน") ;
 --  after_Prep = ss "after" ;
---  all_Predet = ss "all" ;
+  all_Predet = ss (thbind "ทั้ง" "หมด") ;
   almost_AdA, almost_AdN = ss (thbind "เกิ" "อบ") ;
 --  although_Subj = ss "although" ;
   always_AdV = ss (thbind "ตลอด" "ไป") ;
@@ -27,16 +27,16 @@ concrete StructuralTha of Structural = CatTha **
 --  every_Det = mkDeterminer Sg "every" ;
 --  everything_NP = regNP "everything" Sg ;
 --  everywhere_Adv = ss "everywhere" ;
---  few_Det = mkDeterminer Pl "few" ;
+  few_Det = mkDet (thbind "สอง" "สาม") [] ;
 --  first_Ord = ss "first" ;
 --  for_Prep = ss "for" ;
---  from_Prep = ss "from" ;
+  from_Prep = ss "จาก" ;
   have_V2 = mkV2 "มี" ;
   he_Pron = ss khaw_s ;
---  here_Adv = ss "here" ;
+  here_Adv = ss (thbind "ที่นี่") ;
 --  here7to_Adv = ss ["to here"] ;
 --  here7from_Adv = ss ["from here"] ;
---  how_IAdv = ss "how" ;
+  how_IAdv = ss (thbind "อย่าง" "ไร") ;
 --  how8many_IDet = mkDeterminer Pl ["how many"] ;
 --  if_Subj = ss "if" ;
 --  in8front_Prep = ss ["in front of"] ;
@@ -44,7 +44,7 @@ concrete StructuralTha of Structural = CatTha **
 --  in_Prep = ss "in" ;
   it_Pron  = ss "มัน" ;
 --  less_CAdv = ss "less" ;
---  many_Det = mkDeterminer Pl "many" ;
+  many_Det = mkDet "หลาย" [] ;
 --  more_CAdv = ss "more" ;
 --  most_Predet = ss "most" ;
 --  much_Det = mkDeterminer Sg "much" ;
@@ -62,13 +62,13 @@ concrete StructuralTha of Structural = CatTha **
   she_Pron = ss khaw_s ;
 --  so_AdA = ss "so" ;
 --  somebody_NP = regNP "somebody" Sg ;
---  someSg_Det = mkDeterminer Sg "some" ;
---  somePl_Det = mkDeterminer Pl "some" ;
+  somePl_Det = mkDet ("บ้าง") [] ;
+  someSg_Det = mkDet ("บ้าง") [] ;
 --  something_NP = regNP "something" Sg ;
 --  somewhere_Adv = ss "somewhere" ;
   that_Quant = ss nan_s ** {hasC = True} ;
 --  that_NP = regNP "that" Sg ;
---  there_Adv = ss "there" ;
+  there_Adv = ss (thbind "ที่" "นั่น") ;
 --  there7to_Adv = ss "there" ;
 --  there7from_Adv = ss ["from there"] ;
 --  therefore_PConj = ss "therefore" ;
@@ -79,20 +79,20 @@ concrete StructuralTha of Structural = CatTha **
 --  those_NP = regNP "those" Pl ;
 --  through_Prep = ss "through" ;
   too_AdA = ss (thbind "เกิน" "ไป") ;
---  to_Prep = ss "to" ;
+  to_Prep = ss "ถืง" ;
 --  under_Prep = ss "under" ;
   very_AdA = ss "มาก" ;
   want_VV = {s = yaak_s ; typ = VVMid} ;
   we_Pron = ss raw_s ;
   whatPl_IP, whatSg_IP = ss (thbind "อะ" "ไร") ;
---  when_IAdv = ss "when" ;
---  when_Subj = ss "when" ;
+  when_IAdv = ss (thbind "เมื่อไร") ;
+  when_Subj = ss "ฑี" ;
   where_IAdv = ss (thbind "ฑี" "ไหน") ;
   which_IQuant = {s1 = "ไหน" ; s2 = [] ; hasC = True} ;
   whoPl_IP, whoSg_IP = ss "ไคร" ;
   why_IAdv = ss (thbind "ฑำ" "ไม") ;
---  without_Prep = ss "without" ;
---  with_Prep = ss "with" ;
+  without_Prep = ss (thbind "ไ่ม" "มี") ;
+  with_Prep = ss "กับ" ;
   yes_Utt = ss chay_s ;
   youSg_Pron = ss khun_s ;
   youPl_Pron = ss khun_s ;
@@ -105,24 +105,12 @@ concrete StructuralTha of Structural = CatTha **
 --    } ;
 --
 
--- from Swadesh
-  here_Adv = ss (thbind "ที่นี่") ;
-  there_Adv = ss (thbind "ที่นั่น") ;
-  when_IAdv = ss (thbind "เมื่อไร") ;
-  how_IAdv = ss (thbind "อย่างไร") ;
-  all_Predet = ss (thbind "ทั้ง" "หมด") ;
-  many_Det = {s1 = thbind "หลาย" ; s2 = [] ; hasC = True} ;
-  some_Det = {s1 = thbind "บ้าง" ; s2 = [] ; hasC = True} ;
-  few_Det = {s1 = thbind "สอง" "สาม" ; s2 = [] ; hasC = True} ;
   right_Ord = ss (thbind "ขวา") ;
   left_Ord = ss (thbind "ซ้าย") ;
   at_Prep = ss (thbind "ที่") ;
   in_Prep = ss (thbind "ใน") ;
-  with_Prep = ss (thbind "กับ") ;
---  and_N = mkN (thbind "และ") ;
   if_Subj = ss (thbind "ถ้า") ;
   because_Subj = ss (thbind "เพราะ") ;
-  name_N = mkN (thbind "ชื่อ") ;
 
 }
 
