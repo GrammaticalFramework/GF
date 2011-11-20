@@ -16,9 +16,8 @@ lin
 --  apartment_N = regN "apartment" ;
 --  apple_N = regN "apple" ;
 --  art_N = regN "art" ;
-  ash_N = mkN (thbind "เถ้า") ;
---  ashes_N = regN "ash" ;  FIXME: plural only?
---  ask_V2Q = mkV2Q (regV "ask") noPrep ;
+  ashes_N = mkN (thbind "เถ้า") ;
+  ask_V2Q = regV "ถาน" ** {c2 = []} ;
 --  atP = mkPrep "at" ;
 --  baby_N = regN "baby" ;
   back_N = mkN (thbind "หลัง") ;
@@ -27,8 +26,8 @@ lin
   bark_N = mkN (thbind "เปลือก") ;
 --  beautiful_A = regADeg "beautiful" ;
 --  become_VA = mkVA (irregV "become" "became" "become") ;
---  beer_N = mkN biar_s kew_s ; 
---  beg_V2V = mkV2V (regDuplV "beg") noPrep toP ;
+  beer_N = mkN biar_s kew_s ; 
+  beg_V2V = regV "ขอ" ** {c2 = []} ;
   belly_N = mkN (thbind "พุง") ;
   big_A = mkA (thbind "ใหญ่") ;
 --  bike_N = regN "bike" ;
@@ -40,7 +39,7 @@ lin
 --  blue_A = regADeg "blue" ;
 --  boat_N = regN "boat" ;
   bone_N = mkN (thbind "กระดูก") ;
---  book_N = mkN (nag_s ++ svv_s) lem_s ;
+  book_N = mkN (thbind nag_s svv_s) lem_s ;
 --  boot_N = regN "boot" ;
 --  boss_N = regN "boss" ;
 --  boy_N = regN "boy" ;
@@ -64,7 +63,7 @@ lin
 --  cheese_N = regN "cheese" ;
   child_N = mkN (thbind "เด็ก") ;
 --  church_N = regN "church" ;
---  city_N = regN "city" ;
+  city_N = mkN "นคร" "แห่ง" ;
 --  clean_A = regADeg "clean" ;
 --  clever_A = regADeg "clever" ;
 --  close_V2 = dirV2 (regV "close") ;
@@ -139,7 +138,7 @@ lin
 --  girl_N = regN "girl" ;
 ---  give_V3 = mkV3 (thbind "ให้") ;
 --  glove_N = regN "glove" ;
---  go_V = regV pay_s ;
+  go_V = regV pay_s ;
 --  gold_N = regN "gold" ;
   good_A = mkA (thbind "ดี") ;
 --  grammar_N = regN "grammar" ;
@@ -164,7 +163,7 @@ lin
   horn_N = mkN (thbind "เขา") ;
 --  horse_N = regN "horse" ;
 --  hot_A = duplADeg "hot" ;
---  house_N = mkN baan_s lag_s ;
+  house_N = mkN baan_s lag_s ;
   how_IAdv = ss (thbind "อย่างไร") ;
   hunt_V2 = mkV2 (thbind "ล่า") ;
   husband_N = personN (thbind "ผัว") ;
@@ -176,7 +175,7 @@ lin
   john_PN = ss "จน" ;
 --  jump_V = regV "jump" ;
   kill_V2 = mkV2 (thbind "ฆ่า") ;
---  king_N = regN "king" ;
+  king_N = mkN (thbind "พระ" "รา" "ชา") (thbind "พระ" "องด์") ;
   knee_N = mkN (thbind "เข่า") ;
   know_V2 = mkV2 "รู้" ; -----
   know_VQ = lin VQ (regV "รู้") ; -----
@@ -200,15 +199,14 @@ lin
 --  lose_V2 = dirV2 (irregV "lose" "lost" "lost") ;
   louse_N = animalN (thbind "เล็น") ;
 --  love_N = regN "love" ;
---  love_V2 = mkV2 rak_s ;
+  love_V2 = mkV2 rak_s ;
   man_N = personN (thbind "ชาย") ;
   many_Det = mkN (thbind "หลาย") ;
 --  married_A2 = mkA2 (regA "married") toP ;
   meat_N = mkN (thbind "เนื้อ") ;
 --  milk_N = regN "milk" ;
   moon_N = mkN (thbind "เดือน") ;
-  mother_N = personN (thbind "แม่") ;
---  mother_N2 = regN2 "mother" ;
+  mother_N2 = personN "แม่" ** {c2 = []} ;
   mountain_N = mkN (thbind "เขา") ;
   mouth_N = mkN (thbind "ปาก") ;
 --  music_N = regN "music" ;
@@ -230,7 +228,7 @@ lin
   other_A = mkA (thbind "อื่น") ;
 --  paint_V2A = mkV2A (regV "paint") noPrep ;
 --  paper_N = regN "paper" ;
---  paris_PN = regPN "Paris" ;
+  paris_PN = ss "ปารีส" ;
 --  peace_N = regN "peace" ;
 --  pen_N = regN "pen" ;
 --  person_N = genderN human (regN "person") ;
@@ -276,9 +274,8 @@ lin
   seed_N = mkN (thbind "เม็ด") ;
 --  seek_V2 = dirV2 (irregV "seek" "sought" "sought") ;
 --  sell_V3 = dirV3 (irregV "sell" "sold" "sold") toP ;
---  send_V3 = dirV3 (irregV "send" "sent" "sent") toP ;
---  sew_V = sew_V ;
-  sew_V2 = mkV2 (thbind "เย็บ") ;
+  send_V3 = regV "ส่ง" ** {c2,c3 = []} ; ---- prep
+  sew_V = mkV (thbind "เย็บ") ;
   sharp_A = mkA (thbind "คม") ;
 --  sheep_N = mk2N "sheep" "sheep" ;
 --  ship_N = regN "ship" ;
@@ -315,7 +312,7 @@ lin
 --  stop_V = regDuplV "stop" ;
 --  stove_N = regN "stove" ;
   straight_A = mkA (thbind "ดิ่ง") ;
---  student_N = regN "student" ;
+  student_N = personN (thbind "นัก" "สืก" "สา") ;
 --  stupid_A = regADeg "stupid" ;
   suck_V2 = mkV2 (thbind "ดูด") ;
   sun_N = mkN (thbind "ตะ" "วัน") ;
