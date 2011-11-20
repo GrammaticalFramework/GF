@@ -9,7 +9,6 @@ flags
 lin
 --  add_V3 = dirV3 (regV "add") toP ;
 --  airplane_N = regN "airplane" ;
-  all_Predet = ss (thbind "ทั้ง" "หมด") ;
 --  already_Adv = mkAdv "already" ;
   animal_N = animalN (thbind "สัตว์") ;
 --  answer_V2S = mkV2S (regV "answer") toP ;
@@ -80,10 +79,9 @@ lin
   cut_V2 = mkV2 (thbind "ตัด") ;
   day_N = mkN (thbind "กลาง" "วัน") ;
   die_V = mkV (thbind "ตาย") ;
---  dig_V = dig_V ;
-  dig_V2 = mkV2 (thbind "ขุด") ;
+  dig_V = mkV (thbind "ขุด") ;
   dirty_A = mkA (thbind "สก" "ปรก") ;
---  distance_N3 = mkN3 (regN "distance") fromP toP ;
+  distance_N3 = mkN3 (mkN (thbind "ระ" "ยะ" "ฑาง")) "จาก" "ถืง" ;
 --  do_V2 = dirV2 (mkV "do" "does" "did" "done" "doing") ;
 --  doctor_N = regN "doctor" ;
   dog_N = animalN (thbind "หมา") ;
@@ -104,15 +102,12 @@ lin
   fall_V = mkV (thbind "ตก") ;
   far_Adv = ss (thbind "ไกล") ;
   fat_N = mkN (thbind "มัน") ;
-  father_N = personN (thbind "พ่อ") ;
---  father_N2 = regN2 "father" ;
-  fear_N = mkN (thbind "กลัว") ;
+  father_N2 = mkN2 (personN (thbind "พ่อ")) [] ;
+---  fear_N = mkN (thbind "กลัว") ;
 --  fear_V2 = dirV2 (regV "fear") ;
 --  fear_VS = mkVS (regV "fear") ;
   feather_N = mkN (thbind "ขน") ;
-  few_Det = mkN (thbind "สองสาม") ;
-  fight_V = mkV (thbind "สู้") ;
---  fight_V2 = dirV2 fight_V ;
+  fight_V2 = mkV2 (thbind "สู้") ;
 --  find_V2 = dirV2 (irregV "find" "found" "found") ;
   fingernail_N = mkN (thbind "เล็บ") ;
   fire_N = mkN (thbind "ไฟ") ;
@@ -155,7 +150,6 @@ lin
   hear_V2 = mkV2 (thbind "ยิน") ;
   heart_N = mkN (thbind "ใจ") ;
   heavy_A = mkA (thbind "หนัก") ;
-  here_Adv = ss (thbind "ที่นี่") ;
 --  hill_N = regN "hill" ;
   hit_V2 = mkV2 (thbind "ตี") ;
   hold_V2 = mkV2 (thbind "อุ้ม") ;
@@ -164,7 +158,6 @@ lin
 --  horse_N = regN "horse" ;
 --  hot_A = duplADeg "hot" ;
   house_N = mkN baan_s lag_s ;
-  how_IAdv = ss (thbind "อย่างไร") ;
   hunt_V2 = mkV2 (thbind "ล่า") ;
   husband_N = personN (thbind "ผัว") ;
   ice_N = mkN (thbind "น้ำ" "แข็ง") ;
@@ -201,8 +194,7 @@ lin
 --  love_N = regN "love" ;
   love_V2 = mkV2 rak_s ;
   man_N = personN (thbind "ชาย") ;
-  many_Det = mkN (thbind "หลาย") ;
---  married_A2 = mkA2 (regA "married") toP ;
+  married_A2 = mkA2 (mkA (thbind "แต่ง" "งัน" "แล้ว")) "กับ" ;
   meat_N = mkN (thbind "เนื้อ") ;
 --  milk_N = regN "milk" ;
   moon_N = mkN (thbind "เดือน") ;
@@ -210,10 +202,10 @@ lin
   mountain_N = mkN (thbind "เขา") ;
   mouth_N = mkN (thbind "ปาก") ;
 --  music_N = regN "music" ;
---  name_N = regN "name" ;
+  name_N = mkN (thbind "ชื่อ") ;
   narrow_A = mkA (thbind "แคบ") ;
 --  near_A = regA "near" ;
-  near_Adv = ss (thbind "ใกล้") ;
+---  near_Adv = ss (thbind "ใกล้") ;
   neck_N = mkN (thbind "คอ") ;
   new_A = mkA (thbind "ใหม่") ;
 --  newspaper_N = regN "newspaper" ;
@@ -225,8 +217,8 @@ lin
   old_A = mkA (thbind "แก่") ;
 --  onP = mkPrep "on" ;
 --  open_V2 = dirV2 (regV "open") ;
-  other_A = mkA (thbind "อื่น") ;
---  paint_V2A = mkV2A (regV "paint") noPrep ;
+---  other_A = mkA (thbind "อื่น") ;
+  paint_V2A = mkV2A (regV "ปาย") [] ;
 --  paper_N = regN "paper" ;
   paris_PN = ss "ปารีส" ;
 --  peace_N = regN "peace" ;
@@ -297,7 +289,6 @@ lin
   snake_N = animalN (thbind "งู") ;
   snow_N = mkN (thbind "หิมะ") ;
 --  sock_N = regN "sock" ;
-  some_Det = mkN (thbind "บ้าง") ;
 --  song_N = regN "song" ;
 --  speak_V2 = dirV2 (irregV "speak" "spoke" "spoken") ;
   spit_V = mkV (thbind "ถ่ม") ;
@@ -326,7 +317,6 @@ lin
 --  teach_V2 = dirV2 (irregV "teach" "taught" "taught") ;
 --  teacher_N = regN "teacher" ;
 --  television_N = regN "television" ;
-  there_Adv = ss (thbind "ที่นั่น") ;
   thick_A = mkA (thbind "หนา") ;
   thin_A = mkA (thbind "บาง") ;
   think_V = mkV (thbind "คิด") ;
@@ -353,7 +343,6 @@ lin
 --  watch_V2 = dirV2 (regV "watch") ;
   water_N = mkN (thbind "น้ำ") ;
   wet_A = mkA (thbind "เปียก") ;
-  when_IAdv = ss (thbind "เมื่อไร") ;
   white_A = mkA (thbind "ขาว") ;
   wide_A = mkA (thbind "กว้าง") ;
   wife_N = personN (thbind "เมีย") ;
