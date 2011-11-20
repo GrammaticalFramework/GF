@@ -19,16 +19,16 @@ concrete FoodsThai of Foods = open SyntaxTha, LexiconTha,
 		Those kind = mkNP those_Det kind ;
 		Mod quality kind = mkCN quality kind ;
 		Very quality = mkAP very_AdA quality ;
-		Wine = mkCN (mkN (R.thbind "เหล้าอ" "งุ่น") "ขวด") ;
-                Pizza = mkCN (mkN (R.thbind "พิซ" "ซา") "ถาด") ;
-                Cheese = mkCN (mkN (R.thbind "เนย" "แข็ง") "ก้อน") ;
+		Wine = mkCN (mkN (R.thword "เหล้าอ" "งุ่น") "ขวด") ;
+                Pizza = mkCN (mkN (R.thword "พิซ" "ซา") "ถาด") ;
+                Cheese = mkCN (mkN (R.thword "เนย" "แข็ง") "ก้อน") ;
                 Fish = mkCN fish_N ;
                 Fresh = mkAP (mkA "สด") ;
                 Warm = mkAP warm_A ;
                 Italian = mkAP (mkA " อิตาลี") ;
                 Expensive = mkAP (mkA "แพง") ;
                 Delicious = mkAP (mkA "อร่อย") ;
-                Boring = mkAP (mkA (R.thbind "น่า" "เบิ่อ")) ;
+                Boring = mkAP (mkA (R.thword "น่า" "เบิ่อ")) ;
 
 }
 
