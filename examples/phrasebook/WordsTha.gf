@@ -2,6 +2,7 @@ concrete WordsTha of Words = SentencesTha **
     open 
       SyntaxTha,
       ParadigmsTha,
+      (P = ParadigmsTha),
       (R = ResTha),
       (L = LexiconTha),
       Prelude in {
@@ -12,30 +13,30 @@ concrete WordsTha of Words = SentencesTha **
 
 -- Kinds; many of them are in the resource lexicon, others can be built by $mkN$.
 
---    Apple = mkCN L.apple_N ;
+    Apple = mkCN L.apple_N ;
     Beer = mkCN L.beer_N ;
---    Bread = mkCN L.bread_N ;
---    Cheese = mkCN (mkN "จหเเสเ") ;
+    Bread = mkCN L.bread_N ;
+    Cheese = mkCN L.cheese_N ;
 --    Chicken = mkCN (mkN "จหิจกเน") ;
 --    Coffee = mkCN (mkN "จoฝฝเเ") ;
---    Fish = mkCN L.fish_N ;
---    Meat = mkCN (mkN "มเัต") ;
---    Milk = mkCN L.milk_N ;
---    Pizza = mkCN (mkN "ปิzzั") ;
+    Fish = mkCN L.fish_N ;
+    Meat = mkCN L.meat_N ;
+    Milk = mkCN L.milk_N ;
+    Pizza = mkCN (mkN (R.thword "พิซ" "ซา") "ถาด") ;
     Salt = mkCN L.salt_N ;
 --    Tea = mkCN (mkN "ตเั") ;
     Water = mkCN L.water_N ;
---    Wine = mkCN L.wine_N ;
+    Wine = mkCN L.wine_N ;
 
 -- Properties; many of them are in the resource lexicon, others can be built by $mkA$.
 
     Bad = L.bad_A ;
---    Boring = mkA "บoรินง" ;
+    Boring = mkA (R.thword "น่า" "เบิ่อ") ;
 --    Cheap = mkA "จหเัป" ;
     Cold = L.cold_A ;
     Delicious = mkA "อร่อย" ;
     Expensive = mkA "แพง" ;
---    Fresh = mkA "ฝรเสห" ;
+    Fresh = mkA "สด" ;
     Good = mkA "ดี" ;
 --    Suspect = mkA "สุสปเจต" ;
     Warm = L.warm_A ;
@@ -61,14 +62,14 @@ concrete WordsTha of Words = SentencesTha **
 --    Pharmacy = mkPlace "ปหัรมัจย" "ัต" ;
 --    PostOffice = mkCompoundPlace "ปoสต" "oฝฝิจเ" "ัต" ;
 --    Pub = mkPlace "ปุบ" "ัต" ;
---    Restaurant = mkPlace "รเสตัุรันต" "ิน" ;
---    School = mkPlace "สจหooล" "ัต" ;
---    Shop = mkPlace "สหoป" "ัต" ;
+    Restaurant = mkPlace L.restaurant_N at_Prep ;
+    School = mkPlace L.school_N at_Prep ;
+    Shop = mkPlace L.shop_N at_Prep ;
 --    Station = mkPlace "สตัติoน" "ัต" ;
 --    Supermarket = mkPlace "สุปเรมัรกเต" "ัต" ; 
 --    Theatre = mkPlace "ตหเัตรเ" "ัต" ;
 --    Toilet = mkPlace "ตoิลเต" "ิน" ;
---    University = mkPlace "ุนิึเรสิตย" "ัต" ;
+    University = mkPlace L.university_N at_Prep ;
 --    Zoo = mkPlace "zoo" "ัต" ;
    
 --    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "รเสตัุรันต")) in_Prep to_Prep ;
@@ -110,14 +111,14 @@ concrete WordsTha of Words = SentencesTha **
 
 -- Means of transportation 
 
---   Bike = mkTransport L.bike_N ;
+   Bike = mkTransport L.bike_N ;
 --   Bus = mkTransport (mkN "บุส") ;
---   Car = mkTransport L.car_N ;
+   Car = mkTransport L.car_N ;
 --   Ferry = mkTransport (mkN "ฝเรรย") ;
---   Plane = mkTransport L.airplane_N ;
+   Plane = mkTransport L.airplane_N ;
 --   Subway = mkTransport (mkN "สุบวัย") ;
 --   Taxi = mkTransport (mkN "ตัxิ") ;
---   Train = mkTransport (mkN "ตรัิน") ;
+   Train = mkTransport L.train_N ;
 --   Tram = mkTransport (mkN "ตรัม") ;
 
 --   ByFoot = P.mkAdv "บย ฝooต" ;
@@ -130,36 +131,36 @@ concrete WordsTha of Words = SentencesTha **
 --      (mkNP (mkNP a_Det (mkN "รooม")) (SyntaxTha.mkAdv for_Prep (mkNP num (mkN "ปเรสoน")))) ;
 --    AHasTable p num = mkCl p.name have_V2 
 --      (mkNP (mkNP a_Det (mkN "ตับลเ")) (SyntaxTha.mkAdv for_Prep (mkNP num (mkN "ปเรสoน")))) ;
---    AHasName p name = mkCl (nameOf p) name ;
---    AHungry p = mkCl p.name (mkA "หุนงรย") ;
---    AIll p = mkCl p.name (mkA "ิลล") ;
---    AKnow p = mkCl p.name (lin V L.know_V2) ;
+    AHasName p name = mkCl (nameOf p) name ;
+    AHungry p = mkCl p.name (mkA (R.thword "หิว" "ข้าว")) ;
+    AIll p = mkCl p.name (mkA (R.thword "เจ็บ่" "ปวย")) ;
+    AKnow p = mkCl p.name <lin V L.know_V2 : V> ;
 --    ALike p item = mkCl p.name (mkV2 (mkV "ลิกเ")) item ;
 --    ALive p co = mkCl p.name (mkVP (mkVP (mkV "ลิึเ")) (SyntaxTha.mkAdv in_Prep co)) ;
     ALove p q = mkCl p.name L.love_V2 q.name ;
---    AMarried p = mkCl p.name (mkA "มัรริเด") ;
---    AReady p = mkCl p.name (mkA "รเัดย") ;
+    AMarried p = mkCl p.name (mkAP L.married_A2) ;
+    AReady p = mkCl p.name L.ready_A ;
 --    AScared p = mkCl p.name (mkA "สจัรเด") ;
---    ASpeak p lang = mkCl p.name  (mkV2 IrregTha.speak_V) lang ;
+    ASpeak p lang = mkCl p.name L.speak_V2 lang ;
 --    AThirsty p = mkCl p.name (mkA "ตหิรสตย") ;
 --    ATired p = mkCl p.name (mkA "ติรเด") ;
---    AUnderstand p = mkCl p.name IrregTha.understand_V ;
---    AWant p obj = mkCl p.name (mkV2 (mkV "วันต")) obj ;
---    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP IrregTha.go_V) place.to) ;
+    AUnderstand p = mkCl p.name (mkV (R.thword "เข้า" "ไจ")) ;
+    AWant p obj = mkCl p.name (mkV2 (mkV "วันต")) obj ;
+    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
 
 -- miscellaneous
 
---    QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
+    QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
 --    QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
 --    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregTha.cost_V)) ; 
 --    ItCost item price = mkCl item (mkV2 IrregTha.cost_V) price ;
 
---    PropOpen p = mkCl p.name open_Adv ;
---    PropClosed p = mkCl p.name closed_Adv ;
---    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_Adv) d) ; 
---    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_Adv) d) ; 
---    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_Adv) d.habitual) ; 
---    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_Adv) d.habitual) ; 
+    PropOpen p = mkCl p.name open_Adv ;
+    PropClosed p = mkCl p.name closed_Adv ;
+    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_Adv) d) ; 
+    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_Adv) d) ; 
+    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_Adv) d.habitual) ; 
+    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_Adv) d.habitual) ; 
 
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
@@ -178,7 +179,7 @@ concrete WordsTha of Words = SentencesTha **
     Husband = xOf "ผัว" ; ---- familiar
     Son = xOf (R.thbind "ลูก จาย") ;
     Daughter = xOf  (R.thbind "ลูก สาว") ;
---    Children = xOf plur L.child_N ;
+    Children = xOf L.child_N.s ; ----
 
 -- week days
 
@@ -194,14 +195,14 @@ concrete WordsTha of Words = SentencesTha **
 
 -- modifiers of places
 
---    TheBest = mkSuperl L.good_A ;
+    TheBest = mkSuperl L.good_A ;
 --    TheClosest = mkSuperl L.near_A ; 
 --    TheCheapest = mkSuperl (mkA "จหเัป") ;
---    TheMostExpensive = mkSuperl (mkA "เxปเนสิึเ") ;
+    TheMostExpensive = mkSuperl (mkA "แพง") ;
 --    TheMostPopular = mkSuperl (mkA "ปoปุลัร") ;
---    TheWorst = mkSuperl L.bad_A ;
+    TheWorst = mkSuperl L.bad_A ;
 
---    SuperlPlace sup p = placeNP sup p ;
+    SuperlPlace sup p = placeNP sup p ;
 
 
 -- transports
@@ -213,11 +214,11 @@ concrete WordsTha of Words = SentencesTha **
 --      mkQS (mkQCl far_IAdv (mkCl y.name (SyntaxTha.mkAdv from_Prep (mkNP x.name t)))) ;
 --    HowFarBy y t = mkQS (mkQCl far_IAdv (mkCl y.name t)) ;
  
---    WhichTranspPlace trans place = 
---      mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
+    WhichTranspPlace trans place = 
+      mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
---    IsTranspPlace trans place =
---      mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
+    IsTranspPlace trans place =
+      mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
 
 
 
@@ -233,29 +234,27 @@ concrete WordsTha of Words = SentencesTha **
 --      mkNPDay day (SyntaxTha.mkAdv on_Prep day) 
 --        (SyntaxTha.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
     
---    mkCompoundPlace : Str -> Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \comp, p, i ->
---     mkCNPlace (mkCN (P.mkN comp (mkN p))) (P.mkPrep i) to_Prep ;
+    mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i -> 
+      mkCNPlace (mkCN p) i to_Prep ;
 
---    mkPlace : Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i -> 
---      mkCNPlace (mkCN (mkN p)) (P.mkPrep i) to_Prep ;
-
---    open_Adv = P.mkAdv "oปเน" ;
---    closed_Adv = P.mkAdv "จลoสเด" ;
+    open_Adv = P.mkAdv "เปิด" ;
+    closed_Adv = P.mkAdv "ปิด" ;
 
     xOf : Str -> NPPerson -> NPPerson = \f,p -> 
-      {name = mkNP the_Det (mkCN (personN f) (mkAdv possess_Prep p.name)) ; isPron = False ; poss = the_Quant} ; ---- poss not used
+      {name = mkNP the_Det (mkCN (personN f) (SyntaxTha.mkAdv possess_Prep p.name)) ; 
+       isPron = False ; poss = the_Quant} ; ---- poss not used
 
---    nameOf : NPPerson -> NP = \p -> (xOf L.name_N p).name ;
+    nameOf : NPPerson -> NP = \p -> (xOf L.name_N.s p).name ;
 
 
---    mkTransport : N -> {name : CN ; by : Adv} = \n -> {
---      name = mkCN n ; 
---      by = SyntaxTha.mkAdv by8means_Prep (mkNP n)
---      } ;
+    mkTransport : N -> {name : CN ; by : Adv} = \n -> {
+      name = mkCN n ; 
+      by = SyntaxTha.mkAdv by8means_Prep (mkNP n)
+      } ;
 
---    mkSuperl : A -> Det = \a -> SyntaxTha.mkDet the_Art (SyntaxTha.mkOrd a) ;
+    mkSuperl : A -> Det = \a -> SyntaxTha.mkDet the_Art (SyntaxTha.mkOrd a) ;
     
 --   far_IAdv = ExtraTha.IAdvAdv (ss "ฝัร") ;
 
---}
+  at_Prep = mkPrep "ที่" ;
 }
