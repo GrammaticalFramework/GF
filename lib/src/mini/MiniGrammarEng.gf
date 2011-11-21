@@ -1,4 +1,4 @@
---# -path=.:alltenses
+--# -path=.:full:alltenses
 
 concrete MiniGrammarEng of MiniGrammar = LexiconEng, GrammarEng [
 
@@ -49,6 +49,7 @@ concrete MiniGrammarEng of MiniGrammar = LexiconEng, GrammarEng [
     TTAnt, -- Tense -> Ant -> Temp ;
     PPos, PNeg, -- Pol,
     TPres, TPast, TFut, TCond, -- Tense,
+       STense, SCond, SFut, SPast, SPres, -- scand tense
     ASimul, AAnter,
 
     and_Conj, or_Conj, -- Conj,
@@ -122,7 +123,7 @@ lin
    ComplV2 v np = mkVP v np ;
    ModCN ap cn = lin CN (mkCN <lin AP ap : AP> <lin CN cn : CN>) ;
    CompAP ap = mkVP (lin AP ap) ;
-   ConjS co x y = mkS co x y ;
+   ConjS co x y = mkS (lin Conj co) (lin S x) (lin S y) ;
    ConjAP co x y = mkAP co x y ;
    ConjNP co x y = mkNP co x y ;
    a_Det = mkDet a_Quant ;
@@ -139,9 +140,8 @@ lin
    youPl_NP = S.youPl_NP ;
    they_NP = S.they_NP ;
 --   SubjS s subj s = mkS s (mkAdv subj s) ;
-   CompAdv adv = mkVP adv ;
+   CompAdv adv = mkVP (lin Adv adv) ;
 --   SlashV2 np v2 = mkClSlash np v2 ;
-   SlashPrep cl p = mkClSlash cl p ;
-   AdvCN cn p pp = mkCN <lin CN cn : CN> (mkAdv p pp) ;
-
+   SlashPrep cl p = mkClSlash (lin Cl cl) <p : Prep> ;
+   AdvCN cn p pp = mkCN <lin CN cn : CN> (mkAdv <p : Prep> <pp : NP>) ;
 }

@@ -1,6 +1,12 @@
 src = "Eng"
-langs = ["Afr","Bul","Cat","Dan","Dut","Fin","Fre","Ger","Ita",
-         "Nep","Nor","Pes","Pol","Pnb","Ron","Rus","Spa","Swe","Urd"]
+langs = [
+  "Afr", "Bul", "Cat","Dan","Dut",
+  "Fin","Fre","Ger","Ita", -- "Lav",
+  "Nep","Nor","Pes","Pol","Pnb",
+  --- "Ron",
+  "Rus","Spa","Swe","Tha",
+  "Urd"
+  ]
 
 file lng = "MiniGrammar" ++ lng ++ ".gf"
 
