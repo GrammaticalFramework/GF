@@ -990,6 +990,7 @@ function inError(msg,el) {
 function kw(txt) { return wrap_class("span","kw",text(txt)); }
 function sep(txt) { return wrap_class("span","sep",text(txt)); }
 function ident(txt) { return wrap_class("span","ident",text(txt)); }
+function unimportant(txt) { return wrap_class("small","unimportant",text(txt)); }
 function indent(cs) { return div_class("indent",cs); }
 
 function indent_sortable(cs,sort) {

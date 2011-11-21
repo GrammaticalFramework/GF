@@ -31,10 +31,10 @@ function upload(g) {
 	var form=node("form",{method:"post",action:"/cloud"},
 		      [hidden("dir",dir),hidden("command","make"),
 		       hidden(g.basename+".gf",show_abstract(g))])
-	var files = [g.basename+".gf"]
+	//var files = [g.basename+".gf"]
 	for(var i in g.concretes) {
 	    var cname=g.basename+g.concretes[i].langcode+".gf";
-	    files.push(cname);
+	    //files.push(cname);
 	    form.appendChild(hidden(cname,
 				    show_concrete(g.basename)(g.concretes[i])));
 	}
