@@ -1,5 +1,3 @@
---# -path=.:alltenses
-
 abstract MiniGrammar = Lexicon, Grammar [
 
 -- the "mini" resource of GF book, chapter 9
@@ -130,9 +128,9 @@ fun
    this_Det, these_Det : Det ;
    that_Det, those_Det : Det ;
    i_NP, youSg_NP, he_NP, she_NP, we_NP, youPl_NP, they_NP : NP ;
-   SubjS   : S -> Subj -> S -> S ;     -- she walks because we run
+--   SubjS   : S -> Subj -> S -> S ;     -- she walks because we run
    CompAdv : Adv -> VP ;          -- be here
-   SlashV2 : NP -> V2 -> ClSlash ;   -- she loves
+--   SlashV2 : NP -> V2 -> ClSlash ;   -- she loves
    SlashPrep : Cl -> Prep -> ClSlash ; -- she walks with
    AdvCN : CN -> Prep -> NP -> CN ; -- man in the city
 

@@ -3,9 +3,9 @@ RUNMAKE=$(RUNGHC) Make.hs
 
 GF_LIB_PATH=..
 
-.PHONY: all present alltenses lang api math prelude test demo parse synopsis link compiled constructX clean
+.PHONY: all present alltenses full lang api math prelude test demo parse synopsis link compiled constructX clean
 
-all: link prelude constructX present alltenses
+all: link prelude constructX present alltenses full
 
 present:
 	$(RUNMAKE) present lang
@@ -13,15 +13,18 @@ present:
 	$(RUNMAKE) present symbolic
 
 alltenses: 
+	$(RUNMAKE) alltenses lang
+	$(RUNMAKE) alltenses api
+	$(RUNMAKE) alltenses symbolic
+
+full: 
 	$(RUNMAKE) lang
-	$(RUNMAKE) api
-	$(RUNMAKE) symbolic
 
 lang:
-	$(RUNMAKE) lang
+	$(RUNMAKE) alltenses lang
 
 api:
-	$(RUNMAKE) api
+	$(RUNMAKE) alltenses api
 
 compatibility:
 	$(RUNMAKE) present compat

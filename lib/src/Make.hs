@@ -8,7 +8,7 @@ import System.Environment
 import System.Exit
 
 -- Make commands for compiling and testing resource grammars.
--- usage: runghc Make ((present? OPT?) | (clone FILE))? LANGS? 
+-- usage: runghc Make (((present|alltenses)? OPT?) | (clone FILE))? LANGS? 
 -- where 
 -- - OPT = (lang | api | pgf | test | parse | clean | clone)
 -- - LANGS has the form e.g. langs=Eng,Fin,Rus
@@ -72,13 +72,13 @@ langsLang = langs `except` langsIncomplete ---- []
 langsPresent = langsLang `except` ["Lav","Nep","Pes","Tha"]
 
 -- languages for which Lang can be compiled but which are incomplete
-langsIncomplete = ["Amh","Ara","Hin","Lat","Tha","Tur"]
+langsIncomplete = ["Amh","Ara","Hin","Lat","Tur"]
 
 -- languages for which to compile Try 
 langsAPI = langsLang `except` langsIncomplete
 
 -- languages for which to compile Symbolic
-langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Ina","Lav","Nep","Pes","Pnb","Rus","Tha"])
+langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Ina","Lav","Nep","Pes","Pnb","Rus"])
 
 -- languages for which to compile minimal Syntax
 langsMinimal = langs `only` ["Ara","Eng","Bul","Rus"]
@@ -109,13 +109,19 @@ make :: [String] -> IO ()
 make xx = do
   let ifx  opt act = if null xx || elem opt xx then act >> return () else return () 
   let ifxx opt act = if            elem opt xx then act >> return () else return () 
-  let pres = elem "present" xx
-  let dir = if pres then "../present" else "../alltenses"
-   
+  let pres 
+        | elem "present" xx = 1
+        | elem "alltenses" xx = 2
+        | otherwise = 0
+  let dir = case pres of 
+              1 -> "../present" 
+              2 -> "../alltenses"
+              _ -> "../full"
+
   let optl ls = maybe ls id $ getOptLangs xx
 
   ifx "lang" $ do
-    let lans = optl $ if pres then langsPresent else langsLang
+    let lans = optl $ if (pres == 1) then langsPresent else langsLang
     mapM_ (gfc pres [] . lang) lans
     mapM_ (gfc pres presSymbolPath . symbol) lans ---- (optl langsAPI)
     copyl lans "*.gfo" dir
@@ -148,7 +154,7 @@ make xx = do
     mapM_ (gfc pres [] . parse) (optl langsParse)
     copy "parse/*.gfo parse/oald/*.gfo" dir
   ifxx "clean" $ do
-    system "rm -f */*.gfo ../alltenses/*.gfo ../present/*.gfo"
+    system "rm -f */*.gfo ../alltenses/*.gfo ../present/*.gfo ../prelude/*.gfo ../full/*.gfo"
   ifxx "clone" $ do
     let (pref,lang) = case getLangName xx of
           Just pl -> pl
@@ -157,12 +163,15 @@ make xx = do
     mapM_ (\la -> writeFile (pref ++ la ++ ".gf") (replaceLang lang la s)) (map snd (optl langs))
   return ()
 
+-- pres = 0 (full), 1 (present), 2 (alltenses)
 gfc pres ppath file = do
-  let preproc = if pres then "-preproc=mkPresent" else ""
-  let path    = if pres then ppath else ""
+  let preproc = if (pres==1) then "-preproc=mkPresent" else ""
+  let path    = if (pres==1) then ppath else ""
   putStrLn $ "Compiling " ++ file
-----  run_gfc ["-s","-src","-no-pmcfg",preproc, path, file]
-  run_gfc ["-s","-src",preproc, path, file]
+  if pres == 0 
+     then run_gfc ["-s","-src",preproc, path, file]
+     else run_gfc ["-s","-src","-no-pmcfg",preproc, path, file]
+
 
 gfcmin path file = do
   let preproc = "-preproc=mkMinimal"
