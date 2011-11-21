@@ -52,7 +52,7 @@ div.template:hover
 .edit { color: orange; }
 .delete { color: red; }
 .error_message,.inError { color: red; }
-.template, .template .sep { color: #999; }
+.template, .template .sep, .unimportant { color: #999; }
 form { display: inline-block; }
 
 table.tabs {

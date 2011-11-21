@@ -78,15 +78,24 @@ function exb_extra(g,ci) {
     function ask_poss() { ask_possibilities(g,ci) }
 
     if(navigator.onLine && g.concretes.length>1 && conc.example_based && !example_based[ci]) ask_poss();
-    return parser[conc.langcode] && g.concretes.length>1
-	? indent([text("Example based editing: "),
-		  conc.example_based
-		  ? node("span",{},[button("Stop",stop_exb),
-				    text(" Example language: "),
-				    exblangmenu()
-				   ])
-		  : button("Start",ask_poss)])
-	: text("")
+    var sb=button("Start",ask_poss)
+    if(parser[conc.langcode] && g.concretes.length>1)
+	return indent([wrap("small",text("Example-based editing: ")),
+		       conc.example_based
+		         ? node("span",{},
+				[button("Stop",stop_exb),
+				 wrap("small",text(" Example language: ")),
+				 exblangmenu()
+				])
+		         : sb])
+    else {
+	sb.disabled=true;
+	var why= g.concretes.length>1
+	    ? " ("+concname(conc.langcode)+" is not supported yet)"
+	    : " (Add another language to take examples from first.)"
+	return indent([unimportant("Example-based grammar editing: "), sb,
+	          unimportant(why)])
+    }
 }
 
 function fun_lincat(g,conc,fun) {
@@ -158,10 +167,15 @@ function exb_linbuttons(g,ci,f) {
     }
     var buttons=[];
     if(conc.example_based && eb) {
-	if(eb.exready[fun] && fun_lincat(g,conc,fun))
-	    buttons.push(button("By example",by_example))
-	if(eb.testable[fun] && f.eb_lin) {
+	if(f.template) {
+	    var byex=button("By example",by_example);
+	    if(!(eb.exready[fun] && fun_lincat(g,conc,fun)))
+		byex.disabled=true
+	    buttons.push(byex)
+	}
+	else {
 	    var b=button("Test it",test_it);
+	    if(!eb.testable[fun] || !f.eb_lin) b.disabled=true;
 	    buttons.push(b)
 	}
 	var exb_output=node("span",{"class":"exb_output"},[]);
