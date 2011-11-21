@@ -255,7 +255,7 @@ paradigmFiles = [
   ("Russian", srcPath "/russian/ParadigmsRus.gf"),
   ("Spanish",  srcPath "/spanish/ParadigmsSpa.gf"),
   ("Swedish",  srcPath "/swedish/ParadigmsSwe.gf"),
-  ("Thai", srcPath "/urdu/ParadigmsTha.gf")
+  ("Thai", srcPath "/thai/ParadigmsTha.gf"),
   ("Urdu", srcPath "/urdu/ParadigmsUrd.gf")
   ]
 
