@@ -4,6 +4,7 @@ import System.FilePath((</>),makeRelative)
 import Data.Map(fromList)
 import Data.Char(isDigit)
 import Data.Maybe(fromJust)
+import qualified Codec.Binary.UTF8.String as UTF8 (decodeString)
 import PGF
 import GF.Compile.ToAPI
 import Network.CGI
@@ -83,7 +84,7 @@ readParsePGF cwd cache =
 parseEnviron s = do state <- liftIO $ readIO s
                     return $ environ state
 
-getInp name = maybe err return =<< getInput name
+getInp name = maybe err (return . UTF8.decodeString) =<< getInput name
   where err = throwCGIError 400 ("Missing parameter: "++name) []
 
 
