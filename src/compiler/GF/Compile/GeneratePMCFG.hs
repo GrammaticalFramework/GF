@@ -393,24 +393,30 @@ goV (CPar t)     rpath ss = restrictHead (reversePath rpath) t >> return ss
 type SeqSet   = Map.Map Sequence SeqId
 
 addSequencesB :: SeqSet -> Branch (Value [Symbol]) -> (SeqSet, Branch (Value SeqId))
-addSequencesB seqs (Case nr path bs) = let (seqs1,bs1) = List.mapAccumL (\seqs (trm,b) -> let (seqs',b') = addSequencesB seqs b
-                                                                                          in (seqs',(trm,b'))) seqs bs
+addSequencesB seqs (Case nr path bs) = let !(seqs1,bs1) = mapAccumL' (\seqs (trm,b) -> let !(seqs',b') = addSequencesB seqs b
+                                                                                       in (seqs',(trm,b'))) seqs bs
                                        in (seqs1,Case nr path bs1)
-addSequencesB seqs (Variant bs)      = let (seqs1,bs1) = List.mapAccumL addSequencesB seqs bs
+addSequencesB seqs (Variant bs)      = let !(seqs1,bs1) = mapAccumL' addSequencesB seqs bs
                                        in (seqs1,Variant bs1)
-addSequencesB seqs (Return  v)       = let (seqs1,v1) = addSequencesV seqs v
+addSequencesB seqs (Return  v)       = let !(seqs1,v1) = addSequencesV seqs v
                                        in (seqs1,Return v1)
 
 addSequencesV :: SeqSet -> Value [Symbol] -> (SeqSet, Value SeqId)
-addSequencesV seqs (CRec vs)  = let (seqs1,vs1) = List.mapAccumL (\seqs (lbl,b) -> let (seqs',b') = addSequencesB seqs b
-                                                                                   in (seqs',(lbl,b'))) seqs vs
+addSequencesV seqs (CRec vs)  = let !(seqs1,vs1) = mapAccumL' (\seqs (lbl,b) -> let !(seqs',b') = addSequencesB seqs b
+                                                                                in (seqs',(lbl,b'))) seqs vs
                                 in (seqs1,CRec vs1)
-addSequencesV seqs (CTbl pt vs)=let (seqs1,vs1) = List.mapAccumL (\seqs (trm,b) -> let (seqs',b') = addSequencesB seqs b
-                                                                                   in (seqs',(trm,b'))) seqs vs
+addSequencesV seqs (CTbl pt vs)=let !(seqs1,vs1) = mapAccumL' (\seqs (trm,b) -> let !(seqs',b') = addSequencesB seqs b
+                                                                                in (seqs',(trm,b'))) seqs vs
                                 in (seqs1,CTbl pt vs1)
-addSequencesV seqs (CStr lin) = let (seqs1,seqid) = addSequence seqs (optimizeLin lin)
+addSequencesV seqs (CStr lin) = let !(seqs1,seqid) = addSequence seqs (optimizeLin lin)
                                 in (seqs1,CStr seqid)
 addSequencesV seqs (CPar i)   = (seqs,CPar i)
+
+-- a strict version of Data.List.mapAccumL
+mapAccumL' f s []     = (s,[])
+mapAccumL' f s (x:xs) = (s'',y:ys)
+                        where !(s', y ) = f s x
+                              !(s'',ys) = mapAccumL' f s' xs
 
 optimizeLin [] = []
 optimizeLin lin@(SymKS _ : _) = 
