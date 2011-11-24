@@ -46,12 +46,12 @@ Updated: 18 Nov 2011</p>
 <li>Use GF Shell from within Eclipse</li>
 <li>Auto-completion for declared identifiers</li>
 <li>Background compilation (shallow) using project builder</li>
+<li>Full support for <em>Open Declaration</em> (F3)</li>
 </ul>
 
 <h3>Near-term</h3>
 
 <ul>
-<li>Full support for <em>Open Declaration</em> (F3)</li>
 <li>Inline documentation for function calls, overloads</li>
 <li>Quick-fix suggestions for syntax and naming errors</li>
 <li>Code generation for concrete/instance modules</li>
@@ -74,6 +74,9 @@ Updated: 18 Nov 2011</p>
 <h2>Update history</h2>
 
 <dl>
+<dt><strong>24/11/11</strong></dt>
+<dd>(1.2.0.x) with support for &#8220;Open Declaration&#8221; (F3) function, including for external libraries.</dd>
+
 <dt><strong>18/11/11</strong></dt>
 <dd>Third BETA (1.1.0.x) released, overhauled to take advantage of new compiler features. Tag-based scoping with caching for better performance. Interactive console (GF Shell) for luanch configs.</dd>
 
@@ -137,6 +140,13 @@ system and how you installed GF.</em><br />
 <li>In Eclipse, go to <strong>Help &rarr; Check for updates</strong>.</li>
 <li>Any available updates will appear in the dialog. Select them and follow the usual steps.</li>
 </ol>
+
+<h4>Upgrading to GFEP 1.2.0</h4>
+
+<ul>
+<li><p>You may receive a prompt asking if you want to add the Xtext nature to your project; click <strong>Yes</strong> to this (should not apply for newly-created projects).</p></li>
+<li><p>A new folder named <code>(External)</code> may be created in your project, which contains symbolic links to any external GF libraries referenced by your files. You may double click these links as usual (the libraries will be opened as <em>read-only</em>).</p></li>
+</ul>
 
 <hr />
 
