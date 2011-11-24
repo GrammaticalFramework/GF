@@ -112,7 +112,7 @@ concrete MiniGrammarEng of MiniGrammar = LexiconEng, GrammarEng [
     here_Adv, -- Adv,
     by_Prep, in_Prep, of_Prep, with_Prep, -- Prep,
     can_VV, must_VV, want_VV, -- VV,
-    although_Subj, because_Subj, when_Subj, -- Subj,
+    although_Subj, because_Subj, when_Subj, if_Subj, -- Subj,
     when_IAdv, where_IAdv, why_IAdv-- IAdv,
 
 ] ** open SyntaxEng, (S = SyntaxEng) in {
@@ -139,7 +139,7 @@ lin
    we_NP = S.we_NP ;
    youPl_NP = S.youPl_NP ;
    they_NP = S.they_NP ;
---   SubjS s subj s = mkS s (mkAdv subj s) ;
+   SubjS subj a b = mkUtt (mkS (S.mkAdv <subj : Subj> <a : S>) b) ;
    CompAdv adv = mkVP (lin Adv adv) ;
 --   SlashV2 np v2 = mkClSlash np v2 ;
    SlashPrep cl p = mkClSlash (lin Cl cl) <p : Prep> ;
