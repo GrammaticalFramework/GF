@@ -63,6 +63,21 @@ mkCanon2pgf opts gr am = do
                  [(loc,i2i f) | ((m,f),AbsFun (Just (L loc ty)) _ _ (Just True)) <- adefs, snd (GM.valCat ty) == cat]
 
     mkConcr gr cm = do
+      let cflags  = concatOptions [mflags mo | (i,mo) <- modules gr, isModCnc mo, 
+                                                  Just r <- [lookup i (allExtendSpecs gr cm)]]
+
+      (seqs,cdefs) <- addMissingPMCFGs
+                           Map.empty 
+                           ([((cPredefAbs,c), CncCat (Just (L NoLoc GM.defLinType)) Nothing Nothing Nothing) | c <- [cInt,cFloat,cString]] ++
+                            Look.allOrigInfos gr cm)
+
+      let flags = Map.fromList [(mkCId f,C.LStr x) | (f,x) <- optionsPGF cflags]
+
+          !(!fid_cnt1,!cnccats) = genCncCats gr am cm cdefs
+          !(!fid_cnt2,!productions,!lindefs,!sequences,!cncfuns)
+                                = genCncFuns gr am cm seqs cdefs fid_cnt1 cnccats
+        
+          printnames = genPrintNames cdefs
       return (i2i cm, D.Concr flags 
                               printnames
                               cncfuns
@@ -75,19 +90,13 @@ mkCanon2pgf opts gr am = do
                               IntMap.empty
                               fid_cnt2)
       where
-        cflags  = concatOptions [mflags mo | (i,mo) <- modules gr, isModCnc mo, 
-                                                Just r <- [lookup i (allExtendSpecs gr cm)]]
-
-        cdefs = [((cPredefAbs,c), CncCat (Just (L NoLoc GM.defLinType)) Nothing Nothing Nothing) | c <- [cInt,cFloat,cString]] ++
-                Look.allOrigInfos gr cm
-
-        flags = Map.fromList [(mkCId f,C.LStr x) | (f,x) <- optionsPGF cflags]
-
-        !(!fid_cnt1,!cnccats) = genCncCats gr am cm cdefs
-        !(!fid_cnt2,!productions,!lindefs,!sequences,!cncfuns)
-                              = genCncFuns gr am cm cdefs fid_cnt1 cnccats
-        
-        printnames = genPrintNames cdefs
+        -- if some module was compiled with -no-pmcfg, then
+        -- we have to create the PMCFG code just before linking
+        addMissingPMCFGs seqs []                  = return (seqs,[])
+        addMissingPMCFGs seqs (((m,id), info):is) = do
+          (seqs,info) <- addPMCFG opts gr am cm seqs id info
+          (seqs,is  ) <- addMissingPMCFGs seqs is
+          return (seqs, ((m,id), info) : is)
 
 i2i :: Ident -> CId
 i2i = CId . ident2bs
@@ -185,8 +194,8 @@ genCncCats gr am cm cdefs =
     mkCncCats index (_                      :cdefs) = mkCncCats index cdefs
 
 
-genCncFuns gr am cm cdefs fid_cnt cnccats =
-  let (fid_cnt1,funs_cnt1,seqs1,funs1,lindefs) = mkCncCats cdefs fid_cnt  0 Map.empty [] IntMap.empty
+genCncFuns gr am cm seqs0 cdefs fid_cnt cnccats =
+  let (fid_cnt1,funs_cnt1,seqs1,funs1,lindefs) = mkCncCats cdefs fid_cnt  0 seqs0 [] IntMap.empty
       (fid_cnt2,funs_cnt2,seqs2,funs2,prods)   = mkCncFuns cdefs fid_cnt1 funs_cnt1 seqs1 funs1 lindefs Map.empty IntMap.empty
   in (fid_cnt2,prods,lindefs,mkSetArray seqs2,array (0,funs_cnt2-1) funs2)
   where
@@ -256,9 +265,12 @@ genCncFuns gr am cm cdefs fid_cnt cnccats =
         Nothing               -> error "GrammarToPGF.mkCtxt failed"
 
     toCncFun offs (m,id) (seqs,funs) (funid0,lins0) =
-      let Ok (ModInfo{mseqs=Just mseqs}) = lookupModule gr m
-          !(!seqs',lins) = mapAccumL (mkLin mseqs) seqs (elems lins0)
-      in (seqs',(offs+funid0,C.CncFun (i2i id) (mkArray lins)):funs)
+      case lookupModule gr m of
+        Ok (ModInfo{mseqs=Just mseqs}) -> let !(!seqs',lins) = mapAccumL (mkLin mseqs) seqs (elems lins0)
+                                          in (seqs',(offs+funid0,C.CncFun (i2i id) (mkArray lins)):funs)
+        _                              -> -- this function should have been compiled during the linking phase
+                                          -- so its sequences must be in seqs already
+                                          (seqs,(offs+funid0,C.CncFun (i2i id) lins0):funs)
       where
         mkLin mseqs seqs seqid =
           let seq = mseqs ! seqid
