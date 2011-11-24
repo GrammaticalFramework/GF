@@ -6,13 +6,24 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 
   lin
     DetCN kazhduj okhotnik = {
-      s = \\c => case kazhduj.c of {
-       Nom => 
-        kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
-         okhotnik.s ! NF kazhduj.n (extCase c) ; 
-       _ => 
-        kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
-         okhotnik.s ! NF kazhduj.n kazhduj.c };
+      s = \\c => case kazhduj.q of {
+	False =>
+	  case kazhduj.c of {
+	    Nom => 
+              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
+              okhotnik.s ! NF kazhduj.n (extCase c) ; 
+	    _ => 
+              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
+              okhotnik.s ! NF kazhduj.n kazhduj.c } ;
+	True =>
+	  case kazhduj.c of {
+	    Nom => 
+              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
+              okhotnik.s ! NF kazhduj.n Gen ; 
+	    _ => 
+              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
+              okhotnik.s ! NF kazhduj.n Gen }
+	  };
       n = kazhduj.n ; 
       p = P3 ;
       pron = False;
@@ -74,14 +85,18 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       s =  \\af => quant.s !af ++ num.s! (caseAF af) ! (genAF af)  ++ ord.s!af ; 
       n = num.n ;
       g = quant.g;
-      c = quant.c
+      c = quant.c;
+--      q = notB (isNil (num.s ! Nom ! Masc))
+      q = False;
       } ;
 
     DetQuant quant num = {
       s =  \\af => quant.s !af ++ num.s! (caseAF af) ! (genAF af) ;
       n = num.n ;
       g = quant.g;
-      c = quant.c
+      c = quant.c;
+--      q = notB (isNil (num.s ! Nom ! Masc))
+      q = False;
       } ;
 {-
     DetArtOrd quant num ord = {
@@ -131,7 +146,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       anim = okhotnik.anim 
     } ;
 -}
-    PossPron p = {s = \\af => p.s ! mkPronForm (caseAF af) No (Poss (gennum (genAF af) (numAF af) )); c=Nom; g = PNoGen} ;
+    PossPron p = {s = \\af => p.s ! mkPronForm (caseAF af) No (Poss (gennum (genAF af) (numAF af) )); c=Nom; g = PNoGen; q = False} ;
 
    NumCard c = c ;
    NumSg = {s = \\_,_ => [] ; n = Sg} ;
@@ -149,8 +164,8 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 
     OrdSuperl a = {s = a.s!Posit};
 
-    DefArt = {s = \\_=>[] ; c=Nom; g = PNoGen };
-    IndefArt = { s = \\_=>[] ; c=Nom; g = PNoGen };
+    DefArt = {s = \\_=>[] ; c=Nom; g = PNoGen; q = False };
+    IndefArt = { s = \\_=>[] ; c=Nom; g = PNoGen; q = False };
 
   UseN noun = noun ;
   UseN2 noun = noun ;

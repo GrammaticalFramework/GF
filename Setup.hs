@@ -231,7 +231,7 @@ langsLang = langs `except` ["Amh","Ara","Lat","Hin","Tha","Tur"]
 langsAPI  = langsLang `except` ["Hin","Ina","Tha"]
 
 -- languages for which to compile Symbolic 
-langsSymbolic  = langsAPI `except` ["Rus"]
+langsSymbolic  = langsAPI -- `except` ["Rus"]
 
 -- languages for which to run demo test
 langsDemo = langsLang `except` ["Ara","Hin","Ina","Tha"]

@@ -185,6 +185,7 @@ flags coding = utf8 ;
     Husband = xOf sing (P.mkN "муж") ;
     Son = xOf sing (P.mkN "сын") ;
     Daughter = xOf sing (P.mkN "дочь" "дочери" "дочери" "дочь" "дочерью" "дочери" "дочь" "дочери" "дочерей" "дочерям" "дочерей" "дочерьми" "дочерях" P.feminine P.animate) ;
+--    Daughter = xOf sing E.daughter_N ;
     Children = xOf plur L.child_N ; 
 
 
@@ -256,8 +257,8 @@ flags coding = utf8 ;
       relativePerson n (mkCN x) (\a,b,c -> mkNP (mkNP the_Quant a c) (SyntaxRus.mkAdv possess_Prep b)) p ;
 
      mkTransport : N -> {name : CN ; by : Adv} = \n -> {
-      name = mkCN n ; 
-      by = SyntaxRus.mkAdv on_Prep (mkNP the_Det n)
+      name = mkCN n ;  
+     by = SyntaxRus.mkAdv on_Prep (mkNP the_Det n)
       } ;
 
   far_IAdv = ss "как далеко" ** {lock_IAdv = <>} ;

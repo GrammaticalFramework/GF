@@ -58,9 +58,10 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
 -- Gender parameter is due to multiple determiners (Numerals in Russian)
 -- like "mnogo"
 -- The determined noun has the case parameter specific for the determiner
+-- 'q' is for 'quantity', quantity determiners demand genitive for the noun
 
-    Det = {s : AdjForm => Str; n: Number; g: PronGen; c: Case} ; 
-    Predet, Quant = {s : AdjForm => Str; g: PronGen; c: Case} ; 
+    Det = {s : AdjForm => Str; n: Number; g: PronGen; c: Case; q: Bool} ; 
+    Predet, Quant = {s : AdjForm => Str; g: PronGen; c: Case; q: Bool} ; 
 
 -- Numeral
 
