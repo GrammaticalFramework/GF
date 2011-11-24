@@ -3,7 +3,7 @@ langs = [
   "Afr", "Bul", "Cat","Dan","Dut",
   "Fin","Fre","Ger","Ita", -- "Lav",
   "Nep","Nor","Pes","Pol","Pnb",
-  --- "Ron",
+  "Ron",
   "Rus","Spa","Swe","Tha",
   "Urd"
   ]
