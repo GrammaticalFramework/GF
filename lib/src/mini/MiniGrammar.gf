@@ -108,7 +108,7 @@ abstract MiniGrammar = Lexicon, Grammar [
     here_Adv, -- Adv,
     by_Prep, in_Prep, of_Prep, with_Prep, -- Prep,
     can_VV, must_VV, want_VV, -- VV,
-    although_Subj, because_Subj, when_Subj, -- Subj,
+    although_Subj, because_Subj, when_Subj, if_Subj, -- Subj,
     when_IAdv, where_IAdv, why_IAdv-- IAdv,
 
 ] ** {
@@ -128,7 +128,7 @@ fun
    this_Det, these_Det : Det ;
    that_Det, those_Det : Det ;
    i_NP, youSg_NP, he_NP, she_NP, we_NP, youPl_NP, they_NP : NP ;
---   SubjS   : S -> Subj -> S -> S ;     -- she walks because we run
+   SubjS   : Subj -> S -> S -> Utt ;     -- if she walks we run
    CompAdv : Adv -> VP ;          -- be here
 --   SlashV2 : NP -> V2 -> ClSlash ;   -- she loves
    SlashPrep : Cl -> Prep -> ClSlash ; -- she walks with

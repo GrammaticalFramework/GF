@@ -180,7 +180,7 @@ lin
   leaf_N = mkN (thword "ใบ") ;
 --  learn_V2 = dirV2 (regV "learn") ;
 --  leather_N = regN "leather" ;
---  leave_V2 = dirV2 (irregV "leave" "left" "left") ;
+  leave_V2 = mkV2 "ละ" ;
 --  left_Ord = ss "left" ;
   leg_N = mkN (thword "ขา") ;
   lie_V = mkV (thword "นอน") ;
