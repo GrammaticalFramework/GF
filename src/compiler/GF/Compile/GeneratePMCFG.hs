@@ -10,7 +10,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Compile.GeneratePMCFG
-    (generatePMCFG, pgfCncCat
+    (generatePMCFG, pgfCncCat, addPMCFG
     ) where
 
 import PGF.CId
@@ -65,7 +65,7 @@ mapAccumWithKeyM f a m = do let xs = Map.toAscList m
 
 
 addPMCFG :: Options -> SourceGrammar -> Ident -> Ident -> SeqSet -> Ident -> Info -> IO (SeqSet, Info)
-addPMCFG opts gr am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin@(Just (L _ term)) mprn _) = do
+addPMCFG opts gr am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin@(Just (L _ term)) mprn Nothing) = do
   let pres  = protoFCat gr res val
       pargs = [protoFCat gr (snd $ catSkeleton ty) lincat | ((_,_,ty),(_,_,lincat)) <- zip ctxt cont]
 
@@ -98,7 +98,7 @@ addPMCFG opts gr am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin
           newArgs  = map getFIds newArgs'
       in addFunction env0 newCat fun newArgs
 
-addPMCFG opts gr am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) mdef@(Just (L _ term)) mprn _) = do
+addPMCFG opts gr am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) mdef@(Just (L _ term)) mprn Nothing) = do
   let pres = protoFCat gr (am,id) lincat
       parg = protoFCat gr (identW,cVar) typeStr
 

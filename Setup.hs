@@ -254,7 +254,7 @@ gfc1 mode pkg lbi file = do
                   Minimal   -> "-preproc="++({-rgl_src_dir </>-} "mkMinimal")
   createDirectoryIfMissing True dir
   putStrLn $ "Compiling [" ++ show mode ++ "] " ++ file
-  run_gfc pkg lbi ["-s", preproc, "--gfo-dir="++dir, file]
+  run_gfc pkg lbi ["-s", "-no-pmcfg", preproc, "--gfo-dir="++dir, file]
 
 gf comm files pkg lbi = do
   putStrLn $ "Reading " ++ unwords files
