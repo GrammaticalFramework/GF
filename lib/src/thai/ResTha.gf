@@ -52,8 +52,14 @@ resource ResTha = ParamX, StringsTha ** open Prelude in {
 
     Determiner = {s1, s2 : Str ; hasC : Bool} ; 
 
-    mkDet : Str -> Str -> Determiner = 
+    mkDet : Str -> Str -> Determiner = -- before and after classifier
       \s,c -> {s1 = s ; s2 = c ; hasC = True} ;
+
+    quantDet : Str -> Determiner = -- quantifier: before classifier 
+      \s -> mkDet s [] ;
+
+    demDet : Str -> Determiner =  -- demonstrative: after classifier 
+      \s -> mkDet [] s ;
 
 -- Part before and after negation (mai_s)
 
@@ -80,27 +86,37 @@ resource ResTha = ParamX, StringsTha ** open Prelude in {
 -- Verb phrases: form negation and question, too.
 
    VP = {
-     s : Polarity => Str 
+     s : Polarity => Str ;
+     e : Str -- extraposed clause
      } ;
 
-  infVP : VP -> Str = \vp -> vp.s ! Pos ; ----
+  infVP : VP -> Str = \vp -> thbind (vp.s ! Pos) vp.e ; ----
 
   predV : Verb -> VP = \v -> {
      s = \\p => if_then_Str v.isCompl 
                    (thbind v.s1 (polStr may_s p ++ v.s2))
-                   (v.s1 ++     (polStr may_s p ++ v.s2)) --- v.s1 = []
+                   (v.s1 ++     (polStr may_s p ++ v.s2)) ; --- v.s1 = [] ;
+     e = []
      } ;
 
    insertObj : NP -> VP -> VP = \o,vp -> {
-     s = \\p => thbind (vp.s ! p) o.s
+     s = \\p => thbind (vp.s ! p) o.s ;
+     e = vp.e
+     } ; 
+
+   insertExtra : Str -> VP -> VP = \o,vp -> {
+     s = vp.s ;
+     e = vp.e ++ o
      } ; 
 
    adjVP : Adj -> VP = \a -> {
-     s = \\p => polStr may_s p ++ a.s
+     s = \\p => thbind (polStr may_s p) a.s ;
+     e = []
      } ;
 
    insertObject : Str -> VP -> VP = \np,vp -> {
-     s = \\p => thbind (vp.s ! p) np
+     s = \\p => thbind (vp.s ! p) np ;
+     e = vp.e
      } ;
 
    polStr : Str -> Polarity -> Str = \m,p -> case p of {
@@ -125,8 +141,8 @@ oper
 
   mkClause : NP -> VP -> Clause = \np,vp -> {
     s = table {
-      ClDecl  => \\p => thbind np.s (vp.s ! p) ;
-      ClQuest => \\p => thbind np.s (vp.s ! p) (polStr chay_s p) m'ay_s
+      ClDecl  => \\p => thbind np.s (vp.s ! p) vp.e ;
+      ClQuest => \\p => thbind np.s (vp.s ! p) (polStr chay_s p) vp.e m'ay_s --- the place of vp.e?
       }
     } ;
 

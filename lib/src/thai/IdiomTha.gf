@@ -23,6 +23,7 @@ concrete IdiomTha of Idiom = CatTha ** open Prelude, ResTha in {
 
     ProgrVP vp = {
       s = \\p => thbind kam_s lag2_s (vp.s ! p) ;
+      e = vp.e
       } ;
 
     ImpPl1 vp = ss (infVP vp) ; ----

@@ -11,14 +11,14 @@ concrete VerbTha of Verb = CatTha ** open ResTha, StringsTha, Prelude in {
     Slash3V3 v np = insertObj np (predV v) ** {c2 = v.c2} ;
 
     SlashV2A v ap = 
-      insertObj (mkNP <thbind v.c2 ap.s : Str>) (predV v) ** {c2 = v.c2} ;
+      insertExtra <thbind v.c2 ap.s : Str> (predV v) ** {c2 = v.c2} ;
 
     SlashV2V v vp = ---- looks too simple compared with ComplVV
-      insertObj (mkNP <thbind v.c2 (infVP vp) : Str>) (predV v) ** {c2 = v.c2} ;
+      insertExtra <thbind <v.c2 : Str> <infVP vp : Str> : Str> (predV v) ** {c2 = v.c2} ;
     SlashV2S v s  = 
-      insertObj (mkNP <thbind conjThat s.s : Str>) (predV v) ** {c2 = v.c2} ;
+      insertExtra conjThat (predV v) ** {c2 = v.c2} ;
     SlashV2Q v q  = 
-      insertObj (mkNP (q.s ! QDir)) (predV v) ** {c2 = v.c2} ;
+      insertExtra (q.s ! QIndir) (predV v) ** {c2 = v.c2} ;
 
     ComplVV vv vp = {
       s = \\p =>
@@ -30,18 +30,19 @@ concrete VerbTha of Verb = CatTha ** open ResTha, StringsTha, Prelude in {
           VVPre => thbind vv.s neg v ; 
           VVMid => thbind neg vv.s v ; 
           VVPost => thbind v neg vv.s
-          }
+          } ;
+       e = []
       } ;
 
     ComplVS v s  = insertObj (mkNP (thbind conjThat s.s)) (predV v) ;
-    ComplVQ v q  = insertObj (mkNP (q.s ! QDir)) (predV v) ;
+    ComplVQ v q  = insertObj (mkNP (q.s ! QIndir)) (predV v) ;
 
 
     ComplVA  v    ap = insertObj ap (predV v) ; 
 
     ComplSlash vp np = insertObj (mkNP (thbind vp.c2 np.s)) vp ;
 
-    UseComp comp = comp ;
+    UseComp comp = comp ** {e = []} ;
 
     SlashVV v vp = ---- too simple?
       insertObj (mkNP (infVP vp)) (predV (regV v.s)) ** {c2 = vp.c2} ;
@@ -56,7 +57,7 @@ concrete VerbTha of Verb = CatTha ** open ResTha, StringsTha, Prelude in {
     
     ReflVP vp = insertObj (mkNP (thbind vp.c2 reflPron)) vp ;
 
-    PassV2 v = {s = \\p => thbind thuuk_s ((predV v).s ! p)} ;
+    PassV2 v = {s = \\p => thbind thuuk_s ((predV v).s ! p) ; e = []} ;
 
     CompAP ap = {s = \\p => thbind (polStr may_s p) ap.s} ;
 

@@ -60,7 +60,7 @@ lin
 --  ceiling_N = regN "ceiling" ;
 --  chair_N = regN "chair" ;
   cheese_N = mkN (thword "เนย" "แข็ง") "ก้อน" ; 
-  child_N = personN (thword "เด็ก") ;
+  child_N = personN (thword "ลูก") ; --- personN (thword "เด็ก") ;
 --  church_N = regN "church" ;
   city_N = mkN "นคร" "แห่ง" ;
 --  clean_A = regADeg "clean" ;
@@ -191,7 +191,7 @@ lin
   long_A = mkA (thword "ยาว") ;
 --  lose_V2 = dirV2 (irregV "lose" "lost" "lost") ;
   louse_N = animalN (thword "เล็น") ;
---  love_N = regN "love" ;
+  love_N = mkN (thword "ความ" rak_s) ;
   love_V2 = mkV2 rak_s ;
   man_N = personN (thword "ชาย") ;
   married_A2 = mkA2 (mkA (thword "แต่ง" "งาน" "แล้ว")) "กับ" ;
@@ -316,7 +316,7 @@ lin
 --  table_N = regN "table" ;
   tail_N = mkN (thword "หาง") ;
 --  talk_V3 = mkV3 (regV "talk") toP aboutP ;
---  teach_V2 = dirV2 (irregV "teach" "taught" "taught") ;
+  teach_V2 = mkV2 "สอน" ;
 --  teacher_N = regN "teacher" ;
 --  television_N = regN "television" ;
   thick_A = mkA (thword "หนา") ;

@@ -11,7 +11,7 @@ concrete QuestionTha of Question = CatTha **
 
 ---- order of IP and VP to be revisited: Smyth p. 160
 
-    QuestVP qp vp = {s = (mkClause qp vp).s ! ClQuest} ;
+    QuestVP qp vp = {s = (mkClause qp vp).s ! ClDecl} ;
 
     QuestSlash ip slash = {s = \\p => thbind (slash.s ! p) slash.c2 ip.s} ; 
 
@@ -30,7 +30,7 @@ concrete QuestionTha of Question = CatTha **
     IdetIP idet = mkNP (thbind idet.s1 idet.s2) ;
 
     IdetQuant iquant num = {
-      s1 = iquant.s1 ++ num.s ;
+      s1 = num.s ++ iquant.s1 ; --- is num even possible ??
       s2 = iquant.s2 ;
       hasC = iquant.hasC
       } ;

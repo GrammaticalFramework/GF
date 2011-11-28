@@ -32,7 +32,7 @@ concrete CatTha of Cat = CommonX ** open ResTha, Prelude in {
 -- Verb
 
     VP = ResTha.VP ; 
-    Comp = ResTha.VP ;
+    Comp = {s : Polarity => Str} ;
     VPSlash = ResTha.VP ** {c2 : Str} ;
 
 -- Adjective
@@ -43,9 +43,9 @@ concrete CatTha of Cat = CommonX ** open ResTha, Prelude in {
 
     CN = ResTha.Noun ;
     NP, Pron = ResTha.NP ;
-    Det = ResTha.Determiner ; 
+    Det, Quant = ResTha.Determiner ; 
     Predet, Ord = {s : Str} ;
-    Num, Quant = {s : Str ; hasC : Bool} ;
+    Num = {s : Str ; hasC : Bool} ;
 
 -- Numeral
 
