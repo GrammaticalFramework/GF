@@ -18,18 +18,19 @@ concrete NounTha of Noun = CatTha ** open StringsTha, ResTha, Prelude in {
     AdvNP np adv = thbind np adv ;
 
     DetQuant quant num = {
-      s1 = num.s ;
-      s2 = quant.s ;
+      s1 = num.s ++ quant.s1 ; --- can there be quant.s1 ??
+      s2 = quant.s2 ;
       hasC = orB num.hasC quant.hasC ;
       } ;
     DetQuantOrd quant num ord = {
-      s1 = num.s ;
-      s2 = quant.s ++ ord.s ;
-      hasC = orB num.hasC quant.hasC ;
+      s1 = num.s ++ quant.s1 ; --- can there be quant.s1 ??
+      s2 = ord.s ++ quant.s2 ; 
+      hasC = True ;
       } ;
 
     PossPron p = {
-      s = khoog_s ++ p.s ;
+      s1 = khoog_s ++ p.s ;
+      s2 = [] ;
       hasC = False
       } ;
 
@@ -46,8 +47,8 @@ concrete NounTha of Noun = CatTha ** open StringsTha, ResTha, Prelude in {
 
     OrdSuperl a = {s = thbind a.s thii_s sut_s} ;
 
-    DefArt = {s = [] ; hasC = False} ;
-    IndefArt = {s = [] ; hasC = False} ;
+    DefArt = {s1,s2 = [] ; hasC = False} ;
+    IndefArt = {s1,s2 = [] ; hasC = False} ;
 
     MassNP cn = cn ;
 
