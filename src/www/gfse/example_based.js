@@ -52,6 +52,9 @@ function ask_possibilities(g,ci) {
 	reload_grammar(g);
     }
     var exci=conc_index(g,conc.example_lang);
+    if(!conc.example_lang || !exci)
+	conc.example_lang=g.concretes[ci==0 ? 1 : 0].langcode;
+    var exci=conc_index(g,conc.example_lang);
     exb_call(g,ci,"possibilities",{example_state:exb_state(g,exci)},show_poss)
 }
 
@@ -67,7 +70,9 @@ function exb_extra(g,ci) {
     }
 
     function exblangmenu() {
-	function opt(conc) { return option(conc.langcode,conc.langcode); }
+	function opt(conc) {
+	    return option(concname(conc.langcode),conc.langcode);
+	}
 	function skip_target(c) { return c.langcode!=conc.langcode; }
 	var m =node("select",{},map(opt,filter(skip_target,g.concretes)));
 	if(conc.example_lang) m.value=conc.example_lang;
@@ -93,7 +98,7 @@ function exb_extra(g,ci) {
 	var why= g.concretes.length>1
 	    ? " ("+concname(conc.langcode)+" is not supported yet)"
 	    : " (Add another language to take examples from first.)"
-	return indent([unimportant("Example-based grammar editing: "), sb,
+	return indent([unimportant("Example-based editing: "), sb,
 	          unimportant(why)])
     }
 }
