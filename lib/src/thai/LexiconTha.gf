@@ -60,7 +60,7 @@ lin
 --  ceiling_N = regN "ceiling" ;
 --  chair_N = regN "chair" ;
   cheese_N = mkN (thword "เนย" "แข็ง") "ก้อน" ; 
-  child_N = mkN (thword "เด็ก") ;
+  child_N = personN (thword "เด็ก") ;
 --  church_N = regN "church" ;
   city_N = mkN "นคร" "แห่ง" ;
 --  clean_A = regADeg "clean" ;
@@ -194,7 +194,7 @@ lin
 --  love_N = regN "love" ;
   love_V2 = mkV2 rak_s ;
   man_N = personN (thword "ชาย") ;
-  married_A2 = mkA2 (mkA (thword "แต่ง" "งัน" "แล้ว")) "กับ" ;
+  married_A2 = mkA2 (mkA (thword "แต่ง" "งาน" "แล้ว")) "กับ" ;
   meat_N = mkN (thword "เนื้อ") ;
   milk_N = mkN (thword "นาม" "นม") kew_s ;
   moon_N = mkN (thword "เดือน") ;
@@ -243,7 +243,7 @@ lin
 --  read_V2 = dirV2 (irregV "read" "read" "read") ;
   red_A = mkA (thword "แดง") ;
 --  religion_N = regN "religion" ;
-  restaurant_N = placeN "เหลา" ;
+  restaurant_N = placeN (thword "ร้าน" "อาหาร") ;
 --  right_Ord = ss "right" ;
   river_N = mkN (thword "แม่" "น้ำ") ;
   road_N = mkN (thword "ทาง") ;
