@@ -72,7 +72,7 @@ concrete WordsTha of Words = SentencesTha **
     University = mkPlace L.university_N at_Prep ;
 --    Zoo = mkPlace "zoo" "ัต" ;
    
---    CitRestaurant cit = mkCNPlace (mkCN cit (mkN "รเสตัุรันต")) in_Prep to_Prep ;
+    CitRestaurant cit = mkCNPlace (mkCN cit L.restaurant_N) at_Prep noPrep ;
 
 
 -- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
@@ -96,7 +96,7 @@ concrete WordsTha of Words = SentencesTha **
 --    Catalan = mkNPNationality (mkNP (mkPN "Cัตัลัน")) (mkNP (mkPN "Cัตัลoนิั")) (mkA "Cัตัลoนิัน") ;
 --    Danish = mkNat "Dันิสห" "Dเนมัรก" ;
 --    Dutch =  mkNPNationality (mkNP (mkPN "Dุตจห")) (mkNP the_Quant (mkN "Nเตหเรลันดส")) (mkA "Dุตจห") ;
---    English = mkNat "Eนงลิสห" "Eนงลันด" ;
+--    English = mkNat "Eนงลิสห" "Eนงลันด" ; -- citizen, language, adjective, country
 --    Finnish = mkNat "Fินนิสห" "Fินลันด" ;
 --    Flemish = mkNP (mkPN "Fลเมิสห") ;
 --    French = mkNat "Fรเนจห" "Fรันจเ" ; 
@@ -145,12 +145,12 @@ concrete WordsTha of Words = SentencesTha **
 --    AThirsty p = mkCl p.name (mkA "ตหิรสตย") ;
 --    ATired p = mkCl p.name (mkA "ติรเด") ;
     AUnderstand p = mkCl p.name (mkV (R.thword "เข้า" "ไจ")) ;
-    AWant p obj = mkCl p.name (mkV2 (mkV "วันต")) obj ;
+--    AWant p obj = mkCl p.name (mkV2 (mkV "วันต")) obj ;
     AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
 
 -- miscellaneous
 
-    QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
+--    QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
 --    QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
 --    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregTha.cost_V)) ; 
 --    ItCost item price = mkCl item (mkV2 IrregTha.cost_V) price ;
@@ -176,14 +176,14 @@ concrete WordsTha of Words = SentencesTha **
 -- "ตหเ วิฝเ oฝ มย สoน" for non-pronouns.
 
     Wife = xOf "เมีย" ; ---- familiar
-    Husband = xOf "ผัว" ; ---- familiar
-    Son = xOf (R.thbind "ลูก จาย") ;
+--    Husband = xOf "ผัว" ; ---- familiar
+    Son = xOf (R.thbind "ลูก ชาย") ;
     Daughter = xOf  (R.thbind "ลูก สาว") ;
     Children = xOf L.child_N.s ; ----
 
 -- week days
 
---    Monday = mkDay "Moนดัย" ;
+    Monday = mkDay (R.thword "วัน" "จัน" "ทร์") ;
 --    Tuesday = mkDay "Tุเสดัย" ;
 --    Wednesday = mkDay "Wเดนเสดัย" ;
 --    Thursday = mkDay "Tหุรสดัย" ;
@@ -229,13 +229,13 @@ concrete WordsTha of Words = SentencesTha **
 --    mkNat : Str -> Str -> NPNationality = \nat,co -> 
 --      mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
 
---    mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
---      let day = mkNP (mkPN d) in 
---      mkNPDay day (SyntaxTha.mkAdv on_Prep day) 
---        (SyntaxTha.mkAdv on_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
+    mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
+      let day = lin NP (ss d) in 
+      mkNPDay day (SyntaxTha.mkAdv noPrep day) 
+        (SyntaxTha.mkAdv noPrep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
     
     mkPlace : N -> Prep -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p,i -> 
-      mkCNPlace (mkCN p) i to_Prep ;
+      mkCNPlace (mkCN p) i noPrep ;
 
     open_Adv = P.mkAdv "เปิด" ;
     closed_Adv = P.mkAdv "ปิด" ;
@@ -249,7 +249,7 @@ concrete WordsTha of Words = SentencesTha **
 
     mkTransport : N -> {name : CN ; by : Adv} = \n -> {
       name = mkCN n ; 
-      by = SyntaxTha.mkAdv by8means_Prep (mkNP n)
+      by = SyntaxTha.mkAdv (mkPrep "โดย") (mkNP n)
       } ;
 
     mkSuperl : A -> Det = \a -> SyntaxTha.mkDet the_Art (SyntaxTha.mkOrd a) ;
@@ -257,4 +257,6 @@ concrete WordsTha of Words = SentencesTha **
 --   far_IAdv = ExtraTha.IAdvAdv (ss "ฝัร") ;
 
   at_Prep = mkPrep "ที่" ;
+  noPrep = mkPrep [] ;
 }
+  
