@@ -14,8 +14,8 @@ concrete IdiomTha of Idiom = CatTha ** open Prelude, ResTha in {
 
     ExistNP np = {
       s = \\q,p => thbind (case p of {
-        Pos => thbind pen_s np.s ;
-        Neg => thbind may_s chay_s np.s
+        Pos => thbind mii_s np.s ;
+        Neg => thbind may_s mii_s np.s
       }) (case q of {ClQuest => m'ay_s ; _ => []})
     } ;
 

@@ -43,6 +43,7 @@ khow_s = "เข้ว" ; -- understand1
 khun_s = "คุณ" ; -- you
 koon_s = "ก่อน" ; -- bye2
 kwaa_s = "กว่า" ; -- comparative
+mii_s = "มี" ; -- have
 laa_s = "ลา" ; -- bye1
 lag2_s = "ลัง" ; -- Progr2
 lag_s = "หลัง" ; -- houses Classif
