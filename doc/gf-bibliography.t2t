@@ -4,10 +4,11 @@ Aarne Ranta
 
 % NOTE: this is a txt2tags file.
 % Create an html file from this file using:
-% txt2tags -thtml --toc gf-reference.html
+% txt2tags gf-bibliography.t2t
 
 %!style:../css/style.css
 %!target:html
+%!options(html): --toc
 %!postproc(html): #BR <br>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
@@ -143,6 +144,7 @@ Tools for multilingual grammar-based translation on the web.
 //Proceedings of the ACL 2010 System Demonstrations//,
 ACM Digital Library,
 2010.
+[PDF http://www.aclweb.org/anthology-new/P/P10/P10-4012.pdf]
 #BR
 //An overview of of GF for developers and users of translation systems.//
 
@@ -239,6 +241,7 @@ A. Ranta, B. Bringert, and K. Angelov.
 The GF Grammar Development Environment. 
 System demo. Proceedings of //EACL-2009//,
 2009.
+[PDF http://www.aclweb.org/anthology-new/E/E09/E09-2015.pdf]
 #BR
 //An overview of GF from the grammarian's point of view.//
  
@@ -246,6 +249,7 @@ B. Bringert, K. Angelov, and A. Ranta.
 Grammatical Framework Web Service,
 System demo. Proceedings of //EACL-2009//,
 2009.
+[PDF http://www.aclweb.org/anthology-new/E/E09/E09-2003.pdf]
 #BR
 //An overview of how to build web services on top of PGF using the Google Web Toolkit.//
 
