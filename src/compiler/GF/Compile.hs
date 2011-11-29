@@ -209,7 +209,7 @@ compileSourceModule opts env@(k,gr,_) mb_gfFile mo@(i,mi) = do
       warnOut opts warnings
       intermOut opts DumpRename (ppModule Internal mo2)
 
-      (mo3,warnings) <- putpp "  type checking" $ ioeErr $ runCheck (checkModule mos mo2)
+      (mo3,warnings) <- putpp "  type checking" $ ioeErr $ runCheck (checkModule opts mos mo2)
       warnOut opts warnings
       intermOut opts DumpTypeCheck (ppModule Internal mo3)
 
