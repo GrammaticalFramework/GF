@@ -23,9 +23,11 @@
 module GF.Compile.CheckGrammar(checkModule) where
 
 import GF.Infra.Ident
+import GF.Infra.Option
 
 import GF.Compile.TypeCheck.Abstract
 import GF.Compile.TypeCheck.Concrete
+import qualified GF.Compile.TypeCheck.ConcreteNew as CN
 
 import GF.Grammar
 import GF.Grammar.Lexer
@@ -42,8 +44,8 @@ import Control.Monad
 import Text.PrettyPrint
 
 -- | checking is performed in the dependency order of modules
-checkModule :: [SourceModule] -> SourceModule -> Check SourceModule
-checkModule mos mo@(m,mi) = do
+checkModule :: Options -> [SourceModule] -> SourceModule -> Check SourceModule
+checkModule opts mos mo@(m,mi) = do
   checkRestrictedInheritance mos mo
   mo <- case mtype mi of
           MTConcrete a -> do let gr = mGrammar (mo:mos)
@@ -54,7 +56,7 @@ checkModule mos mo@(m,mi) = do
   foldM updateCheckInfo mo infos
   where
     updateCheckInfo mo@(m,mi) (i,info) = do
-      info <- checkInfo mos mo i info
+      info <- checkInfo opts mos mo i info
       return (m,mi{jments=updateTree (i,info) (jments mi)})
 
 -- check if restricted inheritance modules are still coherent
@@ -150,8 +152,8 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = checkIn (ppLocation (msrc cnc) NoLoc
 
 -- | General Principle: only Just-values are checked. 
 -- A May-value has always been checked in its origin module.
-checkInfo :: [SourceModule] -> SourceModule -> Ident -> Info -> Check Info
-checkInfo ms (m,mo) c info = do
+checkInfo :: Options -> [SourceModule] -> SourceModule -> Ident -> Info -> Check Info
+checkInfo opts ms (m,mo) c info = do
   checkIn (ppLocation (msrc mo) NoLoc <> colon) $
     checkReservedId c
   case info of
@@ -211,11 +213,15 @@ checkInfo ms (m,mo) c info = do
            ty'     <- chIn loct "operation" $
                          checkLType gr [] ty typeType >>= computeLType gr [] . fst
            (de',_) <- chIn locd "operation" $
-                         checkLType gr [] de ty'
+                         (if flag optNewComp opts
+                            then CN.checkLType gr de ty'
+                            else checkLType gr [] de ty')
            return (Just (L loct ty'), Just (L locd de'))
          (Nothing         , Just (L locd de)) -> do
            (de',ty') <- chIn locd "operation" $
-                          inferLType gr [] de
+                          (if flag optNewComp opts
+                            then CN.inferLType gr de
+                            else inferLType gr [] de)
            return (Just (L locd ty'), Just (L locd de'))
          (Just (L loct ty), Nothing) -> do
            chIn loct "operation" $

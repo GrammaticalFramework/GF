@@ -167,7 +167,8 @@ data Flags = Flags {
       optUnlexer         :: Maybe String,
       optWarnings        :: [Warning],
       optDump            :: [Dump],
-      optTagsOnly        :: Bool
+      optTagsOnly        :: Bool,
+      optNewComp         :: Bool
     }
   deriving (Show)
 
@@ -269,7 +270,8 @@ defaultFlags = Flags {
       optUnlexer         = Nothing,
       optWarnings        = [],
       optDump            = [],
-      optTagsOnly        = False
+      optTagsOnly        = False,
+      optNewComp         = False
     }
 
 -- Option descriptions
@@ -346,6 +348,7 @@ optDescr =
      Option [] ["stem"] (onOff (toggleOptimize OptStem) True) "Perform stem-suffix analysis (default on).",
      Option [] ["cse"] (onOff (toggleOptimize OptCSE) True) "Perform common sub-expression elimination (default on).",
      Option [] ["cfg"] (ReqArg cfgTransform "TRANS") "Enable or disable specific CFG transformations. TRANS = merge, no-merge, bottomup, no-bottomup, ...",
+     Option [] ["new-comp"] (NoArg (set $ \o -> o{optNewComp = True})) "Use the new experimental compiler.",
      dumpOption "source" DumpSource,
      dumpOption "rebuild" DumpRebuild,
      dumpOption "extend" DumpExtend,
