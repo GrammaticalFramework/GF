@@ -19,6 +19,7 @@ module GF.Grammar.Printer
            , ppConstrs
            , ppLocation
            , ppQIdent
+           , ppMeta
            ) where
 
 import GF.Infra.Ident
@@ -26,6 +27,7 @@ import GF.Infra.Option
 import GF.Grammar.Values
 import GF.Grammar.Grammar
 
+import PGF.Expr (ppMeta)
 import PGF.Printer (ppFId, ppFunId, ppSeqId, ppSeq)
 
 import Text.PrettyPrint
@@ -212,7 +214,7 @@ ppTerm q d (Sort id)   = ppIdent id
 ppTerm q d (K s)       = str s
 ppTerm q d (EInt n)    = int n
 ppTerm q d (EFloat f)  = double f
-ppTerm q d (Meta _)    = char '?'
+ppTerm q d (Meta i)    = ppMeta i
 ppTerm q d (Empty)     = text "[]"
 ppTerm q d (R [])      = text "<>" -- to distinguish from {} empty RecType
 ppTerm q d (R xs)      = braces (fsep (punctuate semi [ppLabel l <+> 
