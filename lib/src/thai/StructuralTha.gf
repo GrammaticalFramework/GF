@@ -20,7 +20,7 @@ concrete StructuralTha of Structural = CatTha **
   by8agent_Prep = ss [] ;
   by8means_Prep = ss "ผ่าน" ;
   can8know_VV = {s = pen_s ; typ = VVPost} ;
-  can_VV = {s = way_s ; typ = VVPost} ;
+  can_VV = {s = "ได้" ; typ = VVPost} ;
 --  during_Prep = ss "during" ;
 --  either7or_DConj = sd2 "either" "or" ** {n = Sg} ;
 --  everybody_NP = regNP "everybody" Sg ;
@@ -28,7 +28,6 @@ concrete StructuralTha of Structural = CatTha **
 --  everything_NP = regNP "everything" Sg ;
 --  everywhere_Adv = ss "everywhere" ;
   few_Det = quantDet (thword "สอง" "สาม") ;
---  first_Ord = ss "first" ;
 --  for_Prep = ss "for" ;
   from_Prep = ss "จาก" ;
   have_V2 = mkV2 "มี" ;
@@ -71,11 +70,8 @@ concrete StructuralTha of Structural = CatTha **
 --  there7to_Adv = ss "there" ;
 --  there7from_Adv = ss ["from there"] ;
 --  therefore_PConj = ss "therefore" ;
---  these_NP = regNP "these" Pl ;
   they_Pron = mkNP khaw_s ;
   this_Quant = demDet nii_s ;
---  this_NP = regNP "this" Sg ;
---  those_NP = regNP "those" Pl ;
 --  through_Prep = ss "through" ;
   too_AdA = ss (thword "เกิน" "ไป") ;
   to_Prep = ss "ถืง" ;

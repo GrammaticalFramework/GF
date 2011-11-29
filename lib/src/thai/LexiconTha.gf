@@ -283,7 +283,7 @@ lin
   sit_V = mkV (thword "นั่ง") ;
   skin_N = mkN (thword "หนัง") ;
   sky_N = mkN (thword "ฟ้า") ;
-  sleep_V = mkV (thword "นอน") ;
+  sleep_V = mkV "นอน" "หลับ" ;
   small_A = mkA (thword "เล็ก") ;
   smell_V = mkV (thword "มีก" "ลิ่น") ;
   smoke_N = mkN (thword "ควัน") ;
