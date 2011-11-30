@@ -16,14 +16,14 @@ oper
   cc2 : (_,_ : SS) -> SS = \x,y -> ss (x.s ++ y.s) ;
   cc3 : (_,_,_ : SS) -> SS = \x,y,z -> ss (x.s ++ y.s ++ z.s) ;
 
-  SS1 : Type -> Type = \P -> {s : P => Str} ;
-  ss1 : (A : Type) -> Str -> SS1 A = \A,s -> {s = table {_ => s}} ;
+  SS1 : PType -> Type = \P -> {s : P => Str} ;
+  ss1 : (A : PType) -> Str -> SS1 A = \A,s -> {s = table {_ => s}} ;
 
   SP1 : Type -> Type = \P -> {s : Str ; p : P} ;
   sp1 : (A : Type) -> Str -> A -> SP1 A = \_,s,a -> {s = s ; p = a} ;
 
-  constTable : (A,B : Type) -> B -> A => B = \_,_,b -> \\_ => b ;
-  constStr   : (A : Type) -> Str -> A => Str = \A -> constTable A Str ;
+  constTable : (A : PType) -> (B : Type) -> B -> A => B = \u,v,b -> \\_ => b ;
+  constStr   : (A : PType) -> Str -> A => Str = \A -> constTable A Str ;
 
 -- Discontinuous constituents.
 
