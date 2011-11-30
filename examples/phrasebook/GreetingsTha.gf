@@ -2,7 +2,7 @@ concrete GreetingsTha of Greetings =
   SentencesTha [Greeting,mkGreeting] ** 
   open ResTha, Prelude in {
 
--- สุคสันต์วันเกิด
+-- สุขสันต์วันเกิด
 
 flags coding = utf8 ;
 
@@ -16,19 +16,20 @@ lin
   GGoodMorning = mkGreeting (thword "สวัส" "ดี") ;
   GGoodNight = mkGreeting (thword "รา" "ตรี" "สวัส" "ดิ์") ;
   GGoodbye = mkGreeting (thword "ลา" "ก่อน") ;
-  GHello = mkGreeting (thword "หวัส" "ดี") ;
+  GHello = mkGreeting (thword "สวัส" "ดี") ;
   GHelp = mkGreeting (thword "ช่วย" "ด้วย") ;
   GHowAreYou = mkGreeting (thword "สบาย" "ดี" "ไหม") ;
   GLookOut = mkGreeting (thword "ระ" "วัง") ; ---- google
   GNiceToMeetYou, GNiceToMeetYouPol = 
-    mkGreeting (thbind "ยิน" "ดี" "ฑี่" "ได้" "รู้" "จัก") ;
+    mkGreeting (thword "ยิน" "ดี" "ที่" "ได้" "รู้" "จัก") ;
   GPleaseGive, GPleaseGivePol = mkGreeting (thword "ช่วย") ; ----
   GSeeYouSoon = mkGreeting (thword "เจอ" "กัน" "นะ") ;
   GSorry, GSorryPol = mkGreeting (thword "ขอ" "โทษ") ;
   GThanks = mkGreeting (thword "ขอบ" "คุณ") ;
   GTheCheck = mkGreeting (thword "เช็ค" "บิล") ;
   GCongratulations = mkGreeting (thword "ยิน" "ดี" "ด้วย") ;
-  GHappyBirthday = mkGreeting (thword "สุค" "สันต์" "วัน" "เกิด") ;
-  GGoodLuck = mkGreeting (thword "โจค" "ดี" "นะ") ; 
+  GHappyBirthday = mkGreeting (thword "สุข" "สันต์" "วัน" "เกิด") ;
+  GGoodLuck = mkGreeting (thword "โชค" "ดี" "นะ") ; 
 }
+
 
