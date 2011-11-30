@@ -150,10 +150,10 @@ concrete WordsTha of Words = SentencesTha **
 
 -- miscellaneous
 
---    QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
---    QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
---    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregTha.cost_V)) ; 
---    ItCost item price = mkCl item (mkV2 IrregTha.cost_V) price ;
+    QWhatName p = mkQS (mkQCl whatSg_IP p.name (mkV2 "ชื่อ")) ; ---
+    QWhatAge p = mkQS (mkQCl (mkIComp how8much_IAdv) (mkNP p.name (ParadigmsTha.mkAdv (R.thword "อา" "ยุ")))) ; --- Adv
+    HowMuchCost item = mkQS (mkQCl (mkIComp how8much_IAdv) item) ;
+    ItCost item price = mkCl item (mkV2 (R.thword "เป็น" "รา" "คา")) price ;
 
     PropOpen p = mkCl p.name open_Adv ;
     PropClosed p = mkCl p.name closed_Adv ;
@@ -196,7 +196,7 @@ concrete WordsTha of Words = SentencesTha **
 -- modifiers of places
 
     TheBest = mkSuperl L.good_A ;
---    TheClosest = mkSuperl L.near_A ; 
+    TheClosest = mkSuperl L.near_A ; 
     TheCheapest = mkSuperl (mkA (R.thword "รา" "คา" "ถูก")) ;
     TheMostExpensive = mkSuperl (mkA "แพง") ;
     TheMostPopular = mkSuperl (mkA (R.thword "โด่ง" "ดัง")) ;
@@ -207,12 +207,12 @@ concrete WordsTha of Words = SentencesTha **
 
 -- transports
 
---    HowFar place = mkQS (mkQCl far_IAdv place.name) ;
---    HowFarFrom x y = 
---      mkQS (mkQCl far_IAdv (mkCl y.name (SyntaxTha.mkAdv from_Prep x.name))) ;
---    HowFarFromBy x y t = 
---      mkQS (mkQCl far_IAdv (mkCl y.name (SyntaxTha.mkAdv from_Prep (mkNP x.name t)))) ;
---    HowFarBy y t = mkQS (mkQCl far_IAdv (mkCl y.name t)) ;
+    HowFar place = mkQS (mkQCl far_IAdv place.name) ;
+    HowFarFrom x y = 
+      mkQS (mkQCl far_IAdv (mkCl y.name (SyntaxTha.mkAdv from_Prep x.name))) ;
+    HowFarFromBy x y t = 
+      mkQS (mkQCl far_IAdv (mkCl y.name (SyntaxTha.mkAdv from_Prep (mkNP x.name t)))) ;
+    HowFarBy y t = mkQS (mkQCl far_IAdv (mkCl y.name t)) ;
  
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
@@ -254,13 +254,12 @@ concrete WordsTha of Words = SentencesTha **
 
     mkSuperl : A -> Det = \a -> SyntaxTha.mkDet the_Art (SyntaxTha.mkOrd a) ;
 
-    mkCurrency : Str -> CN = \s -> mkCN (mkN s) ; ---- classifier
+    mkCurrency : Str -> CN = \s -> mkCN (mkN [] s) ; ---- just a classifier
     
---   far_IAdv = ExtraTha.IAdvAdv (ss "ไกล") ;
+    far_IAdv = lin IAdv (ss (R.thword "ไกล" "เท่า" "ไร")) ;
 
-  at_Prep = mkPrep "ที่" ;
-  noPrep = mkPrep [] ;
-
+    at_Prep = mkPrep "ที่" ;
+    noPrep = mkPrep [] ;
 
 --------------------------------------------------
 -- New 30/11/2011 AR
@@ -270,7 +269,12 @@ concrete WordsTha of Words = SentencesTha **
     Thai = mkNat "ไทย" ;
     Baht = mkCurrency "บาท" ;
 
-
+    Rice = mkCN (mkN ("ฆ้าว")) ;
+    Pork = mkCN (mkN ("หมู")) ;
+    Beef = mkCN (mkN ("เนื้อ")) ;
+    Durian = mkCN (mkN (R.thword "ทุ" "เรียน")) ;
+    Mango = mkCN (mkN (R.thword "ฆะ" "ม่วง")) ;
+    Pineapple = mkCN (mkN (R.thword "สับ" "ปะ" "รด")) ;
 
 }
   

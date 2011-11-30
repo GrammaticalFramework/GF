@@ -266,4 +266,11 @@ concrete WordsEng of Words = SentencesEng **
     Thai = mkNat "Thai" "Thailand" ;
     Baht = mkCN (mkN "baht" "baht") ;
 
+    Rice = mkCN (mkN "rice") ;
+    Pork = mkCN (mkN "pork") ;
+    Beef = mkCN (mkN "beef") ;
+    Durian = mkCN (mkN "durian") ;
+    Mango = mkCN (mkN "mango") ;
+    Pineapple = mkCN (mkN "pineapple") ;
+
 }

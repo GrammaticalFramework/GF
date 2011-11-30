@@ -204,8 +204,8 @@ lin
 --  music_N = regN "music" ;
   name_N = mkN (thword "ชื่อ") ;
   narrow_A = mkA (thword "แคบ") ;
---  near_A = regA "near" ;
----  near_Adv = ss (thword "ใกล้") ;
+  near_A = mkA "ใกล้" ;
+  near_Adv = mkAdv "ใกล้" ;
   neck_N = mkN (thword "คอ") ;
   new_A = mkA (thword "ใหม่") ;
 --  newspaper_N = regN "newspaper" ;
