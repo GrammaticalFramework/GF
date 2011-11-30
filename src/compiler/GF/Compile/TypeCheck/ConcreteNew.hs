@@ -131,12 +131,15 @@ tcRho gr scope (T tt ps) mb_ty = do
   res_ty <- fmap Meta $ newMeta (eval gr [] typeType)
   ps <- mapM (tcCase gr scope (eval gr (scopeEnv scope) p_ty) (eval gr (scopeEnv scope) res_ty)) ps
   instSigma gr scope (T (TTyped p_ty) ps) (eval gr (scopeEnv scope) (Table p_ty res_ty)) mb_ty
-tcRho gr scope (R rs) mb_ty = do
+tcRho gr scope t@(R rs) mb_ty = do
   lttys <- case mb_ty of
              Nothing -> inferRecFields gr scope rs
              Just ty -> case ty of
                           VRecType ltys -> checkRecFields gr scope rs ltys
-                          _             -> tcError (text "Record expected")
+                          _             -> tcError (text "Record type is inferred but:" $$
+                                                    nest 2 (ppTerm Unqualified 0 (value2term gr (scopeVars scope) ty)) $$
+                                                    text "is expected in the expresion:" $$
+                                                    nest 2 (ppTerm Unqualified 0 t))
   return (R        [(l, (Just (value2term gr (scopeVars scope) ty), t)) | (l,t,ty) <- lttys], 
           VRecType [(l, ty)                                             | (l,t,ty) <- lttys]
          )
