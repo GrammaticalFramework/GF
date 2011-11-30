@@ -25,6 +25,8 @@ abstract Sentences = Numeral ** {
     Item ;        -- a single entity                           e.g. "this pizza"
     Kind ;        -- a type of an item                         e.g. "pizza"
     MassKind ;    -- a type mass (uncountable)                 e.g. "water"
+    PlurKind ;    -- a type usually only in plural             e.g. "noodles"
+    DrinkKind ;   -- a drinkable, countable type               e.g. "beer"
     Quality ;     -- qualification of an item, can be complex  e.g. "very good"
     Property ;    -- basic property of an item, one word       e.g. "good"
     Place ;       -- location                                  e.g. "the bar" 
@@ -109,6 +111,7 @@ abstract Sentences = Numeral ** {
     ObjNumber : Number -> Kind -> PrimObject ;   -- five pizzas
     ObjIndef  : Kind -> PrimObject ;             -- a pizza
     ObjPlural : Kind -> PrimObject ;             -- pizzas
+    ObjPlur   : PlurKind -> PrimObject ;         -- noodles
     ObjMass   : MassKind -> PrimObject ;         -- water
     ObjAndObj : PrimObject -> Object -> Object ; -- this pizza and a beer
     OneObj    : PrimObject -> Object ;           -- this pizza
@@ -119,11 +122,15 @@ abstract Sentences = Numeral ** {
     Too  : Property -> Quality ;                 -- too Italian      
     PropQuality : Property -> Quality ;          -- Italian
 
+    MassDrink : DrinkKind -> MassKind ;          -- beer
+    KindDrink : DrinkKind -> Kind ;              -- (one) beer
+
 -- Determiners.
 
-    This, That, These, Those : Kind -> Item ;         -- this pizza,...,those pizzas
-    The, Thes : Kind -> Item ;                        -- the pizza, the pizzas
-    ThisMass, ThatMass, TheMass : MassKind -> Item ;  -- this/that/the water
+    This, That, These, Those : Kind -> Item ;           -- this pizza,...,those pizzas
+    The, Thes : Kind -> Item ;                          -- the pizza, the pizzas
+    ThisMass, ThatMass, TheMass : MassKind -> Item ;    -- this/that/the water
+    ThesePlur, ThosePlur, ThesPlur : PlurKind -> Item ; -- these/those/the potatoes
 
     AmountCurrency : Number -> Currency -> Price ;    -- five euros
 
@@ -189,8 +196,8 @@ abstract Sentences = Numeral ** {
     
     VPlay, VRun, VSit, VSleep, VSwim, VWalk : VerbPhrase ;
     VDrink, VEat, VRead, VWait, VWrite : VerbPhrase ;
----    VBuy, VDrink, VEat : VerbPhrase ;
----    VWait : Person -> VerbPhrase ;
+    V2Buy, V2Drink, V2Eat : Object -> VerbPhrase ;
+    V2Wait : Person -> VerbPhrase ;
 
 -- other new things allowed by the resource
 

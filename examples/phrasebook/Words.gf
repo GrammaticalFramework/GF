@@ -1,7 +1,7 @@
 --2 Words and idiomatic phrases of the Phrasebook
 
 
--- (c) 2009 Aarne Ranta under LGPL --%
+-- (c) 2010 Aarne Ranta under LGPL --%
 
 abstract Words = Sentences ** {
 
@@ -10,19 +10,19 @@ abstract Words = Sentences ** {
 -- kinds of items (so far mostly food stuff)
 
     Apple : Kind ;
-    Beer : MassKind ;
+    Beer : DrinkKind ;
     Bread : MassKind ; 
     Cheese : MassKind ;
     Chicken : MassKind ; 
-    Coffee : MassKind ; 
+    Coffee : DrinkKind ; 
     Fish : MassKind ; 
     Meat : MassKind ;
     Milk : MassKind ; 
     Pizza : Kind ; 
     Salt : MassKind ;
-    Tea : MassKind ; 
-    Water : MassKind ; 
-    Wine : MassKind ;
+    Tea : DrinkKind ; 
+    Water : DrinkKind ; 
+    Wine : DrinkKind ;
 
 -- properties of kinds (so far mostly of food)
 
@@ -207,9 +207,19 @@ abstract Words = Sentences ** {
     Rice : MassKind ;
     Pork : MassKind ;
     Beef : MassKind ;
+    Noodles : PlurKind ;
+    Shrimps : PlurKind ;
     
+    Chili : MassKind ;
+    Garlic : MassKind ;
+
     Durian : Kind ;
     Mango : Kind ;
     Pineapple : Kind ;
+
+    Coke : DrinkKind ;
+    IceCream : DrinkKind ; --- both mass and plural
+
+    Beach : PlaceKind ;
 
 }

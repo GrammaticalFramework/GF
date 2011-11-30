@@ -277,4 +277,28 @@ concrete WordsFin of Words = SentencesFin **
     mkSuperl : A -> Det = \a -> mkDet the_Quant (mkOrd a) ;
 
     far_IAdv = E.IAdvAdv L.far_Adv ;
+
+--------------------------------------------------
+-- New 30/11/2011 AR
+--------------------------------------------------
+
+  lin
+    Thai = mkNat (mkPN "thai") (mkPN "Thaimaa") (mkA "thaimaalainen") ;
+    Baht = mkCN (mkN "baht" "bahteja") ;
+
+    Rice = mkCN (mkN "riisi") ;
+    Pork = mkCN (mkN "sika") ;
+    Beef = mkCN (mkN "nauta") ;
+    Noodles = mkCN (mkN "nuudeli" "nuudeleita") ;
+    Shrimps = mkCN (mkN "katka" (mkN "rapu")) ;
+    Chili = mkCN (mkN "chili") ;
+    Garlic = mkCN (mkN "valko" (mkN "sipuli")) ;
+    Durian = mkCN (mkN "durian" "durianeja") ;
+    Mango = mkCN (mkN "mango" "mangoja") ;
+    Pineapple = mkCN (mkN "ananas" "ananaksia") ;
+    Coke = mkCN (mkN "coca-cola") ;
+    IceCream = mkCN (mkN "jäätelö" "jäätelöitä") ;
+    Beach = mkPlace (mkN "uima" (mkN "ranta")) lla ;
+
+
 }
