@@ -51,7 +51,7 @@ lin
 --  brown_A = regADeg "brown" ;
   burn_V = mkV (thword "เผา") ;
 --  butter_N = regN "butter" ;
---  buy_V2 = dirV2 (irregV "buy" "bought" "bought") ;
+  buy_V2 = mkV2 "ซีอ" ;
 --  camera_N = regN "camera" ;
 --  cap_N = regN "cap" ;
   car_N = mkN "รถ" "คัน" ;
