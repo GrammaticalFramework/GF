@@ -476,7 +476,7 @@ type Hypo     = (BindType,Ident,Term)   -- (x:A)  (_:A)  A  ({x}:A)
 type Context  = [Hypo]                  -- (x:A)(y:B)   (x,y:A)   (_,_:A)
 type Equation = ([Patt],Term) 
 
-type Labelling = (Label, Term) 
+type Labelling = (Label, Type) 
 type Assign = (Label, (Maybe Type, Term)) 
 type Case = (Patt, Term) 
 type Cases = ([Patt], Term) 

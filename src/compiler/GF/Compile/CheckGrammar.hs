@@ -28,6 +28,7 @@ import GF.Infra.Option
 import GF.Compile.TypeCheck.Abstract
 import GF.Compile.TypeCheck.Concrete
 import qualified GF.Compile.TypeCheck.ConcreteNew as CN
+import qualified GF.Compile.Compute.ConcreteNew as CN
 
 import GF.Grammar
 import GF.Grammar.Lexer
@@ -211,7 +212,9 @@ checkInfo opts ms (m,mo) c info = do
       (pty', pde') <- case (pty,pde) of
          (Just (L loct ty), Just (L locd de)) -> do
            ty'     <- chIn loct "operation" $
-                         checkLType gr [] ty typeType >>= computeLType gr [] . fst
+                         (if flag optNewComp opts
+                            then CN.checkLType gr ty typeType >>= return . CN.normalForm gr . fst
+                            else checkLType gr [] ty typeType >>= computeLType gr [] . fst)
            (de',_) <- chIn locd "operation" $
                          (if flag optNewComp opts
                             then CN.checkLType gr de ty'
