@@ -13,7 +13,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Infra.CheckM
-          (Check, Message, runCheck,
+          (Check(..), CheckResult(..), Message, runCheck,
 	       checkError, checkCond, checkWarn, 
 	       checkErr, checkIn, checkMap
 	      ) where
