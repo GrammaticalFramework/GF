@@ -204,4 +204,12 @@ abstract Words = Sentences ** {
     Thai : Nationality ;
     Baht : Currency ; -- Thailand
 
+    Rice : MassKind ;
+    Pork : MassKind ;
+    Beef : MassKind ;
+    
+    Durian : Kind ;
+    Mango : Kind ;
+    Pineapple : Kind ;
+
 }

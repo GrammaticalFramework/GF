@@ -47,7 +47,7 @@ concrete StructuralTha of Structural = CatTha **
   many_Det = quantDet "หลาย" ;
   more_CAdv = {s = thword "มาก" "กว่า" ; p = []} ; ----
 --  most_Predet = ss "most" ;
---  much_Det = mkDeterminer Sg "much" ;
+  much_Det = quantDet "มาก" ;
   must_VV = {s = tog_s ; typ = VVPre} ;
   no_Utt = ss may_s ;
   on_Prep = ss "บน" ;

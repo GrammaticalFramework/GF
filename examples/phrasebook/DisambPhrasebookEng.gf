@@ -11,12 +11,13 @@ concrete DisambPhrasebookEng of Phrasebook = PhrasebookEng -
     GPleaseGive, GPleaseGivePol,
     GNiceToMeetYou, -- GNiceToMeetYouPol,
     PYes, PYesToNo, ObjMass,
+    MKnow,
     WeMale, WeFemale,
     YouPlurFamMale, YouPlurFamFemale,
     YouPlurPolMale, YouPlurPolFemale,
     TheyMale, TheyFemale
    ] 
-  ** open SyntaxEng, ParadigmsEng, Prelude in {
+  ** open SyntaxEng, ParadigmsEng, IrregEng, Prelude in {
 lin
   IMale = mkP i_Pron "(male)" ;
   IFemale = mkP i_Pron "(female)" ;
@@ -32,6 +33,8 @@ lin
   YouPlurPolFemale = mkP youPol_Pron "(plural,polite,female)" ;
   TheyMale = mkP they_Pron "(male)" ;
   TheyFemale = mkP they_Pron "(female)" ;
+
+  MKnow = mkVV (partV know_V "how") ; ---
 
   LangNat nat = mkNP nat.lang (ParadigmsEng.mkAdv "(language)") ;
 --  CitiNat nat = nat.prop ;

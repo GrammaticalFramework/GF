@@ -1,4 +1,3 @@
-DisambPhrasebookEng :
 PhrasebookBul :
 PhrasebookCat :
 PhrasebookDan :
@@ -13,4 +12,5 @@ PhrasebookPol :
 PhrasebookRon :
 PhrasebookSpa :
 PhrasebookSwe :
+PhrasebookTha : ACitizen AHasAge AHasRoom AHasTable AHaveCurr ALike ALive AScared ASpeak AThirsty ATired Airport AmountCurrency AmusementPark Bank Bar Belgian Belgium Bulgarian Bus ByFoot Cafeteria Catalan Center Cheap Chicken Church Cinema CitRestaurant CitiNat Coffee CountryNat Danish DanishCrown Disco Dollar Dutch English Euro Ferry Finnish Flemish French Friday German Hospital Hotel HowFar HowFarBy HowFarFrom HowFarFromBy HowMuchCost ItCost Italian LangNat Lei Leva Monday Museum Norwegian NorwegianCrown OnDay PCitizenship PCountry PCurrency PDay PLanguage PPrice PSeeYouDate PSeeYouPlace PSeeYouPlaceDate Park Parking Pharmacy Polish PostOffice Pound PropCit PropClosedDay PropOpenDay Pub QWhatAge Romanian Rouble Russian Saturday Spanish Station Subway Sunday Supermarket Suspect Swedish SwedishCrown Taxi Tea TheCheapest TheClosest TheMostPopular Theatre Thursday Toilet Tomorrow Tram Tuesday Wednesday Zloty Zoo
 PhrasebookUrd :
