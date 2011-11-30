@@ -167,5 +167,40 @@ abstract Sentences = Numeral ** {
     AKnowPerson   : Person -> Person   -> Action ; -- you know me
     AKnowQuestion : Person -> Question -> Action ; -- you know how far the bar is
 
+------------------------------------------------------------------------------------------
+-- New things added 30/11/2011 by AR
+------------------------------------------------------------------------------------------
+
+  cat
+    VerbPhrase ;  -- things one does, can do, must do, wants to do, e.g. swim
+    Modality ;    -- can, want, must
+  fun
+    ADoVerbPhrase       : Person -> VerbPhrase -> Action ;                       -- I swim
+    AModVerbPhrase       : Modality -> Person -> VerbPhrase -> Action ;           -- I can swim
+    ADoVerbPhrasePlace  : Person -> VerbPhrase -> Place -> Action ;              -- I swim in the hotel
+    AModVerbPhrasePlace  : Modality -> Person -> VerbPhrase -> Place -> Action ;  -- I can swim in the hotel
+
+    QWhereDoVerbPhrase  : Person -> VerbPhrase -> Question ;                     -- where do you swim
+    QWhereModVerbPhrase : Modality -> Person -> VerbPhrase -> Question ;         -- where can I swim
+
+    MCan, MKnow, MMust, MWant : Modality ;
+  
+-- lexical items given in the resource Lexicon
+    
+    VPlay, VRun, VSit, VSleep, VSwim, VWalk : VerbPhrase ;
+    VDrink, VEat, VRead, VWait, VWrite : VerbPhrase ;
+---    VBuy, VDrink, VEat : VerbPhrase ;
+---    VWait : Person -> VerbPhrase ;
+
+-- other new things allowed by the resource
+
+---    PBecause : Sentence -> Sentence -> Phrase ;  -- I want to swim because it is hot
+
+    He, She,                                  -- he, she
+    WeMale, WeFemale,                         -- we, said by men/women (affects agreement)
+    YouPlurFamMale, YouPlurFamFemale,         -- plural familiar you, said to men/women (affects agreement)
+    YouPlurPolMale, YouPlurPolFemale,         -- plural polite you, said to men/women (affects agreement)
+    TheyMale, TheyFemale : Person ;           -- they, said of men/women (affects agreement)
+
 }
 

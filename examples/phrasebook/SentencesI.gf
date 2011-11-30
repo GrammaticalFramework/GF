@@ -228,4 +228,48 @@ oper
 -- for languages with GenNP, use "p's wife"
 --   relativePerson n x (\a,b,c -> mkNP (GenNP b) a c) p ;
 
+------------------------------------------------------------------------------------------
+-- New things added 30/11/2011 by AR
+------------------------------------------------------------------------------------------
+
+  lincat
+    VerbPhrase  = VP ;
+    Modality = VV ;
+  lin
+    ADoVerbPhrase p vp = mkCl p.name vp ;
+    AModVerbPhrase m p vp = mkCl p.name (mkVP m vp) ;
+    ADoVerbPhrasePlace p vp x = mkCl p.name (mkVP vp x.at) ;
+    AModVerbPhrasePlace m p vp x = mkCl p.name (mkVP m (mkVP vp x.at)) ;
+
+    QWhereDoVerbPhrase p vp = mkQS (mkQCl where_IAdv (mkCl p.name vp)) ;
+    QWhereModVerbPhrase m p vp = mkQS (mkQCl where_IAdv (mkCl p.name (mkVP m vp))) ;
+
+    MWant = want_VV ;
+    MCan = can_VV ;
+    MKnow = can8know_VV ;
+    MMust = must_VV ;
+
+    VPlay = mkVP play_V ;
+    VRun = mkVP run_V ;
+    VSit = mkVP sit_V ;
+    VSleep = mkVP sleep_V ;
+    VSwim = mkVP swim_V ; 
+    VWalk = mkVP walk_V ;
+    VDrink = mkVP <lin V drink_V2 : V> ; 
+    VEat = mkVP <lin V eat_V2 : V> ; 
+    VRead = mkVP <lin V read_V2 : V> ; 
+    VWait = mkVP <lin V wait_V2 : V> ; 
+    VWrite = mkVP <lin V write_V2 : V> ; 
+
+-- other new things allowed by the resource
+
+---    PBecause a b = SSubjS a because_Subj b ;
+
+    He = mkPerson he_Pron ;
+    She = mkPerson she_Pron ;
+    WeMale, WeFemale = mkPerson we_Pron ;
+    YouPlurFamMale, YouPlurFamFemale = mkPerson youPl_Pron ;
+    YouPlurPolMale, YouPlurPolFemale = mkPerson youPl_Pron ;
+    TheyMale, TheyFemale = mkPerson they_Pron ;
+
 }

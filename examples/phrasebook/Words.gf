@@ -195,4 +195,13 @@ abstract Words = Sentences ** {
 
     SuperlPlace : Superlative -> PlaceKind -> Place ; -- the best bar
 
+
+--------------------------------------------------
+-- New 30/11/2011 AR
+--------------------------------------------------
+
+  fun
+    Thai : Nationality ;
+    Baht : Currency ; -- Thailand
+
 }

@@ -5,20 +5,14 @@ all: fin demo missing
 demo: compdemo linkdemo
 
 compdemo:
-	$(compile) Bul Cat Dan Dut Eng Fre Ger Ita Nor Pol Ron Rus Spa Swe Urd DisambPhrasebookEng
+	$(compile) Bul Cat Dan Dut Eng Fre Ger Ita Nor Pol Ron Rus Spa Swe Tha Urd DisambPhrasebookEng
 
 linkdemo:
-	$(compile) -link Eng Bul Cat Dan Dut Fin Fre Ger Ita Nor Pol Ron Rus Spa Swe Urd DisambPhrasebookEng 
+	$(compile) -link Eng Bul Cat Dan Dut Fin Fre Ger Ita Nor Pol Ron Rus Spa Swe Tha Urd DisambPhrasebookEng 
 
 #separate, because slow...
 fin:
 	$(compile) Fin
-
-pgfs:
-	$(compile) Bul Cat Dan Dut Eng Fin Fre Ger Ita Nor Pol Ron Rus Spa Swe Urd
-
-koe:
-	$(compile) Eng Fre DisambPhrasebookEng
 
 missing:
 	echo "pg -missing | wf -file=missing.txt" | gf -run Phrasebook.pgf 

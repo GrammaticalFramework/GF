@@ -258,4 +258,12 @@ concrete WordsEng of Words = SentencesEng **
     
    far_IAdv = ExtraEng.IAdvAdv (ss "far") ;
 
+--------------------------------------------------
+-- New 30/11/2011 AR
+--------------------------------------------------
+
+  lin
+    Thai = mkNat "Thai" "Thailand" ;
+    Baht = mkCN (mkN "baht" "baht") ;
+
 }

@@ -1,4 +1,4 @@
-concrete SentencesUrd of Sentences =  NumeralUrd **  SentencesI - [sing,IFemale,YouFamFemale,YouPolFemale] with 
+concrete SentencesUrd of Sentences =  NumeralUrd **  SentencesI - [sing,IFemale,YouFamFemale,YouPolFemale,MMust] with 
   (Syntax = SyntaxUrd),
   (Symbolic = SymbolicUrd),
   (Lexicon = LexiconUrd) **
