@@ -272,9 +272,16 @@ concrete WordsTha of Words = SentencesTha **
     Rice = mkCN (mkN ("ฆ้าว")) ;
     Pork = mkCN (mkN ("หมู")) ;
     Beef = mkCN (mkN ("เนื้อ")) ;
+    Noodles = mkCN (mkN ("เส้ม")) ;
+    Shrimps = mkCN (mkN ("กุ้ง")) ;
+    Chili = mkCN (mkN "พริก") ;
+    Garlic = mkCN (mkN (R.thword "กระ" "เทียม")) ;
     Durian = mkCN (mkN (R.thword "ทุ" "เรียน")) ;
     Mango = mkCN (mkN (R.thword "ฆะ" "ม่วง")) ;
     Pineapple = mkCN (mkN (R.thword "สับ" "ปะ" "รด")) ;
+    Coke = mkCN (mkN ("โค้ก")) ;
+    IceCream = mkCN (mkN (R.thword "ไอ" "ศ" "กรีม")) ;
+    Beach = mkPlace (placeN (R.thword "หาด")) ;
 
 }
   

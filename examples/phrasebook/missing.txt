@@ -1,16 +1,18 @@
-PhrasebookBul :
-PhrasebookCat :
-PhrasebookDan :
-PhrasebookDut :
+DisambPhrasebookEng :
+PhrasebookBul : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
+PhrasebookCat : Baht Beach Beef Chili Coke Durian Garlic IceCream MMust Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
+PhrasebookDan : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
+PhrasebookDut : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
 PhrasebookEng :
 PhrasebookFin :
-PhrasebookFre :
-PhrasebookGer :
-PhrasebookIta :
-PhrasebookNor :
-PhrasebookPol :
-PhrasebookRon :
-PhrasebookSpa :
+PhrasebookFre : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
+PhrasebookGer : AModVerbPhrase AModVerbPhrasePlace Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
+PhrasebookIta : Baht Beach Beef Chili Coke Durian Garlic IceCream MCan MMust Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
+PhrasebookNor : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
+PhrasebookPol : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
+PhrasebookRon : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
+PhrasebookRus : Baht Beach Beef Belgian Belgium Chili Coke Durian Flemish Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
+PhrasebookSpa : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
 PhrasebookSwe :
-PhrasebookTha : ACitizen AHasAge AHasRoom AHasTable AHaveCurr ALike ALive AScared ASpeak AThirsty ATired Airport AmountCurrency AmusementPark Bank Bar Belgian Belgium Bulgarian Bus ByFoot Cafeteria Catalan Center Cheap Chicken Church Cinema CitRestaurant CitiNat Coffee CountryNat Danish DanishCrown Disco Dollar Dutch English Euro Ferry Finnish Flemish French Friday German Hospital Hotel HowFar HowFarBy HowFarFrom HowFarFromBy HowMuchCost ItCost Italian LangNat Lei Leva Monday Museum Norwegian NorwegianCrown OnDay PCitizenship PCountry PCurrency PDay PLanguage PPrice PSeeYouDate PSeeYouPlace PSeeYouPlaceDate Park Parking Pharmacy Polish PostOffice Pound PropCit PropClosedDay PropOpenDay Pub QWhatAge Romanian Rouble Russian Saturday Spanish Station Subway Sunday Supermarket Suspect Swedish SwedishCrown Taxi Tea TheCheapest TheClosest TheMostPopular Theatre Thursday Toilet Tomorrow Tram Tuesday Wednesday Zloty Zoo
-PhrasebookUrd :
+PhrasebookTha :
+PhrasebookUrd : Baht Beach Beef Chili Coke Durian Garlic IceCream MMust Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur

@@ -20,6 +20,9 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Item = NP ;
     Kind = CN ;
     MassKind = CN ;
+    MassKind = CN ;
+    PlurKind = CN ;
+    DrinkKind = CN ;
     Quality = AP ;
     Property = A ;
     Object = NP ;
@@ -73,7 +76,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     PNo = mkPhrase no_Utt ;
     PYesToNo = mkPhrase yes_Utt ;
 
-    GObjectPlease o = lin Text (mkPhr noPConj (mkUtt o) please_Voc) ;
+    GObjectPlease o = lin Text (mkPhr noPConj (mkUtt o) please_Voc) | lin Text (mkUtt o) ;
 
     Is = mkCl ;
     IsMass m q = mkCl (mkNP m) q ;
@@ -93,9 +96,13 @@ incomplete concrete SentencesI of Sentences = Numeral **
     ObjNumber n k = mkNP n k ;
     ObjIndef k = mkNP a_Quant k ;
     ObjPlural k = mkNP aPl_Det k ;
+    ObjPlur k = mkNP aPl_Det k ;
     ObjMass k = mkNP k ;
     ObjAndObj = mkNP and_Conj ;
     OneObj o = o ; 
+
+    MassDrink d = d ;
+    KindDrink d = d ;
 
     This kind = mkNP this_Quant kind ;
     That kind = mkNP that_Quant kind ;
@@ -106,6 +113,9 @@ incomplete concrete SentencesI of Sentences = Numeral **
     ThisMass kind = mkNP this_Quant kind ;
     ThatMass kind = mkNP that_Quant kind ;
     TheMass kind = mkNP the_Quant kind ;
+    ThesePlur kind = mkNP this_Quant plNum kind ;
+    ThosePlur kind = mkNP that_Quant plNum kind ;
+    ThesPlur kind = mkNP the_Quant plNum kind ;
 
     SuchKind quality kind = mkCN quality kind ;
     SuchMassKind quality kind = mkCN quality kind ;
@@ -260,6 +270,11 @@ oper
     VRead = mkVP <lin V read_V2 : V> ; 
     VWait = mkVP <lin V wait_V2 : V> ; 
     VWrite = mkVP <lin V write_V2 : V> ; 
+
+    V2Buy o = mkVP buy_V2 o ;
+    V2Drink o = mkVP drink_V2 o ;
+    V2Eat o = mkVP eat_V2 o ;
+    V2Wait o = mkVP wait_V2 o.name ;
 
 -- other new things allowed by the resource
 

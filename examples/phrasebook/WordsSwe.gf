@@ -245,4 +245,27 @@ concrete WordsSwe of Words = SentencesSwe **
     mkSuperl : A -> Det = \a -> mkDet the_Art (mkOrd a) ;
 
     far_IAdv = ExtraSwe.IAdvAdv L.far_Adv ;
+
+--------------------------------------------------
+-- New 30/11/2011 AR
+--------------------------------------------------
+
+  lin
+    Thai = mkNPNationality (mkNP (mkPN "thai")) (mkNP (mkPN "Thailand")) (mkA "thailändsk") ;
+    Baht = mkCN (mkN "baht" "baht") ;
+
+    Rice = mkCN (mkN "ris" "ris") ;
+    Pork = mkCN (mkN "fläsk" "fläsk") ;
+    Beef = mkCN (mkN "nötkött" "nötkött") ;
+    Noodles = mkCN (mkN "nudel" "nudlar") ;
+    Shrimps = mkCN (mkN "räka") ;
+    Chili = mkCN (mkN "chili" "chilier") ;
+    Garlic = mkCN (mkN "vitlök") ;
+    Durian = mkCN (mkN "durian" "durianer") ;
+    Mango = mkCN (mkN "mango" "mangoer") ;
+    Pineapple = mkCN (mkN "ananas" "ananaser") ;
+    Coke = mkCN (mkN "kola") ;
+    IceCream = mkCN (mkN "glass") ;
+    Beach = mkPlace (mkN "badstrand" "badstränder") "på" ;
+
 }

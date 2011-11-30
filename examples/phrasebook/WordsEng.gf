@@ -269,8 +269,15 @@ concrete WordsEng of Words = SentencesEng **
     Rice = mkCN (mkN "rice") ;
     Pork = mkCN (mkN "pork") ;
     Beef = mkCN (mkN "beef") ;
+    Noodles = mkCN (mkN "noodle") ;
+    Shrimps = mkCN (mkN "shrimp") ;
+    Chili = mkCN (mkN "chili") ;
+    Garlic = mkCN (mkN "garlic") ;
     Durian = mkCN (mkN "durian") ;
     Mango = mkCN (mkN "mango") ;
     Pineapple = mkCN (mkN "pineapple") ;
+    Coke = mkCN (mkN "coke") ;
+    IceCream = mkCN (mkN "ice cream") ;
+    Beach = mkPlace "beach" "on" ;
 
 }
