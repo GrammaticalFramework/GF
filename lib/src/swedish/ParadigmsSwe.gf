@@ -88,9 +88,13 @@ oper
 
     mkN : (nyckel,nycklar : Str) -> N ; -- singular and plural suffice for most nouns
 
--- In the worst case, four forms are needed.
+-- In the worst case, four forms are needed,
 
-    mkN : (museum,museet,museer,museerna : Str) -> N -- worst case for nouns
+    mkN : (museum,museet,museer,museerna : Str) -> N ; -- worst case for nouns
+
+-- and perhaps a gender.
+
+    mkN : (museum,museet,museer,museerna : Str) -> Gender -> N -- even worse case for nouns
   } ;
 
 -- All the functions above work quite as well to form *compound nouns*,
@@ -313,7 +317,8 @@ oper
     mkN : (apa : Str) -> N = regN ;
     mkN : Str -> Gender -> N = regGenN ; 
     mkN : (nyckel, nycklar : Str) -> N = mk2N ; 
-    mkN : (museum,museet,museer,museerna : Str) -> N = mk4N
+    mkN : (museum,museet,museer,museerna : Str) -> N = mk4N ;
+    mkN : (museum,museet,museer,museerna : Str) -> Gender -> N = mk5N
   } ;
 
   mk4N : (museum,museet,museer,museerna : Str) -> N = \apa,apan,apor,aporna ->  {
@@ -322,6 +327,11 @@ oper
       "n" => Utr ;
       _ => Neutr
       }
+    } ** {lock_N = <>} ;
+
+  mk5N : (museum,museet,museer,museerna : Str) -> Gender -> N = \apa,apan,apor,aporna,g ->  {
+    s = nounForms apa apan apor aporna ;
+    g = g
     } ** {lock_N = <>} ;
 
   regN : Str -> N = \bil -> regGenN bil g where {
