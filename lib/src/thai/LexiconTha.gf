@@ -73,7 +73,7 @@ lin
 --  computer_N = regN "computer" ;
   correct_A = mkA (thword "แท้") ;
   count_V2 = mkV2 (thword "นับ") ;
---  country_N = regN "country" ;
+  country_N = placeN (thword "ประ" "เทศ") ;
 --  cousin_N = regN "cousin" ;
 --  cow_N = regN "cow" ;
   cut_V2 = mkV2 (thword "ตัด") ;
@@ -175,7 +175,7 @@ lin
   know_VS = lin VS (regV "รู้") ; -----
   lake_N = mkN (thword "ทะ" "เล" "สาบ") ;
 --  lamp_N = regN "lamp" ;
---  language_N = regN "language" ;
+  language_N = mkN (thword "ภา" "ษา") ;
   laugh_V = mkV (thword "หัว" "เราะ") ;
   leaf_N = mkN (thword "ใบ") ;
 --  learn_V2 = dirV2 (regV "learn") ;
@@ -240,7 +240,7 @@ lin
   rain_V0 = mkV "มี" "ฝน" ; ----
   ready_A = mkA "พร้อม" ;
   reason_N = verbalN "เหตู" ;
---  read_V2 = dirV2 (irregV "read" "read" "read") ;
+  read_V2 = mkV2 "อา่น" ;
   red_A = mkA (thword "แดง") ;
 --  religion_N = regN "religion" ;
   restaurant_N = placeN (thword "ร้าน" "อาหาร") ;
@@ -337,7 +337,7 @@ lin
   university_N = placeN (thword "มหา" "วิ" "ฑยา" "ลัย") ;
 --  village_N = regN "village" ;
   vomit_V = mkV (thword "อ้วก") ;
---  wait_V2 = mkV2 (regV "wait") forP ;
+  wait_V2 = mkV2 "รี" ;
   walk_V = mkV (thword "เดิน") ;
 --  war_N = regN "war" ;
   warm_A = mkA (thword "ร้อน") ;
@@ -358,7 +358,7 @@ lin
   wonder_VQ = mkVQ (regV (thword "ประ" "หลาด" "ไจ")) ; ----
 --  wood_N = regN "wood" ;
   worm_N = animalN (thword "หนอน") ;
---  write_V2 = dirV2 (irregV "write" "wrote" "written") ;
+  write_V2 = mkV2 "ลง" ;
   year_N = mkN (thword "ปี") ;
   yellow_A = mkA (thword "เหลือง") ;
 --  young_A = regADeg "young" ;

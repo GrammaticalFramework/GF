@@ -33,6 +33,9 @@ oper
 
   mkA : Str -> A = \s -> lin A (mkAdj s) ;
 
+  mkPN : Str -> PN
+     = \s -> lin PN (ss s) ;
+
   mkA2 : A -> Str -> A2
       = \n,p -> lin A2 (n ** {c2 = p}) ;
 
