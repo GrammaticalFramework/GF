@@ -10,16 +10,28 @@ concrete DisambPhrasebookEng of Phrasebook = PhrasebookEng -
     GSorry, GSorryPol, 
     GPleaseGive, GPleaseGivePol,
     GNiceToMeetYou, -- GNiceToMeetYouPol,
-    PYes, PYesToNo, ObjMass
+    PYes, PYesToNo, ObjMass,
+    WeMale, WeFemale,
+    YouPlurFamMale, YouPlurFamFemale,
+    YouPlurPolMale, YouPlurPolFemale,
+    TheyMale, TheyFemale
    ] 
   ** open SyntaxEng, ParadigmsEng, Prelude in {
 lin
   IMale = mkP i_Pron "(male)" ;
   IFemale = mkP i_Pron "(female)" ;
-  YouFamMale = mkP youSg_Pron "(familiar,male)" ;
-  YouFamFemale = mkP youSg_Pron "(familiar,female)" ;
-  YouPolMale = mkP youPol_Pron "(polite,male)" ;
-  YouPolFemale = mkP youPol_Pron "(polite,female)" ;
+  WeMale = mkP we_Pron "(male)" ;
+  WeFemale = mkP we_Pron "(female)" ;
+  YouFamMale = mkP youSg_Pron "(singular,familiar,male)" ;
+  YouFamFemale = mkP youSg_Pron "(singular,familiar,female)" ;
+  YouPolMale = mkP youPol_Pron "(singular,polite,male)" ;
+  YouPolFemale = mkP youPol_Pron "(singular,polite,female)" ;
+  YouPlurFamMale = mkP youSg_Pron "(plural,familiar,male)" ;
+  YouPlurFamFemale = mkP youSg_Pron "(plural,familiar,female)" ;
+  YouPlurPolMale = mkP youPol_Pron "(plural,polite,male)" ;
+  YouPlurPolFemale = mkP youPol_Pron "(plural,polite,female)" ;
+  TheyMale = mkP they_Pron "(male)" ;
+  TheyFemale = mkP they_Pron "(female)" ;
 
   LangNat nat = mkNP nat.lang (ParadigmsEng.mkAdv "(language)") ;
 --  CitiNat nat = nat.prop ;

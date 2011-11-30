@@ -2,7 +2,9 @@ concrete SentencesGer of Sentences = NumeralGer ** SentencesI -
   [PYesToNo,SHaveNo,SHaveNoMass,
    Proposition, Action, Is, IsMass, SProp, SPropNot, QProp,
    AHaveCurr, ACitizen, ABePlace, AKnowSentence, AKnowPerson, AKnowQuestion,
-   Nationality, Language
+   Nationality, Language,
+   ADoVerbPhrase, AModVerbPhrase, ADoVerbPhrasePlace, AModVerbPhrasePlace,
+   YouPlurPolMale, YouPlurPolFemale
   ] with 
   (Syntax = SyntaxGer),
   (Symbolic = SymbolicGer),
@@ -38,4 +40,11 @@ concrete SentencesGer of Sentences = NumeralGer ** SentencesI -
     Nationality = {lang : CN ; country : NP ; prop : A} ;
     Language = CN ; -- kein Deutsch
 
+-- the new things
+  lin
+    ADoVerbPhrase p vp = prop (mkCl p.name vp) ;
+    AModVerbPrase m p vp = prop (mkCl p.name (mkVP m vp)) ;
+    ADoVerbPhrasePlace p vp x = prop (mkCl p.name (mkVP vp x.at)) ;
+    AModVerbPrasePlace m p vp x = prop (mkCl p.name (mkVP m (mkVP vp x.at))) ;
+    YouPlurPolMale, YouPlurPolFemale = mkPerson youPol_Pron ;
 }
