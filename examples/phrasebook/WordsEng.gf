@@ -269,6 +269,7 @@ concrete WordsEng of Words = SentencesEng **
     Rice = mkCN (mkN "rice") ;
     Pork = mkCN (mkN "pork") ;
     Beef = mkCN (mkN "beef") ;
+    Egg = mkCN L.egg_N ;
     Noodles = mkCN (mkN "noodle") ;
     Shrimps = mkCN (mkN "shrimp") ;
     Chili = mkCN (mkN "chili") ;

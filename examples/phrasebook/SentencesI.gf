@@ -238,7 +238,8 @@ oper
 -- for languages with GenNP, use "p's wife"
 --   relativePerson n x (\a,b,c -> mkNP (GenNP b) a c) p ;
 
-  phrasePlease : Utt -> Text = \u -> lin Text (mkPhr noPConj u please_Voc) | lin Text u ;
+  phrasePlease : Utt -> Text = \u -> --- lin Text (mkPhr noPConj u please_Voc) | 
+                                     lin Text u ;
 
 ------------------------------------------------------------------------------------------
 -- New things added 30/11/2011 by AR

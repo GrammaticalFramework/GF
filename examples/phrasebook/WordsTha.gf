@@ -77,7 +77,7 @@ concrete WordsTha of Words = SentencesTha **
 
 -- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
 
-    DanishCrown = mkCN (mkA (R.thword "เดน" "มาร์ค")) (mkN "โครน") | mkCurrency "โครน" ;
+    DanishCrown = mkCN (mkA (R.thword "เดน" "มาร์ค")) (mkN "โครน") | mkCurrency "โครน" ; ---#
     Dollar = mkCurrency (R.thword "ดอล" "ล่า" "ห์") ;
     Euro = mkCurrency (R.thword "ยู" "โร") ;
     Lei = mkCurrency "ลี" ;
@@ -175,8 +175,10 @@ concrete WordsTha of Words = SentencesTha **
 -- below. Languages without productive genitives must use an equivalent of
 -- "ตหเ วิฝเ oฝ มย สoน" for non-pronouns.
 
-    Wife = xOf "เมีย" ; ---- familiar
-    Husband = xOf "ผัว" ; ---- familiar
+    Wife = xOf (R.thword "ภร" "รยา") ; -- polite
+    Husband = xOf (R.thword "สา" "มี") ; -- polite
+---    Wife = xOf "เมีย" ; ---- familiar
+---    Husband = xOf "ผัว" ; ---- familiar
     Son = xOf (R.thword "ลูก ชาย") ;
     Daughter = xOf  (R.thword "ลูก สาว") ;
     Children = xOf L.child_N.s ; ----
@@ -269,15 +271,16 @@ concrete WordsTha of Words = SentencesTha **
     Thai = mkNat "ไทย" ;
     Baht = mkCurrency "บาท" ;
 
-    Rice = mkCN (mkN ("ฆ้าว")) ;
+    Rice = mkCN (mkN ("ข้าว")) ;
     Pork = mkCN (mkN ("หมู")) ;
     Beef = mkCN (mkN ("เนื้อ")) ;
-    Noodles = mkCN (mkN ("เส้ม")) ;
+    Egg = mkCN L.egg_N ;
+    Noodles = mkCN (mkN (R.thword "ก๋วย" "เตี๋ยว")) ;
     Shrimps = mkCN (mkN ("กุ้ง")) ;
     Chili = mkCN (mkN "พริก") ;
-    Garlic = mkCN (mkN (R.thword "กระ" "เทียม")) ;
+    Garlic = mkCN (mkN (R.thword "กะ" "เทียม")) ;
     Durian = mkCN (mkN (R.thword "ทุ" "เรียน")) ;
-    Mango = mkCN (mkN (R.thword "ฆะ" "ม่วง")) ;
+    Mango = mkCN (mkN (R.thword "มะ" "ม่วง")) ;
     Pineapple = mkCN (mkN (R.thword "สับ" "ปะ" "รด")) ;
     Coke = mkCN (mkN ("โค้ก")) ;
     IceCream = mkCN (mkN (R.thword "ไอ" "ศ" "กรีม")) ;

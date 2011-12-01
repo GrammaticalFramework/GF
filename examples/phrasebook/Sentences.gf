@@ -202,7 +202,7 @@ abstract Sentences = Numeral ** {
     PImperativeFamPos,    -- eat
     PImperativeFamNeg,    -- don't eat
     PImperativePolPos,    -- essen Sie
-    PImperativePlurNeg,   -- essen Sie nicht
+    PImperativePolNeg,    -- essen Sie nicht
     PImperativePlurPos,   -- esst
     PImperativePlurNeg :  -- esst nicht
       VerbPhrase -> Phrase ;

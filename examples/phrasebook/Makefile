@@ -1,11 +1,11 @@
 compile = runghc Compile 
 
-all: fin demo missing
+all: demo missing
 
-demo: compdemo linkdemo
+demo: compdemo fin linkdemo
 
 compdemo:
-	$(compile) Bul Dan Dut Nor Pol Ron Spa
+	$(compile) Bul Dan Dut Nor Pol Spa
 	$(compile) -opt Cat Eng Fre Ger Rus Swe Tha Urd DisambPhrasebookEng
 #	$(compile) -opt Bul Cat Dan Dut Eng Fre Ger Ita Nor Pol Ron Rus Spa Swe Tha Urd DisambPhrasebookEng
 
