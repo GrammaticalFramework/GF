@@ -112,7 +112,7 @@ lin
   they_Pron = mkPronoun
     "elles" "les" "les" "elles"
     "llur" "llur" "llurs" "llurs"
-    Fem Pl P3 ;
+    Masc Pl P3 ;
 
   this_Quant =
     let aquest : ParadigmsCat.Number => ParadigmsCat.Gender => Case => Str = table {
@@ -134,7 +134,7 @@ lin
     mkPronoun 
       "nosaltres" "ens" "ens" "nosaltres"
       ["el nostre"] ["la nostra"] ["els nostres"] ["les nostres"]
-      Fem Pl P1 ;
+      Masc Pl P1 ;
    whatSg_IP = {s = \\c => prepCase c ++ ["què"] ; a = aagr Masc Sg} ;
    whatPl_IP = {s = \\c => prepCase c ++ ["què"] ; a = aagr Masc Pl} ; ---
    when_IAdv = ss "quan" ;
@@ -163,7 +163,7 @@ lin
   youPol_Pron = mkPronoun
       "vosté" "el" "li" "vosté"
       ["el seu"] ["la seva"] ["els seus"] ["les seves"]
-      Masc Pl P2 ;
+      Masc Sg P3 ;
    not_Predet = {s = \\a,c => prepCase c ++ "no pas" ; c = Nom ;
     a = PNoAg} ;
    have_V2 = dirV2 (verbV (tenir_108 "tenir")) ;
