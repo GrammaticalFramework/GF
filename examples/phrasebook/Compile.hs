@@ -23,9 +23,10 @@ mainmodu = "Phrasebook"
 main = do
   (opts,langs) <- getArgs >>= return . partition ((=='-') . head)
   let modus = [mkFile la | la <- langs]
+  let opt = elem "-opt" opts
   putStrLn $ unwords modus
   if notElem "-link" opts 
-    then mapM_ compileOne modus >> return ()
+    then mapM_ (compileOne opt) modus >> return ()
     else return ()
   case opts of
     _ | elem "-make" opts || elem "-link" opts -> do
@@ -35,8 +36,9 @@ main = do
       return () 
     _ -> return ()
 
-compileOne modu = do
-  let comm = "gf -make -s -optimize-pgf -name=" ++ 
+compileOne opt modu = do
+  let optim = if opt then " -optimize-pgf" else ""
+      comm = "gf -make -s" ++ optim ++ " -name=" ++ 
              modu ++ " " ++ modu ++ ".gf" ++
              " +RTS -K32M"
   putStrLn comm
