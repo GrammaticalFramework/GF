@@ -19,7 +19,7 @@ concrete DisambPhrasebookEng of Phrasebook = PhrasebookEng -
     PImperativeFamPos, 
     PImperativeFamNeg, 
     PImperativePolPos, 
-    PImperativePlurNeg,
+    PImperativePolNeg,
     PImperativePlurPos,
     PImperativePlurNeg 
    ] 
