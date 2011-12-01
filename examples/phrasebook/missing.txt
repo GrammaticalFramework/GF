@@ -1,9 +1,18 @@
+v v v v v v v
 DisambPhrasebookEng :
 PhrasebookBul : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
 PhrasebookCat : Baht Beach Beef Chili Coke Durian Garlic IceCream MMust Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
 PhrasebookDan : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
 PhrasebookDut : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
+*************
+DisambPhrasebookEng :
+PhrasebookBul : Baht Beef Durian Mango Pineapple Pork Rice Thai
+PhrasebookCat : Baht Beef Durian MMust Mango Pineapple Pork Rice Thai
+PhrasebookDan : Baht Beef Durian Mango Pineapple Pork Rice Thai
+PhrasebookDut : Baht Beef Durian Mango Pineapple Pork Rice Thai
+^ ^ ^ ^ ^ ^ ^
 PhrasebookEng :
+v v v v v v v
 PhrasebookFin :
 PhrasebookFre : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
 PhrasebookGer : AModVerbPhrase AModVerbPhrasePlace Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
@@ -16,3 +25,17 @@ PhrasebookSpa : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles 
 PhrasebookSwe :
 PhrasebookTha :
 PhrasebookUrd : Baht Beach Beef Chili Coke Durian Garlic IceCream MMust Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
+*************
+PhrasebookFin : Baht Beef Durian Mango Pineapple Pork Rice Thai
+PhrasebookFre : Baht Beef Durian Mango Pineapple Pork Rice Thai
+PhrasebookGer : AModVerbPhrase AModVerbPhrasePlace Baht Beef Durian Mango Pineapple Pork Rice Thai
+PhrasebookIta : Baht Beef Durian MCan MMust Mango Pineapple Pork Rice Thai
+PhrasebookNor : Baht Beef Durian Mango Pineapple Pork Rice Thai
+PhrasebookPol : Baht Beef Durian Mango Pineapple Pork Rice Thai
+PhrasebookRon : Baht Beef Durian Mango Pineapple Pork Rice Thai
+PhrasebookRus : Baht Beef Belgian Belgium Durian Flemish Mango Pineapple Pork Rice Thai
+PhrasebookSpa : Baht Beef Durian Mango Pineapple Pork Rice Thai
+PhrasebookSwe : Baht Beef Durian Mango Pineapple Pork Rice Thai
+PhrasebookTha :
+PhrasebookUrd : Baht Beef Durian MMust Mango Pineapple Pork Rice Thai
+^ ^ ^ ^ ^ ^ ^

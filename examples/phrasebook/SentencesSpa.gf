@@ -1,6 +1,7 @@
 concrete SentencesSpa of Sentences = NumeralSpa ** SentencesI - [
   IsMass,
   IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
+  WeMale, WeFemale, YouPlurFamMale, YouPlurFamFemale, YouPlurPolFemale, YouPlurPolMale, TheyMale, TheyFemale, 
   WherePlace, WherePerson, ABePlace,
   Superlative
  ] 
@@ -31,6 +32,26 @@ flags coding = utf8 ;
         {name = mkNP (ProDrop youSg_Pron) ; isPron = True ; poss = mkQuant youSg_Pron} ; 
       YouPolMale = 
         {name = mkNP (ProDrop youPol_Pron) ; isPron = True ; poss = mkQuant youPol_Pron} ;
+      He = 
+        {name = mkNP (ProDrop he_Pron) ; isPron = True ; poss = mkQuant he_Pron} ; 
+      She = 
+        {name = mkNP (ProDrop she_Pron) ; isPron = True ; poss = mkQuant she_Pron} ; 
+      WeMale = 
+        {name = mkNP (ProDrop we_Pron) ; isPron = True ; poss = mkQuant we_Pron} ; 
+      WeFemale = 
+        {name = mkNP (ProDrop we8fem_Pron) ; isPron = True ; poss = mkQuant we_Pron} ; 
+      YouPlurFamMale = 
+        {name = mkNP (ProDrop youPl_Pron) ; isPron = True ; poss = mkQuant youPl_Pron} ; 
+      YouPlurFamFemale = 
+        {name = mkNP (ProDrop youPl8fem_Pron) ; isPron = True ; poss = mkQuant youPl_Pron} ; 
+      YouPlurPolMale = 
+        {name = mkNP (ProDrop youPolPl_Pron) ; isPron = True ; poss = mkQuant youPolPl_Pron} ;
+      YouPlurPolFemale = 
+        {name = mkNP (ProDrop youPolPl8fem_Pron) ; isPron = True ; poss = mkQuant youPolPl_Pron};
+      TheyMale = 
+        {name = mkNP (ProDrop they_Pron) ; isPron = True ; poss = mkQuant they_Pron} ; 
+      TheyFemale = 
+        {name = mkNP (ProDrop they8fem_Pron) ; isPron = True ; poss = mkQuant they_Pron} ; 
 
       ABePlace p place = mkCl p.name (mkVP (mkVP estar) place.at) ;
 
