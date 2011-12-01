@@ -122,8 +122,8 @@ abstract Sentences = Numeral ** {
     Too  : Property -> Quality ;                 -- too Italian      
     PropQuality : Property -> Quality ;          -- Italian
 
-    MassDrink : DrinkKind -> MassKind ;          -- beer
-    KindDrink : DrinkKind -> Kind ;              -- (one) beer
+    MassDrink   : DrinkKind -> MassKind ;               -- beer
+    DrinkNumber : Number -> DrinkKind -> PrimObject ;   -- five beers
 
 -- Determiners.
 
@@ -183,9 +183,9 @@ abstract Sentences = Numeral ** {
     Modality ;    -- can, want, must
   fun
     ADoVerbPhrase       : Person -> VerbPhrase -> Action ;                       -- I swim
-    AModVerbPhrase       : Modality -> Person -> VerbPhrase -> Action ;           -- I can swim
+    AModVerbPhrase      : Modality -> Person -> VerbPhrase -> Action ;           -- I can swim
     ADoVerbPhrasePlace  : Person -> VerbPhrase -> Place -> Action ;              -- I swim in the hotel
-    AModVerbPhrasePlace  : Modality -> Person -> VerbPhrase -> Place -> Action ;  -- I can swim in the hotel
+    AModVerbPhrasePlace : Modality -> Person -> VerbPhrase -> Place -> Action ;  -- I can swim in the hotel
 
     QWhereDoVerbPhrase  : Person -> VerbPhrase -> Question ;                     -- where do you swim
     QWhereModVerbPhrase : Modality -> Person -> VerbPhrase -> Question ;         -- where can I swim

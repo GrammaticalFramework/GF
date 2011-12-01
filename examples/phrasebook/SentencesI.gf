@@ -102,7 +102,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     OneObj o = o ; 
 
     MassDrink d = d ;
-    KindDrink d = d ;
+    DrinkNumber n k = mkNP n k ;
 
     This kind = mkNP this_Quant kind ;
     That kind = mkNP that_Quant kind ;

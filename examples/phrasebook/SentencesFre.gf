@@ -1,7 +1,7 @@
 concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [
   IsMass,
   QProp,
-  IFemale, YouFamFemale, YouPolFemale,
+  IFemale, YouFamFemale, YouPolFemale, WeFemale, YouPlurFamFemale, YouPlurPolFemale, YouPlurPolMale, TheyFemale, 
   PYesToNo,
   SHaveNo,SHaveNoMass,
   Superlative
@@ -23,7 +23,18 @@ concrete SentencesFre of Sentences = NumeralFre ** SentencesI - [
       YouFamFemale = 
         {name = mkNP youSg8fem_Pron ; isPron = True ; poss = mkQuant youSg_Pron} ; 
       YouPolFemale = 
-        {name = mkNP youPol8fem_Pron ; isPron = True ; poss = mkQuant youPol_Pron};
+        {name = mkNP youPol8fem_Pron ; isPron = True ; poss = mkQuant youPol_Pron} ;
+      WeFemale = 
+        {name = mkNP we8fem_Pron ; isPron = True ; poss = mkQuant we_Pron} ; 
+      YouPlurFamFemale = 
+        {name = mkNP youPl8fem_Pron ; isPron = True ; poss = mkQuant youPl_Pron} ; 
+      YouPlurPolMale = 
+        {name = mkNP youPl_Pron ; isPron = True ; poss = mkQuant youPol_Pron};
+      YouPlurPolFemale = 
+        {name = mkNP youPl8fem_Pron ; isPron = True ; poss = mkQuant youPol_Pron};
+      TheyFemale = 
+        {name = mkNP they8fem_Pron ; isPron = True ; poss = mkQuant they_Pron} ; 
+
 
       PYesToNo = mkPhrase (lin Utt (ss "si")) ;
 

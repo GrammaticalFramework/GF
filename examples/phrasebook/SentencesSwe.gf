@@ -1,6 +1,6 @@
 concrete SentencesSwe of Sentences = NumeralSwe ** SentencesI - [
-    PYesToNo,NameNN
-    ---- , KindDrink  -- should be utrum gender when countable
+    PYesToNo, NameNN,
+    DrinkNumber  -- should be utrum gender when countable
  ] with 
   (Syntax = SyntaxSwe),
   (Symbolic = SymbolicSwe),
@@ -9,6 +9,6 @@ concrete SentencesSwe of Sentences = NumeralSwe ** SentencesI - [
   lin 
     PYesToNo = mkPhrase (lin Utt (ss "jo")) ;
     NameNN = mkNP (P.mkPN "NN") ;
-----    KindDrink d = mkCN (P.mkN [] [] [] [] P.utrum) (lin Adv (mkUtt d)) ; --- an awful hack...
+    DrinkNumber n d = mkNP n (mkCN (P.mkN [] [] [] [] P.utrum) (lin Adv (mkUtt d))) ; --- empty classifier - quite a hack...
   
 }

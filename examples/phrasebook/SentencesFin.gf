@@ -1,6 +1,7 @@
 concrete SentencesFin of Sentences = NumeralFin ** SentencesI - 
   [Is, IsMass, NameNN, ObjMass,
    IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
+   WeMale, WeFemale, YouPlurFamMale, YouPlurFamFemale, YouPlurPolFemale, YouPlurPolMale, 
    NPPlace, CNPlace, placeNP, mkCNPlace, mkCNPlacePl,
    GObjectPlease
   ] with 
@@ -34,6 +35,10 @@ concrete SentencesFin of Sentences = NumeralFin ** SentencesI -
         {name = mkNP (ProDrop youSg_Pron) ; isPron = True ; poss = ProDropPoss youSg_Pron} ; 
     YouPolMale, YouPolFemale = 
         {name = mkNP (ProDrop youPol_Pron) ; isPron = True ; poss = ProDropPoss youPol_Pron} ;
+    WeMale, WeFemale = 
+        {name = mkNP (ProDrop we_Pron) ; isPron = True ; poss = ProDropPoss we_Pron} ; 
+    YouPlurFamMale, YouPlurFamFemale, YouPlurPolMale, YouPlurPolFemale = 
+        {name = mkNP (ProDrop youPl_Pron) ; isPron = True ; poss = ProDropPoss youPl_Pron} ;
 
     ObjMass = PartCN ;
 
