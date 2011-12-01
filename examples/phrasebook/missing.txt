@@ -1,41 +1,13 @@
-v v v v v v v
 DisambPhrasebookEng :
-PhrasebookBul : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
-PhrasebookCat : Baht Beach Beef Chili Coke Durian Garlic IceCream MMust Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
-PhrasebookDan : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
-PhrasebookDut : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
-*************
-DisambPhrasebookEng :
-PhrasebookBul : Baht Beef Durian Mango Pineapple Pork Rice Thai
-PhrasebookCat : Baht Beef Durian MMust Mango Pineapple Pork Rice Thai
-PhrasebookDan : Baht Beef Durian Mango Pineapple Pork Rice Thai
-PhrasebookDut : Baht Beef Durian Mango Pineapple Pork Rice Thai
-^ ^ ^ ^ ^ ^ ^
 PhrasebookEng :
-v v v v v v v
-PhrasebookFin :
-PhrasebookFre : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
-PhrasebookGer : AModVerbPhrase AModVerbPhrasePlace Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
-PhrasebookIta : Baht Beach Beef Chili Coke Durian Garlic IceCream MCan MMust Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
-PhrasebookNor : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
-PhrasebookPol : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
-PhrasebookRon : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
-PhrasebookRus : Baht Beach Beef Belgian Belgium Chili Coke Durian Flemish Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
-PhrasebookSpa : Baht Beach Beef Chili Coke Durian Garlic IceCream Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
-PhrasebookSwe :
+PhrasebookFre : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
+PhrasebookGer : AModVerbPhrase AModVerbPhrasePlace Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
+PhrasebookIta : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade MCan MMust Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
+PhrasebookNor : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
+PhrasebookPol : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
+PhrasebookRon : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
+PhrasebookRus : Baht Beach Beef Belgian Belgium Chili Coke Durian Egg Flemish Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
+PhrasebookSpa : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
+PhrasebookSwe : Egg ItsCold ItsRaining ItsWarm ItsWindy Lemonade OrangeJuice Salad Smoke SunShine
 PhrasebookTha :
-PhrasebookUrd : Baht Beach Beef Chili Coke Durian Garlic IceCream MMust Mango Noodles ObjPlur Pineapple Pork Rice Shrimps Thai ThesPlur ThesePlur ThosePlur
-*************
-PhrasebookFin : Baht Beef Durian Mango Pineapple Pork Rice Thai
-PhrasebookFre : Baht Beef Durian Mango Pineapple Pork Rice Thai
-PhrasebookGer : AModVerbPhrase AModVerbPhrasePlace Baht Beef Durian Mango Pineapple Pork Rice Thai
-PhrasebookIta : Baht Beef Durian MCan MMust Mango Pineapple Pork Rice Thai
-PhrasebookNor : Baht Beef Durian Mango Pineapple Pork Rice Thai
-PhrasebookPol : Baht Beef Durian Mango Pineapple Pork Rice Thai
-PhrasebookRon : Baht Beef Durian Mango Pineapple Pork Rice Thai
-PhrasebookRus : Baht Beef Belgian Belgium Durian Flemish Mango Pineapple Pork Rice Thai
-PhrasebookSpa : Baht Beef Durian Mango Pineapple Pork Rice Thai
-PhrasebookSwe : Baht Beef Durian Mango Pineapple Pork Rice Thai
-PhrasebookTha :
-PhrasebookUrd : Baht Beef Durian MMust Mango Pineapple Pork Rice Thai
-^ ^ ^ ^ ^ ^ ^
+PhrasebookUrd : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade MMust Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
