@@ -13,7 +13,7 @@ oper
 
 aphai_s = "อภัย" ; -- excuse2
 baan_s = "บ้าน" ; -- house
-biar_s = "เบีอร์" ; -- beer
+biar_s = "เบียร์" ; -- beer
 ca_s = "จะ" ; -- Modal
 cet_s = "เจ็ด" ; -- seven
 chan_s = "ฉัน" ; -- I

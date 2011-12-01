@@ -13,7 +13,7 @@ lin
   animal_N = animalN (thword "สัตว์") ;
   answer_V2S = mkV2S (regV "ขาน") [] ; ---- prep
 --  apartment_N = regN "apartment" ;
-  apple_N = mkN (thbind "แอป" "เิ้ปล") "ลูก" ;
+  apple_N = mkN (thbind "แอป" "เปิ้ล") "ลูก" ;
 --  art_N = regN "art" ;
   ashes_N = mkN (thword "เถ้า") ;
   ask_V2Q = regV "ถาน" ** {c2 = []} ;
@@ -51,7 +51,7 @@ lin
 --  brown_A = regADeg "brown" ;
   burn_V = mkV (thword "เผา") ;
 --  butter_N = regN "butter" ;
-  buy_V2 = mkV2 "ซีอ" ;
+  buy_V2 = mkV2 "ซื้อ" ;
 --  camera_N = regN "camera" ;
 --  cap_N = regN "cap" ;
   car_N = mkN "รถ" "คัน" ;
@@ -94,7 +94,7 @@ lin
   earth_N = mkN (thword "ดิน") ;
 --  easy_A2V = mkA2V (regA "easy") forP ;
   eat_V2 = mkV2 (thword "กิน") ;
-  egg_N = mkN (thword "ไข่") ;
+  egg_N = mkN (thword "ไข่") "ฟอง" ;
 --  empty_A = regADeg "empty" ;
 --  enemy_N = regN "enemy" ;
   eye_N = mkN (thword "ตา") ;
@@ -334,10 +334,10 @@ lin
   turn_V = mkV (thword "หัน") ;
 --  ugly_A = regADeg "ugly" ;
   understand_V2 = mkV2 (mkV (thword "เข้า" "ไจ")) ;
-  university_N = placeN (thword "มหา" "วิ" "ฑยา" "ลัย") ;
+  university_N = placeN (thword "มหา" "วิ" "ทยา" "ลัย") ;
 --  village_N = regN "village" ;
   vomit_V = mkV (thword "อ้วก") ;
-  wait_V2 = mkV2 "รี" ;
+  wait_V2 = mkV2 "รอ" ;
   walk_V = mkV (thword "เดิน") ;
 --  war_N = regN "war" ;
   warm_A = mkA (thword "ร้อน") ;
