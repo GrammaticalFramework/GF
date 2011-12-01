@@ -40,7 +40,10 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
     youSg8fem_Pron = mkPronoun 
       "tu" (elision "t") (elision "t") "toi" "ton" (elisPoss "t") "tes"
       Fem Sg P2 ;
-    youPl8fem_Pron,
+    youPl8fem_Pron =
+      let vous = mkPronoun "vous" "vous" "vous" "vous" "votre" "votre" "vos" Fem Pl P2
+      in 
+      {s = vous.s ; hasClit = vous.hasClit ; poss = vous.poss ; a = vous.a ; isPol = False} ;
     youPol8fem_Pron =
       let vous = mkPronoun "vous" "vous" "vous" "vous" "votre" "votre" "vos" Fem Pl P2
       in 
