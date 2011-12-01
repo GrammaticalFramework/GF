@@ -92,7 +92,8 @@ oper
         let 
           pe    = case b of {True => P3 ; _ => p} ;
           agr   = {g = g ; n = n ; p = pe} ;
-          clpr  = <[],[],False> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
+          clpr  =  <vp.clit1 ++ vp.clit2, [],False> ;  ---- TODO: True if clit
+----          clpr  = <[],[],False> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
 ----e          verb  = case <aag.n, pol,pe> of {
 ----e            <Sg,Neg,P2> => (vp.s ! VPInfinit Simul clpr.p3).inf ! aag ;
 ----e            _ => (vp.s ! VPImperat).fin ! agr
