@@ -119,7 +119,7 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
             _ => vp.s.s ! vImper n pe
             } ;
           neg   = vp.neg ! pol ;
-          compl = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
+          compl = clpr.p1 ++ vp.comp ! agr ++ vp.ext ! pol
         in
         neg.p1 ++ verb ++ bindIf clpr.p3 ++ clpr.p1 ++ compl ;
         ---- TODO non mi mangi
