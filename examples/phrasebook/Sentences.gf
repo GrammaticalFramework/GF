@@ -199,6 +199,14 @@ abstract Sentences = Numeral ** {
     V2Buy, V2Drink, V2Eat : Object -> VerbPhrase ;
     V2Wait : Person -> VerbPhrase ;
 
+    PImperativeFamPos,    -- eat
+    PImperativeFamNeg,    -- don't eat
+    PImperativePolPos,    -- essen Sie
+    PImperativePlurNeg,   -- essen Sie nicht
+    PImperativePlurPos,   -- esst
+    PImperativePlurNeg :  -- esst nicht
+      VerbPhrase -> Phrase ;
+
 -- other new things allowed by the resource
 
 ---    PBecause : Sentence -> Sentence -> Phrase ;  -- I want to swim because it is hot

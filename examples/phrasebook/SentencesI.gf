@@ -238,6 +238,8 @@ oper
 -- for languages with GenNP, use "p's wife"
 --   relativePerson n x (\a,b,c -> mkNP (GenNP b) a c) p ;
 
+  phrasePlease : Utt -> Text = \u -> lin Text (mkPhr noPConj u please_Voc) | lin Text u ;
+
 ------------------------------------------------------------------------------------------
 -- New things added 30/11/2011 by AR
 ------------------------------------------------------------------------------------------
@@ -275,6 +277,13 @@ oper
     V2Drink o = mkVP drink_V2 o ;
     V2Eat o = mkVP eat_V2 o ;
     V2Wait o = mkVP wait_V2 o.name ;
+
+    PImperativeFamPos  v = phrasePlease (mkUtt (mkImp v)) ;
+    PImperativeFamNeg  v = phrasePlease (mkUtt negativePol (mkImp v)) ;
+    PImperativePolPos  v = phrasePlease (mkUtt politeImpForm (mkImp v)) ;
+    PImperativePolNeg  v = phrasePlease (mkUtt politeImpForm negativePol (mkImp v)) ;
+    PImperativePlurPos v = phrasePlease (mkUtt pluralImpForm (mkImp v)) ;
+    PImperativePlurNeg v = phrasePlease (mkUtt pluralImpForm negativePol (mkImp v)) ;
 
 -- other new things allowed by the resource
 
