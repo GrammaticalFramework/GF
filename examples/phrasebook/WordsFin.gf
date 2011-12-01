@@ -289,6 +289,7 @@ concrete WordsFin of Words = SentencesFin **
     Rice = mkCN (mkN "riisi") ;
     Pork = mkCN (mkN "sika") ;
     Beef = mkCN (mkN "nauta") ;
+    Egg = mkCN L.egg_N ;
     Noodles = mkCN (mkN "nuudeli" "nuudeleita") ;
     Shrimps = mkCN (mkN "katka" (mkN "rapu")) ;
     Chili = mkCN (mkN "chili") ;
@@ -298,7 +299,17 @@ concrete WordsFin of Words = SentencesFin **
     Pineapple = mkCN (mkN "ananas" "ananaksia") ;
     Coke = mkCN (mkN "coca-cola") ;
     IceCream = mkCN (mkN "jäätelö" "jäätelöitä") ;
+    Salad = mkCN (mkN "salaatti") ;
+    OrangeJuice = mkCN (mkN "appelsiini" (mkN "mehu")) ;
+    Lemonade = mkCN (mkN "limsa") ;
+
     Beach = mkPlace (mkN "uima" (mkN "ranta")) lla ;
 
+    ItsRaining = mkCl (mkVP L.rain_V0) ;
+    ItsCold = mkCl (mkVP L.cold_A) ;
+    ItsWarm = mkCl (mkVP L.warm_A) ;
+    ItsWindy = mkCl (mkVP (mkV "tuulla")) ;
+    SunShine = mkCl (mkNP the_Det L.sun_N) (mkVP (mkV "paistaa")) ;
 
+    Smoke = mkVP (mkV "tupakoida") ;
 }

@@ -209,18 +209,22 @@ concrete WordsTha of Words = SentencesTha **
 
 -- transports
 
-    HowFar place = mkQS (mkQCl far_IAdv place.name) ;
+    HowFar place = mkQS (mkQCl howFar.how (mkNP place.name howFar.far)) ;
+
     HowFarFrom x y = 
-      mkQS (mkQCl far_IAdv (mkCl y.name (SyntaxTha.mkAdv from_Prep x.name))) ;
+      mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far) (SyntaxTha.mkAdv from_Prep x.name))) ;
+
     HowFarFromBy x y t = 
-      mkQS (mkQCl far_IAdv (mkCl y.name (SyntaxTha.mkAdv from_Prep (mkNP x.name t)))) ;
-    HowFarBy y t = mkQS (mkQCl far_IAdv (mkCl y.name t)) ;
+      mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far) 
+        (SyntaxTha.mkAdv from_Prep (mkNP x.name t)))) ;
+
+    HowFarBy y t = mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far) t)) ;
  
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
     IsTranspPlace trans place =
-      mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
+      mkQS (mkQCl (mkCl (mkCN (mkCN trans.name (mkSC (mkVP L.go_V))) place.to))) ;
 
 
 
@@ -258,7 +262,9 @@ concrete WordsTha of Words = SentencesTha **
 
     mkCurrency : Str -> CN = \s -> mkCN (mkN [] s) ; ---- just a classifier
     
-    far_IAdv = lin IAdv (ss (R.thword "ไกล" "เท่า" "ไร")) ;
+    howFar : {far : Adv ; how : IAdv} = {
+      far = lin Adv (ss "ไกล") ; how = lin IAdv (ss ("เทา" + "ไร"))
+      } ;
 
     at_Prep = mkPrep "ที่" ;
     noPrep = mkPrep [] ;
@@ -284,7 +290,18 @@ concrete WordsTha of Words = SentencesTha **
     Pineapple = mkCN (mkN (R.thword "สับ" "ปะ" "รด")) ;
     Coke = mkCN (mkN ("โค้ก")) ;
     IceCream = mkCN (mkN (R.thword "ไอ" "ศ" "กรีม")) ;
+    Salad = mkCN (mkN "สลัด") ;
+    OrangeJuice = mkCN (mkN (R.thword "น้ำ" "ส้ม" "คั้น")) ;
+    Lemonade = mkCN (mkN (R.thword "น้ำ" "มะ" "นาว")) ;
     Beach = mkPlace (placeN (R.thword "หาด")) ;
+
+    ItsRaining = mkCl (mkVP L.rain_V0) ;
+    ItsCold = mkCl (mkVP L.cold_A) ;
+    ItsWarm = mkCl (mkVP L.warm_A) ;
+    ItsWindy = mkCl (mkVP (P.mkA (R.thword "ลม" "จัด"))) ;
+    SunShine = mkCl (mkNP the_Det L.sun_N) (mkVP (R.regV "ฉาย")) ;
+
+    Smoke = mkVP (P.mkV (R.thword "สูบ" "บุ" "รี")) ;
 
 }
   

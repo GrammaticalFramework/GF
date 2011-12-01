@@ -279,6 +279,18 @@ concrete WordsEng of Words = SentencesEng **
     Pineapple = mkCN (mkN "pineapple") ;
     Coke = mkCN (mkN "coke") ;
     IceCream = mkCN (mkN "ice cream") ;
+    Salad = mkCN (mkN "salad") ;
+    OrangeJuice = mkCN (mkN "orange juice") ;
+    Lemonade = mkCN (mkN "lemonade") ;
+
     Beach = mkPlace "beach" "on" ;
+
+    ItsRaining = mkCl (progressiveVP (mkVP L.rain_V0)) ;
+    ItsCold = mkCl (mkVP L.cold_A) ;
+    ItsWarm = mkCl (mkVP L.warm_A) ;
+    ItsWindy = mkCl (mkVP (P.mkA "windy")) ;
+    SunShine = mkCl (mkNP the_Det L.sun_N) (progressiveVP (mkVP shine_V)) ;
+
+    Smoke = mkVP (P.mkV "smoke") ;
 
 }
