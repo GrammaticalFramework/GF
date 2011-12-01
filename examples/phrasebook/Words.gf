@@ -216,10 +216,22 @@ abstract Words = Sentences ** {
     Durian : Kind ;
     Mango : Kind ;
     Pineapple : Kind ;
+    Egg : Kind ;
 
     Coke : DrinkKind ;
     IceCream : DrinkKind ; --- both mass and plural
+    OrangeJuice : DrinkKind ;
+    Lemonade : DrinkKind ;
+    Salad : DrinkKind ;
 
     Beach : PlaceKind ;
+
+    ItsRaining : Proposition ;
+    ItsWindy : Proposition ;
+    ItsWarm : Proposition ;
+    ItsCold : Proposition ;
+    SunShine : Proposition ;
+
+    Smoke : VerbPhrase ;
 
 }

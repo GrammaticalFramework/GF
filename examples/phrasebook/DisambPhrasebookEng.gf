@@ -15,7 +15,13 @@ concrete DisambPhrasebookEng of Phrasebook = PhrasebookEng -
     WeMale, WeFemale,
     YouPlurFamMale, YouPlurFamFemale,
     YouPlurPolMale, YouPlurPolFemale,
-    TheyMale, TheyFemale
+    TheyMale, TheyFemale,
+    PImperativeFamPos, 
+    PImperativeFamNeg, 
+    PImperativePolPos, 
+    PImperativePlurNeg,
+    PImperativePlurPos,
+    PImperativePlurNeg 
    ] 
   ** open SyntaxEng, ParadigmsEng, IrregEng, Prelude in {
 lin
@@ -53,6 +59,14 @@ lin
 
   ObjMass x = mkNP (mkNP x) (ParadigmsEng.mkAdv "(a portion of)") ;
 
+    PImperativeFamPos  v = phrasePlease (mkUtt (mkImp (addAdv ("singular,familiar") v))) ;
+    PImperativeFamNeg  v = phrasePlease (mkUtt negativePol (mkImp (addAdv ("singular,familiar") v))) ;
+    PImperativePolPos  v = phrasePlease (mkUtt politeImpForm (mkImp (addAdv ("singular,polite") v))) ;
+    PImperativePolNeg  v = phrasePlease (mkUtt politeImpForm negativePol (mkImp (addAdv ("singular,polite") v))) ;
+    PImperativePlurPos v = phrasePlease (mkUtt pluralImpForm (mkImp (addAdv ("plural,familiar") v))) ;
+    PImperativePlurNeg v = phrasePlease (mkUtt pluralImpForm negativePol (mkImp (addAdv ("plural,familiar") v))) ;
+
+
 oper
   fam : Str -> SS = \s -> postfixSS "(familiar)" (ss s) ;
   pol : Str -> SS = \s -> postfixSS "(polite)" (ss s) ;
@@ -62,4 +76,6 @@ oper
      isPron = False ; -- to show the disambiguation 
      poss = SyntaxEng.mkQuant youSg_Pron 
     } ;
+
+  addAdv : Str -> VP -> VP = \s,vp -> mkVP vp (ParadigmsEng.mkAdv ("("+s+")")) ;
 }
