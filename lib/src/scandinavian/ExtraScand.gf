@@ -9,6 +9,12 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
 
     ComplBareVS v s  = insertObj (\\_ => s.s ! Sub) (predV v) ;
 
+    CompBareCN cn = {s = \\a => case a.n of { 
+      Sg => cn.s ! Sg ! DIndef ! Nom ;
+      Pl => cn.s ! Pl ! DIndef ! Nom
+      }
+    } ;
+
     StrandRelSlash rp slash  = {
       s = \\t,a,p,ag,_ => 
           rp.s ! ag.g ! ag.n ! RNom ++ slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
