@@ -210,7 +210,7 @@ concrete WordsFin of Words = SentencesFin **
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
     IsTranspPlace trans place =
-      mkQS (mkQCl (mkCl (mkVP (mkVP (mkVP (mkV "päästä")) trans.by) place.to))) ;
+      mkQS (mkQCl (mkCl (mkVP (mkVP (mkVP (mkV "päästä")) place.to) trans.by))) ;
       -- pääseekö keskustaan bussilla
       -- mkQS (mkQCl (E.AdvPredNP place.to L.go_V (E.PartCN (trans.name)))) ; 
       -- meneekö keskustaan bussia
@@ -312,4 +312,17 @@ concrete WordsFin of Words = SentencesFin **
     SunShine = mkCl (mkNP the_Det L.sun_N) (mkVP (mkV "paistaa")) ;
 
     Smoke = mkVP (mkV "tupakoida") ;
+
+    ADoctor = mkProfession (mkN "lääkäri" "lääkäreitä") ;
+    AProfessor = mkProfession (mkN "professori" "professoreita") ;
+    ALawyer = mkProfession (mkN "laki" L.man_N) ;
+    AEngineer =  mkProfession (mkN "insinööri" "insinöörejä") ;
+    ATeacher = mkProfession (mkN "opettaja" "opettajia") ;
+    ACook = mkProfession (mkN "kokki") ;
+    AStudent = mkProfession (mkN "opiskelija" "opiskelijoita") ;
+    ABusinessman = mkProfession (mkN "liike" L.man_N) ;
+
+  oper
+    mkProfession : N -> NPPerson -> Cl = \n,p -> mkCl p.name n ;
+
 }

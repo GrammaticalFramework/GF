@@ -293,4 +293,15 @@ concrete WordsEng of Words = SentencesEng **
 
     Smoke = mkVP (P.mkV "smoke") ;
 
+    ADoctor = mkProfession (mkN "doctor") ;
+    AProfessor = mkProfession (mkN "professor") ;
+    ALawyer = mkProfession (mkN "lawyer") ;
+    AEngineer =  mkProfession (mkN "engineer") ;
+    ATeacher = mkProfession (mkN "teacher") ;
+    ACook = mkProfession (mkN "cook") ;
+    AStudent = mkProfession (mkN "student") ;
+    ABusinessman = mkProfession (mkN "businessman" "businessmen") ;
+
+  oper
+    mkProfession : N -> NPPerson -> Cl = \n,p -> mkCl p.name n ;
 }

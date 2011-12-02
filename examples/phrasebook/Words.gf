@@ -234,4 +234,13 @@ abstract Words = Sentences ** {
 
     Smoke : VerbPhrase ;
 
+    ADoctor : Person -> Action ;
+    AProfessor : Person -> Action ;
+    ALawyer : Person -> Action ;
+    AEngineer : Person -> Action ;
+    ATeacher : Person -> Action ;
+    ACook : Person -> Action ;
+    AStudent : Person -> Action ;
+    ABusinessman : Person -> Action ;
+
 }
