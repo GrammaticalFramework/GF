@@ -11,6 +11,7 @@ abstract Extra = Cat ** {
     GenIP       : IP -> IQuant ;      -- whose
     GenRP       : Num -> CN -> RP ;   -- whose car
     ComplBareVS : VS -> S -> VP ;     -- know you go
+    CompBareCN  : CN -> Comp ;        -- (est) professeur
 
     StrandRelSlash   : RP -> ClSlash -> RCl ;   -- that he lives in
     EmptyRelSlash    : ClSlash -> RCl ;   -- he lives in
