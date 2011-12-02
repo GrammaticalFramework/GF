@@ -263,7 +263,7 @@ concrete WordsTha of Words = SentencesTha **
     mkCurrency : Str -> CN = \s -> mkCN (mkN [] s) ; ---- just a classifier
     
     howFar : {far : Adv ; how : IAdv} = {
-      far = lin Adv (ss "ไกล") ; how = lin IAdv (ss ("เทา" + "ไร"))
+      far = lin Adv (ss ("ไกล" + "เท่า" + "ไร")) ; how = lin IAdv (ss [])
       } ;
 
     at_Prep = mkPrep "ที่" ;
