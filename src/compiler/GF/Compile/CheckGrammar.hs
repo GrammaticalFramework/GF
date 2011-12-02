@@ -174,10 +174,14 @@ checkInfo opts ms (m,mo) c info = do
 
     CncCat mty mdef mpr mpmcfg -> do
       mty  <- case mty of
-                Just (L loc typ) -> chIn loc "linearization type of" $ do
-                                       (typ,_) <- checkLType gr [] typ typeType
-                                       typ  <- computeLType gr [] typ
-                                       return (Just (L loc typ))
+                Just (L loc typ) -> chIn loc "linearization type of" $ 
+                                     (if flag optNewComp opts
+                                        then do (typ,_) <- CN.checkLType gr typ typeType
+                                                typ  <- computeLType gr [] typ
+                                                return (Just (L loc typ))
+                                        else do (typ,_) <- checkLType gr [] typ typeType
+                                                typ  <- computeLType gr [] typ
+                                                return (Just (L loc typ)))
                 Nothing          -> return Nothing
       mdef <- case (mty,mdef) of
                 (Just (L _ typ),Just (L loc def)) -> 

@@ -7,6 +7,9 @@ import GF.Grammar hiding (Env, VGen, VApp, VRecType)
 import GF.Grammar.Lookup
 import GF.Grammar.Predef
 import GF.Data.Operations
+import Data.List (intersect)
+import Text.PrettyPrint
+import qualified Data.ByteString.Char8 as BS
 
 normalForm :: SourceGrammar -> Term -> Term
 normalForm gr t = value2term gr [] (eval gr [] t)
@@ -40,6 +43,9 @@ eval gr env (Vr x)   = case lookup x env of
                          Just v  -> v
                          Nothing -> error ("Unknown variable "++showIdent x)
 eval gr env (Q x)
+  | x == (cPredef,cErrorType)                            -- to be removed
+                     = let varP = identC (BS.pack "P")   
+                       in eval gr [] (mkProd [(Implicit,varP,typeType)] (Vr varP) [])
   | fst x == cPredef = VApp x []
   | otherwise        = case lookupResDef gr x of
                          Ok t    -> eval gr [] t
@@ -53,16 +59,29 @@ eval gr env (EInt n) = VInt n
 eval gr env (EFloat f) = VFloat f
 eval gr env (K s) = VString s
 eval gr env Empty = VString ""
-eval gr env (Sort s) = VSort s
+eval gr env (Sort s) 
+  | s == cTok = VSort cStr                               -- to be removed
+  | otherwise = VSort s
 eval gr env (ImplArg t) = VImplArg (eval gr env t)
 eval gr env (Table p res) = VTblType (eval gr env p) (eval gr env res)
 eval gr env (RecType rs) = VRecType [(l,eval gr env ty) | (l,ty) <- rs]
+eval gr env t@(ExtR t1 t2) =
+  let error = VError (show (text "The term" <+> ppTerm Unqualified 0 t <+> text "is not reducible"))
+  in case (eval gr env t1, eval gr env t2) of
+       (VRecType rs1, VRecType rs2) -> case intersect (map fst rs1) (map fst rs2) of
+                                         [] -> VRecType (rs1 ++ rs2)
+                                         _  -> error
+       (VRec     rs1, VRec     rs2) -> case intersect (map fst rs1) (map fst rs2) of
+                                         [] -> VRec (rs1 ++ rs2)
+                                         _  -> error
+       _                            -> error
 eval gr env t = error ("eval "++show t)
 
 apply gr env t           []     = eval gr env t
 apply gr env (Q x)       vs     = case lookupResDef gr x of
                                     Ok t    -> apply gr [] t vs
                                     Bad err -> error err
+apply gr env (App t1 t2) vs     = apply gr env t1 (eval gr env t2 : vs)
 apply gr env (Abs b x t) (v:vs) = case (b,v) of
                                     (Implicit,VImplArg v) -> apply gr ((x,v):env) t vs
                                     (Explicit,         v) -> apply gr ((x,v):env) t vs

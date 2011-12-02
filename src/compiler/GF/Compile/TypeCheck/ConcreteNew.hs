@@ -3,6 +3,7 @@ module GF.Compile.TypeCheck.ConcreteNew( checkLType, inferLType ) where
 import GF.Grammar hiding (Env, VGen, VApp, VRecType)
 import GF.Grammar.Lookup
 import GF.Grammar.Predef
+import GF.Grammar.Lockfield
 import GF.Compile.Compute.ConcreteNew
 import GF.Compile.Compute.AppPredefined
 import GF.Infra.CheckM
@@ -86,7 +87,17 @@ tcRho gr scope (Abs bt var body) (Just ty) = do                 -- ABS2
   (var_ty, body_ty) <- unifyFun gr scope (VGen (length scope) []) ty 
   (body, body_ty) <- tcRho gr ((var,var_ty):scope) body (Just body_ty)
   return (Abs bt var body,ty)
+tcRho gr scope (Let (var, (mb_ann_ty, rhs)) body) mb_ty = do    -- LET
+  (rhs,var_ty) <- case mb_ann_ty of
+                    Nothing     -> inferSigma gr scope rhs
+                    Just ann_ty -> do (ann_ty, _) <- tcRho gr scope ann_ty (Just (eval gr [] typeType))
+                                      let v_ann_ty = eval gr (scopeEnv scope) ann_ty
+                                      rhs <- checkSigma gr scope rhs v_ann_ty
+                                      return (rhs, v_ann_ty)
+  (body, body_ty) <- tcRho gr ((var,var_ty):scope) body mb_ty
+  return (Let (var, (Just (value2term gr (scopeVars scope) var_ty), rhs)) body, body_ty)
 tcRho gr scope (Typed body ann_ty) mb_ty = do                   -- ANNOT
+  (ann_ty, _) <- tcRho gr scope ann_ty (Just (eval gr [] typeType))
   let v_ann_ty = eval gr (scopeEnv scope) ann_ty
   body <- checkSigma gr scope body v_ann_ty
   instSigma gr scope (Typed body ann_ty) v_ann_ty mb_ty
@@ -127,7 +138,8 @@ tcRho gr scope (S t p) mb_ty = do
 tcRho gr scope (T tt ps) mb_ty = do
   p_ty   <- case tt of
               TRaw      -> fmap Meta $ newMeta (eval gr [] typePType)
-              TTyped ty -> return ty
+              TTyped ty -> do (ty, _) <- tcRho gr scope ty (Just (eval gr [] typeType))
+                              return ty
   res_ty <- fmap Meta $ newMeta (eval gr [] typeType)
   ps <- mapM (tcCase gr scope (eval gr (scopeEnv scope) p_ty) (eval gr (scopeEnv scope) res_ty)) ps
   instSigma gr scope (T (TTyped p_ty) ps) (eval gr (scopeEnv scope) (Table p_ty res_ty)) mb_ty
@@ -136,6 +148,7 @@ tcRho gr scope t@(R rs) mb_ty = do
              Nothing -> inferRecFields gr scope rs
              Just ty -> case ty of
                           VRecType ltys -> checkRecFields gr scope rs ltys
+                          VMeta _ _ _   -> inferRecFields gr scope rs
                           _             -> tcError (text "Record type is inferred but:" $$
                                                     nest 2 (ppTerm Unqualified 0 (value2term gr (scopeVars scope) ty)) $$
                                                     text "is expected in the expresion:" $$
@@ -154,6 +167,36 @@ tcRho gr scope (C t1 t2) mb_ty = do
   (t1,t1_ty) <- tcRho gr scope t1 (Just (eval gr [] typeStr))
   (t2,t2_ty) <- tcRho gr scope t2 (Just (eval gr [] typeStr))
   instSigma gr scope (C t1 t2) (eval gr [] typeStr) mb_ty
+tcRho gr scope (Glue t1 t2) mb_ty = do
+  (t1,t1_ty) <- tcRho gr scope t1 (Just (eval gr [] typeStr))
+  (t2,t2_ty) <- tcRho gr scope t2 (Just (eval gr [] typeStr))
+  instSigma gr scope (Glue t1 t2) (eval gr [] typeStr) mb_ty
+tcRho gr scope t@(ExtR t1 t2) mb_ty = do
+  (t1,t1_ty) <- tcRho gr scope t1 Nothing
+  (t2,t2_ty) <- tcRho gr scope t2 Nothing
+  case (t1_ty,t2_ty) of
+    (VSort s1,VSort s2)
+       | s1 == cType && s2 == cType -> instSigma gr scope (ExtR t1 t2) (VSort cType) mb_ty
+    (VRecType rs1, VRecType rs2) 
+       | otherwise                  -> do tcWarn (text "bbbb")
+                                          instSigma gr scope (ExtR t1 t2) (VRecType (rs1 ++ rs2)) mb_ty
+    _                               -> tcError (text "Cannot type check" <+> ppTerm Unqualified 0 t)
+tcRho gr scope (ELin cat t) mb_ty = do  -- this could be done earlier, i.e. in the parser
+  tcRho gr scope (ExtR t (R [(lockLabel cat,(Just (RecType []),R []))])) mb_ty
+tcRho gr scope (ELincat cat t) mb_ty = do  -- this could be done earlier, i.e. in the parser
+  tcRho gr scope (ExtR t (RecType [(lockLabel cat,RecType [])])) mb_ty
+tcRho gr scope (Alts t ss) mb_ty = do
+  (t,_) <- tcRho gr scope t (Just (eval gr [] typeStr))
+  ss    <- flip mapM ss $ \(t1,t2) -> do
+              (t1,_) <- tcRho gr scope t1 (Just (eval gr [] typeStr))
+              (t2,_) <- tcRho gr scope t2 (Just (eval gr [] typeStrs))
+              return (t1,t2)
+  instSigma gr scope (Alts t ss) (eval gr [] typeStr) mb_ty
+tcRho gr scope (Strs ss) mb_ty = do
+  ss <- flip mapM ss $ \t -> do
+           (t,_) <- tcRho gr scope t (Just (eval gr [] typeStr))
+           return t
+  instSigma gr scope (Strs ss) (eval gr [] typeStrs) mb_ty
 tcRho gr scope t _ = error ("tcRho "++show t)
 
 tcCase gr scope p_ty res_ty (p,t) = do
@@ -167,9 +210,41 @@ tcPatt gr scope (PV x)    ty0 =
   return ((x,ty0):scope)
 tcPatt gr scope (PP c ps) ty0 = 
   case lookupResType gr c of
-    Ok ty  -> do unify gr scope ty0 (eval gr [] ty)
+    Ok ty  -> do let go scope ty []     = return (scope,ty)
+                     go scope ty (p:ps) = do (arg_ty,res_ty) <- unifyFun gr scope (VGen (length scope) []) ty
+                                             scope <- tcPatt gr scope p arg_ty
+                                             go scope res_ty ps
+                 (scope,ty) <- go scope (eval gr [] ty) ps
+                 unify gr scope ty0 ty
                  return scope
     Bad err -> tcError (text err)
+tcPatt gr scope (PString s) ty0 = do
+  unify gr scope ty0 (eval gr [] typeStr)
+  return scope
+tcPatt gr scope PChar ty0 = do
+  unify gr scope ty0 (eval gr [] typeStr)
+  return scope
+tcPatt gr scope (PSeq p1 p2) ty0 = do
+  unify gr scope ty0 (eval gr [] typeStr)
+  scope <- tcPatt gr scope p1 (eval gr [] typeStr)
+  scope <- tcPatt gr scope p2 (eval gr [] typeStr)
+  return scope
+tcPatt gr scope (PAs x p) ty0 = do
+  tcPatt gr ((x,ty0):scope) p ty0
+tcPatt gr scope (PR rs) ty0 = do
+  let go scope []         = return (scope,[])
+      go scope ((l,p):rs) = do i <- newMeta (eval gr [] typePType)
+                               let ty = VMeta i (scopeEnv scope) []
+                               scope <- tcPatt gr scope p ty
+                               (scope,rs) <- go scope rs
+                               return (scope,(l,ty) : rs)
+  (scope',rs) <- go scope rs
+  unify gr scope ty0 (VRecType rs)
+  return scope'
+tcPatt gr scope (PAlt p1 p2) ty0 = do
+  tcPatt gr scope p1 ty0
+  tcPatt gr scope p2 ty0
+  return scope
 tcPatt gr scope p ty = error ("tcPatt "++show p)
 
 
@@ -178,13 +253,13 @@ inferRecFields gr scope rs =
 
 checkRecFields gr scope []          ltys
   | null ltys                            = return []
-  | otherwise                            = tcError (hsep (map (ppLabel . fst) ltys))
+  | otherwise                            = tcError (text "Missing fields:" <+> hsep (map (ppLabel . fst) ltys))
 checkRecFields gr scope ((l,t):lts) ltys =
   case takeIt l ltys of
     (Just ty,ltys) -> do ltty  <- tcRecField gr scope l t (Just ty)
                          lttys <- checkRecFields gr scope lts ltys
                          return (ltty : lttys)
-    (Nothing,ltys) -> do tcWarn (ppLabel l)
+    (Nothing,ltys) -> do tcWarn (text "Discarded field:" <+> ppLabel l)
                          ltty  <- tcRecField gr scope l t Nothing
                          lttys <- checkRecFields gr scope lts ltys
                          return lttys     -- ignore the field
@@ -197,7 +272,8 @@ checkRecFields gr scope ((l,t):lts) ltys =
 
 tcRecField gr scope l (mb_ann_ty,t) mb_ty = do
   (t,ty) <- case mb_ann_ty of
-              Just ann_ty -> do let v_ann_ty = eval gr (scopeEnv scope) ann_ty
+              Just ann_ty -> do (ann_ty, _) <- tcRho gr scope ann_ty (Just (eval gr [] typeType))
+                                let v_ann_ty = eval gr (scopeEnv scope) ann_ty
                                 t <- checkSigma gr scope t v_ann_ty
                                 instSigma gr scope t v_ann_ty mb_ty
               Nothing     -> tcRho gr scope t mb_ty
@@ -242,7 +318,6 @@ subsCheckRho gr scope t (VClosure env (Prod Explicit _ a1 r1)) rho2 = do        
   subsCheckFun gr scope t (eval gr env a1) (eval gr env r1) a2 r2
 subsCheckRho gr scope t (VSort s1) (VSort s2)
   | s1 == cPType && s2 == cType = return t
-  | s1 == cTok   && s2 == cStr  = return t
 subsCheckRho gr scope t tau1 tau2 = do                                          -- Rule MONO
   unify gr scope tau1 tau2                                 -- Revert to ordinary unification
   return t
@@ -287,12 +362,12 @@ unify gr scope (VTblType p1 res1) (VTblType p2 res2) = do
   unify gr scope p1   p2
   unify gr scope res1 res2
 unify gr scope (VRecType rs1) (VRecType rs2) = do
-  tcWarn (text "aaaa")
+  sequence_ [unify gr scope ty1 ty2 | (l,ty1) <- rs1, Just ty2 <- [lookup l rs2]]
 unify gr scope v1 v2 = do
-  v1 <- zonkTerm (value2term gr (scopeVars scope) v1)
-  v2 <- zonkTerm (value2term gr (scopeVars scope) v2)
-  tcError (text "Cannot unify types:" <+> (ppTerm Unqualified 0 v1 $$ 
-                                           ppTerm Unqualified 0 v2))
+  t1 <- zonkTerm (value2term gr (scopeVars scope) v1)
+  t2 <- zonkTerm (value2term gr (scopeVars scope) v2)
+  tcError (text "Cannot unify types:" <+> (ppTerm Unqualified 0 t1 $$ 
+                                           ppTerm Unqualified 0 t2))
 
 -- | Invariant: tv1 is a flexible type variable
 unifyVar :: SourceGrammar -> Scope -> MetaId -> Env -> [Value] -> Tau -> TcM ()
