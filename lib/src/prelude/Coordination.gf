@@ -33,60 +33,60 @@ oper
 
   -- all this lifted to tables
 
-  ListTable : Type -> Type = \P -> {s1,s2 : P => Str} ; 
+  ListTable : PType -> Type = \P -> {s1,s2 : P => Str} ; 
 
-  twoTable : (P : Type) -> (_,_ : {s : P => Str}) -> ListTable P = \_,x,y ->
+  twoTable : (P : PType) -> (_,_ : {s : P => Str}) -> ListTable P = \_,x,y ->
     {s1 = x.s ; s2 = y.s} ; 
 
-  consTable : (P : Type) -> Str -> ListTable P -> {s : P => Str} -> ListTable P = 
+  consTable : (P : PType) -> Str -> ListTable P -> {s : P => Str} -> ListTable P = 
     \P,c,xs,x ->
     {s1 = table P {o => xs.s1 ! o ++ c ++ xs.s2 ! o} ; s2 = x.s} ; 
 
-  conjunctTable : (P : Type) -> Conjunction -> ListTable P -> {s : P => Str} = 
+  conjunctTable : (P : PType) -> Conjunction -> ListTable P -> {s : P => Str} = 
     \P,or,xs ->
     {s = table P {p => xs.s1 ! p ++ or.s ++ xs.s2 ! p}} ;
 
   conjunctDistrTable : 
-    (P : Type) -> ConjunctionDistr -> ListTable P -> {s : P => Str} = \P,or,xs ->
+    (P : PType) -> ConjunctionDistr -> ListTable P -> {s : P => Str} = \P,or,xs ->
     {s = table P {p => or.s1++ xs.s1 ! p ++ or.s2 ++ xs.s2 ! p}} ;
 
   -- ... and to two- and three-argument tables: how clumsy! ---
 
-  ListTable2 : Type -> Type -> Type = \P,Q -> 
+  ListTable2 : PType -> PType -> Type = \P,Q -> 
     {s1,s2 : P => Q => Str} ; 
 
-  twoTable2 : (P,Q : Type) -> (_,_ : {s : P => Q => Str}) -> ListTable2 P Q = 
+  twoTable2 : (P,Q : PType) -> (_,_ : {s : P => Q => Str}) -> ListTable2 P Q = 
     \_,_,x,y ->
     {s1 = x.s ; s2 = y.s} ; 
 
   consTable2 : 
-    (P,Q : Type) -> Str -> ListTable2 P Q -> {s : P => Q => Str} -> ListTable2 P Q =
+    (P,Q : PType) -> Str -> ListTable2 P Q -> {s : P => Q => Str} -> ListTable2 P Q =
      \P,Q,c,xs,x ->
     {s1 = table P {p => table Q {q => xs.s1 ! p ! q ++ c ++ xs.s2 ! p! q}} ; 
      s2 = x.s
     } ; 
 
   conjunctTable2 : 
-    (P,Q : Type) -> Conjunction -> ListTable2 P Q -> {s : P => Q => Str} = 
+    (P,Q : PType) -> Conjunction -> ListTable2 P Q -> {s : P => Q => Str} = 
     \P,Q,or,xs ->
     {s = table P {p => table Q {q => xs.s1 ! p ! q ++ or.s ++ xs.s2 ! p ! q}}} ;
 
   conjunctDistrTable2 : 
-    (P,Q : Type) -> ConjunctionDistr -> ListTable2 P Q -> {s : P => Q => Str} = 
+    (P,Q : PType) -> ConjunctionDistr -> ListTable2 P Q -> {s : P => Q => Str} = 
     \P,Q,or,xs ->
     {s = 
     table P {p => table Q {q => or.s1++ xs.s1 ! p ! q ++ or.s2 ++ xs.s2 ! p ! q}}} ;
 
-  ListTable3 : Type -> Type -> Type -> Type = \P,Q,R -> 
+  ListTable3 : PType -> PType -> PType -> Type = \P,Q,R -> 
     {s1,s2 : P => Q => R => Str} ; 
 
-  twoTable3 : (P,Q,R : Type) -> (_,_ : {s : P => Q => R => Str}) -> 
+  twoTable3 : (P,Q,R : PType) -> (_,_ : {s : P => Q => R => Str}) -> 
               ListTable3 P Q R = 
     \_,_,_,x,y ->
     {s1 = x.s ; s2 = y.s} ; 
 
   consTable3 : 
-    (P,Q,R : Type) -> Str -> ListTable3 P Q R -> {s : P => Q => R => Str} -> 
+    (P,Q,R : PType) -> Str -> ListTable3 P Q R -> {s : P => Q => R => Str} -> 
          ListTable3 P Q R =
      \P,Q,R,c,xs,x ->
     {s1 = \\p,q,r => xs.s1 ! p ! q ! r ++ c ++ xs.s2 ! p ! q ! r ; 
@@ -94,26 +94,26 @@ oper
     } ; 
 
   conjunctTable3 : 
-    (P,Q,R : Type) -> Conjunction -> ListTable3 P Q R -> {s : P => Q => R => Str} = 
+    (P,Q,R : PType) -> Conjunction -> ListTable3 P Q R -> {s : P => Q => R => Str} = 
     \P,Q,R,or,xs ->
     {s = \\p,q,r => xs.s1 ! p ! q ! r ++ or.s ++ xs.s2 ! p ! q ! r} ;
 
   conjunctDistrTable3 : 
-    (P,Q,R : Type) -> ConjunctionDistr -> ListTable3 P Q R -> 
+    (P,Q,R : PType) -> ConjunctionDistr -> ListTable3 P Q R -> 
        {s : P => Q => R => Str} = 
     \P,Q,R,or,xs ->
     {s = \\p,q,r => or.s1++ xs.s1 ! p ! q ! r ++ or.s2 ++ xs.s2 ! p ! q ! r} ;
 	
-  ListTable4 : Type -> Type -> Type -> Type -> Type = \P,Q,R,T -> 
+  ListTable4 : PType -> PType -> PType -> PType -> Type = \P,Q,R,T -> 
     {s1,s2 : P => Q => R => T => Str} ; 
 
-  twoTable4 : (P,Q,R,T : Type) -> (_,_ : {s : P => Q => R => T => Str}) -> 
+  twoTable4 : (P,Q,R,T : PType) -> (_,_ : {s : P => Q => R => T => Str}) -> 
               ListTable4 P Q R T = 
     \_,_,_,_,x,y ->
     {s1 = x.s ; s2 = y.s} ; 
 
   consTable4 : 
-    (P,Q,R,T : Type) -> Str -> ListTable4 P Q R T -> {s : P => Q => R => T => Str} -> 
+    (P,Q,R,T : PType) -> Str -> ListTable4 P Q R T -> {s : P => Q => R => T => Str} -> 
          ListTable4 P Q R T =
      \P,Q,R,T,c,xs,x ->
     {s1 = \\p,q,r,t => xs.s1 ! p ! q ! r ! t ++ c ++ xs.s2 ! p ! q ! r ! t ; 
@@ -121,12 +121,12 @@ oper
     } ; 
 
   conjunctTable4 : 
-    (P,Q,R,T : Type) -> Conjunction -> ListTable4 P Q R T -> {s : P => Q => R => T => Str} = 
+    (P,Q,R,T : PType) -> Conjunction -> ListTable4 P Q R T -> {s : P => Q => R => T => Str} = 
     \P,Q,R,T,or,xs ->
     {s = \\p,q,r,t => xs.s1 ! p ! q ! r ! t ++ or.s ++ xs.s2 ! p ! q ! r ! t} ;
 
   conjunctDistrTable4 : 
-    (P,Q,R,T : Type) -> ConjunctionDistr -> ListTable4 P Q R T -> 
+    (P,Q,R,T : PType) -> ConjunctionDistr -> ListTable4 P Q R T -> 
        {s : P => Q => R => T => Str} = 
     \P,Q,R,T,or,xs ->
     {s = \\p,q,r,t => or.s1++ xs.s1 ! p ! q ! r ! t ++ or.s2 ++ xs.s2 ! p ! q ! r ! t} ;
@@ -142,18 +142,18 @@ oper
   consrSS : Str -> SS -> ListX -> ListX = \comma,x,xs -> 
     consrStr comma x.s xs ;
 
-  consrTable : (P : Type) -> Str -> {s : P => Str} -> ListTable P -> ListTable P = 
+  consrTable : (P : PType) -> Str -> {s : P => Str} -> ListTable P -> ListTable P = 
     \P,c,x,xs ->
     {s1 = table P {o => x.s ! o ++ c ++ xs.s1 ! o} ; s2 = xs.s2} ; 
 
-  consrTable2 : (P,Q : Type) -> Str -> {s : P => Q => Str} -> 
+  consrTable2 : (P,Q : PType) -> Str -> {s : P => Q => Str} -> 
     ListTable2 P Q -> ListTable2 P Q = 
     \P,Q,c,x,xs ->
     {s1 = table P {p => table Q {q => x.s ! p ! q ++ c ++ xs.s1 ! p ! q}} ; 
      s2 = xs.s2
     } ; 
 
-  consrTable3 : (P,Q,R : Type) -> Str -> {s : P => Q => R => Str} -> 
+  consrTable3 : (P,Q,R : PType) -> Str -> {s : P => Q => R => Str} -> 
     ListTable3 P Q R -> ListTable3 P Q R = 
     \P,Q,R,c,x,xs ->
     {s1 = table P {p => table Q {q => table R {
@@ -162,7 +162,7 @@ oper
      s2 = xs.s2
     } ; 
 
-  consrTable4 : (P,Q,R,T : Type) -> Str -> {s : P => Q => R => T => Str} -> 
+  consrTable4 : (P,Q,R,T : PType) -> Str -> {s : P => Q => R => T => Str} -> 
     ListTable4 P Q R T -> ListTable4 P Q R T = 
     \P,Q,R,T,c,x,xs ->
     {s1 = table P {p => table Q {q => table R { 
