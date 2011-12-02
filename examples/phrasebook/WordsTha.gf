@@ -303,5 +303,16 @@ concrete WordsTha of Words = SentencesTha **
 
     Smoke = mkVP (P.mkV (R.thword "สูบ" "บุ" "รี")) ;
 
+    ADoctor = mkProfession (P.personN "หมอ") ;
+    AProfessor = mkProfession (P.personN (R.thword "อา" "จารย์")) ;
+    ALawyer = mkProfession (P.personN (R.thword "มัก" "กฎ" "หมาย")) ;
+    AEngineer =  mkProfession (P.personN (R.thword "วิ" "ศวกร")) ;
+    ATeacher = mkProfession (P.personN "ครู") ;
+    ACook = mkProfession (P.personN (R.thword "ภัก" "ษกาน")) ;
+    AStudent = mkProfession (P.personN (R.thword "นัก" "ศึก" "ษา")) ;
+    ABusinessman = mkProfession (P.personN (R.thword "ฝู้" "ประ" "กอบ" "การ")) ;
+
+  oper
+    mkProfession : N -> NPPerson -> Cl = \n,p -> mkCl p.name n ;
 }
   

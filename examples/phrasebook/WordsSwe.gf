@@ -257,6 +257,7 @@ concrete WordsSwe of Words = SentencesSwe **
     Rice = mkCN (mkN "ris" "ris") ;
     Pork = mkCN (mkN "fläsk" "fläsk") ;
     Beef = mkCN (mkN "nötkött" "nötkött") ;
+    Egg = mkCN L.egg_N ;
     Noodles = mkCN (mkN "nudel" "nudlar") ;
     Shrimps = mkCN (mkN "räka") ;
     Chili = mkCN (mkN "chili" "chilier") ;
@@ -266,6 +267,29 @@ concrete WordsSwe of Words = SentencesSwe **
     Pineapple = mkCN (mkN "ananas" "ananaser") ;
     Coke = mkCN (mkN "kola") ;
     IceCream = mkCN (mkN "glass") ;
+    Salad = mkCN (mkN "sallad" "sallader") ;
+    OrangeJuice = mkCN (mkN "apelsinjuice" "apelsinjuicer") ;
+    Lemonade = mkCN (mkN "läsk") ;
     Beach = mkPlace (mkN "badstrand" "badstränder") "på" ;
+
+    ItsRaining = mkCl (mkVP L.rain_V0) ;
+    ItsCold = mkCl (mkVP L.cold_A) ;
+    ItsWarm = mkCl (mkVP L.warm_A) ;
+    ItsWindy = mkCl (mkVP (mkV "blåser")) ;
+    SunShine = mkCl (mkNP the_Det L.sun_N) (skina_V) ;
+
+    Smoke = mkVP (mkV "röker") ;
+
+    ADoctor = mkProfession (mkN "läkare" "läkare") ;
+    AProfessor = mkProfession (mkN "professor" "professorer") ;
+    ALawyer = mkProfession (mkN "jurist" "jurister") ;
+    AEngineer =  mkProfession (mkN "ingenjör" "ingenjörer") ;
+    ATeacher = mkProfession (mkN "lärare" "lärare") ;
+    ACook = mkProfession (mkN "kock") ;
+    AStudent = mkProfession (mkN "student" "srudenter") ;
+    ABusinessman = mkProfession (mkN "affärsman" "affärsmannen" "affärsmän" "affärsmännen") ;
+
+  oper
+    mkProfession : N -> NPPerson -> Cl = \n,p -> mkCl p.name (mkVP (CompBareCN (mkCN n))) ;
 
 }
