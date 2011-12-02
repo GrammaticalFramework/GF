@@ -23,7 +23,7 @@ import GF.Grammar.Grammar
 import PGF.Binary
 
 -- Please change this every time when the GFO format is changed
-gfoVersion = "GF01"
+gfoVersion = "GF02"
 
 
 instance Binary Ident where
@@ -155,28 +155,31 @@ instance Binary Term where
   put (App x y)     = putWord8 8  >> put (x,y)
   put (Abs x y z)   = putWord8 9 >> put (x,y,z)
   put (Meta x)      = putWord8 10 >> put x
-  put (Prod w x y z)= putWord8 11 >> put (w,x,y,z)
-  put (Typed x y)   = putWord8 12 >> put (x,y)
-  put (Example x y) = putWord8 13 >> put (x,y)
-  put (RecType x)   = putWord8 14 >> put x
-  put (R x)         = putWord8 15 >> put x
-  put (P x y)       = putWord8 16 >> put (x,y)
-  put (ExtR x y)    = putWord8 17 >> put (x,y)
-  put (Table x y)   = putWord8 18 >> put (x,y)
-  put (T x y)       = putWord8 19 >> put (x,y)
-  put (V x y)       = putWord8 20 >> put (x,y)
-  put (S x y)       = putWord8 21 >> put (x,y)
-  put (Let x y)     = putWord8 22 >> put (x,y)
-  put (Q x)         = putWord8 23 >> put x
-  put (QC x)        = putWord8 24 >> put x
-  put (C x y)       = putWord8 25 >> put (x,y)
-  put (Glue x y)    = putWord8 26 >> put (x,y)
-  put (EPatt x)     = putWord8 27 >> put x
-  put (EPattType x) = putWord8 28 >> put x
-  put (FV x)        = putWord8 29 >> put x
-  put (Alts x y)    = putWord8 30 >> put (x,y)
-  put (Strs x)      = putWord8 31 >> put x
-  put (ELin x y)    = putWord8 32 >> put (x,y)
+  put (ImplArg x)   = putWord8 11 >> put x
+  put (Prod w x y z)= putWord8 12 >> put (w,x,y,z)
+  put (Typed x y)   = putWord8 13 >> put (x,y)
+  put (Example x y) = putWord8 14 >> put (x,y)
+  put (RecType x)   = putWord8 15 >> put x
+  put (R x)         = putWord8 16 >> put x
+  put (P x y)       = putWord8 17 >> put (x,y)
+  put (ExtR x y)    = putWord8 18 >> put (x,y)
+  put (Table x y)   = putWord8 19 >> put (x,y)
+  put (T x y)       = putWord8 20 >> put (x,y)
+  put (V x y)       = putWord8 21 >> put (x,y)
+  put (S x y)       = putWord8 22 >> put (x,y)
+  put (Let x y)     = putWord8 23 >> put (x,y)
+  put (Q x)         = putWord8 24 >> put x
+  put (QC x)        = putWord8 25 >> put x
+  put (C x y)       = putWord8 26 >> put (x,y)
+  put (Glue x y)    = putWord8 27 >> put (x,y)
+  put (EPatt x)     = putWord8 28 >> put x
+  put (EPattType x) = putWord8 29 >> put x
+  put (ELincat x y) = putWord8 30 >> put (x,y)
+  put (ELin x y)    = putWord8 31 >> put (x,y)
+  put (FV x)        = putWord8 32 >> put x
+  put (Alts x y)    = putWord8 33 >> put (x,y)
+  put (Strs x)      = putWord8 34 >> put x
+  put (Error x)     = putWord8 35 >> put x
 
   get = do tag <- getWord8
            case tag of
@@ -191,28 +194,31 @@ instance Binary Term where
              8  -> get >>= \(x,y)   -> return (App x y)
              9  -> get >>= \(x,y,z) -> return (Abs x y z)
              10 -> get >>= \x       -> return (Meta x)
-             11 -> get >>= \(w,x,y,z)->return (Prod w x y z)
-             12 -> get >>= \(x,y)   -> return (Typed x y)
-             13 -> get >>= \(x,y)   -> return (Example x y)
-             14 -> get >>= \x       -> return (RecType x)
-             15 -> get >>= \x       -> return (R x)
-             16 -> get >>= \(x,y)   -> return (P x y)
-             17 -> get >>= \(x,y)   -> return (ExtR x y)
-             18 -> get >>= \(x,y)   -> return (Table x y)
-             19 -> get >>= \(x,y)   -> return (T x y)
-             20 -> get >>= \(x,y)   -> return (V x y)
-             21 -> get >>= \(x,y)   -> return (S x y)
-             22 -> get >>= \(x,y)   -> return (Let x y)
-             23 -> get >>= \x       -> return (Q  x)
-             24 -> get >>= \x       -> return (QC x)
-             25 -> get >>= \(x,y)   -> return (C x y)
-             26 -> get >>= \(x,y)   -> return (Glue x y)
-             27 -> get >>= \x       -> return (EPatt x)
-             28 -> get >>= \x       -> return (EPattType x)
-             29 -> get >>= \x       -> return (FV x)
-             30 -> get >>= \(x,y)   -> return (Alts x y)
-             31 -> get >>= \x       -> return (Strs x)
-             32 -> get >>= \(x,y)   -> return (ELin x y)
+             11 -> get >>= \x       -> return (ImplArg x)
+             12 -> get >>= \(w,x,y,z)->return (Prod w x y z)
+             13 -> get >>= \(x,y)   -> return (Typed x y)
+             14 -> get >>= \(x,y)   -> return (Example x y)
+             15 -> get >>= \x       -> return (RecType x)
+             16 -> get >>= \x       -> return (R x)
+             17 -> get >>= \(x,y)   -> return (P x y)
+             18 -> get >>= \(x,y)   -> return (ExtR x y)
+             19 -> get >>= \(x,y)   -> return (Table x y)
+             20 -> get >>= \(x,y)   -> return (T x y)
+             21 -> get >>= \(x,y)   -> return (V x y)
+             22 -> get >>= \(x,y)   -> return (S x y)
+             23 -> get >>= \(x,y)   -> return (Let x y)
+             24 -> get >>= \x       -> return (Q  x)
+             25 -> get >>= \x       -> return (QC x)
+             26 -> get >>= \(x,y)   -> return (C x y)
+             27 -> get >>= \(x,y)   -> return (Glue x y)
+             28 -> get >>= \x       -> return (EPatt x)
+             29 -> get >>= \x       -> return (EPattType x)
+             30 -> get >>= \(x,y)   -> return (ELincat x y)
+             31 -> get >>= \(x,y)   -> return (ELin x y)
+             32 -> get >>= \x       -> return (FV x)
+             33 -> get >>= \(x,y)   -> return (Alts x y)
+             34 -> get >>= \x       -> return (Strs x)
+             35 -> get >>= \x       -> return (Error x)
              _  -> decodingError
 
 instance Binary Patt where
