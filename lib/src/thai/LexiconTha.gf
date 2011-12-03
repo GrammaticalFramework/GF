@@ -35,7 +35,7 @@ lin
   black_A = mkA (thword "ดำ") ;
   blood_N = mkN (thword "เลือด") ;
   blow_V = mkV (thword "พัด") ;
---  blue_A = regADeg "blue" ;
+  blue_A = mkA (thword "สี" "น้ำ" "เงิน") ;
 --  boat_N = regN "boat" ;
   bone_N = mkN (thword "กระดูก") ;
   book_N = mkN (thword nag_s svv_s) lem_s ;
@@ -124,7 +124,7 @@ lin
 --  forget_V2 = dirV2 (irregDuplV "forget" "forgot" "forgotten") ;
   freeze_V = mkV (thword "แข็ง") ;
 --  fridge_N = regN "fridge" ;
---  friend_N = regN "friend" ;
+  friend_N = personN "เพี่อน" ;
 --  fromP = mkPrep "from" ;
   fruit_N = mkN (thword "หมาก") ;
   full_A = mkA (thword "เต็ม") ;
@@ -150,7 +150,7 @@ lin
   hear_V2 = mkV2 (thword "ยิน") ;
   heart_N = mkN (thword "ใจ") ;
   heavy_A = mkA (thword "หนัก") ;
---  hill_N = regN "hill" ;
+  hill_N = placeN (thword "เนิน" "เขา") ;
   hit_V2 = mkV2 (thword "ตี") ;
   hold_V2 = mkV2 (thword "อุ้ม") ;
 --  hope_VS = mkVS (regV "hope") ;
