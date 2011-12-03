@@ -1,13 +1,6 @@
 DisambPhrasebookEng :
 PhrasebookEng :
-PhrasebookFre : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookGer : AModVerbPhrase AModVerbPhrasePlace Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookIta : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade MCan MMust Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookNor : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookPol : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookRon : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookRus : Baht Beach Beef Belgian Belgium Chili Coke Durian Egg Flemish Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookSpa : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookSwe : Egg ItsCold ItsRaining ItsWarm ItsWindy Lemonade OrangeJuice Salad Smoke SunShine
+PhrasebookSpa : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
+PhrasebookSwe :
 PhrasebookTha :
-PhrasebookUrd : Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade MMust Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
+PhrasebookUrd : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade MMust Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur

@@ -231,6 +231,7 @@ concrete WordsTha of Words = SentencesTha **
 -- auxiliaries
 
   oper
+--    thpron = R.thpron ;
 
     mkNat : Str -> NPNationality = \nat -> 
       mkNPNationality (mkNP (mkCN (mkA nat) L.language_N)) (mkNP (mkCN (mkA nat) L.country_N)) (mkA nat) ;

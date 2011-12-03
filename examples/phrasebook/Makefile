@@ -2,6 +2,16 @@ compile = runghc Compile
 
 all: demo missing
 
+thaidroid:
+	cp -p Phrasebook.pgf FullPhrasebook.pgf
+	$(compile) -opt Eng Swe Tha Thp DisambPhrasebookEng
+	$(compile) -link Eng Fin Swe Tha Thp DisambPhrasebookEng
+	mv Phrasebook.pgf Thaidroid.pgf
+	mv FullPhrasebook.pgf Phrasebook.pgf
+
+thaiscript:
+	runghc ../../lib/src/thai/ThaiScript.hs
+
 demo: compdemo fin linkdemo
 
 compdemo:
