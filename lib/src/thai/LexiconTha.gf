@@ -333,6 +333,7 @@ lin
   tree_N = mkN (thword "ไม้") ;
   turn_V = mkV (thword "หัน") ;
 --  ugly_A = regADeg "ugly" ;
+  uncertain_A = mkA (thword "ลัง" "เล" "ใจ") ;
   understand_V2 = mkV2 (mkV (thword "เข้า" "ไจ")) ;
   university_N = placeN (thword "มหา" "วิ" "ทยา" "ลัย") ;
 --  village_N = regN "village" ;
@@ -361,5 +362,6 @@ lin
   write_V2 = mkV2 "ลง" ;
   year_N = mkN (thword "ปี") ;
   yellow_A = mkA (thword "เหลือง") ;
---  young_A = regADeg "young" ;
+  young_A = mkA "รุ่น" ;
+
 }

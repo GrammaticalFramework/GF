@@ -11,22 +11,26 @@ concrete StructuralTha of Structural = CatTha **
   although_Subj = ss "ถืง" ;
   always_AdV = ss (thword "ตลอด" "ไป") ;
   and_Conj = {s1 = [] ; s2 = "และ"} ;
+  as_CAdv = {s = thword "เท่า" ; p = "กับ"} ; ----
+  at_least_AdN = ss (thword "อย่าง" "น้อย") ;
+  at_most_AdN = ss (thword "อย่าง" "มาก") ;
   because_Subj = ss (thword "เพ" "ราะ") ;
   before_Prep = ss "ก่อน" ;
   behind_Prep = ss "หลัง" ;
   between_Prep = ss (thword "ระ" "หวา่ง") ;
---  both7and_DConj = sd2 "both" "and" ** {n = Pl} ;
+  both7and_DConj = {s1 = "และ" ; s2 = "และ"} ; ----
   but_PConj = ss "แต่" ;
   by8agent_Prep = ss [] ;
   by8means_Prep = ss "ผ่าน" ;
   can8know_VV = {s = pen_s ; typ = VVPost} ;
   can_VV = {s = "ได้" ; typ = VVPost} ;
   during_Prep = ss "ที" ;
---  either7or_DConj = sd2 "either" "or" ** {n = Sg} ;
+  either7or_DConj = {s1 = "หริอ" ; s2 = "หริอ"} ; ----
   everybody_NP = mkNP (thword "ทัว" "ห้นา") ;
   every_Det = quantDet "ทุก" ;
   everything_NP = mkNP (thword "ทุก" "สิ่ง") ;
   everywhere_Adv = ss (thword "ทุก" "ที") ;
+  except_Prep = ss (thword "นอก" "จาก") ;
   few_Det = quantDet (thword "สอง" "สาม") ;
   for_Prep = ss "ให้" ;
   from_Prep = ss "จาก" ;
@@ -40,7 +44,8 @@ concrete StructuralTha of Structural = CatTha **
   how8much_IAdv = ss (thword "เท่า" "ไร") ;
   in8front_Prep = ss "หน้า" ;
   i_Pron  = ss chan_s ;
-  if_Subj = ss (thword "ถ้า") ;
+  if_Subj = ss (thword "ถ้า") ; ---- ... ko
+  if_then_Conj = {s1 = "ถ้า" ; s2 = "ก็"} ; ---- ko between subj and verb
   in_Prep = ss (thword "ใน") ;
   it_Pron  = ss "มัน" ;
   less_CAdv = {s = "น้อย" ; p = "กว่า"} ; ----
@@ -49,7 +54,11 @@ concrete StructuralTha of Structural = CatTha **
   most_Predet = ss (thword "มาก" "ที่" "สุด") ;
   much_Det = quantDet "มาก" ;
   must_VV = {s = tog_s ; typ = VVPre} ;
+  no_Quant = quantDet may_s ; ----
   no_Utt = ss may_s ;
+  nobody_NP = mkNP (thword "ไม่" "มี" "ใคร") ;
+  not_Predet = ss may_s ; ----
+  nothing_NP = mkNP "เปล่า" ;
   on_Prep = ss "บน" ;
   only_Predet = ss (thword "เฑา" "นั้น") ;
   or_Conj = {s1 = [] ; s2 = "หริอ"} ;
@@ -66,6 +75,7 @@ concrete StructuralTha of Structural = CatTha **
   something_NP = mkNP (thword "บาง" "สิ่ง") ;
   somewhere_Adv = mkAdv (thword "บาง" "แห่ง") ;
   that_Quant = demDet nan_s ;
+  that_Subj = ss conjThat ;
   there_Adv = ss (thword "ที่" "นั่น") ;
   there7to_Adv = ss (thword "ที่" "นั่น") ; ----
   there7from_Adv = ss (thword "จาก" "นั่น") ; ----
@@ -92,7 +102,6 @@ concrete StructuralTha of Structural = CatTha **
   youSg_Pron = ss khun_s ;
   youPl_Pron = ss khun_s ;
   youPol_Pron = ss khun_s ;
-
   right_Ord = ss (thword "ขวา") ;
   left_Ord = ss (thword "ซ้าย") ;
 }
