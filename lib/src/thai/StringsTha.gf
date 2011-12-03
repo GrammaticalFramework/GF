@@ -1,15 +1,13 @@
--- The only place where literal Thai strings are defined 
--- (except for Lexicon and Structural).
--- Convert this into StringsThai by 
--- gf
--- > rf -file=thai/src/StringsTha.gf | ps -env=quotes -to_thai | wf -file=thai/StringsTha.gf
--- สุคสันต์วันเกิด!
+-- a repository of literal Thai strings
 
 resource StringsTha = {
 
 flags coding = utf8 ;
 
 oper
+
+-- if Thai is paired with Pronunciation, return the latter
+thpron : Str -> Str -> Str = \t,p -> p ;
 
 aphai_s = "อภัย" ; -- excuse2
 baan_s = "บ้าน" ; -- house
@@ -30,7 +28,7 @@ haa_s = "ห้า" ; -- five
 hay_s = "ให้" ; -- give
 hoog_s = "ห้อง" ; -- room
 hok_s = "หก" ; -- six
-jai_s = "ใj" ; -- understand2
+jai_s = "ใจ" ; -- understand2
 kaaw_s = "เกา" ; -- nine
 kam_s = "กำ" ; -- Progr1
 kew_s = "แก้ว" ; -- glass (drink Classif)

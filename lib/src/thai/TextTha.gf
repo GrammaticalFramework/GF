@@ -1,4 +1,4 @@
-concrete TextTha of Text = CommonX ** {
+concrete TextTha of Text = CommonX ** open ResTha in {
 
 -- No punctuation - but make sure to leave spaces between sentences!
 
