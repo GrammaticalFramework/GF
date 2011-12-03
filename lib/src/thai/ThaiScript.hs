@@ -1,37 +1,31 @@
-module ThaiScript where
+module Main where
 
 import Data.Char
 import Data.List
 import qualified Data.Map as Map
+import System
 
-testFile   = "src/test.txt"
-resultFile = "src/results.txt"
+-- convert all files *Tha.gf into *Thp.gf with "t" changed to (thpron "t" "p")
+main = allThpron
 
-test = do
-  s <- readFile testFile
-  writeFile resultFile []
-  mapM_ (testOne . tabs) $ lines s
+allThpron = do
+  System.system "ls *Tha*.gf ../api/*Tha*.gf >srcThai.txt"
+  files <- readFile "srcThai.txt" >>= return . lines
+  mapM_ fileThpron files
 
-testOne ws = case ws of
-  m:t:p:r:_ -> appendFile resultFile $ concat [mn,"\t",t,"\t",p,"\t",r,"\t",result,"\n"] where
-                   result = unwords (intersperse "," (map thai2pron (filter (/=",") (words t))))
-                   mn = if result == r 
-                      then m
-                      else if result == p then (m ++ "+") else (m ++ "-") 
-  _ -> return ()
+fileThpron file = do
+  s <- readFile file
+  let tgt = appThpron file
+  writeFile tgt (appThpron s)
+  putStrLn ("wrote " ++ tgt)
 
-testOneS ws = case ws of
-  m:t:p:r:_ -> appendFile resultFile $ concat [m,"\t",t,"\t",pn,"\t",r,"\n"] where
-                   result = unwords (intersperse "," (map thai2pron (filter (/=",") (words t))))
-                   pn = if m == "+" 
-                      then r
-                      else p
-  _ -> return ()
+appThpron s = case s of
+  '"':cs -> let (w,_:rest) = break (=='"') cs in mkThpron w ++ appThpron rest
+  'T':'h':'a':rest -> "Thp" ++ appThpron rest
+  c:cs -> c:appThpron cs
+  _ -> s
 
-tabs s = case break (=='\t') s of
-  ([], _:ws) -> tabs ws
-  (w , _:ws) -> w:tabs ws
-  _ -> [s]
+mkThpron s = "(thpron \"" ++ s ++ "\" \"" ++ thai2pron s ++ "\")"
 
 -- heuristics for finding syllables
 uniSyllables :: [Int] -> [[Int]]
@@ -311,6 +305,36 @@ allThaiChars = [
   TC {unicode = 3673, translit = "N9", cclass = Low, liveness = False, pronunc = "9", pronunc_end = "9"}
  ]
 
+-- testing with Wikipedia Swadesh list
+
+testFile   = "src/test.txt"
+resultFile = "src/results.txt"
+
+test = do
+  s <- readFile testFile
+  writeFile resultFile []
+  mapM_ (testOne . tabs) $ lines s
+
+testOne ws = case ws of
+  m:t:p:r:_ -> appendFile resultFile $ concat [mn,"\t",t,"\t",p,"\t",r,"\t",result,"\n"] where
+                   result = unwords (intersperse "," (map thai2pron (filter (/=",") (words t))))
+                   mn = if result == r 
+                      then m
+                      else if result == p then (m ++ "+") else (m ++ "-") 
+  _ -> return ()
+
+testOneS ws = case ws of
+  m:t:p:r:_ -> appendFile resultFile $ concat [m,"\t",t,"\t",pn,"\t",r,"\n"] where
+                   result = unwords (intersperse "," (map thai2pron (filter (/=",") (words t))))
+                   pn = if m == "+" 
+                      then r
+                      else p
+  _ -> return ()
+
+tabs s = case break (=='\t') s of
+  ([], _:ws) -> tabs ws
+  (w , _:ws) -> w:tabs ws
+  _ -> [s]
 
 
 {-
