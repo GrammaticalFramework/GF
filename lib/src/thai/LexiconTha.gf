@@ -8,7 +8,7 @@ flags
 
 lin
 --  add_V3 = dirV3 (regV "add") toP ;
-  airplane_N = mkN (thword "เครึอง" "บิน") "ลำ" ;
+  airplane_N = mkN (thword "เครื่อง" "บิน") "ลำ" ;
 --  already_Adv = mkAdv "already" ;
   animal_N = animalN (thword "สัตว์") ;
   answer_V2S = mkV2S (regV "ขาน") [] ; ---- prep
