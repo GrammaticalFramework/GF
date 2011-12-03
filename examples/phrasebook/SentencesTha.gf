@@ -18,4 +18,5 @@ lin
 oper
   yuu_V : V = R.regV "อยู่" ;
 
+  thpron = R.thpron ;
 }
