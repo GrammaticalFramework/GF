@@ -26,6 +26,10 @@ lang:
 api:
 	$(RUNMAKE) alltenses api
 
+# thai with pronunciation
+thp:
+	cd thai ; runghc ThaiScript.hs ; cd ..
+
 compatibility:
 	$(RUNMAKE) present compat
 

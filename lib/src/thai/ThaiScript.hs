@@ -93,6 +93,7 @@ dat2pron is = case is of
   [CoL] : cc : [CaP]       : d : cs -> prons cc ++ tone cc d cs "o"         ++ endWith cs  -- o-a -> o
   []    :[CO]: v           : d : cs ->             tone[CO]d cs (prons v)   ++ endWith cs  -- Ov  -> v
   []    : cc : [Ca,Cw]     : d : cs -> prons cc ++ tone cc d cs "ua"        ++ endWith cs  -- Caw -> Cua
+  []    : cc : v           :[CK]:cs -> endWith cs                                          -- swas(di:K)
   []    : bb : [] : cc : []: d : cs -> prons bb ++ "a" ++ prons cc ++ tone cc [] cs "o" ++ endWith (d:cs) -- CaCoC
   []    : bb : [] : cc : []         -> prons bb ++                    tone bb [] [cc] "o" ++ endWith [cc]  -- CoC
   []    : bb : [] : cc : v : d : cs -> prons bb ++ "a" ++ prons cc ++ tone cc [] cs (prons v) ++ endWith cs -- CaCvC
@@ -124,10 +125,12 @@ getSyllable s = case s of
      Ch:c:cs     | isConsonant c && isLow c -> let (cc:ccs) = getCons v (c:cs) in (Ch:cc):ccs -- hC
      CO:cs                                  -> [CO]  :getVow v cs      -- O
      Cs:Cr:cs                               -> [Cs]  :getVow v cs      -- O
+     _:CK:[]                                -> []
      b:Cr:Cr:[]  | isConsonant b            -> [b]   :[Ca]:[]:[Cr]:[]  -- Crr  -> Can
      b:Cr:Cr:[c] | all isConsonant [b,c]    -> [b]   :[Ca]:[]:[c]:[]   -- CrrC -> CaC  
      b:c:cs      | isCluster b c            -> [b,c] :getVow v cs      -- C(l|r|w) cluster
      b:cs        | isPreVowel v             -> [b]   :getVow v cs
+     b:c:Cw:Cy:[]| isConsonant b && isDiacritic c -> [b]:[Cu,Ca]:[c]:[Cy]:[] -- CTuay
      b:Cw:Cy:[]  | isConsonant b            -> [b]   :[Cu,Ca]:[]:[Cy]:[] -- Cuay
      b:c:d:[]    | all isConsonant [b,c,d]  -> [b]   :[]:[c]:[]:[d]:[] -- CaCoC
      b:c:[]      | all isConsonant [b,c]    -> [b]   :[]:[c]:[]        -- CoC
