@@ -6,6 +6,7 @@ import qualified Data.Map as Map
 import System
 
 -- convert all files *Tha.gf into *Thp.gf with "t" changed to (thpron "t" "p")
+
 main = allThpron
 
 allThpron = do
@@ -21,39 +22,17 @@ fileThpron file = do
 
 appThpron s = case s of
   '"':cs -> let (w,_:rest) = break (=='"') cs in mkThpron w ++ appThpron rest
+  'T':'h':'a':'A':rest             -> "ThpA" ++ appThpron rest  -- AllThaAbs
+  'T':'h':'a':c:rest   | isAlpha c -> "Tha" ++ c : appThpron rest  -- Thank
   'T':'h':'a':rest -> "Thp" ++ appThpron rest
   c:cs -> c:appThpron cs
   _ -> s
 
 mkThpron s = "(thpron \"" ++ s ++ "\" \"" ++ thai2pron s ++ "\")"
 
--- heuristics for finding syllables
-uniSyllables :: [ThaiDat] -> [[ThaiDat]]
-uniSyllables = reverse . (syll [] []) where
-  syll sys sy is = case is of
-    c:cs | isPreVowel c -> new [] is
-    c:d:cs | isConsonant c && isConsonant d -> new [c] (d:cs) ---- no consonant clusters
-    c:cs -> continue [c] cs ---- more rules to follow 
-    _ -> sy:sys
-   where
-    new old = syll ((sy ++ old) : sys) []
-    continue old = syll sys (sy ++ old)
-
-
-isPreVowel  :: ThaiDat -> Bool
-isPreVowel i = Ce <= i && i <= CaE
-
-isVowel :: ThaiDat -> Bool
-isVowel i = CaP <= i && i <= CaE
-
-isConsonant :: ThaiDat -> Bool
-isConsonant i = Ck <= i && i <= Ch' && i /= CO
-
-isMark :: ThaiDat -> Bool
-isMark i = CS <= i && i <= CK
-
 
 -- the following functions involving pron (=pronunciation) work on syllables
+
 thai2pron  = uni2pron . thai2uni
 trans2pron = uni2pron . trans2uni
 trans2thai = uni2thai . trans2uni
@@ -70,10 +49,31 @@ uni2pron = dat2pron . uni2dat
 
 uni2dat = map (maybe CR dat . (\u -> Map.lookup u uniMap))  --- CR as exception value
 
-dat2pron :: [ThaiDat] -> String
-dat2pron is = case getSyllable is of
+--high = accent '\x301'
+--low  = accent '\x300'
+--rising = accent '\x306'
+--falling = accent '\x302'
 
--- diph order as in Smyth, p. 15
+dat2pron :: [ThaiDat] -> String
+dat2pron is = case is of
+
+-- exceptional words
+ [Ce,Ck1,CaL]    -> "kha\x301w"
+ [Cc1,Ca,Cn]     -> "cha\x301n"
+ [CaE,Ch,Cm]     -> "m" ++ high "ay"
+ [Ct,CT2,CO,Cg]  -> "t" ++ falling i_O ++ i_ng 
+ [Ce,Cg,Ci,Cn]   -> i_ng ++ i_oe ++ "n"
+ [CaE,Cd,CT2]    -> "d" ++ falling "aay"
+ [Ce,Ck,CT2,CaL] -> "k" ++ falling "aaw"
+ [CaE,Cm,CT2]    -> "m" ++ high "aay"
+ [CO,Cy,CaL,Ck]  -> "y" ++ low "aak"
+ [CO,Cy,CT1,CaL] -> "y" ++ low "aa"
+ [CO,Cy,CT1,CaL,Cg] -> "y" ++ low "aa" ++ i_ng
+ [CO,Cy,CT1,CuL] -> "y" ++ low "uu"
+ [Cp3,Cr]        -> "phan" --- not in Smyth
+
+-- words following the rules (mostly from Smyth's Essential Grammar)
+ _ -> case getSyllable is of
   [Ce]  : cc : [] : d : cs | brev d -> prons cc ++ tone cc d cs "e"         ++ endWith cs  -- e-8  -> e
   [Ce'] : cc : [] : d : cs | brev d -> prons cc ++ tone cc d cs i_ae        ++ endWith cs  -- ä-8 -> ä
   [v]   :[CO]: []          : d : cs ->             tone[CO]d cs (pron v)    ++ endWith cs  -- e/ä/o/ay/ay
@@ -93,23 +93,22 @@ dat2pron is = case getSyllable is of
   [CoL] : cc : [CaP]       : d : cs -> prons cc ++ tone cc d cs "o"         ++ endWith cs  -- o-a -> o
   []    :[CO]: v           : d : cs ->             tone[CO]d cs (prons v)   ++ endWith cs  -- Ov  -> v
   []    : cc : [Ca,Cw]     : d : cs -> prons cc ++ tone cc d cs "ua"        ++ endWith cs  -- Caw -> Cua
-  []    : bb : [] : cc : []: d : cs -> prons bb ++ "a" ++ prons cc ++ tone cc [] cs "o" ++ endWith cs    -- CaCoC
-  []    : bb : [] : cc : []         -> prons bb ++                                  "o" ++ endWith [cc]  -- CoC
+  []    : bb : [] : cc : []: d : cs -> prons bb ++ "a" ++ prons cc ++ tone cc [] cs "o" ++ endWith (d:cs) -- CaCoC
+  []    : bb : [] : cc : []         -> prons bb ++                    tone bb [] [cc] "o" ++ endWith [cc]  -- CoC
+  []    : bb : [] : cc : v : d : cs -> prons bb ++ "a" ++ prons cc ++ tone cc [] cs (prons v) ++ endWith cs -- CaCvC
   []    : cc : v           : d : cs -> prons cc ++ tone cc d cs (prons v)               ++ endWith cs  -- Cv- (normal)
 
   _ -> prons is --- shouldn't happen
 
  where
    prons cc = case cc of
-     c :CK:cs -> prons cs -- killer 
+     _ :CK:cs -> prons cs -- killer 
      Ch:c:cs | isConsonant c -> concatMap pron (c:cs) -- hC, ---- only some conss
      _       -> concatMap pron cc
-   endWith ss = case ss of
-     (c:cs) -> encs c ++ dat2pron (concat cs)
-     _   -> []
-   encs cs = case cs of
-     [] -> []
-     _ -> prons (init cs) ++ enc (last cs)
+   endWith ss = case concat ss of
+     _:CK:cs  -> dat2pron cs
+     c   :cs  -> enc c ++ dat2pron cs
+     _        -> []
 
    enc  c = lookThai [] enp c
    pron c = lookThai [] pro c
@@ -117,25 +116,31 @@ dat2pron is = case getSyllable is of
 
 getSyllable :: [ThaiDat] -> [[ThaiDat]]  -- (V?),(C|CC|hC),(V*),(D*),(C*),[[],C]?
 getSyllable s = case s of
-  v:cs | preVowel v -> [v]:getCons v cs
+  v:cs | isPreVowel v -> [v]:getCons v cs
   []  -> []
   c:_ -> []:getCons c s
  where
    getCons v s = case s of
-     b:c:cs   | b == Ch && isConsonant c -> [b,c]:getVow v cs      -- hC
-     b:cs     | b == CO                  -> [b]  :getVow v cs      -- O
-     b:c:cs   | isCluster b c            -> [b,c]:getVow v cs      -- C(l|r|w) cluster
-     b:cs     | preVowel v               -> [b]  :getVow v cs
-     b:c:d:[] | all isConsonant [b,c,d]  -> [b]  :[]:[c]:[]:[d]:[] -- CaCoC
-     b:c:[]   | all isConsonant [b,c]    -> [b]  :[]:[c]:[]        -- CoC
-     b:cs     | isConsonant b            -> [b]  :getVow v cs      -- C
+     Ch:c:cs     | isConsonant c && isLow c -> let (cc:ccs) = getCons v (c:cs) in (Ch:cc):ccs -- hC
+     CO:cs                                  -> [CO]  :getVow v cs      -- O
+     Cs:Cr:cs                               -> [Cs]  :getVow v cs      -- O
+     b:Cr:Cr:[]  | isConsonant b            -> [b]   :[Ca]:[]:[Cr]:[]  -- Crr  -> Can
+     b:Cr:Cr:[c] | all isConsonant [b,c]    -> [b]   :[Ca]:[]:[c]:[]   -- CrrC -> CaC  
+     b:c:cs      | isCluster b c            -> [b,c] :getVow v cs      -- C(l|r|w) cluster
+     b:cs        | isPreVowel v             -> [b]   :getVow v cs
+     b:Cw:Cy:[]  | isConsonant b            -> [b]   :[Cu,Ca]:[]:[Cy]:[] -- Cuay
+     b:c:d:[]    | all isConsonant [b,c,d]  -> [b]   :[]:[c]:[]:[d]:[] -- CaCoC
+     b:c:[]      | all isConsonant [b,c]    -> [b]   :[]:[c]:[]        -- CoC
+     b:c:cs      | all isConsonant [b,c]    -> [b]   :[]:[c]:getVow c cs -- CaCvC
+     b:cs        | isConsonant b            -> [b]   :getVow v cs      -- C
      _ -> [s] --- shouldn't happen ??
-   getVow v0 s = case span (\x -> inVow v0 x || diacritic x) s of
-     (v,c:cs) -> let (d,w) = partition diacritic v in w:d:[c]:getSyllable cs
-     (v,_)    -> let (d,w) = partition diacritic v in [w,d]
-   inVow v0 x = inVowel x || case v0 of
+   getVow v0 s = case span (\x -> inVow v0 x || isDiacritic x) s of
+     (v,c:cs) -> let (d,w) = partition isDiacritic v in w:d:[c]:getSyllable cs
+     (v,_)    -> let (d,w) = partition isDiacritic v in [w,d]
+   inVow v0 x = isInVowel x || case v0 of
      Ce -> elem x [Cy]  -- after e-, also y is a part of a vowel
-     _  -> False
+     _  -> False --- elem x [Cw]
+   isLow c = lookThai Low ccl c == Low
 
 isCluster b c = 
       (pronTha c == "r" && elem (pronTha b) ["k","kh","p","ph","t"])
@@ -144,9 +149,20 @@ isCluster b c =
 
 pronTha c = lookThai [] pro c
 
-inVowel  v  = (CaP <= v && v <= CuL) || v == CO -- infix vowels
-preVowel v  = Ce   <= v && v <= CaE             -- prefix vowels
-diacritic x = CS   <= x && x <= CK              -- tones, killers
+isInVowel :: ThaiDat -> Bool
+isInVowel v  = (CaP <= v && v <= CuL) || v == CO -- infix vowels
+
+isPreVowel :: ThaiDat -> Bool
+isPreVowel i = Ce <= i && i <= CaE
+
+isVowel :: ThaiDat -> Bool
+isVowel i = CaP <= i && i <= CaE
+
+isConsonant :: ThaiDat -> Bool
+isConsonant i = Ck <= i && i <= Ch' && i /= CO
+
+isDiacritic :: ThaiDat -> Bool
+isDiacritic i = CS <= i && i <= CK
 
 tone :: [ThaiDat] -> [ThaiDat] -> [[ThaiDat]] -> String -> String
 tone cc@(c:_) d cs v = case (lookThai Low ccl c, isLive cs1, toneMark d) of
@@ -166,6 +182,7 @@ tone cc@(c:_) d cs v = case (lookThai Low ccl c, isLive cs1, toneMark d) of
   (High,False,_) -> low v
  where
   cs1 = concat (take 1 cs)
+tone _ _ _ v = mid v
 
 toneMark :: [ThaiDat] -> Int
 toneMark is = case is of
@@ -376,5 +393,18 @@ tabs s = case break (=='\t') s of
   ([], _:ws) -> tabs ws
   (w , _:ws) -> w:tabs ws
   _ -> [s]
+
+
+-- heuristics for finding syllables - unreliable, unfinished
+uniSyllables :: [ThaiDat] -> [[ThaiDat]]
+uniSyllables = reverse . (syll [] []) where
+  syll sys sy is = case is of
+    c:cs | isPreVowel c -> new [] is
+    c:d:cs | isConsonant c && isConsonant d -> new [c] (d:cs) ---- no consonant clusters
+    c:cs -> continue [c] cs ---- more rules to follow 
+    _ -> sy:sys
+   where
+    new old = syll ((sy ++ old) : sys) []
+    continue old = syll sys (sy ++ old)
 
 
