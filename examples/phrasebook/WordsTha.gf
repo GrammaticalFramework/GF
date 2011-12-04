@@ -179,8 +179,8 @@ concrete WordsTha of Words = SentencesTha **
     Husband = xOf (R.thword "สา" "มี") ; -- polite
 ---    Wife = xOf "เมีย" ; ---- familiar
 ---    Husband = xOf "ผัว" ; ---- familiar
-    Son = xOf (R.thword "ลูก ชาย") ;
-    Daughter = xOf  (R.thword "ลูก สาว") ;
+    Son = xOf (R.thword "ลูก" "ชาย") ;
+    Daughter = xOf  (R.thword "ลูก" "สาว") ;
     Children = xOf L.child_N.s ; ----
 
 -- week days
