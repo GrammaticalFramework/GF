@@ -2,6 +2,7 @@
 
 concrete DisambPhrasebookEng of Phrasebook = PhrasebookEng - 
    [
+    PGreetingMale, PGreetingFemale,
     IMale, IFemale,
     YouFamMale, YouFamFemale, 
     YouPolMale, YouPolFemale, 
@@ -25,6 +26,8 @@ concrete DisambPhrasebookEng of Phrasebook = PhrasebookEng -
    ] 
   ** open SyntaxEng, ParadigmsEng, IrregEng, Prelude in {
 lin
+  PGreetingMale g   = mkText (lin Text g) (lin Text (ss "(by male)")) ;
+  PGreetingFemale g = mkText (lin Text g) (lin Text (ss "(by female)")) ;
   IMale = mkP i_Pron "(male)" ;
   IFemale = mkP i_Pron "(female)" ;
   WeMale = mkP we_Pron "(male)" ;
