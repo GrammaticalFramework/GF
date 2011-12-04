@@ -21,11 +21,13 @@ are marked in the table
 | Dan   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
 | Dut   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,FJ
 | Eng   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,BB
+| Est   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *KK,IL
 | Fin   | +     | +    | ++    | +   | +    | +   | +    | -     | +    | *AR
 | Fre   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
 | Ger   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,HH
 | Heb   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *DD
 | Hin   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,*KP,MH,AR
+| Jap   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *LZ
 | Ina   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | JB
 | Ita   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *AR,*RE,GP
 | Lat   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
@@ -37,11 +39,11 @@ are marked in the table
 | Pnb   | +     | +    | +     | +   | +    | +   | +    | -     | -    | *SV,MH
 | Pol   | +     | +    | +     | +   | +    | +   | +    | -     | -    | IN,*AS
 | Ron   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *RE
-| Rus   | +     | +    | ++    | +   | +    | +   | -    | -     | -    | JK
+| Rus   | +     | +    | ++    | +   | +    | +   | -    | -     | -    | JK,*NF
 | Spa   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,IA,TS,IL
-| Swa   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *WN, JM
-| Swe   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,MF
-| Tha   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
+| Swa   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *WN,JM
+| Swe   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *MA,*AR,MF
+| Tha   | +     | -    | ++    | +   | +    | +   | +    | -     | -    | *AR,CK
 | Tsn   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *LPs,AB
 | Tur   | +     | -    | ++    | +   | -    | -   | -    | -     | +    | *SC,KA
 | Urd   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,MH
@@ -77,6 +79,7 @@ AD Ali El Dada,
 AR Aarne Ranta,
 AS Adam Slaski,
 BB Björn Bringert,
+CK Chotiros Kairoje,
 DD Dana Dannélls,
 DS Dinesh Simk,
 EA Elnaz Abolahrar,
@@ -90,14 +93,18 @@ JB Jean-Philippe Bernardy,
 JK Janna Khegai,
 JS Jordi Saludes,
 KA Krasimir Angelov,
+KK Kaarel Kaljurand,
 KP Kuchi Prasad,
 JM Juliet Mutahi,
 LPj Laurette Pretorius Jr,
 LPs Laurette Pretorius Sr,
+LZ Liza Zimina,
+MA Malin Ahlberg,
 MF Markus Forsberg,
 MK Markos Kassa Gobena,
 MH Muhammad Humayoun,
 NE Nyamsuren Erdenebadrakh,
+NF Nick Frolov,
 NG Normunds Gruzitis,
 RE Ramona Enache,
 SC Server Cimen,
