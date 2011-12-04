@@ -61,9 +61,10 @@ abstract Sentences = Numeral ** {
 
     --    PWord : Word -> Phrase ;
 
-    PGreeting    : Greeting -> Phrase ;
-    PSentence    : Sentence -> Phrase ;
-    PQuestion    : Question -> Phrase ;
+    PGreetingMale   : Greeting -> Phrase ;  -- depends on speaker e.g. in Thai
+    PGreetingFemale : Greeting -> Phrase ;
+    PSentence       : Sentence -> Phrase ;
+    PQuestion       : Question -> Phrase ;
 
     PNumber      : Number      -> Phrase ;
     PPrice       : Price       -> Phrase ;

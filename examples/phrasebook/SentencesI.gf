@@ -51,7 +51,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     PSentence s = mkText s | lin Text (mkUtt s) ;  -- optional '.'
     PQuestion s = mkText s | lin Text (mkUtt s) ;  -- optional '?'
 
-    PGreeting g = mkText (lin Phr g) exclMarkPunct | g ;
+    PGreetingMale, PGreetingFemale = \g -> mkText (lin Phr g) exclMarkPunct | g ;
 
     -- PWord w = w ;
 
