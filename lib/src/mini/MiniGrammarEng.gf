@@ -1,4 +1,4 @@
---# -path=.:full:alltenses
+--# -path=.:alltenses
 
 concrete MiniGrammarEng of MiniGrammar = LexiconEng, GrammarEng [
 

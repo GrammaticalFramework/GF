@@ -17,7 +17,7 @@ concrete QuestionTha of Question = CatTha **
 
     QuestIAdv iadv cl = {s = \\p => thbind (cl.s ! ClDecl ! p) iadv.s} ; 
 
-    QuestIComp icomp np = {s = \\p => thbind np.s icomp.s} ; 
+    QuestIComp icomp np = {s = \\p => thbind np.s (polStr may_s p) icomp.s} ; 
 
     PrepIP p ip = thbind p ip ;
 
@@ -37,9 +37,9 @@ concrete QuestionTha of Question = CatTha **
 
     AdvIAdv i a = thbind i a ;
 
-    CompIAdv a = a ;
+    CompIAdv a = ss (thbind yuu_s a.s) ;
 
-    CompIP ip = ip ;
+    CompIP ip = ss (thbind pen_s ip.s) ;
 
 }
 
