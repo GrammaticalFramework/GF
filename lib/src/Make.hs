@@ -54,7 +54,7 @@ langsCoding = [
   (("spanish",  "Spa"),"Romance"),
   (("swedish",  "Swe"),"Scand"), 
   (("thai",     "Tha"),""),
-  (("thai",     "Thp"),""),  -- Thai pronunciation
+  (("thai",     "ThaP"),""),  -- Thai pronunciation
   (("turkish",  "Tur"),""),
   (("urdu",     "Urd"),"Hindustani")
   ]
@@ -67,7 +67,7 @@ langs = map fst langsCoding
 langsLangAll = langs
 
 -- languagues that are almost complete and for which Lang is normally compiled
-langsLang = langs `except` (langsIncomplete ++ ["Thp"])
+langsLang = langs `except` langsIncomplete
 
 -- languagues that have notpresent marked
 langsPresent = langsLang `except` ["Lav","Nep","Pes","Tha"]

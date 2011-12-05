@@ -5,7 +5,7 @@ import Data.List
 import qualified Data.Map as Map
 import System
 
--- convert all files *Tha.gf into *Thp.gf with "t" changed to (thpron "t" "p")
+-- convert all files *Tha.gf into *ThP.gf with "t" changed to (thpron "t" "p")
 
 main = allThpron
 
@@ -22,9 +22,9 @@ fileThpron file = do
 
 appThpron s = case s of
   '"':cs -> let (w,_:rest) = break (=='"') cs in mkThpron w ++ appThpron rest
-  'T':'h':'a':'A':rest             -> "ThpA" ++ appThpron rest  -- AllThaAbs
+  'T':'h':'a':'A':rest             -> "ThaPA" ++ appThpron rest  -- AllThaAbs
   'T':'h':'a':c:rest   | isAlpha c -> "Tha" ++ c : appThpron rest  -- Thank
-  'T':'h':'a':rest -> "Thp" ++ appThpron rest
+  'T':'h':'a':rest -> "ThaP" ++ appThpron rest
   c:cs -> c:appThpron cs
   _ -> s
 
@@ -71,6 +71,8 @@ dat2pron is = case is of
  [CO,Cy,CT1,CaL,Cg] -> "y" ++ low "aa" ++ i_ng
  [CO,Cy,CT1,CuL] -> "y" ++ low "uu"
  [Cp3,Cr]        -> "phan" --- not in Smyth
+ [Cc2,CvL,CT1,CO] -> "ch" ++ falling i_uue --- to get rid of final O
+ [CO,Cg,CT1,Cu,Cn] -> low "a" ++ i_ng ++ low "un" --- probably there is a rule for leading vowelless O
 
 -- words following the rules (mostly from Smyth's Essential Grammar)
  _ -> case getSyllable is of
@@ -89,6 +91,7 @@ dat2pron is = case is of
   [Ce]  : cc : [Ci,Cy,CaP] : d : cs -> prons cc ++ tone cc d cs "ia"        ++ endWith cs  -- e-iya-> ia
   [Ce]  : cc : [CiL,CO]    : d : cs -> prons cc ++ tone cc d cs "ia"        ++ endWith cs  -- e-iiO-> üa
   [Ce]  : cc : [CvL,CO]    : d : cs -> prons cc ++ tone cc d cs (i_ue++"a") ++ endWith cs  -- e-vvO-> üa
+  [Ce]  : cc : [CvL,CO,Cy] : d : cs -> prons cc ++ tone cc d cs (i_ue++"ay")++ endWith cs  -- e-vvOy-> üay
   [Ce'] : cc : [CaP]       : d : cs -> prons cc ++ tone cc d cs i_ae        ++ endWith cs  -- ä-a -> ä
   [CoL] : cc : [CaP]       : d : cs -> prons cc ++ tone cc d cs "o"         ++ endWith cs  -- o-a -> o
   []    :[CO]: v           : d : cs ->             tone[CO]d cs (prons v)   ++ endWith cs  -- Ov  -> v
@@ -124,7 +127,7 @@ getSyllable s = case s of
    getCons v s = case s of
      Ch:c:cs     | isConsonant c && isLow c -> let (cc:ccs) = getCons v (c:cs) in (Ch:cc):ccs -- hC
      CO:cs                                  -> [CO]  :getVow v cs      -- O
-     Cs:Cr:cs                               -> [Cs]  :getVow v cs      -- O
+     Cs:Cr:cs                               -> [Cs]  :getVow v cs      -- sr -> s
      _:CK:[]                                -> []
      b:Cr:Cr:[]  | isConsonant b            -> [b]   :[Ca]:[]:[Cr]:[]  -- Crr  -> Can
      b:Cr:Cr:[c] | all isConsonant [b,c]    -> [b]   :[Ca]:[]:[c]:[]   -- CrrC -> CaC  

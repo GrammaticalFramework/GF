@@ -5,7 +5,8 @@ GF_LIB_PATH=..
 
 .PHONY: all present alltenses full lang api math prelude test demo parse synopsis link compiled constructX clean
 
-all: link prelude constructX present alltenses full
+all: link prelude constructX present alltenses 
+#full
 
 present:
 	$(RUNMAKE) present lang

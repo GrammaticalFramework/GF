@@ -2,10 +2,10 @@ compile = runghc Compile
 
 all: demo missing
 
-thaidroid:
+thaidroid: #thaiscript
 	cp -p Phrasebook.pgf FullPhrasebook.pgf
-	$(compile) -opt Eng Swe Tha Thp DisambPhrasebookEng
-	$(compile) -link Eng Fin Swe Tha Thp DisambPhrasebookEng
+	$(compile) -opt Eng Swe Tha PhrasebookThaP DisambPhrasebookEng
+	$(compile) -link Eng Fin Swe Tha PhrasebookThaP DisambPhrasebookEng
 	mv Phrasebook.pgf Thaidroid.pgf
 	mv FullPhrasebook.pgf Phrasebook.pgf
 
