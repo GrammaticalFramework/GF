@@ -31,7 +31,7 @@ concrete WordsTha of Words = SentencesTha **
 -- Properties; many of them are in the resource lexicon, others can be built by $mkA$.
 
     Bad = L.bad_A ;
-    Boring = mkA (R.thword "น่า" "เบิ่อ") ;
+    Boring = mkA (R.thword "น่า" "เบื่อ") ;
     Cheap = mkA (R.thword "รา" "คา" "ถูก") ;
     Cold = L.cold_A ;
     Delicious = mkA "อร่อย" ;
@@ -131,7 +131,7 @@ concrete WordsTha of Words = SentencesTha **
       (mkNP (mkNP a_Det (mkN "ห้อง")) (SyntaxTha.mkAdv for_Prep (mkNP num (mkN "หมาย" "เลข")))) ;
     AHasTable p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (mkN "โต๊ะ")) (SyntaxTha.mkAdv for_Prep (mkNP num (mkN "ตัว" "ที่")))) ;
-    AHasName p name = mkCl (nameOf p) name ;
+    AHasName p name = mkCl p.name (mkV2 "ชื่อ") name ; ---
     AHungry p = mkCl p.name (mkA (R.thword "หิว" "ข้าว")) ;
     AIll p = mkCl p.name (mkA (R.thword "เจ็บ" "ปวย")) ;
     AKnow p = mkCl p.name <lin V L.know_V2 : V> ;
@@ -250,8 +250,6 @@ concrete WordsTha of Words = SentencesTha **
     xOf : Str -> NPPerson -> NPPerson = \f,p -> 
       {name = mkNP the_Det (mkCN (personN f) (SyntaxTha.mkAdv possess_Prep p.name)) ; 
        isPron = False ; poss = the_Quant} ; ---- poss not used
-
-    nameOf : NPPerson -> NP = \p -> (xOf L.name_N.s p).name ;
 
 
     mkTransport : N -> {name : CN ; by : Adv} = \n -> {

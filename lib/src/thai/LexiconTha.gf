@@ -347,7 +347,7 @@ lin
   win_V2 = mkV2 "ชนะ" ;
   wind_N = mkN (thword "ลม") ;
   window_N = mkN (thword "หน้า" "ต่าง" "บาน") ; ----?
-  wine_N = mkN (thword "เหล้าอ" "งุ่น") "ขวด" ;
+  wine_N = mkN (thword "เหล้า" "องุ่น") "ขวด" ;
   wing_N = mkN (thword "ปิก") ;
   wipe_V2 = mkV2 (thword "เช็ด") ;
   woman_N = personN (thword "หญิง") ;
