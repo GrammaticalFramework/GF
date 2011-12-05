@@ -239,7 +239,7 @@ lin
   read_V2 = mkV2 "อ่าน" ;
   red_A = mkA (thword "สี" "แดง") ;
   religion_N = mkN (thword "ศาส" "นา") ; ----?
-  restaurant_N = placeN (thword "ร้าน" "อาหาร") ;
+  restaurant_N = placeN (thword "ร้าน" "อา" "หาร") ;
   right_Ord = ss "ขวา" ;
   river_N = mkN (thword "แม่" "น้ำ") ;
   road_N = mkN (thword "ถนน") ;

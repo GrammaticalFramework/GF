@@ -13,6 +13,7 @@ allThpron = do
   System.system "ls *Tha*.gf ../api/*Tha*.gf >srcThai.txt"
   files <- readFile "srcThai.txt" >>= return . lines
   mapM_ fileThpron files
+  return ()
 
 fileThpron file = do
   s <- readFile file

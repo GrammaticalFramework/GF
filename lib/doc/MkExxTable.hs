@@ -68,9 +68,10 @@ prApiExx aexx = unlines
 prApiEx :: M.Map String String -> [String]
 prApiEx apexx = case M.toList apexx of
   (a,e):lexx -> (a ++ ": ``" ++ unwords (words e) ++ "``"):
-                [l ++ ": //" ++ mkEx e ++ "//" | (l,e) <- lexx]
+                [l ++ ": //" ++ mkEx l e ++ "//" | (l,e) <- lexx]
 
-mkEx = unwords . bind . mkE . words where 
+mkEx l = unws . bind . mkE . words where 
+  unws = if l == "Tha" then concat else unwords
   mkE e = case e of
     "atomic":"term":_ -> ["*"]
     "[]":_ -> ["''"]

@@ -94,6 +94,6 @@ yay_s = "ใหญ" ; -- big
 yig_s = "หญิง" ; -- woman2
 yii_s = "ยี่" ; -- two'
 yin_s = "ยิน" ; -- you're-welcome1
-yuu_s = "ยู" ; -- where0(?)
+yuu_s = "อยู่" ; -- be (in a place)
 
 }

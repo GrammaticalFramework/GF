@@ -23,12 +23,12 @@ constructing trees in them.
 - [Chapter 2 #toc5]: syntactic construction functions, with cross-links and
 examples. 
 - [Chapter 3 #toc83]: morphological paradigms.
-- [Chapter 4 #toc102]: additional libraries.
-- [Chapter 5 #toc109]: how to "browse" the library by 
+- [Chapter 4 #toc103]: additional libraries.
+- [Chapter 5 #toc110]: how to "browse" the library by 
 loading the grammars into the ``gf`` command editor.
-- [Chapter 6 #toc110]: a brief example of how application grammars can
+- [Chapter 6 #toc111]: a brief example of how application grammars can
 use the resource modules. 
-- [Detailed table of contents #toc111].
+- [Detailed table of contents #toc112].
 
 
 Other relevant documents:

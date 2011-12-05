@@ -742,7 +742,7 @@ mkAdv during_Prep it_NP
     either7or_DConj : Conj  -- either...or
 mkAdv either7or_DConj here_Adv there_Adv
     every_Det : Det 
-every_Det
+mkUtt (mkNP every_Det woman_N)
     everybody_NP : NP   -- everybody
 mkUtt everybody_NP
     everything_NP : NP 
@@ -750,7 +750,7 @@ mkUtt everything_NP
     everywhere_Adv : Adv 
 everywhere_Adv
     few_Det : Det 
-few_Det
+mkUtt (mkNP few_Det women_N)
     for_Prep : Prep 
 mkAdv for_Prep it_NP
     from_Prep : Prep 
@@ -788,7 +788,7 @@ more_CAdv
     most_Predet : Predet 
 most_Predet
     much_Det : Det 
-much_Det
+mkUtt (mkNP much_Det wine_N)
     must_VV : VV 
 must_VV
     no_Utt : Utt 
@@ -814,9 +814,9 @@ mkUtt (mkNP she_Pron)
     so_AdA : AdA 
 so_AdA
     someSg_Det : Det 
-someSg_Det
+mkUtt (mkNP someSg_Det wine_N)
     somePl_Det : Det 
-somePl_Det
+mkUtt (mkNP somePl_Det woman_N)
     somebody_NP : NP 
 mkUtt somebody_NP
     something_NP : NP 

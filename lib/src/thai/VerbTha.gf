@@ -73,7 +73,7 @@ concrete VerbTha of Verb = CatTha ** open ResTha, StringsTha, Prelude in {
       }
     } ;
 
-    CompAdv a = {s = \\p => polStr may_s p ++ a.s} ; --- ??
+    CompAdv a = {s = \\p => thbind (polStr may_s p) yuu_s a.s} ; --- works for place adverbs
 
 }
 
