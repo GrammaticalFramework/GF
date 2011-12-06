@@ -91,6 +91,7 @@ concrete WordsBul of Words = SentencesBul **
     Rouble = mkCN (mkN041 "рубла") ;
     SwedishCrown = mkCN (mkA078 "шведски") (mkN041 "крона") | mkCN (mkN041 "крона") ;
     Zloty = mkCN (mkN041 "злота") ;
+    Baht = mkCN (mkN007a "бат") ;
 
 -- Nationalities
 
@@ -112,6 +113,7 @@ concrete WordsBul of Words = SentencesBul **
     Russian = mkNat (mkN014 "руснак") (mkN047 "рускиня") (mkA078 "руски") (mkPN "Русия" R.Fem) ;
     Swedish = mkNat (mkN007 "швед") (mkN041 "шведка") (mkA078 "шведски") (mkPN "Швеция" R.Fem) ;
     Spanish = mkNat (mkN008a "испанец") (mkN041 "испанка") (mkA078 "испански") (mkPN "Испания" R.Fem) ;
+    Thai = mkNat (mkN008a "тайландец") (mkN041 "тайландка") (mkA078 "тайландски") (mkPN "Тайланд" R.Masc) ;
 
 -- Means of transportation 
 
@@ -224,9 +226,47 @@ concrete WordsBul of Words = SentencesBul **
     IsTranspPlace trans place =
       mkQS (mkQCl (mkCl (mkCN trans.name place.to))) ;
 
+    Rice = mkCN (mkN040a "ориз") ;
+    Pork = mkCN (mkN054 "свинско") ;
+    Beef = mkCN (mkN054 "телешко") ;
+    Egg = mkCN (mkN066 "яйце") ;
+    Noodles = mkCN (mkN075 "спагети") ;
+    Shrimps = mkCN (mkN041 "скарида") ;
+    Chili = mkCN (mkN065 "чили") ;
+    Garlic = mkCN (mkN007 "чесън") ;
+    Durian = mkCN (mkN007 "дуриан") ;
+    Mango = mkCN (mkN065 "манго") ;
+    Pineapple = mkCN (mkN007 "ананас") ;
+    Coke = mkCN (mkN041 "кола") ;
+    IceCream = mkCN (mkN007 "сладолед") ;
+    Salad = mkCN (mkN041 "салата") ;
+    OrangeJuice = mkCN (mkA076 "портокалов") (mkN001 "сок") ;
+    Lemonade = mkCN (mkN041 "лимонада") ;
+
+    Beach = mkPlace (mkN001 "плаж") na_Prep ;
+    
+    ItsRaining = mkCl (mkVP (stateV (mkV174 "валя"))) ;
+    ItsCold = mkCl (mkVP (mkA076 "студен")) ;
+    ItsWarm = mkCl (mkVP (mkA080 "топъл")) ;
+    ItsWindy = mkCl (mkVP (mkA076 "ветровит")) ;
+    SunShine = mkCl (progressiveVP (mkVP (actionV (mkV186 "пеквам") (mkV148 "пека")))) ;
+
+    Smoke = mkVP (stateV (mkV176 "пуша")) ;
+
+    ADoctor = mkProfession (mkN007a "доктор") ;
+    AProfessor = mkProfession (mkN007a "професор") ;
+    ALawyer = mkProfession (mkN007a "адвокат") ;
+    AEngineer =  mkProfession (mkN007a "инженер") ;
+    ATeacher = mkProfession (mkN031a "учител") ;
+    ACook = mkProfession (mkN007b "готвач") ;
+    AStudent = mkProfession (mkN007a "студент") ;
+    ABusinessman = mkProfession (mkN007a "бизнесмен") ;
+    
 -- auxiliaries
 
   oper
+    mkProfession : N -> NPPerson -> Cl = \n,p -> mkCl p.name n ;
+
     mkCitizenship : N -> N -> A -> Citizenship
                   = \male, female, adj -> lin Citizenship {s1 = table {R.Fem => female.s; _ => male.s}; s2 = adj} ;
 
