@@ -11,8 +11,8 @@ concrete SentenceTha of Sentence = CatTha **
 
     ImpVP vp = {
       s = table {
-        Pos => thbind (vp.s ! Pos) si_s ;
-        Neg => thbind yaa_s (vp.s ! Pos)
+        Pos => thbind (vp.s ! Pos) vp.e si_s ;
+        Neg => thbind yaa_s (vp.s ! Pos) vp.e
         }
       } ;
 

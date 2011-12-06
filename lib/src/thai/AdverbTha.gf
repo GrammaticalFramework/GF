@@ -6,9 +6,9 @@ concrete AdverbTha of Adverb = CatTha **
 
     PrepNP prep np = thbind prep np ;
 
-    ComparAdvAdj cadv a np = ss (thbind a.s cadv.s np.s) ;
+    ComparAdvAdj cadv a np = ss (thbind a.s cadv.s cadv.p np.s) ;
 
-    ComparAdvAdjS cadv a s = ss (thbind a.s cadv.s s.s) ;
+    ComparAdvAdjS cadv a s = ss (thbind a.s cadv.s cadv.p s.s) ;
 
     AdAdv adv ad = thbind ad adv ;
 

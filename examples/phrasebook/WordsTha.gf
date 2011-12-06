@@ -298,7 +298,7 @@ concrete WordsTha of Words = SentencesTha **
     ItsCold = mkCl (mkVP L.cold_A) ;
     ItsWarm = mkCl (mkVP L.warm_A) ;
     ItsWindy = mkCl (mkVP (P.mkA (R.thword "ลม" "จัด"))) ;
-    SunShine = mkCl (mkNP the_Det L.sun_N) (mkVP (R.regV "ฉาย")) ;
+    SunShine = mkCl (mkNP the_Det L.sun_N) (mkVP (R.regV (R.thword "ฉาย" "แสง"))) ;
 
     Smoke = mkVP (P.mkV (R.thword "สูบ" "บุ" "รี")) ;
 

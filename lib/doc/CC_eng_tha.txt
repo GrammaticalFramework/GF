@@ -1,0 +1,1698 @@
+
+mkText (mkPhr (mkQS (mkCl she_NP sleep_V))) questMarkPunct (mkText (mkPhr yes_Utt) fullStopPunct)
+does she sleep ? yes .
+หล่อนนอนหลับใช่ไหม ใช่
+
+mkText yes_Utt
+yes .
+ใช่
+
+mkText (mkS pastTense (mkCl she_NP sleep_V))
+she slept .
+หล่อนนอนหลับ
+
+mkText (mkCl she_NP sleep_V)
+she sleeps .
+หล่อนนอนหลับ
+
+mkText (mkQS pastTense (mkQCl (mkCl she_NP sleep_V)))
+did she sleep ?
+หล่อนนอนหลับไหม
+
+mkText negativePol (mkImp sleep_V)
+don't sleep !
+อย่านอนหลับ
+
+mkText (mkText (mkPhr (mkUtt where_IAdv)) questMarkPunct (mkText (mkPhr (mkUtt here_Adv)))) (mkText (mkPhr (mkUtt when_IAdv)) questMarkPunct (mkText (mkPhr (mkUtt now_Adv)) exclMarkPunct))
+where ? here . when ? now !
+ที่ไหนที่นี่เมื่อไรเดี๋ยวนี้ -- spaces
+
+mkPhr but_PConj (mkUtt (mkImp sleep_V)) (mkVoc (mkNP i_Pron friend_N))
+but sleep , my friend
+แต่นอนหลับซิเพี่อนของฉัน
+
+mkPhr (mkS futureTense negativePol (mkCl she_NP sleep_V))
+she won't sleep
+หล่อนไม่นอนหลับ -- place of negation (but possible)
+
+mkPhr (mkCl she_NP sleep_V)
+she sleeps
+หล่อนนอนหลับ
+
+mkPhr (mkQS conditionalTense (mkQCl (mkCl she_NP sleep_V)))  
+would she sleep
+หล่อนนอนหลับไหม
+
+mkPhr (mkImp sleep_V)
+sleep
+นอนหลับซิ
+
+mkPhr (mkPConj and_Conj) (mkUtt now_Adv)
+and now
+และเดี๋ยวนี้ -- tone mark
+
+mkPhr yes_Utt (mkVoc (mkNP i_Pron friend_N))
+yes , my friend
+ใช่เพี่อนของฉัน
+
+mkUtt (mkS pastTense (mkCl she_NP sleep_V))
+she slept
+หล่อนนอนหลับ
+
+mkUtt (mkCl she_NP sleep_V)
+she sleeps
+หล่อนนอนหลับ
+
+mkUtt (mkQS pastTense negativePol (mkQCl who_IP sleep_V))   
+who didn't sleep
+ไครไม่นอนหลับ -- neg place not preferred
+
+mkUtt (mkQCl who_IP sleep_V) 
+who sleeps
+ไครนอนหลับ
+
+mkUtt pluralImpForm negativePol (mkImp (mkVP man_N))
+don't be men
+อย่าเป็นชาย
+
+mkUtt who_IP
+who
+ใคร  -- ay
+
+mkUtt why_IAdv
+why
+ทำไม -- th
+
+mkUtt (mkNP this_Det man_N)
+this man
+ชายคนนี้
+
+mkUtt here_Adv   
+here
+ที่นี่
+
+mkUtt (mkVP sleep_V)
+to sleep
+นอนหลับ
+
+mkUtt (mkCN beer_N)      
+beer
+เบียร์
+
+mkUtt (mkAP good_A)   
+good
+ดี
+
+mkUtt (mkCard (mkNumeral n5_Unit)) 
+five
+ห้า
+
+mkPhr (lets_Utt (mkVP sleep_V))
+let's sleep
+นอนหลับ
+
+mkS positivePol (mkCl she_NP sleep_V)
+she sleeps
+หล่อนนอนหลับ
+
+mkS negativePol (mkCl she_NP sleep_V)
+she doesn't sleep
+หล่อนไม่นอนหลับ -- neg place
+
+mkS simultaneousAnt (mkCl she_NP sleep_V)
+she sleeps
+หล่อนนอนหลับ
+
+mkS anteriorAnt (mkCl she_NP sleep_V)
+she has slept
+หล่อนนอนหลับ
+
+mkS presentTense (mkCl she_NP sleep_V)
+she sleeps
+หล่อนนอนหลับ
+
+mkS pastTense (mkCl she_NP sleep_V)
+she slept
+หล่อนนอนหลับ
+
+mkS futureTense (mkCl she_NP sleep_V)
+she will sleep
+หล่อนจะนอน  -- ca !!
+
+mkS conditionalTense (mkCl she_NP sleep_V)
+she would sleep
+หล่อนนอนหลับ
+
+mkUtt singularImpForm (mkImp (mkVP man_N))
+be a man
+เป็นชายซิ
+
+mkUtt pluralImpForm (mkImp (mkVP man_N)) 
+be men
+เป็นชายซิ
+
+mkUtt politeImpForm (mkImp (mkVP man_N))
+be a man
+เป็นชายซิ
+
+mkS conditionalTense anteriorAnt negativePol (mkCl she_NP sleep_V)
+she wouldn't have slept
+หล่อนไม่ได้นอนหลับ -- daay !!
+
+mkS and_Conj (mkS (mkCl she_NP sleep_V)) (mkS (mkCl i_NP run_V))
+she sleeps and I run
+หล่อนนอนหลับและฉันวิ่ง
+
+mkS and_Conj (mkListS (mkS (mkCl she_NP sleep_V)) (mkListS (mkS (mkCl i_NP run_V)) (mkS (mkCl (mkNP youSg_Pron) walk_V))))
+she sleeps , I run and you walk
+หล่อนนอนหลับ ฉันวิ่งและคุณเดิน -- comma
+
+mkS today_Adv (mkS (mkCl she_NP sleep_V))
+today she sleeps
+วันนี้หล่อนนอนหลับ
+
+mkCl she_NP sleep_V
+she sleeps
+หล่อนนอนหลับ
+
+mkCl she_NP love_V2 he_NP
+she loves him
+หล่อนรักเขา
+
+mkCl she_NP send_V3 it_NP he_NP
+she sends it to him
+หล่อนส่งมันให้กับเขา
+
+mkCl she_NP want_VV (mkVP sleep_V)
+she wants to sleep
+หล่อนอยากนอนหลับ
+
+mkCl she_NP say_VS (mkS (mkCl i_NP sleep_V))
+she says that I sleep
+หล่อนพูดว่าฉันนอนหลับ -- wa is complaining
+
+mkCl she_NP wonder_VQ (mkQS (mkQCl who_IP sleep_V))
+she wonders who sleeps
+หล่อนประหลาดใจว่าใครนอนหลับ
+
+mkCl she_NP become_VA old_A
+she becomes old
+หล่อนกลายเป็นคนแก่ -- classifier !!
+
+mkCl she_NP become_VA (mkAP very_AdA old_A)
+she becomes very old
+หล่อนกลายเป็นคนแก่มาก -- classifier !!
+
+mkCl she_NP paint_V2A it_NP red_A
+she paints it red
+หล่อนทามันสีแดง
+
+mkCl she_NP paint_V2A it_NP (mkAP red_A)
+she paints it red
+หล่อนทามันสีแดง
+
+mkCl she_NP answer_V2S he_NP (mkS (mkCl we_NP sleep_V))
+she answers to him that we sleep
+หล่อนตอบเขาว่าเรานอนหลับ
+
+mkCl she_NP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V))
+she asks him who sleeps
+หล่อนถามเขาว่าไครนอนหลับ
+
+mkCl she_NP beg_V2V he_NP (mkVP sleep_V)
+she begs him to sleep
+หล่อนขอเขานอนหลับ
+
+mkCl she_NP old_A
+she is old
+หล่อนแก่
+
+mkCl she_NP old_A he_NP
+she is older than he
+หล่อนแก่กว่าเขา
+
+mkCl she_NP married_A2 he_NP
+she is married to him
+หล่อนแต่งงานแล้วกับเขา
+
+mkCl she_NP (mkAP very_AdA old_A)
+she is very old
+หล่อนแก่มาก
+
+mkCl she_NP (mkNP the_Det woman_N)
+she is the woman
+หล่อนเป็นหญิง
+
+mkCl she_NP woman_N
+she is a woman
+หล่อนเป็นหญิง
+
+mkCl she_NP (mkCN old_A woman_N)
+she is an old woman
+หล่อนเป็นหญิงแก่
+
+mkCl she_NP here_Adv
+she is here
+หล่อนอยู่ที่นี่
+
+mkCl she_NP (mkVP always_AdV (mkVP sleep_V))
+she always sleeps
+หล่อนนอนหลับเสมอ -- not forever
+
+mkCl house_N
+there is a house
+มีบ้าน
+
+mkCl (mkNP many_Det house_N)  
+there are many houses
+มีบ้านหลายหลัง
+
+mkCl she_NP (mkRS (mkRCl which_RP (mkVP sleep_V)))
+it is she who sleeps
+หล่อนเป็นคนที่นอนหลับ -- not classifier !!
+
+mkCl here_Adv (mkS (mkCl she_NP sleep_V)) 
+it is here that she sleeps
+หล่อนนอนหลับที่นี่ -- perhaps thini khue, otherwise thini in the end !!
+
+mkCl rain_V0 
+it rains
+มีฝน
+
+mkCl (progressiveVP (mkVP rain_V0))
+it is raining
+กำลังมีฝน
+
+mkCl (mkSC (mkS (mkCl she_NP sleep_V))) (mkVP good_A)
+that she sleeps is good
+ว่าหล่อนนอนหลับดี
+
+mkS (genericCl (mkVP sleep_V))              
+one sleeps
+นอนหลับ
+
+mkUtt (mkVP sleep_V) 
+to sleep
+นอนหลับ
+
+mkUtt (mkVP love_V2 he_NP) 
+to love him
+รักเขา
+
+mkUtt (mkVP send_V3 it_NP he_NP) 
+to send it to him
+ส่งมันให้กับเขา -- also without kab
+
+mkUtt (mkVP want_VV (mkVP sleep_V)) 
+to want to sleep
+อยากนอนหลับ
+
+mkUtt (mkVP know_VS (mkS (mkCl she_NP sleep_V))) 
+to know that she sleeps
+รู้ว่าหล่อนนอนหลับ
+
+mkUtt (mkVP wonder_VQ (mkQS (mkQCl who_IP sleep_V))) 
+to wonder who sleeps
+ประหลาดใจว่าใครนอนหลับ -- ay
+
+mkUtt (mkVP become_VA (mkAP red_A))
+to become red
+กลายเป็นสีแดง
+
+mkUtt (mkVP paint_V2A it_NP (mkAP red_A))
+to paint it red
+ทามันเป็นสีแดง -- red was missing
+
+mkUtt (mkVP answer_V2S he_NP (mkS (mkCl she_NP sleep_V))) 
+to answer to him that she sleeps
+ตอบเขาว่าหล่อนนอนหลับ -- missing compl
+
+mkUtt (mkVP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V))) 
+to ask him who sleeps
+ถามเขาว่าใครนอนหลับ -- missing compl
+
+mkUtt (mkVP beg_V2V he_NP (mkVP sleep_V))
+to beg him to sleep
+ขอเขาให้นอนหลับ -- compl
+
+mkUtt (mkVP old_A) 
+to be old
+แก่
+
+mkUtt (mkVP old_A he_NP) 
+to be older than he
+แก่กว่าเขา
+
+mkUtt (mkVP married_A2 he_NP)  
+to be married to him
+แต่งงานแล้วกับเขา
+
+mkUtt (mkVP (mkAP very_AdA old_A)) 
+to be very old
+แก่มาก
+
+mkUtt (mkVP woman_N) 
+to be a woman
+เป็นหญิง  -- pu ying !!
+
+mkUtt (mkVP (mkCN old_A woman_N)) 
+to be an old woman
+เป็นหญิงแก่ -- pu !!
+
+mkUtt (mkVP (mkNP the_Det woman_N)) 
+to be the woman
+เป็นหญิง
+
+mkUtt (mkVP here_Adv) 
+to be here
+อยู่ที่นี่
+
+mkUtt (mkVP (mkVP sleep_V) here_Adv)
+to sleep here
+นอนหลับที่นี่
+
+mkUtt (mkVP always_AdV (mkVP sleep_V))
+always to sleep
+นอนหลับเสมอ  -- not forever
+
+mkUtt (mkVP (mkVPSlash paint_V2A (mkAP black_A)) it_NP)
+to paint it black
+ทามันเป็นสีดำ -- compl
+
+mkUtt (mkVP (mkVPSlash paint_V2A (mkAP black_A)))
+to paint itself black
+ทาตัวเองเป็นสีดำ -- compl
+
+mkUtt (mkVP (mkComp (mkAP warm_A)))
+to be warm
+อุ่น
+
+mkUtt (reflexiveVP love_V2)  
+to love itself
+รักตัวเอง
+
+mkUtt (reflexiveVP (mkVPSlash paint_V2A (mkAP black_A)))
+to paint itself black
+ทาตัวเองเป็นสีดำ -- compl
+
+mkUtt (passiveVP love_V2)
+to be loved
+ถูกรัก
+
+mkUtt (passiveVP love_V2 she_NP)
+to be loved by her
+ถูกหล่อนรัก -- agent before verb !!
+
+mkUtt (progressiveVP (mkVP sleep_V))
+to be sleeping
+กำลังนอนหลับ
+
+mkComp (mkAP old_A)
+old
+แก่
+
+mkComp (mkNP this_Det man_N)
+this man
+ชายคนนี้
+
+mkComp here_Adv 
+here
+อยู่ที่นี่
+
+mkSC (mkS (mkCl she_NP sleep_V))
+that she sleeps
+ว่าหล่อนนอนหลับ
+
+mkSC (mkQS (mkQCl who_IP sleep_V))
+who sleeps
+ว่าใครนอนหลับ -- ay
+
+mkSC (mkVP sleep_V)
+to sleep
+นอนหลับ
+
+mkImp (mkVP (mkVP come_V) (mkAdv to_Prep (mkNP i_Pron house_N)))
+come to my house
+มาถืงบ้านของฉันซิ
+
+mkImp come_V
+come
+มาซิ
+
+mkImp buy_V2 it_NP
+buy it
+ซื้อมันซิ
+
+mkUtt (mkNP this_Quant man_N)
+this man
+ชายคนนี้
+
+mkUtt (mkNP this_Quant (mkCN old_A man_N))
+this old man
+ชายแก่คนนี้
+
+mkUtt (mkNP this_Quant (mkNum (mkNumeral n5_Unit)) (mkCN old_A man_N))
+these five old men
+ชายแก่ห้าคนนี้
+
+mkUtt (mkNP this_Quant (mkNum (mkNumeral n5_Unit)) man_N)
+these five men
+ชายห้าคนนี้
+
+mkUtt (mkNP (mkDet the_Quant (mkNum (mkNumeral n5_Unit))) (mkCN old_A man_N))
+the five old men
+ชายแก่ห้าคน
+
+mkUtt (mkNP (mkDet the_Quant (mkNum (mkNumeral n5_Unit))) man_N)
+the five men
+ชายห้าคน
+
+mkUtt (mkNP (mkNumeral (tenfoldSub100 n5_Unit)) (mkCN old_A man_N))
+fifty old men
+ชายแก่ห้าสิบคน
+
+mkUtt (mkNP (mkNumeral (tenfoldSub100 n5_Unit)) man_N)
+fifty men
+ชายห้าสิบคน
+
+mkUtt (mkNP (mkDigits n5_Dig (mkDigits n1_Dig)) (mkCN old_A man_N))
+5 1 old men
+ชายแก่ ๕๑ คน -- space around number !!
+
+mkUtt (mkNP (mkDigits n5_Dig (mkDigits n1_Dig)) man_N)
+5 1 men
+ชาย ๕๑ คน  -- space
+
+mkUtt (mkNP i_Pron (mkCN old_A man_N))
+my old man
+ชายแก่ของฉัน
+
+mkUtt (mkNP i_Pron man_N)
+my man
+ชายของฉัน
+
+mkUtt (mkNP paris_PN)
+Paris
+ปารีส
+
+mkUtt (mkNP we_Pron)
+we
+เรา
+
+mkUtt (mkNP this_Quant)  
+this
+นี้
+
+mkUtt (mkNP this_Quant (mkNum (mkNumeral n5_Unit)))
+these five
+ห้านี้
+
+mkUtt (mkNP (mkDet the_Quant (mkNum (mkNumeral n5_Unit)) (mkOrd good_A)))
+the five best
+ห้าที่ดีที่สุด -- thi as classifier !!
+
+mkUtt (mkNP (mkCN old_A beer_N))
+old beer
+เบียร์เก่า  -- old for inanimate
+
+mkUtt (mkNP beer_N)
+beer
+เบียร์
+
+mkUtt (mkNP only_Predet (mkNP this_Det woman_N))
+only this woman
+หญิงคนนี้เท่านั้น -- only comes last !!
+
+mkUtt (mkNP (mkNP the_Det man_N) see_V2)
+the man seen
+ชายเห็น
+
+mkUtt (mkNP (mkNP paris_PN) today_Adv)
+Paris today
+ปารีสวันนี้
+
+mkUtt (mkNP (mkNP john_PN) (mkRS (mkRCl which_RP (mkVP walk_V))))
+John , who walks
+จอห์นคนที่เดิน -- classifier !!
+
+mkUtt (mkNP or_Conj (mkNP this_Det woman_N) (mkNP john_PN))
+this woman or John
+หญิงคนนี้หริอจอห์น
+
+mkUtt (mkNP or_Conj (mkListNP (mkNP this_Det woman_N) (mkListNP (mkNP john_PN) i_NP)))
+this woman , John or I
+หญิงคนนี้ จอห์นหริอฉัน -- space, no comma
+
+mkUtt i_NP
+I
+ฉัน
+
+mkUtt you_NP
+you
+คุณ
+
+mkUtt youPol_NP
+you
+คุณ
+
+mkUtt he_NP
+he
+เขา
+
+mkUtt she_NP
+she
+หล่อน
+
+mkUtt it_NP
+it
+มัน
+
+mkUtt we_NP
+we
+เรา
+
+mkUtt youPl_NP
+you
+คุณ
+
+mkUtt they_NP
+they
+เขาทั้งหลาย -- more than one
+
+
+mkUtt this_NP
+this
+นี้ 
+
+mkUtt that_NP
+that
+นั้น
+
+mkUtt these_NP
+these
+เหล่านี้ -- more than one !!
+
+mkUtt those_NP
+those
+เหล่านั้น  -- more than one !!
+
+mkUtt (mkNP the_Det house_N)
+the house
+บ้าน
+
+mkUtt (mkNP a_Det house_N)
+a house
+บ้าน
+
+mkUtt (mkNP theSg_Det house_N)
+the house
+บ้าน
+
+mkUtt (mkNP thePl_Det house_N)
+the houses
+บ้าน
+
+mkUtt (mkNP aSg_Det woman_N)
+a woman
+หญิง
+
+mkUtt (mkNP aPl_Det woman_N)
+women
+หญิง
+
+mkUtt (mkNP this_Det woman_N)
+this woman
+หญิงคนนี้
+
+mkUtt (mkNP that_Det woman_N)
+that woman
+หญิงคนนั้น
+
+mkUtt (mkNP these_Det woman_N)
+these women
+หญิงเหล่านี้  -- more than one !!
+
+mkUtt (mkNP those_Det woman_N)
+those women
+หญิงเหล่านั้น  -- more !!
+
+mkUtt (mkNP (mkQuant i_Pron) house_N)
+my house
+บ้านของฉัน
+
+mkUtt (mkNP the_Quant house_N)
+the house
+บ้าน
+
+mkUtt (mkNP a_Quant house_N)
+a house
+บ้าน
+
+mkNum (mkNumeral (tenfoldSub100 n2_Unit))
+twenty
+ยี่สิบ
+
+mkNum (mkDigits n2_Dig (mkDigits n1_Dig))
+2 1
+๒๑
+
+mkNum (mkCard almost_AdN (mkCard (mkNumeral n5_Unit))) 
+almost five
+เกิอบห้า  -- before numeral !!
+
+mkNum (mkCard almost_AdN (mkCard (mkNumeral n5_Unit)))
+almost five
+เกิอบห้า  -- before
+
+mkCard (mkNumeral n7_Unit)
+seven
+เจ็ด
+
+mkOrd small_A
+smallest
+เล็กที่สุด
+
+mkCard (mkAdN more_CAdv) (mkCard (mkNumeral n8_Unit))
+more than eight
+มากกว่าแปด  -- before numeral !!
+
+mkNumeral (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit))
+nine hundred and ninety - nine
+เก้าร้อยเก้าสิบเก้า  -- tone mark for nine
+
+mkNumeral (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit)) (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit))
+nine hundred and ninety - nine thousand nine hundred and ninety - nine
+เก้าแสนเก้าหมื่นเก้าพันเก้าร้อยเก้าสิบเก้า  -- tone
+
+thousandfoldNumeral (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit))
+nine hundred and ninety - nine thousand
+เก้าแสนเก้าหมื่นเก้าพัน  -- tone
+
+mkNumeral (mkSub1000 (mkSub100 n9_Unit n9_Unit))
+ninety - nine
+เก้าสิบเก้า -- tone
+
+mkNumeral (mkSub1000 n9_Unit)
+nine hundred
+เก้าร้อย  -- tone
+
+mkNumeral (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit))
+nine hundred and ninety - nine
+เก้าร้อยเก้าสิบเก้า  -- tone
+
+mkSub100 n8_Unit
+eight
+แปด
+
+mkSub100 n8_Unit n3_Unit
+eighty - three
+แปดสิบสาม
+
+mkSub100 n8_Unit
+eight
+แปด
+
+mkNumeral n1_Unit
+one
+หนึง
+
+mkNumeral n2_Unit
+two
+สอง
+
+mkNumeral n3_Unit
+three
+สาม
+
+mkNumeral n4_Unit
+four
+สี่
+
+mkNumeral n5_Unit
+five
+ห้า
+
+mkNumeral n6_Unit
+six
+หก
+
+mkNumeral n7_Unit
+seven
+เจ็ด
+
+mkNumeral n8_Unit
+eight
+แปด
+
+mkNumeral n9_Unit
+nine
+เก้า  -- tone
+
+mkDigits n4_Dig
+4
+๔
+
+mkDigits n1_Dig (mkDigits n2_Dig (mkDigits n3_Dig (mkDigits n3_Dig (mkDigits n4_Dig (mkDigits n8_Dig (mkDigits n6_Dig)))))) 
+1 , 2 3 3 , 4 8 6
+๑ ๒๓๓ ๔๘๖ -- commas if amount of money etc !!
+
+mkCN house_N 
+house
+บ้าน
+
+mkCN mother_N2 (mkNP the_Det king_N)
+mother of the king
+แม่ของพระราชา  -- khong
+
+mkCN distance_N3 (mkNP this_Det city_N) (mkNP paris_PN) 
+distance from this city to Paris
+ระยะทางจากเมืองเมืองนี้ถืงปารีส
+
+mkCN mother_N2
+mother
+แม่
+
+mkCN distance_N3
+distance
+ระยะทาง
+
+mkCN big_A house_N  
+big house
+บ้านใหญ่
+
+mkCN big_A (mkCN blue_A house_N)
+big blue house
+บ้านสีน้ำเงินหลังใหญ่  -- better with classifier !!
+
+mkCN (mkAP very_AdA big_A) house_N  
+very big house
+บ้านใหญ่มาก
+
+mkCN (mkAP very_AdA big_A) (mkCN blue_A house_N)  
+very big blue house
+บ้านสีน้ำเงินหลังใหญ่มาก  -- better with classifier
+
+mkCN man_N (mkRS (mkRCl which_RP she_NP love_V2))
+man whom she loves
+ชายที่หล่อนรัก
+
+mkCN (mkCN old_A man_N) (mkRS (mkRCl which_RP she_NP love_V2)) 
+old man whom she loves
+ชายแก่ที่หล่อนรัก
+
+mkCN house_N (mkAdv on_Prep (mkNP the_Det hill_N))
+house on the hill
+บ้านบนเนินเขา
+
+mkCN (mkCN big_A house_N) (mkAdv on_Prep (mkNP the_Det hill_N))
+big house on the hill
+บ้านใหญ่บนเนินเขา
+
+mkNum (mkCard almost_AdN (mkCard (mkNumeral n5_Unit)))
+almost five
+เกิอบห้า  -- order
+
+mkNum (mkCard almost_AdN (mkCard (mkNumeral n5_Unit)))
+almost five
+เกิอบห้า -- order
+
+mkCN (mkCN reason_N) (mkVP sleep_V)
+reason to sleep
+เหตุที่นอนหลับ  -- add thi !!
+
+mkCN (mkCN reason_N) (mkVP sleep_V)
+reason to sleep
+เหตุที่นอนหลับ  -- same as prev
+
+mkCN king_N (mkNP john_PN) 
+king John
+พระราชาจอห์น
+
+mkCN (mkCN old_A king_N) (mkNP john_PN)
+old king John
+พระราชาแก่จอห์น
+
+mkAP warm_A
+warm
+อุ่น
+
+mkAP warm_A (mkNP paris_PN)
+warmer than Paris
+อุ่นกว่าปารีส
+
+mkAP married_A2 she_NP 
+married to her
+แต่งงานแล้วกับหล่อน
+
+mkAP married_A2
+married
+แต่งงานแล้ว
+
+mkCl (mkVP (mkAP (mkAP good_A) (mkS (mkCl she_NP sleep_V))))
+it is good that she sleeps
+ดีว่าหล่อนนอนหลับ
+
+mkCl (mkVP (mkAP (mkAP uncertain_A) (mkQS (mkQCl who_IP sleep_V))))
+it is uncertain who sleeps
+ลังเลใจว่าไครนอนหลับ
+
+mkCl she_NP (mkAP (mkAP ready_A) (mkVP sleep_V))
+she is ready to sleep
+หล่อนพร้อมนอนหลับ
+
+mkCl she_NP (mkAP (mkAP ready_A) (mkSC (mkVP sleep_V)))
+she is ready to sleep
+หล่อนพร้อมนอนหลับ
+
+mkAP very_AdA old_A
+very old
+แก่มาก
+
+mkAP very_AdA (mkAP very_AdA old_A)
+very very old
+แก่มากมาก
+
+mkAP or_Conj (mkAP old_A) (mkAP young_A)
+old or young
+แก่หริอรุ่น
+
+mkAP and_Conj (mkListAP (mkAP old_A) (mkListAP (mkAP big_A) (mkAP warm_A)))
+old , big and warm
+แก่ ใหญ่และอุ่น  -- comma
+
+mkAP (mkOrd old_A)
+oldest
+แก่ที่สุด
+
+mkAP as_CAdv (mkAP old_A) she_NP
+as old as she
+แก่เท่าหล่อน
+
+mkUtt (reflAP married_A2)
+married to itself
+แต่งงานแล้วกับตัวเอง
+
+mkUtt (comparAP warm_A)
+warmer
+อุ่นกว่า
+
+mkAdv warm_A
+warmly
+อุ่น
+
+mkAdv in_Prep (mkNP the_Det house_N)
+in the house
+ในบ้าน
+
+mkAdv when_Subj (mkS (mkCl she_NP sleep_V))
+when she sleeps
+เมื่อหล่อนนอนหลับ  -- when !!??
+
+mkAdv more_CAdv warm_A he_NP  
+more warmly than he
+อบอุ่นมากกว่าเขา  -- mak kwa
+
+mkAdv more_CAdv warm_A (mkS (mkCl he_NP run_V))  
+more warmly than he runs
+อบอุ่นมากกว่าที่เขาวิ่ง
+
+mkAdv very_AdA (mkAdv warm_A) 
+very warmly
+อุ่นมาก
+
+mkAdv and_Conj here_Adv now_Adv
+here and now
+ที่นี่และเดี๋ยวนี้  -- tone mark
+
+mkAdv and_Conj (mkListAdv (mkAdv with_Prep she_NP) (mkListAdv here_Adv now_Adv))
+with her , here and now
+กับหล่อน ที่นี่และเดี๋ยวนี้ -- comma, tone
+
+mkQS conditionalTense anteriorAnt negativePol (mkQCl who_IP sleep_V)
+who wouldn't have slept
+ใครนอนไม่หลับ  -- ay
+
+mkQS (mkCl she_NP sleep_V)
+does she sleep
+หล่อนนอนหลับไหม
+
+mkQCl (mkCl she_NP sleep_V)
+does she sleep
+หล่อนนอนหลับไหม
+
+mkQCl who_IP (mkVP (mkVP sleep_V) here_Adv)
+who sleeps here
+ใครนอนหลับที่นี่ -- ay
+
+mkQCl who_IP sleep_V
+who sleeps
+ใครนอนหลับ  -- ay
+
+mkQCl who_IP love_V2 she_NP
+who loves her
+ใครรักหล่อน  -- ay
+
+mkQCl who_IP send_V3 it_NP she_NP
+who sends it to her
+ใครส่งมันให้กับหล่อน  -- ay, send
+
+mkQCl who_IP want_VV (mkVP sleep_V)
+who wants to sleep
+ใครอยากนอนหลับ -- ay
+
+mkQCl who_IP say_VS (mkS (mkCl i_NP sleep_V))
+who says that I sleep
+ใครบอกว่าฉันนอนหลับ -- ay, say (also phut)
+
+mkQCl who_IP wonder_VQ (mkQS (mkQCl who_IP sleep_V))
+who wonders who sleeps
+ใครประหลาดใจว่าใครนอนหลับ  -- ay ay
+
+mkQCl who_IP become_VA old_A
+who becomes old
+ใครกลายเป็นคนแก่  -- ay, classifier !!
+
+mkQCl who_IP become_VA (mkAP very_AdA old_A)
+who becomes very old
+ใครกลายเป็นคนแก่มาก -- ay, classifier
+
+mkQCl who_IP paint_V2A it_NP red_A
+who paints it red
+ใครทามันสีแดง -- ay, compl
+
+mkQCl who_IP paint_V2A it_NP (mkAP very_AdA red_A)
+who paints it very red
+ใครทามันสีแดงมาก -- ay, compl
+
+mkQCl who_IP answer_V2S he_NP (mkS (mkCl we_NP sleep_V))
+who answers to him that we sleep
+ใครตอบเขาว่าเรานอนหลับ -- ay, compl
+
+mkQCl who_IP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V))
+who asks him who sleeps -- ay, compl
+ใครถามเขาว่าใครนอนหลับ
+
+mkQCl who_IP beg_V2V he_NP (mkVP sleep_V)
+who begs him to sleep
+ใครขอให้เขานอนหลับ  -- beg; possible withour hay
+
+mkQCl who_IP old_A
+who is old
+ใครแก่  -- ay
+
+mkQCl who_IP old_A he_NP
+who is older than he
+ใครแก่กว่าเขา
+
+mkQCl who_IP married_A2 he_NP
+who is married to him
+ใครแต่งงานแล้วกับเขา
+
+mkQCl who_IP (mkAP very_AdA old_A)
+who is very old
+ใครแก่มาก
+
+mkQCl who_IP (mkNP the_Det woman_N)
+who is the woman
+ใครเป็นหญิง  -- possible with pu
+
+mkQCl who_IP woman_N
+who is a woman
+ใครเป็นหญิง
+
+mkQCl who_IP (mkCN old_A woman_N)
+who is an old woman
+ใครเป็นหญิงแก่
+
+mkQCl who_IP here_Adv
+who is here
+ใครอยู่ที่นี่
+
+mkQCl who_IP (mkVP always_AdV (mkVP sleep_V))
+who always sleeps
+ใครนอนหลับเสมอ  -- always
+
+mkQCl why_IAdv (mkCl she_NP sleep_V)     
+why does she sleep
+หล่อนนอนหลับทำไม  -- th
+
+mkQCl with_Prep who_IP (mkCl she_NP sleep_V)      
+with whom does she sleep
+หล่อนนอนหลับกับใคร -- ay
+
+mkQCl where_IAdv she_NP 
+where is she
+หล่อนอยู่ที่ไหน
+
+mkQCl (mkIComp who_IP) (mkNP this_Det man_N)
+who is this man
+ชายคนนี้เป็นใคร
+
+mkQCl (mkIP which_IQuant city_N)
+which city is there
+คือเมืองเมืองไหน -- order !!
+
+mkQCl who_IP she_NP
+who is her
+หล่อนเป็นใคร  -- order
+
+mkQCl who_IP (mkClSlash (mkClSlash she_NP love_V2) today_Adv)
+whom does she love today
+หล่อนรักใครวันนี้  -- adv last or first !!
+
+mkIP (mkIDet which_IQuant (mkNum (mkNumeral n5_Unit))) (mkCN big_A city_N)    
+which five big cities
+เมืองใหญ่ห้าเมืองไหน
+
+mkIP (mkIDet which_IQuant (mkNum (mkNumeral n5_Unit))) city_N    
+which five cities
+เมืองห้าเมืองไหน
+
+mkIP (mkIDet which_IQuant (mkNum (mkNumeral n5_Unit)))
+which five
+ห้าไหน
+
+mkIP which_IQuant (mkCN big_A city_N)    
+which big city
+เมืองใหญ่เมืองไหน
+
+mkIP which_IQuant (mkNum (mkNumeral n5_Unit)) (mkCN big_A city_N)    
+which five big cities
+เมืองใหญ่ห้าเมืองไหน
+
+mkIP which_IQuant city_N
+which city
+เมืองเมืองไหน
+
+mkIP who_IP (mkAdv in_Prep (mkNP paris_PN))
+who in Paris
+ใครในปารีส
+
+mkUtt what_IP
+what
+อะไร
+
+mkUtt who_IP
+who
+ใคร
+
+mkIAdv in_Prep (mkIP which_IQuant city_N)
+in which city
+ในเมืองเมืองไหน
+
+mkIAdv where_IAdv (mkAdv in_Prep (mkNP paris_PN))  
+where in Paris
+ที่ไหนในปารีส
+
+mkIP (mkIDet which_IQuant pluralNum) house_N
+which houses
+บ้านหลังไหน
+
+mkIP (mkIDet which_IQuant) house_N      
+which house
+บ้านหลังไหน
+
+mkIP which_IDet house_N
+which house
+บ้านหลังไหน
+
+mkIP whichPl_IDet house_N
+which houses
+บ้านหลังไหน
+
+mkCN woman_N (mkRS conditionalTense anteriorAnt negativePol (mkRCl which_RP sleep_V))
+woman who wouldn't have slept
+หญิงที่นอนไม่หลับ
+
+mkCN woman_N (mkRS (mkRCl which_RP sleep_V))
+woman who sleeps
+หญิงที่นอนหลับ
+
+mkCN woman_N (mkRS or_Conj (mkRS (mkRCl which_RP sleep_V)) (mkRS (mkRCl which_RP we_NP love_V2)))
+woman who sleeps or whom we love
+หญิงที่นอนหลับหริอที่เรารัก
+
+mkCN woman_N (mkRS (mkRCl which_RP (mkVP (mkVP sleep_V) here_Adv)))
+woman who sleeps here
+หญิงที่นอนหลับที่นี่
+
+mkCN woman_N (mkRS (mkRCl which_RP sleep_V))
+woman who sleeps
+หญิงที่นอนหลับ
+
+mkCN woman_N (mkRS (mkRCl which_RP love_V2 he_NP))
+woman who loves him
+หญิงที่รักเขา
+
+mkCN woman_N (mkRS (mkRCl which_RP send_V3 it_NP he_NP))
+woman who sends it to him
+หญิงที่ส่งมันให้กับเขา  -- send
+
+mkCN woman_N (mkRS (mkRCl which_RP want_VV (mkVP sleep_V)))
+woman who wants to sleep
+หญิงที่อยากนอนหลับ
+
+mkCN woman_N (mkRS (mkRCl which_RP say_VS (mkS (mkCl i_NP sleep_V))))
+woman who says that I sleep
+หญิงที่บอกว่าฉันนอนหลับ  -- put better than bok?
+
+mkCN woman_N (mkRS (mkRCl which_RP wonder_VQ (mkQS (mkQCl who_IP sleep_V))))
+woman who wonders who sleeps
+หญิงที่ประหลาดใจว่าใครนอนหลับ
+
+mkCN woman_N (mkRS (mkRCl which_RP become_VA old_A))
+woman who becomes old
+หญิงที่กลายเป็นคนแก่ -- classifier !! 
+
+mkCN woman_N (mkRS (mkRCl which_RP become_VA (mkAP very_AdA old_A)))
+woman who becomes very old
+หญิงที่กลายเป็นคนแก่มาก -- classifier
+
+mkCN woman_N (mkRS (mkRCl which_RP paint_V2A it_NP red_A))
+woman who paints it red
+หญิงที่ทามันสีแดง
+
+mkCN woman_N (mkRS (mkRCl which_RP paint_V2A it_NP (mkAP very_AdA red_A)))
+woman who paints it very red
+หญิงที่ทามันสีแดงมาก
+
+mkCN woman_N (mkRS (mkRCl which_RP answer_V2S he_NP (mkS (mkCl we_NP sleep_V))))
+woman who answers to him that we sleep
+หญิงที่ตอบเขาว่าเรานอนหลับ  -- compl
+
+mkCN woman_N (mkRS (mkRCl which_RP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V))))
+woman who asks him who sleeps
+หญิงที่ถามเขาว่าใครนอนหลับ  -- ay
+
+mkCN woman_N (mkRS (mkRCl which_RP beg_V2V he_NP (mkVP sleep_V)))
+woman who begs him to sleep
+หญิงที่ขอให้เขานอนหลับ -- beg
+
+mkCN woman_N (mkRS (mkRCl which_RP old_A))
+woman who is old
+หญิงที่แก่
+
+mkCN woman_N (mkRS (mkRCl which_RP old_A he_NP))
+woman who is older than he
+หญิงที่แก่กว่าเขา
+
+mkCN woman_N (mkRS (mkRCl which_RP married_A2 he_NP))
+woman who is married to him
+หญิงที่แต่งงานแล้วกับเขา
+
+mkCN woman_N (mkRS (mkRCl which_RP (mkAP very_AdA old_A)))
+woman who is very old
+หญิงที่แก่มาก
+
+mkCN woman_N (mkRS (mkRCl which_RP (mkNP the_Det woman_N)))
+woman who is the woman
+หญิงที่เป็นหญิง
+
+mkCN student_N (mkRS (mkRCl which_RP woman_N))
+student who is a woman
+นักศึกษาที่เป็นหญิง
+
+mkCN student_N (mkRS (mkRCl which_RP (mkCN old_A woman_N)))
+student who is an old woman
+นักศึกษาที่เป็นหญิงแก่
+
+mkCN woman_N (mkRS (mkRCl which_RP here_Adv))
+woman who is here
+หญิงที่อยู่ที่นี่
+
+mkCN woman_N (mkRS (mkRCl which_RP (mkVP always_AdV (mkVP sleep_V))))
+woman who always sleeps
+หญิงที่นอนหลับเสมอ -- always
+
+mkCN woman_N (mkRS (mkRCl which_RP we_NP love_V2))
+woman whom we love
+หญิงที่เรารัก
+
+mkCN woman_N (mkRS (mkRCl which_RP (mkClSlash (mkClSlash she_NP love_V2) today_Adv)))
+woman whom she loves today
+หญิงที่หล่อนรักวันนี้
+
+mkRP in_Prep (mkNP all_Predet (mkNP the_Quant pluralNum city_N)) which_RP
+all the cities in whom
+ทุกเมืองในที่ -- or  เมืองทั้งหมดในที่
+
+mkSSlash (mkTemp pastTense anteriorAnt) negativePol (mkClSlash she_NP (mkVPSlash see_V2))
+she hadn't seen
+หล่อนไม่เห็น
+
+mkQCl who_IP (mkClSlash she_NP (mkVPSlash see_V2))
+whom does she see
+หล่อนเห็นใคร
+
+mkQCl who_IP (mkClSlash she_NP see_V2)
+whom does she see
+หล่อนเห็นใคร
+
+mkQCl who_IP (mkClSlash she_NP want_VV see_V2)
+whom does she want to see
+หล่อนอยากเห็นใคร
+
+mkQCl who_IP (mkClSlash (mkCl she_NP sleep_V) with_Prep)
+with whom does she sleep
+หล่อนนอนหลับกับใคร
+
+mkQCl who_IP (mkClSlash (mkClSlash she_NP see_V2) today_Adv)
+whom does she see today
+หล่อนเห็นใครวันนี้
+
+mkQCl who_IP (mkClSlash she_NP know_VS (mkSSlash (mkTemp pastTense anteriorAnt) negativePol (mkClSlash we_NP (mkVPSlash see_V2))))
+whom does she know that we hadn't seen
+ใครที่หล่อนรู้ว่าเราไม่เห็น -- khray first !!
+
+mkQCl who_IP (mkClSlash she_NP (mkVPSlash see_V2))
+whom does she see
+หล่อนเห็นใคร  -- or khray thi lon hin !!
+
+mkQCl who_IP (mkClSlash she_NP (mkVPSlash send_V3 it_NP))  
+to whom does she send it
+หล่อนส่งมันให้ใคร -- send
+
+mkQCl who_IP (mkClSlash she_NP (mkVPSlash paint_V2A (mkAP red_A)))  
+whom does she paint red
+ใครที่หล่อนทาสีแดง
+
+mkQCl who_IP (mkClSlash she_NP (mkVPSlash ask_V2Q (mkQS (mkQCl where_IAdv (mkCl i_NP sleep_V)))))   
+whom does she ask where I sleep
+หล่อนถามใครว่าฉันนอนหลับที่ไหน -- order !!
+
+mkQCl who_IP (mkClSlash she_NP (mkVPSlash answer_V2S (mkS (mkCl i_NP sleep_V))))   
+to whom does she answer that I sleep
+หล่อนตอบใครว่าฉันนอนหลับ  -- compl
+
+mkQCl who_IP (mkClSlash she_NP (mkVPSlash beg_V2V (mkVP sleep_V)))
+whom does she beg to sleep
+หล่อนขอนอนหลับกับใคร
+
+mkQCl who_IP (mkClSlash she_NP (mkVPSlash want_VV (mkVPSlash see_V2)))
+whom does she want to see
+หล่อนอยากเห็นใคร
+
+mkQCl who_IP (mkClSlash she_NP (mkVPSlash beg_V2V i_NP (mkVPSlash see_V2)))
+whom does she beg me to see
+หล่อนขอให้ฉันเห็นใคร -- beg
+
+mkAdv above_Prep it_NP
+above it
+ข้างบนมัน
+
+mkAdv after_Prep it_NP
+after it
+หลังจากมัน  -- lang cak
+
+mkUtt (mkNP all_Predet (mkNP thePl_Det man_N))
+all the men
+ชายทั้งหมด  -- order !!
+
+mkAP almost_AdA red_A
+almost red
+เกิอบสีแดง -- order !!
+
+mkCard almost_AdN (mkCard (mkNumeral n8_Unit))    
+almost eight
+เกิอบแปด -- order !!
+
+mkAdv although_Subj (mkS (mkCl she_NP sleep_V))
+although she sleeps
+ถืงหล่อนนอนหลับ
+
+always_AdV
+always
+เสมอ -- always!
+
+mkAdv and_Conj here_Adv now_Adv
+here and now
+ที่นี่และเดี๋ยวนี้ -- tone
+
+mkAdv because_Subj (mkS (mkCl she_NP sleep_V))
+because she sleeps
+เพราะหล่อนนอนหลับ
+
+mkAdv before_Prep it_NP
+before it
+ก่อนมัน
+
+mkAdv behind_Prep it_NP
+behind it
+หลังมัน
+
+mkAdv between_Prep (mkNP and_Conj you_NP i_NP)
+between you and me
+ระหว่างคุณและฉัน -- place of tone mark
+
+mkAdv both7and_DConj here_Adv there_Adv
+both here and there
+ทั้งที่นี่และที่นั่น -- both
+
+but_PConj
+but
+แต่
+
+mkAdv by8agent_Prep it_NP
+by it
+มัน
+
+mkAdv by8means_Prep it_NP
+by it
+ผ่านมัน
+
+mkUtt (mkVP can8know_VV (mkVP sleep_V))
+to be able to sleep
+นอนหลับได้
+
+mkUtt (mkVP can_VV (mkVP sleep_V))
+to be able to sleep
+นอนหลับได้
+
+mkAdv during_Prep it_NP
+during it
+ที่มัน -- ra wang man (= between)
+
+mkAdv either7or_DConj here_Adv there_Adv
+either here or there
+ที่นี่หริอที่นั่น  -- or: mai - ko
+
+mkUtt (mkNP every_Det woman_N)
+every woman
+หญิงทุกคน
+
+mkUtt everybody_NP
+everybody
+ทุกคน  -- every person
+
+mkUtt everything_NP
+everything
+ทุกสิ่ง
+
+everywhere_Adv
+everywhere
+ทุกที่
+
+mkAdv for_Prep it_NP
+for it
+ให้มัน
+
+mkAdv from_Prep it_NP
+from it
+จากมัน -- a:
+
+mkUtt (mkNP he_Pron)
+he
+เขา
+
+here_Adv
+here
+ที่นี่
+
+here7to_Adv
+to here
+ที่นี่
+
+here7from_Adv
+from here
+จากนี่  -- a:
+
+mkUtt how_IAdv
+how
+อย่างไร
+
+mkUtt (mkIP how8many_IDet house_N)
+how many houses
+บ้านกี่หลัง
+
+mkUtt how8much_IAdv
+how much
+เท่าไร
+
+mkUtt (mkNP i_Pron)
+I
+ฉัน
+
+mkAdv if_Subj (mkS (mkCl she_NP sleep_V))
+if she sleeps
+ถ้าหล่อนนอนหลับ
+
+mkAdv in8front_Prep it_NP
+in front of it
+หน้ามัน
+
+mkAdv in_Prep it_NP
+in it
+ในมัน
+
+mkUtt (mkNP it_Pron)
+it
+มัน
+
+less_CAdv
+less
+น้อย
+
+mkUtt (mkNP many_Det house_N)
+many houses
+บ้านหลายหลัง
+
+more_CAdv
+more
+มากกว่า -- more than
+
+most_Predet
+most
+มากที่สุด
+
+mkUtt (mkNP much_Det wine_N)
+much wine
+เหล้าองุ่นหลายขวด -- the word much
+
+must_VV
+have to
+ต้อง
+
+no_Utt
+no
+ไม่
+
+mkAdv on_Prep it_NP
+on it
+บนมัน
+
+only_Predet
+only
+เท่านั้น -- tone mark
+
+mkAdv or_Conj here_Adv there_Adv
+here or there
+ที่นี่หริอที่นั่น
+
+otherwise_PConj
+otherwise
+ไม่อย่างนั้น -- was very informal
+
+mkAdv part_Prep it_NP
+of it
+มัน
+
+please_Voc
+please
+ขอ
+
+mkAdv possess_Prep it_NP
+of it
+ของมัน
+
+quite_Adv
+quite
+ค่อนข้าง -- tone mark
+
+mkUtt (mkNP she_Pron)
+she
+หล่อน
+
+so_AdA
+so
+ดังนั้น -- (maak, if alone) !!
+
+mkUtt (mkNP someSg_Det wine_N)
+some wine
+เหล้าองุ่นบางขวด -- tone mark in wrong order; second tone mark off
+
+mkUtt (mkNP somePl_Det woman_N)
+some women
+หญิงบางคน -- tone mark
+
+mkUtt somebody_NP
+somebody
+บางคน
+
+mkUtt something_NP
+something
+บางสิ่ง
+
+somewhere_Adv
+somewhere
+บางแห่ง
+
+mkUtt (mkNP that_Quant house_N)
+that house
+บ้านหลังนั้น
+
+mkAdv that_Subj (mkS (mkCl she_NP sleep_V))
+that she sleeps
+ว่าหล่อนนอนหลับ
+
+there_Adv
+there
+ที่นั่น
+
+there7to_Adv
+there
+ที่นั่น
+
+there7from_Adv
+from there
+จากนั่น  -- a:
+
+therefore_PConj
+therefore
+เพราะฉะนั้น
+
+mkUtt (mkNP they_Pron)
+they
+เขา
+
+mkUtt (mkNP this_Quant house_N)
+this house
+บ้านหลังนี้
+
+mkAdv through_Prep it_NP
+through it
+ผ่านมัน
+
+mkAdv to_Prep it_NP
+to it
+ถืงมัน
+
+too_AdA
+too
+เกินไป
+
+mkAdv under_Prep it_NP
+under it
+ใต้มัน
+
+very_AdA
+very
+มาก
+
+want_VV
+want
+อยาก
+
+mkUtt (mkNP we_Pron)
+we
+เรา
+
+whatPl_IP
+what
+อะไร
+
+whatSg_IP
+what
+อะไร
+
+mkUtt when_IAdv
+when
+เมื่อไร
+
+mkAdv when_Subj (mkS (mkCl she_NP sleep_V))
+when she sleeps
+ที่หล่อนนอนหลับ  -- tone mark, th !! tone mark in Subj?
+
+mkUtt where_IAdv
+where
+ที่ไหน
+
+mkIP which_IQuant house_N
+which house
+บ้านหลังไหน
+
+whoPl_IP
+who
+ใคร
+
+whoSg_IP
+who
+ใคร
+
+mkUtt why_IAdv
+why
+ทำไม  -- th
+
+mkAdv with_Prep it_NP
+with it
+กับมัน
+
+mkAdv without_Prep it_NP
+without it
+ไม่มีมัน -- tone mark
+
+yes_Utt
+yes
+ใช่
+
+mkUtt (mkNP youSg_Pron)
+you
+คุณ
+
+mkUtt (mkNP youPl_Pron)
+you
+คุณ
+
+mkUtt (mkNP youPol_Pron)
+you
+คุณ
+
+mkUtt (mkNP no_Quant house_N)
+no house
+ไม่มีบ้าน  -- may mi + N + C
+
+mkUtt (mkNP not_Predet everybody_NP)
+not everybody
+ไม่ทุกคน
+
+mkAdv if_then_Conj here_Adv there_Adv
+if here then there
+ถ้าที่นี่ก็ที่นั่น
+
+mkCard at_least_AdN (mkCard (mkNumeral n8_Unit))
+at least eight
+อย่างน้อยแปด -- order
+
+mkCard at_most_AdN (mkCard (mkNumeral n8_Unit))
+at most eight
+อย่างมากแปด -- order
+
+mkUtt nobody_NP
+nobody
+ไม่มีใคร
+
+mkUtt nothing_NP
+nothing
+เปล่า
+
+mkAdv except_Prep it_NP
+except it
+นอกจากมัน
+
+as_CAdv
+as
+เท่า
+
+mkUtt (mkVP have_V2 it_NP)
+to have it
+มีมัน
+

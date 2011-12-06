@@ -43,7 +43,7 @@ concrete NounTha of Noun = CatTha ** open StringsTha, ResTha, Prelude in {
     NumNumeral numeral = numeral ** {hasC = True} ;
     OrdNumeral numeral = {s = thbind thii_s numeral.s} ;
 
-    AdNum adn num = thbind num adn ;
+    AdNum adn num = thbind adn num ; ---- always?
 
     OrdSuperl a = {s = thbind a.s thii_s sut_s} ;
 

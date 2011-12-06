@@ -15,7 +15,7 @@ concrete PhraseTha of Phrase = CatTha ** open Prelude, ResTha in {
     UttCN cn = cn ;
     UttAP ap = ap ;
     UttCard x = x ;
-    UttVP vp = {s = vp.s ! Pos} ;
+    UttVP vp = {s = vp.s ! Pos ++ vp.e} ;
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;

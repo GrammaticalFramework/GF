@@ -4,8 +4,8 @@ all: demo missing
 
 thaidroid: #thaiscript
 	cp -p Phrasebook.pgf FullPhrasebook.pgf
-	$(compile) -opt Eng Swe Tha PhrasebookThaP DisambPhrasebookEng
-	$(compile) -link Eng Fin Swe Tha PhrasebookThaP DisambPhrasebookEng
+	$(compile) -opt Eng Swe Tha Thb DisambPhrasebookEng
+	$(compile) -link Eng Fin Swe Tha Thb DisambPhrasebookEng
 	mv Phrasebook.pgf Thaidroid.pgf
 	mv FullPhrasebook.pgf Phrasebook.pgf
 
