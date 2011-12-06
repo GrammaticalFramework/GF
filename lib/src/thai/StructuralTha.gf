@@ -5,11 +5,11 @@ concrete StructuralTha of Structural = CatTha **
 
   lin
   above_Prep = ss (thword "ข้าง" "บน") ;
-  after_Prep = ss "หลัง" ;
+  after_Prep = ss (thword "หลัง" "จาก") ;
   all_Predet = ss (thword "ทั้ง" "หมด") ;
   almost_AdA, almost_AdN = ss (thword "เกิ" "อบ") ;
   although_Subj = ss "ถืง" ;
-  always_AdV = ss (thword "ตลอด" "ไป") ;
+  always_AdV = ss (thword "เส" "มอ") ; --- pronunciation
   and_Conj = {s1 = [] ; s2 = "และ"} ;
   as_CAdv = {s = thword "เท่า" ; p = "กับ"} ; ----
   at_least_AdN = ss (thword "อย่าง" "น้อย") ;
@@ -17,16 +17,16 @@ concrete StructuralTha of Structural = CatTha **
   because_Subj = ss (thword "เพ" "ราะ") ;
   before_Prep = ss "ก่อน" ;
   behind_Prep = ss "หลัง" ;
-  between_Prep = ss (thword "ระ" "หวา่ง") ;
-  both7and_DConj = {s1 = "และ" ; s2 = "และ"} ; ----
+  between_Prep = ss (thword "ระ" "หว่าง") ;
+  both7and_DConj = {s1 = "ทั้ง" ; s2 = "และ"} ;
   but_PConj = ss "แต่" ;
   by8agent_Prep = ss [] ;
   by8means_Prep = ss "ผ่าน" ;
   can8know_VV = {s = pen_s ; typ = VVPost} ;
   can_VV = {s = "ได้" ; typ = VVPost} ;
-  during_Prep = ss "ที" ;
-  either7or_DConj = {s1 = "หริอ" ; s2 = "หริอ"} ; ----
-  everybody_NP = mkNP (thword "ทัว" "ห้นา") ;
+  during_Prep = ss (thword "ระ" "หว่าง") ;
+  either7or_DConj = {s1 = [] ; s2 = "หริอ"} ; ---- or: mai - ko
+  everybody_NP = mkNP (thword "ทุก" "คน") ;
   every_Det = quantDet "ทุก" ;
   everything_NP = mkNP (thword "ทุก" "สิ่ง") ;
   everywhere_Adv = ss (thword "ทุก" "ที") ;
@@ -48,30 +48,30 @@ concrete StructuralTha of Structural = CatTha **
   if_then_Conj = {s1 = "ถ้า" ; s2 = "ก็"} ; ---- ko between subj and verb
   in_Prep = ss (thword "ใน") ;
   it_Pron  = ss "มัน" ;
-  less_CAdv = {s = "น้อย" ; p = "กว่า"} ; ----
+  less_CAdv = {s = "น้อย" ; p = "กว่า"} ;
   many_Det = quantDet "หลาย" ;
-  more_CAdv = {s = "มาก" ; p = "กว่า"} ; ----
+  more_CAdv = {s = "มาก" ; p = "กว่า"} ;
   most_Predet = ss (thword "มาก" "ที่" "สุด") ;
-  much_Det = quantDet "มาก" ;
+  much_Det = quantDet "หลาย" ; ---- always?
   must_VV = {s = tog_s ; typ = VVPre} ;
-  no_Quant = quantDet may_s ; ----
+  no_Quant = quantDet (thword "ไม่" "มี") ;
   no_Utt = ss may_s ;
   nobody_NP = mkNP (thword "ไม่" "มี" "ใคร") ;
   not_Predet = ss may_s ; ----
   nothing_NP = mkNP "เปล่า" ;
   on_Prep = ss "บน" ;
-  only_Predet = ss (thword "เฑา" "นั้น") ;
+  only_Predet = ss (thword "เท่า" "นั้น") ;
   or_Conj = {s1 = [] ; s2 = "หริอ"} ;
-  otherwise_PConj = ss (thword "ไม่" "งัน") ;
+  otherwise_PConj = ss (thword "ไม่" "อย่าง" "นั้น") ;
   part_Prep = ss "" ; ----
   please_Voc = ss "ขอ" ;
   possess_Prep = ss "ของ" ;
-  quite_Adv = ss (thword "คอน" "ข้าง") ;
-  she_Pron = ss khaw_s ;
-  so_AdA = ss (thword "เท่า" "กัน") ; ----
+  quite_Adv = ss (thword "ค่อน" "ข้าง") ;
+  she_Pron = ss "หล่อน" ;
+  so_AdA = ss (thword "ดัง" "นั้น") ;
   somebody_NP = mkNP (thword "บาง" "คน") ;
-  somePl_Det = quantDet ("บ้าง") ;
-  someSg_Det = quantDet ("บ้าง") ;
+  somePl_Det = quantDet ("บาง") ;
+  someSg_Det = quantDet ("บาง") ;
   something_NP = mkNP (thword "บาง" "สิ่ง") ;
   somewhere_Adv = mkAdv (thword "บาง" "แห่ง") ;
   that_Quant = demDet nan_s ;
@@ -80,7 +80,7 @@ concrete StructuralTha of Structural = CatTha **
   there7to_Adv = ss (thword "ที่" "นั่น") ; ----
   there7from_Adv = ss (thword "จาก" "นั่น") ; ----
   therefore_PConj = ss (thword "เพราะ" "ฉะ" "นั้น") ;
-  they_Pron = mkNP khaw_s ;
+  they_Pron = mkNP (thword "พวก" khaw_s) ; --- mkNP (thword "เขา" "ทั้ง" "หลาย") ;
   this_Quant = demDet nii_s ;
   through_Prep = ss "ผ่าน" ;
   too_AdA = ss (thword "เกิน" "ไป") ;
@@ -91,16 +91,16 @@ concrete StructuralTha of Structural = CatTha **
   we_Pron = ss raw_s ;
   whatPl_IP, whatSg_IP = ss (thword "อะ" "ไร") ;
   when_IAdv = ss (thword "เมื่อไร") ;
-  when_Subj = ss "ฑี" ;
+  when_Subj = ss "ที" ;
   where_IAdv = ss (thword "ที่" "ไหน") ;
   which_IQuant = demDet "ไหน" ; 
-  whoPl_IP, whoSg_IP = ss "ไคร" ;
-  why_IAdv = ss (thword "ฑำ" "ไม") ;
-  without_Prep = ss (thword "ไ่ม" "มี") ;
+  whoPl_IP, whoSg_IP = ss "ใคร" ;
+  why_IAdv = ss (thword "ทำ" "ไม") ;
+  without_Prep = ss (thword "ไม่" "มี") ;
   with_Prep = ss "กับ" ;
   yes_Utt = ss chay_s ;
   youSg_Pron = ss khun_s ;
-  youPl_Pron = ss khun_s ;
+  youPl_Pron = ss (thword "พวก" khun_s) ;
   youPol_Pron = ss khun_s ;
   right_Ord = ss (thword "ขวา") ;
   left_Ord = ss (thword "ซ้าย") ;

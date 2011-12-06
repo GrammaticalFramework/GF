@@ -21,11 +21,12 @@ fileThpron file = do
   writeFile tgt (appThpron s)
   putStrLn ("wrote " ++ tgt)
 
+-- thb = IPA Thai; not used in ISO-639-3 like Thp 
 appThpron s = case s of
   '"':cs -> let (w,_:rest) = break (=='"') cs in mkThpron w ++ appThpron rest
-  'T':'h':'a':'A':rest             -> "ThaPA" ++ appThpron rest  -- AllThaAbs
+  'T':'h':'a':'A':rest             -> "Thb" ++ appThpron rest  -- AllThaAbs
   'T':'h':'a':c:rest   | isAlpha c -> "Tha" ++ c : appThpron rest  -- Thank
-  'T':'h':'a':rest -> "ThaP" ++ appThpron rest
+  'T':'h':'a':rest -> "Thb" ++ appThpron rest
   c:cs -> c:appThpron cs
   _ -> s
 
@@ -72,6 +73,7 @@ dat2pron is = case is of
  [CO,Cy,CT1,CaL,Cg] -> "y" ++ low "aa" ++ i_ng
  [CO,Cy,CT1,CuL] -> "y" ++ low "uu"
  [Cp3,Cr]        -> "phan" --- not in Smyth
+ [Cp2,Cw,Ck]     -> "phw" ++ falling "ak" -- not in Smyth
  [Cc2,CvL,CT1,CO] -> "ch" ++ falling i_uue --- to get rid of final O
  [CO,Cg,CT1,Cu,Cn] -> low "a" ++ i_ng ++ low "un" --- probably there is a rule for leading vowelless O
 

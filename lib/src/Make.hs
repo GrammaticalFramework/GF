@@ -54,7 +54,7 @@ langsCoding = [
   (("spanish",  "Spa"),"Romance"),
   (("swedish",  "Swe"),"Scand"), 
   (("thai",     "Tha"),""),
-  (("thai",     "ThaP"),""),  -- Thai pronunciation
+  (("thai",     "Thb"),""),  -- Thai pronunciation
   (("turkish",  "Tur"),""),
   (("urdu",     "Urd"),"Hindustani")
   ]

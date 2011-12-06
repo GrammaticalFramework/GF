@@ -22,7 +22,7 @@ lin
   GLookOut = mkGreeting (thword "ระ" "วัง") ; ---- google
   GNiceToMeetYou, GNiceToMeetYouPol = 
     mkGreeting (thword "ยิน" "ดี" "ที่" "ได้" "รู้" "จัก") ;
-  GPleaseGive, GPleaseGivePol = mkGreeting (thword "ช่วย") ; ----
+  GPleaseGive, GPleaseGivePol = mkGreeting "นะ" ;
   GSeeYouSoon = mkGreeting (thword "เจอ" "กัน" "นะ") ;
   GSorry, GSorryPol = mkGreeting (thword "ขอ" "โทษ") ;
   GThanks = mkGreeting (thword "ขอบ" "คุณ") ;

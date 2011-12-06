@@ -47,7 +47,7 @@ lin
   breast_N = mkN (thword "หน้า" "อก") ;
   breathe_V = mkV (thword "หาย" "ใจ") ;
   broad_A = mkA "กว้าง" ;
-  brother_N2 = mkN2 (personN (thword "พี่" "ชาย")) [] ;
+  brother_N2 = mkN2 (personN (thword "พี่" "ชาย")) poss ;
   brown_A = mkA (thword "สี" "น้ำ" "ตาล") ;
   burn_V = mkV (thword "เผา") ;
   butter_N = mkN (thword "เนย") "สด" ; ----?
@@ -102,7 +102,7 @@ lin
   fall_V = mkV (thword "ตก") ;
   far_Adv = ss (thword "ไกล") ;
   fat_N = mkN (thword "ไข" "มัน") ;
-  father_N2 = mkN2 (personN (thword "พ่อ")) [] ;
+  father_N2 = mkN2 (personN (thword "พ่อ")) poss ;
   fear_N = mkN (thword "ความ" "กลัว") ;
   fear_V2 = mkV2 "กลัว";
   fear_VS = mkVS (regV "กลัว") ;
@@ -195,7 +195,7 @@ lin
   meat_N = mkN (thword "เนื้อ") ;
   milk_N = mkN (thword "นม") kew_s ;
   moon_N = mkN (thword "พระ" "จันทร์") ;
-  mother_N2 = personN "แม่" ** {c2 = []} ;
+  mother_N2 = mkN2 (personN "แม่") poss ;
   mountain_N = mkN (thword "เขา") ;
   mouth_N = mkN (thword "ปาก") ;
   music_N = mkN (thword "ดน" "ตรี") ; ----?
@@ -208,7 +208,7 @@ lin
   newspaper_N = mkN (thword "หนัง" "สือ" "พิมพ์") "ฉบับ"  ;
   night_N = mkN (thword "กลาง" "คืน") ;
   nose_N = mkN (thword "จมูก") ;
-  now_Adv = mkAdv (thword "เดี่ยว" "นี้") ;
+  now_Adv = mkAdv (thword "เดี๋ยว" "นี้") ;
   number_N = mkN (thword "หมาย" "เลข") ; ----?
   oil_N = mkN (thword "น้ำมัน") ; ----?
   old_A = mkA (thword "แก่") ;
@@ -255,7 +255,7 @@ lin
   run_V = mkV "วิ่ง" ;
   salt_N = mkN (thword "เกลือ") ;
   sand_N = mkN (thword "ทราย") ;
-  say_VS = mkVS (regV ("ว่า")) ;
+  say_VS = mkVS (regV "พูด") ;
   school_N = placeN (thword "โรง" "เรียน") ;
 ----  science_N = mkN "science" ;  ----?
   scratch_V2 = mkV2 (thword "เกา") ;
@@ -264,7 +264,7 @@ lin
   seed_N = mkN (thword "เม็ด") ;
   seek_V2 = mkV2 "หา" ;
   sell_V3 = mkV3 "ขาย" ;
-  send_V3 = mkV3 "ส่ง" ;
+  send_V3 = mkV3 (mkV "ส่ง" "ให้") ;
   sew_V = mkV (thword "เย็บ") ;
   sharp_A = mkA (thword "คม") ;
   sheep_N = animalN "แกะ" ;
@@ -347,7 +347,7 @@ lin
   win_V2 = mkV2 "ชนะ" ;
   wind_N = mkN (thword "ลม") ;
   window_N = mkN (thword "หน้า" "ต่าง" "บาน") ; ----?
-  wine_N = mkN (thword "เหล้า" "องุ่น") "ขวด" ;
+  wine_N = mkN (thword "เหล้า" "องุ่น") "ขวด" ;
   wing_N = mkN (thword "ปิก") ;
   wipe_V2 = mkV2 (thword "เช็ด") ;
   woman_N = personN (thword "หญิง") ;
@@ -358,5 +358,8 @@ lin
   year_N = mkN (thword "ปี") ;
   yellow_A = mkA (thword "สี" "เหลือง") ;
   young_A = mkA "รุ่น" ;
+
+oper 
+  poss = "ของ" ;
 
 }

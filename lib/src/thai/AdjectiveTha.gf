@@ -10,7 +10,7 @@ concrete AdjectiveTha of Adjective = CatTha ** open ResTha, Prelude in {
 
     AdjOrd ord = ord ;
 
-    CAdvAP ad ap np = mkAdj (thbind ap.s ad.s np.s) ;
+    CAdvAP ad ap np = mkAdj (thbind ap.s ad.s ad.p np.s) ;
 
     ComplA2 a np = mkAdj (thbind a.s a.c2 np.s) ;
 

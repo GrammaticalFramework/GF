@@ -11,15 +11,15 @@ concrete ConjunctionTha of Conjunction = CatTha ** open Prelude, Coordination in
 -- These fun's are generated from the list cat's.
 
     BaseS = twoSS ;
-    ConsS = consrSS comma ;
+    ConsS = consrSS thcomma ;
     BaseAdv = twoSS ;
-    ConsAdv = consrSS comma ;
+    ConsAdv = consrSS thcomma ;
     BaseNP = twoSS ;
-    ConsNP = consrSS comma ;
+    ConsNP = consrSS thcomma ;
     BaseAP = twoSS ;
-    ConsAP = consrSS comma ;
+    ConsAP = consrSS thcomma ;
     BaseRS = twoSS ;
-    ConsRS = consrSS comma ;
+    ConsRS = consrSS thcomma ;
 
   lincat
     [S] = {s1,s2 : Str} ;
@@ -27,5 +27,8 @@ concrete ConjunctionTha of Conjunction = CatTha ** open Prelude, Coordination in
     [NP] = {s1,s2 : Str} ;
     [AP] = {s1,s2 : Str} ;
     [RS] = {s1,s2 : Str} ;
+
+  oper
+    thcomma : Str = [] ; ---- should be a space
 
 }
