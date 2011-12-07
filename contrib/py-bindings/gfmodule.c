@@ -1,5 +1,5 @@
 // GF Python bindings
-// Jordi Saludes, upc.edu 2010
+// Jordi Saludes, upc.edu 2010, 2011
 //
 
 #include <Python.h>
@@ -31,6 +31,7 @@ NEWGF(Tree,GF_Tree,TreeType,"gf.tree","gf tree")
 /* CId methods, constructor and destructor */
 
 DEALLOCFN(CId_dealloc, CId, gf_freeCId, "freeCId")
+
 
 
 /* PGF methods, constructor and destructor */
@@ -123,17 +124,16 @@ parse(PGF *self, PyObject *args, PyObject *kws)
 	Lang *lang;
 	gfType *cat = NULL;
 	char *lexed;
-	static char *kwlist[] = {"lexed", "lang", "cat", NULL};
-	if (!PyArg_ParseTupleAndKeywords(args, kws, "sO|O", kwlist,
-				       &lexed, &lang, &cat))
-    	return NULL;
+	static char *kwlist[] = {"lang", "lexed", "cat", NULL};
+	if (!PyArg_ParseTupleAndKeywords(args, kws, "Os|O", kwlist, &lang, &lexed, &cat))
+	  return NULL;
 	if (!checkType(self, &PGFType)) return NULL;
 	if (!checkType(lang, &LangType)) return NULL;
 	if (cat) {
 	  if (!checkType(cat, &gfTypeType)) return NULL;
 	} else { 
-	  cat = gf_startCat(self);		
-	} 
+	  cat = gf_startCat(self);
+	}
 	return gf_parse(self, lang, cat, lexed);
 }
 
@@ -154,9 +154,27 @@ readPGF(PyObject *self, PyObject *args)
 }
 
 
+static PyObject*
+completions(PGF *self, PyObject *args, PyObject *kws)
+{ char   *tokens;
+  Lang   *lang;
+  gfType *cat = NULL;
+  static char *kwlist[] = {"lang", "tokens", "category", NULL};
+  if (!PyArg_ParseTupleAndKeywords(args, kws, "Os|O", kwlist, &lang, &tokens, &cat))
+    return NULL;
+  if (!checkType(self, &PGFType)) return NULL;
+  if (!checkType(lang, &LangType)) return NULL;
+  if (cat) {
+    if (!checkType(cat, &gfTypeType)) return NULL;
+  } else {
+    cat = gf_startCat(self);
+  }
+  return gf_completions(self, lang, cat, tokens);
+}
+
 
 static PyMethodDef pgf_methods[] = {
-  {"parse", (PyCFunction)parse, METH_VARARGS|METH_KEYWORDS,"Parse a string."},
+  {"parse", (PyCFunction)parse, METH_VARARGS|METH_KEYWORDS, "Parse a string."},
   {"lin", (PyCFunction)linearize, METH_VARARGS,"Linearize tree."},
   {"lang_code", (PyCFunction)languageCode, METH_VARARGS,"Get the language code."},
   {"print_name", (PyCFunction)printName, METH_VARARGS,"Get the print name for a id."},
@@ -166,6 +184,7 @@ static PyMethodDef pgf_methods[] = {
   {"functions", (PyCFunction)gf_functions, METH_NOARGS,"Get all functions."},
   {"abstract", (PyCFunction)abstractName, METH_NOARGS,"Get the module abstract name."},
   {"languages", (PyCFunction)gf_languages, METH_NOARGS,"Get the module languages."},
+  {"complete", (PyCFunction)completions, METH_VARARGS|METH_KEYWORDS, "Get completions for tokens."},
   {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
@@ -281,12 +300,17 @@ initgf(void)
 	if (PyType_Ready(&t) < 0) return;
 	
         READYTYPE(CIdType, CId_repr, CId_dealloc)
+	
 	PGFType.tp_methods = pgf_methods;
 	READYTYPE(PGFType, pgf_repr, PGF_dealloc)
+	
 	READYTYPE(LangType, lang_repr, Lang_dealloc)
+	
 	READYTYPE(gfTypeType, gfType_repr, gfType_dealloc)
-        ExprType.tp_methods = expr_methods;
+        
+	ExprType.tp_methods = expr_methods;
 	READYTYPE(ExprType, expr_repr, expr_dealloc)
+	
 	TreeType.tp_methods = expr_methods; // Tree == Expr ?
 	READYTYPE(TreeType, tree_repr, Tree_dealloc)	
 
@@ -311,4 +335,5 @@ PyModule_AddObject(m, "gf", (PyObject *)&t);
 /* List utilities to be imported by FFI */
 
 inline PyObject* newList() { return  PyList_New(0); }
+inline PyObject* newString(const char *s) { return  PyString_FromString(s); }
 inline void append(PyObject* l, PyObject* ob) { PyList_Append(l, ob); }

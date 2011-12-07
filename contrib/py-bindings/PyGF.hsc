@@ -1,7 +1,9 @@
 {-# LANGUAGE ForeignFunctionInterface #-} 
--- GF Python bindings                                                                                                                                        -- Jordi Saludes, upc.edu 2010
+--
+-- GF Python bindings
 -- Jordi Saludes, upc.edu 2010
 --
+
 module PyGF where
 
 import PGF
@@ -9,6 +11,8 @@ import Foreign
 import CString
 import Foreign.C.Types
 import Control.Monad
+import Data.Map (keys, (!))
+import Data.Char (isSpace)
 
 #include "pygf.h"
 
@@ -72,6 +76,7 @@ instance Storable Tree where
       sp <- (#peek PyGF, sp) p
       deRefStablePtr sp
 -}
+
 
 foreign export ccall gf_freePGF :: Ptr PGF -> IO ()
 foreign export ccall gf_freeType :: Ptr Type -> IO ()
@@ -141,6 +146,18 @@ listToPy mk ls = do
           poke pl l
           pyl << pl
        
+
+listToPyStrings :: [String] -> IO (Ptr ())
+listToPyStrings ss = do
+     pyls <- pyList
+     mapM_ (mpoke pyls) ss
+     return pyls
+  where mpoke pyl s = do
+  	      cs <- newCString s
+	      pcs <- pyString cs
+	      pyl << pcs
+
+
 -- foreign export ccall "gf_freeArray" free :: Ptr a -> IO ()
 
               
@@ -256,6 +273,29 @@ gf_functiontype ppgf pcid = do
         _      -> return nullPtr
 
 
+foreign export ccall gf_completions :: Ptr PGF -> Ptr Language -> Ptr Type -> CString -> IO (Ptr ())
+gf_completions ppgf plang pcat ctoks = do
+	pgf  <- peek ppgf
+	lang <- peek plang
+	cat  <- peek pcat
+	toks <- peekCString ctoks
+	let (rpre,rs) = break isSpace (reverse toks)
+	    pre = reverse rpre
+	    ws = words (reverse rs)
+	    state0 = initState pgf lang cat
+	    completions =
+	    		case loop state0 ws of
+	    		     Nothing    -> []
+			     Just state -> keys $ getCompletions state pre
+	listToPyStrings completions
+   where
+        loop ps []     = Just ps
+        loop ps (w:ws) =
+            case nextState ps (simpleParseInput w) of
+                Left _   -> Nothing
+                Right ps -> loop ps ws
+ 	
+	
 foreign import ccall "newLang" pyLang :: IO (Ptr Language) 
 foreign import ccall "newPGF" pyPGF :: IO (Ptr PGF) 
 foreign import ccall "newTree" pyTree :: IO (Ptr Tree) 
@@ -263,4 +303,5 @@ foreign import ccall "newgfType" pyType :: IO (Ptr Type)
 foreign import ccall "newCId" pyCId :: IO (Ptr CId) 
 foreign import ccall "newExpr" pyExpr :: IO (Ptr Expr) 
 foreign import ccall "newList" pyList :: IO (Ptr ()) 
+foreign import ccall "newString" pyString :: CString -> IO (Ptr ())
 foreign import ccall "append" (<<) :: Ptr () -> Ptr a -> IO ()

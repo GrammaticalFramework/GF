@@ -7,7 +7,6 @@
 import gf
 import unittest
 
-
 samples = [
 	(['Odd', ['Number', 89]],
 	 {'eng': "is 89 odd",
@@ -93,7 +92,7 @@ class TestParsing(unittest.TestCase):
 		l = gf.read_language(self.lang)
 		for abs,cnc in self.lexed:
 			rabs = exp2str(abs)
-			ps = pgf.parse(cnc['eng'], l)
+			ps = pgf.parse(l, cnc['eng'])
 			self.failUnless(ps)
 			pt = rmprefix(ps[0])
 			self.assertEqual(pt,rabs)
@@ -108,7 +107,7 @@ class TestLinearize(unittest.TestCase):
 	def test_Linearize(self):
 		l = self.lang
 		for abs,cnc in self.samples:
-			ts = self.pgf.parse(cnc['eng'], l)
+			ts = self.pgf.parse(l, cnc['eng'])
 			self.assertEqual(cnc['eng'],self.pgf.lin(l,ts[0]))
 
 class TestTranslate(unittest.TestCase):
@@ -122,7 +121,7 @@ class TestTranslate(unittest.TestCase):
 			for i,l in self.langs:
 				for j,m in self.langs:
 					if i==j: continue
-					parsed = self.pgf.parse(cnc[i],l)
+					parsed = self.pgf.parse(l, cnc[i])
 					assert len(parsed) == 1
 					lin = self.pgf.lin(m,parsed[0])
 					self.assertEqual(lin,cnc[j])
@@ -146,7 +145,7 @@ class TestUnapplyExpr(unittest.TestCase):
 		lg = 'eng'
 		lang = self.langs[lg]
 		for abs,cnc in self.samples:
-			parsed = self.pgf.parse(cnc[lg],lang)
+			parsed = self.pgf.parse(lang, cnc[lg])
 			uparsed = self.deep_unapp(parsed[0])
 			self.assertEqual(abs,uparsed)
 
@@ -154,7 +153,7 @@ class TestUnapplyExpr(unittest.TestCase):
 		lg = 'eng'
 		lang = self.langs[lg]
 		cnc = self.samples[0][1]
-		parsed = self.pgf.parse(cnc[lg],lang)
+		parsed = self.pgf.parse(lang, cnc[lg])
 		exp = parsed[0]
 		for t in 'Question Object Int'.split():
 			self.assertEqual(`exp.infer(self.pgf)`, t)
@@ -162,6 +161,27 @@ class TestUnapplyExpr(unittest.TestCase):
 			if type(uexp) != type(2) and type(uexp) != type('2'):
 				exp = uexp[1]
 
+
+class TestComplete(unittest.TestCase):
+    def setUp(self):
+        self.lexed = samples
+	self.pgf = gf.read_pgf('Query.pgf')
+	self.langs = dict([(lang2iso(l),l) for l in self.pgf.languages()])
+
+    def test_complete(self):
+        for (_,d) in self.lexed:
+            for l,text in d.items():
+                lang = self.langs[l]
+		for k in range(len(text)):
+                    if text[k].isdigit() or text[k-1].isdigit(): # No completion for integer literals
+                         continue
+		    comps = self.pgf.complete(lang,text[:k])
+		    self.assertNotEqual(comps, [],
+					msg="while completing '%s^%s'" % (text[:k],text[k:]))
+
+		    self.assertTrue(any(w in text for w in comps),
+				    msg="None of %s is in '%s'" % (comps,text))
+					
 
 if __name__ == '__main__':
 	unittest.main()
