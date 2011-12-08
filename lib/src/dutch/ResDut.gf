@@ -224,7 +224,7 @@ resource ResDut = ParamX ** open Prelude in {
     
     -- For regular verbs with past tense 'd'
     d_regVerb : (_,_ :Str) -> Verb = \geeuwen,geeuw ->
-    	let stem = mkStem geeuwen
+    	let stem = geeuw --- mkStem geeuwen
     	in
     	mkVerb stem (stem + "t") geeuwen 
     	  (stem + "de") (stem + "de") (stem + "den") 

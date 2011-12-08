@@ -750,7 +750,7 @@ mkUtt everything_NP
     everywhere_Adv : Adv 
 everywhere_Adv
     few_Det : Det 
-mkUtt (mkNP few_Det women_N)
+mkUtt (mkNP few_Det woman_N)
     for_Prep : Prep 
 mkAdv for_Prep it_NP
     from_Prep : Prep 

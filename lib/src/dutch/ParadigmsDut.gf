@@ -116,6 +116,7 @@ oper
 
   mkV : overload {
     mkV : (aaien : Str) -> V ;  -- regular verb
+    mkV : (aaien,aait : Str) -> V ;  -- regular verb with third person sg pres (giving stem)
     mkV : (breken,brak,gebroken : Str) -> V ; -- theme of irregular verb
     mkV : (breken,brak,braken,gebroken : Str) -> V ; -- also past plural irregular
     mkV : (aai,aait,aaien,aaide,aaide,aaiden,geaaid : Str) -> V ; -- worst-case verb
@@ -216,6 +217,8 @@ oper
   mkV = overload {
     mkV : (aaien : Str) -> V = 
       \s -> lin V (v2vv (regVerb s)) ;
+    mkV : (aaien, aait : Str) -> V = 
+      \s,t -> lin V (v2vv (smartVerb s (init t))) ;
     mkV : (breken,brak,gebroken : Str) -> V = 
       \a,b,c -> lin V (v2vv (irregVerb a b c)) ;
     mkV : (breken,brak,braken,gebroken : Str) -> V = 

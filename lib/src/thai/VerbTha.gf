@@ -7,16 +7,16 @@ concrete VerbTha of Verb = CatTha ** open ResTha, StringsTha, Prelude in {
 
     SlashV2a v = predV v ** {c2 = v.c2} ;
 
-    Slash2V3 v np = insertObj np (predV v) ** {c2 = v.c3} ;
-    Slash3V3 v np = insertObj np (predV v) ** {c2 = v.c2} ;
+    Slash2V3 v np = insertObject <thbind v.c2 np.s : Str> (predV v) ** {c2 = v.c3} ;
+    Slash3V3 v np = insertExtra  <thbind v.c3 np.s : Str> (predV v) ** {c2 = v.c2} ;
 
     SlashV2A v ap = 
-      insertExtra <thbind v.c2 ap.s : Str> (predV v) ** {c2 = v.c2} ;
+      insertExtra <thbind pen_s v.c3 ap.s : Str> (predV v) ** {c2 = v.c2} ; --- pen?
 
     SlashV2V v vp = ---- looks too simple compared with ComplVV
-      insertExtra <thbind <v.c2 : Str> <infVP vp : Str> : Str> (predV v) ** {c2 = v.c2} ;
+      insertExtra <thbind <v.c3 : Str> <infVP vp : Str> : Str> (predV v) ** {c2 = v.c2} ;
     SlashV2S v s  = 
-      insertExtra conjThat (predV v) ** {c2 = v.c2} ;
+      insertExtra <thbind conjThat s.s : Str> (predV v) ** {c2 = v.c2} ;
     SlashV2Q v q  = 
       insertExtra (q.s ! QIndir) (predV v) ** {c2 = v.c2} ;
 
@@ -57,7 +57,7 @@ concrete VerbTha of Verb = CatTha ** open ResTha, StringsTha, Prelude in {
     
     ReflVP vp = insertObj (mkNP (thbind vp.c2 reflPron)) vp ;
 
-    PassV2 v = {s = \\p => thbind thuuk_s ((predV v).s ! p) ; e = []} ;
+    PassV2 v = {s = \\p => thbind (polStr may_s p) thuuk_s ; e = thbind v.s1 v.s2} ; -- to put agent before verb; --- the place of neg?
 
     CompAP ap = {s = \\p => thbind (polStr may_s p) ap.s} ;
 

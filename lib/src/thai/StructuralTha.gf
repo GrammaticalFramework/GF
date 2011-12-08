@@ -6,7 +6,7 @@ concrete StructuralTha of Structural = CatTha **
   lin
   above_Prep = ss (thword "ข้าง" "บน") ;
   after_Prep = ss (thword "หลัง" "จาก") ;
-  all_Predet = ss (thword "ทั้ง" "หมด") ;
+  all_Predet = {s1 = thword "ทั้ง" "หมด" ; s2 = []} ;
   almost_AdA, almost_AdN = ss (thword "เกิ" "อบ") ;
   although_Subj = ss "ถืง" ;
   always_AdV = ss (thword "เส" "มอ") ; --- pronunciation
@@ -51,16 +51,16 @@ concrete StructuralTha of Structural = CatTha **
   less_CAdv = {s = "น้อย" ; p = "กว่า"} ;
   many_Det = quantDet "หลาย" ;
   more_CAdv = {s = "มาก" ; p = "กว่า"} ;
-  most_Predet = ss (thword "มาก" "ที่" "สุด") ;
+  most_Predet = {s1 = thword "มาก" "ที่" "สุด" ; s2 = []} ;
   much_Det = quantDet "หลาย" ; ---- always?
   must_VV = {s = tog_s ; typ = VVPre} ;
   no_Quant = quantDet (thword "ไม่" "มี") ;
   no_Utt = ss may_s ;
   nobody_NP = mkNP (thword "ไม่" "มี" "ใคร") ;
-  not_Predet = ss may_s ; ----
+  not_Predet = {s1 = may_s ; s2 = []} ; ----
   nothing_NP = mkNP "เปล่า" ;
   on_Prep = ss "บน" ;
-  only_Predet = ss (thword "เท่า" "นั้น") ;
+  only_Predet = {s1 = [] ; s2 = thword "เท่า" "นั้น"} ;
   or_Conj = {s1 = [] ; s2 = "หริอ"} ;
   otherwise_PConj = ss (thword "ไม่" "อย่าง" "นั้น") ;
   part_Prep = ss "" ; ----
