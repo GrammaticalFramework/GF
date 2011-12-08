@@ -26,7 +26,7 @@ lin
   beautiful_A = mkA "สวย" ;
   become_VA = mkV (thword "กลาย" "เป็น") ; -- pen
   beer_N = mkN biar_s kew_s ; 
-  beg_V2V = regV "ขอ" ** {c2 = []} ;
+  beg_V2V = regV "ขอ" ** {c2 = [] ; c3 = "ให้"} ; --- hay as prep of VP
   belly_N = mkN (thword "พุง") ;
   big_A = mkA (thword "ใหญ่") ;
   bike_N = mkN (thword "จักร" "ยาน") "คัน" ;
@@ -35,7 +35,7 @@ lin
   black_A = mkA (thword "ดำ") ;
   blood_N = mkN (thword "เลือด") ;
   blow_V = mkV (thword "พัด") ;
-  blue_A = mkA (thword "สี" "น้ำ" "เงิน") ;
+  blue_A = mkA (thword "น้ำ" "เงิน") ; --- (thword "สี" "น้ำ" "เงิน") ;
   boat_N = mkN (thword "เรือ") "ลำ"  ;
   bone_N = mkN (thword "กระ" "ดูก") ;
   book_N = mkN (thword nag_s svv_s) lem_s ;
@@ -137,7 +137,7 @@ lin
   good_A = mkA "ดี" ;
   grammar_N = mkN (thword "ไวย" "กรณ์") ; ----?
   grass_N = mkN "หญ้า" ;
-  green_A = mkA (thword "สี" "เขียว") ;
+  green_A = mkA "เขียว" ; --- (thword "สี" "เขียว") ;
   guts_N = mkN (thword "ไส้") ;
   hair_N = mkN (thword "ผม") ;
   hand_N = mkN (thword "มือ") ;
@@ -214,7 +214,7 @@ lin
   old_A = mkA (thword "แก่") ;
   open_V2 = mkV2 (mkV "เปิด") ;
   other_A = mkA "อื่น" ;
-  paint_V2A = mkV2A (regV "ทา") [] ;
+  paint_V2A = mkV2A (regV "ทา") [] "สี" ;
   paper_N = mkN (thword "กระ" "ดาษ") ; ----?
   paris_PN = ss "ปารีส" ;
   peace_N = mkN (thword "สัน" "ติ" "ภาพ"); ----?
@@ -237,7 +237,7 @@ lin
   ready_A = mkA "พร้อม" ;
   reason_N = verbalN "เหตู" ;
   read_V2 = mkV2 "อ่าน" ;
-  red_A = mkA (thword "สี" "แดง") ;
+  red_A = mkA "แดง" ; --- (thword "สี" "แดง") ;
   religion_N = mkN (thword "ศาส" "นา") ; ----?
   restaurant_N = placeN (thword "ร้าน" "อา" "หาร") ;
   right_Ord = ss "ขวา" ;
@@ -264,7 +264,7 @@ lin
   seed_N = mkN (thword "เม็ด") ;
   seek_V2 = mkV2 "หา" ;
   sell_V3 = mkV3 "ขาย" ;
-  send_V3 = mkV3 (mkV "ส่ง" "ให้") ;
+  send_V3 = mkV3 (mkV "ส่ง") [] (thword "ให้" "กับ") ; --- hai kab as prep
   sew_V = mkV (thword "เย็บ") ;
   sharp_A = mkA (thword "คม") ;
   sheep_N = animalN "แกะ" ;
@@ -356,7 +356,7 @@ lin
   worm_N = animalN (thword "หนอน") ;
   write_V2 = mkV2 "เขียน" ;
   year_N = mkN (thword "ปี") ;
-  yellow_A = mkA (thword "สี" "เหลือง") ;
+  yellow_A = mkA "เหลือง" ; ---- (thword "สี" "เหลือง") ;
   young_A = mkA "รุ่น" ;
 
 oper 

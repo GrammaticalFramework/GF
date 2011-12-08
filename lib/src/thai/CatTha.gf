@@ -44,7 +44,8 @@ concrete CatTha of Cat = CommonX ** open ResTha, Prelude in {
     CN = ResTha.Noun ;
     NP, Pron = ResTha.NP ;
     Det, Quant = ResTha.Determiner ; 
-    Predet, Ord = {s : Str} ;
+    Predet = {s1,s2 : Str} ;
+    Ord = {s : Str} ;
     Num = {s : Str ; hasC : Bool} ;
 
 -- Numeral
@@ -60,8 +61,8 @@ concrete CatTha of Cat = CommonX ** open ResTha, Prelude in {
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ; 
-    V2, V2A, V2Q, V2S, V2V = Verb ** {c2 : Str} ;
-    V3 = Verb ** {c2, c3 : Str} ;
+    V2, V2Q, V2S = Verb ** {c2 : Str} ;
+    V3, V2A, V2V = Verb ** {c2, c3 : Str} ;
     VV = VVerb ;
 
     A = ResTha.Adj ;

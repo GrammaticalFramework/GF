@@ -155,12 +155,12 @@ concrete WordsTha of Words = SentencesTha **
     HowMuchCost item = mkQS (mkQCl (mkIComp how8much_IAdv) item) ;
     ItCost item price = mkCl item (mkV2 (R.thword "เป็น" "รา" "คา")) price ;
 
-    PropOpen p = mkCl p.name open_Adv ;
-    PropClosed p = mkCl p.name closed_Adv ;
-    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_Adv) d) ; 
-    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_Adv) d) ; 
-    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_Adv) d.habitual) ; 
-    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_Adv) d.habitual) ; 
+    PropOpen p = mkCl p.name open_A ;
+    PropClosed p = mkCl p.name closed_A ;
+    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_A) d) ; 
+    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_A) d) ; 
+    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_A) d.habitual) ; 
+    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
 
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
@@ -244,8 +244,8 @@ concrete WordsTha of Words = SentencesTha **
     mkPlace : N -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p -> 
       mkCNPlace (mkCN p) at_Prep noPrep ;
 
-    open_Adv = P.mkAdv "เปิด" ;
-    closed_Adv = P.mkAdv "ปิด" ;
+    open_A = P.mkA "เปิด" ;
+    closed_A = P.mkA "ปิด" ;
 
     xOf : Str -> NPPerson -> NPPerson = \f,p -> 
       {name = mkNP the_Det (mkCN (personN f) (SyntaxTha.mkAdv possess_Prep p.name)) ; 

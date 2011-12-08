@@ -1,5 +1,5 @@
 DisambPhrasebookEng :
-PhrasebookBul : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
+PhrasebookBul : Noodles
 PhrasebookCat : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade MMust Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
 PhrasebookDan : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
 PhrasebookDut : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur

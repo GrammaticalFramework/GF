@@ -44,7 +44,7 @@ lin
   married_A2 = mkA2 (mkA "getrouwd") (mkPrep "met") ;
   mother_N2 = mkN2 (mkN "moeder") ;
   now_Adv = mkAdv "nu" ;
-  paint_V2A = mkV2A (mkV "schilderen") noPrep ;
+  paint_V2A = mkV2A (mkV "schilderen" "schildert") noPrep ;
   paris_PN = mkPN "Parijs" ;
   red_A = mkA "rood" ;
   say_VS = mkVS zeggen_V ;
@@ -196,7 +196,7 @@ laugh_V = lachen_V ;
 leaf_N = mkN "blad" neuter ;
 learn_V2 = mkV2 "leren" ;
 leather_N = mkN "leer" neuter ;
-leave_V2 = mkV2 laten_V ;
+leave_V2 = mkV2 (mkV "verlaten" "verliet" "verlieten" "verlaten") ;
 leg_N = mkN "been" neuter ;
 lie_V = liggen_V ;
 like_V2 = mkV2 houden_V van_Prep ;

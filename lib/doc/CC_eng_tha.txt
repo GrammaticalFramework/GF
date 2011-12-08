@@ -65,11 +65,11 @@ she sleeps
 
 mkUtt (mkQS pastTense negativePol (mkQCl who_IP sleep_V))   
 who didn't sleep
-ไครไม่นอนหลับ -- neg place not preferred
+ใครไม่นอนหลับ -- neg place not preferred
 
 mkUtt (mkQCl who_IP sleep_V) 
 who sleeps
-ไครนอนหลับ
+ใครนอนหลับ
 
 mkUtt pluralImpForm negativePol (mkImp (mkVP man_N))
 don't be men
@@ -217,7 +217,7 @@ she answers to him that we sleep
 
 mkCl she_NP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V))
 she asks him who sleeps
-หล่อนถามเขาว่าไครนอนหลับ
+หล่อนถามเขาว่าใครนอนหลับ
 
 mkCl she_NP beg_V2V he_NP (mkVP sleep_V)
 she begs him to sleep
@@ -854,7 +854,7 @@ it is good that she sleeps
 
 mkCl (mkVP (mkAP (mkAP uncertain_A) (mkQS (mkQCl who_IP sleep_V))))
 it is uncertain who sleeps
-ลังเลใจว่าไครนอนหลับ
+ลังเลใจว่าใครนอนหลับ
 
 mkCl she_NP (mkAP (mkAP ready_A) (mkVP sleep_V))
 she is ready to sleep

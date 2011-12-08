@@ -76,14 +76,14 @@ oper
   mkV2Q : V -> Str -> V2Q =
     \v,p -> lin V2Q (v ** {c2 = p}) ; 
 
-  mkV2V : V -> Str -> V2V =
-    \v,p -> lin V2V (v ** {c2 = p}) ; 
+  mkV2V : V -> Str -> Str -> V2V =
+    \v,p,q -> lin V2V (v ** {c2 = p ; c3 = q}) ; 
 
   mkV2S : V -> Str -> V2S =
     \v,p -> lin V2S (v ** {c2 = p}) ; 
 
-  mkV2A : V -> Str -> V2A =
-    \v,p -> lin V2A (v ** {c2 = p}) ; 
+  mkV2A : V -> Str -> Str -> V2A =
+    \v,p,q -> lin V2A (v ** {c2 = p ; c3 = q}) ; 
 
   mkAdv : Str -> Adv = 
     \s -> lin Adv (ss s) ;

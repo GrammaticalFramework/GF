@@ -11,7 +11,7 @@ concrete NounTha of Noun = CatTha ** open StringsTha, ResTha, Prelude in {
 
     DetNP det = mkNP (thbind det.s1 det.s2) ;
 
-    PredetNP pred np = thbind pred np ;
+    PredetNP pred np = mkNP (thbind pred.s1 np.s pred.s2) ;
 
     PPartNP np v2 = thbind np (ss ((predV v2).s ! Pos)) ; ---- ??
 
