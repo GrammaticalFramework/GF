@@ -175,7 +175,7 @@ completions(PGF *self, PyObject *args, PyObject *kws)
 
 static PyMethodDef pgf_methods[] = {
   {"parse", (PyCFunction)parse, METH_VARARGS|METH_KEYWORDS, "Parse a string."},
-  {"lin", (PyCFunction)linearize, METH_VARARGS,"Linearize tree."},
+  {"linearize", (PyCFunction)linearize, METH_VARARGS,"Linearize tree."},
   {"lang_code", (PyCFunction)languageCode, METH_VARARGS,"Get the language code."},
   {"print_name", (PyCFunction)printName, METH_VARARGS,"Get the print name for a id."},
   {"fun_type", (PyCFunction)functiontype, METH_VARARGS,"Get the type of a fun expression."},

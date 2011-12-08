@@ -46,7 +46,7 @@ Notice that parsing returns a list of gf trees.
 Let's save it and linearize it in Spanish:
 
 >>> t = pgf.parse(eng, "is 42 prime")
->>> pgf.lin(spa, t[0])
+>>> pgf.linearize(spa, t[0])
 '42 es primo'
 
 (which is not, but there is a '?' lacking at the end, remember?)
