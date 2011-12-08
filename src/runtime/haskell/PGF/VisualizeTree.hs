@@ -56,13 +56,12 @@ graphvizAbstractTree pgf (funs,cats) = render . tree2graph
 
     getAbs xs (EAbs _ x e) = getAbs (x:xs) e
     getAbs xs (ETyped e _) = getAbs xs e
-    getAbs xs (EImplArg e) = getAbs xs e
     getAbs xs e            = (xs,e)
     
-    getApp (EApp x y)   es = getApp x (y:es)
-    getApp (ETyped e _) es = getApp e es
-    getApp (EImplArg e) es = getApp e es
-    getApp e            es = (e,es)
+    getApp (EApp x (EImplArg y)) es = getApp x es
+    getApp (EApp x y)            es = getApp x (y:es)
+    getApp (ETyped e _)          es = getApp e es
+    getApp e                     es = (e,es)
 
     getLbl scope (EFun f)     = let fun = if funs then ppCId f else empty
                                     cat = if cats then ppCId (lookValCat (abstract pgf) f) else empty
