@@ -21,7 +21,11 @@ compdemo:
 
 linkdemo:
 #	$(compile) -link Eng Bul Cat Dan Dut Fin Fre Ger Ita Nor Pol Rus Spa Swe Tha Urd DisambPhrasebookEng 
-	$(compile) -link Eng Bul Cat Dan Dut Fin Fre Ger Ita Nor Pol Ron Rus Spa Swe Tha Urd DisambPhrasebookEng 
+	$(compile) -link Eng Bul Cat Dan Dut Fin Fre Ger Ita Nor Pol Ron Rus Spa Swe Tha Urd DisambPhrasebookE
+
+linkdemothb:
+#	$(compile) -link Eng Bul Cat Dan Dut Fin Fre Ger Ita Nor Pol Rus Spa Swe Tha Urd DisambPhrasebookEng 
+	$(compile) -link Eng Bul Cat Dan Dut Fin Fre Ger Ita Nor Pol Ron Rus Spa Swe Tha Thb Urd DisambPhrasebookEng 
 
 #separate, because slow...
 fin:
