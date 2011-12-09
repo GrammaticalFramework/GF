@@ -152,7 +152,8 @@ getSyllable s = case s of
    isLow c = lookThai Low ccl c == Low
 
 isCluster b c = 
-      (pronTha c == "r" && elem (pronTha b) ["k","kh","p","ph","t"])
+      (pronTha c == "r"  && elem (pronTha b) ["k","kh","p","ph","t"])
+   || (pronTha c == "ri" && elem (pronTha b) ["k","kh","p","ph","t"])
    || (pronTha c == "l" && elem (pronTha b) ["k","kh","p","ph"])
    || (pronTha c == "w" && elem (pronTha b) ["k","kh"])
 
@@ -340,8 +341,8 @@ allThaiChars = [
   TC {dat = CoL, uni = 3650, tra = "o:", ccl = Low, liv = True, pro = "oo", enp = "oo"},
   TC {dat = CaH, uni = 3651, tra = "a%", ccl = Low, liv = True, pro = "ay", enp = "ay"},
   TC {dat = CaE, uni = 3652, tra = "a&", ccl = Low, liv = True, pro = "ay", enp = "ay"},
-  TC {dat = CL,  uni = 3653, tra = "L",  ccl = Low, liv = True, pro = "l", enp = "n"},
-  TC {dat = CR,  uni = 3654, tra = "R",  ccl = Low, liv = True, pro = "r", enp = "n"},
+  TC {dat = CL,  uni = 3653, tra = "L",  ccl = Low, liv = True, pro = "li", enp = "n"},
+  TC {dat = CR,  uni = 3654, tra = "R",  ccl = Low, liv = True, pro = "ri", enp = "n"},
   TC {dat = CS,  uni = 3655, tra = "S",  ccl = Low, liv = True, pro = "", enp = ""},
   TC {dat = CT1, uni = 3656, tra = "T1", ccl = Low, liv = True, pro = "", enp = ""},
   TC {dat = CT2, uni = 3657, tra = "T2", ccl = Low, liv = True, pro = "", enp = ""},

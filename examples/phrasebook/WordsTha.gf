@@ -185,13 +185,13 @@ concrete WordsTha of Words = SentencesTha **
 
 -- week days
 
-    Monday = mkDay (R.thword "วัน" "จัน" "ทร์") ;
+    Monday = mkDay (R.thword "วัน" "จั" "นท" "ร์") ;
     Tuesday = mkDay (R.thword "วัน" "อัง" "คาร") ;
     Wednesday = mkDay (R.thword "วัน" "พุธ") ;
     Thursday = mkDay (R.thword "วัน" "พฤ" "หัส" "บดี") ;
-    Friday = mkDay (R.thword "วัน" "ศุก" "ร์") ;
-    Saturday = mkDay (R.thword "วัน" "เสา" "ร์") ;
-    Sunday = mkDay (R.thword "วัน" "อา" "ทิต" "ย์") ;
+    Friday = mkDay (R.thword "วัน" "ศุกร์") ;
+    Saturday = mkDay (R.thword "วัน" "เสาร์") ;
+    Sunday = mkDay (R.thword "วัน" "อา" "ทิตย์") ;
  
     Tomorrow = P.mkAdv (R.thword "วัน" "พรุ่ง" "นี้") ;
 
@@ -209,16 +209,18 @@ concrete WordsTha of Words = SentencesTha **
 
 -- transports
 
-    HowFar place = mkQS (mkQCl howFar.how (mkNP place.name howFar.far)) ;
+    HowFar place = mkQS (mkQCl howFar.howfar place.name) ; ---- (mkNP place.name howFar.far)) ;
 
     HowFarFrom x y = 
-      mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far) (SyntaxTha.mkAdv from_Prep x.name))) ;
+      mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far) (lin AP (R.thbind from_Prep x.name)))) ; --- no yuu
 
     HowFarFromBy x y t = 
       mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far) 
-        (SyntaxTha.mkAdv from_Prep (mkNP x.name t)))) ;
+        (lin AP (R.thbind from_Prep (mkNP x.name t))))) ;
+--      mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far) 
+--        (SyntaxTha.mkAdv from_Prep (mkNP x.name t)))) ;
 
-    HowFarBy y t = mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far) t)) ;
+    HowFarBy y t = mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far) <t : AP>)) ;
  
     WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
@@ -261,8 +263,8 @@ concrete WordsTha of Words = SentencesTha **
 
     mkCurrency : Str -> CN = \s -> mkCN (mkN [] s) ; ---- just a classifier
     
-    howFar : {far : Adv ; how : IAdv} = {
-      far = lin Adv (ss ("ไกล" + "เท่า" + "ไร")) ; how = lin IAdv (ss [])
+    howFar : {howfar : IComp ; far : Adv ; how : IAdv} = {  --- to avoid yuu
+      howfar = lin IComp (ss ("ไกล" + "เท่า" + "ไร")) ; far = lin Adv (ss ("ไกล" + "เท่า" + "ไร")) ; how = lin IAdv (ss [])
       } ;
 
     at_Prep = mkPrep "ที่" ;
