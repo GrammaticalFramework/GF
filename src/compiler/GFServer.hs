@@ -4,8 +4,8 @@ import Data.List(partition)
 import qualified Data.Map as M
 import Control.Monad(when)
 import System.Random(randomRIO)
-import System.IO(stdout,stderr)
-import System.IO.Error(try,ioError)
+import System.IO(stdout,stderr,hPutStrLn)
+import System.IO.Error(try,ioError,isAlreadyExistsError)
 import System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
                         setCurrentDirectory,getCurrentDirectory,
                         getDirectoryContents,removeFile,removeDirectory)
@@ -14,12 +14,14 @@ import System.FilePath(takeExtension,takeFileName,takeDirectory,(</>))
 import System.Posix.Files(getSymbolicLinkStatus,isSymbolicLink,removeLink,
                           createSymbolicLink)
 #endif
-import Control.Concurrent.MVar(newMVar,modifyMVar)
-import Network.URI(URI(..))
+import Control.Concurrent(newMVar,modifyMVar,forkIO)
+import Network.URI(URI(..),parseURI)
 import Network.Shed.Httpd(initServer,Request(..),Response(..),queryToArguments,
                           noCache)
+--import qualified Network.FastCGI as FCGI -- from hackage direct-fastcgi
+--import qualified Data.ByteString.Char8 as BS(pack,unpack,length)
 import Network.CGI(handleErrors,liftIO)
-import FastCGIUtils(outputJSONP,handleCGIErrors)
+import FastCGIUtils(outputJSONP,handleCGIErrors,stderrToFile)
 import System.IO.Silently(hCapture)
 import System.Process(readProcessWithExitCode)
 import System.Exit(ExitCode(..))
@@ -32,22 +34,61 @@ import Paths_gf(getDataDir,version)
 import GF.Infra.BuildInfo (buildInfo)
 import RunHTTP(cgiHandler)
 
--- * HTTP server
+--logFile :: FilePath
+--logFile = "pgf-error.log"
+
+debug s = liftIO (logPutStrLn s)
+
+-- | Combined FastCGI and HTTP server
 server execute1 state0 = 
-  do state <- newMVar M.empty
+  do --stderrToFile logFile
+     state <- newMVar M.empty
      cache <- PS.newPGFCache
      datadir <- getDataDir
      let root = datadir</>"www"
-         port = 41296
-     putStrLn $ "This is GF version "++showVersion version++"."
-     putStrLn buildInfo
-     putStrLn $ "Document root = "++root
-     putStrLn $ "Starting HTTP server, open http://localhost:"
-                ++show port++"/ in your web browser."
+     debug $ "document root="++root
      setCurrentDirectory root
-     initServer port (modifyMVar state . handle state0 cache execute1)
+--   FCGI.acceptLoop forkIO (handle_fcgi execute1 state0 state cache)
+     -- if acceptLoop returns, then GF was not invoked as a FastCGI script
+     http_server execute1 state0 state cache root
+  where
+    -- | HTTP server
+    http_server execute1 state0 state cache root =
+      do putStrLn $ "This is GF version "++showVersion version++"."
+         putStrLn buildInfo
+         putStrLn $ "Document root = "++root
+         putStrLn $ "Starting HTTP server, open http://localhost:"
+                    ++show port++"/ in your web browser."
+         initServer port (modifyMVar state . handle state0 cache execute1)
 
--- * HTTP request handler
+    port = 41296
+{-
+-- | FastCGI request handler
+handle_fcgi execute1 state0 stateM cache =
+  do Just method <- FCGI.getRequestMethod
+     debug $ "request method="++method
+     Just path <- FCGI.getPathInfo
+--   debug $ "path info="++path
+     query <- maybe (return "") return =<< FCGI.getQueryString
+--   debug $ "query string="++query
+     let uri = URI "" Nothing path query ""
+     headers <- fmap (mapFst show) FCGI.getAllRequestHeaders
+     body <- fmap BS.unpack FCGI.fGetContents
+     let req = Request method uri headers body
+--   debug (show req)
+     (output,resp) <- liftIO $ hCapture [stdout] $ modifyMVar stateM $ handle state0 cache execute1 req
+     let Response code headers body = resp
+--   debug output
+     debug $ "    "++show code++" "++show headers
+     FCGI.setResponseStatus code
+     mapM_ (uncurry (FCGI.setResponseHeader . toHeader)) headers
+     let pbody = BS.pack body
+         n = BS.length pbody
+     FCGI.fPut pbody
+     debug $ "done "++show n
+-}
+
+-- | HTTP request handler
 handle state0 cache execute1
        rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) state =
     do let qs = decodeQ $ 
@@ -227,7 +268,7 @@ serveStaticFile' path =
                     else return (resp404 path)
 
 -- * Logging
-logPutStrLn = putStrLn
+logPutStrLn = hPutStrLn stderr
 
 -- * Standard HTTP responses
 ok200        = Response 200 [plainUTF8,noCache] . encodeString
@@ -265,24 +306,42 @@ updateFile path new =
                                 seq (either (const 0) length old) $
                                     writeBinaryFile path new
 
-
 newDirectory =
-  do k <- randomRIO (1,maxBound::Int)
-     let path = "tmp/gfse."++show k
-     b <- try $ createDirectory path
-     case b of
-       Left _ -> newDirectory
-       Right _ -> return ('/':path)
+    do debug "newDirectory"
+       loop 10
+  where
+    loop 0 = fail "Failed to create a new directory"
+    loop n = maybe (loop (n-1)) return =<< once
+
+    once =
+      do k <- randomRIO (1,maxBound::Int)
+         let path = "tmp/gfse."++show k
+         b <- try $ createDirectory path
+         case b of
+           Left err -> do debug (show err) ;
+                          if isAlreadyExistsError err
+                             then return Nothing
+                             else ioError err
+           Right _ -> return (Just ('/':path))
 
 -- | Remove a directory and the files in it, but not recursively
 removeDir dir =
   do files <- filter (`notElem` [".",".."]) `fmap` getDirectoryContents dir
      mapM (removeFile . (dir</>)) files
      removeDirectory dir
+{-
+-- * direct-fastcgi deficiency workaround
 
+--toHeader = FCGI.toHeader -- not exported, unfortuntately
+
+toHeader "Content-Type" = FCGI.HttpContentType -- to avoid duplicate headers
+toHeader s = FCGI.HttpExtensionHeader s -- cheating a bit
+-}
 -- * misc utils
 
 decodeQ qs = [(decode n,decode v)|(n,v)<-qs]
 decode = map decode1
 decode1 '+' = ' ' -- httpd-shed bug workaround
 decode1 c   = c
+
+mapFst f xys = [(f x,y)|(x,y)<-xys]
