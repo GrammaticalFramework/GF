@@ -61,7 +61,7 @@ concrete QuestionRus of Question = CatRus ** open ResRus, Prelude in {
     IdetQuant kakoj pyat = -- okhotnik =
     {s = \\af => 
            kakoj.s ! pyat.n ! af ++
-           pyat.s ! caseAF af ! genAF af ;
+           pyat.s ! genAF af ! animAF af ! caseAF af ;
      n = pyat.n ;
      g = kakoj.g ;
      c = kakoj.c 
