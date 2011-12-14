@@ -317,6 +317,9 @@ oper genAF: AdjForm -> Gender = \af ->
 oper caseAF: AdjForm -> Case = \af ->
    case af of { AdvF => Nom; AFShort _ => Nom; AF c _ _ => c } ;
 
+oper animAF: AdjForm -> Animacy = \af ->
+   case af of { AF _ a _ => a ; _ => Inanimate } ;
+
 -- The Degree parameter should also be more complex, since most Russian
 -- adjectives have two comparative forms: 
 -- attributive (syntactic (compound), declinable) - 

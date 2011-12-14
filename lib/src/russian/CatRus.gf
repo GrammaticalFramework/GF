@@ -65,7 +65,7 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
 
 -- Numeral
 
-    Num, Numeral, Card = {s : Case => Gender => Str ; n : Number} ;
+    Num, Numeral, Card = {s : Gender => Animacy => Case => Str ; n : Number} ;
     Digits = {s : Str ; n : Number} ; ---- 
     
 -- Structural

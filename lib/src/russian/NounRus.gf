@@ -82,7 +82,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
     } ;
 
     DetQuantOrd quant num ord = {
-      s =  \\af => quant.s !af ++ num.s! (caseAF af) ! (genAF af)  ++ ord.s!af ; 
+      s =  \\af => quant.s !af ++ num.s ! (genAF af) ! (animAF af) ! (caseAF af)  ++ ord.s!af ; 
       n = num.n ;
       g = quant.g;
       c = quant.c;
@@ -91,7 +91,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       } ;
 
     DetQuant quant num = {
-      s =  \\af => quant.s !af ++ num.s! (caseAF af) ! (genAF af) ;
+      s =  \\af => quant.s !af ++ num.s ! (genAF af) ! (animAF af) ! (caseAF af);
       n = num.n ;
       g = quant.g;
       c = quant.c;
@@ -149,8 +149,8 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
     PossPron p = {s = \\af => p.s ! mkPronForm (caseAF af) No (Poss (gennum (genAF af) (numAF af) )); c=Nom; g = PNoGen; q = False} ;
 
    NumCard c = c ;
-   NumSg = {s = \\_,_ => [] ; n = Sg} ;
-   NumPl = {s = \\_,_ => [] ; n = Pl} ;
+   NumSg = {s = \\_,_,_ => [] ; n = Sg} ;
+   NumPl = {s = \\_,_,_ => [] ; n = Pl} ;
 
    OrdNumeral numeral = variants {} ; ---- TODO; needed to compile Constructors
    OrdDigits numeral = variants {} ; ---- TODO; needed to compile Constructors
@@ -158,9 +158,9 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
  --  {s = \\ af => (uy_j_EndDecl (numeral.s ! caseAF af ! genAF af)).s!af} ;
 
     NumNumeral n = n ;
-    NumDigits n = {s = \\_,_ => n.s ; n = n.n} ;
+    NumDigits n = {s = \\_,_,_ => n.s ; n = n.n} ;
 
-    AdNum adn num = {s = \\c,n => adn.s ++ num.s!c!n ; n = num.n} ;
+    AdNum adn num = {s = \\c,a,n => adn.s ++ num.s!c!a!n ; n = num.n} ;
 
     OrdSuperl a = {s = a.s!Posit};
 
