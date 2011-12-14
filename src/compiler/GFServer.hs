@@ -40,7 +40,7 @@ import RunHTTP(cgiHandler)
 debug s = liftIO (logPutStrLn s)
 
 -- | Combined FastCGI and HTTP server
-server execute1 state0 = 
+server port execute1 state0 = 
   do --stderrToFile logFile
      state <- newMVar M.empty
      cache <- PS.newPGFCache
@@ -61,7 +61,6 @@ server execute1 state0 =
                     ++show port++"/ in your web browser."
          initServer port (modifyMVar state . handle state0 cache execute1)
 
-    port = 41296
 {-
 -- | FastCGI request handler
 handle_fcgi execute1 state0 stateM cache =

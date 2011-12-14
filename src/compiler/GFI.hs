@@ -69,8 +69,8 @@ mainGFI opts files = do
 shell opts files = loop opts =<< importInEnv emptyGFEnv opts files
 
 #ifdef SERVER_MODE
-mainServerGFI opts0 files =
-    server (execute1 opts) =<< importInEnv emptyGFEnv opts files
+mainServerGFI opts0 port files =
+    server port (execute1 opts) =<< importInEnv emptyGFEnv opts files
   where opts = beQuiet opts0
 #else
 mainServerGFI opts files =
