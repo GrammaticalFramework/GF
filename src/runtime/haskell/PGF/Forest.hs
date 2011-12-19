@@ -121,7 +121,7 @@ getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty dp =
                                  generateForForest (prove dp) e) emptyMetaStore fid
   in if null res
        then Left  (nub err)
-       else Right (nubsort [e | (_,_,e) <- res])
+       else Right (nub [e | (_,_,e) <- res])
   where
     go rec_ scope_ mb_tty_ (PArg hypos fid)
       | fid < totalCats cnc = case mb_tty of
