@@ -133,7 +133,7 @@ oper
 
   viens = mkNumSpec "viens" "pirmais" "vien" "" Sg ;
 
-  mkNum : Str -> Str -> Number -> { s : DForm => CardOrd => Gender => Case => Str } =
+  mkNumReg : Str -> Str -> Number -> { s : DForm => CardOrd => Gender => Case => Str } =
     \pieci,piektais,n -> mkNumSpec pieci piektais (cutStem pieci) (cutStem pieci) n ;
 
   mkNumSpec : Str -> Str -> Str -> Str -> Number -> { s : DForm => CardOrd => Gender => Case => Str } =

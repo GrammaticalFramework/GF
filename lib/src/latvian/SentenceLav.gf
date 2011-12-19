@@ -1,7 +1,6 @@
 --# -path=.:../abstract:../common:../prelude
 
 concrete SentenceLav of Sentence = CatLav ** open
-  Prelude,
   ResLav,
   VerbLav
   in {
@@ -52,7 +51,7 @@ lin
   AdvS a s = { s = NON_EXISTENT } ;
 
 oper
-  mkClause : NP -> VP -> Cl = \np,vp -> lin Cl {
+  mkClause : NP -> CatLav.VP -> Cl = \np,vp -> lin Cl {
     s = \\mood,pol =>
       case mood of {					-- Subject
         -- FIXME: jāčeko valences, reizēm arī īstenības izteiksmē - 'man patīk kaut kas'
@@ -66,7 +65,7 @@ oper
   -- FIXME: quick&dirty - lai kompilētos pret RGL API
   -- Eng: PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp
   -- Ar SC nav iespējams neko saskaņot (sk. Cat.gf un Common.gf)
-  mkClauseSC : SC -> VP -> Cl = \sc,vp -> lin Cl {
+  mkClauseSC : SC -> CatLav.VP -> Cl = \sc,vp -> lin Cl {
     s = \\mood,pol => sc.s ++ buildVerb vp.v mood pol (AgP3 Sg Masc) ++ vp.s2 ! (AgP3 Sg Masc)
   } ;
 

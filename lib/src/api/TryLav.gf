@@ -1,6 +1,6 @@
 --# -path=.:alltenses:prelude:../latvian
 
-resource TryLav = SyntaxLav-[mkAdN], LexiconLav, ParadigmsLav - [mkAdv,mkAdN,mkOrd,mkQuant] **
+resource TryLav = SyntaxLav-[mkAdN], LexiconLav, ParadigmsLav-[mkAdv,mkAdN,mkOrd,mkQuant] **
   open (P = ParadigmsLav) in {
 
 oper
@@ -14,9 +14,9 @@ oper
     mkAdN : Str -> AdN = P.mkAdN ;
   } ;
 
-  mkOrd = overload SyntaxLav {
-    mkOrd : Str -> Ord = P.mkOrd ;
-  } ;
+  --mkOrd = overload SyntaxLav {
+  --  mkOrd : Str -> Ord = P.mkOrd ;
+  --} ;
 
 
 }
