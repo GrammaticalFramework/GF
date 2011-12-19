@@ -1,17 +1,17 @@
--- Latvian pronoun paradigms - by Normunds Grūzītis; copied off mini-grammar as of 2011-07-12
+--# -path=.:../abstract:../common:../prelude
 
-resource ParadigmsPronounsLav = open 
-  (Predef=Predef), 
-  Prelude, 
+resource ParadigmsPronounsLav = open
+  (Predef=Predef),
+  Prelude,
   ResLav,
   CatLav
   in {
 
 flags
   coding = utf8;
-  
+
 oper
-  PronGend : Type = {s : Gender => Number => Case => Str} ;	
+  PronGend : Type = {s : Gender => Number => Case => Str} ;
 
 -- PRONOUNS (incl. 'determiners')
 
@@ -35,7 +35,7 @@ oper
             Dat => stem + "am" ;
             Acc => stem + "u" ;
             Loc => stem + "ā" ;
-			Voc => NON_EXISTENT
+			Voc => NON_EXISTENT --FIXME - var tak uzrunā arī likt determineru
           } ;
           Pl => table {
             Nom => stem + "i" ;
@@ -114,5 +114,5 @@ oper
         }
       } ;
     } ;
-	
+
 } ;

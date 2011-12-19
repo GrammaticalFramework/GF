@@ -1,17 +1,13 @@
---# -path=.:../abstract:../../prelude:../common
+--# -path=.:../abstract:../common:../prelude
 
---1 English Lexical Paradigms
---
--- Aarne Ranta 2003--2005
---
--- This is an API for the user of the resource grammar 
+-- This is an API for the user of the resource grammar
 -- for adding lexical items. It gives functions for forming
 -- expressions of open categories: nouns, adjectives, verbs.
--- 
--- Closed categories (determiners, pronouns, conjunctions) are
--- accessed through the resource syntax API, $Structural.gf$. 
 --
--- The main difference with $MorphoEng.gf$ is that the types
+-- Closed categories (determiners, pronouns, conjunctions) are
+-- accessed through the resource syntax API, $Structural.gf$.
+--
+-- The main difference with $MorphoLav.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
 -- had the design principle of always having existing forms, rather
 -- than stems, as string arguments of the paradigms.
@@ -20,13 +16,10 @@
 -- first we give a handful of patterns that aim to cover all
 -- regular cases. Then we give a worst-case function $mkC$, which serves as an
 -- escape to construct the most irregular words of type $C$.
--- However, this function should only seldom be needed: we have a
--- separate module [``IrregEng`` ../../english/IrregEng.gf], 
--- which covers irregular verbss.
 
-resource ParadigmsLav = open 
-  (Predef=Predef), 
-  Prelude, 
+resource ParadigmsLav = open
+  (Predef=Predef),
+  Prelude,
   ParadigmsNounsLav,
   ParadigmsAdjectivesLav,
   ParadigmsVerbsLav,
@@ -36,18 +29,18 @@ resource ParadigmsLav = open
   in {
 
 flags
-  coding = utf8;
+  coding = utf8 ;
 
-oper  
+oper
   second_conjugation : VerbConj = C2 ;
   third_conjugation  : VerbConj = C3 ;
-   
+
   nominative : Case = Nom ;
-  genitive : Case = Gen ;
-  dative : Case = Dat ;
+  genitive   : Case = Gen ;
+  dative     : Case = Dat ;
   accusative : Case = Acc ;
-  locative : Case = Loc ;  
- 
+  locative   : Case = Loc ;
+
   mkN = overload {
     mkN : (lemma : Str) -> N = \l -> lin N (mkNoun l) ;
 
@@ -59,72 +52,76 @@ oper
     mkN : (lemma : Str) -> NounDecl -> Bool -> N = \l,d,p -> lin N (mkNounByDeclPal l d p) ;
     mkN : (lemma : Str) -> Gender -> NounDecl -> N = \l,g,d -> lin N (mkNounByGendDecl l g d) ;
 
-    mkN : (lemma : Str) -> Gender -> NounDecl -> Bool -> N = \l,g,d,p -> lin N (mkNounByGendDeclPal l g d p) ;
+    mkN : (lemma : Str) -> Gender -> NounDecl -> Bool -> N = \l,g,d,p ->
+      lin N (mkNounByGendDeclPal l g d p) ;
   } ;
-  
+
   mkPN = overload {
     mkN : (lemma : Str) -> PN = \l -> lin PN (mkProperNoun l Sg) ;
 	mkN : (lemma : Str) -> Number -> PN = \l,n -> lin PN (mkProperNoun l n) ;
   } ;
-  
+
   mkN2 = overload {
-	mkN2  : N -> Prep -> N2 = \n,p -> lin N2 n ** {p = p; isPre = False};     
-	mkN2  : N -> Prep -> Bool -> N2 = \n,p,isPre -> lin N2 n ** {p = p; isPre = isPre};     
+	mkN2 : N -> Prep -> N2 = \n,p -> lin N2 n ** { p = p ; isPre = False } ;
+	mkN2 : N -> Prep -> Bool -> N2 = \n,p,isPre -> lin N2 n ** { p = p ; isPre = isPre } ;
   } ;
-  mkN3  : N -> Prep -> Prep -> N3 = \n,p1,p2 -> lin N3 n ** {p1 = p1; p2 = p2; isPre1 = False; isPre2 = False};     
+
+  mkN3 : N -> Prep -> Prep -> N3 = \n,p1,p2 ->
+    lin N3 n ** { p1 = p1 ; p2 = p2 ; isPre1 = False ; isPre2 = False } ;
 
   mkA = overload {
     mkA : (lemma : Str) -> A = \s -> lin A (mkAdjective s) ;
     mkA : (lemma : Str) -> AdjType -> A = \s,t -> lin A (mkAdjectiveByType s t) ;
 	mkA : (v : Verb) -> A = \v -> lin A (mkAdjective_Participle v) ;
   } ;
-  
-  mkA2 : A -> Prep -> A2 = \a,p -> lin A2 (a ** {p = p}); -- precējies ar ...
-  
+
+  mkA2  : A -> Prep -> A2 = \a,p -> lin A2 (a ** { p = p }) ;	-- precējies ar ...
   mkAS  : A -> AS  =\a   -> lin A  a ;
-  mkA2S : A -> Prep -> A2S =\a,p -> lin A2 (a ** {p = p});
+  mkA2S : A -> Prep -> A2S =\a,p -> lin A2 (a ** { p = p }) ;
   mkAV  : A -> AV  = \a   -> lin A  a ;
-  mkA2V : A -> Prep -> A2V = \a,p -> lin A2 (a ** {p = p} );
-  
-  AS, AV : Type = {s : AForm => Str } ;
-  A2S, A2V : Type = {s : AForm => Str; p: Prep};
+  mkA2V : A -> Prep -> A2V = \a,p -> lin A2 (a ** { p = p }) ;
+
+  AS, AV   : Type = { s : AForm => Str } ;
+  A2S, A2V : Type = { s : AForm => Str ; p : Prep };
 
   mkV = overload {
     mkV : (lemma : Str) -> V = \l -> lin V (mkVerb_Irreg l) ;
     mkV : (lemma : Str) -> VerbConj -> V = \l,c -> lin V (mkVerb l c) ;
     mkV : (lemma : Str) -> Str -> Str -> V = \l1,l2,l3 -> lin V (mkVerbC1 l1 l2 l3) ;
   } ;
-    
-  mkV2  : V -> Prep -> V2 = \v,p -> lin V2 v ** {p = p};     
-  mkVS  : V -> Subj -> VS = \v,s -> lin VS v ** {subj = s};
-  mkV2S : V -> Prep -> Subj -> V2S = \v,p,s -> lin V2S v ** {p = p; subj = s};
-  mkVA  : V -> VA = \v -> lin VA v;
-  mkV2A : V -> Prep -> V2A = \v,p -> lin V2A v ** {p = p};     
-  mkVQ  : V -> VQ = \v -> lin VQ v;
-  mkV2Q : V -> Prep -> V2Q = \v,p -> lin V2Q v ** {p = p};     
+
+  mkV2  : V -> Prep -> V2 = \v,p -> lin V2 v ** { p = p } ;
+  mkVS  : V -> Subj -> VS = \v,s -> lin VS v ** { subj = s } ;
+  mkV2S : V -> Prep -> Subj -> V2S = \v,p,s -> lin V2S v ** { p = p ; subj = s } ;
+  mkVA  : V -> VA = \v -> lin VA v ;
+  mkV2A : V -> Prep -> V2A = \v,p -> lin V2A v ** { p = p } ;
+  mkVQ  : V -> VQ = \v -> lin VQ v ;
+  mkV2Q : V -> Prep -> V2Q = \v,p -> lin V2Q v ** { p = p } ;
   mkVV  : V -> VV = \v -> lin VV v ;
-  mkV2V : V -> Prep -> V2V = \v,p -> lin V2V v ** {p = p};     
-  mkV3  : V -> Prep -> Prep -> V3 = \v,p1,p2 -> lin V3 v ** {p1 = p1; p2 = p2};     
-  
-  mkCAdv : Str -> Str -> Degree -> CAdv  = \s,p,d -> {s = s ; p = p ; d = d; lock_CAdv = <>};
-  
+  mkV2V : V -> Prep -> V2V = \v,p -> lin V2V v ** { p = p } ;
+  mkV3  : V -> Prep -> Prep -> V3 = \v,p1,p2 -> lin V3 v ** { p1 = p1 ; p2 = p2 } ;
+
+  mkCAdv : Str -> Str -> Degree -> CAdv  = \s,p,d -> { s = s ; p = p ; d = d ; lock_CAdv = <> } ;
+
   mkPrep = overload {
-    mkPrep : Str -> Case -> Case -> Prep = \prep, sg, pl -> lin Prep { s = prep; c = table { Sg => sg; Pl => pl } };
-	mkPrep : Case -> Prep = \c -> lin Prep { s = []; c = table { _ => c } } ;
-  };
-  
-  -- empty fake prepositions for valences / rections that are expressed by simple cases without any prepositions
-  nom_Prep = mkPrep Nom;
-  gen_Prep = mkPrep Gen;
-  dat_Prep = mkPrep Dat;
-  acc_Prep = mkPrep Acc;
-  loc_Prep = mkPrep Loc;
-  
+    mkPrep : Str -> Case -> Case -> Prep = \prep,sg,pl ->
+      lin Prep { s = prep ; c = table { Sg => sg ; Pl => pl } } ;
+	mkPrep : Case -> Prep = \c -> lin Prep { s = [] ; c = table { _ => c } } ;
+  } ;
+
+  -- empty fake prepositions for valences
+  -- rections that are expressed by simple cases without any prepositions
+  nom_Prep = mkPrep Nom ;
+  gen_Prep = mkPrep Gen ;
+  dat_Prep = mkPrep Dat ;
+  acc_Prep = mkPrep Acc ;
+  loc_Prep = mkPrep Loc ;
+
   mkAdv : Str -> Adv = \x -> lin Adv (ss x) ;
   mkAdV : Str -> AdV = \x -> lin AdV (ss x) ;
   mkAdA : Str -> AdA = \x -> lin AdA (ss x) ;
   mkAdN : Str -> AdN = \x -> lin AdN (ss x) ;
-  
+
   mkConj = overload {
     mkConj : Str -> Conj = \y -> mk2Conj [] y Pl ;
     mkConj : Str -> Number -> Conj = \y,n -> mk2Conj [] y n ;
@@ -132,731 +129,68 @@ oper
     mkConj : Str -> Str -> Number -> Conj = mk2Conj ;
   } ;
 
-  mk2Conj : Str -> Str -> Number -> Conj = \x,y,n -> 
-    lin Conj (sd2 x y ** {n = n}) ;  
-
-  viens = mkNumSpec "viens" "pirmais" "vien" "" Sg;  
-  mkNum : Str -> Str -> Number -> { s : DForm => CardOrd => Gender => Case => Str } = \pieci,piektais,n -> mkNumSpec pieci piektais (cutStem pieci) (cutStem pieci) n;
-  
-  mkNumSpec : Str -> Str -> Str -> Str -> Number -> { s : DForm => CardOrd => Gender => Case => Str } = \pieci,piektais,stem_teen,stem_ten,n -> let
-	masc = mkNoun_D1 pieci ;
-	fem = mkNoun_D4 pieci Fem ;
-	ord = mkAdjective_Pos piektais Def ;
-	padsmit = mkAdjective_Pos (stem_teen+"padsmitais") Def ;
-	desmit = mkAdjective_Pos (stem_ten+"desmitais") Def ;
-  in {
-	s = table {
-		unit => table {
-			NCard => table {
-				Masc => table {	c => masc.s ! n ! c } ;
-				Fem => table {	c => fem.s ! n ! c } 
-			} ;
-			NOrd => table {
-				g => table { c => ord ! g ! Sg ! c } --FIXME - pazaudējam kārtas skaitļu daudzskaitli - 'mēs palikām piektie'
-			}
-		} ;
-		teen => table {
-			NCard => table { g => table { c => stem_teen + "padsmit" } } ;
-			NOrd => table { g => table { c => padsmit ! g ! Sg ! c } }
-		} ;
-		ten => table {
-			NCard => table { g => table { c => stem_ten + "desmit" } } ;
-			NOrd => table { g => table { c => desmit ! g ! Sg ! c } }
-		}
-	} 		
-  };
-  
-  simts : CardOrd => Gender => Number => Case => Str = let
-	card = mkNoun_D1 "simts" ;
-	ord = mkAdjective_Pos "simtais" Def ;  
-  in table {
-	NCard => table {
-		_ => table { n => table { c => card.s ! n ! c }}
-	} ;
-	NOrd => table {
-		g => table { n => table { c => ord ! g ! n ! c }}
-	}
-  };
-  
-  tuukstotis : CardOrd => Gender => Number => Case => Str = let
-	card = mkNoun_D2 "tūkstotis" True;
-	ord = mkAdjective_Pos "tūkstošais" Def ;  
-  in table {
-	NCard => table {
-		_ => table { n => table { c => card.s ! n ! c }}
-	} ;
-	NOrd => table {
-		g => table { n => table { c => ord ! g ! n ! c }}
-	}
-  };
-  
-{-  
-  
---2 Parameters 
---
--- To abstract over gender names, we define the following identifiers.
-
-oper
-  Gender : Type ; 
-
-  human     : Gender ;
-  nonhuman  : Gender ;
-  masculine : Gender ;
-  feminine : Gender ;
-
--- To abstract over number names, we define the following.
-
-  Number : Type ; 
-
-  singular : Number ;
-  plural   : Number ;
-
--- To abstract over case names, we define the following.
-
-  Case : Type ;
-
-  nominative : Case ;
-  genitive   : Case ;
-
--- Prepositions are used in many-argument functions for rection.
--- The resource category $Prep$ is used.
-
-
-
---2 Nouns
-
--- Nouns are constructed by the function $mkN$, which takes a varying
--- number of arguments.
-
-  mkN : overload {
-
--- The regular function captures the variants for nouns ending with
--- "s","sh","x","z" or "y": "kiss - kisses", "flash - flashes"; 
--- "fly - flies" (but "toy - toys"),
-
-    mkN : (flash : Str) -> N ;
-
--- In practice the worst case is to give singular and plural nominative.
-
-    mkN : (man,men : Str) -> N ;
-
--- The theoretical worst case: give all four forms.
-
-    mkN : (man,men,man's,men's : Str) -> N ;
-
--- Change gender from the default $nonhuman$.
-
-    mkN : Gender -> N -> N ;
-
---3 Compound nouns 
---
--- A compound noun is an uninflected string attached to an inflected noun,
--- such as "baby boom", "chief executive officer".
-
-    mkN : Str -> N -> N
-  } ;
-
-
---3 Relational nouns 
-
-  mkN2 : overload {
-    mkN2 : N -> Prep -> N2 ; -- access to
-    mkN2 : N -> Str -> N2 ; -- access to
-    mkN2 : Str -> Str -> N2 ; -- access to
-    mkN2 : N -> N2 ; -- wife of
-    mkN2 : Str -> N2 -- daughter of
-  } ;
-
--- Use the function $mkPrep$ or see the section on prepositions below to  
--- form other prepositions.
---
--- Three-place relational nouns ("the connection from x to y") need two prepositions.
-
-  mkN3 : N -> Prep -> Prep -> N3 ;
-
-
-
---3 Proper names and noun phrases
---
--- Proper names, with a regular genitive, are formed from strings.
-
-  mkPN : overload {
-
-    mkPN : Str -> PN ;
-
--- Sometimes a common noun can be reused as a proper name, e.g. "Bank"
-
-    mkPN : N -> PN
-  } ;
-
---3 Determiners and quantifiers
-
-  mkQuant : overload {
-    mkQuant : (this, these : Str) -> Quant ;
-    mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant ;
-  } ;
-
-  mkOrd : Str -> Ord ;
-
---2 Adjectives
-
-  mkA : overload {
-
--- For regular adjectives, the adverbial and comparison forms are derived. This holds
--- even for cases with the variations "happy - happily - happier - happiest",
--- "free - freely - freer - freest", and "rude - rudest".
-
-    mkA : (happy : Str) -> A ;
-
--- However, the duplication of the final consonant cannot be predicted,
--- but a separate case is used to give the comparative
-
-    mkA : (fat,fatter : Str) -> A ;
-
--- As many as four forms may be needed.
-
-    mkA : (good,better,best,well : Str) -> A 
-    } ;
-
--- Regular comparison is formed by "more - most" for words with two vowels separated
--- and terminated by some other letters. To force this or the opposite, 
--- the following can be used:  
-
-    compoundA : A -> A ; -- -/more/most ditto
-    simpleA   : A -> A ; -- young,younger,youngest
-
-
---3 Two-place adjectives
-
-  mkA2 : overload {
-    mkA2 : A -> Prep -> A2 ; -- absent from
-    mkA2 : A -> Str -> A2 ; -- absent from
-    mkA2 : Str -> Prep -> A2 ; -- absent from
-    mkA2 : Str -> Str -> A2 -- absent from
-
-  } ;
-
-
---2 Adverbs
-
--- Adverbs are not inflected. Most lexical ones have position
--- after the verb. Some can be preverbal (e.g. "always").
-
-  mkAdv : Str -> Adv ;
-  mkAdV : Str -> AdV ;
-
--- Adverbs modifying adjectives and sentences can also be formed.
-
-  mkAdA : Str -> AdA ;
-
--- Adverbs modifying numerals
-
-  mkAdN : Str -> AdN ;
-
---2 Prepositions
---
--- A preposition as used for rection in the lexicon, as well as to
--- build $PP$s in the resource API, just requires a string.
-
-  mkPrep : Str -> Prep ;
-  noPrep : Prep ;
-
--- (These two functions are synonyms.)
-
---2 Conjunctions
---
-
-  mkConj : overload {
-    mkConj : Str -> Conj ;                  -- and (plural agreement)
-    mkConj : Str -> Number -> Conj ;        -- or (agrement number given as argument)
-    mkConj : Str -> Str -> Conj ;           -- both ... and (plural)
-    mkConj : Str -> Str -> Number -> Conj ; -- either ... or (agrement number given as argument)
-  } ;
-
---2 Verbs
---
-
--- Verbs are constructed by the function $mkV$, which takes a varying
--- number of arguments.
-
-  mkV : overload {
-
--- The regular verb function recognizes the special cases where the last
--- character is "y" ("cry-cries" but "buy-buys") or a sibilant
--- ("kiss-"kisses", "jazz-jazzes", "rush-rushes", "munch - munches", 
--- "fix - fixes").
-
-    mkV : (cry : Str) -> V ;
-
--- Give the present and past forms for regular verbs where
--- the last letter is duplicated in some forms,
--- e.g. "rip - ripped - ripping".
-
-    mkV : (stop, stopped : Str) -> V ;
-
--- There is an extensive list of irregular verbs in the module $IrregularEng$.
--- In practice, it is enough to give three forms, 
--- e.g. "drink - drank - drunk".
-
-    mkV : (drink, drank, drunk  : Str) -> V ;
-
--- Irregular verbs with duplicated consonant in the present participle.
- 
-    mkV : (run, ran, run, running  : Str) -> V ;
-
--- Except for "be", the worst case needs five forms: the infinitive and
--- the third person singular present, the past indicative, and the
--- past and present participles.
-
-    mkV : (go, goes, went, gone, going : Str) -> V ;
-
--- Adds a prefix to an exisiting verb. This is most useful to create
--- prefix-variants of irregular verbs from $IrregEng$, e.g. "undertake".
-
-    mkV : Str -> V -> V ;
-  };
-
--- Verbs with a particle.
--- The particle, such as in "switch on", is given as a string.
-
-  partV  : V -> Str -> V ;
-
--- Reflexive verbs.
--- By default, verbs are not reflexive; this function makes them that.
-
-  reflV  : V -> V ;
-
---3 Two-place verbs
---
--- Two-place verbs need a preposition, except the special case with direct object.
--- (transitive verbs). Notice that a particle comes from the $V$.
-
-  mkV2 : overload {
-    mkV2  : Str -> V2 ;       -- kill
-    mkV2  : V -> V2 ;         -- hit
-    mkV2  : V -> Prep -> V2 ; -- believe in
-    mkV2  : V -> Str -> V2 ;  -- believe in
-    mkV2  : Str -> Prep -> V2 ; -- believe in
-    mkV2  : Str -> Str -> V2  -- believe in
-  };
-
---3 Three-place verbs
---
--- Three-place (ditransitive) verbs need two prepositions, of which
--- the first one or both can be absent.
-
-  mkV3 : overload {
-    mkV3  : V -> Prep -> Prep -> V3 ;   -- speak, with, about
-    mkV3  : V -> Prep -> V3 ;           -- give,_,to
-    mkV3  : V -> Str -> V3 ;            -- give,_,to
-    mkV3  : Str -> Str -> V3 ;          -- give,_,to
-    mkV3  : V -> V3 ;                   -- give,_,_
-    mkV3  : Str -> V3 ;                 -- give,_,_
-  };
-
---3 Other complement patterns
---
--- Verbs and adjectives can take complements such as sentences,
--- questions, verb phrases, and adjectives.
-
-  mkV0  : V -> V0 ;
-  mkVS  : V -> VS ;
-  mkV2S : V -> Prep -> V2S ;
-  mkVV  : V -> VV ;
-  mkV2V : V -> Prep -> Prep -> V2V ;
-  mkVA  : V -> VA ;
-  mkV2A : V -> Prep -> V2A ;
-  mkVQ  : V -> VQ ;
-  mkV2Q : V -> Prep -> V2Q ;
-
-  mkAS  : A -> AS ;
-  mkA2S : A -> Prep -> A2S ;
-  mkAV  : A -> AV ;
-  mkA2V : A -> Prep -> A2V ;
-
--- Notice: Categories $V0, AS, A2S, AV, A2V$ are just $A$.
--- $V0$ is just $V$; the second argument is treated as adverb.
-
-  V0 : Type ;
-  AS, A2S, AV, A2V : Type ;
-
---2 Other categories
-
-mkSubj : Str -> Subj = \s -> lin Subj {s = s} ;
-
---.
---2 Definitions of paradigms
---
--- The definitions should not bother the user of the API. So they are
--- hidden from the document.
-
-  Gender = ResEng.Gender ; 
-  Number = ResEng.Number ;
-  Case = ResEng.Case ;
-  human = Masc ; 
-  nonhuman = Neutr ;
-  masculine = Masc ;
-  feminine = Fem ;
-  singular = Sg ;
-  plural = Pl ;
-  nominative = Nom ;
-  genitive = Gen ;
-
-  Preposition : Type = Str ; -- obsolete
-
-  regN = \ray -> 
-    let rays = add_s ray
-     in
-       mk2N ray rays ;
-
-
-  add_s : Str -> Str = \w -> case w of {
-    _ + ("io" | "oo")                         => w + "s" ;   -- radio, bamboo
-    _ + ("s" | "z" | "x" | "sh" | "ch" | "o") => w + "es" ;  -- bus, hero
-    _ + ("a" | "o" | "u" | "e") + "y"  => w + "s" ;   -- boy
-    x + "y"                            => x + "ies" ; -- fly
-    _                                  => w + "s"     -- car
-    } ;
-
-  duplFinal : Str -> Str = \w -> case w of {
-    _ + ("a" | "e" | "o") + ("a" | "e" | "i" | "o" | "u") + ? => w ; -- waited, needed
-    _ + ("a" | "e" | "i" | "o" | "u") + 
-      c@("b"|"d"|"g"|"m"|"n"|"p"|"r"|"t") => w + c ; -- omitted, manned
-    _ => w
-    } ;
-
-  mk2N = \man,men -> 
-    let mens = case last men of {
-      "s" => men + "'" ;
-      _   => men + "'s"
-      }
-    in
-    mk4N man men (man + "'s") mens ;
-
-  mk4N = \man,men,man's,men's -> 
-    lin N (mkNoun man man's men men's ** {g = Neutr}) ;
-
-  genderN g man = lin N {s = man.s ; g = g} ;
-
-  compoundN s n = lin N {s = \\x,y => s ++ n.s ! x ! y ; g=n.g} ;
-
-  mkPN = overload {
-    mkPN : Str -> PN = regPN ;
-    mkPN : N -> PN = nounPN
-  } ;
-
-  mkN2 = overload {
-    mkN2 : N -> Prep -> N2 = prepN2 ;
-    mkN2 : N -> Str -> N2 = \n,s -> prepN2 n (mkPrep s);
-    mkN2 : Str -> Str -> N2 = \n,s -> prepN2 (regN n) (mkPrep s);
-    mkN2 : N -> N2         = \n -> prepN2 n (mkPrep "of") ;
-    mkN2 : Str -> N2       = \s -> prepN2 (regN s) (mkPrep "of") 
-  } ;
-
-  prepN2 = \n,p -> lin N2 (n ** {c2 = p.s}) ;
-  regN2 n = prepN2 (regN n) (mkPrep "of") ;
-
-  mkN3 = \n,p,q -> lin N3 (n ** {c2 = p.s ; c3 = q.s}) ;
-
---3 Relational common noun phrases
---
--- In some cases, you may want to make a complex $CN$ into a
--- relational noun (e.g. "the old town hall of").
-
-  cnN2 : CN -> Prep -> N2 ;
-  cnN3 : CN -> Prep -> Prep -> N3 ;
-
--- This is obsolete.
-  cnN2 = \n,p -> lin N2 (n ** {c2 = p.s}) ;
-  cnN3 = \n,p,q -> lin N3 (n ** {c2 = p.s ; c3 = q.s}) ;
-
-  regPN n = regGenPN n human ;
-  regGenPN n g = lin PN {s = table {Gen => n + "'s" ; _ => n} ; g = g} ;
-  nounPN n = lin PN {s = n.s ! singular ; g = n.g} ;
-
-  mkQuant = overload {
-    mkQuant : (this, these : Str) -> Quant = \sg,pl -> mkQuantifier sg pl sg pl;
-    mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant = mkQuantifier;
-  } ;
-
-  mkQuantifier : Str -> Str -> Str -> Str -> Quant = 
-   \sg,pl,sg',pl' -> lin Quant {
-    s = \\_  => table { Sg => sg ; Pl => pl } ;
-    sp = \\_ => table { Sg => regGenitiveS sg' ; Pl => regGenitiveS pl'}
-    } ;
-
-  mkOrd : Str -> Ord = \x -> lin Ord { s = regGenitiveS x};
-
-  mk2A a b = mkAdjective a a a b ;
-  regA a = case a of {
-    _ + ("a" | "e" | "i" | "o" | "u" | "y") + ? + _ + 
-        ("a" | "e" | "i" | "o" | "u" | "y") + ? + _  => 
-         lin A (compoundADeg (regADeg a)) ;
-    _ => lin A (regADeg a)
-    } ;
-
-  prepA2 a p = lin A2 (a ** {c2 = p.s}) ;
-
-  ADeg = A ; ----
-
-  mkADeg a b c d = mkAdjective a b c d ;
-
-  regADeg happy = 
-    let
-      happ = init happy ;
-      y    = last happy ;
-      happie = case y of {
-        "y" => happ + "ie" ;
-        "e" => happy ;
-        _   => duplFinal happy + "e"
-        } ;
-      happily : Str = case happy of {
-        _ + "ble" => init happy + "y" ;
-        _ + "y" => happ + "ily" ;
-        _ + "ll" => happy + "y" ;
-        _   => happy + "ly"
-        } ;
-    in mkADeg happy (happie + "r") (happie + "st") happily ;
-
-  duplADeg fat = 
-    mkADeg fat 
-    (fat + last fat + "er") (fat + last fat + "est") (fat + "ly") ;
-
-  compoundADeg a =
-    let ad = (a.s ! AAdj Posit Nom) 
-    in mkADeg ad ("more" ++ ad) ("most" ++ ad) (a.s ! AAdv) ;
-
-  adegA a = a ;
-
-  mkAdv x = lin Adv (ss x) ;
-  mkAdV x = lin AdV (ss x) ;
-  mkAdA x = lin AdA (ss x) ;
-  mkAdN x = lin AdN (ss x) ;
-
-  mkPrep p = lin Prep (ss p) ;
-  noPrep = mkPrep [] ;
-
-  mk5V a b c d e = lin V (mkVerb a b c d e ** {s1 = []}) ;
-
-  regV cry = 
-    let
-      cries = (regN cry).s ! Pl ! Nom ; -- !
-      cried : Str = case cries of {
-        _ + "es" => init cries + "d" ;
-        _        => duplFinal cry + "ed"
-        } ;
-      crying : Str = case cry of {
-        _  + "ee" => cry + "ing" ;
-        d  + "ie" => d  + "ying" ;
-        us + "e"  => us + "ing" ; 
-        _         => duplFinal cry + "ing"
+  mk2Conj : Str -> Str -> Number -> Conj = \x,y,n -> lin Conj (sd2 x y ** { n = n }) ;
+
+  viens = mkNumSpec "viens" "pirmais" "vien" "" Sg ;
+
+  mkNum : Str -> Str -> Number -> { s : DForm => CardOrd => Gender => Case => Str } =
+    \pieci,piektais,n -> mkNumSpec pieci piektais (cutStem pieci) (cutStem pieci) n ;
+
+  mkNumSpec : Str -> Str -> Str -> Str -> Number -> { s : DForm => CardOrd => Gender => Case => Str } =
+    \pieci,piektais,stem_teen,stem_ten,n ->
+      let
+        masc = mkNoun_D1 pieci ;
+        fem = mkNoun_D4 pieci Fem ;
+        ord = mkAdjective_Pos piektais Def ;
+        padsmit = mkAdjective_Pos (stem_teen+"padsmitais") Def ;
+        desmit = mkAdjective_Pos (stem_ten+"desmitais") Def ;
+      in {
+        s = table {
+          unit => table {
+            NCard => table {
+              Masc => table { c => masc.s ! n ! c } ;
+              Fem => table { c => fem.s ! n ! c }
+            } ;
+            NOrd => table {
+              -- FIXME: pazaudējam kārtas skaitļu daudzskaitli - 'mēs palikām piektie'
+              g => table { c => ord ! g ! Sg ! c }
+            }
+          } ;
+          teen => table {
+            NCard => table { g => table { c => stem_teen + "padsmit" } } ;
+            NOrd => table { g => table { c => padsmit ! g ! Sg ! c } }
+          } ;
+          ten => table {
+            NCard => table { g => table { c => stem_ten + "desmit" } } ;
+            NOrd => table { g => table { c => desmit ! g ! Sg ! c } }
+          }
         }
-    in mk5V cry cries cried cried crying ;
-
-  reg2V fit fitted =
-   let fitt = Predef.tk 2 fitted ;
-   in mk5V fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing") ;
-
-  regDuplV fit = 
-    case last fit of {
-      ("a" | "e" | "i" | "o" | "u" | "y") => 
-        Predef.error (["final duplication makes no sense for"] ++ fit) ;
-      t =>
-       let fitt = fit + t in
-       mk5V fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing")
       } ;
 
-  irregV x y z = let reg = (regV x).s in
-    mk5V x (reg ! VPres) y z (reg ! VPresPart) ** {s1 = []} ;
-
-  irreg4V x y z w = let reg = (regV x).s in
-    mk5V x (reg ! VPres) y z w ** {s1 = []} ;
-
-  irregDuplV fit y z = 
-    let 
-      fitting = (regDuplV fit).s ! VPresPart
-    in
-    mk5V fit (fit + "s") y z fitting ;
-
-  partV v p = lin V {s = \\f => v.s ! f ++ p ; isRefl = v.isRefl} ;
-  reflV v = lin V {s = v.s ; part = v.part ; isRefl = True} ;
-
-  prepV2 v p = lin V2 {s = v.s ; s1 = v.s1 ; c2 = p.s ; isRefl = v.isRefl} ;
-  dirV2 v = prepV2 v noPrep ;
-
-  prepPrepV3 v p q = 
-    lin V3 {s = v.s ; s1 = v.s1 ; c2 = p.s ; c3 = q.s ; isRefl = v.isRefl} ;
-  dirV3 v p = prepPrepV3 v noPrep p ;
-  dirdirV3 v = dirV3 v noPrep ;
-
-  mkVS  v = lin VS v ;
-  mkVV  v = lin VV {
-    s = table {VVF vf => v.s ! vf ; _ => v.s ! VInf} ;
-                                          --- variants {}} ; not used 
-    isAux = False
-    } ;
-  mkVQ  v = lin VQ v ;
-
-  V0 : Type = V ;
---  V2S, V2V, V2Q : Type = V2 ;
-  AS, A2S, AV : Type = A ;
-  A2V : Type = A2 ;
-
-  mkV0  v = v ;
-  mkV2S v p = lin V2S (prepV2 v p) ;
-  mkV2V v p t = lin V2V (prepV2 v p ** {isAux = False}) ;
-  mkVA  v = lin VA v ;
-  mkV2A v p = lin V2A (prepV2 v p) ;
-  mkV2Q v p = lin V2Q (prepV2 v p) ;
-
-  mkAS  v = v ;
-  mkA2S v p = lin A (prepA2 v p) ;
-  mkAV  v = v ;
-  mkA2V v p = prepA2 v p ;
-
-
--- pre-overload API and overload definitions
-
-  mk4N : (man,men,man's,men's : Str) -> N ;
-  regN : Str -> N ;
-  mk2N : (man,men : Str) -> N ;
-  genderN : Gender -> N -> N ;
-  compoundN : Str -> N -> N ;
-
-  mkN = overload {
-    mkN : (man,men,man's,men's : Str) -> N = mk4N ;
-    mkN : Str -> N = regN ;
-    mkN : (man,men : Str) -> N = mk2N ;
-    mkN : Gender -> N -> N = genderN ;
-    mkN : Str -> N -> N = compoundN
+  simts : CardOrd => Gender => Number => Case => Str =
+    let
+      card = mkNoun_D1 "simts" ;
+      ord = mkAdjective_Pos "simtais" Def ;
+    in table {
+      NCard => table {
+        _ => table { n => table { c => card.s ! n ! c } }
+      } ;
+      NOrd => table {
+        g => table { n => table { c => ord ! g ! n ! c } }
+      }
     } ;
 
--- Relational nouns ("daughter of x") need a preposition. 
-
-  prepN2 : N -> Prep -> N2 ;
-
--- The most common preposition is "of", and the following is a
--- shortcut for regular relational nouns with "of".
-
-  regN2 : Str -> N2 ;
-
-  mk2A : (free,freely : Str) -> A ;
-  regA : Str -> A ;
-
-  mkA = overload {
-    mkA : Str -> A = regA ;
-    mkA : (fat,fatter : Str) -> A = \fat,fatter -> 
-      mkAdjective fat fatter (init fatter + "st") (fat + "ly") ;
-    mkA : (good,better,best,well : Str) -> A = \a,b,c,d ->
-      mkAdjective a b c d
+  tuukstotis : CardOrd => Gender => Number => Case => Str =
+    let
+      card = mkNoun_D2 "tūkstotis" True ;
+      ord = mkAdjective_Pos "tūkstošais" Def ;
+    in table {
+      NCard => table {
+        _ => table { n => table { c => card.s ! n ! c } }
+      } ;
+      NOrd => table {
+        g => table { n => table { c => ord ! g ! n ! c } }
+      }
     } ;
 
-  compoundA = compoundADeg ;
-  simpleA a = 
-    let ad = (a.s ! AAdj Posit Nom) 
-    in regADeg ad ;
-
-  prepA2 : A -> Prep -> A2 ;
-
-  mkA2 = overload {
-    mkA2 : A -> Prep -> A2   = prepA2 ;
-    mkA2 : A -> Str -> A2    = \a,p -> prepA2 a (mkPrep p) ;
-    mkA2 : Str -> Prep -> A2 = \a,p -> prepA2 (regA a) p;
-    mkA2 : Str -> Str -> A2  = \a,p -> prepA2 (regA a) (mkPrep p);
-  } ;
-
-  mk5V : (go, goes, went, gone, going : Str) -> V ;
-  regV : (cry : Str) -> V ;
-  reg2V : (stop, stopped : Str) -> V;
-  irregV : (drink, drank, drunk  : Str) -> V ;
-  irreg4V : (run, ran, run, running  : Str) -> V ;
-
-  -- Use reg2V instead
-  regDuplV : Str -> V ;
-  -- Use irreg4V instead
-  irregDuplV : (get,   got,   gotten : Str) -> V ;
-
-  mkV = overload {
-    mkV : (cry : Str) -> V = regV ;
-    mkV : (stop, stopped : Str) -> V = reg2V ;
-    mkV : (drink, drank, drunk  : Str) -> V = irregV ;
-    mkV : (run, ran, run, running  : Str) -> V = irreg4V ;
-    mkV : (go, goes, went, gone, going : Str) -> V = mk5V ;
-    mkV : Str -> V -> V = prefixV
-  };
-
-  prepV2 : V -> Prep -> V2 ;
-  dirV2 : V -> V2 ;
-  prefixV : Str -> V -> V = \p,v -> v ** { s = p + v.s } ;
-
-  mkV2 = overload {
-    mkV2  : V -> V2 = dirV2 ;
-    mkV2  : Str -> V2 = \s -> dirV2 (regV s) ;
-    mkV2  : V -> Prep -> V2 = prepV2 ;
-    mkV2  : V -> Str -> V2 = \v,p -> prepV2 v (mkPrep p) ;
-    mkV2  : Str -> Prep -> V2 = \v,p -> prepV2 (regV v) p ;
-    mkV2  : Str -> Str -> V2 = \v,p -> prepV2 (regV v) (mkPrep p)
-  }; 
-
-  prepPrepV3 : V -> Prep -> Prep -> V3 ;
-  dirV3 : V -> Prep -> V3 ;
-  dirdirV3 : V -> V3 ;
-
-  mkV3 = overload {
-    mkV3 : V -> Prep -> Prep -> V3 = prepPrepV3 ;
-    mkV3 : V -> Prep -> V3 = dirV3 ;
-    mkV3 : V -> Str -> V3 = \v,s -> dirV3 v (mkPrep s);
-    mkV3 : Str -> Str -> V3 = \v,s -> dirV3 (regV v) (mkPrep s);
-    mkV3 : V -> V3 = dirdirV3 ;
-    mkV3 : Str -> V3 = \v -> dirdirV3 (regV v) ;
-  } ;
-
-  mkConj = overload {
-    mkConj : Str -> Conj = \y -> mk2Conj [] y plural ;
-    mkConj : Str -> Number -> Conj = \y,n -> mk2Conj [] y n ;
-    mkConj : Str -> Str -> Conj = \x,y -> mk2Conj x y plural ;
-    mkConj : Str -> Str -> Number -> Conj = mk2Conj ;
-  } ;
-
-  mk2Conj : Str -> Str -> Number -> Conj = \x,y,n -> 
-    lin Conj (sd2 x y ** {n = n}) ;
-
----- obsolete
-
--- Comparison adjectives may two more forms. 
-
-  ADeg : Type ;
-
-  mkADeg : (good,better,best,well : Str) -> ADeg ;
-
--- The regular pattern recognizes two common variations: 
--- "-e" ("rude" - "ruder" - "rudest") and
--- "-y" ("happy - happier - happiest - happily")
-
-  regADeg : Str -> ADeg ;      -- long, longer, longest
-
--- However, the duplication of the final consonant is nor predicted,
--- but a separate pattern is used:
-
-  duplADeg : Str -> ADeg ;      -- fat, fatter, fattest
-
--- If comparison is formed by "more", "most", as in general for
--- long adjective, the following pattern is used:
-
-  compoundADeg : A -> ADeg ; -- -/more/most ridiculous
-
--- From a given $ADeg$, it is possible to get back to $A$.
-
-  adegA : ADeg -> A ;
-
-
-  regPN    : Str -> PN ;          
-  regGenPN : Str -> Gender -> PN ;     -- John, John's
-
--- Sometimes you can reuse a common noun as a proper name, e.g. "Bank".
-
-  nounPN : N -> PN ;
-
-
--}
-} ;
+}

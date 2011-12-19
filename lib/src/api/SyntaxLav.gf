@@ -1,5 +1,5 @@
---# -path=.:alltenses:prelude
+--# -path=.:alltenses:prelude:../latvian
 
-instance SyntaxLav of Syntax = 
+instance SyntaxLav of Syntax =
   ConstructorsLav, CatLav, StructuralLav, CombinatorsLav ;
 

@@ -1,26 +1,34 @@
-concrete AdverbLav of Adverb = CatLav ** open ResLav, Prelude in {
+--# -path=.:../abstract:../common:../prelude
 
-  lin
-  
-    PositAdvAdj a = {s = a.s ! (AAdv Posit)} ;
-	
-    ComparAdvAdj cadv a np = {
-      s = cadv.s ++ a.s ! (AAdv cadv.d) ++ cadv.p ++ np.s ! Nom -- TODO vajag arî 'âtrâks par Jâni' un 'âtrâks nekâ Jânis' pie more_CAdv  
-	  -- TODO - vai te tieðâm veido 'âtrâk par Jâni', kas ir pareizais adverbs? nevis 'âtrâks par jâni'...
-      } ;
-    ComparAdvAdjS cadv a s = {
-      s = cadv.s ++ a.s ! (AAdv cadv.d) ++ cadv.p ++ s.s
-      } ;   
+concrete AdverbLav of Adverb = CatLav ** open
+  ResLav,
+  Prelude
+  in {
 
-    PrepNP prep np = {s = prep.s ++ np.s ! (prep.c ! (fromAgr np.a).n)} ; --FIXME - postpozîcijas prievârdi
+flags
+  coding = utf8 ;
 
-    AdAdv = cc2 ;
-    SubjS = cc2 ;
+lin
+  PositAdvAdj a = { s = a.s ! (AAdv Posit) } ;
 
-    AdnCAdv cadv = {
-	  s = case cadv.d of {
-		Posit => cadv.s ++ cadv.p;
-		_ => NON_EXISTENT
-	  }
-	};
+  -- TODO: vajag arÄ« 'ÄtrÄks par JÄni' un 'ÄtrÄks nekÄ JÄnis' pie more_CAdv
+  -- TODO: vai te tieÅ¡Äm veido 'ÄtrÄk par JÄni'? kurÅ¡ ir pareizais adverbs? nevis 'ÄtrÄks par JÄni'?
+  ComparAdvAdj cadv a np = { s = cadv.s ++ a.s ! (AAdv cadv.d) ++ cadv.p ++ np.s ! Nom } ;
+
+  ComparAdvAdjS cadv a s = { s = cadv.s ++ a.s ! (AAdv cadv.d) ++ cadv.p ++ s.s } ;
+
+  -- FIXME: postpozÄ«cijas prievÄrdi
+  PrepNP prep np = { s = prep.s ++ np.s ! (prep.c ! (fromAgr np.a).n) } ;
+
+  AdAdv = cc2 ;
+
+  SubjS = cc2 ;
+
+  AdnCAdv cadv = {
+    s = case cadv.d of {
+      Posit => cadv.s ++ cadv.p ;
+      _ => NON_EXISTENT
+    }
+  } ;
+
 }

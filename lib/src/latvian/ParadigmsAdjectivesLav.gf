@@ -1,4 +1,4 @@
--- Latvian adjective paradigms - by Normunds Grūzītis; copied off mini-grammar as of 2011-07-12
+--# -path=.:../abstract:../common:../prelude
 
 resource ParadigmsAdjectivesLav = open
   (Predef=Predef),

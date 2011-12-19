@@ -1,6 +1,6 @@
---# -path=.:alltenses:prelude
+--# -path=.:alltenses:prelude:../latvian
 
-resource CombinatorsLav = Combinators with 
+resource CombinatorsLav = Combinators with
   (Cat = CatLav),
   (Structural = StructuralLav),
   (Constructors = ConstructorsLav) ;

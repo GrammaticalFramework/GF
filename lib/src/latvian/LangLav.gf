@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:../prelude
 
-concrete LangLav of Lang = 
+concrete LangLav of Lang =
   GrammarLav,
   LexiconLav
   ** {
@@ -10,4 +10,4 @@ flags
   unlexer = text ;
   lexer = text ;
 
-} ;
+}
