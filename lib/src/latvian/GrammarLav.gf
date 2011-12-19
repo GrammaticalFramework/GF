@@ -1,8 +1,8 @@
---# -path=.:../abstract:../common:prelude
+--# -path=.:../abstract:../common:../prelude
 
-concrete GrammarLav of Grammar = 
-  NounLav, 
-  VerbLav, 
+concrete GrammarLav of Grammar =
+  NounLav,
+  VerbLav,
   AdjectiveLav,
   AdverbLav,
   NumeralLav,
@@ -17,6 +17,9 @@ concrete GrammarLav of Grammar =
   TenseX - [CAdv]
   ** {
 
-flags startcat = Phr ; unlexer = text ; lexer = text ;
+flags
+  startcat = Phr ;
+  unlexer = text ;
+  lexer = text ;
 
-} ;
+}

@@ -1,4 +1,4 @@
--- Latvian noun paradigms - by Normunds Grūzītis & Pēteris Paikens
+--# -path=.:../abstract:../common:../prelude
 
 resource ParadigmsNounsLav = open
   (Predef=Predef),
@@ -13,7 +13,7 @@ flags
 oper
   Noun     : Type = {s : Number => Case => Str ; g : Gender} ;
   ProperNoun : Type = {s : Case => Str; g : Gender; n : Number} ;
-  
+
   masculine : Gender = Masc ;
   feminine  : Gender = Fem ;
 
@@ -153,7 +153,7 @@ oper
   --   Pl: -i
   --       should be provided only in the case of plural mass nouns
   --       produces an incorrect Sg.Nom form if plural lemma is given
-  --       the incorrect Sg.Nom forms should be filtered out by a domain lexicon 
+  --       the incorrect Sg.Nom forms should be filtered out by a domain lexicon
   mkNoun_D2 : Str -> Bool -> Noun = \lemma,pal ->
     let stem : Str = cutStem lemma
     in {

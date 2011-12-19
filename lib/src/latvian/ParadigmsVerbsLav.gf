@@ -1,16 +1,16 @@
--- Latvian verb paradigms - by Pēteris Paikens & Normunds Grūzītis
+--# -path=.:../abstract:../common:../prelude
 
-resource ParadigmsVerbsLav = open 
-  (Predef=Predef), 
-  Prelude, 
+resource ParadigmsVerbsLav = open
+  (Predef=Predef),
+  Prelude,
   ResLav,
   CatLav
   in {
 
 flags
   coding = utf8 ;
-  
-oper  
+
+oper
   Verb_TMP : Type = {s : VerbForm => Str} ;
 
   -- Second and third conjugations
@@ -92,7 +92,7 @@ oper
         Indicative P3 _ Fut  => pal_C1_1 stem3 stem + "s" ;
         Indicative P3 _ Past    => stem3 + "a" ;
 
-		Indicative _ _ Cond  => stem + "tu";		
+		Indicative _ _ Cond  => stem + "tu";
 
         Relative Pres => stem2 + "ot" ;
         Relative Fut  => pal_C1_1 stem3 stem + "šot" ;
@@ -101,11 +101,11 @@ oper
 
         Debitive => "jā" + stem2 ;
         DebitiveRelative => "jā" + stem2 + "ot" ;
-		
+
 		Imperative Sg => stem3 ;
 		Imperative Pl => stem3 + "iet" ;
-		
-		Participle g n c => participle_normal_l g n c (pal_C1_3 stem3) (pal_C1_4 stem3) 
+
+		Participle g n c => participle_normal_l g n c (pal_C1_3 stem3) (pal_C1_4 stem3)
       }
     } ;
 
@@ -135,7 +135,7 @@ oper
         Indicative P3 _ Fut  => stem + "s" ;
         Indicative P3 _ Past    => stem + "ja" ;
 
-		Indicative _ _ Cond  => stem + "tu";		
+		Indicative _ _ Cond  => stem + "tu";
 
         Relative Pres => stem + "jot" ;
         Relative Fut  => stem + "šot" ;
@@ -144,10 +144,10 @@ oper
 
         Debitive => "jā" + stem ;
         DebitiveRelative => "jā" + stem + "jot" ;
-		
+
 		Imperative Sg => stem ;
 		Imperative Pl => stem + "jiet";
-				
+
 		Participle g n c => participle_normal g n c (stem + "j")
       }
     } ;
@@ -178,7 +178,7 @@ oper
         Indicative P3 _ Fut  => stem + "s" ;
         Indicative P3 _ Past    => stem + "ja" ;
 
-		Indicative _ _ Cond  => stem + "tu";		
+		Indicative _ _ Cond  => stem + "tu";
 
         Relative Pres => pal_C3_1 stem + "ot" ;
         Relative Fut  => stem + "šot" ;
@@ -187,7 +187,7 @@ oper
 
         Debitive => pal_C3_3 stem ;
         DebitiveRelative => pal_C3_3 stem + "ot" ;
-		
+
 		Imperative Sg => pal_C3_1 stem + "i" ;
 		Imperative Pl => pal_C3_1 stem + "iet";
 
@@ -224,7 +224,7 @@ oper
         Indicative P3 _ Fut  => pal_C1_1 stem3 stem + "sies" ;
         Indicative P3 _ Past    => stem3 + "ās" ;
 
-		Indicative _ _ Cond  => stem + "tos";		
+		Indicative _ _ Cond  => stem + "tos";
 
         Relative Pres => stem2 + "oties" ;
         Relative Fut  => pal_C1_1 stem3 stem + "šoties" ;
@@ -233,11 +233,11 @@ oper
 
         Debitive => "jā" + stem2 + "as" ;
         DebitiveRelative => "jā" + stem2 + "oties" ;
-		
+
 		Imperative Sg => pal_C1_2 stem3 stem2 + "ies" ;
 		Imperative Pl => pal_C1_2 stem3 stem2 + "ieties" ;
 
-		Participle g n c => participle_reflexive_l g n c (pal_C1_3 stem3) (pal_C1_4 stem3) 
+		Participle g n c => participle_reflexive_l g n c (pal_C1_3 stem3) (pal_C1_4 stem3)
       }
     } ;
 
@@ -267,7 +267,7 @@ oper
         Indicative P3 _ Fut  => stem + "sies" ;
         Indicative P3 _ Past    => stem + "jās" ;
 
-		Indicative _ _ Cond  => stem + "tos";		
+		Indicative _ _ Cond  => stem + "tos";
 
         Relative Pres => stem + "joties" ;
         Relative Fut  => stem + "šoties" ;
@@ -276,7 +276,7 @@ oper
 
         Debitive => "jā" + stem + "jas" ;
         DebitiveRelative => "jā" + stem + "joties" ;
-		
+
 		Imperative Sg => stem + "jies" ;
 		Imperative Pl => stem + "jieties" ;
 
@@ -310,7 +310,7 @@ oper
         Indicative P3 _ Fut  => stem + "sies" ;
         Indicative P3 _ Past    => stem + "jās" ;
 
-		Indicative _ _ Cond  => stem + "tos";		
+		Indicative _ _ Cond  => stem + "tos";
 
         Relative Pres => pal_C3_1 stem + "oties" ;
         Relative Fut  => stem + "šoties" ;
@@ -322,7 +322,7 @@ oper
 
 		Imperative Sg => pal_C3_1 stem + "ies" ;
 		Imperative Pl => pal_C3_1 stem + "ieties" ;
-		
+
 		Participle g n c => participle_reflexive g n c (stem + "j")
       }
     } ;
@@ -353,7 +353,7 @@ oper
       }
     }
   } ;
-  
+
   mkVerb_Walk : Verb = {
     s = table {
       Pos => table {
@@ -367,26 +367,26 @@ oper
         DebitiveRelative => NON_EXISTENT;
         x => (mkVerb_C1 "neiet" "neeju" "negāju" ).s ! x		-- the incorrect form 'neesu' will be overriden
       }
-    }  
+    }
   } ;
-  
+
   mkVerb_Sleep : Verb = {
     s = table {
       Pos => table {
-		Indicative P2 Sg Pres => (mkVerb_C3 "gulēt").s ! Indicative P2 Sg Pres;			
-	    Indicative p n Pres => (mkVerb_C3 "guļēt").s ! Indicative p n Pres;			
-		Relative Pres => (mkVerb_C3 "guļēt").s ! Relative Pres;			
-		Debitive => (mkVerb_C3 "guļēt").s ! Debitive;			
-		DebitiveRelative => (mkVerb_C3 "guļēt").s ! DebitiveRelative;			
-        x => (mkVerb_C3 "gulēt").s ! x			
+		Indicative P2 Sg Pres => (mkVerb_C3 "gulēt").s ! Indicative P2 Sg Pres;
+	    Indicative p n Pres => (mkVerb_C3 "guļēt").s ! Indicative p n Pres;
+		Relative Pres => (mkVerb_C3 "guļēt").s ! Relative Pres;
+		Debitive => (mkVerb_C3 "guļēt").s ! Debitive;
+		DebitiveRelative => (mkVerb_C3 "guļēt").s ! DebitiveRelative;
+        x => (mkVerb_C3 "gulēt").s ! x
       } ;
       Neg => table {
-		Indicative P2 Sg Pres => (mkVerb_C3 "negulēt").s ! Indicative P2 Sg Pres;			
+		Indicative P2 Sg Pres => (mkVerb_C3 "negulēt").s ! Indicative P2 Sg Pres;
 	    Indicative p n Pres => (mkVerb_C3 "neguļēt").s ! Indicative p n Pres;
-		Relative Pres => (mkVerb_C3 "neguļēt").s ! Relative Pres;			
-		Debitive => NON_EXISTENT;			
-		DebitiveRelative => NON_EXISTENT;			
-        x => (mkVerb_C3 "negulēt").s ! x		
+		Relative Pres => (mkVerb_C3 "neguļēt").s ! Relative Pres;
+		Debitive => NON_EXISTENT;
+		DebitiveRelative => NON_EXISTENT;
+        x => (mkVerb_C3 "negulēt").s ! x
       }
     }
   } ;
@@ -399,7 +399,7 @@ oper
       s + "s" => case stem3 of {
         _ + "d" => s + "dī" ;
         _ + "t" => s + "tī" ;
-        _ + "s" => s + "sī" ;		
+        _ + "s" => s + "sī" ;
         _ => stem
       } ;
 	  s + "z" => s + "zī" ; -- lauzt -> lauzīs
@@ -490,12 +490,12 @@ oper
       s + "ī"   => s + "ā" ;
       s + "inā" => s + "inā" ;
       _ => Predef.tk 1 stem + "a"
-    } ;  
+    } ;
 
 
   -- Participle paradigms
   participle_normal : Gender -> Number -> Case -> Str -> Str  = \g,n,c, stem -> participle_normal_l g n c stem stem;
-  participle_normal_l : Gender -> Number -> Case -> Str -> Str -> Str = \g,n,c, stem, lemma_stem -> 
+  participle_normal_l : Gender -> Number -> Case -> Str -> Str -> Str = \g,n,c, stem, lemma_stem ->
     case g of {
 		Masc => case n of {
 			Sg => case c of {
@@ -504,15 +504,15 @@ oper
 				Dat => stem + "ušam" ;
 				Acc => stem + "ušu" ;
 				Loc => stem + "ušā" ;
-				Voc => NON_EXISTENT 
+				Voc => NON_EXISTENT
 			} ;
 			Pl => case c of {
 				Nom => stem + "uši" ;
 				Gen => stem + "ušu" ;
 				Dat => stem + "ušiem" ;
 				Acc => stem + "ušus" ;
-				Loc => stem + "ušos" ; 
-				Voc => NON_EXISTENT 
+				Loc => stem + "ušos" ;
+				Voc => NON_EXISTENT
 			}
 		} ;
 		Fem => case n of {
@@ -522,7 +522,7 @@ oper
 				Dat => stem + "ušai" ;
 				Acc => stem + "ušu" ;
 				Loc => stem + "ušā" ;
-				Voc => NON_EXISTENT 
+				Voc => NON_EXISTENT
 			};
 			Pl => case c of {
 				Nom => stem + "ušas" ;
@@ -530,13 +530,13 @@ oper
 				Dat => stem + "ušām" ;
 				Acc => stem + "ušas" ;
 				Loc => stem + "ušās" ;
-				Voc => NON_EXISTENT 
+				Voc => NON_EXISTENT
 			}
 		}
 	} ;
 
   participle_reflexive : Gender -> Number -> Case -> Str -> Str  = \g,n,c, stem -> participle_reflexive_l g n c stem stem;
-  participle_reflexive_l : Gender -> Number -> Case -> Str -> Str -> Str = \g,n,c, stem, lemma_stem -> 
+  participle_reflexive_l : Gender -> Number -> Case -> Str -> Str -> Str = \g,n,c, stem, lemma_stem ->
     case g of {
 		Masc => case n of {
 			Sg => case c of {
@@ -545,7 +545,7 @@ oper
 				Dat => NON_EXISTENT ;
 				Acc => stem + "ušos" ;
 				Loc => NON_EXISTENT ;
-				Voc => NON_EXISTENT 
+				Voc => NON_EXISTENT
 			} ;
 			Pl => case c of {
 				Nom => stem + "ušies" ;
@@ -553,7 +553,7 @@ oper
 				Dat => NON_EXISTENT ;
 				Acc => stem + "ušos" ;
 				Loc => NON_EXISTENT ;
-				Voc => NON_EXISTENT 
+				Voc => NON_EXISTENT
 			}
 		} ;
 		Fem => case n of {
@@ -563,7 +563,7 @@ oper
 				Dat => NON_EXISTENT ;
 				Acc => stem + "ušos" ;
 				Loc => NON_EXISTENT ;
-				Voc => NON_EXISTENT 
+				Voc => NON_EXISTENT
 			};
 			Pl => case c of {
 				Nom => stem + "ušās" ;
@@ -571,9 +571,9 @@ oper
 				Dat => NON_EXISTENT ;
 				Acc => stem + "ušos" ;
 				Loc => NON_EXISTENT ;
-				Voc => NON_EXISTENT 
+				Voc => NON_EXISTENT
 			}
 		}
 	} ;
-	
+
 } ;

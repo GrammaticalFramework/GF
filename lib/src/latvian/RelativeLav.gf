@@ -1,55 +1,53 @@
-concrete RelativeLav of Relative = CatLav ** open ResLav, VerbLav in {
-flags optimize=all_subs ;
+--# -path=.:../abstract:../common:../prelude
 
-  lin
+concrete RelativeLav of Relative = CatLav ** open
+  ResLav,
+  VerbLav
+  in {
 
-    RelCl cl = {
-      s = \\m,p,_ => "ka" ++ cl.s ! m ! p 
-    } ;
-	  
-    RelVP rp vp = {
-      s = \\m,p,ag => rp.s ! Nom ++ buildVerb vp.v m p (toAgr (fromAgr ag).n P3 (fromAgr ag).g) ++ vp.s2 ! ag
-    } ;
+flags
+  optimize = all_subs ;
+  coding = utf8 ;
 
-    RelSlash rp slash = { -- FIXME - v�rdu sec�ba; nevis 'kas m�l vi�u' bet 'kas vi�u m�l' 
-      s = \\m,p,ag => 
-          slash.p.s ++ rp.s ! (slash.p.c ! Sg) ++  slash.s ! m ! p ;
-    } ;
-  {-
+lin
+  RelCl cl = { s = \\m,p,_ => "ka" ++ cl.s ! m ! p } ;
 
--- Pied piping: "at which we are looking". Stranding and empty
--- relative are defined in $ExtraEng.gf$ ("that we are looking at", 
--- "we are looking at").
+  RelVP rp vp = {
+    s = \\m,p,ag =>
+      rp.s ! Masc ! Nom ++ buildVerb vp.v m p (toAgr (fromAgr ag).n P3 (fromAgr ag).g) ++ vp.s2 ! ag
+  } ;
 
+  -- FIXME: vārdu secība - nevis 'kas mīl viņu' bet 'kas viņu mīl' (?)
+  -- FIXME: Masc varētu nebūt labi
+  RelSlash rp slash = {
+    s = \\m,p,ag => slash.p.s ++ rp.s ! Masc ! (slash.p.c ! Sg) ++  slash.s ! m ! p
+  } ;
 
-    FunRP p np rp = {
-      s = \\c => np.s ! Acc ++ p.s ++ rp.s ! RPrep (fromAgr np.a).g ;
-      a = RAg np.a
+  -- FIXME: placeholder
+  -- TODO: jātestē, kautkas nav labi ar testpiemēru
+  FunRP p np rp = {
+    s = \\g,c => p.s ++ rp.s ! g ! c ++ np.s ! (p.c ! (fromAgr np.a).n)
+  } ;
+
+  IdRP = {
+    s = table {
+      Masc => table {
+        Nom => "kurš" ;
+        Gen => "kura" ;
+        Dat => "kuram" ;
+        Acc => "kuru" ;
+        Loc => "kurā" ;
+        ResLav.Voc => NON_EXISTENT
       } ;
-	-}
-	--FIXME placeholder
-	FunRP p np rp = { s = \\_ => NON_EXISTENT } ; 
-	
-	IdRP = {
-	  s = table {
-		Nom => "kas";
-		Gen => "k�";
-		Dat => "kam";
-		Acc => "ko";
-		Loc => "kur";
-		ResLav.Voc => NON_EXISTENT		
-	  }
-	};
-	{-
-    IdRP = 
-     { s = table {
-        RC _ Gen => "whose" ; 
-        RC Neutr _  => "which" ;
-        RC _ Acc    => "whom" ;
-        RC _ Nom    => "who" ;
-        RPrep Neutr => "which" ;
-        RPrep _     => "whom"
-        } ;
-      a = RNoAg
-    } ; -}
+      Fem => table {
+        Nom => "kura" ;
+        Gen => "kuras" ;
+        Dat => "kurai" ;
+        Acc => "kuru" ;
+        Loc => "kurā" ;
+        ResLav.Voc => NON_EXISTENT
+      }
+    }
+  } ;
+
 }

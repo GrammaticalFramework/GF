@@ -1,4 +1,4 @@
---# -path=.:prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete LexiconLav of Lexicon = CatLav ** open
   ParadigmsLav,
@@ -7,13 +7,14 @@ concrete LexiconLav of Lexicon = CatLav ** open
   Prelude
   in {
 
-flags 
+flags
   optimize = values ;
   coding = utf8 ;
-  
+
 lin
   airplane_N = mkN "lidmašīna" ;
-  answer_V2S = mkV2S (mkV "atbildēt" third_conjugation) dat_Prep that_Subj ;	-- toP = 'answer to [Person]' = 'atbildēt [kam?]'
+  answer_V2S = mkV2S (mkV "atbildēt" third_conjugation) dat_Prep that_Subj ;
+  -- toP = 'answer to [Person]' = 'atbildēt [kam?]'
   apartment_N = mkN "dzīvoklis" ;
   apple_N = mkN "ābols" ;
   art_N = mkN "māksla" ;
@@ -38,10 +39,11 @@ lin
   bread_N = mkN "maize" ;
   break_V2 = mkV2 (mkV "lauzt" "laužu" "lauzu") acc_Prep ;
   broad_A = mkA "plats" ;
-  brother_N2 = mkN2 (mkN "brālis") gen_Prep True;	-- Ģenitīvs nav kā piederība, bet kā relācija: "Jāņa/tēva brālis", bet ne "mans brālis" (?)
+  brother_N2 = mkN2 (mkN "brālis") gen_Prep True;
+  -- Ģenitīvs nav kā piederība, bet kā relācija: "Jāņa/tēva brālis", bet ne "mans brālis" (?)
   brown_A = mkA "brūns" ;
   butter_N = mkN "sviests" ;
-  buy_V2 = mkV2 (mkV "pirkt" "pērku" "pirku") acc_Prep ;  
+  buy_V2 = mkV2 (mkV "pirkt" "pērku" "pirku") acc_Prep ;
   camera_N = mkN "fotoaparāts" ;
   cap_N = mkN "cepure" ;
   car_N = mkN "automašīna" ;
@@ -55,13 +57,13 @@ lin
   city_N = mkN "pilsēta" ;
   clean_A = mkA "tīrs" ;
   clever_A = mkA "gudrs" ;
-  close_V2 = mkV2 (mkV "aizvērt" "aizveru" "aizvēru") acc_Prep;
+  close_V2 = mkV2 (mkV "aizvērt" "aizveru" "aizvēru") acc_Prep ;
   coat_N = mkN "mētelis" ;
   cold_A = mkA "auksts" ;
   come_V = mkV "nākt" "nāku" "nācu" ;
   computer_N = mkN "dators" ;
   country_N = mkN "valsts" ;
-  cousin_N = mkN "brālēns" ; --FIXME - brālēns / māsīca angļiem ir vienāds...
+  cousin_N = mkN "brālēns" ;	-- FIXME: brālēns/māsīca angļiem ir vienāds...
   cow_N = mkN "govs" ;
   die_V = mkV "nomirt" "nomirstu" "nomiru";
   dirty_A = mkA "netīrs" ;
@@ -70,19 +72,17 @@ lin
   dog_N = mkN "suns" ;
   door_N = mkN "durvis" ;
   drink_V2 = mkV2 (mkV "dzert" "dzeru" "dzēru") acc_Prep;
-{-  
-  easy_A2V = mkA2V (regA "easy") forP ;  -- FIXME - nu nav tādas konstrukcijas latviešu val
--}
-  eat_V2 = mkV2 (mkV "ēst" "ēdu" "ēdu") acc_Prep;
+  --easy_A2V = mkA2V (regA "easy") forP ;	-- FIXME: nav tādas konstrukcijas latviešu val.
+  eat_V2 = mkV2 (mkV "ēst" "ēdu" "ēdu") acc_Prep ;
   empty_A = mkA "tukšs" ;
   enemy_N = mkN "ienaidnieks" ;
   factory_N = mkN "rūpnīca" ;
-  father_N2 = mkN2 (mkN "tēvs") gen_Prep True ; 
-  fear_VS = mkVS (mkV "baidīties" third_conjugation) that_Subj;
-  find_V2 = mkV2 (mkV "atrast" "atrodi" "atradu") acc_Prep;
+  father_N2 = mkN2 (mkN "tēvs") gen_Prep True ;
+  fear_VS = mkVS (mkV "baidīties" third_conjugation) that_Subj ;
+  find_V2 = mkV2 (mkV "atrast" "atrodi" "atradu") acc_Prep ;
   fish_N = mkN "zivs" ;
   floor_N = mkN "grīda" ;
-  forget_V2 = mkV2 (mkV "aizmirst" "aizmirstu" "aizmirsu") acc_Prep;  
+  forget_V2 = mkV2 (mkV "aizmirst" "aizmirstu" "aizmirsu") acc_Prep ;
   fridge_N = mkN "ledusskapis" ;
   friend_N = mkN "draugs" ;
   fruit_N = mkN "auglis" ;
@@ -92,14 +92,14 @@ lin
   glove_N = mkN "cimds" ;
   gold_N = mkN "zelts" ;
   good_A = mkA "labs" ;
-  go_V = mkV "iet" ; 
+  go_V = mkV "iet" ;
   green_A = mkA "zaļš" ;
   harbour_N = mkN "osta" ;
-  hate_V2 = mkV2 (mkV "ienīst" "ienīstu" "ienīdu") acc_Prep;
+  hate_V2 = mkV2 (mkV "ienīst" "ienīstu" "ienīdu") acc_Prep ;
   hat_N = mkN "cepure" ;
-  hear_V2 = mkV2 (mkV "dzirdēt" third_conjugation) acc_Prep;
+  hear_V2 = mkV2 (mkV "dzirdēt" third_conjugation) acc_Prep ;
   hill_N = mkN "kalns" ;
-  hope_VS = mkVS (mkV "cerēt" third_conjugation) that_Subj; 
+  hope_VS = mkVS (mkV "cerēt" third_conjugation) that_Subj ;
   horse_N = mkN "zirgs" ;
   hot_A = mkA "karsts" ;
   house_N = mkN "māja" ;
@@ -107,36 +107,35 @@ lin
   industry_N = mkN "industrija" ;
   iron_N = mkN "dzelzs" ;
   king_N = mkN "karalis" ;
-  know_V2 = mkV2 (mkV "zināt" third_conjugation) acc_Prep; -- FIXME - šitādas lietas jārisina ar valencēm nevis 2 vienādiem vārdiem
-  know_VS = mkVS (mkV "zināt" third_conjugation) that_Subj;
+  know_V2 = mkV2 (mkV "zināt" third_conjugation) acc_Prep ;
+  -- FIXME: šitādas lietas jārisina ar valencēm nevis 2 vienādiem vārdiem
+  know_VS = mkVS (mkV "zināt" third_conjugation) that_Subj ;
   lake_N = mkN "ezers" ;
   lamp_N = mkN "lampa" ;
-  learn_V2 = mkV2 (mkV "mācīties" third_conjugation) acc_Prep;
+  learn_V2 = mkV2 (mkV "mācīties" third_conjugation) acc_Prep ;
   leather_N = mkN "āda" ;
-  leave_V2 = mkV2 (mkV "atstāt" "atstāju" "atstāju") acc_Prep;
-{-  
-  like_V2 = mkV2 (regV "like") ;
--}  
+  leave_V2 = mkV2 (mkV "atstāt" "atstāju" "atstāju") acc_Prep ;
+  --like_V2 = mkV2 (regV "like") ;
   listen_V2 = mkV2 (mkV "klausīties" third_conjugation) acc_Prep ;
   live_V = mkV "dzīvot" second_conjugation ;
   long_A = mkA "garš" ;
-  lose_V2 = mkV2 (mkV "pazaudēt" second_conjugation) acc_Prep;
+  lose_V2 = mkV2 (mkV "pazaudēt" second_conjugation) acc_Prep ;
   love_N = mkN "mīlestība" ;
-  love_V2   = mkV2 (mkV "mīlēt" third_conjugation) acc_Prep;  
+  love_V2   = mkV2 (mkV "mīlēt" third_conjugation) acc_Prep ;
   man_N = mkN "vīrietis" ;
   married_A2 = mkA2 (mkA (mkV "precēties" third_conjugation)) with_Prep ;
   meat_N = mkN "gaļa" ;
   milk_N = mkN "piens" ;
   moon_N = mkN "mēness" ;
-  mother_N2 = mkN2 (mkN "māte") gen_Prep True;  
+  mother_N2 = mkN2 (mkN "māte") gen_Prep True ;
   mountain_N = mkN "kalns" ;
   music_N = mkN "mūzika" ;
   narrow_A = mkA "šaurs" ;
   new_A = mkA "jauns" ;
   newspaper_N = mkN "avīze" ;
-  oil_N = mkN "eļļa" ;  -- reku parādās klasiskās problēmas - eļļa vai nafta?
+  oil_N = mkN "eļļa" ;	-- reku parādās klasiskās problēmas - eļļa vai nafta?
   old_A = mkA "vecs" ;
-  open_V2 = mkV2 (mkV "atvērt" "atveru" "atvēru") acc_Prep;  
+  open_V2 = mkV2 (mkV "atvērt" "atveru" "atvēru") acc_Prep ;
   paint_V2A = mkV2A (mkV "krāsot" second_conjugation) acc_Prep ;
   paper_N = mkN "papīrs" ;
   paris_PN = mkPN "Parīze" ;
@@ -144,14 +143,14 @@ lin
   pen_N = mkN "pildspalva" ;
   planet_N = mkN "planēta" ;
   plastic_N = mkN "plastmasa" ;
-  play_V2 = mkV2 (mkV "spēlēt" second_conjugation) acc_Prep;
+  play_V2 = mkV2 (mkV "spēlēt" second_conjugation) acc_Prep ;
   policeman_N = mkN "policists" ;
   priest_N = mkN "mācītājs" ;
   probable_AS = mkAS (mkA "iespējams") ;
   queen_N = mkN "karaliene" ;
   radio_N = mkN "radio" ;
-{-  rain_V0 = mkV0 (regV "rain") ; -}
-  read_V2 = mkV2 (mkV "lasīt" third_conjugation) acc_Prep; 
+  --rain_V0 = mkV0 (regV "rain") ;
+  read_V2 = mkV2 (mkV "lasīt" third_conjugation) acc_Prep ;
   red_A = mkA "sarkans" ;
   religion_N = mkN "reliģija" ;
   restaurant_N = mkN "restorāns" ;
@@ -160,14 +159,14 @@ lin
   roof_N = mkN "jumts" ;
   rubber_N = mkN "gumija" ;
   run_V =  mkV "skriet" "skrienu" "skrēju" ;
-  say_VS = mkVS (mkV "sacīt" third_conjugation) that_Subj;
+  say_VS = mkVS (mkV "sacīt" third_conjugation) that_Subj ;
   school_N = mkN "skola" ;
   science_N = mkN "zinātne" ;
   sea_N = mkN "jūra" ;
-  seek_V2 = mkV2 (mkV "meklēt" second_conjugation) acc_Prep;
-  see_V2 = mkV2 (mkV "redzēt" third_conjugation) acc_Prep;
+  seek_V2 = mkV2 (mkV "meklēt" second_conjugation) acc_Prep ;
+  see_V2 = mkV2 (mkV "redzēt" third_conjugation) acc_Prep ;
   sell_V3 = mkV3 (mkV "pārdot" "pārdodu" "pārdevu") acc_Prep dat_Prep ;
-  send_V3 = mkV3 (mkV "sūtīt" third_conjugation) acc_Prep dat_Prep; 
+  send_V3 = mkV3 (mkV "sūtīt" third_conjugation) acc_Prep dat_Prep ;
   sheep_N = mkN "aita" ;
   ship_N = mkN "kuģis" ;
   shirt_N = mkN "krekls" ;
@@ -175,12 +174,12 @@ lin
   shop_N = mkN "veikals" ;
   short_A = mkA "īss" ;
   silver_N = mkN "sudrabs" ;
-  sister_N = mkN "māsa" ;  --TODO kāpēc nav kā brālis ar parametru?
-  sleep_V = mkV "gulēt";  
+  sister_N = mkN "māsa" ;	-- TODO: kāpēc nav kā brālis ar parametru?
+  sleep_V = mkV "gulēt";
   small_A = mkA "mazs" ;
   snake_N = mkN "čūska" ;
   sock_N = mkN "zeķe" ;
-  speak_V2 = mkV2 (mkV "sacīt" third_conjugation) acc_Prep; --TODO - citas valences tur tak  
+  speak_V2 = mkV2 (mkV "sacīt" third_conjugation) acc_Prep ;	-- TODO: citas valences tur tak
   star_N = mkN "zvaigzne" ;
   steel_N = mkN "tērauds" ;
   stone_N = mkN "akmens" ;
@@ -188,40 +187,40 @@ lin
   student_N = mkN "students" ;
   stupid_A = mkA "dumjš" ;
   sun_N = mkN "saule" ;
-  switch8off_V2 = mkV2 (mkV "izslēgt" "izslēdzu" "izslēdzu") acc_Prep;
-  switch8on_V2 = mkV2 (mkV "ieslēgt" "ieslēdzu" "ieslēdzu") acc_Prep;
+  switch8off_V2 = mkV2 (mkV "izslēgt" "izslēdzu" "izslēdzu") acc_Prep ;
+  switch8on_V2 = mkV2 (mkV "ieslēgt" "ieslēdzu" "ieslēdzu") acc_Prep ;
   table_N = mkN "galds" ;
-  talk_V3 = mkV3 (mkV "runāt" second_conjugation) to_Prep par_Prep ; --ar ko, par ko
+  talk_V3 = mkV3 (mkV "runāt" second_conjugation) to_Prep par_Prep ;	-- ar ko, par ko
   teacher_N = mkN "skolotājs" ;
-  teach_V2 = mkV2 (mkV "mācīt" third_conjugation) acc_Prep;
+  teach_V2 = mkV2 (mkV "mācīt" third_conjugation) acc_Prep ;
   television_N = mkN "televīzija" ;
   thick_A = mkA "biezs" ;
   thin_A = mkA "plāns" ;
   train_N = mkN "vilciens" ;
-  travel_V = mkV "ceļot" second_conjugation;
+  travel_V = mkV "ceļot" second_conjugation ;
   tree_N = mkN "koks" ;
   --trousers_N = mkN "bikses" ;
   ugly_A = mkA "neglīts" ;
-  understand_V2 = mkV2 (mkV "saprast" "saprotu" "sapratu") acc_Prep;
+  understand_V2 = mkV2 (mkV "saprast" "saprotu" "sapratu") acc_Prep ;
   university_N = mkN "universitāte" ;
   village_N = mkN "village" ;
   wait_V2 = mkV2 (mkV "gaidīt" third_conjugation) acc_Prep ;
-  walk_V = mkV "staigāt" second_conjugation ; 
-  warm_A = mkA "silts" ;  
-  war_N = mkN "karš" ;  
-  watch_V2 = mkV2 (mkV "skatīties" third_conjugation) acc_Prep;
+  walk_V = mkV "staigāt" second_conjugation ;
+  warm_A = mkA "silts" ;
+  war_N = mkN "karš" ;
+  watch_V2 = mkV2 (mkV "skatīties" third_conjugation) acc_Prep ;
   water_N = mkN "ūdens" ;
   white_A = mkA "balts" ;
   window_N = mkN "logs" ;
   wine_N = mkN "vīns" ;
-  win_V2 = mkV2 (mkV "uzvarēt" third_conjugation) acc_Prep;
+  win_V2 = mkV2 (mkV "uzvarēt" third_conjugation) acc_Prep ;
   woman_N = mkN "sieviete" ;
-  wonder_VQ = mkVQ (mkV "brīnīties" third_conjugation) ; 
+  wonder_VQ = mkVQ (mkV "brīnīties" third_conjugation) ;
   wood_N = mkN "koks" ;
-  write_V2 = mkV2 (mkV "rakstīt" third_conjugation) acc_Prep;
+  write_V2 = mkV2 (mkV "rakstīt" third_conjugation) acc_Prep ;
   yellow_A = mkA "dzeltens" ;
   young_A = mkA "jauns" ;
-  do_V2 = mkV2 (mkV "darīt" third_conjugation) acc_Prep; 
+  do_V2 = mkV2 (mkV "darīt" third_conjugation) acc_Prep ;
   now_Adv = mkAdv "tagad" ;
   already_Adv = mkAdv "jau" ;
   song_N = mkN "dziesma" ;
@@ -231,13 +230,12 @@ lin
   stop_V = mkV "apstāties" "apstājos" "apstājos";
   jump_V = mkV "lēkt" "lecu" "lēcu" ;
 
-{-  
-  left_Ord = mkOrd "left" ;
-  right_Ord = mkOrd "right" ; -}
-  far_Adv = mkAdv "tālu" ; 
+  --left_Ord = mkOrd "left" ;
+  --right_Ord = mkOrd "right" ;
+  far_Adv = mkAdv "tālu" ;
   correct_A = mkA "pareizs" ;
   dry_A = mkA "sauss" ;
-  dull_A = mkA "neass" ; -- garlaicīgs?
+  dull_A = mkA "neass" ;	-- garlaicīgs?
   full_A = mkA "pilns" ;
   heavy_A = mkA "smags" ;
   near_A = mkA "tuvs" ;
@@ -249,13 +247,13 @@ lin
   wet_A = mkA "slapjš" ;
   wide_A = mkA "plats" ;
   animal_N = mkN "dzīvnieks" ;
-  ashes_N = mkN "pelni" ; -- FIXME: plural only? kā to norāda?
+  ashes_N = mkN "pelni" ;	-- FIXME: plural only? kā to norāda?
   back_N = mkN "mugura" ;
   bark_N = mkN "miza" ;
   belly_N = mkN "vēders" ;
-  blood_N = mkN "asinis" Fem;
+  blood_N = mkN "asinis" Fem ;
   bone_N = mkN "kauls" ;
-  breast_N = mkN "krūts" Fem;
+  breast_N = mkN "krūts" Fem ;
   cloud_N = mkN "mākonis" ;
   day_N = mkN "diena" ;
   dust_N = mkN "putekļi" ;
@@ -272,13 +270,13 @@ lin
   foot_N = mkN "pēda" ;
   forest_N = mkN "mežs" ;
   grass_N = mkN "zāle" ;
-  guts_N = mkN "zarnas" ; -- FIXME: no singular
+  guts_N = mkN "zarnas" ;	-- FIXME: no singular
   hair_N = mkN "mati" ;
   hand_N = mkN "roka" ;
   head_N = mkN "galva" ;
   heart_N = mkN "sirds" ;
   horn_N = mkN "rags" ;
-  husband_N = mkN "vīrs" ; --TODO - kāpēc nav parametrs tāpat kā tēvam?
+  husband_N = mkN "vīrs" ;	--TODO: kāpēc nav parametrs tāpat kā tēvam?
   ice_N = mkN "ledus" ;
   knee_N = mkN "ceļgals" ;
   leaf_N = mkN "lapa" ;
@@ -311,62 +309,63 @@ lin
   wing_N = mkN "spārns" ;
   worm_N = mkN "tārps" ;
   year_N = mkN "gads" ;
- 
+
   blow_V = mkV "pūst" "pūšu" "pūtu" ;
-  breathe_V = mkV2 (mkV "elpot" second_conjugation) acc_Prep;
+  breathe_V = mkV2 (mkV "elpot" second_conjugation) acc_Prep ;
   burn_V = mkV "degt" "degu" "degu" ;
   dig_V = mkV "rakt" "roku" "raku" ;
-  fall_V = mkV "krist" "krītu" "kritu" ;  
-  float_V = mkV "peldēt" third_conjugation;
-  flow_V = mkV "plūst" "plūstu" "plūdu";
+  fall_V = mkV "krist" "krītu" "kritu" ;
+  float_V = mkV "peldēt" third_conjugation ;
+  flow_V = mkV "plūst" "plūstu" "plūdu" ;
   fly_V = mkV "lidot" second_conjugation ;
   freeze_V = mkV "sasalt" "sasalstu" "sasalu" ;
-  give_V3 = mkV3 (mkV "dot" "dodu" "devu") acc_Prep dat_Prep ; -- dot ko kam
+  give_V3 = mkV3 (mkV "dot" "dodu" "devu") acc_Prep dat_Prep ;	-- dot ko? kam?
   laugh_V = mkV "smieties" "smejos" "smējos" ;
   lie_V = mkV "gulties" "guļos" "gūlos" ;
-  play_V = mkV "spēlēt" second_conjugation;
-  sew_V = mkV "šūt" "šuju" "šuvu"; 
+  play_V = mkV "spēlēt" second_conjugation ;
+  sew_V = mkV "šūt" "šuju" "šuvu" ;
   sing_V = mkV "dziedāt" third_conjugation ;
   sit_V = mkV "sēdēt" third_conjugation ;
-  smell_V = mkV "smirdēt" third_conjugation;
+  smell_V = mkV "smirdēt" third_conjugation ;
   spit_V = mkV "spļaut" "spļauju" "spļāvu" ;
-  stand_V = mkV "stāvēt" third_conjugation;
+  stand_V = mkV "stāvēt" third_conjugation ;
   swell_V = mkV "piebriest" "piebriestu" "piebriedu" ;
-  swim_V = mkV "peldēt" third_conjugation;
-  think_V = mkV "domāt" second_conjugation;
-  turn_V = mkV "griezties" "griežos" "griezos";
+  swim_V = mkV "peldēt" third_conjugation ;
+  think_V = mkV "domāt" second_conjugation ;
+  turn_V = mkV "griezties" "griežos" "griezos" ;
   vomit_V = mkV "vemt" "vemju" "vēmu" ;
 
   bite_V2 = mkV2 (mkV "kost" "kožu" "kodu") dat_Prep ;
-  count_V2 = mkV2 (mkV "skaitīt" third_conjugation) acc_Prep;
-  cut_V2 = mkV2 (mkV "griezt" "griežu" "griezu") acc_Prep;
-  fear_V2 = mkV2 (mkV "baidīties" third_conjugation) from_Prep;
-  fight_V2 = mkV2 (mkV "cīnīties" third_conjugation) with_Prep;
-  hit_V2 = mkV2 (mkV "sist" "situ" "situ") dat_Prep; -- TODO - atkal valences, var arī akuzatīvu ar bik citu nozīmi
+  count_V2 = mkV2 (mkV "skaitīt" third_conjugation) acc_Prep ;
+  cut_V2 = mkV2 (mkV "griezt" "griežu" "griezu") acc_Prep ;
+  fear_V2 = mkV2 (mkV "baidīties" third_conjugation) from_Prep ;
+  fight_V2 = mkV2 (mkV "cīnīties" third_conjugation) with_Prep ;
+  hit_V2 = mkV2 (mkV "sist" "situ" "situ") dat_Prep ;
+  -- TODO: atkal valences, var arī akuzatīvu ar bik citu nozīmi
   hold_V2 = mkV2 (mkV "turēt" third_conjugation) acc_Prep ;
-  hunt_V2 = mkV2 (mkV "medīt" second_conjugation) acc_Prep;
-  kill_V2 = mkV2 (mkV "nogalināt" third_conjugation) acc_Prep;
-  pull_V2 = mkV2 (mkV "vilkt" "velku" "vilku") acc_Prep;
-  push_V2 = mkV2 (mkV "stumt" "stumju" "stūmu") acc_Prep;
-  rub_V2 = mkV2 (mkV "berzt" "beržu" "berzu") acc_Prep;
-  scratch_V2 = mkV2 (mkV "kasīt" third_conjugation) acc_Prep;
-  split_V2 = mkV2 (mkV "sadalīt" third_conjugation) acc_Prep;
-  squeeze_V2 = mkV2 (mkV "saspiest" "saspiežu" "saspiedu") acc_Prep;
-  stab_V2 = mkV2 (mkV "sadurt" "saduru" "sadūru") acc_Prep;
-  suck_V2 = mkV2 (mkV "sūkt" "sūcu" "sūcu") acc_Prep;
-  throw_V2 = mkV2 (mkV "mest" "metu" "metu") acc_Prep;
-  tie_V2 = mkV2 (mkV "piesiet" "piesienu" "piesēju") acc_Prep;
-  wash_V2 = mkV2 (mkV "mazgāt" second_conjugation) acc_Prep;
-  wipe_V2 = mkV2 (mkV "slaucīt" third_conjugation) acc_Prep;
+  hunt_V2 = mkV2 (mkV "medīt" second_conjugation) acc_Prep ;
+  kill_V2 = mkV2 (mkV "nogalināt" third_conjugation) acc_Prep ;
+  pull_V2 = mkV2 (mkV "vilkt" "velku" "vilku") acc_Prep ;
+  push_V2 = mkV2 (mkV "stumt" "stumju" "stūmu") acc_Prep ;
+  rub_V2 = mkV2 (mkV "berzt" "beržu" "berzu") acc_Prep ;
+  scratch_V2 = mkV2 (mkV "kasīt" third_conjugation) acc_Prep ;
+  split_V2 = mkV2 (mkV "sadalīt" third_conjugation) acc_Prep ;
+  squeeze_V2 = mkV2 (mkV "saspiest" "saspiežu" "saspiedu") acc_Prep ;
+  stab_V2 = mkV2 (mkV "sadurt" "saduru" "sadūru") acc_Prep ;
+  suck_V2 = mkV2 (mkV "sūkt" "sūcu" "sūcu") acc_Prep ;
+  throw_V2 = mkV2 (mkV "mest" "metu" "metu") acc_Prep ;
+  tie_V2 = mkV2 (mkV "piesiet" "piesienu" "piesēju") acc_Prep ;
+  wash_V2 = mkV2 (mkV "mazgāt" second_conjugation) acc_Prep ;
+  wipe_V2 = mkV2 (mkV "slaucīt" third_conjugation) acc_Prep ;
 
---  other_A = regA "other" ;
+  --other_A = regA "other" ;
 
   grammar_N = mkN "gramatika" ;
   language_N = mkN "valoda" ;
   rule_N = mkN "likums" ;
 
   john_PN = mkPN "Jānis" ;
-  
+
   question_N = mkN "jautājums" ;
   ready_A = mkA "gatavs" ;
   reason_N = mkN "iemesls" ;
@@ -374,8 +373,8 @@ lin
   uncertain_A = mkA "nepārliecināts" ;
 
 oper
-  par_Prep = mkPrep "par" Acc Dat;
-  
+  par_Prep = mkPrep "par" Acc Dat ;
+
 {-
   atP = mkPrep "at" ;
   forP = mkPrep "for" ;
@@ -383,7 +382,6 @@ oper
   inP = mkPrep "in" ;
   onP = mkPrep "on" ;
   toP = mkPrep "to" ;
-
 -}
-  
-} ;
+
+}
