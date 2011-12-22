@@ -267,7 +267,7 @@ static PyMethodDef expr_methods[] = {
 
 
 
-/* tree typr: methods, constructor and destructor */
+/* tree type: methods, constructor and destructor */
 //  Are Expr and Tree equivalent ? 
 
 REPRCB(tree_repr, Tree, gf_showExpr)
