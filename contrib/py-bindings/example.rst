@@ -9,7 +9,7 @@ First you must import the library:
 
 >>> import gf
 
-then load a .pgf file, like this tiny example:
+then load a PGF file, like this tiny example:
 
 >>> pgf = gf.read_pgf("Query.pgf")
 
@@ -73,7 +73,7 @@ Is it important to note the blank space at the end, otherwise we get it again:
 ['is']
 
 But, how come that nothing is suggested at "is "? 
-At the current point, a literal integer is expected so GF would have to present an  infinite list of alternatives. I can not blame it for refusing to do so.
+At the current point, a literal integer is expected so GF would have to present an infinite list of alternatives. I cannot blame it for refusing to do so.
 
 >>> pgf.complete(eng, "is 42 ")
 ['even', 'odd', 'prime']

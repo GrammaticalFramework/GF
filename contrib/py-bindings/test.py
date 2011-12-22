@@ -108,7 +108,7 @@ class TestLinearize(unittest.TestCase):
 		l = self.lang
 		for abs,cnc in self.samples:
 			ts = self.pgf.parse(l, cnc['eng'])
-			self.assertEqual(cnc['eng'],self.pgf.lin(l,ts[0]))
+			self.assertEqual(cnc['eng'],self.pgf.linearize(l,ts[0]))
 
 class TestTranslate(unittest.TestCase):
 	def setUp(self):
@@ -123,7 +123,7 @@ class TestTranslate(unittest.TestCase):
 					if i==j: continue
 					parsed = self.pgf.parse(l, cnc[i])
 					assert len(parsed) == 1
-					lin = self.pgf.lin(m,parsed[0])
+					lin = self.pgf.linearize(m,parsed[0])
 					self.assertEqual(lin,cnc[j])
 
 class TestUnapplyExpr(unittest.TestCase):

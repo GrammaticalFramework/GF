@@ -1,7 +1,7 @@
 {-# LANGUAGE ForeignFunctionInterface #-} 
 --
 -- GF Python bindings
--- Jordi Saludes, upc.edu 2010
+-- Jordi Saludes, upc.edu 2010, 2011
 --
 
 module PyGF where
@@ -156,9 +156,6 @@ listToPyStrings ss = do
   	      cs <- newCString s
 	      pcs <- pyString cs
 	      pyl << pcs
-
-
--- foreign export ccall "gf_freeArray" free :: Ptr a -> IO ()
 
               
 foreign export ccall gf_showLanguage :: Ptr Language -> IO CString
