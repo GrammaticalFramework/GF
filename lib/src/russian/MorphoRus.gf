@@ -1015,8 +1015,6 @@ oper ti_j_EndDecl : Str -> Adjective = \s ->{s = table {
   } ;
 -}
 
-
-
 ---- 2 Adverbs
 --
 --oper vsegda: Adverb = { s = "всегда" } ;
@@ -1037,6 +1035,47 @@ oper ti_j_EndDecl : Str -> Adjective = \s ->{s = table {
 -- +++ MG_UR: new conjugation class 'Foreign' introduced +++
 param Conjugation = First | FirstE | Second | SecondA | Mixed | Dolzhen | Foreign ;
 
+  oper hasConj : Verbum -> Conjugation = \ v ->
+	 case v.s ! VFORM Act VINF of {
+	   -- irregular first
+	   _+("бр"|"стел"|"поч"|"зижд"|"б"|"в"|"л"|"п"|"ш"|"гн"|"ж"|"зыб"|"шиб")+"ить"+(""|"ся") => First ;
+	   -- irregular second
+	   _+("блест"|"бол"|"вел"|"верт"|"вид"|"вис"|"галд"|"гляд"|"гор"|"грем"|"гуд"|"гунд"|"дуд"
+		|"завис"|"звен"|"зр"|"зуд"|"кип"|"киш"|"копт"|"корп"|"кряхт"|"лет"|"ненавид"|"обид"
+		|"перд"|"пыхт"|"сверб"|"свирист"|"свист"|"сид"|"сип"|"скорб"|"скрип"|"смерд"|"смотр"|"соп"
+		|"тарахт"|"терп"|"храп"|"хруст"|"шелест"|"шелест")+"еть"+(""|"ся") => Second ;
+	   _+("бренч"|"брюзж"|"бурч"|"верещ"|"визж"|"ворч"|"гн"|"дребезж"|"дыш"|"держ"|"дрож"|"жужж"|"журч"
+		|"звуч"|"крич"|"леж"|"молч"|"мыч"|"пищ"|"рыч"|"слыш"|"сп"|"стуч"|"торч"|"трещ"
+		|"урч"|"фырч"|"шурш"|"шкварч")+"ать"+(""|"ся") => SecondA ;
+	   -- regular first
+	   _+("сто"|"бо")+"ять"+(""|"ся") => SecondA ;
+	   stem+("е"|"а"|"о"|"у"|"я"|"ы")+"ть" => First;
+	   -- regular second
+	   stem+"ить" => Second;
+	   -- default
+	   stem+"ть" => First
+	 } ;
+
+  oper verbStem : Verbum -> Str = \ v ->
+	 case v.s ! VFORM Act VINF of {
+	   stem+"ть" => stem ;
+	   stem+"ти" => stem ;
+	   stem+"и" => stem
+	 } ;
+
+  oper verbHasEnding : Verbum -> Str = \ v ->
+	 case v.s ! (VFORM Act (VIND GPl (VPresent P3))) of {
+	   _+"ут" => "ущ" ;
+	   _+"ют" => "ющ" ;
+	   _+"ат" => "ащ" ;
+	   _+"ят" => "ящ"
+	 } ;
+
+  oper stemHasEnding : Str -> Str = \ s ->
+	 case s of {
+	   _+("а"|"е"|"ё"|"и"|"о"|"у"|"э"|"ю"|"я") => "вш" ;
+	   _ => "ш"
+	 } ;
 
 --3 First conjugation (in Present) verbs :
 oper verbIdti : Verbum = verbDecl Imperfective First "ид" "у" "шел" "иди" "идти";

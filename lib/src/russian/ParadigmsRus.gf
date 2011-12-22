@@ -401,12 +401,6 @@ foreign = Foreign; -- +++ MG_UR: added +++
       stem                            => mkAdjDeg (adjInvar stem) comparative
     } ;
 
-  -- mkParticiple : VP -> AP = \v, voice ->
-  --   case voice of {
-  --     Act => ;
-  --     Pass => ;
-  --   } ;
-
   -- khaki, mini, hindi, netto
   adjInvar : Str -> Adjective = \stem -> { s = \\_ => stem } ;
 
@@ -419,6 +413,40 @@ foreign = Foreign; -- +++ MG_UR: added +++
            }
   } ** {lock_A = <>};
 
+
+  oper mkParticiple : Voice -> VTense -> V -> A = \voice, tense, v ->
+	 let vstem = verbStem v in
+	 let actpres = verbHasEnding v in
+	 let actpast = stemHasEnding vstem in
+	 let passpast = case hasConj v of {
+	       (First|FirstE) => "ем" ;
+	       (Second|SecondA) => "им" ;
+	       _ => "ем"
+	       } in
+	 case <voice, tense> of {
+	   <Act, VPresent _> => mkA (vstem + actpres + "ий") ;
+	   <Act, VPast> => mkA (vstem + actpast + "ий") ;
+	   <Pass, VPresent _> => mkA (vstem + "нный") ;
+	   <Pass, VPast> => mkA (vstem + passpast + "ый") ;
+	   _ => mkA "" -- Russian participles do not have a future tense
+	 } ;
+
+  oper mkActPresParticiple : V -> A = mkParticiple Act (VPresent P3) ;
+  oper mkActPastParticiple : V -> A = mkParticiple Act (VPresent P3) ;
+  oper mkPassPresParticiple : V -> A = mkParticiple Pass VPast ;
+  oper mkPassPastParticiple : V -> A = mkParticiple Pass VPast ;
+
+  oper mkGerund : VTense -> V -> Adv = \tense, v ->
+	 let vstem = verbStem v in
+	 let suffix = case hasConj v of {
+	       SecondA => "а" ;
+	       _ => "я"
+	       } in
+	 case tense of {
+	   VPresent _ => mkAdv (vstem + suffix) ;
+	   VPast => mkAdv (vstem + "в") ;
+	   _ => mkAdv "" -- Russian gerunds do not have a future tense
+	 } ;
 
   mkA2 a p c=  a ** {c2 = {s=p; c=c}; lock_A2 = <>};
 --  mkADeg a s = mkAdjDeg a s ** {lock_ADeg = <>}; -- defined in morpho.RusU
