@@ -8,12 +8,6 @@ Editor modes & IDE integration for GF
 We collect GF modes for various editors on this page. Contributions are
 welcome!
 
-==GF Eclipse Plugin==
-
-As a new development under the MOLTO Poject, there is now a (beta) Eclipse plugin for
-writing GF grammars within the Eclipse IDE.
-Details can be found [here ../eclipse/]
-
 
 ==Emacs==
 
