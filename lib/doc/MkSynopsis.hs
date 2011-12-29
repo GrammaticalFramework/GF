@@ -17,7 +17,7 @@ revealedLang = "Eng"
 
 -- all languages shown
 apiExxFiles = ["api-examples-" ++ lang ++ ".txt" | lang <- words 
-  "Afr Bul Cat Dan Dut Eng Fin Fre Ger Ita Nep Nor Pes Pnb Pol Ron Rus Spa Swe Tha Urd"]
+  "Afr Bul Cat Dan Dut Eng Fin Fre Ger Ita Lav Nep Nor Pes Pnb Pol Ron Rus Spa Swe Tha Urd"]
 
 main = do
   xx <- getArgs
@@ -136,7 +136,7 @@ getRules aexx file = do
        _ -> getrs rs ss2
    rule s = (name, typ, ex)
        where 
-         ws = takeWhile (flip notElem ["--#", "--:"]) $ words s
+         ws = takeWhile (flip notElem ["--#", "--:", "="]) $ words s
          name = head ws
          (t,e) = span (/="--") (tail ws)
          typ = unwords $ filtype (drop 1 t)
@@ -247,6 +247,7 @@ paradigmFiles = [
   ("German",  srcPath "/german/ParadigmsGer.gf"),
 --  ("Interlingua", srcPath "/interlingua/ParadigmsIna.gf"),
   ("Italian",  srcPath "/italian/ParadigmsIta.gf"),
+  ("Latvian",  srcPath "/latvian/ParadigmsLav.gf"),
   ("Nepali", srcPath "/nepali/ParadigmsNep.gf"),
   ("Norwegian", srcPath "/norwegian/ParadigmsNor.gf"),
   ("Polish", srcPath "/polish/ParadigmsPol.gf"),
