@@ -31,7 +31,7 @@ are marked in the table
 | Ina   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | JB
 | Ita   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *AR,*RE,GP
 | Lat   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
-| Lav   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *NG
+| Lav   | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *NG,*PP
 | Mon   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *NE
 | Nep   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | *DS
 | Nor   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
@@ -107,6 +107,7 @@ NE Nyamsuren Erdenebadrakh,
 NF Nick Frolov,
 NG Normunds Gruzitis,
 RE Ramona Enache,
+PP Peteris Paikens,
 SC Server Cimen,
 SM Sofy Moradi,
 SV Shafqat Virk,
