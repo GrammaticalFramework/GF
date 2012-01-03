@@ -32,6 +32,7 @@ are marked in the table
 | Ita   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *AR,*RE,GP
 | Lat   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
 | Lav   | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *NG,*PP
+| Mlt   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *JC
 | Mon   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *NE
 | Nep   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | *DS
 | Nor   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
@@ -90,12 +91,13 @@ IA Ingrid Andersson,
 IL Inari Listenmaa,
 IN Ilona Novak,
 JB Jean-Philippe Bernardy,
+JC John J. Camilleri,
 JK Janna Khegai,
+JM Juliet Mutahi,
 JS Jordi Saludes,
 KA Krasimir Angelov,
 KK Kaarel Kaljurand,
 KP Kuchi Prasad,
-JM Juliet Mutahi,
 LPj Laurette Pretorius Jr,
 LPs Laurette Pretorius Sr,
 LZ Liza Zimina,
