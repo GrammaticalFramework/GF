@@ -51,7 +51,7 @@ are marked in the table
 
 Lang = 3-letter ISO language code, used in library file names
 
-Darcs = available in the darcs repository of http://code.haskell.org/gf
+Darcs = available in the darcs repository of --http://code.haskell.org/gf-- http://www.grammaticalframework.org/
 
 Mini = minimal resource, compiles with ``make minimal``
 
