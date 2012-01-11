@@ -1,7 +1,7 @@
 <h1>The GF Eclipse Plugin</h1>
 
 <p>John  J. Camilleri<br />
-Updated: 29 Nov 2011</p>
+Updated: 11 Jan 2012</p>
 
 <p><em>The research leading to these results has received funding from the European Union&#8217;s Seventh Framework Programme (FP7/2007-2013) under grant agreement n° FP7-ICT-247914.</em></p>
 
@@ -74,6 +74,9 @@ Updated: 29 Nov 2011</p>
 <h2>Update history</h2>
 
 <dl>
+<dt><strong>10/01/12</strong></dt>
+<dd>(1.2.2.x) Updated to use Xtext 2.1.0.</dd>
+
 <dt><strong>24/11/11</strong></dt>
 <dd>(1.2.0.x) with support for &#8220;Open Declaration&#8221; (F3) function, including for external libraries.</dd>
 
@@ -118,10 +121,14 @@ Updated: 29 Nov 2011</p>
 <ol>
 <li>Inside Eclipse, go to <strong>Help &rarr; Install New Software</strong>.</li>
 <li>Add new software site using the URL: <code>http://www.grammaticalframework.org/eclipse/release/</code></li>
-<li>Select the <strong>GF Eclipse Plugin</strong>, click Next, accept the license agreement and install.</li>
+<li>Select the <strong>GF Eclipse Plugin</strong>, and make sure the option <em>Contact all update sites during install to find required software</em> is checked.</li>
+<li>Click Next, accept the license agreement and install.</li>
 <li>Accept the prompt warning that the software is unsigned.</li>
 <li>Restart Eclipse when prompted.</li>
 </ol>
+
+<p><strong>Note when installing on Ubuntu:</strong>
+If you installed the Eclipse package from Ubuntu&#8217;s Software Centre you may find that your update site list is empty, as described by <a href="https://bugs.launchpad.net/ubuntu/+source/eclipse/+bug/460944">this bug</a>. This will cause the GFEP installation to fail; You will need to add the standard Eclipse update site URL manually, e.g. <code>http://download.eclipse.org/releases/indigo/</code></p>
 
 <h4>Settings</h4>
 
@@ -169,9 +176,9 @@ system and how you installed GF.</em><br />
 <p><em>If asked whether you want to add the <strong>Xtext nature</strong> to your project, you can safely say <strong>No</strong> (this prompt has been removed in newer versions).</em></p>
 
 <ul>
-<li><p>You can find some small examples at http://www.grammaticalframework.org/eclipse/examples/. Download the 
-files and manually add them to your Eclipse workspace. To experiment with some of the plugin features.</p></li>
-<li><p>You can change your syntax colouring styles as you wish from <strong>Window &rarr; Preferences &rarr; Grammatical Framework &rarr; Syntax Colouring</strong></p></li>
+<li><p>You can find some small examples at <a href="http://www.grammaticalframework.org/eclipse/examples/">http://www.grammaticalframework.org/eclipse/examples/</a>. Download the 
+files and manually add them to your Eclipse workspace to experiment with some of the plugin features.</p></li>
+<li><p>You can change your syntax colouring styles as you wish from <strong>Window &rarr; Preferences &rarr; Grammatical Framework &rarr; Syntax Coloring</strong></p></li>
 </ul>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-syntaxcoloring.png" alt="Syntax highlighting styles" /></p>
