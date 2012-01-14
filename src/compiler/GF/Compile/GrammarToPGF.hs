@@ -52,10 +52,10 @@ mkCanon2pgf opts gr am = do
 
         flags = Map.fromList [(mkCId f,C.LStr x) | (f,x) <- optionsPGF aflags]
         
-        funs = Map.fromAscList [(i2i f, (mkType [] ty, mkArrity ma, mkDef pty, 0)) | 
+        funs = Map.fromList [(i2i f, (mkType [] ty, mkArrity ma, mkDef pty, 0)) | 
                                    ((m,f),AbsFun (Just (L _ ty)) ma pty _) <- adefs]
                                    
-        cats = Map.fromAscList [(i2i c, (snd (mkContext [] cont),catfuns c)) |
+        cats = Map.fromList [(i2i c, (snd (mkContext [] cont),catfuns c)) |
                                    ((m,c),AbsCat (Just (L _ cont))) <- adefs]
 
         catfuns cat =
