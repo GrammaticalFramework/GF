@@ -31,6 +31,7 @@ param
 --  Anteriority = Simul | Anter ; 
   ClForm =  ClIndic RusTense Anteriority | ClCondit  | ClInfinit | ClImper;      
   -- "naked infinitive" clauses
+--  DetForm = NonNum | Few | Many ;
 
 -- A number of Russian nouns have common gender. They can
 -- denote both males and females: "умница" (a clever person), "инженер" (an engineer).
@@ -77,7 +78,7 @@ oper
 -- For the sake of shorter description these parameters are 
 -- combined in the type SubstForm.
 param
-  NForm = NF Number Case ;
+  NForm = NF Number Case Size ;
 
 
 -- Real parameter types (i.e. ones on which words and phrases depend) 
@@ -124,7 +125,9 @@ oper
    p : Person ; g: PronGen ; anim : Animacy ;  pron: Bool} ;
 
   mkNP : Number -> CommNoun -> NounPhrase = \n,chelovek -> 
-    {s = \\cas => chelovek.s ! NF n (extCase cas) ;
+    {s = \\cas => chelovek.s ! NF n (extCase cas) (case n of {
+                                                     Sg => nom ;
+                                                     Pl => plg });
      n = n ; g = PGen chelovek.g ; p = P3 ; pron =False ;
      anim = chelovek.anim 
     } ;

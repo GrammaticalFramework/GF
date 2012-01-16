@@ -14,7 +14,7 @@ lin
   above_Prep = { s = "над" ; c = Inst} ;
   after_Prep  = { s = "после" ; c = Gen };
 --  all8mass_Det = vesDet ** {n = Sg; g = PNoGen;  c = Nom} ; 
-  all_Predet  = vseDetPl ** { g = PNoGen; c = Nom; q = False} ; 
+  all_Predet  = vseDetPl ** { g = PNoGen; c = Nom; size = nom} ; 
   almost_AdA = {s= "почти"} ;
   almost_AdN = {s= "почти"} ;
   although_Subj  = ss "хотя" ;
@@ -33,11 +33,11 @@ lin
   during_Prep  = { s = ["в течение"] ; c = Gen};
   either7or_DConj  = sd2 "либо" [", либо"]  ** {n = Sg} ;
 -- comma is not visible in GUI!
-  every_Det  = kazhdujDet ** {n = Sg ; g = PNoGen; c= Nom; q = False} ; 
+  every_Det  = kazhdujDet ** {n = Sg ; g = PNoGen; c= Nom; size = nom} ; 
   everybody_NP = mkNP Pl (UseN ((eEnd_Decl "вс")**{lock_N=<>})) ;
   everything_NP  = UsePron (pronVseInanimate ** {lock_Pron=<>}) ;
   everywhere_Adv = ss "везде" ;
-  few_Det = nemnogoSgDet **{lock_Det= <>; n= Sg; g = PNoGen; c = Nom; q = True};
+  few_Det = nemnogoSgDet **{lock_Det= <>; n= Sg; g = PNoGen; c = Nom; size = plg};
 --- DEPREC  first_Ord = (uy_j_EndDecl  "перв" ) ** {lock_A = <>};  --AStaruyj 
   for_Prep = { s = "для" ; c = Gen };
   from_Prep  = { s = "от" ; c = Gen };
@@ -54,19 +54,19 @@ lin
   in_Prep = { s = "в" ; c = Prepos PrepVNa } ;
   it_Pron    = pronOno ;
   less_CAdv = {s="менее"; p=""} ;
-  many_Det  = mnogoSgDet ** {n = Sg; g = (PGen Neut); c= Gen; q = True} ; 
+  many_Det  = mnogoSgDet ** {n = Sg; g = (PGen Neut); c= Gen; size = plg} ; 
   more_CAdv = {s="более"; p=""} ;
-  most_Predet   = bolshinstvoSgDet ** {n = Sg; g = (PGen Neut); c= Gen; q = True} ; 
+  most_Predet   = bolshinstvoSgDet ** {n = Sg; g = (PGen Neut); c= Gen; size = plg} ; 
   -- inanimate, Sg: "большинство телефонов безмолству-ет" 
 --  most8many_Det = bolshinstvoPlDet ** {n = Pl; g = (PGen Neut); c= Gen} ;  
   -- animate, Pl: "большинство учащихся хорошо подготовлен-ы"
- much_Det   = mnogoSgDet ** {n = Sg; g = (PGen Neut); c= Gen; q = True} ; -- same as previous
+ much_Det   = mnogoSgDet ** {n = Sg; g = (PGen Neut); c= Gen; size = plg} ; -- same as previous
  must_VV  = verbDolzhen ;
  no_Utt  = ss ["Нет"] ;
  on_Prep = { s = "на" ; c = Prepos PrepVNa };
 --- DEPREC one_Quant = odinDet  ** {lock_QuantSg = <>; n= Sg; g = PNoGen; c = Nom };
 --AStaruyj :
- only_Predet = (uy_j_EndDecl  "единственн" ) ** {lock_Predet = <>; n= Sg; g = PNoGen; c = Nom; q = False };
+ only_Predet = (uy_j_EndDecl  "единственн" ) ** {lock_Predet = <>; n= Sg; g = PNoGen; c = Nom; size = nom };
  or_Conj  = {s1= [] ; s2 = "или" ; n = Sg} ;
  otherwise_PConj  = ss "иначе" ;
   part_Prep = { s = "" ; c = Nom}; -- missing in Russian
@@ -76,17 +76,17 @@ lin
   she_Pron   = pronOna ;
   so_AdA = ss "так";
   somebody_NP = UsePron (pronKtoTo** {lock_Pron = <>});
-  someSg_Det   = nekotorujDet ** {n = Sg; g = PNoGen; c= Nom; q = False} ;
-  somePl_Det = nekotorujDet ** {n = Pl; g = PNoGen; c= Nom; q = False} ;  
+  someSg_Det   = nekotorujDet ** {n = Sg; g = PNoGen; c= Nom; size = nom} ;
+  somePl_Det = nekotorujDet ** {n = Pl; g = PNoGen; c= Nom; size = nom} ;  
   something_NP  = UsePron (pronChtoTo** {lock_Pron=<> }) ;
   somewhere_Adv  = ss "где-нибудь" ;
-  that_Quant   = totDet ** {n = Sg; g = PNoGen; c= Nom; q = False} ;
+  that_Quant   = totDet ** {n = Sg; g = PNoGen; c= Nom; size = nom} ;
   there_Adv = ss "там" ;
   there7to_Adv = ss "туда" ;
   there7from_Adv = ss "оттуда" ;
   therefore_PConj  = ss "следовательно" ;
   they_Pron  = pronOni;
-  this_Quant   = etotDet ** {n = Sg; g = PNoGen; c= Nom; q = False} ;
+  this_Quant   = etotDet ** {n = Sg; g = PNoGen; c= Nom; size = nom} ;
   through_Prep  = { s = "через" ; c = Acc };
   to_Prep = { s = "к" ; c = Dat };
   too_AdA = ss "слишком" ;
