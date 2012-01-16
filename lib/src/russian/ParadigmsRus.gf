@@ -285,7 +285,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
 
   mkIndeclinableNoun = \s,g, anim ->
    {
-     s = table { NF _ _ => s } ;
+     s = table { NF _ _ _ => s } ;
      g = g ;
      anim = anim 
    } ** {lock_N = <>};
@@ -296,19 +296,19 @@ foreign = Foreign; -- +++ MG_UR: added +++
           nomPl, genPl, datPl, accPl, instPl, preposPl, g, anim ->
    {
      s = table { 
-           NF Sg Nom => nomSg ;
-           NF Sg Gen => genSg ;
-           NF Sg Dat => datSg ;
-           NF Sg Acc => accSg ;
-           NF Sg Inst => instSg ;
-           NF Sg (Prepos PrepOther) => preposSg ;
-           NF Sg (Prepos PrepVNa) => prepos2Sg ;
-           NF Pl Nom => nomPl ;
-           NF Pl Gen => genPl ;
-           NF Pl Dat => datPl ;
-           NF Pl Acc => accPl ;
-           NF Pl Inst => instPl ;
-           NF Pl (Prepos _) => preposPl
+           NF Sg Nom _ => nomSg ;
+           NF Sg Gen _ => genSg ;
+           NF Sg Dat _ => datSg ;
+           NF Sg Acc _ => accSg ;
+           NF Sg Inst _ => instSg ;
+           NF Sg (Prepos PrepOther) _ => preposSg ;
+           NF Sg (Prepos PrepVNa) _ => prepos2Sg ;
+           NF Pl Nom _ => nomPl ;
+           NF Pl Gen _ => genPl ;
+           NF Pl Dat _ => datPl ;
+           NF Pl Acc _ => accPl ;
+           NF Pl Inst _ => instPl ;
+           NF Pl (Prepos _) _ => preposPl
      } ;                           
      g = g ;
      anim = anim
@@ -370,7 +370,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
 	} ;
       Pl => mkProperNamePl ivan anim
     } ** {lock_PN =<>};
-  nounPN n = {s=\\c => n.s! NF Sg c; anim=n.anim; g=n.g; lock_PN=<>};
+  nounPN n = {s=\\c => n.s! NF Sg c nom; anim=n.anim; g=n.g; lock_PN=<>};
     
 -- On the top level, it is maybe $CN$ that is used rather than $N$, and
 -- $NP$ rather than $PN$.

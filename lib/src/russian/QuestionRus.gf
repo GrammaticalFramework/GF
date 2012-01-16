@@ -36,10 +36,10 @@ concrete QuestionRus of Question = CatRus ** open ResRus, Prelude in {
     {s = \\pf => case kakoj.c of {
        Nom => 
         kakoj.s ! AF (extCase pf) okhotnik.anim (gennum okhotnik.g kakoj.n) ++ 
-         okhotnik.s ! NF kakoj.n (extCase pf) ; 
+         okhotnik.s ! NF kakoj.n (extCase pf) nom ; 
        _ => 
         kakoj.s ! AF (extCase pf) okhotnik.anim (gennum okhotnik.g kakoj.n) ++ 
-        okhotnik.s ! NF kakoj.n kakoj.c };
+        okhotnik.s ! NF kakoj.n kakoj.c plg };
      n = kakoj.n ; 
      p = P3 ;
      pron = False;

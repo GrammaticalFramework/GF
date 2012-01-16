@@ -11,9 +11,9 @@ lincat Digit = {s : DForm => Gender => Animacy => Case => Str ; size : Size} ;
 lincat Sub10 = {s : Place => DForm => Gender => Animacy =>  Case => Str ; size : Size} ;
 lincat Sub100 = {s : Place => Gender => Animacy => Case => Str ; size : Size} ;
 lincat Sub1000 = {s : Place => Gender => Animacy => Case => Str ; size : Size} ;
-lincat Sub1000000 = {s : Gender => Animacy => Case => Str} ;
+lincat Sub1000000 = {s : Gender => Animacy => Case => Str ; size : Size} ;
 
-lin num x = {s = \\ g,a,c => x.s ! g ! a ! c; n = Pl}; ---- n TODO ; Size? AR 18/12/2007
+lin num x = {s = \\ g,a,c => x.s ! g ! a ! c; n = Pl ; size = x.size};
 
 lin n2  =
   {s = table {unit => \\ g, a, c =>
@@ -201,7 +201,7 @@ lin pot110  =
 lin pot111  =
   {s = \\ p => nadsat "один" ; size = plg} ; --- 11
 lin pot1to19 d =
-  {s = table {_ => d.s ! teen} ; size = plg} ;
+  {s = table {_ => d.s ! teen} ; size = d.size} ;
 lin pot0as1 n =
   {s = table {p => n.s ! p ! unit} ; size = n.size} ;
 lin pot1 d =
@@ -215,11 +215,11 @@ lin pot2 d =
 lin pot2plus d e =
   {s = \\ p, g, a, c => d.s ! p ! hund ! g ! a ! c ++ e.s ! indep ! g ! a ! c ; size = e.size} ;
 lin pot2as3 n =
-  {s = n.s ! indep} ;
+  {s = n.s ! indep ; size = n.size} ;
 lin pot3 n =
-  {s = \\ g, a, c => n.s ! attr ! Fem ! a ! c ++ mille ! n.size} ;
+  {s = \\ g, a, c => n.s ! attr ! Fem ! a ! c ++ mille ! n.size ; size = n.size} ;
 lin pot3plus n m =
-  {s = \\ g, a, c => n.s ! attr ! Fem ! a ! c ++ mille ! n.size ++ m.s ! indep ! g ! a ! c} ;
+  {s = \\ g, a, c => n.s ! attr ! Fem ! a ! c ++ mille ! n.size ++ m.s ! indep ! g ! a ! c ; size = m.size} ;
 
 --- TODO
 --- raz/odin
@@ -230,36 +230,39 @@ lin pot3plus n m =
     Dig = TDigit ;
 
   lin
-    IDig d = {s = d.s ; n = d.n} ;
+    IDig d = {s = d.s ; n = d.n ; size = d.size} ;
 
     IIDig d i = {
       s = d.s ++ i.s ;
-      n = Pl
+      n = Pl ;
+      size = i.size
     } ;
 
-    D_0 = mkDig "0" ;
-    D_1 = mk3Dig "1" "1" Sg ; ----
-    D_2 = mkDig "2" ;
-    D_3 = mkDig "3" ;
-    D_4 = mkDig "4" ;
-    D_5 = mkDig "5" ;
-    D_6 = mkDig "6" ;
-    D_7 = mkDig "7" ;
-    D_8 = mkDig "8" ;
-    D_9 = mkDig "9" ;
+    D_0 = mk2Dig "0" plg ;
+    D_1 = mk4Dig "1" "1" Sg nom ; ----
+    D_2 = mk2Dig "2" sgg ;
+    D_3 = mk2Dig "3" sgg ;
+    D_4 = mk2Dig "4" sgg ;
+    D_5 = mk2Dig "5" plg ;
+    D_6 = mk2Dig "6" plg ;
+    D_7 = mk2Dig "7" plg ;
+    D_8 = mk2Dig "8" plg ;
+    D_9 = mk2Dig "9" plg ;
 
   oper
-    mk2Dig : Str -> Str -> TDigit = \c,o -> mk3Dig c o Pl ;
-    mkDig : Str -> TDigit = \c -> mk2Dig c (c + "o") ;
+    mk3Dig : Str -> Str -> Size -> TDigit = \c,o,size -> mk4Dig c o Pl size ;
+    mk2Dig : Str -> Size -> TDigit = \c,size -> mk3Dig c (c + "o") size ;
 
-    mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
+    mk4Dig : Str -> Str -> Number -> Size -> TDigit = \c,o,n,size -> {
       s = c ; ---- gender
-      n = n
+      n = n ;
+      size = size
       } ;
 
     TDigit = {
       n : Number ;
-      s : Str
+      s : Str ;
+      size : Size
     } ;
 
 }

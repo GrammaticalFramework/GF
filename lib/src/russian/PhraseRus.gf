@@ -17,7 +17,7 @@ concrete PhraseRus of Phrase = CatRus ** open Prelude, ResRus in {
     UttNP np = {s = np.s ! PF Acc No NonPoss} ;
     UttVP vp = {s = vp.s ! ClInfinit ! GSg Masc ! P3} ;
     UttAdv adv = adv ;
-    UttCN n = {s = n.s ! NF Sg Nom} ;
+    UttCN n = {s = n.s ! NF Sg Nom nom} ;
     UttCard n = {s = n.s ! Neut ! Inanimate ! Nom} ;
     UttAP ap = {s = ap.s ! AF Nom Inanimate (GSg Neut)} ; ---- gennum ? (AR)
 
