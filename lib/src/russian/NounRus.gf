@@ -8,13 +8,8 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
     DetCN kazhduj okhotnik = {
       s = \\c => case kazhduj.size of {
 	nom =>
-	  case kazhduj.c of {
-	    Nom => 
               kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
-              okhotnik.s ! NF kazhduj.n (extCase c) nom ; 
-	    _ => 
-              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
-              okhotnik.s ! NF kazhduj.n kazhduj.c nom } ;
+              okhotnik.s ! NF kazhduj.n (extCase c) nom  ;
 	sgg =>
 	  case kazhduj.c of {
 	    Nom => 
@@ -155,7 +150,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
     PossPron p = {s = \\af => p.s ! mkPronForm (caseAF af) No (Poss (gennum (genAF af) (numAF af) )); c=Nom; g = PNoGen; size = nom} ;
 
    NumCard c = c ;
-   NumSg = {s = \\_,_,_ => [] ; n = Sg ; size = sgg} ;
+   NumSg = {s = \\_,_,_ => [] ; n = Sg ; size = nom} ;
    NumPl = {s = \\_,_,_ => [] ; n = Pl ; size = plg} ;
 
    OrdNumeral numeral = variants {} ; ---- TODO; needed to compile Constructors
