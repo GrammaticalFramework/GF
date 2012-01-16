@@ -14,7 +14,7 @@ flags coding = utf8 ;
     Bread = mkCN L.bread_N ;
     Cheese = mkCN L.cheese_N ;
     Chicken = mkCN (P.mkN "курица") ;
-    Coffee = mkCN (P.mkN "кофе") ;
+    Coffee = mkCN (P.mkIndeclinableNoun "кофе" P.masculine P.inanimate) ;
     Fish = mkCN L.fish_N ;
     Meat = mkCN (P.mkN "мясо") ;
     Milk = mkCN L.milk_N ; 
@@ -76,25 +76,25 @@ flags coding = utf8 ;
 
 -- currencies
 
-    DanishCrown = mkCN (P.mkA "датский") (P.mkN "крона") ;
-    Dollar = mkCN (P.mkN "доллар") ;
-    Euro = mkCN (P.mkN "евро") ;
-    Lei = mkCN (P.mkN "лей") ;
-    Leva = mkCN (P.mkN "лев") ;
-    NorwegianCrown = mkCN (P.mkA "норвежский") (P.mkN "крона") ;  
-    Pound = mkCN (P.mkN "фунт");
-    Rouble = mkCN (P.mkN "рубль") ;
-    SwedishCrown = mkCN (P.mkA "шведский") (P.mkN "крона") ;
-    Zloty = mkCN (P.mkN "злотый") ;
+    DanishCrown = mkCN (P.mkA "датский") (P.mkN "крона" P.inanimate) ;
+    Dollar = mkCN (P.mkN "доллар" P.inanimate) ;
+    Euro = mkCN (P.mkIndeclinableNoun "евро" P.neuter P.inanimate) ;
+    Lei = mkCN (P.mkN "лей" P.inanimate) ;
+    Leva = mkCN (P.mkN "лев" P.inanimate) ;
+    NorwegianCrown = mkCN (P.mkA "норвежский") (P.mkN "крона" P.inanimate) ;  
+    Pound = mkCN (P.mkN "фунт" P.inanimate);
+    Rouble = mkCN (P.mkN "рубль" P.inanimate) ;
+    SwedishCrown = mkCN (P.mkA "шведский") (P.mkN "крона" P.inanimate) ;
+    Zloty = mkCN (P.mkN "злотый" P.inanimate) ;
 
 
 -- Nationalities
 
 --    Belgian = mkNat "бельгийский" (P.mkPN "Бельгия" P.feminine P.singular P.inanimate) ;
-    Bulgarian = mkNat "болгарский" (P.mkPN "Болгария" P.feminine P.singular P.inanimate) ;
-    Catalan = mkNat "каталонский" (P.mkPN "Каталония" P.feminine P.singular P.inanimate) ;
-    Danish = mkNat "датский" (P.mkPN "Дания" P.feminine P.singular P.inanimate) ;
-    Dutch = mkNat "нидерландский" (P.mkPN "Нидерланды" P.neuter P.plural P.animate) ;
+    Bulgarian = mkNat "болгарский" (P.mkPN "Болгария" P.feminine P.singular P.animate) ;
+    Catalan = mkNat "каталонский" (P.mkPN "Каталония" P.feminine P.singular P.animate) ;
+    Danish = mkNat "датский" (P.mkPN "Дания" P.feminine P.singular P.animate) ;
+    Dutch = mkNat "нидерландский" (P.mkPN "Нидерланды" P.neuter P.plural P.inanimate) ;
     English = mkNat "английский" (P.mkPN "Англия" P.feminine P.singular P.animate) ;
     Finnish = mkNat "финский" (P.mkPN "Финляндия" P.feminine P.singular P.animate) ;
 --    Flemish = mkNat "фландрийский" (P.mkPN "Фландрия" P.feminine P.singular P.animate) ;
@@ -181,9 +181,9 @@ flags coding = utf8 ;
 -- below. Languages without productive genitives must use an equivalent of
 -- "the wife of my son" for non-pronouns.
 
-    Wife = xOf sing (P.mkN "жена") ; 
-    Husband = xOf sing (P.mkN "муж") ;
-    Son = xOf sing (P.mkN "сын") ;
+    Wife = xOf sing (P.mkN "жена" P.animate) ; 
+    Husband = xOf sing (P.mkN "муж" P.animate) ;
+    Son = xOf sing (P.mkN "сын" P.animate) ;
     Daughter = xOf sing (P.mkN "дочь" "дочери" "дочери" "дочь" "дочерью" "дочери" "дочь" "дочери" "дочерей" "дочерям" "дочерей" "дочерьми" "дочерях" P.feminine P.animate) ;
 --    Daughter = xOf sing E.daughter_N ;
     Children = xOf plur L.child_N ; 
@@ -231,7 +231,7 @@ flags coding = utf8 ;
 
   oper
     mkNat : Str -> PN -> NPNationality = \la,co -> 
-      mkNPNationality (mkNP (P.mkPN la P.masculine P.singular P.animate)) (mkNP co) (P.mkA la) ;
+      mkNPNationality (mkNP (mkCN (P.mkA la) (P.mkN "язык"))) (mkNP co) (P.mkA la) ;
 
     mkDay : Str -> P.Gender -> {name : NP ; point : Adv ; habitual : Adv} =
       \d,g -> mkNPDay (mkNP (P.mkPN d g P.singular P.inanimate)) (mkAdv (P.mkPrep "в" P.accusative) (mkNP (P.mkPN d g P.singular P.inanimate))) 

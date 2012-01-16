@@ -11,7 +11,7 @@ lin
   animal_N = mkN "животное" animate;
   answer_V2S = dirV2 (regV imperfective first "отвеча" "ю" "отвечал" "отвечай" "отвечать" );
   apartment_N = mkN "квартира" ;
-  apple_N = mkN "яблоко" ;
+  apple_N = mkN "яблоко" inanimate ;
   art_N = mkN "искусство" ;
   ashes_N = mkN "пепел" ;
   ask_V2Q = dirV2 (regV imperfective first "спрашива" "ю" "спрашивал" "спрашивай" "спрашивать") ;
@@ -22,7 +22,7 @@ lin
   bark_N = mkN "кора";
   beautiful_A = mkA "красивый";
   become_VA = regV perfective second "станов" "лю" "стал" "стань" "стать" ;
-  beer_N = mkN "пиво" ;
+  beer_N = mkIndeclinableNoun "пиво" neuter inanimate ;
   beg_V2V = dirV2 (mkV imperfective "прошу" "просишь" "просит" "просим" "просите" "просят" "просил" "проси" "просить" );
   belly_N = mkN "живот" ;
   big_A = mkA "большой" "больше" ;
