@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libgu
+Description: G(F|lib|othenburg) Utilities library
+Version: @VERSION@
+Libs: -L${libdir} -lgu 
+Cflags: -I${includedir} -I${libdir}/libgu/include
