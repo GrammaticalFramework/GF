@@ -1,144 +1,152 @@
-#ifndef PGF_EXPR_H
-#define PGF_EXPR_H
+#ifndef EXPR_H_
+#define EXPR_H_
 
-#define LIT_STR   0
-#define LIT_INT   1
-#define LIT_FLOAT 2
+#include <gu/read.h>
+#include <gu/write.h>
+#include <gu/variant.h>
+#include <gu/seq.h>
+#include <pgf/pgf.h>
 
-struct _Literal {
-  int tag;
+/// Abstract syntax trees
+/// @file
+
+/// An abstract syntax tree
+typedef GuVariant PgfExpr;
+
+GU_DECLARE_TYPE(PgfExpr, GuVariant);
+
+typedef GuList(PgfExpr) PgfExprs;
+
+typedef struct PgfHypo PgfHypo;
+typedef struct PgfType PgfType;
+
+typedef int PgfMetaId;
+
+typedef enum {
+	PGF_BIND_TYPE_EXPLICIT,
+	PGF_BIND_TYPE_IMPLICIT
+} PgfBindType;
+
+// PgfLiteral
+
+typedef GuVariant PgfLiteral;
+
+
+typedef enum {
+	PGF_LITERAL_STR,
+	PGF_LITERAL_INT,
+	PGF_LITERAL_FLT,
+	PGF_LITERAL_NUM_TAGS
+} PgfLiteralTag;
+
+typedef struct {
+	GuStr val;
+} PgfLiteralStr;
+
+typedef struct {
+	int val;
+} PgfLiteralInt;
+
+typedef struct {
+	double val;
+} PgfLiteralFlt;
+
+
+
+struct PgfHypo {
+	PgfBindType bindtype;
+
+	PgfCId cid;
+	/**< Locally scoped name for the parameter if dependent types
+	 * are used. "_" for normal parameters. */
+
+	PgfType* type;
 };
 
-typedef struct _LiteralStr {
-  struct _Literal _;
-  String val;
-} *LiteralStr;
+typedef GuSeq PgfHypos;
+extern GU_DECLARE_TYPE(PgfHypos, GuSeq);
 
-typedef struct _LiteralInt {
-  struct _Literal _;
-  int val;
-} *LiteralInt;
-
-typedef struct _LiteralFloat {
-  struct _Literal _;
-  double val;
-} *LiteralFloat;
-
-#define TAG_ABS 0
-#define TAG_APP 1
-#define TAG_LIT 2
-#define TAG_MET 3
-#define TAG_FUN 4
-#define TAG_VAR 5
-#define TAG_TYP 6
-#define TAG_IMP 7
-
-struct _Expr {
-  int tag;
+struct PgfType {
+	PgfHypos hypos;
+	PgfCId cid; /// XXX: resolve to PgfCat*?
+	int n_exprs;
+	PgfExpr exprs[];
 };
 
-typedef struct _ExprAbs {
-  struct _Expr _;
-  BindType bt;
-  CId var;
-  Expr body;
-} *ExprAbs;
+			
+typedef enum {
+	PGF_EXPR_ABS,
+	PGF_EXPR_APP,
+	PGF_EXPR_LIT,
+	PGF_EXPR_META,
+	PGF_EXPR_FUN,
+	PGF_EXPR_VAR,
+	PGF_EXPR_TYPED,
+	PGF_EXPR_IMPL_ARG,
+	PGF_EXPR_NUM_TAGS
+} PgfExprTag;
 
-typedef struct _ExprApp {
-  struct _Expr _;
-  Expr left, right;
-} *ExprApp;
+typedef struct {
+	PgfBindType bind_type;
+	PgfCId id; // 
+	PgfExpr body;
+} PgfExprAbs;
+		
+typedef struct {
+	PgfExpr fun;
+	PgfExpr arg;
+} PgfExprApp;
 
-typedef struct _ExprLit {
-  struct _Expr _;
-  Literal lit;
-} *ExprLit;
+typedef struct {
+	PgfLiteral lit;
+} PgfExprLit;
 
-typedef struct _ExprMeta {
-  struct _Expr _;
-  int id;
-} *ExprMeta;
+typedef struct {
+	PgfMetaId id;
+} PgfExprMeta;
 
-typedef struct _ExprFun {
-  struct _Expr _;
-  CId fun;
-} *ExprFun;
+typedef struct {
+	PgfCId fun;
+} PgfExprFun;
 
-typedef struct _ExprVar {
-  struct _Expr _;
-  int index;
-} *ExprVar;
+typedef struct {
+	int var;
+} PgfExprVar;
 
-typedef struct _ExprTyped {
-  struct _Expr _;
-  Expr e;
-  Type ty;
-} *ExprTyped;
+/**< A variable. The value is a de Bruijn index to the environment,
+ * beginning from the innermost variable. */
 
-typedef struct _ExprImplArg {
-  struct _Expr _;
-  Expr e;
-} *ExprImplArg;
+typedef struct {
+	PgfExpr expr;
+	PgfType* type;
+} PgfExprTyped;
 
-#define TAG_PAPP   0
-#define TAG_PVAR   1
-#define TAG_PAT    2
-#define TAG_PWILD  3
-#define TAG_PLIT   4
-#define TAG_PIMP   5
-#define TAG_PTILDE 6
+typedef struct {
+	PgfExpr expr;
+} PgfExprImplArg;
 
-typedef struct _Patt {
-  int tag;
-} *Patt;
+int
+pgf_expr_arity(PgfExpr expr);
 
-typedef struct _Patts {
-  int count;
-  Patt pats[];
-} *Patts;
+PgfExpr
+pgf_expr_unwrap(PgfExpr expr);
 
-typedef struct _PattApp {
-  struct _Patt _;
-  CId fun;
-  struct _Patts args;
-} *PattApp;
+typedef struct PgfApplication PgfApplication;
 
-typedef struct _PattVar {
-  struct _Patt _;
-  CId var;
-} *PattVar;
+struct PgfApplication {
+	PgfCId fun;
+	int n_args;
+	PgfExpr args[];
+};
 
-typedef struct _PattAt {
-  struct _Patt _;
-  CId  var;
-  Patt pat;
-} *PattAt;
+PgfApplication*
+pgf_expr_unapply(PgfExpr expr, GuPool* pool);
 
-typedef struct _PattWild {
-  struct _Patt _;
-} *PattWild;
 
-typedef struct _PattLit {
-  struct _Patt _;
-  Literal lit;
-} *PattLit;
+PgfExpr
+pgf_read_expr(GuReader* rdr, GuPool* pool, GuExn* err);
 
-typedef struct _PattImplArg {
-  struct _Patt _;
-  Patt pat;
-} *PattImplArg;
+void
+pgf_expr_print(PgfExpr expr, GuWriter* wtr, GuExn* err);
 
-typedef struct _PattTilde {
-  struct _Patt _;
-  Expr e;
-} *PattTilde;
-
-typedef struct _Equations {
-  int count;
-  struct _Equation {
-    Patts lhs;
-    Expr  rhs;
-  } equs[];
-} *Equations;
-
-#endif
+#endif /* EXPR_H_ */
