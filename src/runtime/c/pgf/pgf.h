@@ -74,5 +74,7 @@ GU_DECLARE_TYPE(PgfPGF, struct);
 
 /// @}
 
+void
+pgf_print(PgfPGF* pgf, GuWriter* wtr, GuExn* err); 
 
 #endif // PGF_H_

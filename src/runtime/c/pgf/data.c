@@ -229,6 +229,9 @@ GU_DEFINE_TYPE(
 GU_DEFINE_TYPE(
 	PgfConcr, struct, 
 	GU_MEMBER(PgfConcr, cflags, PgfFlagsP),
+    GU_MEMBER_P(PgfConcr, ccats, GuMap),
+    GU_MEMBER_P(PgfConcr, cncfuns, PgfCncFuns),
+    GU_MEMBER_P(PgfConcr, sequences, PgfSequences),	
 	GU_MEMBER_P(PgfConcr, printnames, PgfPrintNames),
 	GU_MEMBER_V(PgfConcr, cnccats,
 		    GU_TYPE_LIT(pointer, PgfCIdMap*,

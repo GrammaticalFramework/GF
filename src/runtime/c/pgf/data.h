@@ -157,6 +157,7 @@ struct PgfCncCat {
 
 struct PgfCncFun {
 	PgfCId fun; // XXX: resolve to PgfFunDecl*?
+    int funid;
 	GuLength n_lins;
 	PgfSeqId lins[];
 };
@@ -184,8 +185,11 @@ extern GU_DECLARE_TYPE(PgfPrintNames, GuStringMap);
 struct PgfConcr {
 	PgfFlags* cflags;
 	PgfPrintNames* printnames;
-	PgfCIdMap* cnccats;
+    GuMap* ccats;
 	PgfCCatSeq extra_ccats;
+    PgfCncFuns* cncfuns;
+    PgfSequences* sequences;	
+	PgfCIdMap* cnccats;
 };
 
 extern GU_DECLARE_TYPE(PgfConcr, struct);

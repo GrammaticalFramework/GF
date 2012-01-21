@@ -147,6 +147,12 @@ PgfExpr
 pgf_read_expr(GuReader* rdr, GuPool* pool, GuExn* err);
 
 void
-pgf_expr_print(PgfExpr expr, GuWriter* wtr, GuExn* err);
+pgf_print_expr(PgfExpr expr, int prec, GuWriter* wtr, GuExn* err);
+
+void
+pgf_print_hypo(PgfHypo *hypo, int prec, GuWriter *wtr, GuExn *err);
+
+void
+pgf_print_type(PgfType *type, int prec, GuWriter *wtr, GuExn *err);
 
 #endif /* EXPR_H_ */

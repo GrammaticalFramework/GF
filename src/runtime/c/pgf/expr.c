@@ -291,8 +291,8 @@ pgf_read_expr(GuReader* rdr, GuPool* pool, GuExn* err)
 	return expr;
 }
 
-static void
-pgf_expr_print_with_paren(PgfExpr expr, bool need_paren,
+void
+pgf_print_expr(PgfExpr expr, int prec,
 			  GuWriter* wtr, GuExn* err)
 {
 	GuVariantInfo ei = gu_variant_open(expr);
@@ -304,13 +304,13 @@ pgf_expr_print_with_paren(PgfExpr expr, bool need_paren,
 	}
 	case PGF_EXPR_APP: {
 		PgfExprApp* app = ei.data;
-		if (need_paren) {
+		if (prec > 3) {
 			gu_puts("(", wtr, err);
 		}
-		pgf_expr_print_with_paren(app->fun, false, wtr, err);
+		pgf_print_expr(app->fun, 3, wtr, err);
 		gu_puts(" ", wtr, err);
-		pgf_expr_print_with_paren(app->arg, true, wtr, err);
-		if (need_paren) {
+		pgf_print_expr(app->arg, 4, wtr, err);
+		if (prec > 3) {
 			gu_puts(")", wtr, err);
 		}
 		break;
@@ -329,6 +329,47 @@ pgf_expr_print_with_paren(PgfExpr expr, bool need_paren,
 }
 
 void
-pgf_expr_print(PgfExpr expr, GuWriter* wtr, GuExn* err) {
-	pgf_expr_print_with_paren(expr, false, wtr, err);
+pgf_print_hypo(PgfHypo *hypo, int prec, GuWriter *wtr, GuExn *err)
+{
+    if (hypo->bindtype == PGF_BIND_TYPE_IMPLICIT) {
+        gu_puts("({", wtr, err);
+        gu_string_write(hypo->cid, wtr, err);
+        gu_puts("} : ", wtr, err);
+        pgf_print_type(hypo->type, 0, wtr, err);
+        gu_puts(")", wtr, err);
+    } else {
+        GuPool* tmp_pool = gu_new_pool();
+        GuString tmp = gu_str_string("_", tmp_pool);
+        
+        if (!gu_string_eq(hypo->cid, tmp)) {
+            gu_puts("(", wtr, err);
+            gu_string_write(hypo->cid, wtr, err);
+            gu_puts(" : ", wtr, err);
+            pgf_print_type(hypo->type, 0, wtr, err);
+            gu_puts(")", wtr, err);
+        } else {
+            pgf_print_type(hypo->type, prec, wtr, err);
+        }
+        
+        gu_pool_free(tmp_pool);
+    }
+}
+
+void
+pgf_print_type(PgfType *type, int prec, GuWriter *wtr, GuExn *err)
+{
+    size_t len = gu_seq_length(type->hypos);
+    for (size_t i = 0; i < len; i++) {
+        PgfHypo *hypo = gu_seq_index(type->hypos, PgfHypo, i);
+        pgf_print_hypo(hypo, 1, wtr, err);
+
+        gu_puts(" -> ", wtr, err);
+    }
+
+    gu_string_write(type->cid, wtr, err);
+    
+    for (int i = 0; i < type->n_exprs; i++) {
+        gu_puts(" ", wtr, err);
+        pgf_print_expr(type->exprs[i], 4, wtr, err);
+    }
 }
