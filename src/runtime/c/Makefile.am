@@ -47,7 +47,7 @@ pgfinclude_HEADERS = \
 	pgf/expr.h \
 	pgf/linearize.h \
 	pgf/parser.h \
-	pgf/pgf.h 
+	pgf/pgf.h
 
 libgu_la_SOURCES = \
 	gu/assert.c \
@@ -88,14 +88,19 @@ libpgf_la_SOURCES = \
 	pgf/parser.c \
 	pgf/parser.h \
 	pgf/reader.c \
-	pgf/linearize.c
+	pgf/linearize.c \
+	pgf/printer.c
 
 bin_PROGRAMS = \
 	utils/pgf2yaml \
+	utils/pgf-print \
 	utils/pgf-translate
 
 utils_pgf2yaml_SOURCES = utils/pgf2yaml.c
 utils_pgf2yaml_LDADD = libpgf.la libgu.la 
+
+utils_pgf_print_SOURCES = utils/pgf-print.c
+utils_pgf_print_LDADD = libpgf.la libgu.la 
 
 utils_pgf_translate_SOURCES = utils/pgf-translate.c
 utils_pgf_translate_LDADD = libpgf.la libgu.la

@@ -54,7 +54,6 @@ struct PgfReader {
 	GuTypeMap* read_to_map;
 	GuTypeMap* read_new_map;
 	void* curr_key;
-	GuPool* curr_pool;
 };
 
 typedef struct PgfReadTagExn PgfReadTagExn;
@@ -433,6 +432,7 @@ pgf_read_to_PgfCCatId(GuType* type, PgfReader* rdr, void* to)
 	PgfCCat** pto = to;
 	int fid = pgf_read_int(rdr);
 	gu_return_on_exn(rdr->err,);
+
 	PgfCCat* ccat = gu_map_get(rdr->curr_ccats, &fid, PgfCCat*);
 	if (!ccat) {
         ccat = gu_new(PgfCCat, rdr->pool);
@@ -539,11 +539,18 @@ pgf_read_new_idarray(GuType* type, PgfReader* rdr, GuPool* pool,
 		     size_t* size_out)
 {
 	(void) type;
-	void* list = pgf_read_new_GuList(type, rdr, rdr->curr_pool, size_out);
+	void* list = pgf_read_new_GuList(type, rdr, rdr->opool, size_out);
 	if (type == gu_type(PgfSequences)) {
 		rdr->curr_sequences = list;
 	} else if (type == gu_type(PgfCncFuns)) {
 		rdr->curr_cncfuns = list;
+        
+        // set the function ids
+        int n_funs = gu_list_length(rdr->curr_cncfuns);
+        for (int funid = 0; funid < n_funs; funid++) {
+            PgfCncFun* cncfun = gu_list_index(rdr->curr_cncfuns, funid);
+            cncfun->funid = funid;
+        }
 	} else {
 		gu_impossible();
 	}
@@ -645,39 +652,31 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
 		       size_t* size_out)
 {
 	(void) (type && size_out);
-	/* We allocate indices from a temporary pool. The actual data
-	 * is allocated from rdr->opool. Once everything is resolved
-	 * and indices aren't needed, the temporary pool can be
-	 * freed. */
-	GuPool* tmp_pool = gu_new_pool();
-	rdr->curr_pool = tmp_pool;
-	PgfConcr* concr = gu_new(PgfConcr, pool);;
+	PgfConcr* concr = gu_new(PgfConcr, pool);
 	concr->cflags = 
 		pgf_read_new(rdr, gu_type(PgfFlags), pool, NULL);
 	concr->printnames = 
 		pgf_read_new(rdr, gu_type(PgfPrintNames), pool, NULL);
-	rdr->curr_sequences = 
-		pgf_read_new(rdr, gu_type(PgfSequences), pool, NULL);
-	rdr->curr_cncfuns =
+	concr->sequences = 
+		pgf_read_new(rdr, gu_type(PgfSequences), rdr->opool, NULL);
+	concr->cncfuns =
 		pgf_read_new(rdr, gu_type(PgfCncFuns), pool, NULL);
 	GuMapType* lindefs_t = gu_type_cast(gu_type(PgfLinDefs), GuMap);
-	rdr->curr_lindefs = gu_map_type_make(lindefs_t, tmp_pool);
+	rdr->curr_lindefs = gu_map_type_make(lindefs_t, pool);
 	pgf_read_into_map(lindefs_t, rdr, rdr->curr_lindefs, rdr->opool);
 	GuMapType* ccats_t = gu_type_cast(gu_type(PgfCCatMap), GuMap);
-	rdr->curr_ccats =
-		gu_new_int_map(PgfCCat*, &gu_null_struct, tmp_pool);
-	rdr->ccat_locs =
-		gu_new_int_map(GuBuf*, &gu_null_struct, tmp_pool);
-	pgf_read_into_map(ccats_t, rdr, rdr->curr_ccats, rdr->opool);
+	concr->ccats =
+		gu_new_int_map(PgfCCat*, &gu_null_struct, pool);
+    rdr->curr_ccats = concr->ccats;
+	pgf_read_into_map(ccats_t, rdr, concr->ccats, rdr->opool);    
 	concr->cnccats = pgf_read_new(rdr, gu_type(PgfCncCatMap), 
 				      rdr->opool, NULL);
 
-	GuBuf* extra_ccats = gu_new_buf(PgfCCat*, tmp_pool);
+	GuBuf* extra_ccats = gu_new_buf(PgfCCat*, pool);
 	PgfCCatCbCtx ctx = { { pgf_read_ccat_cb }, extra_ccats };
-	gu_map_iter(rdr->curr_ccats, &ctx.fn, NULL);
+	gu_map_iter(concr->ccats, &ctx.fn, NULL);
 	concr->extra_ccats = gu_buf_freeze(extra_ccats, rdr->opool);
 	(void) pgf_read_int(rdr); // totalcats
-	gu_pool_free(tmp_pool);
 	return concr;
 }
 

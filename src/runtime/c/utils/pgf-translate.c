@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
 			}
 			gu_putc(' ', wtr, err);
 			// Write out the abstract syntax tree
-			pgf_expr_print(expr, wtr, err);
+			pgf_print_expr(expr, 0, wtr, err);
 			gu_putc('\n', wtr, err);
 
 			// Enumerate the concrete syntax trees corresponding
