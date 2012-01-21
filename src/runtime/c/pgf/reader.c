@@ -49,7 +49,6 @@ struct PgfReader {
 	PgfSequences* curr_sequences;
 	PgfCncFuns* curr_cncfuns;
 	GuMap* curr_ccats;
-	GuMap* ccat_locs;
 	GuMap* curr_lindefs;
 	GuMap* curr_coercions;
 	GuTypeMap* read_to_map;
@@ -435,16 +434,16 @@ pgf_read_to_PgfCCatId(GuType* type, PgfReader* rdr, void* to)
 	int fid = pgf_read_int(rdr);
 	gu_return_on_exn(rdr->err,);
 	PgfCCat* ccat = gu_map_get(rdr->curr_ccats, &fid, PgfCCat*);
-	if (ccat) {
-		*pto = ccat;
-		return;
+	if (!ccat) {
+        ccat = gu_new(PgfCCat, rdr->pool);
+        ccat->cnccat = NULL;
+        ccat->prods = gu_null_seq;
+        ccat->fid = fid;
+
+        gu_map_put(rdr->curr_ccats, &fid, PgfCCat*, ccat);
 	}
-	GuBuf* locs = gu_map_get(rdr->ccat_locs, &fid, GuBuf*);
-	if (!locs) {
-		locs = gu_new_buf(PgfCCat**, rdr->pool);
-		gu_map_put(rdr->ccat_locs, &fid, GuBuf*, locs);
-	}
-	gu_buf_push(locs, PgfCCat**, pto);
+
+    *pto = ccat;
 }
 
 static void
@@ -457,14 +456,6 @@ pgf_read_to_PgfCCat(GuType* type, PgfReader* rdr, void* to)
 	pgf_read_to(rdr, gu_type(PgfProductionSeq), &cat->prods);
 	int* fidp = rdr->curr_key;
 	cat->fid = *fidp;
-	GuBuf* locs_buf = gu_map_get(rdr->ccat_locs, fidp, GuBuf*);
-	if (locs_buf) {
-		size_t len = gu_buf_length(locs_buf);
-		PgfCCat*** locs = gu_buf_data(locs_buf);
-		for (size_t n = 0; n < len; n++) {
-			*(locs[n]) = cat;
-		}
-	}
 	gu_exit("<-");
 }
 
@@ -474,7 +465,11 @@ static void*
 pgf_read_new_PgfCCat(GuType* type, PgfReader* rdr, GuPool* pool,
 		     size_t* size_out)
 {
-	PgfCCat* ccat = gu_new(PgfCCat, pool);
+	PgfCCat* ccat = gu_map_get(rdr->curr_ccats, rdr->curr_key, PgfCCat*);
+	if (!ccat) {
+        ccat = gu_new(PgfCCat, pool);
+        gu_map_put(rdr->curr_ccats, rdr->curr_key, PgfCCat*, ccat);
+	}
 	pgf_read_to_PgfCCat(type, rdr, ccat);
 	*size_out = sizeof(PgfCCat);
 	return ccat;
@@ -737,19 +732,22 @@ pgf_read_new_PgfCncCat(GuType* type, PgfReader* rdr, GuPool* pool,
 	PgfCCatIds* cats = gu_new_list(PgfCCatIds, pool, len);
 	int n_lins = -1;
 	for (int i = 0; i < len; i++) {
-		int n = first + i;
-		PgfCCat* ccat = gu_map_get(rdr->curr_ccats, &n, PgfCCat*);
-		/* ccat can be NULL if the PGF is optimized and the
-		 * category has been erased as useless */
+		int fid = first + i;
+		PgfCCat* ccat = gu_map_get(rdr->curr_ccats, &fid, PgfCCat*);
+        if (!ccat) {
+            ccat = gu_new(PgfCCat, rdr->pool);
+            ccat->cnccat = NULL;
+            ccat->prods = gu_null_seq;
+            ccat->fid = fid;
+
+            gu_map_put(rdr->curr_ccats, &fid, PgfCCat*, ccat);
+        }
 		gu_list_index(cats, i) = ccat;
-		if (ccat != NULL) {
-			// TODO: error if overlap
-			ccat->cnccat = cnccat;
-			if (!pgf_ccat_n_lins(ccat, &n_lins)) {
-				gu_raise(rdr->err, PgfReadExn);
-				goto fail;
-			}
-			
+
+        ccat->cnccat = cnccat;
+		if (!pgf_ccat_n_lins(ccat, &n_lins)) {
+			gu_raise(rdr->err, PgfReadExn);
+			goto fail;
 		}
 		gu_debug("range[%d] = %d", i, ccat ? ccat->fid : -1);
 	}
