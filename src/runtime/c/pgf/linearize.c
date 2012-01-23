@@ -206,20 +206,6 @@ pgf_lzr_index(PgfLzr* lzr, PgfCCat* cat, PgfProduction prod)
 	}
 }
 
-static void
-pgf_lzr_index_ccat(PgfLzr* lzr, PgfCCat* cat)
-{
-	gu_debug("ccat: %d", cat->fid);
-	if (gu_seq_is_null(cat->prods)) {
-		return;
-	}
-	size_t n_prods = gu_seq_length(cat->prods);
-	for (size_t i = 0; i < n_prods; i++) {
-		PgfProduction prod = gu_seq_get(cat->prods, PgfProduction, i);
-		pgf_lzr_index(lzr, cat, prod);
-	}
-}
-
 typedef struct {
 	GuMapItor fn;
 	PgfLzr* lzr;
@@ -229,19 +215,18 @@ static void
 pgf_lzr_index_cnccat_cb(GuMapItor* fn, const void* key, void* value,
 			GuExn* err)
 {
-	(void) (key && err);
 	PgfLzrIndexFn* clo = (PgfLzrIndexFn*) fn;
-	PgfCncCat** cnccatp = value;
-	PgfCncCat* cnccat = *cnccatp;
-	gu_enter("-> cnccat: %s", cnccat->cid);
-	int n_ccats = gu_list_length(cnccat->cats);
-	for (int i = 0; i < n_ccats; i++) {
-		PgfCCat* cat = gu_list_index(cnccat->cats, i);
-		if (cat) {
-			pgf_lzr_index_ccat(clo->lzr, cat);
-		}
+    PgfCCat *ccat = *((PgfCCat **) value);
+     
+   	gu_debug("ccat: %d", ccat->fid);
+	if (gu_seq_is_null(ccat->prods)) {
+		return;
 	}
-	gu_exit("<-");
+	size_t n_prods = gu_seq_length(ccat->prods);
+	for (size_t i = 0; i < n_prods; i++) {
+		PgfProduction prod = gu_seq_get(ccat->prods, PgfProduction, i);
+		pgf_lzr_index(clo->lzr, ccat, prod);
+	}
 }
 
 
@@ -254,12 +239,7 @@ pgf_new_lzr(PgfConcr* cnc, GuPool* pool)
 	lzr->fun_indices = gu_map_type_new(PgfFunIndices, pool);
 	lzr->coerce_idx = gu_map_type_new(PgfCoerceIdx, pool);
 	PgfLzrIndexFn clo = { { pgf_lzr_index_cnccat_cb }, lzr };
-	gu_map_iter(cnc->cnccats, &clo.fn, NULL);
-	size_t n_extras = gu_seq_length(cnc->extra_ccats);
-	for (size_t i = 0; i < n_extras; i++) {
-		PgfCCat* cat = gu_seq_get(cnc->extra_ccats, PgfCCat*, i);
-		pgf_lzr_index_ccat(lzr, cat);
-	}
+	gu_map_iter(cnc->ccats, &clo.fn, NULL);
 	// TODO: prune productions with zero linearizations
 	return lzr;
 }

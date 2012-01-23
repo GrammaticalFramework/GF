@@ -597,13 +597,8 @@ static GU_DEFINE_TYPE(PgfCCatMap, GuIntMap, gu_ptr_type(PgfCCat),
 static GU_DEFINE_TYPE(PgfCncCatMap, GuStringMap, gu_ptr_type(PgfCncCat),
 		      &gu_null_struct);
 
-typedef struct {
-	GuMapItor fn;
-	GuBuf* seq;
-} PgfCCatCbCtx;
-
 static PgfCncCat*
-pgf_ccat_set_cnccat(PgfCCat* ccat, GuBuf* newly_set)
+pgf_ccat_set_cnccat(PgfCCat* ccat)
 {
 	if (!ccat->cnccat) {
 		size_t n_prods = gu_seq_length(ccat->prods);
@@ -615,8 +610,7 @@ pgf_ccat_set_cnccat(PgfCCat* ccat, GuBuf* newly_set)
 			case PGF_PRODUCTION_COERCE: {
 				PgfProductionCoerce* pcoerce = i.data;
 				PgfCncCat* cnccat = 
-					pgf_ccat_set_cnccat(pcoerce->coerce,
-							    newly_set);
+					pgf_ccat_set_cnccat(pcoerce->coerce);
 				if (!ccat->cnccat) {
 					ccat->cnccat = cnccat;
 				} else if (ccat->cnccat != cnccat) {
@@ -634,7 +628,6 @@ pgf_ccat_set_cnccat(PgfCCat* ccat, GuBuf* newly_set)
 				gu_impossible();
 			}
 		}
-		gu_buf_push(newly_set, PgfCCat*, ccat);
 	}
 	return ccat->cnccat;
 }
@@ -644,9 +637,8 @@ static void
 pgf_read_ccat_cb(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
 	(void) (key && err);
-	PgfCCatCbCtx* ctx = (PgfCCatCbCtx*) fn;
 	PgfCCat** ccatp = value;
-	pgf_ccat_set_cnccat(*ccatp, ctx->seq);
+	pgf_ccat_set_cnccat(*ccatp);
 }
 
 static void*
@@ -673,12 +665,10 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
 	pgf_read_into_map(ccats_t, rdr, concr->ccats, rdr->opool);    
 	concr->cnccats = pgf_read_new(rdr, gu_type(PgfCncCatMap), 
 				      rdr->opool, NULL);
-
-	GuBuf* extra_ccats = gu_new_buf(PgfCCat*, pool);
-	PgfCCatCbCtx ctx = { { pgf_read_ccat_cb }, extra_ccats };
-	gu_map_iter(concr->ccats, &ctx.fn, NULL);
-	concr->extra_ccats = gu_buf_freeze(extra_ccats, rdr->opool);
 	concr->max_fid = pgf_read_int(rdr);
+
+	GuMapItor fn = { pgf_read_ccat_cb };
+	gu_map_iter(concr->ccats, &fn, NULL);
 	return concr;
 }
 
