@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 	PgfConcr* to_concr =
 		gu_map_get(pgf->concretes, &to_lang, PgfConcr*);
 	if (!from_concr || !to_concr) {
-		fprintf(stderr, "Unknown language");
+		fprintf(stderr, "Unknown language\n");
 		status = EXIT_FAILURE;
 		goto fail_concr;
 	}
@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
 		PgfParse* parse =
 			pgf_parser_parse(parser, cat, lin_idx, pool);
 		if (parse == NULL) {
-			fprintf(stderr, "Couldn't begin parsing");
+			fprintf(stderr, "Couldn't begin parsing\n");
 			status = EXIT_FAILURE;
 			break;
 		}
