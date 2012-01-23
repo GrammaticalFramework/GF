@@ -23,7 +23,7 @@ provided the following syntax highlighting mode for
 [Gedit http://www.gedit.org/] (the default text editor in Ubuntu).
 
 Copy the file below to
-``~/.local/share/gtksourceview-2.0/language-specs/gf.lang`` (under Ubuntu).
+``~/.local/share/gtksourceview-3.0/language-specs/gf.lang`` (under Ubuntu).
 
 - [gf.lang ../src/tools/gf.lang]
 
