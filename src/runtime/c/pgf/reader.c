@@ -437,6 +437,7 @@ pgf_read_to_PgfCCatId(GuType* type, PgfReader* rdr, void* to)
 	if (!ccat) {
         ccat = gu_new(PgfCCat, rdr->pool);
         ccat->cnccat = NULL;
+        ccat->lindefs = gu_map_get(rdr->curr_lindefs, &fid, PgfFunIds*);
         ccat->prods = gu_null_seq;
         ccat->fid = fid;
 
@@ -449,14 +450,16 @@ pgf_read_to_PgfCCatId(GuType* type, PgfReader* rdr, void* to)
 static void
 pgf_read_to_PgfCCat(GuType* type, PgfReader* rdr, void* to)
 {
-	(void) type;
-	gu_enter("->");
-	PgfCCat* cat = to;
-	cat->cnccat = NULL;
-	pgf_read_to(rdr, gu_type(PgfProductionSeq), &cat->prods);
-	int* fidp = rdr->curr_key;
-	cat->fid = *fidp;
-	gu_exit("<-");
+    (void) type;
+    gu_enter("->");
+    int* fidp = rdr->curr_key;
+
+    PgfCCat* ccat = to;
+    ccat->cnccat = NULL;
+    ccat->lindefs = gu_map_get(rdr->curr_lindefs, fidp, PgfFunIds*);
+    pgf_read_to(rdr, gu_type(PgfProductionSeq), &ccat->prods);
+    ccat->fid = *fidp;
+    gu_exit("<-");
 }
 
 // This is only needed because new_struct would otherwise override.
@@ -736,6 +739,7 @@ pgf_read_new_PgfCncCat(GuType* type, PgfReader* rdr, GuPool* pool,
         if (!ccat) {
             ccat = gu_new(PgfCCat, rdr->pool);
             ccat->cnccat = NULL;
+            ccat->lindefs = gu_map_get(rdr->curr_lindefs, &fid, PgfFunIds*);
             ccat->prods = gu_null_seq;
             ccat->fid = fid;
 
@@ -752,7 +756,6 @@ pgf_read_new_PgfCncCat(GuType* type, PgfReader* rdr, GuPool* pool,
 	}
 	cnccat->n_lins = n_lins == -1 ? 0 : (size_t) n_lins;
 	cnccat->cats = cats;
-	cnccat->lindefs = gu_map_get(rdr->curr_lindefs, &first, PgfFunIds*);
 	cnccat->labels = pgf_read_new(rdr, gu_type(GuStringL), 
 				      pool, NULL);
 	gu_exit("<-");

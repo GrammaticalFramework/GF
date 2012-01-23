@@ -143,7 +143,6 @@ struct PgfCat {
 struct PgfCncCat {
 	PgfCId cid;
 	PgfCCatIds* cats;
-	PgfFunIds* lindefs;
 	size_t n_lins;
 
 	GuStringL* labels;
@@ -173,6 +172,7 @@ struct PgfAlternative {
 
 struct PgfCCat {
 	PgfCncCat* cnccat;
+	PgfFunIds* lindefs;
 	PgfProductionSeq prods;
 	int fid;
 };

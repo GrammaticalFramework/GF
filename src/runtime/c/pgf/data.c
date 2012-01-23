@@ -4,11 +4,10 @@
 #include <gu/variant.h>
 #include <gu/assert.h>
 
-
-PgfCCat pgf_ccat_string = { NULL, GU_NULL_SEQ, -1 };
-PgfCCat pgf_ccat_int = { NULL, GU_NULL_SEQ, -2 };
-PgfCCat pgf_ccat_float = { NULL, GU_NULL_SEQ, -3 };
-PgfCCat pgf_ccat_var = { NULL, GU_NULL_SEQ, -4 };
+PgfCCat pgf_ccat_string = { NULL, NULL, GU_NULL_SEQ, -1 };
+PgfCCat pgf_ccat_int = { NULL, NULL, GU_NULL_SEQ, -2 };
+PgfCCat pgf_ccat_float = { NULL, NULL, GU_NULL_SEQ, -3 };
+PgfCCat pgf_ccat_var = { NULL, NULL, GU_NULL_SEQ, -4 };
 
 PgfCCatId
 pgf_literal_cat(PgfLiteral lit)
@@ -59,6 +58,7 @@ typedef GuType_GuStringMap GuType_PgfCIdMap;
 
 GU_DEFINE_TYPE(PgfCCat, struct,
 	       GU_MEMBER_S(PgfCCat, cnccat, PgfCncCat),
+           GU_MEMBER_P(PgfCCat, lindefs, PgfFunIds),
 	       GU_MEMBER(PgfCCat, prods, PgfProductionSeq));
 
 GU_DEFINE_TYPE(PgfCCatId, shared, gu_type(PgfCCat));
@@ -100,7 +100,6 @@ GU_DEFINE_TYPE(
 	GU_MEMBER(PgfCncCat, cid, PgfCId),
 	GU_MEMBER_P(PgfCncCat, cats, PgfCCatIds),
 	GU_MEMBER(PgfCncCat, n_lins, size_t),
-	GU_MEMBER_P(PgfCncCat, lindefs, PgfFunIds),
 	GU_MEMBER_P(PgfCncCat, labels, GuStringL));
 
 // GU_DEFINE_TYPE(PgfSequence, GuList, gu_ptr_type(PgfSymbol));
