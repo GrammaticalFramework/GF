@@ -292,6 +292,34 @@ pgf_read_expr(GuReader* rdr, GuPool* pool, GuExn* err)
 }
 
 void
+pgf_print_literal(PgfLiteral lit,
+			  GuWriter* wtr, GuExn* err)
+{
+	GuVariantInfo ei = gu_variant_open(lit);
+	switch (ei.tag) {
+	case PGF_LITERAL_STR: {
+		PgfLiteralStr* lit = ei.data;
+        gu_putc('"', wtr, err);
+		gu_string_write(lit->val, wtr, err);
+        gu_putc('"', wtr, err);
+		break;
+    }
+    case PGF_LITERAL_INT: {
+        PgfLiteralInt* lit = ei.data;
+		gu_printf(wtr, err, "%d", lit->val);
+        break;
+    }
+	case PGF_LITERAL_FLT: {
+        PgfLiteralFlt* lit = ei.data;
+		gu_printf(wtr, err, "%f", lit->val);
+        break;
+    }
+	default:
+		gu_impossible();
+    }
+}
+
+void
 pgf_print_expr(PgfExpr expr, int prec,
 			  GuWriter* wtr, GuExn* err)
 {
@@ -316,7 +344,11 @@ pgf_print_expr(PgfExpr expr, int prec,
 		break;
 	}
 	case PGF_EXPR_ABS:
-	case PGF_EXPR_LIT:
+	case PGF_EXPR_LIT: {
+		PgfExprLit* lit = ei.data;
+        pgf_print_literal(lit->lit, wtr, err);
+		break;
+	}
 	case PGF_EXPR_META:
 	case PGF_EXPR_VAR:
 	case PGF_EXPR_TYPED:

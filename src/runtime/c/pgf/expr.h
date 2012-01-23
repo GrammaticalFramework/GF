@@ -40,7 +40,7 @@ typedef enum {
 } PgfLiteralTag;
 
 typedef struct {
-	GuStr val;
+	GuString val;
 } PgfLiteralStr;
 
 typedef struct {
@@ -145,6 +145,9 @@ pgf_expr_unapply(PgfExpr expr, GuPool* pool);
 
 PgfExpr
 pgf_read_expr(GuReader* rdr, GuPool* pool, GuExn* err);
+
+void
+pgf_print_literal(PgfLiteral lit, GuWriter* wtr, GuExn* err);
 
 void
 pgf_print_expr(PgfExpr expr, int prec, GuWriter* wtr, GuExn* err);
