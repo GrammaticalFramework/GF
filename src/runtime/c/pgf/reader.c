@@ -44,7 +44,6 @@ struct PgfReader {
 	GuIn* in;
 	GuExn* err;
 	GuPool* opool;
-	GuPool* pool;
 	GuSymTable* symtab;
 	PgfSequences* curr_sequences;
 	PgfCncFuns* curr_cncfuns;
@@ -435,7 +434,7 @@ pgf_read_to_PgfCCatId(GuType* type, PgfReader* rdr, void* to)
 
 	PgfCCat* ccat = gu_map_get(rdr->curr_ccats, &fid, PgfCCat*);
 	if (!ccat) {
-        ccat = gu_new(PgfCCat, rdr->pool);
+        ccat = gu_new(PgfCCat, rdr->opool);
         ccat->cnccat = NULL;
         ccat->lindefs = gu_map_get(rdr->curr_lindefs, &fid, PgfFunIds*);
         ccat->prods = gu_null_seq;
@@ -737,7 +736,7 @@ pgf_read_new_PgfCncCat(GuType* type, PgfReader* rdr, GuPool* pool,
 		int fid = first + i;
 		PgfCCat* ccat = gu_map_get(rdr->curr_ccats, &fid, PgfCCat*);
         if (!ccat) {
-            ccat = gu_new(PgfCCat, rdr->pool);
+            ccat = gu_new(PgfCCat, rdr->opool);
             ccat->cnccat = NULL;
             ccat->lindefs = gu_map_get(rdr->curr_lindefs, &fid, PgfFunIds*);
             ccat->prods = gu_null_seq;
@@ -815,18 +814,17 @@ pgf_read_new_table = GU_TYPETABLE(
 	);
 
 static PgfReader*
-pgf_new_reader(GuIn* in, GuPool* opool, GuPool* pool, GuExn* err)
+pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 {
-	PgfReader* rdr = gu_new(PgfReader, pool);
+	PgfReader* rdr = gu_new(PgfReader, tmp_pool);
 	rdr->opool = opool;
-	rdr->symtab = gu_new_symtable(opool, pool);
+	rdr->symtab = gu_new_symtable(opool, tmp_pool);
 	rdr->err = err;
 	rdr->in = in;
 	rdr->curr_sequences = NULL;
 	rdr->curr_cncfuns = NULL;
-	rdr->read_to_map = gu_new_type_map(&pgf_read_to_table, pool);
-	rdr->read_new_map = gu_new_type_map(&pgf_read_new_table, pool);
-	rdr->pool = pool;
+	rdr->read_to_map = gu_new_type_map(&pgf_read_to_table, tmp_pool);
+	rdr->read_new_map = gu_new_type_map(&pgf_read_new_table, tmp_pool);
 	return rdr;
 }
 
