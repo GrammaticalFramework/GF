@@ -678,7 +678,7 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
 	PgfCCatCbCtx ctx = { { pgf_read_ccat_cb }, extra_ccats };
 	gu_map_iter(concr->ccats, &ctx.fn, NULL);
 	concr->extra_ccats = gu_buf_freeze(extra_ccats, rdr->opool);
-	(void) pgf_read_int(rdr); // totalcats
+	concr->max_fid = pgf_read_int(rdr);
 	return concr;
 }
 

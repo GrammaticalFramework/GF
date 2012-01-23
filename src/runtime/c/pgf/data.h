@@ -190,6 +190,7 @@ struct PgfConcr {
     PgfCncFuns* cncfuns;
     PgfSequences* sequences;	
 	PgfCIdMap* cnccats;
+    int max_fid;
 };
 
 extern GU_DECLARE_TYPE(PgfConcr, struct);
