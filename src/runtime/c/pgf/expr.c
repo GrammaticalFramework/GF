@@ -117,7 +117,7 @@ GU_DEFINE_TYPE(
 		GU_MEMBER(PgfExprMeta, id, int)),
 	GU_CONSTRUCTOR_S(
 		PGF_EXPR_FUN, PgfExprFun,
-		GU_MEMBER(PgfExprFun, fun, GuStr)),
+		GU_MEMBER(PgfExprFun, fun, GuString)),
 	GU_CONSTRUCTOR_S(
 		PGF_EXPR_VAR, PgfExprVar,
 		GU_MEMBER(PgfExprVar, var, int)),

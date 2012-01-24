@@ -274,6 +274,8 @@ typedef struct {
 } PgfProductionConst;
 
 
+extern GU_DECLARE_TYPE(PgfPatt, GuVariant);
+
 extern GU_DECLARE_TYPE(PgfProduction, GuVariant);
 extern GU_DECLARE_TYPE(PgfBindType, enum);
 extern GU_DECLARE_TYPE(PgfLiteral, GuVariant);
@@ -286,10 +288,10 @@ pgf_literal_cat(PgfLiteral lit);
 
 typedef enum {
 	PGF_PATT_APP,
-	PGF_PATT_LIT,
 	PGF_PATT_VAR,
 	PGF_PATT_AS,
 	PGF_PATT_WILD,
+	PGF_PATT_LIT,
 	PGF_PATT_IMPL_ARG,
 	PGF_PATT_TILDE,
 	PGF_PATT_NUM_TAGS
