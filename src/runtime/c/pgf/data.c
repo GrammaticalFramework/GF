@@ -160,10 +160,7 @@ GU_DEFINE_TYPE(
 		PGF_PATT_APP, PgfPattApp,
 		GU_MEMBER(PgfPattApp, ctor, PgfCId),
 		GU_MEMBER(PgfPattApp, n_args, GuLength),
-		GU_MEMBER(PgfPattApp, args, PgfPatt)),
-	GU_CONSTRUCTOR_S(
-		PGF_PATT_LIT, PgfPattLit,
-		GU_MEMBER(PgfPattLit, lit, PgfLiteral)),
+		GU_FLEX_MEMBER(PgfPattApp, args, PgfPatt)),
 	GU_CONSTRUCTOR_S(
 		PGF_PATT_VAR, PgfPattVar,
 		GU_MEMBER(PgfPattVar, var, PgfCId)),
@@ -173,6 +170,9 @@ GU_DEFINE_TYPE(
 		GU_MEMBER(PgfPattAs, patt, PgfPatt)),
 	GU_CONSTRUCTOR(
 		PGF_PATT_WILD, void),
+	GU_CONSTRUCTOR_S(
+		PGF_PATT_LIT, PgfPattLit,
+		GU_MEMBER(PgfPattLit, lit, PgfLiteral)),
 	GU_CONSTRUCTOR_S(
 		PGF_PATT_IMPL_ARG, PgfPattImplArg,
 		GU_MEMBER(PgfPattImplArg, patt, PgfPatt)),
@@ -184,7 +184,7 @@ GU_DEFINE_TYPE(
 	PgfEquation, struct, 
 	GU_MEMBER(PgfEquation, body, PgfExpr),
 	GU_MEMBER(PgfEquation, n_patts, GuLength),
-	GU_MEMBER(PgfEquation, patts, PgfPatt));
+	GU_FLEX_MEMBER(PgfEquation, patts, PgfPatt));
 
 // Distinct type so we can give it special treatment in the reader
 GU_DEFINE_TYPE(PgfEquationsM, GuSeq, gu_type(PgfEquation));

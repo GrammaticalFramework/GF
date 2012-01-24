@@ -516,7 +516,7 @@ pgf_read_to_GuSeq(GuType* type, PgfReader* rdr, void* to)
 }
 
 static void
-pgf_read_to_maybe_seq(GuType* type, PgfReader* rdr, void* to)
+pgf_read_to_PgfEquationsM(GuType* type, PgfReader* rdr, void* to)
 {
 	GuSeq* sto = to;
 	uint8_t tag = pgf_read_u8(rdr);
@@ -525,9 +525,32 @@ pgf_read_to_maybe_seq(GuType* type, PgfReader* rdr, void* to)
 	case 0:
 		*sto = gu_null_seq;
 		break;
-	case 1:
-		pgf_read_to_GuSeq(type, rdr, to);
+	case 1: {
+        GuLength length = pgf_read_len(rdr);
+        gu_return_on_exn(rdr->err, );
+
+        GuSeq seq = gu_new_seq(PgfEquation*, length, rdr->opool);
+        PgfEquation** data = gu_seq_data(seq);
+        for (size_t i = 0; i < length; i++) {
+            GuLength n_patts = pgf_read_len(rdr);
+            gu_return_on_exn(rdr->err, );
+
+            PgfEquation *equ =
+                gu_malloc(rdr->opool, 
+                          sizeof(PgfEquation)+sizeof(PgfPatt)*n_patts);
+            equ->n_patts = n_patts;
+            for (int j = 0; j < n_patts; j++) {
+                pgf_read_to(rdr, gu_type(PgfPatt), &equ->patts[j]);
+                gu_return_on_exn(rdr->err, );
+            }
+            pgf_read_to(rdr, gu_type(PgfExpr), &equ->body);
+            gu_return_on_exn(rdr->err, );
+
+            data[i] = equ;
+        }
+        *sto = seq;
 		break;
+    }
 	default:
 		gu_raise_i(rdr->err, PgfReadTagExn,
 			   .type = type, .tag = tag);
@@ -775,7 +798,7 @@ pgf_read_to_table = GU_TYPETABLE(
 	PGF_READ_TO(GuString),
 	PGF_READ_TO(double),
 	PGF_READ_TO(pointer),
-	PGF_READ_TO_FN(PgfEquationsM, pgf_read_to_maybe_seq),
+	PGF_READ_TO(PgfEquationsM),
 	PGF_READ_TO(GuSeq),
 	PGF_READ_TO(PgfCCatId),
 	PGF_READ_TO(PgfCCat),
