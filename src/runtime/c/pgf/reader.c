@@ -539,7 +539,7 @@ pgf_read_to_PgfEquationsM(GuType* type, PgfReader* rdr, void* to)
                 gu_malloc(rdr->opool, 
                           sizeof(PgfEquation)+sizeof(PgfPatt)*n_patts);
             equ->n_patts = n_patts;
-            for (int j = 0; j < n_patts; j++) {
+            for (GuLength j = 0; j < n_patts; j++) {
                 pgf_read_to(rdr, gu_type(PgfPatt), &equ->patts[j]);
                 gu_return_on_exn(rdr->err, );
             }
