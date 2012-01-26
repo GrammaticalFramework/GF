@@ -119,7 +119,7 @@ typedef GuSeq GuStrings;
 typedef GuMap GuStringMap;
 
 #define gu_new_string_map(VAL_T, DEFAULT, POOL)				\
-	gu_new_map(GuString, gu_string_hasher, (VAL_T), (DEFAULT), (POOL))
+	gu_new_map(GuString, gu_string_hasher, VAL_T, (DEFAULT), (POOL))
 
 #endif
 
