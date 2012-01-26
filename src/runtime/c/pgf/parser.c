@@ -79,6 +79,7 @@ typedef struct PgfParsing PgfParsing;
 struct PgfParsing {
 	PgfParse* parse;
 	GuPool* pool;
+    GuPool* tmp_pool;
 	PgfContsMap* conts_map;
 	PgfGenCatMap* generated_cats;
 };
@@ -211,7 +212,7 @@ pgf_parsing_get_contss(PgfParsing* parsing, PgfCCat* cat)
 	PgfItemBufs* contss = gu_map_get(parsing->conts_map, cat, PgfItemBufs*);
 	if (!contss) {
 		size_t n_lins = cat->cnccat->n_lins;
-		contss = gu_new_list(PgfItemBufs, parsing->pool, n_lins);
+		contss = gu_new_list(PgfItemBufs, parsing->tmp_pool, n_lins);
 		for (size_t i = 0; i < n_lins; i++) {
 			gu_list_index(contss, i) = NULL;
 		}
@@ -678,6 +679,7 @@ pgf_new_parsing(PgfParse* parse, GuPool* parse_pool, GuPool* out_pool)
 	parsing->generated_cats = gu_map_type_new(PgfGenCatMap, out_pool);
 	parsing->conts_map = gu_map_type_new(PgfContsMap, out_pool);
 	parsing->pool = parse_pool;
+    parsing->tmp_pool = out_pool;
 	return parsing;
 }
 
