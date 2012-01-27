@@ -1,0 +1,6246 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{times}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 11
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize a4paper
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+A Bilingual Treebank for the FraCaS Test Suite
+\begin_inset Newline newline
+\end_inset
+
+CLT Project Report
+\end_layout
+
+\begin_layout Author
+Peter Ljunglöf and Magdalena Siverbo
+\begin_inset Newline newline
+\end_inset
+
+Centre for Language Technology
+\begin_inset Newline newline
+\end_inset
+
+University of Gothenburg
+\begin_inset Newline newline
+\end_inset
+
+E-mail: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+peter.ljunglof@gu.se
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+31st October, 2011
+\end_layout
+
+\begin_layout Abstract
+\noindent
+We have created a bilingual treebank for 99% of the sentences in the FraCaS
+ test suite.
+ The treebank is built together with an associated bilingual English-Swedish
+ lexicon written in the Grammatical Framework Resource Grammar.
+ The original FraCaS sentences are English, and we have tested the multilinguali
+ty of the Resource Grammar by analysing the grammaticality and naturalness
+ of the Swedish translations.
+ 86% of the sentences are grammatically and semantically correct and sound
+ natural.
+ About 10% can probably be fixed by adding new lexical items or grammatical
+ rules, and only a small amount are considered to be difficult to cure.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+thispagestyle{empty}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+In this project we have created a bilingual treebank for the FraCaS test
+ suite 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "CooperCrouchEijck1996:Using-the-Framework"
+
+\end_inset
+
+, using the Grammatical Framework Resource Grammar Library 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Ranta2009:The-GF-Resource-Grammar-Library,Ranta2009:Grammatical-Framework:-A-Multilingual,Ranta2011:Grammatical-Framework:-Programming"
+
+\end_inset
+
+.
+ The project consisted of two parts that were partly interwoven.
+ The first aim was to construct a treebank, which involved creating a lexicon
+ and a limited grammar specific for the FraCaS test suite, parsing the sentences
+ and selecting the most representative trees.
+ The second aim was to build a FraCaS corpus in Swedish, using the treebank
+ constructed in the first part of the project.
+ This involved translating the English lexicon and grammar into Swedish
+ equivalents, generating Swedish sentences for all the trees in the treebank
+ and evaluate the results.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The FraCaS Corpus
+\end_layout
+
+\begin_layout Standard
+The FraCaS textual inference problem set 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "CooperCrouchEijck1996:Using-the-Framework"
+
+\end_inset
+
+ was built in the mid 1990's by the FraCaS project, a large collaboration
+ aimed at developing resources and theories for computational semantics.
+ This test set was later modified and converted to XML by Bill MacCartney:
+ 
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+
+\family sans
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www-nlp.stanford.edu/~wcmac/downloads/fracas.xml"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It is the latter, modified version that has been used in this project.
+ The corpus consists of 346 problems each containing one or more statements
+ and one yes/no-question (except for four problems, where there is no question).
+ The total number of sentences in the corpus is 1220, but since some of
+ them are repeated in several problems, there are in total 874 unique sentences.
+\end_layout
+
+\begin_layout Standard
+The FraCaS problems contain relatively simple sentences, and the premise
+ and hypothesis sentences are usually syntactically similar.
+ Despite this simplicity, the problems are intended to reflect a broad variety
+ of semantic and inferential phenomena.
+ For this reason, the FraCaS corpus has been used as a benchmark for evaluating
+ different computational semantics systems 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "MacCartneyManning2008:Modeling-semantic-containment"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The FraCaS corpus only contains made-up sentences, which are intended to
+ be grammatically correct.
+ Therefore we took the opportunity to correct some obvious minor mistakes,
+ such as 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+a executive
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+.
+ 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+does 
+\family typewriter
+[\SpecialChar \ldots{}
+]
+\family default
+ has
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+did 
+\family typewriter
+[\SpecialChar \ldots{}
+]
+\family default
+ delivered
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, and 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+Jones's
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+.
+ In total 7 sentences were corrected.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Subsubsection
+from MacCartney's thesis:
+\end_layout
+
+\begin_layout Plain Layout
+The FraCaS test suite 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "CooperCrouchEijck1996:Using-the-Framework"
+
+\end_inset
+
+(Cooper et al.
+ 1996) of NLI problems was one product of the FraCaS Consortium, a large
+ collaboration in the mid-1990s aimed at developing a range of resources
+ related to computational semantics.
+ The FraCaS problems contain comparatively simple sentences, and the premise
+ and hypothesis sentences are usu- ally quite similar, so that just a few
+ edits suffice to transform p into h.
+ Despite this simplicity, the problems are designed to reflect a broad diversity
+ of semantic and infer- ential phenomena.
+ For this reason, the FraCaS test suite has proven to be invaluable as a
+ developmental test bed for the NatLog system and as a yardstick for evaluating
+ its effectiveness.
+ Indeed, the test suite was created with just such an application as its
+ primary goal.
+ As the authors write:
+\end_layout
+
+\begin_layout Quote
+In light of the view expressed elsewhere in this and other FraCaS de- liverables
+ ...
+ that inferential ability is not only a central manifestation of semantic
+ competence but is in fact centrally constitutive of it, it shouldn’t be
+ a surprise that we regard inferencing tasks as the best way of testing
+ an NLP system’s semantic capacity.2
+\end_layout
+
+\begin_layout Subsubsection
+from MacCartney & Manning (2007):
+\end_layout
+
+\begin_layout Plain Layout
+The FraCaS test suite (Cooper et al., 1996) was de- veloped as part of a
+ collaborative research effort in computational semantics.
+ It contains 346 inference problems reminiscent of a textbook on formal
+ se- mantics.
+ In the authors’ view, “inferencing tasks [are] the best way of testing
+ an NLP system’s se- mantic capacity.” 
+\end_layout
+
+\begin_layout Plain Layout
+The problems are divided into nine sections, each focused on a category
+ of semantic phenomena, such as quantifiers or anaphora (see table 2).
+ Each prob- lem consists of one or more premise sentences, fol- lowed by
+ a one-sentence question.
+ For this project, the questions were converted into declarative hy- potheses.
+\end_layout
+
+\begin_layout Plain Layout
+Each problem also has an answer, which (usually) takes one of three values:
+ yes (the hypoth- esis can be inferred from the premise(s)), no (the negation
+ of the hypothesis can be inferred), or unk (neither the hypothesis nor
+ its negation can be in- ferred).
+\end_layout
+
+\begin_layout Subsubsection
+from Mac&Mann (2008):
+\end_layout
+
+\begin_layout Plain Layout
+The FraCaS test suite (Cooper et al., 1996) con- tains 346 NLI problems,
+ divided into nine sec- tions, each focused on a specific category of se-
+ mantic phenomena (listed in table 3).
+ Each prob- lem consists of one or more premise sentences, a question sentence,
+ and one of three answers: yes, no, or unknown
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Examples from the FraCaS Corpus
+\end_layout
+
+\begin_layout Standard
+The FraCaS problems are divided into 9 broad categories which cover many
+ aspects of semantic inference.
+ The categories are called 
+\emph on
+quantifiers
+\emph default
+, 
+\emph on
+plurals
+\emph default
+, 
+\emph on
+anaphora
+\emph default
+, 
+\emph on
+ellipsis
+\emph default
+, 
+\emph on
+adjectives
+\emph default
+, 
+\emph on
+comparatives
+\emph default
+, 
+\emph on
+temporal reference
+\emph default
+, 
+\emph on
+verbs
+\emph default
+, and 
+\emph on
+attitudes
+\emph default
+, and they are also sub-categorised and sub-sub-categorised in an hierarchy
+ of semantic phenomena.
+ Each problem starts with one or more premises, and a question that can
+ be answered with yes, no or unknown.
+ Here are two similar examples with different semantic inferences from the
+ 
+\emph on
+anaphora
+\emph default
+ category:
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring (999)
+(135) P: Every customer who owns a computer has a service contract for it.
+\begin_inset Newline newline
+\end_inset
+
+P: MFI is a customer that owns several computers.
+\begin_inset Newline newline
+\end_inset
+
+Q: Does MFI have a service contract for all its computers?
+\begin_inset Newline newline
+\end_inset
+
+A: Yes.
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring (999)
+(136) P: Every executive who had a laptop computer brought it to take notes
+ at the meeting.
+\begin_inset Newline newline
+\end_inset
+
+P: Smith is an executive who owns five different laptop computers.
+\begin_inset Newline newline
+\end_inset
+
+Q: Did Smith take five laptop computers to the meeting?
+\begin_inset Newline newline
+\end_inset
+
+A: Unknown.
+\end_layout
+
+\begin_layout Standard
+Some of the problems are equivalent to each other, but with different answers
+ depending on ambiguity.
+ This happens for the following problem from the 
+\emph on
+ellipsis
+\emph default
+ category:
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring (160--161)
+(160--161) P: John owns a red car.
+\begin_inset Newline newline
+\end_inset
+
+P: Bill owns a fast one.
+\begin_inset Newline newline
+\end_inset
+
+Q: Does Bill own a fast red car?
+\begin_inset Newline newline
+\end_inset
+
+A: Yes or unknown, depending on the reading of 
+\begin_inset Quotes eld
+\end_inset
+
+one
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Grammatical Framework
+\end_layout
+
+\begin_layout Standard
+Grammatical Framework (GF) 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Ranta2009:Grammatical-Framework:-A-Multilingual,Ranta2011:Grammatical-Framework:-Programming"
+
+\end_inset
+
+ is a grammar formalism based on type theory.
+ The main feature is the separation of abstract and concrete syntax.
+ The abstract syntax of a grammar defines a set of abstract syntactic structures
+, called abstract terms or trees; and the concrete syntax defines a relation
+ between abstract structures and concrete structures.
+ The concrete syntax is expressive enough to describe language-specific
+ linguistic features such as word order, gender and case inflection, and
+ discontinuous phrases.
+ This makes it very suitable for writing multilingual grammars, where the
+ abstract syntax is lifted to a more language universal level.
+\end_layout
+
+\begin_layout Subsubsection
+Simple GF Example
+\end_layout
+
+\begin_layout Standard
+As an example to show the possibilities of GF, we define adjectives as noun-modi
+fying functions in the spirit of categorial grammar:
+\end_layout
+
+\begin_layout Description
+(Abstract) 
+\begin_inset Formula $\mathit{green:CN\rightarrow CN}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This means that 
+\emph on
+green
+\emph default
+ is a grammatical construction that create common nouns (CN) from common
+ nouns (CN).
+ This does not say anything about the word order, which is instead defined
+ in the linearisation rules in the concrete syntax.
+ In English, the adjective comes before the noun:
+\end_layout
+
+\begin_layout Description
+
+\series bold
+(English) 
+\series default
+
+\begin_inset Formula $\mathit{green\; n="\! green"\,+\negmedspace\negmedspace+\:\: n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Whereas in French the adjective comes after:
+\end_layout
+
+\begin_layout Description
+(French) 
+\begin_inset Formula $\mathit{green\; n=n\:+\negmedspace\negmedspace+\:\:"\! vert"}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+But since French adjectives are inflected by number and gender, this is
+ only correct for singular masculine nouns.
+ That is why GF concrete syntax has support for inflection tables, inherent
+ attributes and discontinuous constituents, which makes the formalism as
+ expressive as Multiple Context-Free Grammars 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Ljunglof2004:Expressivity-and-Complexity-of-GF"
+
+\end_inset
+
+.
+ A slightly more correct French variant of the adjective 
+\emph on
+green
+\emph default
+ would then be:
+\end_layout
+
+\begin_layout Description
+
+\series bold
+(French) 
+\series default
+
+\begin_inset Formula $\mathit{green\; n=\mathbf{table}\left\{ \begin{array}{l}
+Sg\:\Rightarrow\: n\,!\, Sg\:+\negmedspace\negmedspace+\:\:"\! vert"\\
+Pl\:\Rightarrow\: n\,!\, Pl\:+\negmedspace\negmedspace+\:\:"\! verts"
+\end{array}\right\} }$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+But this still does not handle feminine nouns, which of course is possible.
+ Even better is to make use of the GF Resource Grammar, where all these
+ inflection paradigms are already defined.
+\end_layout
+
+\begin_layout Subsubsection
+The GF Resource Grammar
+\end_layout
+
+\begin_layout Standard
+GF has a rich module system which facilitates grammar writing as an engineering
+ task, by reusing common grammars.
+ The abstract syntax of one grammar can be used as a concrete syntax of
+ another grammar.
+ This makes it possible to implement grammar resources to be used in several
+ different application domains.
+ These points are currently exploited in the GF Resource Grammar Library
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Ranta2009:The-GF-Resource-Grammar-Library,Ranta2011:Grammatical-Framework:-Programming"
+
+\end_inset
+
+, which is a multilingual GF grammar with a common abstract syntax for 20
+ languages, including Finnish, Persian, Russian and Urdu.
+ The main purpose of the Grammar Library is as a resource for writing domain-spe
+cific grammars.
+\end_layout
+
+\begin_layout Standard
+Now we can define the French and English linearisations for the adjective
+ functions using the resource grammar, which then takes care of all kinds
+ of inflection:
+\end_layout
+
+\begin_layout Description
+(French) 
+\begin_inset Formula $\mathit{green\; n=AdjCN\:(PositA\:(mkA\;"\! vert"))\: n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+(English) 
+\begin_inset Formula $\mathit{green\; n=AdjCN\:(PositA\:(mkA\;"\! green"))\: n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here 
+\emph on
+AdjCN
+\emph default
+ is a function that modifies a common noun with an adjective phrase, 
+\emph on
+PositA
+\emph default
+ uses the positive form of an adjective, and 
+\emph on
+mkA
+\emph default
+ creates all possible inflections of a regular adjective.
+ Note that the structures of the English and French linearisations are the
+ same, except for the lexical entries, and this can be exploited in GF by
+ creating a language-independent concrete syntax.
+ The FraCaS treebank is language-independent in this sense, since the tree
+ for each sentence is the same for both English and Swedish.
+\end_layout
+
+\begin_layout Section
+The English Treebank
+\end_layout
+
+\begin_layout Subsection
+The FraCaS Grammar
+\end_layout
+
+\begin_layout Standard
+To be able to construct a GF treebank we need a grammar and a lexicon that
+ can describe every sentence in the corpus.
+ We have used the GF Resource Grammar as underlying grammar, and added lexical
+ items that capture the FraCaS domain.
+ On top of the resource grammar we have added a few new grammatical construction
+s, as well as functions for handling elliptic phrases.
+ 
+\end_layout
+
+\begin_layout Standard
+In total, we used 107 grammatical functions out of the 189 that are defined
+ in the resource grammar.
+ In addition we added four new grammatical constructions that were lacking,
+ and 7 different elliptic phrases.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+In order to construct the treebank for FraCaS, two modules were written,
+ one lexicon module and one grammar module.
+\end_layout
+
+\begin_layout Subsubsection
+Lexicon module
+\end_layout
+
+\begin_layout Plain Layout
+The FraCaS lexicon module consists of an abstract and a concrete part.
+\end_layout
+
+\begin_layout Description
+FraCaSLex Abstract lexicon for the FraCaS test suite
+\end_layout
+
+\begin_layout Description
+FraCaSLexEng Concrete lexicon for the FraCaS test suite
+\end_layout
+
+\begin_layout Plain Layout
+The lexicon was built using the functions mkN, mkA, mkV etc, mainly from
+ the Paradigms module.
+\end_layout
+
+\begin_layout Subsubsection
+Grammar module
+\end_layout
+
+\begin_layout Plain Layout
+The FraCaS grammar module consists of an abstract and a concrete part.
+\end_layout
+
+\begin_layout Description
+FraCaS Abstract grammar for the FraCaS test suite
+\end_layout
+
+\begin_layout Description
+FraCaSEng Concrete grammar for the FraCaS test suite
+\end_layout
+
+\begin_layout Plain Layout
+Initially, the whole Grammar module from the resource grammar was imported,
+ but in the end only parts of the Grammar module (namely Noun, Verb, Adjective,
+ Adverb, Numeral and Tense) were imported, while other parts were opened
+ and necessary functions used in the FraCaS module.
+ A few functions were added, mainly on clause and sentence level, in order
+ to simplify the tree structures.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Lexicon
+\end_layout
+
+\begin_layout Standard
+The lexicon has in total 531 entries, some of which are structural words
+ already defined in the resource grammar.
+ Some of the lexical items denote different meanings of the same word.
+ Examples of this include the word 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+than
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ which can function as a preposition and as a subjunction, the verb 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+go
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ which can mean 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+travel
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ or 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+walk
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, and the conjunction 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+and
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ which can be a phrase initial conjunction and an ordinary conjuntion.
+ Other entries denote different valencies of the same meaning.
+ This is most common for verbs, such as the transitive verb 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+finish
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ which can take a noun phrase or a verb phrase argument, and the verb 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+know
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ which can take either a question or a sentence as argument.
+\end_layout
+
+\begin_layout Standard
+The lexicon entries are divided into 63 adjectives, 77 adverbials, 20 conjunctio
+ns/subjunctions, 34 determiners, 142 nouns, 19 numerals, 40 proper nouns,
+ 15 prepositions, 12 pronouns, and 109 verbs.
+ Out of these, 55 adverbials and 28 nouns/proper nouns are multi-word expression
+s.
+\end_layout
+
+\begin_layout Subsubsection
+Multi-word Lexical Items
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Multi-word-Lexical-Items"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+83 of the lexical items denote multi-word phrases.
+ They were mainly divided into two types:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Itemize
+P: Modified proper nouns (A + PN) could not be parsed.
+\begin_inset Newline newline
+\end_inset
+
+S: “southern Europe” was defined as PN in FraCaSLex.
+\end_layout
+
+\begin_layout Itemize
+P: Compounds constructed from a proper noun and a noun (PN + N) , and hyphenated
+ nouns (N-N) could not be parsed.
+\begin_inset Newline newline
+\end_inset
+
+S: “Labour MP”, “APCOM manager”, “stock-market” etc.
+ were defined as N in FraCaSLex.
+\end_layout
+
+\begin_layout Itemize
+(SKIP) P: Certain indefinite pronouns were not recognized as they did not
+ exist in the resource grammar.
+\begin_inset Newline newline
+\end_inset
+
+S: “all”, “anyone”, “everyone”, “no one” and “someone” were defined as NP
+ in FraCaSLex.
+\end_layout
+
+\end_inset
+
+
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Paragraph
+Quantifiers
+\end_layout
+
+\begin_layout Itemize
+P: Numbers written without spaces between the digits were not recognized.
+\begin_inset Newline newline
+\end_inset
+
+S: “10”, “99”, “100”, “2500” etc.
+ defined as Det in FraCaSLex.
+\end_layout
+
+\begin_layout Itemize
+P: Certain longer numerical expressions could not be parsed.
+\begin_inset Newline newline
+\end_inset
+
+S: “one or more”, “the other 99” and “two out of ten” were defined as Det
+ in FraCaSLex.
+\end_layout
+
+\begin_layout Itemize
+P: Certain quantifiers were not recognized as they did not exist in the
+ resource grammar.
+\begin_inset Newline newline
+\end_inset
+
+S: “a few”, “both”, “either”, “most of the”, “several” etc.
+ were defined as Det in FraCaSLex.
+\end_layout
+
+\begin_layout Paragraph
+Conjunctions
+\end_layout
+
+\begin_layout Itemize
+P: Sentences starting with a conjunction could not be parsed.
+\begin_inset Newline newline
+\end_inset
+
+S: The functions SentencePAnd and SentencePBut were added in FraCaS.
+\end_layout
+
+\begin_layout Itemize
+P: Conjunctions preceded by comma or semicolon could not be parsed.
+\begin_inset Newline newline
+\end_inset
+
+S: “, and” and “; and” were defined as Conj in FraCaSLex.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Compounds Compound noun phrases such as 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+southern Europe
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ (adjective + proper noun), 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+APCOM manager
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ (proper noun + noun) and 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+university student
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ (noun + noun) were problematic.
+ Partly because the Resource Grammar currently cannot handle all kinds of
+ compounding, but mostly because many of the corresponding Swedish phrases
+ are single compound words.
+ In total there were 28 wulti-word compounds, divided between nouns, proper
+ nouns and adjectives.
+\end_layout
+
+\begin_layout Description
+Time
+\begin_inset space ~
+\end_inset
+
+and
+\begin_inset space ~
+\end_inset
+
+Date
+\begin_inset space ~
+\end_inset
+
+Expressions Time and date expressions were problematic for different reasons.
+ First, although a generic multilingual time and date resource grammar is
+ in the making, it is not finished yet.
+ Second, different languages use different syntactic constructions for times
+ and dates.
+ Especially the use prepositions differ a lot: 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+in 1990
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+in February
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ and 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+in two years
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, are translated to Swedish as 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+1990
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+i februari
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ and 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+om två år
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, respectively.
+ For these reasons, we have defined all time and date expressions as multi-word
+ adverbials.
+ In total we defined 55 different time and date phrases.
+\end_layout
+
+\begin_layout Subsubsection
+Grammar Additions
+\end_layout
+
+\begin_layout Standard
+Three different grammatical constructions were added to the grammar.
+ They consist of natural extensions to and slight modifications of existing
+ functions.
+ The intention is that they will be added to the resource grammar in the
+ near future.
+ Examples include the idiom 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+so do I
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ / 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+so did she
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, and question adverbials such as 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+if Smith signed the contract, did Jones sign the contract?
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+.
+\end_layout
+
+\begin_layout Subsubsection
+Elliptic Phrases
+\end_layout
+
+\begin_layout Standard
+The resource grammar cannot handle all kinds of conjunctions and elliptical
+ phrases.
+ In the FraCaS corpus there are 35 sentences with more advanced elliptical
+ constructions.
+ Examples include 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+Bill did 
+\family typewriter
+[\SpecialChar \ldots{}
+]
+\family default
+ too
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, and 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+Smith saw Jones sign the contract and 
+\family typewriter
+[\SpecialChar \ldots{}
+]
+\family default
+ his secretary make a copy
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+.
+ Our solution was to introduce empty phrases, one for each grammatical category.
+ E.g., in the first example, the ellipsis is an empty verb phrase, and the
+ longer example contains an empty ditransitive verb.
+\end_layout
+
+\begin_layout Subsection
+Coverage
+\end_layout
+
+\begin_layout Standard
+Of the 874 unique sentences, 812 could be parsed directly with the Resource
+ Grammar and the implemented lexicon, as shown in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:coverage"
+
+\end_inset
+
+.
+ With the three additional grammatical constructions 14 more sentences were
+ parsed.
+ The addition of elliptical phrases increased the number of sentences by
+ another 34.
+ Of the 14 remaining sentences, we could parse 6 more by doing some minor
+ reformulations, such as moving a comma or adding a preposition.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="3">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Total
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+% of sentences
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unique sentences
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+874
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+100%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Accepted by the RG
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+812
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+92.9%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+- with grammar extensions
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+826
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+94.5%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+- with elliptic phrases
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+860
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+98.4%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+- with slight reformulation of sentence
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+866
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+99.1%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unable to parse
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.9%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The coverage of the English FraCaS grammar 
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:coverage"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Grammatical extensions: RelNP_nocomma, SoDoI, ExtAdvQS, ConjQS.
+\end_layout
+
+\begin_layout Plain Layout
+Note that this statistics is very strict in the sense that punctuation (in
+ particular commas) are included and has to be incorporated by the grammar.
+\end_layout
+
+\begin_layout Plain Layout
+After having taken measures to solve the problems described in section 2.2,
+ the parsing rate was at 84,6%.
+ Part of these sentences could be parsed, but returned no representative
+ trees, which gave a lower percentage of correctly parsed sentences (83,2%).
+ There were various reasons why certain sentences could not be parsed, with
+ various degrees of severity.
+ The table below shows the results after changing the corpus by giving substitut
+ions for problematic sentences on each of these levels.
+ The first number is the number of sentences out of 1220, while the percentage
+ is on the next line.
+\end_layout
+
+\begin_layout Plain Layout
+These are explanations for the different levels:
+\end_layout
+
+\begin_layout Enumerate
+the original corpus with no changes.
+\end_layout
+
+\begin_layout Enumerate
+substitution for simple spelling or grammar mistakes, such as double punctuation
+ or incorrect verb forms.
+ The change also involved using only uncontracted negation, for the sake
+ of conformity and simplicity.
+ There were only a few sentences of these types, so changing them did not
+ make a major difference to the results.
+\end_layout
+
+\begin_layout Enumerate
+rewriting of certain constructions that could not be handled by the parser.
+ These were constructions like “the people [..] all voted...”, changed to “all
+ the people [...] voted...”.
+\end_layout
+
+\begin_layout Enumerate
+filling of gaps in gap constructions, e.g.
+ adding “spoken to Mary” to “Bill has”, rendering “Bill has spoken to Mary”.
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+FraCaS version 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Parsed
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Correctly parsed
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.
+ original
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1032 84,6% 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1015 83,2%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.
+ mistakes corrected; uncontracted negation 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1037 85,0% 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1020 83,6%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.
+ reconstructions 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1040 85,2% 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1026 84,1%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.
+ gap filling 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1045 85,7% 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1043 85,5%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+As we can see, the changes made in the corpus did not cause any major increase
+ in the percentage of parsed sentences, and only a slightly higher increase
+ in the percentage of correctly parsed sentences.
+ It would take more radical changes for a more radical increase.
+ In the following section, we will look into what those changes would concern.
+\end_layout
+
+\end_inset
+
+
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+The following are a few examples of tree structures resulting from parsing
+ FraCaS sentences using this grammar.
+\end_layout
+
+\begin_layout Description
+Positive
+\begin_inset space ~
+\end_inset
+
+declarative: 
+\begin_inset Quotes eld
+\end_inset
+
+No delegate finished the report.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+Sentence (DeclPos TPast ASimul (PredVP (DetCN (DetQuant no_Quant NumSg)
+ (UseN delegate_N)) (ComplSlash (SlashV2a finish_V2) (DetCN (DetQuant DefArt
+ NumSg) (UseN report_N)))))
+\end_layout
+
+\end_deeper
+\begin_layout Description
+Negative
+\begin_inset space ~
+\end_inset
+
+declarative: 
+\begin_inset Quotes eld
+\end_inset
+
+Bill did not speak to Mary on Monday.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+Sentence (DeclNeg TPast ASimul (PredVP (UsePN bill_PN) (AdvVP (ComplSlash
+ (SlashV2a speak_to_V2) (UsePN mary_PN)) on_monday_Adv)))
+\end_layout
+
+\end_deeper
+\begin_layout Description
+Question: 
+\begin_inset Quotes eld
+\end_inset
+
+Did a Swede win a Nobel prize?
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+Sentence (Question TPast ASimul (PredVP (DetCN (DetQuant IndefArt NumSg)
+ (UseN swede_N)) (ComplSlash (SlashV2a win_V2) (DetCN (DetQuant IndefArt
+ NumSg) (UseN nobel_prize_N)))))
+\end_layout
+
+\end_deeper
+\begin_layout Description
+Clause
+\begin_inset space ~
+\end_inset
+
+conjunction: 
+\begin_inset Quotes eld
+\end_inset
+
+Smith took a machine on Tuesday, and Jones took a machine on Wednesday.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+Sentence (DeclConj comma_and_Conj TPast ASimul (PredVP (UsePN smith_PN)
+ (AdvVP (ComplSlash (SlashV2a take_V2) (DetCN (DetQuant IndefArt NumSg)
+ (UseN machine_N))) on_tuesday_Adv)) (PredVP (UsePN jones_PN) (AdvVP (ComplSlash
+ (SlashV2a take_V2) (DetCN (DetQuant IndefArt NumSg) (UseN machine_N)))
+ on_wednesday_Adv)))
+\end_layout
+
+\end_deeper
+\begin_layout Description
+Sentence-initial
+\begin_inset space ~
+\end_inset
+
+conjunction: 
+\begin_inset Quotes eld
+\end_inset
+
+But only one woman.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+SentencePBut (UttNP (PredetNP only_Predet (DetCN (DetQuant IndefArt (NumCard
+ (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01))))))) (UseN woman_N))))
+\end_layout
+
+\end_deeper
+\begin_layout Description
+Noun
+\begin_inset space ~
+\end_inset
+
+phrase
+\begin_inset space ~
+\end_inset
+
+conjunction: 
+\begin_inset Quotes eld
+\end_inset
+
+John and his colleagues went to a meeting.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+Sentence (DeclPos TPast ASimul (PredVP (ConjNP2 and_Conj (UsePN john_PN)
+ (DetCN (DetQuant (PossPron he_Pron) NumPl) (UseN colleague_N))) (AdvVP
+ (UseV go8walk_V) (PrepNP to_Prep (DetCN (DetQuant IndefArt NumSg) (UseN
+ meeting_N))))))
+\end_layout
+
+\end_deeper
+\end_inset
+
+
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Three of the sentences that are encoded as synonyms have attachment ambiguities
+ that can be encoded in the grammar.
+ This means that they have different trees in different problems (169.1.p/170.1.p,
+ 175.1.p/176.1.p, 244.1.p/245.1.p).
+ But we don't count them in this statistics.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Syntactical Ambiguity
+\end_layout
+
+\begin_layout Standard
+All trees in the FraCaS treebank are implemented in the GF grammar described
+ above.
+ This grammar can be used by itself for parsing and analysing similar sentences.
+ It is useful to know how ambiguous the grammar is, so we have parsed the
+ 866 sentences that are covered by the grammar and counted the number of
+ trees for each sentence.
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:ambiguity"
+
+\end_inset
+
+ shows that the grammar is moderately ambiguous, where almost 70% of the
+ sentences have less than 10 different parse trees, and over 90% have less
+ than 100 trees.
+ The median is for a sentence to have 5 parse trees, and the largest number
+ of trees for a sentence is 33,048.
+ The ambiguous sentence is: 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+Since APCOM bought its present office building it has been paying mortgage
+ interest on it for more than 10 years.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that the number of parse trees are misleading for the 34 sentences
+ with elliptic phrases, since ellipsis is linearised as 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+[\SpecialChar \ldots{}
+]
+\family default
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ in the FraCaS grammar.
+ If we had made the elliptic phrases invisible, the number of parse trees
+ would increase dramatically.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+No.
+ parse trees
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+No.
+ sentences
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1 -- 9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+598
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+69.1%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10 -- 99
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+203
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23.4%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+100 -- 999
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+49
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.7%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\geq$
+\end_inset
+
+ 1000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.8%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Ambiguity of the FraCaS treebank 
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:ambiguity"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Subsection
+Problems remaining
+\end_layout
+
+\begin_layout Plain Layout
+Some problems could not be solved, due to their complexity and/or the time
+ limitations of the project.
+ Remaining problems are listed below, categorised according to their nature.
+ Examples from the FraCaS corpus are given with the relevant parts italicized.
+ For each type of problem, the number of affected sentences is given in
+ brackets (out of the 177 sentences that were not correctly parsed).
+ A few sentences had more than one problem, but was only counted in one
+ category.
+\end_layout
+
+\begin_layout Paragraph
+Adverbials (46)
+\end_layout
+
+\begin_layout Plain Layout
+Certain kinds and uses of adverbials were problematic.
+\end_layout
+
+\begin_layout Itemize
+Verb phrase adverbials (1)
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+“Every executive who had a laptop computer brought it to take notes at the
+ meeting.”
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Noun phrase adverbials (3)
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+“It lasted 2 days.”
+\end_layout
+
+\begin_layout Plain Layout
+“Smith had been travelling the day before she arrived in Katmandu.”
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Sentence-initial adverbials (34)
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+“Since 1992 ITEL has been in Birmingham.”
+\end_layout
+
+\begin_layout Plain Layout
+“Yesterday APCOM signed the contract.”
+\end_layout
+
+\begin_layout Plain Layout
+“Then she took a taxi to the station.”
+\end_layout
+
+\begin_layout Plain Layout
+“Two years from now Smith will have been to Florence at least four times.”
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+To this group also belong sentence-initial subordinate clauses.
+ (Subordinate clauses following the main clause are treated as adverbials,
+ so it is only natural to treat subordinate clauses preceding the main clause
+ as adverbials too.)
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+“If Smith and Anderson did not sign the contract, Jones signed the contract.”
+\end_layout
+
+\begin_layout Plain Layout
+“When Smith arrived in Katmandu she had been travelling for three days.”
+\end_layout
+
+\begin_layout Plain Layout
+“Before APCOM bought its present office building, it had been paying mortgage
+ interest [...].”
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Adverbials with copula (8)
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+“It is now 1996.”
+\end_layout
+
+\begin_layout Plain Layout
+“Today is Saturday, July 14th.”
+\end_layout
+
+\end_deeper
+\begin_layout Paragraph
+Verb phrase conjunctions (5)
+\end_layout
+
+\begin_layout Plain Layout
+The grammar could handle conjunction on the noun phrase and clause level,
+ but not verb phrase conjunctions.
+\end_layout
+
+\begin_layout Plain Layout
+“ICM is one of the companies and owns 150 computers.”
+\end_layout
+
+\begin_layout Plain Layout
+“She took a taxi to the station and caught the first train to Luxembourg.”
+\end_layout
+
+\begin_layout Plain Layout
+“Jones graduated in March and has been employed ever since.”
+\end_layout
+
+\begin_layout Paragraph
+Auxiliary verbs (17)
+\end_layout
+
+\begin_layout Plain Layout
+Auxiliary verbs used independently could not be parsed.
+\end_layout
+
+\begin_layout Plain Layout
+“John wanted to buy a car, and he did.”
+\end_layout
+
+\begin_layout Plain Layout
+“Bill spoke to everyone that John did.”
+\end_layout
+
+\begin_layout Plain Layout
+“She finished before he did.”
+\end_layout
+
+\begin_layout Paragraph
+Complex comparisons (23)
+\end_layout
+
+\begin_layout Plain Layout
+Simple comparatives worked well, but not comparatives embedded in a noun
+ phrase or other complex comparisons.
+\end_layout
+
+\begin_layout Plain Layout
+“John is a fatter politician than Bill.”
+\end_layout
+
+\begin_layout Plain Layout
+“ITEL won more orders than APCOM lost.”
+\end_layout
+
+\begin_layout Plain Layout
+“ITEL sold 3000 more computers than APCOM.”
+\end_layout
+
+\begin_layout Plain Layout
+“APCOM has a more important customer than ITEL.”
+\end_layout
+
+\begin_layout Plain Layout
+“Mary's story lasted as long as Jones's updating the program.”
+\end_layout
+
+\begin_layout Paragraph
+Relative clauses (11)
+\end_layout
+
+\begin_layout Plain Layout
+Some relative clauses could not be parsed or parsed correctly.
+\end_layout
+
+\begin_layout Itemize
+-- Relative clauses using present participle (1)
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+“No one gambling seriously stops until he is broke.”
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+-- Relative clauses modifying a pronoun (8)
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+“No one who starts gambling seriously stops until he is broke.”
+\end_layout
+
+\begin_layout Plain Layout
+“Everyone who starts gambling seriously continues until he is broke.”
+\end_layout
+
+\begin_layout Plain Layout
+“Nobody who is asleep ever knows that he is asleep.”
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+-- Relative clauses with object gap (2)
+\end_layout
+
+\begin_deeper
+\begin_layout Plain Layout
+“There is a representative that Smith wrote to every week.”
+\end_layout
+
+\end_deeper
+\begin_layout Paragraph
+Complement infinitive clauses (17)
+\end_layout
+
+\begin_layout Plain Layout
+The verb “see” as in “see someone do something”, defined as V2V, does not
+ work.
+ It requires an infinitive marker, which should not be present in this case.
+\end_layout
+
+\begin_layout Plain Layout
+“Smith saw Jones sign the contract.”
+\end_layout
+
+\begin_layout Plain Layout
+“Smith saw Jones' heart beat.”
+\end_layout
+
+\begin_layout Paragraph
+Other (58)
+\end_layout
+
+\begin_layout Plain Layout
+Apart from the problems in the categories above, there are other problems
+ that are harder to classify.
+ Some of these could have been solved, had time permitted, while others
+ are of a more intricate type.
+ Each problem is exemplified by one sentence from the FraCaS corpus.
+\end_layout
+
+\begin_layout Plain Layout
+“Mary represents her own company.” (15)
+\end_layout
+
+\begin_layout Plain Layout
+“APCOM sold exactly 2500 computers.” (1)
+\end_layout
+
+\begin_layout Plain Layout
+“Smith spent two hours writing the report.” (12)
+\end_layout
+
+\begin_layout Plain Layout
+“No representative took less than half a day to read the report.” (1)
+\end_layout
+
+\begin_layout Plain Layout
+“The conference was over on July 8th, 1994.” (2)
+\end_layout
+
+\begin_layout Plain Layout
+“Bill owns a blue one.” (6)
+\end_layout
+
+\begin_layout Plain Layout
+“That is, there was one lawyer who signed all the reports.” (1)
+\end_layout
+
+\begin_layout Plain Layout
+“Bill is going to speak to Mary.” (1)
+\end_layout
+
+\begin_layout Plain Layout
+“It is the case that Jones is not and will never be allowed to write his
+ memoirs.” (4)
+\end_layout
+
+\begin_layout Plain Layout
+“It took the representatives more than a week to read the report.” (2)
+\end_layout
+
+\begin_layout Plain Layout
+“Smith represents his company and so does Jones.” (13)
+\end_layout
+
+\begin_layout Subsection
+Tree selection
+\end_layout
+
+\begin_layout Plain Layout
+When having parsed the whole corpus, a selection had to be made for each
+ sentence to be represented by the most adequate tree structure.
+ Most of the time there was a clear choice, while at other times, two trees
+ were kept since it was not clear which one was the most suitable representation
+ of the sentence.
+ This was especially common for sentences using a copula with an indefinite
+ noun phrase as complement.
+ In these cases, both the tree with the indefinite article represented and
+ the one without were kept.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+The Swedish Corpus
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Subsection
+Modules
+\end_layout
+
+\begin_layout Plain Layout
+In order to build the Swedish version of the FraCaS corpus, two modules
+ were written, one lexicon module and one grammar module.
+\end_layout
+
+\begin_layout Subsubsection
+Lexicon module
+\end_layout
+
+\begin_layout Plain Layout
+FraCaSLexSwe is the Swedish concrete lexicon.
+ It was built in a very similar way to the English counterpart, using the
+ functions mkN, mkA, mkV etc, mainly from the Paradigms module.
+\end_layout
+
+\begin_layout Subsubsection
+Grammar module
+\end_layout
+
+\begin_layout Plain Layout
+FraCaSSwe is the Swedish concrete grammar.
+ Just as for the English counterpart, parts of the Grammar module (namely
+ Noun, Verb, Adjective, Adverb, Numeral and Tense) were imported, while
+ other parts were opened and necessary functions used in FraCaSSwe.
+\end_layout
+
+\end_inset
+
+
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Some of the FraCaS sentences depend on lexical ambiguity that cannot be
+ expressed adequately in Swedish.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A long-term goal of this project is that the treebank should be truly multilingu
+al for all the languages in the GF resource grammar.
+ Of course this is not possible in the general case, since some of the sentences
+ cannot even be translated without changing their semantic content.
+ But at least we can try to create a multlingual treebank of as many sentences
+ as possible.
+\end_layout
+
+\begin_layout Standard
+As a first step we have created Swedish translations of the sentences, by
+ writing a new Swedish lexicon.
+ Then we evaluated the translations and iteratively made changes to the
+ trees to make the translations better.
+ Note that since we use exactly the same syntax trees for the Swedish and
+ English sentences, we had to make sure that the English translation was
+ not changed when we modified the trees.
+ 
+\end_layout
+
+\begin_layout Standard
+This means the corpus was not created by manually translating the English
+ sentences, but instead we translated the lexicon and let the Swedish Resource
+ Grammar take care of the syntactical translation.
+ Currently, out of the 866 sentences in the treebank, 748 are translated
+ into grammatically correct and comprehensible Swedish sentences.
+\end_layout
+
+\begin_layout Subsection
+The Swedish Lexicon
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+When creating the Swedish lexicon
+\end_layout
+
+\begin_layout Plain Layout
+As was the case for the parsing part of the project, certain problems were
+ also discovered in the process of generating into Swedish.
+ Often these problems had to be solved by going back to the English lexicon
+ and making changes so that more suitable, often more general, trees would
+ be constructed.
+ This is where the two project parts were interwoven.
+\end_layout
+
+\begin_layout Plain Layout
+Some of the problems could be solved and some remain.
+ The solutions are presented in this section, while remaining problems are
+ listed in the next section on statistics (3.3).
+\end_layout
+
+\begin_layout Plain Layout
+The problems encountered have been divided into categories as seen below.
+ The explanations follow P (Problem) and S (Solution).
+ FraCaSLex here refers to both the abstract lexicon and the two concrete
+ lexicons (FraCaSLexEng and FraCaSLexSwe).
+ In the same way, FraCaS refers to both the abstract grammar and the two
+ concrete grammars (FraCaSEng and FraCaSSwe).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When we created the Swedish lexicon, we often had to go back to the English
+ lexicon and make changes so that more suitable trees could be constructed.
+ Sometimes we merged several lexical entries into one multi-word entry,
+ and sometimes we split one entry into different meanings.
+ Most of the changes consisted of the following types:
+\end_layout
+
+\begin_layout Description
+Compounds Many compound noun phrases, such as 
+\emph on
+“company car”
+\emph default
+, 
+\emph on
+“mortgage interest”
+\emph default
+ and 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+APCOM manager
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, are single words in Swedish (
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+tjänstebil
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+hypoteksränta
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ and 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+APCOM-direktör
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, respectively).
+ We solved this by defining them as multi-word nouns, as described in section
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Multi-word-Lexical-Items"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+Lexical
+\begin_inset space ~
+\end_inset
+
+ambiguity Several words in English are translated into different Swedish
+ words, depending on the context.
+ Such words were split into different lexical entries.
+ The adjective 
+\emph on
+“poor”
+\emph default
+, for example, was handled by creating two different functions, one with
+ the meaning 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+not good
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ (Swedish 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+dålig
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+), and one with the meaning 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+not rich
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ (Swedish 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+fattig
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+).
+\end_layout
+
+\begin_layout Description
+Prepositions Prepositions are often translated differently in different
+ contexts.
+ E.g., 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+inhabitant of
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ is translated to 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+invånare i
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ if the argument is a country or a town, but to 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+invånare på
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ if the argument is an island.
+ This was solved, either by creating different lexical entries, or by making
+ the preposition a part of the main verb.
+\end_layout
+
+\begin_layout Description
+Adverbials Most of the multi-word adverbials are time and date expressions.
+ The reason for this is that many time and date expressions are translated
+ very differently between different languages.
+ E.g., the English preposition 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+in
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ is translated differently for different time and date expressions: 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+in March
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ becomes 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+i mars
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ and 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+in a month
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ translates to 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+om en månad
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, whereas 
+\emph on
+“in 1994”
+\emph default
+ is best formulated as the bare word 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+1994
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ in Swedish.
+ As already explained, we defined all time and date expressions as multi-word
+ adverbials.
+\end_layout
+
+\begin_layout Subsection
+Coverage
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="9" columns="3">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Total
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+% of sentences
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sentences in treebank
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+866
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+100%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Correct Swedish translation
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+748
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+86.4%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Problematic sentences
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+118
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13.6%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+-- idioms
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+31
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.6%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+-- agreement
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+24
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.8%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+-- future tense
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.4%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+-- elliptical
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.2%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+-- uncomprehensible
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.7%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The coverage of the Swedish FraCaS grammar 
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:swedish-coverage"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:swedish-coverage"
+
+\end_inset
+
+ gives an overview of the coverage of the Swedish lexicon and grammar.
+ Of the 866 unique sentences in the treebank, we consider 748 to have good
+ Swedish translations.
+ The remaining 118 sentences had some problems which we divided into five
+ different classes -- idioms, agreement, future tense, elliptical phrases,
+ and more difficult errors.
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:swedish-problems"
+
+\end_inset
+
+ gives examples of some of the encountered problems, and in the next section
+ are short descriptions.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="19" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="middle" width="25col%">
+<column alignment="center" valignment="middle" width="25col%">
+<column alignment="center" valignment="middle" width="25col%">
+<column alignment="center" valignment="middle" width="25col%">
+<row>
+<cell alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+English original
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Direct translation
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Better idiom
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Literally in English
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+idioms
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X is likely to Y
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X 
+\series bold
+är trolig
+\series default
+ att Y
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\emph on
+det är troligt
+\series default
+ att X Y
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+it is likely that X Y
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+members of the committee
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\emph on
+medlemmar av
+\series default
+ kommittén
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+kommitté
+\series bold
+medlemmar
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+committee-members
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X is asleep
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X 
+\series bold
+är sovande
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X 
+\series bold
+sover
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X sleeps
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+the previous one
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+den förra 
+\series bold
+en
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+den förra
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+the previous
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+agreement
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X has the right to Y
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X har 
+\series bold
+rätten
+\series default
+ att Y
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X har 
+\series bold
+rätt
+\series default
+ att Y
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X has right to Y
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+traffic increased
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\emph on
+trafik
+\series default
+ ökade
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\emph on
+trafiken
+\series default
+ ökade
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+the traffic increased
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+one of the tenors
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\emph on
+ett 
+\series default
+av tenorerna
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\emph on
+en
+\series default
+ av tenorerna
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+---
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+everyone continues until he is broke
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+alla fortsätter tills 
+\series bold
+han 
+\series default
+är pank
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+alla fortsätter tills 
+\series bold
+de 
+\series default
+är panka
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+all continue until they are broke
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+clients at the demonstration
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\emph on
+klienter 
+\series default
+på presentationen
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\emph on
+klienterna
+\series default
+ på presentationen
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+the clients at the demonstration
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+future tense
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X will make a poor stock market trader
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X 
+\series bold
+ska
+\series default
+ bli en dålig aktiehandlare
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X 
+\series bold
+kommer att
+\series default
+ bli en dålig aktiehandlare
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+---
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+elliptical phrases
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X wanted to buy a car, and he did
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X ville köpa en bil, och han gjorde
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X ville köpa en bil, och han gjorde 
+\series bold
+det
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X wanted to buy a car, and he did it
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X did too
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X gjorde också
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X gjorde 
+\series bold
+det 
+\series default
+också
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X did it too
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+more difficult
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X took less than half a day to Y
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X tog mindre än en halv dag att Y
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+X tog mindre än en halv dag
+\series bold
+ på sig för
+\series default
+ att Y
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+---
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Examples of encountered problems with the Swedish translation 
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:swedish-problems"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Types of translation problems
+\end_layout
+
+\begin_layout Description
+Idioms We encountered 10 problematic idioms in 31 sentences, where the direct
+ translation of a phrase is not the most natural, but instead we should
+ use a different syntactical construction.
+ 
+\end_layout
+
+\begin_layout Description
+Agreement There were 7 different noun phrase agreement problems in 24 of
+ the sentences, where the Swedish translation would be more natural if we
+ could change the number, definiteness or gender of the noun phrase.
+ 
+\end_layout
+
+\begin_layout Description
+Future
+\begin_inset space ~
+\end_inset
+
+tense Swedish future tense takes two different forms, either 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+ska
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ or 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+kommer att
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+.
+ The resource grammar defaults to 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+ska
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, but 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+kommer att
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ is the more natural translation for all 12 FraCaS sentences using future
+ tense.
+ This is the case for 12 sentences, one example is 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+Bill will talk to Mary
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, which should be translated to 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+Bill kommer att prata med Mary
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+.
+\end_layout
+
+\begin_layout Description
+Elliptical
+\begin_inset space ~
+\end_inset
+
+phrases 19 sentences has problems with elliptical phrases in Swedish.
+ 15 of them has to do with the auxiliary verb 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+do/does/did
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, which sounds very awkward when it is translated to the Swedish verb 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+gör/gjorde
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+.
+ E.g., 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+Bill did too
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ is translated as 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+Bill gjorde också
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+.
+ In Swedish we also need an object 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+det
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ (lit.
+ 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+it
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+), so a better translation is 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+Bill gjorde det också
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ (lit.
+ 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+Bill did it too
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+).
+ The remaining four problematic elliptical sentences are more difficult
+ to analyse.
+\end_layout
+
+\begin_layout Description
+Serious 32 of the sentences had more serious problems in Swedish.
+ Some of them did not translate at all, since one of the grammatical constructio
+ns had not been implemented for Swedish yet.
+ Others translated, but with a very strange word order or inflection, since
+ the corresponding grammatical construction did not function as expected.
+ 
+\end_layout
+
+\begin_layout Standard
+All in all, out of the 118 problematic Swedish sentences we believe than
+ more than two thirds of them should be possible to correct without too
+ much trouble.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Paragraph
+Idioms
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+in business
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+i affärsverksamhet
+\begin_inset Quotes erd
+\end_inset
+
+? (3)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+Bill is likely to [..]
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+är sannolik/trolig att
+\begin_inset Quotes erd
+\end_inset
+
+? [bättre: 
+\begin_inset Quotes eld
+\end_inset
+
+det är troligt att Bill [..]
+\begin_inset Quotes erd
+\end_inset
+
+] (2)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+Mary is female
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+Mary är kvinnlig
+\begin_inset Quotes erd
+\end_inset
+
+? [bättre: 
+\begin_inset Quotes eld
+\end_inset
+
+Mary är kvinna
+\begin_inset Quotes erd
+\end_inset
+
+] (2)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+members of the committee
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+medlemmar av kommittén
+\begin_inset Quotes erd
+\end_inset
+
+ [bättre: 
+\begin_inset Quotes eld
+\end_inset
+
+kommittémedlem
+\begin_inset Quotes erd
+\end_inset
+
+] (2)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+had his paper accepted
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+hade sin uppsats godkänd
+\begin_inset Quotes erd
+\end_inset
+
+ [bättre: 
+\begin_inset Quotes eld
+\end_inset
+
+fick sin uppsats godkänd
+\begin_inset Quotes erd
+\end_inset
+
+] (3)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+made a loss
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+gjorde en förlust
+\begin_inset Quotes erd
+\end_inset
+
+ [bättre: 
+\begin_inset Quotes eld
+\end_inset
+
+gick med förlust
+\begin_inset Quotes erd
+\end_inset
+
+] (4)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+a chain of businesses
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+en kedja av affärsverksamheter
+\begin_inset Quotes erd
+\end_inset
+
+ [bättre: 
+\begin_inset Quotes eld
+\end_inset
+
+en affärskedja
+\begin_inset Quotes erd
+\end_inset
+
+] (7)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+be sleeping
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+är sovande
+\begin_inset Quotes erd
+\end_inset
+
+ [bättre: 
+\begin_inset Quotes eld
+\end_inset
+
+sover
+\begin_inset Quotes erd
+\end_inset
+
+] (4)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+no one stops until
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+eveyone continues until
+\begin_inset Quotes erd
+\end_inset
+
+ => [
+\begin_inset Quotes eld
+\end_inset
+
+ingen slutar förrän
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+alla fortsätter tills
+\begin_inset Quotes erd
+\end_inset
+
+]
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+a blue one
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+en blå en
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+en blå
+\begin_inset Quotes erd
+\end_inset
+
+ (3)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+the previous one
+\begin_inset Quotes erd
+\end_inset
+
+ => ?? / 
+\begin_inset Quotes eld
+\end_inset
+
+den förra
+\begin_inset Quotes erd
+\end_inset
+
+ (1)
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+OK
+\series default
+: 
+\begin_inset Quotes eld
+\end_inset
+
+comes cheap
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+fås billigt
+\begin_inset Quotes erd
+\end_inset
+
+? [bättre: 
+\begin_inset Quotes eld
+\end_inset
+
+är billig
+\begin_inset Quotes erd
+\end_inset
+
+] (3)
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+OK
+\series default
+: (group_N2) 
+\begin_inset Quotes eld
+\end_inset
+
+a group of people
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+en grupp av människor
+\begin_inset Quotes erd
+\end_inset
+
+ [
+\begin_inset Quotes eld
+\end_inset
+
+en grupp människor
+\begin_inset Quotes erd
+\end_inset
+
+] (2)
+\end_layout
+
+\begin_layout Paragraph
+OK: Passive form
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+was blamed
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+blev beskyllda
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+beskylldes
+\begin_inset Quotes erd
+\end_inset
+
+ (3)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+was used
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+blev använd
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+användes
+\begin_inset Quotes erd
+\end_inset
+
+ (2)
+\end_layout
+
+\begin_layout Paragraph
+Agreement
+\end_layout
+
+\begin_layout Plain Layout
+16 of these contained variations of the definite noun phrase 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+the right
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ (used in the context 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph default
+X
+\emph on
+ has the right to live in 
+\emph default
+Y
+\emph on
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+), which is translated to 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+rätten
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+.
+ But in Swedish it sounds more natural to say 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+rätt
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ (lit.
+ 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+right
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+), at least in this context.
+ In other cases, English indefinite noun phrases are better translated to
+ definite form, such as 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+traffic
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ which should translate to 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+trafiken
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ (lit.
+ 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+the traffic
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+).
+ Another example is gender problems, since Swedish has two genders, such
+ as 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+one of the tenors
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ where the gender of 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+one
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ should depend on the gender of 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+tenor
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+.
+ Problems with number were mostly due to the singular pronoun 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+everyone
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ which was translated to the plural pronoun 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+alla
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+.
+\end_layout
+
+\begin_layout Paragraph
+Agreement examples
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+one of the tenors
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+ett av tenorerna
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+en av tenorerna
+\begin_inset Quotes erd
+\end_inset
+
+ (1)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+everyone continues until he is broke
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+alla fortsätter tills han är pank
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+\SpecialChar \ldots{}
+ tills de är panka
+\begin_inset Quotes erd
+\end_inset
+
+ (1)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+clients at the demonstration
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+klienter på presentationen
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+klienterna \SpecialChar \ldots{}
+
+\begin_inset Quotes erd
+\end_inset
+
+ (2)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+traffic increased
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+trafik ökade
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+trafiken ökade
+\begin_inset Quotes erd
+\end_inset
+
+ (1)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+is the chairman of ITEL
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+är ordföranden för ITEL
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+ordförande
+\begin_inset Quotes erd
+\end_inset
+
+ (1)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+every customer who owns a computer has a service contract for it
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+varje kund som äger en dator har ett servicekontrakt för det
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+\SpecialChar \ldots{}
+ för den
+\begin_inset Quotes erd
+\end_inset
+
+ (2)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+the right to \SpecialChar \ldots{}
+
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+rätten att \SpecialChar \ldots{}
+
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+rätt att \SpecialChar \ldots{}
+
+\begin_inset Quotes erd
+\end_inset
+
+ (16)
+\end_layout
+
+\begin_layout Paragraph
+OK: (ta bort ProgrVP på svenska) Progressive
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+Smith was writing a report
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+Smith höll på att skriva en rapport
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+skrev en rapport
+\begin_inset Quotes erd
+\end_inset
+
+ (24)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+APCOM has been paying mortgage
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+APCOM har hållit på att betala hypoteksränta
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+betalat
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Reflexive pronouns
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+OK
+\series default
+: (lägg till refl_Pron) 
+\begin_inset Quotes eld
+\end_inset
+
+his/her/their
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+hans/hennes/deras
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+sin
+\begin_inset Quotes erd
+\end_inset
+
+/
+\begin_inset Quotes erd
+\end_inset
+
+sitt
+\begin_inset Quotes erd
+\end_inset
+
+/
+\begin_inset Quotes erd
+\end_inset
+
+sina
+\begin_inset Quotes erd
+\end_inset
+
+ (~30)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+himself
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+sig
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+sig själv
+\begin_inset Quotes erd
+\end_inset
+
+ (but not always) (1)
+\end_layout
+
+\begin_layout Paragraph
+Uncomprehensible
+\end_layout
+
+\begin_layout Plain Layout
+prepositions/subjunctions: 2
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+twice as many than \SpecialChar \ldots{}
+
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+dubbelt så många än \SpecialChar \ldots{}
+
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+som
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+Bill suggested to Frank's boss that \SpecialChar \ldots{}
+, and Carl to Alan's wife
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+Bill föreslog för Franks chef att \SpecialChar \ldots{}
+, och Carl till Alans fru
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+för Alans fru
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\series bold
+OK
+\series default
+: (arrive_in_V2) 
+\begin_inset Quotes eld
+\end_inset
+
+arrived in Katmandu
+\begin_inset Quotes erd
+\end_inset
+
+ => 
+\begin_inset Quotes eld
+\end_inset
+
+anlände i Katmandu
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+till
+\begin_inset Quotes erd
+\end_inset
+
+ (2)
+\end_layout
+
+\begin_layout Plain Layout
+Uncomprehensible/difficult to fix: 6
+\end_layout
+
+\begin_layout Plain Layout
+No linearisation: 24
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Subsection
+Statistics
+\end_layout
+
+\begin_layout Plain Layout
+Out of 1220 original sentences, 1043 could eventually be correctly parsed
+ and their tree representations be used for generating the equivalent Swedish
+ sentences.
+ Also, the changes listed in section 3.2 were performed, resulting in better
+ linearizations.
+ The generated Swedish sentences were checked for accuracy and divided into
+ a few different groups.
+ The number of sentences in each group is given in the left-most column.
+ Descriptions and examples for each group are given on the right and can
+ be viewed as a list of remaining problems to be solved.
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+unique sentences
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+874
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+(som förut)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+599
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+(skiljer sig)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+89
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+(hade inte förut)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+150
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+no linearisation
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+36
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Number Type Description Result Desired result
+\end_layout
+
+\begin_layout Itemize
+811 correct & natural 
+\end_layout
+
+\begin_layout Itemize
+120 considered correct but could be more natural
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+“each” / “every”: “varje europé” “alla européer”
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+proper inclusion -- indefinite article: “Mary är en student” “Mary är student”
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+infinitive marker desired: “John sade Bill hade skadat sig” “John sade att
+ Bill hade skadat sig”
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+infinitive marker not desired: “lyckades att vinna” “lyckades vinna”
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+passive constructions: “blev använd” “användes”
+\end_layout
+
+\begin_layout Itemize
+gender of pronoun referring to previous sentence: “Bill äger ett också”
+ (referring to “bil”) “Bill äger en också”
+\end_layout
+
+\begin_layout Itemize
+definite form: “ordföranden för” “ordförande för”
+\end_layout
+
+\begin_layout Itemize
+meaning of “female”: “Mary är kvinnlig” “Mary är kvinna”
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+28 requiring changes in the FraCaS lexicon 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+“of” constructions:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+“medlemmar av kommittén” “medlemmar i kommittén”
+\end_layout
+
+\begin_layout Itemize
+“kedja av affärsverksamhet” “affärskedja”
+\end_layout
+
+\begin_layout Itemize
+“grupp av människor” “grupp människor”
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+“alla av dem” “alla” / “allihop”
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+translation of “should”: “föreslog [...] att de borde” “föreslog [...] att de
+ skulle”
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+translation of “make a loss”: “gjorde en förlust” “gick med förlust”
+\end_layout
+
+\begin_layout Itemize
+translation of “have been to”: “har varit till” “har varit i”
+\end_layout
+
+\begin_layout Itemize
+translation of “be asleep”: “har varit sovande” “har sovit”
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+30 requiring changes in the English and/or Swedish general grammar(s) 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+gender: “ett av de ledande tenorerna” “en av de ledande tenorerna”
+\end_layout
+
+\begin_layout Itemize
+translation of “come cheap”: “fås billigt” “vara billig (att anlita)”
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+“both” with adjective -- definite article: “båda ledande tenorerna” “båda
+ de ledande tenorerna”
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+“will” -- difference in modality: “ska bli” “kommer att bli” (sometimes)
+\end_layout
+
+\begin_layout Itemize
+AdV position of “also”: “hon gav också dem en faktura” “hon gav dem också
+ en faktura”
+\end_layout
+
+\begin_layout Itemize
+translation of “awarded himself”: “tilldelade sig” “tilldelade sig själv”
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+translation of “used to be”: “brukade att vara” e.g.
+ “var tidigare”
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+54 difficult to correct 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+“were blamed for” (non-human subject): “blev anklagade för” [difficult to
+ find Swedish equivalent]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+reflexive possessive: “skrev hans första roman” “skrev sin första roman”
+\end_layout
+
+\begin_layout Itemize
+progressive aspect: “höll på att” (sometimes meaning “nearly”) [difficult
+ to find Swedish equivalent]
+\end_layout
+
+\begin_layout Itemize
+singular / plural: “alla italienska män vill vara en framstående tenor”
+ “alla italienska män vill vara framstående tenorer”
+\end_layout
+
+\begin_layout Itemize
+“be likely to”: “Smith är sannolik att bli” “det är sannolikt att Smith
+ blir”
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+“some”: “snabbare än någon ITEL-dator” “snabbare än någon viss ITEL-dator”
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+“lose one's temper”: “Smith förlorade hans humör” “Smith tappade humöret”
+\end_layout
+
+\begin_layout Itemize
+“have something accepted”: “John hade hans uppsats godkänd” “John fick sin
+ uppsats godkänd”
+\end_layout
+
+\end_deeper
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Discussion
+\end_layout
+
+\begin_layout Standard
+The FraCaS treebank was a small project financed by the Centre for Language
+ Technology (CLT) at the University of Gothenburg.
+ The project used less than three person months to create a treebank for
+ the FraCaS test suite, together with a bilingual GF grammar for the trees.
+ The coverage of the English grammar is 95--99%, depending on whether you
+ include elliptic phrases or not.
+ The Swedish grammar is not as developed yet and has a coverage of 86% of
+ the FraCaS sentences.
+\end_layout
+
+\begin_layout Standard
+The treebank is released under an open-source license, and can be downloaded
+ as a part of the Gothenburg CLT Toolkit:
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+
+\family sans
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.clt.gu.se/clt-toolkit"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Implications for the FraCaS Test Suite
+\end_layout
+
+\begin_layout Standard
+From the corpus point of view, the FraCaS test suite is not very interesting.
+ It is a small corpus (less than 1000 sentences), with non-natural, made
+ up sentences.
+ Furthermore it uses a fairly standard syntax and is monolingual.
+\end_layout
+
+\begin_layout Standard
+However, the main value of FraCaS is as a resource for testing semantic
+ inference algorithms 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "MacCartneyManning2007:Natural-logic-for-textual,MacCartneyManning2008:Modeling-semantic-containment"
+
+\end_inset
+
+.
+ This project adds syntactic structures to the test sentences, which we
+ hope can be beneficial since the semantics of a sentence has a close dependence
+ on syntax.
+ 
+\end_layout
+
+\begin_layout Standard
+Furthermore, we have added a new language to the test set, albeit not perfect
+ yet.
+ And since we are using the multilingual GF resource grammar, more languages
+ should be relatively easy to add.
+ 
+\end_layout
+
+\begin_layout Subsection
+Implications for GF
+\end_layout
+
+\begin_layout Standard
+The making of this treebank has been a strees test, both for GF and for
+ the resource grammar.
+ The main work in this project has been by a person who is an experienced
+ computational linguist, but had never used GF before.
+ This means that the project has been a test of how easy it is to learn
+ and start using GF and its resource grammar.
+ Furthermore, the project was a test of the coverage of the existing grammatical
+ constructions in the resource grammar.
+ 
+\end_layout
+
+\begin_layout Subsection
+Future Work
+\end_layout
+
+\begin_layout Standard
+There are several remaining problems and interesting extension possible
+ with the FraCaS treebank; the following are some examples:
+\end_layout
+
+\begin_layout Itemize
+First and most important is to get most of the remaining Swedish sentences
+ to work, by factoring out idioms and other constructions from the treebank
+ and put them in the grammars instead.
+ 
+\end_layout
+
+\begin_layout Itemize
+A good treatment of elliptical phrases, by implementing more coordination
+ constructions in the resource grammar.
+ 
+\end_layout
+
+\begin_layout Itemize
+We would like to add new languages from the resource grammar to the multilingual
+ FraCaS grammar.
+ Hopefully this will also benefit the existing two languages, by requiring
+ us to abstract away from language-specific details, thus making the grammar
+ more abstract.
+\end_layout
+
+\begin_layout Itemize
+A long-term goal would be to make the treebank and the associated grammar
+ more 
+\begin_inset Quotes eld
+\end_inset
+
+semantic
+\begin_inset Quotes erd
+\end_inset
+
+ by factoring out even more syntactic constructions and put them in a semantic
+ resource grammar.
+ That it is possible to formulate classic Montague semantics in GF has already
+ been shown 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Ranta2001:Computational-Semantics"
+
+\end_inset
+
+, but here we need to handle many more semantic and pragmatic phenomena.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Subsection
+Related work
+\end_layout
+
+\begin_layout Plain Layout
+Converting the Penn Treebank to GF, Swedish Talbanken to GF
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "FraCaSBank"
+options "apalike"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
