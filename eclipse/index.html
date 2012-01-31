@@ -1,7 +1,7 @@
 <h1>The GF Eclipse Plugin</h1>
 
 <p>John  J. Camilleri<br />
-Updated: 23 Jan 2012</p>
+Updated: 31 Jan 2012</p>
 
 <p><em>The research leading to these results has received funding from the European Union&#8217;s Seventh Framework Programme (FP7/2007-2013) under grant agreement n° FP7-ICT-247914.</em></p>
 
@@ -70,6 +70,12 @@ Updated: 23 Jan 2012</p>
 <h2>Major release history</h2>
 
 <dl>
+<dt><strong>31/01/12</strong></dt>
+<dd>(1.2.5.x) Hugely improved scoping performance. New &#8220;Clone to new language&#8221; wizard. Improved code formatting. More efficient builder.</dd>
+
+<dt><strong>23/01/12</strong></dt>
+<dd>(1.2.4.x) Logging is now done to the Eclipse Platform Log (use &#8220;Error Log&#8221; view). Tested with Eclipse 3.6.2. Bug fixes.</dd>
+
 <dt><strong>11/01/12</strong></dt>
 <dd>(1.2.3.x) Updated to use Xtext 2.1.0. Links to external files now moved into new &#8220;GF Library View&#8221;.</dd>
 
@@ -84,15 +90,6 @@ Updated: 23 Jan 2012</p>
 
 <dt><strong>01/10/11</strong></dt>
 <dd>Initial BETA released.</dd>
-
-<dt><strong>20/09/11</strong></dt>
-<dd>Refactoring of grammar to provide neater syntax trees, and handle cross-referencing contraints. Major work on name resolution across modules, implementing custom <code>Scoping</code>, <code>Naming</code>, <code>ResourceDescription</code> implementations.</dd>
-
-<dt><strong>08/09/11</strong></dt>
-<dd>Successfully converted GF language grammar into ANTLR-compaticble format. Refactoring to avoid left-recursion took up the majority of this time so far.</dd>
-
-<dt><strong>Late August 2011</strong></dt>
-<dd>Started investigation the use of Xtext as a basis for building the Eclipse plugin. Xtext requires a EBNF-style language grammar in order to generate development tools as a plugin for the Eclipse IDE.</dd>
 </dl>
 
 <hr />
@@ -127,7 +124,7 @@ Updated: 23 Jan 2012</p>
 
 <ol>
 <li>Inside Eclipse, go to <strong>Help &rarr; Install New Software</strong>.</li>
-<li>Add new software site using the URL: <code>http://www.grammaticalframework.org/eclipse/release/</code></li>
+<li>Add new software site using the URL: <a href="http://www.grammaticalframework.org/eclipse/release/">http://www.grammaticalframework.org/eclipse/release/</a></li>
 <li>Select the <strong>GF Eclipse Plugin</strong>, and make sure the <strong>Contact all update sites during install to find required software</strong> option is checked.</li>
 <li>Click Next, accept the license agreement and install.</li>
 <li>Accept the prompt warning that the software is unsigned.</li>
@@ -157,6 +154,32 @@ system and how you installed GF.</em><br />
 <ul>
 <li>If your project has a folder named <code>(External)</code> you can safely delete this <strong>via the Eclipse Project Explorer</strong>. It is no longer used in GFEP >= 1.2.3</li>
 </ul>
+
+<h3>Project settings</h3>
+
+<p>Although the plugin should take care of your project settings for you, in case anything gets messed up you can always correct them manually as follows:</p>
+
+<h4>Project nature</h4>
+
+<p>Your <code>.project</code> file should include the GF Project Nature as follows:</p>
+
+<pre><code>&lt;natures&gt;
+  &lt;nature&gt;org.grammaticalframework.eclipse.ui.natures.projectNatureID&lt;/nature&gt;
+&lt;/natures&gt;
+</code></pre>
+
+<h4>Builder</h4>
+
+<p>Your <code>.project</code> file should include the GF Builder as follows:</p>
+
+<pre><code>&lt;buildSpec&gt;
+  &lt;buildCommand&gt;
+      &lt;name&gt;org.grammaticalframework.eclipse.ui.build.GFBuilderID&lt;/name&gt;
+      &lt;arguments&gt;
+      &lt;/arguments&gt;
+  &lt;/buildCommand&gt;
+&lt;/buildSpec&gt;
+</code></pre>
 
 <hr />
 
@@ -233,7 +256,7 @@ files and manually add them to your Eclipse workspace to experiment with some of
 
 <h4>Logs</h4>
 
-<p>You can set the log verbosity from <strong>Window &rarr; Preferences &rarr; Grammatical Framework</strong>. This setting also affects the verbosity of the log file <code>gfep.log</code>.</p>
+<p>You can set the log verbosity from <strong>Window &rarr; Preferences &rarr; Grammatical Framework</strong>.</p>
 
 <h4>Validation</h4>
 
@@ -268,4 +291,9 @@ files and manually add them to your Eclipse workspace to experiment with some of
 
 <h3>Logs</h3>
 
-<p>The GFEP writes a log file in your Eclipse workspace folder, self-evidently named <code>gfep.log</code>. When things go wrong it may be useful to consult this file, or even send it as part of any feedback you provide.</p>
+<p>The GFEP writes to the Eclipse platform log. This can be accessed in two ways:</p>
+
+<ol>
+<li>By opening the <strong>Error Log</strong> view in Eclipse</li>
+<li>Accessing the file directly at <code>workspace/.metadata/.log</code></li>
+</ol>
