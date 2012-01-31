@@ -1,12 +1,23 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <HTML>
 <HEAD>
 <TITLE>GF - Grammatical Framework</TITLE>
 <link rel=stylesheet href="css/style.css">
+<script type="text/javascript">
+function sitesearch() {
+  var q=document.forms[0].q.value;
+  var site=" site:www.grammaticalframework.org";
+  var search=encodeURIComponent(q+site)
+  document.location.href="http://www.google.com/search?q="+search
+  return false;
+}
+</script>
 </HEAD>
 
 <BODY>
-
+<script type="text/javascript">
+document.write('<div style="text-align: right">  <form onsubmit="return sitesearch()" method=get action="http://www.google.com/search">  <input type=search name="q" placeholder="site search">  <input type=submit value="Search">  </form></div>')
+</script>
 <div class=center>
 <IMG SRC="doc/Logos/gf0.png" alt="">
 <H1>Grammatical Framework</H1>
