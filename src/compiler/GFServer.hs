@@ -90,10 +90,9 @@ handle_fcgi execute1 state0 stateM cache =
 -- | HTTP request handler
 handle state0 cache execute1
        rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) state =
-    do let qs = decodeQ $ 
-                case method of
-                  "GET" -> queryToArguments q
-                  "POST" -> queryToArguments body
+    do let qs = case method of
+                  "GET" -> inputs q
+                  "POST" -> inputs body
 
        logPutStrLn $ method++" "++upath++" "++show qs
        case upath of
@@ -338,9 +337,11 @@ toHeader s = FCGI.HttpExtensionHeader s -- cheating a bit
 -}
 -- * misc utils
 
-decodeQ qs = [(decode n,decode v)|(n,v)<-qs]
-decode = map decode1
-decode1 '+' = ' ' -- httpd-shed bug workaround
-decode1 c   = c
+
+inputs = queryToArguments . fixplus
+  where
+    fixplus = concatMap decode
+    decode '+' = "%20" -- httpd-shed bug workaround
+    decode c   = [c]
 
 mapFst f xys = [(f x,y)|(x,y)<-xys]
