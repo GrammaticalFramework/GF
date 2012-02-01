@@ -90,27 +90,29 @@ handle_fcgi execute1 state0 stateM cache =
 -- | HTTP request handler
 handle state0 cache execute1
        rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) state =
-    do let qs = case method of
-                  "GET" -> inputs q
-                  "POST" -> inputs body
-
-       logPutStrLn $ method++" "++upath++" "++show qs
-       case upath of
-         "/new" -> new
---       "/stop" ->
---       "/start" ->
-         "/gfshell" -> inDir qs $ look "command" . command
-         "/cloud" -> inDir qs $ look "command" . cloud
-         '/':rpath ->
-           case (takeDirectory path,takeFileName path,takeExtension path) of
-             (_  ,_             ,".pgf") -> wrapCGI $ PS.cgiMain' cache path
-             (dir,"grammars.cgi",_     ) -> wrapCGI $ grammarList dir
-             (dir  ,"exb.fcgi"  ,_     ) -> wrapCGI $ ES.cgiMain' root dir cache
-             _ -> do resp <- serveStaticFile path
-                     return (state,resp)
-           where path = translatePath rpath
-         _ -> return (state,resp400 upath)
+    case method of
+      "POST" -> normal_request (inputs body)
+      "GET"  -> normal_request (inputs q)
+      _ -> return (state,resp501 $ "method "++method)
   where
+    normal_request qs =
+      do logPutStrLn $ method++" "++upath++" "++show qs
+         case upath of
+           "/new" -> new
+--         "/stop" ->
+--         "/start" ->
+           "/gfshell" -> inDir qs $ look "command" . command
+           "/cloud" -> inDir qs $ look "command" . cloud
+           '/':rpath ->
+             case (takeDirectory path,takeFileName path,takeExtension path) of
+               (_  ,_             ,".pgf") -> wrapCGI $ PS.cgiMain' cache path
+               (dir,"grammars.cgi",_     ) -> wrapCGI $ grammarList dir
+               (dir  ,"exb.fcgi"  ,_    ) -> wrapCGI $ ES.cgiMain' root dir cache
+               _ -> do resp <- serveStaticFile path
+                       return (state,resp)
+             where path = translatePath rpath
+           _ -> return (state,resp400 upath)
+
     root = "."
 
     translatePath rpath = root</>rpath -- hmm, check for ".."
@@ -275,6 +277,7 @@ html200      = ok200' htmlUTF8 . encodeString
 resp204      = Response 204 [] "" -- no content
 resp400 msg  = Response 400 [plain] $ "Bad request: "++msg++"\n"
 resp404 path = Response 404 [plain] $ "Not found: "++path++"\n"
+resp501 msg  = Response 501 [plain] $ "Not implemented: "++msg++"\n"
 
 -- * Content types
 plain = ct "text/plain"
