@@ -1,7 +1,7 @@
 <h1>The GF Eclipse Plugin</h1>
 
 <p>John  J. Camilleri<br />
-Updated: 31 Jan 2012</p>
+Updated: 2 Feb 2012</p>
 
 <p><em>The research leading to these results has received funding from the European Union&#8217;s Seventh Framework Programme (FP7/2007-2013) under grant agreement n° FP7-ICT-247914.</em></p>
 
@@ -42,18 +42,18 @@ Updated: 31 Jan 2012</p>
 <li>Use GF Shell from within Eclipse</li>
 <li>Auto-completion for declared identifiers</li>
 <li>Background compilation (shallow) using project builder</li>
-<li>Full support for <em>Open Declaration</em> (F3)</li>
+<li>Support for <em>Open Declaration</em> (F3)</li>
+<li>Code generation for new languages in application grammars</li>
 </ul>
 
 <h3>Near-term</h3>
 
 <ul>
+<li>Built-in library browser (in particular for GF resource grammar library)</li>
 <li>Inline documentation for function calls, overloads</li>
 <li>Quick-fix suggestions for syntax and naming errors</li>
 <li>Code generation for concrete/instance modules</li>
-<li>Code generation for new languages in application grammars</li>
 <li>Grouping of concrete syntaxes by language, fast switching and linked navigation</li>
-<li>Built-in library browser (in particular for GF resource grammar library)</li>
 </ul>
 
 <h3>Long-term goals</h3>
@@ -70,8 +70,8 @@ Updated: 31 Jan 2012</p>
 <h2>Major release history</h2>
 
 <dl>
-<dt><strong>31/01/12</strong></dt>
-<dd>(1.2.5.x) Hugely improved scoping performance. New &#8220;Clone to new language&#8221; wizard. Improved code formatting. More efficient builder.</dd>
+<dt><strong>02/02/12</strong></dt>
+<dd>(1.2.5.x) Hugely improved scoping performance. New &#8220;Clone to new language&#8221; wizard. Improved code formatting. More efficient builder. Removed library path preference. GF runtime is now automatically found.</dd>
 
 <dt><strong>23/01/12</strong></dt>
 <dd>(1.2.4.x) Logging is now done to the Eclipse Platform Log (use &#8220;Error Log&#8221; view). Tested with Eclipse 3.6.2. Bug fixes.</dd>
@@ -135,11 +135,8 @@ Updated: 31 Jan 2012</p>
 
 <ol>
 <li>Add the GF perspective by clicking <strong>Open Perspective &rarr; Other</strong> and choosing <strong>GF</strong>.</li>
-<li>Set your paths to the GF executable and libraries by going to <strong>Window &rarr; Preferences &rarr; Grammatical Framework</strong>.<br />
-<em>The runtime path is assumed to be <code>~/.cabal/bin/gf</code>, which may be wrong depending on your
-system and how you installed GF.</em><br />
-<em>The library path should get automatically set from your environment&#8217;s <code>GF_LIB_PATH</code> variable.</em></li>
-<li>You can also adjust the verbosity level of the GFEP logger.</li>
+<li>The plugin will try to determine the path to your GF executable automatically. You can always check/overwrite it by going to <strong>Window &rarr; Preferences &rarr; Grammatical Framework</strong>.  </li>
+<li>You can also adjust the verbosity level of the GFEP console log in the preferences window.</li>
 </ol>
 
 <h3>Updating the plugin</h3>
@@ -149,10 +146,11 @@ system and how you installed GF.</em><br />
 <li>Any available updates will appear in the dialog. Select them and follow the usual steps.</li>
 </ol>
 
-<h4>Upgrading to GFEP 1.2.3</h4>
+<h4>Deprecated stuff</h4>
 
 <ul>
 <li>If your project has a folder named <code>(External)</code> you can safely delete this <strong>via the Eclipse Project Explorer</strong>. It is no longer used in GFEP >= 1.2.3</li>
+<li>If your workspace contains a log file <code>gfep.log</code> then you can safely delete it from your system. As of version 1.2.4, GFEP uses Eclipse&#8217;s standard log file at <code>.metadata/.log</code></li>
 </ul>
 
 <h3>Project settings</h3>
