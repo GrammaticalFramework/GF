@@ -1,5 +1,30 @@
 /* Abstract syntax for a small subset of GF grammars in JavaScript */
 
+/*
+type Id   = String -- all sorts of identifiers
+type Cat  = Id -- category name
+type Type = [Cat] -- [Cat_1,...,Cat_n] means Cat_1 -> ... -> Cat_n
+
+type Grammar  = { basename: Id, abstract : Abstract, concretes : [Concrete] }
+
+type Abstract = { startcat: Cat, cats : [Cat], funs : [ Fun ] }
+type Fun      = { name:Id, type : Type }
+
+type Concrete = { langcode:Id,
+                  opens:[Id],
+		  params: [{name:Id, rhs:String}],
+		  lincats : [{ cat:Cat, type:Term}],
+		  opers: [{name:Lhs, rhs:Term}],
+		  lins: [{fun:Id, args:[Id], lin:Term}]
+		}
+
+
+type Lhs = String -- name and type of oper,
+                  -- e.g "regN : Str -> { s:Str,g:Gender} ="
+type Term = String -- arbitrary GF term (not parsed by the editor)
+*/
+
+// defined_cats :: [Grammar] -> {Cat=>Bool}
 function defined_cats(g) {
     var dc={};
     with(g.abstract)
@@ -7,6 +32,7 @@ function defined_cats(g) {
     return dc;
 }
 
+// defined_funs :: [Grammar] -> {Id=>Bool}
 function defined_funs(g) {
     var df={};
     with(g.abstract)
@@ -15,6 +41,7 @@ function defined_funs(g) {
 }
 
 // Return the type of a named function in the abstract syntax
+// function_type :: Grammar -> Id -> Type
 function function_type(g,fun) {
     with(g.abstract)
 	for(var i in funs) if(funs[i].name==fun) return funs[i].type
@@ -22,6 +49,7 @@ function function_type(g,fun) {
 }
 
 // Return the lincat defined in a given concrete syntax for an abstract category
+// cat_lincat :: Concrete -> Cat -> Term
 function cat_lincat(conc,cat) {
     with(conc)
 	for(var i in lincats) if(lincats[i].cat==cat) return lincats[i].type
@@ -29,6 +57,7 @@ function cat_lincat(conc,cat) {
 }
 
 // Return the index of the concrete syntax with a given langcode
+// conc_index :: Grammar -> Id -> Int
 function conc_index(g,langcode) {
     var c=g.concretes;
     for(var ix=0;ix<c.length;ix++)
@@ -36,7 +65,7 @@ function conc_index(g,langcode) {
     return null;
 }
 
-
+// rename_category :: Grammar -> Cat -> Cat -> Grammar  // destructive update
 function rename_category(g,oldcat,newcat) {
     function rename_cats(cats) {
 	for(var i in cats) if(cats[i]==oldcat) cats[i]=newcat;
@@ -65,6 +94,7 @@ function rename_category(g,oldcat,newcat) {
     return g;
 }
 
+// rename_function :: Grammar -> Id -> Id -> Grammar // destructive update
 function rename_function(g,oldfun,newfun) {
     function rename_lin(lin) {
 	if(lin.fun==oldfun) lin.fun=newfun;
@@ -76,6 +106,7 @@ function rename_function(g,oldfun,newfun) {
     return g;
 }
 
+// change_lin_lhs :: Grammar -> Id -> Grammar // destructive update
 function change_lin_lhs(g,fun) {
     function change_lin(lin) {
 	if(lin.fun==fun.name) lin.args=arg_names(fun.type);
@@ -101,7 +132,7 @@ function check_name(s,kind) {
 	: s+"? "+kind+" names must start with a letter and can contain letters, digits, _ and '"
 }
 
-
+// parse_fun :: String -> {error:String} + {ok:Fun}
 function parse_fun(s) {
     var ws=s.split(/\s+/);
     var fun={name:"",type:[]};
@@ -127,6 +158,7 @@ function parse_fun(s) {
 }
 
 
+// parse_param :: String -> {error:String} + { ok:{name:Id,rhs:String} }
 function parse_param(s) {
     var ws=s.split("=");
     if(ws.length==2) {
@@ -138,6 +170,7 @@ function parse_param(s) {
 	return { error: "P = C1 | ... | Cn" }
 }
 
+// parse_oper :: String -> {error:String} + {ok:{name:Lhs, rhs:Term}}
 function parse_oper(s) {
     var i=s.indexOf(" ");
     var operr = { error: "op = expr" }
