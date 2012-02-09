@@ -36,7 +36,7 @@ function upload(g) {
 	    var cname=g.basename+g.concretes[i].langcode+".gf";
 	    //files.push(cname);
 	    form.appendChild(hidden(cname,
-				    show_concrete(g.basename)(g.concretes[i])));
+				    show_concrete(g)(g.concretes[i])));
 	}
 	editor.appendChild(form);
 	form.submit();

@@ -2,20 +2,25 @@
 
 /*
 type Id   = String -- all sorts of identifiers
+type ModId = Id -- module name
 type Cat  = Id -- category name
+type FunId = Id -- function name
 type Type = [Cat] -- [Cat_1,...,Cat_n] means Cat_1 -> ... -> Cat_n
 
-type Grammar  = { basename: Id, abstract : Abstract, concretes : [Concrete] }
+type Grammar  = { basename: ModId,
+                  extends: [ModId],
+                  abstract: Abstract,
+                  concretes: [Concrete] }
 
-type Abstract = { startcat: Cat, cats : [Cat], funs : [ Fun ] }
-type Fun      = { name:Id, type : Type }
+type Abstract = { startcat: Cat, cats: [Cat], funs: [Fun] }
+type Fun      = { name: FunId, type: Type }
 
-type Concrete = { langcode:Id,
-                  opens:[Id],
-		  params: [{name:Id, rhs:String}],
-		  lincats : [{ cat:Cat, type:Term}],
-		  opers: [{name:Lhs, rhs:Term}],
-		  lins: [{fun:Id, args:[Id], lin:Term}]
+type Concrete = { langcode: Id,
+                  opens: [ModId],
+		  params: [{name: Id, rhs: String}],
+		  lincats : [{ cat: Cat, type: Term}],
+		  opers: [{name: Lhs, rhs: Term}],
+		  lins: [{fun: FunId, args: [Id], lin: Term}]
 		}
 
 
@@ -24,24 +29,42 @@ type Lhs = String -- name and type of oper,
 type Term = String -- arbitrary GF term (not parsed by the editor)
 */
 
-// defined_cats :: [Grammar] -> {Cat=>Bool}
-function defined_cats(g) {
-    var dc={};
+// locally_defined_cats :: Grammar -> {Cat=>Bool} -> {Cat=>Bool} // destr upd
+function locally_defined_cats(g,dc) {
     with(g.abstract)
-	for(var i in cats) dc[cats[i]]=true;
+	for(var i in cats) dc[cats[i]]=g.basename;
     return dc;
 }
 
-// defined_funs :: [Grammar] -> {Id=>Bool}
-function defined_funs(g) {
-    var df={};
+// all_defined_cats :: Grammar -> [Grammar] -> {Cat=>Bool}
+function all_defined_cats(g,igs) {
+    return all_inherited_cats(igs,locally_defined_cats(g,{}))
+}
+// all_inherited_cats :: [Grammar] -> {Cat=>Bool} -> {Cat=>Bool} // destr upd
+function all_inherited_cats(igs,dc) {
+    for(var i in igs) dc=locally_defined_cats(igs[i],dc)
+    return dc;
+}
+
+// locally_defined_funs :: [Grammar] -> {FunId=>ModId} -> {Id=>ModId} // destr upd
+function locally_defined_funs(g,df) {
     with(g.abstract)
-	for(var i in funs) df[funs[i].name]=true;
+	for(var i in funs) df[funs[i].name]=g.basename;
+    return df;
+}
+
+// all_defined_funs :: Grammar -> [Grammar] -> {FunId=>ModId}
+function all_defined_funs(g,igs) {
+    return all_inherited_funs(igs,locally_defined_funs(g,{}))
+}
+// all_inherited_funs :: [Grammar] -> {FunId=>ModId} -> {FunId=>ModId} // destr upd
+function all_inherited_funs(igs,df) {
+    for(var i in igs) df=locally_defined_funs(igs[i],df)
     return df;
 }
 
 // Return the type of a named function in the abstract syntax
-// function_type :: Grammar -> Id -> Type
+// function_type :: Grammar -> FunId -> Type
 function function_type(g,fun) {
     with(g.abstract)
 	for(var i in funs) if(funs[i].name==fun) return funs[i].type
@@ -187,7 +210,7 @@ function parse_oper(s) {
     
 }
 
-/* --- Print as plain text (normal GF concrete syntax) ---------------------- */
+/* --- Print as plain text (normal GF source syntax) ------------------------- */
 
 function show_type(t) {
     var s="";
@@ -209,12 +232,18 @@ function show_grammar(g) {
 function show_abstract(g) {
 //  var startcat= g.abstract.cats.length==1 ? g.abstract.cats[0] : g.abstract.startcat;
     var startcat= g.abstract.startcat || g.abstract.cats[0];
-    return "abstract "+g.basename+" = {\n\n"
+    return "abstract "+g.basename+" = "
+        +show_extends(g.extends)
+        +"{\n\n"
 	+"flags coding = utf8 ;\n\n"
 	+show_startcat(startcat)
         +show_cats(g.abstract.cats)
         +show_funs(g.abstract.funs)
 	+"}\n";
+}
+
+function show_extends(exts) {
+    return exts && exts.length>0 ? exts.join(", ")+" ** " : "";
 }
 
 function show_startcat(startcat) {
@@ -228,15 +257,18 @@ function show_cats(cats) {
 function show_funs(funs) { return show_list("fun",show_fun,funs); }
 
 function show_concretes(g) {
-    return map(show_concrete(g.basename),g.concretes).join("\n\n");
+    return map(show_concrete(g),g.concretes).join("\n\n");
 }
 
-function show_concrete(basename) {
+function conc_extends(conc) { return function(m) { return m+conc.langcode; }}
+
+function show_concrete(g) {
     return function(conc) {
 	return "--# -path=.:present\n"
-            + "concrete "+basename+conc.langcode+" of "+basename+" ="
+            + "concrete "+g.basename+conc.langcode+" of "+g.basename+" = "
+	    +show_extends((g.extends || []).map(conc_extends(conc)))
             +show_opens(conc.opens)
-	    +" {\n\nflags coding = utf8 ;\n\n"
+	    +"{\n\nflags coding = utf8 ;\n\n"
 	    +show_params(conc.params)
 	    +show_lincats(conc.lincats)
 	    +show_opers(conc.opers)
@@ -252,7 +284,7 @@ function show_list(kw,show1,list) {
 }
 
 function show_opens(opens) {
-    return opens && opens.length>0 ? "\n\nopen "+opens.join(", ")+" in" : ""
+    return opens && opens.length>0 ? "\n\nopen "+opens.join(", ")+" in " : ""
 }
 
 function show_params(params) { return show_list("param",show_param,params); }

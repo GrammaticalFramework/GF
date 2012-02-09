@@ -17,6 +17,9 @@ div#file, pre.plain { background: white; padding: 0.6ex; }
 img.cloud, img.right, div.right, div.modtime { float: right; }
 .modtime { color: #999; white-space: nowrap; }
 
+table.grammar_list { border-collapse: collapse; margin-left: 1.0em; }
+table.grammar_list td { padding: 0.4ex 0.25em; }
+
 div.namebar { background: #9df; }
 div.namebar table { width: 100%; }
 .namebar h3, .home h3 { margin: 0; color: #009; }
@@ -45,7 +48,8 @@ div.template:hover
 
 .editable:hover, .deletable:hover { background: #ff9; }
 
-.extensible:hover .more,.editable:hover > .edit ,.deletable:hover > .delete 
+.extensible:hover .more,.editable:hover > .edit ,.deletable:hover > .delete,
+ tr.deletable:hover .delete 
   { visibility: visible; }
 
 .more { color: green; }
