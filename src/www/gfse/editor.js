@@ -35,24 +35,29 @@ function draw_grammar_list() {
 	insertAfter(cloud_download,cloud_upload);
     }
     editor.appendChild(home)
-    var gs=ul([]);
     function del(i) { return function () { delete_grammar(i); } }
     function clone(i) { return function (g,b) { clone_grammar(i); } }
-    for(var i=0;i<local.count;i++) {
-	var grammar=local.get(i,null);
-	if(grammar && grammar.basename) {
-	    var link=a(jsurl("open_grammar("+i+")"),[text(grammar.basename)]);
-	    gs.appendChild(
-		node("li",{"class":"extensible"},
-		     [deletable(del(i),link,"Delete this grammar"),
-		      more(grammar,clone(i),"Clone this grammar")]))
-	}
+    function new_extension(i) { return function (g,b) { new_grammar([g]) }}
+    function item(i,grammar) {
+	var link=a(jsurl("open_grammar("+i+")"),[text(grammar.basename)]);
+	return node("tr",{"class":"extensible deletable"},
+		    [td(delete_button(del(i),"Delete this grammar")),
+		     td(link),
+		     td(more(grammar,clone(i),"Clone this grammar")),
+		     td(more(grammar,new_extension(i),"Create an extension of this grammar"))])
     }
     if(local.get("count",null)==null)
 	home.appendChild(text("You have not created any grammars yet."));
     else if(local.count==0)
 	home.appendChild(text("Your grammar list is empty."));
-    home.appendChild(gs);
+    else {
+	var rows=[];
+	for(var i=0;i<local.count;i++) {
+	    var grammar=local.get(i,null);
+	    if(grammar && grammar.basename) rows.push(item(i,grammar))
+	}
+	home.appendChild(node("table",{"class":"grammar_list"},rows));
+    }
 
     home.appendChild(
 	ul([li([a(jsurl("new_grammar()"),[text("New grammar")])])]));
@@ -60,11 +65,29 @@ function draw_grammar_list() {
     home.appendChild(empty_id("div","sharing"));
 }
 
-function new_grammar() {
+function new_grammar(gs) {
+    gs=gs || [];
     var g={basename:"Unnamed",
+	   extends:gs.map(function(g){return g.basename}),
+	             // check that "Unnamed" is not in exts !!
 	   abstract:{cats:[],funs:[]},
-	   concretes:[]}
+	   concretes:empty_concretes_extending(gs)}
     edit_grammar(g);
+}
+
+function empty_concretes_extending(gs) {
+    var concs=[]
+    var langs=[];
+    for(var i in gs) {
+	var g=gs[i];
+	for(var ci in g.concretes) {
+	    var conc=g.concretes[ci];
+	    var code=conc.langcode;
+	    if(!langs[code])
+		langs[code]=true,concs.push(new_concrete(code))
+	}
+    }
+    return concs
 }
 
 function remove_local_grammar(i) {
@@ -291,6 +314,14 @@ function draw_startcat(g) {
     return indent([kw("flags startcat"),sep(" = "),m]);
 }
 
+function draw_extends(exts) {
+    var kw_extends=kw("extends ")
+    kw_extends.title="This grammar is an extension of the grammars listed here."
+    return exts && exts.length>0
+	? indent([kw_extends,ident(exts.join(", "))])
+	: text("")
+}
+
 function draw_abstract(g) {
     var kw_cat = kw("cat");
     kw_cat.title = "The categories (nonterminals) of the grammar are enumerated here. [C.3.2]";
@@ -307,6 +338,7 @@ function draw_abstract(g) {
     return div_id("file",
 		  [kw("abstract "),ident(g.basename),sep(" = "),
 		   draw_timestamp(g.abstract),
+		   draw_extends(g.extends),
 		   flags,
 		   indent([extensible([kw_cat,
 				       indent(draw_cats(g))]),
@@ -352,21 +384,27 @@ function rename_cat(g,el,cat) {
     string_editor(el,cat,ren);
 }
 
+function duplicated(g,kind,orig) {
+    return orig==g.basename
+	? "Same "+kind+" defined twice in this module"
+	: "Same "+kind+" already defined in "+orig
+}
+
 function draw_cats(g) {
     var cs=g.abstract.cats;
     var es=[];
-    var defined={};
+    var defined=inherited_cats(g);
     function eident(cat) {
 	function ren(g,el) { rename_cat(g,el,cat); }
 	return editable("span",ident(cat),g,ren,"Rename category");
     }
     function check(cat,el) {
-	return ifError(defined[cat],"Same category named twice",el);
+	return ifError(defined[cat],duplicated(g,"category",defined[cat]),el);
     }
     function del(i) { return function() { delete_cat(g,i); }}
     for(var i in cs) {
 	es.push(deletable(del(i),check(cs[i],eident(cs[i])),"Delete this category"));
-	defined[cs[i]]=true;
+	defined[cs[i]]=g.basename;
 	es.push(sep("; "));
     }
     es.push(more(g,add_cat,"Add more categories"));
@@ -419,24 +457,24 @@ function draw_funs(g) {
     var funs=g.abstract.funs;
     var es=[];
     var dc=defined_cats(g);
-    var df={};
+    var df=inherited_funs(g);
     function del(i) { return function() { delete_fun(g,i); }}
     function draw_efun(i,df) {
-	return editable("span",draw_fun(funs[i],dc,df),g,edit_fun(i),"Edit this function");
+	return editable("span",draw_fun(g,funs[i],dc,df),g,edit_fun(i),"Edit this function");
     }
     for(var i in funs) {
 	es.push(node_sortable("fun",funs[i].name,[deletable(del(i),draw_efun(i,df),"Delete this function")]));
-	df[funs[i].name]=true;
+	df[funs[i].name]=g.basename;
     }
     es.push(more(g,add_fun,"Add a new function"));
     return es;
 }
 
-function draw_fun(fun,dc,df) {
+function draw_fun(g,fun,dc,df) {
     function check(el) {
 	return ifError(dc[fun.name],
 		       "Function names must be distinct from category names",
-		       ifError(df[fun.name],"Same function defined twice",el));
+		       ifError(df[fun.name],duplicated(g,"function",df[fun.name]),el));
     }
     return node("span",{},
 		[check(ident(fun.name)),sep(" : "),draw_type(fun.type,dc)]);
@@ -496,6 +534,7 @@ function draw_concrete(g,i) {
 			    edit_langcode,"Change language"),
 		   kw(" of "),ident(g.basename),sep(" = "),
 		   draw_timestamp(conc),
+		   draw_extends((g.extends || []).map(conc_extends(conc))),
 		   indent([extensible([kw("open "),draw_opens(g,i)])]),
 		   indent([kw_lincat,draw_lincats(g,i)]),
 		   indent([kw_lin,draw_lins(g,i)]),
@@ -658,7 +697,7 @@ function draw_lincats(g,i) {
 	return node("span",{"class":cls},
 		    [ident(c.cat),sep(" = "),t]);
     }
-    var dc=defined_cats(g);
+    var dc=locally_defined_cats(g,{});
     function draw_lincat(c) {
 	var cat=c.cat;
 	var err=!dc[cat];
@@ -821,7 +860,7 @@ function draw_lins(g,ci) {
 	l.push(t);
 	return node("span",{"class":cls},l);
     }
-    var df=defined_funs(g);
+    var df=locally_defined_funs(g,{});
     function draw_lin(f) {
 	var fun=f.fun;
 	var err= !df[fun];
@@ -848,6 +887,42 @@ function draw_lins(g,ci) {
     for(var f in df)
 	ls.push(dtmpl(f));
     return indent_sortable(ls,sort_lins);
+}
+
+/* -------------------------------------------------------------------------- */
+
+function defined_cats(g) {
+    var grammar_byname=cached_grammar_byname();
+    var igs=(g.extends || []).map(grammar_byname)
+    return all_defined_cats(g,igs)
+}
+
+function inherited_cats(g) {
+    var grammar_byname=cached_grammar_byname();
+    var igs=(g.extends || []).map(grammar_byname)
+    return all_inherited_cats(igs,{})
+}
+
+function defined_funs(g) {
+    var grammar_byname=cached_grammar_byname();
+    var igs=(g.extends || []).map(grammar_byname)
+    return all_defined_funs(g,igs)
+}
+
+function inherited_funs(g) {
+    var grammar_byname=cached_grammar_byname();
+    var igs=(g.extends || []).map(grammar_byname)
+    return all_inherited_funs(igs,{})
+}
+
+function cached_grammar_byname() {
+    var gix={};
+    for(var i=0;i<local.count;i++) {
+	var g=local.get(i,null);
+	if(g) gix[g.basename]=g; // basenames are not necessarily unique!!
+    }
+    function grammar_byname(name) { return gix[name]; }
+    return grammar_byname;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -1030,9 +1105,14 @@ function edit_button(action,hint) {
 }
 
 function deletable(del,el,hint) {
-    var b=node("span",{"class":"delete",title:hint || "Delete"},[text("×")])
-    b.onclick=del;
+    var b=delete_button(del,hint)
     return node("span",{"class":"deletable"},[b,el])
+}
+
+function delete_button(action,hint) {
+    var b=node("span",{"class":"delete",title:hint || "Delete"},[text("×")])
+    b.onclick=action;
+    return b;
 }
 
 function touch_edit() {

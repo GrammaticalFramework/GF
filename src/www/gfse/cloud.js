@@ -24,7 +24,7 @@ function upload(g) {
 		      [hidden(g.basename+".gf",show_abstract(g))])
 	for(var i in g.concretes)
 	    form.appendChild(hidden(g.basename+g.concretes[i].langcode+".gf",
-				    show_concrete(g.basename)(g.concretes[i])));
+				    show_concrete(g)(g.concretes[i])));
 	editor.appendChild(form);
 	form.submit();
 	form.parentNode.removeChild(form);
