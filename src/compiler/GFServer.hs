@@ -224,18 +224,17 @@ handle state0 cache execute1
 resultpage cwd dir cmd (ecode,stdout,stderr) files =
   unlines $ 
     "<!DOCTYPE html>":
-    "<title>Uploaded</title>":
+    wrap "title" "Uploaded":
     "<link rel=stylesheet type=\"text/css\" HREF=\"/gfse/editor.css\" title=\"Normal\">":
-    "<h1>Uploaded</h1>":
-    "<pre>":escape cmd:"":escape (rel stderr):escape (rel stdout):
-    "</pre>":
+    wrap "h1" "Uploaded":
+    concatMap (pre.escape) [cmd,rel stderr,rel stdout]:
     (if ecode==ExitSuccess
-     then "<h3>OK</h3>":links
+     then wrap "h3" "OK":links
      else "<h3 class=error_message>Error</h3>":listing)
   where
     links = "<dl>":
             ("<dt>▸ <a href=\"/minibar/minibar.html?"++dir++pgf++"\">Minibar</a>"):
-            "<dt>◂ <a href=\"javascript:history.back()\">Back to Editor</a>":
+            "<dt class=back_to_editor>◂ <a href=\"javascript:history.back()\">Back to Editor</a>":
             "</dl>":
             []
 
@@ -246,11 +245,16 @@ resultpage cwd dir cmd (ecode,stdout,stderr) files =
     listing = concatMap listfile files
 
     listfile (name,source) = 
-      ("<h4>"++name++"</h4><pre class=plain>"):number source:"</pre>":[]
+      (wrap "h4"  name++"<pre class=plain>"):number source:"</pre>":[]
 
     number = unlines . zipWith num [1..] . lines
     num n s = pad (show n)++"  "++escape s
     pad s = replicate (5-length s) ' '++s
+
+    pre = wrap "pre"
+    wrap t s = tag t++s++endtag t
+    tag t = "<"++t++">"
+    endtag t = tag ('/':t)
 
     rel = unlines . map relative . lines
 

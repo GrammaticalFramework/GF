@@ -26,7 +26,7 @@ function remove_cloud_grammar(g) {
 }
 
 // Upload the grammar to the server and check it for errors
-function upload(g) {
+function old_upload(g) {
     function upload2(dir) {
 	var form=node("form",{method:"post",action:"/cloud"},
 		      [hidden("dir",dir),hidden("command","make"),
@@ -42,8 +42,30 @@ function upload(g) {
 	form.submit();
 	form.parentNode.removeChild(form);
     }
-    
+
     function upload3(message) {	if(message) alert(message); }
+
+    with_dir(upload2)
+}
+
+// Upload the grammar to the server and check it for errors
+function upload(g) {
+    function upload2(dir) {
+	var pre="dir="+encodeURIComponent(dir)
+	var form= {command:"make"}
+	form[encodeURIComponent(g.basename+".gf")]=show_abstract(g)
+	for(var i in g.concretes) {
+	    var cname=g.basename+g.concretes[i].langcode+".gf";
+	    form[encodeURIComponent(cname)]=show_concrete(g)(g.concretes[i]);
+	}
+	ajax_http_post("/cloud",pre+encodeArgs(form),upload3)
+    }
+
+    function upload3(message) {
+	var dst=element("compiler_output")
+	if(dst) dst.innerHTML=message;
+	else alert(message);
+    }
 
     with_dir(upload2)
 }
