@@ -171,7 +171,7 @@ function gfshell(cmd,cont) {
 function check_exp(s,cont) {
     function check(gf_message) {
 	//debug("cc "+s+" = "+gf_message);
-	cont(/parse error/.test(gf_message) ? "parse error" : null);
+	cont(/(parse|syntax) error/.test(gf_message) ? "syntax error" : null);
     }
     gfshell("cc "+s,check);
 }
