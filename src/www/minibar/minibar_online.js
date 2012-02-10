@@ -7,13 +7,6 @@ var online_options={
   //grammar_list: ["Foods.pgf"], // leave undefined to get list from server
 }
 
-
-if(/^\?\/tmp\//.test(location.search)) {
-  online_options.grammars_url=location.search.substr(1);
-}
-
-var server=pgf_online(online_options);
-
 var minibar_options= {
   show_abstract: true,
   show_trees: true,
@@ -22,4 +15,12 @@ var minibar_options= {
 //feedback_url: "feedback.html",
   try_google: true
 }
+
+if(/^\?\/tmp\//.test(location.search)) {
+    var args=decodeURIComponent(location.search.substr(1)).split(" ")
+    if(args[0]) online_options.grammars_url=args[0];
+    if(args[1]) minibar_options.initial_grammar=args[1];
+}
+
+var server=pgf_online(online_options);
 var minibar=new Minibar(server,minibar_options);

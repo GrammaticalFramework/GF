@@ -32,7 +32,8 @@ function Minibar(server,opts) {
 	target: "minibar",
 	try_google: true,
 	feedback_url: null,
-	help_url: null
+	help_url: null,
+	initial_grammar: null
     }
 
     // Apply supplied options
@@ -81,7 +82,9 @@ Minibar.prototype.show_grammarlist=function(grammars) {
 	}
 	if(options.help_url)
 	    menubar.appendChild(button("Help",bind(open_help,this)));
-	select_grammar(grammars[0]);
+	var grammar0=options.initial_grammar || grammars[0];
+	grammar_menu.value=grammar0;
+	select_grammar(grammar0);
     }
 }
 

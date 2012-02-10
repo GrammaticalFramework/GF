@@ -1,6 +1,7 @@
 {-# LANGUAGE CPP #-}
 module GFServer(server) where
-import Data.List(partition)
+import Data.List(partition,stripPrefix,tails)
+import Data.Maybe(mapMaybe)
 import qualified Data.Map as M
 import Control.Monad(when)
 import System.Random(randomRIO)
@@ -169,7 +170,8 @@ handle state0 cache execute1
          let args = "-s":"-make":map fst files
              cmd = unwords ("gf":args)
          out <- readProcessWithExitCode "gf" args ""
-         return (state,html200 (resultpage ('/':dir++"/") cmd out files))
+         cwd <- getCurrentDirectory
+         return (state,html200 (resultpage cwd ('/':dir++"/") cmd out files))
 
     upload files =
       do let update (name,contents)= updateFile name contents
@@ -219,23 +221,27 @@ handle state0 cache execute1
 
 -- * Dynamic content
 
-resultpage dir cmd (ecode,stdout,stderr) files =
+resultpage cwd dir cmd (ecode,stdout,stderr) files =
   unlines $ 
     "<!DOCTYPE html>":
     "<title>Uploaded</title>":
     "<link rel=stylesheet type=\"text/css\" HREF=\"/gfse/editor.css\" title=\"Normal\">":
     "<h1>Uploaded</h1>":
-    "<pre>":escape cmd:"":escape stderr:escape stdout:
+    "<pre>":escape cmd:"":escape (rel stderr):escape (rel stdout):
     "</pre>":
     (if ecode==ExitSuccess
      then "<h3>OK</h3>":links
      else "<h3 class=error_message>Error</h3>":listing)
   where
     links = "<dl>":
-            ("<dt>▸ <a href=\"/minibar/minibar.html?"++dir++"\">Minibar</a>"):
+            ("<dt>▸ <a href=\"/minibar/minibar.html?"++dir++pgf++"\">Minibar</a>"):
             "<dt>◂ <a href=\"javascript:history.back()\">Back to Editor</a>":
             "</dl>":
             []
+
+    pgf = case files of
+            (abstract,_):_ -> "%20"++take (length abstract-3) abstract++".pgf"
+            _ -> ""
 
     listing = concatMap listfile files
 
@@ -245,6 +251,13 @@ resultpage dir cmd (ecode,stdout,stderr) files =
     number = unlines . zipWith num [1..] . lines
     num n s = pad (show n)++"  "++escape s
     pad s = replicate (5-length s) ' '++s
+
+    rel = unlines . map relative . lines
+
+    -- remove absolute file paths from error messages:
+    relative s = case stripPrefix cwd s of
+                   Just ('/':rest) -> rest
+                   _ -> s
 
 escape = concatMap escape1
 escape1 '<' = "&lt;"
