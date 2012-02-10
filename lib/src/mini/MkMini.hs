@@ -1,10 +1,9 @@
 src = "Eng"
 langs = [
   "Afr", "Bul", "Cat","Dan","Dut",
-  "Fin","Fre","Ger","Ita", -- "Lav",
+  "Fin","Fre","Ger","Ita", "Lav",
   "Nep","Nor","Pes","Pol","Pnb",
-  "Ron",
-  "Rus","Spa","Swe","Tha",
+  "Ron","Rus","Spa","Swe","Tha",
   "Urd"
   ]
 
