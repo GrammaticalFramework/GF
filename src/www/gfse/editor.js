@@ -120,7 +120,12 @@ function open_grammar(i) {
     edit_grammar(g);
 }
 
-function close_grammar(g) { save_grammar(g); draw_grammar_list(); }
+function close_grammar(g) {
+    var o=element("compiler_output");
+    if(o) o.innerHTML="";
+    save_grammar(g);
+    draw_grammar_list();
+}
 function reload_grammar(g) { save_grammar(g);  edit_grammar(g); }
 
 function save_grammar(g) {
@@ -143,8 +148,8 @@ function draw_grammar(g) {
 function draw_namebar(g,files) {
     return div_class("namebar",
 		  [table([tr([td(draw_name(g)),
-			      td_right([draw_plainbutton(g,files),
-					upload_button(g),
+			      td_right([upload_button(g),
+					draw_plainbutton(g,files),
 					draw_closebutton(g)])])])])
 }
 
