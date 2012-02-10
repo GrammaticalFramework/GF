@@ -217,7 +217,7 @@ resource ResAfr = ParamX ** open Prelude in {
     s = table {
        VInf      => "het" ;
        VPres     => "het" ; 
-       VPast     => "had" ; --# notpresent
+       VPast     => "het" ; --# notpresent
        VPerf     => "gehad" 
        } ;
     aux = VHebben ;
@@ -297,7 +297,7 @@ param
   oper
     vForm : Tense -> VForm = \t -> case t of {
       Pres  => VPres 
-     ; Fut   => VPres  --# notpresent
+     ;  Fut   => VPres  --# notpresent
      ;  Past | Cond => VPast   -- Fut and Cond affect zullen --# notpresent
       } ;
 
@@ -448,12 +448,12 @@ param
           neg   = vp.a1 ! b ;
           obj0  = vp.n0 ! agr ;
           obj   = vp.n2 ! agr ;
-          compl = obj0 ++ neg ++ obj ++ vp.a2 ++ vp.s.prefix ++ neg;
+          compl = obj0 ++ neg ++ obj ++ vp.a2 ++ vp.s.prefix ;
           inf   = 
             case <vp.isAux, vp.inf.p2, a> of {                  --# notpresent
               <True,True,Anter> => vp.s.s ! VInf ++ vp.inf.p1 ; --# notpresent
               _ =>                                              --# notpresent
-                 vp.inf.p1 ++ verb.p2
+                 vp.inf.p1 ++ verb.p2 ++ neg
               }                                                 --# notpresent
               ;
           extra = vp.ext ;
@@ -480,7 +480,7 @@ param
     <
      \\agr => vp.n0 ! agr ++  vp.n2 ! agr ++  vp.a2,
      vp.a1 ! Pos ++ 
-     if_then_Str isAux [] "te" ++ vp.s.s ! VInf,
+     if_then_Str isAux [] "om" ++ "te" ++ vp.s.s ! VInf,
      vp.inf.p1 ++ vp.ext
     > ;
 
