@@ -10,7 +10,8 @@ import System.IO.Error(try,ioError,isAlreadyExistsError)
 import System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
                         setCurrentDirectory,getCurrentDirectory,
                         getDirectoryContents,removeFile,removeDirectory)
-import System.FilePath(takeExtension,takeFileName,takeDirectory,(</>))
+import System.FilePath(dropExtension,takeExtension,takeFileName,takeDirectory,
+                       (</>))
 #ifndef mingw32_HOST_OS
 import System.Posix.Files(getSymbolicLinkStatus,isSymbolicLink,removeLink,
                           createSymbolicLink)
@@ -23,6 +24,7 @@ import Network.Shed.Httpd(initServer,Request(..),Response(..),queryToArguments,
 --import qualified Data.ByteString.Char8 as BS(pack,unpack,length)
 import Network.CGI(handleErrors,liftIO)
 import FastCGIUtils(outputJSONP,handleCGIErrors,stderrToFile)
+import Text.JSON(encode,showJSON,toJSObject)
 import System.IO.Silently(hCapture)
 import System.Process(readProcessWithExitCode)
 import System.Exit(ExitCode(..))
@@ -107,7 +109,7 @@ handle state0 cache execute1
            '/':rpath ->
              case (takeDirectory path,takeFileName path,takeExtension path) of
                (_  ,_             ,".pgf") -> wrapCGI $ PS.cgiMain' cache path
-               (dir,"grammars.cgi",_     ) -> wrapCGI $ grammarList dir
+               (dir,"grammars.cgi",_     ) -> grammarList dir
                (dir  ,"exb.fcgi"  ,_    ) -> wrapCGI $ ES.cgiMain' root dir cache
                _ -> do resp <- serveStaticFile path
                        return (state,resp)
@@ -171,7 +173,7 @@ handle state0 cache execute1
              cmd = unwords ("gf":args)
          out <- readProcessWithExitCode "gf" args ""
          cwd <- getCurrentDirectory
-         return (state,html200 (resultpage cwd ('/':dir++"/") cmd out files))
+         return (state,json200 (jsonresult cwd ('/':dir++"/") cmd out files))
 
     upload files =
       do let update (name,contents)= updateFile name contents
@@ -180,7 +182,7 @@ handle state0 cache execute1
 
     jsonList =
         do jsons <- ls_ext "." ".json"
-           return (state,ok200 (unwords jsons))
+           return (state,json200 jsons)
 
     rm path _ | takeExtension path==".json" =
       do b <- doesFileExist path
@@ -213,7 +215,9 @@ handle state0 cache execute1
     link_directories olddir newdir _ =
       return (state,resp400 $ "unacceptable directories "++olddir++" "++newdir)
 
-    grammarList dir = outputJSONP =<< liftIO (ls_ext dir ".pgf")
+    grammarList dir =
+        do pgfs <- ls_ext dir ".pgf"
+           return (state,json200 pgfs)
 
     ls_ext dir ext =
         do paths <- getDirectoryContents dir
@@ -221,6 +225,26 @@ handle state0 cache execute1
 
 -- * Dynamic content
 
+jsonresult cwd dir cmd (ecode,stdout,stderr) files =
+  toJSObject [
+    field "errorcode" (if ecode==ExitSuccess then "OK" else "Error"),
+    field "command" cmd,
+    field "output" (unlines [rel stderr,rel stdout]),
+    field "minibar_url" ("/minibar/minibar.html?"++dir++pgf)]
+  where
+    field n v = (n,showJSON v)
+
+    pgf = case files of
+            (abstract,_):_ -> "%20"++dropExtension abstract++".pgf"
+            _ -> ""
+
+    rel = unlines . map relative . lines
+
+    -- remove absolute file paths from error messages:
+    relative s = case stripPrefix cwd s of
+                   Just ('/':rest) -> rest
+                   _ -> s
+{-
 resultpage cwd dir cmd (ecode,stdout,stderr) files =
   unlines $ 
     "<!DOCTYPE html>":
@@ -239,7 +263,7 @@ resultpage cwd dir cmd (ecode,stdout,stderr) files =
             []
 
     pgf = case files of
-            (abstract,_):_ -> "%20"++take (length abstract-3) abstract++".pgf"
+            (abstract,_):_ -> "%20"++dropExtension abstract++".pgf"
             _ -> ""
 
     listing = concatMap listfile files
@@ -267,7 +291,7 @@ escape = concatMap escape1
 escape1 '<' = "&lt;"
 escape1 '&' = "&amp;"
 escape1 c   = [c]
-
+-}
 -- * Static content
 
 serveStaticFile path =
@@ -290,6 +314,7 @@ logPutStrLn = hPutStrLn stderr
 -- * Standard HTTP responses
 ok200        = Response 200 [plainUTF8,noCache] . encodeString
 ok200' t     = Response 200 [t]
+json200 x    = ok200' jsonUTF8 . encodeString . encode $ x
 html200      = ok200' htmlUTF8 . encodeString
 resp204      = Response 204 [] "" -- no content
 resp400 msg  = Response 400 [plain] $ "Bad request: "++msg++"\n"
@@ -299,6 +324,7 @@ resp501 msg  = Response 501 [plain] $ "Not implemented: "++msg++"\n"
 -- * Content types
 plain = ct "text/plain"
 plainUTF8 = ct "text/plain; charset=UTF-8"
+jsonUTF8 = ct "text/javascript; charset=UTF-8"
 htmlUTF8 = ct "text/html; charset=UTF-8"
 ct t = ("Content-Type",t)
 

@@ -49,7 +49,7 @@ function old_upload(g) {
 }
 
 // Upload the grammar to the server and check it for errors
-function upload(g) {
+function upload(g,cont) {
     function upload2(dir) {
 	var pre="dir="+encodeURIComponent(dir)
 	var form= {command:"make"}
@@ -61,10 +61,10 @@ function upload(g) {
 	ajax_http_post("/cloud",pre+encodeArgs(form),upload3)
     }
 
-    function upload3(message) {
-	var dst=element("compiler_output")
-	if(dst) dst.innerHTML=message;
-	else alert(message);
+    function upload3(json) {
+	var res=JSON.parse(json)
+	if(cont) cont(res)
+	else alert(res.errorcode+"\n"+res.command+"\n\n"+res.output);
     }
 
     with_dir(upload2)

@@ -148,7 +148,8 @@ function draw_grammar(g) {
 function draw_namebar(g,files) {
     return div_class("namebar",
 		  [table([tr([td(draw_name(g)),
-			      td_right([upload_button(g),
+			      td_right([minibar_button(g),
+					compile_button(g),
 					draw_plainbutton(g,files),
 					draw_closebutton(g)])])])])
 }
@@ -180,9 +181,35 @@ function draw_plainbutton(g,files) {
     return b;
 }
 
-function upload_button(g) {
-    var b=button("Compile",function(){upload(g);});
-    b.title="Upload the grammar to the server to check it in GF and test it in the minibar";
+function show_compile_error(res) {
+    var dst=element("compiler_output")
+    if(dst) {
+	dst.innerHTML="";
+	var minibarlink=a(res.minibar_url,[text("Minibar")])
+	if(res.errorcode=="OK")
+	    dst.appendChild(wrap("h3",text("OK")))
+	else
+	    appendChildren(dst,
+			   [node("h3",{"class":"error_message"},
+				 [text(res.errorcode)]),
+			    wrap("pre",text(res.command)),
+			    wrap("pre",text(res.output))])
+    }
+}
+
+function compile_button(g) {
+    var b=button("Compile",function(){upload(g,show_compile_error);});
+    b.title="Upload the grammar to the server to check it in GF for errors";
+    return b;
+}
+
+function minibar_button(g) {
+    function goto_minibar(res) {
+	show_compile_error(res);
+	if(res.errorcode=="OK") location.href=res.minibar_url;
+    }
+    var b=button("Minibar",function(){upload(g,goto_minibar);});
+    b.title="Upload the grammar and test it in the minibar";
     return b;
 }
 
