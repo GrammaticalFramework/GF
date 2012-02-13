@@ -148,7 +148,7 @@ function draw_grammar(g) {
 function draw_namebar(g,files) {
     return div_class("namebar",
 		  [table([tr([td(draw_name(g)),
-			      td_right([minibar_button(g),
+			      td_right([minibar_button(g,files),
 					compile_button(g),
 					draw_plainbutton(g,files),
 					draw_closebutton(g)])])])])
@@ -203,10 +203,33 @@ function compile_button(g) {
     return b;
 }
 
-function minibar_button(g) {
+function minibar_button(g,files) {
+    var b2;
+    function show_editor() { edit_grammar(g); }
     function goto_minibar(res) {
 	show_compile_error(res);
-	if(res.errorcode=="OK") location.href=res.minibar_url;
+	if(res.errorcode=="OK") {
+	    //location.href=res.minibar_url;
+	    files.innerHTML="";
+	    files.appendChild(div_id("minibar"));
+	    var online_options={grammars_url: local.get("dir")+"/",
+			        grammar_list: [g.basename+".pgf"]}
+	    var pgf_server=pgf_online(online_options)
+	    var minibar_options= {
+		show_abstract: true,
+		show_trees: true,
+		show_grouped_translations: false,
+		default_source_language: "Eng",
+		try_google: true
+	    }
+	    var minibar=new Minibar(pgf_server,minibar_options);
+	    b.style.display="none";
+	    if(b2) b2.style.display="";
+	    else {
+		b2=button("Show editor",show_editor);
+		insertAfter(b2,b);
+	    }
+	}
     }
     var b=button("Minibar",function(){upload(g,goto_minibar);});
     b.title="Upload the grammar and test it in the minibar";

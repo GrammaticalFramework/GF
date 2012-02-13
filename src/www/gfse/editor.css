@@ -92,3 +92,9 @@ li { margin-top: 0.5ex; margin-bottom: 0.5ex; }
 #sharing h1, #sharing .footer { display: none; }
 
 div.compiler_output .back_to_editor { display: none; }
+
+div#minibar {
+    border: 1px solid black;
+    padding: 5px;
+    background: #ccc url("../minibar/brushed-metal.png");
+}

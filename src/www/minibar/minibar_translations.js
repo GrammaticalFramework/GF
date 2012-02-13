@@ -1,7 +1,7 @@
 /* --- Translations object -------------------------------------------------- */
 
-var tree_icon="tree-btn.png";
-var alignment_icon="align-btn.png";
+var tree_icon="../minibar/tree-btn.png";
+var alignment_icon="../minibar/align-btn.png";
 
 function Translations(server,opts) {
     this.server=server;
