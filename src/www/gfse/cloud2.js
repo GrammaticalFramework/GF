@@ -153,7 +153,7 @@ function download_json() {
 	local.put("current",0);
 	if(ls) {
 	    //debug("Downloading "+ls);
-	    var files=ls.split(" ");
+	    var files=JSON.parse(ls);
 	    cleanup_deleted(files);
 	    for(var i in files) get_file(files[i],file_downloaded,file_failed);
 	}
