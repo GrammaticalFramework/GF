@@ -153,7 +153,7 @@ Minibar.prototype.open_feedback=function() {
 	// make the minibar state easily accessible from the feedback page:
 	minibar.state={grammar:grammar,current:input.current,
 		       to:translations.to_menu.value,
-		       translations:translations.translations};
+		       translations:translations.main};
 	open_popup(options.feedback_url,'feedback');
     }
 }
