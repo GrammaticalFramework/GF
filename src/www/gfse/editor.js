@@ -357,7 +357,10 @@ function draw_startcat(g) {
     var abs=g.abstract;
     var startcat = abs.startcat || abs.cats[0];
     function opt(cat) { return option(cat,cat); }
-    var m= node("select",{},map(opt,abs.cats));
+    var opts = g.extends && g.extends.length>0 ? [opt("-")] : [];
+    var dc=defined_cats(g);
+    for(var cat in dc) opts.push(opt(cat));
+    var m = node("select",{},opts);
     m.value=startcat;
     m.onchange=function() { 
 	if(m.value!=abs.startcat) {
@@ -382,7 +385,8 @@ function draw_abstract(g) {
     kw_cat.title = "The categories (nonterminals) of the grammar are enumerated here. [C.3.2]";
     var kw_fun = kw("fun");
     kw_fun.title = "The functions (productions) of the grammar are enumerated here. [C.3.4]";
-    var flags=g.abstract.startcat || g.abstract.cats.length>1
+
+    var flags=g.abstract.startcat||g.abstract.cats.length>1||g.extends.length>0
 	? draw_startcat(g)
 	: text("");
     function sort_funs() {
@@ -946,28 +950,14 @@ function draw_lins(g,ci) {
 
 /* -------------------------------------------------------------------------- */
 
-function defined_cats(g) {
-    var grammar_byname=cached_grammar_byname();
-    var igs=(g.extends || []).map(grammar_byname)
-    return all_defined_cats(g,igs)
-}
+function defined_cats(g) { return all_defined_cats(g,inherited_grammars(g)) }
+function defined_funs(g) { return all_defined_funs(g,inherited_gramamrs(g)) }
+function inherited_cats(g) {return all_inherited_cats(inherited_grammars(g),{})}
+function inherited_funs(g) {return all_inherited_funs(inherited_grammars(g),{})}
 
-function inherited_cats(g) {
+function inherited_grammars(g) {
     var grammar_byname=cached_grammar_byname();
-    var igs=(g.extends || []).map(grammar_byname)
-    return all_inherited_cats(igs,{})
-}
-
-function defined_funs(g) {
-    var grammar_byname=cached_grammar_byname();
-    var igs=(g.extends || []).map(grammar_byname)
-    return all_defined_funs(g,igs)
-}
-
-function inherited_funs(g) {
-    var grammar_byname=cached_grammar_byname();
-    var igs=(g.extends || []).map(grammar_byname)
-    return all_inherited_funs(igs,{})
+    return (g.extends || []).map(grammar_byname)
 }
 
 function cached_grammar_byname() {
