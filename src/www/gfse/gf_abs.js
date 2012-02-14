@@ -247,7 +247,9 @@ function show_extends(exts) {
 }
 
 function show_startcat(startcat) {
-    return startcat ? "flags startcat = "+startcat+";\n\n" : "";
+    return startcat && startcat!="-"
+	? "flags startcat = "+startcat+";\n\n"
+	: "";
 }
 
 function show_cats(cats) {
