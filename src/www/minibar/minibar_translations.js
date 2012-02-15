@@ -80,7 +80,7 @@ Translations.prototype.show_translations=function(translationResults) {
 	  cnt>1 ? ""+cnt+" translations:":
 	  "One translation:")));
 	*/
-	for(p=0;p<cnt;p++) {
+	for(var p=0;p<cnt;p++) {
 	    var tra=translationResults[p];
 	    if (tra.translations != null) {
 		for (q = 0; q < tra.translations.length; q++) {
@@ -122,7 +122,7 @@ Translations.prototype.show_groupedtranslations=function(translationsResult) {
 	//trans.translations=translationsResult;
 	trans.single_translation=[];
 	trans.innerHTML="";
-	for(p=0;p<cnt;p++) {
+	for(var p=0;p<cnt;p++) {
 	    var t=translationsResult[p];
 	    if(to=="All" || t.to==to) {
 		var lin=t.linearizations;
