@@ -1,6 +1,7 @@
 
 
 var editor=element("editor");
+var compiler_output=element("compiler_output")
 
 /* -------------------------------------------------------------------------- */
 
@@ -43,8 +44,7 @@ function draw_grammar_list() {
 	return node("tr",{"class":"extensible deletable"},
 		    [td(delete_button(del(i),"Delete this grammar")),
 		     td(link),
-		     td(more(grammar,clone(i),"Clone this grammar")),
-		     td(more(grammar,new_extension(i),"Create an extension of this grammar"))])
+		     td(more(grammar,clone(i),"Clone this grammar"))])
     }
     if(local.get("count",null)==null)
 	home.appendChild(text("You have not created any grammars yet."));
@@ -108,8 +108,9 @@ function delete_grammar(i) {
 
 function clone_grammar(i) {
     var old=local.get(i);
-    var g={basename:old.basename,abstract:old.abstract,concretes:old.concretes}
-    save_grammar(g);
+    var g={basename:old.basename,extends:old.extends || [],
+	   abstract:old.abstract,concretes:old.concretes}
+    save_grammar(g); // we rely on the serialization to eliminate sharing
     draw_grammar_list();
 }
 
@@ -121,7 +122,7 @@ function open_grammar(i) {
 }
 
 function close_grammar(g) {
-    var o=element("compiler_output");
+    var o=compiler_output;
     if(o) o.innerHTML="";
     save_grammar(g);
     draw_grammar_list();
@@ -182,7 +183,7 @@ function draw_plainbutton(g,files) {
 }
 
 function show_compile_error(res) {
-    var dst=element("compiler_output")
+    var dst=compiler_output
     if(dst) {
 	dst.innerHTML="";
 	var minibarlink=a(res.minibar_url,[text("Minibar")])
@@ -198,7 +199,11 @@ function show_compile_error(res) {
 }
 
 function compile_button(g) {
-    var b=button("Compile",function(){upload(g,show_compile_error);});
+    function compile() {
+	if(compiler_output) compiler_output.innerHTML="<h3>Compiling...</h3>";
+	upload(g,show_compile_error);
+    }
+    var b=button("Compile",compile);
     b.title="Upload the grammar to the server to check it in GF for errors";
     return b;
 }
@@ -231,7 +236,11 @@ function minibar_button(g,files) {
 	    }
 	}
     }
-    var b=button("Minibar",function(){upload(g,goto_minibar);});
+    function compile() {
+	if(compiler_output) compiler_output.innerHTML="<h3>Compiling...</h3>";
+	upload(g,goto_minibar);
+    }
+    var b=button("Minibar",compile);
     b.title="Upload the grammar and test it in the minibar";
     return b;
 }
@@ -372,12 +381,51 @@ function draw_startcat(g) {
     return indent([kw("flags startcat"),sep(" = "),m]);
 }
 
-function draw_extends(exts) {
+function draw_conc_extends(g,conc) {
     var kw_extends=kw("extends ")
     kw_extends.title="This grammar is an extension of the grammars listed here."
-    return exts && exts.length>0
+    var exts=(g.extends || []).map(conc_extends(conc))
+    return exts.length>0
 	? indent([kw_extends,ident(exts.join(", "))])
 	: text("")
+}
+
+function draw_extends(g) {
+    var kw_extends=kw("extends ")
+    var exts= g.extends || [];
+    kw_extends.title="This grammar is an extension of the grammars listed here."
+    var m1=more(g,add_extends,"Inherit from other grammars");
+    var m2=more(g,add_extends,"Inherit from more grammars");
+    return exts.length>0
+	? indent([extensible([kw_extends,ident(exts.join(", ")),m2])])
+	: indent([extensible([span_class("more",kw_extends),m1])])
+}
+
+function add_extends(g,el) {
+    var file=element("file");
+    file.innerHTML="";
+    var gs=cached_grammar_array_byname();
+    var list=[]
+    for(var i in gs) {
+	if(gs[i].basename!=g.basename
+	   && !elem(gs[i].basename,g.extends || [])
+	   && !elem(g.basename,gs[i].extends || [])
+	   // also exclude indirectly inherited grammars!!
+	  )
+	    list.push(li([a(jsurl("add_extends2("+g.index+","+gs[i].index+")"),
+			    [text(gs[i].basename)])]));
+    }
+    file.appendChild(p(text("Pick a grammar to inherit:")));
+    file.appendChild(node("ul",{"class":"grammars"},list));
+}
+
+function add_extends2(gix,igix) {
+    var g=local.get(gix);
+    var ig=local.get(igix);
+    if(!g.extends) g.extends=[];
+    g.extends.push(ig.basename);
+    //timestamp(g)
+    reload_grammar(g);
 }
 
 function draw_abstract(g) {
@@ -397,7 +445,7 @@ function draw_abstract(g) {
     return div_id("file",
 		  [kw("abstract "),ident(g.basename),sep(" = "),
 		   draw_timestamp(g.abstract),
-		   draw_extends(g.extends),
+		   draw_extends(g),
 		   flags,
 		   indent([extensible([kw_cat,
 				       indent(draw_cats(g))]),
@@ -542,6 +590,7 @@ function draw_fun(g,fun,dc,df) {
 function draw_type(t,dc) {
     var el=empty("span");
     function check(t,el) {
+	if(dc[t]) el.title=dc[t]+"."+t;
 	return ifError(!dc[t],"Undefined category",el);
     }
     for(var i in t) {
@@ -593,7 +642,7 @@ function draw_concrete(g,i) {
 			    edit_langcode,"Change language"),
 		   kw(" of "),ident(g.basename),sep(" = "),
 		   draw_timestamp(conc),
-		   draw_extends((g.extends || []).map(conc_extends(conc))),
+		   draw_conc_extends(g,conc),
 		   indent([extensible([kw("open "),draw_opens(g,i)])]),
 		   indent([kw_lincat,draw_lincats(g,i)]),
 		   indent([kw_lin,draw_lins(g,i)]),
@@ -956,18 +1005,35 @@ function inherited_cats(g) {return all_inherited_cats(inherited_grammars(g),{})}
 function inherited_funs(g) {return all_inherited_funs(inherited_grammars(g),{})}
 
 function inherited_grammars(g) {
+    // Load the available grammars once
     var grammar_byname=cached_grammar_byname();
-    return (g.extends || []).map(grammar_byname)
+    var visited={};
+    // Then traverse the dependencies to collect all inherited grammars
+    function ihgs(g) {
+	if(visited[g.basename]) return []; // avoid cycles and diamonds
+	else {
+	    visited[g.basename]=true;
+	    var igs=(g.extends || []).map(grammar_byname)
+	    var igss=igs.map(ihgs)
+	    for(var i in igss) igs.concat(igss[i]);
+	    return igs;
+	}
+    }
+    return ihgs(g)
 }
 
 function cached_grammar_byname() {
+    var gix=cached_grammar_array_byname()
+    function grammar_byname(name) { return gix[name]; }
+    return grammar_byname;
+}
+function cached_grammar_array_byname() {
     var gix={};
     for(var i=0;i<local.count;i++) {
 	var g=local.get(i,null);
 	if(g) gix[g.basename]=g; // basenames are not necessarily unique!!
     }
-    function grammar_byname(name) { return gix[name]; }
-    return grammar_byname;
+    return gix
 }
 
 /* -------------------------------------------------------------------------- */
@@ -1125,9 +1191,9 @@ function node_sortable(cls,name,ls) {
 
 function extensible(cs) { return div_class("extensible",cs); }
 
-function more(g,action,hint) {
+function more(g,action,hint,label) {
     var b=node("span",{"class":"more","title":hint || "Add more"},
-	       [text(" + ")]);
+	       [text(label || " + ")]);
     b.onclick=function() { action(g,b); }
     return b;
 }
