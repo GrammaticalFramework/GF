@@ -64,7 +64,7 @@ table.tabs {
     border-width: 0; border-spacing: 0; empty-cells: show;
 }
 
-table.tabs td { text-align: center; border: 2px solid #009; padding: 2px; }
+table.tabs td { text-align: center; border: 2px solid #009; padding: 2px; white-space: nowrap; }
 table.tabs td.active { background: white; border-bottom-width: 0; }
 table.tabs td.inactive {
     background: #cef;
