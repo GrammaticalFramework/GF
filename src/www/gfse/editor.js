@@ -396,9 +396,20 @@ function draw_extends(g) {
     kw_extends.title="This grammar is an extension of the grammars listed here."
     var m1=more(g,add_extends,"Inherit from other grammars");
     var m2=more(g,add_extends,"Inherit from more grammars");
-    return exts.length>0
-	? indent([extensible([kw_extends,ident(exts.join(", ")),m2])])
-	: indent([extensible([span_class("more",kw_extends),m1])])
+    var es=[exts.length>0 ? kw_extends : span_class("more",kw_extends)];
+    function del(i) { return function() { delete_extends(g,i); }}
+    for(var i=0;i<exts.length;i++) {
+	if(i>0) es.push(sep(", "))
+	es.push(deletable(del(i),ident(exts[i]),"Don't inherit from "+exts[i]));
+    }
+    es.push(exts.length>0 ? m2 : m1);
+    return indent([extensible(es)])
+}
+
+function delete_extends(g,ix) {
+    g.extends=delete_ix(g.extends,ix);
+    //timestamp(g);
+    reload_grammar(g);
 }
 
 function add_extends(g,el) {
