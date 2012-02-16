@@ -1,9 +1,16 @@
-body { background: #eee; }
+body { color: black; background: #eee; }
 h1 { font-size: 175%; }
 h1,h2,h3,h4,small { font-family: sans-serif; }
 h1:first-child, h2:first-child { margin-top: 0; margin-bottom: 1ex; }
 
-#editor { max-width: 50em; }
+#editor {
+    /* This allows the div to grow wider than the window if necessary to
+       accommodate the contents. Otherwise, wide things inside can poke
+       through the border. */
+    display: table;
+    width: 100%;
+}
+
 div.home, div.grammar { border: 1px solid black; background: #9df; }
 div.home { padding: 5px; }
 div.files { margin: 0 8px 8px 8px; }
