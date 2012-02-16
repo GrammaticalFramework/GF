@@ -1015,6 +1015,7 @@ function defined_funs(g) { return all_defined_funs(g,inherited_gramamrs(g)) }
 function inherited_cats(g) {return all_inherited_cats(inherited_grammars(g),{})}
 function inherited_funs(g) {return all_inherited_funs(inherited_grammars(g),{})}
 
+// inherited_grammars :: Grammar -> [Grammar]
 function inherited_grammars(g) {
     // Load the available grammars once
     var grammar_byname=cached_grammar_byname();
@@ -1026,18 +1027,21 @@ function inherited_grammars(g) {
 	    visited[g.basename]=true;
 	    var igs=(g.extends || []).map(grammar_byname)
 	    var igss=igs.map(ihgs)
-	    for(var i in igss) igs.concat(igss[i]);
+	    for(var i in igss) igs=igs.concat(igss[i]);
 	    return igs;
 	}
     }
     return ihgs(g)
 }
 
+// cached_grammar__byname :: () -> (ModId->Grammar)
 function cached_grammar_byname() {
     var gix=cached_grammar_array_byname()
     function grammar_byname(name) { return gix[name]; }
     return grammar_byname;
 }
+
+// cached_grammar_array_byname :: () -> {ModId=>Grammar}
 function cached_grammar_array_byname() {
     var gix={};
     for(var i=0;i<local.count;i++) {
