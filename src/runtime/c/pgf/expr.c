@@ -390,18 +390,38 @@ pgf_print_hypo(PgfHypo *hypo, int prec, GuWriter *wtr, GuExn *err)
 void
 pgf_print_type(PgfType *type, int prec, GuWriter *wtr, GuExn *err)
 {
-    size_t len = gu_seq_length(type->hypos);
-    for (size_t i = 0; i < len; i++) {
-        PgfHypo *hypo = gu_seq_index(type->hypos, PgfHypo, i);
-        pgf_print_hypo(hypo, 1, wtr, err);
-
-        gu_puts(" -> ", wtr, err);
-    }
-
-    gu_string_write(type->cid, wtr, err);
+    size_t n_hypos = gu_seq_length(type->hypos);
     
-    for (int i = 0; i < type->n_exprs; i++) {
-        gu_puts(" ", wtr, err);
-        pgf_print_expr(type->exprs[i], 4, wtr, err);
-    }
+    if (n_hypos > 0) {
+		if (prec > 0) gu_putc('(', wtr, err);
+		
+		for (size_t i = 0; i < n_hypos; i++) {
+			PgfHypo *hypo = gu_seq_index(type->hypos, PgfHypo, i);
+			pgf_print_hypo(hypo, 1, wtr, err);
+
+			gu_puts(" -> ", wtr, err);
+		}
+
+		gu_string_write(type->cid, wtr, err);
+    
+		for (int i = 0; i < type->n_exprs; i++) {
+			gu_puts(" ", wtr, err);
+			pgf_print_expr(type->exprs[i], 4, wtr, err);
+		}
+		
+		if (prec > 0) gu_putc(')', wtr, err);
+	} else if (type->n_exprs > 0) {
+		if (prec > 3) gu_putc('(', wtr, err);
+		
+		gu_string_write(type->cid, wtr, err);
+    
+		for (int i = 0; i < type->n_exprs; i++) {
+			gu_puts(" ", wtr, err);
+			pgf_print_expr(type->exprs[i], 4, wtr, err);
+		}
+		
+		if (prec > 3) gu_putc(')', wtr, err);
+	} else {
+		gu_string_write(type->cid, wtr, err);
+	}
 }
