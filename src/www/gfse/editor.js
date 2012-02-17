@@ -1015,6 +1015,12 @@ function defined_funs(g) { return all_defined_funs(g,inherited_gramamrs(g)) }
 function inherited_cats(g) {return all_inherited_cats(inherited_grammars(g),{})}
 function inherited_funs(g) {return all_inherited_funs(inherited_grammars(g),{})}
 
+function upload(g,cont) {
+    var gs=inherited_grammars(g);
+    gs.push(g);
+    upload_grammars(gs,cont);
+}
+
 // inherited_grammars :: Grammar -> [Grammar]
 function inherited_grammars(g) {
     // Load the available grammars once
