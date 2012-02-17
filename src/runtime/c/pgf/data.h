@@ -143,9 +143,9 @@ struct PgfCat {
 struct PgfCncCat {
 	PgfCId cid;
 	PgfCCatIds* cats;
+	
 	size_t n_lins;
-
-	GuStringL* labels;
+	GuString labels[];
 	/**< Labels for tuples. All nested tuples, records and tables
 	 * in the GF linearization types are flattened into a single
 	 * tuple in the corresponding PGF concrete category. This

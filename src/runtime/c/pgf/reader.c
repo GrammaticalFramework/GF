@@ -695,42 +695,6 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
 	return concr;
 }
 
-static bool
-pgf_ccat_n_lins(PgfCCat* cat, int* n_lins) {
-	if (gu_seq_is_null(cat->prods)) {
-		return true;
-	}
-	size_t n_prods = gu_seq_length(cat->prods);
-	for (size_t j = 0; j < n_prods; j++) {
-		PgfProduction prod =
-			gu_seq_get(cat->prods, PgfProduction, j);
-		GuVariantInfo i = gu_variant_open(prod);
-		switch (i.tag) {
-		case PGF_PRODUCTION_APPLY: {
-			PgfProductionApply* papp = i.data;
-			if (*n_lins == -1) {
-				*n_lins = (int) papp->fun->n_lins;
-			} else if (*n_lins != (int) papp->fun->n_lins) {
-				// Inconsistent n_lins for different productions!
-				return false;
-			}
-			break;
-		}
-		case PGF_PRODUCTION_COERCE: {
-			PgfProductionCoerce* pcoerce = i.data;
-			bool succ = pgf_ccat_n_lins(pcoerce->coerce, n_lins);
-			if (!succ) {
-				return false;
-			}
-			break;
-		}
-		default:
-			gu_impossible();
-		}
-	}
-	return true;
-}
-
 static void*
 pgf_read_new_PgfCncCat(GuType* type, PgfReader* rdr, GuPool* pool,
 		       size_t* size_out)
@@ -738,13 +702,18 @@ pgf_read_new_PgfCncCat(GuType* type, PgfReader* rdr, GuPool* pool,
 	PgfCId cid = *(PgfCId*) rdr->curr_key;
 	gu_enter("-> cid");
 	(void) (type && size_out);
-	PgfCncCat* cnccat = gu_new(PgfCncCat, pool);
-	cnccat->cid = cid;
+	
 	int first = pgf_read_int(rdr);
 	int last = pgf_read_int(rdr);
+	int n_lins = pgf_read_len(rdr);
+	
+	PgfCncCat* cnccat =
+		gu_malloc(pool, sizeof(PgfCncCat)+n_lins*sizeof(GuString));
+	cnccat->cid = cid;
+
 	int len = last + 1 - first;
-	PgfCCatIds* cats = gu_new_list(PgfCCatIds, pool, len);
-	int n_lins = -1;
+	cnccat->cats = gu_new_list(PgfCCatIds, pool, len);
+	
 	for (int i = 0; i < len; i++) {
 		int fid = first + i;
 		PgfCCat* ccat = gu_map_get(rdr->curr_ccats, &fid, PgfCCat*);
@@ -757,24 +726,19 @@ pgf_read_new_PgfCncCat(GuType* type, PgfReader* rdr, GuPool* pool,
 
             gu_map_put(rdr->curr_ccats, &fid, PgfCCat*, ccat);
         }
-		gu_list_index(cats, i) = ccat;
+		gu_list_index(cnccat->cats, i) = ccat;
 
         ccat->cnccat = cnccat;
-		if (!pgf_ccat_n_lins(ccat, &n_lins)) {
-			gu_raise(rdr->err, PgfReadExn);
-			goto fail;
-		}
 		gu_debug("range[%d] = %d", i, ccat ? ccat->fid : -1);
 	}
-	cnccat->n_lins = n_lins == -1 ? 0 : (size_t) n_lins;
-	cnccat->cats = cats;
-	cnccat->labels = pgf_read_new(rdr, gu_type(GuStringL), 
-				      pool, NULL);
+
+	cnccat->n_lins = n_lins;
+	for (size_t i = 0; i < cnccat->n_lins; i++) {
+		pgf_read_to(rdr, gu_type(GuString), &cnccat->labels[i]);
+	}
+	
 	gu_exit("<-");
 	return cnccat;
-fail:
-	gu_exit("<- fail");
-	return NULL;
 }
 
 #define PGF_READ_TO_FN(k_, fn_)					\
