@@ -290,8 +290,7 @@ pgf_print_cnccat(GuMapItor* fn, const void* key, void* value,
 			gu_puts("\n               ", wtr, err);
 		}
 
-		GuString lbl = gu_list_index(cnccat->labels, i);
-		gu_string_write(lbl, wtr, err);
+		gu_string_write(cnccat->labels[i], wtr, err);
 	}
     gu_puts("]\n", wtr, err);
 }

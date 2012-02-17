@@ -100,7 +100,7 @@ GU_DEFINE_TYPE(
 	GU_MEMBER(PgfCncCat, cid, PgfCId),
 	GU_MEMBER_P(PgfCncCat, cats, PgfCCatIds),
 	GU_MEMBER(PgfCncCat, n_lins, size_t),
-	GU_MEMBER_P(PgfCncCat, labels, GuStringL));
+	GU_FLEX_MEMBER(PgfCncCat, labels, GuString));
 
 // GU_DEFINE_TYPE(PgfSequence, GuList, gu_ptr_type(PgfSymbol));
 // GU_DEFINE_TYPE(PgfSequence, GuList, gu_type(PgfSymbol));
