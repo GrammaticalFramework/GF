@@ -49,14 +49,18 @@ function old_upload(g) {
 }
 
 // Upload the grammar to the server and check it for errors
-function upload(g,cont) {
+function upload_grammars(gs,cont) {
     function upload2(dir) {
 	var pre="dir="+encodeURIComponent(dir)
 	var form= {command:"make"}
-	form[encodeURIComponent(g.basename+".gf")]=show_abstract(g)
-	for(var i in g.concretes) {
-	    var cname=g.basename+g.concretes[i].langcode+".gf";
-	    form[encodeURIComponent(cname)]=show_concrete(g)(g.concretes[i]);
+	for(var aix in gs) {
+	    var g=gs[aix]
+	    form[encodeURIComponent(g.basename+".gf")]=show_abstract(g)
+	    var cnc=g.concretes
+	    for(var i in cnc) {
+		var cname=g.basename+cnc[i].langcode+".gf";
+		form[encodeURIComponent(cname)]=show_concrete(g)(cnc[i]);
+	    }
 	}
 	ajax_http_post("/cloud",pre+encodeArgs(form),upload3)
     }
