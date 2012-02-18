@@ -87,16 +87,7 @@ struct PgfParsing {
     int max_fid;
 };
 
-#ifndef NDEBUG
-static bool 
-pgf_parser_debug() {
-    const char* cfg = getenv("PGF_PARSER_DEBUG");
-    if (cfg == NULL)
-        return false;
-
-    return strcmp(cfg, "yes") == 0;
-}
-
+#ifdef PGF_PARSER_DEBUG
 static void
 pgf_print_production(int fid, PgfProduction prod, GuWriter *wtr, GuExn* err)
 {
@@ -409,20 +400,18 @@ pgf_parsing_complete(PgfParsing* parsing, PgfItem* item)
     GuBuf* prodbuf = gu_seq_buf(cat->prods);
 	gu_buf_push(prodbuf, PgfProduction, prod);
 
-#ifndef NDEBUG
-    if (pgf_parser_debug()) {
-        GuPool* tmp_pool = gu_new_pool();
-        GuOut* out = gu_file_out(stderr, tmp_pool);
-        GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
-        GuExn* err = gu_exn(NULL, type, tmp_pool);
-        if (tmp_cat == NULL)
-            gu_printf(wtr, err, "[C%d; %d; C%d]\n",
+#ifdef PGF_PARSER_DEBUG
+    GuPool* tmp_pool = gu_new_pool();
+    GuOut* out = gu_file_out(stderr, tmp_pool);
+    GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
+    GuExn* err = gu_exn(NULL, type, tmp_pool);
+    if (tmp_cat == NULL)
+		gu_printf(wtr, err, "[C%d; %d; C%d]\n",
                             item->base->ccat->fid, 
                             item->base->lin_idx, 
                             cat->fid);
-        pgf_print_production(cat->fid, prod, wtr, err);
-        gu_pool_free(tmp_pool);
-    }
+    pgf_print_production(cat->fid, prod, wtr, err);
+    gu_pool_free(tmp_pool);
 #endif
 
 	if (tmp_cat != NULL) {
@@ -583,15 +572,13 @@ pgf_parsing_symbol(PgfParsing* parsing, PgfItem* item, PgfSymbol sym) {
 static void
 pgf_parsing_item(PgfParsing* parsing, PgfItem* item)
 {
-#ifndef NDEBUG
-    if (pgf_parser_debug()) {
-        GuPool* tmp_pool = gu_new_pool();
-        GuOut* out = gu_file_out(stderr, tmp_pool);
-        GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
-        GuExn* err = gu_exn(NULL, type, tmp_pool);
-        pgf_print_item(item, wtr, err);
-        gu_pool_free(tmp_pool);
-    }
+#ifdef PGF_PARSER_DEBUG
+    GuPool* tmp_pool = gu_new_pool();
+    GuOut* out = gu_file_out(stderr, tmp_pool);
+    GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
+    GuExn* err = gu_exn(NULL, type, tmp_pool);
+    pgf_print_item(item, wtr, err);
+    gu_pool_free(tmp_pool);
 #endif
 
 	GuVariantInfo i = gu_variant_open(item->base->prod);
