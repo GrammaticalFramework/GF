@@ -25,40 +25,6 @@
 /// Linearization of abstract syntax trees.
 /// @file
 
-/** @name Linearizers
- *
- * Linearization begins by choosing a concrete category (#PgfConcr) for some
- * grammar, and creating a new linearizer (#PgfLzr) which can then be used to
- * linearize abstract syntax trees (#PgfExpr) of that grammar into the given
- * concrete category.
- *
- * @{
- */
-
-
-/// A linearizer.
-typedef struct PgfLzr PgfLzr;
-/**<
- *
- * A #PgfLzr object transforms abstract syntax trees of a PGF grammar
- * into sequences of token events for a single concrete category of
- * that grammar.
- * 
- */
-GU_DECLARE_TYPE(PgfLzr, struct);
-
-
-/// Create a new linearizer.
-PgfLzr*
-pgf_new_lzr(PgfConcr* cnc, GuPool* pool);
-/**<
- * @param cnc The concrete category to linearize to. 
- *
- * @pool
- *
- * @return A new linearizer.
- */
-
 /** @}
  *
  * @name Enumerating concrete syntax trees
@@ -80,7 +46,7 @@ typedef GuEnum PgfCncTreeEnum;
 
 /// Begin enumerating concrete syntax variants.
 PgfCncTreeEnum*
-pgf_lzr_concretize(PgfLzr* lzr, PgfExpr expr, GuPool* pool);
+pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuPool* pool);
 
 /** @}
  *
@@ -127,13 +93,13 @@ struct PgfLinFuncs
 
 /// Linearize a concrete syntax tree.
 void
-pgf_lzr_linearize(PgfLzr* lzr, PgfCncTree ctree, size_t lin_idx,
+pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx,
 		  PgfLinFuncs** fnsp);
 
 
 /// Linearize a concrete syntax tree as space-separated tokens.
 void
-pgf_lzr_linearize_simple(PgfLzr* lzr, PgfCncTree ctree,
+pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
 			 size_t lin_idx, GuWriter* wtr, GuExn* err);
 
 

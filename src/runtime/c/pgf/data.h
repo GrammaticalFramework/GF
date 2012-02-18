@@ -182,13 +182,21 @@ extern PgfCCat pgf_ccat_string, pgf_ccat_int, pgf_ccat_float, pgf_ccat_var;
 typedef PgfCIdMap PgfPrintNames;
 extern GU_DECLARE_TYPE(PgfPrintNames, GuStringMap);
 
+typedef GuStringMap PgfFunIndices;
+extern GU_DECLARE_TYPE(PgfFunIndices, GuStringMap);
+
+typedef GuMap PgfCoerceIdx;
+extern GU_DECLARE_TYPE(PgfCoerceIdx, GuMap);
+
 struct PgfConcr {
 	PgfFlags* cflags;
 	PgfPrintNames* printnames;
     GuMap* ccats;
 	PgfCCatSeq extra_ccats;
+	PgfFunIndices* fun_indices;
+	PgfCoerceIdx* coerce_idx;
     PgfCncFuns* cncfuns;
-    PgfSequences* sequences;	
+    PgfSequences* sequences;
 	PgfCIdMap* cnccats;
     int max_fid;
 };

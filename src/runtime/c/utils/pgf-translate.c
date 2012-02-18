@@ -68,12 +68,6 @@ int main(int argc, char* argv[]) {
 		goto fail_concr;
 	}
 
-	// Create the parser for the source category
-	PgfParser* parser = pgf_new_parser(from_concr, pool);
-
-	// Create a linearizer for the destination category
-	PgfLzr* lzr = pgf_new_lzr(to_concr, pool);
-
 	// Arbitrarily choose linearization index 0. Usually the initial
 	// categories we are interested in only have one field.
 	int lin_idx = 0;
@@ -110,7 +104,7 @@ int main(int argc, char* argv[]) {
 
 		// Begin parsing a sentence of the specified category
 		PgfParse* parse =
-			pgf_parser_parse(parser, cat, lin_idx, pool);
+			pgf_parser_parse(from_concr, cat, lin_idx, pool);
 		if (parse == NULL) {
 			fprintf(stderr, "Couldn't begin parsing\n");
 			status = EXIT_FAILURE;
@@ -149,7 +143,7 @@ int main(int argc, char* argv[]) {
 
 			// Enumerate the concrete syntax trees corresponding
 			// to the abstract tree.
-			GuEnum* cts = pgf_lzr_concretize(lzr, expr, ppool);
+			GuEnum* cts = pgf_lzr_concretize(to_concr, expr, ppool);
 			while (true) {
 				PgfCncTree ctree =
 					gu_next(cts, PgfCncTree, ppool);
@@ -159,7 +153,7 @@ int main(int argc, char* argv[]) {
 				gu_puts("  ", wtr, err);
 				// Linearize the concrete tree as a simple
 				// sequence of strings.
-				pgf_lzr_linearize_simple(lzr, ctree, lin_idx,
+				pgf_lzr_linearize_simple(to_concr	, ctree, lin_idx,
 							 wtr, err);
 				gu_putc('\n', wtr, err);
 				gu_writer_flush(wtr, err);

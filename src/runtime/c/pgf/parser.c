@@ -18,12 +18,8 @@ typedef GuMap PgfTransitions;
 
 typedef GuBuf PgfCCatBuf;
 
-struct PgfParser {
-	PgfConcr* concr;
-};
-
 struct PgfParse {
-	PgfParser* parser;
+	PgfConcr* concr;
     PgfItemBuf* agenda;
     int max_fid;
 };
@@ -650,10 +646,10 @@ pgf_new_parsing(PgfLexCallback* callback, int max_fid,
 }
 
 static PgfParse*
-pgf_new_parse(PgfParser* parser, int max_fid, GuPool* pool)
+pgf_new_parse(PgfConcr* concr, int max_fid, GuPool* pool)
 {
 	PgfParse* parse = gu_new(PgfParse, pool);
-	parse->parser = parser;
+	parse->concr = concr;
     parse->agenda = NULL;
     parse->max_fid = max_fid;
 	return parse;
@@ -692,7 +688,7 @@ pgf_parse_token(PgfParse* parse, PgfToken tok, GuPool* pool)
 
     PgfParse* next_parse = NULL;
     if (gu_buf_length(agenda) > 0) {
-        next_parse = pgf_new_parse(parse->parser, parse->max_fid, pool);
+        next_parse = pgf_new_parse(parse->concr, parse->max_fid, pool);
         next_parse->agenda = agenda;
         next_parse->max_fid= parsing->max_fid;
     }
@@ -805,7 +801,7 @@ pgf_parse_result(PgfParse* parse, GuPool* pool)
 
 	PgfExprEnum* en = 
            &gu_new_i(pool, PgfParseResult,
-			 .concr = parse->parser->concr,
+			 .concr = parse->concr,
              .completed = parsing->completed,
 			 .choice = gu_new_choice(pool),
 			 .en.next = pgf_parse_result_enum_next)->en;
@@ -818,17 +814,17 @@ pgf_parse_result(PgfParse* parse, GuPool* pool)
 
 // TODO: s/CId/Cat, add the cid to Cat, make Cat the key to CncCat
 PgfParse*
-pgf_parser_parse(PgfParser* parser, PgfCId cat, size_t lin_idx, GuPool* pool)
+pgf_parser_parse(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
 {
 	PgfCncCat* cnccat =
-		gu_map_get(parser->concr->cnccats, &cat, PgfCncCat*);
+		gu_map_get(concr->cnccats, &cat, PgfCncCat*);
 	if (!cnccat) {
 		// error ...
 		gu_impossible();
 	}
 	gu_assert(lin_idx < cnccat->n_lins);
 
-	PgfParse* parse = pgf_new_parse(parser, parser->concr->max_fid, pool);
+	PgfParse* parse = pgf_new_parse(concr, concr->max_fid, pool);
     parse->agenda = gu_new_buf(PgfItem*, pool);
 
     PgfItemBuf* conts = gu_new_buf(PgfItem*, pool);
@@ -855,13 +851,4 @@ pgf_parser_parse(PgfParser* parser, PgfCId cat, size_t lin_idx, GuPool* pool)
 		}
 	}
 	return parse;
-}
-
-PgfParser* 
-pgf_new_parser(PgfConcr* concr, GuPool* pool)
-{
-	gu_require(concr != NULL);
-	PgfParser* parser = gu_new(PgfParser, pool);
-	parser->concr = concr;
-	return parser;
 }
