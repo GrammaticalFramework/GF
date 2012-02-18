@@ -105,42 +105,28 @@ static GU_DEFINE_TYPE(PgfInferMap, GuMap,
 		      gu_ptr_type(PgfLinInfers), &gu_null_struct);
 
 typedef GuStringMap PgfFunIndices;
-static GU_DEFINE_TYPE(PgfFunIndices, GuStringMap, gu_ptr_type(PgfInferMap),
+GU_DEFINE_TYPE(PgfFunIndices, GuStringMap, gu_ptr_type(PgfInferMap),
 		      &gu_null_struct);
 
 typedef GuBuf PgfCCatBuf;
 static GU_DEFINE_TYPE(PgfCCatBuf, GuBuf, gu_ptr_type(PgfCCat));
 
 typedef GuMap PgfCoerceIdx;
-static GU_DEFINE_TYPE(PgfCoerceIdx, GuMap,
+GU_DEFINE_TYPE(PgfCoerceIdx, GuMap,
 		      gu_type(PgfCCat), NULL,
 		      gu_ptr_type(PgfCCatBuf), &gu_null_struct);
 
-struct PgfLzr {
-	PgfConcr* cnc;
-	GuPool* pool;
-	PgfFunIndices* fun_indices;
-	PgfCoerceIdx* coerce_idx;
-};
-
-GU_DEFINE_TYPE(
-	PgfLzr, struct,
-	GU_MEMBER_P(PgfLzr, cnc, PgfConcr),
-	GU_MEMBER_P(PgfLzr, fun_indices, PgfFunIndices),
-	GU_MEMBER_P(PgfLzr, coerce_idx, PgfCoerceIdx));
-
-
-
 
 static void
-pgf_lzr_add_infer_entry(PgfLzr* lzr,
+pgf_lzr_add_infer_entry(
 			PgfInferMap* infer_table,
 			PgfCCat* cat,
-			PgfProductionApply* papply)
+			PgfProductionApply* papply,
+			GuPool *pool)
 {
 	PgfPArgs args = papply->args;
 	size_t n_args = gu_seq_length(args);
-	PgfCCatIds* arg_cats = gu_new_list(PgfCCatIds, lzr->pool, n_args);
+	PgfCCatIds* arg_cats = gu_new_list(PgfCCatIds, pool, n_args);
 	for (size_t i = 0; i < n_args; i++) {
 		// XXX: What about the hypos in the args?
 		gu_list_index(arg_cats, i) = gu_seq_get(args, PgfPArg, i).ccat;
@@ -153,7 +139,7 @@ pgf_lzr_add_infer_entry(PgfLzr* lzr,
 	PgfLinInfers* entries =
 		gu_map_get(infer_table, &arg_cats, PgfLinInfers*);
 	if (!entries) {
-		entries = gu_new_buf(PgfLinInferEntry, lzr->pool);
+		entries = gu_new_buf(PgfLinInferEntry, pool);
 		gu_map_put(infer_table, &arg_cats, PgfLinInfers*, entries);
 	} else {
 		// XXX: arg_cats is duplicate, we ought to free it
@@ -168,32 +154,33 @@ pgf_lzr_add_infer_entry(PgfLzr* lzr,
 }
 			
 
-static void
-pgf_lzr_index(PgfLzr* lzr, PgfCCat* cat, PgfProduction prod)
+void
+pgf_lzr_index(PgfConcr* concr, PgfCCat* cat, PgfProduction prod,
+              GuPool *pool)
 {
 	void* data = gu_variant_data(prod);
 	switch (gu_variant_tag(prod)) {
 	case PGF_PRODUCTION_APPLY: {
 		PgfProductionApply* papply = data;
 		PgfInferMap* infer =
-			gu_map_get(lzr->fun_indices, &papply->fun->fun,
+			gu_map_get(concr->fun_indices, &papply->fun->fun,
 				   PgfInferMap*);
 		gu_debug("index: %s -> %d", papply->fun->fun, cat->fid);
 		if (!infer) {
-			infer = gu_map_type_new(PgfInferMap, lzr->pool);
-			gu_map_put(lzr->fun_indices,
+			infer = gu_map_type_new(PgfInferMap, pool);
+			gu_map_put(concr->fun_indices,
 				   &papply->fun->fun, PgfInferMap*, infer);
 		}
-		pgf_lzr_add_infer_entry(lzr, infer, cat, papply);
+		pgf_lzr_add_infer_entry(infer, cat, papply, pool);
 		break;
 	}
 	case PGF_PRODUCTION_COERCE: {
 		PgfProductionCoerce* pcoerce = data;
-		PgfCCatBuf* cats = gu_map_get(lzr->coerce_idx, pcoerce->coerce,
+		PgfCCatBuf* cats = gu_map_get(concr->coerce_idx, pcoerce->coerce,
 					      PgfCCatBuf*);
 		if (!cats) {
-			cats = gu_new_buf(PgfCCat*, lzr->pool);
-			gu_map_put(lzr->coerce_idx, 
+			cats = gu_new_buf(PgfCCat*, pool);
+			gu_map_put(concr->coerce_idx, 
 				   pcoerce->coerce, PgfCCatBuf*, cats);
 		}
 		gu_debug("coerce_idx: %d -> %d", pcoerce->coerce->fid, cat->fid);
@@ -206,48 +193,10 @@ pgf_lzr_index(PgfLzr* lzr, PgfCCat* cat, PgfProduction prod)
 	}
 }
 
-typedef struct {
-	GuMapItor fn;
-	PgfLzr* lzr;
-} PgfLzrIndexFn;
-
-static void
-pgf_lzr_index_cnccat_cb(GuMapItor* fn, const void* key, void* value,
-			GuExn* err)
-{
-	PgfLzrIndexFn* clo = (PgfLzrIndexFn*) fn;
-    PgfCCat *ccat = *((PgfCCat **) value);
-     
-   	gu_debug("ccat: %d", ccat->fid);
-	if (gu_seq_is_null(ccat->prods)) {
-		return;
-	}
-	size_t n_prods = gu_seq_length(ccat->prods);
-	for (size_t i = 0; i < n_prods; i++) {
-		PgfProduction prod = gu_seq_get(ccat->prods, PgfProduction, i);
-		pgf_lzr_index(clo->lzr, ccat, prod);
-	}
-}
-
-
-PgfLzr*
-pgf_new_lzr(PgfConcr* cnc, GuPool* pool)
-{
-	PgfLzr* lzr = gu_new(PgfLzr, pool);
-	lzr->cnc = cnc;
-	lzr->pool = pool;
-	lzr->fun_indices = gu_map_type_new(PgfFunIndices, pool);
-	lzr->coerce_idx = gu_map_type_new(PgfCoerceIdx, pool);
-	PgfLzrIndexFn clo = { { pgf_lzr_index_cnccat_cb }, lzr };
-	gu_map_iter(cnc->ccats, &clo.fn, NULL);
-	// TODO: prune productions with zero linearizations
-	return lzr;
-}
-
 typedef struct PgfLzn PgfLzn;
 
 struct PgfLzn {
-	PgfLzr* lzr;
+	PgfConcr* concr;
 	GuChoice* ch;
 	PgfExpr expr;
 	GuEnum en;
@@ -282,7 +231,7 @@ pgf_lzn_pick_supercat(PgfLzn* lzn, PgfCCat* cat)
 	gu_enter("->");
 	while (true) {
 		PgfCCatBuf* supers =
-			gu_map_get(lzn->lzr->coerce_idx, cat, PgfCCatBuf*);
+			gu_map_get(lzn->concr->coerce_idx, cat, PgfCCatBuf*);
 		if (!supers) {
 			break;
 		}
@@ -347,7 +296,7 @@ pgf_lzn_infer_application(PgfLzn* lzn, PgfApplication* appl,
 			  GuPool* pool, PgfCncTree* ctree_out)
 {
 	PgfInferMap* infer =
-		gu_map_get(lzn->lzr->fun_indices, &appl->fun, PgfInferMap*);
+		gu_map_get(lzn->concr->fun_indices, &appl->fun, PgfInferMap*);
 	gu_enter("-> f: %s, n_args: %d", appl->fun, appl->n_args);
 	if (infer == NULL) {
 		gu_exit("<- couldn't find f");
@@ -458,10 +407,10 @@ pgf_cnc_tree_enum_next(GuEnum* self, void* to, GuPool* pool)
 }
 
 PgfCncTreeEnum*
-pgf_lzr_concretize(PgfLzr* lzr, PgfExpr expr, GuPool* pool)
+pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuPool* pool)
 {
 	PgfLzn* lzn = gu_new(PgfLzn, pool);
-	lzn->lzr = lzr;
+	lzn->concr = concr;
 	lzn->expr = expr;
 	lzn->ch = gu_new_choice(pool);
 	lzn->en.next = pgf_cnc_tree_enum_next;
@@ -487,7 +436,7 @@ pgf_cnc_tree_dimension(PgfCncTree ctree)
 }
 
 void
-pgf_lzr_linearize(PgfLzr* lzr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs** fnsp)
+pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs** fnsp)
 {
 	PgfLinFuncs* fns = *fnsp;
 	GuVariantInfo cti = gu_variant_open(ctree);
@@ -521,7 +470,7 @@ pgf_lzr_linearize(PgfLzr* lzr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs** f
 				PgfSymbolIdx* sidx = sym_i.data;
 				gu_assert((unsigned) sidx->d < fapp->n_args);
 				PgfCncTree argf = fapp->args[sidx->d];
-				pgf_lzr_linearize(lzr, argf, sidx->r, fnsp);
+				pgf_lzr_linearize(concr, argf, sidx->r, fnsp);
 				break;
 			}
 			case PGF_SYMBOL_KS: {
@@ -581,7 +530,7 @@ static PgfLinFuncs pgf_file_lin_funcs = {
 };
 
 void
-pgf_lzr_linearize_simple(PgfLzr* lzr, PgfCncTree ctree,
+pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
 			 size_t lin_idx, GuWriter* wtr, GuExn* err)
 {
 	PgfSimpleLin flin = {
@@ -589,5 +538,5 @@ pgf_lzr_linearize_simple(PgfLzr* lzr, PgfCncTree ctree,
 		.wtr = wtr,
 		.err = err
 	};
-	pgf_lzr_linearize(lzr, ctree, lin_idx, &flin.funcs);
+	pgf_lzr_linearize(concr, ctree, lin_idx, &flin.funcs);
 }

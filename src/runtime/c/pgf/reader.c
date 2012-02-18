@@ -655,13 +655,32 @@ pgf_ccat_set_cnccat(PgfCCat* ccat)
 	return ccat->cnccat;
 }
 
+typedef struct {
+	GuMapItor fn;
+	PgfConcr* concr;
+	GuPool *pool;
+} PgfIndexFn;
+
+void
+pgf_lzr_index(PgfConcr* concr, PgfCCat* cat, PgfProduction prod,
+              GuPool *pool);
 
 static void
 pgf_read_ccat_cb(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
 	(void) (key && err);
-	PgfCCat** ccatp = value;
-	pgf_ccat_set_cnccat(*ccatp);
+	PgfIndexFn* clo = (PgfIndexFn*) fn;
+	PgfCCat* ccat = *((PgfCCat**) value);
+
+	pgf_ccat_set_cnccat(ccat);
+	
+	if (!gu_seq_is_null(ccat->prods)) {
+		size_t n_prods = gu_seq_length(ccat->prods);
+		for (size_t i = 0; i < n_prods; i++) {
+			PgfProduction prod = gu_seq_get(ccat->prods, PgfProduction, i);
+			pgf_lzr_index(clo->concr, ccat, prod, clo->pool);
+		}
+	}
 }
 
 static void*
@@ -684,14 +703,16 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
 	GuMapType* ccats_t = gu_type_cast(gu_type(PgfCCatMap), GuMap);
 	concr->ccats =
 		gu_new_int_map(PgfCCat*, &gu_null_struct, pool);
+	concr->fun_indices = gu_map_type_new(PgfFunIndices, pool);
+	concr->coerce_idx = gu_map_type_new(PgfCoerceIdx, pool);
     rdr->curr_ccats = concr->ccats;
-	pgf_read_into_map(ccats_t, rdr, concr->ccats, rdr->opool);    
+	pgf_read_into_map(ccats_t, rdr, concr->ccats, rdr->opool);
 	concr->cnccats = pgf_read_new(rdr, gu_type(PgfCncCatMap), 
 				      rdr->opool, NULL);
 	concr->max_fid = pgf_read_int(rdr);
 
-	GuMapItor fn = { pgf_read_ccat_cb };
-	gu_map_iter(concr->ccats, &fn, NULL);
+	PgfIndexFn clo = { { pgf_read_ccat_cb }, concr, pool };
+	gu_map_iter(concr->ccats, &clo.fn, NULL);
 	return concr;
 }
 

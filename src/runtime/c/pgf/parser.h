@@ -17,30 +17,6 @@
 
 typedef struct PgfParse PgfParse;
 
-/** @name Creating a new parser
- *
- * A #PgfParser object can parse sentences of a single concrete category into
- * abstract syntax trees (#PgfExpr). The parser is created with
- * #pgf_new_parser.
- *
- * @{ 
- */
-
-/// A parser for a single concrete category
-typedef struct PgfParser PgfParser;
-    
-
-/// Create a new parser
-PgfParser*
-pgf_new_parser(PgfConcr* concr, GuPool* pool);
-/**<
- * @param concr The concrete category whose sentences are to be parsed
- *
- * @pool
- *
- * @return A newly created parser for the concrete category \p concr
- */ 
-
 /** @}
  * 
  * @name Parsing a sentence
@@ -57,7 +33,7 @@ pgf_new_parser(PgfConcr* concr, GuPool* pool);
 
 /// Begin parsing
 PgfParse*
-pgf_parser_parse(PgfParser* parser, PgfCId cat, size_t lin_idx, GuPool* pool);
+pgf_parser_parse(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool);
 /**<
  * @param parser The parser to use
  *
