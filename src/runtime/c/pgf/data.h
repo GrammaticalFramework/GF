@@ -192,7 +192,6 @@ struct PgfConcr {
 	PgfFlags* cflags;
 	PgfPrintNames* printnames;
     GuMap* ccats;
-	PgfCCatSeq extra_ccats;
 	PgfFunIndices* fun_indices;
 	PgfCoerceIdx* coerce_idx;
     PgfCncFuns* cncfuns;
