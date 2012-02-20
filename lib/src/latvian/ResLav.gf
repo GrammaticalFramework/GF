@@ -32,11 +32,24 @@ param
   -- Deb  = Debitive (Latvian specific: http://www.isocat.org/rest/dc/3835)
   -- Condit = Conditional
   -- DebitiveRelative = the relative subtype of debitive
-  VerbForm = Infinitive | Indicative Person Number Tense | Relative Tense | Debitive |
-    Imperative Number | DebitiveRelative | Participle Gender Number Case ;
+  VerbForm =
+  	  Infinitive
+  	| Indicative Person Number Tense
+  	| Relative Tense
+  	| Debitive
+  	| Imperative Number
+  	| DebitiveRelative
+  	| Participle Gender Number Case
+  	;
     -- TODO: divdabim noteiktā forma un arī pārākā / vispārākā pakāpe
 
-  VerbMood = Ind Anteriority Tense | Rel Anteriority Tense | Deb Anteriority Tense | Condit Anteriority ;
+  VerbMood =
+  	  Ind Anteriority Tense
+  	| Rel Anteriority Tense		--# notpresent
+  	| Deb Anteriority Tense		--# notpresent
+  	| Condit Anteriority		--# notpresent
+  	;
+
   VerbConj = C2 | C3 ;
 
   --Agr = Ag Gender Number ;

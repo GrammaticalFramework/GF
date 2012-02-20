@@ -1,3 +1,3 @@
 --# -path=.:../abstract:../common:../prelude
 
-abstract ExtraLavAbs = {}
+abstract ExtraLavAbs = Extra ** {}

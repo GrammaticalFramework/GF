@@ -58,11 +58,9 @@ lin
       s =
         vp.v.s ! Pos ! (Indicative P1 Pl Pres) ++	-- Verb
         vp.s2 ! a									-- Object(s), complements, adverbial modifiers
-    } | {
-      s =
-        vp.v.s ! Pos ! (Indicative P1 Pl Fut) ++
-        vp.s2 ! a
-    } ;
+    }
+    | { s = vp.v.s ! Pos ! (Indicative P1 Pl Fut) ++ vp.s2 ! a }	--# notpresent
+    ;
 
   ImpP3 np vp = {
     s = "lai" ++ np.s ! Nom ++ buildVerb vp.v (Ind Simul Pres) Pos np.a ++ vp.s2 ! np.a ;
