@@ -137,11 +137,14 @@ ioeIO io = ioe (io >>= return . return)
 ioeErr :: Err a -> IOE a
 ioeErr = ioe . return 
 
+instance Functor IOE where fmap = liftM
+
 instance  Monad IOE where
   return a    = ioe (return (return a))
   IOE c >>= f = IOE $ do 
                   x <- c          -- Err a
                   appIOE $ err ioeBad f x         -- f :: a -> IOE a
+  fail = ioeBad
 
 ioeBad :: String -> IOE a
 ioeBad = ioe . return . Bad
