@@ -8,12 +8,12 @@ import System.Environment
 import System.Exit
 
 -- Make commands for compiling and testing resource grammars.
--- usage: runghc Make (((present|alltenses)? OPT?) | (clone FILE))? LANGS? 
--- where 
+-- usage: runghc Make (((present|alltenses)? OPT?) | (clone FILE))? LANGS?
+-- where
 -- - OPT = (lang | api | pgf | test | parse | clean | clone)
 -- - LANGS has the form e.g. langs=Eng,Fin,Rus
 -- - clone with a flag file=FILENAME clones the file to the specified languages,
---   by replacing the 3-letter language name of the original in both 
+--   by replacing the 3-letter language name of the original in both
 --   the filename and the body
 --   with each name in the list (default: all languages)
 -- With no argument, lang and api are done, in this order.
@@ -21,12 +21,12 @@ import System.Exit
 
 default_gf = "../../dist/build/gf/gf"
 
-presApiPath = "-path=api:present"
+presApiPath = "-path=api:present:../present"
 presSymbolPath = "" -- "-path=.:abstract:present:common:romance:scandinavian" ----
 
 -- the languages have long directory names and short ISO codes (3 letters)
 -- we also give the functors implied
- 
+
 langsCoding = [
   (("afrikaans","Afr"),""),
   (("amharic",  "Amh"),""),
@@ -52,7 +52,7 @@ langsCoding = [
   (("romanian", "Ron"),""),
   (("russian",  "Rus"),""),
   (("spanish",  "Spa"),"Romance"),
-  (("swedish",  "Swe"),"Scand"), 
+  (("swedish",  "Swe"),"Scand"),
   (("thai",     "Tha"),""),
   (("thai",     "Thb"),""),  -- Thai pronunciation
   (("turkish",  "Tur"),""),
@@ -70,25 +70,25 @@ langsLangAll = langs
 langsLang = langs `except` langsIncomplete
 
 -- languagues that have notpresent marked
-langsPresent = langsLang `except` ["Lav","Nep","Pes","Tha"]
+langsPresent = langsLang `except` ["Nep","Pes","Tha"]
 
 -- languages for which Lang can be compiled but which are incomplete
 langsIncomplete = ["Amh","Ara","Hin","Lat","Tur"]
 
--- languages for which to compile Try 
+-- languages for which to compile Try
 langsAPI = langsLang `except` langsIncomplete
 
 -- languages for which to compile Symbolic
-langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Ina","Lav","Nep","Pes","Pnb","Rus"])
+langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Ina","Nep","Pes","Pnb","Rus"])
 
 -- languages for which to compile minimal Syntax
 langsMinimal = langs `only` ["Ara","Eng","Bul","Rus"]
 
 -- languages for which to run treebank test
-langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Rus","Spa","Tha"]
+langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Lav","Rus","Spa","Tha"]
 
 -- languages for which to run demo test
-langsDemo = langsLang `except` ["Ara","Hin","Ina","Lat","Tha"]
+langsDemo = langsLang `except` ["Ara","Hin","Ina","Lat","Lav","Tha"]
 
 -- languages for which to compile parsing grammars
 langsParse = langs `only` ["Eng"]
@@ -97,7 +97,7 @@ langsParse = langs `only` ["Eng"]
 langsPGF = langsTest `only` ["Eng","Fre","Swe"]
 
 -- languages for which Compatibility exists (to be extended)
-langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Spa","Swe"]
+langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Lav","Spa","Swe"]
 
 treebankExx = "exx-resource.gft"
 treebankResults = "exx-resource.gftb"
@@ -108,14 +108,14 @@ main = do
 
 make :: [String] -> IO ()
 make xx = do
-  let ifx  opt act = if null xx || elem opt xx then act >> return () else return () 
-  let ifxx opt act = if            elem opt xx then act >> return () else return () 
-  let pres 
+  let ifx  opt act = if null xx || elem opt xx then act >> return () else return ()
+  let ifxx opt act = if            elem opt xx then act >> return () else return ()
+  let pres
         | elem "present" xx = 1
         | elem "alltenses" xx = 2
         | otherwise = 0
-  let dir = case pres of 
-              1 -> "../present" 
+  let dir = case pres of
+              1 -> "../present"
               2 -> "../alltenses"
               _ -> "../full"
 
@@ -150,7 +150,7 @@ make xx = do
                ++ [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- optl langsPGF]
   ifxx "test" $ do
     let ls = optl langsTest
-    gf (treeb "Lang" ls) $ unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- ls] 
+    gf (treeb "Lang" ls) $ unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- ls]
   ifxx "parse" $ do
     mapM_ (gfc pres [] . parse) (optl langsParse)
     copy "parse/*.gfo parse/oald/*.gfo" dir
@@ -169,7 +169,7 @@ gfc pres ppath file = do
   let preproc = if (pres==1) then "-preproc=mkPresent" else ""
   let path    = if (pres==1) then ppath else ""
   putStrLn $ "Compiling " ++ file
-  if pres == 0 
+  if pres == 0
      then run_gfc ["-s","-src",preproc, path, file]
      else run_gfc ["-s","-src","-no-pmcfg",preproc, path, file]
 
@@ -185,10 +185,10 @@ gf comm file = do
   putStrLn cmd
   system cmd
 
-treeb abstr ls = "rf -lines -tree -file=" ++ treebankExx ++ 
+treeb abstr ls = "rf -lines -tree -file=" ++ treebankExx ++
         " | l -treebank " ++ unlexer abstr ls ++ " | wf -file=" ++ treebankResults
 
-demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++ 
+demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++
            " | ps -to_html | wf -file=resdemo.html"
 
 lang (lla,la) = lla ++ "/All" ++ la ++ ".gf"
@@ -214,7 +214,7 @@ getOptLangs args = case [ls | a <- args, let (f,ls) = splitAt 6 a, f=="langs="] 
 
 -- the file name has the form p....pLLL.gf, i.e. 3-letter lang name, suffix .gf
 getLangName args = case [ls | a <- args, let (f,ls) = splitAt 5 a, f=="file="] of
-  fi:_ -> let (nal,ferp) = splitAt 3 (drop 3 (reverse fi)) in return (reverse ferp,reverse nal)  
+  fi:_ -> let (nal,ferp) = splitAt 3 (drop 3 (reverse fi)) in return (reverse ferp,reverse nal)
   _ -> Nothing
 
 replaceLang s1 s2 = repl where
@@ -225,19 +225,19 @@ replaceLang s1 s2 = repl where
     _ -> s
   lgs = 3 -- length s1
 
-unlexer abstr ls = 
-  "-unlexer=\\\"" ++ unwords 
-      [abstr ++ la ++ "=" ++ unl | 
-        lla@(_,la) <- ls, let unl = unlex lla, not (null unl)] ++ 
+unlexer abstr ls =
+  "-unlexer=\\\"" ++ unwords
+      [abstr ++ la ++ "=" ++ unl |
+        lla@(_,la) <- ls, let unl = unlex lla, not (null unl)] ++
       "\\\""
     where
       unlex lla = maybe "" id $ lookup lla langsCoding
 
 -- | Runs the gf executable in compile mode with the given arguments.
 run_gfc :: [String] -> IO ()
-run_gfc args = 
+run_gfc args =
     do let args' = ["-batch"] ++ filter (not . null) args ++ ["+RTS"] ++ rts_flags ++ ["-RTS"]
---- do let args' = ["-batch","-gf-lib-path=."] ++ filter (not . null) args ++ ["+RTS"] ++ rts_flags ++ ["-RTS"] --- why path? AR 
+--- do let args' = ["-batch","-gf-lib-path=."] ++ filter (not . null) args ++ ["+RTS"] ++ rts_flags ++ ["-RTS"] --- why path? AR
        putStrLn $ "Running: " ++ default_gf ++ " " ++ unwords (map showArg args')
        e <- rawSystem default_gf args'
        case e of
@@ -247,24 +247,24 @@ run_gfc args =
         showArg arg = "'" ++ arg ++ "'"
 
 copy :: String -> String -> IO ()
-copy from to = 
+copy from to =
     do system $ "cp " ++ from ++ " " ++ to
        return ()
 
 copyl :: [(String,String)] -> String -> String -> IO ()
-copyl lans from to = do 
+copyl lans from to = do
   echosystem $ "cp abstract/" ++ from ++ " " ++ to
   echosystem $ "cp common/"   ++ from ++ " " ++ to
-  mapM_ (\lan -> echosystem $ "cp */*" ++ lan ++ from ++ " " ++ to) 
+  mapM_ (\lan -> echosystem $ "cp */*" ++ lan ++ from ++ " " ++ to)
         (map snd lans ++ concatMap implied lans)
   return ()
 
 copyld :: [(String,String)] -> String -> String -> String -> IO ()
-copyld lans dir from to = do 
-  mapM_ (\lan -> echosystem $ "cp " ++ dir ++ lan ++ from ++ " " ++ to) 
+copyld lans dir from to = do
+  mapM_ (\lan -> echosystem $ "cp " ++ dir ++ lan ++ from ++ " " ++ to)
         (map snd lans ++ if (take 3 dir == "api") then [] else concatMap implied lans)
   return ()
 
 echosystem c = do
-  putStrLn c 
+  putStrLn c
   system c

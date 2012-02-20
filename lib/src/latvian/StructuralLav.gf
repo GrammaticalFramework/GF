@@ -450,37 +450,4 @@ oper
 
   no_Utt = ss "nē" ;
 
-{-
-  can8know_VV, can_VV = {
-    s = table {
-      VVF VInf => ["be able to"] ;
-      VVF VPres => "can" ;
-      VVF VPPart => ["been able to"] ;
-      VVF VPresPart => ["being able to"] ;
-      VVF VPast => "could" ;      --# notpresent
-      VVPastNeg => "couldn't" ;   --# notpresent
-      VVPresNeg => "can't"
-      } ;
-    isAux = True
-    } ;
-  must_VV = {
-    s = table {
-      VVF VInf => ["have to"] ;
-      VVF VPres => "must" ;
-      VVF VPPart => ["had to"] ;
-      VVF VPresPart => ["having to"] ;
-      VVF VPast => ["had to"] ;      --# notpresent
-      VVPastNeg => ["hadn't to"] ;      --# notpresent
-      VVPresNeg => "mustn't"
-      } ;
-    isAux = True
-    } ;
-
-  not_Predet = {s = "not" ; lock_Predet = <>} ;
-  no_Quant = mkQuant "no" "no" "none" "none" ;
-
-  have_V2 = dirV2 (mk5V "have" "has" "had" "had" "having") ;
-
--}
 }
-

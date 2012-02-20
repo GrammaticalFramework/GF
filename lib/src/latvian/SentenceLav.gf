@@ -42,8 +42,9 @@ lin
   UseQCl t p cl = { s = t.s ++ p.s ++ cl.s ! (Ind t.a t.t) ! p.p } ;
 
   UseRCl t p cl =
-	{ s = \\ag => t.s ++ p.s ++ cl.s ! (Ind t.a t.t) ! p.p ! ag } |
-	{ s = \\ag => t.s ++ p.s ++ cl.s ! (Rel t.a t.t) ! p.p ! ag } ;
+	  { s = \\ag => t.s ++ p.s ++ cl.s ! (Ind t.a t.t) ! p.p ! ag }
+	| { s = \\ag => t.s ++ p.s ++ cl.s ! (Rel t.a t.t) ! p.p ! ag }		--# notpresent
+	;
 
   UseSlash t p slash = { s = t.s ++ p.s ++ slash.s ! (Ind t.a t.t) ! p.p ; p = slash.p } ;
 
@@ -55,7 +56,7 @@ oper
     s = \\mood,pol =>
       case mood of {					-- Subject
         -- FIXME: jāčeko valences, reizēm arī īstenības izteiksmē - 'man patīk kaut kas'
-        Deb _ _ => np.s ! Dat ;
+        Deb _ _ => np.s ! Dat ;		--# notpresent
         _ => np.s ! Nom
       } ++
       buildVerb vp.v mood pol np.a ++	-- Verb

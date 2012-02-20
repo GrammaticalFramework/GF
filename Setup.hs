@@ -73,7 +73,7 @@ rglCommands =
        do let dir = getRGLBuildDir lbi mode
           createDirectoryIfMissing True dir
           sequence_ [run_gfc pkg lbi ["-s","-make","-name=Lang"++la,
-                                       dir ++ "/Lang" ++ la ++ ".gfo"] 
+                                       dir ++ "/Lang" ++ la ++ ".gfo"]
                       | (_,la) <- optl langsPGF args]
           run_gfc pkg lbi (["-s","-make","-name=Lang"]++
                            ["Lang" ++ la ++ ".pgf"|(_,la)<-optl langsPGF args])
@@ -190,7 +190,7 @@ rgl_dst_dir lbi = buildDir lbi </> "rgl"
 -- the languages have long directory names and short ISO codes (3 letters)
 -- we also give the decodings for postprocessing linearizations, as long as grammars
 -- don't support all flags needed; they are used in tests
- 
+
 langsCoding = [
   (("amharic",  "Amh"),""),
   (("arabic",   "Ara"),""),
@@ -206,13 +206,14 @@ langsCoding = [
   (("interlingua","Ina"),""),
   (("italian",  "Ita"),""),
   (("latin",    "Lat"),""),
+  (("latvian",    "Lav"),""),
   (("norwegian","Nor"),""),
   (("polish",   "Pol"),""),
   (("punjabi",   "Pnb"),""),
   (("romanian", "Ron"),""),
   (("russian",  "Rus"),""),
   (("spanish",  "Spa"),""),
-  (("swedish",  "Swe"),""), 
+  (("swedish",  "Swe"),""),
   (("thai",     "Tha"),"to_thai"),
   (("turkish",  "Tur"),""),
   (("urdu",     "Urd"),"")
@@ -227,14 +228,14 @@ langs = map fst langsCoding
 langsLang = langs `except` ["Amh","Ara","Lat","Hin","Tha","Tur"]
 --langsLang = langs `only` ["Fin"] --test
 
--- languages for which to compile Try 
+-- languages for which to compile Try
 langsAPI  = langsLang `except` ["Hin","Ina","Tha"]
 
--- languages for which to compile Symbolic 
+-- languages for which to compile Symbolic
 langsSymbolic  = langsAPI -- `except` ["Rus"]
 
 -- languages for which to run demo test
-langsDemo = langsLang `except` ["Ara","Hin","Ina","Tha"]
+langsDemo = langsLang `except` ["Ara","Hin","Ina","Lav","Tha"]
 
 -- languages for which to compile parsing grammars
 langsParse = langs `only` ["Eng"]
@@ -243,7 +244,7 @@ langsParse = langs `only` ["Eng"]
 langsPGF = langsLang `except` ["Ara","Hin","Ron","Tha"]
 
 -- languages for which Compatibility exists (to be extended)
-langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Spa","Swe"]
+langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Lav","Spa","Swe"]
 
 gfc modes pkg lbi file = sequence_ [gfc1 mode pkg lbi file | mode<-modes]
 gfc1 mode pkg lbi file = do
@@ -264,7 +265,7 @@ gf comm files pkg lbi = do
   out <- readProcess gf ("-s":files) comm
   putStrLn out
 
-demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++ 
+demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++
            " | ps -to_html | wf -file=resdemo.html"
 
 lang   (lla,la) = rgl_src_dir </> lla </> ("All"           ++ la ++ ".gf")
@@ -285,7 +286,7 @@ getOptMode args =
     then default_modes
     else explicit_modes
   where
-    explicit_modes = 
+    explicit_modes =
       [Minimal|have "minimal"]++
       [Present|have "present"]++
       [AllTenses|have "alltenses"]
@@ -330,17 +331,17 @@ getRGLCommands args =
 langs_prefix = "langs="
 rgl_prefix = "rgl-"
 
-unlexer abstr ls = 
-  "-unlexer=\\\"" ++ unwords 
-      [abstr ++ la ++ "=" ++ unl | 
-        lla@(_,la) <- ls, let unl = unlex lla, not (null unl)] ++ 
+unlexer abstr ls =
+  "-unlexer=\\\"" ++ unwords
+      [abstr ++ la ++ "=" ++ unl |
+        lla@(_,la) <- ls, let unl = unlex lla, not (null unl)] ++
       "\\\""
     where
       unlex lla = maybe "" id $ lookup lla langsCoding
 
 -- | Runs the gf executable in compile mode with the given arguments.
 run_gfc :: PackageDescription -> LocalBuildInfo -> [String] -> IO ()
-run_gfc pkg lbi args = 
+run_gfc pkg lbi args =
     do let args' = ["-batch","-gf-lib-path="++rgl_src_dir,"+RTS","-K32M","-RTS"] ++ filter (not . null) args
            gf = default_gf pkg lbi
            gf_cmdline = gf ++ " " ++ unwords (map showArg args')

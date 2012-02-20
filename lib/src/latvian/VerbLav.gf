@@ -6,6 +6,7 @@
 -- Not so simple since morphology itself needs ResLav & friends.
 
 concrete VerbLav of Verb = CatLav ** open
+  ParamX,
   ResLav,
   ParadigmsVerbsLav,
   StructuralLav
@@ -74,22 +75,27 @@ oper
 
   buildVerb : Verb -> VerbMood -> Polarity -> Agr -> Str = \v,mood,pol,ag ->
     let
-      ag = fromAgr ag ;
-      part = v.s ! ResLav.Pos ! (Participle ag.g ag.n Nom)
+      ag = fromAgr ag
+      ;																							--# notpresent
+      part = v.s ! ResLav.Pos ! (Participle ag.g ag.n Nom)										--# notpresent
     in case mood of {
-      Ind Simul tense => v.s ! pol ! (Indicative ag.p ag.n tense) ;
-      Ind Anter tense => mkVerb_toBe.s ! pol ! (Indicative ag.p ag.n tense) ++ part ;
+      Ind Simul tense => v.s ! pol ! (Indicative ag.p ag.n tense)
+      ;																							--# notpresent
+      Ind Anter tense => mkVerb_toBe.s ! pol ! (Indicative ag.p ag.n tense) ++ part ;			--# notpresent
 
-      Rel _     Past  => ResLav.NON_EXISTENT ;	-- FIXME (?)
-      Rel Simul tense => v.s ! pol ! (Relative tense) ;
-      Rel Anter tense => mkVerb_toBe.s ! pol ! (Relative tense) ++ part ;
+      -- FIXME(?): Rel _ Past => ...
+      Rel _     Past  => ResLav.NON_EXISTENT ;													--# notpresent
+      Rel Simul tense => v.s ! pol ! (Relative tense) ;											--# notpresent
+      Rel Anter tense => mkVerb_toBe.s ! pol ! (Relative tense) ++ part ;						--# notpresent
 
-      Deb Simul tense => mkVerb_toBe.s ! pol ! (Indicative P3 Sg tense) ++ v.s ! ResLav.Pos ! Debitive ;
-      Deb Anter tense => mkVerb_toBe.s ! pol ! (Indicative P3 Sg tense) ++
-        mkVerb_toBe.s ! ResLav.Pos ! (Participle Masc Sg Nom) ++ v.s ! ResLav.Pos ! Debitive ;
+      Deb Simul tense => mkVerb_toBe.s ! pol ! (Indicative P3 Sg tense) ++						--# notpresent
+      	v.s ! ResLav.Pos ! Debitive ;															--# notpresent
+      Deb Anter tense => mkVerb_toBe.s ! pol ! (Indicative P3 Sg tense) ++						--# notpresent
+        mkVerb_toBe.s ! ResLav.Pos ! (Participle Masc Sg Nom) ++								--# notpresent
+        v.s ! ResLav.Pos ! Debitive ;															--# notpresent
 
-      Condit Simul => v.s ! pol ! (Indicative ag.p ag.n Cond) ;
-      Condit Anter => mkVerb_toBe.s ! pol ! (Indicative ag.p ag.n Cond) ++ part
+      Condit Simul => v.s ! pol ! (Indicative ag.p ag.n ParamX.Cond) ;							--# notpresent
+      Condit Anter => mkVerb_toBe.s ! pol ! (Indicative ag.p ag.n ParamX.Cond) ++ part			--# notpresent
     } ;
 
 -- TODO: nav testēts

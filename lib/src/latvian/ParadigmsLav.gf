@@ -32,6 +32,14 @@ flags
   coding = utf8 ;
 
 oper
+  Number : Type ;
+  singular : Number ;
+  plural   : Number ;
+
+  Number = ResLav.Number ;
+  singular = Sg ;
+  plural = Pl ;
+
   second_conjugation : VerbConj = C2 ;
   third_conjugation  : VerbConj = C3 ;
 
