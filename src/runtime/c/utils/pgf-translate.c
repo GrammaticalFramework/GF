@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
+#include <time.h>
 
 int main(int argc, char* argv[]) {
 	// Set the character locale, so we can produce proper output.
@@ -102,6 +103,8 @@ int main(int argc, char* argv[]) {
 		// sentence, so our memory usage doesn't increase over time.
 		GuPool* ppool = gu_new_pool();
 
+		clock_t start = clock();
+
 		// Begin parsing a sentence of the specified category
 		PgfParse* parse =
 			pgf_parser_parse(from_concr, cat, lin_idx, pool);
@@ -125,6 +128,11 @@ int main(int argc, char* argv[]) {
 			}
 			tok = strtok(NULL, " \n");
 		}
+		
+		clock_t end = clock();
+
+		double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+		printf("%.2f sec\n", cpu_time_used);
 
 		// Now begin enumerating the resulting syntax trees
 		GuEnum* result = pgf_parse_result(parse, ppool);
