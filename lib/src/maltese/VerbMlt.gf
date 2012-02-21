@@ -1,11 +1,11 @@
 -- VerbMlt.gf: verb phrases
 --
 -- Maltese Resource Grammar Library
--- John J. Camilleri, 2011
+-- John J. Camilleri, 2012
 -- Licensed under LGPL
 
 concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
-	flags optimize=all_subs ;
+  flags optimize=all_subs ;
 
 -- Comp
 -- VP
