@@ -212,6 +212,7 @@ langsCoding = [
   (("punjabi",   "Pnb"),""),
   (("romanian", "Ron"),""),
   (("russian",  "Rus"),""),
+  (("sindhi",   "Snd"),""),
   (("spanish",  "Spa"),""),
   (("swedish",  "Swe"),""),
   (("thai",     "Tha"),"to_thai"),

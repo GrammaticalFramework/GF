@@ -43,6 +43,7 @@ allTransliterations = Map.fromAscList [
   ("greek", transGreek),
   ("hebrew", transHebrew),
   ("persian", transPersian),
+  ("sindhi", transSindhi),
   ("nepali", transNepali),
   ("telugu", transTelugu),
   ("thai", transThai),
@@ -145,6 +146,23 @@ transUrdu =
       "f q k l m n - w "    ++  -- 0641 - 0648
       "$ n- T p c D R x g h t: y N h' E " ++  -- 0654,658,679,67e,686,688,698,6af,6c1,6c3,6cc,6ba,6be,6d2
       "N0 N1 N2 N3 N4 N5 N6 N7 N8 N9 " ++ "? ."
+
+transSindhi :: Transliteration
+transSindhi = 
+  (mkTransliteration "Sindhi" allTrans allCodes) where
+    allCodes = [0x0626 .. 0x062f] ++ [0x0630 .. 0x063a] ++ [0x0641 .. 0x0648] ++
+               [0x067a,0x067b,0x067d,0x067e,0x067f] ++ [0x0680 .. 0x068f] ++
+               [0x0699,0x0918,0x06a6,0x061d,0x06a9,0x06af,0x06b3,0x06bb,0x06be,0x06f6,0x06cc,0x06b1, 0x06aa, 0x06fd, 0x06fe] ++
+			   [0x06f0 .. 0x06f9] ++ [0x061f,0x06D4]
+    allTrans = words $
+      "K a b - t C j H - d " ++  -- 0626 - 062f
+      "Z r z s X S Z- t- z- e G "   ++  -- 0630 - 063a
+      "f q - L m n - W "    ++  -- 0641 - 0648
+      "T! B T p T' " ++  -- 067a,067b,067d,067e,067f
+      "B' - - Y' J' - c c' - - d! - d' D - D' " ++  -- 0680 - 068f
+      "R - F' - k' g G' t' h' e' y c! k A M " ++  -- 0699, 0918, 06a6, 061d, 06a9,06af,06b3,06bb,06be,06f6,06cc,06b1 
+      "N0 N1 N2 N3 N4 N5 N6 N7 N8 N9 " ++ "? ."
+
     
 
 transArabic :: Transliteration
