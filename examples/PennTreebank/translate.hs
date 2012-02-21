@@ -18,8 +18,8 @@ import Data.Tree
 test = False
 
 main = do
-  pgf <- readPGF "PennTreebank.pgf"
-  let Just language = readLanguage "PennTreebankCnc"
+  pgf <- readPGF "ParseEngAbs.pgf"
+  let Just language = readLanguage "ParseEng"
       morpho        = buildMorpho pgf language
   s <- readFile "wsj.02-21"
   ref <- newIORef (0,0,0)
@@ -84,8 +84,8 @@ penn =
                   v <- inside "JJ" (lemma "V2" "s VPPart")
                   pps <- many (cat "PP")
                   let adj  = mkApp cidPastPartAP [mkApp v []]
-                      ap0  = foldr (\ada ap -> mkApp cidAdAP [ada,ap]) (mkApp cidPositA [adj]) adas
-                      ap   = foldr (\pp ap -> mkApp cidAdAP [ap,pp]) ap0 pps
+                      ap0  = foldr (\ada ap -> mkApp cidAdAP [ada,ap]) adj adas
+                      ap   = foldr (\pp ap -> mkApp cidAdvAP [ap,pp]) ap0 pps
                   return ap
                `mplus`
                do adas0 <- many pAdA
