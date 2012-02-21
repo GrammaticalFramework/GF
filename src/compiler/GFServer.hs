@@ -21,10 +21,9 @@ import Network.URI(URI(..),parseURI)
 import Network.Shed.Httpd(initServer,Request(..),Response(..),queryToArguments,
                           noCache)
 --import qualified Network.FastCGI as FCGI -- from hackage direct-fastcgi
---import qualified Data.ByteString.Char8 as BS(pack,unpack,length)
 import Network.CGI(handleErrors,liftIO)
 import FastCGIUtils(outputJSONP,handleCGIErrors,stderrToFile)
-import Text.JSON(encode,showJSON,toJSObject)
+import Text.JSON(encode,showJSON,makeObj)
 import System.IO.Silently(hCapture)
 import System.Process(readProcessWithExitCode)
 import System.Exit(ExitCode(..))
@@ -35,6 +34,7 @@ import qualified ExampleService as ES
 import Data.Version(showVersion)
 import Paths_gf(getDataDir,version)
 import GF.Infra.BuildInfo (buildInfo)
+import SimpleEditor.Convert(parseModule)
 import RunHTTP(cgiHandler)
 
 --logFile :: FilePath
@@ -105,6 +105,7 @@ handle state0 cache execute1
 --         "/stop" ->
 --         "/start" ->
            "/gfshell" -> inDir qs $ look "command" . command
+           "/parse" -> parse qs
            "/cloud" -> inDir qs $ look "command" . cloud
            '/':rpath ->
              case (takeDirectory path,takeFileName path,takeExtension path) of
@@ -156,6 +157,8 @@ handle state0 cache execute1
          (output,st') <- hCapture [stdout,stderr] (execute1 st cmd)
          let state' = maybe state (flip (M.insert dir) state) st'
          return (state',ok200 output)
+
+    parse qs = return (state,json200 (makeObj (map parseModule qs)))
 
     cloud dir cmd qs =
       case cmd of
@@ -226,14 +229,12 @@ handle state0 cache execute1
 -- * Dynamic content
 
 jsonresult cwd dir cmd (ecode,stdout,stderr) files =
-  toJSObject [
-    field "errorcode" (if ecode==ExitSuccess then "OK" else "Error"),
-    field "command" cmd,
-    field "output" (unlines [rel stderr,rel stdout]),
-    field "minibar_url" ("/minibar/minibar.html?"++dir++pgf)]
+  makeObj [
+    prop "errorcode" (if ecode==ExitSuccess then "OK" else "Error"),
+    prop "command" cmd,
+    prop "output" (unlines [rel stderr,rel stdout]),
+    prop "minibar_url" ("/minibar/minibar.html?"++dir++pgf)]
   where
-    field n v = (n,showJSON v)
-
     pgf = case files of
             (abstract,_):_ -> "%20"++dropExtension abstract++".pgf"
             _ -> ""
@@ -391,3 +392,5 @@ inputs = queryToArguments . fixplus
     decode c   = [c]
 
 mapFst f xys = [(f x,y)|(x,y)<-xys]
+
+prop n v = (n,showJSON v)
