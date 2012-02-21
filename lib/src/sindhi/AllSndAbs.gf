@@ -1,0 +1,4 @@
+abstract AllSndAbs =
+  Lang,
+  ExtraSndAbs
+  ** {} ;
