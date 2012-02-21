@@ -1,7 +1,7 @@
 -- StructuralMlt.gf: lexicon of structural words
 --
 -- Maltese Resource Grammar Library
--- John J. Camilleri, 2011
+-- John J. Camilleri, 2012
 -- Licensed under LGPL
 
 concrete StructuralMlt of Structural = CatMlt **

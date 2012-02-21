@@ -1,7 +1,7 @@
 -- QuestionMlt.gf: questions and interrogatives
 --
 -- Maltese Resource Grammar Library
--- John J. Camilleri, 2011
+-- John J. Camilleri, 2012
 -- Licensed under LGPL
 
 concrete QuestionMlt of Question = CatMlt ** open ResMlt, ParamX, Prelude in {

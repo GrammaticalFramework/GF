@@ -1,7 +1,7 @@
 -- LangMlt.gf: common syntax and lexicon
 --
 -- Maltese Resource Grammar Library
--- John J. Camilleri, 2011
+-- John J. Camilleri, 2012
 -- Licensed under LGPL
 
 --# -path=.:../abstract:../common:../prelude
