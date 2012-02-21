@@ -104,14 +104,12 @@ static GU_DEFINE_TYPE(PgfInferMap, GuMap,
 		      gu_ptr_type(PgfCCatIds), pgf_lzr_cats_hasher,
 		      gu_ptr_type(PgfLinInfers), &gu_null_struct);
 
-typedef GuStringMap PgfFunIndices;
 GU_DEFINE_TYPE(PgfFunIndices, GuStringMap, gu_ptr_type(PgfInferMap),
 		      &gu_null_struct);
 
 typedef GuBuf PgfCCatBuf;
 static GU_DEFINE_TYPE(PgfCCatBuf, GuBuf, gu_ptr_type(PgfCCat));
 
-typedef GuMap PgfCoerceIdx;
 GU_DEFINE_TYPE(PgfCoerceIdx, GuMap,
 		      gu_type(PgfCCat), NULL,
 		      gu_ptr_type(PgfCCatBuf), &gu_null_struct);
@@ -155,7 +153,7 @@ pgf_lzr_add_infer_entry(
 			
 
 void
-pgf_lzr_index(PgfConcr* concr, PgfCCat* cat, PgfProduction prod,
+pgf_lzr_index(PgfConcr* concr, PgfCCat* ccat, PgfProduction prod,
               GuPool *pool)
 {
 	void* data = gu_variant_data(prod);
@@ -164,27 +162,27 @@ pgf_lzr_index(PgfConcr* concr, PgfCCat* cat, PgfProduction prod,
 		PgfProductionApply* papply = data;
 		PgfInferMap* infer =
 			gu_map_get(concr->fun_indices, &papply->fun->fun,
-				   PgfInferMap*);
-		gu_debug("index: %s -> %d", papply->fun->fun, cat->fid);
+				PgfInferMap*);
+		gu_debug("index: %s -> %d", papply->fun->fun, ccat->fid);
 		if (!infer) {
 			infer = gu_map_type_new(PgfInferMap, pool);
 			gu_map_put(concr->fun_indices,
-				   &papply->fun->fun, PgfInferMap*, infer);
+				&papply->fun->fun, PgfInferMap*, infer);
 		}
-		pgf_lzr_add_infer_entry(infer, cat, papply, pool);
+		pgf_lzr_add_infer_entry(infer, ccat, papply, pool);
 		break;
 	}
 	case PGF_PRODUCTION_COERCE: {
 		PgfProductionCoerce* pcoerce = data;
 		PgfCCatBuf* cats = gu_map_get(concr->coerce_idx, pcoerce->coerce,
-					      PgfCCatBuf*);
+						PgfCCatBuf*);
 		if (!cats) {
 			cats = gu_new_buf(PgfCCat*, pool);
 			gu_map_put(concr->coerce_idx, 
-				   pcoerce->coerce, PgfCCatBuf*, cats);
+				pcoerce->coerce, PgfCCatBuf*, cats);
 		}
-		gu_debug("coerce_idx: %d -> %d", pcoerce->coerce->fid, cat->fid);
-		gu_buf_push(cats, PgfCCat*, cat);
+		gu_debug("coerce_idx: %d -> %d", pcoerce->coerce->fid, ccat->fid);
+		gu_buf_push(cats, PgfCCat*, ccat);
 		break;
 	}
 	default:

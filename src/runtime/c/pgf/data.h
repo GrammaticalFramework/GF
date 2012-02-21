@@ -173,6 +173,7 @@ struct PgfAlternative {
 struct PgfCCat {
 	PgfCncCat* cnccat;
 	PgfFunIds* lindefs;
+	size_t n_synprods;
 	PgfProductionSeq prods;
 	int fid;
 };
@@ -188,12 +189,19 @@ extern GU_DECLARE_TYPE(PgfFunIndices, GuStringMap);
 typedef GuMap PgfCoerceIdx;
 extern GU_DECLARE_TYPE(PgfCoerceIdx, GuMap);
 
+typedef GuStringMap PgfLexiconIdx;
+extern GU_DECLARE_TYPE(PgfLexiconIdx, GuStringMap);
+
+typedef GuBuf PgfEpsilonIdx;
+
 struct PgfConcr {
 	PgfFlags* cflags;
 	PgfPrintNames* printnames;
     GuMap* ccats;
 	PgfFunIndices* fun_indices;
 	PgfCoerceIdx* coerce_idx;
+	PgfLexiconIdx* lexicon_idx;
+	PgfEpsilonIdx* epsilon_idx;
     PgfCncFuns* cncfuns;
     PgfSequences* sequences;
 	PgfCIdMap* cnccats;
