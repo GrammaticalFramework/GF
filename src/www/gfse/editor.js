@@ -453,7 +453,7 @@ function draw_abstract(g) {
 	timestamp(g.abstract);
 	save_grammar(g);
     }
-    return div_id("file",
+    var file=div_id("file",
 		  [kw("abstract "),ident(g.basename),sep(" = "),
 		   draw_timestamp(g.abstract),
 		   draw_extends(g),
@@ -462,6 +462,65 @@ function draw_abstract(g) {
 				       indent(draw_cats(g))]),
 			   extensible([kw_fun,
 				       indent_sortable(draw_funs(g),sort_funs)])])]);
+    if(navigator.onLine) {
+	var mode_button=text_mode(g,file);
+	insertBefore(mode_button,file.firstChild)
+    }
+    return file;
+}
+
+function text_mode(g,file) {
+    var path=g.basename+".gf"
+    function switch_to_guided_mode() {
+	edit_grammar(g); // !!
+    }
+    function store_parsed(parse_results) {
+	var dst=compiler_output;
+	var msg=parse_results[path];
+	if(dst) dst.innerHTML=""
+	console.log(msg)
+	if(dst && msg.error)
+	    dst.appendChild(span_class("error_message",
+				       text(msg.location+": "+msg.error)))
+	else if(dst && msg.parsed)
+	    dst.innerHTML=
+	      "Accepted by GF, but not by this editor ("+msg.parsed+")"
+	else if(msg.converted) {
+	    var gnew=msg.converted;
+	    g.abstract=gnew.abstract;
+	    g.extends=gnew.extends;
+	    timestamp(g.abstract);
+	    save_grammar(g);
+	}
+	else if(dst) dst.innerHTML="unexpected parse result";
+    }
+    var last_source=show_abstract(g);
+    function parse(source) {
+	if(source!=last_source) {
+	    if(navigator.onLine) {
+		//compiler_output.innerHTML="";
+		last_source=source;
+		check_module(path,source,store_parsed)
+	    }
+	    else if(compiler_output)
+		compiler_output.innerHTML="Offline, edits will not be saved"
+	}
+    }
+    function switch_to_text_mode() {
+	var ta=node("textarea",{class:"text_mode",rows:25,cols:80},
+		[text(show_abstract(g))])
+	var timeout;
+	ta.onkeyup=function() {
+	    if(timeout) clearTimeout(timeout);
+	    timeout=setTimeout(function(){parse(ta.value)},400)
+	}
+	var mode_button=div_class("right",[button("Guided mode",switch_to_guided_mode)])
+	file.innerHTML="";
+	appendChildren(file,[mode_button,ta])
+	ta.focus();
+    }
+    var mode_button=div_class("right",[button("Text mode",switch_to_text_mode)])
+    return mode_button;
 }
 
 function add_cat(g,el) {
