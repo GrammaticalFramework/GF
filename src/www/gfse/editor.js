@@ -14,7 +14,7 @@ function initial_view() {
 
 function draw_grammar_list() {
     local.put("current",0);
-    editor.innerHTML="";
+    clear(editor);
     var uploaded=local.get("dir") && local.get("json_uploaded");
     var cloud_upload=
 	a(jsurl("upload_json()"),
@@ -122,8 +122,7 @@ function open_grammar(i) {
 }
 
 function close_grammar(g) {
-    var o=compiler_output;
-    if(o) o.innerHTML="";
+    clear(compiler_output);
     save_grammar(g);
     draw_grammar_list();
 }
@@ -135,8 +134,7 @@ function save_grammar(g) {
 }
 
 function edit_grammar(g) {
-    editor.innerHTML="";
-    editor.appendChild(draw_grammar(g));
+    replaceChildren(editor,draw_grammar(g));
 }
 
 
@@ -185,7 +183,7 @@ function draw_plainbutton(g,files) {
 function show_compile_error(res) {
     var dst=compiler_output
     if(dst) {
-	dst.innerHTML="";
+	clear(dst);
 	var minibarlink=a(res.minibar_url,[text("Minibar")])
 	if(res.errorcode=="OK")
 	    dst.appendChild(wrap("h3",text("OK")))
@@ -200,7 +198,7 @@ function show_compile_error(res) {
 
 function compile_button(g) {
     function compile() {
-	if(compiler_output) compiler_output.innerHTML="<h3>Compiling...</h3>";
+	replaceInnerHTML(compiler_output,"<h3>Compiling...</h3>");
 	upload(g,show_compile_error);
     }
     var b=button("Compile",compile);
@@ -215,7 +213,7 @@ function minibar_button(g,files) {
 	show_compile_error(res);
 	if(res.errorcode=="OK") {
 	    //location.href=res.minibar_url;
-	    files.innerHTML="";
+	    clear(files);
 	    files.appendChild(div_id("minibar"));
 	    var online_options={grammars_url: local.get("dir")+"/",
 			        grammar_list: [g.basename+".pgf"]}
@@ -237,7 +235,7 @@ function minibar_button(g,files) {
 	}
     }
     function compile() {
-	if(compiler_output) compiler_output.innerHTML="<h3>Compiling...</h3>";
+	replaceInnerHTML(compiler_output,"<h3>Compiling...</h3>");
 	upload(g,goto_minibar);
     }
     var b=button("Minibar",compile);
@@ -262,7 +260,7 @@ function concname(code) { return langname[code] || code; }
 
 function add_concrete(g,el) {
     var file=element("file");
-    file.innerHTML="";
+    clear(file);
     var dc={};
     for(var i in g.concretes)
 	dc[g.concretes[i].langcode]=true;
@@ -414,7 +412,7 @@ function delete_extends(g,ix) {
 
 function add_extends(g,el) {
     var file=element("file");
-    file.innerHTML="";
+    clear(file)
     var gs=cached_grammar_array_byname();
     var list=[]
     for(var i in gs) {
@@ -472,13 +470,14 @@ function draw_abstract(g) {
 function text_mode(g,file) {
     var path=g.basename+".gf"
     function switch_to_guided_mode() {
+	clear(compiler_output);
 	edit_grammar(g); // !!
     }
     function store_parsed(parse_results) {
 	var dst=compiler_output;
 	var msg=parse_results[path];
-	if(dst) dst.innerHTML=""
-	console.log(msg)
+	clear(dst)
+	//console.log(msg)
 	if(dst && msg.error)
 	    dst.appendChild(span_class("error_message",
 				       text(msg.location+": "+msg.error)))
@@ -492,18 +491,18 @@ function text_mode(g,file) {
 	    timestamp(g.abstract);
 	    save_grammar(g);
 	}
-	else if(dst) dst.innerHTML="unexpected parse result";
+	else replaceInnerHTML(dst,"unexpected parse result");
     }
     var last_source=show_abstract(g);
     function parse(source) {
 	if(source!=last_source) {
 	    if(navigator.onLine) {
-		//compiler_output.innerHTML="";
+		//clear(compiler_output) // makes the page "jumpy"
 		last_source=source;
 		check_module(path,source,store_parsed)
 	    }
-	    else if(compiler_output)
-		compiler_output.innerHTML="Offline, edits will not be saved"
+	    else replaceInnerHTML(compiler_output,
+				  "Offline, edits will not be saved")
 	}
     }
     function switch_to_text_mode() {
@@ -515,7 +514,7 @@ function text_mode(g,file) {
 	    timeout=setTimeout(function(){parse(ta.value)},400)
 	}
 	var mode_button=div_class("right",[button("Guided mode",switch_to_guided_mode)])
-	file.innerHTML="";
+	clear(file)
 	appendChildren(file,[mode_button,ta])
 	ta.focus();
     }
@@ -739,7 +738,7 @@ function add_open(ci) {
 	}
 	if(list.length>0) {
 	    var file=element("file");
-	    file.innerHTML="";
+	    clear(file)
 	    file.appendChild(p(text("Pick a resource library module to open:")));
 	    file.appendChild(node("ul",{},list));
 	}
@@ -1326,15 +1325,6 @@ function table(rows) { return node("table",{},rows); }
 function td_right(cs) { return node("td",{"class":"right"},cs); }
 function jsurl(js) { return "javascript:"+js; }
 
-function hidden(name,value) {
-    return node("input",{type:"hidden",name:name,value:value},[])
-}
-
-function insertBefore(el,ref) { ref.parentNode.insertBefore(el,ref); }
-
-function insertAfter(el,ref) {
-    ref.parentNode.insertBefore(el,ref.nextSibling);
-}
 /* -------------------------------------------------------------------------- */
 
 function download_from_cloud() {

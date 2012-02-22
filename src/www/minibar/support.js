@@ -128,7 +128,7 @@ function text(s) { return document.createTextNode(s); }
 function node(tag,as,ds) {
     var n=document.createElement(tag);
     for(var a in as) n.setAttribute(a,as[a]);
-    for(var i in ds) n.appendChild(ds[i]);
+    if(ds) for(var i in ds) n.appendChild(ds[i]);
     return n;
 }
 
@@ -147,9 +147,7 @@ function span_id(id) { return empty_id("span",id); }
 function wrap(tag,contents) { return node(tag,{},[contents]); }
 
 function wrap_class(tag,cls,contents) {
-  var el=empty_class(tag,cls);
-  if(contents) el.appendChild(contents);
-  return el;
+    return node(tag,{"class":cls},contents ? [contents] : [])
 }
 
 function span_class(cls,contents) { return wrap_class("span",cls,contents); }
@@ -177,6 +175,20 @@ function option(label,value) {
     return node("option",{"value":value},[text(label)]);
 }
 
+function hidden(name,value) {
+    return node("input",{type:"hidden",name:name,value:value},[])
+}
+
+function tda(cs) { return node("td",{},cs); }
+
+function img(src) { return empty("img","src",src); }
+
+/* --- Document modification ------------------------------------------------ */
+
+function clear(el) { replaceInnerHTML(el,""); }
+function replaceInnerHTML(el,html) { if(el) el.innerHTML=html; }
+function replaceChildren(el,newchild) { clear(el); el.appendChild(newchild); }
+
 function appendChildren(el,ds) {
     for(var i in ds) el.appendChild(ds[i]);
     return el;
@@ -186,9 +198,11 @@ function insertFirst(parent,child) {
     parent.insertBefore(child,parent.firstChild);
 }
 
-function tda(cs) { return node("td",{},cs); }
+function insertBefore(el,ref) { ref.parentNode.insertBefore(el,ref); }
 
-function img(src) { return empty("img","src",src); }
+function insertAfter(el,ref) {
+    ref.parentNode.insertBefore(el,ref.nextSibling);
+}
 
 /* --- Debug ---------------------------------------------------------------- */
 
