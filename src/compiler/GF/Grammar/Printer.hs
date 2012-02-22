@@ -13,6 +13,7 @@ module GF.Grammar.Printer
            , ppGrammar
            , ppModule
            , ppJudgement
+           , ppParams
            , ppTerm
            , ppPatt
            , ppValue
@@ -20,6 +21,7 @@ module GF.Grammar.Printer
            , ppLocation
            , ppQIdent
            , ppMeta
+           , getAbs
            ) where
 
 import GF.Infra.Ident
@@ -107,7 +109,7 @@ ppJudgement q (id, AbsFun ptype _ pexp poper) =
 ppJudgement q (id, ResParam pparams _) = 
   text "param" <+> ppIdent id <+>
   (case pparams of
-     Just (L _ ps) -> equals <+> fsep (intersperse (char '|') (map (ppParam q) ps))
+     Just (L _ ps) -> equals <+> ppParams q ps
      _             -> empty) <+> semi
 ppJudgement q (id, ResValue pvalue) = empty
 ppJudgement q (id, ResOper  ptype pexp) =
@@ -304,6 +306,7 @@ ppBind (Implicit,v) = braces (ppIdent v)
 
 ppAltern q (x,y) = ppTerm q 0 x <+> char '/' <+> ppTerm q 0 y
 
+ppParams q ps = fsep (intersperse (char '|') (map (ppParam q) ps))
 ppParam q (id,cxt) = ppIdent id <+> hsep (map (ppDDecl q) cxt)
 
 ppLocation :: FilePath -> Location -> Doc

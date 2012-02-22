@@ -461,14 +461,21 @@ function draw_abstract(g) {
 			   extensible([kw_fun,
 				       indent_sortable(draw_funs(g),sort_funs)])])]);
     if(navigator.onLine) {
-	var mode_button=text_mode(g,file);
+	var mode_button=text_mode(g,file,0);
 	insertBefore(mode_button,file.firstChild)
     }
     return file;
 }
 
-function text_mode(g,file) {
-    var path=g.basename+".gf"
+function module_name(g,ix) {
+    return ix==0 ? g.basename : g.basename+g.concretes[ix-1].langcode
+}
+function show_module(g,ix) {
+    return ix==0 ? show_abstract(g) : show_concrete(g)(g.concretes[ix-1]);
+}
+
+function text_mode(g,file,ix) {
+    var path=module_name(g,ix)+".gf"
     function switch_to_guided_mode() {
 	clear(compiler_output);
 	edit_grammar(g); // !!
@@ -485,11 +492,24 @@ function text_mode(g,file) {
 	    dst.innerHTML=
 	      "Accepted by GF, but not by this editor ("+msg.parsed+")"
 	else if(msg.converted) {
-	    var gnew=msg.converted;
-	    g.abstract=gnew.abstract;
-	    g.extends=gnew.extends;
-	    timestamp(g.abstract);
-	    save_grammar(g);
+	    if(ix==0) {
+		var gnew=msg.converted;
+		g.abstract=gnew.abstract;
+		g.extends=gnew.extends;
+		timestamp(g.abstract);
+		save_grammar(g);
+	    }
+	    else {
+		var conc=g.concretes[ix-1];
+		var cnew=msg.converted.concretes[0];
+		conc.opens=cnew.opens;
+		conc.params=cnew.params;
+		conc.lincats=cnew.lincats;
+		conc.opers=cnew.opers;
+		conc.lins=cnew.lins;
+		timestamp(conc);
+		save_grammar(g);
+	    }
 	}
 	else replaceInnerHTML(dst,"unexpected parse result");
     }
@@ -507,7 +527,7 @@ function text_mode(g,file) {
     }
     function switch_to_text_mode() {
 	var ta=node("textarea",{class:"text_mode",rows:25,cols:80},
-		[text(show_abstract(g))])
+		    [text(show_module(g,ix))])
 	var timeout;
 	ta.onkeyup=function() {
 	    if(timeout) clearTimeout(timeout);
@@ -704,7 +724,7 @@ function draw_concrete(g,i) {
     kw_param.title="Parameter type definitions can be added here. [C.3.12]"
     var kw_oper=kw("oper")
     kw_oper.title="Operation definitions can be added here. [C.3.14]"
-    return div_id("file",
+    var file=div_id("file",
 		  [kw("concrete "),
 		   ident(g.basename),
 		   editable("span",ident(conc.langcode),g,
@@ -719,6 +739,11 @@ function draw_concrete(g,i) {
 		   indent([extensible([kw_oper,draw_opers(g,i)])]),
 		   exb_extra(g,i)
 		  ])
+    if(navigator.onLine) {
+	var mode_button=text_mode(g,file,i+1);
+	insertBefore(mode_button,file.firstChild)
+    }
+    return file;
 }
 
 var rgl_modules=["Paradigms","Syntax","Lexicon","Extra"];
