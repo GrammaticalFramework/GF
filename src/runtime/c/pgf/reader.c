@@ -44,6 +44,7 @@ struct PgfReader {
 	GuIn* in;
 	GuExn* err;
 	GuPool* opool;
+	GuPool* tmp_pool;
 	GuSymTable* symtab;
 	PgfConcr* curr_concr;
 	GuMap* curr_lindefs;
@@ -692,7 +693,7 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
 	concr->cncfuns =
 		pgf_read_new(rdr, gu_type(PgfCncFuns), pool, NULL);
 	GuMapType* lindefs_t = gu_type_cast(gu_type(PgfLinDefs), GuMap);
-	rdr->curr_lindefs = gu_map_type_make(lindefs_t, pool);
+	rdr->curr_lindefs = gu_map_type_make(lindefs_t, rdr->tmp_pool);
 	pgf_read_into_map(lindefs_t, rdr, rdr->curr_lindefs);
 	GuMapType* ccats_t = gu_type_cast(gu_type(PgfCCatMap), GuMap);
 	concr->ccats =
@@ -816,6 +817,7 @@ pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 {
 	PgfReader* rdr = gu_new(PgfReader, tmp_pool);
 	rdr->opool = opool;
+	rdr->tmp_pool = tmp_pool;
 	rdr->symtab = gu_new_symtable(opool, tmp_pool);
 	rdr->err = err;
 	rdr->in = in;
