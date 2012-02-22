@@ -127,7 +127,7 @@ pgf_print_production(int fid, PgfProduction prod, GuWriter *wtr, GuExn* err)
     }
     case PGF_PRODUCTION_COERCE: {
         PgfProductionCoerce* pcoerce = i.data;
-        gu_printf(wtr,err,"_[C%d]\n",pcoerce->coerce);
+        gu_printf(wtr,err,"_[C%d]\n",pcoerce->coerce->fid);
         break;
     }
     default:
@@ -172,7 +172,7 @@ pgf_print_item(PgfItem* item, GuWriter* wtr, GuExn* err)
 	}
 	case PGF_PRODUCTION_COERCE: {
 		PgfProductionCoerce* pcoerce = i.data;
-        gu_printf(wtr, err, "_[%d]; %d : ",
+        gu_printf(wtr, err, "_[C%d]; %d : ",
             pcoerce->coerce->fid,
             item->base->lin_idx);
         if (item->seq_idx == 0)
