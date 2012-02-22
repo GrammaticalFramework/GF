@@ -1058,7 +1058,7 @@ function draw_lins(g,ci) {
 	}
 	l.push(sep(" = "));
 	var t=editable("span",text_ne(f.lin),g,edit(f),"Edit lin for "+f.fun);
-	appendChildren(t,exb_linbuttons(g,ci,f));
+	t.appendChild(exb_linbuttons(g,ci,f));
 	l.push(t);
 	return node("span",{"class":cls},l);
     }
