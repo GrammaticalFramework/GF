@@ -189,10 +189,11 @@ extern GU_DECLARE_TYPE(PgfFunIndices, GuStringMap);
 typedef GuMap PgfCoerceIdx;
 extern GU_DECLARE_TYPE(PgfCoerceIdx, GuMap);
 
-typedef GuStringMap PgfLexiconIdx;
-extern GU_DECLARE_TYPE(PgfLexiconIdx, GuStringMap);
+typedef GuStringMap PgfTransitions;
+extern GU_DECLARE_TYPE(PgfTransitions, GuStringMap);
 
-typedef GuBuf PgfEpsilonIdx;
+typedef GuMap PgfEpsilonIdx;
+extern GU_DECLARE_TYPE(PgfEpsilonIdx, GuMap);
 
 struct PgfConcr {
 	PgfFlags* cflags;
@@ -200,7 +201,7 @@ struct PgfConcr {
     GuMap* ccats;
 	PgfFunIndices* fun_indices;
 	PgfCoerceIdx* coerce_idx;
-	PgfLexiconIdx* lexicon_idx;
+	PgfTransitions* lexicon_idx;
 	PgfEpsilonIdx* epsilon_idx;
     PgfCncFuns* cncfuns;
     PgfSequences* sequences;
