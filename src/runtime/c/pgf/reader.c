@@ -34,6 +34,8 @@
 
 typedef struct PgfIdContext PgfIdContext;
 
+typedef GuMap PgfContsMap;
+
 //
 // PgfReader
 // 
@@ -48,6 +50,7 @@ struct PgfReader {
 	GuSymTable* symtab;
 	PgfConcr* curr_concr;
 	GuMap* curr_lindefs;
+	PgfContsMap* curr_conts_map;   // used temporary for building the bu index for the parser
 	GuTypeMap* read_to_map;
 	GuTypeMap* read_new_map;
 	void* curr_key;
@@ -440,14 +443,6 @@ pgf_read_to_PgfCCatId(GuType* type, PgfReader* rdr, void* to)
     *pto = ccat;
 }
 
-void
-pgf_parser_bu_index(PgfConcr* concr, PgfCCat* cat, PgfProduction prod, 
-                    GuPool *pool);
-
-void
-pgf_lzr_index(PgfConcr* concr, PgfCCat* cat, PgfProduction prod, 
-              GuPool *pool);
-
 static void
 pgf_read_to_PgfCCat(GuType* type, PgfReader* rdr, void* to)
 {
@@ -488,9 +483,6 @@ pgf_read_to_PgfCCat(GuType* type, PgfReader* rdr, void* to)
 		default:
 			gu_impossible();
 		}
-		
-		pgf_parser_bu_index(rdr->curr_concr, ccat, prod, rdr->opool);
-		pgf_lzr_index(rdr->curr_concr, ccat, prod, rdr->opool);
 	}
 
 	ccat->n_synprods = top;
@@ -668,6 +660,11 @@ pgf_ccat_set_cnccat(PgfCCat* ccat)
 	return ccat->cnccat;
 }
 
+typedef struct {
+	GuMapItor fn;
+	PgfReader* rdr;
+} PgfIndexFn;
+
 static void
 pgf_read_ccat_cb(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
@@ -675,6 +672,40 @@ pgf_read_ccat_cb(GuMapItor* fn, const void* key, void* value, GuExn* err)
 	PgfCCat* ccat = *((PgfCCat**) value);
 
 	pgf_ccat_set_cnccat(ccat);
+}
+
+extern GU_DECLARE_TYPE(PgfContsMap, GuMap);
+
+void
+pgf_parser_bu_index(PgfConcr* concr, PgfCCat* cat, PgfProduction prod, 
+                    PgfContsMap* conts_map,
+                    GuPool *pool, GuPool *tmp_pool);
+
+void
+pgf_lzr_index(PgfConcr* concr, PgfCCat* cat, PgfProduction prod, 
+              GuPool *pool);
+
+static void
+pgf_index_prods(GuMapItor* fn, const void* key, void* value, GuExn* err)
+{
+	(void) (key && err);
+	
+	PgfIndexFn* clo = (PgfIndexFn*) fn;
+    PgfCCat* ccat = *((PgfCCat**) value);
+    PgfReader *rdr = clo->rdr;
+
+	if (gu_seq_is_null(ccat->prods))
+		return;
+
+	size_t n_prods = gu_seq_length(ccat->prods);
+	for (size_t i = 0; i < n_prods; i++) {
+		PgfProduction prod = gu_seq_get(ccat->prods, PgfProduction, i);
+
+		pgf_parser_bu_index(rdr->curr_concr, ccat, prod, 
+		                     rdr->curr_conts_map,
+		                     rdr->opool, rdr->tmp_pool);
+		pgf_lzr_index(rdr->curr_concr, ccat, prod, rdr->opool);
+	}
 }
 
 static void*
@@ -695,19 +726,23 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
 	GuMapType* lindefs_t = gu_type_cast(gu_type(PgfLinDefs), GuMap);
 	rdr->curr_lindefs = gu_map_type_make(lindefs_t, rdr->tmp_pool);
 	pgf_read_into_map(lindefs_t, rdr, rdr->curr_lindefs);
+	rdr->curr_conts_map = gu_map_type_new(PgfContsMap, rdr->tmp_pool);
 	GuMapType* ccats_t = gu_type_cast(gu_type(PgfCCatMap), GuMap);
 	concr->ccats =
 		gu_new_int_map(PgfCCat*, &gu_null_struct, pool);
 	concr->fun_indices = gu_map_type_new(PgfFunIndices, pool);
-	concr->coerce_idx  = gu_map_type_new(PgfCoerceIdx, pool);
-	concr->lexicon_idx = gu_map_type_new(PgfLexiconIdx, pool);
-	concr->epsilon_idx = gu_new_buf(struct PgfItemBase*, pool);
+	concr->coerce_idx  = gu_map_type_new(PgfCoerceIdx,  pool);
+	concr->lexicon_idx = gu_map_type_new(PgfTransitions,pool);
+	concr->epsilon_idx = gu_map_type_new(PgfEpsilonIdx, pool);
 	pgf_read_into_map(ccats_t, rdr, concr->ccats);
 	concr->cnccats = pgf_read_new(rdr, gu_type(PgfCncCatMap), pool, NULL);
 	concr->max_fid = pgf_read_int(rdr);
 
-	GuMapItor fn = { pgf_read_ccat_cb };
-	gu_map_iter(concr->ccats, &fn, NULL);
+	PgfIndexFn clo1 = { { pgf_read_ccat_cb }, rdr };
+	gu_map_iter(concr->ccats, &clo1.fn, NULL);
+	
+	PgfIndexFn clo2 = { { pgf_index_prods }, rdr };
+	gu_map_iter(concr->ccats, &clo2.fn, NULL);
 
     // set the function ids
     int n_funs = gu_list_length(concr->cncfuns);
@@ -822,6 +857,8 @@ pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 	rdr->err = err;
 	rdr->in = in;
 	rdr->curr_concr = NULL;
+	rdr->curr_lindefs = NULL;
+	rdr->curr_conts_map = NULL;
 	rdr->read_to_map = gu_new_type_map(&pgf_read_to_table, tmp_pool);
 	rdr->read_new_map = gu_new_type_map(&pgf_read_new_table, tmp_pool);
 	return rdr;
