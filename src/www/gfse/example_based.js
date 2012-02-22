@@ -186,5 +186,5 @@ function exb_linbuttons(g,ci,f) {
 	var exb_output=node("span",{"class":"exb_output"},[]);
 	buttons.push(exb_output)
     }
-    return buttons
+    return node("span",{"class":"exb_linbuttons"},buttons)
 }
