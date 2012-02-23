@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../prelude:c:/gf_unicoded/hindustani
+--# -path=.:../abstract:../common:../prelude:
 
  concrete GrammarHin of Grammar = 
   NounHin, 
@@ -11,9 +11,9 @@
   RelativeHin,
   ConjunctionHin,
   PhraseHin,
-  TextX - [Adv,AdN],
+  TextX - [Adv,AdN,SC],
   StructuralHin,
-  TenseX - [Adv,AdN],
+  TenseX - [Adv,AdN,SC],
   IdiomHin
   ** {
 

@@ -1,2 +1,3 @@
-concrete CatHin of Cat = CommonX - [Adv,AdN] ** CatHindustani with
-  (ResHindustani = ResHin) ;
+concrete CatHin of Cat = CommonX - [Adv,AdN,SC] ** CatHindustani with
+  (ResHindustani = ResHin);
+

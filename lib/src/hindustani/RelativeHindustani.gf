@@ -1,6 +1,6 @@
 --concrete RelativeUrd of Relative = CatUrd ** open ResUrd, StringsHindustani in {
 incomplete concrete RelativeHindustani of Relative = 
-  CatHindustani ** open CommonHindustani, ResHindustani, StringsHindustani, Prelude in {
+  CatHindustani ** open CommonHindustani, ResHindustani, Prelude in {
 
   flags optimize=all_subs ;
   coding = utf8;
@@ -11,7 +11,7 @@ incomplete concrete RelativeHindustani of Relative =
       s = \\t,p,o,agr => case <t,giveNumber agr> of {
 	                    <VPImpPast,Sg> => js ++ cl.s ! t ! p ! o ; 
 						<VPImpPast,Pl> => jn ++ cl.s ! t ! p ! o ;
-						<_,_>          => "jw" ++ cl.s ! t ! p ! o 
+						<_,_>          => jw ++ cl.s ! t ! p ! o 
 			};
       c = Dir
       } ;

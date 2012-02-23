@@ -11,10 +11,10 @@
   RelativeUrd,
   ConjunctionUrd,
   PhraseUrd,
-  TextUrd - [Adv,AdN],
+  TextUrd - [Adv,AdN,SC],
 --  TextX - [Adv,AdN],
   StructuralUrd,
-  TenseX - [Adv,AdN],
+  TenseX - [Adv,AdN,SC],
   IdiomUrd
   ** {
 

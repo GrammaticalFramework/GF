@@ -123,15 +123,16 @@ transDevanagari :: Transliteration
 transDevanagari = 
   (mkTransliteration "Devanagari" 
     allTransUrduHindi allCodes){invisible_chars = ["a"]} where
-      allCodes = [0x0900 .. 0x095f]
+      allCodes = [0x0900 .. 0x095f] ++ [0x0966 .. 0x096f]
 
 allTransUrduHindi = words $
-    "-  M  N  -  -  a- A- i- I- u- U- R- -  -  -  e- " ++
-    "E- -  -  o- O- k  K  g  G  N: c  C  j  J  n: t. " ++
-    "T. d. D. n. t  T  d  D  n  -  p  P  b  B  m  y  " ++
-    "r  -  l  -  -  v  S  s. s  h  -  -  r: -  A  i  " ++
-    "I  u  U  R  -  -  -  e  E  o  O  -  -  -  -  -  " ++
-    "-  -  -  -  -  -  -  -  -  -  -  z  r. -  -  -  "
+    "-  n~ m. h.  -  A A: I I: U U: r.- l.-  -  -  E: " ++
+    "E+ -  -  O: O+ k  k'  g  g'  n- c  c'  j  j'  n* T " ++
+    "T' D D' N t  t'  d  d'  n  -  p  p'  b  b'  m  y  " ++
+    "r  -  l  L  -  v  s*  S  s  h  -  -  X~ -  a:  i  " ++
+    "i:  u  u:  r.  l.  -  -  e:  e+  -  -  o:  o+  X,  -  -  " ++
+    "-  -  -  -  -  -  -  -  q  x  g.  z  R R'  f  -  " ++
+    "N0 N1 N2 N3 N4 N5 N6 N7 N8 N9 "
 
 
 transUrdu :: Transliteration
@@ -150,7 +151,7 @@ transUrdu =
 transSindhi :: Transliteration
 transSindhi = 
   (mkTransliteration "Sindhi" allTrans allCodes) where
-    allCodes = [0x0626 .. 0x062f] ++ [0x0630 .. 0x063a] ++ [0x0641 .. 0x0648] ++
+    allCodes = [0x062e] ++ [0x0627 .. 0x062f] ++ [0x0630 .. 0x063a] ++ [0x0641 .. 0x0648] ++
                [0x067a,0x067b,0x067d,0x067e,0x067f] ++ [0x0680 .. 0x068f] ++
                [0x0699,0x0918,0x06a6,0x061d,0x06a9,0x06af,0x06b3,0x06bb,0x06be,0x06f6,0x06cc,0x06b1, 0x06aa, 0x06fd, 0x06fe] ++
 			   [0x06f0 .. 0x06f9] ++ [0x061f,0x06D4]

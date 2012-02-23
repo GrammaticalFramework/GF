@@ -1,6 +1,6 @@
 concrete TextUrd of Text = CommonX - [Temp,TTAnt,Tense,TPres,TPast,TFut,TCond] ** {
 
--- This works for the special punctuation marks of Urdu but still browser does not display them well so left balnk.
+-- This works for the special punctuation marks of Urdu.
 
   lin
     TEmpty = {s = []} ;

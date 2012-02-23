@@ -3,127 +3,128 @@ concrete StructuralHin of Structural = CatHin **
 
   flags optimize=all ;
   coding = utf8;
-
+  
   lin
-  above_Prep = mkPrep "wपर" "wपर" ;
-  after_Prep = mkPrep ["कै बेद"]  ["कै बेद"] ;
-  all_Predet = ss "तमम" ;
-  almost_AdA, almost_AdN = mkAdN "तqरयब" ;
-  although_Subj = ss "गरचh-" ;
-  always_AdV = ss "हमयXह" ;
-  and_Conj = sd2 [] "wर" ** {n = Pl} ;
-  because_Subj = ss "कयwनकh-" ;
-  before_Prep = mkPrep "पहलै" "पहलै" ;
-  behind_Prep = mkPrep "पयचh-ै" "पयचh-ै" ;
-  between_Prep = mkPrep "दरमयं" "दरमयं" ;
-  both7and_DConj = sd2 "दwनwं" "wर" ** {n = Pl} ;
-  but_PConj = ss "लयकन" ;
+  above_Prep = mkPrep ["के ऊपर"] ["के ऊपर"] ;
+  after_Prep = mkPrep ["के बाद"]  ["के बाद"] ;
+  all_Predet = ss "तमाम" ;
+  almost_AdA, almost_AdN = mkAdN "तक़रीबन" ;
+  although_Subj = ss "अगरचि" ;
+  always_AdV = ss "हमेशा" ;
+  and_Conj = sd2 [] "और" ** {n = Pl} ;
+  because_Subj = ss "क्योँकि" ;
+  before_Prep = mkPrep ["से पहले"] ["से पहले"] ; 
+  behind_Prep = mkPrep ["के पीछे"] ["के पीछे"] ;
+  between_Prep = mkPrep ["के दरमियान"] ["के दरमियान"] ;
+  both7and_DConj = sd2 "दोनों" "और" ** {n = Pl} ;
+  but_PConj = ss "लेकिन" ;
   by8agent_Prep = mkPrep "" "" ;
   by8means_Prep = mkPrep "" "" ;
---  can8know_VV,can_VV = mkV "सकन" ** { isAux = True} ;
-  during_Prep = mkPrep ["कै दरमयं"] ["कै दरमयं"] ;
-  either7or_DConj = sd2 "कwय यक" "य" ** {n = Sg} ;
-  everybody_NP =  MassNP (UseN (ParadigmsHin.mkN "हर कwय" "हर कwय" "हर कwय" "हर कwय" "हर कwय" "हर कwय" Masc )); -- not a good way coz need to include NounHin
---  every_Det = mkDet "हर" Sg;
-  everything_NP = MassNP (UseN (ParadigmsHin.mkN "हर चयज़" "हर चयज़" "हर चयज़w" "सब चयज़यं" "सब चयज़wं" "सब चयज़w" Masc ));
+  can8know_VV,can_VV = mkV "सकना" ** { isAux = True} ;
+  during_Prep = mkPrep ["के दरमियान"] ["के दरमियान"] ;
+  either7or_DConj = sd2 "कोई एक" "या" ** {n = Sg} ;
+  everybody_NP =  MassNP (UseN (ParadigmsHin.mkN "हर कोई" "हर कोई" "हर कोई" "हर कोई" "हर कोई" "हर कोई" Masc )); 
+  every_Det = mkDet "हर" "हर" "हर" "हर" Sg;
+  everything_NP = MassNP (UseN (ParadigmsHin.mkN "हर चीज़" "हर चीज़" "हर चीज़ोँ" "सब चीज़ेँ" "सब चीज़ोँ" "सब चीज़ोँ" Masc ));
   everywhere_Adv = mkAdv "हर जगह" ;
---  few_Det = mkDet "चनद" Pl ;
-  first_Ord = {s = "पेहल" ; n = Sg} ; --DEPRECATED
-  for_Prep = mkPrep "कयलयै" "कयलयै" ;
-  from_Prep = mkPrep "सै" "सै" ;
-  he_Pron = personalPN "wह" "स" "" "स क"  Sg Masc Pers3_Distant ;
-  here_Adv = mkAdv "यहं" ;
-  here7to_Adv = mkAdv "यहं पर" ;
-  here7from_Adv = mkAdv "यहं सै" ;
-  how_IAdv = ss "कयसै" ;
-  how8many_IDet = makeIDet "कतनै" "कतनय" Pl ;
-  if_Subj = ss "गर" ;
-  in8front_Prep = mkPrep ["कै समनै"] ["कै समनै"] ;
-  i_Pron = personalPN "मयं" "मजh-" "" "मयर" Sg Masc Pers1;
+  few_Det = mkDet "चंद" "चंद" "चंद" "चंद" Pl ;
+  first_Ord = {s = "" ; n = Sg} ; --De:PRe:CATe:D
+  for_Prep = mkPrep ["के लिये"] ["के लिये"]  ;
+  from_Prep = mkPrep "से" "से" ;
+  he_Pron = personalPN "वह" "उस" "" "उस का" "उस की" "उस के" "उस की" Sg Masc Pers3_Distant ;
+  here_Adv = mkAdv "यहाँ" ;
+  here7to_Adv = mkAdv ["यहाँ पर"] ;
+  here7from_Adv = mkAdv ["यहाँ से"] ;
+  how_IAdv = ss "कैसे" ;
+  how8many_IDet = makeIDet "कितने" "कितनी" Pl ;
+  how8much_IAdv  = ss "कितना" ;
+  if_Subj = ss "अगर" ;
+  in8front_Prep = mkPrep ["के सामने"] ["के सामने"] ;
+  i_Pron = personalPN "मैं" "मुझ" "" "मेरा" "मेरी" "मेरे" "मेरी" Sg Masc Pers1;
   in_Prep = mkPrep "में" "में" ;
-  it_Pron  = personalPN "यह" "यह" "यह" "स क" Sg Masc Pers3_Near;
+  it_Pron  = personalPN "यह" "इस" "यह" "इस का" "इस की" "उस के" "उस की" Sg Masc Pers3_Near;
   less_CAdv = {s = "कम" ; p = ""} ;
---  many_Det = mkDet "बहत ज़यदह" Pl ;
-  more_CAdv = {s = "ज़यदh-" ; p = "" } ;
-  most_Predet = ss "ज़यदह तर" ;
-  --much_Det = mkDet "बहत" Pl  ;
+  many_Det = mkDet "बहुत" "बहुत" "बहुत" "बहुत" Pl ;
+  more_CAdv = {s = "ज़्यादा" ; p = "से" } ;
+  most_Predet = ss "सब से ज़्यादा" ;
+  much_Det = mkDet "बहुत" "बहुत" "बहुत" "बहुत" Sg  ;
 --  must_VV = {
 --    s = table {
---      VVF VInf => ["हवे तॉ"] ;
+--      VVF VInf => ["हवe तo"] ;
 --      VVF VPres => "मुसत" ;
---      VVF VPPart => ["हद तॉ"] ;
---      VVF VPresPart => ["हविनग तॉ"] ;
---      VVF VPast => ["हद तॉ"] ;      --# notpresent
---      VVPastNeg => ["हदn'त तॉ"] ;      --# notpresent
+--      VVF VPPart => ["हद तo"] ;
+--      VVF VPresPart => ["हविनग तo"] ;
+--      VVF VPast => ["हद तo"] ;      --# notpresent
+--      VVPastNeg => ["हदn'त तo"] ;      --# notpresent
 --      VVPresNeg => "मुसतn'त"
 --      } ;
 --    isAux = True
 --    } ;
------b  no_Phr = ss "नॉ" ;
-  no_Utt = ss "नहयं" ;
+  no_Utt = ss "नहीं" ;
   on_Prep = mkPrep "पर" "पर" ;
---  one_Quant = demoPN "यक" "यक" "यक" ; -- DEPRECATED
-  only_Predet = ss "सरf" ;
-  or_Conj = sd2 [] "य" ** {n = Sg} ;
-  otherwise_PConj = ss "य पh-र" ;
+--  one_Quant = demoPN "" ; -- De:PRe:CATe:D
+  only_Predet = ss "सिर्फ़" ;
+  or_Conj = sd2 [] "या" ** {n = Sg} ;
+  otherwise_PConj = ss "नहीं तो" ;
   part_Prep = mkPrep "" "" ;
-  please_Voc = ss "महरबनि" ;
-  possess_Prep = mkPrep "क" "कय" ;
-  quite_Adv = ss "कहमॉसह" ;
-  she_Pron = personalPN "wह" "स" "wह" "स कय" Sg Fem Pers3_Distant ;
-  so_AdA = ss "सॉ" ;
-  somebody_NP = MassNP (UseN (ParadigmsHin.mkN "कwय" "कwय" "कwय" "कwय" "कwय" "कwय" Masc ));
-  --someSg_Det = mkDet "कचh-" Sg ;
-  --somePl_Det = mkDet "कचh-" Pl ;
-  something_NP = MassNP (UseN (ParadigmsHin.mkN "कwय चयज़" "कwय चयज़" "कwय चयज़" "कh- चयज़यं" "कh- चयज़wं" "कh- चयज़w" Masc ));
-  somewhere_Adv = mkAdv "कहिन पर" ;
-  that_Quant = demoPN "wह" "स" "न" ;
-  that_Subj = ss "कह";
-  there_Adv = mkAdv "wहं" ;
-  there7to_Adv = mkAdv "wहं पर" ;
-  there7from_Adv = mkAdv ["wहं सै"] ;
-  therefore_PConj = ss "स लयै" ;
-  they_Pron = personalPN "wह" "wह" "wह" "न क" Pl Masc Pers3_Distant ; ---- 
-  this_Quant = demoPN "यह" "स" "न";      
-  through_Prep = mkPrep ["मयं सै"] ["मयं सै"] ;
-  too_AdA = ss "बहत" ;
-  to_Prep = mkPrep "कw" "कw" ;
-  under_Prep = mkPrep "नयचै" "नयचै" ;
-  very_AdA = ss "बहत" ;
---  want_VV = mkV "चहन" ** { isAux = False} ;
-  we_Pron = personalPN "हम" "हम" "हम" "हमर" Pl Masc Pers1 ;
-  whatSg_IP = mkIP "कय" "किस" "किस" Sg Masc ;
-  whatPl_IP = mkIP "कय" "किन" "किन" Pl Masc ;
+--  please_Voc = ss "" ;
+  possess_Prep = mkPrep "का" "की" ;
+  quite_Adv = ss "काफ़ी" ;
+  she_Pron = personalPN "वह" "उस" "उस" "उस का" "उस की" "उस के" "उस की"  Sg Fem Pers3_Distant ; -- chek with prasad about 'Us'
+  so_AdA = ss "तो" ;
+  somebody_NP = MassNP (UseN (ParadigmsHin.mkN "कोई" "कोई" "कोई" "कोई" "कोई" "कोई" Masc ));
+  someSg_Det = mkDet "कुछ" "कुछ" "कुछ" "कुछ" Sg ;
+  somePl_Det = mkDet "कुछ" "कुछ" "कुछ" "कुछ" Pl ;
+  something_NP = MassNP (UseN (ParadigmsHin.mkN ["कोई चीज़"] ["कोई चीज़"] ["कोई चीज़"] ["कोई चीज़"] ["कोई चीज़"] ["कोई चीज़"] Masc ));
+  somewhere_Adv = mkAdv ["कहीं"] ;
+  that_Quant = demoPN "वह" "उस" "उन" ;
+  that_Subj = ss "कि";
+  there_Adv = mkAdv "वहाँ" ;
+  there7to_Adv = mkAdv ["वहाँ पर"] ;
+  there7from_Adv = mkAdv ["वहाँ से"] ;
+  therefore_PConj = ss "इस लिये" ;
+  they_Pron = personalPN "वह" "वह" "वह" "उन का" "उन की" "उन के" "उन की" Pl Masc Pers3_Distant ; ---- 
+  this_Quant = demoPN "यह" "इस" "इन";      
+  through_Prep = mkPrep ["में से"] ["में से"] ;
+  too_AdA = ss "बहुत" ;
+  to_Prep = mkPrep "को" "को" ; -- ** {lock_Prep = <>};
+  under_Prep = mkPrep ["के नीचे"] ["के नीचे"] ; -- ** {lock_Prep = <>};
+  very_AdA = ss "बहुत" ;
+  want_VV = mkV "चाहना" ** { isAux = False} ;
+  we_Pron = personalPN "हम" "हम" "हम" "हमारा" "हमारी" "हमारे" "हमारी" Pl Masc Pers1 ;
+  whatSg_IP = mkIP "क्या" "क्या" "क्या" Sg Masc ; -- confirm
+  whatPl_IP = mkIP "क्या" "क्या" "क्या" Pl Masc ;
   when_IAdv = ss "कब" ;
   when_Subj = ss "कब" ;
-  where_IAdv = ss "कहं" ;
-  which_IQuant = {s = \\_ => "कwन सय"} ;
---  whichPl_IDet = makeDet "कwन स" "कwन सय" "कwन सै" "कwन सय" ;
---  whichSg_IDet = makeDet "कwन स" "कwन सय" "कwन सै" "कwन सय" ;
-  whoSg_IP = mkIP "कwन" "किस" "किस" Sg Masc  ;
-  whoPl_IP = mkIP "कwन" "कन" "कनहwं" Pl Masc ;
-  why_IAdv = ss "कयwं" ;
-  without_Prep = mkPrep ["कै बघयर"] ["कै बघयर"] ;
-  with_Prep = mkPrep ["कै सतh-"] ["कै सतh-"] ;
---  yes_Phr = ss "हं" ;
-  yes_Utt = ss "हं" ;
-  youSg_Pron = personalPN "तम" "तम" "तम" "तमh-र" Sg Masc Pers2_Casual ;
-  youPl_Pron = personalPN "तम" "तम" "तम" "तमh-र" Pl Masc Pers2_Casual ;
-  youPol_Pron = personalPN "ाप" "ाफ" "ाफ" "ाप क" Sg Masc Pers2_Respect  ;
-  no_Quant =  demoPN " कwय नहयं" "कwय नहयं" "कwय नहयं" ; 
-  not_Predet = {s="नहयं"} ;
-  if_then_Conj = sd2 "गर" "तw" ** {n = Sg} ; 
-  at_least_AdN = mkAdN ["कम ज़ कम"] ;
-  at_most_AdN = mkAdN ["ज़यदह सै ज़यदह"];
-  nothing_NP = MassNP (UseN (ParadigmsHin.mkN "कwय चयज़ नहयं" "कwय चयज़ नहयं" "कwय चयज़ नहयं" "कwय चयज़ नहयं" "कwय चयज़ नहयं" "कwय चयज़ नहयं" Masc )); 
-  except_Prep = mkPrep "सwै" "सwै" ;
-  nobody_NP = MassNP (UseN (ParadigmsHin.mkN "कwय नहयं" "कwय नहयं" "कwय नहयं" "कwय नहयं" "कwय नहयं" "कwय नहयं" Masc ));  
+  where_IAdv = ss "कहाँ" ;
+  which_IQuant = mkIQuant ["कौन सा"] ["कौन से"] "" ["कौन सी"] ["कौन सी"] ""
+                          ["कौन से"] ["कौन से"] "" ["कौन सी"] ["कौन सी"] "" ; -- need to put right forms Prasad
+--  whichPl_IDet = makeDet "" ;
+--  whichSg_IDet = makeDet "";
+  whoSg_IP = mkIP "कौन" "किस" "किस" Sg Masc  ;
+  whoPl_IP = mkIP "कौन" "किन" "किनहों" Pl Masc ;
+  why_IAdv = ss "क्यों" ;
+--  without_Prep = mkPrep ;
+  with_Prep = mkPrep ["के साथ"] ["के साथ"] ;
+--  yes_Phr = ss "???" ;
+  yes_Utt = ss "हाँ" ;
+  youSg_Pron = personalPN "तू" "तुम" "तुम" "तुमहारा" "तुमहारी" "तुमहारे" "तुमहारी" Sg Masc Pers2_Casual ;
+  youPl_Pron = personalPN "तुम" "तुम" "तुम" "तुमहारा" "तुमहारी" "तुमहारे" "तुमहारी" Pl Masc Pers2_Casual ;
+  youPol_Pron = personalPN "आप" "आप" "आप" "आप का" "आप की" "आप के" "आप की" Sg Masc Pers2_Respect  ;
+--  no_Quant =  demoPN "कोई नहीं" ; 
+  not_Predet = {s="नहीं"} ;
+--  if_then_Conj = sd2  "गर तो" ** {n = Sg} ; 
+  at_least_AdN = mkAdN ["कम से कम"] ;
+  at_most_AdN = mkAdN ["ज़्यादा से ज़्यादा"];
+--  nothing_NP = MassNP (UseN (ParadigmsHin.mkN "कुछ नहीं" Masc )); 
+  except_Prep = mkPrep "के सिवाय" "के सिवाय";
+--  nobody_NP = MassNP (UseN (ParadigmsHin.mkN "कोई नहीं" Masc ));  
 
-  as_CAdv = {s = "ेतन" ; p = "जतन"} ;
+  as_CAdv = {s = "ितना" ; p = "जितना"} ;
 
-  have_V2 = mkV2 (mkV "रकh-न") "" ;
+--  have_V2 = mkV2 "";
 
- language_title_Utt = ss "रदw" ;
+ language_title_Utt = ss "हिन्दी" ;
 
 }
 

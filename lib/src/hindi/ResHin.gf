@@ -1,2 +1,2 @@
-instance ResHin of ResHindustani = DiffHin ** open CommonHindustani, Prelude, Predef in {
+instance ResHin of ResHindustani =  DiffHin ** open CommonHindustani,StringsHin, Prelude, Predef in {
 } ;

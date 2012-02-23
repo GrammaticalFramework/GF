@@ -50,7 +50,7 @@ param
     eq : Str -> Str -> Bool = \s1,s2-> (pbool2bool (eqStr s1 s2)) ; 
 
   RefPron : Str;
-  RefPron = "Kwd";
+  RefPron = kwd ;
   
   ----------------------------------------------------------
   -- Grammar part
@@ -60,47 +60,23 @@ param
   toNP : ( Case => Str) -> NPCase -> Str = \pn, npc -> case npc of {
       NPC c => pn !  c ;
       NPObj => pn !  Dir ;
-      NPErg => pn !  Obl ++ "nE"
+      NPErg => pn !  Obl ++ nE
       } ;
   detcn2NP : (Determiner) -> Noun -> NPCase -> Number -> Str = \dt,cn,npc,nn -> case npc of {
 --       NPC c => dt.s ! Sg ! Masc ++ cn.s ! nn ! c ; --changed while phrasebook e.g tyry beti where gender of determiner 'tyry' should be dependent on gender of common noum e.g 'beti' 
        NPC c => dt.s ! nn ! cn.g ! c ++ cn.s ! nn ! c ;
        NPObj => dt.s ! nn ! cn.g ! Obl ++ cn.s ! nn ! Dir ; 
-       NPErg => dt.s ! nn ! cn.g ! Obl ++ cn.s ! nn ! Obl ++ "nE"
+       NPErg => dt.s ! nn ! cn.g ! Obl ++ cn.s ! nn ! Obl ++ nE
       } ;  
   det2NP : (Determiner) -> NPCase -> Str = \dt,npc -> case npc of {
        NPC c => dt.s ! Sg ! Masc ! c ;
        NPObj => dt.s ! Sg ! Masc ! Dir ;
-       NPErg => dt.s ! Sg  ! Masc ! Obl ++ "nE"
+       NPErg => dt.s ! Sg  ! Masc ! Obl ++ nE
       } ;    
 	  
 ------------------------------------------
 -- Agreement transformations
 -----------------------------------------
-{-    toAgr : Number -> UPerson -> Gender -> Agr = \n,p,g ->       
-	   Ag g n p;
-      
-
-    fromAgr : Agr -> {n : Number ; p : UPerson ; g : Gender} = \a -> case a of {
-      Ag g n p => {n = n ; p = p ; g = g} 
-	  } ;
-	  
-	conjAgr : Agr -> Agr -> Agr = \a0,b0 -> 
-      let a = fromAgr a0 ; b = fromAgr b0 
-      in
-      toAgr
-        (conjNumber a.n b.n)
-        b.p a.g;	  
-	
-	giveNumber : Agr -> Number =\a -> case a of {
-	   Ag _ n _ => n
-	};
-	giveGender : Agr -> Gender =\a -> case a of {
-	   Ag g _ _ => g
-	};
--}    
---    defaultAgr : Agr = agrP3 Masc Sg ;
---    agrP3 : Gender -> Number -> Agr = \g,n -> Ag g n Pers3_Distant ;	
     personalAgr : Agr = agrP1 Masc Sg ;
     agrP1 : Gender -> Number -> Agr = \g,n -> Ag g n Pers1 ;
 	
@@ -121,6 +97,7 @@ param
     
 	objVType : VType -> NPCase = \vt -> case vt of {
       VTrans => NPObj ;
+      VTransPost => NPC Dir ;
       _ => NPC Obl
       } ;
 
@@ -131,14 +108,28 @@ param
 
     predVc : (Verb ** {c2,c1 : Str}) -> VPHSlash = \verb -> 
     predV verb ** {c2 = {s = verb.c1 ; c = VTrans} } ;
-{-
--------------------------
--- added for cauitives
-   predVcc : (Verb **{c2:Compl}) -> VPHSlash = \verb ->
-    predV verb ** {c2 = {s = "" ; c = VTrans} } ;
-------------------------
--}	 
-	predAux : Aux -> VPH = \verb -> {
+  predV : Verb -> VPH ;
+  predV v = {
+         s = \\vh => 
+	   case vh of {
+	         VPTense VPPres (Ag g n p) => {fin = copula CPresent n p g ; inf = v.s ! VF Imperf p n g } ;
+		 VPTense VPPast (Ag g n p) => {fin = [] ; inf =v.s ! VF Perf p n g} ;
+		 VPTense VPFutr (Ag g n p) =>  {fin = copula CFuture n p g ; inf =  v.s ! VF Subj p n g } ;
+		 VPTense VPPerf (Ag g n p) => { fin = [] ; inf = v.s ! Root ++ cka g n } ; 
+		 VPStem => {fin = []  ; inf =  v.s ! Root};
+		 VPInf => {fin = v.s ! Inf_Obl  ; inf =  v.s ! Root}; -- for V2V like sonE ky altja krna , check if it is being used anywhere else
+		 VPImp => {fin = v.s ! VF Subj Pers3_Near Pl Masc  ; inf =  v.s ! Root};
+		 _ => {fin = [] ; inf = v.s ! Root} 
+		 };
+	    obj = {s = [] ; a = defaultAgr} ;
+		subj = VIntrans ;
+		inf = v.s ! Inf;
+		ad = [];
+        embComp = [];
+	prog = False ;
+        comp = \\_ => []
+      } ;  
+    predAux : Aux -> VPH = \verb -> {
      s = \\vh => 
        let  
 
@@ -191,107 +182,6 @@ param
       comp = verb.comp 
       } ;
    	
-{-  Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
-  mkClause : NP -> VPH -> Clause = \np,vp -> {
-      s = \\vt,b,ord => 
-        let 
-          subjagr : NPCase * Agr = case vt of {
-            VPImpPast => case vp.subj of {
-              VTrans     => <NPErg, vp.obj.a> ;
-              VTransPost => <NPErg, defaultAgr> ;
-              _          => <NPC Dir, np.a>
-              } ;
-            _ => <NPC Dir, np.a>
-            } ;
-          subj = subjagr.p1 ;
-          agr  = subjagr.p2 ;
-		  n    = (fromAgr agr).n;
-		  p    = (fromAgr agr).p;
-		  g    = (fromAgr agr).g;
-          vps  = case vt of {
-
-		   VPGenPres  => vp.s !  VPTense VPPres agr ;
-		   VPImpPast  => vp.s !  VPTense VPPast agr ;		    
-		   VPFut      => case vp.prog of { True => {fin = (vp.s !  VPTense VPFutr agr).fin ; inf = (vp.s !  VPTense VPFutr agr).inf ++ hw p n} ;
-                                                   _    => vp.s !  VPTense VPFutr agr } ;
-                   VPContPres => {fin = copula CPresent n p g ; inf = (vp.s ! VPStem).inf ++ raha g n } ;
-		   VPContPast => {fin = copula CPast n p g ; inf = (vp.s ! VPStem).inf ++ raha g n } ;
-		   VPContFut  => {fin = copula CFuture n p g ; inf = (vp.s ! VPStem).inf ++ raha g n ++ hw p n} ;
-		   VPPerfPres => {fin = copula CPresent n p g ; inf = (vp.s ! VPTense VPPerf agr).inf } ;  
-		   VPPerfPast => {fin = copula CPast n p g ; inf = (vp.s ! VPTense VPPerf agr).inf } ;  
-		   VPPerfFut  => {fin = copula CFuture n p g ; inf = (vp.s ! VPTense VPPerf agr).inf  ++ hw p n } ;
-		   VPPerfPresCont => {fin = copula CPresent n p g ; inf = (vp.s ! VPTense VPPres agr).inf ++ raha g n } ;					
-	           VPPerfPastCont => {fin = copula CPast n p g ; inf = (vp.s ! VPTense VPPres agr).inf ++ raha g n } ;					
-		   VPPerfFutCont =>  {fin = copula CFuture n p g ; inf = (vp.s ! VPTense VPPres agr).inf ++ raha g n  ++ hw p n } ;					
-		   VPSubj   => case vp.prog of { True => {fin = (vp.s !  VPTense VPFutr agr).inf ++ hw p n ; inf = "Xayd" } ;
-		   _    => {fin = (vp.s !  VPTense VPFutr agr).inf ; inf = "Xayd" } } 
-                   
-		  };
-					
-		    
-          quest =
-            case ord of
-              { ODir => [];
-                OQuest => "kya" }; 
-		  na =
-            case b of
-              { Pos => [];
-                Neg => "na" };
-           nahim =
-            case b of 
-              { Pos => [];
-                Neg => "nhyN" };
-        in
-		case vt of {
-		VPSubj => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ na ++  vps.inf ++ vps.fin ++ vp.embComp ;
-		_      => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ nahim  ++  vps.inf ++ vps.fin ++ vp.embComp};
-
-  } ;
-
-  mkSClause : Str -> Agr -> VPH -> Clause =
-    \subj,agr,vp -> {
-      s = \\t,b,ord => 
-        let 
-		  n    = (fromAgr agr).n;
-		  p    = (fromAgr agr).p;
-		  g    = (fromAgr agr).g;
-          vps  = case t of {
-                    VPGenPres  => vp.s !  VPTense VPPres agr ;
-		    VPImpPast  => vp.s !  VPTense VPPast agr ;
-		    VPFut      => vp.s !  VPTense VPFutr agr ;
-		    VPContPres => {fin = copula CPresent n p g ; inf = (vp.s ! VPStem).inf ++ raha g n  } ;
-		    VPContPast => {fin = copula CPast n p g ; inf = (vp.s ! VPStem).inf ++ raha g n } ;
-		    VPContFut  => {fin = copula CFuture n p g  ; inf = (vp.s ! VPStem).inf ++ raha g n ++ hw p n  } ;
-		    VPPerfPres => {fin = copula CPresent n p g ; inf = (vp.s ! VPStem).inf ++ cka g n } ;
-		    VPPerfPast => {fin = copula CPast n p g ; inf = (vp.s ! VPStem).inf ++ cka g n } ;
-		    VPPerfFut  => {fin = copula CFuture n p g ; inf = (vp.s ! VPStem).inf ++ cka g n ++ hw p n } ;
-		    VPPerfPresCont => {fin = copula CPresent n p g ; inf = (vp.s ! VPStem).inf ++ raha g n } ; 
-		    VPPerfPastCont => {fin = copula CPast n p g ; inf = (vp.s ! VPStem).inf ++ raha g n } ; 
-		    VPPerfFutCont =>  {fin = copula CFuture n p g ; inf = (vp.s ! VPStem).inf ++ raha g n ++ hw p n } ;
-		    VPSubj   => {fin = insertSubj p (vp.s ! VPStem).inf ; inf = "Xayd"  }
-                    
-			  };
-
-	  quest =
-            case ord of
-              { ODir => [];
-                OQuest => "kya" }; 
-	  na =
-            case b of
-              { Pos => [];
-                Neg => "na" };
-          nahim =
-            case b of 
-              { Pos => [];
-                Neg => "nhyN" };		
-        in
-		case t of {
-		VPSubj => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ na ++  vps.inf ++ vps.fin ++ vp.embComp;
-		_      => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ nahim ++  vps.inf ++ vps.fin ++ vp.embComp};
-    } ;
--}    
---    insertSubj : UPerson -> Str -> Str = \p,s -> 
---      case p of { Pers1 => s ++ "wN" ; _ => s ++ "E"};
    
     insertObj : (Agr => Str) -> VPH -> VPH = \obj1,vp -> {
      s = vp.s ;
@@ -326,19 +216,18 @@ param
      
      } ;
 	 
-	insertObjc : (Agr => Str) -> VPHSlash -> VPHSlash = \obj,vp -> 
+    insertObjc : (Agr => Str) -> VPHSlash -> VPHSlash = \obj,vp -> 
     insertObj obj vp ** {c2 = vp.c2} ;
     insertObjc2 : Str -> VPHSlash -> VPHSlash = \obj,vp -> 
     insertObj2 obj vp ** {c2 = vp.c2} ;
 
 	infVP : Bool -> VPH -> Agr -> Str = \isAux,vp,a ->
-     vp.obj.s ++ vp.inf ++ vp.comp ! a ;
---    infVV : Bool -> VPH -> Str = \isAux,vp -> 
---      case isAux of {False => vp.obj.s ++ vp.inf ; True => vp.obj.s ++ (vp.s ! VPImp).fin };
+     vp.obj.s ++ vp.comp ! a ++ vp.inf  ;
+
    infVV : Bool -> VPH -> Str = \isAux,vp -> 
-      case isAux of {False =>  vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ vp.inf ; True => vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPImp).fin } ;
+      case isAux of {False =>  vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ vp.inf ; True => (vp.s ! VPImp).inf  ++ vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) } ;
     infV2V : Bool -> VPH -> Str = \isAux,vp -> 
-      case isAux of {False =>  vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPInf).fin ++ "ky"  ; True => vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPImp).fin  ++ "ky"};
+      case isAux of {False =>  vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPInf).fin ++ ky  ; True => vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPImp).fin  ++ ky};
 
 
     insertObject : NP -> VPHSlash -> VPH = \np,vps -> {
@@ -374,7 +263,7 @@ param
      comp = vp.comp
     } ;
     
-	conjThat : Str = "kh" ;
+--	conjThat : Str = "kh" ;
     
   insertEmbCompl : VPH -> Str -> VPH = \vp,emb -> {
      s = vp.s ;
@@ -395,7 +284,12 @@ param
      embComp = vp.embComp ;
      prog = vp.prog ;
      comp = vp.comp
-    } ;  
+    } ;
+    
+  compoundAdj : Str -> Str -> Adjective = \s1,s2 -> mkCompoundAdj (regAdjective s1) (regAdjective s2) ;
+   mkCompoundAdj : Adjective -> Adjective -> Adjective ;
+   mkCompoundAdj adj1 adj2 = {s = \\n,g,c,d => adj1.s ! n ! g ! c ! d ++ adj2.s ! n ! g ! c ! d} ;
+  
 
 }
 

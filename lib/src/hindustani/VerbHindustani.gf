@@ -1,23 +1,23 @@
 --concrete VerbUrd of Verb = CatUrd ** open ResUrd in {
-incomplete concrete VerbHindustani of Verb = CatHindustani ** open CommonHindustani, ResHindustani, StringsHindustani in {
+incomplete concrete VerbHindustani of Verb = CatHindustani ** open CommonHindustani, ResHindustani in {
 
   flags optimize=all_subs ;
 
   lin
     UseV  v = predV v   ;
-    SlashV2a v = predV v ** {c2 = {s = v.c2.s ; c = VTrans}} ;
+    SlashV2a v = predV v ** {c2 = {s = v.c2.s ; c = VTrans}} ; 
     Slash2V3 v np = 
-      insertObjc (\\_ => np.s ! NPObj ++ v.c3 ) (predV v ** {c2 = {s = v.c2 ; c = VTrans}}) ;
+      insertObjc (\\_ => np.s ! NPC Dir ++ v.c3 ) (predV v ** {c2 = {s = v.c2 ; c = VTransPost}}) ; -- changed form NPObj
     Slash3V3 v np = 
-      insertObjc (\\_ => np.s ! NPC Obl ++ v.c2) (predV v ** {c2 = {s = v.c3 ; c = VTrans}}) ; 
-    ComplVV v vp = insertTrans (insertVV (infVV v.isAux vp) (predV v) vp.embComp ) VTransPost;
-    ComplVS v s  = insertTrans (insertObj2 (conjThat ++ s.s) (predV v)) VTransPost ;
+       insertObjc (\\_ => np.s ! NPC Obl ++ v.c2) (predV v ** {c2 = {s = v.c3 ; c = VTransPost}}) ; 
+    ComplVV v vp = insertTrans (insertVV (infVV v.isAux vp) (predV v) vp.embComp ) VTrans; -- changed from VTransPost
+    ComplVS v s  = insertTrans (insertObj2 (conjThat ++ s.s) (predV v)) VTrans ; -- changed from VTransPost
     ComplVQ v q  = insertObj2 (conjThat ++ q.s ! QIndir) (predV v) ;
     ComplVA v ap = insertObj (\\a => ap.s ! giveNumber a ! giveGender a ! Dir ! Posit) (predV v) ;
-    SlashV2V v vp = insertVV (infV2V v.isAux vp) (predV v) vp.embComp **{c2 = {s = sE ; c = VTransPost}} ;
-    SlashV2S v s  = insertObjc2 (conjThat ++ s.s) (predV v ** {c2 = {s = kw ; c = VTransPost}}) ;
-    SlashV2Q v q  = insertObjc2 (conjThat ++ q.s ! QIndir) (predV v ** {c2 = {s = sE ; c = VTransPost}}) ;
-    SlashV2A v ap = insertObjc (\\a => ap.s ! giveNumber a ! giveGender a ! Dir ! Posit) (predV v ** {c2 = {s = kw ; c = VTransPost}}) ; ----
+    SlashV2V v vp = insertVV (infV2V v.isAux vp) (predV v) vp.embComp **{c2 = {s = sE ; c = VTrans}} ; -- changed from VTransPost
+    SlashV2S v s  = insertObjc2 (conjThat ++ s.s) (predV v ** {c2 = {s = kw ; c = VTrans}}) ; -- changed from VTransPost
+    SlashV2Q v q  = insertObjc2 (conjThat ++ q.s ! QIndir) (predV v ** {c2 = {s = sE ; c = VTrans}}) ; -- changed from VTransPost
+    SlashV2A v ap = insertObjc (\\a => ap.s ! giveNumber a ! giveGender a ! Dir ! Posit) (predV v ** {c2 = {s = kw ; c = VTrans}}) ; ----
     ComplSlash vp np = insertObject np vp ;
     SlashVV vv vp = 
       insertEmbCompl (insertObj (\\a => infVP vv.isAux vp a) (predV vv)) vp.embComp **

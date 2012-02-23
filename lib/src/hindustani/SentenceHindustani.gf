@@ -1,6 +1,6 @@
 --concrete SentenceUrd of Sentence = CatUrd ** open Prelude, StringsHindustani, ResUrd in {
 incomplete concrete SentenceHindustani of Sentence = 
-  CatHindustani ** open CommonHindustani, ResHindustani, Prelude, StringsHindustani in {
+  CatHindustani ** open CommonHindustani, ResHindustani, Prelude in {
 
   flags optimize=all_subs ;
   coding = utf8;
@@ -40,9 +40,10 @@ incomplete concrete SentenceHindustani of Sentence =
         (insertObj2 (conjThat ++ slash.s) (predV vs))  **
         {c2 = slash.c2} ;
 
-    EmbedS  s  = {s = conjThat ++ s.s} ;
-    EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = infVP False vp defaultAgr} ; --- agr
+    EmbedS  s  = {s = conjThat ++ s.s ; fromVP = False} ;
+    EmbedQS qs = {s = conjThat ++ qs.s ! QIndir ; fromVP = False} ;
+--    EmbedVP vp = {s = infVP False vp defaultAgr ; fromVP = True} ; --- agr
+    EmbedVP vp = {s = (vp.s ! VPInf).fin ; fromVP = True} ;
 
     UseCl  temp p cl = 
 	 { s = case <temp.t,temp.a> of {
@@ -98,7 +99,6 @@ incomplete concrete SentenceHindustani of Sentence =
     } ;
 
     AdvS a s = {s = a.s ! Masc ++ s.s} ;
-    ExtAdvS a s = {s = a.s ! Masc ++ "," ++ s.s} ;
 
     RelS s r = {s = s.s ++ r.s ! agrP3 Masc Sg} ;
     SSubjS s sj s = { s = s.s ++ sj.s ++ s.s};

@@ -47,7 +47,16 @@ oper
 
 -- Proper names     
   mkPN : Str -> PN = \s -> let n = regNoun s in {s = n.s ! Sg ; g = n.g ; lock_PN = <>} ;
-  personalPN : Str -> Str -> Str -> Str -> Number -> Gender -> UPerson -> Pron = \s1,s2,s3,sp,nn,g,p -> let n = mkPron s1 s2 s3 in {s = n.s ; a = toAgr nn p g ; ps = sp ; lock_Pron = <>};
+  personalPN : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Number -> Gender -> UPerson -> Pron =
+    \s1,s2,s3,smp,sfp,pmp,pfp,nn,g,p -> let n = mkPron s1 s2 s3 in
+      {s = n.s ;
+       a = toAgr nn p g ;
+       ps = \\n,g => case <n,g> of {
+                        <Sg,Masc> =>smp ;
+			<Sg,Fem> => sfp ;
+			<Pl,Masc> => pmp ;
+			<Pl,Fem> => pfp } ; lock_Pron = <>};
+  
   demoPN : Str -> Str -> Str -> Quant = \s1,s2,s3 -> let n = makeDemonPronForm s1 s2 s3 in {s = n.s ; a = defaultAgr ; lock_Quant = <>};
   mkDet : Str -> Str -> Str -> Str -> Number -> Det = \s1,s2,s3,s4,nb -> let dt = makeDet s1 s2 s3 s4 nb in {s = dt.s ; n = nb ; lock_Det = <>};
   mkIP : (x1,x2,x3:Str) -> Number -> Gender -> IP = \s1,s2,s3,n,g -> let p = mkIntPronForm s1 s2 s3 in { s = p.s ; n = n ; g = g ;  lock_IP = <>}; 
@@ -62,6 +71,8 @@ oper
 	mkA : Str -> Str -> A2
 	  = \a,c -> let n = regAdjective a in {s = n.s; c2 = c} ** {lock_A2 = <>} ;
     } ;
+  
+  mkIrregA : Str -> Str -> A2 = \str,c -> makeIrregA str ** {c2 = c ; lock_A2 = <>} ;
 
 --2 Verbs
 
@@ -99,6 +110,22 @@ oper
     
 --3 Determiners and quantifiers
 
+  mkIQuant : (s1,_,_,_,_,_,_,_,_,_,_,s12:Str) -> IQuant =
+    \smd,smo,smv,sfd,sfo,sfv,pmd,pmo,pmv,pfd,pfo,pfv -> 
+      {s =  \\n,g,c => case <n,g,c> of {
+                        <Sg,Masc,Dir> =>smd ;
+			<Sg,Masc,Obl> =>smo;
+			<Sg,Masc,Voc> =>smv ;
+			<Sg,Fem,Dir> =>sfd ;
+			<Sg,Fem,Obl> =>sfo;
+			<Sg,Fem,Voc> =>sfv ;
+			<Pl,Masc,Dir> =>pmd ;
+			<Pl,Masc,Obl> =>pmo;
+			<Pl,Masc,Voc> =>pmv ;
+			<Pl,Fem,Dir> =>pfd ;
+			<Pl,Fem,Obl> =>pfo;
+			<Pl,Fem,Voc> =>pfv} ;
+			lock_IQuant = <>};
 --  mkQuant : overload {
     mkQuant : Pron -> Quant ;
 --    mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant ;
