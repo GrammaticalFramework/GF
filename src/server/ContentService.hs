@@ -14,11 +14,13 @@ import qualified Codec.Binary.UTF8.String as UTF8 (encodeString, decodeString)
 
 import Control.Monad
 import Control.Exception
+import Control.Concurrent(forkIO)
 import System.Environment(getArgs)
 import System.Time
 import System.Locale
 import System.FilePath
 import Database.HSQL.MySQL
+import Database.HSQL.Types(toSqlValue)
 
 logFile :: FilePath
 logFile = "content-error.log"
