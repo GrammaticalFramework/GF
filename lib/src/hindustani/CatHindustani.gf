@@ -1,6 +1,6 @@
 --concrete CatUrd of Cat = CommonX - [Adv,AdN] ** open ResUrd, Prelude in {
 incomplete concrete CatHindustani of Cat = 
-  CommonX - [Adv,AdN]** open ResHindustani, Prelude, CommonHindustani,  (R = ParamX) in {
+  CommonX - [Adv,AdN,SC]** open ResHindustani, Prelude, CommonHindustani,  (R = ParamX) in {
 
   flags optimize=all_subs ;
 
@@ -11,6 +11,7 @@ incomplete concrete CatHindustani of Cat =
     QS = {s : QForm => Str} ;
     RS = {s : Agr => Str ; c : Case} ; -- c for it clefts
     SSlash = {s : Str ; c2 : ResHindustani.Compl} ;
+    SC  = {s : Str ; fromVP : Bool} ;
 
 ---- Sentence
 

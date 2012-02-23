@@ -5,7 +5,7 @@ concrete StructuralUrd of Structural = CatUrd **
   coding = utf8;
 
   lin
-  above_Prep = mkPrep "awpr" "awpr" ;
+  above_Prep = mkPrep ["kE awpr"] ["kE awpr"] ;
   after_Prep = mkPrep ["kE bed"] ["kE bed"] ;
   all_Predet = ss "tmam" ;
   almost_AdA, almost_AdN = mkAdN "tqryba" ;
@@ -13,8 +13,8 @@ concrete StructuralUrd of Structural = CatUrd **
   always_AdV = ss "hmyXh" ;
   and_Conj = sd2 [] "awr" ** {n = Pl} ;
   because_Subj = ss "kywnkh" ;
-  before_Prep = mkPrep "phlE" "phlE" ;
-  behind_Prep = mkPrep "pych'E" "pych'E" ;
+  before_Prep = mkPrep ["sE phlE"] ["sE phlE"] ;
+  behind_Prep = mkPrep ["kE pych'E"] ["kE pych'E"] ;
   between_Prep = mkPrep "drmyaN" "drmyaN" ;
   both7and_DConj = sd2 "dwnwN" "awr" ** {n = Pl} ;
   but_PConj = ss "lykn" ;
@@ -72,7 +72,7 @@ concrete StructuralUrd of Structural = CatUrd **
   possess_Prep = mkPrep "ka" "ky" ;
   quite_Adv = ss "KamwX" ;
   she_Pron = personalPN "wh" "as" "wh" ["as ky"] ["as ky"] ["as kE"] ["as ky"] Sg Fem Pers3_Distant ;
-  so_AdA = ss "[as lyE]" ;
+  so_AdA = ss "as lyE" ;
   somebody_NP = MassNP (UseN (ParadigmsUrd.mkN "kwy" "kwy" "kwy" "kwy" "kwy" "kwy" Masc ));
   someSg_Det = mkDet "kch'" "kch'" "kch'" "kch'" Sg ;
   somePl_Det = mkDet "kch'" "kch'" "kch'" "kch'" Pl ;
@@ -89,7 +89,7 @@ concrete StructuralUrd of Structural = CatUrd **
   through_Prep = mkPrep ["myN sE"] ["myN sE"] ;
   too_AdA = ss "bht" ;
   to_Prep = mkPrep "kw" "kw" ; -- ** {lock_Prep = <>};
-  under_Prep = mkPrep "nycE" "nycE" ; -- ** {lock_Prep = <>};
+  under_Prep = mkPrep "kE nycE" "kE nycE" ; -- ** {lock_Prep = <>};
   very_AdA = ss "bht" ;
   want_VV = mkV "cahna" ** { isAux = False} ;
   we_Pron = personalPN "hm" "hm" "hm" "hmara" "hmary" "hmarE" "hmary" Pl Masc Pers1 ;
@@ -118,7 +118,7 @@ concrete StructuralUrd of Structural = CatUrd **
   at_least_AdN = mkAdN ["km az km"] ;
   at_most_AdN = mkAdN ["zyadh sE zyadh"];
   nothing_NP = MassNP (UseN (ParadigmsUrd.mkN "kwy cyz nhyN" "kwy cyz nhyN" "kwy cyz nhyN" "kwy cyz nhyN" "kwy cyz nhyN" "kwy cyz nhyN" Masc )); 
-  except_Prep = mkPrep "swaE" "swaE" ;
+  except_Prep = mkPrep "kE swaE" "kE swaE" ;
   nobody_NP = MassNP (UseN (ParadigmsUrd.mkN "kwy nhyN" "kwy nhyN" "kwy nhyN" "kwy nhyN" "kwy nhyN" "kwy nhyN" Masc ));  
 
   as_CAdv = {s = "atna" ; p = "jtna"} ;

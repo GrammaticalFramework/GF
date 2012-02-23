@@ -1,6 +1,6 @@
 --concrete QuestionUrd of Question = CatUrd ** open ResUrd, StringsHindustani, Prelude in {
 incomplete concrete QuestionHindustani of Question = 
-  CatHindustani ** open CommonHindustani, ResHindustani, StringsHindustani, Prelude in {
+  CatHindustani ** open CommonHindustani, ResHindustani, Prelude in {
 
   flags optimize=all_subs ;
     coding = utf8;
@@ -24,8 +24,11 @@ incomplete concrete QuestionHindustani of Question =
 					 }
 					}; 
     QuestSlash ip slash = 
-     let ip1 = ip.s ! Dir;
-         ip2 = ip.s ! Obl ++ nE
+     let
+        -- ip1 = ip.s ! Dir;
+        -- ip2 = ip.s ! Obl ++ nE
+	ip1 = ip.s ! Obl ++ kw;
+        ip2 = ip.s ! Obl ++ kw
      in {
       s = \\t,p,o => case t of { 
             VPImpPast => ip2 ++ slash.s ! t ! p ! ODir;

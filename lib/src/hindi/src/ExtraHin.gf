@@ -1,8 +1,9 @@
 --# -path=.:../abstract:../common:../prelude:/Users/virk/gf_1/lib/src/hindustani
 concrete ExtraHin of ExtraHinAbs = CatHin ** 
   open ResHin, Coordination, Prelude, MorphoHin, ParadigmsHin in {
-
+ flags coding = utf8;
   lin
+ 
 --    GenNP np = {s = \\_,_,_ => np.s ! NPC Obl ++ "ka" ; a = np.a} ;
 
 --    each_Det = mkDet  "hr kwy" "hr kwy" "hr kwy" "hr kwy" Sg ;

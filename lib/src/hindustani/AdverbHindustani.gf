@@ -1,4 +1,4 @@
-incomplete concrete AdverbHindustani of Adverb = CatHindustani ** open CommonHindustani, ResHindustani, StringsHindustani, Prelude in {
+incomplete concrete AdverbHindustani of Adverb = CatHindustani ** open CommonHindustani, ResHindustani, Prelude in {
 
   lin
     PositAdvAdj a = {s = \\g => a.s ! Sg ! g ! Obl ! Posit} ;

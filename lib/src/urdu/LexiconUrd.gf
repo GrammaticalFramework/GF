@@ -119,7 +119,7 @@ concrete LexiconUrd of Lexicon = CatUrd **
   love_N = mkN "محبت" ;
   love_V2 = mkV2 (compoundV "پیار" do_V2) "كو";
   man_N = mkN "آدمی" "آدمی" "آدمی" "آدمی" "آدمیوں" "آدمیو" masculine ; 
-  married_A2 = mkA "[شادی كرنa]" "سے" ;
+  married_A2 = mkA "شادی شدہ" "سے" ;
   meat_N = mkN "گوشت" ;
   milk_N = mkN "دودھ" ;
   moon_N = mkN "چاند" ;
@@ -162,7 +162,7 @@ concrete LexiconUrd of Lexicon = CatUrd **
   seek_V2 = mkV2 (compoundV "تلاش" do_V2) ;
   see_V2 = mkV2 (mkV "دیكھنا") ;
   sell_V3 = mkV3 (mkV "بیچنا") "كو" "";
-  send_V3 = mkV3 (mkV "بھیجنا") "كو" "كو";
+  send_V3 = mkV3 (mkV "بھیجنا") "كو" "";
   sheep_N = mkN "بھیڑ" feminine ;
   ship_N = mkN "جہاز" ;
   shirt_N = mkN "قمیص" feminine;
@@ -352,7 +352,7 @@ concrete LexiconUrd of Lexicon = CatUrd **
   wash_V2 = mkV2 (mkV "دھونا") ;
   wipe_V2 = mkV2 (compoundV "صاف" (mkV "كرنا" ));
 
-----  other_A = regA "?تہعر" ;
+----  other_A = regA "؟تہعر" ;
 
   grammar_N = mkN "گردان" ;
   language_N = mkN "زبان" feminine ;
@@ -361,7 +361,7 @@ concrete LexiconUrd of Lexicon = CatUrd **
 ---- added 4/6/2007
     john_PN = mkPN "جان" ;
     question_N = mkN "سوال" ;
---    ready_A = regA "رعادی" ;
+    ready_A = mkA "تیار" ;
     reason_N = mkN "وجہ" feminine ;
     today_Adv = mkAdv "آج" ;
     uncertain_A = mkA ["غیریقینی"] ;

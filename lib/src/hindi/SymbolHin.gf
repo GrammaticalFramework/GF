@@ -2,3 +2,4 @@
 
 concrete SymbolHin of Symbol = CatHin ** SymbolHindustani with
   (ResHindustani = ResHin) ;
+

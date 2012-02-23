@@ -5,7 +5,7 @@ concrete StructuralUrd of Structural = CatUrd **
   coding = utf8;
 
   lin
-  above_Prep = mkPrep "اوپر" "اوپر" ;
+  above_Prep = mkPrep ["كے اوپر"] ["كے اوپر"] ;
   after_Prep = mkPrep ["كے بعد"] ["كے بعد"] ;
   all_Predet = ss "تمام" ;
   almost_AdA, almost_AdN = mkAdN "تقریبا" ;
@@ -13,8 +13,8 @@ concrete StructuralUrd of Structural = CatUrd **
   always_AdV = ss "ہمیشہ" ;
   and_Conj = sd2 [] "اور" ** {n = Pl} ;
   because_Subj = ss "كیونكہ" ;
-  before_Prep = mkPrep "پہلے" "پہلے" ;
-  behind_Prep = mkPrep "پیچھے" "پیچھے" ;
+  before_Prep = mkPrep ["سے پہلے"] ["سے پہلے"] ;
+  behind_Prep = mkPrep ["كے پیچھے"] ["كے پیچھے"] ;
   between_Prep = mkPrep "درمیاں" "درمیاں" ;
   both7and_DConj = sd2 "دونوں" "اور" ** {n = Pl} ;
   but_PConj = ss "لیكن" ;

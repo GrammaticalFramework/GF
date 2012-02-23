@@ -1,4 +1,4 @@
-incomplete concrete AdjectiveHindustani of Adjective = CatHindustani ** open CommonHindustani,ResHindustani, StringsHindustani, Prelude in {
+incomplete concrete AdjectiveHindustani of Adjective = CatHindustani ** open CommonHindustani,ResHindustani, Prelude in {
 
   lin
 
@@ -19,8 +19,10 @@ incomplete concrete AdjectiveHindustani of Adjective = CatHindustani ** open Com
       s = \\n,g,c,d => a.s ! n ! g ! c ! d  ++  RefPron ++ sE ; 
       } ;
 
-    SentAP ap sc = {
-      s = \\n,g,c,d => ap.s ! n ! g ! c ! d ++ sc.s ; 
+    SentAP ap sc = { 
+      s = \\n,g,c,d => case sc.fromVP of {
+                           True => sc.s ++ kw ++ ap.s ! n ! g ! c ! d  ; 
+			   False => ap.s ! n ! g ! c ! d ++ sc.s } ;
       } ;
 
     AdAP ada ap = {

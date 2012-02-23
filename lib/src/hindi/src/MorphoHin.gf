@@ -36,10 +36,11 @@ oper
 
     regNoun : Str -> Noun ;
     regNoun s = case s of {
-		     _ + "ya" => mkN05 (s);
-                 _ + ("a"|"e"|"h") =>  mkN01 (s);
-                 _ + "y" => mkN03 (s);
-                 _ + ("aN"|"wN") => mkN04 (s);
+		     _ + "ya:" => mkN05 (s);
+                 _ + ("a:") =>  mkN01 (s);
+                 _ + "i:" => mkN03 (s);
+                 _ + ("a:n~"|"a:") => mkN04 (s);
+		 _ + "a:n~v" => mkN12 s;
                  _ + "w^" => mkN12 (s);
              _			  => regNoun2 (s)				 
                  };
@@ -55,10 +56,11 @@ oper
 	 in case <s,g,c> of {
 		         <_ + "t",Fem,_> => mkN10 (s);
 				 <_ + "t",Masc,_> => mkN02 (s);
-				 <_ + "w",Masc,_> => mkN11 (s);
+				 <_ + "u:",Masc,_> => mkN11 (s);
                  <_ + "w",Fem,_> 	=> mkN07 (s);
 				 <_ + "ya",Fem,_> => mkN05 (s);
                  <_ + "ya",Masc,_> => mkN02 (s);
+		 <_ + "i:",Masc,_> => mkN13 (s);
                  <_,Fem,False>		=> mkN08 (s);
                  <_,Fem,_>		=> mkN09 (s)
                  				 
@@ -70,14 +72,14 @@ oper
      mkN01 : Str -> Noun ;
      mkN01 lRka = let end = last (lRka) ;
                  lRk = if_then_else Str (eq end "e") lRka (tk 1 lRka)
-             in mkNoun (lRka)     (lRk+"E")  (lRk+"E")
-                       (lRk+"E")  (lRk+"wN") (lRk+"w")
+             in mkNoun (lRka)     (lRk+"e:")  (lRk+"e:")
+                       (lRk+"e:")  (lRk+"o:n~") (lRk+"o:")
                        Masc ;
 
 -- masculine nouns does not end with a, h, e, an
 
      mkN02 : Str -> Noun ;
-     mkN02 mrd = let mrdwN = mrd+"wN" ;
+     mkN02 mrd = let mrdwN = mrd+"o:n~" ;
               mrdw  = tk 1 mrdwN
               in mkNoun mrd mrd   mrd
                       mrd mrdwN mrdw
@@ -86,24 +88,32 @@ oper
 -- feminine Nouns end with y
 
      mkN03 : Str -> Noun ;
-     mkN03 krsy = let krsyaN  = krsy+"aN" ;
-		 krsywN  = krsy+"wN" ;
+     mkN03 krsy = let krsyaN  = krsy+"an~" ;
+		 krsywN  = krsy+"yo:n~" ;
 		 krsyw   = tk 1 krsywN
              in mkNoun krsy   krsy   krsy
                        krsyaN krsywN krsyw
                        Fem ;
 
+-- masculine nouns ending at i: e.g Admi:
+ mkN13 : Str -> Noun ;
+     mkN13 krsy = let 
+		 krsywN  = krsy+"yo:n~" ;
+		 krsyw   = tk 1 krsywN
+             in mkNoun krsy   krsy   krsy
+                       krsy krsywN krsyw
+                       Masc ;
+		       
 -- feminine nouns end with a, aN, wN
      mkN04 : Str -> Noun ;
      mkN04 n = case last n of {
-     "a" => let bla = n
-        in mkNoun bla          bla         bla
-                  (bla+"y^yN") (bla+"w^N") (bla+"w^")
+     "a:" =>  mkNoun n          n         n
+                  (n+"a:e:n~") (n+"a:o:n~") (n+"a:o:")
                   Fem ;
       _   => let maN = n ; -- ends with aN and wN
             ma  = tk 1 maN
         in mkNoun maN         maN        maN
-                  (ma+"y^yN") (ma+"w^N") (ma+"w^N")
+                  (maN+"a:n~e:n~") (maN+"a:n~o:n~") (maN+"a:n~o:")
                   Fem 
 
             };
@@ -112,14 +122,14 @@ oper
       mkN05 : Str -> Noun ;
       mkN05 gRya = let gRy = (tk 1 gRya)
              in mkNoun gRya       gRya       gRya
-                       (gRya+"N") (gRy+"wN") (gRy+"w")
+                       (gRya+"n~") (gRy+"o:n~") (gRy+"o:")
                        Fem ;
 
 -- feminine nouns end with w
       
       mkN07 : Str -> Noun ;
       mkN07 khshbw =  mkNoun khshbw     khshbw         khshbw
-                            (khshbw + "y^yN") (khshbw + "w^N") (khshbw + "w^")
+                            (khshbw + "e:n~") (khshbw + "o:n~") (khshbw + "o:")
                             Fem ;
 
 -- Loan arabic feminine nouns end with t
@@ -127,7 +137,7 @@ oper
 
       mkN10 : Str -> Noun ;
       mkN10 ndamt = mkNoun ndamt        ndamt        ndamt
-                     (ndamt+"yN") (ndamt+"wN") (ndamt+"w")
+                     (ndamt+"e:m.") (ndamt+"w:m.") (ndamt+"o:")
                      Fem ;
 -- Worst case function
       mkN : (_,_,_,_,_,_ : Str) -> Gender -> Noun ;
@@ -143,21 +153,21 @@ oper
      
       mkN08 : Str -> Noun ;
       mkN08 ktab = mkNoun ktab ktab ktab
-                    (ktab+"yN") (ktab+"wN") (ktab+"w")
+                    (ktab+"e:n~") (ktab+"o:n~") (ktab+"o:")
                     Fem ;
 
 -- Loan arabic feminine nouns
      
       mkN09 : Str -> Noun ;
       mkN09 ahsan = mkNoun ahsan        ahsan                             ahsan
-                     (ahsan+"at")  (ahsan+"at") (ahsan+"w") 
+                     (ahsan+"a:t")  (ahsan+"a:t") (ahsan+"o:") 
                      Fem ;
 -- (variants{ahsan+"at";ahsan+"wN"})
 -- Loan persian maculine nouns end with w
 
       mkN11 : Str -> Noun ;
       mkN11 alw = mkNoun alw alw         alw
-                   alw (alw+"w^N") (alw+"w^")
+                   alw (alw+"o:n~") (alw+"o:")
                    Masc ;
 
 
@@ -167,17 +177,19 @@ oper
       mkN12 bhao = mkNoun (bhao)      (bhao)     (bhao)
                           (bhao)      (bhao)     (bhao)
                     Masc ;
+		    
+
 ----2 Determiners
-  IDeterminer = {s:Gender => Str ; n : Number};
+  IDeterminer = {s:Gender => Case => Str ; n : Number};
   makeDet : Str -> Str -> Str -> Str -> Number -> Determiner = \s1,s2,s3,s4,n -> {
    s = table {
-      Sg => table {
-        Masc => s1 ;
-        Fem => s2 
+      Sg => table { 
+        Masc => table {_ => s1} ;
+        Fem => table {_ => s2} 
 	  } ;
       Pl => table {
-        Masc => s3 ;
-        Fem => s4 
+        Masc => table { _ => s3} ;
+        Fem => table {_ => s4} 
 	  }
       } ;
 
@@ -186,11 +198,11 @@ oper
 	
   makeIDet : Str -> Str -> Number -> IDeterminer = \s1,s2,n -> {
    s = table {
-        Masc => s1;
-		Fem  => s2
+        Masc => table {_ =>s1};
+	Fem  => table {_ =>s2} 
 	 };
 	 n = n
-    };		
+    };
     
 -- Proposition  
  
@@ -317,13 +329,14 @@ oper
 	}; 
 
 ----2 Adjectives
--- defined in ResUrd
+
+  makeIrregA : Str -> Adjective = \str -> {s = \\_,_,_,_ => str} ;
 
 ----3 Verbs
   CommonVF = {s : VTense => UPerson => Number => Gender => Str} ;
  
    mkVerb : (x1: Str) -> Verb = \inf  ->
-     	 let root = (tk 2 inf); inf_obl = ((tk 1 inf) + "E"); inf_fem = ((tk 1 inf) + "y")
+     	 let root = (tk 2 inf); inf_obl = ((tk 1 inf) + "e:"); inf_fem = ((tk 2 inf) + "yi:")
 	in { s = table {
           
                VF tense person number gender => (mkCmnVF root tense person number gender).s  ;
@@ -343,38 +356,43 @@ oper
    mkCmnVF : Str -> VTense -> UPerson -> Number -> Gender -> {s:Str} =
     \root,t,p,n,g ->
      {s = 
-      let form1 = case (last root) of {
-                  "a"|"A"|"w" => root + "w^N" ;
-                  _           => root + "wN"
-                 };
-          form2 =  case (last root) of {
-                  "a"|"A"|"w" => root + "y^N" ;
-                  _           => root + "yN"
-                 };
+      let form1 = case (last root) of
+          {
+	  "a:"|"o:"|"i:"  => root + "U:n~";
+	  "e:" => (tk 1 root)+ "u:n~";
+	  _ => root + "u:n~"
+	  };
+          form2 = case (last root) of
+	  {
+	  "a:"|"o:"  => root + "E:n~";
+	  "i:" => root + "ye:n~";
+	  "e:" => (tk 1 root)+ "e:n~";
+	  _ => root + "e:n~"
+	  }
 	 in
        case <t,p,n,g> of {
         <Subj,Pers1,Sg,_> => form1 ;
         <Subj,Pers1,Pl,_> => form2 ;
         <Subj,_,_,_>      => (mkImpert root p n g).s ;
         <Perf,_,_,_>      => case root of {
-		                      "hw" => (mkPastInd root p n g).s ;
-							  "ja" => (mkPastInd "gy" p n g).s ;
-							  "kr" => (mkPastInd "k" p n g).s ;
-							  "dE" => (mkPastInd "d" p n g).s ;
-							  "lE" => (mkPastInd "l" p n g).s ;
-							  _    => (mkPastInd root p n g).s };
-        <Imperf,Pers2_Familiar,Sg,Masc>         => root + "tE";
-        <Imperf,Pers2_Familiar,Sg,Fem>         => root + "ty"; --variants{root+"ty" ; root+"tyN"};	
-        <Imperf,Pers2_Familiar,Pl,Masc>         => root + "tE";
-        <Imperf,Pers2_Familiar,Pl,Fem>         => root+"tyN";
-        <Imperf,Pers2_Respect,Sg,Masc>         => root + "tE";
-        <Imperf,Pers2_Respect,Sg,Fem>         => root + "ty"; --variants{root+"ty" ; root+"tyN"};	
-        <Imperf,Pers2_Respect,Pl,Masc>         => root + "tE";
-        <Imperf,Pers2_Respect,Pl,Fem>         => root+"tyN";
-		<Imperf,_,Sg,Masc>					  => root+"ta";
-		<Imperf,_,Sg,Fem>					  => root+"ty";
-		<Imperf,_,Pl,Masc>					  => root+"te";
-		<Imperf,_,Pl,Fem>					  => root+"tyN"
+		                      "ho:" => (mkPastInd root p n g).s ;
+				      "ja:" => (mkPastInd "gay" p n g).s ;
+				      "kr" => (mkPastInd "kiy" p n g).s ;
+				     -- "dE" => (mkPastInd "d" p n g).s ;
+				     -- "lE" => (mkPastInd "l" p n g).s ;
+				      _    => (mkPastInd root p n g).s };
+        <Imperf,Pers2_Familiar,Sg,Masc>         => root + "te:";
+        <Imperf,Pers2_Familiar,Sg,Fem>         => root + "ti:"; --variants{root+"ty" ; root+"tyN"};	
+        <Imperf,Pers2_Familiar,Pl,Masc>         => root + "te:";
+        <Imperf,Pers2_Familiar,Pl,Fem>         => root+"ti:";
+        <Imperf,Pers2_Respect,Sg,Masc>         => root + "te:";
+        <Imperf,Pers2_Respect,Sg,Fem>         => root + "ti:"; --variants{root+"ty" ; root+"tyN"};	
+        <Imperf,Pers2_Respect,Pl,Masc>         => root + "te:";
+        <Imperf,Pers2_Respect,Pl,Fem>         => root+"ti:";
+		<Imperf,_,Sg,Masc>					  => root+"ta:";
+		<Imperf,_,Sg,Fem>					  => root+"ti:";
+		<Imperf,_,Pl,Masc>					  => root+"te:";
+		<Imperf,_,Pl,Fem>					  => root+"ti:"
         }
        
      } ;
@@ -382,20 +400,27 @@ oper
    mkPastInd : Str -> UPerson -> Number -> Gender -> {s:Str} = \root,p,n,g ->
     {s = let roo = root ;
              a = case (last root) of {
-                  "a"|"A"|"w"|"k" => "ya" ;
-                  _           => "a"
+                  "a:"|"o:"|"i:" => "ya:" ;
+		  "e:" => (tk 1 roo) + "iya:" ;
+                  _           => "a:"
                  } ;
              y = case (last root) of {
-                  "a"|"A"|"w" => "y^y" ;
-                  _           => "y"
+                  "a:"|"o:" => "yi:" ;
+		  "i:" => "" ;
+		  "e:" => (tk 1 roo) + "i:" ;
+		   "iy" => (tk 2 roo) + "i:" ;
+                  _           => "i:"
                  } ;
              e = case (last root) of {
-                  "a"|"A"|"w"|"k" => "y^E" ;
-                  _           => "E"
+                  "a:"|"o:"|"i:"|"k" => "ye:" ;
+		  "e:" => (tk 1 roo) + "i:" ;
+                  _           => "e:"
                  } ;
             yN = case (last root) of {
-                  "a"|"A"|"w" => "y^yN" ;
-                  _           => "yN"
+                  "a:"|"o:"|"i:" => "yi:n~" ;
+		  "iy" => (tk 2 roo) + "i:" ;
+		  "e:" => (tk 1 roo) + "i:n~" ;
+                  _           => "yn~"
                  } ;
 
      in 
@@ -430,20 +455,19 @@ oper
    mkImpert : Str -> UPerson -> Number -> Gender -> {s:Str} = \root,p,n,g ->
     {s = let roo =  root ;
              w = case (last root) of {
-                  "a"|"A"|"w" => "w^" ;
-                  _           => "w"
+                  "a:" => "O:" ;
+		  "o:" => "O:" ;
+                  _           => "o:"
                } ;
              yN = case (last root) of {
-                  "a"|"A"|"w" => "y^yN" ;
-                  _           => "yN" 
-               } ;
-             yE = case (last root) of {
-                  "a"|"A"|"w" => "y^yE" ;
-                  _           => "yE" 
+                  "a:"|"o:" => "E:n~" ;
+                  _           => "E:n~" 
                } ;
              e = case (last root) of {
-                  "a"|"A"|"w" => "y^E" ;
-                  _           => "E" 
+                  "a:"|"o:" => "E:" ;
+		  "e:" => "" ;
+		  "i:" => "ye:" ;
+                  _           => "E:" 
                } in
       case <p,n,g> of {
        <Pers1,_,_>          => ""; --nonExist ;

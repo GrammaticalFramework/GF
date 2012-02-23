@@ -10,7 +10,7 @@ oper
   jw = "jw" ;
   kw = "kw" ;
   mt = "mt" ;
-  nE = "nE" ;
+--  nE = "nE" ;
   nh = "nh" ;
   sE = "sE" ;
   waN = "waN" ;

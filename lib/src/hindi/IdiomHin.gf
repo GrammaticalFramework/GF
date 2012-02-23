@@ -5,21 +5,21 @@ concrete IdiomHin of Idiom = CatHin ** open Prelude,Predef, ResHin,ParamX,Common
 
   lin
     ImpersCl vp = mkSClause " " (agrP3 Masc Sg) vp ;
-    GenericCl vp = mkSClause "कwय" (agrP3 Masc Sg) vp ;
+    GenericCl vp = mkSClause "कोई" (agrP3 Masc Sg) vp ;
 
    CleftNP np rs = 
 	 let cl = mkSClause (np.s ! NPC rs.c) (np.a) (predAux auxBe);
 	  in 
 	   {s = \\t,p,o =>  cl.s ! t ! p ! o ++ rs.s ! np.a };
 	  
---    CleftAdv ad ss = { s = \\t,b,o => ad.s ! Masc ++ ss.s};
+    CleftAdv ad ss = { s = \\t,b,o => ad.s ! Masc ++ ss.s};
         
---     ExistNP np = 
---      mkSClause "wहं" (agrP3 (fromAgr np.a).g (fromAgr np.a).n) 
---        (insertObj (\\_ => np.s ! NPC Obl) (predAux auxBe)) ;
+     ExistNP np = 
+      mkSClause "वहाँ" (agrP3 (fromAgr np.a).g (fromAgr np.a).n) 
+        (insertObj (\\_ => np.s ! NPC Dir) (predAux auxBe)) ;
 
    ExistIP ip = 
-     let cl = mkSClause ("wहं" ++ ip.s ! Dir) (agrP3 ip.g ip.n) (predAux auxBe); 
+     let cl = mkSClause ("वहाँ" ++ ip.s ! Dir) (agrP3 ip.g ip.n) (predAux auxBe); 
 	   in {
        s = \\t,p,qf => case qf of { 
 	      QDir =>   cl.s ! t ! p ! ODir;
@@ -31,8 +31,9 @@ concrete IdiomHin of Idiom = CatHin ** open Prelude,Predef, ResHin,ParamX,Common
       ProgrVP vp =  (predProg vp) ;
 
 
-    ImpPl1 vp = {s = "ाw" ++ infVP True vp (agrP1 Masc Pl)} ;
-	ImpP3 np vp = {s = np.s!NPC Dir ++ "कw" ++ (vp.s ! VPImp ).inf ++ "दw"};
+--    ImpPl1 vp = {s = "आओ" ++ infVP True vp (agrP1 Masc Pl)} ;
+      ImpPl1 vp = {s = "आओ" ++ vp.obj.s ++ (vp.s !  VPTense VPFutr (agrP1 Masc Pl)).inf ++ vp.comp ! (agrP1 Masc Pl)} ;
+	ImpP3 np vp = {s = np.s!NPC Dir ++ "को" ++ (vp.s ! VPImp ).inf ++ "दो"};
 
 
 }

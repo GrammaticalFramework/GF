@@ -8,4 +8,6 @@ rf -file=src/IdiomHin.gf | ps -env=quotes -to_devanagari | wf -file=IdiomHin.gf
 rf -file=src/LexiconHin.gf | ps -env=quotes -to_devanagari | wf -file=LexiconHin.gf
 rf -file=src/MorphoHin.gf | ps -env=quotes -to_devanagari | wf -file=MorphoHin.gf
 rf -file=src/StructuralHin.gf | ps -env=quotes -to_devanagari | wf -file=StructuralHin.gf
+rf -file=src/StringsHin.gf | ps -env=quotes -to_devanagari | wf -file=StringsHin.gf
+rf -file=src/NumeralHin.gf | ps -env=quotes -to_devanagari | wf -file=NumeralHin.gf
 

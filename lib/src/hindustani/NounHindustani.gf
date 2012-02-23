@@ -1,6 +1,6 @@
 --concrete NounUrd of Noun = CatUrd ** open ResUrd, Prelude in {
 incomplete concrete NounHindustani of Noun =
-   CatHindustani ** open CommonHindustani, ResHindustani, StringsHindustani, Prelude in {
+   CatHindustani ** open CommonHindustani, ResHindustani, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -19,7 +19,7 @@ incomplete concrete NounHindustani of Noun =
       } ;
 
     PPartNP np v2 = {
-      s = \\c => v2.s ! VF Perf (fromAgr np.a).p (fromAgr np.a).n (fromAgr np.a).g   ++ np.s ! c   ;
+      s = \\c => v2.s ! VF Perf (fromAgr np.a).p (fromAgr np.a).n (fromAgr np.a).g   ++ hwa np.a ++ np.s ! c   ;
       a = np.a
       } ;
 
@@ -133,7 +133,11 @@ incomplete concrete NounHindustani of Noun =
 --    AdvCN cn ad = {s = \\n,c => cn.s ! n ! c ++ ad.s ; g = cn.g} ;    -- changed during WebAlt adver comes before noun like phaRy pr gh-r (house on the hill)
     AdvCN cn ad = {s = \\n,c => ad.s ! cn.g ++ cn.s ! n ! c ; g = cn.g} ;
     
-    SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s ; g = cn.g} ;
+    SentCN cn sc = {s = \\n,c => case sc.fromVP of {
+                           True => sc.s ++ ky ++ cn.s ! n ! c   ;
+			   False => cn.s ! n ! c ++ sc.s } ;
+			   g = cn.g ;
+			   } ;
 
     ApposCN cn np = {s = \\n,c => cn.s ! n ! Dir ++ np.s ! NPC c ; g = cn.g} ;
 
