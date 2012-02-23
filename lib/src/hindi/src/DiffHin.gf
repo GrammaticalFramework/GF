@@ -237,16 +237,6 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
 							  x  ("bahut" ++ x) 	("sab se:" ++ x)  x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x)
 							  x  ("bahut" ++ x) 	("sab se:" ++ x)  x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x)
 																 
-                            }; 
-IrregAdjective : Str -> Adjective;
-IrregAdjective x =   mkAdjective  x  ("bahut" ++ x)  	("sab se:" ++ x)  x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x)
-							  x  ("bahut" ++ x) 	("sab se:" ++ x) 	x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x)
-							  x  ("bahut" ++ x) 	("sab se:" ++ x)  x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x)
-							  x  ("bahut" ++ x) 	("sab se:" ++ x)  x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x) ;
-																 
+                            }; 												 
                   					 
-
-
-  
-       
 }
