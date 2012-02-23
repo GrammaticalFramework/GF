@@ -8,10 +8,13 @@ synopsis: FastCGI Server for Grammatical Framework
 
 flag fastcgi
   Description: Build the fastcgi service (requires the fastcgi package)
+               (In Ubuntu: apt-get install libghc-fastcgi-dev)
   Default:     False
 
 flag content
-  Description: Build content service (requires fastcgi and hsql-mysql packages)
+  Description:
+      Build content service (requires fastcgi and hsql-mysql packages)
+      (In Ubuntu: apt-get install libghc-fastcgi-dev libghc-hsql-mysql-dev)
   Default:     False
 
 executable pgf-http
@@ -53,6 +56,7 @@ executable pgf-service
 
   if flag(fastcgi)
     build-depends: fastcgi >= 3001.0.2.2
+       -- Install it in Ubuntu with: apt-get install libghc-fastcgi-dev
     buildable: True
   else
     buildable: False
@@ -78,8 +82,11 @@ executable pgf-service
 
 executable content-service
   if flag(content)
-    build-depends: base >=4.2 && <5,
-                   fastcgi >= 3001.0.2.2, hsql-mysql, hsql, old-locale
+    build-depends: base >=4.2 && <5, old-locale,
+                   fastcgi >= 3001.0.2.2,
+                       -- In Ubuntu: apt-get install libghc-fastcgi-dev
+                   hsql-mysql, hsql
+                       -- In Ubuntu: apt-get install libghc-hsql-mysql-dev
     buildable: True
   else
     buildable: False
