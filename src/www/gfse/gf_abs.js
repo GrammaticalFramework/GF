@@ -271,10 +271,10 @@ function show_concrete(g) {
 	    +show_extends((g.extends || []).map(conc_extends(conc)))
             +show_opens(conc.opens)
 	    +"{\n\nflags coding = utf8 ;\n\n"
-	    +show_params(conc.params)
 	    +show_lincats(conc.lincats)
-	    +show_opers(conc.opers)
 	    +show_lins(conc.lins)
+	    +show_params(conc.params)
+	    +show_opers(conc.opers)
 	    +"}\n"
     }
 }
