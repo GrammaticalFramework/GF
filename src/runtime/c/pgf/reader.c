@@ -352,8 +352,12 @@ pgf_read_into_map(GuMapType* mtype, PgfReader* rdr, GuMap* map)
 		   it. This allows us to create the value
 		   object and point into it before we read the
 		   content. */
-		void* valp = gu_map_insert(map, key);
-		pgf_read_to(rdr, mtype->value_type, valp);
+		void* val0p = gu_map_insert(map, key);
+		void* valp = pgf_read_new(rdr, mtype->value_type, tmp_pool, NULL);
+		// if the map has been updated,
+		// then the old val0p may not be valid.
+		val0p = gu_map_find(map, key);   
+		memcpy(val0p, valp, gu_type_size(mtype->value_type));
 		gu_return_on_exn(rdr->err, );
 	}
 	gu_pool_free(tmp_pool);
