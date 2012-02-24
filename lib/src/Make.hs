@@ -51,6 +51,7 @@ langsCoding = [
   (("punjabi",  "Pnb"),""),
   (("romanian", "Ron"),""),
   (("russian",  "Rus"),""),
+  (("sindhi",   "Snd"),""),
   (("spanish",  "Spa"),"Romance"),
   (("swedish",  "Swe"),"Scand"),
   (("thai",     "Tha"),""),
@@ -70,16 +71,16 @@ langsLangAll = langs
 langsLang = langs `except` langsIncomplete
 
 -- languagues that have notpresent marked
-langsPresent = langsLang `except` ["Nep","Pes","Tha"]
+langsPresent = langsLang `except` ["Nep","Pes","Snd","Tha"]
 
 -- languages for which Lang can be compiled but which are incomplete
-langsIncomplete = ["Amh","Ara","Hin","Lat","Tur"]
+langsIncomplete = ["Amh","Ara","Lat","Tur"]
 
 -- languages for which to compile Try
 langsAPI = langsLang `except` langsIncomplete
 
 -- languages for which to compile Symbolic
-langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Ina","Nep","Pes","Pnb","Rus"])
+langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Ina","Nep","Pes","Pnb","Rus", "Snd"])
 
 -- languages for which to compile minimal Syntax
 langsMinimal = langs `only` ["Ara","Eng","Bul","Rus"]
