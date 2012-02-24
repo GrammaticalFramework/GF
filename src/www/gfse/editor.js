@@ -536,7 +536,7 @@ function text_mode(g,file,ix) {
 	var mode_button=div_class("right",[button("Guided mode",switch_to_guided_mode)])
 	clear(file)
 	appendChildren(file,[mode_button,ta])
-	ta.style.height=ta.scrollHeight+"px";
+	//ta.style.height=ta.scrollHeight+"px";
 	ta.focus();
     }
     var mode_button=div_class("right",[button("Text mode",switch_to_text_mode)])

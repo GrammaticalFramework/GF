@@ -27,7 +27,7 @@ import Text.JSON(encode,showJSON,makeObj)
 import System.IO.Silently(hCapture)
 import System.Process(readProcessWithExitCode)
 import System.Exit(ExitCode(..))
-import Codec.Binary.UTF8.String(encodeString)
+import Codec.Binary.UTF8.String(decodeString,encodeString)
 import GF.Infra.UseIO(readBinaryFile,writeBinaryFile)
 import qualified PGFService as PS
 import qualified ExampleService as ES
@@ -158,7 +158,8 @@ handle state0 cache execute1
          let state' = maybe state (flip (M.insert dir) state) st'
          return (state',ok200 output)
 
-    parse qs = return (state,json200 (makeObj (map parseModule qs)))
+    parse qs =
+      return (state,json200 (makeObj(map(parseModule.apBoth decodeString) qs)))
 
     cloud dir cmd qs =
       case cmd of
@@ -382,6 +383,7 @@ removeDir dir =
 toHeader "Content-Type" = FCGI.HttpContentType -- to avoid duplicate headers
 toHeader s = FCGI.HttpExtensionHeader s -- cheating a bit
 -}
+
 -- * misc utils
 
 
@@ -392,5 +394,6 @@ inputs = queryToArguments . fixplus
     decode c   = [c]
 
 mapFst f xys = [(f x,y)|(x,y)<-xys]
+apBoth f (x,y) = (f x,f y)
 
 prop n v = (n,showJSON v)

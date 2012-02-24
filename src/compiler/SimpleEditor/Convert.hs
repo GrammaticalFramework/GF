@@ -103,7 +103,7 @@ convOpen o =
     _ -> fail "unsupported module open"
 
 
-data CncJment = Pa S.Param | LC Lincat | Op Oper | Li Lin
+data CncJment = Pa S.Param | LC Lincat | Op Oper | Li Lin | Ignored
 
 convCncJments = mapM convCncJment . Map.toList
 
@@ -111,13 +111,14 @@ convCncJment (name,jment) =
   case jment of
     ResParam ops _ ->
       return $ Pa $ Param i (maybe "" (render . ppParams q . unLoc) ops)
-    CncCat (Just (L _ typ)) Nothing Nothing _ ->
+    ResValue _ -> return Ignored
+    CncCat (Just (L _ typ)) Nothing pprn _ -> -- ignores printname !!
       return $ LC $ Lincat i (render $ ppTerm q 0 typ)
     ResOper oltyp (Just lterm) -> return $ Op $ Oper lhs rhs
       where
         lhs = i++maybe "" ((" : "++) . render . ppTerm q 0 . unLoc) oltyp
         rhs = " = "++render (ppTerm q 0 (unLoc lterm))
-    CncFun _ (Just ldef) Nothing _ ->
+    CncFun _ (Just ldef) pprn _ -> -- ignores printname !!
       do let (xs,e') = getAbs (unLoc ldef)
              lin = render $ ppTerm q 0 e'
          args <- mapM convBind xs
