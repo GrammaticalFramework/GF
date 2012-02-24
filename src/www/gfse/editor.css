@@ -99,6 +99,11 @@ li { margin-top: 0.5ex; margin-bottom: 0.5ex; }
 
 div.compiler_output .back_to_editor { display: none; }
 
+textarea.text_mode {
+    /*font-family: inherit; font-size: inherit;*/
+    width: 99%;
+}
+
 div#minibar {
     border: 1px solid black;
     padding: 5px;
