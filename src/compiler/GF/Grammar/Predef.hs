@@ -33,6 +33,7 @@ module GF.Grammar.Predef
           , cOccurs, cEqInt, cLessInt, cPlus, cShow, cRead
           , cToStr, cMapStr, cError
           , cToUpper, cToLower, cIsUpper
+          , cEqVal
 
           -- hacks
           , cMeta, cAs, cChar, cChars, cSeq, cAlt, cRep
@@ -128,6 +129,9 @@ cIsUpper = identC (BS.pack "isUpper")
 
 cEqStr :: Ident
 cEqStr = identC (BS.pack "eqStr")
+
+cEqVal :: Ident
+cEqVal = identC (BS.pack "eqVal")
 
 cOccur :: Ident
 cOccur = identC (BS.pack "occur")
