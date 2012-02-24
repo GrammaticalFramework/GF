@@ -41,6 +41,7 @@ are marked in the table
 | Pol   | +     | +    | +     | +   | +    | +   | +    | -     | -    | IN,*AS
 | Ron   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *RE
 | Rus   | +     | +    | ++    | +   | +    | +   | -    | -     | -    | JK,*NF
+| Snd   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,*JD
 | Spa   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,IA,TS,IL
 | Swa   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *WN,JM
 | Swe   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *MA,*AR,MF
@@ -92,6 +93,7 @@ IL Inari Listenmaa,
 IN Ilona Novak,
 JB Jean-Philippe Bernardy,
 JC John J. Camilleri,
+JD Jherna Devi,
 JK Janna Khegai,
 JM Juliet Mutahi,
 JS Jordi Saludes,
