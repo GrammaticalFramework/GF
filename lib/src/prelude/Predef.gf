@@ -32,6 +32,7 @@ resource Predef = {
   oper toLower : Tok       -> Tok      = variants {} ; -- map all chars to lower case
   oper show   : (P : Type) -> P -> Tok = variants {} ; -- convert param to string
   oper read   : (P : Type) -> Tok -> P = variants {} ; -- convert string to param
+  oper eqVal  : (P : Type) -> P -> P -> PBool = variants {} ; -- test if equal values
   oper toStr  : (L : Type) -> L -> Str = variants {} ; -- find the "first" string
   oper mapStr : (L : Type) -> (Str -> Str) -> L -> L = variants {} ; 
                -- map all strings in a data structure; experimental ---
