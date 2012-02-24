@@ -77,6 +77,8 @@ primitives = Map.fromList
                                          [(Explicit,varP,typePType),(Explicit,identW,typeStr)] (Vr varP) []))) Nothing)
   , (cShow     , ResOper (Just (noLoc (mkProd -- (P : PType) -> P -> Tok
                                          [(Explicit,varP,typePType),(Explicit,identW,Vr varP)] typeStr []))) Nothing)
+  , (cEqVal    , ResOper (Just (noLoc (mkProd -- (P : PType) -> P -> P -> PBool
+                                         [(Explicit,varP,typePType),(Explicit,identW,Vr varP),(Explicit,identW,Vr varP)] typePBool []))) Nothing)
   , (cToStr    , ResOper (Just (noLoc (mkProd -- (L : Type)  -> L -> Str
                                          [(Explicit,varL,typeType),(Explicit,identW,Vr varL)] typeStr []))) Nothing)
   , (cMapStr   , ResOper (Just (noLoc (mkProd -- (L : Type)  -> (Str -> Str) -> L -> L
@@ -135,6 +137,7 @@ appPredefined t = case t of
      (z,_) <- appPredefined z0
      case (z, y, x) of
        (ty,op,t) | f == cMapStr -> retf $ mapStr ty op t
+       _ | f == cEqVal -> retb $ if y==x then predefTrue else predefFalse
        _ -> retb t ---- prtBad "cannot compute predefined" t
 
     _ -> retb t ---- prtBad "cannot compute predefined" t
