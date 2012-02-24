@@ -434,6 +434,7 @@ pgf_read_to_PgfCCatId(GuType* type, PgfReader* rdr, void* to)
         ccat = gu_new(PgfCCat, rdr->opool);
         ccat->cnccat = NULL;
         ccat->lindefs = gu_map_get(rdr->curr_lindefs, &fid, PgfFunIds*);
+        ccat->n_synprods = 0;
         ccat->prods = gu_null_seq;
         ccat->fid = fid;
 
@@ -780,6 +781,7 @@ pgf_read_new_PgfCncCat(GuType* type, PgfReader* rdr, GuPool* pool,
             ccat = gu_new(PgfCCat, rdr->opool);
             ccat->cnccat = NULL;
             ccat->lindefs = gu_map_get(rdr->curr_lindefs, &fid, PgfFunIds*);
+            ccat->n_synprods = 0;
             ccat->prods = gu_null_seq;
             ccat->fid = fid;
 

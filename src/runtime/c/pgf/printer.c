@@ -123,7 +123,7 @@ pgf_print_productions(GuMapItor* fn, const void* key, void* value,
 			}
 			case PGF_PRODUCTION_COERCE: {
 				PgfProductionCoerce* pcoerce = i.data;
-				gu_printf(wtr,err,"_[C%d]\n",pcoerce->coerce);
+				gu_printf(wtr,err,"_[C%d]\n",pcoerce->coerce->fid);
 				break;
 			}
 			default:
