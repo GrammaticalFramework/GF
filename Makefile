@@ -1,4 +1,4 @@
-.PHONY: all build install doc clean sdist
+.PHONY: all build install doc clean sdist gf
 
 all: build
 
