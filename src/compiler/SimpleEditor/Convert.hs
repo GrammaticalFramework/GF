@@ -1,14 +1,16 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
 module SimpleEditor.Convert where
 
-import Control.Monad(unless,foldM,ap)
+import Control.Monad(unless,foldM,ap,mplus)
+import Data.List(sortBy)
+import Data.Function(on)
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS(pack)
 import Text.JSON(encode,makeObj)
 import Text.PrettyPrint(render)
 
 --import GF.Compile.GetGrammar (getSourceModule)
---import GF.Infra.Option(noOptions)
+import GF.Infra.Option(optionsGFO)
 import GF.Infra.Ident(showIdent)
 --import GF.Infra.UseIO(appIOE)
 import GF.Grammar.Grammar
@@ -47,15 +49,18 @@ convAbstract (modid,src) =
   do unless (isModAbs src) $ fail "Abstract syntax expected"
      unless (isCompleteModule src) $ fail "A complete abstract syntax expected"
      extends <- convExtends (mextend src)
-     (cats,funs) <- convAbsJments (jments src)
-     let startcat = head (cats++["-"]) -- !!!
+     (cats0,funs0) <- convAbsJments (jments src)
+     let cats = reverse cats0
+         funs = reverse funs0
+         flags = optionsGFO (mflags src)
+         startcat = maybe "-" id $ lookup "startcat" flags
      return $ Grammar (convId modid) extends (Abstract startcat cats funs) []
 
 convExtends = mapM convExtend
 convExtend (modid,MIAll) = return (convId modid)
 convExtend _ = fail "unsupported module extension"
 
-convAbsJments jments = foldM convAbsJment ([],[]) (Map.toList jments)
+convAbsJments jments = foldM convAbsJment ([],[]) (jmentList jments)
 
 convAbsJment (cats,funs) (name,jment) =
   case jment of
@@ -105,7 +110,7 @@ convOpen o =
 
 data CncJment = Pa S.Param | LC Lincat | Op Oper | Li Lin | Ignored
 
-convCncJments = mapM convCncJment . Map.toList
+convCncJments = mapM convCncJment . jmentList
 
 convCncJment (name,jment) =
   case jment of
@@ -130,3 +135,18 @@ convCncJment (name,jment) =
 
 convBind (Explicit,v) = return $ convId v
 convBind (Implicit,v) = fail "implicit binding not supported"
+
+jmentList = sortBy (compare `on` (jmentLocation.snd)) . Map.toList
+
+jmentLocation jment =
+  case jment of
+    AbsCat ctxt      -> fmap loc ctxt
+    AbsFun ty _ _ _  -> fmap loc ty
+    ResParam ops _   -> fmap loc ops
+    CncCat ty _ _ _  -> fmap loc ty
+    ResOper ty rhs   -> fmap loc rhs `mplus` fmap loc ty
+    CncFun _ rhs _ _ -> fmap loc rhs
+    _ -> Nothing
+
+
+loc (L l _) = l
