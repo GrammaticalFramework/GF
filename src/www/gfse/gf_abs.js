@@ -29,18 +29,24 @@ type Lhs = String -- name and type of oper,
 type Term = String -- arbitrary GF term (not parsed by the editor)
 */
 
-// locally_defined_cats :: Grammar -> {Cat=>Bool} -> {Cat=>Bool} // destr upd
+// locally_defined_cats :: Grammar -> {Cat=>ModId} -> {Cat=>ModId} // destr upd
 function locally_defined_cats(g,dc) {
     with(g.abstract)
 	for(var i in cats) dc[cats[i]]=g.basename;
     return dc;
 }
 
-// all_defined_cats :: Grammar -> [Grammar] -> {Cat=>Bool}
-function all_defined_cats(g,igs) {
-    return all_inherited_cats(igs,locally_defined_cats(g,{}))
+// predefined_cats :: () -> {Cat=>ModId}
+function predefined_cats() {
+    var pd = "Predef"
+    return { "Int":pd, "Float":pd, "String":pd}
 }
-// all_inherited_cats :: [Grammar] -> {Cat=>Bool} -> {Cat=>Bool} // destr upd
+
+// all_defined_cats :: Grammar -> [Grammar] -> {Cat=>ModId}
+function all_defined_cats(g,igs) {
+    return all_inherited_cats(igs,locally_defined_cats(g,predefined_cats()))
+}
+// all_inherited_cats :: [Grammar] -> {Cat=>ModId} -> {Cat=>ModId} // destr upd
 function all_inherited_cats(igs,dc) {
     for(var i in igs) dc=locally_defined_cats(igs[i],dc)
     return dc;
