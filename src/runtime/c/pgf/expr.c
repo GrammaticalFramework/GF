@@ -350,6 +350,8 @@ pgf_print_expr(PgfExpr expr, int prec,
 		break;
 	}
 	case PGF_EXPR_META:
+		gu_putc('?', wtr, err);
+		break;
 	case PGF_EXPR_VAR:
 	case PGF_EXPR_TYPED:
 	case PGF_EXPR_IMPL_ARG:
