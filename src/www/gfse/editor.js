@@ -366,7 +366,7 @@ function draw_startcat(g) {
     function opt(cat) { return option(cat,cat); }
     var opts = g.extends && g.extends.length>0 ? [opt("-")] : [];
     var dc=defined_cats(g);
-    for(var cat in dc) opts.push(opt(cat));
+    for(var cat in dc) if(dc[cat]!="Predef") opts.push(opt(cat));
     var m = node("select",{},opts);
     m.value=startcat;
     m.onchange=function() { 
@@ -1096,7 +1096,9 @@ function draw_lins(g,ci) {
 
 function defined_cats(g) { return all_defined_cats(g,inherited_grammars(g)) }
 function defined_funs(g) { return all_defined_funs(g,inherited_gramamrs(g)) }
-function inherited_cats(g) {return all_inherited_cats(inherited_grammars(g),{})}
+function inherited_cats(g) {
+    return all_inherited_cats(inherited_grammars(g),predefined_cats())
+}
 function inherited_funs(g) {return all_inherited_funs(inherited_grammars(g),{})}
 
 function upload(g,cont) {
