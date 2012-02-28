@@ -126,7 +126,7 @@ appPredefined t = case t of
       (EInt i, EInt j) | f == cEqInt   -> retb $ if i==j then predefTrue else predefFalse
       (EInt i, EInt j) | f == cLessInt -> retb $ if i<j  then predefTrue else predefFalse
       (EInt i, EInt j) | f == cPlus    -> retb $ EInt $ i+j
-      (_,      t)      | f == cShow    -> retb $ foldr C Empty $ map K $ words $ render (ppTerm Unqualified 0 t)
+      (_,      t)      | f == cShow  && notVar t  -> retb $ foldrC $ map K $ words $ render (ppTerm Unqualified 0 t)
       (_,      K s)    | f == cRead    -> retb $ Cn (identC (BS.pack s)) --- because of K, only works for atomic tags
       (_,      t)      | f == cToStr   -> trm2str t >>= retb
       _ -> retb t ---- prtBad "cannot compute predefined" t
@@ -137,7 +137,7 @@ appPredefined t = case t of
      (z,_) <- appPredefined z0
      case (z, y, x) of
        (ty,op,t) | f == cMapStr -> retf $ mapStr ty op t
-       _ | f == cEqVal -> retb $ if y==x then predefTrue else predefFalse
+       _ | f == cEqVal && notVar y && notVar x -> retb $ if y==x then predefTrue else predefFalse
        _ -> retb t ---- prtBad "cannot compute predefined" t
 
     _ -> retb t ---- prtBad "cannot compute predefined" t
@@ -156,6 +156,11 @@ appPredefined t = case t of
        (K x,K y) -> K (x +++ y)
        _ -> t
      _ -> t
+   notVar t = case t of
+     Vr _ -> False
+     App f a -> notVar f && notVar a
+     _ -> True ---- would need to check that t is a value
+   foldrC ts = if null ts then Empty else foldr1 C ts
 
 -- read makes variables into constants
 
