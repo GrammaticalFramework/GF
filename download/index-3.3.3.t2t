@@ -1,0 +1,117 @@
+Grammatical Framework Download and Installation
+
+
+%!style:../css/style.css
+%!postproc(html): <TD><B> <TH>
+%!postproc(html): </B></TD> </TH>
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+
+**GF 3.3.3** was released on 3 March 2012.
+
+What's new? See the [Release notes release-3.3.3.html].
+
+
+== Binary packages ==
+
+| **Platform** | **Download** | **How to install**
+| ... | ... | ...
+
+More packages might be added later.
+
+===Notes===
+
+The Windows package is installed by just unpacking it anywhere. 
+It finds the libraries relative to the ``.exe`` file.
+
+%The ``.deb`` packages work on Ubuntu 10.04 and 10.10.
+
+%The ``.pkg`` package works on MacOS X 10.6 (Snow Leopard).
+The MacOS tar package works on 10.5 (Leopard), 10.6 (Snow Leopard) and probably
+also 10.7 (Lion).
+
+The MacOS and Linux ``.tar.gz`` packages are designed to be installed in ``/usr/local``.
+You can install them in other locations, but then you need to set the
+``GF_LIB_PATH`` environment variable:
+
+```
+  export GF_LIB_PATH=/usr/local/share/gf-3.3/lib
+```
+
+where ``/usr/local`` should be replaced with the path to the location where you
+unpacked the package.
+
+
+==Installing the latest release from source==
+
+[GF is on Hackage http://hackage.haskell.org/package/gf], so the prodedure is
+fairly simple:
+
++ Install the
+  [Haskell Platform 2010.2.0.0 (July 2010) http://hackage.haskell.org/platform]
+  or newer.
++ ``cabal update``
++ On Linux: install some C libraries from your Linux distribution (see below)
++ ``cabal install gf``
+
+
+You can also download the full source package from here:
+[``gf-3.3.3.tar.gz`` gf-3.3.3.tar.gz].
+
+=== Notes ===
+
+The above steps installs GF for a single user and does not require root
+privileges. The executables are put in ``$HOME/.cabal/bin``
+(or, with recent versions of the Haskell platform on Mac OS X,
+in ``$HOME/Library/Haskell/bin``), so it is a good
+idea to put a line in your ``.bash_profile`` to add that directory to you path:
+
+```
+  PATH=$HOME/.cabal/bin:$PATH
+```
+or
+```
+  PATH=$HOME/Library/Haskell/bin:$PATH
+```
+
+GF uses ``haskeline``, which depends some non-Haskell libraries that
+won't be installed automatically by cabal, so you need to install
+them manually. Here is one way to do this:
+
+- On Ubuntu: ``sudo apt-get install libghc6-terminfo-dev``
+- On Fedora: ``sudo yum install ghc-terminfo-devel``
+
+
+==Installing from the latest developer code==
+
+The first time:
+
+```
+  darcs get --lazy http://www.grammaticalframework.org/ GF
+  cd GF
+  cabal install
+```
+
+Subsequently:
+
+```
+  cd GF
+  darcs pull -a
+  cabal install
+```
+
+The above notes for installing from source apply also in this case.
+
+
+==Older releases==
+
+- [GF 3.3 index-3.3.html] (October 2011).
+- [GF 3.2.9 index-3.2.9.html] source-only snapshot (September 2011).
+- [GF 3.2 index-3.2.html] (December 2010).
+- [GF 3.1.6 index-3.1.6.html] (April 2010).
+- [GF 3.1 old-index.html] (December 2009).
+
+
+--------------------
+
+[www.grammaticalframework.org http://www.grammaticalframework.org]
+ 
