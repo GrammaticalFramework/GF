@@ -166,7 +166,7 @@ pgf_print_item(PgfItem* item, GuWriter* wtr, GuExn* err)
             PgfPArg arg = gu_seq_get(item->args, PgfPArg, i);
             gu_printf(wtr, err,
                       ((i < gu_seq_length(item->args)-1) ? "C%d," : "C%d"),
-                      ((arg.ccat == NULL) ? 0 : arg.ccat->fid));
+                      arg.ccat->fid);
         }
         gu_printf(wtr, err, "]; %d : ",item->base->lin_idx);
 		PgfSequence seq = fun->lins[item->base->lin_idx];
