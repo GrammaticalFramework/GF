@@ -275,8 +275,11 @@ catFactor (PFCat _ f _) = f
 
 computeCatRange gr lincat = compute (0,1) lincat
   where
-    compute st (RecType  rs) = let (st',rs') = List.mapAccumL (\st (lbl,t) -> let (st',t') = compute st t
-                                                                              in (st',(lbl,Identity t'))) st rs
+    compute st (RecType  rs) = let (st',rs') = List.mapAccumL (\st (lbl,t) -> case lbl of
+                                                                                LVar _ -> let (st',t') = compute st t
+                                                                                          in (st ,(lbl,Identity t'))
+                                                                                _      -> let (st',t') = compute st t
+                                                                                          in (st',(lbl,Identity t'))) st rs
                                in (st',CRec rs')
     compute st (Table pt vt) = let vs        = err error id (allParamValues gr pt)
                                    (st',cs') = List.mapAccumL (\st v       -> let (st',vt') = compute st vt
