@@ -1,0 +1,20 @@
+GF Version 3.3.3 Release Notes
+March 2012
+
+%!style:../css/style.css
+%!postproc(html): <H1> <H1><IMG src="../doc/Logos/gf0.png">
+
+==Installation==
+
+See the [download page http://www.grammaticalframework.org/download/index.html].
+
+==New features==
+
+- New option ``gf -tags`` generates tags files for use with the GF Eclipse
+  plugin.
+- ...
+- ...
+
+--------------------
+
+[www.grammaticalframework.org http://www.grammaticalframework.org]
