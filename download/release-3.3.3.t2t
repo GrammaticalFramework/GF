@@ -12,7 +12,8 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 - New option ``gf -tags`` generates tags files for use with the [GF Eclipse
   plugin http://www.grammaticalframework.org/eclipse/].
-- ...
+- New languages in the Resource Grammar Library: Latvian, Thai, Hindi, Sindhi
+- Bug fixes: ...
 - ...
 
 
