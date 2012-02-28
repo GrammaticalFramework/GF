@@ -182,9 +182,8 @@ pgf_print_item(PgfItem* item, GuWriter* wtr, GuExn* err)
 		break;
 	}
 	case PGF_PRODUCTION_COERCE: {
-		PgfProductionCoerce* pcoerce = i.data;
         gu_printf(wtr, err, "_[C%d]; %d : ",
-            pcoerce->coerce->fid,
+            gu_seq_index(item->args, PgfPArg, 0)->ccat,
             item->base->lin_idx);
         if (item->seq_idx == 0)
             gu_printf(wtr, err, ". ");
