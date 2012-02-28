@@ -129,13 +129,13 @@ int main(int argc, char* argv[]) {
 			tok = strtok(NULL, " \n");
 		}
 		
+		// Now begin enumerating the resulting syntax trees
+		GuEnum* result = pgf_parse_result(parse, ppool);
+
 		clock_t end = clock();
 
 		double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 		printf("%.2f sec\n", cpu_time_used);
-
-		// Now begin enumerating the resulting syntax trees
-		GuEnum* result = pgf_parse_result(parse, ppool);
 
 		while (true) {
 			PgfExpr expr = gu_next(result, PgfExpr, ppool);
