@@ -7,7 +7,7 @@ concrete ExtraIta of ExtraItaAbs = ExtraRomanceIta **
       Fem Sg P1 ;
     these8fem_NP = makeNP ["queste"] Fem Pl ;
     they8fem_Pron = mkPronoun
-      "loro" "loro" "li" "glie" "loro" "loro" "loro" "loro" "loro" 
+      "loro" "li" "li" "glie" "loro" "loro" "loro" "loro" "loro" 
       Fem Pl P3 ;
     this8fem_NP = pn2np (mkPN ["questa"] Fem) ;
     those8fem_NP = makeNP ["quelle"] Fem Pl ;
@@ -30,10 +30,10 @@ concrete ExtraIta of ExtraItaAbs = ExtraRomanceIta **
         Fem Sg P3 ;
 
     youPolPl_Pron = mkPronoun
-      "Loro" "Loro" "Li" "Glie" "Loro" "Loro" "Loro" "Loro" "Loro" 
+      "Loro" "Li" "Li" "Glie" "Loro" "Loro" "Loro" "Loro" "Loro" 
       Masc Pl P3 ;
     youPolPl8fem_Pron = mkPronoun
-      "Loro" "Loro" "Li" "Glie" "Loro" "Loro" "Loro" "Loro" "Loro" 
+      "Loro" "Li" "Li" "Glie" "Loro" "Loro" "Loro" "Loro" "Loro" 
       Fem Pl P3 ;
 
     PossFamQuant p = {
