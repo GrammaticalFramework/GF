@@ -148,6 +148,7 @@ function draw_namebar(g,files) {
     return div_class("namebar",
 		  [table([tr([td(draw_name(g)),
 			      td_right([minibar_button(g,files),
+					quiz_button(g),
 					compile_button(g),
 					draw_plainbutton(g,files),
 					draw_closebutton(g)])])])])
@@ -184,7 +185,7 @@ function show_compile_error(res) {
     var dst=compiler_output
     if(dst) {
 	clear(dst);
-	var minibarlink=a(res.minibar_url,[text("Minibar")])
+	//var minibarlink=a(res.minibar_url,[text("Minibar")])
 	if(res.errorcode=="OK")
 	    dst.appendChild(wrap("h3",text("OK")))
 	else
@@ -242,6 +243,22 @@ function minibar_button(g,files) {
     b.title="Upload the grammar and test it in the minibar";
     return b;
 }
+
+function quiz_button(g) {
+    function goto_quiz(res) {
+	show_compile_error(res);
+	if(res.errorcode=="OK")
+	    location.href="../TransQuiz/translation_quiz.html?"+local.get("dir")+"/"
+    }
+    function compile() {
+	replaceInnerHTML(compiler_output,"<h3>Compiling...</h3>");
+	upload(g,goto_quiz);
+    }
+    var b=button("Quiz",compile);
+    b.title="Upload the grammar and go to the translation quiz";
+    return b;
+}
+
 
 function lang(code,name) { return { code:code, name:name} }
 function lang1(name) {

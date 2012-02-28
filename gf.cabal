@@ -23,6 +23,10 @@ data-files: www/index.html
 	    www/minibar/*.css
 	    www/minibar/*.js
 	    www/minibar/*.png
+	    www/TransQuiz/*.html
+	    www/TransQuiz/*.css
+	    www/TransQuiz/*.js
+	    www/TransQuiz/*.png
 
 source-repository head
   type:     darcs
