@@ -110,7 +110,7 @@ handle state0 cache execute1
            '/':rpath ->
              case (takeDirectory path,takeFileName path,takeExtension path) of
                (_  ,_             ,".pgf") -> wrapCGI $ PS.cgiMain' cache path
-               (dir,"grammars.cgi",_     ) -> grammarList dir
+               (dir,"grammars.cgi",_     ) -> grammarList dir qs
                (dir  ,"exb.fcgi"  ,_    ) -> wrapCGI $ ES.cgiMain' root dir cache
                _ -> do resp <- serveStaticFile path
                        return (state,resp)
@@ -219,9 +219,9 @@ handle state0 cache execute1
     link_directories olddir newdir _ =
       return (state,resp400 $ "unacceptable directories "++olddir++" "++newdir)
 
-    grammarList dir =
+    grammarList dir qs =
         do pgfs <- ls_ext dir ".pgf"
-           return (state,json200 pgfs)
+           return (state,jsonp qs pgfs)
 
     ls_ext dir ext =
         do paths <- getDirectoryContents dir
@@ -313,10 +313,17 @@ serveStaticFile' path =
 -- * Logging
 logPutStrLn = hPutStrLn stderr
 
+-- * JSONP output
+
+jsonp qs = json200' $ maybe id apply (lookup "jsonp" qs)
+  where
+    apply f json = f++"("++json++")"
+
 -- * Standard HTTP responses
 ok200        = Response 200 [plainUTF8,noCache] . encodeString
 ok200' t     = Response 200 [t]
-json200 x    = ok200' jsonUTF8 . encodeString . encode $ x
+json200 x    = json200' id x
+json200' f   = ok200' jsonUTF8 . encodeString . f . encode
 html200      = ok200' htmlUTF8 . encodeString
 resp204      = Response 204 [] "" -- no content
 resp400 msg  = Response 400 [plain] $ "Bad request: "++msg++"\n"
