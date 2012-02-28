@@ -34,7 +34,7 @@ You can install them in other locations, but then you need to set the
 ``GF_LIB_PATH`` environment variable:
 
 ```
-  export GF_LIB_PATH=/usr/local/share/gf-3.3/lib
+  export GF_LIB_PATH=/usr/local/share/gf-3.3.3/lib
 ```
 
 where ``/usr/local`` should be replaced with the path to the location where you
@@ -46,11 +46,11 @@ unpacked the package.
 [GF is on Hackage http://hackage.haskell.org/package/gf], so the prodedure is
 fairly simple:
 
-+ Install the
-  [Haskell Platform 2010.2.0.0 (July 2010) http://hackage.haskell.org/platform]
-  or newer.
++ Install the [Haskell Platform http://hackage.haskell.org/platform]
+  (versions 2010.2.0.0 - 2011.4.0.0 should work) (see note 2 below)
 + ``cabal update``
-+ On Linux: install some C libraries from your Linux distribution (see below)
++ On Linux: install some C libraries from your Linux distribution
+  (see note 1 below)
 + ``cabal install gf``
 
 
@@ -59,8 +59,9 @@ You can also download the full source package from here:
 
 === Notes ===
 
-The above steps installs GF for a single user and does not require root
-privileges. The executables are put in ``$HOME/.cabal/bin``
+The above steps installs GF for a single user.
+% and does not require root privileges.
+The executables are put in ``$HOME/.cabal/bin``
 (or, with recent versions of the Haskell platform on Mac OS X,
 in ``$HOME/Library/Haskell/bin``), so it is a good
 idea to put a line in your ``.bash_profile`` to add that directory to you path:
@@ -73,7 +74,9 @@ or
   PATH=$HOME/Library/Haskell/bin:$PATH
 ```
 
-GF uses ``haskeline``, which depends some non-Haskell libraries that
+**Note 1**.
+GF uses [``haskeline`` http://hackage.haskell.org/package/haskeline], which
+depends some non-Haskell libraries that
 won't be installed automatically by cabal, so you need to install
 them manually. Here is one way to do this:
 
@@ -81,9 +84,14 @@ them manually. Here is one way to do this:
 - On Fedora: ``sudo yum install ghc-terminfo-devel``
 
 
+**Note 2**.
+GF does **not** compile with the most recent versions of GHC (>=7.2).
+GF does **not** compile with the most recent versions of Alex (>=3.0).
+
 ==Installing from the latest developer code==
 
 The first time:
+%, assuming you already have the Haskell Platform and darcs
 
 ```
   darcs get --lazy http://www.grammaticalframework.org/ GF
