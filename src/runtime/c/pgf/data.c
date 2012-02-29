@@ -149,7 +149,10 @@ GU_DEFINE_TYPE(
 		PGF_PRODUCTION_CONST, PgfProductionConst,
 		GU_MEMBER(PgfProductionConst, expr, PgfExpr),
 		GU_MEMBER(PgfProductionConst, n_toks, GuLength),
-		GU_FLEX_MEMBER(PgfProductionConst, toks, GuString)));
+		GU_FLEX_MEMBER(PgfProductionConst, toks, GuString)),
+	GU_CONSTRUCTOR_S(
+		PGF_PRODUCTION_META, PgfProductionMeta,
+		GU_MEMBER(PgfProductionMeta, args, PgfPArgs)));
 
 GU_DEFINE_TYPE(PgfProductions, GuList, gu_type(PgfProduction));
 GU_DEFINE_TYPE(PgfProductionSeq, GuSeq, gu_type(PgfProduction));

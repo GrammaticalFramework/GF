@@ -741,7 +741,8 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
 	concr->epsilon_idx = gu_map_type_new(PgfEpsilonIdx, pool);
 	pgf_read_into_map(ccats_t, rdr, concr->ccats);
 	concr->cnccats = pgf_read_new(rdr, gu_type(PgfCncCatMap), pool, NULL);
-	concr->max_fid = pgf_read_int(rdr);
+	concr->total_cats = pgf_read_int(rdr);
+	concr->max_fid = concr->total_cats;
 
 	PgfIndexFn clo1 = { { pgf_read_ccat_cb }, rdr };
 	gu_map_iter(concr->ccats, &clo1.fn, NULL);

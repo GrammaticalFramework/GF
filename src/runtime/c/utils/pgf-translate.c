@@ -120,7 +120,7 @@ int main(int argc, char* argv[]) {
 			GuString tok_s = gu_str_string(tok, pool);
 			gu_debug("parsing token \"%s\"", tok);
 			// feed the token to get a new parse state
-			parse = pgf_parse_token(parse, tok_s, ppool);
+			parse = pgf_parse_token(parse, tok_s, true, ppool);
 			if (!parse) {
 				fprintf(stderr,
 					"Unexpected token: \"%s\"\n", tok);

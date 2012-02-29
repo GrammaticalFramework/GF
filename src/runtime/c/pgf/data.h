@@ -206,6 +206,7 @@ struct PgfConcr {
     PgfCncFuns* cncfuns;
     PgfSequences* sequences;
 	PgfCIdMap* cnccats;
+	int total_cats;
     int max_fid;
 };
 
@@ -254,7 +255,8 @@ typedef struct PgfSymbolKP
 typedef enum {
 	PGF_PRODUCTION_APPLY,
 	PGF_PRODUCTION_COERCE,
-	PGF_PRODUCTION_CONST
+	PGF_PRODUCTION_CONST,
+	PGF_PRODUCTION_META
 } PgfProductionTag;
 
 typedef struct PgfPArg PgfPArg;
@@ -289,6 +291,9 @@ typedef struct {
 	GuString toks[]; // XXX
 } PgfProductionConst;
 
+typedef struct {
+	PgfPArgs args;
+} PgfProductionMeta;
 
 extern GU_DECLARE_TYPE(PgfPatt, GuVariant);
 

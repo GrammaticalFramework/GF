@@ -49,7 +49,7 @@ pgf_parser_parse(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool);
 
 /// Feed a token to the parser
 PgfParse*
-pgf_parse_token(PgfParse* parse, PgfToken tok, GuPool* pool);
+pgf_parse_token(PgfParse* parse, PgfToken tok, bool robust, GuPool* pool);
 /**<
  * @param parse The current parse state
  *
