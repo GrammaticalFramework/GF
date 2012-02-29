@@ -244,7 +244,7 @@ resource ResMlt = PatternsMlt ** open Prelude in {
     } ;
 -}
     Noun : Type = {
-      s : Noun_Number => Definiteness => Str ;
+      s : Noun_Number => Str ;
       g : Gender ;
     } ;
 
