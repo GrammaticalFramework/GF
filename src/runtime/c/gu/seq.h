@@ -124,6 +124,20 @@ gu_buf_trim(GuBuf* buf);
 void
 gu_seq_resize_tail(GuSeq seq, ptrdiff_t change);
 
+
+// Using a buffer as a heap
+void
+gu_buf_heap_push(GuBuf *buf, GuOrder *order, void *value);
+
+void
+gu_buf_heap_pop(GuBuf *buf, GuOrder *order, void* data_out);
+
+void
+gu_buf_heap_replace(GuBuf *buf, GuOrder *order, void *value, void *data_out);
+
+void
+gu_buf_heapify(GuBuf *buf, GuOrder *order);
+
 #if 0
 void
 gu_buf_resize_head(GuBuf* buf, ptrdiff_t change);
