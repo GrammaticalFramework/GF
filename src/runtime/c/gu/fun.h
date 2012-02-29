@@ -62,4 +62,10 @@ struct GuEquality {
 	bool (*is_equal)(GuEquality* self, const void* a, const void* b);
 };
 
+typedef const struct GuOrder GuOrder;
+
+struct GuOrder {
+	int (*compare)(GuOrder* self, const void* a, const void* b);
+};
+
 #endif // GU_FUN_H_
