@@ -155,49 +155,49 @@ doExternal (Just cmd) input =
 doTranslate :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
 doTranslate pgf input mcat mfrom mto =
   showJSON
-     [toJSObject (("from", showJSON from) :
-                  ("brackets", showJSON bs) :
-                  jsonParseOutput po)
-           | (from,po,bs) <- parse' pgf input mcat mfrom]
+     [makeObj ("from".=from : "brackets".=bs : jsonTranslateOutput po)
+          | (from,po,bs) <- parse' pgf input mcat mfrom]
   where
-    jsonParseOutput (PGF.ParseOk trees)  = [("translations",showJSON 
-                                               [toJSObject [("tree",          showJSON tree),
-                                                            ("linearizations",showJSON 
-                                                               [toJSObject [("to", showJSON to),
-                                                                            ("text",showJSON output)]
-                                                                  | (to,output) <- linearizeAndBind pgf mto tree]
-                                                            )]
-                                                   | tree <- trees])]
-    jsonParseOutput (PGF.ParseIncomplete)= []
-    jsonParseOutput (PGF.ParseFailed _)  = []
-    jsonParseOutput (PGF.TypeError errs) = [("typeErrors",showJSON [toJSObject [("fid", showJSON fid)
-                                                                               ,("msg", showJSON (show (PGF.ppTcError err)))
-                                                                               ] | (fid,err) <- errs])]
+    jsonTranslateOutput output =
+      case output of
+        PGF.ParseOk trees ->
+            ["translations".=
+              [makeObj ["tree".=tree,
+                        "linearizations".=
+                            [makeObj ["to".=to, "text".=output]
+                               | (to,output) <- linearizeAndBind pgf mto tree]] 
+                | tree <- trees]]
+        PGF.ParseIncomplete -> ["incomplete".=True]
+        PGF.ParseFailed n   -> ["parseFailed".=n]
+        PGF.TypeError errs -> jsonTypeErrors errs
+
+jsonTypeErrors errs = 
+    ["typeErrors".= [makeObj ["fid".=fid, "msg".=show (PGF.ppTcError err)]
+                       | (fid,err) <- errs]]
 
 -- used in phrasebook
 doTranslateGroup :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
 doTranslateGroup pgf input mcat mfrom mto =
   showJSON
-     [toJSObject [("from",          showJSON (langOnly (PGF.showLanguage from))),
-                  ("to",            showJSON (langOnly (PGF.showLanguage to))),
-                  ("linearizations",showJSON 
-                      [toJSObject (("text", doText (doBind alt)) : disamb lg from ts) | 
-                                             (ts,alt) <- output, let lg = length output])
-                 ]
-        | 
-          (from,po,bs) <- parse' pgf input mcat mfrom,
-          (to,output)  <- groupResults [(t, linearize' pgf mto t) | t <- case po of {PGF.ParseOk ts -> ts; _ -> []}]
+    [makeObj ["from".=langOnly (PGF.showLanguage from),
+              "to".=langOnly (PGF.showLanguage to),
+              "linearizations".=
+                 [toJSObject (("text", doText (doBind alt)) : disamb lg from ts)
+                    | (ts,alt) <- output, let lg = length output]
+              ]
+       | 
+         (from,po,bs) <- parse' pgf input mcat mfrom,
+         (to,output)  <- groupResults [(t, linearize' pgf mto t) | t <- case po of {PGF.ParseOk ts -> ts; _ -> []}]
           ]
   where
    groupResults = Map.toList . foldr more Map.empty . start . collect
      where
        collect tls = [(t,(l,s)) | (t,ls) <- tls, (l,s) <- ls, notDisamb l]
        start ls = [(l,[([t],s)]) | (t,(l,s)) <- ls]
-       more (l,s) = 
-         Map.insertWith (\ [([t],x)] xs -> insertAlt t x xs) l s
+       more (l,s) = Map.insertWith (\ [([t],x)] xs -> insertAlt t x xs) l s
 
    insertAlt t x xs = case xs of
-     (ts,y):xs2 -> if x==y then (t:ts,y):xs2        -- if string is there add only tree
+     (ts,y):xs2 -> if x==y then (t:ts,y):xs2 -- if string is there add only tree
                    else (ts,y) : insertAlt t x xs2
      _ -> [([t],x)]
 
@@ -234,79 +234,77 @@ doTranslateGroup pgf input mcat mfrom mto =
    notDisamb = (/="Disamb") . take 6 . PGF.showLanguage
 
 doParse :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> JSValue
-doParse pgf input mcat mfrom = showJSON $ map toJSObject
-     [("from", showJSON from) :
-      ("brackets", showJSON bs) :
-      jsonParseOutput po
-         | (from,po,bs) <- parse' pgf input mcat mfrom]
+doParse pgf input mcat mfrom = showJSON $ map makeObj
+     ["from".=from : "brackets".=bs : jsonParseOutput po
+        | (from,po,bs) <- parse' pgf input mcat mfrom]
   where
-    jsonParseOutput (PGF.ParseOk trees)  = [("trees",showJSON trees)]
-    jsonParseOutput (PGF.ParseFailed _)  = []
-    jsonParseOutput (PGF.TypeError errs) = [("typeErrors",showJSON [toJSObject [("fid", showJSON fid)
-                                                                               ,("msg", showJSON (show (PGF.ppTcError err)))
-                                                                               ] | (fid,err) <- errs])]
+    jsonParseOutput output =
+      case output of
+        PGF.ParseOk trees   -> ["trees".=trees]
+        PGF.TypeError errs  -> jsonTypeErrors errs
+        PGF.ParseIncomplete -> ["incomlete".=True]
+        PGF.ParseFailed n   -> ["parseFailed".=n]
 
 doComplete :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe Int -> JSValue
-doComplete pgf input mcat mfrom mlimit = showJSON $ map toJSObject
-  [[("from",        showJSON from),
-    ("brackets",    showJSON bs),
-    ("completions", showJSON cs),
-    ("text",        showJSON s)]
-          | from <- froms, let (bs,s,cs) = complete' pgf from cat mlimit input]
+doComplete pgf input mcat mfrom mlimit = showJSON
+    [makeObj ["from".=from, "brackets".=bs, "completions".=cs, "text".=s]
+       | from <- froms, let (bs,s,cs) = complete' pgf from cat mlimit input]
   where
     froms = maybe (PGF.languages pgf) (:[]) mfrom
     cat = fromMaybe (PGF.startCat pgf) mcat
 
 doLinearize :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
-doLinearize pgf tree mto = showJSON $
-    [toJSObject [("to", PGF.showLanguage to),("text",text)]
+doLinearize pgf tree mto = showJSON
+    [makeObj ["to".=PGF.showLanguage to, "text".=text]
       | (to,text) <- linearize' pgf mto tree]
 
 doLinearizes :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
-doLinearizes pgf tree mto = showJSON $ 
-    [toJSObject [("to", showJSON $ PGF.showLanguage to),
-                 ("texts",showJSON texts)]
-      | (to,texts) <- linearizes' pgf mto tree]
+doLinearizes pgf tree mto = showJSON
+    [makeObj ["to".=PGF.showLanguage to, "texts".=texts]
+       | (to,texts) <- linearizes' pgf mto tree]
 
 doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> Maybe PGF.Language -> IO JSValue
 doRandom pgf mcat mdepth mlimit mto =
   do g <- newStdGen
      let trees = PGF.generateRandomDepth g pgf cat (Just depth)
-     return $ showJSON $
-          [toJSObject [("tree", showJSON (PGF.showExpr [] tree)),
-                       ("linearizations", showJSON [toJSObject [("to", PGF.showLanguage to),("text",text)] 
-                                                          | (to,text) <- linearize' pgf mto tree])]
-                 | tree <- limit trees]
+     return $ showJSON
+          [makeObj ["tree".=PGF.showExpr [] tree,
+                    "linearizations".=
+                       [makeObj ["to".=PGF.showLanguage to, "text".=text] 
+                          | (to,text) <- linearize' pgf mto tree]]
+             | tree <- limit trees]
   where cat = fromMaybe (PGF.startCat pgf) mcat
         limit = take (fromMaybe 1 mlimit)
         depth = fromMaybe 4 mdepth
 
 doGenerate :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> Maybe PGF.Language -> JSValue
 doGenerate pgf mcat mdepth mlimit mto = 
-  let trees = PGF.generateAllDepth pgf cat (Just depth)
-  in showJSON $
-          [toJSObject [("tree", showJSON (PGF.showExpr [] tree)),
-                       ("linearizations", showJSON [toJSObject [("to", PGF.showLanguage to),("text",text)] 
-                                                          | (to,text) <- linearize' pgf mto tree])]
-                 | tree <- limit trees]
-  where cat = fromMaybe (PGF.startCat pgf) mcat
-        limit = take (fromMaybe 1 mlimit)
-        depth = fromMaybe 4 mdepth
+    showJSON [makeObj ["tree".=PGF.showExpr [] tree,
+                       "linearizations".=
+                          [makeObj ["to".=PGF.showLanguage to, "text".=text]
+                             | (to,text) <- linearize' pgf mto tree]]
+                | tree <- limit trees]
+  where
+    trees = PGF.generateAllDepth pgf cat (Just depth)
+    cat = fromMaybe (PGF.startCat pgf) mcat
+    limit = take (fromMaybe 1 mlimit)
+    depth = fromMaybe 4 mdepth
 
 doGrammar :: PGF -> Maybe (Accept Language) -> JSValue
-doGrammar pgf macc = showJSON $ toJSObject
-             [("name", showJSON (PGF.abstractName pgf)),
-              ("userLanguage", showJSON (selectLanguage pgf macc)),
-              ("startcat",showJSON (PGF.showType [] (PGF.startCat pgf))),
-              ("categories", showJSON categories),
-              ("functions", showJSON functions),
-              ("languages", showJSON languages)]
-  where languages = map toJSObject
-                    [[("name", showJSON l), 
-                      ("languageCode", showJSON $ fromMaybe "" (PGF.languageCode pgf l))]
-                     | l <- PGF.languages pgf]
-        categories = [PGF.showCId cat | cat <- PGF.categories pgf]
-        functions  = [PGF.showCId fun | fun <- PGF.functions pgf]
+doGrammar pgf macc = showJSON $ makeObj
+             ["name".=PGF.abstractName pgf,
+              "userLanguage".=selectLanguage pgf macc,
+              "startcat".=PGF.showType [] (PGF.startCat pgf),
+              "categories".=categories,
+              "functions".=functions,
+              "languages".=languages]
+  where
+    languages =
+       [makeObj ["name".= l, 
+                  "languageCode".= fromMaybe "" (PGF.languageCode pgf l)]
+          | l <- PGF.languages pgf]
+    categories = [PGF.showCId cat | cat <- PGF.categories pgf]
+    functions  = [PGF.showCId fun | fun <- PGF.functions pgf]
 
 doGraphvizAbstrTree pgf tree = do
   pipeIt2graphviz $  PGF.graphvizAbstractTree pgf (True,True) tree
@@ -433,13 +431,9 @@ instance JSON PGF.Expr where
 
 instance JSON PGF.BracketedString where
     readJSON x = return (PGF.Leaf "")
-    showJSON (PGF.Bracket cat fid index _ bs)
-                          = showJSON $ toJSObject [("cat",      showJSON cat)
-                                                  ,("fid",      showJSON fid)
-                                                  ,("index",    showJSON index)
-                                                  ,("children", showJSON bs)
-                                                  ]
-    showJSON (PGF.Leaf s) = showJSON $ toJSObject [("token", s)]
+    showJSON (PGF.Bracket cat fid index _ bs) =
+        makeObj ["cat".=cat, "fid".=fid, "index".=index, "children".=bs]
+    showJSON (PGF.Leaf s) = makeObj ["token".=s]
 
 -- * PGF utilities
 
@@ -515,6 +509,8 @@ langCodeLanguage :: PGF -> String -> Maybe PGF.Language
 langCodeLanguage pgf code = listToMaybe [l | l <- PGF.languages pgf, PGF.languageCode pgf l == Just code]
 
 -- * General utilities
+
+f .= v = (f,showJSON v)
 
 --cleanFilePath :: FilePath -> FilePath
 --cleanFilePath = takeFileName
