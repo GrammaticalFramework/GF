@@ -303,11 +303,11 @@ serveStaticFile path =
 
 serveStaticFile' path =
   do let ext = takeExtension path
-         (t,rdFile,encode) = contentTypeFromExt ext
+         (t,rdFile) = contentTypeFromExt ext
      if ext `elem` [".cgi",".fcgi",".sh",".php"]
        then return $ resp400 $ "Unsupported file type: "++ext
        else do b <- doesFileExist path
-               if b then fmap (ok200' (ct t) . encode) $ rdFile path
+               if b then fmap (ok200' (ct t)) $ rdFile path
                     else return (resp404 path)
 
 -- * Logging
@@ -349,8 +349,9 @@ contentTypeFromExt ext =
     ".jpg" -> bin "image/jpg"
     _ -> bin "application/octet-stream"
   where
-     text subtype = ("text/"++subtype++"; charset=UTF-8",readFile,encodeString)
-     bin t = (t,readBinaryFile,id)
+     text subtype = ("text/"++subtype++"; charset=UTF-8",
+                     fmap encodeString . readFile)
+     bin t = (t,readBinaryFile)
 
 -- * IO utilities
 updateFile path new =
