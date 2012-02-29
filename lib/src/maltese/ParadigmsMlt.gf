@@ -107,20 +107,9 @@ resource ParadigmsMlt = open
         let
           gender = if_then_else (Gender) (isNil sing) (inferNounGender coll) (inferNounGender sing) ;
         in
-        {
-          s = table {
-            Singular Singulative  => buildNounTable sing ;
-            Singular Collective    => buildNounTable coll ;
-            Dual          => buildNounTable dual ;
-            Plural Determinate    => buildNounTable det ;
-            Plural Indeterminate  => buildNounTable ind
-          } ;
-          g = gender ;
-        } ;
-
+          mkNounWorst sing coll dual det ind gender ;
 
     } ; --end of mkNoun overload
-
 
     -- Take the singular and infer gender.
     -- No other plural forms.
@@ -191,55 +180,15 @@ resource ParadigmsMlt = open
       -- Gender
     mkNounWorst : Str -> Str -> Str -> Str -> Str -> Gender -> Noun = \sing,coll,dual,det,ind,gen -> {
       s = table {
-        Singular Singulative  => buildNounTable sing ;
-        Singular Collective    => buildNounTable coll ;
-        Dual          => buildNounTable dual ;
-        Plural Determinate    => buildNounTable det ;
-        Plural Indeterminate  => buildNounTable ind
+        Singular Singulative  => sing ;
+        Singular Collective    => coll ;
+        Dual          => dual ;
+        Plural Determinate    => det ;
+        Plural Indeterminate  => ind
       } ;
       g = gen ;
     } ;
 
-    -- Build a definiteness table for a single noun number form
-    -- Params:
-      -- noun form (eg NEMLA, NEMEL, NEMLIET)
-    buildNounTable : Str -> (Definiteness => Str) = \noun ->
-      table {
-        Definite => addDefinitePreposition "il" noun ;
-        Indefinite => noun
-      };
-{-
-    -- Build a definiteness/case table for a single noun number form
-    -- Params:
-      -- noun form (eg NEMLA, NEMEL, NEMLIET)
-    buildNounTable : Str -> (Definiteness => Case => Str) = \noun ->
-      table {
-        Definite => table {
-          Benefactive  => addDefinitePreposition "għall" noun;
-          Comitative  => addDefinitePreposition "mal" noun ;
-          Dative    => addDefinitePreposition "lill" noun ;
-          Elative    => addDefinitePreposition "mill" noun ;
-          Equative  => addDefinitePreposition "bħall" noun ;
-          Genitive  => addDefinitePreposition "tal" noun ;
-          Inessive  => addDefinitePreposition "fil" noun;
-          Instrumental=> addDefinitePreposition "bil" noun;
-          Lative    => addDefinitePreposition "sal" noun ;
-          Nominative  => addDefinitePreposition "il" noun
-        } ;
-        Indefinite => table {
-          Benefactive  => abbrevPrepositionIndef "għal" noun;
-          Comitative  => abbrevPrepositionIndef "ma'" noun ;
-          Dative    => abbrevPrepositionIndef "lil" noun ;
-          Elative    => abbrevPrepositionIndef "minn" noun ;
-          Equative  => abbrevPrepositionIndef "bħal" noun ;
-          Genitive  => abbrevPrepositionIndef "ta'" noun ;
-          Inessive  => abbrevPrepositionIndef "fi" noun;
-          Instrumental=> abbrevPrepositionIndef "bi" noun;
-          Lative    => abbrevPrepositionIndef "sa" noun ;
-          Nominative  => noun
-        }
-      };
--}
 {-
     -- Correctly abbreviate definite prepositions and join with noun
     -- Params:
