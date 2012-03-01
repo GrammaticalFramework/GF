@@ -1,6 +1,6 @@
 --# -path=.:alltenses
 
-concrete FoodsThai of Foods = open SyntaxTha, LexiconTha, 
+concrete FoodsTha of Foods = open SyntaxTha, LexiconTha,
   ParadigmsTha, (R=ResTha) in {
 
         flags coding = utf8 ;
@@ -31,4 +31,3 @@ concrete FoodsThai of Foods = open SyntaxTha, LexiconTha,
                 Boring = mkAP (mkA (R.thword "น่า" "เบิ่อ")) ;
 
 }
-
