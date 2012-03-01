@@ -226,11 +226,11 @@ langs = map fst langsCoding
 -- defaultLangs = langs `only` words "Eng Fre Ger Ita Spa Swe"
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Amh","Ara","Lat","Hin","Tha","Tur"]
+langsLang = langs `except` ["Amh","Ara","Lat","Tur"]
 --langsLang = langs `only` ["Fin"] --test
 
 -- languages for which to compile Try
-langsAPI  = langsLang `except` ["Hin","Ina","Tha"]
+langsAPI  = langsLang `except` ["Ina"]
 
 -- languages for which to compile Symbolic
 langsSymbolic  = langsAPI -- `except` ["Rus"]
