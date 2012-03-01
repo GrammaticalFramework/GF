@@ -460,7 +460,8 @@ function draw_abstract(g) {
     var kw_fun = kw("fun");
     kw_fun.title = "The functions (productions) of the grammar are enumerated here. [C.3.4]";
 
-    var flags=g.abstract.startcat||g.abstract.cats.length>1||g.extends.length>0
+    var flags=g.abstract.startcat || g.abstract.cats.length>1
+              || g.extends && g.extends.length>0
 	? draw_startcat(g)
 	: text("");
     function sort_funs() {
