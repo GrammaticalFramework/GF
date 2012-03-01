@@ -446,6 +446,7 @@ sequences; see example.
  | ``-from_hebrew`` | from unicode to GF unvocalized Hebrew transliteration
  | ``-from_nepali`` | from unicode to GF Nepali transliteration
  | ``-from_persian`` | from unicode to GF Persian/Farsi transliteration
+ | ``-from_sindhi`` | from unicode to GF Sindhi transliteration
  | ``-from_telugu`` | from unicode to GF Telugu transliteration
  | ``-from_thai`` | from unicode to GF Thai transliteration
  | ``-from_urdu`` | from unicode to GF Urdu transliteration
@@ -463,6 +464,7 @@ sequences; see example.
  | ``-to_html`` | wrap in a html file with linebreaks
  | ``-to_nepali`` | from GF Nepali transliteration to unicode
  | ``-to_persian`` | from GF Persian/Farsi transliteration to unicode
+ | ``-to_sindhi`` | from GF Sindhi transliteration to unicode
  | ``-to_telugu`` | from GF Telugu transliteration to unicode
  | ``-to_thai`` | from GF Thai transliteration to unicode
  | ``-to_urdu`` | from GF Urdu transliteration to unicode
@@ -682,6 +684,7 @@ To see transliteration tables, use command ut.
  | ``-from_hebrew`` | from unicode to GF unvocalized Hebrew transliteration
  | ``-from_nepali`` | from unicode to GF Nepali transliteration
  | ``-from_persian`` | from unicode to GF Persian/Farsi transliteration
+ | ``-from_sindhi`` | from unicode to GF Sindhi transliteration
  | ``-from_telugu`` | from unicode to GF Telugu transliteration
  | ``-from_thai`` | from unicode to GF Thai transliteration
  | ``-from_urdu`` | from unicode to GF Urdu transliteration
@@ -699,6 +702,7 @@ To see transliteration tables, use command ut.
  | ``-to_html`` | wrap in a html file with linebreaks
  | ``-to_nepali`` | from GF Nepali transliteration to unicode
  | ``-to_persian`` | from GF Persian/Farsi transliteration to unicode
+ | ``-to_sindhi`` | from GF Sindhi transliteration to unicode
  | ``-to_telugu`` | from GF Telugu transliteration to unicode
  | ``-to_thai`` | from GF Thai transliteration to unicode
  | ``-to_urdu`` | from GF Urdu transliteration to unicode
@@ -979,7 +983,7 @@ This command must be a line of its own, and thus cannot be a part of a pipe.
 
 ====t = tokenize====
 #NOINDENT
-``t`` = ``tokenize``: //Tokenize string usng the vocabulary.//
+``t`` = ``tokenize``: //Tokenize string using the vocabulary.//
 
 #TINY
 
@@ -1035,6 +1039,7 @@ This command must be a line of its own, and thus cannot be a part of a pipe.
  | ``-greek`` | modern Greek
  | ``-hebrew`` | unvocalized Hebrew
  | ``-persian`` | Persian/Farsi
+ | ``-sindhi`` | Sindhi
  | ``-nepali`` | Nepali
  | ``-telugu`` | Telugu
  | ``-thai`` | Thai
