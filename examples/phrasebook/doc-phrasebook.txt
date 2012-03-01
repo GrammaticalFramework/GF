@@ -76,7 +76,7 @@ The phrasebook has the following requirement specification:
 
 The phrasebook is available as open-source software, licensed under GNU LGPL. 
 The source code resides in 
-[``code.haskell.org/gf/examples/phrasebook/`` http://code.haskell.org/gf/examples/phrasebook/]
+[``www.grammaticalframework.org/examples/phrasebook/`` http://www.grammaticalframework.org/examples/phrasebook/]
 
 
 
@@ -119,7 +119,7 @@ Feed-back from users
 
 The use of resource grammars and functors
 - the translator was implemented on top of an earlier linguistic knowledge base,
-  the [GF Resource Grammar Library http://grammaticalframework.com/lib]
+  the [GF Resource Grammar Library http://www.grammaticalframework.org/lib]
 
 
 Example-based grammar writing and grammar induction from statistical models 
@@ -180,9 +180,9 @@ The abstract syntax defines the **ontology** behind the phrasebook.
 Some explanations can be found in the 
 [ontology document Ontology.html], which is produced from the
 abstract syntax files
-[``Sentences.gf`` http://code.haskell.org/gf/examples/phrasebook/Sentences.gf]
+[``Sentences.gf`` http://www.grammaticalframework.org/examples/phrasebook/Sentences.gf]
 and
-[``Words.gf`` http://code.haskell.org/gf/examples/phrasebook/Words.gf]
+[``Words.gf`` http://www.grammaticalframework.org/examples/phrasebook/Words.gf]
 by ``make doc``.
 
 
@@ -329,7 +329,7 @@ The basic things "everyone" can do is
 
 The missing concrete syntax entries are added to the ``Words``//L//``.gf`` 
 files for each language //L//. The
-[morphological paradigms http://code.haskell.org/gf/lib/doc/synopsis.html#toc78]
+[morphological paradigms http://www.grammaticalframework.org/lib/doc/synopsis.html#toc78]
 of the GF resource library should be used. Actions (prefixed with ``A``, as ``AWant``) are
 a little more demanding, since they also require syntax constructors. Greetings (prefixed
 with ``G``) are pure strings.
@@ -337,9 +337,9 @@ with ``G``) are pure strings.
 Some explanations can be found in the 
 [implementation document Implementation.html], which is produced from the
 concrete syntax files
-[``SentencesI.gf`` http://code.haskell.org/gf/examples/phrasebook/SentencesI.gf]
+[``SentencesI.gf`` http://www.grammaticalframework.org/examples/phrasebook/SentencesI.gf]
 and
-[``WordsEng.gf`` http://code.haskell.org/gf/examples/phrasebook/WordsEng.gf]
+[``WordsEng.gf`` http://www.grammaticalframework.org/examples/phrasebook/WordsEng.gf]
 by ``make doc``.
 
 Here are the steps to follow for contributors:
@@ -348,7 +348,7 @@ Here are the steps to follow for contributors:
   using ``darcs pull``.
 + Also make sure that you have compiled the library by ``make present`` in ``gf/lib/src/``.
 + Work in the directory 
-  [``gf/examples/phrasebook/`` http://code.haskell.org/gf/examples/phrasebook/].
+  [``gf/examples/phrasebook/`` http://www.grammaticalframework.org/examples/phrasebook/].
 + After you've finished your contribution, recompile the phrasebook by ``make pgf``.
 + Save your changes in ``darcs record .`` (in the ``phrasebook`` subdirectory).
 + Make a patch file with ``darcs send -o my_phrasebook_patch``, which you can 
