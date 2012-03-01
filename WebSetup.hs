@@ -17,8 +17,18 @@ import Distribution.Simple.LocalBuildInfo(datadir,buildDir,absoluteInstallDirs)
 -}
 
 example_grammars =  -- :: [(pgf, tmp, src)]
-   [("Foods.pgf","foods","contrib"</>"summerschool"</>"foods"</>"Foods???.gf"),
-    ("Letter.pgf","letter","examples"</>"letter"</>"Letter???.gf")]
+   [("Foods.pgf","foods",foodsSrc),
+    ("Letter.pgf","letter",letterSrc)]
+  where
+    foodsDir ="contrib"</>"summerschool"</>"foods"
+  --foodsSrc = foodsDir</>"Foods???.gf" -- doesn't work on Win32
+    foodsSrc = unwords [foodsDir</>"Foods"++lang++".gf"|lang<-foodsLangs]
+    foodsLangs = words "Afr Amh Bul Cat Cze Dut Eng Epo Fin Fre Ger Gle Heb Hin Ice Ita Jpn Lav Mlt Mon Nep Pes Por Ron Spa Swe Tha Tsn Tur Urd"
+
+    letterDir = "examples"</>"letter"
+  --letterSrc = letterDir</>"Letter???.gf"
+    letterSrc = unwords [letterDir</>"Letter"++lang++".gf"|lang<-letterLangs]
+    letterLangs = words "Eng Fin Fre Heb Rus Swe"
 
 
 installWeb gf args flags pki lbi = setupWeb gf args dest pki lbi
