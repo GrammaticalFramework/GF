@@ -193,7 +193,7 @@ The phrasebook uses
 the 
 [PGF server http://code.google.com/p/grammatical-framework/wiki/LaunchWebDemos]
 written in Haskell and the 
-[minibar library http://www.cse.chalmers.se/~hallgren/minibar/about.html]
+[minibar library http://www.grammaticalframework.org/demos/minibar/about.html]
 written in JavaScript. Since the sources of these systems are available, anyone can build the phrasebook
 locally on her own computer.
 
