@@ -164,34 +164,30 @@ gu_buf_freeze(GuBuf* buf, GuPool* pool)
 }
 
 static void
-gu_heap_siftdown(GuBuf *buf, GuOrder *order, int startpos, int pos)
+gu_heap_siftdown(GuBuf *buf, GuOrder *order, 
+                 const void *value, int startpos, int pos)
 {
-	void *newitem = alloca(buf->elem_size);
-	memcpy(newitem, &buf->data[buf->elem_size * pos], buf->elem_size);
-
 	while (pos > startpos) {
 		int parentpos = (pos - 1) >> 1;
         void *parent = &buf->data[buf->elem_size * parentpos];
         
-		if (order->compare(order, newitem, parent) < 0) {
-			memcpy(&buf->data[buf->elem_size * pos], parent, buf->elem_size);
-			pos = parentpos;
-			continue;
-		}
-		break;
+		if (order->compare(order, value, parent) >= 0)
+			break;
+
+		memcpy(&buf->data[buf->elem_size * pos], parent, buf->elem_size);
+		pos = parentpos;
 	}
 
-	memcpy(&buf->data[buf->elem_size * pos], newitem, buf->elem_size);
+	memcpy(&buf->data[buf->elem_size * pos], value, buf->elem_size);
 }
 
 static void
-gu_heap_siftup(GuBuf *buf, GuOrder *order, int pos)
+gu_heap_siftup(GuBuf *buf, GuOrder *order,
+               const void *value, int pos)
 {
 	int startpos = pos;
 	int endpos = gu_buf_length(buf);
-	void *newitem = alloca(buf->elem_size);
-	memcpy(newitem, &buf->data[buf->elem_size * pos], buf->elem_size);
-   
+
 	int childpos = 2*pos + 1;
 	while (childpos < endpos) {
 		int rightpos = childpos + 1;
@@ -208,15 +204,14 @@ gu_heap_siftup(GuBuf *buf, GuOrder *order, int pos)
 		childpos = 2*pos + 1;
    }
    
-   memcpy(&buf->data[buf->elem_size * pos], newitem, buf->elem_size);
-   gu_heap_siftdown(buf, order, startpos, pos);
+   gu_heap_siftdown(buf, order, value, startpos, pos);
 }
 
 void
 gu_buf_heap_push(GuBuf *buf, GuOrder *order, void *value)
 {
-	memcpy(gu_buf_extend(buf), value, buf->elem_size);
-    gu_heap_siftdown(buf, order, 0, gu_buf_length(buf)-1);
+	gu_buf_extend(buf);
+	gu_heap_siftdown(buf, order, value, 0, gu_buf_length(buf)-1);
 }
 
 void
@@ -226,8 +221,7 @@ gu_buf_heap_pop(GuBuf *buf, GuOrder *order, void* data_out)
 
 	if (gu_buf_length(buf) > 0) {
 		memcpy(data_out, buf->data, buf->elem_size);
-		memcpy(buf->data, last, buf->elem_size);
-		gu_heap_siftup(buf, order, 0);
+		gu_heap_siftup(buf, order, last, 0);
 	} else {
 		memcpy(data_out, last, buf->elem_size);
 	}
@@ -239,17 +233,18 @@ gu_buf_heap_replace(GuBuf *buf, GuOrder *order, void *value, void *data_out)
 	gu_require(gu_buf_length(buf) > 0);
 
 	memcpy(data_out, buf->data, buf->elem_size);
-	memcpy(buf->data, value, buf->elem_size);
-	gu_heap_siftup(buf, order, 0);
+	gu_heap_siftup(buf, order, value, 0);
 }
 
 void
 gu_buf_heapify(GuBuf *buf, GuOrder *order)
 {
 	size_t middle = gu_buf_length(buf) / 2;
+	void *value = alloca(buf->elem_size);
 	
 	for (size_t i = 0; i < middle; i++) {
-		gu_heap_siftup(buf, order, i);
+		memcpy(value, &buf->data[buf->elem_size * i], buf->elem_size);
+		gu_heap_siftup(buf, order, value, i);
 	}
 }
 
