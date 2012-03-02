@@ -2,7 +2,7 @@
 The FraCaS GF Treebank
 ======================
 
-:Author: Peter Ljunglöf
+:Authors: Peter Ljunglöf, Magdalena Siverbo
 :Version: 0.2
 :Date: 2012-01-27
 :Organization: Centre for Language Technology, University of Gothenburg
