@@ -13,9 +13,17 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 - New option ``gf -tags`` generates tags files for use with the
   [GF Eclipse plugin http://www.grammaticalframework.org/eclipse/].
 - New languages in the Resource Grammar Library: Latvian, Thai, Hindi, Sindhi
- (see the [updated synopsis ../lib/doc/synopsis.html]).
-- Bug fixes: ...
-- ...
+ (see the [updated synopsis ../lib/doc/synopsis.html]). Improvements for other
+ languages, e.g. Russian and Swedish.
+- Improved separate compilation makes recompiling large grammars faster.
+  The flag ``-no-pmcfg`` reverts to the old behaviour.
+- Version numbers in ``.gfo`` files to avoid problems caused by reuse of
+  ``.gfo`` files produced with an incompatible version of the compiler.
+- The web-based grammar editor now supports grammar extension and text mode
+  editing with instant syntax checking.
+- Fixed a bug that prevented the shell commands ``abstract_info``,
+  ``generate_random`` and ``generate_trees`` from working properly.
+- Various other small improvements bug and fixes.
 
 
 --------------------
