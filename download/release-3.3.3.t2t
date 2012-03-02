@@ -21,9 +21,9 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
   ``.gfo`` files produced with an incompatible version of the compiler.
 - The web-based grammar editor now supports grammar extension and text mode
   editing with instant syntax checking.
-- Fixed a bug that prevented the shell commands ``abstract_info``,
+- Fix for a bug that prevented the shell commands ``abstract_info``,
   ``generate_random`` and ``generate_trees`` from working properly.
-- Various other small improvements bug and fixes.
+- Various other small improvements and bug fixes.
 
 
 --------------------
