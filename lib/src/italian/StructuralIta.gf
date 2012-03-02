@@ -106,7 +106,7 @@ lin
   there_Adv = ss "là" ;
   therefore_PConj = ss "quindi" ;
   they_Pron = mkPronoun
-    "loro" "li" "li" "glie" "loro" "loro" "loro" "loro" "loro" 
+    "loro" "li" "loro" "glie" "loro" "loro" "loro" "loro" "loro" 
     Masc Pl P3 ;
 
   this_Quant = let
