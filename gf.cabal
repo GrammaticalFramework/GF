@@ -1,5 +1,5 @@
 name: gf
-version: 3.3-darcs
+version: 3.3.3
 
 cabal-version: >= 1.8
 build-type: Custom
@@ -10,7 +10,7 @@ synopsis: Grammatical Framework
 description: GF, Grammatical Framework, is a programming language for multilingual grammar applications
 homepage: http://www.grammaticalframework.org/
 bug-reports: http://code.google.com/p/grammatical-framework/issues/list
-tested-with: GHC==6.12.3, GHC==7.0.3
+tested-with: GHC==6.12.3, GHC==7.0.4
 
 data-dir: src
 data-files: www/index.html
