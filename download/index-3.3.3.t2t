@@ -17,6 +17,7 @@ What's new? See the [Release notes release-3.3.3.html].
 | Linux (32-bit) | [gf-3.3.3-bin-i386-linux.tar.gz gf-3.3.3-bin-i386-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3.3-bin-i386-linux.tar.gz``
 | Linux (64-bit) | [gf-3.3.3-bin-amd64-linux.tar.gz gf-3.3.3-bin-amd64-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3.3-bin-amd64-linux.tar.gz``
 | MacOS X | [gf-3.3.3-bin-intel-mac.tar.gz gf-3.3.3-bin-intel-mac.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3.3-bin-intel-mac.tar.gz``
+| Windows | [gf-3.3.3-bin-windows.zip gf-3.3.3-bin-windows.zip] | ``unzip gf-3.3.3-bin-windows.zip``
 | ... | ... | ...
 
 More packages might be added later.
