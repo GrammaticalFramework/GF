@@ -24,14 +24,23 @@ int main(int argc, char* argv[]) {
 	GuPool* pool = gu_new_pool();
 	int status = EXIT_SUCCESS;
 	if (argc != 5) {
-		fprintf(stderr, "usage: %s pgf cat from_lang to_lang\n", argv[0]);
+		fprintf(stderr, "usage: %s pgf [.]cat from_lang to_lang\n", argv[0]);
 		status = EXIT_FAILURE;
 		goto fail;
 	}
 	char* filename = argv[1];
 
-	// Transform C strings to libgu strings
-	GuString cat = gu_str_string(argv[2], pool);
+	GuString cat;
+	bool robust_mode;
+	if (argv[2][0] == '.') {
+		printf("%s\n", argv[2]+1);
+		cat = gu_str_string(argv[2]+1, pool);
+		robust_mode = true;
+	} else {
+		cat = gu_str_string(argv[2], pool);
+		robust_mode = false;
+	}
+
 	GuString from_lang = gu_str_string(argv[3], pool);
 	GuString to_lang = gu_str_string(argv[4], pool);
 	
@@ -107,7 +116,7 @@ int main(int argc, char* argv[]) {
 
 		// Begin parsing a sentence of the specified category
 		PgfParse* parse =
-			pgf_parser_parse(from_concr, cat, lin_idx, pool);
+			pgf_parser_parse(&pgf->abstract, from_concr, cat, lin_idx, pool);
 		if (parse == NULL) {
 			fprintf(stderr, "Couldn't begin parsing\n");
 			status = EXIT_FAILURE;
@@ -120,7 +129,7 @@ int main(int argc, char* argv[]) {
 			GuString tok_s = gu_str_string(tok, pool);
 			gu_debug("parsing token \"%s\"", tok);
 			// feed the token to get a new parse state
-			parse = pgf_parse_token(parse, tok_s, true, ppool);
+			parse = pgf_parse_token(parse, tok_s, robust_mode, ppool);
 			if (!parse) {
 				fprintf(stderr,
 					"Unexpected token: \"%s\"\n", tok);
@@ -139,6 +148,9 @@ int main(int argc, char* argv[]) {
 
 		while (true) {
 			PgfExpr expr = gu_next(result, PgfExpr, ppool);
+			
+			clock_t end = clock();
+			
 			// The enumerator will return a null variant at the
 			// end of the results.
 			if (gu_variant_is_null(expr)) {
@@ -148,6 +160,12 @@ int main(int argc, char* argv[]) {
 			// Write out the abstract syntax tree
 			pgf_print_expr(expr, 0, wtr, err);
 			gu_putc('\n', wtr, err);
+			
+			if (robust_mode) {
+				double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+				printf("%.2f sec\n", cpu_time_used);
+				break;
+			}
 
 			// Enumerate the concrete syntax trees corresponding
 			// to the abstract tree.
