@@ -6,19 +6,22 @@ Grammatical Framework Download and Installation
 %!postproc(html): </B></TD> </TH>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
-**GF 3.3.3** was released on 3 March 2012.
+**GF 3.3** was released on 27 October 2011.
 
-What's new? See the [Release notes release-3.3.3.html].
+What's new? See the [Release notes release-3.3.html].
 
 
 == Binary packages ==
 
 | **Platform** | **Download** | **How to install**
-| Linux (32-bit) | [gf-3.3.3-bin-i386-linux.tar.gz gf-3.3.3-bin-i386-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3.3-bin-i386-linux.tar.gz``
-| Linux (64-bit) | [gf-3.3.3-bin-amd64-linux.tar.gz gf-3.3.3-bin-amd64-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3.3-bin-amd64-linux.tar.gz``
-| MacOS X | [gf-3.3.3-bin-intel-mac.tar.gz gf-3.3.3-bin-intel-mac.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3.3-bin-intel-mac.tar.gz``
-| Windows | [gf-3.3.3-bin-windows.zip gf-3.3.3-bin-windows.zip] | ``unzip gf-3.3.3-bin-windows.zip``
-| ... | ... | ...
+| Linux (32-bit) | [gf-3.3-bin-i386-linux.tar.gz gf-3.3-bin-i386-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3-bin-i386-linux.tar.gz``
+| Linux (64-bit) | [gf-3.3-bin-amd64-linux.tar.gz gf-3.3-bin-amd64-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3-bin-amd64-linux.tar.gz``
+| MacOS X | [gf-3.3-bin-intel-mac.tar.gz gf-3.3-bin-intel-mac.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3-bin-intel-mac.tar.gz``
+| Ubuntu 11.10 (32-bit) | [gf_3.3-1_i386-oneiric.deb gf_3.3-1_i386-oneiric.deb] | Double-click on the package icon, or use ``sudo dpkg -i gf_3.3-1_i386-oneiric.deb``
+| Ubuntu 11.10 (64-bit) | [gf_3.3-1_amd64-oneiric.deb gf_3.3-1_amd64-oneiric.deb] | Double-click on the package icon, or use ``sudo dpkg -i gf_3.3-1_amd64-oneiric.deb``
+| Ubuntu 11.04 (32-bit) | [gf_3.3-1_i386-natty.deb gf_3.3-1_i386-natty.deb] | Double-click on the package icon, or use ``sudo dpkg -i gf_3.3-1_i386-natty.deb``
+| Ubuntu 11.04 (64-bit) | [gf_3.3-1_amd64-natty.deb  gf_3.3-1_amd64-natty.deb] | Double-click on the package icon, or use ``sudo dpkg -i gf_3.3-1_amd64-natty.deb``
+| Windows | [gf-3.3-bin-i386-windows.zip gf-3.3-bin-i386-windows.zip] | ``unzip gf-3.3-bin-i386-windows.zip``
 
 More packages might be added later.
 
@@ -38,7 +41,7 @@ You can install them in other locations, but then you need to set the
 ``GF_LIB_PATH`` environment variable:
 
 ```
-  export GF_LIB_PATH=/usr/local/share/gf-3.3.3/lib
+  export GF_LIB_PATH=/usr/local/share/gf-3.3/lib
 ```
 
 where ``/usr/local`` should be replaced with the path to the location where you
@@ -50,22 +53,21 @@ unpacked the package.
 [GF is on Hackage http://hackage.haskell.org/package/gf], so the prodedure is
 fairly simple:
 
-+ Install the [Haskell Platform http://hackage.haskell.org/platform]
-  (versions 2010.2.0.0 - 2011.4.0.0 should work) (see note 2 below)
++ Install the
+  [Haskell Platform 2010.2.0.0 (July 2010) http://hackage.haskell.org/platform]
+  or newer.
 + ``cabal update``
-+ On Linux: install some C libraries from your Linux distribution
-  (see note 1 below)
++ On Linux: install some C libraries from your Linux distribution (see below)
 + ``cabal install gf``
 
 
 You can also download the full source package from here:
-[``gf-3.3.3.tar.gz`` gf-3.3.3.tar.gz].
+[``gf-3.3.tar.gz`` gf-3.3.tar.gz].
 
 === Notes ===
 
-The above steps installs GF for a single user.
-% and does not require root privileges.
-The executables are put in ``$HOME/.cabal/bin``
+The above steps installs GF for a single user and does not require root
+privileges. The executables are put in ``$HOME/.cabal/bin``
 (or, with recent versions of the Haskell platform on Mac OS X,
 in ``$HOME/Library/Haskell/bin``), so it is a good
 idea to put a line in your ``.bash_profile`` to add that directory to you path:
@@ -78,9 +80,7 @@ or
   PATH=$HOME/Library/Haskell/bin:$PATH
 ```
 
-**Note 1**.
-GF uses [``haskeline`` http://hackage.haskell.org/package/haskeline], which
-depends some non-Haskell libraries that
+GF uses ``haskeline``, which depends some non-Haskell libraries that
 won't be installed automatically by cabal, so you need to install
 them manually. Here is one way to do this:
 
@@ -88,14 +88,9 @@ them manually. Here is one way to do this:
 - On Fedora: ``sudo yum install ghc-terminfo-devel``
 
 
-**Note 2**.
-GF does **not** compile with the most recent versions of GHC (>=7.2).
-GF does **not** compile with the most recent versions of Alex (>=3.0).
-
 ==Installing from the latest developer code==
 
 The first time:
-%, assuming you already have the Haskell Platform and darcs
 
 ```
   darcs get --lazy http://www.grammaticalframework.org/ GF
@@ -116,7 +111,6 @@ The above notes for installing from source apply also in this case.
 
 ==Older releases==
 
-- [GF 3.3 index-3.3.html] (October 2011).
 - [GF 3.2.9 index-3.2.9.html] source-only snapshot (September 2011).
 - [GF 3.2 index-3.2.html] (December 2010).
 - [GF 3.1.6 index-3.1.6.html] (April 2010).
