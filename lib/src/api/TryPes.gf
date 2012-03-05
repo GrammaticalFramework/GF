@@ -1,6 +1,6 @@
 --# -path=.:alltenses:prelude:/users/shafqat/www.grammaticalframework.org_0/lib/src/persian
 
-resource TryPes = SyntaxPes, LexiconPes, ParadigmsPes -[mkDet,mkQuant]** 
+resource TryPes = SyntaxPes, LexiconPes, ParadigmsPes -[mkDet,mkQuant,mkAdv]** 
   open (P = ParadigmsPes) in {
 
 -- oper

@@ -99,6 +99,7 @@ incomplete concrete SentenceHindustani of Sentence =
     } ;
 
     AdvS a s = {s = a.s ! Masc ++ s.s} ;
+    ExtAdvS a s = {s = a.s ! Masc ++ s.s} ; ---- with comma? added by AR 5/3/2012
 
     RelS s r = {s = s.s ++ r.s ! agrP3 Masc Sg} ;
     SSubjS s sj s = { s = s.s ++ sj.s ++ s.s};
