@@ -16,7 +16,7 @@ flags coding = utf8 ;
    a = np.a} ;
 
     each_Det = mkDet  "hr kwy" "hr kwy" "hr kwy" "hr kwy" Sg ;
-    have_V = mkV "rakh-na";
+    have_V = mkV "rakh'na";
     IAdvAdv adv = {s = "ktny" ++ adv.s ! Masc} ;
     ICompAP ap = {s = "ktnE" ++ ap.s ! Sg ! Masc ! Dir ! Posit} ;
     cost_V = mkV "qymt" ;
