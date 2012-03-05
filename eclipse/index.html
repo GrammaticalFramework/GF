@@ -1,9 +1,9 @@
 <h1>The GF Eclipse Plugin</h1>
 
 <p>John  J. Camilleri<br />
-Updated: 8 Feb 2012</p>
+Updated: 5 March 2012</p>
 
-<p><em>The research leading to these results has received funding from the European Union&#8217;s Seventh Framework Programme (FP7/2007-2013) under grant agreement n° FP7-ICT-247914.</em></p>
+<p><em>The research leading to these results has received funding from the European Union&#8217;s Seventh Framework Programme (FP7/2007-2013) under grant agreement no. FP7-ICT-247914.</em></p>
 
 <p><em>This documentation is also available at the <a href="http://www.molto-project.eu/node/1395">MOLTO Project Wiki</a>.</em></p>
 
@@ -27,11 +27,9 @@ Updated: 8 Feb 2012</p>
 <li>Software update site URL for installing through Eclipse: <a href="http://www.grammaticalframework.org/eclipse/release/">http://www.grammaticalframework.org/eclipse/release/</a></li>
 </ul>
 
-<hr />
+<!----------------------------------------------------------------------------->
 
 <h2>Features</h2>
-
-<h3>Implemented</h3>
 
 <ul>
 <li>Syntax highlighting and error detection</li>
@@ -42,34 +40,22 @@ Updated: 8 Feb 2012</p>
 <li>Use GF Shell from within Eclipse</li>
 <li>Auto-completion for declared identifiers</li>
 <li>Background compilation (shallow) using project builder</li>
-<li>Support for <em>Open Declaration</em> (F3)</li>
+<li>Support for <em>Open Declaration</em> (F3), including qualified names</li>
 <li>Code generation for new languages in application grammars</li>
-</ul>
-
-<h3>Near-term</h3>
-
-<ul>
-<li>Built-in library browser (in particular for GF resource grammar library)</li>
 <li>Inline documentation for function calls, overloads</li>
-<li>Quick-fix suggestions for syntax and naming errors</li>
-<li>Code generation for concrete/instance modules</li>
-<li>Grouping of concrete syntaxes by language, fast switching and linked navigation</li>
+<li>Proper cross-reference handling with qualified names</li>
+<li>Treebank management and testing tool</li>
+<li>External library browser</li>
 </ul>
 
-<h3>Long-term goals</h3>
-
-<ul>
-<li>Test-suite functionality</li>
-<li>Treebank management and testing</li>
-<li>Provide a single platform for developing and using embedded grammars</li>
-<li>Integration with ontology engineering tools</li>
-</ul>
-
-<hr />
+<!----------------------------------------------------------------------------->
 
 <h2>Major release history</h2>
 
 <dl>
+<dt><strong>05/03/12</strong></dt>
+<dd>(1.4.0.x) Treebank manager view. Updated launch configurations. UI improvements, new icons. Inline contextual documentation. Correct resolution of qualified identifiers. Bug fixes and some refactoring.</dd>
+
 <dt><strong>07/02/12</strong></dt>
 <dd>(1.3.0.x) Re-written underlying GF grammar.</dd>
 
@@ -95,22 +81,15 @@ Updated: 8 Feb 2012</p>
 <dd>Initial BETA released.</dd>
 </dl>
 
-<hr />
+<!----------------------------------------------------------------------------->
 
 <h2>Installation &amp; updating</h2>
 
 <h3>System requirements</h3>
 
 <ol>
-<li>The plugin makes use of the newest GF features, and <strong>requires the latest developer version of GF</strong> to be installed on your system (instructions <a href="http://www.grammaticalframework.org/download/index.html">here</a>).
-<em>Specifically, you need a version of GF which supports the &#8220;&#8212;tags&#8221; flag, added in November 2011.</em></li>
-<li>Paths to GF must be set within the plugin (see below). This means:
-
-<ul>
-<li>you don&#8217;t necessarily need to have GF in your <code>PATH</code> environment variable</li>
-<li>you can use a separate GF installation for GFEP if you wish</li>
-</ul></li>
-<li>The plugin was developed using Eclipse 3.7. It has been successfully installed on Eclipse as low as 3.6.2.</li>
+<li><a href="http://www.grammaticalframework.org/download/release-3.3.3.html">GF version 3.3.3</a> or above. The path to GF must be set within the plugin (see below).</li>
+<li><a href="http://www.eclipse.org/downloads/">Eclipse</a> 3.6 or above.</li>
 </ol>
 
 <h3>Installing the plugin for the first time</h3>
@@ -153,8 +132,8 @@ Updated: 8 Feb 2012</p>
 <h4>Deprecated stuff</h4>
 
 <ul>
-<li>If your project has a folder named <code>(External)</code> you can safely delete this <strong>via the Eclipse Project Explorer</strong>. It is no longer used in GFEP >= 1.2.3</li>
-<li>If your workspace contains a log file <code>gfep.log</code> then you can safely delete it from your system. As of version 1.2.4, GFEP uses Eclipse&#8217;s standard log file at <code>.metadata/.log</code></li>
+<li>If your project has a folder named <code>(External)</code> you can safely delete this <strong>via the Eclipse Project Explorer</strong>. It is no longer used in GFEP &ge; 1.2.3</li>
+<li>If your workspace contains a log file <code>gfep.log</code> then you can safely delete it from your system. As of version 1.2.4, GFEP uses Eclipse&#8217;s standard log file at <code>&lt;workspace&gt;/.metadata/.log</code></li>
 </ul>
 
 <h3>Project settings</h3>
@@ -183,84 +162,101 @@ Updated: 8 Feb 2012</p>
 &lt;/buildSpec&gt;
 </code></pre>
 
-<hr />
+<!----------------------------------------------------------------------------->
 
 <h2>Getting started</h2>
 
 <p>Some steps you can follow to get a feel of of the plugin&#8217;s features.</p>
 
-<ul>
-<li>Create a new <strong>GF Project</strong>.</li>
-</ul>
+<h3>Create a new GF Project</h3>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-projectwizard-1.png" alt="New project wizard" />
 <img src="http://www.grammaticalframework.org/eclipse/images/eclipse-projectwizard-2.png" alt="New project wizard" /></p>
 
-<ul>
-<li>Create some new modules using the <strong>GF Module</strong> wizard from <strong>File &rarr; New &rarr; Other &rarr; GF Module</strong>:</li>
-</ul>
+<h3>Add some new modules</h3>
+
+<p>Use the <strong>GF Module</strong> wizard from <strong>File &rarr; New &rarr; Other &rarr; GF Module</strong>:</p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-modulewizard-1.png" alt="New module wizard" /></p>
 
-<p><em>If asked whether you want to add the <strong>Xtext nature</strong> to your project, you can safely say <strong>No</strong> (this prompt has been removed in newer versions).</em></p>
+<p>You can find some small examples at <a href="http://www.grammaticalframework.org/eclipse/examples/">http://www.grammaticalframework.org/eclipse/examples/</a>. Download the 
+files and manually add them to your Eclipse workspace to experiment with some of the plugin features.</p>
 
-<ul>
-<li><p>You can find some small examples at <a href="http://www.grammaticalframework.org/eclipse/examples/">http://www.grammaticalframework.org/eclipse/examples/</a>. Download the 
-files and manually add them to your Eclipse workspace to experiment with some of the plugin features.</p></li>
-<li><p>You can change your syntax colouring styles as you wish from <strong>Window &rarr; Preferences &rarr; Grammatical Framework &rarr; Syntax Coloring</strong></p></li>
-</ul>
+<h3>Syntax highlighting</h3>
+
+<p>You can change your syntax colouring styles as you wish from <strong>Window &rarr; Preferences &rarr; Grammatical Framework &rarr; Syntax Coloring</strong></p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-syntaxcoloring.png" alt="Syntax highlighting styles" /></p>
 
-<ul>
-<li>Use Eclipes&#8217; own features to drag and drop your editor tabs to suit your needs. Notice the <strong>Outline</strong> view in the bottom-right offers a quite overview of your module structure. Clicking any of the terms will make your cursor jump to that point in the file.</li>
-</ul>
+<h3>Workbench editor layout</h3>
+
+<p>Use Eclipes&#8217; own features to drag and drop your editor tabs to suit your needs.</p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-editor-general.png" alt="The editor and outline view" /></p>
 
-<ul>
-<li>Note how changing a <code>cat</code> definition for example will produce warnings and/or errors in other the modules.</li>
-</ul>
+<h4>Outline view</h4>
+
+<p>The <strong>Outline</strong> view in the bottom-right offers a quite overview of your module structure. Clicking any of the terms will make your cursor jump to that point in the file.</p>
+
+<h3>Cross-referencing errors and warnings</h3>
+
+<p>Notice how changing a <code>cat</code> definition for example will produce warnings and/or errors in other the modules.</p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-editor-cat.png" alt="Warnings and errors in the editor" /></p>
 
-<ul>
-<li>Use the built-in code formatter to tidy your code automatically. Right-click in the editor and choose <strong>Format</strong> or use the keyboard shortcut <strong>Ctrl+Shift+F</strong>.</li>
-</ul>
+<h3>Code formatting</h3>
+
+<p>Use the built-in code formatter to tidy your code automatically. Right-click in the editor and choose <strong>Format</strong> or use the keyboard shortcut <strong>Ctrl+Shift+F</strong>.</p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-before-format.png" alt="Before auto-formatting" /> <img src="http://www.grammaticalframework.org/eclipse/images/eclipse-after-format.png" alt="After auto-formatting" /></p>
 
-<ul>
-<li>Set up a launch configuration from <strong>Run &rarr; Run Configurations&#8230; &rarr; Grammatical Framework</strong>. You will see the dialog below with some fields automatically filled in for you. </li>
-</ul>
+<h3>Launch configurations</h3>
+
+<p>Set up a launch configuration from <strong>Run &rarr; Run Configurations&#8230; &rarr; Grammatical Framework</strong>. You will see the dialog below with some fields automatically filled in for you.</p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-launchconfig.png" alt="Launch configuration dialog" /></p>
 
-<ul>
-<li>Run the launch config and you will see the output from the GF compiler in the console view within Eclipse.</li>
-</ul>
+<p>Run the launch config and you will see the output from the GF compiler in the console view within Eclipse.</p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-compileroutput.png" alt="Output from the GF compiler" /></p>
 
-<h3>Usage hints &amp; issues</h3>
+<h4>Run As&#8230; launch shortcut</h4>
 
-<h4>Consoles</h4>
+<p>Using the <strong>Run &rarr; Run As &rarr; Compile with GF</strong> shortcut will take the current selection or active editor and do one of two things:</p>
+
+<ol>
+<li>If a launch configuration already exists which the current file in its <em>Source filenames</em> field, then that config will be launch directly.</li>
+<li>Otherwise, a new a launch configuration window is displayed where you will need to review and confirm the default settings before continuing.</li>
+</ol>
+
+<h3>Consoles</h3>
 
 <p>The plugin provides its own console view named <em>GFEP Log</em>, which shows log messages based on the <strong>Log Level</strong> preference (<strong>Window &rarr; Preferences &rarr; Grammatical Framework</strong>).</p>
 
-<p>Additionally, everytime a grammar is <strong>Run</strong> a <em>new</em> console is opened to display the output. This console may also serve as the interactive GF Shell, depending on the <strong>Interactive Mode</strong> checkbox in your <strong>Run Configuration</strong>.</p>
+<p>Additionally, every time a grammar is <strong>Run</strong> a <em>new</em> console is opened to display the output. This console may also serve as the interactive GF Shell, depending on the <strong>Interactive Mode</strong> checkbox in your <strong>Run Configuration</strong>.</p>
 
 <p>Eclipse does not make it obvious when multiple console windows open; click on the <strong>Display Selected Console</strong> button to switch between open consoles:</p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-console-icon.png" alt="Display Selected Console icon" /></p>
 
+<p>If the process associated with a console window has terminated, it will be indicated in the upper-left corner as below. Such console windows can then be closed using the gray cross button:</p>
+
+<p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-console-terminated.png" alt="Close terminated console icon" /></p>
+
 <p><em>The Eclipse console implementation does not support command history (up arrow) or auto-completion (tab).</em></p>
 
-<h4>Logs</h4>
+<h3>Logs</h3>
+
+<p>The GFEP writes to the Eclipse platform log. This can be accessed in two ways:</p>
+
+<ol>
+<li>By opening the <strong>Error Log</strong> view in Eclipse</li>
+<li>Accessing the file directly at <code>&lt;workspace&gt;/.metadata/.log</code></li>
+</ol>
 
 <p>You can set the log verbosity from <strong>Window &rarr; Preferences &rarr; Grammatical Framework</strong>.</p>
 
-<h4>Validation</h4>
+<h3>Validation</h3>
 
 <p>For validation to work correctly, the project&#8217;s <strong>Build Automatically</strong> option should be turned on.</p>
 
@@ -268,7 +264,7 @@ files and manually add them to your Eclipse workspace to experiment with some of
 
 <p>Sometimes you may get an entire file marked with errors, even though in fact there is only a single error which is causing the internal builder to fail. In such cases referring to the <strong>Problems</strong> view should help you locate the cause. This issue is particularly relevant when changes made to one module may induce errors in its descendants (e.g. renaming a parameter in a resource module). This behaviour will hopefully be improved in future versions.</p>
 
-<hr />
+<!----------------------------------------------------------------------------->
 
 <h2>Evaluation &amp; feedback</h2>
 
@@ -289,13 +285,4 @@ files and manually add them to your Eclipse workspace to experiment with some of
 <li>General intuitiveness of the UI</li>
 <li>Feature wish-list</li>
 <li>Compatibilities / conflicts with other Eclipse plugins</li>
-</ol>
-
-<h3>Logs</h3>
-
-<p>The GFEP writes to the Eclipse platform log. This can be accessed in two ways:</p>
-
-<ol>
-<li>By opening the <strong>Error Log</strong> view in Eclipse</li>
-<li>Accessing the file directly at <code>workspace/.metadata/.log</code></li>
 </ol>
