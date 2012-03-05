@@ -178,7 +178,7 @@ pgf_print_cncfun(PgfCncFun *cncfun, PgfSequences *sequences,
 	}
 	
 	gu_puts(") [", wtr, err);
-	gu_string_write(cncfun->fun, wtr, err);
+	gu_string_write(cncfun->name, wtr, err);
 	gu_puts("]\n", wtr, err);
 }
 

@@ -48,6 +48,7 @@ struct PgfReader {
 	GuPool* opool;
 	GuPool* tmp_pool;
 	GuSymTable* symtab;
+	PgfAbstr* curr_abstr;
 	PgfConcr* curr_concr;
 	GuMap* curr_lindefs;
 	PgfContsMap* curr_conts_map;   // used temporary for building the bu index for the parser
@@ -619,6 +620,13 @@ pgf_read_to_PgfFunId(GuType* type, PgfReader* rdr, void* to)
 	*(PgfFunId*) to = gu_list_elems(rdr->curr_concr->cncfuns)[id];
 }
 
+static void
+pgf_read_to_PgfAbstr(GuType* type, PgfReader* rdr, void* to)
+{
+	rdr->curr_abstr = to;
+	pgf_read_to_struct(type, rdr, to);
+}
+
 static GU_DEFINE_TYPE(PgfLinDefs, GuIntMap, gu_ptr_type(PgfFunIds),
 		      &gu_null_struct);
 typedef PgfCCat PgfCCatData;
@@ -755,6 +763,8 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
     for (int funid = 0; funid < n_funs; funid++) {
 		PgfCncFun* cncfun = gu_list_index(concr->cncfuns, funid);
         cncfun->funid = funid;
+        cncfun->absfun = 
+			gu_map_get(rdr->curr_abstr->funs, &cncfun->name, PgfFunDecl*);
 	}
 
 	return concr;
@@ -764,8 +774,7 @@ static void*
 pgf_read_new_PgfCncCat(GuType* type, PgfReader* rdr, GuPool* pool,
 		       size_t* size_out)
 {
-	PgfCId cid = *(PgfCId*) rdr->curr_key;
-	gu_enter("-> cid");
+	gu_enter("->");
 	(void) (type && size_out);
 	
 	int first = pgf_read_int(rdr);
@@ -774,7 +783,10 @@ pgf_read_new_PgfCncCat(GuType* type, PgfReader* rdr, GuPool* pool,
 	
 	PgfCncCat* cnccat =
 		gu_malloc(pool, sizeof(PgfCncCat)+n_lins*sizeof(GuString));
-	cnccat->cid = cid;
+
+	cnccat->abscat = 
+		gu_map_get(rdr->curr_abstr->cats, rdr->curr_key, PgfCat*);
+	gu_assert(cnccat->abscat != NULL);
 
 	int len = last + 1 - first;
 	cnccat->cats = gu_new_list(PgfCCatIds, pool, len);
@@ -834,6 +846,7 @@ pgf_read_to_table = GU_TYPETABLE(
 	PGF_READ_TO(PgfCCat),
 	PGF_READ_TO(PgfSeqId),
 	PGF_READ_TO(PgfFunId),
+	PGF_READ_TO(PgfAbstr),
 	PGF_READ_TO(alias));
 
 #define PGF_READ_NEW_FN(k_, fn_)		\
@@ -863,6 +876,7 @@ pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 	rdr->symtab = gu_new_symtable(opool, tmp_pool);
 	rdr->err = err;
 	rdr->in = in;
+	rdr->curr_abstr = NULL;
 	rdr->curr_concr = NULL;
 	rdr->curr_lindefs = NULL;
 	rdr->curr_conts_map = NULL;

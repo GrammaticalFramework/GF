@@ -97,7 +97,7 @@ GU_DEFINE_TYPE(
 
 GU_DEFINE_TYPE(
 	PgfCncCat, struct,
-	GU_MEMBER(PgfCncCat, cid, PgfCId),
+	GU_MEMBER(PgfCncCat, abscat, PgfCat),
 	GU_MEMBER_P(PgfCncCat, cats, PgfCCatIds),
 	GU_MEMBER(PgfCncCat, n_lins, size_t),
 	GU_FLEX_MEMBER(PgfCncCat, labels, GuString));
@@ -118,7 +118,7 @@ GU_DEFINE_TYPE(PgfSeqId, typedef, gu_type(PgfSequence));
 
 GU_DEFINE_TYPE(
 	PgfCncFun, struct,
-	GU_MEMBER(PgfCncFun, fun, PgfCId),
+	GU_MEMBER(PgfCncFun, name, PgfCId),
 	GU_MEMBER(PgfCncFun, n_lins, GuLength),
 	GU_FLEX_MEMBER(PgfCncFun, lins, PgfSeqId));
 

@@ -33,7 +33,7 @@ typedef struct PgfParse PgfParse;
 
 /// Begin parsing
 PgfParse*
-pgf_parser_parse(PgfAbstr* abstr, PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool);
+pgf_parser_parse(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool);
 /**<
  * @param parser The parser to use
  *

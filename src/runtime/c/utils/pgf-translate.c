@@ -33,7 +33,6 @@ int main(int argc, char* argv[]) {
 	GuString cat;
 	bool robust_mode;
 	if (argv[2][0] == '.') {
-		printf("%s\n", argv[2]+1);
 		cat = gu_str_string(argv[2]+1, pool);
 		robust_mode = true;
 	} else {
@@ -116,7 +115,7 @@ int main(int argc, char* argv[]) {
 
 		// Begin parsing a sentence of the specified category
 		PgfParse* parse =
-			pgf_parser_parse(&pgf->abstract, from_concr, cat, lin_idx, pool);
+			pgf_parser_parse(from_concr, cat, lin_idx, pool);
 		if (parse == NULL) {
 			fprintf(stderr, "Couldn't begin parsing\n");
 			status = EXIT_FAILURE;
