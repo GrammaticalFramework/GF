@@ -59,7 +59,7 @@ param
 
   toNP : ( Case => Str) -> NPCase -> Str = \pn, npc -> case npc of {
       NPC c => pn !  c ;
-      NPObj => pn !  Dir ;
+      NPObj => pn !  Obl ; -- changed during phrasebook 'miltay han jumE ko'
       NPErg => pn !  Obl ++ nE
       } ;
   detcn2NP : (Determiner) -> Noun -> NPCase -> Number -> Str = \dt,cn,npc,nn -> case npc of {

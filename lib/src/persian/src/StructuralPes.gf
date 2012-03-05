@@ -112,7 +112,7 @@ concrete StructuralPes of Structural = CatPes **
   yes_Utt = ss "blh" ;
   youSg_Pron = personalPN "tv" Sg PPers2 ;
   youPl_Pron = personalPN "CmA" Pl PPers2 ;
-  youPol_Pron = personalPN "CmA"  Sg PPers2  ; 
+  youPol_Pron = personalPN "CmA"  Pl PPers2  ; 
 --  no_Quant =  demoPN "hyc^" ; 
   not_Predet = {s="nh"} ;
   if_then_Conj = sd2 "Agr" "A:ngAh" ** {n = Sg} ; 
@@ -124,7 +124,7 @@ concrete StructuralPes of Structural = CatPes **
 
   as_CAdv = {s = ["bh AndAzh y"] ; p = ""} ;
 
---  have_V2 = mkV2 (mkV "dACtn" "dAr") "rA" ;
+  have_V2 = mkV2 (mkV "dACtn" "dAr") "rA" ;
 
  language_title_Utt = ss "persian" ;
 

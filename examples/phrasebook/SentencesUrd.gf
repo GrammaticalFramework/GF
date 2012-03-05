@@ -1,4 +1,4 @@
-concrete SentencesUrd of Sentences =  NumeralUrd **  SentencesI - [sing,IFemale,YouFamFemale,YouPolFemale,MMust] with 
+concrete SentencesUrd of Sentences =  NumeralUrd **  SentencesI - [sing,IFemale,YouFamFemale,YouPolFemale,MMust,YouPlurFamFemale,YouPlurPolFemale,YouFamMale] with 
   (Syntax = SyntaxUrd),
   (Symbolic = SymbolicUrd),
   (Lexicon = LexiconUrd) **
@@ -7,9 +7,11 @@ concrete SentencesUrd of Sentences =  NumeralUrd **  SentencesI - [sing,IFemale,
   ParamX,
   CommonHindustani in {
   lin IFemale = mkPerson (P.personalPN myN mjh "" myra myry myrE myry Sg Fem Pers1) ;
-      YouFamFemale = mkPerson (P.personalPN tw tw tw tyra tyry tyrE tyry Sg Fem Pers2_Casual) ;
+      YouFamMale = mkPerson (P.personalPN tum tum tum tumhara tumhary tumharay tumhary Pl Masc Pers2_Familiar) ;
+      YouFamFemale = mkPerson (P.personalPN tum tum tum tyra tyry tyrE tyry Pl Fem Pers2_Familiar) ;
       YouPolFemale = mkPerson (P.personalPN ap ap ap apka apky apkE apky Pl Fem Pers2_Respect);
-
+      YouPlurFamFemale = mkPerson (P.personalPN tum tum tum tumhara tumhary tumharay tumhary Pl Fem Pers2_Familiar) ;
+      YouPlurPolFemale = mkPerson (P.personalPN ap ap ap apka apky apkE apky Pl Fem Pers2_Respect) ;
 
 flags coding = utf8 ;
 
@@ -20,9 +22,13 @@ oper
   myry = "میری" ;
   myrE = "میرے" ;
   tw = "تو" ;
+  tum = "تم" ;
   tyra = "تیرا" ;
   tyry = "تیری" ;
   tyrE = "تیرے" ;
+  tumhara = "تمھارا" ;
+  tumhary = "تمھاری" ;
+  tumharay = "تمھارے" ;
   ap = "آپ" ;
   apka = ["آپ كا"] ;
   apky = ["آپ كی"] ;

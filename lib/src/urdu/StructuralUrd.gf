@@ -72,7 +72,7 @@ concrete StructuralUrd of Structural = CatUrd **
   possess_Prep = mkPrep "كا" "كی" ;
   quite_Adv = ss "خاموش" ;
   she_Pron = personalPN "وہ" "اس" "وہ" ["اس كی"] ["اس كی"] ["اس كے"] ["اس كی"] Sg Fem Pers3_Distant ;
-  so_AdA = ss "[اس لیE]" ;
+  so_AdA = ss "اس لیے" ;
   somebody_NP = MassNP (UseN (ParadigmsUrd.mkN "كوی" "كوی" "كوی" "كوی" "كوی" "كوی" Masc ));
   someSg_Det = mkDet "كچھ" "كچھ" "كچھ" "كچھ" Sg ;
   somePl_Det = mkDet "كچھ" "كچھ" "كچھ" "كچھ" Pl ;
@@ -89,7 +89,7 @@ concrete StructuralUrd of Structural = CatUrd **
   through_Prep = mkPrep ["میں سے"] ["میں سے"] ;
   too_AdA = ss "بہت" ;
   to_Prep = mkPrep "كو" "كو" ; -- ** {lock_Prep = <>};
-  under_Prep = mkPrep "نیچے" "نیچے" ; -- ** {lock_Prep = <>};
+  under_Prep = mkPrep "كے نیچے" "كے نیچے" ; -- ** {lock_Prep = <>};
   very_AdA = ss "بہت" ;
   want_VV = mkV "چاہنا" ** { isAux = False} ;
   we_Pron = personalPN "ہم" "ہم" "ہم" "ہمارا" "ہماری" "ہمارے" "ہماری" Pl Masc Pers1 ;
@@ -118,7 +118,7 @@ concrete StructuralUrd of Structural = CatUrd **
   at_least_AdN = mkAdN ["كم از كم"] ;
   at_most_AdN = mkAdN ["زیادہ سے زیادہ"];
   nothing_NP = MassNP (UseN (ParadigmsUrd.mkN "كوی چیز نہیں" "كوی چیز نہیں" "كوی چیز نہیں" "كوی چیز نہیں" "كوی چیز نہیں" "كوی چیز نہیں" Masc )); 
-  except_Prep = mkPrep "سواے" "سواے" ;
+  except_Prep = mkPrep "كے سواے" "كے سواے" ;
   nobody_NP = MassNP (UseN (ParadigmsUrd.mkN "كوی نہیں" "كوی نہیں" "كوی نہیں" "كوی نہیں" "كوی نہیں" "كوی نہیں" Masc ));  
 
   as_CAdv = {s = "اتنا" ; p = "جتنا"} ;

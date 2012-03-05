@@ -68,11 +68,14 @@ oper
   mkA = overload {
     mkA : Str-> A 
       = \s -> regAdjective s ** {lock_A = <>} ;
-	mkA : Str -> Str -> A2
+    mkA : Str -> Str -> A2
 	  = \a,c -> let n = regAdjective a in {s = n.s; c2 = c} ** {lock_A2 = <>} ;
+    mkA : A -> Str -> A2
+	  = \a,c -> a ** {c2 = c ; lock_A2 = <>};	  
+	  
     } ;
   
-  mkIrregA : Str -> Str -> A2 = \str,c -> makeIrregA str ** {c2 = c ; lock_A2 = <>} ;
+  mkIrregA : Str -> A = \str -> makeIrregA str ;
 
 --2 Verbs
 

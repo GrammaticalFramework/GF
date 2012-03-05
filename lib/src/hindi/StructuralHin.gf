@@ -12,14 +12,14 @@ concrete StructuralHin of Structural = CatHin **
   although_Subj = ss "अगरचि" ;
   always_AdV = ss "हमेशा" ;
   and_Conj = sd2 [] "और" ** {n = Pl} ;
-  because_Subj = ss "क्योँकि" ;
+  because_Subj = ss "क्योंकि" ;
   before_Prep = mkPrep ["से पहले"] ["से पहले"] ; 
   behind_Prep = mkPrep ["के पीछे"] ["के पीछे"] ;
   between_Prep = mkPrep ["के दरमियान"] ["के दरमियान"] ;
   both7and_DConj = sd2 "दोनों" "और" ** {n = Pl} ;
   but_PConj = ss "लेकिन" ;
-  by8agent_Prep = mkPrep "" "" ;
-  by8means_Prep = mkPrep "" "" ;
+  by8agent_Prep = mkPrep "से" "से" ;
+  by8means_Prep = mkPrep "पर" "पर" ;
   can8know_VV,can_VV = mkV "सकना" ** { isAux = True} ;
   during_Prep = mkPrep ["के दरमियान"] ["के दरमियान"] ;
   either7or_DConj = sd2 "कोई एक" "या" ** {n = Sg} ;
@@ -67,7 +67,7 @@ concrete StructuralHin of Structural = CatHin **
   or_Conj = sd2 [] "या" ** {n = Sg} ;
   otherwise_PConj = ss "नहीं तो" ;
   part_Prep = mkPrep "" "" ;
---  please_Voc = ss "" ;
+  please_Voc = ss "कृपया" ;
   possess_Prep = mkPrep "का" "की" ;
   quite_Adv = ss "काफ़ी" ;
   she_Pron = personalPN "वह" "उस" "उस" "उस का" "उस की" "उस के" "उस की"  Sg Fem Pers3_Distant ; -- chek with prasad about 'Us'
@@ -83,8 +83,8 @@ concrete StructuralHin of Structural = CatHin **
   there7to_Adv = mkAdv ["वहाँ पर"] ;
   there7from_Adv = mkAdv ["वहाँ से"] ;
   therefore_PConj = ss "इस लिये" ;
-  they_Pron = personalPN "वह" "वह" "वह" "उन का" "उन की" "उन के" "उन की" Pl Masc Pers3_Distant ; ---- 
-  this_Quant = demoPN "यह" "इस" "इन";      
+  they_Pron = personalPN "वे" "वे" "वे" "उन का" "उन की" "उन के" "उन की" Pl Masc Pers3_Distant ; ---- 
+  this_Quant = demoPN "ये" "इस" "इन";      
   through_Prep = mkPrep ["में से"] ["में से"] ;
   too_AdA = ss "बहुत" ;
   to_Prep = mkPrep "को" "को" ; -- ** {lock_Prep = <>};
@@ -108,21 +108,21 @@ concrete StructuralHin of Structural = CatHin **
   with_Prep = mkPrep ["के साथ"] ["के साथ"] ;
 --  yes_Phr = ss "???" ;
   yes_Utt = ss "हाँ" ;
-  youSg_Pron = personalPN "तू" "तुम" "तुम" "तुमहारा" "तुमहारी" "तुमहारे" "तुमहारी" Sg Masc Pers2_Casual ;
-  youPl_Pron = personalPN "तुम" "तुम" "तुम" "तुमहारा" "तुमहारी" "तुमहारे" "तुमहारी" Pl Masc Pers2_Casual ;
+  youSg_Pron = personalPN "तू" "तुम" "तुम" "तुम्हारा" "तुम्हारी" "तुम्हारे" "तुम्हारी" Sg Masc Pers2_Casual ;
+  youPl_Pron = personalPN "तुम" "तुम" "तुम" "तुम्हारा" "तुम्हारी" "तुम्हारे" "तुम्हारी" Pl Masc Pers2_Casual ;
   youPol_Pron = personalPN "आप" "आप" "आप" "आप का" "आप की" "आप के" "आप की" Sg Masc Pers2_Respect  ;
 --  no_Quant =  demoPN "कोई नहीं" ; 
   not_Predet = {s="नहीं"} ;
---  if_then_Conj = sd2  "गर तो" ** {n = Sg} ; 
+--  if_then_Conj = sd2  "अगर तो" ** {n = Sg} ; 
   at_least_AdN = mkAdN ["कम से कम"] ;
   at_most_AdN = mkAdN ["ज़्यादा से ज़्यादा"];
 --  nothing_NP = MassNP (UseN (ParadigmsHin.mkN "कुछ नहीं" Masc )); 
   except_Prep = mkPrep "के सिवाय" "के सिवाय";
 --  nobody_NP = MassNP (UseN (ParadigmsHin.mkN "कोई नहीं" Masc ));  
 
-  as_CAdv = {s = "ितना" ; p = "जितना"} ;
+  as_CAdv = {s = "इतना" ; p = "जितना"} ;
 
---  have_V2 = mkV2 "";
+  have_V2 = mkV2 "रखना";
 
  language_title_Utt = ss "हिन्दी" ;
 

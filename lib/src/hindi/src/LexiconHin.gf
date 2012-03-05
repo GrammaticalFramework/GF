@@ -14,14 +14,14 @@ lin
   apartment_N = mkN "kamra:" ;
   apple_N = mkN "se:b" ;
 --  art_N = mkN "" ;
-  ask_V2Q = mkV2 (mkV "pu:c'ana:") ;
+  ask_V2Q = mkV2 (mkV "pu:c'na:") ;
   baby_N = mkN "bacX,c'a:" ;
   bad_A = mkA "bura:" ;
   bank_N = mkN "be+m.k" ;
   beautiful_A = mkA "xu:bsu:rat" ;
-  become_VA = mkV "banana:";
+  become_VA = mkV "banna:";
   beer_N = mkN "biyar" ;
-  beg_V2V =  mkV2V (compoundV "b'i:k'" (mkV "ma:m.gna:")) "se:" "kh" False;
+  beg_V2V =  mkV2V (compoundV "b'i:k'" (mkV "ma:m.gna:")) "se:" "k'" False;
   big_A = mkA "baRa:" ;
   bike_N = mkN "sa:ykal" feminine ;
   bird_N = mkN "ciRiya:" ;
@@ -47,14 +47,14 @@ lin
   ceiling_N = mkN "c'at" feminine ;
   chair_N = mkN "kurX,si:" ;
   cheese_N = mkN "pani:r" feminine ;
-  child_N = mkN "bacX,c'a:"  ;
+  child_N = mkN "bacX,ca:"  ;
   church_N = mkN "girija:" ;
   city_N = mkN "s*ahar" ;
   clean_A = mkA "sa:f" ;
   clever_A = mkA "ca:la:k" ;  
   close_V2 =  mkV2 (compoundV "band" do_V2); 
   coat_N = mkN "ko:T" ;
-  cold_A = mkA "sard" ;
+  cold_A = mkA "sarX,d" ;
   come_V = mkV "A:na:" ;
   computer_N = mkN "kam.pyu:Tar" ;
   country_N = mkN "de:s*" ;
@@ -64,7 +64,7 @@ lin
   dirty_A = mkA "gam.da:" ;
   distance_N3 = mkN3 (mkN "fa:sla:") (mkPrep "ka:" "ki:") "ke:" "se:"  ;
   doctor_N = mkN "Da:kTar" ;
-  dog_N = mkN "kutta:" ;
+  dog_N = mkN "kutX,ta:" ;
   door_N = mkN "darva:za:" ;
   drink_V2 = mkV2 (mkV "pi:na:");
   easy_A2V = mkA "A:sa:n" "" ; -- chek for A or a
@@ -108,12 +108,13 @@ lin
   king_N = mkN "ra:ja:" ;
   know_V2 = mkV2 (mkV "ja:nna:") ;
   know_VS = mkV "ja:nna:";
+  know_VQ = (mkV "ja:nna:") ;
   lake_N = mkN "j'i:l" feminine ;
   lamp_N = mkN "cira:g" ;
   learn_V2 = mkV2 (mkV "si:k'na:") ;
   leather_N = mkN "camRa:" ;
   leave_V2 = mkV2 (mkV "calna:") ;
-  like_V2 = mkV2 (compoundV "pasam.d" do_V2);
+  like_V2 = mkV2 (compoundV "pasam.d" do_V2) "ko:";
   listen_V2 = mkV2 (mkV "sunna:") ;
   live_V = mkV "rahna:" ; ---- touch
   long_A = mkA "lam.ba:" ;
@@ -121,7 +122,7 @@ lin
   love_N = mkN "pX,ya:r" ;
   love_V2 = mkV2 (compoundV "pX,ya:r" do_V2) "ko:";
   man_N = mkN "A:dmi:" masculine;
-  married_A2 = mkIrregA "s*a:di: s*uda:" "se:" ;
+  married_A2 = mkA (mkIrregA "s*a:di: s*uda:") "se:" ;
   marriage = mkN "s*a:di: " ;
   meat_N = mkN "ma:m.s" ;
   milk_N = mkN "du:d'" ;
@@ -153,7 +154,7 @@ lin
   read_V2 = mkV2 (mkV "paR'na:");
   red_A = mkA "la:l" ;
   religion_N = mkN "mazhab" ;
-  restaurant_N = mkN "re:sTo:ra:m.T" ;
+  restaurant_N = mkN "re:sto:ra:m." ;
 --  river_N = mkN "dariya:" masculine ;
   rock_N = mkN "caTTa:n" ;
   roof_N = mkN "c'at" masculine ;
@@ -161,7 +162,7 @@ lin
   run_V = mkV "do+Rna:" ;
   say_VS = mkV "kahna:" ;
   school_N = mkN "sku:l" ;
-  science_N = mkN "sa:ians" ; -- vgyan
+  science_N = mkN "vijX,n*a:n" ; -- vgyan
   sea_N = mkN "samam.dar" ;
   seek_V2 = mkV2 (compoundV "tala:s*" do_V2) ;
   see_V2 = mkV2 (mkV "de:k'na:") ;
@@ -202,7 +203,7 @@ lin
   trousers_N = mkN "patlu:n" ;
   ugly_A = mkA "badsu:rat" ;
   understand_V2 = mkV2 (mkV "samaj'na:") ;
-  university_N = mkN "yu:nivarsiTi:" ;
+  university_N = mkN "vis*X,v vidX,ya:lay" ;
   village_N = mkN "ga:n~v" ; -- check for n or N
   wait_V2 = mkV2 (compoundV "Im.taza:r" do_V2) "ka:" ; -- something prtkXa
   walk_V = mkV "calna:" ;
@@ -224,7 +225,7 @@ lin
   now_Adv = mkAdv "Ab" ;
   already_Adv = mkAdv "pahle: hi:" ;
   song_N = mkN "gi:t" ;
-  add_V3 = mkV3 (mkV "jo:Rana:") "ko:" "mi:m."; -- confirm
+  add_V3 = mkV3 (mkV "jo:Rna:") "ko:" "me:m."; -- confirm
   number_N = mkN "hndsh" ;
   put_V2 = mkV2 (mkV "Da:lna:") ;
   stop_V = mkV "rukna:"  ;
@@ -238,7 +239,7 @@ lin
   dull_A = mkA "nalik" ;
   full_A = mkA "b'ara:" ;
   heavy_A = mkA "b'a:ri:" ;
-  near_A = mkA "pa:s" ;
+  near_A = mkA "nazdi:k" ;
   rotten_A = mkA "saRa:" ;
   round_A = mkA "go:l" ;
   sharp_A = mkA "te:z" ;
@@ -252,7 +253,7 @@ lin
 --  bark_N = mkN "bark" ;
 --  belly_N = mkN "dh-ny" ;
   blood_N = mkN "xu:n" ;
-  bone_N = mkN "haDDi:" feminine ;
+  bone_N = mkN "haDX,Di:" feminine ;
   breast_N = mkN "c'a:ti:" ; --stan
   cloud_N = mkN "ba:dal" ;
   day_N = mkN "din" ;
@@ -288,10 +289,10 @@ lin
   neck_N = mkN "garX,dan" feminine ;
   night_N = mkN "ra:t" feminine ;
   nose_N = mkN "na:k" ;
---  person_N = mkN "XKS" ;
+--  person_N = mkN "vX,yakX,ti" ;
   road_N = mkN "saRak" ;
   root_N = mkN "jaR" feminine ;
-  rope_N = mkN "rassi:" ;
+  rope_N = mkN "rasX,si:" ;
   salt_N = mkN "namak" feminine ;
   sand_N = mkN "re:t" feminine ;
   seed_N = mkN "bi:j"  ;
@@ -367,7 +368,7 @@ lin
     ready_A = mkA "te+ya:r" ;
     reason_N = mkN "vajah" feminine ;
     today_Adv = mkAdv "A:j" ;
---    uncertain_A = mkA ["g.yr yqyny"] ;
+    uncertain_A = mkA ["g.yr yqyny"] ;
     
   
 }

@@ -1,4 +1,4 @@
 abstract AllPesAbs =
-  Lang
---  ExtraPesAbs
+  Lang,
+  ExtraPesAbs
   ** {} ;

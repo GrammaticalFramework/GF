@@ -11,7 +11,7 @@ resource ResPes =  ParamX **  open Prelude,Predef in {
   coding = utf8;
 
   param
-
+    
     Order = ODir | OQuest ;
 
     Animacy = Animate | Inanimate ;
@@ -231,7 +231,7 @@ oper
  -}    
     infVV : Bool -> VPH -> {s : AgrPes => Str} = \isAux,vp -> 
 	                       {s = \\agr => case agr of {
-		                  AgPes n p => (vp.comp ! (toAgr n p)) ++ (vp.s ! VVForm (AgPes n p)).inf }};
+		                  AgPes n p => (vp.ad ++ vp.comp ! (toAgr n p)) ++ (vp.s ! VVForm (AgPes n p)).inf }};
    
     insertObjPre : (AgrPes => Str) -> VPHSlash -> VPH = \obj,vp -> {
      s = vp.s ;
