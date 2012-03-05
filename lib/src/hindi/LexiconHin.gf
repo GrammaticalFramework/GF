@@ -21,7 +21,7 @@ lin
   beautiful_A = mkA "ख़ूबसूरत" ;
   become_VA = mkV "बनना";
   beer_N = mkN "बियर" ;
-  beg_V2V =  mkV2V (compoundV "भीख" (mkV "मांगना")) "से" "कह" False;
+  beg_V2V =  mkV2V (compoundV "भीख" (mkV "मांगना")) "से" "ख" False;
   big_A = mkA "बड़ा" ;
   bike_N = mkN "सायकल" feminine ;
   bird_N = mkN "चिड़िया" ;
@@ -47,14 +47,14 @@ lin
   ceiling_N = mkN "छत" feminine ;
   chair_N = mkN "कुर्सी" ;
   cheese_N = mkN "पनीर" feminine ;
-  child_N = mkN "बच्छा"  ;
+  child_N = mkN "बच्चा"  ;
   church_N = mkN "गिरिजा" ;
   city_N = mkN "शहर" ;
   clean_A = mkA "साफ़" ;
   clever_A = mkA "चालाक" ;  
   close_V2 =  mkV2 (compoundV "बनद" do_V2); 
   coat_N = mkN "कोट" ;
-  cold_A = mkA "सरद" ;
+  cold_A = mkA "सर्द" ;
   come_V = mkV "आना" ;
   computer_N = mkN "कंपयूटर" ;
   country_N = mkN "देश" ;
@@ -64,7 +64,7 @@ lin
   dirty_A = mkA "गंदा" ;
   distance_N3 = mkN3 (mkN "फ़ासला") (mkPrep "का" "की") "के" "से"  ;
   doctor_N = mkN "डाकटर" ;
-  dog_N = mkN "कुतता" ;
+  dog_N = mkN "कुत्ता" ;
   door_N = mkN "दरवाज़ा" ;
   drink_V2 = mkV2 (mkV "पीना");
   easy_A2V = mkA "आसान" "" ; -- chek for A or a
@@ -108,12 +108,13 @@ lin
   king_N = mkN "राजा" ;
   know_V2 = mkV2 (mkV "जानना") ;
   know_VS = mkV "जानना";
+  know_VQ = (mkV "जानना") ;
   lake_N = mkN "झील" feminine ;
   lamp_N = mkN "चिराग" ;
   learn_V2 = mkV2 (mkV "सीखना") ;
   leather_N = mkN "चमड़ा" ;
   leave_V2 = mkV2 (mkV "चलना") ;
-  like_V2 = mkV2 (compoundV "पसंद" do_V2);
+  like_V2 = mkV2 (compoundV "पसंद" do_V2) "को";
   listen_V2 = mkV2 (mkV "सुनना") ;
   live_V = mkV "रहना" ; ---- touch
   long_A = mkA "लंबा" ;
@@ -121,7 +122,7 @@ lin
   love_N = mkN "प्यार" ;
   love_V2 = mkV2 (compoundV "प्यार" do_V2) "को";
   man_N = mkN "आदमी" masculine;
-  married_A2 = mkIrregA "शादी शुदा" "से" ;
+  married_A2 = mkA (mkIrregA "शादी शुदा") "से" ;
   marriage = mkN "शादी " ;
   meat_N = mkN "मांस" ;
   milk_N = mkN "दूध" ;
@@ -153,7 +154,7 @@ lin
   read_V2 = mkV2 (mkV "पढ़ना");
   red_A = mkA "लाल" ;
   religion_N = mkN "मज़हब" ;
-  restaurant_N = mkN "रेसटोरांट" ;
+  restaurant_N = mkN "रेसतोरां" ;
 --  river_N = mkN "दरिया" masculine ;
   rock_N = mkN "चटटान" ;
   roof_N = mkN "छत" masculine ;
@@ -161,7 +162,7 @@ lin
   run_V = mkV "दौड़ना" ;
   say_VS = mkV "कहना" ;
   school_N = mkN "सकूल" ;
-  science_N = mkN "सािनस" ; -- vgyan
+  science_N = mkN "विज्ञान" ; -- vgyan
   sea_N = mkN "समंदर" ;
   seek_V2 = mkV2 (compoundV "तलाश" do_V2) ;
   see_V2 = mkV2 (mkV "देखना") ;
@@ -202,7 +203,7 @@ lin
   trousers_N = mkN "पतलून" ;
   ugly_A = mkA "बदसूरत" ;
   understand_V2 = mkV2 (mkV "समझना") ;
-  university_N = mkN "यूनिवरसिटी" ;
+  university_N = mkN "विश्व विद्यालय" ;
   village_N = mkN "गाँव" ; -- check for n or N
   wait_V2 = mkV2 (compoundV "इंतज़ार" do_V2) "का" ; -- something prtkXa
   walk_V = mkV "चलना" ;
@@ -224,7 +225,7 @@ lin
   now_Adv = mkAdv "अब" ;
   already_Adv = mkAdv "पहले ही" ;
   song_N = mkN "गीत" ;
-  add_V3 = mkV3 (mkV "जोड़ना") "को" "मीं"; -- confirm
+  add_V3 = mkV3 (mkV "जोड़ना") "को" "में"; -- confirm
   number_N = mkN "हनदसह" ;
   put_V2 = mkV2 (mkV "डालना") ;
   stop_V = mkV "रुकना"  ;
@@ -238,7 +239,7 @@ lin
   dull_A = mkA "नलिक" ;
   full_A = mkA "भरा" ;
   heavy_A = mkA "भारी" ;
-  near_A = mkA "पास" ;
+  near_A = mkA "नज़दीक" ;
   rotten_A = mkA "सड़ा" ;
   round_A = mkA "गोल" ;
   sharp_A = mkA "तेज़" ;
@@ -252,7 +253,7 @@ lin
 --  bark_N = mkN "बरक" ;
 --  belly_N = mkN "दh-नय" ;
   blood_N = mkN "ख़ून" ;
-  bone_N = mkN "हडडी" feminine ;
+  bone_N = mkN "हड्डी" feminine ;
   breast_N = mkN "छाती" ; --stan
   cloud_N = mkN "बादल" ;
   day_N = mkN "दिन" ;
@@ -288,10 +289,10 @@ lin
   neck_N = mkN "गर्दन" feminine ;
   night_N = mkN "रात" feminine ;
   nose_N = mkN "नाक" ;
---  person_N = mkN "XKष" ;
+--  person_N = mkN "व्यक्ति" ;
   road_N = mkN "सड़क" ;
   root_N = mkN "जड़" feminine ;
-  rope_N = mkN "रससी" ;
+  rope_N = mkN "रस्सी" ;
   salt_N = mkN "नमक" feminine ;
   sand_N = mkN "रेत" feminine ;
   seed_N = mkN "बीज"  ;
@@ -367,7 +368,7 @@ lin
     ready_A = mkA "तैयार" ;
     reason_N = mkN "वजह" feminine ;
     today_Adv = mkAdv "आज" ;
---    uncertain_A = mkA ["ग़यर यक़यनय"] ;
+    uncertain_A = mkA ["ग़यर यक़यनय"] ;
     
   
 }

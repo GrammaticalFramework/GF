@@ -112,7 +112,7 @@ concrete StructuralPes of Structural = CatPes **
   yes_Utt = ss "بله" ;
   youSg_Pron = personalPN "تو" Sg PPers2 ;
   youPl_Pron = personalPN "شما" Pl PPers2 ;
-  youPol_Pron = personalPN "شما"  Sg PPers2  ; 
+  youPol_Pron = personalPN "شما"  Pl PPers2  ; 
 --  no_Quant =  demoPN "هیچ" ; 
   not_Predet = {s="نه"} ;
   if_then_Conj = sd2 "اگر" "آنگاه" ** {n = Sg} ; 
@@ -124,7 +124,7 @@ concrete StructuralPes of Structural = CatPes **
 
   as_CAdv = {s = ["به اندازه ی"] ; p = ""} ;
 
---  have_V2 = mkV2 (mkV "داشتن" "دار") "را" ;
+  have_V2 = mkV2 (mkV "داشتن" "دار") "را" ;
 
  language_title_Utt = ss "پeرسن" ;
 

@@ -43,7 +43,7 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
           quest =
             case ord of
               { ODir => [];
-                OQuest => "kya:" }; 
+                OQuest => "kX,ya:" }; 
 		  na =
             case b of
               { Pos => [];
@@ -86,7 +86,7 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
 	  quest =
             case ord of
               { ODir => [];
-                OQuest => "kya:" }; 
+                OQuest => "kX,ya:" }; 
 	  na =
             case b of
               { Pos => [];
@@ -139,9 +139,9 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
       <CPresent,Sg,Pers2_Respect,_   > => "he+m." ;
        <CPresent,Sg,Pers3_Near,_   > => "he+" ;
        <CPresent,Sg,Pers3_Distant,_   > => "he+" ;
-	<CPresent,Pl,Pers1,_   > => "he+n~" ;
-       <CPresent,Pl,Pers2_Casual,_   > => "ho+" ;
-       <CPresent,Pl,Pers2_Familiar,_   > => "ho+" ;
+	<CPresent,Pl,Pers1,_   > => "he+m." ;
+       <CPresent,Pl,Pers2_Casual,_   > => "ho:" ;
+       <CPresent,Pl,Pers2_Familiar,_   > => "ho:" ;
 	<CPresent,Pl,Pers2_Respect,_   > => "he+m." ;
        <CPresent,Pl,Pers3_Near,_   > => "he+m." ;
        <CPresent,Pl,Pers3_Distant,_   > => "he+m." ;
@@ -227,7 +227,7 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
  
   regAdjective : Str -> Adjective; 
   regAdjective x =  case x of {
-	              acch + ("a:"|"an") => mkAdjective x  ("bahut" ++ x)          ("sab se:" ++ x)          (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "E") (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:")
+	              acch + ("a:"|"an") => mkAdjective x  ("bahut" ++ x)          ("sab se:" ++ x)          (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:") (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:")
 		                                      (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:") (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:") (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:")
 						      (acch +"e:")  ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:") (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:") (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:")
 		                                      (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:") (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:") (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:");

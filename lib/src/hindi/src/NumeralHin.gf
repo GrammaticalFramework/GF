@@ -49,13 +49,13 @@ oper mkR : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> DSize 
   r4 => a4 + "a:li:s" ;
   r5 => a5 + "n" ;
   r6 => a6 + "saT'" ;
-  r7 => a7 + "attar" ;
+  r7 => a7 + "atX,tar" ;
   r8 => a8 + "a:si:" ;
   r9 => a9 + "a:nawve:"
 } ;
 
 oper rows : DSize => DSize => Str = table {
-  sg => mkR "gya:r" "Ikki:" "Ikat" "Ikt" "Ikya:va" "Ik" "Ikh" "Iky" "Iky" ; 
+  sg => mkR "gX,ya:r" "Ikki:" "Ikat" "Ikt" "Ikya:va" "Ik" "Ikh" "Iky" "Iky" ; 
   r2 => mkR "ba:r" "ba:I:" "bat" "be+t" "ba:va" "ba:" "bah" "bay" "b" ;
   r3 => mkR "te:r" "te:I:" "te+m." "te+m.t" "tirpa" "tir" "tih" "tir" "tir" ;
   r4 => mkR "co+d" "co+bi:" "co+m." "co+va" "cww" "co+n~" "co+h" "cw+r" "co+r" ;
@@ -75,28 +75,28 @@ lin pot01 = {s = table {unit => "E:k" ; _ => "dmi:" } ; size = sg ; n = Sg} ;
 lin pot0 d = d ; 
 lin pot110 = {s = "ds" ; size = less100 ; n = Pl} ; 
 lin pot111 = {s = rows ! sg ! sg ; size = less100 ; n = Pl} ;
-lin pot1to19 d = {s = rows ! d.size ! sg ; size = less100 ; n = d.n} ;
+lin pot1to19 d = {s = rows ! d.size ! sg ; size = less100 ; n = Pl} ;
 lin pot0as1 n = {s = n.s ! unit ; size = table {sg => singl ; _ => less100} ! n.size ; n = n.n } ;
 
-lin pot1 d = {s = d.s ! ten ; size = less100 ; n = d.n} ;
-lin pot1plus d e = {s = rows ! e.size ! d.size ; size = less100 ; n = d.n} ;
+lin pot1 d = {s = d.s ! ten ; size = less100 ; n = Pl} ;
+lin pot1plus d e = {s = rows ! e.size ! d.size ; size = less100 ; n = Pl} ;
 
 lin pot1as2 n = {s = n.s ; s2 = "dmi:" ; size = n.size ; n = n.n} ;
 lin pot2 d = {s = (mksau (d.s ! unit) d.size) ; 
-              s2 = d.s ! unit ++ "la:k'" ; size = more100 ; n = d.n} ;
+              s2 = d.s ! unit ++ "la:k'" ; size = more100 ; n = Pl} ;
 lin pot2plus d e = 
   {s = (mksau (d.s ! unit) d.size) ++ e.s ; 
    s2 = (d.s ! unit) ++ "la:k'" ++ (mkhazar e.s e.size) ; 
-   size = more100 ; n = d.n} ;
+   size = more100 ; n = Pl} ;
 
 lin pot2as3 n = {s = n.s ; n = n.n} ;
 lin pot3 n = {s = table { singl => ekhazar ;
                           less100 => n.s ++ "haza:r" ; 
-                          more100 => n.s2 } ! n.size ; n = n.n} ;
+                          more100 => n.s2 } ! n.size ; n = Pl} ;
 lin pot3plus n m = 
   {s = table {singl => ekhazar ;
               less100 => n.s ++ "haza:r" ; 
-              more100 => n.s2 } ! n.size ++ m.s ; n = n.n} ;
+              more100 => n.s2 } ! n.size ++ m.s ; n = Pl} ;
 
 lin D_0 = { s = "N0" ; n = Sg};
 lin D_1 = { s = "N1" ; n = Sg};

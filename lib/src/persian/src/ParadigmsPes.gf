@@ -122,16 +122,16 @@ oper
    compoundV : Str -> V -> V = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;     
    compoundV : Str -> V2 -> V = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;
    };
- {-
+ 
 
 ----2 Adverbs
-  mkAdv : Str -> Adv = \str -> {s =\\ _ =>  str ; lock_Adv = <>};
+  mkAdv : Str -> Adv = \str -> {s =  str ; lock_Adv = <>};
 
 ----2 Prepositions
 
   mkPrep : Str -> Prep ;
-    mkPrep str = makePrep str ** {lock_Prep = <>};
-    
+    mkPrep str = {s = str ; lock_Prep = <>};
+{-    
 --3 Determiners and quantifiers
 
 --  mkQuant : overload {

@@ -73,7 +73,7 @@ oper
      mkN01 lRka = let end = last (lRka) ;
                  lRk = if_then_else Str (eq end "e") lRka (tk 1 lRka)
              in mkNoun (lRka)     (lRk+"े")  (lRk+"े")
-                       (lRk+"े")  (lRk+"ोँ") (lRk+"ो")
+                       (lRk+"े")  (lRk+"ों") (lRk+"ो")
                        Masc ;
 
 -- masculine nouns does not end with a, h, e, an

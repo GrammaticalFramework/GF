@@ -43,7 +43,7 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
           quest =
             case ord of
               { ODir => [];
-                OQuest => "कया" }; 
+                OQuest => "क्या" }; 
 		  na =
             case b of
               { Pos => [];
@@ -86,7 +86,7 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
 	  quest =
             case ord of
               { ODir => [];
-                OQuest => "कया" }; 
+                OQuest => "क्या" }; 
 	  na =
             case b of
               { Pos => [];
@@ -139,9 +139,9 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
       <CPresent,Sg,Pers2_Respect,_   > => "हैं" ;
        <CPresent,Sg,Pers3_Near,_   > => "है" ;
        <CPresent,Sg,Pers3_Distant,_   > => "है" ;
-	<CPresent,Pl,Pers1,_   > => "हैँ" ;
-       <CPresent,Pl,Pers2_Casual,_   > => "हौ" ;
-       <CPresent,Pl,Pers2_Familiar,_   > => "हौ" ;
+	<CPresent,Pl,Pers1,_   > => "हैं" ;
+       <CPresent,Pl,Pers2_Casual,_   > => "हो" ;
+       <CPresent,Pl,Pers2_Familiar,_   > => "हो" ;
 	<CPresent,Pl,Pers2_Respect,_   > => "हैं" ;
        <CPresent,Pl,Pers3_Near,_   > => "हैं" ;
        <CPresent,Pl,Pers3_Distant,_   > => "हैं" ;
@@ -227,7 +227,7 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
  
   regAdjective : Str -> Adjective; 
   regAdjective x =  case x of {
-	              acch + ("ा"|"न") => mkAdjective x  ("बहुत" ++ x)          ("सब से" ++ x)          (acch + "े") ("बहुत" ++ acch + "े") ("सब से" ++ acch + "E") (acch + "े") ("बहुत" ++ acch + "े") ("सब से" ++ acch + "े")
+	              acch + ("ा"|"न") => mkAdjective x  ("बहुत" ++ x)          ("सब से" ++ x)          (acch + "े") ("बहुत" ++ acch + "े") ("सब से" ++ acch + "े") (acch + "े") ("बहुत" ++ acch + "े") ("सब से" ++ acch + "े")
 		                                      (acch + "ी") ("बहुत" ++ acch + "ी") ("सब से" ++ acch + "ी") (acch + "ी") ("बहुत" ++ acch + "ी") ("सब से" ++ acch + "ी") (acch + "ी") ("बहुत" ++ acch + "ी") ("सब से" ++ acch + "ी")
 						      (acch +"े")  ("बहुत" ++ acch + "े") ("सब से" ++ acch + "े") (acch + "े") ("बहुत" ++ acch + "े") ("सब से" ++ acch + "े") (acch + "े") ("बहुत" ++ acch + "े") ("सब से" ++ acch + "े")
 		                                      (acch + "ी") ("बहुत" ++ acch + "ी") ("सब से" ++ acch + "ी") (acch + "ी") ("बहुत" ++ acch + "ी") ("सब से" ++ acch + "ी") (acch + "ी") ("बहुत" ++ acch + "ी") ("सब से" ++ acch + "ी");
@@ -237,16 +237,6 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
 							  x  ("बहुत" ++ x) 	("सब से" ++ x)  x ("बहुत" ++ x) ("सब से" ++ x) x ("बहुत" ++ x) ("सब से" ++ x)
 							  x  ("बहुत" ++ x) 	("सब से" ++ x)  x ("बहुत" ++ x) ("सब से" ++ x) x ("बहुत" ++ x) ("सब से" ++ x)
 																 
-                            }; 
-IrregAdjective : Str -> Adjective;
-IrregAdjective x =   mkAdjective  x  ("बहुत" ++ x)  	("सब से" ++ x)  x ("बहुत" ++ x) ("सब से" ++ x) x ("बहुत" ++ x) ("सब से" ++ x)
-							  x  ("बहुत" ++ x) 	("सब से" ++ x) 	x ("बहुत" ++ x) ("सब से" ++ x) x ("बहुत" ++ x) ("सब से" ++ x)
-							  x  ("बहुत" ++ x) 	("सब से" ++ x)  x ("बहुत" ++ x) ("सब से" ++ x) x ("बहुत" ++ x) ("सब से" ++ x)
-							  x  ("बहुत" ++ x) 	("सब से" ++ x)  x ("बहुत" ++ x) ("सब से" ++ x) x ("बहुत" ++ x) ("सब से" ++ x) ;
-																 
+                            }; 												 
                   					 
-
-
-  
-       
 }

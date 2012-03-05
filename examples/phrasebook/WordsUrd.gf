@@ -40,7 +40,7 @@ flags coding = utf8 ;
     Expensive = mkA "مہنگا" ;
     Fresh = mkA "تازہ" ;
     Good = L.good_A ;
-    Suspect = mkA "" ;
+    Suspect = mkA "برا" ;
     Warm = L.warm_A ;
 
 -- Places require different prepositions to express location; in some languages 
@@ -154,9 +154,12 @@ flags coding = utf8 ;
 
 -- miscellaneous
 
-    QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
-    QWhatAge p = mkQS (mkQCl (mkCl (mkNP (modQuant p.poss)) (mkAdv "عمر"))) ;
-    HowMuchCost item = mkQS (mkQCl (mkCl (modNP item) (mkAdv ["كی قیمت"]))) ; 
+--    QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
+    QWhatName p = mkQS (mkQCl what_IAdv (mkNP p.poss (P.mkN "نام" "نام" "نام" "نام" "نام" "نام" masculine))) ;
+--    QWhatAge p = mkQS (mkQCl (mkCl (mkNP (modQuant p.poss)) (mkAdv "عمر"))) ;
+    QWhatAge p = mkQS (mkQCl howMuch_IAdv (mkNP (modQuant p.poss) (P.mkN "عمر" "عمر" "عمر" "عمریں" "عمریں" "عمرو" feminine))) ; 
+    HowMuchCost item = mkQS (mkQCl (mkCl (modNP item) (mkAdv ["كی قیمت"]))) ;
+--    HowMuchCost item = mkQS (mkQCl howMuch_IAdv (mkNP cost_Predet (modNP item))) ;
     ItCost item price = mkCl item (mkV2 (mkV "قیمت")) price ;
 
     PropOpen p = mkCl p.name open_Adv ;
@@ -169,11 +172,11 @@ flags coding = utf8 ;
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYouDate d = mkText (lin Text (Prelude.ss ("ملتے ہیں"))) (mkPhrase (mkUtt d)) ;
-    PSeeYouPlace p = mkText (lin Text (Prelude.ss ("ملتے ہیں"))) (mkPhrase (mkUtt p.at)) ;
+    PSeeYouDate d = mkText (mkPhrase (mkUtt d)) (lin Text (Prelude.ss ("ملتے ہیں")))  ;
+    PSeeYouPlace p = mkText (mkPhrase (mkUtt p.at)) (lin Text (Prelude.ss ("ملتے ہیں")))  ;
     PSeeYouPlaceDate p d = 
-      mkText (lin Text (Prelude.ss ("ملتے ہیں"))) 
-        (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
+      mkText (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d)))
+       (lin Text (Prelude.ss ("ملتے ہیں"))) ;
 
 -- Relations are expressed as "می وiفع" or "می سon'س وiفع", as defined by $xOf$
 -- below. Languages without productive genitives must use an equivalent of
@@ -234,9 +237,10 @@ flags coding = utf8 ;
       mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
 
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
-      let day = mkNP (mkPN d) in 
-      mkNPDay day (SyntaxUrd.mkAdv to_Prep day) 
-        (SyntaxUrd.mkAdv to_Prep (mkNP a_Quant sgNum (mkCN (mkN d)))) ; --changed from plNum to sgNum
+--      let day = mkNP (mkPN d) in
+--       let day = (mkNP (mkCN (mkN d))) in
+      mkNPDay (mkNP (mkCN (mkN d))) (SyntaxUrd.mkAdv to_Prep (mkNP (mkCN (mkN d)))) 
+        (SyntaxUrd.mkAdv to_Prep (mkNP (mkCN (mkN d)))) ; --changed from plNum to sgNum
     
     mkCompoundPlace : Str -> Str -> Str -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \comp, p, i ->
 --     mkCNPlace (mkCN (P.mkN comp (mkN p))) (P.mkPrep i) to_Prep ;
@@ -262,9 +266,12 @@ flags coding = utf8 ;
       } ;
 
 --    mkSuperl : A -> Det = \a -> SyntaxUrd.mkDet the_Art (SyntaxUrd.mkOrd a) ;
-      mkSuperl : A -> Det = \a -> lin Det { s = \\n,g,c => a.s ! n ! g ! c ! Posit ; n = Sg } ;
+      mkSuperl : A -> Det = \a -> lin Det { s = \\n,g,c => a.s ! n ! g ! c ! Superl ; n = Sg } ;
     
    far_IAdv = ExtraUrd.IAdvAdv (P.mkAdv "دور") ;
+   what_IAdv = lin IAdv {s = "كیا"} ;
+   howMuch_IAdv = lin IAdv {s = "كتنی"} ;
+-- cost_Predet = lin Predet {s = ["كی قیمت"]} ;
 -------------------
 modN : N -> N = \noun -> lin N {s = \\n,c =>noun.s!n!c++"كا" ; g =noun.g} ;
 modQuant : Quant -> Quant = \q -> lin Quant {s = \\n,g,c => q.s ! n ! Fem ! c ; a = q.a};
