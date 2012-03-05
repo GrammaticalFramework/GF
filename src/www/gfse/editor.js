@@ -393,12 +393,14 @@ function draw_startcat(g) {
 	    save_grammar(g); 
 	}
     }
-    return indent([kw("flags startcat"),sep(" = "),m]);
+    return indent([kw("flags startcat","This is the default start category for parsing, random generation, etc. [C.3.16, C.5.1]"),
+		   sep(" = "),m]);
 }
 
+var extends_hint="This grammar is an extension of the grammars listed here. [C.2.1]"
+
 function draw_conc_extends(g,conc) {
-    var kw_extends=kw("extends ")
-    kw_extends.title="This grammar is an extension of the grammars listed here."
+    var kw_extends=kw("extends ",extends_hint)
     var exts=(g.extends || []).map(conc_extends(conc))
     return exts.length>0
 	? indent([kw_extends,ident(exts.join(", "))])
@@ -406,9 +408,8 @@ function draw_conc_extends(g,conc) {
 }
 
 function draw_extends(g) {
-    var kw_extends=kw("extends ")
+    var kw_extends=kw("extends ",extends_hint)
     var exts= g.extends || [];
-    kw_extends.title="This grammar is an extension of the grammars listed here."
     var m1=more(g,add_extends,"Inherit from other grammars");
     var m2=more(g,add_extends,"Inherit from more grammars");
     var es=[exts.length>0 ? kw_extends : span_class("more",kw_extends)];
@@ -455,10 +456,9 @@ function add_extends2(gix,igix) {
 }
 
 function draw_abstract(g) {
-    var kw_cat = kw("cat");
-    kw_cat.title = "The categories (nonterminals) of the grammar are enumerated here. [C.3.2]";
-    var kw_fun = kw("fun");
-    kw_fun.title = "The functions (productions) of the grammar are enumerated here. [C.3.4]";
+    var kw_abstract = kw("abstract ","A GF grammar must have one abstract syntax module. [C.2.1]")
+    var kw_cat = kw("cat","The categories (nonterminals) of the grammar are enumerated here. [C.3.2]");
+    var kw_fun = kw("fun","The functions (productions) of the grammar are enumerated here. [C.3.4]");
 
     var flags=g.abstract.startcat || g.abstract.cats.length>1
               || g.extends && g.extends.length>0
@@ -470,7 +470,7 @@ function draw_abstract(g) {
 	save_grammar(g);
     }
     var file=div_id("file",
-		  [kw("abstract "),ident(g.basename),sep(" = "),
+		  [kw_abstract,ident(g.basename),sep(" = "),
 		   draw_timestamp(g.abstract),
 		   draw_extends(g),
 		   flags,
@@ -735,28 +735,26 @@ function draw_concrete(g,i) {
 	}
 	string_editor(el,conc.langcode,change_langcode)
     }
-    var kw_lincat=kw("lincat")
-    kw_lincat.title="The linearization type for each catagory in the abstract syntax is given here. [C.3.8]"
-    var kw_lin=kw("lin")
-    kw_lin.title="The linearization function for each function in the abstract syntax is given here. [C.3.9]"
-    var kw_param=kw("param")
-    kw_param.title="Parameter type definitions can be added here. [C.3.12]"
-    var kw_oper=kw("oper")
-    kw_oper.title="Operation definitions can be added here. [C.3.14]"
+    var kw_concrete=kw("concrete ", "A GF grammar can have any number of concrete syntax modules matching the abstract syntax [C.2.1]")
+    var kw_open=kw("open ","Opening makes constants from other modules available in this module. [C.2.8]")
+    var kw_lincat=kw("lincat","The linearization type for each catagory in the abstract syntax is given here. [C.3.8]")
+    var kw_lin=kw("lin","The linearization function for each function in the abstract syntax is given here. [C.3.9]")
+    var kw_param=kw("param","Parameter type definitions can be added here. [C.3.12]")
+    var kw_oper=kw("oper","Operation definitions can be added here. [C.3.14]")
     var file=div_id("file",
-		  [kw("concrete "),
+		  [kw_concrete,
 		   ident(g.basename),
 		   editable("span",ident(conc.langcode),g,
 			    edit_langcode,"Change language"),
 		   kw(" of "),ident(g.basename),sep(" = "),
 		   draw_timestamp(conc),
 		   draw_conc_extends(g,conc),
-		   indent([extensible([kw("open "),draw_opens(g,i)])]),
+		   indent([extensible([kw_open,draw_opens(g,i)])]),
 		   indent([kw_lincat,draw_lincats(g,i)]),
 		   indent([kw_lin,draw_lins(g,i)]),
 		   indent([extensible([kw_param,draw_params(g,i)])]),
-		   indent([extensible([kw_oper,draw_opers(g,i)])]),
-		   exb_extra(g,i)
+		   indent([extensible([kw_oper,draw_opers(g,i)])])/*,
+		   exb_extra(g,i)*/
 		  ])
     if(navigator.onLine) {
 	var mode_button=text_mode(g,file,i+1);
@@ -765,7 +763,13 @@ function draw_concrete(g,i) {
     return file;
 }
 
-var rgl_modules=["Paradigms","Syntax","Lexicon","Extra"];
+var rgl_modules=["Syntax","Lexicon","Paradigms","Extra"];
+var rgl_info = {
+    Paradigms: "Lexical categories (A, N, V, ...) and smart paradigms (mkA, mkN, mkV, ...) for turning raw strings into new dictionary entries.",
+    Syntax: "Syntactic categories (Utt, Cl, V, NP, CN, AP, ...), structural words (this_Det, few_Det, ...) and functions for building phrases (mkUtt, mkCl, mkCN, mkVP, mkAP, ...)",
+    Lexicon: "A multilingual lexicon with ~350 common words.",
+    Extra: "Language-specific extra constructions not available via the common API."
+}
 
 function add_open(ci) {
     return function (g,el) {
@@ -776,9 +780,12 @@ function add_open(ci) {
 	var list=[]
 	for(var i in rgl_modules) {
 	    var b=rgl_modules[i], m=b+conc.langcode;
-	    if(!ds[m])
+	    if(!ds[m]) {
+		var info=rgl_info[b];
+		var infotext=info ? text(" - "+info) : text("");
 		list.push(li([a(jsurl("add_open2("+g.index+","+ci+",'"+m+"')"),
-				[text(m)])]));
+				[text(m)]),infotext]));
+	    }
 	}
 	if(list.length>0) {
 	    var file=element("file");
@@ -813,7 +820,12 @@ function draw_opens(g,ci) {
     var first=true;
     for(var i in os) {
 	if(!first) es.push(sep(", "))
-	es.push(deletable(del(i),ident(os[i]),"Don't open this module"));
+	var m=os[i];
+	var b=m.substr(0,m.length-conc.langcode.length);
+	var info=rgl_info[b];
+	var id=ident(m);
+	if(info) id.title=info;
+	es.push(deletable(del(i),id,"Don't open this module"));
 	first=false;
     }
     es.push(more(g,add_open(ci),"Open more modules"));
@@ -1299,7 +1311,11 @@ function inError(msg,el) {
     return node("span",{"class":"inError",title:msg},[el]);
 }
 
-function kw(txt) { return wrap_class("span","kw",text(txt)); }
+function kw(txt,hint) {
+    var w=wrap_class("span","kw",text(txt));
+    if(hint) w.title=hint;
+    return w;
+}
 function sep(txt) { return wrap_class("span","sep",text(txt)); }
 function ident(txt) { return wrap_class("span","ident",text(txt)); }
 function unimportant(txt) { return wrap_class("small","unimportant",text(txt)); }
