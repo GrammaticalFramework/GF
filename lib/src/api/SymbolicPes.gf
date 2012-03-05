@@ -1,4 +1,4 @@
---# -path=.:present:mathematical:prelude
+--# -path=.:alltenses:mathematical:prelude
 
 resource SymbolicPes = Symbolic with 
   (Symbol = SymbolPes),

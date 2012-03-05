@@ -15,10 +15,10 @@ thaiscript:
 demo: compdemo fin linkdemo
 
 compdemo:
-	$(compile) -opt Bul Cat Dan Dut Eng Fre Ger Ita Nor Pol Ron Rus Spa Swe Tha Urd DisambPhrasebookEng
+	$(compile) -opt Bul Cat Dan Dut Eng Fre Ger Hin Ita Nor Pes Pol Ron Rus Spa Swe Tha Urd DisambPhrasebookEng
 
 linkdemo:
-	$(compile) -link Eng Bul Cat Dan Dut Fin Fre Ger Ita Nor Pol Ron Rus Spa Swe Tha Urd DisambPhrasebookEng
+	$(compile) -link Eng Bul Cat Dan Dut Fin Fre Ger Hin Ita Nor Pes Pol Ron Rus Spa Swe Tha Urd DisambPhrasebookEng
 
 linkdemothb:
 	$(compile) -link Eng Bul Cat Dan Dut Fin Fre Ger Ita Nor Pol Ron Rus Spa Swe Tha Thb Urd DisambPhrasebookEng 
