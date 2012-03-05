@@ -15,7 +15,6 @@ typedef GuList(PgfItemBuf*) PgfItemBufs;
 typedef GuBuf PgfCCatBuf;
 
 struct PgfParse {
-	PgfAbstr* abstr;
 	PgfConcr* concr;
     PgfItemBuf* agenda;
     int max_fid;
@@ -39,7 +38,6 @@ struct PgfExprState {
 typedef struct PgfParseResult PgfParseResult;
 
 struct PgfParseResult {
-    PgfAbstr* abstr;
     PgfConcr* concr;
 	GuPool *tmp_pool;
 	GuBuf *pqueue;
@@ -852,11 +850,9 @@ pgf_new_parsing(PgfConcr* concr, PgfLexCallback* callback, int max_fid,
 }
 
 static PgfParse*
-pgf_new_parse(PgfAbstr* abstr, PgfConcr* concr, 
-              int max_fid, GuPool* pool)
+pgf_new_parse(PgfConcr* concr, int max_fid, GuPool* pool)
 {
 	PgfParse* parse = gu_new(PgfParse, pool);
-	parse->abstr = abstr;
 	parse->concr = concr;
     parse->agenda = NULL;
     parse->max_fid = max_fid;
@@ -969,7 +965,7 @@ pgf_parse_token(PgfParse* parse, PgfToken tok, bool robust, GuPool* pool)
 
     PgfParse* next_parse = NULL;
     if (gu_buf_length(agenda) > 0) {
-        next_parse = pgf_new_parse(parse->abstr, parse->concr, parse->max_fid, pool);
+        next_parse = pgf_new_parse(parse->concr, parse->max_fid, pool);
         next_parse->agenda = agenda;
         next_parse->max_fid= parsing->max_fid;
     }
@@ -1009,11 +1005,9 @@ pgf_parse_result_from_ccat(PgfParseResult *result, PgfCCat *ccat,
 		case PGF_PRODUCTION_APPLY: {
 			PgfProductionApply* papp = pi.data;
 			
-			PgfFunDecl *fun_decl =
-				gu_map_get(result->abstr->funs, &papp->fun->fun, PgfFunDecl*);
-			gu_assert(fun_decl != NULL);
+			gu_assert(papp->fun->absfun != NULL);
 
-			double prob = ps->prob - log(fun_decl->prob);
+			double prob = ps->prob - log(papp->fun->absfun->prob);
 
 			PgfExprState *state = gu_new(PgfExprState, result->tmp_pool);
 			state->prev = ps->state;
@@ -1021,7 +1015,7 @@ pgf_parse_result_from_ccat(PgfParseResult *result, PgfCCat *ccat,
 				gu_new_variant(PGF_EXPR_FUN,
 				       PgfExprFun,
 				       &state->expr, pool);
-			expr_fun->fun = papp->fun->fun;
+			expr_fun->fun = papp->fun->name;
 			state->args = papp->args;
 			state->arg_idx = 0;
 			
@@ -1148,7 +1142,6 @@ pgf_parse_result(PgfParse* parse, GuPool* pool)
 	GuPool *states_pool = gu_new_pool();
 	PgfParseResult *result =
 		gu_new_i(pool, PgfParseResult,
-			 .abstr = parse->abstr,
 			 .concr = parse->concr,
 			 .tmp_pool = states_pool,
 			 .pqueue = gu_new_buf(PgfExprPState, states_pool),
@@ -1168,7 +1161,7 @@ pgf_parse_result(PgfParse* parse, GuPool* pool)
 
 // TODO: s/CId/Cat, add the cid to Cat, make Cat the key to CncCat
 PgfParse*
-pgf_parser_parse(PgfAbstr* abstr, PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
+pgf_parser_parse(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
 {
 	PgfCncCat* cnccat =
 		gu_map_get(concr->cnccats, &cat, PgfCncCat*);
@@ -1178,7 +1171,7 @@ pgf_parser_parse(PgfAbstr* abstr, PgfConcr* concr, PgfCId cat, size_t lin_idx, G
 	}
 	gu_assert(lin_idx < cnccat->n_lins);
 
-	PgfParse* parse = pgf_new_parse(abstr, concr, concr->max_fid, pool);
+	PgfParse* parse = pgf_new_parse(concr, concr->max_fid, pool);
     parse->agenda = gu_new_buf(PgfItem*, pool);
 
     PgfItemBuf* conts = gu_new_buf(PgfItem*, pool);

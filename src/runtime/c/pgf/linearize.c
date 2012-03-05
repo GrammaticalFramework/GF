@@ -133,7 +133,7 @@ pgf_lzr_add_infer_entry(
 		 n_args > 0 ? gu_list_index(arg_cats, 0)->fid : -1,
 		 n_args > 1 ? gu_list_index(arg_cats, 1)->fid : -1,
 		 n_args > 2 ? gu_list_index(arg_cats, 2)->fid : -1,
-		 cat->fid, papply->fun->fun);
+		 cat->fid, papply->fun->name);
 	PgfLinInfers* entries =
 		gu_map_get(infer_table, &arg_cats, PgfLinInfers*);
 	if (!entries) {
@@ -161,13 +161,13 @@ pgf_lzr_index(PgfConcr* concr, PgfCCat* ccat, PgfProduction prod,
 	case PGF_PRODUCTION_APPLY: {
 		PgfProductionApply* papply = data;
 		PgfInferMap* infer =
-			gu_map_get(concr->fun_indices, &papply->fun->fun,
+			gu_map_get(concr->fun_indices, &papply->fun->name,
 				PgfInferMap*);
-		gu_debug("index: %s -> %d", papply->fun->fun, ccat->fid);
+		gu_debug("index: %s -> %d", papply->fun->name, ccat->fid);
 		if (!infer) {
 			infer = gu_map_type_new(PgfInferMap, pool);
 			gu_map_put(concr->fun_indices,
-				&papply->fun->fun, PgfInferMap*, infer);
+				&papply->fun->name, PgfInferMap*, infer);
 		}
 		pgf_lzr_add_infer_entry(infer, ccat, papply, pool);
 		break;
@@ -452,7 +452,7 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 		PgfCncTreeApp* fapp = cti.data;
 		PgfCncFun* fun = fapp->fun;
 		if (fns->expr_apply) {
-			fns->expr_apply(fnsp, fun->fun, fapp->n_args);
+			fns->expr_apply(fnsp, fun->name, fapp->n_args);
 		}
 		gu_require(lin_idx < fun->n_lins);
 		PgfSequence seq = fun->lins[lin_idx];

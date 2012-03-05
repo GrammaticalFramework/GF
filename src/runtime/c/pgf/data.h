@@ -39,6 +39,8 @@ typedef GuSeq PgfCCatSeq;
 extern GU_DECLARE_TYPE(PgfCCatSeq, GuSeq);
 
 typedef struct PgfAbstr PgfAbstr;
+extern GU_DECLARE_TYPE(PgfAbstr, struct);
+
 typedef struct PgfFunDecl PgfFunDecl;
 typedef struct PgfConcr PgfConcr;
 
@@ -89,7 +91,9 @@ typedef struct PgfEquation PgfEquation;
 typedef GuSeq PgfEquations;
 typedef PgfEquations PgfEquationsM; // can be null
 extern GU_DECLARE_TYPE(PgfEquationsM, GuSeq);
+
 typedef struct PgfCat PgfCat;
+extern GU_DECLARE_TYPE(PgfCat, struct);
 
 typedef PgfSequence PgfSeqId; // shared reference
 
@@ -141,9 +145,9 @@ struct PgfCat {
 
 
 struct PgfCncCat {
-	PgfCId cid;
+	PgfCat *abscat;
 	PgfCCatIds* cats;
-	
+
 	size_t n_lins;
 	GuString labels[];
 	/**< Labels for tuples. All nested tuples, records and tables
@@ -155,7 +159,8 @@ struct PgfCncCat {
 };
 
 struct PgfCncFun {
-	PgfCId fun; // XXX: resolve to PgfFunDecl*?
+	PgfCId name;
+	PgfFunDecl *absfun;
     int funid;
 	GuLength n_lins;
 	PgfSeqId lins[];
