@@ -1130,12 +1130,13 @@ function inherited_grammars(g) {
     // Load the available grammars once
     var grammar_byname=cached_grammar_byname();
     var visited={};
+    function exists(g) { return g; }
     // Then traverse the dependencies to collect all inherited grammars
     function ihgs(g) {
 	if(visited[g.basename]) return []; // avoid cycles and diamonds
 	else {
 	    visited[g.basename]=true;
-	    var igs=(g.extends || []).map(grammar_byname)
+	    var igs=(g.extends || []).map(grammar_byname).filter(exists);
 	    var igss=igs.map(ihgs)
 	    for(var i in igss) igs=igs.concat(igss[i]);
 	    return igs;
