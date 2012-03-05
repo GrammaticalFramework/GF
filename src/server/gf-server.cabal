@@ -6,45 +6,48 @@ license: GPL
 license-file: ../../LICENSE
 synopsis: FastCGI Server for Grammatical Framework
 
-flag fastcgi
-  Description: Build the fastcgi service (requires the fastcgi package)
-               (In Ubuntu: apt-get install libghc-fastcgi-dev)
-  Default:     False
-
 flag content
   Description:
       Build content service (requires fastcgi and hsql-mysql packages)
       (In Ubuntu: apt-get install libghc-fastcgi-dev libghc-hsql-mysql-dev)
   Default:     False
 
+flag http
+  Description: Build pgf-http (deprecated, replaced by gf -server)
+  Default: False
+
 executable pgf-http
   main-is: pgf-http.hs
   Hs-source-dirs: . transfer
-  other-modules: PGFService FastCGIUtils Cache URLEncoding
-                 RunHTTP ServeStaticFile Fold
   ghc-options: -threaded
   if impl(ghc>=7.0)
     ghc-options: -rtsopts
 
-  build-depends: base >=4.2 && <5,
-                 old-time,
-                 directory,
-                 filepath,
-                 containers,
-                 process,
-                 gf >= 3.1,
-                 cgi >= 3001.1.8.0,
-                 httpd-shed,
-                 network,
-                 json >= 0.3.3,
-                 utf8-string >= 0.3.1.1,
-                 bytestring,
-                 pretty,
-                 random
-  if os(windows)
-    ghc-options: -optl-mwindows
+  if flag(http)
+    buildable: True
+    other-modules: PGFService FastCGIUtils Cache URLEncoding
+                   RunHTTP ServeStaticFile Fold
+    build-depends: base >=4.2 && <5,
+                   old-time,
+                   directory,
+                   filepath,
+                   containers,
+                   process,
+                   gf >= 3.1,
+                   cgi >= 3001.1.7.3,
+                   httpd-shed,
+                   network,
+                   json >= 0.3.3,
+                   utf8-string >= 0.3.1.1,
+                   bytestring,
+                   pretty,
+                   random
+    if os(windows)
+      ghc-options: -optl-mwindows
+    else
+      build-depends: unix
   else
-    build-depends: unix
+    buildable: False
 
 executable pgf-service
   main-is: pgf-fcgi.hs
@@ -54,12 +57,8 @@ executable pgf-service
   if impl(ghc>=7.0)
     ghc-options: -rtsopts
 
-  if flag(fastcgi)
-    build-depends: fastcgi >= 3001.0.2.2
+  build-depends: fastcgi >= 3001.0.2.2
        -- Install it in Ubuntu with: apt-get install libghc-fastcgi-dev
-    buildable: True
-  else
-    buildable: False
 
   build-depends: base >=4.2 && <5,
                  old-time,
@@ -68,7 +67,7 @@ executable pgf-service
                  containers,
                  process,
                  gf >= 3.1,
-                 cgi >= 3001.1.8.0,
+                 cgi >= 3001.1.7.3,
                  network,
                  json >= 0.3.3,
                  utf8-string >= 0.3.1.1,
