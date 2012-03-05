@@ -126,8 +126,11 @@ Minibar.prototype.append_extra_buttons=function(extra,options) {
     with(this) {
 	if(options.try_google)
 	    extra.appendChild(button("Try Google Translate",bind(try_google,this)));
-	if(options.feedback_url)
-	    appendChildren(extra,[text(" "),button("Feedback",bind(open_feedback,this))]);
+	if(options.feedback_url) {
+	    var b=button("Feedback",bind(open_feedback,this));
+	    b.title="Click to suggest improvements. Select a language in the To: menu first to suggest a better translation to that language."
+	    appendChildren(extra,[text(" "),b]);
+	}
     }
 }
 
@@ -170,7 +173,7 @@ function prefill_feedback_form() {
     setField(form,"from",langpart(state.current.from,gn));
     setField(form,"input",state.current.input);
     setField(form,"to",to);
-    if(to=="All") element("translation_box").style.display="none";
+    if(to=="All") element("translation_box").innerHTML=" To suggest a better translation to a particular language, select that language in the To: menu before pressing the Feedback button."
     else setField(form,"translation",trans.single_translation.join(" / "));
     
     // Browser info:
