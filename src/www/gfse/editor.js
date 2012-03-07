@@ -145,12 +145,14 @@ function draw_grammar(g) {
 }
 
 function draw_namebar(g,files) {
+    var err_ind=empty("small"); // space for error indicator
     return div_class("namebar",
 		  [table([tr([td(draw_name(g)),
-			      td_right([minibar_button(g,files),
-					quiz_button(g),
-					compile_button(g),
-					draw_plainbutton(g,files),
+			      td_right([err_ind,
+					compile_button(g,err_ind),
+					minibar_button(g,files,err_ind),
+					quiz_button(g,err_ind),
+					/*draw_plainbutton(g,files),*/
 					draw_closebutton(g)])])])])
 }
 
@@ -181,8 +183,11 @@ function draw_plainbutton(g,files) {
     return b;
 }
 
-function show_compile_error(res) {
+function show_compile_error(res,err_ind) {
     var dst=compiler_output
+    replaceInnerHTML(err_ind,res.errorcode=="OK" 
+		     ? res.errorcode+" "
+		     : "<span class=error_message>"+res.errorcode+" </span>")
     if(dst) {
 	clear(dst);
 	//var minibarlink=a(res.minibar_url,[text("Minibar")])
@@ -197,21 +202,22 @@ function show_compile_error(res) {
     }
 }
 
-function compile_button(g) {
+function compile_button(g,err_ind) {
     function compile() {
+	replaceInnerHTML(err_ind,"Compiling...");
 	replaceInnerHTML(compiler_output,"<h3>Compiling...</h3>");
-	upload(g,show_compile_error);
+	upload(g,function(res) { show_compile_error(res,err_ind) });
     }
     var b=button("Compile",compile);
     b.title="Upload the grammar to the server to check it in GF for errors";
     return b;
 }
 
-function minibar_button(g,files) {
+function minibar_button(g,files,err_ind) {
     var b2;
     function show_editor() { edit_grammar(g); }
     function goto_minibar(res) {
-	show_compile_error(res);
+	show_compile_error(res,err_ind);
 	if(res.errorcode=="OK") {
 	    //location.href=res.minibar_url;
 	    clear(files);
@@ -236,6 +242,7 @@ function minibar_button(g,files) {
 	}
     }
     function compile() {
+	replaceInnerHTML(err_ind,"Compiling...");
 	replaceInnerHTML(compiler_output,"<h3>Compiling...</h3>");
 	upload(g,goto_minibar);
     }
@@ -244,13 +251,14 @@ function minibar_button(g,files) {
     return b;
 }
 
-function quiz_button(g) {
+function quiz_button(g,err_ind) {
     function goto_quiz(res) {
-	show_compile_error(res);
+	show_compile_error(res,err_ind);
 	if(res.errorcode=="OK")
 	    location.href="../TransQuiz/translation_quiz.html?"+local.get("dir")+"/"
     }
     function compile() {
+	replaceInnerHTML(err_ind,"Compiling...");
 	replaceInnerHTML(compiler_output,"<h3>Compiling...</h3>");
 	upload(g,goto_quiz);
     }
@@ -471,7 +479,7 @@ function draw_abstract(g) {
     }
     var file=div_id("file",
 		  [kw_abstract,ident(g.basename),sep(" = "),
-		   draw_timestamp(g.abstract),
+		   /*draw_timestamp(g.abstract),*/
 		   draw_extends(g),
 		   flags,
 		   indent([extensible([kw_cat,
@@ -747,7 +755,7 @@ function draw_concrete(g,i) {
 		   editable("span",ident(conc.langcode),g,
 			    edit_langcode,"Change language"),
 		   kw(" of "),ident(g.basename),sep(" = "),
-		   draw_timestamp(conc),
+		   /*draw_timestamp(conc),*/
 		   draw_conc_extends(g,conc),
 		   indent([extensible([kw_open,draw_opens(g,i)])]),
 		   indent([kw_lincat,draw_lincats(g,i)]),
