@@ -133,7 +133,7 @@ pgf_print_production(int fid, PgfProduction prod, GuWriter *wtr, GuExn* err)
     case PGF_PRODUCTION_APPLY: {
         PgfProductionApply* papp = i.data;
         gu_printf(wtr,err,"F%d(",papp->fun->funid);
-        gu_string_write(papp->fun->fun, wtr, err);
+        gu_string_write(papp->fun->name, wtr, err);
         gu_printf(wtr,err,")[");
         size_t n_args = gu_seq_length(papp->args);
         for (size_t j = 0; j < n_args; j++) {
@@ -195,7 +195,7 @@ pgf_print_item(PgfItem* item, GuWriter* wtr, GuExn* err)
 		PgfProductionApply* papp = i.data;
         PgfCncFun* fun = papp->fun;
         gu_printf(wtr, err, "F%d(", fun->funid);
-        gu_string_write(fun->fun, wtr, err);
+        gu_string_write(fun->name, wtr, err);
         gu_printf(wtr, err, ")[");
 		for (size_t i = 0; i < gu_seq_length(item->args); i++) {
             PgfPArg arg = gu_seq_get(item->args, PgfPArg, i);
