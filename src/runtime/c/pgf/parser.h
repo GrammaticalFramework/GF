@@ -97,6 +97,8 @@ pgf_parse_result(PgfParse* parse, GuPool* pool);
  * succesful, or ambiguously successful.
  */
 
+PgfExpr
+pgf_parse_best_result(PgfParse* parse, GuPool* pool);
 
 /** @} */
 
