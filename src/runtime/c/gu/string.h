@@ -63,6 +63,12 @@ gu_format_string(GuPool* pool, const char* fmt, ...);
 GuString
 gu_str_string(const char* str, GuPool* pool);
 
+bool
+gu_string_to_int(GuString s, int *res);
+
+bool
+gu_string_to_double(GuString s, double *res);
+
 #endif // GU_STRING_H_
 
 #if defined(GU_HASH_H_) && !defined(GU_STRING_H_HASH_)

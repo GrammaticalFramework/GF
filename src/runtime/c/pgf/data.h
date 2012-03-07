@@ -124,12 +124,21 @@ struct PgfPGF {
 
 extern GU_DECLARE_TYPE(PgfPGF, struct);
 
+typedef struct {
+	double prob;
+	PgfExpr expr;
+} PgfExprProb;
+
+extern GU_DECLARE_TYPE(PgfExprProb, struct);
+
 struct PgfFunDecl {
 	PgfType* type;
-	int arity; // Only for computational defs?
+	int arity;
 	PgfEquationsM defns; // maybe null
-	double prob;
+	PgfExprProb ep;
 };
+
+extern GU_DECLARE_TYPE(PgfFunDecl, struct);
 
 struct PgfCatFun {
 	double prob;
@@ -160,7 +169,7 @@ struct PgfCncCat {
 
 struct PgfCncFun {
 	PgfCId name;
-	PgfFunDecl *absfun;
+	PgfExprProb *ep;
     int funid;
 	GuLength n_lins;
 	PgfSeqId lins[];
@@ -260,7 +269,6 @@ typedef struct PgfSymbolKP
 typedef enum {
 	PGF_PRODUCTION_APPLY,
 	PGF_PRODUCTION_COERCE,
-	PGF_PRODUCTION_CONST,
 	PGF_PRODUCTION_META
 } PgfProductionTag;
 
@@ -306,9 +314,6 @@ extern GU_DECLARE_TYPE(PgfProduction, GuVariant);
 extern GU_DECLARE_TYPE(PgfBindType, enum);
 extern GU_DECLARE_TYPE(PgfLiteral, GuVariant);
 
-
-PgfCCatId
-pgf_literal_cat(PgfLiteral lit);
 
 // PgfPatt
 
