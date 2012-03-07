@@ -21,19 +21,10 @@ struct PgfParse {
 };
 
 typedef struct {
-	double prob;
-	PgfExpr expr;
-} PgfExprProb;
-
-typedef struct {
 	PgfExprProb ep;
 	PgfPArgs args;
 	size_t arg_idx;
 } PgfExprState;
-
-static GU_DEFINE_TYPE(PgfExprProb, struct,
-	       GU_MEMBER(PgfExprProb, prob, double),
-           GU_MEMBER(PgfExprProb, expr, PgfExpr));
 
 typedef GuMap PgfExprCache;
 static GU_DEFINE_TYPE(PgfExprCache, GuMap,
@@ -103,10 +94,16 @@ GU_DEFINE_TYPE(PgfTransitions, GuStringMap,
 
 typedef struct PgfParsing PgfParsing;
 
+typedef struct {
+	PgfTokens tokens;
+	PgfExprProb ep;
+} PgfLiteralCandidate;
+
 typedef const struct PgfLexCallback PgfLexCallback;
 
 struct PgfLexCallback {
 	void (*lex)(PgfLexCallback* self, PgfToken tok, PgfItem* item);
+	GuEnum *(*lit)(PgfLexCallback* self, PgfCCat* cat);
 };
 
 struct PgfParsing {
@@ -133,7 +130,7 @@ pgf_print_production(int fid, PgfProduction prod, GuWriter *wtr, GuExn* err)
     case PGF_PRODUCTION_APPLY: {
         PgfProductionApply* papp = i.data;
         gu_printf(wtr,err,"F%d(",papp->fun->funid);
-        gu_string_write(papp->fun->name, wtr, err);
+        pgf_print_expr(papp->fun->ep->expr, 0, wtr, err);
         gu_printf(wtr,err,")[");
         size_t n_args = gu_seq_length(papp->args);
         for (size_t j = 0; j < n_args; j++) {
@@ -195,7 +192,7 @@ pgf_print_item(PgfItem* item, GuWriter* wtr, GuExn* err)
 		PgfProductionApply* papp = i.data;
         PgfCncFun* fun = papp->fun;
         gu_printf(wtr, err, "F%d(", fun->funid);
-        gu_string_write(fun->name, wtr, err);
+        pgf_print_expr(fun->ep->expr, 0, wtr, err);
         gu_printf(wtr, err, ")[");
 		for (size_t i = 0; i < gu_seq_length(item->args); i++) {
             PgfPArg arg = gu_seq_get(item->args, PgfPArg, i);
@@ -445,10 +442,20 @@ pgf_parsing_combine(PgfParsing* parsing, PgfItem* cont, PgfCCat* cat)
 	PgfItem* item = NULL;
 
 	if (!gu_variant_is_null(cont->curr_sym)) {
-		gu_assert(gu_variant_tag(cont->curr_sym) == PGF_SYMBOL_CAT);
-		PgfSymbolCat* scat = gu_variant_data(cont->curr_sym);
-
-		item = pgf_item_update_arg(cont, scat->d, cat, parsing->pool);
+		switch (gu_variant_tag(cont->curr_sym)) {
+		case PGF_SYMBOL_CAT: {
+			PgfSymbolCat* scat = gu_variant_data(cont->curr_sym);
+			item = pgf_item_update_arg(cont, scat->d, cat, parsing->pool);
+			break;
+		}
+		case PGF_SYMBOL_LIT: {
+			PgfSymbolLit* slit = gu_variant_data(cont->curr_sym);
+			item = pgf_item_update_arg(cont, slit->d, cat, parsing->pool);
+			break;
+		}
+		default:
+			gu_impossible();
+		}
 	} else {		
 		item = pgf_item_copy(cont, parsing->pool);
 		size_t nargs = gu_seq_length(cont->args);
@@ -772,9 +779,66 @@ pgf_parsing_symbol(PgfParsing* parsing, PgfItem* item, PgfSymbol sym) {
 		}
 		break;
 	}
-	case PGF_SYMBOL_LIT:
-		// XXX TODO proper support
+	case PGF_SYMBOL_LIT: {
+		PgfSymbolLit* slit = gu_variant_data(sym);
+		PgfPArg* parg = gu_seq_index(item->args, PgfPArg, slit->d);
+
+		PgfCncCat *cnccat = parg->ccat->cnccat;
+
+		// the linearization category must be {s : Str}
+		gu_assert(cnccat->n_lins == 1);
+		gu_assert(gu_list_length(cnccat->cats) == 1);
+
+		PgfItemBuf* conts = 
+			pgf_parsing_get_conts(parsing->conts_map, 
+			                      parg->ccat, slit->r, 
+		                          parsing->pool, parsing->tmp_pool);
+		gu_buf_push(conts, PgfItem*, item);
+		if (gu_buf_length(conts) == 1) {
+			/* This is the first time when we encounter this 
+			 * literal category so we must call the callback */
+		 
+			GuEnum* en = parsing->callback->lit(parsing->callback, parg->ccat);
+			for (;;) {
+				PgfLiteralCandidate* candidate =
+					gu_next(en, PgfLiteralCandidate*, parsing->pool);
+				if (candidate == NULL)
+					break;
+
+				PgfSymbol sym = gu_null_variant;
+				PgfSymbolKS* sks =
+					gu_new_variant(PGF_SYMBOL_KS,
+					               PgfSymbolKS,
+					               &sym, parsing->pool);
+				sks->tokens = candidate->tokens;
+
+				PgfSequence seq = gu_new_seq(PgfSymbol, 1, parsing->pool);
+				gu_seq_set(seq, PgfSymbol, 0, sym);
+
+				PgfCncFun* fun = 
+					gu_malloc(parsing->pool, 
+							  sizeof(PgfCncFun)+
+							  sizeof(PgfSequence*)*cnccat->n_lins);
+				fun->name    = gu_empty_string;
+				fun->ep      = &candidate->ep;
+				fun->funid   = -1;
+				fun->n_lins  = cnccat->n_lins;
+				fun->lins[0] = seq;
+
+				PgfProduction prod;
+				PgfProductionApply* papp =
+					gu_new_variant(PGF_PRODUCTION_APPLY,
+								   PgfProductionApply,
+								   &prod, parsing->pool);
+				papp->fun  = fun;
+				papp->args = gu_new_seq(PgfPArg, 0, parsing->pool);
+
+				pgf_parsing_production(parsing, parg->ccat, slit->r, 
+							           prod, conts);
+			}
+		}
 		break;
+	}
 	case PGF_SYMBOL_VAR:
 		// XXX TODO proper support
 		break;
@@ -864,10 +928,29 @@ pgf_new_parse(PgfConcr* concr, int max_fid, GuPool* pool)
 	return parse;
 }
 
+static void
+pgf_lex_noop(PgfLexCallback* self, PgfToken tok, PgfItem* item)
+{
+}
+
+static void
+pgf_enum_null(GuEnum* self, void* to, GuPool* pool)
+{
+	*((PgfLiteralCandidate**) to) = NULL;
+}
+
+static GuEnum*
+pgf_lit_noop(PgfLexCallback* self, PgfCCat* ccat)
+{
+	static GuEnum en = { pgf_enum_null };
+	return &en;
+}
+
 typedef struct {
     PgfLexCallback fn;
     PgfToken tok;
     PgfItemBuf* agenda;
+    GuPool *pool;
 } PgfParseTokenCallback;
 
 static
@@ -878,6 +961,79 @@ void pgf_match_token(PgfLexCallback* self, PgfToken tok, PgfItem* item)
     if (gu_string_eq(tok, clo->tok)) {
         gu_buf_push(clo->agenda, PgfItem*, item);
     }
+}
+
+typedef struct {
+	GuEnum en;
+	PgfLiteralCandidate candidate;
+	size_t idx;
+} PgfLitEnum;
+
+static void
+pgf_enum_lits(GuEnum* self, void* to, GuPool* pool)
+{
+	PgfLitEnum* en = (PgfLitEnum*) self;
+
+	*((PgfLiteralCandidate**) to) = 
+		(en->idx++ > 0) ? NULL : &en->candidate;
+}
+
+static GuEnum*
+pgf_match_lit(PgfLexCallback* self, PgfCCat* ccat)
+{
+	PgfParseTokenCallback *clo = (PgfParseTokenCallback *) self;
+					   
+	PgfLiteral lit;
+
+	switch (ccat->fid) {
+	case -1: {
+		PgfLiteralStr *lit_str =
+			gu_new_variant(PGF_LITERAL_STR,
+			               PgfLiteralStr,
+			               &lit, clo->pool);
+		lit_str->val = clo->tok;
+		break;
+	}
+	case -2: {
+		PgfLiteralInt *lit_int =
+			gu_new_variant(PGF_LITERAL_INT,
+			               PgfLiteralInt,
+			               &lit, clo->pool);
+		if (!gu_string_to_int(clo->tok, &lit_int->val))
+			return pgf_lit_noop(self, ccat);
+		break;
+	}
+	case -3: {
+		PgfLiteralFlt *lit_flt =
+			gu_new_variant(PGF_LITERAL_FLT,
+			               PgfLiteralFlt,
+			               &lit, clo->pool);
+		if (!gu_string_to_double(clo->tok, &lit_flt->val))
+			return pgf_lit_noop(self, ccat);
+		break;
+	}
+	default:
+		gu_impossible();
+	}
+
+	PgfTokens tokens = gu_new_seq(PgfToken, 1, clo->pool);
+	gu_seq_set(tokens, PgfToken, 0, clo->tok);
+
+	PgfExpr expr = gu_null_variant;
+	PgfExprLit *expr_lit =
+		gu_new_variant(PGF_EXPR_LIT,
+					   PgfExprLit,
+					   &expr, clo->pool);
+	expr_lit->lit = lit;
+
+	PgfLitEnum* en = gu_new(PgfLitEnum, clo->pool);
+	en->en.next = pgf_enum_lits;
+	en->candidate.tokens  = tokens;
+	en->candidate.ep.prob = INFINITY; 
+	en->candidate.ep.expr = expr;
+	en->idx = 0;
+
+	return &en->en;
 }
 
 typedef struct {
@@ -924,7 +1080,8 @@ pgf_parse_token(PgfParse* parse, PgfToken tok, bool robust, GuPool* pool)
 {
     PgfItemBuf* agenda = gu_new_buf(PgfItem*, pool);
 
-    PgfParseTokenCallback clo1 = {{ pgf_match_token }, tok, agenda};
+    PgfParseTokenCallback clo1 = {{ pgf_match_token, pgf_match_lit }, 
+                                  tok, agenda, pool};
 
 	GuPool* tmp_pool = gu_new_pool();
 	PgfParsing* parsing = pgf_new_parsing(parse->concr, &clo1.fn, parse->max_fid, pool, tmp_pool);
@@ -993,9 +1150,7 @@ pgf_production_to_expr(PgfConcr* concr, PgfProduction prod,
 	switch (pi.tag) {
 	case PGF_PRODUCTION_APPLY: {
 		PgfProductionApply* papp = pi.data;
-		PgfExpr expr = gu_new_variant_i(pool, PGF_EXPR_FUN,
-						PgfExprFun,
-						.fun = papp->fun->name);
+		PgfExpr expr = papp->fun->ep->expr;
 		size_t n_args = gu_seq_length(papp->args);
 		for (size_t i = 0; i < n_args; i++) {
 			PgfPArg* parg = gu_seq_index(papp->args, PgfPArg, i);
@@ -1105,18 +1260,18 @@ pgf_parse_result_enum_next(GuEnum* self, void* to, GuPool* pool)
 	*(PgfExpr*)to = pgf_parse_result_next(pr, pool);
 }
 
-static
-void pgf_noop(PgfLexCallback* self, PgfToken tok, PgfItem* item)
-{
-}
+static PgfLexCallback lex_callback_noop = 
+		{ pgf_lex_noop, pgf_lit_noop };
 
 PgfExprEnum*
 pgf_parse_result(PgfParse* parse, GuPool* pool)
 {
-    PgfLexCallback fn = { pgf_noop };
-
     GuPool* tmp_pool = gu_new_pool();
-	PgfParsing* parsing = pgf_new_parsing(parse->concr, &fn, parse->max_fid, pool, tmp_pool);
+	PgfParsing* parsing = 
+		pgf_new_parsing(parse->concr,
+	                    &lex_callback_noop,
+	                    parse->max_fid,
+	                    pool, tmp_pool);
 	size_t n_items = gu_buf_length(parse->agenda);
 	for (size_t i = 0; i < n_items; i++) {
 		PgfItem* item = gu_buf_get(parse->agenda, PgfItem*, i);
@@ -1164,18 +1319,10 @@ pgf_parse_best_result_init(PgfCCat *ccat, GuBuf *pqueue,
 		case PGF_PRODUCTION_APPLY: {
 			PgfProductionApply* papp = pi.data;
 
-			gu_assert(papp->fun->absfun != NULL);
-
 			PgfExprState *st = gu_new(PgfExprState, tmp_pool);
-			st->ep.prob = - log(papp->fun->absfun->prob);
-			PgfExprFun *expr_fun =
-				gu_new_variant(PGF_EXPR_FUN,
-				       PgfExprFun,
-				       &st->ep.expr, out_pool);
-			expr_fun->fun = papp->fun->name;
+			st->ep = *papp->fun->ep;
 			st->args = papp->args;
 			st->arg_idx = 0;
-			
 			gu_buf_heap_push(pqueue, &pgf_expr_prob_order, &st);
 			break;
 		}
@@ -1274,11 +1421,12 @@ pgf_parse_best_ccat_result(
 PgfExpr
 pgf_parse_best_result(PgfParse* parse, GuPool* pool)
 {
-    PgfLexCallback fn = { pgf_noop };
-
 	GuPool* tmp_pool = gu_new_pool();
-	PgfParsing* parsing = pgf_new_parsing(parse->concr, &fn, parse->max_fid, 
-	                                      pool, tmp_pool);
+	PgfParsing* parsing = 
+		pgf_new_parsing(parse->concr, 
+	                    &lex_callback_noop,
+	                    parse->max_fid, 
+	                    pool, tmp_pool);
 	size_t n_items = gu_buf_length(parse->agenda);
 	for (size_t i = 0; i < n_items; i++) {
 		PgfItem* item = gu_buf_get(parse->agenda, PgfItem*, i);
@@ -1441,7 +1589,7 @@ pgf_parser_bu_item(PgfConcr* concr, PgfItem* item,
 				break;
 			}
 			case PGF_SYMBOL_LIT:
-				// XXX TODO proper support
+				// Nothing to be done here
 				break;
 			case PGF_SYMBOL_VAR:
 				// XXX TODO proper support

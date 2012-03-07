@@ -209,6 +209,109 @@ gu_str_string(const char* str, GuPool* pool)
 #endif
 }
 
+bool
+gu_string_to_int(GuString s, int *res)
+{
+	GuWord w = s.w_;
+	uint8_t buf[sizeof(GuWord)];
+	char* src;
+	size_t sz;
+	if (w & 1) {
+		sz = (w & 0xff) >> 1;
+		gu_assert(sz <= sizeof(GuWord));
+		size_t i = sz;
+		while (i > 0) {
+			w >>= 8;
+			buf[--i] = w & 0xff;
+		}
+		src = (char*) buf;
+	} else {
+		uint8_t* p = (void*) w;
+		sz = (p[0] == 0) ? ((size_t*) p)[-1] : p[0];
+		src = (char*) &p[1];
+	}
+
+	size_t i = 0;
+	
+	bool neg = false;
+
+	if (src[i] == '-') {
+		neg = true;
+		i++;
+	}
+
+	if (i >= sz)
+		return false;
+
+	int n = 0;
+	for (; i < sz; i++) {
+		if (src[i] < '0' || src[i] > '9')
+			return false;
+
+		n = n * 10 + (src[i] - '0');
+	}
+
+	*res = neg ? -n : n;
+	return true;
+}
+
+bool
+gu_string_to_double(GuString s, double *res)
+{
+	GuWord w = s.w_;
+	uint8_t buf[sizeof(GuWord)];
+	char* src;
+	size_t sz;
+	if (w & 1) {
+		sz = (w & 0xff) >> 1;
+		gu_assert(sz <= sizeof(GuWord));
+		size_t i = sz;
+		while (i > 0) {
+			w >>= 8;
+			buf[--i] = w & 0xff;
+		}
+		src = (char*) buf;
+	} else {
+		uint8_t* p = (void*) w;
+		sz = (p[0] == 0) ? ((size_t*) p)[-1] : p[0];
+		src = (char*) &p[1];
+	}
+
+	size_t i = 0;
+	
+	bool neg = false;
+	bool dec = false;
+	int  exp = 1;
+
+	if (src[i] == '-') {
+		neg = true;
+		i++;
+	}
+
+	if (i >= sz)
+		return false;
+
+	double d = 0;
+	for (; i < sz; i++) {
+		if (src[i] == '.') {
+			if (dec) return false;
+
+			dec = true;
+			continue;
+		}
+
+		if (src[i] < '0' || src[i] > '9')
+			return false;
+
+		if (dec) exp = exp * 10;
+
+		d = d * 10 + (src[i] - '0');
+	}
+
+	*res = (neg ? -d : d) / exp;
+	return true;
+}
+
 GuWord
 gu_string_hash(GuString s)
 {

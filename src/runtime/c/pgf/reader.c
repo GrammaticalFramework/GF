@@ -28,6 +28,7 @@
 #include <gu/bits.h>
 #include <gu/exn.h>
 #include <gu/utf8.h>
+#include <math.h>
 
 #define GU_LOG_ENABLE
 #include <gu/log.h>
@@ -550,25 +551,31 @@ pgf_read_to_GuSeq(GuType* type, PgfReader* rdr, void* to)
 	gu_exit("<-");
 }
 
-static void
-pgf_read_to_PgfEquationsM(GuType* type, PgfReader* rdr, void* to)
+static void*
+pgf_read_new_PgfFunDecl(GuType* type, PgfReader* rdr, GuPool* pool, size_t* size_out)
 {
-	GuSeq* sto = to;
+	PgfFunDecl* absfun = gu_new(PgfFunDecl, pool);
+
+	absfun->type = pgf_read_new(rdr, gu_type(PgfType), pool, NULL);
+	gu_return_on_exn(rdr->err, NULL);
+	
+	absfun->arity = pgf_read_int(rdr);
+
 	uint8_t tag = pgf_read_u8(rdr);
-	gu_return_on_exn(rdr->err,);
+	gu_return_on_exn(rdr->err, NULL);
 	switch (tag) {
 	case 0:
-		*sto = gu_null_seq;
+		absfun->defns = gu_null_seq;
 		break;
 	case 1: {
         GuLength length = pgf_read_len(rdr);
-        gu_return_on_exn(rdr->err, );
+        gu_return_on_exn(rdr->err, NULL);
 
-        GuSeq seq = gu_new_seq(PgfEquation*, length, rdr->opool);
-        PgfEquation** data = gu_seq_data(seq);
+        absfun->defns = gu_new_seq(PgfEquation*, length, rdr->opool);
+        PgfEquation** data = gu_seq_data(absfun->defns);
         for (size_t i = 0; i < length; i++) {
             GuLength n_patts = pgf_read_len(rdr);
-            gu_return_on_exn(rdr->err, );
+            gu_return_on_exn(rdr->err, NULL);
 
             PgfEquation *equ =
                 gu_malloc(rdr->opool, 
@@ -576,14 +583,13 @@ pgf_read_to_PgfEquationsM(GuType* type, PgfReader* rdr, void* to)
             equ->n_patts = n_patts;
             for (GuLength j = 0; j < n_patts; j++) {
                 pgf_read_to(rdr, gu_type(PgfPatt), &equ->patts[j]);
-                gu_return_on_exn(rdr->err, );
+                gu_return_on_exn(rdr->err, NULL);
             }
             pgf_read_to(rdr, gu_type(PgfExpr), &equ->body);
-            gu_return_on_exn(rdr->err, );
+            gu_return_on_exn(rdr->err, NULL);
 
             data[i] = equ;
         }
-        *sto = seq;
 		break;
     }
 	default:
@@ -591,6 +597,17 @@ pgf_read_to_PgfEquationsM(GuType* type, PgfReader* rdr, void* to)
 			   .type = type, .tag = tag);
 		break;
 	}
+
+	absfun->ep.prob = - log(gu_in_f64be(rdr->in, rdr->err));
+	
+	PgfExprFun* expr_fun =
+		gu_new_variant(PGF_EXPR_FUN,
+					   PgfExprFun,
+					   &absfun->ep.expr, pool);
+	expr_fun->fun = *((PgfCId *) rdr->curr_key);
+
+	*size_out = sizeof(PgfFunDecl);
+	return absfun;
 }
 
 static void
@@ -763,8 +780,10 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
     for (int funid = 0; funid < n_funs; funid++) {
 		PgfCncFun* cncfun = gu_list_index(concr->cncfuns, funid);
         cncfun->funid = funid;
-        cncfun->absfun = 
+        
+        PgfFunDecl* absfun =
 			gu_map_get(rdr->curr_abstr->funs, &cncfun->name, PgfFunDecl*);
+        cncfun->ep = (absfun == NULL) ? NULL : &absfun->ep;
 	}
 
 	return concr;
@@ -840,7 +859,6 @@ pgf_read_to_table = GU_TYPETABLE(
 	PGF_READ_TO(GuString),
 	PGF_READ_TO(double),
 	PGF_READ_TO(pointer),
-	PGF_READ_TO(PgfEquationsM),
 	PGF_READ_TO(GuSeq),
 	PGF_READ_TO(PgfCCatId),
 	PGF_READ_TO(PgfCCat),
@@ -862,6 +880,7 @@ pgf_read_new_table = GU_TYPETABLE(
 	PGF_READ_NEW(struct),
 	PGF_READ_NEW(GuMap),
 	PGF_READ_NEW(GuList),
+	PGF_READ_NEW(PgfFunDecl),
 	PGF_READ_NEW(PgfCCat),
 	PGF_READ_NEW(PgfCncCat),
 	PGF_READ_NEW(PgfConcr)

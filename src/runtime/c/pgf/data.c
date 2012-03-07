@@ -4,27 +4,6 @@
 #include <gu/variant.h>
 #include <gu/assert.h>
 
-PgfCCat pgf_ccat_string = { NULL, NULL, 0, GU_NULL_SEQ, -1 };
-PgfCCat pgf_ccat_int = { NULL, NULL, 0, GU_NULL_SEQ, -2 };
-PgfCCat pgf_ccat_float = { NULL, NULL, 0, GU_NULL_SEQ, -3 };
-PgfCCat pgf_ccat_var = { NULL, NULL, 0, GU_NULL_SEQ, -4 };
-
-PgfCCatId
-pgf_literal_cat(PgfLiteral lit)
-{
-	switch (gu_variant_tag(lit)) {
-	case PGF_LITERAL_STR:
-		return &pgf_ccat_string;
-	case PGF_LITERAL_INT:
-		return &pgf_ccat_int;
-	case PGF_LITERAL_FLT:
-		return &pgf_ccat_float;
-	default:
-		gu_impossible();
-		return NULL;
-	}
-}
-
 bool 
 pgf_tokens_equal(PgfTokens t1, PgfTokens t2)
 {
@@ -146,11 +125,6 @@ GU_DEFINE_TYPE(
 		PGF_PRODUCTION_COERCE, PgfProductionCoerce,
 		GU_MEMBER(PgfProductionCoerce, coerce, PgfCCatId)),
 	GU_CONSTRUCTOR_S(
-		PGF_PRODUCTION_CONST, PgfProductionConst,
-		GU_MEMBER(PgfProductionConst, expr, PgfExpr),
-		GU_MEMBER(PgfProductionConst, n_toks, GuLength),
-		GU_FLEX_MEMBER(PgfProductionConst, toks, GuString)),
-	GU_CONSTRUCTOR_S(
 		PGF_PRODUCTION_META, PgfProductionMeta,
 		GU_MEMBER(PgfProductionMeta, args, PgfPArgs)));
 
@@ -192,12 +166,16 @@ GU_DEFINE_TYPE(
 // Distinct type so we can give it special treatment in the reader
 GU_DEFINE_TYPE(PgfEquationsM, GuSeq, gu_type(PgfEquation));
 
+GU_DEFINE_TYPE(PgfExprProb, struct,
+	GU_MEMBER(PgfExprProb, prob, double),
+    GU_MEMBER(PgfExprProb, expr, PgfExpr));
+
 GU_DEFINE_TYPE(
 	PgfFunDecl, struct, 
 	GU_MEMBER_P(PgfFunDecl, type, PgfType),
 	GU_MEMBER(PgfFunDecl, arity, int),
 	GU_MEMBER(PgfFunDecl, defns, PgfEquationsM),
-	GU_MEMBER(PgfFunDecl, prob, double));
+	GU_MEMBER(PgfFunDecl, ep, PgfExprProb));
 
 GU_DEFINE_TYPE(
 	PgfCatFun, struct,

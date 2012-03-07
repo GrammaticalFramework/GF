@@ -311,7 +311,7 @@ pgf_print_literal(PgfLiteral lit,
     }
 	case PGF_LITERAL_FLT: {
         PgfLiteralFlt* lit = ei.data;
-		gu_printf(wtr, err, "%f", lit->val);
+		gu_printf(wtr, err, "%lf", lit->val);
         break;
     }
 	default:

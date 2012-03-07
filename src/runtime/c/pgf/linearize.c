@@ -338,6 +338,29 @@ finish:
 	return ret;
 }
 
+PgfCCat*
+pgf_literal_cat(PgfLzn* lzn, PgfLiteral lit)
+{
+	int fid;
+
+	switch (gu_variant_tag(lit)) {
+	case PGF_LITERAL_STR:
+		fid = -1;
+		break;
+	case PGF_LITERAL_INT:
+		fid = -2;
+		break;
+	case PGF_LITERAL_FLT:
+		fid = -3;
+		break;
+	default:
+		gu_impossible();
+		return NULL;
+	}
+
+	return gu_map_get(lzn->concr->ccats, &fid, PgfCCat*);
+}
+
 static PgfCCat*
 pgf_lzn_infer(PgfLzn* lzn, PgfExpr expr, GuPool* pool, PgfCncTree* ctree_out)
 {
@@ -357,7 +380,7 @@ pgf_lzn_infer(PgfLzn* lzn, PgfExpr expr, GuPool* pool, PgfCncTree* ctree_out)
 					PgfCncTreeLit,
 					.lit = elit->lit);
 			}
-			ret = pgf_literal_cat(elit->lit);
+			ret = pgf_literal_cat(lzn, elit->lit);
 		}
 		default:
 			// XXX: should we do something here?
@@ -523,8 +546,40 @@ pgf_file_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens toks)
 	}
 }
 
+static void
+pgf_file_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
+{
+	PgfSimpleLin* flin = gu_container(funcs, PgfSimpleLin, funcs);
+	if (!gu_ok(flin->err)) {
+		return;
+	}
+	
+	GuVariantInfo i = gu_variant_open(lit);
+    switch (i.tag) {
+    case PGF_LITERAL_STR: {
+        PgfLiteralStr* lstr = i.data;
+		gu_string_write(lstr->val, flin->wtr, flin->err);
+		gu_putc(' ', flin->wtr, flin->err);
+		break;
+	}
+    case PGF_LITERAL_INT: {
+        PgfLiteralInt* lint = i.data;
+		gu_printf(flin->wtr, flin->err, "%d ", lint->val);
+		break;
+	}
+    case PGF_LITERAL_FLT: {
+        PgfLiteralFlt* lflt = i.data;
+		gu_printf(flin->wtr, flin->err, "%lf ", lflt->val);
+		break;
+	}
+	default:
+		gu_impossible();
+	}
+}
+
 static PgfLinFuncs pgf_file_lin_funcs = {
-	.symbol_tokens = pgf_file_lzn_symbol_tokens
+	.symbol_tokens = pgf_file_lzn_symbol_tokens,
+	.expr_literal  = pgf_file_lzn_expr_literal
 };
 
 void
