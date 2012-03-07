@@ -136,52 +136,60 @@ int main(int argc, char* argv[]) {
 			}
 			tok = strtok(NULL, " \n");
 		}
-		
-		// Now begin enumerating the resulting syntax trees
-		GuEnum* result = pgf_parse_result(parse, ppool);
 
-		clock_t end = clock();
+		if (robust_mode) {
+			PgfExpr expr = pgf_parse_best_result(parse, ppool);
 
-		double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-		printf("%.2f sec\n", cpu_time_used);
-
-		while (true) {
-			PgfExpr expr = gu_next(result, PgfExpr, ppool);
-			
 			clock_t end = clock();
-			
-			// The enumerator will return a null variant at the
-			// end of the results.
-			if (gu_variant_is_null(expr)) {
-				break;
-			}
-			gu_putc(' ', wtr, err);
-			// Write out the abstract syntax tree
-			pgf_print_expr(expr, 0, wtr, err);
-			gu_putc('\n', wtr, err);
-			
-			if (robust_mode) {
-				double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-				printf("%.2f sec\n", cpu_time_used);
-				break;
-			}
 
-			// Enumerate the concrete syntax trees corresponding
-			// to the abstract tree.
-			GuEnum* cts = pgf_lzr_concretize(to_concr, expr, ppool);
+			double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+			printf("%.2f sec\n", cpu_time_used);
+			
+			if (!gu_variant_is_null(expr)) {
+				gu_putc(' ', wtr, err);
+				// Write out the abstract syntax tree
+				pgf_print_expr(expr, 0, wtr, err);
+				gu_putc('\n', wtr, err);
+			}
+		} else {
+			// Now begin enumerating the resulting syntax trees
+			GuEnum* result = pgf_parse_result(parse, ppool);
+
+			clock_t end = clock();
+
+			double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+			printf("%.2f sec\n", cpu_time_used);
+
 			while (true) {
-				PgfCncTree ctree =
-					gu_next(cts, PgfCncTree, ppool);
-				if (gu_variant_is_null(ctree)) {
+				PgfExpr expr = gu_next(result, PgfExpr, ppool);
+
+				// The enumerator will return a null variant at the
+				// end of the results.
+				if (gu_variant_is_null(expr)) {
 					break;
 				}
-				gu_puts("  ", wtr, err);
-				// Linearize the concrete tree as a simple
-				// sequence of strings.
-				pgf_lzr_linearize_simple(to_concr	, ctree, lin_idx,
-							 wtr, err);
+				gu_putc(' ', wtr, err);
+				// Write out the abstract syntax tree
+				pgf_print_expr(expr, 0, wtr, err);
 				gu_putc('\n', wtr, err);
-				gu_writer_flush(wtr, err);
+
+				// Enumerate the concrete syntax trees corresponding
+				// to the abstract tree.
+				GuEnum* cts = pgf_lzr_concretize(to_concr, expr, ppool);
+				while (true) {
+					PgfCncTree ctree =
+						gu_next(cts, PgfCncTree, ppool);
+					if (gu_variant_is_null(ctree)) {
+						break;
+					}
+					gu_puts("  ", wtr, err);
+					// Linearize the concrete tree as a simple
+					// sequence of strings.
+					pgf_lzr_linearize_simple(to_concr	, ctree, lin_idx,
+								 wtr, err);
+					gu_putc('\n', wtr, err);
+					gu_writer_flush(wtr, err);
+				}
 			}
 		}
 	fail_parse:

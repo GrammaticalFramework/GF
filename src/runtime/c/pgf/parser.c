@@ -20,27 +20,32 @@ struct PgfParse {
     int max_fid;
 };
 
-typedef struct PgfExprState PgfExprState;
-
 typedef struct {
 	double prob;
-	PgfExprState *state;
-} PgfExprPState;
-
-struct PgfExprState {
-	double prob;
-	PgfExprState* prev;
 	PgfExpr expr;
+} PgfExprProb;
+
+typedef struct {
+	PgfExprProb ep;
 	PgfPArgs args;
 	size_t arg_idx;
-};
+} PgfExprState;
+
+static GU_DEFINE_TYPE(PgfExprProb, struct,
+	       GU_MEMBER(PgfExprProb, prob, double),
+           GU_MEMBER(PgfExprProb, expr, PgfExpr));
+
+typedef GuMap PgfExprCache;
+static GU_DEFINE_TYPE(PgfExprCache, GuMap,
+		              gu_type(PgfCCat), NULL,
+		              gu_ptr_type(PgfExprProb), &gu_null_struct);
 
 typedef struct PgfParseResult PgfParseResult;
 
 struct PgfParseResult {
     PgfConcr* concr;
-	GuPool *tmp_pool;
-	GuBuf *pqueue;
+	PgfCCatBuf* completed;
+	GuChoice* choice;
 	PgfExprEnum en;
 };
 
@@ -974,148 +979,130 @@ pgf_parse_token(PgfParse* parse, PgfToken tok, bool robust, GuPool* pool)
 	return next_parse;
 }
 
+static PgfExpr
+pgf_cat_to_expr(PgfConcr* concr, PgfCCat* cat,
+                PgfCCatBuf* visited, GuChoice* choice,
+                GuPool* pool);
 
-int cmp_expr_prob(GuOrder* self, const void* a, const void* b)
+static PgfExpr
+pgf_production_to_expr(PgfConcr* concr, PgfProduction prod,
+                       PgfCCatBuf* visited, GuChoice* choice,
+                       GuPool* pool)
 {
-	PgfExprPState *s1 = (PgfExprPState *) a;
-	PgfExprPState *s2 = (PgfExprPState *) b;
-
-	if (s1->prob < s2->prob)
-		return -1;
-	else if (s1->prob > s2->prob)
-		return 1;
-	else
-		return 0;
-}
-
-static GuOrder
-pgf_expr_state_order = { cmp_expr_prob };
-
-static void
-pgf_parse_result_from_ccat(PgfParseResult *result, PgfCCat *ccat, 
-                           PgfExprPState *ps, GuPool *pool)
-{
-	size_t n_prods = gu_seq_length(ccat->prods);
-	for (size_t i = 0; i < n_prods; i++) {
-		PgfProduction prod =
-			gu_seq_get(ccat->prods, PgfProduction, i);
-
-		GuVariantInfo pi = gu_variant_open(prod);
-		switch (pi.tag) {
-		case PGF_PRODUCTION_APPLY: {
-			PgfProductionApply* papp = pi.data;
-			
-			gu_assert(papp->fun->absfun != NULL);
-
-			double prob = ps->prob - log(papp->fun->absfun->prob);
-
-			PgfExprState *state = gu_new(PgfExprState, result->tmp_pool);
-			state->prev = ps->state;
-			PgfExprFun *expr_fun =
-				gu_new_variant(PGF_EXPR_FUN,
-				       PgfExprFun,
-				       &state->expr, pool);
-			expr_fun->fun = papp->fun->name;
-			state->args = papp->args;
-			state->arg_idx = 0;
-			
-			PgfExprPState ps1 = { prob, state };
-			gu_buf_heap_push(result->pqueue, &pgf_expr_state_order, &ps1);
-			break;
+	GuVariantInfo pi = gu_variant_open(prod);
+	switch (pi.tag) {
+	case PGF_PRODUCTION_APPLY: {
+		PgfProductionApply* papp = pi.data;
+		PgfExpr expr = gu_new_variant_i(pool, PGF_EXPR_FUN,
+						PgfExprFun,
+						.fun = papp->fun->name);
+		size_t n_args = gu_seq_length(papp->args);
+		for (size_t i = 0; i < n_args; i++) {
+			PgfPArg* parg = gu_seq_index(papp->args, PgfPArg, i);
+			gu_assert(!parg->hypos || !parg->hypos->len);
+			PgfExpr earg = pgf_cat_to_expr(concr, parg->ccat, visited, choice, pool);
+			if (gu_variant_is_null(earg))
+				return gu_null_variant;
+			expr = gu_new_variant_i(pool, PGF_EXPR_APP,
+						PgfExprApp,
+						.fun = expr, .arg = earg);
 		}
-		case PGF_PRODUCTION_COERCE: {
-			PgfProductionCoerce* pcoerce = pi.data;
-			pgf_parse_result_from_ccat(result, pcoerce->coerce, ps, pool);
-			break;
-		}
-		case PGF_PRODUCTION_META: {
-			PgfProductionMeta* pmeta = pi.data;
-
-			double prob = ps->prob + 100000000000 + rand();
-
-			PgfExprState *state = gu_new(PgfExprState, result->tmp_pool);
-			state->prev = ps->state;
-			PgfExprMeta *expr_meta =
-				gu_new_variant(PGF_EXPR_META,
-				       PgfExprMeta,
-				       &state->expr, pool);
-			expr_meta->id = 0;
-			state->args = pmeta->args;
-			state->arg_idx = 0;
-			
-			PgfExprPState ps1 = { prob, state };
-			gu_buf_heap_push(result->pqueue, &pgf_expr_state_order, &ps1);
-			break;
-		}
-		}
+		return expr;
 	}
+	case PGF_PRODUCTION_COERCE: {
+		PgfProductionCoerce* pcoerce = pi.data;
+		return pgf_cat_to_expr(concr, pcoerce->coerce, visited, choice, pool);
+	}
+	case PGF_PRODUCTION_META: {
+		PgfProductionMeta* pmeta = pi.data;
+		PgfExpr expr = gu_new_variant_i(pool, PGF_EXPR_META,
+						PgfExprMeta,
+						.id = 0);
+		size_t n_args = gu_seq_length(pmeta->args);
+		for (size_t i = 0; i < n_args; i++) {
+			PgfPArg* parg = gu_seq_index(pmeta->args, PgfPArg, i);
+			gu_assert(!parg->hypos || !parg->hypos->len);
+			PgfExpr earg = pgf_cat_to_expr(concr, parg->ccat, visited, choice, pool);
+			if (gu_variant_is_null(earg))
+				return gu_null_variant;
+			expr = gu_new_variant_i(pool, PGF_EXPR_APP,
+						PgfExprApp,
+						.fun = expr, .arg = earg);
+		}
+		return expr;
+	}
+	default:
+		gu_impossible();
+	}
+	return gu_null_variant;
 }
 
 static PgfExpr
-pgf_parse_result_next(PgfParseResult *result, GuPool *pool)
+pgf_cat_to_expr(PgfConcr* concr, PgfCCat* cat,
+                PgfCCatBuf* visited, GuChoice* choice,
+                GuPool* pool)
 {
-	if (result->pqueue == NULL)
-		return gu_null_variant;
+	if (cat->fid < concr->total_cats) {
+		// XXX: What should the PgfMetaId be?
+		return gu_new_variant_i(pool, PGF_EXPR_META,
+					PgfExprMeta, 
+					.id = 0);
+	}
 
-	while (gu_buf_length(result->pqueue) > 0) {		
-		PgfExprPState ps;
-		gu_buf_heap_pop(result->pqueue, &pgf_expr_state_order, &ps);
-	
-		if (ps.state->arg_idx >= gu_seq_length(ps.state->args)) {
-			PgfExprState *prev = ps.state->prev;
-
-			if (prev == NULL)
-				return ps.state->expr;
-
-			PgfExprState *next = gu_new(PgfExprState, result->tmp_pool);
-			next->prev = prev->prev;
-			PgfExprApp *expr_apply =
-				gu_new_variant(PGF_EXPR_APP,
-				               PgfExprApp,
-				               &next->expr, pool);
-			expr_apply->fun = prev->expr;
-			expr_apply->arg = ps.state->expr;
-			next->args = prev->args;
-			next->arg_idx = prev->arg_idx;
-			
-			PgfExprPState ps1 = { ps.prob, next };
-			gu_buf_heap_push(result->pqueue, &pgf_expr_state_order, &ps1);
-		} else {
-			PgfPArg *arg = gu_seq_index(ps.state->args, PgfPArg, ps.state->arg_idx++);
-			
-			if (arg->ccat->fid < result->concr->total_cats) {
-				PgfExpr fun = ps.state->expr;
-				PgfExpr arg;
-				PgfExprMeta *expr_meta =
-					gu_new_variant(PGF_EXPR_META,
-				               PgfExprMeta,
-				               &arg, pool);
-				expr_meta->id = 0;
-
-				PgfExprApp *expr_apply =
-					gu_new_variant(PGF_EXPR_APP,
-				               PgfExprApp,
-				               &ps.state->expr, pool);
-				expr_apply->fun = fun;
-				expr_apply->arg = arg;
-				gu_buf_heap_push(result->pqueue, &pgf_expr_state_order, &ps);
-			} else {
-				pgf_parse_result_from_ccat(result, arg->ccat, &ps, pool);
-			}
+	size_t n_prods = gu_seq_length(cat->prods);
+	for (size_t i = 0; i < gu_buf_length(visited); i++) {
+		if (gu_buf_get(visited, PgfCCat*, i) == cat) {
+			n_prods = 0;
+			break;
 		}
 	}
+	gu_buf_push(visited, PgfCCat*, cat);
+
+	int i = gu_choice_next(choice, n_prods);
+	if (i == -1) {
+		return gu_null_variant;
+	}
+	PgfProduction prod = gu_seq_get(cat->prods, PgfProduction, i);
+	return pgf_production_to_expr(concr, prod, visited, choice, pool);
+}
+
+static PgfExpr
+pgf_parse_result_next(PgfParseResult* pr, GuPool* pool)
+{
+	if (pr->choice == NULL) {
+		return gu_null_variant;
+	}
 	
-	gu_pool_free(result->tmp_pool);
-	result->tmp_pool = NULL;
-	result->pqueue   = NULL;
-	return gu_null_variant;
+	PgfExpr ret = gu_null_variant;
+
+	do {
+		size_t n_results = gu_buf_length(pr->completed);
+		GuChoiceMark mark = gu_choice_mark(pr->choice);
+		int i = gu_choice_next(pr->choice, n_results);
+		if (i == -1) {
+			return gu_null_variant;
+		}
+		PgfCCat* cat = gu_buf_get(pr->completed, PgfCCat*, i);
+
+		GuPool* tmp_pool = gu_new_pool();
+		PgfCCatBuf* visited = gu_new_buf(PgfCCat*, tmp_pool);
+		ret = pgf_cat_to_expr(pr->concr, cat, visited, pr->choice, pool);
+		gu_pool_free(tmp_pool);
+
+		gu_choice_reset(pr->choice, mark);
+		if (!gu_choice_advance(pr->choice)) {
+			pr->choice = NULL;
+		};
+	} while (gu_variant_is_null(ret));
+	
+	return ret;
 }
 
 static void
 pgf_parse_result_enum_next(GuEnum* self, void* to, GuPool* pool)
 {
-	PgfParseResult* result = gu_container(self, PgfParseResult, en);
-	*(PgfExpr*)to = pgf_parse_result_next(result, pool);
+	PgfParseResult* pr = gu_container(self, PgfParseResult, en);
+	*(PgfExpr*)to = pgf_parse_result_next(pr, pool);
 }
 
 static
@@ -1128,36 +1115,201 @@ pgf_parse_result(PgfParse* parse, GuPool* pool)
 {
     PgfLexCallback fn = { pgf_noop };
 
-	GuPool* parsing_pool = gu_new_pool();
-	PgfParsing* parsing = pgf_new_parsing(parse->concr, &fn, parse->max_fid, 
-	                                      pool, parsing_pool);
+    GuPool* tmp_pool = gu_new_pool();
+	PgfParsing* parsing = pgf_new_parsing(parse->concr, &fn, parse->max_fid, pool, tmp_pool);
 	size_t n_items = gu_buf_length(parse->agenda);
 	for (size_t i = 0; i < n_items; i++) {
 		PgfItem* item = gu_buf_get(parse->agenda, PgfItem*, i);
         pgf_parsing_item(parsing, item);
 	}
-	PgfCCatBuf *completed = parsing->completed;
-	gu_pool_free(parsing_pool);
 
-	GuPool *states_pool = gu_new_pool();
-	PgfParseResult *result =
-		gu_new_i(pool, PgfParseResult,
+	PgfExprEnum* en = 
+           &gu_new_i(pool, PgfParseResult,
 			 .concr = parse->concr,
-			 .tmp_pool = states_pool,
-			 .pqueue = gu_new_buf(PgfExprPState, states_pool),
-			 .en.next = pgf_parse_result_enum_next);
+             .completed = parsing->completed,
+			 .choice = gu_new_choice(pool),
+			 .en.next = pgf_parse_result_enum_next)->en;
 
-	size_t n_completed = gu_buf_length(completed);
-	for (size_t i = 0; i < n_completed; i++) {
-		PgfCCat *ccat = gu_buf_get(completed, PgfCCat*, i);
-		PgfExprPState ps = { 0, NULL };
-		pgf_parse_result_from_ccat(result, ccat, &ps, pool);
-	}
-
-	return &result->en;
+	gu_pool_free(tmp_pool);
+	return en;
 }
 
+int cmp_expr_prob(GuOrder* self, const void* a, const void* b)
+{
+	PgfExprProb *s1 = *((PgfExprProb **) a);
+	PgfExprProb *s2 = *((PgfExprProb **) b);
 
+	if (s1->prob < s2->prob)
+		return -1;
+	else if (s1->prob > s2->prob)
+		return 1;
+	else
+		return 0;
+}
+
+static GuOrder
+pgf_expr_prob_order = { cmp_expr_prob };
+
+static void
+pgf_parse_best_result_init(PgfCCat *ccat, GuBuf *pqueue,
+                           GuPool *tmp_pool, GuPool *out_pool)
+{
+	size_t n_prods = gu_seq_length(ccat->prods);
+	for (size_t i = 0; i < n_prods; i++) {
+		PgfProduction prod =
+			gu_seq_get(ccat->prods, PgfProduction, i);
+
+		GuVariantInfo pi = gu_variant_open(prod);
+		switch (pi.tag) {
+		case PGF_PRODUCTION_APPLY: {
+			PgfProductionApply* papp = pi.data;
+
+			gu_assert(papp->fun->absfun != NULL);
+
+			PgfExprState *st = gu_new(PgfExprState, tmp_pool);
+			st->ep.prob = - log(papp->fun->absfun->prob);
+			PgfExprFun *expr_fun =
+				gu_new_variant(PGF_EXPR_FUN,
+				       PgfExprFun,
+				       &st->ep.expr, out_pool);
+			expr_fun->fun = papp->fun->name;
+			st->args = papp->args;
+			st->arg_idx = 0;
+			
+			gu_buf_heap_push(pqueue, &pgf_expr_prob_order, &st);
+			break;
+		}
+		case PGF_PRODUCTION_COERCE: {
+			PgfProductionCoerce* pcoerce = pi.data;
+			pgf_parse_best_result_init(pcoerce->coerce, pqueue, 
+			                           tmp_pool, out_pool);
+			break;
+		}
+		case PGF_PRODUCTION_META: {
+			PgfProductionMeta* pmeta = pi.data;
+
+			PgfExprState *st = gu_new(PgfExprState, tmp_pool);
+			st->ep.prob = 100000000000 + rand();
+			PgfExprMeta *expr_meta =
+				gu_new_variant(PGF_EXPR_META,
+				       PgfExprMeta,
+				       &st->ep.expr, out_pool);
+			expr_meta->id = 0;
+			st->args = pmeta->args;
+			st->arg_idx = 0;
+			
+			gu_buf_heap_push(pqueue, &pgf_expr_prob_order, &st);
+			break;
+		}
+		}
+	}
+}
+
+static PgfExprProb*
+pgf_parse_best_ccat_result(
+                    PgfExprCache *cache, PgfConcr *concr, 
+                    PgfCCat *ccat, GuPool *pool)
+{
+	PgfExprProb* ep = NULL;
+	if (gu_map_has(cache, ccat)) {
+		ep = gu_map_get(cache, ccat, PgfExprProb*);
+		return ep;
+	}
+
+	gu_map_put(cache, ccat, PgfExprProb*, NULL);
+
+	GuPool *tmp_pool = gu_new_pool();
+
+	GuBuf* pqueue = gu_new_buf(PgfExprState*, tmp_pool);
+	pgf_parse_best_result_init(ccat, pqueue, tmp_pool, pool);
+
+	while (gu_buf_length(pqueue) > 0) {
+		PgfExprState *st;
+		gu_buf_heap_pop(pqueue, &pgf_expr_prob_order, &st);
+
+		if (st->arg_idx >= gu_seq_length(st->args)) {
+			ep = gu_new(PgfExprProb, pool);
+			*ep = st->ep;
+			gu_map_put(cache, ccat, PgfExprProb*, ep);
+			break;
+		}
+
+		PgfPArg *parg = gu_seq_index(st->args, PgfPArg, st->arg_idx++);
+
+		double prob = 0;
+		PgfExpr fun = st->ep.expr;
+		PgfExpr arg;
+
+		if (parg->ccat->fid < concr->total_cats) {
+			PgfExprMeta *expr_meta =
+				gu_new_variant(PGF_EXPR_META,
+							   PgfExprMeta,
+							   &arg, pool);
+			expr_meta->id = 0;
+		} else {
+			PgfExprProb *ep_arg = 
+				pgf_parse_best_ccat_result(cache, concr, 
+			                               parg->ccat, pool);
+			if (ep_arg == NULL)
+				continue;
+				
+			arg  = ep_arg->expr;
+			prob = ep_arg->prob;
+		}
+		PgfExprApp *expr_apply =
+			gu_new_variant(PGF_EXPR_APP,
+						   PgfExprApp,
+						   &st->ep.expr, pool);
+		expr_apply->fun = fun;
+		expr_apply->arg = arg;
+		st->ep.prob += prob;
+		gu_buf_heap_push(pqueue, &pgf_expr_prob_order, &st);
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return ep;
+}
+
+PgfExpr
+pgf_parse_best_result(PgfParse* parse, GuPool* pool)
+{
+    PgfLexCallback fn = { pgf_noop };
+
+	GuPool* tmp_pool = gu_new_pool();
+	PgfParsing* parsing = pgf_new_parsing(parse->concr, &fn, parse->max_fid, 
+	                                      pool, tmp_pool);
+	size_t n_items = gu_buf_length(parse->agenda);
+	for (size_t i = 0; i < n_items; i++) {
+		PgfItem* item = gu_buf_get(parse->agenda, PgfItem*, i);
+        pgf_parsing_item(parsing, item);
+	}
+
+	PgfExprCache *cache = gu_map_type_new(PgfExprCache, tmp_pool);
+
+	GuBuf* pqueue = gu_new_buf(PgfExprProb*, tmp_pool);
+
+	size_t n_completed = gu_buf_length(parsing->completed);
+	for (size_t i = 0; i < n_completed; i++) {
+		PgfCCat *ccat = gu_buf_get(parsing->completed, PgfCCat*, i);
+
+		PgfExprProb *ep =
+			pgf_parse_best_ccat_result(cache, parse->concr, ccat, pool);
+		if (ep != NULL)
+			gu_buf_heap_push(pqueue, &pgf_expr_prob_order, &ep);
+	}
+
+	PgfExpr expr = gu_null_variant;
+	if (gu_buf_length(pqueue) > 0) {
+		PgfExprProb* ep = NULL;
+		gu_buf_heap_pop(pqueue, &pgf_expr_prob_order, &ep);
+		expr = ep->expr;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return expr;
+}
 
 // TODO: s/CId/Cat, add the cid to Cat, make Cat the key to CncCat
 PgfParse*
