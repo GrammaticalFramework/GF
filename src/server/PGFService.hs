@@ -48,29 +48,32 @@ cgiMain cache = handleErrors . handleCGIErrors $
 cgiMain' :: Cache PGF -> FilePath -> CGI CGIResult
 cgiMain' cache path =
     do pgf <- liftIO $ readCache cache path
-       command <- liftM (maybe "grammar" (urlDecodeUnicode . UTF8.decodeString)) (getInput "command")
+       command <- liftM (maybe "grammar" (urlDecodeUnicode . UTF8.decodeString))
+                        (getInput "command")
        pgfMain pgf command
 
 pgfMain :: PGF -> String -> CGI CGIResult
-pgfMain pgf command = do
-       case command of
-         "parse"          -> outputJSONP =<< doParse pgf `fmap` getText `ap` getCat `ap` getFrom 
-         "complete"       -> outputJSONP =<< doComplete pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit
-         "linearize"      -> outputJSONP =<< doLinearize pgf `fmap` getTree `ap` getTo
-         "linearizeAll"   -> outputJSONP =<< doLinearizes pgf `fmap` getTree `ap` getTo
-         "random"         -> getCat >>= \c -> getDepth >>= \dp -> getLimit >>= \l -> getTo >>= \to -> liftIO (doRandom pgf c dp l to) >>= outputJSONP
-         "generate"       -> outputJSONP =<< doGenerate pgf `fmap` getCat `ap` getDepth `ap` getLimit `ap` getTo
-         "translate"      -> outputJSONP =<< doTranslate pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo
-         "translategroup" -> outputJSONP =<< doTranslateGroup pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo
-         "grammar"        -> outputJSONP =<< doGrammar pgf `fmap` requestAcceptLanguage
-         "abstrtree"      -> outputPNG =<< liftIO . doGraphvizAbstrTree pgf =<< getTree
-         "parsetree"      -> getTree >>= \t -> getFrom >>= \(Just l) -> liftIO (doGraphvizParseTree pgf l t) >>= outputPNG
-         "alignment"      -> getTree >>= liftIO . doGraphvizAlignment pgf >>= outputPNG
-         "browse"         -> outputHTML =<< doBrowse pgf `fmap` getId `ap` getCSSClass `ap` getHRef
-         "external"       -> do cmd <- getInput "external"
-                                input <- getText
-                                doExternal cmd input
-         _                -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show command]
+pgfMain pgf command =
+    case command of
+      "parse"          -> outputJSONP =<< doParse pgf `fmap` getText `ap` getCat `ap` getFrom
+      "complete"       -> outputJSONP =<< doComplete pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit
+      "linearize"      -> outputJSONP =<< doLinearize pgf `fmap` getTree `ap` getTo
+      "linearizeAll"   -> outputJSONP =<< doLinearizes pgf `fmap` getTree `ap` getTo
+      "random"         -> getCat >>= \c -> getDepth >>= \dp -> getLimit >>= \l -> getTo >>= \to -> liftIO (doRandom pgf c dp l to) >>= outputJSONP
+      "generate"       -> outputJSONP =<< doGenerate pgf `fmap` getCat `ap` getDepth `ap` getLimit `ap` getTo
+      "translate"      -> outputJSONP =<< doTranslate pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo
+      "translategroup" -> outputJSONP =<< doTranslateGroup pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo
+      "grammar"        -> outputJSONP =<< doGrammar pgf `fmap` requestAcceptLanguage
+      "abstrtree"      -> outputGraphviz . abstrTree pgf =<< getTree
+      "alignment"      -> outputGraphviz . alignment pgf =<< getTree
+      "parsetree"      -> do t <- getTree
+                             Just l <- getFrom
+                             outputGraphviz (parseTree pgf l t)
+      "browse"         -> outputHTML =<< doBrowse pgf `fmap` getId `ap` getCSSClass `ap` getHRef
+      "external"       -> do cmd <- getInput "external"
+                             input <- getText
+                             doExternal cmd input
+      _                -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show command]
   where
     getText :: CGI String
     getText = liftM (maybe "" (urlDecodeUnicode . UTF8.decodeString)) $ getInput "input"
@@ -306,24 +309,37 @@ doGrammar pgf macc = showJSON $ makeObj
     categories = [PGF.showCId cat | cat <- PGF.categories pgf]
     functions  = [PGF.showCId fun | fun <- PGF.functions pgf]
 
-doGraphvizAbstrTree pgf tree = do
-  pipeIt2graphviz $  PGF.graphvizAbstractTree pgf (True,True) tree
+outputGraphviz code =
+  do format <- maybe "png" id `fmap` getInput "format"
+     case format of
+       "gv" -> outputPlain code
+       _ -> outputFPS' format =<< liftIO (pipeIt2graphviz format code)
+  where
+    outputFPS' format bs =
+      do setHeader "Content-Type" (mimeType format)
+         outputFPS bs
 
-doGraphvizParseTree pgf lang tree = do
-  pipeIt2graphviz $ PGF.graphvizParseTree pgf lang tree
+    mimeType fmt =
+      case fmt of
+        "png" -> "image/png"
+        "gif" -> "image/gif"
+        "svg" -> "image/svg+xml"
+    -- ...
+        _     -> "application/binary"
 
-doGraphvizAlignment pgf tree = do
-  pipeIt2graphviz $ PGF.graphvizAlignment pgf (PGF.languages pgf) tree
+abstrTree pgf tree      = PGF.graphvizAbstractTree pgf (True,True) tree
+parseTree pgf lang tree = PGF.graphvizParseTree pgf lang tree
+alignment pgf tree      = PGF.graphvizAlignment pgf (PGF.languages pgf) tree
 
-pipeIt2graphviz :: String -> IO BS.ByteString
-pipeIt2graphviz code = do
+pipeIt2graphviz :: String -> String -> IO BS.ByteString
+pipeIt2graphviz format code = do
     (Just inh, Just outh, _, pid) <-
-        createProcess (proc "dot" ["-T","png"])
+        createProcess (proc "dot" ["-T",format])
                       { std_in  = CreatePipe,
                         std_out = CreatePipe,
                         std_err = Inherit }
 
-    hSetEncoding outh latin1
+    hSetBinaryMode outh True
     hSetEncoding inh  utf8
 
     -- fork off a thread to start consuming the output
