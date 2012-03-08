@@ -9,7 +9,10 @@ function Translations(server,opts) {
     // Default values for options:
     this.options={
 	show_abstract: false,
-	show_trees: false,
+	show_trees: false, // add buttons to show abstract syntax trees,
+	                   // parse trees & word alignment
+	tree_img_format: "png", // format for trees & alignment images,
+	                        // can be "gif", "png" or "svg"
 	show_grouped_translations: true,
     }
 
@@ -141,23 +144,26 @@ Translations.prototype.show_groupedtranslations=function(translationsResult) {
 
 
 Translations.prototype.abstree_button=function(abs) {
+  var f=this.options.tree_img_format;
   var i=button_img(tree_icon,"toggle_img(this)");
   i.title="Click to display abstract syntax tree"
-  i.other=this.server.current_grammar_url+"?command=abstrtree&tree="+encodeURIComponent(abs);
+  i.other=this.server.current_grammar_url+"?command=abstrtree&format="+f+"&tree="+encodeURIComponent(abs);
   return i;
 }
 
 Translations.prototype.alignment_button=function(abs) {
+  var f=this.options.tree_img_format;
   var i=button_img(alignment_icon,"toggle_img(this)");
   i.title="Click to display word alignment"
-  i.other=this.server.current_grammar_url+"?command=alignment&tree="+encodeURIComponent(abs);
+  i.other=this.server.current_grammar_url+"?command=alignment&format="+f+"&tree="+encodeURIComponent(abs);
   return i;
 }
 
 Translations.prototype.parsetree_button=function(abs,lang) {
+  var f=this.options.tree_img_format;
   var i=button_img(tree_icon,"toggle_img(this)");
   i.title="Click to display parse tree"
   i.other=this.server.current_grammar_url
-          +"?command=parsetree&from="+lang+"&tree="+encodeURIComponent(abs);
+          +"?command=parsetree&format="+f+"&from="+lang+"&tree="+encodeURIComponent(abs);
   return i;
 }
