@@ -218,6 +218,8 @@ oper
 
 -- Most irregular verbs need just the conventional three forms.
 
+    mkV : (slita, slet : Str) -> V ; -- i/e/i, u/ö/u, u/a/u
+
     mkV : (dricka,drack,druckit : Str) -> V ; -- the theme of an irregular verb
 
 -- In the worst case, six forms are given.
@@ -508,6 +510,7 @@ oper
 
   mkV = overload {
     mkV : (stämmer : Str) -> V = regV ;
+    mkV : (slita, slet : Str) -> V = reg2V ;
     mkV : (dricka,drack,druckit : Str) -> V = irregV ;
     mkV : (supa,super,sup,söp,supit,supen : Str) -> V = mk6V ;
     mkV : V -> Str -> V = partV
@@ -565,6 +568,19 @@ oper
 
   conj3 : Str -> V = \bo ->
     mk6V bo (bo + "r") bo (bo +"dde") (bo +"tt") (bo +"dd") ;
+
+  reg2V : Str -> Str -> V = \sliter,slet -> (case <slita,slet> of {
+    <_ + "i" + ?  + "a", sl + "e" + ?>   => irregV slita slet (init slita + "it") ;
+    <_ + "u" + ?  + "a", sl + "ö" + ?>   => irregV slita slet (init slita + "it") ;
+    <_ + "u" + ? + ? + "a", sl + "ö" + ? + ?>  => irregV slita slet (init slita + "it") ;
+    <_ + "i" + ? + ? + "a", sl + "a" + pp@(? + ?)>  => irregV slita slet (sl  + "u" + pp ++ "it") ;
+    _ => regV sliter
+    } where {
+     slita : Str = case sliter of {
+       slit + "er" => slit + "a" ;
+       _ => sliter
+       }
+     }) ;
 
   irregV = \sälja, sålde, sålt -> 
     let
