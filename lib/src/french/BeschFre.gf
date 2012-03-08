@@ -231,43 +231,22 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
       _                     => conj1aimer parler
     } ;
 
-{-
-    let
-      e = last (Predef.tk 4 parler) ;
-      c = last (Predef.tk 3 parler) ;
-      verb_é = pbool2bool (occur "é" (e + last (Predef.tk 3 parler))) ;
-      verb_e = andB (pbool2bool (occur e "e")) (pbool2bool (occur c "cmnprsv"))
-    in
-    case Predef.dp 4 parler of {
-      "éger" => conj1assiéger parler ;
-      "eler" => conj1jeter parler ;
-      "eter" => conj1jeter parler ;
-      _ => case verb_é of {
-        True => conj1céder parler ;
-        _ => case verb_e of {
-----          True => conj1peser parler ;
-          False | _ => case Predef.dp 3 parler of {
-            "cer" => conj1placer parler ;
-            "ger" => conj1manger parler ;
-            "yer" => conj1payer parler ;
-            _ => case Predef.dp 2 parler of {
-              "ir" => conj2finir parler ;
-              "re" => conj3rendre parler ;
-              _ => conj1aimer parler
-              }
-            }
-          }
-        }
-      } ;
--}
-
 -- The following can be more reliable.
 
+  mkVerb2Reg : Str -> Str -> Verbe = \jeter,jette -> case <jeter,jette> of {
+    <_ + "er", _ + "e">  => auxConj1 (Predef.tk 2 jeter) (Predef.tk 1 jette) 
+                                     (jette + "r") ;
+    <_ + "oir", _ >      => conj3cevoir jeter ;
+    <_ + "ir", _ + "it"> => conj2finir jeter ;
+    <_ + "ir", _ >       => conj3sentir jeter ;
+    _ => mkVerbReg jeter
+    } ;
+
   mkVerb3Reg : Str -> Str -> Str -> Verbe = \jeter,jette,jettera ->
-    auxConj1 
-      (Predef.tk 2 jeter) 
-      (Predef.tk 1 jette)  
-      (Predef.tk 1 jettera) ;
+    case jeter of {
+      _ + "er" => auxConj1 (Predef.tk 2 jeter) (Predef.tk 1 jette) (Predef.tk 1 jettera) ;
+      _ => mkVerb2Reg jeter jette
+      } ;
 
 --3 The second conjugation
 --

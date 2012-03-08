@@ -216,6 +216,7 @@ oper
 
   mkV : overload {
     mkV : (finir : Str) -> V ; -- regular 1/2/3 conjugation
+    mkV : (jeter,jette : Str) -> V ; -- 1st and 2nd conjugation variations
     mkV : (jeter,jette,jettera : Str) -> V ; -- 1st conjugation variations
 
 -- Here is a paradigm that works for most irregular verbs.
@@ -442,6 +443,8 @@ oper
 
   mkV = overload {
     mkV : Str -> V = regV ;
+    mkV : (jeter,jette : Str) -> V = 
+      \x,y -> let v = vvf (mkVerb2Reg x y) in {s = v ; vtyp = VHabere ; lock_V = <>} ;
     mkV : (jeter,jette,jettera : Str) -> V = reg3V ;
     mkV : V2 -> V = v2V ;
     mkV : (tenir,tiens,tenons,tiennent,tint,tiendra,tenu : Str) -> V
