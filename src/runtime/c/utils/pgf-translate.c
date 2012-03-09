@@ -7,6 +7,7 @@
 #include <pgf/pgf.h>
 #include <pgf/data.h>
 #include <pgf/parser.h>
+#include <pgf/lexer.h>
 #include <pgf/linearize.h>
 #include <pgf/expr.h>
 #include <pgf/edsl.h>
@@ -121,20 +122,26 @@ int main(int argc, char* argv[]) {
 			status = EXIT_FAILURE;
 			break;
 		}
+		
+		GuReader *rdr =
+			gu_string_reader(gu_str_string(line, pool), pool);
+		PgfLexer *lexer =
+			pgf_new_lexer(rdr, pool);
 
 		// naive tokenization
-		char* tok = strtok(line, " \n");
-		while (tok) {
-			GuString tok_s = gu_str_string(tok, pool);
-			gu_debug("parsing token \"%s\"", tok);
+		GuExn* lex_err = gu_new_exn(NULL, gu_kind(type), pool);
+		PgfToken tok = pgf_lexer_next_token(lexer, lex_err, pool);
+		while (!gu_exn_is_raised(lex_err)) {
 			// feed the token to get a new parse state
-			parse = pgf_parse_token(parse, tok_s, robust_mode, ppool);
+			parse = pgf_parse_token(parse, tok, robust_mode, ppool);
 			if (!parse) {
-				fprintf(stderr,
-					"Unexpected token: \"%s\"\n", tok);
+				gu_puts("Unexpected token: \"", wtr, err);
+				gu_string_write(tok, wtr, err);
+				gu_puts("\"\n", wtr, err);
 				goto fail_parse;
 			}
-			tok = strtok(NULL, " \n");
+			
+			tok = pgf_lexer_next_token(lexer, lex_err, pool);
 		}
 
 		if (robust_mode) {

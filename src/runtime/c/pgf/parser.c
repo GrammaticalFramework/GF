@@ -953,8 +953,8 @@ typedef struct {
     GuPool *pool;
 } PgfParseTokenCallback;
 
-static
-void pgf_match_token(PgfLexCallback* self, PgfToken tok, PgfItem* item)
+static void 
+pgf_match_token(PgfLexCallback* self, PgfToken tok, PgfItem* item)
 {
     PgfParseTokenCallback *clo = (PgfParseTokenCallback *) self;
 
