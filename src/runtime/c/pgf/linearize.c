@@ -27,6 +27,7 @@
 #include <gu/string.h>
 #include <gu/assert.h>
 #include <pgf/expr.h>
+#include <pgf/literals.h>
 
 typedef GuStringMap PgfLinInfer;
 typedef GuSeq PgfProdSeq;
@@ -338,29 +339,6 @@ finish:
 	return ret;
 }
 
-PgfCCat*
-pgf_literal_cat(PgfLzn* lzn, PgfLiteral lit)
-{
-	int fid;
-
-	switch (gu_variant_tag(lit)) {
-	case PGF_LITERAL_STR:
-		fid = -1;
-		break;
-	case PGF_LITERAL_INT:
-		fid = -2;
-		break;
-	case PGF_LITERAL_FLT:
-		fid = -3;
-		break;
-	default:
-		gu_impossible();
-		return NULL;
-	}
-
-	return gu_map_get(lzn->concr->ccats, &fid, PgfCCat*);
-}
-
 static PgfCCat*
 pgf_lzn_infer(PgfLzn* lzn, PgfExpr expr, GuPool* pool, PgfCncTree* ctree_out)
 {
@@ -380,7 +358,7 @@ pgf_lzn_infer(PgfLzn* lzn, PgfExpr expr, GuPool* pool, PgfCncTree* ctree_out)
 					PgfCncTreeLit,
 					.lit = elit->lit);
 			}
-			ret = pgf_literal_cat(lzn, elit->lit);
+			ret = pgf_literal_cat(lzn->concr, elit->lit);
 		}
 		default:
 			// XXX: should we do something here?

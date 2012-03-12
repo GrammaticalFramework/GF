@@ -8,6 +8,7 @@
 #include <pgf/data.h>
 #include <pgf/parser.h>
 #include <pgf/lexer.h>
+#include <pgf/literals.h>
 #include <pgf/linearize.h>
 #include <pgf/expr.h>
 #include <pgf/edsl.h>
@@ -77,6 +78,10 @@ int main(int argc, char* argv[]) {
 		status = EXIT_FAILURE;
 		goto fail_concr;
 	}
+	
+	// Register a callback for the literal category Symbol
+	pgf_parser_add_literal(from_concr, gu_str_string("Symb", pool),
+	                       &pgf_nerc_literal_callback);
 
 	// Arbitrarily choose linearization index 0. Usually the initial
 	// categories we are interested in only have one field.
