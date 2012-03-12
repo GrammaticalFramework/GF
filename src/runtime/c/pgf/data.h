@@ -209,6 +209,17 @@ extern GU_DECLARE_TYPE(PgfTransitions, GuStringMap);
 typedef GuMap PgfEpsilonIdx;
 extern GU_DECLARE_TYPE(PgfEpsilonIdx, GuMap);
 
+typedef struct PgfLiteralCallback PgfLiteralCallback;
+extern GU_DECLARE_TYPE(PgfLiteralCallback, struct);
+
+struct PgfLiteralCallback {
+	bool (*match)(PgfLiteralCallback* self, int lin_idx, PgfTokens toks,
+                  PgfExprProb** out_ep, GuPool *pool);
+};
+
+typedef GuMap PgfCallbacksMap;
+extern GU_DECLARE_TYPE(PgfCallbacksMap, GuMap);
+
 struct PgfConcr {
 	PgfFlags* cflags;
 	PgfPrintNames* printnames;
@@ -220,6 +231,7 @@ struct PgfConcr {
     PgfCncFuns* cncfuns;
     PgfSequences* sequences;
 	PgfCIdMap* cnccats;
+	PgfCallbacksMap* callbacks;
 	int total_cats;
     int max_fid;
 };
@@ -269,7 +281,7 @@ typedef struct PgfSymbolKP
 typedef enum {
 	PGF_PRODUCTION_APPLY,
 	PGF_PRODUCTION_COERCE,
-	PGF_PRODUCTION_META
+	PGF_PRODUCTION_EXTERN
 } PgfProductionTag;
 
 typedef struct PgfPArg PgfPArg;
@@ -299,14 +311,10 @@ typedef struct PgfProductionCoerce
 } PgfProductionCoerce;
 
 typedef struct {
-	PgfExpr expr; // XXX
-	GuLength n_toks;
-	GuString toks[]; // XXX
-} PgfProductionConst;
-
-typedef struct {
+	PgfFunId fun; 
 	PgfPArgs args;
-} PgfProductionMeta;
+	PgfLiteralCallback *callback;
+} PgfProductionExtern;
 
 extern GU_DECLARE_TYPE(PgfPatt, GuVariant);
 

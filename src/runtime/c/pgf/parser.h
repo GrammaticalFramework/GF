@@ -65,6 +65,9 @@ pgf_parse_token(PgfParse* parse, PgfToken tok, bool robust, GuPool* pool);
  * the pool used to create \parse.
  */
 
+void
+pgf_parser_add_literal(PgfConcr *concr, PgfCId cat,
+                       PgfLiteralCallback* callback);
 
 /** @}
  * @name Retrieving abstract syntax trees

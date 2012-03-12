@@ -19,6 +19,7 @@
 
 #include "data.h"
 #include "expr.h"
+#include "literals.h"
 #include <gu/defs.h>
 #include <gu/map.h>
 #include <gu/seq.h>
@@ -766,6 +767,7 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
 	concr->epsilon_idx = gu_map_type_new(PgfEpsilonIdx, pool);
 	pgf_read_into_map(ccats_t, rdr, concr->ccats);
 	concr->cnccats = pgf_read_new(rdr, gu_type(PgfCncCatMap), pool, NULL);
+	concr->callbacks = pgf_new_callbacks_map(concr, pool); 
 	concr->total_cats = pgf_read_int(rdr);
 	concr->max_fid = concr->total_cats;
 

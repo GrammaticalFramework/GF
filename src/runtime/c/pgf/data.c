@@ -125,8 +125,10 @@ GU_DEFINE_TYPE(
 		PGF_PRODUCTION_COERCE, PgfProductionCoerce,
 		GU_MEMBER(PgfProductionCoerce, coerce, PgfCCatId)),
 	GU_CONSTRUCTOR_S(
-		PGF_PRODUCTION_META, PgfProductionMeta,
-		GU_MEMBER(PgfProductionMeta, args, PgfPArgs)));
+		PGF_PRODUCTION_EXTERN, PgfProductionExtern,
+		GU_MEMBER(PgfProductionExtern, fun, PgfFunId),
+		GU_MEMBER(PgfProductionExtern, args, PgfPArgs),
+		GU_MEMBER(PgfProductionExtern, callback, PgfLiteralCallback)));
 
 GU_DEFINE_TYPE(PgfProductions, GuList, gu_type(PgfProduction));
 GU_DEFINE_TYPE(PgfProductionSeq, GuSeq, gu_type(PgfProduction));
