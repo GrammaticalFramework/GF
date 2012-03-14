@@ -17,7 +17,7 @@ lin
   almost_AdA, almost_AdN = ss "quasi" ;
   always_AdV = ss "sempre" ;
   although_Subj = ss "benché" ** {m = Conjunct} ;
-  and_Conj = {s1 = [] ; s2 = "e" ; n = Pl} ;
+  and_Conj = {s1 = [] ; s2 = pre {#vocale => "ed" ; _ => "e"} ; n = Pl} ;
   because_Subj = ss "perché" ** {m = Indic} ;
   before_Prep = mkPrep "prima" ;
   behind_Prep = mkPrep "dietro" ;
