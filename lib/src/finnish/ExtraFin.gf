@@ -149,6 +149,13 @@ x
       in
       {s = t.s ++ p.s ++ cl.adv ++ pa ++ cl.subj ++ cl.fin ++ cl.inf ++ cl.compl ++ cl.ext} ; 
 
+    S_OVS part t p clp = 
+      let 
+         cl = clp.s ! t.t ! t.a ! p.p ;
+         pa = part.s ! True ----
+      in
+      {s = t.s ++ p.s ++ cl.compl ++ pa ++ cl.fin ++ cl.inf ++ cl.subj ++ cl.adv ++ cl.ext} ; 
+
     PredClPlus np vp = mkClausePlus (subjForm np vp.sc) np.a vp ;
     PredClPlusFocSubj np vp = insertKinClausePlus 0 (mkClausePlus (subjForm np vp.sc) np.a vp) ;
     PredClPlusFocVerb np vp = insertKinClausePlus 1 (mkClausePlus (subjForm np vp.sc) np.a vp) ;

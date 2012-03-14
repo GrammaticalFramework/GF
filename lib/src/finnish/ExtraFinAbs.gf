@@ -37,7 +37,7 @@ abstract ExtraFinAbs = Extra [
     S_ASV  : Part -> Temp -> Pol -> ClPlusAdv  -> S ;  -- nytpäs me juomme maitoa
 
 --    S_SOV  : Part -> Temp -> Pol -> ClPlus  -> S ;  -- mepäs maitoa juomme
---    S_OVS  : Part -> Temp -> Pol -> ClPlus  -> S ;  -- maitoapas juomme me
+    S_OVS  : Part -> Temp -> Pol -> ClPlus  -> S ;  -- maitoapas juomme me
 --    S_VOS  : Part -> Temp -> Pol -> ClPlus  -> S ;  -- juommepas maitoa me
 
 
