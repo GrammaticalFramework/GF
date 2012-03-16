@@ -69,7 +69,7 @@ pgfMain pgf command =
       "parsetree"      -> do t <- getTree
                              Just l <- getFrom
                              outputGraphviz (parseTree pgf l t)
-      "browse"         -> outputHTML =<< doBrowse pgf `fmap` getId `ap` getCSSClass `ap` getHRef
+      "browse"         -> id =<< doBrowse pgf `fmap` getId `ap` getCSSClass `ap` getHRef `ap` getFormat "html"
       "external"       -> do cmd <- getInput "external"
                              input <- getText
                              doExternal cmd input
@@ -134,6 +134,8 @@ pgfMain pgf command =
                          Nothing -> throwCGIError 400 "Bad language" ["Bad language: " ++ l]
                          Just lang | lang `elem` PGF.languages pgf -> return $ Just lang
                                    | otherwise -> throwCGIError 400 "Unknown language" ["Unknown language: " ++ l]
+
+getFormat def = maybe def id `fmap` getInput "format"
 
 -- Hook for simple extensions of the PGF service
 doExternal Nothing input = throwCGIError 400 "Unknown external command" ["Unknown external command"]
@@ -263,7 +265,7 @@ doLinearize pgf tree mto = showJSON
 
 doLinearizes :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
 doLinearizes pgf tree mto = showJSON
-    [makeObj ["to".=PGF.showLanguage to, "texts".=texts]
+    [makeObj ["to".=to, "texts".=texts]
        | (to,texts) <- linearizes' pgf mto tree]
 
 doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> Maybe PGF.Language -> IO JSValue
@@ -310,7 +312,7 @@ doGrammar pgf macc = showJSON $ makeObj
     functions  = [PGF.showCId fun | fun <- PGF.functions pgf]
 
 outputGraphviz code =
-  do format <- maybe "png" id `fmap` getInput "format"
+  do format <- getFormat "png"
      case format of
        "gv" -> outputPlain code
        _ -> outputFPS' format =<< liftIO (pipeIt2graphviz format code)
@@ -363,7 +365,13 @@ pipeIt2graphviz format code = do
      ExitSuccess   -> return output
      ExitFailure r -> fail ("pipeIt2graphviz: (exit " ++ show r ++ ")")
 
-doBrowse pgf id cssClass href =
+doBrowse pgf id _ _ "json" =
+    outputJSONP . makeObj . maybe [] obj $ PGF.browse pgf id
+  where
+    obj (def,ps,cs) = ["def".=def,"producers".=ps,"consumers".=cs]
+
+doBrowse pgf id cssClass href _ = -- default to "html" format
+  outputHTML $
   case PGF.browse pgf id of
     Just (def,ps,cs) -> "<PRE>"++annotate def++"</PRE>\n"++
                         syntax++
