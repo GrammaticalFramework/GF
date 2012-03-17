@@ -1,0 +1,60 @@
+Grammatical Framework Tutorial
+ICFP 2012, Copenhagen 9-15 September 2012
+
+
+
+=Goals=
+
+This tutorial gives a hands-on introduction to GF (Grammatical Framework), 
+a special-purpose functional language 
+for writing grammars (http://grammaticalframework.org).
+
+We will show how techniques from compiler construction and functional 
+programming can be used in the processing of natural languages, 
+but also for formal languages and interfacing 
+the two. An emerging use is DSL's, where GF provides high expressive 
+power in terms of both
+linguistic expressivity (beyond context-free) and semantics (dependent types).
+
+GF activities are rapidly growing: there is an on-going EU project 
+MOLTO (molto-project.eu), as well as a new textbook 
+(Aarne Ranta, Grammatical Framework: Programming with Multilingual Grammars, 
+CSLI Publications, Stanford, 2011). 
+GF also has users in companies (Galois, Ontotext, BeInformed, Google).
+Interestingly, GF has been the first functional language for many people, 
+in particular those with a linguistic background. It has a unique 
+combination of advanced features such as parametrized modules, regular 
+expression pattern matching, and dependent types - all of which are 
+amply motivated by practical applications.
+
+The [GF Resource Grammar Library http://www.grammaticalframework.org/lib/doc/synopsis.html]
+is an open-source international project 
+now comprising 24 languages, with 5 to 10 more under construction.
+It makes it possible to develop grammar applications without linguistic knowledge.
+
+At the same time, it is an experiment on using a common abstract syntax for
+the languages of the world. We don't claim it to be a universal grammar
+with no exceptions, but so far we haven't met any unsurmountable problems.
+If you want to contribute a new language, let us know! It is a job of
+2 to 6 months.
+
+
+=Structure of the tutorial=
+
+Hour 1. Writing multilingual grammars in GF (Aarne Ranta)
+
+Hour 2. Applications for the web, mobile phones, and as embedded Haskell programs 
+(Thomas Hallgren)
+
+Hour 3. Internals of GF, theoretical aspects, and future trends (Krasimir Angelov)
+
+
+=Organizers=
+
+
+[Krasimir Angelov http://www.chalmers.se/cse/EN/organization/divisions/computing-science/people/angelov-krasimir]
+
+[Thomas Hallgren http://www.cse.chalmers.se/~hallgren/]
+
+[Aarne Ranta http://www.cse.chalmers.se/~aarne/]
+
