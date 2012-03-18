@@ -14,6 +14,7 @@ function Translations(server,opts) {
 	tree_img_format: "png", // format for trees & alignment images,
 	                        // can be "gif", "png" or "svg"
 	show_grouped_translations: true,
+	show_brackets: false // show bracketed string
     }
 
     // Apply supplied options
@@ -74,7 +75,7 @@ Translations.prototype.show_translations=function(translationResults) {
 	var trans=main;
 	//var to=target_lang(); // wrong
 	var to=to_menu.value;
-	var cnt=translationResults.length;
+	var cnt=translationResults.length; // cnt==1 usually
 	//trans.translations=translations;
 	trans.single_translation=[];
 	trans.innerHTML="";
@@ -85,6 +86,7 @@ Translations.prototype.show_translations=function(translationResults) {
 	*/
 	for(var p=0;p<cnt;p++) {
 	    var tra=translationResults[p];
+	    var bra=tra.brackets;
 	    if (tra.translations != null) {
 		for (q = 0; q < tra.translations.length; q++) {
 		    var t = tra.translations[q];
@@ -99,6 +101,8 @@ Translations.prototype.show_translations=function(translationResults) {
 		    for(var i=0;i<lin.length;i++) {
 			if(lin[i].to==to)
 			    trans.single_translation.push(lin[i].text);
+			if(lin[i].to==current.from && lin[i].brackets)
+			    bra=lin[i].brackets;
 			if(to=="All" || lin[i].to==to)
 			    tbody.appendChild(tr([th(text(langpart(lin[i].to,grammar.name)+": ")),
 						  tdt(parsetree_button(t.tree,lin[i].to),
@@ -108,10 +112,13 @@ Translations.prototype.show_translations=function(translationResults) {
 		}
 	    }
 	    else if(tra.typeErrors) {
-		var errs=tra.typeErrors;
-		for(var i=0;i<errs.length;i++)
-		    trans.appendChild(wrap("pre",text(errs[i].msg)))
+		    var errs=tra.typeErrors;
+		    for(var i=0;i<errs.length;i++)
+			trans.appendChild(wrap("pre",text(errs[i].msg)))
 	    }
+	    if(options.show_brackets)
+		trans.appendChild(div_class("brackets",draw_brackets(bra)));
+
 	}
     }
 }
@@ -166,4 +173,11 @@ Translations.prototype.parsetree_button=function(abs,lang) {
   i.other=this.server.current_grammar_url
           +"?command=parsetree&format="+f+"&from="+lang+"&tree="+encodeURIComponent(abs);
   return i;
+}
+
+function draw_brackets(b) {
+    return b.token
+	? span_class("token",text(b.token))
+	: node("span",{"class":"brackets",title:(b.fun||"_")+":"+b.cat},
+	       b.children.map(draw_brackets))
 }
