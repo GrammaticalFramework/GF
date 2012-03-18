@@ -21,7 +21,7 @@ div#words {
     border: 3px solid #e0e0e0;
 }
 
-div.word, span.word, div#words div, div#words input[type=button] {
+div.word, span.word, div#words div, div#words input[type=button], div#surface input[type=button] {
     display: inline-block;
     font-family: sans-serif;
     font-size: 100%;
@@ -31,6 +31,12 @@ div.word, span.word, div#words div, div#words input[type=button] {
     margin: 3px;
     box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
+div#surface span.editable, div#surface input[type=button] {
+    color: blue;
+    border-color: blue;
+    box-shadow: 2px 2px 4px rgba(0,0,255,0.5)
+}
+
 
 .invalid { color: red; }
 
@@ -53,3 +59,18 @@ span.field { background-color: #eee; }
 pre.feedbacklist { background: white }
 
 img.button { padding: 1px; }
+
+div.brackets {
+    margin: 5px;
+}
+
+span.brackets {
+    background: #ddd;
+    display: inline-block;
+    border: 1px solid black;
+    padding: 3px;
+}
+
+div.brackets .token {
+  padding: 0.5ex
+}

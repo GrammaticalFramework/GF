@@ -11,6 +11,7 @@ function Input(server,translations,opts) { // Input object constructor
 	default_source_language: null,
 	startcat_menu: true,
 	random_button: true,
+	word_replacements: false
     }
 
     // Apply supplied options
@@ -46,6 +47,8 @@ function Input(server,translations,opts) { // Input object constructor
 }
 
 Input.prototype.change_grammar=function (grammar) {
+    grammar.browse={} // for caching output from the browse command
+    this.grammar=grammar;
     update_language_menu(this.from_menu,grammar);
     set_initial_language(this.options,this.from_menu,grammar);
     this.update_startcat_menu(grammar)
@@ -91,9 +94,9 @@ Input.prototype.get_completions=function() {
     with(this) {
 	//debug("get_completions ");
 	words.innerHTML="...";
-	server.complete({from:current.from,input:current.input,
-			 cat:startcat_menu.value},
-			bind(show_completions,this));
+	var args={from:current.from,input:current.input,cat:startcat_menu.value}
+	server.complete(args,bind(show_completions,this));
+	if(options.word_replacements) server.parse(args,bind(get_tree1,this));
     }
 }
 
@@ -282,6 +285,106 @@ Input.prototype.delete_last=function() {
     }
 }
 
+/* --- Structural editing --------------------------------------------------- */
+
+Input.prototype.get_tree1=function(parse_output) {
+    with(this) {
+	if(parse_output.length==1 && parse_output[0].from==current.from
+	   && parse_output[0].trees
+	   && parse_output[0].trees.length==1)
+	    server.linearize({to:current.from,tree:parse_output[0].trees[0]},
+			     bind(get_tree2,this));
+    }
+}
+
+Input.prototype.get_tree2=function(lin) {
+    with(this) {
+	if(lin.length==1 && lin[0].to==current.from
+	   && lin[0].text+" "==current.input
+	   && lin[0].brackets)
+	    enable_structural_editing(lin[0].brackets)
+    }
+}
+
+Input.prototype.enable_structural_editing=function(brackets) {
+    var t=this;
+    with(t) {
+	function add_bs(b,parent) {
+	    if(b.token) {
+		var fun=parent.fun,cat=parent.cat;
+		function showrepl() { t.show_replacements(brackets,parent) }
+		var w= span_class("word editable",text(b.token));
+		if(fun && cat) w.onclick=showrepl
+		w.title=(fun||"_")+":"+(cat||"_")
+		surface.appendChild(w);
+	    }
+	    else b.children.map(function(c){add_bs(c,b)})
+	}
+	var typed=surface.typed;
+	surface.innerHTML="";
+	add_bs(brackets);
+	if(typed) surface.appendChild(typed);
+    }
+}
+
+Input.prototype.show_replacements=function(brackets,parent) {
+    var fun=parent.fun,cat=parent.cat;
+    var t=this;
+    with(t) {
+	function browse1(fun_info) {
+	    var fun_type = fun_info.def.split(":")[1];
+	    function browse2(cat_info) {
+		function examine_replacement(rfun) {
+		    function browse3(rfun_info) {
+			var rfun_type=rfun_info.def.split(":")[1];
+			function replace() {
+			    t.replace_word(brackets,parent,rfun);
+			}
+			if(rfun_type==fun_type)
+			    t.words.appendChild(button(rfun,replace))
+		    }
+		    t.browse(rfun,browse3)
+		}
+		var ps=cat_info.producers;
+		t.words.innerHTML="";
+		if(ps)
+		    for(var pi in ps)
+			if(ps[pi]!=fun) examine_replacement(ps[pi])
+	    }
+	    t.browse(cat,browse2)
+	}
+	t.browse(fun,browse1)
+    }
+}
+
+Input.prototype.replace_word=function(brackets,parent,fun) {
+    var t=this;
+    with(t) {
+	parent.fun=fun;
+	var tree=show_abstract_tree(brackets);
+	function replace(lin_output) {
+	    if(lin_output.length==1 && lin_output[0].to==t.current.from) {
+		t.clear_all1();
+		t.add_words(lin_output[0].text)
+	    }
+	}
+	server.linearize({to:current.from,tree:tree},replace)
+    }
+}
+
+Input.prototype.browse=function(id,cont) {
+    var t=this;
+    if(t.grammar.browse[id]) cont(t.grammar.browse[id])
+    else {
+	function browsed(info) {
+	    t.grammar.browse[id]=info;
+	    cont(info);
+	}
+	server.pgf_call("browse",{id:id,format:"json"},browsed);
+    }
+}
+
+
 /* --- Auxiliary functions -------------------------------------------------- */
 
 function set_initial_language(options,menu,grammar) {
@@ -293,4 +396,26 @@ function set_initial_language(options,menu,grammar) {
 	    if(l==options.default_source_language) menu.value=o;
 	}
     }
+}
+
+function show_abstract_tree(b) { return show_tree(abstract_tree(b)) }
+
+function abstract_tree(b) {
+    return { fun:b.fun,args:abstract_trees(b.children) }
+}
+
+function abstract_trees(bs) {
+    var as=[];
+    for(var i in bs)
+	if(bs[i].fun) as.push(abstract_tree(bs[i]))
+    return as
+}
+
+function show_tree(t) {
+    return t.fun+" "+t.args.map(show_tree_atomic).join(" ");
+}
+
+function show_tree_atomic(t) {
+    var s=show_tree(t);
+    return t.args.length>0 ? "("+s+")" : s
 }
