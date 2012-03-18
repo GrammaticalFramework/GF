@@ -57,9 +57,9 @@ linearizeWithBrackets dp = head . snd . untokn "" . bracketedTokn dp
 bracketedTokn :: Maybe Int -> Forest -> BracketedTokn
 bracketedTokn dp f@(Forest abs cnc forest root) =
   case [computeSeq isTrusted seq (map (render forest) args) | (seq,args) <- root] of
-    ([bs@(Bracket_ _ _ _ _ _)]:_) -> bs
-    (bss:_)                       -> Bracket_ wildCId 0 0 [] bss
-    []                            -> Bracket_ wildCId 0 0 [] []
+    ([bs@(Bracket_{})]:_) -> bs
+    (bss:_)               -> Bracket_ wildCId 0 0 wildCId [] bss
+    []                    -> Bracket_ wildCId 0 0 wildCId [] []
   where
     isTrusted (_,fid) = IntSet.member fid trusted
 
@@ -67,8 +67,8 @@ bracketedTokn dp f@(Forest abs cnc forest root) =
 
     render forest arg@(PArg hypos fid) =
       case IntMap.lookup fid forest >>= Set.maxView of
-        Just (p,set) -> let (ct,es,(_,lin)) = descend (if Set.null set then forest else IntMap.insert fid set forest) p
-                        in (ct,es,(map getVar hypos,lin))
+        Just (p,set) -> let (ct,fun,es,(_,lin)) = descend (if Set.null set then forest else IntMap.insert fid set forest) p
+                        in (ct,fun,es,(map getVar hypos,lin))
         Nothing      -> error ("wrong forest id " ++ show fid)
       where
         descend forest (PApply funid args) = let (CncFun fun lins) = cncfuns cnc ! funid
@@ -78,9 +78,9 @@ bracketedTokn dp f@(Forest abs cnc forest root) =
                                                                        Just (DTyp _ cat _,_,_,_) -> cat
                                                  largs  = map (render forest) args
                                                  ltable = mkLinTable cnc isTrusted [] funid largs
-                                             in ((cat,fid),either (const []) id $ getAbsTrees f arg Nothing dp,ltable)
+                                             in ((cat,fid),wildCId,either (const []) id $ getAbsTrees f arg Nothing dp,ltable)
         descend forest (PCoerce fid)       = render forest (PArg [] fid)
-        descend forest (PConst cat e ts)   = ((cat,fid),[e],([],listArray (0,0) [[LeafKS ts]]))
+        descend forest (PConst cat e ts)   = ((cat,fid),wildCId,[e],([],listArray (0,0) [[LeafKS ts]]))
 
     getVar (fid,_)
       | fid == fidVar = wildCId
