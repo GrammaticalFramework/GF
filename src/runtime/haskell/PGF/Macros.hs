@@ -141,7 +141,7 @@ cidVar    = mkCId "__gfVar"
 -- mark the beginning and the end of each constituent.
 data BracketedString
   = Leaf Token                                                                -- ^ this is the leaf i.e. a single token
-  | Bracket CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex [Expr] [BracketedString]   
+  | Bracket CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex CId [Expr] [BracketedString]
                                                                                -- ^ this is a bracket. The 'CId' is the category of
                                                                                -- the phrase. The 'FId' is an unique identifier for
                                                                                -- every phrase in the sentence. For context-free grammars
@@ -157,7 +157,7 @@ data BracketedString
 data BracketedTokn
   = LeafKS [Token]
   | LeafKP [Token] [Alternative]
-  | Bracket_ CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex [Expr] [BracketedTokn]    -- Invariant: the list is not empty
+  | Bracket_ CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex CId [Expr] [BracketedTokn]    -- Invariant: the list is not empty
   deriving Eq
 
 type LinTable = ([CId],Array.Array LIndex [BracketedTokn])
@@ -169,12 +169,12 @@ showBracketedString :: BracketedString -> String
 showBracketedString = render . ppBracketedString
 
 ppBracketedString (Leaf t) = text t
-ppBracketedString (Bracket cat fid index _ bss) = parens (ppCId cat <> colon <> int fid <+> hsep (map ppBracketedString bss))
+ppBracketedString (Bracket cat fid index _ _ bss) = parens (ppCId cat <> colon <> int fid <+> hsep (map ppBracketedString bss))
 
 -- | The length of the bracketed string in number of tokens.
 lengthBracketedString :: BracketedString -> Int
 lengthBracketedString (Leaf _)              = 1
-lengthBracketedString (Bracket _ _ _ _ bss) = sum (map lengthBracketedString bss)
+lengthBracketedString (Bracket _ _ _ _ _ bss) = sum (map lengthBracketedString bss)
 
 untokn :: String -> BracketedTokn -> (String,[BracketedString])
 untokn nw (LeafKS ts)   = (head ts,map Leaf ts)
@@ -185,18 +185,18 @@ untokn nw (LeafKP d vs) = let ts = sel d vs nw
                               case [v | Alt v cs <- vs, any (\c -> isPrefixOf c nw) cs] of
                                 v:_ -> v
                                 _   -> d
-untokn nw (Bracket_ cat fid index es bss) =
+untokn nw (Bracket_ cat fid index fun es bss) =
   let (nw',bss') = mapAccumR untokn nw bss
-  in (nw',[Bracket cat fid index es (concat bss')])
+  in (nw',[Bracket cat fid index fun es (concat bss')])
 
 type CncType = (CId, FId)    -- concrete type is the abstract type (the category) + the forest id
 
-mkLinTable :: Concr -> (CncType -> Bool) -> [CId] -> FunId -> [(CncType,[Expr],LinTable)] -> LinTable
+mkLinTable :: Concr -> (CncType -> Bool) -> [CId] -> FunId -> [(CncType,CId,[Expr],LinTable)] -> LinTable
 mkLinTable cnc filter xs funid args = (xs,listArray (bounds lins) [computeSeq filter (elems (sequences cnc ! seqid)) args | seqid <- elems lins])
   where
     (CncFun _ lins) = cncfuns cnc ! funid
 
-computeSeq :: (CncType -> Bool) -> [Symbol] -> [(CncType,[Expr],LinTable)] -> [BracketedTokn]
+computeSeq :: (CncType -> Bool) -> [Symbol] -> [(CncType,CId,[Expr],LinTable)] -> [BracketedTokn]
 computeSeq filter seq args = concatMap compute seq
   where
     compute (SymCat d r)    = getArg d r
@@ -207,16 +207,16 @@ computeSeq filter seq args = concatMap compute seq
 
     getArg d r
       | not (null arg_lin) &&
-        filter ct   = [Bracket_ cat fid r es arg_lin]
+        filter ct   = [Bracket_ cat fid r fun es arg_lin]
       | otherwise   = arg_lin
       where
         arg_lin                    = lin ! r
-        (ct@(cat,fid),es,(xs,lin)) = args !! d
+        (ct@(cat,fid),fun,es,(xs,lin)) = args !! d
 
     getVar d r = [LeafKS [showCId (xs !! r)]]
       where
-        (ct,es,(xs,lin)) = args !! d
+        (ct,fun,es,(xs,lin)) = args !! d
 
 flattenBracketedString :: BracketedString -> [String]
 flattenBracketedString (Leaf w)              = [w]
-flattenBracketedString (Bracket _ _ _ _ bss) = concatMap flattenBracketedString bss
+flattenBracketedString (Bracket _ _ _ _ _ bss) = concatMap flattenBracketedString bss

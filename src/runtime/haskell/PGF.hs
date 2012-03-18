@@ -58,7 +58,7 @@ module PGF(
            showPrintName,
            
            BracketedString(..), FId, LIndex, Token,
-           Forest.showBracketedString,
+           Forest.showBracketedString,flattenBracketedString,
 
            -- ** Parsing
            parse, parseAllLang, parseAll, parse_, parseWithRecovery,

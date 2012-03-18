@@ -194,12 +194,12 @@ graphvizBracketedString = render . lin2tree
         getLeaves  level parent bs =
           case bs of
             Leaf w                -> [(level-1,parent,w)]
-            Bracket _ fid i _ bss -> concatMap (getLeaves (level+1) fid) bss
+            Bracket _ fid i _ _ bss -> concatMap (getLeaves (level+1) fid) bss
 
         getInterns level []    = []
         getInterns level nodes =
-          nub [(level-1,parent,fid,showCId cat) | (parent,Bracket cat fid _ _ _) <- nodes] :
-          getInterns (level+1) [(fid,child) | (_,Bracket _ fid _ _ children) <- nodes, child <- children]
+          nub [(level-1,parent,fid,showCId cat) | (parent,Bracket cat fid _ _ _ _) <- nodes] :
+          getInterns (level+1) [(fid,child) | (_,Bracket _ fid _ _ _ children) <- nodes, child <- children]
 
         mkStruct l cs = struct l <> text "[label = \"" <> fields cs <> text "\"] ;" $$
                         vcat [link pl pid l id | (pl,pid,id,_) <- cs]
@@ -247,7 +247,7 @@ genPreAlignment pgf langs = lin2align . linsBracketed
            getLeaves parent bs =
                   case bs of
                     Leaf w                -> [(parent,w)]
-                    Bracket _ fid _ _ bss -> concatMap (getLeaves fid) bss
+                    Bracket _ fid _ _ _ bss -> concatMap (getLeaves fid) bss
 
            mkLayers (cs:css:rest) = let (lrest, rrest) =  mkLayers (css:rest)
                                      in ((fields cs) : lrest, (map (mkLinks css) cs) : rrest)    

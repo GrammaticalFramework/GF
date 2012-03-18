@@ -39,7 +39,9 @@ linearizeAllLang pgf t = [(lang,linearize pgf lang t) | lang <- Map.keys (concre
 bracketedLinearize :: PGF -> Language -> Tree -> BracketedString
 bracketedLinearize pgf lang = head . concat . map (snd . untokn "" . firstLin) . linTree pgf lang
   where
-    head []       = error "cannot linearize"
+--  head []       = error "cannot linearize"
+    head []       = Leaf ""
+            -- so that linearize = flattenBracketedString . bracketedLinearize
     head (bs:bss) = bs
 
 firstLin (_,arr)
@@ -63,7 +65,7 @@ tabularLinearizes pgf lang e = map cnv (linTree pgf lang e)
 
 linTree :: PGF -> Language -> Expr -> [(CncType, Array LIndex BracketedTokn)]
 linTree pgf lang e = 
-  nub [(ct,amapWithIndex (\label -> Bracket_ cat fid label es) lin) | (_,(ct@(cat,fid),es,(xs,lin))) <- lin Nothing 0 e [] [] e []]
+  nub [(ct,amapWithIndex (\label -> Bracket_ cat fid label fun es) lin) | (_,(ct@(cat,fid),fun,es,(xs,lin))) <- lin Nothing 0 e [] [] e []]
   where
     cnc   = lookMap (error "no lang") lang (concretes pgf)
     lp    = lproductions cnc
@@ -76,18 +78,18 @@ linTree pgf lang e =
     lin mb_cty n_fid e0 ys xs (EMeta i)    es = def   mb_cty n_fid e0 ys    xs  ('?':show i)
     lin mb_cty n_fid e0 ys xs (EVar  i)    _  = def   mb_cty n_fid e0 ys    xs  (showCId ((xs++ys) !! i))
     lin mb_cty n_fid e0 ys xs (ELit l)     [] = case l of
-                                                   LStr s -> return (n_fid+1,((cidString,n_fid),[e0],([],ss s)))
-                                                   LInt n -> return (n_fid+1,((cidInt,   n_fid),[e0],([],ss (show n))))
-                                                   LFlt f -> return (n_fid+1,((cidFloat, n_fid),[e0],([],ss (show f))))
+                                                   LStr s -> return (n_fid+1,((cidString,n_fid),wildCId,[e0],([],ss s)))
+                                                   LInt n -> return (n_fid+1,((cidInt,   n_fid),wildCId,[e0],([],ss (show n))))
+                                                   LFlt f -> return (n_fid+1,((cidFloat, n_fid),wildCId,[e0],([],ss (show f))))
 
     ss s = listArray (0,0) [[LeafKS [s]]]
 
-    apply :: Maybe CncType -> FId -> Expr -> [CId] -> [CId] -> CId -> [Expr] -> [(FId,(CncType, [Expr], LinTable))]
+    apply :: Maybe CncType -> FId -> Expr -> [CId] -> [CId] -> CId -> [Expr] -> [(FId,(CncType, CId, [Expr], LinTable))]
     apply mb_cty n_fid e0 ys xs f es =
       case Map.lookup f lp of
         Just prods -> do (funid,(cat,fid),ctys) <- getApps prods
                          (n_fid,args) <- descend n_fid (zip ctys es)
-                         return (n_fid+1,((cat,n_fid),[e0],mkLinTable cnc (const True) xs funid args))
+                         return (n_fid+1,((cat,n_fid),f,[e0],mkLinTable cnc (const True) xs funid args))
         Nothing    -> def mb_cty n_fid e0 ys xs ("[" ++ showCId f ++ "]")  -- fun without lin
       where
         getApps prods =
@@ -110,10 +112,10 @@ linTree pgf lang e =
     def (Just (cat,fid)) n_fid e0 ys xs s =
       case IntMap.lookup fid (lindefs cnc) of
         Just funs           -> do funid <- funs
-                                  let args = [((wildCId, n_fid),[e0],([],ss s))]
-                                  return (n_fid+2,((cat,n_fid+1),[e0],mkLinTable cnc (const True) xs funid args))
+                                  let args = [((wildCId, n_fid),wildCId,[e0],([],ss s))]
+                                  return (n_fid+2,((cat,n_fid+1),wildCId,[e0],mkLinTable cnc (const True) xs funid args))
         Nothing
-          | isPredefFId fid -> return (n_fid+2,((cat,n_fid+1),[e0],(xs,listArray (0,0) [[LeafKS [s]]])))
+          | isPredefFId fid -> return (n_fid+2,((cat,n_fid+1),wildCId,[e0],(xs,listArray (0,0) [[LeafKS [s]]])))
           | otherwise       -> do PCoerce fid <- maybe [] Set.toList (IntMap.lookup fid (pproductions cnc))
                                   def (Just (cat,fid)) n_fid e0 ys xs s
     def Nothing          n_fid e0 ys xs s = []

@@ -169,8 +169,8 @@ doTranslate pgf input mcat mfrom mto =
             ["translations".=
               [makeObj ["tree".=tree,
                         "linearizations".=
-                            [makeObj ["to".=to, "text".=output]
-                               | (to,output) <- linearizeAndBind pgf mto tree]] 
+                            [makeObj ["to".=to, "text".=text, "brackets".=bs]
+                               | (to,text,bs)<- linearizeAndBind pgf mto tree]] 
                 | tree <- trees]]
         PGF.ParseIncomplete -> ["incomplete".=True]
         PGF.ParseFailed n   -> ["parseFailed".=n]
@@ -197,7 +197,7 @@ doTranslateGroup pgf input mcat mfrom mto =
   where
    groupResults = Map.toList . foldr more Map.empty . start . collect
      where
-       collect tls = [(t,(l,s)) | (t,ls) <- tls, (l,s) <- ls, notDisamb l]
+       collect tls = [(t,(l,s)) | (t,ls) <- tls, (l,s,_) <- ls, notDisamb l]
        start ls = [(l,[([t],s)]) | (t,(l,s)) <- ls]
        more (l,s) = Map.insertWith (\ [([t],x)] xs -> insertAlt t x xs) l s
 
@@ -260,8 +260,8 @@ doComplete pgf input mcat mfrom mlimit = showJSON
 
 doLinearize :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
 doLinearize pgf tree mto = showJSON
-    [makeObj ["to".=PGF.showLanguage to, "text".=text]
-      | (to,text) <- linearize' pgf mto tree]
+    [makeObj ["to".=to, "text".=text,"brackets".=bs]
+      | (to,text,bs) <- linearize' pgf mto tree]
 
 doLinearizes :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
 doLinearizes pgf tree mto = showJSON
@@ -275,8 +275,8 @@ doRandom pgf mcat mdepth mlimit mto =
      return $ showJSON
           [makeObj ["tree".=PGF.showExpr [] tree,
                     "linearizations".=
-                       [makeObj ["to".=PGF.showLanguage to, "text".=text] 
-                          | (to,text) <- linearize' pgf mto tree]]
+                       [makeObj ["to".=to, "text".=text] 
+                          | (to,text,bs) <- linearize' pgf mto tree]]
              | tree <- limit trees]
   where cat = fromMaybe (PGF.startCat pgf) mcat
         limit = take (fromMaybe 1 mlimit)
@@ -286,8 +286,8 @@ doGenerate :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> Maybe PGF.Langu
 doGenerate pgf mcat mdepth mlimit mto = 
     showJSON [makeObj ["tree".=PGF.showExpr [] tree,
                        "linearizations".=
-                          [makeObj ["to".=PGF.showLanguage to, "text".=text]
-                             | (to,text) <- linearize' pgf mto tree]]
+                          [makeObj ["to".=to, "text".=text]
+                             | (to,text,bs) <- linearize' pgf mto tree]]
                 | tree <- limit trees]
   where
     trees = PGF.generateAllDepth pgf cat (Just depth)
@@ -455,8 +455,8 @@ instance JSON PGF.Expr where
 
 instance JSON PGF.BracketedString where
     readJSON x = return (PGF.Leaf "")
-    showJSON (PGF.Bracket cat fid index _ bs) =
-        makeObj ["cat".=cat, "fid".=fid, "index".=index, "children".=bs]
+    showJSON (PGF.Bracket cat fid index fun _ bs) =
+        makeObj ["cat".=cat, "fid".=fid, "index".=index, "fun".=fun, "children".=bs]
     showJSON (PGF.Leaf s) = makeObj ["token".=s]
 
 -- * PGF utilities
@@ -494,9 +494,11 @@ complete' pgf from typ mlimit input =
                        Left  es -> (ps,w:ws)
                        Right ps -> loop ps ws
 
-linearize' :: PGF -> Maybe PGF.Language -> PGF.Tree -> [(PGF.Language,String)]
+linearize' :: PGF -> Maybe PGF.Language -> PGF.Tree -> [(PGF.Language,String,PGF.BracketedString)]
 linearize' pgf mto tree =
-    [(to,PGF.linearize pgf to (transfer to tree)) | to<-langs]
+    [(to,s,bs) | to<-langs,
+                 let bs = PGF.bracketedLinearize pgf to (transfer to tree)
+                     s = unwords $ PGF.flattenBracketedString bs]
   where
     langs = maybe (PGF.languages pgf) (:[]) mto
 
@@ -512,7 +514,8 @@ linearizes' pgf mto tree =
     langs = maybe (PGF.languages pgf) (:[]) mto
     lins to = nub . concatMap (map snd) . PGF.tabularLinearizes pgf to
 
-linearizeAndBind pgf mto t = [(la, binds s) | (la,s) <- linearize' pgf mto t]
+linearizeAndBind pgf mto t =
+    [(la, binds s,bs) | (la,s,bs) <- linearize' pgf mto t]
   where
     binds = unwords . bs . words
     bs ws = case ws of
