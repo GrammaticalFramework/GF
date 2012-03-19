@@ -74,17 +74,27 @@ Minibar.prototype.show_grammarlist=function(grammars) {
 	if(grammars.length>1) {
 	    function opt(g) { return option(g,g); }
 	    appendChildren(grammar_menu,map(opt,grammars));
-    	    grammar_menu.onchange=
-		bind(function() { select_grammar(grammar_menu.value); },this);
+	    function pick() {
+		var grammar_name=grammar_menu.value
+		if(window.localStorage)
+		    localStorage["gf.minibar.last_grammar"]=grammar_name;
+		select_grammar(grammar_name);
+	    }
+    	    grammar_menu.onchange=bind(pick,this);
 	    insertFirst(menubar,button("i",bind(show_grammarinfo,this)))
 	    insertFirst(menubar,grammar_menu);
 	    insertFirst(menubar,text("Grammar: "));
 	}
 	if(options.help_url)
 	    menubar.appendChild(button("Help",bind(open_help,this)));
-	var grammar0= options.initial_grammar
-	       || window.localStorage && localStorage["gf.minibar.last_grammar"]
-	       || grammars[0];
+	var grammar0=options.initial_grammar
+	if(!grammar0 && window.localStorage) {
+	    var last_grammar=localStorage["gf.minibar.last_grammar"];
+	    if(last_grammar)
+		for(var i in grammars)
+		    if(last_grammar==grammars[i]) grammar0=last_grammar;
+	}
+	if(!grammar0) grammar0=grammars[0];
 	grammar_menu.value=grammar0;
 	select_grammar(grammar0);
     }
@@ -94,8 +104,6 @@ Minibar.prototype.select_grammar=function(grammar_name) {
     var t=this;
     //debug("select_grammar ");
     function change_grammar() {
-	if(window.localStorage)
-	    localStorage["gf.minibar.last_grammar"]=grammar_name;
 	t.server.grammar_info(bind(t.change_grammar,t));
     }
     t.server.switch_grammar(grammar_name,change_grammar);
