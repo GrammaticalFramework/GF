@@ -1,7 +1,7 @@
 <h1>The GF Eclipse Plugin</h1>
 
 <p>John  J. Camilleri<br />
-Updated: 6 March 2012</p>
+Updated: 19 March 2012</p>
 
 <p><em>The research leading to these results has received funding from the European Union&#8217;s Seventh Framework Programme (FP7/2007-2013) under grant agreement no. FP7-ICT-247914.</em></p>
 
@@ -20,14 +20,12 @@ Updated: 6 March 2012</p>
 <h3>Links</h3>
 
 <ul>
-<li>This document shall contain the most up-to-date information about the plugin. The most up-to-date version of this file can always be found in the source-code repository at <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin/blob/master/README.markdown">https://github.com/GrammaticalFramework/gf-eclipse-plugin/blob/master/README.markdown</a></li>
-<li>Source code repository is at <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin">https://github.com/GrammaticalFramework/gf-eclipse-plugin</a> (do not try to run the plugin from source; please only use the packaged releases).</li>
+<li>This document shall contain the most up-to-date information about the plugin. The most up-to-date version of this file can always be found in the source-code repository at <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin/blob/master/README.md">GitHub</a></li>
+<li>Source code repository is at <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin">github.com/GrammaticalFramework/gf-eclipse-plugin</a></li>
 <li>For reporting bugs and requesting features, please use the <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin/issues">GitHub Issue Tracker</a></li>
 <li>Here are some <a href="http://www.grammaticalframework.org/eclipse/examples/">example GF projects</a> for testing out the plugin features.</li>
-<li>Software update site URL for installing through Eclipse: <a href="http://www.grammaticalframework.org/eclipse/release/">http://www.grammaticalframework.org/eclipse/release/</a></li>
+<li>Software update site URL for installing through Eclipse: <code>http://www.grammaticalframework.org/eclipse/release/</code></li>
 </ul>
-
-<!----------------------------------------------------------------------------->
 
 <h2>Features</h2>
 
@@ -48,11 +46,12 @@ Updated: 6 March 2012</p>
 <li>External library browser</li>
 </ul>
 
-<!----------------------------------------------------------------------------->
-
-<h2>Major release history</h2>
+<h2>Release history</h2>
 
 <dl>
+<dt><strong>14/03/13</strong></dt>
+<dd>(1.4.1.x) GF source files can now be anywhere in project, not necessarily at top level.</dd>
+
 <dt><strong>06/03/12</strong></dt>
 <dd>(1.4.0.x) Treebank manager view. Updated launch configurations. UI improvements, new icons. Inline contextual documentation. Correct resolution of qualified identifiers. Bug fixes and some refactoring.</dd>
 
@@ -99,15 +98,15 @@ Updated: 6 March 2012</p>
 <p>In order for dependencies to be satisfied, you need to ensure that your Eclipse has the following update site URLs set:</p>
 
 <ul>
-<li>Eclipse releases (change version name to match): <a href="http://download.eclipse.org/releases/indigo">http://download.eclipse.org/releases/indigo</a></li>
-<li>Xtext: <a href="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/">http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/</a></li>
+<li>Eclipse releases (change version name to match): <code>http://download.eclipse.org/releases/indigo</code></li>
+<li>Xtext: <code>http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/</code></li>
 </ul>
 
 <p><strong>Steps for installation</strong></p>
 
 <ol>
 <li>Inside Eclipse, go to <strong>Help &rarr; Install New Software</strong>.</li>
-<li>Add new software site using the URL: <a href="http://www.grammaticalframework.org/eclipse/release/">http://www.grammaticalframework.org/eclipse/release/</a></li>
+<li>Add new software site using the URL: <code>http://www.grammaticalframework.org/eclipse/release/</code></li>
 <li>Select the <strong>GF Eclipse Plugin</strong>, and make sure the <strong>Contact all update sites during install to find required software</strong> option is checked.</li>
 <li>Click Next, accept the license agreement and install.</li>
 <li>Accept the prompt warning that the software is unsigned.</li>
@@ -118,7 +117,8 @@ Updated: 6 March 2012</p>
 
 <ol>
 <li>Add the GF perspective by clicking <strong>Open Perspective &rarr; Other</strong> and choosing <strong>GF</strong>.</li>
-<li>The plugin will try to determine the path to your GF executable automatically. You can always check/overwrite it by going to <strong>Window &rarr; Preferences &rarr; Grammatical Framework</strong>.  </li>
+<li>The plugin will try to determine the path to your GF executable automatically. You can always check/overwrite it by going to <strong>Window &rarr; Preferences &rarr; Grammatical Framework</strong>.
+This path should <strong>include</strong> the name of the GF binary itself, e.g. <code>/home/john/.cabal/bin/gf</code> or <code>C:\Users\John\GF\gf.exe</code>.</li>
 <li>You can also adjust the verbosity level of the GFEP console log in the preferences window.</li>
 </ol>
 
@@ -168,6 +168,33 @@ Updated: 6 March 2012</p>
 
 <p>Some steps you can follow to get a feel of of the plugin&#8217;s features.</p>
 
+<h3>Video tutorial</h3>
+
+<p>A quick run through of the major features available in the GF Eclipse Plugin.</p>
+
+<iframe src="http://player.vimeo.com/video/38768382?byline=0&amp;portrait=0" width="693" height="512" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+
+<p><em>If the video doesn&#8217;t appear above, you can view it at <a href="https://vimeo.com/38768382">https://vimeo.com/38768382</a></em></p>
+
+<h3>The Eclipse <em>workspace</em> and <em>project</em> concepts</h3>
+
+<p>When you run Eclipse, it asks you to create or specify a <em>workspace</em> on your system. Any projects you wish to work
+on inside Eclipse must reside in this workspace; generally each folder under the top-level workspace directory is
+considered an individual project, i.e.:</p>
+
+<pre><code>workspace/
+    Project1/
+        file1.gf
+        file2.gf
+    Project2/
+        file3.gf
+        file4.gf
+</code></pre>
+
+<p>If you open an existing folder as your workspace in Eclipse, then your folders in that workspace do not automatically
+become Eclipse projects. You must follow the &#8220;Create new GF Project&#8221; wizards below, and give your project the exact
+name of the existing folder (e.g. <code>Project1</code> or <code>Project2</code> in the example above.)</p>
+
 <h3>Create a new GF Project</h3>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-projectwizard-1.png" alt="New project wizard" />
@@ -179,7 +206,7 @@ Updated: 6 March 2012</p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-modulewizard-1.png" alt="New module wizard" /></p>
 
-<p>You can find some small examples at <a href="http://www.grammaticalframework.org/eclipse/examples/">http://www.grammaticalframework.org/eclipse/examples/</a>. Download the files and manually add them to your Eclipse workspace to experiment with some of the plugin features.</p>
+<p>You can find some small examples at <a href="http://www.grammaticalframework.org/eclipse/examples/">grammaticalframework.org/eclipse/examples</a>. Download the files and manually add them to your Eclipse workspace to experiment with some of the plugin features.</p>
 
 <h3>Clone module wizard</h3>
 
@@ -209,11 +236,14 @@ Updated: 6 March 2012</p>
 
 <h3>Validation</h3>
 
-<p>For validation to work correctly, the project&#8217;s <strong>Build Automatically</strong> option should be turned on.</p>
-
 <p>The in-editor validation sometimes needs to be triggered/updated by a keystroke. If you can still see errors which you believe should be correct, try adding a space character to ensure the validation is re-triggered.</p>
 
 <p>Sometimes you may get an entire file marked with errors, even though in fact there is only a single error which is causing the internal builder to fail. In such cases referring to the <strong>Problems</strong> view should help you locate the cause. This issue is particularly relevant when changes made to one module may induce errors in its descendants (e.g. renaming a parameter in a resource module). This behaviour will hopefully be improved in future versions.</p>
+
+<h4>Builder</h4>
+
+<p>For validation to work correctly, the project&#8217;s <strong>Build Automatically</strong> option should be turned on.
+Each time you save a file (or some other change occurs in your project), the builder should get triggered which recompiles any GF files which have changed. If the builder does not seem to get triggered, try to run a <em>clean</em> via <strong>Project &rarr; Clean&#8230;</strong></p>
 
 <h3>Code formatting</h3>
 
@@ -315,7 +345,7 @@ Updated: 6 March 2012</p>
 
 <p>Please try to use the plugin for developing your own GF projects and report any issues you come up against.</p>
 
-<p>For all bug reports and feature requests please use the GitHub Issue Tracker at <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin/issues">https://github.com/GrammaticalFramework/gf-eclipse-plugin/issues</a>.</p>
+<p>For all bug reports and feature requests please use the <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin/issues">GitHub Issue Tracker</a>.</p>
 
 <p>Do not hesitate to let us know how you think the plugin can be improved!</p>
 
