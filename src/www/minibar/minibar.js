@@ -69,8 +69,9 @@ function Minibar(server,opts) {
 }
 
 Minibar.prototype.show_grammarlist=function(grammars) {
-    this.grammar_menu=empty_id("select","grammar_menu");
-    with(this) {
+    var t=this;
+    t.grammar_menu=empty_id("select","grammar_menu");
+    with(t) {
 	if(grammars.length>1) {
 	    function opt(g) { return option(g,g); }
 	    appendChildren(grammar_menu,map(opt,grammars));
@@ -78,7 +79,7 @@ Minibar.prototype.show_grammarlist=function(grammars) {
 		var grammar_name=grammar_menu.value
 		if(window.localStorage)
 		    localStorage["gf.minibar.last_grammar"]=grammar_name;
-		select_grammar(grammar_name);
+		t.select_grammar(grammar_name);
 	    }
     	    grammar_menu.onchange=bind(pick,this);
 	    insertFirst(menubar,button("i",bind(show_grammarinfo,this)))
