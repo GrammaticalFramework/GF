@@ -82,7 +82,9 @@ Minibar.prototype.show_grammarlist=function(grammars) {
 	}
 	if(options.help_url)
 	    menubar.appendChild(button("Help",bind(open_help,this)));
-	var grammar0=options.initial_grammar || grammars[0];
+	var grammar0= options.initial_grammar
+	       || window.localStorage && localStorage["gf.minibar.last_grammar"]
+	       || grammars[0];
 	grammar_menu.value=grammar0;
 	select_grammar(grammar0);
     }
@@ -92,6 +94,8 @@ Minibar.prototype.select_grammar=function(grammar_name) {
     var t=this;
     //debug("select_grammar ");
     function change_grammar() {
+	if(window.localStorage)
+	    localStorage["gf.minibar.last_grammar"]=grammar_name;
 	t.server.grammar_info(bind(t.change_grammar,t));
     }
     t.server.switch_grammar(grammar_name,change_grammar);
