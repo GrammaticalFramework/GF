@@ -73,12 +73,20 @@ Input.prototype.change_language=function () {
 }
 
 
+Input.prototype.clear_all2=function() {
+    with(this) {
+	current.input="";
+	previous=null;
+	clear(surface)
+	if(surface.typed) surface.appendChild(surface.typed)
+    }
+}
+
+
 Input.prototype.clear_all1=function() {
     with(this) {
 	remove_typed_input();
-	current.input="";
-	previous=null;
-	surface.innerHTML="";
+	clear_all2();
 	translations.clear();
     }
 }
@@ -224,12 +232,14 @@ Input.prototype.generate_random=function() {
 }
 
 Input.prototype.add_words=function(s) {
-    with(this) {
-	var ws=s.split(" ");
-	for(var i=0;i<ws.length;i++)
-	    add_word1(ws[i]+" ");
-	get_completions();
-    }
+    this.add_words1(s);
+    this.get_completions();
+}
+
+Input.prototype.add_words1=function(s) {
+    var ws=s.split(" ");
+    for(var i=0;i<ws.length;i++)
+	if(ws[i]) this.add_word1(ws[i]+" ");
 }
 
 Input.prototype.word=function(s) { 
@@ -294,6 +304,7 @@ Input.prototype.get_tree1=function(parse_output) {
 	   && parse_output[0].trees.length==1)
 	    server.linearize({to:current.from,tree:parse_output[0].trees[0]},
 			     bind(get_tree2,this));
+	else end_structural_editing();
     }
 }
 
@@ -303,6 +314,17 @@ Input.prototype.get_tree2=function(lin) {
 	   && lin[0].text+" "==current.input
 	   && lin[0].brackets)
 	    enable_structural_editing(lin[0].brackets)
+	else end_structural_editing();
+    }
+}
+
+Input.prototype.end_structural_editing=function() {
+    var t=this;
+    if(t.surface.structural_editing_enabled) {
+	var s=t.current.input;
+	t.clear_all2()
+	t.add_words1(s);
+	t.surface.structural_editing_enabled=false;
     }
 }
 
@@ -323,6 +345,7 @@ Input.prototype.enable_structural_editing=function(brackets) {
 	var typed=surface.typed;
 	surface.innerHTML="";
 	add_bs(brackets);
+	t.surface.structural_editing_enabled=true;
 	if(typed) surface.appendChild(typed);
     }
 }
