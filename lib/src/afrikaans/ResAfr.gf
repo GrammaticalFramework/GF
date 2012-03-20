@@ -439,7 +439,7 @@ param
           auxv = (auxVerb vp.s.aux).s ;
           vperf = vp.s.s ! VPerf ;
           verb : Str * Str = case <t,a> of {
-            <Fut|Cond,Simul>  => <sal_V.s ! vform, vperf ++ auxv ! VInf> ; --# notpresent
+            <Fut|Cond,Simul>  => <sal_V.s ! vform, vp.s.s ! VInf> ; --# notpresent
             <Fut|Cond,Anter>  => <sal_V.s ! vform, vperf ++ auxv ! VInf> ; --# notpresent
             <_,       Anter>  => <auxv ! vform,       vperf> ; --# notpresent
             <_,       Simul>  => <vp.s.s ! vform,     []>
