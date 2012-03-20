@@ -1,9 +1,13 @@
 Grammatical Framework Tutorial
 ICFP 2012, Copenhagen 9-15 September 2012
 
+%!style:../css/style.css
+%!postproc(html): <TD><B> <TH>
+%!postproc(html): </B></TD> </TH>
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
 
-=Goals=
+==Goals==
 
 This tutorial gives a hands-on introduction to GF (Grammatical Framework), 
 a special-purpose functional language 
@@ -39,7 +43,7 @@ If you want to contribute a new language, let us know! It is a job of
 2 to 6 months.
 
 
-=Structure of the tutorial=
+==Structure of the tutorial==
 
 Hour 1. Writing multilingual grammars in GF (Aarne Ranta)
 
@@ -49,7 +53,7 @@ Hour 2. Applications for the web, mobile phones, and as embedded Haskell program
 Hour 3. Internals of GF, theoretical aspects, and future trends (Krasimir Angelov)
 
 
-=Organizers=
+==Organizers==
 
 
 [Krasimir Angelov http://www.chalmers.se/cse/EN/organization/divisions/computing-science/people/angelov-krasimir]
