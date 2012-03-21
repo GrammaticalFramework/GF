@@ -1,7 +1,7 @@
 <h1>The GF Eclipse Plugin</h1>
 
 <p>John  J. Camilleri<br />
-Updated: 19 March 2012</p>
+Updated: 21 March 2012</p>
 
 <p><em>The research leading to these results has received funding from the European Union&#8217;s Seventh Framework Programme (FP7/2007-2013) under grant agreement no. FP7-ICT-247914.</em></p>
 
@@ -49,7 +49,10 @@ Updated: 19 March 2012</p>
 <h2>Release history</h2>
 
 <dl>
-<dt><strong>14/03/13</strong></dt>
+<dt><strong>21/03/12</strong></dt>
+<dd>(1.4.2.x) Added wizard for context-free grammars (no syntax support, though).</dd>
+
+<dt><strong>14/03/12</strong></dt>
 <dd>(1.4.1.x) GF source files can now be anywhere in project, not necessarily at top level.</dd>
 
 <dt><strong>06/03/12</strong></dt>
@@ -194,6 +197,15 @@ considered an individual project, i.e.:</p>
 <p>If you open an existing folder as your workspace in Eclipse, then your folders in that workspace do not automatically
 become Eclipse projects. You must follow the &#8220;Create new GF Project&#8221; wizards below, and give your project the exact
 name of the existing folder (e.g. <code>Project1</code> or <code>Project2</code> in the example above.)</p>
+
+<h4>GF Nature and Builder</h4>
+
+<p>The <em>GF Nature</em> and the <em>GF Builder</em> are what make a regular Eclipse project a <em>GF</em> project. If you create a new GF Project
+from scratch then you don&#8217;t need to worry too much about them. If you already have some project set up in your Eclipse
+workspace, then you will need to associate these two items with your project in order for all the GF goodness to work.</p>
+
+<p>As of 1.4.2, this can be done very easily by right-clicking on your project in the explorer and clicking <strong>Add/Remove GF Nature &amp; Builder</strong>.
+If your project has the GF icon overlayed on it, then the GF nature and builder are correctly associated with it.</p>
 
 <h3>Create a new GF Project</h3>
 
@@ -361,3 +373,58 @@ Each time you save a file (or some other change occurs in your project), the bui
 <li>Feature wish-list</li>
 <li>Compatibilities / conflicts with other Eclipse plugins</li>
 </ol>
+
+<!----------------------------------------------------------------------------->
+
+<h2>Appendix</h2>
+
+<h3>Icons</h3>
+
+<p>Description of some of the icons which are used in the GF Eclipse Plugin.</p>
+
+<table>
+<thead>
+<tr>
+  <th align="center">Icon</th>
+  <th align="left">Description</th>
+  <th align="left">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-abstract.png" alt="" /></td>
+  <td align="left">Abstract module</td>
+  <td align="left"><code>abstract Foods = ...</code></td>
+</tr>
+<tr>
+  <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-concrete.png" alt="" /></td>
+  <td align="left">Concrete module</td>
+  <td align="left"><code>concrete FoodsEng of Foods = ...</code></td>
+</tr>
+<tr>
+  <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-resource.png" alt="" /></td>
+  <td align="left">Resource module</td>
+  <td align="left"><code>resource ResFoods = ...</code></td>
+</tr>
+<tr>
+  <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-interface.png" alt="" /></td>
+  <td align="left">Interface</td>
+  <td align="left"><code>interface LexFoods = ...</code></td>
+</tr>
+<tr>
+  <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-instance.png" alt="" /></td>
+  <td align="left">Instance</td>
+  <td align="left"><code>instance LexFoodsEng of LexFoods = ...</code></td>
+</tr>
+<tr>
+  <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-functor.png" alt="" /></td>
+  <td align="left">Functor</td>
+  <td align="left"><code>incomplete concrete FodosI of Foods = ...</code></td>
+</tr>
+<tr>
+  <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-functor-instantiation.png" alt="" /></td>
+  <td align="left">Functor instantiation</td>
+  <td align="left"><code>concrete FoodsEng of Foods = FoodsI with (...) ...</code></td>
+</tr>
+</tbody>
+</table>
