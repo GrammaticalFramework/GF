@@ -309,11 +309,17 @@ Input.prototype.get_tree1=function(parse_output) {
 }
 
 Input.prototype.get_tree2=function(lin) {
-    with(this) {
+    var t=this;
+    with(t) {
 	if(lin.length==1 && lin[0].to==current.from
 	   && lin[0].text+" "==current.input
-	   && lin[0].brackets)
-	    enable_structural_editing(lin[0].brackets)
+	   && (lin[0].brackets)) {
+	    var bs=lin[0].brackets;
+	    var tree=show_abstract_tree(bs);
+	    function proceed() { t.enable_structural_editing(bs) }
+	    server.linearize({to:current.from,tree:tree},
+			     proceed,bind(end_structural_editing,t))
+	}
 	else end_structural_editing();
     }
 }
@@ -343,7 +349,7 @@ Input.prototype.enable_structural_editing=function(brackets) {
 	    else b.children.map(function(c){add_bs(c,b)})
 	}
 	var typed=surface.typed;
-	surface.innerHTML="";
+	clear(surface)
 	add_bs(brackets);
 	t.surface.structural_editing_enabled=true;
 	if(typed) surface.appendChild(typed);
@@ -369,7 +375,7 @@ Input.prototype.show_replacements=function(brackets,parent) {
 		    t.browse(rfun,browse3)
 		}
 		var ps=cat_info.producers;
-		t.words.innerHTML="";
+		clear(t.words);
 		if(ps)
 		    for(var pi in ps)
 			if(ps[pi]!=fun) examine_replacement(ps[pi])
@@ -391,7 +397,13 @@ Input.prototype.replace_word=function(brackets,parent,fun) {
 		t.add_words(lin_output[0].text)
 	    }
 	}
-	server.linearize({to:current.from,tree:tree},replace)
+	function err(text,status,ctype) {
+	    t.words.innerHTML=
+		ctype.split(";")[0]=="text/html"
+		? text
+		: "Word replacement failed"
+	}
+	server.linearize({to:current.from,tree:tree},replace,err)
     }
 }
 
@@ -403,7 +415,7 @@ Input.prototype.browse=function(id,cont) {
 	    t.grammar.browse[id]=info;
 	    cont(info);
 	}
-	server.pgf_call("browse",{id:id,format:"json"},browsed);
+	server.browse(id,browsed);
     }
 }
 
