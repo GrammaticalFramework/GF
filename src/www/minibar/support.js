@@ -38,7 +38,7 @@ var json = {next:0};
 // Like jsonp, but instead of passing the name of the callback function, you 
 // pass the callback function directly, making it possible to use anonymous
 // functions.
-function jsonpf(url,callback)
+function jsonpf(url,callback,errorcallback)
 {
     var name="callback"+(json.next++);
     json[name]=function(x) { delete json[name]; callback(x); }
@@ -71,10 +71,12 @@ function ajax_http(method,url,body,callback,errorcallback) {
 	else alert(errortext)
     }
     else {
-	var statechange=function() {
+	function statechange() {
 	    if (http.readyState==4 || http.readyState=="complete") {
 		if(http.status<300) callback(http.responseText,http.status);
-		else if(errorcallback) errorcallback(http.responseText,http.status);
+		else if(errorcallback)
+		    errorcallback(http.responseText,http.status,
+				  http.getResponseHeader("Content-Type"));
 		else alert("Request for "+url+" failed: "
 			   +http.status+" "+http.statusText);
 	    }
@@ -96,8 +98,8 @@ function ajax_http_post(url,formdata,callback,errorcallback) {
 }
 
 // JSON via AJAX
-function ajax_http_get_json(url,cont) {
-    ajax_http_get(url,function(txt) { cont(eval("("+txt+")")); });
+function ajax_http_get_json(url,cont,errorcallback) {
+    ajax_http_get(url,function(txt){cont(eval("("+txt+")"));}, errorcallback);
 }
 
 function sameOrigin(url) {
@@ -107,9 +109,9 @@ function sameOrigin(url) {
 }
 
 // Use AJAX when possible, fallback to JSONP
-function http_get_json(url,cont) {
-    if(sameOrigin(url)) ajax_http_get_json(url,cont);
-    else jsonpf(url,cont);
+function http_get_json(url,cont,errorcallback) {
+    if(sameOrigin(url)) ajax_http_get_json(url,cont,errorcallback);
+    else jsonpf(url,cont,errorcallback);
 }
 
 /* --- URL construction ----------------------------------------------------- */
