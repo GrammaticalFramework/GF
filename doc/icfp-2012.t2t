@@ -5,6 +5,7 @@ ICFP 2012, Copenhagen 9-15 September 2012
 %!postproc(html): <TD><B> <TH>
 %!postproc(html): </B></TD> </TH>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+%!postproc(html): 'ICFP 2012' '<a href="http://icfpconference.org/icfp2012/">ICFP 2012</a>'
 
 
 ==Goals==
