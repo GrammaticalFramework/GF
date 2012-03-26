@@ -415,7 +415,7 @@ Input.prototype.browse=function(id,cont) {
 	    t.grammar.browse[id]=info;
 	    cont(info);
 	}
-	server.browse(id,browsed);
+	t.server.browse(id,browsed);
     }
 }
 

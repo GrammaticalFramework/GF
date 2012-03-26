@@ -27,12 +27,13 @@ function pgf_online(options) {
 	    else http_get_json(this.grammars_url+"grammars.cgi",cont,err);
 	},
 	get_grammarlists: function(cont,err) { // May call cont several times!
+	    var ds=this.other_grammars_urls;
+	    var n=1+ds.length;
 	    function pair(dir) {
-		return function(grammar_list){cont(dir,grammar_list)}
+		return function(grammar_list){cont(dir,grammar_list,n)}
 	    }
 	    function ignore_error(err) { console.log(err) }
 	    this.get_grammarlist(pair(this.grammars_url),err)
-	    var ds=this.other_grammars_urls;
 	    for(var i in ds)
 		http_get_json(ds[i]+"grammars.cgi",pair(ds[i]),ignore_error);
 	},

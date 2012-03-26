@@ -53,6 +53,8 @@ function Minibar(server,opts) {
     with(this) {
 	appendChildren(menubar,[input.menus,translations.menus,input.buttons])
 	appendChildren(minibar,[menubar,input.main,translations.main,extra]);
+	if(options.help_url)
+	    menubar.appendChild(button("Help",bind(open_help,this)));
 	append_extra_buttons(extra,options);
     }
 
@@ -63,51 +65,63 @@ function Minibar(server,opts) {
 
     /* --- Main program, this gets things going ----------------------------- */
     with(this) {
-	if(server.grammar_list) show_grammarlist(server.grammar_list);
-	else server.get_grammarlist(bind(show_grammarlist,this));
+	server.get_grammarlists(bind(show_grammarlist,this));
     }
 }
 
-Minibar.prototype.show_grammarlist=function(grammars) {
+Minibar.prototype.show_grammarlist=function(dir,grammar_names,dir_count) {
     var t=this;
-    t.grammar_menu=empty_id("select","grammar_menu");
+    var first_time= !t.grammar_menu
+    if(first_time) {
+	t.grammar_menu=empty_id("select","grammar_menu");
+	t.grammars=[];
+	t.grammar_dirs=[];
+    }
     with(t) {
-	if(grammars.length>1) {
-	    function opt(g) { return option(g,g); }
-	    appendChildren(grammar_menu,map(opt,grammars));
-	    function pick() {
-		var grammar_name=grammar_menu.value
-		if(window.localStorage)
-		    localStorage["gf.minibar.last_grammar"]=grammar_name;
-		t.select_grammar(grammar_name);
+	grammar_dirs.push(dir);
+	grammars=grammars.concat(grammar_names.map(function(g){return dir+g}))
+	function glabel(g) {
+	    return hasPrefix(dir,"/tmp/gfse.") ? "gfse: "+g : g
+	}
+	function opt(g) { return option(glabel(g),dir+g); }
+	appendChildren(grammar_menu,map(opt,grammar_names));
+	function pick() {
+	    var grammar_url=grammar_menu.value
+	    if(window.localStorage)
+		localStorage["gf.minibar.last_grammar"]=grammar_url;
+	    t.select_grammar(grammar_url);
+	}
+	function pick_first_grammar() {
+	    if(t.timeout) clearTimeout(t.timeout),t.timeout=null;
+	    if(t.grammar_menu.length>1 && !t.grammar_menu.parentElement) {
+    		t.grammar_menu.onchange=bind(pick,t);
+		insertFirst(t.menubar,button("i",bind(t.show_grammarinfo,t)))
+		insertFirst(t.menubar,t.grammar_menu);
+		insertFirst(t.menubar,text("Grammar: "));
 	    }
-    	    grammar_menu.onchange=bind(pick,this);
-	    insertFirst(menubar,button("i",bind(show_grammarinfo,this)))
-	    insertFirst(menubar,grammar_menu);
-	    insertFirst(menubar,text("Grammar: "));
+	    var grammar0=t.options.initial_grammar
+	    if(!grammar0 && window.localStorage) {
+		var last_grammar=localStorage["gf.minibar.last_grammar"];
+		if(last_grammar && elem(last_grammar,t.grammars))
+		    grammar0=last_grammar;
+	    }
+	    if(!grammar0) grammar0=t.grammars[0];
+	    t.grammar_menu.value=grammar0;
+	    t.select_grammar(grammar0);
 	}
-	if(options.help_url)
-	    menubar.appendChild(button("Help",bind(open_help,this)));
-	var grammar0=options.initial_grammar
-	if(!grammar0 && window.localStorage) {
-	    var last_grammar=localStorage["gf.minibar.last_grammar"];
-	    if(last_grammar)
-		for(var i in grammars)
-		    if(last_grammar==grammars[i]) grammar0=last_grammar;
-	}
-	if(!grammar0) grammar0=grammars[0];
-	grammar_menu.value=grammar0;
-	select_grammar(grammar0);
+	// Wait at most 1.5s before showing the grammar menu.
+	if(first_time) t.timeout=setTimeout(pick_first_grammar,1500);
+	if(t.grammar_dirs.length>=dir_count) pick_first_grammar();
     }
 }
 
-Minibar.prototype.select_grammar=function(grammar_name) {
+Minibar.prototype.select_grammar=function(grammar_url) {
     var t=this;
     //debug("select_grammar ");
     function change_grammar() {
 	t.server.grammar_info(bind(t.change_grammar,t));
     }
-    t.server.switch_grammar(grammar_name,change_grammar);
+    t.server.switch_to_other_grammar(grammar_url,change_grammar);
 }
 
 Minibar.prototype.change_grammar=function(grammar_info) {

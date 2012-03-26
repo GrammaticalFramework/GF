@@ -24,6 +24,11 @@ if(/^\?\/tmp\//.test(location.search)) {
     if(args[0]) online_options.grammars_url=args[0];
     if(args[1]) minibar_options.initial_grammar=args[1];
 }
+else if(window.localStorage) {
+    var s=localStorage["gf.editor.simple.grammardir"]
+    if(s) var editor_dir=JSON.parse(s);
+}
 
 var server=pgf_online(online_options);
+if(editor_dir) server.add_grammars_url(editor_dir+"/");
 var minibar=new Minibar(server,minibar_options);
