@@ -1,7 +1,7 @@
 Grammatical Framework: Programming with Multilingual Grammars
 Aarne Ranta
 
-
+%!style:../css/style.css
 %!Encoding:utf8
 
 %!postproc(html): "#BOOKCOVER" '<center><img width=200mm src="gf-book-cover.png"></center>'
@@ -102,7 +102,9 @@ linguistics, and related fields.
 
 [Slides ./gf-book-slides.pdf] for teaching the book chapter by chapter.
 
-[Code examples ./examples]
+[Code examples ./examples]. You can also download the
+complete example set as a compressed tar file, 
+[gf-book-examples.tgz gf-book-examples.tgz].
 
 [GF Web IDE http://www.grammaticalframework.org/demos/gfse/]: 
 build grammars in the cloud, without installing GF.
