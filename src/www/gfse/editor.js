@@ -229,6 +229,8 @@ function minibar_button(g,files,err_ind) {
 		show_abstract: true,
 		show_trees: true,
 		show_grouped_translations: false,
+		show_brackets: true,
+		word_replacements: true,
 		default_source_language: "Eng",
 		try_google: true
 	    }
