@@ -25,7 +25,7 @@ import PGF.Type
 import Data.Char
 import Data.Maybe
 import Data.List as List
-import Data.Map as Map hiding (showTree)
+import qualified Data.Map as Map hiding (showTree)
 import Control.Monad
 import qualified Text.PrettyPrint as PP
 import qualified Text.ParserCombinators.ReadP as RP
