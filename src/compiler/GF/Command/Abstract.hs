@@ -1,7 +1,7 @@
 module GF.Command.Abstract where
 
-import PGF.CId
-import PGF.Data
+import PGF.CId(CId,mkCId)
+import PGF.Data(Expr)
 
 type Ident = String
 

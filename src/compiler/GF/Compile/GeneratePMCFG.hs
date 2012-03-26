@@ -14,7 +14,7 @@ module GF.Compile.GeneratePMCFG
     ) where
 
 import PGF.CId
-import PGF.Data hiding (Type, Production)
+import PGF.Data(Alternative(..),CncCat(..),Symbol(..),fidVar)
 
 import GF.Infra.Option
 import GF.Grammar hiding (Env, mkRecord, mkTable)
