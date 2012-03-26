@@ -1,3 +1,5 @@
+{-# LANGUAGE CPP #-}
+
 module GF.Text.Coding where
 
 import qualified Data.ByteString as BS
@@ -23,7 +25,11 @@ encodeUnicode enc s =
   where
     translate cod cbuf
       | i < w     = do bbuf <- newByteBuffer 128 WriteBuffer
+#if __GLASGOW_HASKELL__ >= 702
+                       (_,cbuf,bbuf) <- cod cbuf bbuf
+#else
                        (cbuf,bbuf) <- cod cbuf bbuf
+#endif
                        if isEmptyBuffer bbuf
                          then ioe_invalidCharacter
                          else do let bs = PS (bufRaw bbuf) (bufL bbuf) (bufR bbuf-bufL bbuf)
@@ -46,7 +52,12 @@ decodeUnicode enc (PS fptr l len) =
                                             return s
   where
     translate cod bbuf cbuf
-      | i < w     = do (bbuf,cbuf) <- cod bbuf cbuf
+      | i < w     = do
+#if __GLASGOW_HASKELL__ >= 702
+                       (_,bbuf,cbuf) <- cod bbuf cbuf
+#else
+                       (bbuf,cbuf) <- cod bbuf cbuf
+#endif
                        if isEmptyBuffer cbuf
                          then ioe_invalidCharacter
                          else unpack cod bbuf cbuf
