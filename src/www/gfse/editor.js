@@ -1387,8 +1387,6 @@ function touch_edit() {
 }
 /* --- DOM Support ---------------------------------------------------------- */
 
-function div_id(id,cs) { return node("div",{id:id},cs); }
-function div_class(cls,cs) { return node("div",{"class":cls},cs); }
 function a(url,linked) { return node("a",{href:url},linked); }
 function ul(lis) { return node("ul",{},lis); }
 function li(xs) { return node("li",{},xs); }

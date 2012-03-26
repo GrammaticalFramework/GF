@@ -143,13 +143,15 @@ function empty(tag,name,value) {
 function empty_id(tag,id) { return empty(tag,"id",id); }
 function empty_class(tag,cls) { return empty(tag,"class",cls); }
 
-function div_id(id) { return empty_id("div",id); }
+function div_id(id,cs) { return node("div",{id:id},cs); }
 function span_id(id) { return empty_id("span",id); }
 
 function wrap(tag,contents) { return node(tag,{},[contents]); }
 
 function wrap_class(tag,cls,contents) {
-    return node(tag,{"class":cls},contents ? [contents] : [])
+    return node(tag,{"class":cls},
+		contents ? Array.isArray(contents) ? 
+		contents : [contents] : [])
 }
 
 function span_class(cls,contents) { return wrap_class("span",cls,contents); }
