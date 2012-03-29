@@ -216,37 +216,97 @@ function compile_button(g,err_ind) {
 function minibar_button(g,files,err_ind) {
     var b2;
     function show_editor() { edit_grammar(g); }
-    function goto_minibar(res) {
-	show_compile_error(res,err_ind);
-	if(res.errorcode=="OK") {
-	    //location.href=res.minibar_url;
-	    clear(files);
-	    files.appendChild(div_id("minibar"));
-	    var online_options={grammars_url: local.get("dir")+"/",
-			        grammar_list: [g.basename+".pgf"]}
-	    var pgf_server=pgf_online(online_options)
-	    var minibar_options= {
-		show_abstract: true,
-		show_trees: true,
-		show_grouped_translations: false,
-		show_brackets: true,
-		word_replacements: true,
-		default_source_language: "Eng",
-		try_google: true
+
+    function extend_grammar(cat0,fun_type0) {
+	var fname0="New"+cat0;
+	var fun=parse_fun(fname0+" : " + fun_type0).ok;
+	var lins=[];
+	var dc=defined_cats(g),df=inherited_funs(g);
+	var cs=g.concretes
+
+	function draw_extension() {
+	    var cat=fun.type[fun.type.length-1]
+	    files.innerHTML="<h4>Extending "+cat+"</h4>"
+	    var ef=editable("span",draw_fun(g,fun,dc,df),g,edit_fun,
+			    "Edit this function")
+	    var tbl=empty_class("table","extension");
+	    tbl.appendChild(tr([th(text("Abstract")),td([kw("fun "),ef])]));
+	    var anames=arg_names(fun.type);
+	    for(var i in cs) {
+		var lc=cs[i].langcode;
+		var l=[kw("lin "),ident(fun.name)];
+		for(var j in anames) { l.push(text(" ")); l.push(ident(anames[j]));}
+		l.push(sep(" = "))
+		l.push(editable("span",text(lins[lc] || "..."),g,edit_lin(lc),
+				"Edit this linearization"))
+		tbl.appendChild(tr([th(text(concname(cs[i].langcode))),td(l)]));
 	    }
-	    var minibar=new Minibar(pgf_server,minibar_options);
-	    b.style.display="none";
-	    if(b2) b2.style.display="";
-	    else {
-		b2=button("Show editor",show_editor);
-		insertAfter(b2,b);
+	    files.appendChild(tbl);
+	    files.appendChild(button("OK",save_extension))
+	    files.appendChild(button("Cancel",cancel_extension))
+	}
+	function edit_fun(g,el) {
+	    function replace(s) {
+		var p=parse_fun(s);
+		if(p.ok) {
+		    fun=p.ok;
+		    draw_extension();
+		    return null;
+		}
+		else
+		    return p.error;
+	    }
+	    string_editor(el,show_fun(fun),replace);
+	}
+	function edit_lin(lc) {
+	    return function (g,el) {
+		function replace(s) {
+		    lins[lc]=s;
+		    draw_extension();
+		    return null;
+		}
+		string_editor(el,lins[lc] || "",replace);
 	    }
 	}
+	function save_extension() { }
+	function cancel_extension() {
+	    goto_minibar();
+	}
+	draw_extension();
+    }
+
+    function goto_minibar() {
+	clear(files);
+	files.appendChild(div_id("minibar"));
+	var online_options={grammars_url: local.get("dir")+"/",
+			    grammar_list: [g.basename+".pgf"]}
+	var pgf_server=pgf_online(online_options)
+	var minibar_options= {
+	    show_abstract: true,
+	    show_trees: true,
+	    show_grouped_translations: false,
+	    show_brackets: true,
+	    word_replacements: true,
+	    extend_grammar: extend_grammar,
+	    default_source_language: "Eng",
+	    try_google: true
+	}
+	var minibar=new Minibar(pgf_server,minibar_options);
+	b.style.display="none";
+	if(b2) b2.style.display="";
+	else {
+	    b2=button("Show editor",show_editor);
+	    insertAfter(b2,b);
+	}
+    }
+    function goto_minibar_if_ok(res) {
+	show_compile_error(res,err_ind);
+	if(res.errorcode=="OK") goto_minibar();
     }
     function compile() {
 	replaceInnerHTML(err_ind,"Compiling...");
 	replaceInnerHTML(compiler_output,"<h3>Compiling...</h3>");
-	upload(g,goto_minibar);
+	upload(g,goto_minibar_if_ok);
     }
     var b=button("Minibar",compile);
     b.title="Upload the grammar and test it in the minibar";

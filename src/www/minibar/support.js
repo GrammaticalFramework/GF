@@ -146,7 +146,9 @@ function empty_class(tag,cls) { return empty(tag,"class",cls); }
 function div_id(id,cs) { return node("div",{id:id},cs); }
 function span_id(id) { return empty_id("span",id); }
 
-function wrap(tag,contents) { return node(tag,{},[contents]); }
+function wrap(tag,contents) {
+    return node(tag,{},Array.isArray(contents) ? contents : [contents]);
+}
 
 function wrap_class(tag,cls,contents) {
     return node(tag,{"class":cls},

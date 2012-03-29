@@ -363,6 +363,7 @@ Input.prototype.show_replacements=function(brackets,parent) {
 	function browse1(fun_info) {
 	    var fun_type = fun_info.def.split(":")[1];
 	    function browse2(cat_info) {
+		var extb=null;
 		function examine_replacement(rfun) {
 		    function browse3(rfun_info) {
 			var rfun_type=rfun_info.def.split(":")[1];
@@ -370,12 +371,17 @@ Input.prototype.show_replacements=function(brackets,parent) {
 			    t.replace_word(brackets,parent,rfun);
 			}
 			if(rfun_type==fun_type)
-			    t.words.appendChild(button(rfun,replace))
+			    t.words.insertBefore(button(rfun,replace),extb);
 		    }
 		    t.browse(rfun,browse3)
 		}
 		var ps=cat_info.producers;
 		clear(t.words);
+		if(t.options.extend_grammar) {
+		    extb=button("New "+cat+"...",
+				function() { t.options.extend_grammar(cat,fun_type)})
+		    t.words.appendChild(extb)
+		}
 		if(ps)
 		    for(var pi in ps)
 			if(ps[pi]!=fun) examine_replacement(ps[pi])
