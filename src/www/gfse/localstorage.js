@@ -2,6 +2,14 @@
 // Grammars are stored locally in the browser using localStorage.
 // See http://diveintohtml5.info/storage.html
 
+function supports_html5_storage() {
+  try {
+    return 'localStorage' in window && window['localStorage'] !== null;
+  } catch (e) {
+    return false;
+  }
+}
+
 var local={
     prefix:"gf.editor.simple.grammar",
     get: function (name,def) {

@@ -1440,9 +1440,13 @@ function dir_bugfix() {
 }
 
 if(editor) {
-    initial_view();
-    touch_edit();
-    dir_bugfix();
+    if(supports_html5_storage()) {
+	initial_view();
+	touch_edit();
+	dir_bugfix();
+    }
+    else
+	editor.innerHTML="<p>This browser does not appear to support localStorage, and the grammar editor does not work without it. Sorry!"
 }
 
 //console.log("hi")
