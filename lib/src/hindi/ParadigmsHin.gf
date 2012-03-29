@@ -76,6 +76,8 @@ oper
     } ;
   
   mkIrregA : Str -> A = \str -> makeIrregA str ;
+  mkA2 : A -> Str -> A2 ;
+  mkA2 a str = a ** {c2=str ; lock_A2 = <>} ;
 
 --2 Verbs
 
@@ -95,6 +97,9 @@ oper
     mkV3 v p q = v ** { c2 = p ; c3 = q ; lock_V3 = <>} ;
   mkV2V : V -> Str -> Str -> Bool -> V2V ;
     mkV2V v s1 s2 b = v ** {isAux = b ; c1 = s1 ; c2 = s2 ; lock_V2V = <>} ;
+  dirV2 : V -> V2 = \v -> v ** {c2 = {s = [] ; c = VTrans} ; lock_V2 = <>} ;
+  dirdirV3 : V -> V3 ;
+  dirdirV3 v = v ** { c2 = [] ; c3 = [] ; lock_V3 = <>} ;
   
 -- compund verbs
    compoundV = overload {
@@ -157,15 +162,23 @@ oper
     lin Conj (sd2 x y ** {n = n}) ;  
 
 --  mkV0  : V -> V0 ;
---  mkVS  : V -> VS ;
+  mkVS  : V -> VS; -- e.g drna
+  mkVS v = v ;
 --  mkV2S : V -> Prep -> V2S ;
-  mkVV  : V -> VV = \v ->  lin VV (v ** {isAux = False});
+  mkVV  : V -> VV = -- e.g cahna
+     \v ->  lin VV (v ** {isAux = False});
     
+  mkAdA : Str -> AdA ;
+--  mkAdv x = lin Adv (ss x) ;
+--  mkAdV x = lin AdV (ss x) ;
+  mkAdA x = lin AdA (ss x) ;
+--  mkAdN x = lin AdN (ss x) ;
 
 --  mkV2V : V -> Prep -> Prep -> V2V ;
 --  mkVA  : V -> VA ;
 --  mkV2A : V -> Prep -> V2A ;
---  mkVQ  : V -> VQ ;
+  mkVQ  : V -> VQ ; -- e.g janna
+  mkVQ v = v ;
 --  mkV2Q : V -> Prep -> V2Q ;
 --
 --  mkAS  : A -> AS ;
@@ -178,6 +191,7 @@ oper
 --
 --  V0 : Type ;
 --  AS, A2S, AV, A2V : Type ;
+--
 --
 ----.
 ----2 Definitions of paradigms
