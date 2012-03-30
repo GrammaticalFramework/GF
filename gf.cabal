@@ -50,7 +50,7 @@ library
                  random,
                  pretty,
                  mtl
-  ghc-options: -O2
+--ghc-options: -O2
   hs-source-dirs: src/compiler src/runtime/haskell
   extensions: 
   exposed-modules: 
@@ -119,7 +119,7 @@ executable gf
 
   ghc-prof-options: -auto-all
 
-  ghc-options: -O2
+--ghc-options: -O2
   if impl(ghc>=7.0)
     ghc-options: -rtsopts
   hs-source-dirs: src/compiler src/runtime/haskell
