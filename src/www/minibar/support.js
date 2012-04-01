@@ -12,6 +12,14 @@ function bind(f, this_value) {
     return function () {return f.apply (this_value, arguments)};
 };
 
+// Implement Array.isArray for older browsers that lack it.
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray
+if(!Array.isArray) {
+    Array.isArray = function (arg) {
+        return Object.prototype.toString.call(arg) == '[object Array]';
+    };
+}
+
 /* --- JSONP ---------------------------------------------------------------- */
 
 // Inspired by the function jsonp from 
