@@ -109,7 +109,6 @@ struct PgfParsing {
 	PgfCCatBuf* completed;
     PgfLexCallback* callback;
     PgfItemBuf *lexicon_idx;
-    PgfItemBuf *metas;
     PgfToken tok;
     int max_fid;
 };
@@ -763,7 +762,7 @@ pgf_parsing_td_predict(PgfParsing* parsing, PgfItem* item,
 
 static void
 pgf_parsing_bu_predict(PgfParsing* parsing, PgfItem* item, 
-            PgfItemBuf *agenda)
+            PgfItemBuf* metas, PgfItemBuf* agenda)
 {
 	PgfItemBuf* conts =
 		pgf_parsing_get_conts(parsing->conts_map,
@@ -781,12 +780,12 @@ pgf_parsing_bu_predict(PgfParsing* parsing, PgfItem* item,
 		n_items = gu_buf_length(item->base->conts);
 		for (size_t i = 0; i < n_items; i++) {
 			PgfItem *item_ = gu_buf_get(item->base->conts, PgfItem*, i);
-			pgf_parsing_bu_predict(parsing, item_, conts);
+			pgf_parsing_bu_predict(parsing, item_, metas, conts);
 		}
 
-		n_items = gu_buf_length(parsing->metas);
+		n_items = gu_buf_length(metas);
 		for (size_t i = 0; i < n_items; i++) {
-			PgfItem *item_ = gu_buf_get(parsing->metas, PgfItem*, i);
+			PgfItem *item_ = gu_buf_get(metas, PgfItem*, i);
 			gu_buf_push(conts, PgfItem*, item_);
 		}
 	}
@@ -936,55 +935,6 @@ pgf_parsing_symbol(PgfParsing* parsing, PgfItem* item, PgfSymbol sym) {
 }
 
 static void
-pgf_foo(PgfParsing* parsing, PgfItem* item, 
-        PgfLiteralCallback* callback,
-        PgfExprProb** out_ep,
-        bool* out_accepted)
-{
-	PgfTokens toks;
-	if (gu_variant_is_null(item->curr_sym)) {
-		toks = gu_new_seq(PgfToken, 1, parsing->pool);
-		gu_seq_set(toks, PgfToken, 0, parsing->tok);
-	} else {			
-		GuVariantInfo i = gu_variant_open(item->curr_sym);
-		gu_assert(i.tag == PGF_SYMBOL_KS);
-		PgfTokens old_toks = ((PgfSymbolKS*) i.data)->tokens;
-				
-		size_t n_toks = gu_seq_length(old_toks);
-		toks = gu_new_seq(PgfToken, n_toks+1, parsing->pool);
-		for (size_t i = 0; i < n_toks; i++) {
-			gu_seq_set(toks, PgfToken, i, 
-					   gu_seq_get(old_toks, PgfToken, i));
-		}
-		gu_seq_set(toks, PgfToken, n_toks, parsing->tok);
-	}
-
-	PgfExprProb *ep = NULL;
-	bool accepted = 
-		callback->match(callback, 
-		                item->base->lin_idx, toks, &ep, 
-		                parsing->pool);
-
-	if (accepted) {
-		if (gu_variant_is_null(item->curr_sym))
-			item->seq_idx = 1;
-				
-		PgfSymbolKS* sks = (PgfSymbolKS*) 
-			gu_alloc_variant(PGF_SYMBOL_KS,
-							 sizeof(PgfSymbolKS)+sizeof(PgfSymbol),
-							 gu_alignof(PgfSymbolKS),
-							 &item->curr_sym, parsing->pool);
-		*((PgfSymbol*)(sks+1)) = gu_null_variant;
-		sks->tokens = toks;
-
-		pgf_parsing_add_transition(parsing, parsing->tok, item);
-	}
-	
-	*out_ep = ep;
-	*out_accepted = accepted;
-}
-
-static void
 pgf_parsing_item(PgfParsing* parsing, PgfItem* item)
 {
 #ifdef PGF_PARSER_DEBUG
@@ -1051,8 +1001,9 @@ pgf_parsing_item(PgfParsing* parsing, PgfItem* item)
 				gu_seq_set(toks, PgfToken, 0, parsing->tok);
 				prev = item->curr_sym;
 			} else {
-				PgfTokens old_toks = 
-					((PgfSymbolKS*) gu_variant_data(item->curr_sym))->tokens;
+				GuVariantInfo i = gu_variant_open(item->curr_sym);
+				gu_assert(i.tag == PGF_SYMBOL_KS);
+				PgfTokens old_toks = ((PgfSymbolKS*) i.data)->tokens;
 				prev = pgf_prev_extern_sym(item->curr_sym);
 
 				size_t n_toks = gu_seq_length(old_toks);
@@ -1108,7 +1059,6 @@ pgf_new_parsing(PgfConcr* concr, PgfLexCallback* callback, int max_fid,
     parsing->lexicon_idx = NULL;
 	parsing->pool = parse_pool;
     parsing->tmp_pool = out_pool;
-    parsing->metas = gu_new_buf(PgfItem*, out_pool);
     parsing->tok = gu_empty_string;
     parsing->max_fid = max_fid;
 	return parsing;
@@ -1216,7 +1166,7 @@ pgf_parse_token(PgfParse* parse, PgfToken tok, bool robust, GuPool* pool)
         pgf_parsing_item(parsing, item);
 	}
 
-	if (robust) {
+	if (robust && gu_buf_length(agenda) == 0) {
 		PgfProduction prod;
 		PgfProductionExtern* pext =
 			gu_new_variant(PGF_PRODUCTION_EXTERN,
@@ -1226,7 +1176,8 @@ pgf_parse_token(PgfParse* parse, PgfToken tok, bool robust, GuPool* pool)
 		pext->args = gu_new_seq(PgfPArg, 0, parsing->pool);
 		pext->callback = &pgf_meta_callback;
 
-		PgfGetMetaFn clo2 = { { pgf_parsing_get_metas }, prod, parsing->metas, pool };
+		PgfItemBuf *metas = gu_new_buf(PgfItem*, parsing->pool);
+		PgfGetMetaFn clo2 = { { pgf_parsing_get_metas }, prod, metas, pool };
 		gu_map_iter(parsing->conts_map, &clo2.fn, NULL);
 
 		if (parsing->lexicon_idx != NULL) {
@@ -1236,19 +1187,15 @@ pgf_parse_token(PgfParse* parse, PgfToken tok, bool robust, GuPool* pool)
 
 				if (!pgf_parsing_has_conts(parsing->conts_map,
 										   item->base->ccat, item->base->lin_idx)) {
-					pgf_parsing_bu_predict(parsing, item, agenda);
+					pgf_parsing_bu_predict(parsing, item, metas, agenda);
 				}
 			}
 		} else {
 			// We have unknown word
-			
-			size_t n_items = gu_buf_length(parsing->metas);
+			size_t n_items = gu_buf_length(metas);
 			for (size_t i = 0; i < n_items; i++) {
-				PgfItem* item = gu_buf_get(parsing->metas, PgfItem*, i);
-
-				PgfExprProb *ep;
-				bool accepted;
-				pgf_foo(parsing, item, pext->callback, &ep, &accepted);
+				PgfItem* item = gu_buf_get(metas, PgfItem*, i);
+				pgf_parsing_item(parsing, item);
 			}
 		}
 	}
