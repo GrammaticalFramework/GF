@@ -178,6 +178,7 @@ Translations.prototype.parsetree_button=function(abs,lang) {
 function draw_brackets(b) {
     return b.token
 	? span_class("token",text(b.token))
-	: node("span",{"class":"brackets",title:(b.fun||"_")+":"+b.cat},
+	: node("span",{"class":"brackets",
+		       title:(b.fun||"_")+":"+b.cat+" "+b.fid+":"+b.index},
 	       b.children.map(draw_brackets))
 }
