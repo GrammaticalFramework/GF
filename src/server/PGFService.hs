@@ -18,6 +18,7 @@ import qualified Data.ByteString.Lazy as BS
 import Control.Concurrent
 import Control.Exception(evaluate)
 import Control.Monad
+import Control.Monad.State(State,evalState,get,put)
 import Data.Char
 import Data.Function (on)
 import Data.List (sortBy,intersperse,mapAccumL,nub,isSuffixOf)
@@ -69,6 +70,7 @@ pgfMain pgf command =
       "parsetree"      -> do t <- getTree
                              Just l <- getFrom
                              outputGraphviz (parseTree pgf l t)
+      "abstrjson"      -> outputJSONP . jsonExpr =<< getTree
       "browse"         -> id =<< doBrowse pgf `fmap` getId `ap` getCSSClass `ap` getHRef `ap` getFormat "html"
       "external"       -> do cmd <- getInput "external"
                              input <- getText
@@ -170,7 +172,7 @@ doTranslate pgf input mcat mfrom mto =
               [makeObj ["tree".=tree,
                         "linearizations".=
                             [makeObj ["to".=to, "text".=text, "brackets".=bs]
-                               | (to,text,bs)<- linearizeAndBind pgf mto tree]] 
+                               | (to,text,bs)<- linearizeAndBind pgf mto tree]]
                 | tree <- trees]]
         PGF.ParseIncomplete -> ["incomplete".=True]
         PGF.ParseFailed n   -> ["parseFailed".=n]
@@ -448,6 +450,20 @@ doBrowse pgf id cssClass href _ = -- default to "html" format
 instance JSON PGF.CId where
     readJSON x = readJSON x >>= maybe (fail "Bad language.") return . PGF.readLanguage
     showJSON = showJSON . PGF.showLanguage
+
+jsonExpr e = evalState (expr e) 0
+  where
+    expr e = maybe other app (PGF.unApp e)
+      where
+        other = return (makeObj ["other".=e])
+
+    app (f,es) = do js <- mapM expr es
+                    let children=["children".=js | not (null js)]
+                    i<-inc
+                    return $ makeObj (["fun".=f,"fid".=i]++children)
+
+    inc :: State Int Int
+    inc = do i <- get; put (i+1); return i
 
 instance JSON PGF.Expr where
     readJSON x = readJSON x >>= maybe (fail "Bad expression.") return . PGF.readExpr
