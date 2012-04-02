@@ -297,26 +297,25 @@ Input.prototype.delete_last=function() {
 
 /* --- Structural editing --------------------------------------------------- */
 
-Input.prototype.get_tree1=function(parse_output) {
-    with(this) {
-	if(parse_output.length==1 && parse_output[0].from==current.from
-	   && parse_output[0].trees
-	   && parse_output[0].trees.length==1)
-	    server.linearize({to:current.from,tree:parse_output[0].trees[0]},
-			     bind(get_tree2,this));
-	else end_structural_editing();
-    }
+Input.prototype.get_tree1=function(parse) {
+    var t=this;
+    function proceed(lin) { t.get_tree2(lin,parse[0].trees[0]) }
+
+    if(parse.length==1 && parse[0].from==t.current.from
+       && parse[0].trees && parse[0].trees.length==1)
+	t.server.linearize({to:t.current.from,tree:parse[0].trees[0]},proceed);
+    else t.end_structural_editing();
 }
 
-Input.prototype.get_tree2=function(lin) {
+Input.prototype.get_tree2=function(lin,tree) {
     var t=this;
     with(t) {
 	if(lin.length==1 && lin[0].to==current.from
 	   && lin[0].text+" "==current.input
 	   && (lin[0].brackets)) {
 	    var bs=lin[0].brackets;
-	    var tree=show_abstract_tree(bs);
-	    function proceed() { t.enable_structural_editing(bs) }
+	    //var tree=show_abstract_tree(bs);
+	    function proceed() { t.enable_structural_editing(bs,tree) }
 	    server.linearize({to:current.from,tree:tree},
 			     proceed,bind(end_structural_editing,t))
 	}
@@ -334,16 +333,16 @@ Input.prototype.end_structural_editing=function() {
     }
 }
 
-Input.prototype.enable_structural_editing=function(brackets) {
+Input.prototype.enable_structural_editing=function(brackets,tree) {
     var t=this;
     with(t) {
 	function add_bs(b,parent) {
 	    if(b.token) {
 		var fun=parent.fun,cat=parent.cat;
-		function showrepl() { t.show_replacements(brackets,parent) }
+		function showrepl() { t.show_replacements(brackets,parent,tree)}
 		var w= span_class("word editable",text(b.token));
 		if(fun && cat) w.onclick=showrepl
-		w.title=(fun||"_")+":"+(cat||"_")
+		w.title=(fun||"_")+":"+(cat||"_")+" "+parent.fid+":"+parent.index
 		surface.appendChild(w);
 	    }
 	    else b.children.map(function(c){add_bs(c,b)})
@@ -356,7 +355,7 @@ Input.prototype.enable_structural_editing=function(brackets) {
     }
 }
 
-Input.prototype.show_replacements=function(brackets,parent) {
+Input.prototype.show_replacements=function(brackets,parent,tree) {
     var fun=parent.fun,cat=parent.cat;
     var t=this;
     with(t) {
@@ -368,7 +367,7 @@ Input.prototype.show_replacements=function(brackets,parent) {
 		    function browse3(rfun_info) {
 			var rfun_type=rfun_info.def.split(":")[1];
 			function replace() {
-			    t.replace_word(brackets,parent,rfun);
+			    t.replace_word(brackets,parent,rfun,tree);
 			}
 			if(rfun_type==fun_type)
 			    t.words.insertBefore(button(rfun,replace),extb);
@@ -392,11 +391,13 @@ Input.prototype.show_replacements=function(brackets,parent) {
     }
 }
 
-Input.prototype.replace_word=function(brackets,parent,fun) {
+Input.prototype.replace_word=function(brackets,parent,fun,tree) {
     var t=this;
-    with(t) {
-	parent.fun=fun;
-	var tree=show_abstract_tree(brackets);
+    function proceed(tree) {
+	//parent.fun=fun;
+	//var tree=show_abstract_tree(brackets);
+	tree=modify_tree(tree,parent.fid,fun)
+	tree=show_tree(tree) // Convert JSON repr of tree back to string
 	function replace(lin_output) {
 	    if(lin_output.length==1 && lin_output[0].to==t.current.from) {
 		t.clear_all1();
@@ -409,8 +410,10 @@ Input.prototype.replace_word=function(brackets,parent,fun) {
 		? text
 		: "Word replacement failed"
 	}
-	server.linearize({to:current.from,tree:tree},replace,err)
+	t.server.linearize({to:t.current.from,tree:tree},replace,err)
     }
+    // Convert the string representaiton of the abstract syntax tree to JSON:
+    t.server.pgf_call("abstrjson",{tree:tree},proceed)
 }
 
 Input.prototype.browse=function(id,cont) {
@@ -439,10 +442,11 @@ function set_initial_language(options,menu,grammar) {
     }
 }
 
+/*
 function show_abstract_tree(b) { return show_tree(abstract_tree(b)) }
 
 function abstract_tree(b) {
-    return { fun:b.fun,args:abstract_trees(b.children) }
+    return { fun:b.fun,children:abstract_trees(b.children) }
 }
 
 function abstract_trees(bs) {
@@ -451,12 +455,25 @@ function abstract_trees(bs) {
 	if(bs[i].fun) as.push(abstract_tree(bs[i]))
     return as
 }
+*/
 
 function show_tree(t) {
-    return t.fun+" "+t.args.map(show_tree_atomic).join(" ");
+    return t.children
+	? t.fun+" "+t.children.map(show_tree_atomic).join(" ")
+	: t.fun;
 }
 
 function show_tree_atomic(t) {
     var s=show_tree(t);
-    return t.args.length>0 ? "("+s+")" : s
+    return t.children && t.children.length>0 ? "("+s+")" : s
+}
+
+// Find the node labelled fid in tree and replace the function there with fun
+function modify_tree(tree,fid,fun) {
+    if(tree.fun) {
+	if(tree.fid==fid) tree.fun=fun
+	else if(tree.children)
+	    tree.children.map(function(t) { modify_tree(t,fid,fun) })
+    }
+    return tree;
 }
