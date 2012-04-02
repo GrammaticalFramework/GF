@@ -61,6 +61,7 @@ executable pgf-service
        -- Install it in Ubuntu with: apt-get install libghc-fastcgi-dev
 
   build-depends: base >=4.2 && <5,
+                 mtl,
                  old-time,
                  directory,
                  filepath,
