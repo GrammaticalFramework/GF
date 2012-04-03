@@ -43,16 +43,18 @@ function Input(server,translations,opts) { // Input object constructor
     this.previous=null;
 
     this.from_menu.onchange=bind(this.change_language,this);
-    this.startcat_menu.onchange=bind(this.clear_all,this);
+    this.startcat_menu.onchange=bind(this.change_startcat,this);
 }
 
 Input.prototype.change_grammar=function (grammar) {
+    var t=this;
     grammar.browse={} // for caching output from the browse command
-    this.grammar=grammar;
-    update_language_menu(this.from_menu,grammar);
-    set_initial_language(this.options,this.from_menu,grammar);
-    this.update_startcat_menu(grammar)
-    this.change_language();
+    t.grammar=grammar;
+    t.local=mi_local(t.server.current_grammar_url)
+    update_language_menu(t.from_menu,grammar);
+    set_initial_language(t.options,t.from_menu,grammar,t.local.get("from"));
+    t.update_startcat_menu(grammar)
+    t.change_language();
 }
 
 Input.prototype.update_startcat_menu=function (grammar) {
@@ -60,22 +62,34 @@ Input.prototype.update_startcat_menu=function (grammar) {
     menu.innerHTML="";
     var cats=grammar.categories;
     for(var cat in cats) menu.appendChild(option(cats[cat],cats[cat]))
-    if(grammar.startcat) menu.value=grammar.startcat;
+    var startcat=this.local.get("startcat") || grammar.startcat;
+    if(startcat) menu.value=startcat;
     else {
 	insertFirst(menu,option("Default",""));
 	menu.value="";
     }
 }
 
+Input.prototype.change_startcat=function () {
+    this.local.put("startcat",this.startcat_menu.value)
+    this.clear_all();
+}
+
 Input.prototype.change_language=function () {
     this.current.from=this.from_menu.value;
-    this.clear_all();
+    this.local.put("from",this.current.from)
+    var old_current=this.local.get("current");
+    var new_input= old_current && old_current.from==this.current.from
+	           ? old_current.input : ""
+    this.clear_all1();
+    this.add_words(new_input)
 }
 
 
 Input.prototype.clear_all2=function() {
     with(this) {
 	current.input="";
+	local.put("current",current)
 	previous=null;
 	clear(surface)
 	if(surface.typed) surface.appendChild(surface.typed)
@@ -92,10 +106,8 @@ Input.prototype.clear_all1=function() {
 }
 
 Input.prototype.clear_all=function() {
-    with(this) {
-	clear_all1();
-	get_completions();
-    }
+    this.clear_all1();
+    this.get_completions();
 }
 
 Input.prototype.get_completions=function() {
@@ -271,6 +283,7 @@ Input.prototype.add_word1=function(s) {
     with(this) {
 	previous={ input: current.input, previous: previous };
 	current.input+=s;
+	local.put("current",current)
 	var w=span_class("word",text(s));
 	if(surface.typed) surface.insertBefore(w,surface.typed);
 	else surface.appendChild(w);
@@ -283,6 +296,7 @@ Input.prototype.delete_last=function() {
 	    surface.typed.value="";
 	else if(previous) {
 	    current.input=previous.input;
+	    local.put("current",current)
 	    previous=previous.previous;
 	    if(surface.typed) {
 		surface.removeChild(surface.typed.previousSibling);
@@ -431,8 +445,34 @@ Input.prototype.browse=function(id,cont) {
 
 /* --- Auxiliary functions -------------------------------------------------- */
 
-function set_initial_language(options,menu,grammar) {
-    if(grammar.userLanguage) menu.value=grammar.userLanguage;
+
+function mi_local(grammar_url) {
+    function dummy() {
+	return {
+	    get: function(name,def) { return def },
+	    put: function(name,value) { }
+	}
+    }
+    function real() {
+	var prefix="gf.minibar_input."+grammar_url+"."
+	return {
+	    get: function (name,def) {
+		var id=prefix+name
+		return localStorage[id] ? JSON.parse(localStorage[id]) : def;
+	    },
+	    put: function (name,value) {
+		var id=prefix+name;
+		localStorage[id]=JSON.stringify(value);
+	    }
+	}
+    }
+    return window.localStorage ? real() : dummy()
+}
+
+
+function set_initial_language(options,menu,grammar,old_from) {
+    var user_from=old_from || grammar.userLanguage;
+    if(user_from) menu.value=user_from; // !! What if the language was removed?
     else if(options.default_source_language) {
 	for(var i=0;i<menu.options.length;i++) {
 	    var o=menu.options[i].value;
