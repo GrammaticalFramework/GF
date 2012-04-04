@@ -202,12 +202,18 @@ function show_compile_error(res,err_ind) {
     }
 }
 
-function compile_button(g,err_ind) {
-    function compile() {
-	replaceInnerHTML(err_ind,"Compiling...");
-	replaceInnerHTML(compiler_output,"<h3>Compiling...</h3>");
-	upload(g,function(res) { show_compile_error(res,err_ind) });
+function compile_grammar(g,err_ind,cont) {
+    function show_error(res) {
+	show_compile_error(res,err_ind);
+	if(cont) cont(res)
     }
+    replaceInnerHTML(err_ind,"Compiling...");
+    replaceInnerHTML(compiler_output,"<h3>Compiling...</h3>");
+    upload(g,show_error);
+}
+
+function compile_button(g,err_ind) {
+    function compile() { compile_grammar(g,err_ind) }
     var b=button("Compile",compile);
     b.title="Upload the grammar to the server to check it in GF for errors";
     return b;
@@ -215,18 +221,23 @@ function compile_button(g,err_ind) {
 
 function minibar_button(g,files,err_ind) {
     var b2;
-    function show_editor() { edit_grammar(g); }
 
-    function extend_grammar(cat0,fun_type0) {
+    function page_overlay(inner) {
+	return wrap_class("table","page_overlay",tr(td(inner)))
+    }
+
+    function extend_grammar(cat0,fun_type0,update_minibar) {
 	var fname0="New"+cat0;
 	var fun=parse_fun(fname0+" : " + fun_type0).ok;
 	var lins=[];
 	var dc=defined_cats(g),df=inherited_funs(g);
 	var cs=g.concretes
+	var ext=div_class("grammar_extension")
+	var overlay=page_overlay(ext);
 
 	function draw_extension() {
 	    var cat=fun.type[fun.type.length-1]
-	    files.innerHTML="<h4>Extending "+cat+"</h4>"
+	    ext.innerHTML="<h4>Extending "+cat+"</h4>"
 	    var ef=editable("span",draw_fun(g,fun,dc,df),g,edit_fun,
 			    "Edit this function")
 	    var tbl=empty_class("table","extension");
@@ -241,9 +252,9 @@ function minibar_button(g,files,err_ind) {
 				"Edit this linearization"))
 		tbl.appendChild(tr([th(text(concname(cs[i].langcode))),td(l)]));
 	    }
-	    files.appendChild(tbl);
-	    files.appendChild(button("OK",save_extension))
-	    files.appendChild(button("Cancel",cancel_extension))
+	    ext.appendChild(tbl);
+	    ext.appendChild(button("OK",save_extension))
+	    ext.appendChild(button("Cancel",cancel_extension))
 	}
 	function edit_fun(g,el) {
 	    function replace(s) {
@@ -260,20 +271,54 @@ function minibar_button(g,files,err_ind) {
 	}
 	function edit_lin(lc) {
 	    return function (g,el) {
-		function replace(s) {
-		    lins[lc]=s;
-		    draw_extension();
-		    return null;
+		function check(s,cont) {
+		    function replace() {
+			lins[lc]=s;
+			draw_extension();
+			return null;
+		    }
+		    function check2(msg) { if(msg) cont(msg); else replace(); }
+		    check_exp(s,check2);
 		}
-		string_editor(el,lins[lc] || "",replace);
+		string_editor(el,lins[lc] || "",check,true);
 	    }
 	}
-	function save_extension() { }
-	function cancel_extension() {
-	    goto_minibar();
+	function save_extension() {
+	    function extend_grammar(newg) {
+		newg.abstract.funs.push(fun);
+		var cs=newg.concretes
+		for(var ci in cs) {
+		    var lc=cs[ci].langcode
+		    if(lins[lc]) {
+			var lin={fun: fun.name, args: arg_names(fun.type),
+				 lin: lins[lc]}
+			cs[ci].lins.push(lin)
+		    }
+		}
+	    }
+	    function save_if_ok(res) {
+		if(res.errorcode=="OK") {
+		    extend_grammar(g);
+		    save_grammar(g);
+		    document.body.removeChild(overlay)
+		    if(update_minibar) update_minibar();
+		    //goto_minibar();
+		}
+	    }
+	    // This is not functional programming, so copy the grammar first...
+	    var newg=JSON.parse(JSON.stringify(g));
+	    extend_grammar(newg)
+	    compile_grammar(newg,err_ind,save_if_ok);
 	}
+	function cancel_extension() {
+	    document.body.removeChild(overlay)
+	    //goto_minibar();
+	}
+	document.body.appendChild(overlay)
 	draw_extension();
     }
+
+    function show_editor() { edit_grammar(g); }
 
     function goto_minibar() {
 	clear(files);
@@ -299,15 +344,8 @@ function minibar_button(g,files,err_ind) {
 	    insertAfter(b2,b);
 	}
     }
-    function goto_minibar_if_ok(res) {
-	show_compile_error(res,err_ind);
-	if(res.errorcode=="OK") goto_minibar();
-    }
-    function compile() {
-	replaceInnerHTML(err_ind,"Compiling...");
-	replaceInnerHTML(compiler_output,"<h3>Compiling...</h3>");
-	upload(g,goto_minibar_if_ok);
-    }
+    function goto_minibar_if_ok(res) { if(res.errorcode=="OK") goto_minibar(); }
+    function compile() { compile_grammar(g,err_ind,goto_minibar_if_ok) }
     var b=button("Minibar",compile);
     b.title="Upload the grammar and test it in the minibar";
     return b;
@@ -315,15 +353,10 @@ function minibar_button(g,files,err_ind) {
 
 function quiz_button(g,err_ind) {
     function goto_quiz(res) {
-	show_compile_error(res,err_ind);
 	if(res.errorcode=="OK")
 	    location.href="../TransQuiz/translation_quiz.html?"+local.get("dir")+"/"
     }
-    function compile() {
-	replaceInnerHTML(err_ind,"Compiling...");
-	replaceInnerHTML(compiler_output,"<h3>Compiling...</h3>");
-	upload(g,goto_quiz);
-    }
+    function compile() { compile_grammar(g,err_ind,goto_quiz) }
     var b=button("Quiz",compile);
     b.title="Upload the grammar and go to the translation quiz";
     return b;

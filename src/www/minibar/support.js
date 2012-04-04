@@ -175,7 +175,7 @@ function li(contents) { return wrap("li",contents); }
 function th(contents) { return wrap("th",contents); }
 function td(contents) { return wrap("td",contents); }
 
-function tr(cells) { return node("tr",{},cells); }
+function tr(cells)    { return wrap("tr",cells); }
 
 function button(label,action,key) {
     var el=node("input",{"type":"button","value":label},[]);
