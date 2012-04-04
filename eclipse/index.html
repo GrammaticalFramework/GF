@@ -121,6 +121,8 @@ Note that Xtext and Eclipse are released under the <a href="http://www.eclipse.o
 <li>Xtext: <code>http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/</code></li>
 </ul>
 
+<p>You can set these from <strong>Preferences &rarr; Install/Update &rarr; Available Software Sites</strong>.</p>
+
 <p><strong>Steps for installation</strong></p>
 
 <ol>
@@ -135,11 +137,20 @@ Note that Xtext and Eclipse are released under the <a href="http://www.eclipse.o
 <h4>Settings</h4>
 
 <ol>
-<li>Add the GF perspective by clicking <strong>Open Perspective &rarr; Other</strong> and choosing <strong>GF</strong>.</li>
-<li>The plugin will try to determine the path to your GF executable automatically. You can always check/overwrite it by going to <strong>Window &rarr; Preferences &rarr; Grammatical Framework</strong>.
+<li>Add the GF perspective by clicking <strong>Window &rarr; Open Perspective &rarr; Other</strong> and choosing <strong>GF</strong>.</li>
+<li>The plugin will try to determine the path to your GF executable automatically. You can check/overwrite it by going to <strong>Preferences &rarr; Grammatical Framework</strong>.
 This path should <strong>include</strong> the name of the GF binary itself, e.g. <code>/home/john/.cabal/bin/gf</code> or <code>C:\Users\John\GF\gf.exe</code>.</li>
 <li>You can also adjust the verbosity level of the GFEP console log in the preferences window.</li>
 </ol>
+
+<h4>Eclipse preferences</h4>
+
+<p>How to find the Eclipse preferences window may depend on your version and/or operating system, and may be either of:</p>
+
+<ul>
+<li><strong>Window &rarr; Preferences</strong></li>
+<li><strong>Eclipse &rarr; Preferences</strong></li>
+</ul>
 
 <h3>Updating the plugin</h3>
 
@@ -306,7 +317,7 @@ Each time you save a file (or some other change occurs in your project), the bui
 
 <h3>Consoles</h3>
 
-<p>The plugin provides its own console view named <em>GFEP Log</em>, which shows log messages based on the <strong>Log Level</strong> preference (<strong>Window &rarr; Preferences &rarr; Grammatical Framework</strong>).</p>
+<p>The plugin provides its own console view named <em>GFEP Log</em>, which shows log messages based on the <strong>Log Level</strong> preference (<strong>Preferences &rarr; Grammatical Framework</strong>).</p>
 
 <p>Additionally, every time a grammar is <strong>Run</strong> a <em>new</em> console is opened to display the output. This console may also serve as the interactive GF Shell, depending on the <strong>Interactive Mode</strong> checkbox in your <strong>Run Configuration</strong>.</p>
 
@@ -365,7 +376,7 @@ Each time you save a file (or some other change occurs in your project), the bui
 <li>Accessing the file directly at <code>&lt;workspace&gt;/.metadata/.log</code></li>
 </ol>
 
-<p>You can set the log verbosity from <strong>Window &rarr; Preferences &rarr; Grammatical Framework</strong>.</p>
+<p>You can set the log verbosity from <strong>Preferences &rarr; Grammatical Framework</strong>.</p>
 
 <!----------------------------------------------------------------------------->
 
