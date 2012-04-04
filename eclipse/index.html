@@ -11,26 +11,29 @@
 <h1>The GF Eclipse Plugin</h1>
 
 <p>John  J. Camilleri<br />
-Updated: 22 March 2012</p>
+Updated: 4 April 2012</p>
 
 <p><em>The research leading to these results has received funding from the European Union&#8217;s Seventh Framework Programme (FP7/2007-2013) under grant agreement no. FP7-ICT-247914.</em></p>
 
-<p><em>This documentation is also available at the <a href="http://www.molto-project.eu/node/1395">MOLTO Project Wiki</a>.</em></p>
-
 <h2>Introduction</h2>
 
-<p>The aim behind developing a desktop IDE for GF is to provide more powerful tools than may be possible and/or practical in a web-based environment (the GF Web IDE). In particular, the ability to resolve identifier cross-references and browse external libraries quickly during development time is one of the primary motivations for the project.</p>
+<p>The aim behind developing a desktop IDE for GF is to provide more powerful tools than may be possible and/or practical in a web-based environment (the <a href="http://www.grammaticalframework.org/demos/gfse/">GF Web IDE</a>). In particular, the ability to resolve identifier cross-references and browse external libraries quickly during development time is one of the primary motivations for the project.</p>
 
-<p>The choice was made to develop this desktop IDE as a plugin for the Eclipse Platform as it emerged as the most popular choice among the GF developer community. Support for the platform is vast and many tools for adapting Eclipse to domain-specific languages already exist. Unlike the zero-click Web IDE approach, using the GF Eclipse plugin (GFEP) will require some manual installation and configuration on the development machine. Thus the GFEP is aimed more at seasoned developers rather than the curious GF newbie.</p>
+<p>The choice was made to develop this desktop IDE as a plugin for the Eclipse Platform as it emerged as the most popular choice among the GF developer community. Support for the platform is vast and many tools for adapting Eclipse to domain-specific languages already exist. Unlike the zero-click Web IDE approach, using the GF Eclipse plugin requires some manual installation and configuration on the development machine.</p>
 
-<p>The starting point for the GFEP is using the <a href="http://www.eclipse.org/Xtext/">Xtext DSL Framework</a> for Eclipse. By converting the GF grammar into the appropriate Extended-BNF form required by the LL(*) ANTLR parser, the framework provides a good starting point for future plugin development, already including a variery of syntax checking tools and some cross-reference resolution support. The specific requirements of the GF language, particularly in the way of its special module hierarchy, mean that significant customisations to this generated base plugin are needed.</p>
+<p>The GFEP was developed with support from the <a href="http://www.molto-project.eu/">MOLTO Project</a>.</p>
 
-<p>The GFEP is being developed by  as part of Work Package 2 of the <a href="http://www.molto-project.eu/">MOLTO Project</a>.</p>
+<h3>License</h3>
+
+<p>The GF Eclipse Plugin is open-source under the <a href="http://www.gnu.org/licenses/gpl-3.0.txt">GNU General Public License (GPL)</a>.<br />
+The licenses that cover the rest of GF are listed <a href="http://www.grammaticalframework.org/LICENSE">here</a>.<br />
+Note that Xtext and Eclipse are released under the <a href="http://www.eclipse.org/legal/epl-v10.html">Eclipse Public License (EPL)</a>.</p>
 
 <h3>Links</h3>
 
 <ul>
-<li>This document shall contain the most up-to-date information about the plugin. The most up-to-date version of this file can always be found in the source-code repository at <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin/blob/master/README.md">GitHub</a></li>
+<li>This document shall contain all collected information about the plugin. The most up-to-date version of this file can always be found at <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin/blob/master/README.md">GitHub</a></li>
+<li>This documentation is also available at the <a href="http://www.molto-project.eu/node/1395">MOLTO Project Wiki</a>.</li>
 <li>Source code repository is at <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin">github.com/GrammaticalFramework/gf-eclipse-plugin</a></li>
 <li>For reporting bugs and requesting features, please use the <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin/issues">GitHub Issue Tracker</a></li>
 <li>Here are some <a href="http://www.grammaticalframework.org/eclipse/examples/">example GF projects</a> for testing out the plugin features.</li>
@@ -52,21 +55,24 @@ Updated: 22 March 2012</p>
 <li>Code generation for new languages in application grammars</li>
 <li>Inline documentation for function calls, overloads</li>
 <li>Proper cross-reference handling with qualified names</li>
-<li>Treebank management and testing tool</li>
+<li>Test management and testing tool</li>
 <li>External library browser</li>
 </ul>
 
 <h2>Release history</h2>
 
 <dl>
+<dt><strong>04/04/12</strong></dt>
+<dd>(1.4.3.x) Improvements to the Test Manager. Added support for arbitrary commands in launch. Made the license information clearer.</dd>
+
 <dt><strong>22/03/12</strong></dt>
-<dd>(1.4.2.x) Added wizard for context-free grammars (no syntax support, though). Context-menu option for toggling the GF Nature and Builder together. Treebank tool now parses languages &amp; params, and includes filtering and toggling options.</dd>
+<dd>(1.4.2.x) Added wizard for context-free grammars (no syntax support, though). Context-menu option for toggling the GF Nature and Builder together. Test Manager now parses languages &amp; params, and includes filtering and toggling options.</dd>
 
 <dt><strong>14/03/12</strong></dt>
 <dd>(1.4.1.x) GF source files can now be anywhere in project, not necessarily at top level.</dd>
 
 <dt><strong>06/03/12</strong></dt>
-<dd>(1.4.0.x) Treebank manager view. Updated launch configurations. UI improvements, new icons. Inline contextual documentation. Correct resolution of qualified identifiers. Bug fixes and some refactoring.</dd>
+<dd>(1.4.0.x) Test manager view. Updated launch configurations. UI improvements, new icons. Inline contextual documentation. Correct resolution of qualified identifiers. Bug fixes and some refactoring.</dd>
 
 <dt><strong>07/02/12</strong></dt>
 <dd>(1.3.0.x) Re-written underlying GF grammar.</dd>
@@ -100,7 +106,7 @@ Updated: 22 March 2012</p>
 <h3>System requirements</h3>
 
 <ol>
-<li><a href="http://www.grammaticalframework.org/download/release-3.3.3.html">GF version 3.3.3</a> or above. The path to GF must be set within the plugin (see below).</li>
+<li><a href="http://www.grammaticalframework.org/download/release-3.3.3.html">GF 3.3.3</a> or above. The path to GF must be set within the plugin (see below).</li>
 <li><a href="http://www.eclipse.org/downloads/">Eclipse</a> 3.6 or above.</li>
 </ol>
 
@@ -322,9 +328,9 @@ Each time you save a file (or some other change occurs in your project), the bui
 
 <p><em>Future versions of this view will contain a full tree of all identifiers available in the current scope.</em></p>
 
-<h3><em>Treebank Manager</em> view</h3>
+<h3><em>Test Manager</em> view</h3>
 
-<p>This feature works together with the launch configurations to make the process of testing treebanks against your grammars quick and easy. As described in the <a href="http://www.grammaticalframework.org/gf-book/">GF Book</a> (Section 10.5), the general development-test cycle (independent of GFEP) is as follows:</p>
+<p>This feature works together with the launch configurations to make the process of running regression tests on your grammars quick and easy. As described in the <a href="http://www.grammaticalframework.org/gf-book/">GF Book</a> (Section 10.5), the general development-test cycle (independent of GFEP) is as follows:</p>
 
 <ol>
 <li>Create a file <code>test.trees</code> which contains a bunch of abstract syntax trees, which you want to test</li>
@@ -333,21 +339,21 @@ Each time you save a file (or some other change occurs in your project), the bui
 <li>Each time you update your grammar, repeat step 2, then compare your new output against the gold standard using <code>diff</code> or some other comparison tool.</li>
 </ol>
 
-<p>The <strong>Treebank Manager</strong> view follows this same pattern but provides a convenient graphical interface for running your treebanks and also for looking at the output, just using a few clicks:</p>
+<p>The <strong>Test Manager</strong> view follows this same pattern but provides a convenient graphical interface for running your test cases and also for looking at the output, just using a few clicks:</p>
 
-<p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-treebank-manager.png" alt="Treebank Manager view" /></p>
+<p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-test-manager.png" alt="Test Manager view" /></p>
 
 <p>Note that GFEP assumes the following convention:</p>
 
 <dl>
-<dt><code>nouns.trees</code></dt>
-<dd>Treebank file (abstract trees)</dd>
+<dt><code>*.trees</code> or <code>*.sentences</code></dt>
+<dd>Test input files: trees file (for testing linearisation) and sentences file (for testing parsing)</dd>
 
-<dt><code>nouns.trees.out</code></dt>
-<dd>Output file (generated linearisations)</dd>
+<dt><code>*.trees.out</code> or <code>*.sentences.out</code></dt>
+<dd>Corresponding output files (generated each time a test is run)</dd>
 
-<dt><code>nouns.trees.gold</code></dt>
-<dd>Gold standard file (manually corrected linearisations)</dd>
+<dt><code>*.trees.gold</code> or <code>*.sentences.gold</code></dt>
+<dd>Corresponding gold standard files (manually corrected from an output file)</dd>
 </dl>
 
 <h3>Logs</h3>
