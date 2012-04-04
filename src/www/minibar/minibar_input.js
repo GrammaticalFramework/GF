@@ -390,9 +390,15 @@ Input.prototype.show_replacements=function(brackets,parent,tree) {
 		}
 		var ps=cat_info.producers;
 		clear(t.words);
-		if(t.options.extend_grammar) {
+		var extf=t.options.extend_grammar;
+		if(extf) {
+		    function update() {
+			console.log("update minibar")
+			t.grammar.browse={}; // clear cache
+			t.show_replacements(brackets,parent,tree)
+		    }
 		    extb=button("New "+cat+"...",
-				function() { t.options.extend_grammar(cat,fun_type)})
+				function() { extf(cat,fun_type,update)})
 		    t.words.appendChild(extb)
 		}
 		if(ps)
