@@ -146,14 +146,14 @@ function draw_grammar(g) {
 
 function draw_namebar(g,files) {
     var err_ind=empty("small"); // space for error indicator
+    var cb=compile_button(g,err_ind);
+    var mb=minibar_button(g,files,err_ind,cb);
+    var qb=quiz_button(g,err_ind);
+    //var pb=draw_plainbutton(g,files);
+    var xb=draw_closebutton(g);
     return div_class("namebar",
-		  [table([tr([td(draw_name(g)),
-			      td_right([err_ind,
-					compile_button(g,err_ind),
-					minibar_button(g,files,err_ind),
-					quiz_button(g,err_ind),
-					/*draw_plainbutton(g,files),*/
-					draw_closebutton(g)])])])])
+		     [table([tr([td(draw_name(g)),
+				 td_right([err_ind,cb,mb,qb/*,pb*/,xb])])])])
 }
 
 function draw_name(g) {
@@ -219,8 +219,9 @@ function compile_button(g,err_ind) {
     return b;
 }
 
-function minibar_button(g,files,err_ind) {
+function minibar_button(g,files,err_ind,comp_btn) {
     var b2;
+    var minibar_div=div_id("minibar");
 
     function page_overlay(inner) {
 	return wrap_class("table","page_overlay",tr(td(inner)))
@@ -300,7 +301,8 @@ function minibar_button(g,files,err_ind) {
 		if(res.errorcode=="OK") {
 		    extend_grammar(g);
 		    save_grammar(g);
-		    document.body.removeChild(overlay)
+		    files.removeChild(overlay)
+		    minibar_div.style.minHeight="0px";
 		    if(update_minibar) update_minibar();
 		    //goto_minibar();
 		}
@@ -311,18 +313,25 @@ function minibar_button(g,files,err_ind) {
 	    compile_grammar(newg,err_ind,save_if_ok);
 	}
 	function cancel_extension() {
-	    document.body.removeChild(overlay)
+	    files.removeChild(overlay)
+	    minibar_div.style.minHeight="0px";
 	    //goto_minibar();
 	}
-	document.body.appendChild(overlay)
 	draw_extension();
+	files.appendChild(overlay)
+	// Hack to prevent the overlay from overflowing the minibar div:
+	minibar_div.style.minHeight=overlay.clientHeight-11+"px"
+	//overlay.onresize= ... // doesn't work :-(
     }
 
-    function show_editor() { edit_grammar(g); }
+    function show_editor() {
+	clear(minibar_div);
+	edit_grammar(g);
+    }
 
     function goto_minibar() {
 	clear(files);
-	files.appendChild(div_id("minibar"));
+	files.appendChild(minibar_div);
 	var online_options={grammars_url: local.get("dir")+"/",
 			    grammar_list: [g.basename+".pgf"]}
 	var pgf_server=pgf_online(online_options)
@@ -338,6 +347,7 @@ function minibar_button(g,files,err_ind) {
 	}
 	var minibar=new Minibar(pgf_server,minibar_options);
 	b.style.display="none";
+	comp_btn.disabled=true;
 	if(b2) b2.style.display="";
 	else {
 	    b2=button("Show editor",show_editor);
