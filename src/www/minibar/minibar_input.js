@@ -39,7 +39,7 @@ function Input(server,translations,opts) { // Input object constructor
     }
 
     /* --- Input client state initialization --- */
-    this.current={from: null, input: ""};
+    this.current={from: null, input: [] };
 
     this.from_menu.onchange=bind(this.change_language,this);
     this.startcat_menu.onchange=bind(this.change_startcat,this);
@@ -79,7 +79,7 @@ Input.prototype.change_language=function () {
     this.local.put("from",this.current.from)
     var old_current=this.local.get("current");
     var new_input= old_current && old_current.from==this.current.from
-	           ? old_current.input : ""
+	           ? old_current.input : []
     this.clear_all1();
     this.add_words(new_input)
 }
@@ -87,7 +87,7 @@ Input.prototype.change_language=function () {
 
 Input.prototype.clear_all2=function() {
     with(this) {
-	current.input="";
+	current.input=[];
 	local.put("current",current)
 	clear(surface)
 	if(surface.typed) surface.appendChild(surface.typed)
@@ -112,9 +112,12 @@ Input.prototype.get_completions=function() {
     with(this) {
 	//debug("get_completions ");
 	words.innerHTML="...";
-	var args={from:current.from,input:current.input,cat:startcat_menu.value}
+	var s=gf_unlex(current.input)+" ";
+	var args={from:current.from, input:s, cat:startcat_menu.value}
 	server.complete(args,bind(show_completions,this));
 	if(options.word_replacements) server.parse(args,bind(get_tree1,this));
+	// Making two server calls in parallel! The two continuations can
+	// be called in any order, make sure they are appropriately independent.
     }
 }
 
@@ -233,7 +236,7 @@ Input.prototype.generate_random=function() {
     var t=this;
     function show_random(random) {
 	t.clear_all1();
-	t.add_words(random[0].text);
+	t.add_words(gf_lex(random[0].text));
     }
     
     function lin_random(abs) {
@@ -242,15 +245,14 @@ Input.prototype.generate_random=function() {
     t.server.get_random({cat:t.startcat_menu.value},lin_random);
 }
 
-Input.prototype.add_words=function(s) {
-    this.add_words1(s);
+Input.prototype.add_words=function(ws) {
+    this.add_words1(ws);
     this.get_completions();
 }
 
-Input.prototype.add_words1=function(s) {
-    var ws=s.split(" ");
+Input.prototype.add_words1=function(ws) {
     for(var i=0;i<ws.length;i++)
-	if(ws[i]) this.add_word1(ws[i]+" ");
+	if(ws[i]) this.add_word1(ws[i]);
 }
 
 Input.prototype.word=function(s) { 
@@ -264,7 +266,7 @@ Input.prototype.word=function(s) {
 
 Input.prototype.add_word=function(s) {
     with(this) {
-	add_word1(s+" ");
+	add_word1(s);
 	if(surface.typed) {
 	    var s2;
 	    if(hasPrefix(s2=surface.typed.value,s)) {
@@ -280,7 +282,7 @@ Input.prototype.add_word=function(s) {
 
 Input.prototype.add_word1=function(s) {
     with(this) {
-	current.input+=s;
+	current.input.push(s);
 	local.put("current",current)
 	var w=span_class("word",text(s));
 	if(surface.typed) surface.insertBefore(w,surface.typed);
@@ -292,11 +294,8 @@ Input.prototype.delete_last=function() {
     with(this) {
 	if(surface.typed && surface.typed.value!="")
 	    surface.typed.value="";
-	else if(current.input.length>1) {
-	    var ws=gf_lex(current.input)
-	    var w=ws.pop();
-	    if(w=="") { ws.pop(); ws.push(""); }
-	    current.input=gf_unlex(ws);
+	else if(current.input.length>0) {
+	    current.input.pop();
 	    local.put("current",current)
 	    if(surface.typed) {
 		surface.removeChild(surface.typed.previousSibling);
@@ -325,7 +324,7 @@ Input.prototype.get_tree2=function(lin,tree) {
     var t=this;
     with(t) {
 	if(lin.length==1 && lin[0].to==current.from
-	   && lin[0].text+" "==current.input
+	   && lin[0].text==gf_unlex(current.input)
 	   && (lin[0].brackets)) {
 	    var bs=lin[0].brackets;
 	    //var tree=show_abstract_tree(bs);
@@ -421,7 +420,7 @@ Input.prototype.replace_word=function(brackets,parent,fun,tree) {
 	function replace(lin_output) {
 	    if(lin_output.length==1 && lin_output[0].to==t.current.from) {
 		t.clear_all1();
-		t.add_words(lin_output[0].text)
+		t.add_words(gf_lex(lin_output[0].text))
 	    }
 	}
 	function err(text,status,ctype) {

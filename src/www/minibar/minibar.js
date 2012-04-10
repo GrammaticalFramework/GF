@@ -164,8 +164,8 @@ Minibar.prototype.append_extra_buttons=function(extra,options) {
 Minibar.prototype.try_google=function() {
     with(this) {
 	var to=translations.target_lang();
-	var s=input.current.input;
-	if(input.surface.typed) s+=input.surface.typed.value;
+	var s=gf_unlex(input.current.input);
+	if(input.surface.typed) s+=" "+input.surface.typed.value;
 	var url="http://translate.google.com/?sl="
 	        +langpart(input.current.from,grammar.name);
 	if(to!="All") url+="&tl="+to;
@@ -198,7 +198,7 @@ function prefill_feedback_form() {
     var form=document.forms.namedItem("feedback");
     setField(form,"grammar",gn);
     setField(form,"from",langpart(state.current.from,gn));
-    setField(form,"input",state.current.input);
+    setField(form,"input",gf_unlex(state.current.input));
     setField(form,"to",to);
     if(to=="All") element("translation_box").innerHTML=" To suggest a better translation to a particular language, select that language in the To: menu before pressing the Feedback button."
     else setField(form,"translation",trans.single_translation.join(" / "));
