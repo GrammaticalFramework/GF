@@ -51,12 +51,11 @@ Translations.prototype.translateFrom=function(current,startcat) {
 Translations.prototype.get_translations=function() {
     with(this) {
 	var c=current;
+	var args={from:c.from,input:gf_unlex(c.input),cat:startcat}
 	if(options.show_grouped_translations)
-	    server.translategroup({from:c.from,input:c.input,cat:startcat},
-				  bind(show_groupedtranslations,this));
+	    server.translategroup(args,bind(show_groupedtranslations,this));
 	else
-	    server.translate({from:c.from,input:c.input,cat:startcat},
-			     bind(show_translations,this));
+	    server.translate(args,bind(show_translations,this));
     }
 }
 
