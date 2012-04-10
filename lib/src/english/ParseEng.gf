@@ -12,7 +12,7 @@ concrete ParseEng of ParseEngAbs =
   PhraseEng,
   SentenceEng,
   RelativeEng,
-  IdiomEng [VP, Tense, ProgrVP],
+  IdiomEng [NP, VP, Tense, Cl, ProgrVP, ExistNP],
   ExtraEng [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash],
   DictEng ** 
 open MorphoEng, ResEng, ParadigmsEng, Prelude in {
