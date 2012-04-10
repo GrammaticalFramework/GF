@@ -8,4 +8,5 @@ abstract ExtraGerAbs = Extra [
 
     moegen_VV : VV ;         -- ich mag/möchte singen
 
+    DetNPMasc, DetNPFem : Det -> NP ;
 }

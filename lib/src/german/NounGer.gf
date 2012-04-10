@@ -1,4 +1,4 @@
-concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
+concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -11,7 +11,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       } ;
 
     DetNP det = {
-      s = \\c => det.sp ! Neutr ! c ; ---- genders
+      s = \\c => det.sp ! Neutr ! c ; -- more genders in ExtraGer
       a = agrP3 det.n ;
       isPron = False
       } ;
@@ -109,7 +109,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
           }
         } ; 
       sp = table {
-        Sg => \\g,c => usePrepC c (\k -> "ein" + pronEnding ! GSg g ! k) ;
+        Sg => \\g,c => usePrepC c (\k -> (detLikeAdj Sg "ein").s ! g ! NPC k) ;
         Pl => \\_,c => usePrepC c (\k -> caselist "einige" "einige" "einigen" "einiger" ! k)
         } ;
       a = Strong
