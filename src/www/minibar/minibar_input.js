@@ -40,7 +40,6 @@ function Input(server,translations,opts) { // Input object constructor
 
     /* --- Input client state initialization --- */
     this.current={from: null, input: ""};
-    this.previous=null;
 
     this.from_menu.onchange=bind(this.change_language,this);
     this.startcat_menu.onchange=bind(this.change_startcat,this);
@@ -90,7 +89,6 @@ Input.prototype.clear_all2=function() {
     with(this) {
 	current.input="";
 	local.put("current",current)
-	previous=null;
 	clear(surface)
 	if(surface.typed) surface.appendChild(surface.typed)
     }
@@ -125,7 +123,8 @@ Input.prototype.show_completions=function(complete_output) {
 	//debug("show_completions ");
 	var completions=complete_output[0].completions;
 	var emptycnt=add_completions(completions)
-	if(true/*emptycnt>0*/) translations.translateFrom(current,startcat_menu.value);
+	if(true/*emptycnt>0*/)
+	    translations.translateFrom(current,startcat_menu.value);
 	else translations.clear();
 	if(surface.typed && emptycnt==completions.length) {
 	    if(surface.typed.value=="") remove_typed_input();
@@ -281,7 +280,6 @@ Input.prototype.add_word=function(s) {
 
 Input.prototype.add_word1=function(s) {
     with(this) {
-	previous={ input: current.input, previous: previous };
 	current.input+=s;
 	local.put("current",current)
 	var w=span_class("word",text(s));
@@ -294,10 +292,12 @@ Input.prototype.delete_last=function() {
     with(this) {
 	if(surface.typed && surface.typed.value!="")
 	    surface.typed.value="";
-	else if(previous) {
-	    current.input=previous.input;
+	else if(current.input.length>1) {
+	    var ws=gf_lex(current.input)
+	    var w=ws.pop();
+	    if(w=="") { ws.pop(); ws.push(""); }
+	    current.input=gf_unlex(ws);
 	    local.put("current",current)
-	    previous=previous.previous;
 	    if(surface.typed) {
 		surface.removeChild(surface.typed.previousSibling);
 		surface.typed.focus();
