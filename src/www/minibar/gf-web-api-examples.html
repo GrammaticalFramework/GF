@@ -143,10 +143,20 @@ full API.
   "brackets":{"cat":"_","fid":0,"index":0,"children":[{"cat":"Item","fid":7,"index":0,"children":[{"token":"that"},{"cat":"Kind","fid":6,"index":0,"children":[{"token":"pizza"}]}]},{"token":"is"},{"token":"very"}]},
   "completions":["boring","delicious","expensive","fresh","Italian","very","warm"],
   "text":""}]
+  <dt class=js><em>// Get info about a category in the abstract syntax</em>
+    <br>server.browse({id:"Kind"},callback)
+  <dt>http://localhost:41296/grammars/Foods.pgf?command=browse&id=Kind&format=json
+  <dd>{"def":"cat Kind",
+ "producers":["Cheese","Fish","Mod","Pizza","Wine"],
+ "consumers":["Mod","That","These","This","Those"]}
+  <dt class=js><em>// Get info about a function in the abstract syntax</em>
+    <br>server.browse({id:"This"},callback)
+  <dt>http://localhost:41296/grammars/Foods.pgf?command=browse&id=This&format=json
+  <dd>{"def":"fun This : Kind -> Item","producers":[],"consumers":[]}
 </dl>
 <hr>
 <div class=modtime><small>
-<!-- hhmts start --> Last modified: Tue Oct 18 16:36:36 CEST 2011 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Tue Apr 10 15:08:14 CEST 2012 <!-- hhmts end -->
   </small></div>
 <address><a href="http://www.cse.chalmers.se/~hallgren/">TH</a></address>
   
