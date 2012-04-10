@@ -35,4 +35,15 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
 
     IAdvAdv adv = {s = "wie" ++ adv.s} ;
 
+    DetNPMasc det = {
+      s = \\c => det.sp ! Masc ! c ; ---- genders
+      a = agrP3 det.n ;
+      isPron = False
+      } ;
+
+    DetNPFem det = {
+      s = \\c => det.sp ! Fem ! c ; ---- genders
+      a = agrP3 det.n ;
+      isPron = False
+      } ;
 } 
