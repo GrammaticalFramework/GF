@@ -11,7 +11,7 @@ abstract ParseEngAbs =
   Phrase,
   Sentence,
   Relative,
-  Idiom [VP, ProgrVP],
+  Idiom [NP, VP, Cl, ProgrVP, ExistNP],
   Extra [NP, Quant, VPSlash, VP, GenNP, PassVPSlash],
   DictEngAbs ** {
 

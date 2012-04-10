@@ -13766,7 +13766,6 @@ fun flesh_wound_N : N;
 fun fleshly_A : A;
 fun fleshy_A : A;
 fun fleur_de_lis_N : N;
-fun fleur_de_lys_N : N;
 fun flex_N : N;
 fun flex_V2 : V2;
 fun flexibility_N : N;
