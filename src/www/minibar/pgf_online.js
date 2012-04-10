@@ -68,8 +68,9 @@ function pgf_online(options) {
 	translategroup: function(args,cont,err) { // from, input, cat, to
 	    this.pgf_call("translategroup",args,cont,err);
 	},
-	browse: function(id,cont,err) {
-	    this.pgf_call("browse",{id:id,format:"json"},cont,err);
+	browse: function(args,cont,err) { // id, format
+	    if(!args.format) args.format="json"; // sife effect!!
+	    this.pgf_call("browse",args,cont,err);
 	}
     };
     for(var o in options) server[o]=options[o];
