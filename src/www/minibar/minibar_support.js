@@ -5,6 +5,10 @@ function langpart(conc,abs) { // langpart("FoodsEng","Foods") == "Eng"
     return hasPrefix(conc,abs) ? conc.substr(abs.length) : conc;
 }
 
+// Words are separated by spaces (for now). GF has other lexers/unlexers.
+function gf_lex(s) { return s.split(" "); }
+function gf_unlex(ws) { return ws.join(" "); }
+
 function update_language_menu(menu,grammar) {
     // Replace the options in the menu with the languages in the grammar
     var lang=grammar.languages;
