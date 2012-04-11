@@ -84,16 +84,13 @@ Input.prototype.change_language=function () {
     this.add_words(new_input)
 }
 
-
 Input.prototype.clear_all2=function() {
     with(this) {
 	current.input=[];
 	local.put("current",current)
-	clear(surface)
-	if(surface.typed) surface.appendChild(surface.typed)
+	remove_surface_words()
     }
 }
-
 
 Input.prototype.clear_all1=function() {
     with(this) {
@@ -205,6 +202,15 @@ Input.prototype.add_typed_input=function() {
     }
 }
 
+Input.prototype.remove_surface_words=function() {
+    with(this) {
+	var typed=surface.typed;
+	if(typed) while(typed.previousSibling)
+	              surface.removeChild(typed.previousSibling)
+	else clear(surface)
+    }
+}
+
 Input.prototype.remove_typed_input=function() {
     with(this) {
 	if(surface.typed) {
@@ -253,6 +259,7 @@ Input.prototype.add_words=function(ws) {
 Input.prototype.add_words1=function(ws) {
     for(var i=0;i<ws.length;i++)
 	if(ws[i]) this.add_word1(ws[i]);
+    this.local.put("current",this.current)
 }
 
 Input.prototype.word=function(s) { 
@@ -267,6 +274,7 @@ Input.prototype.word=function(s) {
 Input.prototype.add_word=function(s) {
     with(this) {
 	add_word1(s);
+	local.put("current",current)
 	if(surface.typed) {
 	    var s2;
 	    if(hasPrefix(s2=surface.typed.value,s)) {
@@ -283,10 +291,8 @@ Input.prototype.add_word=function(s) {
 Input.prototype.add_word1=function(s) {
     with(this) {
 	current.input.push(s);
-	local.put("current",current)
 	var w=span_class("word",text(s));
-	if(surface.typed) surface.insertBefore(w,surface.typed);
-	else surface.appendChild(w);
+	surface.insertBefore(w,surface.typed);
     }
 }
 
@@ -339,9 +345,9 @@ Input.prototype.get_tree2=function(lin,tree) {
 Input.prototype.end_structural_editing=function() {
     var t=this;
     if(t.surface.structural_editing_enabled) {
-	var s=t.current.input;
+	var ws=t.current.input;
 	t.clear_all2()
-	t.add_words1(s);
+	t.add_words1(ws);
 	t.surface.structural_editing_enabled=false;
     }
 }
@@ -349,6 +355,7 @@ Input.prototype.end_structural_editing=function() {
 Input.prototype.enable_structural_editing=function(brackets,tree) {
     var t=this;
     with(t) {
+	var typed=surface.typed;
 	function add_bs(b,parent) {
 	    if(b.token) {
 		var fun=parent.fun,cat=parent.cat;
@@ -356,15 +363,13 @@ Input.prototype.enable_structural_editing=function(brackets,tree) {
 		var w= span_class("word editable",text(b.token));
 		if(fun && cat) w.onclick=showrepl
 		w.title=(fun||"_")+":"+(cat||"_")+" "+parent.fid+":"+parent.index
-		surface.appendChild(w);
+		surface.insertBefore(w,typed);
 	    }
 	    else b.children.map(function(c){add_bs(c,b)})
 	}
-	var typed=surface.typed;
-	clear(surface)
+	remove_surface_words()
 	add_bs(brackets);
 	t.surface.structural_editing_enabled=true;
-	if(typed) surface.appendChild(typed);
     }
 }
 
