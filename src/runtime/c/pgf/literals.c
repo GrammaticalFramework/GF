@@ -1,4 +1,5 @@
 #include <gu/read.h>
+#include <pgf/parser.h>
 #include <pgf/literals.h>
 #include <wctype.h>
 
@@ -10,18 +11,19 @@ GU_DEFINE_TYPE(PgfCallbacksMap, GuMap,
 
 
 static bool
-pgf_match_string_lit(PgfLiteralCallback* self, int lin_idx, PgfTokens toks, 
+pgf_match_string_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
                      PgfExprProb** out_ep, GuPool *pool)
 {
-	gu_assert(lin_idx == 0);
+	gu_assert(pgf_item_lin_idx(item) == 0);
 
-	if (gu_seq_length(toks) == 1) {
+	int n_syms = pgf_item_sequence_length(item);
+	if (n_syms == 0) {
 		*out_ep = NULL;
 		return true;
-	} else if (gu_seq_length(toks) == 2) {
+	} else if (n_syms == 1) {
 		PgfExprProb* ep = gu_new(PgfExprProb, pool);
 		ep->prob = 0;
-
+		
 		PgfExprLit *expr_lit =
 			gu_new_variant(PGF_EXPR_LIT,
 						   PgfExprLit,
@@ -30,7 +32,7 @@ pgf_match_string_lit(PgfLiteralCallback* self, int lin_idx, PgfTokens toks,
 			gu_new_variant(PGF_LITERAL_STR,
 						   PgfLiteralStr,
 						   &expr_lit->lit, pool);
-		lit_str->val = gu_seq_get(toks, PgfToken, 0);
+		lit_str->val = tok;
 
 		*out_ep = ep;
 		return false;
@@ -46,22 +48,18 @@ static PgfLiteralCallback pgf_string_literal_callback =
 
 
 static bool
-pgf_match_int_lit(PgfLiteralCallback* self, int lin_idx, PgfTokens toks, 
+pgf_match_int_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
                   PgfExprProb** out_ep, GuPool *pool)
 {
-	gu_assert(lin_idx == 0);
+	gu_assert(pgf_item_lin_idx(item) == 0);
 
-	size_t n_toks = gu_seq_length(toks);
-	if (n_toks == 1) {
-		PgfToken tok = gu_seq_get(toks, PgfToken, 0);
-
+	size_t n_syms = pgf_item_sequence_length(item);
+	if (n_syms == 0) {
 		int val;
 
 		*out_ep = NULL;
 		return gu_string_to_int(tok, &val);
-	} else if (n_toks == 2) {
-		PgfToken tok = gu_seq_get(toks, PgfToken, 0);
-
+	} else if (n_syms == 1) {
 		int val;
 		if (!gu_string_to_int(tok, &val)) {
 			*out_ep = NULL;
@@ -95,22 +93,18 @@ static PgfLiteralCallback pgf_int_literal_callback =
 
 
 static bool
-pgf_match_float_lit(PgfLiteralCallback* self, int lin_idx, PgfTokens toks, 
+pgf_match_float_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
                     PgfExprProb** out_ep, GuPool *pool)
 {
-	gu_assert(lin_idx == 0);
+	gu_assert(pgf_item_lin_idx(item) == 0);
 
-	size_t n_toks = gu_seq_length(toks);
-	if (n_toks == 1) {
-		PgfToken tok = gu_seq_get(toks, PgfToken, 0);
-
+	size_t n_syms = pgf_item_sequence_length(item);
+	if (n_syms == 0) {
 		double val;
 
 		*out_ep = NULL;
 		return gu_string_to_double(tok, &val);
-	} else if (n_toks == 2) {
-		PgfToken tok = gu_seq_get(toks, PgfToken, 0);
-
+	} else if (n_syms == 1) {
 		double val;
 		if (!gu_string_to_double(tok, &val)) {
 			*out_ep = NULL;
@@ -144,37 +138,45 @@ static PgfLiteralCallback pgf_float_literal_callback =
 
 
 static bool
-pgf_match_name_lit(PgfLiteralCallback* self, int lin_idx, PgfTokens toks, 
+pgf_match_name_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
                    PgfExprProb** out_ep, GuPool *pool)
 {
+	int lin_idx;
+	PgfSequence seq;
+	pgf_item_sequence(item, &lin_idx, &seq, pool);
+
 	gu_assert(lin_idx == 0);
-	
-	size_t n_toks = gu_seq_length(toks);
 
-	if (n_toks == 0) {
-		*out_ep = NULL;
-		return false;
-	}
-
-	PgfToken tok = gu_seq_get(toks, PgfToken, n_toks-1);
-	
 	GuPool* tmp_pool = gu_new_pool();
-	GuReader* rdr = gu_string_reader(tok, tmp_pool);
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 	
-	bool iscap = iswupper(gu_read_ucs(rdr, err));	
-	if (!iscap && n_toks > 1) {
+	GuString hyp = gu_str_string("-", tmp_pool);
+	
+	bool iscap = false;
+	if (gu_string_eq(tok, hyp)) {
+		iscap = true;
+	} else if (!gu_string_eq(tok, gu_empty_string)) {
+		GuReader* rdr = gu_string_reader(tok, tmp_pool);
+		iscap = iswupper(gu_read_ucs(rdr, err));
+	}
+
+	size_t n_syms = gu_seq_length(seq);
+	if (!iscap && n_syms > 0) {
 		GuStringBuf *sbuf = gu_string_buf(tmp_pool);
 		GuWriter* wtr = gu_string_buf_writer(sbuf);
 
-		for (size_t i = 0; i < n_toks-1; i++) {
+		for (size_t i = 0; i < n_syms; i++) {
 			if (i > 0)
 			  gu_putc(' ', wtr, err);
 
-			tok = gu_seq_get(toks, PgfToken, i);
+			PgfSymbol sym = gu_seq_get(seq, PgfSymbol, i);
+			gu_assert(gu_variant_tag(sym) == PGF_SYMBOL_KS);
+			PgfSymbolKS* sks = gu_variant_data(sym);
+			PgfToken tok = gu_seq_get(sks->tokens, PgfToken, 0);
+
 			gu_string_write(tok, wtr, err);
 		}
-		
+
 		PgfExprProb* ep = gu_new(PgfExprProb, pool);
 		ep->prob = 0;
 
@@ -196,7 +198,7 @@ pgf_match_name_lit(PgfLiteralCallback* self, int lin_idx, PgfTokens toks,
 			               PgfLiteralStr,
 			               &expr_lit->lit, pool);
 		lit_str->val = gu_string_buf_freeze(sbuf, pool);
-		
+
 		*out_ep = ep;
 	}
 

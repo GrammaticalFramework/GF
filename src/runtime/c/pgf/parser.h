@@ -103,6 +103,18 @@ pgf_parse_result(PgfParse* parse, GuPool* pool);
 PgfExpr
 pgf_parse_best_result(PgfParse* parse, GuPool* pool);
 
+
+int
+pgf_item_lin_idx(PgfItem* item);
+
+void
+pgf_item_sequence(PgfItem* item, 
+                  int* lin_idx, PgfSequence* seq,
+                  GuPool* pool);
+
+int
+pgf_item_sequence_length(PgfItem* item);
+
 /** @} */
 
 #endif // PGF_PARSER_H_

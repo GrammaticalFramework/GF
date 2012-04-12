@@ -212,9 +212,11 @@ extern GU_DECLARE_TYPE(PgfEpsilonIdx, GuMap);
 typedef struct PgfLiteralCallback PgfLiteralCallback;
 extern GU_DECLARE_TYPE(PgfLiteralCallback, struct);
 
+typedef struct PgfItem PgfItem;
+
 struct PgfLiteralCallback {
-	bool (*match)(PgfLiteralCallback* self, int lin_idx, PgfTokens toks,
-                  PgfExprProb** out_ep, GuPool *pool);
+	bool (*match)(PgfConcr* concr, PgfItem* item, PgfToken tok,
+	              PgfExprProb** out_ep, GuPool *pool);
 };
 
 typedef GuMap PgfCallbacksMap;

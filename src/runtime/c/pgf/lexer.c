@@ -36,13 +36,26 @@ pgf_lexer_next_token(PgfLexer *lexer, GuExn* err, GuPool *pool)
 	if (iswalpha(lexer->ucs) ||
 	    lexer->ucs == '\''   ||
 	    lexer->ucs == '_') {
+		int counter = 0;
 		do {
 			gu_ucs_write(lexer->ucs, wtr, err);
 			if (gu_exn_is_raised(err))
 				goto stop;
+			counter++;
 			lexer->ucs = gu_read_ucs(lexer->rdr, err);
 			if (gu_exn_is_raised(err))
 				goto stop;
+			
+			if (lexer->ucs == '.' && counter < 3) {
+				// perhaps an abreviation
+				gu_ucs_write(lexer->ucs, wtr, err);
+				if (gu_exn_is_raised(err))
+					goto stop;
+				counter = 0;
+				lexer->ucs = gu_read_ucs(lexer->rdr, err);
+				if (gu_exn_is_raised(err))
+					goto stop;
+			}
 		} while (iswalnum(lexer->ucs) ||
 		         lexer->ucs == '\''   ||
 		         lexer->ucs == '_');
