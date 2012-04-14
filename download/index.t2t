@@ -81,7 +81,7 @@ or
 **Note 1**.
 GF uses [``haskeline`` http://hackage.haskell.org/package/haskeline], which
 on Linux depends on some non-Haskell libraries that
-won't be installed automatically by cabal, and therefore needs to be installed
+won't be installed automatically by cabal, and therefore need to be installed
 manually. Here is one way to do this:
 
 - On Ubuntu: ``sudo apt-get install libghc6-terminfo-dev``
