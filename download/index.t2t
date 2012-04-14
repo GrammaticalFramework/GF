@@ -51,7 +51,7 @@ unpacked the package.
 fairly simple:
 
 + Install the [Haskell Platform http://hackage.haskell.org/platform]
-  (versions 2010.2.0.0 - 2011.4.0.0 should work) (see note 2 below)
+  (versions 2010.2.0.0 - 2011.4.0.0 should work) (see notes 2&3 below)
 + ``cabal update``
 + On Linux: install some C libraries from your Linux distribution
   (see note 1 below)
@@ -80,17 +80,23 @@ or
 
 **Note 1**.
 GF uses [``haskeline`` http://hackage.haskell.org/package/haskeline], which
-depends some non-Haskell libraries that
-won't be installed automatically by cabal, so you need to install
-them manually. Here is one way to do this:
+on Linux depends on some non-Haskell libraries that
+won't be installed automatically by cabal, and therefore needs to be installed
+manually. Here is one way to do this:
 
 - On Ubuntu: ``sudo apt-get install libghc6-terminfo-dev``
 - On Fedora: ``sudo yum install ghc-terminfo-devel``
 
 
 **Note 2**.
-GF does **not** compile with the most recent versions of GHC (>=7.2).
+GF (<=3.3.3) does **not** compile with the most recent versions of GHC (>=7.2).
 GF does **not** compile with the most recent versions of Alex (>=3.0).
+
+**Note 3**.
+[The Haskell Platform for Mac OS X http://hackage.haskell.org/platform/mac.html]
+page states that you need Xcode 3.2 or later, but in fact it appears you need
+Xcode 3.2.3 or later. If you have Xcode 3.2.2, you can get an error from the
+linker: ``ld: unknown option: -no_pie``.
 
 ==Installing from the latest developer code==
 
