@@ -14,15 +14,24 @@ static bool
 pgf_match_string_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
                      PgfExprProb** out_ep, GuPool *pool)
 {
-	gu_assert(pgf_item_lin_idx(item) == 0);
+	GuPool* tmp_pool = gu_new_pool();
 
-	int n_syms = pgf_item_sequence_length(item);
+	int lin_idx;
+	PgfSequence seq;
+	pgf_item_sequence(item, &lin_idx, &seq, tmp_pool);
+	gu_assert(lin_idx == 0);
+
+	bool accepted = false;
+	int n_syms = gu_seq_length(seq);
 	if (n_syms == 0) {
 		*out_ep = NULL;
-		return true;
+		accepted = true;
 	} else if (n_syms == 1) {
 		PgfExprProb* ep = gu_new(PgfExprProb, pool);
 		ep->prob = 0;
+
+		PgfSymbolKS* sks =
+			gu_variant_data(gu_seq_get(seq, PgfSymbol, 0));
 		
 		PgfExprLit *expr_lit =
 			gu_new_variant(PGF_EXPR_LIT,
@@ -32,14 +41,16 @@ pgf_match_string_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
 			gu_new_variant(PGF_LITERAL_STR,
 						   PgfLiteralStr,
 						   &expr_lit->lit, pool);
-		lit_str->val = tok;
+		lit_str->val = gu_seq_get(sks->tokens, PgfToken, 0);
 
 		*out_ep = ep;
-		return false;
+		accepted = false;
 	} else {
 		*out_ep = NULL;
-		return false;
 	}
+	
+	gu_pool_free(tmp_pool);
+	return accepted;
 }
 
 static PgfLiteralCallback pgf_string_literal_callback =
@@ -51,40 +62,52 @@ static bool
 pgf_match_int_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
                   PgfExprProb** out_ep, GuPool *pool)
 {
-	gu_assert(pgf_item_lin_idx(item) == 0);
+	GuPool* tmp_pool = gu_new_pool();
 
-	size_t n_syms = pgf_item_sequence_length(item);
+	int lin_idx;
+	PgfSequence seq;
+	pgf_item_sequence(item, &lin_idx, &seq, tmp_pool);
+	gu_assert(lin_idx == 0);
+
+	bool accepted = false;
+	int n_syms = gu_seq_length(seq);
 	if (n_syms == 0) {
 		int val;
 
 		*out_ep = NULL;
-		return gu_string_to_int(tok, &val);
+		accepted = gu_string_to_int(tok, &val);
 	} else if (n_syms == 1) {
+		PgfSymbolKS* sks =
+			gu_variant_data(gu_seq_get(seq, PgfSymbol, 0));
+		PgfToken tok = gu_seq_get(sks->tokens, PgfToken, 0);
+
 		int val;
 		if (!gu_string_to_int(tok, &val)) {
 			*out_ep = NULL;
-			return false;
+		} else {
+			PgfExprProb* ep = gu_new(PgfExprProb, pool);
+			ep->prob = 0;
+
+			PgfExprLit *expr_lit =
+				gu_new_variant(PGF_EXPR_LIT,
+							   PgfExprLit,
+							   &ep->expr, pool);
+			PgfLiteralInt *lit_int =
+				gu_new_variant(PGF_LITERAL_INT,
+							   PgfLiteralInt,
+							   &expr_lit->lit, pool);
+			lit_int->val = val;
+
+			*out_ep = ep;
 		}
-
-		PgfExprProb* ep = gu_new(PgfExprProb, pool);
-		ep->prob = 0;
-
-		PgfExprLit *expr_lit =
-			gu_new_variant(PGF_EXPR_LIT,
-						   PgfExprLit,
-						   &ep->expr, pool);
-		PgfLiteralInt *lit_int =
-			gu_new_variant(PGF_LITERAL_INT,
-						   PgfLiteralInt,
-						   &expr_lit->lit, pool);
-		lit_int->val = val;
-
-		*out_ep = ep;
-		return false;
+		
+		accepted = false;
 	} else {
 		*out_ep = NULL;
-		return false;
 	}
+	
+	gu_pool_free(tmp_pool);
+	return accepted;
 }
 
 static PgfLiteralCallback pgf_int_literal_callback =
@@ -96,40 +119,52 @@ static bool
 pgf_match_float_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
                     PgfExprProb** out_ep, GuPool *pool)
 {
-	gu_assert(pgf_item_lin_idx(item) == 0);
+	GuPool* tmp_pool = gu_new_pool();
 
-	size_t n_syms = pgf_item_sequence_length(item);
+	int lin_idx;
+	PgfSequence seq;
+	pgf_item_sequence(item, &lin_idx, &seq, tmp_pool);
+	gu_assert(lin_idx == 0);
+
+	bool accepted = false;
+	int n_syms = gu_seq_length(seq);
 	if (n_syms == 0) {
 		double val;
 
 		*out_ep = NULL;
-		return gu_string_to_double(tok, &val);
+		accepted = gu_string_to_double(tok, &val);
 	} else if (n_syms == 1) {
+		PgfSymbolKS* sks =
+			gu_variant_data(gu_seq_get(seq, PgfSymbol, 0));
+		PgfToken tok = gu_seq_get(sks->tokens, PgfToken, 0);
+
 		double val;
 		if (!gu_string_to_double(tok, &val)) {
 			*out_ep = NULL;
-			return false;
+		} else {
+			PgfExprProb* ep = gu_new(PgfExprProb, pool);
+			ep->prob = 0;
+
+			PgfExprLit *expr_lit =
+				gu_new_variant(PGF_EXPR_LIT,
+							   PgfExprLit,
+							   &ep->expr, pool);
+			PgfLiteralFlt *lit_flt =
+				gu_new_variant(PGF_LITERAL_FLT,
+							   PgfLiteralFlt,
+							   &expr_lit->lit, pool);
+			lit_flt->val = val;
+
+			*out_ep = ep;
 		}
-
-		PgfExprProb* ep = gu_new(PgfExprProb, pool);
-		ep->prob = 0;
-
-		PgfExprLit *expr_lit =
-			gu_new_variant(PGF_EXPR_LIT,
-						   PgfExprLit,
-						   &ep->expr, pool);
-		PgfLiteralFlt *lit_flt =
-			gu_new_variant(PGF_LITERAL_FLT,
-						   PgfLiteralFlt,
-						   &expr_lit->lit, pool);
-		lit_flt->val = val;
-
-		*out_ep = ep;
-		return false;
+		
+		accepted = false;
 	} else {
 		*out_ep = NULL;
-		return false;
 	}
+	
+	gu_pool_free(tmp_pool);
+	return accepted;
 }
 
 static PgfLiteralCallback pgf_float_literal_callback =
