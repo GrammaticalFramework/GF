@@ -42,9 +42,10 @@ Translations.prototype.clear=function() {
     this.main.innerHTML="";
 }
 
-Translations.prototype.translateFrom=function(current,startcat) {
+Translations.prototype.translateFrom=function(current,startcat,lin_action) {
     this.current=current;
     this.startcat=startcat;
+    this.lin_action=lin_action;
     this.get_translations();
 }
 
@@ -59,18 +60,24 @@ Translations.prototype.get_translations=function() {
     }
 }
 
-Translations.prototype.tdt=function(tree_btn,txt) {
-    with(this) {
-	return options.show_trees ? tda([tree_btn,txt]) : td(txt);
-    }
-}
-
 Translations.prototype.target_lang=function() {
     with(this) return langpart(to_menu.value,grammar.name);
 }
 
 Translations.prototype.show_translations=function(translationResults) {
-    with(this) {
+    var self=this;
+    function tdt(tree_btn,s,action) {
+	var txt=text(s);
+	if(action) {
+	    txt=node("span",{onclick:action},[txt])
+	    //txt=button(s,action)
+	}
+	return self.options.show_trees ? tda([tree_btn,text(" "),txt]) : td(txt)
+    }
+    function act(lin) {
+	return self.lin_action ? function() { self.lin_action(lin) } : null
+    }
+    with(self) {
 	var trans=main;
 	//var to=target_lang(); // wrong
 	var to=to_menu.value;
@@ -96,16 +103,21 @@ Translations.prototype.show_translations=function(translationResults) {
 			    tr([th(text("Abstract: ")),
 				tdt(node("span",{},[abstree_button(t.tree),
 						    alignment_button(t.tree)]),
-				    text(" "+t.tree))]));
+				    t.tree)]));
 		    for(var i=0;i<lin.length;i++) {
 			if(lin[i].to==to)
 			    trans.single_translation.push(lin[i].text);
 			if(lin[i].to==current.from && lin[i].brackets)
 			    bra=lin[i].brackets;
-			if(to=="All" || lin[i].to==to)
-			    tbody.appendChild(tr([th(text(langpart(lin[i].to,grammar.name)+": ")),
-						  tdt(parsetree_button(t.tree,lin[i].to),
-						      text(lin[i].text))]));
+			if(to=="All" || lin[i].to==to) {
+			    var langcode=langpart(lin[i].to,grammar.name)
+		          //var hdr=text(langcode+": ")
+			    var hdr=button(langcode,act(lin[i]))
+			    //hdr.disabled=lin[i].to==current.from
+			    var btn=parsetree_button(t.tree,lin[i].to)
+			    tbody.appendChild(tr([th(hdr),
+						  tdt(btn,lin[i].text)]));
+			}
 		    }
 		    trans.appendChild(wrap("table",tbody));
 		}

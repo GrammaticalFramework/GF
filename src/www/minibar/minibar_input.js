@@ -119,13 +119,19 @@ Input.prototype.get_completions=function() {
 }
 
 Input.prototype.show_completions=function(complete_output) {
-    with(this) {
+    var self=this;
+    function switch_input(lin) {
+	with(self) {
+	    local.put("current",{from:lin.to,input:lin.text.split(" ")})
+	    from_menu.value=lin.to;
+	    change_language()
+	}
+    }
+    with(self) {
 	//debug("show_completions ");
 	var completions=complete_output[0].completions;
 	var emptycnt=add_completions(completions)
-	if(true/*emptycnt>0*/)
-	    translations.translateFrom(current,startcat_menu.value);
-	else translations.clear();
+	translations.translateFrom(current,startcat_menu.value,switch_input);
 	if(surface.typed && emptycnt==completions.length) {
 	    if(surface.typed.value=="") remove_typed_input();
 	}
