@@ -45,7 +45,7 @@ function Minibar(server,opts) {
 
     /* --- Creating user interface elements --------------------------------- */
 
-    this.menubar=empty("div");
+    this.menubar=div_class("menubar");
     this.extra=div_id("extra");
 
     this.minibar=element(this.options.target);
@@ -94,7 +94,7 @@ Minibar.prototype.show_grammarlist=function(dir,grammar_names,dir_count) {
 	function pick_first_grammar() {
 	    if(t.timeout) clearTimeout(t.timeout),t.timeout=null;
 	    if(t.grammar_menu.length>1 && !t.grammar_menu.parentElement) {
-    		t.grammar_menu.onchange=bind(pick,t);
+    		t.grammar_menu.onchange=pick;
 		insertFirst(t.menubar,button("i",bind(t.show_grammarinfo,t)))
 		insertFirst(t.menubar,t.grammar_menu);
 		insertFirst(t.menubar,text("Grammar: "));
