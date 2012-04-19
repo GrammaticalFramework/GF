@@ -11,9 +11,9 @@
 <h1>The GF Eclipse Plugin</h1>
 
 <p>John  J. Camilleri<br />
-Updated: 4 April 2012</p>
+Updated: 19 April 2012</p>
 
-<p><em>The research leading to these results has received funding from the European Union&#8217;s Seventh Framework Programme (FP7/2007-2013) under grant agreement no. FP7-ICT-247914.</em></p>
+<p><em>The research leading to these results has received funding from the European Union&#8217;s Seventh Framework Programme (FP7/2007-2013) under grant agreement no. FP7-ICT-247914 (the <a href="http://www.molto-project.eu/">MOLTO Project</a>).</em></p>
 
 <h2>Introduction</h2>
 
@@ -21,18 +21,16 @@ Updated: 4 April 2012</p>
 
 <p>The choice was made to develop this desktop IDE as a plugin for the Eclipse Platform as it emerged as the most popular choice among the GF developer community. Support for the platform is vast and many tools for adapting Eclipse to domain-specific languages already exist. Unlike the zero-click Web IDE approach, using the GF Eclipse plugin requires some manual installation and configuration on the development machine.</p>
 
-<p>The GFEP was developed with support from the <a href="http://www.molto-project.eu/">MOLTO Project</a>.</p>
-
 <h3>License</h3>
 
-<p>The GF Eclipse Plugin is open-source under the <a href="http://www.gnu.org/licenses/gpl-3.0.txt">GNU General Public License (GPL)</a>.<br />
-The licenses that cover the rest of GF are listed <a href="http://www.grammaticalframework.org/LICENSE">here</a>.<br />
-Note that Xtext and Eclipse are released under the <a href="http://www.eclipse.org/legal/epl-v10.html">Eclipse Public License (EPL)</a>.</p>
+<p>The GF Eclipse Plugin is open-source under the <strong><a href="http://www.gnu.org/licenses/gpl-3.0.txt">GNU General Public License (GPL)</a></strong>.<br />
+<em>The licenses that cover the rest of GF are listed <a href="http://www.grammaticalframework.org/LICENSE">here</a>.</em><br />
+<em>Note that Xtext and Eclipse are released under the <a href="http://www.eclipse.org/legal/epl-v10.html">Eclipse Public License (EPL)</a>.</em></p>
 
 <h3>Links</h3>
 
 <ul>
-<li>This document shall contain all collected information about the plugin. The most up-to-date version of this file can always be found at <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin/blob/master/README.md">GitHub</a></li>
+<li>This document shall contain all collected information about the plugin. The most up-to-date version of this file can always be found <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin/blob/master/README.md">here</a></li>
 <li>This documentation is also available at the <a href="http://www.molto-project.eu/node/1395">MOLTO Project Wiki</a>.</li>
 <li>Source code repository is at <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin">github.com/GrammaticalFramework/gf-eclipse-plugin</a></li>
 <li>For reporting bugs and requesting features, please use the <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin/issues">GitHub Issue Tracker</a></li>
@@ -62,6 +60,9 @@ Note that Xtext and Eclipse are released under the <a href="http://www.eclipse.o
 <h2>Release history</h2>
 
 <dl>
+<dt><strong>19/04/12</strong></dt>
+<dd>(1.5.0.x) Removed need for <code>.gfexternal</code> folder. Much improved &#8220;External Libraries&#8221; view allows you to search in current scope. Memory usage improvements in scoping implementation. Validation now occurs on file open. Re-added GF Library Path field in preferences.</dd>
+
 <dt><strong>04/04/12</strong></dt>
 <dd>(1.4.3.x) Improvements to the Test Manager. Added support for arbitrary commands in launch. Made the license information clearer.</dd>
 
@@ -106,13 +107,13 @@ Note that Xtext and Eclipse are released under the <a href="http://www.eclipse.o
 <h3>System requirements</h3>
 
 <ol>
-<li><a href="http://www.grammaticalframework.org/download/release-3.3.3.html">GF 3.3.3</a> or above. The path to GF must be set within the plugin (see below).</li>
 <li><a href="http://www.eclipse.org/downloads/">Eclipse</a> 3.6 or above.</li>
+<li><a href="http://www.grammaticalframework.org/download/release-3.3.3.html">GF 3.3.3</a> or above. The path to GF must be set within the plugin (see below).</li>
 </ol>
 
 <h3>Installing the plugin for the first time</h3>
 
-<p><strong>Note about Available Software Sites</strong></p>
+<h4>Available Software Sites</h4>
 
 <p>In order for dependencies to be satisfied, you need to ensure that your Eclipse has the following update site URLs set:</p>
 
@@ -123,7 +124,16 @@ Note that Xtext and Eclipse are released under the <a href="http://www.eclipse.o
 
 <p>You can set these from <strong>Preferences &rarr; Install/Update &rarr; Available Software Sites</strong>.</p>
 
-<p><strong>Steps for installation</strong></p>
+<h4>Eclipse preferences</h4>
+
+<p>How to find the <strong>Eclipse preferences</strong> window depends on your Eclipse version and/or OS, and may be either of:</p>
+
+<ul>
+<li><strong>Window &rarr; Preferences</strong></li>
+<li><strong>Eclipse &rarr; Preferences</strong></li>
+</ul>
+
+<h3>Installation</h3>
 
 <ol>
 <li>Inside Eclipse, go to <strong>Help &rarr; Install New Software</strong>.</li>
@@ -143,15 +153,6 @@ This path should <strong>include</strong> the name of the GF binary itself, e.g.
 <li>You can also adjust the verbosity level of the GFEP console log in the preferences window.</li>
 </ol>
 
-<h4>Eclipse preferences</h4>
-
-<p>How to find the Eclipse preferences window may depend on your version and/or operating system, and may be either of:</p>
-
-<ul>
-<li><strong>Window &rarr; Preferences</strong></li>
-<li><strong>Eclipse &rarr; Preferences</strong></li>
-</ul>
-
 <h3>Updating the plugin</h3>
 
 <ol>
@@ -162,6 +163,7 @@ This path should <strong>include</strong> the name of the GF binary itself, e.g.
 <h4>Deprecated stuff</h4>
 
 <ul>
+<li>Any folders <code>.gfexternal</code> can safely deleted as of GFEP &ge; 1.5. Using Eclipse&#8217;s <strong>Clean</strong> function from the <strong>Run</strong> menu will do this for you automatically.</li>
 <li>If your project has a folder named <code>(External)</code> you can safely delete this <strong>via the Eclipse Project Explorer</strong>. It is no longer used in GFEP &ge; 1.2.3</li>
 <li>If your workspace contains a log file <code>gfep.log</code> then you can safely delete it from your system. As of version 1.2.4, GFEP uses Eclipse&#8217;s standard log file at <code>&lt;workspace&gt;/.metadata/.log</code></li>
 </ul>
@@ -208,33 +210,50 @@ This path should <strong>include</strong> the name of the GF binary itself, e.g.
 
 <h3>The Eclipse <em>workspace</em> and <em>project</em> concepts</h3>
 
-<p>When you run Eclipse, it asks you to create or specify a <em>workspace</em> on your system. Any projects you wish to work
-on inside Eclipse must reside in this workspace; generally each folder under the top-level workspace directory is
-considered an individual project, i.e.:</p>
+<p>When you run Eclipse, it asks you to create or specify a <em>workspace</em> on your system, which is essentially the top directory that Eclipse will &#8220;see&#8221;. Any code you wish to work on inside Eclipse must reside in this workspace.
+A workspace contains one or more <em>projects</em>, which may or may not be related to each other. Generally each folder under the top-level workspace directory is considered an individual project, i.e.:</p>
 
 <pre><code>workspace/
     Project1/
-        file1.gf
-        file2.gf
+        file1-1.gf
+        file1-2.gf
     Project2/
-        file3.gf
-        file4.gf
+        subdir2-1/
+            file2-1-1.gf
+            file2-1-2.gf
+        file2-1.gf
+        file2-2.gf
 </code></pre>
 
-<p>If you open an existing folder as your workspace in Eclipse, then your folders in that workspace do not automatically
-become Eclipse projects. You must follow the &#8220;Create new GF Project&#8221; wizards below, and give your project the exact
-name of the existing folder (e.g. <code>Project1</code> or <code>Project2</code> in the example above.)</p>
+<p>If you open an existing folder as your workspace in Eclipse, then your folders in that workspace <strong>do not</strong> automatically become Eclipse projects.
+To do this, you must follow the &#8220;Create new GF Project&#8221; wizard below, and give your project the exact name of the existing folder (e.g. <code>Project1</code> or <code>Project2</code> in the example above.)</p>
 
-<h4>GF Nature and Builder</h4>
+<h4>GF Nature</h4>
 
-<p>The <em>GF Nature</em> and the <em>GF Builder</em> are what make a regular Eclipse project a <em>GF</em> project. If you create a new GF Project
-from scratch then you don&#8217;t need to worry too much about them. If you already have some project set up in your Eclipse
-workspace, then you will need to associate these two items with your project in order for all the GF goodness to work.</p>
+<p>The <em>GF Nature</em> is what makes a regular Eclipse project a <em>GF</em> project.
+If you create a new GF Project from scratch then you don&#8217;t need to worry too much about them.
+If you already have some project set up in your Eclipse workspace, then you will need to associate the builder with your project in order for all the GF goodness to work.
+This will internally add the <em>GF Builder</em> to your project also.</p>
 
-<p>As of 1.4.2, this can be done very easily by right-clicking on your project in the explorer and clicking <strong>Add/Remove GF Nature &amp; Builder</strong>.
+<p>As of 1.4.2, this can be done very easily by right-clicking on your project in the explorer and clicking <strong>Add/Remove GF Nature</strong>.
 If your project has the GF icon overlayed on it, then the GF nature and builder are correctly associated with it.</p>
 
+<p>See the <strong>project settings</strong> section above if you want to mess with your <code>.project</code> file.</p>
+
+<h4>Metadata folders</h4>
+
+<p>GFEP will create the following metadata directories within your project:</p>
+
+<ul>
+<li>A <code>.gfbuild</code> directory in every folder containing GF source code, containing <code>.gf-tags</code> files created using the GF <code>--tags</code> compiler flag.</li>
+</ul>
+
+<p>These can be removed manually at any time, as they will always be regenerated as necessary.
+You will probably want to ignore these directories in your version control system.</p>
+
 <h3>Create a new GF Project</h3>
+
+<p>If you have a folder in your workspace which you want to convert into a GF Project, then you can select it from the dropdown. This folder will then appear as an Eclipse project in your workspace.</p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-projectwizard-1.png" alt="New project wizard" />
 <img src="http://www.grammaticalframework.org/eclipse/images/eclipse-projectwizard-2.png" alt="New project wizard" /></p>
@@ -292,7 +311,7 @@ Each time you save a file (or some other change occurs in your project), the bui
 
 <h3>Syntax highlighting</h3>
 
-<p>You can change your syntax colouring styles as you wish from <strong>Window &rarr; Preferences &rarr; Grammatical Framework &rarr; Syntax Coloring</strong></p>
+<p>You can change your syntax colouring styles as you wish from <strong>Preferences &rarr; Grammatical Framework &rarr; Syntax Coloring</strong></p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-syntaxcoloring.png" alt="Syntax highlighting styles" /></p>
 
@@ -382,15 +401,8 @@ Each time you save a file (or some other change occurs in your project), the bui
 
 <h2>Evaluation &amp; feedback</h2>
 
-<p>Please try to use the plugin for developing your own GF projects and report any issues you come up against.</p>
-
-<p>For all bug reports and feature requests please use the <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin/issues">GitHub Issue Tracker</a>.</p>
-
-<p>Do not hesitate to let us know how you think the plugin can be improved!</p>
-
-<h3>Criteria</h3>
-
-<p>As part of the evaluation of the GF Eclipse Plugin, feedback (both negative and positive) on the following would be appreciated:</p>
+<p>Please try to use the plugin for developing your own GF projects and report any issues you come up against.
+Feedback (both negative and positive) on the following would be appreciated:</p>
 
 <ol>
 <li>Issues encountered with installation</li>
@@ -401,13 +413,15 @@ Each time you save a file (or some other change occurs in your project), the bui
 <li>Compatibilities / conflicts with other Eclipse plugins</li>
 </ol>
 
+<p>For all bug reports and feature requests, please use the <a href="https://github.com/GrammaticalFramework/gf-eclipse-plugin/issues">GitHub Issue Tracker</a>.</p>
+
 <!----------------------------------------------------------------------------->
 
 <h2>Appendix</h2>
 
-<h3>Icons</h3>
+<h3>Module types</h3>
 
-<p>Description of some of the icons which are used in the GF Eclipse Plugin.</p>
+<p>Description of the GF module types and their icons within the GF Eclipse Plugin.</p>
 
 <table>
 <thead>
