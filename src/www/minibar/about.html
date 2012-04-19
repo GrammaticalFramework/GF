@@ -172,11 +172,47 @@ Some implementation details:
    the option <code>{startcat_menu:false}</code> when starting the minibar.
  <li>[Added 2012-02-10] New minibar option <code>initial_grammar</code> to
    control which of the available grammars is selected initially.
+ <li>[Added 2012-03-08] Added the option
+   <code>{tree_img_format: <var>fmt</var>}</code>
+   to make it easy to select <code>"gif"</code>, <code>"png"</code> or
+   <code>"svg"</code> output
+   for abstract synax trees, parse trees and word alignment diagrams.
+ <li>[Added 2012-03-19] Minibar now remembers the most recently used grammar
+   and automatically selects it the next time you return to the minibar.
+   (This is implemented using localStorage, i.e. the data is stored locally on
+   the user's device.)
+ <li>[Added 2012-03-26] Support for adding grammars from several servers to
+  the grammar menu. You can also add grammars from several directories on the
+  same server of course. The included minibar configuration file adds the
+  user's own grammars from the grammar editor.
+ <li>[Added 2012-04-02] Word-for-word replacement: when a complete and
+   unambiguous sentence has been entered, the words glow blue and when you
+   click on one, possible replacements appear. (Replacements are shown as names
+   of functions in the abstract syntax for now. They should be shown as words
+   in the concrete syntax instead.) When you click on a replacement word,
+   the sentence is reconstructed with the new word, adjusting other words
+   as needed for agreement. This functionality is activated by passing the
+   option <code>{word_replacements:true}</code> when starting the minibar.
+ <li>[Added 2012-04-03]
+   If you leave the minibar and later return, the previous input will be
+   restored. One input string per grammar is remembered, so you can also switch
+   back and forth between grammars without losing the input.
+   (This is implemented using localStorage, i.e. the data is stored locally on
+   the user's device.)
+ <li>[Added 2012-04-04] Grammar editor integration: as part of the
+   word-for-word replacement interface, minibar can now show a button for
+   extending the grammar with a new word. This is activated by passing the
+   option <code>{extend_grammar:<var>func</var>}</code> when starting the
+   minibar, where <var>func</var> is the editor function to call
+   (to be document further).
+ <li>[Added 2012-04-18] Added buttons to use generated translations as input.
+   (This functionality is available in the original Fridge Poetry, but has
+   been missing in Minibar, until now.)
 </ul>
 
 <hr>
 <div class=modtime><small>
-<!-- hhmts start --> Last modified: Wed Feb 29 18:27:59 CET 2012 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Thu Apr 19 14:28:52 CEST 2012 <!-- hhmts end -->
 </small></div>
 <address>
 <a href="http://www.cse.chalmers.se/~hallgren/">TH</a>
