@@ -234,9 +234,11 @@ function minibar_button(g,files,err_ind,comp_btn) {
 	var dc=defined_cats(g),df=inherited_funs(g);
 	var cs=g.concretes
 	var ext=div_class("grammar_extension")
+	var form;
 	var overlay=page_overlay(ext);
 
-	function draw_extension() {
+	/*
+	function draw_extension_v1() { // version 1
 	    var cat=fun.type[fun.type.length-1]
 	    ext.innerHTML="<h4>Extending "+cat+"</h4>"
 	    var ef=editable("span",draw_fun(g,fun,dc,df),g,edit_fun,
@@ -262,7 +264,7 @@ function minibar_button(g,files,err_ind,comp_btn) {
 		var p=parse_fun(s);
 		if(p.ok) {
 		    fun=p.ok;
-		    draw_extension();
+		    draw_extension_v1();
 		    return null;
 		}
 		else
@@ -275,7 +277,7 @@ function minibar_button(g,files,err_ind,comp_btn) {
 		function check(s,cont) {
 		    function replace() {
 			lins[lc]=s;
-			draw_extension();
+			draw_extension_v1();
 			return null;
 		    }
 		    function check2(msg) { if(msg) cont(msg); else replace(); }
@@ -284,7 +286,48 @@ function minibar_button(g,files,err_ind,comp_btn) {
 		string_editor(el,lins[lc] || "",check,true);
 	    }
 	}
+	*/
+	function draw_extension() { // version 2
+	    var cat=fun.type[fun.type.length-1]
+	    ext.innerHTML="<h4>Extending "+cat+"</h4>"
+	    var fun_name_els=[];
+	    function update_fun_name() {
+		//console.log("update_fun_name")
+		fun.name=fun_name.value;
+		for(var fi in fun_name_els)
+		    fun_name_els[fi].innerHTML=fun.name
+	    }
+	    var fun_name=node("input",{"class":"string_edit",
+				       name:"Abstract",
+				       value:fun.name})
+	    fun_name.onchange=update_fun_name;
+	    fun_name.onblur=update_fun_name;
+	    var ef=wrap("span",[fun_name,sep(" : "),draw_type(fun.type,dc)])
+	    var tbl=empty_class("table","extension");
+	    tbl.appendChild(tr([th(text("Abstract")),td([kw("fun "),ef])]));
+	    var anames=arg_names(fun.type);
+	    for(var i in cs) {
+		var lc=cs[i].langcode;
+		var fn=ident(fun.name);
+		fun_name_els.push(fn);
+		var l=[kw("lin "),fn];
+		for(var j in anames) { l.push(text(" ")); l.push(ident(anames[j]));}
+		l.push(sep(" = "))
+		l.push(node("input",{"class":"string_edit",
+				     placeholder:"...",size:30,
+				     name:lc,value:lins[lc] || ""}))
+		tbl.appendChild(tr([th(text(concname(cs[i].langcode))),td(l)]));
+	    }
+	    form=node("form",{},[tbl])
+	    form.onsubmit=save_extension;
+	    form.appendChild(node("input",{type:"submit",value:"OK"}))
+	    form.appendChild(button("Cancel",cancel_extension))
+	    ext.appendChild(form);
+	    // fun_name.focus(); // can't focus before adding it to the document
+	    return fun_name;
+	}
 	function save_extension() {
+	    //console.log("save_extension")
 	    function extend_grammar(newg) {
 		newg.abstract.funs.push(fun);
 		var cs=newg.concretes
@@ -307,18 +350,26 @@ function minibar_button(g,files,err_ind,comp_btn) {
 		    //goto_minibar();
 		}
 	    }
+	    // Collect input from the form
+	    fun.name=form["Abstract"].value;
+	    for(var i in cs) {
+		var lc=cs[i].langcode;
+		lins[lc]=form[lc].value;
+	    }
 	    // This is not functional programming, so copy the grammar first...
 	    var newg=JSON.parse(JSON.stringify(g));
 	    extend_grammar(newg)
 	    compile_grammar(newg,err_ind,save_if_ok);
+	    return false; // prevent regular form submission
 	}
 	function cancel_extension() {
 	    files.removeChild(overlay)
 	    minibar_div.style.minHeight="0px";
 	    //goto_minibar();
 	}
-	draw_extension();
+	var fun_name=draw_extension();
 	files.appendChild(overlay)
+	fun_name.focus();
 	// Hack to prevent the overlay from overflowing the minibar div:
 	minibar_div.style.minHeight=overlay.clientHeight-11+"px"
 	//overlay.onresize= ... // doesn't work :-(
