@@ -393,8 +393,17 @@ Input.prototype.show_replacements=function(brackets,parent,tree) {
 			function replace() {
 			    t.replace_word(brackets,parent,rfun,tree);
 			}
-			if(rfun_type==fun_type)
-			    t.words.insertBefore(button(rfun,replace),extb);
+			function show_replacement(lin) {
+			    //console.log(lin)
+			    t.words.insertBefore(button(lin[0].text || rfun,replace),extb);
+			}
+			if(rfun_type==fun_type) {
+			    var tmpl=fun_template(rfun,rfun_type)
+			    if(tmpl)
+				t.server.linearize({to:t.current.from,cat:cat,tree:tmpl},show_replacement)
+			    else
+				t.words.insertBefore(button(rfun,replace),extb)
+			}
 		    }
 		    t.browse(rfun,browse3)
 		}
@@ -532,4 +541,16 @@ function modify_tree(tree,fid,fun) {
 	    tree.children.map(function(t) { modify_tree(t,fid,fun) })
     }
     return tree;
+}
+
+function fun_template(fname,ftype) {
+    if(window.parse_fun) {
+	var fun=parse_fun(fname+" : "+ftype).ok
+	if(fun) {
+	    var t=fname;
+	    for(var i=1;i<fun.type.length;i++) t+=" ?"
+	    return t;
+	}
+    }
+    return null;
 }
