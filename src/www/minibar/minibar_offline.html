@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html manifest="minibar_offline.manifest">
+<head>
+<title>Minibar Offline</title>
+<link rel=stylesheet type="text/css" href="http://www.grammaticalframework.org/src/www/minibar/minibar.css">
+
+<meta name = "viewport" content = "width = device-width">
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<meta charset="UTF-8">
+
+</head>
+
+<body class=minibar>
+<h2>Minibar Offline, technology preview</h2>
+<div id=beskrivning_intro>
+<p>
+<a href="javascript:dolj('intro')">[Hide introduction]</a>
+<br>
+<strong>These examples work flawlessly in the <a href="http://www.opera.com/browser/">Opera</a> web browser.</strong>
+They also work to some extent in Opera Mobile 11 and WebKit browsers
+(Safari and Chrome) and recent versions of Gecko browers (Firefox).
+A hardcoded
+<a href="http://tests.novemberborn.net/javascript/callstack-size.html">call stack size limit</a> still causes some problems.
+
+<p>
+How it works: a JavaScript translation of the Haskell PGF run-time library
+is downloaded and run in the browser. The binary PGF files are downloaded
+from the server, parsed and used in the normal way by functions in the PGF
+library. The brower is
+<a href="http://diveintohtml5.info/offline.html">directed to keep a
+local copy of everything</a>, so that you can have access to the minibar
+even when you are offline.
+</div>
+<p id=beskriv_intro style="display: none"><a href="javascript:beskriv('intro')">[Show introduction]</a>
+
+<div id=minibar>
+</div>
+
+<hr>
+
+<small>
+[<a href="http://www.altocumulus.org/~hallgren/hs2js/tests/">About hs2js</a>
+| <a href="http://www.grammaticalframework.org:41296/minibar/minibar.html">Minibar online</a>]
+</small>
+<small class=modtime>
+HTML <!-- hhmts start --> Last modified: Mon Apr 30 15:44:47 CEST 2012 <!-- hhmts end -->
+</small>
+<address><a href="http://www.cse.chalmers.se/~hallgren/">TH</a></address>
+
+<pre id=nodebug>
+</pre>
+
+<script type="text/javascript" src="http://www.grammaticalframework.org/~hallgren/hs2js/test/debug.js"></script>
+<script type="text/javascript" src="http://www.grammaticalframework.org/~hallgren/hs2js/test/json.js"></script>
+<script type="text/javascript" src="http://www.grammaticalframework.org/~hallgren/hs2js/test/builtin.js"></script>
+<script type="text/JavaScript" src="http://www.grammaticalframework.org/~hallgren/hs2js/test/Services.js"></script>
+<script type="text/javascript" src="http://www.grammaticalframework.org/~hallgren/hs2js/test/visadolj.js"></script>
+
+<script type="text/JavaScript" src="support.js"></script>
+<script type="text/JavaScript" src="minibar.js"></script>
+<script type="text/JavaScript" src="minibar_input.js"></script>
+<script type="text/JavaScript" src="minibar_translations.js"></script>
+<script type="text/JavaScript" src="minibar_support.js"></script>
+<script type="text/JavaScript" src="pgf_offline.js"></script>
+<script type="text/javascript" src="minibar_offline.js"></script>
+</body>
+</html>
