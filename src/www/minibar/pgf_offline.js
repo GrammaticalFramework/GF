@@ -4,15 +4,22 @@ function pgf_offline(options) {
     var server = {
 	// State variables (private):
 	grammars_url: "",
+	other_grammars_urls: [],
 	grammar_list: ["Foods.pgf"],
-
 	current_grammar_url: null,
 	pgf : null,
 	
 	// Methods:
 	switch_grammar: function(grammar_url,cont) {
-	    //debug("switch_grammar ");
 	    var new_grammar_url=this.grammars_url+grammar_url;
+	    this.switch_to_other_grammar(new_grammar_url,cont)
+	},
+	add_grammars_url: function(grammars_url,cont) {
+	    this.other_grammars_urls.push(grammars_url);
+	    if(cont) cont();
+	},
+	switch_to_other_grammar: function(new_grammar_url,cont) {
+	    //debug("switch_grammar ");
 	    var self=this;
 	    var update_pgf=function(pgfbinary) {
 		debug("Got "+new_grammar_url+", length="
@@ -20,11 +27,25 @@ function pgf_offline(options) {
 		self.pgf = {v: Services_decodePGF.v({v:pgfbinary}) }
 		//debug("done")
 		self.current_grammar_url=new_grammar_url;
-		cont();
+		if(cont) cont();
 	    }
 	    ajax_http_get_binary(new_grammar_url,update_pgf);
 	},
-	get_grammarlist: function(cont) { cont([this.grammar_list]); },
+	get_grammarlist: function(cont,err) {
+	    if(this.grammar_list) cont(this.grammar_list)
+	    else http_get_json(this.grammars_url+"grammars.cgi",cont,err);
+	},
+	get_grammarlists: function(cont,err) { // May call cont several times!
+	    var ds=this.other_grammars_urls;
+	    var n=1+ds.length;
+	    function pair(dir) {
+		return function(grammar_list){cont(dir,grammar_list,n)}
+	    }
+	    function ignore_error(err) { console.log(err) }
+	    this.get_grammarlist(pair(this.grammars_url),err)
+	    for(var i in ds)
+		http_get_json(ds[i]+"grammars.cgi",pair(ds[i]),ignore_error);
+	},
 	
 	get_languages: function(cont) {
 	    cont(fromJSValue(Services_grammar.v(this.pgf)))
