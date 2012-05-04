@@ -111,7 +111,8 @@ executable gf
     other-modules: GFServer
     hs-source-dirs: src/server src/server/transfer src/example-based
 
-  build-tools: happy, alex>=2 && <3
+  build-tools: happy
+           --, alex>=2 && <3 -- tricky to install in Ubuntu 12.04
   if os(windows)
     build-depends: Win32
   else
