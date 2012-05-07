@@ -21,9 +21,9 @@ flags coding = utf8 ;
     PositAdAAdj a = {s = a.adv} ;
     
     SubjS subj s = {
-      s = \\st => case subj.when of {
-        True => s.tara ! (Wa | Ga) ! st ;
-        False => s.s ! (Wa | Ga) ! st ++ subj.s
+      s = \\st => case subj.type of {
+        If => s.ba ! (Wa | Ga) ! st ++ subj.s ;
+        _ => s.s ! (Wa | Ga) ! st ++ subj.s
         } ; 
       prepositive = True ;
       compar = NoCompar

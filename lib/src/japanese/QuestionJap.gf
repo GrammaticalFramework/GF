@@ -32,7 +32,7 @@ flags coding = utf8 ;
     QuestIComp icomp np = {
       s = table {
         Wa => \\st,t,p => case np.needPart of {
-          True => np.prepositive ! st ++ np.s ! st ++ "わ" ++ icomp.s ! st ++ 
+          True => np.prepositive ! st ++ np.s ! st ++ "は" ++ icomp.s ! st ++ 
                   mkCopula.s ! st ! t ! p ;
           False => np.prepositive ! st ++ np.s ! st ++ icomp.s ! st ++ mkCopula.s ! st ! t ! p 
           } ;

@@ -9,7 +9,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       te = \\a,st => v.te ;
       a_stem = \\a,st => v.a_stem ;
       i_stem = \\a,st => v.i_stem ;
-      tara = \\a,st => v.tara ;
+      ba = \\a,st => v.ba ;
       prep = [] ;
       obj = \\st => [] ; 
       prepositive = \\st => [] ;
@@ -23,18 +23,18 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
         te = \\a,st => vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ v.te ;  
         a_stem = \\a,st => vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ v.a_stem ;
         i_stem = \\a,st => vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ v.i_stem ;
-        tara = \\a,st => vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ v.tara ;
+        ba = \\a,st => vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ v.ba ;
         prep = vp.prep ;
         obj = \\st => vp.obj ! st ;
         prepositive = vp.prepositive ;
         compar = NoCompar
         } ;
       Oblig => {
-        verb = \\a,st,t,p => vp.a_stem ! Anim ! st ++ "なければ" ++ v.s ! st ! t ! p ;
+        verb = \\a,st,t,p => vp.a_stem ! Anim ! st ++ "なければ" ++ v.s ! st ! t ! Neg ;
         te = \\a,st => vp.a_stem ! Anim ! st ++ "なければ" ++ v.te ;
         a_stem = \\a,st => vp.a_stem ! Anim ! st ++ "なければ" ++ v.a_stem ;
         i_stem = \\a,st => vp.a_stem ! Anim ! st ++ "なければ" ++ v.i_stem ;
-        tara = \\a,st => vp.a_stem ! Anim ! st ++ "なければ" ++ v.tara ;
+        ba = \\a,st => vp.a_stem ! Anim ! st ++ "なければ" ++ v.ba ;
         prep = vp.prep ;
         obj = \\st => vp.obj ! st ;
         prepositive = vp.prepositive ;
@@ -45,7 +45,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
         te = \\a,st => vp.i_stem ! Anim ! st ++ "たがって" ++ v.te ;
         a_stem = \\a,st => vp.i_stem ! Anim ! st ++ "たがって" ++ v.a_stem ;
         i_stem = \\a,st => vp.i_stem ! Anim ! st ++ "たがって" ++ v.i_stem ;
-        tara = \\a,st => vp.i_stem ! Anim ! st ++ "たがって" ++ v.tara ;
+        ba = \\a,st => vp.i_stem ! Anim ! st ++ "たがって" ++ v.ba ;
         prep = vp.prep ;
         obj = \\st => vp.obj ! st ;
         prepositive = vp.prepositive ;
@@ -58,7 +58,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       te = \\a,st => vs.te ;
       a_stem = \\a,st => vs.a_stem ;
       i_stem = \\a,st => vs.i_stem ;
-      tara = \\a,st => vs.tara ;
+      ba = \\a,st => vs.ba ;
       prep = vs.prep ;
       obj = \\st => sent.s ! Ga ! Plain ;
       prepositive = \\st => [] ;
@@ -70,7 +70,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       te = \\a,st => vq.te ;
       a_stem = \\a,st => vq.a_stem ;
       i_stem = \\a,st => vq.i_stem ;
-      tara = \\a,st => vq.tara ;
+      ba = \\a,st => vq.ba ;
       prep = vq.prep ;
       obj = \\st => qs.s ! Ga ! Plain ++ "こと" ;
       prepositive = \\st => [] ;
@@ -82,7 +82,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       te = \\a,st => va.te ;
       a_stem = \\a,st => va.a_stem ;
       i_stem = \\a,st => va.i_stem ;
-      tara = \\a,st => va.tara ;
+      ba = \\a,st => va.ba ;
       prep = [] ;
       obj = \\st => ap.adv ! st ;
       prepositive = ap.prepositive ;
@@ -93,7 +93,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       s = \\st,t,p => v2.s ! st ! t ! p ;
       a_stem = v2.a_stem ;
       i_stem = v2.i_stem ;
-      tara = v2.tara ;
+      ba = v2.ba ;
       prep = v2.prep ;
       obj = \\st => [] ;
       prepositive = \\st => [] ;
@@ -116,9 +116,9 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
           True => "呉れ" ;
           False => "上げ" 
           } ;
-        tara = case np.Pron1Sg of {
-          True => "呉れたら" ;
-          False => "上げたら" 
+        ba = case np.Pron1Sg of {
+          True => "呉れれば" ;
+          False => "上げれば" 
           } ;
         prep = v3.prep2 ;
         obj = \\st => np.s ! st ++ v3.prep1 ;
@@ -134,7 +134,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
         s = \\st,t,p => v3.s ! st ! t ! p ;
         a_stem = v3.a_stem ;
         i_stem = v3.i_stem ;
-        tara = v3.tara ;
+        ba = v3.ba ;
         prep = v3.prep2 ;
         obj = \\st => np.s ! st ++ v3.prep1 ;
         prepositive = np.prepositive ;
@@ -151,7 +151,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
                       ++ v2v.s ! st ! t ! p ;
       a_stem = vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.a_stem ;
       i_stem = vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.i_stem ;
-      tara = vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.tara ;
+      ba = vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.ba ;
       prep = "に" ;
       obj = \\st => vp.obj ! st ++ vp.prep ;
       te = vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.te ; 
@@ -164,7 +164,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       s = v2s.s ;
       a_stem = v2s.a_stem ;
       i_stem = v2s.i_stem ;
-      tara = v2s.tara ;
+      ba = v2s.ba ;
       prep = "に" ;
       obj = \\st => s.s ! Ga ! Plain ++ "と" ;
       prepositive = \\st => [] ;
@@ -177,7 +177,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       s = v2q.s ;
       a_stem = v2q.a_stem ;
       i_stem = v2q.i_stem ;
-      tara = v2q.tara ;
+      ba = v2q.ba ;
       prep = "に" ;
       obj = \\st => qs.s ! Ga ! Plain ++ "ことを" ;
       prepositive = \\st => [] ;
@@ -190,7 +190,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       s = v2a.s ;
       a_stem = v2a.a_stem ;
       i_stem = v2a.i_stem ;
-      tara = v2a.tara ;
+      ba = v2a.ba ;
       prep = "を" ;
       obj = ap.adv ;
       prepositive = ap.prepositive ;
@@ -206,7 +206,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
         } ;
       a_stem = \\a,st => vpslash.a_stem ;
       i_stem = \\a,st => vpslash.i_stem ;
-      tara = \\a,st => vpslash.tara ;
+      ba = \\a,st => vpslash.ba ;
       prep = case np.needPart of {
         True => case vpslash.v2vType of {
           True => [] ;
@@ -219,7 +219,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
         False => vpslash.obj ! st ++ np.s ! st 
         } ;
       te = \\a,st => vpslash.te ;
-      prepositive = vpslash.prepositive ;
+      prepositive = \\st => np.prepositive ! st ++ vpslash.prepositive ! st ;
       compar = vpslash.compar
       } ;
       
@@ -237,10 +237,10 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
         } ;
       a_stem = [] ;
       i_stem = [] ;
-      tara = case v.sense of {
-        Abil => vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ v.tara ;
-        Oblig => vpslash.a_stem ++ "なければ" ++ v.tara ;
-        Wish => vpslash.i_stem ++ "たがって" ++ v.tara
+      ba = case v.sense of {
+        Abil => vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ v.ba ;
+        Oblig => vpslash.a_stem ++ "なければ" ++ v.ba ;
+        Wish => vpslash.i_stem ++ "たがって" ++ v.ba
         } ;
       prep = vpslash.prep ;
       obj = vpslash.obj ;
@@ -254,7 +254,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
                       ++ v2v.s ! st ! t ! p ;
       a_stem = vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.a_stem ;
       i_stem = vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.i_stem ;
-      tara = vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.tara ;
+      ba = vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.ba ;
       prep = vpslash.prep ;
       obj = \\st => np.s ! st ++ "に" ;
       te = vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.te ; 
@@ -267,7 +267,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       verb = \\a,st,t,p => vpslash.s ! st ! t ! p ;
       a_stem = \\a,st => vpslash.a_stem ;
       i_stem = \\a,st => vpslash.i_stem ;
-      tara = \\a,st => vpslash.tara ;
+      ba = \\a,st => vpslash.ba ;
       prep = vpslash.prep ;
       obj = \\st => "自分" ;  -- "jibun"
       te = \\a,st => vpslash.te ;
@@ -280,7 +280,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       te = comp.te ;
       a_stem = comp.a_stem ;
       i_stem = comp.i_stem ;
-      tara = comp.tara ;
+      ba = comp.ba ;
       prep = [] ;
       obj = comp.obj ; 
       prepositive = comp.prepositive ;
@@ -292,7 +292,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       te = \\a,st => v2.pass_te ;
       a_stem = \\a,st => v2.pass_a_stem ;
       i_stem = \\a,st => v2.pass_i_stem ;
-      tara = \\a,st => v2.pass_tara ;
+      ba = \\a,st => v2.pass_ba ;
       prep = [] ;
       obj = \\st => [] ;
       prepositive = \\st => [] ;
@@ -304,7 +304,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       te = vp.te ;
       a_stem = vp.a_stem ;
       i_stem = vp.i_stem ;
-      tara = vp.tara ;
+      ba = vp.ba ;
       prep = vp.prep ;
       obj = \\st => case adv.prepositive of {
         True => vp.obj ! st ;
@@ -322,7 +322,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       te = vp.te ;
       a_stem = vp.a_stem ;
       i_stem = vp.i_stem ;
-      tara = vp.tara ;
+      ba = vp.ba ;
       prep = vp.prep ;
       obj = \\st => adv.s ++ vp.obj ! st ;
       prepositive = vp.prepositive ;
@@ -334,7 +334,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       te = vpslash.te ;
       a_stem = vpslash.a_stem ;
       i_stem = vpslash.i_stem ;
-      tara = vpslash.tara ;
+      ba = vpslash.ba ;
       prep = vpslash.prep ;
       obj = \\st => case adv.prepositive of {
         True => vpslash.obj ! st ;
@@ -353,7 +353,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       te = vpslash.te ;
       a_stem = vpslash.a_stem ;
       i_stem = vpslash.i_stem ;
-      tara = vpslash.tara ;
+      ba = vpslash.ba ;
       prep = vpslash.prep ;
       obj = \\st => adv.s ++ vpslash.obj ! st ;
       prepositive = vpslash.prepositive ; 
@@ -366,7 +366,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       te = \\a,st => ap.te ! st ;
       a_stem = \\a,st => ap.adv ! st ;
       i_stem = \\a,st => ap.adv ! st ;  -- for wishes - not correct!
-      tara = \\a,st => ap.tara ! st ;
+      ba = \\a,st => ap.ba ! st ;
       obj = \\st => [] ; 
       prepositive = ap.prepositive ; 
       compar = ap.compar
@@ -375,7 +375,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
     CompNP np = {
       verb = \\a,st,t,p => mkCopula.s ! st ! t ! p ;
       te = \\a,st => "だって" ;
-      tara = \\a,st => "だったら" ;
+      ba = \\a,st => "であれば" ;
       a_stem = \\a,st => "で" ;
       i_stem = \\a,st => "で" ;  -- for wishes - not correct!
       obj = \\st => np.s ! st ;
@@ -386,7 +386,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
     CompAdv adv = {
       verb = mkExistV.verb ;
       te = mkExistV.te ;
-      tara = mkExistV.tara ;
+      ba = mkExistV.ba ;
       a_stem = mkExistV.a_stem ;
       i_stem = mkExistV.i_stem ;
       obj = \\st => case adv.prepositive of {
@@ -403,7 +403,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
     CompCN cn = {
       verb = \\a,st,t,p => mkCopula.s ! st ! t ! p ;
       te = \\a,st => "だって" ;
-      tara = \\a,st => "だったら" ;
+      ba = \\a,st => "であれば" ;
       a_stem = \\a,st => "で" ;
       i_stem = \\a,st => "で" ;  -- for wishes - not correct!
       obj = \\st => cn.s ! (Sg|Pl) ! st ;
@@ -414,7 +414,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
     UseCopula = {
       verb = \\a,st,t,p => mkCopula.s ! st ! t ! p ; 
       te = \\a,st => "だって" ;
-      tara = \\a,st => "だったら" ;
+      ba = \\a,st => "であれば" ;
       a_stem = \\a,st => "で" ;
       i_stem = \\a,st => "で" ;  -- for wishes - not correct!
       obj = \\st => [] ;
@@ -423,4 +423,5 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       compar = NoCompar
       } ;
   }
+
 

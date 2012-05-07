@@ -44,7 +44,7 @@ flags coding = utf8 ;
     
     NoPConj = ss "" ;
     
-    PConjConj conj = {s = conj.pconj} ;
+    PConjConj conj = {s = conj.s} ;
     
     NoVoc = {s = \\st => [] ; please = False} ;
     

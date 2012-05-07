@@ -7,7 +7,7 @@ concrete GrammarJap of Grammar =
   SentenceJap, 
   QuestionJap,
   RelativeJap,
---  ConjunctionJap,
+  ConjunctionJap,
   PhraseJap,
   TextJap,
   StructuralJap,

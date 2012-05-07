@@ -19,11 +19,11 @@ flags coding = utf8 ;
           Ga => \\st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ "のほうが" ++ 
                         vp.obj ! st ++ vp.prep ++ vp.te ! np.anim ! st
           } ; 
-        tara = table {
+        ba = table {
           Wa => \\st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ "は" ++ 
-                        vp.obj ! st ++ vp.prep ++ vp.tara ! np.anim ! st ;
+                        vp.obj ! st ++ vp.prep ++ vp.ba ! np.anim ! st ;
           Ga => \\st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ "のほうが" ++ 
-                        vp.obj ! st ++ vp.prep ++ vp.tara ! np.anim ! st
+                        vp.obj ! st ++ vp.prep ++ vp.ba ! np.anim ! st
           } ;
         subj = table {
           Wa => \\st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ "は" ;
@@ -31,7 +31,7 @@ flags coding = utf8 ;
           } ;
         pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! np.anim ! st ! t ! p ;
         pred_te = \\st => vp.obj ! st ++ vp.prep ++ vp.te ! np.anim ! st ;
-        pred_tara = \\st => vp.obj ! st ++ vp.prep ++ vp.tara ! np.anim ! st ;
+        pred_ba = \\st => vp.obj ! st ++ vp.prep ++ vp.ba ! np.anim ! st ;
         changePolar = np.changePolar
         } ;
       Less => {
@@ -39,12 +39,12 @@ flags coding = utf8 ;
                              "より" ++ vp.obj ! st ++ vp.prep ++ vp.verb ! np.anim ! st ! t ! p ;
         te = \\part,st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ "より" 
                                ++ vp.obj ! st ++ vp.prep ++ vp.te ! np.anim ! st ; 
-        tara = \\part,st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ 
-                               "より" ++ vp.obj ! st ++ vp.prep ++ vp.tara ! np.anim ! st ;
+        ba = \\part,st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ 
+                          "より" ++ vp.obj ! st ++ vp.prep ++ vp.ba ! np.anim ! st ;
         subj = \\part,st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ "より" ;
         pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! np.anim ! st ! t ! p ;
         pred_te = \\st => vp.obj ! st ++ vp.prep ++ vp.te ! np.anim ! st ;
-        pred_tara = \\st => vp.obj ! st ++ vp.prep ++ vp.tara ! np.anim ! st ;
+        pred_ba = \\st => vp.obj ! st ++ vp.prep ++ vp.ba ! np.anim ! st ;
         changePolar = np.changePolar
         } ;
       NoCompar => case np.needPart of {
@@ -61,11 +61,11 @@ flags coding = utf8 ;
             Ga => \\st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ "が" ++ 
                           vp.obj ! st ++ vp.prep ++ vp.te ! np.anim ! st
             } ; 
-          tara = table {
+          ba = table {
             Wa => \\st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ "は" ++ 
-                          vp.obj ! st ++ vp.prep ++ vp.tara ! np.anim ! st ;
+                          vp.obj ! st ++ vp.prep ++ vp.ba ! np.anim ! st ;
             Ga => \\st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ "が" ++ 
-                          vp.obj ! st ++ vp.prep ++ vp.tara ! np.anim ! st
+                          vp.obj ! st ++ vp.prep ++ vp.ba ! np.anim ! st
             } ;
           subj = table {
             Wa => \\st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ "は" ;
@@ -73,7 +73,7 @@ flags coding = utf8 ;
             } ;
           pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! np.anim ! st ! t ! p ;
           pred_te = \\st => vp.obj ! st ++ vp.prep ++ vp.te ! np.anim ! st ;
-          pred_tara = \\st => vp.obj ! st ++ vp.prep ++ vp.tara ! np.anim ! st ;
+          pred_ba = \\st => vp.obj ! st ++ vp.prep ++ vp.ba ! np.anim ! st ;
           changePolar = np.changePolar
           } ;
         False => {
@@ -89,16 +89,16 @@ flags coding = utf8 ;
             Ga => \\st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ vp.obj ! st ++ 
                           vp.prep ++ vp.te ! np.anim ! st 
             } ;
-          tara = table {
+          ba = table {
             Wa => \\st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ vp.obj ! st ++ 
-                          vp.prep ++ vp.tara ! np.anim ! st ;
+                          vp.prep ++ vp.ba ! np.anim ! st ;
             Ga => \\st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ++ vp.obj ! st ++ 
-                          vp.prep ++ vp.tara ! np.anim ! st
+                          vp.prep ++ vp.ba ! np.anim ! st
             } ;
           subj = \\part,st => np.prepositive ! st ++ vp.prepositive ! st ++ np.s ! st ;
           pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! np.anim ! st ! t ! p ;
           pred_te = \\st => vp.obj ! st ++ vp.prep ++ vp.te ! np.anim ! st ;
-          pred_tara = \\st => vp.obj ! st ++ vp.prep ++ vp.tara ! np.anim ! st ;
+          pred_ba = \\st => vp.obj ! st ++ vp.prep ++ vp.ba ! np.anim ! st ;
           changePolar = np.changePolar
           }
         }
@@ -118,11 +118,11 @@ flags coding = utf8 ;
           Ga => \\st => sc.s ! Ga ! st ++ "ことが" ++ vp.obj ! st ++ 
                         vp.prep ++ vp.te ! Inanim ! st
           } ; 
-        tara = table {
+        ba = table {
           Wa => \\st => sc.s ! Wa ! st ++ "ことは" ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.tara ! Inanim ! st ;
+                        vp.prep ++ vp.ba ! Inanim ! st ;
           Ga => \\st => sc.s ! Ga ! st ++ "ことが" ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.tara ! Inanim ! st
+                        vp.prep ++ vp.ba ! Inanim ! st
           } ;
         subj = table {
           Wa => \\st => sc.s ! Wa ! st ++ "ことは" ;
@@ -130,7 +130,7 @@ flags coding = utf8 ;
           } ;
         pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! Inanim ! st ! t ! p ;
         pred_te = \\st => vp.obj ! st ++ vp.prep ++ vp.te ! Inanim ! st ;
-        pred_tara = \\st => vp.obj ! st ++ vp.prep ++ vp.tara ! Inanim ! st ;
+        pred_ba = \\st => vp.obj ! st ++ vp.prep ++ vp.ba ! Inanim ! st ;
         changePolar = False
         } ;
       False => {
@@ -146,11 +146,11 @@ flags coding = utf8 ;
           Ga => \\st => sc.s ! Ga ! st ++ "ことが" ++ vp.obj ! st ++ 
                         vp.prep ++ vp.te ! Inanim ! st
           } ; 
-        tara = table {
+        ba = table {
           Wa => \\st => sc.s ! Wa ! st ++ "ことが" ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.tara ! Inanim ! st ;
+                        vp.prep ++ vp.ba ! Inanim ! st ;
           Ga => \\st => sc.s ! Ga ! st ++ "ことが" ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.tara ! Inanim ! st
+                        vp.prep ++ vp.ba ! Inanim ! st
           } ;
         subj = table {
           Wa => \\st => sc.s ! Wa ! st ++ "ことが" ;
@@ -158,7 +158,7 @@ flags coding = utf8 ;
           } ;
         pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! Inanim ! st ! t ! p ;
         pred_te = \\st => vp.obj ! st ++ vp.prep ++ vp.te ! Inanim ! st ;
-        pred_tara = \\st => vp.obj ! st ++ vp.prep ++ vp.tara ! Inanim ! st ;
+        pred_ba = \\st => vp.obj ! st ++ vp.prep ++ vp.ba ! Inanim ! st ;
         changePolar = False
         } 
       } ;
@@ -168,37 +168,37 @@ flags coding = utf8 ;
                       vpslash.obj ! st ++ vpslash.prep ++ vpslash.s ! Plain ! t ! p ;
       te = \\st => vpslash.prepositive ! st ++ np.prepositive ! st ++ np.s ! st ++ "が" ++ 
                    vpslash.obj ! st ++ vpslash.prep ++ vpslash.te ;
-      tara = \\st => vpslash.prepositive ! st ++ np.prepositive ! st ++ np.s ! st ++ "が" ++ 
-                   vpslash.obj ! st ++ vpslash.prep ++ vpslash.tara ;
+      ba = \\st => vpslash.prepositive ! st ++ np.prepositive ! st ++ np.s ! st ++ "が" ++ 
+                   vpslash.obj ! st ++ vpslash.prep ++ vpslash.ba ;
       subj = table {
         Wa => \\st => vpslash.prepositive ! st ++ np.prepositive ! st ++ np.s ! st ++ "は" ;
         Ga => \\st => vpslash.prepositive ! st ++ np.prepositive ! st ++ np.s ! st ++ "が"
         } ;
       pred = \\st,t,p => vpslash.obj ! st ++ vpslash.prep ++ vpslash.s ! st ! t ! p ;
       pred_te = \\st => vpslash.obj ! st ++ vpslash.prep ++ vpslash.te ;
-      pred_tara = \\st => vpslash.obj ! st ++ vpslash.tara ;
+      pred_ba = \\st => vpslash.obj ! st ++ vpslash.ba ;
       changePolar = np.changePolar
       } ;
                
     AdvSlash clslash adv = {
       s = \\st,t,p => adv.s ! st ++ clslash.s ! st ! t ! p ;
       te = \\st => adv.s ! st ++ clslash.te ! st ;
-      tara = \\st => adv.s ! st ++ clslash.tara ! st ;
+      ba = \\st => adv.s ! st ++ clslash.ba ! st ;
       subj = \\part,st => adv.s ! st ++ clslash.subj ! part ! st ;
       pred = clslash.pred ;
       pred_te = clslash.pred_te ;
-      pred_tara = clslash.pred_tara ;
+      pred_ba = clslash.pred_ba ;
       changePolar = clslash.changePolar
       } ;
           
     SlashPrep cl prep = {
       s = \\st,t,p => cl.s ! Ga ! st ! t ! p ++ prep.relPrep ;
       te = \\st => cl.te ! Ga ! st ++ prep.relPrep ;
-      tara = \\st => cl.tara ! Ga ! st ++ prep.relPrep ;
+      ba = \\st => cl.ba ! Ga ! st ++ prep.relPrep ;
       subj = cl.subj ;
       pred = \\st,t,p => cl.pred ! st ! t ! p ++ prep.relPrep ;
       pred_te = \\st => cl.pred_te ! st ++ prep.relPrep ;
-      pred_tara = \\st => cl.pred_tara ! st ++ prep.relPrep ;
+      pred_ba = \\st => cl.pred_ba ! st ++ prep.relPrep ;
       changePolar = cl.changePolar
       } ;
 
@@ -206,15 +206,15 @@ flags coding = utf8 ;
       s = \\st,t,p => np.prepositive ! st ++ np.s ! st ++ "が" ++ sslash.s ! st ++ 
                       vs.prep ++ vs.s ! Plain ! t ! p ;
       te = \\st => np.prepositive ! st ++ np.s ! st ++ "が" ++ sslash.s ! st ++ vs.prep ++ vs.te ;
-      tara = \\st => np.prepositive ! st ++ np.s ! st ++ "が" ++ sslash.s ! st ++ 
-                     vs.prep ++ vs.tara ;
+      ba = \\st => np.prepositive ! st ++ np.s ! st ++ "が" ++ sslash.s ! st ++ 
+                   vs.prep ++ vs.ba ;
       subj = table {
         Wa => \\st => np.prepositive ! st ++ np.s ! st ++ "は" ;
         Ga => \\st => np.prepositive ! st ++ np.s ! st ++ "が"
         } ;
       pred = \\st,t,p => sslash.s ! st ++ vs.prep ++ vs.s ! st ! t ! p ;
       pred_te = \\st => sslash.s ! st ++ vs.prep ++ vs.te ;
-      pred_tara = \\st => sslash.s ! st ++ vs.prep ++ vs.tara ;
+      pred_ba = \\st => sslash.s ! st ++ vs.prep ++ vs.ba ;
       changePolar = np.changePolar
       } ;
     
@@ -263,7 +263,7 @@ flags coding = utf8 ;
           }
         } ;
       te = \\part,st => t.s ++ p.s ++ cl.te ! part ! st ;
-      tara = \\part,st => t.s ++ p.s ++ cl.tara ! part ! st ;
+      ba = \\part,st => t.s ++ p.s ++ cl.ba ! part ! st ;
       subj = cl.subj ;
       pred = \\st => case t.a of {
         Simul => case cl.changePolar of {
@@ -284,7 +284,9 @@ flags coding = utf8 ;
             True => t.s ++ p.s ++ cl.pred ! st ! TPres ! Neg
             } 
           }
-        }
+        } ;
+      pred_te = cl.pred_te ;
+      pred_ba = cl.pred_ba
       } ; 
     
     UseQCl t p cl = {
@@ -331,7 +333,7 @@ flags coding = utf8 ;
             } 
           }
         } ;
-      te = \\a,st => rcl.te ! a ! st ;
+      te = \\a,st => t.s ++ p.s ++ rcl.te ! a ! st ;
       subj = rcl.subj ;
       pred = \\a,st => case t.a of {
         Simul => case rcl.changePolar of {
@@ -354,7 +356,7 @@ flags coding = utf8 ;
           }
         } ;
       pred_te = \\a,st => t.s ++ p.s ++ rcl.pred_te ! a ! st ;
-      pred_tara = \\a,st => t.s ++ p.s ++ rcl.pred_tara ! a ! st ;
+      pred_ba = \\a,st => t.s ++ p.s ++ rcl.pred_ba ! a ! st ;
       missingSubj = rcl.missingSubj
       } ; 
               
@@ -385,33 +387,53 @@ flags coding = utf8 ;
     AdvS adv s = {
       s = \\part,st => adv.s ! st ++ s.s ! part ! st ;
       te = \\part,st => adv.s ! st ++ s.te ! part ! st ;
-      tara = \\part,st => adv.s ! st ++ s.tara ! part ! st ;
+      ba = \\part,st => adv.s ! st ++ s.ba ! part ! st ;
       subj = \\part,st => adv.s ! st ++ s.subj ! part ! st ;
-      pred = s.pred
+      pred = s.pred ;
+      pred_te = s.pred_te ;
+      pred_ba = s.pred_ba
       } ;
     
     ExtAdvS adv s = {
       s = \\part,st => adv.s ! st ++ "," ++ s.s ! part ! st ;
       te = \\part,st => adv.s ! st ++ "," ++ s.te ! part ! st ;
-      tara = \\part,st => adv.s ! st ++ "," ++ s.tara ! part ! st ;
+      ba = \\part,st => adv.s ! st ++ "," ++ s.ba ! part ! st ;
       subj = \\part,st => adv.s ! st ++ "," ++ s.subj ! part ! st ;
-      pred = s.pred
+      pred = s.pred ;
+      pred_te = s.pred_te ;
+      pred_ba = s.pred_ba
       } ;
       
-    SSubjS s1 subj s2 = case subj.when of {
-      True => {
-        s = \\part,st => s1.tara ! part ! st ++ subj.s ++ s2.s ! Ga ! st ;
-        te = \\part,st => s1.tara ! part ! st ++ subj.s ++ s2.te ! Ga ! st ;
-        tara = \\part,st => s1.tara ! part ! st ++ subj.s ++ s2.tara ! Ga ! st ;
-        subj = \\part,st => s1.tara ! part ! st ++ subj.s ++ s2.subj ! Ga ! st ;
-        pred = s2.pred
+    SSubjS s1 subj s2 = case subj.type of {
+      If => {
+        s = \\part,st => s1.ba ! part ! st ++ subj.s ++ s2.s ! Ga ! st ;
+        te = \\part,st => s1.ba ! part ! st ++ subj.s ++ s2.te ! Ga ! st ;
+        ba = \\part,st => s1.ba ! part ! st ++ subj.s ++ s2.ba ! Ga ! st ;
+        subj = \\part,st => s1.ba ! part ! st ++ subj.s ++ s2.subj ! Ga ! st ;
+        pred = s2.pred ;
+        pred_te = s2.pred_te ;
+        pred_ba = s2.pred_ba 
         } ;
-      False => {
+      That => {
+        s = \\part,st => s1.subj ! part ! st ++ s2.subj ! Ga ! st ++ s2.pred ! Plain ++ 
+                         subj.s ++ s1.pred ! st ; 
+        te = \\part,st => s1.subj ! part ! st ++ s2.subj ! Ga ! st ++ s2.pred ! Plain ++ 
+                          subj.s ++ s1.pred_te ! st ; 
+        ba = \\part,st => s1.subj ! part ! st ++ s2.subj ! Ga ! st ++ s2.pred ! Plain ++ 
+                          subj.s ++ s1.pred_ba ! st ; 
+        subj = \\part,st => s1.subj ! part ! st ;
+        pred = \\st => s2.subj ! Ga ! st ++ s2.pred ! Plain ++ subj.s ++ s1.pred ! st ;
+        pred_te = \\st => s2.subj ! Ga ! st ++ s2.pred ! Plain ++ subj.s ++ s1.pred_te ! st ;
+        pred_ba = \\st => s2.subj ! Ga ! st ++ s2.pred ! Plain ++ subj.s ++ s1.pred_ba ! st
+        } ;
+      OtherSubj => {
         s = \\part,st => s1.s ! part ! Plain ++ subj.s ++ s2.s ! Ga ! st ;
         te = \\part,st => s1.s ! part ! Plain ++ subj.s ++ s2.te ! Ga ! st ;
-        tara = \\part,st => s1.s ! part ! Plain ++ subj.s ++ s2.tara ! Ga ! st ;
+        ba = \\part,st => s1.s ! part ! Plain ++ subj.s ++ s2.ba ! Ga ! st ;
         subj = \\part,st => s1.s ! part ! Plain ++ subj.s ++ s2.subj ! Ga ! st ;
-        pred = s2.pred
+        pred = s2.pred ;
+        pred_te = s2.pred_te ;
+        pred_ba = s2.pred_ba
         } 
       } ;
           
@@ -421,11 +443,13 @@ flags coding = utf8 ;
                          "ことが" ++ rs.pred ! Inanim ! st ;
         te = \\part,st => rs.subj ! part ! st ++ sent.subj ! Ga ! st ++ sent.pred ! Plain ++ 
                           "ことが" ++ rs.pred_te ! Inanim ! st ;
-        tara = \\part,st => rs.subj ! part ! st ++ sent.subj ! Ga ! st ++ sent.pred ! Plain ++ 
-                            "ことが" ++ rs.pred_tara ! Inanim ! st ;
+        ba = \\part,st => rs.subj ! part ! st ++ sent.subj ! Ga ! st ++ sent.pred ! Plain ++ 
+                          "ことが" ++ rs.pred_ba ! Inanim ! st ;
         subj = \\part,st => rs.subj ! part ! st ++ sent.subj ! Ga ! st ++ sent.pred ! Plain ++
                             "ことが" ;
-        pred = \\st => rs.pred ! Inanim ! st
+        pred = \\st => rs.pred ! Inanim ! st ;
+        pred_te = \\st => rs.pred_te ! Inanim ! st ;
+        pred_ba = \\st => rs.pred_ba ! Inanim ! st
         } ;
       False => {
         s = table {
@@ -440,15 +464,19 @@ flags coding = utf8 ;
           Ga => \\st => rs.subj ! Ga ! st ++ sent.subj ! Ga ! st ++ sent.pred ! Plain ++ 
                         "ことを" ++ rs.pred_te ! Inanim ! st 
           } ;
-        tara = table {
+        ba = table {
           Wa => \\st => rs.subj ! Wa ! st ++ sent.subj ! Ga ! st ++ sent.pred ! Plain ++ 
-                        "ことを" ++ rs.pred_tara ! Inanim ! st ;
+                        "ことを" ++ rs.pred_ba ! Inanim ! st ;
           Ga => \\st => rs.subj ! Ga ! st ++ sent.subj ! Ga ! st ++ sent.pred ! Plain ++ 
-                        "ことを" ++ rs.pred_tara ! Inanim ! st 
+                        "ことを" ++ rs.pred_ba ! Inanim ! st 
           } ;
         subj = \\part,st => rs.subj ! part ! st ;
         pred = \\st => sent.subj ! Ga ! st ++ sent.pred ! Plain ++ "ことを" ++ 
                        rs.pred ! Inanim ! st ;
+        pred_te = \\st => sent.subj ! Ga ! st ++ sent.pred ! Plain ++ "ことを" ++ 
+                          rs.pred_te ! Inanim ! st ;
+        pred_ba = \\st => sent.subj ! Ga ! st ++ sent.pred ! Plain ++ "ことを" ++ 
+                          rs.pred_ba ! Inanim ! st
         }
       } ;
 }
