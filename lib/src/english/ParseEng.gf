@@ -5,9 +5,9 @@ concrete ParseEng of ParseEngAbs =
   NounEng,
   AdjectiveEng,
   NumeralEng,
-  SymbolEng,
+  SymbolEng [PN, Symb, MkSymb, SymbPN],
   ConjunctionEng,
-  VerbEng - [SlashV2V, PassV2],
+  VerbEng - [SlashV2V, PassV2, UseCopula],
   AdverbEng,
   PhraseEng,
   SentenceEng,
@@ -29,6 +29,7 @@ lin
   ourself_NP = regNP "ourself" plural ;
   yourselfPl_NP = regNP "yourself" plural ;
   themself_NP = regNP "themself" plural ;
+  themselves_NP = regNP "themselves" plural ;
 
   CompoundCN num noun cn = {
     s = \\n,c => num.s ! Nom ++ noun.s ! num.n ! Nom ++ cn.s ! n ! c ;
