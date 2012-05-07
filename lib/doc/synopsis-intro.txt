@@ -8,7 +8,7 @@
 =Introduction=
 
 The GF Resource Grammar Library is the standard library for Grammatical Framework.
-It covers the morphology and basic syntax of currently 24 languages.
+It covers the morphology and basic syntax of currently 25 languages.
 
 This document contains the most important parts of the GF Resource Grammar API,
 as needed by a GF application programmer.
