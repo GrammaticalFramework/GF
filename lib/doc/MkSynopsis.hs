@@ -17,7 +17,7 @@ revealedLang = "Eng"
 
 -- all languages shown
 apiExxFiles = ["api-examples-" ++ lang ++ ".txt" | lang <- words 
-  "Afr Bul Cat Dan Dut Eng Fin Fre Ger Hin Ita Lav Nep Nor Pes Pnb Pol Ron Rus Snd Spa Swe Tha Urd"]
+  "Afr Bul Cat Dan Dut Eng Fin Fre Ger Hin Ita Jap Lav Nep Nor Pes Pnb Pol Ron Rus Snd Spa Swe Tha Urd"]
 
 main = do
   xx <- getArgs
@@ -248,6 +248,7 @@ paradigmFiles = [
   ("Hindi", srcPath "/hindi/ParadigmsHin.gf"),
 --  ("Interlingua", srcPath "/interlingua/ParadigmsIna.gf"),
   ("Italian",  srcPath "/italian/ParadigmsIta.gf"),
+  ("Japanese",  srcPath "/japanese/ParadigmsJap.gf"),
   ("Latvian",  srcPath "/latvian/ParadigmsLav.gf"),
   ("Nepali", srcPath "/nepali/ParadigmsNep.gf"),
   ("Norwegian", srcPath "/norwegian/ParadigmsNor.gf"),

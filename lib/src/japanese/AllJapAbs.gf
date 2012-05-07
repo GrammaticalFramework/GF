@@ -1,0 +1,4 @@
+abstract AllJapAbs =
+  Lang
+--  ExtraJapAbs
+  ** {} ;
