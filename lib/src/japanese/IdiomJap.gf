@@ -18,11 +18,11 @@ flags coding = utf8 ;
           Ga => \\st => vp.prepositive ! st ++ "これのほうが" ++ vp.obj ! st ++  
                         vp.prep ++ vp.te ! Inanim ! st
           } ; 
-        tara = table {
+        ba = table {
           Wa => \\st => vp.prepositive ! st ++ "これは" ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.tara ! Inanim ! st ;
+                        vp.prep ++ vp.ba ! Inanim ! st ;
           Ga => \\st => vp.prepositive ! st ++ "これのほうが" ++ vp.obj ! st ++  
-                        vp.prep ++ vp.tara ! Inanim ! st
+                        vp.prep ++ vp.ba ! Inanim ! st
           } ;
         subj = table {
           Wa => \\st => vp.prepositive ! st ++ "これは" ;
@@ -30,7 +30,7 @@ flags coding = utf8 ;
           } ;
         pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! Inanim ! st ! t ! p ;
         pred_te = \\st => vp.obj ! st ++ vp.prep ++ vp.te ! Inanim ! st ;
-        pred_tara = \\st => vp.obj ! st ++ vp.prep ++ vp.tara ! Inanim ! st ;
+        pred_ba = \\st => vp.obj ! st ++ vp.prep ++ vp.ba ! Inanim ! st ;
         changePolar = False
         } ;
       Less => {
@@ -38,12 +38,12 @@ flags coding = utf8 ;
                              vp.prep ++ vp.verb ! Inanim ! st ! t ! p ;
         te = \\part,st => vp.prepositive ! st ++ "これより" ++ vp.obj ! st ++ 
                           vp.prep ++ vp.te ! Inanim ! st ; 
-        tara = \\part,st => vp.prepositive ! st ++ "これより" ++ vp.obj ! st ++ 
-                            vp.prep ++ vp.tara ! Inanim ! st ;
+        ba = \\part,st => vp.prepositive ! st ++ "これより" ++ vp.obj ! st ++ 
+                            vp.prep ++ vp.ba ! Inanim ! st ;
         subj = \\part,st => vp.prepositive ! st ++ "これより" ;
         pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! Inanim ! st ! t ! p ;
         pred_te = \\st => vp.obj ! st ++ vp.prep ++ vp.te ! Inanim ! st ;
-        pred_tara = \\st => vp.obj ! st ++ vp.prep ++ vp.tara ! Inanim ! st ;
+        pred_ba = \\st => vp.obj ! st ++ vp.prep ++ vp.ba ! Inanim ! st ;
         changePolar = False
         } ;
       NoCompar => {
@@ -59,11 +59,11 @@ flags coding = utf8 ;
           Ga => \\st => vp.prepositive ! st ++ "これが" ++ vp.obj ! st ++ 
                         vp.prep ++ vp.te ! Inanim ! st
           } ; 
-        tara = table {
+        ba = table {
           Wa => \\st => vp.prepositive ! st ++ "これは" ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.tara ! Inanim ! st ;
+                        vp.prep ++ vp.ba ! Inanim ! st ;
           Ga => \\st => vp.prepositive ! st ++ "これが" ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.tara ! Inanim ! st
+                        vp.prep ++ vp.ba ! Inanim ! st
           } ;
         subj = table {
           Wa => \\st => vp.prepositive ! st ++ "これは" ;
@@ -71,7 +71,7 @@ flags coding = utf8 ;
           } ;
         pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! Inanim ! st ! t ! p ;
         pred_te = \\st => vp.obj ! st ++ vp.prep ++ vp.te ! Inanim ! st ;
-        pred_tara = \\st => vp.obj ! st ++ vp.prep ++ vp.tara ! Inanim ! st ;
+        pred_ba = \\st => vp.obj ! st ++ vp.prep ++ vp.ba ! Inanim ! st ;
         changePolar = False
         }
       } ;
@@ -79,7 +79,7 @@ flags coding = utf8 ;
     GenericCl  vp = case vp.compar of {
       More => {
         s = table {
-          Wa => \\st,t,p => vp.prepositive ! st ++ "誰か" ++ vp.obj ! st ++  -- "dareka"
+          Wa => \\st,t,p => vp.prepositive ! st ++ "誰か" ++ vp.obj ! st ++ 
                             vp.prep ++ vp.verb ! Anim ! st ! t ! p ; 
           Ga => \\st,t,p => vp.prepositive ! st ++ "誰かのほうが" ++ vp.obj ! st ++  
                             vp.prep ++ vp.verb ! Anim ! st ! t ! p  
@@ -90,11 +90,11 @@ flags coding = utf8 ;
           Ga => \\st => vp.prepositive ! st ++ "誰かのほうが" ++ vp.obj ! st ++  
                         vp.prep ++ vp.te ! Anim ! st
           } ; 
-        tara = table {
+        ba = table {
           Wa => \\st => vp.prepositive ! st ++ "誰か" ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.tara ! Anim ! st ;
+                        vp.prep ++ vp.ba ! Anim ! st ;
           Ga => \\st => vp.prepositive ! st ++ "誰かのほうが" ++ vp.obj ! st ++  
-                        vp.prep ++ vp.tara ! Anim ! st
+                        vp.prep ++ vp.ba ! Anim ! st
           } ;
         subj = table {
           Wa => \\st => vp.prepositive ! st ++ "誰か" ;
@@ -102,7 +102,7 @@ flags coding = utf8 ;
           } ;
         pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! Anim ! st ! t ! p ;
         pred_te = \\st => vp.obj ! st ++ vp.prep ++ vp.te ! Anim ! st ;
-        pred_tara = \\st => vp.obj ! st ++ vp.prep ++ vp.tara ! Anim ! st ;
+        pred_ba = \\st => vp.obj ! st ++ vp.prep ++ vp.ba ! Anim ! st ;
         changePolar = False
         } ;
       Less => {
@@ -110,12 +110,12 @@ flags coding = utf8 ;
                              vp.prep ++ vp.verb ! Anim ! st ! t ! p ;
         te = \\part,st => vp.prepositive ! st ++ "誰かより" ++ vp.obj ! st ++ 
                           vp.prep ++ vp.te ! Anim ! st ; 
-        tara = \\part,st => vp.prepositive ! st ++ "誰かより" ++ vp.obj ! st ++ 
-                            vp.prep ++ vp.tara ! Anim ! st ;
+        ba = \\part,st => vp.prepositive ! st ++ "誰かより" ++ vp.obj ! st ++ 
+                            vp.prep ++ vp.ba ! Anim ! st ;
         subj = \\part,st => vp.prepositive ! st ++ "誰かより" ;
         pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! Anim ! st ! t ! p ;
         pred_te = \\st => vp.obj ! st ++ vp.prep ++ vp.te ! Anim ! st ;
-        pred_tara = \\st => vp.obj ! st ++ vp.prep ++ vp.tara ! Anim ! st ;
+        pred_ba = \\st => vp.obj ! st ++ vp.prep ++ vp.ba ! Anim ! st ;
         changePolar = False
         } ;
       NoCompar => {
@@ -123,12 +123,12 @@ flags coding = utf8 ;
                             vp.prep ++ vp.verb ! Anim ! st ! t ! p ;
         te = \\part,st => vp.prepositive ! st ++ "誰か" ++ vp.obj ! st ++ 
                         vp.prep ++ vp.te ! Anim ! st ;
-        tara = \\part,st => vp.prepositive ! st ++ "誰か" ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.tara ! Anim ! st ;
+        ba = \\part,st => vp.prepositive ! st ++ "誰か" ++ vp.obj ! st ++ 
+                        vp.prep ++ vp.ba ! Anim ! st ;
         subj = \\part,st => vp.prepositive ! st ++ "誰か" ;
         pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! Anim ! st ! t ! p ;
         pred_te = \\st => vp.obj ! st ++ vp.prep ++ vp.te ! Anim ! st ;
-        pred_tara = \\st => vp.obj ! st ++ vp.prep ++ vp.tara ! Anim ! st ;
+        pred_ba = \\st => vp.obj ! st ++ vp.prep ++ vp.ba ! Anim ! st ;
         changePolar = False
         }
       } ;
@@ -139,26 +139,27 @@ flags coding = utf8 ;
                            mkCopula.s ! st ! t ! p ;
       te = \\part,st => np.prepositive ! st ++ rs.subj ! Ga ! st ++ 
                         rs.pred ! np.anim ! Plain ++ "のは" ++ np.s ! st ++ "だって" ;
-      tara = \\part,st => np.prepositive ! st ++ rs.subj ! Ga ! st ++ 
-                      rs.pred ! np.anim ! Plain ++ "のは" ++ np.s ! st ++ "だったら" ;
+      ba = \\part,st => np.prepositive ! st ++ rs.subj ! Ga ! st ++ 
+                      rs.pred ! np.anim ! Plain ++ "のは" ++ np.s ! st ++ "であれば" ;
       subj = \\part,st => np.prepositive ! st ++ rs.subj ! Ga ! st ++ 
                           rs.pred ! np.anim ! Plain ++ "のは" ;
       pred = \\st,t,p => np.s ! st ++ mkCopula.s ! st ! t ! p ;
       pred_te = \\st =>  np.s ! st ++ "だって" ;
-      pred_tara = \\st =>  np.s ! st ++ "だったら" ;
+      pred_ba = \\st =>  np.s ! st ++ "であれば" ;
       changePolar = np.changePolar
       } ;
     
     CleftAdv adv s = {
       s = \\part,st,t,p => s.subj ! Ga ! st ++ s.pred ! Plain ++ "のは" ++ adv.s ! st ++ 
                            mkCopula.s ! st ! t ! p ;
-      te = \\part,st => s.subj ! Ga ! st ++ s.pred ! Plain ++ "のは" ++ adv.s ! st ++ "だって" ;
-      tara = \\part,st => s.subj ! Ga ! st ++ s.pred ! Plain ++ "のは" ++ adv.s ! st ++ 
-                          "だったら" ;
+      te = \\part,st => s.subj ! Ga ! st ++ s.pred ! Plain ++ "のは" ++ adv.s ! st ++ 
+                        "だって" ;
+      ba = \\part,st => s.subj ! Ga ! st ++ s.pred ! Plain ++ "のは" ++ adv.s ! st ++ 
+                          "であれば" ;
       subj = \\part,st => s.subj ! Ga ! st ++ s.pred ! Plain ++ "のは" ;
       pred = \\st,t,p => adv.s ! st ++ mkCopula.s ! st ! t ! p ;
       pred_te = \\st =>  adv.s ! st ++ "だって" ;
-      pred_tara = \\st =>  adv.s ! st ++ "だったら" ;
+      pred_ba = \\st =>  adv.s ! st ++ "であれば" ;
       changePolar = False
       } ;
     
@@ -174,9 +175,9 @@ flags coding = utf8 ;
           Wa => \\st => np.prepositive ! st ++ np.s ! st ++ "は" ++ mkExistV.te ! np.anim ! st ;
           Ga => \\st => np.prepositive ! st ++ np.s ! st ++ "が" ++ mkExistV.te ! np.anim ! st
           } ;
-        tara = table {
-          Wa => \\st => np.prepositive ! st ++ np.s ! st ++ "は" ++ mkExistV.tara ! np.anim ! st ;
-          Ga => \\st => np.prepositive ! st ++ np.s ! st ++ "が" ++ mkExistV.tara ! np.anim ! st
+        ba = table {
+          Wa => \\st => np.prepositive ! st ++ np.s ! st ++ "は" ++ mkExistV.ba ! np.anim ! st ;
+          Ga => \\st => np.prepositive ! st ++ np.s ! st ++ "が" ++ mkExistV.ba ! np.anim ! st
           } ;
         subj = table {
           Wa => \\st => np.prepositive ! st ++ np.s ! st ++ "は" ;
@@ -184,18 +185,18 @@ flags coding = utf8 ;
           } ;
         pred = \\st,t,p => mkExistV.verb ! np.anim ! st ! t ! p ;
         pred_te = \\st => mkExistV.te ! np.anim ! st ;
-        pred_tara = \\st => mkExistV.tara ! np.anim ! st ;
+        pred_ba = \\st => mkExistV.ba ! np.anim ! st ;
         changePolar = np.changePolar
         } ;
       False => {
         s = \\part,st,t,p => np.prepositive ! st ++ np.s ! st ++ 
                              mkExistV.verb ! np.anim ! st ! t ! p ;
         te = \\part,st => np.prepositive ! st ++ np.s ! st ++ mkExistV.te ! np.anim ! st ;
-        tara = \\part,st => np.prepositive ! st ++ np.s ! st ++ mkExistV.tara ! np.anim ! st ;
+        ba = \\part,st => np.prepositive ! st ++ np.s ! st ++ mkExistV.ba ! np.anim ! st ;
         subj = \\part,st => np.prepositive ! st ++ np.s ! st ;
         pred = \\st,t,p => mkExistV.verb ! np.anim ! st ! t ! p ;
         pred_te = \\st => mkExistV.te ! np.anim ! st ;
-        pred_tara = \\st => mkExistV.tara ! np.anim ! st ;
+        pred_ba = \\st => mkExistV.ba ! np.anim ! st ;
         changePolar = np.changePolar
         } 
       } ;
@@ -210,7 +211,7 @@ flags coding = utf8 ;
       te = \\a,st => vp.te ! a ! st ++ "いて" ; 
       a_stem = \\a,st => vp.te ! a ! st ++ "い" ; 
       i_stem = \\a,st => vp.te ! a ! st ++ "い" ; 
-      tara = \\a,st => vp.te ! a ! st ++ "いたら" ;
+      ba = \\a,st => vp.te ! a ! st ++ "いれば" ;
       prep = vp.prep ; 
       obj = vp.obj ; 
       prepositive = vp.prepositive ; 

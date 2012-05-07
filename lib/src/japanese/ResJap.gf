@@ -14,6 +14,8 @@ param
   Anteriority = Simul | Anter ;
   NumeralType = Tens | TensPlus | Other ;
   ComparSense = Less | More | NoCompar ;
+  ConjType    = And | Or | Both ;
+  SubjType    = That | If | OtherSubj ;
 
 oper
 
@@ -21,7 +23,7 @@ oper
                         changePolar : Bool ; Pron1Sg : Bool ; anim : Animateness} ;
   VP          : Type = {verb : Animateness => Style => TTense => Polarity => Str ; 
                         te : Animateness => Style => Str; a_stem : Animateness => Style => Str ; 
-                        i_stem : Animateness => Style => Str ; tara : Animateness => Style => Str ; 
+                        i_stem : Animateness => Style => Str ; ba : Animateness => Style => Str ; 
                         prep : Str ; obj : Style => Str ; prepositive : Style => Str ; 
                         compar : ComparSense} ;
                         
@@ -29,23 +31,24 @@ oper
                         counter : Str ; counterReplace : Bool} ;
   PropNoun    : Type = {s : Style => Str ; anim : Animateness} ;
   Adj         : Type = {pred : Style => TTense => Polarity => Str;
-                        attr : Str; te : Str ; tara : Str ; adv : Str} ; 
-  Adj2        : Type = {pred : Style => TTense => Polarity => Str;
-                        attr : Str; te : Str ; tara : Str ; adv : Str ; prep : Str} ; 
+                        attr : Str; te : Str ; ba : Str ; adv : Str ; dropNaEnging : Str} ; 
+  Adj2        : Type = {pred : Style => TTense => Polarity => Str ; attr : Str; 
+                        te : Str ; ba : Str ; adv : Str ; prep : Str ; dropNaEnging : Str} ; 
   Adverb      : Type = {s : Style => Str ; prepositive : Bool ; compar : ComparSense} ;
   Pronoun     : Type = {s : Style => Str ; Pron1Sg : Bool ; anim : Animateness} ;
-  Determiner  : Type = {quant : Style => Str ; postpositive : Str ; 
-                        num : Str ; n : Number ; inclCard : Bool} ;
+  Determiner  : Type = {quant : Style => Str ; postpositive : Str ; num : Str ; 
+                        n : Number ; inclCard : Bool ; sp : Style => Str ; no : Bool} ;
   Num         : Type = {s : Str ; postpositive : Str ; n : Number ; inclCard : Bool} ;
   Preposition : Type = {s : Str ; relPrep : Str} ;
   Verb        : Type = {s : Style => TTense => Polarity => Str ; te : Str ; 
-                        a_stem : Str ; i_stem : Str ; tara : Str} ;
+                        a_stem : Str ; i_stem : Str ; ba : Str} ;
   Verb2       : Type = {s : Style => TTense => Polarity => Str ; te : Str ; 
-                        a_stem : Str ; i_stem : Str ; tara : Str ;
+                        a_stem : Str ; i_stem : Str ; ba : Str ;
                         pass : Style => TTense => Polarity => Str ; pass_te : Str ; 
-                        pass_a_stem : Str ; pass_i_stem : Str ; pass_tara : Str ; 
+                        pass_a_stem : Str ; pass_i_stem : Str ; pass_ba : Str ; 
                         prep : Str} ;
-  Conjunction : Type = {s : Str ; pconj : Str ; disj : Bool} ;
+  Conjunction : Type = {s : Str ; null : Str ; type : ConjType} ;
+  Subjunction : Type = {s : Str ; type : SubjType} ;
                        
   mkNoun : Str -> Str -> Str -> Str -> Animateness -> Str -> Bool -> Noun = 
     \man1,man2,man3,man4,a,c,b -> {
@@ -70,7 +73,7 @@ oper
     mkNoun kane okane kane okane a c b ;
   
   regAdj : Str -> Adj = \a -> case a of {
-    chiisa + "い"       => i_mkAdj a ;
+    chiisa + "い"     => i_mkAdj a ;
     ooki + ("な"|"の") => na_mkAdj a
     } ;
 
@@ -113,8 +116,9 @@ oper
       } ;
     attr = chiisai ;
     te   = chiisa + "くて" ;
-    tara = chiisa + "かったら" ; 
-    adv  = chiisa + "く"
+    ba   = chiisa + "ければ" ; 
+    adv  = chiisa + "く" ;
+    dropNaEnging = chiisai
     } ;  
   
   na_mkAdj : Str -> Adj = \ookina -> 
@@ -153,8 +157,9 @@ oper
       } ;
     attr = ookina ;
     te   = ooki + "で" ;
-    tara = ooki + "だったら" ;
-    adv  = ooki + "に"
+    ba   = ooki + "であれば" ;
+    adv  = ooki + "に" ;
+    dropNaEnging = ooki
     } ; 
     
   VerbalA : Str -> Str -> Adj = \kekkonshiteiru,kikonno -> 
@@ -193,8 +198,9 @@ oper
       } ;
     attr = kikonno ;
     te   = kekkonshite + "いて" ;
-    tara = kekkonshite + "いたら" ;
-    adv  = kekkonshite + "に"
+    ba   = kekkonshite + "いれば" ;
+    adv  = init kikonno + "で" ;
+    dropNaEnging = init kikonno
     } ; 
   
   mkVerb : Str -> Str -> Str -> Str -> Verb = 
@@ -237,55 +243,21 @@ oper
         } ;
       a_stem = yoma ;
       i_stem = yomi ;
-      tara = yomi + "たら"
+      ba = mkBaForm yomu
     } ;
     
   mkVerb2 : Str -> Str -> Str -> Str -> Str -> Verb2 = 
-    \yoma,yomi,yomu,yonda,p -> 
-      let yon = init yonda ;     
-    in {
-    s = table {
-      Resp => table {
-        TPres => table {
-          Pos => yomi + "ます" ;
-          Neg => yomi + "ません"
-          } ;
-        TPast => table {
-          Pos => yomi + "ました" ;
-          Neg => yomi + "ませんでした"
-          } ;
-        TFut => table {
-          Pos => yomi + "ます" ;
-          Neg => yomi + "ません"
-          }
-        } ;
-      Plain => table {
-        TPres => table {
-          Pos => yomu ;
-          Neg => yoma + "ない"
-          } ;
-        TPast => table {
-          Pos => yonda ;
-          Neg => yoma + "なかった"
-          } ;
-        TFut => table {
-          Pos => yomu ;
-          Neg => yoma + "ない"
-          }
-        }
-      } ;
-    te = case yonda of {
-      yon + "だ" => yon + "で" ;
-      yon + "た" => yon + "て"
-      } ;
-    a_stem = yoma ;
-    i_stem = yomi ;
-    tara = yomi + "たら" ;
-    prep = p ;
-    pass = table {
-      Resp => table {
-        TPres => table {
-          Pos => case yomu of {
+    \yoma,yomi,yomu,yonda,p -> {
+      s = (mkVerb yoma yomi yomu yonda).s ;
+      te = (mkVerb yoma yomi yomu yonda).te ;
+      a_stem = yoma ;
+      i_stem = yomi ;
+      ba = mkBaForm yomu ;
+      prep = p ;
+      pass = table {
+        Resp => table {
+          TPres => table {
+            Pos => case yomu of {
             x + "する" => x + "されます" ;
             _        => yoma + "れます" 
             } ;
@@ -360,9 +332,9 @@ oper
       x + "する" => x + "され" ;
       _        => yoma + "れ" 
       } ;
-    pass_tara = case yomu of {
-      x + "する" => x + "されたら" ;
-      _        => yoma + "れたら" 
+    pass_ba = case yomu of {
+      x + "する" => x + "されれば" ;
+      _        => yoma + "れれば" 
       }
     } ;
   
@@ -400,7 +372,7 @@ oper
     te = "だって" ;
     a_stem = "で" ;
     i_stem = "で" ;
-    tara = "だったら"
+    ba = "であれば"
     } ;
   
   mkExistV : VP = {
@@ -420,9 +392,9 @@ oper
       Anim => \\st => "い" ;
       Inanim => \\st => "あり"
       } ;
-    tara = table {
-      Anim => \\st => "いたら" ;
-      Inanim => \\st => "あったら"
+    ba = table {
+      Anim => \\st => "いれば" ;
+      Inanim => \\st => "あれば"
       } ;
     prep = [] ;
     prepositive, obj = \\st => [] ;
@@ -442,12 +414,14 @@ oper
     anim = a
     } ;    
   
-  mkDet : Str -> Number -> Determiner = \q,n -> {
+  mkDet : Str -> Str -> Number -> Determiner = \q,sp,n -> {
     quant = \\st => q ;
     postpositive = [] ;
     num = [] ;
     n = n ;
-    inclCard = False
+    inclCard = False ;
+    sp = \\st => sp ;
+    no = False
     } ;
                        
   stylePron : Str -> Str -> Bool -> Animateness -> Pronoun = \boku,watashi,b,a -> {
@@ -490,10 +464,10 @@ oper
     anim = a
     } ;
   
-  mkConj : Str -> Str -> Bool -> Conjunction = \c,p,b -> {
+  mkConj : Str -> ConjType -> Conjunction = \c,t -> {
     s = c ;
-    pconj = p ;
-    disj = b
+    null = "" ;
+    type = t
     } ;
     
   mkPrep : Str -> Str -> Preposition = \p,r -> {
@@ -501,5 +475,22 @@ oper
     relPrep = r ;
     } ;
 
+  mkSubj : Str -> SubjType -> Subjunction = \s,t -> {
+    s = s ;
+    type = t ;
+    } ;
+    
+  mkBaForm : Str -> Str = \neru ->
+    case last neru of {  
+      "る" => init neru + "れば" ;
+      "す" => init neru + "せば" ;
+      "く" => init neru + "けば" ;
+      "ぐ" => init neru + "げば" ;
+      "む" => init neru + "めば" ; 
+      "ぬ" => init neru + "ねば" ;
+      "ぶ" => init neru + "べば" ;
+      "つ" => init neru + "てば" ;  
+      _    => init neru + "えば" 
+      } ;
 }
 

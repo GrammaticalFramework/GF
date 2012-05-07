@@ -15,7 +15,10 @@ flags coding = utf8 ;
         } ;
       prepositive = cn.prepositive ;
       needPart = True ;
-      changePolar = False ;
+      changePolar = case det.no of {
+        True => True ;
+        False => False
+        } ;
       Pron1Sg = False ;
       anim = cn.anim
       } ;
@@ -42,7 +45,10 @@ flags coding = utf8 ;
       s = \\st => p.s ++ np.s ! st ;
       prepositive = np.prepositive ;
       needPart = np.needPart ;
-      changePolar = np.changePolar ;
+      changePolar = case p.not of {
+        True => True ;
+        False => np.changePolar
+        } ;
       Pron1Sg = np.Pron1Sg ;
       anim = np.anim
       } ;
@@ -81,13 +87,13 @@ flags coding = utf8 ;
       } ;
     
     DetNP det = {
-      s = \\st => case det.inclCard of {
-        True => det.quant ! st ++ det.num ++ "つ" ++ det.postpositive ;
-        False => det.quant ! st ++ det.num
-        } ;
+      s = det.sp ;
       prepositive = \\st => [] ;
       needPart = True ;
-      changePolar = False ;
+      changePolar = case det.no of {
+        True => True ;
+        False => False
+        } ;
       Pron1Sg = False ;
       anim = Inanim   -- not always, depends on the context
       } ;
@@ -97,7 +103,12 @@ flags coding = utf8 ;
       postpositive = num.postpositive ;
       num = num.s ;
       n = num.n ;
-      inclCard = num.inclCard
+      inclCard = num.inclCard ;
+      sp = \\st => case num.inclCard of {
+        True => quant.s ! st ++ num.s ++ "つ" ++ num.postpositive ;
+        False => quant.sp ! st ++ num.s
+        } ;
+      no = quant.no
       } ;
       
     DetQuantOrd quant num ord = {
@@ -105,7 +116,12 @@ flags coding = utf8 ;
       postpositive = num.postpositive ;
       num = num.s ;
       n = num.n ;
-      inclCard = num.inclCard
+      inclCard = num.inclCard ;
+      sp = \\st => case num.inclCard of {
+        True => quant.s ! st ++ ord.attr ++ num.s ++ "つ" ++ num.postpositive ;
+        False => quant.s ! st ++ ord.attr ++ num.s
+        } ;
+      no = quant.no
       } ;
 
     NumSg = mkNum "" Sg False ;
@@ -133,31 +149,34 @@ flags coding = utf8 ;
     
     OrdDigits d = {
       pred = \\st,t,p => d.s ++ "番目" ++ mkCopula.s ! st ! t ! p ;  -- "banme"
-      attr = d.s ++ "番目の" ; 
+      attr = d.s ++ "番目の" ;
       te = d.s ++ "番目" ++ mkCopula.te ;
-      tara = d.s ++ "番目" ++ mkCopula.tara ;
-      adv = d.s ++ "番目" 
+      ba = d.s ++ "番目" ++ mkCopula.ba ;
+      adv = d.s ++ "番目" ;
+      dropNaEnging = d.s ++ "番目の"
       } ;
     
     OrdNumeral num = {
       pred = \\st,t,p => num.s ++ "番目" ++ mkCopula.s ! st ! t ! p ;
       attr = num.s ++ "番目の" ;
       te = num.s ++ "番目" ++ mkCopula.te ;
-      tara = num.s ++ "番目" ++ mkCopula.tara ;
-      adv = num.s ++ "番目" 
+      ba = num.s ++ "番目" ++ mkCopula.ba ;
+      adv = num.s ++ "番目" ;
+      dropNaEnging = num.s ++ "番目の"
       } ;
       
     OrdSuperl a = {
       pred = \\st,t,p => "一番" ++ a.pred ! st ! t ! p ;  -- "ichiban"
       attr = "一番" ++ a.attr ;
       te = "一番" ++ a.te ;
-      tara = "一番" ++ a.tara ;
-      adv = "一番" ++ a.adv
+      ba = "一番" ++ a.ba ;
+      adv = "一番" ++ a.adv ;
+      dropNaEnging = "一番" ++ a.dropNaEnging
       } ;
     
-    IndefArt = {s = \\st => ""} ;
+    IndefArt = {s = \\st => "" ; sp = \\st => "何か" ; no = False} ;
     
-    DefArt = {s = \\st => ""} ;
+    DefArt = {s = \\st => "" ; sp = \\st => "これ" ; no = False} ;
     
     MassNP cn = {
       s = \\st => cn.object ! st ++ cn.s ! Pl ! st ;
@@ -169,7 +188,8 @@ flags coding = utf8 ;
       } ;
     
     PossPron pron = {
-      s = \\st => pron.s ! st ++ "の" ;
+      s, sp = \\st => pron.s ! st ++ "の" ;
+      no = False
       } ;
     
     UseN n = {
