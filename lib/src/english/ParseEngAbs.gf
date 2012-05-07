@@ -4,9 +4,9 @@ abstract ParseEngAbs =
   Noun,
   Adjective,
   Numeral,
-  Symbol,
+  Symbol [PN, Symb, String, MkSymb, SymbPN],
   Conjunction,
-  Verb - [SlashV2V, PassV2],
+  Verb - [SlashV2V, PassV2, UseCopula],
   Adverb,
   Phrase,
   Sentence,
@@ -28,6 +28,7 @@ fun CompoundCN : Num -> N -> CN -> CN ;
     ourself_NP : NP ;
     yourselfPl_NP : NP ;
     themself_NP : NP ;
+    themselves_NP : NP ;
     OrdCompar : A -> Ord ;
 
     PositAdVAdj : A -> AdV ;
