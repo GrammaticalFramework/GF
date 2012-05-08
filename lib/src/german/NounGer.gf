@@ -5,7 +5,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
   lin
     DetCN det cn = {
       s = \\c => det.s ! cn.g ! c ++ 
-                 (let k = (prepC c).c in cn.s ! adjfCase det.a k ! det.n ! k) ;
+                 (let k = (prepC c).c in cn.s ! adjfCase det.a det.n k ! det.n ! k) ;
       a = agrgP3 cn.g det.n ;
       isPron = False
       } ;
@@ -52,9 +52,9 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
         a = quant.a
       in {
         s  = \\g,c => quant.s ! num.isNum ! n ! g ! c ++ (let k = (prepC c).c in
-                        num.s!g!k ++ ord.s ! agrAdj g (adjfCase a k) n k) ;
+                        num.s!g!k ++ ord.s ! agrAdj g (adjfCase a n k) n k) ;
         sp = \\g,c => quant.sp ! n ! g ! c ++ (let k = (prepC c).c in
-                        num.s!g!k ++ ord.s ! agrAdj g (adjfCase a k) n k) ;
+                        num.s!g!k ++ ord.s ! agrAdj g (adjfCase a n k) n k) ;
         n = n ;
         a = a
         } ;
@@ -116,7 +116,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
       } ;
 
     MassNP cn = {
-      s = \\c => usePrepC c (\k -> cn.s ! adjfCase Strong k ! Sg ! k) ;
+      s = \\c => usePrepC c (\k -> cn.s ! Strong ! Sg ! k) ;
       a = agrP3 Sg ;
       isPron = False
       } ;
