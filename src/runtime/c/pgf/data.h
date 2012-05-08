@@ -125,7 +125,7 @@ struct PgfPGF {
 extern GU_DECLARE_TYPE(PgfPGF, struct);
 
 typedef struct {
-	double prob;
+	float prob;
 	PgfExpr expr;
 } PgfExprProb;
 
@@ -148,6 +148,9 @@ struct PgfCatFun {
 struct PgfCat {
 	// TODO: Add cid here
 	PgfHypos context;
+
+	float meta_prob;
+
 	GuLength n_functions;
 	PgfCatFun functions[]; // XXX: resolve to PgfFunDecl*?
 };
@@ -189,6 +192,7 @@ struct PgfCCat {
 	PgfFunIds* lindefs;
 	size_t n_synprods;
 	PgfProductionSeq prods;
+	float viterbi_prob;
 	int fid;
 };
 

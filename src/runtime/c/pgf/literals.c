@@ -235,6 +235,8 @@ pgf_match_name_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
 		lit_str->val = gu_string_buf_freeze(sbuf, pool);
 
 		*out_ep = ep;
+	} else {
+		*out_ep = NULL;
 	}
 
 	gu_pool_free(tmp_pool);
