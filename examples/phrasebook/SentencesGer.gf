@@ -43,8 +43,8 @@ concrete SentencesGer of Sentences = NumeralGer ** SentencesI -
 -- the new things
   lin
     ADoVerbPhrase p vp = prop (mkCl p.name vp) ;
-    AModVerbPrase m p vp = prop (mkCl p.name (mkVP m vp)) ;
+    AModVerbPhrase m p vp = prop (mkCl p.name (mkVP m vp)) ;
     ADoVerbPhrasePlace p vp x = prop (mkCl p.name (mkVP vp x.at)) ;
-    AModVerbPrasePlace m p vp x = prop (mkCl p.name (mkVP m (mkVP vp x.at))) ;
+    AModVerbPhrasePlace m p vp x = prop (mkCl p.name (mkVP m (mkVP vp x.at))) ;
     YouPlurPolMale, YouPlurPolFemale = mkPerson youPol_Pron ;
 }
