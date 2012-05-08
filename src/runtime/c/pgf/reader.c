@@ -34,7 +34,6 @@
 #define GU_LOG_ENABLE
 #include <gu/log.h>
 
-typedef struct PgfIdContext PgfIdContext;
 
 typedef GuMap PgfContsMap;
 
@@ -443,6 +442,7 @@ pgf_read_to_PgfCCatId(GuType* type, PgfReader* rdr, void* to)
         ccat->lindefs = gu_map_get(rdr->curr_lindefs, &fid, PgfFunIds*);
         ccat->n_synprods = 0;
         ccat->prods = gu_null_seq;
+        ccat->viterbi_prob = 0;
         ccat->fid = fid;
 
         gu_map_put(rdr->curr_concr->ccats, &fid, PgfCCat*, ccat);
@@ -465,6 +465,7 @@ pgf_read_to_PgfCCat(GuType* type, PgfReader* rdr, void* to)
     ccat->cnccat = NULL;
     ccat->lindefs = gu_map_get(rdr->curr_lindefs, fidp, PgfFunIds*);
 	ccat->prods = gu_new_seq(PgfProduction, n_prods, rdr->opool);
+	ccat->viterbi_prob = 0;
     ccat->fid = *fidp;
     
     size_t top = 0;
@@ -600,7 +601,7 @@ pgf_read_new_PgfFunDecl(GuType* type, PgfReader* rdr, GuPool* pool, size_t* size
 	}
 
 	absfun->ep.prob = - log(gu_in_f64be(rdr->in, rdr->err));
-	
+
 	PgfExprFun* expr_fun =
 		gu_new_variant(PGF_EXPR_FUN,
 					   PgfExprFun,
@@ -638,11 +639,33 @@ pgf_read_to_PgfFunId(GuType* type, PgfReader* rdr, void* to)
 	*(PgfFunId*) to = gu_list_elems(rdr->curr_concr->cncfuns)[id];
 }
 
+typedef struct {
+	GuMapItor fn;
+	PgfReader* rdr;
+} PgfIndexFn;
+
+static void
+pgf_compute_meta_probs(GuMapItor* fn, const void* key, void* value, GuExn* err)
+{
+	(void) (key && err);
+	
+    PgfCat* cat = *((PgfCat**) value);
+    
+    double mass = 0;
+    for (size_t i = 0; i < cat->n_functions; i++) {
+		mass += cat->functions[i].prob;
+	}
+    cat->meta_prob = - log(fabs(1 - mass));
+}
+
 static void
 pgf_read_to_PgfAbstr(GuType* type, PgfReader* rdr, void* to)
 {
 	rdr->curr_abstr = to;
 	pgf_read_to_struct(type, rdr, to);
+
+	PgfIndexFn clo = { { pgf_compute_meta_probs }, rdr };
+	gu_map_iter(rdr->curr_abstr->cats, &clo.fn, NULL);
 }
 
 static GU_DEFINE_TYPE(PgfLinDefs, GuIntMap, gu_ptr_type(PgfFunIds),
@@ -690,11 +713,6 @@ pgf_ccat_set_cnccat(PgfCCat* ccat)
 	}
 	return ccat->cnccat;
 }
-
-typedef struct {
-	GuMapItor fn;
-	PgfReader* rdr;
-} PgfIndexFn;
 
 static void
 pgf_read_ccat_cb(GuMapItor* fn, const void* key, void* value, GuExn* err)
@@ -771,12 +789,6 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
 	concr->total_cats = pgf_read_int(rdr);
 	concr->max_fid = concr->total_cats;
 
-	PgfIndexFn clo1 = { { pgf_read_ccat_cb }, rdr };
-	gu_map_iter(concr->ccats, &clo1.fn, NULL);
-	
-	PgfIndexFn clo2 = { { pgf_index_prods }, rdr };
-	gu_map_iter(concr->ccats, &clo2.fn, NULL);
-
     // set the function ids
     int n_funs = gu_list_length(concr->cncfuns);
     for (int funid = 0; funid < n_funs; funid++) {
@@ -787,6 +799,12 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
 			gu_map_get(rdr->curr_abstr->funs, &cncfun->name, PgfFunDecl*);
         cncfun->ep = (absfun == NULL) ? NULL : &absfun->ep;
 	}
+
+	PgfIndexFn clo1 = { { pgf_read_ccat_cb }, rdr };
+	gu_map_iter(concr->ccats, &clo1.fn, NULL);
+	
+	PgfIndexFn clo2 = { { pgf_index_prods }, rdr };
+	gu_map_iter(concr->ccats, &clo2.fn, NULL);
 
 	return concr;
 }
@@ -821,6 +839,7 @@ pgf_read_new_PgfCncCat(GuType* type, PgfReader* rdr, GuPool* pool,
             ccat->lindefs = gu_map_get(rdr->curr_lindefs, &fid, PgfFunIds*);
             ccat->n_synprods = 0;
             ccat->prods = gu_null_seq;
+            ccat->viterbi_prob = 0;
             ccat->fid = fid;
 
             gu_map_put(rdr->curr_concr->ccats, &fid, PgfCCat*, ccat);

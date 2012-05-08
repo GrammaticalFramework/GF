@@ -46,7 +46,7 @@ pgf_lexer_next_token(PgfLexer *lexer, GuExn* err, GuPool *pool)
 			if (gu_exn_is_raised(err))
 				goto stop;
 			
-			if (lexer->ucs == '.' && counter < 3) {
+			if (lexer->ucs == '.' && counter < 4) {
 				// perhaps an abreviation
 				gu_ucs_write(lexer->ucs, wtr, err);
 				if (gu_exn_is_raised(err))

@@ -18,6 +18,33 @@
 #include <locale.h>
 #include <time.h>
 
+static void
+print_result(PgfExprProb* ep, PgfConcr* to_concr, 
+             GuWriter* wtr, GuExn* err, GuPool* ppool)
+{
+	// Write out the abstract syntax tree
+	gu_printf(wtr, err, " [%f] ", ep->prob);
+	pgf_print_expr(ep->expr, 0, wtr, err);
+	gu_putc('\n', wtr, err);
+
+	// Enumerate the concrete syntax trees corresponding
+	// to the abstract tree.
+	GuEnum* cts = pgf_lzr_concretize(to_concr, ep->expr, ppool);
+	while (true) {
+		PgfCncTree ctree =
+			gu_next(cts, PgfCncTree, ppool);
+		if (gu_variant_is_null(ctree)) {
+			break;
+		}
+		gu_putc(' ', wtr, err);
+		// Linearize the concrete tree as a simple
+		// sequence of strings.
+		pgf_lzr_linearize_simple(to_concr	, ctree, 0, wtr, err);
+		gu_putc('\n', wtr, err);
+		gu_writer_flush(wtr, err);
+	}
+}
+
 int main(int argc, char* argv[]) {
 	// Set the character locale, so we can produce proper output.
 	setlocale(LC_CTYPE, "");
@@ -32,15 +59,7 @@ int main(int argc, char* argv[]) {
 	}
 	char* filename = argv[1];
 
-	GuString cat;
-	bool robust_mode;
-	if (argv[2][0] == '.') {
-		cat = gu_str_string(argv[2]+1, pool);
-		robust_mode = true;
-	} else {
-		cat = gu_str_string(argv[2], pool);
-		robust_mode = false;
-	}
+	GuString cat = gu_str_string(argv[2], pool);
 
 	GuString from_lang = gu_str_string(argv[3], pool);
 	GuString to_lang = gu_str_string(argv[4], pool);
@@ -83,10 +102,6 @@ int main(int argc, char* argv[]) {
 	pgf_parser_add_literal(from_concr, gu_str_string("Symb", pool),
 	                       &pgf_nerc_literal_callback);
 
-	// Arbitrarily choose linearization index 0. Usually the initial
-	// categories we are interested in only have one field.
-	int lin_idx = 0;
-
 	// Create an output stream for stdout
 	GuOut* out = gu_file_out(stdout, pool);
 
@@ -94,6 +109,11 @@ int main(int argc, char* argv[]) {
 	// GuWriter* wtr = gu_locale_writer(out, pool);
 	// Use a writer with hard-coded utf-8 encoding for now.
 	GuWriter* wtr = gu_new_utf8_writer(out, pool);
+
+	// We will keep the latest results in the 'ppool' and
+	// we will iterate over them by using 'result'.
+	GuPool* ppool = NULL;
+	GuEnum* result = NULL;
 
 	// The interactive translation loop.
 	// XXX: This currently reads stdin directly, so it doesn't support
@@ -109,20 +129,49 @@ int main(int argc, char* argv[]) {
 				status = EXIT_FAILURE;
 			}
 			break;
-		} else if (line[0] == '\0') {
+		} else if (strcmp(line, "") == 0) {
 			// End nicely on empty input
 			break;
+		} else if (strcmp(line, "\n") == 0) {
+			// Empty line -> show the next tree for the last sentence
+
+			if (result != NULL) {
+				clock_t start = clock();
+
+				PgfExprProb* ep = gu_next(result, PgfExprProb*, ppool);
+
+				clock_t end = clock();
+				double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+				printf("%.2f sec\n", cpu_time_used);
+
+				// The enumerator will return a null variant at the
+				// end of the results.
+				if (ep == NULL) {
+					goto fail_parse;
+				}
+				
+				print_result(ep, to_concr, wtr, err, ppool);
+			}
+			continue;
 		}
+
+		// We release the last results
+		if (ppool != NULL) {
+			gu_pool_free(ppool);
+			ppool  = NULL;
+			result = NULL;
+		}
+		
 		// We create a temporary pool for translating a single
 		// sentence, so our memory usage doesn't increase over time.
-		GuPool* ppool = gu_new_pool();
+		ppool = gu_new_pool();
 
 		clock_t start = clock();
 
 		// Begin parsing a sentence of the specified category
-		PgfParse* parse =
-			pgf_parser_parse(from_concr, cat, lin_idx, pool);
-		if (parse == NULL) {
+		PgfParseState* state =
+			pgf_parser_init_state(from_concr, cat, 0, pool);
+		if (state == NULL) {
 			fprintf(stderr, "Couldn't begin parsing\n");
 			status = EXIT_FAILURE;
 			break;
@@ -133,13 +182,13 @@ int main(int argc, char* argv[]) {
 		PgfLexer *lexer =
 			pgf_new_lexer(rdr, pool);
 
-		// naive tokenization
+		// Tokenization
 		GuExn* lex_err = gu_new_exn(NULL, gu_kind(type), pool);
 		PgfToken tok = pgf_lexer_next_token(lexer, lex_err, pool);
 		while (!gu_exn_is_raised(lex_err)) {
 			// feed the token to get a new parse state
-			parse = pgf_parse_token(parse, tok, robust_mode, ppool);
-			if (!parse) {
+			state = pgf_parser_next_state(state, tok, ppool);
+			if (!state) {
 				gu_puts("Unexpected token: \"", wtr, err);
 				gu_string_write(tok, wtr, err);
 				gu_puts("\"\n", wtr, err);
@@ -149,64 +198,29 @@ int main(int argc, char* argv[]) {
 			tok = pgf_lexer_next_token(lexer, lex_err, pool);
 		}
 
-		if (robust_mode) {
-			PgfExpr expr = pgf_parse_best_result(parse, ppool);
+		// Now begin enumerating the resulting syntax trees
+		result = pgf_parse_result(state, ppool);
 
-			clock_t end = clock();
+		PgfExprProb* ep = gu_next(result, PgfExprProb*, ppool);
 
-			double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-			printf("%.2f sec\n", cpu_time_used);
-			
-			if (!gu_variant_is_null(expr)) {
-				gu_putc(' ', wtr, err);
-				// Write out the abstract syntax tree
-				pgf_print_expr(expr, 0, wtr, err);
-				gu_putc('\n', wtr, err);
-			}
-		} else {
-			// Now begin enumerating the resulting syntax trees
-			GuEnum* result = pgf_parse_result(parse, ppool);
+		clock_t end = clock();
+		double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+		printf("%.2f sec\n", cpu_time_used);
 
-			clock_t end = clock();
-
-			double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-			printf("%.2f sec\n", cpu_time_used);
-
-			while (true) {
-				PgfExpr expr = gu_next(result, PgfExpr, ppool);
-
-				// The enumerator will return a null variant at the
-				// end of the results.
-				if (gu_variant_is_null(expr)) {
-					break;
-				}
-				gu_putc(' ', wtr, err);
-				// Write out the abstract syntax tree
-				pgf_print_expr(expr, 0, wtr, err);
-				gu_putc('\n', wtr, err);
-
-				// Enumerate the concrete syntax trees corresponding
-				// to the abstract tree.
-				GuEnum* cts = pgf_lzr_concretize(to_concr, expr, ppool);
-				while (true) {
-					PgfCncTree ctree =
-						gu_next(cts, PgfCncTree, ppool);
-					if (gu_variant_is_null(ctree)) {
-						break;
-					}
-					gu_puts("  ", wtr, err);
-					// Linearize the concrete tree as a simple
-					// sequence of strings.
-					pgf_lzr_linearize_simple(to_concr	, ctree, lin_idx,
-								 wtr, err);
-					gu_putc('\n', wtr, err);
-					gu_writer_flush(wtr, err);
-				}
-			}
+		// The enumerator will return a null variant at the
+		// end of the results.
+		if (ep == NULL) {
+			goto fail_parse;
 		}
+		
+		print_result(ep, to_concr, wtr, err, ppool);
+
+		continue;
 	fail_parse:
 		// Free all resources allocated during parsing and linearization
 		gu_pool_free(ppool);
+		ppool = NULL;
+		result = NULL;
 	}
 fail_concr:
 fail_read:

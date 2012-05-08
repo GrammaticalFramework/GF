@@ -15,7 +15,7 @@
  *  @todo HOAS, dependent types...
  */
 
-typedef struct PgfParse PgfParse;
+typedef struct PgfParseState PgfParseState;
 
 /** @}
  * 
@@ -32,8 +32,9 @@ typedef struct PgfParse PgfParse;
  */
 
 /// Begin parsing
-PgfParse*
-pgf_parser_parse(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool);
+PgfParseState*
+pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, 
+                      GuPool* pool);
 /**<
  * @param parser The parser to use
  *
@@ -48,8 +49,9 @@ pgf_parser_parse(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool);
 
 
 /// Feed a token to the parser
-PgfParse*
-pgf_parse_token(PgfParse* parse, PgfToken tok, bool robust, GuPool* pool);
+PgfParseState*
+pgf_parser_next_state(PgfParseState* prev, PgfToken tok,
+                      GuPool* pool);
 /**<
  * @param parse The current parse state
  *
@@ -87,7 +89,7 @@ typedef GuEnum PgfExprEnum;
 
 /// Retrieve the current parses from the parse state.
 PgfExprEnum*
-pgf_parse_result(PgfParse* parse, GuPool* pool);
+pgf_parse_result(PgfParseState* state, GuPool* pool);
 /**<
  * @param parse A parse state
  *
@@ -101,7 +103,7 @@ pgf_parse_result(PgfParse* parse, GuPool* pool);
  */
 
 PgfExpr
-pgf_parse_best_result(PgfParse* parse, GuPool* pool);
+pgf_parse_best_result(PgfParseState* state, GuPool* pool);
 
 
 int

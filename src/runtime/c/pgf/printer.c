@@ -40,7 +40,7 @@ pgf_print_cat(GuMapItor* fn, const void* key, void* value,
 		pgf_print_hypo(hypo, 4, wtr, err);
 	}
 
-    gu_puts(" ;\n", wtr, err);
+    gu_printf(wtr, err, " ;   -- %f\n",cat->meta_prob);
 }
 
 void
@@ -56,7 +56,7 @@ pgf_print_absfun(GuMapItor* fn, const void* key, void* value,
     gu_string_write(name, wtr, err);
     gu_puts(" : ", wtr, err);
     pgf_print_type(fun->type, 0, wtr, err);
-    gu_puts(" ;\n", wtr, err);
+    gu_printf(wtr, err, " ;   -- %f\n", fun->ep.prob);
 }
 static void
 pgf_print_abstract(PgfCId absname, PgfAbstr* abstr, 
