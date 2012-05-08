@@ -52,9 +52,10 @@ concrete CatGer of Cat =
     Pron = {s : NPForm => Str ; a : Agr} ;
     Det = {s,sp : Gender => PCase => Str ; n : Number ; a : Adjf} ;
     Quant = {
-      s  : Bool => Number => Gender => PCase => Str ; 
-      sp : Number => Gender => PCase => Str ; 
-      a  : Adjf
+      s   : Bool => Number => Gender => PCase => Str ; 
+      sp  : Number => Gender => PCase => Str ; 
+      a   : Adjf ;
+      aPl : Adjf ;  --- to distinguish "meine guten Freunde" / "gute Freunde"
       } ;
     Predet = {
       s : Number => Gender => PCase => Str ; 

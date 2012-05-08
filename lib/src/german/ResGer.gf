@@ -167,8 +167,8 @@ resource ResGer = ParamX ** open Prelude in {
 
 -- This is used twice in NounGer.
 
-    adjfCase : Adjf -> Number -> Case -> Adjf = \a,n,c -> case <n,c> of {
-         <Sg, Nom|Acc> => a ;
+    adjfCase : Adjf -> Case -> Adjf = \a,c -> case c of {
+         Nom|Acc => a ;
          _ => Weak
          } ;      
 
