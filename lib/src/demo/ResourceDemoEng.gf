@@ -1,4 +1,6 @@
-abstract MiniGrammar = Lexicon, Grammar [
+--# -path=.:alltenses
+
+concrete ResourceDemoEng of ResourceDemo = LexiconEng, GrammarEng [
 
 -- the "mini" resource of GF book, chapter 9
 
@@ -47,6 +49,7 @@ abstract MiniGrammar = Lexicon, Grammar [
     TTAnt, -- Tense -> Ant -> Temp ;
     PPos, PNeg, -- Pol,
     TPres, TPast, TFut, TCond, -- Tense,
+       STense, SCond, SFut, SPast, SPres, -- scand tense
     ASimul, AAnter,
 
     and_Conj, or_Conj, -- Conj,
@@ -74,7 +77,8 @@ abstract MiniGrammar = Lexicon, Grammar [
     Temp,
     Comp,
     Ant,
-    Imp,
+
+    Imp, Bool, True, False, Voc,
 
 --  fun
     UttS , -- S -> Utt,
@@ -92,9 +96,9 @@ abstract MiniGrammar = Lexicon, Grammar [
 ---    CompAdv, -- Adv -> VP,         -- be here
     PrepNP , -- Prep -> NP -> Adv, -- in the house
 
-    ComplVS, -- VS -> S  -> VP,  -- know that she walks
-    ComplVQ, -- VQ -> QS -> VP,  -- wonder who walks
-    ComplVV, -- VV -> VP -> VP,  -- want to walk
+---    ComplVS, -- VS -> S  -> VP,  -- know that she walks
+---    ComplVQ, -- VQ -> QS -> VP,  -- wonder who walks
+---    ComplVV, -- VV -> VP -> VP,  -- want to walk
 
 ---    SlashV2  , -- NP -> V2 -> ClSlash,   -- she loves
 ---    SlashPrep, -- Cl -> Prep -> ClSlash, -- she walks with
@@ -111,29 +115,33 @@ abstract MiniGrammar = Lexicon, Grammar [
     although_Subj, because_Subj, when_Subj, if_Subj, -- Subj,
     when_IAdv, where_IAdv, why_IAdv-- IAdv,
 
-] ** {
-
-flags startcat = Utt ;
+] ** open SyntaxEng, (S = SyntaxEng) in {
 
 -- functions with different type
 
-fun
-   ComplV2 : V2 -> NP -> VP ;
-   ModCN   : AP -> CN -> CN ;
-   CompAP  : AP -> VP ;
-   ConjS   : Conj -> S  -> S  -> S ;
-   ConjAP  : Conj -> AP -> AP -> AP ;
-   ConjNP  : Conj -> NP -> NP -> NP ;
-   a_Det, the_Det : Det ; 
-   this_Det, these_Det : Det ;
-   that_Det, those_Det : Det ;
-   i_NP, youSg_NP, he_NP, she_NP, we_NP, youPl_NP, they_NP : NP ;
-   SubjS   : Subj -> S -> S -> Utt ;     -- if she walks we run
-   CompAdv : Adv -> VP ;          -- be here
---   SlashV2 : NP -> V2 -> ClSlash ;   -- she loves
-   SlashPrep : Cl -> Prep -> ClSlash ; -- she walks with
-   AdvCN : CN -> Prep -> NP -> CN ; -- man in the city
-
-
+lin
+   ComplV2 v np = mkVP v np ;
+   ModCN ap cn = lin CN (mkCN <lin AP ap : AP> <lin CN cn : CN>) ;
+   CompAP ap = mkVP (lin AP ap) ;
+   ConjS co x y = mkS (lin Conj co) (lin S x) (lin S y) ;
+   ConjAP co x y = mkAP co x y ;
+   ConjNP co x y = mkNP co x y ;
+   a_Det = mkDet a_Quant ;
+   the_Det = mkDet the_Quant ;
+   this_Det = S.this_Det ;
+   these_Det = S.these_Det ;
+   that_Det = S.that_Det ;
+   those_Det = S.those_Det ;
+   i_NP = S.i_NP ;
+   youSg_NP = S.you_NP ; 
+   he_NP = S.he_NP ;
+   she_NP = S.she_NP ;
+   we_NP = S.we_NP ;
+   youPl_NP = S.youPl_NP ;
+   they_NP = S.they_NP ;
+   SubjS subj a b = mkUtt (mkS (S.mkAdv <subj : Subj> <a : S>) b) ;
+   CompAdv adv = mkVP (lin Adv adv) ;
+--   SlashV2 np v2 = mkClSlash np v2 ;
+   SlashPrep cl p = mkClSlash (lin Cl cl) <p : Prep> ;
+   AdvCN cn p pp = mkCN <lin CN cn : CN> (mkAdv <p : Prep> <pp : NP>) ;
 }
-

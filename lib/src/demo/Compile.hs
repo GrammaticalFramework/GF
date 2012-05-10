@@ -18,7 +18,7 @@ import System
 
 
 -- change this to apply to another project; alternatively, just use full file names
-mainmodu = "MiniGrammar"
+mainmodu = "ResourceDemo"
 
 main = do
   (opts,langs) <- getArgs >>= return . partition ((=='-') . head)
