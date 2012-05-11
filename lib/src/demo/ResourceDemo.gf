@@ -1,4 +1,4 @@
-abstract ResourceDemo = Lexicon, Grammar [
+abstract ResourceDemo = Lexicon, Numeral, Grammar [
 
 -- the "mini" resource of GF book, chapter 9
 
@@ -18,12 +18,15 @@ abstract ResourceDemo = Lexicon, Grammar [
     Tense, -- tense
     Pol,   -- polarity
     Conj,  -- conjunction
+    Pron, 
+    Numeral,
 
 --  fun
     UseCl  , -- Tense -> Pol -> Cl -> S,
     PredVP , -- NP -> VP -> Cl,
 ---    ComplV2, -- V2 -> NP -> VP,
     DetCN  , -- Det -> CN -> NP,
+    UsePron,
 ---    ModCN  , -- AP -> CN -> CN,
 
 ---    CompAP , -- AP -> VP,
@@ -87,9 +90,8 @@ abstract ResourceDemo = Lexicon, Grammar [
     QuestSlash, -- IP -> ClSlash -> QCl,  -- who does she walk with
     QuestIAdv , -- IAdv -> Cl -> QCl,     -- why does she walk
 
----    SubjCl, -- Cl -> Subj -> S -> Cl,     -- she walks because we run
+    SubjCl, -- Cl -> Subj -> S -> Cl,     -- she walks because we run
 
----    CompAdv, -- Adv -> VP,         -- be here
     PrepNP , -- Prep -> NP -> Adv, -- in the house
 
     ComplVS, -- VS -> S  -> VP,  -- know that she walks
@@ -104,7 +106,7 @@ abstract ResourceDemo = Lexicon, Grammar [
     UsePN, -- PN -> NP,        -- John
 ---    AdvNP, -- NP -> Adv -> NP, -- the man in the city
 
-    who_IP , -- IP,
+    whoSg_IP , -- IP,
     here_Adv, -- Adv,
     by_Prep, in_Prep, of_Prep, with_Prep, -- Prep,
     can_VV, must_VV, want_VV, -- VV,
@@ -114,6 +116,7 @@ abstract ResourceDemo = Lexicon, Grammar [
 ] ** {
 
 flags startcat = Utt ;
+
 
 -- functions with different type
 
@@ -127,10 +130,12 @@ fun
    a_Det, the_Det : Det ; 
    this_Det, these_Det : Det ;
    that_Det, those_Det : Det ;
-   i_NP, youSg_NP, he_NP, she_NP, we_NP, youPl_NP, they_NP : NP ;
-   SubjS   : Subj -> S -> S -> Utt ;     -- if she walks we run
-   CompAdv : Adv -> VP ;          -- be here
---   SlashV2 : NP -> V2 -> ClSlash ;   -- she loves
+   possDet : Pron -> Det ;
+   numeralDet : Numeral -> Det ;
+   i_Pron, youSg_Pron, he_Pron, she_Pron, we_Pron, youPl_Pron, they_Pron : Pron ;
+   SubjS   : Subj -> S -> S -> S ;     -- if she walks we run
+   CompAdv : Prep -> NP -> VP ;        -- be in the house
+   SlashV2 : NP -> V2 -> ClSlash ;   -- she loves
    SlashPrep : Cl -> Prep -> ClSlash ; -- she walks with
    AdvCN : CN -> Prep -> NP -> CN ; -- man in the city
 

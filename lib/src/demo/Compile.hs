@@ -29,7 +29,7 @@ main = do
     else return ()
   case opts of
     _ | elem "-make" opts || elem "-link" opts -> do
-      let comm = "gf -make -s " ++ unwords (map (++ ".pgf") modus)
+      let comm = "gf -make -s " ++ unwords (map (++ ".pgf") modus) ++" +RTS -K320M -RTS"
       putStrLn comm
       system comm
       return () 

@@ -1,8 +1,8 @@
 --# -path=.:alltenses
 
-concrete ResourceDemoEng of ResourceDemo = LexiconEng, GrammarEng [
+concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
 
--- the "mini" resource of GF book, chapter 9
+-- used to be the "mini" resource of GF book, chapter 9, but now larger
 
 -- cat
     S,     -- sentence
@@ -21,11 +21,15 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, GrammarEng [
     Pol,   -- polarity
     Conj,  -- conjunction
 
+    Pron,  -- pronoun
+    Numeral,
+
 --  fun
     UseCl  , -- Tense -> Pol -> Cl -> S,
     PredVP , -- NP -> VP -> Cl,
 ---    ComplV2, -- V2 -> NP -> VP,
     DetCN  , -- Det -> CN -> NP,
+    UsePron,
 ---    ModCN  , -- AP -> CN -> CN,
 
 ---    CompAP , -- AP -> VP,
@@ -43,7 +47,7 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, GrammarEng [
     every_Det, -- Det,
 ---    this_Det, these_Det, -- Det,
 ---    that_Det, those_Det, -- Det,
----    i_NP, youSg_NP, he_NP, she_NP, we_NP, youPl_NP, they_NP, -- NP,
+    i_Pron, youSg_Pron, he_Pron, she_Pron, we_Pron, youPl_Pron, they_Pron, -- NP,
     very_AdA, -- AdA,
 
     TTAnt, -- Tense -> Ant -> Temp ;
@@ -91,14 +95,13 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, GrammarEng [
     QuestSlash, -- IP -> ClSlash -> QCl,  -- who does she walk with
     QuestIAdv , -- IAdv -> Cl -> QCl,     -- why does she walk
 
----    SubjCl, -- Cl -> Subj -> S -> Cl,     -- she walks because we run
+    SubjCl, -- Cl -> Subj -> S -> Cl,     -- she walks because we run
 
----    CompAdv, -- Adv -> VP,         -- be here
     PrepNP , -- Prep -> NP -> Adv, -- in the house
 
----    ComplVS, -- VS -> S  -> VP,  -- know that she walks
----    ComplVQ, -- VQ -> QS -> VP,  -- wonder who walks
----    ComplVV, -- VV -> VP -> VP,  -- want to walk
+    ComplVS, -- VS -> S  -> VP,  -- know that she walks
+    ComplVQ, -- VQ -> QS -> VP,  -- wonder who walks
+    ComplVV, -- VV -> VP -> VP,  -- want to walk
 
 ---    SlashV2  , -- NP -> V2 -> ClSlash,   -- she loves
 ---    SlashPrep, -- Cl -> Prep -> ClSlash, -- she walks with
@@ -108,7 +111,7 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, GrammarEng [
     UsePN, -- PN -> NP,        -- John
 ---    AdvNP, -- NP -> Adv -> NP, -- the man in the city
 
-    who_IP , -- IP,
+    whoSg_IP , -- IP,
     here_Adv, -- Adv,
     by_Prep, in_Prep, of_Prep, with_Prep, -- Prep,
     can_VV, must_VV, want_VV, -- VV,
@@ -132,16 +135,11 @@ lin
    these_Det = S.these_Det ;
    that_Det = S.that_Det ;
    those_Det = S.those_Det ;
-   i_NP = S.i_NP ;
-   youSg_NP = S.you_NP ; 
-   he_NP = S.he_NP ;
-   she_NP = S.she_NP ;
-   we_NP = S.we_NP ;
-   youPl_NP = S.youPl_NP ;
-   they_NP = S.they_NP ;
-   SubjS subj a b = mkUtt (mkS (S.mkAdv <subj : Subj> <a : S>) b) ;
-   CompAdv adv = mkVP (lin Adv adv) ;
---   SlashV2 np v2 = mkClSlash np v2 ;
+   possDet p = S.mkDet <p : Pron> ;
+   numeralDet n = S.mkDet <n : Numeral> ;
+   SubjS subj a b = mkS (S.mkAdv <subj : Subj> <a : S>) b ;
+   CompAdv p pp = mkVP (S.mkAdv <p : Prep> <pp : NP>) ;
+   SlashV2 np v2 = mkClSlash np v2 ;
    SlashPrep cl p = mkClSlash (lin Cl cl) <p : Prep> ;
    AdvCN cn p pp = mkCN <lin CN cn : CN> (mkAdv <p : Prep> <pp : NP>) ;
 }
