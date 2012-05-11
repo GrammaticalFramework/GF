@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>GF RGL Browser</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="http://www.grammaticalframework.org/css/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>GF RGL Browser</h1>
+<p style="font-style:italic;margin-top:-0.5em;">Updated 2012-05-11. <a href="#footer">About this tool</a></p>
+  </header>
+  <div role="main">
+
+    <div class="pane left">
+      <div id="languages"></div>
+      <div id="modules"></div>
+    </div>
+    
+    <div class="pane right">
+      <div id="tabbar">
+        <h2></h2>
+        <div id="loading">
+          <img src="ajax-loader.gif" /> loading...
+        </div>
+      </div>
+      <div id="scope" class="panel scope">
+        <input type="text" id="search" />
+        <input type="checkbox" id="case_sensitive" checked="checked" />
+        <label for="case_sensitive">Case sensitive?</label>
+        <dl></dl>
+      </div>
+      <div id="code" class="panel code"></div>
+    </div>
+
+    <br style="clear:both">
+
+  </div>
+  <footer id="footer">
+    <h3>About the GF RGL Browser</h3>
+  <p>A basic tool for looking up module scopes and quickly looking at module sources, created out of necessity. It is experimental and has only been tested on the latest Chrome under Ubuntu. Even then, the page sometimes crashes and has to be closed.  All feedback welcome.<br/>
+  To do:</p>
+  <ul>
+    <li>Test from other browsers</li>
+    <li>Stop from crashing occasionally</li>
+    <li>Line numbers and syntax highlighting for source code would be cool</li>
+  </ul>
+  <p><em>John J. Camilleri, 2012</em></p>
+  </footer>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

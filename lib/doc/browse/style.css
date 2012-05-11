@@ -1,0 +1,114 @@
+/*
+  GF RGL Browser
+  John J. Camiller, 2012
+*/
+header h1
+{
+  text-align:left;
+  }
+div[role='main']
+{ 
+  overflow:hidden;
+  width:100%;
+ }
+.pane
+{ 
+  display:block;
+ }
+.pane.left
+{ 
+  width:150px;
+  float:left;
+ }
+.pane.right
+{ 
+  margin-left:170px;
+ }
+.button
+{
+  cursor:pointer;
+  color:#00e;
+  padding:1px;
+  }
+.button:hover
+{ 
+  text-decoration:underline;
+ }
+#languages
+{ 
+  margin:0.5em 0;
+  }
+#modules span
+{ 
+  display:block;
+  margin:0.1em;
+  }
+#tabbar *
+{ 
+  display:inline-block;
+ }
+#tabbar h2
+{ 
+  margin: 0 1em;
+  font-size: 1em;
+  border:0;
+ }
+.tab
+{ 
+  cursor:pointer;
+  padding:0.5em;
+  margin-right:0.5em;
+  display:inline-block;
+  text-transform:capitalize;
+  }
+#loading
+{ 
+  display:inline-block;
+  color:#666;
+ }
+.scope
+{ 
+  background:#fff;
+  color:#333;
+ }
+.code
+{ 
+  background:#444;
+  color:#eee;
+ }
+input#search
+{
+  font-size:1em;
+  font-family:monospace;
+  width:25em;
+  padding:0.25em;
+  background:#eee;
+  }
+#scope
+{
+  padding: 1em;
+  }
+#scope dl
+{
+  font-family:monospace;
+  }
+#scope dl a
+{
+  }
+#code
+{
+  font-family:monospace;
+  white-space:pre;
+  padding: 1em;
+  }
+dt
+{ 
+  font-weight:bold;
+  }
+footer
+{ 
+  padding: 0.5em;
+  border-top: 1px solid #999;
+  margin-top: 2em;
+  color:#333;
+  }
