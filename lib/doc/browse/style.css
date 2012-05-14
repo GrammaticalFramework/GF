@@ -88,12 +88,13 @@ input#search
 {
   padding: 1em;
   }
-#scope dl
+#scope_list
 {
   font-family:monospace;
   }
-#scope dl a
+#scope_list dt
 {
+  float:left;
   }
 #code
 {
