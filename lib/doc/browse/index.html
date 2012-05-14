@@ -12,15 +12,13 @@
 <body>
   <header>
     <h1>GF RGL Browser</h1>
-<p style="font-style:italic;margin-top:-0.5em;">Updated 2012-05-11. <a href="#footer">About this tool</a></p>
+    <p style="font-style:italic;margin-top:-0.5em;">Updated 2012-05-14</p>
   </header>
   <div role="main">
-
     <div class="pane left">
       <div id="languages"></div>
       <div id="modules"></div>
     </div>
-    
     <div class="pane right">
       <div id="tabbar">
         <h2></h2>
@@ -30,26 +28,60 @@
       </div>
       <div id="scope" class="panel scope">
         <input type="text" id="search" />
+        <input type="submit" id="submit" value="Filter" />
+        <input type="reset" id="clear" value="Clear" />
         <input type="checkbox" id="case_sensitive" checked="checked" />
         <label for="case_sensitive">Case sensitive?</label>
-        <dl></dl>
+        <div><span id="scope_count">0</span> items</div>
+        <dl id="scope_list"></dl>
       </div>
       <div id="code" class="panel code"></div>
+      <div id="help" class="panel help">
+
+        <h3>Understanding the scope information</h3>
+        <p>The scope information shown by this tool is basically the output of running GF with the <code>--tags</code> flag. This lists all the functions visible in the scope of a module, one per line. Each line can have two possible forms:</p>
+
+
+        <h4>1. Local functions</h4>
+        <pre>mkPrep	oper-type	/lib/src/english/ParadigmsEng.gf:204	Str -> {s : Str; lock_Prep : {}}</pre>
+        <p>For locally defined functions, the second column <code>oper-type</code> indicates the judgement type, followed by the location in the souce file and its type information.</p>
+
+        <h4>2. External functions</h4>
+        <pre>Number	indir	ResEng	R	/lib/doc/browse/tags/ParamX.gf-tags</pre>
+        <p>The <code>indir</code> indicates this function is defined in an external module (note that no distinction is made between functions from opened modules and inherited ones.) <code>ResEng</code> is the name of the opened or inherited module, while <code>R</code> is the alias under which it was opened. The final column points to another tags file where the type information for this function can be found. Note that though the function is available in the given context via the <code>ResEng</code> module, it is actually originally defined in <code>ParamX</code>.</p>
+
+        <h3>The RGL directory structure</h3>
+        <p>The drop-down at the top left lists all child directories under <code><a href="http://www.grammaticalframework.org/lib/src/">/lib/src</a></code> in the GF source code repository. Most directories represent individual languages, however many have special functions:</p>
+        <dl>
+          <dt><code>abstract</code></dt><dd>Abstract syntaxes shared by all resource grammars</dd>
+          <dt><code>api</code></dt><dd>The RGL API and instantiations of the API modules in all languages</dd>
+          <dt><code>common</code></dt><dd>Resource modules common to all languages</dd>
+          <dt><code>parametric</code></dt><dd></dd>
+          <dt><code>prelude</code></dt><dd>Common low-level functions</dd>
+        </dl>
+
+        In addition, the following directories are not individual languages but language functors, shared by resource grammars for related language families:
+        <dl>
+          <dt><code>hindustani</code></dt><dd>Used by Hindi, Persian, Punjabi, Urdu</dd>
+          <dt><code>romance</code></dt><dd>Used by Catalan, French, Italian, Romanian, Spanish</dd>
+          <dt><code>scandinavian</code></dt><dd>Used by Danish, Norwegian, Swedish</dd>
+        </dl>
+        
+        <h3>About</h3>
+        <p>A basic tool for looking up module scopes and quickly looking at module sources, created out of necessity. It is experimental and has only been tested on the latest Chrome under Ubuntu. Even then, the page sometimes crashes and has to be closed. All feedback is welcome.</p>
+
+        <h3>Known issues and To-do</h3>
+        <ul>
+          <li>The page sometimes stalls when handling large files (in particular the dictionary modules)</li>
+          <li>Jump directly to line in file</li>
+          <li>Line numbers and syntax highlighting for source code would be cool</li>
+        </ul>
+      </div>
     </div>
-
-    <br style="clear:both">
-
+    <br style="clear:both" />
   </div>
   <footer id="footer">
-    <h3>About the GF RGL Browser</h3>
-  <p>A basic tool for looking up module scopes and quickly looking at module sources, created out of necessity. It is experimental and has only been tested on the latest Chrome under Ubuntu. Even then, the page sometimes crashes and has to be closed.  All feedback welcome.<br/>
-  To do:</p>
-  <ul>
-    <li>Test from other browsers</li>
-    <li>Stop from crashing occasionally</li>
-    <li>Line numbers and syntax highlighting for source code would be cool</li>
-  </ul>
-  <p><em>John J. Camilleri, 2012</em></p>
+    <p><em>John J. Camilleri, 2012</em></p>
   </footer>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script src="script.js"></script>

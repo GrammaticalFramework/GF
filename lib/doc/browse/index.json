@@ -376,32 +376,6 @@
     "SymbolDan",
     ""
   ],
-  "demo": [
-    "DemoDut",
-    "DemoSpa",
-    "DemoIna",
-    "DemoHin",
-    "DemoNor",
-    "DemoFre",
-    "DemoPol",
-    "DemoRon",
-    "DemoLat",
-    "DemoTur",
-    "DemoDan",
-    "DemoGer",
-    "DemoUrd",
-    "DemoCat",
-    "DemoEng",
-    "DemoRus",
-    "Demo",
-    "DemoIta",
-    "DemoFin",
-    "DemoTha",
-    "DemoBul",
-    "DemoAra",
-    "DemoSwe",
-    ""
-  ],
   "dutch": [
     "NounDut",
     "IrregDutAbs",
@@ -844,11 +818,6 @@
     "IrregMlt",
     "LexiconMlt",
     "ExtraMlt",
-    ""
-  ],
-  "mini": [
-    "MiniGrammar",
-    "MiniGrammarEng",
     ""
   ],
   "nepali": [
@@ -1311,10 +1280,6 @@
     "AdverbTha",
     "NounTha",
     "ConjunctionTha",
-    ""
-  ],
-  "tmp": [
-    "CompatibilityEng",
     ""
   ],
   "turkish": [
