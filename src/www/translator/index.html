@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html> <head>
+<title>Simple Translation Tool</title>
+<link rel="stylesheet" type="text/css" href="../gfse/editor.css" title="Cloud">
+<link rel="stylesheet" type="text/css" href="translator.css" title="Cloud">
+<meta name = "viewport" content = "width = device-width">
+<meta charset="UTF-8">
+</head>
+
+<body>
+<div class=pagehead>
+<h1>Simple Translation Tool</h1>
+<form name=options>
+<table class=menubar>
+  <tr><td>File
+    <dl>
+      <dt onclick="translator.new(this)">New
+      <dt onclick="translator.browse(this)">Open...
+      <dt onclick="translator.save(this)">Save
+      <dt onclick="translator.saveAs(this)">Save As...
+      <dt onclick="translator.close(this)">Close
+    </dl>
+    <td>Edit
+      <dl>
+	<dt onclick="translator.import(this)">Add a segment...
+	<dt onclick="translator.remove(this)">Remove the last segment
+      </dl>
+    <td>View
+      <dl>
+	<dt><label><input type=radio checked>Segment by segment</label>
+      </dl>
+    <td>Options
+      <dl>
+	<dt>
+	  <table class=submenu>
+	    <tr><td>Source Language
+	      <dl id=source>
+		<dt><label><input name=source value=Eng type=radio onchange="translator.change(this)">English</label>
+		<dt><label><input name=source value=Swe type=radio onchange="translator.change(this)">Swedish</label>
+		<dt><label><input name=source value=Ita type=radio onchange="translator.change(this)">Italian</label>
+	      </dl>
+	    </table>
+	<dt>
+	  <table class=submenu>
+	    <tr><td>Target Language
+	      <dl id=target>
+		<dt><label><input name=target value=Eng type=radio onchange="translator.change(this)">English</label>
+		<dt><label><input name=target value=Swe type=radio onchange="translator.change(this)">Swedish</label>
+		<dt><label><input name=target value=Ita type=radio onchange="translator.change(this)">Italian</label>
+	      </dl>
+	    </table>
+	<dt>
+	  <table class=submenu>
+	    <tr><td>Default translation method
+	      <dl id=methods>
+		<dt><label><input name=method value=Manual type=radio onchange="translator.change(this)">Manual</label>
+	      </dl>
+	  </table>
+      </dl>
+</table>
+</form>
+</div>
+
+<div id=document class=document>
+...
+  <noscript>This document translation editor requires JavaScript to work
+  </noscript>
+</div>
+<hr>
+<div class=modtime><small>
+<!-- hhmts start --> Last modified: Tue May 15 16:17:32 CEST 2012 <!-- hhmts end -->
+</small></div>
+<a href="about.html">About</a>
+
+<script type="text/javascript" src="../minibar/support.js"></script>
+<script type="text/javascript" src="../minibar/pgf_online.js"></script>
+<!--
+<script type="text/javascript" src="../gfse/cloud2.js"></script>
+-->
+<script type="text/javascript" src="translator.js"></script>
+<script type="text/javascript" >
+var translator = new Translator()
+</script>
+</body>
+</html>
