@@ -195,7 +195,8 @@ computeTermOpt gr = comput True where
 ----              foldr1 C (map K (str2strings (glueStr v (str a)))) | v <- x']
            ,return $ Glue x y
            ]
-         (C u v,_) -> comp g $ C u (Glue v y)  -- (u ++ v) + y
+         (C u v,_) -> comp g $ C u (Glue v y)    -- (u ++ v) + y
+         (_,C u v) -> comp g $ C (Glue x u) v    -- x ++ (u ++ v)
 
          _ -> do
            mapM_ checkNoArgVars [x,y]
