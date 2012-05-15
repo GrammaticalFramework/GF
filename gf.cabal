@@ -27,6 +27,9 @@ data-files: www/index.html
 	    www/TransQuiz/*.css
 	    www/TransQuiz/*.js
 	    www/TransQuiz/*.png
+	    www/translator/*.html
+	    www/translator/*.css
+	    www/translator/*.js
 
 source-repository head
   type:     darcs

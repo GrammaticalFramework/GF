@@ -1,0 +1,54 @@
+body { margin: 5px; }
+h1 { float: right; margin: 0; font-size: 150%; }
+h2 { font-size: 120%; }
+div.pagehead { font-family: sans-serif;
+               background-color: #ccc;
+}
+table.menubar td { padding: 5px; }
+table.menubar dl, td.options > div > dl {
+    z-index: 1;
+    display: none; position: absolute;
+    background: white; color: black;
+    border: 1px solid black;
+    margin: 0;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.25);
+}
+table.menubar td:hover > dl { display: block; }
+table.menubar dt { margin: 0; padding: 5px; }
+table.submenu dt { padding: 0; }
+table.menubar td:hover, table.menubar dt:hover { background-color: #36f; color: white; }
+table table dl { left: 6em; }
+table.menubar dt { white-space: nowrap; }
+div.document {
+    clear: both;
+    background: white;
+    border: 2px solid #009;
+    padding: 0.6ex;
+}
+
+div.document h2 { color: #009; }
+
+table.segments { margin-left: auto; margin-right: auto; }
+tr.segment:hover { background: #ffc; }
+
+td.source, td.options, td.target {
+    padding: 1ex;
+}
+td.source, td.target {
+    border-bottom: 2px solid #ccc;
+}
+td.options > div { position: relative; margin: 0; }
+td.options:hover > div > dl { display: block; }
+td.options > div > dl {
+    left: 0.8em;
+    padding: 0.6ex;
+    font-family: sans-serif;
+    white-space: nowrap;
+}
+
+td.target input[name=it] {
+    width: 100%; font-family: inherit; font-size: inherit;
+}
+
+span.arrow { color: blue; }
+span.error { color: red; }
