@@ -205,6 +205,7 @@ langsCoding = [
   (("german",   "Ger"),""),
   (("interlingua","Ina"),""),
   (("italian",  "Ita"),""),
+  (("japanese", "Jap"),""),
   (("latin",    "Lat"),""),
   (("latvian",    "Lav"),""),
   (("norwegian","Nor"),""),
@@ -233,7 +234,7 @@ langsLang = langs `except` ["Amh","Ara","Lat","Tur"]
 langsAPI  = langsLang `except` ["Ina"]
 
 -- languages for which to compile Symbolic
-langsSymbolic  = langsAPI -- `except` ["Rus"]
+langsSymbolic  = langsAPI `except` ["Jap"]
 
 -- languages for which to run demo test
 langsDemo = langsLang `except` ["Ara","Hin","Ina","Lav","Tha"]
