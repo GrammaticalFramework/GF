@@ -36,7 +36,7 @@ resource ResGer = ParamX ** open Prelude in {
 -- Case of $NP$ extended to deal with contractions like "zur", "im".
 
     PCase = NPC Case | NPP CPrep ;
-    CPrep = CAnDat | CInAcc | CInDat | CZuDat ;
+    CPrep = CAnDat | CInAcc | CInDat | CZuDat | CVonDat ;
 
   oper 
     NPNom : PCase = NPC Nom ;
@@ -45,7 +45,9 @@ resource ResGer = ParamX ** open Prelude in {
       NPP CAnDat => {s = "an" ; c = Dat} ;
       NPP CInAcc => {s = "in" ; c = Acc} ;
       NPP CInDat => {s = "in" ; c = Dat} ;
-      NPP CZuDat => {s = "zu" ; c = Dat}
+      NPP CZuDat => {s = "zu" ; c = Dat} ;
+      NPP CVonDat => {s = "von" ; c = Dat}
+
       } ;
 
     usePrepC : PCase -> (Case -> Str) -> Str = \c,fs -> 
@@ -392,6 +394,7 @@ resource ResGer = ParamX ** open Prelude in {
       <CZuDat, GSg Masc>           => "zum" ;
       <CZuDat, GSg Neutr>          => "zum" ;
       <CZuDat, GSg Fem>            => "zur" ;
+      <CVonDat, GSg (Masc | Neutr)> => "vom" ;
       _ => let sp = prepC np in sp.s ++ artDef ! gn ! sp.c
       }
     } ;
@@ -641,6 +644,34 @@ resource ResGer = ParamX ** open Prelude in {
     s : Mood => Tense => Anteriority => Polarity => Order => Str
     } ;
 
+
+{-
+-- Erzsébet Galgóczy 15/5/2012
+  mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp ->  let vps = useVP vp in {
+     s = \\m,t,a,b,o =>
+       let
+         ord   = case o of {
+           Sub => True ;  -- glue prefix to verb
+           _ => False
+           } ;
+         verb  = vps.s  ! ord ! agr ! VPFinite m t a ;
+         neg   = vp.a1 ! b ;
+         obj0  = vp.n0 ! agr ;
+         obj   = vp.n2 ! agr ;
+         compl = obj0 ++ obj ++ neg ++ vp.a2 ;
+         inf   = vp.inf ++ verb.inf ;
+         extra = vp.ext ;
+         inffin = inf ++ verb.fin ;
+       --# notpresent
+       in
+       case o of {
+         Main => subj ++ verb.fin ++ compl ++ extra ++ inf;
+         Inv  => verb.fin ++ subj ++ compl ++ extra ++ inf ;
+         Sub  => subj ++ compl ++ extra ++ inffin
+         }
+   } ;
+-}
+-- before 15/5/2012
   mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp ->  let vps = useVP vp in {
       s = \\m,t,a,b,o =>
         let
@@ -652,7 +683,7 @@ resource ResGer = ParamX ** open Prelude in {
           neg   = vp.a1 ! b ;
           obj0  = vp.n0 ! agr ;
           obj   = vp.n2 ! agr ;
-          compl = obj0 ++ neg ++ obj ++ vp.a2 ;
+          compl = obj0 ++ obj ++ neg ++ vp.a2 ; -- from EG 15/5
           inf   = vp.inf ++ verb.inf ;
           extra = vp.ext ;
           inffin = 
@@ -668,6 +699,7 @@ resource ResGer = ParamX ** open Prelude in {
           Sub  => subj ++ compl ++ inffin ++ extra
           }
     } ;
+
 
   infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp -> let vps = useVP vp in
     <

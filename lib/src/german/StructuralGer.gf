@@ -68,9 +68,9 @@ concrete StructuralGer of Structural = CatGer **
   on_Prep = mkPrep "auf" P.dative ;
   or_Conj = {s1 = [] ; s2 = "oder" ; n = Sg} ;
   otherwise_PConj = ss "sonst" ;
-  part_Prep = mkPrep "von" P.dative ;
+  part_Prep = P.von_Prep ; -- mkPrep "von" P.dative ;
   please_Voc = ss "bitte" ;
-  possess_Prep = mkPrep "von" P.dative ;
+  possess_Prep = P.von_Prep ;-- mkPrep "von" P.dative ;
   quite_Adv = ss "ziemlich" ;
   she_Pron = mkPronPers "sie" "sie" "ihr" "ihrer" "ihr" Fem Sg P3 ;
   so_AdA = ss "so" ;
@@ -80,7 +80,8 @@ concrete StructuralGer of Structural = CatGer **
       s,sp = \\g,c => 
              usePrepC c (\k -> "ein" + pronEnding ! GSg g ! k) ;  ---- einer,eines
       n = Sg ;
-      a = Strong
+      a = Strong ;
+      hasNum = True
       } ;
   something_NP = nameNounPhrase {s = \\_ => "etwas"} ;
   somewhere_Adv = ss "irgendwo" ;

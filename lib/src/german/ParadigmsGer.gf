@@ -51,6 +51,7 @@ oper
   inAcc_Case : Case ; -- preposition "in" accusative with contraction "ins" --%
   inDat_Case : Case ; -- preposition "in" dative with contraction "am" --%
   zuDat_Case : Case ; -- preposition "zu" dative with contractions "zum", "zur" --%
+  vonDat_Case : Case ;
 
 -- To abstract over number names, we define the following.
 
@@ -308,6 +309,7 @@ mkV2 : overload {
   inAcc_Case = NPP CInAcc ;
   inDat_Case = NPP CInDat ;
   zuDat_Case = NPP CZuDat ;
+  vonDat_Case = NPP CVonDat ;
 
   singular = Sg ;
   plural = Pl ;
@@ -401,7 +403,8 @@ mkV2 : overload {
   accPrep = mkPrep [] accusative ;
   datPrep = mkPrep [] dative ;
   genPrep = mkPrep [] genitive ;
-  von_Prep = mkPrep "von" dative ;
+  --von_Prep = mkPrep "von" dative ;
+  von_Prep = mkPrep [] vonDat_Case ;
   zu_Prep = mkPrep [] zuDat_Case ;
   anDat_Prep = mkPrep [] anDat_Case ;
   inDat_Prep = mkPrep [] inDat_Case ; 
