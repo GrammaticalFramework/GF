@@ -12,8 +12,8 @@ mkText (mkQS pastTense (mkQCl (mkCl she_NP sleep_V)))
 mkText negativePol (mkImp sleep_V)
       mkText : Text -> Text -> Text  -- Where? Here. When? Now! 
 mkText (mkText (mkPhr (mkUtt where_IAdv)) questMarkPunct (mkText (mkPhr (mkUtt here_Adv)))) (mkText (mkPhr (mkUtt when_IAdv)) questMarkPunct (mkText (mkPhr (mkUtt now_Adv)) exclMarkPunct))
---      emptyText : Text  -- (empty text)  
---emptyText
+--      emptyText : Text  -- (empty text)
+--emptyText)
       fullStopPunct  : Punct   -- .   
 mkText (mkPhr yes_Utt) fullStopPunct
       questMarkPunct : Punct   -- ?   
@@ -63,21 +63,21 @@ mkUtt (mkCard (mkNumeral n5_Unit))
       lets_Utt : VP ->  Utt  -- let's sleep
 mkPhr (lets_Utt (mkVP sleep_V))
       positivePol : Pol   -- she sleeps [default]    
-mkS positivePol (mkCl she_NP sleep_V)
+mkUtt (mkS positivePol (mkCl she_NP sleep_V))
       negativePol : Pol   -- she doesn't sleep    
-mkS negativePol (mkCl she_NP sleep_V)
+mkUtt (mkS negativePol (mkCl she_NP sleep_V))
       simultaneousAnt : Ant   -- she sleeps [default]
-mkS simultaneousAnt (mkCl she_NP sleep_V)
+mkUtt (mkS simultaneousAnt (mkCl she_NP sleep_V))
       anteriorAnt : Ant   -- she has slept       --# notpresent   
-mkS anteriorAnt (mkCl she_NP sleep_V)
+mkUtt (mkS anteriorAnt (mkCl she_NP sleep_V))
       presentTense     : Tense  -- she sleeps [default]   
-mkS presentTense (mkCl she_NP sleep_V)
+mkUtt (mkS presentTense (mkCl she_NP sleep_V))
       pastTense        : Tense  -- she slept           --# notpresent   
-mkS pastTense (mkCl she_NP sleep_V)
+mkUtt (mkS pastTense (mkCl she_NP sleep_V))
       futureTense      : Tense  -- she will sleep        --# notpresent  
-mkS futureTense (mkCl she_NP sleep_V)
+mkUtt (mkS futureTense (mkCl she_NP sleep_V))
       conditionalTense : Tense  -- she would sleep       --# notpresent   
-mkS conditionalTense (mkCl she_NP sleep_V)
+mkUtt (mkS conditionalTense (mkCl she_NP sleep_V))
       singularImpForm : ImpForm   -- be a man [default]
 mkUtt singularImpForm (mkImp (mkVP man_N))
       pluralImpForm   : ImpForm   -- be men 
@@ -85,75 +85,75 @@ mkUtt pluralImpForm (mkImp (mkVP man_N))
       politeImpForm   : ImpForm   -- be a man [polite singular]  
 mkUtt politeImpForm (mkImp (mkVP man_N))
       mkS : (Tense) -> (Ant) -> (Pol) -> Cl  -> S -- she wouldn't have slept  
-mkS conditionalTense anteriorAnt negativePol (mkCl she_NP sleep_V)
+mkUtt (mkS conditionalTense anteriorAnt negativePol (mkCl she_NP sleep_V))
       mkS : Conj -> S -> S -> S   -- she sleeps and I run    
-mkS and_Conj (mkS (mkCl she_NP sleep_V)) (mkS (mkCl i_NP run_V))
+mkUtt (mkS and_Conj (mkS (mkCl she_NP sleep_V)) (mkS (mkCl i_NP run_V)))
       mkS : Conj -> ListS  -> S   -- she sleeps, I run and you walk  
-mkS and_Conj (mkListS (mkS (mkCl she_NP sleep_V)) (mkListS (mkS (mkCl i_NP run_V)) (mkS (mkCl (mkNP youSg_Pron) walk_V))))
+mkUtt (mkS and_Conj (mkListS (mkS (mkCl she_NP sleep_V)) (mkListS (mkS (mkCl i_NP run_V)) (mkS (mkCl (mkNP youSg_Pron) walk_V)))))
       mkS : Adv -> S -> S         -- today, she sleeps 
-mkS today_Adv (mkS (mkCl she_NP sleep_V))
+mkUtt (mkS today_Adv (mkS (mkCl she_NP sleep_V)))
       mkCl : NP -> V -> Cl                -- she sleeps   
-mkCl she_NP sleep_V
+mkUtt (mkCl she_NP sleep_V)
       mkCl : NP -> V2 -> NP -> Cl         -- she loves him
-mkCl she_NP love_V2 he_NP
+mkUtt (mkCl she_NP love_V2 he_NP)
       mkCl : NP -> V3 -> NP -> NP -> Cl   -- she sends it to him
-mkCl she_NP send_V3 it_NP he_NP
+mkUtt (mkCl she_NP send_V3 it_NP he_NP)
       mkCl : NP  -> VV -> VP -> Cl        -- she wants to sleep
-mkCl she_NP want_VV (mkVP sleep_V)
+mkUtt (mkCl she_NP want_VV (mkVP sleep_V))
       mkCl : NP  -> VS -> S  -> Cl        -- she says that I sleep
-mkCl she_NP say_VS (mkS (mkCl i_NP sleep_V))
+mkUtt (mkCl she_NP say_VS (mkS (mkCl i_NP sleep_V)))
       mkCl : NP  -> VQ -> QS -> Cl        -- she wonders who sleeps
-mkCl she_NP wonder_VQ (mkQS (mkQCl who_IP sleep_V))
+mkUtt (mkCl she_NP wonder_VQ (mkQS (mkQCl who_IP sleep_V)))
       mkCl : NP  -> VA -> A  -> Cl        -- she becomes old
-mkCl she_NP become_VA old_A
+mkUtt (mkCl she_NP become_VA old_A)
       mkCl : NP  -> VA -> AP -> Cl        -- she becomes very old
-mkCl she_NP become_VA (mkAP very_AdA old_A)
+mkUtt (mkCl she_NP become_VA (mkAP very_AdA old_A))
       mkCl : NP  -> V2A -> NP -> A  -> Cl -- she paints it red
-mkCl she_NP paint_V2A it_NP red_A
+mkUtt (mkCl she_NP paint_V2A it_NP red_A)
       mkCl : NP  -> V2A -> NP -> AP -> Cl -- she paints it very red
-mkCl she_NP paint_V2A it_NP (mkAP red_A)
+mkUtt (mkCl she_NP paint_V2A it_NP (mkAP red_A))
       mkCl : NP  -> V2S -> NP -> S -> Cl  -- she answers to him that we sleep
-mkCl she_NP answer_V2S he_NP (mkS (mkCl we_NP sleep_V))
+mkUtt (mkCl she_NP answer_V2S he_NP (mkS (mkCl we_NP sleep_V)))
       mkCl : NP  -> V2Q -> NP -> QS -> Cl -- she asks him who sleeps 
-mkCl she_NP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V))
+mkUtt (mkCl she_NP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V)))
       mkCl : NP  -> V2V -> NP -> VP -> Cl -- she begs him to sleep
-mkCl she_NP beg_V2V he_NP (mkVP sleep_V)
+mkUtt (mkCl she_NP beg_V2V he_NP (mkVP sleep_V))
       mkCl : NP -> A  -> Cl       -- she is old
-mkCl she_NP old_A
+mkUtt (mkCl she_NP old_A)
       mkCl : NP -> A -> NP -> Cl  -- she is older than he   
-mkCl she_NP old_A he_NP
+mkUtt (mkCl she_NP old_A he_NP)
       mkCl : NP -> A2 -> NP -> Cl -- she is married to him 
-mkCl she_NP married_A2 he_NP
+mkUtt (mkCl she_NP married_A2 he_NP)
       mkCl : NP -> AP -> Cl    -- she is very old 
-mkCl she_NP (mkAP very_AdA old_A)
+mkUtt (mkCl she_NP (mkAP very_AdA old_A))
       mkCl : NP -> NP -> Cl    -- she is the woman   
-mkCl she_NP (mkNP the_Det woman_N)
+mkUtt (mkCl she_NP (mkNP the_Det woman_N))
       mkCl : NP -> N -> Cl     -- she is a woman   
-mkCl she_NP woman_N
+mkUtt (mkCl she_NP woman_N)
       mkCl : NP -> CN -> Cl    -- she is an old woman   
-mkCl she_NP (mkCN old_A woman_N)
+mkUtt (mkCl she_NP (mkCN old_A woman_N))
       mkCl : NP -> Adv -> Cl   -- she is here   
-mkCl she_NP here_Adv
+mkUtt (mkCl she_NP here_Adv)
       mkCl : NP -> VP -> Cl    -- she always sleeps
-mkCl she_NP (mkVP always_AdV (mkVP sleep_V))
+mkUtt (mkCl she_NP (mkVP always_AdV (mkVP sleep_V)))
       mkCl : N -> Cl           -- there is a house
-mkCl house_N
----      mkCl : CN -> Cl          -- there is an old house 
---- mkCl (mkCN old_A house_N)
+mkUtt (mkCl house_N)
+      mkCl : CN -> Cl          -- there is an old house
+mkUtt (mkCl (mkCN old_A house_N))
       mkCl : NP -> Cl          -- there are many houses 
-mkCl (mkNP many_Det house_N)  
+mkUtt (mkCl (mkNP many_Det house_N)  )
       mkCl : NP  -> RS -> Cl   -- it is she who sleeps
-mkCl she_NP (mkRS (mkRCl which_RP (mkVP sleep_V)))
+mkUtt (mkCl she_NP (mkRS (mkRCl which_RP (mkVP sleep_V))))
       mkCl : Adv -> S  -> Cl   -- it is here that she sleeps
-mkCl here_Adv (mkS (mkCl she_NP sleep_V)) 
+mkUtt (mkCl here_Adv (mkS (mkCl she_NP sleep_V)) )
       mkCl : V -> Cl           -- it rains
-mkCl rain_V0 
+mkUtt (mkCl rain_V0 )
       mkCl : VP -> Cl          -- it is raining    
-mkCl (progressiveVP (mkVP rain_V0))
+mkUtt (mkCl (progressiveVP (mkVP rain_V0)))
       mkCl : SC -> VP -> Cl    -- that she sleeps is good
-mkCl (mkSC (mkS (mkCl she_NP sleep_V))) (mkVP good_A)
+mkUtt (mkCl (mkSC (mkS (mkCl she_NP sleep_V))) (mkVP good_A))
       genericCl : VP ->  Cl    -- one sleeps
-mkS (genericCl (mkVP sleep_V))              
+mkUtt (mkS (genericCl (mkVP sleep_V))              )
       mkVP : V   -> VP                -- sleep
 mkUtt (mkVP sleep_V) 
       mkVP : V2  -> NP -> VP          -- love him 
@@ -213,11 +213,11 @@ mkUtt (passiveVP love_V2 she_NP)
       progressiveVP : VP -> VP     -- be sleeping 
 mkUtt (progressiveVP (mkVP sleep_V))
       mkComp : AP -> Comp -- very old 
-mkComp (mkAP old_A)
+mkUtt (mkVP (mkComp (mkAP old_A)))
       mkComp : NP -> Comp -- this man 
-mkComp (mkNP this_Det man_N)
+mkUtt (mkVP (mkComp (mkNP this_Det man_N)))
       mkComp : Adv -> Comp -- here
-mkComp here_Adv 
+mkUtt (mkVP (mkComp here_Adv))
       mkSC : S -> SC -- that she sleeps
 mkSC (mkS (mkCl she_NP sleep_V))
       mkSC : QS -> SC -- who sleeps 
@@ -225,11 +225,11 @@ mkSC (mkQS (mkQCl who_IP sleep_V))
       mkSC : VP -> SC -- to sleep 
 mkSC (mkVP sleep_V)
       mkImp : VP -> Imp                -- come to my house
-mkImp (mkVP (mkVP come_V) (mkAdv to_Prep (mkNP i_Pron house_N)))
+mkUtt (mkImp (mkVP (mkVP come_V) (mkAdv to_Prep (mkNP i_Pron house_N))))
       mkImp : V  -> Imp                -- come
-mkImp come_V
+mkUtt (mkImp come_V)
       mkImp : V2 -> NP -> Imp          -- take it
-mkImp buy_V2 it_NP
+mkUtt (mkImp buy_V2 it_NP)
       mkNP : Quant -> N  -> NP          -- this man
 mkUtt (mkNP this_Quant man_N)
       mkNP : Quant -> CN -> NP          -- this old man
@@ -250,8 +250,8 @@ mkUtt (mkNP (mkNumeral (tenfoldSub100 n5_Unit)) man_N)
 mkUtt (mkNP (mkDigits n5_Dig (mkDigits n1_Dig)) (mkCN old_A man_N))
       mkNP : Digits -> N -> NP       -- 51 men 
 mkUtt (mkNP (mkDigits n5_Dig (mkDigits n1_Dig)) man_N)
---      mkNP : Card -> CN -> NP     -- forty-five old men   
---      mkNP : Card -> N -> NP       -- forty-five men   
+--      mkNP : Card -> CN -> NP     -- forty-five old men
+--      mkNP : Card -> N -> NP       -- forty-five men
       mkNP : Pron -> CN -> NP   -- my old man
 mkUtt (mkNP i_Pron (mkCN old_A man_N))
       mkNP : Pron -> N  -> NP   -- my man
@@ -301,7 +301,7 @@ mkUtt youPl_NP
       they_NP : NP       -- they
 mkUtt they_NP
       mkDet : Quant ->  Det       -- this  
-mkDet this_Quant
+mkUtt (mkNP (mkDet this_Quant))
       this_NP : NP 
 mkUtt this_NP
       that_NP : NP 
@@ -311,22 +311,22 @@ mkUtt these_NP
       those_NP : NP 
 mkUtt those_NP
       mkDet : Quant -> Card -> Det   -- these five
-mkDet this_Quant (mkCard (mkNumeral n5_Unit))
+mkUtt (mkNP (mkDet this_Quant (mkCard (mkNumeral n5_Unit))))
       mkDet : Quant ->  Ord -> Det     -- the best
-mkDet the_Quant (mkOrd (mkNumeral n5_Unit))
+mkUtt (mkNP (mkDet the_Quant (mkOrd (mkNumeral n5_Unit))))
       mkDet : Quant -> Num -> Ord -> Det  -- these five best  
-mkDet the_Quant (mkNum (mkNumeral n5_Unit)) (mkOrd good_A)
+mkUtt (mkNP (mkDet the_Quant (mkNum (mkNumeral n5_Unit)) (mkOrd good_A)))
       mkDet : Quant -> Num -> Det -- these five  
-mkDet this_Quant pluralNum
+mkUtt (mkNP (mkDet this_Quant pluralNum))
       mkDet : Card ->  Det     -- forty  
-mkDet (mkCard (mkNumeral n5_Unit))
+mkUtt (mkNP (mkDet (mkCard (mkNumeral n5_Unit))))
 --      mkDet : Digits -> Det    -- 51
---      mkDet : Numeral -> Det  -- five 
-mkDet (mkNumeral n5_Unit)
+--      mkDet : Numeral -> Det  -- five
+mkUtt (mkNP (mkDet (mkNumeral n5_Unit)))
       mkDet : Pron -> Det     -- my
-mkDet i_Pron
+mkUtt (mkNP (mkDet i_Pron))
       mkDet : Pron -> Num -> Det -- my five
-mkDet i_Pron  (mkNum (mkNumeral n5_Unit))
+mkUtt (mkNP (mkDet i_Pron  (mkNum (mkNumeral n5_Unit))))
       the_Det   : Det -- the (house)
 mkUtt (mkNP the_Det house_N)
       a_Det     : Det -- a (house)
@@ -353,394 +353,394 @@ mkUtt (mkNP (mkQuant i_Pron) house_N)
 mkUtt (mkNP the_Quant house_N)
       a_Quant   : Quant    -- a  
 mkUtt (mkNP a_Quant house_N)
---      mkNum : Str -> Num   -- thirty-five (given by "35") 
+--      mkNum : Str -> Num   -- thirty-five (given by "35")
       mkNum : Numeral -> Num  -- twenty  
 mkNum (mkNumeral (tenfoldSub100 n2_Unit))
       mkNum : Digits -> Num   -- 21 
 mkNum (mkDigits n2_Dig (mkDigits n1_Dig))
---      mkNum : Digit -> Num -- five
+--      mkNum : Digit -> Num -- five)
       mkNum : Card -> Num  -- almost ten
-mkNum (mkCard almost_AdN (mkCard (mkNumeral n5_Unit))) 
+mkNum (mkCard almost_AdN (mkCard (mkNumeral n5_Unit)))
       mkNum : AdN -> Card -> Num  -- almost ten
 mkNum (mkCard almost_AdN (mkCard (mkNumeral n5_Unit)))
---      singularNum : Num              -- singular 
---      pluralNum : Num                -- plural 
---      mkCard : Str -> Card   -- thirty-five (given as "35")
+--      singularNum : Num              -- singular )
+--      pluralNum : Num                -- plural )
+--      mkCard : Str -> Card   -- thirty-five (given as "35"))
       mkCard : Numeral -> Card   -- twenty  
-mkCard (mkNumeral n7_Unit)
---      mkCard : Digits -> Card      -- 51  
---      mkCard : AdN -> Card -> Card  -- almost fifty
---      mkOrd : Numeral -> Ord   -- twentieth  
---      mkOrd : Digits -> Ord         -- 51st 
---      mkOrd : Digit -> Ord       -- fifth 
+mkUtt (mkCard (mkNumeral n7_Unit))
+--      mkCard : Digits -> Card      -- 51  )
+--      mkCard : AdN -> Card -> Card  -- almost fifty)
+--      mkOrd : Numeral -> Ord   -- twentieth  )
+--      mkOrd : Digits -> Ord         -- 51st )
+--      mkOrd : Digit -> Ord       -- fifth )
       mkOrd : A -> Ord           -- largest  
-mkOrd small_A
+mkUtt (mkAP (mkOrd small_A))
       mkAdN : CAdv -> AdN  -- more than  
-mkCard (mkAdN more_CAdv) (mkCard (mkNumeral n8_Unit))
+mkUtt (mkCard (mkAdN more_CAdv) (mkCard (mkNumeral n8_Unit)))
       mkNumeral : Sub1000 -> Numeral -- coerce 1..999  
-mkNumeral (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit))
+mkUtt (mkCard (mkNumeral (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit))))
       mkNumeral : Sub1000 -> Sub1000 -> Numeral -- 1000m + n  
-mkNumeral (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit)) (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit))
---      mkNumeral : Str -> Numeral   -- thirty-five (given by "35") 
+mkUtt (mkCard (mkNumeral (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit)) (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit))))
+--      mkNumeral : Str -> Numeral   -- thirty-five (given by "35") )
       thousandfoldNumeral : Sub1000 -> Numeral -- 1000n  
-thousandfoldNumeral (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit))
+mkUtt (mkCard (thousandfoldNumeral (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit))))
       mkSub1000 : Sub100 -> Sub1000 -- coerce 1..99  
-mkNumeral (mkSub1000 (mkSub100 n9_Unit n9_Unit))
+mkUtt (mkCard (mkNumeral (mkSub1000 (mkSub100 n9_Unit n9_Unit))))
       mkSub1000 : Unit -> Sub1000 -- 100n  
-mkNumeral (mkSub1000 n9_Unit)
+mkUtt (mkCard (mkNumeral (mkSub1000 n9_Unit)))
       mkSub1000 : Unit -> Sub100 -> Sub1000 -- 100m + n  
-mkNumeral (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit))
+mkUtt (mkCard (mkNumeral (mkSub1000 n9_Unit (mkSub100 n9_Unit n9_Unit))))
       mkSub100 : Unit -> Sub100            -- eight (coerce 1..9)  
-mkSub100 n8_Unit
+mkUtt (mkCard (mkNumeral (mkSub100 n8_Unit)))
     mkSub100 : Unit -> Unit -> Sub100    -- 10m + n  
-mkSub100 n8_Unit n3_Unit
+mkUtt (mkCard (mkNumeral (mkSub100 n8_Unit n3_Unit)))
     tenfoldSub100 : Unit -> Sub100 -- 10n  
-mkSub100 n8_Unit
+mkUtt (mkCard (mkNumeral (mkSub100 n8_Unit)))
     n1_Unit : Unit -- one 
-mkNumeral n1_Unit
+mkUtt (mkCard (mkNumeral n1_Unit))
     n2_Unit : Unit -- two  
-mkNumeral n2_Unit
+mkUtt (mkCard (mkNumeral n2_Unit))
     n3_Unit : Unit -- three  
-mkNumeral n3_Unit
+mkUtt (mkCard (mkNumeral n3_Unit))
     n4_Unit : Unit -- four  
-mkNumeral n4_Unit
+mkUtt (mkCard (mkNumeral n4_Unit))
     n5_Unit : Unit -- five  
-mkNumeral n5_Unit
+mkUtt (mkCard (mkNumeral n5_Unit))
     n6_Unit : Unit -- six  
-mkNumeral n6_Unit
+mkUtt (mkCard (mkNumeral n6_Unit))
     n7_Unit : Unit -- seven  
-mkNumeral n7_Unit
+mkUtt (mkCard (mkNumeral n7_Unit))
     n8_Unit : Unit -- eight  
-mkNumeral n8_Unit
+mkUtt (mkCard (mkNumeral n8_Unit))
     n9_Unit : Unit -- nine  
-mkNumeral n9_Unit
---      mkDigits : Str -> Digits -- 35 (from string "35")
+mkUtt (mkCard (mkNumeral n9_Unit))
+--      mkDigits : Str -> Digits -- 35 (from string "35"))
       mkDigits : Dig -> Digits -- 4  
-mkDigits n4_Dig
+mkUtt (mkCard (mkDigits n4_Dig))
       mkDigits : Dig -> Digits -> Digits -- 1,233,486 
-mkDigits n1_Dig (mkDigits n2_Dig (mkDigits n3_Dig (mkDigits n3_Dig (mkDigits n4_Dig (mkDigits n8_Dig (mkDigits n6_Dig)))))) 
---      n0_Dig : Dig   -- 0  
---      n1_Dig : Dig   -- 1  
---      n2_Dig : Dig   -- 2   
---      n3_Dig : Dig   -- 3      
---      n4_Dig : Dig   -- 4  
---      n5_Dig : Dig   -- 5      
---      n6_Dig : Dig   -- 6      
---      n7_Dig : Dig   -- 7           
---      n8_Dig : Dig   -- 8      
---      n9_Dig : Dig   -- 9  
+mkUtt (mkCard (mkDigits n1_Dig (mkDigits n2_Dig (mkDigits n3_Dig (mkDigits n3_Dig (mkDigits n4_Dig (mkDigits n8_Dig (mkDigits n6_Dig))))))))
+--      n0_Dig : Dig   -- 0  )
+--      n1_Dig : Dig   -- 1  )
+--      n2_Dig : Dig   -- 2   )
+--      n3_Dig : Dig   -- 3      )
+--      n4_Dig : Dig   -- 4  )
+--      n5_Dig : Dig   -- 5      )
+--      n6_Dig : Dig   -- 6      )
+--      n7_Dig : Dig   -- 7           )
+--      n8_Dig : Dig   -- 8      )
+--      n9_Dig : Dig   -- 9  )
       mkCN : N  -> CN            -- house 
-mkCN house_N 
+mkUtt (mkCN house_N )
       mkCN : N2 -> NP -> CN      -- mother of the king   
-mkCN mother_N2 (mkNP the_Det king_N)
+mkUtt (mkCN mother_N2 (mkNP the_Det king_N))
       mkCN : N3 -> NP -> NP -> CN  -- distance from this city to Paris
-mkCN distance_N3 (mkNP this_Det city_N) (mkNP paris_PN) 
+mkUtt (mkCN distance_N3 (mkNP this_Det city_N) (mkNP paris_PN) )
       mkCN : N2 -> CN            -- mother 
-mkCN mother_N2
+mkUtt (mkCN mother_N2)
       mkCN : N3 -> CN            -- distance 
-mkCN distance_N3
+mkUtt (mkCN distance_N3)
       mkCN :  A ->  N  -> CN     -- big house
-mkCN big_A house_N  
+mkUtt (mkCN big_A house_N  )
       mkCN :  A -> CN  -> CN     -- big blue house  
-mkCN big_A (mkCN blue_A house_N)
+mkUtt (mkCN big_A (mkCN blue_A house_N))
       mkCN : AP ->  N  -> CN     -- very big house
-mkCN (mkAP very_AdA big_A) house_N  
+mkUtt (mkCN (mkAP very_AdA big_A) house_N  )
       mkCN : AP -> CN  -> CN     -- very big blue house  
-mkCN (mkAP very_AdA big_A) (mkCN blue_A house_N)  
+mkUtt (mkCN (mkAP very_AdA big_A) (mkCN blue_A house_N)  )
       mkCN :  N -> RS  -> CN     -- man whom she loves 
-mkCN man_N (mkRS (mkRCl which_RP she_NP love_V2))
+mkUtt (mkCN man_N (mkRS (mkRCl which_RP she_NP love_V2)))
       mkCN : CN -> RS  -> CN     -- old man whom she loves 
-mkCN (mkCN old_A man_N) (mkRS (mkRCl which_RP she_NP love_V2)) 
+mkUtt (mkCN (mkCN old_A man_N) (mkRS (mkRCl which_RP she_NP love_V2)) )
       mkCN :  N -> Adv -> CN     -- house on the hill 
-mkCN house_N (mkAdv on_Prep (mkNP the_Det hill_N))
+mkUtt (mkCN house_N (mkAdv on_Prep (mkNP the_Det hill_N)))
       mkCN : CN -> Adv -> CN     -- big house on the hill 
-mkCN (mkCN big_A house_N) (mkAdv on_Prep (mkNP the_Det hill_N))
+mkUtt (mkCN (mkCN big_A house_N) (mkAdv on_Prep (mkNP the_Det hill_N)))
       mkCN : CN -> S   -> CN     -- rule that she sleeps 
-mkNum (mkCard almost_AdN (mkCard (mkNumeral n5_Unit)))
+mkUtt (mkCN (mkCN rule_N) (mkS (mkCl she_NP sleep_V)))
       mkCN : CN -> QS  -> CN     -- question if she sleeps 
-mkNum (mkCard almost_AdN (mkCard (mkNumeral n5_Unit)))
+mkUtt (mkCN (mkCN question_N) (mkQS (mkQCl (mkCl she_NP sleep_V))))
       mkCN : CN -> VP  -> CN     -- reason to sleep 
-mkCN (mkCN reason_N) (mkVP sleep_V)
+mkUtt (mkCN (mkCN reason_N) (mkVP sleep_V))
       mkCN : CN -> SC  -> CN     -- reason to sleep  
-mkCN (mkCN reason_N) (mkVP sleep_V)
+mkUtt (mkCN (mkCN reason_N) (mkVP sleep_V))
       mkCN :  N -> NP  -> CN     -- king John
-mkCN king_N (mkNP john_PN) 
+mkUtt (mkCN king_N (mkNP john_PN) )
       mkCN : CN -> NP  -> CN     -- old king John
-mkCN (mkCN old_A king_N) (mkNP john_PN)
+mkUtt (mkCN (mkCN old_A king_N) (mkNP john_PN))
       mkAP : A -> AP           -- warm   
-mkAP warm_A
+mkUtt (mkAP warm_A)
       mkAP : A -> NP -> AP     -- warmer than Paris    
-mkAP warm_A (mkNP paris_PN)
+mkUtt (mkAP warm_A (mkNP paris_PN))
       mkAP : A2 -> NP -> AP    -- married to her
-mkAP married_A2 she_NP 
+mkUtt (mkAP married_A2 she_NP )
       mkAP : A2 -> AP          -- married 
-mkAP married_A2
+mkUtt (mkAP married_A2)
       mkAP : AP -> S -> AP    -- probable that she sleeps  
-mkCl (mkVP (mkAP (mkAP good_A) (mkS (mkCl she_NP sleep_V))))
+mkUtt (mkCl (mkVP (mkAP (mkAP good_A) (mkS (mkCl she_NP sleep_V)))))
       mkAP : AP -> QS -> AP    -- uncertain who sleeps  
-mkCl (mkVP (mkAP (mkAP uncertain_A) (mkQS (mkQCl who_IP sleep_V))))
+mkUtt (mkCl (mkVP (mkAP (mkAP uncertain_A) (mkQS (mkQCl who_IP sleep_V)))))
       mkAP : AP -> VP -> AP    -- ready to go 
-mkCl she_NP (mkAP (mkAP ready_A) (mkVP sleep_V))
+mkUtt (mkCl she_NP (mkAP (mkAP ready_A) (mkVP sleep_V)))
       mkAP : AP -> SC -> AP    -- ready to go  
-mkCl she_NP (mkAP (mkAP ready_A) (mkSC (mkVP sleep_V)))
+mkUtt (mkCl she_NP (mkAP (mkAP ready_A) (mkSC (mkVP sleep_V))))
       mkAP : AdA -> A -> AP   -- very old
-mkAP very_AdA old_A
+mkUtt (mkAP very_AdA old_A)
       mkAP : AdA -> AP -> AP   -- very very old  
-mkAP very_AdA (mkAP very_AdA old_A)
+mkUtt (mkAP very_AdA (mkAP very_AdA old_A))
       mkAP : Conj -> AP -> AP -> AP -- old and big 
-mkAP or_Conj (mkAP old_A) (mkAP young_A)
+mkUtt (mkAP or_Conj (mkAP old_A) (mkAP young_A))
       mkAP : Conj -> ListAP -> AP   -- old, big and warm 
-mkAP and_Conj (mkListAP (mkAP old_A) (mkListAP (mkAP big_A) (mkAP warm_A)))
+mkUtt (mkAP and_Conj (mkListAP (mkAP old_A) (mkListAP (mkAP big_A) (mkAP warm_A))))
       mkAP : Ord   -> AP              -- oldest 
-mkAP (mkOrd old_A)
+mkUtt (mkAP (mkOrd old_A))
       mkAP : CAdv -> AP -> NP -> AP   -- as old as she
-mkAP as_CAdv (mkAP old_A) she_NP
+mkUtt (mkAP as_CAdv (mkAP old_A) she_NP)
       reflAP   : A2 -> AP             -- married to himself 
 mkUtt (reflAP married_A2)
       comparAP : A -> AP              -- warmer 
 mkUtt (comparAP warm_A)
       mkAdv : A -> Adv            -- warmly   
-mkAdv warm_A
+mkUtt (mkAdv warm_A)
       mkAdv : Prep -> NP -> Adv          -- in the house    
-mkAdv in_Prep (mkNP the_Det house_N)
+mkUtt (mkAdv in_Prep (mkNP the_Det house_N))
       mkAdv : Subj -> S -> Adv   -- when she sleeps
-mkAdv when_Subj (mkS (mkCl she_NP sleep_V))
+mkUtt (mkAdv when_Subj (mkS (mkCl she_NP sleep_V)))
       mkAdv : CAdv -> A -> NP -> Adv   -- more warmly than he
-mkAdv more_CAdv warm_A he_NP  
+mkUtt (mkAdv more_CAdv warm_A he_NP  )
       mkAdv : CAdv -> A -> S -> Adv    -- more warmly than he runs 
-mkAdv more_CAdv warm_A (mkS (mkCl he_NP run_V))  
+mkUtt (mkAdv more_CAdv warm_A (mkS (mkCl he_NP run_V))  )
       mkAdv : AdA -> Adv -> Adv        -- very warmly
-mkAdv very_AdA (mkAdv warm_A) 
+mkUtt (mkAdv very_AdA (mkAdv warm_A) )
       mkAdv : Conj -> Adv -> Adv -> Adv  -- here and now
-mkAdv and_Conj here_Adv now_Adv
+mkUtt (mkAdv and_Conj here_Adv now_Adv)
       mkAdv : Conj -> ListAdv -> Adv   -- with her, here and now  
-mkAdv and_Conj (mkListAdv (mkAdv with_Prep she_NP) (mkListAdv here_Adv now_Adv))
+mkUtt (mkAdv and_Conj (mkListAdv (mkAdv with_Prep she_NP) (mkListAdv here_Adv now_Adv)))
       mkQS : (Tense) -> (Ant) -> (Pol) -> QCl -> QS -- who wouldn't have slept 
-mkQS conditionalTense anteriorAnt negativePol (mkQCl who_IP sleep_V)
+mkUtt (mkQS conditionalTense anteriorAnt negativePol (mkQCl who_IP sleep_V))
       mkQS : Cl -> QS -- 
-mkQS (mkCl she_NP sleep_V)
+mkUtt (mkQS (mkCl she_NP sleep_V))
       mkQCl : Cl -> QCl -- does she sleep
-mkQCl (mkCl she_NP sleep_V)
+mkUtt (mkQCl (mkCl she_NP sleep_V))
       mkQCl : IP -> VP -> QCl               -- who sleeps      
-mkQCl who_IP (mkVP (mkVP sleep_V) here_Adv)
+mkUtt (mkQCl who_IP (mkVP (mkVP sleep_V) here_Adv))
       mkQCl : IP -> V -> QCl                -- who sleeps
-mkQCl who_IP sleep_V
+mkUtt (mkQCl who_IP sleep_V)
       mkQCl : IP -> V2 -> NP -> QCl         -- who loves her
-mkQCl who_IP love_V2 she_NP
+mkUtt (mkQCl who_IP love_V2 she_NP)
       mkQCl : IP -> V3 -> NP -> NP -> QCl   -- who sends it to her
-mkQCl who_IP send_V3 it_NP she_NP
+mkUtt (mkQCl who_IP send_V3 it_NP she_NP)
       mkQCl : IP  -> VV -> VP -> QCl        -- who wants to sleep
-mkQCl who_IP want_VV (mkVP sleep_V)
+mkUtt (mkQCl who_IP want_VV (mkVP sleep_V))
       mkQCl : IP  -> VS -> S  -> QCl        -- who says that I sleep
-mkQCl who_IP say_VS (mkS (mkCl i_NP sleep_V))
+mkUtt (mkQCl who_IP say_VS (mkS (mkCl i_NP sleep_V)))
       mkQCl : IP  -> VQ -> QS -> QCl        -- who wonders who sleeps
-mkQCl who_IP wonder_VQ (mkQS (mkQCl who_IP sleep_V))
+mkUtt (mkQCl who_IP wonder_VQ (mkQS (mkQCl who_IP sleep_V)))
       mkQCl : IP  -> VA -> A  -> QCl        -- who becomes old
-mkQCl who_IP become_VA old_A
+mkUtt (mkQCl who_IP become_VA old_A)
       mkQCl : IP  -> VA -> AP -> QCl        -- who becomes very old
-mkQCl who_IP become_VA (mkAP very_AdA old_A)
+mkUtt (mkQCl who_IP become_VA (mkAP very_AdA old_A))
       mkQCl : IP  -> V2A -> NP -> A  -> QCl -- who paints it red
-mkQCl who_IP paint_V2A it_NP red_A
+mkUtt (mkQCl who_IP paint_V2A it_NP red_A)
       mkQCl : IP  -> V2A -> NP -> AP -> QCl -- who paints it very red
-mkQCl who_IP paint_V2A it_NP (mkAP very_AdA red_A)
+mkUtt (mkQCl who_IP paint_V2A it_NP (mkAP very_AdA red_A))
       mkQCl : IP  -> V2S -> NP -> S -> QCl  -- who answers to him that we sleep
-mkQCl who_IP answer_V2S he_NP (mkS (mkCl we_NP sleep_V))
+mkUtt (mkQCl who_IP answer_V2S he_NP (mkS (mkCl we_NP sleep_V)))
       mkQCl : IP  -> V2Q -> NP -> QS -> QCl -- who asks him who sleeps 
-mkQCl who_IP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V))
+mkUtt (mkQCl who_IP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V)))
       mkQCl : IP  -> V2V -> NP -> VP -> QCl -- who begs him to sleep
-mkQCl who_IP beg_V2V he_NP (mkVP sleep_V)
+mkUtt (mkQCl who_IP beg_V2V he_NP (mkVP sleep_V))
       mkQCl : IP -> A  -> QCl       -- who is old
-mkQCl who_IP old_A
+mkUtt (mkQCl who_IP old_A)
       mkQCl : IP -> A -> NP -> QCl  -- who is older than he   
-mkQCl who_IP old_A he_NP
+mkUtt (mkQCl who_IP old_A he_NP)
       mkQCl : IP -> A2 -> NP -> QCl -- who is married to him 
-mkQCl who_IP married_A2 he_NP
+mkUtt (mkQCl who_IP married_A2 he_NP)
       mkQCl : IP -> AP -> QCl    -- who is very old 
-mkQCl who_IP (mkAP very_AdA old_A)
+mkUtt (mkQCl who_IP (mkAP very_AdA old_A))
       mkQCl : IP -> NP -> QCl    -- who is the woman   
-mkQCl who_IP (mkNP the_Det woman_N)
+mkUtt (mkQCl who_IP (mkNP the_Det woman_N))
       mkQCl : IP -> N -> QCl     -- who is a woman   
-mkQCl who_IP woman_N
+mkUtt (mkQCl who_IP woman_N)
       mkQCl : IP -> CN -> QCl    -- who is an old woman   
-mkQCl who_IP (mkCN old_A woman_N)
+mkUtt (mkQCl who_IP (mkCN old_A woman_N))
       mkQCl : IP -> Adv -> QCl   -- who is here   
-mkQCl who_IP here_Adv
+mkUtt (mkQCl who_IP here_Adv)
       mkQCl : IP -> VP -> QCl    -- who always sleeps
-mkQCl who_IP (mkVP always_AdV (mkVP sleep_V))
+mkUtt (mkQCl who_IP (mkVP always_AdV (mkVP sleep_V)))
       mkQCl : IAdv -> Cl -> QCl            -- why does she sleep
-mkQCl why_IAdv (mkCl she_NP sleep_V)     
+mkUtt (mkQCl why_IAdv (mkCl she_NP sleep_V)     )
       mkQCl : Prep -> IP -> Cl -> QCl      -- with whom does she sleep
-mkQCl with_Prep who_IP (mkCl she_NP sleep_V)      
+mkUtt (mkQCl with_Prep who_IP (mkCl she_NP sleep_V)      )
       mkQCl : IAdv -> NP -> QCl   -- where is she
-mkQCl where_IAdv she_NP 
+mkUtt (mkQCl where_IAdv she_NP )
       mkQCl : IComp -> NP -> QCl   -- who is this man
-mkQCl (mkIComp who_IP) (mkNP this_Det man_N)
+mkUtt (mkQCl (mkIComp who_IP) (mkNP this_Det man_N))
       mkQCl : IP -> QCl         -- which cities are there
-mkQCl (mkIP which_IQuant city_N)
+mkUtt (mkQCl (mkIP which_IQuant city_N))
       mkQCl : IP -> NP -> V2 -> QCl        -- who does she love 
-mkQCl who_IP she_NP
+mkUtt (mkQCl who_IP she_NP)
       mkQCl : IP -> ClSlash -> QCl         -- who does she love today   --:   
-mkQCl who_IP (mkClSlash (mkClSlash she_NP love_V2) today_Adv)
+mkUtt (mkQCl who_IP (mkClSlash (mkClSlash she_NP love_V2) today_Adv))
       mkIP : IDet -> CN -> IP          -- which five big cities
-mkIP (mkIDet which_IQuant (mkNum (mkNumeral n5_Unit))) (mkCN big_A city_N)    
+mkUtt (mkIP (mkIDet which_IQuant (mkNum (mkNumeral n5_Unit))) (mkCN big_A city_N)    )
       mkIP : IDet -> N -> IP      -- which five cities
-mkIP (mkIDet which_IQuant (mkNum (mkNumeral n5_Unit))) city_N    
+mkUtt (mkIP (mkIDet which_IQuant (mkNum (mkNumeral n5_Unit))) city_N    )
       mkIP : IDet -> IP      -- which five 
-mkIP (mkIDet which_IQuant (mkNum (mkNumeral n5_Unit)))
+mkUtt (mkIP (mkIDet which_IQuant (mkNum (mkNumeral n5_Unit))))
       mkIP : IQuant -> CN -> IP    -- which big city
-mkIP which_IQuant (mkCN big_A city_N)    
+mkUtt (mkIP which_IQuant (mkCN big_A city_N)    )
       mkIP : IQuant -> Num -> CN -> IP          -- which five big cities
-mkIP which_IQuant (mkNum (mkNumeral n5_Unit)) (mkCN big_A city_N)    
+mkUtt (mkIP which_IQuant (mkNum (mkNumeral n5_Unit)) (mkCN big_A city_N)    )
       mkIP : IQuant -> N -> IP      -- which city
-mkIP which_IQuant city_N
+mkUtt (mkIP which_IQuant city_N)
       mkIP : IP -> Adv -> IP        -- who in Paris
-mkIP who_IP (mkAdv in_Prep (mkNP paris_PN))
+mkUtt (mkIP who_IP (mkAdv in_Prep (mkNP paris_PN)))
       what_IP : IP  -- what (singular)
 mkUtt what_IP
       who_IP : IP   -- who (singular)
 mkUtt who_IP
       mkIAdv : Prep -> IP -> IAdv --  in which city 
-mkIAdv in_Prep (mkIP which_IQuant city_N)
+mkUtt (mkIAdv in_Prep (mkIP which_IQuant city_N))
       mkIAdv : IAdv -> Adv -> IAdv --  where in Paris
-mkIAdv where_IAdv (mkAdv in_Prep (mkNP paris_PN))  
+mkUtt (mkIAdv where_IAdv (mkAdv in_Prep (mkNP paris_PN))  )
       mkIDet : IQuant -> Num -> IDet          -- which (songs) 
-mkIP (mkIDet which_IQuant pluralNum) house_N
+mkUtt (mkIP (mkIDet which_IQuant pluralNum) house_N)
       mkIDet : IQuant -> IDet
-mkIP (mkIDet which_IQuant) house_N      
+mkUtt (mkIP (mkIDet which_IQuant) house_N      )
       which_IDet : IDet 
-mkIP which_IDet house_N
+mkUtt (mkIP which_IDet house_N)
       whichPl_IDet : IDet 
-mkIP whichPl_IDet house_N
+mkUtt (mkIP whichPl_IDet house_N)
       mkRS : (Tense) -> (Ant) -> (Pol) -> RCl -> RS -- that wouldn't have slept 
-mkCN woman_N (mkRS conditionalTense anteriorAnt negativePol (mkRCl which_RP sleep_V))
+mkUtt (mkCN woman_N (mkRS conditionalTense anteriorAnt negativePol (mkRCl which_RP sleep_V)))
       mkRS : RCl -> RS -- 
-mkCN woman_N (mkRS (mkRCl which_RP sleep_V))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP sleep_V)))
       mkRS : Conj -> RS -> RS -> RS -- 
-mkCN woman_N (mkRS or_Conj (mkRS (mkRCl which_RP sleep_V)) (mkRS (mkRCl which_RP we_NP love_V2)))
+mkUtt (mkCN woman_N (mkRS or_Conj (mkRS (mkRCl which_RP sleep_V)) (mkRS (mkRCl which_RP we_NP love_V2))))
       mkRCl : RP -> VP -> RCl               -- who sleeps      
-mkCN woman_N (mkRS (mkRCl which_RP (mkVP (mkVP sleep_V) here_Adv)))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP (mkVP (mkVP sleep_V) here_Adv))))
       mkRCl : RP -> V -> RCl                -- who sleeps
-mkCN woman_N (mkRS (mkRCl which_RP sleep_V))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP sleep_V)))
       mkRCl : RP -> V2 -> NP -> RCl         -- who loves her
-mkCN woman_N (mkRS (mkRCl which_RP love_V2 he_NP))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP love_V2 he_NP)))
       mkRCl : RP -> V3 -> NP -> NP -> RCl   -- who sends it to her
-mkCN woman_N (mkRS (mkRCl which_RP send_V3 it_NP he_NP))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP send_V3 it_NP he_NP)))
       mkRCl : RP  -> VV -> VP -> RCl        -- who wants to sleep
-mkCN woman_N (mkRS (mkRCl which_RP want_VV (mkVP sleep_V)))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP want_VV (mkVP sleep_V))))
       mkRCl : RP  -> VS -> S  -> RCl        -- who says that I sleep
-mkCN woman_N (mkRS (mkRCl which_RP say_VS (mkS (mkCl i_NP sleep_V))))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP say_VS (mkS (mkCl i_NP sleep_V)))))
       mkRCl : RP  -> VQ -> QS -> RCl        -- who wonders who sleeps
-mkCN woman_N (mkRS (mkRCl which_RP wonder_VQ (mkQS (mkQCl who_IP sleep_V))))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP wonder_VQ (mkQS (mkQCl who_IP sleep_V)))))
       mkRCl : RP  -> VA -> A  -> RCl        -- who becomes old
-mkCN woman_N (mkRS (mkRCl which_RP become_VA old_A))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP become_VA old_A)))
       mkRCl : RP  -> VA -> AP -> RCl        -- who becomes very old
-mkCN woman_N (mkRS (mkRCl which_RP become_VA (mkAP very_AdA old_A)))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP become_VA (mkAP very_AdA old_A))))
       mkRCl : RP  -> V2A -> NP -> A  -> RCl -- who paints it red
-mkCN woman_N (mkRS (mkRCl which_RP paint_V2A it_NP red_A))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP paint_V2A it_NP red_A)))
       mkRCl : RP  -> V2A -> NP -> AP -> RCl -- who paints it very red
-mkCN woman_N (mkRS (mkRCl which_RP paint_V2A it_NP (mkAP very_AdA red_A)))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP paint_V2A it_NP (mkAP very_AdA red_A))))
       mkRCl : RP  -> V2S -> NP -> S -> RCl  -- who answers to him that we sleep
-mkCN woman_N (mkRS (mkRCl which_RP answer_V2S he_NP (mkS (mkCl we_NP sleep_V))))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP answer_V2S he_NP (mkS (mkCl we_NP sleep_V)))))
       mkRCl : RP  -> V2Q -> NP -> QS -> RCl -- who asks him who sleeps 
-mkCN woman_N (mkRS (mkRCl which_RP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V))))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP ask_V2Q he_NP (mkQS (mkQCl who_IP sleep_V)))))
       mkRCl : RP  -> V2V -> NP -> VP -> RCl -- who begs him to sleep
-mkCN woman_N (mkRS (mkRCl which_RP beg_V2V he_NP (mkVP sleep_V)))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP beg_V2V he_NP (mkVP sleep_V))))
       mkRCl : RP -> A  -> RCl       -- who is old
-mkCN woman_N (mkRS (mkRCl which_RP old_A))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP old_A)))
       mkRCl : RP -> A -> NP -> RCl  -- who is older than he   
-mkCN woman_N (mkRS (mkRCl which_RP old_A he_NP))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP old_A he_NP)))
       mkRCl : RP -> A2 -> NP -> RCl -- who is married to him 
-mkCN woman_N (mkRS (mkRCl which_RP married_A2 he_NP))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP married_A2 he_NP)))
       mkRCl : RP -> AP -> RCl    -- who is very old 
-mkCN woman_N (mkRS (mkRCl which_RP (mkAP very_AdA old_A)))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP (mkAP very_AdA old_A))))
       mkRCl : RP -> NP -> RCl    -- who is the woman   
-mkCN woman_N (mkRS (mkRCl which_RP (mkNP the_Det woman_N)))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP (mkNP the_Det woman_N))))
       mkRCl : RP -> N -> RCl     -- who is a woman   
-mkCN student_N (mkRS (mkRCl which_RP woman_N))
+mkUtt (mkCN student_N (mkRS (mkRCl which_RP woman_N)))
       mkRCl : RP -> CN -> RCl    -- who is an old woman   
-mkCN student_N (mkRS (mkRCl which_RP (mkCN old_A woman_N)))
+mkUtt (mkCN student_N (mkRS (mkRCl which_RP (mkCN old_A woman_N))))
       mkRCl : RP -> Adv -> RCl   -- who is here   
-mkCN woman_N (mkRS (mkRCl which_RP here_Adv))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP here_Adv)))
       mkRCl : RP -> VP -> RCl    -- who always sleeps
-mkCN woman_N (mkRS (mkRCl which_RP (mkVP always_AdV (mkVP sleep_V))))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP (mkVP always_AdV (mkVP sleep_V)))))
       mkRCl : RP -> NP -> V2 -> RCl        -- who she loves 
-mkCN woman_N (mkRS (mkRCl which_RP we_NP love_V2))
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP we_NP love_V2)))
       mkRCl : RP -> ClSlash -> RCl         -- who she loves today   --:   
-mkCN woman_N (mkRS (mkRCl which_RP (mkClSlash (mkClSlash she_NP love_V2) today_Adv)))
---      which_RP : RP                        -- which/who 
---which_RP
+mkUtt (mkCN woman_N (mkRS (mkRCl which_RP (mkClSlash (mkClSlash she_NP love_V2) today_Adv))))
+      which_RP : RP                        -- which/who )
+which_RP
       mkRP : Prep -> NP -> RP -> RP    -- all the cities in which
 mkRP in_Prep (mkNP all_Predet (mkNP the_Quant pluralNum city_N)) which_RP
       mkSSlash : Temp -> Pol -> ClSlash -> SSlash  
 mkSSlash (mkTemp pastTense anteriorAnt) negativePol (mkClSlash she_NP (mkVPSlash see_V2))
       mkClSlash : NP -> VPSlash -> ClSlash        -- (whom) he sees here  
-mkQCl who_IP (mkClSlash she_NP (mkVPSlash see_V2))
+mkUtt (mkQCl who_IP (mkClSlash she_NP (mkVPSlash see_V2)))
       mkClSlash : NP -> V2 -> ClSlash        -- (whom) he sees 
-mkQCl who_IP (mkClSlash she_NP see_V2)
+mkUtt (mkQCl who_IP (mkClSlash she_NP see_V2))
       mkClSlash : NP -> VV -> V2 -> ClSlash  -- (whom) he wants to see
-mkQCl who_IP (mkClSlash she_NP want_VV see_V2)
+mkUtt (mkQCl who_IP (mkClSlash she_NP want_VV see_V2))
       mkClSlash : Cl -> Prep -> ClSlash      -- (with whom) he sleeps
-mkQCl who_IP (mkClSlash (mkCl she_NP sleep_V) with_Prep)
+mkUtt (mkQCl who_IP (mkClSlash (mkCl she_NP sleep_V) with_Prep))
       mkClSlash : ClSlash -> Adv -> ClSlash    -- (whom) he sees tomorrow   
-mkQCl who_IP (mkClSlash (mkClSlash she_NP see_V2) today_Adv)
+mkUtt (mkQCl who_IP (mkClSlash (mkClSlash she_NP see_V2) today_Adv))
       mkClSlash : NP -> VS -> SSlash -> ClSlash -- (whom)she says that he s
-mkQCl who_IP (mkClSlash she_NP know_VS (mkSSlash (mkTemp pastTense anteriorAnt) negativePol (mkClSlash we_NP (mkVPSlash see_V2))))
+mkUtt (mkQCl who_IP (mkClSlash she_NP know_VS (mkSSlash (mkTemp pastTense anteriorAnt) negativePol (mkClSlash we_NP (mkVPSlash see_V2)))))
       mkVPSlash : V2  -> VPSlash         -- (whom) (she) loves 
-mkQCl who_IP (mkClSlash she_NP (mkVPSlash see_V2))
+mkUtt (mkQCl who_IP (mkClSlash she_NP (mkVPSlash see_V2)))
       mkVPSlash : V3  -> NP -> VPSlash   -- (whom) (she) gives an apple 
-mkQCl who_IP (mkClSlash she_NP (mkVPSlash send_V3 it_NP))  
+mkUtt (mkQCl who_IP (mkClSlash she_NP (mkVPSlash send_V3 it_NP))  )
       mkVPSlash : V2A -> AP -> VPSlash   -- (whom) (she) paints red
-mkQCl who_IP (mkClSlash she_NP (mkVPSlash paint_V2A (mkAP red_A)))  
+mkUtt (mkQCl who_IP (mkClSlash she_NP (mkVPSlash paint_V2A (mkAP red_A)))  )
       mkVPSlash : V2Q -> QS -> VPSlash   -- (whom) (she) asks who sleeps
-mkQCl who_IP (mkClSlash she_NP (mkVPSlash ask_V2Q (mkQS (mkQCl where_IAdv (mkCl i_NP sleep_V)))))   
+mkUtt (mkQCl who_IP (mkClSlash she_NP (mkVPSlash ask_V2Q (mkQS (mkQCl where_IAdv (mkCl i_NP sleep_V)))))   )
       mkVPSlash : V2S -> S  -> VPSlash   -- (whom) (she) tells that we sleep
-mkQCl who_IP (mkClSlash she_NP (mkVPSlash answer_V2S (mkS (mkCl i_NP sleep_V))))   
+mkUtt (mkQCl who_IP (mkClSlash she_NP (mkVPSlash answer_V2S (mkS (mkCl i_NP sleep_V))))   )
       mkVPSlash : V2V -> VP -> VPSlash   -- (whom) (she) forces to sleep  
-mkQCl who_IP (mkClSlash she_NP (mkVPSlash beg_V2V (mkVP sleep_V)))
+mkUtt (mkQCl who_IP (mkClSlash she_NP (mkVPSlash beg_V2V (mkVP sleep_V))))
       mkVPSlash : VV  -> VPSlash -> VPSlash  -- want always to buy 
-mkQCl who_IP (mkClSlash she_NP (mkVPSlash want_VV (mkVPSlash see_V2)))
+mkUtt (mkQCl who_IP (mkClSlash she_NP (mkVPSlash want_VV (mkVPSlash see_V2))))
       mkVPSlash : V2V -> NP -> VPSlash -> VPSlash -- beg me always to buy 
-mkQCl who_IP (mkClSlash she_NP (mkVPSlash beg_V2V i_NP (mkVPSlash see_V2)))
+mkUtt (mkQCl who_IP (mkClSlash she_NP (mkVPSlash beg_V2V i_NP (mkVPSlash see_V2))))
     above_Prep : Prep   
-mkAdv above_Prep it_NP
+mkUtt (mkAdv above_Prep it_NP)
     after_Prep : Prep 
-mkAdv after_Prep it_NP
+mkUtt (mkAdv after_Prep it_NP)
     all_Predet : Predet 
 mkUtt (mkNP all_Predet (mkNP thePl_Det man_N))
     almost_AdA : AdA    
-mkAP almost_AdA red_A
+mkUtt (mkAP almost_AdA red_A)
     almost_AdN : AdN
-mkCard almost_AdN (mkCard (mkNumeral n8_Unit))    
+mkUtt (mkCard almost_AdN (mkCard (mkNumeral n8_Unit))    )
     although_Subj : Subj 
-mkAdv although_Subj (mkS (mkCl she_NP sleep_V))
+mkUtt (mkAdv although_Subj (mkS (mkCl she_NP sleep_V)))
     always_AdV : AdV 
 always_AdV
     and_Conj : Conj 
-mkAdv and_Conj here_Adv now_Adv
+mkUtt (mkAdv and_Conj here_Adv now_Adv)
     because_Subj : Subj 
-mkAdv because_Subj (mkS (mkCl she_NP sleep_V))
+mkUtt (mkAdv because_Subj (mkS (mkCl she_NP sleep_V)))
     before_Prep : Prep 
-mkAdv before_Prep it_NP
+mkUtt (mkAdv before_Prep it_NP)
     behind_Prep : Prep 
-mkAdv behind_Prep it_NP
+mkUtt (mkAdv behind_Prep it_NP)
     between_Prep : Prep 
-mkAdv between_Prep (mkNP and_Conj you_NP i_NP)
+mkUtt (mkAdv between_Prep (mkNP and_Conj you_NP i_NP))
     both7and_DConj : Conj  -- both...and
-mkAdv both7and_DConj here_Adv there_Adv
+mkUtt (mkAdv both7and_DConj here_Adv there_Adv)
     but_PConj : PConj 
 but_PConj
     by8agent_Prep : Prep  -- by (agent)
-mkAdv by8agent_Prep it_NP
+mkUtt (mkAdv by8agent_Prep it_NP)
     by8means_Prep : Prep  -- by (means of)
-mkAdv by8means_Prep it_NP
+mkUtt (mkAdv by8means_Prep it_NP)
     can8know_VV : VV  -- can (capacity)
 mkUtt (mkVP can8know_VV (mkVP sleep_V))
     can_VV : VV       -- can (possibility)
 mkUtt (mkVP can_VV (mkVP sleep_V))
     during_Prep : Prep 
-mkAdv during_Prep it_NP
+mkUtt (mkAdv during_Prep it_NP)
     either7or_DConj : Conj  -- either...or
-mkAdv either7or_DConj here_Adv there_Adv
+mkUtt (mkAdv either7or_DConj here_Adv there_Adv)
     every_Det : Det 
 mkUtt (mkNP every_Det woman_N)
     everybody_NP : NP   -- everybody
@@ -748,21 +748,21 @@ mkUtt everybody_NP
     everything_NP : NP 
 mkUtt everything_NP
     everywhere_Adv : Adv 
-everywhere_Adv
+mkUtt (everywhere_Adv)
     few_Det : Det 
 mkUtt (mkNP few_Det woman_N)
     for_Prep : Prep 
-mkAdv for_Prep it_NP
+mkUtt (mkAdv for_Prep it_NP)
     from_Prep : Prep 
-mkAdv from_Prep it_NP
+mkUtt (mkAdv from_Prep it_NP)
     he_Pron : Pron 
 mkUtt (mkNP he_Pron)
     here_Adv : Adv 
-here_Adv
+mkUtt (here_Adv)
     here7to_Adv : Adv  -- to here
-here7to_Adv
+mkUtt (here7to_Adv)
     here7from_Adv : Adv   -- from here
-here7from_Adv
+mkUtt (here7from_Adv)
     how_IAdv : IAdv 
 mkUtt how_IAdv
     how8many_IDet : IDet 
@@ -772,11 +772,11 @@ mkUtt how8much_IAdv
     i_Pron : Pron 
 mkUtt (mkNP i_Pron)
     if_Subj : Subj 
-mkAdv if_Subj (mkS (mkCl she_NP sleep_V))
+mkUtt (mkAdv if_Subj (mkS (mkCl she_NP sleep_V)))
     in8front_Prep : Prep  -- in front of
-mkAdv in8front_Prep it_NP
+mkUtt (mkAdv in8front_Prep it_NP)
     in_Prep : Prep 
-mkAdv in_Prep it_NP
+mkUtt (mkAdv in_Prep it_NP)
     it_Pron : Pron 
 mkUtt (mkNP it_Pron)
     less_CAdv : CAdv 
@@ -794,25 +794,25 @@ must_VV
     no_Utt : Utt 
 no_Utt
     on_Prep : Prep 
-mkAdv on_Prep it_NP
+mkUtt (mkAdv on_Prep it_NP)
     only_Predet : Predet 
 only_Predet
     or_Conj : Conj 
-mkAdv or_Conj here_Adv there_Adv
+mkUtt (mkAdv or_Conj here_Adv there_Adv)
     otherwise_PConj : PConj 
 otherwise_PConj
     part_Prep : Prep 
-mkAdv part_Prep it_NP
+mkUtt (mkAdv part_Prep it_NP)
     please_Voc : Voc 
 please_Voc
     possess_Prep : Prep  -- of (possessive)
-mkAdv possess_Prep it_NP
+mkUtt (mkAdv possess_Prep it_NP)
     quite_Adv : AdA 
 quite_Adv
     she_Pron : Pron 
 mkUtt (mkNP she_Pron)
     so_AdA : AdA 
-so_AdA
+mkUtt (mkAP so_AdA warm_A)
     someSg_Det : Det 
 mkUtt (mkNP someSg_Det wine_N)
     somePl_Det : Det 
@@ -822,17 +822,17 @@ mkUtt somebody_NP
     something_NP : NP 
 mkUtt something_NP
     somewhere_Adv : Adv 
-somewhere_Adv
+mkUtt (somewhere_Adv)
     that_Quant : Quant 
 mkUtt (mkNP that_Quant house_N)
     that_Subj : Subj 
-mkAdv that_Subj (mkS (mkCl she_NP sleep_V))
+mkUtt (mkAdv that_Subj (mkS (mkCl she_NP sleep_V)))
     there_Adv : Adv 
-there_Adv
+mkUtt (there_Adv)
     there7to_Adv : Adv  -- to there
-there7to_Adv
+mkUtt (there7to_Adv)
     there7from_Adv : Adv  -- from there
-there7from_Adv
+mkUtt (there7from_Adv)
     therefore_PConj : PConj 
 therefore_PConj
     they_Pron : Pron  
@@ -840,41 +840,41 @@ mkUtt (mkNP they_Pron)
     this_Quant : Quant 
 mkUtt (mkNP this_Quant house_N)
     through_Prep : Prep 
-mkAdv through_Prep it_NP
+mkUtt (mkAdv through_Prep it_NP)
     to_Prep : Prep 
-mkAdv to_Prep it_NP
+mkUtt (mkAdv to_Prep it_NP)
     too_AdA : AdA 
-too_AdA
+mkUtt (mkAP too_AdA warm_A)
     under_Prep : Prep 
-mkAdv under_Prep it_NP
+mkUtt (mkAdv under_Prep it_NP)
     very_AdA : AdA 
-very_AdA
+mkUtt (mkAP very_AdA warm_A)
     want_VV : VV 
-want_VV
+mkUtt (mkVP want_VV (mkVP sleep_V))
     we_Pron : Pron 
 mkUtt (mkNP we_Pron)
     whatPl_IP : IP  -- what (plural)
-whatPl_IP
+mkUtt (whatPl_IP)
     whatSg_IP : IP  -- what (singular)
-whatSg_IP
+mkUtt (whatSg_IP)
     when_IAdv : IAdv 
 mkUtt when_IAdv
     when_Subj : Subj 
-mkAdv when_Subj (mkS (mkCl she_NP sleep_V))
+mkUtt (mkAdv when_Subj (mkS (mkCl she_NP sleep_V)))
     where_IAdv : IAdv 
 mkUtt where_IAdv
     which_IQuant : IQuant 
-mkIP which_IQuant house_N
+mkUtt (mkIP which_IQuant house_N)
     whoPl_IP : IP   -- who (plural)
-whoPl_IP
+mkUtt (whoPl_IP)
     whoSg_IP : IP   -- who (singular)
-whoSg_IP
+mkUtt (whoSg_IP)
     why_IAdv : IAdv 
 mkUtt why_IAdv
     with_Prep : Prep 
-mkAdv with_Prep it_NP
+mkUtt (mkAdv with_Prep it_NP)
     without_Prep : Prep 
-mkAdv without_Prep it_NP
+mkUtt (mkAdv without_Prep it_NP)
     yes_Utt : Utt 
 yes_Utt
     youSg_Pron : Pron  -- you (singular)
@@ -888,17 +888,17 @@ mkUtt (mkNP no_Quant house_N)
     not_Predet : Predet 
 mkUtt (mkNP not_Predet everybody_NP)
     if_then_Conj : Conj 
-mkAdv if_then_Conj here_Adv there_Adv
+mkUtt (mkAdv if_then_Conj here_Adv there_Adv)
     at_least_AdN : AdN 
-mkCard at_least_AdN (mkCard (mkNumeral n8_Unit))
+mkUtt (mkCard at_least_AdN (mkCard (mkNumeral n8_Unit)))
     at_most_AdN : AdN 
-mkCard at_most_AdN (mkCard (mkNumeral n8_Unit))
+mkUtt (mkCard at_most_AdN (mkCard (mkNumeral n8_Unit)))
     nobody_NP : NP 
 mkUtt nobody_NP
     nothing_NP : NP 
 mkUtt nothing_NP
     except_Prep : Prep 
-mkAdv except_Prep it_NP
+mkUtt (mkAdv except_Prep it_NP)
     as_CAdv : CAdv 
 as_CAdv
     have_V2 : V2 
