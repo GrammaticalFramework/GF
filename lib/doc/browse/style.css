@@ -24,6 +24,10 @@ div[role='main']
 { 
   margin-left:170px;
  }
+.panel
+{
+  padding:1em;
+  }
 .button
 {
   cursor:pointer;
@@ -63,8 +67,15 @@ div[role='main']
   }
 #loading
 { 
-  display:inline-block;
-  color:#666;
+  position: fixed;
+  top: 1em;
+  right: 1em;
+  white-space: nowrap;
+  padding: 0.5em 1em;
+  border: 1px solid #F0C36D;
+  background: #F9EDBE;
+  color: black;
+  vertical-align: middle;
  }
 .scope
 { 
@@ -91,16 +102,40 @@ input#search
 #scope_list
 {
   font-family:monospace;
+  width:100%;
+  margin-top:1em;
   }
-#scope_list dt
+#scope_list tr:hover
 {
-  float:left;
+  background:#eee;
   }
-#code
+#scope_list tr.indir
 {
-  font-family:monospace;
-  white-space:pre;
-  padding: 1em;
+  font-style:italic;
+  }
+#scope_list tr.local td:nth-child(2)
+{
+  font-weight:bold;
+  }
+#scope_list th
+{
+  text-align:left;
+  }
+#scope_list th, #scope_list td
+{
+  padding:0.4em;
+  border: 1px solid #aaa;
+  background:none;
+  white-space:nowrap;
+  }
+#scope_list td:nth-child(6)
+{
+  white-space:normal;
+  }
+#code pre
+{
+  margin:0;
+  color:#000;
   }
 dt
 { 

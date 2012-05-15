@@ -9,7 +9,6 @@ dir=`pwd`
 basedir=${dir}/../../src
 tagsdir=${dir}/tags
 index=${dir}/index.json
-removeprefix="/home/john/repositories/GF"
 ignore="demo old-demo tmp"
 
 # Function for testing array membership
@@ -45,6 +44,6 @@ echo "  \"\":{}\n}\n}" >> $index
 # Replace all URLs
 echo "Replacing URLs"
 cd $tagsdir
-sed -i "s|${removeprefix}||g" *.gf-tags
+sed -ir "s|\S+?/lib/|/lib/|g" *.gf-tags
 
 exit 0

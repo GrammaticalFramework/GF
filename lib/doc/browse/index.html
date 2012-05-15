@@ -8,11 +8,12 @@
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="http://www.grammaticalframework.org/css/style.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="google-code-prettify/prettify-own.css">
 </head>
 <body>
   <header>
     <h1>GF RGL Browser</h1>
-    <p style="font-style:italic;margin-top:-0.5em;">Updated 2012-05-14</p>
+    <p style="font-style:italic;margin-top:-0.5em;">Updated 2012-05-15</p>
   </header>
   <div role="main">
     <div class="pane left">
@@ -28,14 +29,16 @@
       </div>
       <div id="scope" class="panel scope">
         <input type="text" id="search" />
+        &nbsp;<span id="scope_count">0</span> items&nbsp;
         <input type="submit" id="submit" value="Filter" />
         <input type="reset" id="clear" value="Clear" />
         <input type="checkbox" id="case_sensitive" checked="checked" />
         <label for="case_sensitive">Case sensitive?</label>
-        <div><span id="scope_count">0</span> items</div>
-        <dl id="scope_list"></dl>
+        <table id="scope_list"></table>
       </div>
-      <div id="code" class="panel code"></div>
+      <div id="code" class="panel code">
+        <pre class="prettyprint lang-hs linenums"></pre>
+      </div>
       <div id="help" class="panel help">
 
         <h3>Understanding the scope information</h3>
@@ -72,9 +75,10 @@
 
         <h3>Known issues and To-do</h3>
         <ul>
+          <li>Some way of browsing just the API</li>
+          <li>Some visual cue for </li>
           <li>The page sometimes stalls when handling large files (in particular the dictionary modules)</li>
-          <li>Jump directly to line in file</li>
-          <li>Line numbers and syntax highlighting for source code would be cool</li>
+          <li>Syntax highlighting is using a Haskell default, could cusomtise for GF</li>
         </ul>
       </div>
     </div>
@@ -84,6 +88,7 @@
     <p><em>John J. Camilleri, 2012</em></p>
   </footer>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="google-code-prettify/prettify.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
