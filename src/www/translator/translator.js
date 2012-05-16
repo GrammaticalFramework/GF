@@ -67,26 +67,31 @@ Translator.prototype.update_translations=function() {
 	    ds[i]=sd
 	    replaceNode(sd,old)
 	}
-	function upd2(ts) {
-	    switch(ts.length) {
-	    case 1: segment.target=ts[0]; break;
-	    case 0: segment.target="[no translation]";break;
-	    default: segment.target="[ambiguous translation]"
-	    }
+	function upd3(txt) {
+	    segment.target=txt;
 	    segment.options=JSON.parse(JSON.stringify(o)) // no sharing!
 	    replace(t.draw_segment(segment,i))
 	}
-	function upd(translate_output) {
+	function upd2(ts) {
+	    switch(ts.length) {
+	    case 1: gfshell('ps -unlextext "'+ts[0]+'"',upd3); break;
+	    case 0: upd3("[no translation]");break;
+	    default: upd3("[ambiguous translation]")
+	    }
+	}
+	function upd1(translate_output) {
 	    //console.log(translate_output)
-	    var ts=collect_texts(translate_output[0].translations)
-	    upd2(ts)
+	    upd2(collect_texts(translate_output[0].translations))
+	}
+	function upd0(source) {
+	    t.server.translate({from:gfrom,to:gto,input:source},upd1)
 	}
 	var fs=supported(gfrom)
 	var ts=supported(gto)
 	if(fs && ts) {
 	    if(segment.options.method!="Manual" 
 	       && JSON.stringify(segment.options)!=JSON.stringify(o))
-		t.server.translate({from:gfrom,to:gto,input:segment.source},upd)
+		gfshell('ps -lextext "'+segment.source+'"',upd0)
 	}
 	else {
 	    var fn=concname(o.from)
@@ -95,7 +100,7 @@ Translator.prototype.update_translations=function() {
 	    var sup=" is supported by the grammar"
 	    var msg= fs ? tn+unsup : ts ? fn+unsup :
 		          "Neither "+fn+" nor "+tn+sup
-	    upd2(["["+msg+"]"])
+	    upd3("["+msg+"]")
 	}
     }
 
