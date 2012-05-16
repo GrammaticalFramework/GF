@@ -1,2 +1,0 @@
-/* Define to 1 if character literals use ASCII encoding */
-#undef GU_CHAR_ASCII

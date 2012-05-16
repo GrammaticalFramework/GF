@@ -304,6 +304,7 @@ gu_buf_out(GuBuf* buf, GuPool* pool)
 	bout->stream.output = gu_buf_out_output;
 	bout->stream.begin_buf = gu_buf_outbuf_begin;
 	bout->stream.end_buf = gu_buf_outbuf_end;
+	bout->stream.flush = NULL;
 	bout->buf = buf;
 	return gu_new_out(&bout->stream, pool);
 }

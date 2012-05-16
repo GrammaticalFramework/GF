@@ -297,11 +297,11 @@ struct PgfPArg {
 	PgfCCatIds* hypos;
 };
 
-GU_DECLARE_TYPE(PgfPArg, struct);
+extern GU_DECLARE_TYPE(PgfPArg, struct);
 
 typedef GuSeq PgfPArgs;
 
-GU_DECLARE_TYPE(PgfPArgs, GuSeq);
+extern GU_DECLARE_TYPE(PgfPArgs, GuSeq);
 
 typedef struct {
 	PgfFunId fun; 

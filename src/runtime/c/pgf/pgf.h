@@ -70,7 +70,7 @@ pgf_read(GuIn* in, GuPool* pool, GuExn* err);
 
 
 #include <gu/type.h>
-GU_DECLARE_TYPE(PgfPGF, struct);
+extern GU_DECLARE_TYPE(PgfPGF, struct);
 
 /// @}
 

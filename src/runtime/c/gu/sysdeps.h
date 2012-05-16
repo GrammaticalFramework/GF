@@ -1,7 +1,7 @@
 #ifndef GU_SYSDEPS_H_
 #define GU_SYSDEPS_H_
 
-#include <guconfig.h>
+#include <config.h>
 
 #if defined(__GNUC__) && !defined(__STRICT_ANSI__)
 # define GU_GNUC
@@ -9,7 +9,6 @@
 
 #ifdef GU_GNUC
 # define GU_ALIGNOF __alignof
-# define GU_HAVE_STATEMENT_EXPRESSIONS
 # define GU_GNUC_ATTR(x) __attribute__(( x ))
 # if defined(__OPTIMIZE_SIZE__)
 #  define GU_OPTIMIZE_SIZE

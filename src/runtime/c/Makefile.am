@@ -7,7 +7,6 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libgu.pc libpgf.pc
 
 configincludedir = $(libdir)/libgu/include
-nodist_configinclude_HEADERS = guconfig.h
 
 guincludedir=$(includedir)/gu
 guinclude_HEADERS = \
@@ -103,7 +102,7 @@ bin_PROGRAMS = \
 	utils/pgf-translate
 
 utils_pgf2yaml_SOURCES = utils/pgf2yaml.c
-utils_pgf2yaml_LDADD = libpgf.la libgu.la 
+utils_pgf2yaml_LDADD = libpgf.la libgu.la
 
 utils_pgf_print_SOURCES = utils/pgf-print.c
 utils_pgf_print_LDADD = libpgf.la libgu.la 
@@ -119,5 +118,4 @@ EXTRA_DIST = \
 	Doxyfile \
 	DoxygenLayout.xml \
 	libgu.pc.in \
-	libpgf.pc.in \
-	guconfig.h.in
+	libpgf.pc.in

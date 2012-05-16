@@ -1,11 +1,11 @@
 #include <gu/ucs.h>
 #include <gu/assert.h>
-#include <guconfig.h>
+#include <config.h>
 
 GU_DEFINE_TYPE(GuUCSExn, abstract, _);
 
 
-#ifdef GU_CHAR_ASCII
+#ifdef CHAR_ASCII
 
 bool
 gu_char_is_valid(char c)
@@ -36,7 +36,7 @@ gu_ucs_char(GuUCS uc, GuExn* err)
 	return 0;
 }
 
-#else // defined(GU_CHAR_ASCII)
+#else // defined(CHAR_ASCII)
 
 static const char gu_ucs_ascii[128] =
 	"\0\0\0\0\0\0\0\a\b\t\n\v\f\r\0\0"

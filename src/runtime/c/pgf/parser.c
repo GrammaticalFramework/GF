@@ -110,13 +110,11 @@ static GU_DEFINE_TYPE(PgfCFCat, struct,
 
 extern GuHasher pgf_cfcat_hasher;
 
-typedef GuMap PgfEpsilonIdx;
 GU_DEFINE_TYPE(PgfEpsilonIdx, GuMap,
 		      gu_type(PgfCFCat), &pgf_cfcat_hasher,
 		      gu_ptr_type(PgfCCat), &gu_null_struct);
 
 // GuString -> PgfItemBuf*
-typedef GuStringMap PgfTransitions;
 GU_DEFINE_TYPE(PgfTransitions, GuStringMap,
 		      gu_ptr_type(PgfItemBuf), &gu_null_struct);
 

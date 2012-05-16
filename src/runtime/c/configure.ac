@@ -12,7 +12,7 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 PKG_PROG_PKG_CONFIG
 
-AC_CONFIG_HEADERS([config.h guconfig.h])
+AC_CONFIG_HEADERS([config.h])
 
 AM_MAINTAINER_MODE([enable])
 AC_CHECK_LIB(m,nan)
@@ -35,12 +35,7 @@ fi]
 AC_C_ALIGNOF
 AC_C_FAM_IN_MEM
 AC_C_STATEMENT_EXPRESSIONS
-
-m4_define([ORIG_DEFINE],m4_defn([AC_DEFINE]))
-m4_define([_ORIG_DEFINE],m4_defn([_AC_DEFINE]))
-m4_pushdef([AC_DEFINE],[ORIG_DEFINE([GU_$1],[$2],[$3])])
 AC_C_ASCII
-m4_popdef([AC_DEFINE])
 
 dnl Doxygen support
 DX_PS_FEATURE(OFF)	
