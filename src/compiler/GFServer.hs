@@ -94,8 +94,8 @@ handle_fcgi execute1 state0 stateM cache =
 handle state0 cache execute1
        rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) state =
     case method of
-      "POST" -> normal_request (inputs body)
-      "GET"  -> normal_request (inputs q)
+      "POST" -> normal_request (utf8inputs body)
+      "GET"  -> normal_request (utf8inputs q)
       _ -> return (state,resp501 $ "method "++method)
   where
     normal_request qs =
@@ -159,7 +159,7 @@ handle state0 cache execute1
          return (state',ok200 output)
 
     parse qs =
-      return (state,json200 (makeObj(map(parseModule.apBoth decodeString) qs)))
+      return (state,json200 (makeObj(map parseModule qs)))
 
     cloud dir cmd qs =
       case cmd of
@@ -394,6 +394,7 @@ toHeader s = FCGI.HttpExtensionHeader s -- cheating a bit
 
 -- * misc utils
 
+utf8inputs = mapBoth decodeString . inputs
 
 inputs = queryToArguments . fixplus
   where
@@ -402,6 +403,7 @@ inputs = queryToArguments . fixplus
     decode c   = [c]
 
 mapFst f xys = [(f x,y)|(x,y)<-xys]
+mapBoth = map . apBoth
 apBoth f (x,y) = (f x,f y)
 
 prop n v = (n,showJSON v)
