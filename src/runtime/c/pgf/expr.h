@@ -13,7 +13,7 @@
 /// An abstract syntax tree
 typedef GuVariant PgfExpr;
 
-GU_DECLARE_TYPE(PgfExpr, GuVariant);
+extern GU_DECLARE_TYPE(PgfExpr, GuVariant);
 
 typedef GuList(PgfExpr) PgfExprs;
 

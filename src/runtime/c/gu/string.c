@@ -195,7 +195,7 @@ gu_format_string(GuPool* pool, const char* fmt, ...)
 GuString
 gu_str_string(const char* str, GuPool* pool)
 {
-#ifdef GU_CHAR_ASCII
+#ifdef CHAR_ASCII
 	return gu_utf8_string((const uint8_t*) str, strlen(str), pool);
 #else
 	GuPool* tmp_pool = gu_local_pool();

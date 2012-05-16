@@ -21,7 +21,7 @@ gu_in_utf8(GuIn* in, GuExn* err)
 inline char
 gu_in_utf8_char(GuIn* in, GuExn* err)
 {
-#ifdef GU_CHAR_ASCII
+#ifdef CHAR_ASCII
 	int i = gu_in_peek_u8(in);
 	if (i >= 0 && i < 0x80) {
 		gu_in_consume(in, 1);
@@ -55,7 +55,7 @@ gu_utf8_decode(const uint8_t** utf8);
 inline void 
 gu_str_out_utf8(const char* str, GuOut* out, GuExn* err)
 {
-#ifdef GU_CHAR_ASCII
+#ifdef CHAR_ASCII
 	gu_out_bytes(out, (const uint8_t*) str, strlen(str), err);
 #else
 	extern void 

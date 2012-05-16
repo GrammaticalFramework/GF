@@ -29,7 +29,7 @@ inline GuUCS
 gu_char_ucs(char c)
 {
 	gu_require(gu_char_is_valid(c));
-#ifdef GU_CHAR_ASCII
+#ifdef CHAR_ASCII
 	GuUCS u = (GuUCS) c;
 #else
 	extern const uint8_t gu_ucs_ascii_reverse_[CHAR_MAX];

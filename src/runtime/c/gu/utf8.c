@@ -1,6 +1,6 @@
 #include <gu/assert.h>
 #include <gu/utf8.h>
-#include <guconfig.h>
+#include <config.h>
 
 GuUCS
 gu_utf8_decode(const uint8_t** src_inout)
@@ -180,7 +180,7 @@ gu_utf32_out_utf8(const GuUCS* src, size_t len, GuOut* out, GuExn* err)
 
 }
 
-#ifndef GU_CHAR_ASCII
+#ifndef CHAR_ASCII
 
 void gu_str_out_utf8_(const char* str, GuOut* out, GuExn* err)
 {
