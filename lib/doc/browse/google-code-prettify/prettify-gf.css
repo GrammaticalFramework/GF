@@ -10,7 +10,7 @@
     }
   .kwd
   {
-    color:#008
+    color:#c0f
     }
   .com
   {
@@ -47,49 +47,6 @@
   .fun
   {
     color:red
-    }
-}
-@media print,projection
-{
-  .str
-  {
-    color:#060
-    }
-  .kwd
-  {
-    color:#006;
-    font-weight:bold
-    }
-  .com
-  {
-    color:#600;
-    font-style:italic
-    }
-  .typ
-  {
-    color:#404;
-    font-weight:bold
-    }
-  .lit
-  {
-    color:#044
-    }
-  .pun,.opn,.clo
-  {
-    color:#440
-    }
-  .tag
-  {
-    color:#006;
-    font-weight:bold
-    }
-  .atn
-  {
-    color:#404
-    }
-  .atv
-  {
-    color:#060
     }
 }
 pre.prettyprint
