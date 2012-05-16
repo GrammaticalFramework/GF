@@ -146,14 +146,12 @@ Translator.prototype.browse=function(el) {
     hide_menu(el);
     var t=this
     function browse() {
+	var files=t.local.ls("/")
 	var ul=empty_class("ul","files")
-	var pre=t.local.prefix+"/"
-	for(var i in localStorage) {
-	    if(hasPrefix(i,pre)) {
-		var name=i.substr(pre.length)
-		var link=a(jsurl("translator.open('"+name+"')"),[text(name)])
-		ul.appendChild(li(link))
-	    }
+	for(var i in files) {
+	    var name=files[i]
+	    var link=a(jsurl("translator.open('"+name+"')"),[text(name)])
+	    ul.appendChild(li(link))
 	}
 	clear(t.view)
 	t.view.appendChild(wrap("h2",text("Your translator documents")))
@@ -362,28 +360,37 @@ function concname(code) { return langname[code] || code; }
 
 
 function tr_local() {
-    var prefix="gf.translator."
+    /*
     function dummy() {
 	return {
-	    prefix: prefix,
 	    get: function(name,def) { return def },
 	    put: function(name,value) { }
+	    ls: function() { return [] }
 	}
     }
-    function real() {
+    */
+    function real(storage) {
+	var appPrefix="gf.translator."
 	return {
-	    prefix: prefix,
 	    get: function (name,def) {
-		var id=prefix+name
-		return localStorage[id] ? JSON.parse(localStorage[id]) : def;
+		var id=appPrefix+name
+		return storage[id] ? JSON.parse(storage[id]) : def;
 	    },
 	    put: function (name,value) {
-		var id=prefix+name;
-		localStorage[id]=JSON.stringify(value);
+		var id=appPrefix+name;
+		storage[id]=JSON.stringify(value);
+	    },
+	    ls: function(prefix) {
+		var pre=appPrefix+prefix
+		var files=[]
+		for(var i in storage)
+		    if(hasPrefix(i,pre)) files.push(i.substr(pre.length))
+		files.sort()
+		return files
 	    }
 	}
     }
-    return window.localStorage ? real() : dummy()
+    return window.localStorage ? real(localStorage) : real([])
 }
 
 // Collect alternative texts in the output from PGF service translate command
