@@ -261,10 +261,10 @@ Translator.prototype.edit_translation=function(i) {
 }
 
 function hide_menu(el) {
-    function disp(s) { el.parentNode.style.display=s||""; }
+    function disp(s) { el.parentNode.style.display=s; }
     if(el) {
 	disp("none")
-	setTimeout(disp,500)
+	setTimeout(function(){disp("")},500)
     }
 }
 
