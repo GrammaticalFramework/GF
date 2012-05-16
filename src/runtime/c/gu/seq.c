@@ -300,11 +300,11 @@ gu_buf_outbuf_end(GuOutStream* stream, size_t sz, GuExn* err)
 GuOut*
 gu_buf_out(GuBuf* buf, GuPool* pool)
 {
-	GuBufOut* bout = gu_new_i(pool, GuBufOut,
-				  .stream.output = gu_buf_out_output,
-				  .stream.begin_buf = gu_buf_outbuf_begin,
-				  .stream.end_buf = gu_buf_outbuf_end,
-				  .buf = buf);
+	GuBufOut* bout = gu_new(GuBufOut, pool);
+	bout->stream.output = gu_buf_out_output;
+	bout->stream.begin_buf = gu_buf_outbuf_begin;
+	bout->stream.end_buf = gu_buf_outbuf_end;
+	bout->buf = buf;
 	return gu_new_out(&bout->stream, pool);
 }
 
