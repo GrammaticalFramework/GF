@@ -31,21 +31,23 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       };
 
   lincat
-    VPI   = {s : VPIForm => Agr => Str} ;
-    [VPI] = {s1,s2 : VPIForm => Agr => Str} ;
+    VPI   = {s : VVType => Agr => Str} ;
+    [VPI] = {s1,s2 : VVType => Agr => Str} ;
 
   lin
-    BaseVPI = twoTable2 VPIForm Agr ;
-    ConsVPI = consrTable2 VPIForm Agr comma ;
+    BaseVPI = twoTable2 VVType Agr ;
+    ConsVPI = consrTable2 VVType Agr comma ;
 
     MkVPI vp = {
-      s = \\v,a => vp.ad ++ vp.inf ++ vp.s2 ! a
+      s = table {
+            VVAux      => \\a => vp.ad ++ vp.inf ++ vp.s2 ! a;
+            VVInf      => \\a => "to" ++ vp.ad ++ vp.inf ++ vp.s2 ! a;
+            VVPresPart => \\a => vp.ad ++ vp.prp ++ vp.s2 ! a
+          }
       } ;
-    ConjVPI = conjunctDistrTable2 VPIForm Agr ;
+    ConjVPI = conjunctDistrTable2 VVType Agr ;
     ComplVPIVV vv vpi = 
-----      insertObj (\\a => infVP vv.typ vpi a) (predVV vv) ;
-      let isAux = case vv.typ of {VVAux => True ; _ => False} in 
-      insertObj (\\a => (if_then_Str isAux [] "to") ++ vpi.s ! VPIInf ! a) (predVV vv) ;
+      insertObj (\\a => vpi.s ! vv.typ ! a) (predVV vv) ;
 
   lin
     that_RP = 
@@ -63,9 +65,6 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     any_Quant = mkQuant "any" "any" ;
 
 -- for VP conjunction
-
-  param
-    VPIForm = VPIInf | VPIPPart ;
 
   lincat
     VPS   = {s : Agr => Str} ;

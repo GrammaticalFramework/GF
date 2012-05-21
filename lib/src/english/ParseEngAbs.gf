@@ -1,7 +1,7 @@
 abstract ParseEngAbs = 
   Tense,
   Cat,
-  Noun,
+  Noun - [PPartNP],
   Adjective,
   Numeral,
   Symbol [PN, Symb, String, MkSymb, SymbPN],
@@ -12,7 +12,9 @@ abstract ParseEngAbs =
   Sentence,
   Relative,
   Idiom [NP, VP, Cl, ProgrVP, ExistNP],
-  Extra [NP, Quant, VPSlash, VP, GenNP, PassVPSlash],
+  Extra [NP, Quant, VPSlash, VP, GenNP, PassVPSlash,
+         Temp, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
+         VPI, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV],
   DictEngAbs ** {
 
 fun CompoundCN : Num -> N -> CN -> CN ;
@@ -44,4 +46,6 @@ fun CompoundCN : Num -> N -> CN -> CN ;
     CompS : S -> Comp ;
     CompVP : VP -> Comp ;
 
+	PassVS : VS -> VP -> VP ;
+	PPartNP : NP -> VPSlash -> NP ;
 }
