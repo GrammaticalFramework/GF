@@ -2,7 +2,7 @@
 concrete ParseEng of ParseEngAbs = 
   TenseX - [Pol, PNeg, PPos],
   CatEng,
-  NounEng,
+  NounEng - [PPartNP],
   AdjectiveEng,
   NumeralEng,
   SymbolEng [PN, Symb, MkSymb, SymbPN],
@@ -13,7 +13,10 @@ concrete ParseEng of ParseEngAbs =
   SentenceEng,
   RelativeEng,
   IdiomEng [NP, VP, Tense, Cl, ProgrVP, ExistNP],
-  ExtraEng [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash],
+  ExtraEng [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
+            Temp, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
+            VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV],
+
   DictEng ** 
 open MorphoEng, ResEng, ParadigmsEng, Prelude in {
 
@@ -90,6 +93,28 @@ lin
 
   CompS s = {s = \\_ => "that" ++ s.s} ;
   CompVP vp = {s = \\a => infVP VVInf vp a} ;
+
+  PassVS vs vp = 
+    let
+      vps = insertObj (\\a => infVP VVInf vp a) (predV vs) ;
+      be  = predAux auxBe ;
+      ppt = vps.ptp
+    in {
+    s = be.s ;
+    prp = be.prp ;
+    ptp = be.ptp ;
+    inf = be.inf ;
+    ad = vps.ad ;
+    s2 = \\a => ppt ++ vps.s2 ! a
+    } ;
+
+  PPartNP np vps = {
+    s = let
+          be = predAux auxBe ;
+          ppt = vps.ptp
+        in \\c => np.s ! c ++ vps.ptp ++ vps.s2 ! np.a ;
+    a = np.a
+  } ;
 
 lin
   PPos = {s = [] ; p = CPos} ;
