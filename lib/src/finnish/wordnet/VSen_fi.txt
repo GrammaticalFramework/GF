@@ -1,0 +1,2929 @@
+accept	vastaanottaa
+accept	hyväksyä
+accept	myöntyä
+accept	ottaa kannettavakseen
+accept	ottaa vastuulleen
+accept	ottaa vastaan
+accept	imeä itseensä
+accept	kelpuuttaa
+
+acknowledge	hyväksyä
+acknowledge	myöntää
+acknowledge	ilmoittaa vastaanottaneensa
+acknowledge	arvostaa
+acknowledge	tunnustaa
+acknowledge	kiittää
+
+add	lisätä
+add	laskea yhteen
+
+admit	sallia
+admit	päästää sisään
+admit	päästää mukaan
+admit	hyväksyä
+admit	myöntää
+admit	ottaa mukaan
+admit	ottaa
+admit	antaa mahdollisuus
+admit	antaa
+admit	avautua
+admit	tunnustaa
+
+advise	ehdottaa
+advise	neuvoa
+advise	ilmoittaa
+advise	antaa neuvoja
+
+advocate	puoltaja
+advocate	puolestapuhuja
+advocate	puolustaja
+advocate	neuvoa
+advocate	asianajaja
+advocate	kannattaa
+
+affirm	vahvistaa
+affirm	myöntää
+affirm	todistaa
+
+agree	sopia
+agree	suostua
+agree	mukautua
+agree	myöntyä
+agree	olla samaa mieltä
+agree	yhtyä
+agree	noudattaa
+
+allege	väittää
+
+allow	varautua
+allow	sallia
+allow	luovuttaa
+allow	hyväksyä
+allow	jättää sijaa
+allow	antaa lupa
+allow	antaa alennusta
+allow	antaa
+
+announce	julistaa
+announce	enteillä
+announce	ilmoittaa
+announce	tiedottaa
+announce	kuuluttaa
+
+anticipate	odottaa
+anticipate	olettaa
+anticipate	ennakoida
+anticipate	toteuttaa ennakolta
+
+appear	vaikuttaa
+appear	saapua
+appear	esiintyä
+appear	ilmaantua
+appear	ilmestyä
+appear	tulla oikeuteen
+
+appoint	varustaa
+appoint	nimittää
+appoint	asettaa tehtävään
+appoint	asettaa virkaan
+appoint	kalustaa
+
+argue	esittää syitä
+argue	riidellä
+argue	kiistellä
+
+arise	syntyä
+arise	saada alkunsa
+arise	nousta ylös vuoteesta
+arise	nousta kapinaan
+arise	nousta seisomaan
+arise	nousta
+arise	ilmaantua
+arise	ilmetä
+
+arose	syntyä
+arose	saada alkunsa
+arose	nousta ylös vuoteesta
+arose	nousta kapinaan
+arose	nousta seisomaan
+arose	nousta
+arose	ilmaantua
+arose	ilmetä
+
+ask	vaatia
+ask	pyytää
+ask	tiedustella
+ask	kysyä
+ask	kysellä
+
+assert	väittää
+assert	vakuuttaa
+assert	pitää puoliaan
+assert	tuoda itseään esille
+
+assume	saada
+assume	pukea
+assume	ottaa
+assume	ottaa itselleen
+assume	ottaa niskoilleen
+assume	ottaa vastaan
+assume	otaksua
+assume	olettaa
+assume	omaksua
+assume	teeskennellä
+
+assure	vannoa
+assure	vakuuttaa
+assure	rauhoitella
+assure	taata
+
+attest	osoittaa todeksi
+attest	todistaa
+
+averr	+?
+
+become	muuttua jksik
+become	pukea jkta
+become	tulla jksik
+become	sopia jklle
+
+believe	uskoa jhk
+believe	uskoa
+believe	pitää jtak totena
+believe	pitää
+believe	olla uskossa
+
+bet	veikata
+bet	vedonlyönti
+bet	veto
+bet	uskoa
+bet	lyödä vetoa
+bet	panos
+
+bleed	vuotaa verta
+bleed	vuotaa
+bleed	kiristää
+bleed	kyniä
+bleed	iskeä suonta
+bleed	ilmata
+bleed	laskea pois
+
+boast	kerskailu
+boast	leuhkia
+boast	pröystäillä
+
+broke	murtautua
+broke	murtaa
+broke	murtua
+broke	muuttua
+broke	muuttaa suuntaa
+broke	valjeta
+broke	rikkoutua
+broke	rikkoa
+broke	romahtaa
+broke	ratkaista
+broke	julkistaa
+broke	breikata
+broke	koittaa
+broke	katkaista
+broke	katketa
+broke	erottaa
+broke	hellittää
+broke	hajottaa
+broke	hajota
+broke	hajaantua
+broke	lieventää
+broke	leimahtaa
+broke	lopettaa
+broke	luopua
+broke	luhistua
+broke	laantua
+broke	nousta
+broke	pitää tauko
+broke	pennitön
+broke	pettää
+broke	pehmittää
+broke	purkaa
+broke	puhkaista
+broke	puhjeta
+broke	paljastaa
+broke	paeta
+broke	tiputtaa
+broke	totuttaa
+broke	turmella
+broke	tuhota
+broke	tulla julki
+broke	tapahtua
+broke	sortua
+broke	särkyä
+broke	särkeä
+broke	syntyä
+broke	sarastaa
+
+brought	viedä
+brought	kasvattaa
+brought	hakea
+brought	noutaa
+brought	tuoda mukanaan
+brought	tuoda
+brought	tuottaa
+brought	aiheuttaa
+brought	saada
+
+burble	pulista
+
+calculate	luottaa
+calculate	laskea
+calculate	laskelmoida
+
+call	tuomio
+call	tuomita
+call	takuusumman vaatimus
+call	kutsua koolle
+call	kutsua
+call	kutsu
+call	kuuluttaa
+call	kyseenalaistaa
+call	katsominen
+call	osto-optio
+call	arvioida
+call	linnunlaulu
+call	vedota
+call	vierailu
+call	vaatia
+call	vaatimus
+call	puhelu
+call	puhutella
+call	poiketa
+call	pyyntö
+call	pistäytyä
+call	soittaa
+call	siirtää
+call	sanoa
+call	huutaa
+call	huudahtaa
+call	huudahdus
+call	houkutella
+call	herättää
+
+catch	tuntea
+catch	tarttua
+catch	tavoittaa
+catch	takertua
+catch	käsittää
+catch	käräyttää
+catch	kuulla
+catch	koppi
+catch	kerätä
+catch	kiinniotto
+catch	kiinnittää huomio
+catch	kiinnittää
+catch	kiehtoa
+catch	katko
+catch	katsoa
+catch	iskeä
+catch	yllättää
+catch	ymmärtää
+catch	ehtiä
+catch	ottaa kiinni
+catch	ottaa
+catch	vangita
+catch	juuttua
+catch	juoni
+catch	pyytää
+catch	pidätin
+catch	pidättää
+catch	paljastaa
+catch	säppi
+catch	syttyä
+catch	siepata
+catch	sieppaus
+catch	sairastua
+catch	salpa
+catch	saalis
+catch	saavuttaa
+catch	saada kiikkiin
+catch	hillitä
+catch	haka
+catch	nähdä
+
+cause	tapaus
+cause	asia
+cause	aiheuttaja
+cause	aiheuttaa
+cause	syy
+
+caution	varoitus
+caution	varoittaa
+caution	varovaisuus
+
+cease	tauko
+cease	lakata
+cease	päättyä
+
+chance	todennäköisyys
+chance	löytää sattumalta
+chance	riski
+chance	riskeerata
+chance	mahdollisuus
+chance	sattumalta
+chance	sattuma
+chance	sattua
+
+charge	tehtävä
+charge	täyttää
+charge	toimeksianto
+charge	käyttää vaakunamerkkinä
+charge	innostaa
+charge	osoittaa
+charge	ostaa luotolla
+charge	antaa ohjeet valamiehistölle
+charge	antaa toimitettavaksi
+charge	antaa tehtäväksi
+charge	ahtaa täyteen
+charge	ladata
+charge	veloitus
+charge	veloittaa
+charge	varaus
+charge	varata
+charge	vaakunamerkki
+charge	viettienergiavaraus
+charge	väittää jkn syyksi
+charge	väittää
+charge	uskoa haltuun
+charge	rasitus
+charge	rynniä
+charge	rynnistys
+charge	rynnätä
+charge	mennä maata käskystä
+charge	maksu
+charge	määrätä
+charge	panos
+charge	sävärit
+charge	suojatti
+charge	syyte
+charge	syyttää
+charge	syytös
+charge	huolenpito
+
+choose	valita
+choose	päättää
+
+chuckle	hihittää
+chuckle	hihitys
+
+claim	oikeus
+claim	vaatia itselleen
+claim	vaatia
+claim	vaatimus
+claim	väite
+claim	väittää
+
+close	tiivis
+close	tiukka
+close	tarkasti
+close	tulla lähitaisteluun
+close	täyttää
+close	ympäröidä
+close	yhdistää
+close	ahdas
+close	liki
+close	lyhyeksi ajeltu
+close	loppu
+close	lopettaa peli voitolla
+close	lähellä oleva
+close	lähellä
+close	läheinen
+close	lähestyä
+close	vaitelias
+close	uskollinen
+close	umpinainen
+close	umpi-
+close	päättyä
+close	päättää
+close	päätös
+close	sulkeutua
+close	sulkea rivinsä
+close	sulkea
+close	hyvin istuva
+close	hyvin varjeltu
+close	hyvin vartioitu
+close	nuuka
+
+come	tulla esiin
+come	tulla mieleen
+come	tulla
+come	tehdä yhteensä
+come	käydä ilmi
+come	olla
+come	ulottua
+come	suoriutua
+come	seurata
+
+comment	kommentoida
+comment	kommentti
+comment	kommentaari
+comment	varustaa huomautuksin ja selityksin
+comment	huomautus
+
+complain	valittaa
+complain	nostaa kanne
+
+concede	tunnustaa
+concede	antaa myöten
+concede	luovuttaa
+concede	myöntää vastustajan vaalivoitto
+
+concern	konserni
+concern	koskea
+concern	asia
+concern	levottomuus
+concern	murhe
+concern	huoli
+concern	huolestuttaa
+
+conclude	tehdä sopimus
+conclude	päättyä
+conclude	päättää
+conclude	päätellä
+
+confess	tunnustaa
+confess	ripittäytyä
+confess	myöntää
+
+confide	uskoa jklle
+confide	uskoutua
+
+confirm	konfirmoida
+confirm	kannattaa
+confirm	lujittaa
+confirm	vahvistaa
+
+consider	tarkastella
+consider	ottaa huomioon
+consider	ottaa tarkasteltavaksi
+consider	antaa arvoa
+consider	miettiä
+consider	pitää
+consider	harkita
+
+contemplate	tuijottaa
+contemplate	mietiskellä
+contemplate	pohdiskella
+contemplate	harkita
+
+contend	kilpailla
+contend	kiistellä
+contend	kamppailla
+contend	asettaa kyseenalaiseksi
+contend	väittää
+contend	väitellä
+contend	pärjätä
+
+continue	jatkaa
+continue	jatkua
+
+correct	korjata
+correct	kurittaa
+correct	oikeassa
+correct	oikea
+correct	oikaista
+correct	ojentaa
+correct	sopiva
+
+counter	tiski
+counter	astiakaappi
+counter	laskija
+counter	laskuri
+counter	vahvikevuori
+counter	vasta-
+counter	vastata
+counter	vastaisku
+counter	vastakaiku
+counter	rekisteri
+counter	päinvastaiseen suuntaan
+counter	pelimerkki
+
+cover	cover
+cover	toimia sijaisena
+cover	taivaltaa
+cover	koskea
+cover	korvata
+cover	kattaa
+cover	kannet
+cover	kansi
+cover	käsittää
+cover	kuverttimaksu
+cover	ottaa tikki
+cover	astua
+cover	valvoa
+cover	vartioida
+cover	pitää aseen kantama-alueella
+cover	peitehenkilöys
+cover	peite
+cover	peittää
+cover	salata
+cover	salaaminen
+cover	suojatuli
+cover	suojata
+cover	suoja
+cover	selostaa
+
+crow	kiljahdella ilosta
+crow	kiekua
+crow	kiekuminen
+crow	leuhkiminen
+crow	varis
+crow	pöyhistellä
+
+cut	tieleikkaus
+cut	tallentaa
+cut	teeskennellä olevansa huomaamatta
+cut	kierrelyönti
+cut	kirjoittaa
+cut	kaivaa
+cut	kastroida
+cut	katkaista
+cut	kaataa
+cut	kanava
+cut	kulkea läpi
+cut	kulkea yli
+cut	kulkea poikki
+cut	keskeyttää
+cut	kopioida
+cut	ilkeys
+cut	erottaa
+cut	ohentaa
+cut	oikaista
+cut	osuus
+cut	otos
+cut	aste
+cut	auki leikattu
+cut	laimentaa
+cut	lyönti
+cut	lyödä kierrelyönti
+cut	lyhentää
+cut	leikkaus
+cut	leikkautua
+cut	leikkaaminen
+cut	leikattu
+cut	leikata
+cut	levyttää
+cut	loukkaus
+cut	viillos
+cut	viiltää
+cut	viilto
+cut	vaikuttaa
+cut	uurtaa
+cut	raivata
+cut	madaltaa
+cut	muuttaa äkkiä suuntaa
+cut	pinnaus
+cut	pinnata
+cut	pala
+cut	puhjeta
+cut	pysäyttää
+cut	pois leikkaaminen
+cut	siisti
+cut	saksittu
+cut	sammuttaa
+cut	suorittaa
+cut	haava
+cut	huoliteltu
+cut	niittää
+cut	nosto
+cut	nostaa
+
+decide	ratkaista
+decide	saada päättämään
+decide	päättää
+
+declare	määrätä valtti
+declare	julistaa
+declare	ilmaista kantansa
+declare	ilmoittaa tullattavasta tavarasta
+declare	ilmoittaa
+declare	valtuuttaa maksettavaksi
+
+decline	kieltäytyä
+decline	vähentyä
+decline	väheneminen
+decline	viettää
+decline	heikentyä
+decline	rappio
+decline	rappeutua
+decline	rinne
+decline	taivuttaa
+decline	torjua
+decline	laskea
+decline	aleta
+
+deem	olla jostakin jotakin mieltä
+
+delay	viivästyttää
+delay	viivytys
+delay	viivyttää
+delay	viivyttäminen
+delay	pysäyttää
+
+delight	ilahduttaa
+delight	ilonaihe
+delight	ilo
+delight	ihastuttaa
+delight	saada iloa jstk
+
+demand	kysyntä
+demand	kysyä
+demand	vaatimus
+demand	vaatiminen
+demand	vaatia
+demand	haastaa
+demand	tarve
+
+demonstrate	esitellä
+demonstrate	näyttää toteen
+demonstrate	osoittaa mieltä
+demonstrate	todistaa
+
+demur	vastustaa
+demur	väite
+demur	tehdä väite
+
+deny	kiistää
+deny	kieltäytyä antamasta
+deny	kieltäytyä
+deny	kieltää
+deny	evätä
+
+describe	kuvata
+describe	piirtää
+
+design	malli
+design	kuvio
+design	tarkoittaa
+design	luonnos
+design	aikoa
+design	aikomus
+design	suunnitteleminen
+design	suunnitella
+design	suunnitelma
+
+designate	määrätä
+designate	nimittää
+designate	nimetä
+designate	olla määrätty
+designate	valita
+designate	tarkoittaa
+designate	tehtävään nimitetty
+
+determine	määrittää
+determine	määrätä
+determine	vaikuttaa ratkaisevasti
+determine	rajoittaa
+determine	ratkaista
+
+dictate	määrätä
+dictate	määräys
+dictate	johtaa diktaattorina
+dictate	ohjenuora
+dictate	sanella
+
+direct	käskeä
+direct	neuvoa
+direct	johtaa
+direct	ohjata
+direct	välitön
+direct	tasa-
+direct	suora
+direct	suoraan
+direct	suoraviivainen
+direct	suunnata
+
+disagree	olla erilainen
+disagree	olla eri mieltä
+
+disclaim	kieltää
+disclaim	vetäytyä jstk
+disclaim	luopua
+disclaim	sanoutua irti
+
+disclose	paljastaa
+
+discover	keksiä
+discover	huomata
+discover	tuoda päivänvaloon
+discover	löytää
+discover	saada selville
+
+discuss	keskustella
+discuss	käsitellä
+
+display	kosiskella
+display	esittely
+display	esitys
+display	näyttö
+display	näyttely
+display	osoitus
+display	panna näytteille
+
+disprove	kumota
+
+doubt	epävarmuus
+doubt	epäillä
+doubt	epäilys
+
+drive	metsästää
+drive	käyttää
+drive	käyttövoima
+drive	kulkea
+drive	karkottaa
+drive	kaivaa
+drive	ohjata
+drive	innostaa
+drive	into
+drive	iskeä
+drive	vietti
+drive	voimansiirto
+drive	tempaus
+drive	lyödä
+drive	avauslyönti
+drive	ajaa
+drive	ajelu
+drive	ajotie
+drive	ajo
+drive	aikoa
+drive	asema
+drive	pyrkiä
+drive	palautuslyönti
+drive	pakottava tarve
+drive	pakottaa
+
+dub	nimittää
+dub	jälkiäänittää
+dub	dubata
+dub	antaa lempinimi
+
+elect	tuleva
+elect	äänestää
+elect	valitut
+elect	valittu
+elect	valita
+elect	vastavalittu
+
+emerge	tulla esiin
+emerge	ilmaantua
+emerge	käydä ilmi
+
+emphasize	korostaa
+
+enable	mahdollistaa
+enable	tehdä mahdolliseksi
+
+end	pääty
+end	päättyä
+end	päättää
+end	päätös
+end	päämäärä
+end	pää
+end	laitahyökkääjä
+end	loppu
+end	lopettaa
+end	tukimies
+end	tehdä loppu jstk
+end	ääri
+end	jäännöspala
+end	osuus
+end	osa
+
+ensure	turvata
+ensure	taata
+ensure	varmistaa
+
+entitle	nimittää
+entitle	aateloida
+entitle	oikeuttaa
+
+envision	kuvitella
+
+escape	pakotie
+escape	pakoventtiili
+escape	pakoilu
+escape	pako
+escape	paeta
+escape	pelastuminen
+escape	villiintynyt puutarhakasvi
+escape	välttyä jltk
+escape	välttää
+escape	vuoto
+escape	vuotaa
+escape	olla käsittämätön jklle
+escape	karata
+
+estimate	mielipide
+estimate	arviolaskelma
+estimate	arvioida
+estimate	arvio
+
+evaporate	haihtua
+evaporate	haihduttaa
+
+expect	odottaa lasta
+expect	odottaa
+
+expire	hengittää ulos
+expire	heittää henkensä
+expire	vanheta
+
+explain	selittää
+
+explore	tutkia
+
+expound	selittää
+
+fail	olla kykenemätön jhk
+fail	heiketä
+fail	jättää tekemättä
+fail	joutua vararikkoon
+fail	epäonnistua
+fail	reputtaa
+fail	pettää
+
+fall	luhistua
+fall	liikkua
+fall	lasku
+fall	laskeutua
+fall	laskea
+fall	langeta
+fall	lankeaminen
+fall	osua
+fall	tuho
+fall	tulla jkn osaksi
+fall	tulla jksk
+fall	tulla
+fall	tarttua jhk
+fall	viettää
+fall	hämärä
+fall	joutua jhk
+fall	joutua jkn piiriin
+fall	sortua
+fall	syntyä
+fall	synketä
+fall	syksy
+fall	siirtyä perintönä
+fall	sattua
+fall	saada surmansa
+fall	kukistua
+fall	kaatua
+fall	kaatuminen
+fall	kaato
+fall	kaltevuus
+fall	ryhtyä jhk
+fall	mennä
+fall	antautua
+fall	antautuminen
+fall	päätyä jllk
+fall	pudotus
+fall	pudota
+
+fancy	kuvittelu
+fancy	kuvitella
+fancy	koristeellinen
+fancy	ihastua
+fancy	mieltymys
+fancy	mielikuvituksen tuote
+
+favor	lahja
+favor	etu
+favor	säästää
+favor	suosionosoitus
+favor	suosio
+favor	suosia
+
+fear	pelko
+fear	pelätä
+
+feel	tuntua
+feel	tuntu
+feel	tuntea itsensä jksk
+feel	tuntea olonsa jksk
+feel	tuntea
+feel	tuntemus
+feel	tunnustella
+feel	tunnelma
+feel	koskettelu
+feel	kosketella
+feel	kokea
+
+fell	laskeutua
+fell	laskea
+fell	langeta
+fell	luhistua
+fell	liikkua
+fell	lentää
+fell	osua
+fell	tarttua jhk
+fell	talja
+fell	tulla jkn osaksi
+fell	tulla jksk
+fell	tulla
+fell	viettää
+fell	hakkuu
+fell	joutua jhk
+fell	joutua jkn piiriin
+fell	syntyä
+fell	synketä
+fell	sattua
+fell	saada surmansa
+fell	siirtyä perintönä
+fell	sortua
+fell	kattaa
+fell	katesauma
+fell	kaatua
+fell	kaataa
+fell	kauhistuttava
+fell	kukistua
+fell	ryhtyä jhk
+fell	mennä
+fell	antautua
+fell	pudota
+fell	päätyä jllk
+
+figure	numero
+figure	laskea
+figure	luku
+figure	olla mukana
+figure	vartalo
+figure	vertauskuva
+figure	hahmo
+figure	hinta
+figure	ymmärtää
+figure	kaaviokuva
+figure	kuvitella
+figure	kuvio
+figure	muoto
+figure	arvioida
+
+find	löytää
+find	löytäminen
+find	löytö
+find	tavoittaa
+find	todeta
+find	hankkia
+find	havaita
+find	saavuttaa
+find	saada
+find	pitää jnk
+
+finish	lopettaa
+finish	loppua
+finish	loppu
+finish	tulos
+finish	tyhjentää lautanen
+finish	täydellisyys
+finish	viimeistellä
+finish	jälkimaku
+finish	maali
+finish	pintakäsittely
+finish	päättää
+finish	päättäminen
+finish	päätyä
+
+float	näytöslava
+float	lasta
+float	laskea vesille
+float	leijailla
+float	osakeannin merkitsemätön osa
+float	viive
+float	juoma
+float	uittaa
+float	silottaa
+float	kelluke
+float	kellua
+float	koho
+float	ilmarakko
+float	muuntaa liukuluvuksi
+float	panna liikkeelle
+float	päästää kellumaan
+
+fly	liehuttaa
+fly	lyödä korkea pallo
+fly	lennähtää
+fly	lennättää
+fly	lentää
+fly	ovela
+fly	ovivaate
+fly	halkiolista
+fly	kiitää
+fly	korkea pallo
+fly	kärpänen
+fly	rientää
+fly	rynnätä
+fly	paeta
+fly	perho
+
+follow	noudattaa
+follow	olla seurauksena
+follow	tulla perässä
+follow	harjoittaa jtak ammattia
+follow	ymmärtää
+follow	seurata
+follow	pysyä
+
+force	tunkeutua
+force	työntyä
+force	voimassaolo
+force	voima
+force	vallata äkkirynnäköllä
+force	väkivalta
+force	vetäistä
+force	joukko
+force	polttaminen
+force	pakottaa
+force	painaa
+
+forecast	ennakoida
+forecast	ennustaa
+forecast	ennuste
+
+forget	unohtaa
+
+fret	levottomuus
+fret	olla huolissaan
+fret	otenauha
+fret	varustaa otenauhalla
+fret	hermoilu
+fret	huolestuneisuus
+fret	harmittaa
+fret	harmitella
+fret	hangata
+fret	kiusata
+fret	koristella yhteen punotulla kuviolla
+fret	koristekuvio
+fret	kulunut kohta
+fret	kuluttaa
+fret	kalvaa
+fret	kaivertaa kuvio
+fret	ärsyttää
+
+galvanize	sähköistää
+galvanize	stimuloida
+galvanize	galvanoida
+galvanize	hätkähdyttää
+
+get	ottaa päähän
+get	ostaa
+get	osua
+get	ehtiä
+get	tajuta
+get	tavoittaa
+get	tavoitella
+get	tulla jksik
+get	tuoda
+get	tehdä selvää
+get	toimittaa
+get	sairastua
+get	saada langan päähän
+get	saada jälkikasvua
+get	saada jku tekemään jtak
+get	saada kiinni
+get	saada osakseen
+get	saada puhelimeen
+get	saada pauloihinsa
+get	saada tulokseksi
+get	saada tehdä jtak
+get	saada tauti
+get	saada
+get	ymmärtää
+get	joutua
+get	alkaa olla jtak
+get	alkaa tehdä jtak
+get	aikoa
+get	lähteä
+get	päästä perille
+get	päästä
+get	hakea
+get	hoksata
+get	ärsyttää
+get	viedä
+get	kuulla
+get	käydä kimppuun
+get	koitua tuhoksi
+get	kostaa
+get	kokea
+
+gloat	olla vahingoniloinen
+gloat	leuhkia
+gloat	vahingonilo
+
+go	ottaa suunta
+go	olla vuoro
+go	olla
+go	esso
+go	toimia
+go	tulla jksik
+go	tulla käytetyksi
+go	tehdä siirto
+go	sopia yhteen
+go	sopia
+go	sisältyä
+go	sujua
+go	noudattaa
+go	yritys
+go	johtaa
+go	aloittaa
+go	go
+go	lakata olemasta
+go	lähteä
+go	lähestyä
+go	luistaa
+go	poistua keskuudesta
+go	poistaa käytöstä
+go	päätyä jhk
+go	ryhtyä
+go	muuttua jksik
+go	mennä jollekulle
+go	mennä eteenpäin
+go	mennä
+go	hoitaa
+go	hajota
+go	vuoro
+go	käydä läpi
+go	käydä
+go	kuluttaa loppuun
+go	kulua
+go	kulkea
+go	kuulua jollekulle
+go	kuulua
+
+gripe	ruikuttaa
+gripe	marina
+gripe	valituksen aihe
+gripe	valitus
+
+grouse	purnata
+grouse	metsästää metsäkanoja
+grouse	metsäkanan liha
+grouse	metsäkana
+
+grow	enentyä
+grow	tulla joksikin vähitellen
+grow	lisääntyä
+grow	vahvistua
+grow	kehittyä
+grow	kypsyä
+grow	kysyä
+grow	kasvattaa
+grow	kasvaa yhteen
+grow	kasvaa
+
+grumble	nurina
+grumble	nurista
+grumble	napista
+grumble	jyristä
+grumble	jylistä
+grumble	purnata
+grumble	murina
+grumble	marista
+grumble	mariseminen
+grumble	valittaa
+
+guarantee	tae
+guarantee	taata
+guarantee	takuutodistus
+guarantee	takaus
+guarantee	turvata
+guarantee	luvata
+guarantee	vakuuttaa
+
+guess	olettaa
+guess	arvata
+guess	arvaus
+guess	veikata
+
+gushes	tulva
+gushes	purskahdus
+gushes	ryöpytä
+gushes	virrata voimakkaasti
+gushes	kehua voimakkaasti
+
+hate	vihata
+hate	suuttumus
+
+have	pitää
+have	suostua
+have	synnyttää
+have	saada jku tekemään jtak
+have	saada
+have	harrastaa
+have	olla
+have	rikas henkilö
+
+hear	kuunnella
+hear	kuulla
+hear	käsitellä
+
+help	estää
+help	edesauttaa
+help	tarjoilla
+help	apumies
+help	apuväline
+help	apu
+help	auttaa
+help	parantaa
+help	varastaa
+help	ottaa
+
+hesitate	epäröidä
+
+hint	vinkki
+hint	vihje
+hint	vihjaus
+hint	vihjailla
+hint	sipaus
+hint	häivähdys
+
+hire	palkata
+hire	vuokrata
+
+hold	järjestää
+hold	tyrmä
+hold	linnoitus
+hold	pitäytyä
+hold	pitää yllä
+hold	pitää jonakin
+hold	pitää hallussaan
+hold	pitää pintansa
+hold	pitää sisällään
+hold	pitää voimassa
+hold	pitää
+hold	pidellä
+hold	pidätys
+hold	pidättää
+hold	pidätellä
+hold	päteä
+hold	pysyä
+hold	pysäytys
+hold	viivyttää
+hold	yhtyä
+hold	ymmärrys
+hold	mahtua
+hold	katsoa
+hold	kantaa
+hold	käsitys
+hold	sisältää
+hold	sanka
+hold	säilyttää
+hold	ote
+hold	olla jotain mieltä
+hold	olla voimassa
+hold	olla
+hold	omistaa
+hold	rauhoittaa
+hold	ruuma
+
+hope	toivoa
+hope	toivo
+
+hurt	tehdä kipeää
+hurt	tehdä kipeätä
+hurt	loukkaantunut
+hurt	loukkaaminen
+hurt	loukata
+hurt	vahingoittaa
+hurt	vamma
+hurt	kipu
+hurt	koskea
+hurt	kärsiä
+hurt	kärsimys
+hurt	sattua
+hurt	satuttaa
+hurt	haitta
+hurt	heikentynyt
+
+illustrate	kuvittaa
+illustrate	kuvata
+illustrate	havainnollistaa
+
+imagine	luulla
+imagine	kuvitella
+
+implore	anella
+implore	rukoilla
+implore	pyytää hartaasti
+
+imply	vihjailla
+imply	merkitä
+imply	tarkoittaa
+
+include	sisältää
+include	sisällyttää
+include	ottaa mukaan
+
+indicate	ilmaista
+indicate	olla merkkinä
+indicate	osoittaa
+indicate	tarjota
+
+insist	pysyä vaatimuksessaan
+insist	väittää
+insist	vaatia
+
+insure	varmistaa
+insure	vakuuttaa
+insure	taata
+
+intend	aikoa
+intend	suunnitella
+intend	tarkoittaa
+
+involve	aiheuttaa
+involve	liikuttaa
+involve	sotkea
+involve	käsittää
+involve	kuulua
+involve	koskea
+
+jam	jumiutua
+jam	sulloa
+jam	kolhia
+jam	häirintä
+jam	häiritä
+jam	hillo
+jam	tukkia
+jam	tunkea
+jam	ruuhka
+jam	ruhjoa
+jam	liisteri
+
+joke	vitsi
+joke	vitsailla
+joke	kuje
+joke	kepponen
+joke	pila
+joke	laskea leikkiä
+
+judge	syyttää
+judge	arvioida
+judge	tuomari
+judge	tuomita
+
+keep	hoitaa
+keep	pysyä
+keep	pitää kiinni
+keep	pitää
+keep	kasvattaa
+keep	koppi
+keep	jatkaa
+keep	ylläpitää
+keep	tallentaa
+keep	torni
+keep	torjua
+keep	majoittaa
+keep	elatus
+keep	suojella
+keep	säilyä
+keep	säilyttää
+keep	säilöä
+keep	seurata
+
+know	olla sukupuoliyhteydessä jkn kanssa
+know	olla selvillä
+know	osata
+know	ymmärtää
+know	tunnistaa
+know	tuntea
+know	tietää
+know	maata jkn kanssa
+know	myöntää
+know	erottaa
+
+label	erottaa
+label	etiketti
+label	etiketöidä
+label	levy-yhtiö
+label	leimata
+label	leima
+
+lament	surra
+lament	valitusruno
+lament	valitusvirsi
+lament	vaikerointi
+lament	vaikeroida
+lament	vaikertaa
+
+laugh	nauraa
+laugh	nauraminen
+laugh	nauru
+laugh	vitsi
+laugh	hauska juttu
+
+lay	sijoittaa
+lay	sijaita
+lay	munia
+lay	maallikko-
+lay	maata
+lay	balladi
+lay	asettaa
+lay	periä
+lay	panna
+lay	olla peräisin
+lay	olla makuuasennossa
+lay	olla
+lay	valehdella
+lay	laittaa
+lay	laatia
+lay	laulu
+
+lead	saada tekemään
+lead	talutushihna
+lead	aiheuttaa
+lead	ennakko
+lead	etumatka
+lead	edeltää
+lead	kulkea edellä
+lead	kärki
+lead	pääosan esittäjä
+lead	pääuutinen
+lead	olla johdossa
+lead	ohjaus
+lead	ohjata
+lead	vuoro
+lead	välike
+lead	vihje
+lead	viedä
+lead	lyijy
+lead	johtolanka
+lead	johtopaikka
+lead	johtoasema
+lead	johto
+lead	johtaa
+lead	johdanto
+lead	johdattaa
+
+learn	saada tietoonsa
+learn	oppia
+learn	opettaa
+learn	opetella
+learn	opiskella
+learn	ottaa selvää
+
+leave	sanoa itsensä irti
+leave	erota
+leave	olla yhtä kuin
+leave	virkavapaus
+leave	lupa
+leave	lähteä pois
+leave	lähteä
+leave	loma
+leave	unohtaa
+leave	jäähyväiset
+leave	jättää jonnekin
+leave	jättää huoleksi
+leave	jättää huostaan
+leave	jättää perinnöksi
+leave	jättää
+
+left	sanoa itsensä irti
+left	erota
+left	olla yhtä kuin
+left	vasen käsi
+left	vasen kenttä
+left	vasen
+left	vasemmistolainen
+left	vasemmisto
+left	vasemmalle
+left	vasemmanpuoleinen
+left	lähteä pois
+left	lähteä
+left	unohtaa
+left	jäljelle jääneet
+left	jättää jonnekin
+left	jättää huoleksi
+left	jättää huostaan
+left	jättää perinnöksi
+left	jättää
+left	jätökset
+
+let	sallia
+let	saada aikaan
+let	saada
+let	antaa lupa
+let	antaa olla
+let	antaa tehdä
+let	vuokrata
+let	verkkosyöttö
+
+lie	sijainti
+lie	sijaita
+lie	maata
+lie	olla peräisin
+lie	olla makuuasennossa
+lie	olla
+lie	valhe
+lie	valehdella
+lie	vale
+
+like	samanlainen
+like	samankaltainen
+like	sama
+like	tahtoa
+like	kuten
+like	pitää
+like	välittää
+like	haluta
+
+maintain	väittää
+maintain	ylläpitää
+maintain	käyttää
+maintain	pitää jonakin
+maintain	pitää kiinni jstak
+maintain	pitää
+maintain	säilyttää
+
+make	muodostaa
+make	merkki
+make	asettaa
+make	arvioida
+make	vietellä
+make	valmistaa
+make	olla jtak mieltä
+make	olla olevinaan jtak
+make	olla
+make	organisoida
+make	ehtiä
+make	päästää
+make	päästä
+make	pitää jnak
+make	pitää
+make	näyttää aikovansa
+make	nimittää
+make	suunnata
+make	sopia jksik
+make	sijata
+make	siirtyä
+make	saapua
+make	saada jku tekemään jtak
+make	saada aikaan
+make	tulla jksik
+make	työn tekeminen
+make	tehdä yhteensä
+make	tehdä jksik
+make	tehdä jksta menestyvä
+make	tehdä tarpeensa
+make	tehdä
+make	hankkia
+
+mandate	määrätä
+mandate	mandaattialue
+mandate	mandaatti
+mandate	valtuutus
+mandate	valtuuttaa
+mandate	valtuudet
+mandate	valtakirja
+
+marke	+?
+
+marvel	ihmetellä
+marvel	ihme
+
+mean	merkitä
+mean	loistava
+mean	alhainen
+mean	viheliäinen
+mean	katala
+mean	kurja
+mean	keski-
+mean	keskiverto
+mean	keskiarvoinen
+mean	keskiarvo
+mean	ilkeä
+mean	itara
+mean	tarkoittaa
+
+mention	mainita
+mention	viite
+mention	viittaus
+mention	kunniamaininta
+
+mind	mielipide
+mind	mieli
+mind	muistaa
+mind	ajattelija
+mind	ajatella
+mind	varoa
+mind	välittää
+mind	tarkoitus
+mind	huomio
+mind	huomata
+mind	huolehtia
+mind	hoitaa
+mind	järki
+
+moan	valitus
+moan	valittaa
+moan	purnata
+moan	nurista
+
+mount	ratsu
+mount	asentaa
+mount	alusta
+mount	vuori
+mount	kohoaminen
+mount	käynnistää
+mount	kytkeä
+mount	kehys
+mount	paritella
+mount	nousta
+mount	suurentua
+mount	järjestää
+
+muse	muusa
+muse	pohtia
+
+name	määrittää tauti
+name	maine
+name	nimittää
+name	nimi
+name	nimetä
+name	luetella
+name	haukkumasana
+
+need	tarvita
+need	tarve
+need	ahdinko
+need	kaivata
+need	puute
+
+nickname	lempinimi
+nickname	kutsumanimi
+nickname	kutsua jksk
+
+note	muistilappu
+note	muistiinpano
+note	merkittävyys
+note	äänensävy
+note	sävy
+note	sävel
+note	seteli
+note	havaita
+note	huomauttaa
+note	kiinnittää huomiota
+note	kirjelappu
+note	velkakirja
+note	paperiraha
+note	panna muistiin
+
+notice	tiedotus
+notice	tehdä huomautus
+notice	huomio
+notice	huomata
+notice	arvostelu
+notice	kiinnittää huomiota
+notice	irtisanominen
+notice	ilmoitus
+notice	varoitus
+
+observe	panna merkille
+observe	noudattaa
+observe	tarkkailla
+observe	huomata
+observe	havaita
+observe	havainnoida
+observe	kunnioittaa
+
+offer	rukoilla
+offer	poissa oleva
+offer	poissa päältä oleva
+offer	poissa päältä
+offer	poissa
+offer	pois päältä oleva
+offer	pois päältä
+offer	peruttu
+offer	pilaantunut
+offer	suljettuna
+offer	sammutettuna
+offer	olla tarjolla
+offer	tarjous
+offer	tarjoutua
+offer	tarjota
+offer	huono
+offer	kosia
+offer	uhata
+offer	yritys
+offer	ehdotus
+offer	esittää
+
+opine	tuoda mielipiteensä esiin
+opine	arvella
+
+oppose	vastustaa
+oppose	panna vastaan
+oppose	asettaa vastapaino
+
+opt	valita
+
+ordain	vihkiä
+ordain	valita
+ordain	säätää
+ordain	määrätä
+
+order	vihkiä papiksi
+order	veljeskunta
+order	pylväsjärjestelmä
+order	organisoida
+order	tilata
+order	tilaus
+order	luokka
+order	lahko
+order	järjestys
+order	järjestää
+order	järjestäminen
+order	määräys
+order	määrätä
+order	komentaa
+order	käskeä
+order	käsky
+
+pause	keskeyttää
+pause	tauko
+pause	pysähtyä
+
+pay	suorittaa
+pay	hyvittää
+pay	maksaa
+pay	osoittaa
+pay	kohdistaa
+pay	kannattaa
+pay	antaa
+pay	tuottaa
+pay	tehdä
+pay	palkka
+
+perceive	havaita
+perceive	huomata
+perceive	tajuta
+perceive	ymmärtää
+
+plan	suunnitella
+plan	suunnitelma
+plan	aikoa
+plan	piirustus
+
+plead	anoa
+plead	vastata
+plead	vedota jhk
+
+pledge	lupaus
+pledge	luvata
+pledge	sitoutua
+pledge	nostaa malja
+pledge	jäsenkandidaatti
+pledge	malja
+pledge	antaa kunniasanansa
+pledge	pantti
+
+ply	liikennöidä
+ply	säie
+ply	harjoittaa
+ply	heilutella
+ply	kiertää
+ply	kerros
+ply	käyttää
+ply	tyrkyttää
+
+ponder	harkita
+
+predict	ennustaa
+
+prefer	suosia
+prefer	pitää parempana
+prefer	pitää enemmän
+
+prepare	harjoittaa
+prepare	harjoitella
+prepare	valmentautua
+prepare	valmistella
+prepare	valmistaa
+
+presume	rohjeta
+presume	olettaa
+presume	otaksua
+presume	ottaa vapaus
+presume	tohtia
+presume	edellyttää
+
+pretend	näytellä
+pretend	julistautua
+pretend	mielikuvitus-
+pretend	ruveta
+pretend	teeskennellä
+pretend	uskaltaa
+pretend	uskotella
+
+proclaim	julistaa
+
+prohibit	kieltää
+
+project	lähettää
+project	suunnitella
+project	saada kantamaan
+project	heijastaa
+project	hanke
+project	kuvitella
+project	tuoda esiin
+project	projisoida
+project	projekti
+project	pilkistää
+project	ilmaista
+project	esitellä
+
+promise	luvata
+promise	lupaus
+promise	toive
+promise	enteillä
+
+pronounce	lausua
+pronounce	julistaa
+
+propose	kosia
+propose	aikoa
+propose	ehdottaa
+
+prove	nostattaa
+prove	nousta
+prove	osoittautua
+prove	osoittaa
+prove	kokeilla
+prove	testata
+prove	todistaa
+prove	valvoa
+
+provide	säätää
+provide	järjestää
+provide	antaa
+provide	varautua
+provide	elättää
+
+purr	kehräys
+purr	kehrätä
+
+push	lähestyä
+push	näppäin
+push	mainostaa
+push	myydä huumeita
+push	ajaa tarmokkaasti
+push	tunkeutua
+push	työntyä
+push	työntää
+push	työntö
+push	pinnistää
+push	painostaa
+push	paine
+push	painaa
+push	ponnistella
+push	into
+push	eteneminen
+
+put	laittaa
+put	sijoittaa
+put	saattaa
+put	saada
+put	sanoa
+put	myyntioptio
+put	asettaa
+put	panna
+put	ilmaista
+
+quip	sutkaus
+quip	kompa
+quip	letkauttaa
+
+quot	+?
+
+rank	villiintynyt
+rank	jäsenkunta
+rank	rehottava
+rank	rivit
+rank	rivi
+rank	ilmiselvä
+rank	lukeutua
+rank	erittäin huomiotaherättävä
+rank	erittäin silmiinpistävä
+rank	sijoittaa
+rank	olla korkeampiarvoinen
+rank	muheva
+rank	pistävä
+rank	asema
+
+rate	vauhti
+rate	hinta
+rate	nopeus
+rate	taso
+rate	tahti
+rate	olla arvoinen
+rate	aste
+rate	arvioida
+
+read	kuulua
+read	koe-esiintyä
+read	lukea
+read	lukeminen
+read	selittää
+read	tulkita
+read	opiskella
+read	osoittaa
+read	ymmärtää
+
+realize	realisoida
+realize	hankkia
+realize	tajuta
+realize	täydentää
+realize	toteuttaa
+
+reason	järki
+reason	järkeillä
+reason	järkevyys
+reason	syy
+reason	päätellä
+reason	perustella
+reason	perustelu
+reason	peruste
+
+reassure	vakuutella
+reassure	vakuuttaa
+reassure	tyynnyttää
+
+recall	kutsua takaisin
+recall	kotiinkutsu
+recall	takaisinkutsu
+recall	muistaa
+recall	muistella
+recall	muisteleminen
+recall	muistuttaa
+recall	palautuspyyntö
+recall	palauttaa ajatuksistaan
+recall	perääntymiskäsky
+recall	poistaa myynnistä
+
+reckon	laskea
+reckon	luottaa
+reckon	luulla
+reckon	ottaa huomioon
+reckon	arvella
+
+recognize	hyväksyä
+recognize	nähdä
+recognize	käsittää
+recognize	tunnistaa
+recognize	tunnustaa
+recognize	tervehtiä
+recognize	antaa tunnustusta
+
+recommend	suositella
+recommend	olla kunniaksi
+recommend	puhua puolestaan
+
+reconsider	harkita uudelleen
+reconsider	ottaa uudelleen esille
+
+recount	kertoa
+recount	laskea uudelleen
+recount	tarkistuslaskenta
+
+regard	huomio
+regard	katsella
+regard	kunnioitus
+regard	kiinteä katse
+regard	koskettaa
+regard	luottamus
+regard	liittyä
+regard	suhde
+regard	terveiset
+regard	arvioida
+
+regret	valittaa
+regret	kaivata
+regret	surra
+regret	suru
+regret	olla pahoillaan
+
+reiterate	kerrata
+
+relish	nauttia jstk
+relish	into
+relish	maku
+relish	mauste
+
+remain	jäädä jäljelle
+remain	jäädä
+remain	olla jäljellä
+remain	pysyä
+remain	pysytellä
+
+remark	huomio
+remark	huomautus
+remark	huomauttaa
+remark	kommentoida
+
+remember	muistaa
+
+rename	nimetä uudelleen
+rename	nimetä uudestaan
+
+render	julistaa
+render	rapata
+render	kääntää
+render	luovuttaa
+render	esittää
+render	sulattaa
+render	suoda
+render	tarjota
+render	tulkata
+render	tehdä jstak jtak
+render	antaa
+render	antaa takaisin
+
+repeat	kerrata teema
+repeat	kerrata
+repeat	toistaa
+repeat	toistua
+repeat	uusinta
+
+reply	vastine
+reply	vastaus
+reply	vastata
+
+report	raportointi
+report	raportoida
+report	raportti
+report	ilmoittautua
+report	ilmoittaa
+report	tutkimus
+report	todistus
+report	maine
+report	pamaus
+report	antaa selonteko
+
+request	pyytää
+request	pyyntö
+
+require	vaatia
+
+resent	olla pahoillaan
+resent	olla närkästynyt
+resent	olla katkera
+
+resign	jättää
+resign	erota
+resign	tyytyä
+
+resist	vastustaa
+resist	hylkiä
+resist	tehdä vastarintaa
+resist	panna hanttiin
+
+respond	vastata
+respond	reagoida
+
+rest	jäädä
+rest	lepuuttaa
+rest	lepo
+rest	levätä
+rest	loput
+rest	tauko
+rest	tuki
+rest	olla tauolla
+rest	olla
+rest	asettaa
+
+resume	jatkaa
+resume	tiivistelmä
+resume	tehdä yhteenveto
+resume	ottaa takaisin
+resume	palata
+resume	ansioluettelo
+
+reveal	tuoda ilmi
+reveal	paljastaa
+
+risk	vaara
+risk	riski
+risk	riskeerata
+risk	ottaa riski
+
+ruin	viedä perikatoon
+ruin	viedä taloudelliseen perikatoon
+ruin	vietellä
+ruin	raunioitua
+ruin	raunioittaa
+ruin	raunio
+ruin	kukistuminen
+ruin	syöstä turmioon
+ruin	turmella
+ruin	tuhoutuminen
+ruin	tuho
+ruin	pilata
+ruin	perikato
+ruin	ajaa konkurssiin
+ruin	ajaa vararikkoon
+
+rule	viivoittaa
+rule	viivain
+rule	valtakausi
+rule	johtaa
+rule	hallita
+rule	herruus
+rule	liittyä jhkin
+rule	sääntö
+rule	periaate
+rule	antaa ratkaisu
+
+rumor	huhuta
+rumor	huhu
+
+run	viedä
+run	virrata
+run	valuminen
+run	valta
+run	vaalikampanja
+run	vaihdella
+run	jatkua
+run	juoksukisa
+run	juoksuttaa
+run	juoksu
+run	juosta pois
+run	juosta
+run	rientää
+run	run
+run	reissu
+run	repeämä
+run	haalistua
+run	kaupata
+run	kulkea
+run	kestää
+run	koe
+run	kärsiä
+run	käyttöaika
+run	käydä läpi
+run	liuta
+run	liikkua yhdessä
+run	liikkua
+run	esiintyä
+run	sarja
+run	sulaa
+run	suorittaa
+run	tavata
+run	tehdä peräkkäin
+run	tehdä
+run	toistaa
+run	olla käynnissä
+run	olla silmäpako
+run	olla
+run	matka
+run	määrä
+run	purjehtia myötätuuleen
+run	purkautua
+run	puro
+run	pyöriä
+run	pyörittää
+run	pyrkiä
+run	päästää vapaaksi
+run	ulottua
+run	ulottaa
+run	ajaa takaa
+run	ajaa
+run	alkaa
+
+rush	vihvilä
+rush	juoksuttaa
+rush	rush
+rush	ruuhka-
+rush	ruuhka
+rush	ryöppy
+rush	hyökätä
+rush	hoputtaa
+rush	kiiruhtaa
+rush	kiireellinen
+rush	kiire
+rush	edetä
+rush	synnyttää
+rush	syöksyä
+rush	sävärit
+
+say	puheenvuoro
+say	toistaa
+say	olettaa
+say	viestiä
+say	kertoa
+say	sanoa
+
+scream	hulvattoman hauska
+scream	kiljua
+scream	kiljunta
+scream	kiljaisu
+
+seal	hylje
+seal	tiiviste
+seal	lakata
+seal	leima
+seal	metsästää hylkeitä
+seal	sulkea
+seal	sinetti
+seal	sinetöidä
+
+see	piispanistuin
+see	nähdä
+see	havaita
+see	huolehtia jstak
+see	tarkistaa
+see	tapailla
+see	tavata
+see	ottaa vastaan
+see	varmistaa
+see	vastata
+see	vierailla
+see	katsoa
+see	kuvitella
+see	käydä katsomassa
+see	käsittää
+see	kokea
+see	saattaa
+see	selvittää
+
+seek	pyytää
+seek	hakeutua
+seek	hakeminen
+seek	tavoitella
+seek	yrittää
+seek	etsiä
+
+seem	tuntua
+seem	vaikuttaa
+
+sell	pettää
+sell	myydä
+sell	myynti
+sell	mennä kaupaksi
+sell	vakuuttaa
+
+send	passittaa
+send	lähettää
+
+sense	järki
+sense	havaita
+sense	taju
+sense	tunne
+sense	tuntea
+sense	äly
+sense	aavistus
+sense	aistia
+sense	aisti
+sense	merkitys
+sense	ymmärtää
+sense	vaisto
+
+serve	istua
+serve	palvella
+serve	hyödyttää
+serve	tarjoilla
+serve	toimia
+serve	lusia
+serve	olla palveluksessa
+serve	olla asepalveluksessa
+serve	antaa haaste
+serve	auttaa
+serve	astua
+serve	myötävaikuttaa
+serve	edistää
+serve	vastata
+serve	syöttää
+serve	syöttö
+
+set	ryhmä
+set	istuttaa
+set	panna
+set	piintymä
+set	piiri
+set	jähmettynyt
+set	jähmettyä
+set	jähmettyminen
+set	joukko
+set	hioa
+set	takiloida
+set	tehdä hedelmää
+set	laittaa
+set	laite
+set	lasku
+set	laskenut
+set	laskea
+set	latoa
+set	lavasteet
+set	lähettää kimppuun
+set	asetus
+set	asettaa oikeaan
+set	asettaa
+set	asetettu
+set	määrittää
+set	määrätä
+set	määrätty
+set	erä
+set	valmius
+set	valmistautua
+set	valmis
+set	vastaanotin
+set	virittää
+set	kiinteä
+set	koristaa
+set	sarja
+set	suuntaus
+set	säveltää
+set	sijoittuva
+set	sijaita
+set	setti
+set	seurapiiri
+set	upottaa
+
+settle	painua
+settle	päättää
+settle	penkki
+settle	hiljentyä
+settle	hoitaa
+settle	tyytyä
+settle	tyyntyä
+settle	laskeutua
+settle	asettautua
+settle	asettua
+settle	asuttaa
+settle	maksaa
+settle	sakkautua
+settle	suorittaa
+settle	selvittää
+settle	sopia
+settle	sopeutua
+settle	upota
+
+show	ilmentää
+show	ilmaista
+show	näyttää
+show	näytös
+show	teeskentely
+show	tulla kolmen parhaan joukkoon
+show	toimia paikannäyttäjänä
+show	osoittaa
+show	esitys
+show	esittää
+show	esitellä
+show	kuvata
+show	show
+
+shrug	olankohautus
+shrug	kohauttaa
+
+sigh	huoahtaa
+sigh	huokaus
+sigh	huokailla
+sigh	huokailu
+
+signal	huomattava
+signal	merkitä
+signal	merkki
+signal	viittilöidä
+signal	signaali
+
+signale	+?
+
+snap	raksahdus
+snap	papu
+snap	painonappi
+snap	pakkaskausi
+snap	pipari
+snap	näpäys
+snap	näykkäistä
+snap	napsaus
+snap	napsauttaa
+snap	napsahtaa poikki
+snap	napsahtaa
+snap	napsahdus
+snap	napsahdella
+snap	nappaus
+snap	naksahtaa
+snap	tiuskaista
+snap	laukaista
+snap	ottaa kuva
+snap	aloitussyöttö
+snap	vaivaton juttu
+snap	kaapata
+snap	katketa rapsahtaen
+snap	katketa
+snap	kimmoisuus
+snap	seota
+
+sniff	nuuhkia
+sniff	nuuhkaisu
+sniff	niiskuttaa
+sniff	haistella
+sniff	haistelu
+
+snort	nuuskata
+snort	tuhahtaa
+snort	tuhahdus
+snort	sniffata
+
+sound	pätevä
+sound	päästää ääni
+sound	perinpohjainen
+sound	johdonmukainen
+sound	hyvä
+sound	turmeltumaton
+sound	terve
+sound	luodata
+sound	äänne
+sound	ääntää soinnillisena
+sound	ääni
+sound	moitteeton
+sound	melu
+sound	voimassa oleva
+sound	virheetön
+sound	vakavarainen
+sound	kuulostaa
+sound	kuulua
+sound	soittaa
+sound	salmi
+
+specify	nimetä
+specify	täsmentää
+specify	määrittää
+specify	eritellä
+
+speculate	pohtia
+speculate	arvella
+speculate	miettiä
+speculate	keinotella
+speculate	spekuloida
+
+spend	tuhlata
+spend	käyttää
+spend	kuluttaa
+
+spot	paikka
+spot	puuska
+spot	piste
+spot	pisara
+spot	nähdä
+spot	havaita
+spot	hitunen
+spot	täplä
+spot	tahriintua
+spot	tahrata
+spot	tahraantua
+spot	tahra
+spot	tulla läikikkääksi
+spot	tilkka
+spot	läikkiintyä
+spot	läikkä
+spot	murunen
+spot	merkitä
+spot	merkata
+spot	kohtaus
+spot	kohta
+spot	kuvio
+spot	spotti
+spot	-kkö
+spot	-kko
+spot	-kerho
+
+spread	runsas ateria
+spread	päiväpeitto
+spread	päällystää
+spread	pyylevöityminen
+spread	hajallaan oleva
+spread	hajallaan
+spread	hajonta
+spread	tukevoituminen
+spread	levällään oleva
+spread	levällään
+spread	leviäminen
+spread	levite
+spread	levitä
+spread	levittäytyä
+spread	levittää
+spread	farmi
+spread	aukeama
+spread	ero
+spread	katettu
+spread	sängynpeite
+spread	spread
+spread	sivellä
+
+stand	painaa
+stand	puolustusasema
+stand	puolustaa
+stand	pöytä
+stand	pysähdys
+stand	pystyttää
+stand	pysyä
+stand	näkökanta
+stand	jalusta
+stand	hedelmöittää
+stand	teline
+stand	lava
+stand	olla
+stand	olla pitkä
+stand	ottaa kantaa
+stand	asema
+stand	metsikkö
+stand	metsä
+stand	myyntikoju
+stand	yhden yön suhde
+stand	katsomo
+stand	katko
+stand	sietää
+stand	siittää
+stand	seistä
+
+start	ruveta
+start	ryhtyä
+start	pelata
+start	perustaa
+start	johto
+start	hypähtää
+start	hätkähtää
+start	lentää selälleen
+start	lähteä
+start	lähtöviiva
+start	lähtömerkki
+start	lähtö
+start	aloitus
+start	aloittaa
+start	alku
+start	alkuunpano
+start	alkaa
+start	alkaminen
+start	astua virkaan
+start	käynnistää
+start	saada alkunsa jstak
+start	säpsähdys
+
+state	ilmoittaa
+state	tila
+state	todeta
+state	lausua
+state	olomuoto
+state	osavaltio
+state	valtio
+state	kertoa
+state	kansalaiset
+state	sanoa
+
+stay	pysäytys
+stay	pysäyttää
+stay	pysyä
+stay	pysytellä
+stay	jäädä
+stay	hillitä
+stay	harus
+stay	tuki
+stay	tyydyttää
+stay	lykkäys
+stay	lykätä
+stay	oleskella
+stay	oleskelu
+stay	viipyä
+stay	kiinnittää
+stay	kaarituki
+stay	korsetin luut
+stay	sammuttaa
+stay	saada rauhoittumaan
+
+stipulate	panna ehdoksi
+stipulate	taata
+stipulate	määrätä
+stipulate	vaatia
+
+stress	rasitus
+stress	painotus
+stress	painottaa
+stress	paino
+stress	paine
+stress	jännitys
+stress	koetella
+stress	stressi
+
+struggle	rimpuilla
+struggle	ponnistella
+struggle	ponnistelu
+struggle	taistelu
+struggle	taistella
+struggle	tappelu
+struggle	kamppailu
+
+subtitle	tekstitys
+subtitle	tekstittää
+subtitle	alaotsikko
+
+suggest	herättää
+suggest	tarjota
+suggest	tuoda mieleen
+suggest	muistuttaa
+suggest	ehdottaa
+suggest	ehdotella
+suggest	vihjailla
+
+suppose	otaksua
+suppose	olettaa
+suppose	vaatia
+
+surface	pinnoittaa
+surface	pinnalta katsoen
+surface	pinta-
+surface	pinta
+surface	pulpahtaa pinnalle
+surface	nousta pinnalle
+
+survive	elää kauemmin
+survive	selvitä hengissä
+survive	selviytyä hengissä
+
+suspect	pitää mahdollisena
+suspect	epäilty
+suspect	epäilyttävä
+suspect	epäillä
+
+tag	polttaa
+tag	polttaminen
+tag	leima
+tag	-lappu
+tag	tagi
+tag	tag
+tag	räsy
+tag	annotaatio
+tag	nimittää
+tag	varjostaa
+tag	koskettaa
+tag	hippa
+tag	merkintä
+tag	merkata
+
+take	poistaa
+take	edellyttää
+take	suoria
+take	siirtää
+take	tulla sairaaksi
+take	tulla
+take	tilata
+take	ruveta
+take	ryhtyä
+take	alkaa
+take	ajaa
+take	voittaa
+take	vetää
+take	viedä
+take	vallata
+take	vaatia
+take	käyttää
+take	kuljettaa
+take	kohtaus
+take	hyväksyä
+take	hakeutua
+take	opiskella
+take	omaksua
+take	otos
+take	ottaa palvelukseen
+take	ottaa tähtäimeen
+take	ottaa esimerkiksi
+take	ottaa vuokralle
+take	ottaa valtaansa
+take	ottaa vastaan
+take	ottaa
+take	myyntitulot
+take	mennä
+
+target	pilkka
+target	tähdätä
+target	tavoite
+target	kohde
+target	maali
+
+teach	opettaa
+
+tell	paljastaa
+tell	tuntea
+tell	kannella
+tell	käskeä
+tell	kertoa
+tell	huomata
+
+term	lausekkeen jäsen
+term	ehto
+term	täysiaikaisuus
+term	termi
+term	rajakivi
+term	aika
+term	ajanjakso
+term	määritellä
+
+testify	todistaa
+
+theorize	teoretisoida
+
+think	pitää
+think	pohdinta
+think	lietsoa
+think	suunnitella
+think	ajatella
+think	kuvitella
+think	olettaa
+think	muistella
+
+threaten	uhata
+
+throw	pudottaa
+throw	isku
+throw	lennättää
+throw	laukoa
+throw	luoda
+throw	lupautua
+throw	suunnata
+throw	torkkupeitto
+throw	toteuttaa
+throw	riisua
+throw	valaa
+throw	viskata
+throw	kierros
+throw	kyhätä
+throw	heittäytyä
+throw	heittää
+throw	heitto
+throw	hämmentyä
+throw	hämätä
+
+title	luonnehtia
+title	lopputekstit
+title	titteli
+title	arvonimi
+title	alkutekstit
+title	nimittää
+title	nimi
+title	kappale
+title	hallintatodistus
+title	oikeus
+title	otsikko
+title	mestaruus
+
+trust	luottaa
+trust	luottamus
+trust	lainata
+trust	trusti
+trust	uskoa jklle
+trust	uskoa
+trust	omaisuus
+
+try	sovittaa
+try	syyttää
+try	sulattaa
+try	testata
+try	tutkia
+try	koettaa
+try	koetella
+try	kokeilla
+try	yritys
+try	yrittää
+
+turn	pilaantua
+turn	palvelus
+turn	pyöriä
+turn	pyöräytys
+turn	sorvata
+turn	taittaa
+turn	tulla jksik
+turn	tulla toisenlaiseksi
+turn	tulla toiseksi
+turn	täyttää
+turn	ansaita
+turn	vaihtua
+turn	vuoro
+turn	vedota
+turn	venähdyttää
+turn	vääntää
+turn	kiertää
+turn	kaataa
+turn	kohdistaa
+turn	kävely
+turn	käännyttää
+turn	käänne
+turn	käännös
+turn	kääntyä
+turn	kääntyminen
+turn	kääntää
+turn	osoittaa
+turn	mutka
+turn	muovata
+turn	muuttua jksik
+turn	muuttua toisenlaiseksi
+turn	muuttua toiseksi
+turn	muuttua
+
+understand	uskoa
+understand	ymmärtää
+
+urge	vaatia
+urge	halu
+urge	yllyttää
+urge	kehottaa
+urge	tarve
+
+venture	vaarantaa
+venture	ryhtyä
+venture	riskisijoitus
+venture	riskialtis liikeyritys
+venture	rohjeta arvata
+venture	uhkayritys
+venture	uskaltautua
+
+volunteer	tarjota
+volunteer	tehdä vapaaehtoistyötä
+volunteer	kertoa vapaaehtoisesti
+volunteer	vapaaehtoinen
+volunteer	vapaaehtoistyöntekijä
+
+vote	myöntää
+vote	äänivalta
+vote	äänimäärä
+vote	ääni
+vote	äänestys
+vote	äänestää
+vote	äänet
+vote	ehdottaa
+
+vow	lupaus
+vow	luvata
+vow	vala
+vow	vannoa
+vow	omistaa elämänsä
+
+wad	mälli
+wad	puristaa
+wad	täyttää
+wad	tukku
+wad	tuppo
+
+want	kaivata
+want	puute
+want	etsintäkuuluttaa
+want	toive
+want	tahtoa
+want	tahto
+want	tarpeet
+want	haluta
+
+warn	kehottaa
+warn	ajaa pois
+warn	varoittaa
+
+warrant	lupa
+warrant	vakuuttaa
+warrant	optiotodistus
+warrant	oikeuttaa
+warrant	oikeutus
+
+watch	kello
+watch	katsoa
+watch	seurata
+watch	pitää silmällä
+watch	tarkkailla
+watch	vartiovuoro
+watch	vartiomies
+watch	vartio
+watch	varoa
+watch	vahtivuoro
+watch	yövartio
+
+wish	terveiset
+wish	toivottaa
+wish	toivoa
+wish	toivomus
+wish	toive
+wish	haluta
+wish	halu
+
+wonder	ihmetellä
+wonder	ihme
+wonder	kummastella
+wonder	tiedonjano
+wonder	hämmästys
+
+worry	murehtia
+worry	levottomuus
+worry	riepottaa
+worry	retuuttaa
+worry	huolestuttaa
+worry	huolettaa
+worry	huoli
+worry	olla huolissaan
+
+write	kirjoittaa
+write	luoda
+write	säveltää
+write	julkaista
+write	tallentaa
+

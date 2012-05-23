@@ -188,6 +188,7 @@ oper
     mkV2 : V -> V2 ;    -- direct transitive
     mkV2 : V -> Case -> V2 ; -- complement just case
     mkV2 : V -> Prep -> V2 ; -- complement pre/postposition
+    mkV2 : VK -> V2 ;    -- direct transitive of Kotus verb
     } ;
 
 
@@ -607,6 +608,7 @@ oper
     mkV2 : V -> V2 = dirV2 ;
     mkV2 : V -> Case -> V2 = caseV2 ;
     mkV2 : V -> Prep -> V2 = mk2V2 ;
+    mkV2 : VK -> V2 = \w -> dirV2 (vforms2V w.s ** {sc = NPCase Nom ; lock_V = <>}) ;
     } ;
 
   mk2V2 : V -> Prep -> V2 ;

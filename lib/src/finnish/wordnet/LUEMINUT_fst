@@ -1,0 +1,190 @@
+
+FinnWordNetin sanastoon perustuvat HFST-transduktorit
+=====================================================
+
+
+Tämä paketti sisältää FinnWordNetin sanastodatan pohjalta luotuja
+HFST-transduktoreita, joita voi käyttää (taivuttavina) suomen tai
+englannin synonyymisanastoina tai käännössanakirjoina.
+
+
+FinnWordNet
+-----------
+
+FinnWordNet on suomen wordnet. Se on luotu käännättämällä
+ammattikääntäjillä alkuperäisen englanninkielen Princeton WordNetin
+(PWN) version 3.0 sanat (sananmerkitykset) suomeksi ja yhdistämällä
+käännökset PWN:n rakenteeseen. FinnWordNet on osa
+FIN-CLARIN-infrastruktuurihanketta:
+
+    http://www.ling.helsinki.fi/finclarin/
+
+Lisätietoja FinnWordNetistä saa FinnWordNet-projektin WWW-sivulta:
+
+    http://www.ling.helsinki.fi/kieliteknologia/tutkimus/finnwordnet/
+
+
+HFST – Helsinki Finite-State Transducer Technology
+--------------------------------------------------
+
+Lisätietoa HFST:stä (englanniksi) saa projektin WWW-sivulta:
+
+    http://www.ling.helsinki.fi/kieliteknologia/tutkimus/hfst/
+
+FinnWordNetin transduktorit ovat HFST:n optimized lookup -muodossa:
+
+    https://kitwiki.csc.fi/twiki/bin/view/KitWiki/HfstOptimizedLookupFormat
+
+Transduktoritiedostoissa on pääte .hfstol. Niiden käyttäminen
+edellyttää joko HFST-kirjastoa ja -työkaluja (versiota 3.2.0 tai
+uudempaa) tai erillistä HFST optimized lookup -ohjelmaa, jolla niitä
+voi ajaa:
+
+    http://sourceforge.net/projects/hfst/files/optimized-lookup/
+
+Transduktorit tarvitsevat optimized lookup -ohjelman version 1.3 (tai
+uudemman) tai Java-toteutuksen (hfst-ol.jar, 2011-05-23 tai uudempi);
+ne eivät toimi Python-toteutuksella (2011-05-24).
+
+
+FinnWordNetin transduktoripaketit
+---------------------------------
+
+FinnWordNetin transduktorit on jaettu kolmeen pakettiin, joista
+jokaisessa on hiukan erilaiset transduktorit (YYYYMMDD viittaa paketin
+julkaisupäivään):
+
+    fiwnsyn-fi-YYYYMMDD.zip – Suomen synonyymisanastot
+
+    fiwnsyn-en-YYYYMMDD.zip - Englannin synonyymisanastot (perustuvat
+        Princeton WordNetiin)
+
+    fiwntransl-YYYYMMDD.zip - Suomi–englanti ja englanti–suomi
+    käännössanakirjat
+
+Tämä LUEMINUT-tiedosto on yhteinen kaikille paketeille.
+
+Synonyymisanastotransduktorien nimet ovat muotoa
+fiwnsyn-KL-TYYPPI.hfstol, missä KL on kielikoodi ”fi” tai ”en” ja
+TYYPPI on yksi seuraavista:
+
+    infl – Transduktori tunnistaa syötesanan taivutusmuodon ja tuottaa
+        synonyymit samassa taivutusmuodossa. Transduktori ei tunnista
+        ei tuota monisanaisia synonyymeja. Sanaa ei lasketa itsensä
+        synonyymiksi.
+
+    infl-refl – Sama kuin edellä, mutta synonymia on refleksiivistä:
+        sana lasketaan itsensä synonyymiksi. Tämä mahdollistaa
+        syötesanan mahdollisten vaihtoehtoisten taivutusmuotojen
+        tuottamisen, kuten ”omenoiden”, ”omenoitten”, ”omenien”,
+        ”omenojen”, ”omenain”.
+
+    noinfl - Transduktori tunnistaa syötesanan taivutetuissa
+        muodoissa, mutta tuottaa synonyymit perusmuodoissaan.
+        Englannin transduktorit tunnistavat ja tuottavat myös
+        monisanaiset ilmaukset ja suomen transduktorit tuottavat.
+        Sanaa ei lasketa itsensä synonyymiksi.
+
+    noinfl-refl – Sama kuin edellä, mutta synonymia on refleksiivistä.
+
+Käännössanakirjatransduktoritiedostojen nimet ovat
+fiwntransl-fien.hfstol (suomi–englanti) ja fiwntransl-enfi.hfstol
+(englanti–suomi). Ne tunnistavat syötesanan taivutettuja muotoja,
+mutta tuottavat käännökset perusmuodossa. Englanti–suomi-sanakirja
+sekä tunnistaa että tuottaa monisanaisia ilmauksia, kun taas
+suomi–englanti-sanakirja vain tuottaa niitä.
+
+
+Lähteitä
+--------
+
+FinnWordNetin ja Princeton WordNetin datan lisäksi transduktorien
+tekemisessä on käytetty Omorfia, suomen avointa morfologista työkalua
+(http://gna.org/projects/omorfi), ja HFST:n englannin morfologiaa
+(http://sourceforge.net/projects/hfst/files/morphological-transducers/hfst-english.tar.gz/download),
+joka on alunperin Måns Huldenin Princeton WordNetin datan pohjalta
+tekemä.
+
+
+Puutteita
+---------
+
+* Monisanaisten ilmausten käsittely on osittain epäyhtenäistä.
+
+* Suomen synonyymisanastot, erityisesti taivuttavat sanastot,
+  tuottavat usein monia identtisiä tulostesanoja.
+
+* Englannin taivuttava synonyymisanasto yligeneroi joitain
+  sananmuotoja, kuten virheellisen kaksinkertaisen monikon genetiivin
+  (”nets’s”) oikean (”nets’”) lisäksi.
+
+* Ei-taivuttava englannin synonyymisanasto ja englanti–suomi-sanakirja
+  tunnistavat taivutuksen monisanaisen ilmauksen viimeisessä sanassa,
+  vaikka olisi oikein taivuttaa jotain aiempaa sanaa. Ne tunnistavat
+  esimerkiksi ”arrive ated” oikean muodon ”arrived at” sijaan.
+
+* Monitulkintaisen tai monimerkityksisen sananmuodon kaikki synonyymit
+  tai käännökset luetellaan yhdessä, ilman järjestystä tai ryhmittelyä
+  sanaluokan tai sananmerkityksen mukaan.
+
+
+Lisenssi
+--------
+
+Koska FinnWordNet käyttää Princeton WordNetin rakennetta ja
+merkitysten selitteitä, se on PWN:n johdannainen ja siten PWN:n
+lisenssin alainen:
+
+    http://wordnet.princeton.edu/wordnet/license/
+
+PWN:n lisenssi sallii vapaan käytön, myös kaupallisesti, kunhan sen
+käyttämisestä ja tekijänoikeuksista kerrotaan:
+
+    WordNet Release 3.0 This software and database is being provided
+    to you, the LICENSEE, by Princeton University under the following
+    license. By obtaining, using and/or copying this software and
+    database, you agree that you have read, understood, and will
+    comply with these terms and conditions.: Permission to use, copy,
+    modify and distribute this software and database and its
+    documentation for any purpose and without fee or royalty is hereby
+    granted, provided that you agree to comply with the following
+    copyright notice and statements, including the disclaimer, and
+    that the same appear on ALL copies of the software, database and
+    documentation, including modifications that you make for internal
+    use or for distribution. WordNet 3.0 Copyright 2006 by Princeton
+    University. All rights reserved. THIS SOFTWARE AND DATABASE IS
+    PROVIDED "AS IS" AND PRINCETON UNIVERSITY MAKES NO REPRESENTATIONS
+    OR WARRANTIES, EXPRESS OR IMPLIED. BY WAY OF EXAMPLE, BUT NOT
+    LIMITATION, PRINCETON UNIVERSITY MAKES NO REPRESENTATIONS OR
+    WARRANTIES OF MERCHANT- ABILITY OR FITNESS FOR ANY PARTICULAR
+    PURPOSE OR THAT THE USE OF THE LICENSED SOFTWARE, DATABASE OR
+    DOCUMENTATION WILL NOT INFRINGE ANY THIRD PARTY PATENTS,
+    COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS. The name of Princeton
+    University or Princeton may not be used in advertising or
+    publicity pertaining to distribution of the software and/or
+    database. Title to copyright in this software, database and any
+    associated documentation shall at all times remain with Princeton
+    University and LICENSEE agrees to preserve same.
+
+FinnWordNetin sisältämien sanojen suomenkielisten käännösten
+tekijänoikeudet ovat Helsinin yliopistolla. Ne lisensoidaan Creative
+Commons Nimeä (CC BY) 3.0 -lisenssillä, joka on samantapainen kuin
+PWN:n lisenssi:
+
+    http://creativecommons.org/licenses/by/3.0/deed.fi
+
+Kun viittaat FinnWordNetiin, viittaa seuraavaan artikkeliin:
+
+    Krister Lindén and Lauri Carlson. 2010. FinnWordNet – WordNet på
+    finska via översättning. LexicoNordica – Nordic Journal of
+    Lexicography, 17:119–140.
+
+
+Yhteystiedot
+------------
+
+FinnWordNet-projektia johtaa tutkimusjohtaja, FT Krister Lindén
+Helsingin yliopiston nykykielten laitoksessa (kieliteknologian
+oppiaineessa). Teknisissä kysymyksissä yhteyshenkilönä on
+projektitutkija Jyrki Niemi. Sähköpostiosoitteet ovat muotoa
+etunimi.sukunimi@helsinki.fi (aksentit poistettuina).
