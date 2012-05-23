@@ -1,4 +1,4 @@
-concrete NumeralCat of Numeral = CatCat ** 
+concrete NumeralCat of Numeral = CatCat [Numeral,Digits] ** 
   open CommonRomance, ResRomance, MorphoCat, Prelude in {
 
 --
