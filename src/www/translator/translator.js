@@ -5,6 +5,10 @@
 function Translator() {
     this.local=tr_local();
     this.view=element("document")
+    if(!supports_html5_storage()) {
+	var warning=span_class("error",text("It appears that localStorage is unsupported or disabled in this browser. Documents will not be preserved after you leave or reload this page!"))
+	insertAfter(warning,this.view)
+    }
     this.current=this.local.get("current")
     this.document=this.current && this.current!="/" && this.local.get("/"+this.current) || empty_document()
     this.server=pgf_online({})
@@ -395,7 +399,7 @@ function tr_local() {
 	    }
 	}
     }
-    return window.localStorage ? real(localStorage) : real([])
+    return supports_html5_storage() ? real(localStorage) : real([])
 }
 
 // Collect alternative texts in the output from PGF service translate command
