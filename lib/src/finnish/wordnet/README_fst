@@ -1,0 +1,195 @@
+
+HFST transducers based on FinnWordNet dictionary data
+=====================================================
+
+
+This package contains various HFST transducers based on FinnWordNet
+lexical data. The transducers can be used as (inflecting) Finnish or
+English thesauri or translation dictionaries.
+
+
+FinnWordNet
+-----------
+
+FinnWordNet is a wordnet for Finnish. It was created by having
+professional translators translate the word senses of the Princeton
+WordNet (PWN) 3.0 into Finnish and by combining the translations with
+the PWN structure. FinnWordNet is a part of the FIN-CLARIN project:
+
+    http://www.ling.helsinki.fi/finclarin/
+
+For more information about FinnWordNet, please visit the FinnWordNet
+project Web page
+
+    http://www.ling.helsinki.fi/en/lt/research/finnwordnet/
+
+
+HFST – Helsinki Finite-State Transducer Technology
+--------------------------------------------------
+
+For more information about HFST, please see the project Web page
+
+    http://www.ling.helsinki.fi/kieliteknologia/tutkimus/hfst/
+
+The FinnWordNet transducers use the HFST optimized lookup format:
+
+    https://kitwiki.csc.fi/twiki/bin/view/KitWiki/HfstOptimizedLookupFormat
+
+The transducer files have the suffix .hfstol. Using them requires
+either the HFST library and tools (version 3.2.0 or later) or the
+standalone HFST optimized lookup program with which they can be run
+(applied):
+
+    http://sourceforge.net/projects/hfst/files/optimized-lookup/
+
+The transducers require version 1.3 or later of the standalone
+optimized lookup or the Java implementation (hfst-ol.jar as of
+2011-05-23); the do not work with the Python implementation of
+2011-05-24.
+
+
+FinnWordNet transducer packages
+-------------------------------
+
+The FinnWordNet transducers are divided into three packages, each with
+a few slightly different transducers (YYYYMMDD denotes the release
+date of the package):
+
+    fiwnsyn-fi-YYYYMMDD.zip – Finnish thesauri
+
+    fiwnsyn-en-YYYYMMDD.zip - English thesauri (based on the Princeton
+        WordNet)
+
+    fiwntransl-YYYYMMDD.zip - Finnish–English and English–Finnish
+        translation dictionaries.
+
+This README file is common to all the packages.
+
+The names of the thesaurus transducer files have the form
+fiwnsyn-LG-TYPE.hfstol, where LG is the language code ‘fi’ or ‘en’ and
+TYPE is one of the following:
+
+    infl – The transducer recognizes inflected forms of the input word
+        and generates synonyms with the same form. Multi-word synonyms
+        are not recognized nor generated. A word is not considered its
+        own synonym.
+
+    infl-refl – The same as above but synonymy is reflexive: a word is
+        considered its own synonym. This makes it possible to generate
+        alternative forms of the input word, such as ‘indices’ and
+        ‘indexes’.
+
+    noinfl - The transducer recognizes inflected forms of the input
+        word but generates synonyms in their base form. Multi-word
+        synonyms are recognized and generated for English and
+        generated for Finnish. A word is not considered its own
+        synonym.
+
+    noinfl-refl – The same as above but synonymy is reflexive.
+
+The names of the translation dictionary transducer files are
+fiwntransl-fien.hfstol for the Finnish–English dictionary and
+fiwntransl-enfi.hfstol for the English–Finnish one. They recognize
+inflected forms of the input word but generate the base form of the
+translation. The English–Finnish dictionary recognizes and generates
+multi-word translations, whereas the Finnish–English one only
+generates them.
+
+
+Sources
+-------
+
+In addition to the FinnWordNet and Princeton WordNet data, the
+transducers have been constructed using the Omorfi open morphology
+tool for Finnish (http://gna.org/projects/omorfi) and the HFST English
+morphology
+(http://sourceforge.net/projects/hfst/files/morphological-transducers/hfst-english.tar.gz/download),
+originally by Måns Hulden, based on Princeton WordNet data.
+
+
+Deficiencies
+------------
+
+* Multi-word expressions are handled somewhat inconsistently.
+
+* The Finnish thesauri, in particular the inflecting ones, often
+  generate many identical output words.
+
+* The inflecting English thesaurus overgenerates some word forms, such
+  as an incorrect double plural genitive (‘nets’s’) in addition to the
+  correct one (‘nets’’).
+
+* The non-inflecting English thesauri and the English–Finnish
+  dictionary recognize inflection in the last word of a multi-word
+  expression, even if it would be correct to inflect a preceding word.
+  For example, they recognize ‘arrive ated’ but not the correct
+  ‘arrived at’.
+
+* All the synonyms or translations of an ambiguous or polysemous word
+  form are listed together, without any sorting or grouping according
+  to the part of speech or word sense.
+
+
+Licence
+-------
+
+Since FinnWordNet retains the structure and glosses of Princeton
+WordNet, it is a derivative of PWN subject to the PWN licence:
+
+    http://wordnet.princeton.edu/wordnet/license/
+
+The PWN licence allows free use, including commercial use, provided
+that a copyright notice is given:
+
+    WordNet Release 3.0 This software and database is being provided
+    to you, the LICENSEE, by Princeton University under the following
+    license. By obtaining, using and/or copying this software and
+    database, you agree that you have read, understood, and will
+    comply with these terms and conditions.: Permission to use, copy,
+    modify and distribute this software and database and its
+    documentation for any purpose and without fee or royalty is hereby
+    granted, provided that you agree to comply with the following
+    copyright notice and statements, including the disclaimer, and
+    that the same appear on ALL copies of the software, database and
+    documentation, including modifications that you make for internal
+    use or for distribution. WordNet 3.0 Copyright 2006 by Princeton
+    University. All rights reserved. THIS SOFTWARE AND DATABASE IS
+    PROVIDED "AS IS" AND PRINCETON UNIVERSITY MAKES NO REPRESENTATIONS
+    OR WARRANTIES, EXPRESS OR IMPLIED. BY WAY OF EXAMPLE, BUT NOT
+    LIMITATION, PRINCETON UNIVERSITY MAKES NO REPRESENTATIONS OR
+    WARRANTIES OF MERCHANT- ABILITY OR FITNESS FOR ANY PARTICULAR
+    PURPOSE OR THAT THE USE OF THE LICENSED SOFTWARE, DATABASE OR
+    DOCUMENTATION WILL NOT INFRINGE ANY THIRD PARTY PATENTS,
+    COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS. The name of Princeton
+    University or Princeton may not be used in advertising or
+    publicity pertaining to distribution of the software and/or
+    database. Title to copyright in this software, database and any
+    associated documentation shall at all times remain with Princeton
+    University and LICENSEE agrees to preserve same.
+
+The translations of FinnWordNet are copyright of the University of
+Helsinki and they are licenced under Creative Commons Attribution (CC
+BY) 3.0, which is similar to the PWN licence:
+
+    http://creativecommons.org/licenses/by/3.0/
+
+Please cite the following paper when referring to FinnWordNet:
+
+    Krister Lindén and Lauri Carlson. 2010. FinnWordNet – WordNet på
+    finska via översättning. LexicoNordica – Nordic Journal of
+    Lexicography, 17:119–140.
+
+HFST is licenced under the GNU Lesser General Public License, version
+3.0:
+
+    http://www.gnu.org/licenses/lgpl.html
+
+
+Contact
+-------
+
+The FinnWordNet project is led by Dr Krister Lindén at the Department
+of Modern Languages (Language Technology) of the University of
+Helsinki. In technical questions, please contact Mr Jyrki Niemi. Email
+addresses are of the form firstname.lastname@helsinki.fi (accents
+removed).
