@@ -3,30 +3,32 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>GF RGL Browser</title>
+  <title>RGL Source Browser</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
+  <link rel="shortcut icon" href="http://cdn.dustball.com/book_next.png" type="image/png">
   <link rel="stylesheet" href="http://www.grammaticalframework.org/css/style.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="google-code-prettify/prettify-gf.css">
 </head>
 <body>
   <header>
-    <h1>GF RGL Browser</h1>
+    <h1>RGL Source Browser</h1>
   </header>
+  <div id="loading">
+    <img src="ajax-loader.gif" /> loading...
+  </div>
   <div role="main">
     <div class="pane left">
       <div id="languages"></div>
-      <div id="modules"></div>
+      <div id="modules" class="maxheight scroll-y"></div>
     </div>
     <div class="pane right">
       <div id="tabbar">
-        <h2></h2>
-        <div id="loading">
-          <img src="ajax-loader.gif" /> loading...
-        </div>
+        <h2>...</h2>
+        <a href="http://www.grammaticalframework.org/lib/doc/synopsis.html" title="RGL Synopsis">Synopsis...</a>
       </div>
-      <div id="scope" class="panel scope">
+      <div id="scope" class="panel scope maxheight">
         <input type="text" id="search" />
         &nbsp;<span id="scope_count">0</span> items&nbsp;
         <input type="submit" id="submit" value="Filter" />
@@ -34,12 +36,14 @@
         <input type="checkbox" id="case_sensitive" checked="checked" /><label for="case_sensitive">Case sensitive?</label>
         <input type="radio" name="show" id="show_all" checked="checked" /><label for="show_all">Show all</label>
         <input type="radio" name="show" id="show_local" /><label for="show_local">Local only</label>
-        <table id="scope_list"></table>
+        <div class="maxheight scroll-y">
+          <table id="scope_list"></table>
+        </div>
       </div>
-      <div id="code" class="panel code">
-        <pre class="prettyprint lang-gf linenums"></pre>
+      <div id="code" class="panel code maxheight">
+        <pre class="prettyprint lang-gf linenums maxheight scroll-y"></pre>
       </div>
-      <div id="help" class="panel help">
+      <div id="help" class="panel help maxheight scroll-y">
 
         <h3>Understanding the scope information</h3>
         <p>The scope information shown by this tool is basically the output of running GF with the <code>--tags</code> flag. This lists all the functions visible in the scope of a module, one per line. Each line can have two possible forms:</p>

@@ -2,6 +2,19 @@
   GF RGL Browser
   John J. Camiller, 2012
 */
+.maxheight
+{ 
+  height:92%;
+  }
+.scroll-y
+{ 
+  overflow-y:auto;
+  }
+
+body
+{ 
+  height:450px; /*adjusted in JS*/
+ }
 header h1
 {
   text-align:left;
@@ -11,10 +24,12 @@ div[role='main']
 { 
   overflow:hidden;
   width:100%;
+  height:100%;
  }
 .pane
 { 
   display:block;
+  height:100%;
  }
 .pane.left
 { 
@@ -39,6 +54,10 @@ div[role='main']
 { 
   text-decoration:underline;
  }
+#language_select
+{ 
+  font-size:1.1em;
+  }
 #languages
 { 
   margin:0.5em 0;
@@ -61,13 +80,14 @@ div[role='main']
 .tab
 { 
   cursor:pointer;
-  padding:0.3em 0.5em;
+  padding:0.5em 0.5em;
   margin-right:0.5em;
   display:inline-block;
   text-transform:capitalize;
   text-decoration:none;
   font-family:sans-serif;
   font-weight:bold;
+  font-size:0.9em;
   }
 #loading
 { 
@@ -91,6 +111,11 @@ div[role='main']
   background:#444;
   color:#eee;
  }
+.help
+{ 
+  background:#ccc;
+  color:#000;
+ }
 input#search
 {
   font-size:1em;
@@ -111,7 +136,7 @@ input#search
   }
 #scope_list tr:hover
 {
-  background:#eee;
+  background:#f9f9f9;
   }
 #scope_list tr.indir
 {
@@ -142,6 +167,7 @@ input#search
 {
   margin:0;
   color:#000;
+  overflow:auto;
   }
 dt
 { 
@@ -149,7 +175,9 @@ dt
   }
 footer
 { 
-  padding-left: 0.5em;
+  padding: 0.4em;
   color:#333;
   text-align:right;
+  border-top:1px solid #ccc;
+  font-size:0.9em;
   }
