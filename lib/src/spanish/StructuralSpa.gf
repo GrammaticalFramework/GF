@@ -6,6 +6,33 @@ concrete StructuralSpa of Structural = CatSpa **
 
 lin
 
+  -- Added by John J. Camilleri 2012-05-23
+  -- These were all missing from the Spanish RG.
+  -- Implementations copied from catalan/StructuralCat.gf, but likely buggy.
+  at_least_AdN = ss "al menos" ;
+  at_most_AdN = ss "a lo más" ;
+  except_Prep = mkPrep "excepto" ;
+  -- have_V3
+  -- have_not_V3
+  how8much_IAdv = ss "cuanto" ;
+  if_then_Conj = {s1 = "si" ; s2 = "entonces" ; n = Sg ; lock_Conj = <>} ;
+  no_Quant =
+    let
+      capS : Str = "hacia" ;
+      cap : ParadigmsSpa.Number => ParadigmsSpa.Gender => Case => Str = table {
+        Sg => \\g,c => prepCase c ++ genForms capS capS ! g ;
+        Pl => \\g,c => prepCase c ++ genForms capS capS ! g
+        }
+    in {
+      s = \\_ => cap ;
+      sp = cap ;
+      s2 = []
+    } ;
+  not_Predet = {s = \\a,c => prepCase c ++ "no" ; c = Nom ; a = PNoAg} ;
+  nobody_NP = pn2np (mkPN "nadie") ;
+  nothing_NP = pn2np (mkPN "nada") ;
+  --
+
   above_Prep = mkPrep "sobre" ;
   after_Prep = {s = ["despues"] ; c = MorphoSpa.genitive ; isDir = False} ;
   all_Predet = {
