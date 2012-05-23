@@ -1,4 +1,4 @@
-concrete NumeralSpa of Numeral = CatSpa ** 
+concrete NumeralSpa of Numeral = CatSpa [Numeral,Digits] ** 
   open CommonRomance, ResRomance, MorphoSpa, Prelude in {
 
 lincat 
