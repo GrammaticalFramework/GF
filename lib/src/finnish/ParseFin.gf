@@ -13,8 +13,9 @@ concrete ParseFin of ParseEngAbs =
   SentenceFin,
   RelativeFin,
   IdiomFin [NP, VP, Tense, Cl, ProgrVP, ExistNP],
---  ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash],
-  DictEngFin ** 
+  ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash],
+  DictEngFin 
+** 
 open MorphoFin, ResFin, ParadigmsFin, Prelude in {
 
 flags literal=Symb ;
