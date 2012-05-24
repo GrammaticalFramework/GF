@@ -12443,15 +12443,6 @@ haunt	ahdistaa
 haunt	käydä usein
 haunt	kummitella
 
-have	pitää
-have	suostua
-have	synnyttää
-have	saada jku tekemään jtak
-have	saada
-have	harrastaa
-have	olla
-have	rikas henkilö
-
 hawk	muurauslauta
 hawk	metsästää
 hawk	kaupustella

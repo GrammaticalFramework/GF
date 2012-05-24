@@ -4181,13 +4181,6 @@ true	oikea
 truly	todella
 truly	vilpittömästi
 
-'tween	väliltä
-'tween	välillä
-'tween	väliin
-'tween	välissä
-
-'tween-decks	+?
-
 twice	kaksinkertaisesti
 twice	kahdesti
 

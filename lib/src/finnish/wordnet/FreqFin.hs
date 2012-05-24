@@ -1,24 +1,27 @@
 import Data.Map
 import Data.List
 import Data.Char
+import System
 
 -- a script for extracting an English-Finnish translation dictionary from
 -- (1) Eng-Fin wordnet links
 -- (2) Fin frequency dictionary
 -- (3) Fin KOTUS morpho wordlist
--- usage: runghc FreqFin.hs >DictEngFin.gf (with appropriate files in place)
+-- usage: runghc FreqFin.hs, which produces DictEngFin.gf (with appropriate files in place)
 -- AR 23/5/2012
 
 main = do
   freqs   <- readFile "taajuus.txt"  >>= return . getFreqMap
-  morpho  <- readFile "DictFin.gf"   >>= return . getMorphoMap
+  morpho  <- readFile "../DictFin.gf"   >>= return . getMorphoMap
   transV  <- readFile "Ven_fi.txt"   >>= return . getTransDict "V" freqs morpho
   transV2 <- readFile "V2en_fi.txt"  >>= return . getTransDict "V2" freqs morpho
   transA  <- readFile "Aen_fi.txt"   >>= return . getTransDict "A" freqs morpho
   transN  <- readFile "Nen_fi.txt"   >>= return . getTransDict "N" freqs morpho
   transAdv <- readFile "Adven_fi.txt"   >>= return . getTransDict "Adv" freqs morpho
   let cnc = sort $ lmap mkLin $ transV ++ transV2 ++ transA ++ transN ++ transAdv
-  mapM_ putStrLn cnc
+  system $ "cp dictBegin dictEngFin"
+  mapM_ (appendFile "dictEngFin") cnc
+  system $ "cat dictEngFin dictEnd >DictEngFin.gf"
 
 getFreqMap = fromList . lmap (getFreq . words) . lines 
 
@@ -55,14 +58,19 @@ getTransDict cat freqs morpho = lmap getOne . lmap (lmap words) . stanzas . line
   where
     getOne ls@((w:_):_) = (w,(cat, sortTrans cat [getRank vs | _:vs <- ls]))
     getRank (v:[]) = case (mlookup v freqs, mlookup v morpho) of
-      (Just (i,c), Just (k,l)) | compatCat cat c && compatCat cat k -> (v, (i, lin l))
+      (Just (i,c), Just (k,l)) | compatCat cat c && compatCat cat k -> (v, (i, linK l))
       (Just (i,c), _)          | compatCat cat c -> (v, (i, lin ("\"" ++ v ++ "\"")))
-      (_,          Just (c,l)) | compatCat cat c -> (v, (morphoRank, lin l))
-      _ | all isLetter (take 1 v) -> (v,(guessRank,lin ("\"" ++ v ++ "\"")))
+      (_,          Just (c,l)) | compatCat cat c -> (v, (morphoRank, linK l))
+      _ | all isLetter (take 1 v) && notVerb cat -> (v,(guessRank,lin ("\"" ++ v ++ "\"")))
       _ -> (v,(noRank,lin v))
     getRank vs = (unwords vs, (compRank,lin (unwords vs)))
 
     lin l = "mk" ++ cat ++ " " ++ l
+    linK l = lin ("(lin " ++ catK ++ "K " ++ l ++ ")") 
+    catK = case cat of
+      "V2" -> "V"
+      _ -> cat
+    notVerb cat = take 1 cat /= "V" -- can produce non-verbs
 
 sortTrans :: Cat -> [(Word,(Rank,Lin))] -> [(Word,(Rank,Lin))]
 sortTrans cat = chooseBest . sortBy (\ (_,(r,_)) (_,(s,_)) -> compare r s) where
@@ -75,15 +83,15 @@ compatCat cat c = case cat of
 morphoRank, guessRank, noRank, compRank :: Int
 morphoRank = 10000
 guessRank = 20000
-noRank = 30000
-compRank = 40000
+compRank = 30000
+noRank = 40000
 
 mkLin :: (Word,(Cat,[(Word,(Rank,Lin))])) -> String
-mkLin (word,(cat,ws)) = unwords $ [keyw,fun,"=",lin,";"] where
+mkLin (word,(cat,ws)) = unwords $ [keyw,fun,"=",lin,"; --",rank,"\n"] where
   fun = lmap clean word ++ "_" ++ cat
-  (keyw,lin) = case ws of
-     (w,(r,l)):_ | r < noRank -> ("lin", l)
-     (w,_):_ -> ("-- lin", "\"" ++ w ++ "\"") ---- look inside non-freq words
+  (keyw,lin,rank) = case ws of
+     (w,(r,l)):_ | r < guessRank -> ("lin", l,show r)
+     (w,(r,_)):_ -> ("-- lin", "\"" ++ w ++ "\"",show r) -- non-wordnet or many-word
   clean c = case c of
     '-' -> '_'
     _   -> c
