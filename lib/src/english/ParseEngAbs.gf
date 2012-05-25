@@ -10,6 +10,7 @@ abstract ParseEngAbs =
   Adverb,
   Phrase,
   Sentence,
+  Question,
   Relative,
   Idiom [NP, VP, Cl, ProgrVP, ExistNP],
   Extra [NP, Quant, VPSlash, VP, GenNP, PassVPSlash,
