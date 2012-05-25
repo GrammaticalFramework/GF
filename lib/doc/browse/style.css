@@ -2,19 +2,10 @@
   GF RGL Browser
   John J. Camiller, 2012
 */
-.maxheight
-{ 
-  height:92%;
-  }
 .scroll-y
 { 
   overflow-y:auto;
   }
-
-body
-{ 
-  height:450px; /*adjusted in JS*/
- }
 header h1
 {
   text-align:left;
@@ -33,7 +24,7 @@ div[role='main']
  }
 .pane.left
 { 
-  width:150px;
+  width:170px;
   float:left;
  }
 .pane.right
@@ -42,7 +33,7 @@ div[role='main']
  }
 .panel
 {
-  padding:1em;
+  padding:15px;
   }
 .button
 {
@@ -62,10 +53,15 @@ div[role='main']
 { 
   margin:0.5em 0;
   }
-#modules span
+#modules a
 { 
   display:block;
   margin:0.1em;
+  text-decoration:none;
+  }
+#modules a:hover
+{ 
+  text-decoration:underline;
   }
 #tabbar *
 { 

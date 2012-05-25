@@ -43,7 +43,8 @@
       <div id="code" class="panel code maxheight">
         <pre class="prettyprint lang-gf linenums maxheight scroll-y"></pre>
       </div>
-      <div id="help" class="panel help maxheight scroll-y">
+      <div id="help" class="panel help maxheight">
+      <div class="maxheight scroll-y">
 
         <h3>Understanding the scope information</h3>
         <p>The scope information shown by this tool is basically the output of running GF with the <code>--tags</code> flag. This lists all the functions visible in the scope of a module, one per line. Each line can have two possible forms:</p>
@@ -80,17 +81,18 @@
         <h3>Known issues and To-do</h3>
         <ul>
           <li>Some way of browsing just the API</li>
-          <li>Better visual cues for functions in scope</li>
           <li>The page sometimes stalls when handling large files (in particular the dictionary modules)</li>
         </ul>
+      </div>
       </div>
     </div>
     <br style="clear:both" />
   </div>
   <footer id="footer">
-  John J. Camilleri. <em>Updated 2012-05-16.</em>
+  John J. Camilleri. <em>Updated 2012-05-25.</em>
   </footer>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="jquery.history.min.js"></script>
   <script src="google-code-prettify/prettify.js"></script>
   <script src="google-code-prettify/lang-gf.js"></script>
   <script src="script.js"></script>
