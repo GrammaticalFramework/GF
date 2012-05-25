@@ -1798,6 +1798,9 @@ pgf_parser_bu_item(PgfConcr* concr, PgfItem* item,
 			gu_buf_push(prodbuf, PgfProduction, prod);
 			eps_ccat->n_synprods++;
 
+			if (eps_ccat->viterbi_prob > item->inside_prob)
+				eps_ccat->viterbi_prob = item->inside_prob;
+
 			if (tmp_ccat == NULL) {
 				size_t n_items = gu_buf_length(item->base->conts);
 				for (size_t i = 0; i < n_items; i++) {
