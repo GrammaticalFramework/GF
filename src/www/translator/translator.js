@@ -211,8 +211,8 @@ Translator.prototype.close=function(el) {
     hide_menu(el);
     this.browse();
 }
-
-Translator.prototype.import=function(el) {
+/*
+Translator.prototype.add_segment1=function(el) {
     hide_menu(el);
     var t=this
     function imp() {
@@ -224,6 +224,70 @@ Translator.prototype.import=function(el) {
     }
     setTimeout(imp,100)
 }
+*/
+Translator.prototype.add_segment=function(el) {
+    hide_menu(el);
+    var t=this
+    function imp() {
+	function restore() {
+	    t.redraw()
+	}
+	function done() {
+	    var text=inp.value
+	    if(text) t.document.segments.push(new_segment(text))
+	    restore()
+	    return false
+	}
+	var inp=node("input",{name:"it",value:""})
+	var e=wrap("form",[inp, submit(), button("Cancel",restore)])
+	var source=wrap_class("td","source",e)
+	var edit=wrap_class("tr","segment",source)
+
+	var ss=t.drawing.segments
+	var n=ss.length
+	if(n>0) insertAfter(edit,ss[n-1])
+	else t.view.appendChild(wrap_class("table","segments",edit))
+
+	e.onsubmit=done
+	inp.focus();
+    }
+    setTimeout(imp,100)
+}
+
+Translator.prototype.import=function(el) {
+    hide_menu(el);
+    var t=this
+    function imp() {
+	function restore() {
+	    t.redraw()
+	}
+	function done2() {
+	    var text=inp.value
+	    var ls=text.split("\n")
+	    var segs= paras.firstChild.checked ? join_paragraphs(ls) : ls
+	    for(var i in segs)
+		t.document.segments.push(new_segment(segs[i]))
+	    restore()
+	    return false
+	}
+	var inp=node("textarea",{name:"it",value:"",rows:"10"})
+	var lines=radiobutton("separator","lines",
+			      "Segments are separated by line breaks",null,true)
+	var paras=radiobutton("separator","paras",
+			      "Segments are separate by blank lines",null,false)
+	var e=node("form",{onsubmit:done2},
+		   [wrap("h3",text("Import text")),
+		    inp,
+		    wrap("dl",map(dt,[lines,paras])),
+		    submit(), button("Cancel",restore)])
+
+	t.view.appendChild(e)
+	e.onsubmit=done2
+	inp.focus();
+    }
+    setTimeout(imp,100)
+}
+
 Translator.prototype.remove=function(el) {
     hide_menu(el);
     var t=this
@@ -417,6 +481,17 @@ function mapix(f,xs) {
     var ys=[];
     for(var i in xs) ys.push(f(xs[i],i))
     return ys;
+}
+
+// Convert array of lines to array of paragraphs
+function join_paragraphs(lines) {
+    var paras=[]
+    var current="";
+    for(var i in lines)
+	if(lines[i]=="") paras.push(current),current=""
+	else current+=" "+lines[i]
+    if(current) paras.push(current)
+    return paras
 }
 
 /* --- DOM Support ---------------------------------------------------------- */
