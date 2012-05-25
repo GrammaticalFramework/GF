@@ -1,6 +1,8 @@
 body { margin: 5px; }
 h1 { float: right; margin: 0; font-size: 150%; }
 h2 { font-size: 120%; }
+h3 { font-size: 100%; }
+
 div.pagehead { font-family: sans-serif;
                background-color: #ccc;
 }
@@ -26,7 +28,7 @@ div.document {
     padding: 0.6ex;
 }
 
-div.document h2 { color: #009; }
+div.document h2, div.document h3 { color: #009; }
 
 table.segments { margin-left: auto; margin-right: auto; }
 tr.segment:hover { background: #ffc; }
@@ -46,9 +48,11 @@ td.options > div > dl {
     white-space: nowrap;
 }
 
-td.target input[name=it] {
+td.source input[name=it], td.target input[name=it], textarea {
     width: 100%; font-family: inherit; font-size: inherit;
 }
+
+div.document form { width: 100%; }
 
 span.arrow { color: blue; }
 span.error { color: red; }
