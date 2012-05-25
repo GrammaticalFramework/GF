@@ -11,6 +11,7 @@ concrete ParseEng of ParseEngAbs =
   AdverbEng,
   PhraseEng,
   SentenceEng,
+  QuestionEng,
   RelativeEng,
   IdiomEng [NP, VP, Tense, Cl, ProgrVP, ExistNP],
   ExtraEng [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
