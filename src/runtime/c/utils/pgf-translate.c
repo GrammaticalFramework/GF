@@ -170,7 +170,7 @@ int main(int argc, char* argv[]) {
 
 		// Begin parsing a sentence of the specified category
 		PgfParseState* state =
-			pgf_parser_init_state(from_concr, cat, 0, pool);
+			pgf_parser_init_state(from_concr, cat, 0, ppool);
 		if (state == NULL) {
 			fprintf(stderr, "Couldn't begin parsing\n");
 			status = EXIT_FAILURE;
@@ -178,13 +178,13 @@ int main(int argc, char* argv[]) {
 		}
 		
 		GuReader *rdr =
-			gu_string_reader(gu_str_string(line, pool), pool);
+			gu_string_reader(gu_str_string(line, ppool), ppool);
 		PgfLexer *lexer =
-			pgf_new_lexer(rdr, pool);
+			pgf_new_lexer(rdr, ppool);
 
 		// Tokenization
-		GuExn* lex_err = gu_new_exn(NULL, gu_kind(type), pool);
-		PgfToken tok = pgf_lexer_next_token(lexer, lex_err, pool);
+		GuExn* lex_err = gu_new_exn(NULL, gu_kind(type), ppool);
+		PgfToken tok = pgf_lexer_next_token(lexer, lex_err, ppool);
 		while (!gu_exn_is_raised(lex_err)) {
 			// feed the token to get a new parse state
 			state = pgf_parser_next_state(state, tok, ppool);
@@ -195,7 +195,7 @@ int main(int argc, char* argv[]) {
 				goto fail_parse;
 			}
 			
-			tok = pgf_lexer_next_token(lexer, lex_err, pool);
+			tok = pgf_lexer_next_token(lexer, lex_err, ppool);
 		}
 
 		// Now begin enumerating the resulting syntax trees
