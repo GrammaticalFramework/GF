@@ -11,6 +11,7 @@ import System
 -- AR 23/5/2012
 
 main = do
+  lexicon <- readFile "../../abstract/Lexicon.gf" >>= return . getLexicon
   freqs   <- readFile "taajuus.txt"  >>= return . getFreqMap
   morpho  <- readFile "../DictFin.gf"   >>= return . getMorphoMap
   transV  <- readFile "Ven_fi.txt"   >>= return . getTransDict "V" freqs morpho
@@ -18,7 +19,7 @@ main = do
   transA  <- readFile "Aen_fi.txt"   >>= return . getTransDict "A" freqs morpho
   transN  <- readFile "Nen_fi.txt"   >>= return . getTransDict "N" freqs morpho
   transAdv <- readFile "Adven_fi.txt"   >>= return . getTransDict "Adv" freqs morpho
-  let cnc = sort $ lmap mkLin $ transV ++ transV2 ++ transA ++ transN ++ transAdv
+  let cnc = sort $ lmap mkLin $ Data.List.filter (notLex lexicon) $ transV ++ transV2 ++ transA ++ transN ++ transAdv
   system $ "cp dictBegin dictEngFin"
   mapM_ (appendFile "dictEngFin") cnc
   system $ "cat dictEngFin dictEnd >DictEngFin.gf"
@@ -40,6 +41,18 @@ getFreq :: [String] -> (Word,(Rank,Cat))
 getFreq ws = case ws of
   n:a:r:w:c:_ -> (w,(read n,c))
 
+
+-- trusted lexicon overrides all other decisions
+getLexicon :: String -> MorphoMap
+getLexicon = fromList . concat . lmap (getLex . words) . lines where
+  getLex ws = case ws of
+    fun:":":cat:_ -> [(takeWhile (/='_') fun, (cat,fun))]
+    _ -> []
+
+notLex :: MorphoMap -> (Word,(Cat,[(Word,(Rank,Lin))])) -> Bool
+notLex morpho (word,(cat,_)) = case mlookup word morpho of
+  Just (c,l) -> False --- | c == cat -> False --- love_V2/love_N
+  _ -> True
 
 type MorphoMap = Map Word (Cat,Lin)
 
