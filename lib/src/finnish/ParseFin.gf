@@ -13,61 +13,63 @@ concrete ParseFin of ParseEngAbs =
   SentenceFin,
   RelativeFin,
   IdiomFin [NP, VP, Tense, Cl, ProgrVP, ExistNP],
-  ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash],
-  DictEngFin 
+  ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash]
+ , DictEngFin 
 ** 
-open MorphoFin, ResFin, ParadigmsFin, Prelude in {
+open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, Prelude in {
 
-flags literal=Symb ;
-{-
+flags literal=Symb ; coding = utf8 ;
+
 lin
-  myself_NP = regNP "myself" singular ;
-  yourselfSg_NP = regNP "yourself" singular ;
-  himself_NP = regNP "himself" singular ;
-  herself_NP = regNP "herself" singular ;
-  itself_NP = regNP "itself" singular ;
-  ourself_NP = regNP "ourself" plural ;
-  yourselfPl_NP = regNP "yourself" plural ;
-  themself_NP = regNP "themself" plural ;
-  themselves_NP = regNP "themselves" plural ;
+  myself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P1) ;
+  yourselfSg_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P2) ;
+  himself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3) ;
+  herself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3) ;
+  itself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3) ;
+  ourself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P1) ;
+  yourselfPl_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P2) ;
+  themself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P3) ;
+  themselves_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P3) ;
 
+{-
   CompoundCN num noun cn = {
     s = \\n,c => num.s ! Nom ++ noun.s ! num.n ! Nom ++ cn.s ! n ! c ;
     g = cn.g
   } ;
+
   
-  DashCN noun1 noun2 = {
+  DashCN noun1 noun2 = { -- type-checking
     s = \\n,c => noun1.s ! Sg ! Nom ++ "-" ++ noun2.s ! n ! c ;
     g = noun2.g
   } ;
 
-  GerundN v = {
+  GerundN v = { -- parsing
     s = \\n,c => v.s ! VPresPart ;
     g = Neutr
   } ;
   
-  GerundAP v = {
+  GerundAP v = {  -- beckoning
     s = \\agr => v.s ! VPresPart ;
     isPre = True
   } ;
 
-  PastPartAP v = {
+  PastPartAP v = {   -- broken
     s = \\agr => v.s ! VPPart ;
     isPre = True
   } ;
 
-  OrdCompar a = {s = \\c => a.s ! AAdj Compar c } ;
+  OrdCompar a = {s = \\c => a.s ! AAdj Compar c } ;  -- higher
 
-  PositAdVAdj a = {s = a.s ! AAdv} ;
+  PositAdVAdj a = {s = a.s ! AAdv} ;  -- really
 
-  UseQuantPN q pn = {s = \\c => q.s ! False ! Sg ++ pn.s ! npcase2case c ; a = agrgP3 Sg pn.g} ;
+  UseQuantPN q pn = {s = \\c => q.s ! False ! Sg ++ pn.s ! npcase2case c ; a = agrgP3 Sg pn.g} ;  -- this London
 
-  SlashV2V v p vp = insertObjc (\\a => p.s ++ case p.p of {CPos => ""; _ => "not"} ++ 
+  SlashV2V v p vp = insertObjc (\\a => p.s ++ case p.p of {CPos => ""; _ => "not"} ++  -- force not to sleep
                                        v.c3 ++ 
                                        infVP v.typ vp a)
                                (predVc v) ;
 
-  ComplPredVP np vp = {
+  ComplPredVP np vp = { -- ?
       s = \\t,a,b,o => 
         let 
           verb  = vp.s ! t ! a ! b ! o ! np.a ;
@@ -79,20 +81,12 @@ lin
           }
     } ;
 
-  that_RP = {
-    s = \\_ => "that" ;
-    a = RNoAg
-    } ;
-  no_RP = {
-    s = \\_ => "" ;
-    a = RNoAg
-    } ;
+  CompS s = {s = \\_ => "that" ++ s.s} ;  -- S -> Comp
+  CompVP vp = {s = \\a => infVP VVInf vp a} ; -- VP -> Comp
+-}
 
-  CompS s = {s = \\_ => "that" ++ s.s} ;
-  CompVP vp = {s = \\a => infVP VVInf vp a} ;
+  that_RP = which_RP ;
+  no_RP = which_RP ;
 
-lin
-  PPos = {s = [] ; p = CPos} ;
-  PNeg = {s = [] ; p = CNeg True} ; -- contracted: don't
--}    
+
 }
