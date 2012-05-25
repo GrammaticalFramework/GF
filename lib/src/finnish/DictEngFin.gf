@@ -1156,8 +1156,6 @@ flags coding=utf8 ;
 -- lin beauty_sleep_N = "+?" ; -- 40000 
 -- lin beauty_spot_N = "+?" ; -- 40000 
 -- lin becalmed_A = "rauhoittua" ; -- 20000 
--- lin become_V = "muuttua jksik" ; -- 30000 
--- lin become_V2 = "muuttua jksik" ; -- 30000 
 -- lin bedaubed_A = "liata" ; -- 20000 
 -- lin bedded_A = "kerrostunut" ; -- 20000 
 -- lin bedding_N = "majoittaa" ; -- 20000 
@@ -1427,7 +1425,6 @@ flags coding=utf8 ;
 -- lin blockade_runner_N = "saarronmurtaja" ; -- 20000 
 -- lin blockbuster_N = "jymymenestys" ; -- 20000 
 -- lin blockhead_N = "taulapää" ; -- 20000 
--- lin blood_V2 = "levittää verta iholle" ; -- 30000 
 -- lin blood_bath_N = "+?" ; -- 40000 
 -- lin blood_donor_N = "+?" ; -- 40000 
 -- lin blood_group_N = "+?" ; -- 40000 
@@ -1464,7 +1461,6 @@ flags coding=utf8 ;
 -- lin blowpipe_N = "puhallusputki" ; -- 20000 
 -- lin blowtorch_N = "puhalluslamppu" ; -- 20000 
 -- lin blowzy_A = "homssuinen" ; -- 20000 
--- lin blue_V2 = "muuttua siniseksi" ; -- 30000 
 -- lin blue_collar_A = "tehdas-" ; -- 20000 
 -- lin blue_jacket_N = "+?" ; -- 40000 
 -- lin blue_pencil_V2 = "käyttää punakynää" ; -- 30000 
@@ -1491,7 +1487,6 @@ flags coding=utf8 ;
 -- lin boardwalk_N = "kävelytie" ; -- 20000 
 -- lin boaster_N = "rehentelijä" ; -- 20000 
 -- lin boastful_A = "kehuskeleva" ; -- 20000 
--- lin boat_V = "veneillä" ; -- 40000 
 -- lin boat_hook_N = "+?" ; -- 40000 
 -- lin boat_house_N = "+?" ; -- 40000 
 -- lin boat_race_N = "kilpasoutaa" ; -- 20000 
@@ -1543,7 +1538,6 @@ flags coding=utf8 ;
 -- lin bonafide_A = "+?" ; -- 40000 
 -- lin bonafide_Adv = "+?" ; -- 40000 
 -- lin bond_holder_N = "+?" ; -- 40000 
--- lin bone_V2 = "poistaa luut" ; -- 30000 
 -- lin bone_dry_A = "rutikuiva" ; -- 20000 
 -- lin bone_head_N = "+?" ; -- 40000 
 -- lin bone_idle_A = "umpilaiska" ; -- 20000 
@@ -3256,7 +3250,6 @@ flags coding=utf8 ;
 -- lin covering_A = "taivaltaa" ; -- 20000 
 -- lin coverlet_N = "päiväpeite" ; -- 20000 
 -- lin covert_N = "piilopaikka" ; -- 20000 
--- lin cow_V2 = "pitää pelon vallassa" ; -- 30000 
 -- lin cowardly_A = "raukkamainen" ; -- 20000 
 -- lin cowbell_N = "lehmänkello" ; -- 20000 
 -- lin cowcatcher_N = "karja-aura" ; -- 20000 
@@ -4161,7 +4154,6 @@ flags coding=utf8 ;
 -- lin dissuade_V2 = "saada luopumaan" ; -- 30000 
 -- lin dissyllable_N = "kaksitavuinen sana" ; -- 30000 
 -- lin distaff_N = "kehrävarsi" ; -- 20000 
--- lin distance_V2 = "jonkin ajan kuluttua" ; -- 30000 
 -- lin distaste_N = "vastenmielisyys" ; -- 20000 
 -- lin distasteful_A = "tympäisevä" ; -- 20000 
 -- lin distastefulness_N = "epämiellyttävyys" ; -- 20000 
@@ -4213,7 +4205,6 @@ flags coding=utf8 ;
 -- lin djinn_N = "djinny" ; -- 20000 
 -- lin dlitt_N = "+?" ; -- 40000 
 -- lin dm_N = "dm" ; -- 20000 
--- lin do_N = "menestyä" ; -- 20000 
 -- lin do_gooder_N = "hyväntekijä" ; -- 20000 
 -- lin dobbin_N = "työhevonen" ; -- 20000 
 -- lin docile_A = "mukautuva" ; -- 20000 
@@ -4621,7 +4612,6 @@ flags coding=utf8 ;
 -- lin egalitarian_A = "tasa-arvoinen" ; -- 20000 
 -- lin egalitarian_N = "tasa-arvoinen" ; -- 20000 
 -- lin egalitarianism_N = "egalitarismi" ; -- 20000 
--- lin egg_V2 = "heitellä munilla" ; -- 30000 
 -- lin egg_beater_N = "+?" ; -- 40000 
 -- lin egg_cup_N = "+?" ; -- 40000 
 -- lin egg_whisk_N = "+?" ; -- 40000 
@@ -4726,7 +4716,6 @@ flags coding=utf8 ;
 -- lin emplane_V = "nousta lentokoneeseen" ; -- 30000 
 -- lin emplane_V2 = "nousta lentokoneeseen" ; -- 30000 
 -- lin employable_A = "työllistettävä" ; -- 20000 
--- lin empty_N = "nälkäinen" ; -- 20000 
 -- lin empty_handed_A = "tyhjäkätinen" ; -- 20000 
 -- lin empty_headed_A = "ajattelematon" ; -- 20000 
 -- lin empurpled_A = "purppuroida" ; -- 20000 
@@ -5121,7 +5110,6 @@ flags coding=utf8 ;
 -- lin fanlight_N = "ovi-ikkuna" ; -- 20000 
 -- lin fantan_N = "fan-tan" ; -- 20000 
 -- lin fao_N = "+?" ; -- 40000 
--- lin far_V2 = "näin kauas" ; -- 30000 
 -- lin far_famed_A = "maankuulu" ; -- 20000 
 -- lin far_fetched_A = "+?" ; -- 40000 
 -- lin far_reaching_A = "+?" ; -- 40000 
@@ -5142,7 +5130,6 @@ flags coding=utf8 ;
 -- lin fascist_A = "fasistinen" ; -- 20000 
 -- lin fatality_N = "hengenvaarallisuus" ; -- 20000 
 -- lin fate_V2 = "olla kohtalon määräämä" ; -- 30000 
--- lin father_V2 = "johtomies" ; -- 40000 
 -- lin fatherless_A = "isätön" ; -- 20000 
 -- lin fatherly_A = "isällinen" ; -- 20000 
 -- lin fathomless_A = "+?" ; -- 40000 
@@ -5164,7 +5151,6 @@ flags coding=utf8 ;
 -- lin feasible_A = "toteutettavissa oleva" ; -- 30000 
 -- lin feast_day_N = "+?" ; -- 40000 
 -- lin feat_N = "urotyö" ; -- 20000 
--- lin feather_N = "höyhen" ; -- 20000 
 -- lin feather_boa_N = "+?" ; -- 40000 
 -- lin featherbed_N = "lelliä" ; -- 20000 
 -- lin featherbed_V2 = "palkata liikaa työntekijöitä" ; -- 30000 
@@ -5276,7 +5262,6 @@ flags coding=utf8 ;
 -- lin finger_plate_N = "+?" ; -- 40000 
 -- lin finger_post_N = "+?" ; -- 40000 
 -- lin fingermark_N = "sormenjälki" ; -- 20000 
--- lin fingernail_N = "sormenkynsi" ; -- 20000 
 -- lin fingerprint_N = "sormenjälki" ; -- 20000 
 -- lin fingerstall_N = "sormituppi" ; -- 20000 
 -- lin fingertip_N = "sormenpää" ; -- 20000 
@@ -5479,7 +5464,6 @@ flags coding=utf8 ;
 -- lin focal_A = "fokaali-" ; -- 20000 
 -- lin foetal_A = "sikiö-" ; -- 20000 
 -- lin foetus_N = "sikiö" ; -- 20000 
--- lin fog_V2 = "verhota sumuun" ; -- 30000 
 -- lin fogbank_N = "sumuseinämä" ; -- 20000 
 -- lin fogbound_A = "sumun peittämä" ; -- 30000 
 -- lin foggy_A = "huuruinen" ; -- 20000 
@@ -5564,7 +5548,6 @@ flags coding=utf8 ;
 -- lin foreshadow_V2 = "antaa aavistaa" ; -- 30000 
 -- lin foreshore_N = "vuorovesijättömaa" ; -- 20000 
 -- lin foreskin_N = "esinahka" ; -- 20000 
--- lin forest_N = "etu-" ; -- 20000 
 -- lin forester_N = "metsänhoitaja" ; -- 20000 
 -- lin forestry_N = "metsänhoitotiede" ; -- 20000 
 -- lin foretaste_N = "esimaku" ; -- 20000 
@@ -5749,7 +5732,6 @@ flags coding=utf8 ;
 -- lin fructification_N = "hedelmöintiosat" ; -- 20000 
 -- lin fructify_V = "saada kantamaan hedelmää" ; -- 30000 
 -- lin fructify_V2 = "saada kantamaan hedelmää" ; -- 30000 
--- lin fruit_V = "saada tuottamaan hedelmää" ; -- 30000 
 -- lin fruit_fly_N = "+?" ; -- 40000 
 -- lin fruitcake_N = "hedelmäkakku" ; -- 20000 
 -- lin fruiterer_N = "hedelmäkauppias" ; -- 20000 
@@ -5878,7 +5860,6 @@ flags coding=utf8 ;
 -- lin garage_V2 = "pitää autotallissa" ; -- 30000 
 -- lin garbage_can_N = "+?" ; -- 40000 
 -- lin garble_V2 = "vääristellä" ; -- 40000 
--- lin garden_V = "puutarhan ja kasvimaan kasvit" ; -- 30000 
 -- lin garden_truck_N = "+?" ; -- 40000 
 -- lin gardener_N = "puutarhuri" ; -- 20000 
 -- lin gardening_N = "puutarhanhoito" ; -- 20000 
@@ -6137,7 +6118,6 @@ flags coding=utf8 ;
 -- lin goggle_box_N = "+?" ; -- 40000 
 -- lin goggle_eyed_A = "silmät pullollaan" ; -- 30000 
 -- lin going_A = "olla" ; -- 20000 
--- lin gold_N = "kulta-" ; -- 20000 
 -- lin gold_beater_N = "+?" ; -- 40000 
 -- lin gold_digger_N = "+?" ; -- 40000 
 -- lin gold_dust_N = "+?" ; -- 40000 
@@ -6194,7 +6174,6 @@ flags coding=utf8 ;
 -- lin gradient_N = "gradientti" ; -- 20000 
 -- lin grail_N = "Graalin malja" ; -- 30000 
 -- lin grained_A = "ootrata" ; -- 20000 
--- lin grammar_N = "kielioppi" ; -- 20000 
 -- lin grammarian_N = "kieliopin tutkija" ; -- 30000 
 -- lin grammatical_A = "oikeakielinen" ; -- 20000 
 -- lin grampus_N = "isodelfiini" ; -- 20000 
@@ -6914,7 +6893,6 @@ flags coding=utf8 ;
 -- lin hopscotch_N = "ruutuhyppely" ; -- 20000 
 -- lin hopscotch_V = "ruutuhyppely" ; -- 40000 
 -- lin horizontal_A = "vaakasuora" ; -- 20000 
--- lin horn_V = "puskea sarvella" ; -- 30000 
 -- lin horn_rimmed_A = "sarvisankainen" ; -- 20000 
 -- lin hornbeam_N = "valkopyökki" ; -- 20000 
 -- lin hornbill_N = "sarvinokka" ; -- 20000 
@@ -6959,8 +6937,6 @@ flags coding=utf8 ;
 -- lin hostel_N = "retkeilymaja" ; -- 20000 
 -- lin hostile_A = "vihamielinen" ; -- 20000 
 -- lin hostility_N = "vihamielisyys" ; -- 20000 
--- lin hot_V = "lähellä oleva" ; -- 30000 
--- lin hot_V2 = "lähellä oleva" ; -- 30000 
 -- lin hot_blooded_A = "kuumaverinen" ; -- 20000 
 -- lin hot_headed_A = "+?" ; -- 40000 
 -- lin hot_tempered_A = "kipakka" ; -- 20000 
@@ -7062,7 +7038,6 @@ flags coding=utf8 ;
 -- lin hurl_N = "laukoa" ; -- 20000 
 -- lin hurling_N = "laukoa" ; -- 20000 
 -- lin hurly_burly_N = "+?" ; -- 40000 
--- lin husband_V2 = "hoitaa säästäväisesti" ; -- 30000 
 -- lin hush_money_N = "+?" ; -- 40000 
 -- lin huskily_Adv = "käheä-äänisesti" ; -- 20000 
 -- lin hussar_N = "husaari" ; -- 20000 
@@ -7772,8 +7747,6 @@ flags coding=utf8 ;
 -- lin irishman_N = "+?" ; -- 40000 
 -- lin irishwoman_N = "+?" ; -- 40000 
 -- lin irksome_A = "ärsyttävä" ; -- 20000 
--- lin iron_V = "rautainen" ; -- 40000 
--- lin iron_V2 = "rautainen" ; -- 40000 
 -- lin iron_foundry_N = "+?" ; -- 40000 
 -- lin iron_grey_A = "raudanharmaa" ; -- 20000 
 -- lin iron_grey_N = "raudanharmaa" ; -- 20000 
@@ -8115,7 +8088,6 @@ flags coding=utf8 ;
 -- lin knockout_N = "tyrmäävä" ; -- 20000 
 -- lin knothole_N = "oksanreikä" ; -- 20000 
 -- lin knotty_A = "visainen" ; -- 20000 
--- lin know_N = "osata" ; -- 20000 
 -- lin knowledgeable_A = "tietäväinen" ; -- 20000 
 -- lin ko_N = "+?" ; -- 40000 
 -- lin kobo_N = "kobo" ; -- 20000 
@@ -8176,7 +8148,6 @@ flags coding=utf8 ;
 -- lin laird_N = "kartanonherra" ; -- 20000 
 -- lin laissez_faire_N = "salliva" ; -- 20000 
 -- lin laity_N = "maallikot" ; -- 20000 
--- lin lake_N = "substraattipigmentti" ; -- 20000 
 -- lin lakh_N = "satatuhatta" ; -- 20000 
 -- lin lambent_A = "kimalteleva" ; -- 20000 
 -- lin lambkin_N = "nuori karitsa" ; -- 30000 
@@ -8548,7 +8519,6 @@ flags coding=utf8 ;
 -- lin littoral_A = "ranta-" ; -- 20000 
 -- lin liturgical_A = "liturginen" ; -- 20000 
 -- lin livable_A = "asuttava" ; -- 20000 
--- lin live_Adv = "suorana" ; -- 20000 
 -- lin live_birth_N = "+?" ; -- 40000 
 -- lin liveable_A = "asuttava" ; -- 20000 
 -- lin livelong_A = "kallioperuna" ; -- 20000 
@@ -8623,7 +8593,6 @@ flags coding=utf8 ;
 -- lin loincloth_N = "lannevaate" ; -- 20000 
 -- lin loiterer_N = "vetelehtijä" ; -- 20000 
 -- lin londoner_N = "+?" ; -- 40000 
--- lin long_N = "runsaasti" ; -- 20000 
 -- lin long_distance_A = "kauko-" ; -- 20000 
 -- lin long_drawn_out_A = "+?" ; -- 40000 
 -- lin long_haired_A = "pitkähiuksinen" ; -- 20000 
@@ -8971,7 +8940,6 @@ flags coding=utf8 ;
 -- lin marquetry_N = "koristeupotus" ; -- 20000 
 -- lin marriageability_N = "naimakelpoisuus" ; -- 20000 
 -- lin marriageable_A = "naimaikäinen" ; -- 20000 
--- lin married_A = "avio-" ; -- 20000 
 -- lin marrowbone_N = "ydinluu" ; -- 20000 
 -- lin marsala_N = "+?" ; -- 40000 
 -- lin marseillaise_N = "+?" ; -- 40000 
@@ -9262,8 +9230,6 @@ flags coding=utf8 ;
 -- lin military_A = "sota-" ; -- 20000 
 -- lin military_N = "sota-" ; -- 20000 
 -- lin militate_V = "olla haitaksi jllek" ; -- 30000 
--- lin milk_V = "lisätä maitoa" ; -- 30000 
--- lin milk_V2 = "lisätä maitoa" ; -- 30000 
 -- lin milk_churn_N = "+?" ; -- 40000 
 -- lin milk_powder_N = "+?" ; -- 40000 
 -- lin milk_shake_N = "+?" ; -- 40000 
@@ -9629,7 +9595,6 @@ flags coding=utf8 ;
 -- lin moult_N = "nahanluonti" ; -- 20000 
 -- lin moult_V = "luoda nahka" ; -- 30000 
 -- lin moult_V2 = "luoda nahka" ; -- 30000 
--- lin mountain_N = "vuori" ; -- 20000 
 -- lin mountaineer_N = "vuorikiipeillä" ; -- 20000 
 -- lin mountaineering_N = "vuoristokiipeily" ; -- 20000 
 -- lin mountainous_A = "vuoristoinen" ; -- 20000 
@@ -9819,7 +9784,6 @@ flags coding=utf8 ;
 -- lin neap_tide_N = "+?" ; -- 40000 
 -- lin neapolitan_A = "+?" ; -- 40000 
 -- lin neapolitan_N = "+?" ; -- 40000 
--- lin near_A = "lähi-" ; -- 20000 
 -- lin near_sighted_A = "+?" ; -- 40000 
 -- lin nearby_A = "läheinen" ; -- 20000 
 -- lin nearer_Adv = "lähi-" ; -- 20000 
@@ -9882,7 +9846,6 @@ flags coding=utf8 ;
 -- lin neurotically_Adv = "neuroottisesti" ; -- 20000 
 -- lin neuter_A = "neutrisukuinen" ; -- 20000 
 -- lin nevermore_Adv = "ei enää ikinä" ; -- 30000 
--- lin new_Adv = "uusi" ; -- 20000 
 -- lin newcomer_N = "vastatullut" ; -- 20000 
 -- lin newel_N = "kaidepylväs" ; -- 20000 
 -- lin newfangled_A = "uudenaikainen" ; -- 20000 
@@ -10261,7 +10224,6 @@ flags coding=utf8 ;
 -- lin ogle_V2 = "töllistellä" ; -- 40000 
 -- lin ogreish_A = "+?" ; -- 40000 
 -- lin ogress_N = "syöjätär" ; -- 20000 
--- lin oil_V2 = "öljytä" ; -- 40000 
 -- lin oil_bearing_A = "öljypitoinen" ; -- 20000 
 -- lin oil_burner_N = "+?" ; -- 40000 
 -- lin oil_cake_N = "+?" ; -- 40000 
@@ -11976,7 +11938,6 @@ flags coding=utf8 ;
 -- lin prize_ring_N = "+?" ; -- 40000 
 -- lin pro_N = "ammattilaisurheilija" ; -- 20000 
 -- lin probabilistically_Adv = "probabilistisesti" ; -- 20000 
--- lin probable_N = "todennäköinen" ; -- 20000 
 -- lin problematically_Adv = "ongelmallisesti" ; -- 20000 
 -- lin process_server_N = "haastemies" ; -- 20000 
 -- lin processional_A = "kulkuemusiikki" ; -- 20000 
@@ -12275,7 +12236,6 @@ flags coding=utf8 ;
 -- lin quay_N = "satamalaituri" ; -- 20000 
 -- lin queasily_Adv = "huonovointisesti" ; -- 20000 
 -- lin queasy_A = "huolestunut" ; -- 20000 
--- lin queen_V2 = "tulla kuningattareksi" ; -- 30000 
 -- lin queenly_A = "kuningatarmainen" ; -- 20000 
 -- lin quenchless_A = "sammumaton" ; -- 20000 
 -- lin quern_N = "jauhinkivet" ; -- 20000 
@@ -13343,7 +13303,6 @@ flags coding=utf8 ;
 -- lin sallow_A = "paju" ; -- 20000 
 -- lin sally_V = "nokkela vastaus" ; -- 30000 
 -- lin salsify_N = "kaurajuuri" ; -- 20000 
--- lin salt_A = "höystää" ; -- 20000 
 -- lin salt_cellar_N = "+?" ; -- 40000 
 -- lin salt_lick_N = "+?" ; -- 40000 
 -- lin saltpan_N = "suolakuoppa" ; -- 20000 
@@ -13693,7 +13652,6 @@ flags coding=utf8 ;
 -- lin seduce_V2 = "vietellä" ; -- 40000 
 -- lin seducer_N = "viettelijä" ; -- 20000 
 -- lin seductive_A = "viettelevä" ; -- 20000 
--- lin see_N = "piispanistuin" ; -- 20000 
 -- lin see_through_A = "läpikuultava" ; -- 20000 
 -- lin seed_corn_N = "+?" ; -- 40000 
 -- lin seedbed_N = "kylvöalusta" ; -- 20000 
@@ -14011,7 +13969,6 @@ flags coding=utf8 ;
 -- lin shocking_A = "röyhkeä" ; -- 20000 
 -- lin shoddiness_N = "halpa-arvoisuus" ; -- 20000 
 -- lin shoddy_N = "petollinen" ; -- 20000 
--- lin shoe_V2 = "olla jalassa" ; -- 30000 
 -- lin shoe_leather_N = "+?" ; -- 40000 
 -- lin shoeblack_N = "kengänkiillottaja" ; -- 20000 
 -- lin shoehorn_N = "kenkälusikka" ; -- 20000 
@@ -14441,7 +14398,6 @@ flags coding=utf8 ;
 -- lin smoking_mixture_N = "+?" ; -- 40000 
 -- lin smoking_room_N = "+?" ; -- 40000 
 -- lin smoky_A = "savuinen" ; -- 20000 
--- lin smooth_N = "pehmeä" ; -- 20000 
 -- lin smooth_bore_A = "+?" ; -- 40000 
 -- lin smooth_faced_A = "siloposkinen" ; -- 20000 
 -- lin smooth_spoken_A = "miellyttävästi puhuva" ; -- 30000 
@@ -14533,7 +14489,6 @@ flags coding=utf8 ;
 -- lin social_work_N = "+?" ; -- 40000 
 -- lin socialite_N = "silmäätekevä" ; -- 20000 
 -- lin sociological_A = "sosiologinen" ; -- 20000 
--- lin sock_Adv = "täräyttää" ; -- 20000 
 -- lin socratic_A = "+?" ; -- 40000 
 -- lin sod_V = "peittää turpeella" ; -- 30000 
 -- lin soda_biscuit_N = "+?" ; -- 40000 
@@ -14922,9 +14877,6 @@ flags coding=utf8 ;
 -- lin stanza_N = "stanza" ; -- 20000 
 -- lin stapler_N = "pää-" ; -- 20000 
 -- lin stapling_machine_N = "+?" ; -- 40000 
--- lin star_N = "tähdittää" ; -- 20000 
--- lin star_V = "merkitä asteriskilla" ; -- 30000 
--- lin star_V2 = "merkitä asteriskilla" ; -- 30000 
 -- lin starch_N = "tärkkelys" ; -- 20000 
 -- lin starch_V2 = "tärkkelys" ; -- 40000 
 -- lin stardom_N = "tähteys" ; -- 20000 
@@ -15073,7 +15025,6 @@ flags coding=utf8 ;
 -- lin stomach_ache_N = "+?" ; -- 40000 
 -- lin stomach_pump_N = "+?" ; -- 40000 
 -- lin stomp_N = "tallustaa" ; -- 20000 
--- lin stone_V2 = "poistaa kivet" ; -- 30000 
 -- lin stone_blind_A = "umpisokea" ; -- 20000 
 -- lin stone_cold_A = "jääkylmä" ; -- 20000 
 -- lin stone_dead_A = "kuollut kuin kivi" ; -- 30000 
@@ -15172,7 +15123,6 @@ flags coding=utf8 ;
 -- lin stumbling_block_N = "+?" ; -- 40000 
 -- lin stumper_N = "hankala kysymys" ; -- 30000 
 -- lin stumpy_A = "tanakka" ; -- 20000 
--- lin stupid_N = "tyhmä" ; -- 20000 
 -- lin stupify_V2 = "+?" ; -- 40000 
 -- lin stupifying_A = "+?" ; -- 40000 
 -- lin sturdily_Adv = "päättäväisesti" ; -- 20000 
@@ -15254,7 +15204,6 @@ flags coding=utf8 ;
 -- lin succubus_N = "naispaholainen" ; -- 20000 
 -- lin succulent_A = "mehikasvi" ; -- 20000 
 -- lin succulent_N = "mehikasvi" ; -- 20000 
--- lin suck_N = "imeä" ; -- 20000 
 -- lin sucking_pig_N = "+?" ; -- 40000 
 -- lin sudanese_A = "+?" ; -- 40000 
 -- lin sudanese_N = "+?" ; -- 40000 
@@ -15301,7 +15250,6 @@ flags coding=utf8 ;
 -- lin sumpter_N = "kuormajuhta" ; -- 20000 
 -- lin sumptuary_A = "kulutusta säätelevä" ; -- 30000 
 -- lin sumptuous_A = "tuhlaileva" ; -- 20000 
--- lin sun_V2 = "ottaa aurinkoa" ; -- 30000 
 -- lin sun_drenched_A = "paahteinen" ; -- 20000 
 -- lin sun_dried_A = "aurinkokuivattu" ; -- 20000 
 -- lin sun_god_N = "+?" ; -- 40000 
@@ -15555,8 +15503,6 @@ flags coding=utf8 ;
 -- lin taffrail_N = "peräparras" ; -- 20000 
 -- lin tahitian_A = "+?" ; -- 40000 
 -- lin tahitian_N = "+?" ; -- 40000 
--- lin tail_V = "poistaa kanta" ; -- 30000 
--- lin tail_V2 = "poistaa kanta" ; -- 30000 
 -- lin tail_coat_N = "+?" ; -- 40000 
 -- lin tail_end_N = "+?" ; -- 40000 
 -- lin tail_light_N = "+?" ; -- 40000 
@@ -15881,14 +15827,12 @@ flags coding=utf8 ;
 -- lin thermostatic_A = "termostaattinen" ; -- 20000 
 -- lin thermostatically_Adv = "termostaattisesti" ; -- 20000 
 -- lin thesaurus_N = "synonyymisanakirja" ; -- 20000 
--- lin thick_Adv = "peräjälkeen" ; -- 20000 
 -- lin thick_headed_A = "+?" ; -- 40000 
 -- lin thick_set_A = "+?" ; -- 40000 
 -- lin thick_skinned_A = "paksunahkainen" ; -- 20000 
 -- lin thicket_N = "tiheikkö" ; -- 20000 
 -- lin thievish_A = "varasteleva" ; -- 20000 
 -- lin thighbone_N = "reisiluu" ; -- 20000 
--- lin thin_Adv = "laimentaa" ; -- 20000 
 -- lin thin_skinned_A = "herkkänahkainen" ; -- 20000 
 -- lin thine_A = "+?" ; -- 40000 
 -- lin thingumajig_N = "vekotin" ; -- 20000 
@@ -17672,7 +17616,6 @@ flags coding=utf8 ;
 -- lin westward_A = "länteen päin menevä" ; -- 30000 
 -- lin westward_Adv = "länteen päin menevä" ; -- 30000 
 -- lin westwards_Adv = "länteen" ; -- 20000 
--- lin wet_N = "kastella" ; -- 20000 
 -- lin wet_nurse_N = "imettää" ; -- 20000 
 -- lin whack_V2 = "mäjähdys" ; -- 40000 
 -- lin whacked_A = "mäjäyttää" ; -- 20000 
@@ -17821,7 +17764,6 @@ flags coding=utf8 ;
 -- lin windswept_A = "tuulinen" ; -- 20000 
 -- lin windward_A = "tuulenpuoleinen" ; -- 20000 
 -- lin windward_N = "tuulenpuoleinen" ; -- 20000 
--- lin wine_V2 = "juoda viiniä" ; -- 30000 
 -- lin wineglass_N = "viinilasi" ; -- 20000 
 -- lin winepress_N = "rypäleenpuserrin" ; -- 20000 
 -- lin wineskin_N = "viinileili" ; -- 20000 
@@ -17836,7 +17778,6 @@ flags coding=utf8 ;
 -- lin winning_post_N = "+?" ; -- 40000 
 -- lin winsomeness_N = "hurmaavuus" ; -- 20000 
 -- lin winter_V = "viettää talvi" ; -- 30000 
--- lin wipe_N = "pyyhkiä" ; -- 20000 
 -- lin wiper_N = "kosketusvarsi" ; -- 20000 
 -- lin wire_N = "maaliviiva" ; -- 20000 
 -- lin wire_haired_A = "karkeakarvainen" ; -- 20000 
@@ -18285,8 +18226,6 @@ lin adaptable_A = mkA (lin AK {s = d10 "joustava"}) ; -- 10000
 lin adaptation_N = mkN (lin NK {s = d39 "sovitus"}) ; -- 5913 
 lin adapter_N = mkN (lin NK {s = d33A "sovitin"}) ; -- 10000 
 lin adaptor_N = mkN (lin NK {s = d33A "sovitin"}) ; -- 10000 
-lin add_V = mkV "lisätä" ; -- 247 
-lin add_V2 = mkV2 "lisätä" ; -- 247 
 lin addendum_N = mkN (lin NK {s = d48A "liite"}) ; -- 10000 
 lin adder_N = mkN (lin NK {s = d33 "laskin"}) ; -- 10000 
 lin addict_N = mkN (lin NK {s = d05 "addikti"}) ; -- 10000 
@@ -18527,7 +18466,6 @@ lin airframe_N = mkN (lin NK {s = d01A "runko"}) ; -- 4248
 lin airing_N = mkN "kävely" ; -- 4987 
 lin airline_N = mkN "lentoyhtiö" ; -- 4880 
 lin airman_N = mkN "lentäjä" ; -- 3420 
-lin airplane_N = mkN "lentokone" ; -- 2554 
 lin airport_N = mkN "lentokenttä" ; -- 2060 
 lin airscrew_N = mkN (lin NK {s = d06 "potkuri"}) ; -- 10000 
 lin airway_N = mkN "lentoyhtiö" ; -- 4880 
@@ -18622,7 +18560,6 @@ lin alp_N = mkN (lin NK {s = d05A "alppi"}) ; -- 10000
 lin alpha_N = mkN (lin NK {s = d01A "alku"}) ; -- 122 
 lin alphabet_N = mkN (lin NK {s = d02 "aakkosto"}) ; -- 10000 
 lin alphabetical_A = mkA (lin AK {s = d38 "aakkosellinen"}) ; -- 10000 
-lin already_Adv = mkAdv (lin AdvK {s = c99 "jo"}) ; -- 10000 
 lin alright_Adv = mkAdv "varmasti" ; -- 587 
 lin alsatian_N = mkN (lin NK {s = d01 "saku"}) ; -- 10000 
 lin also_ran_N = mkN "häviäjä" ; -- 7431 
@@ -18766,7 +18703,6 @@ lin angularity_N = mkN (lin NK {s = d40 "kulmikkuus"}) ; -- 10000
 lin aniline_N = mkN (lin NK {s = d05 "aniliini"}) ; -- 10000 
 lin animadversion_N = mkN (lin NK {s = d05A "kritisointi"}) ; -- 10000 
 lin animadvert_V = mkV (lin VK {s = c67 "arvostella"}) ; -- 1392 
-lin animal_N = mkN "eläin" ; -- 1003 
 lin animate_V2 = mkV2 (lin VK {s = c53 "elollistaa"}) ; -- 10000 
 lin animation_N = mkN (lin NK {s = d40 "vilkkaus"}) ; -- 10000 
 lin animism_N = mkN (lin NK {s = d03 "personifikaatio"}) ; -- 10000 
@@ -18801,9 +18737,6 @@ lin anon_Adv = mkAdv (lin AdvK {s = c99 "pian"}) ; -- 774
 lin anonymity_N = mkN (lin NK {s = d05A "anonymiteetti"}) ; -- 10000 
 lin anonymous_A = mkA (lin AK {s = d38 "tavallinen"}) ; -- 539 
 lin anorak_N = mkN (lin NK {s = d05A "anorakki"}) ; -- 10000 
-lin answer_N = mkN (lin NK {s = d39 "vastaus"}) ; -- 958 
-lin answer_V = mkV (lin VK {s = c73 "vastata"}) ; -- 212 
-lin answer_V2 = mkV2 (lin VK {s = c73 "vastata"}) ; -- 212 
 lin answerable_A = mkA (lin AK {s = d38 "vastuullinen"}) ; -- 5323 
 lin ant_N = mkN (lin NK {s = d38 "muurahainen"}) ; -- 10000 
 lin antagonism_N = mkN (lin NK {s = d40 "vastakkaisuus"}) ; -- 10000 
@@ -18853,7 +18786,6 @@ lin apace_Adv = mkAdv "nopeasti" ; -- 449
 lin apache_N = mkN (lin NK {s = d05 "apassi"}) ; -- 10000 
 lin apart_Adv = mkAdv (lin AdvK {s = c99 "erikseen"}) ; -- 2247 
 lin apartheid_N = mkN (lin NK {s = d05 "apartheid"}) ; -- 10000 
-lin apartment_N = mkN (lin NK {s = d02 "huoneisto"}) ; -- 5035 
 lin apathetic_A = mkA (lin AK {s = d38 "apaattinen"}) ; -- 10000 
 lin apathy_N = mkN (lin NK {s = d12 "apatia"}) ; -- 10000 
 lin ape_N = mkN (lin NK {s = d12 "apina"}) ; -- 9970 
@@ -18896,7 +18828,6 @@ lin appetite_N = mkN (lin NK {s = d01 "halu"}) ; -- 1414
 lin appetizing_A = mkA (lin AK {s = d38 "herkullinen"}) ; -- 6263 
 lin applaud_V = mkV "hyväksyä" ; -- 290 
 lin applaud_V2 = mkV2 "hyväksyä" ; -- 290 
-lin apple_N = mkN (lin NK {s = d11 "omena"}) ; -- 6087 
 lin appliance_N = mkN (lin NK {s = d48 "kone"}) ; -- 524 
 lin applicability_N = mkN (lin NK {s = d40 "soveltuvuus"}) ; -- 10000 
 lin applicant_N = mkN (lin NK {s = d12 "hakija"}) ; -- 1873 
@@ -19030,7 +18961,6 @@ lin arrowroot_N = mkN (lin NK {s = d26 "nuolijuuri"}) ; -- 10000
 lin arse_N = mkN (lin NK {s = d48 "perse"}) ; -- 10000 
 lin arsenal_N = mkN (lin NK {s = d39 "aseistus"}) ; -- 10000 
 lin arsenic_N = mkN (lin NK {s = d05A "arsenikki"}) ; -- 10000 
-lin art_N = mkN (lin NK {s = d48A "taide"}) ; -- 898 
 lin artefact_N = mkN (lin NK {s = d05 "artefakti"}) ; -- 10000 
 lin artery_N = mkN (lin NK {s = d02 "valtimo"}) ; -- 10000 
 lin artful_A = mkA (lin AK {s = d41A "viekas"}) ; -- 10000 
@@ -19067,8 +18997,6 @@ lin ash_N = mkN (lin NK {s = d10 "tuhka"}) ; -- 9192
 lin ashamed_A = mkA (lin AK {s = d01 "nolo"}) ; -- 10000 
 lin ashore_Adv = mkAdv (lin AdvK {s = c99 "maissa"}) ; -- 10000 
 lin aside_Adv = mkAdv (lin AdvK {s = c99 "talteen"}) ; -- 5145 
-lin ask_V = mkV (lin VK {s = c61A "vaatia"}) ; -- 135 
-lin ask_V2 = mkV2 (lin VK {s = c61A "vaatia"}) ; -- 135 
 lin askew_A = mkA (lin AK {s = d01 "vino"}) ; -- 10000 
 lin askew_Adv = mkAdv (lin AdvK {s = c99 "vinossa"}) ; -- 10000 
 lin asking_N = mkN "pyyntö" ; -- 3284 
@@ -19337,18 +19265,12 @@ lin babel_N = mkN (lin NK {s = d12 "kakofonia"}) ; -- 10000
 lin baboo_N = mkN (lin NK {s = d09 "herra"}) ; -- 10000 
 lin baboon_N = mkN (lin NK {s = d05 "paviaani"}) ; -- 10000 
 lin babu_N = mkN (lin NK {s = d09 "herra"}) ; -- 10000 
-lin baby_N = mkN (lin NK {s = d09 "vauva"}) ; -- 2914 
-lin baby_V2 = mkV2 (lin VK {s = c73 "hoivata"}) ; -- 10000 
 lin babyish_A = mkA (lin AK {s = d38 "lapsellinen"}) ; -- 10000 
 lin bacchanal_N = mkN (lin NK {s = d05 "bakkanaali"}) ; -- 10000 
 lin bacchanalian_A = mkA (lin AK {s = d10 "hurja"}) ; -- 2258 
 lin baccy_N = mkN (lin NK {s = d14A "tupakka"}) ; -- 3101 
 lin bachelor_N = mkN (lin NK {s = d05A "kandidaatti"}) ; -- 5408 
 lin bacillus_N = mkN (lin NK {s = d06 "basilli"}) ; -- 10000 
-lin back_Adv = mkAdv (lin AdvK {s = c99 "takaisin"}) ; -- 564 
-lin back_N = mkN "selkä" ; -- 1786 
-lin back_V = mkV (lin VK {s = c53A "kannattaa"}) ; -- 282 
-lin back_V2 = mkV2 (lin VK {s = c53A "kannattaa"}) ; -- 282 
 lin backbite_V = mkV (lin VK {s = c73 "mustamaalata"}) ; -- 10000 
 lin backbite_V2 = mkV2 (lin VK {s = c73 "mustamaalata"}) ; -- 10000 
 lin backbone_N = mkN "selkä" ; -- 1786 
@@ -19375,8 +19297,6 @@ lin backwater_N = mkN "syrjäseutu" ; -- 9123
 lin bacon_N = mkN (lin NK {s = d06 "pekoni"}) ; -- 10000 
 lin bacteriology_N = mkN (lin NK {s = d12 "bakteriologia"}) ; -- 10000 
 lin bacterium_N = mkN (lin NK {s = d06 "bakteeri"}) ; -- 3816 
-lin bad_A = mkA (lin AK {s = d09 "paha"}) ; -- 406 
-lin bad_N = mkN "ikävä" ; -- 5629 
 lin badge_N = mkN (lin NK {s = d05A "merkki"}) ; -- 732 
 lin badger_V2 = mkV2 (lin VK {s = c67A "maanitella"}) ; -- 10000 
 lin badness_N = mkN (lin NK {s = d40 "kovuus"}) ; -- 9487 
@@ -19453,9 +19373,6 @@ lin banger_N = mkN (lin NK {s = d12 "makkara"}) ; -- 4578
 lin banish_V2 = mkV2 (lin VK {s = c53A "karkottaa"}) ; -- 4624 
 lin banishment_N = mkN (lin NK {s = d39 "karkotus"}) ; -- 10000 
 lin banjo_N = mkN (lin NK {s = d01 "banjo"}) ; -- 10000 
-lin bank_N = mkN "ryhmä" ; -- 230 
-lin bank_V = mkV (lin VK {s = c53A "luottaa"}) ; -- 1315 
-lin bank_V2 = mkV2 (lin VK {s = c53A "luottaa"}) ; -- 1315 
 lin banker_N = mkN (lin NK {s = d06 "pankkiiri"}) ; -- 10000 
 lin banknote_N = mkN (lin NK {s = d06 "seteli"}) ; -- 4639 
 lin bankruptcy_N = mkN (lin NK {s = d05 "konkurssi"}) ; -- 2792 
@@ -19494,9 +19411,6 @@ lin barge_N = mkN (lin NK {s = d10 "lotja"}) ; -- 10000
 lin barge_V = mkV (lin VK {s = c52A "tunkeutua"}) ; -- 3634 
 lin baritone_N = mkN (lin NK {s = d05 "baritoni"}) ; -- 9623 
 lin barium_N = mkN (lin NK {s = d05 "barium"}) ; -- 10000 
-lin bark_N = mkN (lin NK {s = d09 "kaarna"}) ; -- 10000 
-lin bark_V = mkV (lin VK {s = c52A "haukkua"}) ; -- 5270 
-lin bark_V2 = mkV2 (lin VK {s = c52A "haukkua"}) ; -- 5270 
 lin barker_N = mkN (lin NK {s = d05 "piski"}) ; -- 10000 
 lin barley_N = mkN (lin NK {s = d10 "ohra"}) ; -- 10000 
 lin barm_N = mkN (lin NK {s = d09 "hiiva"}) ; -- 10000 
@@ -19615,7 +19529,6 @@ lin beatitude_N = mkN (lin NK {s = d40 "autuus"}) ; -- 10000
 lin beau_N = mkN "poikaystävä" ; -- 9940 
 lin beauteous_A = mkA (lin AK {s = d10 "ihana"}) ; -- 2899 
 lin beautician_N = mkN (lin NK {s = d05 "kosmetologi"}) ; -- 10000 
-lin beautiful_A = mkA (lin AK {s = d10 "ihana"}) ; -- 2899 
 lin beautify_V2 = mkV2 (lin VK {s = c53 "koristaa"}) ; -- 7688 
 lin beauty_N = mkN (lin NK {s = d07 "helmi"}) ; -- 3650 
 lin beaver_N = mkN (lin NK {s = d10 "majava"}) ; -- 10000 
@@ -19644,7 +19557,6 @@ lin beef_V = mkV (lin VK {s = c66 "marista"}) ; -- 10000
 lin beefeater_N = mkN (lin NK {s = d12 "vartija"}) ; -- 4643 
 lin beefsteak_N = mkN (lin NK {s = d05 "pihvi"}) ; -- 10000 
 lin beehive_N = mkN "työpaikka" ; -- 453 
-lin beer_N = mkN (lin NK {s = d43 "olut"}) ; -- 2472 
 lin beet_N = mkN (lin NK {s = d26 "punajuuri"}) ; -- 10000 
 lin beetle_N = mkN (lin NK {s = d10 "nuija"}) ; -- 10000 
 lin beetle_V = mkV (lin VK {s = c52A "riippua"}) ; -- 1955 
@@ -19653,8 +19565,6 @@ lin befit_V2 = mkV2 (lin VK {s = c61A "sopia"}) ; -- 197
 lin befitting_A = mkA (lin AK {s = d10 "sopiva"}) ; -- 10000 
 lin before_Adv = mkAdv "ennen" ; -- 846 
 lin befoul_V2 = mkV2 (lin VK {s = c73A "liata"}) ; -- 10000 
-lin beg_V = mkV (lin VK {s = c52 "anoa"}) ; -- 4159 
-lin beg_V2 = mkV2 (lin VK {s = c52 "anoa"}) ; -- 4159 
 lin beggar_V2 = mkV2 "ylittää" ; -- 963 
 lin beggarly_A = mkA (lin AK {s = d10 "kurja"}) ; -- 7333 
 lin begin_V = mkV (lin VK {s = c56A "alkaa"}) ; -- 65 
@@ -19699,9 +19609,6 @@ lin belle_N = mkN (lin NK {s = d32A "kaunotar"}) ; -- 9237
 lin bellhop_N = mkN (lin NK {s = d02 "pikkolo"}) ; -- 10000 
 lin belligerent_N = mkN (lin NK {s = d12 "sotija"}) ; -- 10000 
 lin bellwether_N = mkN (lin NK {s = d41A "kellokas"}) ; -- 10000 
-lin belly_N = mkN (lin NK {s = d09 "vatsa"}) ; -- 5530 
-lin belly_V = mkV (lin VK {s = c52 "pullistua"}) ; -- 10000 
-lin belly_V2 = mkV2 (lin VK {s = c52 "pullistua"}) ; -- 10000 
 lin bellyache_V = mkV (lin VK {s = c66 "jupista"}) ; -- 10000 
 lin beloved_N = mkN (lin NK {s = d01A "lemmitty"}) ; -- 10000 
 lin below_Adv = mkAdv "alla" ; -- 6546 
@@ -19809,15 +19716,12 @@ lin biff_V2 = mkV2 (lin VK {s = c73A "hakata"}) ; -- 3435
 lin bifurcate_V = mkV (lin VK {s = c52A "haarautua"}) ; -- 10000 
 lin bifurcate_V2 = mkV2 (lin VK {s = c52A "haarautua"}) ; -- 10000 
 lin bifurcation_N = mkN (lin NK {s = d10 "haarautuma"}) ; -- 10000 
-lin big_A = mkA "tärkeä" ; -- 121 
 lin bigamy_N = mkN (lin NK {s = d12 "bigamia"}) ; -- 10000 
 lin bight_N = mkN (lin NK {s = d05A "lenkki"}) ; -- 3330 
 lin bigot_N = mkN (lin NK {s = d12 "kiihkoilija"}) ; -- 10000 
 lin bigoted_A = mkA (lin AK {s = d38 "fanaattinen"}) ; -- 10000 
 lin bigotry_N = mkN (lin NK {s = d02 "kiihkoilu"}) ; -- 10000 
 lin bijou_N = mkN (lin NK {s = d01 "koru"}) ; -- 5201 
-lin bike_N = mkN "pyörä" ; -- 1871 
-lin bike_V = mkV "pyöräillä" ; -- 8255 
 lin bilateral_A = mkA (lin AK {s = d38 "bilateraalinen"}) ; -- 10000 
 lin bilberry_N = mkN (lin NK {s = d14A "mustikka"}) ; -- 10000 
 lin bilge_N = mkN (lin NK {s = d10 "ruuma"}) ; -- 10000 
@@ -19854,7 +19758,6 @@ lin biologist_N = mkN (lin NK {s = d05 "biologi"}) ; -- 10000
 lin biology_N = mkN (lin NK {s = d12 "biologia"}) ; -- 8695 
 lin bioscope_N = mkN "elokuvateatteri" ; -- 5466 
 lin birch_N = mkN (lin NK {s = d01 "koivu"}) ; -- 3958 
-lin bird_N = mkN (lin NK {s = d01A "lintu"}) ; -- 1602 
 lin birth_N = mkN (lin NK {s = d01A "alku"}) ; -- 122 
 lin birthday_N = mkN "syntymäpäivä" ; -- 5294 
 lin birthrate_N = mkN (lin NK {s = d40 "syntyvyys"}) ; -- 10000 
@@ -19870,9 +19773,6 @@ lin bit_N = mkN (lin NK {s = d10 "osa"}) ; -- 73
 lin bitch_N = mkN (lin NK {s = d39 "valitus"}) ; -- 1865 
 lin bitch_V = mkV (lin VK {s = c53A "valittaa"}) ; -- 1201 
 lin bitchy_A = mkA (lin AK {s = d01 "kelju"}) ; -- 10000 
-lin bite_N = mkN (lin NK {s = d40 "osuus"}) ; -- 369 
-lin bite_V = mkV "pistää" ; -- 1464 
-lin bite_V2 = mkV2 "pistää" ; -- 1464 
 lin biting_A = mkA "terävä" ; -- 3532 
 lin bitter_A = mkA (lin AK {s = d10 "kova"}) ; -- 218 
 lin bitter_N = mkN (lin NK {s = d06 "bitter"}) ; -- 10000 
@@ -19880,9 +19780,6 @@ lin bitterness_N = mkN (lin NK {s = d40 "kovuus"}) ; -- 9487
 lin bitumen_N = mkN (lin NK {s = d06 "bitumi"}) ; -- 10000 
 lin bivouac_N = mkN (lin NK {s = d05 "leiri"}) ; -- 1429 
 lin biz_N = mkN (lin NK {s = d39 "bisnes"}) ; -- 3926 
-lin black_A = mkA (lin AK {s = d09 "paha"}) ; -- 406 
-lin black_N = mkN (lin NK {s = d10 "musta"}) ; -- 10000 
-lin black_V2 = mkV2 (lin VK {s = c52 "mustua"}) ; -- 10000 
 lin blackamoor_N = mkN (lin NK {s = d06 "murjaani"}) ; -- 10000 
 lin blackboard_N = mkN (lin NK {s = d01 "taulu"}) ; -- 2945 
 lin blacken_V = mkV (lin VK {s = c52 "mustua"}) ; -- 10000 
@@ -19978,7 +19875,6 @@ lin blond_A = mkA "vaalea" ; -- 4334
 lin blond_N = mkN (lin NK {s = d15 "vaalea"}) ; -- 10000 
 lin blonde_A = mkA "vaalea" ; -- 4334 
 lin blonde_N = mkN (lin NK {s = d15 "vaalea"}) ; -- 10000 
-lin blood_N = mkN (lin NK {s = d01A "suku"}) ; -- 2035 
 lin bloodless_A = mkA "kylmä" ; -- 1090 
 lin bloodshed_N = mkN (lin NK {s = d10 "murha"}) ; -- 2300 
 lin bloodstained_A = mkA (lin AK {s = d38 "verinen"}) ; -- 5511 
@@ -19993,9 +19889,6 @@ lin blossom_V = mkV "kehittyä" ; -- 974
 lin blot_N = mkN (lin NK {s = d09 "tahra"}) ; -- 10000 
 lin blot_V2 = mkV2 (lin VK {s = c61 "tahria"}) ; -- 10000 
 lin blotch_N = mkN (lin NK {s = d01A "laikku"}) ; -- 10000 
-lin blow_N = mkN "lyönti" ; -- 4147 
-lin blow_V = mkV (lin VK {s = c53A "soittaa"}) ; -- 657 
-lin blow_V2 = mkV2 (lin VK {s = c53A "soittaa"}) ; -- 657 
 lin blowback_N = mkN "takaisku" ; -- 5268 
 lin blower_N = mkN (lin NK {s = d41 "valas"}) ; -- 10000 
 lin blubber_N = mkN (lin NK {s = d09 "ihra"}) ; -- 10000 
@@ -20003,8 +19896,6 @@ lin blubber_V = mkV "itkeä" ; -- 4275
 lin blubber_V2 = mkV2 "itkeä" ; -- 4275 
 lin bludgeon_N = mkN (lin NK {s = d10 "nuija"}) ; -- 10000 
 lin bludgeon_V2 = mkV2 (lin VK {s = c73A "hakata"}) ; -- 3435 
-lin blue_A = mkA "synkkä" ; -- 2897 
-lin blue_N = mkN (lin NK {s = d01 "rivo"}) ; -- 10000 
 lin blueprint_N = mkN (lin NK {s = d05 "malli"}) ; -- 570 
 lin bluff_A = mkA "jyrkkä" ; -- 2989 
 lin bluff_N = mkN (lin NK {s = d05 "bluffi"}) ; -- 10000 
@@ -20036,7 +19927,6 @@ lin boarding_N = mkN (lin NK {s = d01 "nousu"}) ; -- 698
 lin boast_N = mkN (lin NK {s = d02 "kerskailu"}) ; -- 10000 
 lin boast_V = mkV (lin VK {s = c61 "leuhkia"}) ; -- 10000 
 lin boast_V2 = mkV2 (lin VK {s = c61 "leuhkia"}) ; -- 10000 
-lin boat_N = mkN (lin NK {s = d48 "vene"}) ; -- 1719 
 lin boater_N = mkN "veneilijä" ; -- 8982 
 lin boatman_N = mkN (lin NK {s = d10 "soutaja"}) ; -- 10000 
 lin bob_N = mkN (lin NK {s = d01 "paino"}) ; -- 2296 
@@ -20082,7 +19972,6 @@ lin bonbon_N = mkN (lin NK {s = d05 "karamelli"}) ; -- 10000
 lin bond_N = mkN (lin NK {s = d39 "liitos"}) ; -- 5879 
 lin bond_V2 = mkV2 "yhdistää" ; -- 784 
 lin bondage_N = mkN (lin NK {s = d40 "orjuus"}) ; -- 10000 
-lin bone_N = mkN (lin NK {s = d18 "luu"}) ; -- 4674 
 lin boner_N = mkN (lin NK {s = d38 "luinen"}) ; -- 10000 
 lin bongo_N = mkN (lin NK {s = d01 "bongo"}) ; -- 10000 
 lin bonkers_A = mkA (lin AK {s = d01 "hullu"}) ; -- 2883 
@@ -20094,8 +19983,6 @@ lin boo_V = mkV (lin VK {s = c73 "buuata"}) ; -- 10000
 lin boo_V2 = mkV2 (lin VK {s = c73 "buuata"}) ; -- 10000 
 lin boob_N = mkN (lin NK {s = d01 "tollo"}) ; -- 10000 
 lin booby_N = mkN (lin NK {s = d10 "suula"}) ; -- 10000 
-lin book_N = mkN (lin NK {s = d09 "kirja"}) ; -- 289 
-lin book_V2 = mkV2 "järjestää" ; -- 171 
 lin booking_N = mkN (lin NK {s = d39 "varaus"}) ; -- 4056 
 lin booklet_N = mkN (lin NK {s = d38 "vihkonen"}) ; -- 10000 
 lin bookshop_N = mkN "kirjakauppa" ; -- 7195 
@@ -20109,8 +19996,6 @@ lin boorishness_N = mkN (lin NK {s = d40 "moukkamaisuus"}) ; -- 10000
 lin boost_N = mkN (lin NK {s = d07A "tuki"}) ; -- 292 
 lin boost_V2 = mkV2 (lin VK {s = c58A "tukea"}) ; -- 429 
 lin booster_N = mkN (lin NK {s = d12 "tukija"}) ; -- 4382 
-lin boot_N = mkN "potku" ; -- 2812 
-lin boot_V2 = mkV2 "käynnistää" ; -- 1714 
 lin bootee_N = mkN (lin NK {s = d01 "tossu"}) ; -- 10000 
 lin booth_N = mkN (lin NK {s = d01 "koju"}) ; -- 10000 
 lin bootleg_V2 = mkV2 (lin VK {s = c62 "kopioida"}) ; -- 8930 
@@ -20134,8 +20019,6 @@ lin borrower_N = mkN (lin NK {s = d10 "lainaaja"}) ; -- 10000
 lin bortsch_N = mkN (lin NK {s = d05 "borssi"}) ; -- 10000 
 lin bosky_A = mkA "tiheä" ; -- 6994 
 lin bosom_N = mkN "sydän" ; -- 1232 
-lin boss_N = mkN (lin NK {s = d10 "johtaja"}) ; -- 210 
-lin boss_V2 = mkV2 (lin VK {s = c53A "pakottaa"}) ; -- 1692 
 lin botanical_A = mkA (lin AK {s = d38 "botaaninen"}) ; -- 10000 
 lin botanist_N = mkN (lin NK {s = d05 "botanisti"}) ; -- 10000 
 lin botany_N = mkN (lin NK {s = d09A "botaniikka"}) ; -- 10000 
@@ -20193,7 +20076,6 @@ lin box_V2 = mkV2 "iskeä" ; -- 976
 lin boxer_N = mkN "nyrkkeilijä" ; -- 9957 
 lin boxful_N = mkN (lin NK {s = d38 "rasiallinen"}) ; -- 10000 
 lin boxing_N = mkN (lin NK {s = d02 "nyrkkeily"}) ; -- 8174 
-lin boy_N = mkN (lin NK {s = d06 "kaveri"}) ; -- 1193 
 lin boycott_N = mkN (lin NK {s = d05A "boikotti"}) ; -- 9509 
 lin boycott_V2 = mkV2 (lin VK {s = c62 "boikotoida"}) ; -- 10000 
 lin boyhood_N = mkN (lin NK {s = d40 "poikuus"}) ; -- 10000 
@@ -20240,11 +20122,7 @@ lin bray_V2 = mkV2 (lin VK {s = c54A "huutaa"}) ; -- 2352
 lin braze_V2 = mkV2 (lin VK {s = c53A "juottaa"}) ; -- 10000 
 lin breach_N = mkN (lin NK {s = d01A "aukko"}) ; -- 3430 
 lin breach_V2 = mkV2 (lin VK {s = c52A "rikkoa"}) ; -- 1483 
-lin bread_N = mkN "leipä" ; -- 2018 
 lin breadth_N = mkN (lin NK {s = d40 "laajuus"}) ; -- 4224 
-lin break_N = mkN (lin NK {s = d01A "tauko"}) ; -- 1925 
-lin break_V = mkV (lin VK {s = c66 "nousta"}) ; -- 111 
-lin break_V2 = mkV2 (lin VK {s = c66 "nousta"}) ; -- 111 
 lin break_in_N = mkN (lin NK {s = d01A "murto"}) ; -- 7374 
 lin breakage_N = mkN (lin NK {s = d39 "hyvitys"}) ; -- 8506 
 lin breakdown_N = mkN (lin NK {s = d39 "romahdus"}) ; -- 5392 
@@ -20253,11 +20131,7 @@ lin breakfast_V = mkV (lin VK {s = c74 "tarjota"}) ; -- 281
 lin breakneck_A = mkA (lin AK {s = d10 "hurja"}) ; -- 2258 
 lin breakthrough_N = mkN "keksintö" ; -- 4482 
 lin bream_N = mkN (lin NK {s = d09 "lahna"}) ; -- 10000 
-lin breast_N = mkN (lin NK {s = d09A "rinta"}) ; -- 3273 
-lin breast_V2 = mkV2 (lin VK {s = c73A "kohdata"}) ; -- 934 
 lin breath_N = mkN (lin NK {s = d07A "henki"}) ; -- 426 
-lin breathe_V = mkV (lin VK {s = c53 "poistaa"}) ; -- 1076 
-lin breathe_V2 = mkV2 (lin VK {s = c53 "poistaa"}) ; -- 1076 
 lin breathtaking_A = mkA (lin AK {s = d15 "huikea"}) ; -- 3360 
 lin breed_N = mkN (lin NK {s = d05 "laji"}) ; -- 623 
 lin breed_V = mkV "synnyttää" ; -- 2005 
@@ -20316,8 +20190,6 @@ lin bristle_V = mkV (lin VK {s = c52 "kiukustua"}) ; -- 10000
 lin bristly_A = mkA (lin AK {s = d15 "karhea"}) ; -- 10000 
 lin brit_N = mkN (lin NK {s = d05A "sintti"}) ; -- 10000 
 lin brittle_A = mkA (lin AK {s = d15 "kolea"}) ; -- 10000 
-lin broad_A = mkA (lin AK {s = d09 "vahva"}) ; -- 427 
-lin broad_N = mkN (lin NK {s = d38 "naikkonen"}) ; -- 10000 
 lin broad_minded_A = mkA (lin AK {s = d38 "suvaitsevainen"}) ; -- 10000 
 lin broad_mindedness_N = mkN (lin NK {s = d40 "suvaitsevaisuus"}) ; -- 9300 
 lin broadcast_N = mkN "lähetys" ; -- 3052 
@@ -20350,7 +20222,6 @@ lin brook_V2 = mkV2 (lin VK {s = c61 "sallia"}) ; -- 1043
 lin broom_N = mkN (lin NK {s = d10 "kanerva"}) ; -- 10000 
 lin broth_N = mkN (lin NK {s = d25 "liemi"}) ; -- 9759 
 lin brothel_N = mkN (lin NK {s = d05 "bordelli"}) ; -- 10000 
-lin brother_N = mkN (lin NK {s = d06 "kaveri"}) ; -- 1193 
 lin brother_in_law_N = mkN (lin NK {s = d01A "lanko"}) ; -- 10000 
 lin brotherhood_N = mkN "ammattiliitto" ; -- 3057 
 lin brotherly_A = mkA (lin AK {s = d38 "veljellinen"}) ; -- 10000 
@@ -20358,9 +20229,6 @@ lin brought_V = mkV (lin VK {s = c63 "saada"}) ; -- 10
 lin brouhaha_N = mkN (lin NK {s = d01 "kohu"}) ; -- 4092 
 lin brow_N = mkN (lin NK {s = d01A "huippu"}) ; -- 1406 
 lin browbeat_V2 = mkV2 (lin VK {s = c53A "pakottaa"}) ; -- 1692 
-lin brown_A = mkA "ruskea" ; -- 8036 
-lin brown_V = mkV (lin VK {s = c53 "ruskistaa"}) ; -- 10000 
-lin brown_V2 = mkV2 (lin VK {s = c53 "ruskistaa"}) ; -- 10000 
 lin brownie_N = mkN (lin NK {s = d12 "haltija"}) ; -- 4906 
 lin brownstone_N = mkN "rivitalo" ; -- 6121 
 lin browse_N = mkN "syöminen" ; -- 7141 
@@ -20500,9 +20368,6 @@ lin burgle_V = mkV (lin VK {s = c74 "rosvota"}) ; -- 10000
 lin burgle_V2 = mkV2 (lin VK {s = c74 "rosvota"}) ; -- 10000 
 lin burgomaster_N = mkN (lin NK {s = d06 "pormestari"}) ; -- 6203 
 lin burke_V2 = mkV2 (lin VK {s = c73 "murhata"}) ; -- 4341 
-lin burn_N = mkN (lin NK {s = d09 "palohaava"}) ; -- 10000 
-lin burn_V = mkV (lin VK {s = c56 "palaa"}) ; -- 1788 
-lin burn_V2 = mkV2 (lin VK {s = c56 "palaa"}) ; -- 1788 
 lin burner_N = mkN (lin NK {s = d33A "poltin"}) ; -- 10000 
 lin burning_A = mkA "ajankohtainen" ; -- 2387 
 lin burnish_V = mkV (lin VK {s = c53A "kiillottaa"}) ; -- 10000 
@@ -20543,8 +20408,6 @@ lin butchery_N = mkN (lin NK {s = d02 "teurastamo"}) ; -- 8855
 lin butt_N = mkN (lin NK {s = d48A "kohde"}) ; -- 520 
 lin butt_V = mkV "liittää" ; -- 1823 
 lin butt_V2 = mkV2 "liittää" ; -- 1823 
-lin butter_N = mkN "voi" ; -- 3109 
-lin butter_V2 = mkV2 (lin VK {s = c67A "voidella"}) ; -- 9913 
 lin buttercup_N = mkN (lin NK {s = d05A "leinikki"}) ; -- 10000 
 lin butterfly_N = mkN (lin NK {s = d38 "perhonen"}) ; -- 6555 
 lin buttery_N = mkN (lin NK {s = d38 "voinen"}) ; -- 10000 
@@ -20555,9 +20418,6 @@ lin button_V2 = mkV2 (lin VK {s = c53A "napittaa"}) ; -- 10000
 lin buttoned_up_A = mkA "ammattimainen" ; -- 6656 
 lin buttress_V2 = mkV2 (lin VK {s = c58A "tukea"}) ; -- 429 
 lin buxom_A = mkA (lin AK {s = d15 "uhkea"}) ; -- 10000 
-lin buy_N = mkN (lin NK {s = d09A "kauppa"}) ; -- 240 
-lin buy_V = mkV (lin VK {s = c63 "saada"}) ; -- 10 
-lin buy_V2 = mkV2 (lin VK {s = c63 "saada"}) ; -- 10 
 lin buyer_N = mkN (lin NK {s = d10 "ostaja"}) ; -- 1744 
 lin buzz_N = mkN (lin NK {s = d12 "suhina"}) ; -- 10000 
 lin buzzer_N = mkN (lin NK {s = d06 "summeri"}) ; -- 10000 
@@ -20659,7 +20519,6 @@ lin cambric_N = mkN (lin NK {s = d05 "batisti"}) ; -- 10000
 lin camel_N = mkN (lin NK {s = d06 "kameli"}) ; -- 10000 
 lin camellia_N = mkN (lin NK {s = d12 "kamelia"}) ; -- 10000 
 lin cameo_N = mkN (lin NK {s = d20 "kamee"}) ; -- 10000 
-lin camera_N = mkN (lin NK {s = d12 "kamera"}) ; -- 2882 
 lin camion_N = mkN "kuorma-auto" ; -- 4077 
 lin camomile_N = mkN (lin NK {s = d02 "sauramo"}) ; -- 10000 
 lin camouflage_N = mkN (lin NK {s = d05A "naamiointi"}) ; -- 10000 
@@ -20722,8 +20581,6 @@ lin canvass_N = mkN (lin NK {s = d09 "tausta"}) ; -- 791
 lin canvass_V = mkV (lin VK {s = c61 "tutkia"}) ; -- 417 
 lin canvass_V2 = mkV2 (lin VK {s = c61 "tutkia"}) ; -- 417 
 lin canyon_N = mkN (lin NK {s = d06 "kanjoni"}) ; -- 10000 
-lin cap_N = mkN (lin NK {s = d01 "kruunu"}) ; -- 1808 
-lin cap_V2 = mkV2 (lin VK {s = c53A "rajoittaa"}) ; -- 1713 
 lin capability_N = mkN (lin NK {s = d01A "kyky"}) ; -- 1564 
 lin capable_A = mkA "altis" ; -- 8070 
 lin capacious_A = mkA (lin AK {s = d09 "laaja"}) ; -- 481 
@@ -20757,7 +20614,6 @@ lin captivity_N = mkN (lin NK {s = d40 "vankeus"}) ; -- 2210
 lin captor_N = mkN (lin NK {s = d12 "vangitsija"}) ; -- 10000 
 lin capture_N = mkN (lin NK {s = d39 "sieppaus"}) ; -- 10000 
 lin capture_V2 = mkV2 (lin VK {s = c73A "vallata"}) ; -- 1962 
-lin car_N = mkN (lin NK {s = d01 "vaunu"}) ; -- 3619 
 lin carafe_N = mkN (lin NK {s = d05 "karahvi"}) ; -- 10000 
 lin caramel_N = mkN (lin NK {s = d20 "toffee"}) ; -- 10000 
 lin carapace_N = mkN (lin NK {s = d06 "panssari"}) ; -- 10000 
@@ -20801,8 +20657,6 @@ lin carouse_V2 = mkV2 (lin VK {s = c67A "juopotella"}) ; -- 10000
 lin carp_N = mkN (lin NK {s = d05A "karppi"}) ; -- 10000 
 lin carp_V = mkV (lin VK {s = c61A "moittia"}) ; -- 2757 
 lin carp_V2 = mkV2 (lin VK {s = c61A "moittia"}) ; -- 2757 
-lin carpet_N = mkN (lin NK {s = d01A "matto"}) ; -- 4704 
-lin carpet_V2 = mkV2 "peittää" ; -- 2669 
 lin carriage_N = mkN (lin NK {s = d13 "alusta"}) ; -- 6960 
 lin carriageway_N = mkN "ajorata" ; -- 9863 
 lin carrier_N = mkN (lin NK {s = d10 "kuljettaja"}) ; -- 999 
@@ -20855,7 +20709,6 @@ lin castration_N = mkN (lin NK {s = d03 "kastraatio"}) ; -- 10000
 lin casual_A = mkA "tilapäinen" ; -- 4814 
 lin casualty_N = mkN (lin NK {s = d03 "tappio"}) ; -- 908 
 lin casuistry_N = mkN (lin NK {s = d09A "kasuistiikka"}) ; -- 10000 
-lin cat_N = mkN (lin NK {s = d09 "kissa"}) ; -- 2122 
 lin cataclysm_N = mkN (lin NK {s = d05 "katastrofi"}) ; -- 3394 
 lin cataclysmic_A = mkA (lin AK {s = d38 "turmiollinen"}) ; -- 10000 
 lin catafalque_N = mkN (lin NK {s = d05A "katafalkki"}) ; -- 10000 
@@ -20926,7 +20779,6 @@ lin cease_fire_N = mkN "tulitauko" ; -- 5774
 lin ceaseless_A = mkA "loputon" ; -- 5153 
 lin cedar_N = mkN (lin NK {s = d06 "sypressi"}) ; -- 10000 
 lin cede_V2 = mkV2 (lin VK {s = c53A "luovuttaa"}) ; -- 1086 
-lin ceiling_N = mkN (lin NK {s = d01A "katto"}) ; -- 1586 
 lin celandine_N = mkN (lin NK {s = d02 "keltamo"}) ; -- 10000 
 lin celebrant_N = mkN (lin NK {s = d12 "juhlija"}) ; -- 9212 
 lin celebrate_V2 = mkV2 "viettää" ; -- 652 
@@ -20990,8 +20842,6 @@ lin chaffinch_N = mkN (lin NK {s = d01A "peippo"}) ; -- 10000
 lin chagrin_N = mkN (lin NK {s = d05 "harmi"}) ; -- 4018 
 lin chain_N = mkN (lin NK {s = d01 "ketju"}) ; -- 2037 
 lin chain_V2 = mkV2 (lin VK {s = c53A "ketjuttaa"}) ; -- 10000 
-lin chair_N = mkN "paikka" ; -- 123 
-lin chair_V2 = mkV2 (lin VK {s = c53A "johtaa"}) ; -- 172 
 lin chairman_N = mkN "puheenjohtaja" ; -- 136 
 lin chairmanship_N = mkN "puheenjohtajuus" ; -- 2913 
 lin chaise_N = mkN (lin NK {s = d05 "kiesit"}) ; -- 10000 
@@ -21105,7 +20955,6 @@ lin cheerful_A = mkA (lin AK {s = d38 "iloinen"}) ; -- 1765
 lin cheerfulness_N = mkN (lin NK {s = d40 "iloisuus"}) ; -- 10000 
 lin cheerleader_N = mkN (lin NK {s = d05 "cheerleader"}) ; -- 10000 
 lin cheerlessness_N = mkN (lin NK {s = d40 "ilottomuus"}) ; -- 10000 
-lin cheese_N = mkN (lin NK {s = d01 "juusto"}) ; -- 5558 
 lin cheeseparing_A = mkA (lin AK {s = d41 "kitsas"}) ; -- 10000 
 lin cheetah_N = mkN (lin NK {s = d05 "gepardi"}) ; -- 10000 
 lin chef_N = mkN "kokki" ; -- 7393 
@@ -21136,7 +20985,6 @@ lin chief_A = mkA "ensisijainen" ; -- 5489
 lin chief_N = mkN (lin NK {s = d10 "johtaja"}) ; -- 210 
 lin chieftain_N = mkN "päämies" ; -- 5021 
 lin chignon_N = mkN (lin NK {s = d12 "nuttura"}) ; -- 10000 
-lin child_N = mkN "jälkeläinen" ; -- 6998 
 lin childbirth_N = mkN (lin NK {s = d39 "synnytys"}) ; -- 5555 
 lin childhood_N = mkN (lin NK {s = d40 "lapsuus"}) ; -- 2588 
 lin childish_A = mkA (lin AK {s = d38 "lapsellinen"}) ; -- 10000 
@@ -21225,7 +21073,6 @@ lin chuck_V2 = mkV2 (lin VK {s = c53A "taputtaa"}) ; -- 10000
 lin chuckle_N = mkN (lin NK {s = d39 "hihitys"}) ; -- 10000 
 lin chum_N = mkN "jätkä" ; -- 6815 
 lin chummy_A = mkA (lin AK {s = d38 "tuttavallinen"}) ; -- 10000 
-lin church_N = mkN "seurakunta" ; -- 889 
 lin churl_N = mkN (lin NK {s = d06 "tomppeli"}) ; -- 10000 
 lin churn_N = mkN (lin NK {s = d01 "kirnu"}) ; -- 10000 
 lin churn_V = mkV (lin VK {s = c52 "kuohua"}) ; -- 9918 
@@ -21270,7 +21117,6 @@ lin citadel_N = mkN (lin NK {s = d39 "linnoitus"}) ; -- 10000
 lin citation_N = mkN (lin NK {s = d48 "haaste"}) ; -- 1248 
 lin cite_V2 = mkV2 (lin VK {s = c69 "mainita"}) ; -- 787 
 lin citizenship_N = mkN (lin NK {s = d40 "kansalaisuus"}) ; -- 6509 
-lin city_N = mkN (lin NK {s = d05A "kaupunki"}) ; -- 70 
 lin civil_A = mkA (lin AK {s = d38 "porvarillinen"}) ; -- 7073 
 lin civilian_N = mkN (lin NK {s = d06 "siviili"}) ; -- 2570 
 lin civility_N = mkN (lin NK {s = d40 "kohteliaisuus"}) ; -- 10000 
@@ -21331,11 +21177,6 @@ lin claustrophobia_N = mkN (lin NK {s = d12 "klaustrofobia"}) ; -- 10000
 lin claw_N = mkN (lin NK {s = d28 "kynsi"}) ; -- 4650 
 lin claw_V2 = mkV2 (lin VK {s = c52A "tarttua"}) ; -- 1549 
 lin clay_N = mkN (lin NK {s = d07 "savi"}) ; -- 10000 
-lin clean_A = mkA "puhdas" ; -- 1224 
-lin clean_Adv = mkAdv (lin AdvK {s = c99 "aivan"}) ; -- 275 
-lin clean_N = mkN (lin NK {s = d34A "tahraton"}) ; -- 10000 
-lin clean_V = mkV (lin VK {s = c53 "puhdistaa"}) ; -- 3066 
-lin clean_V2 = mkV2 (lin VK {s = c53 "puhdistaa"}) ; -- 3066 
 lin cleaner_N = mkN "siivooja" ; -- 9028 
 lin cleanly_A = mkA (lin AK {s = d05 "siisti"}) ; -- 4826 
 lin cleanse_V2 = mkV2 (lin VK {s = c53 "puhdistaa"}) ; -- 3066 
@@ -21355,7 +21196,6 @@ lin clemency_N = mkN (lin NK {s = d40 "laupeus"}) ; -- 10000
 lin clement_A = mkA "lempeä" ; -- 8918 
 lin clergy_N = mkN (lin NK {s = d02 "papisto"}) ; -- 10000 
 lin cleric_N = mkN (lin NK {s = d05A "pappi"}) ; -- 2639 
-lin clever_A = mkA (lin AK {s = d10 "ovela"}) ; -- 10000 
 lin cleverness_N = mkN (lin NK {s = d40 "lahjakkuus"}) ; -- 6402 
 lin clew_N = mkN "jälki" ; -- 904 
 lin clew_V2 = mkV2 "pyöriä" ; -- 1772 
@@ -21397,11 +21237,6 @@ lin cloggy_A = mkA "tiheä" ; -- 6994
 lin cloister_N = mkN (lin NK {s = d06 "luostari"}) ; -- 5574 
 lin clone_N = mkN (lin NK {s = d05 "klooni"}) ; -- 10000 
 lin clone_V2 = mkV2 (lin VK {s = c73 "kloonata"}) ; -- 10000 
-lin close_A = mkA "tiukka" ; -- 706 
-lin close_Adv = mkAdv (lin AdvK {s = c99 "tarkasti"}) ; -- 1293 
-lin close_N = mkN "päätös" ; -- 163 
-lin close_V = mkV "päättää" ; -- 161 
-lin close_V2 = mkV2 "päättää" ; -- 161 
 lin closeness_N = mkN "läheisyys" ; -- 2768 
 lin closet_N = mkN (lin NK {s = d09 "vessa"}) ; -- 4980 
 lin closet_V2 = mkV2 (lin VK {s = c52A "sulkeutua"}) ; -- 6796 
@@ -21410,9 +21245,6 @@ lin clot_V = mkV "hyytyä" ; -- 7259
 lin clot_V2 = mkV2 "hyytyä" ; -- 7259 
 lin clothe_V2 = mkV2 (lin VK {s = c53 "varustaa"}) ; -- 2393 
 lin clothing_N = mkN (lin NK {s = d39 "vaatetus"}) ; -- 10000 
-lin cloud_N = mkN (lin NK {s = d01 "varjo"}) ; -- 2328 
-lin cloud_V = mkV (lin VK {s = c53 "varjostaa"}) ; -- 6957 
-lin cloud_V2 = mkV2 (lin VK {s = c53 "varjostaa"}) ; -- 6957 
 lin cloudy_A = mkA "hämärä" ; -- 4129 
 lin clout_N = mkN "vaikutusvalta" ; -- 5863 
 lin clout_V2 = mkV2 "lyödä" ; -- 855 
@@ -21449,8 +21281,6 @@ lin coarsen_V = mkV (lin VK {s = c54A "karhentaa"}) ; -- 10000
 lin coarsen_V2 = mkV2 (lin VK {s = c54A "karhentaa"}) ; -- 10000 
 lin coarseness_N = mkN (lin NK {s = d40 "karheus"}) ; -- 10000 
 lin coast_N = mkN (lin NK {s = d05A "reitti"}) ; -- 1533 
-lin coat_N = mkN (lin NK {s = d39 "kerros"}) ; -- 2447 
-lin coat_V2 = mkV2 "päällystää" ; -- 7952 
 lin coating_N = mkN (lin NK {s = d39 "kerros"}) ; -- 2447 
 lin coax_V = mkV (lin VK {s = c67A "suostutella"}) ; -- 10000 
 lin coax_V2 = mkV2 (lin VK {s = c67A "suostutella"}) ; -- 10000 
@@ -21517,8 +21347,6 @@ lin coke_N = mkN (lin NK {s = d05 "koksi"}) ; -- 10000
 lin coke_V2 = mkV2 (lin VK {s = c52A "koksiintua"}) ; -- 10000 
 lin col_N = mkN (lin NK {s = d10 "sola"}) ; -- 10000 
 lin cola_N = mkN (lin NK {s = d10 "kola"}) ; -- 10000 
-lin cold_A = mkA "kylmä" ; -- 1090 
-lin cold_N = mkN (lin NK {s = d40 "kylmyys"}) ; -- 7904 
 lin coldness_N = mkN (lin NK {s = d40 "kylmyys"}) ; -- 7904 
 lin colic_N = mkN (lin NK {s = d05A "koliikki"}) ; -- 10000 
 lin collaboration_N = mkN "yhteistyö" ; -- 257 
@@ -21579,8 +21407,6 @@ lin combine_V = mkV "yhdistää" ; -- 784
 lin combine_V2 = mkV2 "yhdistää" ; -- 784 
 lin combustible_N = mkN "polttoaine" ; -- 2928 
 lin combustion_N = mkN (lin NK {s = d39 "myllerrys"}) ; -- 10000 
-lin come_V = mkV (lin VK {s = c67 "olla"}) ; -- 1 
-lin come_V2 = mkV2 (lin VK {s = c67 "olla"}) ; -- 1 
 lin come_on_N = mkN (lin NK {s = d02 "rohkaisu"}) ; -- 10000 
 lin comeback_N = mkN (lin NK {s = d17 "paluu"}) ; -- 1691 
 lin comedian_N = mkN (lin NK {s = d04A "koomikko"}) ; -- 10000 
@@ -21742,7 +21568,6 @@ lin compulsion_N = mkN (lin NK {s = d01A "pakko"}) ; -- 1150
 lin compulsory_A = mkA "pakollinen" ; -- 3051 
 lin compute_V = mkV (lin VK {s = c58 "laskea"}) ; -- 259 
 lin compute_V2 = mkV2 (lin VK {s = c58 "laskea"}) ; -- 259 
-lin computer_N = mkN "tietokone" ; -- 1285 
 lin comrade_N = mkN (lin NK {s = d06 "kaveri"}) ; -- 1193 
 lin comradeship_N = mkN "ystävyys" ; -- 5175 
 lin con_Adv = mkAdv (lin AdvK {s = c99 "vastaan"}) ; -- 682 
@@ -22162,9 +21987,6 @@ lin corpus_N = mkN "pääoma" ; -- 2168
 lin corpuscle_N = mkN (lin NK {s = d01 "solu"}) ; -- 5897 
 lin corral_N = mkN (lin NK {s = d39 "aitaus"}) ; -- 10000 
 lin corral_V2 = mkV2 (lin VK {s = c61 "haalia"}) ; -- 8057 
-lin correct_A = mkA (lin AK {s = d15 "oikea"}) ; -- 418 
-lin correct_V = mkV (lin VK {s = c73 "korjata"}) ; -- 1100 
-lin correct_V2 = mkV2 (lin VK {s = c73 "korjata"}) ; -- 1100 
 lin correction_N = mkN (lin NK {s = d39 "korjaus"}) ; -- 2598 
 lin correctitude_N = mkN (lin NK {s = d40 "sopivaisuus"}) ; -- 10000 
 lin correctness_N = mkN (lin NK {s = d40 "korrektius"}) ; -- 10000 
@@ -22225,9 +22047,6 @@ lin council_N = mkN (lin NK {s = d02 "neuvottelu"}) ; -- 431
 lin counsel_N = mkN "asiamies" ; -- 6103 
 lin counsel_V2 = mkV2 (lin VK {s = c73 "ohjata"}) ; -- 624 
 lin counsellor_N = mkN (lin NK {s = d10 "ohjaaja"}) ; -- 1064 
-lin count_N = mkN "laskeminen" ; -- 6457 
-lin count_V = mkV (lin VK {s = c58 "laskea"}) ; -- 259 
-lin count_V2 = mkV2 (lin VK {s = c58 "laskea"}) ; -- 259 
 lin countenance_N = mkN "kasvot" ; -- 1718 
 lin counter_N = mkN (lin NK {s = d06 "rekisteri"}) ; -- 4252 
 lin counter_V = mkV (lin VK {s = c73 "vastata"}) ; -- 212 
@@ -22245,7 +22064,6 @@ lin counterpoise_N = mkN "vastapaino" ; -- 4301
 lin countersink_V2 = mkV2 (lin VK {s = c53A "upottaa"}) ; -- 5381 
 lin countervail_V = mkV (lin VK {s = c73 "vastata"}) ; -- 212 
 lin countervail_V2 = mkV2 (lin VK {s = c73 "vastata"}) ; -- 212 
-lin country_N = mkN "maaseutu" ; -- 1229 
 lin countryman_N = mkN "maanmies" ; -- 7138 
 lin countryside_N = mkN "maaseutu" ; -- 1229 
 lin countrywoman_N = mkN "maanmies" ; -- 7138 
@@ -22270,7 +22088,6 @@ lin courtesy_N = mkN (lin NK {s = d40 "kohteliaisuus"}) ; -- 10000
 lin courtliness_N = mkN (lin NK {s = d40 "hienostuneisuus"}) ; -- 10000 
 lin courtly_A = mkA (lin AK {s = d47 "hienostunut"}) ; -- 10000 
 lin courtship_N = mkN (lin NK {s = d02 "kosiskelu"}) ; -- 10000 
-lin cousin_N = mkN (lin NK {s = d01A "serkku"}) ; -- 10000 
 lin cove_N = mkN (lin NK {s = d10 "poukama"}) ; -- 10000 
 lin covenant_N = mkN (lin NK {s = d39 "sopimus"}) ; -- 242 
 lin cover_N = mkN "suoja" ; -- 2231 
@@ -22282,7 +22099,6 @@ lin covet_V2 = mkV2 (lin VK {s = c69 "himoita"}) ; -- 10000
 lin covetous_A = mkA (lin AK {s = d48 "ahne"}) ; -- 10000 
 lin covetousness_N = mkN (lin NK {s = d40 "ahneus"}) ; -- 8216 
 lin covey_N = mkN "ryhmä" ; -- 230 
-lin cow_N = mkN "lehmä" ; -- 2680 
 lin coward_N = mkN (lin NK {s = d06 "pelkuri"}) ; -- 10000 
 lin cowardice_N = mkN (lin NK {s = d40 "pelkuruus"}) ; -- 10000 
 lin cowboy_N = mkN (lin NK {s = d21 "cowboy"}) ; -- 10000 
@@ -22583,9 +22399,6 @@ lin custody_N = mkN "pidätys" ; -- 5289
 lin custom_N = mkN (lin NK {s = d09A "tapa"}) ; -- 130 
 lin customary_A = mkA "tavanomainen" ; -- 2623 
 lin customer_N = mkN (lin NK {s = d41A "asiakas"}) ; -- 383 
-lin cut_N = mkN (lin NK {s = d40 "osuus"}) ; -- 369 
-lin cut_V = mkV (lin VK {s = c53A "vaikuttaa"}) ; -- 268 
-lin cut_V2 = mkV2 (lin VK {s = c53A "vaikuttaa"}) ; -- 268 
 lin cutback_N = mkN "vähennys" ; -- 4310 
 lin cute_A = mkA (lin AK {s = d10 "soma"}) ; -- 10000 
 lin cuteness_N = mkN (lin NK {s = d40 "sievyys"}) ; -- 10000 
@@ -22712,7 +22525,6 @@ lin dawdle_V2 = mkV2 (lin VK {s = c61 "maleksia"}) ; -- 10000
 lin dawdler_N = mkN (lin NK {s = d12 "vitkastelija"}) ; -- 10000 
 lin dawn_N = mkN (lin NK {s = d39 "sarastus"}) ; -- 10000 
 lin dawn_V = mkV (lin VK {s = c72A "valjeta"}) ; -- 10000 
-lin day_N = mkN "päivä" ; -- 81 
 lin daybook_N = mkN "päiväkirja" ; -- 6137 
 lin daydream_V = mkV (lin VK {s = c61 "uneksia"}) ; -- 10000 
 lin daylight_N = mkN "päivänvalo" ; -- 8722 
@@ -23210,9 +23022,6 @@ lin diction_N = mkN (lin NK {s = d39 "esitys"}) ; -- 295
 lin dictum_N = mkN (lin NK {s = d01A "lausunto"}) ; -- 990 
 lin didactic_A = mkA (lin AK {s = d38 "didaktinen"}) ; -- 10000 
 lin diddle_V2 = mkV2 (lin VK {s = c73 "puijata"}) ; -- 10000 
-lin die_N = mkN "terä" ; -- 7457 
-lin die_V = mkV (lin VK {s = c67 "kuolla"}) ; -- 562 
-lin die_V2 = mkV2 (lin VK {s = c67 "kuolla"}) ; -- 562 
 lin dieresis_N = mkN (lin NK {s = d09 "treema"}) ; -- 10000 
 lin diet_N = mkN "ruoka" ; -- 775 
 lin dietetics_N = mkN (lin NK {s = d09A "dietetiikka"}) ; -- 10000 
@@ -23237,9 +23046,6 @@ lin diffuse_V = mkV "levitä" ; -- 1563
 lin diffuse_V2 = mkV2 "levitä" ; -- 1563 
 lin diffuseness_N = mkN (lin NK {s = d40 "hajanaisuus"}) ; -- 10000 
 lin diffusion_N = mkN "leviäminen" ; -- 4511 
-lin dig_N = mkN (lin NK {s = d39 "kaivaus"}) ; -- 8754 
-lin dig_V = mkV (lin VK {s = c56 "kaivaa"}) ; -- 2580 
-lin dig_V2 = mkV2 (lin VK {s = c56 "kaivaa"}) ; -- 2580 
 lin digest_N = mkN (lin NK {s = d01 "lukemisto"}) ; -- 10000 
 lin digest_V = mkV (lin VK {s = c74A "koota"}) ; -- 803 
 lin digest_V2 = mkV2 (lin VK {s = c74A "koota"}) ; -- 803 
@@ -23316,9 +23122,6 @@ lin direful_A = mkA (lin AK {s = d10 "kammottava"}) ; -- 10000
 lin dirk_N = mkN (lin NK {s = d06 "tikari"}) ; -- 10000 
 lin dirt_N = mkN (lin NK {s = d18 "maa"}) ; -- 10000 
 lin dirtily_Adv = mkAdv (lin AdvK {s = c99 "siivottomasti"}) ; -- 10000 
-lin dirty_A = mkA "likainen" ; -- 5564 
-lin dirty_V = mkV (lin VK {s = c73A "sotata"}) ; -- 10000 
-lin dirty_V2 = mkV2 (lin VK {s = c73A "sotata"}) ; -- 10000 
 lin disability_N = mkN (lin NK {s = d09 "vamma"}) ; -- 2091 
 lin disable_V2 = mkV2 (lin VK {s = c52A "vaurioitua"}) ; -- 5385 
 lin disablement_N = mkN (lin NK {s = d09 "vamma"}) ; -- 2091 
@@ -23561,7 +23364,6 @@ lin dissolve_V2 = mkV2 "päättää" ; -- 161
 lin dissonance_N = mkN (lin NK {s = d10 "eripura"}) ; -- 10000 
 lin dissonant_A = mkA "ristiriitainen" ; -- 4033 
 lin dissuasion_N = mkN (lin NK {s = d39 "varoitus"}) ; -- 3387 
-lin distance_N = mkN "välimatka" ; -- 9195 
 lin distant_A = mkA "kaukainen" ; -- 4427 
 lin distemper_N = mkN (lin NK {s = d40 "vihaisuus"}) ; -- 10000 
 lin distend_V = mkV (lin VK {s = c72 "laajeta"}) ; -- 2894 
@@ -23642,8 +23444,6 @@ lin divvy_N = mkN (lin NK {s = d40 "osuus"}) ; -- 369
 lin dizziness_N = mkN (lin NK {s = d39 "huimaus"}) ; -- 10000 
 lin dizzy_A = mkA "typerä" ; -- 8639 
 lin dizzy_V2 = mkV2 (lin VK {s = c73 "huimata"}) ; -- 10000 
-lin do_V = mkV "tehdä" ; -- 16 
-lin do_V2 = mkV2 "tehdä" ; -- 16 
 lin docility_N = mkN (lin NK {s = d40 "mukautuvaisuus"}) ; -- 10000 
 lin dock_N = mkN "laituri" ; -- 4144 
 lin dock_V = mkV "vähentää" ; -- 802 
@@ -23651,8 +23451,6 @@ lin dock_V2 = mkV2 "vähentää" ; -- 802
 lin docker_N = mkN (lin NK {s = d10 "lastaaja"}) ; -- 10000 
 lin docket_N = mkN "asialista" ; -- 5883 
 lin dockyard_N = mkN (lin NK {s = d14A "telakka"}) ; -- 2734 
-lin doctor_N = mkN "lääkäri" ; -- 801 
-lin doctor_V2 = mkV2 (lin VK {s = c53A "hoitaa"}) ; -- 288 
 lin doctrinaire_A = mkA (lin AK {s = d38 "teoreettinen"}) ; -- 6941 
 lin doctrinaire_N = mkN (lin NK {s = d04A "teoreetikko"}) ; -- 10000 
 lin doctrinal_A = mkA (lin AK {s = d38 "dogmaattinen"}) ; -- 10000 
@@ -23669,8 +23467,6 @@ lin dodgy_A = mkA (lin AK {s = d38 "vaarallinen"}) ; -- 1398
 lin dodo_N = mkN (lin NK {s = d03 "muumio"}) ; -- 10000 
 lin doer_N = mkN "tekijä" ; -- 538 
 lin doff_V2 = mkV2 (lin VK {s = c53 "nostaa"}) ; -- 306 
-lin dog_N = mkN (lin NK {s = d10 "koira"}) ; -- 954 
-lin dog_V2 = mkV2 (lin VK {s = c73 "seurata"}) ; -- 120 
 lin doggie_N = mkN (lin NK {s = d09 "hauva"}) ; -- 10000 
 lin doggy_N = mkN (lin NK {s = d09 "hauva"}) ; -- 10000 
 lin doghouse_N = mkN (lin NK {s = d05A "koirankoppi"}) ; -- 10000 
@@ -23708,7 +23504,6 @@ lin donkey_N = mkN (lin NK {s = d05 "aasi"}) ; -- 10000
 lin donor_N = mkN (lin NK {s = d10 "lahjoittaja"}) ; -- 10000 
 lin doom_N = mkN (lin NK {s = d03 "tuomio"}) ; -- 1115 
 lin doom_V2 = mkV2 (lin VK {s = c69 "tuomita"}) ; -- 734 
-lin door_N = mkN (lin NK {s = d01 "talo"}) ; -- 277 
 lin doorkeeper_N = mkN "vahtimestari" ; -- 9059 
 lin doorknocker_N = mkN (lin NK {s = d33A "kolkutin"}) ; -- 10000 
 lin doornail_N = mkN (lin NK {s = d09 "naula"}) ; -- 10000 
@@ -23846,9 +23641,6 @@ lin drifter_N = mkN (lin NK {s = d06 "kulkuri"}) ; -- 10000
 lin drill_N = mkN (lin NK {s = d39 "harjoitus"}) ; -- 1314 
 lin drill_V = mkV (lin VK {s = c53A "kouluttaa"}) ; -- 1350 
 lin drill_V2 = mkV2 (lin VK {s = c53A "kouluttaa"}) ; -- 1350 
-lin drink_N = mkN (lin NK {s = d27 "vesi"}) ; -- 348 
-lin drink_V = mkV (lin VK {s = c64 "juoda"}) ; -- 2230 
-lin drink_V2 = mkV2 (lin VK {s = c64 "juoda"}) ; -- 2230 
 lin drinker_N = mkN (lin NK {s = d06 "juomari"}) ; -- 10000 
 lin drinking_N = mkN (lin NK {s = d38 "juominen"}) ; -- 8398 
 lin drip_N = mkN (lin NK {s = d01A "vuoto"}) ; -- 8245 
@@ -23899,9 +23691,6 @@ lin drunk_A = mkA "humalainen" ; -- 9325
 lin drunk_N = mkN (lin NK {s = d01A "juoppo"}) ; -- 10000 
 lin drunkard_N = mkN (lin NK {s = d01A "juoppo"}) ; -- 10000 
 lin drunkenness_N = mkN (lin NK {s = d38 "juominen"}) ; -- 8398 
-lin dry_A = mkA "tyhjä" ; -- 1379 
-lin dry_V = mkV (lin VK {s = c52 "kuivua"}) ; -- 5610 
-lin dry_V2 = mkV2 (lin VK {s = c52 "kuivua"}) ; -- 5610 
 lin dryer_N = mkN (lin NK {s = d10 "kuivaaja"}) ; -- 10000 
 lin dryness_N = mkN (lin NK {s = d40 "kuivuus"}) ; -- 5221 
 lin dub_V2 = mkV2 "nimittää" ; -- 867 
@@ -23926,9 +23715,6 @@ lin dug_N = mkN (lin NK {s = d49 "utare"}) ; -- 10000
 lin dugout_N = mkN (lin NK {s = d06 "bunkkeri"}) ; -- 10000 
 lin duke_N = mkN (lin NK {s = d12 "herttua"}) ; -- 10000 
 lin dulcet_A = mkA (lin AK {s = d10 "ihana"}) ; -- 2899 
-lin dull_A = mkA "heikko" ; -- 1009 
-lin dull_V = mkV "heikentää" ; -- 2491 
-lin dull_V2 = mkV2 "heikentää" ; -- 2491 
 lin dullard_N = mkN (lin NK {s = d39 "typerys"}) ; -- 10000 
 lin dullness_N = mkN (lin NK {s = d40 "yksitoikkoisuus"}) ; -- 10000 
 lin dumb_A = mkA "tyhmä" ; -- 5208 
@@ -23955,8 +23741,6 @@ lin durance_N = mkN (lin NK {s = d40 "vankeus"}) ; -- 2210
 lin duration_N = mkN (lin NK {s = d01 "kesto"}) ; -- 4574 
 lin duress_N = mkN (lin NK {s = d01A "pakko"}) ; -- 1150 
 lin dusky_A = mkA "tumma" ; -- 3192 
-lin dust_N = mkN "pöly" ; -- 6140 
-lin dust_V2 = mkV2 (lin VK {s = c53 "varjostaa"}) ; -- 6957 
 lin duster_N = mkN "syöttö" ; -- 3085 
 lin dutiful_A = mkA (lin AK {s = d38 "kuuliainen"}) ; -- 10000 
 lin duty_N = mkN (lin NK {s = d40 "velvollisuus"}) ; -- 2904 
@@ -23978,7 +23762,6 @@ lin e'er_Adv = mkAdv "aina" ; -- 132
 lin eager_A = mkA (lin AK {s = d41A "innokas"}) ; -- 2724 
 lin eagerness_N = mkN (lin NK {s = d01A "into"}) ; -- 2314 
 lin eagle_N = mkN (lin NK {s = d10 "kotka"}) ; -- 6904 
-lin ear_N = mkN (lin NK {s = d03 "huomio"}) ; -- 486 
 lin earful_N = mkN (lin NK {s = d39 "vuodatus"}) ; -- 10000 
 lin earl_N = mkN (lin NK {s = d05 "jaarli"}) ; -- 10000 
 lin early_A = mkA "aikainen" ; -- 1030 
@@ -23990,8 +23773,6 @@ lin earnest_N = mkN (lin NK {s = d40 "vakuus"}) ; -- 6611
 lin earnestness_N = mkN (lin NK {s = d40 "vakavuus"}) ; -- 8870 
 lin earphone_N = mkN (lin NK {s = d48A "kuuloke"}) ; -- 10000 
 lin earpiece_N = mkN (lin NK {s = d48A "kuuloke"}) ; -- 10000 
-lin earth_N = mkN "maapallo" ; -- 3131 
-lin earth_V2 = mkV2 (lin VK {s = c53A "maadoittaa"}) ; -- 10000 
 lin earth_closet_N = mkN (lin NK {s = d18 "puusee"}) ; -- 10000 
 lin earthenware_N = mkN (lin NK {s = d05 "fajanssi"}) ; -- 10000 
 lin earthly_A = mkA "maallinen" ; -- 7841 
@@ -24006,11 +23787,7 @@ lin easily_Adv = mkAdv (lin AdvK {s = c99 "helposti"}) ; -- 792
 lin east_A = mkA "itäinen" ; -- 2950 
 lin easterly_A = mkA "itäinen" ; -- 2950 
 lin eastern_A = mkA "itäinen" ; -- 2950 
-lin easy_A = mkA "helppo" ; -- 461 
-lin easy_Adv = mkAdv (lin AdvK {s = c99 "hitaasti"}) ; -- 2561 
 lin easygoing_A = mkA (lin AK {s = d10 "mukava"}) ; -- 1200 
-lin eat_V = mkV "syödä" ; -- 920 
-lin eat_V2 = mkV2 "syödä" ; -- 920 
 lin ebb_N = mkN (lin NK {s = d01 "lasku"}) ; -- 841 
 lin ebb_V = mkV (lin VK {s = c58 "laskea"}) ; -- 259 
 lin ebonite_N = mkN (lin NK {s = d05A "eboniitti"}) ; -- 10000 
@@ -24084,7 +23861,6 @@ lin effulgence_N = mkN "säteily" ; -- 5824
 lin effusion_N = mkN (lin NK {s = d39 "vuodatus"}) ; -- 10000 
 lin effusive_A = mkA (lin AK {s = d38 "ylenpalttinen"}) ; -- 10000 
 lin effusiveness_N = mkN (lin NK {s = d40 "ylenpalttisuus"}) ; -- 10000 
-lin egg_N = mkN (lin NK {s = d10 "muna"}) ; -- 3965 
 lin eggshell_N = mkN (lin NK {s = d26 "munankuori"}) ; -- 10000 
 lin ego_N = mkN (lin NK {s = d01 "ego"}) ; -- 10000 
 lin egoist_N = mkN (lin NK {s = d05 "egoisti"}) ; -- 10000 
@@ -24231,9 +24007,6 @@ lin emporium_N = mkN "tavaratalo" ; -- 3870
 lin empower_V2 = mkV2 (lin VK {s = c56A "antaa"}) ; -- 61 
 lin empress_N = mkN (lin NK {s = d09 "keisarinna"}) ; -- 10000 
 lin emptiness_N = mkN (lin NK {s = d40 "autius"}) ; -- 10000 
-lin empty_A = mkA "tyhjä" ; -- 1379 
-lin empty_V = mkV "jättää" ; -- 255 
-lin empty_V2 = mkV2 "jättää" ; -- 255 
 lin empyrean_A = mkA (lin AK {s = d10 "mahtava"}) ; -- 2260 
 lin empyrean_N = mkN (lin NK {s = d41 "taivas"}) ; -- 1783 
 lin emu_N = mkN (lin NK {s = d01 "emu"}) ; -- 9377 
@@ -24288,7 +24061,6 @@ lin endue_V2 = mkV2 (lin VK {s = c56A "antaa"}) ; -- 61
 lin endurance_N = mkN "kestävyys" ; -- 6438 
 lin endure_V = mkV "kestää" ; -- 310 
 lin endure_V2 = mkV2 "kestää" ; -- 310 
-lin enemy_N = mkN (lin NK {s = d38 "vihollinen"}) ; -- 3858 
 lin energetic_A = mkA (lin AK {s = d38 "energinen"}) ; -- 10000 
 lin energy_N = mkN (lin NK {s = d12 "energia"}) ; -- 1872 
 lin enervate_V2 = mkV2 "heikentää" ; -- 2491 
@@ -24812,8 +24584,6 @@ lin exuberant_A = mkA "rehevä" ; -- 9750
 lin exude_V = mkV (lin VK {s = c52 "uhkua"}) ; -- 10000 
 lin exude_V2 = mkV2 (lin VK {s = c52 "uhkua"}) ; -- 10000 
 lin exult_V = mkV (lin VK {s = c61 "juhlia"}) ; -- 1109 
-lin eye_N = mkN (lin NK {s = d03 "huomio"}) ; -- 486 
-lin eye_V2 = mkV2 (lin VK {s = c52 "katsoa"}) ; -- 211 
 lin eyeball_V2 = mkV2 (lin VK {s = c67 "katsella"}) ; -- 1400 
 lin eyeless_A = mkA (lin AK {s = d15 "sokea"}) ; -- 9857 
 lin eyelet_N = mkN "reikä" ; -- 4867 
@@ -24839,7 +24609,6 @@ lin facing_N = mkN (lin NK {s = d39 "vuoraus"}) ; -- 10000
 lin fact_N = mkN (lin NK {s = d40 "todellisuus"}) ; -- 1492 
 lin factitious_A = mkA "keinotekoinen" ; -- 7054 
 lin factor_N = mkN "tekijä" ; -- 538 
-lin factory_N = mkN (lin NK {s = d41A "tehdas"}) ; -- 763 
 lin factual_A = mkA (lin AK {s = d38 "asiallinen"}) ; -- 4489 
 lin faculty_N = mkN "henkilökunta" ; -- 1059 
 lin fad_N = mkN (lin NK {s = d05 "trendi"}) ; -- 5384 
@@ -24872,9 +24641,6 @@ lin fake_N = mkN (lin NK {s = d06 "huijari"}) ; -- 10000
 lin fake_V2 = mkV2 "väärentää" ; -- 6958 
 lin fakir_N = mkN (lin NK {s = d06 "fakiiri"}) ; -- 10000 
 lin falcon_N = mkN (lin NK {s = d09A "haukka"}) ; -- 10000 
-lin fall_N = mkN (lin NK {s = d01 "syksy"}) ; -- 265 
-lin fall_V = mkV (lin VK {s = c67 "tulla"}) ; -- 14 
-lin fall_V2 = mkV2 (lin VK {s = c67 "tulla"}) ; -- 14 
 lin fallacious_A = mkA "väärä" ; -- 1118 
 lin fallout_N = mkN (lin NK {s = d10 "laskeuma"}) ; -- 10000 
 lin fallow_N = mkN (lin NK {s = d01A "kesanto"}) ; -- 10000 
@@ -24911,7 +24677,6 @@ lin fantasize_V = mkV (lin VK {s = c67A "kuvitella"}) ; -- 1593
 lin fantastic_A = mkA (lin AK {s = d15 "huikea"}) ; -- 3360 
 lin fantastically_Adv = mkAdv "loistavasti" ; -- 6857 
 lin fantasy_N = mkN (lin NK {s = d12 "fantasia"}) ; -- 7507 
-lin far_A = mkA "pitkä" ; -- 208 
 lin far_flung_A = mkA "kaukainen" ; -- 4427 
 lin far_off_A = mkA "etäinen" ; -- 5011 
 lin faraway_A = mkA "kaukainen" ; -- 4427 
@@ -24948,9 +24713,6 @@ lin fastening_N = mkN (lin NK {s = d33A "kiinnitin"}) ; -- 10000
 lin fastidious_A = mkA (lin AK {s = d10 "vaativa"}) ; -- 2332 
 lin fastidiousness_N = mkN (lin NK {s = d40 "tarkkuus"}) ; -- 4841 
 lin fastness_N = mkN (lin NK {s = d40 "lujuus"}) ; -- 10000 
-lin fat_A = mkA (lin AK {s = d01 "paksu"}) ; -- 3775 
-lin fat_N = mkN (lin NK {s = d09 "rasva"}) ; -- 4660 
-lin fat_V2 = mkV2 (lin VK {s = c53A "lihottaa"}) ; -- 10000 
 lin fatal_A = mkA (lin AK {s = d10 "tuhoisa"}) ; -- 4615 
 lin fatalism_N = mkN (lin NK {s = d05 "fatalismi"}) ; -- 10000 
 lin fatalist_N = mkN (lin NK {s = d05 "fatalisti"}) ; -- 10000 
@@ -24958,7 +24720,6 @@ lin fatalistic_A = mkA (lin AK {s = d38 "fatalistinen"}) ; -- 10000
 lin fate_N = mkN (lin NK {s = d02 "kohtalo"}) ; -- 1284 
 lin fateful_A = mkA (lin AK {s = d10 "tuhoisa"}) ; -- 4615 
 lin fathead_N = mkN (lin NK {s = d39 "typerys"}) ; -- 10000 
-lin father_N = mkN "isä" ; -- 553 
 lin father_in_law_N = mkN (lin NK {s = d07A "appi"}) ; -- 10000 
 lin fatherhood_N = mkN (lin NK {s = d40 "isyys"}) ; -- 10000 
 lin fatherland_N = mkN "isänmaa" ; -- 5841 
@@ -24984,9 +24745,6 @@ lin favourable_A = mkA (lin AK {s = d10 "suotuisa"}) ; -- 5603
 lin favourite_N = mkN (lin NK {s = d05A "suosikki"}) ; -- 1780 
 lin fawn_V = mkV (lin VK {s = c68 "liehakoida"}) ; -- 10000 
 lin fealty_N = mkN (lin NK {s = d40 "uskollisuus"}) ; -- 10000 
-lin fear_N = mkN (lin NK {s = d01A "pelko"}) ; -- 1369 
-lin fear_V = mkV "pelätä" ; -- 690 
-lin fear_V2 = mkV2 "pelätä" ; -- 690 
 lin fearful_A = mkA (lin AK {s = d41A "pelokas"}) ; -- 10000 
 lin fearfulness_N = mkN (lin NK {s = d40 "pelokkuus"}) ; -- 10000 
 lin fearless_A = mkA (lin AK {s = d15 "urhea"}) ; -- 10000 
@@ -24995,7 +24753,6 @@ lin fearsome_A = mkA "hirveä" ; -- 5815
 lin feast_N = mkN (lin NK {s = d01A "nautinto"}) ; -- 8337 
 lin feast_V = mkV (lin VK {s = c67A "herkutella"}) ; -- 10000 
 lin feast_V2 = mkV2 (lin VK {s = c67A "herkutella"}) ; -- 10000 
-lin feather_V2 = mkV2 (lin VK {s = c73A "pontata"}) ; -- 10000 
 lin feature_N = mkN (lin NK {s = d40 "ominaisuus"}) ; -- 2239 
 lin feature_V2 = mkV2 (lin VK {s = c52 "kuulua"}) ; -- 96 
 lin featureless_A = mkA (lin AK {s = d38 "yksitoikkoinen"}) ; -- 10000 
@@ -25103,9 +24860,6 @@ lin fiery_A = mkA (lin AK {s = d41 "kiivas"}) ; -- 3422
 lin fiesta_N = mkN (lin NK {s = d10 "juhla"}) ; -- 831 
 lin fife_N = mkN (lin NK {s = d01 "huilu"}) ; -- 10000 
 lin fig_N = mkN (lin NK {s = d12 "viikuna"}) ; -- 10000 
-lin fight_N = mkN (lin NK {s = d02 "ottelu"}) ; -- 241 
-lin fight_V = mkV (lin VK {s = c67A "tapella"}) ; -- 6839 
-lin fight_V2 = mkV2 (lin VK {s = c67A "tapella"}) ; -- 6839 
 lin fighter_N = mkN "hävittäjä" ; -- 5136 
 lin fighting_N = mkN (lin NK {s = d02 "tappelu"}) ; -- 8039 
 lin figment_N = mkN (lin NK {s = d01A "juttu"}) ; -- 354 
@@ -25148,9 +24902,6 @@ lin finance_V2 = mkV2 (lin VK {s = c53A "rahoittaa"}) ; -- 1778
 lin financial_A = mkA (lin AK {s = d38 "taloudellinen"}) ; -- 598 
 lin financier_N = mkN (lin NK {s = d10 "rahoittaja"}) ; -- 5223 
 lin finch_N = mkN (lin NK {s = d01A "peippo"}) ; -- 10000 
-lin find_N = mkN "löytäminen" ; -- 3756 
-lin find_V = mkV (lin VK {s = c63 "saada"}) ; -- 10 
-lin find_V2 = mkV2 (lin VK {s = c63 "saada"}) ; -- 10 
 lin finder_N = mkN (lin NK {s = d33 "etsin"}) ; -- 10000 
 lin finding_N = mkN "päätös" ; -- 163 
 lin fine_A = mkA (lin AK {s = d01 "hieno"}) ; -- 1019 
@@ -25169,9 +24920,6 @@ lin finish_V2 = mkV2 "päättää" ; -- 161
 lin finite_A = mkA (lin AK {s = d38 "rajallinen"}) ; -- 7398 
 lin fiord_N = mkN (lin NK {s = d01 "vuono"}) ; -- 10000 
 lin fir_N = mkN "kuusi" ; -- 2828 
-lin fire_N = mkN (lin NK {s = d23 "tuli"}) ; -- 1833 
-lin fire_V = mkV (lin VK {s = c52A "ampua"}) ; -- 957 
-lin fire_V2 = mkV2 (lin VK {s = c52A "ampua"}) ; -- 957 
 lin fire_eater_N = mkN "palomies" ; -- 3564 
 lin firebrand_N = mkN (lin NK {s = d10 "kiihottaja"}) ; -- 10000 
 lin firebug_N = mkN (lin NK {s = d48A "lude"}) ; -- 10000 
@@ -25187,9 +24935,6 @@ lin firmness_N = mkN "vakaus" ; -- 3736
 lin first_rate_Adv = mkAdv "erinomaisen" ; -- 9279 
 lin firstborn_N = mkN (lin NK {s = d38 "esikoinen"}) ; -- 8540 
 lin firth_N = mkN (lin NK {s = d01 "vuono"}) ; -- 10000 
-lin fish_N = mkN (lin NK {s = d09 "kala"}) ; -- 1277 
-lin fish_V = mkV (lin VK {s = c53 "kalastaa"}) ; -- 5867 
-lin fish_V2 = mkV2 (lin VK {s = c53 "kalastaa"}) ; -- 5867 
 lin fishbone_N = mkN (lin NK {s = d01A "ruoto"}) ; -- 10000 
 lin fisher_N = mkN (lin NK {s = d10 "kalastaja"}) ; -- 3670 
 lin fisherman_N = mkN (lin NK {s = d10 "kalastaja"}) ; -- 3670 
@@ -25309,9 +25054,6 @@ lin flirt_N = mkN (lin NK {s = d05A "flirtti"}) ; -- 10000
 lin flirt_V = mkV (lin VK {s = c67 "flirttailla"}) ; -- 10000 
 lin flirtation_N = mkN (lin NK {s = d02 "hakkailu"}) ; -- 10000 
 lin flit_N = mkN (lin NK {s = d01A "muutto"}) ; -- 2671 
-lin float_N = mkN (lin NK {s = d10 "juoma"}) ; -- 3787 
-lin float_V = mkV (lin VK {s = c67 "leijailla"}) ; -- 10000 
-lin float_V2 = mkV2 (lin VK {s = c67 "leijailla"}) ; -- 10000 
 lin floatation_N = mkN (lin NK {s = d09A "kellunta"}) ; -- 10000 
 lin floating_A = mkA "epävarma" ; -- 3174 
 lin flock_N = mkN "seurakunta" ; -- 889 
@@ -25321,8 +25063,6 @@ lin flood_N = mkN (lin NK {s = d10 "tulva"}) ; -- 3232
 lin flood_V = mkV "täyttää" ; -- 590 
 lin flood_V2 = mkV2 "täyttää" ; -- 590 
 lin floodgate_N = mkN (lin NK {s = d05A "portti"}) ; -- 3203 
-lin floor_N = mkN (lin NK {s = d39 "kerros"}) ; -- 2447 
-lin floor_V2 = mkV2 "tyrmätä" ; -- 3552 
 lin floorboard_N = mkN (lin NK {s = d12 "lattia"}) ; -- 2880 
 lin flooring_N = mkN (lin NK {s = d12 "lattia"}) ; -- 2880 
 lin floozie_N = mkN (lin NK {s = d10 "lutka"}) ; -- 10000 
@@ -25344,10 +25084,6 @@ lin flourish_N = mkN (lin NK {s = d06 "fanfaari"}) ; -- 10000
 lin flourish_V = mkV "menestyä" ; -- 1184 
 lin flourish_V2 = mkV2 "menestyä" ; -- 1184 
 lin flout_V2 = mkV2 (lin VK {s = c73 "ivata"}) ; -- 10000 
-lin flow_N = mkN (lin NK {s = d01 "juoksu"}) ; -- 1802 
-lin flow_V = mkV (lin VK {s = c73A "virrata"}) ; -- 3193 
-lin flower_N = mkN (lin NK {s = d10A "kukka"}) ; -- 2604 
-lin flower_V = mkV (lin VK {s = c61A "kukkia"}) ; -- 4969 
 lin flu_N = mkN (lin NK {s = d10 "flunssa"}) ; -- 6365 
 lin fluctuate_V = mkV (lin VK {s = c67A "heilahdella"}) ; -- 10000 
 lin fluctuation_N = mkN (lin NK {s = d02 "vaihtelu"}) ; -- 3999 
@@ -25386,10 +25122,6 @@ lin flutter_N = mkN (lin NK {s = d39 "lepatus"}) ; -- 10000
 lin flutter_V = mkV (lin VK {s = c53A "lepattaa"}) ; -- 10000 
 lin flutter_V2 = mkV2 (lin VK {s = c53A "lepattaa"}) ; -- 10000 
 lin flux_N = mkN (lin NK {s = d39 "muutos"}) ; -- 333 
-lin fly_A = mkA (lin AK {s = d10 "ovela"}) ; -- 10000 
-lin fly_N = mkN (lin NK {s = d01 "perho"}) ; -- 10000 
-lin fly_V = mkV "lentää" ; -- 1241 
-lin fly_V2 = mkV2 "lentää" ; -- 1241 
 lin flyblown_A = mkA "likainen" ; -- 5564 
 lin flycatcher_N = mkN (lin NK {s = d01A "sieppo"}) ; -- 10000 
 lin flyer_N = mkN "lentäjä" ; -- 3420 
@@ -25404,7 +25136,6 @@ lin focus_V = mkV "keskittyä" ; -- 662
 lin focus_V2 = mkV2 "keskittyä" ; -- 662 
 lin fodder_N = mkN (lin NK {s = d01 "rehu"}) ; -- 7315 
 lin foe_N = mkN (lin NK {s = d10 "vastustaja"}) ; -- 1013 
-lin fog_N = mkN (lin NK {s = d10 "usva"}) ; -- 10000 
 lin fogey_N = mkN (lin NK {s = d39 "kalkkis"}) ; -- 10000 
 lin foil_N = mkN (lin NK {s = d07A "siipi"}) ; -- 2891 
 lin foil_V2 = mkV2 (lin VK {s = c53 "korostaa"}) ; -- 404 
@@ -25435,9 +25166,6 @@ lin fool_V2 = mkV2 (lin VK {s = c73 "tuhlata"}) ; -- 7365
 lin foolery_N = mkN (lin NK {s = d02 "hulluttelu"}) ; -- 10000 
 lin foolish_A = mkA "järjetön" ; -- 7348 
 lin foolishness_N = mkN (lin NK {s = d40 "typeryys"}) ; -- 10000 
-lin foot_N = mkN (lin NK {s = d09A "jalka"}) ; -- 818 
-lin foot_V = mkV (lin VK {s = c56 "maksaa"}) ; -- 134 
-lin foot_V2 = mkV2 (lin VK {s = c56 "maksaa"}) ; -- 134 
 lin football_N = mkN "jalkapallo" ; -- 2010 
 lin footballer_N = mkN "jalkapalloilija" ; -- 7280 
 lin footboard_N = mkN "pääty" ; -- 7890 
@@ -25505,8 +25233,6 @@ lin forge_N = mkN (lin NK {s = d09 "paja"}) ; -- 7095
 lin forge_V = mkV "kehittää" ; -- 599 
 lin forge_V2 = mkV2 "kehittää" ; -- 599 
 lin forger_N = mkN "seppä" ; -- 9553 
-lin forget_V = mkV (lin VK {s = c53A "unohtaa"}) ; -- 1211 
-lin forget_V2 = mkV2 (lin VK {s = c53A "unohtaa"}) ; -- 1211 
 lin forget_me_not_N = mkN (lin NK {s = d05A "lemmikki"}) ; -- 4994 
 lin forgetful_A = mkA "lyhyt" ; -- 770 
 lin forging_N = mkN (lin NK {s = d09A "taonta"}) ; -- 10000 
@@ -25633,9 +25359,6 @@ lin freelance_N = mkN (lin NK {s = d08 "freelance"}) ; -- 10000
 lin freemasonry_N = mkN (lin NK {s = d40 "vapaamuurarius"}) ; -- 10000 
 lin freesia_N = mkN (lin NK {s = d12 "freesia"}) ; -- 10000 
 lin freeway_N = mkN "moottoritie" ; -- 3411 
-lin freeze_N = mkN (lin NK {s = d38 "pakkanen"}) ; -- 1838 
-lin freeze_V = mkV "jäätyä" ; -- 5729 
-lin freeze_V2 = mkV2 "jäätyä" ; -- 5729 
 lin freezer_N = mkN (lin NK {s = d33 "pakastin"}) ; -- 10000 
 lin freight_N = mkN (lin NK {s = d05A "rahti"}) ; -- 10000 
 lin freight_V2 = mkV2 (lin VK {s = c73A "rahdata"}) ; -- 10000 
@@ -25661,8 +25384,6 @@ lin friability_N = mkN (lin NK {s = d40 "hauraus"}) ; -- 10000
 lin friar_N = mkN (lin NK {s = d05A "munkki"}) ; -- 9537 
 lin fricassee_N = mkN (lin NK {s = d05A "viillokki"}) ; -- 10000 
 lin friction_N = mkN (lin NK {s = d10 "ongelma"}) ; -- 177 
-lin fridge_N = mkN "jääkaappi" ; -- 6503 
-lin friend_N = mkN "ystävä" ; -- 817 
 lin friendlessness_N = mkN "yksinäisyys" ; -- 6343 
 lin friendly_A = mkA "ystävällinen" ; -- 5532 
 lin friendship_N = mkN "ystävyys" ; -- 5175 
@@ -25695,7 +25416,6 @@ lin froth_N = mkN (lin NK {s = d01A "vaahto"}) ; -- 10000
 lin froth_V = mkV (lin VK {s = c74A "vaahdota"}) ; -- 10000 
 lin frugal_A = mkA "tarkka" ; -- 856 
 lin frugality_N = mkN (lin NK {s = d40 "taloudellisuus"}) ; -- 10000 
-lin fruit_N = mkN (lin NK {s = d39 "tulos"}) ; -- 159 
 lin fruition_N = mkN "toteutuminen" ; -- 3124 
 lin fruity_A = mkA (lin AK {s = d01 "hullu"}) ; -- 2883 
 lin frumpish_A = mkA "vanhanaikainen" ; -- 5846 
@@ -25722,7 +25442,6 @@ lin fulcrum_N = mkN (lin NK {s = d09A "napa"}) ; -- 10000
 lin fulfil_V2 = mkV2 (lin VK {s = c53A "toteuttaa"}) ; -- 574 
 lin fulfill_V2 = mkV2 (lin VK {s = c53A "toteuttaa"}) ; -- 574 
 lin fulfilment_N = mkN "toteuttaminen" ; -- 1863 
-lin full_A = mkA "täysi" ; -- 712 
 lin full_blooded_A = mkA (lin AK {s = d41A "ponnekas"}) ; -- 10000 
 lin full_blown_A = mkA "kypsä" ; -- 4261 
 lin full_dress_A = mkA (lin AK {s = d38 "perusteellinen"}) ; -- 4356 
@@ -25739,7 +25458,6 @@ lin fume_V = mkV (lin VK {s = c53A "savuttaa"}) ; -- 10000
 lin fume_V2 = mkV2 (lin VK {s = c53A "savuttaa"}) ; -- 10000 
 lin fumigate_V2 = mkV2 (lin VK {s = c53A "savuttaa"}) ; -- 10000 
 lin fumigation_N = mkN (lin NK {s = d39 "savutus"}) ; -- 10000 
-lin fun_N = mkN (lin NK {s = d40 "hulluus"}) ; -- 8629 
 lin function_N = mkN (lin NK {s = d10 "juhla"}) ; -- 831 
 lin function_V = mkV (lin VK {s = c61 "toimia"}) ; -- 83 
 lin functional_A = mkA "toiminnallinen" ; -- 6418 
@@ -25865,7 +25583,6 @@ lin gape_V = mkV (lin VK {s = c53A "ammottaa"}) ; -- 10000
 lin garb_N = mkN (lin NK {s = d01 "asu"}) ; -- 3615 
 lin garb_V2 = mkV2 (lin VK {s = c53A "vaatettaa"}) ; -- 10000 
 lin garbage_N = mkN (lin NK {s = d39 "roskis"}) ; -- 10000 
-lin garden_N = mkN "puutarha" ; -- 3436 
 lin gardenia_N = mkN (lin NK {s = d12 "gardenia"}) ; -- 10000 
 lin gargantuan_A = mkA "jättimäinen" ; -- 9447 
 lin gargle_N = mkN (lin NK {s = d39 "kurlaus"}) ; -- 10000 
@@ -26015,12 +25732,8 @@ lin gird_V = mkV "ympäröidä" ; -- 3235
 lin gird_V2 = mkV2 "ympäröidä" ; -- 3235 
 lin girdle_N = mkN "vyö" ; -- 8260 
 lin girdle_V2 = mkV2 (lin VK {s = c53 "puristaa"}) ; -- 4233 
-lin girl_N = mkN "tyttö" ; -- 513 
 lin girlfriend_N = mkN "tyttöystävä" ; -- 5876 
 lin gist_N = mkN (lin NK {s = d33A "ydin"}) ; -- 3176 
-lin give_N = mkN (lin NK {s = d01 "jousto"}) ; -- 8753 
-lin give_V = mkV (lin VK {s = c52A "kertoa"}) ; -- 30 
-lin give_V2 = mkV2 (lin VK {s = c52A "kertoa"}) ; -- 30 
 lin giveaway_N = mkN (lin NK {s = d09 "lahja"}) ; -- 2275 
 lin giver_N = mkN (lin NK {s = d10 "antaja"}) ; -- 9232 
 lin gizzard_N = mkN (lin NK {s = d09 "kivipiira"}) ; -- 10000 
@@ -26081,7 +25794,6 @@ lin glory_V = mkV (lin VK {s = c61A "nauttia"}) ; -- 929
 lin gloss_N = mkN (lin NK {s = d39 "selitys"}) ; -- 2316 
 lin gloss_V2 = mkV2 (lin VK {s = c53A "kiillottaa"}) ; -- 10000 
 lin glossary_N = mkN (lin NK {s = d02 "sanasto"}) ; -- 10000 
-lin glove_N = mkN (lin NK {s = d09 "hanska"}) ; -- 9155 
 lin glow_N = mkN "säteily" ; -- 5824 
 lin glow_V = mkV (lin VK {s = c52 "hehkua"}) ; -- 5899 
 lin glower_V = mkV (lin VK {s = c66 "mulkaista"}) ; -- 10000 
@@ -26101,9 +25813,6 @@ lin gnaw_V = mkV (lin VK {s = c74 "kaluta"}) ; -- 10000
 lin gnaw_V2 = mkV2 (lin VK {s = c74 "kaluta"}) ; -- 10000 
 lin gnome_N = mkN (lin NK {s = d01A "tonttu"}) ; -- 10000 
 lin gnu_N = mkN (lin NK {s = d18 "gnuu"}) ; -- 10000 
-lin go_N = mkN (lin NK {s = d39 "yritys"}) ; -- 117 
-lin go_V = mkV (lin VK {s = c67 "olla"}) ; -- 1 
-lin go_V2 = mkV2 (lin VK {s = c67 "olla"}) ; -- 1 
 lin go_between_N = mkN "välittäjä" ; -- 3553 
 lin goad_N = mkN (lin NK {s = d48A "yllyke"}) ; -- 10000 
 lin goad_V2 = mkV2 "ärsyttää" ; -- 4306 
@@ -26142,8 +25851,6 @@ lin gong_V2 = mkV2 (lin VK {s = c53A "kumahtaa"}) ; -- 10000
 lin gonorrhea_N = mkN (lin NK {s = d06 "tippuri"}) ; -- 10000 
 lin gonorrhoea_N = mkN (lin NK {s = d06 "tippuri"}) ; -- 10000 
 lin goo_N = mkN (lin NK {s = d06 "liisteri"}) ; -- 10000 
-lin good_A = mkA (lin AK {s = d48 "tuore"}) ; -- 691 
-lin good_N = mkN (lin NK {s = d01A "etu"}) ; -- 637 
 lin good_for_naught_N = mkN (lin NK {s = d34A "kelvoton"}) ; -- 10000 
 lin good_for_nothing_N = mkN (lin NK {s = d05A "hunsvotti"}) ; -- 10000 
 lin goodish_A = mkA (lin AK {s = d38 "melkoinen"}) ; -- 1537 
@@ -26244,9 +25951,6 @@ lin grasp_N = mkN (lin NK {s = d48A "ote"}) ; -- 935
 lin grasp_V = mkV (lin VK {s = c52A "tarttua"}) ; -- 1549 
 lin grasp_V2 = mkV2 (lin VK {s = c52A "tarttua"}) ; -- 1549 
 lin grasping_A = mkA (lin AK {s = d48 "ahne"}) ; -- 10000 
-lin grass_N = mkN "heinä" ; -- 5595 
-lin grass_V = mkV (lin VK {s = c56 "laulaa"}) ; -- 1120 
-lin grass_V2 = mkV2 (lin VK {s = c56 "laulaa"}) ; -- 1120 
 lin grate_N = mkN (lin NK {s = d13 "arina"}) ; -- 10000 
 lin grate_V = mkV (lin VK {s = c52 "narskua"}) ; -- 10000 
 lin grate_V2 = mkV2 (lin VK {s = c52 "narskua"}) ; -- 10000 
@@ -26287,8 +25991,6 @@ lin grebe_N = mkN (lin NK {s = d01A "uikku"}) ; -- 10000
 lin greed_N = mkN (lin NK {s = d40 "ahneus"}) ; -- 8216 
 lin greediness_N = mkN (lin NK {s = d40 "ahneus"}) ; -- 8216 
 lin greedy_A = mkA (lin AK {s = d41 "ahnas"}) ; -- 10000 
-lin green_A = mkA "raaka" ; -- 4244 
-lin green_N = mkN "kenttä" ; -- 701 
 lin greenback_N = mkN (lin NK {s = d06 "dollari"}) ; -- 804 
 lin greenery_N = mkN (lin NK {s = d40 "vehreys"}) ; -- 10000 
 lin greenfly_N = mkN (lin NK {s = d09 "kirva"}) ; -- 10000 
@@ -26496,7 +26198,6 @@ lin hail_N = mkN (lin NK {s = d39 "tervehdys"}) ; -- 7876
 lin hail_V = mkV (lin VK {s = c52 "kutsua"}) ; -- 675 
 lin hail_V2 = mkV2 (lin VK {s = c52 "kutsua"}) ; -- 675 
 lin hailstone_N = mkN (lin NK {s = d48A "rae"}) ; -- 10000 
-lin hair_N = mkN (lin NK {s = d39 "karvoitus"}) ; -- 10000 
 lin hairdo_N = mkN (lin NK {s = d39 "kampaus"}) ; -- 10000 
 lin hairdresser_N = mkN (lin NK {s = d10 "kampaaja"}) ; -- 10000 
 lin hairiness_N = mkN (lin NK {s = d40 "karvaisuus"}) ; -- 10000 
@@ -26529,8 +26230,6 @@ lin hammer_V2 = mkV2 (lin VK {s = c52A "takoa"}) ; -- 6102
 lin hamper_V2 = mkV2 (lin VK {s = c73A "haitata"}) ; -- 2072 
 lin hamster_N = mkN (lin NK {s = d06 "hamsteri"}) ; -- 10000 
 lin hamstring_V2 = mkV2 (lin VK {s = c53A "rajoittaa"}) ; -- 1713 
-lin hand_N = mkN (lin NK {s = d26 "puoli"}) ; -- 253 
-lin hand_V2 = mkV2 (lin VK {s = c56A "auttaa"}) ; -- 550 
 lin handful_N = mkN (lin NK {s = d38 "kourallinen"}) ; -- 10000 
 lin handicap_N = mkN (lin NK {s = d09 "vamma"}) ; -- 2091 
 lin handicap_V2 = mkV2 (lin VK {s = c53A "hankaloittaa"}) ; -- 9076 
@@ -26575,9 +26274,6 @@ lin harass_V2 = mkV2 "häiritä" ; -- 2318
 lin harassment_N = mkN "häirintä" ; -- 9498 
 lin harbinger_N = mkN (lin NK {s = d43 "airut"}) ; -- 10000 
 lin harbor_V2 = mkV2 "pitää" ; -- 18 
-lin harbour_N = mkN (lin NK {s = d10 "satama"}) ; -- 1611 
-lin harbour_V = mkV (lin VK {s = c67 "suojella"}) ; -- 2303 
-lin harbour_V2 = mkV2 (lin VK {s = c67 "suojella"}) ; -- 2303 
 lin hard_A = mkA (lin AK {s = d10 "kova"}) ; -- 218 
 lin hard_Adv = mkAdv (lin AdvK {s = c99 "paljon"}) ; -- 33 
 lin hard_bitten_A = mkA (lin AK {s = d05 "karski"}) ; -- 10000 
@@ -26630,14 +26326,11 @@ lin haste_N = mkN (lin NK {s = d01A "hoppu"}) ; -- 10000
 lin hasten_V = mkV "herättää" ; -- 879 
 lin hasten_V2 = mkV2 "herättää" ; -- 879 
 lin hasty_A = mkA (lin AK {s = d38 "pikainen"}) ; -- 4796 
-lin hat_N = mkN (lin NK {s = d05 "rooli"}) ; -- 628 
 lin hatch_N = mkN (lin NK {s = d01A "luukku"}) ; -- 6595 
 lin hatch_V = mkV (lin VK {s = c53A "viivoittaa"}) ; -- 10000 
 lin hatch_V2 = mkV2 (lin VK {s = c53A "viivoittaa"}) ; -- 10000 
 lin hatchery_N = mkN (lin NK {s = d02 "hautomo"}) ; -- 10000 
 lin hatching_N = mkN (lin NK {s = d39 "varjostus"}) ; -- 10000 
-lin hate_N = mkN (lin NK {s = d39 "suuttumus"}) ; -- 10000 
-lin hate_V2 = mkV2 (lin VK {s = c73 "vihata"}) ; -- 7097 
 lin hatred_N = mkN (lin NK {s = d09 "viha"}) ; -- 4902 
 lin haughtiness_N = mkN (lin NK {s = d40 "koppavuus"}) ; -- 10000 
 lin haughty_A = mkA (lin AK {s = d15 "kopea"}) ; -- 10000 
@@ -26666,9 +26359,6 @@ lin haze_N = mkN (lin NK {s = d01A "utu"}) ; -- 10000
 lin haze_V2 = mkV2 (lin VK {s = c53A "simputtaa"}) ; -- 10000 
 lin he_goat_N = mkN "pukki" ; -- 7284 
 lin he_man_N = mkN (lin NK {s = d05 "orhi"}) ; -- 10000 
-lin head_N = mkN (lin NK {s = d12 "asia"}) ; -- 43 
-lin head_V = mkV "mennä" ; -- 88 
-lin head_V2 = mkV2 "mennä" ; -- 88 
 lin head_on_Adv = mkAdv (lin AdvK {s = c99 "avoimesti"}) ; -- 4020 
 lin headache_N = mkN "päänsärky" ; -- 8407 
 lin header_N = mkN (lin NK {s = d07 "nimi"}) ; -- 199 
@@ -26691,12 +26381,9 @@ lin healthy_A = mkA (lin AK {s = d48 "terve"}) ; -- 1774
 lin heap_N = mkN (lin NK {s = d09 "kasa"}) ; -- 2949 
 lin heap_V2 = mkV2 (lin VK {s = c73 "kasata"}) ; -- 5100 
 lin heaps_Adv = mkAdv (lin AdvK {s = c99 "paljon"}) ; -- 33 
-lin hear_V = mkV (lin VK {s = c67 "kuulla"}) ; -- 434 
-lin hear_V2 = mkV2 (lin VK {s = c67 "kuulla"}) ; -- 434 
 lin hearer_N = mkN (lin NK {s = d12 "kuulija"}) ; -- 2837 
 lin hearing_N = mkN (lin NK {s = d02 "kuulustelu"}) ; -- 4408 
 lin hearken_V = mkV (lin VK {s = c67 "kuulla"}) ; -- 434 
-lin heart_N = mkN "sydän" ; -- 1232 
 lin heartbeat_N = mkN (lin NK {s = d39 "keskus"}) ; -- 10000 
 lin hearten_V2 = mkV2 (lin VK {s = c53 "innostaa"}) ; -- 2983 
 lin hearthrug_N = mkN (lin NK {s = d01A "matto"}) ; -- 4704 
@@ -26717,8 +26404,6 @@ lin heavenly_A = mkA (lin AK {s = d38 "taivaallinen"}) ; -- 10000
 lin heavenward_Adv = mkAdv "ylöspäin" ; -- 4015 
 lin heavily_Adv = mkAdv "runsaasti" ; -- 956 
 lin heaviness_N = mkN (lin NK {s = d01 "paino"}) ; -- 2296 
-lin heavy_A = mkA (lin AK {s = d10 "kova"}) ; -- 218 
-lin heavy_Adv = mkAdv "täynnä" ; -- 1590 
 lin heckle_V2 = mkV2 "keskeyttää" ; -- 1980 
 lin hectare_N = mkN (lin NK {s = d06 "hehtaari"}) ; -- 1448 
 lin hectic_A = mkA (lin AK {s = d38 "hektinen"}) ; -- 10000 
@@ -26847,7 +26532,6 @@ lin hijack_V2 = mkV2 (lin VK {s = c73A "kaapata"}) ; -- 5396
 lin hike_N = mkN (lin NK {s = d01 "nousu"}) ; -- 698 
 lin hike_V = mkV (lin VK {s = c53 "nostaa"}) ; -- 306 
 lin hilarity_N = mkN (lin NK {s = d40 "hauskuus"}) ; -- 10000 
-lin hill_N = mkN (lin NK {s = d12 "kukkula"}) ; -- 7633 
 lin hillock_N = mkN (lin NK {s = d48 "kumpare"}) ; -- 10000 
 lin hilt_N = mkN (lin NK {s = d09 "kahva"}) ; -- 10000 
 lin hinder_V2 = mkV2 "estää" ; -- 773 
@@ -26875,9 +26559,6 @@ lin historic_A = mkA "historiallinen" ; -- 1677
 lin historical_A = mkA "historiallinen" ; -- 1677 
 lin history_N = mkN (lin NK {s = d12 "historia"}) ; -- 465 
 lin histrionics_N = mkN "näytteleminen" ; -- 9695 
-lin hit_N = mkN "käynti" ; -- 1192 
-lin hit_V = mkV (lin VK {s = c53A "soittaa"}) ; -- 657 
-lin hit_V2 = mkV2 (lin VK {s = c53A "soittaa"}) ; -- 657 
 lin hitch_N = mkN (lin NK {s = d10 "ongelma"}) ; -- 177 
 lin hitch_V = mkV "kiinnittää" ; -- 1212 
 lin hitch_V2 = mkV2 "kiinnittää" ; -- 1212 
@@ -26913,9 +26594,6 @@ lin hog_V2 = mkV2 (lin VK {s = c61A "ahnehtia"}) ; -- 10000
 lin hogshead_N = mkN (lin NK {s = d06 "tynnyri"}) ; -- 8414 
 lin hoist_V2 = mkV2 (lin VK {s = c53 "nostaa"}) ; -- 306 
 lin hoity_toity_A = mkA (lin AK {s = d10 "koppava"}) ; -- 10000 
-lin hold_N = mkN (lin NK {s = d48A "ote"}) ; -- 935 
-lin hold_V = mkV (lin VK {s = c67 "olla"}) ; -- 1 
-lin hold_V2 = mkV2 (lin VK {s = c67 "olla"}) ; -- 1 
 lin holdall_N = mkN (lin NK {s = d05 "kori"}) ; -- 3857 
 lin holder_N = mkN "pitäjä" ; -- 3938 
 lin holding_N = mkN (lin NK {s = d40 "omaisuus"}) ; -- 1914 
@@ -26984,8 +26662,6 @@ lin hoover_V2 = mkV2 (lin VK {s = c62 "imuroida"}) ; -- 10000
 lin hop_N = mkN (lin NK {s = d10 "humala"}) ; -- 5072 
 lin hop_V = mkV "ylittää" ; -- 963 
 lin hop_V2 = mkV2 "ylittää" ; -- 963 
-lin hope_N = mkN (lin NK {s = d01 "toivo"}) ; -- 10000 
-lin hope_V = mkV (lin VK {s = c52 "toivoa"}) ; -- 331 
 lin hopeful_A = mkA (lin AK {s = d41A "toiveikas"}) ; -- 6673 
 lin hopefulness_N = mkN (lin NK {s = d01 "toivo"}) ; -- 10000 
 lin hopeless_A = mkA "onneton" ; -- 5832 
@@ -26994,7 +26670,6 @@ lin hopper_N = mkN "maapallo" ; -- 3131
 lin horde_N = mkN (lin NK {s = d01 "heimo"}) ; -- 7991 
 lin horizon_N = mkN "näköpiiri" ; -- 7307 
 lin hormone_N = mkN (lin NK {s = d05 "hormoni"}) ; -- 7371 
-lin horn_N = mkN (lin NK {s = d07 "torvi"}) ; -- 10000 
 lin horoscope_N = mkN (lin NK {s = d05A "horoskooppi"}) ; -- 10000 
 lin horrible_A = mkA (lin AK {s = d15 "kauhea"}) ; -- 4651 
 lin horrid_A = mkA (lin AK {s = d10 "kamala"}) ; -- 8697 
@@ -27002,7 +26677,6 @@ lin horridness_N = mkN (lin NK {s = d40 "hirveys"}) ; -- 10000
 lin horrific_A = mkA (lin AK {s = d15 "kauhea"}) ; -- 4651 
 lin horrify_V2 = mkV2 (lin VK {s = c53A "kauhistuttaa"}) ; -- 10000 
 lin horror_N = mkN (lin NK {s = d01 "kauhu"}) ; -- 4372 
-lin horse_N = mkN (lin NK {s = d38 "hevonen"}) ; -- 1352 
 lin horseback_N = mkN (lin NK {s = d48A "harjanne"}) ; -- 10000 
 lin horsehair_N = mkN (lin NK {s = d23 "jouhi"}) ; -- 10000 
 lin horseradish_N = mkN (lin NK {s = d26 "piparjuuri"}) ; -- 10000 
@@ -27020,15 +26694,12 @@ lin hostage_N = mkN "panttivanki" ; -- 5772
 lin hosteller_N = mkN (lin NK {s = d10 "matkustaja"}) ; -- 1501 
 lin hostelry_N = mkN (lin NK {s = d06 "kievari"}) ; -- 10000 
 lin hostess_N = mkN "emäntä" ; -- 3078 
-lin hot_A = mkA (lin AK {s = d48 "tuore"}) ; -- 691 
 lin hotel_N = mkN (lin NK {s = d06 "hotelli"}) ; -- 1382 
 lin hothead_N = mkN (lin NK {s = d12 "kiihkoilija"}) ; -- 10000 
 lin hound_N = mkN (lin NK {s = d10 "koira"}) ; -- 954 
 lin hound_V2 = mkV2 "etsiä" ; -- 491 
 lin hour_N = mkN (lin NK {s = d07 "hetki"}) ; -- 231 
 lin houri_N = mkN (lin NK {s = d05 "huuri"}) ; -- 10000 
-lin house_N = mkN (lin NK {s = d01 "talo"}) ; -- 277 
-lin house_V2 = mkV2 (lin VK {s = c67 "olla"}) ; -- 1 
 lin housebreaker_N = mkN (lin NK {s = d10 "murtautuja"}) ; -- 10000 
 lin houseful_N = mkN (lin NK {s = d38 "talollinen"}) ; -- 10000 
 lin housemaid_N = mkN (lin NK {s = d32A "palvelijatar"}) ; -- 10000 
@@ -27085,9 +26756,6 @@ lin hunger_N = mkN "nälkä" ; -- 3832
 lin hunger_V = mkV (lin VK {s = c73A "kaivata"}) ; -- 845 
 lin hungry_A = mkA "nälkäinen" ; -- 8703 
 lin hunk_N = mkN (lin NK {s = d09 "pala"}) ; -- 3154 
-lin hunt_N = mkN (lin NK {s = d05A "pyynti"}) ; -- 8825 
-lin hunt_V = mkV (lin VK {s = c58A "hakea"}) ; -- 300 
-lin hunt_V2 = mkV2 (lin VK {s = c58A "hakea"}) ; -- 300 
 lin hunter_N = mkN "metsästäjä" ; -- 4788 
 lin hunting_N = mkN "metsästys" ; -- 4025 
 lin hurdle_N = mkN (lin NK {s = d48 "este"}) ; -- 1884 
@@ -27103,7 +26771,6 @@ lin hurt_V = mkV (lin VK {s = c58 "koskea"}) ; -- 320
 lin hurt_V2 = mkV2 (lin VK {s = c58 "koskea"}) ; -- 320 
 lin hurtful_A = mkA (lin AK {s = d38 "haitallinen"}) ; -- 5310 
 lin hurtle_V = mkV (lin VK {s = c53A "singahtaa"}) ; -- 10000 
-lin husband_N = mkN "aviomies" ; -- 4865 
 lin husbandman_N = mkN "maanviljelijä" ; -- 2958 
 lin husbandry_N = mkN "maatalous" ; -- 1287 
 lin hush_N = mkN (lin NK {s = d40 "hiljaisuus"}) ; -- 3367 
@@ -27157,9 +26824,6 @@ lin hysterical_A = mkA (lin AK {s = d38 "hysteerinen"}) ; -- 10000
 lin hysterics_N = mkN (lin NK {s = d04A "hysteerikko"}) ; -- 10000 
 lin iamb_N = mkN (lin NK {s = d05 "jambi"}) ; -- 10000 
 lin ibis_N = mkN (lin NK {s = d39 "iibis"}) ; -- 10000 
-lin ice_N = mkN "jää" ; -- 1244 
-lin ice_V = mkV "jäädyttää" ; -- 6240 
-lin ice_V2 = mkV2 "jäädyttää" ; -- 6240 
 lin iceman_N = mkN (lin NK {s = d10 "tappaja"}) ; -- 10000 
 lin icing_N = mkN (lin NK {s = d39 "kuorrutus"}) ; -- 10000 
 lin icon_N = mkN (lin NK {s = d06 "ikoni"}) ; -- 9379 
@@ -27315,7 +26979,6 @@ lin imponderable_N = mkN (lin NK {s = d34A "arvaamaton"}) ; -- 10000
 lin import_N = mkN (lin NK {s = d39 "merkitys"}) ; -- 551 
 lin import_V2 = mkV2 (lin VK {s = c64 "tuoda"}) ; -- 139 
 lin importance_N = mkN "tärkeys" ; -- 4245 
-lin important_A = mkA "tärkeä" ; -- 121 
 lin importation_N = mkN (lin NK {s = d05A "tuonti"}) ; -- 3009 
 lin importer_N = mkN "maahantuoja" ; -- 7019 
 lin importune_V2 = mkV2 (lin VK {s = c52A "mankua"}) ; -- 10000 
@@ -27514,7 +27177,6 @@ lin indulgent_A = mkA (lin AK {s = d15 "suopea"}) ; -- 10000
 lin industrial_A = mkA (lin AK {s = d38 "teollinen"}) ; -- 4750 
 lin industrialism_N = mkN (lin NK {s = d05 "industrialismi"}) ; -- 10000 
 lin industrious_A = mkA (lin AK {s = d10 "ponteva"}) ; -- 10000 
-lin industry_N = mkN (lin NK {s = d40 "teollisuus"}) ; -- 922 
 lin inebriate_N = mkN (lin NK {s = d06 "juomari"}) ; -- 10000 
 lin inebriation_N = mkN (lin NK {s = d10 "humala"}) ; -- 5072 
 lin ineffective_A = mkA "tehoton" ; -- 8854 
@@ -27932,7 +27594,6 @@ lin iridescence_N = mkN (lin NK {s = d02 "kimaltelu"}) ; -- 10000
 lin iridium_N = mkN (lin NK {s = d05 "iridium"}) ; -- 10000 
 lin iris_N = mkN (lin NK {s = d39 "iiris"}) ; -- 10000 
 lin irk_V2 = mkV2 (lin VK {s = c53A "harmittaa"}) ; -- 2946 
-lin iron_N = mkN (lin NK {s = d09A "rauta"}) ; -- 5029 
 lin ironic_A = mkA (lin AK {s = d38 "ironinen"}) ; -- 10000 
 lin ironical_A = mkA (lin AK {s = d38 "ironinen"}) ; -- 10000 
 lin irony_N = mkN (lin NK {s = d12 "ironia"}) ; -- 9847 
@@ -28125,9 +27786,6 @@ lin julep_N = mkN (lin NK {s = d05 "grogi"}) ; -- 10000
 lin jumble_N = mkN (lin NK {s = d01 "sotku"}) ; -- 7796 
 lin jumble_V = mkV (lin VK {s = c53A "sekoittaa"}) ; -- 2295 
 lin jumble_V2 = mkV2 (lin VK {s = c53A "sekoittaa"}) ; -- 2295 
-lin jump_N = mkN (lin NK {s = d01 "nousu"}) ; -- 698 
-lin jump_V = mkV "hypätä" ; -- 1926 
-lin jump_V2 = mkV2 "hypätä" ; -- 1926 
 lin jumper_N = mkN "hyppääjä" ; -- 7212 
 lin jumpiness_N = mkN (lin NK {s = d40 "levottomuus"}) ; -- 4049 
 lin jumpy_A = mkA (lin AK {s = d47 "hermostunut"}) ; -- 10000 
@@ -28200,9 +27858,6 @@ lin kiddy_N = mkN (lin NK {s = d29 "lapsi"}) ; -- 10000
 lin kidnap_V2 = mkV2 (lin VK {s = c73A "siepata"}) ; -- 6450 
 lin kidnapper_N = mkN (lin NK {s = d10 "sieppaaja"}) ; -- 10000 
 lin kidney_N = mkN (lin NK {s = d38 "munuainen"}) ; -- 10000 
-lin kill_N = mkN (lin NK {s = d10 "surma"}) ; -- 1784 
-lin kill_V = mkV "lyödä" ; -- 855 
-lin kill_V2 = mkV2 "lyödä" ; -- 855 
 lin killer_N = mkN (lin NK {s = d10 "murhaaja"}) ; -- 8616 
 lin killing_N = mkN (lin NK {s = d10 "kuolema"}) ; -- 1051 
 lin kilo_N = mkN "kilo" ; -- 923 
@@ -28216,7 +27871,6 @@ lin kindle_V2 = mkV2 "herättää" ; -- 879
 lin kindly_A = mkA "ystävällinen" ; -- 5532 
 lin kindred_N = mkN "sukulainen" ; -- 2942 
 lin kinetics_N = mkN (lin NK {s = d09A "kinetiikka"}) ; -- 10000 
-lin king_N = mkN (lin NK {s = d41A "kuningas"}) ; -- 1982 
 lin kingcup_N = mkN (lin NK {s = d05A "leinikki"}) ; -- 10000 
 lin kingdom_N = mkN (lin NK {s = d10A "kunta"}) ; -- 90 
 lin kinglike_A = mkA (lin AK {s = d38 "kuninkaallinen"}) ; -- 5486 
@@ -28248,7 +27902,6 @@ lin knapsack_N = mkN (lin NK {s = d01A "reppu"}) ; -- 7057
 lin knave_N = mkN "jätkä" ; -- 6815 
 lin knead_V = mkV (lin VK {s = c52 "hieroa"}) ; -- 7745 
 lin knead_V2 = mkV2 (lin VK {s = c52 "hieroa"}) ; -- 7745 
-lin knee_N = mkN (lin NK {s = d07 "polvi"}) ; -- 1869 
 lin kneel_V = mkV (lin VK {s = c52 "polvistua"}) ; -- 10000 
 lin knife_N = mkN (lin NK {s = d01A "puukko"}) ; -- 5401 
 lin knight_N = mkN (lin NK {s = d38 "hevonen"}) ; -- 1352 
@@ -28268,8 +27921,6 @@ lin knot_N = mkN (lin NK {s = d01A "joukko"}) ; -- 207
 lin knot_V = mkV (lin VK {s = c52A "sitoa"}) ; -- 1659 
 lin knot_V2 = mkV2 (lin VK {s = c52A "sitoa"}) ; -- 1659 
 lin knout_N = mkN (lin NK {s = d10 "ruoska"}) ; -- 10000 
-lin know_V = mkV "tietää" ; -- 129 
-lin know_V2 = mkV2 "tietää" ; -- 129 
 lin know_all_N = mkN (lin NK {s = d12 "viisastelija"}) ; -- 10000 
 lin know_how_N = mkN "asiantuntemus" ; -- 4577 
 lin knowing_A = mkA "tietoinen" ; -- 3583 
@@ -28346,7 +27997,6 @@ lin lament_V2 = mkV2 (lin VK {s = c67 "surra"}) ; -- 5920
 lin lamentable_A = mkA (lin AK {s = d10 "valitettava"}) ; -- 10000 
 lin laminate_V = mkV (lin VK {s = c53A "viiluttaa"}) ; -- 10000 
 lin laminate_V2 = mkV2 (lin VK {s = c53A "viiluttaa"}) ; -- 10000 
-lin lamp_N = mkN (lin NK {s = d01A "lamppu"}) ; -- 7532 
 lin lampoon_N = mkN (lin NK {s = d12 "parodia"}) ; -- 10000 
 lin lampoon_V2 = mkV2 (lin VK {s = c73A "pilkata"}) ; -- 10000 
 lin lamprey_N = mkN (lin NK {s = d38 "nahkiainen"}) ; -- 10000 
@@ -28363,7 +28013,6 @@ lin landowner_N = mkN "maanomistaja" ; -- 3747
 lin landscape_N = mkN (lin NK {s = d10 "maisema"}) ; -- 1467 
 lin landscape_V2 = mkV2 (lin VK {s = c62 "maisemoida"}) ; -- 10000 
 lin lane_N = mkN (lin NK {s = d09 "kaista"}) ; -- 5727 
-lin language_N = mkN (lin NK {s = d26 "kieli"}) ; -- 534 
 lin languid_A = mkA "heikko" ; -- 1009 
 lin languish_V = mkV (lin VK {s = c73A "kaivata"}) ; -- 845 
 lin languor_N = mkN (lin NK {s = d40 "raukeus"}) ; -- 10000 
@@ -28423,9 +28072,6 @@ lin latitudes_N = mkN (lin NK {s = d05 "latitudi"}) ; -- 10000
 lin latter_A = mkA "jälkimmäinen" ; -- 3185 
 lin lattice_N = mkN (lin NK {s = d04A "ristikko"}) ; -- 10000 
 lin laud_V2 = mkV2 "ylistää" ; -- 3993 
-lin laugh_N = mkN (lin NK {s = d01 "nauru"}) ; -- 4635 
-lin laugh_V = mkV (lin VK {s = c56 "nauraa"}) ; -- 1723 
-lin laugh_V2 = mkV2 (lin VK {s = c56 "nauraa"}) ; -- 1723 
 lin laughable_A = mkA (lin AK {s = d10 "naurettava"}) ; -- 10000 
 lin laughter_N = mkN (lin NK {s = d01 "nauru"}) ; -- 4635 
 lin launch_N = mkN (lin NK {s = d02 "laukaisu"}) ; -- 10000 
@@ -28476,8 +28122,6 @@ lin leader_N = mkN (lin NK {s = d10 "johtaja"}) ; -- 210
 lin leadership_N = mkN (lin NK {s = d01A "johto"}) ; -- 332 
 lin leading_A = mkA "johtava" ; -- 1663 
 lin leading_N = mkN "johtaminen" ; -- 4221 
-lin leaf_N = mkN (lin NK {s = d01 "levy"}) ; -- 832 
-lin leaf_V = mkV (lin VK {s = c67 "selailla"}) ; -- 10000 
 lin leaflet_N = mkN (lin NK {s = d38 "lehtinen"}) ; -- 10000 
 lin league_N = mkN (lin NK {s = d09 "liiga"}) ; -- 687 
 lin league_V = mkV (lin VK {s = c52A "liittoutua"}) ; -- 4246 
@@ -28498,8 +28142,6 @@ lin leap_N = mkN (lin NK {s = d01A "hyppy"}) ; -- 2199
 lin leap_V = mkV "hypätä" ; -- 1926 
 lin leap_V2 = mkV2 "hypätä" ; -- 1926 
 lin leapfrog_V2 = mkV2 "ylittää" ; -- 963 
-lin learn_V = mkV (lin VK {s = c61A "oppia"}) ; -- 740 
-lin learn_V2 = mkV2 (lin VK {s = c61A "oppia"}) ; -- 740 
 lin learned_A = mkA (lin AK {s = d47 "sivistynyt"}) ; -- 10000 
 lin learner_N = mkN (lin NK {s = d41 "oppilas"}) ; -- 663 
 lin learning_N = mkN "oppiminen" ; -- 3242 
@@ -28507,10 +28149,6 @@ lin lease_N = mkN "vuokrasopimus" ; -- 6249
 lin lease_V2 = mkV2 (lin VK {s = c73 "vuokrata"}) ; -- 2145 
 lin leaseholder_N = mkN "vuokralainen" ; -- 5905 
 lin leastwise_Adv = mkAdv (lin AdvK {s = c99 "ainakin"}) ; -- 187 
-lin leather_N = mkN (lin NK {s = d09 "nahka"}) ; -- 4943 
-lin leave_N = mkN (lin NK {s = d10A "lupa"}) ; -- 507 
-lin leave_V = mkV "lähteä" ; -- 102 
-lin leave_V2 = mkV2 "lähteä" ; -- 102 
 lin leaven_V2 = mkV2 (lin VK {s = c53A "nostattaa"}) ; -- 4071 
 lin lecher_N = mkN "pukki" ; -- 7284 
 lin lecherous_A = mkA (lin AK {s = d41 "irstas"}) ; -- 10000 
@@ -28525,12 +28163,8 @@ lin ledge_N = mkN (lin NK {s = d10 "ulkonema"}) ; -- 10000
 lin leech_N = mkN (lin NK {s = d41A "juotikas"}) ; -- 10000 
 lin leek_N = mkN (lin NK {s = d01 "purjo"}) ; -- 10000 
 lin leer_V = mkV (lin VK {s = c67 "mulkoilla"}) ; -- 10000 
-lin left_A = mkA "vasen" ; -- 2048 
-lin left_Adv = mkAdv (lin AdvK {s = c99 "vasemmalle"}) ; -- 10000 
-lin left_N = mkN (lin NK {s = d01 "vasemmisto"}) ; -- 3813 
 lin left_hand_A = mkA "vasen" ; -- 2048 
 lin left_handed_A = mkA "epävirallinen" ; -- 3309 
-lin leg_N = mkN (lin NK {s = d09A "jalka"}) ; -- 818 
 lin leg_pull_N = mkN (lin NK {s = d09 "pila"}) ; -- 10000 
 lin leg_pulling_N = mkN (lin NK {s = d09 "pila"}) ; -- 10000 
 lin legacy_N = mkN "perintö" ; -- 4125 
@@ -28642,8 +28276,6 @@ lin lick_V2 = mkV2 (lin VK {s = c53A "voittaa"}) ; -- 192
 lin licking_N = mkN "häviö" ; -- 8597 
 lin lid_N = mkN (lin NK {s = d28 "kansi"}) ; -- 3123 
 lin lidless_A = mkA (lin AK {s = d38 "tarkkaavainen"}) ; -- 10000 
-lin lie_N = mkN (lin NK {s = d05A "sijainti"}) ; -- 3418 
-lin lie_V = mkV (lin VK {s = c67 "olla"}) ; -- 1 
 lin lie_abed_N = mkN (lin NK {s = d06 "laiskuri"}) ; -- 10000 
 lin lied_N = mkN (lin NK {s = d05 "lied"}) ; -- 10000 
 lin lief_Adv = mkAdv "innokkaasti" ; -- 5630 
@@ -28676,10 +28308,6 @@ lin lightsome_A = mkA "kevyt" ; -- 1530
 lin lightsomeness_N = mkN (lin NK {s = d40 "suruttomuus"}) ; -- 10000 
 lin lightweight_A = mkA "kevyt" ; -- 1530 
 lin lightweight_N = mkN (lin NK {s = d43 "kevyt"}) ; -- 10000 
-lin like_A = mkA "samanlainen" ; -- 1099 
-lin like_Adv = mkAdv (lin AdvK {s = c99 "kuten"}) ; -- 10000 
-lin like_N = mkN (lin NK {s = d38 "samanlainen"}) ; -- 10000 
-lin like_V2 = mkV2 "pitää" ; -- 18 
 lin likeable_A = mkA (lin AK {s = d38 "sympaattinen"}) ; -- 7525 
 lin likelihood_N = mkN "todennäköisyys" ; -- 7238 
 lin likely_A = mkA "todennäköinen" ; -- 2148 
@@ -28756,7 +28384,6 @@ lin lisp_V2 = mkV2 (lin VK {s = c54A "sammaltaa"}) ; -- 10000
 lin list_N = mkN (lin NK {s = d09 "lista"}) ; -- 972 
 lin list_V = mkV (lin VK {s = c73 "kirjata"}) ; -- 1440 
 lin list_V2 = mkV2 (lin VK {s = c73 "kirjata"}) ; -- 1440 
-lin listen_V = mkV (lin VK {s = c67A "kuunnella"}) ; -- 1108 
 lin listener_N = mkN (lin NK {s = d12 "kuuntelija"}) ; -- 9133 
 lin listing_N = mkN (lin NK {s = d09 "lista"}) ; -- 972 
 lin listlessness_N = mkN "välinpitämättömyys" ; -- 9010 
@@ -28780,15 +28407,11 @@ lin little_N = mkN (lin NK {s = d26 "pieni"}) ; -- 10000
 lin littleness_N = mkN (lin NK {s = d40 "pienuus"}) ; -- 10000 
 lin littoral_N = mkN (lin NK {s = d04A "rannikko"}) ; -- 10000 
 lin liturgy_N = mkN (lin NK {s = d12 "liturgia"}) ; -- 10000 
-lin live_A = mkA (lin AK {s = d15 "oikea"}) ; -- 418 
-lin live_V = mkV "elää" ; -- 317 
-lin live_V2 = mkV2 "elää" ; -- 317 
 lin livelihood_N = mkN "toimeentulo" ; -- 4411 
 lin liveliness_N = mkN (lin NK {s = d40 "eloisuus"}) ; -- 10000 
 lin lively_A = mkA (lin AK {s = d41A "vilkas"}) ; -- 1940 
 lin liven_V = mkV "virkistää" ; -- 7627 
 lin liven_V2 = mkV2 "virkistää" ; -- 7627 
-lin liver_N = mkN (lin NK {s = d41A "asukas"}) ; -- 403 
 lin livery_N = mkN (lin NK {s = d39 "luovutus"}) ; -- 7773 
 lin livestock_N = mkN "karja" ; -- 6166 
 lin living_N = mkN (lin NK {s = d01A "elanto"}) ; -- 8044 
@@ -28858,9 +28481,6 @@ lin lone_A = mkA "ainoa" ; -- 450
 lin loneliness_N = mkN "yksinäisyys" ; -- 6343 
 lin lonely_A = mkA "yksinäinen" ; -- 3522 
 lin lonesome_A = mkA "yksittäinen" ; -- 1323 
-lin long_A = mkA "pitkä" ; -- 208 
-lin long_Adv = mkAdv "pitkään" ; -- 602 
-lin long_V = mkV (lin VK {s = c73A "kaivata"}) ; -- 845 
 lin long_lived_A = mkA "pitkäaikainen" ; -- 2184 
 lin long_term_A = mkA "pitkäaikainen" ; -- 2184 
 lin longer_Adv = mkAdv "runsaasti" ; -- 956 
@@ -28900,8 +28520,6 @@ lin lordliness_N = mkN (lin NK {s = d40 "kopeus"}) ; -- 10000
 lin lordly_A = mkA (lin AK {s = d38 "aristokraattinen"}) ; -- 10000 
 lin lordship_N = mkN (lin NK {s = d40 "herruus"}) ; -- 10000 
 lin lorry_N = mkN (lin NK {s = d01 "vaunu"}) ; -- 3619 
-lin lose_V = mkV "menettää" ; -- 651 
-lin lose_V2 = mkV2 "menettää" ; -- 651 
 lin loser_N = mkN "häviäjä" ; -- 7431 
 lin loss_N = mkN (lin NK {s = d03 "tappio"}) ; -- 908 
 lin lot_N = mkN (lin NK {s = d10 "osa"}) ; -- 73 
@@ -28917,12 +28535,9 @@ lin lough_N = mkN "lahti" ; -- 2840
 lin lounge_N = mkN (lin NK {s = d05A "seslonki"}) ; -- 10000 
 lin lounge_V = mkV (lin VK {s = c67 "lorvailla"}) ; -- 10000 
 lin lour_V = mkV (lin VK {s = c58 "laskea"}) ; -- 259 
-lin louse_N = mkN (lin NK {s = d01 "roisto"}) ; -- 10000 
 lin lousy_A = mkA (lin AK {s = d15 "surkea"}) ; -- 4109 
 lin lout_N = mkN (lin NK {s = d12 "tolvana"}) ; -- 10000 
 lin lovable_A = mkA (lin AK {s = d10 "rakastettava"}) ; -- 10000 
-lin love_N = mkN (lin NK {s = d40 "rakkaus"}) ; -- 1303 
-lin love_V2 = mkV2 (lin VK {s = c53 "rakastaa"}) ; -- 2272 
 lin lovebird_N = mkN (lin NK {s = d05A "undulaatti"}) ; -- 10000 
 lin loveliness_N = mkN (lin NK {s = d40 "kauneus"}) ; -- 4394 
 lin lovemaking_N = mkN (lin NK {s = d02 "rakastelu"}) ; -- 10000 
@@ -29116,8 +28731,6 @@ lin mamma_N = mkN "äiti" ; -- 488
 lin mammon_N = mkN (lin NK {s = d11 "mammona"}) ; -- 10000 
 lin mammoth_N = mkN (lin NK {s = d05A "mammutti"}) ; -- 10000 
 lin mammy_N = mkN "äiti" ; -- 488 
-lin man_N = mkN (lin NK {s = d38 "ihminen"}) ; -- 48 
-lin man_V2 = mkV2 "täyttää" ; -- 590 
 lin man_at_arms_N = mkN (lin NK {s = d41 "sotilas"}) ; -- 1028 
 lin man_sized_A = mkA (lin AK {s = d10 "valtava"}) ; -- 1553 
 lin manage_V = mkV (lin VK {s = c69 "tarvita"}) ; -- 104 
@@ -29355,7 +28968,6 @@ lin measure_V2 = mkV2 (lin VK {s = c73A "mitata"}) ; -- 1218
 lin measured_A = mkA (lin AK {s = d38 "tasainen"}) ; -- 1580 
 lin measureless_A = mkA "loputon" ; -- 5153 
 lin measurement_N = mkN (lin NK {s = d39 "mittaus"}) ; -- 4308 
-lin meat_N = mkN "sisältö" ; -- 1327 
 lin meaty_A = mkA (lin AK {s = d10 "antoisa"}) ; -- 8198 
 lin mechanic_N = mkN (lin NK {s = d04A "mekaanikko"}) ; -- 10000 
 lin mechanical_A = mkA (lin AK {s = d38 "mekaaninen"}) ; -- 7291 
@@ -29560,7 +29172,6 @@ lin militarism_N = mkN (lin NK {s = d05 "militarismi"}) ; -- 10000
 lin militarist_N = mkN (lin NK {s = d05 "militaristi"}) ; -- 10000 
 lin militia_N = mkN (lin NK {s = d05 "miliisi"}) ; -- 9650 
 lin militiaman_N = mkN (lin NK {s = d05 "miliisi"}) ; -- 9650 
-lin milk_N = mkN (lin NK {s = d01A "maito"}) ; -- 2228 
 lin mill_N = mkN (lin NK {s = d41A "tehdas"}) ; -- 763 
 lin mill_V = mkV "pyöriä" ; -- 1772 
 lin mill_V2 = mkV2 "pyöriä" ; -- 1772 
@@ -29803,9 +29414,6 @@ lin moo_V = mkV (lin VK {s = c52 "ammua"}) ; -- 10000
 lin moo_cow_N = mkN "lehmä" ; -- 2680 
 lin mood_N = mkN "mieliala" ; -- 6154 
 lin moody_A = mkA (lin AK {s = d38 "oikullinen"}) ; -- 10000 
-lin moon_N = mkN (lin NK {s = d18 "kuu"}) ; -- 1252 
-lin moon_V = mkV (lin VK {s = c67 "haaveilla"}) ; -- 3943 
-lin moon_V2 = mkV2 (lin VK {s = c67 "haaveilla"}) ; -- 3943 
 lin moonshine_N = mkN (lin NK {s = d14A "pontikka"}) ; -- 10000 
 lin moor_N = mkN (lin NK {s = d07 "nummi"}) ; -- 10000 
 lin moor_V2 = mkV2 "kiinnittää" ; -- 1212 
@@ -29855,8 +29463,6 @@ lin moss_grown_A = mkA (lin AK {s = d38 "vanhoillinen"}) ; -- 10000
 lin mossy_A = mkA (lin AK {s = d38 "vanhoillinen"}) ; -- 10000 
 lin mostly_Adv = mkAdv "enimmäkseen" ; -- 3605 
 lin motel_N = mkN (lin NK {s = d06 "motelli"}) ; -- 10000 
-lin mother_N = mkN "äiti" ; -- 488 
-lin mother_V2 = mkV2 "synnyttää" ; -- 2005 
 lin mother_in_law_N = mkN (lin NK {s = d05A "anoppi"}) ; -- 10000 
 lin motherland_N = mkN "kotimaa" ; -- 967 
 lin motif_N = mkN (lin NK {s = d48 "aihe"}) ; -- 578 
@@ -29892,9 +29498,6 @@ lin mouse_N = mkN (lin NK {s = d24 "hiiri"}) ; -- 6722
 lin mouse_V = mkV (lin VK {s = c67 "hiippailla"}) ; -- 10000 
 lin mousse_N = mkN (lin NK {s = d08 "mousse"}) ; -- 10000 
 lin mousy_A = mkA "arka" ; -- 5747 
-lin mouth_N = mkN (lin NK {s = d10 "edustaja"}) ; -- 303 
-lin mouth_V = mkV (lin VK {s = c52 "sanoa"}) ; -- 25 
-lin mouth_V2 = mkV2 (lin VK {s = c52 "sanoa"}) ; -- 25 
 lin mouth_watering_A = mkA (lin AK {s = d38 "herkullinen"}) ; -- 6263 
 lin mouthpiece_N = mkN "puhemies" ; -- 2207 
 lin movable_A = mkA (lin AK {s = d10 "liikkuva"}) ; -- 10000 
@@ -29979,7 +29582,6 @@ lin muse_V = mkV (lin VK {s = c61A "pohtia"}) ; -- 496
 lin museum_N = mkN (lin NK {s = d03 "museo"}) ; -- 1488 
 lin mush_N = mkN (lin NK {s = d05A "siirappi"}) ; -- 10000 
 lin mushroom_N = mkN (lin NK {s = d26 "sieni"}) ; -- 4531 
-lin music_N = mkN (lin NK {s = d05A "musiikki"}) ; -- 391 
 lin musical_A = mkA (lin AK {s = d38 "musikaalinen"}) ; -- 10000 
 lin musical_N = mkN (lin NK {s = d05 "musikaali"}) ; -- 4026 
 lin musician_N = mkN "säveltäjä" ; -- 2062 
@@ -30039,8 +29641,6 @@ lin naive_A = mkA "yksinkertainen" ; -- 1910
 lin naked_A = mkA "paljas" ; -- 5919 
 lin nakedness_N = mkN (lin NK {s = d40 "alastomuus"}) ; -- 10000 
 lin namby_pamby_N = mkN (lin NK {s = d01 "nynny"}) ; -- 10000 
-lin name_N = mkN (lin NK {s = d07 "nimi"}) ; -- 199 
-lin name_V2 = mkV2 "nimittää" ; -- 867 
 lin nameless_A = mkA "tuntematon" ; -- 2186 
 lin namely_Adv = mkAdv "nimittäin" ; -- 1471 
 lin namesake_N = mkN (lin NK {s = d09 "kaima"}) ; -- 10000 
@@ -30062,10 +29662,6 @@ lin narrate_V2 = mkV2 (lin VK {s = c52A "kertoa"}) ; -- 30
 lin narration_N = mkN (lin NK {s = d39 "kertomus"}) ; -- 2240 
 lin narrative_N = mkN (lin NK {s = d09A "kerronta"}) ; -- 6195 
 lin narrator_N = mkN (lin NK {s = d10 "kertoja"}) ; -- 6423 
-lin narrow_A = mkA "ahdas" ; -- 3159 
-lin narrow_N = mkN (lin NK {s = d07 "salmi"}) ; -- 9336 
-lin narrow_V = mkV (lin VK {s = c73 "rajata"}) ; -- 2497 
-lin narrow_V2 = mkV2 (lin VK {s = c73 "rajata"}) ; -- 2497 
 lin narrowness_N = mkN (lin NK {s = d40 "suvaitsemattomuus"}) ; -- 10000 
 lin nastiness_N = mkN (lin NK {s = d40 "siivottomuus"}) ; -- 10000 
 lin nation_N = mkN "kansakunta" ; -- 3368 
@@ -30104,9 +29700,6 @@ lin navy_N = mkN (lin NK {s = d02 "laivasto"}) ; -- 6661
 lin nay_Adv = mkAdv (lin AdvK {s = c99 "oikeastaan"}) ; -- 1636 
 lin nazi_N = mkN (lin NK {s = d05 "natsi"}) ; -- 6497 
 lin ne'er_do_well_N = mkN (lin NK {s = d03 "hulttio"}) ; -- 10000 
-lin near_Adv = mkAdv "lähes" ; -- 138 
-lin near_V = mkV "lähestyä" ; -- 1715 
-lin near_V2 = mkV2 "lähestyä" ; -- 1715 
 lin nearness_N = mkN "läheisyys" ; -- 2768 
 lin neat_A = mkA (lin AK {s = d01 "hieno"}) ; -- 1019 
 lin neatness_N = mkN (lin NK {s = d40 "siisteys"}) ; -- 10000 
@@ -30116,8 +29709,6 @@ lin necessary_A = mkA "välttämätön" ; -- 1846
 lin necessary_N = mkN (lin NK {s = d48A "tarve"}) ; -- 498 
 lin necessitate_V2 = mkV2 "edellyttää" ; -- 782 
 lin necessity_N = mkN "välttämättömyys" ; -- 9556 
-lin neck_N = mkN (lin NK {s = d09 "niska"}) ; -- 3177 
-lin neck_V = mkV (lin VK {s = c67 "halailla"}) ; -- 10000 
 lin neckband_N = mkN (lin NK {s = d39 "kaulus"}) ; -- 10000 
 lin necklet_N = mkN (lin NK {s = d39 "kaulus"}) ; -- 10000 
 lin necktie_N = mkN (lin NK {s = d03 "solmio"}) ; -- 10000 
@@ -30197,10 +29788,8 @@ lin neutralization_N = mkN "tuhoaminen" ; -- 7908
 lin neutralize_V2 = mkV2 (lin VK {s = c56A "tappaa"}) ; -- 1610 
 lin neutron_N = mkN (lin NK {s = d05 "neutroni"}) ; -- 10000 
 lin nevertheless_Adv = mkAdv (lin AdvK {s = c99 "silti"}) ; -- 452 
-lin new_A = mkA "uudenlainen" ; -- 2902 
 lin newness_N = mkN (lin NK {s = d40 "uutuus"}) ; -- 3140 
 lin news_N = mkN (lin NK {s = d38 "uutinen"}) ; -- 10000 
-lin newspaper_N = mkN "sanomalehti" ; -- 1912 
 lin newsy_A = mkA (lin AK {s = d41 "suulas"}) ; -- 10000 
 lin next_A = mkA "viereinen" ; -- 4799 
 lin next_N = mkN (lin NK {s = d38 "viereinen"}) ; -- 10000 
@@ -30226,7 +29815,6 @@ lin niggle_V = mkV (lin VK {s = c73 "vaivata"}) ; -- 2673
 lin niggling_A = mkA "mitätön" ; -- 8436 
 lin nigh_Adv = mkAdv "lähes" ; -- 138 
 lin nigher_Adv = mkAdv "lähempänä" ; -- 9147 
-lin night_N = mkN (lin NK {s = d09A "ilta"}) ; -- 528 
 lin nightly_Adv = mkAdv (lin AdvK {s = c99 "iltaisin"}) ; -- 5977 
 lin nightmare_N = mkN (lin NK {s = d38 "painajainen"}) ; -- 6139 
 lin nightshade_N = mkN (lin NK {s = d01 "koiso"}) ; -- 10000 
@@ -30292,9 +29880,6 @@ lin normalize_V2 = mkV2 (lin VK {s = c53 "normaalistaa"}) ; -- 10000
 lin north_N = mkN (lin NK {s = d38 "pohjoinen"}) ; -- 10000 
 lin northeast_N = mkN (lin NK {s = d38 "koillinen"}) ; -- 10000 
 lin northerner_N = mkN (lin NK {s = d38 "pohjoinen"}) ; -- 10000 
-lin nose_N = mkN "nenä" ; -- 4050 
-lin nose_V = mkV (lin VK {s = c61 "nuuskia"}) ; -- 10000 
-lin nose_V2 = mkV2 (lin VK {s = c61 "nuuskia"}) ; -- 10000 
 lin nosedive_V = mkV "syöksyä" ; -- 5071 
 lin nosh_V = mkV (lin VK {s = c61 "napsia"}) ; -- 10000 
 lin nostalgia_N = mkN (lin NK {s = d12 "nostalgia"}) ; -- 9241 
@@ -30333,7 +29918,6 @@ lin novel_N = mkN (lin NK {s = d06 "romaani"}) ; -- 1418
 lin novelty_N = mkN (lin NK {s = d40 "uutuus"}) ; -- 3140 
 lin novice_N = mkN (lin NK {s = d05 "noviisi"}) ; -- 10000 
 lin novitiate_N = mkN (lin NK {s = d05 "noviisi"}) ; -- 10000 
-lin now_Adv = mkAdv (lin AdvK {s = c99 "nyt"}) ; -- 28 
 lin nowadays_Adv = mkAdv (lin AdvK {s = c99 "nykyisin"}) ; -- 772 
 lin noxious_A = mkA (lin AK {s = d38 "haitallinen"}) ; -- 5310 
 lin noxiousness_N = mkN (lin NK {s = d40 "haitallisuus"}) ; -- 10000 
@@ -30352,8 +29936,6 @@ lin nuisance_N = mkN "häiriö" ; -- 3216
 lin null_A = mkA "mitätön" ; -- 8436 
 lin nullity_N = mkN (lin NK {s = d40 "olemattomuus"}) ; -- 10000 
 lin numb_V2 = mkV2 (lin VK {s = c53A "puuduttaa"}) ; -- 10000 
-lin number_N = mkN (lin NK {s = d01A "luku"}) ; -- 109 
-lin number_V2 = mkV2 (lin VK {s = c58 "laskea"}) ; -- 259 
 lin numbness_N = mkN (lin NK {s = d40 "tunnottomuus"}) ; -- 10000 
 lin numeral_N = mkN (lin NK {s = d02 "numero"}) ; -- 1091 
 lin numerator_N = mkN (lin NK {s = d10 "osoittaja"}) ; -- 10000 
@@ -30504,12 +30086,9 @@ lin oft_Adv = mkAdv "monesti" ; -- 3524
 lin often_Adv = mkAdv (lin AdvK {s = c99 "usein"}) ; -- 359 
 lin ogre_N = mkN (lin NK {s = d01A "peto"}) ; -- 6662 
 lin ohm_N = mkN (lin NK {s = d05 "ohmi"}) ; -- 10000 
-lin oil_N = mkN "öljy" ; -- 1790 
 lin oiliness_N = mkN (lin NK {s = d40 "rasvaisuus"}) ; -- 10000 
 lin ointment_N = mkN (lin NK {s = d48A "voide"}) ; -- 10000 
 lin okay_Adv = mkAdv (lin AdvK {s = c99 "okei"}) ; -- 10000 
-lin old_A = mkA "entinen" ; -- 155 
-lin old_N = mkN (lin NK {s = d09 "vanha"}) ; -- 10000 
 lin old_fashioned_A = mkA "vanhanaikainen" ; -- 5846 
 lin old_timer_N = mkN (lin NK {s = d06 "konkari"}) ; -- 6031 
 lin olden_A = mkA "entinen" ; -- 155 
@@ -30550,10 +30129,6 @@ lin ooze_V2 = mkV2 (lin VK {s = c53A "vuotaa"}) ; -- 4863
 lin opacity_N = mkN (lin NK {s = d40 "vaikeaselkoisuus"}) ; -- 10000 
 lin opal_N = mkN (lin NK {s = d06 "opaali"}) ; -- 10000 
 lin opaqueness_N = mkN (lin NK {s = d40 "sekavuus"}) ; -- 10000 
-lin open_A = mkA "avoin" ; -- 667 
-lin open_N = mkN "suora" ; -- 5852 
-lin open_V = mkV (lin VK {s = c53A "aloittaa"}) ; -- 166 
-lin open_V2 = mkV2 (lin VK {s = c53A "aloittaa"}) ; -- 166 
 lin open_ended_A = mkA "avoin" ; -- 667 
 lin opener_N = mkN "suora" ; -- 5852 
 lin opening_N = mkN (lin NK {s = d40 "mahdollisuus"}) ; -- 184 
@@ -30834,9 +30409,6 @@ lin pain_V2 = mkV2 (lin VK {s = c53A "surettaa"}) ; -- 10000
 lin pained_A = mkA (lin AK {s = d38 "tuskainen"}) ; -- 10000 
 lin painful_A = mkA "kipeä" ; -- 3614 
 lin painstaking_A = mkA (lin AK {s = d38 "huolellinen"}) ; -- 9119 
-lin paint_N = mkN "maali" ; -- 330 
-lin paint_V = mkV "maalata" ; -- 2104 
-lin paint_V2 = mkV2 "maalata" ; -- 2104 
 lin paintbrush_N = mkN (lin NK {s = d33A "sivellin"}) ; -- 10000 
 lin painter_N = mkN "taidemaalari" ; -- 6567 
 lin painting_N = mkN "maalaus" ; -- 1662 
@@ -30906,8 +30478,6 @@ lin pantomime_N = mkN (lin NK {s = d05 "pantomiimi"}) ; -- 10000
 lin pap_N = mkN (lin NK {s = d09A "rinta"}) ; -- 3273 
 lin papa_N = mkN (lin NK {s = d05 "isi"}) ; -- 8110 
 lin papaya_N = mkN (lin NK {s = d13 "papaija"}) ; -- 10000 
-lin paper_N = mkN (lin NK {s = d06 "paperi"}) ; -- 1121 
-lin paper_V2 = mkV2 (lin VK {s = c62 "tapetoida"}) ; -- 10000 
 lin paperclip_N = mkN (lin NK {s = d06 "klemmari"}) ; -- 10000 
 lin papist_N = mkN (lin NK {s = d38 "katolilainen"}) ; -- 10000 
 lin paprika_N = mkN (lin NK {s = d12 "paprika"}) ; -- 10000 
@@ -31117,7 +30687,6 @@ lin payoff_N = mkN (lin NK {s = d01A "palkinto"}) ; -- 819
 lin payroll_N = mkN "palkkalista" ; -- 8656 
 lin paysheet_N = mkN "palkkalista" ; -- 8656 
 lin pea_N = mkN (lin NK {s = d48 "herne"}) ; -- 10000 
-lin peace_N = mkN (lin NK {s = d09 "rauha"}) ; -- 822 
 lin peaceable_A = mkA "rauhanomainen" ; -- 7125 
 lin peaceful_A = mkA "rauhanomainen" ; -- 7125 
 lin peacefulness_N = mkN (lin NK {s = d40 "rauhallisuus"}) ; -- 10000 
@@ -31181,8 +30750,6 @@ lin pelt_N = mkN (lin NK {s = d09 "nahka"}) ; -- 4943
 lin pelt_V = mkV (lin VK {s = c53A "pommittaa"}) ; -- 3886 
 lin pelt_V2 = mkV2 (lin VK {s = c53A "pommittaa"}) ; -- 3886 
 lin pelvis_N = mkN (lin NK {s = d03 "lantio"}) ; -- 10000 
-lin pen_N = mkN "kynä" ; -- 6144 
-lin pen_V2 = mkV2 (lin VK {s = c53A "kirjoittaa"}) ; -- 387 
 lin penalize_V2 = mkV2 (lin VK {s = c53A "kurittaa"}) ; -- 10000 
 lin penalty_N = mkN (lin NK {s = d39 "rangaistus"}) ; -- 2047 
 lin penance_N = mkN (lin NK {s = d39 "parannus"}) ; -- 3581 
@@ -31301,7 +30868,6 @@ lin persimmon_N = mkN (lin NK {s = d05 "kaki"}) ; -- 10000
 lin persist_V = mkV "kestää" ; -- 310 
 lin persistence_N = mkN (lin NK {s = d40 "sitkeys"}) ; -- 10000 
 lin persistent_A = mkA (lin AK {s = d10 "jatkuva"}) ; -- 10000 
-lin person_N = mkN "henkilö" ; -- 385 
 lin persona_N = mkN (lin NK {s = d10 "persoona"}) ; -- 4262 
 lin personage_N = mkN "henkilö" ; -- 385 
 lin personal_A = mkA "henkilökohtainen" ; -- 1237 
@@ -31593,7 +31159,6 @@ lin plan_V2 = mkV2 (lin VK {s = c52A "aikoa"}) ; -- 299
 lin plane_N = mkN (lin NK {s = d01 "taso"}) ; -- 356 
 lin plane_V = mkV (lin VK {s = c73 "plaanata"}) ; -- 10000 
 lin plane_V2 = mkV2 (lin VK {s = c73 "plaanata"}) ; -- 10000 
-lin planet_N = mkN (lin NK {s = d09A "planeetta"}) ; -- 6255 
 lin planetarium_N = mkN (lin NK {s = d03 "planetaario"}) ; -- 10000 
 lin plank_N = mkN (lin NK {s = d01A "lankku"}) ; -- 10000 
 lin plank_V2 = mkV2 (lin VK {s = c53A "lankuttaa"}) ; -- 10000 
@@ -31612,8 +31177,6 @@ lin plasm_N = mkN (lin NK {s = d09 "plasma"}) ; -- 10000
 lin plasma_N = mkN (lin NK {s = d09 "plasma"}) ; -- 10000 
 lin plaster_N = mkN (lin NK {s = d06 "laastari"}) ; -- 10000 
 lin plaster_V2 = mkV2 (lin VK {s = c52A "hautoa"}) ; -- 10000 
-lin plastic_A = mkA (lin AK {s = d38 "plastinen"}) ; -- 10000 
-lin plastic_N = mkN (lin NK {s = d05 "muovi"}) ; -- 4961 
 lin plastics_N = mkN (lin NK {s = d05 "muovi"}) ; -- 4961 
 lin plate_N = mkN (lin NK {s = d01 "levy"}) ; -- 832 
 lin plate_V2 = mkV2 "päällystää" ; -- 7952 
@@ -31627,9 +31190,6 @@ lin platoon_N = mkN (lin NK {s = d48 "joukkue"}) ; -- 180
 lin platter_N = mkN "äänite" ; -- 7852 
 lin plaudit_N = mkN "hyväksyntä" ; -- 4807 
 lin plausible_A = mkA (lin AK {s = d10 "vakuuttava"}) ; -- 10000 
-lin play_N = mkN (lin NK {s = d02 "ottelu"}) ; -- 241 
-lin play_V = mkV (lin VK {s = c61 "toimia"}) ; -- 83 
-lin play_V2 = mkV2 (lin VK {s = c61 "toimia"}) ; -- 83 
 lin playback_N = mkN (lin NK {s = d01 "toisto"}) ; -- 10000 
 lin playboy_N = mkN (lin NK {s = d21 "playboy"}) ; -- 10000 
 lin player_N = mkN (lin NK {s = d10 "pelaaja"}) ; -- 469 
@@ -31762,7 +31322,6 @@ lin poleaxe_N = mkN (lin NK {s = d12 "tappara"}) ; -- 4303
 lin polecat_N = mkN (lin NK {s = d06 "hilleri"}) ; -- 10000 
 lin polemic_N = mkN (lin NK {s = d05A "polemiikki"}) ; -- 10000 
 lin police_V2 = mkV2 (lin VK {s = c52 "valvoa"}) ; -- 1243 
-lin policeman_N = mkN "poliisi" ; -- 147 
 lin policy_N = mkN (lin NK {s = d09A "politiikka"}) ; -- 658 
 lin polio_N = mkN (lin NK {s = d03 "polio"}) ; -- 10000 
 lin polish_N = mkN (lin NK {s = d01A "kiilto"}) ; -- 10000 
@@ -32131,7 +31690,6 @@ lin prickle_N = mkN (lin NK {s = d10A "oka"}) ; -- 10000
 lin prickle_V = mkV (lin VK {s = c66 "puhkaista"}) ; -- 10000 
 lin prickle_V2 = mkV2 (lin VK {s = c66 "puhkaista"}) ; -- 10000 
 lin pride_N = mkN (lin NK {s = d40 "ylpeys"}) ; -- 6536 
-lin priest_N = mkN (lin NK {s = d05A "pappi"}) ; -- 2639 
 lin priestess_N = mkN (lin NK {s = d32A "papitar"}) ; -- 10000 
 lin priesthood_N = mkN (lin NK {s = d02 "papisto"}) ; -- 10000 
 lin priestlike_A = mkA (lin AK {s = d38 "papillinen"}) ; -- 10000 
@@ -32188,7 +31746,6 @@ lin prize_V2 = mkV2 (lin VK {s = c53 "arvostaa"}) ; -- 1168
 lin pro_Adv = mkAdv (lin AdvK {s = c99 "puolesta"}) ; -- 9639 
 lin probabilistic_A = mkA "todennäköinen" ; -- 2148 
 lin probability_N = mkN "todennäköisyys" ; -- 7238 
-lin probable_A = mkA "todennäköinen" ; -- 2148 
 lin probate_N = mkN "vahvistaminen" ; -- 4093 
 lin probate_V2 = mkV2 (lin VK {s = c52 "valvoa"}) ; -- 1243 
 lin probation_N = mkN (lin NK {s = d09A "koeaika"}) ; -- 10000 
@@ -32516,9 +32073,6 @@ lin puke_V2 = mkV2 (lin VK {s = c54A "oksentaa"}) ; -- 10000
 lin pulchritude_N = mkN (lin NK {s = d40 "kauneus"}) ; -- 4394 
 lin pulchritudinous_A = mkA (lin AK {s = d41 "kaunis"}) ; -- 10000 
 lin pule_V = mkV "itkeä" ; -- 4275 
-lin pull_N = mkN "veto" ; -- 2718 
-lin pull_V = mkV "vetää" ; -- 439 
-lin pull_V2 = mkV2 "vetää" ; -- 439 
 lin pull_up_N = mkN (lin NK {s = d01A "leuanveto"}) ; -- 10000 
 lin pullulate_V = mkV (lin VK {s = c52 "versoa"}) ; -- 10000 
 lin pulp_N = mkN (lin NK {s = d09 "massa"}) ; -- 4290 
@@ -32602,9 +32156,6 @@ lin purvey_V = mkV (lin VK {s = c74 "tarjota"}) ; -- 281
 lin purvey_V2 = mkV2 (lin VK {s = c74 "tarjota"}) ; -- 281 
 lin purveyance_N = mkN "hankinta" ; -- 2006 
 lin purveyor_N = mkN (lin NK {s = d12 "hankkija"}) ; -- 10000 
-lin push_N = mkN (lin NK {s = d48 "paine"}) ; -- 1222 
-lin push_V = mkV (lin VK {s = c56 "painaa"}) ; -- 965 
-lin push_V2 = mkV2 (lin VK {s = c56 "painaa"}) ; -- 965 
 lin push_bike_N = mkN "polkupyörä" ; -- 4322 
 lin pusher_N = mkN (lin NK {s = d06 "pyrkyri"}) ; -- 10000 
 lin pusillanimity_N = mkN (lin NK {s = d40 "arkuus"}) ; -- 10000 
@@ -32612,9 +32163,6 @@ lin pusillanimous_A = mkA "arka" ; -- 5747
 lin puss_N = mkN (lin NK {s = d05 "mirri"}) ; -- 10000 
 lin pussy_N = mkN (lin NK {s = d01 "kisu"}) ; -- 10000 
 lin pussyfoot_V = mkV (lin VK {s = c53A "hissuttaa"}) ; -- 10000 
-lin put_N = mkN "panna" ; -- 9589 
-lin put_V = mkV (lin VK {s = c63 "saada"}) ; -- 10 
-lin put_V2 = mkV2 (lin VK {s = c63 "saada"}) ; -- 10 
 lin put_on_N = mkN (lin NK {s = d39 "huijaus"}) ; -- 10000 
 lin putt_N = mkN (lin NK {s = d39 "puttaus"}) ; -- 10000 
 lin putt_V = mkV (lin VK {s = c73A "putata"}) ; -- 10000 
@@ -32676,7 +32224,6 @@ lin quasar_N = mkN (lin NK {s = d05 "kvasaari"}) ; -- 10000
 lin quash_V2 = mkV2 (lin VK {s = c74 "kumota"}) ; -- 3448 
 lin quaver_N = mkN (lin NK {s = d02 "tremolo"}) ; -- 10000 
 lin queasiness_N = mkN (lin NK {s = d40 "hermostuneisuus"}) ; -- 10000 
-lin queen_N = mkN (lin NK {s = d10 "rouva"}) ; -- 2288 
 lin queer_A = mkA (lin AK {s = d10 "kumma"}) ; -- 4208 
 lin queer_N = mkN (lin NK {s = d05A "hintti"}) ; -- 10000 
 lin queer_V2 = mkV2 "estää" ; -- 773 
@@ -32688,8 +32235,6 @@ lin query_V = mkV "kysellä" ; -- 1681
 lin query_V2 = mkV2 "kysellä" ; -- 1681 
 lin quest_N = mkN "etsintä" ; -- 3378 
 lin quest_V = mkV (lin VK {s = c58A "hakea"}) ; -- 300 
-lin question_N = mkN (lin NK {s = d39 "kysymys"}) ; -- 273 
-lin question_V2 = mkV2 "kysyä" ; -- 512 
 lin questionable_A = mkA "kyseenalainen" ; -- 4312 
 lin queue_N = mkN (lin NK {s = d01 "jono"}) ; -- 2521 
 lin queue_V = mkV (lin VK {s = c53A "jonottaa"}) ; -- 5197 
@@ -32778,8 +32323,6 @@ lin radical_A = mkA (lin AK {s = d05 "radikaali"}) ; -- 4875
 lin radical_N = mkN "juuri" ; -- 1341 
 lin radicalism_N = mkN (lin NK {s = d05 "radikalismi"}) ; -- 10000 
 lin radicle_N = mkN (lin NK {s = d26 "sirkkajuuri"}) ; -- 10000 
-lin radio_N = mkN (lin NK {s = d03 "radio"}) ; -- 10000 
-lin radio_V2 = mkV2 (lin VK {s = c62 "radioida"}) ; -- 10000 
 lin radioactive_A = mkA "radioaktiivinen" ; -- 9592 
 lin radiologist_N = mkN (lin NK {s = d05 "radiologi"}) ; -- 10000 
 lin radiology_N = mkN (lin NK {s = d12 "radiologia"}) ; -- 10000 
@@ -32809,9 +32352,6 @@ lin raillery_N = mkN (lin NK {s = d02 "kiusoittelu"}) ; -- 10000
 lin railroad_N = mkN "rautatie" ; -- 4410 
 lin railroad_V2 = mkV2 (lin VK {s = c53A "hoputtaa"}) ; -- 10000 
 lin railway_N = mkN (lin NK {s = d09A "rata"}) ; -- 10000 
-lin rain_N = mkN (lin NK {s = d48A "sade"}) ; -- 2132 
-lin rain_V = mkV (lin VK {s = c56A "sataa"}) ; -- 2976 
-lin rain_V2 = mkV2 (lin VK {s = c56A "sataa"}) ; -- 2976 
 lin rainfall_N = mkN (lin NK {s = d48A "sade"}) ; -- 2132 
 lin rainy_A = mkA "sateinen" ; -- 7806 
 lin raise_N = mkN (lin NK {s = d01 "nousu"}) ; -- 698 
@@ -32942,18 +32482,12 @@ lin reach_V2 = mkV2 (lin VK {s = c66 "nousta"}) ; -- 111
 lin react_V = mkV (lin VK {s = c62 "reagoida"}) ; -- 3155 
 lin reaction_N = mkN (lin NK {s = d39 "vastaus"}) ; -- 958 
 lin reactor_N = mkN (lin NK {s = d06 "reaktori"}) ; -- 8743 
-lin read_N = mkN (lin NK {s = d38 "lukeminen"}) ; -- 4404 
-lin read_V = mkV (lin VK {s = c52 "kuulua"}) ; -- 96 
-lin read_V2 = mkV2 (lin VK {s = c52 "kuulua"}) ; -- 96 
 lin readability_N = mkN (lin NK {s = d40 "helppolukuisuus"}) ; -- 10000 
 lin reader_N = mkN (lin NK {s = d12 "lukija"}) ; -- 1579 
 lin readily_Adv = mkAdv (lin AdvK {s = c99 "helposti"}) ; -- 792 
 lin readiness_N = mkN (lin NK {s = d40 "valmius"}) ; -- 2403 
 lin reading_N = mkN "näkemys" ; -- 913 
 lin readjustment_N = mkN "korjaaminen" ; -- 3492 
-lin ready_A = mkA "valmis" ; -- 368 
-lin ready_N = mkN (lin NK {s = d41 "valmis"}) ; -- 10000 
-lin ready_V2 = mkV2 (lin VK {s = c56A "laittaa"}) ; -- 1073 
 lin ready_made_A = mkA "jokapäiväinen" ; -- 4446 
 lin reagent_N = mkN (lin NK {s = d05 "reagenssi"}) ; -- 10000 
 lin real_A = mkA (lin AK {s = d15 "oikea"}) ; -- 418 
@@ -32976,9 +32510,6 @@ lin rearm_V2 = mkV2 (lin VK {s = c53 "aseistaa"}) ; -- 6813
 lin rearmost_A = mkA "viimeinen" ; -- 198 
 lin rearward_N = mkN (lin NK {s = d13 "selusta"}) ; -- 10000 
 lin rearwards_Adv = mkAdv "taaksepäin" ; -- 6897 
-lin reason_N = mkN "syy" ; -- 167 
-lin reason_V = mkV (lin VK {s = c67 "perustella"}) ; -- 766 
-lin reason_V2 = mkV2 (lin VK {s = c67 "perustella"}) ; -- 766 
 lin reasonable_A = mkA "järkevä" ; -- 1995 
 lin reasonableness_N = mkN (lin NK {s = d40 "rationaalisuus"}) ; -- 10000 
 lin reasonless_A = mkA "järjetön" ; -- 7348 
@@ -33098,8 +32629,6 @@ lin recuperation_N = mkN "toipuminen" ; -- 8522
 lin recur_V = mkV (lin VK {s = c73 "palata"}) ; -- 402 
 lin recusancy_N = mkN (lin NK {s = d02 "vastaanhangoittelu"}) ; -- 10000 
 lin recycle_V2 = mkV2 (lin VK {s = c52 "toistua"}) ; -- 3298 
-lin red_A = mkA (lin AK {s = d38 "verinen"}) ; -- 5511 
-lin red_N = mkN (lin NK {s = d03 "tappio"}) ; -- 908 
 lin red_hot_A = mkA "ajankohtainen" ; -- 2387 
 lin redact_V2 = mkV2 (lin VK {s = c53A "toimittaa"}) ; -- 1124 
 lin redaction_N = mkN (lin NK {s = d39 "toimitus"}) ; -- 2832 
@@ -33280,7 +32809,6 @@ lin relic_N = mkN "jäänne" ; -- 9511
 lin relict_N = mkN (lin NK {s = d05 "relikti"}) ; -- 10000 
 lin relief_N = mkN (lin NK {s = d01A "apu"}) ; -- 226 
 lin relieve_V2 = mkV2 (lin VK {s = c54A "parantaa"}) ; -- 747 
-lin religion_N = mkN (lin NK {s = d01A "uskonto"}) ; -- 2826 
 lin religious_A = mkA (lin AK {s = d38 "uskonnollinen"}) ; -- 3069 
 lin religious_N = mkN (lin NK {s = d38 "uskovainen"}) ; -- 10000 
 lin relinquish_V2 = mkV2 (lin VK {s = c52A "luopua"}) ; -- 874 
@@ -33513,7 +33041,6 @@ lin responsiveness_N = mkN (lin NK {s = d40 "vastaanottavaisuus"}) ; -- 10000
 lin rest_N = mkN (lin NK {s = d07A "tuki"}) ; -- 292 
 lin rest_V = mkV (lin VK {s = c67 "olla"}) ; -- 1 
 lin rest_V2 = mkV2 (lin VK {s = c67 "olla"}) ; -- 1 
-lin restaurant_N = mkN (lin NK {s = d12 "ravintola"}) ; -- 1039 
 lin restaurateur_N = mkN (lin NK {s = d12 "ravintoloitsija"}) ; -- 10000 
 lin restful_A = mkA (lin AK {s = d38 "levollinen"}) ; -- 10000 
 lin restfulness_N = mkN (lin NK {s = d40 "rauhallisuus"}) ; -- 10000 
@@ -33685,10 +33212,6 @@ lin rig_V = mkV "kiinnittää" ; -- 1212
 lin rig_V2 = mkV2 "kiinnittää" ; -- 1212 
 lin rigger_N = mkN (lin NK {s = d39 "alus"}) ; -- 1627 
 lin rigging_N = mkN (lin NK {s = d05 "riki"}) ; -- 10000 
-lin right_A = mkA (lin AK {s = d15 "oikea"}) ; -- 418 
-lin right_Adv = mkAdv (lin AdvK {s = c99 "hyvin"}) ; -- 55 
-lin right_N = mkN (lin NK {s = d40 "oikeus"}) ; -- 322 
-lin right_V2 = mkV2 (lin VK {s = c66 "oikaista"}) ; -- 7663 
 lin right_down_A = mkA "suoranainen" ; -- 5353 
 lin right_down_Adv = mkAdv (lin AdvK {s = c99 "suorastaan"}) ; -- 2077 
 lin righteousness_N = mkN "oikeudenmukaisuus" ; -- 5483 
@@ -33748,12 +33271,10 @@ lin rival_V2 = mkV2 (lin VK {s = c67 "kilpailla"}) ; -- 989
 lin rivalry_N = mkN (lin NK {s = d02 "kilpailu"}) ; -- 173 
 lin rive_V = mkV "repiä" ; -- 3191 
 lin rive_V2 = mkV2 "repiä" ; -- 3191 
-lin river_N = mkN (lin NK {s = d07A "joki"}) ; -- 10000 
 lin rivet_N = mkN (lin NK {s = d05A "niitti"}) ; -- 10000 
 lin rivet_V = mkV (lin VK {s = c73A "niitata"}) ; -- 10000 
 lin rivet_V2 = mkV2 (lin VK {s = c73A "niitata"}) ; -- 10000 
 lin roach_N = mkN (lin NK {s = d14A "russakka"}) ; -- 10000 
-lin road_N = mkN "tie" ; -- 308 
 lin roadblock_N = mkN (lin NK {s = d48 "este"}) ; -- 1884 
 lin roadway_N = mkN "tie" ; -- 308 
 lin roam_V = mkV (lin VK {s = c67A "vaellella"}) ; -- 10000 
@@ -33774,9 +33295,6 @@ lin robe_N = mkN (lin NK {s = d01A "kaapu"}) ; -- 10000
 lin robot_N = mkN (lin NK {s = d05A "robotti"}) ; -- 10000 
 lin robust_A = mkA (lin AK {s = d41A "voimakas"}) ; -- 1032 
 lin robustness_N = mkN (lin NK {s = d40 "vankkuus"}) ; -- 10000 
-lin rock_N = mkN "rock" ; -- 3307 
-lin rock_V = mkV (lin VK {s = c53A "keinuttaa"}) ; -- 10000 
-lin rock_V2 = mkV2 (lin VK {s = c53A "keinuttaa"}) ; -- 10000 
 lin rocker_N = mkN (lin NK {s = d33 "luistin"}) ; -- 8238 
 lin rocket_N = mkN (lin NK {s = d05A "raketti"}) ; -- 5875 
 lin rocket_V = mkV (lin VK {s = c66 "nousta"}) ; -- 111 
@@ -33809,8 +33327,6 @@ lin romanticize_V = mkV (lin VK {s = c62 "romantisoida"}) ; -- 10000
 lin romanticize_V2 = mkV2 (lin VK {s = c62 "romantisoida"}) ; -- 10000 
 lin rondo_N = mkN (lin NK {s = d01 "rondo"}) ; -- 10000 
 lin roneo_V2 = mkV2 (lin VK {s = c53 "monistaa"}) ; -- 10000 
-lin roof_N = mkN (lin NK {s = d01A "katto"}) ; -- 1586 
-lin roof_V2 = mkV2 (lin VK {s = c56A "kattaa"}) ; -- 1149 
 lin roofless_A = mkA "koditon" ; -- 8316 
 lin rook_N = mkN (lin NK {s = d05 "torni"}) ; -- 4771 
 lin rook_V2 = mkV2 (lin VK {s = c73 "huijata"}) ; -- 8286 
@@ -33821,11 +33337,6 @@ lin roomer_N = mkN "vuokralainen" ; -- 5905
 lin roomy_A = mkA (lin AK {s = d10 "tilava"}) ; -- 10000 
 lin roost_N = mkN (lin NK {s = d28 "orsi"}) ; -- 10000 
 lin rooster_N = mkN (lin NK {s = d01A "kukko"}) ; -- 10000 
-lin root_N = mkN "juuri" ; -- 1341 
-lin root_V = mkV (lin VK {s = c52A "juurtua"}) ; -- 10000 
-lin root_V2 = mkV2 (lin VK {s = c52A "juurtua"}) ; -- 10000 
-lin rope_N = mkN "köysi" ; -- 9566 
-lin rope_V2 = mkV2 (lin VK {s = c75 "lassota"}) ; -- 10000 
 lin ropey_A = mkA "pitkä" ; -- 208 
 lin rose_N = mkN (lin NK {s = d01 "ruusu"}) ; -- 10000 
 lin rose_V = mkV (lin VK {s = c66 "nousta"}) ; -- 111 
@@ -33843,7 +33354,6 @@ lin rotate_V = mkV "kiertää" ; -- 1025
 lin rotate_V2 = mkV2 "kiertää" ; -- 1025 
 lin rotation_N = mkN (lin NK {s = d01A "kierto"}) ; -- 5567 
 lin rotor_N = mkN (lin NK {s = d06 "roottori"}) ; -- 10000 
-lin rotten_A = mkA (lin AK {s = d10 "kurja"}) ; -- 7333 
 lin rotter_N = mkN (lin NK {s = d01 "roisto"}) ; -- 10000 
 lin rotund_A = mkA (lin AK {s = d10 "mahtava"}) ; -- 2260 
 lin rotundity_N = mkN (lin NK {s = d40 "pehmeys"}) ; -- 10000 
@@ -33862,11 +33372,6 @@ lin roughen_V2 = mkV2 (lin VK {s = c54A "karhentaa"}) ; -- 10000
 lin roughness_N = mkN (lin NK {s = d40 "kovuus"}) ; -- 9487 
 lin roughshod_A = mkA (lin AK {s = d01 "raju"}) ; -- 1824 
 lin roulette_N = mkN (lin NK {s = d05A "ruletti"}) ; -- 10000 
-lin round_A = mkA "pyöreä" ; -- 5075 
-lin round_Adv = mkAdv "ympäri" ; -- 8821 
-lin round_N = mkN (lin NK {s = d39 "kierros"}) ; -- 664 
-lin round_V = mkV "kiertää" ; -- 1025 
-lin round_V2 = mkV2 "kiertää" ; -- 1025 
 lin roundel_N = mkN (lin NK {s = d39 "suojus"}) ; -- 10000 
 lin roundup_N = mkN "kokoaminen" ; -- 6868 
 lin rouse_V = mkV "herätä" ; -- 1870 
@@ -33888,11 +33393,6 @@ lin rowing_N = mkN (lin NK {s = d01A "soutu"}) ; -- 10000
 lin rowlock_N = mkN (lin NK {s = d33 "hankain"}) ; -- 10000 
 lin royal_A = mkA (lin AK {s = d38 "kuninkaallinen"}) ; -- 5486 
 lin royalty_N = mkN (lin NK {s = d05 "rojalti"}) ; -- 10000 
-lin rub_N = mkN (lin NK {s = d40 "hankaluus"}) ; -- 6000 
-lin rub_V = mkV (lin VK {s = c52 "hieroa"}) ; -- 7745 
-lin rub_V2 = mkV2 (lin VK {s = c52 "hieroa"}) ; -- 7745 
-lin rubber_N = mkN (lin NK {s = d34A "katteeton"}) ; -- 10000 
-lin rubber_V2 = mkV2 (lin VK {s = c53A "kumittaa"}) ; -- 10000 
 lin rubbery_A = mkA "sitkeä" ; -- 5432 
 lin rubbing_N = mkN (lin NK {s = d09 "kitka"}) ; -- 10000 
 lin rubbish_N = mkN (lin NK {s = d10 "roska"}) ; -- 5399 
@@ -33929,9 +33429,6 @@ lin ruin_N = mkN (lin NK {s = d01 "tuho"}) ; -- 2467
 lin ruin_V2 = mkV2 (lin VK {s = c73 "pilata"}) ; -- 3685 
 lin ruination_N = mkN (lin NK {s = d01 "tuho"}) ; -- 2467 
 lin ruinous_A = mkA (lin AK {s = d10 "tuhoisa"}) ; -- 4615 
-lin rule_N = mkN "sääntö" ; -- 1181 
-lin rule_V = mkV (lin VK {s = c53A "johtaa"}) ; -- 172 
-lin rule_V2 = mkV2 (lin VK {s = c53A "johtaa"}) ; -- 172 
 lin ruler_N = mkN (lin NK {s = d12 "hallitsija"}) ; -- 8322 
 lin ruling_N = mkN "päätös" ; -- 163 
 lin rumba_N = mkN (lin NK {s = d10 "rumba"}) ; -- 10000 
@@ -33951,9 +33448,6 @@ lin rumour_V2 = mkV2 (lin VK {s = c74 "huhuta"}) ; -- 10000
 lin rump_N = mkN "perä" ; -- 6039 
 lin rumple_V2 = mkV2 (lin VK {s = c53A "sekoittaa"}) ; -- 2295 
 lin rumpus_N = mkN (lin NK {s = d14A "metakka"}) ; -- 10000 
-lin run_N = mkN "määrä" ; -- 133 
-lin run_V = mkV (lin VK {s = c67 "olla"}) ; -- 1 
-lin run_V2 = mkV2 (lin VK {s = c67 "olla"}) ; -- 1 
 lin run_of_the_mill_A = mkA (lin AK {s = d38 "tavallinen"}) ; -- 539 
 lin run_up_N = mkN (lin NK {s = d01 "nousu"}) ; -- 698 
 lin runaway_N = mkN (lin NK {s = d34A "holtiton"}) ; -- 10000 
@@ -34061,8 +33555,6 @@ lin sally_N = mkN "hyökkäys" ; -- 1447
 lin salmon_N = mkN (lin NK {s = d23 "lohi"}) ; -- 4295 
 lin salon_N = mkN (lin NK {s = d05A "salonki"}) ; -- 10000 
 lin saloon_N = mkN (lin NK {s = d14A "kapakka"}) ; -- 8272 
-lin salt_N = mkN (lin NK {s = d09 "suola"}) ; -- 3443 
-lin salt_V2 = mkV2 (lin VK {s = c73 "suolata"}) ; -- 7964 
 lin saltiness_N = mkN (lin NK {s = d40 "suolaisuus"}) ; -- 10000 
 lin saltpetre_N = mkN (lin NK {s = d06 "salpietari"}) ; -- 10000 
 lin salty_A = mkA "terävä" ; -- 3532 
@@ -34094,8 +33586,6 @@ lin sanction_N = mkN "laki" ; -- 467
 lin sanction_V2 = mkV2 "hyväksyä" ; -- 290 
 lin sanctity_N = mkN (lin NK {s = d40 "pyhyys"}) ; -- 10000 
 lin sanctuary_N = mkN (lin NK {s = d10 "turva"}) ; -- 1755 
-lin sand_N = mkN (lin NK {s = d09A "hiekka"}) ; -- 4939 
-lin sand_V2 = mkV2 (lin VK {s = c52 "hioa"}) ; -- 3889 
 lin sandal_N = mkN (lin NK {s = d06 "sandaali"}) ; -- 10000 
 lin sandiness_N = mkN (lin NK {s = d40 "rakeisuus"}) ; -- 10000 
 lin sandpiper_N = mkN (lin NK {s = d10A "kurppa"}) ; -- 10000 
@@ -34171,9 +33661,6 @@ lin saxhorn_N = mkN (lin NK {s = d07 "torvi"}) ; -- 10000
 lin saxifrage_N = mkN (lin NK {s = d01A "rikko"}) ; -- 10000 
 lin saxophone_N = mkN (lin NK {s = d05 "saksofoni"}) ; -- 10000 
 lin saxophonist_N = mkN (lin NK {s = d05 "saksofonisti"}) ; -- 10000 
-lin say_N = mkN "puheenvuoro" ; -- 2662 
-lin say_V = mkV (lin VK {s = c52 "sanoa"}) ; -- 25 
-lin say_V2 = mkV2 (lin VK {s = c52 "sanoa"}) ; -- 25 
 lin saying_N = mkN (lin NK {s = d09A "sanonta"}) ; -- 6324 
 lin scab_N = mkN (lin NK {s = d06 "rikkuri"}) ; -- 10000 
 lin scabbard_N = mkN (lin NK {s = d10 "huotra"}) ; -- 10000 
@@ -34249,8 +33736,6 @@ lin scholarly_A = mkA (lin AK {s = d38 "tieteellinen"}) ; -- 3229
 lin scholarship_N = mkN (lin NK {s = d05 "stipendi"}) ; -- 6332 
 lin scholastic_A = mkA (lin AK {s = d38 "akateeminen"}) ; -- 5161 
 lin scholasticism_N = mkN (lin NK {s = d09A "skolastiikka"}) ; -- 10000 
-lin school_N = mkN (lin NK {s = d01 "koulu"}) ; -- 174 
-lin school_V2 = mkV2 (lin VK {s = c53A "kouluttaa"}) ; -- 1350 
 lin schooling_N = mkN (lin NK {s = d39 "koulutus"}) ; -- 442 
 lin schoolman_N = mkN (lin NK {s = d10 "kasvattaja"}) ; -- 6765 
 lin schoolmaster_N = mkN (lin NK {s = d10 "opettaja"}) ; -- 526 
@@ -34259,7 +33744,6 @@ lin schoolteacher_N = mkN "luokanopettaja" ; -- 8543
 lin schooltime_N = mkN (lin NK {s = d09A "kouluaika"}) ; -- 10000 
 lin schooner_N = mkN (lin NK {s = d06 "kuunari"}) ; -- 10000 
 lin sciatica_N = mkN (lin NK {s = d39 "iskias"}) ; -- 10000 
-lin science_N = mkN (lin NK {s = d01A "tieto"}) ; -- 127 
 lin scientific_A = mkA (lin AK {s = d38 "tieteellinen"}) ; -- 3229 
 lin scimitar_N = mkN (lin NK {s = d06 "sapeli"}) ; -- 10000 
 lin scintilla_N = mkN (lin NK {s = d38 "hitunen"}) ; -- 10000 
@@ -34322,9 +33806,6 @@ lin scrape_V2 = mkV2 "kerätä" ; -- 560
 lin scraper_N = mkN (lin NK {s = d33A "kaavin"}) ; -- 10000 
 lin scraping_N = mkN (lin NK {s = d48A "ripe"}) ; -- 10000 
 lin scrappiness_N = mkN (lin NK {s = d40 "aggressiivisuus"}) ; -- 10000 
-lin scratch_N = mkN (lin NK {s = d39 "tasoitus"}) ; -- 4949 
-lin scratch_V = mkV "hylätä" ; -- 1338 
-lin scratch_V2 = mkV2 "hylätä" ; -- 1338 
 lin scratchy_A = mkA (lin AK {s = d38 "rosoinen"}) ; -- 10000 
 lin scrawl_V = mkV (lin VK {s = c53 "raapustaa"}) ; -- 10000 
 lin scrawl_V2 = mkV2 (lin VK {s = c53 "raapustaa"}) ; -- 10000 
@@ -34396,7 +33877,6 @@ lin scuttle_V = mkV (lin VK {s = c53A "singahtaa"}) ; -- 10000
 lin scuttle_V2 = mkV2 (lin VK {s = c53A "singahtaa"}) ; -- 10000 
 lin scythe_N = mkN (lin NK {s = d48A "viikate"}) ; -- 10000 
 lin scythe_V2 = mkV2 "niittää" ; -- 7354 
-lin sea_N = mkN (lin NK {s = d24 "meri"}) ; -- 10000 
 lin seaboard_N = mkN (lin NK {s = d04A "rannikko"}) ; -- 10000 
 lin seal_N = mkN (lin NK {s = d09 "leima"}) ; -- 4849 
 lin seal_V = mkV (lin VK {s = c58A "sulkea"}) ; -- 837 
@@ -34451,13 +33931,7 @@ lin sedge_N = mkN (lin NK {s = d09 "sara"}) ; -- 10000
 lin sediment_N = mkN (lin NK {s = d05A "sedimentti"}) ; -- 10000 
 lin seduction_N = mkN (lin NK {s = d39 "viettelys"}) ; -- 10000 
 lin sedulous_A = mkA (lin AK {s = d10 "ahkera"}) ; -- 4289 
-lin see_V = mkV "nähdä" ; -- 112 
-lin see_V2 = mkV2 "nähdä" ; -- 112 
-lin seed_N = mkN (lin NK {s = d32 "siemen"}) ; -- 4222 
-lin seed_V = mkV (lin VK {s = c53A "sijoittaa"}) ; -- 814 
-lin seed_V2 = mkV2 (lin VK {s = c53A "sijoittaa"}) ; -- 814 
 lin seedcake_N = mkN (lin NK {s = d39 "leivos"}) ; -- 10000 
-lin seek_V2 = mkV2 "yrittää" ; -- 262 
 lin seem_V = mkV (lin VK {s = c52A "tuntua"}) ; -- 263 
 lin seem_V2 = mkV2 (lin VK {s = c52A "tuntua"}) ; -- 263 
 lin seeming_A = mkA "näennäinen" ; -- 9274 
@@ -34500,9 +33974,6 @@ lin self_seeker_N = mkN (lin NK {s = d05 "egoisti"}) ; -- 10000
 lin self_sufficient_A = mkA "itsenäinen" ; -- 1555 
 lin self_supporting_A = mkA "itsenäinen" ; -- 1555 
 lin selfishness_N = mkN (lin NK {s = d40 "itsekkyys"}) ; -- 10000 
-lin sell_N = mkN (lin NK {s = d05A "myynti"}) ; -- 494 
-lin sell_V = mkV "myydä" ; -- 305 
-lin sell_V2 = mkV2 "myydä" ; -- 305 
 lin seller_N = mkN (lin NK {s = d41 "kauppias"}) ; -- 2074 
 lin selling_N = mkN (lin NK {s = d05A "myynti"}) ; -- 494 
 lin sellout_N = mkN (lin NK {s = d39 "petos"}) ; -- 4350 
@@ -34518,8 +33989,6 @@ lin seminarist_N = mkN (lin NK {s = d41 "oppilas"}) ; -- 663
 lin sempstress_N = mkN (lin NK {s = d12 "ompelija"}) ; -- 10000 
 lin senate_N = mkN (lin NK {s = d05A "senaatti"}) ; -- 5030 
 lin senator_N = mkN (lin NK {s = d06 "senaattori"}) ; -- 8256 
-lin send_V = mkV "lähettää" ; -- 585 
-lin send_V2 = mkV2 "lähettää" ; -- 585 
 lin senescence_N = mkN (lin NK {s = d40 "vanhuus"}) ; -- 7603 
 lin senility_N = mkN (lin NK {s = d40 "seniiliys"}) ; -- 10000 
 lin senior_N = mkN (lin NK {s = d16A "vanhempi"}) ; -- 576 
@@ -34618,8 +34087,6 @@ lin severally_Adv = mkAdv (lin AdvK {s = c99 "eri"}) ; -- 10000
 lin severance_N = mkN (lin NK {s = d39 "irrotus"}) ; -- 10000 
 lin severe_A = mkA (lin AK {s = d10 "kova"}) ; -- 218 
 lin severity_N = mkN (lin NK {s = d40 "vakavuus"}) ; -- 8870 
-lin sew_V = mkV (lin VK {s = c67A "ommella"}) ; -- 9005 
-lin sew_V2 = mkV2 (lin VK {s = c67A "ommella"}) ; -- 9005 
 lin sewage_N = mkN "jätevesi" ; -- 4607 
 lin sewer_N = mkN "viemäri" ; -- 8790 
 lin sewing_N = mkN (lin NK {s = d39 "ompelus"}) ; -- 10000 
@@ -34678,9 +34145,6 @@ lin share_V2 = mkV2 (lin VK {s = c56A "jakaa"}) ; -- 399
 lin share_out_N = mkN "jakaminen" ; -- 3687 
 lin shareholder_N = mkN "osakkeenomistaja" ; -- 5562 
 lin shark_N = mkN (lin NK {s = d01A "peto"}) ; -- 6662 
-lin sharp_A = mkA (lin AK {s = d10 "kova"}) ; -- 218 
-lin sharp_Adv = mkAdv "jyrkästi" ; -- 3990 
-lin sharp_N = mkN (lin NK {s = d14A "rivakka"}) ; -- 10000 
 lin sharp_set_A = mkA "nälkäinen" ; -- 8703 
 lin sharpen_V = mkV (lin VK {s = c53A "korottaa"}) ; -- 2331 
 lin sharpen_V2 = mkV2 (lin VK {s = c53A "korottaa"}) ; -- 2331 
@@ -34702,7 +34166,6 @@ lin sheathing_N = mkN (lin NK {s = d39 "laudoitus"}) ; -- 10000
 lin shed_N = mkN (lin NK {s = d09 "vaja"}) ; -- 4835 
 lin shed_V2 = mkV2 (lin VK {s = c53A "pudottaa"}) ; -- 2034 
 lin sheen_N = mkN (lin NK {s = d01 "loisto"}) ; -- 10000 
-lin sheep_N = mkN (lin NK {s = d41A "lammas"}) ; -- 4659 
 lin sheepish_A = mkA "arka" ; -- 5747 
 lin sheepishness_N = mkN (lin NK {s = d40 "nolous"}) ; -- 10000 
 lin sheepskin_N = mkN (lin NK {s = d05A "pergamentti"}) ; -- 10000 
@@ -34745,9 +34208,6 @@ lin shine_V = mkV (lin VK {s = c53 "loistaa"}) ; -- 1695
 lin shine_V2 = mkV2 (lin VK {s = c53 "loistaa"}) ; -- 1695 
 lin shingle_N = mkN (lin NK {s = d07A "kilpi"}) ; -- 9344 
 lin shingles_N = mkN (lin NK {s = d07A "kilpi"}) ; -- 9344 
-lin ship_N = mkN (lin NK {s = d09 "laiva"}) ; -- 1487 
-lin ship_V = mkV (lin VK {s = c53A "toimittaa"}) ; -- 1124 
-lin ship_V2 = mkV2 (lin VK {s = c53A "toimittaa"}) ; -- 1124 
 lin shipment_N = mkN (lin NK {s = d39 "toimitus"}) ; -- 2832 
 lin shipper_N = mkN (lin NK {s = d10 "rahtaaja"}) ; -- 10000 
 lin shipping_N = mkN (lin NK {s = d39 "kuljetus"}) ; -- 2304 
@@ -34757,7 +34217,6 @@ lin shipyard_N = mkN (lin NK {s = d14A "telakka"}) ; -- 2734
 lin shirk_V = mkV "välttää" ; -- 1690 
 lin shirk_V2 = mkV2 "välttää" ; -- 1690 
 lin shirker_N = mkN (lin NK {s = d06 "pinnari"}) ; -- 10000 
-lin shirt_N = mkN (lin NK {s = d09A "paita"}) ; -- 3037 
 lin shit_N = mkN (lin NK {s = d38 "paskiainen"}) ; -- 10000 
 lin shit_V = mkV (lin VK {s = c67A "laverrella"}) ; -- 10000 
 lin shiver_N = mkN (lin NK {s = d39 "puistatus"}) ; -- 10000 
@@ -34769,7 +34228,6 @@ lin shoal_V = mkV (lin VK {s = c52A "mataloitua"}) ; -- 10000
 lin shock_N = mkN "järkytys" ; -- 9499 
 lin shock_V2 = mkV2 "törmätä" ; -- 1847 
 lin shoddy_A = mkA (lin AK {s = d38 "petollinen"}) ; -- 10000 
-lin shoe_N = mkN "kenkä" ; -- 3116 
 lin shoemaker_N = mkN (lin NK {s = d06 "suutari"}) ; -- 10000 
 lin shoetree_N = mkN (lin NK {s = d05 "lesti"}) ; -- 10000 
 lin shoot_N = mkN "metsästys" ; -- 4025 
@@ -34777,18 +34235,11 @@ lin shoot_V = mkV (lin VK {s = c73 "kuvata"}) ; -- 575
 lin shoot_V2 = mkV2 (lin VK {s = c73 "kuvata"}) ; -- 575 
 lin shooter_N = mkN "hyökkääjä" ; -- 2618 
 lin shooting_N = mkN "ammunta" ; -- 5989 
-lin shop_N = mkN (lin NK {s = d09A "kauppa"}) ; -- 240 
-lin shop_V = mkV (lin VK {s = c67 "shoppailla"}) ; -- 10000 
 lin shopkeeper_N = mkN (lin NK {s = d41 "kauppias"}) ; -- 2074 
 lin shopping_N = mkN "ostaminen" ; -- 4437 
 lin shore_N = mkN (lin NK {s = d04A "rannikko"}) ; -- 10000 
 lin shore_V2 = mkV2 (lin VK {s = c53 "reunustaa"}) ; -- 10000 
 lin shorn_V2 = mkV2 (lin VK {s = c52A "murtua"}) ; -- 4884 
-lin short_A = mkA "tiukka" ; -- 706 
-lin short_Adv = mkAdv (lin AdvK {s = c99 "lyhyesti"}) ; -- 3899 
-lin short_N = mkN (lin NK {s = d09A "niukka"}) ; -- 10000 
-lin short_V = mkV "pettää" ; -- 2622 
-lin short_V2 = mkV2 "pettää" ; -- 2622 
 lin short_change_V2 = mkV2 (lin VK {s = c73 "huijata"}) ; -- 8286 
 lin short_circuit_V = mkV "kiertää" ; -- 1025 
 lin short_circuit_V2 = mkV2 "kiertää" ; -- 1025 
@@ -34937,9 +34388,6 @@ lin silo_N = mkN (lin NK {s = d01 "siilo"}) ; -- 10000
 lin silt_N = mkN (lin NK {s = d01 "hiesu"}) ; -- 10000 
 lin silt_V = mkV (lin VK {s = c52A "madaltua"}) ; -- 10000 
 lin silt_V2 = mkV2 (lin VK {s = c52A "madaltua"}) ; -- 10000 
-lin silver_N = mkN (lin NK {s = d15 "hopea"}) ; -- 1667 
-lin silver_V = mkV (lin VK {s = c52A "hopeoitua"}) ; -- 10000 
-lin silver_V2 = mkV2 (lin VK {s = c52A "hopeoitua"}) ; -- 10000 
 lin silvern_A = mkA (lin AK {s = d41A "kirkas"}) ; -- 2650 
 lin silvery_A = mkA (lin AK {s = d41A "kirkas"}) ; -- 2650 
 lin simian_N = mkN (lin NK {s = d12 "apina"}) ; -- 9970 
@@ -34972,8 +34420,6 @@ lin sincere_A = mkA (lin AK {s = d38 "rehellinen"}) ; -- 4390
 lin sincerity_N = mkN (lin NK {s = d40 "rehellisyys"}) ; -- 8784 
 lin sinful_A = mkA (lin AK {s = d38 "synnillinen"}) ; -- 10000 
 lin sinfulness_N = mkN (lin NK {s = d40 "synnillisyys"}) ; -- 10000 
-lin sing_V = mkV (lin VK {s = c56 "laulaa"}) ; -- 1120 
-lin sing_V2 = mkV2 (lin VK {s = c56 "laulaa"}) ; -- 1120 
 lin singable_A = mkA (lin AK {s = d38 "melodinen"}) ; -- 10000 
 lin singe_V = mkV (lin VK {s = c52A "korventua"}) ; -- 10000 
 lin singe_V2 = mkV2 (lin VK {s = c52A "korventua"}) ; -- 10000 
@@ -35005,11 +34451,8 @@ lin sirrah_N = mkN (lin NK {s = d14A "nulikka"}) ; -- 10000
 lin sirup_N = mkN (lin NK {s = d05A "siirappi"}) ; -- 10000 
 lin sisal_N = mkN (lin NK {s = d05 "sisal"}) ; -- 10000 
 lin sissy_N = mkN (lin NK {s = d01 "nynny"}) ; -- 10000 
-lin sister_N = mkN (lin NK {s = d32 "sisar"}) ; -- 4216 
 lin sisterhood_N = mkN (lin NK {s = d40 "sisaruus"}) ; -- 10000 
 lin sisterly_A = mkA (lin AK {s = d38 "sisarellinen"}) ; -- 10000 
-lin sit_V = mkV (lin VK {s = c69 "sijaita"}) ; -- 459 
-lin sit_V2 = mkV2 (lin VK {s = c69 "sijaita"}) ; -- 459 
 lin sit_in_N = mkN (lin NK {s = d39 "valtaus"}) ; -- 8349 
 lin sitar_N = mkN (lin NK {s = d06 "sitar"}) ; -- 10000 
 lin site_N = mkN "paikka" ; -- 123 
@@ -35054,9 +34497,6 @@ lin skimp_V = mkV (lin VK {s = c67 "nuukailla"}) ; -- 10000
 lin skimp_V2 = mkV2 (lin VK {s = c67 "nuukailla"}) ; -- 10000 
 lin skimpily_Adv = mkAdv (lin AdvK {s = c99 "piukasti"}) ; -- 10000 
 lin skimpy_A = mkA "niukka" ; -- 3854 
-lin skin_N = mkN (lin NK {s = d01 "iho"}) ; -- 4070 
-lin skin_V = mkV (lin VK {s = c61 "kuoria"}) ; -- 6946 
-lin skin_V2 = mkV2 (lin VK {s = c61 "kuoria"}) ; -- 6946 
 lin skin_deep_A = mkA (lin AK {s = d38 "pinnallinen"}) ; -- 10000 
 lin skinflint_N = mkN (lin NK {s = d05A "kitupiikki"}) ; -- 10000 
 lin skinhead_N = mkN (lin NK {s = d05 "skini"}) ; -- 10000 
@@ -35082,8 +34522,6 @@ lin skull_N = mkN (lin NK {s = d01 "kallo"}) ; -- 10000
 lin skullcap_N = mkN (lin NK {s = d05A "kalotti"}) ; -- 10000 
 lin skullduggery_N = mkN (lin NK {s = d39 "sumutus"}) ; -- 10000 
 lin skunk_N = mkN (lin NK {s = d38 "irtolainen"}) ; -- 10000 
-lin sky_N = mkN (lin NK {s = d41 "taivas"}) ; -- 1783 
-lin sky_V2 = mkV2 "heittää" ; -- 877 
 lin skylark_N = mkN (lin NK {s = d01 "leivo"}) ; -- 10000 
 lin skylark_V = mkV (lin VK {s = c67 "kirmailla"}) ; -- 10000 
 lin skyrocket_V = mkV (lin VK {s = c52A "sinkoutua"}) ; -- 10000 
@@ -35130,9 +34568,6 @@ lin sleazy_A = mkA "ohut" ; -- 4138
 lin sled_N = mkN (lin NK {s = d07A "reki"}) ; -- 10000 
 lin sledge_N = mkN (lin NK {s = d07A "reki"}) ; -- 10000 
 lin sledgehammer_N = mkN (lin NK {s = d06 "moukari"}) ; -- 10000 
-lin sleep_N = mkN (lin NK {s = d24 "uni"}) ; -- 2551 
-lin sleep_V = mkV (lin VK {s = c52A "nukkua"}) ; -- 2139 
-lin sleep_V2 = mkV2 (lin VK {s = c52A "nukkua"}) ; -- 2139 
 lin sleeper_N = mkN (lin NK {s = d39 "menestys"}) ; -- 860 
 lin sleepiness_N = mkN (lin NK {s = d40 "unisuus"}) ; -- 10000 
 lin sleeplessness_N = mkN (lin NK {s = d40 "unettomuus"}) ; -- 10000 
@@ -35239,9 +34674,6 @@ lin slut_N = mkN (lin NK {s = d38 "naikkonen"}) ; -- 10000
 lin smack_N = mkN (lin NK {s = d01A "maku"}) ; -- 1775 
 lin smack_V = mkV (lin VK {s = c52 "maistua"}) ; -- 2798 
 lin smack_V2 = mkV2 (lin VK {s = c52 "maistua"}) ; -- 2798 
-lin small_A = mkA "heikko" ; -- 1009 
-lin small_Adv = mkAdv (lin AdvK {s = c99 "vaatimattomasti"}) ; -- 10000 
-lin small_N = mkN (lin NK {s = d26 "pieni"}) ; -- 10000 
 lin smallness_N = mkN (lin NK {s = d40 "pienuus"}) ; -- 10000 
 lin smarmy_A = mkA (lin AK {s = d41A "liukas"}) ; -- 4631 
 lin smart_A = mkA (lin AK {s = d01 "hieno"}) ; -- 1019 
@@ -35257,9 +34689,6 @@ lin smattering_N = mkN (lin NK {s = d38 "hitunen"}) ; -- 10000
 lin smear_N = mkN (lin NK {s = d39 "herjaus"}) ; -- 10000 
 lin smear_V = mkV (lin VK {s = c73 "tahrata"}) ; -- 10000 
 lin smear_V2 = mkV2 (lin VK {s = c73 "tahrata"}) ; -- 10000 
-lin smell_N = mkN (lin NK {s = d01 "haju"}) ; -- 4546 
-lin smell_V = mkV (lin VK {s = c53A "vaikuttaa"}) ; -- 268 
-lin smell_V2 = mkV2 (lin VK {s = c53A "vaikuttaa"}) ; -- 268 
 lin smelt_N = mkN (lin NK {s = d48 "kuore"}) ; -- 10000 
 lin smelt_V2 = mkV2 (lin VK {s = c53A "vaikuttaa"}) ; -- 268 
 lin smile_N = mkN (lin NK {s = d01 "hymy"}) ; -- 3864 
@@ -35272,14 +34701,8 @@ lin smite_V2 = mkV2 "lyödä" ; -- 855
 lin smith_N = mkN "seppä" ; -- 9553 
 lin smithy_N = mkN (lin NK {s = d09 "paja"}) ; -- 7095 
 lin smocking_N = mkN (lin NK {s = d39 "rypytys"}) ; -- 10000 
-lin smoke_N = mkN (lin NK {s = d01 "savu"}) ; -- 4001 
-lin smoke_V = mkV (lin VK {s = c53A "polttaa"}) ; -- 1929 
-lin smoke_V2 = mkV2 (lin VK {s = c53A "polttaa"}) ; -- 1929 
 lin smoker_N = mkN (lin NK {s = d12 "tupakoitsija"}) ; -- 10000 
 lin smoking_N = mkN (lin NK {s = d01 "savu"}) ; -- 4001 
-lin smooth_A = mkA (lin AK {s = d38 "tasainen"}) ; -- 1580 
-lin smooth_V = mkV (lin VK {s = c53A "tasoittaa"}) ; -- 3568 
-lin smooth_V2 = mkV2 (lin VK {s = c53A "tasoittaa"}) ; -- 3568 
 lin smoothness_N = mkN (lin NK {s = d40 "rauhallisuus"}) ; -- 10000 
 lin smother_V2 = mkV2 "peittää" ; -- 2669 
 lin smoulder_N = mkN (lin NK {s = d39 "hiillos"}) ; -- 10000 
@@ -35298,8 +34721,6 @@ lin snag_N = mkN (lin NK {s = d10 "pulma"}) ; -- 3399
 lin snag_V = mkV (lin VK {s = c52A "rikkoa"}) ; -- 1483 
 lin snag_V2 = mkV2 (lin VK {s = c52A "rikkoa"}) ; -- 1483 
 lin snail_N = mkN (lin NK {s = d12 "etana"}) ; -- 10000 
-lin snake_N = mkN "käärme" ; -- 8569 
-lin snake_V = mkV (lin VK {s = c67A "pujotella"}) ; -- 10000 
 lin snap_N = mkN (lin NK {s = d39 "raksahdus"}) ; -- 10000 
 lin snap_V = mkV (lin VK {s = c74 "katketa"}) ; -- 2699 
 lin snap_V2 = mkV2 (lin VK {s = c74 "katketa"}) ; -- 2699 
@@ -35359,9 +34780,6 @@ lin snorty_A = mkA (lin AK {s = d38 "kiukkuinen"}) ; -- 10000
 lin snot_N = mkN (lin NK {s = d38 "paskiainen"}) ; -- 10000 
 lin snotty_A = mkA (lin AK {s = d10 "nokkava"}) ; -- 10000 
 lin snout_N = mkN (lin NK {s = d01 "kuono"}) ; -- 10000 
-lin snow_N = mkN (lin NK {s = d25 "lumi"}) ; -- 1380 
-lin snow_V = mkV (lin VK {s = c73 "bluffata"}) ; -- 10000 
-lin snow_V2 = mkV2 (lin VK {s = c73 "bluffata"}) ; -- 10000 
 lin snowdrift_N = mkN (lin NK {s = d39 "nietos"}) ; -- 10000 
 lin snowfall_N = mkN "lumisade" ; -- 6938 
 lin snowflake_N = mkN (lin NK {s = d38 "pulmunen"}) ; -- 10000 
@@ -35403,8 +34821,6 @@ lin socialize_V2 = mkV2 (lin VK {s = c53A "sopeuttaa"}) ; -- 9927
 lin society_N = mkN "yhteiskunta" ; -- 581 
 lin sociologist_N = mkN (lin NK {s = d05 "sosiologi"}) ; -- 10000 
 lin sociology_N = mkN (lin NK {s = d12 "sosiologia"}) ; -- 10000 
-lin sock_N = mkN (lin NK {s = d10A "sukka"}) ; -- 8038 
-lin sock_V2 = mkV2 (lin VK {s = c73A "motata"}) ; -- 10000 
 lin socket_N = mkN (lin NK {s = d10A "kuoppa"}) ; -- 9430 
 lin sod_N = mkN (lin NK {s = d48A "turve"}) ; -- 6341 
 lin soda_N = mkN (lin NK {s = d09 "limsa"}) ; -- 10000 
@@ -35473,7 +34889,6 @@ lin somnolence_N = mkN (lin NK {s = d40 "raukeus"}) ; -- 10000
 lin somnolent_A = mkA (lin AK {s = d38 "uninen"}) ; -- 10000 
 lin son_N = mkN (lin NK {s = d10A "poika"}) ; -- 10000 
 lin sonata_N = mkN (lin NK {s = d05A "sonaatti"}) ; -- 10000 
-lin song_N = mkN (lin NK {s = d01 "laulu"}) ; -- 949 
 lin songster_N = mkN (lin NK {s = d10 "laulaja"}) ; -- 1945 
 lin songstress_N = mkN (lin NK {s = d32A "laulajatar"}) ; -- 10000 
 lin sonnet_N = mkN (lin NK {s = d05A "sonetti"}) ; -- 10000 
@@ -35595,8 +35010,6 @@ lin spawn_N = mkN (lin NK {s = d01A "kutu"}) ; -- 10000
 lin spawn_V = mkV (lin VK {s = c53A "aiheuttaa"}) ; -- 298 
 lin spawn_V2 = mkV2 (lin VK {s = c53A "aiheuttaa"}) ; -- 298 
 lin spay_V2 = mkV2 (lin VK {s = c73A "leikata"}) ; -- 1328 
-lin speak_V = mkV (lin VK {s = c52 "puhua"}) ; -- 222 
-lin speak_V2 = mkV2 (lin VK {s = c52 "puhua"}) ; -- 222 
 lin speaker_N = mkN (lin NK {s = d10 "puhuja"}) ; -- 5695 
 lin spear_N = mkN "keihäs" ; -- 5016 
 lin spear_V2 = mkV2 "pistää" ; -- 1464 
@@ -35694,9 +35107,6 @@ lin spiritualize_V2 = mkV2 (lin VK {s = c53 "kirkastaa"}) ; -- 10000
 lin spirituous_A = mkA "väkevä" ; -- 6148 
 lin spirt_N = mkN (lin NK {s = d39 "ruiskaus"}) ; -- 10000 
 lin spirt_V = mkV (lin VK {s = c74A "pulputa"}) ; -- 10000 
-lin spit_N = mkN (lin NK {s = d25 "niemi"}) ; -- 6906 
-lin spit_V = mkV (lin VK {s = c53A "tihuttaa"}) ; -- 10000 
-lin spit_V2 = mkV2 (lin VK {s = c53A "tihuttaa"}) ; -- 10000 
 lin spite_N = mkN (lin NK {s = d40 "pahansuopuus"}) ; -- 10000 
 lin spite_V2 = mkV2 "ärsyttää" ; -- 4306 
 lin spitefulness_N = mkN (lin NK {s = d40 "pahansuopuus"}) ; -- 10000 
@@ -35718,9 +35128,6 @@ lin splint_N = mkN (lin NK {s = d01A "tikku"}) ; -- 10000
 lin splinter_N = mkN (lin NK {s = d01 "siru"}) ; -- 10000 
 lin splinter_V = mkV (lin VK {s = c52A "pirstoutua"}) ; -- 10000 
 lin splinter_V2 = mkV2 (lin VK {s = c52A "pirstoutua"}) ; -- 10000 
-lin split_N = mkN (lin NK {s = d40 "osuus"}) ; -- 369 
-lin split_V = mkV (lin VK {s = c56A "jakaa"}) ; -- 399 
-lin split_V2 = mkV2 (lin VK {s = c56A "jakaa"}) ; -- 399 
 lin splodge_N = mkN (lin NK {s = d01A "laikku"}) ; -- 10000 
 lin splosh_V2 = mkV2 (lin VK {s = c61 "roiskia"}) ; -- 10000 
 lin splotch_N = mkN (lin NK {s = d01A "laikku"}) ; -- 10000 
@@ -35849,9 +35256,6 @@ lin squeal_V = mkV "myöntää" ; -- 291
 lin squeal_V2 = mkV2 "myöntää" ; -- 291 
 lin squealer_N = mkN (lin NK {s = d01 "possu"}) ; -- 10000 
 lin squeegee_V2 = mkV2 "pyyhkiä" ; -- 6156 
-lin squeeze_N = mkN (lin NK {s = d03 "tappio"}) ; -- 908 
-lin squeeze_V = mkV "kiristää" ; -- 2951 
-lin squeeze_V2 = mkV2 "kiristää" ; -- 2951 
 lin squeezer_N = mkN (lin NK {s = d33 "puristin"}) ; -- 10000 
 lin squelch_N = mkN (lin NK {s = d39 "vaiennus"}) ; -- 10000 
 lin squelch_V = mkV "hillitä" ; -- 3981 
@@ -35868,9 +35272,6 @@ lin squirrel_N = mkN (lin NK {s = d10 "orava"}) ; -- 9696
 lin squirt_N = mkN "pätkä" ; -- 4017 
 lin squirt_V = mkV (lin VK {s = c53A "ruiskuttaa"}) ; -- 10000 
 lin squirt_V2 = mkV2 (lin VK {s = c53A "ruiskuttaa"}) ; -- 10000 
-lin stab_N = mkN (lin NK {s = d39 "yritys"}) ; -- 117 
-lin stab_V = mkV (lin VK {s = c73A "leikata"}) ; -- 1328 
-lin stab_V2 = mkV2 (lin VK {s = c73A "leikata"}) ; -- 1328 
 lin stabber_N = mkN "hyökkääjä" ; -- 2618 
 lin stability_N = mkN "vakaus" ; -- 3736 
 lin stabilize_V = mkV (lin VK {s = c53A "tasaannuttaa"}) ; -- 10000 
@@ -35929,9 +35330,6 @@ lin stampede_V = mkV (lin VK {s = c72A "paeta"}) ; -- 1612
 lin stampede_V2 = mkV2 (lin VK {s = c72A "paeta"}) ; -- 1612 
 lin stance_N = mkN (lin NK {s = d01A "asento"}) ; -- 6164 
 lin stanch_V2 = mkV2 (lin VK {s = c61A "tukkia"}) ; -- 5040 
-lin stand_N = mkN (lin NK {s = d10 "asema"}) ; -- 325 
-lin stand_V = mkV (lin VK {s = c67 "olla"}) ; -- 1 
-lin stand_V2 = mkV2 (lin VK {s = c67 "olla"}) ; -- 1 
 lin stand_in_N = mkN (lin NK {s = d10 "tuuraaja"}) ; -- 10000 
 lin standard_A = mkA "tavanomainen" ; -- 2623 
 lin standard_N = mkN "normaali" ; -- 3179 
@@ -36011,8 +35409,6 @@ lin steam_V = mkV (lin VK {s = c74 "raivota"}) ; -- 10000
 lin steam_V2 = mkV2 (lin VK {s = c74 "raivota"}) ; -- 10000 
 lin steamroller_V2 = mkV2 "jyrätä" ; -- 5718 
 lin steamy_A = mkA (lin AK {s = d38 "eroottinen"}) ; -- 10000 
-lin steel_N = mkN "teräs" ; -- 7345 
-lin steel_V2 = mkV2 (lin VK {s = c53A "pinnoittaa"}) ; -- 10000 
 lin steely_A = mkA (lin AK {s = d10 "kova"}) ; -- 218 
 lin steep_A = mkA "jyrkkä" ; -- 2989 
 lin steep_V = mkV (lin VK {s = c53A "liottaa"}) ; -- 10000 
@@ -36049,10 +35445,6 @@ lin stew_N = mkN (lin NK {s = d48 "murhe"}) ; -- 4739
 lin stew_V = mkV (lin VK {s = c61A "murehtia"}) ; -- 6752 
 lin stew_V2 = mkV2 (lin VK {s = c61A "murehtia"}) ; -- 6752 
 lin steward_N = mkN (lin NK {s = d10 "valvoja"}) ; -- 5582 
-lin stick_N = mkN (lin NK {s = d39 "rangaistus"}) ; -- 2047 
-lin stick_V = mkV "pysyä" ; -- 311 
-lin stick_V2 = mkV2 "pysyä" ; -- 311 
-lin stick_V2 = mkV2 "pysyä" ; -- 311 
 lin sticker_N = mkN (lin NK {s = d05A "piikki"}) ; -- 4299 
 lin stickiness_N = mkN (lin NK {s = d40 "tahmeus"}) ; -- 10000 
 lin stickler_N = mkN (lin NK {s = d12 "intoilija"}) ; -- 10000 
@@ -36132,7 +35524,6 @@ lin stomach_N = mkN (lin NK {s = d01 "halu"}) ; -- 1414
 lin stomach_V2 = mkV2 "sietää" ; -- 3248 
 lin stomp_V = mkV (lin VK {s = c53 "tallustaa"}) ; -- 10000 
 lin stomp_V2 = mkV2 (lin VK {s = c53 "tallustaa"}) ; -- 10000 
-lin stone_N = mkN (lin NK {s = d34A "tunteeton"}) ; -- 10000 
 lin stonewall_V2 = mkV2 (lin VK {s = c53A "jarruttaa"}) ; -- 5090 
 lin stonily_Adv = mkAdv (lin AdvK {s = c99 "piittaamattomasti"}) ; -- 10000 
 lin stooge_N = mkN (lin NK {s = d48A "kohde"}) ; -- 520 
@@ -36141,9 +35532,6 @@ lin stool_N = mkN "kanto" ; -- 7235
 lin stoop_N = mkN (lin NK {s = d01 "kannu"}) ; -- 10000 
 lin stoop_V = mkV (lin VK {s = c52 "painua"}) ; -- 3684 
 lin stoop_V2 = mkV2 (lin VK {s = c52 "painua"}) ; -- 3684 
-lin stop_N = mkN (lin NK {s = d48 "piste"}) ; -- 346 
-lin stop_V = mkV "estää" ; -- 773 
-lin stop_V2 = mkV2 "estää" ; -- 773 
 lin stoppage_N = mkN "estäminen" ; -- 4495 
 lin stopper_N = mkN (lin NK {s = d39 "kohtaus"}) ; -- 3705 
 lin stopping_N = mkN (lin NK {s = d48A "ote"}) ; -- 935 
@@ -36164,16 +35552,12 @@ lin stout_A = mkA (lin AK {s = d15 "rohkea"}) ; -- 3249
 lin stout_N = mkN (lin NK {s = d05 "stout"}) ; -- 10000 
 lin stouthearted_A = mkA (lin AK {s = d15 "rohkea"}) ; -- 3249 
 lin stoutness_N = mkN (lin NK {s = d40 "paksuus"}) ; -- 10000 
-lin stove_N = mkN (lin NK {s = d05 "uuni"}) ; -- 4901 
 lin stovepipe_N = mkN (lin NK {s = d06 "silinteri"}) ; -- 10000 
 lin stow_V2 = mkV2 (lin VK {s = c52 "sulloa"}) ; -- 10000 
 lin straddle_V = mkV (lin VK {s = c52 "jatkua"}) ; -- 243 
 lin straddle_V2 = mkV2 (lin VK {s = c52 "jatkua"}) ; -- 243 
 lin strafe_V2 = mkV2 "hyökätä" ; -- 2306 
 lin straggle_V = mkV "levitä" ; -- 1563 
-lin straight_A = mkA (lin AK {s = d10 "kuiva"}) ; -- 2327 
-lin straight_Adv = mkAdv "oikein" ; -- 625 
-lin straight_N = mkN "suora" ; -- 5852 
 lin straighten_V = mkV (lin VK {s = c66 "nousta"}) ; -- 111 
 lin straighten_V2 = mkV2 (lin VK {s = c66 "nousta"}) ; -- 111 
 lin straightforward_A = mkA "yksiselitteinen" ; -- 7776 
@@ -36290,7 +35674,6 @@ lin stucco_N = mkN (lin NK {s = d01A "stukko"}) ; -- 10000
 lin stuck_up_A = mkA (lin AK {s = d09 "leuhka"}) ; -- 10000 
 lin stud_N = mkN (lin NK {s = d05A "niitti"}) ; -- 10000 
 lin stud_V2 = mkV2 (lin VK {s = c62 "kuvioida"}) ; -- 10000 
-lin student_N = mkN (lin NK {s = d12 "opiskelija"}) ; -- 606 
 lin studio_N = mkN (lin NK {s = d03 "studio"}) ; -- 3770 
 lin studious_A = mkA (lin AK {s = d38 "huolellinen"}) ; -- 9119 
 lin studiousness_N = mkN (lin NK {s = d40 "huolellisuus"}) ; -- 10000 
@@ -36315,7 +35698,6 @@ lin stunt_V2 = mkV2 (lin VK {s = c67 "temppuilla"}) ; -- 10000
 lin stupefaction_N = mkN "hämmennys" ; -- 8986 
 lin stupefy_V2 = mkV2 (lin VK {s = c73 "huumata"}) ; -- 10000 
 lin stupendous_A = mkA (lin AK {s = d10 "mahtava"}) ; -- 2260 
-lin stupid_A = mkA "tyhmä" ; -- 5208 
 lin stupidity_N = mkN (lin NK {s = d40 "tyhmyys"}) ; -- 10000 
 lin stupor_N = mkN (lin NK {s = d12 "tokkura"}) ; -- 10000 
 lin sturdiness_N = mkN (lin NK {s = d40 "vankkuus"}) ; -- 10000 
@@ -36422,8 +35804,6 @@ lin succour_V2 = mkV2 (lin VK {s = c56A "auttaa"}) ; -- 550
 lin succulence_N = mkN (lin NK {s = d40 "mehevyys"}) ; -- 10000 
 lin succumb_V = mkV (lin VK {s = c67 "kuolla"}) ; -- 562 
 lin suchlike_A = mkA (lin AK {s = d10 "vastaava"}) ; -- 10000 
-lin suck_V = mkV "imeä" ; -- 5127 
-lin suck_V2 = mkV2 "imeä" ; -- 5127 
 lin sucker_N = mkN (lin NK {s = d06 "tikkari"}) ; -- 10000 
 lin suckle_V2 = mkV2 "imeä" ; -- 5127 
 lin suckling_N = mkN (lin NK {s = d39 "imetys"}) ; -- 10000 
@@ -36489,7 +35869,6 @@ lin summon_V2 = mkV2 "kerätä" ; -- 560
 lin summons_N = mkN (lin NK {s = d48 "haaste"}) ; -- 1248 
 lin summons_V2 = mkV2 "kerätä" ; -- 560 
 lin sumptuousness_N = mkN (lin NK {s = d40 "ruhtinaallisuus"}) ; -- 10000 
-lin sun_N = mkN (lin NK {s = d01A "aurinko"}) ; -- 1813 
 lin sunblind_N = mkN (lin NK {s = d05 "markiisi"}) ; -- 10000 
 lin sunder_V2 = mkV2 (lin VK {s = c53A "erottaa"}) ; -- 1519 
 lin sundowner_N = mkN (lin NK {s = d06 "kulkuri"}) ; -- 10000 
@@ -36652,10 +36031,6 @@ lin sweetheart_N = mkN (lin NK {s = d01A "rakastettu"}) ; -- 10000
 lin sweetie_N = mkN (lin NK {s = d01A "lemmitty"}) ; -- 10000 
 lin sweetmeat_N = mkN (lin NK {s = d38 "makeinen"}) ; -- 10000 
 lin sweetness_N = mkN (lin NK {s = d01 "tuoksu"}) ; -- 5492 
-lin swell_A = mkA (lin AK {s = d10 "mahtava"}) ; -- 2260 
-lin swell_N = mkN "selänne" ; -- 6190 
-lin swell_V = mkV (lin VK {s = c66 "nousta"}) ; -- 111 
-lin swell_V2 = mkV2 (lin VK {s = c66 "nousta"}) ; -- 111 
 lin swelling_N = mkN (lin NK {s = d10 "paukama"}) ; -- 10000 
 lin swerve_V = mkV "kääntyä" ; -- 1190 
 lin swerve_V2 = mkV2 "kääntyä" ; -- 1190 
@@ -36666,9 +36041,6 @@ lin swig_V = mkV (lin VK {s = c66 "huitaista"}) ; -- 10000
 lin swig_V2 = mkV2 (lin VK {s = c66 "huitaista"}) ; -- 10000 
 lin swill_V = mkV (lin VK {s = c61A "ruokkia"}) ; -- 4882 
 lin swill_V2 = mkV2 (lin VK {s = c61A "ruokkia"}) ; -- 4882 
-lin swim_N = mkN (lin NK {s = d05A "uinti"}) ; -- 3951 
-lin swim_V = mkV (lin VK {s = c62 "uida"}) ; -- 2480 
-lin swim_V2 = mkV2 (lin VK {s = c62 "uida"}) ; -- 2480 
 lin swimmer_N = mkN (lin NK {s = d06 "uimari"}) ; -- 5627 
 lin swimming_N = mkN (lin NK {s = d10 "uiva"}) ; -- 10000 
 lin swimmingly_Adv = mkAdv "hienosti" ; -- 3586 
@@ -36764,8 +36136,6 @@ lin systematize_V2 = mkV2 (lin VK {s = c62 "systematisoida"}) ; -- 10000
 lin tab_N = mkN (lin NK {s = d05A "piikki"}) ; -- 4299 
 lin tabard_N = mkN "viitta" ; -- 8496 
 lin tabby_N = mkN (lin NK {s = d41A "juovikas"}) ; -- 10000 
-lin table_N = mkN "pöytä" ; -- 1281 
-lin table_V2 = mkV2 (lin VK {s = c62 "taulukoida"}) ; -- 10000 
 lin tableau_N = mkN (lin NK {s = d10 "kuvaelma"}) ; -- 10000 
 lin tablet_N = mkN (lin NK {s = d05A "tabletti"}) ; -- 10000 
 lin tabloid_N = mkN (lin NK {s = d05 "tabloidi"}) ; -- 10000 
@@ -36791,7 +36161,6 @@ lin taffy_N = mkN (lin NK {s = d20 "toffee"}) ; -- 10000
 lin tag_N = mkN "merkintä" ; -- 4519 
 lin tag_V = mkV "nimittää" ; -- 867 
 lin tag_V2 = mkV2 "nimittää" ; -- 867 
-lin tail_N = mkN (lin NK {s = d10 "seuraaja"}) ; -- 2884 
 lin tailor_N = mkN (lin NK {s = d06 "vaatturi"}) ; -- 10000 
 lin tailor_V2 = mkV2 "räätälöidä" ; -- 7074 
 lin taint_V = mkV (lin VK {s = c53A "saastuttaa"}) ; -- 8092 
@@ -36808,9 +36177,6 @@ lin tale_N = mkN (lin NK {s = d12 "tarina"}) ; -- 705
 lin talent_N = mkN (lin NK {s = d01A "kyky"}) ; -- 1564 
 lin talented_A = mkA (lin AK {s = d41A "lahjakas"}) ; -- 4339 
 lin talisman_N = mkN (lin NK {s = d05 "talismaani"}) ; -- 10000 
-lin talk_N = mkN (lin NK {s = d48 "puhe"}) ; -- 671 
-lin talk_V = mkV (lin VK {s = c52 "puhua"}) ; -- 222 
-lin talk_V2 = mkV2 (lin VK {s = c52 "puhua"}) ; -- 222 
 lin talker_N = mkN (lin NK {s = d10 "puhuja"}) ; -- 5695 
 lin tall_A = mkA "pitkä" ; -- 208 
 lin tallow_N = mkN (lin NK {s = d05 "tali"}) ; -- 10000 
@@ -36912,10 +36278,7 @@ lin taxi_V2 = mkV2 (lin VK {s = c73 "rullata"}) ; -- 10000
 lin taxonomy_N = mkN (lin NK {s = d12 "taksonomia"}) ; -- 10000 
 lin taxpayer_N = mkN "veronmaksaja" ; -- 3588 
 lin tea_N = mkN (lin NK {s = d18 "tee"}) ; -- 8376 
-lin teach_V = mkV (lin VK {s = c53A "opettaa"}) ; -- 1264 
-lin teach_V2 = mkV2 (lin VK {s = c53A "opettaa"}) ; -- 1264 
 lin teach_in_N = mkN (lin NK {s = d05 "seminaari"}) ; -- 1885 
-lin teacher_N = mkN (lin NK {s = d10 "opettaja"}) ; -- 526 
 lin teaching_N = mkN (lin NK {s = d39 "opetus"}) ; -- 1135 
 lin teak_N = mkN (lin NK {s = d05A "tiikki"}) ; -- 10000 
 lin teal_N = mkN (lin NK {s = d05 "tavi"}) ; -- 10000 
@@ -36959,7 +36322,6 @@ lin telescope_V = mkV "tiivistää" ; -- 2271
 lin telescope_V2 = mkV2 "tiivistää" ; -- 2271 
 lin telescopic_A = mkA (lin AK {s = d38 "teleskooppinen"}) ; -- 10000 
 lin televise_V2 = mkV2 (lin VK {s = c62 "televisioida"}) ; -- 10000 
-lin television_N = mkN "televisio" ; -- 873 
 lin tell_V = mkV (lin VK {s = c52A "kertoa"}) ; -- 30 
 lin tell_V2 = mkV2 (lin VK {s = c52A "kertoa"}) ; -- 30 
 lin teller_N = mkN (lin NK {s = d10 "kertoja"}) ; -- 6423 
@@ -37102,8 +36464,6 @@ lin thermostat_N = mkN (lin NK {s = d05A "termostaatti"}) ; -- 10000
 lin thesis_N = mkN "väitöskirja" ; -- 2169 
 lin thespian_A = mkA (lin AK {s = d38 "traaginen"}) ; -- 6269 
 lin thespian_N = mkN "näyttelijä" ; -- 1209 
-lin thick_A = mkA "syvä" ; -- 1349 
-lin thick_N = mkN (lin NK {s = d15 "sakea"}) ; -- 10000 
 lin thicken_V = mkV (lin VK {s = c72A "saeta"}) ; -- 10000 
 lin thicken_V2 = mkV2 (lin VK {s = c72A "saeta"}) ; -- 10000 
 lin thickening_N = mkN (lin NK {s = d10 "paksuuntuma"}) ; -- 10000 
@@ -37115,17 +36475,11 @@ lin thievery_N = mkN (lin NK {s = d02 "varastelu"}) ; -- 10000
 lin thigh_N = mkN (lin NK {s = d27 "reisi"}) ; -- 10000 
 lin thimble_N = mkN (lin NK {s = d33 "sormustin"}) ; -- 10000 
 lin thimbleful_N = mkN (lin NK {s = d38 "sormustimellinen"}) ; -- 10000 
-lin thin_A = mkA "heikko" ; -- 1009 
-lin thin_V = mkV (lin VK {s = c54A "laimentaa"}) ; -- 10000 
-lin thin_V2 = mkV2 (lin VK {s = c54A "laimentaa"}) ; -- 10000 
 lin thing_N = mkN (lin NK {s = d12 "asia"}) ; -- 43 
 lin thingmabob_N = mkN (lin NK {s = d09 "kama"}) ; -- 10000 
 lin thingmajig_N = mkN (lin NK {s = d33 "vempain"}) ; -- 10000 
 lin thingumabob_N = mkN (lin NK {s = d01 "lelu"}) ; -- 5400 
 lin thingummy_N = mkN (lin NK {s = d48A "laite"}) ; -- 1233 
-lin think_N = mkN (lin NK {s = d09A "pohdinta"}) ; -- 4913 
-lin think_V = mkV "pitää" ; -- 18 
-lin think_V2 = mkV2 "pitää" ; -- 18 
 lin thinker_N = mkN (lin NK {s = d12 "ajattelija"}) ; -- 10000 
 lin thinness_N = mkN (lin NK {s = d40 "hoikkuus"}) ; -- 10000 
 lin thirst_N = mkN (lin NK {s = d01 "jano"}) ; -- 10000 
@@ -37175,9 +36529,6 @@ lin throttle_V = mkV "vähentää" ; -- 802
 lin throttle_V2 = mkV2 "vähentää" ; -- 802 
 lin through_Adv = mkAdv (lin AdvK {s = c99 "halki"}) ; -- 10000 
 lin throughway_N = mkN "moottoritie" ; -- 3411 
-lin throw_N = mkN (lin NK {s = d39 "kierros"}) ; -- 664 
-lin throw_V = mkV (lin VK {s = c64 "luoda"}) ; -- 407 
-lin throw_V2 = mkV2 (lin VK {s = c64 "luoda"}) ; -- 407 
 lin throwaway_N = mkN (lin NK {s = d01A "heitto"}) ; -- 3272 
 lin throwback_N = mkN (lin NK {s = d01 "muisto"}) ; -- 1601 
 lin thrum_V = mkV (lin VK {s = c53A "rummuttaa"}) ; -- 10000 
@@ -37214,9 +36565,6 @@ lin tideway_N = mkN (lin NK {s = d10 "kanava"}) ; -- 1668
 lin tidiness_N = mkN (lin NK {s = d40 "siisteys"}) ; -- 10000 
 lin tidy_A = mkA (lin AK {s = d05 "siisti"}) ; -- 4826 
 lin tidy_N = mkN (lin NK {s = d38 "sievoinen"}) ; -- 10000 
-lin tie_N = mkN "tasapeli" ; -- 3516 
-lin tie_V = mkV "yhdistää" ; -- 784 
-lin tie_V2 = mkV2 "yhdistää" ; -- 784 
 lin tie_up_N = mkN (lin NK {s = d48A "side"}) ; -- 6540 
 lin tier_N = mkN (lin NK {s = d01 "taso"}) ; -- 356 
 lin tiger_N = mkN (lin NK {s = d06 "tiikeri"}) ; -- 10000 
@@ -37302,8 +36650,6 @@ lin toast_V2 = mkV2 (lin VK {s = c56A "paahtaa"}) ; -- 10000
 lin tobacco_N = mkN (lin NK {s = d14A "tupakka"}) ; -- 3101 
 lin toccata_N = mkN (lin NK {s = d09 "toccata"}) ; -- 10000 
 lin tocsin_N = mkN "hälytys" ; -- 4450 
-lin today_Adv = mkAdv "tänään" ; -- 470 
-lin today_N = mkN (lin NK {s = d09A "nykyaika"}) ; -- 3036 
 lin toddle_V = mkV (lin VK {s = c54A "taapertaa"}) ; -- 10000 
 lin toddler_N = mkN (lin NK {s = d02 "taapero"}) ; -- 10000 
 lin toddy_N = mkN (lin NK {s = d05 "toti"}) ; -- 10000 
@@ -37343,7 +36689,6 @@ lin tonality_N = mkN (lin NK {s = d40 "tonaalisuus"}) ; -- 10000
 lin tone_N = mkN (lin NK {s = d07A "henki"}) ; -- 426 
 lin tone_V = mkV "jännittää" ; -- 2347 
 lin tone_V2 = mkV2 "jännittää" ; -- 2347 
-lin tongue_N = mkN (lin NK {s = d26 "kieli"}) ; -- 534 
 lin tonic_A = mkA (lin AK {s = d38 "soinnillinen"}) ; -- 10000 
 lin tonic_N = mkN (lin NK {s = d38 "painollinen"}) ; -- 10000 
 lin tonnage_N = mkN (lin NK {s = d01 "vero"}) ; -- 1047 
@@ -37355,7 +36700,6 @@ lin tool_N = mkN "väline" ; -- 2305
 lin tool_V2 = mkV2 (lin VK {s = c56 "ajaa"}) ; -- 217 
 lin toot_V = mkV (lin VK {s = c73A "tuutata"}) ; -- 10000 
 lin toot_V2 = mkV2 (lin VK {s = c73A "tuutata"}) ; -- 10000 
-lin tooth_N = mkN (lin NK {s = d48A "rakenne"}) ; -- 1434 
 lin toothsome_A = mkA (lin AK {s = d38 "herkullinen"}) ; -- 6263 
 lin tootle_N = mkN (lin NK {s = d39 "toitotus"}) ; -- 10000 
 lin tootle_V = mkV (lin VK {s = c73A "tuutata"}) ; -- 10000 
@@ -37486,9 +36830,6 @@ lin tragic_A = mkA (lin AK {s = d38 "traaginen"}) ; -- 6269
 lin trail_N = mkN "jälki" ; -- 904 
 lin trail_V = mkV "jäljittää" ; -- 8236 
 lin trail_V2 = mkV2 "jäljittää" ; -- 8236 
-lin train_N = mkN (lin NK {s = d10 "juna"}) ; -- 1457 
-lin train_V = mkV (lin VK {s = c53A "kasvattaa"}) ; -- 1046 
-lin train_V2 = mkV2 (lin VK {s = c53A "kasvattaa"}) ; -- 1046 
 lin trainbearer_N = mkN (lin NK {s = d43 "airut"}) ; -- 10000 
 lin trainee_N = mkN (lin NK {s = d12 "harjoittelija"}) ; -- 9199 
 lin trainer_N = mkN (lin NK {s = d10 "valmentaja"}) ; -- 569 
@@ -37572,9 +36913,6 @@ lin trash_V2 = mkV2 (lin VK {s = c52A "haukkua"}) ; -- 5270
 lin trashy_A = mkA (lin AK {s = d15 "surkea"}) ; -- 4109 
 lin trauma_N = mkN (lin NK {s = d09 "trauma"}) ; -- 10000 
 lin travail_N = mkN (lin NK {s = d39 "synnytys"}) ; -- 5555 
-lin travel_N = mkN "siirtyminen" ; -- 1886 
-lin travel_V = mkV (lin VK {s = c58A "kulkea"}) ; -- 511 
-lin travel_V2 = mkV2 (lin VK {s = c58A "kulkea"}) ; -- 511 
 lin traveller_N = mkN (lin NK {s = d10 "matkustaja"}) ; -- 1501 
 lin travelling_N = mkN "matkustaminen" ; -- 7648 
 lin traverse_N = mkN (lin NK {s = d39 "ylitys"}) ; -- 5407 
@@ -37607,8 +36945,6 @@ lin treaty_N = mkN (lin NK {s = d39 "sopimus"}) ; -- 242
 lin treble_A = mkA "kolminkertainen" ; -- 7296 
 lin treble_V = mkV (lin VK {s = c53 "kolminkertaistaa"}) ; -- 10000 
 lin treble_V2 = mkV2 (lin VK {s = c53 "kolminkertaistaa"}) ; -- 10000 
-lin tree_N = mkN (lin NK {s = d18 "puu"}) ; -- 636 
-lin tree_V2 = mkV2 (lin VK {s = c56 "ajaa"}) ; -- 217 
 lin trefoil_N = mkN (lin NK {s = d13 "apila"}) ; -- 10000 
 lin trek_N = mkN (lin NK {s = d39 "vaellus"}) ; -- 9016 
 lin trek_V = mkV (lin VK {s = c54A "vaeltaa"}) ; -- 6308 
@@ -37818,9 +37154,6 @@ lin turgidity_N = mkN (lin NK {s = d40 "mahtipontisuus"}) ; -- 10000
 lin turkey_N = mkN (lin NK {s = d08 "pelle"}) ; -- 10000 
 lin turmeric_N = mkN (lin NK {s = d10 "kurkuma"}) ; -- 10000 
 lin turmoil_N = mkN (lin NK {s = d09A "kuohunta"}) ; -- 10000 
-lin turn_N = mkN (lin NK {s = d01 "vuoro"}) ; -- 1143 
-lin turn_V = mkV (lin VK {s = c52A "muuttua"}) ; -- 358 
-lin turn_V2 = mkV2 (lin VK {s = c52A "muuttua"}) ; -- 358 
 lin turn_on_N = mkN (lin NK {s = d39 "kiihotus"}) ; -- 10000 
 lin turner_N = mkN (lin NK {s = d06 "sorvari"}) ; -- 10000 
 lin turning_N = mkN (lin NK {s = d39 "muutos"}) ; -- 333 
@@ -37897,7 +37230,6 @@ lin tzarina_N = mkN (lin NK {s = d32A "tsaaritar"}) ; -- 10000
 lin ubiquity_N = mkN "läsnäolo" ; -- 4718 
 lin uglify_V2 = mkV2 (lin VK {s = c54A "rumentaa"}) ; -- 10000 
 lin ugliness_N = mkN (lin NK {s = d40 "rumuus"}) ; -- 10000 
-lin ugly_A = mkA (lin AK {s = d10 "ruma"}) ; -- 5402 
 lin ukase_N = mkN (lin NK {s = d06 "ukaasi"}) ; -- 10000 
 lin ukulele_N = mkN (lin NK {s = d08 "ukulele"}) ; -- 10000 
 lin ulcer_N = mkN (lin NK {s = d10 "haavauma"}) ; -- 10000 
@@ -37968,7 +37300,6 @@ lin unbuttoned_A = mkA (lin AK {s = d10 "leppoisa"}) ; -- 7619
 lin uncalled_for_A = mkA "tarpeeton" ; -- 3985 
 lin uncarpeted_A = mkA "paljas" ; -- 5919 
 lin unceasing_A = mkA "loputon" ; -- 5153 
-lin uncertain_A = mkA "epävarma" ; -- 3174 
 lin unchain_V2 = mkV2 (lin VK {s = c53A "vapauttaa"}) ; -- 1648 
 lin uncharitable_A = mkA (lin AK {s = d01 "tyly"}) ; -- 6204 
 lin uncivil_A = mkA (lin AK {s = d15 "karkea"}) ; -- 6991 
@@ -38041,8 +37372,6 @@ lin undersign_V2 = mkV2 "allekirjoittaa" ; -- 1427
 lin underslung_A = mkA "matala" ; -- 2129 
 lin underspend_V = mkV (lin VK {s = c53A "kuluttaa"}) ; -- 3245 
 lin underspend_V2 = mkV2 (lin VK {s = c53A "kuluttaa"}) ; -- 3245 
-lin understand_V = mkV (lin VK {s = c52 "uskoa"}) ; -- 140 
-lin understand_V2 = mkV2 (lin VK {s = c52 "uskoa"}) ; -- 140 
 lin understanding_N = mkN "ymmärrys" ; -- 5474 
 lin understate_V2 = mkV2 "vähätellä" ; -- 4860 
 lin understatement_N = mkN (lin NK {s = d05 "understatement"}) ; -- 10000 
@@ -38162,7 +37491,6 @@ lin united_A = mkA "yhtenäinen" ; -- 2535
 lin unity_N = mkN "yhtenäisyys" ; -- 7400 
 lin universal_A = mkA (lin AK {s = d38 "yleinen"}) ; -- 499 
 lin universe_N = mkN (lin NK {s = d06 "universumi"}) ; -- 10000 
-lin university_N = mkN "yliopisto" ; -- 797 
 lin unjust_A = mkA "epäoikeudenmukainen" ; -- 9775 
 lin unjustifiable_A = mkA "kohtuuton" ; -- 3217 
 lin unjustified_A = mkA "kohtuuton" ; -- 3217 
@@ -38632,7 +37960,6 @@ lin vileness_N = mkN (lin NK {s = d40 "inhottavuus"}) ; -- 10000
 lin vilification_N = mkN (lin NK {s = d02 "panettelu"}) ; -- 10000 
 lin vilify_V2 = mkV2 (lin VK {s = c73 "mustamaalata"}) ; -- 10000 
 lin villa_N = mkN "omakotitalo" ; -- 2479 
-lin village_N = mkN "kylä" ; -- 603 
 lin villager_N = mkN "kyläläinen" ; -- 3805 
 lin villain_N = mkN (lin NK {s = d10 "konna"}) ; -- 10000 
 lin villainy_N = mkN (lin NK {s = d40 "roistomaisuus"}) ; -- 10000 
@@ -38736,9 +38063,6 @@ lin voluptuary_N = mkN (lin NK {s = d12 "nautiskelija"}) ; -- 10000
 lin voluptuous_A = mkA (lin AK {s = d38 "nautinnollinen"}) ; -- 10000 
 lin voluptuousness_N = mkN (lin NK {s = d40 "hekumallisuus"}) ; -- 10000 
 lin volute_N = mkN (lin NK {s = d48A "kierre"}) ; -- 6587 
-lin vomit_N = mkN (lin NK {s = d39 "oksennus"}) ; -- 10000 
-lin vomit_V = mkV (lin VK {s = c54A "oksentaa"}) ; -- 10000 
-lin vomit_V2 = mkV2 (lin VK {s = c54A "oksentaa"}) ; -- 10000 
 lin voodoo_N = mkN (lin NK {s = d20 "voodoo"}) ; -- 10000 
 lin voodooism_N = mkN (lin NK {s = d20 "voodoo"}) ; -- 10000 
 lin voracious_A = mkA (lin AK {s = d41 "ahnas"}) ; -- 10000 
@@ -38794,9 +38118,6 @@ lin wail_V = mkV (lin VK {s = c54A "vaikertaa"}) ; -- 10000
 lin wail_V2 = mkV2 (lin VK {s = c54A "vaikertaa"}) ; -- 10000 
 lin wainscot_N = mkN (lin NK {s = d05A "panelointi"}) ; -- 10000 
 lin waist_N = mkN (lin NK {s = d39 "kavennus"}) ; -- 10000 
-lin wait_N = mkN (lin NK {s = d39 "odotus"}) ; -- 1477 
-lin wait_V = mkV (lin VK {s = c53A "odottaa"}) ; -- 152 
-lin wait_V2 = mkV2 (lin VK {s = c53A "odottaa"}) ; -- 152 
 lin waiter_N = mkN (lin NK {s = d12 "tarjoilija"}) ; -- 9370 
 lin waive_V2 = mkV2 (lin VK {s = c52A "luopua"}) ; -- 874 
 lin wake_V = mkV "herättää" ; -- 879 
@@ -38805,9 +38126,6 @@ lin wakefulness_N = mkN (lin NK {s = d40 "unettomuus"}) ; -- 10000
 lin waken_V = mkV "herättää" ; -- 879 
 lin waken_V2 = mkV2 "herättää" ; -- 879 
 lin wale_N = mkN (lin NK {s = d41A "parras"}) ; -- 7483 
-lin walk_N = mkN "käynti" ; -- 1192 
-lin walk_V = mkV (lin VK {s = c56A "saattaa"}) ; -- 162 
-lin walk_V2 = mkV2 (lin VK {s = c56A "saattaa"}) ; -- 162 
 lin walkabout_N = mkN (lin NK {s = d39 "vaellus"}) ; -- 9016 
 lin walker_N = mkN (lin NK {s = d06 "rollaattori"}) ; -- 10000 
 lin walkout_N = mkN (lin NK {s = d01A "lakko"}) ; -- 1616 
@@ -38836,8 +38154,6 @@ lin want_N = mkN (lin NK {s = d48A "puute"}) ; -- 1063
 lin want_V = mkV (lin VK {s = c75 "haluta"}) ; -- 64 
 lin want_V2 = mkV2 (lin VK {s = c75 "haluta"}) ; -- 64 
 lin wanton_V = mkV (lin VK {s = c73 "tuhlata"}) ; -- 7365 
-lin war_N = mkN "sota" ; -- 395 
-lin war_V = mkV (lin VK {s = c61A "sotia"}) ; -- 6922 
 lin warbler_N = mkN (lin NK {s = d01A "kerttu"}) ; -- 10000 
 lin ward_V2 = mkV2 (lin VK {s = c67 "suojella"}) ; -- 2303 
 lin wardrobe_N = mkN (lin NK {s = d02 "puvusto"}) ; -- 10000 
@@ -38848,9 +38164,6 @@ lin warehousing_N = mkN (lin NK {s = d05A "varastointi"}) ; -- 10000
 lin warhorse_N = mkN "sotaveteraani" ; -- 7985 
 lin wariness_N = mkN (lin NK {s = d40 "varovaisuus"}) ; -- 9138 
 lin warlike_A = mkA (lin AK {s = d10 "sotaisa"}) ; -- 10000 
-lin warm_A = mkA (lin AK {s = d48 "tuore"}) ; -- 691 
-lin warm_V = mkV "lämmittää" ; -- 3275 
-lin warm_V2 = mkV2 "lämmittää" ; -- 3275 
 lin warmth_N = mkN (lin NK {s = d01A "into"}) ; -- 2314 
 lin warn_V = mkV (lin VK {s = c53A "kehottaa"}) ; -- 1302 
 lin warn_V2 = mkV2 (lin VK {s = c53A "kehottaa"}) ; -- 1302 
@@ -38862,9 +38175,6 @@ lin warrior_N = mkN (lin NK {s = d06 "soturi"}) ; -- 10000
 lin wart_N = mkN (lin NK {s = d48A "puute"}) ; -- 1063 
 lin wartime_N = mkN "sota-aika" ; -- 6416 
 lin wary_A = mkA (lin AK {s = d38 "varovainen"}) ; -- 3198 
-lin wash_N = mkN (lin NK {s = d01 "pesu"}) ; -- 6605 
-lin wash_V = mkV (lin VK {s = c73A "kelvata"}) ; -- 1513 
-lin wash_V2 = mkV2 (lin VK {s = c73A "kelvata"}) ; -- 1513 
 lin washer_N = mkN (lin NK {s = d09A "prikka"}) ; -- 10000 
 lin washing_N = mkN (lin NK {s = d01 "pesu"}) ; -- 6605 
 lin washout_N = mkN (lin NK {s = d06 "tunari"}) ; -- 10000 
@@ -38874,17 +38184,11 @@ lin waste_N = mkN (lin NK {s = d03 "autio"}) ; -- 10000
 lin waste_V = mkV (lin VK {s = c53 "poistaa"}) ; -- 1076 
 lin waste_V2 = mkV2 (lin VK {s = c53 "poistaa"}) ; -- 1076 
 lin waster_N = mkN (lin NK {s = d06 "tuhlari"}) ; -- 10000 
-lin watch_N = mkN (lin NK {s = d01 "kello"}) ; -- 473 
-lin watch_V = mkV (lin VK {s = c73 "seurata"}) ; -- 120 
-lin watch_V2 = mkV2 (lin VK {s = c73 "seurata"}) ; -- 120 
 lin watchdog_N = mkN (lin NK {s = d10 "valvoja"}) ; -- 5582 
 lin watcher_N = mkN (lin NK {s = d12 "tarkkailija"}) ; -- 2777 
 lin watchful_A = mkA (lin AK {s = d38 "tarkkaavainen"}) ; -- 10000 
 lin watchfulness_N = mkN (lin NK {s = d40 "tarkkaavaisuus"}) ; -- 10000 
 lin watchman_N = mkN (lin NK {s = d12 "vartija"}) ; -- 4643 
-lin water_N = mkN (lin NK {s = d27 "vesi"}) ; -- 348 
-lin water_V = mkV (lin VK {s = c67 "kastella"}) ; -- 8525 
-lin water_V2 = mkV2 (lin VK {s = c67 "kastella"}) ; -- 8525 
 lin watercourse_N = mkN (lin NK {s = d09A "virta"}) ; -- 2979 
 lin waterman_N = mkN (lin NK {s = d12 "purjehtija"}) ; -- 10000 
 lin waterside_N = mkN (lin NK {s = d09A "ranta"}) ; -- 10000 
@@ -38991,8 +38295,6 @@ lin welter_N = mkN (lin NK {s = d01A "joukko"}) ; -- 207
 lin welter_V = mkV (lin VK {s = c62 "piehtaroida"}) ; -- 10000 
 lin wench_N = mkN (lin NK {s = d09A "likka"}) ; -- 10000 
 lin wend_V2 = mkV2 (lin VK {s = c73A "suunnata"}) ; -- 1309 
-lin wet_A = mkA "märkä" ; -- 5995 
-lin wet_V2 = mkV2 (lin VK {s = c67 "kastella"}) ; -- 8525 
 lin wether_N = mkN (lin NK {s = d41 "oinas"}) ; -- 10000 
 lin wetting_N = mkN (lin NK {s = d02 "kastelu"}) ; -- 10000 
 lin whack_N = mkN "lyönti" ; -- 4147 
@@ -39057,8 +38359,6 @@ lin whistle_N = mkN (lin NK {s = d05 "pilli"}) ; -- 10000
 lin whistle_V = mkV "viheltää" ; -- 8725 
 lin whistle_V2 = mkV2 "viheltää" ; -- 8725 
 lin whit_N = mkN (lin NK {s = d38 "rahtunen"}) ; -- 10000 
-lin white_A = mkA "puhdas" ; -- 1224 
-lin white_N = mkN (lin NK {s = d38 "valkoinen"}) ; -- 9789 
 lin white_livered_A = mkA (lin AK {s = d41A "pelokas"}) ; -- 10000 
 lin whitebait_N = mkN (lin NK {s = d05 "silli"}) ; -- 10000 
 lin whiten_V = mkV (lin VK {s = c66 "valkaista"}) ; -- 10000 
@@ -39093,8 +38393,6 @@ lin wick_N = mkN "sydän" ; -- 1232
 lin wicked_A = mkA (lin AK {s = d09 "paha"}) ; -- 406 
 lin wickedness_N = mkN (lin NK {s = d40 "pahuus"}) ; -- 10000 
 lin wicket_N = mkN (lin NK {s = d09 "hila"}) ; -- 10000 
-lin wide_A = mkA (lin AK {s = d09 "laaja"}) ; -- 481 
-lin wide_Adv = mkAdv (lin AdvK {s = c99 "paljon"}) ; -- 33 
 lin wide_awake_A = mkA (lin AK {s = d38 "tarkkaavainen"}) ; -- 10000 
 lin widen_V = mkV (lin VK {s = c54A "laajentaa"}) ; -- 1498 
 lin widen_V2 = mkV2 (lin VK {s = c54A "laajentaa"}) ; -- 1498 
@@ -39104,7 +38402,6 @@ lin widow_N = mkN (lin NK {s = d07 "leski"}) ; -- 6889
 lin widowhood_N = mkN (lin NK {s = d40 "leskeys"}) ; -- 10000 
 lin width_N = mkN (lin NK {s = d40 "leveys"}) ; -- 9224 
 lin wield_V2 = mkV2 "käyttää" ; -- 94 
-lin wife_N = mkN (lin NK {s = d01 "vaimo"}) ; -- 928 
 lin wigging_N = mkN (lin NK {s = d39 "nalkutus"}) ; -- 10000 
 lin wiggle_V = mkV (lin VK {s = c53A "heiluttaa"}) ; -- 7320 
 lin wiggle_V2 = mkV2 (lin VK {s = c53A "heiluttaa"}) ; -- 7320 
@@ -39126,26 +38423,15 @@ lin willy_nilly_Adv = mkAdv "väkisin" ; -- 3569
 lin wilt_V = mkV (lin VK {s = c52 "lannistua"}) ; -- 10000 
 lin wilt_V2 = mkV2 (lin VK {s = c52 "lannistua"}) ; -- 10000 
 lin wily_A = mkA (lin AK {s = d01 "kiero"}) ; -- 10000 
-lin win_N = mkN (lin NK {s = d01A "voitto"}) ; -- 10000 
-lin win_V = mkV (lin VK {s = c53A "voittaa"}) ; -- 192 
-lin win_V2 = mkV2 (lin VK {s = c53A "voittaa"}) ; -- 192 
 lin winch_N = mkN (lin NK {s = d05 "vinssi"}) ; -- 10000 
 lin winch_V2 = mkV2 (lin VK {s = c73 "vinssata"}) ; -- 10000 
-lin wind_N = mkN (lin NK {s = d09 "ilma"}) ; -- 1022 
-lin wind_V = mkV "vetää" ; -- 439 
-lin wind_V2 = mkV2 "vetää" ; -- 439 
 lin windbag_N = mkN (lin NK {s = d05A "suupaltti"}) ; -- 10000 
 lin windbreak_N = mkN (lin NK {s = d10 "tuulensuoja"}) ; -- 10000 
 lin windfall_N = mkN (lin NK {s = d41A "pudokas"}) ; -- 10000 
 lin windflower_N = mkN (lin NK {s = d01A "vuokko"}) ; -- 10000 
 lin windiness_N = mkN (lin NK {s = d40 "tuulisuus"}) ; -- 10000 
 lin windlass_N = mkN (lin NK {s = d06 "vintturi"}) ; -- 10000 
-lin window_N = mkN (lin NK {s = d12 "ikkuna"}) ; -- 1665 
 lin windy_A = mkA (lin AK {s = d38 "kiireinen"}) ; -- 3689 
-lin wine_N = mkN "viini" ; -- 2200 
-lin wing_N = mkN (lin NK {s = d01 "sivu"}) ; -- 386 
-lin wing_V = mkV "lentää" ; -- 1241 
-lin wing_V2 = mkV2 "lentää" ; -- 1241 
 lin winger_N = mkN "laitahyökkääjä" ; -- 6910 
 lin wink_V = mkV (lin VK {s = c52A "vilkkua"}) ; -- 10000 
 lin wink_V2 = mkV2 (lin VK {s = c52A "vilkkua"}) ; -- 10000 
@@ -39157,8 +38443,6 @@ lin winsome_A = mkA (lin AK {s = d10 "hurmaava"}) ; -- 10000
 lin winter_N = mkN (lin NK {s = d07 "talvi"}) ; -- 579 
 lin wintery_A = mkA "talvinen" ; -- 7580 
 lin wintry_A = mkA "talvinen" ; -- 7580 
-lin wipe_V = mkV "pyyhkiä" ; -- 6156 
-lin wipe_V2 = mkV2 "pyyhkiä" ; -- 6156 
 lin wire_V = mkV (lin VK {s = c53 "ripustaa"}) ; -- 7219 
 lin wire_V2 = mkV2 (lin VK {s = c53 "ripustaa"}) ; -- 7219 
 lin wireless_A = mkA "langaton" ; -- 9283 
@@ -39206,21 +38490,16 @@ lin wold_N = mkN (lin NK {s = d07 "nummi"}) ; -- 10000
 lin wolf_N = mkN (lin NK {s = d27 "susi"}) ; -- 3084 
 lin wolf_V2 = mkV2 (lin VK {s = c61 "ahmia"}) ; -- 10000 
 lin wolfram_N = mkN (lin NK {s = d06 "volframi"}) ; -- 10000 
-lin woman_N = mkN "siivooja" ; -- 9028 
 lin womanhood_N = mkN (lin NK {s = d40 "naiseus"}) ; -- 10000 
 lin womanish_A = mkA (lin AK {s = d38 "naismainen"}) ; -- 10000 
 lin womanly_A = mkA (lin AK {s = d38 "naisellinen"}) ; -- 10000 
 lin womb_N = mkN (lin NK {s = d01A "kohtu"}) ; -- 10000 
-lin wonder_N = mkN "ihme" ; -- 1805 
-lin wonder_V = mkV "ihmetellä" ; -- 926 
-lin wonder_V2 = mkV2 "ihmetellä" ; -- 926 
 lin wonderful_A = mkA "ihmeellinen" ; -- 4210 
 lin wonderment_N = mkN (lin NK {s = d39 "ihmetys"}) ; -- 10000 
 lin wondrous_A = mkA (lin AK {s = d10 "vaikuttava"}) ; -- 10000 
 lin wonky_A = mkA (lin AK {s = d01 "kiero"}) ; -- 10000 
 lin wont_N = mkN (lin NK {s = d09A "tapa"}) ; -- 130 
 lin woo_V2 = mkV2 (lin VK {s = c67 "kosiskella"}) ; -- 10000 
-lin wood_N = mkN (lin NK {s = d18 "puu"}) ; -- 636 
 lin wooden_A = mkA "puinen" ; -- 6790 
 lin woodpecker_N = mkN (lin NK {s = d09A "tikka"}) ; -- 10000 
 lin woodsman_N = mkN "metsästäjä" ; -- 4788 
@@ -39248,8 +38527,6 @@ lin workshop_N = mkN (lin NK {s = d05 "seminaari"}) ; -- 1885
 lin worldliness_N = mkN (lin NK {s = d40 "kokeneisuus"}) ; -- 10000 
 lin worldly_A = mkA "maallinen" ; -- 7841 
 lin worldwide_A = mkA "maailmanlaajuinen" ; -- 3580 
-lin worm_N = mkN (lin NK {s = d48A "kierre"}) ; -- 6587 
-lin worm_V2 = mkV2 (lin VK {s = c67A "kiemurrella"}) ; -- 10000 
 lin worry_N = mkN (lin NK {s = d26 "huoli"}) ; -- 677 
 lin worry_V = mkV (lin VK {s = c53A "huolestuttaa"}) ; -- 2896 
 lin worry_V2 = mkV2 (lin VK {s = c53A "huolestuttaa"}) ; -- 2896 
@@ -39311,8 +38588,6 @@ lin wrist_N = mkN (lin NK {s = d48A "ranne"}) ; -- 9299
 lin wristband_N = mkN (lin NK {s = d48A "ranneke"}) ; -- 10000 
 lin wristlet_N = mkN (lin NK {s = d48A "ranneke"}) ; -- 10000 
 lin writ_N = mkN (lin NK {s = d48 "haaste"}) ; -- 1248 
-lin write_V = mkV (lin VK {s = c53A "kirjoittaa"}) ; -- 387 
-lin write_V2 = mkV2 (lin VK {s = c53A "kirjoittaa"}) ; -- 387 
 lin write_off_N = mkN (lin NK {s = d39 "alennus"}) ; -- 3433 
 lin writer_N = mkN (lin NK {s = d12 "kirjailija"}) ; -- 863 
 lin writhe_V = mkV (lin VK {s = c67A "kiemurrella"}) ; -- 10000 
@@ -39338,7 +38613,6 @@ lin yawn_N = mkN (lin NK {s = d39 "haukotus"}) ; -- 10000
 lin yawn_V = mkV (lin VK {s = c67A "haukotella"}) ; -- 10000 
 lin yea_Adv = mkAdv "kyllä" ; -- 246 
 lin yeah_Adv = mkAdv (lin AdvK {s = c99 "joo"}) ; -- 8897 
-lin year_N = mkN (lin NK {s = d27 "vuosi"}) ; -- 10000 
 lin yearling_N = mkN (lin NK {s = d38 "pienokainen"}) ; -- 10000 
 lin yearly_A = mkA "vuotuinen" ; -- 3877 
 lin yearly_Adv = mkAdv (lin AdvK {s = c99 "vuosittain"}) ; -- 1050 
@@ -39349,10 +38623,6 @@ lin yeasty_A = mkA (lin AK {s = d41A "innokas"}) ; -- 2724
 lin yell_N = mkN (lin NK {s = d09A "karjunta"}) ; -- 10000 
 lin yell_V = mkV (lin VK {s = c54A "huutaa"}) ; -- 2352 
 lin yell_V2 = mkV2 (lin VK {s = c54A "huutaa"}) ; -- 2352 
-lin yellow_A = mkA "keltainen" ; -- 4012 
-lin yellow_N = mkN (lin NK {s = d38 "keltainen"}) ; -- 10000 
-lin yellow_V = mkV (lin VK {s = c52 "kellastua"}) ; -- 10000 
-lin yellow_V2 = mkV2 (lin VK {s = c52 "kellastua"}) ; -- 10000 
 lin yellowness_N = mkN (lin NK {s = d40 "keltaisuus"}) ; -- 10000 
 lin yelp_V = mkV (lin VK {s = c67A "ulvahdella"}) ; -- 10000 
 lin yen_N = mkN "kaipuu" ; -- 7639 
@@ -39380,8 +38650,6 @@ lin yoke_V2 = mkV2 "liittyä" ; -- 234
 lin yolk_N = mkN (lin NK {s = d38 "keltuainen"}) ; -- 10000 
 lin yon_Adv = mkAdv (lin AdvK {s = c99 "tuolla"}) ; -- 9356 
 lin yonder_Adv = mkAdv (lin AdvK {s = c99 "tuolla"}) ; -- 9356 
-lin young_A = mkA (lin AK {s = d41A "nuorekas"}) ; -- 10000 
-lin young_N = mkN (lin NK {s = d02 "nuoriso"}) ; -- 2421 
 lin youngster_N = mkN (lin NK {s = d10 "tenava"}) ; -- 10000 
 lin youth_N = mkN (lin NK {s = d40 "nuoruus"}) ; -- 3164 
 lin youthful_A = mkA (lin AK {s = d41A "nuorekas"}) ; -- 10000 
@@ -39722,6 +38990,388 @@ lin
 --  have_V2 = mkV2 (caseV adessive vOlla) ;
 
   lin language_title_Utt = ss "suomi" ;
+
+
+--- concrete LexiconFin of Lexicon = CatFin ** open MorphoFin, ParadigmsFin in {
+
+lin
+  airplane_N = mkN "lentokone" ;
+  answer_V2S = mkV2 (mkV "vastata") (casePrep allative) ;
+  apartment_N = mkN "asunto" ;
+  apple_N = mkN "omena" ; --- omenia, not omenoita
+  art_N = mkN "taide" ;
+  ask_V2Q = mkV2 (mkV "kysyä") (casePrep ablative) ;
+  baby_N = mkN "vauva" ;
+  bad_A = mkA (mkN "paha") "pahempi" "pahin" ;
+  bank_N = mkN "pankki" ;
+  beautiful_A = mkA (mkN "kaunis") "kauniimpi" "kaunein" ;
+  become_VA = mkVA (mkV "tulla") (casePrep translative) ;
+  beer_N = mkN "olut" "oluita" ;
+  beg_V2V = mkV2V (mk2V "pyytää" "pyysi") (casePrep partitive) ;
+  big_A = mkA (mkN "suuri" "suuria") "suurempi" "suurin" ;
+  bike_N = mkN "polku" (mkN "pyörä") ; 
+  bird_N = mkN "lintu" ;
+  black_A = mkA (mkN "musta") "mustempi" "mustin" ;
+  blue_A = mkA (mkN "sininen") "sinisempi" "sinisin" ;
+  boat_N = mkN "vene" ;
+  book_N = mkN "kirja" ;
+  boot_N = mkN "saapas" ;
+  boss_N = mkN "pomo" ;
+  boy_N = mkN "poika" "pojan" "poikia" ;
+  bread_N = mkN "leipä" ;
+  break_V2 = mkV2 (mkV "rikkoa") ;
+  broad_A = mkA (mkN "leveä") "leveämpi" "levein" ;
+  brother_N2 = mkN2 (
+    mkN "veli" "veljen" "veljenä" "veljeä" "veljeen" 
+        "veljinä" "veljissä" "veljien" "veljiä" "veljiin") ;
+  brown_A = mkA (mkN "ruskea") "ruskeampi" "ruskein" ;
+  butter_N = mk3N "voi" "voin" "voita" ;  ---- errors in Part
+  buy_V2 = mkV2 (mkV "ostaa") ;
+  camera_N = mkN "kamera" ;
+  cap_N = mkN "lakki" ;
+  car_N = mkN "auto" "auton" "autoja" ; -- mkN: audon
+  carpet_N = mkN "matto" ;
+  cat_N = mkN "kissa" ;
+  ceiling_N = mkN "katto" ;
+  chair_N = mkN "tuoli" ;
+  cheese_N = mkN "juusto" ;
+  child_N = mkN "lapsi" "lapsen" "lasta" "lapsena" "lapseen" 
+              "lasten" "lapsia" "lapsina" "lapsissa" "lapsiin" ;
+  church_N = mkN "kirkko" ;
+  city_N = mkN "kaupunki" ;
+  clean_A = mkA (mkN "puhdas") ;
+  clever_A = mkA (mkN "viisas") ;
+  close_V2 = mkV2 (mkV "sulkea") ;
+  coat_N = mkN "takki" ;
+  cold_A = mkA (mkN "kylmä") "kylmempi" "kylmin" ;
+  come_V = mkV "tulla" ;
+  computer_N = mkN "tietokone" ;
+  country_N = mkN "maa" ;
+  cousin_N = mkN "serkku" ;
+  cow_N = mkN "lehmä" ;
+  die_V = mkV "kuolla" ;
+  dirty_A = mkA (mkN "likainen") "likaisempi" "likaisin" ;
+  distance_N3 = mkN3 (mkN "etäisyys") (casePrep elative) (casePrep illative) ;
+  doctor_N = mk2N "tohtori" "tohtoreita" ;
+  dog_N = mkN "koira" ;
+  door_N = mkN "ovi" "ovia" ;
+  drink_V2 = mkV2 (mkV "juoda") (casePrep partitive) ;
+  easy_A2V = mkA2 (mkA (mkN "helppo") "helpompi" "helpoin") 
+    (casePrep allative) ;
+  eat_V2 = mkV2 (mkV "syödä") (casePrep partitive) ;
+  empty_A = mkA (mkN "tyhjä") "tyhjempi" "tyhjin" ;
+  enemy_N = mkN "vihollinen" ;
+  factory_N = mkN "tehdas" ;
+  father_N2 = mkN2 (mkN "isä") ;
+  fear_VS = mkVS (mk2V "pelätä" "pelkäsi") ;
+  find_V2 = mkV2 (mk2V "löytää" "löysi") ;
+  fish_N = mkN "kala" ;
+  floor_N = mk2N "lattia" "lattioita" ;
+  forget_V2 = mkV2 (mkV "unohtaa") ;
+  fridge_N = mkN "jääkaappi" ;
+  friend_N = mkN "ystävä" ;
+  fruit_N = mkN "hedelmä" ;
+  fun_AV = mkAV (mkA (mkN "hauska") "hauskempi" "hauskin") ;
+  garden_N = mkN "puutarha" "puutarhan" "puutarhoja" ;
+  girl_N = mkN "tyttö" ;
+  glove_N = mkN "käsine" ;
+  gold_N = mkN "kulta" ;
+  good_A = mkA (mkN "hyvä") "parempi" "parhain" ; --- paras
+  go_V = mkV "mennä" ;
+  green_A = mkA (mkN "vihreä") "vihreämpi" "vihrein" ;
+  harbour_N = mkN "satama" "sataman" "satamia" ;
+  hate_V2 = mkV2 (mkV "vihata") cpartitive ;
+  hat_N = mkN "hattu" ;
+  hear_V2 = mkV2 (mkV "kuulla") ;
+  hill_N = mkN "kukkula" ;
+  hope_VS = mkVS (mkV "toivoa") ;
+  horse_N = mkN "hevonen" ;
+  hot_A = mkA (mkN "kuuma") "kuumempi" "kuumin" ;
+  house_N = mkN "talo" ;
+  important_A = mkA (mkN "tärkeä") "tärkeämpi" "tärkein" ;
+  industry_N = mkN "teollisuus" ;
+  iron_N = mkN "rauta" ;
+  king_N = mkN "kuningas" ;
+  know_VS = mkVS (mkV "tietää" "tiesi") ;
+  know_VQ = mkVQ (mkV "tietää" "tiesi") ;
+  know_V2 = mkV2 (mkV "tuntea" "tunsi") ;
+  lake_N = mkN "järvi" "järviä" ;
+  lamp_N = mkN "lamppu" ;
+  learn_V2 = 
+    mkV2 (mk12V "oppia" "opin" "oppii" "oppivat" "oppikaa" "opitaan"
+      "opin" "oppi" "oppisi" "oppinut" "opittu" "opitun") ;
+  leather_N = mkN "nahka" ; --- nahan
+  leave_V2 = mkV2 (mkV "jättää") ;
+  like_V2 = mkV2 (mkV "pitää") elative ;
+  listen_V2 = mkV2 (mkV "kuunnella" "kuunteli") partitive ;
+  live_V = mkV "elää" ;
+  long_A = mkA (mkN "pitkä") "pitempi" "pisin" ;
+  lose_V2 = mkV2 (mkV "hävitä" "hävisi") ; --- hukata
+  love_N = mk3N "rakkaus" "rakkauden" "rakkauksia" ;
+  love_V2 = mkV2 (mkV "rakastaa") partitive ;
+  man_N = mkN "mies" "miehen" "miestä" "miehenä" "mieheen" 
+              "miesten" "miehiä" "miehinä" "miehissä" "miehiin" ; 
+  married_A2 = mkA2 (mkA "avioitunut") (postPrep genitive "kanssa") ; ---- infl
+  meat_N = mkN "liha" ;
+  milk_N = mkN "maito" ;
+  moon_N = mkN "kuu" ;
+  mother_N2 = mkN2 (mkN "äiti") ;
+  mountain_N = mkN "vuori" "vuoria" ;
+  music_N = mkN "musiikki" ;
+  narrow_A = mkA (mkN "kapea") "kapeampi" "kapein" ;
+  new_A = mkA (mk3N "uusi" "uuden" "uusia") "uudempi" "uusin" ;
+  newspaper_N = mkN "sanoma" (mkN "lehti" "lehtiä") ; --- for correct vowel harmony
+  oil_N = mkN "öljy" ;
+  old_A = mkA (mkN "vanha") "vanhempi" "vanhin" ;
+  open_V2 = mkV2 (mkV "avata" "avasi") ;
+  paint_V2A = mkV2A (mkV "maalata") accPrep (casePrep translative) ;
+  paper_N = mk2N "paperi" "papereita" ;
+  paris_PN = mkPN (mkN "Pariisi") ;
+  peace_N = mkN "rauha" ;
+  pen_N = mkN "kynä" ;
+  planet_N = mkN "planeetta" ;
+  plastic_N = mkN "muovi" ;
+  play_V2 = mkV2 (mkV "pelata") cpartitive ; --- leikkiä, soittaa
+  policeman_N = mkN "poliisi" ;
+  priest_N = mkN "pappi" ;
+  probable_AS = mkAS --- for vowel harmony
+    (mkA (mkN "todennäköinen") "tonennäköisempi" "todennäköisin") ; ---- sta
+  queen_N = mkN "kuningatar" ;
+  radio_N = mk2N "radio" "radioita" ;
+  rain_V0 = mkV0 (mk2V "sataa" "satoi") ;
+  read_V2 = mkV2 (mkV "lukea") ;
+  red_A = mkA "punainen" ;
+  religion_N = mkN "uskonto" ;
+  restaurant_N = mkN "ravintola" ;
+  river_N = mkN "joki" "jokia" ;
+  rock_N = mk2N "kallio" "kallioita" ;
+  roof_N = mkN "katto" ;
+  rubber_N = mkN "kumi" ;
+  run_V = mk2V "juosta" "juoksi" ;
+  say_VS = mkVS (mkV "sanoa") ;
+  school_N = mkN "koulu" ;
+  science_N = mkN "tiede" ;
+  sea_N = mkN "meri" "meren" "meriä" "merta" ;
+  seek_V2 = mkV2 (mkV "etsiä") cpartitive ;
+  see_V2 = mkV2 (
+    mk12V "nähdä" "näen" "näkee" "näkevät" "nähkää" "nähdään"
+      "näin" "näki" "näkisi" "nähnyt" "nähty" "nähdyn") ; 
+  sell_V3 = mkV3 (mkV "myydä") accPrep (casePrep allative) ;
+  send_V3 = mkV3 (mkV "lähettää") accPrep (casePrep allative) ;
+  sheep_N = mkN "lammas" ;
+  ship_N = mkN "laiva" ;
+  shirt_N = mkN "paita" ;
+  shoe_N = mkN "kenkä" ;
+  shop_N = mkN "kauppa" ;
+  short_A = mkA (mkN "lyhyt" "lyhyitä") ;
+  silver_N = mkN "hopea" ;
+  sister_N = mkN "sisko" ;
+  sleep_V = mkV "nukkua" ;
+  small_A = mkA (mk2N "pieni" "pieniä") "pienempi" "pienin" ;
+  snake_N = mkN "käärme" ;
+  sock_N = mkN "sukka" ;
+  speak_V2 = mkV2 (mkV "puhua") cpartitive ;
+  star_N = mkN "tähti" "tähtiä" ;
+  steel_N = mkN "teräs" ;
+  stone_N = mkN "kivi" "kiviä" ;
+  stove_N = mk3N "liesi" "lieden" "liesiä" ;
+  student_N = mk2N "opiskelija" "opiskelijoita" ;
+  stupid_A = mkA "tyhmä" ;
+  sun_N = mkN "aurinko" ;
+  switch8off_V2 = mkV2 (mkV "sammuttaa") ; ---
+  switch8on_V2 = mkV2 (mkV "sytyttää") ; ---
+  table_N = mkN "pöytä" ;
+  talk_V3 = mkV3 (mkV "puhua") (casePrep allative) (casePrep elative) ;
+  teacher_N = mkN "opettaja" ;
+  teach_V2 = mkV2 (mkV "opettaa") ;
+  television_N = mk2N "televisio" "televisioita" ;
+  thick_A = mkA "paksu" ;
+  thin_A = mkA (mkN "ohut" "ohuita") ;
+  train_N = mkN "juna" ;
+  travel_V = mkV "matkustaa" ;
+  tree_N = mkN "puu" ;
+ ---- trousers_N = mkN "trousers" ;
+  ugly_A = mkA (mkN "ruma") "rumempi" "rumin" ;
+  understand_V2 = mkV2 (mkV "ymmärtää" "ymmärrän" "ymmärsi") ;
+  university_N = mkN "yliopisto" ;
+  village_N = mkN "kylä" ;
+  wait_V2 = mkV2 (mkV "odottaa") partitive ;
+  walk_V = mkV "kävellä" "käveli" ;
+  warm_A = mkA 
+    (mkN "lämmin" "lämpimän" "lämmintä" "lämpimänä" "lämpimään" 
+         "lämpiminä" "lämpimiä" "lämpimien" "lämpimissä" "lämpimiin"
+	 ) 
+    "lämpimämpi" "lämpimin" ;
+  war_N = mkN "sota" ;
+  watch_V2 = mkV2 (mkV "katsella") cpartitive ;
+  water_N = mk3N "vesi" "veden" "vesiä" ;
+  white_A = mkA "valkoinen" ;
+  window_N = mk2N "ikkuna" "ikkunoita" ;
+  wine_N = mkN "viini" ;
+  win_V2 = mkV2 (mkV "voittaa") ;
+  woman_N = mkN "nainen" ;
+  wonder_VQ = mkVQ (mkV "ihmetellä") ;
+  wood_N = mkN "puu" ;
+  write_V2 = mkV2 (mkV "kirjoittaa") ;
+  yellow_A = mkA "keltainen" ;
+  young_A = mkA (mkN "nuori" "nuoria") "nuorempi" "nuorin" ;
+
+  do_V2 = mkV2 (
+    mkV "tehdä" "teen" "tekee" "tekevät" "tehkää" "tehdään"
+      "tein" "teki" "tekisi" "tehnyt" "tehty" "tehdyn") ; 
+
+  now_Adv = mkAdv "nyt" ;
+  already_Adv = mkAdv "jo" ;
+  song_N = mkN "laulu" ;
+  add_V3 = mkV3 (mkV "lisätä") accPrep (casePrep illative) ;
+  number_N = mk2N "numero" "numeroita" ;
+  put_V2 = mkV2 (mkV "panna") ;
+  stop_V = mkV "pysähtyä" ;
+  jump_V = mkV "hypätä" ;
+  left_Ord = mkOrd (mkN "vasen") ;
+  right_Ord = mkOrd (mkN "oikea") ;
+  far_Adv = mkAdv "kaukana" ;
+  correct_A = mkA "oikea" ;
+  dry_A = mkA (mkN "kuiva") "kuivempi" "kuivin" ;
+  dull_A = mkA (mkN "tylsä") "tylsempi" "tylsin" ;
+  full_A = mkA (mk3N "täysi" "täyden" "täysiä") "täydempi" "täysin" ;
+  heavy_A = mkA "raskas" ;
+  near_A = mkA (mkN "läheinen") "läheisempi" "lähin" ;
+  rotten_A = mkA "mätä" ;
+  round_A = mkA "pyöreä" ;
+  sharp_A = mkA "terävä" ;
+  smooth_A = mkA "sileä" ;
+  straight_A = mkA (mkN "suora") "suorempi" "suorin" ;
+  wet_A = mkA (mkN "märkä") "märempi" "märin" ;
+  wide_A = mkA "leveä" ;
+  animal_N = mk3N "eläin" "eläimen" "eläimiä" ;
+  ashes_N = mkN "tuhka" ;
+  back_N = mkN "selkä" ;
+  bark_N = mkN "kaarna" ;
+  belly_N = mkN "vatsa" ;
+  blood_N = mkN "veri" "veren" "veriä" "verta" ;
+  bone_N = mkN "luu" ;
+  breast_N = mkN "rinta" ;
+  cloud_N = mk2N "pilvi" "pilviä" ;
+  day_N = mkN "päivä" ;
+  dust_N = mkN "pöly" ;
+  ear_N = mkN "korva" ;
+  earth_N = mkN "maa" ;
+  egg_N = mkN "muna" ;
+  eye_N = mkN "silmä" ;
+  fat_N = mkN "rasva" ;
+  feather_N = mk3N "höyhen" "höyhenen" "höyheniä" ;
+  fingernail_N = mk3N "kynsi" "kynnen" "kynsiä" ;
+  fire_N = mk2N "tuli" "tulia" ;
+  flower_N = mkN "kukka" ;
+  fog_N = mkN "sumu" ;
+  foot_N = mkN "jalka" ;
+  forest_N = mkN "metsä" ;
+  grass_N = mkN "ruoho" ;
+  guts_N = mkN "sisälmys" ; --- suoli
+  hair_N = mkN "hius" ;
+  hand_N = mk3N "käsi" "käden" "käsiä" ;
+  head_N = mkN "pää" ;
+  heart_N = mkN "sydän" "sydämen" "sydäntä" "sydämenä" "sydämeen"
+                "sydänten" "sydämiä" "sydäminä" "sydämissä" "sydämiin" ;
+  horn_N = mk2N "sarvi" "sarvia" ;
+  husband_N = mkN "mies" "miehen" "miestä" "miehenä" "mieheen" 
+                  "miesten" "miehiä" "miehinä" "miehissä" "miehiin" ; 
+  ice_N = mkN "jää" ;
+  knee_N = mk2N "polvi" "polvia" ;
+  leaf_N = mk2N "lehti" "lehtiä" ;
+  leg_N = mkN "jalka" ; --- sääri
+  liver_N = mkN "maksa" ;
+  louse_N = mkN "lude" ;
+  mouth_N = mkN "suu" ;
+  name_N = mk2N "nimi" "nimiä" ;
+  neck_N = mkN "niska" ;
+  night_N = mkN "yö" ;
+  nose_N = mkN "nenä" ;
+  person_N = mkN "henkilö" ;
+  rain_N = mkN "sade" ;
+  road_N = mkN "tie" ;
+  root_N = mk2N "juuri" "juuria" ;
+  rope_N = mk3N "köysi" "köyden" "köysiä" ;
+  salt_N = mkN "suola" ;
+  sand_N = mkN "hiekka" ;
+  seed_N = mkN "siemen" ;
+  skin_N = mkN "nahka" ;
+  sky_N = mk3N "taivas" "taivaan" "taivaita" ;
+  smoke_N = mkN "savu" ;
+  snow_N = mkN "lumi" "lumen" "lumia" "lunta" ;
+  stick_N = mkN "keppi" ;
+  tail_N = mkN "häntä" ;
+  tongue_N = mk2N "kieli" "kieliä" ;
+  tooth_N = mkN "hammas" ;
+  wife_N = mkN "vaimo" ;
+  wind_N = mk2N "tuuli" "tuulia" ;
+  wing_N = mk2N "siipi" "siipiä" ;
+  worm_N = mkN "mato" ;
+  year_N = mk3N "vuosi" "vuoden" "vuosia" ;
+  bite_V2 = mkV2 (mkV "purra") ;
+  blow_V = mkV "puhaltaa" ;
+  burn_V = mkV "palaa" ;
+  count_V2 = mkV2 (mkV "laskea") ;
+  cut_V2 = mkV2 (mk2V "leikata" "leikkasi") ;
+  dig_V = mkV "kaivaa" ;
+  fall_V = mkV "pudota" "putoan" "putosi" ;
+  fear_V2 = mkV2 (mkV "pelätä" "pelkään" "pelkäsi") cpartitive ;
+  fight_V2 = mkV2 (mkV "taistella") (postPrep partitive "vastaan") ;
+  float_V = mkV "kellua" ;
+  flow_V = mkV "virrata" "virtaan" "virtasi" ;
+  fly_V = mkV "lentää" ;
+  freeze_V = mkV "jäätyä" ;
+  give_V3 = mkV3 (mkV "antaa" "annan" "antoi") accPrep (casePrep allative) ;
+  hit_V2 = mkV2 (mkV "lyödä") cpartitive ;
+  hold_V2 = mkV2 (mkV "pitää") cpartitive ;
+  hunt_V2 = mkV2 (mkV "metsästää") cpartitive ;
+  kill_V2 = mkV2 (mkV "tappaa") ;
+  laugh_V = mkV "nauraa" "nauroi" ;
+  lie_V = mkV "maata" "makasi" ;
+  play_V = mkV "pelata" ;
+  pull_V2 = mkV2 (mkV "vetää") ;
+  push_V2 = mkV2 (mkV "työntää") ;
+  rub_V2 = mkV2 (mkV "hieroa") cpartitive ;
+  scratch_V2 = mkV2 (mkV "raapia") cpartitive ;
+  sew_V = mkV "kylvää" ;
+  sing_V = mkV "laulaa" ;
+  sit_V = mkV "istua" ;
+  smell_V = mk2V "haista" "haisi" ;
+  spit_V = mkV "sylkeä" ;
+  split_V2 = mkV2 (mk2V "halkaista" "halkaisi") ;
+  squeeze_V2 = mkV2 (mkV "puristaa") cpartitive ;
+  stab_V2 = mkV2 (mkV "pistää") cpartitive ;
+  stand_V = mk12V "seistä" "seison" "seisoo" "seisovat" "seiskää" "seistään"
+      "seisoin" "seisoi" "seisoisi" "seissyt" "seisty" "seistyn" ; --- *seisoivät
+  suck_V2 = mkV2 (mkV "imeä") cpartitive ;
+  swell_V = mkV "turvota" "turposi" ;
+  swim_V = mkV "uida" "uin" "ui" ;
+  think_V = mkV "ajatella" "ajattelen" "ajatteli" ;
+  throw_V2 = mkV2 (mkV "heittää") ;
+  tie_V2 = mkV2 (mkV "sitoa") ;
+  turn_V = mkV "kääntyä" ;
+  vomit_V = mkV "oksentaa" ;
+  wash_V2 = mkV2 (mkV "pestä") ;
+  wipe_V2 = mkV2 (mkV "pyyhkiä") ;
+
+  breathe_V = mkV "hengittää" ;
+
+  grammar_N = mkN "kielioppi" ;
+  language_N = mk2N "kieli" "kieliä" ;
+  rule_N = mkN "sääntö" ;
+
+    john_PN = mkPN "Jussi" ;
+    question_N = mkN "kysymys" ;
+    ready_A = mkA (mkN "valmis") ;
+    reason_N = mkN "syy" ;
+    today_Adv = mkAdv "tänään" ;
+    uncertain_A = mkA "epävarma" ;
+
+ oper
+    mkOrd : N -> Ord ;
+    mkOrd x = {s = x.s ; lock_Ord = <> } ;
+    cpartitive = casePrep partitive ;
 
 
 }
