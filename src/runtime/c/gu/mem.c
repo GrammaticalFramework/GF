@@ -299,7 +299,7 @@ void*
 gu_malloc_aligned(GuPool* pool, size_t size, size_t align)
 {
 	if (align == 0) {
-		align = GU_MIN(size, gu_alignof(GuMaxAlign));
+		align = gu_alignof(GuMaxAlign);
 	}
 	void* ret = gu_malloc_prefixed(pool, 1, 0, align, size);
 	return ret;
