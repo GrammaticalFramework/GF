@@ -26,6 +26,43 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
     ComplVPIVV vv vpi = 
       insertObj (\\_,_,_ => vpi.s) (predV vv) ;
 
+  lincat
+    VPS = {
+      s   : Agr  => Str ; 
+      sc  : NPForm ;  --- can be different for diff parts
+      qp  : Bool -- True = back vowel --- can be different for diff parts
+      } ;
+
+    [VPS] = {
+      s1,s2 : Agr  => Str ; 
+      sc    : NPForm ;  --- take the first: minä osaan kutoa ja täytyy virkata
+      qp    : Bool      --- take the first: osaanko minä kutoa ja käyn koulua
+      } ;
+
+  lin
+    BaseVPS x y = twoTable Agr x y ** {sc = x.sc ; qp = x.qp} ;
+    ConsVPS x y = consrTable Agr comma x y ** {sc = x.sc ; qp = x.qp} ;
+
+    ConjVPS conj ss = conjunctDistrTable Agr conj ss ** {
+      sc = ss.sc ; qp = ss.qp
+      } ;
+
+    MkVPS t p vp = { --  Temp -> Pol -> VP -> VPS ;
+      s = \\a => let vps = vp.s ! VIFin t.t ! t.a ! p.p ! a
+                 in
+                 t.s ++ p.s ++
+                 vps.fin ++ vps.inf ++
+                 vp.s2 ! True ! p.p ! a ++
+                 vp.adv ! p.p ++
+                 vp.ext ;
+      sc = vp.sc ;
+      qp = vp.qp
+      } ;
+
+    PredVPS np vps = { -- NP -> VPS -> S ;
+      s = subjForm np vps.sc Pos ++ vps.s ! np.a
+      } ;
+
     AdvExistNP adv np = 
       mkClause (\_ -> adv.s) np.a (insertObj 
         (\\_,b,_ => np.s ! NPCase Nom) (predV (verbOlla ** {sc = NPCase Nom ; qp = True}))) ;
@@ -62,7 +99,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       in  {
         s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
       } ;
-x
+
 --    i_implicPron = mkPronoun [] "minun" "minua" "minuna" "minuun" Sg P1 ;
     whatPart_IP = {
       s = table {

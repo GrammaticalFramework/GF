@@ -17,10 +17,11 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
           let k = npform2case n c 
           in 
           case <n, c, det.isNum, det.isPoss, det.isDef> of {
-            <_, NPAcc,       True,_,_>  => <Nom,NCase Sg Part> ; -- kolme kytkintä(ni)
-            <_, NPCase Nom,  True,_,_>  => <Nom,NCase Sg Part> ; -- kolme kytkintä(ni)
+            <_, NPAcc,       True,_,_>  => <Nom,NCase Sg Part> ; -- myin kolme kytkintä(ni)
+            <_, NPCase Nom,  True,_,_>  => <Nom,NCase Sg Part> ; -- kolme kytkintä(ni) on
             <_, _, True,False,_>        => <k,  NCase Sg k> ;    -- kolmeksi kytkimeksi
-            <Pl,NPCase Nom,  _,_,False> => <k,  NCase Pl Part> ; -- kytkimiä
+            <Pl,NPAcc,     _, _, False> => <k,  NCase Pl Part> ; -- myin kytkimiä
+            <_, NPAcc,     _,True,_>    => <k,  NPossNom n> ;    -- myin kytkime+ni
             <_, NPCase Nom,_,True,_>    => <k,  NPossNom n> ;    -- kytkime+ni on/ovat...
             <_, NPCase Gen,_,True,_>    => <k,  NPossNom n> ;    -- kytkime+ni vika
             <_, NPCase Transl,_,True,_> => <k,  NPossTransl n> ; -- kytkim(e|i)kse+ni
@@ -33,8 +34,8 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
                    k = ncase c ;
                  in
                  det.s1 ! k.p1 ++ cn.s ! k.p2 ++ det.s2 ; 
-      a = agrP3 (case det.isDef of {
-            False => Sg ;  -- autoja menee; kolme autoa menee
+      a = agrP3 (case <det.isDef, det.isNum> of {
+            <False,True> => Sg ;  -- kolme kytkintä on
             _ => det.n
             }) ;
       isPron = False
