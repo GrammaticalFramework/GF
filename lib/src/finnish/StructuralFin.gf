@@ -281,19 +281,19 @@ lin
   not_Predet = {s = \\_,_ => "ei"} ;
 
   no_Quant = heavyQuant {
-    s1 = \\n,c => "ei" ++ mikaanPron ! n ! c ;
+    s1 = \\n,c => mikaanPron ! n ! c ;  --- requires negative or question polarity
     s2 = [] ; isNum,isPoss = False ; isDef = True ; 
     } ;
 
   if_then_Conj = {s1 = "jos" ; s2 = "niin" ; n = Sg} ;
   nobody_NP = {
-    s = \\c => "ei" ++ kukaanPron ! Sg ! npform2case Sg c ;
+    s = \\c => kukaanPron ! Sg ! npform2case Sg c ; --- requires negative or question polarity
     a = agrP3 Sg ; 
     isPron = False
     } ;
 
   nothing_NP = {
-    s = \\c => "ei" ++ mikaanPron ! Sg ! npform2case Sg c ;
+    s = \\c => mikaanPron ! Sg ! npform2case Sg c ; --- requires negative or question polarity
     a = agrP3 Sg ; 
     isPron = False
     } ;
