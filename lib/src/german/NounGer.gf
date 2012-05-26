@@ -118,7 +118,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
 
     MassNP cn = {
       s = \\c => usePrepC c (\k -> cn.s ! Strong ! Sg ! k) ;
-      a = agrP3 Sg ;
+      a = agrgP3 cn.g Sg ;
       isPron = False
       } ;
 
