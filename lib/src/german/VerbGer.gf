@@ -9,10 +9,11 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer in {
       let 
         vpi = infVP v.isAux vp 
       in
-      insertExtrapos vpi.p3 (
-        insertInf vpi.p2 (
-          insertObj vpi.p1 (
-            predVGen v.isAux v))) ;
+       insertExtrapos vpi.p4 (
+        insertInfExt vpi.p3 (
+          insertInf vpi.p2 (
+            insertObj vpi.p1 (
+              predVGen v.isAux v)))) ;
 
     ComplVS v s = 
       insertExtrapos (conjThat ++ s.s ! Sub) (predV v) ;

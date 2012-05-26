@@ -444,8 +444,9 @@ resource ResGer = ParamX ** open Prelude in {
       a2 : Str ;             -- heute
       isAux : Bool ;         -- is a double infinitive
       inf : Str ;            -- sagen
-      ext : Str              -- dass sie kommt
-      } ;
+      ext : Str ;             -- dass sie kommt
+      infExt : Str
+	} ;
 
   predV : Verb -> VP = predVGen False ;
 
@@ -520,7 +521,7 @@ resource ResGer = ParamX ** open Prelude in {
     n2  : Agr => Str = \\_ => [] ;
     a2  : Str = [] ;
     isAux = isAux ; ----
-    inf,ext : Str = []
+    inf,ext,infExt : Str = []
     } ;
 
   auxPerfect : Verb -> VForm => Str = \verb ->
@@ -591,8 +592,9 @@ resource ResGer = ParamX ** open Prelude in {
     a2 = vp.a2 ;
     isAux = vp.isAux ;
     inf = vp.inf ;
-    ext = vp.ext
-    } ;
+    ext = vp.ext ;
+    infExt = vp.infExt
+	} ;
 
   insertAdV : Str -> VP -> VP = \adv,vp -> {
     s = vp.s ;
@@ -602,7 +604,8 @@ resource ResGer = ParamX ** open Prelude in {
     a2 = vp.a2 ;
     isAux = vp.isAux ;
     inf = vp.inf ;
-    ext = vp.ext
+    ext = vp.ext ;
+    infExt = vp.infExt
     } ;
 
   insertAdv : Str -> VP -> VP = \adv,vp -> {
@@ -613,7 +616,8 @@ resource ResGer = ParamX ** open Prelude in {
     a2 = vp.a2 ++ adv ;
     isAux = vp.isAux ;
     inf = vp.inf ;
-    ext = vp.ext
+    ext = vp.ext ;
+    infExt = vp.infExt 
     } ;
 
   insertExtrapos : Str -> VP -> VP = \ext,vp -> {
@@ -624,8 +628,21 @@ resource ResGer = ParamX ** open Prelude in {
     a2 = vp.a2 ;
     isAux = vp.isAux ;
     inf = vp.inf ;
-    ext = vp.ext ++ ext
+    ext = vp.ext ++ ext ;
+    infExt = vp.infExt
     } ;
+
+  insertInfExt : Str -> VP -> VP = \infExt,vp -> {
+	s = vp.s ;
+	a1 = vp.a1 ;
+	n0 = vp.n0 ;
+	n2 = vp.n2 ;
+	a2 = vp.a2 ;
+	isAux = vp.isAux ;
+	inf = vp.inf ;
+	ext = vp.ext ;
+	infExt = vp.infExt ++ infExt 
+   } ;
 
   insertInf : Str -> VP -> VP = \inf,vp -> {
     s = vp.s ;
@@ -635,7 +652,8 @@ resource ResGer = ParamX ** open Prelude in {
     a2 = vp.a2 ;
     isAux = vp.isAux ; ----
     inf = inf ++ vp.inf ;
-    ext = vp.ext
+    ext = vp.ext ;
+    infExt = vp.infExt
     } ;
 
 -- For $Sentence$.
@@ -645,33 +663,6 @@ resource ResGer = ParamX ** open Prelude in {
     } ;
 
 
-{-
--- ErzsÈbet GalgÛczy 15/5/2012
-  mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp ->  let vps = useVP vp in {
-     s = \\m,t,a,b,o =>
-       let
-         ord   = case o of {
-           Sub => True ;  -- glue prefix to verb
-           _ => False
-           } ;
-         verb  = vps.s  ! ord ! agr ! VPFinite m t a ;
-         neg   = vp.a1 ! b ;
-         obj0  = vp.n0 ! agr ;
-         obj   = vp.n2 ! agr ;
-         compl = obj0 ++ obj ++ neg ++ vp.a2 ;
-         inf   = vp.inf ++ verb.inf ;
-         extra = vp.ext ;
-         inffin = inf ++ verb.fin ;
-       --# notpresent
-       in
-       case o of {
-         Main => subj ++ verb.fin ++ compl ++ extra ++ inf;
-         Inv  => verb.fin ++ subj ++ compl ++ extra ++ inf ;
-         Sub  => subj ++ compl ++ extra ++ inffin
-         }
-   } ;
--}
--- before 15/5/2012
   mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp ->  let vps = useVP vp in {
       s = \\m,t,a,b,o =>
         let
@@ -686,26 +677,29 @@ resource ResGer = ParamX ** open Prelude in {
           compl = obj0 ++ obj ++ neg ++ vp.a2 ; -- from EG 15/5
           inf   = vp.inf ++ verb.inf ;
           extra = vp.ext ;
-          inffin = 
-            case <a,vp.isAux> of {                              --# notpresent
-              <Anter,True> => verb.fin ++ inf ; -- double inf   --# notpresent
-              _ =>                                              --# notpresent
-              inf ++ verb.fin              --- or just auxiliary vp
-            }                                                   --# notpresent
+          inffin : Str = 
+            case <a,vp.isAux> of {                       
+	           <Anter,True> => verb.fin ++ inf ; -- double inf   --# notpresent
+             _            => inf ++ verb.fin              --- or just auxiliary vp
+            }                                            
         in
         case o of {
-          Main => subj ++ verb.fin ++ compl ++ inf ++ extra ;
-          Inv  => verb.fin ++ subj ++ compl ++ inf ++ extra ;
-          Sub  => subj ++ compl ++ inffin ++ extra
+	    Main => subj ++ verb.fin ++ compl ++ vp.infExt ++ inf ++ extra ;
+	    Inv  => verb.fin ++ subj ++ compl ++ vp.infExt ++ inf ++ extra ;
+	    Sub  => subj ++ compl ++ vp.infExt ++ inffin ++ extra
+  --        Main => subj ++ verb.fin ++ compl ++ "[N]" ++ vp.infExt ++ "[/N]" ++  "[I]" ++ inf ++ "[/I]" ++ "[E]" ++ extra ++ "[/E]" ;
+  --        Inv  => verb.fin ++ subj ++ compl ++ inf ++ extra ;
+  --        Sub  => subj ++ compl ++ "(n)" ++ vp.infExt ++ "(/n)" ++ "(if)" ++ inffin ++ "(/if)" ++ "(e)" ++ extra ++ "(/e)"
           }
     } ;
 
 
-  infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp -> let vps = useVP vp in
+  infVP : Bool -> VP -> ((Agr => Str) * Str * Str * Str) = \isAux, vp -> let vps = useVP vp in
     <
      \\agr => vp.n0 ! agr ++ vp.n2 ! agr ++  vp.a2,
      vp.a1 ! Pos ++ (vps.s ! (notB isAux) ! agrP3 Sg ! VPInfinit Simul).inf,
-     vp.inf ++ vp.ext
+     vp.inf,
+     vp.ext
     > ;
 
   useInfVP : Bool -> VP -> Str = \isAux,vp ->
@@ -728,7 +722,7 @@ resource ResGer = ParamX ** open Prelude in {
     Ag _ Pl P3 => caselist "sie" "sich" "sich" "ihrer"
     } ;
 
-  conjThat : Str = "daﬂ" ;
+  conjThat : Str = "dass" ;
 
   conjThan : Str = "als" ;
 
