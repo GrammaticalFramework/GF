@@ -49,7 +49,7 @@ server port execute1 state0 =
      cache <- PS.newPGFCache
      datadir <- getDataDir
      let root = datadir</>"www"
-     debug $ "document root="++root
+--   debug $ "document root="++root
      setCurrentDirectory root
 --   FCGI.acceptLoop forkIO (handle_fcgi execute1 state0 state cache)
      -- if acceptLoop returns, then GF was not invoked as a FastCGI script
