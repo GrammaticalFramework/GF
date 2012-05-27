@@ -67,4 +67,6 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
     s2 = []
     } ;
 
+    PNegNe = {s = [] ; p = RNeg True} ;
+
 }

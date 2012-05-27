@@ -11,12 +11,12 @@ concrete GrammarFre of Grammar =
   RelativeFre,
   ConjunctionFre,
   PhraseFre,
-  TextX - [SC,Temp,Tense],
+  TextX - [SC,Temp,Tense,Pol,PPos,PNeg],
   IdiomFre,
   StructuralFre,
   TenseFre
   ** {
 
-flags startcat = Phr ; unlexer = text ; lexer = text ;
+flags startcat = Phr ; 
 
 } ;

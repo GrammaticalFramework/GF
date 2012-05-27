@@ -1,3 +1,3 @@
-concrete TenseFre of Tense = CatFre, TenseX [Ant,Pol,AAnter,ASimul,PNeg,PPos] ** 
+concrete TenseFre of Tense = CatFre, TenseX [Ant,AAnter,ASimul] ** 
   TenseRomance with
     (ResRomance = ResFre) ;

@@ -1,9 +1,13 @@
-incomplete concrete CatRomance of Cat = CommonX - [SC]
+incomplete concrete CatRomance of Cat = CommonX - [SC,Pol]
   ** open Prelude, CommonRomance, ResRomance, (R = ParamX) in {
 
   flags optimize=all_subs ;
 
   lincat
+
+-- exception to CommonX, due to the distinction ne/ne-pas
+
+    Pol = {s : Str ; p : RPolarity} ;
 
 -- Tensed/Untensed
 
@@ -19,16 +23,16 @@ incomplete concrete CatRomance of Cat = CommonX - [SC]
 
 -- Sentence
 
-    Cl    = {s : Direct => RTense => Anteriority => Polarity => Mood => Str} ;
+    Cl    = {s : Direct => RTense => Anteriority => RPolarity => Mood => Str} ;
     ClSlash = {
-      s  : AAgr => Direct => RTense => Anteriority => Polarity => Mood => Str ; 
+      s  : AAgr => Direct => RTense => Anteriority => RPolarity => Mood => Str ; 
       c2 : Compl
       } ;
-    Imp   = {s : Polarity => ImpForm => Gender => Str} ;
+    Imp   = {s : RPolarity => ImpForm => Gender => Str} ;
 
 -- Question
 
-    QCl    = {s : RTense => Anteriority => Polarity => QForm => Str} ;
+    QCl    = {s : RTense => Anteriority => RPolarity => QForm => Str} ;
     IP     = {s : Case => Str ; a : AAgr} ;
     IComp  = {s : AAgr => Str} ;     
     IDet   = {s : Gender => Case => Str ; n : Number} ;
@@ -37,7 +41,7 @@ incomplete concrete CatRomance of Cat = CommonX - [SC]
 -- Relative
 
     RCl  = {
-      s : Agr => RTense => Anteriority => Polarity => Mood => Str ; 
+      s : Agr => RTense => Anteriority => RPolarity => Mood => Str ; 
       c : Case
       } ;
     RP   = {s : Bool => AAgr => Case => Str ; a : AAgr ; hasAgr : Bool} ;
@@ -95,7 +99,7 @@ incomplete concrete CatRomance of Cat = CommonX - [SC]
     V, VQ, VA = Verb ;
     V2, VV, V2S, V2Q = Verb ** {c2 : Compl} ;
     V3, V2A, V2V = Verb ** {c2,c3 : Compl} ;
-    VS = Verb ** {m : Polarity => Mood} ;
+    VS = Verb ** {m : RPolarity => Mood} ;
 
     A  = {s : Degree => AForm => Str ; isPre : Bool} ;
     A2 = {s : Degree => AForm => Str ; c2 : Compl} ;
