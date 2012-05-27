@@ -16,17 +16,25 @@ oper
     s : Case => {c1,c2,comp,ton : Str} ;
     a : Agr ;
     hasClit : Bool ; 
-    isPol : Bool --- only needed for French complement agr
+    isPol : Bool ; --- only needed for French complement agr
+    isNeg : Bool --- needed for negative NP's such as "personne"
     } ;
-  Pronoun : Type = NounPhrase ** {
+  Pronoun : Type = {
+    s : Case => {c1,c2,comp,ton : Str} ;
+    a : Agr ;
+    hasClit : Bool ; 
+    isPol : Bool ; --- only needed for French complement agr
     poss : Number => Gender => Str ---- also: substantival
     } ;
 
-  heavyNP : {s : Case => Str ; a : Agr} -> NounPhrase = \np -> {
+  heavyNP    : {s : Case => Str ; a : Agr} -> NounPhrase = heavyNPpol False ;
+
+  heavyNPpol : Bool -> {s : Case => Str ; a : Agr} -> NounPhrase = \isNeg,np -> {
     s = \\c => {comp,ton = np.s ! c ; c1,c2 = []} ;
     a = np.a ;
     hasClit = False ;
-    isPol = False
+    isPol = False ;
+    isNeg = isNeg
     } ;
 
   Compl : Type = {s : Str ; c : Case ; isDir : Bool} ;
@@ -35,7 +43,10 @@ oper
   complGen : Compl = {s = [] ; c = genitive ; isDir = False} ;
   complDat : Compl = {s = [] ; c = dative ; isDir = True} ;
 
-  pn2np : {s : Str ; g : Gender} -> NounPhrase = \pn -> heavyNP {
+  pn2np : {s : Str ; g : Gender} -> NounPhrase = pn2npPol False ;
+  pn2npNeg : {s : Str ; g : Gender} -> NounPhrase = pn2npPol True ;
+
+  pn2npPol : Bool -> {s : Str ; g : Gender} -> NounPhrase = \isNeg, pn -> heavyNPpol isNeg {
     s = \\c => prepCase c ++ pn.s ; 
     a = agrP3 pn.g Sg
     } ;
@@ -75,6 +86,7 @@ oper
       clit1  = [] ;
       clit2  = [] ;
       clit3  = [] ;
+      isNeg  = False ; 
       comp   = \\a => [] ;
       ext    = \\p => []
       } ;
@@ -91,6 +103,7 @@ oper
       clit1 = vp.clit1 ++ obj.c1 ;
       clit2 = vp.clit2 ++ obj.c2 ;
       clit3 = vp.clit3 ;
+      isNeg = orB vp.isNeg np.isNeg ;
       comp  = \\a => c.s ++ obj.comp ++ vp.comp ! a ;
       neg   = vp.neg ;
       ext   = vp.ext ;
@@ -102,6 +115,7 @@ oper
     clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
     clit3 = vp.clit3 ; 
+    isNeg = vp.isNeg ; --- can be in compl as well
     neg   = vp.neg ;
     comp  = \\a => vp.comp ! a ++ co ! a ;
     ext   = vp.ext ;
@@ -116,7 +130,8 @@ oper
     agr   = vpAgrClit (agrP3 ag.g ag.n) ;
     clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
-    clit3 = vp.clit3 ; 
+    clit3 = vp.clit3 ;
+    isNeg = vp.isNeg ; 
     neg   = vp.neg ;
     comp  = vp.comp ;
     ext   = vp.ext ;
@@ -128,6 +143,7 @@ oper
     clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
     clit3 = vp.clit3 ; 
+    isNeg = vp.isNeg ; 
     neg   = vp.neg ;
     comp  = vp.comp ;
     ext   = vp.ext ;
@@ -138,7 +154,8 @@ oper
     agr   = vp.agr ;
     clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
-    clit3 = vp.clit3 ; 
+    clit3 = vp.clit3 ;
+    isNeg = vp.isNeg ; --- adv could be neg 
     neg   = vp.neg ;
     comp  = \\a => vp.comp ! a ++ co ;
     ext   = vp.ext ;
@@ -149,7 +166,8 @@ oper
     agr   = vp.agr ;
     clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
-    clit3 = vp.clit3 ; 
+    clit3 = vp.clit3 ;
+    isNeg = vp.isNeg ;  
     neg   = \\b => let vpn = vp.neg ! b in {p1 = vpn.p1 ; p2 = vpn.p2 ++ co} ;
     comp  = vp.comp ;
     ext   = vp.ext ;
@@ -160,7 +178,8 @@ oper
     agr   = vp.agr ;
     clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
-    clit3 = vp.clit3 ++ co ; 
+    clit3 = vp.clit3 ++ co ;
+    isNeg = vp.isNeg ;  
     neg   = vp.neg ;
     comp  = vp.comp ;
     ext   = vp.ext ;
@@ -171,7 +190,8 @@ oper
     agr   = vp.agr ;
     clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
-    clit3 = vp.clit3 ; 
+    clit3 = vp.clit3 ;
+    isNeg = vp.isNeg ;  
     neg   = vp.neg ;
     comp  = vp.comp ;
     ext   = \\p => vp.ext ! p ++ co ! p ;
@@ -181,10 +201,21 @@ oper
 
   mkClause : Str -> Bool -> Bool -> Agr -> VP -> 
       {s : Direct => RTense => Anteriority => RPolarity => Mood => Str} =
-    \subj, hasClit, isPol, agr, vp -> {
+    mkClausePol False ;
+
+  -- isNeg = True if subject NP is a negative element, e.g. "personne"
+  mkClausePol : Bool -> Str -> Bool -> Bool -> Agr -> VP -> 
+      {s : Direct => RTense => Anteriority => RPolarity => Mood => Str} =
+    \isNeg, subj, hasClit, isPol, agr, vp -> {
       s = \\d,te,a,b,m => 
         let
-          neg = vp.neg ! b ;
+          isAnyNeg = orB isNeg vp.isNeg ;
+          pol = case <isAnyNeg,b> of {
+            <True,RPos> => RNeg True ; 
+            _ => b
+            } ;
+
+          neg = vp.neg ! pol ;
 
           gen = agr.g ;
           num = agr.n ;
@@ -193,7 +224,7 @@ oper
           compl = case isPol of {
             True => vp.comp ! {g = gen ; n = Sg ; p = per} ;
             _ => vp.comp ! agr
-            } ++ vp.ext ! b ;
+            } ++ vp.ext ! pol ;
 
           vtyp  = vp.s.vtyp ;
           refl  = case vtyp of {

@@ -1,5 +1,5 @@
 concrete ExtraIta of ExtraItaAbs = ExtraRomanceIta ** 
-  open CommonRomance, ParadigmsIta, PhonoIta, MorphoIta, ParamX, ResIta in {
+  open CommonRomance, ParadigmsIta, PhonoIta, MorphoIta, ParamX, ResIta, Prelude in {
 
   lin
     i8fem_Pron = mkPronoun
@@ -39,6 +39,10 @@ concrete ExtraIta of ExtraItaAbs = ExtraRomanceIta **
     PossFamQuant p = {
       s = \\_,n,g,c => case n of {Sg => prepCase c ; _ => possCase g n c} ++ p.poss ! n ! g ;
       sp = \\ n,g,c => case n of {Sg => prepCase c ; _ => possCase g n c} ++ p.poss ! n ! g ;
-      s2 = []
+      s2 = [] ; isNeg = False
       } ;
+
+    AdvDatVP = insertClit3 datClit ;
+    AdvGenVP = insertClit3 genClit ;
+
 }

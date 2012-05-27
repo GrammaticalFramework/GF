@@ -31,6 +31,12 @@ abstract ExtraFreAbs = ExtraRomanceAbs - [ProDrop] ** {
     youPl8fem_Pron : Pron ;
     youPol8fem_Pron : Pron ;
 
+-- clitic adverbs
+
+    AdvDatVP : VP -> VP ;  -- j'y vais
+    AdvGenVP : VP -> VP ;  -- j'en vais
+
+
 -- The determiner "tout" in the special use "tout nombre"
 
     tout_Det : Det ;

@@ -4,7 +4,7 @@ incomplete concrete SentenceRomance of Sentence =
   flags optimize=all_subs ;
 
   lin
-    PredVP np vp = mkClause (np.s ! Nom).comp np.hasClit np.isPol np.a vp ;
+    PredVP np vp = mkClausePol np.isNeg (np.s ! Nom).comp np.hasClit np.isPol np.a vp ;
 
     PredSCVP sc vp = mkClause (sc.s ! Nom) False False (agrP3 Masc Sg) vp ;
 
@@ -23,7 +23,7 @@ incomplete concrete SentenceRomance of Sentence =
 ----              <Acc,True> => insertAgr ag v2 ;
 ----              _ => v2
 ----e              }
-          in (mkClause (np.s ! Nom).comp np.hasClit np.isPol np.a vp).s ;
+          in (mkClausePol np.isNeg (np.s ! Nom).comp np.hasClit np.isPol np.a vp).s ;
        c2 = v2.c2
       } ;
 
@@ -39,7 +39,7 @@ incomplete concrete SentenceRomance of Sentence =
 
     SlashVS np vs slash = 
       {s = \\ag =>
-        (mkClause
+        (mkClausePol np.isNeg
           (np.s ! Nom).comp np.hasClit np.isPol np.a
           (insertExtrapos (\\b => conjThat ++ slash.s ! ag ! (vs.m ! b))
             (predV vs))

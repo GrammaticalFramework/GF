@@ -111,6 +111,7 @@ oper
     clit1  : Str ;                      -- le/se
     clit2  : Str ;                      -- lui
     clit3  : Str ;                      -- y en
+    isNeg  : Bool ;                     -- includes a negative element, such as "rien"
     comp   : Agr => Str ;               -- content(e) ; à ma mère ; hier
     ext    : RPolarity => Str ;         -- que je dors / que je dorme
     } ;

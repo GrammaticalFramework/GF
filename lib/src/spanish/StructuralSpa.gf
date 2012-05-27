@@ -26,11 +26,11 @@ lin
     in {
       s = \\_ => cap ;
       sp = cap ;
-      s2 = []
+      s2 = [] ; isNeg = True
     } ;
   not_Predet = {s = \\a,c => prepCase c ++ "no" ; c = Nom ; a = PNoAg} ;
-  nobody_NP = pn2np (mkPN "nadie") ;
-  nothing_NP = pn2np (mkPN "nada") ;
+  nobody_NP = pn2npNeg (mkPN "nadie") ;
+  nothing_NP = pn2npNeg (mkPN "nada") ;
   --
 
   above_Prep = mkPrep "sobre" ;
@@ -57,11 +57,11 @@ lin
   during_Prep = mkPrep "durante" ; ----
   either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
   everybody_NP = makeNP ["todos"] Masc Pl ;
-  every_Det = {s,sp = \\_,_ => "cada" ; n = Sg ; s2 = []} ;
+  every_Det = {s,sp = \\_,_ => "cada" ; n = Sg ; s2 = [] ; isNeg = False} ;
   everything_NP = pn2np (mkPN ["todo"] Masc) ;
   everywhere_Adv = ss ["en todas partes"] ;
   few_Det  = {
-    s,sp = \\g,c => prepCase c ++ genForms "pocos" "pocas" ! g ; n = Pl ; s2 = []} ;
+    s,sp = \\g,c => prepCase c ++ genForms "pocos" "pocas" ! g ; n = Pl ; s2 = [] ; isNeg = False} ;
 ---  first_Ord = {s = \\ag => (regA "primero").s ! Posit ! AF ag.g ag.n} ;
   for_Prep = mkPrep "para" ;
   from_Prep = complGen ; ---
@@ -91,12 +91,12 @@ lin
       Masc Sg P3 ;
   less_CAdv = X.mkCAdv "menos" conjThan ; ----
   many_Det = {
-    s,sp = \\g,c => prepCase c ++ genForms "muchos" "muchas" ! g ; n = Pl ; s2 = []} ;
+    s,sp = \\g,c => prepCase c ++ genForms "muchos" "muchas" ! g ; n = Pl ; s2 = [] ; isNeg = False} ;
   more_CAdv = X.mkCAdv "más" conjThan ;
   most_Predet = {s = \\_,c => prepCase c ++ ["la mayor parte"] ; c = CPrep P_de ;
     a = PNoAg} ;
   much_Det = {
-    s,sp = \\g,c => prepCase c ++ genForms "mucho" "mucha" ! g ; n = Sg ; s2 = []} ;
+    s,sp = \\g,c => prepCase c ++ genForms "mucho" "mucha" ! g ; n = Sg ; s2 = [] ; isNeg = False} ;
   must_VV = mkVV (verboV (deber_6 "deber")) ;
   no_Utt = ss "no" ;
   on_Prep = mkPrep "sobre" ;
@@ -117,9 +117,9 @@ lin
   so_AdA = ss "tanto" ;
   somebody_NP = pn2np (mkPN ["algún"] Masc) ;
   somePl_Det = {
-    s,sp = \\g,c => prepCase c ++ genForms "algunos" "algunas" ! g ; n = Pl ; s2 = []} ;
+    s,sp = \\g,c => prepCase c ++ genForms "algunos" "algunas" ! g ; n = Pl ; s2 = [] ; isNeg = False} ;
   someSg_Det = {
-    s,sp = \\g,c => prepCase c ++ genForms "algun" "alguna" ! g ; n = Sg ; s2 = []} ;
+    s,sp = \\g,c => prepCase c ++ genForms "algun" "alguna" ! g ; n = Sg ; s2 = [] ; isNeg = False} ;
   something_NP = pn2np (mkPN ["algo"] Masc) ;
   somewhere_Adv = ss ["en ninguna parte"] ;
   that_Quant =
@@ -130,7 +130,7 @@ lin
     in {
     s = \\_ => ese ;
     sp = ese ; 
-    s2 = []
+    s2 = [] ; isNeg = False
     } ;
   there_Adv = mkAdv "allí" ;		-- allá
   there7to_Adv = mkAdv ["para allá"] ;
@@ -148,7 +148,7 @@ lin
     in {
     s = \\_ => este ;
     sp = este ; 
-    s2 = []
+    s2 = [] ; isNeg = False
     } ;
 
   through_Prep = mkPrep "por" ;

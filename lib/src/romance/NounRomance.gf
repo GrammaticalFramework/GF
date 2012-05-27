@@ -8,7 +8,7 @@ incomplete concrete NounRomance of Noun =
       let 
         g = cn.g ;
         n = det.n
-      in heavyNP {
+      in heavyNPpol det.isNeg {
         s = \\c => det.s ! g ! c ++ cn.s ! n ++ det.s2 ;
         a = agrP3 g n ;
         hasClit = False
@@ -16,11 +16,11 @@ incomplete concrete NounRomance of Noun =
 
     UsePN = pn2np ;
 
-    UsePron p = p ;
+    UsePron p = p ** {isNeg = False} ;
 
     PredetNP pred np = 
       let agr = complAgr np.a in
-      heavyNP {
+      heavyNPpol np.isNeg {
         s = \\c => pred.s ! agr ! c ++ (np.s ! pred.c).ton ;
         a = case pred.a of {PAg n => agrP3 agr.g n ; _ => np.a} ;
         hasClit = False
@@ -28,19 +28,19 @@ incomplete concrete NounRomance of Noun =
 
     PPartNP np v2 = 
       let agr = complAgr np.a in
-      heavyNP {
+      heavyNPpol np.isNeg {
         s = \\c => (np.s ! c).ton ++ v2.s ! VPart agr.g agr.n ;
         a = np.a ;
         hasClit = False
       } ;
 
-    RelNP np rs = heavyNP {
+    RelNP np rs = heavyNPpol np.isNeg {
       s = \\c => (np.s ! c).ton ++ rs.s ! Indic ! np.a ;
       a = np.a ;
       hasClit = False
       } ;
 
-    AdvNP np adv = heavyNP {
+    AdvNP np adv = heavyNPpol np.isNeg {
       s = \\c => (np.s ! c).ton ++ adv.s ;
       a = np.a ;
       hasClit = False
@@ -50,7 +50,8 @@ incomplete concrete NounRomance of Noun =
       s,sp = \\g,c => quant.s ! num.isNum ! num.n ! g ! c ++ num.s ! g ++ 
                    ord.s ! aagr g num.n ;
       s2 = quant.s2 ;
-      n = num.n
+      n = num.n ;
+      isNeg = quant.isNeg
       } ;
 
     DetQuant quant num = {
@@ -60,14 +61,15 @@ incomplete concrete NounRomance of Noun =
         False => quant.sp ! num.n ! g ! c ++ num.s ! g
         } ; 
       s2 = quant.s2 ;
-      n  = num.n
+      n  = num.n ;
+      isNeg = quant.isNeg
       } ;
 
     DetNP det = 
       let 
         g = Masc ;  ---- Fem in Extra
         n = det.n
-      in heavyNP {
+      in heavyNPpol det.isNeg {
         s = det.sp ! g ;
         a = agrP3 g n ;
         hasClit = False
@@ -76,7 +78,8 @@ incomplete concrete NounRomance of Noun =
     PossPron p = {
       s = \\_,n,g,c => possCase g n c ++ p.poss ! n ! g ; ---- il mio!
       sp = \\ n,g,c => possCase g n c ++ p.poss ! n ! g ; ---- not for Fre
-      s2 = []
+      s2 = [] ;
+      isNeg = False
       } ;
 
     NumSg = {s = \\_ => [] ; isNum = False ; n = Sg} ;
@@ -97,13 +100,15 @@ incomplete concrete NounRomance of Noun =
     DefArt = {
       s = \\_,n,g,c => artDef g n c ;  
       sp = \\n,g,c => artDef g n c ; ---- not for Fre 
-      s2 = []
+      s2 = [] ;
+      isNeg = False
       } ;
 
     IndefArt = {
       s = \\b,n,g,c => if_then_Str b (prepCase c) (artIndef g n c) ;
       sp = \\n,g,c => artIndef g n c ; ---- not for Fre
-      s2 = []
+      s2 = [] ;
+      isNeg = False
       } ;
 
     MassNP cn = let 
@@ -112,7 +117,8 @@ incomplete concrete NounRomance of Noun =
       in heavyNP {
         s = \\c => partitive g c ++ cn.s ! n ;
         a = agrP3 g n ;
-        hasClit = False
+        hasClit = False ;
+        isNeg = False
         } ;
 
 -- This is based on record subtyping.
