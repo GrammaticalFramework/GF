@@ -233,18 +233,21 @@ oper
   oper
   VPC : Type = {
       s : VPForm => {
-        fin : Agr  => Str ;              -- ai  
-        inf : AAgr => Str                -- dit 
+        fin : Agr  => Str ;               -- ai  
+        inf : AAgr => Str                 -- dit 
         } ;
-      agr    : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
-      neg    : Polarity => (Str * Str) ; -- ne-pas
-      clit1  : Str ;                     -- le/se
-      clit2  : Str ;                     -- lui
-      clit3  : Str ;                     -- y en
-      comp   : Agr => Str ;              -- content(e) ; à ma mère ; hier
-      ext    : Polarity => Str ;         -- que je dors / que je dorme
+      agr    : VPAgr ;                    -- dit/dite dep. on verb, subj, and clitic
+      neg    : RPolarity => (Str * Str) ; -- ne-pas
+      clit1  : Str ;                      -- le/se
+      clit2  : Str ;                      -- lui
+      clit3  : Str ;                      -- y en
+      comp   : Agr => Str ;               -- content(e) ; à ma mère ; hier
+      ext    : RPolarity => Str ;         -- que je dors / que je dorme
       } ;
 
+-- Polarity: three values (Fre positive,ne-pas,ne), presence of polarity element line "aucun"
+
+  param RPolarity = RPos | RNeg Bool ; -- RNeg True = "ne", RNeg False = "ne - pas" 
 
 }
 

@@ -32,14 +32,14 @@ concrete IdiomSpa of Idiom = CatSpa **
         (\\agr => 
            let 
              clpr = <vp.clit1,vp.clit2> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
-             obj  = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
+             obj  = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! RPos ---- pol
            in
            vp.s.s ! VGer ++ clpr.p1 ++ obj
         )
         (predV (verboV (estar_2 "estar"))) ;
 
     ImpPl1 vp = {s =
-      mkImperative False P1 vp ! Pos ! Masc ! Pl ; --- fem
+      mkImperative False P1 vp ! RPos ! Masc ! Pl ; --- fem
       } ;
 
 }

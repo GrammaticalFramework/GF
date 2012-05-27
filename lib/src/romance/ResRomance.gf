@@ -166,7 +166,7 @@ oper
     ext   = vp.ext ;
     } ;
 
-  insertExtrapos : (Polarity => Str) -> VP -> VP = \co,vp -> { 
+  insertExtrapos : (RPolarity => Str) -> VP -> VP = \co,vp -> { 
     s     = vp.s ;
     agr   = vp.agr ;
     clit1 = vp.clit1 ; 
@@ -179,19 +179,8 @@ oper
 
   mkVPSlash : Compl -> VP -> VP ** {c2 : Compl} = \c,vp -> vp ** {c2 = c} ;
 
-  tmpVP : Type = {
-    s      : Verb ;
-    agr    : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
-    neg    : Polarity => (Str * Str) ; -- ne-pas
-    clit1  : Str ;                     -- le/se
-    clit2  : Str ;                     -- lui
-    clit3  : Str ;                     -- y en
-    comp   : Agr => Str ;              -- content(e) ; à ma mère ; hier
-    ext    : Polarity => Str ;         -- que je dors / que je dorme
-    } ;
-
   mkClause : Str -> Bool -> Bool -> Agr -> VP -> 
-      {s : Direct => RTense => Anteriority => Polarity => Mood => Str} =
+      {s : Direct => RTense => Anteriority => RPolarity => Mood => Str} =
     \subj, hasClit, isPol, agr, vp -> {
       s = \\d,te,a,b,m => 
         let
@@ -252,8 +241,8 @@ oper
       let
         iform = False ;                    ---- meaning: no clitics
         inf   = vp.s.s ! VInfin iform ;    
-        neg   = vp.neg ! Pos ;             --- Neg not in API
-        obj   = neg.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ; ---- pol
+        neg   = vp.neg ! RPos ;             --- Neg not in API
+        obj   = neg.p2 ++ vp.comp ! agr ++ vp.ext ! RPos ; ---- pol
         refl  = case vp.s.vtyp of {
             VRefl => reflPron agr.n agr.p Acc ; ---- case ?
             _ => [] 

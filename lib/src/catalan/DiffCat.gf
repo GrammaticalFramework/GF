@@ -104,9 +104,9 @@ oper
         in
         neg.p1 ++ verb ++ bindIf clpr.p3 ++ clpr.p1 ++ compl ;
 
-    negation : Polarity => (Str * Str) = table {
-      Pos => <[],[]> ;
-      Neg => <"no",[]>
+    negation : RPolarity => (Str * Str) = table {
+      RPos => <[],[]> ;
+      RNeg _ => <"no",[]>
       } ;
 
     conjThan = "que" ;

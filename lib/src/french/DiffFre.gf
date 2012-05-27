@@ -90,11 +90,11 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 -- Positive polarity is used in the imperative: stressed for 1st and
 -- 2nd persons.
 
-    pronArgGen : Polarity -> Number -> Person -> CAgr -> CAgr -> Str * Str = 
+    pronArgGen : RPolarity -> Number -> Person -> CAgr -> CAgr -> Str * Str = 
       \b,n,p,acc,dat ->
       let 
         cas : Person -> Case -> Case = \pr,c -> case <pr,b> of {
-          <P1 | P2, Pos> => CPrep P_de ; --- encoding in argPron
+          <P1 | P2, RPos> => CPrep P_de ; --- encoding in argPron
           _ => c
           } ;
         pacc = case acc of {
@@ -126,15 +126,16 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
           compl = vp.comp ! agr ++ vp.ext ! pol
         in
         case pol of {
-          Pos => verb ++ if_then_Str clpr.p2 "-" [] ++ clpr.p1 ++ compl ;
-          Neg => neg.p1 ++ clpr.p1 ++ verb ++ neg.p2 ++ compl
+          RPos => verb ++ if_then_Str clpr.p2 "-" [] ++ clpr.p1 ++ compl ;
+          RNeg _ => neg.p1 ++ clpr.p1 ++ verb ++ neg.p2 ++ compl
           } ;
           ---- TODO: vois-le vs. vois-moi vs. ne me vois pas
 
 
-    negation : Polarity => (Str * Str) = table {
-      Pos => <[],[]> ;
-      Neg => <elisNe,"pas">
+    negation : RPolarity => (Str * Str) = table {
+      RPos => <[],[]> ;
+      RNeg True  => <elisNe,[]> ;
+      RNeg False => <elisNe,"pas">
       } ;
 
     conjThan = elisQue ;

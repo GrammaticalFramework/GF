@@ -1,3 +1,3 @@
-concrete TenseIta of Tense = CatIta, TenseX [Ant,Pol,AAnter,ASimul,PNeg,PPos] ** 
+concrete TenseIta of Tense = CatIta, TenseX [Ant,AAnter,ASimul] ** 
   TenseRomance with
     (ResRomance = ResIta) ;

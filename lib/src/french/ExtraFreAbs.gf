@@ -35,4 +35,8 @@ abstract ExtraFreAbs = ExtraRomanceAbs - [ProDrop] ** {
 
     tout_Det : Det ;
 
+-- Polarity "ne" without "pas"
+
+    PNegNe : Pol ;
+
 }

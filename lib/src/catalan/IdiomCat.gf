@@ -15,7 +15,7 @@ concrete IdiomCat of Idiom = CatCat **
         (\\agr => 
            let 
              clpr = <vp.clit1,vp.clit2> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
-             obj  = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
+             obj  = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! RPos ---- pol
            in
            vp.s.s ! VGer ++ clpr.p1 ++ obj
         )
@@ -38,7 +38,7 @@ concrete IdiomCat of Idiom = CatCat **
       } ;
 
     ImpPl1 vp = {s =
-      mkImperative False P1 vp ! Pos ! Masc ! Pl --- fem
+      mkImperative False P1 vp ! RPos ! Masc ! Pl --- fem
       } ;
 
     CleftAdv ad s = mkClause [] True False (agrP3 Masc Sg) 
