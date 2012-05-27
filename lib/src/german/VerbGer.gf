@@ -1,4 +1,4 @@
-concrete VerbGer of Verb = CatGer ** open Prelude, ResGer in {
+concrete VerbGer of Verb = CatGer ** open Prelude, ResGer, Coordination in {
 
   flags optimize=all_subs ;
 
@@ -16,9 +16,9 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer in {
               predVGen v.isAux v)))) ;
 
     ComplVS v s = 
-      insertExtrapos (conjThat ++ s.s ! Sub) (predV v) ;
+      insertExtrapos (comma ++ conjThat ++ s.s ! Sub) (predV v) ;
     ComplVQ v q = 
-      insertExtrapos (q.s ! QIndir) (predV v) ;
+      insertExtrapos (comma ++ q.s ! QIndir) (predV v) ;
     ComplVA  v ap = insertObj (\\ _ => ap.s ! APred) (predV v) ;
 
     SlashV2a v = predV v ** {c2 = v.c2} ; 
