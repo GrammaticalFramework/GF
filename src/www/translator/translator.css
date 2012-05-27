@@ -31,7 +31,7 @@ div.document {
 div.document h2, div.document h3 { color: #009; }
 
 table.segments { margin-left: auto; margin-right: auto; }
-tr.segment:hover { background: #ffc; }
+.current_segment, .segment:hover { background: #ff9; }
 
 td.source, td.options, td.target {
     padding: 1ex;
@@ -50,6 +50,11 @@ td.options > div > dl {
 
 td.source input[name=it], td.target input[name=it], textarea {
     width: 100%; font-family: inherit; font-size: inherit;
+}
+
+table.paralleltexts td {
+    vertical-align: baseline;
+    line-height: 130%;
 }
 
 div.document form { width: 100%; }
