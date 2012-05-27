@@ -203,5 +203,6 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
   datClit = "ci" ;
   genClit = "ne" ;
 
+  subjPron = \_ -> [] ;
 
 }
