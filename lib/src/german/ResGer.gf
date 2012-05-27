@@ -693,6 +693,22 @@ resource ResGer = ParamX ** open Prelude in {
           }
     } ;
 
+{-
+-- tests 27/5/2012
+
+  ich bin nicht alt
+  ich bin nicht hier
+  ich kenne dich nicht
+  ich kenne deine Frau nicht
+  ich bin nicht ein Kind / ich bin kein Kind (via no_Quant)
+  ich schlafe nicht hier
+  ich sage nicht, dass es regnet
+  ich male es nicht blau
+  ich schlafe nicht immer
+  ich kenne dich nicht immer
+  ich kann nicht schlafen
+  es wird nicht besser
+-}
 
   infVP : Bool -> VP -> ((Agr => Str) * Str * Str * Str) = \isAux, vp -> let vps = useVP vp in
     <
