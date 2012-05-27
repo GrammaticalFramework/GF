@@ -4,7 +4,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
 
   lin
 
-    PredVP np vp = mkClause (subjForm np vp.sc) np.a vp ;
+    PredVP np vp = mkClausePol (orB np.isNeg vp.isNeg) (subjForm np vp.sc) np.a vp ;
 
     PredSCVP sc vp = mkClause (\_ -> sc.s) (agrP3 Sg) vp ;
 

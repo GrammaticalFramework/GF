@@ -188,6 +188,7 @@ oper
     adv : Polarity => Str ; -- ainakin/ainakaan
     ext : Str ;
     sc  : NPForm ;
+    isNeg : Bool ; -- True if some complement is negative
     qp  : Bool -- True = back vowel
     } ;
     
@@ -252,7 +253,8 @@ oper
     adv = \\_ => [] ;
     ext = [] ;
     sc = verb.sc ;
-    qp = verb.qp
+    qp = verb.qp ;
+    isNeg = False 
     } ;
 
   insertObj : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
@@ -261,16 +263,18 @@ oper
     adv = vp.adv ;
     ext = vp.ext ;
     sc = vp.sc ; 
-    qp = vp.qp
+    qp = vp.qp ;
+    isNeg = vp.isNeg
     } ;
 
-  insertObjPre : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
+  insertObjPre : Bool -> (Bool => Polarity => Agr => Str) -> VP -> VP = \isNeg, obj,vp -> {
     s = vp.s ;
     s2 = \\fin,b,a => obj ! fin ! b ! a ++ vp.s2 ! fin ! b ! a ;
     adv = vp.adv ;
     ext = vp.ext ;
     sc = vp.sc ; 
-    qp = vp.qp
+    qp = vp.qp ;
+    isNeg = orB vp.isNeg isNeg
     } ;
 
   insertAdv : (Polarity => Str) -> VP -> VP = \adv,vp -> {
@@ -279,7 +283,8 @@ oper
     ext = vp.ext ;
     adv = \\b => vp.adv ! b ++ adv ! b ;
     sc = vp.sc ; 
-    qp = vp.qp
+    qp = vp.qp ;
+    isNeg = vp.isNeg --- missään
     } ;
 
   insertExtrapos : Str -> VP -> VP = \obj,vp -> {
@@ -288,7 +293,8 @@ oper
     ext = vp.ext ++ obj ;
     adv = vp.adv ;
     sc = vp.sc ; 
-    qp = vp.qp
+    qp = vp.qp ;
+    isNeg = vp.isNeg
     } ;
 
 -- For $Sentence$.
@@ -301,6 +307,21 @@ oper
     s : Tense => Anteriority => Polarity => {subj,fin,inf,compl,adv,ext : Str ; qp : Bool}
     } ;
 
+  mkClausePol : Bool -> (Polarity -> Str) -> Agr -> VP -> Clause = 
+    \isNeg,sub,agr,vp -> {
+      s = \\t,a,b => 
+         let
+           pol = case isNeg of {
+            True => Neg ; 
+            _ => b
+            } ; 
+           c = (mkClausePlus sub agr vp).s ! t ! a ! pol 
+         in 
+         table {
+           SDecl  => c.subj ++ c.fin ++ c.inf ++ c.compl ++ c.adv ++ c.ext ;
+           SQuest => c.fin ++ BIND ++ questPart c.qp ++ c.subj ++ c.inf ++ c.compl ++ c.adv ++ c.ext
+           }
+      } ;
   mkClause : (Polarity -> Str) -> Agr -> VP -> Clause = 
     \sub,agr,vp -> {
       s = \\t,a,b => let c = (mkClausePlus sub agr vp).s ! t ! a ! b in 
@@ -696,12 +717,13 @@ oper
       n : Number ;
       isNum : Bool ;
       isPoss : Bool ;
-      isDef : Bool
+      isDef : Bool ;
+      isNeg : Bool
       } ;
 
     heavyQuant : PQuant -> PQuant ** {sp : Number => Case => Str} = \d -> 
       d ** {sp = d.s1} ; 
     PQuant : Type =  
-      {s1 : Number => Case => Str ; s2 : Str ; isPoss : Bool ; isDef : Bool} ; 
+      {s1 : Number => Case => Str ; s2 : Str ; isPoss : Bool ; isDef : Bool ; isNeg : Bool} ; 
 
 }

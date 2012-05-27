@@ -38,7 +38,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
             <False,True> => Sg ;  -- kolme kytkintä on
             _ => det.n
             }) ;
-      isPron = False
+      isPron = False ; isNeg = det.isNeg
       } ;
 
     DetNP det = 
@@ -54,32 +54,35 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
             False => Sg ;  -- autoja menee; kolme autoa menee
             _ => det.n
             }) ;
-        isPron = False
+        isPron = False ; isNeg = det.isNeg
       } ;
 
     UsePN pn = {
       s = \\c => pn.s ! npform2case Sg c ; 
       a = agrP3 Sg ;
-      isPron = False
+      isPron = False ; isNeg = False
       } ;
-    UsePron p = p ** {isPron = True} ;
+    UsePron p = p ** {isPron = True ; isNeg = False} ;
 
     PredetNP pred np = {
       s = \\c => pred.s ! complNumAgr np.a ! c ++ np.s ! c ;
       a = np.a ;
-      isPron = np.isPron  -- kaikki minun - ni
+      isPron = np.isPron ;  -- kaikki minun - ni
+      isNeg = np.isNeg
       } ;
 
     PPartNP np v2 = {
       s = \\c => np.s ! c ++ v2.s ! PastPartPass (AN (NCase (complNumAgr np.a) Ess)) ;
       a = np.a ;
-      isPron = np.isPron  -- minun täällä - ni
+      isPron = np.isPron ;  -- minun täällä - ni
+      isNeg = np.isNeg
       } ;
 
     AdvNP np adv = {
       s = \\c => np.s ! c ++ adv.s ;
       a = np.a ;
-      isPron = np.isPron  -- minun täällä - ni
+      isPron = np.isPron ;  -- minun täällä - ni
+      isNeg = np.isNeg
       } ;
 
     DetQuantOrd quant num ord = {
@@ -89,7 +92,8 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
       n = num.n ;
       isNum = num.isNum ;
       isPoss = quant.isPoss ;
-      isDef = quant.isDef
+      isDef = quant.isDef ;
+      isNeg = quant.isNeg
       } ;
 
     DetQuant quant num = {
@@ -99,7 +103,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
       n = num.n ;
       isNum = num.isNum ; -- case num.n of {Sg => False ; _ => True} ;
       isPoss = quant.isPoss ;
-      isDef = quant.isDef
+      isDef = quant.isDef ; isNeg = quant.isNeg
       } ;
 
     PossPron p = {
@@ -107,7 +111,8 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
       s2 = BIND ++ possSuffix p.a ;
       isNum = False ;
       isPoss = True ;
-      isDef = True  --- "minun kolme autoani ovat" ; thus "...on" is missing
+      isDef = True ; --- "minun kolme autoani ovat" ; thus "...on" is missing
+      isNeg = False
       } ;
 
     NumSg = {s = \\_,_ => [] ; isNum = False ; n = Sg} ;
@@ -138,7 +143,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
       s1 = \\_,_ => [] ; 
       sp = table {Sg => pronSe.s ; Pl => pronNe.s} ;
       s2 = [] ; 
-      isNum,isPoss = False ;
+      isNum,isPoss,isNeg = False ;
       isDef = True   -- autot ovat
       } ;
 
@@ -148,7 +153,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
          (nhn (mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
          "yksien" "yksiä" "yksiin")).s ! NCase n c ;
       s2 = [] ; 
-      isNum,isPoss,isDef = False -- autoja on
+      isNum,isPoss,isDef,isNeg = False -- autoja on
       } ;
 
     MassNP cn =
@@ -159,7 +164,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
         s = \\c => let k = npform2case n c in
                 cn.s ! ncase k ; 
         a = agrP3 Sg ;
-        isPron = False
+        isPron = False ; isNeg = False
       } ;
 
     UseN n = n ;
@@ -198,7 +203,8 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
     RelNP np rs = {
       s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ; 
       a = np.a ;  
-      isPron = np.isPron ---- correct ?
+      isPron = np.isPron ; ---- correct ?
+      isNeg = np.isNeg
       } ;
 
     AdvCN cn ad = {s = \\nf => cn.s ! nf ++ ad.s} ;
