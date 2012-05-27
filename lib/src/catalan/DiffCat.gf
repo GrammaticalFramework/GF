@@ -178,4 +178,6 @@ oper
 
     verbBeschH : Verbum -> Verb = \v -> verbBesch v ** {vtyp = VHabere} ;
 
+    subjPron = \_ -> [] ;
+
 }

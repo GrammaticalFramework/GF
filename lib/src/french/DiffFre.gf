@@ -225,4 +225,15 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
   datClit = "y" ;
   genClit = "en" ;
 
+  subjPron = \a -> case a of {
+    {n = Sg ; p = P1} => "je" ;
+    {n = Sg ; p = P2} => "tu" ;
+    {n = Pl ; p = P1} => "nous" ;
+    {n = Pl ; p = P2} => "vous" ;
+    {n = Sg ; p = P3 ; g = Masc} => "il" ;
+    {n = Sg ; p = P3 ; g = Fem}  => "elle" ;
+    {n = Pl ; p = P3 ; g = Masc} => "ils" ;
+    {n = Pl ; p = P3 ; g = Fem}  => "elles"
+    } ;
+
 }

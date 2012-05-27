@@ -116,6 +116,10 @@ oper
     ext    : RPolarity => Str ;         -- que je dors / que je dorme
     } ;
 
+-- The pronoun to be repeated in $VPS$ coordination, and also in Fre inverted questions.
+-- Empty in other languages than Fre (as a kind of prodrop).
+
+  subjPron : Agr -> Str ;
 
 --2 Workarounds, to be eliminated
 

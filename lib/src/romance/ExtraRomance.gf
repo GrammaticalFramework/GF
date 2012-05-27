@@ -37,4 +37,33 @@ incomplete concrete ExtraRomance of ExtraRomanceAbs = CatRomance **
 
     PrepCN prep cn = {s = prep.s ++ prepCase prep.c ++ cn.s ! Sg} ;
     
+  lincat
+    VPS   = {s : Mood => Agr => Bool => Str} ;
+    [VPS] = {s1,s2 : Mood => Agr => Bool => Str} ;
+
+  lin
+    BaseVPS x y = {
+      s1 = \\m,a,b => x.s ! m ! a ! b ;
+      s2 = \\m,a,b => subjPron a ++ y.s ! m ! a ! b
+      } ;
+
+    ConsVPS x y = {
+      s1 = \\m,a,b => x.s ! m ! a ! b ;
+      s2 = \\m,a,b => subjPron a ++ y.s1 ! m ! a ! b ++ y.s2 ! m ! a ! b
+      } ;
+
+    PredVPS np vpi = {
+      s = \\m => (np.s ! Nom).comp ++ vpi.s ! m ! np.a ! np.isNeg
+      } ;
+
+    MkVPS tm p vp = {
+      s = \\m,agr,isNeg => 
+          tm.s ++ p.s ++
+          (mkClausePol (orB isNeg vp.isNeg) [] False False agr vp).s 
+            ! DDir ! tm.t ! tm.a ! p.p ! m
+      } ;
+
+    ConjVPS = conjunctDistrTable3 Mood Agr Bool ;
+
+
 } 
