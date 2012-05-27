@@ -38,6 +38,7 @@ Translator.prototype.redraw=function() {
 	update_radiobutton("method",o.method)
 	update_radiobutton("source",o.from)
 	update_radiobutton("target",o.to)
+	update_radiobutton("view",o.view || "segmentbysegment")
 	if(o.method!="Manual") {
 	    function cont2(gr_info) {
 		t.grammar_info=gr_info
@@ -57,6 +58,7 @@ Translator.prototype.update_translations=function() {
     var o=doc.options
     var ss=doc.segments
     var ds=t.drawing.segments
+    var ts=t.drawing.targets
 
     function supported(concname) {
 	var l=t.grammar_info.languages
@@ -66,15 +68,22 @@ Translator.prototype.update_translations=function() {
 
     function update_translation(i) {
 	var segment=ss[i]
-	function replace(sd) {
-	    var old=ds[i]
-	    ds[i]=sd
-	    replaceNode(sd,old)
+	function replace() {
+	    if(ds) {
+		var sd=t.draw_segment(segment,i)
+		var old=ds[i]
+		ds[i]=sd
+		replaceNode(sd,old)
+	    }
+	    else if(ts) {
+		clear(ts[i])
+		ts[i].appendChild(text(segment.target+" "))
+	    }
 	}
 	function upd3(txt) {
 	    segment.target=txt;
-	    segment.options=JSON.parse(JSON.stringify(o)) // no sharing!
-	    replace(t.draw_segment(segment,i))
+	    segment.options={method:o.method,from:o.from,to:o.to} // no sharing!
+	    replace()
 	}
 	function upd2(ts) {
 	    switch(ts.length) {
@@ -90,11 +99,11 @@ Translator.prototype.update_translations=function() {
 	function upd0(source) {
 	    t.server.translate({from:gfrom,to:gto,input:source},upd1)
 	}
-	var fs=supported(gfrom)
-	var ts=supported(gto)
-	if(fs && ts) {
+	var fls=supported(gfrom)
+	var tls=supported(gto)
+	if(fls && tls) {
 	    if(segment.options.method!="Manual" 
-	       && JSON.stringify(segment.options)!=JSON.stringify(o))
+	       && !eq_options(segment.options,o))
 		gfshell('ps -lextext "'+segment.source+'"',upd0)
 	}
 	else {
@@ -102,8 +111,8 @@ Translator.prototype.update_translations=function() {
 	    var tn=concname(o.to)
 	    var unsup=" is not supported by the grammar"
 	    var sup=" is supported by the grammar"
-	    var msg= fs ? tn+unsup : ts ? fn+unsup :
-		          "Neither "+fn+" nor "+tn+sup
+	    var msg= fls ? tn+unsup : tls ? fn+unsup :
+		           "Neither "+fn+" nor "+tn+sup
 	    upd3("["+msg+"]")
 	}
     }
@@ -140,6 +149,7 @@ Translator.prototype.change=function(el) {
     case "method": update("method"); break;
     case "source": update("from"); break;
     case "target": update("to"); break;
+    case "view": update("view"); break;
     }
 }
 
@@ -244,7 +254,7 @@ Translator.prototype.add_segment=function(el) {
 	var edit=wrap_class("tr","segment",source)
 
 	var ss=t.drawing.segments
-	var n=ss.length
+	var n=ss ? ss.length : 0
 	if(n>0) insertAfter(edit,ss[n-1])
 	else t.view.appendChild(wrap_class("table","segments",edit))
 
@@ -274,7 +284,7 @@ Translator.prototype.import=function(el) {
 	var lines=radiobutton("separator","lines",
 			      "Segments are separated by line breaks",null,true)
 	var paras=radiobutton("separator","paras",
-			      "Segments are separate by blank lines",null,false)
+			      "Segments are separated by blank lines",null,false)
 	var e=node("form",{onsubmit:done2},
 		   [wrap("h3",text("Import text")),
 		    inp,
@@ -350,15 +360,41 @@ type Method = "Manual" | GrammarName
 type GrammarName = String // e.g. "Foods.pgf"
 */
 
+function eq_options(o1,o2) {
+    return o1.method==o2.method && o1.from==o2.from && o1.to==o2.to
+}
+
 Translator.prototype.draw_document=function() {
     var t=this
     var doc=t.document
     var o=doc.options;
-    var segments=mapix(bind(t.draw_segment,t),doc.segments)
-    var drawing=[node("h2",{},[text(doc.name),text(" "),
-			       wrap("small",draw_translation(o))]),
-		 wrap_class("table","segments",segments)]
-    return {doc:drawing,segments:segments}
+    var hdr=wrap("h2",[text(doc.name),text(" "),
+		       wrap("small",draw_translation(o))])
+    switch(o.view || "segmentbysegment") {
+    case "paralleltexts":
+	function src(seg) { return seg.source }
+	function trg(seg) { return seg.target }
+	function fmt(txt,i) {
+	    var sd=span_class("segment",text(txt+" "))
+	    function setclass(cls) {
+		return function() {
+		    targets[i].className=sources[i].className=cls
+		}
+	    }
+	    sd.onmouseover=setclass("current_segment")
+	    sd.onmouseout=setclass("segment")
+	    return sd
+	}
+	var sources=mapix(fmt,map(src,doc.segments))
+	var targets=mapix(fmt,map(trg,doc.segments))
+	var drawing=[hdr,wrap_class("table","paralleltexts",
+				    tr([td(sources),td(targets)]))]
+	return {doc:drawing,sources:sources,targets:targets}
+    default:
+	var segments=mapix(bind(t.draw_segment,t),doc.segments)
+	var drawing=[hdr,wrap_class("table","segments",segments)]
+	return {doc:drawing,segments:segments}
+    }
 }
 
 Translator.prototype.draw_segment=function(s,i) {
