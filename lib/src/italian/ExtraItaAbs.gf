@@ -28,4 +28,10 @@ abstract ExtraItaAbs = ExtraRomanceAbs ** {
 -- Possessive without definite article, like "mio figlio".
 
     PossFamQuant : Pron -> Quant ;
+
+-- clitic adverbs
+
+    AdvDatVP : VP -> VP ;  -- ci vado
+    AdvGenVP : VP -> VP ;  -- ne arrivo
+
 }

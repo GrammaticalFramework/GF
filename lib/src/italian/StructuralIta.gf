@@ -31,10 +31,10 @@ lin
   during_Prep = mkPrep "durante" ;
   either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
   everybody_NP = makeNP ["tutti"] Masc Pl ;
-  every_Det = {s,sp = \\_,_ => "ogni" ; n = Sg ; s2 = []} ;
+  every_Det = {s,sp = \\_,_ => "ogni" ; n = Sg ; s2 = [] ; isNeg = False} ;
   everything_NP = pn2np (mkPN ["tutto"] Masc) ;
   everywhere_Adv = ss "dappertutto" ;
-  few_Det  = {s,sp = \\g,c => prepCase c ++ genForms "pochi" "poche" ! g ; n = Pl ; s2 = []} ;
+  few_Det  = {s,sp = \\g,c => prepCase c ++ genForms "pochi" "poche" ! g ; n = Pl ; s2 = [] ; isNeg = False} ;
 ----  first_Ord = {s = \\ag => (regA "primo").s ! Posit ! AF ag.g ag.n} ;
   for_Prep = mkPrep "per" ;
   from_Prep = da_Prep ;
@@ -60,11 +60,11 @@ lin
       "lui" "lo" "gli" "glie" "lui" "suo" "sua" "suoi" "sue"
       Masc Sg P3 ;
   less_CAdv = X.mkCAdv "meno" conjThan ;
-  many_Det = {s,sp = \\g,c => prepCase c ++ genForms "molti" "molte" ! g ; n = Pl ; s2 = []} ;
+  many_Det = {s,sp = \\g,c => prepCase c ++ genForms "molti" "molte" ! g ; n = Pl ; s2 = [] ; isNeg = False} ;
   more_CAdv = X.mkCAdv "più" conjThan ;
   most_Predet = {s = \\_,c => prepCase c ++ ["la maggior parte"] ; c = CPrep P_di ;
     a = PNoAg} ;
-  much_Det = {s,sp = \\g,c => prepCase c ++ genForms "molto" "molta" ! g ; n = Sg ; s2 = []} ;
+  much_Det = {s,sp = \\g,c => prepCase c ++ genForms "molto" "molta" ! g ; n = Sg ; s2 = [] ; isNeg = False} ;
   must_VV = mkVV (verboV (dovere_47 "dovere")) ;
   no_Utt = ss "no" ;
   on_Prep = {s = [] ; c = CPrep P_su ; isDir = False} ;
@@ -83,8 +83,8 @@ lin
       Fem Sg P3 ;
   so_AdA = ss "cosÃ¬" ;
   somebody_NP = pn2np (mkPN ["qualcuno"] Masc) ;
-  somePl_Det = {s,sp = \\_,c => prepCase c ++ "qualche" ; n = Pl ; s2 = []} ;
-  someSg_Det = {s,sp = \\_,c => prepCase c ++ "qualche" ; n = Sg ; s2 = []} ;
+  somePl_Det = {s,sp = \\_,c => prepCase c ++ "qualche" ; n = Pl ; s2 = [] ; isNeg = False} ;
+  someSg_Det = {s,sp = \\_,c => prepCase c ++ "qualche" ; n = Sg ; s2 = [] ; isNeg = False} ;
   something_NP = pn2np (mkPN ["qualche cosa"] Masc) ;
   somewhere_Adv = ss ["qualche parte"] ;
   that_Quant = let
@@ -98,7 +98,8 @@ lin
         quello (elision "quel" "quell'" "quello") 
                (elision "quei" "quegli" "quegli")  ;
       sp = quello "quello" "quelli" ;
-      s2 = []
+      s2 = [] ;
+    isNeg = False
       } ;
 
   there7from_Adv = ss ["di là"] ;
@@ -117,7 +118,8 @@ lin
     in {
       s = \\_ => questo ;
       sp = questo ;
-      s2 = []
+      s2 = [] ;
+    isNeg = False
       } ;
 
   through_Prep = mkPrep "per" ;
@@ -167,12 +169,13 @@ lin
     in {
     s = \\_ => aucun ;
     sp = aucun ;
-    s2 = []
+    s2 = [] ;
+    isNeg = True
     } ;
   if_then_Conj = {s1 = "si" ; s2 = "allora" ; n = Sg ; lock_Conj = <>} ;
-  nobody_NP = pn2np (mkPN ["nessuno"] Masc) ;
+  nobody_NP = pn2npNeg (mkPN ["nessuno"] Masc) ;
  
-  nothing_NP = pn2np (mkPN "niente" Masc) ;
+  nothing_NP = pn2npNeg (mkPN "niente" Masc) ;
   at_least_AdN = ss "almeno" ;
   at_most_AdN = ss "al massimo" ;
 

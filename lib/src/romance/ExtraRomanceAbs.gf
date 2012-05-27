@@ -5,4 +5,6 @@ abstract ExtraRomanceAbs = Cat, Extra[
   fun 
     TPasseSimple : Tense ; --# notpresent
     ComplCN : V2 -> CN -> VP ;  -- j'ai soif
+
+
 }

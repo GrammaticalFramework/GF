@@ -43,11 +43,14 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
     youPl8fem_Pron =
       let vous = mkPronoun "vous" "vous" "vous" "vous" "votre" "votre" "vos" Fem Pl P2
       in 
-      {s = vous.s ; hasClit = vous.hasClit ; poss = vous.poss ; a = vous.a ; isPol = False} ;
+      {s = vous.s ; hasClit = vous.hasClit ; poss = vous.poss ; a = vous.a ; isPol = False ; isNeg = False} ;
     youPol8fem_Pron =
       let vous = mkPronoun "vous" "vous" "vous" "vous" "votre" "votre" "vos" Fem Pl P2
       in 
-      {s = vous.s ; hasClit = vous.hasClit ; poss = vous.poss ; a = vous.a ; isPol = True} ;
+      {s = vous.s ; hasClit = vous.hasClit ; poss = vous.poss ; a = vous.a ; isPol = True ; isNeg = False} ;
+
+    AdvDatVP = insertClit3 datClit ;
+    AdvGenVP = insertClit3 genClit ;
 
   oper
     prepQue : Case -> Str = \c -> case c of {
@@ -64,7 +67,8 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
     s  = \\g,c => prepCase c ++ genForms "tout" "toute" ! g ;
     sp = \\g,c => prepCase c ++ genForms "tout" "toute" ! g ;
     n = Sg ; 
-    s2 = []
+    s2 = [] ;
+    isNeg = False
     } ;
 
     PNegNe = {s = [] ; p = RNeg True} ;

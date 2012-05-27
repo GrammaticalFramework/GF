@@ -37,11 +37,12 @@ lin
     s  = \\_,c => prepCase c ++ "chaque" ;
     sp = \\g,c => prepCase c ++ genForms "chacun" "chacune" ! g ;
     n = Sg ; 
-    s2 = []
+    s2 = [] ;
+    isNeg = False
     } ;
   everything_NP = pn2np (mkPN ["tout"] Masc) ;
   everywhere_Adv = ss "partout" ;
-  few_Det  = {s,sp = \\g,c => prepCase c ++ "peu" ++ elisDe ; n = Pl ; s2 = []} ;
+  few_Det  = {s,sp = \\g,c => prepCase c ++ "peu" ++ elisDe ; n = Pl ; s2 = [] ; isNeg = False} ;
 --- DEPREC first_Ord = {s = \\ag => (regA "premier").s ! Posit ! AF ag.g ag.n} ;
   for_Prep = mkPreposition "pour" ;
   from_Prep = complGen ; ---
@@ -67,10 +68,10 @@ lin
       "il" (elision "l") "lui" "lui" "son" (elisPoss "s") "ses"
       Masc Sg P3 ;
   less_CAdv = X.mkCAdv "moins" conjThan ;
-  many_Det = {s,sp = \\_,c => prepCase c ++ "plusieurs" ; n = Pl ; s2 = []} ;
+  many_Det = {s,sp = \\_,c => prepCase c ++ "plusieurs" ; n = Pl ; s2 = [] ; isNeg = False} ;
   more_CAdv = X.mkCAdv "plus" conjThan ;
   most_Predet = {s = \\_,c => prepCase c ++ ["la plupart"] ; c = CPrep P_de ; a = PNoAg} ;
-  much_Det = {s,sp = \\_,c => prepCase c ++ "beaucoup" ++ elisDe ; n = Pl ; s2 = []} ;
+  much_Det = {s,sp = \\_,c => prepCase c ++ "beaucoup" ++ elisDe ; n = Pl ; s2 = [] ; isNeg = False} ;
   must_VV = mkVV (devoir_V2 ** {lock_V = <>}) ;
 ---b  no_Phr = ss "non" ;
   no_Utt = ss "non" ;
@@ -90,8 +91,8 @@ lin
 
   so_AdA = ss "si" ;
   somebody_NP = pn2np (mkPN ["quelqu'un"] Masc) ;
-  somePl_Det = {s,sp = \\_,c => prepCase c ++ "quelques" ; n = Pl ; s2 = []} ; ---- sp
-  someSg_Det = {s,sp = \\_,c => prepCase c ++ "quelque" ; n = Sg ; s2 = []} ; ----sp
+  somePl_Det = {s,sp = \\_,c => prepCase c ++ "quelques" ; n = Pl ; s2 = [] ; isNeg = False} ; ---- sp
+  someSg_Det = {s,sp = \\_,c => prepCase c ++ "quelque" ; n = Sg ; s2 = [] ; isNeg = False} ; ----sp
   something_NP = pn2np (mkPN ["quelque chose"] Masc) ;
   somewhere_Adv = ss ["quelque part"] ; --- ne - pas
 
@@ -105,7 +106,8 @@ lin
       Sg => \\g,c => prepCase c ++ genForms "celui-là" "celle-là" ! g ;
       Pl => \\g,c => prepCase c ++ genForms "ceux-là" "celles-là" ! g
       } ;
-    s2 = [] ---- "-là"
+    s2 = [] ; ---- "-là" ;
+    isNeg = False
     } ;
 
 ---b  that_NP = makeNP ["cela"] Masc Sg ;
@@ -128,7 +130,8 @@ lin
       Sg => \\g,c => prepCase c ++ genForms "celui-ci" "celle-ci" ! g ;
       Pl => \\g,c => prepCase c ++ genForms "ceux-ci" "celles-ci" ! g
       } ;
-    s2 = [] ---- "-ci"
+    s2 = [] ; ---- "-ci"
+    isNeg = False
     } ;
 
 ---b  this_NP = pn2np (mkPN ["ceci"] Masc) ;
@@ -173,7 +176,7 @@ lin
   youPol_Pron = 
     let vous = mkPronoun "vous" "vous" "vous" "vous" "votre" "votre" "vos" Masc Pl P2
     in 
-    {s = vous.s ; hasClit = vous.hasClit ; poss = vous.poss ; a = vous.a ; isPol = True} ;
+    {s = vous.s ; hasClit = vous.hasClit ; poss = vous.poss ; a = vous.a ; isPol = True ; isNeg = False} ;
 
   not_Predet = {s = \\a,c => prepCase c ++ "pas" ; c = Nom ; a = PNoAg} ;
 
@@ -185,12 +188,13 @@ lin
     in {
     s = \\_ => aucun ;
     sp = aucun ;
-    s2 = []
+    s2 = [] ;
+    isNeg = True
     } ;
   if_then_Conj = {s1 = "si" ; s2 = "alors" ; n = Sg ; lock_Conj = <>} ;
-  nobody_NP = pn2np (mkPN ["personne"] Fem) ;
+  nobody_NP = pn2npNeg (mkPN ["personne"] Fem) ;
  
-  nothing_NP = pn2np (mkPN "rien" Masc) ;
+  nothing_NP = pn2npNeg (mkPN "rien" Masc) ;
   at_least_AdN = ss "au moins" ;
   at_most_AdN = ss "au plus" ;
 

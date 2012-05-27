@@ -179,7 +179,8 @@ oper
       } ;
     a = Ag g n p ;
     hasClit = True ;
-    isPol = False
+    isPol = False ;
+    isNeg = False
     } ;
 
   elisPoss : Str -> Str = \s ->

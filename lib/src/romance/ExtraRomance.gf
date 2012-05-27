@@ -2,7 +2,8 @@ incomplete concrete ExtraRomance of ExtraRomanceAbs = CatRomance **
   open 
     CommonRomance,
     Coordination,
-    ResRomance in {
+    ResRomance, 
+    Prelude in {
 
     lin TPasseSimple = {s = []} ** {t = RPasse} ;   --# notpresent
 
@@ -28,7 +29,8 @@ incomplete concrete ExtraRomance of ExtraRomanceAbs = CatRomance **
       a = p.a ;
       poss = p.poss ;
       hasClit = p.hasClit ;
-      isPol = p.isPol
+      isPol = p.isPol ;
+      isNeg = False
       } ;
 
     CompIQuant iq = {s = \\aa => iq.s ! aa.n ! aa.g ! Nom} ;

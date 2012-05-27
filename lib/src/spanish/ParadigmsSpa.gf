@@ -328,7 +328,7 @@ oper
       }
     } ;
 
-  makeNP x g n = {s = (pn2np (mk2PN x g)).s; a = agrP3 g n ; hasClit = False ; isPol = False} ** {lock_NP = <>} ;
+  makeNP x g n = {s = (pn2np (mk2PN x g)).s; a = agrP3 g n ; hasClit = False ; isPol = False ; isNeg = False} ** {lock_NP = <>} ;
 
   mk5A a b c d e = 
    compADeg {s = \\_ => (mkAdj a b c d e).s ; isPre = False ; lock_A = <>} ;
@@ -376,14 +376,14 @@ oper
     in lin Quant {
       s = \\_ => attrforms ;
       s2 = [] ;
-      sp = npforms 
+      sp = npforms  ; isNeg = False
       } ;
 
   mkDet mucho mucha number = 
     lin Det {
       s,sp = \\g,c => prepCase c ++ genForms mucho mucha ! g ;
       n = number;
-      s2 = []
+      s2 = [] ; isNeg = False
       } ;
 
   regV x = -- cortar actuar cazar guiar pagar sacar

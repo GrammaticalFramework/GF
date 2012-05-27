@@ -222,4 +222,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 "aurais";"aurais";"aurait";"aurions";"auriez";"auraient";--# notpresent
 "aie";"ayons";"ayez";"eu";"eus";"eue";"eues";"ayant"];vtyp=VHabere};
 
+  datClit = "y" ;
+  genClit = "en" ;
+
 }

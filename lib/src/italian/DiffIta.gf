@@ -199,4 +199,9 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
     copula = verbBesch (essere_1 "essere") ** {vtyp = VEsse} ;
     avere_V = verbBesch (avere_2 "avere") ** {vtyp = VHabere} ;
     venire_V = verbBesch (venire_110 "venire") ** {vtyp = VEsse} ;
+
+  datClit = "ci" ;
+  genClit = "ne" ;
+
+
 }
