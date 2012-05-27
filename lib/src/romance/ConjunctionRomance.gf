@@ -11,7 +11,7 @@ incomplete concrete ConjunctionRomance of Conjunction =
 
     ConjNP conj ss = heavyNP (conjunctDistrTable Case conj ss ** {
       a = conjAgr (Ag Masc conj.n P3) ss.a ;
-      hasClit = False
+      hasClit = False ; isNeg = ss.isNeg
       }) ;
     ConjAP conj ss = conjunctDistrTable AForm conj ss ** {
       isPre = ss.isPre
@@ -33,12 +33,12 @@ incomplete concrete ConjunctionRomance of Conjunction =
     BaseNP x y = {
       s1 = \\c => (x.s ! c).ton ; 
       s2 = \\c => (y.s ! conjunctCase c).ton ; ----e (conjunctCase c) ; 
-      a = conjAgr x.a y.a
+      a = conjAgr x.a y.a ; isNeg = orB x.isNeg y.isNeg
       } ;
     ConsNP x xs = {
       s1 = \\c => (x.s ! c).ton ++ comma ++ xs.s1 ! conjunctCase c ; ----e (conjunctCase c) ; 
       s2 = \\c => xs.s2 ! c ; ----e (conjunctCase c) ; 
-      a = conjAgr x.a xs.a
+      a = conjAgr x.a xs.a ; isNeg = orB x.isNeg xs.isNeg
       } ;
     BaseAP x y = twoTable AForm x y ** {isPre = andB x.isPre y.isPre} ;
     ConsAP xs x = consrTable AForm comma xs x ** {isPre = andB xs.isPre x.isPre} ;
@@ -53,7 +53,7 @@ incomplete concrete ConjunctionRomance of Conjunction =
     [S] = {s1,s2 : Mood => Str} ;
     [Adv] = {s1,s2 : Str} ;
     [IAdv] = {s1,s2 : Str} ;
-    [NP] = {s1,s2 : Case => Str ; a : Agr} ;
+    [NP] = {s1,s2 : Case => Str ; a : Agr ; isNeg : Bool} ;
     [AP] = {s1,s2 : AForm  => Str ; isPre : Bool} ;
     [RS] = {s1,s2 : Mood => Agr => Str ; c : Case} ;
     [CN] = {s1,s2 : Number => Str ; g : Gender} ;

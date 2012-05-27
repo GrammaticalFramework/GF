@@ -843,13 +843,15 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       n : Number ;             -- Pl   (agreement feature for verb)
       isNum : Bool ;           -- True (a numeral is present)
       isPoss : Bool ;          -- True (a possessive suffix is present)
-      isDef : Bool             -- True (verb agrees in Pl, Nom is not Part)
+      isDef : Bool ;           -- True (verb agrees in Pl, Nom is not Part)
+      isNeg : Bool
       } = \n, noun -> heavyDet {
     s1 = \\c => noun.s ! NCase n c ;
     s2 = [] ;
     n = n ;
     isNum, isPoss = False ;
-    isDef = True  --- does this hold for all new dets?
+    isDef = True ;  --- does this hold for all new dets?
+    isNeg = False
     } ;
 
 -- Here we define personal and relative pronouns.

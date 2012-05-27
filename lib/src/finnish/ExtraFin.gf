@@ -9,8 +9,9 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       s2 = [] ;
       isNum  = False ;
       isPoss = False ;
-      isDef  = True  --- "Jussin kolme autoa ovat" ; thus "...on" is missing
-      } ;
+      isDef  = True ; --- "Jussin kolme autoa ovat" ; thus "...on" is missing
+      isNeg = False 
+     } ;
 
     GenCN n1 n2 = {s = \\nf => n1.s ! NPCase Gen ++ n2.s ! nf} ;
 
@@ -118,7 +119,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
           c => acn.s ! c
           } ; 
         a = acn.a ;
-        isPron = False
+        isPron = False ; isNeg = False
         } ;
 
     vai_Conj = {s1 = [] ; s2 = "vai" ; n = Sg} ;
@@ -153,7 +154,8 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       s2 = BIND ++ possSuffix p.a ;
       isNum = False ;
       isPoss = True ;
-      isDef = True  --- "minun kolme autoani ovat" ; thus "...on" is missing
+      isDef = True ;  --- "minun kolme autoani ovat" ; thus "...on" is missing
+      isNeg = False
       } ;
 
   lincat 

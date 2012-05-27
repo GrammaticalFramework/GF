@@ -49,7 +49,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 
     CN   = {s : NForm => Str} ;
     Pron = {s : NPForm => Str ; a : Agr} ;
-    NP   = {s : NPForm => Str ; a : Agr ; isPron : Bool} ;
+    NP   = {s : NPForm => Str ; a : Agr ; isPron : Bool ; isNeg : Bool} ;
     Det  = {
       s1 : Case => Str ;       -- minun kolme
       s2 : Str ;               -- -ni
@@ -57,12 +57,13 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
       n : Number ;             -- Pl   (agreement feature for verb)
       isNum : Bool ;           -- True (a numeral is present)
       isPoss : Bool ;          -- True (a possessive suffix is present)
-      isDef : Bool             -- True (verb agrees in Pl, Nom is not Part)
+      isDef : Bool ;           -- True (verb agrees in Pl, Nom is not Part)
+      isNeg : Bool             -- False (only True for "mikään", "kukaan")
       } ;
 ----    QuantSg, QuantPl = {s1 : Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
     Ord    = {s : NForm => Str} ;
     Predet = {s : Number => NPForm => Str} ;
-    Quant  = {s1,sp : Number => Case => Str ; s2 : Str ; isPoss : Bool ; isDef : Bool} ;
+    Quant  = {s1,sp : Number => Case => Str ; s2 : Str ; isPoss : Bool ; isDef : Bool ; isNeg : Bool} ;
     Card   = {s : Number => Case => Str ; n : Number} ;
     Num    = {s : Number => Case => Str ; isNum : Bool ; n : Number} ;
 

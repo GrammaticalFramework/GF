@@ -43,7 +43,8 @@ concrete IdiomFin of Idiom = CatFin **
       adv = vp.adv ;
       ext = vp.ext ;
       sc = vp.sc ; 
-      qp = vp.qp
+      qp = vp.qp ;
+      isNeg = vp.isNeg
       } ;
 
     ProgrVP vp = 
@@ -56,7 +57,7 @@ concrete IdiomFin of Idiom = CatFin **
         adv = vp.adv ;
         ext = vp.ext ;
         sc = vp.sc ; 
-        qp = vp.qp
+        qp = vp.qp ; isNeg = vp.isNeg
         } ;
 
 -- This gives "otetaan oluet" instead of "ottakaamme oluet".
