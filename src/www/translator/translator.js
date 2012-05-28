@@ -80,16 +80,19 @@ Translator.prototype.update_translations=function() {
 		ts[i].appendChild(text(segment.target+" "))
 	    }
 	}
-	function upd3(txt) {
-	    segment.target=txt;
+	function upd3(txts) {
+	    segment.target=txts[0];
 	    segment.options={method:o.method,from:o.from,to:o.to} // no sharing!
+	    if(txts.length>1) segment.choices=txts
+	    else delete segment.choices
 	    replace()
 	}
 	function upd2(ts) {
+	    function unlex(txt,cont) { gfshell('ps -unlextext "'+txt+'"',cont) }
+
 	    switch(ts.length) {
-	    case 1: gfshell('ps -unlextext "'+ts[0]+'"',upd3); break;
-	    case 0: upd3("[no translation]");break;
-	    default: upd3("[ambiguous translation]")
+	    case 0: upd3(["[no translation]"]);break;
+	    default: mapc(unlex,ts,upd3); break;
 	    }
 	}
 	function upd1(translate_output) {
@@ -310,35 +313,46 @@ Translator.prototype.remove=function(el) {
     setTimeout(rm,100)
 }
 
-Translator.prototype.edit_translation=function(i) {
-    var t=this
-    var ds=t.drawing.segments
-    
-    function replace_segment(sd) {
+Translator.prototype.replace_segment=function(i,sd) {
+    var t=this;
+    var ds=t.drawing.segments;
+
+    if(ds) {
 	var old=ds[i]
 	ds[i]=sd
 	replaceNode(sd,old)
     }
+}
 
-    function edit_segment(s) {
-	function restore() { replace_segment(t.draw_segment(s,i)) }
-	function done() {
-	    s.options.method="Manual"
-	    s.options.from=t.document.options.from
-	    s.options.to=t.document.options.to
-	    s.target=inp.value // side effect, updating the document in-place
-	    restore();
-	    return false;
-	}
-	var inp=node("input",{name:"it",value:s.target})
-	var e=wrap("form",[inp, submit(), button("Cancel",restore)])
-	var target=wrap_class("td","target",e)
-	var edit=t.draw_segment_given_target(s,target)
-	replace_segment(edit)
-	e.onsubmit=done
-	inp.focus();
+Translator.prototype.pick_translation=function(i,txt) {
+    var t=this
+    var s=t.document.segments[i]
+    s.options.method="Manual"
+    s.target=txt // side effect, updating the document in-place
+    t.replace_segment(i,t.draw_segment(s,i))
+}
+
+Translator.prototype.edit_translation=function(i) {
+    var t=this
+    var s=t.document.segments[i]
+ 
+    function restore() { t.replace_segment(i,t.draw_segment(s,i)) }
+    function done() {
+	s.options.method="Manual"
+	s.options.from=t.document.options.from
+	s.options.to=t.document.options.to
+	s.target=inp.value // side effect, updating the document in-place
+	restore();
+	return false;
     }
-    edit_segment(t.document.segments[i])
+
+    var inp=node("input",{name:"it",value:s.target})
+    var e=wrap("form",[inp, submit(), button("Cancel",restore)])
+    var target=wrap_class("td","target",e)
+    var edit=t.draw_segment_given_target(s,target)
+    t.replace_segment(i,edit)
+    e.onsubmit=done
+    inp.focus();
 }
 
 function hide_menu(el) {
@@ -405,8 +419,20 @@ Translator.prototype.draw_segment=function(s,i) {
     if(opt.from!=dopt.from || opt.to!=dopt.to) txt=span_class("error",txt)
     var target=wrap_class("td","target",txt)
     function edit() { t.edit_translation(i) }
+    function pick(txt) { t.pick_translation(i,txt) }
     target.onclick=edit
+    if(s.choices) appendChildren(target,draw_choices(s.choices,pick))
     return t.draw_segment_given_target(s,target)
+}
+
+function draw_choices(txts,onclick) {
+    function opt(txt) { 
+	var o=dt(text(txt))
+	o.onclick=function(ev) { ev.stopPropagation(); onclick(txt) }
+	return o
+    }
+    return [span_class("choices",text("+")),
+	    wrap_class("dl","popupmenu",map(opt,txts))]
 }
 
 Translator.prototype.draw_segment_given_target=function(s,target) {
