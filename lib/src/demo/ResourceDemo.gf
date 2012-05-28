@@ -115,12 +115,16 @@ abstract ResourceDemo = Lexicon, Numeral, Grammar [
 
 ] ** {
 
-flags startcat = Utt ;
+flags startcat = Text ;
 
 
 -- functions with different type
 
 fun
+   TextS   : S  -> Text ; -- with .
+   TextQS  : QS -> Text ; -- with ?
+   TextImp : VP -> Text ; -- with !
+
    ComplV2 : V2 -> NP -> VP ;
    ModCN   : AP -> CN -> CN ;
    CompAP  : AP -> VP ;

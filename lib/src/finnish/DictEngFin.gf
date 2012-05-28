@@ -38721,6 +38721,7 @@ lin zoom_V = mkV "kiitää" ; -- 7632
     {lock_N = <>}) Sg ;
 --  everywhere_Adv = ss "kaikkialla" ;
   few_Det  = mkDet Sg (mkN "harva") ;
+---  first_Ord = {s = \\n,c => (mkN "ensimmäinen").s ! NCase n c} ;
   for_Prep = casePrep allative ;
   from_Prep = casePrep elative ;
   he_Pron = mkPronoun "hän" "hänen" "häntä"  "hänenä" "häneen" Sg P3 ;
@@ -38761,22 +38762,22 @@ lin zoom_V = mkV "kiitää" ; -- 7632
   somebody_NP = {
     s = \\c => jokuPron ! Sg ! npform2case Sg c ;
     a = agrP3 Sg ; 
-    isPron = False
+    isPron = False ; isNeg = False
     } ;
   someSg_Det = heavyDet {
     s1 = jokuPron ! Sg ;
     s2 = [] ;
-    isNum,isPoss = False ; isDef = True ; n = Sg
+    isNum,isPoss = False ; isDef = True ; isNeg = False ; n = Sg
     } ;
   somePl_Det = heavyDet {
     s1 = jokuPron ! Pl ;
-    s2 = [] ; isNum,isPoss = False ; isDef = True ; 
-    n = Pl
+    s2 = [] ; isNum,isPoss = False ; isNeg = False ; isDef = True ; 
+    n = Pl ; isNeg = False
     } ;
   something_NP = {
     s = \\c => jokinPron ! Sg ! npform2case Sg c ;
     a = agrP3 Sg ; 
-    isPron = False
+    isPron = False ; isNeg = False ; isNeg = False
     } ;
 --  somewhere_Adv = ss "jossain" ;
   that_Quant = heavyQuant {
@@ -38788,7 +38789,7 @@ lin zoom_V = mkV "kiitää" ; -- 7632
             c => (mkPronoun "nuo" "noiden" "noita" "noina" "noihin" Sg P3).s ! NPCase c
             }
           } ;
-    s2 = [] ; isNum,isPoss = False ; isDef = True ; 
+    s2 = [] ; isNum,isPoss = False ; isDef = True  ; isNeg = False 
     } ;
   that_Subj = ss "että" ;
 --  there_Adv = ss "siellä" ; --- tuolla
@@ -38805,7 +38806,7 @@ lin zoom_V = mkV "kiitää" ; -- 7632
             c => (mkPronoun "nämä" "näiden" "näitä" "näinä" "näihin" Sg P3).s ! NPCase c
             }
           } ;
-    s2 = [] ; isNum,isPoss = False ; isDef = True ; 
+    s2 = [] ; isNum,isPoss = False ; isDef = True  ; isNeg = False
     } ;
   through_Prep = postGenPrep "kautta" ;
   too_AdA = ss "liian" ;
@@ -38955,7 +38956,7 @@ oper
   makeNP noun num = {
     s = \\c => noun.s ! NCase num (npform2case num c) ; 
     a = agrP3 num ;
-    isPron = False ;
+    isPron, isNeg = False ;
     lock_NP = <>
     } ;
 
@@ -38963,21 +38964,21 @@ lin
   not_Predet = {s = \\_,_ => "ei"} ;
 
   no_Quant = heavyQuant {
-    s1 = \\n,c => "ei" ++ mikaanPron ! n ! c ;
-    s2 = [] ; isNum,isPoss = False ; isDef = True ; 
+    s1 = \\n,c => mikaanPron ! n ! c ;  -- requires negative or question polarity
+    s2 = [] ; isNum,isPoss = False ; isDef = True ; isNeg = True
     } ;
 
   if_then_Conj = {s1 = "jos" ; s2 = "niin" ; n = Sg} ;
   nobody_NP = {
-    s = \\c => "ei" ++ kukaanPron ! Sg ! npform2case Sg c ;
+    s = \\c => kukaanPron ! Sg ! npform2case Sg c ; -- requires negative or question polarity
     a = agrP3 Sg ; 
-    isPron = False
+    isPron = False ; isNeg = True
     } ;
 
   nothing_NP = {
-    s = \\c => "ei" ++ mikaanPron ! Sg ! npform2case Sg c ;
+    s = \\c => mikaanPron ! Sg ! npform2case Sg c ; --- requires negative or question polarity
     a = agrP3 Sg ; 
-    isPron = False
+    isPron = False ; isNeg = True
     } ;
 
   at_least_AdN = ss "vähintään" ;
@@ -38990,7 +38991,6 @@ lin
 --  have_V2 = mkV2 (caseV adessive vOlla) ;
 
   lin language_title_Utt = ss "suomi" ;
-
 
 --- concrete LexiconFin of Lexicon = CatFin ** open MorphoFin, ParadigmsFin in {
 

@@ -13,7 +13,9 @@ concrete ParseFin of ParseEngAbs =
   SentenceFin,
   RelativeFin,
   IdiomFin [NP, VP, Tense, Cl, ProgrVP, ExistNP],
-  ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash]
+  ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
+            Temp, Tense, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
+            VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV]
  , DictEngFin 
 ** 
 open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, Prelude in {

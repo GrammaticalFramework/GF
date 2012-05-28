@@ -61,6 +61,7 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
 -- extension of the mini grammar
 
 --  cat
+    Text,    -- text (with punctuation)          e.g. "Who knows it?"
     Utt,     -- utterance (sentence or question) e.g. "does she walk"
     QS,      -- question (fixed tense)           e.g. "who doesn't walk"
     QCl,     -- question clause (variable tense) e.g. "who walks"
@@ -85,6 +86,7 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
     Imp, Bool, True, False, Voc,
 
 --  fun
+
     UttS , -- S -> Utt,
     UttQS, -- QS -> Utt,
 
@@ -123,6 +125,10 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
 -- functions with different type
 
 lin
+   TextS s = mkText (lin S s) ;
+   TextQS qs = mkText (lin QS qs) ;
+   TextImp vp = mkText (mkImp (lin VP vp)) ;
+
    ComplV2 v np = mkVP v np ;
    ModCN ap cn = lin CN (mkCN <lin AP ap : AP> <lin CN cn : CN>) ;
    CompAP ap = mkVP (lin AP ap) ;
