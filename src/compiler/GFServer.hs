@@ -180,8 +180,7 @@ handle state0 cache execute1
          return (state,json200 (jsonresult cwd ('/':dir++"/") cmd out files))
 
     upload files =
-      do let update (name,contents)= updateFile name contents
-         mapM_ update files
+      do mapM_ (uncurry updateFile) files
          return (state,resp204)
 
     jsonList =
@@ -354,8 +353,9 @@ contentTypeFromExt ext =
      bin t = (t,readBinaryFile)
 
 -- * IO utilities
-updateFile path new =
+updateFile path new0 =
   do old <- try $ readBinaryFile path
+     let new = encodeString new0
      when (Right new/=old) $ do logPutStrLn $ "Updating "++path
                                 seq (either (const 0) length old) $
                                     writeBinaryFile path new
