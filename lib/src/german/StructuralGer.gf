@@ -31,10 +31,10 @@ concrete StructuralGer of Structural = CatGer **
   during_Prep = mkPrep "während" P.genitive ;
   either7or_DConj = sd2 "entweder" "oder" ** {n = Sg} ;
   everybody_NP = nameNounPhrase {s = caselist "jeder" "jeden" "jedem" "jedes"} ;
-  every_Det = detLikeAdj Sg "jed" ;
+  every_Det = detLikeAdj False Sg "jed" ;
   everything_NP = nameNounPhrase {s = caselist "alles" "alles" "allem" "alles"} ;
   everywhere_Adv = ss "überall" ;
-  few_Det = detLikeAdj Pl "wenig" ;
+  few_Det = detLikeAdj False Pl "wenig" ;
 ----  first_Ord = {s = (regA "erst").s ! Posit} ;
   for_Prep = mkPrep "für" P.accusative ;
   from_Prep = mkPrep "aus" P.dative ;
@@ -44,17 +44,17 @@ concrete StructuralGer of Structural = CatGer **
   here_Adv = ss "hier" ;
   how_IAdv = ss "wie" ;
   how8much_IAdv = ss "wieviel" ;
-  how8many_IDet = {s = \\g,c => (detLikeAdj Pl "wieviel").s ! g ! NPC c ; n = Pl} ;
+  how8many_IDet = {s = \\g,c => (detLikeAdj False Pl "wieviel").s ! g ! NPC c ; n = Pl} ;
   if_Subj = ss "wenn" ;
   in8front_Prep = mkPrep "vor" P.dative ;
   i_Pron = mkPronPers "ich" "mich" "mir" "meiner" "mein" Masc Sg P1 ;
   in_Prep = mkPrep [] (NPP CInDat) ;
   it_Pron = mkPronPers "es" "es" "ihm" "seiner" "sein"  Neutr Sg P3 ;
   less_CAdv = X.mkCAdv "weniger" "als" ;
-  many_Det = detLikeAdj Pl "viel" ;
+  many_Det = detLikeAdj False Pl "viel" ;
   more_CAdv = X.mkCAdv "mehr" "als" ;
   most_Predet = {s = appAdj (regA "meist") ; c = noCase ; a = PAgNone} ;
-  much_Det = detLikeAdj Sg "viel" ;
+  much_Det = detLikeAdj False Sg "viel" ;
   must_VV = auxVV 
       (mkV 
         "müssen" "muß" "mußt" "muß" "müßt" "müß" 
@@ -75,18 +75,19 @@ concrete StructuralGer of Structural = CatGer **
   she_Pron = mkPronPers "sie" "sie" "ihr" "ihrer" "ihr" Fem Sg P3 ;
   so_AdA = ss "so" ;
   somebody_NP = nameNounPhrase {s = caselist "jemand" "jemanden" "jemandem" "jemands"} ;
-  somePl_Det = detLikeAdj Pl "einig" ;
+  somePl_Det = detLikeAdj True Pl "einig" ;
   someSg_Det = {
       s,sp = \\g,c => 
              usePrepC c (\k -> "ein" + pronEnding ! GSg g ! k) ;  ---- einer,eines
       n = Sg ;
       a = Strong ;
-      hasNum = True
+      hasNum = True ;
+      isDef = False ;
       } ;
   something_NP = nameNounPhrase {s = \\_ => "etwas"} ;
   somewhere_Adv = ss "irgendwo" ;
   that_Quant = let 
-     jener : Number => Gender => PCase => Str = \\n => (detLikeAdj n "jen").s in 
+     jener : Number => Gender => PCase => Str = \\n => (detLikeAdj True n "jen").s in 
      {s = \\_ => jener ; sp = jener ; a,aPl = Weak} ;
 ---b  that_NP = nameNounPhrase {s = caselist "das" "das" "denem" "dessen"} ; ----
   there_Adv = ss "da" ;
@@ -96,7 +97,7 @@ concrete StructuralGer of Structural = CatGer **
 ---b  these_NP = {s = caselist "diese" "diese" "diesen" "dieser" ; a = agrP3 Pl} ;
   they_Pron = mkPronPers "sie" "sie" "ihnen" "ihrer" "ihr" Fem Pl P3 ;
   this_Quant = let 
-     dieser : Number => Gender => PCase => Str = \\n => (detLikeAdj n "dies").s in 
+     dieser : Number => Gender => PCase => Str = \\n => (detLikeAdj True n "dies").s in 
      {s = \\_ => dieser ; sp = dieser ; a,aPl = Weak} ;
 ---b  this_NP = nameNounPhrase {s = caselist "dies" "dies" "diesem" "dieses"} ; ----
 ---b  those_NP = {s = caselist "jene" "jene" "jenen" "jener" ; a = agrP3 Pl} ;
@@ -119,7 +120,7 @@ concrete StructuralGer of Structural = CatGer **
   when_IAdv = ss "wann" ;
   when_Subj = ss "wenn" ;
   where_IAdv = ss "wo" ;
-  which_IQuant = {s = \\n,g,c => (detLikeAdj n "welch").s ! g ! NPC c} ;
+  which_IQuant = {s = \\n,g,c => (detLikeAdj True n "welch").s ! g ! NPC c} ;
 
   whoSg_IP = {s = caselist "wer" "wen" "wem" "wessen" ; n = Sg} ;
   whoPl_IP = {s = caselist "wer" "wen" "wem" "wessen" ; n = Pl} ;
@@ -135,7 +136,7 @@ concrete StructuralGer of Structural = CatGer **
   no_Quant = let 
      keiner : Number => Gender => PCase => Str = table {
        Sg => \\g,c => usePrepC c (\k -> "kein" + pronEnding ! GSg g ! k) ;
-       Pl => (detLikeAdj Pl "kein").s
+       Pl => (detLikeAdj False Pl "kein").s
        }
      in 
      {s = \\_ => keiner ; sp = keiner ; a = Strong ; aPl = Weak} ;   ---- sp

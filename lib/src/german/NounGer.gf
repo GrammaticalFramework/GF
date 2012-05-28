@@ -7,13 +7,13 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
       s = \\c => det.s ! cn.g ! c ++ 
                  (let k = (prepC c).c in cn.s ! adjfCase det.a k ! det.n ! k) ;
       a = agrgP3 cn.g det.n ;
-      isPron = False
+      isPron = det.isDef    -- ich sehe den Mann nicht vs. ich sehe nicht einen Mann
       } ;
 
     DetNP det = {
       s = \\c => det.sp ! Neutr ! c ; -- more genders in ExtraGer
       a = agrP3 det.n ;
-      isPron = False
+      isPron = det.isDef
       } ;
 
     UsePN pn = {
@@ -57,6 +57,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
                         num.s!g!k ++ ord.s ! agrAdj g (adjfCase quant.aPl k) n k) ;
         n = n ;
         a = case n of {Sg => a ; Pl => quant.aPl} ;
+        isDef = case <quant.a, quant.aPl> of {<Strong,Strong> => False ; _ => True} ;
         } ;
 
     DetQuant quant num = 
@@ -70,6 +71,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
                         num.s!g!k) ;
         n = n ;
         a = case n of {Sg => a ; Pl => quant.aPl} ;
+        isDef = case <quant.a, quant.aPl> of {<Strong,Strong> => False ; _ => True} ;
         } ;
 
 
@@ -110,7 +112,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
           }
         } ; 
       sp = table {
-        Sg => \\g,c => usePrepC c (\k -> (detLikeAdj Sg "ein").s ! g ! NPC k) ;
+        Sg => \\g,c => usePrepC c (\k -> (detLikeAdj False Sg "ein").s ! g ! NPC k) ;
         Pl => \\_,c => usePrepC c (\k -> caselist "einige" "einige" "einigen" "einiger" ! k)
         } ;
       a, aPl = Strong 

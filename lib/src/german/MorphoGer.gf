@@ -24,9 +24,9 @@ oper
       a = agrP3 Sg
       } ;
 
-  detLikeAdj : Number -> Str -> 
-    {s,sp : Gender => PCase => Str ; n : Number ; a : Adjf} = \n,dies -> 
-      {s,sp = appAdj (regA dies) ! n ; n = n ; a = Weak} ;
+  detLikeAdj : Bool -> Number -> Str -> 
+    {s,sp : Gender => PCase => Str ; n : Number ; a : Adjf ; isDef : Bool} = \isDef,n,dies -> 
+      {s,sp = appAdj (regA dies) ! n ; n = n ; a = Weak ; isDef = isDef} ;
 
   mkOrd : {s : Degree => AForm => Str} -> {s : AForm => Str} = \a ->
     {s = a.s ! Posit} ;
