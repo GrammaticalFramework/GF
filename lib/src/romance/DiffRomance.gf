@@ -121,6 +121,10 @@ oper
 
   subjPron : Agr -> Str ;
 
+-- Whether subject negative in direct position causes negation to the sentence: "personne ne dort" vs. "nessuno dorme".
+
+  polNegDirSubj : RPolarity ;
+
 --2 Workarounds, to be eliminated
 
 -- This should be provided by $pronArg$ above, but causes trouble in compilation.
