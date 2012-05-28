@@ -205,4 +205,6 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
 
   subjPron = \_ -> [] ;
 
+  polNegDirSubj = RPos ;
+
 }

@@ -209,12 +209,13 @@ oper
     \isNeg, subj, hasClit, isPol, agr, vp -> {
       s = \\d,te,a,b,m => 
         let
-          isAnyNeg = orB isNeg vp.isNeg ;
-          pol = case <isAnyNeg,b> of {
-            <True,RPos> => RNeg True ; 
+
+          pol : RPolarity = case <isNeg, vp.isNeg, b, d> of {
+            <_,True,RPos,_>    => RNeg True ; 
+            <True,_,RPos,DInv> => RNeg True ; 
+            <True,_,RPos,_>    => polNegDirSubj ;
             _ => b
             } ;
-
           neg = vp.neg ! pol ;
 
           gen = agr.g ;

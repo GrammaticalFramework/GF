@@ -236,4 +236,6 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
     {n = Pl ; p = P3 ; g = Fem}  => "elles"
     } ;
 
+  polNegDirSubj = RNeg True ;
+
 }

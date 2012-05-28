@@ -180,4 +180,6 @@ oper
 
     subjPron = \_ -> [] ;
 
+    polNegDirSubj = RPos ;
+
 }
