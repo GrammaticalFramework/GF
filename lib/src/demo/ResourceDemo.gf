@@ -127,7 +127,7 @@ fun
    ConjS   : Conj -> S  -> S  -> S ;
    ConjAP  : Conj -> AP -> AP -> AP ;
    ConjNP  : Conj -> NP -> NP -> NP ;
-   a_Det, the_Det : Det ; 
+   a_Det, the_Det, aPl_Det, thePl_Det : Det ; 
    this_Det, these_Det : Det ;
    that_Det, those_Det : Det ;
    possDet : Pron -> Det ;
