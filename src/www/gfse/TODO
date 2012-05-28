@@ -40,7 +40,3 @@
 
 + Bug! The startcat menu shows the first category by default, but the startcat
   flag is actually not set until a selection is made from the menu.
-
-- Bug! In Opera it seems that grammars are sent with the wrong character	
-  encoding to the server, preventing grammars containing ÅÄÖ or other non-ASCII
-  characters from working.
