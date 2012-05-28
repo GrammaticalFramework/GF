@@ -131,6 +131,8 @@ lin
    ConjNP co x y = mkNP co x y ;
    a_Det = mkDet a_Quant ;
    the_Det = mkDet the_Quant ;
+   aPl_Det = mkDet a_Quant plNum ;
+   thePl_Det = mkDet the_Quant plNum ;
    this_Det = S.this_Det ;
    these_Det = S.these_Det ;
    that_Det = S.that_Det ;
