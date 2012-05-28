@@ -11,17 +11,17 @@ lin
   CNIntNP cn i = {
     s = \\c => cn.s ! NCase Sg (npform2case Sg c) ++ i.s ;
     a = agrP3 Sg ;
-    isPron = False
+    isPron = False ; isNeg = False
     } ;
   CNSymbNP det cn xs = let detcn = NounFin.DetCN det cn in {
     s = \\c => detcn.s ! c ++ xs.s ;
     a = detcn.a ;
-    isPron = False
+    isPron = False ; isNeg = False
     } ;
   CNNumNP cn i = {
     s = \\c => cn.s ! NCase Sg (npform2case Sg c) ++ i.s ! Sg ! Nom ;
     a = agrP3 Sg ;
-    isPron = False
+    isPron = False ; isNeg = False
     } ;
 
   SymbS sy = sy ;
