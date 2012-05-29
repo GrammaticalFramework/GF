@@ -6,7 +6,7 @@ src:
 	runghc MkMini.hs
 
 compdemo:
-	$(compile) Afr Bul Cat Dan Dut Eng Fin Fre Ger Hin Ita Jap Lav Nep Nor Pes Pnb Pol Ron Rus Snd Spa Swe Tha Urd
+	$(compile) API Afr Bul Cat Dan Dut Eng Fin Fre Ger Hin Ita Jap Lav Nep Nor Pes Pnb Pol Ron Rus Snd Spa Swe Tha Urd
 
 linkdemo:
-	$(compile) -link Afr Bul Cat Dan Dut Eng Fin Fre Ger Hin Ita Jap Lav Nep Nor Pes Pnb Pol Ron Rus Snd Spa Swe Tha Urd
+	$(compile) -link API Afr Bul Cat Dan Dut Eng Fin Fre Ger Hin Ita Jap Lav Nep Nor Pes Pnb Pol Ron Rus Snd Spa Swe Tha Urd
