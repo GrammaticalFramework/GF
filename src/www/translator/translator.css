@@ -3,8 +3,12 @@ h1 { float: right; margin: 0; font-size: 150%; }
 h2 { font-size: 120%; }
 h3 { font-size: 100%; }
 
-div.pagehead { font-family: sans-serif;
-               background-color: #ccc;
+div.pagehead {
+    font-family: sans-serif;
+    /*position: fixed; top: 5px; left: 5px; right: 5px; z-index: 2;*/
+    background-color: #d0d0d0;
+    padding: 1px 5px;
+    border-radius: 5px;
 }
 table.menubar td { padding: 5px; }
 table.menubar dl, td.options > div > dl, dl.popupmenu {
@@ -24,6 +28,7 @@ table.menubar td:hover, table.menubar dt:hover, dl.popupmenu > dt:hover {
 table table dl { left: 6em; }
 table.menubar dt { white-space: nowrap; }
 div.document {
+    /*margin-top: 7ex;*/
     clear: both;
     background: white;
     border: 2px solid #009;
@@ -50,9 +55,11 @@ td.options > div > dl {
     white-space: nowrap;
 }
 
-td.source input[name=it], td.target input[name=it], textarea {
-    width: 100%; font-family: inherit; font-size: inherit;
+td.source input[name=it], td.target input[name=it], textarea, input[name=punctchars] {
+    font-family: inherit; font-size: inherit;
 }
+
+textarea { width: 100% }
 
 table.paralleltexts td {
     vertical-align: baseline;

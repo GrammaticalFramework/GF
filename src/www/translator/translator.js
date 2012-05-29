@@ -274,28 +274,36 @@ Translator.prototype.import=function(el) {
 	function restore() {
 	    t.redraw()
 	}
-	function done2() {
+	function done() {
 	    var text=inp.value
 	    var ls=text.split("\n")
-	    var segs= paras.firstChild.checked ? join_paragraphs(ls) : ls
+	    var segs= punct.firstChild.checked 
+	              ? split_punct(text,punctchars.value)
+		      : paras.firstChild.checked 
+		        ? join_paragraphs(ls)
+		        : ls
 	    for(var i in segs)
 		t.document.segments.push(new_segment(segs[i]))
 	    restore()
 	    return false
 	}
 	var inp=node("textarea",{name:"it",value:"",rows:"10"})
+	var punct=radiobutton("separator","punct",
+			      "Punctuation indicates where segments end: ",null,true)
 	var lines=radiobutton("separator","lines",
-			      "Segments are separated by line breaks",null,true)
+			      "Segments are separated by line breaks",null,false)
 	var paras=radiobutton("separator","paras",
 			      "Segments are separated by blank lines",null,false)
-	var e=node("form",{onsubmit:done2},
-		   [wrap("h3",text("Import text")),
+	var punctchars=node("input",{name:"punctchars",value:".?!",size:"5"})
+	var lang=concname(t.document.options.from)
+	var e=node("form",{class:"import"},
+		   [wrap("h3",text("Import text ("+lang+")")),
 		    inp,
-		    wrap("dl",map(dt,[lines,paras])),
+		    wrap("dl",[dt([punct,punctchars]),dt(lines),dt(paras)]),
 		    submit(), button("Cancel",restore)])
 
 	t.view.appendChild(e)
-	e.onsubmit=done2
+	e.onsubmit=done
 	inp.focus();
     }
     setTimeout(imp,100)
@@ -556,10 +564,17 @@ function join_paragraphs(lines) {
     return paras
 }
 
+function split_punct(text,punct) {
+    var ss=text.split(new RegExp("(["+punct+"])"))
+    var segs=[];
+    for(var i=0;i<ss.length;i+=2) segs.push((ss[i]+(ss[i+1]||"")).trim())
+    if(segs.length>0 && segs[segs.length-1]=="") segs.pop();
+    return segs
+}
+
 /* --- DOM Support ---------------------------------------------------------- */
 
 function a(url,linked) { return node("a",{href:url},linked); }
-function li(xs) { return wrap("li",xs); }
 function jsurl(js) { return "javascript:"+js; }
 
 function replaceNode(node,ref) { ref.parentNode.replaceChild(node,ref) }

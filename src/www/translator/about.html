@@ -16,9 +16,13 @@
 
 <p>
 This is a simple bilingual document editor. Documents consist of a sequence
-of segments that are translated independently. The user can add segments
-in the source language and obtain automatically translated segments in
-the target language. If an unsatisfactory automatic translation is
+of segments that are translated independently. The user can import text
+in the source language and obtain automatically translated text in
+the target language. Imported text can be segmented based on punctuation.
+Optionally, one can also use line breaks or blank lines to indicate segmentation
+in imported text.
+
+<p>If an unsatisfactory automatic translation is
 obtained, the user can click on it and replace it with a manual translation.
 If multiple translations are obtained, one of them is shown by default and
 the other ones are available in a popup menu.
@@ -35,8 +39,6 @@ closed and reopened later.
 <ul>
   <li>Text can be imported/exported by copying and pasting, but other ways
   could be added.
-  <li>Segmentation of imported text based on punctuation. (Currently, segments
-  must be separated by line breaks or blank lines.)
   <li>GF's lexer/unlexer is used to allow for more natural looking text, but
   the unlexer does the wrong thing if the first word of a sentence is supposed
   to be capitalized, e.g. "I am ready." and "Spanish wine is good."
@@ -52,7 +54,7 @@ closed and reopened later.
 
 <hr>
 <div class=modtime><small>
-<!-- hhmts start --> Last modified: Mon May 28 18:36:10 CEST 2012 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Tue May 29 16:30:58 CEST 2012 <!-- hhmts end -->
   </small></div>
 <address>
 <a href="http://www.cse.chalmers.se/~hallgren/">TH</a>
