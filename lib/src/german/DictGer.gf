@@ -25,7 +25,7 @@ lin
   aalartig_A = regA "aalartig" ;
   aalbeere_N = reg2N  "Aalbeere" "Aalbeeren" feminine ;
   aalbutt_N = reg2N  "Aalbutt" "Aalbutte" masculine ;
-  aalen_N = reg2N  "Aalen" "–" neuter ;
+  aalen_N = reg2N "Aalen" "Aalen" neuter;
   aalen_V = regV "aalen" ;
   aalener_N = reg2N  "Aalener" "Aalener" masculine ;
   aalfang_N = reg2N  "Aalfang" "Aalfänge" masculine ;
@@ -47,7 +47,7 @@ lin
   aalrute_N = reg2N  "Aalrute" "Aalruten" feminine ;
   aalschnur_N = reg2N  "Aalschnur" "Aalschnüre" feminine ;
   aalspeer_N = reg2N  "Aalspeer" "Aalspeere" masculine ;
-  aalstechen__N = reg2N  "Aalstechen " "Aalstechen" neuter ;
+  aalstechen__N = reg2N  "Aalstechen" "Aalstechen" neuter ;
   aalstreif_N = reg2N  "Aalstreif" "Aalstreife" masculine ;
   aalsuppe_N = reg2N  "Aalsuppe" "Aalsuppen" feminine ;
   aaltierchen_N = reg2N  "Aaltierchen" "Aaltierchen" neuter ;
@@ -122,7 +122,7 @@ lin
   abbasten_V = prefixV "ab" (irregV "basten" "bastet" "baste" "baste" "gebastet") ; 
   abbau_N = reg2N  "Abbau" "Abbaue" masculine ;
   abbaubar_A = regA "abbaubar" ;
-  abbaubarkeit_N = reg2N  "Abbaubarkeit" "-" feminine ;
+  abbaubarkeit_N = reg2N "Abbaubarkeit" "e" feminine;
   abbauen_V = prefixV "ab" (regV "bauen") ;
   abbauend_A = regA "abbauend" ;
   abbauerscheinung_N = mkN "Abbauerscheinung" ;
@@ -157,11 +157,11 @@ lin
   abbiegen_V = prefixV "ab" (irregV "biegen" "biegt" "bog" "böge" "gebogen") ; 
   abbiegespur_N = reg2N  "Abbiegespur" "Abbiegespuren" feminine ;
   abbiegung_N = mkN "Abbiegung" ;
-  abbild__N = reg2N  "Abbild " "Abbilder" neuter ;
+  abbild__N = reg2N  "Abbild" "Abbilder" neuter ;
   abbild_N = reg2N  "Abbild" "Abbilder" neuter ;
   abbilden_V = prefixV "ab" (regV "bilden") ;
   abbildend_A = regA "abbildend" ;
-  abbildung__N = reg2N  "Abbildung " "Abbildungen" feminine ;
+  abbildung__N = reg2N  "Abbildung" "Abbildungen" feminine ;
   abbildung_N = reg2N  "Abbildung" "Abbildungen" feminine ;
   abbildungsfehler_N = reg2N  "Abbildungsfehler" "Abbildungsfehler" masculine ;
   abbildungsmassstab_N = reg2N  "Abbildungsmaßstab" "Abbildungsmaßstäbe" masculine ;
@@ -197,7 +197,7 @@ lin
   abbremsen_V = prefixV "ab" (regV "bremsen") ;
   abbrennen_V = prefixV "ab" (irregV "brennen" "brennt" "brannte" "brannte" "gebrannt") ; 
   abbreviation_N = mkN "Abbreviation" ;
-  abbreviatur_N = reg2N  "Abbreviatur" "Abbreviaturen " feminine ;
+  abbreviatur_N = reg2N  "Abbreviatur" "Abbreviaturen" feminine ;
   abbreviieren_V = prefixV "ab" (irregV "breviieren" "breviiert" "breviierte" "breviierte" "gebreviiert") ;
   abbringen_V = prefixV "ab" (irregV "bringen" "bringt" "brachte" "brächte" "gebracht") ; 
   abbrocken_V = prefixV "ab" (regV "brocken") ;
@@ -248,7 +248,7 @@ lin
   abdeckplane_N = reg2N  "Abdeckplane" "Abdeckplanen" feminine ;
   abdeckplatte_N = reg2N  "Abdeckplatte" "Abdeckplatten" feminine ;
   abdeckung_N = mkN "Abdeckung" ;
-  abderit__N = reg2N  "Abderit " "Abderiten" masculine ;
+  abderit__N = reg2N  "Abderit" "Abderiten" masculine ;
   abderitisch_A = mk3A "abderitisch" "abderitischer" "abderitischste" ;
   abdestillation_N = mkN "Abdestillation" ;
   abdi_N = reg2N  "Abdi" "Abdis" masculine ;
@@ -306,7 +306,7 @@ lin
   abendmahl_N = reg2N  "Abendmahl" "Abendmahle" neuter ;
   abendmahlsfeier_N = reg2N  "Abendmahlsfeier" "Abendmahlsfeiern" feminine ;
   abendmahlsgemeinschaft_N = reg2N  "Abendmahlsgemeinschaft" "Abendmahlsgemeinschaften" feminine ;
-  abendmahlsstreit_N = reg2N  "Abendmahlsstreit" "–" masculine ;
+  abendmahlsstreit_N = reg2N "Abendmahlsstreit" "Abendmahlsstreite" masculine;
   abendmahlswein_N = reg2N  "Abendmahlswein" "Abendmahlsweine" masculine ;
   abendmahlzeit_N = reg2N  "Abendmahlzeit" "Abendmahlzeiten" feminine ;
   abendnebel_N = reg2N  "Abendnebel" "Abendnebel" masculine ;
@@ -328,14 +328,14 @@ lin
   abenteuerlich_A = mk3A "abenteuerlich" "abenteuerlicher" "abenteuerlichste" ;
   abenteuerspielplatz_N = reg2N  "Abenteuerspielplatz" "Abenteuerspielplätze" masculine ;
   abenteurerin_N = reg2N  "Abenteurerin" "Abenteurerinnen" feminine ;
-  aber__N = reg2N  "Aber " "Aber " neuter ;
+  aber__N = reg2N  "Aber" "Aber" neuter ;
   aber_Adv = mkAdv "aber" ;
   aberchen_N = reg2N  "Aberchen" "Aberchen" neuter ;
   aberdeenrind_N = reg2N  "Aberdeenrind" "Aberdeenrinder" neuter ;
   aberglaeubisch_A = mk3A "abergläubisch" "abergläubischer" "abergläubischste" ;
   aberkennen_V = prefixV "ab" (irregV "erkennen" "erkennt" "erkannte" "erkannte" "erkannt") ; 
   abermals_Adv = mkAdv "abermals" ;
-  abern_V = prefixV "ab" (irregV "ern" "ert" "erte" "erte" "geert") ;
+  abern_V = regV "abern" ;
   abernten_V = prefixV "ab" (irregV "ernten" "erntet" "erntete" "erntete" "geerntet") ; 
   aberrant_A = regA "aberrant" ;
   aberratio_ictus_N = reg2N  "aberratio ictus" "aberrationes ictus" feminine ;
@@ -428,7 +428,7 @@ lin
   abgehen_V = prefixV "ab" (irregV "gehen" "geht" "ging" "ginge" "gegangen") ; 
   abgekartet_A = regA "abgekartet" ;
   abgeklaert_A = mk3A "abgeklärt" "abgeklärter" "abgeklärteste" ;
-  abgeklaertheit_N = reg2N  "Abgeklärtheit" "-" feminine ;
+  abgeklaertheit_N = reg2N "Abgeklärtheit" "e" feminine;
   abgekuehlt_A = regA "abgekühlt" ;
   abgelagert_A = regA "abgelagert" ;
   abgeleitet_A = regA "abgeleitet" ;
@@ -745,7 +745,7 @@ lin
   abspaltbar_A = regA "abspaltbar" ;
   abspaltung_N = mkN "Abspaltung" ;
   abspecken_V = prefixV "ab" (regV "specken") ;
-  abspeichern_V = prefixV "ab" (irregV "speichern" "speichert" "speiche" "speichere" "gespeichert ") ; 
+  abspeichern_V = prefixV "ab" (irregV "speichern" "speichert" "speiche" "speichere" "gespeichert") ; 
   absperrbalken_N = reg2N  "Absperrbalken" "Absperrbalken" masculine ;
   absperrung_N = mkN "Absperrung" ;
   abspinnen_V = prefixV "ab" (irregV "spinnen" "spinnt" "spann" "spänne" "gesponnen") ; 
@@ -821,7 +821,7 @@ lin
   abtritt_N = reg2N  "Abtritt" "Abtritte" masculine ;
   abtritterker_N = reg2N  "Abtritterker" "Abtritterker" masculine ;
   abtruennig_A = regA "abtrünnig" ;
-  abtrunk_N = reg2N  "Abtrunk" "- " masculine ;
+  abtrunk_N = reg2N "Abtrunk" "Abtrunke" masculine;
   abtun_V = prefixV "ab" (irregV "tun" "tut" "tat" "täte" "getan") ; 
   abulie_N = reg2N  "Abulie" "Abulien" feminine ;
   abundant_A = mk3A "abundant" "abundanter" "abundanteste" ;
@@ -887,7 +887,7 @@ lin
   acarologe_N = reg2N  "Acarologe" "Acarologen" masculine ;
   accelerando_Adv = mkAdv "accelerando" ;
   accessoire_N = reg2N  "Accessoire" "Accessoires" neuter ;
-  accordatura_N = reg2N  "Accordatura" "-" feminine ;
+  accordatura_N = reg2N "Accordatura" "e" feminine;
   acephalie_N = reg2N  "Acephalie" "Acephalien" feminine ;
   acetabuloplastik_N = reg2N  "Acetabuloplastik" "Acetabuloplastiken" feminine ;
   acetal_N = reg2N  "Acetal" "Acetale" neuter ;
@@ -964,7 +964,7 @@ lin
   ackerbuerger__N = reg2N  "Ackerbürger " "Ackerbürger " masculine ;
   ackerbuergerhaus_N = reg2N  "Ackerbürgerhaus" "Ackerbürgerhäuser" neuter ;
   ackergauchheil_N = reg2N  "Ackergauchheil" "Ackergauchheile" masculine ;
-  ackerling__N = reg2N  "Ackerling " "Ackerlinge " masculine ;
+  ackerling__N = reg2N  "Ackerling" "Ackerlinge" masculine ;
   ackern_V = regV "ackern" ;
   ackerschotendotter_N = reg2N  "Ackerschotendotter" "Ackerschotendotter" masculine ;
   ackerweg_N = reg2N  "Ackerweg" "Ackerwege" masculine ;
@@ -1019,7 +1019,7 @@ lin
   adaptieren_V = regV "adaptieren" ;
   adaption_N = mkN "Adaption" ;
   adaptiv_A = mk3A "adaptiv" "adaptiver" "adaptivste" ;
-  adar_N = reg2N  "Adar" "–" masculine ;
+  adar_N = reg2N "Adar" "Adare" masculine;
   adaxial_A = regA "adaxial" ;
   addi_N = reg2N  "Addi" "Addis" masculine ;
   addieren_V = regV "addieren" ;
@@ -1127,11 +1127,11 @@ lin
   adventssonntag_N = reg2N  "Adventssonntag" "Adventssonntage" masculine ;
   adventsstern_N = reg2N  "Adventsstern" "Adventssterne" masculine ;
   adverb_N = reg2N  "Adverb" "Adverbien" neuter ;
-  adverbial__N = reg2N  "Adverbial " "Adverbiale" neuter ;
+  adverbial__N = reg2N  "Adverbial" "Adverbiale" neuter ;
   adverbial_A = regA "adverbial" ;
   adverbialadjektiv_N = reg2N  "Adverbialadjektiv" "Adverbialadjektive" neuter ;
   adverbialbestimmung_N = mkN "Adverbialbestimmung" ;
-  adverbiale__N = reg2N  "Adverbiale " "Adverbialien" neuter ;
+  adverbiale__N = reg2N  "Adverbiale" "Adverbialien" neuter ;
   adverbiale_satzglied_N = reg2N  "adverbiale Satzglied" "adverbialen Satzglieder" neuter ;
   adverbialklammer_N = reg2N  "Adverbialklammer" "Adverbialklammern" feminine ;
   adverbialsatz_N = reg2N  "Adverbialsatz" "Adverbialsätze" masculine ;
@@ -1173,7 +1173,7 @@ lin
   aeonisch_A = regA "äonisch" ;
   aepfelchen_N = reg2N  "Äpfelchen" "Äpfelchen" neuter ;
   aepfeln_V = regV "äpfeln" ;
-  aepfelsaeure_N = reg2N  "Äpfelsäure" "—" feminine ;
+  aepfelsaeure_N = reg2N "Äpfelsäure" "e" feminine;
   aequator_N = reg2N  "Äquator" "Äquatoren" masculine ;
   aequatorial_A = mk3A "äquatorial" "äquatorialer" "äquatorialste" ;
   aequatorialguineer_N = reg2N  "Äquatorialguineer" "Äquatorialguineer" masculine ;
@@ -1299,7 +1299,7 @@ lin
   agentur_N = reg2N  "Agentur" "Agenturen" feminine ;
   agge_N = reg2N  "Agge" "Agges" masculine ;
   aggi_N = reg2N  "Aggi" "Aggis" masculine ;
-  aggiornamento_N = reg2N  "Aggiornamento" "–" neuter ;
+  aggiornamento_N = reg2N "Aggiornamento" "Aggiornamentoe" neuter;
   agglomerat_N = reg2N  "Agglomerat" "Agglomerate" neuter ;
   agglomeration_N = mkN "Agglomeration" ;
   agglomerieren_V = irregV "agglomerieren" "agglomeriert" "agglomerierte" "agglomerierte" "agglomeriert" ;
@@ -1365,7 +1365,7 @@ lin
   ahnenbild_N = reg2N  "Ahnenbild" "Ahnenbilder" neuter ;
   ahnherr_N = reg2N  "Ahnherr" "Ahnherren" masculine ;
   ahnung_N = mkN "Ahnung" ;
-  ahnungslos_A = mk3A "ahnungslos" "ahnungsloser " "ahnungsloseste" ;
+  ahnungslos_A = mk3A "ahnungslos" "ahnungsloser" "ahnungsloseste" ;
   ahorn_N = reg2N  "Ahorn" "Ahorne" masculine ;
   ahornsirup_N = reg2N  "Ahornsirup" "Ahornsirupe" masculine ;
   ahrwein_N = reg2N  "Ahrwein" "Ahrweine" masculine ;
@@ -1378,7 +1378,7 @@ lin
   airline_N = reg2N  "Airline" "Airlines" feminine ;
   airport_N = reg2N  "Airport" "Airports" masculine ;
   ais_N = reg2N  "Ais" "Ais" neuter ;
-  aischrologie_N = reg2N  "Aischrologie" "Aischrologien " feminine ;
+  aischrologie_N = reg2N  "Aischrologie" "Aischrologien" feminine ;
   ajatollah_N = reg2N  "Ajatollah" "Ajatollahs" masculine ;
   akademie_N = reg2N  "Akademie" "Akademien" feminine ;
   akademiker_N = reg2N  "Akademiker" "Akademiker" masculine ;
@@ -1452,7 +1452,7 @@ lin
   aktieninhaber_N = reg2N  "Aktieninhaber" "Aktieninhaber" masculine ;
   aktieninhaberin_N = reg2N  "Aktieninhaberin" "Aktieninhaberinnen" feminine ;
   aktienkurs_N = reg2N  "Aktienkurs" "Aktienkurse" masculine ;
-  aktin_N = reg2N  "Aktin" "–" neuter ;
+  aktin_N = reg2N "Aktin" "Aktine" neuter;
   aktinisch_A = regA "aktinisch" ;
   aktion_N = mkN "Aktion" ;
   aktionaer_N = reg2N  "Aktionär" "Aktionäre" masculine ;
@@ -1486,7 +1486,7 @@ lin
   aktuell_A = mk3A "aktuell" "aktueller" "aktuellste" ;
   akuefi_N = reg2N  "Aküfi" "Aküfis" masculine ;
   akupunktur_N = reg2N  "Akupunktur" "Akupunkturen" feminine ;
-  akustik_N = reg2N  "Akustik" "–" feminine ;
+  akustik_N = reg2N "Akustik" "e" feminine;
   akustikkoppler_N = reg2N  "Akustikkoppler" "Akustikkoppler" masculine ;
   akustisch_A = regA "akustisch" ;
   akut_A = mk3A "akut" "akuter" "akuteste" ;
@@ -1495,7 +1495,7 @@ lin
   akzentuieren_V = regV "akzentuieren" ;
   akzentverschiebung_N = mkN "Akzentverschiebung" ;
   akzeptabel_A = mk3A "akzeptabel" "akzeptabler" "akzeptabelste" ;
-  akzeptabilitaet_N = reg2N  "Akzeptabilität" "-" feminine ;
+  akzeptabilitaet_N = reg2N "Akzeptabilität" "e" feminine;
   akzeptierbar_A = regA "akzeptierbar" ;
   akzeptieren_V = regV "akzeptieren" ;
   akzeptor_N = reg2N  "Akzeptor" "Akzeptoren" masculine ;
@@ -1558,7 +1558,7 @@ lin
   alexandrit_N = reg2N  "Alexandrit" "Alexandrite" masculine ;
   alexis_N = reg2N  "Alexis" "Alexisse" masculine ;
   alexius_N = reg2N  "Alexius" "Alexiusse" masculine ;
-  alf_N = reg2N  "Alf" "?" masculine ;
+  alf_N = reg2N  "Alf" "Alfe" masculine ;
   alfalfa_N = reg2N  "Alfalfa" "Alfalfas" feminine ;
   alfanzerei_N = reg2N  "Alfanzerei" "Alfanzereien" feminine ;
   alfreda_N = reg2N  "Alfreda" "Alfredas" feminine ;
@@ -1695,7 +1695,7 @@ lin
   alleluja_N = reg2N  "Alleluja" "Allelujas" neuter ;
   allenfalls_Adv = mkAdv "allenfalls" ;
   allenthalben_Adv = mkAdv "allenthalben" ;
-  aller_N = reg2N  "Aller" "–" feminine ;
+  aller_N = reg2N "Aller" "e" feminine;
   allerdings_Adv = mkAdv "allerdings" ;
   allergen_N = reg2N  "Allergen" "Allergene" neuter ;
   allergeneity_N = reg2N "Allergenität" "Allergenitäten" feminine ;
@@ -1807,7 +1807,7 @@ lin
   alt_A = mk3A "alt" "älter" "älteste" ;
   alt_achtundsechziger_N = reg2N  "Alt-Achtundsechziger" "Alt-Achtundsechziger" masculine ;
   alt_N = reg2N  "Alt" "Alte" masculine ;
-  alta_N = reg2N  "Alta" "–" neuter ;
+  alta_N = reg2N "Alta" "Altae" neuter;
   altaethiopisch_A = regA "altäthiopisch" ;
   altaisprache_N = reg2N  "Altaisprache" "Altaisprachen" feminine ;
   altan_N = reg2N  "Altan" "Altane" masculine ;
@@ -1825,7 +1825,7 @@ lin
   altbier_N = reg2N  "Altbier" "Altbiere" neuter ;
   altbundespraesident_N = reg2N  "Altbundespräsident" "Altbundespräsidenten" masculine ;
   altdorf_N = reg2N  "Altdorf" "Altdorfs" neuter ;
-  altdorfer__N = reg2N  "Altdorfer " "Altdorfer " masculine ;
+  altdorfer__N = reg2N  "Altdorfer" "Altdorfer" masculine ;
   altdorferin_N = reg2N  "Altdorferin" "Altdorferinnen" feminine ;
   alteln_V = irregV "alteln" "altelt" "altelte" "altelte" "gealtelt" ; 
   altenglisch_A = regA "altenglisch" ;
@@ -1873,8 +1873,8 @@ lin
   altpapiertonne_N = reg2N  "Altpapiertonne" "Altpapiertonnen" feminine ;
   altphilologie_N = reg2N  "Altphilologie" "Altphilologien" feminine ;
   altpreussisch_A = regA "altpreußisch" ;
-  altrad_N = reg2N  "Altrad" "Altrads " masculine ;
-  altram_N = reg2N  "Altram" "Altrams " masculine ;
+  altrad_N = reg2N  "Altrad" "Altrads" masculine ;
+  altram_N = reg2N  "Altram" "Altrams" masculine ;
   altruist_N = reg2N  "Altruist" "Altruisten" masculine ;
   altruistin_N = reg2N  "Altruistin" "Altruistinnen" feminine ;
   altruistisch_A = mk3A "altruistisch" "altruistischer" "altruistischste" ;
@@ -1901,10 +1901,10 @@ lin
   alveolar_N = reg2N  "Alveolar" "Alveolare" masculine ;
   alveole_N = reg2N  "Alveole" "Alveolen" feminine ;
   amadeus_N = reg2N  "Amadeus" "Amadeusse" masculine ;
-  amalbert_N = reg2N  "Amalbert" "Amalberts " masculine ;
+  amalbert_N = reg2N  "Amalbert" "Amalberts" masculine ;
   amalgamieren_V = irregV "amalgamieren" "amalgamiert" "amalgamierte" "amalgamierte" "amalgamiert" ;
   amalgamierung_N = mkN "Amalgamierung" ;
-  amalwin_N = reg2N  "Amalwin" "Amalwins " masculine ;
+  amalwin_N = reg2N  "Amalwin" "Amalwins" masculine ;
   amanuensis_N = reg2N  "Amanuensis" "Amanuenses" masculine ;
   amaranten_A = regA "amaranten" ;
   amarelle_N = reg2N  "Amarelle" "Amarellen" feminine ;
@@ -2477,7 +2477,7 @@ lin
   annika_N = reg2N  "Annika" "Annikas" feminine ;
   annonce_N = reg2N  "Annonce" "Annoncen" feminine ;
   annullieren_V = prefixV "an" (irregV "nullieren" "nulliert" "nullierte" "nullierte" "genulliert") ;
-  annulus_N = reg2N  "Annulus" "Annuli " masculine ;
+  annulus_N = reg2N  "Annulus" "Annuli" masculine ;
   anode_N = reg2N  "Anode" "Anoden" feminine ;
   anomal_A = regA "anomal" ;
   anomalie_N = reg2N  "Anomalie" "Anomalien" feminine ;
@@ -2551,7 +2551,7 @@ lin
   anschwaerzen_V = prefixV "an" (regV "schwärzen") ;
   anschwitzen_V = prefixV "an" (regV "schwitzen") ;
   ansegeln_8_V = prefixV "an" (regV "segeln") ;
-  ansehen_N = reg2N  "Ansehen" "–" neuter ;
+  ansehen_N = reg2N "Ansehen" "Ansehen" neuter;
   ansehen_V = prefixV "an" (irregV "sehen" "seht" "sah" "sähe" "gesehen") ; 
   ansehnlich_A = mk3A "ansehnlich" "ansehnlicher" "ansehnlichste" ;
   ansicht_N = reg2N  "Ansicht" "Ansichten" feminine ;
@@ -2622,7 +2622,7 @@ lin
   anthrazit_N = reg2N  "Anthrazit" "Anthrazite" masculine ;
   anthrazitfarben_A = regA "anthrazitfarben" ;
   anthropisch_A = regA "anthropisch" ;
-  anthropodizee_N = reg2N  "Anthropodizee" "-" feminine ;
+  anthropodizee_N = reg2N "Anthropodizee" "e" feminine;
   anthropogen_A = regA "anthropogen" ;
   anthropologe_N = reg2N  "Anthropologe" "Anthropologen" masculine ;
   anthropologin_N = reg2N  "Anthropologin" "Anthropologinnen" feminine ;
@@ -2817,7 +2817,7 @@ lin
   antizyklone_N = reg2N  "Antizyklone" "Antizyklonen" feminine ;
   antizymotikum_N = reg2N  "Antizymotikum" "Antizymotika" neuter ;
   antlitz_N = reg2N  "Antlitz" "Antlitze" neuter ;
-  antonomasie__N = reg2N  "Antonomasie " "Antonomasien " feminine ;
+  antonomasie__N = reg2N  "Antonomasie" "Antonomasien" feminine ;
   antonym__N = reg2N  "Antonym'" "Antonyme'" neuter ;
   antonymie_N = reg2N  "Antonymie" "Antonymien" feminine ;
   antrag_N = reg2N  "Antrag" "Anträge" masculine ;
@@ -2903,12 +2903,12 @@ lin
   apfelgriebs_N = reg2N  "Apfelgriebs" "Apfelgriebse" masculine ;
   apfelgruen_A = regA "apfelgrün" ;
   apfelkern_N = reg2N  "Apfelkern" "Apfelkerne" masculine ;
-  apfelkraut_N = reg2N  "Apfelkraut" "–" neuter ;
-  apfelkren_N = reg2N  "Apfelkren" "-" masculine ;
+  apfelkraut_N = reg2N "Apfelkraut" "Apfelkraute" neuter;
+  apfelkren_N = reg2N "Apfelkren" "Apfelkren" masculine;
   apfelkrotzen_N = reg2N  "Apfelkrotzen" "Apfelkrotzen" masculine ;
   apfelkuchen_N = reg2N  "Apfelkuchen" "Apfelkuchen" masculine ;
   apfelmus_N = reg2N  "Apfelmus" "Apfelmuse" neuter ;
-  apfelsaeure_N = reg2N  "Apfelsäure" "—" feminine ;
+  apfelsaeure_N = reg2N "Apfelsäure" "e" feminine;
   apfelsaft_N = reg2N  "Apfelsaft" "Apfelsäfte" masculine ;
   apfelsaftkonzentrat_N = reg2N  "Apfelsaftkonzentrat" "Apfelsaftkonzentrate" neuter ;
   apfelsaftschorle_N = reg2N  "Apfelsaftschorle" "Apfelsaftschorlen" feminine ;
@@ -3054,7 +3054,7 @@ lin
   arabismus_N = reg2N  "Arabismus" "Arabismen" masculine ;
   arabist_N = reg2N  "Arabist" "Arabisten" masculine ;
   arabistin_N = reg2N  "Arabistin" "Arabistinnen" feminine ;
-  arachidonsaeure_N = reg2N  "Arachidonsäure" "—" feminine ;
+  arachidonsaeure_N = reg2N "Arachidonsäure" "e" feminine;
   arachidonsaeuremetabolit_N = reg2N  "Arachidonsäuremetabolit" "Arachidonsäuremetaboliten" feminine ;
   arachisnuss_N = reg2N  "Arachisnuss" "Arachisnüsse" feminine ;
   arachnophobie_N = reg2N  "Arachnophobie" "Arachnophobien" feminine ;
@@ -3093,7 +3093,7 @@ lin
   arbeitsgericht_N = reg2N  "Arbeitsgericht" "Arbeitsgerichte" neuter ;
   arbeitskampf_N = reg2N  "Arbeitskampf" "Arbeitskämpfe" masculine ;
   arbeitskollegin_N = reg2N  "Arbeitskollegin" "Arbeitskolleginnen" feminine ;
-  arbeitskraeftemangel_N = reg2N  "Arbeitskräftemangel" "—" masculine ;
+  arbeitskraeftemangel_N = reg2N "Arbeitskräftemangel" "Arbeitskräftemangele" masculine;
   arbeitskraft_N = reg2N  "Arbeitskraft" "Arbeitskräfte" feminine ;
   arbeitskreis_N = reg2N  "Arbeitskreis" "Arbeitskreise" masculine ;
   arbeitslager_N = reg2N  "Arbeitslager" "Arbeitslager" neuter ;
@@ -3190,8 +3190,8 @@ lin
   arm_A = mk3A "arm" "ärmer" "ärmste" ;
   arm_N = reg2N  "Arm" "Arme" masculine ;
   armada_N = reg2N  "Armada" "Armadas" feminine ;
-  armageddon_N = reg2N  "Armageddon" "–" neuter ;
-  armaturenbrett__N = reg2N  "Armaturenbrett " "Armaturenbretter" neuter ;
+  armageddon_N = reg2N "Armageddon" "Armageddone" neuter;
+  armaturenbrett__N = reg2N  "Armaturenbrett" "Armaturenbretter" neuter ;
   armband_N = reg2N  "Armband" "Armbänder" neuter ;
   armbanduhr_N = reg2N  "Armbanduhr" "Armbanduhren" feminine ;
   armbruch_N = reg2N  "Armbruch" "Armbrüche" masculine ;
@@ -3441,7 +3441,7 @@ lin
   atavismus_N = reg2N  "Atavismus" "Atavismen" masculine ;
   ataxie_N = reg2N  "Ataxie" "Ataxien" feminine ;
   atelier_N = reg2N  "Atelier" "Ateliers" neuter ;
-  atem_N = reg2N  "Atem" "—" masculine ;
+  atem_N = reg2N "Atem" "Ateme" masculine;
   atembar_A = regA "atembar" ;
   atemnotsyndrom_N = reg2N  "Atemnotsyndrom" "Atemnotsyndrome" neuter ;
   atempause_N = reg2N  "Atempause" "Atempausen" feminine ;
@@ -3621,7 +3621,7 @@ lin
   aufhalten_9_V = prefixV "auf" (irregV "halten" "hält" "hielt" "hielte" "gehalten") ; 
   aufheben_6_V = prefixV "auf" (irregV "heben" "hebt" "hob" "höbe" "gehoben") ; 
   aufheben_V = prefixV "auf" (DictGer.heben_5_V) ;
-  aufhebung__N = reg2N  "Aufhebung " "Aufhebungen" feminine ;
+  aufhebung__N = reg2N  "Aufhebung" "Aufhebungen" feminine ;
   aufheiterung_N = mkN "Aufheiterung" ;
   aufheller_N = reg2N  "Aufheller" "Aufheller" masculine ;
   aufhoeren_3_V = prefixV "auf" (regV "hören") ;
@@ -3677,7 +3677,7 @@ lin
   aufnehmen_V = prefixV "auf" (irregV "nehmen" "nimmt" "nahm" "nähme" "genommen") ;
   aufnoetigen_V = prefixV "auf" (regV "nötigen") ;
   aufoktroyieren_V = prefixV "auf" (regV "oktroyieren") ;
-  aufopferung__N = reg2N  "Aufopferung " "Aufopferungen" feminine ;
+  aufopferung__N = reg2N  "Aufopferung" "Aufopferungen" feminine ;
   aufopferungsvoll_A = mk3A "aufopferungsvoll" "aufopferungsvoller" "aufopferungsvollste" ;
   aufpaeppeln_V = prefixV "auf" (irregV "päppeln" "päppelt" "päppelt" "päppelt" "gepäppelt") ; 
   aufpassen_0_V = prefixV "auf" (regV "passen") ;
@@ -3786,7 +3786,7 @@ lin
   aufwendung_N = mkN "Aufwendung" ;
   aufwerfen_3_V = prefixV "auf" (irregV "werfen" "werft" "warf" "würfe" "geworfen") ; 
   aufwerten_9_V = prefixV "auf" (irregV "werten" "wertet" "wertete" "wertete" "gewertet") ; 
-  aufwickeln_9_V = prefixV "auf" (irregV "wickeln" "wickelt" "wicke" "wickele" "gewickelt ") ; 
+  aufwickeln_9_V = prefixV "auf" (irregV "wickeln" "wickelt" "wicke" "wickele" "gewickelt") ; 
   aufwind_N = reg2N  "Aufwind" "Aufwinde" masculine ;
   aufwindkraftwerk_N = reg2N  "Aufwindkraftwerk" "Aufwindkraftwerke" neuter ;
   aufzaehlung_N = mkN "Aufzählung" ;
@@ -3803,8 +3803,8 @@ lin
   augenaufschlag_N = reg2N  "Augenaufschlag" "Augenaufschläge" masculine ;
   augenblick_N = reg2N  "Augenblick" "Augenblicke" masculine ;
   augenblicklich_A = regA "augenblicklich" ;
-  augenblicksbildung__N = reg2N  "Augenblicksbildung " "Augenblicksbildungen " feminine ;
-  augenbraue_N = reg2N  "Augenbraue" "Augenbrauen " feminine ;
+  augenblicksbildung__N = reg2N  "Augenblicksbildung" "Augenblicksbildungen" feminine ;
+  augenbraue_N = reg2N  "Augenbraue" "Augenbrauen" feminine ;
   augenentzuendung_N = reg2N  "Augenentzündung" "Augenentzündungen" feminine ;
   augenerkrankung_N = reg2N  "Augenerkrankung" "Augenerkrankungen" feminine ;
   augenfaellig_A = mk3A "augenfällig" "augenfälliger" "augenfälligste" ;
@@ -3827,7 +3827,7 @@ lin
   augenzeuge_N = reg2N  "Augenzeuge" "Augenzeugen" masculine ;
   augenzeugin_N = reg2N  "Augenzeugin" "Augenzeuginnen" feminine ;
   augit_N = reg2N  "Augit" "Augite" masculine ;
-  augment__N = reg2N  "Augment " "Augmente" neuter ;
+  augment__N = reg2N  "Augment" "Augmente" neuter ;
   augmentation_N = mkN "Augmentation" ;
   augmentativ_N = reg2N  "Augmentativ" "Augmentative" neuter ;
   augmentativum_N = reg2N  "Augmentativum" "Augmentativa" neuter ;
@@ -3933,7 +3933,7 @@ lin
   ausgebrochen_A = regA "ausgebrochen" ;
   ausgeburt_N = reg2N  "Ausgeburt" "Ausgeburten" feminine ;
   ausgefaellt_A = regA "ausgefällt" ;
-  ausgeglichen_A = mk3A "ausgeglichen" "ausgeglich(e)ner" "ausgeglichenste" ;
+  ausgeglichen_A = mk3A "ausgeglichen" "ausgeglichener" "ausgeglichenste" ;
   ausgehen_8_V = prefixV "aus" (irregV "gehen" "geht" "ging" "ginge" "gegangen") ; 
   ausgehend_A = regA "ausgehend" ;
   ausgekocht_A = mk3A "ausgekocht" "ausgekochter" "ausgekochteste" ;
@@ -4164,10 +4164,10 @@ lin
   austausch_N = reg2N  "Austausch" "Austausche" masculine ;
   austauschbar_A = regA "austauschbar" ;
   austauschen_2_V = prefixV "aus" (regV "tauschen") ;
-  auster__N = reg2N  "Auster " "Austern" feminine ;
+  auster__N = reg2N  "Auster" "Austern" feminine ;
   austernfischer_N = reg2N  "Austernfischer" "Austernfischer" masculine ;
-  austernpilz_N = reg2N  "Austernpilz" "Austernpilze " masculine ;
-  austernseitling__N = reg2N  "Austernseitling " "Austernseitlinge " masculine ;
+  austernpilz_N = reg2N  "Austernpilz" "Austernpilze" masculine ;
+  austernseitling__N = reg2N  "Austernseitling" "Austernseitlinge" masculine ;
   austragungsort_N = reg2N  "Austragungsort" "Austragungsorte" masculine ;
   austral_A = regA "austral" ;
   australier_N = reg2N  "Australier" "Australier" masculine ;
@@ -4212,7 +4212,7 @@ lin
   auswendig_Adv = mkAdv "auswendig" ;
   auswertbar_A = regA "auswertbar" ;
   auswerten_7_V = prefixV "aus" (irregV "werten" "wertet" "wertete" "wertete" "gewertet") ; 
-  auswertung__N = reg2N  "Auswertung " "Auswertungen" feminine ;
+  auswertung__N = reg2N  "Auswertung" "Auswertungen" feminine ;
   auswirkung_N = mkN "Auswirkung" ;
   auswurf_N = reg2N  "Auswurf" "Auswürfe" masculine ;
   auszahlung_N = mkN "Auszahlung" ;
@@ -4223,7 +4223,7 @@ lin
   auszug_N = reg2N  "Auszug" "Auszüge" masculine ;
   auszuscheidend_A = regA "auszuscheidend" ;
   autark_A = mk3A "autark" "autarker" "autarkste" ;
-  autarkie__N = reg2N  "Autarkie " "Autarkien " feminine ;
+  autarkie__N = reg2N  "Autarkie" "Autarkien" feminine ;
   authentifikation_N = mkN "Authentifikation" ;
   authentifizieren_V = regV "authentifizieren" ;
   authentifizierung_N = mkN "Authentifizierung" ;
@@ -4291,7 +4291,7 @@ lin
   automobilistin_N = reg2N  "Automobilistin" "Automobilistinnen" feminine ;
   automobilstrasse_N = reg2N  "Automobilstraße" "Automobilstraßen" feminine ;
   autonom_A = mk3A "autonom" "autonomer" "autonomste" ;
-  autonomie__N = reg2N  "Autonomie " "Autonomien " feminine ;
+  autonomie__N = reg2N  "Autonomie" "Autonomien" feminine ;
   autopoiesis_N = reg2N  "Autopoiesis" "Autopoiesis" feminine ;
   autopoietisch_A = mk3A "autopoietisch" "autopoietischer" "autopoietischste" ;
   autoproteolytisch_A = regA "autoproteolytisch" ;
@@ -4377,7 +4377,7 @@ lin
   azurn_A = regA "azurn" ;
   azyklisch_A = regA "azyklisch" ;
   b_N = reg2N  "B" "Bs" neuter ;
-  baas_N = reg2N  "Baas" "Baase " masculine ;
+  baas_N = reg2N  "Baas" "Baase" masculine ;
   baba_A = regA "baba" ;
   babbeln_V = regV "babbeln" ;
   babs_N = reg2N  "Babs" "Babs" feminine ;
@@ -4404,7 +4404,7 @@ lin
   bacille_N = reg2N  "Bacille" "Bacillen" feminine ;
   bacitracin_N = reg2N  "Bacitracin" "Bacitracine" neuter ;
   back_Adv = mkAdv "back" ;
-  backblech__N = reg2N  "Backblech " "Backbleche " neuter ;
+  backblech__N = reg2N  "Backblech" "Backbleche" neuter ;
   backbord_N = reg2N  "Backbord" "Backborde" neuter ;
   backe_N = reg2N  "Backe" "Backen" feminine ;
   backen_3_V = irregV "backen" "backt" "buk" "büke" "gebacken" ; 
@@ -4435,7 +4435,7 @@ lin
   bad_bank_N = reg2N  "Bad Bank" "Bad Banks" feminine ;
   bad_N = reg2N  "Bad" "Bäder" neuter ;
   badeanzug_N = reg2N  "Badeanzug" "Badeanzüge" masculine ;
-  badehose_N = reg2N  "Badehose" "Badehosen " feminine ;
+  badehose_N = reg2N  "Badehose" "Badehosen" feminine ;
   badekappe_N = reg2N  "Badekappe" "Badekappen" feminine ;
   bademantel_N = reg2N  "Bademantel" "Bademäntel" masculine ;
   bademeister_N = reg2N  "Bademeister" "Bademeister" masculine ;
@@ -4443,7 +4443,7 @@ lin
   baden_wuerttemberger_N = reg2N  "Baden-Württemberger" "Baden-Württemberger" masculine ;
   baden_wuerttembergerin_N = reg2N  "Baden-Württembergerin" "Baden-Württembergerinnen" feminine ;
   bader_N = reg2N  "Bader" "Bader" masculine ;
-  badesalz_N = reg2N  "Badesalz" "Badesalze " neuter ;
+  badesalz_N = reg2N  "Badesalz" "Badesalze" neuter ;
   badeschwamm_N = reg2N  "Badeschwamm" "Badeschwämme" masculine ;
   badewanne_N = reg2N  "Badewanne" "Badewannen" feminine ;
   badezimmer_N = reg2N  "Badezimmer" "Badezimmer" neuter ;
@@ -4464,7 +4464,7 @@ lin
   baerenfellmuetze_N = reg2N  "Bärenfellmütze" "Bärenfellmützen" feminine ;
   baerenstark_A = regA "bärenstark" ;
   baerentraube_N = reg2N  "Bärentraube" "Bärentrauben" feminine ;
-  baerenzucker_N = reg2N  "Bärenzucker" "-" masculine ;
+  baerenzucker_N = reg2N "Bärenzucker" "Bärenzucker" masculine;
   baerin_N = reg2N  "Bärin" "Bärinnen" feminine ;
   baerlapp_N = reg2N  "Bärlapp" "Bärlappe" masculine ;
   baertierchen_N = reg2N  "Bärtierchen" "Bärtierchen" neuter ;
@@ -4494,7 +4494,7 @@ lin
   bahnhofsgaststaette_N = reg2N  "Bahnhofsgaststätte" "Bahnhofsgaststätten" feminine ;
   bahnhofsuhr_N = reg2N  "Bahnhofsuhr" "Bahnhofsuhren" feminine ;
   bahnhofsvorplatz_N = reg2N  "Bahnhofsvorplatz" "Bahnhofsvorplätze" masculine ;
-  bahnpoststempel__N = reg2N  "Bahnpoststempel " "Bahnpoststempel " masculine ;
+  bahnpoststempel__N = reg2N  "Bahnpoststempel" "Bahnpoststempel" masculine ;
   bahnradsport_N = reg2N  "Bahnradsport" "Bahnradsporte" masculine ;
   bahnreise_N = reg2N  "Bahnreise" "Bahnreisen" feminine ;
   bahnschranke_N = reg2N  "Bahnschranke" "Bahnschranken" feminine ;
@@ -4532,7 +4532,7 @@ lin
   bakterienzelle_N = reg2N  "Bakterienzelle" "Bakterienzellen" feminine ;
   bakterin_N = reg2N  "Bakterin" "Bakterine" neuter ;
   bakteriologe_N = reg2N  "Bakteriologe" "Bakteriologen" masculine ;
-  bakteriologie_N = reg2N  "Bakteriologie" "- " feminine ;
+  bakteriologie_N = reg2N "Bakteriologie" "e" feminine;
   bakteriologin_N = reg2N  "Bakteriologin" "Bakteriologinnen" feminine ;
   bakteriologisch_A = regA "bakteriologisch" ;
   bakteriophage_N = reg2N  "Bakteriophage" "Bakteriophagen" masculine ;
@@ -4611,11 +4611,11 @@ lin
   banane_N = reg2N  "Banane" "Bananen" feminine ;
   bananenbrot_N = reg2N  "Bananenbrot" "Bananenbrote" neuter ;
   bananenflanke_N = reg2N  "Bananenflanke" "Bananenflanken" feminine ;
-  bananenhalter__N = reg2N  "Bananenhalter " "Bananenhalter" masculine ;
+  bananenhalter__N = reg2N  "Bananenhalter" "Bananenhalter" masculine ;
   bananenrepublik_N = reg2N  "Bananenrepublik" "Bananenrepubliken" feminine ;
   bananensaft_N = reg2N  "Bananensaft" "Bananensäfte" masculine ;
   bananenschale_N = reg2N  "Bananenschale" "Bananenschalen" feminine ;
-  bananenstecker__N = reg2N  "Bananenstecker " "Bananenstecker" masculine ;
+  bananenstecker__N = reg2N  "Bananenstecker" "Bananenstecker" masculine ;
   bananig_A = mk3A "bananig" "bananiger" "bananigste" ;
   banause_N = reg2N  "Banause" "Banausen" masculine ;
   bancomat_N = reg2N  "Bancomat" "Bancomaten" masculine ;
@@ -4624,7 +4624,7 @@ lin
   bande_N = reg2N  "Bande" "Banden" feminine ;
   bandelwerk_N = reg2N  "Bandelwerk" "Bandelwerke" neuter ;
   bandenkrieg_N = reg2N  "Bandenkrieg" "Bandenkriege" masculine ;
-  banderilla__N = reg2N  "Banderilla " "Banderillas" feminine ;
+  banderilla__N = reg2N  "Banderilla" "Banderillas" feminine ;
   bandgenerator_N = reg2N  "Bandgenerator" "Bandgeneratoren" masculine ;
   bandit_N = reg2N  "Bandit" "Banditen" masculine ;
   bandlaufwerk_N = reg2N  "Bandlaufwerk" "Bandlaufwerke" neuter ;
@@ -4776,7 +4776,7 @@ lin
   basismaterial_N = reg2N  "Basismaterial" "Basismaterialien" neuter ;
   basispunkt_N = reg2N  "Basispunkt" "Basispunkte" masculine ;
   basisueberzugsschicht_N = reg2N  "Basisüberzugsschicht" "Basisüberzugsschichten" feminine ;
-  baskenland_N = reg2N  "Baskenland" " " neuter ;
+  baskenland_N = reg2N  "Baskenland" "Baskenländer" neuter ;
   baskenmuetze_N = reg2N  "Baskenmütze" "Baskenmützen" feminine ;
   basketball_N = reg2N  "Basketball" "Basketbälle" masculine ;
   basketballer_N = reg2N  "Basketballer" "Basketballer" masculine ;
@@ -4822,7 +4822,7 @@ lin
   bauchpinseln_V = regV "bauchpinseln" ;
   bauchredner_N = reg2N  "Bauchredner" "Bauchredner" masculine ;
   bauchschmerz_N = reg2N  "Bauchschmerz" "Bauchschmerzen" masculine ;
-  bauchschuss__N = reg2N  "Bauchschuss " "Bauchschüsse" masculine ;
+  bauchschuss__N = reg2N  "Bauchschuss" "Bauchschüsse" masculine ;
   bauchspeck_N = reg2N  "Bauchspeck" "Bauchspecke" masculine ;
   bauchspeicheldruese_N = reg2N  "Bauchspeicheldrüse" "Bauchspeicheldrüsen" feminine ;
   bauchspeicheldruesentumor_N = reg2N  "Bauchspeicheldrüsentumor" "Bauchspeicheldrüsentumoren" masculine ;
@@ -4930,7 +4930,7 @@ lin
   beanstanden_V = regV "beanstanden" ;
   beantragen_V = regV "beantragen" ;
   beantworten_V = irregV "beantworten" "beantwortet" "beantwortete" "beantworte" "beantwortet" ; 
-  bearbeiten_V = irregV "bearbeiten" "bearbeitet" "bearbeitete" "bearbeite" "bearbeitet " ; 
+  bearbeiten_V = irregV "bearbeiten" "bearbeitet" "bearbeitete" "bearbeite" "bearbeitet" ; 
   bearbeitung_N = mkN "Bearbeitung" ;
   beate_N = reg2N  "Beate" "Beaten" feminine ;
   beaten_V = irregV "beaten" "beatet" "beatete" "beate" "gebeatet" ; 
@@ -5139,7 +5139,7 @@ lin
   behaelter_N = reg2N  "Behälter" "Behälter" masculine ;
   behaeltervorrichtung_N = reg2N  "Behältervorrichtung" "Behältervorrichtungen" feminine ;
   behaeltnis_N = reg2N  "Behältnis" "Behältnisse" neuter ;
-  behaemmert_A = mk3A "behämmert" "behämmerter" "behämmert(e)ste" ;
+  behaemmert_A = mk3A "behämmert" "behämmerter" "behämmerteste" ;
   behaend_A = mk3A "behänd" "behänder" "behändeste" ;
   behaende_A = mk3A "behände" "behänder" "behändeste" ;
   behaendigen_V = regV "behändigen" ;
@@ -5225,7 +5225,7 @@ lin
   beinhaltend_A = regA "beinhaltend" ;
   beinhart_A = regA "beinhart" ;
   beinhaus_N = reg2N  "Beinhaus" "Beinhäuser" neuter ;
-  beinschuss__N = reg2N  "Beinschuss " "Beinschüsse" masculine ;
+  beinschuss__N = reg2N  "Beinschuss" "Beinschüsse" masculine ;
   beinwell_N = reg2N  "Beinwell" "Beinwelle" masculine ;
   beiordnung_N = mkN "Beiordnung" ;
   beipackzettel_N = reg2N  "Beipackzettel" "Beipackzettel" masculine ;
@@ -5239,7 +5239,7 @@ lin
   beisetzen_4_V = prefixV "bei" (regV "setzen") ;
   beisetzung_N = mkN "Beisetzung" ;
   beispiel_N = reg2N  "Beispiel" "Beispiele" neuter ;
-  beispiellos_A = mk3A "beispiellos " "beispielloser" "beispielloseste" ;
+  beispiellos_A = mk3A "beispiellos" "beispielloser" "beispielloseste" ;
   beispielsweise_Adv = mkAdv "beispielsweise" ;
   beispringen_V = prefixV "bei" (irregV "springen" "springt" "sprang" "spränge" "gesprungen") ; 
   beissen_4_V = irregV "beißen" "beißt" "biss" "bisse" "gebissen" ; 
@@ -5406,7 +5406,7 @@ lin
   benzinverbrauch_N = reg2N  "Benzinverbrauch" "Benzinverbräuche" masculine ;
   benzoat_N = reg2N  "Benzoat" "Benzoate" neuter ;
   benzodiazepin_N = reg2N  "Benzodiazepin" "Benzodiazepine" neuter ;
-  benzoesaeure_N = reg2N  "Benzoesäure" "—" feminine ;
+  benzoesaeure_N = reg2N "Benzoesäure" "e" feminine;
   benzofuranderivat_N = reg2N  "Benzofuranderivat" "Benzofuranderivate" neuter ;
   benzol_N = reg2N  "Benzol" "Benzole" neuter ;
   benzolkern_N = reg2N  "Benzolkern" "Benzolkerne" masculine ;
@@ -5513,7 +5513,7 @@ lin
   bernstein_N = reg2N  "Bernstein" "Bernsteine" masculine ;
   bernsteinen_A = regA "bernsteinen" ;
   bernsteinfarben_A = regA "bernsteinfarben" ;
-  bernsteinsaeure_N = reg2N  "Bernsteinsäure" "—" feminine ;
+  bernsteinsaeure_N = reg2N "Bernsteinsäure" "e" feminine;
   bernsteinsaeuregruppe_N = reg2N  "Bernsteinsäuregruppe" "Bernsteinsäuregruppen" feminine ;
   berserker_N = reg2N  "Berserker" "Berserker" masculine ;
   bersten_V = irregV "bersten" "birst" "barst" "bärste" "geborsten" ; 
@@ -5574,7 +5574,7 @@ lin
   bescheissen_V = irregV "bescheißen" "bescheißt" "beschiss" "beschiss" "beschissen" ; 
   bescheren_V = regV "bescheren" ;
   bescherung_N = mkN "Bescherung" ;
-  bescheuert_A = mk3A "bescheuert" "bescheuerter" "bescheuert(e)ste" ;
+  bescheuert_A = mk3A "bescheuert" "bescheuerter" "bescheuerteste" ;
   beschichten_V = regV "beschichten" ;
   beschichtend_A = regA "beschichtend" ;
   beschichtet_A = regA "beschichtet" ;
@@ -5645,7 +5645,7 @@ lin
   besitzen_V = irregV "besitzen" "besitzt" "besaß" "besäße" "besessen" ; 
   besitzend_A = regA "besitzend" ;
   besitzer_N = reg2N  "Besitzer" "Besitzer" masculine ;
-  besoffen_A = mk3A "besoffen" "besoff(e)ner" "besoffenste" ;
+  besoffen_A = mk3A "besoffen" "besoffener" "besoffenste" ;
   besoldung_N = mkN "Besoldung" ;
   besonderebesonderesbesonderer_A = mk3A "besondere, besonderes, besonderer" "besonderer" "besonderste" ;
   besonderheit_N = reg2N  "Besonderheit" "Besonderheiten" feminine ;
@@ -5845,7 +5845,7 @@ lin
   beweglich_A = regA "beweglich" ;
   bewegt_A = mk3A "bewegt" "bewegter" "bewegteste" ;
   bewegung_N = mkN "Bewegung" ;
-  bewegungsmangel_N = reg2N  "Bewegungsmangel" "—" masculine ;
+  bewegungsmangel_N = reg2N "Bewegungsmangel" "Bewegungsmangele" masculine;
   bewegungsstoerung_N = reg2N  "Bewegungsstörung" "Bewegungsstörungen" feminine ;
   bewehren_V = regV "bewehren" ;
   bewehrt_A = regA "bewehrt" ;
@@ -5922,7 +5922,7 @@ lin
   bhutanerin_N = reg2N  "Bhutanerin" "Bhutanerinnen" feminine ;
   bhutanisch_A = mk3A "bhutanisch" "bhutanischer" "bhutanischste" ;
   bi_A = regA "bi" ;
-  biak_N = reg2N  "Biak" "–" neuter ;
+  biak_N = reg2N "Biak" "Biake" neuter;
   bianca_N = reg2N  "Bianca" "Biancas" feminine ;
   bibax_N = reg2N  "Bibax" "Bibaxe" masculine ;
   bibbern_V = regV "bibbern" ;
@@ -5944,7 +5944,7 @@ lin
   bibliothekarin_N = reg2N  "Bibliothekarin" "Bibliothekarinnen" feminine ;
   biblisch_A = regA "biblisch" ;
   bicarbonat_N = reg2N  "Bicarbonat" "Bicarbonate" neuter ;
-  bicinchoninsaeure_N = reg2N  "Bicinchoninsäure" "—" feminine ;
+  bicinchoninsaeure_N = reg2N "Bicinchoninsäure" "e" feminine;
   bicistronisch_A = regA "bicistronisch" ;
   bicyclisch_A = regA "bicyclisch" ;
   biden_V = regV "biden" ;
@@ -5952,7 +5952,7 @@ lin
   bidet_N = reg2N  "Bidet" "Bidets" neuter ;
   bieder_A = mk3A "bieder" "biederer" "biederste" ;
   biedermann_N = reg2N  "Biedermann" "Biedermänner" masculine ;
-  biedermeier_N = reg2N  "Biedermeier" "—" neuter ;
+  biedermeier_N = reg2N "Biedermeier" "Biedermeier" neuter;
   biegen_0_V = irregV "biegen" "biegt" "bog" "böge" "gebogen" ; 
   biegepruefung_N = mkN "Biegeprüfung" ;
   biegung_N = mkN "Biegung" ;
@@ -5984,7 +5984,7 @@ lin
   bierkrug_N = reg2N  "Bierkrug" "Bierkrüge" masculine ;
   bierlokal_N = reg2N  "Bierlokal" "Bierlokale" neuter ;
   bierrutsche_N = reg2N  "Bierrutsche" "Bierrutschen" feminine ;
-  bierschaum_N = reg2N  "Bierschaum" "-" masculine ;
+  bierschaum_N = reg2N "Bierschaum" "Bierschaume" masculine;
   bierselig_A = mk3A "bierselig" "bierseliger" "bierseligste" ;
   bierstube_N = reg2N  "Bierstube" "Bierstuben" feminine ;
   biertraeger_N = reg2N  "Bierträger" "Bierträger" masculine ;
@@ -6126,7 +6126,7 @@ lin
   binokel_N = reg2N  "Binokel" "Binokel" neuter ;
   binse_N = reg2N  "Binse" "Binsen" feminine ;
   binsenwahrheit_N = reg2N  "Binsenwahrheit" "Binsenwahrheiten" feminine ;
-  binsenweisheit__N = reg2N  "Binsenweisheit " "Binsenweisheiten " feminine ;
+  binsenweisheit__N = reg2N  "Binsenweisheit" "Binsenweisheiten" feminine ;
   bioabbaubar_A = regA "bioabbaubar" ;
   bioabsorbierbar_A = regA "bioabsorbierbar" ;
   bioadhaesiv_A = regA "bioadhäsiv" ;
@@ -6189,7 +6189,7 @@ lin
   birkenleder_N = reg2N  "Birkenleder" "Birkenleder" neuter ;
   birkenmaus_N = reg2N  "Birkenmaus" "Birkenmäuse" feminine ;
   birkenpilz_N = reg2N  "Birkenpilz" "Birkenpilze" masculine ;
-  birkenporling__N = reg2N  "Birkenporling " "Birkenporlinge " masculine ;
+  birkenporling__N = reg2N  "Birkenporling" "Birkenporlinge" masculine ;
   birkenreizker_N = reg2N  "Birkenreizker" "Birkenreizker" masculine ;
   birkenroehrling_N = reg2N  "Birkenröhrling" "Birkenröhrlinge" masculine ;
   birkenrotkappe_N = reg2N  "Birkenrotkappe" "Birkenrotkappen" feminine ;
@@ -6234,7 +6234,7 @@ lin
   bitten_0_V = irregV "bitten" "bittet" "bat" "bäte" "gebeten" ; 
   bitter_A = mk3A "bitter" "bitterer" "bitterste" ;
   bitterkalt_A = regA "bitterkalt" ;
-  bitterling_N = reg2N  "Bitterling" "Bitterlinge " masculine ;
+  bitterling_N = reg2N  "Bitterling" "Bitterlinge" masculine ;
   bittersuess_A = mk3A "bittersüß" "bittersüßer" "bittersüßeste" ;
   bittgebet_N = reg2N  "Bittgebet" "Bittgebete" neuter ;
   bituminoes_A = mk3A "bituminös" "bituminöser" "bituminöseste" ;
@@ -6260,7 +6260,7 @@ lin
   blage_N = reg2N  "Blage" "Blagen" feminine ;
   blaken_V = regV "blaken" ;
   blakig_A = mk3A "blakig" "blakiger" "blakigste" ;
-  blamabel_A = mk3A "blamabel" "blamabler " "blamabelste" ;
+  blamabel_A = mk3A "blamabel" "blamabler" "blamabelste" ;
   blamage_N = reg2N  "Blamage" "Blamagen" feminine ;
   blamieren_V = regV "blamieren" ;
   blanc_de_blancs_N = reg2N  "Blanc de Blancs" "Blanc de Blancs" masculine ;
@@ -6268,7 +6268,7 @@ lin
   blanchieren_V = regV "blanchieren" ;
   bland_A = regA "bland" ;
   blande_A = regA "blande" ;
-  blank_A = mk3A "blank" "blanker" "blank(e)ste" ;
+  blank_A = mk3A "blank" "blanker" "blankeste" ;
   blankenau_N = reg2N  "Blankenau" "Blankenaus" neuter ;
   blankounterschrift_N = reg2N  "Blankounterschrift" "Blankounterschriften" feminine ;
   blankziehen_8_V = prefixV "blank" (irregV "ziehen" "zieht" "zog" "zog" "gezogen") ; 
@@ -6299,8 +6299,8 @@ lin
   blattform_N = reg2N  "Blattform" "Blattformen" feminine ;
   blattlaus_N = reg2N  "Blattlaus" "Blattläuse" feminine ;
   blattscheide_N = reg2N  "Blattscheide" "Blattscheiden" feminine ;
-  blau_A = mk3A "blau" "blauer" "blau(e)ste" ;
-  blau_N = reg2N  "Blau" "Blaus " neuter ;
+  blau_A = mk3A "blau" "blauer" "blaueste" ;
+  blau_N = reg2N  "Blau" "Blaus" neuter ;
   blauaeugig_A = mk3A "blauäugig" "blauäugiger" "blauäugigste" ;
   blaualge_N = reg2N  "Blaualge" "Blaualgen" feminine ;
   blaubeere_N = reg2N  "Blaubeere" "Blaubeeren" feminine ;
@@ -6406,7 +6406,7 @@ lin
   blockiert_A = regA "blockiert" ;
   blockierungsgruppe_N = reg2N  "Blockierungsgruppe" "Blockierungsgruppen" feminine ;
   blockwart_N = reg2N  "Blockwart" "Blockwarte" masculine ;
-  bloed_A = mk3A "blöd" "blöder" "blöd(e)ste" ;
+  bloed_A = mk3A "blöd" "blöder" "blödeste" ;
   bloedeln_V = regV "blödeln" ;
   bloedheit_N = reg2N  "Blödheit" "Blödheiten" feminine ;
   bloedmann_N = reg2N  "Blödmann" "Blödmänner" masculine ;
@@ -6484,7 +6484,7 @@ lin
   blutkuchen_N = reg2N  "Blutkuchen" "Blutkuchen" masculine ;
   blutlache_N = reg2N  "Blutlache" "Blutlachen" feminine ;
   blutleer_A = mk3A "blutleer" "blutleerer" "blutleerste" ;
-  blutmangel_N = reg2N  "Blutmangel" "—" masculine ;
+  blutmangel_N = reg2N "Blutmangel" "Blutmangele" masculine;
   blutorange_N = reg2N  "Blutorange" "Blutorangen" feminine ;
   blutplaettchen_N = reg2N  "Blutplättchen" "Blutplättchen" neuter ;
   blutplaettchenaktivierungsfaktor_N = reg2N  "Blutplättchenaktivierungsfaktor" "Blutplättchenaktivierungsfaktoren" masculine ;
@@ -6518,7 +6518,7 @@ lin
   boandlkramer_N = reg2N  "Boandlkramer" "Boandlkramer" masculine ;
   boaschlange_N = reg2N  "Boaschlange" "Boaschlangen" feminine ;
   bob_N = reg2N  "Bob" "Bobs" masculine ;
-  bobfahrer__N = reg2N  "Bobfahrer " "Bobfahrer " masculine ;
+  bobfahrer__N = reg2N  "Bobfahrer" "Bobfahrer" masculine ;
   bobfahrerin_N = reg2N  "Bobfahrerin" "Bobfahrerinnen" feminine ;
   bobrennen_N = reg2N  "Bobrennen" "Bobrennen" neuter ;
   bobtail_N = reg2N  "Bobtail" "Bobtails" masculine ;
@@ -6573,7 +6573,7 @@ lin
   bogenschuetze_N = reg2N  "Bogenschütze" "Bogenschützen" masculine ;
   bogenschuetzin_N = reg2N  "Bogenschützin" "Bogenschützinnen" feminine ;
   bogey_N = reg2N  "Bogey" "Bogeys" neuter ;
-  boheme_N = reg2N  "Bohème" "-" feminine ;
+  boheme_N = reg2N "Bohème" "e" feminine;
   bohle_N = reg2N  "Bohle" "Bohlen" feminine ;
   bohne_N = reg2N  "Bohne" "Bohnen" feminine ;
   bohnenkaffee_N = reg2N  "Bohnenkaffee" "Bohnenkaffees" masculine ;
@@ -6589,7 +6589,7 @@ lin
   bohrmaschine_N = reg2N  "Bohrmaschine" "Bohrmaschinen" feminine ;
   bohrturm_N = reg2N  "Bohrturm" "Bohrtürme" masculine ;
   bohrung_N = mkN "Bohrung" ;
-  bohrwinde__N = reg2N  "Bohrwinde " "Bohrwin" feminine ;
+  bohrwinde__N = reg2N  "Bohrwinde" "Bohrwinden" feminine ;
   boiler_N = reg2N  "Boiler" "Boiler" masculine ;
   boje_N = reg2N  "Boje" "Bojen" feminine ;
   bokkie_N = reg2N  "Bokkie" "Bokkies" neuter ;
@@ -6643,7 +6643,7 @@ lin
   bootsmannspfeife_N = reg2N  "Bootsmannspfeife" "Bootsmannspfeifen" feminine ;
   boration_N = reg2N  "Boration" "Borationen" feminine ;
   borbora_N = reg2N  "Borbora" "Borboras" feminine ;
-  borborygmus__N = reg2N  "Borborygmus " "Borborygmen" masculine ;
+  borborygmus__N = reg2N  "Borborygmus" "Borborygmen" masculine ;
   bord_N = reg2N  "Bord" "Borde" neuter ;
   bordeauxfarben_A = regA "bordeauxfarben" ;
   bordell_N = reg2N  "Bordell" "Bordelle" neuter ;
@@ -6675,7 +6675,7 @@ lin
   bosseln_V = regV "bosseln" ;
   bot_N = reg2N  "Bot" "Bots" masculine ;
   botaniker_N = reg2N  "Botaniker" "Botaniker" masculine ;
-  botanikerin__N = reg2N  "Botanikerin " "Botanikerinnen" feminine ;
+  botanikerin__N = reg2N  "Botanikerin" "Botanikerinnen" feminine ;
   botanisch_A = regA "botanisch" ;
   botanisieren_V = regV "botanisieren" ;
   bote_N = reg2N  "Bote" "Boten" masculine ;
@@ -6711,7 +6711,7 @@ lin
   boxen_V = regV "boxen" ;
   boxenluder_N = reg2N  "Boxenluder" "Boxenluder" neuter ;
   boxenstopp_N = reg2N  "Boxenstopp" "Boxenstopps" masculine ;
-  boxermotor__N = reg2N  "Boxermotor " "Boxermotoren" masculine ;
+  boxermotor__N = reg2N  "Boxermotor" "Boxermotoren" masculine ;
   boxkampf_N = reg2N  "Boxkampf" "Boxkämpfe" masculine ;
   boxweltmeister_N = reg2N  "Boxweltmeister" "Boxweltmeister" masculine ;
   boy_N = reg2N  "Boy" "Boys" masculine ;
@@ -6803,7 +6803,7 @@ lin
   bratapfel_N = reg2N  "Bratapfel" "Bratäpfel" masculine ;
   braten_N = reg2N  "Braten" "Braten" masculine ;
   braten_V = irregV "braten" "brät" "briet" "briete" "gebraten" ; 
-  bratfisch_N = reg2N  "Bratfisch" "Bratfische " masculine ;
+  bratfisch_N = reg2N  "Bratfisch" "Bratfische" masculine ;
   brathaehnchen_N = reg2N  "Brathähnchen" "Brathähnchen" neuter ;
   brathendl_N = reg2N  "Brathendl" "Brathendln" neuter ;
   brathering_N = reg2N  "Brathering" "Bratheringe" masculine ;
@@ -6845,7 +6845,7 @@ lin
   brausepulver_N = reg2N  "Brausepulver" "Brausepulver" neuter ;
   brausetablette_N = reg2N  "Brausetablette" "Brausetabletten" feminine ;
   braut_N = reg2N  "Braut" "Bräute" feminine ;
-  brautente_N = reg2N  "Brautente" "Brautenten " feminine ;
+  brautente_N = reg2N  "Brautente" "Brautenten" feminine ;
   brautkleid_N = reg2N  "Brautkleid" "Brautkleider" neuter ;
   brautschleier_N = reg2N  "Brautschleier" "Brautschleier" masculine ;
   brav_A = mk3A "brav" "braver" "bravste" ;
@@ -6936,7 +6936,7 @@ lin
   brillentraegerin_N = reg2N  "Brillenträgerin" "Brillenträgerinnen" feminine ;
   bringen_8_V = irregV "bringen" "bringt" "brachte" "brächte" "gebracht" ; 
   bringer_N = reg2N  "Bringer" "Bringer" masculine ;
-  bringschuld_N = reg2N  "Bringschuld" "-" feminine ;
+  bringschuld_N = reg2N "Bringschuld" "e" feminine;
   brioche_N = reg2N  "Brioche" "Brioches" feminine ;
   brisant_A = mk3A "brisant" "brisanter" "brisanteste" ;
   brise_N = reg2N  "Brise" "Brisen" feminine ;
@@ -7153,7 +7153,7 @@ lin
   buecherverbrennung_N = mkN "Bücherverbrennung" ;
   buecherwurm_N = reg2N  "Bücherwurm" "Bücherwürmer" masculine ;
   buechse_N = reg2N  "Büchse" "Büchsen" feminine ;
-  buechsenfleisch_N = reg2N  "Büchsenfleisch" "-" neuter ;
+  buechsenfleisch_N = reg2N "Büchsenfleisch" "Büchsenfleische" neuter;
   buechsenmacher_N = reg2N  "Büchsenmacher" "Büchsenmacher" masculine ;
   buechsenmacherin_N = reg2N  "Büchsenmacherin" "Büchsenmacherinnen" feminine ;
   buechsenoeffner_N = reg2N  "Büchsenöffner" "Büchsenöffner" masculine ;
@@ -7244,7 +7244,7 @@ lin
   bundeshauptstadt_N = reg2N  "Bundeshauptstadt" "Bundeshauptstädte" feminine ;
   bundeskanzler_N = reg2N  "Bundeskanzler" "Bundeskanzler" masculine ;
   bundeskanzlerin_N = reg2N  "Bundeskanzlerin" "Bundeskanzlerinnen" feminine ;
-  bundeslade_N = reg2N  "Bundeslade" "—" feminine ;
+  bundeslade_N = reg2N "Bundeslade" "e" feminine;
   bundesland_N = reg2N  "Bundesland" "Bundesländer" neuter ;
   bundesliga_N = reg2N  "Bundesliga" "Bundesligen" feminine ;
   bundesligist_N = reg2N  "Bundesligist" "Bundesligisten" masculine ;
@@ -7252,7 +7252,7 @@ lin
   bundespatentgericht_N = reg2N  "Bundespatentgericht" "Bundespatentgerichte" neuter ;
   bundespersonalausweis_N = reg2N  "Bundespersonalausweis" "Bundespersonalausweise" masculine ;
   bundespolitisch_A = regA "bundespolitisch" ;
-  bundespolizei_N = reg2N  "Bundespolizei" "-" feminine ;
+  bundespolizei_N = reg2N "Bundespolizei" "e" feminine;
   bundespraesident_N = reg2N  "Bundespräsident" "Bundespräsidenten" masculine ;
   bundespraesidentin_N = reg2N  "Bundespräsidentin" "Bundespräsidentinnen" feminine ;
   bundesrat_N = reg2N  "Bundesrat" "Bundesräte" masculine ;
@@ -7340,7 +7340,7 @@ lin
   butterfass_N = reg2N  "Butterfass" "Butterfässer" neuter ;
   buttermakrele_N = reg2N  "Buttermakrele" "Buttermakrelen" feminine ;
   buttern_V = irregV "buttern" "buttert" "butterte" "buttere" "gebuttert" ; 
-  butterpilz_N = reg2N  "Butterpilz" "Butterpilze " masculine ;
+  butterpilz_N = reg2N  "Butterpilz" "Butterpilze" masculine ;
   butterroehrling_N = reg2N  "Butterröhrling" "Butterröhrlinge " masculine ;
   buttersaeure_N = reg2N  "Buttersäure" "Buttersäuren" feminine ;
   buttersaeurebakterium_N = reg2N  "Buttersäurebakterium" "Buttersäurebakterien" neuter ;
@@ -7429,7 +7429,7 @@ lin
   carambola_N = reg2N  "Carambola" "Carambolas" feminine ;
   carbamat_N = reg2N  "Carbamat" "Carbamate" neuter ;
   carbamidsaeure_N = reg2N  "Carbamidsäure" "Carbamidsäuren" feminine ;
-  carbaminsaeure_N = reg2N  "Carbaminsäure" "—" feminine ;
+  carbaminsaeure_N = reg2N "Carbaminsäure" "e" feminine;
   carbamoylgruppe_N = reg2N  "Carbamoylgruppe" "Carbamoylgruppen" feminine ;
   carbamoyloxygruppe_N = reg2N  "Carbamoyloxygruppe" "Carbamoyloxygruppen" feminine ;
   carboanhydrase_N = reg2N  "Carboanhydrase" "Carboanhydrasen" feminine ;
@@ -7709,11 +7709,11 @@ lin
   chloroplast_N = reg2N  "Chloroplast" "Chloroplasten" masculine ;
   chlorsubstituiert_A = regA "chlorsubstituiert" ;
   chochem_A = regA "chochem" ;
-  chochemer_loschen_N = reg2N  "Chochemer Loschen" "-" neuter ;
+  chochemer_loschen_N = reg2N "Chochemer Loschen" "Chochemer Loschen" neuter;
   choleriker_N = reg2N  "Choleriker" "Choleriker" masculine ;
   cholerikerin_N = reg2N  "Cholerikerin" "Cholerikerinnen" feminine ;
   cholerisch_A = mk3A "cholerisch" "cholerischer" "cholerischste" ;
-  cholesterin_N = reg2N  "Cholesterin" "- " neuter ;
+  cholesterin_N = reg2N "Cholesterin" "Cholesterine" neuter;
   cholesterinderivat_N = reg2N  "Cholesterinderivat" "Cholesterinderivate" neuter ;
   cholesterinspiegel_N = reg2N  "Cholesterinspiegel" "Cholesterinspiegel" neuter ;
   cholezystitis_N = reg2N  "Cholezystitis" "Cholezystitiden" feminine ;
@@ -7737,7 +7737,7 @@ lin
   choreographie_N = reg2N  "Choreographie" "Choreographien" feminine ;
   chorhaupt_N = reg2N  "Chorhaupt" "Chorhäupter" neuter ;
   choriongonadotropin_N = reg2N  "Choriongonadotropin" "Choriongonadotropine" neuter ;
-  chorisminsaeure_N = reg2N  "Chorisminsäure" "—" feminine ;
+  chorisminsaeure_N = reg2N "Chorisminsäure" "e" feminine;
   chorist_N = reg2N  "Chorist" "Choristen" masculine ;
   chorizo_N = reg2N  "Chorizo" "Chorizos" feminine ;
   chormusik_N = reg2N  "Chormusik" "Chormusiken" feminine ;
@@ -7786,8 +7786,8 @@ lin
   cineast_N = reg2N  "Cineast" "Cineasten" masculine ;
   cingulum_N = reg2N  "Cingulum" "Cingula" neuter ;
   cinnamoylamidderivat_N = reg2N  "Cinnamoylamidderivat" "Cinnamoylamidderivate" neuter ;
-  cipollin_N = reg2N  "Cipollin" "—" masculine ;
-  cipollino_N = reg2N  "Cipollino" " " masculine ;
+  cipollin_N = reg2N "Cipollin" "Cipolline" masculine;
+  cipollino_N = reg2N  "Cipollino" "Cipollinos" masculine ;
   cipollinosaeule_N = reg2N  "Cipollinosäule" "Cipollinosäulen" feminine ;
   cirage_N = reg2N  "Cirage" "Ciragen" feminine ;
   ciragenmalerei_N = reg2N  "Ciragenmalerei" "Ciragenmalereien" feminine ;
@@ -7813,7 +7813,7 @@ lin
   clathrat_N = reg2N  "Clathrat" "Clathrate" neuter ;
   claudia_N = reg2N  "Claudia" "Claudias" feminine ;
   claudius_N = reg2N  "Claudius" "Claudiusse" masculine ;
-  clause_N = reg2N  "Clause" "Clauses " feminine ;
+  clause_N = reg2N  "Clause" "Clauses" feminine ;
   clavichord_N = reg2N  "Clavichord" "Clavichorde" neuter ;
   clavicula_N = reg2N  "Clavicula" "Claviculae" feminine ;
   claviform_A = regA "claviform" ;
@@ -7841,10 +7841,10 @@ lin
   coagulation_N = reg2N "Koagulation" "Koagulationen" feminine ;
   cocaine_N = reg2N "Kokain" "Kokaine" neuter ;
   cockpit_N = reg2N  "Cockpit" "Cockpits" neuter ;
-  cocktail_N = reg2N  "Cocktail" "Cocktails " masculine ;
+  cocktail_N = reg2N  "Cocktail" "Cocktails" masculine ;
   cocktailglas_N = reg2N  "Cocktailglas" "Cocktailgläser" neuter ;
   coda_N = reg2N  "Coda" "Codas" feminine ;
-  code__N = reg2N  "Code " "Codes" masculine ;
+  code__N = reg2N  "Code" "Codes" masculine ;
   codegenerator_N = reg2N  "Codegenerator" "Codegeneratoren" masculine ;
   codewort_N = reg2N  "Codewort" "Codewörter" neuter ;
   codieren_V = regV "codieren" ;
@@ -7900,7 +7900,7 @@ lin
   container_N = reg2N  "Container" "Container" masculine ;
   containerisieren_V = regV "containerisieren" ;
   containerschiff_N = reg2N  "Containerschiff" "Containerschiffe" neuter ;
-  containerterminal__N = reg2N  "Containerterminal " "Containerterminals" masculine ;
+  containerterminal__N = reg2N  "Containerterminal" "Containerterminals" masculine ;
   content_N = reg2N  "Content" "Contents" masculine ;
   contradictio_in_adiecto_N = reg2N  "Contradictio in adiecto" "Contradictiones in adiecto " feminine ;
   cookie_N = reg2N  "Cookie" "Cookies" neuter ;
@@ -8050,7 +8050,7 @@ lin
   dachlawine_N = reg2N  "Dachlawine" "Dachlawinen" feminine ;
   dachluke_N = reg2N  "Dachluke" "Dachluke" feminine ;
   dachpappe_N = reg2N  "Dachpappe" "Dachpappen" feminine ;
-  dachreiter__N = reg2N  "Dachreiter " "Dachreiter" masculine ;
+  dachreiter__N = reg2N  "Dachreiter" "Dachreiter" masculine ;
   dachrinne_N = reg2N  "Dachrinne" "Dachrinnen" feminine ;
   dachs_N = reg2N  "Dachs" "Dachse" masculine ;
   dachschaden_N = reg2N  "Dachschaden" "Dachschäden" masculine ;
@@ -8383,7 +8383,7 @@ lin
   deja_vu_N = reg2N  "Déjà-vu" "Déjà-vus" neuter ;
   dekade_N = reg2N  "Dekade" "Dekaden" feminine ;
   dekadent_A = mk3A "dekadent" "dekadenter" "dekadenteste" ;
-  dekalog_N = reg2N  "Dekalog" "—" masculine ;
+  dekalog_N = reg2N "Dekalog" "Dekaloge" masculine;
   dekameter_N = reg2N  "Dekameter" "Dekameter" masculine ;
   dekan_N = reg2N  "Dekan" "Dekane" masculine ;
   dekanter_N = reg2N  "Dekanter" "Dekanter" masculine ;
@@ -8677,7 +8677,7 @@ lin
   dessin_N = reg2N  "Dessin" "Dessins" neuter ;
   dessous_N = reg2N  "Dessous" "Dessous" neuter ;
   destillat_N = reg2N  "Destillat" "Destillate" neuter ;
-  destillation__N = reg2N  "Destillation " "Destillationen " feminine ;
+  destillation__N = reg2N  "Destillation" "Destillationen" feminine ;
   destillieren_V = irregV "destillieren" "destilliert" "destillierte" "destillierte" "destilliert" ;
   destillierkolben_N = reg2N  "Destillierkolben" "Destillierkolben" masculine ;
   destilliert_A = regA "destilliert" ;
@@ -8714,7 +8714,7 @@ lin
   deuten_3_V = irregV "deuten" "deutet" "deutete" "deutete" "gedeutet" ; 
   deuteriert_A = regA "deuteriert" ;
   deutlich_A = mk3A "deutlich" "deutlicher" "deutlichste" ;
-  deutsch_A = mk3A "deutsch " "deutscher  " "deutscheste" ;
+  deutsch_A = mk3A "deutsch" "deutscher  " "deutscheste" ;
   deutschlandweit_A = regA "deutschlandweit" ;
   deutschlehrer_N = reg2N  "Deutschlehrer" "Deutschlehrer" masculine ;
   deutschlehrerin_N = reg2N  "Deutschlehrerin" "Deutschlehrerinnen" feminine ;
@@ -8878,7 +8878,7 @@ lin
   dienstagmittag_N = reg2N  "Dienstagmittag" "Dienstagmittage" masculine ;
   dienstagmorgen_N = reg2N  "Dienstagmorgen" "Dienstagmorgen" masculine ;
   dienstagnachmittag_N = reg2N  "Dienstagnachmittag" "Dienstagnachmittage" masculine ;
-  dienstagnacht__N = reg2N  "Dienstagnacht " "Dienstagnächte" feminine ;
+  dienstagnacht__N = reg2N  "Dienstagnacht" "Dienstagnächte" feminine ;
   dienstags_Adv = mkAdv "dienstags" ;
   dienstagvormittag_N = reg2N  "Dienstagvormittag" "Dienstagvormittage" masculine ;
   dienstbarkeit_N = reg2N  "Dienstbarkeit" "Dienstbarkeiten" feminine ;
@@ -8962,7 +8962,7 @@ lin
   diktiergeraet_N = reg2N  "Diktiergerät" "Diktiergeräte" neuter ;
   diktion_N = mkN "Diktion" ;
   diktum_N = reg2N  "Diktum" "Dikta" neuter ;
-  dilatation__N = reg2N  "Dilatation " "Dilatationen" feminine ;
+  dilatation__N = reg2N  "Dilatation" "Dilatationen" feminine ;
   dilatieren_V = irregV "dilatieren" "dilatiert" "dilatierte" "dilatierte" "dilatiert" ;
   dilator_N = reg2N "Dilator" "Dilatoren" masculine ;
   dilatorisch_A = mk3A "dilatorisch" "dilatorischer" "dilatorischste" ;
@@ -9045,7 +9045,7 @@ lin
   diptotisch_A = regA "diptotisch" ;
   diptoton_N = reg2N  "Diptoton" "Diptota" neuter ;
   dipyridamole_N = reg2N "Dipyridamol" "Dipyridamole" neuter ;
-  direkt_A = mk3A "direkt" "(direkter)" "(direktesten)e" ;
+  direkt_A = mk3A "direkt" "direkter" "direkteste" ;
   direkte_frage_N = reg2N  "direkte Frage" "direkten Fragen" feminine ;
   direkte_objekt_N = reg2N  "direkte Objekt" "direkten Objekte" neuter ;
   direkte_rede__N = reg2N  "direkte Rede " "direkten Re" feminine ;
@@ -9142,7 +9142,7 @@ lin
   dissipativ_A = mk3A "dissipativ" "dissipativer" "dissipativste" ;
   dissonant_A = mk3A "dissonant" "dissonanter" "dissonanteste" ;
   dissonanz_N = reg2N  "Dissonanz" "Dissonanzen" feminine ;
-  dissozial_A = mk3A "dissozial" "?" "?e" ;
+  dissozial_A = mk3A "dissozial" "dissozialer" "dissozialste" ;
   dissoziation_N = mkN "Dissoziation" ;
   dissoziationskonstante_N = reg2N  "Dissoziationskonstante" "Dissoziationskonstanten" feminine ;
   dissoziieren_V = irregV "dissoziieren" "dissoziiert" "dissoziierte" "dissoziierte" "dissoziiert" ;
@@ -9153,7 +9153,7 @@ lin
   distanzierung_N = mkN "Distanzierung" ;
   distanzkompositum_N = reg2N  "Distanzkompositum" "Distanzkomposita" neuter ;
   distanzschuss_N = reg2N  "Distanzschuss" "Distanzschüsse" masculine ;
-  distanzstellung__N = reg2N  "Distanzstellung " "Distanzstellungen" feminine ;
+  distanzstellung__N = reg2N  "Distanzstellung" "Distanzstellungen" feminine ;
   distanzverlust_N = reg2N  "Distanzverlust" "Distanzverluste" masculine ;
   distelfink_N = reg2N  "Distelfink" "Distelfinken" masculine ;
   distich_A = regA "distich" ;
@@ -9202,7 +9202,7 @@ lin
   dock_N = reg2N  "Dock" "Docks" neuter ;
   docke_N = reg2N  "Docke" "Docken" feminine ;
   docosahexaenoisch_A = regA "docosahexaenoisch" ;
-  docosahexaensaeure_N = reg2N  "Docosahexaensäure" "—" feminine ;
+  docosahexaensaeure_N = reg2N "Docosahexaensäure" "e" feminine;
   dodo_N = reg2N  "Dodo" "Dodos" masculine ;
   doebel_N = reg2N  "Döbel" "Döbel" masculine ;
   doelmern_V = regV "dölmern" ;
@@ -9269,11 +9269,11 @@ lin
   dompteur_N = reg2N  "Dompteur" "Dompteure" masculine ;
   donator_N = reg2N  "Donator" "Donatoren" masculine ;
   donauland_N = reg2N  "Donauland" "Donauländer" neuter ;
-  donauschrift_N = reg2N  "Donauschrift" "-" feminine ;
+  donauschrift_N = reg2N "Donauschrift" "e" feminine;
   donga_N = reg2N  "Donga" "Dongas" feminine ;
   donjon_N = reg2N  "Donjon" "Donjons" masculine ;
   donnern_V = regV "donnern" ;
-  donnerpilz_N = reg2N  "Donnerpilz" "Donnerpilze " masculine ;
+  donnerpilz_N = reg2N  "Donnerpilz" "Donnerpilze" masculine ;
   donnerstag_N = reg2N  "Donnerstag" "Donnerstage" masculine ;
   donnerstagabend_N = reg2N  "Donnerstagabend" "Donnerstagabende" masculine ;
   donnerstagmittag_N = reg2N  "Donnerstagmittag" "Donnerstagmittage" masculine ;
@@ -9338,7 +9338,7 @@ lin
   dorfflur_N = reg2N  "Dorfflur" "Dorffluren" feminine ;
   dorfhelfer_N = reg2N  "Dorfhelfer" "Dorfhelfer" masculine ;
   dorfhelferin_N = reg2N  "Dorfhelferin" "Dorfhelferinnen" feminine ;
-  dorfkirche__N = reg2N  "Dorfkirche " "Dorfkirchen" feminine ;
+  dorfkirche__N = reg2N  "Dorfkirche" "Dorfkirchen" feminine ;
   dorfplatz_N = reg2N  "Dorfplatz" "Dorfplätze" masculine ;
   dorfschuetzersystem_N = reg2N  "Dorfschützersystem" "Dorfschützersysteme" neuter ;
   dorfstrasse_N = reg2N  "Dorfstraße" "Dorfstraßen" feminine ;
@@ -9360,7 +9360,7 @@ lin
   dortig_A = regA "dortig" ;
   dortzulande_Adv = mkAdv "dortzulande" ;
   dosage_N = reg2N  "Dosage" "Dosagen" feminine ;
-  dose__N = reg2N  "Dose " "Dosen" feminine ;
+  dose__N = reg2N  "Dose" "Dosen" feminine ;
   dose_N = reg2N  "Dose" "Dosen" feminine ;
   dosenlocher_N = reg2N  "Dosenlocher" "Dosenlocher" masculine ;
   dosenoeffner_N = reg2N  "Dosenöffner" "Dosenöffner" masculine ;
@@ -9426,7 +9426,7 @@ lin
   dramaturgisch_A = regA "dramaturgisch" ;
   dramentheorie_N = reg2N  "Dramentheorie" "Dramentheorien" feminine ;
   dran_Adv = mkAdv "dran" ;
-  drang_N = reg2N  "Drang" "— " masculine ;
+  drang_N = reg2N "Drang" "Drange" masculine;
   drangsal_N = reg2N  "Drangsal" "Drangsale" feminine ;
   drangsalieren_V = regV "drangsalieren" ;
   drapieren_V = regV "drapieren" ;
@@ -9722,7 +9722,7 @@ lin
   durchschnittlich_A = mk3A "durchschnittlich" "durchschnittlicher" "durchschnittlichste" ;
   durchschnittseinkommen_N = reg2N  "Durchschnittseinkommen" "Durchschnittseinkommen" neuter ;
   durchschnittsmenge_N = reg2N  "Durchschnittsmenge" "Durchschnittsmengen" feminine ;
-  durchschuss__N = reg2N  "Durchschuss " "Durchschüsse" masculine ;
+  durchschuss__N = reg2N  "Durchschuss" "Durchschüsse" masculine ;
   durchsetzen_7_V = prefixV "durch" (regV "setzen") ;
   durchsetzungsvermoegen_N = reg2N  "Durchsetzungsvermögen" "Durchsetzungsvermögen" neuter ;
   durchsichtig_A = mk3A "durchsichtig" "durchsichtiger" "durchsichtigste" ;
@@ -9738,7 +9738,7 @@ lin
   durchziehen_1_V = prefixV "durch" (irregV "ziehen" "zieht" "zog" "zog" "gezogen") ; 
   durchzufuehrend_A = regA "durchzuführend" ;
   dursten_V = irregV "dursten" "durstet" "durstete" "durstete" "gedurstet" ; 
-  durstgefuehl_N = reg2N  "Durstgefühl" "— " neuter ;
+  durstgefuehl_N = reg2N "Durstgefühl" "Durstgefühle" neuter;
   durstig_A = mk3A "durstig" "durstiger" "durstigste" ;
   durststrecke_N = reg2N  "Durststrecke" "Durststrecken" feminine ;
   durstzentrum_N = reg2N  "Durstzentrum" "Durstzentren" neuter ;
@@ -9764,7 +9764,7 @@ lin
   dynastie_N = reg2N  "Dynastie" "Dynastien" feminine ;
   dynastisch_A = mk3A "dynastisch" "dynastischer" "dynastischste" ;
   dysaesthesie_N = reg2N  "Dysästhesie" "Dysästhesien" feminine ;
-  dysbakterie_N = reg2N  "Dysbakterie" "-" feminine ;
+  dysbakterie_N = reg2N "Dysbakterie" "e" feminine;
   dysfunktion_N = mkN "Dysfunktion" ;
   dysfunktional_A = mk3A "dysfunktional" "dysfunktionaler" "dysfunktionalste" ;
   dysfunktionalitaet_N = reg2N  "Dysfunktionalität" "Dysfunktionalitäten" feminine ;
@@ -9849,8 +9849,8 @@ lin
   edelmarderfell_N = reg2N  "Edelmarderfell" "Edelmarderfelle" neuter ;
   edelmetall_N = reg2N  "Edelmetall" "Edelmetalle" neuter ;
   edelmetallkatalysator_N = reg2N  "Edelmetallkatalysator" "Edelmetallkatalysatoren" masculine ;
-  edelpilz_N = reg2N  "Edelpilz" "Edelpilze " masculine ;
-  edelreizker__N = reg2N  "Edelreizker " "Edelreizker" masculine ;
+  edelpilz_N = reg2N  "Edelpilz" "Edelpilze" masculine ;
+  edelreizker__N = reg2N  "Edelreizker" "Edelreizker" masculine ;
   edelstein_N = reg2N  "Edelstein" "Edelsteine" masculine ;
   edelvernatsch_N = reg2N  "Edelvernatsch" "Edelvernatsche" masculine ;
   edelweiss_N = reg2N  "Edelweiß" "Edelweiße" neuter ;
@@ -9940,10 +9940,10 @@ lin
   eichen_V = irregV "eichen" "eicht" "eichte" "eichte" "geeicht" ;
   eichenblatt_N = reg2N  "Eichenblatt" "Eichenblätter" neuter ;
   eichenbohle_N = reg2N  "Eichenbohle" "Eichenbohlen" feminine ;
-  eichenglucke__N = reg2N  "Eichenglucke " "Eichenglucken" feminine ;
+  eichenglucke__N = reg2N  "Eichenglucke" "Eichenglucken" feminine ;
   eichenprozessionsspinner_N = reg2N  "Eichenprozessionsspinner" "Eichenprozessionsspinner" masculine ;
-  eichenrotkappe_N = reg2N  "Eichenrotkappe" "Eichenrotkappen " feminine ;
-  eichensteinpilz_N = reg2N  "Eichensteinpilz" "Eichensteinpilze " masculine ;
+  eichenrotkappe_N = reg2N  "Eichenrotkappe" "Eichenrotkappen" feminine ;
+  eichensteinpilz_N = reg2N  "Eichensteinpilz" "Eichensteinpilze" masculine ;
   eichhase_N = reg2N  "Eichhase" "Eichhasen" masculine ;
   eichhoernchen_N = reg2N  "Eichhörnchen" "Eichhörnchen" neuter ;
   eicosapentaensaeure_N = reg2N  "Eicosapentaensäure" "Eicosapentaensäuren" feminine ;
@@ -9956,7 +9956,7 @@ lin
   eidesstattliche_versicherung_N = mkN "eidesstattliche Versicherung" ;
   eidetisch_A = regA "eidetisch" ;
   eidgenossenschaft_N = reg2N  "Eidgenossenschaft" "Eidgenossenschaften" feminine ;
-  eidotter_N = reg2N  "Eidotter" "Eidotter " masculine ;
+  eidotter_N = reg2N  "Eidotter" "Eidotter" masculine ;
   eierbecher_N = reg2N  "Eierbecher" "Eierbecher" masculine ;
   eierkocher_N = reg2N  "Eierkocher" "Eierkocher" masculine ;
   eierkoepfer_N = reg2N  "Eierköpfer" "Eierköpfer" masculine ;
@@ -9975,7 +9975,7 @@ lin
   eierschwammerl_N = reg2N  "Eierschwammerl" "Eierschwammerln" neuter ;
   eierspeise_N = reg2N  "Eierspeise" "Eierspeisen" feminine ;
   eierstecher_N = reg2N  "Eierstecher" "Eierstecher" masculine ;
-  eierstich_N = reg2N  "Eierstich" "-" masculine ;
+  eierstich_N = reg2N "Eierstich" "Eierstiche" masculine;
   eierstock_N = reg2N  "Eierstock" "Eierstöcke" masculine ;
   eierstockzelle_N = reg2N  "Eierstockzelle" "Eierstockzellen" feminine ;
   eiertanz_N = reg2N  "Eiertanz" "Eiertänze" masculine ;
@@ -10002,7 +10002,7 @@ lin
   eigenschaft_N = reg2N  "Eigenschaft" "Eigenschaften" feminine ;
   eigenschaftsprofil_N = reg2N  "Eigenschaftsprofil" "Eigenschaftsprofile" neuter ;
   eigenschaftswort_N = reg2N  "Eigenschaftswort" "Eigenschaftswörter" neuter ;
-  eigensinnig_A = mk3A "eigensinnig " "eigensinniger " "eigensinnigste" ;
+  eigensinnig_A = mk3A "eigensinnig" "eigensinniger" "eigensinnigste" ;
   eigenstaendig_A = mk3A "eigenständig" "eigenständiger" "eigenständigste" ;
   eigentlich_A = regA "eigentlich" ;
   eigentor_N = reg2N  "Eigentor" "Eigentore" neuter ;
@@ -10073,7 +10073,7 @@ lin
   einenglischen_V = prefixV "ein" (regV "englischen") ;
   einer_N = reg2N  "Einer" "Einer" masculine ;
   einerlei_A = regA "einerlei" ;
-  einerlei_N = reg2N  "Einerlei" "-" neuter ;
+  einerlei_N = reg2N "Einerlei" "Einerleie" neuter;
   einermenge_N = reg2N  "Einermenge" "Einermengen" feminine ;
   einerseits_Adv = mkAdv "einerseits" ;
   eineurojob_N = reg2N  "Eineurojob" "Eineurojobs" masculine ;
@@ -10088,7 +10088,7 @@ lin
   einfall_N = reg2N  "Einfall" "Einfälle" masculine ;
   einfallen_5_V = prefixV "ein" (irregV "fallen" "fallt" "fiel" "fiele" "gefallen") ; 
   einfallsreich_A = mk3A "einfallsreich" "einfallsreicher" "einfallsreichste" ;
-  einfallsreichtum_N = reg2N  "Einfallsreichtum" "-" masculine ;
+  einfallsreichtum_N = reg2N "Einfallsreichtum" "Einfallsreichtümer" masculine;
   einfaltspinsel_N = reg2N  "Einfaltspinsel" "Einfaltspinsel" masculine ;
   einfamilienhaus_N = reg2N  "Einfamilienhaus" "Einfamilienhäuser" neuter ;
   einfangen_1_V = prefixV "ein" (irregV "fangen" "fängt" "fing" "fing" "gefangen") ; 
@@ -10183,7 +10183,7 @@ lin
   einkommensteuer_N = reg2N  "Einkommensteuer" "Einkommensteuern" feminine ;
   einkommensteuererklaerung_N = mkN "Einkommensteuererklärung" ;
   einkoppeln_V = prefixV "ein" (regV "koppeln") ;
-  einkorn_N = reg2N  "Einkorn" "-" neuter ;
+  einkorn_N = reg2N "Einkorn" "Einkorne" neuter;
   einkreisen_V = prefixV "ein" (regV "kreisen") ;
   einkristall_N = reg2N  "Einkristall" "Einkristalle" masculine ;
   einladen_5_V = prefixV "ein" (irregV "laden" "lädt" "lud" "lüde" "geladen") ; 
@@ -10200,7 +10200,7 @@ lin
   einleuchten_V = prefixV "ein" (irregV "leuchten" "leuchtet" "leuchtete" "leuchtete" "geleuchtet") ; 
   einloggen_V = prefixV "ein" (regV "loggen") ;
   einlullen_V = prefixV "ein" (regV "lullen") ;
-  einmach_N = reg2N  "Einmach" "-" feminine ;
+  einmach_N = reg2N "Einmach" "e" feminine;
   einmachen_7_V = prefixV "ein" (regV "machen") ;
   einmahnen_2_V = prefixV "ein" (regV "mahnen") ;
   einmal_Adv = mkAdv "einmal" ;
@@ -10222,7 +10222,7 @@ lin
   einphasig_A = regA "einphasig" ;
   einpreisen_V = prefixV "ein" (regV "preisen") ;
   einrad_N = reg2N  "Einrad" "Einräder" neuter ;
-  einradhockey_N = reg2N  "Einradhockey" "-" neuter ;
+  einradhockey_N = reg2N "Einradhockey" "Einradhockeys" neuter;
   einraeumen_7_V = prefixV "ein" (regV "räumen") ;
   einraumwohnung_N = mkN "Einraumwohnung" ;
   einreiben_1_V = prefixV "ein" (irregV "reiben" "reibt" "rieb" "rieb" "gerieben") ; 
@@ -10310,7 +10310,7 @@ lin
   einteilen_7_V = prefixV "ein" (irregV "teilen" "teilt" "teilte" "teilte" "geteilt") ; 
   einteilung_N = mkN "Einteilung" ;
   eintoenig_A = mk3A "eintönig" "eintöniger" "eintönigste" ;
-  eintoenigkeit_N = reg2N  "Eintönigkeit" "-" feminine ;
+  eintoenigkeit_N = reg2N "Eintönigkeit" "e" feminine;
   eintopf_N = reg2N  "Eintopf" "Eintöpfe" masculine ;
   eintraeglich_A = mk3A "einträglich" "einträglicher" "einträglichste" ;
   eintrag_N = reg2N  "Eintrag" "Einträge" masculine ;
@@ -10333,7 +10333,7 @@ lin
   einwanderer_N = reg2N  "Einwanderer" "Einwanderer" masculine ;
   einwanderung_N = mkN "Einwanderung" ;
   einwanderungsland_N = reg2N  "Einwanderungsland" "Einwanderungsländer" neuter ;
-  einwandfrei_A = mk3A "einwandfrei" "einwandfreier" "einwandfrei(e)ste" ;
+  einwandfrei_A = mk3A "einwandfrei" "einwandfreier" "einwandfreieste" ;
   einwecken_4_V = prefixV "ein" (regV "wecken") ;
   einwegrasierer_N = reg2N  "Einwegrasierer" "Einwegrasierer" masculine ;
   einweihen_V = prefixV "ein" (regV "weihen") ;
@@ -10408,7 +10408,7 @@ lin
   eisdiele_N = reg2N  "Eisdiele" "Eisdielen" feminine ;
   eisen_N = reg2N  "Eisen" "Eisen" neuter ;
   eisenatom_N = reg2N  "Eisenatom" "Eisenatome" neuter ;
-  eisenbahn__N = reg2N  "Eisenbahn " "Eisenbahnen" feminine ;
+  eisenbahn__N = reg2N  "Eisenbahn" "Eisenbahnen" feminine ;
   eisenbahnbruecke_N = reg2N  "Eisenbahnbrücke" "Eisenbahnbrücken" feminine ;
   eisenbahner_N = reg2N  "Eisenbahner" "Eisenbahner" masculine ;
   eisenbahnerin_N = reg2N  "Eisenbahnerin" "Eisenbahnerinnen" feminine ;
@@ -10444,7 +10444,7 @@ lin
   eiskunstlaeufer_N = reg2N  "Eiskunstläufer" "Eiskunstläufer" masculine ;
   eiskunstlaeuferin_N = reg2N  "Eiskunstläuferin" "Eiskunstläuferinnen" feminine ;
   eislaufen_4_V = prefixV "eis" (irregV "laufen" "läuft" "lief" "lief" "gelaufen") ; 
-  eislaufen_N = reg2N  "Eislaufen" "-" neuter ;
+  eislaufen_N = reg2N "Eislaufen" "Eislaufen" neuter;
   eismann_N = reg2N  "Eismann" "Eismänner" masculine ;
   eismaschine_N = reg2N  "Eismaschine" "Eismaschinen" feminine ;
   eismasse_N = reg2N  "Eismasse" "Eismassen" feminine ;
@@ -10452,8 +10452,8 @@ lin
   eismoewe_N = reg2N  "Eismöwe" "Eismöwen" feminine ;
   eisnebel_N = reg2N  "Eisnebel" "Eisnebel" masculine ;
   eispickel_N = reg2N  "Eispickel" "Eispickel" masculine ;
-  eispilz_N = reg2N  "Eispilz" "Eispilze " masculine ;
-  eisregen_N = reg2N  "Eisregen" "— " masculine ;
+  eispilz_N = reg2N  "Eispilz" "Eispilze" masculine ;
+  eisregen_N = reg2N "Eisregen" "Eisregen" masculine;
   eisscholle_N = reg2N  "Eisscholle" "Eisschollen" feminine ;
   eisspatel_N = reg2N  "Eisspatel" "Eisspatel" masculine ;
   eistaucher_N = reg2N  "Eistaucher" "Eistaucher" masculine ;
@@ -10487,7 +10487,7 @@ lin
   ekloge_N = reg2N  "Ekloge" "Eklogen" feminine ;
   ekonomiser_N = reg2N  "Ekonomiser" "Ekonomiser" masculine ;
   ekossaise_N = reg2N  "Ekossaise" "Ekossaisen" feminine ;
-  ekrasit_N = reg2N  "Ekrasit" " " neuter ;
+  ekrasit_N = reg2N  "Ekrasit" "Ekrasite" neuter ;
   ekstatisch_A = mk3A "ekstatisch" "ekstatischer" "ekstatischste" ;
   ektokarp_N = reg2N  "Ektokarp" "Ektokarpe" neuter ;
   ektoparasit_N = reg2N  "Ektoparasit" "Ektoparasiten" feminine ;
@@ -10530,7 +10530,7 @@ lin
   elektroherd_N = reg2N  "Elektroherd" "Elektroherde" masculine ;
   elektroindustrie_N = reg2N  "Elektroindustrie" "Elektroindustrien" feminine ;
   elektrokabel_N = reg2N  "Elektrokabel" "Elektrokabel" neuter ;
-  elektroleitung__N = reg2N  "Elektroleitung " "Elektroleitungen" feminine ;
+  elektroleitung__N = reg2N  "Elektroleitung" "Elektroleitungen" feminine ;
   elektrolyse_N = reg2N  "Elektrolyse" "Elektrolysen" feminine ;
   elektrolythaltig_A = regA "elektrolythaltig" ;
   elektrolytisch_A = regA "elektrolytisch" ;
@@ -10552,7 +10552,7 @@ lin
   elektrophoretisch_A = regA "elektrophoretisch" ;
   elektrorad_N = reg2N  "Elektrorad" "Elektroräder" neuter ;
   elektrostatisch_A = regA "elektrostatisch" ;
-  elektrotechnik_N = reg2N  "Elektrotechnik" "-" feminine ;
+  elektrotechnik_N = reg2N "Elektrotechnik" "e" feminine;
   element_N = reg2N  "Element" "Elemente" neuter ;
   elementar_A = mk3A "elementar" "elementarer" "elementarste" ;
   elementarladung_N = mkN "Elementarladung" ;
@@ -10651,9 +10651,9 @@ lin
   emittierend_A = regA "emittierend" ;
   emma_N = reg2N  "Emma" "Emmas" feminine ;
   emmenagogum_N = reg2N  "Emmenagogum" "Emmenagoga" neuter ;
-  emmental_N = reg2N  "Emmental" "-" neuter ;
+  emmental_N = reg2N "Emmental" "Emmentale" neuter;
   emmentaler_N = reg2N  "Emmentaler" "Emmentaler" masculine ;
-  emmer_N = reg2N  "Emmer" "—" masculine ;
+  emmer_N = reg2N "Emmer" "Emmer" masculine;
   emo_N = reg2N  "Emo" "Emos" masculine ;
   emoticon_N = reg2N  "Emoticon" "Emoticons" neuter ;
   emotion_N = mkN "Emotion" ;
@@ -10774,14 +10774,14 @@ lin
   endspiel_N = reg2N  "Endspiel" "Endspiele" neuter ;
   endstaendig_A = regA "endständig" ;
   endstation_N = mkN "Endstation" ;
-  endstellung__N = reg2N  "Endstellung " "Endstellungen" feminine ;
+  endstellung__N = reg2N  "Endstellung" "Endstellungen" feminine ;
   endstruktur_N = reg2N  "Endstruktur" "Endstrukturen" feminine ;
   endteufe_N = reg2N  "Endteufe" "Endteufen" feminine ;
   endung_N = mkN "Endung" ;
   endwort_N = reg2N  "Endwort" "Endwörter" neuter ;
   endzeitstimmung_N = mkN "Endzeitstimmung" ;
   energetisch_A = regA "energetisch" ;
-  energie__N = reg2N  "Energie " "Energien" feminine ;
+  energie__N = reg2N  "Energie" "Energien" feminine ;
   energieausweis_N = reg2N  "Energieausweis" "Energieausweise" masculine ;
   energieberatung_N = mkN "Energieberatung" ;
   energiebuendel_N = reg2N  "Energiebündel" "Energiebündel" neuter ;
@@ -10830,8 +10830,8 @@ lin
   enneaeterisch_A = regA "enneaeterisch" ;
   enneagramm_N = reg2N  "Enneagramm" "Enneagramme" neuter ;
   ennuyieren_V = irregV "ennuyieren" "ennuyiert" "ennuyierte" "ennuyierte" "ennuyiert" ;
-  enokidake__N = reg2N  "Enokidake " "Enokidake " masculine ;
-  enokitake__N = reg2N  "Enokitake " "Enokitake " masculine ;
+  enokidake__N = reg2N  "Enokidake" "Enokidake" masculine ;
+  enokitake__N = reg2N  "Enokitake" "Enokitake" masculine ;
   enolsaeure_N = reg2N  "Enolsäure" "Enolsäuren" feminine ;
   enorm_A = mk3A "enorm" "enormer" "enormste" ;
   enossal_A = regA "enossal" ;
@@ -11066,7 +11066,7 @@ lin
   enzymbehandlung_N = reg2N  "Enzymbehandlung" "Enzymbehandlungen" feminine ;
   enzymgemisch_N = reg2N  "Enzymgemisch" "Enzymgemische" neuter ;
   enzyminhibitor_N = reg2N  "Enzyminhibitor" "Enzyminhibitoren" masculine ;
-  enzymologie_N = reg2N  "Enzymologie" "-" feminine ;
+  enzymologie_N = reg2N "Enzymologie" "e" feminine;
   enzymsystem_N = reg2N  "Enzymsystem" "Enzymsysteme" neuter ;
   enzymzubereitung_N = reg2N  "Enzymzubereitung" "Enzymzubereitungen" feminine ;
   eobiont_N = reg2N  "Eobiont" "Eobionten" masculine ;
@@ -11107,7 +11107,7 @@ lin
   epiphyt_N = reg2N  "Epiphyt" "Epiphyten" masculine ;
   epirubicine_N = reg2N "Epirubicin" "Epirubicine" neuter ;
   episch_A = mk3A "episch" "epischer" "epischste" ;
-  episiotomie_N = reg2N  "Episiotomie" "Episiotomien " feminine ;
+  episiotomie_N = reg2N  "Episiotomie" "Episiotomien" feminine ;
   episkop_N = reg2N  "Episkop" "Episkope" neuter ;
   episode_N = reg2N  "Episode" "Episoden" feminine ;
   episomal_A = regA "episomal" ;
@@ -11183,7 +11183,7 @@ lin
   erdalkalimetallcarbonat_N = reg2N  "Erdalkalimetallcarbonat" "Erdalkalimetallcarbonate" neuter ;
   erdalkalimetallsalz_N = reg2N  "Erdalkalimetallsalz" "Erdalkalimetallsalze" neuter ;
   erdapfel_N = reg2N  "Erdapfel" "Erdäpfel" masculine ;
-  erdaushubdeponie_N = reg2N  "Erdaushubdeponie" "Erdaushubdeponien " feminine ;
+  erdaushubdeponie_N = reg2N  "Erdaushubdeponie" "Erdaushubdeponien" feminine ;
   erdbeben_N = reg2N  "Erdbeben" "Erdbeben" neuter ;
   erdbebenwarnung_N = mkN "Erdbebenwarnung" ;
   erdbeerbaum_N = reg2N  "Erdbeerbaum" "Erdbeerbäume" masculine ;
@@ -11220,7 +11220,7 @@ lin
   erdofen_N = reg2N  "Erdofen" "Erdöfen" masculine ;
   erdolchen_V = irregV "erdolchen" "erdolcht" "erdolchte" "erdolchte" "erdolcht" ;
   erdrakete_N = reg2N  "Erdrakete" "Erdraketen" feminine ;
-  erdritterling__N = reg2N  "Erdritterling " "Erdritterlinge " masculine ;
+  erdritterling__N = reg2N  "Erdritterling" "Erdritterlinge" masculine ;
   erdrosseln_V = irregV "erdrosseln" "erdrosselt" "erdrosselte" "erdrosselte" "erdrosselt" ;
   erdrotation_N = mkN "Erdrotation" ;
   erdrutsch_N = reg2N  "Erdrutsch" "Erdrutsche" masculine ;
@@ -11228,7 +11228,7 @@ lin
   erdstall_N = reg2N  "Erdstall" "Erdställe" masculine ;
   erdteil_N = reg2N  "Erdteil" "Erdteile" masculine ;
   erdtrabant_N = reg2N  "Erdtrabant" "Erdtrabanten" masculine ;
-  erdumfang_N = reg2N  "Erdumfang" "—" masculine ;
+  erdumfang_N = reg2N "Erdumfang" "Erdumfange" masculine;
   erdumlaufbahn_N = reg2N  "Erdumlaufbahn" "Erdumlaufbahnen" feminine ;
   erdung_N = mkN "Erdung" ;
   erdwaermekraftwerk_N = reg2N  "Erdwärmekraftwerk" "Erdwärmekraftwerke" neuter ;
@@ -11341,7 +11341,7 @@ lin
   erkennen_2_V = irregV "erkennen" "erkennt" "erkannte" "erkannte" "erkannt" ; 
   erkennend_A = regA "erkennend" ;
   erkenntnis_N = reg2N  "Erkenntnis" "Erkenntnisse" feminine ;
-  erkenntnislehre_N = reg2N  "Erkenntnislehre" "-" feminine ;
+  erkenntnislehre_N = reg2N "Erkenntnislehre" "e" feminine;
   erkennungsmarke_N = reg2N  "Erkennungsmarke" "Erkennungsmarken" feminine ;
   erkennungssequenz_N = reg2N  "Erkennungssequenz" "Erkennungssequenzen" feminine ;
   erkennungszeichen_N = reg2N  "Erkennungszeichen" "Erkennungszeichen" neuter ;
@@ -11383,7 +11383,7 @@ lin
   erloeschen_V = irregV "erlöschen" "erlöscht" "erlosch" "erlösche" "erloschen" ; 
   erloesen_V = irregV "erlösen" "erlöst" "erlöste" "erlöste" "erlöst" ;
   erloesung_N = mkN "Erlösung" ;
-  ermessen_N = reg2N  "Ermessen" "—" neuter ;
+  ermessen_N = reg2N "Ermessen" "Ermessen" neuter;
   ermitteln_V = irregV "ermitteln" "ermittelt" "ermittelte" "ermittele" "ermittelt" ; 
   ermittelt_A = regA "ermittelt" ;
   ermittler_N = reg2N  "Ermittler" "Ermittler" masculine ;
@@ -11551,12 +11551,12 @@ lin
   erwischen_V = irregV "erwischen" "erwischt" "erwischte" "erwischte" "erwischt" ;
   erworben_A = regA "erworben" ;
   erwuenscht_A = mk3A "erwünscht" "erwünschter" "erwünschteste" ;
-  erythem__N = reg2N  "Erythem " "Erytheme" neuter ;
+  erythem__N = reg2N  "Erythem" "Erytheme" neuter ;
   erythematoes_A = regA "erythematös" ;
   erythropoetin_N = reg2N  "Erythropoetin" "Erythropoetine" neuter ;
   erythrozyt_N = reg2N  "Erythrozyt" "Erythrozyten" masculine ;
   erz_N = reg2N  "Erz" "Erze" neuter ;
-  erzabbau_N = reg2N  "Erzabbau" "-" masculine ;
+  erzabbau_N = reg2N "Erzabbau" "Erzabbaue" masculine;
   erzaehlen_V = irregV "erzählen" "erzählt" "erzählte" "erzählte" "erzählt" ;
   erzaehlung_N = mkN "Erzählung" ;
   erzamt_N = reg2N  "Erzamt" "Erzämter" neuter ;
@@ -11587,7 +11587,7 @@ lin
   erzschurke_N = reg2N  "Erzschurke" "Erzschurken" masculine ;
   erzuernen_V = irregV "erzürnen" "erzürnt" "erzürnte" "erzürnte" "erzürnt" ;
   escarpe_N = reg2N  "Escarpe" "Escarpen" feminine ;
-  esch_N = reg2N  "Esch" "-" neuter ;
+  esch_N = reg2N "Esch" "Esche" neuter;
   eschatologie_N = reg2N  "Eschatologie" "Eschatologien" feminine ;
   eschatologisch_A = mk3A "eschatologisch" "eschatologischer" "eschatologischste" ;
   esche_N = reg2N  "Esche" "Eschen" feminine ;
@@ -11608,7 +11608,7 @@ lin
   eskortieren_V = irregV "eskortieren" "eskortiert" "eskortierte" "eskortierte" "eskortiert" ;
   esophagus_N = reg2N "Oesophagus" "Oesophagen" masculine ;
   espe_N = reg2N  "Espe" "Espen" feminine ;
-  espenrotkappe__N = reg2N  "Espenrotkappe " "Espenrotkappen" feminine ;
+  espenrotkappe__N = reg2N  "Espenrotkappe" "Espenrotkappen" feminine ;
   esplanade_N = reg2N  "Esplanade" "Esplanaden" feminine ;
   espressokanne_N = reg2N  "Espressokanne" "Espressokannen" feminine ;
   essayistisch_A = regA "essayistisch" ;
@@ -11637,7 +11637,7 @@ lin
   essstoerung_N = reg2N  "Eßstörung" "Eßstörungen" feminine ;
   esstisch_N = reg2N  "Esstisch" "Esstische" masculine ;
   esszimmer_N = reg2N  "Esszimmer" "Esszimmer" neuter ;
-  este__N = reg2N  "Este " "Esten" masculine ;
+  este__N = reg2N  "Este" "Esten" masculine ;
   ester_N = reg2N  "Ester" "Ester" masculine ;
   esterbindung_N = reg2N  "Esterbindung" "Esterbindungen" feminine ;
   esterderivat_N = reg2N  "Esterderivat" "Esterderivate" neuter ;
@@ -11649,7 +11649,7 @@ lin
   estermonomer_N = reg2N  "Estermonomer" "Estermonomere" neuter ;
   esterverbindung_N = reg2N  "Esterverbindung" "Esterverbindungen" feminine ;
   estin_N = reg2N  "Estin" "Estinnen" feminine ;
-  estland_N = reg2N  "Estland" "—" neuter ;
+  estland_N = reg2N "Estland" "Estlande" neuter;
   estnisch_A = mk3A "estnisch" "estnischer" "estnischste" ;
   estradiol_N = reg2N "Oestradiol" "Oestradiole" neuter ;
   estrich_N = reg2N  "Estrich" "Estriche" masculine ;
@@ -11713,7 +11713,7 @@ lin
   etymon_N = reg2N  "Etymon" "Etyma" neuter ;
   eu_osterweiterung_N = mkN "EU-Osterweiterung" ;
   eu_weit_A = regA "EU-weit" ;
-  eubakterie__N = reg2N  "Eubakterie " "Eubakterien" feminine ;
+  eubakterie__N = reg2N  "Eubakterie" "Eubakterien" feminine ;
   eubakterium_N = reg2N  "Eubakterium" "Eubakterien" neuter ;
   eucharistie_N = reg2N  "Eucharistie" "Eucharistien" feminine ;
   eucharistiefeier_N = reg2N  "Eucharistiefeier" "Eucharistiefeiern" feminine ;
@@ -11738,7 +11738,7 @@ lin
   euphorisch_A = mk3A "euphorisch" "euphorischer" "euphorischste" ;
   euphuismus_N = reg2N  "Euphuismus" "Euphuismen" masculine ;
   euploid_A = regA "euploid" ;
-  eurasien_N = reg2N  "Eurasien" "—" neuter ;
+  eurasien_N = reg2N "Eurasien" "Eurasien" neuter;
   eurasisch_A = regA "eurasisch" ;
   eurerseits_Adv = mkAdv "eurerseits" ;
   euretwillen_Adv = mkAdv "euretwillen" ;
@@ -11849,7 +11849,7 @@ lin
   exkursion_N = mkN "Exkursion" ;
   exlibris_N = reg2N  "Exlibris" "Exlibris" neuter ;
   exmatrikulation_N = mkN "Exmatrikulation" ;
-  exmatrikulationsbescheinigung__N = reg2N  "Exmatrikulationsbescheinigung " "Exmatrikulationsbescheinigungen" feminine ;
+  exmatrikulationsbescheinigung__N = reg2N  "Exmatrikulationsbescheinigung" "Exmatrikulationsbescheinigungen" feminine ;
   exmatrikulieren_V = irregV "exmatrikulieren" "exmatrikuliert" "exmatrikulierte" "exmatrikulierte" "exmatrikuliert" ;
   exocyclisch_A = regA "exocyclisch" ;
   exodus_N = reg2N  "Exodus" "Exodusse" masculine ;
@@ -12033,7 +12033,7 @@ lin
   fachbuch_N = reg2N  "Fachbuch" "Fachbücher" neuter ;
   fachfrau_N = reg2N  "Fachfrau" "Fachfrauen" feminine ;
   fachgebiet_N = reg2N  "Fachgebiet" "Fachgebiete" neuter ;
-  fachgerecht_A = mk3A "fachgerecht " "fachgerechter" "fachgerechteste" ;
+  fachgerecht_A = mk3A "fachgerecht" "fachgerechter" "fachgerechteste" ;
   fachgeschaeft_N = reg2N  "Fachgeschäft" "Fachgeschäfte" neuter ;
   fachhochschule_N = reg2N  "Fachhochschule" "Fachhochschulen" feminine ;
   fachidiot_N = reg2N  "Fachidiot" "Fachidioten" masculine ;
@@ -12061,8 +12061,8 @@ lin
   fackel_N = reg2N  "Fackel" "Fackeln" feminine ;
   fackellauf_N = reg2N  "Fackellauf" "Fackelläufe" masculine ;
   factor_N = reg2N  "Factor" "Factoren" masculine ;
-  fad_A = mk3A "fad" "fader" "fad(e)ste" ;
-  fade_A = mk3A "fade " "fader" "fadeste" ;
+  fad_A = mk3A "fad" "fader" "fadeste" ;
+  fade_A = mk3A "fade" "fader" "fadeste" ;
   fadenkreuz_N = reg2N  "Fadenkreuz" "Fadenkreuze" neuter ;
   fadennackend_A = regA "fadennackend" ;
   fadenscheinig_A = mk3A "fadenscheinig" "fadenscheiniger" "fadenscheinigste" ;
@@ -12209,7 +12209,7 @@ lin
   faltbuch_N = reg2N  "Faltbuch" "Faltbücher" neuter ;
   falte_N = reg2N  "Falte" "Falten" feminine ;
   falten_V = irregV "falten" "faltet" "faltete" "faltete" "gefaltet" ; 
-  faltentintling__N = reg2N  "Faltentintling " "Faltentintlinge " masculine ;
+  faltentintling__N = reg2N  "Faltentintling" "Faltentintlinge" masculine ;
   falter_N = reg2N  "Falter" "Falter" masculine ;
   faltrad_N = reg2N  "Faltrad" "Falträder" neuter ;
   falz_N = reg2N  "Falz" "Falze" masculine ;
@@ -12343,7 +12343,7 @@ lin
   favorit_N = reg2N  "Favorit" "Favoriten" masculine ;
   favoritenschreck_N = reg2N  "Favoritenschreck" "Favoritenschrecke" masculine ;
   fax_N = reg2N  "Fax" "Faxe" neuter ;
-  faxe__N = reg2N  "Faxe " "Faxen" feminine ;
+  faxe__N = reg2N  "Faxe" "Faxen" feminine ;
   fazetie_N = reg2N  "Fazetie" "Fazetien" feminine ;
   fazial_A = regA "fazial" ;
   fazilitaet_N = reg2N  "Fazilität" "Fazilitäten" feminine ;
@@ -12445,8 +12445,8 @@ lin
   feinkostgeschaeft_N = reg2N  "Feinkostgeschäft" "Feinkostgeschäfte" neuter ;
   feinmechanik_N = reg2N  "Feinmechanik" "Feinmechaniken" feminine ;
   feinporig_A = mk3A "feinporig" "feinporiger" "feinporigste" ;
-  feinschmecker__N = reg2N  "Feinschmecker " "Feinschmecker " masculine ;
-  feinsliebchen__N = reg2N  "Feinsliebchen " "Feinsliebchen " neuter ;
+  feinschmecker__N = reg2N  "Feinschmecker" "Feinschmecker" masculine ;
+  feinsliebchen__N = reg2N  "Feinsliebchen" "Feinsliebchen" neuter ;
   feinstaub_N = reg2N  "Feinstaub" "Feinstäube" masculine ;
   feinstaubbelastung_N = mkN "Feinstaubbelastung" ;
   feinstaubplakette_N = reg2N  "Feinstaubplakette" "Feinstaubplaketten" feminine ;
@@ -12722,7 +12722,7 @@ lin
   fichte_N = reg2N  "Fichte" "Fichten" feminine ;
   fichten_A = regA "fichten" ;
   fichtenmarderfell_N = reg2N  "Fichtenmarderfell" "Fichtenmarderfelle" neuter ;
-  fichtensteinpilz_N = reg2N  "Fichtensteinpilz" "Fichtensteinpilze " masculine ;
+  fichtensteinpilz_N = reg2N  "Fichtensteinpilz" "Fichtensteinpilze" masculine ;
   fichtenwaldsaenger_N = reg2N  "Fichtenwaldsänger" "Fichtenwaldsänger" masculine ;
   fichtenzapfenruebling__N = reg2N  "Fichtenzapfenrübling " "Fichtenzapfenrüblinge " masculine ;
   fick_N = reg2N  "Fick" "Ficks" masculine ;
@@ -12850,7 +12850,7 @@ lin
   finnisch_A = mk3A "finnisch" "finnischer" "finnischste" ;
   finnlaendisch_A = regA "finnländisch" ;
   finno_ugrische_sprache_N = reg2N  "finno-ugrische Sprache" "finno-ugrischen Sprachen" feminine ;
-  finster_A = mk3A "finster" "finst(e)rer" "finsterste" ;
+  finster_A = mk3A "finster" "finsterer" "finsterste" ;
   finsternis_N = reg2N  "Finsternis" "Finsternisse" feminine ;
   fiona_N = reg2N  "Fiona" "Fionas" feminine ;
   fips_N = reg2N  "Fips" "Fipse" masculine ;
@@ -12924,7 +12924,7 @@ lin
   flachland_N = reg2N  "Flachland" "Flachländer" neuter ;
   flachmoor_N = reg2N  "Flachmoor" "Flachmoore" neuter ;
   flachpfeife_N = reg2N  "Flachpfeife" "Flachpfeifen" feminine ;
-  flachschuss__N = reg2N  "Flachschuss " "Flachschüsse" masculine ;
+  flachschuss__N = reg2N  "Flachschuss" "Flachschüsse" masculine ;
   flachsfarben_A = regA "flachsfarben" ;
   flachwichser_N = reg2N  "Flachwichser" "Flachwichser" masculine ;
   flackern_V = regV "flackern" ;
@@ -12968,14 +12968,14 @@ lin
   flansch_N = reg2N  "Flansch" "Flansche" masculine ;
   flapsig_A = mk3A "flapsig" "flapsiger" "flapsigste" ;
   flasche_N = reg2N  "Flasche" "Flaschen" feminine ;
-  flaschenbovist__N = reg2N  "Flaschenbovist " "Flaschenboviste " masculine ;
+  flaschenbovist__N = reg2N  "Flaschenbovist" "Flaschenboviste" masculine ;
   flaschenbuerste_N = reg2N  "Flaschenbürste" "Flaschenbürsten" feminine ;
   flaschengruen_A = regA "flaschengrün" ;
   flaschenhals_N = reg2N  "Flaschenhals" "Flaschenhälse" masculine ;
   flaschenoeffner_N = reg2N  "Flaschenöffner" "Flaschenöffner" masculine ;
   flaschenstaeubling__N = reg2N  "Flaschenstäubling " "Flaschenstäublinge " masculine ;
   flaschenwein_N = reg2N  "Flaschenwein" "Flaschenweine" masculine ;
-  flaschenzug__N = reg2N  "Flaschenzug " "Flaschenzüge" masculine ;
+  flaschenzug__N = reg2N  "Flaschenzug" "Flaschenzüge" masculine ;
   flashback_N = reg2N  "Flashback" "Flashbacks" masculine ;
   flashen_V = regV "flashen" ;
   flat_N = reg2N  "Flat" "Flats" feminine ;
@@ -13047,7 +13047,7 @@ lin
   fliegenpilz_N = reg2N  "Fliegenpilz" "Fliegenpilze" masculine ;
   fliegenraum_N = reg2N  "Fliegenraum" "Fliegenräume" masculine ;
   flieger_N = reg2N  "Flieger" "Flieger" masculine ;
-  fliegerabwehrkanone__N = reg2N  "Fliegerabwehrkanone " "Fliegerabwehrkanonen" feminine ;
+  fliegerabwehrkanone__N = reg2N  "Fliegerabwehrkanone" "Fliegerabwehrkanonen" feminine ;
   fliegeralarm_N = reg2N  "Fliegeralarm" "Fliegeralarme" masculine ;
   fliegerbombe_N = reg2N  "Fliegerbombe" "Fliegerbomben" feminine ;
   fliegerhorst_N = reg2N  "Fliegerhorst" "Fliegerhorste" masculine ;
@@ -13163,7 +13163,7 @@ lin
   flugbegleiterin_N = reg2N  "Flugbegleiterin" "Flugbegleiterinnen" feminine ;
   flugbild_N = reg2N  "Flugbild" "Flugbilder" neuter ;
   flugblatt_N = reg2N  "Flugblatt" "Flugblätter" neuter ;
-  flugboot__N = reg2N  "Flugboot " "Flugboote" neuter ;
+  flugboot__N = reg2N  "Flugboot" "Flugboote" neuter ;
   flugente_N = reg2N  "Flugente" "Flugenten" feminine ;
   fluggesellschaft_N = reg2N  "Fluggesellschaft" "Fluggesellschaften" feminine ;
   flughafen_N = reg2N  "Flughafen" "Flughäfen" masculine ;
@@ -13265,7 +13265,7 @@ lin
   foetal_A = regA "fötal" ;
   foggara_N = reg2N  "Foggara" "Foggara" feminine ;
   fogoschfilet_N = reg2N  "Fogoschfilet" "Fogoschfilets" neuter ;
-  fohlen_N = reg2N  "Fohlen" "Fohlen " neuter ;
+  fohlen_N = reg2N  "Fohlen" "Fohlen" neuter ;
   fokal_A = regA "fokal" ;
   fokus_N = reg2N  "Fokus" "Fokusse" masculine ;
   fokuspartikel_N = reg2N  "Fokuspartikel" "Fokuspartikeln" feminine ;
@@ -13287,11 +13287,11 @@ lin
   folgsamkeit_N = reg2N  "Folgsamkeit" "Folgsamkeiten" feminine ;
   folie_N = reg2N  "Folie" "Folien" feminine ;
   folienverbundmaterial_N = reg2N  "Folienverbundmaterial" "Folienverbundmaterialien" neuter ;
-  folinsaeure_N = reg2N  "Folinsäure" "—" feminine ;
+  folinsaeure_N = reg2N "Folinsäure" "e" feminine;
   follikel_N = reg2N  "Follikel" "Follikel" feminine ;
   follikelstimulierend_A = regA "follikelstimulierend" ;
   follikulaer_A = regA "follikulär" ;
-  folsaeure_N = reg2N  "Folsäure" "—" feminine ;
+  folsaeure_N = reg2N "Folsäure" "e" feminine;
   folsaeureantagonist_N = reg2N  "Folsäureantagonist" "Folsäureantagonisten" masculine ;
   folter_N = reg2N  "Folter" "Foltern" feminine ;
   folterkammer_N = reg2N  "Folterkammer" "Folterkammern" feminine ;
@@ -13528,8 +13528,8 @@ lin
   freihaendig_A = regA "freihändig" ;
   freihafen_N = reg2N  "Freihafen" "Freihäfen" masculine ;
   freiheit_N = reg2N  "Freiheit" "Freiheiten" feminine ;
-  freiheitlich_A = mk3A "freiheitlich " "freiheitlicher" "freiheitlichste" ;
-  freiheitsdurst_N = reg2N  "Freiheitsdurst" "— " masculine ;
+  freiheitlich_A = mk3A "freiheitlich" "freiheitlicher" "freiheitlichste" ;
+  freiheitsdurst_N = reg2N "Freiheitsdurst" "Freiheitsdurste" masculine;
   freiheitsrecht_N = reg2N  "Freiheitsrecht" "Freiheitsrechte" neuter ;
   freiheitsstrafe_N = reg2N  "Freiheitsstrafe" "Freiheitsstrafen" feminine ;
   freiherr_N = reg2N  "Freiherr" "Freiherren" masculine ;
@@ -13564,11 +13564,11 @@ lin
   freistoss_N = reg2N  "Freistoß" "Freistöße" masculine ;
   freistunde_N = reg2N  "Freistunde" "Freistunden" feminine ;
   freitag_N = reg2N  "Freitag" "Freitage" masculine ;
-  freitagabend__N = reg2N  "Freitagabend " "Freitagabende" masculine ;
+  freitagabend__N = reg2N  "Freitagabend" "Freitagabende" masculine ;
   freitagmittag_N = reg2N  "Freitagmittag" "Freitagmittage" masculine ;
   freitagmorgen_N = reg2N  "Freitagmorgen" "Freitagmorgen" masculine ;
   freitagnachmittag_N = reg2N  "Freitagnachmittag" "Freitagnachmittage" masculine ;
-  freitagnacht__N = reg2N  "Freitagnacht " "Freitagnächte" feminine ;
+  freitagnacht__N = reg2N  "Freitagnacht" "Freitagnächte" feminine ;
   freitags_Adv = mkAdv "freitags" ;
   freitagvormittag_N = reg2N  "Freitagvormittag" "Freitagvormittage" masculine ;
   freitod_N = reg2N  "Freitod" "Freitode" masculine ;
@@ -13658,7 +13658,7 @@ lin
   frisbee_N = reg2N  "Frisbee" "Frisbees" neuter ;
   frisch_A = mk3A "frisch" "frischer" "frischeste" ;
   frischen_V = regV "frischen" ;
-  frischhaltedose__N = reg2N  "Frischhaltedose " "Frischhaltedosen" feminine ;
+  frischhaltedose__N = reg2N  "Frischhaltedose" "Frischhaltedosen" feminine ;
   frischkaese_N = reg2N  "Frischkäse" "Frischkäse" masculine ;
   frischling_N = reg2N  "Frischling" "Frischlinge" masculine ;
   frischware_N = reg2N  "Frischware" "Frischwaren" feminine ;
@@ -13709,7 +13709,7 @@ lin
   frostmonat_N = reg2N  "Frostmonat" "Frostmonate" masculine ;
   frostmusterboden_N = reg2N  "Frostmusterboden" "Frostmusterböden" masculine ;
   frostschaden_N = reg2N  "Frostschaden" "Frostschäden" masculine ;
-  frostschneckling__N = reg2N  "Frostschneckling " "Frostschnecklinge " masculine ;
+  frostschneckling__N = reg2N  "Frostschneckling" "Frostschnecklinge" masculine ;
   frostschutzmittel_N = reg2N  "Frostschutzmittel" "Frostschutzmittel" neuter ;
   frotzelei_N = reg2N  "Frotzelei" "Frotzeleien" feminine ;
   frotzeln_V = regV "frotzeln" ;
@@ -13719,7 +13719,7 @@ lin
   fruchtkasten_N = reg2N  "Fruchtkasten" "Fruchtkästen" masculine ;
   fruchtkoerper_N = reg2N  "Fruchtkörper" "Fruchtkörper" masculine ;
   fruchtmonat_N = reg2N  "Fruchtmonat" "Fruchtmonate" masculine ;
-  fruchtquark_N = reg2N  "Fruchtquark" "-" masculine ;
+  fruchtquark_N = reg2N "Fruchtquark" "Fruchtquarke" masculine;
   fruchtsaeure_N = reg2N  "Fruchtsäure" "Fruchtsäuren" feminine ;
   fruchtsaft_N = reg2N  "Fruchtsaft" "Fruchtsäfte" masculine ;
   fruchtsaftgetraenk_N = reg2N  "Fruchtsaftgetränk" "Fruchtsaftgetränke" neuter ;
@@ -13727,7 +13727,7 @@ lin
   fruchtzehnt_N = reg2N  "Fruchtzehnt" "Fruchtzehnten" masculine ;
   fruechtchen_N = reg2N  "Früchtchen" "Früchtchen" neuter ;
   fruechtebrot_N = reg2N  "Früchtebrot" "Früchtebrote" neuter ;
-  fruechtequark_N = reg2N  "Früchtequark" "-" masculine ;
+  fruechtequark_N = reg2N "Früchtequark" "Früchtequarke" masculine;
   frueh_A = mk3A "früh" "früher" "früheste" ;
   fruehaufsteher_N = reg2N  "Frühaufsteher" "Frühaufsteher" masculine ;
   fruehbluehend_A = regA "frühblühend" ;
@@ -13847,7 +13847,7 @@ lin
   fulminant_A = mk3A "fulminant" "fulminanter" "fulminanteste" ;
   fumarat_N = reg2N  "Fumarat" "Fumarate" neuter ;
   fumarole_N = reg2N  "Fumarole" "Fumarolen" feminine ;
-  fumarsaeure_N = reg2N  "Fumarsäure" "—" feminine ;
+  fumarsaeure_N = reg2N "Fumarsäure" "e" feminine;
   fummelig_A = mk3A "fummelig" "fummeliger" "fummeligste" ;
   fundament_N = reg2N  "Fundament" "Fundamente" neuter ;
   fundamental_A = mk3A "fundamental" "fundamentaler" "fundamentalste" ;
@@ -13906,10 +13906,10 @@ lin
   furylmethylgruppe_N = reg2N  "Furylmethylgruppe" "Furylmethylgruppen" feminine ;
   furz_N = reg2N  "Furz" "Fürze" masculine ;
   furzen_V = regV "furzen" ;
-  fusarinsaeure_N = reg2N  "Fusarinsäure" "—" feminine ;
+  fusarinsaeure_N = reg2N "Fusarinsäure" "e" feminine;
   fusel_N = reg2N  "Fusel" "Fusel" masculine ;
   fuseloel_N = reg2N  "Fuselöl" "Fuselöle" neuter ;
-  fusidinsaeure_N = reg2N  "Fusidinsäure" "—" feminine ;
+  fusidinsaeure_N = reg2N "Fusidinsäure" "e" feminine;
   fusion_N = mkN "Fusion" ;
   fusionieren_V = regV "fusionieren" ;
   fusionierende_sprache_N = reg2N  "fusionierende Sprache" "fusionierenSprachen" feminine ;
@@ -14031,7 +14031,7 @@ lin
   galactosylgruppe_N = reg2N  "Galactosylgruppe" "Galactosylgruppen" feminine ;
   galaktosefrei_A = regA "galaktosefrei" ;
   galan_N = reg2N  "Galan" "Galane" masculine ;
-  galant_A = mk3A "galant" "galanter " "galantesten e" ;
+  galant_A = mk3A "galant" "galanter" "galantesten e" ;
   galanterie_N = reg2N  "Galanterie" "Galanterien" feminine ;
   galaxie_N = reg2N  "Galaxie" "Galaxien" feminine ;
   galeere_N = reg2N  "Galeere" "Galeeren" feminine ;
@@ -14085,7 +14085,7 @@ lin
   gancyclovir_N = reg2N  "Gancyclovir" "Gancycloviren" neuter ;
   gang_N = reg2N  "Gang" "Gänge" masculine ;
   gangart_N = reg2N  "Gangart" "Gangarten" feminine ;
-  gangbar_A = mk3A "gangbar " "gangbarer " "gangbarsten e" ;
+  gangbar_A = mk3A "gangbar" "gangbarer" "gangbarsten e" ;
   gangliosid_N = reg2N  "Gangliosid" "Ganglioside" neuter ;
   gangliosidkomponente_N = reg2N  "Gangliosidkomponente" "Gangliosidkomponenten" feminine ;
   gangraen_N = reg2N  "Gangrän" "Gangräne" neuter ;
@@ -14166,7 +14166,7 @@ lin
   gast_N = reg2N  "Gast" "Gäste" masculine ;
   gastflagge_N = reg2N  "Gastflagge" "Gastflaggen" feminine ;
   gastfreundlich_A = mk3A "gastfreundlich" "gastfreundlicher" "gastfreundlichste" ;
-  gastfreundschaft__N = reg2N  "Gastfreundschaft " "Gastfreundschaften" feminine ;
+  gastfreundschaft__N = reg2N  "Gastfreundschaft" "Gastfreundschaften" feminine ;
   gastgeber_N = reg2N  "Gastgeber" "Gastgeber" masculine ;
   gastgeberin_N = reg2N  "Gastgeberin" "Gastgeberinnen" feminine ;
   gasthaus_N = reg2N  "Gasthaus" "Gasthäuser" neuter ;
@@ -14431,7 +14431,7 @@ lin
   gegenueber_Adv = mkAdv "gegenüber" ;
   gegenueberstellung_N = mkN "Gegenüberstellung" ;
   gegenwaertig_A = regA "gegenwärtig" ;
-  gegenwartslatein_N = reg2N  "Gegenwartslatein" "-" neuter ;
+  gegenwartslatein_N = reg2N "Gegenwartslatein" "Gegenwartslateine" neuter;
   gegenwartssprache_N = reg2N  "Gegenwartssprache" "Gegenwartssprachen" feminine ;
   gegenwert_N = reg2N  "Gegenwert" "Gegenwerte" masculine ;
   gegenwort_N = reg2N  "Gegenwort" "Gegenwörter" neuter ;
@@ -14451,7 +14451,7 @@ lin
   geheien_V = irregV "geheien" "geheit" "geheite" "geheite" "geheit" ;
   geheim_A = mk3A "geheim" "geheimer" "geheimste" ;
   geheimbund_N = reg2N  "Geheimbund" "Geheimbünde" masculine ;
-  geheimcode__N = reg2N  "Geheimcode " "Geheimcodes" masculine ;
+  geheimcode__N = reg2N  "Geheimcode" "Geheimcodes" masculine ;
   geheimdienst_N = reg2N  "Geheimdienst" "Geheimdienste" masculine ;
   geheimgesellschaft_N = reg2N  "Geheimgesellschaft" "Geheimgesellschaften" feminine ;
   geheimnachricht_N = reg2N  "Geheimnachricht" "Geheimnachrichten" feminine ;
@@ -14517,7 +14517,7 @@ lin
   geisseln_V = irregV "geißeln" "geißelt" "geißelte" "geißelte" "geißelt" ;
   geisterbahn_N = reg2N  "Geisterbahn" "Geisterbahnen" feminine ;
   geisterfahrer_N = reg2N  "Geisterfahrer" "Geisterfahrer" masculine ;
-  geisterhaft_A = mk3A "geisterhaft" "geisterhafter " "geisterhafteste" ;
+  geisterhaft_A = mk3A "geisterhaft" "geisterhafter" "geisterhafteste" ;
   geisterreich_N = reg2N  "Geisterreich" "Geisterreiche" neuter ;
   geisterschiff_N = reg2N  "Geisterschiff" "Geisterschiffe" neuter ;
   geisterspiel_N = reg2N  "Geisterspiel" "Geisterspiele" neuter ;
@@ -14592,7 +14592,7 @@ lin
   gelege_N = reg2N  "Gelege" "Gelege" neuter ;
   gelegen_A = regA "gelegen" ;
   gelegenheit_N = reg2N  "Gelegenheit" "Gelegenheiten" feminine ;
-  gelegenheitsbildung__N = reg2N  "Gelegenheitsbildung " "Gelegenheitsbildungen " feminine ;
+  gelegenheitsbildung__N = reg2N  "Gelegenheitsbildung" "Gelegenheitsbildungen" feminine ;
   gelegenheitsgedicht_N = reg2N  "Gelegenheitsgedicht" "Gelegenheitsgedichte" neuter ;
   gelegentlich_A = regA "gelegentlich" ;
   geleit_N = reg2N  "Geleit" "Geleite" neuter ;
@@ -14724,7 +14724,7 @@ lin
   genick_N = reg2N  "Genick" "Genicke" neuter ;
   genickfaenger_N = reg2N  "Genickfänger" "Genickfänger" masculine ;
   genickfang_N = reg2N  "Genickfang" "Genickfänge" masculine ;
-  genickschuss__N = reg2N  "Genickschuss " "Genickschüsse" masculine ;
+  genickschuss__N = reg2N  "Genickschuss" "Genickschüsse" masculine ;
   genie_N = reg2N  "Genie" "Genies" neuter ;
   genieoffizier_N = reg2N  "Genieoffizier" "Genieoffiziere" masculine ;
   genieren_V = irregV "genieren" "geniert" "genierte" "genierte" "geniert" ;
@@ -14768,7 +14768,7 @@ lin
   genus_verbi_N = reg2N  "Genus verbi" "Genera verbi" neuter ;
   genuss_N = reg2N  "Genuss" "Genüsse" masculine ;
   genveraenderung_N = reg2N  "Genveränderung" "Genveränderungen" feminine ;
-  geobotanik_N = reg2N  "Geobotanik" "-" feminine ;
+  geobotanik_N = reg2N "Geobotanik" "e" feminine;
   geode_N = reg2N  "Geode" "Geoden" feminine ;
   geodreieck_N = reg2N  "Geodreieck" "Geodreiecke" neuter ;
   geoffrey_N = reg2N  "Geoffrey" "Geoffreys" masculine ;
@@ -14810,7 +14810,7 @@ lin
   geradekettig_A = regA "geradekettig" ;
   geradezu_Adv = mkAdv "geradezu" ;
   geradkettig_A = regA "geradkettig" ;
-  geradlinigkeit__N = reg2N  "Geradlinigkeit " "Geradlinigkeiten" feminine ;
+  geradlinigkeit__N = reg2N  "Geradlinigkeit" "Geradlinigkeiten" feminine ;
   geraedert_A = mk3A "gerädert" "geräderter" "geräderteste" ;
   geraet_N = reg2N  "Gerät" "Geräte" neuter ;
   geraeusch_N = reg2N  "Geräusch" "Geräusche" neuter ;
@@ -14853,7 +14853,7 @@ lin
   gerinnungsstoerung_N = reg2N  "Gerinnungsstörung" "Gerinnungsstörungen" feminine ;
   gerinnungszeit_N = reg2N  "Gerinnungszeit" "Gerinnungszeiten" feminine ;
   gerippe_N = reg2N  "Gerippe" "Gerippe" neuter ;
-  gerissen_A = mk3A "gerissen" "geriss(e)ner" "gerissenste" ;
+  gerissen_A = mk3A "gerissen" "gerissener" "gerissenste" ;
   german_N = reg2N  "German" "Germane" neuter ;
   germane_N = reg2N  "Germane" "Germanen" masculine ;
   germanin_N = reg2N  "Germanin" "Germaninnen" feminine ;
@@ -14931,13 +14931,13 @@ lin
   gescheit_A = mk3A "gescheit" "gescheiter" "gescheiteste" ;
   gescheiterte_staat_N = reg2N  "gescheiterte Staat" "gescheiterten Staaten" masculine ;
   geschenk_N = reg2N  "Geschenk" "Geschenke" neuter ;
-  geschenkpapier__N = reg2N  "Geschenkpapier " "Geschenkpapiere" neuter ;
+  geschenkpapier__N = reg2N  "Geschenkpapier" "Geschenkpapiere" neuter ;
   geschert_A = mk3A "geschert" "gescherter" "gescherteste" ;
   geschichte_N = reg2N  "Geschichte" "Geschichten" feminine ;
   geschichtslehrer_N = reg2N  "Geschichtslehrer" "Geschichtslehrer" masculine ;
   geschichtslehrerin_N = reg2N  "Geschichtslehrerin" "Geschichtslehrerinnen" feminine ;
-  geschichtslos_A = mk3A "geschichtslos " "geschichtsloser" "geschichtsloseste" ;
-  geschick__N = reg2N  "Geschick " "Geschicke " neuter ;
+  geschichtslos_A = mk3A "geschichtslos" "geschichtsloser" "geschichtsloseste" ;
+  geschick__N = reg2N  "Geschick" "Geschicke" neuter ;
   geschicklichkeit_N = reg2N  "Geschicklichkeit" "Geschicklichkeiten" feminine ;
   geschicklichkeitswettbewerb_N = reg2N  "Geschicklichkeitswettbewerb" "Geschicklichkeitswettbewerbe" masculine ;
   geschickt_A = mk3A "geschickt" "geschickter" "geschickteste" ;
@@ -14948,7 +14948,7 @@ lin
   geschirrspuelmaschine_N = reg2N  "Geschirrspülmaschine" "Geschirrspülmaschinen" feminine ;
   geschirrtuch_N = reg2N  "Geschirrtuch" "Geschirrtücher" neuter ;
   geschirrware_N = reg2N  "Geschirrware" "Geschirrwaren" feminine ;
-  geschiss_N = reg2N  "Geschiss" "-" neuter ;
+  geschiss_N = reg2N "Geschiss" "Geschisse" neuter;
   geschlecht_N = reg2N  "Geschlecht" "Geschlechter" neuter ;
   geschlechtsdruese_N = reg2N  "Geschlechtsdrüse" "Geschlechtsdrüsen" feminine ;
   geschlechtsgenosse_N = reg2N  "Geschlechtsgenosse" "Geschlechtsgenossen" masculine ;
@@ -14980,7 +14980,7 @@ lin
   geschoss_N = reg2N  "Geschoss" "Geschosse" neuter ;
   geschosswohnung_N = mkN "Geschosswohnung" ;
   geschraubtheit_N = reg2N  "Geschraubtheit" "Geschraubtheiten" feminine ;
-  geschreibsel_N = reg2N  "Geschreibsel" "-" neuter ;
+  geschreibsel_N = reg2N "Geschreibsel" "Geschreibsele" neuter;
   geschuetz_N = reg2N  "Geschütz" "Geschütze" neuter ;
   geschuetzt_A = regA "geschützt" ;
   geschuetzturm_N = reg2N  "Geschützturm" "Geschütztürme" masculine ;
@@ -15027,7 +15027,7 @@ lin
   gespalten_A = regA "gespalten" ;
   gespann_N = reg2N  "Gespann" "Gespanne" neuter ;
   gespannt_A = mk3A "gespannt" "gespannter" "gespannteste" ;
-  gespenst__N = reg2N  "Gespenst " "Gespenster" neuter ;
+  gespenst__N = reg2N  "Gespenst" "Gespenster" neuter ;
   gespenstschrecke_N = reg2N  "Gespenstschrecke" "Gespenstschrecken" feminine ;
   gespielin_N = reg2N  "Gespielin" "Gespielinnen" feminine ;
   gespinst_N = reg2N  "Gespinst" "Gespinste" neuter ;
@@ -15157,7 +15157,7 @@ lin
   gewebsverletzung_N = reg2N  "Gewebsverletzung" "Gewebsverletzungen" feminine ;
   gewebt_A = regA "gewebt" ;
   gewehr_N = reg2N  "Gewehr" "Gewehre" neuter ;
-  gewehrschuss__N = reg2N  "Gewehrschuss " "Gewehrschüsse" masculine ;
+  gewehrschuss__N = reg2N  "Gewehrschuss" "Gewehrschüsse" masculine ;
   geweih_N = reg2N  "Geweih" "Geweihe" neuter ;
   gewerbe_N = reg2N  "Gewerbe" "Gewerbe" neuter ;
   gewerbegebiet_N = reg2N  "Gewerbegebiet" "Gewerbegebiete" neuter ;
@@ -15172,7 +15172,7 @@ lin
   gewerkschaftsmitglied_N = reg2N  "Gewerkschaftsmitglied" "Gewerkschaftsmitglieder" neuter ;
   gewicht_N = reg2N  "Gewicht" "Gewichte" neuter ;
   gewichtet_A = regA "gewichtet" ;
-  gewichtig_A = mk3A "gewichtig" "gewichtiger " "gewichtigste" ;
+  gewichtig_A = mk3A "gewichtig" "gewichtiger" "gewichtigste" ;
   gewichtseinheit_N = reg2N  "Gewichtseinheit" "Gewichtseinheiten" feminine ;
   gewichtsgemittelt_A = regA "gewichtsgemittelt" ;
   gewichtsklasse_N = reg2N  "Gewichtsklasse" "Gewichtsklassen" feminine ;
@@ -15253,7 +15253,7 @@ lin
   gifthaeubling_N = reg2N  "Gifthäubling" "Gifthäublinge" masculine ;
   giftig_A = mk3A "giftig" "giftiger" "giftigste" ;
   giftler_N = reg2N  "Giftler" "Giftler" masculine ;
-  giftlorchel_N = reg2N  "Giftlorchel" "Giftlorcheln " feminine ;
+  giftlorchel_N = reg2N  "Giftlorchel" "Giftlorcheln" feminine ;
   giftpflanze_N = reg2N  "Giftpflanze" "Giftpflanzen" feminine ;
   giftring_N = reg2N  "Giftring" "Giftringe" masculine ;
   giftschlange_N = reg2N  "Giftschlange" "Giftschlangen" feminine ;
@@ -15286,7 +15286,7 @@ lin
   gipsverband_N = reg2N  "Gipsverband" "Gipsverbände" masculine ;
   giraffe_N = reg2N  "Giraffe" "Giraffen" feminine ;
   girieren_V = regV "girieren" ;
-  girlande__N = reg2N  "Girlande " "Girlanden" feminine ;
+  girlande__N = reg2N  "Girlande" "Girlanden" feminine ;
   girlfriend_N = reg2N  "Girlfriend" "Girlfriends" neuter ;
   girlitz_N = reg2N  "Girlitz" "Girlitze" masculine ;
   girre_N = reg2N  "Girre" "Girres" masculine ;
@@ -15360,7 +15360,7 @@ lin
   gleichmaessig_A = mk3A "gleichmäßig" "gleichmäßiger" "gleichmäßigste" ;
   gleichmuetig_A = mk3A "gleichmütig" "gleichmütiger" "gleichmütigste" ;
   gleichnamig_A = regA "gleichnamig" ;
-  gleichrichter__N = reg2N  "Gleichrichter " "Gleichrichter " masculine ;
+  gleichrichter__N = reg2N  "Gleichrichter" "Gleichrichter" masculine ;
   gleichsam_Adv = mkAdv "gleichsam" ;
   gleichschenklig_A = regA "gleichschenklig" ;
   gleichsetzungsakkusativ_N = reg2N  "Gleichsetzungsakkusativ" "Gleichsetzungsakkusative" masculine ;
@@ -15615,9 +15615,9 @@ lin
   golfklub_N = reg2N  "Golfklub" "Golfklubs" masculine ;
   golflehrer_N = reg2N  "Golflehrer" "Golflehrer" masculine ;
   golflehrerin_N = reg2N  "Golflehrerin" "Golflehrerinnen" feminine ;
-  golfplatz__N = reg2N  "Golfplatz " "Golfplätze" masculine ;
+  golfplatz__N = reg2N  "Golfplatz" "Golfplätze" masculine ;
   golfschlaeger_N = reg2N  "Golfschläger" "Golfschläger" masculine ;
-  golfspiel_N = reg2N  "Golfspiel" "-" neuter ;
+  golfspiel_N = reg2N "Golfspiel" "Golfspiele" neuter;
   golfspieler_N = reg2N  "Golfspieler" "Golfspieler" masculine ;
   golfspielerin_N = reg2N  "Golfspielerin" "Golfspielerinnen" feminine ;
   golgi_apparat_N = reg2N  "Golgi-Apparat" "Golgi-Apparate" masculine ;
@@ -15631,7 +15631,7 @@ lin
   gonadotrop_A = regA "gonadotrop" ;
   gondel_N = reg2N  "Gondel" "Gondeln" feminine ;
   goniometer_N = reg2N  "Goniometer" "Goniometer" neuter ;
-  gonocoel_N = reg2N  "Gonocöl" "— " neuter ;
+  gonocoel_N = reg2N "Gonocöl" "Gonocöle" neuter;
   gonokokke_N = reg2N  "Gonokokke" "Gonokokken" feminine ;
   gonorrhoee_N = reg2N  "Gonorrhöe" "Gonorrhöen" feminine ;
   googeln_V = regV "googeln" ;
@@ -15787,7 +15787,7 @@ lin
   grausam_A = mk3A "grausam" "grausamer" "grausamste" ;
   grausamkeit_N = reg2N  "Grausamkeit" "Grausamkeiten" feminine ;
   grauspecht_N = reg2N  "Grauspecht" "Grauspechte" masculine ;
-  graustich_N = reg2N  "Graustich" "- " masculine ;
+  graustich_N = reg2N "Graustich" "Graustiche" masculine;
   grauvernatsch_N = reg2N  "Grauvernatsch" "Grauvernatsche" masculine ;
   grauweide_N = reg2N  "Grauweide" "Grauweiden" feminine ;
   grauzone_N = reg2N  "Grauzone" "Grauzonen" feminine ;
@@ -15802,7 +15802,7 @@ lin
   grede_N = reg2N  "Grede" "Greden" feminine ;
   gregorianisch_A = regA "gregorianisch" ;
   gregorianische_gesang_N = reg2N  "Gregorianische Gesang" "Gregorianischen Gesänge" masculine ;
-  gregoriuswasser_N = reg2N  "Gregoriuswasser" "— " neuter ;
+  gregoriuswasser_N = reg2N "Gregoriuswasser" "Gregoriuswasser" neuter;
   greifbar_A = mk3A "greifbar" "greifbarer" "greifbarste" ;
   greifen_8_V = irregV "greifen" "greift" "griff" "griffe" "gegriffen" ; 
   greifvogel_N = reg2N  "Greifvogel" "Greifvögel" masculine ;
@@ -15995,7 +15995,7 @@ lin
   grundsaetzlich_A = regA "grundsätzlich" ;
   grundsatzprogramm_N = reg2N  "Grundsatzprogramm" "Grundsatzprogramme" neuter ;
   grundschicht_N = reg2N  "Grundschicht" "Grundschichten" feminine ;
-  grundschrift_N = reg2N  "Grundschrift" "Grundschriften " feminine ;
+  grundschrift_N = reg2N  "Grundschrift" "Grundschriften" feminine ;
   grundschule_N = reg2N  "Grundschule" "Grundschulen" feminine ;
   grundschullehrer_N = reg2N  "Grundschullehrer" "Grundschullehrer" masculine ;
   grundschullehrerin_N = reg2N  "Grundschullehrerin" "Grundschullehrerinnen" feminine ;
@@ -16089,7 +16089,7 @@ lin
   gummiringerl_N = reg2N  "Gummiringerl" "Gummiringerl" neuter ;
   gummistiefel_N = reg2N  "Gummistiefel" "Gummistiefel" masculine ;
   gummituch_N = reg2N  "Gummituch" "Gummitücher" neuter ;
-  gummituchanalogie_N = reg2N  "Gummituchanalogie" "—" feminine ;
+  gummituchanalogie_N = reg2N "Gummituchanalogie" "e" feminine;
   gunne_N = reg2N  "Gunne" "Gunnes" masculine ;
   gurgel_N = reg2N  "Gurgel" "Gurgeln" feminine ;
   gurgeln_V = regV "gurgeln" ;
@@ -16139,7 +16139,7 @@ lin
   gynoeceum_N = reg2N  "Gynoeceum" "Gynoeceen" neuter ;
   gynostemium_N = reg2N  "Gynostemium" "Gynostemien" neuter ;
   gynozentrisch_A = mk3A "gynozentrisch" "gynozentrischer" "gynozentrischste" ;
-  gyrocopter__N = reg2N  "Gyrocopter " "Gyrocopter " masculine ;
+  gyrocopter__N = reg2N  "Gyrocopter" "Gyrocopter" masculine ;
   gyrometer_N = reg2N  "Gyrometer" "Gyrometer" neuter ;
   gyros_N = reg2N  "Gyros" "Gyros" neuter ;
   h_N = reg2N  "H" "Hs" neuter ;
@@ -16373,7 +16373,7 @@ lin
   halbvokal_N = reg2N  "Halbvokal" "Halbvokale" masculine ;
   halbwegs_Adv = mkAdv "halbwegs" ;
   halbwertszeit_N = reg2N  "Halbwertszeit" "Halbwertszeiten" feminine ;
-  halbwissen_N = reg2N  "Halbwissen" "-" neuter ;
+  halbwissen_N = reg2N "Halbwissen" "Halbwissen" neuter;
   halbwollen_A = regA "halbwollen" ;
   halbzeit_N = reg2N  "Halbzeit" "Halbzeiten" feminine ;
   halbzeitansprache_N = reg2N  "Halbzeitansprache" "Halbzeitansprachen" feminine ;
@@ -16484,7 +16484,7 @@ lin
   handgreiflichkeit_N = reg2N  "Handgreiflichkeit" "Handgreiflichkeiten" feminine ;
   handgriff_N = reg2N  "Handgriff" "Handgriffe" masculine ;
   handhabbar_A = regA "handhabbar" ;
-  handhabbarkeit_N = reg2N  "Handhabbarkeit" "-" feminine ;
+  handhabbarkeit_N = reg2N "Handhabbarkeit" "e" feminine;
   handhaben_V = regV "handhaben" ;
   handicap_N = reg2N  "Handicap" "Handicaps" neuter ;
   handkreissaege_N = reg2N  "Handkreissäge" "Handkreissägen" feminine ;
@@ -16710,9 +16710,9 @@ lin
   hausen_V = regV "hausen" ;
   hausente_N = reg2N  "Hausente" "Hausenten" feminine ;
   hausfrau_N = reg2N  "Hausfrau" "Hausfrauen" feminine ;
-  hausfrauenart_N = reg2N  "Hausfrauenart" "- " feminine ;
+  hausfrauenart_N = reg2N "Hausfrauenart" "e" feminine;
   hausfreund_N = reg2N  "Hausfreund" "Hausfreunde" masculine ;
-  hausfriede_N = reg2N  "Hausfriede" "-" masculine ;
+  hausfriede_N = reg2N "Hausfriede" "Hausfrieden" masculine;
   hausfriedensbruch_N = reg2N  "Hausfriedensbruch" "Hausfriedensbrüche" masculine ;
   hausgeburt_N = reg2N  "Hausgeburt" "Hausgeburten" feminine ;
   hausgemacht_A = regA "hausgemacht" ;
@@ -16766,7 +16766,7 @@ lin
   hautbereich_N = reg2N  "Hautbereich" "Hautbereiche" masculine ;
   hautbeschaffenheit_N = reg2N  "Hautbeschaffenheit" "Hautbeschaffenheiten" feminine ;
   hautdurchdringungsverbesserungsmittel_N = reg2N  "Hautdurchdringungsverbesserungsmittel" "Hautdurchdringungsverbesserungsmittel" neuter ;
-  haute_cuisine_N = reg2N  "Haute Cuisine" "-" feminine ;
+  haute_cuisine_N = reg2N "Haute Cuisine" "e" feminine;
   hauteng_A = regA "hauteng" ;
   hautentzuendung_N = reg2N  "Hautentzündung" "Hautentzündungen" feminine ;
   hautepithelzelle_N = reg2N  "Hautepithelzelle" "Hautepithelzellen" feminine ;
@@ -16841,13 +16841,13 @@ lin
   heckenschere_N = reg2N  "Heckenschere" "Heckenscheren" feminine ;
   heckenschuetze_N = reg2N  "Heckenschütze" "Heckenschützen" masculine ;
   heckklappe_N = reg2N  "Heckklappe" "Heckklappen" feminine ;
-  heckmeck_N = reg2N  "Heckmeck" "Heckmecks " masculine ;
+  heckmeck_N = reg2N  "Heckmeck" "Heckmecks" masculine ;
   heckmotor_N = reg2N  "Heckmotor" "Heckmotoren" masculine ;
   heckscheibe_N = reg2N  "Heckscheibe" "Heckscheiben" feminine ;
   hederich_N = reg2N  "Hederich" "Hederiche" masculine ;
   hedgefonds_N = reg2N  "Hedgefonds" "Hedgefonds" masculine ;
   hedoniker_N = reg2N  "Hedoniker" "Hedoniker" masculine ;
-  hedonisch_A = mk3A "hedonisch" "?" "?e" ;
+  hedonisch_A = mk3A "hedonisch" "hedonischer" "hedonischte" ;
   hedonismus_N = reg2N  "Hedonismus" "Hedonismen" masculine ;
   hedonist_N = reg2N  "Hedonist" "Hedonisten" masculine ;
   hedonistisch_A = mk3A "hedonistisch" "hedonistischer" "hedonistischste" ;
@@ -16938,7 +16938,7 @@ lin
   heimreise_N = reg2N  "Heimreise" "Heimreisen" feminine ;
   heimsieg_N = reg2N  "Heimsieg" "Heimsiege" masculine ;
   heimspiel_N = reg2N  "Heimspiel" "Heimspiele" neuter ;
-  heimstatt_N = reg2N  "Heimstatt" "-" feminine ;
+  heimstatt_N = reg2N "Heimstatt" "e" feminine;
   heimtier_N = reg2N  "Heimtier" "Heimtiere" neuter ;
   heimtierhaltung_N = mkN "Heimtierhaltung" ;
   heimzahlen_1_V = prefixV "heim" (regV "zahlen") ;
@@ -16956,7 +16956,7 @@ lin
   heissgeliebt_9_A = regA "heißgeliebt" ;
   heissgeliebt_A = regA "heißgeliebt" ;
   heissleiter_N = reg2N  "Heißleiter" "Heißleiter" masculine ;
-  heiter_A = mk3A "heiter " "heiterer" "heiterste" ;
+  heiter_A = mk3A "heiter" "heiterer" "heiterste" ;
   heiterkeit_N = reg2N  "Heiterkeit" "Heiterkeiten" feminine ;
   heizdecke_N = reg2N  "Heizdecke" "Heizdecken" feminine ;
   heizen_V = regV "heizen" ;
@@ -16986,7 +16986,7 @@ lin
   helferlein_N = reg2N  "Helferlein" "Helferlein" neuter ;
   helfershelfer_N = reg2N  "Helfershelfer" "Helfershelfer" masculine ;
   helikon_N = reg2N  "Helikon" "Helikons" neuter ;
-  helikopter__N = reg2N  "Helikopter " "Helikopter " masculine ;
+  helikopter__N = reg2N  "Helikopter" "Helikopter" masculine ;
   helikopterabsturz_N = reg2N  "Helikopterabsturz" "Helikopterabstürze" masculine ;
   heliometer_N = reg2N  "Heliometer" "Heliometer" neuter ;
   heliumatom_N = reg2N  "Heliumatom" "Heliumatome" neuter ;
@@ -17166,7 +17166,7 @@ lin
   herstellen_V = prefixV "her" (regV "stellen") ;
   hersteller_N = reg2N  "Hersteller" "Hersteller" masculine ;
   herstellung_N = mkN "Herstellung" ;
-  hertha__N = reg2N  "Hertha " "Herthas" feminine ;
+  hertha__N = reg2N  "Hertha" "Herthas" feminine ;
   herum_Adv = mkAdv "herum" ;
   herumdrucksen_V = prefixV "herum" (regV "drucksen") ;
   herumfuhrwerken_2_V = prefixV "herum" (regV "fuhrwerken") ;
@@ -17321,8 +17321,8 @@ lin
   hiesig_A = regA "hiesig" ;
   hiezu_Adv = mkAdv "hiezu" ;
   high_five_N = reg2N  "High five" "High fives" masculine ;
-  high_society_N = reg2N  "High Society" "-" feminine ;
-  hilarfleck__N = reg2N  "Hilarfleck " "Hilarflecke " masculine ;
+  high_society_N = reg2N "High Society" "High Societys" feminine;
+  hilarfleck__N = reg2N  "Hilarfleck" "Hilarflecke" masculine ;
   hilarius_N = reg2N  "Hilarius" "Hilariusse" masculine ;
   hilfe_N = reg2N  "Hilfe" "Hilfen" feminine ;
   hilfreich_A = mk3A "hilfreich" "hilfreicher" "hilfreichste" ;
@@ -17346,7 +17346,7 @@ lin
   hilfszeitwort_N = reg2N  "Hilfszeitwort" "Hilfszeitwörter" neuter ;
   himbeere_N = reg2N  "Himbeere" "Himbeeren" feminine ;
   himbeerfarben_A = regA "himbeerfarben" ;
-  himmel__N = reg2N  "Himmel " "Himmel" masculine ;
+  himmel__N = reg2N  "Himmel" "Himmel" masculine ;
   himmelan_Adv = mkAdv "himmelan" ;
   himmelbett_N = reg2N  "Himmelbett" "Himmelbetten" neuter ;
   himmelblau_A = regA "himmelblau" ;
@@ -17468,7 +17468,7 @@ lin
   historikerin_N = reg2N  "Historikerin" "Historikerinnen" feminine ;
   historiolekt_N = reg2N  "Historiolekt" "Historiolekte" masculine ;
   historisch_A = mk3A "historisch" "historischer" "historischste" ;
-  historische_praesens_N = reg2N  "historische Präsens" "-" neuter ;
+  historische_praesens_N = reg2N "historische Präsens" "historische Präsense" neuter;
   historismus_N = reg2N  "Historismus" "Historismen" masculine ;
   historizitaet_N = reg2N  "Historizität" "Historizitäten" feminine ;
   hit_N = reg2N  "Hit" "Hits" masculine ;
@@ -17485,7 +17485,7 @@ lin
   hiv_negativ_A = regA "HIV-negativ" ;
   hiv_positiv_A = regA "HIV-positiv" ;
   hiwi_N = reg2N  "Hiwi" "Hiwis" masculine ;
-  hoagascht__N = reg2N  "Hoagascht " "Hoagaschte" masculine ;
+  hoagascht__N = reg2N  "Hoagascht" "Hoagaschte" masculine ;
   hoagaschten_V = irregV "hoagaschten" "hoagaschtet" "hoagaschtete" "hoagaschtete" "gehoagaschtet" ; 
   hoatzin_N = reg2N  "Hoatzin" "Hoatzine" masculine ;
   hobbit_N = reg2N  "Hobbit" "Hobbits" masculine ;
@@ -17658,7 +17658,7 @@ lin
   holistisch_A = mk3A "holistisch" "holistischer" "holistischste" ;
   hollaendisch_A = mk3A "holländisch" "holländischer" "holländischste" ;
   holland_N = reg2N  "Holland" "Hollands" neuter ;
-  hollandaise_N = reg2N  "Hollandaise" "-" feminine ;
+  hollandaise_N = reg2N "Hollandaise" "e" feminine;
   hollersaft_N = reg2N  "Hollersaft" "Hollersäfte" masculine ;
   holly_N = reg2N  "Holly" "Hollys" feminine ;
   holm_N = reg2N  "Holm" "Holme" masculine ;
@@ -17673,7 +17673,7 @@ lin
   holterdipolter_Adv = mkAdv "holterdipolter" ;
   holunder_N = reg2N  "Holunder" "Holunder" masculine ;
   holunderbeere_N = reg2N  "Holunderbeere" "Holunderbeeren" feminine ;
-  holunderpilz_N = reg2N  "Holunderpilz" "Holunderpilze " masculine ;
+  holunderpilz_N = reg2N  "Holunderpilz" "Holunderpilze" masculine ;
   holz_N = reg2N  "Holz" "Hölzer" neuter ;
   holzauge_N = reg2N  "Holzauge" "Holzaugen" neuter ;
   holzbank_N = reg2N  "Holzbank" "Holzbänke" feminine ;
@@ -17756,7 +17756,7 @@ lin
   hoody_N = reg2N  "Hoody" "Hoodys" masculine ;
   hooligan_N = reg2N  "Hooligan" "Hooligans" masculine ;
   hopfen_N = reg2N  "Hopfen" "Hopfen" masculine ;
-  hopfenbitter_N = reg2N  "Hopfenbitter" "-" neuter ;
+  hopfenbitter_N = reg2N "Hopfenbitter" "Hopfenbitter" neuter;
   hoplit_N = reg2N  "Hoplit" "Hopliten" masculine ;
   horchen_V = regV "horchen" ;
   horcher_N = reg2N  "Horcher" "Horcher" masculine ;
@@ -17935,7 +17935,7 @@ lin
   hungern_3_V = regV "hungern" ;
   hungerpflaume_N = reg2N  "Hungerpflaume" "Hungerpflaumen" feminine ;
   hungerquelle_N = reg2N  "Hungerquelle" "Hungerquellen" feminine ;
-  hungerraeude_N = reg2N  "Hungerräude" "— " feminine ;
+  hungerraeude_N = reg2N "Hungerräude" "e" feminine;
   hungerrechen_N = reg2N  "Hungerrechen" "Hungerrechen" masculine ;
   hungersnot_N = reg2N  "Hungersnot" "Hungersnöte" feminine ;
   hungerstein_N = reg2N  "Hungerstein" "Hungersteine" masculine ;
@@ -18042,7 +18042,7 @@ lin
   hydrokolloid_A = regA "hydrokolloid" ;
   hydrolase_N = reg2N  "Hydrolase" "Hydrolasen" feminine ;
   hydrolisieren_V = irregV "hydrolisieren" "hydrolisiert" "hydrolisierte" "hydrolisierte" "hydrolisiert" ;
-  hydrologie_N = reg2N  "Hydrologie" "-" feminine ;
+  hydrologie_N = reg2N "Hydrologie" "e" feminine;
   hydrolysat_N = reg2N  "Hydrolysat" "Hydrolysate" neuter ;
   hydrolyse_N = reg2N  "Hydrolyse" "Hydrolysen" feminine ;
   hydrolysierbar_A = regA "hydrolysierbar" ;
@@ -18187,21 +18187,21 @@ lin
   hypothermie_N = reg2N  "Hypothermie" "Hypothermien" feminine ;
   hypothese_N = reg2N  "Hypothese" "Hypothesen" feminine ;
   hypothetisch_A = regA "hypothetisch" ;
-  hypothyreose_N = reg2N  "Hypothyreose" "-" feminine ;
+  hypothyreose_N = reg2N "Hypothyreose" "e" feminine;
   hypothyroidism_N = reg2N "Hypothyroidismus" "Hypothyroidismen" masculine ;
   hypotonie_N = reg2N  "Hypotonie" "Hypotonien" feminine ;
   hypotonisch_A = regA "hypotonisch" ;
   hypotrachelion_N = mkN "Hypotrachelion" ;
   hypourikaemie_N = reg2N  "Hypourikämie" "Hypourikämien" feminine ;
   hypoventilation_N = mkN "Hypoventilation" ;
-  hypovitaminose_N = reg2N  "Hypovitaminose" "Hypovitaminosen " feminine ;
+  hypovitaminose_N = reg2N  "Hypovitaminose" "Hypovitaminosen" feminine ;
   hypovolaemie_N = reg2N  "Hypovolämie" "Hypovolämien" feminine ;
   hypoxisch_A = regA "hypoxisch" ;
   hypozentrum_N = reg2N  "Hypozentrum" "Hypozentren" neuter ;
   hypsiphobie_N = reg2N  "Hypsiphobie" "Hypsiphobien" feminine ;
   hysterektomie_N = reg2N  "Hysterektomie" "Hysterektomien" feminine ;
   hysterie_N = reg2N  "Hysterie" "Hysterien" feminine ;
-  hysterisch_A = mk3A "hysterisch" "hysterischer " "hysterischsten e" ;
+  hysterisch_A = mk3A "hysterisch" "hysterischer" "hysterischsten e" ;
   hysterosalpingografie_N = reg2N  "Hysterosalpingografie" "Hysterosalpingografien" feminine ;
   i_4_N = reg2N  "i" "i" neuter ;
   i_N = reg2N  "I" "Is" neuter ;
@@ -18226,7 +18226,7 @@ lin
   ichthyosis_N = reg2N  "Ichthyosis" "Ichthyosen" feminine ;
   ichtyose_N = reg2N  "Ichtyose" "Ichtyosen" feminine ;
   idarubicine_N = reg2N "Idarubicin" "Idarubicine" neuter ;
-  ideal_A = mk3A "ideal" "(idealer)" "(idealsten)e" ;
+  ideal_A = mk3A "ideal" "idealer" "idealste" ;
   ideal_N = reg2N  "Ideal" "Ideale" neuter ;
   idealbild_N = reg2N  "Idealbild" "Idealbilder" neuter ;
   ideale_sprecher_hoerer_N = reg2N  "ideale Sprecher-Hörer" "idealen Sprecher-Hörer" masculine ;
@@ -18301,7 +18301,7 @@ lin
   illusion_N = mkN "Illusion" ;
   illusionaer_A = mk3A "illusionär" "illusionärer" "illusionärste" ;
   illusorisch_A = mk3A "illusorisch" "illusorischer" "illusorischste" ;
-  illuster_A = mk3A "illuster " "illustrer " "illustersten e" ;
+  illuster_A = mk3A "illuster" "illustrer" "illustersten e" ;
   illustration_N = mkN "Illustration" ;
   illustrieren_V = regV "illustrieren" ;
   iltis_N = reg2N  "Iltis" "Iltisse" masculine ;
@@ -18329,7 +18329,7 @@ lin
   imkern_V = irregV "imkern" "imkert" "imkerte" "imkerte" "imkert" ;
   immanent_A = regA "immanent" ;
   immatrikulation_N = mkN "Immatrikulation" ;
-  immatrikulationsbescheinigung__N = reg2N  "Immatrikulationsbescheinigung " "Immatrikulationsbescheinigungen" feminine ;
+  immatrikulationsbescheinigung__N = reg2N  "Immatrikulationsbescheinigung" "Immatrikulationsbescheinigungen" feminine ;
   immatrikulieren_V = irregV "immatrikulieren" "immatrikuliert" "immatrikulierte" "immatrikulierte" "immatrikuliert" ;
   immatur_A = regA "immatur" ;
   imme_N = reg2N  "Imme" "Immen" feminine ;
@@ -18499,7 +18499,7 @@ lin
   inbusschluessel_N = reg2N  "Inbusschlüssel" "Inbusschlüssel" masculine ;
   inbusschraube_N = reg2N  "Inbusschraube" "Inbusschraube" masculine ;
   incentive_N = reg2N  "Incentive" "Incentives" neuter ;
-  inch__N = reg2N  "Inch " "Inches" masculine ;
+  inch__N = reg2N  "Inch" "Inches" masculine ;
   inchoativ_A = regA "inchoativ" ;
   inclusion_N = reg2N "Einschluss" "Einschlüsse" masculine ;
   incontinence_N = reg2N "Inkontinenz" "Inkontinenzen" feminine ;
@@ -18527,7 +18527,7 @@ lin
   indikativ_N = reg2N  "Indikativ" "Indikative" masculine ;
   indikator_N = reg2N  "Indikator" "Indikatoren" masculine ;
   indikatorzelle_N = reg2N  "Indikatorzelle" "Indikatorzellen" feminine ;
-  indirekt_A = mk3A "indirekt" "(indirekter)" "(indirektesten)e" ;
+  indirekt_A = mk3A "indirekt" "indirekter" "indirekteste" ;
   indirekte_frage_N = reg2N  "indirekte Frage" "indirekten Fragen" feminine ;
   indirekte_objekt_N = reg2N  "indirekte Objekt" "indirekten Objekte" neuter ;
   indirekte_rede__N = reg2N  "indirekte Rede " "indirekten Re" feminine ;
@@ -18641,7 +18641,7 @@ lin
   informationstechnologie_N = reg2N  "Informationstechnologie" "Informationstechnologien" feminine ;
   informationstext_N = reg2N  "Informationstext" "Informationstexte" masculine ;
   informationstheorie_N = reg2N  "Informationstheorie" "Informationstheorien" feminine ;
-  informationswirtschaft_N = reg2N  "Informationswirtschaft" "?" feminine ;
+  informationswirtschaft_N = reg2N  "Informationswirtschaft" "Informationswirtschaften" feminine ;
   informativ_A = mk3A "informativ" "informativer" "informativsten e" ;
   informell_A = mk3A "informell" "informeller" "informellste" ;
   informieren_V = irregV "informieren" "informiert" "informierte" "informierte" "informiert" ;
@@ -18711,7 +18711,7 @@ lin
   injizieren_V = irregV "injizieren" "injiziert" "injizierte" "injizierte" "injiziert" ;
   injurie_N = reg2N  "Injurie" "Injurien" feminine ;
   inkarnation_N = mkN "Inkarnation" ;
-  inkarnatklee_N = reg2N  "Inkarnatklee" " " masculine ;
+  inkarnatklee_N = reg2N  "Inkarnatklee" "Inkarnatkleen" masculine ;
   inkluse_N = reg2N  "Inkluse" "Inklusen" feminine ;
   inklusion_N = mkN "Inklusion" ;
   inklusionist_N = reg2N  "Inklusionist" "Inklusionisten" masculine ;
@@ -18813,7 +18813,7 @@ lin
   insolvenzantrag_N = reg2N  "Insolvenzantrag" "Insolvenzanträge" masculine ;
   insomnia_N = regN "Schlaflosigkeit" ;
   inspektion_N = mkN "Inspektion" ;
-  inspiration__N = reg2N  "Inspiration " "Inspirationen" feminine ;
+  inspiration__N = reg2N  "Inspiration" "Inspirationen" feminine ;
   inspirieren_V = irregV "inspirieren" "inspiriert" "inspirierte" "inspirierte" "inspiriert" ;
   inspizient_N = reg2N  "Inspizient" "Inspizienten" masculine ;
   instabil_A = mk3A "instabil" "instabiler" "instabilste" ;
@@ -18964,7 +18964,7 @@ lin
   internetradio_N = reg2N  "Internetradio" "Internetradios" neuter ;
   internetseite_N = reg2N  "Internetseite" "Internetseiten" feminine ;
   internetsurfer_N = reg2N  "Internetsurfer" "Internetsurfer" masculine ;
-  internetsurfing_N = reg2N  "Internetsurfing" "- " neuter ;
+  internetsurfing_N = reg2N "Internetsurfing" "Internetsurfinge" neuter;
   internetzeitung_N = mkN "Internetzeitung" ;
   internetzugang_N = reg2N  "Internetzugang" "Internetzugänge" masculine ;
   internieren_V = irregV "internieren" "interniert" "internierte" "internierte" "interniert" ; 
@@ -19174,14 +19174,14 @@ lin
   irakisch_A = mk3A "irakisch" "irakischer" "irakischste" ;
   iraner_N = reg2N  "Iraner" "Iraner" masculine ;
   iranerin_N = reg2N  "Iranerin" "Iranerinnen" feminine ;
-  iranisch_A = mk3A "iranisch " "iranischer" "iranischste" ;
+  iranisch_A = mk3A "iranisch" "iranischer" "iranischste" ;
   iranische_sprache_N = reg2N  "iranische Sprache" "iranischen Sprachen" feminine ;
   irbesartan_N = reg2N "Irbesartan" "Irbesartane" neuter ;
   irden_A = regA "irden" ;
   irdisch_A = mk3A "irdisch" "irdischer" "irdischste" ;
   ire_N = reg2N  "Ire" "Iren" masculine ;
   iren_N = reg2N  "Iren" "Irene" neuter ;
-  irene__N = reg2N  "Irene " "Irenen" feminine ;
+  irene__N = reg2N  "Irene" "Irenen" feminine ;
   irgendwann_Adv = mkAdv "irgendwann" ;
   irgendwelch_A = regA "irgendwelch" ;
   irgendwie_Adv = mkAdv "irgendwie" ;
@@ -19200,7 +19200,7 @@ lin
   irr_A = mk3A "irr" "irrer" "irrste" ;
   irrational_A = mk3A "irrational" "irrationaler" "irrationalste" ;
   irre_A = mk3A "irre" "irrer" "irrste" ;
-  irre_N = reg2N  "Irre" "-" feminine ;
+  irre_N = reg2N "Irre" "e" feminine;
   irreal_A = mk3A "irreal" "irrealer" "irrealste" ;
   irrelevant_A = regA "irrelevant" ;
   irren_V = regV "irren" ;
@@ -19278,9 +19278,9 @@ lin
   isopropanolloesung_N = reg2N  "Isopropanollösung" "Isopropanollösungen" feminine ;
   isopropyl_N = reg2N "Isopropyl" "Isopropyle" neuter ;
   isopropylgruppe_N = reg2N  "Isopropylgruppe" "Isopropylgruppen" feminine ;
-  isoquante_N = reg2N  "Isoquante" "Isoquanten " feminine ;
+  isoquante_N = reg2N  "Isoquante" "Isoquanten" feminine ;
   isosorbide_N = reg2N "Isosorbid" "Isosorbide" neuter ;
-  isotherme_N = reg2N  "Isotherme" "Isothermen " feminine ;
+  isotherme_N = reg2N  "Isotherme" "Isothermen" feminine ;
   isothiocyanat_N = reg2N  "Isothiocyanat" "Isothiocyanate" neuter ;
   isotonisch_A = mk3A "isotonisch" "isotonischer" "isotonischste" ;
   isotonisierend_A = regA "isotonisierend" ;
@@ -19373,7 +19373,7 @@ lin
   jahrestag_N = reg2N  "Jahrestag" "Jahrestage" masculine ;
   jahresueberschuss_N = reg2N  "Jahresüberschuss" "Jahresüberschüsse" masculine ;
   jahreswechsel_N = reg2N  "Jahreswechsel" "Jahreswechsel" masculine ;
-  jahreszahl__N = reg2N  "Jahreszahl " "Jahreszahlen" feminine ;
+  jahreszahl__N = reg2N  "Jahreszahl" "Jahreszahlen" feminine ;
   jahreszeit_N = reg2N  "Jahreszeit" "Jahreszeiten" feminine ;
   jahrgang_N = reg2N  "Jahrgang" "Jahrgänge" masculine ;
   jahrhundert_N = reg2N  "Jahrhundert" "Jahrhunderte" neuter ;
@@ -19390,7 +19390,7 @@ lin
   jakobsbirne_N = reg2N  "Jakobsbirne" "Jakobsbirnen" feminine ;
   jakobsblume_N = reg2N  "Jakobsblume" "Jakobsblumen" feminine ;
   jakobsbruder_N = reg2N  "Jakobsbruder" "Jakobsbrüder" masculine ;
-  jakobskreuzkraut_N = reg2N  "Jakobskreuzkraut" "— " neuter ;
+  jakobskreuzkraut_N = reg2N "Jakobskreuzkraut" "Jakobskreuzkraute" neuter;
   jakobslachs_N = reg2N  "Jakobslachs" "Jakobslachse" masculine ;
   jakobsleiter_N = reg2N  "Jakobsleiter" "Jakobsleitern" feminine ;
   jakobslilie_N = reg2N  "Jakobslilie" "Jakobslilie" feminine ;
@@ -19473,7 +19473,7 @@ lin
   jo_jo_N = reg2N  "Jo-Jo" "Jo-Jos" neuter ;
   job_N = reg2N  "Job" "Jobs" masculine ;
   jobben_V = regV "jobben" ;
-  jobcenter__N = reg2N  "Jobcenter " "Jobcenter " neuter ;
+  jobcenter__N = reg2N  "Jobcenter" "Jobcenter" neuter ;
   jobeljahr_N = reg2N  "Jobeljahr" "Jobeljahre" neuter ;
   joch_N = reg2N  "Joch" "Joche" neuter ;
   jochbein_N = reg2N  "Jochbein" "Jochbeine" neuter ;
@@ -19485,7 +19485,7 @@ lin
   jodokus_N = reg2N  "Jodokus" "Jodokusse" masculine ;
   jodophor_N = reg2N  "Jodophor" "Jodophoren" neuter ;
   joggen_V = regV "joggen" ;
-  jogging_N = reg2N  "Jogging" "-" neuter ;
+  jogging_N = reg2N "Jogging" "Jogginge" neuter;
   jogginghose_N = reg2N  "Jogginghose" "Jogginghosen" feminine ;
   jogi_N = reg2N  "Jogi" "Jogis" masculine ;
   jogin_N = reg2N  "Jogin" "Jogins" masculine ;
@@ -19534,7 +19534,7 @@ lin
   judaist_N = reg2N  "Judaist" "Judaisten" masculine ;
   judaistisch_A = regA "judaistisch" ;
   judaskuss_N = reg2N  "Judaskuss" "Judasküsse" masculine ;
-  judasohr_N = reg2N  "Judasohr" "Judasohren " neuter ;
+  judasohr_N = reg2N  "Judasohr" "Judasohren" neuter ;
   jude_N = reg2N  "Jude" "Juden" masculine ;
   judenchrist_N = reg2N  "Judenchrist" "Judenchristen" masculine ;
   judenfeindlich_A = mk3A "judenfeindlich" "judenfeindlicher" "judenfeindlichste" ;
@@ -19573,7 +19573,7 @@ lin
   jung_A = mk3A "jung" "jünger" "jüngste" ;
   jungenhaft_A = mk3A "jungenhaft" "jungenhafter" "jungenhafteste" ;
   jungenname_N = reg2N  "Jungenname" "Jungennamen" masculine ;
-  jungfer__N = reg2N  "Jungfer " "Jungfern" feminine ;
+  jungfer__N = reg2N  "Jungfer" "Jungfern" feminine ;
   jungfer_im_gruenen_N = reg2N  "Jungfer im Grünen" "Jungfern im Grünen" feminine ;
   jungfernflug_N = reg2N  "Jungfernflug" "Jungfernflüge" masculine ;
   jungfernhaeutchen_N = reg2N  "Jungfernhäutchen" "Jungfernhäutchen" neuter ;
@@ -19723,7 +19723,7 @@ lin
   kaiserlich_A = regA "kaiserlich" ;
   kaiserling_N = reg2N  "Kaiserling" "Kaiserlinge" masculine ;
   kaiserpfalz_N = reg2N  "Kaiserpfalz" "Kaiserpfalzen" feminine ;
-  kaiserpilz_N = reg2N  "Kaiserpilz" "Kaiserpilze " masculine ;
+  kaiserpilz_N = reg2N  "Kaiserpilz" "Kaiserpilze" masculine ;
   kaiserpinguin_N = reg2N  "Kaiserpinguin" "Kaiserpinguine" masculine ;
   kaiserreich_N = reg2N  "Kaiserreich" "Kaiserreiche" neuter ;
   kaiserschmarren_N = reg2N  "Kaiserschmarren" "Kaiserschmarren" masculine ;
@@ -19748,7 +19748,7 @@ lin
   kalauer_N = reg2N  "Kalauer" "Kalauer" masculine ;
   kalb_N = reg2N  "Kalb" "Kälber" neuter ;
   kalben_V = irregV "kalben" "kalbt" "kalbte" "kalbte" "kalbt" ;
-  kalbfleisch_N = reg2N  "Kalbfleisch" "-" neuter ;
+  kalbfleisch_N = reg2N "Kalbfleisch" "Kalbfleische" neuter;
   kalbin_N = reg2N  "Kalbin" "Kalbinnen" feminine ;
   kalbsbries_N = reg2N  "Kalbsbries" "Kalbsbriese" neuter ;
   kalbshachse_N = reg2N  "Kalbshachse" "Kalbshachsen" feminine ;
@@ -19798,7 +19798,7 @@ lin
   kambodschaner_N = reg2N  "Kambodschaner" "Kambodschaner" masculine ;
   kambodschanerin_N = reg2N  "Kambodschanerin" "Kambodschanerinnen" feminine ;
   kambodschanisch_A = mk3A "kambodschanisch" "kambodschanischer" "kambodschanischste" ;
-  kambrium_N = reg2N  "Kambrium" "— " neuter ;
+  kambrium_N = reg2N "Kambrium" "Kambriume" neuter;
   kamee_N = reg2N  "Kamee" "Kameen" feminine ;
   kamel_N = reg2N  "Kamel" "Kamele" neuter ;
   kamelie_N = reg2N  "Kamelie" "Kamelien" feminine ;
@@ -19880,8 +19880,8 @@ lin
   kanone_N = reg2N  "Kanone" "Kanonen" feminine ;
   kanonenkugel_N = reg2N  "Kanonenkugel" "Kanonenkugeln" feminine ;
   kanonenofen_N = reg2N  "Kanonenofen" "Kanonenöfen" masculine ;
-  kanonenschuss__N = reg2N  "Kanonenschuss " "Kanonenschüsse" masculine ;
-  kanonenturm__N = reg2N  "Kanonenturm " "Kanonentürme" masculine ;
+  kanonenschuss__N = reg2N  "Kanonenschuss" "Kanonenschüsse" masculine ;
+  kanonenturm__N = reg2N  "Kanonenturm" "Kanonentürme" masculine ;
   kanonier_N = reg2N  "Kanonier" "Kanoniere" masculine ;
   kanonierin_N = reg2N  "Kanonierin" "Kanonierinnen" feminine ;
   kanonisch_A = mk3A "kanonisch" "kanonischer" "kanonischste" ;
@@ -19900,13 +19900,13 @@ lin
   kantoniert_A = regA "kantoniert" ;
   kanu_N = reg2N  "Kanu" "Kanus" neuter ;
   kanuele_N = reg2N  "Kanüle" "Kanülen" feminine ;
-  kanufahrer__N = reg2N  "Kanufahrer " "Kanufahrer " masculine ;
+  kanufahrer__N = reg2N  "Kanufahrer" "Kanufahrer" masculine ;
   kanufahrerin_N = reg2N  "Kanufahrerin" "Kanufahrerinnen" feminine ;
   kanuslalom_N = reg2N  "Kanuslalom" "Kanuslaloms" masculine ;
   kanzel_N = reg2N  "Kanzel" "Kanzeln" feminine ;
   kanzlei_N = reg2N  "Kanzlei" "Kanzleien" feminine ;
   kanzleisprache_N = reg2N  "Kanzleisprache" "Kanzleisprachen" feminine ;
-  kanzleistil_N = reg2N  "Kanzleistil" "-" masculine ;
+  kanzleistil_N = reg2N "Kanzleistil" "Kanzleistile" masculine;
   kanzler_N = reg2N  "Kanzler" "Kanzler" masculine ;
   kanzleramt_N = reg2N  "Kanzleramt" "Kanzlerämter" neuter ;
   kanzlerin_N = reg2N  "Kanzlerin" "Kanzlerinnen" feminine ;
@@ -20052,7 +20052,7 @@ lin
   kartellamt_N = reg2N  "Kartellamt" "Kartellämter" neuter ;
   karteln_V = irregV "karteln" "kartelt" "kartelte" "kartelte" "gekartelt" ; 
   kartenhaus_N = reg2N  "Kartenhaus" "Kartenhäuser" neuter ;
-  kartenspiel__N = reg2N  "Kartenspiel " "Kartenspiele" neuter ;
+  kartenspiel__N = reg2N  "Kartenspiel" "Kartenspiele" neuter ;
   kartenspieler_N = reg2N  "Kartenspieler" "Kartenspieler" masculine ;
   kartenspielerin_N = reg2N  "Kartenspielerin" "Kartenspielerinnen" feminine ;
   karthager_N = reg2N  "Karthager" "Karthager" masculine ;
@@ -20108,7 +20108,7 @@ lin
   kassenwart_N = reg2N  "Kassenwart" "Kassenwarte" masculine ;
   kasserolle_N = reg2N  "Kasserolle" "Kasserollen" feminine ;
   kassette_N = reg2N  "Kassette" "Kassetten" feminine ;
-  kassettendecke_N = reg2N  "Kassettendecke" "Kassettendecken " feminine ;
+  kassettendecke_N = reg2N  "Kassettendecke" "Kassettendecken" feminine ;
   kassettenfilm_N = reg2N  "Kassettenfilm" "Kassettenfilme" masculine ;
   kassettenvektor_N = reg2N  "Kassettenvektor" "Kassettenvektoren" masculine ;
   kassia_N = reg2N  "Kassia" "Kassien" feminine ;
@@ -20138,7 +20138,7 @@ lin
   katakana_N = reg2N  "Katakana" "Katakana" feminine ;
   kataklysmus_N = reg2N  "Kataklysmus" "Kataklysmen" masculine ;
   katakombe_N = reg2N  "Katakombe" "Katakomben" feminine ;
-  katalane__N = reg2N  "Katalane " "Katalanen" masculine ;
+  katalane__N = reg2N  "Katalane" "Katalanen" masculine ;
   katalanin_N = reg2N  "Katalanin" "Katalaninnen" feminine ;
   katalanisch_A = mk3A "katalanisch" "katalanischer" "katalanischste" ;
   katalase_N = reg2N  "Katalase" "Katalasen" feminine ;
@@ -20361,7 +20361,7 @@ lin
   kerl_N = reg2N  "Kerl" "Kerle" masculine ;
   kern_N = reg2N  "Kern" "Kerne" masculine ;
   kernbeisser_N = reg2N  "Kernbeißer" "Kernbeißer" masculine ;
-  kernel_N = reg2N  "Kernel" "Kernel " masculine ;
+  kernel_N = reg2N  "Kernel" "Kernel" masculine ;
   kerner_N = reg2N  "Kerner" "Kerner" masculine ;
   kernfamilie_N = reg2N  "Kernfamilie" "Kernfamilien" feminine ;
   kernfusion_N = mkN "Kernfusion" ;
@@ -20440,7 +20440,7 @@ lin
   kiefer_N = reg2N  "Kiefer" "Kiefern" feminine ;
   kieferknochen_N = reg2N  "Kieferknochen" "Kieferknochen" masculine ;
   kiefern_A = regA "kiefern" ;
-  kiefernsteinpilz_N = reg2N  "Kiefernsteinpilz" "Kiefernsteinpilze " masculine ;
+  kiefernsteinpilz_N = reg2N  "Kiefernsteinpilz" "Kiefernsteinpilze" masculine ;
   kieken_V = regV "kieken" ;
   kiel_N = reg2N  "Kiel" "Kiele" masculine ;
   kielerin_N = reg2N  "Kielerin" "Kielerinnen" feminine ;
@@ -20710,7 +20710,7 @@ lin
   kleidungsstueck_N = reg2N  "Kleidungsstück" "Kleidungsstücke" neuter ;
   kleie_N = reg2N  "Kleie" "Kleien" feminine ;
   klein_A = mk3A "klein" "kleiner" "kleinste" ;
-  kleinbahn__N = reg2N  "Kleinbahn " "Kleinbahnen" feminine ;
+  kleinbahn__N = reg2N  "Kleinbahn" "Kleinbahnen" feminine ;
   kleinbauer_N = reg2N  "Kleinbauer" "Kleinbauern" masculine ;
   kleinbuchstabe_N = reg2N  "Kleinbuchstabe" "Kleinbuchstaben" masculine ;
   kleinbuergerlich_A = mk3A "kleinbürgerlich" "kleinbürgerlicher" "kleinbürgerlichste" ;
@@ -20777,7 +20777,7 @@ lin
   klinik_N = reg2N  "Klinik" "Kliniken" feminine ;
   klinisch_A = mk3A "klinisch" "klinischer" "klinischste" ;
   klinkenputzer_N = reg2N  "Klinkenputzer" "Klinkenputzer" masculine ;
-  klinkenstecker__N = reg2N  "Klinkenstecker " "Klinkenstecker" masculine ;
+  klinkenstecker__N = reg2N  "Klinkenstecker" "Klinkenstecker" masculine ;
   klinker_N = reg2N  "Klinker" "Klinker" masculine ;
   klipp_Adv = mkAdv "klipp" ;
   klippe_N = reg2N  "Klippe" "Klippen" feminine ;
@@ -20794,7 +20794,7 @@ lin
   klo_N = reg2N  "Klo" "Klos" neuter ;
   kloake_N = reg2N  "Kloake" "Kloaken" feminine ;
   kloakentier_N = reg2N  "Kloakentier" "Kloakentiere" neuter ;
-  klobig_A = mk3A "klobig " "klobiger" "klobigste" ;
+  klobig_A = mk3A "klobig" "klobiger" "klobigste" ;
   kloenen_V = regV "klönen" ;
   kloenschnack_N = reg2N  "Klönschnack" "Klönschnacks" masculine ;
   kloeppel_N = reg2N  "Klöppel" "Klöppel" masculine ;
@@ -21403,7 +21403,7 @@ lin
   kongruent_A = regA "kongruent" ;
   kongruenz_N = reg2N  "Kongruenz" "Kongruenzen" feminine ;
   konifere_N = reg2N  "Konifere" "Koniferen" feminine ;
-  konisch_A = mk3A "konisch " "konischer " "konischsten e" ;
+  konisch_A = mk3A "konisch" "konischer" "konischsten e" ;
   konjektur_N = reg2N  "Konjektur" "Konjekturen" feminine ;
   konjugal_A = regA "konjugal" ;
   konjugat_N = reg2N  "Konjugat" "Konjugate" neuter ;
@@ -21606,7 +21606,7 @@ lin
   konventikler_N = reg2N  "Konventikler" "Konventikler" masculine ;
   konvention_N = mkN "Konvention" ;
   konventionalstrafe_N = reg2N  "Konventionalstrafe" "Konventionalstrafen" feminine ;
-  konventionell_A = mk3A "konventionell" "konventioneller " "konventionellsten e" ;
+  konventionell_A = mk3A "konventionell" "konventioneller" "konventionellsten e" ;
   konvergent_A = regA "konvergent" ;
   konvergenz_N = reg2N  "Konvergenz" "Konvergenzen" feminine ;
   konvergieren_V = irregV "konvergieren" "konvergiert" "konvergierte" "konvergierte" "konvergiert" ;
@@ -21685,7 +21685,7 @@ lin
   kopfnuss_N = reg2N  "Kopfnuss" "Kopfnüsse" feminine ;
   kopfsalat_N = reg2N  "Kopfsalat" "Kopfsalate" masculine ;
   kopfschmerz_N = reg2N  "Kopfschmerz" "Kopfschmerzen" masculine ;
-  kopfschuss__N = reg2N  "Kopfschuss " "Kopfschüsse" masculine ;
+  kopfschuss__N = reg2N  "Kopfschuss" "Kopfschüsse" masculine ;
   kopfstand_N = reg2N  "Kopfstand" "Kopfstände" masculine ;
   kopfsteg_N = reg2N  "Kopfsteg" "Kopfstege" masculine ;
   kopfsteinpflaster_N = reg2N  "Kopfsteinpflaster" "Kopfsteinpflaster" neuter ;
@@ -21796,7 +21796,7 @@ lin
   kosmetikum_N = reg2N  "Kosmetikum" "Kosmetiken" neuter ;
   kosmetisch_A = regA "kosmetisch" ;
   kosmisch_A = regA "kosmisch" ;
-  kosmodizee_N = reg2N  "Kosmodizee" "-" feminine ;
+  kosmodizee_N = reg2N "Kosmodizee" "e" feminine;
   kosmologe_N = reg2N  "Kosmologe" "Kosmologen" masculine ;
   kosmonaut_N = reg2N  "Kosmonaut" "Kosmonauten" masculine ;
   kosmopolit_N = reg2N  "Kosmopolit" "Kosmopoliten" masculine ;
@@ -21844,7 +21844,7 @@ lin
   koyotenfell_N = reg2N  "Koyotenfell" "Koyotenfelle" neuter ;
   krabbe_N = reg2N  "Krabbe" "Krabben" feminine ;
   krabbeln_V = regV "krabbeln" ;
-  krach__N = reg2N  "Krach " "Kräche" masculine ;
+  krach__N = reg2N  "Krach" "Kräche" masculine ;
   krachen_V = regV "krachen" ;
   kraechzen_V = regV "krächzen" ;
   kraeftezehrend_A = mk3A "kräftezehrend" "kräftezehrender" "kräftezehrendste" ;
@@ -21980,7 +21980,7 @@ lin
   kreis_N = reg2N  "Kreis" "Kreise" masculine ;
   kreischen_V = regV "kreischen" ;
   kreisdiagramm_N = reg2N  "Kreisdiagramm" "Kreisdiagramme" neuter ;
-  kreisel__N = reg2N  "Kreisel " "Kreisel " masculine ;
+  kreisel__N = reg2N  "Kreisel" "Kreisel" masculine ;
   kreisen_8_V = regV "kreisen" ;
   kreisfoermig_A = mk3A "kreisförmig" "kreisförmiger" "kreisförmigste" ;
   kreisfrei_A = regA "kreisfrei" ;
@@ -22296,7 +22296,7 @@ lin
   kujon_N = reg2N  "Kujon" "Kujone" masculine ;
   kujonieren_V = regV "kujonieren" ;
   kukulle_N = reg2N  "Kukulle" "Kukullen" feminine ;
-  kulant_A = mk3A "kulant" "kulanter " "kulantesten e" ;
+  kulant_A = mk3A "kulant" "kulanter" "kulantesten e" ;
   kuli_N = reg2N  "Kuli" "Kulis" masculine ;
   kulinarisch_A = mk3A "kulinarisch" "kulinarischer" "kulinarischste" ;
   kulisse_N = reg2N  "Kulisse" "Kulissen" feminine ;
@@ -22405,7 +22405,7 @@ lin
   kurios_A = mk3A "kurios" "kurioser" "kurioseste" ;
   kurrent_A = regA "kurrent" ;
   kurrentschrift_N = reg2N  "Kurrentschrift" "Kurrentschriften" feminine ;
-  kurs__N = reg2N  "Kurs " "Kurse" masculine ;
+  kurs__N = reg2N  "Kurs" "Kurse" masculine ;
   kursbuch_N = reg2N  "Kursbuch" "Kursbücher" neuter ;
   kursieren_V = regV "kursieren" ;
   kursiv_A = regA "kursiv" ;
@@ -22463,7 +22463,7 @@ lin
   kutscher_N = reg2N  "Kutscher" "Kutscher" masculine ;
   kutte_N = reg2N  "Kutte" "Kutten" feminine ;
   kuttel_N = reg2N  "Kuttel" "Kutteln" feminine ;
-  kuttelkraut_N = reg2N  "Kuttelkraut" "-" neuter ;
+  kuttelkraut_N = reg2N "Kuttelkraut" "Kuttelkraute" neuter;
   kutter_N = reg2N  "Kutter" "Kutter" masculine ;
   kutterschaufel_N = reg2N  "Kutterschaufel" "Kutterschaufeln" feminine ;
   kuvert_N = reg2N  "Kuvert" "Kuverts" neuter ;
@@ -22503,7 +22503,7 @@ lin
   lachfaeltchen_N = reg2N  "Lachfältchen" "Lachfältchen" neuter ;
   lachmoewe_N = reg2N  "Lachmöwe" "Lachmöwen" feminine ;
   lachs_N = reg2N  "Lachs" "Lachse" masculine ;
-  lachsersatz_N = reg2N  "Lachsersatz" "-" masculine ;
+  lachsersatz_N = reg2N "Lachsersatz" "Lachsersatze" masculine;
   lachsreizker_N = reg2N  "Lachsreizker" "Lachsreizker" masculine ;
   lachter_N = reg2N  "Lachter" "Lachter" neuter ;
   lack_N = reg2N  "Lack" "Lacke" masculine ;
@@ -22604,7 +22604,7 @@ lin
   lakai_N = reg2N  "Lakai" "Lakaien" masculine ;
   lake_N = reg2N  "Lake" "Laken" feminine ;
   laken_N = reg2N  "Laken" "Laken" neuter ;
-  lakonisch_A = mk3A "lakonisch " "lakonischer" "lakonischste" ;
+  lakonisch_A = mk3A "lakonisch" "lakonischer" "lakonischste" ;
   lakritze_N = reg2N  "Lakritze" "Lakritzen" masculine ;
   laktat_N = reg2N  "Laktat" "Laktate" neuter ;
   laktationsstoerung_N = reg2N  "Laktationsstörung" "Laktationsstörungen" feminine ;
@@ -22668,7 +22668,7 @@ lin
   landkreis_N = reg2N  "Landkreis" "Landkreise" masculine ;
   landkrieg_N = reg2N  "Landkrieg" "Landkriege" masculine ;
   landlaeufig_A = mk3A "landläufig" "landläufiger" "landläufigste" ;
-  landluft_N = reg2N  "Landluft" "-" feminine ;
+  landluft_N = reg2N "Landluft" "e" feminine;
   landmaschine_N = reg2N  "Landmaschine" "Landmaschinen" feminine ;
   landmensch_N = reg2N  "Landmensch" "Landmenschen" masculine ;
   landmine_N = reg2N  "Landmine" "Landminen" feminine ;
@@ -22757,7 +22757,7 @@ lin
   lara_N = reg2N  "Lara" "Laras" feminine ;
   larifari_A = regA "larifari" ;
   larissa_N = reg2N  "Larissa" "Larissas" feminine ;
-  larmoyant_A = mk3A "larmoyant " "larmoyanter" "larmoyanteste" ;
+  larmoyant_A = mk3A "larmoyant" "larmoyanter" "larmoyanteste" ;
   larve_N = reg2N  "Larve" "Larven" feminine ;
   laryngograph_N = reg2N  "Laryngograph" "Laryngographen" masculine ;
   laryngoskop_N = reg2N  "Laryngoskop" "Laryngoskope" neuter ;
@@ -22785,7 +22785,7 @@ lin
   lateinamerikanerin_N = reg2N  "Lateinamerikanerin" "Lateinamerikanerinnen" feminine ;
   lateinisch_A = regA "lateinisch" ;
   lateinlehrer_N = reg2N  "Lateinlehrer" "Lateinlehrer" masculine ;
-  lateinschrift_N = reg2N  "Lateinschrift" "-" feminine ;
+  lateinschrift_N = reg2N "Lateinschrift" "e" feminine;
   lateinschule_N = reg2N  "Lateinschule" "Lateinschulen" feminine ;
   latency_N = reg2N "Latenz" "Latenzen" feminine ;
   latent_A = regA "latent" ;
@@ -22801,7 +22801,7 @@ lin
   latschen_7_V = regV "latschen" ;
   latschen_N = reg2N  "Latschen" "Latschen" masculine ;
   latte_N = reg2N  "Latte" "Latten" feminine ;
-  lattenschuss__N = reg2N  "Lattenschuss " "Lattenschüsse" masculine ;
+  lattenschuss__N = reg2N  "Lattenschuss" "Lattenschüsse" masculine ;
   latthammer_N = reg2N  "Latthammer" "Latthämmer" masculine ;
   latwerge_N = reg2N  "Latwerge" "Latwergen" feminine ;
   latz_N = reg2N  "Latz" "Lätze" masculine ;
@@ -22882,7 +22882,7 @@ lin
   lautwert_N = reg2N  "Lautwert" "Lautwerte" masculine ;
   lautzeichen_N = reg2N  "Lautzeichen" "Lautzeichen" neuter ;
   lauwarm_A = regA "lauwarm" ;
-  lavendel_N = reg2N  "Lavendel" "Lavendel " masculine ;
+  lavendel_N = reg2N  "Lavendel" "Lavendel" masculine ;
   lavendelfarben_A = regA "lavendelfarben" ;
   lavendelhonig_N = reg2N  "Lavendelhonig" "Lavendelhonige" masculine ;
   lavendelweide_N = reg2N  "Lavendelweide" "Lavendelweiden" feminine ;
@@ -22914,7 +22914,7 @@ lin
   lebensabschnittsgefaehrte_N = reg2N  "Lebensabschnittsgefährte" "Lebensabschnittsgefährten" masculine ;
   lebensart_N = reg2N  "Lebensart" "Lebensarten" feminine ;
   lebensbuch_N = reg2N  "Lebensbuch" "Lebensbücher" neuter ;
-  lebenschance__N = reg2N  "Lebenschance " "Lebenschancen" feminine ;
+  lebenschance__N = reg2N  "Lebenschance" "Lebenschancen" feminine ;
   lebensdauer_N = reg2N  "Lebensdauer" "Lebensdauern" feminine ;
   lebenseiche_N = reg2N  "Lebenseiche" "Lebenseichen" feminine ;
   lebenselixier_N = reg2N  "Lebenselixier" "Lebenselixiere" neuter ;
@@ -22939,7 +22939,7 @@ lin
   lebensmittelvorrat_N = reg2N  "Lebensmittelvorrat" "Lebensmittelvorräte" masculine ;
   lebensmittelzusatzstoff_N = reg2N  "Lebensmittelzusatzstoff" "Lebensmittelzusatzstoffe" masculine ;
   lebensmotto_N = reg2N  "Lebensmotto" "Lebensmottos" neuter ;
-  lebenspilz_N = reg2N  "Lebenspilz" "Lebenspilze " masculine ;
+  lebenspilz_N = reg2N  "Lebenspilz" "Lebenspilze" masculine ;
   lebensraum_N = reg2N  "Lebensraum" "Lebensräume" masculine ;
   lebensretter_N = reg2N  "Lebensretter" "Lebensretter" masculine ;
   lebensretterin_N = reg2N  "Lebensretterin" "Lebensretterinnen" feminine ;
@@ -23051,7 +23051,7 @@ lin
   lehnwortbildung_N = mkN "Lehnwortbildung" ;
   lehnwortschatz_N = reg2N  "Lehnwortschatz" "Lehnwortschätze" masculine ;
   lehramt_N = reg2N  "Lehramt" "Lehrämter" neuter ;
-  lehrbetrieb_N = reg2N  "Lehrbetrieb" "-" masculine ;
+  lehrbetrieb_N = reg2N "Lehrbetrieb" "Lehrbetriebe" masculine;
   lehrbuch_N = reg2N  "Lehrbuch" "Lehrbücher" neuter ;
   lehrdorn_N = reg2N  "Lehrdorn" "Lehrdorne" masculine ;
   lehre_N = reg2N  "Lehre" "Lehren" feminine ;
@@ -23086,7 +23086,7 @@ lin
   leichenfledderei_N = reg2N  "Leichenfledderei" "Leichenfleddereien" feminine ;
   leichenschau_N = reg2N  "Leichenschau" "Leichenschauen" feminine ;
   leichenstein_N = reg2N  "Leichenstein" "Leichensteine" masculine ;
-  leichenverbrennung__N = reg2N  "Leichenverbrennung " "Leichenverbrennungen " feminine ;
+  leichenverbrennung__N = reg2N  "Leichenverbrennung" "Leichenverbrennungen" feminine ;
   leichenwagen_N = reg2N  "Leichenwagen" "Leichenwagen" masculine ;
   leichnam_N = reg2N  "Leichnam" "Leichname" masculine ;
   leicht_A = mk3A "leicht" "leichter" "leichteste" ;
@@ -23138,7 +23138,7 @@ lin
   leinwand_N = reg2N  "Leinwand" "Leinwände" feminine ;
   leipogramm_N = reg2N  "Leipogramm" "Leipogramme" neuter ;
   leipzig_N = reg2N  "Leipzig" "Leipzigs" neuter ;
-  leipziger_allerlei_N = reg2N  "Leipziger Allerlei" "-" neuter ;
+  leipziger_allerlei_N = reg2N "Leipziger Allerlei" "Leipziger Allerleie" neuter;
   leipziger_N = reg2N  "Leipziger" "Leipziger" masculine ;
   leipzigerin_N = reg2N  "Leipzigerin" "Leipzigerinnen" feminine ;
   leise_A = mk3A "leise" "leiser" "leiseste" ;
@@ -23266,7 +23266,7 @@ lin
   leuchtkaefer_N = reg2N  "Leuchtkäfer" "Leuchtkäfer" masculine ;
   leuchtkoerper_N = reg2N  "Leuchtkörper" "Leuchtkörper" masculine ;
   leuchtmittel_N = reg2N  "Leuchtmittel" "Leuchtmittel" neuter ;
-  leuchtstoff_N = reg2N  "Leuchtstoff" "Leuchtstoffe " masculine ;
+  leuchtstoff_N = reg2N  "Leuchtstoff" "Leuchtstoffe" masculine ;
   leuchtstofflampe_N = reg2N  "Leuchtstofflampe" "Leuchtstofflampen" feminine ;
   leuchtstoffroehre_N = reg2N  "Leuchtstoffröhre" "Leuchtstoffröhren" feminine ;
   leuchtturm_N = reg2N  "Leuchtturm" "Leuchttürme" masculine ;
@@ -23332,7 +23332,7 @@ lin
   lichte_mass_N = reg2N  "lichte Maß" "lichten Maße" neuter ;
   lichtempfindlich_A = regA "lichtempfindlich" ;
   lichterloh_A = regA "lichterloh" ;
-  lichtermeer_N = reg2N  "Lichtermeer" "Lichtermeere " neuter ;
+  lichtermeer_N = reg2N  "Lichtermeer" "Lichtermeere" neuter ;
   lichtgeschwindigkeit_N = reg2N  "Lichtgeschwindigkeit" "Lichtgeschwindigkeiten" feminine ;
   lichtgestalt_N = reg2N  "Lichtgestalt" "Lichtgestalten" feminine ;
   lichtgrau_A = regA "lichtgrau" ;
@@ -23354,7 +23354,7 @@ lin
   lieb_A = mk3A "lieb" "lieber" "liebste" ;
   liebaeugeln_V = regV "liebäugeln" ;
   liebbehalten_8_V = prefixV "lieb" (irregV "behalten" "behält" "behielt" "behielte" "behalten") ; 
-  liebchen__N = reg2N  "Liebchen " "Liebchen " neuter ;
+  liebchen__N = reg2N  "Liebchen" "Liebchen" neuter ;
   liebe_N = reg2N  "Liebe" "Lieben" feminine ;
   liebelei_N = reg2N  "Liebelei" "Liebeleien" feminine ;
   lieben_V = regV "lieben" ;
@@ -23478,7 +23478,7 @@ lin
   linkslastig_A = mk3A "linkslastig" "linkslastiger" "linkslastigste" ;
   linksrekursiv_A = regA "linksrekursiv" ;
   linksrheinisch_A = regA "linksrheinisch" ;
-  linksschuss__N = reg2N  "Linksschuss " "Linksschüsse" masculine ;
+  linksschuss__N = reg2N  "Linksschuss" "Linksschüsse" masculine ;
   linnea_N = reg2N  "Linnea" "Linneas" feminine ;
   linolensaeure_N = reg2N  "Linolensäure" "Linolensäuren" feminine ;
   linolsaeure_N = reg2N  "Linolsäure" "Linolsäuren" feminine ;
@@ -23525,7 +23525,7 @@ lin
   lippenbluetler_N = reg2N  "Lippenblütler" "Lippenblütler" masculine ;
   lippenlaut_N = reg2N  "Lippenlaut" "Lippenlaute" masculine ;
   lippenstift_N = reg2N  "Lippenstift" "Lippenstifte" masculine ;
-  liquidation__N = reg2N  "Liquidation " "Liquidationen" feminine ;
+  liquidation__N = reg2N  "Liquidation" "Liquidationen" feminine ;
   liquidierung_N = mkN "Liquidierung" ;
   liquor_N = reg2N  "Liquor" "Liquores" masculine ;
   lis_N = reg2N  "Lis" "Lis" feminine ;
@@ -23541,7 +23541,7 @@ lin
   litauisch_A = mk3A "litauisch" "litauischer" "litauischste" ;
   literal_A = regA "literal" ;
   literal_N = reg2N  "Literal" "Literale" neuter ;
-  literarisch_A = mk3A "literarisch" "literarischer " "literarischsten e" ;
+  literarisch_A = mk3A "literarisch" "literarischer" "literarischsten e" ;
   literat_N = reg2N  "Literat" "Literaten" masculine ;
   literatur_N = reg2N  "Literatur" "Literaturen" feminine ;
   literaturgattung_N = mkN "Literaturgattung" ;
@@ -23618,7 +23618,7 @@ lin
   loeschfahrzeug_N = reg2N  "Löschfahrzeug" "Löschfahrzeuge" neuter ;
   loeschflugzeug_N = reg2N  "Löschflugzeug" "Löschflugzeuge" neuter ;
   loeschung_N = reg2N  "Löschung" "Löschungen" feminine ;
-  loeschwasser_N = reg2N  "Löschwasser" "—" neuter ;
+  loeschwasser_N = reg2N "Löschwasser" "Löschwasser" neuter;
   loeschwasserbehaelter_N = reg2N  "Löschwasserbehälter" "Löschwasserbehälter" masculine ;
   loesegeld_N = reg2N  "Lösegeld" "Lösegelder" neuter ;
   loesemittel_N = reg2N  "Lösemittel" "Lösemittel" neuter ;
@@ -23661,7 +23661,7 @@ lin
   loggia_N = reg2N  "Loggia" "Loggien" feminine ;
   logik_N = reg2N  "Logik" "Logiken" feminine ;
   logis_N = reg2N  "Logis" "Logis" neuter ;
-  logisch_A = mk3A "logisch" "logischer " "logischste" ;
+  logisch_A = mk3A "logisch" "logischer" "logischste" ;
   logismus_N = reg2N  "Logismus" "Logismen" masculine ;
   logistik_N = reg2N  "Logistik" "Logistiken" feminine ;
   logo_N = reg2N  "Logo" "Logos" neuter ;
@@ -23714,7 +23714,7 @@ lin
   longitudinalwelle_N = reg2N  "Longitudinalwelle" "Longitudinalwellen" feminine ;
   longline_Adv = mkAdv "longline" ;
   longline_N = reg2N  "Longline" "Longlines" masculine ;
-  lorbass__N = reg2N  "Lorbass " "Lorbasse" masculine ;
+  lorbass__N = reg2N  "Lorbass" "Lorbasse" masculine ;
   lorbeer_N = reg2N  "Lorbeer" "Lorbeeren" masculine ;
   lorbeerkirsche_N = reg2N  "Lorbeerkirsche" "Lorbeerkirschen" feminine ;
   lorbeerkranz_N = reg2N  "Lorbeerkranz" "Lorbeerkränze" masculine ;
@@ -23780,10 +23780,10 @@ lin
   luestling_N = reg2N  "Lüstling" "Lüstlinge" masculine ;
   luett_A = mk3A "lütt" "lütter" "lütteste" ;
   luetzel_A = regA "lützel" ;
-  luetzel_N = reg2N  "Lützel" "- " neuter ;
-  luetzelburg_N = reg2N  "Lützelburg" "- " neuter ;
-  luetzelsachsen_N = reg2N  "Lützelsachsen" "- " neuter ;
-  luetzelsoon_N = reg2N  "Lützelsoon" "-" masculine ;
+  luetzel_N = reg2N "Lützel" "Lützele" neuter;
+  luetzelburg_N = reg2N "Lützelburg" "Lützelburge" neuter;
+  luetzelsachsen_N = reg2N "Lützelsachsen" "Lützelsachsen" neuter;
+  luetzelsoon_N = reg2N "Lützelsoon" "Lützelsoone" masculine;
   luft_N = reg2N  "Luft" "Lüfte" feminine ;
   luftangriff_N = reg2N  "Luftangriff" "Luftangriffe" masculine ;
   luftaufnahme_N = reg2N  "Luftaufnahme" "Luftaufnahmen" feminine ;
@@ -23827,7 +23827,7 @@ lin
   lukrieren_V = regV "lukrieren" ;
   lukubration_N = mkN "Lukubration" ;
   lukullisch_A = mk3A "lukullisch" "lukullischer" "lukullischste" ;
-  lulatsch_N = reg2N  "Lulatsch" "Lulatsche " masculine ;
+  lulatsch_N = reg2N  "Lulatsch" "Lulatsche" masculine ;
   lullen_1_V = regV "lullen" ;
   lumineszenz_N = reg2N  "Lumineszenz" "Lumineszenzen" feminine ;
   luminoes_A = mk3A "luminös" "luminöser" "luminöseste" ;
@@ -23845,7 +23845,7 @@ lin
   lungenkrebs_N = reg2N  "Lungenkrebs" "Lungenkrebse" masculine ;
   lungenkrebszelle_N = reg2N  "Lungenkrebszelle" "Lungenkrebszellen" feminine ;
   lungenoedem_N = reg2N  "Lungenödem" "Lungenödeme" neuter ;
-  lungenseitling__N = reg2N  "Lungenseitling " "Lungenseitlinge " masculine ;
+  lungenseitling__N = reg2N  "Lungenseitling" "Lungenseitlinge" masculine ;
   lungensurfactantzubereitung_N = reg2N  "Lungensurfactantzubereitung" "Lungensurfactantzubereitungen" feminine ;
   lungensurfaktant_N = reg2N  "Lungensurfaktant" "Lungensurfaktanten" masculine ;
   lungentumor_N = reg2N  "Lungentumor" "Lungentumoren" masculine ;
@@ -24062,7 +24062,7 @@ lin
   mahd_N = reg2N  "Mahd" "Mahden" feminine ;
   mahdi_N = reg2N  "Mahdi" "Mahdis" masculine ;
   mahlen_V = regV "mahlen" ;
-  mahlzeit__N = reg2N  "Mahlzeit " "Mahlzeiten" feminine ;
+  mahlzeit__N = reg2N  "Mahlzeit" "Mahlzeiten" feminine ;
   mahlzeit_N = reg2N  "Mahlzeit" "Mahlzeiten" feminine ;
   mahnbrief_N = reg2N  "Mahnbrief" "Mahnbriefe" masculine ;
   mahnen_7_V = regV "mahnen" ;
@@ -24086,8 +24086,8 @@ lin
   mainboard_N = reg2N  "Mainboard" "Mainboards" neuter ;
   mainman_N = reg2N  "Mainman" "Mainmanne" masculine ;
   mainzisch_A = regA "mainzisch" ;
-  maipilz__N = reg2N  "Maipilz " "Maipilze " masculine ;
-  mairitterling__N = reg2N  "Mairitterling " "Mairitterlinge " masculine ;
+  maipilz__N = reg2N  "Maipilz" "Maipilze" masculine ;
+  mairitterling__N = reg2N  "Mairitterling" "Mairitterlinge" masculine ;
   mais_N = reg2N  "Mais" "Maissorten" masculine ;
   maisfeld_N = reg2N  "Maisfeld" "Maisfelder" neuter ;
   maisgelb_A = regA "maisgelb" ;
@@ -24173,8 +24173,8 @@ lin
   malstift_N = reg2N  "Malstift" "Malstifte" masculine ;
   malt_whisky_N = reg2N  "Malt Whisky" "Malt Whiskys" masculine ;
   malter_N = reg2N  "Malter" "Malters" masculine ;
-  malteser__N = reg2N  "Malteser " "Malteser " masculine ;
-  malteserin_N = reg2N  "Malteserin" "Malteserinnen " feminine ;
+  malteser__N = reg2N  "Malteser" "Malteser" masculine ;
+  malteserin_N = reg2N  "Malteserin" "Malteserinnen" feminine ;
   maltesisch_A = mk3A "maltesisch" "maltesischer" "maltesischste" ;
   maltraetieren_V = regV "malträtieren" ;
   malversation_N = mkN "Malversation" ;
@@ -24197,12 +24197,12 @@ lin
   mandala_N = reg2N  "Mandala" "Mandalas" neuter ;
   mandarin_N = reg2N  "Mandarin" "Mandarine" masculine ;
   mandarine_N = reg2N  "Mandarine" "Mandarinen" feminine ;
-  mandarinente_N = reg2N  "Mandarinente" "Mandarinenten " feminine ;
+  mandarinente_N = reg2N  "Mandarinente" "Mandarinenten" feminine ;
   mandat_N = reg2N  "Mandat" "Mandate" neuter ;
   mandatorisch_A = regA "mandatorisch" ;
   mandatszuwachsparadoxon_N = reg2N  "Mandatszuwachsparadoxon" "Mandatszuwachsparadoxa" neuter ;
   mandel_N = reg2N  "Mandel" "Mandeln" feminine ;
-  mandelpilz_N = reg2N  "Mandelpilz" "Mandelpilze " masculine ;
+  mandelpilz_N = reg2N  "Mandelpilz" "Mandelpilze" masculine ;
   mandibel_N = reg2N  "Mandibel" "Mandibeln" feminine ;
   mandibular_A = regA "mandibular" ;
   mandoline_N = reg2N  "Mandoline" "Mandolinen" feminine ;
@@ -24279,7 +24279,7 @@ lin
   marathonlaeufer_N = reg2N  "Marathonläufer" "Marathonläufer" masculine ;
   marathonlaeuferin_N = reg2N  "Marathonläuferin" "Marathonläuferinnen" feminine ;
   marathonlauf_N = reg2N  "Marathonlauf" "Marathonläufe" masculine ;
-  marchfeld_N = reg2N  "Marchfeld" "—" neuter ;
+  marchfeld_N = reg2N "Marchfeld" "Marchfelde" neuter;
   marchzins_N = reg2N  "Marchzins" "Marchzinsen" masculine ;
   marder_N = reg2N  "Marder" "Marder" masculine ;
   marderfell_N = reg2N  "Marderfell" "Marderfelle" neuter ;
@@ -24379,7 +24379,7 @@ lin
   mascara_N = reg2N  "Mascara" "Mascaras" masculine ;
   mascha_N = reg2N  "Mascha" "Maschas" feminine ;
   masche_N = reg2N  "Masche" "Maschen" feminine ;
-  maschendrahtzaun__N = reg2N  "Maschendrahtzaun " "Maschendrahtzäune" masculine ;
+  maschendrahtzaun__N = reg2N  "Maschendrahtzaun" "Maschendrahtzäune" masculine ;
   maschikulis_N = reg2N  "Maschikulis" "Maschikulis" masculine ;
   maschine_N = reg2N  "Maschine" "Maschinen" feminine ;
   maschinelle_uebersetzung_N = mkN "maschinelle Übersetzung" ;
@@ -24484,7 +24484,7 @@ lin
   matrize_N = reg2N  "Matrize" "Matrizen" feminine ;
   matroschka_N = reg2N  "Matroschka" "Matroschkas" feminine ;
   matrose_N = reg2N  "Matrose" "Matrosen" masculine ;
-  matsutake__N = reg2N  "Matsutake " "Matsutake " masculine ;
+  matsutake__N = reg2N  "Matsutake" "Matsutake" masculine ;
   matt_A = mk3A "matt" "matter" "matteste" ;
   matt_N = reg2N  "Matt" "Matts" neuter ;
   matte_N = reg2N  "Matte" "Matten" feminine ;
@@ -24542,7 +24542,7 @@ lin
   mauritierin_N = reg2N  "Mauritierin" "Mauritierinnen" feminine ;
   mauritisch_A = mk3A "mauritisch" "mauritischer" "mauritischste" ;
   mauritiusfalke_N = reg2N  "Mauritiusfalke" "Mauritiusfalken" masculine ;
-  maus__N = reg2N  "Maus " "Mäuse" feminine ;
+  maus__N = reg2N  "Maus" "Mäuse" feminine ;
   mauschel_N = reg2N  "Mauschel" "Mauschel" masculine ;
   mauscheln_V = regV "mauscheln" ;
   mausefalle_N = reg2N  "Mausefalle" "Mausefallen" feminine ;
@@ -24589,7 +24589,7 @@ lin
   mediaeval_A = regA "mediäval" ;
   medial_A = regA "medial" ;
   median_A = regA "median" ;
-  median_N = reg2N  "Median" "Mediane " masculine ;
+  median_N = reg2N  "Median" "Mediane" masculine ;
   medianwert_N = reg2N  "Medianwert" "Medianwerte" masculine ;
   mediation_N = mkN "Mediation" ;
   mediatisieren_V = regV "mediatisieren" ;
@@ -24618,7 +24618,7 @@ lin
   meditieren_V = regV "meditieren" ;
   medium_A = regA "medium" ;
   medium_N = reg2N  "Medium" "Medien" neuter ;
-  medizin_N = reg2N  "Medizin" "Medizinen " feminine ;
+  medizin_N = reg2N  "Medizin" "Medizinen" feminine ;
   medizinball_N = reg2N  "Medizinball" "Medizinbälle" masculine ;
   mediziner_N = reg2N  "Mediziner" "Mediziner" masculine ;
   medizinisch_A = regA "medizinisch" ;
@@ -24707,7 +24707,7 @@ lin
   meisterbrief_N = reg2N  "Meisterbrief" "Meisterbriefe" masculine ;
   meisterhaft_A = mk3A "meisterhaft" "meisterhafter" "meisterhafteste" ;
   meisterleistung_N = mkN "Meisterleistung" ;
-  meisterschaft__N = reg2N  "Meisterschaft " "Meisterschaften" feminine ;
+  meisterschaft__N = reg2N  "Meisterschaft" "Meisterschaften" feminine ;
   meisterwerk_N = reg2N  "Meisterwerk" "Meisterwerke" neuter ;
   meiststufe_N = reg2N  "Meiststufe" "Meiststufen" feminine ;
   mekka_N = reg2N  "Mekka" "Mekkas" neuter ;
@@ -24766,7 +24766,7 @@ lin
   menagerie_N = reg2N  "Menagerie" "Menagerien" feminine ;
   menarche_N = reg2N  "Menarche" "Menarchen" feminine ;
   menetekel_N = reg2N  "Menetekel" "Menetekel" neuter ;
-  menge__N = reg2N  "Menge " "Mengen" feminine ;
+  menge__N = reg2N  "Menge" "Mengen" feminine ;
   menge_N = reg2N  "Menge" "Mengen" feminine ;
   mengenangabe_N = reg2N  "Mengenangabe" "Mengenangaben" masculine ;
   mengendiagramm_N = reg2N  "Mengendiagramm" "Mengendiagramme" neuter ;
@@ -24791,9 +24791,9 @@ lin
   menschenleben_N = reg2N  "Menschenleben" "Menschenleben" neuter ;
   menschenleer_A = regA "menschenleer" ;
   menschenmasse_N = reg2N  "Menschenmasse" "Menschenmassen" feminine ;
-  menschenmenge__N = reg2N  "Menschenmenge " "Menschenmengen" feminine ;
+  menschenmenge__N = reg2N  "Menschenmenge" "Menschenmengen" feminine ;
   menschenrecht_N = reg2N  "Menschenrecht" "Menschenrechte" neuter ;
-  menschenwuerde_N = reg2N  "Menschenwürde" "-" feminine ;
+  menschenwuerde_N = reg2N "Menschenwürde" "e" feminine;
   menschlich_A = mk3A "menschlich" "menschlicher" "menschlichste" ;
   menschlichkeit_N = reg2N  "Menschlichkeit" "Menschlichkeiten" feminine ;
   menschlisch_A = regA "menschlisch" ;
@@ -24833,7 +24833,7 @@ lin
   mersennezahl_N = reg2N  "Mersennezahl" "Mersennezahlen" feminine ;
   merzerisieren_V = regV "merzerisieren" ;
   mesalliance_N = reg2N  "Mesalliance" "Mesalliancen" feminine ;
-  meschugge_A = mk3A "meschugge" "(selten oder ungebräuchlich)', meschuggener" "(selten oder ungebräuchlich)', meschuggenste" ;
+  meschugge_A = mk3A "meschugge" "meschuggener" "meschuggenste" ;
   mesenchym_N = reg2N  "Mesenchym" "Mesenchyme" neuter ;
   mesenchymal_A = regA "mesenchymal" ;
   mesenterisch_A = regA "mesenterisch" ;
@@ -24928,7 +24928,7 @@ lin
   methastatisch_A = regA "methastatisch" ;
   methode_N = reg2N  "Methode" "Methoden" feminine ;
   methodik_N = reg2N  "Methodik" "Methodiken" feminine ;
-  methodologie__N = reg2N  "Methodologie " "Methodologien" feminine ;
+  methodologie__N = reg2N  "Methodologie" "Methodologien" feminine ;
   methodologisch_A = mk3A "methodologisch" "methodologischer" "methodologischste" ;
   methotrexate_N = reg2N "Methotrexat" "Methotrexate" neuter ;
   methoxygruppe_N = reg2N  "Methoxygruppe" "Methoxygruppen" feminine ;
@@ -25104,7 +25104,7 @@ lin
   milk_N = reg2N "Milch" "Milche" feminine ;
   millenarisch_A = regA "millenarisch" ;
   millennium_N = reg2N  "Millennium" "Millennien" neuter ;
-  milliamperemeter__N = reg2N  "Milliamperemeter " "Milliamperemeter " neuter ;
+  milliamperemeter__N = reg2N  "Milliamperemeter" "Milliamperemeter" neuter ;
   milliardaer_N = reg2N  "Milliardär" "Milliardäre" masculine ;
   milliarde_N = reg2N  "Milliarde" "Milliarden" feminine ;
   milliardengrab_N = reg2N  "Milliardengrab" "Milliardengräber" neuter ;
@@ -25230,7 +25230,7 @@ lin
   missernte_N = reg2N  "Missernte" "Missernten" feminine ;
   missfallen_V = irregV "missfallen" "missfällt" "missfiel" "missfiel" "missfallen" ; 
   missgelaunt_A = mk3A "missgelaunt" "missgelaunter" "missgelaunteste" ;
-  missgeschick__N = reg2N  "Missgeschick " "Missgeschicke " neuter ;
+  missgeschick__N = reg2N  "Missgeschick" "Missgeschicke" neuter ;
   misshandeln_V = regV "misshandeln" ;
   misshandlung_N = mkN "Misshandlung" ;
   mission_N = mkN "Mission" ;
@@ -25305,11 +25305,11 @@ lin
   mittags_Adv = mkAdv "mittags" ;
   mittagsbreite_N = reg2N  "Mittagsbreite" "Mittagsbreiten" feminine ;
   mittagsdaemon_N = reg2N  "Mittagsdämon" "Mittagsdämonen" masculine ;
-  mittagsonne_N = reg2N  "Mittagsonne" "-" feminine ;
+  mittagsonne_N = reg2N "Mittagsonne" "e" feminine;
   mittagspause_N = reg2N  "Mittagspause" "Mittagspausen" feminine ;
-  mittagssonne_N = reg2N  "Mittagssonne" "-" feminine ;
+  mittagssonne_N = reg2N "Mittagssonne" "e" feminine;
   mittagstisch_N = reg2N  "Mittagstisch" "Mittagstische" masculine ;
-  mitte__N = reg2N  "Mitte " "Mitten" feminine ;
+  mitte__N = reg2N  "Mitte" "Mitten" feminine ;
   mitteilen_4_V = prefixV "mit" (irregV "teilen" "teilt" "teilte" "teilte" "geteilt") ; 
   mitteilsam_A = mk3A "mitteilsam" "mitteilsamer" "mitteilsamste" ;
   mitteilung_N = mkN "Mitteilung" ;
@@ -25319,7 +25319,7 @@ lin
   mittelalterlich_A = regA "mittelalterlich" ;
   mittelaltrig_A = regA "mittelaltrig" ;
   mittelamerikanisch_A = mk3A "mittelamerikanisch" "mittelamerikanischer" "mittelamerikanischste" ;
-  mittelbar_A = mk3A "mittelbar" "(mittelbarer)" "(mittelbarsten)e" ;
+  mittelbar_A = mk3A "mittelbar" "mittelbarer" "mittelbarste" ;
   mittelbare_konstituente_N = reg2N  "mittelbare Konstituente" "mittelbaren Konstituenten" feminine ;
   mittelbauer_N = reg2N  "Mittelbauer" "Mittelbauern" masculine ;
   mittelchen_N = reg2N  "Mittelchen" "Mittelchen" neuter ;
@@ -25498,7 +25498,7 @@ lin
   mollig_A = mk3A "mollig" "molliger" "molligste" ;
   molluske_N = reg2N  "Molluske" "Mollusken" feminine ;
   molmasse_N = reg2N  "Molmasse" "Molmassen" feminine ;
-  moloch_N = reg2N  "Moloch" "Moloche " masculine ;
+  moloch_N = reg2N  "Moloch" "Moloche" masculine ;
   molotowcocktail_N = reg2N  "Molotowcocktail" "Molotowcocktails" masculine ;
   moltebeere_N = reg2N  "Moltebeere" "Moltebeeren" feminine ;
   molton_N = reg2N  "Molton" "Moltons" masculine ;
@@ -25512,7 +25512,7 @@ lin
   monarchfalter_N = reg2N  "Monarchfalter" "Monarchfalter" masculine ;
   monarchie_N = reg2N  "Monarchie" "Monarchien" feminine ;
   monaster_N = reg2N  "Monaster" "Monaster" masculine ;
-  monasterium__N = reg2N  "Monasterium " "Monasterien " neuter ;
+  monasterium__N = reg2N  "Monasterium" "Monasterien" neuter ;
   monastisch_A = regA "monastisch" ;
   monat_N = reg2N  "Monat" "Monate" masculine ;
   monatelang_A = regA "monatelang" ;
@@ -25827,7 +25827,7 @@ lin
   muffel_N = reg2N  "Muffel" "Muffel" masculine ;
   muffeln_V = regV "muffeln" ;
   muffelofen_N = reg2N  "Muffelofen" "Muffelöfen" masculine ;
-  muffelwild_N = reg2N  "Muffelwild" "-" neuter ;
+  muffelwild_N = reg2N "Muffelwild" "Muffelwilde" neuter;
   muffen_V = regV "muffen" ;
   muffig_A = mk3A "muffig" "muffiger" "muffigste" ;
   muffin_N = reg2N  "Muffin" "Muffins" masculine ;
@@ -25877,7 +25877,7 @@ lin
   multisegmentale_kurzwort_N = reg2N  "multisegmentale Kurzwort" "multisegmentalen Kurzwörter" neuter ;
   multitaskingfaehig_A = regA "multitaskingfähig" ;
   multivalent_A = regA "multivalent" ;
-  multiversum_N = reg2N  "Multiversum" "Multiversen " neuter ;
+  multiversum_N = reg2N  "Multiversum" "Multiversen" neuter ;
   multizellulaer_A = regA "multizellulär" ;
   mumie_N = reg2N  "Mumie" "Mumien" feminine ;
   mumienportraet_N = reg2N  "Mumienporträt" "Mumienporträts" neuter ;
@@ -25892,7 +25892,7 @@ lin
   mundartlich_A = regA "mundartlich" ;
   mundartwoerterbuch_N = reg2N  "Mundartwörterbuch" "Mundartwörterbücher" neuter ;
   mundblech_N = reg2N  "Mundblech" "Mundbleche" neuter ;
-  munddusche_N = reg2N  "Munddusche" "Mundduschen " feminine ;
+  munddusche_N = reg2N  "Munddusche" "Mundduschen" feminine ;
   mundgeruch_N = reg2N  "Mundgeruch" "Mundgerüche" masculine ;
   mundharmonika_N = reg2N  "Mundharmonika" "Mundharmonikas" feminine ;
   mundharmonikaspieler_N = reg2N  "Mundharmonikaspieler" "Mundharmonikaspieler" masculine ;
@@ -26012,7 +26012,7 @@ lin
   mutterkorn_N = reg2N  "Mutterkorn" "Mutterkorne" neuter ;
   mutterkuchen_N = reg2N  "Mutterkuchen" "Mutterkuchen" masculine ;
   mutterlauge_N = reg2N  "Mutterlauge" "Mutterlaugen" feminine ;
-  mutterliebe__N = reg2N  "Mutterliebe " "Mutterlieben " feminine ;
+  mutterliebe__N = reg2N  "Mutterliebe" "Mutterlieben" feminine ;
   muttermal_N = reg2N  "Muttermal" "Muttermale" neuter ;
   mutterseelenallein_A = regA "mutterseelenallein" ;
   muttersprache_N = reg2N  "Muttersprache" "Muttersprachen" feminine ;
@@ -26212,7 +26212,7 @@ lin
   nacktmull_N = reg2N  "Nacktmull" "Nacktmulle" masculine ;
   nacktscanner_N = reg2N  "Nacktscanner" "Nacktscanner" masculine ;
   nacktschnecke_N = reg2N  "Nacktschnecke" "Nacktschnecken" feminine ;
-  nadel__N = reg2N  "Nadel " "Nadeln " feminine ;
+  nadel__N = reg2N  "Nadel" "Nadeln" feminine ;
   nadelbaum_N = reg2N  "Nadelbaum" "Nadelbäume" masculine ;
   nadelholzhaeubling_N = reg2N  "Nadelholzhäubling" "Nadelholzhäublinge" masculine ;
   nadelkissen_N = reg2N  "Nadelkissen" "Nadelkissen" neuter ;
@@ -26350,10 +26350,10 @@ lin
   nasigoreng_N = reg2N  "Nasigoreng" "Nasigorengs" neuter ;
   nasobem_N = reg2N  "Nasobēm" "Nasobēme" neuter ;
   nasopharyngeal_A = regA "nasopharyngeal" ;
-  nass_A = mk3A "nass" "nasser ('auch' nässer)" "nassesten ('auch' nässesten)e" ;
+  nass_A = mk3A "nass" "nasser" "nassesten" ;
   nassauer_N = reg2N  "Nassauer" "Nassauer" masculine ;
   nassauerin_N = reg2N  "Nassauerin" "Nassauerinnen" feminine ;
-  nassforsch_A = mk3A "nassforsch " "nassforscher " "nassforscheste" ;
+  nassforsch_A = mk3A "nassforsch" "nassforscher" "nassforscheste" ;
   nassrasur_N = reg2N  "Nassrasur" "Nassrasuren" feminine ;
   nastuch_N = reg2N  "Nastuch" "Nastücher" neuter ;
   natali_N = reg2N  "Natali" "Natalis" feminine ;
@@ -26443,7 +26443,7 @@ lin
   nebeln_V = regV "nebeln" ;
   nebelparder_N = reg2N  "Nebelparder" "Nebelparder" masculine ;
   nebelschlussleuchte_N = reg2N  "Nebelschlussleuchte" "Nebelschlussleuchten" feminine ;
-  nebeltraufe_N = reg2N  "Nebeltraufe" "-" feminine ;
+  nebeltraufe_N = reg2N "Nebeltraufe" "e" feminine;
   nebelung_N = mkN "Nebelung" ;
   nebenakzent_N = reg2N  "Nebenakzent" "Nebenakzente" masculine ;
   nebenbedeutung_N = mkN "Nebenbedeutung" ;
@@ -26451,7 +26451,7 @@ lin
   nebenbemerkung_N = mkN "Nebenbemerkung" ;
   nebenberuf_N = reg2N  "Nebenberuf" "Nebenberufe" masculine ;
   nebenberuflich_A = regA "nebenberuflich" ;
-  nebenblatt__N = reg2N  "Nebenblatt " "Nebenblätter" neuter ;
+  nebenblatt__N = reg2N  "Nebenblatt" "Nebenblätter" neuter ;
   nebenbuch_N = reg2N  "Nebenbuch" "Nebenbücher" neuter ;
   nebenbuhler_N = reg2N  "Nebenbuhler" "Nebenbuhler" masculine ;
   nebeneffekt_N = reg2N  "Nebeneffekt" "Nebeneffekte" neuter ;
@@ -26523,7 +26523,7 @@ lin
   nekrotomie_N = reg2N  "Nekrotomie" "Nekrotomien" feminine ;
   nektar_N = reg2N  "Nektar" "Nektare" masculine ;
   nektarine_N = reg2N  "Nektarine" "Nektarinen" feminine ;
-  nektarium_N = reg2N  "Nektarium" "Nektarien " neuter ;
+  nektarium_N = reg2N  "Nektarium" "Nektarien" neuter ;
   nelke_N = reg2N  "Nelke" "Nelken" feminine ;
   nelkengewaechs_N = reg2N  "Nelkengewächs" "Nelkengewächse" neuter ;
   nelkenwurz_N = reg2N  "Nelkenwurz" "Nelkenwurze" feminine ;
@@ -27135,7 +27135,7 @@ lin
   nussenkasten_N = reg2N  "Nussenkasten" "Nussenkästen" masculine ;
   nussknacker_N = reg2N  "Nussknacker" "Nussknacker" masculine ;
   nusspfirsich_N = reg2N  "Nusspfirsich" "Nusspfirsiche" masculine ;
-  nusspilz_N = reg2N  "Nusspilz" "Nusspilze " masculine ;
+  nusspilz_N = reg2N  "Nusspilz" "Nusspilze" masculine ;
   nussschale_N = reg2N  "Nussschale" "Nussschalen" feminine ;
   nussschinken_N = reg2N  "Nussschinken" "Nussschinken" masculine ;
   nussschokolade_N = reg2N  "Nussschokolade" "Nussschokoladen" feminine ;
@@ -27182,8 +27182,8 @@ lin
   obenflaechenaktiv_A = regA "obenflächenaktiv" ;
   obengenannt_A = regA "obengenannt" ;
   obenstehend_A = regA "obenstehend" ;
-  ober__N = reg2N  "Ober " "Ober " masculine ;
-  ober_A = mk3A "ober" "(oberer)" "oberste" ;
+  ober__N = reg2N  "Ober" "Ober" masculine ;
+  ober_A = mk3A "ober" "oberer" "oberste" ;
   oberaffengeil_A = mk3A "oberaffengeil" "oberaffengeiler" "oberaffengeilste" ;
   oberarm_N = reg2N  "Oberarm" "Oberarme" masculine ;
   oberarmbruch_N = reg2N  "Oberarmbruch" "Oberarmbrüche" masculine ;
@@ -27260,7 +27260,7 @@ lin
   oblivioes_A = mk3A "obliviös" "obliviöser" "obliviöseste" ;
   oboe_N = reg2N  "Oboe" "Oboen" feminine ;
   oboist_N = reg2N  "Oboist" "Oboisten" masculine ;
-  obrigkeit__N = reg2N  "Obrigkeit " "Obrigkeiten " feminine ;
+  obrigkeit__N = reg2N  "Obrigkeit" "Obrigkeiten" feminine ;
   obrigkeitsstaat_N = reg2N  "Obrigkeitsstaat" "Obrigkeitsstaaten" masculine ;
   obsekration_N = mkN "Obsekration" ;
   observatorium_N = reg2N  "Observatorium" "Observatorien" neuter ;
@@ -27299,7 +27299,7 @@ lin
   odyssee_N = reg2N  "Odyssee" "Odysseen" feminine ;
   oe_N = reg2N  "Ö" "Ö" neuter ;
   oed_A = mk3A "öd" "öder" "ödeste" ;
-  oede_A = mk3A "öde" "öder" "öd(e)ste" ;
+  oede_A = mk3A "öde" "öder" "ödeste" ;
   oedem_N = reg2N  "Ödem" "Ödeme" neuter ;
   oedemhemmend_A = regA "oedemhemmend" ;
   oedipal_A = mk3A "ödipal" "ödipaler" "ödipalste" ;
@@ -27489,12 +27489,12 @@ lin
   oliver_N = reg2N  "Oliver" "Oliver" masculine ;
   olla_podrida_N = reg2N  "Olla podrida" "Ollas podridas" feminine ;
   olm_N = reg2N  "Olm" "Olme" masculine ;
-  olsenbande_N = reg2N  "Olsenbande" "-" feminine ;
+  olsenbande_N = reg2N "Olsenbande" "e" feminine;
   olympiade_N = reg2N  "Olympiade" "Olympiaden" feminine ;
   olympiadorf_N = reg2N  "Olympiadorf" "Olympiadörfer" neuter ;
   olympiasieger_N = reg2N  "Olympiasieger" "Olympiasieger" masculine ;
   olympiastadion_N = mkN "Olympiastadion" ;
-  olympiateilnehmer__N = reg2N  "Olympiateilnehmer " "Olympiateilnehmer " masculine ;
+  olympiateilnehmer__N = reg2N  "Olympiateilnehmer" "Olympiateilnehmer" masculine ;
   olympionike_N = reg2N  "Olympionike" "Olympioniken" masculine ;
   olympisch_A = regA "olympisch" ;
   oma_N = reg2N  "Oma" "Omas" feminine ;
@@ -27538,8 +27538,8 @@ lin
   onlineauftritt_N = reg2N  "Onlineauftritt" "Onlineauftritte" masculine ;
   onlineauktion_N = mkN "Onlineauktion" ;
   onlineausgabe_N = reg2N  "Onlineausgabe" "Onlineausgaben" feminine ;
-  onlinebanking_N = reg2N  "Onlinebanking" "- " neuter ;
-  onlinebetrieb_N = reg2N  "Onlinebetrieb" "-" masculine ;
+  onlinebanking_N = reg2N "Onlinebanking" "Onlinebankinge" neuter;
+  onlinebetrieb_N = reg2N "Onlinebetrieb" "Onlinebetriebe" masculine;
   onlinebibliothek_N = reg2N  "Onlinebibliothek" "Onlinebibliotheken" feminine ;
   onlineboerse_N = reg2N  "Onlinebörse" "Onlinebörsen" feminine ;
   onlinebroker_N = reg2N  "Onlinebroker" "Onlinebroker" masculine ;
@@ -27551,12 +27551,12 @@ lin
   onlinekatalog_N = reg2N  "Onlinekatalog" "Onlinekataloge" masculine ;
   onlinekommunikation_N = mkN "Onlinekommunikation" ;
   onlinemedium_N = reg2N  "Onlinemedium" "Onlinemedien" neuter ;
-  onlinepublishing_N = reg2N  "Onlinepublishing" "-" neuter ;
+  onlinepublishing_N = reg2N "Onlinepublishing" "Onlinepublishinge" neuter;
   onlinerecherche_N = reg2N  "Onlinerecherche" "Onlinerecherchen" feminine ;
   onlineredaktion_N = mkN "Onlineredaktion" ;
   onlineservice_N = reg2N  "Onlineservice" "Onlineservices" masculine ;
   onlineshop_N = reg2N  "Onlineshop" "Onlineshops" masculine ;
-  onlineshopping_N = reg2N  "Onlineshopping" "-" neuter ;
+  onlineshopping_N = reg2N "Onlineshopping" "Onlineshoppinge" neuter;
   onlinespiel_N = reg2N  "Onlinespiel" "Onlinespiele" neuter ;
   onlinezeitung_N = mkN "Onlinezeitung" ;
   onlinezugang_N = reg2N  "Onlinezugang" "Onlinezugänge" masculine ;
@@ -27731,7 +27731,7 @@ lin
   ork_N = reg2N  "Ork" "Orks" masculine ;
   orkan_N = reg2N  "Orkan" "Orkane" masculine ;
   ormaplatin_N = reg2N "Ormaplatin" "Ormaplatine" neuter ;
-  ornament__N = reg2N  "Ornament " "Ornamente" neuter ;
+  ornament__N = reg2N  "Ornament" "Ornamente" neuter ;
   ornativ_N = reg2N  "Ornativ" "Ornative" neuter ;
   ornativum_N = reg2N  "Ornativum" "Ornativa" neuter ;
   ornithologe_N = reg2N  "Ornithologe" "Ornithologen" masculine ;
@@ -27776,7 +27776,7 @@ lin
   ossuarium_N = reg2N  "Ossuarium" "Ossuarien" neuter ;
   ostalgie_N = reg2N  "Ostalgie" "Ostalgien" feminine ;
   ostdeutsch_A = mk3A "ostdeutsch" "ostdeutscher" "ostdeutscheste" ;
-  ostensibel_A = mk3A "ostensibel " "- " "- e" ;
+  ostensibel_A = mk3A "ostensibel" "ostensibler" "ostensibelste" ;
   ostensiv_A = regA "ostensiv" ;
   ostentativ_A = mk3A "ostentativ" "ostentativer" "ostentativste" ;
   osteoarthrose_N = reg2N  "Osteoarthrose" "Osteoarthrosen" feminine ;
@@ -27827,7 +27827,7 @@ lin
   ostpreussisch_A = regA "ostpreußisch" ;
   ostteil_N = reg2N  "Ostteil" "Ostteile" masculine ;
   ostwaerts_Adv = mkAdv "ostwärts" ;
-  ostzone_N = reg2N  "Ostzone" "-" feminine ;
+  ostzone_N = reg2N "Ostzone" "e" feminine;
   oszillation_N = mkN "Oszillation" ;
   oszillieren_V = regV "oszillieren" ;
   oszillierend_A = regA "oszillierend" ;
@@ -27860,7 +27860,7 @@ lin
   ovarium_N = reg2N  "Ovarium" "Ovarien" neuter ;
   ovarzelle_N = reg2N  "Ovarzelle" "Ovarzellen" feminine ;
   ovation_N = mkN "Ovation" ;
-  overhead__N = reg2N  "Overhead " "Overheads" masculine ;
+  overhead__N = reg2N  "Overhead" "Overheads" masculine ;
   ovidukt_N = reg2N  "Ovidukt" "Ovidukte" masculine ;
   ovin_A = regA "ovin" ;
   ovipar_A = regA "ovipar" ;
@@ -27915,7 +27915,7 @@ lin
   paarlauf_N = reg2N  "Paarlauf" "Paarläufe" masculine ;
   paarsprache_N = reg2N  "Paarsprache" "Paarsprachen" feminine ;
   paarweise_Adv = mkAdv "paarweise" ;
-  pacht__N = reg2N  "Pacht " "Pachten" feminine ;
+  pacht__N = reg2N  "Pacht" "Pachten" feminine ;
   pachten_V = irregV "pachten" "pachtet" "pachtete" "pachtete" "gepachtet" ; 
   pachulke_N = reg2N  "Pachulke" "Pachulken" masculine ;
   pachyderme_N = reg2N  "Pachyderme" "Pachydermen" masculine ;
@@ -27944,7 +27944,7 @@ lin
   paffen_V = regV "paffen" ;
   pagan_A = mk3A "pagan" "paganer" "paganste" ;
   pagatorisch_A = regA "pagatorisch" ;
-  page__N = reg2N  "Page " "Pagen " masculine ;
+  page__N = reg2N  "Page" "Pagen" masculine ;
   paginieren_V = regV "paginieren" ;
   pagode_N = reg2N  "Pagode" "Pagoden" feminine ;
   pak_choi_N = reg2N  "Pak Choi" "Pak-Choi-Pflanzen" masculine ;
@@ -27961,7 +27961,7 @@ lin
   palaestinensisch_A = mk3A "palästinensisch" "palästinensischer" "palästinensischste" ;
   palais_N = reg2N  "Palais" "Palais" neuter ;
   palas_N = reg2N  "Palas" "Palasse" masculine ;
-  palast__N = reg2N  "Palast " "Paläste" masculine ;
+  palast__N = reg2N  "Palast" "Paläste" masculine ;
   palatal_A = regA "palatal" ;
   palatal_N = reg2N  "Palatal" "Palatale" masculine ;
   palato_alveolar_A = regA "palato-alveolar" ;
@@ -27991,7 +27991,7 @@ lin
   palmitate_N = reg2N "Palmitat" "Palmitate" neuter ;
   palmitinsaeure_N = reg2N  "Palmitinsäure" "Palmitinsäuren" feminine ;
   palmsonntag_N = reg2N  "Palmsonntag" "Palmsonntage" masculine ;
-  palmwedel_N = reg2N  "Palmwedel" "Palmwedel " masculine ;
+  palmwedel_N = reg2N  "Palmwedel" "Palmwedel" masculine ;
   palmwein_N = reg2N  "Palmwein" "Palmweine" masculine ;
   paloma_N = reg2N  "Paloma" "Palomas" feminine ;
   palpebral_A = regA "palpebral" ;
@@ -28020,7 +28020,7 @@ lin
   panfloete_N = reg2N  "Panflöte" "Panflöten" feminine ;
   pangasius_N = reg2N  "Pangasius" "Pangasiusse" masculine ;
   pangen_N = reg2N  "Pangen" "Pangene" neuter ;
-  pangenesistheorie_N = reg2N  "Pangenesistheorie" "- " feminine ;
+  pangenesistheorie_N = reg2N "Pangenesistheorie" "e" feminine;
   pangramm_N = reg2N  "Pangramm" "Pangramme" neuter ;
   panier_N = reg2N  "Panier" "Paniere" neuter ;
   panierbrot_N = reg2N  "Panierbrot" "Panierbrote" neuter ;
@@ -28042,7 +28042,7 @@ lin
   panniculitis_N = reg2N  "Panniculitis" "Panniculitiden" feminine ;
   pannikulitis_N = reg2N  "Pannikulitis" "Pannikulitiden" feminine ;
   panoptikum_N = reg2N  "Panoptikum" "Panoptiken" neuter ;
-  panorama__N = reg2N  "Panorama " "Panoramen" neuter ;
+  panorama__N = reg2N  "Panorama" "Panoramen" neuter ;
   panoramafenster_N = reg2N  "Panoramafenster" "Panoramafenster" neuter ;
   panschen_V = regV "panschen" ;
   pansen_N = reg2N  "Pansen" "Pansen" masculine ;
@@ -28219,7 +28219,7 @@ lin
   parkplatz_N = reg2N  "Parkplatz" "Parkplätze" masculine ;
   parkuhr_N = reg2N  "Parkuhr" "Parkuhren" feminine ;
   parkverbot_N = reg2N  "Parkverbot" "Parkverbote" neuter ;
-  parlament__N = reg2N  "Parlament " "Parlamente" neuter ;
+  parlament__N = reg2N  "Parlament" "Parlamente" neuter ;
   parlamentarier_N = reg2N  "Parlamentarier" "Parlamentarier" masculine ;
   parlamentarierin_N = reg2N  "Parlamentarierin" "Parlamentarierinnen" feminine ;
   parlamentsmitglied_N = reg2N  "Parlamentsmitglied" "Parlamentsmitglieder" neuter ;
@@ -28227,7 +28227,7 @@ lin
   parmaene_N = reg2N  "Parmäne" "Parmänen" feminine ;
   parmesankaese_N = reg2N  "Parmesankäse" "Parmesankäse" masculine ;
   parmesanmesser_N = reg2N  "Parmesanmesser" "Parmesanmesser" neuter ;
-  parmesanreibe_N = reg2N  "Parmesanreibe" "Parmesanreiben " feminine ;
+  parmesanreibe_N = reg2N  "Parmesanreibe" "Parmesanreiben" feminine ;
   parodie_N = reg2N  "Parodie" "Parodien" feminine ;
   parodontal_A = regA "parodontal" ;
   paroemie_N = reg2N  "Parömie" "Parömien" feminine ;
@@ -28324,7 +28324,7 @@ lin
   passive_wortschatz_N = reg2N  "passive Wortschatz" "passiven Wortschätze" masculine ;
   passivieren_V = regV "passivieren" ;
   passivierung_N = mkN "Passivierung" ;
-  passivstil_N = reg2N  "Passivstil" "-" masculine ;
+  passivstil_N = reg2N "Passivstil" "Passivstile" masculine;
   passkontrolle_N = reg2N  "Passkontrolle" "Passkontrollen" feminine ;
   passus_N = reg2N  "Passus" "Passus" masculine ;
   passwort_N = reg2N  "Passwort" "Passwörter" neuter ;
@@ -28359,7 +28359,7 @@ lin
   pathogen_N = reg2N  "Pathogen" "Pathogene" neuter ;
   pathogenassoziiert_A = regA "pathogenassoziiert" ;
   pathogenfrei_A = regA "pathogenfrei" ;
-  pathognomonisch_A = mk3A "pathognomonisch" "?" "?e" ;
+  pathognomonisch_A = mk3A "pathognomonisch" "pathognomonischer" "pathognomonischte" ;
   pathologie_N = reg2N  "Pathologie" "Pathologien" feminine ;
   pathologisch_A = mk3A "pathologisch" "pathologischer" "pathologischste" ;
   patient_N = reg2N  "Patient" "Patienten" masculine ;
@@ -28397,7 +28397,7 @@ lin
   paukist_N = reg2N  "Paukist" "Paukisten" masculine ;
   paukistin_N = reg2N  "Paukistin" "Paukistinnen" feminine ;
   paulchen_N = reg2N  "Paulchen" "Paulchen" neuter ;
-  pauperismus_N = reg2N  "Pauperismus" "-" masculine ;
+  pauperismus_N = reg2N "Pauperismus" "Pauperismuse" masculine;
   pausalform_N = reg2N  "Pausalform" "Pausalformen" feminine ;
   pausbacke_N = reg2N  "Pausbacke" "Pausbacken" feminine ;
   pausbaeckig_A = mk3A "pausbäckig" "pausbäckiger" "pausbäckigste" ;
@@ -28446,7 +28446,7 @@ lin
   pekuniaer_A = regA "pekuniär" ;
   pelagial_N = reg2N  "Pelagial" "Pelagiale" neuter ;
   pelagisch_A = regA "pelagisch" ;
-  pelargonie_N = reg2N  "Pelargonie" "Pelargonien " feminine ;
+  pelargonie_N = reg2N  "Pelargonie" "Pelargonien" feminine ;
   pelikan_N = reg2N  "Pelikan" "Pelikane" masculine ;
   pelikanaal_N = reg2N  "Pelikanaal" "Pelikanaale" masculine ;
   pelle_N = reg2N  "Pelle" "Pellen" feminine ;
@@ -28561,7 +28561,7 @@ lin
   perfusionsloesung_N = reg2N  "Perfusionslösung" "Perfusionslösungen" feminine ;
   pergamener_N = reg2N  "Pergamener" "Pergamener" masculine ;
   pergamenisch_A = regA "pergamenisch" ;
-  pergament__N = reg2N  "Pergament " "Pergamente" neuter ;
+  pergament__N = reg2N  "Pergament" "Pergamente" neuter ;
   pergamenten_A = regA "pergamenten" ;
   pergola_N = reg2N  "Pergola" "Pergolen" feminine ;
   perhorreszieren_V = regV "perhorreszieren" ;
@@ -28573,7 +28573,7 @@ lin
   perimortal_A = regA "perimortal" ;
   perinatal_A = regA "perinatal" ;
   perindopril_N = reg2N "Perindopril" "Perindoprile" neuter ;
-  perineotomie_N = reg2N  "Perineotomie" "Perineotomien " feminine ;
+  perineotomie_N = reg2N  "Perineotomie" "Perineotomien" feminine ;
   periodatoxidiert_A = regA "periodatoxidiert" ;
   periode_N = reg2N  "Periode" "Perioden" feminine ;
   periodenfrequenz_N = reg2N  "Periodenfrequenz" "Periodenfrequenzen" feminine ;
@@ -28700,7 +28700,7 @@ lin
   petroglyphe_N = reg2N  "Petroglyphe" "Petroglyphen" feminine ;
   petroleumkocher_N = reg2N  "Petroleumkocher" "Petroleumkocher" masculine ;
   petroleumlampe_N = reg2N  "Petroleumlampe" "Petroleumlampen" feminine ;
-  petrovarianz_N = reg2N  "Petrovarianz" "?" feminine ;
+  petrovarianz_N = reg2N  "Petrovarianz" "Petrovarianzen" feminine ;
   petschaft_N = reg2N  "Petschaft" "Petschafte" neuter ;
   petting_N = reg2N  "Petting" "Pettings" neuter ;
   petze_N = reg2N  "Petze" "Petzen" feminine ;
@@ -28806,7 +28806,7 @@ lin
   pflastern_V = irregV "pflastern" "pflastert" "pflasterte" "pflasterte" "gepflastert" ; 
   pflasterstein_N = reg2N  "Pflasterstein" "Pflastersteine" masculine ;
   pflaume_N = reg2N  "Pflaume" "Pflaumen" feminine ;
-  pflaumentoffel__N = reg2N  "Pflaumentoffel " "Pflaumentoffel " masculine ;
+  pflaumentoffel__N = reg2N  "Pflaumentoffel" "Pflaumentoffel" masculine ;
   pflaumenwein_N = reg2N  "Pflaumenwein" "Pflaumenweine" masculine ;
   pflege_N = reg2N  "Pflege" "Pflegen" feminine ;
   pflegeabhaengigkeit_N = reg2N  "Pflegeabhängigkeit" "Pflegeabhängigkeiten" feminine ;
@@ -28831,7 +28831,7 @@ lin
   pfostament_N = reg2N  "Pfostament" "Pfostamente" neuter ;
   pfosten_N = reg2N  "Pfosten" "Pfosten" masculine ;
   pfostenbau_N = reg2N  "Pfostenbau" "Pfostenbauten" masculine ;
-  pfostenschuss__N = reg2N  "Pfostenschuss " "Pfostenschüsse" masculine ;
+  pfostenschuss__N = reg2N  "Pfostenschuss" "Pfostenschüsse" masculine ;
   pfostenwand_N = reg2N  "Pfostenwand" "Pfostenwände" feminine ;
   pfote_N = reg2N  "Pfote" "Pfoten" feminine ;
   pfrieme_N = reg2N  "Pfrieme" "Pfriemen" feminine ;
@@ -28855,7 +28855,7 @@ lin
   phantasiezahl_N = reg2N  "Phantasiezahl" "Phantasiezahlen" feminine ;
   phantasmagorie_N = reg2N  "Phantasmagorie" "Phantasmagorien" feminine ;
   phantasterei_N = reg2N  "Phantasterei" "Phantastereien" feminine ;
-  phantastisch_A = mk3A "phantastisch" "phantastischer " "phantastischste" ;
+  phantastisch_A = mk3A "phantastisch" "phantastischer" "phantastischste" ;
   phantom_N = reg2N  "Phantom" "Phantome" neuter ;
   phantombild_N = reg2N  "Phantombild" "Phantombilder" neuter ;
   phantomschmerz_N = reg2N  "Phantomschmerz" "Phantomschmerzen" masculine ;
@@ -29166,7 +29166,7 @@ lin
   pisser_N = reg2N  "Pisser" "Pisser" masculine ;
   pissnelke_N = reg2N  "Pissnelke" "Pissnelken" feminine ;
   pistole_N = reg2N  "Pistole" "Pistolen" feminine ;
-  pistolenschuss__N = reg2N  "Pistolenschuss " "Pistolenschüsse" masculine ;
+  pistolenschuss__N = reg2N  "Pistolenschuss" "Pistolenschüsse" masculine ;
   pitahaya_N = reg2N  "Pitahaya" "Pitahayas" feminine ;
   pitchgabel_N = reg2N  "Pitchgabel" "Pitchgabeln" feminine ;
   pithekoid_A = regA "pithekoid" ;
@@ -29202,7 +29202,7 @@ lin
   plan_A = mk3A "plan" "planer" "planste" ;
   plan_b_N = reg2N  "Plan B" "Pläne B" masculine ;
   plan_N = reg2N  "Plan" "Pläne" masculine ;
-  planck_aera_N = reg2N  "Planck-Ära" "-" feminine ;
+  planck_aera_N = reg2N "Planck-Ära" "e" feminine;
   plane_N = reg2N  "Plane" "Planen" feminine ;
   planen_V = regV "planen" ;
   planet_N = reg2N  "Planet" "Planeten" masculine ;
@@ -29755,7 +29755,7 @@ lin
   poussierstaengel_N = reg2N  "Poussierstängel" "Poussierstängel" masculine ;
   povidon_N = reg2N  "Povidon" "Povidone" neuter ;
   powergamer_N = reg2N  "Powergamer" "Powergamer" masculine ;
-  powidl_N = reg2N  "Powidl" "-" masculine ;
+  powidl_N = reg2N "Powidl" "Powidle" masculine;
   poxvirusvektor_N = reg2N  "Poxvirusvektor" "Poxvirusvektoren" masculine ;
   prachtfink_N = reg2N  "Prachtfink" "Prachtfinken" masculine ;
   prachttaucher_N = reg2N  "Prachttaucher" "Prachttaucher" masculine ;
@@ -29773,7 +29773,7 @@ lin
   praedikativ_N = reg2N  "Prädikativ" "Prädikative" neuter ;
   praedikativsatz_N = reg2N  "Prädikativsatz" "Prädikativsätze" masculine ;
   praedikativum_N = reg2N  "Prädikativum" "Prädikativa" neuter ;
-  praedikatsnomen_N = reg2N  "Prädikatsnomen" "-nomina" neuter ;
+  praedikatsnomen_N = reg2N  "Prädikatsnomen" "Prädikatsnomina" neuter ;
   praediktion_N = mkN "Prädiktion" ;
   praediktor_N = reg2N  "Prädiktor" "Prädiktoren" masculine ;
   praedisposition_N = reg2N  "Prädisposition" "Prädispositionen" feminine ;
@@ -29848,7 +29848,7 @@ lin
   praezipitieren_V = irregV "präzipitieren" "präzipitiert" "präzipitierte" "präzipitierte" "präzipitiert" ;
   praezipitierend_A = regA "präzipitierend" ;
   praezipitiert_A = regA "präzipitiert" ;
-  praezise_A = mk3A "präzis(e)" "präziser" "präziseste" ;
+  praezise_A = mk3A "präzise" "präziser" "präziseste" ;
   praezisieren_V = irregV "präzisieren" "präzisiert" "präzisierte" "präzisierte" "präzisiert" ;
   prager_N = reg2N  "Prager" "Prager" masculine ;
   pragmatik_N = reg2N  "Pragmatik" "Pragmatiken" feminine ;
@@ -29873,7 +29873,7 @@ lin
   precursorverbindung_N = reg2N  "Precursorverbindung" "Precursorverbindungen" feminine ;
   predella_N = reg2N  "Predella" "Predellen" feminine ;
   predigen_V = regV "predigen" ;
-  prediger__N = reg2N  "Prediger " "Prediger " masculine ;
+  prediger__N = reg2N  "Prediger" "Prediger" masculine ;
   predigt_N = reg2N  "Predigt" "Predigten" feminine ;
   prednisone_N = reg2N "Prednison" "Prednisone" neuter ;
   pregabalin_N = reg2N "Pregabalin" "Pregabaline" neuter ;
@@ -29890,7 +29890,7 @@ lin
   preissuchmaschine_N = reg2N  "Preissuchmaschine" "Preissuchmaschinen" feminine ;
   preistraeger_N = reg2N  "Preisträger" "Preisträger" masculine ;
   preisverleihung_N = mkN "Preisverleihung" ;
-  preiswert_A = mk3A "preiswert " "preiswerter" "preiswertesten e" ;
+  preiswert_A = mk3A "preiswert" "preiswerter" "preiswertesten e" ;
   prekaer_A = mk3A "prekär" "prekärer" "prekärste" ;
   prellen_V = regV "prellen" ;
   prellung_N = mkN "Prellung" ;
@@ -30125,7 +30125,7 @@ lin
   proparoxytonon_N = reg2N  "Proparoxytonon" "Proparoxytona" neuter ;
   propeller_N = reg2N  "Propeller" "Propeller" masculine ;
   proper_A = mk3A "proper" "properer, proprer" "properste" ;
-  properispomenon__N = reg2N  "Properispomenon " "Properispomena" neuter ;
+  properispomenon__N = reg2N  "Properispomenon" "Properispomena" neuter ;
   prophet_N = reg2N  "Prophet" "Propheten" masculine ;
   prophezeien_V = irregV "prophezeien" "prophezeit" "prophezeite" "prophezeite" "prophezeit" ;
   prophezeiung_N = mkN "Prophezeiung" ;
@@ -30148,7 +30148,7 @@ lin
   propyleneimine_N = reg2N "Propylenimin" "Propylenimine" neuter ;
   propylgruppe_N = reg2N  "Propylgruppe" "Propylgruppen" feminine ;
   propylon_N = reg2N  "Propylon" "Propyla" neuter ;
-  prosa_N = reg2N  "Prosa" "-" feminine ;
+  prosa_N = reg2N "Prosa" "e" feminine;
   prosadichtung_N = mkN "Prosadichtung" ;
   prosaerzaehlung_N = mkN "Prosaerzählung" ;
   prosaisch_A = mk3A "prosaisch" "prosaischer" "prosaischste" ;
@@ -30329,7 +30329,7 @@ lin
   psychoanalyse_N = reg2N  "Psychoanalyse" "Psychoanalysen" feminine ;
   psychologe_N = reg2N  "Psychologe" "Psychologen" masculine ;
   psychopath_N = reg2N  "Psychopath" "Psychopathen" masculine ;
-  psychophysik_N = reg2N  "Psychophysik" "-" feminine ;
+  psychophysik_N = reg2N "Psychophysik" "e" feminine;
   psychose_N = reg2N  "Psychose" "Psychosen" feminine ;
   psychosomatisch_A = regA "psychosomatisch" ;
   psychosozial_A = regA "psychosozial" ;
@@ -30420,7 +30420,7 @@ lin
   puppenstube_N = reg2N  "Puppenstube" "Puppenstuben" feminine ;
   pups_N = reg2N  "Pups" "Pupse" masculine ;
   pupsen_V = regV "pupsen" ;
-  pur_A = mk3A "pur" "(purer)" "(pursten)e" ;
+  pur_A = mk3A "pur" "purer" "purste" ;
   purgatorium_N = reg2N  "Purgatorium" "Purgatorien" neuter ;
   purgieren_V = regV "purgieren" ;
   purifikation_N = mkN "Purifikation" ;
@@ -30482,12 +30482,12 @@ lin
   pyrimidinderivat_N = reg2N  "Pyrimidinderivat" "Pyrimidinderivate" neuter ;
   pyrogen_A = regA "pyrogen" ;
   pyrogenfrei_A = regA "pyrogenfrei" ;
-  pyrografie_N = reg2N  "Pyrografie" " " feminine ;
+  pyrografie_N = reg2N  "Pyrografie" "Pyrografien" feminine ;
   pyroklastisch_A = regA "pyroklastisch" ;
   pyrolyse_N = reg2N  "Pyrolyse" "Pyrolysen" feminine ;
   pyrometer_N = reg2N  "Pyrometer" "Pyrometer" neuter ;
   pyrophosphation_N = reg2N  "Pyrophosphation" "Pyrophosphationen" feminine ;
-  pyropiktur_N = reg2N  "Pyropiktur" " " feminine ;
+  pyropiktur_N = reg2N  "Pyropiktur" "Pyropikturen" feminine ;
   pyroskop_N = reg2N  "Pyroskop" "Pyroskop" neuter ;
   pyrotechnik_N = reg2N  "Pyrotechnik" "Pyrotechniken" feminine ;
   pyroxenit_N = reg2N  "Pyroxenit" "Pyroxenite" masculine ;
@@ -30699,7 +30699,7 @@ lin
   raclette_N = reg2N  "Raclette" "Raclettes" masculine ;
   rad_N = reg2N  "Rad" "Räder" neuter ;
   radarkontrolle_N = reg2N  "Radarkontrolle" "Radarkontrollen" feminine ;
-  radau_N = reg2N  "Radau" "-" masculine ;
+  radau_N = reg2N "Radau" "Radaue" masculine;
   radball_N = reg2N  "Radball" "Radbälle" masculine ;
   radebrechen_V = irregV "radebrechen" "radebrecht" "radebrechte" "radebrechte" "radebrecht" ;
   radeln_V = irregV "radeln" "radelt" "radelte" "radelte" "radelt" ;
@@ -30779,13 +30779,13 @@ lin
   raeuspern_V = regV "räuspern" ;
   rafaela_N = reg2N  "Rafaela" "Rafaelas" feminine ;
   raffen_V = regV "raffen" ;
-  raffgier_N = reg2N  "Raffgier" "–" feminine ;
+  raffgier_N = reg2N "Raffgier" "e" feminine;
   raffgierig_A = mk3A "raffgierig" "raffgieriger" "raffgierigste" ;
   raffinerie_N = reg2N  "Raffinerie" "Raffinerien" feminine ;
   raffinesse_N = reg2N  "Raffinesse" "Raffinessen" feminine ;
   raffiniert_A = mk3A "raffiniert" "raffinierter" "raffinierteste" ;
   raffinose_N = reg2N "Raffinose" "Raffinosen" feminine ;
-  raffsucht_N = reg2N  "Raffsucht" "–" feminine ;
+  raffsucht_N = reg2N "Raffsucht" "e" feminine;
   raffwort_N = reg2N  "Raffwort" "Raffwörter" neuter ;
   ragout_N = reg2N  "Ragout" "Ragouts" neuter ;
   ragwurz_N = reg2N  "Ragwurz" "Ragwurzen" feminine ;
@@ -30807,7 +30807,7 @@ lin
   rallen_V = regV "rallen" ;
   rallig_A = mk3A "rallig" "ralliger" "ralligste" ;
   rallye_N = reg2N  "Rallye" "Rallyes" feminine ;
-  rallyefahrer__N = reg2N  "Rallyefahrer " "Rallyefahrer " masculine ;
+  rallyefahrer__N = reg2N  "Rallyefahrer" "Rallyefahrer" masculine ;
   rallyefahrerin_N = reg2N  "Rallyefahrerin" "Rallyefahrerinnen" feminine ;
   raloxifene_N = reg2N "Raloxifen" "Raloxifene" neuter ;
   rambur_N = reg2N  "Rambur" "Rambure" masculine ;
@@ -30816,7 +30816,7 @@ lin
   rammbock_N = reg2N  "Rammbock" "Rammböcke" masculine ;
   rammdoesig_A = mk3A "rammdösig" "rammdösiger" "rammdösigste" ;
   ramme_N = reg2N  "Ramme" "Rammen" feminine ;
-  rammel_N = reg2N  "Rammel" "Rammel " masculine ;
+  rammel_N = reg2N  "Rammel" "Rammel" masculine ;
   rammeln_V = regV "rammeln" ;
   rammen_V = regV "rammen" ;
   rampe_N = reg2N  "Rampe" "Rampen" feminine ;
@@ -30831,7 +30831,7 @@ lin
   randbauer_N = reg2N  "Randbauer" "Randbauern" masculine ;
   randbebauung_N = mkN "Randbebauung" ;
   randbemerkung_N = mkN "Randbemerkung" ;
-  rande__N = reg2N  "Rande " "Randen" feminine ;
+  rande__N = reg2N  "Rande" "Randen" feminine ;
   randfeuerpatrone_N = reg2N  "Randfeuerpatrone" "Randfeuerpatronen" feminine ;
   randlos_A = regA "randlos" ;
   randomisieren_V = regV "randomisieren" ;
@@ -30864,7 +30864,7 @@ lin
   raps_N = reg2N  "Raps" "Rapse" masculine ;
   rapsfeld_N = reg2N  "Rapsfeld" "Rapsfelder" neuter ;
   rapsoel_N = reg2N  "Rapsöl" "Rapsöle" neuter ;
-  rar_A = mk3A "rar" "rarer (unüblich)" "rarsten (unüblich)e" ;
+  rar_A = mk3A "rar" "rarer" "rarste" ;
   raritaet_N = reg2N  "Rarität" "Raritäten" feminine ;
   rasant_A = mk3A "rasant" "rasanter" "rasanteste" ;
   rasch_A = mk3A "rasch" "rascher" "rascheste" ;
@@ -30893,7 +30893,7 @@ lin
   rast_N = reg2N  "Rast" "Rasten" feminine ;
   rastafari_N = reg2N  "Rastafari" "Rastafaris" masculine ;
   rasten_3_V = irregV "rasten" "rastet" "rastete" "rastete" "gerastet" ; 
-  raster__N = reg2N  "Raster " "Raster " masculine ;
+  raster__N = reg2N  "Raster" "Raster" masculine ;
   rasterfahndung_N = mkN "Rasterfahndung" ;
   rasthof_N = reg2N  "Rasthof" "Rasthöfe" masculine ;
   rastlos_A = mk3A "rastlos" "rastloser" "rastloseste" ;
@@ -30967,7 +30967,7 @@ lin
   raufe_N = reg2N  "Raufe" "Raufen" feminine ;
   raufen_V = regV "raufen" ;
   raufhaendel_N = reg2N  "Raufhändel" "Raufhändel" masculine ;
-  raufrost_N = reg2N  "Raufrost" "-" masculine ;
+  raufrost_N = reg2N "Raufrost" "Raufroste" masculine;
   raufusskauz_N = reg2N  "Raufußkauz" "Raufußkäuze" masculine ;
   rauke_N = reg2N  "Rauke" "Rauken" feminine ;
   raum_N = reg2N  "Raum" "Räume" masculine ;
@@ -31008,7 +31008,7 @@ lin
   reagierend_A = regA "reagierend" ;
   reaktand_N = reg2N  "Reaktand" "Reaktanden" masculine ;
   reaktanz_N = reg2N  "Reaktanz" "Reaktanzen" feminine ;
-  reaktion__N = reg2N  "Reaktion " "Reaktionen" feminine ;
+  reaktion__N = reg2N  "Reaktion" "Reaktionen" feminine ;
   reaktion_N = reg2N  "Reaktion" "Reaktionen" feminine ;
   reaktionaer_A = mk3A "reaktionär" "reaktionärer" "reaktionärste" ;
   reaktionsfaehig_A = regA "reaktionsfähig" ;
@@ -31039,14 +31039,14 @@ lin
   rean_V = irregV "rean" "reant" "reante" "reante" "reant" ;
   reanalyse_N = reg2N  "Reanalyse" "Reanalysen" feminine ;
   reassortiert_A = regA "reassortiert" ;
-  rebbau_N = reg2N  "Rebbau" "-" masculine ;
+  rebbau_N = reg2N "Rebbau" "Rebbaue" masculine;
   rebberg_N = reg2N  "Rebberg" "Rebberge" masculine ;
   rebe_N = reg2N  "Rebe" "Reben" feminine ;
   rebell_N = reg2N  "Rebell" "Rebellen" masculine ;
   rebellieren_V = irregV "rebellieren" "rebelliert" "rebellierte" "rebellierte" "rebelliert" ;
   rebenbluete_N = reg2N  "Rebenblüte" "Rebenblüten" feminine ;
   rebenhuegel_N = reg2N  "Rebenhügel" "Rebenhügel" masculine ;
-  rebenklima_N = reg2N  "Rebenklima" "-" neuter ;
+  rebenklima_N = reg2N "Rebenklima" "Rebenklimae" neuter;
   rebensaft_N = reg2N  "Rebensaft" "Rebensäfte" masculine ;
   rebenstecher_N = reg2N  "Rebenstecher" "Rebenstecher" masculine ;
   rebenumsponnen_A = regA "rebenumsponnen" ;
@@ -31105,7 +31105,7 @@ lin
   rechtsrheinisch_A = regA "rechtsrheinisch" ;
   rechtsruck_N = reg2N  "Rechtsruck" "Rechtsrucke" masculine ;
   rechtsschein_N = reg2N  "Rechtsschein" "Rechtsscheine" masculine ;
-  rechtsschuss__N = reg2N  "Rechtsschuss " "Rechtsschüsse" masculine ;
+  rechtsschuss__N = reg2N  "Rechtsschuss" "Rechtsschüsse" masculine ;
   rechtssprache_N = reg2N  "Rechtssprache" "Rechtssprachen" feminine ;
   rechtsstaat_N = reg2N  "Rechtsstaat" "Rechtsstaaten" masculine ;
   rechtsstand_N = reg2N  "Rechtsstand" "Rechtsstände" masculine ;
@@ -31316,7 +31316,7 @@ lin
   reichlich_A = mk3A "reichlich" "reichlicher" "reichlichste" ;
   reichsdeputation_N = mkN "Reichsdeputation" ;
   reichshauptstadt_N = reg2N  "Reichshauptstadt" "Reichshauptstädte" feminine ;
-  reichskrone__N = reg2N  "Reichskrone " "Reichskronen" feminine ;
+  reichskrone__N = reg2N  "Reichskrone" "Reichskronen" feminine ;
   reichsleiter_N = reg2N  "Reichsleiter" "Reichsleiter" masculine ;
   reichsparteitag_N = reg2N  "Reichsparteitag" "Reichsparteitage" masculine ;
   reichstag_N = reg2N  "Reichstag" "Reichstage" masculine ;
@@ -31385,7 +31385,7 @@ lin
   reissverschlusssystem_N = reg2N  "Reißverschlusssystem" "Reißverschlusssysteme" neuter ;
   reisswolf_N = reg2N  "Reißwolf" "Reißwölfe" masculine ;
   reisszahn_N = reg2N  "Reißzahn" "Reißzähne" masculine ;
-  reisszeug_N = reg2N  "Reißzeug" "-" neuter ;
+  reisszeug_N = reg2N "Reißzeug" "Reißzeuge" neuter;
   reisszwecke_N = reg2N  "Reißzwecke" "Reißzwecken" feminine ;
   reiswein_N = reg2N  "Reiswein" "Reisweine" masculine ;
   reiten_V = irregV "reiten" "reitet" "ritt" "ritte" "geritten" ; 
@@ -31403,7 +31403,7 @@ lin
   reizen_5_V = irregV "reizen" "reizt" "reizte" "reizte" "reizt" ;
   reizend_A = mk3A "reizend" "reizender" "reizendste" ;
   reizerzeugend_A = regA "reizerzeugend" ;
-  reizker__N = reg2N  "Reizker " "Reizker " masculine ;
+  reizker__N = reg2N  "Reizker" "Reizker" masculine ;
   reizung_N = reg2N  "Reizung" "Reizungen" feminine ;
   rejection_N = reg2N "Abstossung" "Abstossungen" feminine ;
   rekapitulieren_V = irregV "rekapitulieren" "rekapituliert" "rekapitulierte" "rekapitulierte" "rekapituliert" ;
@@ -31467,7 +31467,7 @@ lin
   reliefpfeiler_N = reg2N  "Reliefpfeiler" "Reliefpfeiler" masculine ;
   religioes_A = mk3A "religiös" "religiöser" "religiöseste" ;
   religion_N = mkN "Religion" ;
-  religionsphilosoph__N = reg2N  "Religionsphilosoph " "Religionsphilosophen" masculine ;
+  religionsphilosoph__N = reg2N  "Religionsphilosoph" "Religionsphilosophen" masculine ;
   religionsphilosophie_N = reg2N  "Religionsphilosophie" "Religionsphilosophien" feminine ;
   religionsphilosophisch_A = regA "religionsphilosophisch" ;
   relikt_N = reg2N  "Relikt" "Relikte" neuter ;
@@ -31559,7 +31559,7 @@ lin
   repraesentativitaet_N = reg2N  "Repräsentativität" "Repräsentativitäten" feminine ;
   repraesentieren_V = irregV "repräsentieren" "repräsentiert" "repräsentierte" "repräsentierte" "repräsentiert" ;
   repressalie_N = reg2N  "Repressalie" "Repressalien" feminine ;
-  repression__N = reg2N  "Repression " "Repressionen" feminine ;
+  repression__N = reg2N  "Repression" "Repressionen" feminine ;
   repressiv_A = regA "repressiv" ;
   repressor_N = reg2N  "Repressor" "Repressoren" masculine ;
   reprimieren_V = irregV "reprimieren" "reprimiert" "reprimierte" "reprimierte" "reprimiert" ;
@@ -31571,7 +31571,7 @@ lin
   republik_N = reg2N  "Republik" "Republiken" feminine ;
   republikaner_N = reg2N  "Republikaner" "Republikaner" masculine ;
   requirieren_V = irregV "requirieren" "requiriert" "requirierte" "requirierte" "requiriert" ;
-  requisit__N = reg2N  "Requisit " "Requisiten" neuter ;
+  requisit__N = reg2N  "Requisit" "Requisiten" neuter ;
   resektion_N = mkN "Resektion" ;
   reserve_N = reg2N  "Reserve" "Reserven" feminine ;
   reservieren_V = irregV "reservieren" "reserviert" "reservierte" "reservierte" "reserviert" ;
@@ -31718,7 +31718,7 @@ lin
   rezept_N = reg2N  "Rezept" "Rezepte" neuter ;
   rezeption_N = mkN "Rezeption" ;
   rezeptiv_A = mk3A "rezeptiv" "rezeptiver" "rezeptivste" ;
-  rezeptor__N = reg2N  "Rezeptor " "Rezeptoren" masculine ;
+  rezeptor__N = reg2N  "Rezeptor" "Rezeptoren" masculine ;
   rezeptor_N = reg2N  "Rezeptor" "Rezeptoren" masculine ;
   rezeptorabhaengig_A = regA "rezeptorabhängig" ;
   rezeptoragonist_N = reg2N  "Rezeptoragonist" "Rezeptoragonisten" masculine ;
@@ -31750,7 +31750,7 @@ lin
   rhapsodisch_A = regA "rhapsodisch" ;
   rheinaue_N = reg2N  "Rheinaue" "Rheinauen" feminine ;
   rheinbruecke_N = reg2N  "Rheinbrücke" "Rheinbrücken" feminine ;
-  rheinfall_N = reg2N  "Rheinfall" "-" masculine ;
+  rheinfall_N = reg2N "Rheinfall" "Rheinfalle" masculine;
   rheinfraenkisch_A = regA "rheinfränkisch" ;
   rheinhessenwein_N = reg2N  "Rheinhessenwein" "Rheinhessenweine" masculine ;
   rheinisch_A = mk3A "rheinisch" "rheinischer" "rheinischste" ;
@@ -31798,7 +31798,7 @@ lin
   richten_9_V = irregV "richten" "richtet" "richtete" "richtete" "gerichtet" ; 
   richter_N = reg2N  "Richter" "Richter" masculine ;
   richterin_N = reg2N  "Richterin" "Richterinnen" feminine ;
-  richtfest__N = reg2N  "Richtfest " "Richtfeste" neuter ;
+  richtfest__N = reg2N  "Richtfest" "Richtfeste" neuter ;
   richtgeschwindigkeit_N = reg2N  "Richtgeschwindigkeit" "Richtgeschwindigkeiten" feminine ;
   richtig_A = mk3A "richtig" "richtiger" "richtigste" ;
   richtigkeit_N = reg2N  "Richtigkeit" "Richtigkeiten" feminine ;
@@ -31808,7 +31808,7 @@ lin
   richtschwert_N = reg2N  "Richtschwert" "Richtschwerter" neuter ;
   richtspruch_N = reg2N  "Richtspruch" "Richtsprüche" masculine ;
   richtung_N = mkN "Richtung" ;
-  ricotta_N = reg2N  "Ricotta" "-" masculine ;
+  ricotta_N = reg2N "Ricotta" "Ricottae" masculine;
   ridikuel_A = mk3A "ridikül" "ridiküler" "ridikülste" ;
   riechen_V = irregV "riechen" "riecht" "roch" "röche" "gerochen" ; 
   ried_N = reg2N  "Ried" "Riede" neuter ;
@@ -31820,11 +31820,11 @@ lin
   rieselfaehig_A = regA "rieselfähig" ;
   rieseln_V = irregV "rieseln" "rieselt" "rieselte" "rieselte" "rieselt" ;
   riesenalk_N = reg2N  "Riesenalk" "Riesenalke" masculine ;
-  riesenbovist_N = reg2N  "Riesenbovist" "Riesenboviste " masculine ;
+  riesenbovist_N = reg2N  "Riesenbovist" "Riesenboviste" masculine ;
   riesenchromosom_N = reg2N  "Riesenchromosom" "Riesenchromosome" neuter ;
-  riesengebirge_N = reg2N  "Riesengebirge" "-" neuter ;
+  riesengebirge_N = reg2N "Riesengebirge" "Riesengebirgen" neuter;
   riesenroetling_N = reg2N  "Riesenrötling" "Riesenrötlinge" masculine ;
-  riesenschirmpilz_N = reg2N  "Riesenschirmpilz" "Riesenschirmpilze " masculine ;
+  riesenschirmpilz_N = reg2N  "Riesenschirmpilz" "Riesenschirmpilze" masculine ;
   riesentukan_N = reg2N  "Riesentukan" "Riesentukane" masculine ;
   riesig_A = mk3A "riesig" "riesiger" "riesigste" ;
   riesling_N = reg2N  "Riesling" "Rieslinge" masculine ;
@@ -31841,11 +31841,11 @@ lin
   rind_N = reg2N  "Rind" "Rinder" neuter ;
   rinde_N = reg2N  "Rinde" "Rinden" feminine ;
   rinderfell_N = reg2N  "Rinderfell" "Rinderfelle" neuter ;
-  rinderhackfleisch_N = reg2N  "Rinderhackfleisch" "-" neuter ;
+  rinderhackfleisch_N = reg2N "Rinderhackfleisch" "Rinderhackfleische" neuter;
   rinderkolostrum_N = reg2N  "Rinderkolostrum" "Rinderkolostren" neuter ;
   rinderroulade_N = reg2N  "Rinderroulade" "Rinderrouladen" feminine ;
   rinderwachstumshormonfreisetzungsfaktor_N = reg2N  "Rinderwachstumshormonfreisetzungsfaktor" "Rinderwachstumshormonfreisetzungsfaktoren" masculine ;
-  rinderwahn_N = reg2N  "Rinderwahn" "- " masculine ;
+  rinderwahn_N = reg2N "Rinderwahn" "Rinderwahne" masculine;
   rindsledern_A = regA "rindsledern" ;
   ring_N = reg2N  "Ring" "Ringe" masculine ;
   ringanker_N = reg2N  "Ringanker" "Ringanker" masculine ;
@@ -31878,7 +31878,7 @@ lin
   rippen_V = irregV "rippen" "rippt" "rippte" "rippte" "rippt" ;
   rippengewoelbe_N = reg2N  "Rippengewölbe" "Rippengewölbe" neuter ;
   risalit_N = reg2N  "Risalit" "Risalite" masculine ;
-  risikoaffin_A = mk3A "risikoaffin " "risikoaffiner" "risikoaffinsten e" ;
+  risikoaffin_A = mk3A "risikoaffin" "risikoaffiner" "risikoaffinsten e" ;
   risikoavers_A = mk3A "risikoavers" "risikoaverser" "risikoaverseste" ;
   risikofaktor_N = reg2N  "Risikofaktor" "Risikofaktoren" masculine ;
   risikopraemie_N = reg2N  "Risikoprämie" "Risikoprämien" feminine ;
@@ -31971,7 +31971,7 @@ lin
   rohrzange_N = reg2N  "Rohrzange" "Rohrzangen" feminine ;
   rohschneider_N = reg2N  "Rohschneider" "Rohschneider" masculine ;
   rohstoff_N = reg2N  "Rohstoff" "Rohstoffe" masculine ;
-  rohstoffmangel_N = reg2N  "Rohstoffmangel" "—" masculine ;
+  rohstoffmangel_N = reg2N "Rohstoffmangel" "Rohstoffmangele" masculine;
   rojer_N = reg2N  "Rojer" "Rojer" masculine ;
   rollator_N = reg2N  "Rollator" "Rollatoren" masculine ;
   rollback_N = reg2N  "Rollback" "Rollbacks" neuter ;
@@ -32202,7 +32202,7 @@ lin
   ruf_N = reg2N  "Ruf" "Rufe" masculine ;
   rufen_1_V = irregV "rufen" "ruft" "rief" "riefe" "gerufen" ; 
   rufmord_N = reg2N  "Rufmord" "Rufmorde" masculine ;
-  ruhegeld__N = reg2N  "Ruhegeld " "Ruhegelder" neuter ;
+  ruhegeld__N = reg2N  "Ruhegeld" "Ruhegelder" neuter ;
   ruheliege_N = reg2N  "Ruheliege" "Ruheliegen" feminine ;
   ruhen_V = regV "ruhen" ;
   ruhepause_N = reg2N  "Ruhepause" "Ruhepausen" feminine ;
@@ -32411,7 +32411,7 @@ lin
   saeureunloeslich_A = regA "säureunlöslich" ;
   safari_N = reg2N  "Safari" "Safaris" feminine ;
   safran_N = reg2N  "Safran" "Safrane" masculine ;
-  safranschirmling__N = reg2N  "Safranschirmling " "Safranschirmlinge " masculine ;
+  safranschirmling__N = reg2N  "Safranschirmling" "Safranschirmlinge" masculine ;
   saft_N = reg2N  "Saft" "Säfte" masculine ;
   saften_V = irregV "saften" "saftet" "saftete" "saftete" "gesaftet" ; 
   saftflasche_N = reg2N  "Saftflasche" "Saftflaschen" feminine ;
@@ -32475,7 +32475,7 @@ lin
   salomoner_N = reg2N  "Salomoner" "Salomoner" masculine ;
   salomonerin_N = reg2N  "Salomonerin" "Salomonerinnen" feminine ;
   salomonisch_A = mk3A "salomonisch" "salomonischer" "salomonischste" ;
-  salon__N = reg2N  "Salon " "Salons" masculine ;
+  salon__N = reg2N  "Salon" "Salons" masculine ;
   salonloewe_N = reg2N  "Salonlöwe" "Salonlöwen" masculine ;
   salopp_A = mk3A "salopp" "salopper" "saloppeste" ;
   salpe_N = reg2N  "Salpe" "Salpen" feminine ;
@@ -32494,7 +32494,7 @@ lin
   salzbildner_N = reg2N  "Salzbildner" "Salzbildner" masculine ;
   salzbrezel_N = reg2N  "Salzbrezel" "Salzbrezeln" feminine ;
   salzbroetchen_N = reg2N  "Salzbrötchen" "Salzbrötchen" neuter ;
-  salzburgisch_A = mk3A "salzburgisch " "salzburgischer" "salzburgischste" ;
+  salzburgisch_A = mk3A "salzburgisch" "salzburgischer" "salzburgischste" ;
   salzdiapir_N = reg2N  "Salzdiapir" "Salzdiapire" masculine ;
   salzdom_N = reg2N  "Salzdom" "Salzdome" masculine ;
   salzen_V = regV "salzen" ;
@@ -32576,7 +32576,7 @@ lin
   samtfusskrempling__N = reg2N  "Samtfußkrempling " "Samtfußkremplinge " masculine ;
   samtfussruebling__N = reg2N  "Samtfußrübling " "Samtfußrüblinge " masculine ;
   samtig_A = mk3A "samtig" "samtiger" "samtigste" ;
-  samtrot_N = reg2N  "Samtrot" "-" masculine ;
+  samtrot_N = reg2N "Samtrot" "Samtrote" masculine;
   samtweich_A = regA "samtweich" ;
   samurai_N = reg2N  "Samurai" "Samurai" masculine ;
   san_marinese_N = reg2N  "San-Marinese" "San-Marinesen" masculine ;
@@ -32739,7 +32739,7 @@ lin
   sauber_A = mk3A "sauber" "sauberer" "sauberste" ;
   sauberkeit_N = reg2N  "Sauberkeit" "Sauberkeiten" feminine ;
   saubillig_A = regA "saubillig" ;
-  sauce_hollandaise_N = reg2N  "Sauce hollandaise" "-" feminine ;
+  sauce_hollandaise_N = reg2N "Sauce hollandaise" "e" feminine;
   sauce_N = reg2N  "Sauce" "Saucen" feminine ;
   sauciere_N = reg2N  "Sauciere" "Saucieren" feminine ;
   saudackel_N = reg2N  "Saudackel" "Saudackel" masculine ;
@@ -32757,7 +32757,7 @@ lin
   sauerstoffatom_N = reg2N  "Sauerstoffatom" "Sauerstoffatome" neuter ;
   sauerstoffflasche_N = reg2N  "Sauerstoffflasche" "Sauerstoffflaschen" feminine ;
   sauerstoffhaltig_A = regA "sauerstoffhaltig" ;
-  sauerstoffmangel_N = reg2N  "Sauerstoffmangel" "—" masculine ;
+  sauerstoffmangel_N = reg2N "Sauerstoffmangel" "Sauerstoffmangele" masculine;
   sauerstoffmaske_N = reg2N  "Sauerstoffmaske" "Sauerstoffmasken" feminine ;
   sauerteig_N = reg2N  "Sauerteig" "Sauerteige" masculine ;
   sauertoepfisch_A = mk3A "sauertöpfisch" "sauertöpfischer" "sauertöpfischste" ;
@@ -32797,7 +32797,7 @@ lin
   schablone_N = reg2N  "Schablone" "Schablonen" feminine ;
   schablonenhaft_A = mk3A "schablonenhaft" "schablonenhafter" "schablonenhafteste" ;
   schabracke_N = reg2N  "Schabracke" "Schabracken" feminine ;
-  schachblindheit_N = reg2N  "Schachblindheit" "-" feminine ;
+  schachblindheit_N = reg2N "Schachblindheit" "e" feminine;
   schachbrett_N = reg2N  "Schachbrett" "Schachbretter" neuter ;
   schachclub_N = reg2N  "Schachclub" "Schachclubs" masculine ;
   schachern_7_V = regV "schachern" ;
@@ -32958,12 +32958,12 @@ lin
   schattierung_N = mkN "Schattierung" ;
   schattig_A = mk3A "schattig" "schattiger" "schattigste" ;
   schatz_N = reg2N  "Schatz" "Schätze" masculine ;
-  schatzkammer__N = reg2N  "Schatzkammer " "Schatzkammern" feminine ;
+  schatzkammer__N = reg2N  "Schatzkammer" "Schatzkammern" feminine ;
   schatzkarte_N = reg2N  "Schatzkarte" "Schatzkarten" feminine ;
   schatzsuche_N = reg2N  "Schatzsuche" "Schatzsuchen" feminine ;
   schatzsucher_N = reg2N  "Schatzsucher" "Schatzsucher" masculine ;
   schatzsucherin_N = reg2N  "Schatzsucherin" "Schatzsucherinnen" feminine ;
-  schau_A = mk3A "schau" "schauer" "schau(e)ste" ;
+  schau_A = mk3A "schau" "schauer" "schaueste" ;
   schau_N = reg2N  "Schau" "Schauen" feminine ;
   schaubude_N = reg2N  "Schaubude" "Schaubuden" feminine ;
   schauen_0_V = regV "schauen" ;
@@ -33070,7 +33070,7 @@ lin
   scheuerhader_N = reg2N  "Scheuerhader" "Scheuerhader" masculine ;
   scheuklappe_N = reg2N  "Scheuklappe" "Scheuklappen" feminine ;
   scheune_N = reg2N  "Scheune" "Scheunen" feminine ;
-  scheunendrescher__N = reg2N  "Scheunendrescher " "Scheunendrescher " masculine ;
+  scheunendrescher__N = reg2N  "Scheunendrescher" "Scheunendrescher" masculine ;
   scheunentor_N = reg2N  "Scheunentor" "Scheunentore" neuter ;
   scheurebe_N = reg2N  "Scheurebe" "Scheureben" feminine ;
   scheusal_N = reg2N  "Scheusal" "Scheusale" neuter ;
@@ -33099,7 +33099,7 @@ lin
   schiedsrichterball_N = reg2N  "Schiedsrichterball" "Schiedsrichterbälle" masculine ;
   schiedsrichtergespann_N = reg2N  "Schiedsrichtergespann" "Schiedsrichtergespanne" neuter ;
   schiedsrichterin_N = reg2N  "Schiedsrichterin" "Schiedsrichterinnen" feminine ;
-  schief_A = mk3A "schief" "schiefer " "schiefste" ;
+  schief_A = mk3A "schief" "schiefer" "schiefste" ;
   schiefer_N = reg2N  "Schiefer" "Schiefer" masculine ;
   schiefern_A = regA "schiefern" ;
   schiefertafel_N = reg2N  "Schiefertafel" "Schiefertafeln" feminine ;
@@ -33190,7 +33190,7 @@ lin
   schinkenbeutel_N = reg2N  "Schinkenbeutel" "Schinkenbeutel" masculine ;
   schinkenbroetchen_N = reg2N  "Schinkenbrötchen" "Schinkenbrötchen" neuter ;
   schinkenbrot_N = reg2N  "Schinkenbrot" "Schinkenbrote" neuter ;
-  schirch_A = mk3A "schirch" "schircher" "schirch(e)ste" ;
+  schirch_A = mk3A "schirch" "schircher" "schircheste" ;
   schiri_N = reg2N  "Schiri" "Schiris" masculine ;
   schirm_N = reg2N  "Schirm" "Schirme" masculine ;
   schirmgewoelbe_N = reg2N  "Schirmgewölbe" "Schirmgewölbe" neuter ;
@@ -33276,7 +33276,7 @@ lin
   schlank_A = mk3A "schlank" "schlanker" "schlankste" ;
   schlankschnabelbuelbuel_N = reg2N  "Schlankschnabelbülbül" "Schlankschnabelbülbüls" masculine ;
   schlaraffe_N = reg2N  "Schlaraffe" "Schlaraffen" masculine ;
-  schlau_A = mk3A "schlau" "schlauer" "schlau(e)ste" ;
+  schlau_A = mk3A "schlau" "schlauer" "schlaueste" ;
   schlauch_N = reg2N  "Schlauch" "Schläuche" masculine ;
   schlauchboot_N = reg2N  "Schlauchboot" "Schlauchboote" neuter ;
   schlauchen_V = regV "schlauchen" ;
@@ -33434,7 +33434,7 @@ lin
   schmelzsubstanz_N = reg2N  "Schmelzsubstanz" "Schmelzsubstanzen" feminine ;
   schmelztiegel_N = reg2N  "Schmelztiegel" "Schmelztiegel" masculine ;
   schmelzwasser_N = reg2N  "Schmelzwasser" "Schmelzwässer" neuter ;
-  schmer_N = reg2N  "Schmer" "-" masculine ;
+  schmer_N = reg2N "Schmer" "Schmer" masculine;
   schmerling_N = reg2N  "Schmerling" "Schmerlinge" masculine ;
   schmerz_N = reg2N  "Schmerz" "Schmerzen" masculine ;
   schmerzen_V = regV "schmerzen" ;
@@ -33506,7 +33506,7 @@ lin
   schnappauf_N = reg2N  "Schnappauf" "Schnappaufs" masculine ;
   schnappen_V = regV "schnappen" ;
   schnapper_N = reg2N  "Schnapper" "Schnapper" masculine ;
-  schnappschuss__N = reg2N  "Schnappschuss " "Schnappschüsse" masculine ;
+  schnappschuss__N = reg2N  "Schnappschuss" "Schnappschüsse" masculine ;
   schnaps_N = reg2N  "Schnaps" "Schnäpse" masculine ;
   schnapsdrossel_N = reg2N  "Schnapsdrossel" "Schnapsdrosseln" neuter ;
   schnapsflasche_N = reg2N  "Schnapsflasche" "Schnapsflaschen" feminine ;
@@ -33678,7 +33678,7 @@ lin
   schonwald_N = reg2N  "Schonwald" "Schonwälder" masculine ;
   schopf_N = reg2N  "Schopf" "Schöpfe" masculine ;
   schopfpinguin_N = reg2N  "Schopfpinguin" "Schopfpinguine" masculine ;
-  schopftintling_N = reg2N  "Schopftintling" "Schopftintlinge " masculine ;
+  schopftintling_N = reg2N  "Schopftintling" "Schopftintlinge" masculine ;
   schoppen_N = reg2N  "Schoppen" "Schoppen" masculine ;
   schore_N = reg2N  "Schore" "Schoren" feminine ;
   schorf_N = reg2N  "Schorf" "Schorfe" masculine ;
@@ -33798,7 +33798,7 @@ lin
   schrotflinte_N = reg2N  "Schrotflinte" "Schrotflinten" feminine ;
   schrotgewehr_N = reg2N  "Schrotgewehr" "Schrotgewehre" neuter ;
   schrotholzkirche_N = reg2N  "Schrotholzkirche" "Schrotholzkirchen" feminine ;
-  schrotschuss__N = reg2N  "Schrotschuss " "Schrotschüsse" masculine ;
+  schrotschuss__N = reg2N  "Schrotschuss" "Schrotschüsse" masculine ;
   schrott_N = reg2N  "Schrott" "Schrotte" masculine ;
   schrotten_V = irregV "schrotten" "schrottet" "schrottete" "schrotte" "geschrottet" ; 
   schrotthaendler_N = reg2N  "Schrotthändler" "Schrotthändler" masculine ;
@@ -33866,10 +33866,10 @@ lin
   schuldenschnitt_N = reg2N  "Schuldenschnitt" "Schuldenschnitte" masculine ;
   schuldgefuehl_N = reg2N  "Schuldgefühl" "Schuldgefühle" neuter ;
   schuldig_A = mk3A "schuldig" "schuldiger" "schuldigste" ;
-  schuldner__N = reg2N  "Schuldner " "Schuldner " masculine ;
+  schuldner__N = reg2N  "Schuldner" "Schuldner" masculine ;
   schuldnerin_N = reg2N  "Schuldnerin" "Schuldnerinnen" feminine ;
   schuldturm_N = reg2N  "Schuldturm" "Schuldtürme" masculine ;
-  schuldverschreibung__N = reg2N  "Schuldverschreibung " "Schuldverschreibungen" feminine ;
+  schuldverschreibung__N = reg2N  "Schuldverschreibung" "Schuldverschreibungen" feminine ;
   schuldzuweisung_N = mkN "Schuldzuweisung" ;
   schule_N = reg2N  "Schule" "Schulen" feminine ;
   schulen_V = regV "schulen" ;
@@ -33896,7 +33896,7 @@ lin
   schulterguertel_N = reg2N  "Schultergürtel" "Schultergürtel" masculine ;
   schulterklappe_N = reg2N  "Schulterklappe" "Schulterklappen" feminine ;
   schultern_V = irregV "schultern" "schultert" "schulterte" "schultere" "geschultert" ; 
-  schulterzucken_N = reg2N  "Schulterzucken" "-" neuter ;
+  schulterzucken_N = reg2N "Schulterzucken" "Schulterzucken" neuter;
   schultraeger_N = reg2N  "Schulträger" "Schulträger" masculine ;
   schultuete_N = reg2N  "Schultüte" "Schultüten" feminine ;
   schuluniform_N = reg2N  "Schuluniform" "Schuluniformen" feminine ;
@@ -33921,7 +33921,7 @@ lin
   schurkin_N = reg2N  "Schurkin" "Schurkinnen" feminine ;
   schurwollen_A = regA "schurwollen" ;
   schurz_N = reg2N  "Schurz" "Schurze" masculine ;
-  schuss__N = reg2N  "Schuss " "Schüsse" masculine ;
+  schuss__N = reg2N  "Schuss" "Schüsse" masculine ;
   schussbereit_A = regA "schussbereit" ;
   schussel_N = reg2N  "Schussel" "Schussel" masculine ;
   schusselig_A = mk3A "schusselig" "schusseliger" "schusseligste" ;
@@ -33934,7 +33934,7 @@ lin
   schusterbub_N = reg2N  "Schusterbub" "Schusterbuben" masculine ;
   schusterjunge_N = reg2N  "Schusterjunge" "Schusterjungen" masculine ;
   schusterpalme_N = reg2N  "Schusterpalme" "Schusterpalmen" feminine ;
-  schusterpilz_N = reg2N  "Schusterpilz" "Schusterpilze " masculine ;
+  schusterpilz_N = reg2N  "Schusterpilz" "Schusterpilze" masculine ;
   schutz_N = reg2N  "Schutz" "Schutze" masculine ;
   schutzbereich_N = reg2N  "Schutzbereich" "Schubereiche" masculine ;
   schutzengel_N = reg2N  "Schutzengel" "Schutzengel" masculine ;
@@ -33953,7 +33953,7 @@ lin
   schwabe_N = reg2N  "Schwabe" "Schwaben" masculine ;
   schwabo_N = reg2N  "Schwabo" "Schwabos" masculine ;
   schwach_A = mk3A "schwach" "schwächer" "schwächste" ;
-  schwachkopf__N = reg2N  "Schwachkopf " "Schwachköpfe" masculine ;
+  schwachkopf__N = reg2N  "Schwachkopf" "Schwachköpfe" masculine ;
   schwachmat_N = reg2N  "Schwachmat" "Schwachmaten" masculine ;
   schwachsinnig_A = mk3A "schwachsinnig" "schwachsinniger" "schwachsinnigste" ;
   schwachstelle_N = reg2N  "Schwachstelle" "Schwachstellen" feminine ;
@@ -34039,7 +34039,7 @@ lin
   schwarzwaldmaedel_N = reg2N  "Schwarzwaldmädel" "Schwarzwaldmädel" neuter ;
   schwarzweissfilm_N = reg2N  "Schwarzweißfilm" "Schwarzweißfilme" masculine ;
   schwarzweissfoto_N = reg2N  "Schwarzweißfoto" "Schwarzweißfotos" neuter ;
-  schwarzwild_N = reg2N  "Schwarzwild" "-" neuter ;
+  schwarzwild_N = reg2N "Schwarzwild" "Schwarzwilde" neuter;
   schwarzwurzel_N = reg2N  "Schwarzwurzel" "Schwarzwurzeln" feminine ;
   schwatzen_V = regV "schwatzen" ;
   schwatzhaft_A = mk3A "schwatzhaft" "schwatzhafter" "schwatzhafteste" ;
@@ -34054,7 +34054,7 @@ lin
   schwefel_N = reg2N  "Schwefel" "Schwefel" neuter ;
   schwefelatom_N = reg2N  "Schwefelatom" "Schwefelatome" neuter ;
   schwefelporling_N = reg2N  "Schwefelporling" "Schwefelporlinge" masculine ;
-  schwefelritterling__N = reg2N  "Schwefelritterling " "Schwefelritterlinge " masculine ;
+  schwefelritterling__N = reg2N  "Schwefelritterling" "Schwefelritterlinge" masculine ;
   schwefelverbindung_N = reg2N  "Schwefelverbindung" "Schwefelverbindungen" feminine ;
   schwefelwasserstoff_N = reg2N  "Schwefelwasserstoff" "Schwefelwasserstoffe" masculine ;
   schweif_N = reg2N  "Schweif" "Schweife" masculine ;
@@ -34083,7 +34083,7 @@ lin
   schweinezyklus_N = reg2N  "Schweinezyklus" "Schweinezyklen" masculine ;
   schweinsleber_N = reg2N  "Schweinsleber" "Schweinslebern" feminine ;
   schweinsleder_N = reg2N  "Schweinsleder" "Schweinsleder" neuter ;
-  schweinsohr_N = reg2N  "Schweinsohr" "Schweinsohren " neuter ;
+  schweinsohr_N = reg2N  "Schweinsohr" "Schweinsohren" neuter ;
   schweissen_5_V = regV "schweißen" ;
   schweisser_N = reg2N  "Schweißer" "Schweißer" masculine ;
   schweisserin_N = reg2N  "Schweißerin" "Schweißerinnen" feminine ;
@@ -34101,7 +34101,7 @@ lin
   schwellkoerper_N = reg2N  "Schwellkörper" "Schwellkörper" masculine ;
   schwellung_N = reg2N  "Schwellung" "Schwellungen" feminine ;
   schwenken_V = regV "schwenken" ;
-  schwenkfutter_N = reg2N  "Schwenkfutter" "?" neuter ;
+  schwenkfutter_N = reg2N  "Schwenkfutter" "Schwenkfuttern" neuter ;
   schwer_A = mk3A "schwer" "schwerer" "schwerste" ;
   schwerenoeter_N = reg2N  "Schwerenöter" "Schwerenöter" masculine ;
   schwerfigur_N = reg2N  "Schwerfigur" "Schwerfiguren" feminine ;
@@ -34161,7 +34161,7 @@ lin
   schwirl_N = reg2N  "Schwirl" "Schwirle" masculine ;
   schwitzen_7_V = regV "schwitzen" ;
   schwoeren_V = irregV "schwören" "schwört" "schwor" "schwöre" "geschworen" ; 
-  schwof__N = reg2N  "Schwof " "Schwofe " masculine ;
+  schwof__N = reg2N  "Schwof" "Schwofe" masculine ;
   schwofen_V = regV "schwofen" ;
   schwuchtel_N = reg2N  "Schwuchtel" "Schwuchteln" feminine ;
   schwuel_A = mk3A "schwül" "schwüler" "schwülste" ;
@@ -34173,7 +34173,7 @@ lin
   schwur_N = reg2N  "Schwur" "Schwüre" masculine ;
   schwurbeln_V = regV "schwurbeln" ;
   schwyzer_N = reg2N  "Schwyzer" "Schwyzer" masculine ;
-  schwyzerduetsch_N = reg2N  "Schwyzerdütsch" "-" neuter ;
+  schwyzerduetsch_N = reg2N "Schwyzerdütsch" "Schwyzerdütsche" neuter;
   sclerosis_N = reg2N "Sklerose" "Sklerosen" feminine ;
   scorekarte_N = reg2N  "Scorekarte" "Scorekarten" feminine ;
   scotch_whisky_N = reg2N  "Scotch Whisky" "Scotch Whiskys" masculine ;
@@ -34225,7 +34225,7 @@ lin
   seeland_N = reg2N  "Seeland" "Seelands" neuter ;
   seele_N = reg2N  "Seele" "Seelen" feminine ;
   seelenruhig_A = mk3A "seelenruhig" "seelenruhiger" "seelenruhigste" ;
-  seelenschmetter_N = reg2N  "Seelenschmetter" "-" masculine ;
+  seelenschmetter_N = reg2N "Seelenschmetter" "Seelenschmetter" masculine;
   seelenstriptease_N = reg2N  "Seelenstriptease" "Seelenstriptease" masculine ;
   seelenverkaeufer_N = reg2N  "Seelenverkäufer" "Seelenverkäufer" masculine ;
   seelenvoll_A = mk3A "seelenvoll" "seelenvoller" "seelenvollste" ;
@@ -34317,7 +34317,7 @@ lin
   seiler_N = reg2N  "Seiler" "Seiler" masculine ;
   seilerei_N = reg2N  "Seilerei" "Seilereien" feminine ;
   seilerin_N = reg2N  "Seilerin" "Seilerinnen" feminine ;
-  seilspringen_N = reg2N  "Seilspringen" "-" neuter ;
+  seilspringen_N = reg2N "Seilspringen" "Seilspringen" neuter;
   seimig_A = mk3A "seimig" "seimiger" "seimigste" ;
   sein_A = regA "sein" ;
   seiner_majestaet_schiff_N = reg2N  "Seiner Majestät Schiff" "Seiner Majestät Schiffe" neuter ;
@@ -34474,8 +34474,8 @@ lin
   semmelgelbe_stacheling__N = reg2N  "Semmelgelbe Stacheling " "Semmelgelben Stachelinge " masculine ;
   semmelknoedel_N = reg2N  "Semmelknödel" "Semmelknödel" masculine ;
   semmelmehl_N = reg2N  "Semmelmehl" "Semmelmehle" neuter ;
-  semmelpilz__N = reg2N  "Semmelpilz " "Semmelpilze " masculine ;
-  semmelstoppelpilz__N = reg2N  "Semmelstoppelpilz " "Semmelstoppelpilze " masculine ;
+  semmelpilz__N = reg2N  "Semmelpilz" "Semmelpilze" masculine ;
+  semmelstoppelpilz__N = reg2N  "Semmelstoppelpilz" "Semmelstoppelpilze" masculine ;
   senat_N = reg2N  "Senat" "Senate" masculine ;
   senator_N = reg2N  "Senator" "Senatoren" masculine ;
   sendaivirusvektor_N = reg2N  "Sendaivirusvektor" "Sendaivirusvektoren" masculine ;
@@ -34592,7 +34592,7 @@ lin
   serviettenknoedel_N = reg2N  "Serviettenknödel" "Serviettenknödel" masculine ;
   servil_A = mk3A "servil" "serviler" "servilste" ;
   servilitaet_N = reg2N  "Servilität" "Servilitäten" feminine ;
-  servitut__N = reg2N  "Servitut " "Servitute " neuter ;
+  servitut__N = reg2N  "Servitut" "Servitute" neuter ;
   sesam_N = reg2N  "Sesam" "Sesams" masculine ;
   sesambroetchen_N = reg2N  "Sesambrötchen" "Sesambrötchen" neuter ;
   sesamstange_N = reg2N  "Sesamstange" "Sesamstangen" feminine ;
@@ -34626,7 +34626,7 @@ lin
   sexualwissenschaft_N = reg2N  "Sexualwissenschaft" "Sexualwissenschaften" feminine ;
   sexuell_A = mk3A "sexuell" "sexueller" "sexuellste" ;
   sexvideo_N = reg2N  "Sexvideo" "Sexvideos" neuter ;
-  sexy_A = mk3A "sexy " "sexyer" "sexyste" ;
+  sexy_A = mk3A "sexy" "sexyer" "sexyste" ;
   seychellenfalke_N = reg2N  "Seychellenfalke" "Seychellenfalken" masculine ;
   seycheller_N = reg2N  "Seycheller" "Seycheller" masculine ;
   seychellerin_N = reg2N  "Seychellerin" "Seychellerinnen" feminine ;
@@ -34881,8 +34881,8 @@ lin
   sippe_N = reg2N  "Sippe" "Sippen" feminine ;
   sir_N = reg2N  "Sir" "Sirs" masculine ;
   sire_N = reg2N  "Sire" "Sires" masculine ;
-  sirene__N = reg2N  "Sirene " "Sirenen" feminine ;
-  sirius_N = reg2N  "Sirius" "-" masculine ;
+  sirene__N = reg2N  "Sirene" "Sirenen" feminine ;
+  sirius_N = reg2N "Sirius" "Siriuse" masculine;
   siriusfern_A = regA "siriusfern" ;
   sirren_V = regV "sirren" ;
   sirup_N = reg2N  "Sirup" "Sirupe" neuter ;
@@ -34916,7 +34916,7 @@ lin
   skalpieren_V = irregV "skalpieren" "skalpiert" "skalpierte" "skalpierte" "skalpiert" ;
   skandal_N = reg2N  "Skandal" "Skandale" masculine ;
   skandaloes_A = mk3A "skandalös" "skandalöser" "skandalöseste" ;
-  skandalon_N = reg2N  "Skandalon" "-" neuter ;
+  skandalon_N = reg2N "Skandalon" "Skandalone" neuter;
   skandieren_V = irregV "skandieren" "skandiert" "skandierte" "skandierte" "skandiert" ;
   skandinavisch_A = regA "skandinavisch" ;
   skandinavische_sprache_N = reg2N  "skandinavische Sprache" "skandinavischen Sprachen " feminine ;
@@ -34937,7 +34937,7 @@ lin
   skeptisch_A = mk3A "skeptisch" "skeptischer" "skeptischste" ;
   sketch_N = reg2N  "Sketch" "Sketche" masculine ;
   sketsch_N = reg2N  "Sketsch" "Sketsche" masculine ;
-  skifahrer__N = reg2N  "Skifahrer " "Skifahrer " masculine ;
+  skifahrer__N = reg2N  "Skifahrer" "Skifahrer" masculine ;
   skifahrerin_N = reg2N  "Skifahrerin" "Skifahrerinnen" feminine ;
   skigebiet_N = reg2N  "Skigebiet" "Skigebiete" neuter ;
   skilehrer_N = reg2N  "Skilehrer" "Skilehrer" masculine ;
@@ -34970,7 +34970,7 @@ lin
   skurrilitaet_N = reg2N  "Skurrilität" "Skurrilitäten" feminine ;
   skyline_N = reg2N  "Skyline" "Skylines" feminine ;
   skypen_V = irregV "skypen" "skypt" "skypte" "skypte" "skypt" ;
-  skythisch_A = mk3A "skythisch" " " " e" ;
+  skythisch_A = mk3A "skythisch" "skythischer" "skythischte" ;
   slang_N = reg2N  "Slang" "Slangs" masculine ;
   slapstick_N = reg2N  "Slapstick" "Slapsticks" masculine ;
   slawisch_A = mk3A "slawisch" "slawischer" "slawischste" ;
@@ -35117,7 +35117,7 @@ lin
   sommersonnenwende_N = reg2N  "Sommersonnenwende" "Sommersonnenwenden" feminine ;
   sommerspiel_N = reg2N  "Sommerspiel" "Sommerspiele" neuter ;
   sommersprosse_N = reg2N  "Sommersprosse" "Sommersprossen" feminine ;
-  sommersteinpilz_N = reg2N  "Sommersteinpilz" "Sommersteinpilze " masculine ;
+  sommersteinpilz_N = reg2N  "Sommersteinpilz" "Sommersteinpilze" masculine ;
   sommersueber_Adv = mkAdv "sommersüber" ;
   sommertrueffel_N = reg2N  "Sommertrüffel" "Sommertrüffeln " feminine ;
   sommerwohnung_N = mkN "Sommerwohnung" ;
@@ -35172,7 +35172,7 @@ lin
   sonnenbrille_N = reg2N  "Sonnenbrille" "Sonnenbrillen" feminine ;
   sonnenbuchstabe_N = reg2N  "Sonnenbuchstabe" "Sonnenbuchstaben" masculine ;
   sonnencreme_1_N = reg2N  "Sonnencrème" "Sonnencrèmes " feminine ;
-  sonnencreme_N = reg2N  "Sonnencreme" "Sonnencremes " feminine ;
+  sonnencreme_N = reg2N  "Sonnencreme" "Sonnencremes" feminine ;
   sonnendachsfell_N = reg2N  "Sonnendachsfell" "Sonnendachsfelle" neuter ;
   sonnenfackel_N = reg2N  "Sonnenfackel" "Sonnenfackeln" feminine ;
   sonnenfinsternis_N = reg2N  "Sonnenfinsternis" "Sonnenfinsternisse" feminine ;
@@ -35183,7 +35183,7 @@ lin
   sonnenkreme_N = reg2N  "Sonnenkreme" "Sonnenkremes" feminine ;
   sonnenliege_N = reg2N  "Sonnenliege" "Sonnenliegen" feminine ;
   sonnenoel_N = reg2N  "Sonnenöl" "Sonnenöle" neuter ;
-  sonnenpilz_N = reg2N  "Sonnenpilz" "Sonnenpilze " masculine ;
+  sonnenpilz_N = reg2N  "Sonnenpilz" "Sonnenpilze" masculine ;
   sonnenroeschen_N = reg2N  "Sonnenröschen" "Sonnenröschen" neuter ;
   sonnenschirm_N = reg2N  "Sonnenschirm" "Sonnenschirme" masculine ;
   sonnenschutzfilter_N = reg2N  "Sonnenschutzfilter" "Sonnenschutzfilter" masculine ;
@@ -35216,7 +35216,7 @@ lin
   sonst_Adv = mkAdv "sonst" ;
   sonstig_A = regA "sonstig" ;
   sophismus_N = reg2N  "Sophismus" "Sophismen" masculine ;
-  sophist__N = reg2N  "Sophist " "Sophisten" masculine ;
+  sophist__N = reg2N  "Sophist" "Sophisten" masculine ;
   sophistisch_A = mk3A "sophistisch" "sophistischer" "sophistischste" ;
   sopran_N = reg2N  "Sopran" "Soprane" masculine ;
   sopranist_N = reg2N  "Sopranist" "Sopranisten" masculine ;
@@ -35412,7 +35412,7 @@ lin
   speisekammer_N = reg2N  "Speisekammer" "Speisekammern" feminine ;
   speisekarte_N = reg2N  "Speisekarte" "Speisekarten" feminine ;
   speisekartoffel_N = reg2N  "Speisekartoffel" "Speisekartoffeln" feminine ;
-  speisemorchel_N = reg2N  "Speisemorchel" "Speisemorcheln " feminine ;
+  speisemorchel_N = reg2N  "Speisemorchel" "Speisemorcheln" feminine ;
   speisen_7_V = regV "speisen" ;
   speiseplan_N = reg2N  "Speiseplan" "Speisepläne" masculine ;
   speiserest_N = reg2N  "Speiserest" "Speisereste" masculine ;
@@ -35466,7 +35466,7 @@ lin
   spezialitaet_N = reg2N  "Spezialität" "Spezialitäten" feminine ;
   speziell_A = mk3A "speziell" "spezieller" "speziellste" ;
   spezies_N = reg2N  "Spezies" "Spezies" feminine ;
-  spezifikation__N = reg2N  "Spezifikation " "Spezifikationen" feminine ;
+  spezifikation__N = reg2N  "Spezifikation" "Spezifikationen" feminine ;
   spezifisch_A = mk3A "spezifisch" "spezifischer" "spezifischste" ;
   spezifische_epitheton_N = reg2N  "Spezifische Epitheton" "Spezifischen Epitheta" neuter ;
   spezifitaet_N = reg2N  "Spezifität" "Spezifitäten" feminine ;
@@ -35554,7 +35554,7 @@ lin
   spinnrute_N = reg2N  "Spinnrute" "Spinnruten" feminine ;
   spinnwebe_N = reg2N  "Spinnwebe" "Spinnweben" feminine ;
   spinoes_A = mk3A "spinös" "spinöser" "spinöseste" ;
-  spint_N = reg2N  "Spint" "Spinte " masculine ;
+  spint_N = reg2N  "Spint" "Spinte" masculine ;
   spion_N = mkN "Spion" ;
   spiralfeder_N = reg2N  "Spiralfeder" "Spiralfedern" feminine ;
   spiralnebel_N = reg2N  "Spiralnebel" "Spiralnebel" masculine ;
@@ -35582,7 +35582,7 @@ lin
   spitzer_N = reg2N  "Spitzer" "Spitzer" masculine ;
   spitzfindig_A = mk3A "spitzfindig" "spitzfindiger" "spitzfindigste" ;
   spitzhammer_N = reg2N  "Spitzhammer" "Spitzhämmer" masculine ;
-  spitzmorchel_N = reg2N  "Spitzmorchel" "Spitzmorcheln " feminine ;
+  spitzmorchel_N = reg2N  "Spitzmorchel" "Spitzmorcheln" feminine ;
   spitzname_N = reg2N  "Spitzname" "Spitznamen" masculine ;
   spleen_N = reg2N  "Spleen" "Spleens" masculine ;
   spleiss_N = reg2N  "Spleiß" "Spleiße" masculine ;
@@ -35646,7 +35646,7 @@ lin
   sprache_N = reg2N  "Sprache" "Sprachen" feminine ;
   sprachebene_N = reg2N  "Sprachebene" "Sprachebenen" feminine ;
   spracheinstellung_N = mkN "Spracheinstellung" ;
-  sprachencharta_N = reg2N  "Sprachencharta" "-" feminine ;
+  sprachencharta_N = reg2N "Sprachencharta" "e" feminine;
   sprachenkenntnis_N = reg2N  "Sprachenkenntnis" "Sprachenkenntnisse" feminine ;
   sprachenkontakt_N = reg2N  "Sprachenkontakt" "Sprachenkontakte" masculine ;
   sprachenpolitik_N = reg2N  "Sprachenpolitik" "Sprachenpolitiken" feminine ;
@@ -35672,7 +35672,7 @@ lin
   sprachgemeinschaft_N = reg2N  "Sprachgemeinschaft" "Sprachgemeinschaften" feminine ;
   sprachgesellschaft_N = reg2N  "Sprachgesellschaft" "Sprachgesellschaften" feminine ;
   sprachgesetz_N = reg2N  "Sprachgesetz" "Sprachgesetze" neuter ;
-  sprachgewalt_N = reg2N  "Sprachgewalt" "-" feminine ;
+  sprachgewalt_N = reg2N "Sprachgewalt" "e" feminine;
   sprachgewaltig_A = regA "sprachgewaltig" ;
   sprachgewandt_A = regA "sprachgewandt" ;
   sprachglosse_N = reg2N  "Sprachglosse" "Sprachglossen" feminine ;
@@ -35790,7 +35790,7 @@ lin
   sprechstunde_N = reg2N  "Sprechstunde" "Sprechstunden" feminine ;
   sprechtrakt_N = reg2N  "Sprechtrakt" "Sprechtrakte" masculine ;
   spreissel_N = reg2N  "Spreißel" "Spreißel" masculine ;
-  spreize__N = reg2N  "Spreize " "Spreizen " feminine ;
+  spreize__N = reg2N  "Spreize" "Spreizen" feminine ;
   spreizen_V = regV "spreizen" ;
   sprengel_N = reg2N  "Sprengel" "Sprengel" masculine ;
   sprengen_V = regV "sprengen" ;
@@ -35996,7 +35996,7 @@ lin
   stall_N = reg2N  "Stall" "Ställe" masculine ;
   stallfeind_N = reg2N  "Stallfeind" "Stallfeinde" masculine ;
   stallgeruch_N = reg2N  "Stallgeruch" "Stallgerüche" masculine ;
-  stallung__N = reg2N  "Stallung " "Stallungen" feminine ;
+  stallung__N = reg2N  "Stallung" "Stallungen" feminine ;
   stallwaechterparty_N = reg2N  "Stallwächterparty" "Stallwächterpartys" feminine ;
   stamm_N = reg2N  "Stamm" "Stämme" masculine ;
   stammbaum_N = reg2N  "Stammbaum" "Stammbäume" masculine ;
@@ -36049,21 +36049,21 @@ lin
   standpunkt_N = reg2N  "Standpunkt" "Standpunkte" masculine ;
   standrechtlich_A = regA "standrechtlich" ;
   standuhr_N = reg2N  "Standuhr" "Standuhren" feminine ;
-  standvogel__N = reg2N  "Standvogel " "Standvögel" masculine ;
+  standvogel__N = reg2N  "Standvogel" "Standvögel" masculine ;
   stange_N = reg2N  "Stange" "Stangen" feminine ;
   stante_pede_Adv = mkAdv "stante pede" ;
   stanzen_V = regV "stanzen" ;
   stapel_N = reg2N  "Stapel" "Stapel" masculine ;
   stapeln_V = regV "stapeln" ;
   stapfen_V = regV "stapfen" ;
-  staphylococcus__N = reg2N  "Staphylococcus " "Staphylococcen " masculine ;
+  staphylococcus__N = reg2N  "Staphylococcus" "Staphylococcen" masculine ;
   staphylokokkenbakterium_N = reg2N  "Staphylokokkenbakterium" "Staphylokokkenbakterien" neuter ;
   star_N = reg2N  "Star" "Stare" masculine ;
   stararchitekt_N = reg2N  "Stararchitekt" "Stararchitekten" masculine ;
   stararchitektin_N = reg2N  "Stararchitektin" "Stararchitektinnen" feminine ;
   stark_A = mk3A "stark" "stärker" "stärkste" ;
   starkregen_N = reg2N  "Starkregen" "Starkregen" masculine ;
-  starkriechende_pfifferling__N = reg2N  "Starkriechende Pfifferling " "StarkriechenPfifferlinge " masculine ;
+  starkriechende_pfifferling__N = reg2N  "Starkriechende Pfifferling " "StarkriechenPfifferlinge" masculine ;
   starr_A = mk3A "starr" "starrer" "starrste" ;
   starren_0_V = regV "starren" ;
   start_N = reg2N  "Start" "Starts" masculine ;
@@ -36122,7 +36122,7 @@ lin
   stecker_N = reg2N  "Stecker" "Stecker" masculine ;
   steckerlfisch_N = reg2N  "Steckerlfisch" "Steckerlfische" masculine ;
   stecknadel_N = reg2N  "Stecknadel" "Stecknadeln" feminine ;
-  steckschuss__N = reg2N  "Steckschuss " "Steckschüsse" masculine ;
+  steckschuss__N = reg2N  "Steckschuss" "Steckschüsse" masculine ;
   steckverbinder_N = reg2N  "Steckverbinder" "Steckverbinder" masculine ;
   steert_N = reg2N  "Steert" "Steerte" masculine ;
   stefan_N = reg2N  "Stefan" "Stefans" masculine ;
@@ -36203,7 +36203,7 @@ lin
   stellenausschreibung_N = mkN "Stellenausschreibung" ;
   stellenwertsystem_N = reg2N  "Stellenwertsystem" "Stellenwertsysteme" neuter ;
   stellstift_N = reg2N  "Stellstift" "Stellstifte" masculine ;
-  stellung__N = reg2N  "Stellung " "Stellungen" feminine ;
+  stellung__N = reg2N  "Stellung" "Stellungen" feminine ;
   stellung_N = reg2N  "Stellung" "Stellungen" feminine ;
   stellungnahme_N = reg2N  "Stellungnahme" "Stellungnahmen" feminine ;
   stellungsfeld_N = reg2N  "Stellungsfeld" "Stellungsfelder" neuter ;
@@ -36361,7 +36361,7 @@ lin
   stieren_V = regV "stieren" ;
   stierln_V = regV "stierln" ;
   stiernacken_N = reg2N  "Stiernacken" "Stiernacken" masculine ;
-  stiersucht_N = reg2N  "Stiersucht" "-" feminine ;
+  stiersucht_N = reg2N "Stiersucht" "e" feminine;
   stift_N = reg2N  "Stift" "Stifte" masculine ;
   stiften_V = irregV "stiften" "stiftet" "stiftete" "stiftete" "gestiftet" ; 
   stifter_N = reg2N  "Stifter" "Stifter" masculine ;
@@ -36461,7 +36461,7 @@ lin
   stoffpreisgleitklausel_N = reg2N  "Stoffpreisgleitklausel" "Stoffpreisgleitklauseln" feminine ;
   stofftaschentuch_N = reg2N  "Stofftaschentuch" "Stofftaschentücher" neuter ;
   stofftier_N = reg2N  "Stofftier" "Stofftiere" neuter ;
-  stoffwechsel_N = reg2N  "Stoffwechsel" "Stoffwechsel " masculine ;
+  stoffwechsel_N = reg2N  "Stoffwechsel" "Stoffwechsel" masculine ;
   stoffwechselerkrankung_N = mkN "Stoffwechselerkrankung" ;
   stoffwechselfunktionsstoerung_N = reg2N  "Stoffwechselfunktionsstörung" "Stoffwechselfunktionsstörungen" feminine ;
   stoffwechselmodulator_N = reg2N  "Stoffwechselmodulator" "Stoffwechselmodulatoren" masculine ;
@@ -36684,7 +36684,7 @@ lin
   stromkreis_N = reg2N  "Stromkreis" "Stromkreise" masculine ;
   stromquelle_N = reg2N  "Stromquelle" "Stromquellen" feminine ;
   stromrechnung_N = mkN "Stromrechnung" ;
-  stromrichter__N = reg2N  "Stromrichter " "Stromrichter " masculine ;
+  stromrichter__N = reg2N  "Stromrichter" "Stromrichter" masculine ;
   stromschnelle_N = reg2N  "Stromschnelle" "Stromschnellen" feminine ;
   stromstaerke_N = reg2N  "Stromstärke" "Stromstärken" feminine ;
   stromversorger_N = reg2N  "Stromversorger" "Stromversorger" masculine ;
@@ -36716,7 +36716,7 @@ lin
   stubenmaedchen_N = reg2N  "Stubenmädchen" "Stubenmädchen" neuter ;
   stubenrein_A = mk3A "stubenrein" "stubenreiner" "stubenreinste" ;
   stubentiger_N = reg2N  "Stubentiger" "Stubentiger" masculine ;
-  stuck_N = reg2N  "Stuck" "-" masculine ;
+  stuck_N = reg2N "Stuck" "Stucke" masculine;
   stuckateur_N = reg2N  "Stuckateur" "Stuckateure" masculine ;
   student_N = reg2N  "Student" "Studenten" masculine ;
   studentenblume_N = reg2N  "Studentenblume" "Studentenblumen" feminine ;
@@ -36899,7 +36899,7 @@ lin
   subsumieren_V = irregV "subsumieren" "subsumiert" "subsumierte" "subsumierte" "subsumiert" ;
   subsumtiv_A = regA "subsumtiv" ;
   subsystem_N = reg2N  "Subsystem" "Subsysteme" neuter ;
-  subterran_A = mk3A "subterran" " " " e" ;
+  subterran_A = mk3A "subterran" "subterraner" "subterranste" ;
   subtil_A = mk3A "subtil" "subtiler" "subtilste" ;
   subtilitaet_N = reg2N  "Subtilität" "Subtilitäten" feminine ;
   subtituent_N = reg2N  "Subtituent" "Subtituenten" masculine ;
@@ -36959,7 +36959,7 @@ lin
   suelze_N = reg2N  "Sülze" "Sülzen" feminine ;
   suelzen_V = regV "sülzen" ;
   suende_N = reg2N  "Sünde" "Sünden" feminine ;
-  suendenbabel_N = reg2N  "Sündenbabel" "-" masculine ;
+  suendenbabel_N = reg2N "Sündenbabel" "Sündenbabele" masculine;
   suendenbock_N = reg2N  "Sündenbock" "Sündenböcke" masculine ;
   suendenpfuhl_N = reg2N  "Sündenpfuhl" "Sündenpfuhle" masculine ;
   suender_N = reg2N  "Sünder" "Sünder" masculine ;
@@ -37093,7 +37093,7 @@ lin
   surfer_N = reg2N  "Surfer" "Surfer" masculine ;
   surferin_N = reg2N  "Surferin" "Surferinnen" feminine ;
   surfschule_N = reg2N  "Surfschule" "Surfschulen" feminine ;
-  surimi_N = reg2N  "Surimi" "-" neuter ;
+  surimi_N = reg2N "Surimi" "Surimie" neuter;
   surinamer_N = reg2N  "Surinamer" "Surinamer" masculine ;
   surinamerin_N = reg2N  "Surinamerin" "Surinamerinnen" feminine ;
   surinamisch_A = mk3A "surinamisch" "surinamischer" "surinamischste" ;
@@ -37124,7 +37124,7 @@ lin
   sweating_N = reg2N "Schwitzen" "Schwitzen" neuter ;
   swinger_N = reg2N  "Swinger" "Swinger" masculine ;
   switch_N = reg2N  "Switch" "Switches" masculine ;
-  sybaris_N = reg2N  "Sybaris" "-" neuter ;
+  sybaris_N = reg2N "Sybaris" "Sybarise" neuter;
   sybarit_N = reg2N  "Sybarit" "Sybariten" masculine ;
   sybaritisch_A = mk3A "sybaritisch" "sybaritischer" "sybaritischste" ;
   syllabar_N = reg2N  "Syllabar" "Syllabare" neuter ;
@@ -37361,7 +37361,7 @@ lin
   tamtam_N = reg2N  "Tamtam" "Tamtams" neuter ;
   tandem_N = reg2N  "Tandem" "Tandems" neuter ;
   tang_N = reg2N  "Tang" "Tange" masculine ;
-  tanga__N = reg2N  "Tanga " "Tangas" masculine ;
+  tanga__N = reg2N  "Tanga" "Tangas" masculine ;
   tangens_N = reg2N  "Tangens" "Tangens" masculine ;
   tangente_N = reg2N  "Tangente" "Tangenten" feminine ;
   tangentenviereck_N = reg2N  "Tangentenviereck" "Tangentenvierecke" neuter ;
@@ -37385,7 +37385,7 @@ lin
   tannen_A = regA "tannen" ;
   tannenbaum_N = reg2N  "Tannenbaum" "Tannenbäume" masculine ;
   tannenhaeher_N = reg2N  "Tannenhäher" "Tannenhäher" masculine ;
-  tannenpilz_N = reg2N  "Tannenpilz" "Tannenpilze " masculine ;
+  tannenpilz_N = reg2N  "Tannenpilz" "Tannenpilze" masculine ;
   tannenreizker_N = reg2N  "Tannenreizker" "Tannenreizker" masculine ;
   tannenzapfen_N = reg2N  "Tannenzapfen" "Tannenzapfen" masculine ;
   tannin_N = reg2N  "Tannin" "Tannine" neuter ;
@@ -37410,7 +37410,7 @@ lin
   tanztee_N = reg2N  "Tanztee" "Tanztees" masculine ;
   tapet_N = reg2N  "Tapet" "Tapete" neuter ;
   tapete_N = reg2N  "Tapete" "Tapeten" feminine ;
-  tapfer_A = mk3A "tapfer " "tapferer" "tapferste" ;
+  tapfer_A = mk3A "tapfer" "tapferer" "tapferste" ;
   tapferkeitsmedaille_N = reg2N  "Tapferkeitsmedaille" "Tapferkeitsmedaillen" feminine ;
   taphephobie_N = reg2N  "Taphephobie" "Taphephobien" feminine ;
   tapir_N = reg2N  "Tapir" "Tapire" masculine ;
@@ -37426,7 +37426,7 @@ lin
   targetzelle_N = reg2N  "Targetzelle" "Targetzellen" feminine ;
   tarif_N = reg2N  "Tarif" "Tarife" masculine ;
   tarifabschluss_N = reg2N  "Tarifabschluss" "Tarifabschlüsse" masculine ;
-  tarifautonomie__N = reg2N  "Tarifautonomie " "Tarifautonomien " feminine ;
+  tarifautonomie__N = reg2N  "Tarifautonomie" "Tarifautonomien" feminine ;
   tarifkonflikt_N = reg2N  "Tarifkonflikt" "Tarifkonflikt" masculine ;
   tariflich_A = regA "tariflich" ;
   tariflohn_N = reg2N  "Tariflohn" "Tariflöhne" masculine ;
@@ -37515,7 +37515,7 @@ lin
   tautologie_N = reg2N  "Tautologie" "Tautologien" feminine ;
   tautologisch_A = regA "tautologisch" ;
   tautomer_N = reg2N  "Tautomer" "Tautomere" neuter ;
-  tautomerie_N = reg2N  "Tautomerie" "?" feminine ;
+  tautomerie_N = reg2N  "Tautomerie" "Tautomerien" feminine ;
   taxan_N = reg2N  "Taxan" "Taxane" neuter ;
   taxativ_A = regA "taxativ" ;
   taxe_N = reg2N  "Taxe" "Taxen" feminine ;
@@ -37611,7 +37611,7 @@ lin
   tektur_N = reg2N  "Tektur" "Tekturen" feminine ;
   teleangiektasie_N = reg2N  "Teleangiektasie" "Teleangiektasien" feminine ;
   telebrief_N = reg2N  "Telebrief" "Telebriefe" masculine ;
-  telefon__N = reg2N  "Telefon " "Telefone" neuter ;
+  telefon__N = reg2N  "Telefon" "Telefone" neuter ;
   telefonat_N = reg2N  "Telefonat" "Telefonate" neuter ;
   telefonbuch_N = reg2N  "Telefonbuch" "Telefonbücher" neuter ;
   telefonhoerer_N = reg2N  "Telefonhörer" "Telefonhörer" masculine ;
@@ -37621,7 +37621,7 @@ lin
   telefonkonferenz_N = reg2N  "Telefonkonferenz" "Telefonkonferenzen" feminine ;
   telefonleitung_N = mkN "Telefonleitung" ;
   telefonnummer_N = reg2N  "Telefonnummer" "Telefonnummern" feminine ;
-  telefonvorwahl__N = reg2N  "Telefonvorwahl " "Telefonvorwahlen" feminine ;
+  telefonvorwahl__N = reg2N  "Telefonvorwahl" "Telefonvorwahlen" feminine ;
   telefonzelle_N = reg2N  "Telefonzelle" "Telefonzellen" feminine ;
   telege_N = reg2N  "Telege" "Telegen" feminine ;
   telegen_A = mk3A "telegen" "telegener" "telegenste" ;
@@ -37921,7 +37921,7 @@ lin
   tier_N = reg2N  "Tier" "Tiere" neuter ;
   tieraffe_N = reg2N  "Tieraffe" "Tieraffen" masculine ;
   tieranatomie_N = reg2N  "Tieranatomie" "Tieranatomien" feminine ;
-  tierarzt__N = reg2N  "Tierarzt " "Tierärzte" masculine ;
+  tierarzt__N = reg2N  "Tierarzt" "Tierärzte" masculine ;
   tierauge_N = reg2N  "Tierauge" "Tieraugen" feminine ;
   tierchen_N = reg2N  "Tierchen" "Tierchen" neuter ;
   tierfell_N = reg2N  "Tierfell" "Tierfelle" neuter ;
@@ -37934,7 +37934,7 @@ lin
   tierisch_A = mk3A "tierisch" "tierischer" "tierischste" ;
   tierkoerper_N = reg2N  "Tierkörper" "Tierkörper" masculine ;
   tierkreiszeichen_N = reg2N  "Tierkreiszeichen" "Tierkreiszeichen" neuter ;
-  tiermedizin_N = reg2N  "Tiermedizin" "-" feminine ;
+  tiermedizin_N = reg2N "Tiermedizin" "e" feminine;
   tiermehl_N = reg2N  "Tiermehl" "Tiermehle" neuter ;
   tiermodell_N = reg2N  "Tiermodell" "Tiermodelle" neuter ;
   tierquaelerei_N = reg2N  "Tierquälerei" "Tierquälereien" feminine ;
@@ -37952,7 +37952,7 @@ lin
   tigerfell_N = reg2N  "Tigerfell" "Tigerfelle" neuter ;
   tigerpferd_N = reg2N  "Tigerpferd" "Tigerpferde" neuter ;
   tigerpython_N = reg2N  "Tigerpython" "Tigerpythons" masculine ;
-  tigerritterling__N = reg2N  "Tigerritterling " "Tigerritterlinge " masculine ;
+  tigerritterling__N = reg2N  "Tigerritterling" "Tigerritterlinge" masculine ;
   tigerwaldsaenger_N = reg2N  "Tigerwaldsänger" "Tigerwaldsänger" masculine ;
   tigon_N = reg2N  "Tigon" "Tigon" masculine ;
   tilde_N = reg2N  "Tilde" "Tilden" feminine ;
@@ -37993,8 +37993,8 @@ lin
   tischlampe_N = reg2N  "Tischlampe" "Tischlampen" feminine ;
   tischler_N = reg2N  "Tischler" "Tischler" masculine ;
   tischnachbar_N = reg2N  "Tischnachbar" "Tischnachbarn" masculine ;
-  tischruecken_N = reg2N  "Tischrücken" "-" neuter ;
-  tischsegen_N = reg2N  "Tischsegen" "-" masculine ;
+  tischruecken_N = reg2N "Tischrücken" "Tischrücken" neuter;
+  tischsegen_N = reg2N "Tischsegen" "Tischsegen" masculine;
   tischtennisschlaeger_N = reg2N  "Tischtennisschläger" "Tischtennisschläger" masculine ;
   tischtennisspieler_N = reg2N  "Tischtennisspieler" "Tischtennisspieler" masculine ;
   tischtuch_N = reg2N  "Tischtuch" "Tischtücher" neuter ;
@@ -38055,7 +38055,7 @@ lin
   toerggelemenue__N = reg2N  "Törggelemenü " "Törggelemenüs" neuter ;
   toerggelen_V = regV "törggelen" ;
   toerggelepartie_N = reg2N  "Törggelepartie" "Törggelepartieen" feminine ;
-  toerggelezeit__N = reg2N  "Törggelezeit " "-" feminine ;
+  toerggelezeit__N = reg2N "Törggelezeit " "e" feminine;
   toericht_A = mk3A "töricht" "törichter" "törichtste" ;
   toeten_V = irregV "töten" "tötet" "tötete" "töte" "getötet" ; 
   toetungsverbrechen_N = reg2N  "Tötungsverbrechen" "Tötungsverbrechen" neuter ;
@@ -38175,7 +38175,7 @@ lin
   torrichter_N = reg2N  "Torrichter" "Torrichter" masculine ;
   torschuetze_N = reg2N  "Torschütze" "Torschützen" masculine ;
   torschuetzenkoenig_N = reg2N  "Torschützenkönig" "Torschützenkönige" masculine ;
-  torschuss__N = reg2N  "Torschuss " "Torschüsse" masculine ;
+  torschuss__N = reg2N  "Torschuss" "Torschüsse" masculine ;
   tort_N = reg2N  "Tort" "Torts" masculine ;
   torte_N = reg2N  "Torte" "Torten" feminine ;
   tortendiagramm_N = reg2N  "Tortendiagramm" "Tortendiagramme" neuter ;
@@ -38193,11 +38193,11 @@ lin
   totem_N = reg2N  "Totem" "Totems" neuter ;
   totenacker_N = reg2N  "Totenacker" "Totenäcker" masculine ;
   totenblass_A = regA "totenblass" ;
-  totenfeier__N = reg2N  "Totenfeier " "Totenfeiern" feminine ;
+  totenfeier__N = reg2N  "Totenfeier" "Totenfeiern" feminine ;
   totenfleck_N = reg2N  "Totenfleck" "Totenflecke" masculine ;
-  totengabe__N = reg2N  "Totengabe " "Totengaben" feminine ;
+  totengabe__N = reg2N  "Totengabe" "Totengaben" feminine ;
   totengelaeut__N = reg2N  "Totengeläut " "Totengeläute" neuter ;
-  totenglocke__N = reg2N  "Totenglocke " "Totenglocken" feminine ;
+  totenglocke__N = reg2N  "Totenglocke" "Totenglocken" feminine ;
   totengraeber_N = reg2N  "Totengräber" "Totengräber" masculine ;
   totenhalle_N = reg2N  "Totenhalle" "Totenhallen" feminine ;
   totenhemd_N = reg2N  "Totenhemd" "Totenhemden" neuter ;
@@ -38208,7 +38208,7 @@ lin
   totenkrone_N = reg2N  "Totenkrone" "Totenkronen" feminine ;
   totenkult_N = reg2N  "Totenkult" "Totenkulte" masculine ;
   totenlade_N = reg2N  "Totenlade" "Totenladen" feminine ;
-  totenlager__N = reg2N  "Totenlager " "Totenlager" neuter ;
+  totenlager__N = reg2N  "Totenlager" "Totenlager" neuter ;
   totenmaske_N = reg2N  "Totenmaske" "Totenmasken" feminine ;
   totenmesse_N = reg2N  "Totenmesse" "Totenmessen" feminine ;
   totenoffizium_N = reg2N  "Totenoffizium" "Totenoffizien" neuter ;
@@ -38432,7 +38432,7 @@ lin
   traube_N = reg2N  "Traube" "Trauben" feminine ;
   traubeneiche_N = reg2N  "Traubeneiche" "Traubeneichen" feminine ;
   traubenlese_N = reg2N  "Traubenlese" "Traubenlese" feminine ;
-  traubenmost_N = reg2N  "Traubenmost" "-" masculine ;
+  traubenmost_N = reg2N "Traubenmost" "Traubenmoste" masculine;
   traubensaft_N = reg2N  "Traubensaft" "Traubensäfte" masculine ;
   traubensorte_N = reg2N  "Traubensorte" "Traubensorten" feminine ;
   trauen_V = regV "trauen" ;
@@ -38485,10 +38485,10 @@ lin
   treibstoff_N = reg2N  "Treibstoff" "Treibstoffe" masculine ;
   treibstoffbehaelter_N = reg2N  "Treibstoffbehälter" "Treibstoffbehälter" masculine ;
   treibstoffkanister_N = reg2N  "Treibstoffkanister" "Treibstoffkanister" masculine ;
-  treibstoffmangel_N = reg2N  "Treibstoffmangel" "—" masculine ;
+  treibstoffmangel_N = reg2N "Treibstoffmangel" "Treibstoffmangele" masculine;
   treibstoffverbrauch_N = reg2N  "Treibstoffverbrauch" "Treibstoffverbräuche" masculine ;
   treidel_N = reg2N  "Treidel" "Treideln" masculine ;
-  treidelei_N = reg2N  "Treidelei" "-" feminine ;
+  treidelei_N = reg2N "Treidelei" "e" feminine;
   treideler_N = reg2N  "Treideler" "Treideler" masculine ;
   treidellokomotive_N = reg2N  "Treidellokomotive" "Treidellokomotiven" feminine ;
   treideln_V = regV "treideln" ;
@@ -38578,7 +38578,7 @@ lin
   triel_N = reg2N  "Triel" "Triele" masculine ;
   trielen_V = regV "trielen" ;
   triell_N = reg2N  "Triell" "Trielle" neuter ;
-  trier_N = reg2N  "Trier" " " neuter ;
+  trier_N = reg2N  "Trier" "Triere" neuter ;
   triezen_V = regV "triezen" ;
   trifluoracetatsalz_N = reg2N  "Trifluoracetatsalz" "Trifluoracetatsalze" neuter ;
   trifluormethoxygruppe_N = reg2N  "Trifluormethoxygruppe" "Trifluormethoxygruppen" feminine ;
@@ -38693,7 +38693,7 @@ lin
   trommelfeuer_N = reg2N  "Trommelfeuer" "Trommelfeuer" neuter ;
   trompe_N = reg2N  "Trompe" "Trompen" feminine ;
   trompete_N = reg2N  "Trompete" "Trompeten" feminine ;
-  trompetenpfifferling__N = reg2N  "Trompetenpfifferling " "Trompetenpfifferlinge " masculine ;
+  trompetenpfifferling__N = reg2N  "Trompetenpfifferling" "Trompetenpfifferlinge" masculine ;
   trompetenspieler_N = reg2N  "Trompetenspieler" "Trompetenspieler" masculine ;
   trompeter_N = reg2N  "Trompeter" "Trompeter" masculine ;
   trompeterin_N = reg2N  "Trompeterin" "Trompeterinnen" feminine ;
@@ -38912,7 +38912,7 @@ lin
   tutor_N = reg2N  "Tutor" "Tutoren" masculine ;
   tutorial_N = reg2N  "Tutorial" "Tutorials" neuter ;
   tutu_N = reg2N  "Tutu" "Tutus" neuter ;
-  tuvalu_N = reg2N  "Tuvalu" "-" neuter ;
+  tuvalu_N = reg2N "Tuvalu" "Tuvalue" neuter;
   tuvaluer_N = reg2N  "Tuvaluer" "Tuvaluer" masculine ;
   tuvaluerin_N = reg2N  "Tuvaluerin" "Tuvaluerinnen" feminine ;
   tuvaluisch_A = mk3A "tuvaluisch" "tuvaluischer" "tuvaluischste" ;
@@ -39131,7 +39131,7 @@ lin
   ufer_N = reg2N  "Ufer" "Ufer" neuter ;
   ufer_wolfstrapp_N = reg2N  "Ufer-Wolfstrapp" "Ufer-Wolfstrappe" masculine ;
   ufo_N = reg2N  "UFO" "UFOs" neuter ;
-  uganda_N = reg2N  "Uganda" "-" neuter ;
+  uganda_N = reg2N "Uganda" "Ugandae" neuter;
   ugander_N = reg2N  "Ugander" "Ugander" masculine ;
   uganderin_N = reg2N  "Uganderin" "Uganderinnen" feminine ;
   ugandisch_A = mk3A "ugandisch" "ugandischer" "ugandischste" ;
@@ -39385,7 +39385,7 @@ lin
   unerlaesslich_A = mk3A "unerlässlich" "unerlässlicher" "unerlässlichste" ;
   unermesslich_A = mk3A "unermesslich" "unermesslicher" "unermesslichste" ;
   unermuedlich_A = mk3A "unermüdlich" "unermüdlicher" "unermüdlichste" ;
-  unermuedlichkeit_N = reg2N  "Unermüdlichkeit" "-" feminine ;
+  unermuedlichkeit_N = reg2N "Unermüdlichkeit" "e" feminine;
   unerschoepflich_A = mk3A "unerschöpflich" "unerschöpflicher" "unerschöpflichste" ;
   unerschrocken_A = mk3A "unerschrocken" "unerschrockener" "unerschrockenste" ;
   unerschuetterlich_A = mk3A "unerschütterlich" "unerschütterlicher" "unerschütterlichste" ;
@@ -39484,7 +39484,7 @@ lin
   ungunst_N = reg2N  "Ungunst" "Ungunsten" feminine ;
   ungut_A = regA "ungut" ;
   unheilvoll_A = mk3A "unheilvoll" "unheilvoller" "unheilvollste" ;
-  unheimlich_A = mk3A "unheimlich " "unheimlicher" "unheimlichste" ;
+  unheimlich_A = mk3A "unheimlich" "unheimlicher" "unheimlichste" ;
   unhoeflich_A = mk3A "unhöflich" "unhöflicher" "unhöflichste" ;
   unhoeflichkeit_N = reg2N  "Unhöflichkeit" "Unhöflichkeiten" feminine ;
   unhoerbar_A = mk3A "unhörbar" "unhörbarer" "unhörbarste" ;
@@ -39529,7 +39529,7 @@ lin
   unkompliziert_A = mk3A "unkompliziert" "unkomplizierter" "unkomplizierteste" ;
   unkonjugiert_A = regA "unkonjugiert" ;
   unkontrolliert_A = regA "unkontrolliert" ;
-  unkonventionell_A = mk3A "unkonventionell" "unkonventioneller " "unkonventionellsten e" ;
+  unkonventionell_A = mk3A "unkonventionell" "unkonventioneller" "unkonventionellsten e" ;
   unkonventionelle_spreng__und_brandvorrichtung_N = mkN "Unkonventionelle Spreng- und Brandvorrichtung" ;
   unkostenbeitrag_N = reg2N  "Unkostenbeitrag" "Unkostenbeiträge" masculine ;
   unkraut_N = reg2N  "Unkraut" "Unkräuter" neuter ;
@@ -39554,7 +39554,7 @@ lin
   unmittelbarkeit_N = reg2N  "Unmittelbarkeit" "Unmittelbarkeiten" feminine ;
   unmodifiziert_A = regA "unmodifiziert" ;
   unmoeglich_A = mk3A "unmöglich" "unmöglicher" "unmöglichste" ;
-  unmoral_N = reg2N  "Unmoral" "-" feminine ;
+  unmoral_N = reg2N "Unmoral" "e" feminine;
   unmotiviert_A = mk3A "unmotiviert" "unmotivierter" "unmotivierteste" ;
   unmotivierte_wort_N = reg2N  "unmotivierte Wort" "unmotivierten Wörter" neuter ;
   unmotiviertheit_N = reg2N  "Unmotiviertheit" "Unmotiviertheiten" feminine ;
@@ -39595,7 +39595,7 @@ lin
   unsererseits_Adv = mkAdv "unsererseits" ;
   unseretwillen_Adv = mkAdv "unseretwillen" ;
   unsertwillen_Adv = mkAdv "unsertwillen" ;
-  unsicherheit__N = reg2N  "Unsicherheit " "Unsicherheiten" feminine ;
+  unsicherheit__N = reg2N  "Unsicherheit" "Unsicherheiten" feminine ;
   unsichtbar_A = regA "unsichtbar" ;
   unsinkbar_A = regA "unsinkbar" ;
   unsinkbarkeit_N = reg2N  "Unsinkbarkeit" "Unsinkbarkeiten" feminine ;
@@ -39614,7 +39614,7 @@ lin
   unsystematisch_A = mk3A "unsystematisch" "unsystematischer" "unsystematischste" ;
   untadelig_A = regA "untadelig" ;
   untaetig_A = mk3A "untätig" "untätiger" "untätigste" ;
-  untalentiert_A = mk3A "untalentiert " "untalentierter" "untalentierteste" ;
+  untalentiert_A = mk3A "untalentiert" "untalentierter" "untalentierteste" ;
   untauglich_A = regA "untauglich" ;
   untechnisch_A = regA "untechnisch" ;
   unten_Adv = mkAdv "unten" ;
@@ -39764,7 +39764,7 @@ lin
   unverletzlich_A = regA "unverletzlich" ;
   unvermischbar_A = regA "unvermischbar" ;
   unvermittelt_A = regA "unvermittelt" ;
-  unvermoegen_N = reg2N  "Unvermögen" "-" neuter ;
+  unvermoegen_N = reg2N "Unvermögen" "Unvermögen" neuter;
   unvernetzt_A = regA "unvernetzt" ;
   unvernuenftig_A = mk3A "unvernünftig" "unvernünftiger" "unvernünftigste" ;
   unverschaemt_A = mk3A "unverschämt" "unverschämter" "unverschämteste" ;
@@ -39844,7 +39844,7 @@ lin
   urenkel_N = reg2N  "Urenkel" "Urenkel" masculine ;
   urenkelin_N = reg2N  "Urenkelin" "Urenkelinnen" feminine ;
   urenkelkind_N = reg2N  "Urenkelkind" "Urenkelkinder" neuter ;
-  urerde_N = reg2N  "Urerde" "- " feminine ;
+  urerde_N = reg2N "Urerde" "e" feminine;
   urethan_N = reg2N  "Urethan" "Urethane" neuter ;
   urethanderivat_N = reg2N  "Urethanderivat" "Urethanderivate" neuter ;
   urethangruppe_N = reg2N  "Urethangruppe" "Urethangruppen" feminine ;
@@ -39888,7 +39888,7 @@ lin
   uroma_N = reg2N  "Uroma" "Uromas" feminine ;
   uronsaeure_N = reg2N  "Uronsäure" "Uronsäuren" feminine ;
   uropa_N = reg2N  "Uropa" "Uropas" masculine ;
-  urozean_N = reg2N  "Urozean" "-" masculine ;
+  urozean_N = reg2N "Urozean" "Urozeane" masculine;
   urpflanze_N = reg2N  "Urpflanze" "Urpflanzen" feminine ;
   urploetzlich_A = regA "urplötzlich" ;
   urquell_N = reg2N  "Urquell" "Urquelle" masculine ;
@@ -39900,7 +39900,7 @@ lin
   urspruenglich_A = mk3A "ursprünglich" "ursprünglicher" "ursprünglichste" ;
   ursprung_N = mkN "Ursprung" ;
   urspung_N = reg2N  "Urspung" "Urspungen" feminine ;
-  ursuppe_N = reg2N  "Ursuppe" "- " feminine ;
+  ursuppe_N = reg2N "Ursuppe" "e" feminine;
   urteil_N = reg2N  "Urteil" "Urteile" neuter ;
   urtier_N = reg2N  "Urtier" "Urtiere" neuter ;
   uruguayer_N = reg2N  "Uruguayer" "Uruguayer" masculine ;
@@ -40209,7 +40209,7 @@ lin
   verbringen_V = irregV "verbringen" "verbringt" "verbrachte" "verbrächte" "verbracht" ; 
   verbrueckt_A = regA "verbrückt" ;
   verbruehung_N = reg2N  "Verbrühung" "Verbrühungen" feminine ;
-  verbstellung__N = reg2N  "Verbstellung " "Verbstellungen" feminine ;
+  verbstellung__N = reg2N  "Verbstellung" "Verbstellungen" feminine ;
   verbuddeln_V = irregV "verbuddeln" "verbuddelt" "verbuddelte" "verbuddelte" "verbuddelt" ;
   verbuenden_V = irregV "verbünden" "verbündet" "verbündete" "verbündete" "verbündet" ;
   verbum_N = reg2N  "Verbum" "Verba" neuter ;
@@ -40264,7 +40264,7 @@ lin
   verdraengen_V = irregV "verdrängen" "verdrängt" "verdrängte" "verdrängte" "verdrängt" ;
   verdreschen_V = irregV "verdreschen" "verdrescht" "verdrosch" "verdrösche" "verdroschen" ; 
   verdriesslich_A = mk3A "verdrießlich" "verdrießlicher" "verdrießlichste" ;
-  verdrossenheit_N = reg2N  "Verdrossenheit" "—" feminine ;
+  verdrossenheit_N = reg2N "Verdrossenheit" "e" feminine;
   verdruckst_A = mk3A "verdruckst" "verdruckster" "verdrucksteste" ;
   verdruecken_V = irregV "verdrücken" "verdrückt" "verdrückte" "verdrückte" "verdrückt" ;
   verduennen_V = irregV "verdünnen" "verdünnt" "verdünnte" "verdünnte" "verdünnt" ;
@@ -40277,7 +40277,7 @@ lin
   verduennungssubstanz_N = reg2N  "Verdünnungssubstanz" "Verdünnungssubstanzen" feminine ;
   verduften_V = irregV "verduften" "verduftet" "verduftete" "verduftete" "verduftet" ; 
   verdutzen_V = irregV "verdutzen" "verdutzt" "verdutzte" "verdutzte" "verdutzt" ;
-  verdutzt_A = mk3A "verdutzt " "verdutzter " "verdutztesten e" ;
+  verdutzt_A = mk3A "verdutzt" "verdutzter" "verdutztesten e" ;
   verebben_V = irregV "verebben" "verebbt" "verebbte" "verebbte" "verebbt" ;
   veredelung_N = mkN "Veredelung" ;
   verehren_V = irregV "verehren" "verehrt" "verehrte" "verehrte" "verehrt" ;
@@ -40370,7 +40370,7 @@ lin
   vergehen_V = irregV "vergehen" "vergeht" "verging" "verginge" "vergangen" ; 
   vergeigen_V = irregV "vergeigen" "vergeigt" "vergeigte" "vergeigte" "vergeigt" ;
   vergeltung_N = mkN "Vergeltung" ;
-  vergessen_V = irregV "vergessen" "vergesst" "vergaß" "vergäße" "vergessen " ; 
+  vergessen_V = irregV "vergessen" "vergesst" "vergaß" "vergäße" "vergessen" ; 
   vergesslich_A = mk3A "vergesslich" "vergesslicher" "vergesslichste" ;
   vergeuden_V = irregV "vergeuden" "vergeudet" "vergeudete" "vergeudete" "vergeudet" ;
   vergewaltigen_V = irregV "vergewaltigen" "vergewaltigt" "vergewaltigte" "vergewaltigte" "vergewaltigt" ;
@@ -40480,7 +40480,7 @@ lin
   verklaeren_V = irregV "verklären" "verklärt" "verklärte" "verklärte" "verklärt" ;
   verklaerung_N = mkN "Verklärung" ;
   verklappen_V = irregV "verklappen" "verklappt" "verklappte" "verklappte" "verklappt" ;
-  verklausuliert_A = mk3A "verklausuliert " "verklausulierter " "verklausuliertesten e" ;
+  verklausuliert_A = mk3A "verklausuliert" "verklausulierter" "verklausuliertesten e" ;
   verkleidung_N = mkN "Verkleidung" ;
   verkleinerung_N = mkN "Verkleinerung" ;
   verkleinerungsform_N = reg2N  "Verkleinerungsform" "Verkleinerungsformen" feminine ;
@@ -40693,7 +40693,7 @@ lin
   verrunzelt_A = mk3A "verrunzelt" "verrunzelter" "verrunzeltste" ;
   vers_N = reg2N  "Vers" "Verse" masculine ;
   versaeumen_V = irregV "versäumen" "versäumt" "versäumte" "versäumte" "versäumt" ;
-  versagen_N = reg2N  "Versagen" "-" neuter ;
+  versagen_N = reg2N "Versagen" "Versagen" neuter;
   versagen_V = irregV "versagen" "versagt" "versagte" "versagte" "versagt" ;
   versager_N = reg2N  "Versager" "Versager" masculine ;
   versal_N = reg2N  "Versal" "Versalien" masculine ;
@@ -40792,7 +40792,7 @@ lin
   versetzungsart_N = reg2N  "Versetzungsart" "Versetzungsarten" feminine ;
   versichern_V = irregV "versichern" "versichert" "versicherte" "versicherte" "versichert" ;
   versicherung_N = mkN "Versicherung" ;
-  versicherungspflicht_N = reg2N  "Versicherungspflicht" "—" feminine ;
+  versicherungspflicht_N = reg2N "Versicherungspflicht" "e" feminine;
   versicherungspflichtgrenze_N = reg2N  "Versicherungspflichtgrenze" "Versicherungspflichtgrenzen" feminine ;
   versicherungspflichtig_A = regA "versicherungspflichtig" ;
   versiegeln_V = irregV "versiegeln" "versiegelt" "versiegelte" "versiegelte" "versiegelt" ;
@@ -40945,7 +40945,7 @@ lin
   verwaltungssprache_N = reg2N  "Verwaltungssprache" "Verwaltungssprachen" feminine ;
   verwandeln_V = irregV "verwandeln" "verwandelt" "verwandelte" "verwandelte" "verwandelt" ;
   verwandlung_N = mkN "Verwandlung" ;
-  verwandt_A = mk3A "verwandt" "verwandter" "verwandt(e)ste" ;
+  verwandt_A = mk3A "verwandt" "verwandter" "verwandteste" ;
   verwandtschaft_N = reg2N  "Verwandtschaft" "Verwandtschaften" feminine ;
   verwechseln_V = irregV "verwechseln" "verwechselt" "verwechselte" "verwechselte" "verwechselt" ;
   verwechslung_N = mkN "Verwechslung" ;
@@ -41185,7 +41185,7 @@ lin
   vitiligo_N = reg2N  "Vitiligo" "Vitiligines" feminine ;
   vitrine_N = reg2N  "Vitrine" "Vitrinen" feminine ;
   viura_N = reg2N  "Viura" "Viuras" feminine ;
-  vivipar_A = mk3A "vivipar" " " " e" ;
+  vivipar_A = mk3A "vivipar" "viviparer" "viviparste" ;
   vivisektion_N = mkN "Vivisektion" ;
   vizepraesident_N = reg2N  "Vizepräsident" "Vizepräsidenten" masculine ;
   voegelchen_N = reg2N  "Vögelchen" "Vögelchen" neuter ;
@@ -41352,7 +41352,7 @@ lin
   voreingenommen_A = mk3A "voreingenommen" "voreingenommner, voreingenommener" "voreingenommenste" ;
   vorerst_Adv = mkAdv "vorerst" ;
   vorfach_N = reg2N  "Vorfach" "Vorfächer" neuter ;
-  vorfahre__N = reg2N  "Vorfahre " "Vorfahren" masculine ;
+  vorfahre__N = reg2N  "Vorfahre" "Vorfahren" masculine ;
   vorfall_N = reg2N  "Vorfall" "Vorfälle" masculine ;
   vorfallen_V = irregV "vorfallen" "fallt" "fiel" "fiele" "gefallen" ; 
   vorfeld_N = reg2N  "Vorfeld" "Vorfelder" neuter ;
@@ -41429,7 +41429,7 @@ lin
   vornahme_N = reg2N  "Vornahme" "Vornahmen" feminine ;
   vorname_N = reg2N  "Vorname" "Vornamen" masculine ;
   vorne_Adv = mkAdv "vorne" ;
-  vornehm_A = mk3A "vornehm " "vornehmer" "vornehmste" ;
+  vornehm_A = mk3A "vornehm" "vornehmer" "vornehmste" ;
   vornehmen_8_V = prefixV "vor" (irregV "nehmen" "nimmt" "nahm" "nähme" "genommen") ; 
   vornehmlich_Adv = mkAdv "vornehmlich" ;
   vorprodukt_N = reg2N  "Vorprodukt" "Vorprodukte" neuter ;
@@ -41547,7 +41547,7 @@ lin
   waagerecht_A = regA "waagerecht" ;
   waagrecht_A = regA "waagrecht" ;
   waagschale_N = reg2N  "Waagschale" "Waagschalen" feminine ;
-  waal_N = reg2N  "Waal" "-" feminine ;
+  waal_N = reg2N "Waal" "e" feminine;
   wabe_N = reg2N  "Wabe" "Waben" feminine ;
   wabern_V = regV "wabern" ;
   wach_A = mk3A "wach" "wacher" "wachste" ;
@@ -41736,7 +41736,7 @@ lin
   wallfahren_V = regV "wallfahren" ;
   wallfahrt_N = reg2N  "Wallfahrt" "Wallfahrten" feminine ;
   wallfahrtskirche_N = reg2N  "Wallfahrtskirche" "Wallfahrtskirchen" feminine ;
-  wallis_N = reg2N  "Wallis" "—" neuter ;
+  wallis_N = reg2N "Wallis" "Wallise" neuter;
   wallung_N = mkN "Wallung" ;
   walm_N = reg2N  "Walm" "Walme" masculine ;
   walmdach_N = reg2N  "Walmdach" "Walmdächer" neuter ;
@@ -41873,7 +41873,7 @@ lin
   wasserfall_N = reg2N  "Wasserfall" "Wasserfälle" masculine ;
   wasserfarbe_N = reg2N  "Wasserfarbe" "Wasserfarben" feminine ;
   wasserfass_N = reg2N  "Wasserfass" "Wasserfässer" neuter ;
-  wasserfest_A = mk3A "wasserfest" "wasserfester '(selten)'" "wasserfestesten '(selten)'e" ;
+  wasserfest_A = mk3A "wasserfest" "wasserfester" "wasserfesteste" ;
   wasserflasche_N = reg2N  "Wasserflasche" "Wasserflaschen" feminine ;
   wasserfloh_N = reg2N  "Wasserfloh" "Wasserflöhe" masculine ;
   wasserflugzeug_N = reg2N  "Wasserflugzeug" "Wasserflugzeuge" neuter ;
@@ -41902,7 +41902,7 @@ lin
   wasserleitung_N = mkN "Wasserleitung" ;
   wasserlinie_N = reg2N  "Wasserlinie" "Wasserlinien" feminine ;
   wasserloeslich_A = mk3A "wasserlöslich" "wasserlöslicher" "wasserlöslichste" ;
-  wassermangel_N = reg2N  "Wassermangel" "—" masculine ;
+  wassermangel_N = reg2N "Wassermangel" "Wassermangele" masculine;
   wassermann_N = reg2N  "Wassermann" "Wassermänner" masculine ;
   wassermelone_N = reg2N  "Wassermelone" "Wassermelonen" feminine ;
   wassermischbar_A = regA "wassermischbar" ;
@@ -41948,7 +41948,7 @@ lin
   wasserunloeslich_A = regA "wasserunlöslich" ;
   wasserverbrauch_N = reg2N  "Wasserverbrauch" "Wasserverbräuche" masculine ;
   wasserverschmutzung_N = mkN "Wasserverschmutzung" ;
-  wasservogel__N = reg2N  "Wasservogel " "Wasservögel " masculine ;
+  wasservogel__N = reg2N  "Wasservogel" "Wasservögel " masculine ;
   wasservolumen_N = reg2N  "Wasservolumen" "Wasservolumina" neuter ;
   wasservorrat_N = reg2N  "Wasservorrat" "Wasservorräte" masculine ;
   wasserwaage_N = reg2N  "Wasserwaage" "Wasserwaagen" feminine ;
@@ -41982,7 +41982,7 @@ lin
   weblog_N = reg2N  "Weblog" "Weblogs" neuter ;
   webmaster_N = reg2N  "Webmaster" "Webmaster" masculine ;
   webmistress_N = reg2N  "Webmistress" "Webmistresses" feminine ;
-  webradio_N = reg2N  "Webradio" "-" neuter ;
+  webradio_N = reg2N "Webradio" "Webradios" neuter;
   webseite_N = reg2N  "Webseite" "Webseiten" feminine ;
   webserver_N = reg2N  "Webserver" "Webserver" masculine ;
   webshop_N = reg2N  "Webshop" "Webshops" masculine ;
@@ -41996,7 +41996,7 @@ lin
   wechselgeruecht_N = reg2N  "Wechselgerücht" "Wechselgerüchte" neuter ;
   wechselkurs_N = reg2N  "Wechselkurs" "Wechselkurse" masculine ;
   wechseln_V = regV "wechseln" ;
-  wechselrichter__N = reg2N  "Wechselrichter " "Wechselrichter " masculine ;
+  wechselrichter__N = reg2N  "Wechselrichter" "Wechselrichter" masculine ;
   wechselschritt_N = reg2N  "Wechselschritt" "Wechselschritte" masculine ;
   wechselseitig_A = regA "wechselseitig" ;
   wechselseitigkeit_N = reg2N  "Wechselseitigkeit" "Wechselseitigkeiten" feminine ;
@@ -42122,7 +42122,7 @@ lin
   wein_N = reg2N  "Wein" "Weine" masculine ;
   weinbauer_N = reg2N  "Weinbauer" "Weinbauern" masculine ;
   weinbaugebiet_N = reg2N  "Weinbaugebiet" "Weinbaugebiete" neuter ;
-  weinbauklima_N = reg2N  "Weinbauklima" "-" neuter ;
+  weinbauklima_N = reg2N "Weinbauklima" "Weinbauklimae" neuter;
   weinbauzone_N = reg2N  "Weinbauzone" "Weinbauzonen" feminine ;
   weinbecher_N = reg2N  "Weinbecher" "Weinbecher" masculine ;
   weinbeere_N = reg2N  "Weinbeere" "Weinbeeren" feminine ;
@@ -42172,7 +42172,7 @@ lin
   weinkauf_N = reg2N  "Weinkauf" "Weinkäufe" masculine ;
   weinkeller_N = reg2N  "Weinkeller" "Weinkeller" masculine ;
   weinkenner_N = reg2N  "Weinkenner" "Weinkenner" masculine ;
-  weinklima_N = reg2N  "Weinklima" "-" neuter ;
+  weinklima_N = reg2N "Weinklima" "Weinklimae" neuter;
   weinkoenigin_N = reg2N  "Weinkönigin" "Weinköniginnen" feminine ;
   weinkuefer_N = reg2N  "Weinküfer" "Weinküfer" masculine ;
   weinkueferin_N = reg2N  "Weinküferin" "Weinküferinnen" feminine ;
@@ -42226,7 +42226,7 @@ lin
   weissfuchsfell_N = reg2N  "Weißfuchsfell" "Weißfuchsfelle" neuter ;
   weissgluehend_A = regA "weißglühend" ;
   weissgolden_A = regA "weißgolden" ;
-  weissherbst_N = reg2N  "Weißherbst" "-" masculine ;
+  weissherbst_N = reg2N "Weißherbst" "Weißherbste" masculine;
   weisskopfruderente_N = reg2N  "Weißkopfruderente" "Weißkopfruderenten" feminine ;
   weisslacker_N = reg2N  "Weißlacker" "Weißlacker" masculine ;
   weissrueckenspecht_N = reg2N  "Weißrückenspecht" "Weißrückenspechte" masculine ;
@@ -42257,7 +42257,7 @@ lin
   weiterverleihen_4_V = prefixV "weiter" (irregV "verleihen" "verleiht" "verlieh" "verlieh" "verliehen") ; 
   weitgehend_A = mk3A "weitgehend" "weitgehender" "weitgehendste" ;
   weitlaeufig_A = mk3A "weitläufig " "weitläufiger" "weitläufigsten e" ;
-  weitschuss__N = reg2N  "Weitschuss " "Weitschüsse" masculine ;
+  weitschuss__N = reg2N  "Weitschuss" "Weitschüsse" masculine ;
   weitschweifig_A = mk3A "weitschweifig" "weitschweifiger" "weitschweifigste" ;
   weitsicht_N = reg2N  "Weitsicht" "Weitsichten" feminine ;
   weitsprung_N = mkN "Weitsprung" ;
@@ -42289,7 +42289,7 @@ lin
   weltanschaulich_A = regA "weltanschaulich" ;
   weltanschauung_N = mkN "Weltanschauung" ;
   weltausstellung_N = mkN "Weltausstellung" ;
-  weltbank_N = reg2N  "Weltbank" "— " feminine ;
+  weltbank_N = reg2N "Weltbank" "e" feminine;
   weltbild_N = reg2N  "Weltbild" "Weltbilder" neuter ;
   weltchronik_N = reg2N  "Weltchronik" "Weltchroniken" feminine ;
   weltelite_N = reg2N  "Weltelite" "Welteliten" feminine ;
@@ -42299,7 +42299,7 @@ lin
   welterfolg_N = reg2N  "Welterfolg" "Welterfolge" masculine ;
   weltfussballer_N = reg2N  "Weltfußballer" "Weltfußballer" masculine ;
   weltgesundheitsorganisation_N = mkN "Weltgesundheitsorganisation" ;
-  weltgetriebe_N = reg2N  "Weltgetriebe" "-" neuter ;
+  weltgetriebe_N = reg2N "Weltgetriebe" "Weltgetrieben" neuter;
   weltgetuemmel_N = reg2N  "Weltgetümmel" "Weltgetümmel" neuter ;
   welthilfssprache_N = reg2N  "Welthilfssprache" "Welthilfssprachen" feminine ;
   weltkarte_N = reg2N  "Weltkarte" "Weltkarten" feminine ;
@@ -42389,7 +42389,7 @@ lin
   werktag_N = reg2N  "Werktag" "Werktage" masculine ;
   werkzeug_N = reg2N  "Werkzeug" "Werkzeuge" neuter ;
   werkzeugkasten_N = reg2N  "Werkzeugkasten" "Werkzeugkästen" masculine ;
-  werkzeugkiste__N = reg2N  "Werkzeugkiste " "Werkzeugkisten" feminine ;
+  werkzeugkiste__N = reg2N  "Werkzeugkiste" "Werkzeugkisten" feminine ;
   werkzeugsatz_N = reg2N  "Werkzeugsatz" "Werkzeugsätze" masculine ;
   werkzeugstahl_N = reg2N  "Werkzeugstahl" "Werkzeugstähle" masculine ;
   wermut_N = reg2N  "Wermut" "Wermuts" masculine ;
@@ -42504,7 +42504,7 @@ lin
   widmung_N = mkN "Widmung" ;
   widrig_A = mk3A "widrig" "widriges" "widrigste" ;
   wie_Adv = mkAdv "wie" ;
-  wied_N = reg2N  "Wied" "-" feminine ;
+  wied_N = reg2N "Wied" "e" feminine;
   wiedehopf_N = reg2N  "Wiedehopf" "Wiedehopfe" masculine ;
   wieder_Adv = mkAdv "wieder" ;
   wiederaufbereitungsanlage_N = reg2N  "Wiederaufbereitungsanlage" "Wiederaufbereitungsanlagen" feminine ;
@@ -42550,7 +42550,7 @@ lin
   wienerin_N = reg2N  "Wienerin" "Wienerinnen" feminine ;
   wienerisch_A = mk3A "wienerisch" "wienerischer" "wienerischste" ;
   wienern_V = regV "wienern" ;
-  wienerwald_N = reg2N  "Wienerwald" "—" masculine ;
+  wienerwald_N = reg2N "Wienerwald" "Wienerwalde" masculine;
   wiese_N = reg2N  "Wiese" "Wiesen" feminine ;
   wiesel_N = reg2N  "Wiesel" "Wiesel" neuter ;
   wieselfell_N = reg2N  "Wieselfell" "Wieselfelle" neuter ;
@@ -42566,11 +42566,11 @@ lin
   wiki_N = reg2N  "Wiki" "Wikis" neuter ;
   wikibook_N = reg2N  "Wikibook" "Wikibooks" neuter ;
   wikinger_N = reg2N  "Wikinger" "Wikinger" masculine ;
-  wikipedistik_N = reg2N  "Wikipedistik" "-" feminine ;
+  wikipedistik_N = reg2N "Wikipedistik" "e" feminine;
   wikivoyage_N = reg2N  "Wikivoyage" "Wikivoyages" masculine ;
   wikiwoerterbuch_N = reg2N  "Wikiwörterbuch" "Wikiwörterbücher" neuter ;
   wiktionary_N = reg2N  "Wiktionary" "Wiktionarys" neuter ;
-  wild_A = mk3A "wild " "wilder" "wildeste" ;
+  wild_A = mk3A "wild" "wilder" "wildeste" ;
   wildbeuter_N = reg2N  "Wildbeuter" "Wildbeuter" masculine ;
   wildbirne_N = reg2N  "Wildbirne" "Wildbirnen" feminine ;
   wilderer_N = reg2N  "Wilderer" "Wilderer" masculine ;
@@ -42633,7 +42633,7 @@ lin
   windrose_N = reg2N  "Windrose" "Windrosen" feminine ;
   windsbraut_N = reg2N  "Windsbraut" "Windsbräute" feminine ;
   windschief_A = mk3A "windschief" "windschiefer" "windschiefste" ;
-  windschutzscheibe__N = reg2N  "Windschutzscheibe " "Windschutzscheiben" feminine ;
+  windschutzscheibe__N = reg2N  "Windschutzscheibe" "Windschutzscheiben" feminine ;
   windverband_N = reg2N  "Windverband" "Windverbände" masculine ;
   wingert_N = reg2N  "Wingert" "Wingerte" masculine ;
   winkel_N = reg2N  "Winkel" "Winkel" masculine ;
@@ -42702,7 +42702,7 @@ lin
   wirkungsgrad_N = reg2N  "Wirkungsgrad" "Wirkungsgrade" masculine ;
   wirkungsvoll_A = regA "wirkungsvoll" ;
   wirkwiderstand_N = reg2N  "Wirkwiderstand" "Wirkwiderstände" masculine ;
-  wirr_A = mk3A "wirr" "wirrer" "wirr(e)ste" ;
+  wirr_A = mk3A "wirr" "wirrer" "wirreste" ;
   wirrnis_N = reg2N  "Wirrnis" "Wirrnisse" feminine ;
   wirsch_A = mk3A "wirsch" "wirscher" "wirscheste" ;
   wirsing_N = reg2N  "Wirsing" "Wirsinge" masculine ;
@@ -42834,7 +42834,7 @@ lin
   wolkenkratzer_N = reg2N  "Wolkenkratzer" "Wolkenkratzer" masculine ;
   wolkenkuckucksheim_N = reg2N  "Wolkenkuckucksheim" "Wolkenkuckucksheime" neuter ;
   wolkenlos_A = regA "wolkenlos" ;
-  wolkenohrpilz_N = reg2N  "Wolkenohrpilz" "Wolkenohrpilze " masculine ;
+  wolkenohrpilz_N = reg2N  "Wolkenohrpilz" "Wolkenohrpilze" masculine ;
   wolkenverhangen_A = regA "wolkenverhangen" ;
   wolkig_A = mk3A "wolkig" "wolkiger" "wolkigste" ;
   wolle_N = reg2N  "Wolle" "Wollen" feminine ;
@@ -42894,7 +42894,7 @@ lin
   wortkunde_N = reg2N  "Wortkunde" "Wortkunden" feminine ;
   wortlaenge_N = reg2N  "Wortlänge" "Wortlängen" feminine ;
   wortlaengenverteilung_N = mkN "Wortlängenverteilung" ;
-  wortlaut_N = reg2N  "Wortlaut" "-" masculine ;
+  wortlaut_N = reg2N "Wortlaut" "Wortlaute" masculine;
   wortlos_A = regA "wortlos" ;
   wortmarke_N = reg2N  "Wortmarke" "Wortmarken" feminine ;
   wortmeldung_N = mkN "Wortmeldung" ;
@@ -42917,7 +42917,7 @@ lin
   wortwoertlich_A = regA "wortwörtlich" ;
   wortwurzel_N = reg2N  "Wortwurzel" "Wortwurzeln" feminine ;
   wortzeichen_N = reg2N  "Wortzeichen" "Wortzeichen" neuter ;
-  wortzwischenraum__N = reg2N  "Wortzwischenraum " "Wortzwischenräume" masculine ;
+  wortzwischenraum__N = reg2N  "Wortzwischenraum" "Wortzwischenräume" masculine ;
   worueber_Adv = mkAdv "worüber" ;
   wozu_Adv = mkAdv "wozu" ;
   wrack_N = reg2N  "Wrack" "Wracks" neuter ;
@@ -43008,7 +43008,7 @@ lin
   wuschig_A = mk3A "wuschig" "wuschiger" "wuschigste" ;
   wuselig_A = mk3A "wuselig" "wuseliger" "wuseligste" ;
   wuseln_V = regV "wuseln" ;
-  wust_N = reg2N  "Wust" "-" masculine ;
+  wust_N = reg2N "Wust" "Wuste" masculine;
   wutbuerger_N = reg2N  "Wutbürger" "Wutbürger" masculine ;
   wutentbrannt_A = regA "wutentbrannt" ;
   wutz_N = reg2N  "Wutz" "Wutzen" feminine ;
@@ -43085,7 +43085,7 @@ lin
   yankee_N = reg2N  "Yankee" "Yankees" masculine ;
   yard_N = reg2N  "Yard" "Yards" neuter ;
   yentl_N = reg2N  "Yentl" "Yentl" feminine ;
-  yeti_N = reg2N  "Yeti" "Yetis " masculine ;
+  yeti_N = reg2N  "Yeti" "Yetis" masculine ;
   yezide_N = reg2N  "Yezide" "Yeziden" masculine ;
   yips_N = reg2N  "Yips" "Yips" masculine ;
   ylang_ylang_baum_N = reg2N  "Ylang-Ylang-Baum" "Ylang-Ylang-Bäume" masculine ;
@@ -43142,7 +43142,7 @@ lin
   zahlung_N = mkN "Zahlung" ;
   zahlungserinnerung_N = mkN "Zahlungserinnerung" ;
   zahlungsfrist_N = reg2N  "Zahlungsfrist" "Zahlungsfristen" feminine ;
-  zahlungsmittel__N = reg2N  "Zahlungsmittel " "Zahlungsmittel " neuter ;
+  zahlungsmittel__N = reg2N  "Zahlungsmittel" "Zahlungsmittel" neuter ;
   zahlungswirksam_A = regA "zahlungswirksam" ;
   zahlzeichen_N = reg2N  "Zahlzeichen" "Zahlzeichen" neuter ;
   zahm_A = mk3A "zahm" "zahmer" "zahmste" ;
@@ -43199,7 +43199,7 @@ lin
   zarge_N = reg2N  "Zarge" "Zargen" feminine ;
   zart_A = mk3A "zart" "zarter" "zarteste" ;
   zartbitterschokolade_N = reg2N  "Zartbitterschokolade" "Zartbitterschokoladen" feminine ;
-  zartgefuehl_N = reg2N  "Zartgefühl" "-" neuter ;
+  zartgefuehl_N = reg2N "Zartgefühl" "Zartgefühle" neuter;
   zartheit_N = reg2N  "Zartheit" "Zartheiten" feminine ;
   zarzuela_N = reg2N  "Zarzuela" "Zarzuelas" feminine ;
   zauber_N = reg2N  "Zauber" "Zauber" masculine ;
@@ -43341,7 +43341,7 @@ lin
   zelle_N = reg2N  "Zelle" "Zellen" feminine ;
   zellengewoelbe_N = reg2N  "Zellengewölbe" "Zellengewölbe" neuter ;
   zellenkultur_N = reg2N  "Zellenkultur" "Zellenkulturen" feminine ;
-  zeller_N = reg2N  "Zeller" "-" masculine ;
+  zeller_N = reg2N "Zeller" "Zeller" masculine;
   zellextrakt_N = reg2N  "Zellextrakt" "Zellextrakte" neuter ;
   zellfrei_A = regA "zellfrei" ;
   zellfunktion_N = reg2N  "Zellfunktion" "Zellfunktionen" feminine ;
@@ -43530,7 +43530,7 @@ lin
   ziehvater_N = reg2N  "Ziehvater" "Ziehväter" masculine ;
   ziel_N = reg2N  "Ziel" "Ziele" neuter ;
   zielantigen_N = reg2N  "Zielantigen" "Zielantigene" neuter ;
-  zielbewusst_A = mk3A "zielbewusst " "zielbewusster" "zielbewussteste" ;
+  zielbewusst_A = mk3A "zielbewusst" "zielbewusster" "zielbewussteste" ;
   zielen_6_V = regV "zielen" ;
   zielend_A = regA "zielend" ;
   zielfuehrend_A = regA "zielführend" ;
@@ -43566,7 +43566,7 @@ lin
   zigeuner_N = reg2N  "Zigeuner" "Zigeuner" masculine ;
   zigeunerin_N = reg2N  "Zigeunerin" "Zigeunerinnen" feminine ;
   zigeunerleben_N = reg2N  "Zigeunerleben" "Zigeunerleben" neuter ;
-  zigeunerpilz_N = reg2N  "Zigeunerpilz" "Zigeunerpilze " masculine ;
+  zigeunerpilz_N = reg2N  "Zigeunerpilz" "Zigeunerpilze" masculine ;
   zigeunersosse_N = reg2N  "Zigeunersoße" "Zigeunersoßen" feminine ;
   zigeunersprache_N = reg2N  "Zigeunersprache" "Zigeunersprachen" feminine ;
   zigmal_Adv = mkAdv "zigmal" ;
@@ -43711,7 +43711,7 @@ lin
   zoo_N = reg2N  "Zoo" "Zoos" masculine ;
   zoogeografisch_A = regA "zoogeografisch" ;
   zoogeographisch_A = regA "zoogeographisch" ;
-  zoologe__N = reg2N  "Zoologe " "Zoologen" masculine ;
+  zoologe__N = reg2N  "Zoologe" "Zoologen" masculine ;
   zoologin_N = reg2N  "Zoologin" "Zoologinnen" feminine ;
   zoologisch_A = regA "zoologisch" ;
   zoophobie_N = reg2N  "Zoophobie" "Zoophobien" feminine ;
@@ -43751,7 +43751,7 @@ lin
   zuchtchampignon_N = reg2N  "Zuchtchampignon" "Zuchtchampignons" masculine ;
   zuchtfisch_N = reg2N  "Zuchtfisch" "Zuchtfische" masculine ;
   zuchthaus_N = reg2N  "Zuchthaus" "Zuchthäuser" neuter ;
-  zucken_N = reg2N  "Zucken" "-" neuter ;
+  zucken_N = reg2N "Zucken" "Zucken" neuter;
   zucken_V = irregV "zucken" "zuckt" "zuckte" "zuckte" "zuckt" ;
   zucker_N = reg2N  "Zucker" "Zucker" masculine ;
   zuckeralkohol_N = reg2N  "Zuckeralkohol" "Zuckeralkohole" masculine ;
@@ -44038,7 +44038,7 @@ lin
   zweifach_A = regA "zweifach" ;
   zweifel_N = reg2N  "Zweifel" "Zweifel" masculine ;
   zweifelhaft_A = mk3A "zweifelhaft" "zweifelhafter" "zweifelhafteste" ;
-  zweifellos_A = mk3A "zweifellos" "?" "?e" ;
+  zweifellos_A = mk3A "zweifellos" "zweifelloser" "zweifelloseste" ;
   zweifeln_2_V = regV "zweifeln" ;
   zweifelsfrei_A = regA "zweifelsfrei" ;
   zweifrontenkrieg_N = reg2N  "Zweifrontenkrieg" "Zweifrontenkriege" masculine ;
@@ -44189,7 +44189,7 @@ lin
   zylindrisch_A = regA "zylindrisch" ;
   zylindrom_N = reg2N  "Zylindrom" "Zylindrome" neuter ;
   zymogen_N = reg2N  "Zymogen" "Zymogene" neuter ;
-  zymologie_N = reg2N  "Zymologie" "-" feminine ;
+  zymologie_N = reg2N "Zymologie" "e" feminine;
   zync_N = reg2N "Zink" "Zinke" masculine ;
   zynisch_A = mk3A "zynisch" "zynischer" "zynischste" ;
   zynismus_N = reg2N  "Zynismus" "Zynismen" masculine ;
@@ -44210,11 +44210,11 @@ lin
   zystitis_N = reg2N  "Zystitis" "Zystitiden" feminine ;
   zytoblast_N = reg2N  "Zytoblast" "Zytoblasten" masculine ;
   zytoblastom_N = reg2N  "Zytoblastom" "Zytoblastome" neuter ;
-  zytochemie_N = reg2N  "Zytochemie" "-" feminine ;
+  zytochemie_N = reg2N "Zytochemie" "e" feminine;
   zytochrom_N = reg2N  "Zytochrom" "Zytochrome" neuter ;
   zytodiagnostik_N = reg2N  "Zytodiagnostik" "Zytodiagnostiken" feminine ;
   zytogen_A = regA "zytogen" ;
-  zytogenetik_N = reg2N  "Zytogenetik" "-" feminine ;
+  zytogenetik_N = reg2N "Zytogenetik" "Zytogenetiken" feminine;
   zytokin_N = reg2N  "Zytokin" "Zytokine" neuter ;
   zytokinese_N = reg2N  "Zytokinese" "Zytokinesen" feminine ;
   zytokingen_N = reg2N  "Zytokingen" "Zytokingene" neuter ;
