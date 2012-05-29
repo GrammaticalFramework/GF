@@ -346,7 +346,7 @@ lin
   push_V2 = mkV2 (mkV "työntää") ;
   rub_V2 = mkV2 (mkV "hieroa") cpartitive ;
   scratch_V2 = mkV2 (mkV "raapia") cpartitive ;
-  sew_V = mkV "kylvää" ;
+  sew_V = mkV "ommella" ;
   sing_V = mkV "laulaa" ;
   sit_V = mkV "istua" ;
   smell_V = mk2V "haista" "haisi" ;

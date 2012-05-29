@@ -112,7 +112,7 @@ lin
   leather_N = regN "leather" ;
   leave_V2 = dirV2 (irregV "leave" "left" "left") ;
   like_V2 = dirV2 (regV "like") ;
-  listen_V2 = prepV2 (regV "listen") toP ;
+  listen_V2 = prepV2 (mkV "listen" "listened") toP ;
   live_V = (regV "live") ;
   long_A = regADeg "long" ;
   lose_V2 = dirV2 (irregV "lose" "lost" "lost") ;
