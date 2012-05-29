@@ -3,10 +3,13 @@ concrete NumeralJap of Numeral = CatJap ** open ResJap, ParadigmsJap, Prelude in
 flags coding = utf8 ;
 
   lincat
-    Digit, Sub1000000 = {s : Str ; n : Number} ;
-    Sub10 = {s : Str ; n : Number ; is1 : Bool} ;
-    Sub100, Sub1000 = {s : Str ; n : Number ; numType : NumeralType ; 
-                       digit1 : Str ; digit2 : Str} ;
+    Digit = {s : Str ; n : Number} ;
+    Sub10 = {s : Str ; n : Number ; is1 : Bool ; null : Str} ;
+    Sub100 = {s : Str ; n : Number ; numType : NumeralType ; digit1 : Str ; digit2 : Str ; 
+              tenPlus : Bool ; is1 : Bool} ;
+    Sub1000 = {s_init : Str ; s_mid : Str ; n : Number ; numType : NumeralType ; 
+               man : Str ; sen : Str ; tenPlus : Bool ; is1 : Bool ; null : Str} ;
+    Sub1000000 = {s : Str ; n : Number ; tenPlus : Bool} ;
 
   lin
     num dig = dig ;
@@ -20,121 +23,195 @@ flags coding = utf8 ;
     n8 = {s = "八" ; n = Pl} ;  -- "hachi"
     n9 = {s = "九" ; n = Pl} ;  -- "kyuu"
 
-    pot01 = {s = "一" ; n = Sg ; is1 = True} ;  -- "ichi"
+    pot01 = {s = "一" ; n = Sg ; is1 = True ; null = ""} ;
     
-    pot0 d = d ** {is1 = False} ;
+    pot0 d = d ** {is1 = False ; null = ""} ;
     
     pot110 = {
       s = "十" ;  -- "juu"
       n = Pl ; 
-      numType = Tens ;
-      digit1 = "1" ;
-      digit2 = "0"
+      numType = EndZero ;
+      digit1 = "一" ;
+      digit2 = "0" ;
+      tenPlus = True ;
+      is1 = False
       } ;
     
     pot111 = {
       s = "十一" ; 
       n = Pl ; 
-      numType = TensPlus ;
-      digit1 = "1" ;
-      digit2 = "1" 
+      numType = EndNotZero ;
+      digit1 = "一" ;
+      digit2 = "一"  ;
+      tenPlus = True ;
+      is1 = False
       } ;
     
     pot1to19 d = {
       s = "十" ++ d.s ;
       n = Pl ;
-      numType = TensPlus ;
-      digit1 = "1" ;
-      digit2 = d.s 
+      numType = EndNotZero ;
+      digit1 = "一" ;
+      digit2 = d.s ;
+      tenPlus = True ;
+      is1 = False
       } ;
     
     pot0as1 d = {
       s = d.s ; 
       n = Pl ; 
-      numType = Other ;
+      numType = SingleDigit ;
       digit1 = [] ;
-      digit2 = [] 
+      digit2 = d.s ;
+      tenPlus = False ;
+      is1 = d.is1
       } ;
     
     pot1 d = {
       s = d.s ++ "十" ;
       n = Pl ;
-      numType = Tens ;
+      numType = EndZero ;
       digit1 = d.s ;
-      digit2 = "0" 
+      digit2 = "0" ;
+      tenPlus = True ;
+      is1 = False
       } ;
     
     pot1plus d n = {
       s = d.s ++ "十" ++ n.s ;
       n = Pl ;
-      numType = TensPlus ;
+      numType = EndNotZero ;
       digit1 = d.s ;
-      digit2 = n.s 
+      digit2 = n.s ;
+      tenPlus = True ;
+      is1 = False
       } ;
       
-    pot1as2 d = d ;
+    pot1as2 d = {
+      s_init = d.s ; 
+      s_mid = d.s ;
+      n = d.n ; 
+      numType = d.numType ; 
+      man = d.digit1 ; 
+      sen = d.digit2 ; 
+      tenPlus = d.tenPlus ; 
+      is1 = d.is1 ;
+      null = ""
+      } ;
     
     pot2 d = {
-      s = case d.is1 of {
-        True => "百" ;  -- "hyaku"
+      s_init = case d.is1 of {
+        True => d.null ++ "百" ;  -- "hyaku"
         False => d.s ++ "百" 
         } ;
+      s_mid = d.s ++ "百" ;
       n = Pl ;
-      numType = Other ;
-      digit1 = [] ;
-      digit2 = [] 
+      numType = EndZero ;
+      man = case d.is1 of {
+        True => d.null ++ "十" ;
+        False => d.s ++ "十" 
+        } ;
+      sen = [] ;
+      tenPlus = True ;
+      is1 = False ;
+      null = ""
       } ;
       
     pot2plus d n = {
-      s = case d.is1 of {
-        True => "百" ++ n.s ;
+      s_init = case d.is1 of {
+        True => d.null ++ "百" ++ n.s ;
         False => d.s ++ "百" ++ n.s
         } ;
+      s_mid = d.s ++ "百" ++ n.s ;
       n = Pl ;
-      numType = Other ;
-      digit1 = [] ;
-      digit2 = [] 
+      numType = case n.numType of {
+        EndZero => EndZero ;
+        _ => EndNotZero
+        } ;
+      man = case d.is1 of {
+        True => d.null ++ "十" ++ n.digit1 ;
+        False => d.s ++ "十" ++ n.digit1
+        } ;
+      sen = n.digit2 ;
+      tenPlus = True ;
+      is1 = False ;
+      null = ""
       } ;
     
-    pot2as3 d = d ;
+    pot2as3 d = {
+      s = d.s_init ;
+      n = d.n ;
+      tenPlus = d.tenPlus
+      } ;
     
     pot3 d = {
       s = case d.numType of {
-        Tens => d.digit1 ++ "万" ;  -- "man" 
-        TensPlus => d.digit1 ++ "万" ++ d.digit2 ++ "千" ;  -- "sen"
-        Other => d.s ++ "千"  
+        EndZero => d.man ++ "万" ;  -- "man"
+        EndNotZero => d.man ++ "万" ++ d.sen ++ "千" ;  -- "sen"
+        SingleDigit => case d.is1 of {
+          True => d.null ++ "千" ;
+          False => d.s_init ++ "千"
+          }
         } ;
-      n = Pl
+      n = Pl;
+      tenPlus = True
       } ;
       
     pot3plus d n = {
       s = case d.numType of {
-        Tens => d.digit1 ++ "万" ++ n.s ;
-        TensPlus => d.digit1 ++ "万" ++ d.digit2 ++ "千" ++ n.s ;
-        Other => d.s ++ "千" ++ n.s 
+        EndZero => d.man ++ "万" ++ n.s_mid ;
+        EndNotZero => d.man ++ "万" ++ d.sen ++ "千" ++ n.s_mid ;
+        SingleDigit => case d.is1 of {
+          True => d.null ++ "千" ++ n.s_mid ;
+          False => d.s_init ++ "千" ++ n.s_mid
+          }
         } ;
-      n = Pl
+      n = Pl;
+      tenPlus = True
       } ;
       
   lincat
-    Dig = {s : Str ; n : Number} ;
+    Dig = {s : Str ; n : Number ; is0 : Bool} ;
     
   lin
-    IDig d = d ;
+    IDig d = {
+      s = d.s ;
+      n = d.n ;
+      tenPlus = False ;
+      tail = T1
+      } ;
     
     IIDig d n = {
-      s = d.s ++ n.s ;
-      n = Pl
+      s = d.s ++ commaIf n.tail ++ n.s ;
+      n = Pl ;
+      tenPlus = case <d.is0, n.tenPlus> of {
+        <_, True> => True ;
+        <True, False> => False ;
+        _ => True
+        } ;
+      tail = inc n.tail
       } ;
   
-    D_0 = {s = "0" ; n = Sg} ;
-    D_1 = {s = "1" ; n = Sg} ;
-    D_2 = {s = "2" ; n = Pl} ;
-    D_3 = {s = "3" ; n = Pl} ;
-    D_4 = {s = "4" ; n = Pl} ;
-    D_5 = {s = "5" ; n = Pl} ;
-    D_6 = {s = "6" ; n = Pl} ;
-    D_7 = {s = "7" ; n = Pl} ;
-    D_8 = {s = "8" ; n = Pl} ;
-    D_9 = {s = "9" ; n = Pl} ;
+    D_0 = {s = "0" ; n = Sg ; is0 = True} ;
+    D_1 = {s = "1" ; n = Sg ; is0 = False} ;
+    D_2 = {s = "2" ; n = Pl ; is0 = False} ;
+    D_3 = {s = "3" ; n = Pl ; is0 = False} ;
+    D_4 = {s = "4" ; n = Pl ; is0 = False} ;
+    D_5 = {s = "5" ; n = Pl ; is0 = False} ;
+    D_6 = {s = "6" ; n = Pl ; is0 = False} ;
+    D_7 = {s = "7" ; n = Pl ; is0 = False} ;
+    D_8 = {s = "8" ; n = Pl ; is0 = False} ;
+    D_9 = {s = "9" ; n = Pl ; is0 = False} ;
+    
+  oper
+    commaIf : DTail -> Str = \t -> case t of {
+      T3 => "," ;
+      _ => []
+      } ;
+
+    inc : DTail -> DTail = \t -> case t of {
+      T1 => T2 ;
+      T2 => T3 ;
+      T3 => T1
+      } ;
 }

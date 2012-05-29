@@ -4,37 +4,38 @@ flags coding = utf8 ;
 
   lin
   
-    PositAdvAdj a = {s = \\st => a.adv ; prepositive = False ; compar = NoCompar} ;
+    PositAdvAdj a = {s = \\st => a.adv ! Pos ; prepositive = False} ;
   
     PrepNP prep np = {s = \\st => np.s ! st ++ prep.s ; 
-                      prepositive = False ; compar = NoCompar} ;
+                      prepositive = False} ;
     
-    ComparAdvAdj cadv a np = {s = \\st => np.s ! st ++ cadv.s ++ a.adv ; 
-                              prepositive = False ; compar = cadv.compar} ;
+    ComparAdvAdj cadv a np = {
+      s = \\st => case cadv.less of {
+        True => np.s ! st ++ cadv.s ++ a.adv ! Neg ;
+        False => np.s ! st ++ cadv.s ++ a.adv ! Pos 
+        } ; 
+      prepositive = False} ;
     
-    ComparAdvAdjS cadv a s = {s = \\st => s.s ! Ga ! Plain ++ "こと" ++ cadv.s ++ a.adv ; 
-                              prepositive = False ; compar = cadv.compar} ;
+    ComparAdvAdjS cadv a s = {
+      s = \\st => case cadv.less of {
+        True => s.subj ! Ga ! st ++ s.pred ! Plain ++ cadv.s ++ a.adv ! Neg ; 
+        False => s.subj ! Ga ! st ++ s.pred ! Plain ++ cadv.s ++ a.adv ! Pos
+        } ;
+      prepositive = False} ;
     
     AdAdv ada adv = {s = \\st => ada.s ++ adv.s ! st ; 
-                     prepositive = adv.prepositive ; compar = NoCompar} ;
+                     prepositive = adv.prepositive} ;
     
-    PositAdAAdj a = {s = a.adv} ;
+    PositAdAAdj a = {s = a.adv ! Pos } ;
     
     SubjS subj s = {
       s = \\st => case subj.type of {
-        If => s.ba ! (Wa | Ga) ! st ++ subj.s ;
-        _ => s.s ! (Wa | Ga) ! st ++ subj.s
+      
+        If => s.ba ! Wa ! st ++ subj.s ;
+        _ => s.s ! Wa ! st ++ subj.s
         } ; 
-      prepositive = True ;
-      compar = NoCompar
+      prepositive = True
       } ;
     
-    AdnCAdv cadv = {
-      s = case cadv.compar of {
-        More => "以上" ;  -- "ijou"
-        Less => "以下" ;  -- "ika" ;
-        NoCompar => "もの"
-        } ;
-      postposition = True
-      } ;
+    AdnCAdv cadv = {s = cadv.s_adn ; postposition = True} ;
 }

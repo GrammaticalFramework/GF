@@ -9,42 +9,38 @@ flags coding = utf8 ;
       attr = \\st => adj.attr ;
       te = \\st => adj.te ;
       ba = \\st => adj.ba ;
-      adv = \\st => adj.adv ;
-      prepositive = \\st => [] ; 
-      compar = NoCompar ;
+      adv = \\st => adj.adv ! Pos ;
+      prepositive = \\st => [] ;
       dropNaEnging = \\st => adj.dropNaEnging
       } ;
     
     ComparA adj np = {
-      pred = \\st,t,p => np.s ! st ++ "より" ++ adj.pred ! st ! t ! p ;  
+      pred = \\st,t,p => np.s ! st ++ "より" ++ adj.pred ! st ! t ! p ;
       attr = \\st => np.s ! st ++ "より" ++ adj.attr ;
-      te = \\st => np.s ! st ++ "より" ++ adj.te ;
-      ba = \\st => np.s ! st ++ "より" ++ adj.ba ;
-      adv = \\st => np.s ! st ++ "より" ++ adj.adv ; 
+      te = \\st,p => np.s ! st ++ "より" ++ adj.te ! p ;
+      ba = \\st,p => np.s ! st ++ "より" ++ adj.ba ! p ;
+      adv = \\st => np.s ! st ++ "より" ++ adj.adv ! Pos ; 
       prepositive = np.prepositive ; 
-      compar = More ;
       dropNaEnging = \\st => np.s ! st ++ "より" ++ adj.dropNaEnging ;
       } ;
     
     ComplA2 a2 np = {
       pred = \\st,t,p => np.s ! st ++ a2.prep ++ a2.pred ! st ! t ! p ;
       attr = \\st => np.s ! st ++ a2.prep ++ a2.attr ;
-      te = \\st => np.s ! st ++ a2.prep ++ a2.te ;
-      ba = \\st => np.s ! st ++ a2.prep ++ a2.ba ;
+      te = \\st,p => np.s ! st ++ a2.prep ++ a2.te ! p ;
+      ba = \\st,p => np.s ! st ++ a2.prep ++ a2.ba ! p ;
       prepositive = np.prepositive ;
-      adv = \\st => [] ; 
-      compar = NoCompar ;
+      adv = \\st => np.s ! st ++ a2.prep ++ a2.adv ! Pos ; 
       dropNaEnging = \\st => np.s ! st ++ a2.prep ++ a2.dropNaEnging
       } ;
     
     ReflA2 a2 = {
       pred = \\st,t,p => "自分" ++ a2.prep ++ a2.pred ! st ! t ! p ;  -- "jibun"
       attr = \\st => "自分" ++ a2.prep ++ a2.attr ;
-      te = \\st => "自分" ++ a2.prep ++ a2.te ;
-      ba = \\st => "自分" ++ a2.prep ++ a2.ba ;
-      adv = \\st => [] ; 
+      te = \\st,p => "自分" ++ a2.prep ++ a2.te ! p ;
+      ba = \\st,p => "自分" ++ a2.prep ++ a2.ba ! p ;
+      adv = \\st => "自分" ++ a2.prep ++ a2.adv ! Pos ; 
       prepositive = \\st => [] ;
-      compar = NoCompar ;
       dropNaEnging = \\st => "自分" ++ a2.prep ++ a2.dropNaEnging
       } ;
     
@@ -53,32 +49,53 @@ flags coding = utf8 ;
       attr = \\st => a2.attr ;
       te = \\st => a2.te ;
       ba = \\st => a2.ba ;
-      adv = \\st => [] ; 
+      adv = \\st => a2.adv ! Pos ; 
       prepositive = \\st => [] ;
-      compar = NoCompar ;
       dropNaEnging = \\st => a2.dropNaEnging
       } ;
     
     UseComparA adj = {
       pred = \\st,t,p => "もっと" ++ adj.pred ! st ! t ! p ;
       attr = \\st => "もっと" ++ adj.attr ;
-      te = \\st => "もっと" ++ adj.te ;
-      ba = \\st => "もっと" ++ adj.ba ;
-      adv = \\st => "もっと" ++ adj.adv ;
+      te = \\st,p => "もっと" ++ adj.te ! p ;
+      ba = \\st,p => "もっと" ++ adj.ba ! p ;
+      adv = \\st => "もっと" ++ adj.adv ! Pos ;
       prepositive = \\st => [] ;
-      compar = NoCompar ;  -- "motto" does not change the main NP's particle 
       dropNaEnging = \\st => "もっと" ++ adj.dropNaEnging
       } ;
     
     CAdvAP cadv ap np = {
-      pred = \\st,t,p => np.s ! st ++ cadv.s ++ ap.pred ! st ! t ! p ;
-      attr = \\st => np.s ! st ++ cadv.s ++ ap.attr ! st ;
-      te = \\st => np.s ! st ++ cadv.s ++ ap.te ! st ;
-      ba = \\st => np.s ! st ++ cadv.s ++ ap.ba ! st ;
+      pred = \\st,t => case cadv.less of {
+        True => table {
+          Pos => np.s ! st ++ cadv.s ++ ap.pred ! st ! t ! Neg ;
+          Neg => np.s ! st ++ cadv.s ++ ap.pred ! st ! t ! Pos
+          } ;
+        False => \\p => np.s ! st ++ cadv.s ++ ap.pred ! st ! t ! p
+        } ;
+      attr = \\st => case cadv.less of {
+        True => np.s ! st ++ cadv.s ++ ap.pred ! Plain ! TPres ! Neg ;
+        False => np.s ! st ++ cadv.s ++ ap.attr ! st 
+        } ;
+      te = \\st => case cadv.less of {
+        True => table {
+          Pos => np.s ! st ++ cadv.s ++ ap.te ! st ! Neg ;
+          Neg => np.s ! st ++ cadv.s ++ ap.te ! st ! Pos
+          } ;
+        False => \\p => np.s ! st ++ cadv.s ++ ap.te ! st ! p
+        } ;
+      ba = \\st => case cadv.less of {
+        True => table {
+          Pos => np.s ! st ++ cadv.s ++ ap.ba ! st ! Neg ;
+          Neg => np.s ! st ++ cadv.s ++ ap.ba ! st ! Pos
+          } ;
+        False => \\p => np.s ! st ++ cadv.s ++ ap.ba ! st ! p
+        } ;
       adv = \\st => np.s ! st ++ cadv.s ++ ap.adv ! st ; 
       prepositive = np.prepositive ;
-      compar = cadv.compar ;
-      dropNaEnging = \\st => np.s ! st ++ cadv.s ++ ap.dropNaEnging ! st
+      dropNaEnging = \\st => case cadv.less of {
+        True => np.s ! st ++ cadv.s ++ ap.pred ! Plain ! TPres ! Neg ;
+        False => np.s ! st ++ cadv.s ++ ap.dropNaEnging ! st
+        }
       } ;
     
     AdjOrd ord = {
@@ -86,31 +103,28 @@ flags coding = utf8 ;
       attr = \\st => ord.attr ;
       te = \\st => ord.te ;
       ba = \\st => ord.ba ;
-      adv = \\st => ord.adv ;
+      adv = \\st => ord.adv ! Pos ;
       prepositive = \\st => [] ;
-      compar = NoCompar ;
       dropNaEnging = \\st => ord.dropNaEnging
       } ;
 
     SentAP ap sc = {
-      pred = \\st,t,p => sc.s ! Ga ! st ++ "ことを" ++ ap.pred ! st ! t ! p ;
-      attr = \\st => sc.s ! Ga ! st ++ "ことを" ++ ap.attr ! st ;
-      te = \\st => sc.s ! Ga ! st ++ "ことを" ++ ap.te ! st ;
-      ba = \\st => sc.s ! Ga ! st ++ "ことを" ++ ap.ba ! st ;
-      adv = \\st => sc.s ! Ga ! st ++ "ことを" ++ ap.adv ! st ;
+      pred = \\st,t,p => sc.s ! Wa ! st ++ "ことが" ++ ap.pred ! st ! t ! p ;
+      attr = \\st => sc.s ! Wa ! st ++ "ことが" ++ ap.attr ! st ;
+      te = \\st,p => sc.s ! Wa ! st ++ "ことが" ++ ap.te ! st ! p ;
+      ba = \\st,p => sc.s ! Wa ! st ++ "ことが" ++ ap.ba ! st ! p ;
+      adv = \\st => sc.s ! Wa ! st ++ "ことが" ++ ap.adv ! st ;
       prepositive = ap.prepositive ;
-      compar = ap.compar ;
-      dropNaEnging = \\st => sc.s ! Ga ! st ++ "ことを" ++ ap.dropNaEnging ! st
+      dropNaEnging = \\st => sc.s ! Wa ! st ++ "ことが" ++ ap.dropNaEnging ! st
       } ;
     
     AdAP ada ap = {
       pred = \\st,t,p => ada.s ++ ap.pred ! st ! t ! p ;
       attr = \\st => ada.s ++ ap.attr ! st ;
-      te = \\st => ada.s ++ ap.te ! st ;
-      ba = \\st => ada.s ++ ap.ba ! st ;
+      te = \\st,p => ada.s ++ ap.te ! st ! p ;
+      ba = \\st,p => ada.s ++ ap.ba ! st ! p ;
       adv = \\st => ada.s ++ ap.adv ! st ;
       prepositive = ap.prepositive ;
-      compar = ap.compar ;
       dropNaEnging = \\st => ada.s ++ ap.dropNaEnging ! st
       } ;
     
@@ -125,11 +139,11 @@ flags coding = utf8 ;
         } ;
       te = \\st => case adv.prepositive of {
         True => ap.te ! st ;
-        False => adv.s ! st ++ ap.te ! st 
+        False => \\p => adv.s ! st ++ ap.te ! st ! p 
         } ;
       ba = \\st => case adv.prepositive of {
         True => ap.ba ! st ;
-        False => adv.s ! st ++ ap.ba ! st 
+        False => \\p => adv.s ! st ++ ap.ba ! st ! p 
         } ;
       adv = \\st => case adv.prepositive of {
         True => ap.adv ! st ;
@@ -139,7 +153,6 @@ flags coding = utf8 ;
         True => adv.s ! st ;
         False => [] 
         } ;
-      compar = ap.compar ;
       dropNaEnging = \\st => case adv.prepositive of {
         True => ap.dropNaEnging ! st ;
         False => adv.s ! st ++ ap.dropNaEnging ! st 

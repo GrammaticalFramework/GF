@@ -1,4 +1,4 @@
-abstract AllJapAbs =
-  Lang
---  ExtraJapAbs
+abstract AllJapAbs = 
+  Lang,
+  ExtraJapAbs
   ** {} ;
