@@ -4,7 +4,7 @@ flags coding = utf8 ;
 
 lin
 
-    TEmpty = ss "" ;
+    TEmpty = {s = ""} ;
     
     TFullStop phr txt = {s = phr.s ++ "." ++ txt.s} ;
     

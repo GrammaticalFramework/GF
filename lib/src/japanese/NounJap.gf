@@ -7,10 +7,14 @@ flags coding = utf8 ;
     DetCN det cn = {
       s = \\st => case det.inclCard of {
         True => case cn.counterReplace of {
-          True => cn.object ! st ++ det.quant ! st++ det.num ++ cn.counter ++ det.postpositive ;
-          False => cn.object ! st ++ det.quant ! st ++ cn.s ! det.n ! st ++ 
-                   "の" ++ det.num ++ cn.counter ++ det.postpositive
-                   } ;
+          True => cn.object ! st ++ det.quant ! st ++ det.num ++ cn.counter ++ det.postpositive ;
+          False => case <det.tenPlus, cn.counterTsu> of {
+            <True, True> => cn.object ! st ++ det.quant ! st ++ cn.s ! det.n ! st ++ 
+                            "の" ++ det.num ++ det.postpositive ;
+             _ => cn.object ! st ++ det.quant ! st ++ cn.s ! det.n ! st ++ "の" ++ 
+                 det.num ++ cn.counter ++ det.postpositive 
+            } 
+          } ;
         False => cn.object ! st ++ det.quant ! st ++ det.num ++ cn.s ! det.n ! st 
         } ;
       prepositive = cn.prepositive ;
@@ -19,7 +23,7 @@ flags coding = utf8 ;
         True => True ;
         False => False
         } ;
-      Pron1Sg = False ;
+      meaning = SomeoneElse ;
       anim = cn.anim
       } ;
       
@@ -28,7 +32,7 @@ flags coding = utf8 ;
       prepositive = \\st => [] ;
       needPart = True ;
       changePolar = False ;
-      Pron1Sg = False ;
+      meaning = SomeoneElse ;
       anim = pn.anim
     } ;
     
@@ -37,7 +41,10 @@ flags coding = utf8 ;
       prepositive = \\st => [] ;
       needPart = True ;
       changePolar = False ;
-      Pron1Sg = pron.Pron1Sg ;
+      meaning = case pron.Pron1Sg of {
+        True => Me ;
+        False => SomeoneElse
+        } ;
       anim = pron.anim
       } ;
     
@@ -49,7 +56,7 @@ flags coding = utf8 ;
         True => True ;
         False => np.changePolar
         } ;
-      Pron1Sg = np.Pron1Sg ;
+      meaning = np.meaning ;
       anim = np.anim
       } ;
       
@@ -58,7 +65,7 @@ flags coding = utf8 ;
       prepositive = np.prepositive ;
       needPart = np.needPart ;
       changePolar = np.changePolar ;
-      Pron1Sg = np.Pron1Sg ;
+      meaning = np.meaning ;
       anim = np.anim
       } ;
 
@@ -73,7 +80,7 @@ flags coding = utf8 ;
         } ;
       needPart = np.needPart ;
       changePolar = np.changePolar ;
-      Pron1Sg = np.Pron1Sg ;
+      meaning = np.meaning ;
       anim = np.anim
       } ;
     
@@ -82,7 +89,7 @@ flags coding = utf8 ;
       prepositive = np.prepositive ;
       needPart = np.needPart ; 
       changePolar = np.changePolar ; 
-      Pron1Sg = np.Pron1Sg ; 
+      meaning = np.meaning ; 
       anim = np.anim
       } ;
     
@@ -94,7 +101,7 @@ flags coding = utf8 ;
         True => True ;
         False => False
         } ;
-      Pron1Sg = False ;
+      meaning = SomeoneElse ;
       anim = Inanim   -- not always, depends on the context
       } ;
     
@@ -105,10 +112,14 @@ flags coding = utf8 ;
       n = num.n ;
       inclCard = num.inclCard ;
       sp = \\st => case num.inclCard of {
-        True => quant.s ! st ++ num.s ++ "つ" ++ num.postpositive ;
+        True => case num.tenPlus of {
+          False => quant.s ! st ++ num.s ++ "つ" ++ num.postpositive ;
+          True => quant.s ! st ++ num.s ++ num.postpositive
+          } ;
         False => quant.sp ! st ++ num.s
         } ;
-      no = quant.no
+      no = quant.no ;
+      tenPlus = num.tenPlus
       } ;
       
     DetQuantOrd quant num ord = {
@@ -118,15 +129,19 @@ flags coding = utf8 ;
       n = num.n ;
       inclCard = num.inclCard ;
       sp = \\st => case num.inclCard of {
-        True => quant.s ! st ++ ord.attr ++ num.s ++ "つ" ++ num.postpositive ;
+        True => case num.tenPlus of {
+          False => quant.s ! st ++ ord.attr ++ num.s ++ "つ" ++ num.postpositive ;
+          True => quant.s ! st ++ ord.attr ++ num.s ++ num.postpositive
+          } ;
         False => quant.s ! st ++ ord.attr ++ num.s
         } ;
-      no = quant.no
+      no = quant.no ;
+      tenPlus = num.tenPlus
       } ;
 
-    NumSg = mkNum "" Sg False ;
+    NumSg = mkNum "" Sg ;
     
-    NumPl = mkNum "" Pl False ;
+    NumPl = mkNum "" Pl ;
     
     NumCard card = card ** {inclCard = True} ;
     
@@ -138,39 +153,41 @@ flags coding = utf8 ;
       True => {
         s = card.s ;
         postpositive = adn.s ;
-        n = card.n
+        n = card.n ;
+        tenPlus = card.tenPlus
         } ;
       False => {
         s = adn.s ++ card.s ;
         postpositive = [] ;
-        n = card.n
+        n = card.n ;
+        tenPlus = card.tenPlus
         } 
       } ;
     
     OrdDigits d = {
       pred = \\st,t,p => d.s ++ "番目" ++ mkCopula.s ! st ! t ! p ;  -- "banme"
       attr = d.s ++ "番目の" ;
-      te = d.s ++ "番目" ++ mkCopula.te ;
-      ba = d.s ++ "番目" ++ mkCopula.ba ;
-      adv = d.s ++ "番目" ;
+      te = \\p => d.s ++ "番目" ++ mkCopula.te ! p ;
+      ba = \\p => d.s ++ "番目" ++ mkCopula.ba ! p ;
+      adv = \\p => d.s ++ "番目" ;
       dropNaEnging = d.s ++ "番目の"
       } ;
     
     OrdNumeral num = {
       pred = \\st,t,p => num.s ++ "番目" ++ mkCopula.s ! st ! t ! p ;
       attr = num.s ++ "番目の" ;
-      te = num.s ++ "番目" ++ mkCopula.te ;
-      ba = num.s ++ "番目" ++ mkCopula.ba ;
-      adv = num.s ++ "番目" ;
+      te = \\p => num.s ++ "番目" ++ mkCopula.te ! p ;
+      ba = \\p => num.s ++ "番目" ++ mkCopula.ba ! p ;
+      adv = \\p => num.s ++ "番目" ;
       dropNaEnging = num.s ++ "番目の"
       } ;
       
     OrdSuperl a = {
       pred = \\st,t,p => "一番" ++ a.pred ! st ! t ! p ;  -- "ichiban"
       attr = "一番" ++ a.attr ;
-      te = "一番" ++ a.te ;
-      ba = "一番" ++ a.ba ;
-      adv = "一番" ++ a.adv ;
+      te = \\p => "一番" ++ a.te ! p ;
+      ba = \\p => "一番" ++ a.ba ! p ;
+      adv = \\p => "一番" ++ a.adv ! p ;
       dropNaEnging = "一番" ++ a.dropNaEnging
       } ;
     
@@ -183,7 +200,7 @@ flags coding = utf8 ;
       prepositive = cn.prepositive ;
       needPart = True ;
       changePolar = False ;
-      Pron1Sg = False ;
+      meaning = SomeoneElse ;
       anim = cn.anim
       } ;
     
@@ -199,7 +216,8 @@ flags coding = utf8 ;
       hasAttr = False ;
       anim = n.anim ;
       counter = n.counter ;
-      counterReplace = n.counterReplace
+      counterReplace = n.counterReplace ;
+      counterTsu = n.counterTsu
       } ;
       
     ComplN2 n2 np = {
@@ -209,7 +227,8 @@ flags coding = utf8 ;
       hasAttr = False ;
       anim = n2.anim ;
       counter = n2.counter ;
-      counterReplace = n2.counterReplace
+      counterReplace = n2.counterReplace ;
+      counterTsu = n2.counterTsu
       } ;
       
     ComplN3 n3 np = {
@@ -219,7 +238,8 @@ flags coding = utf8 ;
       prep = n3.prep2 ;
       anim = n3.anim ;
       counter = n3.counter ;
-      counterReplace = n3.counterReplace
+      counterReplace = n3.counterReplace ;
+      counterTsu = n3.counterTsu
       } ;
       
     UseN2 n2 = {
@@ -229,7 +249,8 @@ flags coding = utf8 ;
       hasAttr = False ;
       anim = n2.anim ;
       counter = n2.counter ;
-      counterReplace = n2.counterReplace
+      counterReplace = n2.counterReplace ;
+      counterTsu = n2.counterTsu
       } ;
       
     Use2N3 n3 = {
@@ -238,7 +259,8 @@ flags coding = utf8 ;
       prep = n3.prep1 ;
       anim = n3.anim ;
       counter = n3.counter ;
-      counterReplace = n3.counterReplace
+      counterReplace = n3.counterReplace;
+      counterTsu = n3.counterTsu
       } ;
     
     Use3N3 n3 = {
@@ -247,20 +269,22 @@ flags coding = utf8 ;
       prep = n3.prep2 ;
       anim = n3.anim ;
       counter = n3.counter ;
-      counterReplace = n3.counterReplace
+      counterReplace = n3.counterReplace;
+      counterTsu = n3.counterTsu
       } ;
 
     AdjCN ap cn = {
       s = \\n,st => case cn.hasAttr of {
         False => ap.attr ! st ++ cn.s ! n ! st ;
-        True => ap.te ! st ++ cn.s ! n ! st 
+        True => ap.te ! st ! Pos ++ cn.s ! n ! st 
         } ;
       object = cn.object ;
       prepositive = cn.prepositive ;
       hasAttr = True ;
       anim = cn.anim ;
       counter = cn.counter ;
-      counterReplace = cn.counterReplace
+      counterReplace = cn.counterReplace ;
+      counterTsu = cn.counterTsu
       } ;
 
     RelCN cn rs = {
@@ -270,7 +294,8 @@ flags coding = utf8 ;
       counterReplace = cn.counterReplace ;
       object = \\st => rs.s ! cn.anim ! st ++ cn.object ! st ;
       prepositive = cn.prepositive ;
-      hasAttr = cn.hasAttr 
+      hasAttr = cn.hasAttr ;
+      counterTsu = cn.counterTsu
       } ;
                                   
     AdvCN cn adv = {
@@ -286,7 +311,8 @@ flags coding = utf8 ;
       hasAttr = cn.hasAttr ;
       anim = cn.anim ;
       counter = cn.counter ;
-      counterReplace = cn.counterReplace
+      counterReplace = cn.counterReplace ;
+      counterTsu = cn.counterTsu
       } ;
       
     SentCN cn sc = {
@@ -296,7 +322,8 @@ flags coding = utf8 ;
       hasAttr = cn.hasAttr ;
       anim = cn.anim ;
       counter = cn.counter ;
-      counterReplace = cn.counterReplace
+      counterReplace = cn.counterReplace;
+      counterTsu = cn.counterTsu
       } ;
     
     ApposCN cn np = {
@@ -306,6 +333,7 @@ flags coding = utf8 ;
       hasAttr = cn.hasAttr ;
       anim = cn.anim ;
       counter = cn.counter ;
-      counterReplace = cn.counterReplace
+      counterReplace = cn.counterReplace ;
+      counterTsu = cn.counterTsu
       } ;
 }

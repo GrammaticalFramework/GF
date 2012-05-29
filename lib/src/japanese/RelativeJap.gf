@@ -6,43 +6,47 @@ flags coding = utf8 ;
 
     RelCl cl = {
       s = \\_,st,t,p => cl.s ! Ga ! st ! t ! p ;
-      te = \\_,st => cl.te ! Ga ! st ;
+      te = \\_ => cl.te ! Ga ;
       changePolar = cl.changePolar ;
       subj = cl.subj ;
       pred = \\_,st,t,p => cl.pred ! st ! t ! p ;
-      pred_te = \\a,st => cl.pred_te ! st ;
-      pred_ba = \\a,st => cl.pred_ba ! st ;
+      pred_te = \\a => cl.pred_te ;
+      pred_ba = \\a => cl.pred_ba ;
       missingSubj = False
       } ;
     
     RelVP rp vp = {
       s = \\a,st,t,p => vp.prepositive ! st ++ rp.s ! st ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.verb ! a ! Plain ! t ! p ++ rp.prep ;
-      te = \\a,st => vp.prepositive ! st ++ rp.s ! st ++ vp.obj ! st ++ 
-                      vp.prep ++ vp.te ! a ! st ++ rp.prep ;
+                        vp.prep ++ vp.verb ! SomeoneElse ! a ! Plain ! t ! p ;
+      te = \\a,st,p => vp.prepositive ! st ++ rp.s ! st ++ vp.obj ! st ++ 
+                      vp.prep ++ vp.te ! SomeoneElse ! a ! st ! p ;
       changePolar = False ;
       subj = \\part,st => vp.prepositive ! st ++ rp.s ! st ;
-      pred = \\a,st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! a ! st ! t ! p ++ rp.prep ;
-      pred_te = \\a,st => vp.obj ! st ++ vp.prep ++ vp.te ! a ! st ++ rp.prep ;
-      pred_ba = \\a,st => vp.obj ! st ++ vp.prep ++ vp.ba ! a ! st ++ rp.prep ;
+      pred = \\a,st,t,p => vp.obj ! st ++ vp.prep ++ 
+                           vp.verb ! SomeoneElse ! a ! st ! t ! p ;
+      pred_te = \\a,st,p => vp.obj ! st ++ vp.prep ++ vp.te ! SomeoneElse ! a ! st ! p ;
+      pred_ba = \\a,st,p => vp.obj ! st ++ vp.prep ++ vp.ba ! SomeoneElse ! a ! st ! p ;
       missingSubj = True
       } ;
     
     RelSlash rp clslash = {
-      s = \\_,st,t,p => rp.s ! st ++ clslash.s ! st ! t ! p ++ rp.prep ;
-      te = \\_,st => rp.s ! st ++ clslash.te ! st ;
+      s = \\_,st,t,p => case rp.null of {
+        True => rp.s ! st ++ clslash.s ! st ! t ! p ;
+        False => clslash.subj ! Ga ! st ++ rp.s ! st ++ clslash.pred ! Plain ! t ! p 
+        } ;
+      te = \\_,st,p => case rp.null of {
+        True => rp.s ! st ++ clslash.te ! st ! p ;
+        False => clslash.subj ! Ga ! st ++ rp.s ! st ++ clslash.pred_te ! st ! p 
+        } ;
       changePolar = clslash.changePolar ;
       subj = \\part,st => rp.s ! st ++ clslash.subj ! part ! st ;
-      pred = \\_,st,t,p => clslash.pred ! st ! t ! p ++ rp.prep ;
-      pred_te = \\a,st => clslash.pred_te ! st ++ rp.prep ;
-      pred_ba = \\a,st => clslash.pred_ba ! st ++ rp.prep ;
+      pred = \\_,st,t,p => clslash.pred ! st ! t ! p ;
+      pred_te = \\a => clslash.pred_te ;
+      pred_ba = \\a => clslash.pred_ba ;
       missingSubj = False
       } ;
     
-    IdRP = {s = \\st => [] ; prep = []} ;
+    IdRP = {s = \\st => [] ; null = True} ;
     
-    FunRP prep np rp = {
-      s = \\st => np.prepositive ! st ++ np.s ! st ; 
-      prep = prep.relPrep
-      } ;
+    FunRP prep np rp = {s = \\st => np.prepositive ! st ++ np.s ! st ; null = False} ;
 }

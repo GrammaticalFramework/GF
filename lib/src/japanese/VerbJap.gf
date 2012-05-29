@@ -5,208 +5,183 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
   lin
   
     UseV v = {
-      verb = \\a,st,t,p => v.s ! st ! t ! p ;
-      te = \\a,st => v.te ;
-      a_stem = \\a,st => v.a_stem ;
-      i_stem = \\a,st => v.i_stem ;
-      ba = \\a,st => v.ba ;
+      verb = \\sp,a,st,t,p => v.s ! st ! t ! p ;
+      te = \\sp,a,st => v.te ;
+      a_stem = \\sp,a,st => v.a_stem ;
+      i_stem = \\sp,a,st => v.i_stem ;
+      ba = \\sp,a,st => v.ba ;
       prep = [] ;
       obj = \\st => [] ; 
-      prepositive = \\st => [] ;
-      compar = NoCompar
+      prepositive = \\st => []
       } ;
       
     ComplVV v vp = case v.sense of {
       Abil => {
-        verb = \\a,st,t,p => vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ 
-                             "ことが" ++ v.s ! st ! t ! p ;
-        te = \\a,st => vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ v.te ;  
-        a_stem = \\a,st => vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ v.a_stem ;
-        i_stem = \\a,st => vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ v.i_stem ;
-        ba = \\a,st => vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ v.ba ;
+        verb = \\sp,a,st,t,p => vp.verb ! sp ! a ! Plain ! TPres ! ResJap.Pos ++ 
+                             "ことが" ++ v.s ! sp ! st ! t ! p ;
+        te = \\sp,a,st,p => vp.verb ! sp ! a ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ 
+                            v.te ! sp ! p ;  
+        a_stem = \\sp,a,st => vp.verb ! sp ! a ! Plain ! TPres ! ResJap.Pos ++ 
+                              "ことが" ++ v.a_stem ! sp ;
+        i_stem = \\sp,a,st => vp.verb ! sp ! a ! Plain ! TPres ! ResJap.Pos ++ 
+                              "ことが" ++ v.i_stem ! sp ;
+        ba = \\sp,a,st,p => vp.verb ! sp ! a ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ 
+                            v.ba ! sp ! p ;
         prep = vp.prep ;
         obj = \\st => vp.obj ! st ;
-        prepositive = vp.prepositive ;
-        compar = NoCompar
+        prepositive = vp.prepositive
         } ;
       Oblig => {
-        verb = \\a,st,t,p => vp.a_stem ! Anim ! st ++ "なければ" ++ v.s ! st ! t ! Neg ;
-        te = \\a,st => vp.a_stem ! Anim ! st ++ "なければ" ++ v.te ;
-        a_stem = \\a,st => vp.a_stem ! Anim ! st ++ "なければ" ++ v.a_stem ;
-        i_stem = \\a,st => vp.a_stem ! Anim ! st ++ "なければ" ++ v.i_stem ;
-        ba = \\a,st => vp.a_stem ! Anim ! st ++ "なければ" ++ v.ba ;
+        verb = \\sp,a,st,t => table {
+          Pos => vp.a_stem ! sp ! a ! st ++ "なければ" ++ v.s ! sp ! st ! t ! Neg ;
+          Neg => vp.te ! sp ! a ! st ! Pos ++ "は" ++ v.s ! sp ! st ! t ! Neg
+          } ;
+        te = \\sp,a,st => table {
+          Pos => vp.a_stem ! sp ! a ! st ++ "なければ" ++ v.te ! sp ! Pos ;
+          Neg => vp.te ! sp ! a ! st ! Pos ++ "は" ++ v.te ! sp ! Pos 
+          } ;
+        a_stem = \\sp,a,st => vp.a_stem ! sp ! a ! st ++ "なければ" ++ v.a_stem ! sp ;
+        i_stem = \\sp,a,st => vp.a_stem ! sp ! a ! st ++ "なければ" ++ v.i_stem ! sp ;
+        ba = \\sp,a,st => table {
+          Pos => vp.a_stem ! sp ! a ! st ++ "なければ" ++ v.ba ! sp ! Pos ;
+          Neg => vp.te ! sp ! a ! st ! Pos ++ "は" ++ v.ba ! sp ! Pos 
+          } ;
         prep = vp.prep ;
         obj = \\st => vp.obj ! st ;
-        prepositive = vp.prepositive ;
-        compar = NoCompar
+        prepositive = vp.prepositive
         } ;
       Wish => {
-        verb = \\a,st,t,p => vp.i_stem ! Anim ! st ++ "たがって" ++ v.s ! st ! t ! p ;
-        te = \\a,st => vp.i_stem ! Anim ! st ++ "たがって" ++ v.te ;
-        a_stem = \\a,st => vp.i_stem ! Anim ! st ++ "たがって" ++ v.a_stem ;
-        i_stem = \\a,st => vp.i_stem ! Anim ! st ++ "たがって" ++ v.i_stem ;
-        ba = \\a,st => vp.i_stem ! Anim ! st ++ "たがって" ++ v.ba ;
+        verb = \\sp,a,st,t,p => vp.i_stem ! sp ! a ! st ++ v.s ! sp ! st ! t ! p ;
+        te = \\sp,a,st,p => vp.i_stem ! sp ! a ! st ++ v.te ! sp ! p ;
+        a_stem = \\sp,a,st => vp.i_stem ! sp ! a ! st ++ v.a_stem ! sp ;
+        i_stem = \\sp,a,st => vp.i_stem ! sp ! a ! st ++ v.i_stem ! sp ;
+        ba = \\sp,a,st,p => vp.i_stem ! sp ! a ! st ++ v.ba ! sp ! p ;
         prep = vp.prep ;
         obj = \\st => vp.obj ! st ;
-        prepositive = vp.prepositive ;
-        compar = NoCompar
+        prepositive = vp.prepositive
         } 
       } ; 
     
     ComplVS vs sent = {
-      verb = \\a,st,t,p => vs.s ! st ! t ! p ;
-      te = \\a,st => vs.te ;
-      a_stem = \\a,st => vs.a_stem ;
-      i_stem = \\a,st => vs.i_stem ;
-      ba = \\a,st => vs.ba ;
+      verb = \\sp,a,st,t,p => vs.s ! st ! t ! p ;
+      te = \\sp,a,st => vs.te ;
+      a_stem = \\sp,a,st => vs.a_stem ;
+      i_stem = \\sp,a,st => vs.i_stem ;
+      ba = \\sp,a,st => vs.ba ;
       prep = vs.prep ;
-      obj = \\st => sent.s ! Ga ! Plain ;
-      prepositive = \\st => [] ;
-      compar = NoCompar
+      obj = \\st => sent.subj ! Ga ! st ++ sent.pred ! Plain ;
+      prepositive = \\st => []
       } ;
       
     ComplVQ vq qs = {
-      verb = \\a,st,t,p => vq.s ! st ! t ! p ;
-      te = \\a,st => vq.te ;
-      a_stem = \\a,st => vq.a_stem ;
-      i_stem = \\a,st => vq.i_stem ;
-      ba = \\a,st => vq.ba ;
-      prep = vq.prep ;
-      obj = \\st => qs.s ! Ga ! Plain ++ "こと" ;
-      prepositive = \\st => [] ;
-      compar = NoCompar
+      verb = \\sp,a,st,t,p => vq.s ! st ! t ! p ;
+      te = \\sp,a,st => vq.te ;
+      a_stem = \\sp,a,st => vq.a_stem ;
+      i_stem = \\sp,a,st => vq.i_stem ;
+      ba = \\sp,a,st => vq.ba ;
+      prep = "" ;
+      obj = \\st => qs.s_plain_pred ! Ga ! st ;
+      prepositive = \\st => []
       } ;
       
     ComplVA va ap = {
-      verb = \\a,st,t,p => va.s ! st ! t ! p ;
-      te = \\a,st => va.te ;
-      a_stem = \\a,st => va.a_stem ;
-      i_stem = \\a,st => va.i_stem ;
-      ba = \\a,st => va.ba ;
+      verb = \\sp,a,st,t,p => va.s ! st ! t ! p ;
+      te = \\sp,a,st => va.te ;
+      a_stem = \\sp,a,st => va.a_stem ;
+      i_stem = \\sp,a,st => va.i_stem ;
+      ba = \\sp,a,st => va.ba ;
       prep = [] ;
       obj = \\st => ap.adv ! st ;
-      prepositive = ap.prepositive ;
-      compar = NoCompar
+      prepositive = ap.prepositive
       } ;
 
     SlashV2a v2 = {
-      s = \\st,t,p => v2.s ! st ! t ! p ;
-      a_stem = v2.a_stem ;
-      i_stem = v2.i_stem ;
-      ba = v2.ba ;
+      s = \\sp,st,t,p => v2.s ! st ! t ! p ;
+      a_stem = \\sp => v2.a_stem ;
+      i_stem = \\sp => v2.i_stem ;
+      ba = \\sp => v2.ba ;
       prep = v2.prep ;
       obj = \\st => [] ;
       prepositive = \\st => [] ;
-      te = v2.te ;
-      v2vType = False ;
-      compar = NoCompar
+      te = \\sp => v2.te ;
+      v2vType = False
       } ;
       
-    Slash2V3 v3 np = case v3.give of {
-      True => {
-        s = \\st,t,p => case np.Pron1Sg of {
-          True => (mkVerb "呉れ" "呉れ" "呉れる" "呉れた").s ! st ! t ! p ;  -- "kureru"
-          False => v3.s ! st ! t ! p 
-          } ;
-        a_stem = case np.Pron1Sg of {
-          True => "呉れ" ;
-          False => "上げ" 
-          } ;
-        i_stem = case np.Pron1Sg of {
-          True => "呉れ" ;
-          False => "上げ" 
-          } ;
-        ba = case np.Pron1Sg of {
-          True => "呉れれば" ;
-          False => "上げれば" 
-          } ;
+    Slash2V3 v3 np = {
+        s = \\sp,st,t,p => v3.s ! np.meaning ! st ! t ! p ;
+        a_stem = \\sp => v3.a_stem ! np.meaning ;
+        i_stem = \\sp => v3.i_stem ! np.meaning ;
+        ba = \\sp,p => v3.ba ! np.meaning ! p ;
         prep = v3.prep2 ;
         obj = \\st => np.s ! st ++ v3.prep1 ;
         prepositive = np.prepositive ;
-        te = case np.Pron1Sg of {
-          True => "呉れて" ;
-          False => "上げて" 
-          } ;
-        v2vType = False ;
-        compar = NoCompar
-        } ;
-      False => {
-        s = \\st,t,p => v3.s ! st ! t ! p ;
-        a_stem = v3.a_stem ;
-        i_stem = v3.i_stem ;
-        ba = v3.ba ;
-        prep = v3.prep2 ;
-        obj = \\st => np.s ! st ++ v3.prep1 ;
-        prepositive = np.prepositive ;
-        te = v3.te ;
-        v2vType = False ;
-        compar = NoCompar
-        }
+        te = \\sp,p => v3.te ! np.meaning ! p ;
+        v2vType = False
       } ;
       
     Slash3V3 = Slash2V3 ;
     
     SlashV2V v2v vp = {
-      s = \\st,t,p => vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" 
-                      ++ v2v.s ! st ! t ! p ;
-      a_stem = vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.a_stem ;
-      i_stem = vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.i_stem ;
-      ba = vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.ba ;
+      s = \\sp,st,t,p => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" 
+                         ++ v2v.s ! st ! t ! p ;
+      a_stem = \\sp => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJap.Pos ++ 
+                       "ように" ++ v2v.a_stem ;
+      i_stem = \\sp => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJap.Pos ++ 
+                       "ように" ++ v2v.i_stem ;
+      ba = \\sp,p => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ 
+                     v2v.ba ! p ;
       prep = "に" ;
       obj = \\st => vp.obj ! st ++ vp.prep ;
-      te = vp.verb ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.te ; 
+      te = \\sp,p => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ 
+                     v2v.te ! p ; 
       prepositive = vp.prepositive ;
-      v2vType = True ;
-      compar = NoCompar
+      v2vType = True
       } ;
       
     SlashV2S v2s s = {
-      s = v2s.s ;
-      a_stem = v2s.a_stem ;
-      i_stem = v2s.i_stem ;
-      ba = v2s.ba ;
+      s = \\sp,st,t,p => v2s.s ! st ! t ! p ;
+      a_stem = \\sp => v2s.a_stem ;
+      i_stem = \\sp => v2s.i_stem ;
+      ba = \\sp => v2s.ba ;
       prep = "に" ;
-      obj = \\st => s.s ! Ga ! Plain ++ "と" ;
+      obj = \\st => s.subj ! Ga ! st ++ s.pred ! Plain ++ "と" ;
       prepositive = \\st => [] ;
-      te = v2s.te ; 
-      v2vType = False ;
-      compar = NoCompar
+      te = \\sp => v2s.te ; 
+      v2vType = False
       } ;
       
     SlashV2Q v2q qs = {
-      s = v2q.s ;
-      a_stem = v2q.a_stem ;
-      i_stem = v2q.i_stem ;
-      ba = v2q.ba ;
+      s = \\sp,st,t,p => v2q.s ! st ! t ! p ;
+      a_stem = \\sp => v2q.a_stem ;
+      i_stem = \\sp => v2q.i_stem ;
+      ba = \\sp => v2q.ba ;
       prep = "に" ;
-      obj = \\st => qs.s ! Ga ! Plain ++ "ことを" ;
+      obj = \\st => qs.s_plain_pred ! Ga ! st ;
       prepositive = \\st => [] ;
-      te = v2q.te ; 
-      v2vType = True ;
-      compar = NoCompar
+      te = \\sp => v2q.te ; 
+      v2vType = True
       } ;
       
     SlashV2A v2a ap = {
-      s = v2a.s ;
-      a_stem = v2a.a_stem ;
-      i_stem = v2a.i_stem ;
-      ba = v2a.ba ;
+      s = \\sp,st,t,p => v2a.s ! st ! t ! p ;
+      a_stem = \\sp => v2a.a_stem ;
+      i_stem = \\sp => v2a.i_stem ;
+      ba = \\sp => v2a.ba ;
       prep = "を" ;
       obj = ap.adv ;
       prepositive = ap.prepositive ;
-      te = v2a.te ; 
-      v2vType = True ;
-      compar = NoCompar
+      te = \\sp => v2a.te ; 
+      v2vType = True
       } ;
     
     ComplSlash vpslash np = {
-      verb = \\a,st,t,p => case np.changePolar of {
-        True => vpslash.s ! st ! t ! Neg ;
-        False => vpslash.s ! st ! t ! p 
+      verb = \\sp,a,st,t,p => case np.changePolar of {
+        True => vpslash.s ! sp ! st ! t ! Neg ;
+        False => vpslash.s ! sp ! st ! t ! p 
         } ;
-      a_stem = \\a,st => vpslash.a_stem ;
-      i_stem = \\a,st => vpslash.i_stem ;
-      ba = \\a,st => vpslash.ba ;
+      a_stem = \\sp,a,st => vpslash.a_stem ! sp ;
+      i_stem = \\sp,a,st => vpslash.i_stem ! sp ;
+      ba = \\sp,a,st,p => vpslash.ba ! sp ! p ;
       prep = case np.needPart of {
         True => case vpslash.v2vType of {
           True => [] ;
@@ -218,85 +193,104 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
         True => np.s ! st ++ vpslash.prep ++ vpslash.obj ! st ;
         False => vpslash.obj ! st ++ np.s ! st 
         } ;
-      te = \\a,st => vpslash.te ;
-      prepositive = \\st => np.prepositive ! st ++ vpslash.prepositive ! st ;
-      compar = vpslash.compar
+      te = \\sp,a,st,p => vpslash.te ! sp ! p ;
+      prepositive = \\st => np.prepositive ! st ++ vpslash.prepositive ! st
       } ;
       
-    SlashVV v vpslash = {
-      s = \\st,t,p => case v.sense of {
-        Abil => vpslash.s ! Plain ! TPres ! ResJap.Pos ++ 
-                "ことが" ++ v.s ! st ! t ! p ;
-        Oblig => vpslash.a_stem ++ "なければ" ++ v.s ! st ! t ! p ;
-        Wish => vpslash.i_stem ++ "たがって" ++ v.s ! st ! t ! p 
+    SlashVV v vpslash = case v.sense of {
+      Abil => {
+        s = \\sp,st,t,p => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ 
+                           "ことが" ++ v.s ! sp ! st ! t ! p ;
+        te = \\sp,p => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ 
+                       v.te ! sp ! p ;  
+        a_stem = \\sp => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ 
+                         v.a_stem ! sp ;
+        i_stem = \\sp => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ 
+                         v.i_stem ! sp ;
+        ba = \\sp,p => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ 
+                       v.ba ! sp ! p ;
+        prep = vpslash.prep ;
+        obj = vpslash.obj ;
+        prepositive = vpslash.prepositive ;
+        v2vType = False
         } ;
-      te = case v.sense of {
-        Abil => vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ v.te ; 
-        Oblig => vpslash.a_stem ++ "なければ" ++ v.te ;
-        Wish => vpslash.i_stem ++ "たがって" ++ v.te 
+      Oblig => {
+        s = \\sp,st,t => table {
+          Pos => vpslash.a_stem ! sp ++ "なければ" ++ v.s ! sp ! st ! t ! Neg ;
+          Neg => vpslash.te ! sp ! Pos ++ "は" ++ v.s ! sp ! st ! t ! Neg 
+          } ;
+        te = \\sp => table {
+          Pos => vpslash.a_stem ! sp ++ "なければ" ++ v.te ! sp ! Pos ;
+          Neg => vpslash.te ! sp ! Pos ++ "は" ++ v.te ! sp ! Pos
+          } ;
+        a_stem = \\sp => vpslash.a_stem ! sp ++ "なければ" ++ v.a_stem ! sp ;
+        i_stem = \\sp => vpslash.a_stem ! sp ++ "なければ" ++ v.i_stem ! sp ;
+        ba = \\sp => table {
+          Pos => vpslash.a_stem ! sp ++ "なければ" ++ v.ba ! sp ! Pos ;
+          Neg => vpslash.te ! sp ! Pos ++ "は" ++ v.ba ! sp ! Pos
+          } ;
+        prep = vpslash.prep ;
+        obj = vpslash.obj ;
+        prepositive = vpslash.prepositive ;
+        v2vType = False
         } ;
-      a_stem = [] ;
-      i_stem = [] ;
-      ba = case v.sense of {
-        Abil => vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ v.ba ;
-        Oblig => vpslash.a_stem ++ "なければ" ++ v.ba ;
-        Wish => vpslash.i_stem ++ "たがって" ++ v.ba
-        } ;
-      prep = vpslash.prep ;
-      obj = vpslash.obj ;
-      prepositive = vpslash.prepositive ;
-      v2vType = False ;
-      compar = vpslash.compar
-      } ;
+      Wish => {
+        s = \\sp,st,t,p => vpslash.i_stem ! sp ++ v.s ! sp ! st ! t ! p ;
+        te = \\sp,p => vpslash.i_stem ! sp ++ v.te ! sp ! p ;
+        a_stem = \\sp => vpslash.i_stem ! sp ++ v.a_stem ! sp ;
+        i_stem = \\sp => vpslash.i_stem ! sp ++ v.i_stem ! sp ;
+        ba = \\sp,p => vpslash.i_stem ! sp ++ v.ba ! sp ! p ;
+        prep = vpslash.prep ;
+        obj = vpslash.obj ;
+        prepositive = vpslash.prepositive ;
+        v2vType = False
+        } 
+      } ; 
 
     SlashV2VNP v2v np vpslash = {
-      s = \\st,t,p => vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ように" 
-                      ++ v2v.s ! st ! t ! p ;
-      a_stem = vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.a_stem ;
-      i_stem = vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.i_stem ;
-      ba = vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.ba ;
+      s = \\sp,st,t,p => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ように" 
+                         ++ v2v.s ! st ! t ! p ;
+      a_stem = \\sp => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.a_stem ;
+      i_stem = \\sp => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.i_stem ;
+      ba = \\sp,p => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.ba ! p ;
       prep = vpslash.prep ;
-      obj = \\st => np.s ! st ++ "に" ;
-      te = vpslash.s ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.te ; 
-      prepositive = vpslash.prepositive ;
-      v2vType = True ;
-      compar = vpslash.compar
+      obj = \\st => np.s ! st ++ "に" ++ vpslash.obj ! st ;
+      te = \\sp,p => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.te ! p ; 
+      prepositive = \\st => np.prepositive ! st ++ vpslash.prepositive ! st ;
+      v2vType = True
       } ;
 
     ReflVP vpslash = {
-      verb = \\a,st,t,p => vpslash.s ! st ! t ! p ;
-      a_stem = \\a,st => vpslash.a_stem ;
-      i_stem = \\a,st => vpslash.i_stem ;
-      ba = \\a,st => vpslash.ba ;
+      verb = \\sp,a,st,t,p => vpslash.s ! sp ! st ! t ! p ;
+      a_stem = \\sp,a,st => vpslash.a_stem ! sp ;
+      i_stem = \\sp,a,st => vpslash.i_stem ! sp ;
+      ba = \\sp,a,st,p => vpslash.ba ! sp ! p ;
       prep = vpslash.prep ;
-      obj = \\st => "自分" ;  -- "jibun"
-      te = \\a,st => vpslash.te ;
-      prepositive = vpslash.prepositive ;
-      compar = vpslash.compar
+      obj = \\st => vpslash.obj ! st ++ "自分" ;  -- "jibun"
+      te = \\sp,a,st,p => vpslash.te ! sp ! p ;
+      prepositive = vpslash.prepositive
       } ;
 
     UseComp comp = {
-      verb = comp.verb ; 
-      te = comp.te ;
-      a_stem = comp.a_stem ;
-      i_stem = comp.i_stem ;
-      ba = comp.ba ;
+      verb = \\sp,a,st,t,p => comp.verb ! a ! st ! t ! p; 
+      te = \\sp => comp.te ;
+      a_stem = \\sp,a,st => comp.a_stem ! a ! st ;
+      i_stem = \\sp,a,st => comp.i_stem ! a ! st ;
+      ba = \\sp => comp.ba ;
       prep = [] ;
       obj = comp.obj ; 
-      prepositive = comp.prepositive ;
-      compar = comp.compar
+      prepositive = comp.prepositive
       } ;
     
     PassV2 v2 = {
-      verb = \\a,st,t,p => v2.pass ! st ! t ! p ; 
-      te = \\a,st => v2.pass_te ;
-      a_stem = \\a,st => v2.pass_a_stem ;
-      i_stem = \\a,st => v2.pass_i_stem ;
-      ba = \\a,st => v2.pass_ba ;
+      verb = \\sp,a,st,t,p => v2.pass ! st ! t ! p ; 
+      te = \\sp,a,st => v2.pass_te ;
+      a_stem = \\sp,a,st => v2.pass_a_stem ;
+      i_stem = \\sp,a,st => v2.pass_i_stem ;
+      ba = \\sp,a,st => v2.pass_ba ;
       prep = [] ;
       obj = \\st => [] ;
-      prepositive = \\st => [] ;
-      compar = NoCompar
+      prepositive = \\st => []
       } ;
     
     AdvVP vp adv = {
@@ -311,10 +305,9 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
         False => adv.s ! st ++ vp.obj ! st 
         } ;
       prepositive = \\st => case adv.prepositive of {
-        True => adv.s ! st ; 
-        False => []
-        } ;
-      compar = adv.compar
+        True => vp.prepositive ! st ++ adv.s ! st ; 
+        False => vp.prepositive ! st
+        }
       } ;
     
     AdVVP adv vp = {
@@ -325,8 +318,7 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       ba = vp.ba ;
       prep = vp.prep ;
       obj = \\st => adv.s ++ vp.obj ! st ;
-      prepositive = vp.prepositive ;
-      compar = NoCompar
+      prepositive = vp.prepositive
       } ;
     
     AdvVPSlash vpslash adv = {
@@ -341,11 +333,10 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
         False => adv.s ! st ++ vpslash.obj ! st 
         } ;
       prepositive = \\st => case adv.prepositive of {
-        True => adv.s ! st ; 
-        False => []
+        True => vpslash.prepositive ! st ++ adv.s ! st ; 
+        False => vpslash.prepositive ! st
         } ;
-      v2vType = False ;
-      compar = adv.compar
+      v2vType = False
       } ;
       
     AdVVPSlash adv vpslash = {
@@ -357,38 +348,35 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       prep = vpslash.prep ;
       obj = \\st => adv.s ++ vpslash.obj ! st ;
       prepositive = vpslash.prepositive ; 
-      v2vType = False ;
-      compar = vpslash.compar
+      v2vType = False
       } ;
       
     CompAP ap = {
       verb = \\a,st,t,p => ap.pred ! st ! t ! p ; 
-      te = \\a,st => ap.te ! st ;
-      a_stem = \\a,st => ap.adv ! st ;
-      i_stem = \\a,st => ap.adv ! st ;  -- for wishes - not correct!
-      ba = \\a,st => ap.ba ! st ;
+      te = \\a => ap.te ;
+      a_stem = \\a,st => ap.attr ! st ++ "では" ;
+      i_stem = \\a,st => ap.adv ! st ++ "なり" ;
+      ba = \\a => ap.ba ;
       obj = \\st => [] ; 
-      prepositive = ap.prepositive ; 
-      compar = ap.compar
+      prepositive = ap.prepositive
       } ;
       
     CompNP np = {
       verb = \\a,st,t,p => mkCopula.s ! st ! t ! p ;
-      te = \\a,st => "だって" ;
-      ba = \\a,st => "であれば" ;
-      a_stem = \\a,st => "で" ;
-      i_stem = \\a,st => "で" ;  -- for wishes - not correct!
+      te = \\a,st => mkCopula.te ;
+      ba = \\a,st => mkCopula.ba ;
+      a_stem = \\a,st => "では" ;
+      i_stem = \\a,st => "になり" ;  -- "become" - for wishes
       obj = \\st => np.s ! st ;
-      prepositive = np.prepositive ; 
-      compar = NoCompar
+      prepositive = np.prepositive
       } ;
     
     CompAdv adv = {
-      verb = mkExistV.verb ;
-      te = mkExistV.te ;
-      ba = mkExistV.ba ;
-      a_stem = mkExistV.a_stem ;
-      i_stem = mkExistV.i_stem ;
+      verb = mkExistV.verb ! SomeoneElse ;
+      te = mkExistV.te ! SomeoneElse ;
+      ba = mkExistV.ba ! SomeoneElse ;
+      a_stem = mkExistV.a_stem ! SomeoneElse ;
+      i_stem = mkExistV.i_stem ! SomeoneElse ;
       obj = \\st => case adv.prepositive of {
         True => [] ;
         False => adv.s ! st 
@@ -396,32 +384,28 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       prepositive = \\st => case adv.prepositive of {
         True => adv.s ! st ; 
         False => []
-        } ;
-      compar = NoCompar
+        }
       } ;
     
     CompCN cn = {
-      verb = \\a,st,t,p => mkCopula.s ! st ! t ! p ;
-      te = \\a,st => "だって" ;
-      ba = \\a,st => "であれば" ;
-      a_stem = \\a,st => "で" ;
-      i_stem = \\a,st => "で" ;  -- for wishes - not correct!
-      obj = \\st => cn.s ! (Sg|Pl) ! st ;
-      prepositive = cn.prepositive ; 
-      compar = NoCompar
+      verb = \\a => mkCopula.s ;
+      te = \\a,st => mkCopula.te ;
+      ba = \\a,st => mkCopula.ba ;
+      a_stem = \\a,st => "では" ;
+      i_stem = \\a,st => "になり" ;  -- "become" - for wishes
+      obj = \\st => cn.s ! Sg ! st ;
+      prepositive = cn.prepositive
       } ;
       
     UseCopula = {
-      verb = \\a,st,t,p => mkCopula.s ! st ! t ! p ; 
-      te = \\a,st => "だって" ;
-      ba = \\a,st => "であれば" ;
-      a_stem = \\a,st => "で" ;
-      i_stem = \\a,st => "で" ;  -- for wishes - not correct!
+      verb = \\sp,a => mkCopula.s ; 
+      te = \\sp,a,st => mkCopula.te ;
+      ba = \\sp,a,st => mkCopula.ba ;
+      a_stem = \\sp,a,st => "では" ;
+      i_stem = \\sp,a,st => "なり" ;  -- "become" - for wishes
       obj = \\st => [] ;
       prepositive = \\st => [] ; 
-      prep = [] ;
-      compar = NoCompar
+      prep = []
       } ;
   }
-
 

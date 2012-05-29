@@ -12,6 +12,5 @@ concrete GrammarJap of Grammar =
   TextJap,
   StructuralJap,
   IdiomJap,
-  TenseJap --,
---  TransferJap 
+  TenseJap 
   ;

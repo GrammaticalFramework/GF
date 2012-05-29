@@ -4,11 +4,13 @@ flags coding = utf8 ;
 
   lincat  
 
-    Text, Phr, PConj, Interj, AdV, AdA = {s : Str} ;
+    PConj, Interj, AdV, AdA = {s : Str} ;
     
-    Utt = {s : Style => Str} ;
+    Phr, Text = {s : Str} ;
     
-    Voc = {s : Style => Str ; please : Bool} ;
+    Utt = {s : Particle => Style => Str ; type : UttType} ;
+    
+    Voc = {s : Style => Str ; type : VocType ; null : Str} ;
     
     SC = {s : Particle => Style => Str ; isVP : Bool} ;
     
@@ -16,9 +18,9 @@ flags coding = utf8 ;
     
     AdN = {s : Str ; postposition : Bool} ;
     
-    IAdv = {s : Style => Str ; particle : Str} ;
+    IAdv = {s : Style => Str ; particle : Str ; wh8re : Bool} ;
     
-    CAdv = {s : Str ; compar : ComparSense} ;
+    CAdv = {s : Str ; less : Bool ; s_adn : Str} ;
     
     Temp = {s : Str ; t : TTense ; a : Anteriority} ;
     Tense = {s : Str ; t : TTense} ;

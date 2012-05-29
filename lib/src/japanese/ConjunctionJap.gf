@@ -48,24 +48,22 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
       
     ConjAP conj ap = case conj.type of {
       (And | Both) => {
-        pred = \\st,t,p => conj.null ++ ap.s1and ! st ++ ap.s2pred ! st ! t ! p ;
-        attr = \\st => conj.null ++ ap.s1and ! st ++ ap.s2attr ! st ;
-        te = \\st => conj.null ++ ap.s1and ! st ++ ap.s2te ! st ;
-        ba = \\st => conj.null ++ ap.s1and ! st ++ ap.s2ba ! st ;
-        adv = \\st => conj.null ++ ap.s1and ! st ++ ap.s2adv ! st ;
-        dropNaEnging = \\st => conj.null ++ ap.s1and ! st ++ ap.s2dropNaEnging ! st ;
-        prepositive = ap.prepositive ;
-        compar = ap.compar
+        pred = \\st,t,p => conj.null ++ ap.s1and ! st ! p ++ ap.s2pred ! st ! t ! p ;
+        attr = \\st => conj.null ++ ap.s1and ! st ! Pos ++ ap.s2attr ! st ;
+        te = \\st,p => conj.null ++ ap.s1and ! st ! p ++ ap.s2te ! st ! p ;
+        ba = \\st,p => conj.null ++ ap.s1and ! st ! p ++ ap.s2ba ! st ! p ;
+        adv = \\st => conj.null ++ ap.s1and ! st ! Pos ++ ap.s2adv ! st ;
+        dropNaEnging = \\st => conj.null ++ ap.s1and ! st ! Pos ++ ap.s2dropNaEnging ! st ;
+        prepositive = ap.prepositive
         } ;
       Or => {    
-        pred = \\st,t,p => conj.null ++ ap.s1or ! st ++ ap.s2pred ! st ! t ! p ;
-        attr = \\st => conj.null ++ ap.s1or ! st ++ ap.s2attr ! st ;
-        te = \\st => conj.null ++ ap.s1or ! st ++ ap.s2te ! st ;
-        ba = \\st => conj.null ++ ap.s1or ! st ++ ap.s2ba ! st ;
-        adv = \\st => conj.null ++ ap.s1or ! st ++ ap.s2adv ! st ;
-        dropNaEnging = \\st => conj.null ++ ap.s1or ! st ++ ap.s2dropNaEnging ! st ;
-        prepositive = ap.prepositive ;
-        compar = ap.compar
+        pred = \\st,t,p => conj.null ++ ap.s1or ! st ! p ++ ap.s2pred ! st ! t ! p ;
+        attr = \\st => conj.null ++ ap.s1or ! st ! Pos ++ ap.s2attr ! st ;
+        te = \\st,p => conj.null ++ ap.s1or ! st ! p ++ ap.s2te ! st ! p ;
+        ba = \\st,p => conj.null ++ ap.s1or ! st ! p ++ ap.s2ba ! st ! p ;
+        adv = \\st => conj.null ++ ap.s1or ! st ! Pos ++ ap.s2adv ! st ;
+        dropNaEnging = \\st => conj.null ++ ap.s1or ! st ! Pos ++ ap.s2dropNaEnging ! st ;
+        prepositive = ap.prepositive
         }
       } ;
     
@@ -74,8 +72,7 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
         (And | Both) => conj.null ++ adv.and ! st ;
         Or => conj.null ++ adv.or ! st
         } ;
-      prepositive = adv.prepositive ;
-      compar = adv.compar
+      prepositive = adv.prepositive
       } ;
       
     ConjNP conj np = {
@@ -90,13 +87,14 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
         Both     => False
         } ;
       changePolar = np.changePolar ;
-      Pron1Sg = np.Pron1Sg ;
+      meaning = SomeoneElse ;
       anim = np.anim
       } ;
     
     ConjIAdv conj iadv = {
       s = \\st => conj.null ++ iadv.s ! st ;
-      particle = iadv.particle
+      particle = iadv.particle ;
+      wh8re = iadv.wh8re
       } ;
       
     ConjCN conj cn = {
@@ -109,7 +107,8 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
       counterReplace = cn.counterReplace ;
       object = cn.object ;
       prepositive = cn.prepositive ;
-      hasAttr = cn.hasAttr
+      hasAttr = cn.hasAttr ;
+      counterTsu = cn.counterTsu
       } ;
            
     BaseS x y = {
@@ -157,7 +156,7 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
       pred_teAnd = \\a,st => x.pred_te ! a ! st ++ "," ++ y.te ! a ! st ;
       pred_teOr = \\a,st => x.pred_te ! a ! st ++ "," ++ "あるいは" ++ y.te ! a ! st ;
       pred_baAnd = \\a,st => x.pred_te ! a ! st ++ "," ++ y.subj ! Ga ! st ++ 
-                               y.pred_ba ! a ! st ;
+                             y.pred_ba ! a ! st ;
       pred_baOr = \\a,st => x.pred_te ! a ! st ++ "," ++ "あるいは" ++ y.subj ! Ga ! st ++ 
                               y.pred_ba ! a ! st ;
       subj = x.subj ;
@@ -196,11 +195,6 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
       prepositive = case <x.prepositive, y.prepositive> of {
         <False, False> => False ;
         _              => True
-        } ;
-      compar = case <x.compar, y.compar> of {
-        <NoCompar, NoCompar> => NoCompar ;
-        (<More, _> | <_, More>) => More ;
-        _ => Less
         }
       } ;
     
@@ -210,17 +204,12 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
         _              => xs.and ! st ++ "," ++ x.s ! st 
         } ;
       or = \\st => case <x.prepositive, xs.prepositive> of {
-        <False, False> => xs.or ! st ++ "か" ++ x.s ! st ;
+        <False, False> => x.s ! st ++ "か" ++ xs.or ! st ;
         _              => xs.or ! st ++ "," ++ "あるいは" ++ x.s ! st 
         } ;
       prepositive = case <x.prepositive, xs.prepositive> of {
         <False, False> => False ;
         _              => True
-        } ;
-      compar = case <x.compar, xs.compar> of {
-        <NoCompar, NoCompar> => NoCompar ;
-        (<More, _> | <_, More>) => More ;
-        _ => Less
         }
       } ;
       
@@ -237,7 +226,7 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
         <False, False> => False ;
         _ => True 
         } ;
-      Pron1Sg = False ;
+      meaning = SomeoneElse ;
       anim = case <x.anim, y.anim> of {
         <Inanim, Inanim> => Inanim ;
         _ => Anim 
@@ -257,47 +246,59 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
         <False, False> => False ;
         _ => True 
         } ;
-      Pron1Sg = False ;
+      meaning = SomeoneElse ;
       anim = case <xs.anim, x.anim> of {
         <Inanim, Inanim> => Inanim ;
         _ => Anim 
         } 
       } ;
-    
+
     BaseAP x y = {
       s1and = x.te ;
-      s1or = \\st => x.dropNaEnging ! st ++ "か" ;
+      s1or = \\st => table {
+        Pos => x.dropNaEnging ! st ++ "か" ;
+        Neg => x.pred ! Plain ! TPres ! Neg ++ "か" 
+        } ;
       s2pred = y.pred ;
       s2attr = y.attr ;
       s2te = y.te ;
       s2ba = y.ba ;
       s2adv = y.adv ;
       s2dropNaEnging = y.dropNaEnging ;
-      prepositive = \\st => x.prepositive ! st ++ y.prepositive ! st ;
-      compar = y.compar
+      prepositive = \\st => x.prepositive ! st ++ y.prepositive ! st
       } ;
       
     ConsAP x xs = {
-      s1and = \\st => xs.s1and ! st ++ xs.s2te ! st ;
-      s1or = \\st => xs.s1or ! st ++ xs.s2dropNaEnging ! st ++ "か" ;
+      s1and = \\st,p => xs.s1and ! st ! p ++ xs.s2te ! st ! p ;
+      s1or = \\st => table {
+        Pos => xs.s1or ! st ! Pos ++ xs.s2dropNaEnging ! st ++ "か" ;
+        Neg => xs.s1or ! st ! Neg ++ xs.s2pred ! Plain ! TPres ! Neg ++ "か" 
+        } ;
       s2pred = x.pred ;
       s2attr = x.attr ;
       s2te = x.te ;
       s2ba = x.ba ;
       s2adv = x.adv ;
       s2dropNaEnging = x.dropNaEnging ;
-      prepositive = \\st => x.prepositive ! st ++ xs.prepositive ! st ;
-      compar = x.compar
+      prepositive = \\st => x.prepositive ! st ++ xs.prepositive ! st
       } ;
     
     BaseIAdv x y = {
       s = \\st => x.s ! st ++ x.particle ++ y.s ! st ;
-      particle = y.particle
+      particle = y.particle ;
+      wh8re = case <x.wh8re, y.wh8re> of {
+        <False, False> => False ;
+        _ => True 
+        }
       } ;
       
     ConsIAdv x xs = {
       s = \\st => x.s ! st ++ x.particle ++ xs.s ! st ;
-      particle = xs.particle
+      particle = xs.particle ;
+      wh8re = case <x.wh8re, xs.wh8re> of {
+        <False, False> => False ;
+        _ => True 
+        }
       } ;
       
     BaseCN x y = {
@@ -311,7 +312,8 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
       counterReplace = y.counterReplace ;
       object = x.object ;
       prepositive = \\st => x.prepositive ! st ++ y.prepositive ! st ;
-      hasAttr = x.hasAttr
+      hasAttr = x.hasAttr ;
+      counterTsu = y.counterTsu
       } ;
       
     ConsCN x xs = {
@@ -325,7 +327,8 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
       counterReplace = xs.counterReplace ;
       object = x.object ;
       prepositive = \\st => x.prepositive ! st ++ xs.prepositive ! st ;
-      hasAttr = x.hasAttr
+      hasAttr = x.hasAttr ;
+      counterTsu = xs.counterTsu
       } ;
     
   lincat
@@ -337,18 +340,19 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
             pred_baOr : Animateness => Style => Str ; subj : Particle => Style => Str ; 
             missingSubj : Bool} ;
     
-    [Adv] = {and, or : Style => Str ; prepositive : Bool ; compar : ComparSense} ;
+    [Adv] = {and, or : Style => Str ; prepositive : Bool} ;
     
     [NP] = {and, or, both : Style => Str ; prepositive : Style => Str ; 
-            needPart : Bool ; changePolar : Bool ; Pron1Sg : Bool ; anim : Animateness} ; 
+            needPart : Bool ; changePolar : Bool ; meaning : Speaker ; anim : Animateness} ; 
     
-    [AP] = {s1and, s1or : Style => Str ; s2pred : Style => TTense => Polarity => Str ; 
-            s2attr, s2te, s2ba, s2adv, s2dropNaEnging, prepositive : Style => Str ; 
-            compar : ComparSense} ;
+    [AP] = {s1and, s1or : Style => Polarity => Str ; s2pred : Style => TTense => Polarity => Str ; 
+            s2attr, s2adv, s2dropNaEnging, prepositive : Style => Str ; 
+            s2te, s2ba : Style => Polarity => Str} ;
     
-    [IAdv] = {s : Style => Str ; particle : Str} ;
+    [IAdv] = {s : Style => Str ; particle : Str ; wh8re : Bool} ;
     
     [CN] = {and, or : Number => Style => Str ; anim : Animateness ; counter : Str ; 
             counterReplace : Bool ; object : Style => Str ; prepositive : Style => Str ;
-            hasAttr : Bool} ;
+            hasAttr : Bool ; counterTsu : Bool} ;
+
 }
