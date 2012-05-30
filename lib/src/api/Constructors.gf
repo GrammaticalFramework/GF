@@ -91,13 +91,29 @@ incomplete resource Constructors = open Grammar in {  --%
       mkText : Phr -> Text  -- But she sleeps.  --%
         =    \x -> TFullStop x TEmpty  ;  --%
 
+-- A text can also be directly built from utterances.
 
--- A text can also be directly built from utterances, which in turn can
--- be directly built from sentences, present-tense clauses, questions, or
+      mkText : Utt -> (Punct) -> (Text) -> Text  -- Does she sleep? Yes. --:
+        = \u,punct,text -> let phr = (PhrUtt NoPConj u NoVoc) in case punct of {  --%
+          PFullStop => TFullStop phr text ;   --%
+          PExclMark => TExclMark phr text ;   --%
+          PQuestMark => TQuestMark phr text   --%
+          } ;  --%
+      mkText : Utt -> Text -> Text  -- But she sleeps. Yes!  --%
+        =    \u,t -> TFullStop (PhrUtt NoPConj u NoVoc) t  ;  --%
+      mkText : Utt -> Punct -> Text   --%
+        = \u,punct -> let phr = (PhrUtt NoPConj u NoVoc) in case punct of {   --%
+          PFullStop => TFullStop phr TEmpty ;   --%
+          PExclMark => TExclMark phr TEmpty ;   --%
+          PQuestMark => TQuestMark phr TEmpty   --%
+          } ;   --%
+      mkText : Utt -> Text  -- But she sleeps.  --%
+        =    \u -> TFullStop (PhrUtt NoPConj u NoVoc) TEmpty  ;  --%
+
+-- Utterances in turn can
+-- be directly given as sentences, present-tense clauses, questions, or
 -- positive imperatives. 
 
-      mkText : Utt ->  Text    -- Yes. 
-        = \u -> TFullStop (PhrUtt NoPConj u NoVoc) TEmpty ;  --%  
       mkText : S   ->  Text    -- She slept. 
         = \s -> TFullStop (PhrUtt NoPConj (UttS s) NoVoc) TEmpty ; --%  
       mkText : Cl  ->  Text    -- She sleeps. 
