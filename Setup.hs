@@ -7,7 +7,9 @@ import Distribution.Simple.Setup
 import Distribution.PackageDescription hiding (Flag)
 import Control.Monad
 import Data.List(isPrefixOf)
+import Data.Maybe(listToMaybe)
 import System.IO
+import qualified System.IO.Error as E
 import System.Cmd
 import System.FilePath
 import System.Directory
@@ -17,16 +19,24 @@ import System.Exit
 import WebSetup
 
 main :: IO ()
-main = defaultMainWithHooks simpleUserHooks{ preBuild =checkRGLArgs
+main = defaultMainWithHooks simpleUserHooks{ preBuild =gfPreBuild
                                            , postBuild=buildRGL
-                                           , preInst  =checkRGLArgs
+                                           , preInst  =gfPreInst
                                            , postInst =gfPostInst
-                                           , preCopy  =checkRGLArgs
+                                           , preCopy  =const . checkRGLArgs
                                            , postCopy =gfPostCopy
                                            , sDistHook=sdistRGL
                                            , runTests =testRGL
                                            }
   where
+    gfPreBuild args  = gfPre args . buildDistPref
+    gfPreInst args = gfPre args . installDistPref
+
+    gfPre args distFlag =
+      do h <- checkRGLArgs args
+         extractDarcsVersion distFlag
+         return h
+
     gfPostInst args flags pkg lbi =
       do installRGL args flags pkg lbi
          let gf = default_gf pkg lbi
@@ -92,7 +102,7 @@ rglCommands =
 
 --------------------------------------------------------
 
-checkRGLArgs args flags = do
+checkRGLArgs args = do
   let args' = filter (\arg -> not (arg `elem` all_modes ||
                                    rgl_prefix `isPrefixOf` arg ||
                                    langs_prefix `isPrefixOf` arg)) args
@@ -360,3 +370,32 @@ default_gf pkg lbi = buildDir lbi </> exeName' </> exeNameReal
   where
     exeName' = (exeName . head . executables) pkg
     exeNameReal = exeName' <.> (if null $ takeExtension exeName' then exeExtension else "")
+
+-- | Create autogen module with detailed version info by querying darcs
+extractDarcsVersion distFlag =
+  do info <- E.try askDarcs
+     updateFile versionModulePath $ unlines $
+       ["module "++modname++" where",
+        "darcs_info = "++show info]
+  where
+    dist = fromFlagOrDefault "dist" distFlag
+    versionModulePath = dist</>"build"</>"autogen"</>"DarcsVersion_gf.hs"
+    modname = "DarcsVersion_gf"
+
+    askDarcs =
+      do tags <- lines `fmap` readProcess "darcs" ["show","tags"] ""
+         let from = case tags of
+                      [] -> []
+                      tag:_ -> ["--from-tag="++tag]
+         changes <- lines `fmap` readProcess "darcs" ("changes":from) ""
+         let dates = filter ((`notElem` [""," "]).take 1) changes
+         whatsnew <- lines `fmap` readProcess "darcs" ["whatsnew","-s"] ""
+         return (listToMaybe tags,listToMaybe dates,
+                 length dates,length whatsnew)
+
+-- | Only update the file if contents has changed
+updateFile path new =
+  do old <- E.try $ readFile path
+     when (Right new/=old) $ seq (either (const 0) length old) $
+                                 writeFile path new
+
