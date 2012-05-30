@@ -376,7 +376,7 @@ extractDarcsVersion distFlag =
   do info <- E.try askDarcs
      updateFile versionModulePath $ unlines $
        ["module "++modname++" where",
-        "darcs_info = "++show info]
+        "darcs_info = "++show (either (const (Left ())) Right info)]
   where
     dist = fromFlagOrDefault "dist" distFlag
     versionModulePath = dist</>"build"</>"autogen"</>"DarcsVersion_gf.hs"
@@ -389,9 +389,9 @@ extractDarcsVersion distFlag =
                       tag:_ -> ["--from-tag="++tag]
          changes <- lines `fmap` readProcess "darcs" ("changes":from) ""
          let dates = filter ((`notElem` [""," "]).take 1) changes
-         whatsnew <- lines `fmap` readProcess "darcs" ["whatsnew","-s"] ""
+         whatsnew<-E.try $ lines `fmap` readProcess "darcs" ["whatsnew","-s"] ""
          return (listToMaybe tags,listToMaybe dates,
-                 length dates,length whatsnew)
+                 length dates,either (const 0) length whatsnew)
 
 -- | Only update the file if contents has changed
 updateFile path new =
