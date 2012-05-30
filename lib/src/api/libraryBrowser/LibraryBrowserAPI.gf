@@ -1,6 +1,6 @@
 --# -path=.:alltenses
 
-concrete LangAPI of Lang = open Prelude in {
+concrete LibraryBrowserAPI of LibraryBrowser = open Prelude in {
 
 lincat 
   A, A2, AP, AdA, AdN, AdV, Adv, Ant, CAdv, CN, Card, Cl, ClSlash, Comp, Conj, Det, Dig, Digit, Digits, 
@@ -127,8 +127,8 @@ lin ExistNP np_1 = mkTerm "mkCl" np_1 ;
 lin ExtAdvS adv_1 s_2 = mkTerm "mkS" adv_1 s_2 ;
 lin FunRP prep_1 np_2 rp_3 = mkTerm "mkRP" prep_1 np_2 rp_3 ;
 lin GenericCl vp_1 = mkTerm "genericCl" vp_1 ;
-lin IDig dig_1 = mkTerm "mkDigits" (mkTerm "\"123\"") ; -- mkTerm "mkDigits" dig_1 ;
-lin IIDig dig_1 digits_2 = mkTerm "mkDigits" (mkTerm "\"123\"") ; -- mkTerm "mkDigits" dig_1 digits_2 ;
+lin IDig dig_1 = mkTerm "mkDigits" (mkTerm "\"999999\"") ; -- mkTerm "mkDigits" dig_1 ;
+lin IIDig dig_1 digits_2 = mkTerm "mkDigits" (mkTerm "\"999\"") ; -- mkTerm "mkDigits" dig_1 digits_2 ;
 lin IdRP = mkTerm "IdRP" ;
 lin IdetCN idet_1 cn_2 = mkTerm "mkIP" idet_1 cn_2 ;
 lin IdetIP idet_1 = mkTerm "mkIP" idet_1 ;
@@ -511,7 +511,7 @@ lin nose_N = mkTerm "nose_N" ;
 lin not_Predet = mkTerm "not_Predet" ;
 lin nothing_NP = mkTerm "nothing_NP" ;
 lin now_Adv = mkTerm "now_Adv" ;
-lin num sub1000000_1 = mkTerm "mkNumeral" (mkTerm "\"123\"") ; -- sub1000000_1 ;
+lin num sub1000000_1 = mkTerm "mkNumeral" (mkTerm "\"999\"") ; -- sub1000000_1 ;
 --lin num2digits numeral_1 = mkTerm "mkDigits" numeral_1 ;
 lin number_N = mkTerm "number_N" ;
 lin oil_N = mkTerm "oil_N" ;
