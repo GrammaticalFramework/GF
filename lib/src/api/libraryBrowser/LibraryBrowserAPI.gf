@@ -10,17 +10,17 @@ lincat
   Sub10, Sub100, Sub1000, Sub1000000, Subj, Temp, Tense, Text, Utt, V, V2, V2A, V2Q, V2S, V2V, V3, 
   VA, VP, VPSlash, VQ, VS, VV, Voc = Term ;
 
-oper Term = {s : Str ; f,x : Str ; par : Str * Str ; flat : Bool} ;
+oper Term = {s : Str ; f,x,swap : Str ; par : Str * Str ; flat : Bool} ;
 
 oper mkTerm = overload {
   mkTerm : Str -> Term = \f -> 
-    {s = f ; f = f ; x = [] ; par = noPar ; flat = False} ;
+    {s = f ; f = f ; x,swap = [] ; par = noPar ; flat = False} ;
   mkTerm : Str -> Term -> Term = \f,x -> 
     appTerm f (fullTerm x) ;
   mkTerm : Str -> (_,_ : Term) -> Term = \f,x,y -> 
-    appTerm f (fullTerm x ++ fullTerm y) ; 
+    appTerm f (concatTerm x y) ; 
   mkTerm : Str -> (_,_,_ : Term) -> Term = \f,x,y,z -> 
-    appTerm f (fullTerm x ++ fullTerm y ++ fullTerm z) ; 
+    appTerm f (fullTerm x ++ concatTerm y z) ; 
   mkTerm : Str -> (_,_,_,_ : Term) -> Term = \f,x,y,z,u -> 
     appTerm f (fullTerm x ++ fullTerm y ++ fullTerm z ++ fullTerm u) ;
   } ;
@@ -28,15 +28,21 @@ oper mkTerm = overload {
   noPar  = <[],[]> ;
   yesPar = <"(",")"> ;
 
-  appTerm : Str -> Str -> Term = \f,x -> {s = f ++ x ; f = f ; x = x ; par = yesPar ; flat = False} ;
-  useTerm : Term -> Str = \t -> t.f ++ t.x ;
-  fullTerm : Term -> Str = \t -> t.par.p1 ++ t.f ++ t.x ++ t.par.p2 ;
-  flatTerm : Term -> Term = \t -> {s = t.x ; f = [] ; x = t.x ; par = noPar ; flat = False} ;
+  appTerm : Str -> Str -> Term = \f,x -> {s = f ++ x ; f = f ; x = x ; swap = [] ; par = yesPar ; flat = False} ;
+  useTerm : Term -> Str = \t -> t.f ++ t.x ++ t.swap ;
+  fullTerm : Term -> Str = \t -> t.par.p1 ++ t.f ++ t.x ++ t.swap ++ t.par.p2 ;
+  flatTerm : Term -> Term = \t -> {s = t.x ; f = [] ; x = t.x ; swap = t.swap ; par = noPar ; flat = False} ;
   flatIfTerm : Term -> Term = \t -> case t.flat of {
     True  => flatTerm t ;
     False => t
     } ;
-  mkFlat : Term -> Term = \t -> {s = t.s ; f = t.f ; x = t.x ; par = t.par ; flat = True} ;
+  mkFlat : Term -> Term = \t -> {s = t.s ; f = t.f ; x = t.x ; swap = t.swap ; par = t.par ; flat = True} ;
+  mkSwap : Term -> Term = \t -> {s = t.s ; f = t.f ; x = [] ; swap = t.x ; par = t.par ; flat = False} ;
+  mkSwapTerm : Str -> Term -> Term -> Term = \f,x,y -> 
+    let xs = fullTerm x ; ys = fullTerm y in
+    {s = f ++ xs ++ ys ; f = f ; x = xs ; swap = ys ; par = yesPar ; flat = False} ;
+  concatTerm : Term -> Term -> Str = \t,u ->
+    (t.par.p1 ++ t.f ++ t.x ++ t.par.p2 ++ fullTerm u ++ t.swap) ;
 
   hide : Str -> Str = \f -> [] ;
 
@@ -129,7 +135,7 @@ lin FunRP prep_1 np_2 rp_3 = mkTerm "mkRP" prep_1 np_2 rp_3 ;
 lin GenericCl vp_1 = mkTerm "genericCl" vp_1 ;
 lin IDig dig_1 = mkTerm "mkDigits" (mkTerm "\"999999\"") ; -- mkTerm "mkDigits" dig_1 ;
 lin IIDig dig_1 digits_2 = mkTerm "mkDigits" (mkTerm "\"999\"") ; -- mkTerm "mkDigits" dig_1 digits_2 ;
-lin IdRP = mkTerm "IdRP" ;
+lin IdRP = mkTerm "which_RP" ;
 lin IdetCN idet_1 cn_2 = mkTerm "mkIP" idet_1 cn_2 ;
 lin IdetIP idet_1 = mkTerm "mkIP" idet_1 ;
 lin IdetQuant iquant_1 num_2 = mkTerm "mkIDet" iquant_1 num_2 ;
@@ -184,12 +190,12 @@ lin SSubjS s_1 subj_2 s_3 = mkTerm "mkS" s_1 subj_2 s_3 ;
 lin SentAP ap_1 sc_2 = mkTerm "mkAP" ap_1 sc_2 ;
 lin SentCN cn_1 sc_2 = mkTerm "mkCN" cn_1 sc_2 ;
 lin Slash2V3 v3_1 np_2 = mkTerm "mkVPSlash" v3_1 np_2 ;
-lin Slash3V3 v3_1 np_2 = mkFlat (mkTerm "mkVPSlash" v3_1 np_2) ;
+lin Slash3V3 v3_1 np_2 = mkFlat (mkSwapTerm "mkVPSlash" v3_1 np_2) ;
 lin SlashPrep cl_1 prep_2 = mkTerm "mkClSlash" cl_1 prep_2 ;
-lin SlashV2A v2a_1 ap_2 = mkFlat (mkTerm "mkVPSlash" v2a_1 ap_2) ;
-lin SlashV2Q v2q_1 qs_2 = mkFlat (mkTerm "mkVPSlash" v2q_1 qs_2) ;
-lin SlashV2S v2s_1 s_2 = mkFlat (mkTerm "mkVPSlash" v2s_1 s_2) ;
-lin SlashV2V v2v_1 vp_2 = mkFlat (mkTerm "mkVPSlash" v2v_1 vp_2) ;
+lin SlashV2A v2a_1 ap_2 = mkFlat (mkSwapTerm "mkVPSlash" v2a_1 ap_2) ;
+lin SlashV2Q v2q_1 qs_2 = mkFlat (mkSwapTerm "mkVPSlash" v2q_1 qs_2) ;
+lin SlashV2S v2s_1 s_2 = mkFlat (mkSwapTerm "mkVPSlash" v2s_1 s_2) ;
+lin SlashV2V v2v_1 vp_2 = mkFlat (mkSwapTerm "mkVPSlash" v2v_1 vp_2) ;
 lin SlashV2VNP v2v_1 np_2 vpslash_3 = mkTerm "mkVPSlash" v2v_1 np_2 vpslash_3 ;
 lin SlashV2a v2_1 = mkFlat (mkTerm "mkVPSlash" v2_1) ;
 lin SlashVP np_1 vpslash_2 = mkTerm "mkClSlash" np_1 vpslash_2 ;
