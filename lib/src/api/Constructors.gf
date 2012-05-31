@@ -399,6 +399,8 @@ incomplete resource Constructors = open Grammar in {  --%
         = \s,v,n,q -> PredVP s (ComplSlash (SlashV2Q v q) n) ; --% 
       mkCl : NP  -> V2V -> NP -> VP -> Cl         -- she begs him to sleep
         = \s,v,n,q -> PredVP s (ComplSlash (SlashV2V v q) n) ; --% 
+      mkCl : NP  -> VPSlash -> NP -> Cl         -- she begs him to sleep here
+        = \s,v,n -> PredVP s (ComplSlash v n) ; --% 
       mkCl : NP -> A  -> Cl    -- she is old
         = \x,y -> PredVP x (UseComp (CompAP (PositA y))) ; --%   
       mkCl : NP -> A -> NP -> Cl -- she is older than him   
