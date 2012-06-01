@@ -1,17 +1,7 @@
-<html>
-<head>
-
-<title>GF Eclipse Plugin</title>
-
-<link rel="stylesheet" type="text/css" href="http://www.grammaticalframework.org/css/style.css">
-
-</head>
-<body>
-
 <h1>The GF Eclipse Plugin</h1>
 
 <p>John  J. Camilleri<br />
-Updated: 19 April 2012</p>
+Updated: 1 June 2012</p>
 
 <p><em>The research leading to these results has received funding from the European Union&#8217;s Seventh Framework Programme (FP7/2007-2013) under grant agreement no. FP7-ICT-247914 (the <a href="http://www.molto-project.eu/">MOLTO Project</a>).</em></p>
 
@@ -38,13 +28,20 @@ Updated: 19 April 2012</p>
 <li>Software update site URL for installing through Eclipse: <code>http://www.grammaticalframework.org/eclipse/release/</code></li>
 </ul>
 
+<h3>Publications</h3>
+
+<ul>
+<li><a href="http://academic.johnjcamilleri.com/presentations/2012-05%20EAMT%20poster.pdf">Poster</a> at EAMT 2012 in Trento, Italy</li>
+<li><a href="http://academic.johnjcamilleri.com/papers/freerbmt2012.pdf">Paper</a> presented at FreeRBMT 2012 in Gothenburg, Sweden.</li>
+</ul>
+
 <h2>Features</h2>
 
 <ul>
 <li>Syntax highlighting and error detection</li>
 <li>Code folding, quick block-commenting, automatic code formatting</li>
 <li>Definition outlining, jump to declaration, find usage</li>
-<li>Warnings for problems in module dependancy hierarchy</li>
+<li>Warnings for problems in module dependency hierarchy</li>
 <li>Launch configurations, i.e. compilation directly from IDE</li>
 <li>Use GF Shell from within Eclipse</li>
 <li>Auto-completion for declared identifiers</li>
@@ -67,7 +64,7 @@ Updated: 19 April 2012</p>
 <dd>(1.4.3.x) Improvements to the Test Manager. Added support for arbitrary commands in launch. Made the license information clearer.</dd>
 
 <dt><strong>22/03/12</strong></dt>
-<dd>(1.4.2.x) Added wizard for context-free grammars (no syntax support, though). Context-menu option for toggling the GF Nature and Builder together. Test Manager now parses languages &amp; params, and includes filtering and toggling options.</dd>
+<dd>(1.4.2.x) Added wizard for context-free grammars (no syntax support, though). Context-menu option for toggling the GF Nature and Builder together. Test Manager now parses languages &amp; parameters, and includes filtering and toggling options.</dd>
 
 <dt><strong>14/03/12</strong></dt>
 <dd>(1.4.1.x) GF source files can now be anywhere in project, not necessarily at top level.</dd>
@@ -91,7 +88,7 @@ Updated: 19 April 2012</p>
 <dd>(1.2.0.x) with support for &#8220;Open Declaration&#8221; (F3) function, including for external libraries.</dd>
 
 <dt><strong>18/11/11</strong></dt>
-<dd>Third BETA (1.1.0.x) released, overhauled to take advantage of new compiler features. Tag-based scoping with caching for better performance. Interactive console (GF Shell) for luanch configs.</dd>
+<dd>Third BETA (1.1.0.x) released, overhauled to take advantage of new compiler features. Tag-based scoping with caching for better performance. Interactive console (GF Shell) for launch configs.</dd>
 
 <dt><strong>11/10/11</strong></dt>
 <dd>Second BETA (1.0.0.x) released, with improved support for qualified names, local variable bindings, selective inheritance, module outlining, and launch configurations. Also new GF Project type.</dd>
@@ -149,7 +146,8 @@ Updated: 19 April 2012</p>
 <ol>
 <li>Add the GF perspective by clicking <strong>Window &rarr; Open Perspective &rarr; Other</strong> and choosing <strong>GF</strong>.</li>
 <li>The plugin will try to determine the path to your GF executable automatically. You can check/overwrite it by going to <strong>Preferences &rarr; Grammatical Framework</strong>.
-This path should <strong>include</strong> the name of the GF binary itself, e.g. <code>/home/john/.cabal/bin/gf</code> or <code>C:\Users\John\GF\gf.exe</code>.</li>
+This path should include the name of the GF binary itself, e.g. <code>/home/john/.cabal/bin/gf</code> or <code>C:\Users\John\GF\gf.exe</code>.</li>
+<li>By default, the <em>Library path</em> setting is set to <code>.:present:alltenses:prelude</code>. This is passed to GF using the <code>--path</code> flag.</li>
 <li>You can also adjust the verbosity level of the GFEP console log in the preferences window.</li>
 </ol>
 
@@ -253,7 +251,7 @@ You will probably want to ignore these directories in your version control syste
 
 <h3>Create a new GF Project</h3>
 
-<p>If you have a folder in your workspace which you want to convert into a GF Project, then you can select it from the dropdown. This folder will then appear as an Eclipse project in your workspace.</p>
+<p>If you have a folder in your workspace which you want to convert into a GF Project, then you can select it from the drop-down. This folder will then appear as an Eclipse project in your workspace.</p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-projectwizard-1.png" alt="New project wizard" />
 <img src="http://www.grammaticalframework.org/eclipse/images/eclipse-projectwizard-2.png" alt="New project wizard" /></p>
@@ -268,7 +266,7 @@ You will probably want to ignore these directories in your version control syste
 
 <h3>Clone module wizard</h3>
 
-<p>If you want to clone an existing module into a new language, you can now do so via the <strong>Clone GF Module</strong> wizard. This is also available as a context menu option in the <strong>Project Explorer</strong>, via <strong>&lt;Richt click&gt; &rarr; Grammatical Framework &rarr; Compile for new language</strong>:</p>
+<p>If you want to clone an existing module into a new language, you can now do so via the <strong>Clone GF Module</strong> wizard. This is also available as a context menu option in the <strong>Project Explorer</strong>, via <strong>&lt;Right click&gt; &rarr; Grammatical Framework &rarr; Compile for new language</strong>:</p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-clonewizard.png" alt="Clone GF module to new language wizard" /></p>
 
@@ -278,7 +276,7 @@ You will probably want to ignore these directories in your version control syste
 
 <h3>Workbench editor layout</h3>
 
-<p>Use Eclipes&#8217; own features to drag and drop your editor tabs to suit your needs.</p>
+<p>Use Eclipse&#8217; own features to drag and drop your editor tabs to suit your needs.</p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-editor-general.png" alt="The editor and outline view" /></p>
 
@@ -301,7 +299,7 @@ You will probably want to ignore these directories in your version control syste
 <h4>Builder</h4>
 
 <p>For validation to work correctly, the project&#8217;s <strong>Build Automatically</strong> option should be turned on.
-Each time you save a file (or some other change occurs in your project), the builder should get triggered which recompiles any GF files which have changed. If the builder does not seem to get triggered, try to run a <em>clean</em> via <strong>Project &rarr; Clean&#8230;</strong></p>
+Each time you save a file (or some other change occurs in your project), the builder should get triggered which re-compiles any GF files which have changed. If the builder does not seem to get triggered, try to run a <em>clean</em> via <strong>Project &rarr; Clean&#8230;</strong></p>
 
 <h3>Code formatting</h3>
 
@@ -344,7 +342,7 @@ Each time you save a file (or some other change occurs in your project), the bui
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-console-icon.png" alt="Display Selected Console icon" /></p>
 
-<p>If the process associated with a console window has terminated, it will be indicated in the upper-left corner as below. Such console windows can then be closed using the gray cross button:</p>
+<p>If the process associated with a console window has terminated, it will be indicated in the upper-left corner as below. Such console windows can then be closed using the grey cross button:</p>
 
 <p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-console-terminated.png" alt="Close terminated console icon" /></p>
 
@@ -354,9 +352,9 @@ Each time you save a file (or some other change occurs in your project), the bui
 
 <p>This view is automatically populated with a list of all the external modules referenced by the current file. Double-clicking on any item provides a quick way of opening GF files which are imported into your grammar from outside your Eclipse project, for example the GF Resource Grammar Library.</p>
 
-<p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-external-libraries.png" alt="External libraries view" /></p>
+<p>This view also provides a text box for searching within the current module&#8217;s scope, as shown in the image below. Clicking the small arrow on the right-hand side of the view provides options for case sensitive and/or regular-expression based search.</p>
 
-<p><em>Future versions of this view will contain a full tree of all identifiers available in the current scope.</em></p>
+<p><img src="http://www.grammaticalframework.org/eclipse/images/eclipse-external-libraries.png" alt="External libraries view" /></p>
 
 <h3><em>Test Manager</em> view</h3>
 
@@ -399,6 +397,34 @@ Each time you save a file (or some other change occurs in your project), the bui
 
 <!----------------------------------------------------------------------------->
 
+<h2>Common issues and fixes</h2>
+
+<h3>No identifiers are resolved and my log contains messages saying &#8220;File Syntax.gf does not exist.&#8221;</h3>
+
+<p>In general, this means that something is wrong with your <em>library path</em> setting.</p>
+
+<p>GFEP attempts to compile all of your files individually with GF, which is not the usual way in which you would compile your grammar.
+As a result, when looking for the RGL files, GF needs a little help via the <code>path</code> argument.</p>
+
+<p>The normal way to do this is to specify the <em>Library path</em> setting from  <strong>Preferences &rarr; Grammatical Framework</strong>, setting it to something like <code>.:present:alltenses:prelude</code> (this is the default setting). Note that these paths are relative to the true RGL directory, which GF should already be aware of. The value of this setting is passed to GF from GFEP using the <code>--path</code> flag.</p>
+
+<p>The <em>Library path</em> setting is the same for all your GF projects. If you want finer-grain control over the <code>path</code> compiler option then you should use compiler pragmas in your source files, e.g.:</p>
+
+<pre><code>--# -path=.:present:alltenses:prelude
+</code></pre>
+
+<p>The advantage of this method is that the information is bound to the file, so you can freely compile your modules outside of GFEP without having to specify the path as a command line option to GF.
+The disadvantage is that you need to specify such a pragma in every single file (at least if you want to continue to use the GFEP).</p>
+
+<h3>Other strange behaviour</h3>
+
+<p>When things seem strange, the very first step is always to clean the project via <strong>Project &rarr; Clean&#8230;</strong>.
+I only support the latest version of the plugin, so make sure you are up to date too.</p>
+
+<p>If problems persist, please contact me or better yet file an issue on the GitHub issue tracker (see below).</p>
+
+<!----------------------------------------------------------------------------->
+
 <h2>Evaluation &amp; feedback</h2>
 
 <p>Please try to use the plugin for developing your own GF projects and report any issues you come up against.
@@ -435,39 +461,44 @@ Feedback (both negative and positive) on the following would be appreciated:</p>
 <tr>
   <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-abstract.png" alt="" /></td>
   <td align="left">Abstract module</td>
-  <td align="left"><code>abstract Foods = ...</code></td>
+  <td align="left"><code>abstract Foods = {...}</code></td>
 </tr>
 <tr>
   <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-concrete.png" alt="" /></td>
   <td align="left">Concrete module</td>
-  <td align="left"><code>concrete FoodsEng of Foods = ...</code></td>
+  <td align="left"><code>concrete FoodsEng of Foods = {...}</code></td>
 </tr>
 <tr>
   <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-resource.png" alt="" /></td>
   <td align="left">Resource module</td>
-  <td align="left"><code>resource ResFoods = ...</code></td>
+  <td align="left"><code>resource ResFoods = {...}</code></td>
 </tr>
 <tr>
   <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-interface.png" alt="" /></td>
   <td align="left">Interface</td>
-  <td align="left"><code>interface LexFoods = ...</code></td>
+  <td align="left"><code>interface LexFoods = {...}</code></td>
 </tr>
 <tr>
   <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-instance.png" alt="" /></td>
   <td align="left">Instance</td>
-  <td align="left"><code>instance LexFoodsEng of LexFoods = ...</code></td>
+  <td align="left"><code>instance LexFoodsEng of LexFoods = {...}</code></td>
 </tr>
 <tr>
   <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-functor.png" alt="" /></td>
   <td align="left">Functor</td>
-  <td align="left"><code>incomplete concrete FoodsI of Foods = ...</code></td>
+  <td align="left"><code>incomplete concrete FoodsI of Foods = {...}</code></td>
 </tr>
 <tr>
   <td align="center"><img src="http://www.grammaticalframework.org/eclipse/images/module-functor-instantiation.png" alt="" /></td>
   <td align="left">Functor instantiation</td>
-  <td align="left"><code>concrete FoodsEng of Foods = FoodsI with (...) ...</code></td>
+  <td align="left"><code>concrete FoodsEng of Foods = FoodsI with (...) {...}</code></td>
 </tr>
 </tbody>
 </table>
-</body>
-</html>
+
+<h3>Build command</h3>
+
+<p>This is the GF command run by the builder:</p>
+
+<pre><code>gf --v=0 --tags --output-dir=.gfbuild [--path=PATH] FILE
+</code></pre>
