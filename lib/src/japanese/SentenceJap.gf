@@ -58,7 +58,7 @@ flags coding = utf8 ;
         pred_te = \\st,p => vp.obj ! st ++ vp.prep ++ vp.te ! np.meaning ! np.anim ! st ! p ;
         pred_ba = \\st,p => vp.obj ! st ++ vp.prep ++ vp.ba ! np.meaning ! np.anim ! st ! p ;
         changePolar = np.changePolar
-        }
+        } 
       } ;
     
     PredSCVP sc vp = case sc.isVP of {
@@ -171,7 +171,7 @@ flags coding = utf8 ;
           } ;
         Plain => table {
           Pos => vp.prepositive ! Plain ++ vp.obj ! Plain ++ vp.prep ++ 
-                 vp.i_stem ! SomeoneElse ! Anim ! Plain ++ "nasai" ;
+                 vp.i_stem ! SomeoneElse ! Anim ! Plain ++ "なさい" ;
           Neg => vp.prepositive ! Plain ++ vp.obj ! Plain ++ vp.prep ++ 
                  vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! Pos ++ "な" 
           }

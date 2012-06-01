@@ -11,7 +11,8 @@ flags coding = utf8 ;
       ba = \\st => adj.ba ;
       adv = \\st => adj.adv ! Pos ;
       prepositive = \\st => [] ;
-      dropNaEnging = \\st => adj.dropNaEnging
+      dropNaEnging = \\st => adj.dropNaEnging ;
+      needSubject = True
       } ;
     
     ComparA adj np = {
@@ -22,6 +23,7 @@ flags coding = utf8 ;
       adv = \\st => np.s ! st ++ "より" ++ adj.adv ! Pos ; 
       prepositive = np.prepositive ; 
       dropNaEnging = \\st => np.s ! st ++ "より" ++ adj.dropNaEnging ;
+      needSubject = True
       } ;
     
     ComplA2 a2 np = {
@@ -31,7 +33,8 @@ flags coding = utf8 ;
       ba = \\st,p => np.s ! st ++ a2.prep ++ a2.ba ! p ;
       prepositive = np.prepositive ;
       adv = \\st => np.s ! st ++ a2.prep ++ a2.adv ! Pos ; 
-      dropNaEnging = \\st => np.s ! st ++ a2.prep ++ a2.dropNaEnging
+      dropNaEnging = \\st => np.s ! st ++ a2.prep ++ a2.dropNaEnging ;
+      needSubject = True
       } ;
     
     ReflA2 a2 = {
@@ -41,7 +44,8 @@ flags coding = utf8 ;
       ba = \\st,p => "自分" ++ a2.prep ++ a2.ba ! p ;
       adv = \\st => "自分" ++ a2.prep ++ a2.adv ! Pos ; 
       prepositive = \\st => [] ;
-      dropNaEnging = \\st => "自分" ++ a2.prep ++ a2.dropNaEnging
+      dropNaEnging = \\st => "自分" ++ a2.prep ++ a2.dropNaEnging ;
+      needSubject = True
       } ;
     
     UseA2 a2 = {
@@ -51,7 +55,8 @@ flags coding = utf8 ;
       ba = \\st => a2.ba ;
       adv = \\st => a2.adv ! Pos ; 
       prepositive = \\st => [] ;
-      dropNaEnging = \\st => a2.dropNaEnging
+      dropNaEnging = \\st => a2.dropNaEnging ;
+      needSubject = True
       } ;
     
     UseComparA adj = {
@@ -61,7 +66,8 @@ flags coding = utf8 ;
       ba = \\st,p => "もっと" ++ adj.ba ! p ;
       adv = \\st => "もっと" ++ adj.adv ! Pos ;
       prepositive = \\st => [] ;
-      dropNaEnging = \\st => "もっと" ++ adj.dropNaEnging
+      dropNaEnging = \\st => "もっと" ++ adj.dropNaEnging ;
+      needSubject = True
       } ;
     
     CAdvAP cadv ap np = {
@@ -95,7 +101,8 @@ flags coding = utf8 ;
       dropNaEnging = \\st => case cadv.less of {
         True => np.s ! st ++ cadv.s ++ ap.pred ! Plain ! TPres ! Neg ;
         False => np.s ! st ++ cadv.s ++ ap.dropNaEnging ! st
-        }
+        } ;
+      needSubject = True
       } ;
     
     AdjOrd ord = {
@@ -105,7 +112,8 @@ flags coding = utf8 ;
       ba = \\st => ord.ba ;
       adv = \\st => ord.adv ! Pos ;
       prepositive = \\st => [] ;
-      dropNaEnging = \\st => ord.dropNaEnging
+      dropNaEnging = \\st => ord.dropNaEnging ;
+      needSubject = True
       } ;
 
     SentAP ap sc = {
@@ -115,7 +123,8 @@ flags coding = utf8 ;
       ba = \\st,p => sc.s ! Wa ! st ++ "ことが" ++ ap.ba ! st ! p ;
       adv = \\st => sc.s ! Wa ! st ++ "ことが" ++ ap.adv ! st ;
       prepositive = ap.prepositive ;
-      dropNaEnging = \\st => sc.s ! Wa ! st ++ "ことが" ++ ap.dropNaEnging ! st
+      dropNaEnging = \\st => sc.s ! Wa ! st ++ "ことが" ++ ap.dropNaEnging ! st ;
+      needSubject = False
       } ;
     
     AdAP ada ap = {
@@ -125,7 +134,8 @@ flags coding = utf8 ;
       ba = \\st,p => ada.s ++ ap.ba ! st ! p ;
       adv = \\st => ada.s ++ ap.adv ! st ;
       prepositive = ap.prepositive ;
-      dropNaEnging = \\st => ada.s ++ ap.dropNaEnging ! st
+      dropNaEnging = \\st => ada.s ++ ap.dropNaEnging ! st ;
+      needSubject = True
       } ;
     
     AdvAP ap adv = {
@@ -156,6 +166,7 @@ flags coding = utf8 ;
       dropNaEnging = \\st => case adv.prepositive of {
         True => ap.dropNaEnging ! st ;
         False => adv.s ! st ++ ap.dropNaEnging ! st 
-        }
+        } ;
+      needSubject = True
       } ;
 }

@@ -4,33 +4,48 @@ flags coding = utf8 ;
 
   lin
 
-    ImpersCl vp = {
-      s = table {
-        Wa => \\st,t,p => vp.prepositive ! st ++ "これは" ++ vp.obj ! st ++ 
-                          vp.prep ++ vp.verb ! SomeoneElse ! Inanim ! st ! t ! p ;
-        Ga => \\st,t,p => vp.prepositive ! st ++ "これが" ++ vp.obj ! st ++ 
-                          vp.prep ++ vp.verb ! SomeoneElse ! Inanim ! st ! t ! p  
+    ImpersCl vp = case vp.needSubject of {
+      True => {
+        s = table {
+          Wa => \\st,t,p => vp.prepositive ! st ++ "これは" ++ vp.obj ! st ++ 
+                            vp.prep ++ vp.verb ! SomeoneElse ! Inanim ! st ! t ! p ;
+          Ga => \\st,t,p => vp.prepositive ! st ++ "これが" ++ vp.obj ! st ++ 
+                            vp.prep ++ vp.verb ! SomeoneElse ! Inanim ! st ! t ! p  
+          } ;
+        te = table {
+          Wa => \\st,p => vp.prepositive ! st ++ "これは" ++ vp.obj ! st ++ 
+                          vp.prep ++ vp.te ! SomeoneElse ! Inanim ! st ! p ;
+          Ga => \\st,p => vp.prepositive ! st ++ "これが" ++ vp.obj ! st ++ 
+                          vp.prep ++ vp.te ! SomeoneElse ! Inanim ! st ! p
+          } ; 
+        ba = table {
+          Wa => \\st,p => vp.prepositive ! st ++ "これは" ++ vp.obj ! st ++ 
+                          vp.prep ++ vp.ba ! SomeoneElse ! Inanim ! st ! p ;
+          Ga => \\st,p => vp.prepositive ! st ++ "これが" ++ vp.obj ! st ++ 
+                          vp.prep ++ vp.ba ! SomeoneElse ! Inanim ! st ! p
+          } ;
+        subj = table {
+          Wa => \\st => vp.prepositive ! st ++ "これは" ;
+          Ga => \\st => vp.prepositive ! st ++ "これが" 
+          } ;
+        pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! SomeoneElse ! Inanim ! st ! t ! p ;
+        pred_te = \\st,p => vp.obj ! st ++ vp.prep ++ vp.te ! SomeoneElse ! Inanim ! st ! p ;
+        pred_ba = \\st,p => vp.obj ! st ++ vp.prep ++ vp.ba ! SomeoneElse ! Inanim ! st ! p ;
+        changePolar = False
         } ;
-      te = table {
-        Wa => \\st,p => vp.prepositive ! st ++ "これは" ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.te ! SomeoneElse ! Inanim ! st ! p ;
-        Ga => \\st,p => vp.prepositive ! st ++ "これが" ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.te ! SomeoneElse ! Inanim ! st ! p
-        } ; 
-      ba = table {
-        Wa => \\st,p => vp.prepositive ! st ++ "これは" ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.ba ! SomeoneElse ! Inanim ! st ! p ;
-        Ga => \\st,p => vp.prepositive ! st ++ "これが" ++ vp.obj ! st ++ 
-                        vp.prep ++ vp.ba ! SomeoneElse ! Inanim ! st ! p
-        } ;
-      subj = table {
-        Wa => \\st => vp.prepositive ! st ++ "これは" ;
-        Ga => \\st => vp.prepositive ! st ++ "これが" 
-        } ;
-      pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! SomeoneElse ! Inanim ! st ! t ! p ;
-      pred_te = \\st,p => vp.obj ! st ++ vp.prep ++ vp.te ! SomeoneElse ! Inanim ! st ! p ;
-      pred_ba = \\st,p => vp.obj ! st ++ vp.prep ++ vp.ba ! SomeoneElse ! Inanim ! st ! p ;
-      changePolar = False
+      False => {
+        s = \\part,st,t,p => vp.prepositive ! st ++ vp.obj ! st ++ vp.prep ++ 
+                             vp.verb ! SomeoneElse ! Inanim ! st ! t ! p ;
+        te = \\part,st,p => vp.prepositive ! st ++ vp.obj ! st ++ vp.prep ++ 
+                            vp.te ! SomeoneElse ! Inanim ! st ! p ; 
+        ba = \\part,st,p => vp.prepositive ! st ++ vp.obj ! st ++ vp.prep ++ 
+                            vp.ba ! SomeoneElse ! Inanim ! st ! p ;
+        subj = \\part,st => vp.prepositive ! st ;
+        pred = \\st,t,p => vp.obj ! st ++ vp.prep ++ vp.verb ! SomeoneElse ! Inanim ! st ! t ! p ;
+        pred_te = \\st,p => vp.obj ! st ++ vp.prep ++ vp.te ! SomeoneElse ! Inanim ! st ! p ;
+        pred_ba = \\st,p => vp.obj ! st ++ vp.prep ++ vp.ba ! SomeoneElse ! Inanim ! st ! p ;
+        changePolar = False
+        } 
       } ;
     
     GenericCl vp = {
@@ -79,28 +94,13 @@ flags coding = utf8 ;
     
     ExistNP np = case np.needPart of {
       True => {
-        s = table {
-          Wa => \\st,t,p => np.prepositive ! st ++ np.s ! st ++ "は" ++ 
-                            mkExistV.verb ! SomeoneElse ! np.anim ! st ! t ! p ;
-          Ga => \\st,t,p => np.prepositive ! st ++ np.s ! st ++ "が" ++ 
-                            mkExistV.verb ! SomeoneElse ! np.anim ! st ! t ! p
-          } ;
-        te = table {
-          Wa => \\st,p => np.prepositive ! st ++ np.s ! st ++ "は" ++ 
-                          mkExistV.te ! SomeoneElse ! np.anim ! st ! p ;
-          Ga => \\st,p => np.prepositive ! st ++ np.s ! st ++ "が" ++ 
-                          mkExistV.te ! SomeoneElse ! np.anim ! st ! p
-          } ;
-        ba = table {
-          Wa => \\st,p => np.prepositive ! st ++ np.s ! st ++ "は" ++ 
-                          mkExistV.ba ! SomeoneElse ! np.anim ! st ! p ;
-          Ga => \\st,p => np.prepositive ! st ++ np.s ! st ++ "が" ++ 
-                          mkExistV.ba ! SomeoneElse ! np.anim ! st ! p
-          } ;
-        subj = table {
-          Wa => \\st => np.prepositive ! st ++ np.s ! st ++ "は" ;
-          Ga => \\st => np.prepositive ! st ++ np.s ! st ++ "が" 
-          } ;
+        s = \\part,st,t,p => np.prepositive ! st ++ np.s ! st ++ "が" ++ 
+                             mkExistV.verb ! SomeoneElse ! np.anim ! st ! t ! p ;
+        te = \\part,st,p => np.prepositive ! st ++ np.s ! st ++ "が" ++ 
+                              mkExistV.te ! SomeoneElse ! np.anim ! st ! p ;
+        ba = \\part,st,p => np.prepositive ! st ++ np.s ! st ++ "が" ++ 
+                              mkExistV.ba ! SomeoneElse ! np.anim ! st ! p ;
+        subj = \\part,st => np.prepositive ! st ++ np.s ! st ++ "が" ;
         pred = \\st,t,p => mkExistV.verb ! SomeoneElse ! np.anim ! st ! t ! p ;
         pred_te = \\st,p => mkExistV.te ! SomeoneElse ! np.anim ! st ! p ;
         pred_ba = \\st,p => mkExistV.ba ! SomeoneElse ! np.anim ! st ! p ;
@@ -143,7 +143,8 @@ flags coding = utf8 ;
       ba = \\sp,a,st,p => vp.te ! sp ! a ! st ! Pos ++ mkExistV.ba ! SomeoneElse ! Anim ! st ! p ;
       prep = vp.prep ; 
       obj = vp.obj ; 
-      prepositive = vp.prepositive
+      prepositive = vp.prepositive ;
+      needSubject = vp.needSubject
       } ;
 
     ImpPl1 vp = {s = \\part,st => vp.prepositive ! st ++ vp.obj ! st ++ vp.prep ++ 

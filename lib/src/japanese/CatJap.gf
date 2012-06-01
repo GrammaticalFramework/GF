@@ -32,15 +32,16 @@ flags coding = utf8 ;
     VP = ResJap.VP ;  -- {verb : Speaker => Animateness => Style => TTense => Polarity => Str ; 
                       --  a_stem, i_stem : Speaker => Animateness => Style => Str ; 
                       --  te, ba : Speaker => Animateness => Style => Polarity => Str ;
-                      --  prep : Str ; obj : Style => Str ; prepositive : Style => Str} ;
+                      --  prep : Str ; obj : Style => Str ; prepositive : Style => Str ; 
+                      --  needSubject : Bool} ;
     Comp = {verb : Animateness => Style => TTense => Polarity => Str ; a_stem, i_stem : 
             Animateness => Style => Str ; te, ba : Animateness => Style => Polarity => Str ;
-            obj : Style => Str ; prepositive : Style => Str} ;
+            obj : Style => Str ; prepositive : Style => Str ; needSubject : Bool} ;
     VPSlash = {s : Speaker => Style => TTense => Polarity => Str ; 
                a_stem, i_stem : Speaker => Str ; te, ba : Speaker => Polarity => Str ;
                prep : Str ; obj : Style => Str ; prepositive : Style => Str ; v2vType : Bool} ;
     AP = {pred : Style => TTense => Polarity => Str ; attr, adv, dropNaEnging, prepositive : 
-          Style => Str ; te, ba : Style => Polarity => Str} ;
+          Style => Str ; te, ba : Style => Polarity => Str ; needSubject : Bool} ;
     NP = ResJap.NP ;  -- {s : Style => Str ; prepositive : Style => Str ; needPart : Bool ; 
                       --  changePolar : Bool ; meaning : Speaker ; anim : Animateness} ;
     CN = Noun ** {object : Style => Str ; prepositive : Style => Str ; hasAttr : Bool} ; 
@@ -60,18 +61,18 @@ flags coding = utf8 ;
     Subj = Subjunction ;          -- {s : Str ; type : SubjType} ;
     Prep = Preposition ;          -- {s : Str ; null : Str} ;
     V = Verb ;                    -- {s : Style => TTense => Polarity => Str ; a_stem, i_stem : 
-                                  --  Str ; te, ba : Polarity => Str} 
+                                  --  Str ; te, ba : Polarity => Str ; needSubject : Bool} 
     V2 = Verb2 ;                  -- {s, pass : Style => TTense => Polarity => Str ; a_stem, i_stem, 
                                   --  pass_a_stem, pass_i_stem, prep : Str ; te, ba, pass_te, 
-                                  --  pass_ba : Polarity => Str} ;
+                                  --  pass_ba : Polarity => Str ; needSubject : Bool} ;
     V3 = Verb3 ;                  -- {s : Speaker => Style => TTense => Polarity => Str ; a_stem, 
                                   --  i_stem : Speaker => Str ; te, ba : Speaker => Polarity => 
                                   --  Str ; prep1, prep2 : Str} ;
     VV = ResJap.VV ;              -- {s : Speaker => Style => TTense => Polarity => Str ; te,  
                                   --  a_stem, i_stem, ba, te_neg, ba_neg : Speaker => Str ; 
                                   --  sense : ModSense} ;
-    VS = Verb ** {prep : Str} ;
-    VQ = Verb ;
+    VS = Verb2 ;
+    VQ = Verb2 ;
     VA = Verb ;
     V2V = Verb ;
     V2S = Verb ;

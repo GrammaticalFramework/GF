@@ -6,9 +6,9 @@ lin
 
     TEmpty = {s = ""} ;
     
-    TFullStop phr txt = {s = phr.s ++ "." ++ txt.s} ;
+    TFullStop phr txt = {s = phr.s ++ "。" ++ txt.s} ;
     
-    TQuestMark phr txt = {s = phr.s ++ "?" ++ txt.s} ;
+    TQuestMark phr txt = {s = phr.s ++ "？" ++ txt.s} ;
     
-    TExclMark phr txt = {s = phr.s ++ "!" ++ txt.s} ;
+    TExclMark phr txt = {s = phr.s ++ "！" ++ txt.s} ;
 }
