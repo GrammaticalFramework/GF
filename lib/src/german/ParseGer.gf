@@ -12,8 +12,6 @@ concrete ParseGer of ParseEngAbs =
   PhraseGer,
   SentenceGer,
   RelativeGer,
---  LexiconGer,
---  StructuralGer,
   IdiomGer [NP, VP, Tense, Cl, ProgrVP, ExistNP],
   ExtraGer [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
             Temp, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
