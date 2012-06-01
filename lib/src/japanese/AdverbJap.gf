@@ -18,8 +18,8 @@ flags coding = utf8 ;
     
     ComparAdvAdjS cadv a s = {
       s = \\st => case cadv.less of {
-        True => s.subj ! Ga ! st ++ s.pred ! Plain ++ cadv.s ++ a.adv ! Neg ; 
-        False => s.subj ! Ga ! st ++ s.pred ! Plain ++ cadv.s ++ a.adv ! Pos
+        True => s.subj ! Ga ! st ++ s.pred ! Plain ++ "こと" ++ cadv.s ++ a.adv ! Neg ; 
+        False => s.subj ! Ga ! st ++ s.pred ! Plain ++ "こと" ++ cadv.s ++ a.adv ! Pos
         } ;
       prepositive = False} ;
     

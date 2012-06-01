@@ -28,7 +28,8 @@ oper
   VP          : Type = {verb : Speaker => Animateness => Style => TTense => Polarity => Str ; 
                         a_stem, i_stem : Speaker => Animateness => Style => Str ; 
                         te, ba : Speaker => Animateness => Style => Polarity => Str ;
-                        prep : Str ; obj : Style => Str ; prepositive : Style => Str} ;
+                        prep : Str ; obj : Style => Str ; prepositive : Style => Str ;
+                        needSubject : Bool} ;
                         
   Noun        : Type = {s : Number => Style => Str ; anim : Animateness ; 
                         counter : Str ; counterReplace : Bool ; counterTsu : Bool} ;
@@ -45,7 +46,7 @@ oper
                         tenPlus : Bool} ;
   Preposition : Type = {s : Str ; null : Str} ;
   Verb        : Type = {s : Style => TTense => Polarity => Str ; a_stem, i_stem : Str ; 
-                        te, ba : Polarity => Str} ;
+                        te, ba : Polarity => Str ; needSubject : Bool} ;
   Verb2       : Type = {s, pass : Style => TTense => Polarity => Str ; a_stem, i_stem, pass_a_stem, 
                         pass_i_stem, prep : Str ; te, ba, pass_te, pass_ba : Polarity => Str} ;
   Verb3       : Type = {s : Speaker => Style => TTense => Polarity => Str ; a_stem, i_stem : 
@@ -203,7 +204,8 @@ oper
     ba = table {
       Pos => mkBaForm yomu gr ;
       Neg => yoma + "なければ"
-      }
+      } ;
+    needSubject = True
     } ;
       
   mkVerb2 : Str -> Str -> VerbGroup -> Verb2 = 
@@ -318,7 +320,8 @@ oper
           Suru => Predef.tk 2 yomu + "されなければ" ;
           Kuru => "来られなければ"
           } 
-        }
+        } ;
+      needSubject = True
       } ;
                         
   mkVerb3 : Str -> Str -> Str -> VerbGroup -> Verb3 = 
@@ -420,7 +423,8 @@ oper
         }
       } ;
     prep = [] ;
-    prepositive, obj = \\st => []
+    prepositive, obj = \\st => [] ;
+    needSubject = True
     } ;
           
   mkWant : VV = {
@@ -670,7 +674,8 @@ oper
     ba = table {
       Pos => "雨が降れば" ;
       Neg => "雨が降らなければ"
-      }
+      } ;
+    needSubject = False
     } ;
 }
 

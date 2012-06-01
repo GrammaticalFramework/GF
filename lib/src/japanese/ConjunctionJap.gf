@@ -54,7 +54,8 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
         ba = \\st,p => conj.null ++ ap.s1and ! st ! p ++ ap.s2ba ! st ! p ;
         adv = \\st => conj.null ++ ap.s1and ! st ! Pos ++ ap.s2adv ! st ;
         dropNaEnging = \\st => conj.null ++ ap.s1and ! st ! Pos ++ ap.s2dropNaEnging ! st ;
-        prepositive = ap.prepositive
+        prepositive = ap.prepositive ;
+        needSubject = True
         } ;
       Or => {    
         pred = \\st,t,p => conj.null ++ ap.s1or ! st ! p ++ ap.s2pred ! st ! t ! p ;
@@ -63,7 +64,8 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
         ba = \\st,p => conj.null ++ ap.s1or ! st ! p ++ ap.s2ba ! st ! p ;
         adv = \\st => conj.null ++ ap.s1or ! st ! Pos ++ ap.s2adv ! st ;
         dropNaEnging = \\st => conj.null ++ ap.s1or ! st ! Pos ++ ap.s2dropNaEnging ! st ;
-        prepositive = ap.prepositive
+        prepositive = ap.prepositive ;
+        needSubject = True
         }
       } ;
     

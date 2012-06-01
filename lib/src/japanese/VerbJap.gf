@@ -12,7 +12,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       ba = \\sp,a,st => v.ba ;
       prep = [] ;
       obj = \\st => [] ; 
-      prepositive = \\st => []
+      prepositive = \\st => [] ;
+      needSubject = v.needSubject
       } ;
       
     ComplVV v vp = case v.sense of {
@@ -29,7 +30,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
                             v.ba ! sp ! p ;
         prep = vp.prep ;
         obj = \\st => vp.obj ! st ;
-        prepositive = vp.prepositive
+        prepositive = vp.prepositive ;
+        needSubject = True
         } ;
       Oblig => {
         verb = \\sp,a,st,t => table {
@@ -48,7 +50,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
           } ;
         prep = vp.prep ;
         obj = \\st => vp.obj ! st ;
-        prepositive = vp.prepositive
+        prepositive = vp.prepositive ;
+        needSubject = True
         } ;
       Wish => {
         verb = \\sp,a,st,t,p => vp.i_stem ! sp ! a ! st ++ v.s ! sp ! st ! t ! p ;
@@ -58,7 +61,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
         ba = \\sp,a,st,p => vp.i_stem ! sp ! a ! st ++ v.ba ! sp ! p ;
         prep = vp.prep ;
         obj = \\st => vp.obj ! st ;
-        prepositive = vp.prepositive
+        prepositive = vp.prepositive ;
+        needSubject = True
         } 
       } ; 
     
@@ -70,7 +74,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       ba = \\sp,a,st => vs.ba ;
       prep = vs.prep ;
       obj = \\st => sent.subj ! Ga ! st ++ sent.pred ! Plain ;
-      prepositive = \\st => []
+      prepositive = \\st => [] ;
+      needSubject = True
       } ;
       
     ComplVQ vq qs = {
@@ -81,7 +86,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       ba = \\sp,a,st => vq.ba ;
       prep = "" ;
       obj = \\st => qs.s_plain_pred ! Ga ! st ;
-      prepositive = \\st => []
+      prepositive = \\st => [] ;
+      needSubject = True
       } ;
       
     ComplVA va ap = {
@@ -92,7 +98,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       ba = \\sp,a,st => va.ba ;
       prep = [] ;
       obj = \\st => ap.adv ! st ;
-      prepositive = ap.prepositive
+      prepositive = ap.prepositive ;
+      needSubject = True
       } ;
 
     SlashV2a v2 = {
@@ -194,7 +201,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
         False => vpslash.obj ! st ++ np.s ! st 
         } ;
       te = \\sp,a,st,p => vpslash.te ! sp ! p ;
-      prepositive = \\st => np.prepositive ! st ++ vpslash.prepositive ! st
+      prepositive = \\st => np.prepositive ! st ++ vpslash.prepositive ! st ;
+      needSubject = True
       } ;
       
     SlashVV v vpslash = case v.sense of {
@@ -268,7 +276,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       prep = vpslash.prep ;
       obj = \\st => vpslash.obj ! st ++ "自分" ;  -- "jibun"
       te = \\sp,a,st,p => vpslash.te ! sp ! p ;
-      prepositive = vpslash.prepositive
+      prepositive = vpslash.prepositive ;
+      needSubject = True
       } ;
 
     UseComp comp = {
@@ -279,7 +288,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       ba = \\sp => comp.ba ;
       prep = [] ;
       obj = comp.obj ; 
-      prepositive = comp.prepositive
+      prepositive = comp.prepositive ;
+      needSubject = comp.needSubject
       } ;
     
     PassV2 v2 = {
@@ -290,7 +300,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       ba = \\sp,a,st => v2.pass_ba ;
       prep = [] ;
       obj = \\st => [] ;
-      prepositive = \\st => []
+      prepositive = \\st => [] ;
+      needSubject = True
       } ;
     
     AdvVP vp adv = {
@@ -307,7 +318,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       prepositive = \\st => case adv.prepositive of {
         True => vp.prepositive ! st ++ adv.s ! st ; 
         False => vp.prepositive ! st
-        }
+        } ;
+      needSubject = vp.needSubject
       } ;
     
     AdVVP adv vp = {
@@ -318,7 +330,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       ba = vp.ba ;
       prep = vp.prep ;
       obj = \\st => adv.s ++ vp.obj ! st ;
-      prepositive = vp.prepositive
+      prepositive = vp.prepositive ;
+      needSubject = vp.needSubject
       } ;
     
     AdvVPSlash vpslash adv = {
@@ -358,7 +371,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       i_stem = \\a,st => ap.adv ! st ++ "なり" ;
       ba = \\a => ap.ba ;
       obj = \\st => [] ; 
-      prepositive = ap.prepositive
+      prepositive = ap.prepositive ;
+      needSubject = ap.needSubject
       } ;
       
     CompNP np = {
@@ -368,7 +382,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       a_stem = \\a,st => "では" ;
       i_stem = \\a,st => "になり" ;  -- "become" - for wishes
       obj = \\st => np.s ! st ;
-      prepositive = np.prepositive
+      prepositive = np.prepositive ;
+      needSubject = True
       } ;
     
     CompAdv adv = {
@@ -384,7 +399,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       prepositive = \\st => case adv.prepositive of {
         True => adv.s ! st ; 
         False => []
-        }
+        } ;
+      needSubject = True
       } ;
     
     CompCN cn = {
@@ -394,7 +410,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       a_stem = \\a,st => "では" ;
       i_stem = \\a,st => "になり" ;  -- "become" - for wishes
       obj = \\st => cn.s ! Sg ! st ;
-      prepositive = cn.prepositive
+      prepositive = cn.prepositive ;
+      needSubject = True
       } ;
       
     UseCopula = {
@@ -405,7 +422,8 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       i_stem = \\sp,a,st => "なり" ;  -- "become" - for wishes
       obj = \\st => [] ;
       prepositive = \\st => [] ; 
-      prep = []
+      prep = [] ;
+      needSubject = True
       } ;
   }
 
