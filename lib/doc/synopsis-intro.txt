@@ -37,6 +37,9 @@ Other relevant documents:
 - [The RGL Status Document ./status.html]: the current status of different languages
   and the authors of each grammar
 - [RGL Source Browser ./browse]: look up functions and their source code
+- [Minibar http://cloud.grammaticalframework.org/minibar/minibar.html]:
+  find resource grammar expressions by parsing (select Grammar: LibraryBrowser)
+  or test translations between all languages (select Grammar: ResourceDemo)
 - [Resource Grammar Tutorial http://www.grammaticalframework.org/doc/gf-lrec-2010.pdf]
   as presented in LREC-2010.
 - Paper "The GF Resource Grammar Library" by A. Ranta
