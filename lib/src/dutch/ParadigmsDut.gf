@@ -126,6 +126,15 @@ oper
     mkV : Str -> V -> V -- add movable suffix, e.g. af + stappen
     } ;
 
+-- To remove the past participle prefix "ge", e.g. for the verbs
+-- prefixed by "be-, ver-".
+
+  no_geV : V -> V ;  -- no participle "ge", e.g. "vertrekken"
+
+-- To add a fixed prefix such as "be-, ver-"; this implies $no_geV$.
+
+  fixprefixV : Str -> V -> V ; -- add prefix such as "be"; implies no_ge
+
   zijnV  : V -> V ; -- force zijn as auxiliary (default hebben)
 
   reflV  : V -> V ; -- reflexive verb e.g. zich afvragen
@@ -229,6 +238,22 @@ oper
     } ;
   zijnV v = lin V (v2vvAux v VZijn) ;
   reflV v = lin V {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = VRefl} ;
+
+  no_geV v = let vs = v.s in {
+    s = table {
+      VPerf => Predef.drop 2 (vs ! VPerf) ;
+      p => vs ! p
+      } ;
+    prefix = v.prefix ; lock_V = v.lock_V ; aux = v.aux ; vtype = v.vtype
+    } ;
+
+  fixprefixV s v = let vs = v.s in {
+    s = table {
+      VPerf => s + Predef.drop 2 (vs ! VPerf) ;
+      p => s + vs ! p
+      } ;
+    prefix = v.prefix ; lock_V = v.lock_V ; aux = v.aux ; vtype = v.vtype
+    } ;
 
   zijn_V : V = lin V ResDut.zijn_V ;
   hebben_V : V = lin V ResDut.hebben_V ;
