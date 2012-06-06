@@ -46,7 +46,8 @@ oper
 
  VPSlash = VP ** {c2 : Case} ;
 
- Prep = {s : Str ; isPre : Bool} ;
+
+ Prep = {s : Str ;isPre : Bool} ;
 
  mkClause : Str -> VPerNumGen -> VP -> Cl =
     \subj,png,vp -> {
