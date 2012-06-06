@@ -74,4 +74,8 @@ abstract Extra = Cat ** {
 
     PassVPSlash : VPSlash -> VP ; -- be forced to sleep
 
+-- publishing of the document
+
+    NominalizeVPSlashNP : VPSlash -> NP -> NP ;
+
 }
