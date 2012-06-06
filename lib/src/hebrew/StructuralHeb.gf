@@ -29,15 +29,15 @@ concrete StructuralHeb of Structural = CatHeb **
 
   }; 
 
- he_Pron = mkPron "hwA" "Awtw" "bw" Masc Sg Per3  ; 
- i_Pron = mkPron "Any" "Awty" "ly" Masc Sg Per1 ; --both fem and masc nom, acc, gen
- it_Pron = mkPron "zh" "" "" Masc Sg Per1 ;
- she_Pron = mkPron "hyA" "Awth" "lh" Fem Sg Per3  ; 
- they_Pron = mkPron  "hM" "hncnw" "lhM"   Masc Pl Per1  ; 
+ he_Pron = mkPron "hwA" "Awtw" "slw" Masc Sg Per3  ; 
+ i_Pron = mkPron "Any" "Awty" "sly" Masc Sg Per1 ; --both fem and masc nom, acc, gen
+ it_Pron = mkPron "zh" "" "" Masc Sg Per3 ;
+ she_Pron = mkPron "hyA" "slh" "slh" Fem Sg Per3  ; 
+ they_Pron = mkPron  "hM" "slhM" "slhM"   Masc Pl Per3  ;  -- add Fem in extra
  we_Pron = mkPron "AnHnw" "Awtnw" "lnw" Masc Pl Per1; --both fem and masc 
- youSg_Pron = mkPron "At" "" ""  Fem Sg Per2 ; -- add Masc in extra 
- youPl_Pron = mkPron "AtN" "" "" Fem Sg Per2 ;
- youPol_Pron = mkPron "AtN" "" "" Fem Sg Per2 ;
+ youSg_Pron = mkPron "Ath" "slK" "slK"  Fem Sg Per2 ; -- add Masc in extra 
+ youPl_Pron = mkPron "AtN" "slkN" "slkN" Fem Pl Per2 ;
+-- youPol_Pron = mkPron "AtN" "" "" Fem Sg Per2 ;
 
   above_Prep = mkPrep "mOl" False;
   after_Prep = mkPrep "AHry" False;
