@@ -33,7 +33,7 @@ oper
 
  ClSlash : Type = {
  	 s : TenseHeb => Polarity => Str ;
-	 c2 : Prep
+	 c2 : Case
    	 } ;
 
  VP : Type = { 
@@ -129,7 +129,7 @@ oper
 --  defH : Str -> Str = \cn ->
 --	case cn of {_ => "h" + cn} ;	
 
-  insertObj : NP -> VP -> VP = \np,vp ->
+  insertObj : NP ->  VP -> VP = \np,vp ->
       let
         nps = np.s ! Acc
       in
