@@ -14,9 +14,9 @@
           
   mkNoun : (bait,batim,batimD : Str) -> Gender -> Noun = \bait,batim,batimD,g -> {
 	  s = table {
-		  Sg => table{Indef => bait ; Def => defH bait};
-		  Pl => table{Indef => batim ; Def => defH batim} ;
-		  Dl => table{Indef => batimD ; Def => defH batimD}
+		  Sg => table{Indef => bait ; Def =>  ("h" +bait)};
+		  Pl => table{Indef => batim ; Def =>  ("h" + batim)} ;
+		  Dl => table{Indef => batimD ; Def =>  ("h" +batimD)}
 		  } ;
 	  g=g ;
     }; 
@@ -97,11 +97,12 @@
     s = table {
       	Sg => table { 
 		Indef => table { Masc => tov ; Fem => tova } ; 
-		Def => table { Masc => defH tov ; Fem => defH tova }  
+		Def => table { Masc => ("h" + tov) ; Fem =>  ("h"
+    + tova) }  
             	} ; 
         _ => table { 
 		Indef => table {Masc => tovim ; Fem  => tovot } ; 
-		Def => table { Masc => defH tovim ; Fem  => defH tovot }
+		Def => table { Masc =>  ("h" + tovim) ; Fem  =>  ("h" + tovot) }
                }
          }
    };

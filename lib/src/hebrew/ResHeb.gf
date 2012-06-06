@@ -125,8 +125,8 @@ oper
   Num, Ord :  Type = {s : Case => Str; n : Number} ;
   Det :   Type = {s :  Gender => Str ; n : Number ; sp : Species; isDef : Bool} ; 
 
-  defH : Str -> Str = \cn ->
-	case cn of {_ => "h" + cn} ;	
+--  defH : Str -> Str = \cn ->
+--	case cn of {_ => "h" + cn} ;	
 
   insertObj : NP -> VP -> VP = \np,vp ->
       let
