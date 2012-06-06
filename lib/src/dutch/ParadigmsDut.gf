@@ -40,7 +40,8 @@ oper
   de  : Gender ; -- non-neutrum
   het : Gender ; -- neutrum
 
-
+  nominative : Case ; -- nominative of nouns
+  genitive : Case ;   -- genitive of nouns
   
 --2 Nouns
 
@@ -48,6 +49,8 @@ oper
     mkN : (muis : Str) -> N ;   -- de muis-muisen, with some predictable exceptions
     mkN : (bit : Str) -> Gender -> N ; -- if gender is not predictable
     mkN : (gat,gaten : Str) -> Gender -> N ; -- worst-case for nouns
+    mkN : (huis, boot : N) -> N ; -- compound huisboot
+    mkN : (station, hal : N) -> Case -> N ; -- compound stationshal
   } ;
 
 -- Relational nouns need a preposition. The most common is "van".
@@ -195,6 +198,10 @@ oper
     = \a,b -> lin N (regNounG a b) ;
     mkN : (gat,gaten : Str) -> Gender -> N 
     = \a,b,c -> lin N (mkNoun a b c) ;
+   mkN : (huis,boot : N) -> N
+    = \huis,boot -> lin N {s = \\n => huis.s ! NF Sg Nom + boot.s ! n ; g = boot.g} ;
+   mkN : (huis,boot : N) -> Case -> N
+    = \huis,boot,c -> lin N {s = \\n => huis.s ! NF Sg c + boot.s ! n ; g = boot.g} ;
   } ;
 
   mkN2 = overload {
@@ -213,6 +220,8 @@ oper
   feminine  = Utr ;
   het,neuter = Neutr ;
   de,utrum = Utr ;
+  nominative = Nom ;
+  genitive = Gen ;
 
   mkA = overload {
     mkA : (vers : Str) -> A = \a -> lin A (regAdjective a) ;

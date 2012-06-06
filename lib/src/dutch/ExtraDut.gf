@@ -1,5 +1,5 @@
 concrete ExtraDut of ExtraDutAbs = CatDut ** 
-  open ResDut, Coordination, Prelude, IrregDut in 
+  open ResDut, MorphoDut, Coordination, Prelude, IrregDut in 
 {
 --{
 --
@@ -112,5 +112,15 @@ lin
     } ;
 
     ConjVPS = conjunctDistrTable2 Order Agr ;
+
+lin
+ NominalizeVPSlashNP vpslash np = 
+           let vp : ResDut.VP = insertObjNP np.isPron (\\_ => appPrep vpslash.c2 np.s) vpslash ;
+                agrDef : Agr = agrP3 Sg ; 
+                compl : Str = vp.n0 ! agrDef ++ vp.a1 ! Pos ++ vp.n2 ! agrDef ++ vp.s.prefix ; 
+                inf : Str = vp.inf.p1 ;
+                extra : Str = vp.ext
+            in       
+            lin NP (MorphoDut.mkNP (vp.s.s ! VInf ++ "van" ++ compl ++ inf ++ extra ) Utr Sg) ;  
 
 }

@@ -21,7 +21,9 @@ abstract ExtraEngAbs = Extra - [ProDrop] ** {
 
    do_VV : VV ;
 
+   may_VV : VV ;
 
+---------------------
 --- these are obsolete: use UncNeg : Pol instead
 
   fun
@@ -31,6 +33,7 @@ abstract ExtraEngAbs = Extra - [ProDrop] ** {
 
     UncNegImpSg : Pol -> Imp -> Utt;           -- do not help yourself
     UncNegImpPl : Pol -> Imp -> Utt;           -- do not help yourselves
+
 
 
 }

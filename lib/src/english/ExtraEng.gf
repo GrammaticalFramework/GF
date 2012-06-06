@@ -112,6 +112,24 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     typ = VVAux
     } ;
 
+   may_VV = lin VV {
+     s = table { 
+      VVF VInf => ["be allowed to"] ;
+      VVF VPres => "may" ;
+      VVF VPPart => ["been allowed to"] ;
+      VVF VPresPart => ["being allowed to"] ;
+      VVF VPast => "might" ;
+      VVPastNeg => "mightn't" ;
+      VVPresNeg => "may not"
+      } ;
+    typ = VVAux
+    } ;
+
+
+   NominalizeVPSlashNP vpslash np = 
+     let vp : ResEng.VP = insertObjPre (\\_ => vpslash.c2 ++ np.s ! NPAcc) vpslash 
+     in 
+     lin NP {s=\\_=>vp.ad ++ vp.prp ++ vp.s2! (AgP3Sg Neutr); a=AgP3Sg Neutr } ;  
 
 lin
   UncNeg = {s = [] ; p = CNeg False} ; 

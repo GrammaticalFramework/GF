@@ -2,8 +2,10 @@ abstract ExtraDutAbs = Extra [
   VPI,ListVPI,BaseVPI,ConsVPI,MkVPI,ComplVPIVV,ConjVPI,
   VPS,ListVPS,BaseVPS,ConsVPS,ConjVPS,MkVPS,PredVPS,
   Temp,Pol,S,NP,
-  VV,VP,Conj,IComp,ICompAP,IAdvAdv,Adv,AP,IAdv] ** 
+  VV,VP,Conj,IComp,ICompAP,IAdvAdv,Adv,AP,IAdv,
+  VPSlash, NominalizeVPSlashNP] ** 
 {
+
 --{
 --
 --  fun
@@ -13,5 +15,7 @@ abstract ExtraDutAbs = Extra [
 --    moegen_VV : VV ;         -- ich mag/möchte singen
 --
 --}
+
+
 
 }
