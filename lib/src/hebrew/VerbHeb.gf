@@ -6,8 +6,8 @@ concrete VerbHeb of Verb = CatHeb ** open Prelude, ResHeb in {
 
    UseV = predV ;
 
-   ComplSlash vp np = insertObj np vp ;
+   ComplSlash vp np = insertObj vp np;
 
-   SlashV2a v = predV v ** {c2 = v.c2} ;
+   SlashV2a v = predVc v  ; --predV v ** {c2 = v.c2} ;
 
 }
