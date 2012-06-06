@@ -22,8 +22,8 @@ C1oC2C3ot = { C1 = "" ; C1C2="w"; C2C3 =""; C3="wt"};
 eC1C2oC3 = { C1 = "y" ; C1C2=""; C2C3 =""; C3=""}; 
 niC1C2oC3 = { C1 = "n" ; C1C2=""; C2C3 =""; C3=""};
 tiC1C2oC3 = { C1 = "t" ; C1C2=""; C2C3 =""; C3=""};
-tiC1C2eC3i = { C1 = "t" ; C1C2=""; C2C3 ="e"; C3="y"};
-tiC1C2eC3o = { C1 = "t" ; C1C2=""; C2C3 ="e"; C3="w"};
+tiC1C2eC3i = { C1 = "t" ; C1C2=""; C2C3 =""; C3="y"};
+tiC1C2eC3o = { C1 = "t" ; C1C2=""; C2C3 =""; C3="w"};
 
 yiC1C2oC3 = { C1 = "y" ; C1C2=""; C2C3 =""; C3=""};
 yiC1C2eC3u = { C1 = "y" ; C1C2=""; C2C3 =""; C3="w"};

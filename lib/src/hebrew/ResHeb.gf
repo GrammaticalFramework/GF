@@ -132,8 +132,10 @@ oper
       let
         nps = np.s ! Acc
       in
-      { s = vp.s;
-        obj = nps.obj;
+      { s = vp.s;    
+ 	obj  =  case <np.isDef> of  
+ 	     { <True> =>  "At" ++ nps.obj; 
+	         _    =>  nps.obj } ;
         s2 = vp.s2;
         pred = vp.pred;
         isPred = vp.isPred
@@ -155,6 +157,9 @@ oper
         pred = { s = \\_,_ => []};
         isPred = False
 	} ;
+
+   predVc : Verb2 -> VPSlash = \verb2 -> 
+       	   predV verb2 ** {c2 = verb2.c} ;
 
   appPattern : Root -> Pattern -> Str = \r,p ->
     p.C1 + r.C1 + p.C1C2 + r.C2 + p.C2C3 + r.C3 + p.C3 ;

@@ -35,7 +35,7 @@ concrete StructuralHeb of Structural = CatHeb **
  she_Pron = mkPron "hyA" "slh" "slh" Fem Sg Per3  ; 
  they_Pron = mkPron  "hM" "slhM" "slhM"   Masc Pl Per3  ;  -- add Fem in extra
  we_Pron = mkPron "AnHnw" "Awtnw" "lnw" Masc Pl Per1; --both fem and masc 
- youSg_Pron = mkPron "Ath" "slK" "slK"  Fem Sg Per2 ; -- add Masc in extra 
+ youSg_Pron = mkPron "At" "slK" "slK"  Fem Sg Per2 ; -- add Masc in extra 
  youPl_Pron = mkPron "AtN" "slkN" "slkN" Fem Pl Per2 ;
 -- youPol_Pron = mkPron "AtN" "" "" Fem Sg Per2 ;
 
