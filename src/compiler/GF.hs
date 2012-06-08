@@ -6,6 +6,7 @@ import GFI
 import GF.Data.ErrM
 import GF.Infra.Option
 import GF.Infra.UseIO
+import GF.Infra.BuildInfo (buildInfo)
 import Paths_gf
 
 import Data.Version
@@ -41,7 +42,7 @@ main = do
 mainOpts :: Options -> [FilePath] -> IO ()
 mainOpts opts files = 
     case flag optMode opts of
-      ModeVersion     -> putStrLn $ "Grammatical Framework (GF) version " ++ showVersion version
+      ModeVersion     -> putStrLn $ "Grammatical Framework (GF) version " ++ showVersion version ++ "\n" ++ buildInfo
       ModeHelp        -> putStrLn helpMessage
       ModeInteractive -> mainGFI opts files
       ModeRun         -> mainRunGFI opts files
