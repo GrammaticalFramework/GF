@@ -65,4 +65,6 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
 
     RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! Neutr ! Sg} ;
 
+    SSubjS a s b = {s = \\o => a.s ! o ++ "," ++ s.s ++ b.s ! Sub} ;
+
 }

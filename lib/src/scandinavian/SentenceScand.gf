@@ -62,4 +62,6 @@ incomplete concrete SentenceScand of Sentence =
 
     RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! agrP3 Neutr Sg ! RPrep True } ; --- vilket
 
+    SSubjS a s b = {s = \\o => a.s ! o ++ "," ++ s.s ++ b.s ! Sub} ;
+
 }
