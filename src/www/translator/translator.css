@@ -59,7 +59,7 @@ td.source input[name=it], td.target input[name=it], textarea, input[name=punctch
     font-family: inherit; font-size: inherit;
 }
 
-textarea { width: 100% }
+td.source input[name=it], td.target input[name=it], textarea { width: 100% }
 
 table.paralleltexts td {
     vertical-align: baseline;
