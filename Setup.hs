@@ -374,12 +374,14 @@ default_gf pkg lbi = buildDir lbi </> exeName' </> exeNameReal
 -- | Create autogen module with detailed version info by querying darcs
 extractDarcsVersion distFlag =
   do info <- E.try askDarcs
+     createDirectoryIfMissing True autogenPath
      updateFile versionModulePath $ unlines $
        ["module "++modname++" where",
         "darcs_info = "++show (either (const (Left ())) Right info)]
   where
     dist = fromFlagOrDefault "dist" distFlag
-    versionModulePath = dist</>"build"</>"autogen"</>"DarcsVersion_gf.hs"
+    autogenPath = dist</>"build"</>"autogen"
+    versionModulePath = autogenPath</>"DarcsVersion_gf.hs"
     modname = "DarcsVersion_gf"
 
     askDarcs =
