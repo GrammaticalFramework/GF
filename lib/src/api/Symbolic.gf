@@ -4,6 +4,7 @@ incomplete resource Symbolic = open Symbol, Grammar, PredefCnc in {
 
   oper
     symb : overload {
+      symb : Symb -> NP ;                      -- x
       symb : Str -> NP ;                       -- x
       symb : Int -> NP ;                       -- 23
       symb : Float -> NP ;                     -- 0.99
@@ -31,9 +32,13 @@ incomplete resource Symbolic = open Symbol, Grammar, PredefCnc in {
     mkInteger : Predef.Int -> Integer ;
     mkFloating : Predef.Float -> Floating ;
 
+    Symb : Type 
+      = Symbol.Symb ;
 --.
 
     symb = overload {
+      symb : Symb -> NP 
+                          = \s -> UsePN (SymbPN s) ;
       symb : Str -> NP 
                           = \s -> UsePN (SymbPN (mkSymb s)) ;
       symb : Int -> NP 
