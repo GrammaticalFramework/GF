@@ -1,4 +1,4 @@
-concrete LexiconJap of Lexicon = CatJap ** open ParadigmsJap, ResJap, Prelude in {
+concrete LexiconJpn of Lexicon = GrammarJpn ** open ParadigmsJpn, ResJpn, Prelude in {
 
 flags coding = utf8 ;
 
@@ -129,7 +129,7 @@ lin
   glove_N = mkN "手袋" Inanim ;  -- "tebukuro"
   gold_N = mkN "金" Inanim ;  -- "kin"
   good_A = mkA "良い" ;  -- "ii" ;
-  go_V = mkV "行く" Gr1 ;  -- "iku"
+  go_V = mkGo ;
   grammar_N = mkN "文法" Inanim ;  -- "bumpou"
   grass_N = mkN "草" Inanim ;  -- "kusa"
   green_A = mkA "緑色の" ;  -- "midoriirono" ;

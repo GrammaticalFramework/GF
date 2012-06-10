@@ -1,5 +1,5 @@
-concrete PhraseJap of Phrase = CatJap
-** open ResJap, ParadigmsJap, Prelude in {
+concrete PhraseJpn of Phrase = CatJpn
+** open ResJpn, ParadigmsJpn, Prelude in {
 
 flags coding = utf8 ;
 
@@ -12,9 +12,9 @@ flags coding = utf8 ;
           (Imper|NoImp) => pconj.s ++ utt.s ! Wa ! Resp ++ voc.s ! Resp
           } ;
         VocPres => case utt.type of {
-          ImpPolite => voc.s ! Resp ++ "," ++ pconj.s ++ utt.s ! Wa ! Resp ;
-          Imper => voc.s ! Plain ++ "," ++ pconj.s ++ utt.s ! Wa ! Plain ;
-          NoImp => voc.s ! Plain ++ "," ++ pconj.s ++ utt.s ! Wa ! Plain
+          ImpPolite => voc.s ! Resp ++ "、" ++ pconj.s ++ utt.s ! Wa ! Resp ;
+          Imper => voc.s ! Plain ++ "、" ++ pconj.s ++ utt.s ! Wa ! Plain ;
+          NoImp => voc.s ! Plain ++ "、" ++ pconj.s ++ utt.s ! Wa ! Plain
           } ;
         VocAbs => case utt.type of {
           (Imper|ImpPolite) => voc.s ! Plain ++ pconj.s ++ utt.s ! Wa ! Plain ;

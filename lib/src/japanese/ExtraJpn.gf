@@ -1,4 +1,4 @@
-concrete ExtraJap of ExtraJapAbs = CatJap ** open ResJap, Prelude, ParadigmsJap in {
+concrete ExtraJpn of ExtraJpnAbs = CatJpn ** open ResJpn, Prelude, ParadigmsJpn in {
 
   lincat
     Level = {s : Str ; l : Style} ;

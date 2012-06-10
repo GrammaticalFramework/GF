@@ -1,5 +1,5 @@
-resource ParadigmsJap = CatJap ** 
-  open ResJap, CatJap, Prelude in {
+resource ParadigmsJpn = CatJpn ** 
+  open ResJpn, CatJpn, Prelude in {
 
 flags coding = utf8 ;
 

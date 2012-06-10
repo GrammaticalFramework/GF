@@ -1,4 +1,4 @@
-concrete AdjectiveJap of Adjective = CatJap ** open ResJap, ParadigmsJap, Prelude in {
+concrete AdjectiveJpn of Adjective = CatJpn ** open ResJpn, ParadigmsJpn, Prelude in {
 
 flags coding = utf8 ;
 

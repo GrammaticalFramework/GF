@@ -1,4 +1,4 @@
-concrete NounJap of Noun = CatJap ** open ResJap, ParadigmsJap, Prelude in {
+concrete NounJpn of Noun = CatJpn ** open ResJpn, ParadigmsJpn, Prelude in {
 
 flags coding = utf8 ;
 
@@ -7,10 +7,14 @@ flags coding = utf8 ;
     DetCN det cn = {
       s = \\st => case det.inclCard of {
         True => case cn.counterReplace of {
-          True => cn.object ! st ++ det.quant ! st ++ det.num ++ cn.counter ++ det.postpositive ;
+          True => case cn.hasAttr of {
+            True => cn.object ! st ++ det.quant ! st ++ det.num ++ cn.counter ++ det.postpositive
+                    ++ "の" ++ cn.s ! det.n ! st ;
+            False => cn.object ! st ++ det.quant ! st ++ det.num ++ cn.counter ++ det.postpositive 
+            } ;
           False => case <det.tenPlus, cn.counterTsu> of {
-            <True, True> => cn.object ! st ++ det.quant ! st ++ det.num ++ det.postpositive ++
-                            "の" ++ cn.s ! det.n ! st ;
+            <True, True> => cn.object ! st ++ det.quant ! st ++ det.num ++ "個" ++ det.postpositive 
+                            ++ "の" ++ cn.s ! det.n ! st ;
              _ => cn.object ! st ++ det.quant ! st ++ det.num ++ cn.counter ++ det.postpositive 
                   ++ "の" ++ cn.s ! det.n ! st 
             } 

@@ -1,5 +1,5 @@
-concrete SentenceJap of Sentence = CatJap
-** open ResJap, ParadigmsJap, Prelude in {
+concrete SentenceJpn of Sentence = CatJpn
+** open ResJpn, ParadigmsJpn, Prelude in {
 
 flags coding = utf8 ;
 
@@ -359,10 +359,10 @@ flags coding = utf8 ;
       } ;
     
     ExtAdvS adv s = {
-      s = \\part,st => adv.s ! st ++ "," ++ s.s ! part ! st ;
-      te = \\part,st => adv.s ! st ++ "," ++ s.te ! part ! st ;
-      ba = \\part,st => adv.s ! st ++ "," ++ s.ba ! part ! st ;
-      subj = \\part,st => adv.s ! st ++ "," ++ s.subj ! part ! st ;
+      s = \\part,st => adv.s ! st ++ "、" ++ s.s ! part ! st ;
+      te = \\part,st => adv.s ! st ++ "、" ++ s.te ! part ! st ;
+      ba = \\part,st => adv.s ! st ++ "、" ++ s.ba ! part ! st ;
+      subj = \\part,st => adv.s ! st ++ "、" ++ s.subj ! part ! st ;
       pred = s.pred ;
       pred_te = s.pred_te ;
       pred_ba = s.pred_ba

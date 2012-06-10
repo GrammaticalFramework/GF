@@ -1,4 +1,4 @@
-abstract ExtraJapAbs = Cat ** {
+abstract ExtraJpnAbs = Cat ** {
   cat
     Level ;  -- style of speech
     Part ;   -- particles wa/ga

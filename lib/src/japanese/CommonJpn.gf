@@ -1,4 +1,4 @@
-concrete CommonJap of Common = open ResJap, Prelude in { 
+concrete CommonJpn of Common = open ResJpn, Prelude in { 
 
 flags coding = utf8 ;
 
@@ -26,5 +26,4 @@ flags coding = utf8 ;
     Tense = {s : Str ; t : TTense} ;
     Pol = {s : Str ; b : Polarity} ;
     Ant = {s : Str ; a : Anteriority} ;
-
 }
