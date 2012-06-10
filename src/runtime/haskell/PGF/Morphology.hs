@@ -1,7 +1,8 @@
 module PGF.Morphology(Lemma,Analysis,Morpho,
                       buildMorpho,isInMorpho,
                       lookupMorpho,fullFormLexicon,
-                      morphoMissing,missingWordMsg) where
+                      morphoMissing,morphoKnown,morphoClassify,
+                      missingWordMsg) where
 
 import PGF.CId
 import PGF.Data
@@ -48,8 +49,14 @@ isInMorpho (Morpho mo) s = maybe False (const True) $ Map.lookup s mo
 fullFormLexicon :: Morpho -> [(String,[(Lemma,Analysis)])]
 fullFormLexicon (Morpho mo) = Map.toList mo
 
-morphoMissing :: Morpho -> [String] -> [String]
-morphoMissing mo ws = [w | w <- ws, null (lookupMorpho mo w), notLiteral w] where
+morphoMissing  :: Morpho -> [String] -> [String]
+morphoMissing = morphoClassify False
+
+morphoKnown    :: Morpho -> [String] -> [String]
+morphoKnown = morphoClassify True
+
+morphoClassify :: Bool -> Morpho -> [String] -> [String]
+morphoClassify k mo ws = [w | w <- ws, k /= null (lookupMorpho mo w), notLiteral w] where
   notLiteral w = not (all isDigit w) ---- should be defined somewhere
 
 missingWordMsg :: Morpho -> [String] -> String
