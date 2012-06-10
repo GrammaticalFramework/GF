@@ -1,4 +1,4 @@
-concrete IdiomJap of Idiom = CatJap ** open ResJap, ParadigmsJap, Prelude in {
+concrete IdiomJpn of Idiom = CatJpn ** open ResJpn, ParadigmsJpn, Prelude in {
 
 flags coding = utf8 ;
 

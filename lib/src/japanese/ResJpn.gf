@@ -1,4 +1,4 @@
-resource ResJap = open Prelude in {
+resource ResJpn = open Prelude in {
 
 flags coding = utf8 ;
 
@@ -505,6 +505,27 @@ oper
       } ;
     prep1 = "に" ;
     prep2 = "を" 
+    } ;
+
+  mkGo : Verb = {
+    s = table {
+      Resp => (mkVerb "行く" Gr1).s ! Resp ; 
+      Plain => table {
+        (TPres|TFut) => (mkVerb "行く" Gr1).s ! Plain ! TPres ;
+        TPast => table {
+          Pos => "行った" ;
+          Neg => "行かなかった"
+          }
+        }
+      } ;
+    te = table {
+      Pos => "行って" ;
+      Neg => "行かないで" 
+      } ;
+    a_stem = "行か" ;
+    i_stem = "行き" ;
+    ba = (mkVerb "行く" Gr1).ba ;
+    needSubject = True
     } ;
 
   mkNum : Str -> Number -> Num = \s,n -> {

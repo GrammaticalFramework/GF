@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common
 
-concrete SymbolJap of Symbol = CatJap ** open Prelude, ResJap in {
+concrete SymbolJpn of Symbol = CatJpn ** open Prelude, ResJpn in {
 
   flags coding = utf8;
 {-

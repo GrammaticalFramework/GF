@@ -1,4 +1,0 @@
-abstract AllJapAbs = 
-  Lang,
-  ExtraJapAbs
-  ** {} ;

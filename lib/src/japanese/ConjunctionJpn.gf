@@ -1,4 +1,4 @@
-concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
+concrete ConjunctionJpn of Conjunction = CatJpn ** open ResJpn, Prelude in {
   
   flags coding = utf8 ;
             
@@ -114,72 +114,72 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
       } ;
            
     BaseS x y = {
-      and = \\part,st => x.s ! part ! st ++ "," ++ "そして" ++ y.s ! Ga ! st ;
-      or = \\part,st => x.s ! part ! st ++ "," ++ "それとも" ++ y.s ! Ga ! st ;
-      teAnd = \\part,st => x.te ! part ! st ++ "," ++ y.te ! Ga ! st ;
-      teOr = \\part,st => x.s ! part ! st ++ "," ++ "それとも" ++ y.te ! Ga ! st ;
-      baAnd = \\part,st => x.ba ! part ! st ++ "," ++ y.ba ! Ga ! st ;
-      baOr = \\part,st => x.s ! part ! st ++ "," ++ "それとも" ++ y.ba ! Ga ! st ;
+      and = \\part,st => x.s ! part ! st ++ "、" ++ "そして" ++ y.s ! Ga ! st ;
+      or = \\part,st => x.s ! part ! st ++ "、" ++ "それとも" ++ y.s ! Ga ! st ;
+      teAnd = \\part,st => x.te ! part ! st ++ "、" ++ y.te ! Ga ! st ;
+      teOr = \\part,st => x.s ! part ! st ++ "、" ++ "それとも" ++ y.te ! Ga ! st ;
+      baAnd = \\part,st => x.ba ! part ! st ++ "、" ++ y.ba ! Ga ! st ;
+      baOr = \\part,st => x.s ! part ! st ++ "、" ++ "それとも" ++ y.ba ! Ga ! st ;
       subj = \\part,st => x.subj ! part ! st ;
-      predAnd = \\st => x.pred ! st ++ "," ++ "そして" ++ y.s ! Ga ! st ;
-      predOr = \\st => x.pred ! st ++ "," ++ "それとも" ++ y.s ! Ga ! st ;
-      pred_teAnd = \\st => x.pred_te ! st ++ "," ++ y.te ! Ga ! st ;
-      pred_teOr = \\st => x.pred ! st ++ "," ++ "それとも" ++ y.te ! Ga ! st ;
-      pred_baAnd = \\st => x.pred_ba ! st ++ "," ++ y.ba ! Ga ! st ;
-      pred_baOr = \\st => x.pred ! st ++ "," ++ "それとも" ++ y.ba ! Ga ! st ;
+      predAnd = \\st => x.pred ! st ++ "、" ++ "そして" ++ y.s ! Ga ! st ;
+      predOr = \\st => x.pred ! st ++ "、" ++ "それとも" ++ y.s ! Ga ! st ;
+      pred_teAnd = \\st => x.pred_te ! st ++ "、" ++ y.te ! Ga ! st ;
+      pred_teOr = \\st => x.pred ! st ++ "、" ++ "それとも" ++ y.te ! Ga ! st ;
+      pred_baAnd = \\st => x.pred_ba ! st ++ "、" ++ y.ba ! Ga ! st ;
+      pred_baOr = \\st => x.pred ! st ++ "、" ++ "それとも" ++ y.ba ! Ga ! st ;
       } ;
     
     ConsS x xs = {
-      and = \\part,st => xs.and ! part ! st ++ "," ++ "そして" ++ x.s ! Ga ! st ;
-      or = \\part,st => xs.or ! part ! st ++ "," ++ "それとも" ++ x.s ! Ga ! st ;
-      teAnd = \\part,st => xs.teAnd ! part ! st ++ "," ++ x.te ! Ga ! st ;
-      teOr = \\part,st => xs.or ! part ! st ++ "," ++ "それとも" ++ x.te ! Ga ! st ;
-      baAnd = \\part,st => xs.baAnd ! part ! st ++ "," ++ x.ba ! Ga ! st ;
-      baOr = \\part,st => xs.or ! part ! st ++ "," ++ "それとも" ++ x.ba ! Ga ! st ;
+      and = \\part,st => xs.and ! part ! st ++ "、" ++ "そして" ++ x.s ! Ga ! st ;
+      or = \\part,st => xs.or ! part ! st ++ "、" ++ "それとも" ++ x.s ! Ga ! st ;
+      teAnd = \\part,st => xs.teAnd ! part ! st ++ "、" ++ x.te ! Ga ! st ;
+      teOr = \\part,st => xs.or ! part ! st ++ "、" ++ "それとも" ++ x.te ! Ga ! st ;
+      baAnd = \\part,st => xs.baAnd ! part ! st ++ "、" ++ x.ba ! Ga ! st ;
+      baOr = \\part,st => xs.or ! part ! st ++ "、" ++ "それとも" ++ x.ba ! Ga ! st ;
       subj = xs.subj ;
-      predAnd = \\st => xs.predAnd ! st ++ "," ++ "そして" ++ x.s ! Ga ! st ;
-      predOr = \\st => xs.predOr ! st ++ "," ++ "それとも" ++ x.s ! Ga ! st ;
-      pred_teAnd = \\st => xs.pred_teAnd ! st ++ "," ++ x.te ! Ga ! st ;
-      pred_teOr = \\st => xs.predOr ! st ++ "," ++ "それとも" ++ x.te ! Ga ! st ;
-      pred_baAnd = \\st => xs.pred_baAnd ! st ++ "," ++ x.ba ! Ga ! st ;
-      pred_baOr = \\st => xs.predOr ! st ++ "," ++ "それとも" ++ x.ba ! Ga ! st ;
+      predAnd = \\st => xs.predAnd ! st ++ "、" ++ "そして" ++ x.s ! Ga ! st ;
+      predOr = \\st => xs.predOr ! st ++ "、" ++ "それとも" ++ x.s ! Ga ! st ;
+      pred_teAnd = \\st => xs.pred_teAnd ! st ++ "、" ++ x.te ! Ga ! st ;
+      pred_teOr = \\st => xs.predOr ! st ++ "、" ++ "それとも" ++ x.te ! Ga ! st ;
+      pred_baAnd = \\st => xs.pred_baAnd ! st ++ "、" ++ x.ba ! Ga ! st ;
+      pred_baOr = \\st => xs.predOr ! st ++ "、" ++ "それとも" ++ x.ba ! Ga ! st ;
       } ;
 
     BaseRS x y = {
-      and = \\a,st => x.te ! a ! st ++ "," ++ y.s ! a ! st ;
+      and = \\a,st => x.te ! a ! st ++ "、" ++ y.s ! a ! st ;
       or = \\a,st => case <x.missingSubj, y.missingSubj> of {
-        <True, True> => x.s ! a ! st ++ "か" ++ "," ++ y.s ! a ! st ;
-        _ => x.te ! a ! st ++ "," ++ "あるいは" ++ y.s ! a ! st 
+        <True, True> => x.s ! a ! st ++ "か" ++ "、" ++ y.s ! a ! st ;
+        _ => x.te ! a ! st ++ "、" ++ "あるいは" ++ y.s ! a ! st 
         } ;
-      teAnd = \\a,st => x.te ! a ! st ++ "," ++ y.te ! a ! st ;
-      teOr = \\a,st => x.te ! a ! st ++ "," ++ "あるいは" ++ y.te ! a ! st ;
-      predAnd = \\a,st => x.pred_te ! a ! st ++ "," ++ y.s ! a ! st ;
-      predOr = \\a,st => x.pred_te ! a ! st ++ "," ++ "あるいは" ++ y.s ! a ! st ;
-      pred_teAnd = \\a,st => x.pred_te ! a ! st ++ "," ++ y.te ! a ! st ;
-      pred_teOr = \\a,st => x.pred_te ! a ! st ++ "," ++ "あるいは" ++ y.te ! a ! st ;
-      pred_baAnd = \\a,st => x.pred_te ! a ! st ++ "," ++ y.subj ! Ga ! st ++ 
+      teAnd = \\a,st => x.te ! a ! st ++ "、" ++ y.te ! a ! st ;
+      teOr = \\a,st => x.te ! a ! st ++ "、" ++ "あるいは" ++ y.te ! a ! st ;
+      predAnd = \\a,st => x.pred_te ! a ! st ++ "、" ++ y.s ! a ! st ;
+      predOr = \\a,st => x.pred_te ! a ! st ++ "、" ++ "あるいは" ++ y.s ! a ! st ;
+      pred_teAnd = \\a,st => x.pred_te ! a ! st ++ "、" ++ y.te ! a ! st ;
+      pred_teOr = \\a,st => x.pred_te ! a ! st ++ "、" ++ "あるいは" ++ y.te ! a ! st ;
+      pred_baAnd = \\a,st => x.pred_te ! a ! st ++ "、" ++ y.subj ! Ga ! st ++ 
                              y.pred_ba ! a ! st ;
-      pred_baOr = \\a,st => x.pred_te ! a ! st ++ "," ++ "あるいは" ++ y.subj ! Ga ! st ++ 
+      pred_baOr = \\a,st => x.pred_te ! a ! st ++ "、" ++ "あるいは" ++ y.subj ! Ga ! st ++ 
                               y.pred_ba ! a ! st ;
       subj = x.subj ;
       missingSubj = x.missingSubj
       } ;
       
     ConsRS x xs = {
-      and = \\a,st => xs.teAnd ! a ! st ++ "," ++ x.s ! a ! st ;
+      and = \\a,st => xs.teAnd ! a ! st ++ "、" ++ x.s ! a ! st ;
       or = \\a,st => case <xs.missingSubj, x.missingSubj> of {
-        <True, True> => xs.teOr ! a ! st ++ "か" ++ "," ++ x.s ! a ! st ;
-        _ => xs.teOr ! a ! st ++ "," ++ "あるいは" ++ x.s ! a ! st 
+        <True, True> => xs.teOr ! a ! st ++ "か" ++ "、" ++ x.s ! a ! st ;
+        _ => xs.teOr ! a ! st ++ "、" ++ "あるいは" ++ x.s ! a ! st 
         } ;
-      teAnd = \\a,st => xs.teAnd ! a ! st ++ "," ++ x.te ! a ! st ;
-      teOr = \\a,st => xs.teOr ! a ! st ++ "," ++ "あるいは" ++ x.te ! a ! st ;
-      predAnd = \\a,st => xs.pred_teAnd ! a ! st ++ "," ++ x.s ! a ! st ;
-      predOr = \\a,st => xs.pred_teOr ! a ! st ++ "," ++ "あるいは" ++ x.s ! a ! st ;
-      pred_teAnd = \\a,st => xs.pred_teAnd ! a ! st ++ "," ++ x.te ! a ! st ;
-      pred_teOr = \\a,st => xs.pred_teOr ! a ! st ++ "," ++ "あるいは" ++ x.te ! a ! st ;
-      pred_baAnd = \\a,st => xs.pred_teAnd ! a ! st ++ "," ++ x.subj ! Ga ! st ++ 
+      teAnd = \\a,st => xs.teAnd ! a ! st ++ "、" ++ x.te ! a ! st ;
+      teOr = \\a,st => xs.teOr ! a ! st ++ "、" ++ "あるいは" ++ x.te ! a ! st ;
+      predAnd = \\a,st => xs.pred_teAnd ! a ! st ++ "、" ++ x.s ! a ! st ;
+      predOr = \\a,st => xs.pred_teOr ! a ! st ++ "、" ++ "あるいは" ++ x.s ! a ! st ;
+      pred_teAnd = \\a,st => xs.pred_teAnd ! a ! st ++ "、" ++ x.te ! a ! st ;
+      pred_teOr = \\a,st => xs.pred_teOr ! a ! st ++ "、" ++ "あるいは" ++ x.te ! a ! st ;
+      pred_baAnd = \\a,st => xs.pred_teAnd ! a ! st ++ "、" ++ x.subj ! Ga ! st ++ 
                                x.pred_ba ! a ! st ;
-      pred_baOr = \\a,st => xs.pred_teOr ! a ! st ++ "," ++ "あるいは" ++ x.subj ! Ga ! st ++ 
+      pred_baOr = \\a,st => xs.pred_teOr ! a ! st ++ "、" ++ "あるいは" ++ x.subj ! Ga ! st ++ 
                               x.pred_ba ! a ! st ;
       subj = xs.subj ;
       missingSubj = xs.missingSubj
@@ -188,11 +188,11 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
     BaseAdv x y = {
       and = \\st => case <x.prepositive, y.prepositive> of {
         <False, False> => x.s ! st ++ y.s ! st ;
-        _              => x.s ! st ++ "," ++ y.s ! st 
+        _              => x.s ! st ++ "、" ++ y.s ! st 
         } ;
       or = \\st => case <x.prepositive, y.prepositive> of {
         <False, False> => x.s ! st ++ "か" ++ y.s ! st ;
-        _              => x.s ! st ++ "," ++ "あるいは" ++ y.s ! st 
+        _              => x.s ! st ++ "、" ++ "あるいは" ++ y.s ! st 
         } ;
       prepositive = case <x.prepositive, y.prepositive> of {
         <False, False> => False ;
@@ -203,11 +203,11 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
     ConsAdv x xs = {
       and = \\st => case <x.prepositive, xs.prepositive> of {
         <False, False> => xs.and ! st ++ x.s ! st ;
-        _              => xs.and ! st ++ "," ++ x.s ! st 
+        _              => xs.and ! st ++ "、" ++ x.s ! st 
         } ;
       or = \\st => case <x.prepositive, xs.prepositive> of {
         <False, False> => x.s ! st ++ "か" ++ xs.or ! st ;
-        _              => xs.or ! st ++ "," ++ "あるいは" ++ x.s ! st 
+        _              => xs.or ! st ++ "、" ++ "あるいは" ++ x.s ! st 
         } ;
       prepositive = case <x.prepositive, xs.prepositive> of {
         <False, False> => False ;
@@ -356,5 +356,4 @@ concrete ConjunctionJap of Conjunction = CatJap ** open ResJap, Prelude in {
     [CN] = {and, or : Number => Style => Str ; anim : Animateness ; counter : Str ; 
             counterReplace : Bool ; object : Style => Str ; prepositive : Style => Str ;
             hasAttr : Bool ; counterTsu : Bool} ;
-
 }

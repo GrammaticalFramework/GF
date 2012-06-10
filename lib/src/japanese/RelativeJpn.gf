@@ -1,4 +1,4 @@
-concrete RelativeJap of Relative = CatJap ** open ResJap, ParadigmsJap, Prelude in {
+concrete RelativeJpn of Relative = CatJpn ** open ResJpn, ParadigmsJpn, Prelude in {
 
 flags coding = utf8 ;
 

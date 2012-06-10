@@ -1,4 +1,4 @@
-concrete TextJap of Text = CatJap ** open ResJap, Prelude in {
+concrete TextJpn of Text = CatJpn ** open ResJpn, Prelude in {
 
 flags coding = utf8 ;
 

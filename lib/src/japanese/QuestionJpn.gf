@@ -1,5 +1,5 @@
-concrete QuestionJap of Question = CatJap
-** open ResJap, ParadigmsJap, Prelude in {
+concrete QuestionJpn of Question = CatJpn
+** open ResJpn, ParadigmsJpn, Prelude in {
 
 flags coding = utf8 ;
 

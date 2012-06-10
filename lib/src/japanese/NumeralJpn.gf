@@ -1,4 +1,4 @@
-concrete NumeralJap of Numeral = CatJap ** open ResJap, ParadigmsJap, Prelude in {
+concrete NumeralJpn of Numeral = CatJpn ** open ResJpn, ParadigmsJpn, Prelude in {
 
 flags coding = utf8 ;
 

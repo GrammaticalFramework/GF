@@ -1,4 +1,4 @@
-concrete StructuralJap of Structural = CatJap ** open ResJap, ParadigmsJap, Prelude in {
+concrete StructuralJpn of Structural = CatJpn ** open ResJpn, ParadigmsJpn, Prelude in {
 
 flags coding = utf8 ;
 

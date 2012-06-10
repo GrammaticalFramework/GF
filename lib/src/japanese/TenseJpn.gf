@@ -1,4 +1,4 @@
-concrete TenseJap of Tense = CatJap ** open ResJap, ParadigmsJap, Prelude in {
+concrete TenseJpn of Tense = CatJpn ** open ResJpn, ParadigmsJpn, Prelude in {
 
 flags coding = utf8 ;
 
@@ -13,9 +13,9 @@ flags coding = utf8 ;
     PPos  = {s = [] ; b = Pos} ;
     PNeg  = {s = [] ; b = Neg} ;
 
-    TPres, TCond = {s = [] ; t = ResJap.TPres} ;
-    TPast = {s = [] ; t = ResJap.TPast} ;
-    TFut  = {s = [] ; t = ResJap.TFut} ;
+    TPres, TCond = {s = [] ; t = ResJpn.TPres} ;
+    TPast = {s = [] ; t = ResJpn.TPast} ;
+    TFut  = {s = [] ; t = ResJpn.TFut} ;
 
     ASimul = {s = [] ; a = Simul} ;
     AAnter = {s = [] ; a = Anter} ;

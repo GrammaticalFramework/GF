@@ -1,10 +1,6 @@
-concrete CatJap of Cat = CommonJap ** open ResJap, Prelude in {
-
-
+concrete CatJpn of Cat = CommonJpn ** open ResJpn, Prelude in {
 
 flags coding = utf8 ;
-
-  
 
   lincat
   
@@ -29,7 +25,7 @@ flags coding = utf8 ;
           te, pred_te, pred_ba : Animateness => Style => Polarity => Str ;
           subj : Particle => Style => Str ; changePolar : Bool ; missingSubj : Bool} ;
     RP = {s : Style => Str ; null : Bool} ;
-    VP = ResJap.VP ;  -- {verb : Speaker => Animateness => Style => TTense => Polarity => Str ; 
+    VP = ResJpn.VP ;  -- {verb : Speaker => Animateness => Style => TTense => Polarity => Str ; 
                       --  a_stem, i_stem : Speaker => Animateness => Style => Str ; 
                       --  te, ba : Speaker => Animateness => Style => Polarity => Str ;
                       --  prep : Str ; obj : Style => Str ; prepositive : Style => Str ; 
@@ -42,7 +38,7 @@ flags coding = utf8 ;
                prep : Str ; obj : Style => Str ; prepositive : Style => Str ; v2vType : Bool} ;
     AP = {pred : Style => TTense => Polarity => Str ; attr, adv, dropNaEnging, prepositive : 
           Style => Str ; te, ba : Style => Polarity => Str ; needSubject : Bool} ;
-    NP = ResJap.NP ;  -- {s : Style => Str ; prepositive : Style => Str ; needPart : Bool ; 
+    NP = ResJpn.NP ;  -- {s : Style => Str ; prepositive : Style => Str ; needPart : Bool ; 
                       --  changePolar : Bool ; meaning : Speaker ; anim : Animateness} ;
     CN = Noun ** {object : Style => Str ; prepositive : Style => Str ; hasAttr : Bool} ; 
     Pron = Pronoun ;              -- {s : Style => Str ; Pron1Sg : Bool ; anim : Animateness} ;
@@ -50,7 +46,7 @@ flags coding = utf8 ;
                --  n : Number ; inclCard : Bool ; sp : Style => Str ; no : Bool ; tenPlus : Bool} ;
     Predet = {s : Str ; not : Bool} ;
     Quant = {s : Style => Str ; sp : Style => Str ; no : Bool} ;
-    Num = ResJap.Num ;            -- {s : Str ; postpositive : Str ; n : Number ; inclCard : Bool ; 
+    Num = ResJpn.Num ;            -- {s : Str ; postpositive : Str ; n : Number ; inclCard : Bool ; 
                                   --  tenPlus : Bool} ;
     Card = {s : Str ; postpositive : Str ; n : Number ; tenPlus : Bool} ; 
     Ord = Adj ;                   -- {pred : Style => TTense => Polarity => Str ; attr, adv,
@@ -68,7 +64,7 @@ flags coding = utf8 ;
     V3 = Verb3 ;                  -- {s : Speaker => Style => TTense => Polarity => Str ; a_stem, 
                                   --  i_stem : Speaker => Str ; te, ba : Speaker => Polarity => 
                                   --  Str ; prep1, prep2 : Str} ;
-    VV = ResJap.VV ;              -- {s : Speaker => Style => TTense => Polarity => Str ; te,  
+    VV = ResJpn.VV ;              -- {s : Speaker => Style => TTense => Polarity => Str ; te,  
                                   --  a_stem, i_stem, ba, te_neg, ba_neg : Speaker => Str ; 
                                   --  sense : ModSense} ;
     VS = Verb2 ;

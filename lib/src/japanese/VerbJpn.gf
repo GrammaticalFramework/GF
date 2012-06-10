@@ -1,4 +1,4 @@
-concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
+concrete VerbJpn of Verb = CatJpn ** open ResJpn, Prelude in {
   
   flags coding = utf8 ;
   
@@ -18,15 +18,15 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       
     ComplVV v vp = case v.sense of {
       Abil => {
-        verb = \\sp,a,st,t,p => vp.verb ! sp ! a ! Plain ! TPres ! ResJap.Pos ++ 
+        verb = \\sp,a,st,t,p => vp.verb ! sp ! a ! Plain ! TPres ! ResJpn.Pos ++ 
                              "ことが" ++ v.s ! sp ! st ! t ! p ;
-        te = \\sp,a,st,p => vp.verb ! sp ! a ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ 
+        te = \\sp,a,st,p => vp.verb ! sp ! a ! Plain ! TPres ! ResJpn.Pos ++ "ことが" ++ 
                             v.te ! sp ! p ;  
-        a_stem = \\sp,a,st => vp.verb ! sp ! a ! Plain ! TPres ! ResJap.Pos ++ 
+        a_stem = \\sp,a,st => vp.verb ! sp ! a ! Plain ! TPres ! ResJpn.Pos ++ 
                               "ことが" ++ v.a_stem ! sp ;
-        i_stem = \\sp,a,st => vp.verb ! sp ! a ! Plain ! TPres ! ResJap.Pos ++ 
+        i_stem = \\sp,a,st => vp.verb ! sp ! a ! Plain ! TPres ! ResJpn.Pos ++ 
                               "ことが" ++ v.i_stem ! sp ;
-        ba = \\sp,a,st,p => vp.verb ! sp ! a ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ 
+        ba = \\sp,a,st,p => vp.verb ! sp ! a ! Plain ! TPres ! ResJpn.Pos ++ "ことが" ++ 
                             v.ba ! sp ! p ;
         prep = vp.prep ;
         obj = \\st => vp.obj ! st ;
@@ -129,17 +129,17 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
     Slash3V3 = Slash2V3 ;
     
     SlashV2V v2v vp = {
-      s = \\sp,st,t,p => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" 
+      s = \\sp,st,t,p => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJpn.Pos ++ "ように" 
                          ++ v2v.s ! st ! t ! p ;
-      a_stem = \\sp => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJap.Pos ++ 
+      a_stem = \\sp => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJpn.Pos ++ 
                        "ように" ++ v2v.a_stem ;
-      i_stem = \\sp => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJap.Pos ++ 
+      i_stem = \\sp => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJpn.Pos ++ 
                        "ように" ++ v2v.i_stem ;
-      ba = \\sp,p => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ 
+      ba = \\sp,p => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJpn.Pos ++ "ように" ++ 
                      v2v.ba ! p ;
       prep = "に" ;
       obj = \\st => vp.obj ! st ++ vp.prep ;
-      te = \\sp,p => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ 
+      te = \\sp,p => vp.verb ! SomeoneElse ! Anim ! Plain ! TPres ! ResJpn.Pos ++ "ように" ++ 
                      v2v.te ! p ; 
       prepositive = vp.prepositive ;
       v2vType = True
@@ -207,15 +207,15 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       
     SlashVV v vpslash = case v.sense of {
       Abil => {
-        s = \\sp,st,t,p => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ 
+        s = \\sp,st,t,p => vpslash.s ! sp ! Plain ! TPres ! ResJpn.Pos ++ 
                            "ことが" ++ v.s ! sp ! st ! t ! p ;
-        te = \\sp,p => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ 
+        te = \\sp,p => vpslash.s ! sp ! Plain ! TPres ! ResJpn.Pos ++ "ことが" ++ 
                        v.te ! sp ! p ;  
-        a_stem = \\sp => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ 
+        a_stem = \\sp => vpslash.s ! sp ! Plain ! TPres ! ResJpn.Pos ++ "ことが" ++ 
                          v.a_stem ! sp ;
-        i_stem = \\sp => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ 
+        i_stem = \\sp => vpslash.s ! sp ! Plain ! TPres ! ResJpn.Pos ++ "ことが" ++ 
                          v.i_stem ! sp ;
-        ba = \\sp,p => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ことが" ++ 
+        ba = \\sp,p => vpslash.s ! sp ! Plain ! TPres ! ResJpn.Pos ++ "ことが" ++ 
                        v.ba ! sp ! p ;
         prep = vpslash.prep ;
         obj = vpslash.obj ;
@@ -256,14 +256,14 @@ concrete VerbJap of Verb = CatJap ** open ResJap, Prelude in {
       } ; 
 
     SlashV2VNP v2v np vpslash = {
-      s = \\sp,st,t,p => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ように" 
+      s = \\sp,st,t,p => vpslash.s ! sp ! Plain ! TPres ! ResJpn.Pos ++ "ように" 
                          ++ v2v.s ! st ! t ! p ;
-      a_stem = \\sp => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.a_stem ;
-      i_stem = \\sp => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.i_stem ;
-      ba = \\sp,p => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.ba ! p ;
+      a_stem = \\sp => vpslash.s ! sp ! Plain ! TPres ! ResJpn.Pos ++ "ように" ++ v2v.a_stem ;
+      i_stem = \\sp => vpslash.s ! sp ! Plain ! TPres ! ResJpn.Pos ++ "ように" ++ v2v.i_stem ;
+      ba = \\sp,p => vpslash.s ! sp ! Plain ! TPres ! ResJpn.Pos ++ "ように" ++ v2v.ba ! p ;
       prep = vpslash.prep ;
       obj = \\st => np.s ! st ++ "に" ++ vpslash.obj ! st ;
-      te = \\sp,p => vpslash.s ! sp ! Plain ! TPres ! ResJap.Pos ++ "ように" ++ v2v.te ! p ; 
+      te = \\sp,p => vpslash.s ! sp ! Plain ! TPres ! ResJpn.Pos ++ "ように" ++ v2v.te ! p ; 
       prepositive = \\st => np.prepositive ! st ++ vpslash.prepositive ! st ;
       v2vType = True
       } ;
