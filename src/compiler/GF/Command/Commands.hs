@@ -521,6 +521,10 @@ allCommands env@(pgf, mos) = Map.fromList [
                     return . fromString . unwords .
                     morphoMissing (optMorpho opts) . 
                     concatMap words . toStrings
+               _ | isOpt "known" opts ->
+                    return . fromString . unwords .
+                    morphoKnown (optMorpho opts) . 
+                    concatMap words . toStrings
                _ -> return . fromString . unlines . 
                     map prMorphoAnalysis . concatMap (morphos opts) . 
                     concatMap words . toStrings ,
@@ -528,7 +532,8 @@ allCommands env@(pgf, mos) = Map.fromList [
        ("lang","the languages of analysis (comma-separated, no spaces)")
        ],
      options = [
-       ("missing","show the list of unknown words in the input")
+       ("known",  "return only the known words, in order of appearance"),
+       ("missing","show the list of unknown words, in order of appearance")
        ]
      }),
 
