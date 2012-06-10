@@ -23,13 +23,13 @@ are marked in the table
 | Eng   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,BB
 | Est   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *KK,IL
 | Fin   | +     | +    | ++    | +   | +    | +   | +    | -     | +    | *AR
-| Fre   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
-| Ger   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,HH
+| Fre   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,RE
+| Ger   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,HH,EG
 | Heb   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *DD
 | Hin   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,*KP,MH,AR
-| Jap   | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *LZ
 | Ina   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | JB
 | Ita   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *AR,*RE,GP
+| Jpn   | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *LZ
 | Lat   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
 | Lav   | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *NG,*PP
 | Mlt   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *JC
@@ -85,6 +85,7 @@ CK Chotiros Kairoje,
 DD Dana Dannélls,
 DS Dinesh Simk,
 EA Elnaz Abolahrar,
+EG Erzsébet Galgóczy
 FJ Femke Johansson,
 HH Harald Hammarström,
 GP Gabriele Paganelli,
