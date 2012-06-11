@@ -449,7 +449,7 @@ I only support the latest version of the plugin, so make sure you are up to date
 <p>In both cases make sure you get the correct version of Xtext (see below).
 Once you have Xtext set up, you can clone the repository locally with <code>git clone git://github.com/GrammaticalFramework/gf-eclipse-plugin.git</code> and then add the projects under the <code>workspace</code> directory to your Eclipse workspace.</p>
 
-<h3>Xtext version</h3>
+<h4>Xtext version</h4>
 
 <p>GFEP currently uses Xtext 2.1.0.</p>
 
@@ -488,6 +488,13 @@ Note that this means you will be running <em>two</em> instances of Eclipse simul
 </ul></li>
 <li>Click <strong>Finish</strong> and wait for the plugin to build. You may get some errors, in which case look through the generated <code>log.zip</code> and fix them, then repeat the process.</li>
 </ol>
+
+<h3>Other notes</h3>
+
+<p>Some have mentioned than when opening the GFEP sources, under Linux, they needed to install the following:</p>
+
+<p><code>sudo apt-get install appmenu-gtk
+sudo apt-get install gtk2-engines-pixbuf</code></p>
 
 <!----------------------------------------------------------------------------->
 
