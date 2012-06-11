@@ -5,6 +5,7 @@ h1,h2,h3,h4 { color: #303030; text-shadow: rgba(0,0,0,0.25) 3px 3px 5px; }
 
 h1:first-child, h2:first-child { margin-top: 0; margin-bottom: 1ex; }
 h1 img { float: right; border: 0; max-width: 50%; }
+h1 img.nofloat { float: none; }
 
 #editor {
     /* This allows the div to grow wider than the window if necessary to

@@ -20,3 +20,4 @@ td { background: white; }
 th { background: #9df; }
 
 h1 img { float: right; border: 0; }
+h1 img.nofloat { float: none; }

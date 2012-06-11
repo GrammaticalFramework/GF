@@ -14,6 +14,7 @@ tested-with: GHC==6.12.3, GHC==7.0.4
 
 data-dir: src
 data-files: www/index.html
+	    www/P/*.png
 	    www/gfse/*.html
 	    www/gfse/*.css
 	    www/gfse/*.js
