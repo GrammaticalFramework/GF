@@ -157,7 +157,7 @@ Updated: 1 June 2012</p>
 <li>Add the GF perspective by clicking <strong>Window &rarr; Open Perspective &rarr; Other</strong> and choosing <strong>GF</strong>.</li>
 <li>The plugin will try to determine the path to your GF executable automatically. You can check/overwrite it by going to <strong>Preferences &rarr; Grammatical Framework</strong>.
 This path should include the name of the GF binary itself, e.g. <code>/home/john/.cabal/bin/gf</code> or <code>C:\Users\John\GF\gf.exe</code>.</li>
-<li>By default, the <em>Library path</em> setting is set to <code>.:present:alltenses:prelude</code>. This is passed to GF using the <code>--path</code> flag.</li>
+<li>By default, the <em>Library path</em> setting is set to <code>.:alltenses:prelude</code>. This is passed to GF using the <code>--path</code> flag.</li>
 <li>You can also adjust the verbosity level of the GFEP console log in the preferences window.</li>
 </ol>
 
@@ -416,11 +416,11 @@ Each time you save a file (or some other change occurs in your project), the bui
 <p>GFEP attempts to compile all of your files individually with GF, which is not the usual way in which you would compile your grammar.
 As a result, when looking for the RGL files, GF needs a little help via the <code>path</code> argument.</p>
 
-<p>The normal way to do this is to specify the <em>Library path</em> setting from  <strong>Preferences &rarr; Grammatical Framework</strong>, setting it to something like <code>.:present:alltenses:prelude</code> (this is the default setting). Note that these paths are relative to the true RGL directory, which GF should already be aware of. The value of this setting is passed to GF from GFEP using the <code>--path</code> flag.</p>
+<p>The normal way to do this is to specify the <em>Library path</em> setting from  <strong>Preferences &rarr; Grammatical Framework</strong>, setting it to something like <code>.:alltenses:prelude</code> (this is the default setting). Note that these paths are relative to the true RGL directory, which GF should already be aware of. The value of this setting is passed to GF from GFEP using the <code>--path</code> flag.</p>
 
 <p>The <em>Library path</em> setting is the same for all your GF projects. If you want finer-grain control over the <code>path</code> compiler option then you should use compiler pragmas in your source files, e.g.:</p>
 
-<pre><code>--# -path=.:present:alltenses:prelude
+<pre><code>--# -path=.:alltenses:prelude
 </code></pre>
 
 <p>The advantage of this method is that the information is bound to the file, so you can freely compile your modules outside of GFEP without having to specify the path as a command line option to GF.
@@ -432,6 +432,62 @@ The disadvantage is that you need to specify such a pragma in every single file 
 I only support the latest version of the plugin, so make sure you are up to date too.</p>
 
 <p>If problems persist, please contact me or better yet file an issue on the GitHub issue tracker (see below).</p>
+
+<!----------------------------------------------------------------------------->
+
+<h2>For developers</h2>
+
+<h3>Project setup</h3>
+
+<p>In order to build/run the GFEP from source, you need to have the Xtext libraries available in your Eclipse workspace. You have two choices:</p>
+
+<ol>
+<li>Download the Xtext libraries from <a href="http://www.eclipse.org/Xtext/download/">http://www.eclipse.org/Xtext/download/</a> and add them to your existing Eclipse instance</li>
+<li>Download a release of Eclipse packaged together with Xtext from <a href="http://xtext.itemis.com/xtext/language=en/36553/downloads">http://xtext.itemis.com/xtext/language=en/36553/downloads</a></li>
+</ol>
+
+<p>In both cases make sure you get the correct version of Xtext (see below).
+Once you have Xtext set up, you can clone the repository locally with <code>git clone git://github.com/GrammaticalFramework/gf-eclipse-plugin.git</code> and then add the projects under the <code>workspace</code> directory to your Eclipse workspace.</p>
+
+<h3>Xtext version</h3>
+
+<p>GFEP currently uses Xtext 2.1.0.</p>
+
+<h3>Running from source</h3>
+
+<p>Once you have set up your projects (see above), you can run/debug the GFEP by following the steps <a href="http://www.eclipse.org/Xtext/documentation/2_1_0/020-domainmodel-step-by-step.php#DomainmodelWalkThrough_7">here</a>.
+Note that this means you will be running <em>two</em> instances of Eclipse simultaneously; the first debugging the second.</p>
+
+<h3>Building plugin package</h3>
+
+<p>To package the GFEP sources as <code>.jar</code> files and install/update the GFEP in a separate Eclipse installation, do the following:</p>
+
+<ol>
+<li>Right-click on the project <code>org.grammaticalframework.feature</code> and choose <strong>Export&#8230;</strong></li>
+<li>Select <strong>Plug-in Development &rarr; Deployable features</strong></li>
+<li>Use the following options:
+
+<ul>
+<li>Available features: <strong>org.grammaticalframework.feature (x.y.z.qualifier)</strong></li>
+<li>Destination
+
+<ul>
+<li>Directory: <strong>&lt;local directory&gt;</strong></li>
+</ul></li>
+<li>Options
+
+<ul>
+<li>Package as individual JAR archives
+
+<ul>
+<li>Generate metadata repository</li>
+<li>Categorize repository: <strong>&lt;workspace&gt;/org.grammaticalframework.feature/category.xml</strong></li>
+</ul></li>
+<li>Allow for binary cycles in target platform</li>
+</ul></li>
+</ul></li>
+<li>Click <strong>Finish</strong> and wait for the plugin to build. You may get some errors, in which case look through the generated <code>log.zip</code> and fix them, then repeat the process.</li>
+</ol>
 
 <!----------------------------------------------------------------------------->
 
