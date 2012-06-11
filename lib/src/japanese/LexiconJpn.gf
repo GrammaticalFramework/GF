@@ -1,4 +1,4 @@
-concrete LexiconJpn of Lexicon = GrammarJpn ** open ParadigmsJpn, ResJpn, Prelude in {
+concrete LexiconJpn of Lexicon = CatJpn ** open ParadigmsJpn, ResJpn, Prelude in {
 
 flags coding = utf8 ;
 
