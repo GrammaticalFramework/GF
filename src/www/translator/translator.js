@@ -340,6 +340,29 @@ Translator.prototype.pick_translation=function(i,txt) {
     t.replace_segment(i,t.draw_segment(s,i))
 }
 
+Translator.prototype.edit_source=function(source,i) {
+    var t=this
+    var s=t.document.segments[i]
+
+    function restore() { t.replace_segment(i,t.draw_segment(s,i)) }
+    function done() {
+	s.source=inp.value // side effect, updating the document in-place
+	restore();
+	if(s.options.method!="Manual") {
+	    s.options.to="" // hack to force an update
+	    t.update_translations()
+	}
+	return false;
+    }
+
+    var inp=node("input",{name:"it",value:s.source})
+    var e=wrap("form",[inp, submit(), button("Cancel",restore)])
+    clear(source)
+    source.appendChild(e)
+    e.onsubmit=done
+    inp.focus()
+}
+
 Translator.prototype.edit_translation=function(i) {
     var t=this
     var s=t.document.segments[i]
@@ -357,7 +380,7 @@ Translator.prototype.edit_translation=function(i) {
     var inp=node("input",{name:"it",value:s.target})
     var e=wrap("form",[inp, submit(), button("Cancel",restore)])
     var target=wrap_class("td","target",e)
-    var edit=t.draw_segment_given_target(s,target)
+    var edit=t.draw_segment_given_target(s,target,i)
     t.replace_segment(i,edit)
     e.onsubmit=done
     inp.focus();
@@ -430,7 +453,7 @@ Translator.prototype.draw_segment=function(s,i) {
     function pick(txt) { t.pick_translation(i,txt) }
     target.onclick=edit
     if(s.choices) appendChildren(target,draw_choices(s.choices,pick))
-    return t.draw_segment_given_target(s,target)
+    return t.draw_segment_given_target(s,target,i)
 }
 
 function draw_choices(txts,onclick) {
@@ -443,7 +466,7 @@ function draw_choices(txts,onclick) {
 	    wrap_class("dl","popupmenu",map(opt,txts))]
 }
 
-Translator.prototype.draw_segment_given_target=function(s,target) {
+Translator.prototype.draw_segment_given_target=function(s,target,i) {
     var t=this
 
     function draw_options2(o) {
@@ -464,11 +487,11 @@ Translator.prototype.draw_segment_given_target=function(s,target) {
 	return wrap("div",[span_class("arrow",text(" ⇒ ")),
 			   wrap("dl",draw_options2(o))])
     }
+    var source=wrap_class("td","source",text(s.source))
+    source.onclick=function() { t.edit_source(source,i); }
+    var options=wrap_class("td","options",draw_options(s.options))
 
-    return wrap_class("tr","segment",
-		      [wrap_class("td","source",text(s.source)),
-		       wrap_class("td","options",draw_options(s.options)),
-		       target])
+    return wrap_class("tr","segment",[source,options,target])
 }
 
 function empty_document() {
