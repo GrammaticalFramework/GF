@@ -15,7 +15,7 @@ concrete ParseEng of ParseEngAbs =
   RelativeEng,
   IdiomEng [NP, VP, Tense, Cl, ProgrVP, ExistNP],
   ExtraEng [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
-            Temp, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
+            Temp, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, UncNeg,
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV],
 
   DictEng ** 
