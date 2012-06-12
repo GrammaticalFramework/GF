@@ -30,6 +30,7 @@
 #include <gu/exn.h>
 #include <gu/utf8.h>
 #include <math.h>
+#include <stdio.h>
 
 #define GU_LOG_ENABLE
 #include <gu/log.h>
@@ -656,6 +657,8 @@ pgf_compute_meta_probs(GuMapItor* fn, const void* key, void* value, GuExn* err)
 		mass += cat->functions[i].prob;
 	}
     cat->meta_prob = - log(fabs(1 - mass));
+	cat->meta_token_prob = INFINITY;
+    cat->meta_child_probs = NULL;
 }
 
 static void
@@ -935,4 +938,52 @@ pgf_read(GuIn* in, GuPool* pool, GuExn* err)
 	gu_pool_free(tmp_pool);
 	gu_return_on_exn(err, NULL);
 	return pgf;
+}
+
+bool
+pgf_load_meta_child_probs(PgfPGF* pgf, const char* fpath, GuPool* pool)
+{
+	FILE *fp = fopen(fpath, "r");
+	if (!fp)
+		return false;
+
+	GuPool* tmp_pool = gu_new_pool();
+	
+	for (;;) {
+		char cat1_s[21];
+		char cat2_s[21];
+		float prob;
+
+		if (fscanf(fp, "%20s\t%20s\t%f", cat1_s, cat2_s, &prob) < 3)
+			break;
+
+		prob = - log(prob);
+
+		GuString cat1 = gu_str_string(cat1_s, tmp_pool);
+		PgfCat* abscat1 =
+			gu_map_get(pgf->abstract.cats, &cat1, PgfCat*);
+		if (abscat1 == NULL)
+			return false;
+
+		if (strcmp(cat2_s, "_") == 0) {
+			abscat1->meta_token_prob = prob;
+		} else {
+			GuString cat2 = gu_str_string(cat2_s, tmp_pool);			
+			PgfCat* abscat2 = gu_map_get(pgf->abstract.cats, &cat2, PgfCat*);
+			if (abscat2 == NULL)
+				return false;
+
+			if (abscat1->meta_child_probs == NULL) {
+				abscat1->meta_child_probs = 
+					gu_map_type_new(PgfMetaChildMap, pool);
+			}
+
+			gu_map_put(abscat1->meta_child_probs, abscat2, float, prob);
+		}
+	}
+	
+	gu_pool_free(tmp_pool);
+
+	fclose(fp);
+	return true;
 }

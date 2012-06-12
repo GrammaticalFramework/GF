@@ -145,11 +145,16 @@ struct PgfCatFun {
 	PgfCId fun;
 };
 
+typedef GuMap PgfMetaChildMap;
+extern GU_DECLARE_TYPE(PgfMetaChildMap, GuMap);
+
 struct PgfCat {
 	// TODO: Add cid here
 	PgfHypos context;
 
 	float meta_prob;
+	float meta_token_prob;
+	PgfMetaChildMap* meta_child_probs;
 
 	GuLength n_functions;
 	PgfCatFun functions[]; // XXX: resolve to PgfFunDecl*?

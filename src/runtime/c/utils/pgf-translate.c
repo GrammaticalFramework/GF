@@ -87,6 +87,12 @@ int main(int argc, char* argv[]) {
 		goto fail_read;
 	}
 
+	if (!pgf_load_meta_child_probs(pgf, "../../../examples/PennTreebank/test2.probs", pool)) {
+		fprintf(stderr, "Loading meta child probs failed\n");
+		status = EXIT_FAILURE;
+		goto fail_read;
+	}
+
 	// Look up the source and destination concrete categories
 	PgfConcr* from_concr =
 		gu_map_get(pgf->concretes, &from_lang, PgfConcr*);
