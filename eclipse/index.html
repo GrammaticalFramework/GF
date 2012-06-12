@@ -118,8 +118,11 @@ Updated: 12 June 2012</p>
 
 <ol>
 <li><a href="http://www.eclipse.org/downloads/">Eclipse</a> 3.6 or above.</li>
-<li><a href="http://www.grammaticalframework.org/download/release-3.3.3.html">GF 3.3.3</a> or above. The path to GF must be set within the plugin (see below).</li>
+<li><a href="http://www.grammaticalframework.org/download/release-3.3.3.html">GF 3.3.3</a> or above. The path to GF must be set within the plugin preferences (see below).</li>
 </ol>
+
+<p>Using the GF Resource Grammar Library requires that the RGL binaries are also installed on your system.
+If you are using the <a href="http://www.grammaticalframework.org/download/index.html">pre-compiled binaries</a> but have separately downloaded the RGL sources to your system, you can optionally specify this path in the plugin preferences (see below).</p>
 
 <h3>Installing the plugin for the first time</h3>
 
@@ -159,9 +162,11 @@ Updated: 12 June 2012</p>
 <ol>
 <li>Add the GF perspective by clicking <strong>Window &rarr; Open Perspective &rarr; Other</strong> and choosing <strong>GF</strong>.</li>
 <li>Open the plugin settings by going to <strong>Preferences &rarr; Grammatical Framework</strong> (image below).</li>
-<li>The plugin will try to determine the path to your GF executable automatically, but this may need to be corrected. The path should include the name of the GF binary itself, e.g. <code>/home/john/.cabal/bin/gf</code> or <code>C:\Users\John\GF\gf.exe</code>.</li>
+<li>The plugin will try to determine the path to your GF executable automatically, but this may need to be corrected.<br />
+The path should include the name of the GF binary itself, e.g. <code>/home/john/.cabal/bin/gf</code> or <code>C:\Users\John\GF\bin\gf.exe</code>.</li>
 <li>The <em>Additional path directive</em> setting can be used if you want to avoid writing <code>--# -path=...</code> directives in your source files. By default it is set to <code>.:alltenses:prelude</code>, but can also be left blank. This is passed to GF using the <code>--path</code> flag.</li>
-<li>If you are using pre-compiled version of the Resource Grammar Library (i.e. you didn&#8217;t build them yourself from source) <em>but</em> you still have the sources available on your system, then you can enter to that path here. This is optional and is only used for jumping to source definitions. You should enter the absolute system path up to and including the <code>src</code> folder, e.g. <code>/home/john/GF/lib/src/</code>.</li>
+<li>If you are using a pre-compiled version of the Resource Grammar Library (i.e. you didn&#8217;t build it from source yourself) but you have the sources available on your system, then you can enter their path in the <em>Library source path</em> setting. This is optional and is only used for jumping to source definitions.<br />
+You should enter an absolute system path, up to and including the <code>src</code> folder, e.g. <code>/home/john/GF/lib/src/</code> or <code>C:\Users\John\GF\lib\src\</code>.</li>
 <li>You can also adjust the verbosity level of the GFEP console log in the preferences window.</li>
 </ol>
 
