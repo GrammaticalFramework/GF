@@ -505,7 +505,8 @@ using the morphological analyser of the actual grammar (see command pg)
 
 - Options:
 
- | ``-missing`` | show the list of unknown words in the input
+ | ``-known`` | return only the known words, in order of appearance
+ | ``-missing`` | show the list of unknown words, in order of appearance
 
 - Flags:
 
