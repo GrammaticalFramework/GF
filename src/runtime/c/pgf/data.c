@@ -3,6 +3,7 @@
 #include <gu/type.h>
 #include <gu/variant.h>
 #include <gu/assert.h>
+#include <math.h>
 
 bool 
 pgf_tokens_equal(PgfTokens t1, PgfTokens t2)
@@ -183,6 +184,12 @@ GU_DEFINE_TYPE(
 	PgfCatFun, struct,
 	GU_MEMBER(PgfCatFun, prob, double),
 	GU_MEMBER(PgfCatFun, fun, PgfCId));
+
+static float inf_float = INFINITY;
+
+GU_DEFINE_TYPE(PgfMetaChildMap, GuMap,
+		       gu_type(PgfCat), NULL,
+		       gu_type(float), &inf_float);
 
 GU_DEFINE_TYPE(
 	PgfCat, struct, 

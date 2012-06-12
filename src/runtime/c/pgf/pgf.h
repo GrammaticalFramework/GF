@@ -69,6 +69,9 @@ pgf_read(GuIn* in, GuPool* pool, GuExn* err);
  */
 
 
+bool
+pgf_load_meta_child_probs(PgfPGF*, const char* fpath, GuPool* pool);
+
 #include <gu/type.h>
 extern GU_DECLARE_TYPE(PgfPGF, struct);
 
