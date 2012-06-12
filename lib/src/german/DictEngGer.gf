@@ -1,4 +1,4 @@
---# -path=.:../prelude:../abstract:../common:/Users/erzsebet/GF/lib/src/german/
+--# -path=.:../prelude:../abstract:../common::../english
 
 concrete DictEngGer of DictEngAbs = CatGer **
 			open ResGer, DictGer, LexiconGer, Prelude,
