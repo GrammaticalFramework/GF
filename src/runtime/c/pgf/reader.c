@@ -791,6 +791,7 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
 	concr->callbacks = pgf_new_callbacks_map(concr, pool); 
 	concr->total_cats = pgf_read_int(rdr);
 	concr->max_fid = concr->total_cats;
+	concr->item_quota = 2000000;
 
     // set the function ids
     int n_funs = gu_list_length(concr->cncfuns);
@@ -986,4 +987,14 @@ pgf_load_meta_child_probs(PgfPGF* pgf, const char* fpath, GuPool* pool)
 
 	fclose(fp);
 	return true;
+}
+
+void
+pgf_set_item_quota(PgfConcr* concr, int quota) {
+	concr->item_quota = quota > 0 ? quota : 0;
+}
+
+int
+pgf_get_item_quota(PgfConcr* concr) {
+	return concr->item_quota;
 }

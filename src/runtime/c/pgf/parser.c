@@ -31,6 +31,7 @@ typedef struct {
 	PgfItem* target;
 	PgfProduction meta_prod;
     int max_fid;
+    int item_count;
 } PgfParsing;
 
 typedef struct {
@@ -686,6 +687,7 @@ pgf_parsing_production(PgfParseState* state,
 {
 	PgfItem* item =
         pgf_new_item(state->offset, ccat, lin_idx, prod, conts, delta_prob, state->pool);
+    state->ps->item_count++;
     gu_buf_heap_push(state->agenda, &pgf_item_prob_order, &item);
 }
 
@@ -875,6 +877,7 @@ pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
 			// Top-down prediction for meta rules
 			PgfItem *item =
 				pgf_new_item(before->offset, ccat, lin_idx, before->ps->meta_prod, conts, 0, before->pool);
+			before->ps->item_count++;
 			item->inside_prob = 
 				ccat->cnccat->abscat->meta_prob;
 			gu_buf_heap_push(before->agenda, &pgf_item_prob_order, &item);
@@ -1425,6 +1428,9 @@ static PgfLiteralCallback pgf_meta_callback =
 static void
 pgf_parsing_proceed(PgfParseState* state, void** output) {
 	while (*output == NULL) {
+		if (state->ps->item_count > state->ps->concr->item_quota)
+			break;
+
 		float best_prob = INFINITY;
 		PgfParseState* before = NULL;
 
@@ -1476,6 +1482,7 @@ pgf_new_parsing(PgfConcr* concr, GuPool* pool)
 	ps->completed = NULL;
 	ps->target = NULL;
 	ps->max_fid = concr->max_fid;
+	ps->item_count = 0;
 
 	PgfProductionExtern* pext =
 		gu_new_variant(PGF_PRODUCTION_EXTERN,
@@ -1757,11 +1764,13 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
                     gu_seq_get(prods, PgfProduction, i);
                 PgfItem* item = 
                     pgf_new_item(0, ccat, lin_idx, prod, conts, 0, pool);
+                ps->item_count++;
                 gu_buf_heap_push(state->agenda, &pgf_item_prob_order, &item);
             }
             
          	PgfItem *item =
 				pgf_new_item(0, ccat, lin_idx, ps->meta_prod, conts, 0, pool);
+			ps->item_count++;
 			item->inside_prob = 
 				ccat->cnccat->abscat->meta_prob;
 			gu_buf_heap_push(state->agenda, &pgf_item_prob_order, &item);
