@@ -165,7 +165,7 @@ handle state0 cache execute1
       case cmd of
         "make" -> make dir qs
         "upload" -> upload qs
-        "ls" -> jsonList
+        "ls" -> jsonList (maybe ".json" id $ lookup "ext" qs)
         "rm" -> look "file" rm qs
         "download" -> look "file" download qs
         "link_directories" -> look "newdir" (link_directories dir) qs
@@ -183,8 +183,8 @@ handle state0 cache execute1
       do mapM_ (uncurry updateFile) files
          return (state,resp204)
 
-    jsonList =
-        do jsons <- ls_ext "." ".json"
+    jsonList ext =
+        do jsons <- ls_ext "." ext
            return (state,json200 jsons)
 
     rm path _ | takeExtension path==".json" =
