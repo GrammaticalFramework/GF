@@ -116,7 +116,7 @@ Translator.prototype.update_translations=function() {
 	    var sup=" is supported by the grammar"
 	    var msg= fls ? tn+unsup : tls ? fn+unsup :
 		           "Neither "+fn+" nor "+tn+sup
-	    upd3("["+msg+"]")
+	    upd3(["["+msg+"]"])
 	}
     }
 
@@ -516,7 +516,7 @@ function lang1(name) {
     return ws.length==1 ? lang(name.substr(0,3),name) : lang(ws[0],ws[1]);
 }
 var languages =
-    map(lang1,"Amharic Arabic Bulgarian Catalan Danish Dutch English Finnish French German Hindi Ina/Interlingua Italian Japanese Latin Norwegian Polish Ron/Romanian Russian Spanish Swedish Thai Turkish Urdu".split(" "));
+    map(lang1,"Amharic Arabic Bulgarian Catalan Danish Dutch English Finnish French German Hindi Ina/Interlingua Italian Jpn/Japanese Latin Norwegian Polish Ron/Romanian Russian Spanish Swedish Thai Turkish Urdu".split(" "));
 
 var langname={};
 for(var i in languages)
