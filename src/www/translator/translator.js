@@ -39,6 +39,7 @@ Translator.prototype.redraw=function() {
 	update_radiobutton("source",o.from)
 	update_radiobutton("target",o.to)
 	update_radiobutton("view",o.view || "segmentbysegment")
+	update_checkbox("cloud",o.cloud  || false)
 	if(o.method!="Manual") {
 	    function cont2(gr_info) {
 		t.grammar_info=gr_info
@@ -148,11 +149,18 @@ Translator.prototype.change=function(el) {
 	    t.redraw()
 	}
     }
+    function update_checkbox(field) {
+	if(el.checked!=o[field]) {
+	    o[field]=el.checked
+	    t.redraw()
+	}
+    }
     switch(el.name) {
     case "method": update("method"); break;
     case "source": update("from"); break;
     case "target": update("to"); break;
-    case "view": update("view"); break;
+    case "view"  : update("view"); break;
+    case "cloud" : update_checkbox("cloud"); break;
     }
 }
 
@@ -167,17 +175,32 @@ Translator.prototype.new=function(el) {
 Translator.prototype.browse=function(el) {
     hide_menu(el);
     var t=this
-    function browse() {
-	var files=t.local.ls("/")
+    function ls(files,op) {
 	var ul=empty_class("ul","files")
 	for(var i in files) {
 	    var name=files[i]
-	    var link=a(jsurl("translator.open('"+name+"')"),[text(name)])
+	    var link=a(jsurl(op+"('"+name+"')"),[text(name)])
 	    ul.appendChild(li(link))
 	}
+	return ul
+    }
+    function browse() {
 	clear(t.view)
 	t.view.appendChild(wrap("h2",text("Your translator documents")))
-	t.view.appendChild(ul)
+	var files=t.local.ls("/")
+	if(files.length>0) {
+	    t.view.appendChild(wrap("h3",text("Local documents")))
+	    t.view.appendChild(ls(files,"translator.open"))
+	}
+	function lscloud(result) {
+	    var filenames=JSON.parse(result)
+	    var files=map(strip_cloudext,filenames)
+	    if(files.length>0) {
+		t.view.appendChild(wrap("h3",text("Documents in the cloud")))
+		t.view.appendChild(ls(files,"translator.open_from_cloud"))
+	    }
+	}
+	if(navigator.onLine) gfcloud("ls",{ext:cloudext},lscloud)
 	t.current="/"
 	t.local.put("current","/")
     }
@@ -189,33 +212,52 @@ Translator.prototype.open=function(name) {
     if(name) {
 	var path="/"+name
 	var document=t.local.get(path);
-	if(document) {
-	    t.current=name;
-	    t.local.put("current",name)
-	    t.document=document;
-	    t.redraw();
-	}
+	if(document) t.load(name,document)
 	else alert("No such document: "+name)
     }
 }
+Translator.prototype.load=function(name,document) {
+    var t=this
+    t.current=name;
+    t.local.put("current",name)
+    t.document=document;
+    t.redraw();
+}
+
+Translator.prototype.open_from_cloud=function(name) {
+    var t=this
+    var filename=name+cloudext
+    function ok(result) {
+	var document=JSON.parse(result)
+	if(document) t.load(name,document)
+    }
+    gfcloud("download",{file:encodeURIComponent(filename)},ok);
+}
 
 Translator.prototype.save=function(el) {
+    var t=this
     hide_menu(el);
-    if(this.current!="/") {
-	if(this.current) this.local.put("/"+this.current,this.document)
-	else this.saveAs()
+    if(t.current!="/") {
+	if(t.current) {
+	    if(t.document.options.cloud)
+		save_in_cloud(t.current+cloudext,t.document)
+	    else
+		t.local.put("/"+t.current,t.document)
+	}
+	else t.saveAs()
     }
 }
 
 Translator.prototype.saveAs=function(el) {
+    var t=this
     hide_menu(el);
-    if(this.current!="/") {
+    if(t.current!="/") {
 	var name=prompt("File name?")
 	if(name) {
-	    this.current=this.document.name=name;
-	    this.local.put("current",name)
-	    this.save();
-	    this.redraw();
+	    t.current=t.document.name=name;
+	    t.local.put("current",name)
+	    t.save();
+	    t.redraw();
 	}
     }
 }
@@ -264,7 +306,7 @@ Translator.prototype.add_segment=function(el) {
 	e.onsubmit=done
 	inp.focus();
     }
-    setTimeout(imp,100)
+    if(t.current!="/") setTimeout(imp,100)
 }
 
 Translator.prototype.import=function(el) {
@@ -306,7 +348,7 @@ Translator.prototype.import=function(el) {
 	e.onsubmit=done
 	inp.focus();
     }
-    setTimeout(imp,100)
+    if(t.current!="/") setTimeout(imp,100)
 }
 
 Translator.prototype.remove=function(el) {
@@ -397,11 +439,13 @@ function hide_menu(el) {
 /* --- Documents ------------------------------------------------------------ */
 
 /*
-type Document = { name:String, options: Options, segments:[Segment] }
+type Document = { name:String, options:DocOptions, segments:[Segment] }
 type Segment = { source:String, target:String, options:Options }
+type DocOptions = Options & { view:View }
 type Options = {from: Lang, to: Lang, method:Method}
 type Lang = String // Eng, Swe, Ita, etc
 type Method = "Manual" | GrammarName
+type View = "segmentbysegment" | "paralleltexts"
 type GrammarName = String // e.g. "Foods.pgf"
 */
 
@@ -595,6 +639,23 @@ function split_punct(text,punct) {
     return segs
 }
 
+/* --- Cloud Support -------------------------------------------------------- */
+
+
+var cloudext=".gfstdoc"
+function strip_cloudext(s) { return s.substr(0,s.length-cloudext.length) }
+
+function save_in_cloud(filename,document) {
+    function done() { }
+    function save(dir) {
+	var form={dir:dir}
+	form[filename]=JSON.stringify(document);
+	ajax_http_post("/cloud","command=upload"+encodeArgs(form),done)
+    }
+    with_dir(save)
+}
+
+
 /* --- DOM Support ---------------------------------------------------------- */
 
 function a(url,linked) { return node("a",{href:url},linked); }
@@ -613,6 +674,10 @@ function update_radiobutton(name,value) {
     var bs=document.forms.options[name]
     if(bs.length)
 	for(var i in bs) if(bs[i].value==value) bs[i].checked=true
+}
+
+function update_checkbox(name,checked) {
+    document.forms.options[name].checked=checked
 }
 
 function submit(label) {

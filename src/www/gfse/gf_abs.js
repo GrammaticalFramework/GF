@@ -216,7 +216,7 @@ function parse_oper(s) {
     
 }
 
-/* --- Print as plain text (normal GF source syntax) ------------------------- */
+/* --- Print as plain text (normal GF source syntax) ------------------------ */
 
 function show_type(t) {
     var s="";
