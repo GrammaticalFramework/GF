@@ -245,6 +245,7 @@ struct PgfConcr {
 	PgfCallbacksMap* callbacks;
 	int total_cats;
     int max_fid;
+    int item_quota;
 };
 
 extern GU_DECLARE_TYPE(PgfConcr, struct);

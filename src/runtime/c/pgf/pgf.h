@@ -72,6 +72,15 @@ pgf_read(GuIn* in, GuPool* pool, GuExn* err);
 bool
 pgf_load_meta_child_probs(PgfPGF*, const char* fpath, GuPool* pool);
 
+typedef struct PgfConcr PgfConcr;
+
+void
+pgf_set_item_quota(PgfConcr* concr, int quota);
+
+int
+pgf_get_item_quota(PgfConcr* concr);
+
+
 #include <gu/type.h>
 extern GU_DECLARE_TYPE(PgfPGF, struct);
 
