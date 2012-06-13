@@ -42,7 +42,6 @@ typedef struct PgfAbstr PgfAbstr;
 extern GU_DECLARE_TYPE(PgfAbstr, struct);
 
 typedef struct PgfFunDecl PgfFunDecl;
-typedef struct PgfConcr PgfConcr;
 
 typedef int PgfLength;
 typedef struct GuVariant PgfSymbol;
@@ -293,7 +292,8 @@ typedef struct PgfSymbolKP
 typedef enum {
 	PGF_PRODUCTION_APPLY,
 	PGF_PRODUCTION_COERCE,
-	PGF_PRODUCTION_EXTERN
+	PGF_PRODUCTION_EXTERN,
+	PGF_PRODUCTION_META
 } PgfProductionTag;
 
 typedef struct PgfPArg PgfPArg;
@@ -323,10 +323,16 @@ typedef struct PgfProductionCoerce
 } PgfProductionCoerce;
 
 typedef struct {
-	PgfFunId fun; 
-	PgfPArgs args;
 	PgfLiteralCallback *callback;
+	PgfExprProb *ep;
+    GuSeq lins;
 } PgfProductionExtern;
+
+typedef struct {
+	PgfExprProb *ep;
+	GuSeq lins; 
+	PgfPArgs args;
+} PgfProductionMeta;
 
 extern GU_DECLARE_TYPE(PgfPatt, GuVariant);
 
