@@ -15,6 +15,7 @@ function Translator() {
     this.server.get_grammarlist(bind(this.extend_methods,this))
     update_language_menu(this,"source")
     update_language_menu(this,"target")
+    if(apertium) this.add_apertium()
     this.redraw();
 }
 
@@ -23,7 +24,7 @@ function update_language_menu(t,id) {
     clear(dl);
     for(var i in languages) {
 	var l=languages[i]
-	dl.appendChild(wrap("dt",radiobutton(id,l.code,l.name,bind(t.change,t))))
+	dl.appendChild(dt(radiobutton(id,l.code,l.name,bind(t.change,t))))
     }
 }
 
@@ -40,17 +41,66 @@ Translator.prototype.redraw=function() {
 	update_radiobutton("target",o.to)
 	update_radiobutton("view",o.view || "segmentbysegment")
 	update_checkbox("cloud",o.cloud  || false)
-	if(o.method!="Manual") {
+	switch(o.method) {
+	case "Manual":
+	case "Apertium":
+	    t.update_language_menus()
+	    t.update_translations()
+	    break;
+	default: // GF
 	    function cont2(gr_info) {
 		t.grammar_info=gr_info
+		t.update_language_menus() // needs grammar_info
 		t.update_translations()
 	    }
 	    function cont1() { t.server.grammar_info(cont2)}
 	    t.server.switch_grammar(o.method,cont1)
 	}
-	else
-	    t.update_translations()
     }
+}
+
+Translator.prototype.update_language_menus=function() {
+    var t=this
+    var o=t.document.options
+    var method=o.method+(o.method=="Apertium"?"/"+o.from:"")
+    if(t.menus_for==method) return;
+    t.menus_for=method
+    function mark_menu(name,supported) {
+	var menu=document.forms.options[name]
+	for(var i=0;i<menu.length;i++)
+	    menu[i].parentNode.parentNode.className=
+	      (supported(menu[i].value)?"":"un")+"supported"
+    }
+    function mark_menus(ssupport,tsupport) {
+	mark_menu("source",ssupport)
+	mark_menu("target",tsupport)
+    }
+    switch(o.method) {
+    case "Manual":
+	function yes(code) { return true; }
+	mark_menus(yes,yes)
+	break;
+    case "Apertium":
+	function ssupport(code) {
+	    return apertium.isTranslatable(alangcode(code))
+	}
+	function tsupport(code) {
+	  return apertium.isTranslatablePair(alangcode(o.from),alangcode(code))
+	}
+	mark_menus(ssupport,tsupport)
+	break;
+    default: // GF
+	var supported=bind(t.gf_supported,t)
+	mark_menus(supported,supported)
+    }
+}
+
+Translator.prototype.gf_supported=function(langcode) {
+    var t=this;
+    var concname=t.grammar_info.name+langcode
+    var l=t.grammar_info.languages
+    for(var i in l) if(l[i].name==concname) return true
+    return false
 }
 
 Translator.prototype.update_translations=function() {
@@ -61,32 +111,51 @@ Translator.prototype.update_translations=function() {
     var ds=t.drawing.segments
     var ts=t.drawing.targets
 
-    function supported(concname) {
-	var l=t.grammar_info.languages
-	for(var i in l) if(l[i].name==concname) return true
-	return false
-    }
-
-    function update_translation(i) {
+    function replace(i) {
 	var segment=ss[i]
-	function replace() {
-	    if(ds) {
-		var sd=t.draw_segment(segment,i)
-		var old=ds[i]
-		ds[i]=sd
-		replaceNode(sd,old)
-	    }
-	    else if(ts) {
-		clear(ts[i])
-		ts[i].appendChild(text(segment.target+" "))
-	    }
+	if(ds) {
+	    var sd=t.draw_segment(segment,i)
+	    var old=ds[i]
+	    ds[i]=sd
+	    replaceNode(sd,old)
 	}
+	else if(ts) {
+	    clear(ts[i])
+	    ts[i].appendChild(text(segment.target+" "))
+	}
+    }
+    function update_apertium_translation(i,afrom,ato) {
+	var segment=ss[i]
 	function upd3(txts) {
 	    segment.target=txts[0];
 	    segment.options={method:o.method,from:o.from,to:o.to} // no sharing!
 	    if(txts.length>1) segment.choices=txts
 	    else delete segment.choices
-	    replace()
+	    replace(i)
+	}
+	function upd1(res) {
+	    //console.log(translate_output)
+	    if(res.translation) upd3([res.translation])
+	    else upd3(["["+res.error.message+"]"])
+	}
+	function upd0(source) { apertium.translate(source,afrom,ato,upd1) }
+	if(apertium.isTranslatablePair(afrom,ato)) {
+	    if(segment.options.method!="Manual" 
+	       && !eq_options(segment.options,o))
+		upd0(segment.source)
+	}
+	else
+	    upd3(["[Apertium does not support "+show_translation(o)+"]"])
+    }
+
+    function update_gf_translation(i,gfrom,gto) {
+	var segment=ss[i]
+	function upd3(txts) {
+	    segment.target=txts[0];
+	    segment.options={method:o.method,from:o.from,to:o.to} // no sharing!
+	    if(txts.length>1) segment.choices=txts
+	    else delete segment.choices
+	    replace(i)
 	}
 	function upd2(ts) {
 	    function unlex(txt,cont) { gfshell('ps -unlextext "'+txt+'"',cont) }
@@ -103,8 +172,8 @@ Translator.prototype.update_translations=function() {
 	function upd0(source) {
 	    t.server.translate({from:gfrom,to:gto,input:source},upd1)
 	}
-	var fls=supported(gfrom)
-	var tls=supported(gto)
+	var fls=t.gf_supported(o.from)
+	var tls=t.gf_supported(o.to)
 	if(fls && tls) {
 	    if(segment.options.method!="Manual" 
 	       && !eq_options(segment.options,o))
@@ -121,21 +190,36 @@ Translator.prototype.update_translations=function() {
 	}
     }
 
-    if(doc.options.method!="Manual") {
+    switch(doc.options.method) {
+    case "Manual":
+	break;
+    case "Apertium":
+	var afrom=alangcode(o.from)
+	var ato=alangcode(o.to)
+	for(var i in ss) update_apertium_translation(i,afrom,ato)
+	break;
+    default: // GF
 	var gname=t.grammar_info.name
 	var gfrom=gname+o.from
 	var gto=gname+o.to
-	for(var i in ss) update_translation(i)
+	for(var i in ss) update_gf_translation(i,gfrom,gto)
     }
+}
+
+Translator.prototype.add_apertium=function() {
+    var dl=element("methods")
+    if(dl)
+	dl.appendChild(dt(radiobutton("method","Apertium","Apertium",
+				      bind(this.change,this))))
 }
 
 Translator.prototype.extend_methods=function(grammars) {
     this.grammars=grammars
     var dl=element("methods")
     if(dl) for(var i in grammars) {
-	dl.appendChild(wrap("dt",radiobutton("method",grammars[i],
-					     "GF: "+grammars[i],
-					     bind(this.change,this))))
+	dl.appendChild(dt(radiobutton("method",grammars[i],
+				      "GF: "+grammars[i],
+				      bind(this.change,this))))
     }
     update_radiobutton("method",this.document.options.method)
 }
@@ -444,9 +528,9 @@ type Segment = { source:String, target:String, options:Options }
 type DocOptions = Options & { view:View }
 type Options = {from: Lang, to: Lang, method:Method}
 type Lang = String // Eng, Swe, Ita, etc
-type Method = "Manual" | GrammarName
+type Method = "Manual" | "Apertium" | GFGrammarName
 type View = "segmentbysegment" | "paralleltexts"
-type GrammarName = String // e.g. "Foods.pgf"
+type GFGrammarName = String // e.g. "Foods.pgf"
 */
 
 function eq_options(o1,o2) {
@@ -522,9 +606,9 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
 	var autoB=radiobutton("method","Auto","Auto",change,!manual)
 	var manualB=radiobutton("method","Manual","Manual",change,manual)
 	return wrap("form",
-		    [wrap("dt",autoB),
-		     wrap("dt",manualB),
-		     wrap("dt",draw_translation(o))])
+		    [dt(autoB),
+		     dt(manualB),
+		     dt(draw_translation(o))])
     }
 
     function draw_options(o) {
@@ -548,26 +632,35 @@ function new_segment(source) {
     return { source:source, target:"", options:{} } // leave options empty
 }
 
-function draw_translation(o) {
-    return text("("+concname(o.from||"?")+" → "+concname(o.to||"?")+")")
+function draw_translation(o) { return text(show_translation(o)) }
+
+function show_translation(o) {
+    return "("+concname(o.from||"?")+" → "+concname(o.to||"?")+")"
 }
 
 /* --- Auxiliary functions -------------------------------------------------- */
 
-function lang(code,name) { return { code:code, name:name} }
-function lang1(name) {
+function lang(code,name,code2) { return {code:code, name:name, code2:code2} }
+function lang1(namecode2) {
+    var nc=namecode2.split(":");
+    var name=nc[0]
     var ws=name.split("/");
-    return ws.length==1 ? lang(name.substr(0,3),name) : lang(ws[0],ws[1]);
+    var code2=nc.length>1 ? nc[1] : ""
+    return ws.length==1 ? lang(name.substr(0,3),name,code2)
+	                : lang(ws[0],ws[1],code2);
 }
-var languages =
-    map(lang1,"Amharic Arabic Bulgarian Catalan Danish Dutch English Finnish French German Hindi Ina/Interlingua Italian Jpn/Japanese Latin Norwegian Polish Ron/Romanian Russian Spanish Swedish Thai Turkish Urdu".split(" "));
+
+var languages = // [ISO-639-2 code "/"] language name ":" ISO 639-1 code
+    map(lang1,"Amharic:am Arabic:ar Bulgarian:bg Catalan:ca Danish:da Dutch:nl English:en Finnish:fi French:fr German:de Hindi:hi Ina/Interlingua:ia Italian:it Jpn/Japanese:ja Latin:la Norwegian:nb Polish:pl Ron/Romanian:ro Russian:ru Spanish:es Swedish:sv Thai:th Turkish:tr Urdu:ur".split(" "));
 
 var langname={};
-for(var i in languages)
+var langcode2={}
+for(var i in languages) {
     langname[languages[i].code]=languages[i].name
-
+    langcode2[languages[i].code]=languages[i].code2
+}
 function concname(code) { return langname[code] || code; }
-
+function alangcode(code) { return langcode2[code] || code; }
 
 function tr_local() {
     /*
