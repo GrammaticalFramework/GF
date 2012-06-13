@@ -10,6 +10,9 @@ typedef struct GuBuf GuBuf;
 typedef GuOpaque() GuSeq;
 
 GuSeq
+gu_empty_seq();
+
+GuSeq
 gu_make_seq(size_t elem_size, size_t len, GuPool* pool);
 
 #define gu_new_seq(T, N, POOL)			\
