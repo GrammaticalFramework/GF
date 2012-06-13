@@ -27,6 +27,8 @@ table.menubar td:hover, table.menubar dt:hover, dl.popupmenu > dt:hover {
 }
 table table dl { left: 6em; }
 table.menubar dt { white-space: nowrap; }
+dt.unsupported { color: #999; }
+
 div.document {
     /*margin-top: 7ex;*/
     clear: both;
