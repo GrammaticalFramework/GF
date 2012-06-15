@@ -9,6 +9,9 @@
 
 module GF.Grammar.Binary where
 
+import Prelude hiding (catch)
+import Control.Exception(catch,ErrorCall(..),throwIO)
+
 import Data.Char
 import Data.Binary
 import Control.Monad
@@ -291,10 +294,9 @@ putGFOVersion = mapM_ (putWord8 . fromIntegral . ord) gfoVersion
 getGFOVersion = replicateM (length gfoVersion) (fmap (chr . fromIntegral) getWord8)
 
 decodeModule :: FilePath -> IO SourceModule
-decodeModule fpath =
-  decodeFile_ fpath (getGFOVersion >> get)
+decodeModule fpath = decodeFile' fpath (getGFOVersion >> get)
 
-decodeModuleHeader fpath = decodeFile_ fpath getVersionedMod
+decodeModuleHeader fpath = decodeFile' fpath getVersionedMod
   where
     getVersionedMod = do
       ver <- getGFOVersion
@@ -306,3 +308,12 @@ decodeModuleHeader fpath = decodeFile_ fpath getVersionedMod
 encodeModule :: FilePath -> SourceModule -> IO ()
 encodeModule fpath mo =
   encodeFile_ fpath (putGFOVersion >> put mo)
+
+-- | like decodeFile_ but adds file name to error message if there was an error
+decodeFile' fpath get = addFPath fpath (decodeFile_ fpath get)
+
+-- | Adds file name to error message if there was an error,
+-- | but laziness can cause errors to slip through
+addFPath fpath m = m `catch` handle
+  where
+    handle (ErrorCall msg) = throwIO (ErrorCall (fpath++": "++msg))
