@@ -13,7 +13,7 @@ bug-reports: http://code.google.com/p/grammatical-framework/issues/list
 tested-with: GHC==6.12.3, GHC==7.0.4
 
 data-dir: src
-data-files: www/index.html
+data-files: www/*.html
 	    www/P/*.png
 	    www/gfse/*.html
 	    www/gfse/*.css
