@@ -34,8 +34,9 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
 		   VPPerfPresCont => {fin = copula CPresent n p g ; inf = (vp.s ! VPTense VPPres agr).inf ++ raha g n } ;					
 	           VPPerfPastCont => {fin = copula CPast n p g ; inf = (vp.s ! VPTense VPPres agr).inf ++ raha g n } ;					
 		   VPPerfFutCont =>  {fin = [] ; inf = Prelude.glue ((vp.s ! VPTense VPPres agr).inf ++ raha g n  ++ hw p n) (copula CFuture n p g) } ;					
-		   VPSubj   => case vp.prog of { True => {fin = (vp.s !  VPTense VPFutr agr).inf ++ hw p n ; inf = "s*a:yd" } ;
-		   _    => {fin = (vp.s !  VPTense VPFutr agr).inf ; inf = "s*a:yd" } } 
+		 --  VPSubj   => case vp.prog of { True => {fin = (vp.s !  VPTense VPFutr agr).inf ++ hw p n ; inf = "s*a:yd" } ;
+		   VPSubj   => case vp.prog of { True => {fin = Prelude.glue ((vp.s !  VPTense VPFutr agr).inf ++ hw p n) (copula CFuture n p g) ; inf =[] } ;
+		   _    => {fin = Prelude.glue (vp.s !  VPTense VPFutr agr).inf (copula CFuture n p g); inf = [] } } 
                    
 		  };
 					
@@ -54,8 +55,8 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
                 Neg => "nahi:m." };
         in
 		case vt of {
-		VPSubj => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ na ++  vps.inf ++ vps.fin ++ vp.embComp ;
-		_      => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ nahim  ++  vps.inf ++ vps.fin ++ vp.embComp};
+		VPSubj => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ vp.cvp ++ na ++  vps.inf ++ vps.fin ++ vp.embComp ;
+		_      => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ vp.cvp ++ nahim  ++  vps.inf ++ vps.fin ++ vp.embComp};
 
   } ;
 
@@ -79,7 +80,7 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
 		    VPPerfPresCont => {fin = copula CPresent n p g ; inf = (vp.s ! VPStem).inf ++ raha g n } ; 
 		    VPPerfPastCont => {fin = copula CPast n p g ; inf = (vp.s ! VPStem).inf ++ raha g n } ; 
 		    VPPerfFutCont =>  {fin = [] ; inf = Prelude.glue ((vp.s ! VPStem).inf ++ raha g n ++ hw p n) (copula CFuture n p g) } ;
-		    VPSubj   => {fin = insertSubj p (vp.s ! VPStem).inf ; inf = "s*a:yd"  }
+		    VPSubj   => {fin = Prelude.glue (insertSubj p (vp.s ! VPStem).inf) (copula CFuture n p g ); inf = [] }
                     
 			  };
 
@@ -97,8 +98,8 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
                 Neg => "nahi:m." };		
         in
 		case t of {
-		VPSubj => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ na ++  vps.inf ++ vps.fin ++ vp.embComp;
-		_      => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ nahim ++  vps.inf ++ vps.fin ++ vp.embComp};
+		VPSubj => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ vp.cvp ++ na ++  vps.inf ++ vps.fin ++ vp.embComp;
+		_      => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ vp.cvp ++ nahim ++  vps.inf ++ vps.fin ++ vp.embComp};
     } ;
 
  np2pronCase ppf npc a = case npc of {
@@ -127,7 +128,7 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
   waN = "va:n~" ; -- check with prasad
   hE = "he:" ;
   comma = "," ;
-  indfArt = "E:k" ; -- check with prasad
+  indfArt = "" ; -- removed
   kwd = "xud" ; -- check with prasad
 
   oper 

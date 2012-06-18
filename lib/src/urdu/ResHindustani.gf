@@ -127,7 +127,8 @@ param
 		ad = [];
         embComp = [];
 	prog = False ;
-        comp = \\_ => []
+        comp = \\_ => [] ;
+	cvp = v.cvp 
       } ;  
     predAux : Aux -> VPH = \verb -> {
      s = \\vh => 
@@ -150,7 +151,8 @@ param
 	  ad = [];
       embComp = [];
       prog = False ;
-      comp = \\_ => []
+      comp = \\_ => [] ;
+      cvp = []
       } ;
     
     Aux = {
@@ -179,7 +181,8 @@ param
       ad = verb.ad;
       embComp = verb.embComp;
       prog = True ;
-      comp = verb.comp 
+      comp = verb.comp ;
+      cvp = verb.cvp 
       } ;
    	
    
@@ -191,7 +194,8 @@ param
 	 ad = vp.ad;
      embComp = vp.embComp;
      prog = vp.prog ;
-     comp = \\a =>    vp.comp ! a  ++ obj1 ! a 
+     comp = \\a =>    vp.comp ! a  ++ obj1 ! a ;
+     cvp = vp.cvp 
      } ;
      insertVV : Str -> VPH -> Str -> VPH = \obj1,vp,emb -> {
      s = vp.s ;
@@ -201,7 +205,8 @@ param
 	 ad = vp.ad;
      embComp = vp.embComp ++ emb ;
      prog = vp.prog ;
-     comp = \\a =>    vp.comp ! a  ++ obj1  
+     comp = \\a =>    vp.comp ! a  ++ obj1 ;
+     cvp = vp.cvp 
      } ;
      
     insertObj2 : (Str) -> VPH -> VPH = \obj1,vp -> {
@@ -212,7 +217,8 @@ param
 	 ad = vp.ad;
      embComp = vp.embComp ++ obj1;
      prog = vp.prog ;
-     comp = vp.comp
+     comp = vp.comp ;
+     cvp = vp.cvp 
      
      } ;
 	 
@@ -238,7 +244,8 @@ param
 	  ad = vps.ad;
       embComp = vps.embComp;
       prog = vps.prog ;
-      comp = vps.comp
+      comp = vps.comp ;
+      cvp = vps.cvp 
       } ;
 	  
 	insertObjPre : (Agr => Str) -> VPHSlash -> VPH = \obj,vp -> {
@@ -249,7 +256,8 @@ param
 	 ad = vp.ad ;
      embComp = vp.embComp;
      prog = vp.prog ;
-     comp = \\a =>   obj ! a  ++ vp.c2.s ++ vp.comp ! a 
+     comp = \\a =>   obj ! a  ++ vp.c2.s ++ vp.comp ! a ;
+     cvp = vp.cvp 
     } ;
 
     insertAdV : Str -> VPH -> VPH = \ad,vp -> {
@@ -260,7 +268,8 @@ param
      ad  = vp.ad ++ ad ;
      embComp = vp.embComp;
      prog = vp.prog ;
-     comp = vp.comp
+     comp = vp.comp ;
+     cvp = vp.cvp 
     } ;
     
 --	conjThat : Str = "كہ" ;
@@ -273,7 +282,8 @@ param
      ad  = vp.ad;
      embComp = vp.embComp ++ emb;
      prog = vp.prog ;
-     comp = vp.comp
+     comp = vp.comp ;
+     cvp = vp.cvp ;
     } ;
   insertTrans : VPH -> VType -> VPH = \vp,vtype -> {
      s = vp.s ;
@@ -283,7 +293,8 @@ param
      ad  = vp.ad;
      embComp = vp.embComp ;
      prog = vp.prog ;
-     comp = vp.comp
+     comp = vp.comp ;
+     cvp = vp.cvp 
     } ;
     
   compoundAdj : Str -> Str -> Adjective = \s1,s2 -> mkCompoundAdj (regAdjective s1) (regAdjective s2) ;

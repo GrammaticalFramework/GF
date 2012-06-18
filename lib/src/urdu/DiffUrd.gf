@@ -56,8 +56,8 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
                 Neg => "نہیں" };
         in
 		case vt of {
-		VPSubj => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ na ++  vps.inf ++ vps.fin ++ vp.embComp ;
-		_      => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ nahim  ++  vps.inf ++ vps.fin ++ vp.embComp};
+		VPSubj => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ vp.cvp ++ na ++  vps.inf ++ vps.fin ++ vp.embComp ;
+		_      => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a ++ vp.cvp ++ nahim  ++  vps.inf ++ vps.fin ++ vp.embComp};
 
   } ;
 
@@ -99,8 +99,8 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
                 Neg => "نہیں" };		
         in
 		case t of {
-		VPSubj => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ na ++  vps.inf ++ vps.fin ++ vp.embComp;
-		_      => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ nahim ++  vps.inf ++ vps.fin ++ vp.embComp};
+		VPSubj => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ vp.cvp ++ na ++  vps.inf ++ vps.fin ++ vp.embComp;
+		_      => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ vp.cvp ++ nahim ++  vps.inf ++ vps.fin ++ vp.embComp};
     } ;
 
  
@@ -132,7 +132,7 @@ conjThat = "كہ" ;
   waN = "واں" ; 
   hE = "ہے" ;
   comma = "," ;
-  indfArt = "اك" ; 
+  indfArt = "" ; 
   kwd = "خود" ; 
 
 copula : CTense -> Number -> UPerson -> Gender -> Str = \t,n,p,g -> 
@@ -153,13 +153,13 @@ copula : CTense -> Number -> UPerson -> Gender -> Str = \t,n,p,g ->
 		<CPast,Sg,Pers1,Fem   > => "تھی" ;
         <CPast,Sg,Pers2_Casual,Masc   > => "تھا" ;
 		<CPast,Sg,Pers2_Casual,Fem   > => "تھی" ;
-        <CPast,Sg,Pers2_Familiar,Masc   > => "تh-ا" ;
+        <CPast,Sg,Pers2_Familiar,Masc   > => "تھا" ;
 		<CPast,Sg,Pers2_Familiar,Fem   > => "تھی" ;
 		<CPast,Sg,Pers2_Respect,Masc   > => "تھے" ;
 		<CPast,Sg,Pers2_Respect,Fem   > => "تھیں" ;
-        <CPast,Sg,Pers3_Near,Masc   > => "تh-ا" ;
+        <CPast,Sg,Pers3_Near,Masc   > => "تھا" ;
 		<CPast,Sg,Pers3_Near,Fem   > => "تھی" ;
-        <CPast,Sg,Pers3_Distant,Masc  > => "تh-ا" ;
+        <CPast,Sg,Pers3_Distant,Masc  > => "تھا" ;
 		<CPast,Sg,Pers3_Distant,Fem  > => "تھی" ;
 		<CPast,Pl,Pers1,Masc   > => "تھے" ;
 		<CPast,Pl,Pers1,Fem   > => "تھیں" ;

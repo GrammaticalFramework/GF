@@ -56,8 +56,8 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
                 Neg => "nhyN" };
         in
 		case vt of {
-		VPSubj => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ na ++  vps.inf ++ vps.fin ++ vp.embComp ;
-		_      => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ nahim  ++  vps.inf ++ vps.fin ++ vp.embComp};
+		VPSubj => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ vp.cvp ++ na ++  vps.inf ++ vps.fin ++ vp.embComp ;
+		_      => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a ++ vp.cvp ++ nahim  ++  vps.inf ++ vps.fin ++ vp.embComp};
 
   } ;
 
@@ -99,8 +99,8 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
                 Neg => "nhyN" };		
         in
 		case t of {
-		VPSubj => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ na ++  vps.inf ++ vps.fin ++ vp.embComp;
-		_      => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ nahim ++  vps.inf ++ vps.fin ++ vp.embComp};
+		VPSubj => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ vp.cvp ++ na ++  vps.inf ++ vps.fin ++ vp.embComp;
+		_      => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ vp.cvp ++ nahim ++  vps.inf ++ vps.fin ++ vp.embComp};
     } ;
 
  
@@ -132,7 +132,7 @@ conjThat = "kh" ;
   waN = "waN" ; 
   hE = "hE" ;
   comma = "," ;
-  indfArt = "ak" ; 
+  indfArt = "" ; 
   kwd = "Kwd" ; 
 
 copula : CTense -> Number -> UPerson -> Gender -> Str = \t,n,p,g -> 
@@ -153,13 +153,13 @@ copula : CTense -> Number -> UPerson -> Gender -> Str = \t,n,p,g ->
 		<CPast,Sg,Pers1,Fem   > => "th'y" ;
         <CPast,Sg,Pers2_Casual,Masc   > => "th'a" ;
 		<CPast,Sg,Pers2_Casual,Fem   > => "th'y" ;
-        <CPast,Sg,Pers2_Familiar,Masc   > => "th-a" ;
+        <CPast,Sg,Pers2_Familiar,Masc   > => "th'a" ;
 		<CPast,Sg,Pers2_Familiar,Fem   > => "th'y" ;
 		<CPast,Sg,Pers2_Respect,Masc   > => "th'E" ;
 		<CPast,Sg,Pers2_Respect,Fem   > => "th'yN" ;
-        <CPast,Sg,Pers3_Near,Masc   > => "th-a" ;
+        <CPast,Sg,Pers3_Near,Masc   > => "th'a" ;
 		<CPast,Sg,Pers3_Near,Fem   > => "th'y" ;
-        <CPast,Sg,Pers3_Distant,Masc  > => "th-a" ;
+        <CPast,Sg,Pers3_Distant,Masc  > => "th'a" ;
 		<CPast,Sg,Pers3_Distant,Fem  > => "th'y" ;
 		<CPast,Pl,Pers1,Masc   > => "th'E" ;
 		<CPast,Pl,Pers1,Fem   > => "th'yN" ;
