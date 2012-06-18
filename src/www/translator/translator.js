@@ -124,15 +124,17 @@ Translator.prototype.update_translations=function() {
 	    ts[i].appendChild(text(segment.target+" "))
 	}
     }
+    function update_segment(i,txts) {
+	var segment=ss[i]
+	segment.target=txts[0];
+	segment.options={method:o.method,from:o.from,to:o.to} // no sharing!
+	if(txts.length>1) segment.choices=txts
+	else delete segment.choices
+	replace(i)
+    }
     function update_apertium_translation(i,afrom,ato) {
 	var segment=ss[i]
-	function upd3(txts) {
-	    segment.target=txts[0];
-	    segment.options={method:o.method,from:o.from,to:o.to} // no sharing!
-	    if(txts.length>1) segment.choices=txts
-	    else delete segment.choices
-	    replace(i)
-	}
+	function upd3(txts) { update_segment(i,txts) }
 	function upd1(res) {
 	    //console.log(translate_output)
 	    if(res.translation) upd3([res.translation])
@@ -150,13 +152,7 @@ Translator.prototype.update_translations=function() {
 
     function update_gf_translation(i,gfrom,gto) {
 	var segment=ss[i]
-	function upd3(txts) {
-	    segment.target=txts[0];
-	    segment.options={method:o.method,from:o.from,to:o.to} // no sharing!
-	    if(txts.length>1) segment.choices=txts
-	    else delete segment.choices
-	    replace(i)
-	}
+	function upd3(txts) { update_segment(i,txts) }
 	function upd2(ts) {
 	    function unlex(txt,cont) { gfshell('ps -unlextext "'+txt+'"',cont) }
 
