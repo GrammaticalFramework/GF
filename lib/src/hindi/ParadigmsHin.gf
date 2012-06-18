@@ -103,8 +103,8 @@ oper
   
 -- compund verbs
    compoundV = overload {
-   compoundV : Str -> V -> V = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;     
-   compoundV : Str -> V2 -> V = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;
+   compoundV : Str -> V -> V = \s,v -> {s = \\vf => v.s ! vf ; cvp = s ; lock_V = <>} ;     
+   compoundV : Str -> V2 -> V = \s,v -> {s = \\vf => v.s ! vf ; cvp = s ; lock_V = <>} ;
    };
  
 

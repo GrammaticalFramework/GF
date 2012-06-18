@@ -19,6 +19,7 @@ resource CommonHindustani = ParamX ** open Prelude, Predef in {
       ad  : Str;
       embComp : Str ;
       prog : Bool ;
+      cvp : Str ;
       } ;
   NP : Type = {s : NPCase => Str ; a : Agr} ;    
  param      
@@ -155,7 +156,7 @@ resource CommonHindustani = ParamX ** open Prelude, Predef in {
    Adjective = { s: Number => Gender => Case => Degree => Str };
    
 	
-   Verb : Type = {s : VerbForm => Str} ;
+   Verb : Type = {s : VerbForm => Str ; cvp : Str} ;
    defaultAgr : Agr = agrP3 Masc Sg ;
    agrP3 : Gender -> Number -> Agr = \g,n -> Ag g n Pers3_Distant ;
    toAgr : Number -> UPerson -> Gender -> Agr = \n,p,g ->       

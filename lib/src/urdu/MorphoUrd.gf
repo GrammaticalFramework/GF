@@ -365,7 +365,8 @@ makeIQuant : Str -> {s : Number => Gender => Case => Str} = \str -> {
                Inf_Fem => inf_fem 
           
           
-       }
+       };
+       cvp = [] 
      } ;
    rem_y : Str -> Str;
    rem_y str = let b = take 1 str; yth = drop 1 str; a1	= take 4 yth; a2 = take 1 yth; 	th= if_then_else Str (eq a1 "(a)ی") (drop 5 str) (drop 2 str);	st = if_then_else Str (eq a1 "(a)ی") (b ++ "(i)"++th) (if_then_else Str (eq a2 "ی") (b ++ th)  str)
@@ -390,11 +391,11 @@ makeIQuant : Str -> {s : Number => Gender => Case => Str} = \str -> {
         <Subj,_,_,_>      => (mkImpert root p n g).s ;
         <Perf,_,_,_>      => case root of {
 		                      "ہو" => (mkPastInd root p n g).s ;
-							  "جا" => (mkPastInd "گی" p n g).s ;
-							  "كر" => (mkPastInd "ك" p n g).s ;
-							  "دے" => (mkPastInd "د" p n g).s ;
-							  "لے" => (mkPastInd "ل" p n g).s ;
-							  _    => (mkPastInd root p n g).s };
+				      "جا" => (mkPastInd "گی" p n g).s ;
+				      "كر" => (mkPastInd "ك" p n g).s ;
+				      "دے" => (mkPastInd "د" p n g).s ;
+				      "لے" => (mkPastInd "ل" p n g).s ;
+				      _    => (mkPastInd root p n g).s };
         <Imperf,Pers2_Familiar,Sg,Masc>         => root + "تے";
         <Imperf,Pers2_Familiar,Sg,Fem>         => root + "تی"; --variants{root+"تی" ; root+"تیں"};	
         <Imperf,Pers2_Familiar,Pl,Masc>         => root + "تے";

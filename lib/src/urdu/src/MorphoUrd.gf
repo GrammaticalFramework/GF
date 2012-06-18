@@ -365,7 +365,8 @@ makeIQuant : Str -> {s : Number => Gender => Case => Str} = \str -> {
                Inf_Fem => inf_fem 
           
           
-       }
+       };
+       cvp = [] 
      } ;
    rem_y : Str -> Str;
    rem_y str = let b = take 1 str; yth = drop 1 str; a1	= take 4 yth; a2 = take 1 yth; 	th= if_then_else Str (eq a1 "(a)y") (drop 5 str) (drop 2 str);	st = if_then_else Str (eq a1 "(a)y") (b ++ "(i)"++th) (if_then_else Str (eq a2 "y") (b ++ th)  str)
@@ -390,11 +391,11 @@ makeIQuant : Str -> {s : Number => Gender => Case => Str} = \str -> {
         <Subj,_,_,_>      => (mkImpert root p n g).s ;
         <Perf,_,_,_>      => case root of {
 		                      "hw" => (mkPastInd root p n g).s ;
-							  "ja" => (mkPastInd "gy" p n g).s ;
-							  "kr" => (mkPastInd "k" p n g).s ;
-							  "dE" => (mkPastInd "d" p n g).s ;
-							  "lE" => (mkPastInd "l" p n g).s ;
-							  _    => (mkPastInd root p n g).s };
+				      "ja" => (mkPastInd "gy" p n g).s ;
+				      "kr" => (mkPastInd "k" p n g).s ;
+				      "dE" => (mkPastInd "d" p n g).s ;
+				      "lE" => (mkPastInd "l" p n g).s ;
+				      _    => (mkPastInd root p n g).s };
         <Imperf,Pers2_Familiar,Sg,Masc>         => root + "tE";
         <Imperf,Pers2_Familiar,Sg,Fem>         => root + "ty"; --variants{root+"ty" ; root+"tyN"};	
         <Imperf,Pers2_Familiar,Pl,Masc>         => root + "tE";

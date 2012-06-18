@@ -105,9 +105,9 @@ oper
 -- compund verbs
    compoundV = overload {
    compoundV : Str -> V -> V -- e.g barX hwna
-      = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;     
+      = \s,v -> {s = \\vf => v.s ! vf ; cvp = s ; lock_V = <>} ;     
    compoundV : Str -> V2 -> V -- e.g bnd krna
-     = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;
+     = \s,v -> {s = \\vf => v.s ! vf ; cvp = s ; lock_V = <>} ;
    };
  
 

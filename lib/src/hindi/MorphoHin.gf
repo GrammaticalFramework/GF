@@ -346,7 +346,8 @@ oper
                Inf_Fem => inf_fem 
           
           
-       }
+       } ;
+       cvp = []
      } ;
    rem_y : Str -> Str;
    rem_y str = let b = take 1 str; yth = drop 1 str; a1	= take 4 yth; a2 = take 1 yth; 	th= if_then_else Str (eq a1 "(a)य") (drop 5 str) (drop 2 str);	st = if_then_else Str (eq a1 "(a)य") (b ++ "(i)"++th) (if_then_else Str (eq a2 "य") (b ++ th)  str)
@@ -400,54 +401,54 @@ oper
    mkPastInd : Str -> UPerson -> Number -> Gender -> {s:Str} = \root,p,n,g ->
     {s = let roo = root ;
              a = case (last root) of {
-                  "ा"|"ो"|"ी" => "या" ;
-		  "े" => (tk 1 roo) + "िया" ;
-                  _           => "ा"
+                  "ा"|"ो"|"ी" => roo + "या" ;
+		  "े" => (tk 1 roo) + "िया" ; --* here is the problem
+                   _           => roo + "ा"
                  } ;
              y = case (last root) of {
-                  "ा"|"ो" => "यी" ;
-		  "ी" => "" ;
+                  "ा"|"ो" => roo + "यी" ;
+		  "ी" => roo ;
 		  "े" => (tk 1 roo) + "ी" ;
 		   "िय" => (tk 2 roo) + "ी" ;
-                  _           => "ी"
+                  _           => roo + "ी"
                  } ;
              e = case (last root) of {
-                  "ा"|"ो"|"ी"|"क" => "ये" ;
+                  "ा"|"ो"|"ी"|"क" => roo + "ये" ;
 		  "े" => (tk 1 roo) + "ी" ;
-                  _           => "े"
+                  _           => roo + "े"
                  } ;
             yN = case (last root) of {
-                  "ा"|"ो"|"ी" => "यीँ" ;
+                  "ा"|"ो"|"ी" => roo + "यीँ" ;
 		  "िय" => (tk 2 roo) + "ी" ;
 		  "े" => (tk 1 roo) + "ीँ" ;
-                  _           => "यँ"
+                  _           => roo + "यँ"
                  } ;
 
      in 
      case <p,n,g> of {
-       <Pers1,Sg,Masc> => roo+a ;
-       <Pers1,Sg,Fem>  => roo+y ;
-       <Pers1,Pl,Masc> => roo+e ;
-       <Pers1,Pl,Fem>  => roo+yN ;
+       <Pers1,Sg,Masc> => a ; --*
+       <Pers1,Sg,Fem>  => y ;
+       <Pers1,Pl,Masc> => e ;
+       <Pers1,Pl,Fem>  => yN ;
 
-       <Pers2_Casual,Sg,Masc> => roo+a ;
-       <Pers2_Casual,Sg,Fem>  => roo+y ;
-       <Pers2_Casual,Pl,Masc> => roo+e ;       
-       <Pers2_Casual,Pl,Fem>  => roo+yN ;
+       <Pers2_Casual,Sg,Masc> => a ; --*
+       <Pers2_Casual,Sg,Fem>  => y ;
+       <Pers2_Casual,Pl,Masc> => e ;       
+       <Pers2_Casual,Pl,Fem>  => yN ;
 
-       <Pers2_Familiar,Sg,Masc> => roo+e ;
-       <Pers2_Familiar,Sg,Fem>  => roo+y; --variants{roo+y ; roo+yN} ;
-       <Pers2_Familiar,Pl,Masc> => roo+e ;
-       <Pers2_Familiar,Pl,Fem>  => roo+yN ;       
+       <Pers2_Familiar,Sg,Masc> => e ;
+       <Pers2_Familiar,Sg,Fem>  => y; --variants{roo+y ; roo+yN} ;
+       <Pers2_Familiar,Pl,Masc> => e ;
+       <Pers2_Familiar,Pl,Fem>  => yN ;       
        
-       <Pers2_Respect,Sg,Masc>  => roo+e ;
-       <Pers2_Respect,Sg,Fem>   => roo+yN; --variants{roo+yN ; roo+y} ;
-       <Pers2_Respect,Pl,Masc>  => roo+e ;
-       <Pers2_Respect,Pl,Fem>   => roo+yN ;
-       <_,Sg,Masc>              => roo + a; 
-       <_,Sg,Fem>              => roo+y ; 
-	   <_,Pl,Masc>              => roo + e; 
-       <_,Pl,Fem>              => roo+yN 
+       <Pers2_Respect,Sg,Masc>  => e ;
+       <Pers2_Respect,Sg,Fem>   => yN; --variants{roo+yN ; roo+y} ;
+       <Pers2_Respect,Pl,Masc>  => e ;
+       <Pers2_Respect,Pl,Fem>   => yN ;
+       <_,Sg,Masc>              => a; --*
+       <_,Sg,Fem>              => y ; 
+	   <_,Pl,Masc>              =>  e; 
+       <_,Pl,Fem>              => yN 
        
      } ;
     } ;
