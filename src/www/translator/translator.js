@@ -442,7 +442,10 @@ Translator.prototype.import=function(el) {
 	    // Allow import from local files, if the browers supports it.
 	    // See http://www.html5rocks.com/en/tutorials/file/dndfiles/
 	    var files=node("input",{name:"files","type":"file"})
-	    e.insertBefore(files,inp)
+	    var extra=wrap("span",[text("Choose a file: "),
+				   files,
+				   text(" and/or enter text to import below.")])
+	    e.insertBefore(extra,inp)
 	}
 	t.view.appendChild(e)
 	e.onsubmit=done
