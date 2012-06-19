@@ -397,16 +397,30 @@ Translator.prototype.import=function(el) {
 	    t.redraw()
 	}
 	function done() {
-	    var text=inp.value
-	    var ls=text.split("\n")
-	    var segs= punct.firstChild.checked 
-	              ? split_punct(text,punctchars.value)
-		      : paras.firstChild.checked 
-		        ? join_paragraphs(ls)
-		        : ls
-	    for(var i in segs)
-		t.document.segments.push(new_segment(segs[i]))
-	    restore()
+	    function add_segments(text) {
+	    	var ls=text.split("\n")
+		var segs= punct.firstChild.checked 
+	            ? split_punct(text,punctchars.value)
+		    : paras.firstChild.checked 
+		    ? join_paragraphs(ls)
+		    : ls
+		for(var i in segs)
+		    t.document.segments.push(new_segment(segs[i]))
+	    }
+	    function import_text(text2) {
+		var text=inp.value
+		add_segments(text2)
+		add_segments(text)
+		restore()
+	    }
+	    function import_file(ev) { import_text(ev.target.result) }
+	    if(files) {
+		var file=files.files[0]
+		var r=new FileReader()
+		r.onload=import_file
+		r.readAsText(file)
+	    }
+	    else import_text("")
 	    return false
 	}
 	var inp=node("textarea",{name:"it",value:"",rows:"10"})
@@ -424,6 +438,12 @@ Translator.prototype.import=function(el) {
 		    wrap("dl",[dt([punct,punctchars]),dt(lines),dt(paras)]),
 		    submit(), button("Cancel",restore)])
 
+	if(window.File && window.FileList && window.FileReader) {
+	    // Allow import from local files, if the browers supports it.
+	    // See http://www.html5rocks.com/en/tutorials/file/dndfiles/
+	    var files=node("input",{name:"files","type":"file"})
+	    e.insertBefore(files,inp)
+	}
 	t.view.appendChild(e)
 	e.onsubmit=done
 	inp.focus();
