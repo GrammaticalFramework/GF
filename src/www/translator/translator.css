@@ -17,7 +17,7 @@ table.menubar dl, td.options > div > dl, dl.popupmenu {
     background: white; color: black;
     border: 1px solid black;
     margin: 0;
-    box-shadow: 5px 5px 5px rgba(0,0,0,0.25);
+    box-shadow: 4px 4px 12px rgba(0,0,0,0.33);
 }
 table.menubar td:hover > dl, :hover > dl.popupmenu { display: block; }
 table.menubar dt, dl.popupmenu > dt { margin: 0; padding: 5px; }
@@ -61,14 +61,22 @@ td.source input[name=it], td.target input[name=it], textarea, input[name=punctch
     font-family: inherit; font-size: inherit;
 }
 
-td.source input[name=it], td.target input[name=it], textarea { width: 100% }
+td.source input[name=it], td.target input[name=it], textarea { width: 100%; }
 
 table.paralleltexts td {
     vertical-align: baseline;
     line-height: 130%;
 }
 
-div.document form { width: 100%; }
+label { font-family: sans-serif; }
+
+div.document form { 
+    min-width: 90%; /* extend to availiable width for Safari */
+    /*background: #eee;*/
+    margin: 10px; /* extend to available width for other browsers */
+    padding: 10px;
+    box-shadow: 4px 4px 12px rgba(0,0,0,0.33);
+}
 
 span.arrow { color: blue; }
 span.error { color: red; }
