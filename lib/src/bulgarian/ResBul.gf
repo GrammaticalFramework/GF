@@ -57,6 +57,7 @@ resource ResBul = ParamX ** open Prelude in {
      | VPassive    AForm
      | VPresPart   AForm
      | VImperative Number
+     | VNoun NForm
      | VGerund
      ;
      
@@ -268,6 +269,7 @@ resource ResBul = ParamX ** open Prelude in {
         VPresPart   aform => regAdjective "бъдещ" ! aform ;
         VImperative Sg    => "бъди" ;
         VImperative Pl    => "бъдете" ;
+        VNoun _           => "";
         VGerund           => "бидейки"
       } ;
 
@@ -295,6 +297,7 @@ resource ResBul = ParamX ** open Prelude in {
         VPresPart   aform => regAdjective "бъдещ" ! aform ;
         VImperative Sg    => "бъди" ;
         VImperative Pl    => "бъдете" ;
+        VNoun _           => "";
         VGerund           => "бъдейки"
       } ;
 

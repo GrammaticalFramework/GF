@@ -13,7 +13,8 @@ open ParadigmsBul, Prelude in {
 flags
   optimize=values ; coding=cp1251;
 
-lin  aba_N = mkN041 "аба" ;
+lin
+  aba_N = mkN041 "аба" ;
   abad_zj_ijski_A = mkA078 "абаджийски" ;
   abad_zj_ijstvo_N = mkN054 "абаджийство" ;
   abad_zj_i_ja__N = mkN039 "абаджия" ;

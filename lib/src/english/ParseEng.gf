@@ -15,7 +15,7 @@ concrete ParseEng of ParseEngAbs =
   RelativeEng,
   IdiomEng [NP, VP, Tense, Cl, ProgrVP, ExistNP],
   ExtraEng [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
-            Temp, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
+            Temp, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV],
 
   DictEng ** 
@@ -71,7 +71,7 @@ lin
                                        infVP v.typ vp a)
                                (predVc v) ;
 
-  ComplPredVP np vp = {
+  PredVPosv np vp = {
       s = \\t,a,b,o => 
         let 
           verb  = vp.s ! t ! a ! b ! o ! np.a ;
@@ -80,6 +80,18 @@ lin
         case o of {
           ODir => compl ++ "," ++ np.s ! npNom ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ;
           OQuest => verb.aux ++ compl ++ "," ++ np.s ! npNom ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf 
+          }
+    } ;
+    
+  PredVPovs np vp = {
+      s = \\t,a,b,o => 
+        let 
+          verb  = vp.s ! t ! a ! b ! o ! np.a ;
+          compl = vp.s2 ! np.a
+        in
+        case o of {
+          ODir => compl ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ np.s ! npNom ;
+          OQuest => verb.aux ++ compl ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ np.s ! npNom
           }
     } ;
 

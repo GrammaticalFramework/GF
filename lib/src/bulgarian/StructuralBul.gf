@@ -63,6 +63,7 @@ concrete StructuralBul of Structural = CatBul **
                     VPresPart    _ => "трябвало" ;
                     VImperative Sg => "трябвай"  ;
                     VImperative Pl => "трябвайте" ;
+                    VNoun _        => "трябване" ;
                     VGerund        => "трябвайки"
                   } ;
          vtype=VNormal ;
