@@ -40,8 +40,8 @@ oper
 
 --2 Verbs
 
-  mkVerb : (_,_,_,_,_,_,_,_,_:Str) -> VTable = 
-    \cheta,chete,chetoh,chetqh,chel,chetql,cheten,chetqst,cheti ->
+  mkVerb : (_,_,_,_,_,_,_,_,_,_:Str) -> VTable = 
+    \cheta,chete,chetoh,chetqh,chel,chetql,cheten,chetqst,cheti,chetene ->
         table {
           VPres      Sg P1 => cheta;
           VPres      Sg P2 => chete + "ш";
@@ -97,6 +97,12 @@ oper
 	                      chet + "и" => chet + "ете";
 	                      ela        => ela  + "те"
                             };
+          VNoun nform => let v0 = init chetene
+                         in (mkNoun (v0+"е")
+							        (v0+"ия")
+							        (v0+"ия")
+							        (v0+"е")
+							        ANeut).s ! nform;
           VGerund => case chete of {
                        rabot + "и" => rabot + "ейки";
                        _           => chete + "йки"
