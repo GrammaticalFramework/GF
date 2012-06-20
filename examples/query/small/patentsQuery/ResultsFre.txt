@@ -1,0 +1,1057 @@
+qu' est l' information à propos de DRUG
+
+information à propos de DRUG
+
+l' information à propos de DRUG
+
+montre l' information à propos de DRUG
+
+je veux l' information à propos de DRUG
+
+quelle information avez vous à propos de DRUG
+
+quelle information peux j' obtenir à propos de DRUG
+
+quelle information puis j' obtenir à propos de DRUG
+
+toute information à propos de DRUG
+
+tout à propos de DRUG
+
+DRUG
+
+
+que sont les ingrédients actifs de DRUG
+
+que sont tous les ingrédients actifs de DRUG
+
+des ingrédients actifs de DRUG
+
+les ingrédients actifs de DRUG
+
+tous les ingrédients actifs de DRUG
+
+montre les ingrédients actifs de DRUG
+
+montre tous les ingrédients actifs de DRUG
+
+je veux les ingrédients actifs de DRUG
+
+je veux tous les ingrédients actifs de DRUG
+
+
+que sont les formes posologiques de DRUG
+
+qu' est la forme posologique de DRUG
+
+forme posologique de DRUG
+
+la forme posologique de DRUG
+
+des formes posologiques de DRUG
+
+les formes posologiques de DRUG
+
+montre les formes posologiques de DRUG
+
+montre la forme posologique de DRUG
+
+quelles formes posologiques de DRUG il y a
+
+
+que sont les voies d' administration de DRUG
+
+qu' est la voie d' administration de DRUG
+
+voie d' administration de DRUG
+
+la voie d' administration de DRUG
+
+des voies d' administration de DRUG
+
+les voies d' administration de DRUG
+
+montre les voies d' administration de DRUG
+
+montre la voie d' administration de DRUG
+
+quelles voies d' administration de DRUG il y a
+
+
+que sont les numéros de brevet
+
+que sont tous les numéros de brevet
+
+des numéros de brevet
+
+les numéros de brevet
+
+tous les numéros de brevet
+
+montre les numéros de brevet
+
+montre tous les numéros de brevet
+
+je veux les numéros de brevet
+
+je veux tous les numéros de brevet
+
+quels numéros de brevet il y a
+
+
+qu' est le numéro de brevet pour DRUG
+
+numéro de brevet pour DRUG
+
+le numéro de brevet pour DRUG
+
+montre le numéro de brevet pour DRUG
+
+je veux le numéro de brevet pour DRUG
+
+
+qu' est le numéro de brevet pour PATENT
+
+numéro de brevet pour PATENT
+
+le numéro de brevet pour PATENT
+
+montre le numéro de brevet pour PATENT
+
+je veux le numéro de brevet pour PATENT
+
+qu' est le numéro de brevet de PATENT
+
+numéro de brevet de PATENT
+
+le numéro de brevet de PATENT
+
+montre le numéro de brevet de PATENT
+
+je veux le numéro de brevet de PATENT
+
+
+qu' est la date d' expiration de PATENT
+
+date d' expiration de PATENT
+
+la date d' expiration de PATENT
+
+montre la date d' expiration de PATENT
+
+je veux la date d' expiration de PATENT
+
+quand expire PATENT
+
+
+qu' est la date d' expiration du brevet pour DRUG
+
+date d' expiration du brevet pour DRUG
+
+la date d' expiration du brevet pour DRUG
+
+montre la date d' expiration du brevet pour DRUG
+
+je veux la date d' expiration du brevet pour DRUG
+
+quand expire la date d' expiration du brevet pour DRUG
+
+
+que sont les codes d' utilisation de PATENT
+
+qu' est la code d' utilisation de PATENT
+
+code d' utilisation de PATENT
+
+la code d' utilisation de PATENT
+
+des codes d' utilisation de PATENT
+
+les codes d' utilisation de PATENT
+
+montre les codes d' utilisation de PATENT
+
+montre la code d' utilisation de PATENT
+
+
+qu' est le numéro de demande pour PATENT
+
+numéro de demande pour PATENT
+
+le numéro de demande pour PATENT
+
+montre le numéro de demande pour PATENT
+
+je veux le numéro de demande pour PATENT
+
+
+qu' est le demandeur pour PATENT
+
+demandeur pour PATENT
+
+le demandeur pour PATENT
+
+montre le demandeur pour PATENT
+
+je veux le demandeur pour PATENT
+
+qui applique pour PATENT
+
+qui appliquait pour PATENT
+
+
+qu' est la date d' approbation du brevet pour DRUG
+
+date d' approbation du brevet pour DRUG
+
+la date d' approbation du brevet pour DRUG
+
+montre la date d' approbation du brevet pour DRUG
+
+je veux la date d' approbation du brevet pour DRUG
+
+
+qu' est la date d' approbation de PATENT
+
+date d' approbation de PATENT
+
+la date d' approbation de PATENT
+
+montre la date d' approbation de PATENT
+
+je veux la date d' approbation de PATENT
+
+
+qu' est la date d' approbation de PATENT avec du demandeur APPLICANT
+
+date d' approbation de PATENT avec du demandeur APPLICANT
+
+la date d' approbation de PATENT avec du demandeur APPLICANT
+
+montre la date d' approbation de PATENT avec du demandeur APPLICANT
+
+je veux la date d' approbation de PATENT avec du demandeur APPLICANT
+
+
+qu' est la date d' approbation du brevet avec du numéro de demande APPLICATION_NUMBER
+
+date d' approbation du brevet avec du numéro de demande APPLICATION_NUMBER
+
+la date d' approbation du brevet avec du numéro de demande APPLICATION_NUMBER
+
+montre la date d' approbation du brevet avec du numéro de demande APPLICATION_NUMBER
+
+je veux la date d' approbation du brevet avec du numéro de demande APPLICATION_NUMBER
+
+
+que sont les substances chimiques de DRUG
+
+de la substance chimique de DRUG
+
+les substances chimiques de DRUG
+
+montre les substances chimiques de DRUG
+
+je veux les substances chimiques de DRUG
+
+qu' est la composition chemique de DRUG
+
+de la composition chemique de DRUG
+
+la composition chemique de DRUG
+
+montre la composition chemique de DRUG
+
+
+que sont les médicaments qui sont des composés
+
+que sont tous les médicaments qui sont des composés
+
+des médicaments qui sont des composés
+
+les médicaments qui sont des composés
+
+tous les médicaments qui sont des composés
+
+montre les médicaments qui sont des composés
+
+montre tous les médicaments qui sont des composés
+
+je veux les médicaments qui sont des composés
+
+je veux tous les médicaments qui sont des composés
+
+
+que sont les préparations
+
+que sont toutes les préparations
+
+des préparations
+
+les préparations
+
+toutes les préparations
+
+montre les préparations
+
+montre toutes les préparations
+
+je veux les préparations
+
+je veux toutes les préparations
+
+quelles préparations il y a
+
+
+qu' est la préparation pour DRUG
+
+préparation pour DRUG
+
+la préparation pour DRUG
+
+montre la préparation pour DRUG
+
+je veux la préparation pour DRUG
+
+
+qu' est la préparation pour DRUG avec un brevet qui expire sur DATE
+
+préparation pour DRUG avec un brevet qui expire sur DATE
+
+la préparation pour DRUG avec un brevet qui expire sur DATE
+
+montre la préparation pour DRUG avec un brevet qui expire sur DATE
+
+je veux la préparation pour DRUG avec un brevet qui expire sur DATE
+
+
+qu' est la préparation pour DRUG avec un brevet qui expire avant DATE
+
+préparation pour DRUG avec un brevet qui expire avant DATE
+
+la préparation pour DRUG avec un brevet qui expire avant DATE
+
+montre la préparation pour DRUG avec un brevet qui expire avant DATE
+
+je veux la préparation pour DRUG avec un brevet qui expire avant DATE
+
+
+qu' est la préparation pour DRUG avec un brevet qui expire après DATE
+
+préparation pour DRUG avec un brevet qui expire après DATE
+
+la préparation pour DRUG avec un brevet qui expire après DATE
+
+montre la préparation pour DRUG avec un brevet qui expire après DATE
+
+je veux la préparation pour DRUG avec un brevet qui expire après DATE
+
+
+qu' est le nom de DRUG
+
+nom de DRUG
+
+le nom de DRUG
+
+montre le nom de DRUG
+
+je veux le nom de DRUG
+
+
+qu' est le nom de DRUG avec un brevet qui a de la date d' approbation sur DATE
+
+nom de DRUG avec un brevet qui a de la date d' approbation sur DATE
+
+le nom de DRUG avec un brevet qui a de la date d' approbation sur DATE
+
+montre le nom de DRUG avec un brevet qui a de la date d' approbation sur DATE
+
+je veux le nom de DRUG avec un brevet qui a de la date d' approbation sur DATE
+
+qu' est le nom de DRUG avec un brevet avec de la date d' approbation sur DATE
+
+nom de DRUG avec un brevet avec de la date d' approbation sur DATE
+
+le nom de DRUG avec un brevet avec de la date d' approbation sur DATE
+
+montre le nom de DRUG avec un brevet avec de la date d' approbation sur DATE
+
+je veux le nom de DRUG avec un brevet avec de la date d' approbation sur DATE
+
+
+qu' est le nom de DRUG avec un brevet qui a de la date d' approbation avant DATE
+
+nom de DRUG avec un brevet qui a de la date d' approbation avant DATE
+
+le nom de DRUG avec un brevet qui a de la date d' approbation avant DATE
+
+montre le nom de DRUG avec un brevet qui a de la date d' approbation avant DATE
+
+je veux le nom de DRUG avec un brevet qui a de la date d' approbation avant DATE
+
+qu' est le nom de DRUG avec un brevet avec de la date d' approbation avant DATE
+
+nom de DRUG avec un brevet avec de la date d' approbation avant DATE
+
+le nom de DRUG avec un brevet avec de la date d' approbation avant DATE
+
+montre le nom de DRUG avec un brevet avec de la date d' approbation avant DATE
+
+je veux le nom de DRUG avec un brevet avec de la date d' approbation avant DATE
+
+
+qu' est le nom de DRUG avec un brevet qui a de la date d' approbation après DATE
+
+nom de DRUG avec un brevet qui a de la date d' approbation après DATE
+
+le nom de DRUG avec un brevet qui a de la date d' approbation après DATE
+
+montre le nom de DRUG avec un brevet qui a de la date d' approbation après DATE
+
+je veux le nom de DRUG avec un brevet qui a de la date d' approbation après DATE
+
+qu' est le nom de DRUG avec un brevet avec de la date d' approbation après DATE
+
+nom de DRUG avec un brevet avec de la date d' approbation après DATE
+
+le nom de DRUG avec un brevet avec de la date d' approbation après DATE
+
+montre le nom de DRUG avec un brevet avec de la date d' approbation après DATE
+
+je veux le nom de DRUG avec un brevet avec de la date d' approbation après DATE
+
+
+qu' est le nom de DRUG avec un brevet qui a du demandeur APPLICANT
+
+nom de DRUG avec un brevet qui a du demandeur APPLICANT
+
+le nom de DRUG avec un brevet qui a du demandeur APPLICANT
+
+montre le nom de DRUG avec un brevet qui a du demandeur APPLICANT
+
+je veux le nom de DRUG avec un brevet qui a du demandeur APPLICANT
+
+qu' est le nom de DRUG avec un brevet avec du demandeur APPLICANT
+
+nom de DRUG avec un brevet avec du demandeur APPLICANT
+
+le nom de DRUG avec un brevet avec du demandeur APPLICANT
+
+montre le nom de DRUG avec un brevet avec du demandeur APPLICANT
+
+je veux le nom de DRUG avec un brevet avec du demandeur APPLICANT
+
+
+que sont les méthodes qui sont utilisées dans PATENT
+
+que sont toutes les méthodes qui sont utilisées dans PATENT
+
+des méthodes qui sont utilisées dans PATENT
+
+les méthodes qui sont utilisées dans PATENT
+
+toutes les méthodes qui sont utilisées dans PATENT
+
+montre les méthodes qui sont utilisées dans PATENT
+
+montre toutes les méthodes qui sont utilisées dans PATENT
+
+je veux les méthodes qui sont utilisées dans PATENT
+
+je veux toutes les méthodes qui sont utilisées dans PATENT
+
+que sont les méthodes de PATENT
+
+que sont toutes les méthodes de PATENT
+
+des méthodes de PATENT
+
+les méthodes de PATENT
+
+toutes les méthodes de PATENT
+
+montre les méthodes de PATENT
+
+montre toutes les méthodes de PATENT
+
+je veux les méthodes de PATENT
+
+je veux toutes les méthodes de PATENT
+
+
+que sont les méthodes qui sont utilisées dans un brevet qui expire sur DATE
+
+que sont toutes les méthodes qui sont utilisées dans un brevet qui expire sur DATE
+
+des méthodes qui sont utilisées dans un brevet qui expire sur DATE
+
+les méthodes qui sont utilisées dans un brevet qui expire sur DATE
+
+toutes les méthodes qui sont utilisées dans un brevet qui expire sur DATE
+
+montre les méthodes qui sont utilisées dans un brevet qui expire sur DATE
+
+montre toutes les méthodes qui sont utilisées dans un brevet qui expire sur DATE
+
+je veux les méthodes qui sont utilisées dans un brevet qui expire sur DATE
+
+je veux toutes les méthodes qui sont utilisées dans un brevet qui expire sur DATE
+
+que sont les méthodes d' un brevet qui expire sur DATE
+
+que sont toutes les méthodes d' un brevet qui expire sur DATE
+
+des méthodes d' un brevet qui expire sur DATE
+
+les méthodes d' un brevet qui expire sur DATE
+
+toutes les méthodes d' un brevet qui expire sur DATE
+
+montre les méthodes d' un brevet qui expire sur DATE
+
+montre toutes les méthodes d' un brevet qui expire sur DATE
+
+je veux les méthodes d' un brevet qui expire sur DATE
+
+je veux toutes les méthodes d' un brevet qui expire sur DATE
+
+
+que sont les méthodes qui sont utilisées dans un brevet qui expire avant DATE
+
+que sont toutes les méthodes qui sont utilisées dans un brevet qui expire avant DATE
+
+des méthodes qui sont utilisées dans un brevet qui expire avant DATE
+
+les méthodes qui sont utilisées dans un brevet qui expire avant DATE
+
+toutes les méthodes qui sont utilisées dans un brevet qui expire avant DATE
+
+montre les méthodes qui sont utilisées dans un brevet qui expire avant DATE
+
+montre toutes les méthodes qui sont utilisées dans un brevet qui expire avant DATE
+
+je veux les méthodes qui sont utilisées dans un brevet qui expire avant DATE
+
+je veux toutes les méthodes qui sont utilisées dans un brevet qui expire avant DATE
+
+que sont les méthodes d' un brevet qui expire avant DATE
+
+que sont toutes les méthodes d' un brevet qui expire avant DATE
+
+des méthodes d' un brevet qui expire avant DATE
+
+les méthodes d' un brevet qui expire avant DATE
+
+toutes les méthodes d' un brevet qui expire avant DATE
+
+montre les méthodes d' un brevet qui expire avant DATE
+
+montre toutes les méthodes d' un brevet qui expire avant DATE
+
+je veux les méthodes d' un brevet qui expire avant DATE
+
+je veux toutes les méthodes d' un brevet qui expire avant DATE
+
+
+que sont les méthodes qui sont utilisées dans un brevet qui expire après DATE
+
+que sont toutes les méthodes qui sont utilisées dans un brevet qui expire après DATE
+
+des méthodes qui sont utilisées dans un brevet qui expire après DATE
+
+les méthodes qui sont utilisées dans un brevet qui expire après DATE
+
+toutes les méthodes qui sont utilisées dans un brevet qui expire après DATE
+
+montre les méthodes qui sont utilisées dans un brevet qui expire après DATE
+
+montre toutes les méthodes qui sont utilisées dans un brevet qui expire après DATE
+
+je veux les méthodes qui sont utilisées dans un brevet qui expire après DATE
+
+je veux toutes les méthodes qui sont utilisées dans un brevet qui expire après DATE
+
+que sont les méthodes d' un brevet qui expire après DATE
+
+que sont toutes les méthodes d' un brevet qui expire après DATE
+
+des méthodes d' un brevet qui expire après DATE
+
+les méthodes d' un brevet qui expire après DATE
+
+toutes les méthodes d' un brevet qui expire après DATE
+
+montre les méthodes d' un brevet qui expire après DATE
+
+montre toutes les méthodes d' un brevet qui expire après DATE
+
+je veux les méthodes d' un brevet qui expire après DATE
+
+je veux toutes les méthodes d' un brevet qui expire après DATE
+
+
+que sont les méthodes qui sont utilisées dans le brevet avec du numéro de demande PATENT_NUMBER
+
+que sont toutes les méthodes qui sont utilisées dans le brevet avec du numéro de demande PATENT_NUMBER
+
+des méthodes qui sont utilisées dans le brevet avec du numéro de demande PATENT_NUMBER
+
+les méthodes qui sont utilisées dans le brevet avec du numéro de demande PATENT_NUMBER
+
+toutes les méthodes qui sont utilisées dans le brevet avec du numéro de demande PATENT_NUMBER
+
+montre les méthodes qui sont utilisées dans le brevet avec du numéro de demande PATENT_NUMBER
+
+montre toutes les méthodes qui sont utilisées dans le brevet avec du numéro de demande PATENT_NUMBER
+
+je veux les méthodes qui sont utilisées dans le brevet avec du numéro de demande PATENT_NUMBER
+
+je veux toutes les méthodes qui sont utilisées dans le brevet avec du numéro de demande PATENT_NUMBER
+
+que sont les méthodes du brevet avec du numéro de demande PATENT_NUMBER
+
+que sont toutes les méthodes du brevet avec du numéro de demande PATENT_NUMBER
+
+des méthodes du brevet avec du numéro de demande PATENT_NUMBER
+
+les méthodes du brevet avec du numéro de demande PATENT_NUMBER
+
+toutes les méthodes du brevet avec du numéro de demande PATENT_NUMBER
+
+montre les méthodes du brevet avec du numéro de demande PATENT_NUMBER
+
+montre toutes les méthodes du brevet avec du numéro de demande PATENT_NUMBER
+
+je veux les méthodes du brevet avec du numéro de demande PATENT_NUMBER
+
+je veux toutes les méthodes du brevet avec du numéro de demande PATENT_NUMBER
+
+
+qu' est l' utilisation de PATENT
+
+utilisation de PATENT
+
+l' utilisation de PATENT
+
+montre l' utilisation de PATENT
+
+je veux l' utilisation de PATENT
+
+
+qu' est l' utilisation de PATENT avec la date d' approbation sur DATE
+
+utilisation de PATENT avec la date d' approbation sur DATE
+
+l' utilisation de PATENT avec la date d' approbation sur DATE
+
+montre l' utilisation de PATENT avec la date d' approbation sur DATE
+
+je veux l' utilisation de PATENT avec la date d' approbation sur DATE
+
+qu' est l' utilisation de PATENT qui est approuvé sur DATE
+
+utilisation de PATENT qui est approuvé sur DATE
+
+l' utilisation de PATENT qui est approuvé sur DATE
+
+montre l' utilisation de PATENT qui est approuvé sur DATE
+
+je veux l' utilisation de PATENT qui est approuvé sur DATE
+
+
+qu' est l' utilisation de PATENT avec la date d' approbation avant DATE
+
+utilisation de PATENT avec la date d' approbation avant DATE
+
+l' utilisation de PATENT avec la date d' approbation avant DATE
+
+montre l' utilisation de PATENT avec la date d' approbation avant DATE
+
+je veux l' utilisation de PATENT avec la date d' approbation avant DATE
+
+qu' est l' utilisation de PATENT qui est approuvé avant DATE
+
+utilisation de PATENT qui est approuvé avant DATE
+
+l' utilisation de PATENT qui est approuvé avant DATE
+
+montre l' utilisation de PATENT qui est approuvé avant DATE
+
+je veux l' utilisation de PATENT qui est approuvé avant DATE
+
+
+qu' est l' utilisation de PATENT avec la date d' approbation après DATE
+
+utilisation de PATENT avec la date d' approbation après DATE
+
+l' utilisation de PATENT avec la date d' approbation après DATE
+
+montre l' utilisation de PATENT avec la date d' approbation après DATE
+
+je veux l' utilisation de PATENT avec la date d' approbation après DATE
+
+qu' est l' utilisation de PATENT qui est approuvé après DATE
+
+utilisation de PATENT qui est approuvé après DATE
+
+l' utilisation de PATENT qui est approuvé après DATE
+
+montre l' utilisation de PATENT qui est approuvé après DATE
+
+je veux l' utilisation de PATENT qui est approuvé après DATE
+
+
+qu' est l' utilisation de PATENT qui expire sur DATE
+
+utilisation de PATENT qui expire sur DATE
+
+l' utilisation de PATENT qui expire sur DATE
+
+montre l' utilisation de PATENT qui expire sur DATE
+
+je veux l' utilisation de PATENT qui expire sur DATE
+
+
+qu' est l' utilisation de PATENT qui expire avant DATE
+
+utilisation de PATENT qui expire avant DATE
+
+l' utilisation de PATENT qui expire avant DATE
+
+montre l' utilisation de PATENT qui expire avant DATE
+
+je veux l' utilisation de PATENT qui expire avant DATE
+
+
+qu' est l' utilisation de PATENT qui expire après DATE
+
+utilisation de PATENT qui expire après DATE
+
+l' utilisation de PATENT qui expire après DATE
+
+montre l' utilisation de PATENT qui expire après DATE
+
+je veux l' utilisation de PATENT qui expire après DATE
+
+
+que sont les utilisations des brevets avec la date d' approbation sur DATE
+
+que sont les utilisations de tous les brevets avec la date d' approbation sur DATE
+
+que sont toutes les utilisations des brevets avec la date d' approbation sur DATE
+
+que sont toutes les utilisations de tous les brevets avec la date d' approbation sur DATE
+
+des utilisations des brevets avec la date d' approbation sur DATE
+
+des utilisations de tous les brevets avec la date d' approbation sur DATE
+
+les utilisations des brevets avec la date d' approbation sur DATE
+
+les utilisations de tous les brevets avec la date d' approbation sur DATE
+
+toutes les utilisations des brevets avec la date d' approbation sur DATE
+
+toutes les utilisations de tous les brevets avec la date d' approbation sur DATE
+
+montre les utilisations des brevets avec la date d' approbation sur DATE
+
+montre les utilisations de tous les brevets avec la date d' approbation sur DATE
+
+montre toutes les utilisations des brevets avec la date d' approbation sur DATE
+
+montre toutes les utilisations de tous les brevets avec la date d' approbation sur DATE
+
+je veux les utilisations des brevets avec la date d' approbation sur DATE
+
+je veux les utilisations de tous les brevets avec la date d' approbation sur DATE
+
+je veux toutes les utilisations des brevets avec la date d' approbation sur DATE
+
+je veux toutes les utilisations de tous les brevets avec la date d' approbation sur DATE
+
+que sont les utilisations des brevets qui sont approuvés sur DATE
+
+que sont les utilisations de tous les brevets qui sont approuvés sur DATE
+
+que sont toutes les utilisations des brevets qui sont approuvés sur DATE
+
+que sont toutes les utilisations de tous les brevets qui sont approuvés sur DATE
+
+des utilisations des brevets qui sont approuvés sur DATE
+
+des utilisations de tous les brevets qui sont approuvés sur DATE
+
+les utilisations des brevets qui sont approuvés sur DATE
+
+les utilisations de tous les brevets qui sont approuvés sur DATE
+
+toutes les utilisations des brevets qui sont approuvés sur DATE
+
+toutes les utilisations de tous les brevets qui sont approuvés sur DATE
+
+montre les utilisations des brevets qui sont approuvés sur DATE
+
+montre les utilisations de tous les brevets qui sont approuvés sur DATE
+
+montre toutes les utilisations des brevets qui sont approuvés sur DATE
+
+montre toutes les utilisations de tous les brevets qui sont approuvés sur DATE
+
+je veux les utilisations des brevets qui sont approuvés sur DATE
+
+je veux les utilisations de tous les brevets qui sont approuvés sur DATE
+
+je veux toutes les utilisations des brevets qui sont approuvés sur DATE
+
+je veux toutes les utilisations de tous les brevets qui sont approuvés sur DATE
+
+
+que sont les utilisations des brevets avec la date d' approbation avant DATE
+
+que sont les utilisations de tous les brevets avec la date d' approbation avant DATE
+
+que sont toutes les utilisations des brevets avec la date d' approbation avant DATE
+
+que sont toutes les utilisations de tous les brevets avec la date d' approbation avant DATE
+
+des utilisations des brevets avec la date d' approbation avant DATE
+
+des utilisations de tous les brevets avec la date d' approbation avant DATE
+
+les utilisations des brevets avec la date d' approbation avant DATE
+
+les utilisations de tous les brevets avec la date d' approbation avant DATE
+
+toutes les utilisations des brevets avec la date d' approbation avant DATE
+
+toutes les utilisations de tous les brevets avec la date d' approbation avant DATE
+
+montre les utilisations des brevets avec la date d' approbation avant DATE
+
+montre les utilisations de tous les brevets avec la date d' approbation avant DATE
+
+montre toutes les utilisations des brevets avec la date d' approbation avant DATE
+
+montre toutes les utilisations de tous les brevets avec la date d' approbation avant DATE
+
+je veux les utilisations des brevets avec la date d' approbation avant DATE
+
+je veux les utilisations de tous les brevets avec la date d' approbation avant DATE
+
+je veux toutes les utilisations des brevets avec la date d' approbation avant DATE
+
+je veux toutes les utilisations de tous les brevets avec la date d' approbation avant DATE
+
+que sont les utilisations des brevets qui sont approuvés avant DATE
+
+que sont les utilisations de tous les brevets qui sont approuvés avant DATE
+
+que sont toutes les utilisations des brevets qui sont approuvés avant DATE
+
+que sont toutes les utilisations de tous les brevets qui sont approuvés avant DATE
+
+des utilisations des brevets qui sont approuvés avant DATE
+
+des utilisations de tous les brevets qui sont approuvés avant DATE
+
+les utilisations des brevets qui sont approuvés avant DATE
+
+les utilisations de tous les brevets qui sont approuvés avant DATE
+
+toutes les utilisations des brevets qui sont approuvés avant DATE
+
+toutes les utilisations de tous les brevets qui sont approuvés avant DATE
+
+montre les utilisations des brevets qui sont approuvés avant DATE
+
+montre les utilisations de tous les brevets qui sont approuvés avant DATE
+
+montre toutes les utilisations des brevets qui sont approuvés avant DATE
+
+montre toutes les utilisations de tous les brevets qui sont approuvés avant DATE
+
+je veux les utilisations des brevets qui sont approuvés avant DATE
+
+je veux les utilisations de tous les brevets qui sont approuvés avant DATE
+
+je veux toutes les utilisations des brevets qui sont approuvés avant DATE
+
+je veux toutes les utilisations de tous les brevets qui sont approuvés avant DATE
+
+
+que sont les utilisations des brevets avec la date d' approbation après DATE
+
+que sont les utilisations de tous les brevets avec la date d' approbation après DATE
+
+que sont toutes les utilisations des brevets avec la date d' approbation après DATE
+
+que sont toutes les utilisations de tous les brevets avec la date d' approbation après DATE
+
+des utilisations des brevets avec la date d' approbation après DATE
+
+des utilisations de tous les brevets avec la date d' approbation après DATE
+
+les utilisations des brevets avec la date d' approbation après DATE
+
+les utilisations de tous les brevets avec la date d' approbation après DATE
+
+toutes les utilisations des brevets avec la date d' approbation après DATE
+
+toutes les utilisations de tous les brevets avec la date d' approbation après DATE
+
+montre les utilisations des brevets avec la date d' approbation après DATE
+
+montre les utilisations de tous les brevets avec la date d' approbation après DATE
+
+montre toutes les utilisations des brevets avec la date d' approbation après DATE
+
+montre toutes les utilisations de tous les brevets avec la date d' approbation après DATE
+
+je veux les utilisations des brevets avec la date d' approbation après DATE
+
+je veux les utilisations de tous les brevets avec la date d' approbation après DATE
+
+je veux toutes les utilisations des brevets avec la date d' approbation après DATE
+
+je veux toutes les utilisations de tous les brevets avec la date d' approbation après DATE
+
+que sont les utilisations des brevets qui sont approuvés après DATE
+
+que sont les utilisations de tous les brevets qui sont approuvés après DATE
+
+que sont toutes les utilisations des brevets qui sont approuvés après DATE
+
+que sont toutes les utilisations de tous les brevets qui sont approuvés après DATE
+
+des utilisations des brevets qui sont approuvés après DATE
+
+des utilisations de tous les brevets qui sont approuvés après DATE
+
+les utilisations des brevets qui sont approuvés après DATE
+
+les utilisations de tous les brevets qui sont approuvés après DATE
+
+toutes les utilisations des brevets qui sont approuvés après DATE
+
+toutes les utilisations de tous les brevets qui sont approuvés après DATE
+
+montre les utilisations des brevets qui sont approuvés après DATE
+
+montre les utilisations de tous les brevets qui sont approuvés après DATE
+
+montre toutes les utilisations des brevets qui sont approuvés après DATE
+
+montre toutes les utilisations de tous les brevets qui sont approuvés après DATE
+
+je veux les utilisations des brevets qui sont approuvés après DATE
+
+je veux les utilisations de tous les brevets qui sont approuvés après DATE
+
+je veux toutes les utilisations des brevets qui sont approuvés après DATE
+
+je veux toutes les utilisations de tous les brevets qui sont approuvés après DATE
+
+
+qu' est l' utilisation de DRUG
+
+utilisation de DRUG
+
+l' utilisation de DRUG
+
+montre l' utilisation de DRUG
+
+je veux l' utilisation de DRUG
+
+
+qu' est l' utilisation de médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+utilisation de médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+l' utilisation de médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+montre l' utilisation de médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+je veux l' utilisation de médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+qu' est l' utilisation des médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+utilisation des médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+l' utilisation des médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+montre l' utilisation des médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+je veux l' utilisation des médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+
+qu' est l' utilisation de médicaments avec de la formulaire d' utilisation DRUG_USAGE_FORM
+
+utilisation de médicaments avec de la formulaire d' utilisation DRUG_USAGE_FORM
+
+l' utilisation de médicaments avec de la formulaire d' utilisation DRUG_USAGE_FORM
+
+montre l' utilisation de médicaments avec de la formulaire d' utilisation DRUG_USAGE_FORM
+
+je veux l' utilisation de médicaments avec de la formulaire d' utilisation DRUG_USAGE_FORM
+
+qu' est l' utilisation des médicaments avec de la formulaire d' utilisation DRUG_USAGE_FORM
+
+utilisation des médicaments avec de la formulaire d' utilisation DRUG_USAGE_FORM
+
+l' utilisation des médicaments avec de la formulaire d' utilisation DRUG_USAGE_FORM
+
+montre l' utilisation des médicaments avec de la formulaire d' utilisation DRUG_USAGE_FORM
+
+je veux l' utilisation des médicaments avec de la formulaire d' utilisation DRUG_USAGE_FORM
+
+
+qu' est la dosage de DRUG
+
+dosage de DRUG
+
+la dosage de DRUG
+
+montre la dosage de DRUG
+
+je veux la dosage de DRUG
+
+
+qu' est la dosage de médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+dosage de médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+la dosage de médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+montre la dosage de médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+je veux la dosage de médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+qu' est la dosage des médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+dosage des médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+la dosage des médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+montre la dosage des médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+je veux la dosage des médicaments qui contiennent CHEMICAL_SUBSTANCE
+
+
+que sont les revendications qui mentionnent DRUG
+
+que sont toutes les revendications qui mentionnent DRUG
+
+des revendications qui mentionnent DRUG
+
+les revendications qui mentionnent DRUG
+
+toutes les revendications qui mentionnent DRUG
+
+montre les revendications qui mentionnent DRUG
+
+montre toutes les revendications qui mentionnent DRUG
+
+je veux les revendications qui mentionnent DRUG
+
+je veux toutes les revendications qui mentionnent DRUG
