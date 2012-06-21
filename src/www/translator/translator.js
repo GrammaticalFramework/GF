@@ -296,6 +296,7 @@ Translator.prototype.open=function(name) {
 	else alert("No such document: "+name)
     }
 }
+
 Translator.prototype.load=function(name,document) {
     var t=this
     t.current=name;
@@ -319,10 +320,13 @@ Translator.prototype.save=function(el) {
     hide_menu(el);
     if(t.current!="/") {
 	if(t.current) {
-	    if(t.document.options.cloud)
-		save_in_cloud(t.current+cloudext,t.document)
+	    var path="/"+t.current
+	    if(t.document.options.cloud) {
+		function done() { /*t.local.remove(path)*/ }
+		save_in_cloud(t.current+cloudext,t.document,done)
+	    }
 	    else
-		t.local.put("/"+t.current,t.document)
+		t.local.put(path,t.document)
 	}
 	else t.saveAs()
     }
@@ -364,29 +368,41 @@ Translator.prototype.add_segment=function(el) {
     hide_menu(el);
     var t=this
     function imp() {
-	function restore() {
-	    t.redraw()
-	}
-	function done() {
-	    var text=inp.value
-	    if(text) t.document.segments.push(new_segment(text))
-	    restore()
-	    return false
-	}
-	var inp=node("input",{name:"it",value:""})
-	var e=wrap("form",[inp, submit(), button("Cancel",restore)])
-	var source=wrap_class("td","source",e)
-	var edit=wrap_class("tr","segment",source)
-
-	var ss=t.drawing.segments
-	var n=ss ? ss.length : 0
-	if(n>0) insertAfter(edit,ss[n-1])
-	else t.view.appendChild(wrap_class("table","segments",edit))
-
-	e.onsubmit=done
-	inp.focus();
+	var n=t.document.segments.length
+	t.insert_segment(n)
     }
     if(t.current!="/") setTimeout(imp,100)
+}
+
+Translator.prototype.insert_segment=function(i) {
+    var t=this
+    function restore() {
+	t.redraw()
+    }
+    function done() {
+	var text=inp.value
+	if(text) {
+	    var newseg=new_segment(text)
+	    t.document.segments=insert_ix(t.document.segments,i,newseg)
+	}
+	restore()
+	return false
+    }
+    var inp=node("input",{name:"it",value:""})
+    var e=wrap("form",[inp, submit(), button("Cancel",restore)])
+    var source=wrap_class("td","source",e)
+    var edit=wrap_class("tr","segment",[td([]),source])
+    
+    var ss=t.drawing.segments
+    var n=ss ? ss.length : 0
+    if(n>0) {
+	if(i==0) insertBefore(edit,ss[0])
+	else insertAfter(edit,ss[i-1])
+    }
+    else t.view.appendChild(wrap_class("table","segments",edit))
+    
+    e.onsubmit=done
+    inp.focus();
 }
 
 Translator.prototype.import=function(el) {
@@ -463,7 +479,15 @@ Translator.prototype.remove=function(el) {
 	    t.redraw();
 	}
     }
-    setTimeout(rm,100)
+    if(t.current!="/") setTimeout(rm,100)
+}
+
+Translator.prototype.remove_segment=function(i) {
+    var t=this
+    if(t.document && t.document.segments.length>i) {
+	t.document.segments=delete_ix(t.document.segments,i)
+	t.redraw();
+    }
 }
 
 Translator.prototype.replace_segment=function(i,sd) {
@@ -629,16 +653,24 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
 		     dt(manualB),
 		     dt(draw_translation(o))])
     }
-
     function draw_options(o) {
 	return wrap("div",[span_class("arrow",text(" ⇒ ")),
 			   wrap("dl",draw_options2(o))])
     }
+
+    var insertB=dt(text("Insert a new segment"))
+    insertB.onclick=function() { t.insert_segment(i) }
+    var removeB=dt(text("Remove this segment"))
+    removeB.onclick=function() { t.remove_segment(i) }
+    var actions=wrap_class("td","actions",
+			   wrap("div",[span_class("actions",text("◊")),
+				       wrap_class("dl","popupmenu",
+						  [insertB,removeB])]))
     var source=wrap_class("td","source",text(s.source))
     source.onclick=function() { t.edit_source(source,i); }
     var options=wrap_class("td","options",draw_options(s.options))
 
-    return wrap_class("tr","segment",[source,options,target])
+    return wrap_class("tr","segment",[actions,source,options,target])
 }
 
 function empty_document() {
@@ -682,15 +714,6 @@ function concname(code) { return langname[code] || code; }
 function alangcode(code) { return langcode2[code] || code; }
 
 function tr_local() {
-    /*
-    function dummy() {
-	return {
-	    get: function(name,def) { return def },
-	    put: function(name,value) { }
-	    ls: function() { return [] }
-	}
-    }
-    */
     function real(storage) {
 	var appPrefix="gf.translator."
 	return {
@@ -701,6 +724,10 @@ function tr_local() {
 	    put: function (name,value) {
 		var id=appPrefix+name;
 		storage[id]=JSON.stringify(value);
+	    },
+	    remove: function(name) {
+		var id=appPrefix+name;
+		delete storage[id]
 	    },
 	    ls: function(prefix) {
 		var pre=appPrefix+prefix
@@ -732,6 +759,21 @@ function mapix(f,xs) {
     return ys;
 }
 
+function delete_ix(old,ix) {
+    var a=[];
+    for(var i in old) if(i!=ix) a.push(old[i]);
+    return a;
+}
+
+function insert_ix(old,ix,x) {
+    var a=[];
+    for(var i in old) {
+	if(i==ix) a.push(x);
+	a.push(old[i])
+    }
+    return a;
+}
+
 // Convert array of lines to array of paragraphs
 function join_paragraphs(lines) {
     var paras=[]
@@ -757,12 +799,11 @@ function split_punct(text,punct) {
 var cloudext=".gfstdoc"
 function strip_cloudext(s) { return s.substr(0,s.length-cloudext.length) }
 
-function save_in_cloud(filename,document) {
-    function done() { }
+function save_in_cloud(filename,document,cont) {
     function save(dir) {
 	var form={dir:dir}
 	form[filename]=JSON.stringify(document);
-	ajax_http_post("/cloud","command=upload"+encodeArgs(form),done)
+	ajax_http_post("/cloud","command=upload"+encodeArgs(form),cont)
     }
     with_dir(save)
 }
