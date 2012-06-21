@@ -1,4 +1,4 @@
---# -path=.:..:alltenses
+--# -path=.:alltenses
 
 concrete QueryPatEng of QueryPat = QueryEng ** open
   SyntaxEng,

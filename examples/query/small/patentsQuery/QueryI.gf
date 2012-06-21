@@ -1,8 +1,9 @@
 --# -path=.:..:alltenses
 
 incomplete concrete QueryI of Query = open
+  LexQuery,
   Syntax,
-  Lang,
+  (Lang = Lang),
   Prelude
 in {
 
@@ -35,9 +36,9 @@ lin
         | mkNP (mkNP thePl_Det name_N) (mkAdv possess_Prep s)
         ---- s's names
     in
-      mkUtt (mkImp (mkVP give_V3 (mkNP i_Pron) ss))
-    | mkUtt (mkQS (mkQCl (L.CompIP whatSg_IP) ss))
-    | mkUtt (mkQS (mkQCl (L.CompIP (L.IdetIP (mkIDet which_IQuant))) ss))
+      mkUtt (mkImp (mkVP LexQuery.give_V3 (mkNP i_Pron) ss))
+    | mkUtt (mkQS (mkQCl (Lang.CompIP whatSg_IP) ss))
+    | mkUtt (mkQS (mkQCl (Lang.CompIP (Lang.IdetIP (mkIDet which_IQuant))) ss))
     | mkUtt ss ;
 
   QWhere s = mkUtt (mkQS (mkQCl where_IAdv s)) ;
@@ -45,10 +46,10 @@ lin
     let
       info : NP = mkNP all_Predet (mkNP (mkNP information_N) (mkAdv about_Prep s)) ;
     in
-      mkUtt (mkImp (mkVP give_V3 (mkNP i_Pron) info))
+      mkUtt (mkImp (mkVP LexQuery.give_V3 (mkNP i_Pron) info))
     | mkUtt info ;
 
-  QCalled i = mkUtt (mkQS (mkQCl how_IAdv (mkCl i (mkVP also_AdV (mkVP called_A))))) ;
+---  QCalled i = mkUtt (mkQS (mkQCl how_IAdv (mkCl i (mkVP also_AdV (mkVP called_A))))) ;
 
   AKind s k = mkUtt (mkCl s (mkNP aPl_Det k)) ; ---- a, fun of s
   AProp s p = mkUtt (mkCl s p) ;
@@ -80,25 +81,6 @@ lin
      mkCN k (mkRS (mkRCl that_RP p)) ;
   KRel r = r.cn ;
 
-oper
--- structural words
-  about_Prep = mkPrep "about" ;
-  all_NP = mkNP (mkPN "all") ; ---
-  also_AdV = mkAdV "also" | mkAdV "otherwise" ;
-  as_Prep = mkPrep "as" ;
-  at_Prep = mkPrep "at" ;
-  called_A = mkA "called" | mkA "named" ;
-  give_V3 = mkV3 give_V ;
-  information_N = mkN "information" ;
-  other_A = mkA "other" ;
-  name_N = mkN "name" ;
 
--- lexical constructors
-  mkName : Str -> NP =
-    \s -> mkNP (mkPN s) ;
-
-oper  
- mkRelation : Str -> {cn : CN ; prep : Prep} =
-    \s -> {cn = mkCN (mkN s) ; prep = possess_Prep} ;
 
 }
