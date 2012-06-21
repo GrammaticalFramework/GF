@@ -10,7 +10,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
                    RC _ (NCase Gen) => cn.s ! nu.n ! Gen ;
                    _ => cn.s ! nu.n ! Nom
                    } ;
-      a = RAg (agrP3 Sg)
+      a = RAg (agrP3 nu.n)
       } ;
 
     ComplBareVS v s  = insertObj (\\_ => s.s) (predV v) ;
