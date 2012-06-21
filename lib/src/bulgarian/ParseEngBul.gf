@@ -42,11 +42,27 @@ lin
     isPre = True
   } ;
 
+  PositAdVAdj a = {s = a.adv} ;
+  
+  that_RP = {
+    s = whichRP
+  } ;
+  
   UseQuantPN q pn = { s = table {
                             RObj Dat => "на" ++ pn.s; 
                             _        => pn.s
                           } ;
                       a = {gn = GSg pn.g; p = P3}
                     } ;
+
+  PPartNP np vps = {
+      s = \\c => np.s ! c ++ 
+                 vps.s ! Perf ! VPassive (aform np.a.gn Indef c) ++
+                 vps.compl1 ! np.a ++ vps.compl2 ! np.a;
+      a = np.a
+      } ;
+
+  SlashV2V vv p vp =
+      insertSlashObj2 (daComplex vp ! Perf) (slashV vv vv.c2) ;
 
 }
