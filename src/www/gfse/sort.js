@@ -1,21 +1,27 @@
 
-function initialize_sorting() {
+function initialize_sorting(tagList,classList) {
+    /*
+    var debugoutput=empty("pre");
+    document.body.appendChild(debugoutput)
+    function jsdebug(txt) {
+	//clear(debugoutput)
+	debugoutput.appendChild(text(txt+"\n"))
+    }
+    */
+    function listToSet(list) {
+	var set={}
+	for(var i in list) set[list[i]]=true
+	return set;
+    }
+    var sortable_tag=listToSet(tagList)
+    var sortable_class=listToSet(classList)
 
     function sortable(elem) {
-	switch(elem.tagName) {
-	case "DIV":
-	    switch(elem.className) {
-	    case "fun":
-	    case "lin":
-	    case "lincat":
-	    case "oper":
-		return elem;
-	    default:
-		return null;
-	    }
-	default:
-	    return sortable(elem.parentNode)
-	}
+	return elem && (sortable_tag[elem.tagName]
+			  ? sortable_class[elem.className]
+			    ? elem
+			    : null
+			  : sortable(elem.parentNode))
     }
 
     function move_element(elem,x,y) {
@@ -86,18 +92,21 @@ function startDrag(event,elem) {
 	move_element(elem,dx,dy);
 	//jsdebug("dragging to "+elem.offsetLeft+" "+elem.offsetTop);
 	swap(elem,dy)
+	//event.stopPropagation();
 	return false;
     }
-    document.onmouseup=function() {
+    document.onmouseup=function(event) {
 	//jsdebug("dropped");
 	elem.style.zIndex=0;
 	move_element(elem,0,0);
 	document.onmousemove=null;
 	document.onmouseup=null;
 	if(list.onsort) list.onsort();
-	else jsdebug("no list.onsort "+list.className+" "+list.firstChild.ident);
+	//else jsdebug("no list.onsort "+list.className+" "+list.firstChild.ident);
+	//event.stopPropagation();
 	return false;
     }
+    //event.stopPropagation();
     return false;
 }
 
@@ -107,7 +116,7 @@ function mousedown(event) {
     //else jsdebug("Clicked outside"/*+taglist(event.target)/*+show_props(event,"event")*/);
 }
 
-    var jsdebug=debug;
+    //var jsdebug=debug;
 
 function init() {
     document.onmousedown=mousedown;
@@ -116,7 +125,5 @@ function init() {
 }
     init();
 }
-
-initialize_sorting();
 
 //Inspired by http://tool-man.org/examples/sorting.html

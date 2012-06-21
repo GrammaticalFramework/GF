@@ -1598,6 +1598,7 @@ if(editor) {
 	initial_view();
 	touch_edit();
 	dir_bugfix();
+	initialize_sorting(["DIV"],["fun","lin","lincat","oper"]);
     }
     else
 	editor.innerHTML="<p>This browser does not appear to support localStorage, and the grammar editor does not work without it. Sorry!"
