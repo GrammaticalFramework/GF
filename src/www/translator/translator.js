@@ -16,6 +16,7 @@ function Translator() {
     update_language_menu(this,"source")
     update_language_menu(this,"target")
     if(apertium) this.add_apertium()
+    //initialize_sorting(["TR"],["segment"])
     this.redraw();
 }
 
@@ -604,7 +605,8 @@ Translator.prototype.draw_document=function() {
 	var sources=mapix(fmt,map(src,doc.segments))
 	var targets=mapix(fmt,map(trg,doc.segments))
 	var drawing=[hdr,wrap_class("table","paralleltexts",
-				    tr([td(sources),td(targets)]))]
+				    tr([wrap_class("td","source",sources),
+					wrap_class("td","target",targets)]))]
 	return {doc:drawing,sources:sources,targets:targets}
     default:
 	var segments=mapix(bind(t.draw_segment,t),doc.segments)
@@ -670,7 +672,7 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
     source.onclick=function() { t.edit_source(source,i); }
     var options=wrap_class("td","options",draw_options(s.options))
 
-    return wrap_class("tr","segment",[actions,source,options,target])
+    return node("tr",{"class":"segment",id:i},[actions,source,options,target])
 }
 
 function empty_document() {

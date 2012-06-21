@@ -12,7 +12,7 @@ div.pagehead {
 }
 table.menubar td { padding: 5px; }
 table.menubar dl, td.options > div > dl, dl.popupmenu {
-    z-index: 1;
+    z-index: 2;
     display: none; position: absolute;
     background: white; color: black;
     border: 1px solid black;
@@ -44,7 +44,7 @@ table.segments { margin-left: auto; margin-right: auto; }
 
 td.actions { padding: 1ex 1em 1ex 0.5em; }
 td.options { padding: 1ex 1em; }
-td.source, td.target {
+.segment td.source, .segment td.target {
     padding: 1ex;
     border-bottom: 2px solid #ccc;
     vertical-align: baseline;
@@ -65,9 +65,15 @@ td.source input[name=it], td.target input[name=it], textarea, input[name=punctch
 td.source input[name=it], td.target input[name=it], textarea { width: 100%; }
 
 table.paralleltexts td {
+    padding: 1ex;
     vertical-align: baseline;
     line-height: 130%;
 }
+table.paralleltexts td.source {
+    padding-right: 0.7em;
+    border-right: 2px solid #ccc;
+}
+table.paralleltexts td.target { padding-left:  0.7em; }
 
 label { font-family: sans-serif; }
 
