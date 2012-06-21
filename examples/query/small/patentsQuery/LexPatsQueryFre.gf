@@ -1,4 +1,4 @@
-instance LexPatsQueryFre of LexPatsQuery = 
+instance LexPatsQueryFre of LexPatsQuery = QueryFre **
   open SyntaxFre, ParadigmsFre, ExtraFre, IrregFre, StructuralFre, DiffFre, (CR=CommonRomance), ParamX, Prelude in {
 
 flags 
@@ -19,32 +19,32 @@ oper
   vpAP vp = variants {} ;
 
 
-  active_ingredient_CN : CN = mkCN (mkA "actif")  (mkN "ingrédient") ;
-  dosage_form_CN : CN = mkCN (mkA "posologique") (mkN "forme") ;
-  route_of_administration_CN : CN = mkCN (mkCN (mkN "voie")) (SyntaxFre.mkAdv possess_Prep (mkNP (mkN "administration"))) ;
-  patent_number_CN : CN = mkCN  (mkCN (mkN "numéro")) (SyntaxFre.mkAdv possess_Prep (mkNP (mkN "brevet"))) ;
-  patent_N : N = mkN "brevet" ;
-  expiration_date_CN : CN = mkCN (mkCN (mkN "date")) (SyntaxFre.mkAdv possess_Prep (mkNP (mkN "expiration")));
+  active_ingredient_CN  = mkCN (mkA "actif")  (mkN "ingrédient") ;
+  dosage_form_CN  = mkCN (mkA "posologique") (mkN "forme") ;
+  route_of_administration_CN  = mkCN (mkCN (mkN "voie")) (SyntaxFre.mkAdv possess_Prep (mkNP (mkN "administration"))) ;
+  patent_number_CN : Kind = mkCN  (mkCN (mkN "numéro")) (SyntaxFre.mkAdv possess_Prep (mkNP (mkN "brevet"))) ;
+  patent_N  = mkCN (mkN "brevet") ;
+  expiration_date_CN  = mkCN (mkCN (mkN "date")) (SyntaxFre.mkAdv possess_Prep (mkNP (mkN "expiration")));
   expire_V : V = regV "expirer" ;
-  use_code_CN : CN = mkCN (mkCN (mkN "code"))  (SyntaxFre.mkAdv possess_Prep (mkNP (mkN "utilisation"))) ; 
-  application_number_CN : CN = mkCN (mkCN (mkN "numéro")) (SyntaxFre.mkAdv possess_Prep  (mkNP (mkN "demande"))) ;
+  use_code_CN  = mkCN (mkCN (mkN "code"))  (SyntaxFre.mkAdv possess_Prep (mkNP (mkN "utilisation"))) ; 
+  application_number_CN  = mkCN (mkCN (mkN "numéro")) (SyntaxFre.mkAdv possess_Prep  (mkNP (mkN "demande"))) ;
    apply_V : V = regV "appliquer" ;
-   applicant_CN : CN = mkCN (mkN "demandeur") ; 
-   approval_date_CN : CN = mkCN (mkCN (mkN "date")) (SyntaxFre.mkAdv possess_Prep (mkNP (mkN "approbation"))) ;
-   chemical_composition_CN : CN = mkCN (mkA "chemique") (mkN "composition") ;
-   chemical_substance_CN : CN = mkCN (mkA "chimique") (mkN "substance") ;
+   applicant_CN  = mkCN (mkN "demandeur") ; 
+   approval_date_CN  = mkCN (mkCN (mkN "date")) (SyntaxFre.mkAdv possess_Prep (mkNP (mkN "approbation"))) ;
+   chemical_composition_CN  = mkCN (mkA "chemique") (mkN "composition") ;
+   chemical_substance_CN  = mkCN (mkA "chimique") (mkN "substance") ;
    drug_N : N = mkN "médicament" ;
-   use_N : N = mkN "utilisation" ;
-   compound_CN : CN = mkCN (mkN "composé") ;
+   use_N  = mkCN (mkN "utilisation") ;
+   compound_CN  = mkCN (mkN "composé") ;
    method_N : N = mkN "méthode" ;
-   strength_N : N = mkN "dosage" ;
-   drug_preparation_CN : CN = mkCN (mkN "préparation") ; 
+   strength_N  = mkCN (mkN "dosage") ;
+   drug_preparation_CN  = mkCN (mkN "préparation") ; 
    claim_N : N = mkN "revendication" ;
    mention_V2 : V2 = dirV2 (regV "mentionner") ;
    use_V2 : V2 = dirV2 (regV "utiliser") ;
    approve_V2 : V2 = dirV2 (regV "approuver") ;
    contain_V2 : V2 = IrregFre.contenir_V2 ;
-   usage_form_CN : CN = mkCN (mkCN (mkN "formulaire")) (SyntaxFre.mkAdv possess_Prep (mkNP (mkN "utilisation")));
+   usage_form_CN  = mkCN (mkCN (mkN "formulaire")) (SyntaxFre.mkAdv possess_Prep (mkNP (mkN "utilisation")));
 
   information_N : N = mkN "information" ;
 
