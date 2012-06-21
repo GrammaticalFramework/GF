@@ -430,7 +430,7 @@ Translator.prototype.import=function(el) {
 		restore()
 	    }
 	    function import_file(ev) { import_text(ev.target.result) }
-	    if(files) {
+	    if(files.files && files.files.length>0) {
 		var file=files.files[0]
 		var r=new FileReader()
 		r.onload=import_file
