@@ -111,7 +111,10 @@ ppJudgement q (id, ResParam pparams _) =
   (case pparams of
      Just (L _ ps) -> equals <+> ppParams q ps
      _             -> empty) <+> semi
-ppJudgement q (id, ResValue pvalue) = empty
+ppJudgement q (id, ResValue pvalue) = 
+  text "-- param constructor" <+> ppIdent id <+> colon <+> 
+  (case pvalue of
+     (L _ ty) -> ppTerm q 0 ty) <+> semi
 ppJudgement q (id, ResOper  ptype pexp) =
   text "oper" <+> ppIdent id <+>
   (case ptype of {Just (L _ t) -> colon  <+> ppTerm q 0 t; Nothing -> empty} $$
