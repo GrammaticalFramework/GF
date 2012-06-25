@@ -13,52 +13,75 @@
 -----------------------------------------------------------------------------
 
 module GF.Infra.CheckM
-          (Check(..), CheckResult(..), Message, runCheck,
-	       checkError, checkCond, checkWarn, 
-	       checkErr, checkIn, checkMap, checkMapRecover
-	      ) where
+          (Check, CheckResult, Message, runCheck,
+	   checkError, checkCond, checkWarn, checkWarnings, checkAccumError,
+	   checkErr, checkIn, checkMap, checkMapRecover,
+           accumulateError
+	  ) where
 
 import GF.Data.Operations
 import GF.Infra.Ident
-import GF.Grammar.Grammar
+import GF.Grammar.Grammar(Context)
 import GF.Grammar.Printer
 
 import qualified Data.Map as Map
 import Text.PrettyPrint
 
 type Message = Doc
-data CheckResult a
-  = Fail      [Message]
-  | Success a [Message]
-newtype Check a = Check {unCheck :: Context -> [Message] -> CheckResult a}
+type Error   = Message
+type Warning = Message
+--data Severity = Warning | Error
+--type NonFatal = ([Severity,Message]) -- preserves order
+type NonFatal = ([Error],[Warning])
+type Accumulate acc ans = acc -> (acc,ans)
+data CheckResult a = Fail Error | Success a
+newtype Check a
+  = Check {unCheck :: Context -> Accumulate NonFatal (CheckResult a)}
 
 instance Monad Check where
-  return x = Check (\ctxt msgs -> Success x msgs)
-  f >>= g  = Check (\ctxt msgs -> case unCheck f ctxt msgs of
-                                    Success x msgs -> unCheck (g x) ctxt msgs
-                                    Fail msgs      -> Fail msgs)
+  return x = Check $ \ctxt ws -> (ws,Success x)
+  f >>= g  = Check $ \ctxt ws ->
+               case unCheck f ctxt ws of
+                 (ws,Success x) -> unCheck (g x) ctxt ws
+                 (ws,Fail msg)  -> (ws,Fail msg)
 
 instance ErrorMonad Check where
   raise s = checkError (text s)
-  handle f h = Check (\ctxt msgs -> case unCheck f ctxt msgs of
-                                      Success x msgs  -> Success x msgs
-                                      Fail (msg:msgs) -> unCheck (h (render msg)) ctxt msgs)
+  handle f h = handle' f (h . render)
 
+handle' f h = Check (\ctxt msgs -> case unCheck f ctxt msgs of
+                                      (ws,Success x) -> (ws,Success x)
+                                      (ws,Fail msg)  -> unCheck (h msg) ctxt ws)
+
+-- | Report a fatal error
 checkError :: Message -> Check a
-checkError msg = Check (\ctxt msgs -> Fail (msg : msgs))
+checkError msg = Check (\ctxt ws -> (ws,Fail msg))
 
 checkCond :: Message -> Bool -> Check ()
 checkCond s b = if b then return () else checkError s
 
 -- | warnings should be reversed in the end
 checkWarn :: Message -> Check ()
-checkWarn msg = Check (\ctxt msgs -> Success () ((text "Warning:" <+> msg) : msgs))
+checkWarn msg = Check $ \ctxt (es,ws) -> ((es,(text "Warning:" <+> msg) : ws),Success ())
 
+checkWarnings = mapM_ checkWarn
+
+-- | Report a nonfatal (accumulated) error
+checkAccumError :: Message -> Check ()
+checkAccumError msg = Check $ \ctxt (es,ws) -> ((msg:es,ws),Success ())
+
+-- | Turn a fatal error into a nonfatal (accumulated) error
+accumulateError :: (a -> Check a) -> a -> Check a
+accumulateError chk a =
+    handle' (chk a) $ \ msg -> do checkAccumError msg; return a
+
+-- | Run an error check, report errors and warnings
 runCheck :: Check a -> Err (a,String)
 runCheck c =
-  case unCheck c [] [] of
-    Fail msgs      -> Bad (   render (vcat (reverse msgs)))
-    Success v msgs -> Ok  (v, render (vcat (reverse msgs)))
+  case unCheck c [] ([],[]) of
+    (([],ws),Success v) -> Ok  (v, render (vcat (reverse ws)))
+    ((es,ws),Success v) -> Bad (   render (vcat (reverse (es++ws))))
+    ((es,ws),Fail msg)  -> Bad (   render (vcat (reverse (msg:es++ws))))
 
 checkMap :: (Ord a) => (a -> b -> Check b) -> Map.Map a b -> Check (Map.Map a b)
 checkMap f map = do xs <- mapM (\(k,v) -> do v <- f k v
@@ -80,8 +103,13 @@ checkErr (Ok x)    = return x
 checkErr (Bad err) = checkError (text err)
 
 checkIn :: Doc -> Check a -> Check a
-checkIn msg c = Check $ \ctxt msgs ->
-  case unCheck c ctxt [] of
-    Fail      msgs' -> Fail ((msg $$ nest 3 (vcat (reverse msgs'))) : msgs)
-    Success v msgs' | null msgs' -> Success v msgs
-                    | otherwise  -> Success v ((msg $$ nest 3 (vcat (reverse msgs'))) : msgs)
+checkIn msg c = Check $ \ctxt msgs0 ->
+    case unCheck c ctxt ([],[]) of
+      (msgs,Fail msg)  -> (augment msgs0 msgs,Fail (augment1 msg))
+      (msgs,Success v) -> (augment msgs0 msgs,Success v)
+  where
+    augment (es0,ws0) (es,ws) = (augment' es0 es,augment' ws0 ws)
+    augment' msgs0 []    = msgs0
+    augment' msgs0 msgs' = (msg $$ nest 3 (vcat (reverse msgs'))):msgs0
+
+    augment1 msg' = msg $$ nest 3 msg'

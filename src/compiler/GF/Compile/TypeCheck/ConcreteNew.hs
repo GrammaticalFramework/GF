@@ -458,7 +458,7 @@ data MetaValue
 type MetaStore = IntMap.IntMap MetaValue
 data TcResult a
   = TcOk   a MetaStore [Message]
-  | TcFail             [Message]
+  | TcFail             [Message] -- First msg is error, the rest are warnings?
 newtype TcM a = TcM {unTcM :: MetaStore -> [Message] -> TcResult a}
 
 instance Monad TcM where
@@ -480,9 +480,9 @@ tcWarn :: Message -> TcM ()
 tcWarn msg = TcM (\ms msgs -> TcOk () ms ((text "Warning:" <+> msg) : msgs))
 
 runTcM :: TcM a -> Check a
-runTcM f = Check (\ctxt msgs -> case unTcM f IntMap.empty msgs of
-                                  TcOk x _ msgs -> Success x msgs
-                                  TcFail msgs   -> Fail msgs)
+runTcM f = case unTcM f IntMap.empty [] of
+             TcOk x _ msgs -> do checkWarnings msgs; return x
+             TcFail (msg:msgs) -> do checkWarnings msgs; checkError msg
 
 newMeta :: Sigma -> TcM MetaId
 newMeta ty = TcM (\ms msgs -> 
