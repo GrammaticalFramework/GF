@@ -52,7 +52,7 @@ renameSourceTerm g m t = do
 renameModule :: [SourceModule] -> SourceModule -> Check SourceModule
 renameModule ms mo@(m,mi) = do
   status <- buildStatus (mGrammar ms) mo
-  js     <- checkMap (renameInfo status mo) (jments mi)
+  js     <- checkMapRecover (renameInfo status mo) (jments mi)
   return (m, mi{jments = js})
 
 type Status = (StatusTree, [(OpenSpec, StatusTree)])

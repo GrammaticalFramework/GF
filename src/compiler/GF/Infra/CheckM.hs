@@ -15,7 +15,7 @@
 module GF.Infra.CheckM
           (Check(..), CheckResult(..), Message, runCheck,
 	       checkError, checkCond, checkWarn, 
-	       checkErr, checkIn, checkMap
+	       checkErr, checkIn, checkMap, checkMapRecover
 	      ) where
 
 import GF.Data.Operations
@@ -64,6 +64,13 @@ checkMap :: (Ord a) => (a -> b -> Check b) -> Map.Map a b -> Check (Map.Map a b)
 checkMap f map = do xs <- mapM (\(k,v) -> do v <- f k v
                                              return (k,v)) (Map.toList map)
                     return (Map.fromAscList xs)
+
+checkMapRecover :: (Ord a) => (a -> b -> Check b) -> Map.Map a b -> Check (Map.Map a b)
+checkMapRecover f mp = do 
+  let xs = map (\ (k,v) -> (k,runCheck (f k v))) (Map.toList mp)
+  case [s | (_,Bad s) <- xs] of
+    ss@(_:_) -> checkError (text (unlines ss)) 
+    _   -> return (Map.fromAscList [(k,x) | (k, Ok (x,_)) <- xs])
 
 checkErr :: Err a -> Check a
 checkErr (Ok x)    = return x
