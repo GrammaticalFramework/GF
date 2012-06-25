@@ -95,7 +95,7 @@ checkMapRecover f mp = do
     ss@(_:_) -> checkError (text (unlines ss)) 
     _   -> do
       let (kx,ss) = unzip [((k,x),s) | (k, Ok (x,s)) <- xs]
-      checkWarn (text (unlines ss))
+      if not (all null ss) then checkWarn (text (unlines ss)) else return ()
       return (Map.fromAscList kx)
 
 checkErr :: Err a -> Check a
