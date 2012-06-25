@@ -6,6 +6,7 @@ import GF.Compile.PGFtoHaskell
 import GF.Compile.PGFtoProlog
 import GF.Compile.PGFtoLProlog
 import GF.Compile.PGFtoJS
+import GF.Compile.PGFtoPython
 import GF.Infra.Option
 import GF.Speech.CFG
 import GF.Speech.PGFToCFG
@@ -32,6 +33,7 @@ exportPGF opts fmt pgf =
     case fmt of
       FmtPGFPretty    -> multi "txt" (render . ppPGF)
       FmtJavaScript   -> multi "js"  pgf2js
+      FmtPython       -> multi "py"  pgf2python
       FmtHaskell      -> multi "hs"  (grammar2haskell opts name)
       FmtProlog       -> multi "pl"  grammar2prolog
       FmtProlog_Abs   -> multi "pl"  grammar2prolog_abs

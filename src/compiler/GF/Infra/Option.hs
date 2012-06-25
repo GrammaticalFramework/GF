@@ -85,6 +85,7 @@ data Phase = Preproc | Convert | Compile | Link
 
 data OutputFormat = FmtPGFPretty
                   | FmtJavaScript 
+                  | FmtPython 
                   | FmtHaskell 
                   | FmtProlog
                   | FmtProlog_Abs
@@ -432,6 +433,7 @@ outputFormatsExpl :: [((String,OutputFormat),String)]
 outputFormatsExpl = 
     [(("pgf_pretty",   FmtPGFPretty),"human-readable pgf"),
      (("js",           FmtJavaScript),"JavaScript (whole grammar)"),
+     (("python",       FmtPython),"Python (whole grammar)"),
      (("haskell",      FmtHaskell),"Haskell (abstract syntax)"),
      (("prolog",       FmtProlog),"Prolog (whole grammar)"),
      (("prolog_abs",   FmtProlog_Abs),"Prolog (abstract syntax)"),
