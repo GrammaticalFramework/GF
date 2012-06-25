@@ -78,10 +78,13 @@ accumulateError chk a =
 -- | Run an error check, report errors and warnings
 runCheck :: Check a -> Err (a,String)
 runCheck c =
-  case unCheck c [] ([],[]) of
-    (([],ws),Success v) -> Ok  (v, render (vcat (reverse ws)))
-    ((es,ws),Success v) -> Bad (   render (vcat (reverse (es++ws))))
-    ((es,ws),Fail msg)  -> Bad (   render (vcat (reverse (msg:es++ws))))
+    case unCheck c [] ([],[]) of
+      (([],ws),Success v) -> Ok (v,render (list ws))
+      (msgs   ,Success v) -> bad msgs
+      ((es,ws),Fail    e) -> bad ((e:es),ws)
+  where
+    bad (es,ws) = Bad (render $ list ws $$ list es)
+    list = vcat . reverse
 
 checkMap :: (Ord a) => (a -> b -> Check b) -> Map.Map a b -> Check (Map.Map a b)
 checkMap f map = do xs <- mapM (\(k,v) -> do v <- f k v
@@ -89,6 +92,9 @@ checkMap f map = do xs <- mapM (\(k,v) -> do v <- f k v
                     return (Map.fromAscList xs)
 
 checkMapRecover :: (Ord a) => (a -> b -> Check b) -> Map.Map a b -> Check (Map.Map a b)
+checkMapRecover f mp = checkMap f' mp
+  where f' key info = accumulateError (f key) info
+{-
 checkMapRecover f mp = do 
   let xs = map (\ (k,v) -> (k,runCheck (f k v))) (Map.toList mp)
   case [s | (_,Bad s) <- xs] of
@@ -97,6 +103,7 @@ checkMapRecover f mp = do
       let (kx,ss) = unzip [((k,x),s) | (k, Ok (x,s)) <- xs]
       if not (all null ss) then checkWarn (text (unlines ss)) else return ()
       return (Map.fromAscList kx)
+-}
 
 checkErr :: Err a -> Check a
 checkErr (Ok x)    = return x
