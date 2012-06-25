@@ -70,7 +70,10 @@ checkMapRecover f mp = do
   let xs = map (\ (k,v) -> (k,runCheck (f k v))) (Map.toList mp)
   case [s | (_,Bad s) <- xs] of
     ss@(_:_) -> checkError (text (unlines ss)) 
-    _   -> return (Map.fromAscList [(k,x) | (k, Ok (x,_)) <- xs])
+    _   -> do
+      let (kx,ss) = unzip [((k,x),s) | (k, Ok (x,s)) <- xs]
+      checkWarn (text (unlines ss))
+      return (Map.fromAscList kx)
 
 checkErr :: Err a -> Check a
 checkErr (Ok x)    = return x
