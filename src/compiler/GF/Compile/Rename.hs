@@ -61,8 +61,12 @@ type StatusTree = BinTree Ident StatusInfo
 
 type StatusInfo = Ident -> Term
 
-renameIdentTerm :: Status -> Term -> Check Term
-renameIdentTerm env@(act,imps) t0 = 
+-- Delays errors, allowing many errors to be detected and reported
+renameIdentTerm env = accumulateError (renameIdentTerm' env)
+
+-- Fails immediately on error, makes it possible to try other possibilities
+renameIdentTerm' :: Status -> Term -> Check Term
+renameIdentTerm' env@(act,imps) t0 = 
   case t0 of
     Vr c -> ident predefAbs c
     Cn c -> ident (\_ s -> checkError s) c
@@ -210,8 +214,8 @@ renameTerm env vars = ren vars where
     P t@(Vr r) l                                               -- Here we have $r.l$ and this is ambiguous it could be either 
                                                                -- record projection from variable or constant $r$ or qualified expression with module $r$
       | elem r vs -> return trm                                -- try var proj first ..
-      | otherwise -> checks [ renid (Q (r,label2ident l))      -- .. and qualified expression second.
-                            , renid t >>= \t -> return (P t l) -- try as a constant at the end
+      | otherwise -> checks [ renid' (Q (r,label2ident l))      -- .. and qualified expression second.
+                            , renid' t >>= \t -> return (P t l) -- try as a constant at the end
                             , checkError (text "unknown qualified constant" <+> ppTerm Unqualified 0 trm)
                             ]
 
@@ -222,6 +226,7 @@ renameTerm env vars = ren vars where
     _ -> composOp (ren vs) trm
 
   renid = renameIdentTerm env
+  renid' = renameIdentTerm' env
   renCase vs (p,t) = do
     (p',vs') <- renpatt p
     t' <- ren (vs' ++ vs) t
@@ -260,7 +265,7 @@ renamePattern env patt = case patt of
             _      -> checkError (text "not a pattern macro" <+> ppPatt Qualified 0 patt)
     return (PM c', [])
 
-  PV x -> checks [ renid (Vr x) >>= \t' -> case t' of
+  PV x -> checks [ renid' (Vr x) >>= \t' -> case t' of
                                              QC c -> return (PP c [],[])
                                              _    -> checkError (text "not a constructor")
                  , return (patt, [x])
@@ -299,6 +304,7 @@ renamePattern env patt = case patt of
  where 
    renp  = renamePattern env
    renid = renameIdentTerm env
+   renid' = renameIdentTerm' env
 
 renameContext :: Status -> Context -> Check Context
 renameContext b = renc [] where
