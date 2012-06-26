@@ -69,6 +69,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     UseComp comp = insertObj comp.s (predV verbBe) ;
 
     AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
+    AdvVPSlash vp adv = insertSlashObj1 (\\_ => adv.s) vp ;
 
     AdVVP adv vp = {
       s   = vp.s ;

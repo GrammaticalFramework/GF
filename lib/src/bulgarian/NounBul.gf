@@ -3,31 +3,30 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
 
   lin
     DetCN det cn =
-      { s = \\role => let nf = case <det.n,det.spec> of {
-                                 <Sg,Def>   => case role of {
-                                                 RSubj => NFSgDefNom ;
-                                                 RVoc  => NFVocative ;
-                                                 _     => NF Sg Def
-                                               } ;
-                                 <Sg,Indef> => case role of {
-				                 RVoc  => NFVocative ;
-				                 _     => NF Sg Indef
-                                               } ;
-                                 <Pl,Def>   => NF det.n det.spec ;
-                                 <Pl,Indef> => case cn.g of {
-                                                 AMasc Human => NF Pl Indef;
-                                                 _           => case det.countable of {
-                                                                  True  => NFPlCount ;
-                                                                  False => NF Pl Indef
-                                                                }
-                                               }
+      { s = \\role => let nf = case <det.nn,det.spec> of {
+                                 <NNum Sg,Def>   => case role of {
+                                                      RSubj => NFSgDefNom ;
+                                                      RVoc  => NFVocative ;
+                                                      _     => NF Sg Def
+                                                    } ;
+                                 <NNum Sg,Indef> => case role of {
+				                                      RVoc  => NFVocative ;
+				                                      _     => NF Sg Indef
+                                                    } ;
+                                 <NNum Pl,Def>   => NF Pl Def ;
+                                 <NNum Pl,Indef> => NF Pl Indef;
+                                 <NCountable,Def>   => NF Pl det.spec ;
+                                 <NCountable,Indef> => case cn.g of {
+                                                         AMasc Human => NF Pl Indef;
+                                                         _           => NFPlCount
+                                                       }
                                } ;
                           s = det.s ! True ! cn.g ! role ++ cn.s ! nf
                       in case role of {
                            RObj Dat => "на" ++ s; 
                            _        => s
                          } ;
-        a = {gn = gennum cn.g det.n; p = P3} ;
+        a = {gn = gennum cn.g (numnnum det.nn); p = P3} ;
       } ;
 
     DetNP det =
@@ -36,7 +35,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                            RObj Dat => "на" ++ s;
                            _        => s
                          } ;
-        a = {gn = gennum ANeut det.n; p = P3} ;
+        a = {gn = gennum ANeut (numnnum det.nn); p = P3} ;
       } ;
     
     UsePN pn = { s = table {
@@ -65,19 +64,17 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     DetQuant quant num = {
       s  = \\sp,g,c => let sp' = case num.nonEmpty of { True  => True ;
                                                         False => sp   }
-                       in quant.s ! sp' ! aform (gennum g num.n) (case c of {RVoc=>Indef; _=>Def}) c ++
+                       in quant.s ! sp' ! aform (gennum g (numnnum num.nn)) (case c of {RVoc=>Indef; _=>Def}) c ++
                           num.s ! dgenderSpecies g quant.spec c ;
-      n = num.n ;
-      countable = num.nonEmpty ;
+      nn = num.nn ;
       spec = case num.nonEmpty of {True=>Indef; _=>quant.spec}
       } ;
 
     DetQuantOrd = \quant, num, ord -> {
-      s  = \\_,g,c => quant.s ! True ! aform (gennum g num.n) (case c of {RVoc=>Indef; _=>Def}) c ++
+      s  = \\_,g,c => quant.s ! True ! aform (gennum g (numnnum num.nn)) (case c of {RVoc=>Indef; _=>Def}) c ++
                       num.s ! dgenderSpecies g quant.spec c ++
-                      ord.s ! aform (gennum g num.n) (case num.nonEmpty of {True=>Indef; _=>quant.spec}) c ; 
-      n = num.n ;
-      countable = num.nonEmpty ;
+                      ord.s ! aform (gennum g (numnnum num.nn)) (case num.nonEmpty of {True=>Indef; _=>quant.spec}) c ; 
+      nn = num.nn ;
       spec=Indef
       } ;
 
@@ -87,10 +84,10 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       spec = ResBul.Indef
       } ;
 
-    NumSg = {s = \\_ => []; n = Sg; nonEmpty = False} ;
-    NumPl = {s = \\_ => []; n = Pl; nonEmpty = False} ;
+    NumSg = {s = \\_ => []; nn = NNum Sg; nonEmpty = False} ;
+    NumPl = {s = \\_ => []; nn = NNum Pl; nonEmpty = False} ;
 
-    NumCard n = n ** {nonEmpty = True} ;
+    NumCard n = {s=n.s; nn=case n.n of {Sg => NNum Sg; Pl => NCountable}; nonEmpty = True} ;
 
     NumDigits n = {s = \\gspec => n.s ! NCard gspec; n = n.n} ;
     OrdDigits n = {s = \\aform => n.s ! NOrd aform} ;
