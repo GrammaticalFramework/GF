@@ -23,7 +23,7 @@ module GF.Data.Relation (Rel, mkRel, mkRel'
                            , isTransitive, isReflexive, isSymmetric
                            , isEquivalence
                            , isSubRelationOf
-                           , topologicalSort) where
+                           , topologicalSort, findCycles) where
 
 import Data.Foldable (toList)
 import Data.List

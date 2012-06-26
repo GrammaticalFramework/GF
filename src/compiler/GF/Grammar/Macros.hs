@@ -568,10 +568,20 @@ allDependencies ism b =
 topoSortJments :: SourceModule -> Err [(Ident,Info)]
 topoSortJments (m,mi) = do
   is <- either
-          return 
+          return
           (\cyc -> Bad (render (text "circular definitions:" <+> fsep (map ppIdent (head cyc)))))
           (topoTest (allDependencies (==m) (jments mi)))
   return (reverse [(i,info) | i <- is, Ok info <- [lookupTree showIdent i (jments mi)]])
+
+topoSortJments2 :: SourceModule -> Err [[(Ident,Info)]]
+topoSortJments2 (m,mi) = do
+  iss <- either
+           return
+           (\cyc -> fail (render (text "circular definitions:"
+                                  <+> fsep (map ppIdent (head cyc)))))
+           (topoTest2 (allDependencies (==m) (jments mi)))
+  return
+    [[(i,info) | i<-is,Ok info<-[lookupTree showIdent i (jments mi)]] | is<-iss]
 {-
 -- | Smart constructor for PSeq
 pSeq p1 p2 =
