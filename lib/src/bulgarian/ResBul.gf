@@ -7,7 +7,7 @@
 -- implement $Test$, it moreover contains regular lexical
 -- patterns needed for $Lex$.
 
-resource ResBul = ParamX ** open Prelude in {
+resource ResBul = ParamX ** open Prelude, Predef in {
 
   flags
     coding=cp1251 ;  optimize=all ;
@@ -28,6 +28,11 @@ resource ResBul = ParamX ** open Prelude in {
       | NFSgDefNom
       | NFPlCount
       | NFVocative
+      ;
+      
+    NNumber =
+        NNum Number
+      | NCountable
       ;
 
     GenNum = GSg Gender | GPl ;
@@ -131,6 +136,12 @@ resource ResBul = ParamX ** open Prelude in {
       case gn of {
         GSg _  => Sg ;
         GPl    => Pl
+      } ;
+
+    numnnum : NNumber -> Number = \nn ->
+      case nn of {
+        NNum n     => n ;
+        NCountable => Pl
       } ;
 
     aform : GenNum -> Species -> Role -> AForm = \gn,spec,role -> 
@@ -636,9 +647,9 @@ resource ResBul = ParamX ** open Prelude in {
                GPl      => "тези"
              } ;
 
-    linCoord : Bool => Str ;
-    linCoord = table {True => "и"; False=>"или"} ;
+    linCoord : Ints 2 => Str ;
+    linCoord = table {0 => "и"; 1=>"или"; 2=>"нито"} ;
     
-    linCoordSep : Str -> Bool => Bool => Str ;
+    linCoordSep : Str -> Bool => Ints 2 => Str ;
     linCoordSep s = table {True => linCoord; False=> \\_ => s} ;
 }

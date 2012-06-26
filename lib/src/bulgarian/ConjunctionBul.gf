@@ -1,5 +1,5 @@
 concrete ConjunctionBul of Conjunction = 
-  CatBul ** open ResBul, Coordination, Prelude in {
+  CatBul ** open ResBul, Coordination, Prelude, Predef in {
   flags coding=cp1251 ;
 
 
@@ -59,9 +59,9 @@ concrete ConjunctionBul of Conjunction =
        isPre = andB x.isPre xs.isPre} ; 
 
   lincat
-    [S] = {s : Bool => Bool => Str} ;
-    [Adv] = {s : Bool => Bool => Str} ;
-    [NP] = {s : Bool => Bool => Role  => Str; a : Agr} ;
-    [RS] = {s : Bool => Bool => Agr   => Str} ;
-    [AP] = {s : Bool => Bool => AForm => Str; adv : Bool => Bool => Str; isPre : Bool} ;
+    [S] = {s : Bool => Ints 2 => Str} ;
+    [Adv] = {s : Bool => Ints 2 => Str} ;
+    [NP] = {s : Bool => Ints 2 => Role  => Str; a : Agr} ;
+    [RS] = {s : Bool => Ints 2 => Agr   => Str} ;
+    [AP] = {s : Bool => Ints 2 => AForm => Str; adv : Bool => Ints 2 => Str; isPre : Bool} ;
 }

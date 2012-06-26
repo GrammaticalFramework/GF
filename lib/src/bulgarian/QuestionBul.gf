@@ -53,9 +53,9 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
       } ;
 
     IdetQuant iquant num = {
-      s = \\g,qform => iquant.s ! gennum g num.n ! qform ++
+      s = \\g,qform => iquant.s ! gennum g (numnnum num.nn) ! qform ++
                        num.s ! dgenderSpecies g Indef RSubj ;
-      n = num.n ;
+      n = numnnum num.nn ;
       nonEmpty = num.nonEmpty
       } ;
 

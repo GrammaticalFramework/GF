@@ -21,10 +21,10 @@ resource MorphoBul = ResBul ** open
 oper
 --2 Determiners
 
-  mkDeterminerSg : Str -> Str -> Str -> {s : Bool => AGender => Role => Str; n : Number; countable : Bool ; spec : Species} = \vseki,vsiaka,vsiako ->
-    {s = \\_,g,_ => table AGender [vseki;vseki;vsiaka;vsiako] ! g; n = Sg; countable = False; spec = Indef} ;
-  mkDeterminerPl : Str -> {s : Bool => AGender => Role => Str ; n : Number; countable : Bool ; spec : Species} = \vsicki ->
-    {s = \\_,_,_ => vsicki; sp = \\_,_ => vsicki; n = Pl; countable = False; spec = Indef} ;
+  mkDeterminerSg : Str -> Str -> Str -> {s : Bool => AGender => Role => Str; nn : NNumber; spec : Species} = \vseki,vsiaka,vsiako ->
+    {s = \\_,g,_ => table AGender [vseki;vseki;vsiaka;vsiako] ! g; nn = NNum Sg; spec = Indef} ;
+  mkDeterminerPl : Str -> {s : Bool => AGender => Role => Str ; nn : NNumber ; spec : Species} = \vsicki ->
+    {s = \\_,_,_ => vsicki; sp = \\_,_ => vsicki; nn = NNum Pl; spec = Indef} ;
 
   mkQuant : Str -> Str -> Str -> Str -> {s : Bool => AForm => Str; nonEmpty : Bool; spec : Species} = \tozi,tazi,towa,tezi -> 
     { s = \\_ => table {

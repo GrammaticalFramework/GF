@@ -1,5 +1,5 @@
 concrete ExtraBul of ExtraBulAbs = CatBul ** 
-  open ResBul, MorphoFunsBul, Coordination, Prelude in {
+  open ResBul, MorphoFunsBul, Coordination, Prelude, Predef in {
   flags coding=cp1251 ;
 
 
@@ -38,7 +38,7 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
                        CFMasc Indef _ | CFFem Indef | CFNeut Indef            => "едни" ;
                        CFMasc Def _ | CFMascDefNom _ | CFFem Def | CFNeut Def => "едните"
                      } ;
-                 n = Pl;
+                 nn = NCountable;
                  nonEmpty = True
                 } ;
 
@@ -69,8 +69,23 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
       } ;
 
   lincat
+    VPI   = {s : Agr => Str} ;
+    [VPI] = {s : Bool => Ints 2 => Agr => Str} ;
+
+  lin
+    BaseVPI x y = {s  = \\d,t,a=>x.s!a++linCoord!t++y.s!a} ;
+    ConsVPI x xs = {s  = \\d,t,a=>x.s!a++(linCoordSep comma)!d!t++xs.s!d!t!a} ;
+
+    MkVPI vp = {s = daComplex vp ! Perf} ;
+    ConjVPI conj vpi = {
+      s = \\a => conj.s++(linCoordSep [])!conj.distr!conj.conj++vpi.s!conj.distr!conj.conj!a;
+      } ;
+    ComplVPIVV vv vpi = 
+      insertObj (\\a => vpi.s ! a) (predV vv) ;
+
+  lincat
     VPS   = {s : Agr => Str} ;
-    [VPS] = {s : Bool => Bool => Agr => Str} ;
+    [VPS] = {s : Bool => Ints 2 => Agr => Str} ;
 
   lin
     BaseVPS x y = {s  = \\d,t,a=>x.s!a++linCoord!t++y.s!a} ;
@@ -86,7 +101,7 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
       } ;
       
     ConjVPS conj vps = {
-      s = \\a => (linCoordSep [])!conj.distr!conj.conj++vps.s!conj.distr!conj.conj!a;
+      s = \\a => conj.s++(linCoordSep [])!conj.distr!conj.conj++vps.s!conj.distr!conj.conj!a;
       } ;
 
     PassVPSlash vp = insertObj (\\a => vp.s ! Perf ! VPassive (aform a.gn Indef (RObj Acc)) ++

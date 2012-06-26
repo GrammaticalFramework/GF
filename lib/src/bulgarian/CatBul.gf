@@ -1,4 +1,4 @@
-concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, (R = ParamX) in {
+concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, (R = ParamX) in {
 
   flags 
     coding=cp1251; optimize=all_subs;
@@ -54,10 +54,10 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, (R = Par
     CN = {s : NForm => Str; g : AGender} ;
     NP = {s : Role => Str; a : Agr} ;
     Pron = {s : Role => Str; gen : AForm => Str; a : Agr} ;
-    Det = {s : Bool => AGender => Role => Str; n : Number; countable : Bool; spec : Species} ;
+    Det = {s : Bool => AGender => Role => Str; nn : NNumber; spec : Species} ;
     Predet = {s : GenNum => Str} ;
     Ord = {s : AForm => Str} ;
-    Num = {s : CardForm => Str; n : Number; nonEmpty : Bool} ;
+    Num = {s : CardForm => Str; nn : NNumber; nonEmpty : Bool} ;
     Card = {s : CardForm => Str; n : Number} ;
     Quant = {s : Bool => AForm => Str; nonEmpty : Bool; spec : Species} ;
 
@@ -68,7 +68,7 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, (R = Par
 
 -- Structural
 
-    Conj = {s : Str; distr : Bool; conj : Bool; n : Number} ;
+    Conj = {s : Str; distr : Bool; conj : Ints 2; n : Number} ;
     Subj = {s : Str} ;
     Prep = {s : Str; c : Case} ;
 

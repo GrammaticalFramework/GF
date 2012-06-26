@@ -15,8 +15,8 @@ lin
     a = agrP3 (gennum cn.g Sg)
     } ;
   CNSymbNP det cn xs = {
-    s = \\c => det.s ! False ! cn.g ! RSubj ++ cn.s ! NF det.n Indef ++ xs.s ; 
-    a = agrP3 (gennum cn.g det.n)
+    s = \\c => det.s ! False ! cn.g ! RSubj ++ cn.s ! NF (numnnum det.nn) Indef ++ xs.s ; 
+    a = agrP3 (gennum cn.g (numnnum det.nn))
     } ;
   CNNumNP cn i = {
     s = \\c => (cn.s ! NF Sg Indef ++ i.s ! CFNeut Indef) ;
