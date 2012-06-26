@@ -16,7 +16,7 @@ module GF.Infra.CheckM
           (Check, CheckResult, Message, runCheck,
 	   checkError, checkCond, checkWarn, checkWarnings, checkAccumError,
 	   checkErr, checkIn, checkMap, checkMapRecover,
-           accumulateError, commitCheck
+           parallelCheck, accumulateError, commitCheck,
 	  ) where
 
 import GF.Data.Operations
@@ -26,6 +26,8 @@ import GF.Grammar.Printer
 
 import qualified Data.Map as Map
 import Text.PrettyPrint
+import Control.Parallel.Strategies(parList,rseq,using)
+import Control.Monad(liftM)
 
 type Message = Doc
 type Error   = Message
@@ -37,6 +39,8 @@ type Accumulate acc ans = acc -> (acc,ans)
 data CheckResult a = Fail Error | Success a
 newtype Check a
   = Check {unCheck :: {-Context ->-} Accumulate NonFatal (CheckResult a)}
+
+instance Functor Check where fmap = liftM
 
 instance Monad Check where
   return x = Check $ \{-ctxt-} ws -> (ws,Success x)
@@ -98,14 +102,28 @@ runCheck c =
     bad (es,ws) = Bad (render $ list ws $$ list es)
     list = vcat . reverse
 
+parallelCheck :: [Check a] -> Check [a]
+parallelCheck cs =
+  Check $ \ {-ctxt-} (es0,ws0) ->
+  let os = [unCheck c {-[]-} ([],[])|c<-cs] `using` parList rseq
+      (msgs1,crs) = unzip os
+      (ess,wss) = unzip msgs1
+      rs = [r | Success r<-crs]
+      fs = [f | Fail f<-crs]
+      msgs = (concat ess++es0,concat wss++ws0)
+  in if null fs
+     then (msgs,Success rs)
+     else (msgs,Fail (vcat $ reverse fs))
+
 checkMap :: (Ord a) => (a -> b -> Check b) -> Map.Map a b -> Check (Map.Map a b)
 checkMap f map = do xs <- mapM (\(k,v) -> do v <- f k v
                                              return (k,v)) (Map.toList map)
                     return (Map.fromAscList xs)
 
 checkMapRecover :: (Ord a) => (a -> b -> Check b) -> Map.Map a b -> Check (Map.Map a b)
-checkMapRecover f mp = commitCheck (checkMap f' mp)
-  where f' key info = accumulateError (f key) info
+checkMapRecover f = fmap Map.fromList . parallelCheck . map f' . Map.toList
+  where f' (k,v) = fmap ((,)k) (f k v)
+
 {-
 checkMapRecover f mp = do 
   let xs = map (\ (k,v) -> (k,runCheck (f k v))) (Map.toList mp)

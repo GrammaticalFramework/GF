@@ -56,11 +56,9 @@ checkModule opts mos mo@(m,mi) = do
   infoss <- checkErr $ topoSortJments2 mo
   foldM updateCheckInfos mo infoss
   where
-    updateCheckInfos mo0 = commitCheck . foldM updateCheckInfo mo0 
-
-    updateCheckInfo mo@(m,mi) (i,info) = do
-      info <- accumulateError (checkInfo opts mos mo i) info
-      return (m,mi{jments=updateTree (i,info) (jments mi)})
+    updateCheckInfos mo = fmap (foldl update mo) . parallelCheck . map check
+      where check (i,info) = fmap ((,) i) (checkInfo opts mos mo i info)
+    update mo@(m,mi) (i,info) = (m,mi{jments=updateTree (i,info) (jments mi)})
 
 -- check if restricted inheritance modules are still coherent
 -- i.e. that the defs of remaining names don't depend on omitted names
