@@ -21,7 +21,7 @@ module GF.Infra.CheckM
 
 import GF.Data.Operations
 import GF.Infra.Ident
-import GF.Grammar.Grammar(Context)
+--import GF.Grammar.Grammar(Context)
 import GF.Grammar.Printer
 
 import qualified Data.Map as Map
@@ -36,39 +36,39 @@ type NonFatal = ([Error],[Warning])
 type Accumulate acc ans = acc -> (acc,ans)
 data CheckResult a = Fail Error | Success a
 newtype Check a
-  = Check {unCheck :: Context -> Accumulate NonFatal (CheckResult a)}
+  = Check {unCheck :: {-Context ->-} Accumulate NonFatal (CheckResult a)}
 
 instance Monad Check where
-  return x = Check $ \ctxt ws -> (ws,Success x)
-  f >>= g  = Check $ \ctxt ws ->
-               case unCheck f ctxt ws of
-                 (ws,Success x) -> unCheck (g x) ctxt ws
+  return x = Check $ \{-ctxt-} ws -> (ws,Success x)
+  f >>= g  = Check $ \{-ctxt-} ws ->
+               case unCheck f {-ctxt-} ws of
+                 (ws,Success x) -> unCheck (g x) {-ctxt-} ws
                  (ws,Fail msg)  -> (ws,Fail msg)
 
 instance ErrorMonad Check where
   raise s = checkError (text s)
   handle f h = handle' f (h . render)
 
-handle' f h = Check (\ctxt msgs -> case unCheck f ctxt msgs of
+handle' f h = Check (\{-ctxt-} msgs -> case unCheck f {-ctxt-} msgs of
                                       (ws,Success x) -> (ws,Success x)
-                                      (ws,Fail msg)  -> unCheck (h msg) ctxt ws)
+                                      (ws,Fail msg)  -> unCheck (h msg) {-ctxt-} ws)
 
 -- | Report a fatal error
 checkError :: Message -> Check a
-checkError msg = Check (\ctxt ws -> (ws,Fail msg))
+checkError msg = Check (\{-ctxt-} ws -> (ws,Fail msg))
 
 checkCond :: Message -> Bool -> Check ()
 checkCond s b = if b then return () else checkError s
 
 -- | warnings should be reversed in the end
 checkWarn :: Message -> Check ()
-checkWarn msg = Check $ \ctxt (es,ws) -> ((es,(text "Warning:" <+> msg) : ws),Success ())
+checkWarn msg = Check $ \{-ctxt-} (es,ws) -> ((es,(text "Warning:" <+> msg) : ws),Success ())
 
 checkWarnings = mapM_ checkWarn
 
 -- | Report a nonfatal (accumulated) error
 checkAccumError :: Message -> Check ()
-checkAccumError msg = Check $ \ctxt (es,ws) -> ((msg:es,ws),Success ())
+checkAccumError msg = Check $ \{-ctxt-} (es,ws) -> ((msg:es,ws),Success ())
 
 -- | Turn a fatal error into a nonfatal (accumulated) error
 accumulateError :: (a -> Check a) -> a -> Check a
@@ -78,8 +78,8 @@ accumulateError chk a =
 -- |  Turn accumulated errors into a fatal error
 commitCheck :: Check a -> Check a
 commitCheck c =
-    Check $ \ ctxt msgs0@(es0,ws0) ->
-    case unCheck c ctxt ([],[]) of
+    Check $ \ {-ctxt-} msgs0@(es0,ws0) ->
+    case unCheck c {-ctxt-} ([],[]) of
       (([],ws),Success v) -> ((es0,ws++ws0),Success v)
       (msgs   ,Success _) -> bad msgs0 msgs
       ((es,ws),Fail    e) -> bad msgs0 ((e:es),ws)
@@ -90,7 +90,7 @@ commitCheck c =
 -- | Run an error check, report errors and warnings
 runCheck :: Check a -> Err (a,String)
 runCheck c =
-    case unCheck c [] ([],[]) of
+    case unCheck c {-[]-} ([],[]) of
       (([],ws),Success v) -> Ok (v,render (list ws))
       (msgs   ,Success v) -> bad msgs
       ((es,ws),Fail    e) -> bad ((e:es),ws)
@@ -122,8 +122,8 @@ checkErr (Ok x)    = return x
 checkErr (Bad err) = checkError (text err)
 
 checkIn :: Doc -> Check a -> Check a
-checkIn msg c = Check $ \ctxt msgs0 ->
-    case unCheck c ctxt ([],[]) of
+checkIn msg c = Check $ \{-ctxt-} msgs0 ->
+    case unCheck c {-ctxt-} ([],[]) of
       (msgs,Fail msg)  -> (augment msgs0 msgs,Fail (augment1 msg))
       (msgs,Success v) -> (augment msgs0 msgs,Success v)
   where
