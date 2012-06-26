@@ -16,7 +16,7 @@ module GF.Infra.CheckM
           (Check, CheckResult, Message, runCheck,
 	   checkError, checkCond, checkWarn, checkWarnings, checkAccumError,
 	   checkErr, checkIn, checkMap, checkMapRecover,
-           accumulateError
+           accumulateError, commitCheck
 	  ) where
 
 import GF.Data.Operations
@@ -75,6 +75,18 @@ accumulateError :: (a -> Check a) -> a -> Check a
 accumulateError chk a =
     handle' (chk a) $ \ msg -> do checkAccumError msg; return a
 
+-- |  Turn accumulated errors into a fatal error
+commitCheck :: Check a -> Check a
+commitCheck c =
+    Check $ \ ctxt msgs0@(es0,ws0) ->
+    case unCheck c ctxt ([],[]) of
+      (([],ws),Success v) -> ((es0,ws++ws0),Success v)
+      (msgs   ,Success _) -> bad msgs0 msgs
+      ((es,ws),Fail    e) -> bad msgs0 ((e:es),ws)
+  where
+    bad (es0,ws0) (es,ws) = ((es0,ws++ws0),Fail (list es))
+    list = vcat . reverse
+
 -- | Run an error check, report errors and warnings
 runCheck :: Check a -> Err (a,String)
 runCheck c =
@@ -92,7 +104,7 @@ checkMap f map = do xs <- mapM (\(k,v) -> do v <- f k v
                     return (Map.fromAscList xs)
 
 checkMapRecover :: (Ord a) => (a -> b -> Check b) -> Map.Map a b -> Check (Map.Map a b)
-checkMapRecover f mp = checkMap f' mp
+checkMapRecover f mp = commitCheck (checkMap f' mp)
   where f' key info = accumulateError (f key) info
 {-
 checkMapRecover f mp = do 

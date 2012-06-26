@@ -53,11 +53,13 @@ checkModule opts mos mo@(m,mi) = do
                              abs <- checkErr $ lookupModule gr a
                              checkCompleteGrammar gr (a,abs) mo
           _            -> return mo
-  infos <- checkErr $ topoSortJments mo
-  foldM updateCheckInfo mo infos
+  infoss <- checkErr $ topoSortJments2 mo
+  foldM updateCheckInfos mo infoss
   where
+    updateCheckInfos mo0 = commitCheck . foldM updateCheckInfo mo0 
+
     updateCheckInfo mo@(m,mi) (i,info) = do
-      info <- checkInfo opts mos mo i info
+      info <- accumulateError (checkInfo opts mos mo i) info
       return (m,mi{jments=updateTree (i,info) (jments mi)})
 
 -- check if restricted inheritance modules are still coherent
