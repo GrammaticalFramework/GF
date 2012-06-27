@@ -88,7 +88,6 @@ data OutputFormat = FmtPGFPretty
                   | FmtPython 
                   | FmtHaskell 
                   | FmtProlog
-                  | FmtProlog_Abs
                   | FmtLambdaProlog
                   | FmtBNF
                   | FmtEBNF
@@ -436,7 +435,6 @@ outputFormatsExpl =
      (("python",       FmtPython),"Python (whole grammar)"),
      (("haskell",      FmtHaskell),"Haskell (abstract syntax)"),
      (("prolog",       FmtProlog),"Prolog (whole grammar)"),
-     (("prolog_abs",   FmtProlog_Abs),"Prolog (abstract syntax)"),
      (("lambda_prolog",FmtLambdaProlog),"LambdaProlog (abstract syntax)"),
      (("bnf",          FmtBNF),"BNF (context-free grammar)"),
      (("ebnf",         FmtEBNF),"Extended BNF"),

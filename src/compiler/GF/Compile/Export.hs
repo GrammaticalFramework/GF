@@ -36,7 +36,6 @@ exportPGF opts fmt pgf =
       FmtPython       -> multi "py"  pgf2python
       FmtHaskell      -> multi "hs"  (grammar2haskell opts name)
       FmtProlog       -> multi "pl"  grammar2prolog
-      FmtProlog_Abs   -> multi "pl"  grammar2prolog_abs
       FmtLambdaProlog -> multi "mod" grammar2lambdaprolog_mod ++ multi "sig" grammar2lambdaprolog_sig
       FmtBNF          -> single "bnf"   bnfPrinter
       FmtEBNF         -> single "ebnf"  (ebnfPrinter opts)
