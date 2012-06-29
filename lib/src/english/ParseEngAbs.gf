@@ -12,11 +12,14 @@ abstract ParseEngAbs =
   Sentence,
   Question,
   Relative,
-  Idiom [NP, VP, Cl, ProgrVP, ExistNP],
+  Idiom [NP, VP, Cl, Tense, ProgrVP, ExistNP],
   Extra [NP, Quant, VPSlash, VP, GenNP, PassVPSlash,
-         Temp, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
+         Temp, Tense, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
          VPI, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV],
   DictEngAbs ** {
+
+flags
+  startcat=Phr;
 
 fun CompoundCN : Num -> N -> CN -> CN ;
     DashCN : N -> N -> N ;
