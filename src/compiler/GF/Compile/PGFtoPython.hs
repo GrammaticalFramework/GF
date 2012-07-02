@@ -41,7 +41,7 @@ pgf2python pgf = ("# -*- coding: UTF-8 -*-" ++++
       cncs = concretes pgf
 
 pyAbsdef :: (Type, Int, Maybe [Equation], Double) -> String
-pyAbsdef (typ, _, _, _) = pyTuple 0 id [pyCId cat, pyTuple 0 pyCId args]
+pyAbsdef (typ, _, _, _) = pyTuple 0 id [pyCId cat, pyList 0 pyCId args]
     where (args, cat) = M.catSkeleton typ 
 
 pyLiteral :: Literal -> String
@@ -53,21 +53,21 @@ pyConcrete :: Concr -> String
 pyConcrete cnc = pyDict 3 pyStr id [
                   ("flags", pyDict 0 pyCId pyLiteral (Map.assocs (cflags cnc))),
                   ("printnames", pyDict 4 pyCId pyStr (Map.assocs (printnames cnc))),
-                  ("lindefs", pyDict 4 pyCat (pyTuple 0 pyFun) (IntMap.assocs (lindefs cnc))),
+                  ("lindefs", pyDict 4 pyCat (pyList 0 pyFun) (IntMap.assocs (lindefs cnc))),
                   ("productions", pyDict 4 pyCat pyProds (IntMap.assocs (productions cnc))),
                   ("cncfuns", pyDict 4 pyFun pyCncFun (Array.assocs (cncfuns cnc))),
                   ("sequences",  pyDict 4 pySeq pySymbols (Array.assocs (sequences cnc))),
                   ("cnccats", pyDict 4 pyCId pyCncCat (Map.assocs (cnccats cnc))),
                   ("size",  show (totalCats cnc))
                  ]
-    where pyProds prods = pyTuple 5 pyProduction (Set.toList prods)
-          pyCncCat (CncCat start end _) = pyTuple 0 pyCat [start..end]
-          pyCncFun (CncFun f lins) = pyTuple 0 id [pyTuple 0 pySeq (Array.elems lins), pyCId f]
-          pySymbols syms = pyTuple 0 pySymbol (Array.elems syms)
+    where pyProds prods = pyList 5 pyProduction (Set.toList prods)
+          pyCncCat (CncCat start end _) = pyList 0 pyCat [start..end]
+          pyCncFun (CncFun f lins) = pyTuple 0 id [pyList 0 pySeq (Array.elems lins), pyCId f]
+          pySymbols syms = pyList 0 pySymbol (Array.elems syms)
 
 pyProduction :: Production -> String
-pyProduction (PCoerce arg)       = pyTuple 0 id [pyStr "", pyTuple 0 pyCat [arg]]
-pyProduction (PApply funid args) = pyTuple 0 id [pyFun funid, pyTuple 0 pyPArg args]
+pyProduction (PCoerce arg)       = pyTuple 0 id [pyStr "", pyList 0 pyCat [arg]]
+pyProduction (PApply funid args) = pyTuple 0 id [pyFun funid, pyList 0 pyPArg args]
     where pyPArg (PArg [] fid) = pyCat fid
           pyPArg (PArg hypos fid) = pyTuple 0 pyCat (fid : map snd hypos)
 
@@ -76,8 +76,8 @@ pySymbol (SymCat n l)    = pyTuple 0 show [n, l]
 pySymbol (SymLit n l)    = pyDict 0 pyStr id [("lit", pyTuple 0 show [n, l])]
 pySymbol (SymVar n l)    = pyDict 0 pyStr id [("var", pyTuple 0 show [n, l])]
 pySymbol (SymKS ts)      = prTList "," (map pyStr ts)
-pySymbol (SymKP ts alts) = pyDict 0 pyStr id [("pre", pyTuple 0 pyStr ts), ("alts", pyTuple 0 alt2py alts)]
-    where alt2py (Alt ps ts) = pyTuple 0 (pyTuple 0 pyStr) [ps, ts]
+pySymbol (SymKP ts alts) = pyDict 0 pyStr id [("pre", pyList 0 pyStr ts), ("alts", pyList 0 alt2py alts)]
+    where alt2py (Alt ps ts) = pyTuple 0 (pyList 0 pyStr) [ps, ts]
 
 ----------------------------------------------------------------------
 -- python helpers 
