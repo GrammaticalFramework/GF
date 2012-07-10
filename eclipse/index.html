@@ -10,8 +10,8 @@
 
 <h1>The GF Eclipse Plugin</h1>
 
-<p>John  J. Camilleri<br />
-Updated: 12 June 2012</p>
+<p>John J. Camilleri<br />
+Updated: 10 July 2012</p>
 
 <p><em>The research leading to these results has received funding from the European Union&#8217;s Seventh Framework Programme (FP7/2007-2013) under grant agreement no. FP7-ICT-247914 (the <a href="http://www.molto-project.eu/">MOLTO Project</a>).</em></p>
 
@@ -460,7 +460,39 @@ I only support the latest version of the plugin, so make sure you are up to date
 </ol>
 
 <p>In both cases make sure you get the correct version of Xtext (see below).
-Once you have Xtext set up, you can clone the repository locally with <code>git clone git://github.com/GrammaticalFramework/gf-eclipse-plugin.git</code> and then add the projects under the <code>workspace</code> directory to your Eclipse workspace.</p>
+Once you have Xtext set up, you can clone the repository locally with the following command:</p>
+
+<pre><code>git clone git://github.com/GrammaticalFramework/gf-eclipse-plugin.git
+</code></pre>
+
+<p>You can then add the projects under the <code>workspace</code> directory to your Eclipse workspace, by using the <strong>File &rarr; Import&#8230;</strong> wizard.
+The individual projects are:</p>
+
+<dl>
+<dt><strong><code>org.grammaticalframework.eclipse</code></strong></dt>
+<dd>Main plugin which covers all parsing and linking behaviour.</dd>
+
+<dt><strong><code>org.grammaticalframework.eclipse.ui</code></strong></dt>
+<dd>Covers all UI aspects of the plugin. Depends on <code>org.grammaticalframework.eclipse</code> (but the opposite is not true).</dd>
+
+<dt><strong><code>org.grammaticalframework.eclipse.tests</code></strong></dt>
+<dd>Contains unit tests for the plugin. Not required for running the plugin.</dd>
+
+<dt><strong><code>org.grammaticalframework.eclipse.ontology-grammar</code></strong></dt>
+<dd>GF Ontology Grammar Plugin for Eclipse, developed separately by Ontotext AB.</dd>
+
+<dt><strong><code>org.grammaticalframework.feature</code></strong></dt>
+<dd>Exports all projects packaged as the GF Eclipse Plugin.</dd>
+
+<dt><strong><code>org.grammaticalframework.updatesite</code></strong></dt>
+<dd><em>Unused</em></dd>
+</dl>
+
+<h4>Extra dependencies for unit testing project</h4>
+
+<p>The unit testing project (<code>org.grammaticalframework.eclipse.tests</code>) has an extra requirement for the library <code>org.eclipselabs.xtext.utils.unittesting</code>, which you will probably get complaints about when importing your projects into Eclipse.
+You only need to worry about this if you want to run the unit tests; otherwise you can ignore these errors.
+You can get more information about this library <a href="http://code.google.com/a/eclipselabs.org/p/xtext-utils/wiki/Unit_Testing">here</a>, or just install it in Eclipse directly using the following update site URL: <a href="http://xtext-utils.eclipselabs.org.codespot.com/git.distribution/releases/unittesting-0.9.x/">http://xtext-utils.eclipselabs.org.codespot.com/git.distribution/releases/unittesting-0.9.x/</a></p>
 
 <h4>Xtext version</h4>
 
