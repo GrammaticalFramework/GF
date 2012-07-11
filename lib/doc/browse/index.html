@@ -6,7 +6,7 @@
   <title>RGL Source Browser</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
-  <link rel="shortcut icon" href="http://cdn.dustball.com/book_next.png" type="image/png">
+  <link rel="shortcut icon" href="icon.png" type="image/png">
   <link rel="stylesheet" href="http://www.grammaticalframework.org/css/style.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="google-code-prettify/prettify-gf.css">
@@ -16,7 +16,7 @@
     <h1>RGL Source Browser</h1>
   </header>
   <div id="loading">
-    <img src="ajax-loader.gif" /> loading...
+    <img src="ajax-loader.gif" /> Loading...
   </div>
   <div role="main">
     <div class="pane left">
@@ -29,13 +29,15 @@
         <a href="http://www.grammaticalframework.org/lib/doc/synopsis.html" title="RGL Synopsis">Synopsis...</a>
       </div>
       <div id="scope" class="panel scope maxheight">
-        <input type="text" id="search" />
-        &nbsp;<span id="scope_count">0</span> items&nbsp;
-        <input type="submit" id="submit" value="Filter" />
-        <input type="reset" id="clear" value="Clear" />
-        <input type="checkbox" id="case_sensitive" checked="checked" /><label for="case_sensitive">Case sensitive?</label>
-        <input type="radio" name="show" id="show_all" checked="checked" /><label for="show_all">Show all</label>
-        <input type="radio" name="show" id="show_local" /><label for="show_local">Local only</label>
+        <div id="scope_controls">
+          <input type="text" id="search" />
+          &nbsp;<span id="scope_count">0</span> items&nbsp;
+          <input type="submit" id="submit" value="Filter" />
+          <input type="reset" id="clear" value="Clear" />
+          <input type="checkbox" id="case_sensitive" checked="checked" /><label for="case_sensitive">Case sensitive?</label>
+          <input type="radio" name="show" id="show_all" checked="checked" /><label for="show_all">Show all</label>
+          <input type="radio" name="show" id="show_local" /><label for="show_local">Local only</label>
+        </div>
         <div class="maxheight scroll-y">
           <table id="scope_list"></table>
         </div>
@@ -46,9 +48,11 @@
       <div id="help" class="panel help maxheight">
       <div class="maxheight scroll-y">
 
+        <h3>About</h3>
+        <p>A basic tool for looking through scopes and quickly jumping to code within GF's resource grammar library (RGL), created out of necessity. All feedback is welcome.</p>
+
         <h3>Understanding the scope information</h3>
         <p>The scope information shown by this tool is basically the output of running GF with the <code>--tags</code> flag. This lists all the functions visible in the scope of a module, one per line. Each line can have two possible forms:</p>
-
 
         <h4>1. Local functions</h4>
         <pre>mkPrep	oper-type	/lib/src/english/ParadigmsEng.gf:204	Str -> {s : Str; lock_Prep : {}}</pre>
@@ -75,10 +79,12 @@
           <dt><code>scandinavian</code></dt><dd>Used by Danish, Norwegian, Swedish</dd>
         </dl>
         
-        <h3>About</h3>
-        <p>A basic tool for looking up module scopes and quickly looking at module sources, created out of necessity. It is experimental and is known to hang when handling large files. All feedback is welcome.</p>
+        <h3>Issues</h3>
 
-        <h3>Known issues and To-do</h3>
+        <h4>Something is missing or out of date</h4>
+        <p>All the scoping information shown is not read directly from the RGL on-demand. There is an in-between processing stage which must be run, so if something seems out of date just let me know and I can udpate things manually.</p>
+
+        <h4>To-Do</h4>
         <ul>
           <li>Some way of browsing just the API</li>
           <li>The page sometimes stalls when handling large files (in particular the dictionary modules)</li>
@@ -89,7 +95,7 @@
     <br style="clear:both" />
   </div>
   <footer id="footer">
-  John J. Camilleri. <em>Updated 2012-05-25.</em>
+  John J. Camilleri<br/><em>Updated 2012-07-11</em>
   </footer>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script src="jquery.history.min.js"></script>
