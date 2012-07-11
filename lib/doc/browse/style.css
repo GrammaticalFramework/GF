@@ -26,6 +26,8 @@ div[role='main']
 { 
   width:170px;
   float:left;
+  background:#ddd;
+  padding:0.2em;
  }
 .pane.right
 { 
@@ -47,11 +49,8 @@ div[role='main']
  }
 #language_select
 { 
-  font-size:1.1em;
-  }
-#languages
-{ 
-  margin:0.5em 0;
+  font-size:1em;
+  width:100%;
   }
 #modules a
 { 
@@ -88,14 +87,15 @@ div[role='main']
 #loading
 { 
   position: fixed;
-  top: 1em;
-  right: 1em;
+  top: 5px;
+  left: 50%;
   white-space: nowrap;
   padding: 0.5em 1em;
   border: 1px solid #F0C36D;
   background: #F9EDBE;
-  color: black;
-  vertical-align: middle;
+  color: #222;
+  vertical-align: top;
+  font-family: sans-serif;
  }
 .scope
 { 
@@ -123,6 +123,11 @@ input#search
 #scope
 {
   padding: 1em;
+  }
+#scope_controls
+{ 
+  border-bottom: 1px solid #CCC;
+  padding-bottom: 0.5em;
   }
 #scope_list
 {
@@ -171,9 +176,11 @@ dt
   }
 footer
 { 
-  padding: 0.4em;
+  padding:0.5em;
   color:#333;
-  text-align:right;
-  border-top:1px solid #ccc;
   font-size:0.9em;
+  text-align:right;
+  position:fixed;
+  top:0;
+  right:0;
   }
