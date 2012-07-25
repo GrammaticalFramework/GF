@@ -62,7 +62,7 @@ Translator.prototype.switch_grammar=function(grammar,cont) {
 	    pgf.waiting=[cont]
 	    function cont2(gr_info) {
 		t.grammar_info[grammar]=gr_info
-		console.log("Passing grammar info for "+grammar+" to "+pgf.waiting.length+" clients")
+		//console.log("Passing grammar info for "+grammar+" to "+pgf.waiting.length+" clients")
 		while(pgf.waiting.length>0) pgf.waiting.pop()(gr_info)
 	    }
 	    function cont1() { pgf.grammar_info(cont2)}
@@ -187,10 +187,10 @@ Translator.prototype.update_translations=function() {
 	if(fls && tls) {
 	    var want={from:o.from, to:o.to, method:grammar}
 	    if(!eq_options(segment.options,want)) {
-		console.log("Updating "+i)
+		//console.log("Updating "+i)
 		gfshell('ps -lextext "'+segment.source+'"',upd0)
 	    }
-	    else if(i==0) console.log("No update ",want,segment.options)
+	    //else console.log("No update ",want,segment.options)
 	}
 	else {
 	    var fn=concname(o.from)
@@ -209,7 +209,7 @@ Translator.prototype.update_translations=function() {
 	if(d || d==null) m=doc.options.method
 	switch(m) {
 	case "Manual":
-	    console.log("Manual "+i)
+	    //console.log("Manual "+i)
 	    break;
 	case "Apertium":
 	    var afrom=alangcode(o.from)
@@ -220,7 +220,7 @@ Translator.prototype.update_translations=function() {
 	    function capture(i,m) { // Capture current values of loop variables
 		function upd00(grammar_info) {
 		    var gname=grammar_info.name
-		    console.log("Got grammar info "+gname+" for "+i)
+		    //console.log("Got grammar info "+gname+" for "+i)
 		    var gfrom=gname+o.from
 		    var gto=gname+o.to
 		    update_gf_translation(i,m,gfrom,gto)
@@ -687,7 +687,7 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
 	    if(m!=o.method) {
 		o.method=m // side effect, updating the document in-place
 		o.to="" // hack to force an update
-		console.log("Method changed to "+m)
+		//console.log("Method changed to "+m)
 		t.update_translations()
 	    }
 	}
