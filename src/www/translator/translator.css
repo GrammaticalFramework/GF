@@ -50,10 +50,11 @@ td.options { padding: 1ex 1em; }
     vertical-align: baseline;
 }
 td.options > div, td.actions > div { position: relative; margin: 0; }
-td.options:hover > div > dl,td.actions:hover > div > dl { display: block; }
-td.options > div > dl, td.actions > div > dl {
-    left: 0.8em;
-    padding: 0.6ex;
+td.options:hover > div > form > dl,td.actions:hover > div > dl {
+    display: block;
+}
+td.options > div > form > dl, td.actions > div > dl {
+    left: 1em;
     font-family: sans-serif;
     white-space: nowrap;
 }
@@ -76,6 +77,8 @@ table.paralleltexts td.source {
 table.paralleltexts td.target { padding-left:  0.7em; }
 
 label { font-family: sans-serif; }
+
+form { margin: 0; }
 
 form.import { 
     min-width: 90%; /* extend to availiable width for Safari */

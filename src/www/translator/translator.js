@@ -3,21 +3,23 @@
 /* --- Translator object ---------------------------------------------------- */
 
 function Translator() {
-    this.local=tr_local();
-    this.view=element("document")
+    var t=this
+    t.local=tr_local();
+    t.view=element("document")
     if(!supports_html5_storage()) {
 	var warning=span_class("error",text("It appears that localStorage is unsupported or disabled in this browser. Documents will not be preserved after you leave or reload this page!"))
-	insertAfter(warning,this.view)
+	insertAfter(warning,t.view)
     }
-    this.current=this.local.get("current")
-    this.document=this.current && this.current!="/" && this.local.get("/"+this.current) || empty_document()
-    this.server=pgf_online({})
-    this.server.get_grammarlist(bind(this.extend_methods,this))
-    update_language_menu(this,"source")
-    update_language_menu(this,"target")
-    if(apertium) this.add_apertium()
+    t.current=t.local.get("current")
+    t.document=t.current && t.current!="/" && t.local.get("/"+t.current) || empty_document()
+    t.servers={}; //The API is stateful, use one pgf_online object per grammar
+    t.grammar_info={};
+    pgf_online({}).get_grammarlist(bind(t.extend_methods,t))
+    update_language_menu(t,"source")
+    update_language_menu(t,"target")
+    if(apertium) t.add_apertium()
     //initialize_sorting(["TR"],["segment"])
-    this.redraw();
+    t.redraw();
 }
 
 function update_language_menu(t,id) {
@@ -37,25 +39,34 @@ Translator.prototype.redraw=function() {
 	clear(t.view)
 	appendChildren(t.view,t.drawing.doc)
 	var o=t.document.options
-	update_radiobutton("method",o.method)
-	update_radiobutton("source",o.from)
-	update_radiobutton("target",o.to)
-	update_radiobutton("view",o.view || "segmentbysegment")
+	var form=document.forms.options
+	update_radiobutton(form,"method",o.method)
+	update_radiobutton(form,"source",o.from)
+	update_radiobutton(form,"target",o.to)
+	update_radiobutton(form,"view",o.view || "segmentbysegment")
 	update_checkbox("cloud",o.cloud  || false)
-	switch(o.method) {
-	case "Manual":
-	case "Apertium":
-	    t.update_language_menus()
-	    t.update_translations()
-	    break;
-	default: // GF
+	t.update_language_menus()
+	t.update_translations()
+    }
+}
+
+Translator.prototype.switch_grammar=function(grammar,cont) {
+    var t=this
+    var gi=t.grammar_info[grammar]
+    if(gi) cont(gi)
+    else {
+	var pgf=t.servers[grammar]
+	if(pgf) pgf.waiting.push(cont)
+	else {
+	    pgf=t.servers[grammar]=pgf_online({})
+	    pgf.waiting=[cont]
 	    function cont2(gr_info) {
-		t.grammar_info=gr_info
-		t.update_language_menus() // needs grammar_info
-		t.update_translations()
+		t.grammar_info[grammar]=gr_info
+		console.log("Passing grammar info for "+grammar+" to "+pgf.waiting.length+" clients")
+		while(pgf.waiting.length>0) pgf.waiting.pop()(gr_info)
 	    }
-	    function cont1() { t.server.grammar_info(cont2)}
-	    t.server.switch_grammar(o.method,cont1)
+	    function cont1() { pgf.grammar_info(cont2)}
+	    pgf.switch_grammar(grammar,cont1)
 	}
     }
 }
@@ -91,15 +102,18 @@ Translator.prototype.update_language_menus=function() {
 	mark_menus(ssupport,tsupport)
 	break;
     default: // GF
-	var supported=bind(t.gf_supported,t)
-	mark_menus(supported,supported)
+	function cont() {
+	    function gfsupport(code) { return t.gf_supported(o.method,code) }
+	    mark_menus(gfsupport,gfsupport)
+	}
+	t.switch_grammar(o.method,cont)
     }
 }
 
-Translator.prototype.gf_supported=function(langcode) {
+Translator.prototype.gf_supported=function(grammar,langcode) {
     var t=this;
-    var concname=t.grammar_info.name+langcode
-    var l=t.grammar_info.languages
+    var concname=t.grammar_info[grammar].name+langcode
+    var l=t.grammar_info[grammar].languages
     for(var i in l) if(l[i].name==concname) return true
     return false
 }
@@ -125,17 +139,17 @@ Translator.prototype.update_translations=function() {
 	    ts[i].appendChild(text(segment.target+" "))
 	}
     }
-    function update_segment(i,txts) {
+    function update_segment(m,i,txts) {
 	var segment=ss[i]
 	segment.target=txts[0];
-	segment.options={method:o.method,from:o.from,to:o.to} // no sharing!
+	segment.options={method:m,from:o.from,to:o.to} // no sharing!
 	if(txts.length>1) segment.choices=txts
 	else delete segment.choices
 	replace(i)
     }
     function update_apertium_translation(i,afrom,ato) {
 	var segment=ss[i]
-	function upd3(txts) { update_segment(i,txts) }
+	function upd3(txts) { update_segment("Apertium",i,txts) }
 	function upd1(res) {
 	    //console.log(translate_output)
 	    if(res.translation) upd3([res.translation])
@@ -143,17 +157,16 @@ Translator.prototype.update_translations=function() {
 	}
 	function upd0(source) { apertium.translate(source,afrom,ato,upd1) }
 	if(apertium.isTranslatablePair(afrom,ato)) {
-	    if(segment.options.method!="Manual" 
-	       && !eq_options(segment.options,o))
-		upd0(segment.source)
+	    if(!eq_options(segment.options,o)) upd0(segment.source)
 	}
 	else
 	    upd3(["[Apertium does not support "+show_translation(o)+"]"])
     }
 
-    function update_gf_translation(i,gfrom,gto) {
+    function update_gf_translation(i,grammar,gfrom,gto) {
 	var segment=ss[i]
-	function upd3(txts) { update_segment(i,txts) }
+	var server=t.servers[grammar]
+	function upd3(txts) { update_segment(grammar,i,txts) }
 	function upd2(ts) {
 	    function unlex(txt,cont) { gfshell('ps -unlextext "'+txt+'"',cont) }
 
@@ -167,14 +180,17 @@ Translator.prototype.update_translations=function() {
 	    upd2(collect_texts(translate_output[0].translations))
 	}
 	function upd0(source) {
-	    t.server.translate({from:gfrom,to:gto,input:source},upd1)
+	    server.translate({from:gfrom,to:gto,input:source},upd1)
 	}
-	var fls=t.gf_supported(o.from)
-	var tls=t.gf_supported(o.to)
+	var fls=t.gf_supported(grammar,o.from)
+	var tls=t.gf_supported(grammar,o.to)
 	if(fls && tls) {
-	    if(segment.options.method!="Manual" 
-	       && !eq_options(segment.options,o))
+	    var want={from:o.from, to:o.to, method:grammar}
+	    if(!eq_options(segment.options,want)) {
+		console.log("Updating "+i)
 		gfshell('ps -lextext "'+segment.source+'"',upd0)
+	    }
+	    else if(i==0) console.log("No update ",want,segment.options)
 	}
 	else {
 	    var fn=concname(o.from)
@@ -182,43 +198,64 @@ Translator.prototype.update_translations=function() {
 	    var unsup=" is not supported by the grammar"
 	    var sup=" is supported by the grammar"
 	    var msg= fls ? tn+unsup : tls ? fn+unsup :
-		           "Neither "+fn+" nor "+tn+sup
+		"Neither "+fn+" nor "+tn+sup
 	    upd3(["["+msg+"]"])
 	}
     }
 
-    switch(doc.options.method) {
-    case "Manual":
-	break;
-    case "Apertium":
-	var afrom=alangcode(o.from)
-	var ato=alangcode(o.to)
-	for(var i in ss) update_apertium_translation(i,afrom,ato)
-	break;
-    default: // GF
-	var gname=t.grammar_info.name
-	var gfrom=gname+o.from
-	var gto=gname+o.to
-	for(var i in ss) update_gf_translation(i,gfrom,gto)
+    for(var i in ss) {
+	var m= ss[i].options.method || doc.options.method
+	var d=ss[i].use_default
+	if(d || d==null) m=doc.options.method
+	switch(m) {
+	case "Manual":
+	    console.log("Manual "+i)
+	    break;
+	case "Apertium":
+	    var afrom=alangcode(o.from)
+	    var ato=alangcode(o.to)
+	    update_apertium_translation(i,afrom,ato)
+	    break;
+	default: // GF
+	    function capture(i,m) { // Capture current values of loop variables
+		function upd00(grammar_info) {
+		    var gname=grammar_info.name
+		    console.log("Got grammar info "+gname+" for "+i)
+		    var gfrom=gname+o.from
+		    var gto=gname+o.to
+		    update_gf_translation(i,m,gfrom,gto)
+		}
+		t.switch_grammar(m,upd00)
+	    }
+	    capture(i,m)
+	}
     }
 }
 
 Translator.prototype.add_apertium=function() {
     var dl=element("methods")
-    if(dl)
-	dl.appendChild(dt(radiobutton("method","Apertium","Apertium",
-				      bind(this.change,this))))
+    if(dl) add_apertium_to_menu(dl,bind(this.change,this))
+}
+
+function add_apertium_to_menu(dl,action) {
+    dl.appendChild(dt(radiobutton("method","Apertium","Apertium",action)))
 }
 
 Translator.prototype.extend_methods=function(grammars) {
     this.grammars=grammars
     var dl=element("methods")
+    if(dl) this.extend_methods_menu(dl,bind(this.change,this))
+    update_radiobutton(document.forms.options,"method",this.document.options.method)
+    this.redraw()
+}
+
+Translator.prototype.extend_methods_menu=function(dl,action) {
+    var grammars=this.grammars
     if(dl) for(var i in grammars) {
 	dl.appendChild(dt(radiobutton("method",grammars[i],
 				      "GF: "+grammars[i],
-				      bind(this.change,this))))
+				      action)))
     }
-    update_radiobutton("method",this.document.options.method)
 }
 
 Translator.prototype.change=function(el) {
@@ -642,22 +679,33 @@ function draw_choices(txts,onclick) {
 Translator.prototype.draw_segment_given_target=function(s,target,i) {
     var t=this
 
-    function draw_options2(o) {
+    function draw_options2() {
+	var o=s.options
 	function change(el) {
-	    o.method=el.value // side effect, updating the document in-place
-	    t.update_translations()
+	    s.use_default = el.value=="Default"
+	    var m = s.use_default ? t.document.options.method : el.value
+	    if(m!=o.method) {
+		o.method=m // side effect, updating the document in-place
+		o.to="" // hack to force an update
+		console.log("Method changed to "+m)
+		t.update_translations()
+	    }
 	}
-	var manual=o.method=="Manual"
-	var autoB=radiobutton("method","Auto","Auto",change,!manual)
-	var manualB=radiobutton("method","Manual","Manual",change,manual)
-	return wrap("form",
-		    [dt(autoB),
-		     dt(manualB),
-		     dt(draw_translation(o))])
+	var autoB=radiobutton("method","Default","Default",change)
+	var manualB=radiobutton("method","Manual","Manual",change)
+	var dl=wrap_class("dl","popupmenu",
+			  [dt(autoB),
+			   dt([manualB,text(" "),draw_translation(o)])])
+	if(apertium) add_apertium_to_menu(dl,change)
+	t.extend_methods_menu(dl,change)
+	var form=wrap("form",dl)
+	var d = s.use_default
+	var m = d || d==null ? "Default" : o.method || "Default"
+	update_radiobutton(form,"method",m)
+	return form
     }
-    function draw_options(o) {
-	return wrap("div",[span_class("arrow",text(" ⇒ ")),
-			   wrap("dl",draw_options2(o))])
+    function draw_options() {
+	return wrap("div",[span_class("arrow",text(" ⇒ ")),draw_options2()])
     }
 
     var insertB=dt(text("Insert a new segment"))
@@ -670,7 +718,7 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
 						  [insertB,removeB])]))
     var source=wrap_class("td","source",text(s.source))
     source.onclick=function() { t.edit_source(source,i); }
-    var options=wrap_class("td","options",draw_options(s.options))
+    var options=wrap_class("td","options",draw_options())
 
     return node("tr",{"class":"segment",id:i},[actions,source,options,target])
 }
@@ -825,8 +873,8 @@ function radiobutton(name,value,label,change,checked) {
     return wrap("label",[b,text(label)])
 }
 
-function update_radiobutton(name,value) {
-    var bs=document.forms.options[name]
+function update_radiobutton(form,name,value) {
+    var bs=form[name]
     if(bs.length)
 	for(var i in bs) if(bs[i].value==value) bs[i].checked=true
 }
