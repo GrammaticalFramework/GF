@@ -120,14 +120,19 @@ Translator.prototype.gf_supported=function(grammar,langcode) {
 
 Translator.prototype.update_translations=function() {
     var t=this
+    for(var i in t.document.segments) t.update_translation(i)
+}
+
+Translator.prototype.update_translation=function(i) {
+    var t=this
     var doc=t.document
     var o=doc.options
     var ss=doc.segments
     var ds=t.drawing.segments
     var ts=t.drawing.targets
+    var segment=ss[i]
 
-    function replace(i) {
-	var segment=ss[i]
+    function draw_update() {
 	if(ds) {
 	    var sd=t.draw_segment(segment,i)
 	    var old=ds[i]
@@ -139,23 +144,26 @@ Translator.prototype.update_translations=function() {
 	    ts[i].appendChild(text(segment.target+" "))
 	}
     }
-    function update_segment(m,i,txts) {
-	var segment=ss[i]
+    function update_segment(m,txts) {
 	segment.target=txts[0];
 	segment.options={method:m,from:o.from,to:o.to} // no sharing!
 	if(txts.length>1) segment.choices=txts
 	else delete segment.choices
-	replace(i)
+	draw_update()
     }
-    function update_apertium_translation(i,afrom,ato) {
-	var segment=ss[i]
-	function upd3(txts) { update_segment("Apertium",i,txts) }
+    function update_apertium_translation() {
+	var afrom=alangcode(o.from), ato=alangcode(o.to)
+
+	function upd3(txts) { update_segment("Apertium",txts) }
+
 	function upd1(res) {
 	    //console.log(translate_output)
 	    if(res.translation) upd3([res.translation])
 	    else upd3(["["+res.error.message+"]"])
 	}
+
 	function upd0(source) { apertium.translate(source,afrom,ato,upd1) }
+
 	if(apertium.isTranslatablePair(afrom,ato)) {
 	    if(!eq_options(segment.options,o)) upd0(segment.source)
 	}
@@ -163,10 +171,9 @@ Translator.prototype.update_translations=function() {
 	    upd3(["[Apertium does not support "+show_translation(o)+"]"])
     }
 
-    function update_gf_translation(i,grammar,gfrom,gto) {
-	var segment=ss[i]
+    function update_gf_translation(grammar,gfrom,gto) {
 	var server=t.servers[grammar]
-	function upd3(txts) { update_segment(grammar,i,txts) }
+	function upd3(txts) { update_segment(grammar,txts) }
 	function upd2(ts) {
 	    function unlex(txt,cont) { gfshell('ps -unlextext "'+txt+'"',cont) }
 
@@ -195,40 +202,28 @@ Translator.prototype.update_translations=function() {
 	else {
 	    var fn=concname(o.from)
 	    var tn=concname(o.to)
-	    var unsup=" is not supported by the grammar"
-	    var sup=" is supported by the grammar"
-	    var msg= fls ? tn+unsup : tls ? fn+unsup :
-		"Neither "+fn+" nor "+tn+sup
+	    var sup="supported by the grammar"
+	    var isnot=" is not "+sup
+	    var is=" is "+sup
+	    var msg= fls ? tn+isnot : tls ? fn+isnot :
+		      "Neither "+fn+" nor "+tn+is
 	    upd3(["["+msg+"]"])
 	}
     }
 
-    for(var i in ss) {
-	var m= ss[i].options.method || doc.options.method
-	var d=ss[i].use_default
-	if(d || d==null) m=doc.options.method
-	switch(m) {
-	case "Manual":
-	    //console.log("Manual "+i)
-	    break;
-	case "Apertium":
-	    var afrom=alangcode(o.from)
-	    var ato=alangcode(o.to)
-	    update_apertium_translation(i,afrom,ato)
-	    break;
-	default: // GF
-	    function capture(i,m) { // Capture current values of loop variables
-		function upd00(grammar_info) {
-		    var gname=grammar_info.name
-		    //console.log("Got grammar info "+gname+" for "+i)
-		    var gfrom=gname+o.from
-		    var gto=gname+o.to
-		    update_gf_translation(i,m,gfrom,gto)
-		}
-		t.switch_grammar(m,upd00)
-	    }
-	    capture(i,m)
+    var m= ss[i].options.method || doc.options.method
+    var d=ss[i].use_default
+    if(d || d==null) m=doc.options.method
+    switch(m) {
+    case "Manual":  /* Nothing to do */ break;
+    case "Apertium": update_apertium_translation(); break;
+    default: // GF
+	function upd00(grammar_info) {
+	    var gname=grammar_info.name
+	    var gfrom=gname+o.from, gto=gname+o.to
+	    update_gf_translation(m,gfrom,gto)
 	}
+	t.switch_grammar(m,upd00)
     }
 }
 
@@ -542,7 +537,7 @@ Translator.prototype.replace_segment=function(i,sd) {
 Translator.prototype.pick_translation=function(i,txt) {
     var t=this
     var s=t.document.segments[i]
-    s.options.method="Manual"
+    set_manual(s)
     s.target=txt // side effect, updating the document in-place
     t.replace_segment(i,t.draw_segment(s,i))
 }
@@ -557,7 +552,7 @@ Translator.prototype.edit_source=function(source,i) {
 	restore();
 	if(s.options.method!="Manual") {
 	    s.options.to="" // hack to force an update
-	    t.update_translations()
+	    t.update_translation(i)
 	}
 	return false;
     }
@@ -576,7 +571,7 @@ Translator.prototype.edit_translation=function(i) {
  
     function restore() { t.replace_segment(i,t.draw_segment(s,i)) }
     function done() {
-	s.options.method="Manual"
+	set_manual(s)
 	s.options.from=t.document.options.from
 	s.options.to=t.document.options.to
 	s.target=inp.value // side effect, updating the document in-place
@@ -688,7 +683,7 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
 		o.method=m // side effect, updating the document in-place
 		o.to="" // hack to force an update
 		//console.log("Method changed to "+m)
-		t.update_translations()
+		t.update_translation(i)
 	    }
 	}
 	var autoB=radiobutton("method","Default","Default",change)
@@ -723,15 +718,26 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
     return node("tr",{"class":"segment",id:i},[actions,source,options,target])
 }
 
+/* --- Document constructor ------------------------------------------------- */
+
 function empty_document() {
     return { name:"Unnamed",
 	     options: {from:"Eng", to:"Swe", method:"Manual"},
 	     segments:[] }
 }
 
+/* --- Segments ------------------------------------------------------------- */
+
 function new_segment(source) {
     return { source:source, target:"", options:{} } // leave options empty
 }
+
+function set_manual(segment) {
+    segment.options.method="Manual"
+    segment.use_default=false
+}
+
+/* -------------------------------------------------------------------------- */
 
 function draw_translation(o) { return text(show_translation(o)) }
 
