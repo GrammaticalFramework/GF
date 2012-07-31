@@ -56,6 +56,7 @@ DX_INIT_DOXYGEN(libpgf)
 AC_CONFIG_FILES([Makefile
 	         libgu.pc
 		 libpgf.pc
+		 libteyjus.pc
 		 ])
 
 AC_OUTPUT
