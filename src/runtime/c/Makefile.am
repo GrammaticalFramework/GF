@@ -1,10 +1,10 @@
 
 LDADD = libgu.la
 
-lib_LTLIBRARIES = libgu.la libpgf.la
+lib_LTLIBRARIES = libgu.la libpgf.la libteyjus.la
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libgu.pc libpgf.pc
+pkgconfig_DATA = libgu.pc libpgf.pc libteyjus.pc
 
 configincludedir = $(libdir)/libgu/include
 
@@ -80,6 +80,23 @@ libgu_la_SOURCES = \
 	gu/variant.c \
 	gu/yaml.c
 
+libteyjus_la_SOURCES = \
+	teyjus/simulator/abstmachine.c \
+	teyjus/simulator/dataformats.c \
+	teyjus/simulator/hnorm.c \
+	teyjus/simulator/hnormlocal.c \
+	teyjus/simulator/hopu.c \
+	teyjus/simulator/io-datastructures.c \
+	teyjus/simulator/mcstring.c \
+	teyjus/simulator/printterm.c \
+	teyjus/simulator/simdispatch.c \
+	teyjus/simulator/siminit.c \
+	teyjus/simulator/siminstr.c \
+	teyjus/simulator/siminstrlocal.c \
+	teyjus/simulator/simulator.c \
+	teyjus/simulator/trail.c \
+	teyjus/simulator/types.c
+
 libpgf_la_SOURCES = \
 	pgf/data.c \
 	pgf/data.h \
@@ -95,7 +112,7 @@ libpgf_la_SOURCES = \
 	pgf/reader.c \
 	pgf/linearize.c \
 	pgf/printer.c
-
+    
 bin_PROGRAMS = \
 	utils/pgf2yaml \
 	utils/pgf-print \
@@ -118,4 +135,5 @@ EXTRA_DIST = \
 	Doxyfile \
 	DoxygenLayout.xml \
 	libgu.pc.in \
+	libteyjus.pc.in \
 	libpgf.pc.in
