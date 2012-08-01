@@ -21,7 +21,7 @@
 
 #include <stdio.h>
 #include "instrgen-c.h"
-#include "instrgen-ocaml.h"
+#include "instrgen-haskell.h"
 #include "../util/util.h"
 
 extern int yylex();
@@ -275,8 +275,7 @@ int main(argc, argv)
     cspitCInstructionsH(root);
     cspitCInstructionsC(root);
     cspitSimDispatch(root);
-    //ocSpitInstructionMLI(root);
-    //ocSpitInstructionML(root);
+    ocSpitInstructionHS(root);
     //printf("Done.\n");
 
     return 0;

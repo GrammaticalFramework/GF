@@ -1,9 +1,11 @@
 all: instrformats/gen pervasives/gen
+	(cd instrformats; ./gen)
+	(cd pervasives; ./gen)
 
 instrformats/gen: instrformats/y.tab.o instrformats/lex.yy.o \
-                  instrformats/instrgen-c.o instrformats/instrgen-ocaml.o \
+                  instrformats/instrgen-c.o instrformats/instrgen-haskell.o \
                   util/util.o
-	gcc -o instrformats/gen $^
+	gcc -o instrformats/gen $^ -lm 
 
 pervasives/gen: pervasives/y.tab.o pervasives/lex.yy.o \
                 pervasives/ccode.o pervasives/ocamlcode.o \
