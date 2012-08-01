@@ -99,18 +99,18 @@ handle state0 cache execute1
       _ -> return (state,resp501 $ "method "++method)
   where
     normal_request qs =
-      do logPutStrLn $ method++" "++upath++" "++show qs
+      do logPutStrLn $ method++" "++upath++" "++show (mapSnd (take 100.fst) qs)
          case upath of
            "/new" -> new
 --         "/stop" ->
 --         "/start" ->
            "/gfshell" -> inDir qs $ look "command" . command
-           "/parse" -> parse qs
+           "/parse" -> parse (decoded qs)
            "/cloud" -> inDir qs $ look "command" . cloud
            '/':rpath ->
              case (takeDirectory path,takeFileName path,takeExtension path) of
                (_  ,_             ,".pgf") -> wrapCGI $ PS.cgiMain' cache path
-               (dir,"grammars.cgi",_     ) -> grammarList dir qs
+               (dir,"grammars.cgi",_     ) -> grammarList dir (decoded qs)
                (dir  ,"exb.fcgi"  ,_    ) -> wrapCGI $ ES.cgiMain' root dir cache
                _ -> do resp <- serveStaticFile path
                        return (state,resp)
@@ -127,7 +127,7 @@ handle state0 cache execute1
 
     look field ok qs =
         case partition ((==field).fst) qs of
-          ((_,value):qs1,qs2) -> ok value (qs1++qs2)
+          ((_,(value,_)):qs1,qs2) -> ok value (qs1++qs2)
           _ -> bad
       where
         bad = return (state,resp400 $ "no "++field++" in request")
@@ -163,9 +163,9 @@ handle state0 cache execute1
 
     cloud dir cmd qs =
       case cmd of
-        "make" -> make dir qs
-        "upload" -> upload qs
-        "ls" -> jsonList (maybe ".json" id $ lookup "ext" qs)
+        "make" -> make dir (raw qs)
+        "upload" -> upload (raw qs)
+        "ls" -> jsonList (maybe ".json" fst $ lookup "ext" qs)
         "rm" -> look "file" rm qs
         "download" -> look "file" download qs
         "link_directories" -> look "newdir" (link_directories dir) qs
@@ -353,9 +353,9 @@ contentTypeFromExt ext =
      bin t = (t,readBinaryFile)
 
 -- * IO utilities
-updateFile path new0 =
+updateFile path new =
   do old <- try $ readBinaryFile path
-     let new = encodeString new0
+--   let new = encodeString new0
      when (Right new/=old) $ do logPutStrLn $ "Updating "++path
                                 seq (either (const 0) length old) $
                                     writeBinaryFile path new
@@ -394,7 +394,10 @@ toHeader s = FCGI.HttpExtensionHeader s -- cheating a bit
 
 -- * misc utils
 
-utf8inputs = mapBoth decodeString . inputs
+--utf8inputs = mapBoth decodeString . inputs
+utf8inputs q = [(decodeString k,(decodeString v,v))|(k,v)<-inputs q]
+decoded = mapSnd fst
+raw = mapSnd snd
 
 inputs = queryToArguments . fixplus
   where
@@ -403,6 +406,7 @@ inputs = queryToArguments . fixplus
     decode c   = [c]
 
 mapFst f xys = [(f x,y)|(x,y)<-xys]
+mapSnd f xys = [(x,f y)|(x,y)<-xys]
 mapBoth = map . apBoth
 apBoth f (x,y) = (f x,f y)
 
