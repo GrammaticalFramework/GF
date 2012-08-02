@@ -10,8 +10,6 @@ function Translator() {
 	var warning=span_class("error",text("It appears that localStorage is unsupported or disabled in this browser. Documents will not be preserved after you leave or reload this page!"))
 	insertAfter(warning,t.view)
     }
-    t.current=t.local.get("current")
-    t.document=t.current && t.current!="/" && t.local.get("/"+t.current) || empty_document()
     t.servers={}; //The API is stateful, use one pgf_online object per grammar
     t.grammar_info={};
     pgf_online({}).get_grammarlist(bind(t.extend_methods,t))
@@ -19,7 +17,12 @@ function Translator() {
     update_language_menu(t,"target")
     if(apertium) t.add_apertium()
     //initialize_sorting(["TR"],["segment"])
-    t.redraw();
+    t.document=empty_document();
+    t.current=t.local.get("current")
+    if(t.current && t.current!="/") {
+	if(t.local.get("current_in_cloud")) t.open_from_cloud(t.current)
+	else t.open(t.current)
+    }
 }
 
 function update_language_menu(t,id) {
@@ -309,7 +312,8 @@ Translator.prototype.browse=function(el) {
 	    var filenames=JSON.parse(result)
 	    var files=map(strip_cloudext,filenames)
 	    if(files.length>0) {
-		t.view.appendChild(wrap("h3",text("Documents in the cloud")))
+		t.view.appendChild(wrap("h3",[text("Documents in the cloud "),
+					      img("../P/cloud.png")]))
 		t.view.appendChild(ls(files,"translator.open_from_cloud"))
 	    }
 	}
@@ -325,15 +329,17 @@ Translator.prototype.open=function(name) {
     if(name) {
 	var path="/"+name
 	var document=t.local.get(path);
-	if(document) t.load(name,document)
+	if(document) t.load(name,document,false)
 	else alert("No such document: "+name)
     }
 }
 
-Translator.prototype.load=function(name,document) {
+Translator.prototype.load=function(name,document,in_cloud) {
     var t=this
     t.current=name;
+    t.current_in_cloud=in_cloud;
     t.local.put("current",name)
+    t.local.put("current_in_cloud",in_cloud)
     t.document=document;
     t.redraw();
 }
@@ -343,7 +349,7 @@ Translator.prototype.open_from_cloud=function(name) {
     var filename=name+cloudext
     function ok(result) {
 	var document=JSON.parse(result)
-	if(document) t.load(name,document)
+	if(document) t.load(name,document,true)
     }
     gfcloud("download",{file:encodeURIComponent(filename)},ok);
 }
@@ -355,7 +361,10 @@ Translator.prototype.save=function(el) {
 	if(t.current) {
 	    var path="/"+t.current
 	    if(t.document.options.cloud) {
-		function done() { /*t.local.remove(path)*/ }
+		function done() {
+		    //t.local.remove(path)
+		    t.local.put("current_in_cloud",true)
+		}
 		save_in_cloud(t.current+cloudext,t.document,done)
 	    }
 	    else
@@ -601,7 +610,7 @@ function hide_menu(el) {
 /*
 type Document = { name:String, options:DocOptions, segments:[Segment] }
 type Segment = { source:String, target:String, options:Options }
-type DocOptions = Options & { view:View }
+type DocOptions = Options & { view:View, cloud:Bool }
 type Options = {from: Lang, to: Lang, method:Method}
 type Lang = String // Eng, Swe, Ita, etc
 type Method = "Manual" | "Apertium" | GFGrammarName
@@ -619,6 +628,7 @@ Translator.prototype.draw_document=function() {
     var o=doc.options;
     var hdr=wrap("h2",[text(doc.name),text(" "),
 		       wrap("small",draw_translation(o))])
+    if(doc.options.cloud) insertFirst(hdr,img("../P/cloud.png"))
     switch(o.view || "segmentbysegment") {
     case "paralleltexts":
 	function src(seg) { return seg.source }
