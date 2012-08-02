@@ -30,7 +30,7 @@ function draw_grammar_list() {
 	var cloud_download=
 	    a(jsurl("download_json()"),
 	      [node("img",{"class":"cloud",
-			   src:"P/1307545089_weather_04.png",alt:"[Down Cloud]",
+			   src:"P/1343909216_weather_03.png",alt:"[Down Cloud]",
 			   title:"Click to download grammar updates from the cloud"},
 		    [])]);
 	insertAfter(cloud_download,cloud_upload);
