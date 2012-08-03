@@ -73,7 +73,7 @@ static Boolean HN_isEmptyEnv()    { return ((ol == 0) && (nl == 0));       }
 static DF_EnvPtr HN_addNDummyEnv(int n)
 {
     int i;
-    DF_EnvPtr last = envlist, current;
+    DF_EnvPtr last = envlist, current = NULL;
 
     AM_heapError(AM_hreg + n * DF_ENV_DUMMY_SIZE);
     for (i = 0; i < n; i++){
@@ -95,7 +95,7 @@ static DF_EnvPtr HN_addNPair(DF_TermPtr argvec, int myol, int mynl,
                              DF_EnvPtr  myenv,  int n)
 {
     int i;
-    DF_EnvPtr   last = envlist, current;
+    DF_EnvPtr   last = envlist, current = NULL;
     MemPtr      myEnvlist = AM_hreg;
     MemPtr      newhtop = AM_hreg + n * DF_ENV_PAIR_SIZE;
     
@@ -122,7 +122,7 @@ static DF_EnvPtr HN_addNPair(DF_TermPtr argvec, int myol, int mynl,
 static DF_EnvPtr HN_addNPairEmpEnv(DF_TermPtr argvec, int n)
 {
     int i;
-    DF_EnvPtr    last = envlist, current;
+    DF_EnvPtr    last = envlist, current = NULL;
     AM_heapError(AM_hreg + n * DF_ENV_PAIR_SIZE);
     for (i = 1; i <= n; i++) {
         current = (DF_EnvPtr)AM_hreg;

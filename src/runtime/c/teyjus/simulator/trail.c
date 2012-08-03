@@ -38,7 +38,7 @@ static MemPtr TR_trailItemAddr(TR_TrailItem *trPtr) { return (trPtr -> addr);}
 void TR_trailTerm(DF_TermPtr addr)         //trailing a term of atomic size
 {
     if (((MemPtr)addr <= AM_hbreg) ||
-        (AM_hreg < (MemPtr)addr) && ((MemPtr)addr < AM_breg)) {
+        ((AM_hreg < (MemPtr)addr) && ((MemPtr)addr < AM_breg))) {
         AM_trailError(TR_TRAIL_TERM_SIZE);
         DF_copyAtomic(addr, AM_trreg);
         ((TR_TrailItem*)(AM_trreg+DF_TM_ATOMIC_SIZE))->tag = TR_TAG_TERM;

@@ -152,7 +152,7 @@ void HNL_updateToRef(DF_TermPtr tmPtr, DF_TermPtr target)
 */ 
 static DF_TermPtr HNL_renumberAsEnv(DF_TermPtr skPtr, int nl)
 {
-    DF_TermPtr rtPtr; //term pointer to be returned
+    DF_TermPtr rtPtr = NULL; //term pointer to be returned
   restart_renumberAsEnv:
     switch (DF_termTag(skPtr)){    
     case DF_TM_TAG_VAR:
@@ -178,7 +178,6 @@ static DF_TermPtr HNL_renumberAsEnv(DF_TermPtr skPtr, int nl)
     {
         if (nl == 0) rtPtr = skPtr;
         else {
-            DF_TermPtr   myskPtr = DF_termDeref(DF_suspTermSkel(skPtr));
             int          myol    = DF_suspOL(skPtr),   mynl = DF_suspNL(skPtr);
             DF_EnvPtr    myenv   = DF_suspEnv(skPtr);
             int          newnl   = mynl+nl;
@@ -353,7 +352,7 @@ static void HNL_BVSuspAsArg(DF_TermPtr bv, int ol, int nl, DF_EnvPtr env,
    pushed on the current heap top if necessary.                         */
 DF_TermPtr HNL_suspAsEnv(DF_TermPtr skPtr, int ol, int nl, DF_EnvPtr env)
 {
-    DF_TermPtr rtPtr;      // term pointer to be returned
+    DF_TermPtr rtPtr = NULL;      // term pointer to be returned
   restart_suspAsEnv:
     switch(DF_termTag(skPtr)){   //[|c, ol, nl, envlist|] -> c
     case DF_TM_TAG_VAR:
