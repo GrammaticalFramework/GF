@@ -672,7 +672,7 @@ static DF_TermPtr HOPU_mkPrunedTerm(DF_TermPtr hPtr, DF_TermPtr args, int nargs)
 /* Find the (partial) structure of the substitution for a flex head of a      */
 /* LLambda term corresponding to an internal flex term which is known to be   */
 /* LLambda. The internal free variable is bound to a proper substitution  as  */
-/* side-effect.
+/* side-effect.                                                               */
 /* The arguments of this procedure are:                                       */
 /*  args1 : reference to the argument vector of the outside flex term         */
 /*  nargs1: number of arguments of the outside flex term                      */
@@ -1512,7 +1512,7 @@ void HOPU_patternUnifyPDL()
     DF_TermPtr tPtr1, tPtr2,  //pointers to terms to be unified
                hPtr,          //pointer to head of hnf 
                args;          //arg vec of hnf
-    Flag       rig,   cons;   //rigid flag and cons flags
+    Flag       rig;           //rigid flag and cons flags
     int        nabs,  nargs;  //binder length and # of arguments of hnf
     while (AM_nemptyPDL()){
         //retrieve the pair of terms on the current top of PDL
@@ -1601,7 +1601,7 @@ void HOPU_patternUnify()
 void HOPU_patternUnifyPair(DF_TermPtr tPtr1, DF_TermPtr tPtr2)
 {
     DF_TermPtr h1Ptr, h2Ptr, args1, args2;
-    Flag       rig1, rig2, cons1, cons2;
+    Flag       rig1, rig2;
     int        nabs1, nabs2, nargs1, nargs2;
     MemPtr     oldPdlBot = AM_pdlBot;
 

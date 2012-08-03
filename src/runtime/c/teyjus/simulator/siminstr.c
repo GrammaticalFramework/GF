@@ -1746,7 +1746,7 @@ void SINSTR_switch_on_bvar()            //switch_on_bvar n,tab -- I1_BVT_X
 {
     INSACC_I1BVTX(n, table);
     for (m = 0; m != n; m++) 
-        if (numAbs = MEM_branchTabIndexVal(table, m)) break;
+        if ((numAbs = MEM_branchTabIndexVal(table, m))) break;
     if (m < n) AM_preg = MEM_branchTabCodePtr(table, m);
     else EM_THROW(EM_FAIL);
 }

@@ -87,6 +87,8 @@ static Boolean PRINT_parenNeeded(OP_FixityType opfx, int opprec,
             }
             break;
         }
+        default:
+			break;
         }
     } else if (context == OP_RIGHT_TERM) {
         switch (fx) {
@@ -101,6 +103,8 @@ static Boolean PRINT_parenNeeded(OP_FixityType opfx, int opprec,
                 if (opprec < prec) pparen = TRUE; break;
             }
         }
+        default:
+			break;
         }
     }
     return pparen;
@@ -131,9 +135,6 @@ static void PRINT_writeNilSymbol(WordPtr outStream)
 
 static void PRINT_writeInfixLam(WordPtr outStream)
 { STREAM_printf(outStream, "\\ ");                           }
-
-static void PRINT_writeLam(WordPtr outStream, int numabs) 
-{ STREAM_printf(outStream, "lam(%d, ", numabs);               }
 
 static void PRINT_writeSpace(WordPtr outStream, int i)
 { while (i--) STREAM_printf(outStream, " ");                 }    
@@ -402,7 +403,6 @@ static void PRINT_writeCons(WordPtr outStream, DF_TermPtr tmPtr,
                             OP_FixityType fx, int prec, OP_TermContext tc)
 {
     DF_TermPtr    args     = DF_consArgs(tmPtr);
-    DF_TermPtr    arg;
     OP_FixityType consfix  = (OP_FixityType)AM_cstFixity(PERV_CONS_INDEX);
     int           consprec = AM_cstPrecedence(PERV_CONS_INDEX);
     Boolean       pparen   = PRINT_parenNeeded(consfix, consprec, tc, fx,prec);
@@ -600,8 +600,8 @@ static void PRINT_writeApp(WordPtr outStream, DF_TermPtr tmPtr,
     int        arity  = DF_appArity(tmPtr);
     Boolean    pparen = PRINT_parenNeeded(OP_APP_FIXITY, OP_APP_PREC, tc, infx,
                                           inprec);
-    OP_FixityType  fix;
-    int            prec;
+    OP_FixityType  fix = 0;
+    int            prec = 0;
 
     HN_hnorm(tmPtr);
     PRINT_getHeadInfo(AM_head, &fix, &prec);  

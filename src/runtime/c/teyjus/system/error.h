@@ -114,11 +114,11 @@ EM_TRY
 }
 EM_CATCH
 {
-   un_foo();			/* clean up *
+   un_foo();			// clean up
    if (EM_CurrentExnType == EM_FOOBAR)
-      printf("foobar!");        /* stop the error here *
+      printf("foobar!");        // stop the error here
    else
-      EM_RETHROW();             /* let a later handler handle it *
+      EM_RETHROW();             // let a later handler handle it
 }
 */
 
