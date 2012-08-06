@@ -1,6 +1,6 @@
 GF Developers Guide
 Authors: Björn Bringert, Krasimir Angelov and Thomas Hallgren
-Last update: %%mtime(%c), but some information here is outdated
+Last update: %%mtime(%F, %H:%M)
 
 % NOTE: this is a txt2tags file.
 % Create an html file from this file using:
@@ -10,81 +10,90 @@ Last update: %%mtime(%c), but some information here is outdated
 %!target:html
 %!options(html): --toc
 %!encoding:utf-8
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
-= Setting up your system for building GF =
+== Before you start ==
 
-Before to build GF from sources you need to install some tools on your system.
-GF is written in Haskell, so first of all you need recent version of the Haskell compiler GHC.
-Currently we use GHC 6.10.3 and we recommend that you should use the same version
-as well. This version is not backward compatible with the previous major releases
-so you cannot use previous versions. GHC is available from here:
+This guide is intended for people who want to contribute to
+the development of the GF compiler or the Resource Grammar Library. If
+you are a GF user who just wants to download and install GF
+(e.g to develop your own grammars), the simpler guide on
+[the GF download page ../download/index.html] should be sufficient.
 
-http://www.haskell.org/ghc/
+== Setting up your system for building GF ==
 
-Once you have installed GHC, open a terminal (Command Prompt on Windows) and try
-to execute the following command:
+To build GF from source you need to install some tools on your
+system: the //Haskell Platform//, //Darcs// and the //Haskeline library//.
+
+**On Linux** the best option is to install the tools via the standard
+software distribution channels, i.e. by using the //Software Center//
+in Ubuntu or the corresponding tool in other popular Linux distributions.
+Or, from a Terminal window, the following command should be enough:
+
+- On Ubuntu: ``sudo apt-get install haskell-platform darcs libghc6-haskeline-dev``
+- On Fedora: ``sudo yum install haskell-platform darcs ghc-haskeline-devevel``
+
+
+**On Mac OS and Windows**, the tools can be downloaded from their respective
+web sites, as described below.
+
+=== The Haskell Platform ===
+
+GF is written in Haskell, so first of all you need
+the //Haskell Platform//, version 2010.2.0.0 or later. Downloads
+and installation instructions are available from here:
+
+    http://hackage.haskell.org/platform/
+
+Once you have installed the Haskell Platform, open a terminal
+(Command Prompt on Windows) and try to execute the following command:
 ```
 $ ghc --version
 ```
 This command should show you which version of GHC you have. If the installation
-of GHC was successful you should see message like:
+of the Haskell Platform	 was successful you should see a message like:
+
 ```
-The Glorious Glasgow Haskell Compilation System, version 6.10.3
+The Glorious Glasgow Haskell Compilation System, version 7.0.4
 ```
-The other two tools that we use are the lexer generator for Haskell - Alex:
-http://www.haskell.org/alex/
-and the parser generator - Happy:
-http://www.haskell.org/happy/.
-Again after the installation check that the tools are available from the terminal.
-If they are not then probably you have to update the current search path in your system.
 
-It is also a good idea to have either readline, editline or haskeline installed.
-This are libraries for user friendly command line editing. On Linux, without some of this
-libraries, the command line editor is very basic. Actually the only key for editing
-that you can use is backspace. On Windows you get much more user friendly editor
-by default but with it you cannot use the GF specific tab completion. In any case if you
-plan to use GF for continuous development then it is recomended to install
-some of these libraries. The GF configuration script checks the libraries
-in the following order:
+Other required tools included in the Haskell Platform are 
+[Cabal http://www.haskell.org/cabal/], 
+[Alex http://www.haskell.org/alex/] and
+[Happy http://www.haskell.org/happy/].
 
-- haskeline
-- readline
-- editline
+=== Darcs ===
+
+To get the GF source code, you also need //Darcs//, version 2 or later.  Darcs
+is a distributed version control system, see http://darcs.net/ for
+more information. There are precompiled packages for many platforms
+available at and source code if you want to compile it yourself. Darcs
+is also written in Haskell and so you can use GHC to compile it.
 
 
-the first that is found will be used in the compilation. The libraries are also written
-in Haskell and could be found on Hackage: http://hackage.haskell.org/packages/archive/pkg-list.html. If you want to check whether,
-you already have some of these you can use the following command:
-```
-$ ghc-pkg list
-```
-which shows the list of all installed libraries. 
+=== The haskeline library ===
 
-Haskeline is the easiest to install because it is a pure Haskell library but currently
-with this editor GF doesn't provide word completion. With editline we provide word completion
-but the library is harder to install because it is a Haskell binding to a
-library with the same name written in C. If you do not have the C library you will have to install
-it first. Unfortunately editline does not have good support for Unicode. This will be a problem
-if you tend to work on non-Latin language. Finaly readline supports both word completion
-and Unicode. Currently this is the best supported library.
+GF uses //haskeline// to enable command line editing in the GF shell.
+This should work automatically on Mac OS and Windows, but on Linux one
+extra step is needed to make sure the C libraries required by //haskeline//
+are installed.  Here is one way to do this:
 
-Before to get the GF sources you also need Darcs, version 2 or later.
-Darcs is a decentralized revision control system, 
-see http://darcs.net/ for more information. There are precompiled packages for many platforms available at
-http://darcs.net/DarcsWiki/CategoryBinaries. There is also source code if you want to compile it yourself. Darcs is
-also written in Haskell and so you can use GHC to compile it.
+- On Ubuntu: ``sudo apt-get install libghc6-haskeline-dev``
+- On Fedora: ``sudo yum install ghc-haskeline-devel``
 
 
-= Getting the sources =
+== Getting the source ==
 
-Once you have all tools in place you can get the GF sources. If you just want to compile and use GF
-then it is enough to have read-only access. It is also possible to make changes in the sources but if
-you want these changes to be applied back to the main sources you will have to send the changes to us.
-If you plan to work continuously on GF then you should consider to get read-write access.
+Once you have all tools in place you can get the GF source code. If you
+just want to compile and use GF then it is enough to have read-only
+access. It is also possible to make changes in the source code but if you
+want these changes to be applied back to the main source repository you will
+have to send the changes to us.  If you plan to work continuously on
+GF then you should consider getting read-write access.
 
-== Read-only access ==
+=== Read-only access ===
 
-=== Getting a fresh copy for read-only access ===
+==== Getting a fresh copy for read-only access ====
 
 Anyone can get the latest development version of GF by running (all on one line):
 
@@ -96,7 +105,7 @@ This will create a directory called ``gf`` in the current
 directory.
 
 
-=== Updating your copy ===
+==== Updating your copy ====
 
 To get all new patches from the main repo:
 ```
@@ -107,7 +116,7 @@ directory, or any of its subdirectories.
 Without ``-a``, you can choose which patches you want to get.
 
 
-=== Recording local changes ===
+==== Recording local changes ====[record]
 
 Since every copy is a repository, you can have local version control
 of your changes.
@@ -136,7 +145,7 @@ question. Both of these record all the changes you have in your local
 repository.
 
 
-=== Submitting patches ===
+==== Submitting patches ====
 
 If you are using read-only access, send your patches by email to
 someone with write-access. First record your changes in your local 
@@ -162,13 +171,13 @@ patch directly from darcs. If so, replace ``-o mypatch.patch`` with
 
 
 
-== Read-write access ==
+=== Read-write access ===
 
 If you have a user account on www.grammaticalframework.org, you can
 get read-write access over SSH to the GF repository.
 
 
-=== Getting a fresh copy ===
+==== Getting a fresh copy ====
 
 Get your copy with (all on one line),
 replacing ``bringert`` with your own username on code.haskell.org:
@@ -183,7 +192,7 @@ and most people don't need the full history of all changes in the
 past.
 
 
-=== Getting other people's changes? ===
+==== Updating your copy ====
 
 Get all new patches from the main repo:
 
@@ -195,13 +204,12 @@ Without ``-a``, you can choose which patches you want to get.
 
 
 
-=== Commit your changes ===
+==== Commit your changes ====
 
 There are two steps to commiting a change to the main repo. First you
-have to record the changes that you want to commit, then you push them
-to the main repo. For instructions on recording your changes locally,
-see "Recording local changes" above. Then you can push the patch(es) to 
-the main repo. If you are using ssh-access, all you need to do is:
+have to record the changes that you want to commit
+(see [Recording local changes #record] above), then you push them
+to the main repo. If you are using ssh-access, all you need to do is:
 
 ```
 $ darcs push
@@ -212,7 +220,7 @@ the main repo are pushed.
 
 
 
-=== Apply a patch from someone else ===
+==== Apply a patch from someone else ====
 
 Use:
 
@@ -223,106 +231,130 @@ $ darcs apply < mypatch.patch
 This applies the patch to your local repository. To commit it to the
 main repo, use ``darcs push``.
 
-== Further information about Darcs ==
+=== Further information about Darcs ===
 
 
 For more info about what you can do with darcs, see http://darcs.net/manual/
 
 
-= Compilation from sources =
+== Compilation from source ==
 
-The build system of GF is based on Cabal (see http://www.haskell.org/cabal/ for more information).
-Cabal is installed by default together with the GHC compiler. This is actually a library which could
-be used from Haskell to compile projects written in Haskell. The entry point is a script
-called Setup.hs which is placed in the top directory of every project managed with Cabal.
-The three main steps that are needed for compilation are much like what you do in a project
-written in C, you have: configure, build and install.
+The build system of GF is based on //Cabal//, which is part of the
+Haskell Platform, so no extra steps are needed to install it. In the simplest
+case, all you need to do to compile and install GF, after downloading the
+source code as described above, is
 
-
-== Configure ==
-
-During the configuration phase Cabal will check that you have all necessary tools and libraries
-needed for GF. The configuration is started by the command:
 ```
-$ runghc Setup.hs configure
-```
-The command ```runghc``` comes with the GHC compiler and is batch interpreter which executes
-the specified script without the need to compile it advance. Setup.hs is our compilation driver
-which is based on Cabal. If you don't see any error message from the above command then
-you have everything that is needed for GF. You can also add the option ```-v``` to see
-more details about the configuration.
-
-== Build ==
-
-The build phase does two things. First it builds the GF compiler from the Haskell sources
-and after that it builds the GF Resource Grammar Library using the already build compiler.
-The simplest command is:
-```
-$ runghc Setup.hs build
-```
-Again you can add the option ```-v``` if you want to see more details.
-
-Sometimes you just want to work on the GF compiler and don't want to recompile the resource
-library after each change. In this case use this extended command:
-```
-$ runghc Setup.hs build rgl-none
-```
-The resource library could also be compiled in two modes: with present tense only and 
-with all tenses. By default it is compiled with all tenses. If you want to use
-the library with only present tense you can compile it in this special mode with
-the command:
-```
-$ runghc Setup.hs build present
-```
-Before to use this command make sure that the script lib/src/mkPresent has executable
-permissions on Linux.
-
-You could also control which languages you want to be recompiled by adding the option
-```langs=list```. For example the following command will compile only the English and the Swedish
-language:
-```
-$ runghc Setup.hs build langs=Eng,Swe
+$ cd gf
+$ cabal install
 ```
 
-== Install ==
+This will automatically download any additional Haskell libraries needed to
+build GF. If this is the first time you use Cabal, you might need to run
+``cabal update`` first, to update the list of available libraries.
 
-After you have compiled GF you can install the binaries to make the system usable.
-On Linux you will need root privileges to do this. Use the command:
-```
-$ su
-```
-and enter the root password. This step should be skipped on Windows.
+If you want more control, the process can also be split up into the usual
+//configure//, //build// and //install// steps.
 
-The installation itself is started with the command:
-```
-$ runghc Setup.hs install
-```
-This command installs the GF compiler in the default place for executable
-files in your system. For example on Linux this is usualy /usr/local/bin and on
-Windows this is c:\Program Files\Haskell\bin. If you want to install in some
-other place then use the ```--prefix``` option during the configuration phase.
+=== Configure ===
 
-The compiled GF Resource Grammar Library will be installed in /usr/local/share/gf-3.1/lib
-on Linux and in c:\Program Files\Haskell\gf-3.1\lib on Windows. Again the location could
-be changed using the ```--prefix``` option.
+During the configuration phase Cabal will check that you have all
+necessary tools and libraries needed for GF. The configuration is
+started by the command:
 
-== Clean ==
+```
+$ cabal configure
+```
+
+If you don't see any error message from the above command then you
+have everything that is needed for GF. You can also add the option
+``-v`` to see more details about the configuration.
+
+You can use ``cabal configure --help`` to get a list of configuration options.
+
+=== Build ===
+
+The build phase does two things. First it builds the GF compiler from
+the Haskell source code and after that it builds the GF Resource Grammar
+Library using the already build compiler.  The simplest command is:
+
+```
+$ cabal build
+```
+
+Again you can add the option ``-v`` if you want to see more details.
+
+Sometimes you just want to work on the GF compiler and don't want to
+recompile the resource library after each change. In this case use
+this extended command:
+
+```
+$ cabal build rgl-none
+```
+
+The resource library could also be compiled in two modes: with present
+tense only and with all tenses. By default it is compiled with all
+tenses. If you want to use the library with only present tense you can
+compile it in this special mode with the command:
+
+```
+$ cabal build present
+```
+
+You could also control which languages you want to be recompiled by
+adding the option ``langs=list``. For example the following command
+will compile only the English and the Swedish language:
+
+```
+$ cabal build langs=Eng,Swe
+```
+
+=== Install ===
+
+After you have compiled GF you need to install the executable and libraries
+to make the system usable.
+
+```
+$ cabal copy
+$ cabal register
+```
+
+This command installs the GF compiler for a single user, in the standard
+place used by Cabal.
+On Linux and Mac this could be ``$HOME/.cabal/bin``.
+On Mac it could also be ``$HOME/Library/Haskell/bin``.
+On Windows this is ``C:\Program Files\Haskell\bin``.
+
+The compiled GF Resource Grammar Library will be installed
+under the same prefix, e.g. in
+``$HOME/.cabal/share/gf-3.3.3/lib`` on Linux and
+in ``C:\Program Files\Haskell\gf-3.1\lib`` on Windows.
+
+If you want to install in some other place then use the ``--prefix``
+option during the configuration phase.
+
+=== Clean ===
 
 Sometimes you want to clean up the compilation and start again from clean
 sources. Use the clean command for this purpose:
+
 ```
-$ runghc Setup.hs clean
+$ cabal clean
 ```
 
-== SDist ==
 
-You can use the command:
-```
-$ runghc Setup.hs sdist
-```
-to prepare archive with all source codes needed to compile GF.
+%=== SDist ===
+%
+%You can use the command:
+%
+%% This does *NOT* include everything that is needed // TH 2012-08-06
+%```
+%$ cabal sdist
+%```
+%
+%to prepare archive with all source codes needed to compile GF.
 
-= Compilation with make =
+== Compilation with make ==
 
 If you feel more comfortable with Makefiles then there is a thin Makefile
 wrapper arround Cabal for you. If you just type:
@@ -343,16 +375,20 @@ For cleaning:
 ```
 $ make clean
 ```
-and to build source distribution archive run:
-```
-$ make sdist
-```
+%and to build source distribution archive run:
+%```
+%$ make sdist
+%```
 
-= Running the testsuite =
+== Running the testsuite ==
+
+**NOTE:** The test suite has not been maintained recently, so expect many
+tests to fail.
+%% // TH 2012-08-06
 
 GF has testsuite. It is run with the following command:
 ```
-$ runghc Setup.hs test
+$ cabal test
 ```
 The testsuite architecture for GF is very simple but still very flexible.
 GF by itself is an interpreter and could execute commands in batch mode.
@@ -374,6 +410,6 @@ that we will not incidentaly break your code later.
 If you don't want to run the whole testsuite you can write the path to the subdirectory
 in which you are interested. For example:
 ```
-$ runghc Setup.hs test testsuite/compiler
+$ cabal test testsuite/compiler
 ```
 will run only the testsuite for the compiler.
