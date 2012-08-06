@@ -1,28 +1,28 @@
-.PHONY: all build install doc clean sdist gf
+.PHONY: all build install doc clean gf # sdist
 
 all: build
 
-dist/setup-config: gf.cabal
-	chmod u+x lib/src/mkPresent
-	chmod u+x lib/src/mkMinimal
-	runghc Setup.hs configure
+dist/setup-config: gf.cabal Setup.hs
+	cabal configure
 
 build: dist/setup-config
-	runghc Setup.hs build
+	cabal build
 
 install:
-	runghc Setup.hs install
+	cabal copy
+	cabal register
 
 doc:
-	runghc Setup.hs haddock
+	cabal haddock
 
 clean:
-	runghc Setup.hs clean
+	cabal clean
 
-sdist:
-	runghc Setup.hs sdist
+#sdist:
+#	cabal sdist
+
 gf:
-	runghc Setup.hs build rgl-none
+	cabal build rgl-none
 	strip dist/build/gf/gf
 
 html::

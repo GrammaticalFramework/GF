@@ -2,9 +2,9 @@
 body { background-color: #f2f2f2; }
 
 
-h1,h2,h3 { font-family: sans-serif; color: #303030;
-	   text-shadow: rgba(0,0,0,0.25) 2px 2px 5px;
-	 }
+h1,h2,h3,h4 { font-family: sans-serif; color: #303030;
+	      text-shadow: rgba(0,0,0,0.25) 2px 2px 5px;
+	    }
 h1 { text-align: center; }
 h2 { border-bottom: 2px solid #303030; clear: right; }
 
