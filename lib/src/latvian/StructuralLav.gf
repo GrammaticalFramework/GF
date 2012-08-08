@@ -13,7 +13,7 @@ flags
   coding = utf8 ;
 
 lin
-  language_title_Utt = ss "Latviešu valoda" ;
+  language_title_Utt = ss "latviešu valoda" ;
 
   -- TODO: kā ar loģikā lietotajiem 'visi', 'katrs' ?
   every_Det = {
@@ -414,7 +414,7 @@ lin
   always_AdV = mkAdV "vienmēr" ;
 
 
-  how8many_IDet = { s = table { _ => "cik daudz"}; n = Sg }; --TODO jātestē kā to pielieto un vai nevajag vēl kaut ko
+  how8many_IDet = { s = table { _ => "cik"}; n = Sg }; --TODO jātestē kā to pielieto un vai nevajag vēl kaut ko
 
 
   everybody_NP = DetCN emptyPl_Det (UseN (mkN "visi"));
@@ -423,6 +423,10 @@ lin
   nothing_NP = DetCN emptySg_Det (UseN (mkN "nekas"));
   somebody_NP = DetCN emptySg_Det (UseN (mkN "kāds"));
   something_NP = DetCN emptySg_Det (UseN (mkN "kaut kas"));
+
+  have_V2 = mkV2 (mkV "būt") nom_Prep ;
+  can8know_VV, can_VV = mkV "varēt" third_conjugation ;
+  must_VV = mkV "vajadzēt" third_conjugation ;
 
 oper
   reflPron : Case => Str = table {
