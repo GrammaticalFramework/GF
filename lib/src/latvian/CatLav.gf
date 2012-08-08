@@ -24,7 +24,7 @@ lincat
   -- Question
   QCl = { s : VerbMood => Polarity => Str } ;
   IP = { s : Case => Str ; n: Number } ;
-  --IComp = { s : Str } ;
+  --IComp = { s : Str ; a : ResLav.Agr } ;
   IDet = { s : Gender => Str ; n : Number } ;
   IQuant = { s : Gender => Number => Str } ;
 

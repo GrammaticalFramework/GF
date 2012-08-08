@@ -30,7 +30,7 @@ lin
 
   ExistNP np =
     let
-      v = lin V mkVerb_toBe ;
+      v = lin V mkVerb_Irreg_Be ;
       a = np.a
     in {
       s = \\mood,pol =>
@@ -40,7 +40,7 @@ lin
 
   ExistIP ip =
     let
-      v = lin V mkVerb_toBe ;
+      v = lin V mkVerb_Irreg_Be ;
       a = AgP3 ip.n Masc
 	in {
       s = \\mood,pol =>

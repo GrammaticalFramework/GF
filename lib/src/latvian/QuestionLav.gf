@@ -20,7 +20,7 @@ lin
 
   QuestIAdv iadv cl = { s = \\m,p => iadv.s ++ cl.s ! m ! p } ;
 
-  QuestIComp icomp np = { s = \\m,p => icomp.s ++ buildVerb mkVerb_toBe m p np.a ++ np.s ! Nom } ;
+  QuestIComp icomp np = { s = \\m,p => icomp.s ++ buildVerb mkVerb_Irreg_Be m p np.a ++ np.s ! Nom } ;
 
   IdetQuant idet num = {
     s = \\g => idet.s ! g ! num.n ++ num.s ! g ! Nom ;

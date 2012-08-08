@@ -1,22 +1,5 @@
 --# -path=.:../abstract:../common:../prelude
 
--- This is an API for the user of the resource grammar
--- for adding lexical items. It gives functions for forming
--- expressions of open categories: nouns, adjectives, verbs.
---
--- Closed categories (determiners, pronouns, conjunctions) are
--- accessed through the resource syntax API, $Structural.gf$.
---
--- The main difference with $MorphoLav.gf$ is that the types
--- referred to are compiled resource grammar types. We have moreover
--- had the design principle of always having existing forms, rather
--- than stems, as string arguments of the paradigms.
---
--- The structure of functions for each word class $C$ is the following:
--- first we give a handful of patterns that aim to cover all
--- regular cases. Then we give a worst-case function $mkC$, which serves as an
--- escape to construct the most irregular words of type $C$.
-
 resource ParadigmsLav = open
   (Predef=Predef),
   Prelude,
@@ -66,12 +49,12 @@ oper
 
   mkPN = overload {
     mkN : (lemma : Str) -> PN = \l -> lin PN (mkProperNoun l Sg) ;
-	mkN : (lemma : Str) -> Number -> PN = \l,n -> lin PN (mkProperNoun l n) ;
+    mkN : (lemma : Str) -> Number -> PN = \l,n -> lin PN (mkProperNoun l n) ;
   } ;
 
   mkN2 = overload {
-	mkN2 : N -> Prep -> N2 = \n,p -> lin N2 n ** { p = p ; isPre = False } ;
-	mkN2 : N -> Prep -> Bool -> N2 = \n,p,isPre -> lin N2 n ** { p = p ; isPre = isPre } ;
+  mkN2 : N -> Prep -> N2 = \n,p -> lin N2 n ** { p = p ; isPre = False } ;
+  mkN2 : N -> Prep -> Bool -> N2 = \n,p,isPre -> lin N2 n ** { p = p ; isPre = isPre } ;
   } ;
 
   mkN3 : N -> Prep -> Prep -> N3 = \n,p1,p2 ->
@@ -80,10 +63,10 @@ oper
   mkA = overload {
     mkA : (lemma : Str) -> A = \s -> lin A (mkAdjective s) ;
     mkA : (lemma : Str) -> AdjType -> A = \s,t -> lin A (mkAdjectiveByType s t) ;
-	mkA : (v : Verb) -> A = \v -> lin A (mkAdjective_Participle v) ;
+    mkA : (v : Verb) -> A = \v -> lin A (mkAdjective_Participle v) ;
   } ;
 
-  mkA2  : A -> Prep -> A2 = \a,p -> lin A2 (a ** { p = p }) ;	-- precējies ar ...
+  mkA2  : A -> Prep -> A2 = \a,p -> lin A2 (a ** { p = p }) ; -- precējies ar ...
   mkAS  : A -> AS  =\a   -> lin A  a ;
   mkA2S : A -> Prep -> A2S =\a,p -> lin A2 (a ** { p = p }) ;
   mkAV  : A -> AV  = \a   -> lin A  a ;
@@ -114,7 +97,7 @@ oper
   mkPrep = overload {
     mkPrep : Str -> Case -> Case -> Prep = \prep,sg,pl ->
       lin Prep { s = prep ; c = table { Sg => sg ; Pl => pl } } ;
-	mkPrep : Case -> Prep = \c -> lin Prep { s = [] ; c = table { _ => c } } ;
+    mkPrep : Case -> Prep = \c -> lin Prep { s = [] ; c = table { _ => c } } ;
   } ;
 
   -- empty fake prepositions for valences

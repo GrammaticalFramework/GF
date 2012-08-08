@@ -1,10 +1,5 @@
 --# -path=.:../abstract:../common:../prelude
 
--- This module contains operations that are needed to make the
--- resource syntax work. To define everything that is needed to
--- implement $Test$, it moreover contains regular lexical
--- patterns needed for $Lex$.
-
 resource ResLav = ParamX ** open Prelude in {
 
 flags
@@ -12,8 +7,6 @@ flags
   coding = utf8 ;
 
 param
-  -- Some parameters, such as $Number$, are inherited from $ParamX$.
-
   -- Nouns
   Case = Nom | Gen | Dat | Acc | Loc | Voc ;
   Gender = Masc | Fem ;

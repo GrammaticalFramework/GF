@@ -63,7 +63,7 @@ lin
   come_V = mkV "nākt" "nāku" "nācu" ;
   computer_N = mkN "dators" ;
   country_N = mkN "valsts" ;
-  cousin_N = mkN "brālēns" ;	-- FIXME: brālēns/māsīca angļiem ir vienāds...
+  cousin_N = mkN "brālēns" ;  -- FIXME: brālēns/māsīca angļiem ir vienāds...
   cow_N = mkN "govs" ;
   die_V = mkV "nomirt" "nomirstu" "nomiru";
   dirty_A = mkA "netīrs" ;
@@ -72,7 +72,7 @@ lin
   dog_N = mkN "suns" ;
   door_N = mkN "durvis" ;
   drink_V2 = mkV2 (mkV "dzert" "dzeru" "dzēru") acc_Prep;
-  --easy_A2V = mkA2V (regA "easy") forP ;	-- FIXME: nav tādas konstrukcijas latviešu val.
+  --easy_A2V = mkA2V (regA "easy") forP ; -- FIXME: nav tādas konstrukcijas latviešu val.
   eat_V2 = mkV2 (mkV "ēst" "ēdu" "ēdu") acc_Prep ;
   empty_A = mkA "tukšs" ;
   enemy_N = mkN "ienaidnieks" ;
@@ -109,6 +109,7 @@ lin
   king_N = mkN "karalis" ;
   know_V2 = mkV2 (mkV "zināt" third_conjugation) acc_Prep ;
   -- FIXME: šitādas lietas jārisina ar valencēm nevis 2 vienādiem vārdiem
+  know_VQ = mkVQ (mkV "zināt" third_conjugation) ;
   know_VS = mkVS (mkV "zināt" third_conjugation) that_Subj ;
   lake_N = mkN "ezers" ;
   lamp_N = mkN "lampa" ;
@@ -133,7 +134,7 @@ lin
   narrow_A = mkA "šaurs" ;
   new_A = mkA "jauns" ;
   newspaper_N = mkN "avīze" ;
-  oil_N = mkN "eļļa" ;	-- reku parādās klasiskās problēmas - eļļa vai nafta?
+  oil_N = mkN "eļļa" ;  -- reku parādās klasiskās problēmas - eļļa vai nafta?
   old_A = mkA "vecs" ;
   open_V2 = mkV2 (mkV "atvērt" "atveru" "atvēru") acc_Prep ;
   paint_V2A = mkV2A (mkV "krāsot" second_conjugation) acc_Prep ;
@@ -149,7 +150,7 @@ lin
   probable_AS = mkAS (mkA "iespējams") ;
   queen_N = mkN "karaliene" ;
   radio_N = mkN "radio" ;
-  --rain_V0 = mkV0 (regV "rain") ;
+  rain_V0 = mkV "līt" "līstu" "liju" ;
   read_V2 = mkV2 (mkV "lasīt" third_conjugation) acc_Prep ;
   red_A = mkA "sarkans" ;
   religion_N = mkN "reliģija" ;
@@ -174,12 +175,12 @@ lin
   shop_N = mkN "veikals" ;
   short_A = mkA "īss" ;
   silver_N = mkN "sudrabs" ;
-  sister_N = mkN "māsa" ;	-- TODO: kāpēc nav kā brālis ar parametru?
+  sister_N = mkN "māsa" ; -- TODO: kāpēc nav kā brālis ar parametru?
   sleep_V = mkV "gulēt";
   small_A = mkA "mazs" ;
   snake_N = mkN "čūska" ;
   sock_N = mkN "zeķe" ;
-  speak_V2 = mkV2 (mkV "sacīt" third_conjugation) acc_Prep ;	-- TODO: citas valences tur tak
+  speak_V2 = mkV2 (mkV "sacīt" third_conjugation) acc_Prep ;  -- TODO: citas valences tur tak
   star_N = mkN "zvaigzne" ;
   steel_N = mkN "tērauds" ;
   stone_N = mkN "akmens" ;
@@ -190,7 +191,7 @@ lin
   switch8off_V2 = mkV2 (mkV "izslēgt" "izslēdzu" "izslēdzu") acc_Prep ;
   switch8on_V2 = mkV2 (mkV "ieslēgt" "ieslēdzu" "ieslēdzu") acc_Prep ;
   table_N = mkN "galds" ;
-  talk_V3 = mkV3 (mkV "runāt" second_conjugation) to_Prep par_Prep ;	-- ar ko, par ko
+  talk_V3 = mkV3 (mkV "runāt" second_conjugation) to_Prep par_Prep ;  -- ar ko, par ko
   teacher_N = mkN "skolotājs" ;
   teach_V2 = mkV2 (mkV "mācīt" third_conjugation) acc_Prep ;
   television_N = mkN "televīzija" ;
@@ -235,7 +236,7 @@ lin
   far_Adv = mkAdv "tālu" ;
   correct_A = mkA "pareizs" ;
   dry_A = mkA "sauss" ;
-  dull_A = mkA "neass" ;	-- garlaicīgs?
+  dull_A = mkA "neass" ;  -- garlaicīgs?
   full_A = mkA "pilns" ;
   heavy_A = mkA "smags" ;
   near_A = mkA "tuvs" ;
@@ -247,7 +248,7 @@ lin
   wet_A = mkA "slapjš" ;
   wide_A = mkA "plats" ;
   animal_N = mkN "dzīvnieks" ;
-  ashes_N = mkN "pelni" ;	-- FIXME: plural only? kā to norāda?
+  ashes_N = mkN "pelni" ; -- FIXME: plural only? kā to norāda?
   back_N = mkN "mugura" ;
   bark_N = mkN "miza" ;
   belly_N = mkN "vēders" ;
@@ -270,13 +271,13 @@ lin
   foot_N = mkN "pēda" ;
   forest_N = mkN "mežs" ;
   grass_N = mkN "zāle" ;
-  guts_N = mkN "zarnas" ;	-- FIXME: no singular
+  guts_N = mkN "zarnas" ; -- FIXME: no singular
   hair_N = mkN "mati" ;
   hand_N = mkN "roka" ;
   head_N = mkN "galva" ;
   heart_N = mkN "sirds" ;
   horn_N = mkN "rags" ;
-  husband_N = mkN "vīrs" ;	--TODO: kāpēc nav parametrs tāpat kā tēvam?
+  husband_N = mkN "vīrs" ;  --TODO: kāpēc nav parametrs tāpat kā tēvam?
   ice_N = mkN "ledus" ;
   knee_N = mkN "ceļgals" ;
   leaf_N = mkN "lapa" ;
@@ -319,7 +320,7 @@ lin
   flow_V = mkV "plūst" "plūstu" "plūdu" ;
   fly_V = mkV "lidot" second_conjugation ;
   freeze_V = mkV "sasalt" "sasalstu" "sasalu" ;
-  give_V3 = mkV3 (mkV "dot" "dodu" "devu") acc_Prep dat_Prep ;	-- dot ko? kam?
+  give_V3 = mkV3 (mkV "dot" "dodu" "devu") acc_Prep dat_Prep ;  -- dot ko? kam?
   laugh_V = mkV "smieties" "smejos" "smējos" ;
   lie_V = mkV "gulties" "guļos" "gūlos" ;
   play_V = mkV "spēlēt" second_conjugation ;
@@ -374,14 +375,5 @@ lin
 
 oper
   par_Prep = mkPrep "par" Acc Dat ;
-
-{-
-  atP = mkPrep "at" ;
-  forP = mkPrep "for" ;
-  fromP = mkPrep "from" ;
-  inP = mkPrep "in" ;
-  onP = mkPrep "on" ;
-  toP = mkPrep "to" ;
--}
 
 }
