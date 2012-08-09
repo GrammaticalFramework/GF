@@ -45037,7 +45037,7 @@ lin
   spekulantski_A = mkA078 "спекулантски" ;
   spekulativen_A = mkA079 "спекулативен" ;
   spekulaci_ja__N = mkN047 "спекулация" ;
-  spekuliram_V = actionV (mkV186 "спекулирам") (mkV148 "спека") ;
+  spekuliram_V = stateV (mkV186 "спекулирам") ;
   spekulirane_N = mkN071 "спекулиране" ;
   speleolog_N = mkN015 "спелеолог" ;
   speleologi_ja__N = mkN047 "спелеология" ;
