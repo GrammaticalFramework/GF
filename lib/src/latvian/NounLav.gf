@@ -12,7 +12,7 @@ flags
 
 lin
   UseN n = { s = \\_ => n.s ; g = n.g } ;
-  UsePN pn = { s = pn.s ; a = agrgP3 Sg pn.g } ;
+  UsePN pn = { s = pn.s ; a = agrgP3 pn.n pn.g } ;
   UsePron p = p ;
 
   PredetNP pred np = {
@@ -21,7 +21,7 @@ lin
   } ;
 
   UseN2 n = { s = \\_ => n.s ; g = n.g } ;
-  UseN3 n = n ;
+  --UseN3 n = n ;
 
   ComplN2 f x = {
     s = \\_,n,c => preOrPost f.isPre (f.p.s ++ x.s ! (f.p.c ! (fromAgr x.a).n)) (f.s ! n ! c) ;

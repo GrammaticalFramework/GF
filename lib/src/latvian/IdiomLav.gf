@@ -53,13 +53,13 @@ lin
   ProgrVP v = v ;
 
   ImpPl1 vp =
-    let a = AgP1 Pl
+    let a = AgP1 Pl Masc
     in {
       s =
-        vp.v.s ! Pos ! (Indicative P1 Pl Pres) ++	-- Verb
-        vp.s2 ! a									-- Object(s), complements, adverbial modifiers
+        vp.v.s ! Pos ! (Indicative P1 Pl Pres) ++  -- Verb
+        vp.s2 ! a                                  -- Object(s), complements, adverbial modifiers
     }
-    | { s = vp.v.s ! Pos ! (Indicative P1 Pl Fut) ++ vp.s2 ! a }	--# notpresent
+    | { s = vp.v.s ! Pos ! (Indicative P1 Pl Fut) ++ vp.s2 ! a }  --# notpresent
     ;
 
   ImpP3 np vp = {

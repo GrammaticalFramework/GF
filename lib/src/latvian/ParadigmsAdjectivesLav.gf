@@ -69,15 +69,20 @@ oper
     }
   };
 
+  -- TODO: Vai vajag iznest polaritāti ārpusē lai ir noliegtie kā atsevišķi īpašībasvārdi?
+  --       Praksē lielākoties pietiek ar palīgverba noliegumu?
+  -- TODO: Jāpieliek parametrs Tense: present = ziedošs, izsalkstošs; past = ziedējis, izsalcis.
+  --       Vai arī jāpadod Str "-is"/"-ošs" un pa tiešo jāizsauc mkParticiple, bet
+  --       kā šis mkA(Str) atšķirsies no citiem mkA(Str)? 
   mkAdjective_Participle : Verb -> Adj = \v -> {
     s = table {
-		AAdj Posit Indef g n c => v.s ! Pos !(Participle g n c); --FIXME - iznest polaritāti ārpusē lai ir noliegtie kā atsevišķi īpašībasvārdi
-		_ => NON_EXISTENT --FIXME - salikt arī tās divdabja formas
-	}
+      AAdj Posit Indef g n c => v.s ! Pos ! (Participle g n c) ;
+      _ => NON_EXISTENT
+    }
   };
 
   -- Positive degree: -s, -š (Indef and Def); -ais (Def only)
-  -- TODO - atsaukties uz lietvārdu locīšanas tabulām?
+  -- TODO: atsaukties uz lietvārdu locīšanas tabulām?
   mkAdjective_Pos : Str -> Definite -> Gender => Number => Case => Str = \lemma,defin ->
     let stem : Str = case lemma of {
       s + "ais" => s ;

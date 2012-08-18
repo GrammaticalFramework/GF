@@ -45,9 +45,9 @@ param
 
   VerbConj = C2 | C3 ;
 
-  --Agr = Ag Gender Number ;
-  -- TODO: kāpēc P3 jāsaskaņo Gender? divdabju dēļ?
-  Agr = AgP1 Number | AgP2 Number | AgP3 Number Gender ;
+  -- TODO: Kāpēc Gender ir tikai P3? Lokāmo divdabju dēļ?
+  --       Dzimte jāsaskaņo vienmēr - nominālo izteicēju dēļ... 
+  Agr = AgP1 Number Gender | AgP2 Number Gender | AgP3 Number Gender ;
 
   ThisOrThat = This | That ;
   CardOrd = NCard | NOrd ;
@@ -61,11 +61,13 @@ oper
   sonantCons : pattern Str = #("l"|"m"|"n"|"r"|"ļ"|"ņ") ;
   doubleCons : pattern Str = #("ll"|"ln"|"nn"|"sl"|"sn"|"st"|"zl"|"zn") ;
 
+  prefix : pattern Str = #("aiz"|"ap"|"at"|"ie"|"iz"|"no"|"pa"|"pār"|"pie"|"sa"|"uz") ;
+
   NON_EXISTENT : Str = "NON_EXISTENT" ;
 
   Verb : Type = { s : Polarity => VerbForm => Str } ;
 
-  VP = { v : Verb ; s2 : Agr => Str } ;	-- s2 = object(s), complements, adverbial modifiers
+  VP = { v : Verb ; s2 : Agr => Str } ;  -- s2 = object(s), complements, adverbial modifiers
 
   VPSlash = VP ** { p : prep } ;
   -- principā rekur ir objekts kuram jau kaut kas ir bet ir vēl viena brīva valence...
@@ -77,15 +79,15 @@ oper
 
   toAgr : Number -> Person -> Gender -> Agr = \n,p,g ->
     case p of {
-      P1 => AgP1 n ;
-      P2 => AgP2 n ;
+      P1 => AgP1 n g ;
+      P2 => AgP2 n g ;
       P3 => AgP3 n g
     } ;
 
   fromAgr : Agr -> { n : Number ; p : Person ; g : Gender } = \a ->
     case a of {
-      AgP1 n => { n = n ; p = P1 ; g = Masc } ;	-- FIXME: 'es esmu skaista'
-      AgP2 n => { n = n ; p = P2 ; g = Masc } ;	-- FIXME: 'tu esi skaista'
+      AgP1 n g => { n = n ; p = P1 ; g = g } ;
+      AgP2 n g => { n = n ; p = P2 ; g = g } ;
       AgP3 n g => { n = n ; p = P3 ; g = g }
     } ;
 

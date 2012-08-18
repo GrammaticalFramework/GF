@@ -356,9 +356,11 @@ oper
   mkVerb_Irreg : Str -> Verb = \lemma ->
     case lemma of {
       "būt"   => mkVerb_Irreg_Be ;
-      "iet"   => mkVerb_Irreg_Walk ;
-      "gulēt" => mkVerb_Irreg_Sleep
-      -- TODO: dot, ..?
+      "iet"   => mkVerb_Irreg_Go ;
+      #prefix + "iet"   => mkVerb_Irreg_Go_Prefix (Predef.tk 3 lemma) ;
+      "gulēt" => mkVerb_Irreg_Sleep  -- FIXME: Should be treated as a regular verb (C3: gulēt, sēdēt etc.)
+      -- TODO: add "dot"/Give (+prefix, +refl)
+      -- TODO: multiple prefixes
       -- TODO: move to IrregLav?
     } ;
 
@@ -387,18 +389,20 @@ oper
     }
   } ;
 
-  mkVerb_Irreg_Walk : Verb = {
+  mkVerb_Irreg_Go : Verb = mkVerb_Irreg_Go_Prefix "" ;
+
+  mkVerb_Irreg_Go_Prefix : Str -> Verb = \pref -> {
     s = table {
       Pos => table {
-        Indicative P3 _ Pres => "iet" ;
-        Debitive => "jāiet" ;
-        x => (mkVerb_C1 "iet" "eju" "gāju" ).s ! x
+        Indicative P3 _ Pres => pref + "iet" ;
+        Debitive => "jā" + pref + "iet" ;
+        x => (mkVerb_C1 (pref + "iet") (pref + "eju") (pref + "gāju")).s ! x
       } ;
       Neg => table {
-        Indicative P3 _ Pres => "neiet" ;
+        Indicative P3 _ Pres => "ne" + pref + "iet" ;
         Debitive => NON_EXISTENT ;
         DebitiveRelative => NON_EXISTENT ;
-        x => (mkVerb_C1 "neiet" "neeju" "negāju" ).s ! x
+        x => (mkVerb_C1 ("ne" + pref + "iet") ("ne" + pref + "eju") ("ne" + pref + "gāju")).s ! x
       }
     }
   } ;
@@ -409,7 +413,7 @@ oper
         Indicative P2 Sg Pres => (mkVerb_C3 "gulēt").s ! Indicative P2 Sg Pres ;
         Indicative p  n  Pres => (mkVerb_C3 "guļēt").s ! Indicative p n Pres ;
 
-        -- Here and there: the incorrect 'guļēt' contains intentional palatalization
+        -- FIXME: Here and there, the incorrect 'guļēt' contains intentional palatalization
 
         Relative Pres => (mkVerb_C3 "guļēt").s ! Relative Pres ;
 
@@ -489,6 +493,7 @@ oper
   pal_C1_4 : Str -> Str = \stem ->
     case stem of {
       s + "k" => s + "c" ;
+      s + "t" => s + "ti" ;
       _       => stem
     } ;
 
@@ -545,6 +550,7 @@ oper
   -- Declinable participles: syntactic function - attribute => category - adjective
   -- TODO: declinable participles => adjectives
   -- TODO: -ot, -am, -ām; -dams/dama, -damies/damās; -ošs/oša, -ams/ama, -āms/āma, -ts/ta
+  -- Nē, -ošs/oša ir tikai adjektīvi! Divdabji - tikai verbālās formas! (sk. Baibas sarakstu)
 
   mkParticiple : Gender -> Number -> Case -> Str -> Str = \g,n,c,stem -> mkParticiple_IsUsi g n c stem stem ;
 

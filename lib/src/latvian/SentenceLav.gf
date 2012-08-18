@@ -14,7 +14,7 @@ lin
 
   PredSCVP sc vp = mkClauseSC sc vp ;
 
-  ImpVP vp = { s = \\pol, n => vp.v.s ! pol ! (Imperative n) ++ vp.s2 ! (AgP2 n) } ;
+  ImpVP vp = { s = \\pol,n => vp.v.s ! pol ! (Imperative n) ++ vp.s2 ! (AgP2 n Masc) } ;
 
   SlashVP np vp = mkClause np vp ** { p = vp.p } ;
 
@@ -54,13 +54,13 @@ lin
 oper
   mkClause : NP -> CatLav.VP -> Cl = \np,vp -> lin Cl {
     s = \\mood,pol =>
-      case mood of {					-- Subject
+      case mood of {  -- Subject
         -- FIXME: jāčeko valences, reizēm arī īstenības izteiksmē - 'man patīk kaut kas'
-        Deb _ _ => np.s ! Dat ;		--# notpresent
+        Deb _ _ => np.s ! Dat ;  --# notpresent
         _ => np.s ! Nom
       } ++
-      buildVerb vp.v mood pol np.a ++	-- Verb
-      vp.s2 ! np.a						-- Object(s), complements, adverbial modifiers
+      buildVerb vp.v mood pol np.a ++  -- Verb
+      vp.s2 ! np.a  -- Object(s), complements, adverbial modifiers
   } ;
 
   -- FIXME: quick&dirty - lai kompilētos pret RGL API

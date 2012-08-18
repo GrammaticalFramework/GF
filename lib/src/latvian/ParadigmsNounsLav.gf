@@ -11,8 +11,8 @@ flags
   coding = utf8 ;
 
 oper
-  Noun     : Type = {s : Number => Case => Str ; g : Gender} ;
-  ProperNoun : Type = {s : Case => Str; g : Gender; n : Number} ;
+  Noun       : Type = { s : Number => Case => Str ; g : Gender } ;
+  ProperNoun : Type = { s : Case => Str ; g : Gender ; n : Number } ;
 
   masculine : Gender = Masc ;
   feminine  : Gender = Fem ;
@@ -21,15 +21,13 @@ oper
   mkNoun : Str -> Noun = \lemma ->
     mkNounByPal lemma True ;
 
-   mkProperNoun : Str -> Number -> ProperNoun = \lemma,number ->
+  mkProperNoun : Str -> Number -> ProperNoun = \lemma,number ->
     let noun = mkNoun lemma
-	in {
-	  s = table {
-	    c => noun.s ! number ! c
-	  } ;
-	  g = noun.g ;
-	  n = number
-	} ;
+    in {
+      s = \\c => noun.s ! number ! c  ;
+      g = noun.g ;
+      n = number
+  } ;
 
 {-
   mkCardinalNumeral : Str -> CardinalNumeral = \lemma ->
@@ -78,7 +76,8 @@ oper
       s + "s"                    => case gend of {Masc => D1 ; Fem  => D6} ;
       s + "a"                    => D4 ;
       s + "e"                    => D5 ;
-      s + #vowel                 => D0
+      s + #vowel                 => D0 ;
+      _                          => D0
     }
     in mkNounByGendDeclPal lemma gend decl pal ;
 
