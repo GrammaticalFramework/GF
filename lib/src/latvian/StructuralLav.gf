@@ -62,244 +62,61 @@ lin
 	d = Def
   } ;
 
+  -- P1
 
-  i_Pron = {
-    s = table {
-		Nom => "es";
-		Gen => "manis";
-		Dat => "man";
-		Acc => "mani";
-		Loc => "manī";
-		ResLav.Voc => NON_EXISTENT
-		} ;
-	possessive = table {
-		Masc => table {
-			Sg => table {
-				Nom => "mans";
-				Gen => "mana";
-				Dat => "manam";
-				Acc => "manu";
-				Loc => "manā";
-				ResLav.Voc => "mans"
-			};
-			Pl => table {
-				Nom => "mani";
-				Gen => "manu";
-				Dat => "maniem";
-				Acc => "manus";
-				Loc => "manos";
-				ResLav.Voc => "mani"
-			}
-		} ;
-		Fem => table {
-			Sg => table {
-				Nom => "mana";
-				Gen => "manas";
-				Dat => "manai";
-				Acc => "manu";
-				Loc => "manā";
-				ResLav.Voc => "mana"
-			};
-			Pl => table {
-				Nom => "manas";
-				Gen => "manu";
-				Dat => "manām";
-				Acc => "manas";
-				Loc => "manās";
-				ResLav.Voc => "manas"
-			}
-		}
-	} ;
-	a = AgP1 Sg ;
-  } ;
+  i_Pron = mkPronoun_I Masc ;  -- See also: ExtraLav.i8fem_Pron
 
-  we_Pron = {
-    s = table {
-		Nom => "mēs";
-		Gen => "mūsu";
-		Dat => "mums";
-		Acc => "mūs";
-		Loc => "mūsos";
-		ResLav.Voc => NON_EXISTENT
-		} ;
-	possessive = table {
-		_ => table {
-			_ => table {
-				_ => "mūsu"
-			}
-		}
-	} ;
-	a = AgP1 Pl ;
-  } ;
+  we_Pron = mkPronoun_We Masc ;  -- See also: ExtraLav.we8fem_Pron
 
-  youSg_Pron = {
-    s = table {
-		Nom => "tu";
-		Gen => "tevis";
-		Dat => "tev";
-		Acc => "tevi";
-		Loc => "tevī";
-		ResLav.Voc => "tu"
-		} ;
-	possessive = table {
-		Masc => table {
-			Sg => table {
-				Nom => "tavs";
-				Gen => "tava";
-				Dat => "tavam";
-				Acc => "tavu";
-				Loc => "tavā"				;
-				ResLav.Voc => "tavs"
-			};
-			Pl => table {
-				Nom => "tavi";
-				Gen => "tavu";
-				Dat => "taviem";
-				Acc => "tavus";
-				Loc => "tavos";
-				ResLav.Voc => "tavi"
-			}
-		} ;
-		Fem => table {
-			Sg => table {
-				Nom => "tava";
-				Gen => "tavas";
-				Dat => "tavai";
-				Acc => "tavu";
-				Loc => "tavā";
-				ResLav.Voc => "tava"
-			};
-			Pl => table {
-				Nom => "tavas";
-				Gen => "tavu";
-				Dat => "tavām";
-				Acc => "tavas";
-				Loc => "tavās";
-				ResLav.Voc => "tavas"
-			}
-		}
-	} ;
-	a = AgP2 Sg ;
-  } ;
+  -- P2
 
-  youPl_Pron = {
-    s = table {
-		Nom => "jūs";
-		Gen => "jūsu";
-		Dat => "jums";
-		Acc => "jūs";
-		Loc => "jūsos";
-		ResLav.Voc => "jūs"
-		} ;
-	possessive = table {
-		_ => table {
-			_ => table {
-				_ => "jūsu"
-			}
-		}
-	} ;
-	a = AgP2 Pl ;
-  } ;
+  youSg_Pron = mkPronoun_You_Sg Masc ;  -- See also: ExtraLav.youSg8fem_Pron
 
-  youPol_Pron = {
-    s = table {
-		Nom => "jūs";
-		Gen => "jūsu";
-		Dat => "jums";
-		Acc => "jūs";
-		Loc => "jūsos";
-		ResLav.Voc => "jūs"
-		} ;
-	possessive = table {
-		_ => table {
-			_ => table {
-				_ => "jūsu"
-			}
-		}
-	} ;
-	a = AgP2 Pl ;
-  } ;
+  youPol_Pron = mkPronoun_You_Pol Masc ;  -- See also: ExtraLav.youPol8fem_Pron
+
+  youPl_Pron = mkPronoun_You_Pl Masc ;  -- See also: ExtraLav.youPl8fem_Pron
+
+  -- P3
 
   he_Pron = {
-    s = (\\c => (mkPronoun_Gend "viņš").s ! Masc ! Sg ! c) ;
-	possessive = table {
-		_ => table {
-			_ => table {
-				_ => "viņa"
-			}
-		}
-	} ;
-	a = AgP3 Sg Masc ;
+    s = \\c => (mkPronoun_Gend "viņš").s ! Masc ! Sg ! c ;
+    a = AgP3 Sg Masc ;
+    possessive = \\_,_,_ => "viņa"
   } ;
 
   she_Pron = {
-    s = (\\c => (mkPronoun_Gend "viņš").s ! Fem ! Sg ! c) ;
-	possessive = table {
-		_ => table {
-			_ => table {
-				_ => "viņas"
-			}
-		}
-	} ;
-	a = AgP3 Sg Fem ;
+    s = \\c => (mkPronoun_Gend "viņš").s ! Fem ! Sg ! c ;
+    a = AgP3 Sg Fem ;
+    possessive = \\_,_,_ => "viņas"
   } ;
 
-  they_Pron = {
-    s = (\\c => (mkPronoun_Gend "viņš").s ! Masc ! Pl ! c) ;
-	possessive = table {
-		_ => table {
-			_ => table {
-				_ => "viņu"
-			}
-		}
-	} ;
-	a = AgP3 Pl Masc ;
-  } |
-  {
-    s = (\\c => (mkPronoun_Gend "viņš").s ! Fem ! Pl ! c) ;
-	possessive = table {
-		_ => table {
-			_ => table {
-				_ => "viņu"
-			}
-		}
-	} ;
-	a = AgP3 Pl Fem ;
-  } ;
+  they_Pron = mkPronoun_They Masc ;  -- See also: ExtraLav.they8fem_Pron
 
-  it_Pron = {
-	s = \\c => (mkPronoun_ThisThat That).s ! Masc ! Sg ! c;
-	possessive = table { _ => table { _ => table { _ => "tā" }}};
-	a = AgP3 Sg Masc
-  } | {
-  	s = \\c => (mkPronoun_ThisThat That).s ! Fem ! Sg ! c;
-	possessive = table { _ => table { _ => table { _ => "tās" }}};
-	a = AgP3 Sg Fem
-  };
+  it_Pron = mkPronoun_It_Sg Masc ;  -- See also: ExtraLav.it8fem_Pron
 
   -- manuprāt prievārdi tomēr ir valodas-specifiski un nebūtu tieši 1-pret-1 jātulko
-  above_Prep = mkPrep "virs" Gen Dat;
-  after_Prep = mkPrep "pēc" Gen Dat;
-  before_Prep = mkPrep "pirms" Gen Dat;
-  behind_Prep = mkPrep "aiz" Gen Dat;
-  between_Prep = mkPrep "starp" Acc Dat;
-  for_Prep = mkPrep "priekš" Gen Dat;
-  from_Prep = mkPrep "no" Gen Dat;
-  on_Prep = mkPrep "uz" Gen Dat;
-  with_Prep = mkPrep "ar" Acc Dat; -- ar sievu, ar sievām
+  above_Prep = mkPrep "virs" Gen Dat ;
+  after_Prep = mkPrep "pēc" Gen Dat ;
+  before_Prep = mkPrep "pirms" Gen Dat ;
+  behind_Prep = mkPrep "aiz" Gen Dat ;
+  between_Prep = mkPrep "starp" Acc Dat ;
+  for_Prep = mkPrep "priekš" Gen Dat ;
+  from_Prep = mkPrep "no" Gen Dat ;
+  on_Prep = mkPrep "uz" Gen Dat ;
+  with_Prep = mkPrep "ar" Acc Dat ;  -- ar sievu, ar sievām
   in_Prep = mkPrep Loc ;
-  to_Prep = mkPrep "līdz" Dat Dat; --FIXME - ļoti dažādi tulkojas
-  possess_Prep = mkPrep Gen ; --FIXME - reku vajadzētu vārdu secību otrādi, ka pirms paskaidrojamā vārda likt
-  under_Prep = mkPrep "zem" Gen Dat;
-  with_Prep = mkPrep "ar" Acc Dat;
-  without_Prep = mkPrep "bez" Gen Dat;
-  by8agent_Prep = nom_Prep;   --- A was attacked by B -> A-Dat uzbruka B-Nom
-  by8means_Prep = mkPrep "ar" Acc Dat;
-  during_Prep = mkPrep "laikā" Gen Gen; --FIXME nevaru saprast. laikam postfix 'X laikā' jāliek
-  in8front_Prep = mkPrep "priekšā" Dat Dat;
+  to_Prep = mkPrep "līdz" Dat Dat ;  -- See also: ExtraLav.to8uz_Prep
+  possess_Prep = mkPrep Gen ;  -- FIXME: reku vajadzētu vārdu secību otrādi, ka pirms paskaidrojamā vārda likt
+  under_Prep = mkPrep "zem" Gen Dat ;
+  with_Prep = mkPrep "ar" Acc Dat ;
+  without_Prep = mkPrep "bez" Gen Dat ;
+  by8agent_Prep = nom_Prep ;  -- A was attacked by B -> A-Dat uzbruka B-Nom
+  by8means_Prep = mkPrep "ar" Acc Dat ;
+  during_Prep = mkPrep "laikā" Gen Gen ;  -- FIXME: nevaru saprast; laikam postfix 'X laikā' jāliek
+  in8front_Prep = mkPrep "priekšā" Dat Dat ;
   part_Prep = mkPrep Gen ; --FIXME - reku vajadzētu vārdu secību otrādi, ka pirms paskaidrojamā vārda likt
-  through_Prep = mkPrep "cauri" Dat Dat;
-  except_Prep = mkPrep "izņemot" Acc Acc;
+  through_Prep = mkPrep "cauri" Dat Dat ;
+  except_Prep = mkPrep "izņemot" Acc Acc ;
 
   very_AdA = mkAdA "ļoti" ;
   almost_AdA = mkAdA "gandrīz" ;
@@ -380,7 +197,7 @@ lin
 
   why_IAdv = ss "kāpēc" ;
   how_IAdv = ss "kā" ;
-  how8much_IAdv = ss "cik daudz" ;
+  how8much_IAdv = ss "cik" ;
   when_IAdv = ss "kad" ;
   where_IAdv = ss "kur" ;
 
@@ -414,7 +231,11 @@ lin
   always_AdV = mkAdV "vienmēr" ;
 
 
-  how8many_IDet = { s = table { _ => "cik"}; n = Sg }; --TODO jātestē kā to pielieto un vai nevajag vēl kaut ko
+  -- TODO: jātestē kā to pielieto un vai nevajag vēl kaut ko
+  how8many_IDet = {
+    s = table { _ => "cik" } ;
+    n = Pl
+  } ;
 
 
   everybody_NP = DetCN emptyPl_Det (UseN (mkN "visi"));

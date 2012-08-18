@@ -8,12 +8,164 @@ resource ParadigmsPronounsLav = open
   in {
 
 flags
-  coding = utf8;
+  coding = utf8 ;
 
 oper
-  PronGend : Type = {s : Gender => Number => Case => Str} ;
+  PronGend : Type = { s : Gender => Number => Case => Str } ;
+  Pron : Type = { s : Case => Str ; a : ResLav.Agr ; possessive : Gender => Number => Case => Str } ;
 
 -- PRONOUNS (incl. 'determiners')
+
+  mkPronoun_I : Gender -> Pron = \g -> {
+    s = table {
+      Nom => "es" ;
+      Gen => "manis" ;
+      Dat => "man" ;
+      Acc => "mani" ;
+      Loc => "manī" ;
+      ResLav.Voc => NON_EXISTENT
+    } ;
+    a = AgP1 Sg g ;
+    possessive = table {
+      Masc => table {
+        Sg => table {
+          Nom => "mans" ;
+          Gen => "mana" ;
+          Dat => "manam" ;
+          Acc => "manu" ;
+          Loc => "manā" ;
+          ResLav.Voc => "mans"
+        } ;
+        Pl => table {
+          Nom => "mani" ;
+          Gen => "manu" ;
+          Dat => "maniem" ;
+          Acc => "manus" ;
+          Loc => "manos" ;
+          ResLav.Voc => "mani"
+        }
+      } ;
+      Fem => table {
+        Sg => table {
+          Nom => "mana" ;
+          Gen => "manas" ;
+          Dat => "manai" ;
+          Acc => "manu" ;
+          Loc => "manā" ;
+          ResLav.Voc => "mana"
+        } ;
+        Pl => table {
+          Nom => "manas" ;
+          Gen => "manu" ;
+          Dat => "manām" ;
+          Acc => "manas" ;
+          Loc => "manās" ;
+          ResLav.Voc => "manas"
+        }
+      }
+    }
+  } ;
+
+  mkPronoun_We : Gender -> Pron = \g -> {
+    s = table {
+      Nom => "mēs" ;
+      Gen => "mūsu" ;
+      Dat => "mums" ;
+      Acc => "mūs" ;
+      Loc => "mūsos" ;
+      ResLav.Voc => NON_EXISTENT
+    } ;
+    a = AgP1 Pl g ;
+    possessive = \\_,_,_ => "mūsu"
+  } ;
+
+  mkPronoun_You_Sg : Gender -> Pron = \g -> {
+    s = table {
+      Nom => "tu" ;
+      Gen => "tevis" ;
+      Dat => "tev" ;
+      Acc => "tevi" ;
+      Loc => "tevī" ;
+      ResLav.Voc => "tu"
+    } ;
+    a = AgP2 Sg g ;
+    possessive = table {
+      Masc => table {
+        Sg => table {
+          Nom => "tavs" ;
+          Gen => "tava" ;
+          Dat => "tavam" ;
+          Acc => "tavu" ;
+          Loc => "tavā" ;
+          ResLav.Voc => "tavs"
+        };
+        Pl => table {
+          Nom => "tavi" ;
+          Gen => "tavu" ;
+          Dat => "taviem" ;
+          Acc => "tavus" ;
+          Loc => "tavos" ;
+          ResLav.Voc => "tavi"
+        }
+      } ;
+      Fem => table {
+        Sg => table {
+          Nom => "tava" ;
+          Gen => "tavas" ;
+          Dat => "tavai" ;
+          Acc => "tavu" ;
+          Loc => "tavā" ;
+          ResLav.Voc => "tava"
+        };
+        Pl => table {
+          Nom => "tavas" ;
+          Gen => "tavu" ;
+          Dat => "tavām" ;
+          Acc => "tavas" ;
+          Loc => "tavās" ;
+          ResLav.Voc => "tavas"
+        }
+      }
+    }
+  } ;
+
+  mkPronoun_You_Pol : Gender -> Pron = \g -> {
+    s = table {
+      Nom => "jūs" ;
+      Gen => "jūsu" ;
+      Dat => "jums" ;
+      Acc => "jūs" ;
+      Loc => "jūsos" ;
+      ResLav.Voc => "jūs"
+    } ;
+    a = AgP2 Pl g ;  -- FIXME: in the case of a predicate nominal: copula=Pl, complement=Sg
+    possessive = \\_,_,_ => "jūsu"
+  } ;
+
+  mkPronoun_You_Pl : Gender -> Pron = \g -> {
+    s = table {
+      Nom => "jūs" ;
+      Gen => "jūsu" ;
+      Dat => "jums" ;
+      Acc => "jūs" ;
+      Loc => "jūsos" ;
+      ResLav.Voc => "jūs"
+    } ;
+    a = AgP2 Pl g ;
+    possessive = \\_,_,_ => "jūsu"
+  } ;
+
+  mkPronoun_They : Gender -> Pron = \g -> {
+    s = \\c => (mkPronoun_Gend "viņš").s ! g ! Pl ! c ;
+    a = AgP3 Pl g ;
+    possessive = \\_,_,_ => "viņu"
+  } ;
+
+  mkPronoun_It_Sg : Gender -> Pron = \g -> {
+    s = \\c => (mkPronoun_ThisThat That).s ! g ! Sg ! c;
+    a = AgP3 Sg g ;
+    possessive = \\_,_,_ => case g of { Masc => "tā" ; Fem => "tās" }
+  } ;
 
   -- Gender=>Number=>Case P3 pronouns
   -- Expected ending of a lemma: -s or -š (Masc=>Sg=>Nom)
