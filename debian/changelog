@@ -1,5 +1,17 @@
+gf (3.3.3-1) oneiric precise; urgency=low
+
+  * GF 3.3.3
+
+ -- Thomas Hallgren <hallgren@chalmers.se>  Wed, 22 Aug 2012 16:50:00 +0200
+
+gf (3.3-1) natty; urgency=low
+
+  * GF 3.3.
+
+ -- Thomas Hallgren <th0907@altocumulus.org>  Wed, 26 Oct 2011 22:10:42 +0200
+
 gf (2.5-1) unstable; urgency=low
 
   * Initial packaging.
- 
+
  -- Bjorn Bringert <bringert@cs.chalmers.se>  Tue, 21 Mar 2006 11:12:25 +0100

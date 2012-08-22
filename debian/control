@@ -1,9 +1,10 @@
 Source: gf
+Section: devel
 Priority: optional
-Section: science
-Maintainer: Bjorn Bringert <bringert@cs.chalmers.se>
-Build-Depends: debhelper, autoconf, ghc6 (>= 6.4.1-1)
-Standards-Version: 3.6.2
+Maintainer: Thomas Hallgren <hallgren@chalmers.se>
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 5), haskell-platform (>= 2011.2.0.1), libghc-haskeline-dev, libghc-mtl-dev, libghc-json-dev
+Homepage: http://www.grammaticalframework.org/
 
 Package: gf
 Architecture: any
@@ -13,4 +14,3 @@ Description: Tools for GF, a grammar formalism based on type theory
  It consists of a special-purpose programming language,
  a compiler of the language, and a generic grammar processor.
  .
- Homepage: http://www.cs.chalmers.se/~aarne/GF/
