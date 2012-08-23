@@ -15,13 +15,8 @@ flags
   coding = utf8 ;
 
 oper
-  Number : Type ;
-  singular : Number ;
-  plural   : Number ;
-
-  Number = ResLav.Number ;
-  singular = Sg ;
-  plural = Pl ;
+  singular : Number = Sg ;
+  plural   : Number = Pl ;
 
   second_conjugation : VerbConj = C2 ;
   third_conjugation  : VerbConj = C3 ;
@@ -53,11 +48,11 @@ oper
   } ;
 
   mkN2 = overload {
-  mkN2 : N -> Prep -> N2 = \n,p -> lin N2 n ** { p = p ; isPre = False } ;
-  mkN2 : N -> Prep -> Bool -> N2 = \n,p,isPre -> lin N2 n ** { p = p ; isPre = isPre } ;
+    mkN2 : N -> ResLav.Prep -> N2 = \n,p -> lin N2 n ** { p = p ; isPre = False } ;
+    mkN2 : N -> ResLav.Prep -> Bool -> N2 = \n,p,isPre -> lin N2 n ** { p = p ; isPre = isPre } ;
   } ;
 
-  mkN3 : N -> Prep -> Prep -> N3 = \n,p1,p2 ->
+  mkN3 : N -> ResLav.Prep -> ResLav.Prep -> N3 = \n,p1,p2 ->
     lin N3 n ** { p1 = p1 ; p2 = p2 ; isPre1 = False ; isPre2 = False } ;
 
   mkA = overload {
@@ -66,14 +61,14 @@ oper
     mkA : (v : Verb) -> A = \v -> lin A (mkAdjective_Participle v) ;
   } ;
 
-  mkA2  : A -> Prep -> A2 = \a,p -> lin A2 (a ** { p = p }) ; -- precējies ar ...
+  mkA2  : A -> ResLav.Prep -> A2 = \a,p -> lin A2 (a ** { p = p }) ; -- precējies ar ...
   mkAS  : A -> AS  =\a   -> lin A  a ;
-  mkA2S : A -> Prep -> A2S =\a,p -> lin A2 (a ** { p = p }) ;
+  mkA2S : A -> ResLav.Prep -> A2S =\a,p -> lin A2 (a ** { p = p }) ;
   mkAV  : A -> AV  = \a   -> lin A  a ;
-  mkA2V : A -> Prep -> A2V = \a,p -> lin A2 (a ** { p = p }) ;
+  mkA2V : A -> ResLav.Prep -> A2V = \a,p -> lin A2 (a ** { p = p }) ;
 
   AS, AV   : Type = { s : AForm => Str } ;
-  A2S, A2V : Type = { s : AForm => Str ; p : Prep };
+  A2S, A2V : Type = { s : AForm => Str ; p : ResLav.Prep };
 
   mkV = overload {
     mkV : (lemma : Str) -> V = \l -> lin V (mkVerb_Irreg l) ;
@@ -81,23 +76,46 @@ oper
     mkV : (lemma : Str) -> Str -> Str -> V = \l1,l2,l3 -> lin V (mkVerbC1 l1 l2 l3) ;
   } ;
 
-  mkV2  : V -> Prep -> V2 = \v,p -> lin V2 v ** { p = p } ;
-  mkVS  : V -> Subj -> VS = \v,s -> lin VS v ** { subj = s } ;
-  mkV2S : V -> Prep -> Subj -> V2S = \v,p,s -> lin V2S v ** { p = p ; subj = s } ;
-  mkVA  : V -> VA = \v -> lin VA v ;
-  mkV2A : V -> Prep -> V2A = \v,p -> lin V2A v ** { p = p } ;
-  mkVQ  : V -> VQ = \v -> lin VQ v ;
-  mkV2Q : V -> Prep -> V2Q = \v,p -> lin V2Q v ** { p = p } ;
-  mkVV  : V -> VV = \v -> lin VV v ;
-  mkV2V : V -> Prep -> V2V = \v,p -> lin V2V v ** { p = p } ;
-  mkV3  : V -> Prep -> Prep -> V3 = \v,p1,p2 -> lin V3 v ** { p1 = p1 ; p2 = p2 } ;
+  mkV2 = overload {
+    mkV2 : V -> ResLav.Prep -> V2 = \v,p -> lin V2 v ** { p = p ; topic = Nom } ;
+    mkV2 : V -> ResLav.Prep -> Case -> V2 = \v,p,c -> lin V2 v ** { p = p ; topic = c } ;
+  } ;
+  
+  mkVS = overload {
+    mkVS : V -> Subj -> VS = \v,s -> lin VS v ** { subj = s ; topic = Nom } ;
+    mkVS : V -> Subj -> Case -> VS = \v,s,c -> lin VS v ** { subj = s ; topic = c } ;
+  } ;
+  
+  mkVQ = overload {
+    mkVQ : V -> VQ = \v -> lin VQ v ** { topic = Nom } ;
+    mkVQ : V -> Case -> VQ = \v,c -> lin VQ v ** { topic = c } ;
+  } ;
+
+  mkVV = overload {
+    mkVV : V -> VV = \v -> lin VV v ** { topic = Nom } ;
+    mkVV : V -> Case -> VV = \v,c -> lin VV v ** { topic = c } ;
+  } ;
+  
+  mkV3 = overload {
+    mkV3 : V -> ResLav.Prep -> ResLav.Prep -> V3 = \v,p1,p2 ->
+      lin V3 v ** { p1 = p1 ; p2 = p2 ; topic = Nom } ;
+    mkV3 : V -> ResLav.Prep -> ResLav.Prep -> Case -> V3 = \v,p1,p2,c ->
+      lin V3 v ** { p1 = p1 ; p2 = p2 ; topic = c } ;
+  } ;
+  
+  mkVA : V -> VA = \v -> lin VA v ;
+  
+  mkV2S : V -> ResLav.Prep -> Subj -> V2S = \v,p,s -> lin V2S v ** { p = p ; subj = s } ;
+  mkV2A : V -> ResLav.Prep -> V2A = \v,p -> lin V2A v ** { p = p } ;
+  mkV2Q : V -> ResLav.Prep -> V2Q = \v,p -> lin V2Q v ** { p = p } ;
+  mkV2V : V -> ResLav.Prep -> V2V = \v,p -> lin V2V v ** { p = p } ;
 
   mkCAdv : Str -> Str -> Degree -> CAdv  = \s,p,d -> { s = s ; p = p ; d = d ; lock_CAdv = <> } ;
 
   mkPrep = overload {
-    mkPrep : Str -> Case -> Case -> Prep = \prep,sg,pl ->
+    mkPrep : Str -> Case -> Case -> ResLav.Prep = \prep,sg,pl ->
       lin Prep { s = prep ; c = table { Sg => sg ; Pl => pl } } ;
-    mkPrep : Case -> Prep = \c -> lin Prep { s = [] ; c = table { _ => c } } ;
+    mkPrep : Case -> ResLav.Prep = \c -> lin Prep { s = [] ; c = table { _ => c } } ;
   } ;
 
   -- empty fake prepositions for valences
