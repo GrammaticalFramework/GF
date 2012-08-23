@@ -14,7 +14,7 @@ lin
 
   PredSCVP sc vp = mkClauseSC sc vp ;
 
-  ImpVP vp = { s = \\pol,n => vp.v.s ! pol ! (Imperative n) ++ vp.s2 ! (AgP2 n Masc) } ;
+  ImpVP vp = { s = \\pol,n => vp.v.s ! pol ! (Imperative n) ++ vp.focus ! (AgP2 n Masc) } ;
 
   SlashVP np vp = mkClause np vp ** { p = vp.p } ;
 
@@ -25,10 +25,14 @@ lin
 
   SlashPrep cl prep = cl ** { p = prep } ;
 
-  SlashVS np vs slash =
-    mkClause np (lin VP { v = vs ; s2 = \\_ => "," ++ vs.subj.s ++ slash.s }) ** { p = slash.p } ;
+  SlashVS np vs sslash =
+    mkClause np (lin VP {
+      v = vs ;
+      topic = vs.topic ;
+      focus = \\_ => "," ++ vs.subj.s ++ sslash.s
+    }) ** { p = sslash.p } ;
 
-  ComplVS v s  = { v = v ; s2 = \\_ => "," ++ v.subj.s ++ s.s } ;
+  ComplVS v s  = { v = v ; focus = \\_ => "," ++ v.subj.s ++ s.s } ;
 
   -- TODO: nočekot kāpēc te ir tieši 'ka'
   EmbedS s = { s = "ka" ++ s.s } ;
@@ -55,19 +59,18 @@ oper
   mkClause : NP -> CatLav.VP -> Cl = \np,vp -> lin Cl {
     s = \\mood,pol =>
       case mood of {  -- Subject
-        -- FIXME: jāčeko valences, reizēm arī īstenības izteiksmē - 'man patīk kaut kas'
         Deb _ _ => np.s ! Dat ;  --# notpresent
-        _ => np.s ! Nom
+        _ => np.s ! vp.topic
       } ++
       buildVerb vp.v mood pol np.a ++  -- Verb
-      vp.s2 ! np.a  -- Object(s), complements, adverbial modifiers
+      vp.focus ! np.a  -- Object(s), complements, adverbial modifiers
   } ;
 
   -- FIXME: quick&dirty - lai kompilētos pret RGL API
   -- Eng: PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp
   -- Ar SC nav iespējams neko saskaņot (sk. Cat.gf un Common.gf)
   mkClauseSC : SC -> CatLav.VP -> Cl = \sc,vp -> lin Cl {
-    s = \\mood,pol => sc.s ++ buildVerb vp.v mood pol (AgP3 Sg Masc) ++ vp.s2 ! (AgP3 Sg Masc)
+    s = \\mood,pol => sc.s ++ buildVerb vp.v mood pol (AgP3 Sg Masc) ++ vp.focus ! (AgP3 Sg Masc)
   } ;
 
 }

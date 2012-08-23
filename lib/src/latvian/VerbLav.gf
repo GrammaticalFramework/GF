@@ -1,77 +1,95 @@
 --# -path=.:../abstract:../common:../prelude
 
--- FIXME: module relations. VerbLav is included in many places because of buildVerb,
+-- FIXME: module relations.
+-- VerbLav is included in many places because of buildVerb,
 -- and includes ParadigmsVerbsLav because of mkVerb_Irreg_Be -
 -- they need to be reallocated somehow to ResLav or something similar.
 -- Not so simple since morphology itself needs ResLav & friends.
 
-concrete VerbLav of Verb = CatLav ** open
+concrete VerbLav of Verb = CatLav **
+open
+  ParadigmsVerbsLav,
   ParamX,
   ResLav,
-  ParadigmsVerbsLav,
   StructuralLav
-  in {
+in {
 
 flags
-    optimize = all_subs ;
-    coding = utf8 ;
+  optimize = all_subs ;
+  coding = utf8 ;
 
 lin
-  -- TODO: rewrite šo uz valencēm, lai ir semantiskās saites
-  UseV v = { v = v ; s2 = \\_ => [] } ;
+  UseV v = { v = v ; topic = Nom ; focus = \\_ => [] } ;
 
-  ComplVV v vp = { v = v ; s2 = \\agr => build_VP vp Pos Infinitive agr } ;
-  ComplVS v s  = { v = v ; s2 = \\_ => "," ++ v.subj.s ++ s.s } ;
-  ComplVQ v q  = { v = v ; s2 = \\_ => "," ++ q.s } ;
-  ComplVA v ap = { v = v ; s2 = \\agr => ap.s ! Indef ! (fromAgr agr).g ! (fromAgr agr).n ! Nom } ;
+  ComplVV vv vp = { v = vv ; topic = vv.topic ; focus = \\agr => build_VP vp Pos Infinitive agr } ;
+  ComplVS vs s = { v = vs ; topic = vs.topic ; focus = \\_ => "," ++ vs.subj.s ++ s.s } ;
+  ComplVQ vq qs = { v = vq ; topic = vq.topic ; focus = \\_ => "," ++ qs.s } ;
+  ComplVA va ap = { v = va ; topic = Nom ; focus = \\agr => ap.s ! Indef ! (fromAgr agr).g ! (fromAgr agr).n ! Nom } ;
 
-  SlashV2a v = { v = v ; s2 = \\_ => [] ; p = v.p } ;
+  SlashV2a v2 = { v = v2 ; topic = v2.topic ; focus = \\_ => [] ; p = v2.p } ;
 
-  Slash2V3 v np =
-    insertObjc (\\_ => v.p1.s ++ np.s ! (v.p1.c ! (fromAgr np.a).n))
-      { v = v ; s2 = \\_ => [] ; p = v.p2 } ;
+  Slash2V3 v3 np = insertObjC
+    (\\_ => v3.p1.s ++ np.s ! (v3.p1.c ! (fromAgr np.a).n))
+    { v = v3 ; topic = Nom ; focus = \\_ => [] ; p = v3.p2 } ;
 
-  Slash3V3 v np =
-    insertObjc (\\_ => v.p2.s ++ np.s ! (v.p2.c ! (fromAgr np.a).n))
-      { v = v ; s2 = \\_ => [] ; p = v.p1 } ;
+  Slash3V3 v3 np = insertObjC
+    (\\_ => v3.p2.s ++ np.s ! (v3.p2.c ! (fromAgr np.a).n))
+    { v = v3 ; topic = Nom ; focus = \\_ => [] ; p = v3.p1 } ;
 
-  SlashV2V v vp = { v = v ; s2 = \\agr => build_VP vp Pos Infinitive agr ; p = v.p } ;
-  SlashV2S v s  = { v = v ; s2 = \\_ => "," ++ v.subj.s ++ s.s ; p = v.p } ;
-  SlashV2Q v q  = { v = v ; s2 = \\_ => "," ++ q.s ; p = v.p } ;
-  SlashV2A v ap = { v = v ; s2 = \\agr => ap.s ! Indef ! (fromAgr agr).g ! (fromAgr agr).n ! Nom ; p = v.p } ;
+  SlashV2V v2v vp = { v = v2v ; topic = Nom ; focus = \\agr => build_VP vp Pos Infinitive agr ; p = v2v.p } ;
+  SlashV2S v2s s = { v = v2s ; topic = Nom ; focus = \\_ => "," ++ v2s.subj.s ++ s.s ; p = v2s.p } ;
+  SlashV2Q v2q qs = { v = v2q ; topic = Nom ; focus = \\_ => "," ++ qs.s ; p = v2q.p } ;
+  SlashV2A v2a ap = { v = v2a ; topic = Nom ; focus = \\agr => ap.s ! Indef ! (fromAgr agr).g ! (fromAgr agr).n ! Nom ; p = v2a.p } ;
 
-  ComplSlash vp np = insertObjPre (\\_ => vp.p.s ++ np.s ! (vp.p.c ! (fromAgr np.a).n)) vp ;
+  ComplSlash vpslash np = insertObjPre
+    (\\_ => vpslash.p.s ++ np.s ! (vpslash.p.c ! (fromAgr np.a).n))
+    vpslash ;
+
+  SlashVV vv vpslash = { v = vv ; topic = vv.topic ; focus = \\agr => build_VP vpslash Pos Infinitive agr ; p = vpslash.p } ;
+
+  SlashV2VNP v2v np vpslash = insertObjC
+    (\\_ => v2v.p.s ++ np.s ! (v2v.p.c ! (fromAgr np.a).n))
+    { v = v2v ; topic = Nom ; focus = \\agr => build_VP vpslash Pos Infinitive agr ; p = vpslash.p } ;
+
+  ReflVP vpslash = insertObjPre
+    (\\agr => vpslash.p.s ++ reflPron ! (vpslash.p.c ! (fromAgr agr).n))
+    vpslash ;
+
+  UseComp comp = { v = lin V mkVerb_Irreg_Be ; topic = Nom ; focus = \\agr => comp.s ! agr } ;
+
+  PassV2 v2 = { v = v2 ; topic = v2.topic ; focus = \\_ => NON_EXISTENT } ; -- FIXME: placeholder
+
+  AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
+  AdVVP adv vp = insertObjPre (\\_ => adv.s) vp ;
 
   CompAP ap = { s = \\agr => ap.s ! Indef ! (fromAgr agr).g ! (fromAgr agr).n ! Nom } ;
   CompNP np = { s = \\_ => np.s ! Nom } ;
   CompAdv a = { s = \\_ => a.s } ;
   CompCN cn = { s = \\agr => cn.s ! Indef ! (fromAgr agr).n ! Nom } ;
 
-  ReflVP vp = insertObjPre (\\a => vp.p.s ++ reflPron ! (vp.p.c ! (fromAgr a).n)) vp ;
-
-  UseComp comp = { v = lin V mkVerb_Irreg_Be ; s2 = \\agr => comp.s ! agr } ;
-
-  AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
-  AdVVP adv vp = insertObjPre (\\_ => adv.s) vp ;
-
 oper
-  build_VP : ResLav.VP -> Polarity -> VerbForm -> Agr -> Str = \vp,p,vf,agr ->
-    vp.v.s ! p ! vf ++ vp.s2 ! agr ;
+  build_VP : ResLav.VP -> Polarity -> VerbForm -> Agr -> Str = \vp,pol,vf,agr ->
+    vp.v.s ! pol ! vf ++ vp.focus ! agr ;
 
-  insertObj : (Agr => Str) -> { v : Verb ; s2 : Agr => Str } -> { v : Verb ; s2 : Agr => Str } =
-    \obj,vp -> {
-      v = vp.v ;
-      s2 = \\a => vp.s2 ! a ++ obj ! a
-    } ;
+  -- VPSlash = { v : Verb ; topic : Case ; focus : Agr => Str ; p : Prep }
+  insertObjC : (Agr => Str) -> ResLav.VPSlash -> ResLav.VPSlash = \obj,vp ->
+    insertObj obj vp ** { p = vp.p } ;
 
-  insertObjPre : (Agr => Str) -> { v : Verb ; s2 : Agr => Str } -> { v : Verb ; s2 : Agr => Str } =
-    \obj,vp -> {
-      v = vp.v ;
-      s2 = \\a => obj ! a ++ vp.s2 ! a
-    } ;
+  -- VP = { v : Verb ; topic : Case ; focus : Agr => Str }
+  insertObj : (Agr => Str) -> ResLav.VP -> ResLav.VP = \obj,vp -> {
+    v = vp.v ;
+    topic = vp.topic ;
+    focus = \\agr => vp.focus ! agr ++ obj ! agr
+  } ;
 
-  insertObjc : (Agr => Str) -> { v : Verb ; s2 : Agr => Str ; p : Prep } -> { v : Verb ; s2 : Agr => Str ; p : Prep } =
-    \obj,vp -> insertObj obj vp ** { p = vp.p } ;
+  -- VP = { v : Verb ; topic : Case ; focus : Agr => Str }
+  -- TODO: šo jāmet ārā un jāpieliek insertObj parametrs isPre
+  -- Bet kas šis vispār ir par gadījumu?!
+  insertObjPre : (Agr => Str) -> ResLav.VP -> ResLav.VP = \obj,vp -> {
+    v = vp.v ;
+    topic = vp.topic ;
+    focus = \\agr => obj ! agr ++ vp.focus ! agr
+  } ;
 
   buildVerb : Verb -> VerbMood -> Polarity -> Agr -> Str = \v,mood,pol,ag ->
     let
@@ -97,15 +115,4 @@ oper
       Condit Simul => v.s ! pol ! (Indicative ag.p ag.n ParamX.Cond) ;  --# notpresent
       Condit Anter => mkVerb_Irreg_Be.s ! pol ! (Indicative ag.p ag.n ParamX.Cond) ++ part  --# notpresent
     } ;
-
--- TODO: nav testēts
-lin
-  SlashVV vv vp = { v = vv ; s2 = \\agr => build_VP vp Pos Infinitive agr ; p = vp.p } ;
-  SlashV2VNP vv np vp =
-    insertObjc (\\_ => vv.p.s ++ np.s ! (vv.p.c ! (fromAgr np.a).n))
-      { v = vv ; s2 = \\agr => build_VP vp Pos Infinitive agr ; p = vp.p } ;
-
-  -- FIXME: placeholder
-  PassV2 v = { v = v ; s2 = \\_ => NON_EXISTENT } ;
-
 }

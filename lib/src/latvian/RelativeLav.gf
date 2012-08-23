@@ -14,7 +14,9 @@ lin
 
   RelVP rp vp = {
     s = \\m,p,ag =>
-      rp.s ! Masc ! Nom ++ buildVerb vp.v m p (toAgr (fromAgr ag).n P3 (fromAgr ag).g) ++ vp.s2 ! ag
+      rp.s ! Masc ! Nom ++ 
+      buildVerb vp.v m p (toAgr (fromAgr ag).n P3 (fromAgr ag).g) ++ 
+      vp.focus ! ag
   } ;
 
   -- FIXME: vārdu secība - nevis 'kas mīl viņu' bet 'kas viņu mīl' (?)

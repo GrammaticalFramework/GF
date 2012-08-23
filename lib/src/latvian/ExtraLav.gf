@@ -22,6 +22,8 @@ lin
   they8fem_Pron = mkPronoun_They Fem ;
   it8fem_Pron = mkPronoun_It_Sg Fem ;
   
+  -- FIXME: zemāk esošās f-cijas nav ExtraLavAbs - kāpēc tās ir te?!
+
   GenNP np = {s = \\_,_,_ => np.s ! Gen ; d = Def} ;
 
   --ICompAP ap = {s = \\g,n => "cik" ++ ap.s ! Indef ! g ! n ! Nom } ;

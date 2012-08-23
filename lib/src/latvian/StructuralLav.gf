@@ -245,9 +245,11 @@ lin
   somebody_NP = DetCN emptySg_Det (UseN (mkN "kāds"));
   something_NP = DetCN emptySg_Det (UseN (mkN "kaut kas"));
 
-  have_V2 = mkV2 (mkV "būt") nom_Prep ;
-  can8know_VV, can_VV = mkV "varēt" third_conjugation ;
-  must_VV = mkV "vajadzēt" third_conjugation ;
+  have_V2 = mkV2 (mkV "būt") nom_Prep Dat ;
+  have_V3 = mkV3 (mkV "būt") nom_Prep dat_Prep Dat ;
+
+  can8know_VV, can_VV = mkVV (mkV "varēt" third_conjugation) ;
+  must_VV = mkVV (mkV "vajadzēt" third_conjugation) Dat ;
 
 oper
   reflPron : Case => Str = table {

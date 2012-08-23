@@ -312,7 +312,7 @@ lin
   year_N = mkN "gads" ;
 
   blow_V = mkV "pūst" "pūšu" "pūtu" ;
-  breathe_V = mkV2 (mkV "elpot" second_conjugation) acc_Prep ;
+  breathe_V = mkV "elpot" second_conjugation ;
   burn_V = mkV "degt" "degu" "degu" ;
   dig_V = mkV "rakt" "roku" "raku" ;
   fall_V = mkV "krist" "krītu" "kritu" ;

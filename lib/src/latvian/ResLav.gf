@@ -67,12 +67,16 @@ oper
 
   Verb : Type = { s : Polarity => VerbForm => Str } ;
 
-  VP = { v : Verb ; s2 : Agr => Str } ;  -- s2 = object(s), complements, adverbial modifiers
+  VP = { v : Verb ; topic : Case ; focus : Agr => Str } ;
+  -- topic: typically - subject
+  -- focus: typically - objects, complements, adverbial modifiers
 
-  VPSlash = VP ** { p : prep } ;
+  VPSlash = VP ** { p : Prep } ;
   -- principā rekur ir objekts kuram jau kaut kas ir bet ir vēl viena brīva valence...
 
-  prep = { s : Str ; c : Number => Case } ;
+  Prep : Type = { s : Str ; c : Number => Case } ;
+  -- In the case of case-based valences, the preposition is empty ([])
+  -- TODO: position of prepositions (pre or post)
 
   --Valence : Type = { p : Prep ; c : Number => Case } ;
   -- e.g. 'ar' + Sg-Acc or Pl-Dat; Preposition may be skipped for simple case-baced valences
