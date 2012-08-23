@@ -125,18 +125,28 @@ in {
 		
 		-- Actions
 		
-		--AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
-		--AHasAge p num = mkCl p.name (mkVP (mkA "vecs")) ;
+		-- FIXME: p.name[Dat] have_V2 num+year[Nom] (word order)
+		AHasAge p num = mkCl (mkNP num L.year_N) (mkV2 (mkV "būt") dat_Prep) p.name ;
 
-		--AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
-		--AHasRoom p num = mkCl p.name have_V2 (mkNP (mkNP a_Det (mkN "istaba")) (mkNP num (mkN "persona"))) ;
-		--AHasTable p num = mkCl p.name have_V2 (mkNP (mkNP a_Det (mkN "galdiņš")) (mkNP num (mkN "persona"))) ;
+		-- FIXME: p.name[Dat] have_V2 num+child[Nom] (word order)
+		AHasChildren p num = mkCl (mkNP num L.child_N) (mkV2 (mkV "būt") dat_Prep) p.name ;
 		
-		AHasName p name = mkCl (nameOf p) name ;  -- FIXME: Subj[Acc]-V-Obj[Nom] would be a better pattern ("mani sauc NN")
+		-- FIXME: p.name[Dat] have_V3 room[Nom] num+person[Dat] (word order)
+		AHasRoom p num = mkCl (mkNP a_Det (mkN "istaba")) (mkV3 (mkV "būt") dat_Prep dat_Prep) p.name (mkNP num (mkN "persona")) ;
+		
+		-- FIXME: p.name[Dat] have_V3 table[Nom] num+person[Dat] (word order)
+		AHasTable p num = mkCl (mkNP a_Det (mkN "galdiņš")) (mkV3 (mkV "būt") dat_Prep dat_Prep) p.name (mkNP num (mkN "persona")) ;
+		
+		-- FIXME: p[Acc] V2("saukt") name[Nom] - a more common phrase (+ word order)
+		AHasName p name = mkCl (nameOf p) name ;
+
 		AHungry p = mkCl p.name (mkA (mkV "izsalkt" "izsalkstu" "izsalku")) ;
 		AIll p = mkCl p.name (mkA "slims") ;
 		AKnow p = mkCl p.name (mkV "zināt" third_conjugation) ;
-		ALike p item = mkCl p.name (mkV2 (mkV "mīlēt" third_conjugation) acc_Prep) item ;  -- FIXME: Subj[Dat]-"garšo"-Obj[Nom] ("man garšo pica")
+		
+		-- FIXME: p.name[Dat] V2 item[Nom] (word order)
+		ALike p item = mkCl item (mkV2 (mkV "garšot" second_conjugation) dat_Prep) p.name ;
+		
 		ALive p co = mkCl p.name (mkVP (mkVP (mkV "dzīvot" second_conjugation)) (SyntaxLav.mkAdv in_Prep co)) ;
 		ALove p q = mkCl p.name L.love_V2 q.name ;
 		AMarried p = mkCl p.name (mkA (mkV "precēties" third_conjugation)) ;
