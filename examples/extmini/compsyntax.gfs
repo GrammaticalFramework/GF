@@ -1,0 +1,14 @@
+-- assumes start by: gf -run LangXXX.gf <compsyntax.gfs
+write_file -file=compsyntax-test.txt "***Missing***"
+print_grammar -missing | write_file -append -file=compsyntax-test.txt
+write_file -append -file=compsyntax-test.txt "***Words***"
+print_grammar -words   | write_file -append -file=compsyntax-test.txt
+write_file -append -file=compsyntax-test.txt "***Noun Phrases***"
+generate_random -number=20 -cat=NP | l -table -treebank | write_file -append -file=compsyntax-test.txt
+write_file -append -file=compsyntax-test.txt "***Clauses***"
+generate_random -number=10 -cat=Cl -depth=2 | l -table -treebank | write_file -append -file=compsyntax-test.txt
+write_file -append -file=compsyntax-test.txt "***Question Clauses***"
+generate_random -number=10 -cat=QCl -depth=2 | l -table -treebank | write_file -append -file=compsyntax-test.txt
+import LangEng.gf
+write_file -append -file=compsyntax-test.txt "***Utterances***"
+generate_random -number=100 | linearize -treebank | write_file -append -file=compsyntax-test.txt
