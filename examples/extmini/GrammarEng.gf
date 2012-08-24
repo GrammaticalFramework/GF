@@ -82,7 +82,7 @@ concrete GrammarEng of Grammar = open ResEng, Prelude in {
 
     i_NP = pronNP "I" "me" Sg Per1 ;
     youSg_NP = pronNP "you" "you" Sg Per2 ;
-    he_NP = pronNP "her" "him" Sg Per3 ;
+    he_NP = pronNP "he" "him" Sg Per3 ;
     she_NP = pronNP "she" "her" Sg Per3 ;
     we_NP = pronNP "we" "us" Pl Per1 ;
     youPl_NP = pronNP "you" "you" Pl Per2 ;
