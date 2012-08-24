@@ -27,12 +27,41 @@ lang:
 api:
 	$(RUNMAKE) alltenses api
 
+dict: DictBul DictEng DictFin DictFre DictRus DictGer DictSwe
+
+DictBul:
+	gf -batch bulgarian/DictBul.gf +RTS -K100M
+	cp -p bulgarian/DictBul*.gfo ../alltenses
+
+DictEng:
+	gf -batch english/DictEng.gf +RTS -K100M
+	cp -p english/DictEng*.gfo ../alltenses
+
+DictFin:
+	gf -batch finnish/DictFin.gf +RTS -K100M
+	cp -p finnish/DictFin*.gfo ../alltenses
+
+DictFre:
+	gf -batch french/DictFre.gf +RTS -K100M
+	cp -p french/DictFre*.gfo ../alltenses
+
+DictGer:
+	gf -batch german/DictGer.gf +RTS -K100M
+	cp -p german/DictGer*.gfo ../alltenses
+
+DictRus:
+	gf -batch russian/DictRus.gf +RTS -K100M
+	cp -p russian/DictRus*.gfo ../alltenses
+
+DictSwe:
+	gf -batch swedish/DictSwe.gf +RTS -K100M
+	cp -p swedish/DictSwe*.gfo ../alltenses
+
+
 # thai with pronunciation
 thp:
 	cd thai ; runghc ThaiScript.hs ; cd ..
 
-compatibility:
-	$(RUNMAKE) present compat
 
 prelude:
 	gf -batch -path=prelude prelude/*.gf
@@ -46,6 +75,11 @@ MakeStructural:
 	gf -batch */MakeStructural*.gf
 	cp -p */MakeStructural*.gfo ../present
 	cp -p */MakeStructural*.gfo ../alltenses
+
+# the rest is mostly obsolete 24/8/2012
+
+compatibility:
+	$(RUNMAKE) present compat
 
 test:
 	$(RUNMAKE) test

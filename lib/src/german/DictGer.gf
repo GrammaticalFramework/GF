@@ -1,4 +1,4 @@
---# -path=.:/Users/erzsebet/GF/lib/src/abstract:/Users/erzsebet/GF/lib/src/german:/Users/erzsebet/GF/lib/src/common:/Users/erzsebet/GF/lib/src/prelude:/Users/erzsebet/GF/lib/src/api:/Users/erzsebet/GF/:/usr/local/share/gf-3.3.3/lib/alltenses/:/usr/local/share/gf-3.3.3/lib/present/
+--# -path=.:alltenses
 
 concrete DictGer of DictGerAbs = CatGer **
   open ParadigmsGer, IrregGer in  {
