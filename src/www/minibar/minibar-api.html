@@ -70,14 +70,18 @@ For an example, see <a href="minibar.html">minibar.html</a>.
   can be set to override various default options:
     <table class=border>
         <tr><th>Option<th>Default<th>Description
-        <tr><td>show_abstract<td>false<td rowspan=3>See Translations,
+        <tr><td>show_abstract<td>false<td rowspan=5>See Translations,
 	  not used directly by Minibar
 	<tr><td>show_trees<td>false
+	<tr><td>tree_img_format<td>"png"
 	<tr><td>show_grouped_translations<td>true
-	<tr><td>delete_button_text<td>"⌫"<td rowspan=3>See Input,
+	<tr><td>show_brackets<td>false
+	<tr><td>delete_button_text<td>"⌫"<td rowspan=5>See Input,
 	  not used directly by Minibar
 	<tr><td>default_source_language<td>null
+	<tr><td>startcat_menu<td>true
 	<tr><td>random_button<td>true
+	<tr><td>word_replacements<td>false
 	<tr><td>try_google<td>true<td>Include a button to try the current
 	  sentence in Google Translate
 	<tr><td>feedback_url<td>null<td>Include a button to open a feedback
@@ -124,13 +128,19 @@ HTML file, you would normally include at least the following:
   can be set to override various default options:
       <table class=border>
         <tr><th>Option<th>Default<th>Description
-	<tr><td>delete_button_text<td>"⌫"<td>the label for the button that deletes the last word
-	<tr><td>default_source_language<td>null<td>the concrete language to
+	<tr><td>delete_button_text<td>"⌫"<td>The label for the button that deletes the last word.
+	<tr><td>default_source_language<td>null<td>The concrete language to
 	  use for input in case the user's browers doesn't supply a suitable
 	  default. If none is provided the first language in alphabetical
 	  order will be used.
-	<tr><td>random_button<td>true<td>include a button to generate a
-	  random sentence
+	<tr><td>startcat_menu<td>true<td>Include a menu to choose which start
+	  category to use for parsing (instead of the grammar's default start
+	  category).
+	<tr><td>random_button<td>true<td>Include a button to generate a
+	  random sentence.
+	<tr><td>word_replacements<td>false<td>Enable
+	  <a href="about#wordforword">word-for-word replacements</a>.
+	  (This is an experimental feature.)
     </table>
 
   <li><code>translations</code> is the object that is notified when the input
@@ -179,7 +189,7 @@ and <a href="support.js">support.js</a>, so to use it in an
 HTML file, you would normally include at least the following:
 
 <blockquote><pre>
-&lt;script type="text/JavaScript" src="minibar_input.js">&lt;/script>
+&lt;script type="text/JavaScript" src="minibar_translations.js">&lt;/script>
 &lt;script type="text/JavaScript" src="minibar_support.js">&lt;/script>
 &lt;script type="text/JavaScript" src="support.js">&lt;/script>
 </pre></blockquote>
@@ -196,8 +206,11 @@ HTML file, you would normally include at least the following:
 	  to the concrete syntax for the translations
 	<tr><td>show_trees<td>false<td>add buttons to display syntax trees
 	  next to translations.
+	<tr><td>tree_img_format<td>"png"<td>format for trees & alignment images,
+	                                    can be "gif", "png" or "svg"
 	<tr><td>show_grouped_translations<td>true<td>in case there are
 	  multiple translations, group them by concrete language
+	<tr><td>show_brackets<td>false<td>show bracketed string
     </table>
 
 </ul>
@@ -232,7 +245,7 @@ should add to the user interface:
 <hr>
 <div class=modtime>
 <small class=modtime>
-HTML <!-- hhmts start --> Last modified: Mon Jun 11 17:55:10 CEST 2012 <!-- hhmts end -->
+HTML <!-- hhmts start -->Last modified: Mon Aug 27 16:46:46 CEST 2012 <!-- hhmts end -->
 </small>
 </div>
 
