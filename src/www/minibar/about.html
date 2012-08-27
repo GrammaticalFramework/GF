@@ -3,6 +3,9 @@
 <title>About Minibar</title>
 <link rel=stylesheet type="text/css" href="minibar.css">
 <meta charset="UTF-8">
+<style>
+:target .summary { font-weight: bold; background: white; }
+</style>
 </head>
 
 <body class=minibar>
@@ -185,7 +188,9 @@ Some implementation details:
   the grammar menu. You can also add grammars from several directories on the
   same server of course. The included minibar configuration file adds the
   user's own grammars from the grammar editor.
- <li>[Added 2012-04-02] Word-for-word replacement: when a complete and
+ <li id=wordforword>
+   [Added 2012-04-02] <span class=summary>Word-for-word replacements</span>:
+  when a complete and
    unambiguous sentence has been entered, the words glow blue and when you
    click on one, possible replacements appear. (Replacements are shown as names
    of functions in the abstract syntax for now. They should be shown as words
@@ -212,7 +217,7 @@ Some implementation details:
 
 <hr>
 <div class=modtime><small>
-<!-- hhmts start --> Last modified: Thu Apr 19 14:28:52 CEST 2012 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Mon Aug 27 16:28:25 CEST 2012 <!-- hhmts end -->
 </small></div>
 <address>
 <a href="http://www.cse.chalmers.se/~hallgren/">TH</a>
