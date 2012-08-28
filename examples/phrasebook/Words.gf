@@ -199,6 +199,7 @@ abstract Words = Sentences ** {
 --------------------------------------------------
 -- New 30/11/2011 AR
 --------------------------------------------------
+{- 28/8/2012 still only available in Bul Eng Fin Swe Tha
 
   fun
     Thai : Nationality ;
@@ -242,5 +243,6 @@ abstract Words = Sentences ** {
     ACook : Person -> Action ;
     AStudent : Person -> Action ;
     ABusinessman : Person -> Action ;
+-}
 
 }
