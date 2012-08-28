@@ -157,8 +157,9 @@ in {
 		ATired p = mkCl p.name (mkA (mkV "nogurt" "nogurstu" "noguru")) ;
 		AUnderstand p = mkCl p.name (mkV "saprast" "saprotu" "sapratu") ;
 		AWant p obj = mkCl p.name (mkV2 (mkV "vēlēties" third_conjugation) acc_Prep) obj ;
-		AWantGo p place = mkCl p.name (mkV "vēlēties" third_conjugation) (mkVP (mkVP (mkV "doties" "dodos" "devos")) place.to) ;
-		
+		AWantGo p place = mkCl p.name (mkVV (mkV "vēlēties" third_conjugation)) (mkVP (mkVP (mkV "doties" "dodos" "devos")) place.to) ;
+		---- mkVV by AR 28/8/2012
+
 		-- Miscellaneous
 		
 		QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
@@ -236,8 +237,8 @@ in {
 		--	isPl : Bool
 		--} = \comp,p,i -> mkCNPlace (mkCN (P.mkN comp (mkN p))) i to_Prep ;
 		
-		mkPlace : Str -> Prep -> {name : CN ; at : Prep ; to : Prep ; isPl : Bool} = \p,i -> 
-		  mkCNPlace (mkCN (mkN p)) i to8uz_Prep ;
+		mkPlace : Str -> Prep -> {name : CN ; at : SyntaxLav.Prep ; to : SyntaxLav.Prep ; isPl : Bool} = \p,i -> 
+		  mkCNPlace (mkCN (mkN p)) i to8uz_Prep ;  ---- SyntaxLav.Prep by AR 28/8/2012
 		
 		open_A = P.mkA "atvērts" ;
 		
