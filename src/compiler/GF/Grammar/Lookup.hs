@@ -39,7 +39,7 @@ import GF.Grammar.Printer
 import GF.Grammar.Predef
 import GF.Grammar.Lockfield
 
-import Data.List (nub,sortBy)
+import Data.List (sortBy)
 import Control.Monad
 import Text.PrettyPrint
 import qualified Data.Map as Map

@@ -8,7 +8,7 @@ import PGF.CId
 import PGF.Data
 import PGF.Macros
 import Data.Maybe
-import Data.List (mapAccumL, nub)
+import Data.List (mapAccumL)
 import Data.Array.IArray
 import Data.Array.MArray
 import Data.Array.ST

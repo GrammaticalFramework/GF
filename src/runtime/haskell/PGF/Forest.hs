@@ -32,7 +32,7 @@ import qualified Data.IntSet as IntSet
 import qualified Data.IntMap as IntMap
 import Control.Monad
 import Control.Monad.State
-import GF.Data.SortedList
+import GF.Data.Utilities (nub')
 
 data Forest
   = Forest
@@ -121,7 +121,7 @@ getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty dp =
                                  generateForForest (prove dp) e) emptyMetaStore fid
   in if null res
        then Left  (nub err)
-       else Right (nub [e | (_,_,e) <- res])
+       else Right (nub' [e | (_,_,e) <- res])
   where
     go rec_ scope_ mb_tty_ (PArg hypos fid)
       | fid < totalCats cnc = case mb_tty of

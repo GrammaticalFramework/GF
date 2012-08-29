@@ -25,7 +25,6 @@ import GF.Grammar.Grammar
 import GF.Compile.ReadFiles
 
 import Data.Char (toUpper)
-import Data.List (nub)
 import qualified Data.ByteString.Char8 as BS
 import Control.Monad (foldM)
 import System.Cmd (system)
