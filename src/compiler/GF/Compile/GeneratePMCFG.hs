@@ -22,7 +22,7 @@ import GF.Grammar.Lookup
 import GF.Grammar.Predef
 import GF.Data.BacktrackM
 import GF.Data.Operations
-import GF.Data.Utilities (updateNthM, updateNth, sortNub)
+import GF.Data.Utilities (updateNthM, updateNth)
 
 import System.IO
 import qualified Data.Map as Map

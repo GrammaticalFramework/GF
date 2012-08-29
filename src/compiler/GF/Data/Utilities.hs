@@ -17,6 +17,7 @@ module GF.Data.Utilities where
 import Data.Maybe
 import Data.List
 import Control.Monad (MonadPlus(..),liftM)
+import qualified Data.Set as Set
 
 -- * functions on lists
 
@@ -67,15 +68,18 @@ safeInit :: [a] -> [a]
 safeInit [] = []
 safeInit xs = init xs
 
--- | Like 'nub', but more efficient as it uses sorting internally.
-sortNub :: Ord a => [a] -> [a]
-sortNub = map head . group . sort
+-- | Like 'nub', but O(n log n) instead of O(n^2), since it uses a set to lookup previous things.
+--   The result list is stable (the elements are returned in the order they occur), and lazy.
+--   Requires that the list elements can be compared by Ord.
+--   Code ruthlessly taken from http://hpaste.org/54411
+nub' :: Ord a => [a] -> [a]
+nub' = loop Set.empty
+    where loop _    []            = []
+          loop seen (x : xs)
+              | Set.member x seen = loop seen xs
+              | otherwise         = x : loop (Set.insert x seen) xs
 
--- | Like 'nubBy', but more efficient as it uses sorting internally.
-sortNubBy :: (a -> a -> Ordering) -> [a] -> [a]
-sortNubBy f = map head . sortGroupBy f
-
--- | Sorts and then groups elements given and ordering of the 
+-- | Sorts and then groups elements given an ordering of the 
 --   elements.
 sortGroupBy :: (a -> a -> Ordering) -> [a] -> [[a]]
 sortGroupBy f = groupBy (compareEq f) . sortBy f
