@@ -20,7 +20,6 @@ import qualified Data.IntMap as IntMap
 import qualified GF.Data.TrieMap as TrieMap
 import qualified Data.List as List
 import Control.Monad.ST
-import GF.Data.Utilities(sortNub)
 
 optimizePGF :: PGF -> PGF
 optimizePGF pgf = pgf{concretes=fmap (updateConcrete (abstract pgf) . 

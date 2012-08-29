@@ -53,7 +53,7 @@ isEpsilon (REConcat []) = True
 isEpsilon _ = False
 
 unionRE :: Ord a => [RE a] -> RE a
-unionRE = unionOrId . sortNub . concatMap toList 
+unionRE = unionOrId . nub' . concatMap toList 
   where 
     toList (REUnion xs) = xs
     toList x = [x]
