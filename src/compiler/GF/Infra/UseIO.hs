@@ -31,7 +31,6 @@ import Text.Printf
 import Control.Monad
 import Control.Exception(evaluate)
 import qualified Data.ByteString.Char8 as BS
-import Data.List(nub)
 
 putShow' :: Show a => (c -> a) -> c -> IO ()
 putShow' f = putStrLn . show . length . show . f

@@ -21,6 +21,7 @@ import GF.Infra.Option
 import GF.Infra.UseIO
 
 import GF.Data.Operations
+import GF.Data.Utilities (nub')
 
 import Data.Char
 import Data.List
@@ -101,7 +102,7 @@ cf2grammar rules = (buildTree abs, buildTree conc, cat) where
             (L _ (_,(c,_))):_ -> c  -- the value category of the first rule
             _ -> error "empty CF" 
   cats  = [(cat, AbsCat (Just (L NoLoc []))) | 
-             cat <- nub (concat (map cf2cat rules))] ----notPredef cat
+             cat <- nub' (concat (map cf2cat rules))] ----notPredef cat
   lincats = [(cat, CncCat (Just (L loc defLinType)) Nothing Nothing Nothing) | (cat,AbsCat (Just (L loc _))) <- cats]
   (funs,lins) = unzip (map cf2rule rules)
 
