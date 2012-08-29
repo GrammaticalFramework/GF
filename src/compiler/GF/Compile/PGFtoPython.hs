@@ -40,8 +40,8 @@ pgf2python pgf = ("# -*- coding: UTF-8 -*-" ++++
       abs = abstract pgf
       cncs = concretes pgf
 
-pyAbsdef :: (Type, Int, Maybe [Equation], Double) -> String
-pyAbsdef (typ, _, _, _) = pyTuple 0 id [pyCId cat, pyList 0 pyCId args]
+pyAbsdef :: (Type, Int, Maybe [Equation], Double, BCAddr) -> String
+pyAbsdef (typ, _, _, _, _) = pyTuple 0 id [pyCId cat, pyList 0 pyCId args]
     where (args, cat) = M.catSkeleton typ 
 
 pyLiteral :: Literal -> String

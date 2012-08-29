@@ -44,6 +44,7 @@ instance Binary Abstr where
            cats <- get
            return (Abstr{ aflags=aflags
                         , funs=funs, cats=cats
+                        , code=BS.empty                        
                         })
   
 instance Binary Concr where

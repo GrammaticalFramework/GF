@@ -1071,7 +1071,7 @@ allCommands env@(pgf, mos) = Map.fromList [
                                                                 if null (functionsToCat pgf id)
                                                                   then empty
                                                                   else space $$
-                                                                       vcat [ppFun fid (ty,0,Just [],0) | (fid,ty) <- functionsToCat pgf id])
+                                                                       vcat [ppFun fid (ty,0,Just [],0,0) | (fid,ty) <- functionsToCat pgf id])
                                                      return void
                                      Nothing   -> do putStrLn ("unknown category of function identifier "++show id)
                                                      return void
@@ -1246,7 +1246,7 @@ allCommands env@(pgf, mos) = Map.fromList [
      | otherwise             = do fmt <- readOutputFormat (valStrOpts "printer" "pgf_pretty" opts)
                                   return $ fromString $ concatMap snd $ exportPGF noOptions fmt pgf
 
-   funsigs pgf = [(f,ty) | (f,(ty,_,_,_)) <- Map.assocs (funs (abstract pgf))]
+   funsigs pgf = [(f,ty) | (f,(ty,_,_,_,_)) <- Map.assocs (funs (abstract pgf))]
    showFun (f,ty) = showCId f ++ " : " ++ showType [] ty ++ " ;"
 
    morphos opts s = 
