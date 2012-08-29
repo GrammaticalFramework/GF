@@ -42,6 +42,7 @@ fun CompoundCN : Num -> N -> CN -> CN ;
     UseQuantPN : Quant -> PN -> NP;
 
     SlashV2V : V2V -> Pol -> VP -> VPSlash ;
+    SlashVPIV2V : V2V -> Pol -> VPI -> VPSlash ;
 
     PredVPosv,PredVPovs : NP -> VP -> Cl ;
     

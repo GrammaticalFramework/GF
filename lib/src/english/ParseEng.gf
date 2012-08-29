@@ -71,6 +71,11 @@ lin
                                        infVP v.typ vp a)
                                (predVc v) ;
 
+  SlashVPIV2V v p vpi = insertObjc (\\a => p.s ++ case p.p of {CPos => ""; _ => "not"} ++ 
+                                        v.c3 ++ 
+                                        vpi.s ! VVAux ! a)
+                                   (predVc v) ;
+
   PredVPosv np vp = {
       s = \\t,a,b,o => 
         let 
@@ -125,7 +130,7 @@ lin
     s = let
           be = predAux auxBe ;
           ppt = vps.ptp
-        in \\c => np.s ! c ++ vps.ptp ++ vps.s2 ! np.a ;
+        in \\c => np.s ! c ++ vps.ad ++ vps.ptp ++ vps.s2 ! np.a ;
     a = np.a
   } ;
 
