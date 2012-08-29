@@ -50,7 +50,7 @@ readProbabilitiesFromFile file pgf = do
 mkProbabilities :: PGF -> Map.Map CId Double -> Probabilities
 mkProbabilities pgf probs =
   let funs1 = Map.fromList [(f,p) | (_,cf) <- Map.toList cats1, (p,f) <- cf]
-      cats1 = Map.map (\(_,fs) -> fill fs) (cats (abstract pgf))
+      cats1 = Map.map (\(_,fs,_) -> fill fs) (cats (abstract pgf))
   in Probs funs1 cats1
   where
     fill fs = pad [(Map.lookup f probs,f) | (_,f) <- fs]
@@ -68,15 +68,15 @@ defaultProbabilities pgf = mkProbabilities pgf Map.empty
 
 getProbabilities :: PGF -> Probabilities
 getProbabilities pgf = Probs {
-  funProbs = Map.map (\(_,_,_,p) -> p) (funs (abstract pgf)),
-  catProbs = Map.map (\(_,fns) -> fns) (cats (abstract pgf))
+  funProbs = Map.map (\(_,_,_,p,_) -> p) (funs (abstract pgf)),
+  catProbs = Map.map (\(_,fns,_) -> fns) (cats (abstract pgf))
   }
 
 setProbabilities :: Probabilities -> PGF -> PGF
 setProbabilities probs pgf = pgf {
   abstract = (abstract pgf) {
-    funs = mapUnionWith (\(ty,a,df,_) p -> (ty,a,df,p)) (funs (abstract pgf)) (funProbs probs),
-    cats = mapUnionWith (\(hypos,_) fns -> (hypos,fns)) (cats (abstract pgf)) (catProbs probs)
+    funs = mapUnionWith (\(ty,a,df,_,addr) p -> (ty,a,df,p,addr)) (funs (abstract pgf)) (funProbs probs),
+    cats = mapUnionWith (\(hypos,_,addr) fns -> (hypos,fns,addr)) (cats (abstract pgf)) (catProbs probs)
   }}
   where
     mapUnionWith f map1 map2 = 
@@ -87,8 +87,8 @@ probTree :: PGF -> Expr -> Double
 probTree pgf t = case t of
   EApp f e -> probTree pgf f * probTree pgf e
   EFun f   -> case Map.lookup f (funs (abstract pgf)) of
-                Just (_,_,_,p) -> p
-                Nothing        -> 1
+                Just (_,_,_,p,_) -> p
+                Nothing          -> 1
   _ -> 1
 
 -- | rank from highest to lowest probability

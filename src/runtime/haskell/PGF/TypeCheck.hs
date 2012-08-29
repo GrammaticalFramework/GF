@@ -121,13 +121,13 @@ runTcM abstr f ms s = unTcM f abstr (\x ms s cp b -> let (es,xs) = cp b
 
 lookupCatHyps :: CId -> TcM s [Hypo]
 lookupCatHyps cat = TcM (\abstr k h ms -> case Map.lookup cat (cats abstr) of
-                                            Just (hyps,_) -> k hyps ms
-                                            Nothing       -> h (UnknownCat cat))
+                                            Just (hyps,_,_) -> k hyps ms
+                                            Nothing         -> h (UnknownCat cat))
 
 lookupFunType :: CId -> TcM s Type
 lookupFunType fun = TcM (\abstr k h ms -> case Map.lookup fun (funs abstr) of
-                                            Just (ty,_,_,_) -> k ty ms
-                                            Nothing         -> h (UnknownFun fun))
+                                            Just (ty,_,_,_,_) -> k ty ms
+                                            Nothing           -> h (UnknownFun fun))
 
 typeGenerators :: Scope -> CId -> TcM s [(Double,Expr,TType)]
 typeGenerators scope cat = fmap normalize (liftM2 (++) x y)
@@ -143,8 +143,8 @@ typeGenerators scope cat = fmap normalize (liftM2 (++) x y)
       | cat == cidString = return [(1.0,ELit (LStr "Foo"),TTyp [] (DTyp [] cat []))]
       | otherwise        = TcM (\abstr k h ms ->
                                     case Map.lookup cat (cats abstr) of
-                                      Just (_,fns) -> unTcM (mapM helper fns) abstr k h ms
-                                      Nothing      -> h (UnknownCat cat))
+                                      Just (_,fns,_) -> unTcM (mapM helper fns) abstr k h ms
+                                      Nothing        -> h (UnknownCat cat))
 
     helper (p,fn) = do
       ty <- lookupFunType fn

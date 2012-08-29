@@ -49,16 +49,16 @@ plAbstract name abs
                     (f, v) <- Map.assocs (aflags abs)] ++++
        plFacts name "cat" 2 "(?Type, ?[X:Type,...])"
                    [[plType cat args, plHypos hypos'] |
-                    (cat, (hypos, _)) <- Map.assocs (cats abs),
+                    (cat, (hypos, _, _)) <- Map.assocs (cats abs),
                     let ((_, subst), hypos') = mapAccumL alphaConvertHypo emptyEnv hypos,
                         let args = reverse [EFun x | (_,x) <- subst]] ++++
        plFacts name "fun" 3 "(?Fun, ?Type, ?[X:Type,...])"
                    [[plp fun, plType cat args, plHypos hypos] |
-                    (fun, (typ, _, _, _)) <- Map.assocs (funs abs),
+                    (fun, (typ, _, _, _, _)) <- Map.assocs (funs abs),
                     let (_, DTyp hypos cat args) = alphaConvert emptyEnv typ] ++++
        plFacts name "def" 2 "(?Fun, ?Expr)" 
                    [[plp fun, plp expr] |
-                    (fun, (_, _, Just eqs, _)) <- Map.assocs (funs abs),
+                    (fun, (_, _, Just eqs, _, _)) <- Map.assocs (funs abs),
                     let (_, expr) = alphaConvert emptyEnv eqs]
       )
     where plType cat args = plTerm (plp cat) (map plp args)

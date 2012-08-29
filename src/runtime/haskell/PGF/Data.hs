@@ -9,6 +9,7 @@ import qualified Data.Set as Set
 import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
 import qualified GF.Data.TrieMap as TMap
+import qualified Data.ByteString as BS
 import Data.Array.IArray
 import Data.Array.Unboxed
 import Data.List
@@ -26,12 +27,13 @@ data PGF = PGF {
   }
 
 data Abstr = Abstr {
-  aflags  :: Map.Map CId Literal,                     -- ^ value of a flag
-  funs    :: Map.Map CId (Type,Int,Maybe [Equation],Double), -- ^ type, arrity and definition of function + probability
-  cats    :: Map.Map CId ([Hypo],[(Double, CId)])     -- ^ 1. context of a category
-                                                      -- ^ 2. functions of a category. The order in the list is important,
-                                                      -- this is the order in which the type singatures are given in the source.
-                                                      -- The termination of the exhaustive generation might depend on this.
+  aflags  :: Map.Map CId Literal,                            -- ^ value of a flag
+  funs    :: Map.Map CId (Type,Int,Maybe [Equation],Double,BCAddr), -- ^ type, arrity and definition of function + probability
+  cats    :: Map.Map CId ([Hypo],[(Double, CId)],BCAddr),    -- ^ 1. context of a category
+                                                             -- ^ 2. functions of a category. The order in the list is important,
+                                                             -- this is the order in which the type singatures are given in the source.
+                                                             -- The termination of the exhaustive generation might depend on this.
+  code    :: BS.ByteString
   }
 
 data Concr = Concr {
@@ -70,6 +72,7 @@ data CncFun = CncFun CId {-# UNPACK #-} !(UArray LIndex SeqId) deriving (Eq,Ord,
 type Sequence = Array DotPos Symbol
 type FunId = Int
 type SeqId = Int
+type BCAddr = Int
 
 data Alternative =
    Alt [Token] [String]
@@ -102,8 +105,8 @@ emptyPGF = PGF {
 haveSameFunsPGF :: PGF -> PGF -> Bool
 haveSameFunsPGF one two = 
   let 
-    fsone = [(f,t) | (f,(t,_,_,_)) <- Map.toList (funs (abstract one))]
-    fstwo = [(f,t) | (f,(t,_,_,_)) <- Map.toList (funs (abstract two))]
+    fsone = [(f,t) | (f,(t,_,_,_,_)) <- Map.toList (funs (abstract one))]
+    fstwo = [(f,t) | (f,(t,_,_,_,_)) <- Map.toList (funs (abstract two))]
   in fsone == fstwo
 
 -- | This is just a 'CId' with the language name.

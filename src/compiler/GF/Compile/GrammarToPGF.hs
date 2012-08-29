@@ -3,6 +3,7 @@ module GF.Compile.GrammarToPGF (mkCanon2pgf) where
 
 import GF.Compile.Export
 import GF.Compile.GeneratePMCFG
+import GF.Compile.GenerateBC
 
 import PGF.CId
 import PGF.Data(fidInt,fidFloat,fidString)
@@ -41,26 +42,27 @@ mkCanon2pgf opts gr am = do
   cncs     <- mapM (mkConcr gr) (allConcretes gr am)
   return $ updateProductionIndices (D.PGF Map.empty an abs (Map.fromList cncs))
   where
-    mkAbstr gr am = return (i2i am, D.Abstr flags funs cats)
+    mkAbstr gr am = return (i2i am, D.Abstr flags funs cats bcode)
       where
         aflags = 
           concatOptions (reverse [mflags mo | (_,mo) <- modules gr, isModAbs mo])
 
-        adefs =
-          [((cPredefAbs,c), AbsCat (Just (L NoLoc []))) | c <- [cFloat,cInt,cString]] ++ 
-          Look.allOrigInfos gr am
+        (adefs,bcode) =
+          generateByteCode $
+            [((cPredefAbs,c), AbsCat (Just (L NoLoc []))) | c <- [cFloat,cInt,cString]] ++ 
+            Look.allOrigInfos gr am
 
         flags = Map.fromList [(mkCId f,C.LStr x) | (f,x) <- optionsPGF aflags]
         
-        funs = Map.fromList [(i2i f, (mkType [] ty, mkArrity ma, mkDef pty, 0)) | 
-                                   ((m,f),AbsFun (Just (L _ ty)) ma pty _) <- adefs]
+        funs = Map.fromList [(i2i f, (mkType [] ty, mkArrity ma, mkDef pty, 0, addr)) | 
+                                   ((m,f),AbsFun (Just (L _ ty)) ma pty _,addr) <- adefs]
                                    
-        cats = Map.fromList [(i2i c, (snd (mkContext [] cont),catfuns c)) |
-                                   ((m,c),AbsCat (Just (L _ cont))) <- adefs]
+        cats = Map.fromList [(i2i c, (snd (mkContext [] cont),catfuns c, addr)) |
+                                   ((m,c),AbsCat (Just (L _ cont)),addr) <- adefs]
 
         catfuns cat =
               (map (\x -> (0,snd x)) . sortBy (compare `on` fst))
-                 [(loc,i2i f) | ((m,f),AbsFun (Just (L loc ty)) _ _ (Just True)) <- adefs, snd (GM.valCat ty) == cat]
+                 [(loc,i2i f) | ((m,f),AbsFun (Just (L loc ty)) _ _ (Just True),_) <- adefs, snd (GM.valCat ty) == cat]
 
     mkConcr gr cm = do
       let cflags  = concatOptions [mflags mo | (i,mo) <- modules gr, isModCnc mo, 
