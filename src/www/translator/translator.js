@@ -15,7 +15,7 @@ function Translator() {
     pgf_online({}).get_grammarlist(bind(t.extend_methods,t))
     update_language_menu(t,"source")
     update_language_menu(t,"target")
-    if(apertium) t.add_apertium()
+    if(window.apertium) t.add_apertium()
     //initialize_sorting(["TR"],["segment"])
     t.document=empty_document();
     t.current=t.local.get("current")
@@ -90,9 +90,10 @@ Translator.prototype.update_language_menus=function() {
 	mark_menu("source",ssupport)
 	mark_menu("target",tsupport)
     }
+    function yes(code) { return true; }
+    function no(code) { return false; }
     switch(o.method) {
     case "Manual":
-	function yes(code) { return true; }
 	mark_menus(yes,yes)
 	break;
     case "Apertium":
@@ -102,7 +103,8 @@ Translator.prototype.update_language_menus=function() {
 	function tsupport(code) {
 	  return apertium.isTranslatablePair(alangcode(o.from),alangcode(code))
 	}
-	mark_menus(ssupport,tsupport)
+	if(window.apertium) mark_menus(ssupport,tsupport)
+	else mark_menus(no,no)
 	break;
     default: // GF
 	function cont() {
@@ -167,7 +169,9 @@ Translator.prototype.update_translation=function(i) {
 
 	function upd0(source) { apertium.translate(source,afrom,ato,upd1) }
 
-	if(apertium.isTranslatablePair(afrom,ato)) {
+	if(!window.apertium)
+	    upd3(["[Apertium is not available]"])
+	else if(apertium.isTranslatablePair(afrom,ato)) {
 	    if(!eq_options(segment.options,o)) upd0(segment.source)
 	}
 	else
@@ -701,7 +705,7 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
 	var dl=wrap_class("dl","popupmenu",
 			  [dt(autoB),
 			   dt([manualB,text(" "),draw_translation(o)])])
-	if(apertium) add_apertium_to_menu(dl,change)
+	if(window.apertium) add_apertium_to_menu(dl,change)
 	t.extend_methods_menu(dl,change)
 	var form=wrap("form",dl)
 	var d = s.use_default
