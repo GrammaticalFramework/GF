@@ -38,7 +38,9 @@ instance Binary CId where
   get    = liftM CId get
 
 instance Binary Abstr where
-  put abs = put (aflags abs, funs abs, cats abs)
+  put abs = put (aflags abs, 
+                 fmap (\(w,x,y,z,_) -> (w,x,y,z)) (funs abs),
+                 fmap (\(x,y,_) -> (x,y)) (cats abs))
   get = do aflags <- get
            funs <- get
            cats <- get
