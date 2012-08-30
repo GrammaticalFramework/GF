@@ -17,7 +17,7 @@ type BCLabel = (Int, BCAddr)
 
 genFun (id,info@(AbsFun (Just (L _ ty)) ma pty _)) = do
   l1 <- newLabel
-  emitLabel l1
+{-  emitLabel l1
   emit Ins_fail
   l2 <- newLabel
   l3 <- newLabel
@@ -31,7 +31,7 @@ genFun (id,info@(AbsFun (Just (L _ ty)) ma pty _)) = do
   l5 <- newLabel
   emit (Ins_switch_on_term (addr l4,addr l5,addr l1,addr l4))
   emitLabel l4
-  emitLabel l5
+  emitLabel l5-}
   return (id,info,addr l1)
 genFun (id,info@(AbsCat (Just (L _ cont)))) = do
   l1 <- newLabel
