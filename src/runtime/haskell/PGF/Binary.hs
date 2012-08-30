@@ -43,7 +43,8 @@ instance Binary Abstr where
            funs <- get
            cats <- get
            return (Abstr{ aflags=aflags
-                        , funs=funs, cats=cats
+                        , funs=fmap (\(w,x,y,z) -> (w,x,y,z,0)) funs
+                        , cats=fmap (\(x,y) -> (x,y,0)) cats
                         , code=BS.empty                        
                         })
   
