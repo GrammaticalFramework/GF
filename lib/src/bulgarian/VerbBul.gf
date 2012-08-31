@@ -16,7 +16,11 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       insertSlashObj2 (\\_ => v.c3.s ++ np.s ! RObj v.c3.c) (slashV v v.c2) ;
 
     ComplVV vv vp =
-      insertObj (daComplex vp ! Perf) (predV vv) ;
+      insertObj (case vv.typ of {
+                   VVInf => daComplex Simul Pos vp ! Perf;
+                   VVGerund => gerund vp ! Imperf
+                 })
+                (predV vv) ;
 
     ComplVS v s  = insertObj (\\_ => "," ++ "че" ++ s.s) (predV v) ;
     ComplVQ v q  = insertObj (\\_ => q.s ! QDir) (predV v) ;
@@ -36,13 +40,13 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
     -- test: I saw a boy whom she begged to walk 
     SlashV2V vv vp =
-      insertSlashObj2 (daComplex vp ! Perf) (slashV vv vv.c2) ;
+      insertSlashObj2 (daComplex Simul Pos vp ! Perf) (slashV vv vv.c2) ;
 
     -- test: I saw a car whom she wanted to buy
     SlashVV vv slash = {
       s = vv.s ;
       ad = {isEmpty=True; s=[]};
-      compl1 = daComplex {s=slash.s; ad=slash.ad; compl=slash.compl1; vtype=slash.vtype} ! Perf ;
+      compl1 = daComplex Simul Pos {s=slash.s; ad=slash.ad; compl=slash.compl1; vtype=slash.vtype} ! Perf ;
       compl2 = slash.compl2 ;
       vtype  = vv.vtype ;
       c2 = slash.c2
@@ -53,7 +57,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       s = vv.s ;
       ad = {isEmpty=True; s=[]};
       compl1 = \\agr => vv.c2.s ++ np.s ! RObj vv.c2.c ++ 
-                        daComplex {s=slash.s; ad=slash.ad; compl=slash.compl1; vtype=slash.vtype} ! Perf ! np.a ;
+                        daComplex Simul Pos {s=slash.s; ad=slash.ad; compl=slash.compl1; vtype=slash.vtype} ! Perf ! np.a ;
       compl2 = slash.compl2 ;
       vtype = vv.vtype ;
       c2 = slash.c2

@@ -41,18 +41,23 @@ fun CompoundCN : Num -> N -> CN -> CN ;
 
     UseQuantPN : Quant -> PN -> NP;
 
-    SlashV2V : V2V -> Pol -> VP -> VPSlash ;
+    SlashV2V : V2V -> Ant -> Pol -> VP -> VPSlash ;
     SlashVPIV2V : V2V -> Pol -> VPI -> VPSlash ;
+
+    SlashSlashV2V : V2V -> Ant -> Pol -> VPSlash -> VPSlash ;
 
     PredVPosv,PredVPovs : NP -> VP -> Cl ;
     
     that_RP, no_RP : RP ;
     
     CompS : S -> Comp ;
-    CompVP : VP -> Comp ;
+    CompVP : Ant -> Pol -> VP -> Comp ;
 
 	PassVS : VS -> VP -> VP ;
 	PPartNP : NP -> VPSlash -> NP ;
 	
 	UncNeg : Pol ;
+
+--	GerundRS : Anter -> Pol -> VP -> RS ;
+
 }

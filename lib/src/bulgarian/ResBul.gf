@@ -72,6 +72,8 @@ resource ResBul = ParamX ** open Prelude, Predef in {
      | VPhrasal Case
      ;
 
+    VVType = VVInf | VVGerund ;
+
 -- The order of sentence is needed already in $VP$.
 
     Order = Main | Inv | Quest ;
@@ -469,14 +471,30 @@ resource ResBul = ParamX ** open Prelude, Predef in {
 
       in verb.ad.s ++ li0 ++ verbs.aux.s1 ++ verbs.main ++ verbs.aux.s2 ;
 
-  daComplex : VP -> Aspect => Agr => Str =
+  daComplex : Anteriority -> Polarity -> VP -> Aspect => Agr => Str =
+    \a,p,vp -> \\asp,agr =>
+      let clitic = case vp.vtype of {
+                     VNormal    => {s=[]; agr=agr} ;
+                     VMedial c  => {s=reflClitics ! c; agr=agr} ;
+                     VPhrasal c => {s=personalClitics ! c ! agr.gn ! agr.p; agr={gn=GSg Neut; p=P3}}
+                   } ;
+          pol = case p of {Pos => ""; Neg => "не"}
+      in vp.ad.s ++ "да" ++ pol ++ clitic.s ++
+         case a of {
+           Simul => vp.s ! asp ! VPres (numGenNum clitic.agr.gn) clitic.agr.p ;
+           Anter => auxBe ! VPres (numGenNum clitic.agr.gn) clitic.agr.p ++
+                    vp.s ! asp ! (VPerfect (aform clitic.agr.gn Indef (RObj Acc)))
+         } ++
+         vp.compl ! agr ;
+
+  gerund : VP -> Aspect => Agr => Str =
     \vp -> \\asp,agr =>
       let clitic = case vp.vtype of {
                      VNormal    => {s=[]; agr=agr} ;
                      VMedial c  => {s=reflClitics ! c; agr=agr} ;
                      VPhrasal c => {s=personalClitics ! c ! agr.gn ! agr.p; agr={gn=GSg Neut; p=P3}}
                    }
-      in vp.ad.s ++ "да" ++ clitic.s ++ vp.s ! asp ! VPres (numGenNum clitic.agr.gn) clitic.agr.p ++ vp.compl ! agr ;
+      in vp.ad.s ++ clitic.s ++ vp.s ! asp ! VGerund ++ vp.compl ! agr ;
 
 -- For $Numeral$.
 

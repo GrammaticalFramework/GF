@@ -76,7 +76,7 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
     BaseVPI x y = {s  = \\d,t,a=>x.s!a++linCoord!t++y.s!a} ;
     ConsVPI x xs = {s  = \\d,t,a=>x.s!a++(linCoordSep comma)!d!t++xs.s!d!t!a} ;
 
-    MkVPI vp = {s = daComplex vp ! Perf} ;
+    MkVPI vp = {s = daComplex Simul Pos vp ! Perf} ;
     ConjVPI conj vpi = {
       s = \\a => conj.s++(linCoordSep [])!conj.distr!conj.conj++vpi.s!conj.distr!conj.conj!a;
       } ;

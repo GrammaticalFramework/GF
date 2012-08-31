@@ -131,10 +131,13 @@ oper
   
   mkVS  : V -> VS ;
   mkVS  v = v ** {lock_VS = <>} ;
-  
+
   mkVV : V -> VV ;
-  mkVV  v = v ** {lock_VV = <>} ;
-  
+  mkVV  v = v ** {typ = VVInf; lock_VV = <>} ;
+
+  gerundVV : V -> VV ;
+  gerundVV  v = v ** {typ = VVGerund; lock_VV = <>} ;
+
   mkVA : V -> VA ;
   mkVA  v = v ** {lock_VA = <>} ;
   
