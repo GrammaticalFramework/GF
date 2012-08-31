@@ -78,7 +78,7 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, 
     V2, V2A = Verb ** {c2 : Preposition} ;
     V2V, V2S, V2Q = Verb ** {c2 : Preposition} ; --- AR
     V3 = Verb ** {c2, c3 : Preposition} ;
-    VV = Verb ;
+    VV = Verb ** {typ : VVType};
 
     A = {s : AForm => Str; adv : Str} ;
     A2 = {s : AForm => Str; adv : Str; c2 : Str} ;

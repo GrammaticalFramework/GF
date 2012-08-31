@@ -95,9 +95,9 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       isPre = False ---- depends on whether there are complements
       } ;
 
-    EmbedPresPart vp = {s = infVP VVPresPart vp (agrP3 Sg)} ; --- agr
+    EmbedPresPart vp = {s = infVP VVPresPart vp Simul CPos (agrP3 Sg)} ; --- agr
 
-    UttVPShort vp = {s = infVP VVAux vp (agrP3 Sg)} ;
+    UttVPShort vp = {s = infVP VVAux vp Simul CPos (agrP3 Sg)} ;
 
   do_VV = {
     s = table {

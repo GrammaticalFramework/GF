@@ -66,8 +66,10 @@ lin
       a = np.a
       } ;
 
-  SlashV2V vv p vp =
-      insertSlashObj2 (daComplex vp ! Perf) (slashV vv vv.c2) ;
+  SlashV2V vv ant p vp =
+      insertSlashObj2 (\\agr => ant.s ++ p.s ++
+                                daComplex ant.a p.p vp ! Perf ! agr)
+                      (slashV vv vv.c2) ;
 
   PredVPosv np vp = {
       s = \\t,a,p,o => 
@@ -86,9 +88,13 @@ lin
            }
     } ;
 
+  CompS s = {s = \\_ => "че" ++ s.s} ;
+  CompVP ant p vp = {s = \\agr => ant.s ++ p.s ++
+                                  daComplex ant.a p.p vp ! Perf ! agr} ;
+
   PassVS vs vp = 
       insertObj (\\a => vs.s ! Perf ! VPassive (aform a.gn Indef (RObj Acc))
-                        ++ daComplex vp ! Perf ! a)
+                        ++ daComplex Simul Pos vp ! Perf ! a)
                 (predV verbBe) ;
 
 }

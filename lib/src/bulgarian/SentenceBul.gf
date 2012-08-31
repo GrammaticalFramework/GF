@@ -49,7 +49,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
 
     EmbedS  s  = {s = "," ++ "че" ++ s.s} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = daComplex vp ! Perf ! {gn=GSg Masc; p=P1}} ;
+    EmbedVP vp = {s = daComplex Simul Pos vp ! Perf ! {gn=GSg Masc; p=P1}} ;
 
     UseCl t p cl = {
       s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! Main

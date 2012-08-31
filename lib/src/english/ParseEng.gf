@@ -66,14 +66,13 @@ lin
 
   UseQuantPN q pn = {s = \\c => q.s ! False ! Sg ++ pn.s ! npcase2case c ; a = agrgP3 Sg pn.g} ;
 
-  SlashV2V v p vp = insertObjc (\\a => p.s ++ case p.p of {CPos => ""; _ => "not"} ++ 
-                                       v.c3 ++ 
-                                       infVP v.typ vp a)
-                               (predVc v) ;
+  SlashV2V v ant p vp = insertObjc (\\a => v.c3 ++ ant.s ++ p.s ++
+                                           infVP v.typ vp ant.a p.p a)
+                                   (predVc v) ;
 
-  SlashVPIV2V v p vpi = insertObjc (\\a => p.s ++ case p.p of {CPos => ""; _ => "not"} ++ 
-                                        v.c3 ++ 
-                                        vpi.s ! VVAux ! a)
+  SlashVPIV2V v p vpi = insertObjc (\\a => p.s ++ 
+                                           v.c3 ++ 
+                                           vpi.s ! VVAux ! a)
                                    (predVc v) ;
 
   PredVPosv np vp = {
@@ -83,7 +82,7 @@ lin
           compl = vp.s2 ! np.a
         in
         case o of {
-          ODir => compl ++ "," ++ np.s ! npNom ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ;
+          ODir => compl ++ "," ++ np.s ! npNom ++ verb.aux ++ vp.ad ++ verb.fin ++ verb.adv ++ verb.inf ;
           OQuest => verb.aux ++ compl ++ "," ++ np.s ! npNom ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf 
           }
     } ;
@@ -110,11 +109,12 @@ lin
     } ;
 
   CompS s = {s = \\_ => "that" ++ s.s} ;
-  CompVP vp = {s = \\a => infVP VVInf vp a} ;
+  CompVP ant p vp = {s = \\a => ant.s ++ p.s ++ 
+                                infVP VVInf vp ant.a p.p a} ;
 
   PassVS vs vp = 
     let
-      vps = insertObj (\\a => infVP VVInf vp a) (predV vs) ;
+      vps = insertObj (\\a => infVP VVInf vp Simul CPos a) (predV vs) ;
       be  = predAux auxBe ;
       ppt = vps.ptp
     in {
@@ -133,6 +133,20 @@ lin
         in \\c => np.s ! c ++ vps.ad ++ vps.ptp ++ vps.s2 ! np.a ;
     a = np.a
   } ;
+
+{-  GerundRS rp vp = {
+    s = \\t,ant,b,ag => 
+        let 
+          agr = case rp.a of {
+            RNoAg => ag ;
+            RAg a => a
+            } ;
+          cl = mkClause (rp.s ! RC (fromAgr agr).g npNom) agr vp
+        in
+        cl.s ! t ! ant ! b ! ODir ;
+      c = npNom
+  } ;
+-}
 
 lin
   PPos = {s = [] ; p = CPos} ;

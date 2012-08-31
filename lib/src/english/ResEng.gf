@@ -376,13 +376,20 @@ resource ResEng = ParamX ** open Prelude in {
   presVerb : {s : VForm => Str} -> Agr -> Str = \verb -> 
     agrVerb (verb.s ! VPres) (verb.s ! VInf) ;
 
-  infVP : VVType -> VP -> Agr -> Str = \typ,vp,a ->
-    vp.ad ++ 
-    case typ of {
-      VVAux => vp.inf ; 
-      VVInf => "to" ++ vp.inf ;
-      _ => vp.prp
-      } ++ 
+  infVP : VVType -> VP -> Anteriority -> CPolarity -> Agr -> Str = \typ,vp,ant,cb,a ->
+    case cb of {CPos => ""; _ => "not"} ++
+    case ant of {
+      Simul => case typ of {
+                 VVAux => vp.ad ++ vp.inf ; 
+                 VVInf => "to" ++ vp.ad ++ vp.inf ;
+                 _ => vp.ad ++ vp.prp
+               };
+      Anter => case typ of {
+                 VVAux => "have" ++ vp.ad ++ vp.ptp ;
+                 VVInf => "to" ++ "have" ++ vp.ad ++ vp.ptp ;
+                 _     => "having" ++ vp.ad ++ vp.ptp
+               }
+    } ++
     vp.s2 ! a ;
 
   agrVerb : Str -> Str -> Agr -> Str = \has,have,agr -> 
