@@ -134,7 +134,16 @@ lin
     a = np.a
   } ;
 
-{-  GerundRS rp vp = {
+{-  
+  PastPartRS ant pol vp = {
+    s = let
+          be = predAux auxBe ;
+          ppt = vps.ptp
+        in \\c => np.s ! c ++ vps.ad ++ vps.ptp ++ vps.s2 ! np.a ;
+    a = np.a
+    } ;
+  
+  PresPartRS rp vp = {
     s = \\t,ant,b,ag => 
         let 
           agr = case rp.a of {
@@ -144,9 +153,16 @@ lin
           cl = mkClause (rp.s ! RC (fromAgr agr).g npNom) agr vp
         in
         cl.s ! t ! ant ! b ! ODir ;
-      c = npNom
+    c = npNom
   } ;
 -}
+
+  ApposNP np1 np2 = {
+    s = \\c => np1.s ! c ++ "," ++ np2.s ! npNom ;
+    a = np1.a
+  } ;
+  
+  AdAdV = cc2 ;
 
 lin
   PPos = {s = [] ; p = CPos} ;

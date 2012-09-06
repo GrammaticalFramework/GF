@@ -58,6 +58,11 @@ fun CompoundCN : Num -> N -> CN -> CN ;
 	
 	UncNeg : Pol ;
 
---	GerundRS : Anter -> Pol -> VP -> RS ;
+--	PastPartRS : Anter -> Pol -> VP -> RS ;
+--  PresPartRS : Anter -> Pol -> VP -> RS ;
+
+	ApposNP : NP -> NP -> NP ;
+	
+	AdAdV : AdA -> AdV -> AdV ;
 
 }

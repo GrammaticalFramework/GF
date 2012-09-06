@@ -23,6 +23,7 @@ open ResBul, Prelude in {
 
 flags
   literal=Symb ;
+  coding = utf8 ;
 
 lin
   GerundN v = {
@@ -51,7 +52,10 @@ lin
   that_RP = {
     s = whichRP
   } ;
-  
+  no_RP = {
+    s = whichRP
+  } ;
+
   UseQuantPN q pn = { s = table {
                             RObj Dat => "на" ++ pn.s; 
                             _        => pn.s
