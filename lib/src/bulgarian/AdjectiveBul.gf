@@ -63,4 +63,11 @@ concrete AdjectiveBul of Adjective = CatBul ** open ResBul, Prelude in {
       adv = a.adv ; 
       isPre = True
       } ;
+      
+    AdvAP ap adv = {
+      s = \\aform => ap.s ! aform ++ adv.s ;
+      adv = ap.adv ++ adv.s;
+      isPre = False
+    } ;
+
 }
