@@ -314,15 +314,19 @@ getOverload gr g mt ot = case appForm ot of
    matchOverload f typs ttys = do
      let (tts,tys) = unzip ttys
      let vfs = lookupOverloadInstance tys typs
-     let matches = [vf | vf@((v,_),_) <- vfs, matchVal mt v]
+     let matches = [vf | vf@((_,v,_),_) <- vfs, matchVal mt v]
+     let showTypes ty = hsep (map ppType ty)
 
      case ([vf | (vf,True) <- matches],[vf | (vf,False) <- matches]) of
-       ([(val,fun)],_) -> return (mkApp fun tts, val)
-       ([],[(val,fun)]) -> do
-         checkWarn (text "ignoring lock fields in resolving" <+> ppTerm Unqualified 0 ot) 
+       ([(_,val,fun)],_) -> return (mkApp fun tts, val)
+       ([],[(pre,val,fun)]) -> do
+         checkWarn $  text "ignoring lock fields in resolving" <+> ppTerm Unqualified 0 ot $$
+                      text "for" $$
+                      nest 2 (showTypes tys) $$
+                      text "using" $$
+                      nest 2 (showTypes pre)
          return (mkApp fun tts, val)
        ([],[]) -> do
-         let showTypes ty = hsep (map ppType ty)
          checkError $ text "no overload instance of" <+> ppTerm Unqualified 0 f $$
                       text "for" $$
                       nest 2 (showTypes tys) $$
@@ -346,7 +350,7 @@ getOverload gr g mt ot = case appForm ot of
          _ -> checkError $ text "ambiguous overloading of" <+> ppTerm Unqualified 0 f <+>
                            text "for" <+> hsep (map ppType tys) $$ 
                            text "with alternatives" $$
-                           nest 2 (vcat [ppType ty | (ty,_) <- if null vfs1 then vfs2 else vfs2])
+                           nest 2 (vcat [ppType ty | (_,ty,_) <- if null vfs1 then vfs2 else vfs2])
 
    matchVal mt v = elem mt [Nothing,Just v,Just (unlocked v)]
 
@@ -356,7 +360,7 @@ getOverload gr g mt ot = case appForm ot of
    ---- TODO: accept subtypes
    ---- TODO: use a trie
    lookupOverloadInstance tys typs = 
-     [((mkFunType rest val, t),isExact) | 
+     [((pre,mkFunType rest val, t),isExact) | 
        let lt = length tys,
        (ty,(val,t)) <- typs, length ty >= lt,
        let (pre,rest) = splitAt lt ty, 
@@ -364,7 +368,7 @@ getOverload gr g mt ot = case appForm ot of
        isExact || map unlocked pre == map unlocked tys
      ]
 
-   noProds vfs = [(v,f) | (v,f) <- vfs, noProd v]
+   noProds vfs = [(v,f) | (_,v,f) <- vfs, noProd v]
 
    noProd ty = case ty of
      Prod _ _ _ _ -> False
