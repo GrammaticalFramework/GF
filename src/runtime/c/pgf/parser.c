@@ -1042,7 +1042,7 @@ pgf_parsing_meta_predict(GuMapItor* fn, const void* key, void* value, GuExn* err
 {
 	(void) (err);
 	
-	PgfCId abscat = *((PgfCId*) key);
+	PgfCat* abscat = (PgfCat*) key;
     float meta_prob = *((float*) value);
     PgfMetaPredictFn* clo = (PgfMetaPredictFn*) fn;
     PgfParseState* before = clo->before;
@@ -1050,7 +1050,7 @@ pgf_parsing_meta_predict(GuMapItor* fn, const void* key, void* value, GuExn* err
     PgfItem* meta_item  = clo->meta_item;
 
     PgfCncCat* cnccat =
-		gu_map_get(before->ps->concr->cnccats, &abscat, PgfCncCat*);
+		gu_map_get(before->ps->concr->cnccats, &abscat->name, PgfCncCat*);
 	if (cnccat == NULL)
 		return;
 

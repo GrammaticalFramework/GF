@@ -648,10 +648,13 @@ typedef struct {
 static void
 pgf_compute_meta_probs(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
-	(void) (key && err);
+	(void) (err);
 	
+	PgfCId name = *((PgfCId*) key);
     PgfCat* cat = *((PgfCat**) value);
-    
+
+    cat->name = name;
+
     double mass = 0;
     for (size_t i = 0; i < cat->n_functions; i++) {
 		mass += cat->functions[i].prob;

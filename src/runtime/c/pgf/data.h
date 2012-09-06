@@ -148,7 +148,7 @@ typedef GuMap PgfMetaChildMap;
 extern GU_DECLARE_TYPE(PgfMetaChildMap, GuMap);
 
 struct PgfCat {
-	// TODO: Add cid here
+	PgfCId name;
 	PgfHypos context;
 
 	float meta_prob;
