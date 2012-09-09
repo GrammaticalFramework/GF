@@ -25,7 +25,7 @@ if(!Array.isArray) {
 // Inspired by the function jsonp from 
 //          http://www.west-wind.com/Weblog/posts/107136.aspx
 // See also http://niryariv.wordpress.com/2009/05/05/jsonp-quickly/
-//          http://en.wikipedia.org/wiki/JSON#JSONP
+//          http://en.wikipedia.org/wiki/JSONP
 function jsonp(url,callback)
 {                
     if (url.indexOf("?") > -1)
