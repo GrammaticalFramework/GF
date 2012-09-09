@@ -10,6 +10,10 @@ function Translator() {
 	var warning=span_class("error",text("It appears that localStorage is unsupported or disabled in this browser. Documents will not be preserved after you leave or reload this page!"))
 	insertAfter(warning,t.view)
     }
+    if(!supports_local_files()) {
+	var item=element("import_globalsight")
+	if(item) item.style.display="none"
+    }
     t.servers={}; //The API is stateful, use one pgf_online object per grammar
     t.grammar_info={};
     pgf_online({}).get_grammarlist(bind(t.extend_methods,t))
@@ -462,7 +466,7 @@ Translator.prototype.import=function(el) {
 	    function add_segments(text) {
 	    	var ls=text.split("\n")
 		var segs= punct.firstChild.checked 
-	            ? split_punct(text,punctchars.value)
+		    ? split_punct(text,punctchars.value)
 		    : paras.firstChild.checked 
 		    ? join_paragraphs(ls)
 		    : ls
@@ -500,9 +504,8 @@ Translator.prototype.import=function(el) {
 		    wrap("dl",[dt([punct,punctchars]),dt(lines),dt(paras)]),
 		    submit(), button("Cancel",restore)])
 
-	if(window.File && window.FileList && window.FileReader) {
+	if(supports_local_files()) {
 	    // Allow import from local files, if the browers supports it.
-	    // See http://www.html5rocks.com/en/tutorials/file/dndfiles/
 	    var files=node("input",{name:"files","type":"file"})
 	    var extra=wrap("label",[text("Choose a file: "),
 				   files,
@@ -514,6 +517,52 @@ Translator.prototype.import=function(el) {
 	inp.focus();
     }
     if(t.current!="/") setTimeout(imp,100)
+}
+
+Translator.prototype.import_globalsight=function(el) {
+    hide_menu(el);
+    var t=this
+    function imp() {
+	function restore() {
+	    t.redraw()
+	}
+	function done() {
+	    function import_text(text) {
+		var ls=text.split("\n")
+		if(ls.length>0 && ls[0]=="# GlobalSight Download File") {
+		    t.current=null;
+		    t.local.put("current",null)
+		    t.document=import_globalsight_download_file(ls)
+		    restore();
+		}
+		else alert("Not a GlobalSight Download File") // !! improve
+	    }
+	    function import_file(ev) { import_text(ev.target.result) }
+	    if(files.files && files.files.length>0) {
+		var file=files.files[0]
+		var r=new FileReader()
+		r.onload=import_file
+		r.readAsText(file)
+	    }
+	    return false
+	}
+
+	clear(t.view)
+	t.view.appendChild(wrap("h2",text("Import")))
+	if(supports_local_files()) {
+	    // Allow import from local files, if the browers supports it.
+	    var files=node("input",{name:"files","type":"file"})
+	    var inp=wrap("p",wrap("label",[text("Choose a file: "),files]))
+	    var e=node("form",{class:"import"},
+		       [wrap("h3",text("Import a GlobalSight Download File")),
+			inp, submit(), button("Cancel",restore)])
+	    t.view.appendChild(e)
+	    e.onsubmit=done
+	}
+	else
+	    t.view.appendChild(text("Support for readling local files is missing in this browser."))
+    }
+    setTimeout(imp,100) // leave time to hide the menu first
 }
 
 Translator.prototype.remove=function(el) {
@@ -776,9 +825,11 @@ var languages = // [ISO-639-2 code "/"] language name ":" ISO 639-1 code
 
 var langname={};
 var langcode2={}
+var langcode3={}
 for(var i in languages) {
     langname[languages[i].code]=languages[i].name
     langcode2[languages[i].code]=languages[i].code2
+    langcode3[languages[i].code2]=languages[i].code
 }
 function concname(code) { return langname[code] || code; }
 function alangcode(code) { return langcode2[code] || code; }
@@ -862,6 +913,49 @@ function split_punct(text,punct) {
     if(segs.length>0 && segs[segs.length-1]=="") segs.pop();
     return segs
 }
+
+function supports_local_files() {
+    // See http://www.html5rocks.com/en/tutorials/file/dndfiles/
+    return window.File && window.FileList && window.FileReader
+}
+
+/* --- GlobalSight support -------------------------------------------------- */
+
+function import_globalsight_download_file(ls) {
+    var doc=empty_document()
+    var i=0;
+
+    // Scan header and pick up source & target locale
+    for(;i<ls.length && ls[i][0]=="#";i++) {
+	var hdr=ls[i].split(":");
+	if(hdr.length==2) {
+	    function setlang(opt) {
+		var code2=hdr[1].trim().split("_")[0] // pick en from en_UK
+		var code3=langcode3[code2]
+		if(code3) doc.options[opt]=code3;
+		// Should notify the user about unsupported language codes!!
+	    }
+	    switch(hdr[0]) {
+	    case "# Source Locale": setlang("from"); break;
+	    case "# Target Locale": setlang("to");break;
+	    }
+	}
+    }
+    // skip blank lines
+    for(;i<ls.length && ls[i].length==0;i++);
+
+    while(i<ls.length) {
+	// skip segment header
+	for(;i<ls.length && ls[i][0]=="#";i++);
+	var seg=""
+	// extract segment text
+	for(;i<ls.length && ls[i][0]!="#";i++)
+	    if(ls[i]!="") seg = seg=="" ? ls[i] : seg+" "+ls[i];
+	if(seg!="") doc.segments.push(new_segment(seg.trim()))
+    }
+    return doc;
+}
+
 
 /* --- Cloud Support -------------------------------------------------------- */
 
