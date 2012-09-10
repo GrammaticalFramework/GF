@@ -54,6 +54,7 @@ Translator.prototype.redraw=function() {
 	update_checkbox("cloud",o.cloud  || false)
 	t.update_language_menus()
 	t.update_translations()
+	t.update_edit_menu()
     }
 }
 
@@ -76,6 +77,19 @@ Translator.prototype.switch_grammar=function(grammar,cont) {
 	    pgf.switch_grammar(grammar,cont1)
 	}
     }
+}
+
+Translator.prototype.update_edit_menu=function() {
+    var t=this
+    function set_class(id,name) {
+	var e=element(id)
+	if(e) e.className=name
+    }
+
+    var able= t.document.globalsight ? "disabled" : ""
+    set_class("edit_import",able)
+    set_class("edit_add_segment",able)
+    set_class("edit_remove_segment",able)
 }
 
 Translator.prototype.update_language_menus=function() {
@@ -372,11 +386,14 @@ Translator.prototype.save=function(el) {
 		function done() {
 		    //t.local.remove(path)
 		    t.local.put("current_in_cloud",true)
+		    t.local.put("current",t.current)
 		}
 		save_in_cloud(t.current+cloudext,t.document,done)
 	    }
-	    else
+	    else {
 		t.local.put(path,t.document)
+		t.local.put("current",t.current)
+	    }
 	}
 	else t.saveAs()
     }
@@ -415,8 +432,9 @@ Translator.prototype.add_segment1=function(el) {
 }
 */
 Translator.prototype.add_segment=function(el) {
-    hide_menu(el);
     var t=this
+    if(t.document.globalsight) return
+    hide_menu(el);
     function imp() {
 	var n=t.document.segments.length
 	t.insert_segment(n)
@@ -456,8 +474,9 @@ Translator.prototype.insert_segment=function(i) {
 }
 
 Translator.prototype.import=function(el) {
-    hide_menu(el);
     var t=this
+    if(t.document.globalsight) return // disabled
+    hide_menu(el);
     function imp() {
 	function restore() {
 	    t.redraw()
@@ -527,21 +546,22 @@ Translator.prototype.import_globalsight=function(el) {
 	    t.redraw()
 	}
 	function done() {
-	    function import_text(text) {
+	    function import_text(name,text) {
 		var ls=text.split("\n")
 		if(ls.length>0 && ls[0]=="# GlobalSight Download File") {
 		    t.current=null;
 		    t.local.put("current",null)
 		    t.document=import_globalsight_download_file(ls)
+		    t.current=t.document.name=name
 		    restore();
 		}
 		else alert("Not a GlobalSight Download File") // !! improve
 	    }
-	    function import_file(ev) { import_text(ev.target.result) }
+	    function import_file(name,ev) { import_text(name,ev.target.result) }
 	    if(files.files && files.files.length>0) {
 		var file=files.files[0]
 		var r=new FileReader()
-		r.onload=import_file
+		r.onload=function(ev) { import_file(file.name,ev); }
 		r.readAsText(file)
 	    }
 	    return false
@@ -566,8 +586,9 @@ Translator.prototype.import_globalsight=function(el) {
 }
 
 Translator.prototype.remove=function(el) {
-    hide_menu(el);
     var t=this
+    if(t.document.globalsight) return
+    hide_menu(el);
     function rm() {
 	if(t.document && t.document.segments.length>0) {
 	    t.document.segments.pop();
@@ -661,7 +682,8 @@ function hide_menu(el) {
 /* --- Documents ------------------------------------------------------------ */
 
 /*
-type Document = { name:String, options:DocOptions, segments:[Segment] }
+type Document = { name:String, options:DocOptions, segments:[Segment],
+                  globalsight : GlobalSight|null }
 type Segment = { source:String, target:String, options:Options }
 type DocOptions = Options & { view:View, cloud:Bool }
 type Options = {from: Lang, to: Lang, method:Method}
@@ -669,6 +691,8 @@ type Lang = String // Eng, Swe, Ita, etc
 type Method = "Manual" | "Apertium" | GFGrammarName
 type View = "segmentbysegment" | "paralleltexts"
 type GFGrammarName = String // e.g. "Foods.pgf"
+
+type GlobalSight = { header: [String], segments:[[String]] }
 */
 
 function eq_options(o1,o2) {
@@ -679,8 +703,11 @@ Translator.prototype.draw_document=function() {
     var t=this
     var doc=t.document
     var o=doc.options;
+    function draw_globalsight() {
+	return text(doc.globalsight ? " (from GlobalSight)" : "")
+    }
     var hdr=wrap("h2",[text(doc.name),text(" "),
-		       wrap("small",draw_translation(o))])
+		       wrap("small",[draw_translation(o),draw_globalsight()])])
     if(doc.options.cloud) insertFirst(hdr,img("../P/cloud.png"))
     switch(o.view || "segmentbysegment") {
     case "paralleltexts":
@@ -765,15 +792,18 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
     function draw_options() {
 	return wrap("div",[span_class("arrow",text(" ⇒ ")),draw_options2()])
     }
-
-    var insertB=dt(text("Insert a new segment"))
-    insertB.onclick=function() { t.insert_segment(i) }
-    var removeB=dt(text("Remove this segment"))
-    removeB.onclick=function() { t.remove_segment(i) }
-    var actions=wrap_class("td","actions",
-			   wrap("div",[span_class("actions",text("◊")),
-				       wrap_class("dl","popupmenu",
-						  [insertB,removeB])]))
+    if(t.document.globalsight)
+	var actions=empty_class("td","actions")
+    else {
+	var insertB=dt(text("Insert a new segment"))
+	insertB.onclick=function() { t.insert_segment(i) }
+	var removeB=dt(text("Remove this segment"))
+	removeB.onclick=function() { t.remove_segment(i) }
+	var actions=wrap_class("td","actions",
+			       wrap("div",[span_class("actions",text("◊")),
+					   wrap_class("dl","popupmenu",
+						      [insertB,removeB])]))
+    }
     var source=wrap_class("td","source",text(s.source))
     source.onclick=function() { t.edit_source(source,i); }
     var options=wrap_class("td","options",draw_options())
@@ -923,10 +953,12 @@ function supports_local_files() {
 
 function import_globalsight_download_file(ls) {
     var doc=empty_document()
+    doc.globalsight={header:[],segments:[]}
     var i=0;
 
     // Scan header and pick up source & target locale
     for(;i<ls.length && ls[i][0]=="#";i++) {
+	doc.globalsight.header.push(ls[i])
 	var hdr=ls[i].split(":");
 	if(hdr.length==2) {
 	    function setlang(opt) {
@@ -942,16 +974,19 @@ function import_globalsight_download_file(ls) {
 	}
     }
     // skip blank lines
-    for(;i<ls.length && ls[i].length==0;i++);
+    for(;i<ls.length && ls[i].length==0;i++)
+	doc.globalsight.header.push(ls[i])
 
     while(i<ls.length) {
+	var seghdr=[]
 	// skip segment header
-	for(;i<ls.length && ls[i][0]=="#";i++);
+	for(;i<ls.length && ls[i][0]=="#";i++) seghdr.push(ls[i])
 	var seg=""
 	// extract segment text
 	for(;i<ls.length && ls[i][0]!="#";i++)
 	    if(ls[i]!="") seg = seg=="" ? ls[i] : seg+" "+ls[i];
 	if(seg!="") doc.segments.push(new_segment(seg.trim()))
+	doc.globalsight.segments.push(seghdr)
     }
     return doc;
 }

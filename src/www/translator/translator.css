@@ -10,7 +10,7 @@ div.pagehead {
     padding: 1px 5px;
     border-radius: 5px;
 }
-table.menubar td { padding: 5px; }
+table.menubar td { padding: 5px; cursor: default; }
 table.menubar dl, td.options > div > dl, dl.popupmenu {
     z-index: 2;
     display: none; position: absolute;
@@ -25,6 +25,8 @@ table.submenu dt { padding: 0; }
 table.menubar td:hover, table.menubar dt:hover, dl.popupmenu > dt:hover {
     background-color: #36f; color: white;
 }
+table.menubar dt.disabled { color: #999; }
+table.menubar dt.disabled:hover { background-color: white; }
 table table dl { left: 6em; }
 table.menubar dt { white-space: nowrap; }
 dt.unsupported { color: #999; }
