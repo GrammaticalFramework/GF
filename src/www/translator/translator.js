@@ -805,7 +805,8 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
 						      [insertB,removeB])]))
     }
     var source=wrap_class("td","source",text(s.source))
-    source.onclick=function() { t.edit_source(source,i); }
+    if(!t.document.globalsight)
+	source.onclick=function() { t.edit_source(source,i); }
     var options=wrap_class("td","options",draw_options())
 
     return node("tr",{"class":"segment",id:i},[actions,source,options,target])
