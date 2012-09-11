@@ -538,6 +538,30 @@ Translator.prototype.import=function(el) {
     if(t.current!="/") setTimeout(imp,100)
 }
 
+Translator.prototype.export_globalsight=function() {
+    t=this
+
+    /*
+      Taken from this discussion on saving to local files:
+      http://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
+    */
+    open("data:application/octet-stream,"
+	 +encodeURIComponent(export_globalsight_download_file(t.document)),
+	 t.document.name
+	 /*,'toolbar=no,location=no,status=no'*/);
+
+/*
+  Also consider: FileSaver saveAs()
+
+  Not directly support in browsers:
+  http://www.w3.org/TR/file-writer-api/#the-filesaver-interface
+
+  Alternative implementation: FileSaver.js:
+  https://github.com/eligrey/FileSaver.js
+  http://eligrey.com/blog/post/saving-generated-files-on-the-client-side
+*/
+}
+
 Translator.prototype.import_globalsight=function(el) {
     hide_menu(el);
     var t=this
@@ -704,7 +728,11 @@ Translator.prototype.draw_document=function() {
     var doc=t.document
     var o=doc.options;
     function draw_globalsight() {
-	return text(doc.globalsight ? " (from GlobalSight)" : "")
+	function gs_export() { t.export_globalsight(); }
+	return doc.globalsight
+	    ? wrap("span",[text(" (from GlobalSight) "),
+			   button("Export",gs_export)])
+	    : text("")
     }
     var hdr=wrap("h2",[text(doc.name),text(" "),
 		       wrap("small",[draw_translation(o),draw_globalsight()])])
@@ -990,6 +1018,20 @@ function import_globalsight_download_file(ls) {
 	doc.globalsight.segments.push(seghdr)
     }
     return doc;
+}
+
+function export_globalsight_download_file(doc) {
+    var ls=[].concat(doc.globalsight.header)
+
+    var gs=doc.globalsight.segments
+    var ss=doc.segments
+    for(var i=0;i<gs.length && i<ss.length;i++)
+	ls=ls.concat(gs[i],ss[i].target)
+
+    ls.push("")
+    ls.push("# END GlobalSight Download File")
+    ls.push("")
+    return ls.join("\n")
 }
 
 
