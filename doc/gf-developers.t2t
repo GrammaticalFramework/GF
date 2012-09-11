@@ -173,14 +173,14 @@ patch directly from darcs. If so, replace ``-o mypatch.patch`` with
 
 === Read-write access ===
 
-If you have a user account on www.grammaticalframework.org, you can
+If you have a user account on ``www.grammaticalframework.org``, you can
 get read-write access over SSH to the GF repository.
 
 
 ==== Getting a fresh copy ====
 
 Get your copy with (all on one line),
-replacing ``bringert`` with your own username on code.haskell.org:
+replacing ``bringert`` with your own username on ``www.grammaticalframework.org``:
 
 ```
 $ darcs get --lazy --set-scripts-executable bringert@www.grammaticalframework.org:/usr/local/www/GF/ gf
@@ -328,7 +328,7 @@ On Windows this is ``C:\Program Files\Haskell\bin``.
 The compiled GF Resource Grammar Library will be installed
 under the same prefix, e.g. in
 ``$HOME/.cabal/share/gf-3.3.3/lib`` on Linux and
-in ``C:\Program Files\Haskell\gf-3.1\lib`` on Windows.
+in ``C:\Program Files\Haskell\gf-3.3.3\lib`` on Windows.
 
 If you want to install in some other place then use the ``--prefix``
 option during the configuration phase.
