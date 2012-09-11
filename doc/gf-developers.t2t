@@ -31,7 +31,7 @@ in Ubuntu or the corresponding tool in other popular Linux distributions.
 Or, from a Terminal window, the following command should be enough:
 
 - On Ubuntu: ``sudo apt-get install haskell-platform darcs libghc6-haskeline-dev``
-- On Fedora: ``sudo yum install haskell-platform darcs ghc-haskeline-devevel``
+- On Fedora: ``sudo yum install haskell-platform darcs ghc-haskeline-devel``
 
 
 **On Mac OS and Windows**, the tools can be downloaded from their respective
