@@ -50,7 +50,8 @@ are marked in the table
 | Tur   | +     | -    | ++    | +   | -    | -   | -    | -     | +    | *SC,KA
 | Urd   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,MH
 
-Lang = 3-letter ISO language code, used in library file names
+Lang = 3-letter ISO language code, used in library file names 
+(mostly ISO 639-2 B (bibliographic))
 
 Darcs = available in the darcs repository of --http://code.haskell.org/gf-- http://www.grammaticalframework.org/
 

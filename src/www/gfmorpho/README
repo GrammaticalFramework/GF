@@ -1,0 +1,23 @@
+A service for using smart paradigms on the web.
+
+Works with a cgi script running a Haskell program that calls GF to interprete a query string as a "cc" command on a specified Paradigms file. For instance, if the
+user submits the query
+
+  Eng N baby
+
+the program executes the command
+
+  cc -table -unqual ParadigmsEng.mkN "baby"
+
+The resulting output is converted into an HTML table.
+
+The file gfmorpho.html gives some more information. Open issues in addition to those mentioned there are:
+
+- GFMorpho.hs creates the temporary files _gfcommand.tmp and _gfmorpho.tmp which need to be world-writable; they should be created more properly and removed after use
+- gfmorpho.cgi defines the variable GF_LIB_PATH to reside in /Users/aarne, and must be edited for other environments
+- to work for all languages mentioned, one has to compile some incomplete GF grammars not standardly compiled:
+
+  GF/lib/src$ runghc Make alltenses lang langs=Amh,Ara,Lat,Mlt,Tur
+
+(c) Aarne Ranta 2012 under LGPL/BSD.
+

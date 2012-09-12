@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<title>Use GF Smart Paradigms</title>
+</head>
+
+<body>
+<h1>Word inflection with smart paradigms</h1>
+
+Give language, part of speech, and one or more word forms, to obtain
+the inflection table.
+<p>
+<form method=get action="gfmorpho.cgi">
+  <input name=args>
+  <INPUT TYPE=SUBMIT VALUE="Submit">
+</form>
+Examples:
+<pre>
+  Eng N baby
+  Fin V odottaa odotti
+  Fre V manger
+  Ger N Soldat Soldaten _masculine
+  Hin N बच्छा
+  Jpn V 答える _Gr2
+  Lat A vetus veteris
+</pre>
+Thus notice that strings are given without quotes, but features
+are prefixed with an underscore <tt>_</tt> (a temporary hack).
+
+
+<h2>Languages and part of speech tags</h2>
+
+The available languages are:
+<pre>
+  Afr Amh Cat Dan Dut Eng Fin Fre Ger Hin Ina Ita Jpn Lat
+  Lav Nep Nor Pes Pnb Ron Rus Snd Spa Swe Tha Tur Urd
+</pre>
+In addition, the library has the languages <tt>Ara Bul Pol</tt>, but they
+are not yet available in this way; you can however use the full form of
+paradigm applications prefixed by "!" as described below.
+
+<p>
+
+The parts of speech are: N (= noun), A (= adjective), V (= verb).
+
+<p>
+
+The way this works is that the program constructs the most probable
+inflection table from the forms given. For a vast majority of words in
+all languages, it is enough to give just one form. But sometimes more
+forms are needed to get the inflection table right. 
+
+
+<h2>Filtering with patterns</h2>
+
+You may not want to see the whole table. Then you can filter it with patterns, each of which works like
+"grep", using <tt>*</tt> to match any substring, either in the
+features or in the forms:
+<pre>
+  Eng N baby -Gen
+  Eng V die -dy*
+</pre>
+This is a front end to the Paradigms modules in the GF Resource Grammar. 
+See <a href=http://grammaticalframework.org/lib/doc/synopsis.html>RGL
+Synopsis</a> for available languages and paradigms. 
+
+
+<h2>Using custom paradigms</h2>
+
+(Another temporary hack, for GF experts:) If you want to use other paradigms than the smart
+<tt>mk</tt> paradigms, you can prefix your input with <tt>!</tt> and
+use the normal expression syntax of GF. For example:
+<pre>
+  ! Ara brkN "طير" "فَعل" "فُعُول" Masc NoHum
+  ! Bul mkN041 "птица"
+  ! Pol mkRegAdj "duży" "większy" "dużo" "więcej"
+</pre>
+This also allows you to use structured terms:
+<pre>
+  ! Ger prefixV "auf" (mkV "fassen")
+</pre>
+
+
+<h2>To do</h2>
+
+<ul>
+  <li> nicer input helped by menus
+  <li> error handling and reporting when some language doesn't follow
+  the format assumed here 
+  <li> better documentation of the paradigms
+</ul>
+
+<p>
+
+Powered by <a href=http://grammaticalframework.org>GF</a>. Aarne Ranta 2012.
+
+<hr>
+<address></address>
+<!-- hhmts start --> Last modified: Wed Sep 12 14:24:51 CEST 2012 <!-- hhmts end -->
+</body> </html>
