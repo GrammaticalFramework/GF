@@ -1,0 +1,57 @@
+concrete DatorSwe of Dator = CatSwe ** open ParadigmsSwe in {
+
+flags coding = utf8 ;
+
+lin supercomputer_N = mkN "superdator" "superdatorer" ; --Swe
+lin computer_program_N = mkN "dataprogram" "dataprogram" ; --Swe
+lin vacuum_tube_N = mkN "elektronrör" "elektronrör" ; --Swe
+lin computer_data_storage_N = mkN "datorminne" "datorminnen" ; --Swe
+lin surf_V = mkV "surfa" ; --Swe
+lin work_V = mkV "jobba" ; --Swe
+lin computer_monitor_N = mkN "bildskärm" ; --Swe
+lin overheated_A = mkA "överhettad" ; --Swe
+lin hack_V = mkV "hacka" ; --Swe
+lin hacker_N = mkN "hackare" "hackare" ; --Swe
+lin calcutor_N = mkN "miniräknare" "miniräknare" ; --Swe
+lin mathematics_N = mkN "matematik" "matematiker" ; --Swe
+lin mathematician_N = mkN "matematiker" "matematiker" ; --Swe
+lin add_V = mkV "addera" ; --Swe
+lin home_computer_N = mkN "hemdator" "hemdatorer" ; --Swe
+lin computer_network_N = mkN "datornätverk" "datornätverk" ; --Swe
+lin mouse_N = mkN "datormus" "datormusen" "datormöss" "datormössen" ; --Swe
+lin central_processing_unit_N = mkN "processor" "processorer" ; --Swe
+lin computer_N = mkN "dator" "datorer" ; --Swe
+lin program_V = mkV "programera" ; --Swe
+lin fast_A = mkA "snabb" ; --Swe
+lin hard_drive_N = mkN "härddisk" ; --Swe
+lin computer_keyboard_N = mkN "tangentbord" "tangentbord" ; --Swe
+lin laptop_N = mkN "bärbar dator" "bärbara datorer" ; --Swe
+--lin computer_N = mkN "datorsystem" ; --Swe
+lin software_N = mkN "programvara" ; --Swe
+lin slow_A = mkA "långsam" "långsamt" "långsamma" "långsammare" "långsammast" ; --Swe
+lin microcontroller_N = mkN "mikrokontroller" ; --Swe
+lin dust_N = mkN "damm" "damm" ; --Swe
+lin machine_N = mkN "maskin" "maskiner" ; --Swe
+lin electicity_N = mkN "elektricitet" "elektriciteter" ; --Swe
+lin information_N = mkN "information" "informationer" ; --Swe
+lin message_N = mkN "meddelande" "meddelanden" ; --Swe
+lin communication_N = mkN "kommunikation" "kommunikationer" ; --Swe
+lin communicating_V = mkV "kommunicera" ; --Swe
+lin tractor_N = mkN "traktor" "traktorer" ; --Swe
+lin mechanical_calculator_N = mkN "räknemaskin" "räknemaskiner" ; --Swe
+lin number_N = mkN "nummer" "nummer" ; --Swe
+lin home_computer_N = mkN "hemdator" "hemdatorer" ; --Swe
+lin power_supply_N = mkN "nätaggregat" "nätaggregat" ; --Swe
+lin system_N = mkN "system" "system" ; --Swe
+lin personal_digital_assistant_N = mkN "handdator" "haddatorer" ; --Swe
+lin webcam_N = mkN "webbkamera" ; --Swe
+lin homepage_N = mkN "hemsida" ; --Swe
+lin knowledge_N = mkN "kunskap" "kunskaper" ; --Swe
+lin printer_N = mkN "skrivare" "skrivare" ; --Swe
+lin relay_N = mkN "relä" "reläer" ; --Swe
+lin graphics_N = mkN "grafik" "grafiker" ; --Swe
+--lin computer_data_storage_N = mkN "arbetsminne" ; --Swe
+lin mainframe_computer_N = mkN "stordator" "stordatorer" ; --Swe
+lin electrical_wiring_N = mkN "elkabel" ; --Swe
+
+}
