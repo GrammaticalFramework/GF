@@ -1,0 +1,54 @@
+concrete DatorFin of Dator = CatFin ** open ParadigmsFin in {
+
+flags coding=utf8 ;
+
+lin supercomputer_N = mkN "supertietokone" ; --Fin
+lin computer_program_N = mkN "tietokoneohjelma" ; --Fin
+lin vacuum_tube_N = mkN "tyhjiö" (mkN "putki") ; --Fin
+lin computer_data_storage_N = mkN "muisti" ; --Fin
+lin surf_V = mkV "surfata" ; --Fin
+lin work_V = mkV "toimia" ; --Fin
+lin computer_monitor_N = mkN "näyttö" ; --Fin
+lin overheated_A = mkA "ylikuumentunut" ; --Fin
+lin hack_V = mkV "hakkeroida" ; --Fin
+lin hacker_N = mkN "hakkeri" ; --Fin
+lin calcutor_N = mkN "taskulaskin" ; --Fin
+lin mathematics_N = mkN "matematiikka" ; --Fin
+lin mathematician_N = mkN "matemaatikko" ; --Fin
+lin add_V = mkV "lisätä" ; --Fin
+lin home_computer_N = mkN "kotitietokone" ; --Fin
+lin computer_network_N = mkN "tietoverkko" ; --Fin
+lin mouse_N = mkN "hiiri" "hiiriä" ; --Fin
+lin central_processing_unit_N = mkN "suoritin" ; --Fin
+lin computer_N = mkN "tietokone" ; --Fin
+lin program_V = mkV "ohjelmoida" ; --Fin
+lin fast_A = mkA "nopea" ; --Fin
+lin hard_drive_N = mkN "kova" (mkN "levy") ; --Fin
+lin computer_keyboard_N = mkN "näppäimistö" ; --Fin
+lin laptop_N = mkN "sylimikro" ; --Fin
+lin software_N = mkN "ohjelmisto" ; --Fin
+lin slow_A = mkA "hidas" ; --Fin
+lin microcontroller_N = mkN "mikrokontrolleri" ; --Fin
+lin dust_N = mkN "pöly" ; --Fin
+lin machine_N = mkN "kone" ; --Fin
+lin electicity_N = mkN "sähkö" ; --Fin
+lin information_N = mkN "informaatio" ; --Fin
+lin message_N = mkN "viesti" ; --Fin
+lin communication_N = mkN "kommunikaatio" ; --Fin
+lin communicating_V = mkV "viestiä" ; --Fin
+lin tractor_N = mkN "traktori" ; --Fin
+lin mechanical_calculator_N = mkN "pöytälaskin" ; --Fin
+lin number_N = mkN "numero" ; --Fin
+lin power_supply_N = mkN "virta" (mkN "lähde") ; --Fin
+lin system_N = mkN "järjestelmä" ; --Fin
+lin personal_digital_assistant_N = mkN "kämmentietokone" ; --Fin
+lin webcam_N = mkN "verkkokamera" ; --Fin
+lin homepage_N = mkN "kotisivu" ; --Fin
+lin knowledge_N = mkN "tieto" ; --Fin
+lin printer_N = mkN "kirjoitin" ; --Fin
+lin relay_N = mkN "rele" ; --Fin
+lin graphics_N = mkN "grafiikka" ; --Fin
+lin mainframe_computer_N = mkN "keskustietokone" ; --Fin
+lin electrical_wiring_N = mkN "sähkö" (mkN "johto") ; --Fin
+
+}
