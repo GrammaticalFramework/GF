@@ -45,6 +45,7 @@ langsCoding = [
   (("japanese", "Jpn"),""),
   (("latin",    "Lat"),""),
   (("latvian",  "Lav"),""),
+  (("maltese",  "Mlt"),""),
   (("nepali",   "Nep"),""),
   (("norwegian","Nor"),"Scand"),
   (("persian",  "Pes"),""),
@@ -75,7 +76,7 @@ langsLang = langs `except` langsIncomplete
 langsPresent = langsLang `except` ["Jpn","Nep","Pes","Snd","Tha"]
 
 -- languages for which Lang can be compiled but which are incomplete
-langsIncomplete = ["Amh","Ara","Lat","Tur"]
+langsIncomplete = ["Amh","Ara","Lat","Mlt","Tur"]
 
 -- languages for which to compile Try
 langsAPI = langsLang `except` langsIncomplete
