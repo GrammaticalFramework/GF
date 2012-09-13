@@ -73,25 +73,25 @@ langsLangAll = langs
 langsLang = langs `except` langsIncomplete
 
 -- languagues that have notpresent marked
-langsPresent = langsLang `except` ["Jpn","Nep","Pes","Snd","Tha"]
+langsPresent = langsLang `except` ["Jpn","Nep","Pes","Snd","Tha","Thb"]
 
 -- languages for which Lang can be compiled but which are incomplete
-langsIncomplete = ["Amh","Ara","Lat","Mlt","Tur"]
+langsIncomplete = ["Amh","Ara","Lat","Mlt","Tur","Thb"]
 
 -- languages for which to compile Try
 langsAPI = langsLang `except` langsIncomplete
 
 -- languages for which to compile Symbolic
-langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Hin","Ina","Jpn","Nep","Pnb","Rus", "Snd"])
+langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Hin","Ina","Jpn","Nep","Pnb","Rus", "Snd", "Thb"])
 
 -- languages for which to compile minimal Syntax
 langsMinimal = langs `only` ["Ara","Eng","Bul","Rus"]
 
 -- languages for which to run treebank test
-langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Lav","Rus","Spa","Tha"]
+langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Lav","Rus","Spa","Tha","Thb"]
 
 -- languages for which to run demo test
-langsDemo = langsLang `except` ["Ara","Hin","Ina","Lat","Lav","Tha"]
+langsDemo = langsLang `except` ["Ara","Hin","Ina","Lat","Lav","Tha","Thb"]
 
 -- languages for which to compile parsing grammars
 langsParse = langs `only` ["Eng"]
@@ -125,7 +125,7 @@ make xx = do
   let optl ls = maybe ls id $ getOptLangs xx
 
   ifx "lang" $ do
-    let lans = optl $ if (pres == 1) then langsPresent else langsLang
+    let lans = optl $ if (pres == 1) then langsPresent else langsLangAll
     mapM_ (gfc pres [] . lang) lans
     mapM_ (gfc pres presSymbolPath . symbol) lans ---- (optl langsAPI)
     copyl lans "*.gfo" dir
