@@ -1,18 +1,21 @@
-DisambPhrasebookEng :
-PhrasebookBul : Noodles
-PhrasebookCat : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade MMust Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookDan : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookDut : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookEng :
-PhrasebookFin :
-PhrasebookFre : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookGer : ABusinessman ACook ADoctor AEngineer ALawyer AModVerbPhrase AModVerbPhrasePlace AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookIta : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade MCan MMust Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookNor : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookPol : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookRon : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookRus : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Belgian Belgium Chili Coke Durian Egg Flemish Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookSpa : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
-PhrasebookSwe :
-PhrasebookTha :
-PhrasebookUrd : ABusinessman ACook ADoctor AEngineer ALawyer AProfessor AStudent ATeacher Baht Beach Beef Chili Coke Durian Egg Garlic IceCream ItsCold ItsRaining ItsWarm ItsWindy Lemonade MMust Mango Noodles ObjPlur OrangeJuice Pineapple Pork Rice Salad Shrimps Smoke SunShine Thai ThesPlur ThesePlur ThosePlur
+DisambPhrasebookEng : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookBul : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookCat : MMust ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookDan : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookDut : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookEng : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookFin : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookFre : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookGer : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookHin : AScared ATired MMust ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookIta : MCan MMust ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookLav : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookNor : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookPes : AHasAge AHasChildren AHasRoom AHasTable AmountCurrency Belgian DrinkNumber ItCost MCan MKnow MMust NNumeral ObjNumber ObjPlur PNumber PPrice ThesPlur ThesePlur ThosePlur V2Wait VWait
+PhrasebookPol : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookRon : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookRus : Belgian Belgium Flemish ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookSpa : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookSwe : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookTha : ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookUrd : MMust ObjPlur ThesPlur ThesePlur ThosePlur
