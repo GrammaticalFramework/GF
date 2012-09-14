@@ -10,7 +10,7 @@
 Give language, part of speech, and one or more word forms, to obtain
 the inflection table.
 <p>
-<form method=get action="gfmorpho.cgi">
+<form method=get action="cgi-bin/gfmorpho.cgi">
   <input name=args>
   <INPUT TYPE=SUBMIT VALUE="Submit">
 </form>
@@ -25,7 +25,7 @@ Examples:
   Lat A vetus veteris
 </pre>
 Thus notice that strings are given without quotes, but features
-are prefixed with an underscore <tt>_</tt> (a temporary hack).
+are prefixed with an underscore <tt>_</tt>.
 
 
 <h2>Languages and part of speech tags</h2>
@@ -50,24 +50,36 @@ inflection table from the forms given. For a vast majority of words in
 all languages, it is enough to give just one form. But sometimes more
 forms are needed to get the inflection table right. 
 
+<p>
+
+This is a front end to the Paradigms modules in the GF Resource Grammar. 
+See <a href=http://grammaticalframework.org/lib/doc/synopsis.html>RGL
+Synopsis</a> for more information on available languages and paradigms. 
+
+
 
 <h2>Filtering with patterns</h2>
 
-You may not want to see the whole table. Then you can filter it with patterns, each of which works like
+You may not want to see the whole table. 
+Then you can filter it with patterns, each of which works like
 "grep", using <tt>*</tt> to match any substring, either in the
 features or in the forms:
 <pre>
   Eng N baby -Gen
   Eng V die -dy*
 </pre>
-This is a front end to the Paradigms modules in the GF Resource Grammar. 
-See <a href=http://grammaticalframework.org/lib/doc/synopsis.html>RGL
-Synopsis</a> for available languages and paradigms. 
+If several pattern are given, they are applied in conjunction.
+Patterns prefixed with a tilde <tt>~</tt> rather than a hyphen
+<tt>-</tt> are checked for <i>not</i> matching. Thus the search
+<pre>
+  Eng N baby -Gen ~Pl
+</pre>
+selects the lines that contain <tt>Gen</tt> but not <tt>Pl</tt>.
 
 
 <h2>Using custom paradigms</h2>
 
-(Another temporary hack, for GF experts:) If you want to use other paradigms than the smart
+(For GF experts.) If you want to use other paradigms than the smart
 <tt>mk</tt> paradigms, you can prefix your input with <tt>!</tt> and
 use the normal expression syntax of GF. For example:
 <pre>

@@ -72,13 +72,17 @@ cleanTablePlain = map clean where
   clean w = case w of
     "=>" -> "\t"
     "s"  -> ""
-    "."  -> ""   
+    "."  -> ""
     _ -> cleanw w
   cleanw = filter (flip notElem "()")
 
-grep oo wss = filter (\ws -> all (flip matchIn ws) (map tail oo)) wss
+grep oo wss = filter (\ws -> all (flip matchIn ws) oo) wss
 
-matchIn p ws = any (match p) ws where
+matchIn p ws = quant (matchPol pol patt) ws where
+  quant = if pol then any else all
+  (pol,patt) = (head p == '-', tail p)
+  matchPol True p w = match p w
+  matchPol False p w = not (match p w)
   match p w = case (p,w) of
     ('*':ps,_   ) -> any (match ps) [drop i w | i <- [0..length w]] ---
     (c:ps,  d:ws) -> c == d && match ps ws
@@ -87,7 +91,7 @@ matchIn p ws = any (match p) ws where
 tmpFile = "_gfmorpho.tmp"
 tmpCommand = "_gfcommand.tmp"
 
-isOption = (=='-') . head
+isOption = (flip elem "-~") . head
 
 tag t s = "<" ++ t ++ ">" ++ s ++ "</" ++ t ++ ">"
 
