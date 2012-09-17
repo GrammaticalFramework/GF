@@ -118,9 +118,22 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       VVF VPres => "may" ;
       VVF VPPart => ["been allowed to"] ;
       VVF VPresPart => ["being allowed to"] ;
-      VVF VPast => "might" ;
-      VVPastNeg => "mightn't" ;
+      VVF VPast => "might" ; --# notpresent
+      VVPastNeg => "mightn't" ; --# notpresent
       VVPresNeg => "may not"
+      } ;
+    typ = VVAux
+    } ;
+
+   shall_VV = lin VV {
+     s = table { 
+      VVF VInf => ["be obliged to"] ; ---
+      VVF VPres => "shall" ;
+      VVF VPPart => ["been obliged to"] ;
+      VVF VPresPart => ["being obliged to"] ;
+      VVF VPast => "should" ; --# notpresent
+      VVPastNeg => "shouldn't" ; --# notpresent
+      VVPresNeg => "shall not"  --- shan't
       } ;
     typ = VVAux
     } ;
