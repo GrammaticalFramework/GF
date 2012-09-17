@@ -148,7 +148,7 @@ lin
   both7and_DConj = mkConj "gan" ("," ++ "gan"); --FIXME - komati nav tā kā vajag
   either7or_DConj = mkConj ("vai" ++ "nu") ("," ++ "vai") Sg ; --FIXME - komati nav tā kā vajag
 
-  want_VV = mkVV (mkV "gribēt" third_conjugation) ;
+  want_VV = mkVV (mkV "vēlēties" third_conjugation) ;
 
   whoSg_IP = {
 	s = table {

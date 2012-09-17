@@ -17,7 +17,7 @@ lin
     in {
       s = \\mood,pol =>
         buildVerb vp.v mood pol agr ++  -- Verb
-        vp.focus ! agr  -- Object(s), complements, adverbial modifiers
+        vp.compl ! agr  -- Object(s), complements, adverbial modifiers
     } ;
 
   GenericCl vp =
@@ -25,7 +25,7 @@ lin
     in {
       s = \\mood,pol =>
         buildVerb vp.v mood pol agr ++
-        vp.focus ! agr
+        vp.compl ! agr
     } ;
 
   ExistNP np =
@@ -57,13 +57,13 @@ lin
     in {
       s =
         vp.v.s ! Pos ! (Indicative P1 Pl Pres) ++  -- Verb
-        vp.focus ! agr  -- Object(s), complements, adverbial modifiers
+        vp.compl ! agr  -- Object(s), complements, adverbial modifiers
     }
-    | { s = vp.v.s ! Pos ! (Indicative P1 Pl Fut) ++ vp.focus ! agr }  --# notpresent
+    | { s = vp.v.s ! Pos ! (Indicative P1 Pl Fut) ++ vp.compl ! agr }  --# notpresent
     ;
 
   ImpP3 np vp = {
-    s = "lai" ++ np.s ! Nom ++ buildVerb vp.v (Ind Simul Pres) Pos np.a ++ vp.focus ! np.a ;
+    s = "lai" ++ np.s ! Nom ++ buildVerb vp.v (Ind Simul Pres) Pos np.a ++ vp.compl ! np.a ;
   } ;
 
   -- FIXME: placeholder
