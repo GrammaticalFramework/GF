@@ -23,6 +23,7 @@ abstract ExtraEngAbs = Extra - [ProDrop] ** {
 
    may_VV : VV ;
 
+   shall_VV : VV ;
 ---------------------
 --- these are obsolete: use UncNeg : Pol instead
 
