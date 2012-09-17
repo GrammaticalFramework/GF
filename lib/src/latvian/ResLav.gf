@@ -45,9 +45,13 @@ param
 
   VerbConj = C2 | C3 ;
 
-  -- TODO: Kāpēc Gender ir tikai P3? Lokāmo divdabju dēļ?
-  --       Dzimte jāsaskaņo vienmēr - nominālo izteicēju dēļ... 
+  -- Verb agreement
+  -- Number depends on the person
+  -- Gender has to be taken into accunt because of predicative nominals and participles
   Agr = AgP1 Number Gender | AgP2 Number Gender | AgP3 Number Gender ;
+
+  -- Clause agreement
+  ClAgr = Topic Case | TopicFocus Case Agr ;
 
   ThisOrThat = This | That ;
   CardOrd = NCard | NOrd ;
@@ -67,7 +71,12 @@ oper
 
   Verb : Type = { s : Polarity => VerbForm => Str } ;
 
-  VP = { v : Verb ; topic : Case ; focus : Agr => Str } ;
+  -- TODO: topic un focus jāapvieno vienā (jaunā) agr parametrā (?), jo
+  --       ne vienmēr ir abi un ne visas kombinācijas ir vajadzīgas
+  --       
+  -- TODO: lai varētu spēlēties ar vārdu secību, compl vēlāk būs jāskalda pa daļām
+  VP = { v : Verb ; compl : Agr => Str ; agr : ClAgr } ;
+  -- compl: objects, complements, adverbial modifiers
   -- topic: typically - subject
   -- focus: typically - objects, complements, adverbial modifiers
 

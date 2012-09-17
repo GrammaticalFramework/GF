@@ -40,7 +40,7 @@ lincat
   -- Verb
 
   VP = ResLav.VP ;
-  VPSlash = ResLav.VP ** { p : ResLav.Prep } ;
+  VPSlash = ResLav.VP ** { p : ResLav.Prep } ; -- TODO: kāpēc jāglabā prep?
   Comp = { s : ResLav.Agr => Str } ;
 
   -- Adjective
@@ -83,9 +83,10 @@ lincat
   V, VA = Verb ;
   VV, VQ = Verb ** { topic : Case } ;
   VS = Verb ** { subj : Subj ; topic : Case } ;
-  V2 = Verb ** { p : ResLav.Prep ; topic : Case } ;
   V2A, V2Q, V2V = Verb ** { p : ResLav.Prep } ;
   V2S = Verb ** { p : ResLav.Prep ; subj : Subj } ;
+  
+  V2 = Verb ** { p : ResLav.Prep ; topic : Case } ;
   V3 = Verb ** { p1, p2 : ResLav.Prep ; topic : Case } ;
 
   CAdv = { s, p : Str ; d : Degree } ;

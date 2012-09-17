@@ -14,7 +14,7 @@ lin
 
   PredSCVP sc vp = mkClauseSC sc vp ;
 
-  ImpVP vp = { s = \\pol,n => vp.v.s ! pol ! (Imperative n) ++ vp.focus ! (AgP2 n Masc) } ;
+  ImpVP vp = { s = \\pol,n => vp.v.s ! pol ! (Imperative n) ++ vp.compl ! (AgP2 n Masc) } ;
 
   SlashVP np vp = mkClause np vp ** { p = vp.p } ;
 
@@ -28,11 +28,11 @@ lin
   SlashVS np vs sslash =
     mkClause np (lin VP {
       v = vs ;
-      topic = vs.topic ;
-      focus = \\_ => "," ++ vs.subj.s ++ sslash.s
+      compl = \\_ => "," ++ vs.subj.s ++ sslash.s ;
+      agr = Topic vs.topic ;
     }) ** { p = sslash.p } ;
 
-  ComplVS v s  = { v = v ; focus = \\_ => "," ++ v.subj.s ++ s.s } ;
+  ComplVS v s  = { v = v ; compl = \\_ => "," ++ v.subj.s ++ s.s } ;
 
   -- TODO: nočekot kāpēc te ir tieši 'ka'
   EmbedS s = { s = "ka" ++ s.s } ;
@@ -60,17 +60,25 @@ oper
     s = \\mood,pol =>
       case mood of {  -- Subject
         Deb _ _ => np.s ! Dat ;  --# notpresent
-        _ => np.s ! vp.topic
+        _       => case vp.agr of {
+          Topic c        => np.s ! c ;
+          TopicFocus c _ => np.s ! c
+        }
       } ++
-      buildVerb vp.v mood pol np.a ++  -- Verb
-      vp.focus ! np.a  -- Object(s), complements, adverbial modifiers
+      case vp.agr of {  -- Verb
+        Topic Nom        => buildVerb vp.v mood pol np.a ;
+        Topic _          => buildVerb vp.v mood pol (AgP3 Sg Masc) ;  -- TODO: test me
+        TopicFocus Nom _ => buildVerb vp.v mood pol np.a ;
+        TopicFocus _ agr => buildVerb vp.v mood pol agr
+      } ++
+      vp.compl ! np.a  -- Object(s), complements, adverbial modifiers
   } ;
 
   -- FIXME: quick&dirty - lai kompilētos pret RGL API
   -- Eng: PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp
   -- Ar SC nav iespējams neko saskaņot (sk. Cat.gf un Common.gf)
   mkClauseSC : SC -> CatLav.VP -> Cl = \sc,vp -> lin Cl {
-    s = \\mood,pol => sc.s ++ buildVerb vp.v mood pol (AgP3 Sg Masc) ++ vp.focus ! (AgP3 Sg Masc)
+    s = \\mood,pol => sc.s ++ buildVerb vp.v mood pol (AgP3 Sg Masc) ++ vp.compl ! (AgP3 Sg Masc)
   } ;
 
 }
