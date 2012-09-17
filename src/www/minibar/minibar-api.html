@@ -160,13 +160,14 @@ HTML file, you would normally include at least the following:
 <h3>Properties and user interface</h3>
 
 The <code>input</code> object created by the <code>Input</code> constructor
-contains two field that the caller should add to the user interface:
+contains the following fields that the caller should add to the user interface:
 <ul>
   <li><code>input.main</code> is the main user interface where the current
   input and the refrigerator magnets are displayed.
-  <li><code>input.menus</code> contains the menu for selecting input language,
-  and buttons for deleting the last word, clearing the input and generating
-  a random sentence (if enabled in the options)
+  <li><code>input.menus</code> contains the menu for selecting input language.
+  <li><code>input.buttons</code> contains
+  buttons for deleting the last word, clearing the input and generating
+  a random sentence (if enabled in the options).
 </ul>
 
 <h3>Methods</h3>
@@ -218,9 +219,9 @@ HTML file, you would normally include at least the following:
 <h3>Properties and user interface</h3>
 
 
-The <code>translations</code> object created by the
-<code>Translations</code> constructor contains two field that the caller
-should add to the user interface:
+The <code>translations</code> object created by the <code>Translations</code>
+constructor contains the following fields that the caller should add to
+the user interface:
 <ul>
   <li><code>translations.main</code> is the main user interface where the current
   translations are displayed.
@@ -237,15 +238,16 @@ should add to the user interface:
   with the languages available in the new grammar.
   <li><code>translations.clear()</code> clears the main output area from old translations.
   <li><code>translations.translateFrom({from:<var>conc</var>,input:<var>string</var>})</code>
-  displays translations of the string given in the <code>input</code>
-  property from the concrete syntax indicated by the <code>from</code>.
+  displays translations of the text given in the <code>input</code>
+  property (as an array of words)
+  from the concrete syntax indicated by the <code>from</code>.
 </ul>
 
 
 <hr>
 <div class=modtime>
 <small class=modtime>
-HTML <!-- hhmts start -->Last modified: Mon Aug 27 16:59:41 CEST 2012 <!-- hhmts end -->
+HTML <!-- hhmts start -->Last modified: Mon Sep 17 17:52:22 CEST 2012 <!-- hhmts end -->
 </small>
 </div>
 
