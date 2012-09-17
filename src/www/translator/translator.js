@@ -483,7 +483,7 @@ Translator.prototype.import=function(el) {
 	}
 	function done() {
 	    function add_segments(text) {
-	    	var ls=text.split("\n")
+	    	var ls=lines(text)
 		var segs= punct.firstChild.checked 
 		    ? split_punct(text,punctchars.value)
 		    : paras.firstChild.checked 
@@ -571,7 +571,7 @@ Translator.prototype.import_globalsight=function(el) {
 	}
 	function done() {
 	    function import_text(name,text) {
-		var ls=text.split("\n")
+		var ls=lines(text)
 		if(ls.length>0 && ls[0]=="# GlobalSight Download File") {
 		    t.current=null;
 		    t.local.put("current",null)
@@ -971,6 +971,13 @@ function split_punct(text,punct) {
     for(var i=0;i<ss.length;i+=2) segs.push((ss[i]+(ss[i+1]||"")).trim())
     if(segs.length>0 && segs[segs.length-1]=="") segs.pop();
     return segs
+}
+
+// Break a string into lines
+function lines(text) {
+    var ls=text.split("\r\n") // DOS
+    if(ls.length<=1) ls=text.split(/\n|\r/) // Unix | Mac
+    return ls
 }
 
 function supports_local_files() {
