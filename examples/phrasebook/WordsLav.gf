@@ -125,28 +125,15 @@ in {
 		
 		-- Actions
 		
-		-- FIXME: p.name[Dat] have_V2 num+year[Nom] (word order)
-		AHasAge p num = mkCl (mkNP num L.year_N) (mkV2 (mkV "būt") dat_Prep) p.name ;
-
-		-- FIXME: p.name[Dat] have_V2 num+child[Nom] (word order)
-		AHasChildren p num = mkCl (mkNP num L.child_N) (mkV2 (mkV "būt") dat_Prep) p.name ;
-		
-		-- FIXME: p.name[Dat] have_V3 room[Nom] num+person[Dat] (word order)
-		AHasRoom p num = mkCl (mkNP a_Det (mkN "istaba")) (mkV3 (mkV "būt") dat_Prep dat_Prep) p.name (mkNP num (mkN "persona")) ;
-		
-		-- FIXME: p.name[Dat] have_V3 table[Nom] num+person[Dat] (word order)
-		AHasTable p num = mkCl (mkNP a_Det (mkN "galdiņš")) (mkV3 (mkV "būt") dat_Prep dat_Prep) p.name (mkNP num (mkN "persona")) ;
-		
-		-- FIXME: p[Acc] V2("saukt") name[Nom] - a more common phrase (+ word order)
-		AHasName p name = mkCl (nameOf p) name ;
-
+		AHasAge p num = mkCl p.name have_V2 (mkNP num L.year_N) ;
+  		AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
+		AHasRoom p num = mkCl p.name have_V3 (mkNP a_Det (mkN "istaba")) (mkNP num (mkN "persona")) ;
+		AHasTable p num = mkCl p.name have_V3 (mkNP a_Det (mkN "galdiņš")) (mkNP num (mkN "persona")) ;
+		AHasName p name = mkCl p.name (mkV2 (mkV "saukt" "saucu" "saucu") nom_Prep Acc) name ;
 		AHungry p = mkCl p.name (mkA (mkV "izsalkt" "izsalkstu" "izsalku")) ;
 		AIll p = mkCl p.name (mkA "slims") ;
 		AKnow p = mkCl p.name (mkV "zināt" third_conjugation) ;
-		
-		-- FIXME: p.name[Dat] V2 item[Nom] (word order)
-		ALike p item = mkCl item (mkV2 (mkV "garšot" second_conjugation) dat_Prep) p.name ;
-		
+		ALike p item = mkCl p.name (mkV2 (mkV "garšot" second_conjugation) nom_Prep Dat) item ;
 		ALive p co = mkCl p.name (mkVP (mkVP (mkV "dzīvot" second_conjugation)) (SyntaxLav.mkAdv in_Prep co)) ;
 		ALove p q = mkCl p.name L.love_V2 q.name ;
 		AMarried p = mkCl p.name (mkA (mkV "precēties" third_conjugation)) ;
@@ -157,10 +144,10 @@ in {
 		ATired p = mkCl p.name (mkA (mkV "nogurt" "nogurstu" "noguru")) ;
 		AUnderstand p = mkCl p.name (mkV "saprast" "saprotu" "sapratu") ;
 		AWant p obj = mkCl p.name (mkV2 (mkV "vēlēties" third_conjugation) acc_Prep) obj ;
+
+		-- TODO: IrregLav.doties_V
 		AWantGo p place = mkCl p.name (mkVV (mkV "vēlēties" third_conjugation)) (mkVP (mkVP (mkV "doties" "dodos" "devos")) place.to) ;
 		---- mkVV by AR 28/8/2012
-
-		-- Miscellaneous
 		
 		QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
 		QWhatAge p = mkQS (mkQCl (mkIP how8many_IDet L.year_N) p.name);
@@ -236,10 +223,10 @@ in {
 		--	to : Prep ;
 		--	isPl : Bool
 		--} = \comp,p,i -> mkCNPlace (mkCN (P.mkN comp (mkN p))) i to_Prep ;
-		
+
 		mkPlace : Str -> Prep -> {name : CN ; at : SyntaxLav.Prep ; to : SyntaxLav.Prep ; isPl : Bool} = \p,i -> 
-		  mkCNPlace (mkCN (mkN p)) i to8uz_Prep ;  ---- SyntaxLav.Prep by AR 28/8/2012
-		
+		 	mkCNPlace (mkCN (mkN p)) i to8uz_Prep ;  ---- SyntaxLav.Prep by AR 28/8/2012
+
 		open_A = P.mkA "atvērts" ;
 		
 		closed_A = P.mkA "slēgts" ;
