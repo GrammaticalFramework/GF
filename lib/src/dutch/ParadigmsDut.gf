@@ -171,6 +171,7 @@ oper
   mkV2A : V -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
   mkV2Q : V -> Prep -> V2Q ;
+
 --
 --  mkAS  : A -> AS ;
 --  mkA2S : A -> Prep -> A2S ;
