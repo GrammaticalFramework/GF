@@ -123,4 +123,8 @@ lin
             in       
             lin NP (MorphoDut.mkNP (vp.s.s ! VInf ++ "van" ++ compl ++ inf ++ extra ) Utr Sg) ;  
 
+
+lin
+  zullen_VV = lin VV (zullen_V ** {isAux = True}) ;
+
 }
