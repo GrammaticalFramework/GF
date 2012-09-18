@@ -655,11 +655,11 @@ pgf_compute_meta_probs(GuMapItor* fn, const void* key, void* value, GuExn* err)
 
     cat->name = name;
 
-    double mass = 0;
+    prob_t mass = 0;
     for (size_t i = 0; i < cat->n_functions; i++) {
 		mass += cat->functions[i].prob;
 	}
-    cat->meta_prob = - log(fabs(1 - mass));
+    cat->meta_prob = (mass > 1) ? INFINITY : - log(1 - mass);
 	cat->meta_token_prob = INFINITY;
     cat->meta_child_probs = NULL;
 }

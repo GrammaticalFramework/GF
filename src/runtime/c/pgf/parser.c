@@ -64,7 +64,7 @@ struct PgfExprState {
 
 typedef struct {
 	PgfExprState *st;
-	float prob;
+	prob_t prob;
 } PgfExprQState;
 
 typedef struct PgfParseResult PgfParseResult;
@@ -96,8 +96,8 @@ struct PgfItem {
 	uint16_t seq_idx;
 	uint8_t tok_idx;
 	uint8_t alt;
-	float inside_prob;
-	float outside_prob;
+	prob_t inside_prob;
+	prob_t outside_prob;
 };
 
 typedef struct {
@@ -415,8 +415,8 @@ cmp_item_prob(GuOrder* self, const void* a, const void* b)
 	PgfItem *item1 = *((PgfItem **) a);
 	PgfItem *item2 = *((PgfItem **) b);
 
-	float prob1 = item1->inside_prob + item1->outside_prob;
-	float prob2 = item2->inside_prob + item2->outside_prob;
+	prob_t prob1 = item1->inside_prob + item1->outside_prob;
+	prob_t prob2 = item2->inside_prob + item2->outside_prob;
 	
 	if (prob1 < prob2)
 		return -1;
@@ -474,7 +474,7 @@ pgf_parsing_get_conts(PgfContsMap* conts_map,
 
 static PgfCCat*
 pgf_parsing_create_completed(PgfParseState* state, PgfItemBuf* conts,
-                             float viterbi_prob, PgfCncCat* cnccat)
+                             prob_t viterbi_prob, PgfCncCat* cnccat)
 {
 	PgfCCat* cat = gu_new(PgfCCat, state->pool);
 	cat->cnccat = cnccat;
@@ -535,7 +535,7 @@ pgf_item_set_curr_symbol(PgfItem* item, GuPool* pool)
 static PgfItem*
 pgf_new_item(int pos, PgfCCat* ccat, size_t lin_idx,
              PgfProduction prod, PgfItemBuf* conts, 
-             float delta_prob,
+             prob_t delta_prob,
              GuPool* pool)
 {
     PgfItemBase* base = gu_new(PgfItemBase, pool);
@@ -712,7 +712,7 @@ pgf_parsing_combine(PgfParseState* before, PgfParseState* after,
 			item->base->ccat->cnccat->abscat->meta_child_probs;
 		item->inside_prob += 
 			cat->viterbi_prob+
-			gu_map_get(meta_child_probs, cat->cnccat->abscat, float);
+			gu_map_get(meta_child_probs, cat->cnccat->abscat, prob_t);
 
 		PgfSymbol prev = item->curr_sym;
 		PgfSymbolCat* scat = (PgfSymbolCat*)
@@ -736,7 +736,7 @@ static void
 pgf_parsing_production(PgfParseState* state,
                        PgfCCat* ccat, size_t lin_idx,
                        PgfProduction prod, PgfItemBuf* conts,
-                       float delta_prob)
+                       prob_t delta_prob)
 {
 	PgfItem* item =
         pgf_new_item(state->offset, ccat, lin_idx, prod, conts, delta_prob, state->pool);
@@ -933,7 +933,7 @@ pgf_parsing_complete(PgfParseState* before, PgfParseState* after,
 static void
 pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
                        PgfItem* item, PgfCCat* ccat, size_t lin_idx,
-                       float delta_prob)
+                       prob_t delta_prob)
 {
 	gu_enter("-> cat: %d", ccat->fid);
 	if (gu_seq_is_null(ccat->prods)) {
@@ -1043,7 +1043,7 @@ pgf_parsing_meta_predict(GuMapItor* fn, const void* key, void* value, GuExn* err
 	(void) (err);
 	
 	PgfCat* abscat = (PgfCat*) key;
-    float meta_prob = *((float*) value);
+    prob_t meta_prob = *((prob_t*) value);
     PgfMetaPredictFn* clo = (PgfMetaPredictFn*) fn;
     PgfParseState* before = clo->before;
     PgfParseState* after  = clo->after;
@@ -1065,12 +1065,12 @@ pgf_parsing_meta_predict(GuMapItor* fn, const void* key, void* value, GuExn* err
 	}
 }
 
-static float
+static prob_t
 pgf_parsing_bu_predict(PgfParseState* before, PgfParseState* after,
                        PgfItemBuf* index, PgfItem* meta_item,
                        PgfItemBuf* agenda)
 {
-	float prob = INFINITY;
+	prob_t prob = INFINITY;
 
 	PgfMetaChildMap* meta_child_probs =
 		meta_item->base->ccat->cnccat->abscat->meta_child_probs;
@@ -1084,17 +1084,17 @@ pgf_parsing_bu_predict(PgfParseState* before, PgfParseState* after,
 		for (size_t i = 0; i < n_items; i++) {
 			PgfItem *item = gu_buf_get(index, PgfItem*, i);
 
-			float meta_prob =
+			prob_t meta_prob =
 				meta_item->inside_prob+
 				meta_item->outside_prob+
-				gu_map_get(meta_child_probs, item->base->ccat->cnccat->abscat, float);
+				gu_map_get(meta_child_probs, item->base->ccat->cnccat->abscat, prob_t);
 
 			PgfItemBuf* conts =
 				pgf_parsing_get_conts(before->conts_map,
 									  item->base->ccat, item->base->lin_idx,
 									  before->pool, before->pool);
 			if (gu_buf_length(conts) == 0) {
-				float outside_prob =
+				prob_t outside_prob =
 					pgf_parsing_bu_predict(before, after,
 										   item->base->conts, meta_item, 
 										   conts);
@@ -1122,7 +1122,7 @@ pgf_parsing_bu_predict(PgfParseState* before, PgfParseState* after,
 						else
 							gu_buf_push(agenda, PgfItem*, copy);
 
-						float item_prob = 
+						prob_t item_prob = 
 							copy->inside_prob+copy->outside_prob;
 						if (prob > item_prob)
 							prob = item_prob;
@@ -1133,7 +1133,7 @@ pgf_parsing_bu_predict(PgfParseState* before, PgfParseState* after,
 				for (size_t i = 0; i < n_items; i++) {
 					PgfItem *item = gu_buf_get(conts, PgfItem*, i);
 					
-					float item_prob = 
+					prob_t item_prob = 
 						item->inside_prob+item->outside_prob;
 					if (prob > item_prob)
 						prob = item_prob;
@@ -1458,7 +1458,7 @@ pgf_parsing_item(PgfParseState* before, PgfParseState* after, PgfItem* item)
 
 			if (after != NULL) {
 				if (after->ts->lexicon_idx == NULL) {
-					float meta_token_prob = 
+					prob_t meta_token_prob = 
 						item->base->ccat->cnccat->abscat->meta_token_prob;
 					if (meta_token_prob == INFINITY)
 						break;
@@ -1508,14 +1508,14 @@ pgf_parsing_proceed(PgfParseState* state, void** output) {
 		if (state->ps->item_count > state->ps->concr->item_quota)
 			break;
 
-		float best_prob = INFINITY;
+		prob_t best_prob = INFINITY;
 		PgfParseState* before = NULL;
 
 		PgfParseState* st = state;
 		while (st != NULL) {
 			if (gu_buf_length(st->agenda) > 0) {
 				PgfItem* item = gu_buf_get(st->agenda, PgfItem*, 0);
-				float item_prob = item->inside_prob+item->outside_prob;
+				prob_t item_prob = item->inside_prob+item->outside_prob;
 				if (item_prob < best_prob) {
 					best_prob = item_prob;
 					before    = st;
@@ -1643,7 +1643,7 @@ pgf_expr_qstate_order = { cmp_expr_qstate };
 
 static void
 pgf_result_cat_init(PgfParseResult* pr,
-                    PgfExprState* cont, float cont_prob, PgfCCat* ccat)
+                    PgfExprState* cont, prob_t cont_prob, PgfCCat* ccat)
 {
 	// Checking for loops in the chart
 	if (cont != NULL) {
@@ -1751,7 +1751,7 @@ pgf_parse_result_next(PgfParseResult* pr, GuPool* pool)
 
 			if (q.st->arg_idx < gu_seq_length(q.st->args)) {
 				PgfPArg* arg = gu_seq_index(q.st->args, PgfPArg, q.st->arg_idx);
-				float cont_prob = q.prob - arg->ccat->viterbi_prob;
+				prob_t cont_prob = q.prob - arg->ccat->viterbi_prob;
 				if (arg->ccat->fid < pr->state->ps->concr->total_cats) {
 					q.st->expr =
 						gu_new_variant_i(pool, PGF_EXPR_APP,

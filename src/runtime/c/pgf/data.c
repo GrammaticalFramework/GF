@@ -188,11 +188,13 @@ GU_DEFINE_TYPE(
 	GU_MEMBER(PgfCatFun, prob, double),
 	GU_MEMBER(PgfCatFun, fun, PgfCId));
 
-static float inf_float = INFINITY;
+static prob_t inf_prob = INFINITY;
+
+GU_DEFINE_TYPE(prob_t, GuFloating, _);
 
 GU_DEFINE_TYPE(PgfMetaChildMap, GuMap,
 		       gu_type(PgfCat), NULL,
-		       gu_type(float), &inf_float);
+		       gu_type(prob_t), &inf_prob);
 
 GU_DEFINE_TYPE(
 	PgfCat, struct, 

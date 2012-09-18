@@ -123,8 +123,10 @@ struct PgfPGF {
 
 extern GU_DECLARE_TYPE(PgfPGF, struct);
 
+typedef float prob_t;
+
 typedef struct {
-	float prob;
+	prob_t prob;
 	PgfExpr expr;
 } PgfExprProb;
 
@@ -151,8 +153,8 @@ struct PgfCat {
 	PgfCId name;
 	PgfHypos context;
 
-	float meta_prob;
-	float meta_token_prob;
+	prob_t meta_prob;
+	prob_t meta_token_prob;
 	PgfMetaChildMap* meta_child_probs;
 
 	GuLength n_functions;
