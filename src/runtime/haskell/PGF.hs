@@ -35,7 +35,7 @@ module PGF(
            categories, startCat,
 
            -- * Functions
-           functions, functionType,
+           functions, functionsByCat, functionType,
 
            -- * Expressions & Trees
            -- ** Tree
@@ -227,6 +227,9 @@ startCat   :: PGF -> Type
 -- | List of all functions defined in the abstract syntax
 functions :: PGF -> [CId]
 
+-- | List of all functions defined for a given category
+functionsByCat :: PGF -> CId -> [CId]
+
 -- | The type of a given function
 functionType :: PGF -> CId -> Maybe Type
 
@@ -275,6 +278,11 @@ categories pgf = [c | (c,hs) <- Map.toList (cats (abstract pgf))]
 startCat pgf = DTyp [] (lookStartCat pgf) []
 
 functions pgf = Map.keys (funs (abstract pgf))
+
+functionsByCat pgf cat =
+  case Map.lookup cat (cats (abstract pgf)) of
+    Just (_,fns,_) -> map snd fns
+    Nothing        -> []
 
 functionType pgf fun =
   case Map.lookup fun (funs (abstract pgf)) of
