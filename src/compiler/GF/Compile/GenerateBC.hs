@@ -36,6 +36,9 @@ genFun (id,info@(AbsFun (Just (L _ ty)) ma pty _)) = do
 genFun (id,info@(AbsCat (Just (L _ cont)))) = do
   l1 <- newLabel
   return (id,info,addr l1)
+genFun (id,info) = do
+  l1 <- newLabel
+  return (id,info,addr l1)
 
 newtype GenM a = GenM {unGenM :: IntMap.IntMap BCAddr ->
                                  IntMap.IntMap BCAddr ->
