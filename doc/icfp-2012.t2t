@@ -47,6 +47,7 @@ If you want to contribute a new language, let us know! It is a job of
 ==Structure of the tutorial==
 
 Hour 1. Writing multilingual grammars in GF (Aarne Ranta)
+[Slides http://www.cse.chalmers.se/~aarne/talks/gf-icfp-2012-1.pdf]
 
 Hour 2. Applications for the web, mobile phones, and as embedded Haskell programs 
 (Thomas Hallgren)
