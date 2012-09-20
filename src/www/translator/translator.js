@@ -483,7 +483,7 @@ Translator.prototype.import=function(el) {
 	}
 	function done() {
 	    function add_segments(text) {
-	    	var ls=lines(text)
+	    	var ls=window.lines(text)
 		var segs= punct.firstChild.checked 
 		    ? split_punct(text,punctchars.value)
 		    : paras.firstChild.checked 
