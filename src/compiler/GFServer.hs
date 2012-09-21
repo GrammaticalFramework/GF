@@ -1,6 +1,6 @@
 {-# LANGUAGE CPP #-}
 module GFServer(server) where
-import Data.List(partition,stripPrefix,tails)
+import Data.List(partition,stripPrefix,tails,isInfixOf)
 import Data.Maybe(mapMaybe)
 import qualified Data.Map as M
 import Control.Monad(when)
@@ -166,10 +166,23 @@ handle state0 cache execute1
         "make" -> make dir (raw qs)
         "upload" -> upload (raw qs)
         "ls" -> jsonList (maybe ".json" fst $ lookup "ext" qs)
-        "rm" -> look "file" rm qs
-        "download" -> look "file" download qs
+        "rm" -> with_file qs rm
+        "download" -> with_file qs download
         "link_directories" -> look "newdir" (link_directories dir) qs
         _ -> return (state,resp400 $ "cloud command "++cmd)
+
+    with_file qs f = look "file" check qs
+      where
+        check path qs =
+          if ok_access path
+          then f path qs
+          else return (state,resp400 $ "unacceptable path "++path)
+
+        ok_access path =
+          case path of
+            '/':_ -> False
+            '.':'.':'/':_ -> False
+            _ -> not ("/../" `isInfixOf` path)
 
     make dir files =
       do (state,_) <- upload files
@@ -187,13 +200,15 @@ handle state0 cache execute1
         do jsons <- ls_ext "." ext
            return (state,json200 jsons)
 
-    rm path _ | takeExtension path==".json" =
+    ok_to_delete = [".json",".gfstdoc",".gfo",".gf",".pgf"]
+
+    rm path _ | takeExtension path `elem` ok_to_delete =
       do b <- doesFileExist path
          if b
            then do removeFile path
                    return (state,ok200 "")
            else return (state,resp404 path)
-    rm path _ = return (state,resp400 $ "unacceptable file "++path)
+    rm path _ = return (state,resp400 $ "unacceptable extension "++path)
 
     download path _ = (,) state `fmap` serveStaticFile path
 
