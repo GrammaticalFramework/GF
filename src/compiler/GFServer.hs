@@ -1,3 +1,4 @@
+-- | GF server mode
 {-# LANGUAGE CPP #-}
 module GFServer(server) where
 import Data.List(partition,stripPrefix,tails,isInfixOf)
@@ -178,12 +179,6 @@ handle state0 cache execute1
           then f path qs
           else return (state,resp400 $ "unacceptable path "++path)
 
-        ok_access path =
-          case path of
-            '/':_ -> False
-            '.':'.':'/':_ -> False
-            _ -> not ("/../" `isInfixOf` path)
-
     make dir files =
       do (state,_) <- upload files
          let args = "-s":"-make":map fst files
@@ -193,8 +188,12 @@ handle state0 cache execute1
          return (state,json200 (jsonresult cwd ('/':dir++"/") cmd out files))
 
     upload files =
-      do mapM_ (uncurry updateFile) files
-         return (state,resp204)
+        if null badpaths
+        then do mapM_ (uncurry updateFile) okfiles
+                return (state,resp204)
+        else return (state,resp404 $ "unacceptable path(s) "++unwords badpaths)
+      where
+        (okfiles,badpaths) = apSnd (map fst) $ partition (ok_access.fst) files
 
     jsonList ext =
         do jsons <- ls_ext "." ext
@@ -375,6 +374,13 @@ updateFile path new =
                                 seq (either (const 0) length old) $
                                     writeBinaryFile path new
 
+-- | Check that a path is not outside the current directory
+ok_access path =
+    case path of
+      '/':_ -> False
+      '.':'.':'/':_ -> False
+      _ -> not ("/../" `isInfixOf` path)
+
 newDirectory =
     do debug "newDirectory"
        loop 10
@@ -424,5 +430,6 @@ mapFst f xys = [(f x,y)|(x,y)<-xys]
 mapSnd f xys = [(x,f y)|(x,y)<-xys]
 mapBoth = map . apBoth
 apBoth f (x,y) = (f x,f y)
+apSnd f (x,y) = (x,f y)
 
 prop n v = (n,showJSON v)
