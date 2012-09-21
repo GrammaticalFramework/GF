@@ -137,7 +137,6 @@ function edit_grammar(g) {
     replaceChildren(editor,draw_grammar(g));
 }
 
-
 function draw_grammar(g) {
     var files=div_class("files",[draw_filebar(g),draw_file(g)]);
     return div_class("grammar",[draw_namebar(g,files),files])
@@ -150,10 +149,11 @@ function draw_namebar(g,files) {
     var mb=minibar_button(g,files,err_ind,cb);
     var qb=quiz_button(g,err_ind);
     //var pb=draw_plainbutton(g,files);
+    var mxb=draw_matrixbutton(g,files)
     var xb=draw_closebutton(g);
     return div_class("namebar",
 		     [table([tr([td(draw_name(g)),
-				 td_right([err_ind,cb,mb,qb/*,pb*/,xb])])])])
+				 td_right([err_ind,cb,mb,qb/*,pb*/,mxb,xb])])])])
 }
 
 function draw_name(g) {
@@ -180,6 +180,24 @@ function draw_plainbutton(g,files) {
     }
     var b=button("Show plain",show_plain);
     b.title="Show plain text representaiton of the grammar";
+    return b;
+}
+
+function draw_matrixbutton(g,files) {
+    var b2;
+    function show_editor() { edit_grammar(g); }
+    function show_matrix() {
+	clear(files)
+	files.appendChild(draw_matrix(g))
+	b.style.display="none";
+	if(b2) b2.style.display="";
+	else {
+	    b2=button("Show editor",show_editor);
+	    insertAfter(b2,b);
+	}
+    }
+    var b=button("Matrix view",show_matrix);
+    b.title="Show matrix view of the grammar";
     return b;
 }
 
@@ -1284,6 +1302,54 @@ function draw_lins(g,ci) {
     for(var f in df)
 	ls.push(dtmpl(f));
     return indent_sortable(ls,sort_lins);
+}
+/* -------------------------------------------------------------------------- */
+
+function draw_matrix(g) {
+    var row=[th(text("Abstract"))]
+    var t=empty_class("table","matrixview")
+    for(var ci in g.concretes)
+	row.push(th(text(concname(g.concretes[ci].langcode))))
+    t.appendChild(tr(row))
+
+    var dc=defined_cats(g);
+    var df=inherited_funs(g);
+
+    for(var i in g.abstract.cats) {
+	var cat=g.abstract.cats[i]
+	var row=[td(ident(cat))]
+	for(var ci in g.concretes) {
+	    var conc=g.concretes[ci]
+	    row.push(td(text(cat_lincat(conc,cat))))
+	}
+	t.appendChild(tr(row))
+    }
+    for(var i in g.abstract.funs) {
+	var fun=g.abstract.funs[i]
+	var row=[td(draw_fun(g,fun,dc,df))]
+	for(var ci in g.concretes) {
+	    var conc=g.concretes[ci]
+	    var lin=fun_lin(conc,fun.name)
+	    var dl=lin ? simple_draw_lin(lin) : text(" ")
+	    row.push(td(dl))
+	}
+	t.appendChild(tr(row))
+    }
+    return t
+}
+
+function simple_draw_lin(f) {
+    var l=[]
+    if(f.args.length>0) {
+	l.push(sep("\\")) /* λ */
+	for(var i in f.args) {
+	    l.push(text(" "));
+	    l.push(ident(f.args[i]));
+	}
+	l.push(sep(" → "));
+    }
+    l.push(text_ne(f.lin));
+    return wrap("span",l);
 }
 
 /* -------------------------------------------------------------------------- */
