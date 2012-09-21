@@ -313,14 +313,29 @@ Translator.prototype.new=function(el) {
 Translator.prototype.browse=function(el) {
     hide_menu(el);
     var t=this
-    function ls(files,op) {
+    function ls(files,open,del) {
 	var ul=empty_class("ul","files")
 	for(var i in files) {
 	    var name=files[i]
-	    var link=a(jsurl(op+"('"+name+"')"),[text(name)])
-	    ul.appendChild(li(link))
+	    var link=a(jsurl(open+"('"+name+"')"),[text(name)])
+	    ul.appendChild(li(deletable(del(name),link)))
 	}
 	return ul
+    }
+    function delete_local(name) {
+	return function() {
+	    if(confirm("Are you sure you want to delete the local document "+name+"?")) {
+		t.local.remove("/"+name)
+		browse();
+	    }
+	}
+    }
+    function delete_from_cloud(name) {
+	return function() {
+	    if(confirm("Are you sure you want to delete the cloud document "+name+"?")) {
+		gfcloud("rm",{file:name+cloudext},browse)
+	    }
+	}
     }
     function browse() {
 	clear(t.view)
@@ -328,7 +343,7 @@ Translator.prototype.browse=function(el) {
 	var files=t.local.ls("/")
 	if(files.length>0) {
 	    t.view.appendChild(wrap("h3",text("Local documents")))
-	    t.view.appendChild(ls(files,"translator.open"))
+	    t.view.appendChild(ls(files,"translator.open",delete_local))
 	}
 	function lscloud(result) {
 	    var filenames=JSON.parse(result)
@@ -336,7 +351,7 @@ Translator.prototype.browse=function(el) {
 	    if(files.length>0) {
 		t.view.appendChild(wrap("h3",[text("Documents in the cloud "),
 					      img("../P/cloud.png")]))
-		t.view.appendChild(ls(files,"translator.open_from_cloud"))
+		t.view.appendChild(ls(files,"translator.open_from_cloud",delete_from_cloud))
 	    }
 	}
 	if(navigator.onLine) gfcloud("ls",{ext:cloudext},lscloud)
@@ -1084,4 +1099,16 @@ function update_checkbox(name,checked) {
 
 function submit(label) {
     return node("input",{type:"submit",value:label||"OK"})
+}
+
+
+function deletable(del,el,hint) {
+    var b=delete_button(del,hint)
+    return node("span",{"class":"deletable"},[b,el])
+}
+
+function delete_button(action,hint) {
+    var b=node("span",{"class":"delete",title:hint || "Delete"},[text("×")])
+    b.onclick=action;
+    return b;
 }
