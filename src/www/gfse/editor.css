@@ -22,7 +22,7 @@ div.files { margin: 0 8px 8px 8px; position: relative; }
 div#file, table.extension td, table.extension th { border: 2px solid #009; }
 div#file { border-top-width: 0; }
 pre.plain { border: 2px solid #009; }
-div#file, pre.plain { background: white; padding: 0.6ex; }
+div#file, pre.plain, table.matrixview td { background: white; padding: 0.6ex; }
 
 table.extension { border-collapse: collapse; background: white; }
 table.extension td, table.extension th { padding: 1ex; }
@@ -86,6 +86,8 @@ table.tabs td.inactive {
     background: #cef;
     border-top-color: #66c; border-left-color: #66c; border-right-color: #66c;
 }
+
+table.matrixview th { background: #cef; color: #009; }
 
  table.tabs td.gap
 { border-top-width: 0; border-left-width: 0; border-right-width: 0; }

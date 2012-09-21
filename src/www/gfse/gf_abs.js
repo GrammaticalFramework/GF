@@ -20,9 +20,9 @@ type Concrete = { langcode: Id,
 		  params: [{name: Id, rhs: String}],
 		  lincats : [{ cat: Cat, type: Term}],
 		  opers: [{name: Lhs, rhs: Term}],
-		  lins: [{fun: FunId, args: [Id], lin: Term}]
+		  lins: [Lin]
 		}
-
+type Lin = {fun: FunId, args: [Id], lin: Term}
 
 type Lhs = String -- name and type of oper,
                   -- e.g "regN : Str -> { s:Str,g:Gender} ="
@@ -82,6 +82,13 @@ function function_type(g,fun) {
 function cat_lincat(conc,cat) {
     with(conc)
 	for(var i in lincats) if(lincats[i].cat==cat) return lincats[i].type
+    return null;
+}
+
+// Return the lin defined in a given concrete syntax for an abstract function
+// cat_lincat :: Concrete -> FunId -> Lin
+function fun_lin(conc,fun) {
+    with(conc) for(var i in lins) if(lins[i].fun==fun) return lins[i]
     return null;
 }
 
