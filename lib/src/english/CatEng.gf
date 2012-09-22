@@ -43,7 +43,7 @@ concrete CatEng of Cat = CommonX - [Pol] ** open ResEng, Prelude in {
 -- Verb
 
     VP = ResEng.VP ;
-    VPSlash = ResEng.VP ** {c2 : Str} ;
+    VPSlash = ResEng.SlashVP ;
     Comp = {s : Agr => Str} ; 
 
 -- Adjective

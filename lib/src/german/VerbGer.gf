@@ -85,5 +85,6 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer, Coordination in {
 
     PassV2 v = insertInf (v.s ! VPastPart APred) (predV werdenPass) ;
 
+    VPSlashPrep vp prep = vp ** {c2 = prep} ;
 
 }

@@ -231,10 +231,10 @@ resource ResEng = ParamX ** open Prelude in {
     } ;
 
 
-  SlashVP = VP ** {c2 : Str} ;
+  SlashVP = VP ** {c2 : Str ; gapInMiddle : Bool} ;
 
   predVc : (Verb ** {c2 : Str}) -> SlashVP = \verb -> 
-    predV verb ** {c2 = verb.c2} ;
+    predV verb ** {c2 = verb.c2 ; gapInMiddle = True} ;
 
   predV : Verb -> VP = \verb -> {
     s = \\t,ant,b,ord,agr => 
@@ -338,7 +338,7 @@ resource ResEng = ParamX ** open Prelude in {
     } ;
 
   insertObjc : (Agr => Str) -> SlashVP -> SlashVP = \obj,vp -> 
-    insertObj obj vp ** {c2 = vp.c2} ;
+    insertObj obj vp ** {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
 
 --- The adverb should be before the finite verb.
 

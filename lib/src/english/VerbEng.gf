@@ -1,4 +1,4 @@
-concrete VerbEng of Verb = CatEng ** open ResEng in {
+concrete VerbEng of Verb = CatEng ** open ResEng, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -7,7 +7,7 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
 
     SlashV2a v = predVc v ;
     Slash2V3 v np = 
-      insertObjc (\\_ => v.c2 ++ np.s ! NPAcc) (predV v ** {c2 = v.c3}) ;
+      insertObjc (\\_ => v.c2 ++ np.s ! NPAcc) (predV v ** {c2 = v.c3 ; gapInMiddle = False}) ;
     Slash3V3 v np = 
       insertObjc (\\_ => v.c3 ++ np.s ! NPAcc) (predVc v) ; ----
 
@@ -21,23 +21,26 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
     SlashV2Q v q  = insertObjc (\\_ => q.s ! QIndir) (predVc v) ;
     SlashV2A v ap = insertObjc (\\a => ap.s ! a) (predVc v) ; ----
 
-    ComplSlash vp np = insertObjPre (\\_ => vp.c2 ++ np.s ! NPAcc) vp ;
+    ComplSlash vp np = case vp.gapInMiddle of {
+      True  => insertObjPre (\\_ => vp.c2 ++ np.s ! NPAcc) vp ;
+      False => insertObj    (\\_ => vp.c2 ++ np.s ! NPAcc) vp
+      } ;
 
     SlashVV vv vp = 
       insertObj (\\a => infVP vv.typ vp Simul CPos a) (predVV vv) **
-        {c2 = vp.c2} ;
+        {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
     SlashV2VNP vv np vp = 
       insertObjPre (\\_ => vv.c2 ++ np.s ! NPAcc)
         (insertObjc (\\a => vv.c3 ++ infVP vv.typ vp Simul CPos a) (predVc vv)) **
-          {c2 = vp.c2} ;
+          {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
 
     UseComp comp = insertObj comp.s (predAux auxBe) ;
 
     AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
     AdVVP adv vp = insertAdV adv.s vp ;
 
-    AdvVPSlash vp adv = insertObj (\\_ => adv.s) vp ** {c2 = vp.c2} ;
-    AdVVPSlash adv vp = insertAdV adv.s vp ** {c2 = vp.c2} ;
+    AdvVPSlash vp adv = insertObj (\\_ => adv.s) vp ** {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
+    AdVVPSlash adv vp = insertAdV adv.s vp ** {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
 
     ReflVP v = insertObjPre (\\a => v.c2 ++ reflPron ! a) v ;
 
@@ -55,5 +58,7 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
     } ;
 
     UseCopula = predAux auxBe ;
+
+    VPSlashPrep vp p = vp ** {c2 = p.s ; gapInMiddle = False} ;
 
 }
