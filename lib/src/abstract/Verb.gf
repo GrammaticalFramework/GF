@@ -61,6 +61,8 @@ abstract Verb = Cat ** {
     AdvVPSlash : VPSlash -> Adv -> VPSlash ;  -- use (it) here
     AdVVPSlash : AdV -> VPSlash -> VPSlash ;  -- always use (it)
    
+    VPSlashPrep : VP -> Prep -> VPSlash ;  -- live in (it)
+
 
 -- *Agents of passives* are constructed as adverbs with the
 -- preposition [Structural Structural.html]$.8agent_Prep$.

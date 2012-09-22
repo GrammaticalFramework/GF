@@ -1,4 +1,4 @@
-incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand in {
+incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -38,7 +38,7 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand i
       } ; 
 
     ComplSlash vp np = 
-       insertObj 
+       insertObjPost 
          (\\_ => vp.c2.s ++ np.s ! accusative ++ vp.n3 ! np.a) vp ;
 
     SlashVV v vp = 
@@ -60,6 +60,8 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand i
     AdVVP adv vp = insertAdV adv.s vp ;
 
     ReflVP vp = insertObj (\\a => vp.c2.s ++ reflPron a ++ vp.n3 ! a) vp ;
+
+    VPSlashPrep vp prep = vp ** {n3 = \\_ => [] ; c2 = {s = prep.s ; hasPrep = True}} ;
 
     PassV2 v = 
       insertObj 
