@@ -5,6 +5,8 @@ import Data.List(partition,stripPrefix,tails,isInfixOf)
 import Data.Maybe(mapMaybe)
 import qualified Data.Map as M
 import Control.Monad(when)
+import Control.Monad.State(StateT(..),get,gets,put)
+import Control.Monad.Error(ErrorT(..),Error(..))
 import System.Random(randomRIO)
 import System.IO(stdout,stderr,hPutStrLn)
 import System.IO.Error(try,ioError,isAlreadyExistsError)
@@ -41,7 +43,7 @@ import RunHTTP(cgiHandler)
 --logFile :: FilePath
 --logFile = "pgf-error.log"
 
-debug s = liftIO (logPutStrLn s)
+debug s = logPutStrLn s
 
 -- | Combined FastCGI and HTTP server
 server port execute1 state0 = 
@@ -91,127 +93,151 @@ handle_fcgi execute1 state0 stateM cache =
      debug $ "done "++show n
 -}
 
+-- * Request handler
+-- | Handler monad
+type HM s a = StateT (Q,s) (ErrorT Response IO) a
+run :: HM s Response -> (Q,s) -> IO (s,Response)
+run m s = either bad ok =<< runErrorT (runStateT m s)
+  where
+    bad resp = return (snd s,resp)
+    ok (resp,(qs,state)) = return (state,resp)
+
+get_qs :: HM s Q
+get_qs = gets fst
+get_state :: HM s s
+get_state = gets snd
+put_qs qs = do state <- get_state; put (qs,state)
+put_state state = do qs <- get_qs; put (qs,state)
+
+err :: Response -> HM s a
+err e = StateT $ \ s -> ErrorT $ return $ Left e
+
+hmtry :: HM s a -> HM s (Either (Either IOError Response) a)
+hmtry m = do s <- get
+             e <- liftIO $ try $ runErrorT $ runStateT m s
+             case e of
+               Left ioerror -> return (Left (Left ioerror))
+               Right (Left resp) -> return (Left (Right resp))
+               Right (Right (a,s)) -> do put s;return (Right a)
+
 -- | HTTP request handler
 handle state0 cache execute1
        rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) state =
     case method of
-      "POST" -> normal_request (utf8inputs body)
-      "GET"  -> normal_request (utf8inputs q)
+      "POST" -> run normal_request (utf8inputs body,state)
+      "GET"  -> run normal_request (utf8inputs q,state)
       _ -> return (state,resp501 $ "method "++method)
   where
-    normal_request qs =
-      do logPutStrLn $ method++" "++upath++" "++show (mapSnd (take 100.fst) qs)
+    normal_request =
+      do qs <- get_qs
+         logPutStrLn $ method++" "++upath++" "++show (mapSnd (take 100.fst) qs)
          case upath of
            "/new" -> new
 --         "/stop" ->
 --         "/start" ->
-           "/gfshell" -> inDir qs $ look "command" . command
+           "/gfshell" -> inDir command
            "/parse" -> parse (decoded qs)
-           "/cloud" -> inDir qs $ look "command" . cloud
+           "/cloud" -> inDir cloud
            '/':rpath ->
              case (takeDirectory path,takeFileName path,takeExtension path) of
                (_  ,_             ,".pgf") -> wrapCGI $ PS.cgiMain' cache path
                (dir,"grammars.cgi",_     ) -> grammarList dir (decoded qs)
                (dir  ,"exb.fcgi"  ,_    ) -> wrapCGI $ ES.cgiMain' root dir cache
-               _ -> do resp <- serveStaticFile path
-                       return (state,resp)
+               _ -> liftIO $ serveStaticFile path
              where path = translatePath rpath
-           _ -> return (state,resp400 upath)
+           _ -> err $ resp400 upath
 
     root = "."
 
     translatePath rpath = root</>rpath -- hmm, check for ".."
 
     wrapCGI cgi = 
-      do resp <- cgiHandler root (handleErrors . handleCGIErrors $ cgi) rq
-         return (state,resp)
+      liftIO $ cgiHandler root (handleErrors . handleCGIErrors $ cgi) rq
 
-    look field ok qs =
-        case partition ((==field).fst) qs of
-          ((_,(value,_)):qs1,qs2) -> ok value (qs1++qs2)
-          _ -> bad
-      where
-        bad = return (state,resp400 $ "no "++field++" in request")
+    look field =
+      do qs <- get_qs
+         case partition ((==field).fst) qs of
+           ((_,(value,_)):qs1,qs2) -> do put_qs (qs1++qs2)
+                                         return value
+           _ -> err $ resp400 $ "no "++field++" in request"
     
-    inDir qs ok = look "dir" cd qs
+    inDir ok = cd =<< look "dir"
       where
-        cd ('/':dir@('t':'m':'p':_)) qs' =
-          do cwd <- getCurrentDirectory
-             b <- try $ setCurrentDirectory dir
+        cd ('/':dir@('t':'m':'p':_)) =
+          do cwd <- liftIO $ getCurrentDirectory
+             b <- liftIO $ try $ setCurrentDirectory dir
              case b of
-               Left _ -> do b <- try $ readFile dir -- poor man's symbolic links
+               Left _ -> do b <- liftIO $ try $ readFile dir -- poor man's symbolic links
                             case b of
-                              Left _ -> return (state,resp404 dir)
-                              Right dir' -> cd dir' qs'
+                              Left _ -> err $ resp404 dir
+                              Right dir' -> cd dir'
                Right _ -> do logPutStrLn $ "cd "++dir
-                             r <- try (ok dir qs')
-                             setCurrentDirectory cwd
-                             either ioError return r
-        cd dir _ = return (state,resp400 $ "unacceptable directory "++dir)
+                             r <- hmtry (ok dir)
+                             liftIO $ setCurrentDirectory cwd
+                             either (either (liftIO . ioError) err) return r
+        cd dir = err $ resp400 $ "unacceptable directory "++dir
 
-    new =
-      do dir <- newDirectory
-         return (state,ok200 dir)
+    new = fmap ok200 $ liftIO $ newDirectory
 
-    command dir cmd _ =
-      do let st = maybe state0 id $ M.lookup dir state
-         (output,st') <- hCapture [stdout,stderr] (execute1 st cmd)
+    command dir =
+      do cmd <- look "command"
+         state <- get_state
+         let st = maybe state0 id $ M.lookup dir state
+         (output,st') <- liftIO $ hCapture [stdout,stderr] (execute1 st cmd)
          let state' = maybe state (flip (M.insert dir) state) st'
-         return (state',ok200 output)
+         put_state state'
+         return $ ok200 output
 
-    parse qs =
-      return (state,json200 (makeObj(map parseModule qs)))
+    parse qs = return $ json200 (makeObj(map parseModule qs))
 
-    cloud dir cmd qs =
-      case cmd of
-        "make" -> make dir (raw qs)
-        "upload" -> upload (raw qs)
-        "ls" -> jsonList (maybe ".json" fst $ lookup "ext" qs)
-        "rm" -> with_file qs rm
-        "download" -> with_file qs download
-        "link_directories" -> look "newdir" (link_directories dir) qs
-        _ -> return (state,resp400 $ "cloud command "++cmd)
+    cloud dir =
+      do cmd <- look "command"
+         case cmd of
+           "make" -> make dir . raw =<< get_qs
+           "upload" -> upload . raw =<< get_qs
+           "ls" -> jsonList . maybe ".json" fst . lookup "ext" =<< get_qs
+           "rm" -> rm =<< look_file
+           "download" -> download =<< look_file
+           "link_directories" ->  link_directories dir =<< look "newdir"
+           _ -> err $ resp400 $ "cloud command "++cmd
 
-    with_file qs f = look "file" check qs
+    look_file = check =<< look "file"
       where
-        check path qs =
+        check path =
           if ok_access path
-          then f path qs
-          else return (state,resp400 $ "unacceptable path "++path)
+          then return path
+          else err $ resp400 $ "unacceptable path "++path
 
     make dir files =
-      do (state,_) <- upload files
+      do _ <- upload files
          let args = "-s":"-make":map fst files
              cmd = unwords ("gf":args)
-         out <- readProcessWithExitCode "gf" args ""
-         cwd <- getCurrentDirectory
-         return (state,json200 (jsonresult cwd ('/':dir++"/") cmd out files))
+         out <- liftIO $ readProcessWithExitCode "gf" args ""
+         cwd <- liftIO $ getCurrentDirectory
+         return $ json200 (jsonresult cwd ('/':dir++"/") cmd out files)
 
     upload files =
         if null badpaths
-        then do mapM_ (uncurry updateFile) okfiles
-                return (state,resp204)
-        else return (state,resp404 $ "unacceptable path(s) "++unwords badpaths)
+        then do liftIO $ mapM_ (uncurry updateFile) okfiles
+                return resp204
+        else err $ resp404 $ "unacceptable path(s) "++unwords badpaths
       where
         (okfiles,badpaths) = apSnd (map fst) $ partition (ok_access.fst) files
 
-    jsonList ext =
-        do jsons <- ls_ext "." ext
-           return (state,json200 jsons)
+    jsonList ext = fmap (json200) (ls_ext "." ext)
 
-    ok_to_delete = [".json",".gfstdoc",".gfo",".gf",".pgf"]
-
-    rm path _ | takeExtension path `elem` ok_to_delete =
-      do b <- doesFileExist path
+    rm path | takeExtension path `elem` ok_to_delete =
+      do b <- liftIO $ doesFileExist path
          if b
-           then do removeFile path
-                   return (state,ok200 "")
-           else return (state,resp404 path)
-    rm path _ = return (state,resp400 $ "unacceptable extension "++path)
+           then do liftIO $ removeFile path
+                   return $ ok200 ""
+           else err $ resp404 path
+    rm path = err $ resp400 $ "unacceptable extension "++path
 
-    download path _ = (,) state `fmap` serveStaticFile path
+    download path = liftIO $ serveStaticFile path
 
-    link_directories olddir newdir@('/':'t':'m':'p':'/':_) _ | old/=new =
+    link_directories olddir newdir@('/':'t':'m':'p':'/':_) | old/=new =
+        liftIO $
         do setCurrentDirectory ".."
            logPutStrLn =<< getCurrentDirectory
            logPutStrLn $ "link_dirs new="++new++", old="++old
@@ -225,29 +251,29 @@ handle state0 cache execute1
            if isLink then removeLink old else removeDir old
            createSymbolicLink new old
 #endif
-           return (state,ok200 "")
+           return $ ok200 ""
       where
         old = takeFileName olddir
         new = takeFileName newdir
-    link_directories olddir newdir _ =
-      return (state,resp400 $ "unacceptable directories "++olddir++" "++newdir)
+    link_directories olddir newdir =
+      err $ resp400 $ "unacceptable directories "++olddir++" "++newdir
 
     grammarList dir qs =
         do pgfs <- ls_ext dir ".pgf"
-           return (state,jsonp qs pgfs)
+           return $ jsonp qs pgfs
 
     ls_ext dir ext =
-        do paths <- getDirectoryContents dir
+        do paths <- liftIO $ getDirectoryContents dir
            return [path | path<-paths, takeExtension path==ext]
 
 -- * Dynamic content
 
 jsonresult cwd dir cmd (ecode,stdout,stderr) files =
   makeObj [
-    prop "errorcode" (if ecode==ExitSuccess then "OK" else "Error"),
-    prop "command" cmd,
-    prop "output" (unlines [rel stderr,rel stdout]),
-    prop "minibar_url" ("/minibar/minibar.html?"++dir++pgf)]
+    "errorcode" .= if ecode==ExitSuccess then "OK" else "Error",
+    "command" .= cmd,
+    "output" .= unlines [rel stderr,rel stdout],
+    "minibar_url" .= "/minibar/minibar.html?"++dir++pgf]
   where
     pgf = case files of
             (abstract,_):_ -> "%20"++dropExtension abstract++".pgf"
@@ -324,7 +350,7 @@ serveStaticFile' path =
                     else return (resp404 path)
 
 -- * Logging
-logPutStrLn = hPutStrLn stderr
+logPutStrLn s = liftIO . hPutStrLn stderr $ s
 
 -- * JSONP output
 
@@ -341,7 +367,12 @@ html200      = ok200' htmlUTF8 . encodeString
 resp204      = Response 204 [] "" -- no content
 resp400 msg  = Response 400 [plain] $ "Bad request: "++msg++"\n"
 resp404 path = Response 404 [plain] $ "Not found: "++path++"\n"
+resp500 msg  = Response 500 [plain] $ "Internal error: "++msg++"\n"
 resp501 msg  = Response 501 [plain] $ "Not implemented: "++msg++"\n"
+
+instance Error Response where
+  noMsg = resp500 "no message"
+  strMsg = resp500
 
 -- * Content types
 plain = ct "text/plain"
@@ -381,6 +412,9 @@ ok_access path =
       '.':'.':'/':_ -> False
       _ -> not ("/../" `isInfixOf` path)
 
+-- | Only delete files with these extensions
+ok_to_delete = [".json",".gfstdoc",".gfo",".gf",".pgf"]
+
 newDirectory =
     do debug "newDirectory"
        loop 10
@@ -416,6 +450,8 @@ toHeader s = FCGI.HttpExtensionHeader s -- cheating a bit
 -- * misc utils
 
 --utf8inputs = mapBoth decodeString . inputs
+type Q = [(String,(String,String))]
+utf8inputs :: String -> Q
 utf8inputs q = [(decodeString k,(decodeString v,v))|(k,v)<-inputs q]
 decoded = mapSnd fst
 raw = mapSnd snd
@@ -432,4 +468,5 @@ mapBoth = map . apBoth
 apBoth f (x,y) = (f x,f y)
 apSnd f (x,y) = (x,f y)
 
-prop n v = (n,showJSON v)
+infix 1 .=
+n .= v = (n,showJSON v)
