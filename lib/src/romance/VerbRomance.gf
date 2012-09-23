@@ -87,6 +87,9 @@ incomplete concrete VerbRomance of Verb =
     PassV2 v = insertComplement 
       (\\a => let agr = complAgr a in v.s ! VPart agr.g agr.n) (predV auxPassive) ;
 
+    VPSlashPrep vp prep = vp ** {
+      c2 = {s = prep.s ; c = prep.c ; isDir = False}
+      } ;
 }
 
 {---b
