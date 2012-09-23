@@ -18,7 +18,7 @@ concrete IdiomFin of Idiom = CatFin **
       let
         cas : NPForm = NPCase Nom ; ---- also partitive in Extra
         vp = insertObj (\\_,b,_ => "olemassa") (predV olla) ; 
-        cl = mkClause (subjForm (ip ** {isPron = False ; a = agrP3 ip.n}) cas) (agrP3 Sg) vp
+        cl = mkClause (subjForm (ip ** {isPron = False ; a = agrP3 ip.n}) cas) (agrP3 ip.n) vp
       in {
         s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
         } ;

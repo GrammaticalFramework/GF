@@ -114,6 +114,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
     CompNP np = {s = \\_ => np.s ! NPCase Nom} ;
     CompAdv a = {s = \\_ => a.s} ;
 
+    VPSlashPrep vp prep = vp ** {c2 = prep} ;
 }
 
 
