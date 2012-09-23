@@ -38,7 +38,7 @@ concrete CatGer of Cat =
 -- Verb
 
     VP = ResGer.VP ;
-    VPSlash = ResGer.VP ** {c2 : Preposition} ;
+    VPSlash = ResGer.VPSlash ;
     Comp = {s : Agr => Str} ; 
 
 -- Adjective

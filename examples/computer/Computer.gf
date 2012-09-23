@@ -123,7 +123,7 @@ flags startcat = Text ;
 fun
    TextS   : S  -> Text ; -- with .
    TextQS  : QS -> Text ; -- with ?
-   TextImp : VP -> Text ; -- with !
+--   TextImp : VP -> Text ; -- with !
 
    ComplV2 : V2 -> NP -> VP ;
    ModCN   : AP -> CN -> CN ;
