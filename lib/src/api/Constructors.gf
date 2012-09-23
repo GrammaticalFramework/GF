@@ -1647,6 +1647,7 @@ incomplete resource Constructors = open Grammar in {  --%
   ListAP : Type = Grammar.ListAP ; 
   ListNP : Type = Grammar.ListNP ; 
   ListS : Type = Grammar.ListS ; 
+  ListRS : Type = Grammar.ListRS ; 
 
 -- bw to 4
 
