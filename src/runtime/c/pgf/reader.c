@@ -646,7 +646,7 @@ typedef struct {
 } PgfIndexFn;
 
 static void
-pgf_compute_meta_probs(GuMapItor* fn, const void* key, void* value, GuExn* err)
+pgf_init_meta_probs(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
 	(void) (err);
 	
@@ -655,11 +655,7 @@ pgf_compute_meta_probs(GuMapItor* fn, const void* key, void* value, GuExn* err)
 
     cat->name = name;
 
-    prob_t mass = 0;
-    for (size_t i = 0; i < cat->n_functions; i++) {
-		mass += cat->functions[i].prob;
-	}
-    cat->meta_prob = (mass > 1) ? INFINITY : - log(1 - mass);
+    cat->meta_prob = INFINITY;
 	cat->meta_token_prob = INFINITY;
     cat->meta_child_probs = NULL;
 }
@@ -670,7 +666,7 @@ pgf_read_to_PgfAbstr(GuType* type, PgfReader* rdr, void* to)
 	rdr->curr_abstr = to;
 	pgf_read_to_struct(type, rdr, to);
 
-	PgfIndexFn clo = { { pgf_compute_meta_probs }, rdr };
+	PgfIndexFn clo = { { pgf_init_meta_probs }, rdr };
 	gu_map_iter(rdr->curr_abstr->cats, &clo.fn, NULL);
 }
 
@@ -969,7 +965,9 @@ pgf_load_meta_child_probs(PgfPGF* pgf, const char* fpath, GuPool* pool)
 		if (abscat1 == NULL)
 			return false;
 
-		if (strcmp(cat2_s, "_") == 0) {
+		if (strcmp(cat2_s, "*") == 0) {
+			abscat1->meta_prob = prob;
+		} else if (strcmp(cat2_s, "_") == 0) {
 			abscat1->meta_token_prob = prob;
 		} else {
 			GuString cat2 = gu_str_string(cat2_s, tmp_pool);			
