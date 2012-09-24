@@ -40,7 +40,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
     -- test: I saw a boy whom she begged to walk 
     SlashV2V vv vp =
-      insertSlashObj2 (daComplex Simul Pos vp ! Perf) (slashV vv vv.c2) ;
+      insertSlashObj2 (\\agr => vv.c3.s ++ daComplex Simul Pos vp ! Perf ! agr) (slashV vv vv.c2) ;
 
     -- test: I saw a car whom she wanted to buy
     SlashVV vv slash = {
@@ -66,7 +66,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     ComplSlash slash np = {
       s   = slash.s ;
       ad  = slash.ad ;
-      compl = \\a => slash.compl1 ! a ++ slash.c2.s ++ np.s ! RObj slash.c2.c ++ slash.compl2 ! np.a ;
+      compl = \\a => slash.compl1 ! a ++ slash.c2.s ++ np.s ! RObj slash.c2.c ++ slash.compl2 ! a ;
       vtype = slash.vtype
       } ;
 

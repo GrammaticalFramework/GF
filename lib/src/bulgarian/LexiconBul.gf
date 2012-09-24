@@ -10,11 +10,11 @@ flags
 
 lin
   airplane_N = mkN007 "самолет" ;
-  answer_V2S = mkV2S (actionV (mkV187 "отговарям") (mkV173 "отговоря")) naP ;
+  answer_V2S = mkV2S (actionV (mkV187 "отговарям") (mkV173 "отговоря")) naP noPrep ;
   apartment_N = mkN007 "апартамент" ;
   apple_N = mkN041 "ябълка" ;
   art_N = mkN054 "изкуство" ;
-  ask_V2Q = mkV2Q (stateV (mkV186 "питам")) noPrep ;
+  ask_V2Q = mkV2Q (stateV (mkV186 "питам")) noPrep noPrep ;
   baby_N = mkN065 "бебе" ;
   bad_A = mkA076 "лош" ;
   bank_N = mkN041 "банка" ;

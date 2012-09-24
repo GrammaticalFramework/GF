@@ -71,7 +71,7 @@ lin
       } ;
 
   SlashV2V vv ant p vp =
-      insertSlashObj2 (\\agr => ant.s ++ p.s ++
+      insertSlashObj2 (\\agr => ant.s ++ p.s ++ vv.c3.s ++
                                 daComplex ant.a p.p vp ! Perf ! agr)
                       (slashV vv vv.c2) ;
 
