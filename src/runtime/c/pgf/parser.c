@@ -472,6 +472,21 @@ pgf_parsing_get_conts(PgfContsMap* conts_map,
 	return conts;
 }
 
+static bool
+pgf_parsing_has_conts(PgfContsMap* conts_map,
+                      PgfCCat* ccat, size_t lin_idx,
+                      PgfItemBuf* conts)
+{
+	gu_require(lin_idx < ccat->cnccat->n_lins);
+
+	PgfItemBufs* contss = gu_map_get(conts_map, ccat, PgfItemBufs*);
+	if (!contss)
+		return false;
+
+	PgfItemBuf* conts0 = gu_list_index(contss, lin_idx);
+	return (conts == conts0);
+}
+
 static PgfCCat*
 pgf_parsing_create_completed(PgfParseState* state, PgfItemBuf* conts,
                              prob_t viterbi_prob, PgfCncCat* cnccat)
@@ -664,7 +679,8 @@ pgf_item_advance(PgfItem* item, GuPool* pool)
 
 static void
 pgf_parsing_combine(PgfParseState* before, PgfParseState* after,
-                    PgfItem* cont, PgfCCat* cat, int lin_idx)
+                    PgfItem* cont, PgfCCat* cat, int lin_idx,
+                    bool is_empty)
 {
 	if (cont == NULL) {
 		if (after == NULL)
@@ -700,6 +716,9 @@ pgf_parsing_combine(PgfParseState* before, PgfParseState* after,
 			gu_impossible();
 		}
 	} else {
+		if (is_empty)
+			return;
+
 		item = pgf_item_copy(cont, before->pool);
 		size_t nargs = gu_seq_length(cont->args);
 		item->args = gu_new_seq(PgfPArg, nargs+1, before->pool);
@@ -922,10 +941,15 @@ pgf_parsing_complete(PgfParseState* before, PgfParseState* after,
 			state = state->next;
 		}
 	} else {
+		bool is_empty =
+			pgf_parsing_has_conts(before->conts_map, 
+		                          item->base->ccat, item->base->lin_idx, 
+		                          item->base->conts);
+
 		size_t n_conts = gu_buf_length(conts);
 		for (size_t i = 0; i < n_conts; i++) {
 			PgfItem* cont = gu_buf_get(conts, PgfItem*, i);
-			pgf_parsing_combine(before, after, cont, cat, item->base->lin_idx);
+			pgf_parsing_combine(before, after, cont, cat, item->base->lin_idx, is_empty);
 		}
     }
 }
@@ -1013,7 +1037,7 @@ pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
 		PgfCCat* completed =
 			pgf_parsing_get_completed(before, conts);
 		if (completed) {
-			pgf_parsing_combine(before, after, item, completed, lin_idx);
+			pgf_parsing_combine(before, after, item, completed, lin_idx, true);
 		}
 
 		PgfParseState* state = after;
@@ -1021,7 +1045,7 @@ pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
 			PgfCCat* completed =
 				pgf_parsing_get_completed(state, conts);
 			if (completed) {
-				pgf_parsing_combine(state, state->next, item, completed, lin_idx);
+				pgf_parsing_combine(state, state->next, item, completed, lin_idx, true);
 			}
 
 			state = state->next;
@@ -1153,7 +1177,7 @@ pgf_parsing_bu_predict(PgfParseState* before, PgfParseState* after,
 					PgfCCat* completed =
 						pgf_parsing_get_completed(state, conts);
 					if (completed) {
-						pgf_parsing_combine(state, state->next, meta_item, completed, item->base->lin_idx);
+						pgf_parsing_combine(state, state->next, meta_item, completed, item->base->lin_idx, true);
 					}
 
 					state = state->next;
@@ -1315,7 +1339,7 @@ pgf_parsing_symbol(PgfParseState* before, PgfParseState* after,
 					PgfCCat* completed =
 							pgf_parsing_get_completed(before, conts);
 					if (completed) {
-						pgf_parsing_combine(before, after, item, completed, slit->r);
+						pgf_parsing_combine(before, after, item, completed, slit->r, true);
 					}
 						
 					PgfParseState* state = after;
@@ -1323,7 +1347,7 @@ pgf_parsing_symbol(PgfParseState* before, PgfParseState* after,
 						PgfCCat* completed =
 							pgf_parsing_get_completed(state, conts);
 						if (completed) {
-							pgf_parsing_combine(state, state->next, item, completed, slit->r);
+							pgf_parsing_combine(state, state->next, item, completed, slit->r, true);
 						}
 
 						state = state->next;
