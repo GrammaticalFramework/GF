@@ -1,11 +1,13 @@
 {-# LANGUAGE ScopedTypeVariables, CPP #-}
+-- | GF interactive mode
 module GFI (mainGFI,mainRunGFI,mainServerGFI) where
-
-import GF.Command.Interpreter
-import GF.Command.Importing
-import GF.Command.Commands
+import Prelude hiding (putStrLn,print)
+import qualified Prelude as P(putStrLn)
+import GF.Command.Interpreter(CommandEnv(..),commands,mkCommandEnv,emptyCommandEnv,interpretCommandLine)
+--import GF.Command.Importing(importSource,importGrammar)
+import GF.Command.Commands(flags,options)
 import GF.Command.Abstract
-import GF.Command.Parse
+import GF.Command.Parse(readCommandLine,pCommand)
 import GF.Data.ErrM
 import GF.Data.Operations (chunks,err)
 import GF.Grammar hiding (Ident)
@@ -14,19 +16,19 @@ import GF.Grammar.Parser (runP, pExp)
 import GF.Grammar.Printer (ppGrammar, ppModule)
 import GF.Grammar.ShowTerm
 import GF.Grammar.Lookup (allOpers,allOpersTo)
-import GF.Compile.Rename
+import GF.Compile.Rename(renameSourceTerm)
 import GF.Compile.Compute.Concrete (computeConcrete,checkPredefError)
 import GF.Compile.TypeCheck.Concrete (inferLType,ppType)
-import GF.Infra.Dependencies
+import GF.Infra.Dependencies(depGraph)
 import GF.Infra.CheckM
-import GF.Infra.UseIO
+import GF.Infra.UseIO(ioErrorText)
+import GF.Infra.SIO
 import GF.Infra.Option
 import GF.Infra.Ident (showIdent)
-import GF.Infra.BuildInfo (buildInfo)
 import qualified System.Console.Haskeline as Haskeline
-import GF.Text.Coding
+import GF.Text.Coding(decodeUnicode,encodeUnicode)
 
-import GF.Compile.Coding
+import GF.Compile.Coding(codeTerm)
 
 import PGF
 import PGF.Data
@@ -38,14 +40,13 @@ import Data.List(nub,isPrefixOf,isInfixOf,partition)
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
 import qualified Text.ParserCombinators.ReadP as RP
-import System.IO
-import System.CPUTime
-import System.Directory
-import Control.Exception
+import System.IO(utf8,mkTextEncoding,hSetEncoding,stdin,stdout,stderr)
+--import System.CPUTime(getCPUTime)
+import System.Directory({-getCurrentDirectory,-}getAppUserDataDirectory)
+import Control.Exception(SomeException,fromException,evaluate,try)
 import Control.Monad
-import Data.Version
 import Text.PrettyPrint (render)
-import GF.System.Signal
+import qualified GF.System.Signal as IO(runInterruptibly)
 #ifdef SERVER_MODE
 import GFServer(server)
 #endif
@@ -54,7 +55,9 @@ import System.Win32.Console
 import System.Win32.NLS
 #endif
 
-import Paths_gf
+import GF.Infra.BuildInfo(buildInfo)
+import Data.Version(showVersion)
+import Paths_gf(version)
 
 mainRunGFI :: Options -> [FilePath] -> IO ()
 mainRunGFI opts files = shell (beQuiet opts) files
@@ -63,14 +66,14 @@ beQuiet = addOptions (modifyFlags (\f -> f{optVerbosity=Quiet}))
 
 mainGFI :: Options -> [FilePath] -> IO ()
 mainGFI opts files = do
-  putStrLn welcome
+  P.putStrLn welcome
   shell opts files
 
-shell opts files = loop opts =<< importInEnv emptyGFEnv opts files
+shell opts files = loop opts =<< runSIO (importInEnv emptyGFEnv opts files)
 
 #ifdef SERVER_MODE
 mainServerGFI opts0 port files =
-    server port (execute1 opts) =<< importInEnv emptyGFEnv opts files
+    server port (execute1 opts) =<< runSIO (importInEnv emptyGFEnv opts files)
   where opts = beQuiet opts0
 #else
 mainServerGFI opts files =
@@ -84,7 +87,8 @@ loop opts gfenv = maybe (return ()) (loop opts) =<< readAndExecute1 opts gfenv
 -- | Read and execute one command, returning Just an updated environment for
 -- | the next command, or Nothing when it is time to quit
 readAndExecute1 :: Options -> GFEnv -> IO (Maybe GFEnv)
-readAndExecute1 opts gfenv = execute1 opts gfenv =<< readCommand opts gfenv
+readAndExecute1 opts gfenv =
+    runSIO . execute1 opts gfenv =<< readCommand opts gfenv
 
 -- | Read a command
 readCommand :: Options -> GFEnv -> IO String
@@ -94,7 +98,7 @@ readCommand opts gfenv0 =
       _       -> fetchCommand gfenv0
 
 -- | Optionally show how much CPU time was used to run an IO action
-optionallyShowCPUTime :: Options -> IO a -> IO a
+optionallyShowCPUTime :: Options -> SIO a -> SIO a
 optionallyShowCPUTime opts act 
   | not (verbAtLeast opts Normal) = act
   | otherwise = do t0 <- getCPUTime
@@ -115,7 +119,7 @@ loopOptNewCPU opts gfenv'
 
 -- | Execute a given command, returning Just an updated environment for
 -- | the next command, or Nothing when it is time to quit
-execute1 :: Options -> GFEnv -> String -> IO (Maybe GFEnv)
+execute1 :: Options -> GFEnv -> String -> SIO (Maybe GFEnv)
 execute1 opts gfenv0 s0 =
   interruptible $ optionallyShowCPUTime opts $
   case pwords s0 of
@@ -239,7 +243,7 @@ execute1 opts gfenv0 s0 =
                  [showIdent j ++ "\t" ++ show (fst k) | (j,k) <- snd sz]
         _ | elem "-save" os -> mapM_ 
                  (\ m@(i,_) -> let file = (showIdent i ++ ".gfh") in 
-                    writeFile file (render (ppModule Qualified m)) >> putStrLn ("wrote " ++ file))
+                    restricted $ writeFile file (render (ppModule Qualified m)) >> P.putStrLn ("wrote " ++ file))
                  (modules mygr)  
         _ -> putStrLn $ render $ ppGrammar mygr
       continue gfenv
@@ -253,7 +257,7 @@ execute1 opts gfenv0 s0 =
          continue gfenv
 
     eh [w] = -- Ehhh? Reads commands from a file, but does not execute them
-      do cs <- readFile w >>= return . map (interpretCommandLine env) . lines
+      do cs <- restricted (readFile w) >>= return . map (interpretCommandLine env) . lines
          continue gfenv
     eh _   = do putStrLn "eh command not parsed"
                 continue gfenv
@@ -311,20 +315,21 @@ execute1 opts gfenv0 s0 =
 
     set_encoding [c] =
       do let cod = renameEncoding c
+         restricted $ do
 #ifdef mingw32_HOST_OS
-         case cod of
-           'C':'P':c -> case reads c of
-                          [(cp,"")] -> do setConsoleCP cp
-                                          setConsoleOutputCP cp
-                          _         -> return ()
-           "UTF-8"   -> do setConsoleCP 65001
-                           setConsoleOutputCP 65001
-           _         -> return ()
+           case cod of
+             'C':'P':c -> case reads c of
+                            [(cp,"")] -> do setConsoleCP cp
+                                            setConsoleOutputCP cp
+                            _         -> return ()
+             "UTF-8"   -> do setConsoleCP 65001
+                             setConsoleOutputCP 65001
+             _         -> return ()
 #endif
-         enc <- mkTextEncoding cod
-         hSetEncoding stdin  enc
-         hSetEncoding stdout enc
-         hSetEncoding stderr enc
+           enc <- mkTextEncoding cod
+           hSetEncoding stdin  enc
+           hSetEncoding stdout enc
+           hSetEncoding stderr enc
          continue gfenv
     set_encoding _ = putStrLn "se command not parsed" >> continue gfenv
 
@@ -347,13 +352,13 @@ fetchCommand gfenv = do
           Haskeline.historyFile = Just path,
           Haskeline.autoAddHistory = True
         }
-  res <- runInterruptibly $ Haskeline.runInputT settings (Haskeline.getInputLine (prompt (commandenv gfenv)))
+  res <- IO.runInterruptibly $ Haskeline.runInputT settings (Haskeline.getInputLine (prompt (commandenv gfenv)))
   case res of
     Left  _        -> return ""
     Right Nothing  -> return "q"
     Right (Just s) -> return s
 
-importInEnv :: GFEnv -> Options -> [FilePath] -> IO GFEnv
+importInEnv :: GFEnv -> Options -> [FilePath] -> SIO GFEnv
 importInEnv gfenv opts files
     | flag optRetainResource opts =
         do src <- importSource (sourcegrammar gfenv) opts files

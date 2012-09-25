@@ -10,6 +10,7 @@ module GF.Command.Commands (
   CommandInfo,
   CommandOutput
   ) where
+import Prelude hiding (putStrLn)
 
 import PGF
 import PGF.CId
@@ -27,7 +28,8 @@ import GF.Compile.Export
 import GF.Compile.ToAPI
 import GF.Compile.ExampleBased
 import GF.Infra.Option (noOptions, readOutputFormat, outputFormatsExpl)
-import GF.Infra.UseIO
+import GF.Infra.UseIO(writeUTF8File)
+import GF.Infra.SIO
 import GF.Data.ErrM ----
 import GF.Command.Abstract
 import GF.Command.Messages
@@ -48,12 +50,12 @@ import qualified Data.Map as Map
 import Text.PrettyPrint
 import Data.List (sort)
 import Debug.Trace
-import System.Random (newStdGen) ----
+--import System.Random (newStdGen) ----
 
 type CommandOutput = ([Expr],String) ---- errors, etc
 
 data CommandInfo = CommandInfo {
-  exec     :: PGFEnv -> [Option] -> [Expr] -> IO CommandOutput,
+  exec     :: PGFEnv -> [Option] -> [Expr] -> SIO CommandOutput,
   synopsis :: String,
   syntax   :: String,
   explanation :: String,
@@ -350,7 +352,7 @@ allCommands = Map.fromList [
        pgf <- optProbs opts pgf
        let printer = if (isOpt "api" opts) then exprToAPI else (showExpr [])
        let conf = configureExBased pgf (optMorpho env opts) (optLang pgf opts) printer
-       (file',ws) <- parseExamplesInGrammar conf file
+       (file',ws) <- restricted $ parseExamplesInGrammar conf file
        if null ws then return () else putStrLn ("unknown words: " ++ unwords ws)
        return (fromString ("wrote " ++ file')),
      needsTypeCheck = False
@@ -544,7 +546,7 @@ allCommands = Map.fromList [
          let typ  = optType pgf opts
          pgf <- optProbs opts pgf
          let mt = mexp xs
-         morphologyQuiz mt pgf lang typ
+         restricted $ morphologyQuiz mt pgf lang typ
          return void,
      flags = [
        ("lang","language of the quiz"),
@@ -721,7 +723,7 @@ allCommands = Map.fromList [
                                   (es, err) | null es   -> return ([], render (err $$ text "no trees found"))
                                             | otherwise -> return (es, render err)
 
-       s <- readFile file
+       s <- restricted $ readFile file
        case opts of
          _ | isOpt "lines" opts && isOpt "tree" opts ->
                returnFromLines (zip [1..] (lines s))
@@ -768,7 +770,7 @@ allCommands = Map.fromList [
          let typ  = optType pgf opts
          let mt   = mexp xs
          pgf <- optProbs opts pgf
-         translationQuiz mt pgf from to typ
+         restricted $ translationQuiz mt pgf from to typ
          return void,
      flags = [
        ("from","translate from this language"),
@@ -824,7 +826,7 @@ allCommands = Map.fromList [
        restricted $ writeFile tmpi $ toString arg
        let syst = optComm opts ++ " " ++ tmpi
        restrictedSystem $ syst ++ " <" ++ tmpi ++ " >" ++ tmpo
-       s <- readFile tmpo
+       s <- restricted $ readFile tmpo
        return $ fromString s,
      flags = [
        ("command","the system command applied to the argument")
@@ -911,7 +913,7 @@ allCommands = Map.fromList [
          let outp = valStrOpts "output" "dot" opts
          mlab <- case file of
            "" -> return Nothing
-           _  -> readFile file >>= return . Just . getDepLabels . lines
+           _  -> restricted (readFile file) >>= return . Just . getDepLabels . lines
          let lang = optLang pgf opts
          let grphs = unlines $ map (graphvizDependencyTree outp debug mlab Nothing pgf lang) es
          if isFlag "view" opts || isFlag "format" opts then do
@@ -1172,16 +1174,16 @@ allCommands = Map.fromList [
    optProbs opts pgf = case valStrOpts "probs" "" opts of
      ""   -> return pgf
      file -> do
-       probs <- readProbabilitiesFromFile file pgf
+       probs <- restricted $ readProbabilitiesFromFile file pgf
        return (setProbabilities probs pgf)
 
    optTranslit opts = case (valStrOpts "to" "" opts, valStrOpts "from" "" opts) of
      ("","")  -> return id
      (file,"") -> do
-       src <- readFile file
+       src <- restricted $ readFile file
        return $ transliterateWithFile file src False
      (_,file) -> do
-       src <- readFile file
+       src <- restricted $ readFile file
        return $ transliterateWithFile file src True
 
    optFile opts = valStrOpts "file" "_gftmp" opts
@@ -1230,7 +1232,7 @@ allCommands = Map.fromList [
      | isOpt "pgf"      opts = do
           let pgf1 = if isOpt "opt" opts then optimizePGF pgf else pgf
           let outfile = valStrOpts "file" (showCId (abstractName pgf) ++ ".pgf") opts
-          encodeFile outfile pgf1
+          restricted $ encodeFile outfile pgf1
           putStrLn $ "wrote file " ++ outfile
           return void
      | isOpt "cats"     opts = return $ fromString $ unwords $ map showCId $ categories pgf
@@ -1345,7 +1347,7 @@ prMorphoAnalysis (w,lps) =
 
 
 -- This function is to be excuted when the command 'tok' is parsed
-execToktok :: PGFEnv -> [Option] -> [Expr] -> IO CommandOutput
+execToktok :: Monad m => PGFEnv -> [Option] -> [Expr] -> m CommandOutput
 execToktok (pgf, _) opts exprs = do
   let tokenizers = Map.fromList [ (l, mkTokenizer pgf l) | l <- languages pgf]
   case getLang opts of
