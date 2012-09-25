@@ -112,7 +112,8 @@ executable gf
                  parallel
   ghc-options: -threaded
   if flag(server)
-    build-depends: httpd-shed, network, silently, utf8-string, json, cgi
+    build-depends: httpd-shed, network, utf8-string, json, cgi
+                   -- ,silently
     cpp-options: -DSERVER_MODE
     other-modules: GFServer
     hs-source-dirs: src/server src/server/transfer src/example-based

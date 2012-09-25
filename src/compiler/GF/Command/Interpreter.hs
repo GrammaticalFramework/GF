@@ -6,6 +6,7 @@ module GF.Command.Interpreter (
   interpretPipe,
   getCommandOp
   ) where
+import Prelude hiding (putStrLn)
 
 import GF.Command.Commands
 import GF.Command.Abstract
@@ -14,7 +15,7 @@ import PGF
 import PGF.Data
 import PGF.Morphology
 import GF.System.Signal
-import GF.Infra.UseIO
+import GF.Infra.SIO
 import GF.Infra.Option
 
 import Text.PrettyPrint
@@ -38,7 +39,7 @@ mkCommandEnv pgf =
 emptyCommandEnv :: CommandEnv
 emptyCommandEnv = mkCommandEnv emptyPGF
 
-interpretCommandLine :: CommandEnv -> String -> IO ()
+interpretCommandLine :: CommandEnv -> String -> SIO ()
 interpretCommandLine env line =
   case readCommandLine line of
     Just []    -> return ()
@@ -82,7 +83,7 @@ appCommand xs c@(Command i os arg) = case arg of
     EFun x     -> EFun x
 
 -- return the trees to be sent in pipe, and the output possibly printed
-interpret :: CommandEnv -> [Expr] -> Command -> IO CommandOutput
+interpret :: CommandEnv -> [Expr] -> Command -> SIO CommandOutput
 interpret env trees comm = 
   case getCommand env trees comm of
     Left  msg               -> do putStrLn ('\n':msg)

@@ -27,11 +27,12 @@ import Network.Shed.Httpd(initServer,Request(..),Response(..),queryToArguments,
 import Network.CGI(handleErrors,liftIO)
 import FastCGIUtils(outputJSONP,handleCGIErrors,stderrToFile)
 import Text.JSON(encode,showJSON,makeObj)
-import System.IO.Silently(hCapture)
+--import System.IO.Silently(hCapture)
 import System.Process(readProcessWithExitCode)
 import System.Exit(ExitCode(..))
 import Codec.Binary.UTF8.String(decodeString,encodeString)
 import GF.Infra.UseIO(readBinaryFile,writeBinaryFile)
+import GF.Infra.SIO(captureSIO)
 import qualified PGFService as PS
 import qualified ExampleService as ES
 import Data.Version(showVersion)
@@ -171,7 +172,7 @@ handle state0 cache execute1
                             case b of
                               Left _ -> err $ resp404 dir
                               Right dir' -> cd dir'
-               Right _ -> do logPutStrLn $ "cd "++dir
+               Right _ -> do --logPutStrLn $ "cd "++dir
                              r <- hmtry (ok dir)
                              liftIO $ setCurrentDirectory cwd
                              either (either (liftIO . ioError) err) return r
@@ -183,7 +184,7 @@ handle state0 cache execute1
       do cmd <- look "command"
          state <- get_state
          let st = maybe state0 id $ M.lookup dir state
-         (output,st') <- liftIO $ hCapture [stdout,stderr] (execute1 st cmd)
+         (output,st') <- liftIO $ captureSIO $ execute1 st cmd
          let state' = maybe state (flip (M.insert dir) state) st'
          put_state state'
          return $ ok200 output
