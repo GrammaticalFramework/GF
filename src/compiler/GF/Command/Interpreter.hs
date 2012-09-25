@@ -1,5 +1,5 @@
 module GF.Command.Interpreter (
-  CommandEnv (..),
+  CommandEnv,commands,multigrammar,commandmacros,expmacros,
   mkCommandEnv,
   emptyCommandEnv,
   interpretCommandLine,
@@ -24,15 +24,16 @@ import qualified Data.Map as Map
 data CommandEnv = CommandEnv {
   multigrammar  :: PGF,
   morphos       :: Map.Map Language Morpho,
-  commands      :: Map.Map String CommandInfo,
+--commands      :: Map.Map String CommandInfo,
   commandmacros :: Map.Map String CommandLine,
   expmacros     :: Map.Map String Expr
   }
+commands _ = allCommands
 
 mkCommandEnv :: PGF -> CommandEnv
 mkCommandEnv pgf = 
   let mos = Map.fromList [(la,buildMorpho pgf la) | la <- languages pgf] in
-    CommandEnv pgf mos (allCommands (pgf, mos)) Map.empty Map.empty
+    CommandEnv pgf mos {-allCommands-} Map.empty Map.empty
 
 emptyCommandEnv :: CommandEnv
 emptyCommandEnv = mkCommandEnv emptyPGF
@@ -86,7 +87,8 @@ interpret env trees comm =
   case getCommand env trees comm of
     Left  msg               -> do putStrLn ('\n':msg)
                                   return ([],[])
-    Right (info,opts,trees) -> do tss@(_,s) <- exec info opts trees
+    Right (info,opts,trees) -> do let cmdenv = (multigrammar env,morphos env)
+                                  tss@(_,s) <- exec info cmdenv opts trees
                                   if isOpt "tr" opts
                                     then putStrLn s
                                     else return ()
