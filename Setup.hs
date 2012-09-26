@@ -219,6 +219,7 @@ langsCoding = [
   (("latin",    "Lat"),""),
   (("latvian",    "Lav"),""),
   (("norwegian","Nor"),""),
+  (("persian",  "Pes"),""),
   (("polish",   "Pol"),""),
   (("punjabi",   "Pnb"),""),
   (("romanian", "Ron"),""),
