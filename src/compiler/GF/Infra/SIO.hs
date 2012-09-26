@@ -58,7 +58,7 @@ captureSIO sio   = do ch <- newChan
                       output <- fmap takeJust (getChanContents ch)
                       return (output,result)
                    where
-                     takeJust (Just xs:ys) = xs++takeJust ys
+                     takeJust (Just xs:ys) = xs++'\n':takeJust ys
                      takeJust _ = []
 
 -- * Restricted accesss to arbitrary (potentially unsafe) IO operations
