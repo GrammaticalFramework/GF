@@ -319,21 +319,19 @@ mkV2 : overload {
   regN : Str -> N = \hund -> case hund of {
     _ + "e" => mk6N hund hund hund hund (hund + "n") (hund + "n") Fem ;
     _ + ("ion" | "ung") => mk6N hund hund hund hund (hund + "en") (hund + "en") Fem ;
-    _ + ("er" | "en" | "el") => mk6N hund hund hund (genitS hund) hund (pluralN hund) Masc ; 
-    _  => mk6N hund hund hund (genitS hund) (hund + "e") (pluralN hund) Masc
+    _ + ("er" | "en" | "el") => mk6N hund hund hund (genitS (True | False) hund) hund (pluralN hund) Masc ; 
+    _  => mk6N hund hund hund (genitS (True | False) hund) (hund + "e") (pluralN hund) Masc
     } ;
 
   reg2N : (x1,x2 : Str) -> Gender -> N = \hund,hunde,g -> 
-    let
-      hunds = genitS hund ;
-      hundE = dativE hund ;
-      hunden = pluralN hunde
+    let hunden = pluralN hunde
     in
     case <hund,hunde,g> of {                                        -- Duden p. 223
       <_,_ + ("e" | "er"), Masc | Neutr> =>                         -- I,IV 
-        mk6N hund hund hundE hunds hunde hunden g ;
+        variants {mk6N hund hund (dativE True  hund) (genitS True  hund) hunde hunden g ;
+                  mk6N hund hund (dativE False hund) (genitS False hund) hunde hunden g} ;
       <_ + ("el"|"er"|"en"),_ + ("el"|"er"|"en"), Masc | Neutr> =>  -- II
-        mk6N hund hund hund hunds hunde hunden g ;
+        mk6N hund hund hund (genitS (True | False) hund) hunde hunden g ;
       <_,_ + "s", Masc | Neutr> =>                                  -- V 
         mk6N hund hund hund (hund + "s") hunde hunde g ;
       <_,_ + "en", Masc> =>                                         -- VI 
