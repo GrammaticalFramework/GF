@@ -110,6 +110,7 @@ oper
 
   mkN2 : overload {
 --    mkN2 : Str -> N2 ;
+    mkN2 : N -> N2 ; -- e.g. summan - av
     mkN2 : N -> Prep -> N2 -- e.g. syster - till
   } ;
 
@@ -426,6 +427,7 @@ oper
 
   mkN2 = overload {
     mkN2 : Str -> N2 = \s -> mmkN2 (regN s) (mkPrep "av") ;
+    mkN2 : N -> N2 = \s -> mmkN2 s (mkPrep "av") ;
     mkN2 : N -> Prep -> N2 = mmkN2 
   } ;
 
