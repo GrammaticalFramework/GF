@@ -33,19 +33,19 @@ oper
 
 -- For $ParadigmsGer$.
 
-  genitS : Str -> Str = \hund -> case hund of {
+  genitS : Bool -> Str -> Str = \flag,hund -> case hund of {
     _ + ("el" | "en" | "er") => hund + "s" ;
     _ + ("s" | "ß" | "sch" | "st" | "x" | "z") => hund + "es" ;
-    _ => hund + variants {"s" ; "es"}
+    _ => hund + case flag of {True => "s"; False => "es"}
     } ;
   pluralN : Str -> Str = \hund -> case hund of {
     _ + ("el" | "er" | "e") => hund + "n" ;
     _ + "en" => hund ;
     _ => hund + "en"
     } ;
-  dativE : Str -> Str = \hund -> case hund of {
+  dativE : Bool -> Str -> Str = \flag,hund -> case hund of {
     _ + ("el" | "en" | "er" | "e") => hund ;
-    _ => variants {hund ; hund + "e"}
+    _ => case flag of {True => hund; False => hund + "e"}
     } ;
 
 -- Duden, p. 119
