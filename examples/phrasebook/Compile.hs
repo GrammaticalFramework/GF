@@ -1,5 +1,7 @@
-import List
-import System
+import Data.List(partition)
+import Control.Monad(when)
+import System.Cmd(system)
+import System.Environment(getArgs)
 
 -- (c) Aarne Ranta 2010 under GNU LGPL
 
@@ -21,13 +23,11 @@ import System
 mainmodu = "Phrasebook"
 
 main = do
-  (opts,langs) <- getArgs >>= return . partition ((=='-') . head)
+  (opts,langs) <- partition ((=='-') . head) `fmap` getArgs
   let modus = [mkFile la | la <- langs]
   let opt = elem "-opt" opts
   putStrLn $ unwords modus
-  if notElem "-link" opts 
-    then mapM_ (compileOne opt) modus >> return ()
-    else return ()
+  when (notElem "-link" opts) $ mapM_ (compileOne opt) modus
   case opts of
     _ | elem "-make" opts || elem "-link" opts -> do
       let comm = "gf -make -s " ++ unwords (map (++ ".pgf") modus)
