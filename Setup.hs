@@ -6,7 +6,7 @@ import Distribution.Simple.Utils
 import Distribution.Simple.Setup
 import Distribution.PackageDescription hiding (Flag)
 import Control.Monad
-import Data.List(isPrefixOf)
+import Data.List(isPrefixOf,intersect)
 import Data.Maybe(listToMaybe)
 import System.IO
 import qualified System.IO.Error as E
@@ -70,14 +70,18 @@ rglCommands =
        createDirectoryIfMissing True prelude_dst_dir
        files <- getDirectoryContents prelude_src_dir
        run_gfc pkg lbi (["-s", "--gfo-dir="++prelude_dst_dir] ++ [prelude_src_dir </> file | file <- files, take 1 file /= "."])
-  , RGLCommand "lang"    True  $ \mode args pkg lbi -> do
-       mapM_ (gfc mode pkg lbi . lang) (optl langsLang args)
-       mapM_ (gfc mode pkg lbi . symbol) (optl langsAPI args)
-  , RGLCommand "compat"  True  $ \mode args pkg lbi -> do
-       mapM_ (gfc mode pkg lbi . compat) (optl langsCompat args)
-  , RGLCommand "api"     True  $ \mode args pkg lbi -> do
-       mapM_ (gfc mode pkg lbi . try) (optl langsAPI args)
-       mapM_ (gfc mode pkg lbi . symbolic) (optl langsSymbolic args)
+  , RGLCommand "lang"    True  $ \modes args pkg lbi -> do
+       sequence_
+         [do mapM_ (gfc1 mode pkg lbi . lang) (optml mode langsLang args)
+             mapM_ (gfc1 mode pkg lbi . symbol) (optml mode langsAPI args)
+          | mode <- modes]
+  , RGLCommand "compat"  True  $ \modes args pkg lbi -> do
+         mapM_ (gfc modes pkg lbi . compat) (optl langsCompat args)
+  , RGLCommand "api"     True  $ \modes args pkg lbi -> do
+       sequence_
+         [do mapM_ (gfc1 mode pkg lbi . try) (optml mode langsAPI args)
+             mapM_ (gfc1 mode pkg lbi . symbolic) (optml mode langsSymbolic args)
+          | mode <- modes]
   , RGLCommand "pgf"     False $ \modes args pkg lbi ->
      sequence_ [
        do let dir = getRGLBuildDir lbi mode
@@ -88,7 +92,7 @@ rglCommands =
           run_gfc pkg lbi (["-s","-make","-name=Lang"]++
                            ["Lang" ++ la ++ ".pgf"|(_,la)<-optl langsPGF args])
        | mode <- modes]
-  , RGLCommand "demo"    False $ \mode args pkg lbi -> do
+  , RGLCommand "demo"    False $ \modes args pkg lbi -> do
        let ls = optl langsDemo args
        gf (demos "Demo" ls) ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls] pkg lbi
        return ()
@@ -98,7 +102,12 @@ rglCommands =
        return ()
   ]
   where
-    optl ls args = getOptLangs ls args
+    optl = optml AllTenses
+    optml mode ls args = getOptLangs (shrink ls) args
+      where
+        shrink = case mode of
+                   Present -> intersect langsPresent
+                   _ -> id
 
 --------------------------------------------------------
 
@@ -240,6 +249,9 @@ langs = map fst langsCoding
 -- languagues for which to compile Lang
 langsLang = langs `except` ["Amh","Ara","Lat","Tur"]
 --langsLang = langs `only` ["Fin"] --test
+
+-- languagues that have notpresent marked
+langsPresent = langsLang `except` ["Pes"{-,"Jpn","Nep","Snd","Tha","Thb"-}]
 
 -- languages for which to compile Try
 langsAPI  = langsLang `except` ["Ina"]
