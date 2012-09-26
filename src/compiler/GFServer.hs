@@ -1,15 +1,14 @@
 -- | GF server mode
 {-# LANGUAGE CPP #-}
 module GFServer(server) where
-import Data.List(partition,stripPrefix,tails,isInfixOf)
-import Data.Maybe(mapMaybe)
+import Data.List(partition,stripPrefix,isInfixOf)
 import qualified Data.Map as M
 import Control.Monad(when)
 import Control.Monad.State(StateT(..),get,gets,put)
 import Control.Monad.Error(ErrorT(..),Error(..))
 import System.Random(randomRIO)
-import System.IO(stdout,stderr,hPutStrLn)
-import System.IO.Error(try,ioError,isAlreadyExistsError)
+import System.IO(stderr,hPutStrLn)
+import System.IO.Error(try,isAlreadyExistsError)
 import System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
                         setCurrentDirectory,getCurrentDirectory,
                         getDirectoryContents,removeFile,removeDirectory)
@@ -19,13 +18,13 @@ import System.FilePath(dropExtension,takeExtension,takeFileName,takeDirectory,
 import System.Posix.Files(getSymbolicLinkStatus,isSymbolicLink,removeLink,
                           createSymbolicLink)
 #endif
-import Control.Concurrent(newMVar,modifyMVar,forkIO)
-import Network.URI(URI(..),parseURI)
+import Control.Concurrent(newMVar,modifyMVar)
+import Network.URI(URI(..))
 import Network.Shed.Httpd(initServer,Request(..),Response(..),queryToArguments,
                           noCache)
 --import qualified Network.FastCGI as FCGI -- from hackage direct-fastcgi
 import Network.CGI(handleErrors,liftIO)
-import FastCGIUtils(outputJSONP,handleCGIErrors,stderrToFile)
+import FastCGIUtils(handleCGIErrors)--,outputJSONP,stderrToFile
 import Text.JSON(encode,showJSON,makeObj)
 --import System.IO.Silently(hCapture)
 import System.Process(readProcessWithExitCode)
@@ -61,12 +60,13 @@ server port execute1 state0 =
   where
     -- | HTTP server
     http_server execute1 state0 state cache root =
-      do putStrLn $ "This is GF version "++showVersion version++"."
-         putStrLn buildInfo
+      do putStrLn gf_version
          putStrLn $ "Document root = "++root
          putStrLn $ "Starting HTTP server, open http://localhost:"
                     ++show port++"/ in your web browser."
          initServer port (modifyMVar state . handle state0 cache execute1)
+
+gf_version = "This is GF version "++showVersion version++".\n"++buildInfo
 
 {-
 -- | FastCGI request handler
@@ -139,6 +139,7 @@ handle state0 cache execute1
            "/gfshell" -> inDir command
            "/parse" -> parse (decoded qs)
            "/cloud" -> inDir cloud
+           "/version" -> return (ok200 gf_version)
            '/':rpath ->
              case (takeDirectory path,takeFileName path,takeExtension path) of
                (_  ,_             ,".pgf") -> wrapCGI $ PS.cgiMain' cache path
