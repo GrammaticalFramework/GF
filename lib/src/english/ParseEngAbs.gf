@@ -6,7 +6,7 @@ abstract ParseEngAbs =
   Numeral,
   Symbol [PN, Symb, String, MkSymb, SymbPN],
   Conjunction,
-  Verb - [SlashV2V, PassV2, UseCopula],
+  Verb - [SlashV2V, PassV2, UseCopula, ComplVV],
   Adverb,
   Phrase,
   Sentence,
@@ -45,6 +45,8 @@ fun CompoundCN : Num -> N -> CN -> CN ;
     SlashVPIV2V : V2V -> Pol -> VPI -> VPSlash ;
 
     SlashSlashV2V : V2V -> Ant -> Pol -> VPSlash -> VPSlash ;
+    
+    ComplVV : VV -> Ant -> Pol -> VP -> VP ;
 
     PredVPosv,PredVPovs : NP -> VP -> Cl ;
     
