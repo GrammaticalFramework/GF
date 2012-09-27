@@ -15,7 +15,8 @@ abstract ParseEngAbs =
   Idiom [NP, VP, Cl, Tense, ProgrVP, ExistNP],
   Extra [NP, Quant, VPSlash, VP, GenNP, PassVPSlash,
          Temp, Tense, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
-         VPI, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV],
+         VPI, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
+         ClSlash, RCl, EmptyRelSlash],
   DictEngAbs ** {
 
 flags
@@ -50,8 +51,8 @@ fun CompoundCN : Num -> N -> CN -> CN ;
 
     PredVPosv,PredVPovs : NP -> VP -> Cl ;
     
-    that_RP, no_RP : RP ;
-    
+    that_RP : RP ;
+
     CompS : S -> Comp ;
     CompVP : Ant -> Pol -> VP -> Comp ;
 

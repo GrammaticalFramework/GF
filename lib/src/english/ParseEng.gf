@@ -16,7 +16,8 @@ concrete ParseEng of ParseEngAbs =
   IdiomEng [NP, VP, Tense, Cl, ProgrVP, ExistNP],
   ExtraEng [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
             Temp, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
-            VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV],
+            VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
+            ClSlash, RCl, EmptyRelSlash],
 
   DictEng ** 
 open MorphoEng, ResEng, ParadigmsEng, Prelude in {
@@ -104,10 +105,6 @@ lin
 
   that_RP = {
     s = \\_ => "that" ;
-    a = RNoAg
-    } ;
-  no_RP = {
-    s = \\_ => "" ;
     a = RNoAg
     } ;
 
