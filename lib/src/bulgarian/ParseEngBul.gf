@@ -16,7 +16,8 @@ concrete ParseEngBul of ParseEngAbs =
   IdiomBul [NP, VP, Tense, Cl, ProgrVP, ExistNP],
   ExtraBul [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
             Temp, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
-            VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV],
+            VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
+            ClSlash, RCl, EmptyRelSlash],
 
   DictEngBul ** 
 open ResBul, Prelude in {
@@ -50,9 +51,6 @@ lin
   PositAdVAdj a = {s = a.adv} ;
   
   that_RP = {
-    s = whichRP
-  } ;
-  no_RP = {
     s = whichRP
   } ;
 
