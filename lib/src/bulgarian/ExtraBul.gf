@@ -22,6 +22,11 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
       spec = Indef
     } ;
 
+    EmptyRelSlash slash = {
+      s = \\t,a,p,agr => slash.c2.s ++ whichRP ! agr.gn ++ slash.s ! agr ! t ! a ! p ! Main ;
+      role = RObj Acc
+      } ;
+
     i8fem_Pron  = mkPron "аз" "мен" "ми" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Fem)  P1 ;
     i8neut_Pron = mkPron "аз" "мен" "ми" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Neut) P1 ;
     

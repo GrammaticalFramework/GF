@@ -749,4 +749,14 @@ resource ResGer = ParamX ** open Prelude in {
     {s : PCase => Str ; a : Agr} -> {s : PCase => Str ; a : Agr ; isPron : Bool} = \np ->
     np ** {isPron = False} ;
 
+  oper
+      relPron :  GenNum => Case => Str = \\gn,c =>
+    case <gn,c> of {
+      <GSg Fem,Gen> => "deren" ;
+      <GSg g,Gen>   => "dessen" ;
+      <GPl,Dat>     => "denen" ;
+      <GPl,Gen>     => "deren" ;
+      _ => artDef ! gn ! c
+      } ;
+
 }
