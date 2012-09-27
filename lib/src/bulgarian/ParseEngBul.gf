@@ -107,4 +107,11 @@ lin
                         ++ daComplex Simul Pos vp ! Perf ! a)
                 (predV verbBe) ;
 
+  ApposNP np1 np2 = {
+    s = \\role => np1.s ! role ++ "," ++ np2.s ! RSubj ;
+    a = np1.a
+  } ;
+  
+  UncNeg = {s = ""; p = Neg} ;
+
 }
