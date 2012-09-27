@@ -227,6 +227,7 @@ langsCoding = [
   (("japanese", "Jpn"),""),
   (("latin",    "Lat"),""),
   (("latvian",    "Lav"),""),
+  (("maltese",  "Mlt"),""),
   (("norwegian","Nor"),""),
   (("persian",  "Pes"),""),
   (("polish",   "Pol"),""),
@@ -247,14 +248,14 @@ langs = map fst langsCoding
 -- defaultLangs = langs `only` words "Eng Fre Ger Ita Spa Swe"
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Amh","Ara","Lat","Tur"]
+langsLang = langs `except` ["Amh","Ara","Lat","Tur","Mlt"]
 --langsLang = langs `only` ["Fin"] --test
 
 -- languagues that have notpresent marked
 langsPresent = langsLang `except` ["Pes"{-,"Jpn","Nep","Snd","Tha","Thb"-}]
 
 -- languages for which to compile Try
-langsAPI  = langsLang `except` ["Ina"]
+langsAPI  = langsLang `except` ["Ina","Mlt"]
 
 -- languages for which to compile Symbolic
 langsSymbolic  = langsAPI `except` ["Jpn"]
