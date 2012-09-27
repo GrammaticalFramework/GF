@@ -4,7 +4,7 @@ abstract ParseEngAbs =
   Noun - [PPartNP],
   Adjective,
   Numeral,
-  Symbol [PN, Symb, String, MkSymb, SymbPN],
+  Symbol [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],
   Conjunction,
   Verb - [SlashV2V, PassV2, UseCopula, ComplVV],
   Adverb,

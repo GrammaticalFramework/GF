@@ -5,7 +5,7 @@ concrete ParseEngBul of ParseEngAbs =
   NounBul - [PPartNP],
   AdjectiveBul,
   NumeralBul,
-  SymbolBul [PN, Symb, MkSymb, SymbPN],
+  SymbolBul [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],
   ConjunctionBul,
   VerbBul - [SlashV2V, PassV2, UseCopula, ComplVV],
   AdverbBul,

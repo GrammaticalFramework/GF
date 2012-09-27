@@ -5,7 +5,7 @@ concrete ParseEng of ParseEngAbs =
   NounEng - [PPartNP],
   AdjectiveEng,
   NumeralEng,
-  SymbolEng [PN, Symb, MkSymb, SymbPN],
+  SymbolEng [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],
   ConjunctionEng,
   VerbEng - [SlashV2V, PassV2, UseCopula, ComplVV],
   AdverbEng,
