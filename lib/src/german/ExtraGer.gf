@@ -47,6 +47,13 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
       isPron = False
       } ;
 
+    EmptyRelSlash slash = {
+      s = \\m,t,a,p,gn => 
+          appPrep slash.c2 (\\k => usePrepC k (\c -> relPron ! gn ! c)) ++ 
+          slash.s ! m ! t ! a ! p ! Sub ;
+      c = (prepC slash.c2.c).c
+      } ;
+
   lincat
     VPS   = {s : Order => Agr => Str} ;
     [VPS] = {s1,s2 : Order => Agr => Str} ;

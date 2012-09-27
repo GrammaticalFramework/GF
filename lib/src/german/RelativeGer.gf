@@ -36,14 +36,4 @@ concrete RelativeGer of Relative = CatGer ** open ResGer in {
 
     IdRP = {s = relPron ; a = RNoAg} ;
 
-  oper
-      relPron :  GenNum => Case => Str = \\gn,c =>
-    case <gn,c> of {
-      <GSg Fem,Gen> => "deren" ;
-      <GSg g,Gen>   => "dessen" ;
-      <GPl,Dat>     => "denen" ;
-      <GPl,Gen>     => "deren" ;
-      _ => artDef ! gn ! c
-      } ;
-
 }
