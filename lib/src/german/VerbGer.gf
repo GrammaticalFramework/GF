@@ -80,6 +80,9 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer, Coordination in {
     AdvVP vp adv = insertAdv adv.s vp ;
     AdVVP adv vp = insertAdv adv.s vp ; -- not AdV 27/5/2012: nicht immer
 
+    AdvVPSlash vp adv = insertAdv adv.s vp ** {c2 = vp.c2} ;
+    AdVVPSlash adv vp = insertAdv adv.s vp ** {c2 = vp.c2} ;
+
     ReflVP vp = insertObj (\\a => appPrep vp.c2 
       (\\k => usePrepC k (\c -> reflPron ! a ! c))) vp ;
 
