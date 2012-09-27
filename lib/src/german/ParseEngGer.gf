@@ -34,6 +34,13 @@ lin
             insertObj vpi.p1 (
               predVGen v.isAux v)))) ;
 
+    PPartNP np sl = heavyNP {   -- guessed by KA, some fields in sl are ignored!!
+      s = \\c => np.s ! c ++ 
+                 sl.s.s ! VPastPart APred ++ 
+                 (sl.nn ! np.a).p1 ++ (sl.nn ! np.a).p2 ++ sl.a2;
+      a = np.a
+      } ;
+
 {-
 lin
   myself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P1) ;
