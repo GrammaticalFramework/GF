@@ -200,10 +200,11 @@ allOpers gr =
   ] 
  where
   typesIn info = case info of
-    AbsFun  (Just ltyp) _ _ _ -> [ltyp] 
-    ResOper (Just ltyp) _     -> [ltyp] 
+    AbsFun  (Just ltyp) _ _ _ -> [ltyp]
+    ResOper (Just ltyp) _     -> [ltyp]
     ResValue ltyp             -> [ltyp]
     ResOverload _ tytrs       -> [ltyp | (ltyp,_) <- tytrs]
+    CncFun  (Just (i,ctx,typ)) _ _ _ -> [L NoLoc (mkProdSimple ctx typ)]
     _                         -> []
   reachable = case greatestResource gr of
     Just r -> allExtendSpecs gr r
