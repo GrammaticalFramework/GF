@@ -7,7 +7,7 @@ concrete ParseEng of ParseEngAbs =
   NumeralEng,
   SymbolEng [PN, Symb, MkSymb, SymbPN],
   ConjunctionEng,
-  VerbEng - [SlashV2V, PassV2, UseCopula],
+  VerbEng - [SlashV2V, PassV2, UseCopula, ComplVV],
   AdverbEng,
   PhraseEng,
   SentenceEng,
@@ -74,6 +74,9 @@ lin
                                            v.c3 ++ 
                                            vpi.s ! VVAux ! a)
                                    (predVc v) ;
+  ComplVV v a p vp = insertObj (\\agr => a.s ++ p.s ++ 
+                                         infVP v.typ vp a.a p.p agr)
+                               (predVV v) ;
 
   PredVPosv np vp = {
       s = \\t,a,b,o => 

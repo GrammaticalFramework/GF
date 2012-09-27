@@ -7,7 +7,7 @@ concrete ParseEngBul of ParseEngAbs =
   NumeralBul,
   SymbolBul [PN, Symb, MkSymb, SymbPN],
   ConjunctionBul,
-  VerbBul - [SlashV2V, PassV2, UseCopula],
+  VerbBul - [SlashV2V, PassV2, UseCopula, ComplVV],
   AdverbBul,
   PhraseBul,
   SentenceBul,
@@ -74,6 +74,14 @@ lin
       insertSlashObj2 (\\agr => ant.s ++ p.s ++ vv.c3.s ++
                                 daComplex ant.a p.p vp ! Perf ! agr)
                       (slashV vv vv.c2) ;
+
+  ComplVV vv ant p vp =
+      insertObj (\\agr => ant.s ++ p.s ++
+                          case vv.typ of {
+                            VVInf    => daComplex ant.a p.p vp ! Perf ! agr;
+                            VVGerund => gerund vp ! Imperf ! agr
+                          })
+                (predV vv) ;
 
   PredVPosv np vp = {
       s = \\t,a,p,o => 
