@@ -3,6 +3,7 @@ Editor modes & IDE integration for GF
 
 %!style:../css/style.css
 %!options(html): --toc
+%!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
 We collect GF modes for various editors on this page. Contributions are
