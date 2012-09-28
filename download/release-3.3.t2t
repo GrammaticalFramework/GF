@@ -2,6 +2,7 @@ GF Version 3.3 Release Notes
 October 2011
 
 %!style:../css/style.css
+%!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
 %!postproc(html): <H1> <H1><IMG src="../doc/Logos/gf0.png">
 
 ==Installation==
