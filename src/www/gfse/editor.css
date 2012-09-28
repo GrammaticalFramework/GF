@@ -39,7 +39,7 @@ table.grammar_list td { padding: 0.4ex 0.25em; }
 
 div.namebar { background: #9df; }
 div.namebar table { width: 100%; }
-.namebar h3, .home h3 { margin: 0; color: #009; }
+.namebar h3, .home h3, .sheet h3 { margin: 0; color: #009; }
 
 td.right { text-align: right; }
 
@@ -56,7 +56,8 @@ div.template:hover
 .exb_output { background: #dfd; float: right; margin: 0 10px; }
 
 .more, .delete { font-weight: bold; font-family: sans-serif; }
-.more, .delete, .edit { cursor: pointer; }
+.more, .delete, .edit, *[onclick], .onclick { cursor: pointer; }
+.onclick:hover, .ident[onclick]:hover { text-decoration: underline; }
 
 .hover .more, .hover .delete, .hover .edit { visibility: hidden }
 
@@ -137,4 +138,16 @@ div.grammar_extension {
     padding: 2ex;
     margin: 2ex;
     box-shadow: 10px 10px 10px rgba(0,0,0,0.3);
+}
+
+div.sheet {
+    position: relative;
+    background: white;
+    padding: 1ex;
+    margin: 2ex;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+    transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out;
 }
