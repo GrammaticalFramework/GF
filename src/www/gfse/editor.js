@@ -945,12 +945,13 @@ function draw_concrete(g,i) {
     return file;
 }
 
-var rgl_modules=["Syntax","Lexicon","Paradigms","Extra"];
+var rgl_modules=["Syntax","Lexicon","Paradigms","Extra","Symbolic"];
 var rgl_info = {
     Paradigms: "Lexical categories (A, N, V, ...) and smart paradigms (mkA, mkN, mkV, ...) for turning raw strings into new dictionary entries.",
     Syntax: "Syntactic categories (Utt, Cl, V, NP, CN, AP, ...), structural words (this_Det, few_Det, ...) and functions for building phrases (mkUtt, mkCl, mkCN, mkVP, mkAP, ...)",
     Lexicon: "A multilingual lexicon with ~350 common words.",
-    Extra: "Language-specific extra constructions not available via the common API."
+    Extra: "Language-specific extra constructions not available via the common API.",
+    Symbolic: "Functions for symbolic expressions (numbers and variables in mathematics)"
 }
 
 function add_open(ci) {
@@ -999,6 +1000,22 @@ function draw_opens(g,ci) {
     var os=conc.opens || [] ;
     var es=[];
     function del(i) { return function() { delete_open(g,ci,i); }}
+    function show_opers(m) {
+	return function(event) {
+	    var link=event.target,dst=compiler_output
+	    function cont2(opers) {
+		clear(dst);
+		var sheet=div_class("sheet",[wrap("h3",text(m)),
+					     wrap("pre",text(opers))])
+		var dy=dst.offsetTop-link.offsetTop-link.offsetHeight
+		sheet.style.top="-"+dy+"px";
+		insertFirst(dst,sheet)
+		setTimeout(function(){sheet.style.top="0px";},1000)
+	    }
+	    function cont1() { gfshell("so",cont2) }
+	    gfshell("i -retain present/"+m+".gfo",cont1)
+	}
+    }
     var first=true;
     for(var i in os) {
 	if(!first) es.push(sep(", "))
@@ -1007,6 +1024,8 @@ function draw_opens(g,ci) {
 	var info=rgl_info[b];
 	var id=ident(m);
 	if(info) id.title=info;
+	id.onclick=show_opers(m)
+	id.className="ident onclick"
 	es.push(deletable(del(i),id,"Don't open this module"));
 	first=false;
     }
