@@ -204,8 +204,14 @@ allOpers gr =
     ResOper (Just ltyp) _     -> [ltyp]
     ResValue ltyp             -> [ltyp]
     ResOverload _ tytrs       -> [ltyp | (ltyp,_) <- tytrs]
-    CncFun  (Just (i,ctx,typ)) _ _ _ -> [L NoLoc (mkProdSimple ctx typ)]
+    CncFun  (Just (i,ctx,typ)) _ _ _ ->
+                                 [L NoLoc (mkProdSimple ctx (lock' i typ))]
     _                         -> []
+
+  lock' i typ = case lock i typ of
+                  Ok t -> t
+                  _ -> typ
+
   reachable = case greatestResource gr of
     Just r -> allExtendSpecs gr r
     _ -> []
