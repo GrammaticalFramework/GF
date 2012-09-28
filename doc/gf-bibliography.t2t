@@ -9,6 +9,7 @@ Aarne Ranta
 %!style:../css/style.css
 %!target:html
 %!options(html): --toc
+%!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
 %!postproc(html): #BR <br>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 

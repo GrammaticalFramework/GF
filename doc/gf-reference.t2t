@@ -9,6 +9,8 @@ April 4, 2006
 %!style:../css/style.css
 %!target:html
 %!options: --toc
+%!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
 This is a quick reference on GF grammars. It aims to
 cover all forms of expression available when writing

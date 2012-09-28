@@ -4,6 +4,7 @@ The GF Software System
 %!style:../css/style.css
 %!options(html): --toc
 %!options(html): --toc-level=4
+%!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 %!postproc(html): "#VSPACE" "<hr>"
 %!postproc(html): "#NORMAL" ""

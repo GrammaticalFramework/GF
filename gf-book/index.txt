@@ -4,7 +4,8 @@ Aarne Ranta
 %!style:../css/style.css
 %!Encoding:utf8
 
-%!postproc(html): "#BOOKCOVER" '<center><img width=200mm src="gf-book-cover.png"></center>'
+%!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
+%!postproc(html): "#BOOKCOVER" '<center><img style="width: 200px" src="gf-book-cover.png"></center>'
 
 
 #BOOKCOVER
