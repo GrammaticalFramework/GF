@@ -56,14 +56,14 @@ cgiMain' cache path =
 pgfMain :: PGF -> String -> CGI CGIResult
 pgfMain pgf command =
     case command of
-      "parse"          -> outputJSONP =<< doParse pgf `fmap` getText `ap` getCat `ap` getFrom
+      "parse"          -> outputJSONP =<< doParse pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit
       "complete"       -> outputJSONP =<< doComplete pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit
       "linearize"      -> outputJSONP =<< doLinearize pgf `fmap` getTree `ap` getTo
       "linearizeAll"   -> outputJSONP =<< doLinearizes pgf `fmap` getTree `ap` getTo
       "random"         -> getCat >>= \c -> getDepth >>= \dp -> getLimit >>= \l -> getTo >>= \to -> liftIO (doRandom pgf c dp l to) >>= outputJSONP
       "generate"       -> outputJSONP =<< doGenerate pgf `fmap` getCat `ap` getDepth `ap` getLimit `ap` getTo
-      "translate"      -> outputJSONP =<< doTranslate pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo
-      "translategroup" -> outputJSONP =<< doTranslateGroup pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo
+      "translate"      -> outputJSONP =<< doTranslate pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo `ap` getLimit
+      "translategroup" -> outputJSONP =<< doTranslateGroup pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo `ap` getLimit
       "grammar"        -> outputJSONP =<< doGrammar pgf `fmap` requestAcceptLanguage
       "abstrtree"      -> outputGraphviz . abstrTree pgf =<< getTree
       "alignment"      -> outputGraphviz . alignment pgf =<< getTree
@@ -159,8 +159,8 @@ doExternal (Just cmd) input =
          liftIO $ removeFile tmpfile2
          return r
 
-doTranslate :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
-doTranslate pgf input mcat mfrom mto =
+doTranslate :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> Maybe Int -> JSValue
+doTranslate pgf input mcat mfrom mto mlimit =
   showJSON
      [makeObj ("from".=from : "brackets".=bs : jsonTranslateOutput po)
           | (from,po,bs) <- parse' pgf input mcat mfrom]
@@ -173,7 +173,7 @@ doTranslate pgf input mcat mfrom mto =
                         "linearizations".=
                             [makeObj ["to".=to, "text".=text, "brackets".=bs]
                                | (to,text,bs)<- linearizeAndBind pgf mto tree]]
-                | tree <- trees]]
+                | tree <- maybe id take mlimit trees]]
         PGF.ParseIncomplete -> ["incomplete".=True]
         PGF.ParseFailed n   -> ["parseFailed".=n]
         PGF.TypeError errs -> jsonTypeErrors errs
@@ -183,8 +183,8 @@ jsonTypeErrors errs =
                        | (fid,err) <- errs]]
 
 -- used in phrasebook
-doTranslateGroup :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
-doTranslateGroup pgf input mcat mfrom mto =
+doTranslateGroup :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> Maybe Int -> JSValue
+doTranslateGroup pgf input mcat mfrom mto mlimit =
   showJSON
     [makeObj ["from".=langOnly (PGF.showLanguage from),
               "to".=langOnly (PGF.showLanguage to),
@@ -194,7 +194,7 @@ doTranslateGroup pgf input mcat mfrom mto =
               ]
        | 
          (from,po,bs) <- parse' pgf input mcat mfrom,
-         (to,output)  <- groupResults [(t, linearize' pgf mto t) | t <- case po of {PGF.ParseOk ts -> ts; _ -> []}]
+         (to,output)  <- groupResults [(t, linearize' pgf mto t) | t <- case po of {PGF.ParseOk ts -> maybe id take mlimit ts; _ -> []}]
           ]
   where
    groupResults = Map.toList . foldr more Map.empty . start . collect
@@ -240,14 +240,14 @@ doTranslateGroup pgf input mcat mfrom mto =
 
    notDisamb = (/="Disamb") . take 6 . PGF.showLanguage
 
-doParse :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> JSValue
-doParse pgf input mcat mfrom = showJSON $ map makeObj
+doParse :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe Int -> JSValue
+doParse pgf input mcat mfrom mlimit = showJSON $ map makeObj
      ["from".=from : "brackets".=bs : jsonParseOutput po
         | (from,po,bs) <- parse' pgf input mcat mfrom]
   where
     jsonParseOutput output =
       case output of
-        PGF.ParseOk trees   -> ["trees".=trees]
+        PGF.ParseOk trees   -> ["trees".=maybe id take mlimit trees]
         PGF.TypeError errs  -> jsonTypeErrors errs
         PGF.ParseIncomplete -> ["incomlete".=True]
         PGF.ParseFailed n   -> ["parseFailed".=n]
