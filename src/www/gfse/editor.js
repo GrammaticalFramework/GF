@@ -1359,6 +1359,7 @@ function lintype(g,conc,igs,dc,type) {
     function lincat(cat) {
 	return dc[cat]
 	    ? (dc[cat]==g.basename ? cat_lincat(conc,cat) : ihcat_lincat(cat))
+	      || "??"
 	    : cat+"??"
     }
     return type.map(lincat)
