@@ -1297,7 +1297,7 @@ function draw_lins(g,ci) {
 	var fty=function_type(g,f.fun)
 	var linty=lintype(g,conc,igs,dc,fty)
 	if(fty)
-	    fn.title=f.fun+": "+show_type(fty)
+	    fn.title="fun "+f.fun+": "+show_type(fty)
                     +"\nlin "+f.fun+": "+show_lintype(linty)
 	var l=[fn]
 	for(var i=0; i<f.args.length;i++) {
