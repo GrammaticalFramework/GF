@@ -14,7 +14,8 @@ function Translations(server,opts) {
 	tree_img_format: "png", // format for trees & alignment images,
 	                        // can be "gif", "png" or "svg"
 	show_grouped_translations: true,
-	show_brackets: false // show bracketed string
+	show_brackets: false, // show bracketed string
+	translate_limit: 25 // maximum number of parse trees to retrieve
     }
 
     // Apply supplied options
@@ -53,6 +54,7 @@ Translations.prototype.get_translations=function() {
     with(this) {
 	var c=current;
 	var args={from:c.from,input:gf_unlex(c.input),cat:startcat}
+	if(options.translate_limit) args.limit=options.translate_limit
 	if(options.show_grouped_translations)
 	    server.translategroup(args,bind(show_groupedtranslations,this));
 	else
