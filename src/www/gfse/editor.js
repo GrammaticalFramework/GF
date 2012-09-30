@@ -5,6 +5,14 @@ var compiler_output=element("compiler_output")
 
 /* -------------------------------------------------------------------------- */
 
+var grammar_cache=[]
+
+function reget_grammar(ix) { return grammar_cache[ix]=local.get(ix) }
+function get_grammar(ix)   { return grammar_cache[ix] || reget_grammar(ix) }
+function put_grammar(ix,g) { grammar_cache[ix]=g; local.put(ix,g) }
+
+/* -------------------------------------------------------------------------- */
+
 function initial_view() {
     var current=local.get("current");
     if(current>0) open_grammar(current-1);
@@ -96,18 +104,18 @@ function remove_local_grammar(i) {
 	local.count--;
 }
 
-function delete_grammar(i) {
-    var g=local.get(i);
+function delete_grammar(ix) {
+    var g=get_grammar(ix);
     var ok=confirm("Do you really want to delete the grammar "+g.basename+"?")
     if(ok) {
-	remove_local_grammar(i)
+	remove_local_grammar(ix)
 	remove_cloud_grammar(g)
 	initial_view();
     }
 }
 
 function clone_grammar(i) {
-    var old=local.get(i);
+    var old=get_grammar(i);
     var g={basename:old.basename,extends:old.extends || [],
 	   abstract:old.abstract,concretes:old.concretes}
     save_grammar(g); // we rely on the serialization to eliminate sharing
@@ -115,7 +123,7 @@ function clone_grammar(i) {
 }
 
 function open_grammar(i) {
-    var g=local.get(i);
+    var g=get_grammar(i);
     g.index=i;
     local.put("current",i+1);
     edit_grammar(g);
@@ -490,7 +498,7 @@ function adjust_opens(cnc,oldcode,code) {
 }
 
 function add_concrete2(ix,code) {
-    var g=local.get(ix);
+    var g=get_grammar(ix);
     var cs=g.concretes;
     var ci;
     for(var ci=0;ci<cs.length;ci++) if(cs[ci].langcode==code) break;
@@ -498,7 +506,7 @@ function add_concrete2(ix,code) {
 	if(g.current>0) {
 	    cs.push(cs[g.current-1]); // old and new are shared at this point
 	    save_grammar(g); // serialization loses sharing
-	    g=local.get(ix); // old and new are separate now
+	    g=reget_grammar(ix); // old and new are separate now
 	    var oldcode=cs[g.current-1].langcode;
 	    var cnc=g.concretes[ci];
 	    cnc.langcode=code;
@@ -629,8 +637,8 @@ function add_extends(g,el) {
 }
 
 function add_extends2(gix,igix) {
-    var g=local.get(gix);
-    var ig=local.get(igix);
+    var g=get_grammar(gix);
+    var ig=get_grammar(igix);
     if(!g.extends) g.extends=[];
     g.extends.push(ig.basename);
     //timestamp(g)
@@ -980,7 +988,7 @@ function add_open(ci) {
 }
 
 function add_open2(ix,ci,m) {
-    var g=local.get(ix);
+    var g=get_grammar(ix);
     var conc=g.concretes[ci];
     conc.opens || (conc.opens=[]);
     conc.opens.push(m);
@@ -1264,6 +1272,8 @@ function arg_names(type) {
 
 function draw_lins(g,ci) {
     var conc=g.concretes[ci];
+    var igs=inherited_grammars(g)
+    var dc=defined_cats(g);
     function edit(f) {
 	return function(g,el) {
 	    function check(s,cont) {
@@ -1283,10 +1293,18 @@ function draw_lins(g,ci) {
     }
     function del(fun) { return function () { delete_lin(g,ci,fun); } }
     function dl(f,cls) {
-	var l=[ident(f.fun)]
-	for(var i in f.args) {
+	var fn=ident(f.fun)
+	var fty=function_type(g,f.fun)
+	var linty=lintype(g,conc,igs,dc,fty)
+	if(fty)
+	    fn.title=f.fun+": "+show_type(fty)
+                    +"\nlin "+f.fun+": "+show_lintype(linty)
+	var l=[fn]
+	for(var i=0; i<f.args.length;i++) {
 	    l.push(text(" "));
-	    l.push(ident(f.args[i]));
+	    var an=ident(f.args[i])
+	    an.title=f.args[i]+": "+linty[i]
+	    l.push(an);
 	}
 	l.push(sep(" = "));
 	var t=editable("span",text_ne(f.lin),g,edit(f),"Edit lin for "+f.fun);
@@ -1322,6 +1340,35 @@ function draw_lins(g,ci) {
 	ls.push(dtmpl(f));
     return indent_sortable(ls,sort_lins);
 }
+
+
+// Return the linearization type for the given abtract type in the given 
+// concrete syntax, taking into account that lincats may be defined in
+// inherited grammars.
+// lintype :: Grammar -> Concrete -> [Grammar] -> {Cat=>ModId} => Type -> [Term]
+function lintype(g,conc,igs,dc,type) {
+    console.log(dc)
+    function ihcat_lincat(cat) {
+	if(dc[cat]=="Predef") return "{s:Str}" // !!! Is this right?
+	var ig=find_grammar_byname(igs,dc[cat])
+	if(!ig) return "??"
+	var iconc=ig.concretes[conc_index(ig,conc.langcode)]
+	if(!iconc) return "??"
+	return cat_lincat(iconc,cat) || "??"
+    }
+    function lincat(cat) {
+	return dc[cat]
+	    ? (dc[cat]==g.basename ? cat_lincat(conc,cat) : ihcat_lincat(cat))
+	    : cat+"??"
+    }
+    return type.map(lincat)
+}
+
+function find_grammar_byname(igs,name) {
+    for(var i in igs) if(igs[i].basename==name) return igs[i]
+    return null
+}
+
 /* -------------------------------------------------------------------------- */
 
 function draw_matrix(g) {
@@ -1417,7 +1464,7 @@ function cached_grammar_byname() {
 function cached_grammar_array_byname() {
     var gix={};
     for(var i=0;i<local.count;i++) {
-	var g=local.get(i,null);
+	var g=get_grammar(i,null);
 	if(g) gix[g.basename]=g; // basenames are not necessarily unique!!
     }
     return gix
@@ -1457,7 +1504,7 @@ function grammar_index() {
 }
 
 function merge_grammar(i,newg) {
-    var oldg=local.get(i);
+    var oldg=get_grammar(i);
     var keep="";
     debug("Merging at "+i);
     if(oldg) {

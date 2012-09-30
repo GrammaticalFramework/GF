@@ -27,6 +27,7 @@ type Lin = {fun: FunId, args: [Id], lin: Term}
 type Lhs = String -- name and type of oper,
                   -- e.g "regN : Str -> { s:Str,g:Gender} ="
 type Term = String -- arbitrary GF term (not parsed by the editor)
+type LinType = [Term]
 */
 
 // locally_defined_cats :: Grammar -> {Cat=>ModId} -> {Cat=>ModId} // destr upd
@@ -86,7 +87,7 @@ function cat_lincat(conc,cat) {
 }
 
 // Return the lin defined in a given concrete syntax for an abstract function
-// cat_lincat :: Concrete -> FunId -> Lin
+// fun_lin :: Concrete -> FunId -> Lin
 function fun_lin(conc,fun) {
     with(conc) for(var i in lins) if(lins[i].fun==fun) return lins[i]
     return null;
@@ -225,6 +226,7 @@ function parse_oper(s) {
 
 /* --- Print as plain text (normal GF source syntax) ------------------------ */
 
+// show_type :: Type -> String
 function show_type(t) {
     var s="";
     for(var i in t) {
@@ -234,10 +236,22 @@ function show_type(t) {
     return s;
 }
 
+// show_lintype :: LinType -> String
+function show_lintype(t) {
+    var s="";
+    for(var i in t) {
+	if(i>0) s+=" -> ";
+	s+= check_id(t[i]) ? t[i] : "("+t[i]+")";
+    }
+    return s;
+}
+
+// show_fun :: Fun -> String
 function show_fun(fun) {
     return fun.name+" : "+show_type(fun.type);
 }
 
+// show_grammar :: Grammar -> String
 function show_grammar(g) {
     return show_abstract(g)+"\n"+show_concretes(g)
 }
