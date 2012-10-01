@@ -148,14 +148,16 @@ function edit_grammar(g) {
 function draw_grammar(g) {
     switch(g.view) {
     case "matrix":
-	var matrix=div_class("files",draw_matrix(g))
-	return div_class("grammar",[draw_namebar(g,matrix),matrix])
+	var files=div_class("files",draw_matrix(g))
+	break;
     case "row":
-	/* ... */
+	var files=div_class("files",draw_row(g))
+	break;
     default:
 	var files=div_class("files",[draw_filebar(g),draw_file(g)]);
-	return div_class("grammar",[draw_namebar(g,files),files])
+	break;
     }
+    return div_class("grammar",[draw_namebar(g,files),files])
 }
 
 function draw_namebar(g,files) {
@@ -525,6 +527,7 @@ function add_concrete2(ix,code) {
 function open_abstract(g) { g.view="column"; g.current=0; reload_grammar(g); }
 function open_concrete(g,i) { g.view="column"; g.current=i+1; reload_grammar(g); }
 function open_matrix(g) { g.view="matrix"; reload_grammar(g); }
+function open_row(g,fun) { g.view="row"; g.row=fun; reload_grammar(g); }
 
 function td_gap(c) {return wrap_class("td","gap",c); }
 function gap() { return td_gap(text(" ")); }
@@ -550,11 +553,12 @@ function abs_tab_button(g) {
     return button("Abstract",function(){open_abstract(g);})
 }
 
-function conc_tab_button(g,ci) {
+function conc_tab_button(g,ci,no_delete) {
     var cs=g.concretes
     function del() { delete_concrete(g,ci); }
     function open_conc() {open_concrete(g,1*ci); }
-    return deletable(del,button(concname(cs[ci].langcode),open_conc),"Delete this concrete syntax")
+    var b=button(concname(cs[ci].langcode),open_conc)
+    return no_delete ? b : deletable(del,b,"Delete this concrete syntax")
 }
 
 function draw_filebar(g) {
@@ -1286,29 +1290,25 @@ function arg_names(type) {
     return map(unique,names);
 }
 
-function draw_lins(g,ci) {
+function draw_elin(g,igs,ci,f,dc,df) {
+    var fun=f.fun;
     var conc=g.concretes[ci];
-    var igs=inherited_grammars(g)
-    var dc=defined_cats(g);
-    function edit(f) {
-	return function(g,el) {
-	    function check(s,cont) {
-		function check2(msg) {
-		    if(!msg) {
-			if(f.template)
-			    conc.lins.push({fun:f.fun,args:f.args,lin:s});
-			else { f.lin=s; f.eb_lin=null; }
-			reload_grammar(g);
-		    }
-		    cont(msg);
+    function edit(g,el) {
+	function check(s,cont) {
+	    function check2(msg) {
+		if(!msg) {
+		    if(f.template)
+			conc.lins.push({fun:f.fun,args:f.args,lin:s});
+		    else { f.lin=s; f.eb_lin=null; }
+		    reload_grammar(g);
 		}
-		check_exp(s,check2);
+		cont(msg);
 	    }
-	    string_editor(el,f.lin,check,true)
+	    check_exp(s,check2);
 	}
+	string_editor(el,f.lin,check,true)
     }
-    function del(fun) { return function () { delete_lin(g,ci,fun); } }
-    function dl(f,cls) {
+    function dl(cls) {
 	var fn=ident(f.fun)
 	var fty=function_type(g,f.fun)
 	var linty=fty && lintype(g,conc,igs,dc,fty)
@@ -1323,28 +1323,39 @@ function draw_lins(g,ci) {
 	    l.push(an);
 	}
 	l.push(sep(" = "));
-	var t=editable("span",text_ne(f.lin),g,edit(f),"Edit lin for "+f.fun);
+	var t=editable("span",text_ne(f.lin),g,edit,"Edit lin for "+f.fun);
 	t.appendChild(exb_linbuttons(g,ci,f));
 	l.push(t);
 	return node("span",{"class":cls},l);
     }
+    function del() { delete_lin(g,ci,fun); }
+    var l=dl(f.template ? "template" : "lin")
+    if(!f.template) {
+	l=deletable(del,l,"Delete this linearization function")
+	delete df[fun];
+    }
+    return l;
+}
+
+function lin_template(g,f) {
+    var args=arg_names(function_type(g,f))
+    return {fun:f,args:args,lin:"",template:true}
+}
+
+function draw_lins(g,ci) {
+    var conc=g.concretes[ci];
+    var igs=inherited_grammars(g)
+    var dc=defined_cats(g);
     var df=locally_defined_funs(g,{});
     function draw_lin(f) {
-	var fun=f.fun;
-	var err= !df[fun];
-	var l= deletable(del(fun),dl(f,"lin"),"Delete this linearization function")
-	var l=ifError(err,"Function "+fun+" is not part of the abstract syntax",l);
-	delete df[fun];
-	return node_sortable("lin",fun,[l]);
-    }
-    function largs(f) {
-	var funs=g.abstract.funs;
-	for(var i=0;i<funs.length && funs[i].name!=f;i++);
-	return arg_names(funs[i].type);
+	var err= !df[f.fun];
+	var l=draw_elin(g,igs,ci,f,dc,df)
+	var l=ifError(err,"Function "+f.fun+" is not part of the abstract syntax",l);
+	return node_sortable("lin",f.fun,[l]);
     }
     function dtmpl(f) {	
-	return div_class("template",
-			 [dl({fun:f,args:largs(f),lin:"",template:true},"template")]);
+	var lin=lin_template(g,f)
+	return div_class("template",draw_elin(g,igs,ci,lin,dc,df))
     }
     function sort_lins() {
 	conc.lins=sort_list(this,conc.lins,"fun");
@@ -1407,9 +1418,12 @@ function draw_matrix(g) {
 	}
 	t.appendChild(tr(row))
     }
+    function openr(f) { return function() { open_row(g,f) } }
     for(var i in g.abstract.funs) {
 	var fun=g.abstract.funs[i]
-	var row=[td(draw_efun(g,i,dc,df))] // modifies df
+	var e=draw_efun(g,i,dc,df) // modifies df
+	e.onclick=openr(fun.name)
+	var row=[td(e)]
 	for(var ci in g.concretes) {
 	    var conc=g.concretes[ci]
 	    var lin=fun_lin(conc,fun.name)
@@ -1433,6 +1447,33 @@ function simple_draw_lin(f) {
     }
     l.push(text_ne(f.lin));
     return wrap("span",l);
+}
+
+function draw_row(g) {
+    var fname=g.row
+    var ix=fun_index(g,fname)
+    if(ix==null) return text(fname+" not found")
+
+    var igs=inherited_grammars(g)
+    var dc=defined_cats(g);
+    var df=inherited_funs(g);
+
+    var t=empty_class("table","matrixview")
+
+    var e=draw_efun(g,ix,dc,df) // modifies df
+    t.appendChild(tr([th(abs_tab_button(g)),td([kw("fun"),e])]))
+
+    var fun=g.abstract.funs[ix]
+
+    for(var ci in g.concretes) {
+	var conc=g.concretes[ci]
+	var lin=fun_lin(conc,fname) || lin_template(g,fname)
+	var dl=draw_elin(g,igs,ci,lin,dc,df)
+	t.appendChild(tr([th(conc_tab_button(g,ci,true)),
+			  td([kw("lin "),dl])]))
+    }
+    var fbar=wrap_class("table","tabs",tr([gap(),tab(true,kw(fname)),gap()]))
+    return [fbar,div_id("file",[t])]
 }
 
 /* -------------------------------------------------------------------------- */

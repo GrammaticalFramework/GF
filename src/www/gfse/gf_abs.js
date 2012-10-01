@@ -70,16 +70,23 @@ function all_inherited_funs(igs,df) {
     return df;
 }
 
-// Return the type of a named function in the abstract syntax
-// function_type :: Grammar -> FunId -> Type
-function function_type(g,fun) {
+// Return the index of the function the given name in the abstract syntax
+// find_function :: Grammar -> FunId -> (Int|null)
+function fun_index(g,fun) {
     with(g.abstract)
-	for(var i in funs) if(funs[i].name==fun) return funs[i].type
+	for(var i in funs) if(funs[i].name==fun) return i
     return null;
 }
 
+// Return the type of a named function in the abstract syntax
+// function_type :: Grammar -> FunId -> (Type|null)
+function function_type(g,fun) {
+    var ix=fun_index(g,fun)
+    return ix==null ? null : g.abstract.funs[ix].type
+}
+
 // Return the lincat defined in a given concrete syntax for an abstract category
-// cat_lincat :: Concrete -> Cat -> Term
+// cat_lincat :: Concrete -> Cat -> (Term|null)
 function cat_lincat(conc,cat) {
     with(conc)
 	for(var i in lincats) if(lincats[i].cat==cat) return lincats[i].type
@@ -87,14 +94,14 @@ function cat_lincat(conc,cat) {
 }
 
 // Return the lin defined in a given concrete syntax for an abstract function
-// fun_lin :: Concrete -> FunId -> Lin
+// fun_lin :: Concrete -> FunId -> (Lin|null)
 function fun_lin(conc,fun) {
     with(conc) for(var i in lins) if(lins[i].fun==fun) return lins[i]
     return null;
 }
 
 // Return the index of the concrete syntax with a given langcode
-// conc_index :: Grammar -> Id -> Int
+// conc_index :: Grammar -> Id -> (Int|null)
 function conc_index(g,langcode) {
     var c=g.concretes;
     for(var ix=0;ix<c.length;ix++)
