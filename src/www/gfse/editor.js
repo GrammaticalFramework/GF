@@ -146,9 +146,16 @@ function edit_grammar(g) {
 }
 
 function draw_grammar(g) {
-    var files=div_class("files",[draw_filebar(g),draw_file(g)]);
-    return div_class("grammar",[draw_namebar(g,files),files])
-
+    switch(g.view) {
+    case "matrix":
+	var matrix=div_class("files",draw_matrix(g))
+	return div_class("grammar",[draw_namebar(g,matrix),matrix])
+    case "row":
+	/* ... */
+    default:
+	var files=div_class("files",[draw_filebar(g),draw_file(g)]);
+	return div_class("grammar",[draw_namebar(g,files),files])
+    }
 }
 
 function draw_namebar(g,files) {
@@ -192,21 +199,16 @@ function draw_plainbutton(g,files) {
 }
 
 function draw_matrixbutton(g,files) {
-    var b2;
-    function show_editor() { edit_grammar(g); }
-    function show_matrix() {
-	clear(files)
-	files.appendChild(draw_matrix(g))
-	b.style.display="none";
-	if(b2) b2.style.display="";
-	else {
-	    b2=button("Show editor",show_editor);
-	    insertAfter(b2,b);
-	}
+    switch(g.view) {
+    case "matrix":
+	function show_editor() { g.view="column"; reload_grammar(g); }
+	var b=button("Show editor",show_editor);
+	return b;
+    default:
+	var b=button("Matrix view",function(){open_matrix(g);});
+	b.title="Show matrix view of the grammar";
+	return b;
     }
-    var b=button("Matrix view",show_matrix);
-    b.title="Show matrix view of the grammar";
-    return b;
 }
 
 function show_compile_error(res,err_ind) {
@@ -520,8 +522,9 @@ function add_concrete2(ix,code) {
     open_concrete(g,ci);
 }
 
-function open_abstract(g) { g.current=0; reload_grammar(g); }
-function open_concrete(g,i) { g.current=i+1; reload_grammar(g); }
+function open_abstract(g) { g.view="column"; g.current=0; reload_grammar(g); }
+function open_concrete(g,i) { g.view="column"; g.current=i+1; reload_grammar(g); }
+function open_matrix(g) { g.view="matrix"; reload_grammar(g); }
 
 function td_gap(c) {return wrap_class("td","gap",c); }
 function gap() { return td_gap(text(" ")); }
@@ -543,26 +546,33 @@ function delete_concrete(g,ci) {
     }
 }
 
+function abs_tab_button(g) {
+    return button("Abstract",function(){open_abstract(g);})
+}
+
+function conc_tab_button(g,ci) {
+    var cs=g.concretes
+    function del() { delete_concrete(g,ci); }
+    function open_conc() {open_concrete(g,1*ci); }
+    return deletable(del,button(concname(cs[ci].langcode),open_conc),"Delete this concrete syntax")
+}
+
 function draw_filebar(g) {
     var cur=(g.current||0)-1;
     var filebar = empty_class("tr","extensible")
     filebar.appendChild(gap());
-    filebar.appendChild(
-	tab(cur== -1,button("Abstract",function(){open_abstract(g);})));
-    var cs=g.concretes;
-    function del(ci) { return function() { delete_concrete(g,ci); }}
-    function open_conc(i) { return function() {open_concrete(g,1*i); }}
-    for(var i in cs) {
+    filebar.appendChild(tab(cur== -1,abs_tab_button(g)));
+    for(var i in g.concretes) {
 	filebar.appendChild(gap());
-	filebar.appendChild(
-	    tab(i==cur,deletable(del(i),button(concname(cs[i].langcode),open_conc(i)),"Delete this concrete syntax")));
+	filebar.appendChild(tab(i==cur,conc_tab_button(g,i)));
     }
     filebar.appendChild(td_gap(more(g,add_concrete,"Add a concrete syntax")));
     return wrap_class("table","tabs",filebar);
 }
 
 function draw_file(g) {
-    return g.current>0 // && g.current<=g.concretes.length
+    if(g.current>g.concretes.length) g.current=0; // bug resilience
+    return g.current>0
 	? draw_concrete(g,g.current-1)
 	: draw_abstract(g);
 }
@@ -795,21 +805,24 @@ function duplicated(g,kind,orig) {
 	: "Same "+kind+" already defined in "+orig
 }
 
+function draw_ecat(g,i,dc) { // modifies dc !!
+    var cs=g.abstract.cats;
+    var cat=cs[i]
+    function ren(g,el) { rename_cat(g,el,cat); }
+    var eident=editable("span",ident(cat),g,ren,"Rename category");
+    var check=ifError(dc[cat],duplicated(g,"category",dc[cat]),eident);
+    function del() { delete_cat(g,i); }
+    var c=deletable(del,check,"Delete this category")
+    dc[cs[i]]=g.basename;
+    return c
+}
+
 function draw_cats(g) {
     var cs=g.abstract.cats;
     var es=[];
-    var defined=inherited_cats(g);
-    function eident(cat) {
-	function ren(g,el) { rename_cat(g,el,cat); }
-	return editable("span",ident(cat),g,ren,"Rename category");
-    }
-    function check(cat,el) {
-	return ifError(defined[cat],duplicated(g,"category",defined[cat]),el);
-    }
-    function del(i) { return function() { delete_cat(g,i); }}
+    var dc=inherited_cats(g);
     for(var i in cs) {
-	es.push(deletable(del(i),check(cs[i],eident(cs[i])),"Delete this category"));
-	defined[cs[i]]=g.basename;
+	es.push(draw_ecat(g,i,dc));
 	es.push(sep("; "));
     }
     es.push(more(g,add_cat,"Add more categories"));
@@ -863,16 +876,19 @@ function draw_funs(g) {
     var es=[];
     var dc=defined_cats(g);
     var df=inherited_funs(g);
-    function del(i) { return function() { delete_fun(g,i); }}
-    function draw_efun(i,df) {
-	return editable("span",draw_fun(g,funs[i],dc,df),g,edit_fun(i),"Edit this function");
-    }
     for(var i in funs) {
-	es.push(node_sortable("fun",funs[i].name,[deletable(del(i),draw_efun(i,df),"Delete this function")]));
-	df[funs[i].name]=g.basename;
+	es.push(node_sortable("fun",funs[i].name,[draw_efun(g,i,dc,df)]));
     }
     es.push(more(g,add_fun,"Add a new function"));
     return es;
+}
+
+function draw_efun(g,i,dc,df) { // modifies df !!
+    var funs=g.abstract.funs;
+    function del() { delete_fun(g,i); }
+    var f=deletable(del,editable("span",draw_fun(g,funs[i],dc,df),g,edit_fun(i),"Edit this function"),"Delete this function");
+    df[funs[i].name]=g.basename;
+    return f
 }
 
 function draw_fun(g,fun,dc,df) {
@@ -1295,7 +1311,7 @@ function draw_lins(g,ci) {
     function dl(f,cls) {
 	var fn=ident(f.fun)
 	var fty=function_type(g,f.fun)
-	var linty=lintype(g,conc,igs,dc,fty)
+	var linty=fty && lintype(g,conc,igs,dc,fty)
 	if(fty)
 	    fn.title="fun "+f.fun+": "+show_type(fty)
                     +"\nlin "+f.fun+": "+show_lintype(linty)
@@ -1303,7 +1319,7 @@ function draw_lins(g,ci) {
 	for(var i=0; i<f.args.length;i++) {
 	    l.push(text(" "));
 	    var an=ident(f.args[i])
-	    an.title=f.args[i]+": "+linty[i]
+	    if(linty) an.title=f.args[i]+": "+linty[i]
 	    l.push(an);
 	}
 	l.push(sep(" = "));
@@ -1373,18 +1389,18 @@ function find_grammar_byname(igs,name) {
 /* -------------------------------------------------------------------------- */
 
 function draw_matrix(g) {
-    var row=[th(text("Abstract"))]
+    var row=[th(abs_tab_button(g))]
     var t=empty_class("table","matrixview")
     for(var ci in g.concretes)
-	row.push(th(text(concname(g.concretes[ci].langcode))))
+	row.push(th(conc_tab_button(g,ci)))
     t.appendChild(tr(row))
 
-    var dc=defined_cats(g);
+    var dc=inherited_cats(g);
     var df=inherited_funs(g);
 
     for(var i in g.abstract.cats) {
 	var cat=g.abstract.cats[i]
-	var row=[td(ident(cat))]
+	var row=[td(draw_ecat(g,i,dc))] // modifies dc
 	for(var ci in g.concretes) {
 	    var conc=g.concretes[ci]
 	    row.push(td(text(cat_lincat(conc,cat))))
@@ -1393,7 +1409,7 @@ function draw_matrix(g) {
     }
     for(var i in g.abstract.funs) {
 	var fun=g.abstract.funs[i]
-	var row=[td(draw_fun(g,fun,dc,df))]
+	var row=[td(draw_efun(g,i,dc,df))] // modifies df
 	for(var ci in g.concretes) {
 	    var conc=g.concretes[ci]
 	    var lin=fun_lin(conc,fun.name)
@@ -1594,6 +1610,7 @@ function string_editor(el,init,ok,async) {
 //  var i=node("textarea",{name:"it",rows:"2",cols:"60"},[text(init)]);
     var e=node("form",{},
 	       [i,
+		text(" "),
 		node("input",{type:"submit",value:"OK"},[]),
 		button("Cancel",restore),
 		text(" "),
@@ -1641,8 +1658,8 @@ function text_ne(s) { // like text(s), but force it to be non-empty
     return text(s ? s : "\xa0\xa0\xa0")
 }
 
-function editable(tag,cs,g,f,hint) {
-    var b=edit_button(function(){f(g,e)},hint);
+function editable(tag,cs,g,edit,hint) {
+    var b=edit_button(function(){edit(g,e)},hint);
     var e=node(tag,{"class":"editable"},[cs,b]);
     //e.onclick=b.onclick;
     return e;

@@ -93,7 +93,7 @@ table.matrixview th { background: #cef; color: #009; }
  table.tabs td.gap
 { border-top-width: 0; border-left-width: 0; border-right-width: 0; }
 
-table.tabs input[type=button] {
+table.tabs input[type=button], table.matrixview th input[type=button] {
     border: 0;
     background: inherit;
     color: #009;
