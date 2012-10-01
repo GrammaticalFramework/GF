@@ -163,6 +163,8 @@ lin
   } ;
   
   AdAdV = cc2 ;
+  
+  UttAdV adv = adv;
 
 lin
   PPos = {s = [] ; p = CPos} ;
