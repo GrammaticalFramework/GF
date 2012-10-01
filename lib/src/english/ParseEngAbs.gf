@@ -68,4 +68,5 @@ fun CompoundCN : Num -> N -> CN -> CN ;
 	
 	AdAdV : AdA -> AdV -> AdV ;
 
+	UttAdV : AdV -> Utt;
 }

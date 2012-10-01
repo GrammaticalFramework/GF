@@ -114,4 +114,6 @@ lin
   
   UncNeg = {s = ""; p = Neg} ;
 
+  UttAdV adv = adv;
+
 }
