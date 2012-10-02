@@ -895,22 +895,24 @@ function draw_funs(g) {
     return es;
 }
 
-function draw_efun(g,i,dc,df) { // modifies df !!
+function draw_efun(g,i,dc,df,click) { // modifies df !!
     var funs=g.abstract.funs;
     function del() { delete_fun(g,i); }
-    var f=deletable(del,editable("span",draw_fun(g,funs[i],dc,df),g,edit_fun(i),"Edit this function"),"Delete this function");
+    var f=deletable(del,editable("span",draw_fun(g,funs[i],dc,df,click),g,edit_fun(i),"Edit this function"),"Delete this function");
     df[funs[i].name]=g.basename;
     return f
 }
 
-function draw_fun(g,fun,dc,df) {
+function draw_fun(g,fun,dc,df,click) {
     function check(el) {
 	return ifError(dc[fun.name],
 		       "Function names must be distinct from category names",
 		       ifError(df[fun.name],duplicated(g,"function",df[fun.name]),el));
     }
-    return node("span",{},
-		[check(ident(fun.name)),sep(" : "),draw_type(fun.type,dc)]);
+    var d=node("span",{},
+	       [check(ident(fun.name)),sep(" : "),draw_type(fun.type,dc)]);
+    if(click) d.onclick=click;
+    return d;
 }
 
 function draw_type(t,dc) {
@@ -1429,8 +1431,7 @@ function draw_matrix(g) {
     function openr(f) { return function() { g.row=f; open_row(g) } }
     for(var i in g.abstract.funs) {
 	var fun=g.abstract.funs[i]
-	var e=draw_efun(g,i,dc,df) // modifies df
-	e.onclick=openr(fun.name)
+	var e=draw_efun(g,i,dc,df,openr(fun.name)) // modifies df
 	var row=[td(e)]
 	for(var ci in g.concretes) {
 	    var conc=g.concretes[ci]
@@ -1440,7 +1441,7 @@ function draw_matrix(g) {
 	}
 	t.appendChild(tr(row))
     }
-    return t
+    return div_class("extensible",[t,more(g,add_fun,"Add a new function")])
 }
 
 function simple_draw_lin(f) {
@@ -1458,11 +1459,10 @@ function simple_draw_lin(f) {
 }
 
 function draw_row(g) {
-    var ix,fname=g.row
+    var ix=null,fname=g.row
     if(fname) ix=fun_index(g,fname)
-    else ix=0,fname=g.abstract.funs[0] && g.abstract.funs[0].name
+    if(ix==null) ix=0,fname=g.abstract.funs[0] && g.abstract.funs[0].name
     if(!fname) return text("No functions in the grammar")
-    if(ix==null) return text(fname+" not found")
 
     var igs=inherited_grammars(g)
     var dc=defined_cats(g);
