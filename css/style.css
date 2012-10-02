@@ -13,6 +13,12 @@ div.news { font-size: small; }
 
 table { border-collapse: collapse; }
 
+table.news td {
+    background: inherit;
+    border: 0;
+    vertical-align: baseline;
+    padding: 0.25ex 0.5ex;
+}
 
 th,td { border: 1px solid #333; }
 
