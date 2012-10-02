@@ -59,10 +59,11 @@ of the display to "Enable editing on touch devices" that reveals all editing
 symbols.
 
 <p>
-In spite of its name, the editor runs entierly in the web
+In spite of its name, the core of the editor runs in the web
 browser, so once you have opened the web page, you can
 <strong>continue editing</strong> grammars even while you are
-<strong>offline</strong>.
+<strong>offline</strong>. Grammar compilation &amp; testing and some
+error checking is done by the GF server and is not available while offline.
 
 <h3>Current status</h3>
 
@@ -81,6 +82,7 @@ abstract syntax, and one file for each concrete syntax.
 The supported abstract syntax corresponds to context-free grammars
 (no dependent types). The definition of an abstract syntax is limited to
 <ul>
+  <li>a list of inherited abstract syntaxes,
   <li>a list of <em>category names</em>,
   <var>Cat<sub>1</sub></var> ; ... ; <var>Cat<sub>n</sub></var>,
   <li>a list of <em>functions</em> of the form
@@ -91,6 +93,7 @@ The supported abstract syntax corresponds to context-free grammars
 
 Available editing operations:
 <ul>
+  <li>Inherited abstract syntaxes can be added and removed.
   <li>Categories can be added, removed and renamed. When renaming a category,
   occurences of it in function types will be updated accordingly.
   <li>Functions can be added, removed and edited. Concrete syntaxes are updated
@@ -110,9 +113,12 @@ Error checks:
 
 At the moment, the concrete syntax for a language <var>L</var> is limited to
 <ul>
-  <li>opening the Resource Grammar Library modules
+  <li>inheriting the concrete syntax <var>G<sub>i</sub>L</var>
+  for each <var>G</var> inherited by the abstract syntax.
+  <li>opening a selection of the Resource Grammar Library modules
   <code>Syntax</code><var>L</var>, <code>Paradigms</code><var>L</var>,
-  <code>Lexicon</code><var>L</var> and <code>Extra</code><var>L</var>,
+  <code>Lexicon</code><var>L</var>, <code>Symbolic</code><var>L</var>
+  and <code>Extra</code><var>L</var>,
   <li><em>linearization types</em> for the categories in the abstract syntax,
   <li><em>linearizations</em> for the functions in the abstract syntax,
   <li><em>parameter type definitions</em>,
@@ -123,13 +129,15 @@ At the moment, the concrete syntax for a language <var>L</var> is limited to
 
 Available editing operations:
 <ul>
+  <li>Modules can be added and removed from the list of opened Resource Grammar
+  Library modules.
   <li>The LHSs of the linearization types and linearizations are determined by
   the abstract syntax and do not need to be entered manually.
   The RHSs can
   be edited.
   <li>Parameter types can be added, removed and edited.
   <li>Operation definitons can be added, removed and edited.
-  <li>Definitions can be reordered (using drag-and-drop)
+  <li>Definitions can be reordered (using drag-and-drop).
 </ul>
 Also,
 
@@ -155,13 +163,31 @@ Error checks:
   semantic errors are delayed until the grammar is compiled.
 </ul>
 
+<h3>Grammar views</h3>
+
+The editor supports three ways to view a grammar:
+
+<ul>
+  <li><strong>Column view</strong>:
+  this is the traditional view where you see one complete grammar module at a
+  time. i.e. either the abstract syntax or one of the concrete syntaxes in the
+  grammar.
+  <li><strong>Matrix view</strong>:
+  this presents an overview of the grammar where columns
+  correspond to the abstract and concrete syntax modules and rows correspond
+  to the categories and functions in the grammar.
+  <li><strong>Row view</strong>:
+  this view shows one function form the abstract syntax and
+  the corresponding linearization functions from all the concrete syntaxes.
+</ul>
+
 <h3>Compiling and testing grammars</h3>
 
 When pressing the <strong>Compile</strong> button, the grammar will be compiled
 with GF, and any errors not detected by the editor will be reported.
-If the grammar is free from errors the user can then
-test the grammar by clicking on links to the online GF shell, the Minibar or
-the Translation Quiz.
+The grammar will also be compiled when pressing the <strong>Minibar</strong>
+and <strong>Quiz</strong> buttons before opening the grammar for testing
+in the Minibar or the Translation Quiz, respectively.
 
 <h3><img class=right src="P/1307545089_weather_04.png" alt="">
 <img class=right src="P/1306856253_weather_06.png" alt="">Grammars in the
@@ -207,7 +233,8 @@ This means that name changes are propagated between devices like other changes.
 
 <h3>Example-based grammar writing</h3>
 
-This is work in progress...
+We experimented with this in 2011. It is currently not included, but it
+might return in a future version...
 
 <h3>Future work</h3>
 
@@ -234,7 +261,7 @@ suitable for multiple users developing a grammar in collaboration.
 
 <hr>
 <div class=modtime><small>
-<!-- hhmts start --> Last modified: Mon Jun 11 17:25:17 CEST 2012 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Tue Oct  2 19:26:08 CEST 2012 <!-- hhmts end -->
   </small></div>
 <address>
 <a href="http://www.cse.chalmers.se/~hallgren/">TH</a>
