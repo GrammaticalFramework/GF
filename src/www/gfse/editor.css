@@ -42,6 +42,7 @@ div.namebar table { width: 100%; }
 .namebar h3, .home h3, .sheet h3 { margin: 0; color: #009; }
 
 td.right { text-align: right; }
+td.center { text-align: center; }
 
 .kw { font-weight: bold; font-family: sans-serif; color: #009; }
 .sep { font-weight: bold; color: #009; }
