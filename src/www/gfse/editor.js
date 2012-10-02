@@ -154,6 +154,7 @@ function draw_grammar(g) {
 	var files=div_class("files",draw_row(g))
 	break;
     default:
+	g.view="column"
 	var files=div_class("files",[draw_filebar(g),draw_file(g)]);
 	break;
     }
@@ -166,11 +167,18 @@ function draw_namebar(g,files) {
     var mb=minibar_button(g,files,err_ind,cb);
     var qb=quiz_button(g,err_ind);
     //var pb=draw_plainbutton(g,files);
-    var mxb=draw_matrixbutton(g,files)
+
+    var fb=draw_view_button(g,"column")
+    var mxb=draw_view_button(g,"matrix")
+    var rb=draw_view_button(g,"row")
+
     var xb=draw_closebutton(g);
+    var center=[wrap("small",text("View: ")),fb,mxb,rb]
+    var right=[err_ind,cb,mb,qb,xb]
     return div_class("namebar",
 		     [table([tr([td(draw_name(g)),
-				 td_right([err_ind,cb,mb,qb/*,pb*/,mxb,xb])])])])
+				 td_center(center),
+				 td_right(right)])])])
 }
 
 function draw_name(g) {
@@ -183,6 +191,14 @@ function draw_closebutton(g) {
     return b;
 }
 
+function draw_view_button(g,view) {
+    var b=button(view,function(){open_view(g,view);});
+    b.title="Shitch to the "+view+" view of the grammar";
+    b.disabled=g.view==view
+    return b;
+}
+
+/*
 function draw_plainbutton(g,files) {
     var b2;
     function show_editor() { edit_grammar(g); }
@@ -199,19 +215,7 @@ function draw_plainbutton(g,files) {
     b.title="Show plain text representaiton of the grammar";
     return b;
 }
-
-function draw_matrixbutton(g,files) {
-    switch(g.view) {
-    case "matrix":
-	function show_editor() { g.view="column"; reload_grammar(g); }
-	var b=button("Show editor",show_editor);
-	return b;
-    default:
-	var b=button("Matrix view",function(){open_matrix(g);});
-	b.title="Show matrix view of the grammar";
-	return b;
-    }
-}
+*/
 
 function show_compile_error(res,err_ind) {
     var dst=compiler_output
@@ -526,8 +530,12 @@ function add_concrete2(ix,code) {
 
 function open_abstract(g) { g.view="column"; g.current=0; reload_grammar(g); }
 function open_concrete(g,i) { g.view="column"; g.current=i+1; reload_grammar(g); }
-function open_matrix(g) { g.view="matrix"; reload_grammar(g); }
-function open_row(g,fun) { g.view="row"; g.row=fun; reload_grammar(g); }
+
+function open_view(g,view) { g.view=view; reload_grammar(g); }
+
+function open_matrix(g)    { open_view(g,"matrix") }
+function open_row(g)       { open_view(g,"row") }
+function open_column(g)    { open_view(g,"column") }
 
 function td_gap(c) {return wrap_class("td","gap",c); }
 function gap() { return td_gap(text(" ")); }
@@ -1411,14 +1419,14 @@ function draw_matrix(g) {
 
     for(var i in g.abstract.cats) {
 	var cat=g.abstract.cats[i]
-	var row=[td(draw_ecat(g,i,dc))] // modifies dc
+	var row=[td([kw("cat"),draw_ecat(g,i,dc)])] // modifies dc
 	for(var ci in g.concretes) {
 	    var conc=g.concretes[ci]
 	    row.push(td(text(cat_lincat(conc,cat))))
 	}
 	t.appendChild(tr(row))
     }
-    function openr(f) { return function() { open_row(g,f) } }
+    function openr(f) { return function() { g.row=f; open_row(g) } }
     for(var i in g.abstract.funs) {
 	var fun=g.abstract.funs[i]
 	var e=draw_efun(g,i,dc,df) // modifies df
@@ -1450,8 +1458,10 @@ function simple_draw_lin(f) {
 }
 
 function draw_row(g) {
-    var fname=g.row
-    var ix=fun_index(g,fname)
+    var ix,fname=g.row
+    if(fname) ix=fun_index(g,fname)
+    else ix=0,fname=g.abstract.funs[0] && g.abstract.funs[0].name
+    if(!fname) return text("No functions in the grammar")
     if(ix==null) return text(fname+" not found")
 
     var igs=inherited_grammars(g)
@@ -1461,7 +1471,7 @@ function draw_row(g) {
     var t=empty_class("table","matrixview")
 
     var e=draw_efun(g,ix,dc,df) // modifies df
-    t.appendChild(tr([th(abs_tab_button(g)),td([kw("fun"),e])]))
+    t.appendChild(tr([th(abs_tab_button(g)),td(kw("fun")),td(e)]))
 
     var fun=g.abstract.funs[ix]
 
@@ -1470,7 +1480,7 @@ function draw_row(g) {
 	var lin=fun_lin(conc,fname) || lin_template(g,fname)
 	var dl=draw_elin(g,igs,ci,lin,dc,df)
 	t.appendChild(tr([th(conc_tab_button(g,ci,true)),
-			  td([kw("lin "),dl])]))
+			  td(kw("lin")),td(dl)]))
     }
     var fbar=wrap_class("table","tabs",tr([gap(),tab(true,kw(fname)),gap()]))
     return [fbar,div_id("file",[t])]
@@ -1739,6 +1749,7 @@ function ul(lis) { return node("ul",{},lis); }
 function li(xs) { return node("li",{},xs); }
 function table(rows) { return node("table",{},rows); }
 function td_right(cs) { return node("td",{"class":"right"},cs); }
+function td_center(cs) { return node("td",{"class":"center"},cs); }
 function jsurl(js) { return "javascript:"+js; }
 
 /* -------------------------------------------------------------------------- */
