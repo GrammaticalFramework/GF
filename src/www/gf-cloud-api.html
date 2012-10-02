@@ -111,19 +111,19 @@ For documentation of GF shell commands, see:
   <dd>This command can be used to check GF source code for syntax errors.
     It also converts GF source code to the JSON representation used in
     GFSE (the cloud-based GF grammar editor).
-  <dt><code>/cloud?dir=</code>...<code>&amp;command=upload&amp;</code><var>path<sub>1</sub></var><code>=</code><var>source<sub>1</sub></var><code>&amp;</code><var>path<sub>2</sub></var><code>=</code><var>source<sub>2</sub></var><code>&amp;</code>...
+  <dt><code>/cloud?dir=</code>...<code>&amp;command=<strong>upload</strong>&amp;</code><var>path<sub>1</sub></var><code>=</code><var>source<sub>1</sub></var><code>&amp;</code><var>path<sub>2</sub></var><code>=</code><var>source<sub>2</sub></var><code>&amp;</code>...
   <dd>Upload files to be stored in the cloud.
-  <dt><code>/cloud?dir=</code>...<code>&amp;command=make&amp;</code><var>path<sub>1</sub></var><code>=</code><var>source<sub>1</sub></var><code>&amp;</code><var>path<sub>2</sub></var><code>=</code><var>source<sub>2</sub></var><code>&amp;</code>...
+  <dt><code>/cloud?dir=</code>...<code>&amp;command=<strong>make</strong>&amp;</code><var>path<sub>1</sub></var><code>=</code><var>source<sub>1</sub></var><code>&amp;</code><var>path<sub>2</sub></var><code>=</code><var>source<sub>2</sub></var><code>&amp;</code>...
   <dd>Upload grammar files and compile them into a PGF file.
     The response code is 204 if the upload was successful.
-  <dt><code>/cloud?dir=</code>...<code>&amp;command=download&amp;file=</code><var>path</var>
+  <dt><code>/cloud?dir=</code>...<code>&amp;command=<strong>download</strong>&amp;file=</code><var>path</var>
   <dd>Download the specified file.
-  <dt><code>/cloud?dir=</code>...<code>&amp;command=ls&ext=.pgf</code>
+  <dt><code>/cloud?dir=</code>...<code>&amp;command=<strong>ls</strong>&amp;ext=.pgf</code>
   <dd>List files with the specified extension, e.g.
     <code class=response>["Foods.pgf","Letter.pgf"]</code>.
-  <dt><code>/cloud?dir=</code>...<code>&amp;command=rm&amp;file=</code><var>path</var>
+  <dt><code>/cloud?dir=</code>...<code>&amp;command=<strong>rm</strong>&amp;file=</code><var>path</var>
   <dd>Remove the specified file.
-  <dt><code>/cloud?dir=</code>...<code>&amp;command=link_directories&newdir=</code>...
+  <dt><code>/cloud?dir=</code>...<code>&amp;command=<strong>link_directories</strong>&newdir=</code>...
   <dd>Combine server directores. This is used by GFSE to share grammars
     between multiple devices.
 </dl>
@@ -131,7 +131,7 @@ For documentation of GF shell commands, see:
 <hr>
 <address></address>
 <div class=modtime><small>
-<!-- hhmts start -->Last modified: Wed Aug  1 17:35:16 CEST 2012 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Tue Oct  2 17:26:02 CEST 2012 <!-- hhmts end -->
   </small></div>
 <address>
 <a href="http://www.cse.chalmers.se/~hallgren/">TH</a>

@@ -67,8 +67,7 @@ function draw_grammar_list() {
 	home.appendChild(node("table",{"class":"grammar_list"},rows));
     }
 
-    home.appendChild(
-	ul([li([a(jsurl("new_grammar()"),[text("New grammar")])])]));
+    home.appendChild(ul(li(a(jsurl("new_grammar()"),[text("New grammar")]))));
     //editor.appendChild(text(local.count));
     home.appendChild(empty_id("div","sharing"));
 }
@@ -1745,9 +1744,8 @@ function touch_edit() {
 /* --- DOM Support ---------------------------------------------------------- */
 
 function a(url,linked) { return node("a",{href:url},linked); }
-function ul(lis) { return node("ul",{},lis); }
-function li(xs) { return node("li",{},xs); }
-function table(rows) { return node("table",{},rows); }
+function ul(lis) { return wrap("ul",lis); }
+function table(rows) { return wrap("table",rows); }
 function td_right(cs) { return node("td",{"class":"right"},cs); }
 function td_center(cs) { return node("td",{"class":"center"},cs); }
 function jsurl(js) { return "javascript:"+js; }
