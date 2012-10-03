@@ -1309,6 +1309,7 @@ function draw_elin(g,igs,ci,f,dc,df) {
 		    if(f.template)
 			conc.lins.push({fun:f.fun,args:f.args,lin:s});
 		    else { f.lin=s; f.eb_lin=null; }
+		    timestamp(conc);
 		    reload_grammar(g);
 		}
 		cont(msg);
@@ -1474,12 +1475,34 @@ function draw_row(g) {
 
     var fun=g.abstract.funs[ix]
 
+    var missing=[]
+    for(var ci in g.concretes) 
+	if(!fun_lin(g.concretes[ci],fname))
+	    missing.push(ci)
+
+    function copy_button(langcode,lin) {
+	function copy() {
+	    for(var i in missing) {
+		var ci=missing[i]
+		var conc=g.concretes[ci]
+		conc.lins.push(lin)
+		timestamp(conc);
+	    }
+	    reload_grammar(g)
+	}
+	var b=button("Copy",copy)
+	b.title="Copy lin "+fname+" from "+concname(langcode)
+	         +" to languages that lack lin "+fname
+	return b
+    }
+
     for(var ci in g.concretes) {
 	var conc=g.concretes[ci]
-	var lin=fun_lin(conc,fname) || lin_template(g,fname)
-	var dl=draw_elin(g,igs,ci,lin,dc,df)
+	var lin=fun_lin(conc,fname)
+	var cp= lin && missing.length>0 ? [copy_button(conc.langcode,lin)] : []
+	var dl=draw_elin(g,igs,ci,lin || lin_template(g,fname),dc,df)
 	t.appendChild(tr([th(conc_tab_button(g,ci,true)),
-			  td(kw("lin")),td(dl)]))
+			  td(kw("lin")),td(dl),td(cp)]))
     }
     var fbar=wrap_class("table","tabs",tr([gap(),tab(true,kw(fname)),gap()]))
     return [fbar,div_id("file",[t])]
