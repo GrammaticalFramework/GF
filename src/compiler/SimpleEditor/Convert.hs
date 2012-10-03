@@ -24,14 +24,13 @@ import SimpleEditor.JSON
 
 
 parseModule (path,source) =
-   prop path $ 
+   (path.=) $
    case runP pModDef (BS.pack source) of
      Left (Pn l c,msg) ->
-         makeObj [prop "error" msg,
-                  prop "location" (show l++":"++show c)]
+         makeObj ["error".=msg, "location".= show l++":"++show c]
      Right mod -> case convModule mod of
-                    Ok g -> makeObj [prop "converted" g]
-                    Bad msg -> makeObj [prop "parsed" msg]
+                    Ok g -> makeObj ["converted".=g]
+                    Bad msg -> makeObj ["parsed".=msg]
 
 {-
 convAbstractFile path =

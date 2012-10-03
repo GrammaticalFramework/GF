@@ -1277,12 +1277,13 @@ function draw_opers(g,ci) {
 }
 
 function delete_lin(g,ci,fun) {
-    var i;
     var c=g.concretes[ci];
-    for(i=0;i<c.lins.length && c.lins[i].fun!=fun;i++);
-    if(i<c.lins.length) c.lins=delete_ix(c.lins,i);
-    timestamp(c);
-    reload_grammar(g);
+    var i=lin_index(c,fun);
+    if(i!=null) {
+	c.lins=delete_ix(c.lins,i);
+	timestamp(c);
+	reload_grammar(g);
+    }
 }
 
 /* -------------------------------------------------------------------------- */
