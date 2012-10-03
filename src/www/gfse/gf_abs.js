@@ -71,7 +71,7 @@ function all_inherited_funs(igs,df) {
 }
 
 // Return the index of the function the given name in the abstract syntax
-// find_function :: Grammar -> FunId -> (Int|null)
+// fun_index :: Grammar -> FunId -> (Int|null)
 function fun_index(g,fun) {
     with(g.abstract)
 	for(var i in funs) if(funs[i].name==fun) return i
@@ -93,10 +93,18 @@ function cat_lincat(conc,cat) {
     return null;
 }
 
+// Return the index of the lin in a given concrete syntax for an abstract function
+// lin_index :: Concrete -> FunId -> (Int|null)
+function lin_index(conc,fun) {
+    with(conc) for(var i in lins) if(lins[i].fun==fun) return i
+    return null;
+}
+
 // Return the lin defined in a given concrete syntax for an abstract function
 // fun_lin :: Concrete -> FunId -> (Lin|null)
 function fun_lin(conc,fun) {
-    with(conc) for(var i in lins) if(lins[i].fun==fun) return lins[i]
+    var i=lin_index(conc,fun)
+    if(i!=null) return conc.lins[i]
     return null;
 }
 
@@ -138,25 +146,21 @@ function rename_category(g,oldcat,newcat) {
     return g;
 }
 
-// rename_function :: Grammar -> Id -> Id -> Grammar // destructive update
+// rename_function :: Grammar -> FunId -> FunId -> Grammar // destructive update
 function rename_function(g,oldfun,newfun) {
-    function rename_lin(lin) {
-	if(lin.fun==oldfun) lin.fun=newfun;
-    }
     function rename_concrete(c) {
-	for(var i in c.lins) rename_lin(c.lins[i]);
+	var i=lin_index(c,oldfun)
+	if(i!=null) c.lins[i].fun=newfun;
     }
     for(var i in g.concretes) rename_concrete(g.concretes[i]);
     return g;
 }
 
-// change_lin_lhs :: Grammar -> Id -> Grammar // destructive update
+// change_lin_lhs :: Grammar -> Fun -> Grammar // destructive update
 function change_lin_lhs(g,fun) {
-    function change_lin(lin) {
-	if(lin.fun==fun.name) lin.args=arg_names(fun.type);
-    }
     function change_concrete(c) {
-	for(var i in c.lins) change_lin(c.lins[i]);
+	var i=lin_index(c,fun.name)
+	if(i!=null) c.lins[i].args=arg_names(fun.type);
     }
     for(var i in g.concretes) change_concrete(g.concretes[i]);
     return g;
