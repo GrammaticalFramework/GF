@@ -1486,7 +1486,9 @@ function draw_row(g) {
 	    for(var i in missing) {
 		var ci=missing[i]
 		var conc=g.concretes[ci]
-		conc.lins.push(lin)
+		// This is not functional programming, so copy the lin first...
+		var lin2=JSON.parse(JSON.stringify(lin))
+		conc.lins.push(lin2)
 		timestamp(conc);
 	    }
 	    reload_grammar(g)
