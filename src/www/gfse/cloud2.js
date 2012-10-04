@@ -74,7 +74,15 @@ function upload_grammars(gs,cont) {
     with_dir(upload2)
 }
 
-// Upload the grammar to store it in the cloud
+function assign_unique_name(g,unique_id) {
+    if(!g.unique_name) {
+	g.unique_name=unique_id+"-"+g.index;
+	save_grammar(g)
+    }
+    return g
+}
+
+// Upload all grammars to the cloud
 function upload_json(cont) {
     function upload2(dir,unique_id) {
 	function upload3(resptext,status) {
@@ -105,10 +113,7 @@ function upload_json(cont) {
 	for(var i=0;i<local.count;i++) {
 	    var g=local.get(i,null);
 	    if(g) {
-		if(!g.unique_name) {
-		    g.unique_name=unique_id+"-"+i;
-		    save_grammar(g)
-		}
+		g=assign_unique_name(g,unique_id)
 		//form.append(g.unique_name+".json",JSON.stringify(g));
 		form[encodeURIComponent(g.unique_name+".json")]=JSON.stringify(g)
 	    }
@@ -119,16 +124,49 @@ function upload_json(cont) {
     with_dir(upload2);
 }
 
+function remove_public(name,cont,err) {
+    gfcloud_public_post("rm",{file:name},cont,err)
+}
+
+// Publish a single grammar
+function publish_json(g,cont) {
+    function publish2(dir,unique_id) {
+	var oldname=g.publishedAs
+
+	function publish3(resptext,status) {
+	    console.log("publish3")
+	    if(oldname && oldname!=g.basename) {
+		console.log("old name="+oldname)
+		var name=oldname+"-"+g.unique_name+".json"
+		remove_public(name,cont,cont)
+	    }
+	    else cont()
+	}
+	g.publishedAs=g.basename;
+	save_grammar(g);
+	g=assign_unique_name(g,unique_id)
+	var name=g.basename+"-"+g.unique_name
+	var ix=g.index;
+	delete g.publishedAs
+	delete g.unique_name
+	delete g.index
+	var form={}
+	form[encodeURIComponent(name+".json")]=JSON.stringify(g)
+	g=reget_grammar(ix)
+	gfcloud_public_post("upload",form,publish3,cont)
+    }
+    with_dir(publish2);
+}
+
 function download_json() {
     var dir=local.get("dir");
-    var index=grammar_index();
     var downloading=0;
 
     function get_list(ok,err) {	gfcloud("ls",{},ok,err) }
 
     function get_file(file,ok,err) {
 	downloading++;
-	gfcloud("download",{file:encodeURIComponent(file)},ok,err);
+	gfcloud("download",{file:file},ok,err);
     }
 
     function file_failed(errormsg,status) {
@@ -139,8 +177,8 @@ function download_json() {
 	downloading--;
 	var newg=JSON.parse(grammar);
 	debug("Downloaded "+newg.unique_name)
-	var i=index[newg.unique_name];
-	if(i!=undefined) merge_grammar(i,newg)
+	var i=my_grammar(newg.unique_name+".json");
+	if(i!=null) merge_grammar(i,newg)
 	else {
 	    debug("New")
 	    newg.index=null;
@@ -176,12 +214,37 @@ function link_directories(newdir,cont) {
 
 /* -------------------------------------------------------------------------- */
 
-// Request GF cloud service
+var public_dir="/tmp/public"
+
+// Request GF cloud service in the public directory (using GET)
+function gfcloud_public_json(cmd,args,cont,err) {
+    var enc=encodeURIComponent;
+    var url="/cloud?dir="+public_dir+"&command="+enc(cmd)+encodeArgs(args)
+    http_get_json(url,cont,err)
+}
+
+// Request GF cloud service in the public directory (using POST)
+function gfcloud_public_post(cmd,args,cont,err) {
+    var enc=encodeURIComponent;
+    var req="dir="+public_dir+"&command="+enc(cmd)+encodeArgs(args)
+    ajax_http_post("/cloud",req,cont,err)
+}
+
+// Request GF cloud service (using GET, for idempotent requests)
 function gfcloud(cmd,args,cont,err) {
     with_dir(function(dir) {
 	var enc=encodeURIComponent;
 	var url="/cloud?dir="+enc(dir)+"&command="+enc(cmd)+encodeArgs(args)
 	ajax_http_get(url,cont,err)
+    })
+}
+
+// Reqest GF cloud service (using POST, for state changing requests)
+function gfcloud_post(cmd,args,cont,err) {
+    with_dir(function(dir) {
+	var enc=encodeURIComponent;
+	var req="dir="+enc(dir)+"&command="+enc(cmd)+encodeArgs(args)
+	ajax_http_post("/cloud",req,cont,err)
     })
 }
 
