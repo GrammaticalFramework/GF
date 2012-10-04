@@ -6,10 +6,36 @@ var compiler_output=element("compiler_output")
 /* -------------------------------------------------------------------------- */
 
 var grammar_cache=[]
+var grammarlist={}
 
 function reget_grammar(ix) { return grammar_cache[ix]=local.get(ix) }
 function get_grammar(ix)   { return grammar_cache[ix] || reget_grammar(ix) }
-function put_grammar(ix,g) { grammar_cache[ix]=g; local.put(ix,g) }
+
+function put_grammar(ix,g) {
+    grammarlist[ix]={unique_name:g.unique_name,basename:g.basename}
+    grammar_cache[ix]=g;
+    local.put(ix,g)
+    local.put(".grammarlist",grammarlist)
+}
+
+function remove_grammar(ix) {
+    delete grammar_cache[ix];
+    delete grammarlist[ix];
+    local.remove(ix);
+    local.put(".grammarlist",grammarlist)
+}
+
+function my_grammar(unique_name) {
+    for(var ix in grammarlist)
+	if(grammarlist[ix].unique_name+".json"==unique_name)
+	    return ix
+    return null
+}
+
+// For sorting grammars alphabetically by name
+function byBasename(a,b) {
+    return a.basename<b.basename ? -1 : a.basename>b.basename ? 1 : 0;
+}
 
 /* -------------------------------------------------------------------------- */
 
@@ -32,8 +58,7 @@ function draw_grammar_list() {
 		               ? "Click to upload grammar updates to the cloud"
 		               : "Click to store your grammars in the cloud"},
 		    [])]);
-    var home=div_class("home",[node("h3",{},
-				    [text("Your grammars"),cloud_upload])]);
+    var userlist=td(wrap("h3",[text("Your grammars  "),cloud_upload]))
     if(uploaded) {
 	var cloud_download=
 	    a(jsurl("download_json()"),
@@ -43,33 +68,84 @@ function draw_grammar_list() {
 		    [])]);
 	insertAfter(cloud_download,cloud_upload);
     }
-    editor.appendChild(home)
+    function edtr(cs) { return wrap_class("tr","extensible deletable",cs); }
     function del(i) { return function () { delete_grammar(i); } }
-    function clone(i) { return function (g,b) { clone_grammar(i); } }
+    function clone(i) { return function () { clone_grammar(i); } }
     function new_extension(i) { return function (g,b) { new_grammar([g]) }}
-    function item(i,grammar) {
-	var link=a(jsurl("open_grammar("+i+")"),[text(grammar.basename)]);
-	return node("tr",{"class":"extensible deletable"},
-		    [td(delete_button(del(i),"Delete this grammar")),
-		     td(link),
-		     td(more(grammar,clone(i),"Clone this grammar"))])
+    function item(i,gid) {
+	//var i=my_grammar(gid.unique_name+".json")
+	var link=a(jsurl("open_grammar("+i+")"),[text(gid.basename)]);
+	if(!navigator.onLine) pubspan=[]
+	else {
+	    function publish() {
+		pub.disabled=true
+		publish_json(get_grammar(i),draw_grammar_list)
+	    }
+	    var pub=attr({class:"public",
+			  title:"Publish a copy of this grammar."},
+			 button("Publish",publish))
+	    var pubspan=[span_class("more",pub)]
+	}
+	return edtr([td(delete_button(del(i),"Delete this grammar")),
+		     td(title(gid.unique_name,link)),
+		     td(more(clone(i),"Clone this grammar")),
+		     td(pubspan)
+		    ])
     }
     if(local.get("count",null)==null)
-	home.appendChild(text("You have not created any grammars yet."));
+	userlist.appendChild(text("You have not created any grammars yet."));
     else if(local.count==0)
-	home.appendChild(text("Your grammar list is empty."));
+	userlist.appendChild(text("Your grammar list is empty."));
     else {
+	//var ls=[];
+	//for(var ix in grammarlist) ls.push(grammarlist[ix])
+	//ls.sort(byBasename)
 	var rows=[];
-	for(var i=0;i<local.count;i++) {
-	    var grammar=local.get(i,null);
-	    if(grammar && grammar.basename) rows.push(item(i,grammar))
-	}
-	home.appendChild(node("table",{"class":"grammar_list"},rows));
+	for(var ix in grammarlist) rows.push(item(ix,grammarlist[ix]))
+	userlist.appendChild(node("table",{"class":"grammar_list"},rows));
     }
 
-    home.appendChild(ul(li(a(jsurl("new_grammar()"),[text("New grammar")]))));
+    userlist.appendChild(ul(li(a(jsurl("new_grammar()"),[text("New grammar")]))));
     //editor.appendChild(text(local.count));
+    var publiclist=empty_class("td","public_grammars")
+    function no_public() {
+	userlist.className="no_publish"
+    }
+    function show_public(files) {
+	function rmpublic(file) {
+	    return function() { remove_public(file,draw_grammar_list) }
+	}
+	publiclist.appendChild(wrap("h3",text("Public grammars")))
+	if(files.length>0) {
+	    var unique_id=local.get("unique_id","-")
+	    var t=empty_class("table","grammar_list")
+	    for(var i in files) {
+		var file=files[i]
+		var parts=file.split("-")
+		var basename=parts[0]
+		var unique_name=parts[1]+"-"+parts[2]
+		var mine = my_grammar(unique_name)!=null
+		var del = mine
+		    ? delete_button(rmpublic(file),"Don't publish this grammar")
+		    : []
+		var tit = mine
+		    ? "This is a copy of your grammar"
+		    : "Click to download a copy of this grammar"
+		t.appendChild(edtr([td(del),
+				    td(title(tit,
+					     a(jsurl('open_public("'+file+'")'),
+					       [text(basename)])))]))
+	    }
+	    publiclist.appendChild(t)
+	}
+	else
+	    publiclist.appendChild(p(text("No public grammars are available.")))
+    }
+    if(navigator.onLine)
+	gfcloud_public_json("ls",{},show_public,no_public)
+    var home=div_class("home",table(tr([userlist,publiclist])))
     home.appendChild(empty_id("div","sharing"));
+    editor.appendChild(home)
 }
 
 function new_grammar(gs) {
@@ -98,7 +174,7 @@ function empty_concretes_extending(gs) {
 }
 
 function remove_local_grammar(i) {
-    local.remove(i);
+    remove_grammar(i);
     while(local.count>0 && !local.get(local.count-1))
 	local.count--;
 }
@@ -128,6 +204,21 @@ function open_grammar(i) {
     edit_grammar(g);
 }
 
+function open_public(file) {
+    function got_json(g) {
+	delete g.index
+	delete g.unique_name
+	delete g.publishedAs
+	reload_grammar(g)
+    }
+    var parts=file.split("-")
+    var unique_name=parts[1]+"-"+parts[2]
+    var ix=my_grammar(unique_name)
+    console.log("open public",file,ix)
+    if(ix!=null) open_grammar(ix)
+    else gfcloud_public_json("download",{file:file},got_json)
+}
+
 function close_grammar(g) {
     clear(compiler_output);
     save_grammar(g);
@@ -137,7 +228,7 @@ function reload_grammar(g) { save_grammar(g);  edit_grammar(g); }
 
 function save_grammar(g) {
     if(g.index==null) g.index=local.count++;
-    local.put(g.index,g);
+    put_grammar(g.index,g);
 }
 
 function edit_grammar(g) {
@@ -154,7 +245,8 @@ function draw_grammar(g) {
 	break;
     default:
 	g.view="column"
-	var files=div_class("files",[draw_filebar(g),draw_file(g)]);
+	var file=draw_file(g)
+	var files=div_class("files",[draw_filebar(g,file),file]);
 	break;
     }
     return div_class("grammar",[draw_namebar(g,files),files])
@@ -185,14 +277,13 @@ function draw_name(g) {
 }
 
 function draw_closebutton(g) {
-    var b=button("X",function(){close_grammar(g);});
-    b.title="Save and Close this grammar";
-    return b;
+    return title("Save and Close this grammar",
+		 button("X",function(){close_grammar(g);}))
 }
 
 function draw_view_button(g,view) {
-    var b=button(view,function(){open_view(g,view);});
-    b.title="Shitch to the "+view+" view of the grammar";
+    var b=title("Shitch to the "+view+" view of the grammar",
+		button(view,function(){open_view(g,view);}))
     b.disabled=g.view==view
     return b;
 }
@@ -247,9 +338,8 @@ function compile_grammar(g,err_ind,cont) {
 
 function compile_button(g,err_ind) {
     function compile() { compile_grammar(g,err_ind) }
-    var b=button("Compile",compile);
-    b.title="Upload the grammar to the server to check it in GF for errors";
-    return b;
+    return title("Upload the grammar to check it in GF for errors",
+		 button("Compile",compile));
 }
 
 function minibar_button(g,files,err_ind,comp_btn) {
@@ -440,9 +530,8 @@ function minibar_button(g,files,err_ind,comp_btn) {
     }
     function goto_minibar_if_ok(res) { if(res.errorcode=="OK") goto_minibar(); }
     function compile() { compile_grammar(g,err_ind,goto_minibar_if_ok) }
-    var b=button("Minibar",compile);
-    b.title="Upload the grammar and test it in the minibar";
-    return b;
+    var b=button("Minibar",compile)
+    return title("Upload the grammar and test it in the minibar",b)
 }
 
 function quiz_button(g,err_ind) {
@@ -451,9 +540,8 @@ function quiz_button(g,err_ind) {
 	    location.href="../TransQuiz/translation_quiz.html?"+local.get("dir")+"/"
     }
     function compile() { compile_grammar(g,err_ind,goto_quiz) }
-    var b=button("Quiz",compile);
-    b.title="Upload the grammar and go to the translation quiz";
-    return b;
+    return title("Upload the grammar and go to the translation quiz",
+		 button("Quiz",compile))
 }
 
 
@@ -472,8 +560,7 @@ for(var i in languages)
 
 function concname(code) { return langname[code] || code; }
 
-function add_concrete(g,el) {
-    var file=element("file");
+function add_concrete(g,file) {
     clear(file);
     var dc={};
     for(var i in g.concretes)
@@ -568,7 +655,7 @@ function conc_tab_button(g,ci,no_delete) {
     return no_delete ? b : deletable(del,b,"Delete this concrete syntax")
 }
 
-function draw_filebar(g) {
+function draw_filebar(g,file) {
     var cur=(g.current||0)-1;
     var filebar = empty_class("tr","extensible")
     filebar.appendChild(gap());
@@ -577,7 +664,8 @@ function draw_filebar(g) {
 	filebar.appendChild(gap());
 	filebar.appendChild(tab(i==cur,conc_tab_button(g,i)));
     }
-    filebar.appendChild(td_gap(more(g,add_concrete,"Add a concrete syntax")));
+    function add_conc(el) { return add_concrete(g,file) }
+    filebar.appendChild(td_gap(more(add_conc,"Add a concrete syntax")));
     return wrap_class("table","tabs",filebar);
 }
 
@@ -621,15 +709,15 @@ function draw_conc_extends(g,conc) {
 function draw_extends(g) {
     var kw_extends=kw("extends ",extends_hint)
     var exts= g.extends || [];
-    var m1=more(g,add_extends,"Inherit from other grammars");
-    var m2=more(g,add_extends,"Inherit from more grammars");
     var es=[exts.length>0 ? kw_extends : span_class("more",kw_extends)];
     function del(i) { return function() { delete_extends(g,i); }}
     for(var i=0;i<exts.length;i++) {
 	if(i>0) es.push(sep(", "))
 	es.push(deletable(del(i),ident(exts[i]),"Don't inherit from "+exts[i]));
     }
-    es.push(exts.length>0 ? m2 : m1);
+    var w= exts.length>0 ? "more" : "other"
+    function add_exts(el) { return add_extends(g); }
+    es.push(more(add_exts,"Inherit from "+w+" grammars"))
     return indent([extensible(es)])
 }
 
@@ -639,7 +727,7 @@ function delete_extends(g,ix) {
     reload_grammar(g);
 }
 
-function add_extends(g,el) {
+function add_extends(g) {
     var file=element("file");
     clear(file)
     var gs=cached_grammar_array_byname();
@@ -772,7 +860,7 @@ function text_mode(g,file,ix) {
     return mode_button;
 }
 
-function add_cat(g,el) {
+function add_cat(g) {
     function add(s) {
 	var cats=s.split(/\s*(?:\s|[;])\s*/); // allow separating spaces or ";"
 	if(cats.length>0 && cats[cats.length-1]=="") cats.pop();
@@ -785,7 +873,7 @@ function add_cat(g,el) {
 	reload_grammar(g);
 	return null;
     }
-    string_editor(el,"",add);
+    return function(el) { string_editor(el,"",add); }
 }
 
 function delete_cat(g,ix) {
@@ -836,11 +924,11 @@ function draw_cats(g) {
 	es.push(draw_ecat(g,i,dc));
 	es.push(sep("; "));
     }
-    es.push(more(g,add_cat,"Add more categories"));
+    es.push(more(add_cat(g),"Add more categories"));
     return es;
 }
 
-function add_fun(g,el) {
+function add_fun(g) {
     function add(s) {
 	var p=parse_fun(s);
 	if(p.ok) {
@@ -852,7 +940,7 @@ function add_fun(g,el) {
 	else
 	    return p.error
     }
-    string_editor(el,"",add);
+    return function(el) { string_editor(el,"",add);}
 }
 
 function edit_fun(i) {
@@ -890,7 +978,7 @@ function draw_funs(g) {
     for(var i in funs) {
 	es.push(node_sortable("fun",funs[i].name,[draw_efun(g,i,dc,df)]));
     }
-    es.push(more(g,add_fun,"Add a new function"));
+    es.push(more(add_fun(g),"Add a new function"));
     return es;
 }
 
@@ -991,8 +1079,8 @@ var rgl_info = {
     Symbolic: "Functions for symbolic expressions (numbers and variables in mathematics)"
 }
 
-function add_open(ci) {
-    return function (g,el) {
+function add_open(g,ci) {
+    return function (el) {
 	var conc=g.concretes[ci];
 	var os=conc.opens;
 	var ds={};
@@ -1066,7 +1154,7 @@ function draw_opens(g,ci) {
 	es.push(deletable(del(i),id,"Don't open this module"));
 	first=false;
     }
-    es.push(more(g,add_open(ci),"Open more modules"));
+    es.push(more(add_open(g,ci),"Open more modules"));
     return indent(es);
 }
 
@@ -1130,7 +1218,7 @@ function draw_params(g,ci) {
 	es.push(div_class("param",[deletable(del(i),draw_eparam(i,dp),"Delete this parameter type")]));
 	dp[params[i].name]=true;
     }
-    es.push(more(g,function(g,el) { return add_param(g,ci,el)},
+    es.push(more(function(el) { return add_param(g,ci,el)},
 		 "Add a new parameter type"));
     return indent(es);
 }
@@ -1266,7 +1354,7 @@ function draw_opers(g,ci) {
 					 "Delete this operator definition")]));
 	dp[opers[i].name]=true;
     }
-    es.push(more(g,function(g,el) { return add_oper(g,ci,el)},
+    es.push(more(function(el) { return add_oper(g,ci,el)},
 		 "Add a new operator definition"));
     function sort_opers() {
 	conc.opers=sort_list(this,conc.opers,"name");
@@ -1385,7 +1473,7 @@ function draw_lins(g,ci) {
 // inherited grammars.
 // lintype :: Grammar -> Concrete -> [Grammar] -> {Cat=>ModId} => Type -> [Term]
 function lintype(g,conc,igs,dc,type) {
-    console.log(dc)
+    //console.log(dc)
     function ihcat_lincat(cat) {
 	if(dc[cat]=="Predef") return "{s:Str}" // !!! Is this right?
 	var ig=find_grammar_byname(igs,dc[cat])
@@ -1442,7 +1530,7 @@ function draw_matrix(g) {
 	}
 	t.appendChild(tr(row))
     }
-    return div_class("extensible",[t,more(g,add_fun,"Add a new function")])
+    return div_class("extensible",[t,more(add_fun(g),"Add a new function")])
 }
 
 function simple_draw_lin(f) {
@@ -1586,16 +1674,6 @@ function cleanup_deleted(files) {
     }
 }
 
-function grammar_index() {
-    var index={}
-    var count=local.count
-    for(var i=0;i<count;i++) {
-	var g=local.get(i,null)
-	if(g && g.unique_name) index[g.unique_name]=i
-    }
-    return index
-}
-
 function merge_grammar(i,newg) {
     var oldg=get_grammar(i);
     var keep="";
@@ -1615,7 +1693,7 @@ function merge_grammar(i,newg) {
 	    }
 	}
     }
-    local.put(i,newg)
+    put_grammar(i,newg)
     return keep;
 }
 
@@ -1723,10 +1801,10 @@ function node_sortable(cls,name,ls) {
 
 function extensible(cs) { return div_class("extensible",cs); }
 
-function more(g,action,hint,label) {
+function more(action,hint,label) {
     var b=node("span",{"class":"more","title":hint || "Add more"},
 	       [text(label || " + ")]);
-    b.onclick=function() { action(g,b); }
+    b.onclick=function() { action(b); }
     return b;
 }
 
@@ -1775,6 +1853,12 @@ function table(rows) { return wrap("table",rows); }
 function td_right(cs) { return node("td",{"class":"right"},cs); }
 function td_center(cs) { return node("td",{"class":"center"},cs); }
 function jsurl(js) { return "javascript:"+js; }
+function title(t,n) { return attr({title:t},n) }
+
+function attr(as,n) {
+    for(var a in as) n.setAttribute(a,as[a]);
+    return n
+}
 
 /* -------------------------------------------------------------------------- */
 
@@ -1819,8 +1903,24 @@ function dir_bugfix() {
     else debug("No server directory yet")
 }
 
+function get_grammarlist() {
+    var list=local.get(".grammarlist")
+    if(list) grammarlist=list
+    else if(local.get("count")!=null) {
+	grammarlist={}
+	var n=local.count;
+	for(var ix=0;ix<n;ix++) {
+	    var g=local.get(ix,null);
+	    if(g)
+		grammarlist[ix]={unique_name:g.unique_name,basename:g.basename}
+	}
+	local.put(".grammarlist",grammarlist)
+    }
+}
+
 if(editor) {
     if(supports_html5_storage()) {
+	get_grammarlist();
 	initial_view();
 	touch_edit();
 	dir_bugfix();

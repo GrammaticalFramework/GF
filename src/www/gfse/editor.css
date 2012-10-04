@@ -18,6 +18,8 @@ h1 img.nofloat { float: none; }
 div.home, div.grammar { border: 1px solid black; background: #9df; }
 div.home { padding: 5px; }
 div.files { margin: 0 8px 8px 8px; position: relative; }
+td.public_grammars { padding-left: 2em; }
+.no_publish .publish { display: none; }
 
 div#file, table.extension td, table.extension th { border: 2px solid #009; }
 div#file { border-top-width: 0; }
@@ -32,6 +34,7 @@ table.extension td { border-left-width: 0; min-width: 30em; }
 .slideshow .hidden { display: none; }
 
 img.cloud, img.right, div.right, div.modtime { float: right; }
+
 .modtime { color: #999; white-space: nowrap; }
 
 table.grammar_list { border-collapse: collapse; margin-left: 1.0em; }
@@ -39,7 +42,8 @@ table.grammar_list td { padding: 0.4ex 0.25em; }
 
 div.namebar { background: #9df; }
 div.namebar table { width: 100%; }
-.namebar h3, .home h3, .sheet h3 { margin: 0; color: #009; }
+.namebar h3, .sheet h3 { margin: 0; color: #009; }
+.home h3 { margin-top: 0; color: #009; }
 
 td.right { text-align: right; }
 td.center { text-align: center; }
