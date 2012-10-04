@@ -962,10 +962,12 @@ function delete_ix(old,ix) {
 
 function insert_ix(old,ix,x) {
     var a=[];
+    var done=false;
     for(var i in old) {
-	if(i==ix) a.push(x);
+	if(i==ix) { a.push(x); done=true; }
 	a.push(old[i])
     }
+    if(!done) a.push(x)
     return a;
 }
 
