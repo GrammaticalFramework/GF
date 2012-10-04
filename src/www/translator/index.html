@@ -12,7 +12,7 @@
 <h1>Simple Translation Tool</h1>
 <form name=options>
 <table class=menubar>
-  <tr><td>File
+  <tr><td><span onclick="">File</span>
     <dl>
       <dt onclick="translator.new(this)">New
       <dt onclick="translator.browse(this)">Open...
@@ -21,22 +21,22 @@
       <dt onclick="translator.saveAs(this)">Save As...
       <dt onclick="translator.close(this)">Close
     </dl>
-    <td>Edit
+    <td><span onclick="">Edit</span>
       <dl>
 	<dt id="edit_import" onclick="translator.import(this)">Import text...
 	<dt id="edit_add_segment" onclick="translator.add_segment(this)">Add a segment...
 	<dt id="edit_remove_segment" onclick="translator.remove(this)">Remove the last segment
       </dl>
-    <td>View
+    <td><span onclick="">View</span>
       <dl>
 	<dt><label><input name=view value=segmentbysegment type=radio checked onchange="translator.change(this)">Segment by segment</label>
 	<dt><label><input name=view value=paralleltexts type=radio onchange="translator.change(this)">Parallel texts</label>
       </dl>
-    <td>Options
+    <td><span onclick="">Options</span>
       <dl>
 	<dt>
 	  <table class=submenu>
-	    <tr><td>Source Language
+	    <tr><td><span onclick="">Source Language</span>
 	      <dl id=source>
 		<dt><label><input name=source value=Eng type=radio onchange="translator.change(this)">English</label>
 		<dt><label><input name=source value=Swe type=radio onchange="translator.change(this)">Swedish</label>
@@ -45,7 +45,7 @@
 	    </table>
 	<dt>
 	  <table class=submenu>
-	    <tr><td>Target Language
+	    <tr><td><span onclick="">Target Language</span>
 	      <dl id=target>
 		<dt><label><input name=target value=Eng type=radio onchange="translator.change(this)">English</label>
 		<dt><label><input name=target value=Swe type=radio onchange="translator.change(this)">Swedish</label>
@@ -54,7 +54,7 @@
 	    </table>
 	<dt>
 	  <table class=submenu>
-	    <tr><td>Default translation method
+	    <tr><td><span onclick="">Default translation method</span>
 	      <dl id=methods>
 		<dt><label><input name=method value=Manual type=radio onchange="translator.change(this)">Manual</label>
 	      </dl>
@@ -72,7 +72,7 @@
 </div>
 <hr>
 <div class=modtime><small>HMTL
-<!-- hhmts start -->Last modified: Fri Sep 21 10:12:52 CEST 2012 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Fri Oct  5 00:29:39 CEST 2012 <!-- hhmts end -->
 </small></div>
 <a href="about.html">About</a>
 
