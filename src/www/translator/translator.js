@@ -833,7 +833,7 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
 	return form
     }
     function draw_options() {
-	return wrap("div",[span_class("arrow",text(" ⇒ ")),draw_options2()])
+	return wrap("div",[span_class("arrow",hovertext(" ⇒ ")),draw_options2()])
     }
     if(t.document.globalsight)
 	var actions=empty_class("td","actions")
@@ -843,7 +843,7 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
 	var removeB=dt(text("Remove this segment"))
 	removeB.onclick=function() { t.remove_segment(i) }
 	var actions=wrap_class("td","actions",
-			       wrap("div",[span_class("actions",text("◊")),
+			       wrap("div",[span_class("actions",hovertext("◊")),
 					   wrap_class("dl","popupmenu",
 						      [insertB,removeB])]))
     }
@@ -1113,4 +1113,8 @@ function delete_button(action,hint) {
     var b=node("span",{"class":"delete",title:hint || "Delete"},[text("×")])
     b.onclick=action;
     return b;
+}
+
+function hovertext(txt) {
+    return node("span",{onclick:""},[text(txt)])
 }
