@@ -50,10 +50,7 @@ import qualified GF.System.Signal as IO(runInterruptibly)
 #ifdef SERVER_MODE
 import GFServer(server)
 #endif
-#ifdef mingw32_HOST_OS
-import System.Win32.Console
-import System.Win32.NLS
-#endif
+import GF.System.Console(changeConsoleEncoding)
 
 import GF.Infra.BuildInfo(buildInfo)
 import Data.Version(showVersion)
@@ -315,21 +312,7 @@ execute1 opts gfenv0 s0 =
 
     set_encoding [c] =
       do let cod = renameEncoding c
-         restricted $ do
-#ifdef mingw32_HOST_OS
-           case cod of
-             'C':'P':c -> case reads c of
-                            [(cp,"")] -> do setConsoleCP cp
-                                            setConsoleOutputCP cp
-                            _         -> return ()
-             "UTF-8"   -> do setConsoleCP 65001
-                             setConsoleOutputCP 65001
-             _         -> return ()
-#endif
-           enc <- mkTextEncoding cod
-           hSetEncoding stdin  enc
-           hSetEncoding stdout enc
-           hSetEncoding stderr enc
+         restricted $ changeConsoleEncoding cod
          continue gfenv
     set_encoding _ = putStrLn "se command not parsed" >> continue gfenv
 

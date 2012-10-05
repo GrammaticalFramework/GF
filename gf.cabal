@@ -54,7 +54,6 @@ library
                  random,
                  pretty,
                  mtl
---ghc-options: -O2
   hs-source-dirs: src/compiler src/runtime/haskell
   extensions: 
   exposed-modules: 
@@ -127,7 +126,6 @@ executable gf
 
   ghc-prof-options: -auto-all
 
---ghc-options: -O2
   if impl(ghc>=7.0)
     ghc-options: -rtsopts
   hs-source-dirs: src/compiler src/runtime/haskell
@@ -148,6 +146,8 @@ executable gf
     GF.Infra.Option
     GF.Infra.UseIO
     GF.Infra.CheckM
+    GF.System.Signal
+    GF.System.Console
     GF.Command.Commands
     GF.Command.Interpreter
     GF.Command.Abstract

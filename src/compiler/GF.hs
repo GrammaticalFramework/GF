@@ -1,4 +1,3 @@
-{-# OPTIONS -cpp #-}
 module Main where
 
 import GFC
@@ -14,22 +13,11 @@ import System.Directory
 import System.Environment (getArgs)
 import System.Exit
 import System.IO
-#ifdef mingw32_HOST_OS
-import System.Win32.Console
-import System.Win32.NLS
-#endif
+import GF.System.Console (setConsoleEncoding)
 
 main :: IO ()
 main = do
-#ifdef mingw32_HOST_OS
-  codepage <- getACP
-  setConsoleCP codepage
-  setConsoleOutputCP codepage
-  enc <- mkTextEncoding ("CP"++show codepage)
-  hSetEncoding stdin  enc
-  hSetEncoding stdout enc
-  hSetEncoding stderr enc
-#endif
+  setConsoleEncoding
   args <- getArgs
   case parseOptions args of
     Ok (opts,files) -> do curr_dir <- getCurrentDirectory
