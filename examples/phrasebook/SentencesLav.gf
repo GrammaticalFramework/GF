@@ -1,4 +1,8 @@
 concrete SentencesLav of Sentences = NumeralLav ** SentencesI - [
+	Language,
+	PLanguage,
+	NPNationality,
+	mkNPNationality,
 	NameNN, 
 	IFemale, 
 	YouFamFemale, 
@@ -18,7 +22,13 @@ open
 	(P = ParadigmsLav),
 	ExtraLav
 in {
+	
+	lincat
+		Language = NPLanguage ;
+
 	lin
+		PLanguage x = mkPhrase (mkUtt x.lang) ;
+
 		NameNN = mkNP (P.mkN "NN") ;
 
 		IFemale = mkPerson i8fem_Pron ;
@@ -30,4 +40,14 @@ in {
 
 		--AHaveCurr p curr = mkCl p.name have_V2 (mkNP aPl_Det curr) ;
 		--AHaveCurr p curr = mkCl (mkVP have_V3 (mkNP aPl_Det curr) p.name) ;
+
+	oper
+		NPLanguage : Type = {lang : NP ; modif : Adv} ;
+		NPNationality : Type = {lang : NPLanguage ; country : NP ; prop : A} ;
+
+		mkNPNationality : NPLanguage -> NP -> A -> NPNationality = \la,co,pro -> {
+			lang = la ; 
+        	country = co ;
+        	prop = pro
+        } ;
 }
