@@ -38,9 +38,6 @@ in {
 		YouPlurFamFemale, YouPlurPolFemale = mkPerson youPl8fem_Pron ;
 		TheyFemale = mkPerson they8fem_Pron ;
 
-		--AHaveCurr p curr = mkCl p.name have_V2 (mkNP aPl_Det curr) ;
-		--AHaveCurr p curr = mkCl (mkVP have_V3 (mkNP aPl_Det curr) p.name) ;
-
 	oper
 		NPLanguage : Type = {lang : NP ; modif : Adv} ;
 		NPNationality : Type = {lang : NPLanguage ; country : NP ; prop : A} ;

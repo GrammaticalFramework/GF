@@ -8,7 +8,8 @@ open
 	(L = LexiconLav), 
 	ExtraLav, 
 	ResLav,
-	Prelude 
+	Prelude,
+	Predef 
 in {
 	
 	flags
@@ -142,7 +143,10 @@ in {
 		ALove p q = mkCl p.name L.love_V2 q.name ;
 		AMarried p = mkCl p.name (mkA (mkV "precēties" third_conjugation)) ;
 		AReady p = mkCl p.name (mkA "gatavs") ;
-		AScared p = mkCl p.name (mkA (mkV "nobīties" "nobīstos" "nobijos")) ;
+		
+		AScared p = 
+			mkCl p.name (mkV "baidīties" third_conjugation) | 
+			mkCl p.name (mkA (mkV "nobīties" "nobīstos" "nobijos")) ;
 		
 		ASpeak p lang = 
 			mkCl p.name (mkVP (mkVP (mkV "runāt" second_conjugation)) lang.modif) | 
@@ -157,16 +161,17 @@ in {
 		AWantGo p place = mkCl p.name (mkVV (mkV "vēlēties" third_conjugation)) (mkVP (mkVP (mkV "doties" "dodos" "devos")) place.to) ;
 		---- mkVV by AR 28/8/2012
 		
-		-- Quick & dirty
+		-- Quick & dirty, or ok?
 		QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name (mkV2 (mkV "saukt" "saucu" "saucu") nom_Prep Acc) (mkNP (mkN [])))) ;
 		
 		-- Quick & dirty
 		-- TODO: how8much_IAdv >>> how8many_IDet (but the word order!) or how8many_IAdv
 		--       mkNP a_Quant pluralNum L.year_N >>> mkNP pluralNum L.year_N
-		QWhatAge p = mkQS (mkQCl how8much_IAdv (mkCl p.name have_V2 (mkNP a_Quant pluralNum L.year_N))) ;
+		-- Cannot use have_V2 because of a different valence
+		QWhatAge p = mkQS (mkQCl how8much_IAdv (mkCl p.name (mkV2 (mkV "būt") gen_Prep Dat) (mkNP the_Quant pluralNum L.year_N))) ;
 
 		-- Quick & dirty
-		-- TODO: use NP -> V -> Cl, changing the default word order
+		-- TODO: item is the subject >>> use NP -> V -> Cl (changing the default word order)
 		HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl (mkVP (mkV2 (mkV "maksāt" second_conjugation) nom_Prep) item))) ;
 
 		ItCost item price = mkCl item (mkV2 (mkV "maksāt" second_conjugation) acc_Prep) price ;
@@ -180,9 +185,10 @@ in {
 		
 		-- Building phrases from strings is complicated: the solution is to use
 		-- mkText : Text -> Text -> Text ;
-		PSeeYouDate d = mkText (lin Text (ss ("uz tikšanos"))) (mkPhrase (mkUtt d)) ;
-		PSeeYouPlace p = mkText (lin Text (ss ("uz tikšanos"))) (mkPhrase (mkUtt p.at)) ;
-		PSeeYouPlaceDate p d = mkText (lin Text (ss ("uz tikšanos"))) (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
+		PSeeYouDate d = mkText (lin Text (ss ("tiksimies"))) (mkPhrase (mkUtt d)) ;
+		PSeeYouPlace p = mkText (lin Text (ss ("tiksimies"))) (mkPhrase (mkUtt p.at)) ;
+		PSeeYouPlaceDate p d = mkText (lin Text (ss ("tiksimies"))) (mkText (mkPhrase (mkUtt d)) (mkPhrase (mkUtt p.at))) ;
+		
 		-- Relations are expressed as "my wife" or "my son's wife", as defined by $xOf$
 		-- below. Languages without productive genitives must use an equivalent of
 		-- "the wife of my son" for non-pronouns.
@@ -231,10 +237,9 @@ in {
 			mkNPNationality (mkLang la mo) (mkNP co) la ;
 		
 		mkDay : Str -> NPDay = \d -> 
-			let day : NP = mkNP (mkPN d) in
-				mkNPDay day
-						(SyntaxLav.mkAdv in_Prep day) 
-						(SyntaxLav.mkAdv in_Prep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
+			mkNPDay (mkNP (mkPN d))
+					(mkAdv (Predef.tk 1 d)) 
+					(SyntaxLav.mkAdv in_Prep (mkNP the_Quant plNum (mkCN (mkN d)))) ;
 
 		--mkCompoundPlace : Str -> Str -> Prep -> {
 		--	name : CN ;
