@@ -114,7 +114,7 @@ Error checks:
 At the moment, the concrete syntax for a language <var>L</var> is limited to
 <ul>
   <li>inheriting the concrete syntax <var>G<sub>i</sub>L</var>
-  for each <var>G</var> inherited by the abstract syntax.
+  for each <var>G<sub>i</sub></var> inherited by the abstract syntax.
   <li>opening a selection of the Resource Grammar Library modules
   <code>Syntax</code><var>L</var>, <code>Paradigms</code><var>L</var>,
   <code>Lexicon</code><var>L</var>, <code>Symbolic</code><var>L</var>
@@ -231,6 +231,45 @@ Also <strong>note</strong> that each grammar is assigned a unique identity
 when it is first created. Renaming a grammar does not change its identity.
 This means that name changes are propagated between devices like other changes.
 
+<h4 id=public>Public grammars</h4>
+<blockquote>
+[October 2012: this is an <strong>experimental feature</strong> that
+might be replaced by an incompatible grammar sharing mechanism in the future.]
+</blockquote>
+<p>
+The grammar cloud also includes a list of public grammars.
+Grammars can be added to the public list by pressing the
+<strong>Publish</strong> button shown next to the grammars in the list of
+your grammars.
+
+<p>
+The <strong>Publish</strong> button creates <em>copy</em> of your grammar.
+If you continue to edit your grammar, the changes will be local only.
+You can press the <strong>Publish</strong> button again to update the public
+copy.
+
+<p>
+You can remove a grammar from the public list by pressing the
+<span class=delete>×</span> button next to the grammar in the public list.
+You can <em>not</em> remove grammars published by other users.
+
+<p>
+When you open a public grammar published by another user, a <em>copy</em> of
+the grammar is added to the list of your grammars. Any changes will be made in
+your own copy of the grammar. If you publish your copy of the grammar, it will
+appear separately in the list of public grammars. You can not
+overwrite grammars published by other users, even if they have the same name.
+
+<p>
+TODO: Publishing grammars that inherit form other grammars is not recommended.
+There is no way to indicate which of several grammars with the same name is
+being inherited.
+
+<p>
+TODO: There should probably be a way to identify who published a grammar and
+when. Maybe the publish button should be restricted to registered users...
+
+
 <h3>Example-based grammar writing</h3>
 
 We experimented with this in 2011. It is currently not included, but it
@@ -261,7 +300,7 @@ suitable for multiple users developing a grammar in collaboration.
 
 <hr>
 <div class=modtime><small>
-<!-- hhmts start -->Last modified: Tue Oct  2 19:26:08 CEST 2012 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Tue Oct  9 16:52:47 CEST 2012 <!-- hhmts end -->
   </small></div>
 <address>
 <a href="http://www.cse.chalmers.se/~hallgren/">TH</a>
