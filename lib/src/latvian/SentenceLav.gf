@@ -66,10 +66,10 @@ oper
         }
       } ++
       case vp.agr of {  -- Verb
-        Topic Nom        => buildVerb vp.v mood pol np.a ;
-        Topic _          => buildVerb vp.v mood pol (AgP3 Sg Masc) ;  -- TODO: test me
-        TopicFocus Nom _ => buildVerb vp.v mood pol np.a ;
-        TopicFocus _ agr => buildVerb vp.v mood pol agr
+        Topic Nom          => buildVerb vp.v mood pol np.a ;
+        Topic _            => buildVerb vp.v mood pol (AgP3 Sg Masc) ;  -- TODO: test me
+        TopicFocus Nom _   => buildVerb vp.v mood pol np.a ;
+        TopicFocus _   agr => buildVerb vp.v mood pol agr
       } ++
       vp.compl ! np.a  -- Object(s), complements, adverbial modifiers
   } ;

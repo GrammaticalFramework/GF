@@ -29,37 +29,42 @@ lin
   } ;
 
   somePl_Det = {
-	s = (\\g,c => (mkPronoun_Gend "kāds").s ! g ! Pl ! c) ;   --  lai atļautu arī tukšo, jāliek (\\_,_ => []) |  klāt
-	n = Pl ;
-	d = Indef
+    s = (\\g,c => (mkPronoun_Gend "kāds").s ! g ! Pl ! c) ;   --  lai atļautu arī tukšo, jāliek (\\_,_ => []) |  klāt
+    n = Pl ;
+    d = Indef
   } ;
 
   few_Det = {
-	s = (\\g,c => (mkPronoun_Gend "dažs").s ! g ! Pl ! c) ;
-	n = Pl ;
-	d = Indef
+    s = (\\g,c => (mkPronoun_Gend "dažs").s ! g ! Pl ! c) ;
+    n = Pl ;
+    d = Indef
   } ;
 
   many_Det = {
-	s = (\\g,c => (mkPronoun_Gend "daudzs").s ! g ! Pl ! c) ;  -- 'daudzs' izlocīsies korekti uz daudzskaitļa 'daudzi'
-	n = Pl ;
-	d = Indef
+    s = (\\g,c => (mkPronoun_Gend "daudzs").s ! g ! Pl ! c) ;  -- 'daudzs' izlocīsies korekti uz daudzskaitļa 'daudzi'
+    n = Pl ;
+    d = Indef
   } ;
 
   much_Det = {
-	s = (\\g,c => "daudz") ;  -- FIXME - ņem saistību ar ģenitīvu; kā to realizēt?
-	n = Sg ;
-	d = Indef
+    s = (\\g,c => "daudz") ;  -- FIXME - ņem saistību ar ģenitīvu; kā to realizēt?
+    n = Sg ;
+    d = Indef
   } ;
 
   this_Quant = {
     s = (mkPronoun_ThisThat This).s ;
-	d = Def
+    d = Def
   } ;
 
   that_Quant = {
     s = (mkPronoun_ThisThat That).s ;
-	d = Def
+    d = Def
+  } ;
+
+  no_Quant = {
+    s = (mkPronoun_Gend "neviens").s ;
+    d = Indef
   } ;
 
   -- P1
@@ -106,15 +111,15 @@ lin
   with_Prep = mkPrep "ar" Acc Dat ;  -- ar sievu, ar sievām
   in_Prep = mkPrep Loc ;
   to_Prep = mkPrep "līdz" Dat Dat ;  -- See also: ExtraLav.to8uz_Prep
-  possess_Prep = mkPrep Gen ;  -- FIXME: reku vajadzētu vārdu secību otrādi, ka pirms paskaidrojamā vārda likt
+  possess_Prep = mkPrep Gen ;  -- FIXME: vajadzētu vārdu secību otrādi - pirms paskaidrojamā vārda likt
   under_Prep = mkPrep "zem" Gen Dat ;
   with_Prep = mkPrep "ar" Acc Dat ;
   without_Prep = mkPrep "bez" Gen Dat ;
   by8agent_Prep = nom_Prep ;  -- A was attacked by B -> A-Dat uzbruka B-Nom
   by8means_Prep = mkPrep "ar" Acc Dat ;
-  during_Prep = mkPrep "laikā" Gen Gen ;  -- FIXME: nevaru saprast; laikam postfix 'X laikā' jāliek
+  during_Prep = mkPrep "laikā" Gen Gen ;  -- FIXME: laikam postfix 'X laikā' jāliek
   in8front_Prep = mkPrep "priekšā" Dat Dat ;
-  part_Prep = mkPrep Gen ; --FIXME - reku vajadzētu vārdu secību otrādi, ka pirms paskaidrojamā vārda likt
+  part_Prep = mkPrep Gen ; --FIXME - vajadzētu vārdu secību otrādi - pirms paskaidrojamā vārda likt
   through_Prep = mkPrep "cauri" Dat Dat ;
   except_Prep = mkPrep "izņemot" Acc Acc ;
 
@@ -125,15 +130,15 @@ lin
 
   and_Conj = mkConj "un" ;
   or_Conj = mkConj "vai" Sg ;
-  if_then_Conj = mkConj "ja" "tad";
+  if_then_Conj = mkConj "ja" "tad" ;
 
   but_PConj = ss "bet" ;
-  otherwise_PConj = ss "tomēr" ; --?
-  therefore_PConj = ss "tātad" ; --?
+  otherwise_PConj = ss "citādi" ;
+  therefore_PConj = ss "tāpēc" ;
 
-  more_CAdv = (mkCAdv [] "nekā" Compar) | (mkCAdv "vairāk" "nekā" Posit);
-  less_CAdv = mkCAdv "mazāk" "nekā" Posit;
-  as_CAdv = mkCAdv "tikpat" "kā" Posit;
+  more_CAdv = (mkCAdv [] "nekā" Compar) | (mkCAdv "vairāk" "nekā" Posit) ;
+  less_CAdv = mkCAdv "mazāk" "nekā" Posit ;
+  as_CAdv = mkCAdv "tikpat" "kā" Posit ;
 
   here_Adv = mkAdv "šeit" ;
   there_Adv = mkAdv "tur" ;
@@ -141,7 +146,7 @@ lin
   here7to_Adv = mkAdv ["uz šejieni"] ;
   here7from_Adv = mkAdv ["no šejienes"] ;
   there7to_Adv = mkAdv "uz turieni" ;
-  there7from_Adv = mkAdv "no turienes";
+  there7from_Adv = mkAdv "no turienes" ;
   somewhere_Adv = mkAdv "kaut kur" ;
   quite_Adv = mkAdv "diezgan" ;
 
@@ -150,50 +155,53 @@ lin
 
   want_VV = mkVV (mkV "vēlēties" third_conjugation) ;
 
-  whoSg_IP = {
-	s = table {
-		Nom => "kurš"; -- FIXME - Fem?
-		Gen => "kura";
-		Dat => "kuram";
-		Acc => "kuru";
-		Loc => "kurā";
-		ResLav.Voc => NON_EXISTENT
-	};
-	n = Sg
-  };
-  whoPl_IP = {
-	s = table {
-		Nom => "kuri";
-		Gen => "kuru";
-		Dat => "kuriem";
-		Acc => "kurus";
-		Loc => "kuros";
-		ResLav.Voc => NON_EXISTENT
-	};
-	n = Pl
-  };
+  whoSg_IP = { -- FIXME: Fem
+    s = table {
+      Nom => "kurš" ;
+      Gen => "kura" ;
+      Dat => "kuram" ;
+      Acc => "kuru" ;
+      Loc => "kurā" ;
+      ResLav.Voc => NON_EXISTENT
+    } ;
+    n = Sg
+  } ;
+  
+  whoPl_IP = { -- FIXME: Fem
+    s = table {
+      Nom => "kuri" ;
+      Gen => "kuru" ;
+      Dat => "kuriem" ;
+      Acc => "kurus" ;
+      Loc => "kuros" ;
+      ResLav.Voc => NON_EXISTENT
+    } ;
+    n = Pl
+  } ;
+  
   whatSg_IP = {
-	s = table {
-		Nom => "kas"; -- FIXME - Fem? standarta locīšana?
-		Gen => "kā";
-		Dat => "kam";
-		Acc => "ko";
-		Loc => "kur";
-		ResLav.Voc => NON_EXISTENT
-	};
-	n = Sg
-  };
+    s = table {
+      Nom => "kas" ;
+      Gen => "kā" ;
+      Dat => "kam" ;
+      Acc => "ko" ;
+      Loc => "kur" ;
+      ResLav.Voc => NON_EXISTENT
+    } ;
+    n = Sg
+  } ;
+  
   whatPl_IP = {
-	s = table {
-		Nom => "kas"; -- FIXME - Fem? standarta locīšana?
-		Gen => "kā";
-		Dat => "kam";
-		Acc => "ko";
-		Loc => "kur";
-		ResLav.Voc => NON_EXISTENT
-	};
-	n = Pl
-  };
+    s = table {
+      Nom => "kas" ;
+      Gen => "kā" ;
+      Dat => "kam" ;
+      Acc => "ko" ;
+      Loc => "kur" ;
+      ResLav.Voc => NON_EXISTENT
+    } ;
+    n = Pl
+  } ;
 
   why_IAdv = ss "kāpēc" ;
   how_IAdv = ss "kā" ;
@@ -201,25 +209,23 @@ lin
   when_IAdv = ss "kad" ;
   where_IAdv = ss "kur" ;
 
-  which_IQuant = {s = table {
-		Masc => table { Sg => "kurš"; Pl => "kuri"};
-		Fem => table { Sg => "kura"; Pl => "kuras"}
-	}
+  which_IQuant = {
+    s = table {
+      Masc => table { Sg => "kurš"; Pl => "kuri" } ;
+      Fem => table { Sg => "kura"; Pl => "kuras" }
+    }
   } ;
 
   when_Subj = ss "kad" ;
   although_Subj = ss "kaut arī" ;
   because_Subj = ss "jo" ;
   if_Subj = ss "ja" ;
-  that_Subj = ss "ka" ; -- ja pareizi saprotu šo konkrēto 'that' pielietojumu
+  that_Subj = ss "ka" ;
 
-  all_Predet = { s = table {
-	Masc => "visi";
-	Fem => "visas"
-	}
-  };
-  only_Predet = { s = table { _ => "tikai"} };
-  most_Predet = { s = table { _ => "vairums"} };
+  all_Predet = { s = table { Masc => "visi" ; Fem => "visas" } } ;
+
+  only_Predet = { s = table { _ => "tikai"} } ;
+  most_Predet = { s = table { _ => "vairums"} } ;
 
   yes_Utt = ss "jā" ;
   please_Voc = ss "lūdzu" ;
@@ -230,20 +236,17 @@ lin
 
   always_AdV = mkAdV "vienmēr" ;
 
-
-  -- TODO: jātestē kā to pielieto un vai nevajag vēl kaut ko
   how8many_IDet = {
     s = table { _ => "cik" } ;
     n = Pl
   } ;
 
-
-  everybody_NP = DetCN emptyPl_Det (UseN (mkN "visi"));
-  everything_NP = DetCN emptySg_Det (UseN (mkN "viss"));
-  nobody_NP = DetCN emptySg_Det (UseN (mkN "neviens"));
-  nothing_NP = DetCN emptySg_Det (UseN (mkN "nekas"));
-  somebody_NP = DetCN emptySg_Det (UseN (mkN "kāds"));
-  something_NP = DetCN emptySg_Det (UseN (mkN "kaut kas"));
+  everybody_NP = DetCN emptyPl_Det (UseN (mkN "visi")) ;
+  everything_NP = DetCN emptySg_Det (UseN (mkN "viss")) ;
+  nobody_NP = DetCN emptySg_Det (UseN (mkN "neviens")) ;
+  nothing_NP = DetCN emptySg_Det (UseN (mkN "nekas")) ;
+  somebody_NP = DetCN emptySg_Det (UseN (mkN "kāds")) ;
+  something_NP = DetCN emptySg_Det (UseN (mkN "kaut kas")) ;
 
   have_V2 = mkV2 (mkV "būt") nom_Prep Dat ;
   have_V3 = mkV3 (mkV "būt") nom_Prep dat_Prep Dat ;
@@ -252,27 +255,29 @@ lin
   must_VV = mkVV (mkV "vajadzēt" third_conjugation) Dat ;
 
 oper
+  
   reflPron : Case => Str = table {
-	Nom => NON_EXISTENT;
-	Gen => "sevis";
-	Dat => "sev";
-	Acc => "sevi";
-	Loc => "sevī";
-	ResLav.Voc => NON_EXISTENT
+    Nom => NON_EXISTENT ;
+    Gen => "sevis" ;
+    Dat => "sev" ;
+    Acc => "sevi" ;
+    Loc => "sevī" ;
+    ResLav.Voc => NON_EXISTENT
   } ;
 
   lai_Subj = ss "lai" ;
   kameer_Subj = ss "kamēr" ;
 
   emptyPl_Det = {
-	s:Gender => Case => Str = \\_,_ => [];
-	n = Pl ;
-	d = Indef
+    s : Gender => Case => Str = \\_,_ => [] ;
+    n = Pl ;
+    d = Indef
   } ;
+
   emptySg_Det = {
-	s:Gender => Case => Str = \\_,_ => [];
-	n = Sg ;
-	d = Indef
+    s : Gender => Case => Str = \\_,_ => [] ;
+    n = Sg ;
+    d = Indef
   } ;
 
   no_Utt = ss "nē" ;
