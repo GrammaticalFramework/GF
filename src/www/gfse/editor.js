@@ -199,9 +199,15 @@ function clone_grammar(i) {
 
 function open_grammar(i) {
     var g=get_grammar(i);
-    g.index=i;
-    local.put("current",i+1);
-    edit_grammar(g);
+    if(g) {
+      g.index=i;
+      local.put("current",i+1);
+      edit_grammar(g);
+   }
+   else {
+     alert("Something went wrong: grammar at index "+i+" is not usable.")
+     draw_grammar_list()
+  }
 }
 
 function open_public(file) {
