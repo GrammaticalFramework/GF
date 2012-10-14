@@ -32,23 +32,13 @@ lin
   } ;
 
   IdRP = {
-    s = table {
-      Masc => table {
-        Nom => "kurš" ;
-        Gen => "kura" ;
-        Dat => "kuram" ;
-        Acc => "kuru" ;
-        Loc => "kurā" ;
-        ResLav.Voc => NON_EXISTENT
-      } ;
-      Fem => table {
-        Nom => "kura" ;
-        Gen => "kuras" ;
-        Dat => "kurai" ;
-        Acc => "kuru" ;
-        Loc => "kurā" ;
-        ResLav.Voc => NON_EXISTENT
-      }
+    s = \\_ => table {
+      Nom => "kas" ;
+      Gen => "kā" ;
+      Dat => "kam" ;
+      Acc => "ko" ;
+      Loc => "kur" ;
+      ResLav.Voc => NON_EXISTENT
     }
   } ;
 

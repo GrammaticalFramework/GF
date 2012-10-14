@@ -289,7 +289,7 @@ lin
   neck_N = mkN "kakls" ;
   night_N = mkN "nakts" ;
   nose_N = mkN "deguns" ;
-  person_N = mkN "cilvēks" ;
+  person_N = mkN "persona" ;
   rain_N = mkN "lietus" ;
   road_N = mkN "ceļš" ;
   root_N = mkN "sakne" ;

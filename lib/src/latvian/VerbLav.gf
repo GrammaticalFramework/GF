@@ -137,8 +137,8 @@ lin
 
   PassV2 v2 = {
     v = v2 ;
-    compl = \\_ => NON_EXISTENT ;  -- FIXME: placeholder
-    agr = Topic v2.topic  -- TODO: test me
+    compl = \\_ => [] ;
+    agr = Topic v2.topic
   } ;
 
   AdvVP vp adv = insertObj (\\_ => adv.s) vp ;

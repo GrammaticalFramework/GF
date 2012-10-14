@@ -241,12 +241,12 @@ lin
     n = Pl
   } ;
 
-  everybody_NP = DetCN emptyPl_Det (UseN (mkN "visi")) ;
-  everything_NP = DetCN emptySg_Det (UseN (mkN "viss")) ;
-  nobody_NP = DetCN emptySg_Det (UseN (mkN "neviens")) ;
-  nothing_NP = DetCN emptySg_Det (UseN (mkN "nekas")) ;
-  somebody_NP = DetCN emptySg_Det (UseN (mkN "kāds")) ;
-  something_NP = DetCN emptySg_Det (UseN (mkN "kaut kas")) ;
+  somebody_NP = DetCN emptySg_Det (UseN (mkN "kāds")) ; -- FIXME: UsePron
+  something_NP = UsePron (mkPronoun_Thing "kaut kas") ;
+  everybody_NP = DetCN emptySg_Det (UseN (mkN "ikviens")) ; -- FIXME: UsePron
+  everything_NP = UsePron (mkPronoun_Thing "jebkas") ;
+  nobody_NP = DetCN emptySg_Det (UseN (mkN "neviens")) ; -- FIXME: UsePron
+  nothing_NP = UsePron (mkPronoun_Thing "nekas") ;
 
   have_V2 = mkV2 (mkV "būt") nom_Prep Dat ;
   have_V3 = mkV3 (mkV "būt") nom_Prep dat_Prep Dat ;
