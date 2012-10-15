@@ -1,5 +1,5 @@
 lang1 = "Eng"
-lang2 = "Tha"
+lang2 = "Chi"
 
 -- to write a comparison for two languages
 
