@@ -131,7 +131,7 @@ lin
 
    ComplV2 v np = mkVP v np ;
    ModCN ap cn = lin CN (mkCN <lin AP ap : AP> <lin CN cn : CN>) ;
-   CompAP ap = mkVP (lin AP ap) ;
+   CompAP ap = mkVP <(lin AP ap) : AP> ;
    ConjS co x y = mkS (lin Conj co) (lin S x) (lin S y) ;
    ConjAP co x y = mkAP co x y ;
    ConjNP co x y = mkNP co x y ;
