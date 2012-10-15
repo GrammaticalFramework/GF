@@ -1,4 +1,5 @@
-concrete SentencesHin of Sentences =  NumeralHin **  SentencesI - [sing,IFemale,YouFamFemale,YouPolFemale,MMust,YouPlurFamFemale,YouPlurPolFemale,YouFamMale] with 
+concrete SentencesHin of Sentences =  NumeralHin **  SentencesI - 
+    [sing,IFemale,YouFamFemale,YouPolFemale,MMust,YouPlurFamFemale,YouPlurPolFemale,YouFamMale,mkGreeting] with 
   (Syntax = SyntaxHin),
   (Symbolic = SymbolicHin),
   (Lexicon = LexiconHin) **
@@ -16,6 +17,9 @@ concrete SentencesHin of Sentences =  NumeralHin **  SentencesI - [sing,IFemale,
 
 
 flags coding = utf8 ;
+
+oper
+  mkGreeting = ss ;
 
 oper
   myN = "मैं" ;

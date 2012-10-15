@@ -1,4 +1,4 @@
-concrete GreetingsUrd of Greetings = SentencesUrd [mkGreeting] ** open (P=Prelude) in {
+concrete GreetingsUrd of Greetings = SentencesUrd [mkGreeting,Greeting] ** open (P=Prelude) in {
 
 -- lincat 
 --  Greeting = {s : Str; lock_Text : {}} ;

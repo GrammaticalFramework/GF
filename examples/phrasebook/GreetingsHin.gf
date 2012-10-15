@@ -1,4 +1,4 @@
-concrete GreetingsHin of Greetings = SentencesHin [mkGreeting] ** open (P=Prelude) in {
+concrete GreetingsHin of Greetings = SentencesHin [Greeting,mkGreeting] ** open (P=Prelude) in {
 
 -- lincat 
 --  Greeting = {s : Str; lock_Text : {}} ;
