@@ -47,6 +47,7 @@ resource ResChi = ParamX ** open Prelude in {
   exclmark_s = "!" ;
   ge_s = "个" ;
   di_s = "是" ; -- used in QuestSlash
+  ba_s = "把" ;
 
   emptyStr = [] ;
 
@@ -188,6 +189,7 @@ param
 
 oper
   Determiner = {s : Str ; detType : DetType} ;
+  Quantifier = Determiner ** {pl : Str} ;
 
   mkDet = overload {
     mkDet : Str ->            Determiner = \s   -> {s = s ; detType = DTFull Sg} ;
@@ -195,7 +197,11 @@ oper
     mkDet : Str -> DetType -> Determiner = \s,d -> {s = s ; detType = d} ;
     } ;
 
-  mkQuant : Str -> {s : Str} = ss ;
+  mkQuant = overload {
+    mkQuant : Str ->                   Quantifier = \s     -> {s,pl = s ; detType = DTFull Sg} ;
+    mkQuant : Str ->        DetType -> Quantifier = \s,d   -> {s,pl = s ; detType = d} ;
+    mkQuant : Str -> Str -> DetType -> Quantifier = \s,p,d -> {s    = s ; detType = d ; pl = p} ;
+    } ;
 
   pronNP : (s : Str) -> NP = \s -> {
     s = word s
