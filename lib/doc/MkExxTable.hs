@@ -71,7 +71,7 @@ prApiEx apexx = case M.toList apexx of
                 [l ++ ": //" ++ mkEx l e ++ "//" | (l,e) <- lexx]
 
 mkEx l = unws . bind . mkE . words where 
-  unws = if elem l ["Jpn","Tha"] then concat else unwords  -- remove spaces
+  unws = if elem l ["Chi","Jpn","Tha"] then concat else unwords  -- remove spaces
   mkE e = case e of
     "atomic":"term":_ -> ["*"]
     "[]":_ -> ["''"]

@@ -20,6 +20,7 @@ exx: exx-script
 	gf -retain -s ../alltenses/TryAfr.gfo <api-examples.gfs >api-examples-Afr.txt
 	gf -retain -s ../alltenses/TryBul.gfo <api-examples.gfs >api-examples-Bul.txt
 	gf -retain -s ../alltenses/TryCat.gfo <api-examples.gfs >api-examples-Cat.txt
+	gf -retain -s ../alltenses/TryChi.gfo <api-examples.gfs >api-examples-Chi.txt
 	gf -retain -s ../alltenses/TryDan.gfo <api-examples.gfs >api-examples-Dan.txt
 	gf -retain -s ../alltenses/TryDut.gfo <api-examples.gfs >api-examples-Dut.txt
 	gf -retain -s ../alltenses/TryEng.gfo <api-examples.gfs >api-examples-Eng.txt
