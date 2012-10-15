@@ -5,16 +5,16 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
   lin
     UseV = predV ;
 
-    SlashV2a v = predV v ** {c2 = v.c2} ;
+    SlashV2a v = predV v ** {c2 = v.c2 ; isPre = False} ;
 
-    Slash2V3 v np = insertObj np (predV v) ** {c2 = v.c3} ; ---- to check arg order
-    Slash3V3 v np = insertObj np (predV v) ** {c2 = v.c2} ;
+    Slash2V3 v np = insertObj np (predV v) ** {c2 = v.c3 ; isPre = True} ; 
+    Slash3V3 v np = insertObj np (predV v) ** {c2 = v.c2 ; isPre = False} ;
 
-    SlashV2A v ap = insertObj ap (predV v) ** {c2 = v.c2} ; 
+    SlashV2A v ap = insertObj ap (predV v) ** {c2 = v.c2 ; isPre = True} ; 
 
-    SlashV2V v vp = insertObj (mkNP (infVP vp)) (predV v) ** {c2 = v.c2} ;
-    SlashV2S v s  = insertObj s (predV v) ** {c2 = v.c2} ; 
-    SlashV2Q v q  = insertObj q (predV v) ** {c2 = v.c2} ; 
+    SlashV2V v vp = insertObj (mkNP (infVP vp)) (predV v) ** {c2 = v.c2 ; isPre = True} ;
+    SlashV2S v s  = insertObj s (predV v) ** {c2 = v.c2 ; isPre = True} ; 
+    SlashV2Q v q  = insertObj q (predV v) ** {c2 = v.c2 ; isPre = True} ; 
 
     ComplVV v vp = {
       verb = v ;
@@ -26,16 +26,19 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
     ComplVQ v q  = insertObj q  (predV v) ; 
     ComplVA v ap = insertObj ap (predV v) ; 
 
-    ComplSlash vp np = insertObj (mkNP (appPrep vp.c2 np.s)) vp ;
+    ComplSlash vp np = case vp.isPre of {
+      True  => insertAdv (mkNP (ba_s ++       np.s)) vp ; --- ba or vp.c2 ?
+      False => insertObj (mkNP (appPrep vp.c2 np.s)) vp
+      } ;
 
     UseComp comp = comp ;
 
     SlashVV v vp = ---- too simple?
-      insertObj (mkNP (infVP vp)) (predV v) ** {c2 = vp.c2} ;
+      insertObj (mkNP (infVP vp)) (predV v) ** {c2 = vp.c2 ; isPre = vp.isPre} ;
 
     SlashV2VNP v np vp = 
       insertObj np
-        (insertObj (mkNP (infVP vp)) (predV v)) ** {c2 = vp.c2} ;
+        (insertObj (mkNP (infVP vp)) (predV v)) ** {c2 = vp.c2 ; isPre = vp.isPre} ;
 
     AdvVP vp adv = case adv.advType of {
       ATManner => insertObj (ss (deVAdv_s ++ adv.s)) vp ;                -- he sleeps well

@@ -6,8 +6,8 @@ concrete StructuralChi of Structural = CatChi **
 lin
     every_Det = mkDet "每" Sg ;
         
-    this_Quant = mkDet "这" ;
-    that_Quant = mkDet "那" ;
+    this_Quant = mkQuant "这" ;
+    that_Quant = mkQuant "那" ;
 
     i_Pron = pronNP "我" ;
     youSg_Pron = pronNP "你"  ;
@@ -23,8 +23,6 @@ lin
     in_Prep = mkPrep "里" [];
     possess_Prep = mkPrep "的" [];
     with_Prep = mkPrep "一起" "和"; 
-
-    ba_s = "把" ;
  
 and_Conj = {s = table {
                     CPhr CNPhrase => mkConjForm "和" ;
@@ -71,9 +69,9 @@ under_Prep = mkPrep "下" ;
 why_IAdv = mkIAdvL "为什么" ;
 too_AdA = mkAdA "太" ;
 
-before_Prep = mkPrep "从前" ; --s
-between_Prep = mkPrep "之间" ; --s
-but_PConj = mkPConjL "但是" ; --s
+before_Prep = mkPrep "从前" ; 
+between_Prep = mkPrep "之间" ; 
+but_PConj = mkPConjL "但是" ; 
 
 
     can_VV  = mkVerb "能"  [] [] [] [] "不" ;
@@ -83,23 +81,16 @@ but_PConj = mkPConjL "但是" ; --s
 can8know_VV = mkV "会" [] [] [] [] "不" ; ----
 
 
-except_Prep = mkPrep "除了" "以外" ; --s
-for_Prep = mkPrep "为了" ; --s
-from_Prep = mkPrep "从" ; --s
----how8many_IDet = mkIDet "几" ; --s
----how8much_IDet = mkIDet "多少" ; --s
-in8front_Prep = mkPrep "前边" ; --s
-it_Pron = pronNP "它" ; --s
----less_CAdv = mkCAdv "少" ; --s
-much_Det = mkDet "多" Sg ; --s
----more_CAdv = mkCAdv "更" ; --s
----most_Predet = mkPredet "最" ; --s
-no_Quant = mkDet "不" ; --s
+except_Prep = mkPrep "除了" "以外" ; 
+for_Prep = mkPrep "为了" ; 
+from_Prep = mkPrep "从" ; 
+in8front_Prep = mkPrep "前边" ; 
+it_Pron = pronNP "它" ; 
+much_Det = mkDet "多" Sg ; 
+no_Quant = mkQuant "不" ; 
 not_Predet = ssword "不" ;
----only_Predet = mkPredet "只" ; --s
-otherwise_PConj = mkPConjL "还是" ; --s
-to_Prep = mkPrep "往" ; --s
----which_IQuant = mkIQuant "哪" ; --s
+otherwise_PConj = mkPConjL "还是" ; 
+to_Prep = mkPrep "往" ; 
 
 have_V2 = mkV2 "有" ;
 
@@ -109,7 +100,7 @@ no_Utt = ss neg_s ;
 oper
   mkConjForm : Str -> {s1,s2 : Str} = \s -> {s1 = [] ; s2 = word s} ;
 
--- manually by AR
+-- manually by AR, Jolene
 
 lin
   always_AdV = ssword "一直" ;
@@ -159,7 +150,8 @@ there7from_Adv = mkAdv "从那里" ;  -- from there
 there7to_Adv = mkAdv "到那里" ;  
 therefore_PConj = ssword "因此" ;  
 through_Prep = mkPrep "通过" ;  
-which_IQuant = ssword [] ;  -- [mark] in sent, it depends on the context
+which_IQuant = mkIQuant "哪" ; 
+--which_IQuant = ssword [] ;  -- [mark] in sent, it depends on the context
 without_Prep = mkPrep "没有" []; 
 youPol_Pron = ssword "您" ;  -- polite you 
 

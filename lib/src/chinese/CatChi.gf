@@ -33,7 +33,7 @@ concrete CatChi of Cat = CommonX - [Tense, Temp, Adv] ** open ResChi, Prelude in
 
     VP = ResChi.VP ; 
     Comp = ResChi.VP ;
-    VPSlash = ResChi.VP ** {c2 : Preposition} ;
+    VPSlash = ResChi.VP ** {c2 : Preposition ; isPre : Bool} ; -- whether the missing arg is before verb
 
 -- Adjective
 
@@ -43,7 +43,8 @@ concrete CatChi of Cat = CommonX - [Tense, Temp, Adv] ** open ResChi, Prelude in
 
     CN = ResChi.Noun ;
     NP, Pron = ResChi.NP ;
-    Det, Quant = Determiner ;
+    Det = Determiner ;
+    Quant = Determiner ** {pl : Str} ;
     Predet = {s : Str} ; ----
     Ord = {s : Str} ;
     Num = {s : Str ; numType : NumType} ;
@@ -52,7 +53,8 @@ concrete CatChi of Cat = CommonX - [Tense, Temp, Adv] ** open ResChi, Prelude in
 
 -- Numeral
 
-    Numeral, Card, Digits = {s : Str} ;
+    Numeral = {s,p : Str} ;
+    Card, Digits = {s : Str} ;
 
 -- Structural
 
