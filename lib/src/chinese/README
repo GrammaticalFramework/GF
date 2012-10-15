@@ -207,3 +207,26 @@ Lexicon and Structural for her inspection and completions.
 
 5h my time today, 3h Jolene's, total 20h.
 
+
+14/10
+
+Lexicon and Structural checked and completed by Jolene. Some open issues found by Jolene, hopefully to be fixed this week:
+  - generics for weather
+  - "something"
+  - relative clause with complex RP
+  - adjectives for animates
+  - weather verbs rather VP's
+  - markers 把(marker for direct-object), 被(marker for indirect-object)
+  - positions of the parts of Subj
+  - the three de particles: 的，地，得”
+     的 ： Adj/AP ++ "的" ++ NP                     
+   “地”： Adv ++ “地” ++ V                     e.g. 飞快(fly fast)地(de)跑(run)
+“   得”： V ++ “得” ++ Adv(complement)         e.g. 跑(run)得(de)快(fast)
+
+
+5h Jolene's time, total 25h.
+
+15/10
+
+GF/lib/src/chinese/ complete and compilable! Added to darcs by AR.
+

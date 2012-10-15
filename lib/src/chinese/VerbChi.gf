@@ -38,7 +38,7 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
         (insertObj (mkNP (infVP vp)) (predV v)) ** {c2 = vp.c2} ;
 
     AdvVP vp adv = case adv.advType of {
-      ATManner => insertObj adv vp ;                -- he sleeps well
+      ATManner => insertObj (ss (deVAdv_s ++ adv.s)) vp ;                -- he sleeps well
       _ => insertAdv (ss (zai_V.s ++ adv.s)) vp     -- he sleeps in the house / today
       } ;
 

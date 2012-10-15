@@ -19,7 +19,9 @@ resource ResChi = ParamX ** open Prelude in {
 
   than_s = "比" ;
   progressive_s = defaultStr ;
-  possessive_s = "的" ;
+  possessive_s = "的" ; -- also used for AP + NP
+  deAdvV_s = "地" ; -- between Adv and V
+  deVAdv_s = "得" ; -- between V and Adv
   imperneg_s = neg_s ;
   conjThat = emptyStr ; ----
   reflPron = word "自己" ;   -- pron + refl
