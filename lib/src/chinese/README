@@ -211,14 +211,14 @@ Lexicon and Structural for her inspection and completions.
 14/10
 
 Lexicon and Structural checked and completed by Jolene. Some open issues found by Jolene, hopefully to be fixed this week:
-  - generics for weather
-  - "something"
-  - relative clause with complex RP
-  - adjectives for animates
-  - weather verbs rather VP's
-  - markers 把(marker for direct-object), 被(marker for indirect-object)
-  - positions of the parts of Subj
-  - the three de particles: 的，地，得”
+  - generics for weather -> Extra
+  - "something" -> Extra (stg for event vs. physical object)
+  - relative clause with complex RP -> postpone; discontinuous?
+  - adjectives for animates -> leave to semantics (cf. Thai)
+  - weather verbs rather VP's -> leave to semantic lexicon
+  - markers 把(marker for direct-object), 被(marker for indirect-object) -> fix for V2A, V3 with ba
+  - positions of the parts of Subj -> fix by introducing particles before or after the subject of the main clause
+  - the three de particles: 的，地，得”-> OK now
      的 ： Adj/AP ++ "的" ++ NP                     
    “地”： Adv ++ “地” ++ V                     e.g. 飞快(fly fast)地(de)跑(run)
 “   得”： V ++ “得” ++ Adv(complement)         e.g. 跑(run)得(de)快(fast)
@@ -244,25 +244,25 @@ p. 28 "who is X" vs. "X is who"
 
 p. 38 er -> liang before a measure word
 
-p. 41 ordinals require measure words: di yi ge xuesheng
+p. 41 ordinals require measure words: di yi ge xuesheng -> possessive + ord + class ; no the + ord
 
-p. 44 how many - duoshao vs. yi
+p. 44 how many - duoshao vs. ji -> ji sui(how many years, to kids)
 
-p. 63 possessive precedes indefinite plural: wo de hen duopengyou "many of my friends"
+p. 63 possessive precedes indefinite plural: wo de hen duo pengyou "many of my friends"
 
 p. 94 degree + adjective + de + noun: hen da de wuzi
 
-p. 95 no copula in adjectival predication
+p. 95 no copula in adjectival predication -> use hen
 
 p. 96 adjectives negated by bu
 
 p. 97 AB -> AABB reduplication
 
-p. 104 non-gradable adjectives require shi: zhei tiao yu shi huo de
+p. 104 non-gradable adjectives require shi: zhei tiao yu shi huo de -> keep this as general rule for APs so far
 
-p. 106 it was Chinese that I studied
+p. 106 it was Chinese that I studied -> move cleft to the end
 
-p. 116 I did it better than you
+p. 116 I did it better than you -> to implement
 
 p. 128 disyllabic place words
 

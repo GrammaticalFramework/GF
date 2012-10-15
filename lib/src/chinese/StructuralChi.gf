@@ -23,6 +23,8 @@ lin
     in_Prep = mkPrep "里" [];
     possess_Prep = mkPrep "的" [];
     with_Prep = mkPrep "一起" "和"; 
+
+    ba_s = "把" ;
  
 and_Conj = {s = table {
                     CPhr CNPhrase => mkConjForm "和" ;
@@ -49,7 +51,7 @@ where_IAdv = mkIAdvL "哪里" ;
 when_IAdv = mkIAdvL "什么时候" ;
 how_IAdv = mkIAdvL "如何" ;
 all_Predet = ssword "所有" ;
-many_Det = mkDet "多" Pl ;
+many_Det = mkDet "很多" DTPoss ;
 someSg_Det = mkDet (word "一些") Sg ;
 somePl_Det = mkDet (word "一些") Sg ;
 few_Det = mkDet "少" Pl ;
@@ -101,7 +103,7 @@ to_Prep = mkPrep "往" ; --s
 
 have_V2 = mkV2 "有" ;
 
-yes_Utt = ss copula_s ;
+yes_Utt = ss "对" ;
 no_Utt = ss neg_s ;
 
 oper
