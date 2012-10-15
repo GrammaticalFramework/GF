@@ -18,6 +18,7 @@ are marked in the table
 | Ara   | +     | +    | +     | +   | -    | -   | -    | -     | -    | AD
 | Bul   | +     | +    | +     | +   | +    | +   | +    | +     | +    | *KA
 | Cat   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *JS
+| Chi   | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *ZL,AR
 | Dan   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
 | Dut   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,FJ
 | Eng   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,BB
@@ -118,7 +119,8 @@ SC Server Cimen,
 SM Sofy Moradi,
 SV Shafqat Virk,
 TH Therese Söderberg,
-WN Wanjiku Ng'ang'a
+WN Wanjiku Ng'ang'a,
+ZL Zhuo Lin Qiqige
 
 
 
