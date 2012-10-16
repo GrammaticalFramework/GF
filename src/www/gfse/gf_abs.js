@@ -1,14 +1,16 @@
 /* Abstract syntax for a small subset of GF grammars in JavaScript */
 
 /*
-type Id   = String -- all sorts of identifiers
+type UniqueId = String --persistent unique grammar identifier used by the editor
+type Id   = String -- all sorts of identifiers in grammars
 type ModId = Id -- module name
 type Cat  = Id -- category name
 type FunId = Id -- function name
 type Type = [Cat] -- [Cat_1,...,Cat_n] means Cat_1 -> ... -> Cat_n
 
 type Grammar  = { basename: ModId,
-                  extends: [ModId],
+                  extends: [ModId], -- in 1-to-1 correspondence with uextends
+		  uextends: [UniqueId], -- added 2012-10-16
                   abstract: Abstract,
                   concretes: [Concrete] }
 

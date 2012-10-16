@@ -5,11 +5,15 @@ var compiler_output=element("compiler_output")
 
 /* -------------------------------------------------------------------------- */
 
+// grammar_cache :: [Grammar]
+// grammarlist   :: {Int=>{unique_name:String,basename:ModId}}
 var grammar_cache=[]
 var grammarlist={}
 
 function reget_grammar(ix) { return grammar_cache[ix]=local.get(ix) }
-function get_grammar(ix)   { return grammar_cache[ix] || reget_grammar(ix) }
+function get_grammar(ix)   {
+    return fix_extends(grammar_cache[ix] || reget_grammar(ix))
+}
 
 function put_grammar(ix,g) {
     grammarlist[ix]={unique_name:g.unique_name,basename:g.basename}
@@ -27,7 +31,14 @@ function remove_grammar(ix) {
 
 function my_grammar(unique_name) {
     for(var ix in grammarlist)
-	if(grammarlist[ix].unique_name+".json"==unique_name)
+	if(grammarlist[ix].unique_name==unique_name)
+	    return ix
+    return null
+}
+
+function find_grammar(basename) {
+    for(var ix in grammarlist)
+	if(grammarlist[ix].basename==basename)
 	    return ix
     return null
 }
@@ -71,9 +82,9 @@ function draw_grammar_list() {
     function edtr(cs) { return wrap_class("tr","extensible deletable",cs); }
     function del(i) { return function () { delete_grammar(i); } }
     function clone(i) { return function () { clone_grammar(i); } }
-    function new_extension(i) { return function (g,b) { new_grammar([g]) }}
+//  function new_extension(i) { return function (g,b) { new_grammar([g]) }}
     function item(i,gid) {
-	//var i=my_grammar(gid.unique_name+".json")
+	//var i=my_grammar(gid.unique_name)
 	var link=a(jsurl("open_grammar("+i+")"),[text(gid.basename)]);
 	if(!navigator.onLine) pubspan=[]
 	else {
@@ -121,7 +132,7 @@ function draw_grammar_list() {
 	    var t=empty_class("table","grammar_list")
 	    for(var i in files) {
 		var file=files[i]
-		var parts=file.split("-")
+		var parts=file.split(/[-.]/)
 		var basename=parts[0]
 		var unique_name=parts[1]+"-"+parts[2]
 		var mine = my_grammar(unique_name)!=null
@@ -148,16 +159,15 @@ function draw_grammar_list() {
     editor.appendChild(home)
 }
 
-function new_grammar(gs) {
-    gs=gs || [];
+function new_grammar() {
     var g={basename:"Unnamed",
-	   extends:gs.map(function(g){return g.basename}),
-	             // check that "Unnamed" is not in exts !!
+	   extends:[],
+	   uextends:[],
 	   abstract:{cats:[],funs:[]},
-	   concretes:empty_concretes_extending(gs)}
+	   concretes:[]/*empty_concretes_extending(gs)*/}
     edit_grammar(g);
 }
-
+/*
 function empty_concretes_extending(gs) {
     var concs=[]
     var langs=[];
@@ -172,7 +182,7 @@ function empty_concretes_extending(gs) {
     }
     return concs
 }
-
+*/
 function remove_local_grammar(i) {
     remove_grammar(i);
     while(local.count>0 && !local.get(local.count-1))
@@ -191,7 +201,8 @@ function delete_grammar(ix) {
 
 function clone_grammar(i) {
     var old=get_grammar(i);
-    var g={basename:old.basename,extends:old.extends || [],
+    var g={basename:old.basename,
+	   extends:old.extends || [], uextends:old.uextends || [],
 	   abstract:old.abstract,concretes:old.concretes}
     save_grammar(g); // we rely on the serialization to eliminate sharing
     draw_grammar_list();
@@ -217,7 +228,7 @@ function open_public(file) {
 	delete g.publishedAs
 	reload_grammar(g)
     }
-    var parts=file.split("-")
+    var parts=file.split(/[-.]/)
     var unique_name=parts[1]+"-"+parts[2]
     var ix=my_grammar(unique_name)
     console.log("open public",file,ix)
@@ -723,12 +734,13 @@ function draw_extends(g) {
     }
     var w= exts.length>0 ? "more" : "other"
     function add_exts(el) { return add_extends(g); }
-    es.push(more(add_exts,"Inherit from "+w+" grammars"))
+    if(g.unique_name) es.push(more(add_exts,"Inherit from "+w+" grammars"))
     return indent([extensible(es)])
 }
 
 function delete_extends(g,ix) {
     g.extends=delete_ix(g.extends,ix);
+    g.uextends=delete_ix(g.uextends,ix);
     //timestamp(g);
     reload_grammar(g);
 }
@@ -736,15 +748,16 @@ function delete_extends(g,ix) {
 function add_extends(g) {
     var file=element("file");
     clear(file)
-    var gs=cached_grammar_array_byname();
+    var gs=grammarlist
     var list=[]
     for(var i in gs) {
-	if(gs[i].basename!=g.basename
+	var ig=get_grammar(i)
+	if(gs[i].unique_name && gs[i].basename!=g.basename
 	   && !elem(gs[i].basename,g.extends || [])
-	   && !elem(g.basename,gs[i].extends || [])
-	   // also exclude indirectly inherited grammars!!
+	   && !elem(g.basename,ig.extends || [])
+	   // should also exclude indirectly inherited grammars!!
 	  )
-	    list.push(li([a(jsurl("add_extends2("+g.index+","+gs[i].index+")"),
+	    list.push(li([a(jsurl("add_extends2("+g.index+","+i+")"),
 			    [text(gs[i].basename)])]));
     }
     file.appendChild(p(text("Pick a grammar to inherit:")));
@@ -753,9 +766,9 @@ function add_extends(g) {
 
 function add_extends2(gix,igix) {
     var g=get_grammar(gix);
-    var ig=get_grammar(igix);
     if(!g.extends) g.extends=[];
-    g.extends.push(ig.basename);
+    g.extends.push(grammarlist[igix].basename);
+    g.uextends.push(grammarlist[igix].unique_name);
     //timestamp(g)
     reload_grammar(g);
 }
@@ -818,7 +831,7 @@ function text_mode(g,file,ix) {
 	    if(ix==0) {
 		var gnew=msg.converted;
 		g.abstract=gnew.abstract;
-		g.extends=gnew.extends;
+		//g.extends=gnew.extends;
 		timestamp(g.abstract);
 		save_grammar(g);
 	    }
@@ -1477,12 +1490,12 @@ function draw_lins(g,ci) {
 // Return the linearization type for the given abtract type in the given 
 // concrete syntax, taking into account that lincats may be defined in
 // inherited grammars.
-// lintype :: Grammar -> Concrete -> [Grammar] -> {Cat=>ModId} => Type -> [Term]
+// lintype:: Grammar -> Concrete -> [Grammar] -> {Cat=>ModId} => Type -> LinType
 function lintype(g,conc,igs,dc,type) {
     //console.log(dc)
     function ihcat_lincat(cat) {
 	if(dc[cat]=="Predef") return "{s:Str}" // !!! Is this right?
-	var ig=find_grammar_byname(igs,dc[cat])
+	var ig=find_inherited_grammar_byname(igs,dc[cat])
 	if(!ig) return "??"
 	var iconc=ig.concretes[conc_index(ig,conc.langcode)]
 	if(!iconc) return "??"
@@ -1497,7 +1510,7 @@ function lintype(g,conc,igs,dc,type) {
     return type.map(lincat)
 }
 
-function find_grammar_byname(igs,name) {
+function find_inherited_grammar_byname(igs,name) {
     for(var i in igs) if(igs[i].basename==name) return igs[i]
     return null
 }
@@ -1622,16 +1635,13 @@ function upload(g,cont) {
 
 // inherited_grammars :: Grammar -> [Grammar]
 function inherited_grammars(g) {
-    // Load the available grammars once
-    var grammar_byname=cached_grammar_byname();
     var visited={};
-    function exists(g) { return g; }
-    // Then traverse the dependencies to collect all inherited grammars
+    function exists(ix) { return ix!=null; }
     function ihgs(g) {
 	if(visited[g.basename]) return []; // avoid cycles and diamonds
 	else {
 	    visited[g.basename]=true;
-	    var igs=(g.extends || []).map(grammar_byname).filter(exists);
+	    var igs=g.uextends.map(my_grammar).filter(exists).map(get_grammar);
 	    var igss=igs.map(ihgs)
 	    for(var i in igss) igs=igs.concat(igss[i]);
 	    return igs;
@@ -1640,6 +1650,7 @@ function inherited_grammars(g) {
     return ihgs(g)
 }
 
+/*
 // cached_grammar__byname :: () -> (ModId->Grammar)
 function cached_grammar_byname() {
     var gix=cached_grammar_array_byname()
@@ -1656,6 +1667,7 @@ function cached_grammar_array_byname() {
     }
     return gix
 }
+*/
 
 /* -------------------------------------------------------------------------- */
 
@@ -1893,6 +1905,38 @@ function download_from_cloud() {
 
 //document.body.appendChild(empty_id("div","debug"));
 
+function fix_extends(g) {
+    //console.log("fix_extends ",g)
+    if(g) {
+	g.extends=g.extends || []
+	var es=[],us=[]
+	if(g.uextends) {
+	    // update inherited grammars (they might be renamed or removed)
+	    for(var i in g.uextends) {
+		var u=g.uextends[i]
+		var gix=my_grammar(u)
+		if(gix!=null) {
+		    us.push(u)
+		    es.push(grammarlist[gix].basename)
+		}
+	    }
+	}
+	else {
+	    // add g.uextends to grammars created before 2012-10-16
+	    for(var i in g.extends) {
+		var e=g.extends[i]
+		var gix=find_grammar(e)
+		var u
+		if(gix!=null) u=grammarlist[gix].unique_name
+		if(u) { es.push(e); us.push(u); }
+	    }
+	}
+	g.extends=es
+	g.uextends=us
+    }
+    return g
+}
+
 function dir_bugfix() {
     // remove trailing newline caused by bug in older version
     var dir=local.get("dir");
@@ -1913,6 +1957,7 @@ function get_grammarlist() {
     var list=local.get(".grammarlist")
     if(list) grammarlist=list
     else if(local.get("count")!=null) {
+	console.log("initializing grammarlist")
 	grammarlist={}
 	var n=local.count;
 	for(var ix=0;ix<n;ix++) {
