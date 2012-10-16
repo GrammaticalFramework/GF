@@ -5,16 +5,16 @@ concrete VerbCmn of Verb = CatCmn ** open ResCmn, Prelude in {
   lin
     UseV = predV ;
 
-    SlashV2a v = predV v ** {c2 = v.c2} ;
+    SlashV2a v = predV v ** {c2 = v.c2 ; isPre = False} ;
 
-    Slash2V3 v np = insertObj np (predV v) ** {c2 = v.c3} ; ---- to check arg order
-    Slash3V3 v np = insertObj np (predV v) ** {c2 = v.c2} ;
+    Slash2V3 v np = insertAdv (mkNP (ba_s ++      np.s)) (predV v) ** {c2 = v.c3 ; isPre = False} ;  -- slot for third argument 
+    Slash3V3 v np = insertObj (mkNP (appPrep v.c3 np.s)) (predV v) ** {c2 = v.c2 ; isPre = True} ;   -- slot for ba object
 
-    SlashV2A v ap = insertObj ap (predV v) ** {c2 = v.c2} ; 
+    SlashV2A v ap = insertObj ap (predV v) ** {c2 = v.c2 ; isPre = True} ; 
 
-    SlashV2V v vp = insertObj (mkNP (infVP vp)) (predV v) ** {c2 = v.c2} ;
-    SlashV2S v s  = insertObj s (predV v) ** {c2 = v.c2} ; 
-    SlashV2Q v q  = insertObj q (predV v) ** {c2 = v.c2} ; 
+    SlashV2V v vp = insertObj (mkNP (infVP vp))   (predV v) ** {c2 = v.c2 ; isPre = True} ;
+    SlashV2S v s  = insertObj (ss (say_s ++ s.s)) (predV v) ** {c2 = v.c2 ; isPre = True} ; 
+    SlashV2Q v q  = insertObj (ss (say_s ++ q.s)) (predV v) ** {c2 = v.c2 ; isPre = True} ; 
 
     ComplVV v vp = {
       verb = v ;
@@ -26,16 +26,19 @@ concrete VerbCmn of Verb = CatCmn ** open ResCmn, Prelude in {
     ComplVQ v q  = insertObj q  (predV v) ; 
     ComplVA v ap = insertObj ap (predV v) ; 
 
-    ComplSlash vp np = insertObj (mkNP (appPrep vp.c2 np.s)) vp ;
+    ComplSlash vp np = case vp.isPre of {
+      True  => insertAdv (mkNP (ba_s ++       np.s)) vp ; --- ba or vp.c2 ?
+      False => insertObj (mkNP (appPrep vp.c2 np.s)) vp
+      } ;
 
     UseComp comp = comp ;
 
     SlashVV v vp = ---- too simple?
-      insertObj (mkNP (infVP vp)) (predV v) ** {c2 = vp.c2} ;
+      insertObj (mkNP (infVP vp)) (predV v) ** {c2 = vp.c2 ; isPre = vp.isPre} ;
 
     SlashV2VNP v np vp = 
       insertObj np
-        (insertObj (mkNP (infVP vp)) (predV v)) ** {c2 = vp.c2} ;
+        (insertObj (mkNP (infVP vp)) (predV v)) ** {c2 = vp.c2 ; isPre = vp.isPre} ;
 
     AdvVP vp adv = case adv.advType of {
       ATManner => insertObj (ss (deVAdv_s ++ adv.s)) vp ;                -- he sleeps well
@@ -48,7 +51,7 @@ concrete VerbCmn of Verb = CatCmn ** open ResCmn, Prelude in {
 
     PassV2 v = insertObj (mkNP passive_s) (predV v) ; ----
 
-    CompAP ap = insertObj (mkNP ap.s) (predV copula) ; ---- hen / bu
+    CompAP ap = insertObj (mkNP (ap.s ++ possessive_s)) (predV copula) ; ---- hen / bu
 
     CompNP np = insertObj np (predV copula) ; ----
 

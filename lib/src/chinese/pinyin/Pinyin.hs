@@ -1,4 +1,4 @@
-module Pinyin where
+module Main where
 
 import Numeric
 import qualified Data.Map as Map
@@ -45,8 +45,8 @@ useMapWith :: (String -> [String]) -> ([String] -> String) -> (String -> String)
 useMapWith ws uws deft m = uws . map (\w -> maybe (deft w) id (Map.lookup w m)) . ws
 
 useMapGF m s = case s of
-  'C':'h':'i':'n':cs -> "Chin" ++ useMapGF m cs  -- don't change Chinese, China
-  'C':'h':'i'    :cs -> "Cmn"  ++ useMapGF m cs  -- to change language code Chi to Cmn
+---  'C':'h':'i':'n':cs -> "Chin" ++ useMapGF m cs  -- don't change Chinese, China
+---  'C':'h':'i'    :cs -> "Cmn"  ++ useMapGF m cs  -- to change language code Chi to Cmn
   '"':cs -> '"':convert cs
   c  :cs -> c  :useMapGF m cs
   _ -> s

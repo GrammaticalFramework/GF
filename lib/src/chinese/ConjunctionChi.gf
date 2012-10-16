@@ -11,15 +11,15 @@ concrete ConjunctionChi of Conjunction = CatChi ** open ResChi, Prelude, Coordin
 -- These fun's are generated from the list cat's.
 
     BaseS = twoSS ;
-    ConsS = consrSS thcomma ;
+    ConsS = consrSS duncomma ;
     BaseAdv = twoSS ;
-    ConsAdv = consrSS thcomma ;
+    ConsAdv = consrSS duncomma ;
     BaseNP = twoSS ;
-    ConsNP = consrSS thcomma ;
+    ConsNP = consrSS duncomma ;
     BaseAP = twoSS ;
-    ConsAP = consrSS thcomma ;
+    ConsAP = consrSS duncomma ;
     BaseRS = twoSS ;
-    ConsRS = consrSS thcomma ;
+    ConsRS = consrSS duncomma ;
 
   lincat
     [S] = {s1,s2 : Str} ;
@@ -27,8 +27,5 @@ concrete ConjunctionChi of Conjunction = CatChi ** open ResChi, Prelude, Coordin
     [NP] = {s1,s2 : Str} ;
     [AP] = {s1,s2 : Str} ;
     [RS] = {s1,s2 : Str} ;
-
-  oper
-    thcomma : Str = [] ; ---- should be a space
 
 }

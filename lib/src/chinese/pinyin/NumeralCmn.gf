@@ -16,55 +16,53 @@ oper Wan : Zero => Str =
 
 oper mkD : Str -> Str -> Str = \x,_ -> word x ; -- hiding the "formal" version
 
---lincat Numeral = {s : Str} ;
-lincat Digit = {s : Str} ;
-lincat Sub10 = {s : Str} ;
-lincat Sub100 = {inh : Zero ; s : Bform => Str} ;
-lincat Sub1000 = {inh : Zero ; s : Qform => Str} ;
-lincat Sub1000000 = {s : Str} ;
-lin num x0 =
-  {s = x0.s} ;
+lincat Digit = {s,p : Str} ;
+lincat Sub10 = {s,p : Str} ;
+lincat Sub100 = {inh : Zero ; s,p : Bform => Str} ;
+lincat Sub1000 = {inh : Zero ; s,p : Qform => Str} ;
+lincat Sub1000000 = {s,p : Str} ;
+lin num x0 = x0 ;
 
 -- 一二三四五六七八九十一百千
 -- 
 
 lin n2  =
-  {s = mkD "er4" "er4"} ;
+  {s = mkD "er4" "er4" ; p = "liang3"} ;
 lin n3  =
-  {s = mkD "san1" "san1"} ;
+  {s,p = mkD "san1" "san1"} ;
 lin n4  =
-  {s = mkD "si4" "si4"} ;
+  {s,p = mkD "si4" "si4"} ;
 lin n5  =
-  {s = mkD "wu3" "wu3"} ;
+  {s,p = mkD "wu3" "wu3"} ;
 lin n6  =
-  {s = mkD "liu4" "liu4"} ;
+  {s,p = mkD "liu4" "liu4"} ;
 lin n7  =
-  {s = mkD "qi1" "qi1"} ;
+  {s,p = mkD "qi1" "qi1"} ;
 lin n8  =
-  {s = mkD "ba1" "ba1"} ;
+  {s,p = mkD "ba1" "ba1"} ;
 lin n9  =
-  {s = mkD "jiu3" "jiu3"} ;
+  {s,p = mkD "jiu3" "jiu3"} ;
 lin pot01  =
-  {s = mkD "yi1" "yi1"} ;
+  {s,p = mkD "yi1" "yi1"} ;
 lin pot0 d =
-  {s = d.s} ;
+  {s = d.s ; p = d.p} ;
 lin pot110  =
   {inh = nozero ; 
-   s = table {
+   s,p = table {
     shi => mkD "yi1shi2" "yi1shi2" ; 
     shi0 => mkD "yi1shi2" "yi1shi2" ; 
     wan => mkD "yi1wan4" "yi1wan4" ; 
     wan0 => mkD "yi1wan4" "yi1wan4"}} ;
 lin pot111  =
   {inh = nozero ; 
-   s = table {
+   s,p = table {
     shi => mkD "shi2yi1" "shi2yi1" ; 
     shi0 => mkD "yi1shi2yi1" "yi1shi2yi1" ; 
     wan => mkD "shi2yi1wan4" "shi2yi1wan4" ; 
     wan0 => mkD "shi2yi1wan4" "shi2yi1wan4"}} ;
 lin pot1to19 d =
   {inh = nozero ; 
-   s = table {
+   s,p = table {
     shi => mkD "yi1shi2" "yi1shi2" ++ d.s ; 
     shi0 => mkD "yi1shi2" "yi1shi2" ; 
     wan => mkD "yi1wan4" "yi1wan4" ++ d.s ++ mkD "qian1" "qian1" ; 
@@ -75,17 +73,23 @@ lin pot0as1 n =
     shi => n.s ; 
     shi0 => n.s ; 
     wan => n.s ++ mkD "qian1" "qian1" ; 
-    wan0 => n.s ++ mkD "qian1" "qian1"}} ;
+    wan0 => n.s ++ mkD "qian1" "qian1"} ;
+   p = table {
+    shi => n.p ; 
+    shi0 => n.s ; 
+    wan => n.s ++ mkD "qian1" "qian1" ; 
+    wan0 => n.s ++ mkD "qian1" "qian1"}
+  } ;
 lin pot1 d =
   {inh = zero ; 
-   s = table {
+   s,p = table {
     shi => d.s ++ mkD "shi2" "shi2" ; 
     shi0 => d.s ++ mkD "shi2" "shi2" ; 
     wan0 => d.s ++ "wan4" ; 
     wan => d.s ++ "wan4"}} ;
 lin pot1plus d e =
   {inh = nozero ; 
-   s = table {
+   s,p = table {
     shi => d.s ++ mkD "shi2" "shi2" ++ e.s ; 
     shi0 => d.s ++ mkD "shi2" "shi2" ++ e.s ; 
     wan => d.s ++ "wan4" ++ e.s ++ mkD "qian1" "qian1" ; 
@@ -96,27 +100,32 @@ lin pot1as2 n =
     bai => n.s ! shi ; 
     bai0 => n.s ! shi ; 
     shiwan => n.s ! wan ; 
+    shiwan0 => n.s ! wan0} ;
+   p = table {
+    bai => n.p ! shi ; 
+    bai0 => n.s ! shi ; 
+    shiwan => n.s ! wan ; 
     shiwan0 => n.s ! wan0}} ;
 lin pot2 d =
   {inh = zero ; 
-   s = table {
+   s,p = table {
     bai => d.s ++ mkD "bai3" "bai3" ; 
     bai0 => d.s ++ mkD "bai3" "bai3" ; 
     shiwan0 => d.s ++ mkD "shi2wan4" "shi2wan4" ; 
     shiwan => d.s ++ mkD "shi2wan4" "shi2wan4"}} ;
 lin pot2plus d e =
   {inh = nozero ; 
-   s = table {
+   s,p = table {
     bai => d.s ++ mkD "" "bai3" ++ (ling ! <e.inh,e.inh>) ++ e.s ! shi0 ; 
     bai0 => d.s ++ mkD "" "bai3" ++ (ling ! <e.inh,e.inh>) ++ e.s ! shi0 ; 
     shiwan => d.s ++ mkD "" "shi2" ++ (Wan ! (e.inh)) ++ e.s ! wan ; 
     shiwan0 => d.s ++ mkD "" "shi2" ++ (Wan ! (e.inh)) ++ e.s ! wan0}} ;
 lin pot2as3 n =
-  {s = n.s ! bai} ;
+  {s = n.s ! bai ; p = n.p ! bai} ;
 lin pot3 n =
-  {s = n.s ! shiwan} ;
+  {s,p = n.s ! shiwan} ;
 lin pot3plus n m =
-  {s = (n.s ! shiwan0) ++ (ling ! <n.inh,m.inh>) ++ m.s ! bai0} ;
+  {s,p = (n.s ! shiwan0) ++ (ling ! <n.inh,m.inh>) ++ m.s ! bai0} ;
 
 
 -- numerals as sequences of digits

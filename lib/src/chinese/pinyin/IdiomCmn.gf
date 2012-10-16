@@ -10,9 +10,9 @@ concrete IdiomCmn of Idiom = CatCmn ** open Prelude, ResCmn in {
     -- GenericCl vp = mkClause "有人" vp ; (meaning: there is a person)
 
     ---- it is John who did it
-    CleftNP np rs = mkClause np.s copula rs.s ;
+    CleftNP np rs = mkClause rs.s copula np.s ; -- did it + de + is I
 
-    CleftAdv ad s = mkClause ad.s (insertObj s (predV copula)) ; ---- it is here she slept
+    CleftAdv ad s = mkClause (s.s ++ possessive_s) copula ad.s ;  -- she sleeps + de + is here
 
     ExistNP np = mkClause [] (regVerb you_s) np.s ; ---- infl of you
 
@@ -20,7 +20,7 @@ concrete IdiomCmn of Idiom = CatCmn ** open Prelude, ResCmn in {
 
     ProgrVP vp = vp ; ----
 
-    ImpPl1 vp = ss (infVP vp) ; ----
+    ImpPl1 vp = ss (zan_s ++ men_s ++ infVP vp ++ ba0_s) ;
 
 }
 

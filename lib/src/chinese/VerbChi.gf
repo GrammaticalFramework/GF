@@ -7,14 +7,14 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
 
     SlashV2a v = predV v ** {c2 = v.c2 ; isPre = False} ;
 
-    Slash2V3 v np = insertObj np (predV v) ** {c2 = v.c3 ; isPre = True} ; 
-    Slash3V3 v np = insertObj np (predV v) ** {c2 = v.c2 ; isPre = False} ;
+    Slash2V3 v np = insertAdv (mkNP (ba_s ++      np.s)) (predV v) ** {c2 = v.c3 ; isPre = False} ;  -- slot for third argument 
+    Slash3V3 v np = insertObj (mkNP (appPrep v.c3 np.s)) (predV v) ** {c2 = v.c2 ; isPre = True} ;   -- slot for ba object
 
     SlashV2A v ap = insertObj ap (predV v) ** {c2 = v.c2 ; isPre = True} ; 
 
-    SlashV2V v vp = insertObj (mkNP (infVP vp)) (predV v) ** {c2 = v.c2 ; isPre = True} ;
-    SlashV2S v s  = insertObj s (predV v) ** {c2 = v.c2 ; isPre = True} ; 
-    SlashV2Q v q  = insertObj q (predV v) ** {c2 = v.c2 ; isPre = True} ; 
+    SlashV2V v vp = insertObj (mkNP (infVP vp))   (predV v) ** {c2 = v.c2 ; isPre = True} ;
+    SlashV2S v s  = insertObj (ss (say_s ++ s.s)) (predV v) ** {c2 = v.c2 ; isPre = True} ; 
+    SlashV2Q v q  = insertObj (ss (say_s ++ q.s)) (predV v) ** {c2 = v.c2 ; isPre = True} ; 
 
     ComplVV v vp = {
       verb = v ;
