@@ -75,7 +75,7 @@ oper
   --       ne vienmēr ir abi un ne visas kombinācijas ir vajadzīgas
   --       
   -- TODO: lai varētu spēlēties ar vārdu secību, compl vēlāk būs jāskalda pa daļām
-  VP = { v : Verb ; compl : Agr => Str ; agr : ClAgr } ;
+  VP = { v : Verb ; compl : Agr => Str ; agr : ClAgr ; objNeg : Bool } ;
   -- compl: objects, complements, adverbial modifiers
   -- topic: typically - subject
   -- focus: typically - objects, complements, adverbial modifiers

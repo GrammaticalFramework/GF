@@ -2,7 +2,8 @@
 
 concrete ConjunctionLav of Conjunction = CatLav ** open
   Coordination,
-  ResLav
+  ResLav,
+  Prelude
   in {
 
 flags
@@ -10,12 +11,14 @@ flags
   coding = utf8 ;
 
 lin
+
   ConjS = conjunctDistrSS ;
 
   ConjAdv = conjunctDistrSS ;
 
   ConjNP conj ss = conjunctDistrTable Case conj ss ** {
-    a = toAgr (conjNumber (fromAgr ss.a).n conj.n) (fromAgr ss.a).p (fromAgr ss.a).g
+    a = toAgr (conjNumber (fromAgr ss.a).n conj.n) (fromAgr ss.a).p (fromAgr ss.a).g ;
+    isNeg = False
   } ;
 
   ConjAP conj ss = conjunctDistrTable4 Definite Gender Number Case conj ss ;
@@ -38,6 +41,7 @@ lin
   ConsRS xs x = consrTable Agr comma xs x  ;
 
 lincat
+
   [S] = { s1, s2 : Str } ;
   [Adv] = { s1, s2 : Str } ;
   [NP] = { s1, s2 : Case => Str ; a : Agr } ;

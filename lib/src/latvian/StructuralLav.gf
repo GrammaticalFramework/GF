@@ -19,52 +19,61 @@ lin
   every_Det = {
     s = (\\g,c => (mkPronoun_Gend "ikviens").s ! g ! Sg ! c) ;
     n = Sg ;
-    d = Indef
+    d = Indef ;
+    isNeg = False
   } ;
 
   someSg_Det = {
     s = (\\g,c => (mkPronoun_Gend "kāds").s ! g ! Sg ! c) ;  --  lai atļautu arī tukšo, jāliek (\\_,_ => []) |  klāt
     n = Sg ;
-    d = Indef
+    d = Indef ;
+    isNeg = False
   } ;
 
   somePl_Det = {
     s = (\\g,c => (mkPronoun_Gend "kāds").s ! g ! Pl ! c) ;   --  lai atļautu arī tukšo, jāliek (\\_,_ => []) |  klāt
     n = Pl ;
-    d = Indef
+    d = Indef ;
+    isNeg = False
   } ;
 
   few_Det = {
     s = (\\g,c => (mkPronoun_Gend "dažs").s ! g ! Pl ! c) ;
     n = Pl ;
-    d = Indef
+    d = Indef ;
+    isNeg = False
   } ;
 
   many_Det = {
     s = (\\g,c => (mkPronoun_Gend "daudzs").s ! g ! Pl ! c) ;  -- 'daudzs' izlocīsies korekti uz daudzskaitļa 'daudzi'
     n = Pl ;
-    d = Indef
+    d = Indef ;
+    isNeg = False
   } ;
 
   much_Det = {
     s = (\\g,c => "daudz") ;  -- FIXME - ņem saistību ar ģenitīvu; kā to realizēt?
     n = Sg ;
-    d = Indef
+    d = Indef ;
+    isNeg = False
   } ;
 
   this_Quant = {
     s = (mkPronoun_ThisThat This).s ;
-    d = Def
+    d = Def ;
+    isNeg = False
   } ;
 
   that_Quant = {
     s = (mkPronoun_ThisThat That).s ;
-    d = Def
+    d = Def ;
+    isNeg = False
   } ;
 
   no_Quant = {
     s = (mkPronoun_Gend "neviens").s ;
-    d = Indef
+    d = Indef ;
+    isNeg = True
   } ;
 
   -- P1
@@ -241,11 +250,11 @@ lin
     n = Pl
   } ;
 
-  somebody_NP = DetCN emptySg_Det (UseN (mkN "kāds")) ; -- FIXME: UsePron
+  somebody_NP = UsePron (mkPronoun_Body "kāds") ;
   something_NP = UsePron (mkPronoun_Thing "kaut kas") ;
-  everybody_NP = DetCN emptySg_Det (UseN (mkN "ikviens")) ; -- FIXME: UsePron
+  everybody_NP = UsePron (mkPronoun_Body "ikviens") ;
   everything_NP = UsePron (mkPronoun_Thing "jebkas") ;
-  nobody_NP = DetCN emptySg_Det (UseN (mkN "neviens")) ; -- FIXME: UsePron
+  nobody_NP = UsePron (mkPronoun_Body "neviens") ;
   nothing_NP = UsePron (mkPronoun_Thing "nekas") ;
 
   have_V2 = mkV2 (mkV "būt") nom_Prep Dat ;

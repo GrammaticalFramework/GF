@@ -5,7 +5,7 @@ concrete IdiomLav of Idiom = CatLav ** open
   ResLav,
   VerbLav,
   ParadigmsVerbsLav
-  in {
+in {
 
 flags
   coding = utf8 ;
@@ -16,7 +16,7 @@ lin
     let agr = AgP3 Sg Masc
     in {
       s = \\mood,pol =>
-        buildVerb vp.v mood pol agr ++  -- Verb
+        buildVerb vp.v mood pol agr False vp.objNeg ++  -- Verb
         vp.compl ! agr  -- Object(s), complements, adverbial modifiers
     } ;
 
@@ -24,7 +24,7 @@ lin
     let agr = AgP3 Sg Masc
     in {
       s = \\mood,pol =>
-        buildVerb vp.v mood pol agr ++
+        buildVerb vp.v mood pol agr False vp.objNeg ++
         vp.compl ! agr
     } ;
 
@@ -34,7 +34,7 @@ lin
       agr = np.a
     in {
       s = \\mood,pol =>
-        buildVerb v mood pol agr ++
+        buildVerb v mood pol agr np.isNeg False ++
         np.s ! Nom
     } ;
 
@@ -45,7 +45,7 @@ lin
 	in {
       s = \\mood,pol =>
         ip.s ! Nom ++
-        buildVerb v mood pol agr
+        buildVerb v mood pol agr False False
     } ;
 
   -- FIXME: needs restriction so that only VerbMood Indicative _ _ Present is allowed;
@@ -63,7 +63,7 @@ lin
     ;
 
   ImpP3 np vp = {
-    s = "lai" ++ np.s ! Nom ++ buildVerb vp.v (Ind Simul Pres) Pos np.a ++ vp.compl ! np.a ;
+    s = "lai" ++ np.s ! Nom ++ buildVerb vp.v (Ind Simul Pres) Pos np.a np.isNeg vp.objNeg ++ vp.compl ! np.a ;
   } ;
 
   -- FIXME: placeholder

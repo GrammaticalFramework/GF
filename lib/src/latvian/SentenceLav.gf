@@ -2,8 +2,9 @@
 
 concrete SentenceLav of Sentence = CatLav ** open
   ResLav,
-  VerbLav
-  in {
+  VerbLav,
+  Prelude
+in {
 
 flags
     optimize = all_subs ;
@@ -30,6 +31,7 @@ lin
       v = vs ;
       compl = \\_ => "," ++ vs.subj.s ++ sslash.s ;
       agr = Topic vs.topic ;
+      objNeg = False
     }) ** { p = sslash.p } ;
 
   ComplVS v s  = { v = v ; compl = \\_ => "," ++ v.subj.s ++ s.s } ;
@@ -56,6 +58,7 @@ lin
   AdvS a s = { s = NON_EXISTENT } ;
 
 oper
+
   mkClause : NP -> CatLav.VP -> Cl = \np,vp -> lin Cl {
     s = \\mood,pol =>
       case mood of {  -- Subject
@@ -66,10 +69,10 @@ oper
         }
       } ++
       case vp.agr of {  -- Verb
-        Topic Nom          => buildVerb vp.v mood pol np.a ;
-        Topic _            => buildVerb vp.v mood pol (AgP3 Sg Masc) ;  -- TODO: test me
-        TopicFocus Nom _   => buildVerb vp.v mood pol np.a ;
-        TopicFocus _   agr => buildVerb vp.v mood pol agr
+        Topic Nom          => buildVerb vp.v mood pol np.a np.isNeg vp.objNeg ;
+        Topic _            => buildVerb vp.v mood pol (AgP3 Sg Masc) np.isNeg vp.objNeg ;  -- TODO: test me
+        TopicFocus Nom _   => buildVerb vp.v mood pol np.a np.isNeg vp.objNeg ;
+        TopicFocus _   agr => buildVerb vp.v mood pol agr np.isNeg vp.objNeg
       } ++
       vp.compl ! np.a  -- Object(s), complements, adverbial modifiers
   } ;
@@ -78,7 +81,7 @@ oper
   -- Eng: PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp
   -- Ar SC nav iespējams neko saskaņot (sk. Cat.gf un Common.gf)
   mkClauseSC : SC -> CatLav.VP -> Cl = \sc,vp -> lin Cl {
-    s = \\mood,pol => sc.s ++ buildVerb vp.v mood pol (AgP3 Sg Masc) ++ vp.compl ! (AgP3 Sg Masc)
+    s = \\mood,pol => sc.s ++ buildVerb vp.v mood pol (AgP3 Sg Masc) False vp.objNeg ++ vp.compl ! (AgP3 Sg Masc)
   } ;
 
 }

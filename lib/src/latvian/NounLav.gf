@@ -4,23 +4,28 @@ concrete NounLav of Noun = CatLav ** open
   MorphoLav,
   ResLav,
   Prelude
-  in {
+in {
 
 flags
   coding = utf8 ;
   optimize = all_subs ;
 
 lin
+
   UseN n = { s = \\_ => n.s ; g = n.g } ;
-  UsePN pn = { s = pn.s ; a = agrgP3 pn.n pn.g } ;
-  UsePron p = p ;
+
+  UsePN pn = { s = pn.s ; a = agrgP3 pn.n pn.g ; isNeg = False } ;
+  
+  UsePron p = p ** { isNeg = False };
 
   PredetNP pred np = {
     s = \\c => pred.s ! (fromAgr np.a).g ++ np.s ! c ;
-    a = np.a
+    a = np.a ;
+    isNeg = False 
   } ;
 
   UseN2 n = { s = \\_ => n.s ; g = n.g } ;
+  
   --UseN3 n = n ;
 
   ComplN2 f x = {
@@ -36,41 +41,49 @@ lin
   } ;
 
   Use2N3 n = { s = n.s ; g = n.g ; p = n.p1 ; isPre = n.isPre1 } ;
+  
   Use3N3 n = { s = n.s ; g = n.g ; p = n.p2 ; isPre = n.isPre2 } ;
 
   AdvNP np adv = {
     s = \\c => np.s ! c ++ adv.s ;
-    a = np.a
+    a = np.a ;
+    isNeg = np.isNeg
   } ;
 
   RelNP np rs = {
     s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ;
-    a = np.a
+    a = np.a ;
+    isNeg = np.isNeg
   } ;
 
   DetCN det cn = {
     s = \\c => det.s ! cn.g ! c ++ cn.s ! det.d ! det.n ! c ;
     a = AgP3 det.n cn.g ;
+    isNeg = det.isNeg
   } ;
 
   DetQuant quant num = {
     s = \\g,c => quant.s ! g ! num.n ! c ++ num.s ! g ! c ;
     n = num.n ;
-    d = quant.d	-- FIXME: ja ir kārtas skaitļa vārds, tad tikai noteiktās formas drīkst būt
+    d = quant.d	; -- FIXME: ja ir kārtas skaitļa vārds, tad tikai noteiktās formas drīkst būt
+    isNeg = quant.isNeg
   } ;
 
   DetQuantOrd quant num ord = {
     s = \\g,c => quant.s ! g ! num.n ! c ++ num.s ! g ! c ++ ord.s ! g ! c ;
     n = num.n ;
-    d = quant.d	--FIXME: ja ir kārtas skaitļa vārds, tad tikai noteiktās formas drīkst būt
+    d = quant.d	; --FIXME: ja ir kārtas skaitļa vārds, tad tikai noteiktās formas drīkst būt
+    isNeg = quant.isNeg
   } ;
 
   DetNP det = {
     s = \\c => det.s ! Masc ! c ;
-    a = AgP3 det.n Masc
+    a = AgP3 det.n Masc ;
+    isNeg = det.isNeg
   } | {
     s = \\c => det.s ! Fem ! c ;
-    a = AgP3 det.n Fem
+    a = AgP3 det.n Fem ;
+    isNeg = det.isNeg
   } ;
 
   AdjCN ap cn = {
@@ -80,33 +93,40 @@ lin
 
   DefArt = {
     s = \\_,_,_ => [] ;
-    d = Def
+    d = Def ;
+    isNeg = False
   } ;
 
   IndefArt = {
     s = \\_,_,_ => [] ;
-    d = Indef
+    d = Indef ;
+    isNeg = False
   } ;
 
   PossPron p = {
     s = p.possessive ;
     d = Def ;
+    isNeg = False
   } ;
 
   MassNP cn = {
     s = cn.s ! Indef ! Sg ;	-- FIXME: a 'šis alus'? der tak gan 'zaļš alus' gan 'zaļais alus'
-    a = AgP3 Sg cn.g
+    a = AgP3 Sg cn.g ;
+    isNeg = False
   } ;
 
   NumSg = { s = \\_,_ => [] ; n = Sg ; hasCard = False } ;
+  
   NumPl = { s = \\_,_ => [] ; n = Pl ; hasCard = False } ;
 
   NumCard n = n ** { hasCard = True } ;
 
   NumDigits n = { s = \\g,c => n.s ! NCard ; n = n.n } ;
+  
   OrdDigits n = { s = \\g,c => n.s ! NOrd } ;
 
   NumNumeral numeral = { s = numeral.s ! NCard ; n = numeral.n } ;
+  
   OrdNumeral numeral = { s = numeral.s ! NOrd } ;
 
   OrdSuperl a = { s = \\g,c => a.s ! (AAdj Superl Def g Sg c) } ;
@@ -126,7 +146,7 @@ lin
   ApposCN cn np = {
     s = \\d,n,c => case (fromAgr np.a).n of {
       n => cn.s ! d ! n ! c ++ np.s ! c ;	-- FIXME: comparison not working
-      _ => NON_EXISTENT
+      _ => NON_EXISTENT -- FIXME: pattern never reached
     } ;
     g = cn.g
   } ;
@@ -144,7 +164,8 @@ lin
   -- FIXME: vajag -ts / -ta divdabja formu, + šķirot noteikto/nenoteikto galotni
   PPartNP np v2 = {
     s = \\c => v2.s ! Pos ! (Participle (fromAgr np.a).g (fromAgr np.a).n c) ++ np.s ! c ;
-    a = np.a
+    a = np.a ;
+    isNeg = np.isNeg
   } ;
 
   -- TODO: šim vajag -ts -ta divdabjus (+ noteiktās formas tiem)
