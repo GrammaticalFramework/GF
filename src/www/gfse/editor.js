@@ -734,7 +734,7 @@ function draw_extends(g) {
     }
     var w= exts.length>0 ? "more" : "other"
     function add_exts(el) { return add_extends(g); }
-    if(g.unique_name) es.push(more(add_exts,"Inherit from "+w+" grammars"))
+    es.push(more(add_exts,"Inherit from "+w+" grammars"))
     return indent([extensible(es)])
 }
 
