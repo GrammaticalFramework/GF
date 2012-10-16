@@ -8,7 +8,7 @@ module GF.Command.Commands (
   flags,
   needsTypeCheck,
   CommandInfo,
-  CommandOutput
+  CommandOutput(..),void
   ) where
 import Prelude hiding (putStrLn)
 
@@ -52,7 +52,8 @@ import Data.List (sort)
 import Debug.Trace
 --import System.Random (newStdGen) ----
 
-type CommandOutput = ([Expr],String) ---- errors, etc
+
+type PGFEnv = (PGF, Map.Map Language Morpho)
 
 data CommandInfo = CommandInfo {
   exec     :: PGFEnv -> [Option] -> [Expr] -> SIO CommandOutput,
@@ -66,9 +67,31 @@ data CommandInfo = CommandInfo {
   needsTypeCheck :: Bool
   }
 
+--------------------------------------------------------------------------------
+newtype CommandOutput  = Piped {fromPipe :: ([Expr],String)} ---- errors, etc
+
+-- Converting command output:
+fromStrings ss         = Piped (map (ELit . LStr) ss, unlines ss)
+fromExprs   es         = Piped (es,unlines (map (showExpr []) es))
+fromString  s          = Piped ([ELit (LStr s)], s)
+pipeWithMessage es msg = Piped (es,msg)
+pipeMessage msg        = Piped ([],msg)
+pipeExprs   es         = Piped (es,[]) -- only used in emptyCommandInfo
+void                   = Piped ([],"")
+
+-- Converting command input:
+toString  = unwords . toStrings
+toStrings = map showAsString
+  where
+    showAsString t = case t of
+      ELit (LStr s) -> s
+      _ -> "\n" ++ showExpr [] t ---newline needed in other cases than the first
+
+--------------------------------------------------------------------------------
+
 emptyCommandInfo :: CommandInfo
 emptyCommandInfo = CommandInfo {
-  exec = \_ _ ts -> return (ts,[]), ----
+  exec = \_ _ ts -> return $ pipeExprs ts, ----
   synopsis = "",
   syntax = "",
   explanation = "",
@@ -134,8 +157,6 @@ optionally f s  = f s
 compact [] = []
 compact ([]:xs@([]:_)) = compact xs
 compact (x:xs) = x:compact xs
-
-type PGFEnv = (PGF, Map.Map Language Morpho)
 
 mkEx s = let (command,expl) = break (=="--") (words s) in (unwords command, unwords (drop 1 expl))
 
@@ -570,7 +591,7 @@ allCommands = Map.fromList [
        "will accept unknown adjectives, nouns and verbs with the resource grammar."
        ],
      exec = \env@(pgf, mos) opts ts ->
-              return $ fromParse opts (concat [map ((,) s) (par pgf opts s) | s <- toStrings ts]),
+              return . Piped $ fromParse opts (concat [map ((,) s) (par pgf opts s) | s <- toStrings ts]),
      flags = [
        ("cat","target category of parsing"),
        ("lang","the languages of parsing (comma-separated, no spaces)"),
@@ -720,8 +741,8 @@ allCommands = Map.fromList [
                                 Nothing -> let (es,err) = exprs ls
                                            in (es,text "on line" <+> int n <> colon <+> text "parse error" $$ err)
            returnFromLines ls = case exprs ls of
-                                  (es, err) | null es   -> return ([], render (err $$ text "no trees found"))
-                                            | otherwise -> return (es, render err)
+                                  (es, err) | null es   -> return $ pipeMessage $ render (err $$ text "no trees found")
+                                            | otherwise -> return $ pipeWithMessage es (render err)
 
        s <- restricted $ readFile file
        case opts of
@@ -1093,8 +1114,6 @@ allCommands = Map.fromList [
      where
        dp = valIntOpts "depth" 4 opts
 
-   void = ([],[])
-
    optLins pgf opts ts = case opts of
      _ | isOpt "groups" opts ->
        map (unlines . snd) $ groupResults
@@ -1202,18 +1221,12 @@ allCommands = Map.fromList [
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
    takeOptNum opts = take (optNumInf opts)
 
-   fromExprs   es = (es,unlines (map (showExpr []) es))
-   fromStrings ss = (map (ELit . LStr) ss, unlines ss)
-   fromString  s  = ([ELit (LStr s)], s)
-   toStrings = map showAsString
-   toString = unwords . toStrings
-
-   fromParse opts []     = ([],"")
+   fromParse opts []     = ([],[])
    fromParse opts ((s,(po,bs)):ps)
      | isOpt "bracket" opts = (es, showBracketedString bs
                                    ++ "\n" ++ msg)
      | otherwise            = case po of
-                                ParseOk ts     -> let (es',msg') = fromExprs ts
+                                ParseOk ts     -> let Piped (es',msg') = fromExprs ts
                                                   in (es'++es,msg'++msg)
                                 TypeError errs -> ([], render (text "The parsing is successful but the type checking failed with error(s):" $$
                                                                nest 2 (vcat (map (ppTcError . snd) errs)))
@@ -1225,7 +1238,7 @@ allCommands = Map.fromList [
        (es,msg) = fromParse opts ps
 
    returnFromExprs es = return $ case es of
-     [] -> ([], "no trees found")
+     [] -> pipeMessage "no trees found"
      _  -> fromExprs es
 
    prGrammar env@(pgf,mos) opts
@@ -1278,10 +1291,6 @@ allCommands = Map.fromList [
      app (OOpt  op)         | Just (Left  f) <- treeOp pgf op = f
      app (OFlag op (VId x)) | Just (Right f) <- treeOp pgf op = f (mkCId x)
      app _                                                    = id
-
-   showAsString t = case t of
-     ELit (LStr s) -> s
-     _ -> "\n" ++ showExpr [] t  --- newline needed in other cases than the first
 
 stringOpOptions = sort $ [
        ("bind","bind tokens separated by Prelude.BIND, i.e. &+"),
@@ -1353,12 +1362,12 @@ execToktok (pgf, _) opts exprs = do
   case getLang opts of
     Nothing -> do
       let output = concatMap toStringList [t input | (_,t) <- Map.toList tokenizers]
-      return ([ELit $ LStr o | o <- output],unlines output)
+      return (fromStrings output)
     Just lang -> case Map.lookup lang tokenizers of
       Just tok -> do
         let output = toStringList $ tok input
-        return ([ELit $ LStr o | o <- output],unlines output)
-      Nothing -> return ([],"Unknown language: " ++ show lang)
+        return (fromStrings output)
+      Nothing -> return (pipeMessage ("Unknown language: " ++ show lang))
   where input = case exprs of
           [ELit (LStr s)] -> s
           _ -> ""
