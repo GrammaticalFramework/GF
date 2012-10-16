@@ -2,8 +2,9 @@
 
 concrete RelativeLav of Relative = CatLav ** open
   ResLav,
-  VerbLav
-  in {
+  VerbLav,
+  Prelude
+in {
 
 flags
   optimize = all_subs ;
@@ -15,7 +16,7 @@ lin
   RelVP rp vp = {
     s = \\m,p,ag =>
       rp.s ! Masc ! Nom ++ 
-      buildVerb vp.v m p (toAgr (fromAgr ag).n P3 (fromAgr ag).g) ++ 
+      buildVerb vp.v m p (toAgr (fromAgr ag).n P3 (fromAgr ag).g) False vp.objNeg ++ 
       vp.compl ! ag
   } ;
 

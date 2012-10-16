@@ -281,7 +281,13 @@ oper
         Voc => NON_EXISTENT
       } ! c ;
       a = AgP3 Sg Masc ;
-      possessive = \\_,_,_ => NON_EXISTENT
+      possessive = \\_,_,_ => case stem of { "kaut" => stem ++ "kā" ; _ => stem + "kā" }
+    } ;
+
+    mkPronoun_Body : Str -> Pron = \lemma -> {
+      s = \\c => (mkPronoun_Gend lemma).s ! Masc ! Sg ! c ;
+      a = AgP3 Sg Masc ;
+      possessive = \\_,_,_ => (mkPronoun_Gend lemma).s ! Masc ! Sg ! Gen ;
     } ;
 
 } ;
