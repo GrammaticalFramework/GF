@@ -44,10 +44,18 @@ resource ResChi = ParamX ** open Prelude in {
   zai_V = mkVerb "在" [] [] [] [] "不" ;
   fullstop_s = "。" ;
   questmark_s = "？" ;
-  exclmark_s = "!" ;
+  exclmark_s = "！" ;
   ge_s = "个" ;
   di_s = "是" ; -- used in QuestSlash
-  ba_s = "把" ;
+  ba_s = "把" ;  -- ba4, object marker
+  ba0_s = "吧" ; -- ba, used in imperatives
+  men_s = "们" ;
+  zan_s = "咱" ;
+
+  say_s = "说" ; -- used in embedded sentences: she answers him that we sleep
+
+  duncomma = "、" ;
+  chcomma = "，" ;
 
   emptyStr = [] ;
 

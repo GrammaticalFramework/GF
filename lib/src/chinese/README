@@ -238,7 +238,7 @@ Issues from
   London and New York, 
   2009.
 
-p. 4 the dun-comma in lists
+p. 4 the dun-comma in lists DONE
 
 p. 28 "who is X" vs. "X is who"
 
@@ -260,7 +260,7 @@ p. 97 AB -> AABB reduplication
 
 p. 104 non-gradable adjectives require shi: zhei tiao yu shi huo de -> keep this as general rule for APs so far
 
-p. 106 it was Chinese that I studied -> move cleft to the end
+p. 106 it was Chinese that I studied -> move cleft to the end DONE 16/10
 
 p. 116 I did it better than you -> to implement
 
@@ -272,7 +272,7 @@ p. 168 "can": hui/neng
 
 p. 174 negation and tense
 
-p. 185 yes/no
+p. 185 yes/no DONE
 
 p. 186 alternation questions
 
@@ -280,7 +280,7 @@ p. 197 "or" haishi/huozhe
 
 p. 206 "please" in imperative
 
-p. 207 "let's" zanmen he yi bei ba
+p. 207 "let's" zanmen he yi bei ba  DONE 16/10
 
 p. 242 coverbs
 
@@ -294,6 +294,27 @@ RGL implementation took 4 person weeks altogether. The remaining immediate fixes
 However, there is a lot of Chinese that we will leave outside the common RGL abstract syntax.
 
 
+16/10
+
+Some more changes in the (almost) complete Chi. It has 546 words:
+
+0 1 2 3 4 5 6 7 8 9 、 。 一 七 万 丈 三 上 下 不 丑 业 丢 两 个 中 为 么 之 乎 乐 九 乞 书 买 了 争 事 二 
+云 五 些 亮 亲 人 什 今 从 他 以 们 件 会 但 位 何 你 候 做 停 像 儿 光 八 公 六 关 写 冰 冷 净 准 几 则 到 
+刺 前 副 割 劈 加 动 包 匹 医 十 千 单 卖 厂 厌 厚 去 又 友 发 变 只 可 台 右 叶 号 吃 名 后 吐 吗 吧 听 吸 
+吹 呕 呼 和 咬 咱 哪 唉 唱 商 啤 喜 喝 嘴 四 回 因 园 国 圆 土 在 地 场 坏 坐 块 城 堂 堆 塑 处 备 外 多 夜 
+大 天 太 夫 头 奇 套 女 奶 她 好 如 妹 妻 姑 娘 婚 婴 子 字 学 孩 它 宗 定 家 宽 寄 寓 察 对 寻 小 少 尖 尘 
+就 尾 屋 山 工 左 己 已 巴 市 师 希 常 帽 干 平 年 庄 店 座 开 弟 张 往 很 得 心 必 忘 怕 您 想 懂 我 或 战 
+房 所 扇 手 打 扔 把 报 拉 指 挖 挤 推 揉 握 搔 摄 摆 擦 收 敌 教 数 文 料 新 旁 旅 时 明 星 是 晚 暖 更 最 
+月 有 朋 服 望 期 木 本 术 朵 机 杀 村 条 来 杯 板 林 果 枝 架 某 树 校 根 桌 桶 棕 森 棵 椅 橡 欢 歌 止 此 
+死 母 每 比 毛 毯 水 求 汽 沙 没 河 油 法 泳 洗 活 流 浮 海 温 港 游 湖 湿 滑 满 滴 漂 火 灯 灰 炉 烂 烟 烧 
+热 然 爱 父 片 牙 牛 牧 物 狗 猎 猫 王 玩 现 球 理 瓶 生 甲 电 男 画 白 百 的 皮 盏 盐 盒 盖 直 看 眼 着 睛 
+睡 知 短 石 码 破 确 离 种 科 空 窄 窗 站 笑 笔 笨 第 等 答 简 算 箱 粒 红 约 纸 经 绑 结 给 绳 绿 缝 羊 羽 
+翅 翰 老 而 耳 聪 肉 肚 肝 肠 肪 胀 背 胶 胸 能 脂 脏 脖 脚 腿 膀 膝 膨 自 舌 船 艘 艺 花 苹 草 落 蓝 薄 虫 
+虱 虽 蛇 蛋 血 行 衣 表 衫 衬 袜 被 要 规 视 角 言 警 计 讨 语 说 请 读 谁 赢 走 起 趣 跑 距 路 跳 躺 车 转 
+轻 辆 边 过 近 还 这 远 通 道 那 酒 酪 里 重 金 钝 钢 铁 银 长 门 闭 问 间 闻 阳 阵 除 雨 雪 零 雾 非 面 革 
+靴 鞋 音 顶 项 须 颗 题 风 飞 饭 首 马 骨 鱼 鸟 黄 黎 黑 鼻 齿 ！ ， ？
+
+Also updated the Pinyin version and created a Makefile to convert Chi to Cmn.
 
 
 

@@ -6,8 +6,8 @@ concrete StructuralCmn of Structural = CatCmn **
 lin
     every_Det = mkDet "mei3" Sg ;
         
-    this_Quant = mkDet "zhe4" ;
-    that_Quant = mkDet "na3" ;
+    this_Quant = mkQuant "zhe4" ;
+    that_Quant = mkQuant "na3" ;
 
     i_Pron = pronNP "wo3" ;
     youSg_Pron = pronNP "ni3"  ;
@@ -49,7 +49,7 @@ where_IAdv = mkIAdvL "na3li3" ;
 when_IAdv = mkIAdvL "shen2mashi2hou4" ;
 how_IAdv = mkIAdvL "ru2he2" ;
 all_Predet = ssword "suo3you3" ;
-many_Det = mkDet "duo1" Pl ;
+many_Det = mkDet (word "hen3duo1") DTPoss ;
 someSg_Det = mkDet (word "yi1xie1") Sg ;
 somePl_Det = mkDet (word "yi1xie1") Sg ;
 few_Det = mkDet "shao3" Pl ;
@@ -69,9 +69,9 @@ under_Prep = mkPrep "xia4" ;
 why_IAdv = mkIAdvL "wei2shen2ma" ;
 too_AdA = mkAdA "tai4" ;
 
-before_Prep = mkPrep "cong1qian2" ; --s
-between_Prep = mkPrep "zhi1jian1" ; --s
-but_PConj = mkPConjL "dan4shi4" ; --s
+before_Prep = mkPrep "cong1qian2" ; 
+between_Prep = mkPrep "zhi1jian1" ; 
+but_PConj = mkPConjL "dan4shi4" ; 
 
 
     can_VV  = mkVerb "neng2"  [] [] [] [] "bu4" ;
@@ -81,33 +81,26 @@ but_PConj = mkPConjL "dan4shi4" ; --s
 can8know_VV = mkV "hui4" [] [] [] [] "bu4" ; ----
 
 
-except_Prep = mkPrep "chu2le" "yi3wai4" ; --s
-for_Prep = mkPrep "wei2le" ; --s
-from_Prep = mkPrep "cong1" ; --s
----how8many_IDet = mkIDet "ji1" ; --s
----how8much_IDet = mkIDet "duo1shao3" ; --s
-in8front_Prep = mkPrep "qian2bian1" ; --s
-it_Pron = pronNP "ta1" ; --s
----less_CAdv = mkCAdv "shao3" ; --s
-much_Det = mkDet "duo1" Sg ; --s
----more_CAdv = mkCAdv "geng1" ; --s
----most_Predet = mkPredet "zui4" ; --s
-no_Quant = mkDet "bu4" ; --s
+except_Prep = mkPrep "chu2le" "yi3wai4" ; 
+for_Prep = mkPrep "wei2le" ; 
+from_Prep = mkPrep "cong1" ; 
+in8front_Prep = mkPrep "qian2bian1" ; 
+it_Pron = pronNP "ta1" ; 
+much_Det = mkDet "duo1" Sg ; 
+no_Quant = mkQuant "bu4" ; 
 not_Predet = ssword "bu4" ;
----only_Predet = mkPredet "qi2" ; --s
-otherwise_PConj = mkPConjL "hai2shi4" ; --s
-to_Prep = mkPrep "wang3" ; --s
----which_IQuant = mkIQuant "na3" ; --s
+otherwise_PConj = mkPConjL "hai2shi4" ; 
+to_Prep = mkPrep "wang3" ; 
 
 have_V2 = mkV2 "you3" ;
 
-yes_Utt = ss copula_s ;
+yes_Utt = ss "dui4" ;
 no_Utt = ss neg_s ;
 
 oper
   mkConjForm : Str -> {s1,s2 : Str} = \s -> {s1 = [] ; s2 = word s} ;
 
--- manually by AR
+-- manually by AR, Jolene
 
 lin
   always_AdV = ssword "yi1zhi2" ;
@@ -152,12 +145,13 @@ so_AdA = ssword "ru2ci3" ;
 somebody_NP = ssword "mou3ren2" ;  
 something_NP = ssword "mou3shi4" ;  -- [mark] in sent, it depends on the context
 somewhere_Adv = mkAdv "mou3chu3" ;  
-that_Subj = mkSubj [] ", " ;  -- that + S [mark] comma
+that_Subj = mkSubj [] chcomma ;  -- that + S [mark] comma
 there7from_Adv = mkAdv "cong1na3li3" ;  -- from there
 there7to_Adv = mkAdv "dao4na3li3" ;  
 therefore_PConj = ssword "yin1ci3" ;  
 through_Prep = mkPrep "tong1guo4" ;  
-which_IQuant = ssword [] ;  -- [mark] in sent, it depends on the context
+which_IQuant = mkIQuant "na3" ; 
+--which_IQuant = ssword [] ;  -- [mark] in sent, it depends on the context
 without_Prep = mkPrep "mei2you3" []; 
 youPol_Pron = ssword "nin2" ;  -- polite you 
 

@@ -42,18 +42,27 @@ resource ResCmn = ParamX ** open Prelude in {
   geng_s = "geng1" ; -- more, in comparison
 
   zai_V = mkVerb "zai4" [] [] [] [] "bu4" ;
-  fullstop_s = "." ;
-  questmark_s = "?" ;
-  exclmark_s = "!" ;
+  fullstop_s = "。" ;
+  questmark_s = "？" ;
+  exclmark_s = "！" ;
   ge_s = "ge4" ;
   di_s = "shi4" ; -- used in QuestSlash
+  ba_s = "ba3" ;  -- ba4, object marker
+  ba0_s = "ba1" ; -- ba, used in imperatives
+  men_s = "men" ;
+  zan_s = "za2" ;
+
+  say_s = "shui4" ; -- used in embedded sentences: she answers him that we sleep
+
+  duncomma = "、" ;
+  chcomma = "，" ;
 
   emptyStr = [] ;
 
 
 -- Write the characters that constitute a word separately. This enables straightforward tokenization.
 
-  bword : Str -> Str -> Str = \x,y -> x + y ; -- change to x ++ y to treat words as separate tokens
+  bword : Str -> Str -> Str = \x,y -> x + y ; -- change to x + y to treat words as single tokens
 
   word : Str -> Str = \s -> case s of {
       x@? + y@? + z@? + u@? => bword x (bword y (bword z u)) ;
@@ -188,6 +197,7 @@ param
 
 oper
   Determiner = {s : Str ; detType : DetType} ;
+  Quantifier = Determiner ** {pl : Str} ;
 
   mkDet = overload {
     mkDet : Str ->            Determiner = \s   -> {s = s ; detType = DTFull Sg} ;
@@ -195,7 +205,11 @@ oper
     mkDet : Str -> DetType -> Determiner = \s,d -> {s = s ; detType = d} ;
     } ;
 
-  mkQuant : Str -> {s : Str} = ss ;
+  mkQuant = overload {
+    mkQuant : Str ->                   Quantifier = \s     -> {s,pl = s ; detType = DTFull Sg} ;
+    mkQuant : Str ->        DetType -> Quantifier = \s,d   -> {s,pl = s ; detType = d} ;
+    mkQuant : Str -> Str -> DetType -> Quantifier = \s,p,d -> {s    = s ; detType = d ; pl = p} ;
+    } ;
 
   pronNP : (s : Str) -> NP = \s -> {
     s = word s
