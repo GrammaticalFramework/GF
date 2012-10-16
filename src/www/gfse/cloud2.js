@@ -177,7 +177,7 @@ function download_json() {
 	downloading--;
 	var newg=JSON.parse(grammar);
 	debug("Downloaded "+newg.unique_name)
-	var i=my_grammar(newg.unique_name+".json");
+	var i=my_grammar(newg.unique_name);
 	if(i!=null) merge_grammar(i,newg)
 	else {
 	    debug("New")
