@@ -19,7 +19,8 @@ import GF.Infra.SIO
 import GF.Infra.Option
 
 import Text.PrettyPrint
-import Control.Monad.Error
+import Control.Monad(when)
+--import Control.Monad.Error()
 import qualified Data.Map as Map
 
 data CommandEnv = CommandEnv {
@@ -47,12 +48,12 @@ interpretCommandLine env line =
     Nothing    -> putStrLnFlush "command not parsed"
 
 interpretPipe env cs = do
-     v@(_,s) <- intercs ([],"") cs
+     Piped v@(_,s) <- intercs void cs
      putStrLnFlush s
      return v
   where
    intercs treess [] = return treess
-   intercs (trees,_) (c:cs) = do
+   intercs (Piped (trees,_)) (c:cs) = do
      treess2 <- interc trees c
      intercs treess2 cs
    interc es comm@(Command co opts arg) = case co of
@@ -60,12 +61,12 @@ interpretPipe env cs = do
        Just css ->
          case getCommandTrees env False arg es of
            Right es -> do mapM_ (interpretPipe env) (appLine es css) 
-                          return ([],[])
+                          return void
            Left msg -> do putStrLn ('\n':msg)
-                          return ([],[])
+                          return void
        Nothing  -> do
          putStrLn $ "command macro " ++ co ++ " not interpreted"
-         return ([],[])
+         return void
      _ -> interpret env es comm
    appLine es = map (map (appCommand es))
 
@@ -87,12 +88,10 @@ interpret :: CommandEnv -> [Expr] -> Command -> SIO CommandOutput
 interpret env trees comm = 
   case getCommand env trees comm of
     Left  msg               -> do putStrLn ('\n':msg)
-                                  return ([],[])
+                                  return void
     Right (info,opts,trees) -> do let cmdenv = (multigrammar env,morphos env)
-                                  tss@(_,s) <- exec info cmdenv opts trees
-                                  if isOpt "tr" opts
-                                    then putStrLn s
-                                    else return ()
+                                  tss@(Piped (_,s)) <- exec info cmdenv opts trees
+                                  when (isOpt "tr" opts) $ putStrLn s
                                   return tss
 
 -- analyse command parse tree to a uniform datastructure, normalizing comm name
