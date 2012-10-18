@@ -41,7 +41,7 @@ data AExp =
    | AApp  AExp AExp Val 
    | AAbs  Ident Val AExp 
    | AProd Ident AExp AExp 
-   | AEqs  [([Exp],AExp)] --- not used
+-- | AEqs  [([Exp],AExp)] --- not used
    | ARecType [ALabelling]
    | AR    [AAssign]
    | AP    AExp Label Val

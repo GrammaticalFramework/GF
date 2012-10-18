@@ -4,6 +4,7 @@ import System.Info
 import Data.Version(showVersion)
 import DarcsVersion_gf
 
+{-# NOINLINE buildInfo #-}
 buildInfo =
     details
     ++"\nBuilt on "++os++"/"++arch

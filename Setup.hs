@@ -391,6 +391,7 @@ extractDarcsVersion distFlag =
      createDirectoryIfMissing True autogenPath
      updateFile versionModulePath $ unlines $
        ["module "++modname++" where",
+        "{-# NOINLINE darcs_info #-}",
         "darcs_info = "++show (either (const (Left ())) Right info)]
   where
     dist = fromFlagOrDefault "dist" distFlag
