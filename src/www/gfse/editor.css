@@ -45,6 +45,9 @@ div.namebar table { width: 100%; }
 .namebar h3, .sheet h3 { margin: 0; color: #009; }
 .home h3 { margin-top: 0; color: #009; }
 
+div.comment:before { content: "-- "; }
+div.comment { color: #009; margin-left: 1em; }
+
 td.right { text-align: right; }
 td.center { text-align: center; }
 

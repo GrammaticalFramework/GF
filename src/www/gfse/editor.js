@@ -98,7 +98,7 @@ function draw_grammar_list() {
 	    var pubspan=[span_class("more",pub)]
 	}
 	return edtr([td(delete_button(del(i),"Delete this grammar")),
-		     td(title(gid.unique_name,link)),
+		     td(title(gid.unique_name || "",link)),
 		     td(more(clone(i),"Clone this grammar")),
 		     td(pubspan)
 		    ])
@@ -161,6 +161,7 @@ function draw_grammar_list() {
 
 function new_grammar() {
     var g={basename:"Unnamed",
+	   comment:"",
 	   extends:[],
 	   uextends:[],
 	   abstract:{cats:[],funs:[]},
@@ -226,6 +227,7 @@ function open_public(file) {
 	delete g.index
 	delete g.unique_name
 	delete g.publishedAs
+	if(!g.uextends) g.uextends=[]
 	reload_grammar(g)
     }
     var parts=file.split(/[-.]/)
@@ -286,7 +288,10 @@ function draw_namebar(g,files) {
     return div_class("namebar",
 		     [table([tr([td(draw_name(g)),
 				 td_center(center),
-				 td_right(right)])])])
+				 td_right(right)]),
+			     tr([attr({colspan:"3"},td(draw_comment(g)))])
+			    ])
+		     ])
 }
 
 function draw_name(g) {
@@ -803,6 +808,10 @@ function draw_abstract(g) {
     return file;
 }
 
+function draw_comment(g) {
+    return div_class("comment",editable("span",text(g.comment || ""),g,edit_comment,"Edit grammar description"));
+}
+
 function module_name(g,ix) {
     return ix==0 ? g.basename : g.basename+g.concretes[ix-1].langcode
 }
@@ -1045,6 +1054,15 @@ function edit_name(g,el) {
 	return null;
     }
     string_editor(el,g.basename,change_name)
+}
+
+function edit_comment(g,el) {
+    function change_comment(comment) {
+	g.comment=comment
+	reload_grammar(g);
+	return null;
+    }
+    string_editor(el,g.comment || "",change_comment)
 }
 /* -------------------------------------------------------------------------- */
 
