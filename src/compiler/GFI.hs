@@ -177,7 +177,7 @@ execute1 opts gfenv0 s0 =
         pOpts style q ("-qual"   :ws) = pOpts style            Qualified   ws
         pOpts style q             ws  = (style,q,unwords ws)
 
-        (style,q,s) = pOpts TermPrintDefault Qualified (tail (words s0))
+        (style,q,s) = pOpts TermPrintDefault Qualified ws
 
       case runP pExp (encodeUnicode utf8 s) of
         Left (_,msg) -> putStrLn msg
