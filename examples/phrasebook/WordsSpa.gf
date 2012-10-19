@@ -92,7 +92,7 @@ lin
 
     Belgian = mkA "belga" ;
     Belgium = mkNP (mkPN "Bélgica") ;
-    Bulgarian = mkNat (mkA "búlgaro") "búlgaro" "Bulgaria" ; --TODO: tarkista
+    Bulgarian = mkNat (mkA "búlgaro") "búlgaro" "Bulgaria" ;
     Catalan = mkNat (mkA "catalán") "catalán" "Cataluña" ;
     Danish = mkNat (mkA "danés") "danés" "Dinamarca" ;
     Dutch = mkNat (mkA "neerlandés") "neerlandés" "Holanda" ;
@@ -252,7 +252,7 @@ lin
     TheCheapest = mkSuperl cheap_A False ;
     TheMostExpensive = mkSuperl expensive_A False ;
     TheMostPopular =
-      let popular = mkA "popular" --"popular" "populares" "populares" "popularmente"
+      let popular = mkA "popular"
       in  mkSuperl popular False ;
     TheWorst = mkSuperl L.bad_A True ;
 
