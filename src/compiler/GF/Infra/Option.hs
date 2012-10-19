@@ -6,7 +6,7 @@ module GF.Infra.Option
      Mode(..), Phase(..), Verbosity(..), 
      OutputFormat(..), 
      SISRFormat(..), Optimization(..), CFGTransform(..), HaskellOption(..),
-     Dump(..), Recomp(..),
+     Dump(..), Pass(..), Recomp(..),
      outputFormatsExpl, 
      -- * Option parsing 
      parseOptions, parseModuleOptions, fixRelativeLibPaths,
@@ -131,7 +131,8 @@ data HaskellOption = HaskellNoPrefix | HaskellGADT | HaskellLexical
 data Warning = WarnMissingLincat
   deriving (Show,Eq,Ord)
 
-data Dump = DumpSource | DumpRebuild | DumpExtend | DumpRename | DumpTypeCheck | DumpRefresh | DumpOptimize | DumpCanon
+newtype Dump = Dump Pass deriving (Show,Eq,Ord)
+data Pass = Source | Rebuild | Extend | Rename | TypeCheck | Refresh | Optimize | Canon
   deriving (Show,Eq,Ord)
 
 data Recomp = AlwaysRecomp | RecompIfNewer | NeverRecomp
@@ -351,14 +352,14 @@ optDescr =
      Option [] ["cse"] (onOff (toggleOptimize OptCSE) True) "Perform common sub-expression elimination (default on).",
      Option [] ["cfg"] (ReqArg cfgTransform "TRANS") "Enable or disable specific CFG transformations. TRANS = merge, no-merge, bottomup, no-bottomup, ...",
      Option [] ["new-comp"] (NoArg (set $ \o -> o{optNewComp = True})) "Use the new experimental compiler.",
-     dumpOption "source" DumpSource,
-     dumpOption "rebuild" DumpRebuild,
-     dumpOption "extend" DumpExtend,
-     dumpOption "rename" DumpRename,
-     dumpOption "tc" DumpTypeCheck,
-     dumpOption "refresh" DumpRefresh,
-     dumpOption "opt" DumpOptimize,
-     dumpOption "canon" DumpCanon
+     dumpOption "source" Source,
+     dumpOption "rebuild" Rebuild,
+     dumpOption "extend" Extend,
+     dumpOption "rename" Rename,
+     dumpOption "tc" TypeCheck,
+     dumpOption "refresh" Refresh,
+     dumpOption "opt" Optimize,
+     dumpOption "canon" Canon
 
     ]
  where phase       x = set $ \o -> o { optStopAfterPhase = x }
@@ -422,7 +423,7 @@ optDescr =
                               Nothing -> fail $ "Unknown CFG transformation: " ++ x'
                                                 ++ " Known: " ++ show (map fst cfgTransformNames)
 
-       dumpOption s d = Option [] ["dump-"++s] (NoArg (set $ \o -> o { optDump = d:optDump o})) ("Dump output of the " ++ s ++ " phase.")
+       dumpOption s d = Option [] ["dump-"++s] (NoArg (set $ \o -> o { optDump = Dump d:optDump o})) ("Dump output of the " ++ s ++ " phase.")
 
        set = return . Options
 
