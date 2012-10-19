@@ -2,7 +2,7 @@ concrete SentencesCat of Sentences = NumeralCat ** SentencesI - [
   IsMass,
   IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
   WeMale, WeFemale, YouPlurFamMale, YouPlurFamFemale, YouPlurPolFemale, YouPlurPolMale, TheyMale, TheyFemale, 
-  WherePlace, WherePerson, ABePlace,
+  PImperativeFamNeg, PImperativePolNeg, PImperativePlurNeg, --negative imperatives in subjunctive
   Superlative
  ] 
   with 
@@ -52,13 +52,12 @@ lin
       TheyFemale = 
         {name = mkNP (ProDrop they8fem_Pron) ; isPron = True ; poss = mkQuant they_Pron} ; 
 
+    PImperativeFamNeg  v = phrasePlease (ImpNeg (mkNP (ProDrop youSg_Pron)) v) ;
+    PImperativePolNeg  v = phrasePlease (ImpNeg (mkNP (ProDrop youPol_Pron)) v) ;
+    PImperativePlurNeg v = phrasePlease (ImpNeg (mkNP (ProDrop youPl_Pron)) v) ;
 
-   ABePlace p place = mkCl p.name (mkVP (mkVP ser) place.at) ;
-   WherePlace place = mkQS (mkQCl where_IAdv (mkCl place.name ser) ) ;
-   WherePerson person = mkQS (mkQCl where_IAdv (mkCl person.name ser) ) ;
 
 oper
-   ser = mkV (ser_52 "ser") ;
 
    CNPlace : Type = {name : CN ; at : Prep ; to : Prep }  ;
 
