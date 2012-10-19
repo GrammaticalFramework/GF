@@ -43,13 +43,13 @@ import Control.Exception
 ----------------------------------------------------------------------
 -- main conversion function
 
-generatePMCFG :: Options -> [SourceModule] -> SourceModule -> IO SourceModule
-generatePMCFG opts mos cmo@(cm,cmi) = do
+generatePMCFG :: Options -> SourceGrammar -> SourceModule -> IO SourceModule
+generatePMCFG opts sgr cmo@(cm,cmi) = do
   (seqs,js) <- mapAccumWithKeyM (addPMCFG opts gr am cm) Map.empty (jments cmi)
   when (verbAtLeast opts Verbose) $ hPutStrLn stderr ""
   return (cm,cmi{mseqs = Just (mkSetArray seqs), jments = js})
   where
-    gr = mGrammar (cmo:mos)
+    gr = prependModule sgr cmo
     MTConcrete am = mtype cmi
 
 mapAccumWithKeyM :: (Monad m, Ord k) => (a -> k -> b -> m (a,c)) -> a

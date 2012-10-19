@@ -49,9 +49,9 @@ renameSourceTerm g m t = do
   status <- buildStatus g (m,mi)
   renameTerm status [] t
 
-renameModule :: [SourceModule] -> SourceModule -> Check SourceModule
-renameModule ms mo@(m,mi) = do
-  status <- buildStatus (mGrammar ms) mo
+renameModule :: SourceGrammar -> SourceModule -> Check SourceModule
+renameModule gr mo@(m,mi) = do
+  status <- buildStatus gr mo
   js     <- checkMapRecover (renameInfo status mo) (jments mi)
   return (m, mi{jments = js})
 

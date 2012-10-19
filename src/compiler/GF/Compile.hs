@@ -203,25 +203,24 @@ compileSourceModule opts env@(k,gr,_) mb_gfFile mo@(i,mi) = do
                   Nothing     -> return ()
                 extendCompileEnvInt env k Nothing mo1b
     _ -> do
-      let mos = modules gr
 
-      (mo2,warnings) <- putpp "  renaming " $ ioeErr $ runCheck (renameModule mos mo1b)
+      (mo2,warnings) <- putpp "  renaming " $ ioeErr $ runCheck (renameModule gr mo1b)
       warnOut opts warnings
       intermOut opts DumpRename (ppModule Internal mo2)
 
-      (mo3,warnings) <- putpp "  type checking" $ ioeErr $ runCheck (checkModule opts mos mo2)
+      (mo3,warnings) <- putpp "  type checking" $ ioeErr $ runCheck (checkModule opts gr mo2)
       warnOut opts warnings
       intermOut opts DumpTypeCheck (ppModule Internal mo3)
 
       if not (flag optTagsOnly opts)
-        then do (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
+        then do (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,gr) mo3
                 intermOut opts DumpRefresh (ppModule Internal mo3r)
 
-                mo4 <- putpp "  optimizing " $ ioeErr $ optimizeModule opts mos mo3r
+                mo4 <- putpp "  optimizing " $ ioeErr $ optimizeModule opts gr mo3r
                 intermOut opts DumpOptimize (ppModule Internal mo4)
 
                 mo5 <- if isModCnc (snd mo4) && flag optPMCFG opts
-                         then putpp "  generating PMCFG " $ ioeIO $ generatePMCFG opts mos mo4
+                         then putpp "  generating PMCFG " $ ioeIO $ generatePMCFG opts gr mo4
                          else return mo4
                 intermOut opts DumpCanon (ppModule Internal mo5)
 

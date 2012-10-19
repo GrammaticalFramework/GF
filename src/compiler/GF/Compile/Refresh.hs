@@ -106,15 +106,15 @@ refreshEquation pst = err Bad (return . fst) (appSTM (refr pst) initIdState) whe
 
 -- for concrete and resource in grammar, before optimizing
 
-refreshGrammar :: SourceGrammar -> Err SourceGrammar
-refreshGrammar = liftM (mGrammar . snd) . foldM refreshModule (0,[]) . modules
+--refreshGrammar :: SourceGrammar -> Err SourceGrammar
+--refreshGrammar = liftM (mGrammar . snd) . foldM refreshModule (0,[]) . modules
 
-refreshModule :: (Int,[SourceModule]) -> SourceModule -> Err (Int,[SourceModule])
-refreshModule (k,ms) mi@(i,mo)
+refreshModule :: (Int,SourceGrammar) -> SourceModule -> Err (Int,[SourceModule])
+refreshModule (k,sgr) mi@(i,mo)
   | isModCnc mo || isModRes mo = do
       (k',js') <- foldM refreshRes (k,[]) $ tree2list $ jments mo
-      return (k', (i,mo{jments=buildTree js'}) : ms)
-  | otherwise = return (k, mi:ms)
+      return (k', (i,mo{jments=buildTree js'}) : modules sgr)
+  | otherwise = return (k, mi:modules sgr)
  where
   refreshRes (k,cs) ci@(c,info) = case info of
     ResOper ptyp (Just (L loc trm)) -> do   ---- refresh ptyp

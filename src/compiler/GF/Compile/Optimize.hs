@@ -40,8 +40,8 @@ import qualified Data.ByteString.Char8 as BS
 
 -- | partial evaluation of concrete syntax. AR 6\/2001 -- 16\/5\/2003 -- 5\/2\/2005.
 
-optimizeModule :: Options -> [SourceModule] -> SourceModule -> Err SourceModule
-optimizeModule opts ms m@(name,mi)
+optimizeModule :: Options -> SourceGrammar -> SourceModule -> Err SourceModule
+optimizeModule opts sgr m@(name,mi)
   | mstatus mi == MSComplete = do
       ids <- topoSortJments m
       mi <- foldM updateEvalInfo mi ids
@@ -51,11 +51,11 @@ optimizeModule opts ms m@(name,mi)
    oopts = opts `addOptions` mflags mi
 
    updateEvalInfo mi (i,info) = do
-     info <- evalInfo oopts ms (name,mi) i info
+     info <- evalInfo oopts sgr (name,mi) i info
      return (mi{jments=updateTree (i,info) (jments mi)})
 
-evalInfo :: Options -> [SourceModule] -> SourceModule -> Ident -> Info -> Err Info
-evalInfo opts ms m c info = do
+evalInfo :: Options -> SourceGrammar -> SourceModule -> Ident -> Info -> Err Info
+evalInfo opts sgr m c info = do
 
  (if verbAtLeast opts Verbose then trace (" " ++ showIdent c) else id) return ()
 
@@ -95,7 +95,7 @@ evalInfo opts ms m c info = do
 
   _ ->  return info
  where
-   gr = mGrammar (m : ms)
+   gr = prependModule sgr m
    optim = flag optOptimizations opts
    param = OptParametrize `Set.member` optim
    eIn cat = errIn (render (text "Error optimizing" <+> cat <+> ppIdent c <+> colon))

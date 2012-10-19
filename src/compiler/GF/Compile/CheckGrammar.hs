@@ -45,11 +45,11 @@ import Control.Monad
 import Text.PrettyPrint
 
 -- | checking is performed in the dependency order of modules
-checkModule :: Options -> [SourceModule] -> SourceModule -> Check SourceModule
-checkModule opts mos mo@(m,mi) = do
-  checkRestrictedInheritance mos mo
+checkModule :: Options -> SourceGrammar -> SourceModule -> Check SourceModule
+checkModule opts sgr mo@(m,mi) = do
+  checkRestrictedInheritance sgr mo
   mo <- case mtype mi of
-          MTConcrete a -> do let gr = mGrammar (mo:mos)
+          MTConcrete a -> do let gr = prependModule sgr mo
                              abs <- checkErr $ lookupModule gr a
                              checkCompleteGrammar gr (a,abs) mo
           _            -> return mo
@@ -57,18 +57,19 @@ checkModule opts mos mo@(m,mi) = do
   foldM updateCheckInfos mo infoss
   where
     updateCheckInfos mo = fmap (foldl update mo) . parallelCheck . map check
-      where check (i,info) = fmap ((,) i) (checkInfo opts mos mo i info)
+      where check (i,info) = fmap ((,) i) (checkInfo opts sgr mo i info)
     update mo@(m,mi) (i,info) = (m,mi{jments=updateTree (i,info) (jments mi)})
 
 -- check if restricted inheritance modules are still coherent
 -- i.e. that the defs of remaining names don't depend on omitted names
-checkRestrictedInheritance :: [SourceModule] -> SourceModule -> Check ()
-checkRestrictedInheritance mos (name,mo) = checkIn (ppLocation (msrc mo) NoLoc <> colon) $ do
+checkRestrictedInheritance :: SourceGrammar -> SourceModule -> Check ()
+checkRestrictedInheritance sgr (name,mo) = checkIn (ppLocation (msrc mo) NoLoc <> colon) $ do
   let irs = [ii | ii@(_,mi) <- mextend mo, mi /= MIAll]  -- names with restr. inh.
   let mrs = [((i,m),mi) | (i,m) <- mos, Just mi <- [lookup i irs]]
                              -- the restr. modules themself, with restr. infos
   mapM_ checkRem mrs
  where
+   mos = modules sgr
    checkRem ((i,m),mi) = do
      let (incl,excl) = partition (isInherited mi) (map fst (tree2list (jments m)))
      let incld c   = Set.member c (Set.fromList incl)
@@ -153,8 +154,8 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = checkIn (ppLocation (msrc cnc) NoLoc
 
 -- | General Principle: only Just-values are checked. 
 -- A May-value has always been checked in its origin module.
-checkInfo :: Options -> [SourceModule] -> SourceModule -> Ident -> Info -> Check Info
-checkInfo opts ms (m,mo) c info = do
+checkInfo :: Options -> SourceGrammar -> SourceModule -> Ident -> Info -> Check Info
+checkInfo opts sgr (m,mo) c info = do
   checkIn (ppLocation (msrc mo) NoLoc <> colon) $
     checkReservedId c
   case info of
@@ -253,7 +254,7 @@ checkInfo opts ms (m,mo) c info = do
 
     _ ->  return info
  where
-   gr = mGrammar ((m,mo) : ms)
+   gr = prependModule sgr (m,mo)
    chIn loc cat = checkIn (ppLocation (msrc mo) loc <> colon $$ 
                            nest 2 (text "Happened in" <+> text cat <+> ppIdent c))
 
