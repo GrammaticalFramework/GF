@@ -5,33 +5,8 @@ concrete StructuralSpa of Structural = CatSpa **
   flags optimize=all ;
 
 lin
-
-  -- Added by John J. Camilleri 2012-05-23
-  -- These were all missing from the Spanish RG.
-  -- Implementations copied from catalan/StructuralCat.gf, but likely buggy.
-  at_least_AdN = ss "al menos" ;
-  at_most_AdN = ss "a lo más" ;
-  except_Prep = mkPrep "excepto" ;
   -- have_V3
   -- have_not_V3
-  how8much_IAdv = ss "cuanto" ;
-  if_then_Conj = {s1 = "si" ; s2 = "entonces" ; n = Sg ; lock_Conj = <>} ;
-  no_Quant =
-    let
-      capS : Str = "hacia" ;
-      cap : ParadigmsSpa.Number => ParadigmsSpa.Gender => Case => Str = table {
-        Sg => \\g,c => prepCase c ++ genForms capS capS ! g ;
-        Pl => \\g,c => prepCase c ++ genForms capS capS ! g
-        }
-    in {
-      s = \\_ => cap ;
-      sp = cap ;
-      s2 = [] ; isNeg = True
-    } ;
-  not_Predet = {s = \\a,c => prepCase c ++ "no" ; c = Nom ; a = PNoAg} ;
-  nobody_NP = pn2npNeg (mkPN "nadie") ;
-  nothing_NP = pn2npNeg (mkPN "nada") ;
-  --
 
   above_Prep = mkPrep "sobre" ;
   after_Prep = {s = ["despues"] ; c = MorphoSpa.genitive ; isDir = False} ;
@@ -42,8 +17,10 @@ lin
     } ;
   almost_AdA, almost_AdN = ss "casi" ;
   always_AdV = ss "siempre" ;
-  although_Subj = ss "benché" ** {m = Conjunct} ;
+  although_Subj = ss "aunque" ** {m = Conjunct} ;
   and_Conj = {s1 = [] ; s2 = etConj.s ; n = Pl} ;
+  at_least_AdN = ss "al menos" ;
+  at_most_AdN = ss "a lo más" ;
   because_Subj = ss "porque" ** {m = Indic} ;
   before_Prep = {s = "antes" ; c = MorphoSpa.genitive ; isDir = False} ;
   behind_Prep = {s = "detrás" ; c = MorphoSpa.genitive ; isDir = False} ;
@@ -54,29 +31,30 @@ lin
   by8means_Prep = mkPrep "por" ;
   can8know_VV = mkVV (verboV (saber_71 "saber")) ;
   can_VV = mkVV (verboV (poder_58 "poder")) ;
-  during_Prep = mkPrep "durante" ; ----
+  during_Prep = mkPrep "durante" ; 
   either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
   everybody_NP = makeNP ["todos"] Masc Pl ;
-  every_Det = {s,sp = \\_,_ => "cada" ; n = Sg ; s2 = [] ; isNeg = False} ;
+  every_Det = mkDeterminer "cada" "cada" Sg False ;
   everything_NP = pn2np (mkPN ["todo"] Masc) ;
   everywhere_Adv = ss ["en todas partes"] ;
-  few_Det  = {
-    s,sp = \\g,c => prepCase c ++ genForms "pocos" "pocas" ! g ; n = Pl ; s2 = [] ; isNeg = False} ;
+  except_Prep = mkPrep "excepto" ;
+  few_Det = mkDeterminer "pocos" "pocas" Pl False ;
 ---  first_Ord = {s = \\ag => (regA "primero").s ! Posit ! AF ag.g ag.n} ;
   for_Prep = mkPrep "para" ;
   from_Prep = complGen ; ---
   he_Pron = 
     mkPronoun 
-     "el" "lo" "le" "él"
+     "él" "lo" "le" "él"
      "su" "su" "sus" "sus"
       Masc Sg P3 ;
-  here_Adv = mkAdv "aquí" ;		-- acá
-  here7to_Adv = mkAdv ["para acá"] ;
-  here7from_Adv = mkAdv ["de acá"] ;
+  here_Adv = mkAdv "aquí" ;
+  here7to_Adv = mkAdv ["para aquí"] ;
+  here7from_Adv = mkAdv ["de aquí"] ;
   how_IAdv = ss "como" ;
-  how8many_IDet = 
-    {s = \\g,c => prepCase c ++ genForms "cuantos" "cuantas" ! g ; n = Pl} ;
+  how8many_IDet = mkIDet "cuantos" "cuantas" Pl ;
+  how8much_IAdv = ss "cuanto" ;
   if_Subj = ss "si" ** {m = Indic} ;
+  if_then_Conj = {s1 = "si" ; s2 = "entonces" ; n = Sg ; lock_Conj = <>} ;
   in8front_Prep = {s = "delante" ; c = MorphoSpa.genitive ; isDir = False} ;
   i_Pron = 
     mkPronoun
@@ -86,19 +64,32 @@ lin
   in_Prep = mkPrep "en" ;
   it_Pron = 
     mkPronoun
-      "el" "lo" "le" "él"
+      "él" "lo" "le" "él"
       "su" "su" "sus" "sus"
       Masc Sg P3 ;
   less_CAdv = X.mkCAdv "menos" conjThan ; ----
-  many_Det = {
-    s,sp = \\g,c => prepCase c ++ genForms "muchos" "muchas" ! g ; n = Pl ; s2 = [] ; isNeg = False} ;
+  many_Det = mkDeterminer "muchos" "muchas" Pl False ;
   more_CAdv = X.mkCAdv "más" conjThan ;
   most_Predet = {s = \\_,c => prepCase c ++ ["la mayor parte"] ; c = CPrep P_de ;
     a = PNoAg} ;
-  much_Det = {
-    s,sp = \\g,c => prepCase c ++ genForms "mucho" "mucha" ! g ; n = Sg ; s2 = [] ; isNeg = False} ;
+  much_Det = mkDeterminer "mucho" "mucha" Sg False ;
   must_VV = mkVV (verboV (deber_6 "deber")) ;
+  no_Quant =
+    let
+      ningun : ParadigmsSpa.Number => ParadigmsSpa.Gender => Case => Str = table {
+        Sg => \\g,c => prepCase c ++ genForms "ningún" "ninguna" ! g ;
+        Pl => \\g,c => prepCase c ++ genForms "ningunos" "ningunas" ! g
+        }
+    in {
+      s = \\_ => ningun ;
+      sp = ningun ;
+      s2 = [] ; isNeg = True
+    } ;
   no_Utt = ss "no" ;
+  not_Predet = {s = \\a,c => prepCase c ++ "no" ; c = Nom ; a = PNoAg} ;
+  nobody_NP = pn2npNeg (mkPN "nadie") ;
+  nothing_NP = pn2npNeg (mkPN "nada") ;
+
   on_Prep = mkPrep "sobre" ;
 ---  one_Quant = {s = \\g,c => prepCase c ++ genForms "uno" "una" ! g} ;
   only_Predet = {s = \\_,c => prepCase c ++ "solamente" ; c = Nom ;
@@ -115,42 +106,21 @@ lin
       "su" "su" "sus" "sus"
       Fem Sg P3 ;
   so_AdA = ss "tanto" ;
-  somebody_NP = pn2np (mkPN ["algún"] Masc) ;
-  somePl_Det = {
-    s,sp = \\g,c => prepCase c ++ genForms "algunos" "algunas" ! g ; n = Pl ; s2 = [] ; isNeg = False} ;
-  someSg_Det = {
-    s,sp = \\g,c => prepCase c ++ genForms "algun" "alguna" ! g ; n = Sg ; s2 = [] ; isNeg = False} ;
+  somebody_NP = pn2np (mkPN "alguien" Masc) ;
+  somePl_Det = mkDeterminer "algunos" "algunas" Pl False ;
+  someSg_Det = mkDeterminer "algún" "alguna" Sg False ; 
   something_NP = pn2np (mkPN ["algo"] Masc) ;
-  somewhere_Adv = ss ["en ninguna parte"] ;
-  that_Quant =
-    let ese : ParadigmsSpa.Number => ParadigmsSpa.Gender => Case => Str = table {
-      Sg => \\g,c => prepCase c ++ genForms "ese" "esa" ! g ;
-      Pl => \\g,c => prepCase c ++ genForms "esos" "esas" ! g
-      }
-    in {
-    s = \\_ => ese ;
-    sp = ese ; 
-    s2 = [] ; isNeg = False
-    } ;
-  there_Adv = mkAdv "allí" ;		-- allá
-  there7to_Adv = mkAdv ["para allá"] ;
-  there7from_Adv = mkAdv ["de allá"] ;	
+  somewhere_Adv = ss ["en alguna parte"] ;
+  that_Quant = mkQuantifier "ese" "esa" "esos" "esas" ;
+  there_Adv = mkAdv "allí" ; -- allá
+  there7to_Adv = mkAdv ["para allí"] ;
+  there7from_Adv = mkAdv ["de allí"] ;
   therefore_PConj = ss ["por eso"] ;
   they_Pron = mkPronoun
     "ellos" "los" "les" "ellos"
     "su" "su" "sus" "sus"
     Masc Pl P3 ;
-  this_Quant = 
-    let este : ParadigmsSpa.Number => ParadigmsSpa.Gender => Case => Str = table {
-      Sg => \\g,c => prepCase c ++ genForms "este" "esta" ! g ;
-      Pl => \\g,c => prepCase c ++ genForms "estos" "estas" ! g
-      }
-    in {
-    s = \\_ => este ;
-    sp = este ; 
-    s2 = [] ; isNeg = False
-    } ;
-
+  this_Quant = mkQuantifier "este" "esta" "estos" "estas" ;
   through_Prep = mkPrep "por" ;
   too_AdA = ss "demasiado" ;
   to_Prep = complDat ;
@@ -174,22 +144,22 @@ lin
    } ;
   whoPl_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Masc Pl} ;
   whoSg_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Masc Sg} ;
-  why_IAdv = ss "porqué" ;
+  why_IAdv = ss ["por qué"] ;
   without_Prep = mkPrep "sin" ;
   with_Prep = mkPrep "con" ;
   yes_Utt = ss "sí" ;
   youSg_Pron = mkPronoun 
-    "tu" "te" "te" "tí"
+    "tú" "te" "te" "ti"
     "tu" "tu" "tus" "tus"
     Masc Sg P2 ;
   youPl_Pron =
     mkPronoun
-      "vosotros" "vos" "vos" "vosotros"
+      "vosotros" "os" "os" "vosotros"
       "vuestro" "vuestra" "vuestros" "vuestras"
       Masc Pl P2 ;
   youPol_Pron =
     mkPronoun
-      "usted" "la" "le" "usted"
+      "usted" "lo" "le" "usted"
       "su" "su" "sus" "sus"
       Masc Sg P3 ;
 
