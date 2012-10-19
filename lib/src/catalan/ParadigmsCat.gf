@@ -160,7 +160,7 @@ oper
 -- them to prefix ones (i.e. ones placed before the noun in
 -- modification, as in "gran casa"), the following function is
 -- provided.
--- JS: What about vi bÛ -> bon vi ?
+-- JS: What about vi bo -> bon vi ?
 
   prefixA : A -> A ; -- adjective before noun (default: after)
 
@@ -320,6 +320,7 @@ oper
 
   mk5A a b c d e = 
    compADeg {s = \\_ => (mkAdj a b c d e).s ; isPre = False ; lock_A = <>} ;
+  mk2A a b = compADeg {s = \\_ => (mkAdj2Reg a b).s ; isPre = False ; lock_A = <>} ;
   regA a = compADeg {s = \\_ => (mkAdjReg a).s ; isPre = False ; lock_A = <>} ;
   prefA a = {s = a.s ; isPre = True ; lock_A = <>} ;
 
@@ -422,11 +423,13 @@ oper
 
   mkA = overload {
     mkA : (util : Str) -> A  = regA ;
+    mkA : (lleig,lletja : Str) -> A = mk2A ;
     mkA : (fort,forta,forts,fortes,fortament : Str) -> A = mk5A ;
     mkA : (bo : A) -> (millor : A) -> A = mkADeg ;
     } ;
 
   mk5A : (fort,forta,forts,fortes,fortament : Str) -> A ;
+  mk2A : (lleig,lletja : Str) -> A ;
   regA : Str -> A ;
   mkADeg : A -> A -> A ;
   compADeg : A -> A ;
