@@ -1,0 +1,342 @@
+Chinese resource grammar experiment
+
+(c) Aarne Ranta 2012
+
+Idea: bootstrap a complete resource grammar by
+- cloning files from another language (Thai)
+- extracting lexicon from available sources (Swadesh, HSK list, Google translate)
+- fixing the errors in syntax and lexicon
+- testing the grammar in applications
+
+With next to now knowledge of Chinese, but access to web sources, a grammar book
+
+  Claudia Ross and Jing-heng Sheng Ma, 
+  Modern Mandarin Chinese Grammar. A Practical Guide,
+  Routledge, 
+  London and New York, 
+  2006.
+ 
+and an extended mini resource by Jolene Zhuo Lin qiqige
+and comments on that from Inari Listenmaa. And also Haiyan Qiao's Numeral implementation 
+from 1999.
+
+The question is how good it will be before the visit to Shanghai in two weeks, 
+and how much work will be needed to fix everything. But so far I feel like the
+guy in Searle's "Chinese Room", http://en.wikipedia.org/wiki/Chinese_room
+
+
+5/10/2012
+
+Clone chinese/*Chi.gf from thai/*Tha.gf by 
+
+  runghc lib/src/Clone.hs Tha Chi
+
+This compiles directly, omitting Lexicon and Structural but producing some Thai words, visible with 
+
+  pg -words
+
+Then port parts of examples/extmini/*Cmn.gf appending them to Lexicon, Structural, Paradigms, Res.
+Tweak until everything compiles. For simplicity, retain lincat's of Thai.
+
+Then identify Thai words with 'pg -words', and locate them with 'ma'. Replace them with constants
+in ResChi, initialized with defaultStr = "". 17 such constants are needed. StringsChi can be eliminated.
+It was a transient part of Tha anyway.
+
+Copy examples/numerals/chinese.gf to NumeralChi.gf. Change the "formal" numerals (used mainly for money) 
+to the "normal" ones.
+
+We now have 47 words (Chinese characters), 
+
+  Lang> pg -words
+  0 1 2 3 4 5 6 7 8 9 万 个 他 他们 仟 伍 你 你们 佰 叁 壹 壹万 壹拾 
+  壹拾壹 大 女人 她 好奇 小 我 我们 房子 拾 拾万 拾壹 拾壹万 捌 柒 树 棵 
+  每 玖 男人 睡 知道 约翰 绿 肆 贰 走 这 那 间 陆 零 非常
+
+and thousands of linearizable Cl. With Thai word order so far. And all these blank (defaultStr)
+function words.
+
+  男人 绿 大 非常 每 男人 绿 走 大
+  every green man very bigly is being walking bigly
+
+  约翰 睡
+  John sleeps
+
+  约翰 睡
+  John is sleeping
+
+  他 知道 约翰 走
+  he knows that John would have walked
+
+  每 走
+  everyone walks
+
+  你们 知道 走
+  you know that one will walk
+
+  房子 我们 绿 男人
+  greenest house we is being a man
+
+  这 走 小
+  this is being walking smally
+
+Ca. 2 hours of work has gone to all this.
+
+Next step: Chinese Swadesh list, http://en.wiktionary.org/wiki/Appendix:Mandarin_Swadesh_list
+
+  -- №	English word	POS	Pinyin	IPA	notes	Traditional Chinese	Simplified Chinese
+
+  > let analyse line = case words line of n:eng:ws | all Data.Char.isDigit n -> eng ++ " " ++ last ws ; _ -> ""
+  > readFile "swadesh.txt" >>= mapM_ (putStrLn . analyse) . lines
+
+After most of this is done, we have 218 words:
+
+  一些 万 丈夫 个 云 什么 什么时候 他 他们 仟 伍 你 你们 佰 光滑 冰 冷 刺 割 劈开  
+  动物 厚 叁 叶 吃 名 吐 听 吵架 吹 呕 呼吸 和 咬 哪里 唱 喝 嗅 嘴 因为 圆 在...里 
+  地球 坏 坐 壹 壹万 壹拾 壹拾壹 多 夜晚 大 天 太阳 头 头发 女人 她 好 好奇 如何 如果   
+  妻子 孩子 宽 对 小 少 尖 尘土 尾 山 干 年 心脏 怕 想 我 我们 房子 手 打 打猎 扔 拉 
+  拾 拾万 拾壹 拾壹万 指甲 挖 挤 捌 推 揉 握 搔 擦 数 新 星 月亮 杀 来 柒 树 树枝 树皮 
+  根 森林 棵 死 每 水 水果 沙 河 洗 活 流 浮 海 温暖 游泳 湖 湿 满 火 灰 烂 烟 爱 牙齿 
+  狗 玖 玩 男人 白 白天 皮 盐 直 看 眼睛 睡 知道 短 石 种子 窄 站 笑 红 约翰 绑 结冰 绳 
+  绿 缝 羽毛 翼 老 耳朵 肆 肉 肚子 肝 肠子 背 胸 脂肪 脏 脖子 脚 腿 膝 膨胀 舌 花 草 落下 
+  薄 虫 虱 蛇 蛋 血 角 谁 贰 走 路 躺 转 近 这 这里 那 那里 重 钝 长 间 陆 雨 雪 零 雾 
+  非常 风 飞 骨 鱼 鸟 黄 黑 鼻
+
+We have more than a half left:
+
+  Lang> pg -missing -lang=Chi | ? wc -w
+  329 _tmpi
+
+But we get more interesting sentences:
+
+  Lang> gr -number=8 PredVP ? ? | l  
+  白天 满 冷 多 个 好奇 你们 谁
+  many cold fuller days wonder who you weren't
+
+  胸 黄 红 一些 胸 数
+  some red breast yellowly is counted
+
+  头 握 多 头 看
+  many heads to be held see themselves
+
+  丈夫 那里 对 他 擦
+  his husbands there correctly are wiping them
+
+  约翰 躺
+  John lies
+  
+  地球 这里 非常 刺 知道 我们 站
+  earth very here stabbed knows that we wouldn't have stood
+
+  多 那里 那里 想 在...里 她
+  many there there are being thinking in her
+
+  尘土 每 个 那里 握
+  every dust there holds itself
+
+Ca. 30 minutes for this phase, 2h30 total.
+
+Now let's take the missing words and try to look them up the in HSK1 word list.
+Now we have 218 left, less than 200 really missing. But potentially some junk. 
+
+Some more words found in Google translate. Guessing mkVA and other complex subcats.
+Now we have 126 left, less than 100 really missing. pg -words shows 404 Chinese words:
+
+…之间 一 一些 万 丈夫 上边 下 不 丢 个 中 为了 为什么 书 买 云 人 什么 什么时候 
+今天 从 从前 他 他们 仟 以后 件 伍 会 但是 你 你们 佰 做 光滑 公寓 写 冰 冰箱 冷 
+刺 前边 割 劈开 动物 医生 卖 厚 原则上 去 叁 发现 变 只 台 右 叶 号 吃 名 吐 吗 
+听 吵架 吸 吹 呕 呼吸 和 和平 咬 哪里 唱 商店 啤酒 喜欢 喝 嗅 嘴 回答 因为 国 国王
+圆 在 在...里 地板 地毯 地球 坏 坐 块 塑料制成 壹 壹万 壹拾 壹拾壹 多 夜晚 大 大学 
+天 天花板上 太 太阳 头 头发 女人 女王 奶 奶酪 她 好 好奇 如何 如果 妹妹 妻子 姑娘 
+婴儿 存在 学 学校 学生 孩子 它 宗教 宽 寄 对 小 少 尖 尘土 尾 屋顶 山 工业 工厂 
+左 已经 市 希望 帽子 干 干净 年 年轻 开 弟弟 往 心脏 必须 忘 怕 想 愿意 懂 我 
+我们 或者 战 房子 所 手 手套 打 打猎 扔 报 拉 拾 拾万 拾壹 拾壹万 指甲 挖 挤 
+捌 推 揉 握 搔 摄像头 摆 擦 收音机 敌人 教 教堂 数 新 旅行 时间 星 星球 是 是否 
+最 月亮 有 朋友 木 机 杀 村庄 来 柒 树 树枝 树皮 根 桌子 森林 棵 椅子 次 歌 死 
+母亲 每 比 水 水果 汽车 沙 河 油 洗 活 流 浮 海 海港 温暖 游泳 湖 湿 满 漂亮 火 
+火车 灯 灰 炉子 烂 烟 烧 热 爱 父亲 牙齿 牛 牧师 状物 狗 猫 玖 玩 玩儿 现在 
+电视 男人 男孩 画 白 白天 的 的橡胶 的距离 皮 皮革 盐 直 看 眼睛 睡 知道 短 
+石 石头 离 种 种子 科学 窄 窗 站 笑 笔 等 红 约翰 纸 绑 结冰 给 绳 绿 缝 羊 
+羽毛 翼 老 老师 老板 耳朵 肆 肉 肚子 肝 肠子 背 胸 脂肪 脏 脖子 脚 腿 膝 膨胀 
+自己 自行车 舌 船 艺术 花 花园 苹果 草 落下 蓝 薄 虫 虱 虽然 蛇 蛋 血 衣服 表弟
+ 衬衫 袜子 被 角 警察 计算机 语法 语言 说 读 谁 贰 赢 走 跑 路 跳 躺 转 近 还是 
+这 这里 远 道理 那 那里 酒 重 重要 金 钝 钢 铁 银 银行 长 门 问 问题 间 陆 除了…
+以外 雨 雪 零 雾 非常 面包 鞋 音乐 风 飞 飞机 饭店 马 骨 鱼 鸟 黄 黄油 黑 鼻
+
+
+4h work for a compiling grammar with a decently sized lexicon. The next thing
+is to fix the worst bugs, in particular in word order.
+
+
+6/10
+
+Started a test set for syntax, with 54 sentences testing predication and noun 
+phrase formation. The first run, baseline.txt, uses the Thai-based syntax.
+
+As the first thing, revised the order of determiners in an NP, and the place of
+adverbs in VP. Det lincats seem to be too rich, whereas Cl may need to be made 
+discontinuous, to enable the proper place of IAdv. This is correct in Jolene's 
+code.
+
+3h of work today, total 7h.
+
+
+7/10
+
+Ported Jonele's lincat's everywhere, eliminated Thai-style identifiers. Difficult
+to choose default tenses. But the code is nice to work with.
+
+4h today, total 11h.
+
+
+8/10
+
+Refactored clause building with an overloaded ResChi.mkClause. Added existentials with the verb
+you_s. Very uncertain on many things, time to call an expert.
+
+1h today, total 12h.
+
+Following a suggestion by Thomas Hallgren, divided multicharacter words to as many tokens as 
+there are characters. This means all division into tokens is performed by the parser, which in a
+sense is optimal. To "remove" spaces in linearization, simply use l -unchars; to "insert" spaces
+in parsing, use pt -chars | p. All this is done by the oper ResChi.word, which can be changed
+to change this behaviour.
+
+
+12/10
+
+Went through some open questions with Jolene. Then fixed some parameters for Det and Adv and prepared 
+Lexicon and Structural for her inspection and completions.
+
+5h my time today, 3h Jolene's, total 20h.
+
+
+14/10
+
+Lexicon and Structural checked and completed by Jolene. Some open issues found by Jolene, hopefully to be fixed this week:
+  - generics for weather -> Extra
+  - "something" -> Extra (stg for event vs. physical object)
+  - relative clause with complex RP -> postpone; discontinuous?
+  - adjectives for animates -> leave to semantics (cf. Thai)
+  - weather verbs rather VP's -> leave to semantic lexicon
+  - markers 把(marker for direct-object), 被(marker for indirect-object) -> fix for V2A, V3 with ba
+  - positions of the parts of Subj -> fix by introducing particles before or after the subject of the main clause
+  - the three de particles: 的，地，得”-> OK now
+     的 ： Adj/AP ++ "的" ++ NP                     
+   “地”： Adv ++ “地” ++ V                     e.g. 飞快(fly fast)地(de)跑(run)
+“   得”： V ++ “得” ++ Adv(complement)         e.g. 跑(run)得(de)快(fast)
+
+
+5h Jolene's time, total 25h.
+
+15/10
+
+GF/lib/src/chinese/ complete and compilable! Added to darcs by AR.
+
+Issues from 
+
+  Yip-Po Ching and Don Rimmington, 
+  Basic Chinese. A Grammar and Workbook, 
+  Routledge, 
+  London and New York, 
+  2009.
+
+p. 4 the dun-comma in lists DONE
+
+p. 28 "who is X" vs. "X is who"
+
+p. 38 er -> liang before a measure word
+
+p. 41 ordinals require measure words: di yi ge xuesheng -> possessive + ord + class ; no the + ord
+
+p. 44 how many - duoshao vs. ji -> ji sui(how many years, to kids)
+
+p. 63 possessive precedes indefinite plural: wo de hen duo pengyou "many of my friends"
+
+p. 94 degree + adjective + de + noun: hen da de wuzi
+
+p. 95 no copula in adjectival predication -> use hen
+
+p. 96 adjectives negated by bu
+
+p. 97 AB -> AABB reduplication
+
+p. 104 non-gradable adjectives require shi: zhei tiao yu shi huo de -> keep this as general rule for APs so far
+
+p. 106 it was Chinese that I studied -> move cleft to the end DONE 16/10
+
+p. 116 I did it better than you -> to implement
+
+p. 128 disyllabic place words
+
+p. 155-158 mapping tenses to aspects
+
+p. 168 "can": hui/neng
+
+p. 174 negation and tense
+
+p. 185 yes/no DONE
+
+p. 186 alternation questions
+
+p. 197 "or" haishi/huozhe
+
+p. 206 "please" in imperative
+
+p. 207 "let's" zanmen he yi bei ba  DONE 16/10
+
+p. 242 coverbs
+
+p. 255 disyllabic prepositions
+
+
+Today's work 6h AR, 3h Jolene. Total 29h. 
+
+Jolene worked 3 weeks for the extended mini Chinese. This means the complete (but not yet perfect) Chinese
+RGL implementation took 4 person weeks altogether. The remaining immediate fixes shouldn't take a lot of time.
+However, there is a lot of Chinese that we will leave outside the common RGL abstract syntax.
+
+
+16/10
+
+Some more changes in the (almost) complete Chi. It has 546 words:
+
+0 1 2 3 4 5 6 7 8 9 、 。 一 七 万 丈 三 上 下 不 丑 业 丢 两 个 中 为 么 之 乎 乐 九 乞 书 买 了 争 事 二 
+云 五 些 亮 亲 人 什 今 从 他 以 们 件 会 但 位 何 你 候 做 停 像 儿 光 八 公 六 关 写 冰 冷 净 准 几 则 到 
+刺 前 副 割 劈 加 动 包 匹 医 十 千 单 卖 厂 厌 厚 去 又 友 发 变 只 可 台 右 叶 号 吃 名 后 吐 吗 吧 听 吸 
+吹 呕 呼 和 咬 咱 哪 唉 唱 商 啤 喜 喝 嘴 四 回 因 园 国 圆 土 在 地 场 坏 坐 块 城 堂 堆 塑 处 备 外 多 夜 
+大 天 太 夫 头 奇 套 女 奶 她 好 如 妹 妻 姑 娘 婚 婴 子 字 学 孩 它 宗 定 家 宽 寄 寓 察 对 寻 小 少 尖 尘 
+就 尾 屋 山 工 左 己 已 巴 市 师 希 常 帽 干 平 年 庄 店 座 开 弟 张 往 很 得 心 必 忘 怕 您 想 懂 我 或 战 
+房 所 扇 手 打 扔 把 报 拉 指 挖 挤 推 揉 握 搔 摄 摆 擦 收 敌 教 数 文 料 新 旁 旅 时 明 星 是 晚 暖 更 最 
+月 有 朋 服 望 期 木 本 术 朵 机 杀 村 条 来 杯 板 林 果 枝 架 某 树 校 根 桌 桶 棕 森 棵 椅 橡 欢 歌 止 此 
+死 母 每 比 毛 毯 水 求 汽 沙 没 河 油 法 泳 洗 活 流 浮 海 温 港 游 湖 湿 滑 满 滴 漂 火 灯 灰 炉 烂 烟 烧 
+热 然 爱 父 片 牙 牛 牧 物 狗 猎 猫 王 玩 现 球 理 瓶 生 甲 电 男 画 白 百 的 皮 盏 盐 盒 盖 直 看 眼 着 睛 
+睡 知 短 石 码 破 确 离 种 科 空 窄 窗 站 笑 笔 笨 第 等 答 简 算 箱 粒 红 约 纸 经 绑 结 给 绳 绿 缝 羊 羽 
+翅 翰 老 而 耳 聪 肉 肚 肝 肠 肪 胀 背 胶 胸 能 脂 脏 脖 脚 腿 膀 膝 膨 自 舌 船 艘 艺 花 苹 草 落 蓝 薄 虫 
+虱 虽 蛇 蛋 血 行 衣 表 衫 衬 袜 被 要 规 视 角 言 警 计 讨 语 说 请 读 谁 赢 走 起 趣 跑 距 路 跳 躺 车 转 
+轻 辆 边 过 近 还 这 远 通 道 那 酒 酪 里 重 金 钝 钢 铁 银 长 门 闭 问 间 闻 阳 阵 除 雨 雪 零 雾 非 面 革 
+靴 鞋 音 顶 项 须 颗 题 风 飞 饭 首 马 骨 鱼 鸟 黄 黎 黑 鼻 齿 ！ ， ？
+
+Also updated the Pinyin version and created a Makefile to convert Chi to Cmn.
+
+
+19/10
+
+Evaluation results for Synopsis terms from Jolene, file eng_chi2.txt. Summary:
+
+  GOOD 295  68%
+  SOSO  66  15%
+  BAD   76  17%
+
+The annotation guidelines were:
+
+  GOOD   -- grammatically correct rendering of the English meaning
+  SOSO   -- grammatically correct in some conditions, but means something different, or is strange with these words
+  BAD    -- grammatically incorrect
+
+Some statistics on the BAD's: 
+
+  10  "constant not found" errors, for structural words.
+   5  in Numerals - maybe result from my bad conversion of Qiao's code?
+
+
+
