@@ -1,6 +1,7 @@
 concrete ExtraSpa of ExtraSpaAbs = ExtraRomanceSpa ** 
-  open CommonRomance, PhonoSpa, MorphoSpa, ParadigmsSpa, ParamX, ResSpa in {
-
+  open CommonRomance, PhonoSpa, MorphoSpa, ParadigmsSpa, ParamX, ResSpa, 
+  Prelude in {
+  
   lin
     i8fem_Pron =  mkPronoun
       "yo" "me" "me" "mí"
@@ -22,11 +23,11 @@ concrete ExtraSpa of ExtraSpaAbs = ExtraRomanceSpa **
     whoSg8fem_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Fem Sg} ;
 
     youSg8fem_Pron = mkPronoun 
-      "tu" "te" "te" "tí"
+      "tú" "te" "te" "ti"
       "tu" "tu" "tus" "tus"
       Fem Sg P2 ;
     youPl8fem_Pron = mkPronoun
-      "vosotras" "vos" "vos" "vosotras"
+      "vosotras" "os" "os" "vosotras"
       "vuestro" "vuestra" "vuestros" "vuestras"
       Fem Pl P2 ;
     youPol8fem_Pron = mkPronoun
@@ -43,5 +44,9 @@ concrete ExtraSpa of ExtraSpaAbs = ExtraRomanceSpa **
       "su" "su" "sus" "sus"
       Fem Pl P3 ;
 
-
+   --IL 2012-10-12
+   ImpNeg np vp = lin Utt{ 
+      s = (mkClause (np.s ! Nom).comp np.hasClit False np.a vp).s 
+          ! DInv ! RPres ! Simul ! RNeg False ! Conjunct
+      } ;
 }
