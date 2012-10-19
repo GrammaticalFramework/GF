@@ -9,7 +9,8 @@
 -- gives a higher-level access to this module.
 
 resource MorphoSpa = CommonRomance, ResSpa ** 
-  open PhonoSpa, Prelude, Predef in {
+  open PhonoSpa, Prelude, Predef,
+  CatSpa in {
 
   flags optimize=all ;
 
@@ -101,7 +102,8 @@ oper
           "á" => "a" ;
           "é" => "e" ;
           "í­" => "i" ;
-          "ó" => "o"
+	  "ó" => "o" ;
+	  "ú" => "u"
         } ;
         alemVn : Str = alem + V + "n" ;
     in mkAdj alemAn (alemVn + "a") (alemVn + "es")
@@ -114,7 +116,6 @@ oper
       _ + "és" => adjEs solo ;
       _ + ("á" | "é­" | "í" | "ó")  + "n" => adjVn solo ;
       _   => adjUtil solo (solo + "es")
-----      _   => adjBlu solo
       } ;
 
 --2 Personal pronouns
@@ -154,4 +155,42 @@ oper
 
   pronForms : Adj -> Gender -> Number -> Str = \tale,g,n -> tale.s ! AF g n ;
 
+  mkOrdinal : A -> Ord = \adj->
+  lin Ord {
+    s = \\ag => adj.s ! Posit ! AF ag.g ag.n ;
+    } ;
+
+  mkQuantifier : (ese,esa,esos,esas : Str) -> Quant = \ese,esa,esos,esas->
+    let 
+      se  : Str = Predef.drop 1 ese ;
+      sa  : Str = Predef.drop 1 esa ;
+      sos : Str = Predef.drop 1 esos ;
+      sas : Str = Predef.drop 1 esas ;
+      E   : Str = "é" ;
+      attrforms : Number => Gender => Case => Str = table {
+        Sg => \\g,c => prepCase c ++ genForms ese esa ! g ;
+        Pl => \\g,c => prepCase c ++ genForms esos esas ! g ---- 
+        } ;
+      npforms : Number => Gender => Case => Str = table {
+        Sg => \\g,c => prepCase c ++ genForms (E + se)  (E + sa)  ! g ;
+        Pl => \\g,c => prepCase c ++ genForms (E + sos) (E + sas) ! g }
+    in lin Quant {
+      s = \\_ => attrforms ;
+      s2 = [] ;
+      sp = npforms  ; isNeg = False
+      } ;
+
+  mkDeterminer : (mucho,mucha : Str) -> Number -> Bool -> Det = \mucho,mucha,number,neg ->
+    lin Det {
+      s,sp = \\g,c => prepCase c ++ genForms mucho mucha ! g ;
+      n = number;
+      s2 = [] ;
+      isNeg = neg
+      } ;
+      
+   mkIDet : (cuantos, cuantas : Str) -> Number -> IDet = \cuantos,cuantas,number ->
+     lin IDet {
+       s = \\g,c => prepCase c ++ genForms cuantos cuantas ! g ;
+       n = number
+       } ;
 }

@@ -36,7 +36,7 @@ concrete ExtraSpa of ExtraSpaAbs = ExtraRomanceSpa **
       Fem Sg P3 ;
 
     youPolPl_Pron = mkPronoun
-      "ustedes" "las" "les" "usted"
+      "ustedes" "los" "les" "usted"
       "su" "su" "sus" "sus"
       Masc Pl P3 ;
     youPolPl8fem_Pron = mkPronoun
