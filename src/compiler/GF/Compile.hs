@@ -4,7 +4,7 @@ module GF.Compile (batchCompile, link, compileToPGF, compileSourceGrammar) where
 import GF.Compile.GetGrammar
 import GF.Compile.Rename
 import GF.Compile.CheckGrammar
-import GF.Compile.Optimize
+import GF.Compile.Optimize(optimizeModule)
 import GF.Compile.SubExOpt
 import GF.Compile.GeneratePMCFG
 import GF.Compile.GrammarToPGF
@@ -146,7 +146,7 @@ compileOne opts env@(_,srcgr,_) file = do
        sm00 <- putPointE Verbose opts ("+ reading" +++ file) $ ioeIO (decodeModule file)
        let sm0 = (fst sm00, (snd sm00) {mflags = mflags (snd sm00) `addOptions` opts})
 
-       intermOut opts DumpSource (ppModule Internal sm0)
+       intermOut opts (Dump Source) (ppModule Internal sm0)
 
        let sm1 = unsubexpModule sm0
        (sm,warnings) <- {- putPointE Normal opts "creating indirections" $ -} ioeErr $ runCheck $ extendModule srcgr sm1
@@ -171,7 +171,7 @@ compileOne opts env@(_,srcgr,_) file = do
        enc <- ioeIO $ mkTextEncoding (renameEncoding (flag optEncoding (mflags (snd sm00))))
        let sm = decodeStringsInModule enc sm00
 
-       intermOut opts DumpSource (ppModule Internal sm)
+       intermOut opts (Dump Source) (ppModule Internal sm)
 
        compileSourceModule opts env (Just file) sm
   where
@@ -180,60 +180,53 @@ compileOne opts env@(_,srcgr,_) file = do
 compileSourceModule :: Options -> CompileEnv -> Maybe FilePath -> SourceModule -> IOE CompileEnv
 compileSourceModule opts env@(k,gr,_) mb_gfFile mo@(i,mi) = do
 
-  let putpp = putPointE Verbose opts
-      
-  (mo1,warnings)   <- ioeErr $ runCheck $ rebuildModule gr mo
-  warnOut opts warnings
-  intermOut opts DumpRebuild (ppModule Internal mo1)
-
-  (mo1b,warnings)  <- ioeErr $ runCheck $ extendModule gr mo1
-  warnOut opts warnings
-  intermOut opts DumpExtend (ppModule Internal mo1b)
+  mo1  <- runPass Rebuild "" (rebuildModule gr mo)
+  mo1b <- runPass Extend "" (extendModule gr mo1)
 
   case mo1b of
     (_,n) | not (isCompleteModule n) ->
-      if not (flag optTagsOnly opts)
-        then do let mb_gfo = fmap (gf2gfo opts) mb_gfFile
-                case mb_gfo of
-                  Just gfo -> writeGFO opts gfo mo1b
-                  Nothing  -> return ()
-                extendCompileEnvInt env k mb_gfo mo1b
-        else do case mb_gfFile of
-                  Just gfFile -> writeTags opts gr (gf2gftags opts gfFile) mo1b
-                  Nothing     -> return ()
-                extendCompileEnvInt env k Nothing mo1b
+      if tagsFlag then generateTags k mo1b else generateGFO k mo1b
     _ -> do
+      mo2 <- runPass Rename "renaming" $ renameModule gr mo1b
+      mo3 <- runPass TypeCheck "type checking" $ checkModule opts gr mo2
+      if tagsFlag then generateTags k mo3 else compileCompleteModule k mo3
+  where
+    compileCompleteModule k mo3 = do
+      (k',mo3r:_) <- runPass2 (head.snd) Refresh "refreshing" $
+                     refreshModule (k,gr) mo3
+      mo4 <- runPass2 id Optimize "optimizing" $ optimizeModule opts gr mo3r
+      mo5 <- if isModCnc (snd mo4) && flag optPMCFG opts
+             then runPass2' "generating PMCFG" $ generatePMCFG opts gr mo4
+             else runPass2' "" $ return mo4
+      generateGFO k' mo5
 
-      (mo2,warnings) <- putpp "  renaming " $ ioeErr $ runCheck (renameModule gr mo1b)
-      warnOut opts warnings
-      intermOut opts DumpRename (ppModule Internal mo2)
+  ------------------------------
+    tagsFlag = flag optTagsOnly opts
 
-      (mo3,warnings) <- putpp "  type checking" $ ioeErr $ runCheck (checkModule opts gr mo2)
-      warnOut opts warnings
-      intermOut opts DumpTypeCheck (ppModule Internal mo3)
+    generateGFO k mo =
+      do let mb_gfo = fmap (gf2gfo opts) mb_gfFile
+         maybeM (flip (writeGFO opts) mo) mb_gfo
+         extendCompileEnvInt env k mb_gfo mo
 
-      if not (flag optTagsOnly opts)
-        then do (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,gr) mo3
-                intermOut opts DumpRefresh (ppModule Internal mo3r)
+    generateTags k mo =
+      do maybeM (flip (writeTags opts gr) mo . gf2gftags opts) mb_gfFile
+         extendCompileEnvInt env k Nothing mo
 
-                mo4 <- putpp "  optimizing " $ ioeErr $ optimizeModule opts gr mo3r
-                intermOut opts DumpOptimize (ppModule Internal mo4)
+    putpp s = if null s then id else putPointE Verbose opts ("  "++s++" ")
+    idump pass = intermOut opts (Dump pass) . ppModule Internal
 
-                mo5 <- if isModCnc (snd mo4) && flag optPMCFG opts
-                         then putpp "  generating PMCFG " $ ioeIO $ generatePMCFG opts gr mo4
-                         else return mo4
-                intermOut opts DumpCanon (ppModule Internal mo5)
+    runPass = runPass' fst fst snd (ioeErr . runCheck)
+    runPass2 = runPass2e ioeErr
+    runPass2' = runPass2e ioeIO id Canon
+    runPass2e lift f = runPass' id f (const "") lift
 
-                let mb_gfo = fmap (gf2gfo opts) mb_gfFile
-                case mb_gfo of
-                  Just gfo -> writeGFO opts gfo mo5
-                  Nothing  -> return ()
+    runPass' ret dump warn lift pass pp m =
+        do out <- putpp pp $ lift m
+           warnOut opts (warn out)
+           idump pass (dump out)
+           return (ret out)
 
-                extendCompileEnvInt env k' mb_gfo mo5
-        else do case mb_gfFile of
-                  Just gfFile -> writeTags opts gr (gf2gftags opts gfFile) mo3
-                  Nothing     -> return ()
-                extendCompileEnvInt env k Nothing mo3
+    maybeM f = maybe (return ()) f
 
 
 writeGFO :: Options -> FilePath -> SourceModule -> IOE ()

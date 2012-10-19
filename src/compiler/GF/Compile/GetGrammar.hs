@@ -17,7 +17,7 @@ module GF.Compile.GetGrammar (getSourceModule) where
 import GF.Data.Operations
 
 import GF.Infra.UseIO
-import GF.Infra.Option
+import GF.Infra.Option(Options,optPreprocessors,addOptions,flag)
 import GF.Grammar.Lexer
 import GF.Grammar.Parser
 import GF.Grammar.Grammar
