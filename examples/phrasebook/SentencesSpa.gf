@@ -3,6 +3,7 @@ concrete SentencesSpa of Sentences = NumeralSpa ** SentencesI - [
   IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
   WeMale, WeFemale, YouPlurFamMale, YouPlurFamFemale, YouPlurPolFemale, YouPlurPolMale, TheyMale, TheyFemale, 
   WherePlace, WherePerson, ABePlace,
+  PImperativeFamNeg, PImperativePlurNeg, --negative imperatives in subjunctive
   Superlative
  ] 
   with 
@@ -53,6 +54,13 @@ flags coding = utf8 ;
       TheyFemale = 
         {name = mkNP (ProDrop they8fem_Pron) ; isPron = True ; poss = mkQuant they_Pron} ; 
 
+      --IL 2012-10-12
+      --Negative imperative is done with subjunctive.
+      --PImperativePolNeg is fine in RGL, but fam and plur are wrong
+      --A special ImpNeg in ExtraSpa is defined for that
+      PImperativeFamNeg  v = phrasePlease (ImpNeg (mkNP (ProDrop youSg_Pron)) v) ; 
+      PImperativePlurNeg v = phrasePlease (ImpNeg (mkNP (ProDrop youPl_Pron)) v) ;
+    
       ABePlace p place = mkCl p.name (mkVP (mkVP estar) place.at) ;
 
       WherePlace place = mkQS (mkQCl where_IAdv (mkCl place.name estar) ) ;

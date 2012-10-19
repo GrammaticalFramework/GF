@@ -23,7 +23,7 @@ lin
     Cheese = mkCN (mkN "queso") ;
     Chicken = mkCN (mkN "pollo") ;
     Coffee = mkCN (mkN "café" "cafés" masculine) ;
-    Fish = mkCN L.fish_N ;
+    Fish = mkCN (mkN "pescado") ;
     Meat = mkCN (mkN "carne" feminine) ;
     Milk = mkCN L.milk_N ;
     Pizza = mkCN (mkN "pizza") ;
@@ -55,7 +55,7 @@ lin
     Center = mkPlace (mkN "centro") in_Prep;
     Church = mkPlace (mkN "iglesia") in_Prep ;
     Cinema = mkPlace (mkN "cine") in_Prep ;
-    Disco = mkPlace (mkN "disco") in_Prep;
+    Disco = mkPlace (mkN "discoteca") in_Prep;
     Hospital = mkPlace (mkN "hospital") in_Prep ;
     Hotel = mkPlace (mkN "hotel") in_Prep ;
     Museum = mkPlace (mkN "museo") in_Prep ;
@@ -90,23 +90,23 @@ lin
 
 -- nationalities
 
-    Belgian = belgian_A ;
+    Belgian = mkA "belga" ;
     Belgium = mkNP (mkPN "Bélgica") ;
-    Bulgarian = mkNat (mkA "bulgaro") "bulgaro" "Bulgaria" ;
-    Catalan = mkNat catalan_A "catalán" "Cataluña" ;
-    Danish = mkNat danish_A "danés" "Dinamarca" ;
-    Dutch = mkNat dutch_A "neerlandés" "Holanda" ;
-    English = mkNat english_A "inglés" "Inglaterra" ;
-    Finnish = mkNat finnish_A "finés" "Finlandia" ;
+    Bulgarian = mkNat (mkA "búlgaro") "búlgaro" "Bulgaria" ; --TODO: tarkista
+    Catalan = mkNat (mkA "catalán") "catalán" "Cataluña" ;
+    Danish = mkNat (mkA "danés") "danés" "Dinamarca" ;
+    Dutch = mkNat (mkA "neerlandés") "neerlandés" "Holanda" ;
+    English = mkNat (mkA "inglés") "inglés" "Inglaterra" ;
+    Finnish = mkNat (mkA "finlandés") "finés" "Finlandia" ;
     Flemish = mkNP (mkPN "flamenco") ;
-    French = mkNat french_A "francés" "Francia" ;
-    German = mkNat german_A "alemán" "Alemania" ;
+    French = mkNat (mkA "francés") "francés" "Francia" ;
+    German = mkNat (mkA "alemán") "alemán" "Alemania" ;
     Italian = mkNat (mkA "italiano") "italiano" "Italia" ;
     Norwegian = mkNat (mkA "noruego") "noruego" "Noruega" ;
     Polish = mkNat (mkA "polaco") "polaco" "Polonia" ;
     Romanian = mkNat (mkA "rumano") "rumano" "Rumania" ;
     Russian = mkNat (mkA "ruso") "ruso" "Rusia" ;
-    Spanish = mkNat spanish_A "español" "España" ;
+    Spanish = mkNat (mkA "español" "española") "español" "España" ;
     Swedish = mkNat (mkA "sueco") "sueco" "Suecia" ;
 
 -- means of transportation 
@@ -115,7 +115,7 @@ lin
     Bus = mkTransport (mkN "autobús" "autobuses" masculine) ;
     Car = mkTransport L.car_N | mkTransport (mkN "coche") ; 
     Ferry = mkTransport (mkN "ferry") | mkTransport (mkN "transbordador") ;
-    Plane = mkTransport (mkN "avión" "aviones" feminine) ;
+    Plane = mkTransport (mkN "avión" "aviones" masculine) ; 
     Subway = mkTransport (mkN "metro") ; 
     Taxi = mkTransport (mkN "taxi" masculine) ; 
     Train = mkTransport (mkN "tren") ;
@@ -198,29 +198,30 @@ lin
 
 -- transports
 
-    -- "qué tan lejos está PLACE"
-    HowFar place = mkQS (mkQCl far_IP place.name placeCopula) ;
+    --a qué distancia está PLACE
+    HowFar place = mkQS (mkQCl what_distance_IAdv (mkCl place.name placeCopula) );
+    
+    --a qué distancia está X de Y
+    HowFarFrom x y = mkQS (mkQCl what_distance_IAdv 
+      (mkCl y.name (mkVP (mkVP placeCopula)
+                         (S.mkAdv from_Prep x.name))));
 
-    -- "qué tan lejos de X está Y"
-    HowFarFrom x y = mkQS (mkQCl (mkIP far_IP (S.mkAdv from_Prep x.name)) y.name placeCopula) ; 
-
-    -- "cuánto dura desde X hasta Y con T"
+    -- "a qué distancia está X de Y con T"
     -- x,y: Place ; t: ByTransport
-    HowFarFromBy x y t = mkQS (mkQCl how8much_IAdv
-       (mkCl (mkVP (mkVP (mkVP (mkVP (mkV "durar")) (S.mkAdv desde_Prep x.name)) (S.mkAdv hasta_Prep y.name)) t ))) ;
+    HowFarFromBy x y t = mkQS (mkQCl what_distance_IAdv 
+      (mkCl y.name (mkVP
+                      (mkVP (mkVP placeCopula)
+                            (S.mkAdv from_Prep x.name))
+                       t)));
 
-    -- "cuánto dura hasta Y con T"
+    -- "a qué distancia está Y con T"
     -- y: Place ; t: ByTransport
-    HowFarBy y t = mkQS (mkQCl how8much_IAdv 
-       (mkCl (mkVP (mkVP (mkVP (mkV "durar")) (S.mkAdv hasta_Prep y.name)) t ))) ;
-
+    HowFarBy y t = mkQS (mkQCl what_distance_IAdv 
+      (mkCl y.name (mkVP (mkVP placeCopula) t)));
 
 oper
-     far_IP = mkIP whatSg_IP (S.mkAdv (P.mkAdA "tan") (P.mkAdv "lejos")) ; -- "qué tan lejos"
-     how8much_IAdv = ss "cuánto" ; -- this wasn't implemented in the resource library
-     desde_Prep = mkPrep "desde" ;
-     hasta_Prep = mkPrep "hasta" ;
-     placeCopula = mkV2 (mkV (estar_2 "estar")) ; 
+     what_distance_IAdv = ss "a qué distancia"**{lock_IAdv=<>};
+     placeCopula = mkV (estar_2 "estar") ; 
 
 lin
     WhichTranspPlace trans place = 
@@ -251,7 +252,7 @@ lin
     TheCheapest = mkSuperl cheap_A False ;
     TheMostExpensive = mkSuperl expensive_A False ;
     TheMostPopular =
-      let popular = mkA "popular" "popular" "populares" "populares" "popularmente"
+      let popular = mkA "popular" --"popular" "populares" "populares" "popularmente"
       in  mkSuperl popular False ;
     TheWorst = mkSuperl L.bad_A True ;
 
@@ -297,17 +298,4 @@ lin
     open_A = mkA "abierto" ;
     closed_A = mkA "cerrado" ;
 
-    -- The nationalities
-    -- There is no constructor in resource grammar that handles the accent correctly in "francés - francesa - franceses" etc.
-    -- The fifth form (adverb) is of course not needed, but the constructor wants 5 forms
-    belgian_A = mkA "belga" "belga" "belgas" "belgas" "belgamente" ;
-    catalan_A = mkA "catalán" "catalana" "catalanes" "catalanas" "catalanamente" ;
-    danish_A  = mkA "danés" "danesa" "daneses" "danesas" "danesamente" ;
-    dutch_A   = mkA "neerlandés" "neerlandesa" "neerlandeses" "neerlandesas" "neerlandesamente" ;
-    english_A = mkA "inglés" "inglesa" "ingleses" "inglesas" "inglesamente" ;
-    finnish_A = mkA "finlandés" "finlandesa" "finlandeses" "finlandesas" "finlandesamente" ;
-    french_A  = mkA "francés" "francesa" "franceses" "francesas" "francesamente" ;
-    german_A  = mkA "alemán" "alemana" "alemanes" "alemanas" "alemanamente" ;
-    spanish_A = mkA "español" "española" "españoles" "españolas" "españolamente" ;
-    
 }

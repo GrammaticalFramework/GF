@@ -210,12 +210,22 @@ lin
 
 -- transports
 
-   HowFar place = mkQS (mkQCl far_IP place.name placeCopula) ;
-   HowFarFrom x y = mkQS (mkQCl (mkIP far_IP (S.mkAdv from_Prep x.name)) y.name placeCopula) ; 
-   HowFarFromBy x y t = mkQS (mkQCl how8much_IAdv
-      (mkCl (mkVP (mkVP (mkVP (mkVP (mkV "durar")) (S.mkAdv desde_Prep x.name)) (S.mkAdv fins_Prep y.name)) t ))) ;
-   HowFarBy y t = mkQS (mkQCl how8much_IAdv 
-      (mkCl (mkVP (mkVP (mkVP (mkV "durar")) (S.mkAdv fins_Prep y.name)) t ))) ;
+   --a quina distància està PLACE
+   HowFar place = mkQS (mkQCl what_distance_IAdv (mkCl place.name placeCopula) );
+    
+   HowFarFrom x y = mkQS (mkQCl what_distance_IAdv 
+      (mkCl y.name (mkVP (mkVP placeCopula)
+                         (S.mkAdv from_Prep x.name))));
+                         
+   HowFarFromBy x y t = mkQS (mkQCl what_distance_IAdv 
+      (mkCl y.name (mkVP
+                      (mkVP (mkVP placeCopula)
+                            (S.mkAdv from_Prep x.name))
+                       t)));
+                       
+   HowFarBy y t = mkQS (mkQCl what_distance_IAdv 
+      (mkCl y.name (mkVP (mkVP placeCopula) t)));
+      
    WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
    IsTranspPlace trans place =
@@ -223,10 +233,10 @@ lin
 
 -- modifiers of places
     TheBest = mkSuperl L.good_A True ;
-	TheClosest = mkSuperl L.near_A False; 
+    TheClosest = mkSuperl L.near_A False; 
     TheCheapest = mkSuperl cheap_A False ;
     TheMostExpensive = mkSuperl expensive_A False ;
-    TheMostPopular = mkSuperl (mkA "popular") False ;
+    TheMostPopular = mkSuperl (mkA "popular" "popular" "populars" "populars" "popularment") False ;
     TheWorst = mkSuperl L.bad_A True ;
     SuperlPlace sup p = placeNPSuperl sup p ;
 
@@ -240,13 +250,12 @@ lin
       isPre = bool ;
     } ;
 
-	desde_Prep = mkPrep "des de" ;
-
+    desde_Prep = mkPrep "des de" ;
     fins_Prep = mkPrep "fins a" ;
 
-	far_IP = mkIP whatSg_IP (S.mkAdv (P.mkAdA "tan") (P.mkAdv "lluny")) ; 
+    what_distance_IAdv = ss "a quina distància"**{lock_IAdv=<>};
 	
-    placeCopula = mkV2 (mkV (estar_54 "estar")) ; 
+    placeCopula = mkV (estar_54 "estar") ; 
 
     mkNat : Str -> Str -> NPNationality = \nat,co -> 
       mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) (mkA nat) ;
@@ -281,9 +290,9 @@ lin
 
     closed_A = mkA "tancat" ;
 
-	cheap_A = mkA "barat" ; 
+    cheap_A = mkA "barat" "barata" ; 
 
-	expensive_A = mkA "car" ;
+    expensive_A = mkA "car" ;
 }
 
 
