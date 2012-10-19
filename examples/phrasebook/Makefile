@@ -40,5 +40,8 @@ doc:
 	txt2tags -thtml help-phrasebook.txt
 	rm -f Ontology.gf Implementation.gf
 
+clean:
+	rm *.gfo *.pgf
+
 upload:: Phrasebook.pgf
-	rsync -a Phrasebook.pgf www.grammaticalframework.org:/usr/local/www/GF-demos/www/grammars
+	rsync -avb Phrasebook.pgf www.grammaticalframework.org:/usr/local/www/GF-demos/www/grammars
