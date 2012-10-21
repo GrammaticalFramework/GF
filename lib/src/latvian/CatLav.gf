@@ -40,7 +40,7 @@ lincat
   -- Verb
 
   VP = ResLav.VP ;
-  VPSlash = ResLav.VP ** { p : ResLav.Prep } ; -- TODO: kāpēc jāglabā prep?
+  VPSlash = ResLav.VP ** { p : ResLav.Prep } ; -- the object agreement
   Comp = { s : ResLav.Agr => Str } ;
 
   -- Adjective

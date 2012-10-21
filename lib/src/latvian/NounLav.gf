@@ -16,7 +16,7 @@ lin
 
   UsePN pn = { s = pn.s ; a = agrgP3 pn.n pn.g ; isNeg = False } ;
   
-  UsePron p = p ** { isNeg = False };
+  UsePron p = { s = p.s ; a = p.a ; isNeg = False } ;
 
   PredetNP pred np = {
     s = \\c => pred.s ! (fromAgr np.a).g ++ np.s ! c ;
