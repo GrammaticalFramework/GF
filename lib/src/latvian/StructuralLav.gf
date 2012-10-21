@@ -124,11 +124,11 @@ lin
   under_Prep = mkPrep "zem" Gen Dat ;
   with_Prep = mkPrep "ar" Acc Dat ;
   without_Prep = mkPrep "bez" Gen Dat ;
-  by8agent_Prep = nom_Prep ;  -- A was attacked by B -> A-Dat uzbruka B-Nom
+  by8agent_Prep = nom_Prep ; -- TODO: should get rid of this Prep
   by8means_Prep = mkPrep "ar" Acc Dat ;
   during_Prep = mkPrep "laikā" Gen Gen ;  -- FIXME: laikam postfix 'X laikā' jāliek
   in8front_Prep = mkPrep "priekšā" Dat Dat ;
-  part_Prep = mkPrep Gen ; --FIXME - vajadzētu vārdu secību otrādi - pirms paskaidrojamā vārda likt
+  --part_Prep = mkPrep Gen ; --FIXME - vajadzētu vārdu secību otrādi - pirms paskaidrojamā vārda likt
   through_Prep = mkPrep "cauri" Dat Dat ;
   except_Prep = mkPrep "izņemot" Acc Acc ;
 
@@ -277,13 +277,13 @@ oper
   lai_Subj = ss "lai" ;
   kameer_Subj = ss "kamēr" ;
 
-  emptyPl_Det = {
+  emptyPl_Det = { -- TODO: pašlaik netiek izmantots, jāpārnes uz ExtraLav(?) kā dsk. alternatīva a_Art, the_Art, no_Quant, every_Det 
     s : Gender => Case => Str = \\_,_ => [] ;
     n = Pl ;
     d = Indef
   } ;
 
-  emptySg_Det = {
+  emptySg_Det = { -- TODO: analoģiski kā emptyPl_Det
     s : Gender => Case => Str = \\_,_ => [] ;
     n = Sg ;
     d = Indef

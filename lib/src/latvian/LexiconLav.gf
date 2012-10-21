@@ -116,7 +116,7 @@ lin
   learn_V2 = mkV2 (mkV "mācīties" third_conjugation) acc_Prep ;
   leather_N = mkN "āda" ;
   leave_V2 = mkV2 (mkV "atstāt" "atstāju" "atstāju") acc_Prep ;
-  --like_V2 = mkV2 (regV "like") ;
+  like_V2 = mkV2 (mkV "patikt" "patīku" "patiku") nom_Prep Dat ;
   listen_V2 = mkV2 (mkV "klausīties" third_conjugation) acc_Prep ;
   live_V = mkV "dzīvot" second_conjugation ;
   long_A = mkA "garš" ;

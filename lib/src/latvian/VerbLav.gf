@@ -9,7 +9,7 @@
 concrete VerbLav of Verb = CatLav ** open 
   StructuralLav, 
   ParadigmsVerbsLav, 
-  ResLav, 
+  ResLav, -- TODO: get rid of ResLav - include parameters (Pos etc.) in ParadigmsVerbsLav
   ParamX,
   Prelude
 in {
@@ -57,17 +57,37 @@ lin
   } ;
 
   -- SlashV2a : V2 -> VPSlash ;  -- love (it)
-  -- Where the (direct) object comes from?!
+  -- The (direct) object is added by ComplSlash
   SlashV2a v2 = {
     v = v2 ;
     compl = \\_ => [] ;
     p = v2.p ;
-    agr = TopicFocus v2.topic (AgP3 Sg Masc) ; -- FIXME: works only if the focus is P3 (Sg/Pl); TODO: P1, P2 (Sg, Pl)
-    objNeg = False -- FIXME: inherit from the object
+    agr = TopicFocus v2.topic (AgP3 Sg Masc) ; -- overriden in ComplSlash
+    objNeg = False -- overriden in ComplSlash
   } ;
 
-  -- Slash2V3 : V3 -> NP -> VPSlash ;  -- give it (to her)
-  -- Where the indirect object comes from?!
+  -- VPSlash = { v : Verb ; compl : Agr => Str ; agr : ClAgr ; objNeg : Bool ; p : ResLav.Prep }
+  -- Agr = AgP1 Number Gender | AgP2 Number Gender | AgP3 Number Gender
+  ComplSlash vpslash np = 
+    let agr : Agr = np.a
+    in insertObjPre_Spec
+      (\\agr => vpslash.p.s ++ np.s ! (vpslash.p.c ! (fromAgr agr).n))
+      vpslash 
+      np ;
+
+oper
+  insertObjPre_Spec : (Agr => Str) -> ResLav.VP -> NP -> ResLav.VP = \obj,vp,obj_np -> {
+    v = vp.v ;
+    compl = \\agr => obj ! agr ++ vp.compl ! agr ;
+    agr = case vp.agr of {
+      TopicFocus topic _ => TopicFocus topic obj_np.a ;
+      _                  => Topic Nom
+    } ;
+    objNeg = obj_np.isNeg
+  } ;
+
+lin
+    -- Slash2V3 : V3 -> NP -> VPSlash ;  -- give it (to her)
   Slash2V3 v3 np = insertObjC
     (\\_ => v3.p1.s ++ np.s ! (v3.p1.c ! (fromAgr np.a).n))
     {
@@ -79,7 +99,6 @@ lin
     } ;
 
   -- Slash3V3 : V3 -> NP -> VPSlash ;  -- give (it) to her
-  -- Where the direct object comes from?!
   Slash3V3 v3 np = insertObjC
     (\\_ => v3.p2.s ++ np.s ! (v3.p2.c ! (fromAgr np.a).n))
     {
@@ -121,10 +140,6 @@ lin
     agr = Topic Nom ;
     objNeg = False
   } ;
-
-  ComplSlash vpslash np = insertObjPre
-    (\\_ => vpslash.p.s ++ np.s ! (vpslash.p.c ! (fromAgr np.a).n))
-    vpslash ;
 
   SlashVV vv vpslash = {
     v = vv ;
@@ -191,13 +206,11 @@ oper
   } ;
 
   -- VP = { v : Verb ; topic : Case ; compl : Agr => Str }
-  -- TODO: šo jāmet ārā un jāpieliek insertObj parametrs isPre
-  -- Bet kas šis vispār ir par gadījumu?!
   insertObjPre : (Agr => Str) -> ResLav.VP -> ResLav.VP = \obj,vp -> {
     v = vp.v ;
     compl = \\agr => obj ! agr ++ vp.compl ! agr ;
     agr = vp.agr ;
-    objNeg = False
+    objNeg = vp.objNeg
   } ;
 
   buildVerb : Verb -> VerbMood -> Polarity -> Agr -> Bool -> Bool -> Str = 
