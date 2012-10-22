@@ -573,7 +573,7 @@ function lang1(name) {
     return ws.length==1 ? lang(name.substr(0,3),name) : lang(ws[0],ws[1]);
 }
 var languages =
-    map(lang1,"Amharic Arabic Bulgarian Catalan Danish Dutch English Finnish French German Hindi Ina/Interlingua Italian Jpn/Japanese Latin Norwegian Polish Ron/Romanian Russian Spanish Swedish Thai Turkish Urdu".split(" "));
+    map(lang1,"Amharic Arabic Bulgarian Catalan Chinese Danish Dutch English Finnish French German Hindi Ina/Interlingua Italian Jpn/Japanese Latin Norwegian Polish Ron/Romanian Russian Spanish Swedish Thai Turkish Urdu".split(" "));
 languages.push(lang("Other","Other"));
 
 var langname={};

@@ -215,6 +215,7 @@ langsCoding = [
   (("arabic",   "Ara"),""),
   (("bulgarian","Bul"),""),
   (("catalan",  "Cat"),""),
+  (("chinese",  "Chi"),""),
   (("danish",   "Dan"),""),
   (("dutch",    "Dut"),""),
   (("english",  "Eng"),""),
