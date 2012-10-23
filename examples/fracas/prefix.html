@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html> <head>
+<meta charset="UTF-8">
+<link rel=stylesheet type="text/css" href="../gfse/editor.css">
+<title>FraCaS treebank visualization</title>
+<style>
+.OnlyEng .FraCaSSwe, .OnlySwe .FraCaSEng { display: none; }
+dt { margin-top: 2ex; margin-bottom: 1ex; }
+dt { margin-left: 3em; text-indent: -3em; }
+dd:before { content: "— "; margin-left: 0; padding-left: 0; }
+dd { margin-left: 3.5em; text-indent: -2.5em; }
+</style>
+<script>
+function swap_img(img,newsrc) {
+  if(img.origsrc) {
+    img.src=img.origsrc
+    img.origsrc=null
+  }
+  else {
+    img.origsrc=img.src
+    img.src=newsrc
+  }
+}
+
+function vt(img,abs) {
+  swap_img(img,"FraCaS.pgf?command=abstrtree&tree="+encodeURIComponent(abs))
+}
+
+function vp(img,lang,abs) {
+  swap_img(img,"FraCaS.pgf?command=parsetree&from="+lang+"&tree="+encodeURIComponent(abs))
+}
+</script>
+</head>
+
+<body>
+<h1>FraCaS treebank visualization</h1>
+Languages:
+<select onchange="document.body.className=this.value">
+  <option value="">English and Swedish</option>
+  <option value="OnlyEng">Only English</option>
+  <option value="OnlySwe">Only Swedish</option>
+</select>
