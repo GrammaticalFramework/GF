@@ -188,16 +188,14 @@ putPointE v opts msg act = do
 -- * File IO
 
 writeUTF8File :: FilePath -> String -> IO ()
-writeUTF8File fpath content = do
-  h <- openFile fpath WriteMode
-  hSetEncoding h utf8
-  hPutStr h content
-  hClose h
+writeUTF8File fpath content =
+  withFile fpath WriteMode $ \ h -> do hSetEncoding h utf8
+                                       hPutStr h content
 
 readBinaryFile path = hGetContents =<< openBinaryFile path ReadMode
 writeBinaryFile path s = withBinaryFile path WriteMode (flip hPutStr s)
 
--- Because GHC adds the confusing text "user error" for failures cased by
+-- | Because GHC adds the confusing text "user error" for failures caused by
 -- calls to fail.
 ioErrorText e = if isUserError e
                 then ioeGetErrorString e

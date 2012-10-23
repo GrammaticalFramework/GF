@@ -40,7 +40,7 @@ import Data.List(nub,isPrefixOf,isInfixOf,partition)
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
 import qualified Text.ParserCombinators.ReadP as RP
-import System.IO(utf8,mkTextEncoding,hSetEncoding,stdin,stdout,stderr)
+import System.IO(utf8)
 --import System.CPUTime(getCPUTime)
 import System.Directory({-getCurrentDirectory,-}getAppUserDataDirectory)
 import Control.Exception(SomeException,fromException,evaluate,try)

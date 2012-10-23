@@ -117,11 +117,7 @@ grammarName opts pgf = fromMaybe (showCId (absname pgf)) (flag optName opts)
 
 writeOutput :: Options -> FilePath-> String -> IOE ()
 writeOutput opts file str =
-    do let path = case flag optOutputDir opts of
-                    Nothing  -> file
-                    Just dir -> dir </> file
-       putPointE Normal opts ("Writing " ++ path ++ "...") $ ioeIO $
-         bracket
-           (openFile path WriteMode)
-           (hClose)
-           (\h -> hSetEncoding h utf8 >> hPutStr h str)
+    putPointE Normal opts ("Writing " ++ path ++ "...") $ ioeIO $
+      writeUTF8File path str
+  where
+    path = maybe id (</>) (flag optOutputDir opts) file
