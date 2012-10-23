@@ -59,13 +59,13 @@ oper
   -- Relative adjective: -ais (Def only); -s, -š (Indef and Def)
   mkAdjective_Rel : Str -> Adj = \lemma -> {
     s = table {
-      AAdj Posit Def g n c => mkAdjective_Pos lemma Def ! g ! n ! c;
-	  AAdj Posit Indef g n c => case lemma of {
-        s + "ais" => NON_EXISTENT  ;
+      AAdj Posit Def g n c => mkAdjective_Pos lemma Def ! g ! n ! c ;
+      AAdj Posit Indef g n c => case lemma of {
+        s + "ais" => mkAdjective_Pos lemma Def ! g ! n ! c ;
         _         => mkAdjective_Pos lemma Indef ! g ! n ! c
       } ;
       AAdj _ _ _ _ _ => NON_EXISTENT ;
-	  AAdv d => mkAdjective_Adverb lemma ! d
+      AAdv d => mkAdjective_Adverb lemma ! d
     }
   };
 
@@ -97,7 +97,7 @@ oper
             Dat => stem + "am" ;
             Acc => stem + "u" ;
             Loc => stem + "ā" ;
-			Voc => NON_EXISTENT
+            Voc => stem + "ais"
           } ;
           Pl => table {
             Nom => stem + "i" ;
@@ -105,7 +105,7 @@ oper
             Dat => stem + "iem" ;
             Acc => stem + "us" ;
             Loc => stem + "os" ;
-			Voc => NON_EXISTENT
+            Voc => stem + "ie"
           }
         } ;
         Fem => table {
@@ -115,7 +115,7 @@ oper
             Dat => stem + "ai" ;
             Acc => stem + "u" ;
             Loc => stem + "ā" ;
-			Voc => NON_EXISTENT
+            Voc => stem + "ā"
           } ;
           Pl => table {
             Nom => stem + "as" ;
@@ -123,7 +123,7 @@ oper
             Dat => stem + "ām" ;
             Acc => stem + "as" ;
             Loc => stem + "ās" ;
-			Voc => NON_EXISTENT
+            Voc => stem + "ās"
           }
         }
       } ;
@@ -135,7 +135,7 @@ oper
             Dat => case stem of {s + "ēj" => stem + "am" ; _ => stem + "ajam"} ;
             Acc => stem + "o" ;
             Loc => case stem of {s + "ēj" => stem + "ā" ; _ => stem + "ajā"} ;
-			Voc => stem + "ais"
+            Voc => stem + "ais"
           } ;
           Pl => table {
             Nom => stem + "ie" ;
@@ -143,7 +143,7 @@ oper
             Dat => case stem of {s + "ēj" => stem + "iem" ; _ => stem + "ajiem"} ;
             Acc => stem + "os" ;
             Loc => case stem of {s + "ēj" => stem + "os" ; _ => stem + "ajos"} ;
-			Voc => stem + "ie"
+            Voc => stem + "ie"
           }
         } ;
         Fem => table {
@@ -153,7 +153,7 @@ oper
             Dat => case stem of {s + "ēj" => stem + "ai" ; _ => stem + "ajai"} ;
             Acc => stem + "o" ;
             Loc => case stem of {s + "ēj" => stem + "ā" ; _ => stem + "ajā"} ;
-			Voc => stem + "ā"
+            Voc => stem + "ā"
           } ;
           Pl => table {
             Nom => stem + "ās" ;
@@ -161,7 +161,7 @@ oper
             Dat => case stem of {s + "ēj" => stem + "ām" ; _ => stem + "ajām"} ;
             Acc => stem + "ās" ;
             Loc => case stem of {s + "ēj" => stem + "ās" ; _ => stem + "ajās"} ;
-			Voc => stem + "ās"
+            Voc => stem + "ās"
           }
         }
       }
@@ -179,7 +179,7 @@ oper
             Dat => stem + "ākam" ;
             Acc => stem + "āku" ;
             Loc => stem + "ākā" ;
-			Voc => NON_EXISTENT
+            Voc => stem + "ākais"
           } ;
           Pl => table {
             Nom => stem + "āki" ;
@@ -187,7 +187,7 @@ oper
             Dat => stem + "ākiem" ;
             Acc => stem + "ākus" ;
             Loc => stem + "ākos" ;
-			Voc => NON_EXISTENT
+            Voc => stem + "ākie"
           }
         } ;
         Fem => table {
@@ -197,7 +197,7 @@ oper
             Dat => stem + "ākai" ;
             Acc => stem + "āku" ;
             Loc => stem + "ākā" ;
-			Voc => NON_EXISTENT
+            Voc => stem + "ākā"
           } ;
           Pl => table {
             Nom => stem + "ākas" ;
@@ -205,7 +205,7 @@ oper
             Dat => stem + "ākām" ;
             Acc => stem + "ākas" ;
             Loc => stem + "ākās" ;
-			Voc => NON_EXISTENT
+            Voc => stem + "ākās"
           }
         }
       } ;
@@ -217,7 +217,7 @@ oper
             Dat => stem + "ākajam" ;
             Acc => stem + "āko" ;
             Loc => stem + "ākajā" ;
-			Voc => stem + "ākais"
+            Voc => stem + "ākais"
           } ;
           Pl => table {
             Nom => stem + "ākie" ;
@@ -225,7 +225,7 @@ oper
             Dat => stem + "ākajiem" ;
             Acc => stem + "ākos" ;
             Loc => stem + "ākajos" ;
-			Voc => stem + "ākie"
+            Voc => stem + "ākie"
           }
         } ;
         Fem => table {
@@ -235,7 +235,7 @@ oper
             Dat => stem + "ākajai" ;
             Acc => stem + "āko" ;
             Loc => stem + "ākajā" ;
-			Voc => stem + "ākā"
+            Voc => stem + "ākā"
           } ;
           Pl => table {
             Nom => stem + "ākās" ;
@@ -243,7 +243,7 @@ oper
             Dat => stem + "ākajām" ;
             Acc => stem + "ākās" ;
             Loc => stem + "ākajās" ;
-			Voc => stem + "ākās"
+            Voc => stem + "ākās"
           }
         }
       }
@@ -255,12 +255,13 @@ oper
 
   -- Adverbial form, all 3 degrees
   mkAdjective_Adverb : Str -> Degree => Str = \lemma ->
-  let stem : Str = case lemma of {
+    let stem : Str = case lemma of {
       s + "ais" => s ;
-      _ => Predef.tk 1 lemma
-  } in table {
-	Posit => stem + "i";
-	Compar => stem + "āk";
-	Superl => "vis" + stem + "āk"
-  };
+      _         => Predef.tk 1 lemma
+    } in table {
+      Posit  => stem + "i" ;
+      Compar => stem + "āk" ;
+      Superl => "vis" + stem + "āk"
+    } ;
+
 } ;

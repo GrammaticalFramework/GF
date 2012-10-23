@@ -48,7 +48,7 @@ oper
   } ;
 
   mkN2 = overload {
-    mkN2 : N -> ResLav.Prep -> N2 = \n,p -> lin N2 n ** { p = p ; isPre = False } ;
+    mkN2 : N -> ResLav.Prep -> N2 = \n,p -> lin N2 n ** { p = p ; isPre = True } ;
     mkN2 : N -> ResLav.Prep -> Bool -> N2 = \n,p,isPre -> lin N2 n ** { p = p ; isPre = isPre } ;
   } ;
 
