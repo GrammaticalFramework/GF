@@ -5,6 +5,7 @@
 -- Licensed under LGPL
 
 concrete AdjectiveMlt of Adjective = CatMlt ** open ResMlt, Prelude in {
+  flags coding=utf8 ;
 
   lin
 

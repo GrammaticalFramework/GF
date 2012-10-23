@@ -317,7 +317,7 @@ concrete LexiconMlt of Lexicon = CatMlt **
     teacher_N = mkN "għalliem" "għalliema" ; -- għalliema ?
     television_N = mkN "televixin" "televixins" ;
     thick_A = mkA "oħxon" "ħoxna" "ħoxnin" "eħxen" ;
-    thin_A = brokenA "irqiq" "irqaq" "irqaq" ;
+    thin_A = brokenA "rqiq" "rqaq" "rqaq" ;
 --    think_V
 --    throw_V2
 --    tie_V2
@@ -341,7 +341,7 @@ concrete LexiconMlt of Lexicon = CatMlt **
 --    wash_V2
 --    watch_V2
     water_N = mkN "ilma" "ilmijiet" masculine ;
-    wet_A = mkA "imxarrab" "imxarrba" "imxarrbin" ;
+    wet_A = mkA "mxarrab" "mxarrba" "mxarrbin" ;
     white_A = mkA "abjad" "bajda" "bojod" ;
     wide_A = broad_A ;
     wife_N = mkN "mara" "nisa" ; -- pronSuffix MARTI

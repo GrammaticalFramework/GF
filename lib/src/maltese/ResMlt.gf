@@ -12,24 +12,37 @@ resource ResMlt = ParamX - [Tense] ** open Prelude, Predef in {
 
   param
 
+    {- General -}
+
     Gender  = Masc | Fem ;
 
+    GenNum  =
+        GSg Gender -- dak, dik
+      | GPl ; -- dawk
+
+    Agr =
+        AgP1 Number  -- jiena, aħna
+      | AgP2 Number  -- inti, intom
+      | AgP3Sg Gender  -- huwa, hija
+      | AgP3Pl    -- huma
+    ;
+
     NPCase = Nom | Gen ;
+
+    Animacy =
+        Animate
+      | Inanimate
+    ;
+
+    -- Definiteness =
+    --     Definite    -- eg IL-KARTA. In this context same as Determinate
+    --   | Indefinite  -- eg KARTA
+    --   ;
+
 
     {- Numerals -}
 
     CardOrd = NCard | NOrd ;
-
-    Num_Number =
-        Num_Sg
-      | Num_Dl
-      | Num_Pl
-    ;
-
-  -- oper
-  --   Num_Number : Type = { n : Number ; isDual : Bool } ;
-
-  param
 
     DForm =
         Unit    -- 0..10
@@ -39,9 +52,17 @@ resource ResMlt = ParamX - [Tense] ** open Prelude, Predef in {
       | Hund    -- 100..999
       --| Thou    -- 1000+
     ;
+
+    Num_Number =
+        Num_Sg
+      | Num_Dl
+      | Num_Pl
+    ;
+
     Num_Case =
         NumNominative   -- TNEJN, ĦAMSA, TNAX, MIJA
       | NumAdjectival ; -- ŻEWĠ, ĦAMES, TNAX-IL, MITT
+
 
     {- Nouns -}
 
@@ -63,49 +84,8 @@ resource ResMlt = ParamX - [Tense] ** open Prelude, Predef in {
         NRegular -- WIĊĊ
       | NPronSuffix Agr ; -- WIĊĊU
 
-    {- Other... -}
 
-    GenNum  = GSg Gender | GPl ; -- masc/fem/plural, e.g. adjective inflection
-
-    Animacy =
-        Animate
-      | Inanimate
-    ;
-
-    Definiteness =
-        Definite    -- eg IL-KARTA. In this context same as Determinate
-      | Indefinite  -- eg KARTA
-      ;
-
---    Person  = P1 | P2 | P3 ;
---    State   = Def | Indef | Const ;
---    Mood    = Ind | Cnj | Jus ;
---    Voice   = Act | Pas ;
-
---    Order   = Verbal | Nominal ;
-
-    -- Agreement features
-    Agr =
-        AgP1 Number  -- Jiena, Aħna
-      | AgP2 Number  -- Inti, Intom
-      | AgP3Sg Gender  -- Huwa, Hija
-      | AgP3Pl    -- Huma
-    ;
-
-    -- Agr : Type = {g : Gender ; n : Number ; p : Person} ;
-    -- Ag : Gender -> Number -> Person -> Agr = \g,n,p -> {g = g ; n = n ; p = p} ;
-    -- agrP1 : Number -> Agr = \n -> Ag {} n P1 ;
-    -- agrP3 : Gender -> Number -> Agr = \g,n -> Ag g n P3 ;
-
-    -- Possible tenses
-    -- Tense =
-    --     Perf  -- Perfect tense, eg SERAQ
-    --   | Impf -- Imperfect tense, eg JISRAQ
-    --   | Imp  -- Imperative, eg ISRAQ
-      -- | PresPart  -- Present Particible. Intransitive and 'motion' verbs only, eg NIEŻEL
-      -- | PastPart  -- Past Particible. Both verbal & adjectival function, eg MISRUQ
-      -- | VerbalNoun  -- Verbal Noun, eg SERQ
-    -- ;
+    {- Verb -}
 
     -- Possible verb forms (tense + person)
     VForm =
@@ -117,6 +97,14 @@ resource ResMlt = ParamX - [Tense] ** open Prelude, Predef in {
       -- | VVerbalNoun      -- Verbal Noun
     ;
 
+    -- Inflection of verbs for pronominal suffixes
+    VSuffixForm =
+        VSuffixNone  -- eg FTAĦT
+      | VSuffixDir Agr  -- eg FTAĦTU
+      | VSuffixInd Agr  -- eg FTAĦTLU
+      | VSuffixDirInd GenNum Agr  -- eg FTAĦTHULU. D.O. is necessarily 3rd person.
+      ;
+
     VDerivedForm =
         FormI
       | FormII
@@ -126,34 +114,38 @@ resource ResMlt = ParamX - [Tense] ** open Prelude, Predef in {
       | FormVI
       | FormVII
       | FormVIII
-      | FormXI
+      | FormIX
       | FormX
+      | FormUnknown
       ;
 
     -- Verb classification
     VClass =
         Strong VStrongClass
       | Weak VWeakClass
-      | Loan --- temporary
-      -- | Romance
-      -- | English
+      | Quad VQuadClass
+      | Loan
+--      | Irregular
       ;
-
     VStrongClass =
         Regular
       | LiquidMedial
-      | Reduplicative
-      | Quad
+      | Geminated
       ;
-
     VWeakClass =
         Assimilative
       | Hollow
-      | WeakFinal
+      | Lacking
       | Defective
-      | QuadWeakFinal
       ;
-
+    VQuadClass =
+        QStrong
+      | QWeak
+      ;
+    -- VRomanceEnding =
+    --     _ARE -- kanta
+    --   | _ERE | _IRE -- vinċa, serva --- we don't need this distinction, just always use IRE
+    --   ;
     -- VQuadClass =
     --     BiradicalBase
     --   | RepeatedC3
@@ -161,22 +153,10 @@ resource ResMlt = ParamX - [Tense] ** open Prelude, Predef in {
     --   | AdditionalC4
     --   ;
 
-    VRomanceClass =
-        Integrated
-      | NonIntegrated
-      ;
 
-    -- Inflection of verbs for pronominal suffixes
-    VSuffixForm =
-        VNone  -- eg FTAĦT
-      | VDir Agr  -- eg FTAĦTU
-      | VInd Agr  -- eg FTAĦTLU
-      | VDirInd Agr Agr  -- eg FTAĦTHULU
-      ;
+    {- Adjective -}
 
-    -- For Adjectives
     AForm =
---        AF Degree GenNum
         APosit GenNum
       | ACompar
       | ASuperl
@@ -184,68 +164,143 @@ resource ResMlt = ParamX - [Tense] ** open Prelude, Predef in {
 
   oper
 
-    -- Roots & Patterns
+    {- ===== Type declarations ===== -}
+
+    Noun : Type = {
+      s : Noun_Number => NForm => Str ;
+      g : Gender ;
+      --      anim : Animacy ; -- is the noun animate? e.g. TABIB
+      } ;
+
+    ProperNoun : Type = {
+      s : Str ;
+      g : Gender ;
+      } ;
+
+    Verb : Type = {
+      s : VForm => VSuffixForm => Polarity => Str ;
+      i : VerbInfo ;
+      } ;
+
+    VerbInfo : Type = {
+      class : VClass ;
+      form : VDerivedForm ;
+      root : Root ; -- radicals
+      patt : Pattern ; -- vowels extracted from mamma
+      patt2: Pattern ; -- vowel changes; default to patt (experimental)
+      -- in particular, patt2 is used to indicate whether an IE sould be shortened
+      -- to an I or an E (same for entire verb)
+      imp : Str ; -- Imperative Sg. Gives so much information jaħasra!
+      } ;
+
+    Adjective : Type = {
+      s : AForm => Str ;
+      } ;
+
+
+    {- ===== Some character classes ===== -}
+
+    Letter : pattern Str = #( "a" | "b" | "ċ" | "d" | "e" | "f" | "ġ" | "g" | "għ" | "h" | "ħ" | "i" | "ie" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "ż" | "z" );
+    Consonant : pattern Str = #( "b" | "ċ" | "d" | "f" | "ġ" | "g" | "għ" | "h" | "ħ" | "j" | "k" | "l" | "m" | "n" | "p" | "q" | "r" | "s" | "t" | "v" | "w" | "x" | "ż" | "z" );
+    CoronalCons : pattern Str = #( "ċ" | "d" | "n" | "r" | "s" | "t" | "x" | "ż" | "z" ); -- "konsonanti xemxin"
+    LiquidCons : pattern Str = #( "l" | "m" | "n" | "r" | "għ" );
+    SonorantCons : pattern Str = #( "l" | "m" | "n" | "r" ); -- See {SA pg13}. Currently unused, but see DoublingConsN below
+    DoublingConsT : pattern Str = #( "ċ" | "d" | "ġ" | "s" | "x" | "ż" | "z" ); -- require doubling when prefixed with 't', eg DDUM, ĠĠORR, SSIB, TTIR, ŻŻID {GM pg68,2b} {OM pg90}
+    DoublingConsN : pattern Str = #( "l" | "m" | "r" ); -- require doubling when prefixed with 'n', eg LLAĦĦAQ, MMUR, RRID {OM pg90}
+    WeakCons : pattern Str = #( "j" | "w" );
+    Vowel : pattern Str = #( "a" | "e" | "i" | "o" | "u" );
+    VowelIE : pattern Str = #( "a" | "e" | "i" | "ie" | "o" | "u" );
+    Digraph : pattern Str = #( "ie" );
+    SemiVowel : pattern Str = #( "għ" | "j" );
+
+    V = Vowel ;
+    C = Consonant ;
+    LC = LiquidCons ;
+
+    EorI : Str = "e" | "i" ;
+    IorE : Str = "i" | "e" ;
+
+    {- ===== Roots & Patterns ===== -}
+
     Pattern : Type = {V1, V2 : Str} ;
-    -- Root3 : Type = {K, T, B : Str} ;
-    -- Root4 : Type = Root3 ** {L : Str} ;
     Root : Type = {C1, C2, C3, C4 : Str} ;
 
+    -- Make a root object. Accepts following overloads:
+    -- mkRoot
+    -- mkRoot "k-t-b"
+    -- mkRoot "k-t-b-l"
+    -- mkRoot "k" "t" "b"
+    -- mkRoot "k" "t" "b" "l"
     mkRoot : Root = overload {
       mkRoot : Root =
         { C1=[] ; C2=[] ; C3=[] ; C4=[] } ;
       mkRoot : Str -> Root = \root ->
-        let root = toLower root in
-        case (charAt 1 root) of {
-          "-" => { C1=(charAt 0 root) ; C2=(charAt 2 root) ; C3=(charAt 4 root) ; C4=(charAt 6 root) } ; -- "k-t-b"
-          _   => { C1=(charAt 0 root) ; C2=(charAt 1 root) ; C3=(charAt 2 root) ; C4=(charAt 3 root) }   -- "ktb"
+        case toLower root of {
+          c1@#Consonant + "-" + c2@#Consonant + "-" + c3@#Consonant =>
+            { C1=c1 ; C2=c2 ; C3=c3 ; C4=[] } ; -- "k-t-b"
+          c1@#Consonant + "-" + c2@#Consonant + "-" + c3@#Consonant + "-" + c4@#Consonant =>
+            { C1=c1 ; C2=c2 ; C3=c3 ; C4=c4 } ; -- "k-t-b-l"
+          _   => { C1=(charAt 0 root) ; C2=(charAt 1 root) ; C3=(charAt 2 root) ; C4=(charAt 3 root) }   -- "ktb" (not recommended)
         } ;
       mkRoot : Str -> Str -> Str -> Root = \c1,c2,c3 ->
-        { C1=c1 ; C2=c2 ; C3=c3 ; C4=[] } ;
+        { C1=toLower c1 ; C2=toLower c2 ; C3=toLower c3 ; C4=[] } ;
       mkRoot : Str -> Str -> Str -> Str -> Root = \c1,c2,c3,c4 ->
-        { C1=c1 ; C2=c2 ; C3=c3 ; C4=c4 } ;
+        { C1=toLower c1 ; C2=toLower c2 ; C3=toLower c3 ; C4=toLower c4 } ;
       } ;
     
     mkPattern : Pattern = overload {
       mkPattern : Pattern =
         { V1=[] ; V2=[] } ;
       mkPattern : Str -> Pattern = \v1 ->
-        { V1=v1 ; V2=[] } ;
+        { V1=toLower v1 ; V2=[] } ;
       mkPattern : Str -> Str -> Pattern = \v1,v2 ->
-        { V1=v1 ; V2=v2 } ;
+        { V1=toLower v1 ; V2=case v2 of {"" => [] ; _ => toLower v2}} ;
       } ;
 
-    -- Some character classes
-    Consonant : pattern Str = #( "b" | "ċ" | "d" | "f" | "ġ" | "g" | "għ" | "ħ" | "h" | "j" | "k" | "l" | "m" | "n" | "p" | "q" | "r" | "s" | "t" | "v" | "w" | "x" | "ż" | "z" );
-    CoronalCons : pattern Str = #( "ċ" | "d" | "n" | "r" | "s" | "t" | "x" | "ż" | "z" ); -- "konsonanti xemxin"
-    ImpfDoublingCons : pattern Str = #( "d" | "ġ" | "s" | "t" | "ż" ); -- require doubling in imperfect, eg (inti) IDDUM, IĠĠOR, ISSIB, ITTIR, IŻŻID. --- only used in hollow paradigm (?)
-    LiquidCons : pattern Str = #( "l" | "m" | "n" | "r" | "għ" );
-    WeakCons : pattern Str = #( "j" | "w" );
-    Vowel : pattern Str = #( "a" | "e" | "i" | "o" | "u" );
-    Digraph : pattern Str = #( "ie" );
-    SemiVowel : pattern Str = #( "għ" | "j" );
+    -- Extract first two vowels from a token (designed for semitic verb forms)
+    --- potentially slow
+    extractPattern : Str -> Pattern = \s ->
+      case s of {
+        v1@"ie" + _ + v2@#Vowel + _ => mkPattern v1 v2 ; -- IEQAF
+        v1@#Vowel + _ + v2@#Vowel + _ => mkPattern v1 v2 ; -- IKTEB
+        _ + v1@"ie" + _ + v2@#Vowel + _ => mkPattern v1 v2 ; -- RIEQED
+        _ + v1@"ie" + _ => mkPattern v1 ; -- ŻIED
+        _ + v1@#Vowel + _ + v2@#Vowel + _ => mkPattern v1 v2 ; -- ĦARBAT
+        _ + v1@#Vowel + _ => mkPattern v1 ; -- ĦOBB
+        _ => mkPattern
+      } ;
 
-    {- ===== Type declarations ===== -}
+    -- Create a VerbInfo record, optionally omitting various fields
+    mkVerbInfo : VerbInfo = overload {
+      mkVerbInfo : VClass -> VDerivedForm -> VerbInfo = \c,f ->
+        { class=c ; form=f ; root=mkRoot ; patt=mkPattern ; patt2=mkPattern ; imp=[] } ;
+      mkVerbInfo : VClass -> VDerivedForm -> Str -> VerbInfo = \c,f,i ->
+        { class=c ; form=f ; root=mkRoot ; patt=mkPattern ; patt2=mkPattern ; imp=i } ;
+      mkVerbInfo : VClass -> VDerivedForm -> Root -> Pattern -> VerbInfo = \c,f,r,p ->
+        { class=c ; form=f ; root=r ; patt=p ; patt2=p ; imp=[] } ;
+      mkVerbInfo : VClass -> VDerivedForm -> Root -> Pattern -> Str -> VerbInfo = \c,f,r,p,i ->
+        { class=c ; form=f ; root=r ; patt=p ; patt2=p ; imp=i } ;
+      mkVerbInfo : VClass -> VDerivedForm -> Root -> Pattern -> Pattern -> Str -> VerbInfo = \c,f,r,p,p2,i ->
+        { class=c ; form=f ; root=r ; patt=p ; patt2=p2 ; imp=i } ;
+      } ;
 
-    Noun : Type = {
-      s : Noun_Number => NForm => Str ;
-      g : Gender ;
---      anim : Animacy ; -- is the noun animate? e.g. TABIB
-    } ;
+    -- Change certain fields of a VerbInfo record
+    updateVerbInfo : VerbInfo = overload {
 
-    ProperNoun : Type = {
-      s : Str ;
-      g : Gender ;
-    } ;
+      -- Root
+      updateVerbInfo : VerbInfo -> Root -> VerbInfo = \i,r ->
+        { class=i.class ; form=i.form ; root=r ; patt=i.patt ; patt2=i.patt2 ; imp=i.imp } ;
 
-    Verb : Type = {
-      s : VForm => Str ;
---      s : VForm => VSuffixForm => Str ;
-      c : VClass ;
-    } ;
+      -- DerivedForm
+      updateVerbInfo : VerbInfo -> VDerivedForm -> VerbInfo = \i,f ->
+        { class=i.class ; form=f ; root=i.root ; patt=i.patt ; patt2=i.patt2 ; imp=i.imp } ;
 
-    Adjective : Type = {
-      s : AForm => Str ;
-    } ;
+      -- DerivedForm, Imperative
+      updateVerbInfo : VerbInfo -> VDerivedForm -> Str -> VerbInfo = \i,f,imp ->
+        { class=i.class ; form=f ; root=i.root ; patt=i.patt ; patt2=i.patt2 ; imp=imp } ;
+
+      } ;
+
 
     {- ===== Conversions ===== -}
 
@@ -258,11 +313,98 @@ resource ResMlt = ParamX - [Tense] ** open Prelude, Predef in {
 
     {- ===== Useful helper functions ===== -}
 
-    -- Get the character at the specific index (0-based).
-    -- Negative indexes behave as 0 (first character). Out of range indexes return the empty string.
-    charAt : Int -> Str -> Str ;
-    charAt i s = take 1 (drop i s) ;
+    -- New names for the drop/take operations
+    takePfx = Predef.take ;
+    dropPfx = Predef.drop ;
+    takeSfx = Predef.dp ;
+    dropSfx = Predef.tk ;
 
+    -- Get the character at the specific index (0-based).
+    -- Negative indices behave as 0 (first character). Out of range indexes return the empty string.
+    charAt : Int -> Str -> Str ;
+    charAt i s = takePfx 1 (dropPfx i s) ;
+
+    -- Delete character at the specific index (0-based).
+    -- Out of range indices are just ignored.
+    delCharAt : Int -> Str -> Str ;
+    delCharAt i s = (takePfx i s) + (dropPfx (plus i 1) s) ;
+
+    -- -- Replace first substring
+    -- replace : Str -> Str -> Str -> Str ;
+    -- replace needle haystack replacement =
+    --   case haystack of {
+    --     x + needle + y => x + replacement + y ;
+    --     _ => haystack
+    --   } ;
+
+    -- Prefix with a 'n'/'t' or double initial consonant, as necessary. See {OM pg 90}
+    pfx_N : Str -> Str = \s -> case takePfx 1 s of {
+      "" => [] ;
+      m@#DoublingConsN => m + s ;
+      _ => "n" + s
+      } ;
+    pfx_T : Str -> Str = \s -> case takePfx 1 s of {
+      "" => [] ;
+      d@#DoublingConsT => d + s ;
+      _ => "t" + s
+      } ;
+    -- This is just here to standardise
+    -- pfx_J : Str -> Str = \s -> case takePfx 1 s of {
+    --   "" => [] ;
+    --   _ => "j" + s
+    --   } ;
+    pfx_J : Str -> Str = \s -> pfx "j" s ;
+
+    -- Generically prefix a string (avoiding empty strings)
+    pfx : Str -> Str -> Str = \p,s -> case <p,s> of {
+      <_, ""> => [] ;
+      <"", str> => str ;
+      <px, str> => px + str
+      } ;
+  
+    -- Add suffix, avoiding triple letters {GO pg96-7}
+    --- add more cases?
+    --- potentially slow
+    sfx : Str -> Str -> Str = \a,b ->
+      case <a,takePfx 1 b> of {
+        <"",_> => [] ;
+        <ke+"nn","n"> => ke+"n"+b ;
+        <ha+"kk","k"> => ha+"k"+b ;
+        <ho+"ll","l"> => ho+"l"+b ;
+        <si+"tt","t"> => si+"t"+b ;
+        <be+"xx","x"> => be+"x"+b ;
+        _ => a + b
+      } ;
+
+    -- Replace any IE in the word with an I or E    --- potentially slow
+    ie2i : Str -> Str = ie2_ "i" ;
+    ie2e : Str -> Str = ie2_ "e" ;
+    ie2_ : Str -> Str -> Str = \iore,serviet ->
+      case serviet of {
+        x + "ie" => x + iore ;
+        x + "ie" + y => x + iore + y ;
+        x => x
+      } ;
+
+    -- Is a word mono-syllabic?
+    --- potentially slow
+    isMonoSyl : Str -> Bool = \s ->
+      case s of {
+        #Consonant + ("ie" | #Vowel) => True ; -- ra
+        #Consonant + #Consonant + ("ie" | #Vowel) => True ; -- bla
+
+        ("ie" | #Vowel) + #Consonant => True ; -- af
+        ("ie" | #Vowel) + #Consonant + #Consonant => True ; -- elf
+
+        #Consonant + ("ie" | #Vowel) + #Consonant => True ; -- miet
+        #Consonant + ("ie" | #Vowel) + #Consonant + #Consonant => True ; -- mort
+        #Consonant + #Consonant + ("ie" | #Vowel) + #Consonant => True ; -- ħliet
+        #Consonant + #Consonant + ("ie" | #Vowel) + #Consonant + #Consonant => True ; -- ħriġt
+        _ => False
+      } ;
+
+    
+    -- Add a definite preposition in front of your token
     addDefinitePreposition : Str -> Str -> Str = \prep,n -> (getDefinitePreposition prep n) ++ n ;
     addDefiniteArticle = addDefinitePreposition "il" ;
     getDefiniteArticle = getDefinitePreposition "il" ;
