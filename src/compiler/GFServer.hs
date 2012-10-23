@@ -195,8 +195,9 @@ handle state0 cache execute1
     cloud dir =
       do cmd <- look "command"
          case cmd of
-           "make" -> make dir . raw =<< get_qs
-           "upload" -> upload . raw =<< get_qs
+           "make" -> make id dir . raw =<< get_qs
+           "remake" -> make skip_empty dir . raw =<< get_qs
+           "upload" -> upload id . raw =<< get_qs
            "ls" -> jsonList . maybe ".json" fst . lookup "ext" =<< get_qs
            "rm" -> rm =<< look_file
            "download" -> download =<< look_file
@@ -210,21 +211,23 @@ handle state0 cache execute1
           then return path
           else err $ resp400 $ "unacceptable path "++path
 
-    make dir files =
-      do _ <- upload files
+    make skip dir files =
+      do _ <- upload skip files
          let args = "-s":"-make":map fst files
              cmd = unwords ("gf":args)
          out <- liftIO $ readProcessWithExitCode "gf" args ""
          cwd <- liftIO $ getCurrentDirectory
          return $ json200 (jsonresult cwd ('/':dir++"/") cmd out files)
 
-    upload files =
+    upload skip files =
         if null badpaths
-        then do liftIO $ mapM_ (uncurry updateFile) okfiles
+        then do liftIO $ mapM_ (uncurry updateFile) (skip okfiles)
                 return resp204
         else err $ resp404 $ "unacceptable path(s) "++unwords badpaths
       where
         (okfiles,badpaths) = apSnd (map fst) $ partition (ok_access.fst) files
+
+    skip_empty = filter (not.null.snd)
 
     jsonList ext = fmap (json200) (ls_ext "." ext)
 
@@ -287,54 +290,7 @@ jsonresult cwd dir cmd (ecode,stdout,stderr) files =
     relative s = case stripPrefix cwd s of
                    Just ('/':rest) -> rest
                    _ -> s
-{-
-resultpage cwd dir cmd (ecode,stdout,stderr) files =
-  unlines $ 
-    "<!DOCTYPE html>":
-    wrap "title" "Uploaded":
-    "<link rel=stylesheet type=\"text/css\" HREF=\"/gfse/editor.css\" title=\"Normal\">":
-    wrap "h1" "Uploaded":
-    concatMap (pre.escape) [cmd,rel stderr,rel stdout]:
-    (if ecode==ExitSuccess
-     then wrap "h3" "OK":links
-     else "<h3 class=error_message>Error</h3>":listing)
-  where
-    links = "<dl>":
-            ("<dt>▸ <a href=\"/minibar/minibar.html?"++dir++pgf++"\">Minibar</a>"):
-            "<dt class=back_to_editor>◂ <a href=\"javascript:history.back()\">Back to Editor</a>":
-            "</dl>":
-            []
 
-    pgf = case files of
-            (abstract,_):_ -> "%20"++dropExtension abstract++".pgf"
-            _ -> ""
-
-    listing = concatMap listfile files
-
-    listfile (name,source) = 
-      (wrap "h4"  name++"<pre class=plain>"):number source:"</pre>":[]
-
-    number = unlines . zipWith num [1..] . lines
-    num n s = pad (show n)++"  "++escape s
-    pad s = replicate (5-length s) ' '++s
-
-    pre = wrap "pre"
-    wrap t s = tag t++s++endtag t
-    tag t = "<"++t++">"
-    endtag t = tag ('/':t)
-
-    rel = unlines . map relative . lines
-
-    -- remove absolute file paths from error messages:
-    relative s = case stripPrefix cwd s of
-                   Just ('/':rest) -> rest
-                   _ -> s
-
-escape = concatMap escape1
-escape1 '<' = "&lt;"
-escape1 '&' = "&amp;"
-escape1 c   = [c]
--}
 -- * Static content
 
 serveStaticFile path =
