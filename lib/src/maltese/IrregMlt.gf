@@ -8,6 +8,21 @@
 
 concrete IrregMlt of IrregMltAbs = CatMlt ** open ParadigmsMlt in {
 
-
+{-
+  Known irregular verbs in Maltese:
+    - ĦA
+    - TA
+    - RA
+    - MAR
+    - ĠIE
+    - QAL
+    - KIEL
+    - KELLU
+    - IDDA
+    - EMMEN
+    - IŻŻA
+    - JAF
+    - KIEN
+-}
 
 }
