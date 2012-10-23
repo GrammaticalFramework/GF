@@ -17,7 +17,7 @@ GF-FILES = $(wildcard src/*.gf)
 build: $(BUILD-FORMATS:%=build/$(BANK).%)
 
 clean:
-	rm -f src/*.gfo src/*.pyc .DS_Store */.DS_Store
+	rm -f src/*.gfo src/*.pyc .DS_Store */.DS_Store FraCaS.pgf $(BANK)I.hs
 
 distclean: clean
 	rm -f build/$(BANK).*
@@ -31,3 +31,14 @@ dist: build clean
 build/$(BANK).%: $(GF-FILES)
 	python build_fracasbank.py $* src/$(BANK)I.gf $(LANGUAGES:%=src/$(BANK)%.gf) > $@
 
+#### HTML generation:
+
+build/$(BANK).html: FraCaS.pgf FeedGF.hs ToHTML.hs prefix.html $(BANK)I.hs
+	cat prefix.html > $@
+	runhaskell FeedGF.hs | gf -run FraCaS.pgf | runhaskell ToHTML.hs >> $@
+
+FraCaS.pgf: $(GF-FILES)
+	gf -s -make src/FraCaSEng.gf src/FraCaSSwe.gf
+
+$(BANK)I.hs: src/$(BANK)I.gf
+	sed -e 's/--#.*//' -e 's/incomplete.*/module $(BANK)I where/' -e 's/lincat.*/bank =/' -e 's/^lin /  ("/' -e 's/ = /", "/' -e 's/;$$/"):/' -e 's/^}/ []/' < $< > $@
