@@ -28,10 +28,10 @@ data Value
   | VRecType [(Label,Value)]
   | VRec [(Label,Value)]
   | VTbl Type [Value]
-  | VC   Value Value
+--  | VC   Value Value
   | VPatt Patt
   | VPattType Value
-  | VFV Value
+  | VFV [Value]
   | VAlts Value [(Value, Value)]
   | VError String
   deriving Show
@@ -75,10 +75,13 @@ eval gr env t@(ExtR t1 t2) =
                                          [] -> VRec (rs1 ++ rs2)
                                          _  -> error
        _                            -> error
-eval gr env t = error ("eval "++show t)
+eval gr env (FV ts) = VFV (map (eval gr env) ts)
+eval gr env t = error ("unimplemented: eval "++show t)
 
 apply gr env t           []     = eval gr env t
-apply gr env (Q x)       vs     = case lookupResDef gr x of
+apply gr env (Q x)       vs
+             | fst x == cPredef = VApp x vs -- hmm
+             | otherwise        = case lookupResDef gr x of
                                     Ok t    -> apply gr [] t vs
                                     Bad err -> error err
 apply gr env (App t1 t2) vs     = apply gr env t1 (eval gr env t2 : vs)
@@ -101,4 +104,5 @@ value2term gr xs (VSort s) = Sort s
 value2term gr xs (VImplArg v) = ImplArg (value2term gr xs v)
 value2term gr xs (VTblType p res) = Table (value2term gr xs p) (value2term gr xs res)
 value2term gr xs (VRecType rs) = RecType [(l,value2term gr xs v) | (l,v) <- rs]
-value2term gr xs v = error ("value2term "++show v)
+value2term gr xs (VFV vs) = FV (map (value2term gr xs) vs)
+value2term gr xs v = error ("unimplemented: value2term "++show v)
