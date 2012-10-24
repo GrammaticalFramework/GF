@@ -483,6 +483,21 @@ composOp co trm =
    ImplArg t        -> liftM ImplArg (co t)
    _ -> return trm -- covers K, Vr, Cn, Sort, EPatt
 
+composPattOp :: Monad m => (Patt -> m Patt) -> Patt -> m Patt
+composPattOp op patt =
+  case patt of
+    PC c ps         -> liftM  (PC c) (mapM op ps)
+    PP qc ps        -> liftM  (PP qc) (mapM op ps)
+    PR as           -> liftM  PR (mapPairsM op as)
+    PT ty p         -> liftM  (PT ty) (op p)
+    PAs x p         -> liftM  (PAs x) (op p)
+    PImplArg p      -> liftM  PImplArg (op p)
+    PNeg p          -> liftM  PNeg (op p)
+    PAlt p1 p2      -> liftM2 PAlt (op p1) (op p2)
+    PSeq p1 p2      -> liftM2 PSeq (op p1) (op p2)
+    PRep p          -> liftM  PRep (op p)
+    _               -> return patt -- converts cases without subpatterns
+
 getTableType :: TInfo -> Err Type
 getTableType i = case i of
   TTyped ty -> return ty
