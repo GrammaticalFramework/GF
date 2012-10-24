@@ -90,7 +90,7 @@ addPMCFG opts gr am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin
   when (verbAtLeast opts Verbose) $ hPutStr stderr (" "++show stats)
   return (seqs1,GF.Grammar.CncFun mty mlin mprn (Just pmcfg))
   where
-    (ctxt,res,_) = err error typeForm (lookupFunType gr am id)
+    (ctxt,res,_) = err bug typeForm (lookupFunType gr am id)
 
     addRule lins (newCat', newArgs') env0 =
       let [newCat] = getFIds newCat'
@@ -126,7 +126,7 @@ unfactor t = CM (\gr c -> c (unfac gr t))
   where
     unfac gr t = 
       case t of
-        T (TTyped ty) [(PV x,u)] -> V ty [restore x v (unfac gr u) | v <- err error id (allParamValues gr ty)]
+        T (TTyped ty) [(PV x,u)] -> V ty [restore x v (unfac gr u) | v <- err bug id (allParamValues gr ty)]
         _ -> composSafeOp (unfac gr) t
       where
         restore x u t = case t of
@@ -214,12 +214,12 @@ choices nr path = do (args,_) <- get
     updateEnv path value gr c (args,seq) = 
       case updateNthM (restrictProtoFCat path value) nr args of
         Just args -> c value (args,seq)
-        Nothing   -> error "conflict in updateEnv"
+        Nothing   -> bug "conflict in updateEnv"
 
 -- | the argument should be a parameter type and then
 -- the function returns all possible values.
 getAllParamValues :: Type -> CnvMonad [Term]
-getAllParamValues ty = CM (\gr c -> c (err error id (allParamValues gr ty)))
+getAllParamValues ty = CM (\gr c -> c (err bug id (allParamValues gr ty)))
 
 mkRecord :: [(Label,CnvMonad (Schema Branch s c))] -> CnvMonad (Schema Branch s c)
 mkRecord xs = CM (\gr c -> foldl (\c (lbl,CM m) bs s -> c ((lbl,m gr (\v s -> Return v) s) : bs) s) (c . CRec) xs [])
@@ -281,14 +281,14 @@ computeCatRange gr lincat = compute (0,1) lincat
                                                                                 _      -> let (st',t') = compute st t
                                                                                           in (st',(lbl,Identity t'))) st rs
                                in (st',CRec rs')
-    compute st (Table pt vt) = let vs        = err error id (allParamValues gr pt)
+    compute st (Table pt vt) = let vs        = err bug id (allParamValues gr pt)
                                    (st',cs') = List.mapAccumL (\st v       -> let (st',vt') = compute st vt
                                                                               in (st',(v,Identity vt'))) st vs
                                in (st',CTbl pt cs')
     compute st (Sort s)
                    | s == cStr = let (index,m) = st
                                  in ((index+1,m),CStr index)
-    compute st t               = let vs = err error id (allParamValues gr t)
+    compute st t               = let vs = err bug id (allParamValues gr t)
                                      (index,m) = st
                                  in ((index,m*length vs),CPar (m,zip vs [0..]))
 
@@ -331,7 +331,7 @@ convertTerm opts sel ctype (Alts s alts)
                                               strings (Strs ss) = concatMap strings ss
 convertTerm opts CNil ctype t           = do v <- evalTerm CNil t
                                              return (CPar v)
-convertTerm _    _    _     t           = error (render (text "convertTerm" <+> parens (ppTerm Unqualified 0 t)))
+convertTerm _    _    _     t           = ppbug (text "convertTerm" <+> parens (ppTerm Unqualified 0 t))
 
 convertArg :: Options -> Term -> Int -> Path -> CnvMonad (Value [Symbol])
 convertArg opts (RecType rs)  nr path =
@@ -361,7 +361,7 @@ convertRec opts CNil (RecType rs) record =
   mkRecord (map (\(lbl,ctype) -> (lbl,convertTerm opts CNil ctype (projectRec lbl record))) rs)
 convertRec opts (CProj lbl path) ctype record =
   convertTerm opts path ctype (projectRec lbl record)
-convertRec opts _ ctype _ = error ("convertRec: "++show ctype)
+convertRec opts _ ctype _ = bug ("convertRec: "++show ctype)
 
 convertTbl opts CNil (Table _ vt) pt ts = do
   vs <- getAllParamValues pt
@@ -370,9 +370,9 @@ convertTbl opts (CSel v sub_sel) ctype pt ts = do
   vs <- getAllParamValues pt
   case lookup v (zip vs ts) of
     Just t  -> convertTerm opts sub_sel ctype t
-    Nothing -> error (render (text "convertTbl:" <+> (text "missing value" <+> ppTerm Unqualified 0 v $$
-                                                      text "among" <+> vcat (map (ppTerm Unqualified 0) vs))))
-convertTbl opts _ ctype _ _ = error ("convertTbl: "++show ctype)
+    Nothing -> ppbug (text "convertTbl:" <+> (text "missing value" <+> ppTerm Unqualified 0 v $$
+                                                      text "among" <+> vcat (map (ppTerm Unqualified 0) vs)))
+convertTbl opts _ ctype _ _ = bug ("convertTbl: "++show ctype)
 
 
 goB :: Branch (Value SeqId) -> Path -> [SeqId] -> BacktrackM Env [SeqId]
@@ -460,14 +460,14 @@ evalTerm path (V pt ts)    = case path of
                                (CSel trm path) -> do vs <- getAllParamValues pt
                                                      case lookup trm (zip vs ts) of
                                                        Just t  -> evalTerm path t
-                                                       Nothing -> error "evalTerm: missing value"
+                                                       Nothing -> bug "evalTerm: missing value"
                                CNil             -> do ts <- mapM (evalTerm path) ts
                                                       return (V pt ts)
 evalTerm path (S term sel) = do v <- evalTerm CNil sel
                                 evalTerm (CSel v path) term
 evalTerm path (FV terms)   = variants terms >>= evalTerm path
 evalTerm path (EInt n)     = return (EInt n)
-evalTerm path t            = error (render (text "evalTerm" <+> parens (ppTerm Unqualified 0 t)))
+evalTerm path t            = ppbug (text "evalTerm" <+> parens (ppTerm Unqualified 0 t))
 
 getVarIndex (IA _ i) = i
 getVarIndex (IAV _ _ i) = i
@@ -532,7 +532,7 @@ restrictProtoFCat path v (PFCat cat f schema) = do
     addConstraint CNil             v (CPar (m,vs)) = case lookup v vs of
                                                        Just index -> return (CPar (m,[(v,index)]))
                                                        Nothing    -> mzero
-    addConstraint CNil             v (CStr _)      = error "restrictProtoFCat: string path"
+    addConstraint CNil             v (CStr _)      = bug "restrictProtoFCat: string path"
     
     update k0 f [] = return []
     update k0 f (x@(k,Identity v):xs)
@@ -543,3 +543,6 @@ restrictProtoFCat path v (PFCat cat f schema) = do
 
 mkArray    lst = listArray (0,length lst-1) lst
 mkSetArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]
+
+bug msg = ppbug (text msg)
+ppbug doc = error $ render $ text "Internal error:" <+> doc
