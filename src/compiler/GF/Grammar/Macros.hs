@@ -496,7 +496,7 @@ composPattOp op patt =
     PAlt p1 p2      -> liftM2 PAlt (op p1) (op p2)
     PSeq p1 p2      -> liftM2 PSeq (op p1) (op p2)
     PRep p          -> liftM  PRep (op p)
-    _               -> return patt -- converts cases without subpatterns
+    _               -> return patt -- covers cases without subpatterns
 
 getTableType :: TInfo -> Err Type
 getTableType i = case i of
@@ -532,6 +532,21 @@ collectOp co trm = case trm of
   FV ts        -> concatMap co ts
   Strs tt      -> concatMap co tt
   _            -> [] -- covers K, Vr, Cn, Sort
+
+collectPattOp :: (Patt -> [a]) -> Patt -> [a]
+collectPattOp op patt =
+  case patt of
+    PC c ps         -> concatMap op ps
+    PP qc ps        -> concatMap op ps
+    PR as           -> concatMap (op.snd) as
+    PT ty p         -> op p
+    PAs x p         -> op p
+    PImplArg p      -> op p
+    PNeg p          -> op p
+    PAlt p1 p2      -> op p1++op p2
+    PSeq p1 p2      -> op p1++op p2
+    PRep p          -> op p
+    _               -> []     -- covers cases without subpatterns
 
 -- | to find the word items in a term
 wordsInTerm :: Term -> [String]
