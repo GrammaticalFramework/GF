@@ -151,45 +151,72 @@ pgf_lzr_add_infer_entry(
 	};
 	gu_buf_push(entries, PgfLinInferEntry, entry);
 }
-			
+
+typedef struct {
+	GuMapItor fn;
+	PgfConcr* concr;
+	GuPool* pool;
+} PgfLzrIndexFn;
+
+static void
+pgf_lzr_index_iter(GuMapItor* fn, const void* key, void* value, GuExn* err)
+{
+	(void) (key && err);
+
+	PgfLzrIndexFn* clo = (PgfLzrIndexFn*) fn;
+    PgfCCat* ccat = *((PgfCCat**) value);
+    PgfConcr *concr = clo->concr;
+    GuPool *pool = clo->pool;
+
+	if (gu_seq_is_null(ccat->prods))
+		return;
+
+	size_t n_prods = gu_seq_length(ccat->prods);
+	for (size_t i = 0; i < n_prods; i++) {
+		PgfProduction prod = gu_seq_get(ccat->prods, PgfProduction, i);
+
+		void* data = gu_variant_data(prod);
+		switch (gu_variant_tag(prod)) {
+		case PGF_PRODUCTION_APPLY: {
+			PgfProductionApply* papply = data;
+			PgfInferMap* infer =
+				gu_map_get(concr->fun_indices, &papply->fun->name,
+					PgfInferMap*);
+			gu_debug("index: %s -> %d", papply->fun->name, ccat->fid);
+			if (!infer) {
+				infer = gu_map_type_new(PgfInferMap, pool);
+				gu_map_put(concr->fun_indices,
+					&papply->fun->name, PgfInferMap*, infer);
+			}
+			pgf_lzr_add_infer_entry(infer, ccat, papply, pool);
+			break;
+		}
+		case PGF_PRODUCTION_COERCE: {
+			PgfProductionCoerce* pcoerce = data;
+			PgfCCatBuf* cats = gu_map_get(concr->coerce_idx, pcoerce->coerce,
+							PgfCCatBuf*);
+			if (!cats) {
+				cats = gu_new_buf(PgfCCat*, pool);
+				gu_map_put(concr->coerce_idx, 
+					pcoerce->coerce, PgfCCatBuf*, cats);
+			}
+			gu_debug("coerce_idx: %d -> %d", pcoerce->coerce->fid, ccat->fid);
+			gu_buf_push(cats, PgfCCat*, ccat);
+			break;
+		}
+		default:
+			// Display warning?
+			break;
+		}
+
+	}
+}
 
 void
-pgf_lzr_index(PgfConcr* concr, PgfCCat* ccat, PgfProduction prod,
-              GuPool *pool)
+pgf_lzr_index(PgfConcr* concr, GuPool *pool)
 {
-	void* data = gu_variant_data(prod);
-	switch (gu_variant_tag(prod)) {
-	case PGF_PRODUCTION_APPLY: {
-		PgfProductionApply* papply = data;
-		PgfInferMap* infer =
-			gu_map_get(concr->fun_indices, &papply->fun->name,
-				PgfInferMap*);
-		gu_debug("index: %s -> %d", papply->fun->name, ccat->fid);
-		if (!infer) {
-			infer = gu_map_type_new(PgfInferMap, pool);
-			gu_map_put(concr->fun_indices,
-				&papply->fun->name, PgfInferMap*, infer);
-		}
-		pgf_lzr_add_infer_entry(infer, ccat, papply, pool);
-		break;
-	}
-	case PGF_PRODUCTION_COERCE: {
-		PgfProductionCoerce* pcoerce = data;
-		PgfCCatBuf* cats = gu_map_get(concr->coerce_idx, pcoerce->coerce,
-						PgfCCatBuf*);
-		if (!cats) {
-			cats = gu_new_buf(PgfCCat*, pool);
-			gu_map_put(concr->coerce_idx, 
-				pcoerce->coerce, PgfCCatBuf*, cats);
-		}
-		gu_debug("coerce_idx: %d -> %d", pcoerce->coerce->fid, ccat->fid);
-		gu_buf_push(cats, PgfCCat*, ccat);
-		break;
-	}
-	default:
-		// Display warning?
-		break;
-	}
+	PgfLzrIndexFn clo = { { pgf_lzr_index_iter }, concr, pool };
+	gu_map_iter(concr->ccats, &clo.fn, NULL);
 }
 
 typedef struct PgfLzn PgfLzn;

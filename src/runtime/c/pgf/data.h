@@ -193,6 +193,8 @@ struct PgfAlternative {
 	 * form. */
 };
 
+typedef struct PgfItemConts PgfItemConts;
+
 struct PgfCCat {
 	PgfCncCat* cnccat;
 	PgfFunIds* lindefs;
@@ -200,6 +202,7 @@ struct PgfCCat {
 	PgfProductionSeq prods;
 	float viterbi_prob;
 	int fid;
+	PgfItemConts* conts;
 };
 
 extern PgfCCat pgf_ccat_string, pgf_ccat_int, pgf_ccat_float, pgf_ccat_var;
@@ -213,11 +216,14 @@ extern GU_DECLARE_TYPE(PgfFunIndices, GuStringMap);
 typedef GuMap PgfCoerceIdx;
 extern GU_DECLARE_TYPE(PgfCoerceIdx, GuMap);
 
-typedef GuStringMap PgfTransitions;
-extern GU_DECLARE_TYPE(PgfTransitions, GuStringMap);
+typedef GuMap PgfProductionIdx;
+extern GU_DECLARE_TYPE(PgfProductionIdx, GuMap);
 
-typedef GuMap PgfEpsilonIdx;
-extern GU_DECLARE_TYPE(PgfEpsilonIdx, GuMap);
+typedef GuMap PgfLeftcornerCatIdx;
+extern GU_DECLARE_TYPE(PgfLeftcornerCatIdx, GuMap);
+
+typedef GuMap PgfLeftcornerTokIdx;
+extern GU_DECLARE_TYPE(PgfLeftcornerTokIdx, GuMap);
 
 typedef struct PgfLiteralCallback PgfLiteralCallback;
 extern GU_DECLARE_TYPE(PgfLiteralCallback, struct);
@@ -238,15 +244,14 @@ struct PgfConcr {
     GuMap* ccats;
 	PgfFunIndices* fun_indices;
 	PgfCoerceIdx* coerce_idx;
-	PgfTransitions* lexicon_idx;
-	PgfEpsilonIdx* epsilon_idx;
+	PgfProductionIdx* epsilon_idx;
+	PgfLeftcornerCatIdx* leftcorner_cat_idx;
+	PgfLeftcornerTokIdx* leftcorner_tok_idx;
     PgfCncFuns* cncfuns;
     PgfSequences* sequences;
 	PgfCIdMap* cnccats;
 	PgfCallbacksMap* callbacks;
 	int total_cats;
-    int max_fid;
-    int item_quota;
 };
 
 extern GU_DECLARE_TYPE(PgfConcr, struct);

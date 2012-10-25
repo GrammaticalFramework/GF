@@ -52,12 +52,8 @@ gu_map_find(GuMap* ht, const void* key);
 const void*
 gu_map_find_key(GuMap* ht, const void* key);
 
-static inline bool
-gu_map_has(GuMap* ht, const void* key)
-{
-	return gu_map_find_key(ht, key) != NULL;
-}
-
+bool
+gu_map_has(GuMap* ht, const void* key);
 
 void*
 gu_map_insert(GuMap* ht, const void* key);

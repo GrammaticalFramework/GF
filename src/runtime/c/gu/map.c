@@ -251,6 +251,12 @@ gu_map_find_key(GuMap* map, const void* key)
 	return NULL;
 }
 
+bool
+gu_map_has(GuMap* ht, const void* key)
+{
+	size_t idx;
+	return gu_map_lookup(ht, key, &idx);
+}
 
 void*
 gu_map_insert(GuMap* map, const void* key)
