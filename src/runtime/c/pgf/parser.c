@@ -675,10 +675,12 @@ pgf_item_copy(PgfItem* item, GuPool* pool, PgfParsing* ps)
 	}
 	memcpy(copy, item, sizeof(PgfItem));
 
+#ifdef PGF_COUNTS_DEBUG
 	if (ps != NULL) {
 		ps->item_count++;
 		ps->real_count++;
 	}
+#endif
 
 	item->conts->ref_count++;
 
