@@ -38,7 +38,8 @@ div.word, span.word, div#words div, div#words input[type=button], div#surface in
 div#surface span.editable, div#surface input[type=button] {
     color: blue;
     border-color: blue;
-    box-shadow: 2px 2px 4px rgba(0,0,255,0.5)
+    box-shadow: 2px 2px 4px rgba(0,0,255,0.5);
+    cursor: pointer;
 }
 
 
