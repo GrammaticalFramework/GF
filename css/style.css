@@ -20,6 +20,11 @@ table.news td {
     padding: 0.25ex 0.5ex;
 }
 
+table.news td:nth-child(1) {
+    /* Don't want the hyphens in dates (2012-06-29) to cause line breaks */
+    white-space: nowrap;
+}
+
 th,td { border: 1px solid #333; }
 
 td { background: white; }
