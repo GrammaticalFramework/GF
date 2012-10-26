@@ -84,7 +84,7 @@ can8know_VV = mkV "会" [] [] [] [] "不" ; ----
 except_Prep = mkPrep "除了" "以外" ; 
 for_Prep = mkPrep "为了" ; 
 from_Prep = mkPrep "从" ; 
-in8front_Prep = mkPrep "前边" ; 
+in8front_Prep = mkPrep "前边" zai_s ; 
 it_Pron = pronNP "它" ; 
 much_Det = mkDet "多" Sg ; 
 no_Quant = mkQuant "不" ; 
@@ -133,7 +133,7 @@ here7to_Adv = mkAdv "到这里" ;    -- to here
 								--        "到这里" 到( to ) 这里(here)
 how8many_IDet = ssword "多少" ;  
 how8much_IAdv = ssword "多少" ;  
-if_Subj = mkSubj "如果" "就" ;  -- [mark] "就" often comes between NP and VP
+if_Subj = mkSubj "如果" [] ; --"就" ;  -- [mark] "就" often comes between NP and VP
 --less_CAdv = ssword "什么" ;  -- less good than
 --more_CAdv = ssword "什么" ;  
 most_Predet = ssword "大多数" ;  

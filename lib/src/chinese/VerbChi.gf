@@ -49,7 +49,7 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
     
     ReflVP vp = insertObj (mkNP reflPron) vp ;
 
-    PassV2 v = insertObj (mkNP passive_s) (predV v) ; ----
+    PassV2 v = insertAdv (mkNP passive_s) (predV v) ; ----
 
     CompAP ap = insertObj (mkNP (ap.s ++ possessive_s)) (predV copula) ; ---- hen / bu
 

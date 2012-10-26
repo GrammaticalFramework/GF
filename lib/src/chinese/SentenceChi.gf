@@ -40,6 +40,7 @@ concrete SentenceChi of Sentence = CatChi **
     UseSlash t p cl = {s = cl.s ! p.p ! t.t ; c2 = cl.c2} ;
 
     AdvS a s = ss (a.s ++ s.s) ;
+    ExtAdvS a s = ss (a.s ++ chcomma ++ s.s) ;
 
     RelS s r = ss (s.s ++ r.s) ;
 }
