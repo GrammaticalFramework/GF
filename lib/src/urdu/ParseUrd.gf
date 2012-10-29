@@ -1,14 +1,14 @@
---# -path=alltenses:../abstract
-concrete ParseUrd of ParseAbs = 
+--# -path=alltenses:../abstract:../english
+concrete ParseUrd of ParseEngAbs = 
   TenseX - [AdN,Adv,SC],
-  TextX - [AdN,Adv,SC],
+--  TextX - [AdN,Adv,SC],
   CatUrd,
   NounUrd,
   AdjectiveUrd,
   NumeralUrd,
-  SymbolUrd,
+ -- SymbolUrd,
   ConjunctionUrd,
-  VerbUrd - [SlashV2V, PassV2],
+  VerbUrd - [PassV2],
   AdverbUrd,
   PhraseUrd,
   SentenceUrd,
@@ -60,7 +60,7 @@ lin
 
   PositAdVAdj a = {s = a.s ! Sg ! Masc ! Dir ! Posit} ;
 ---------------
-SlashV2V v p vp = insertVV (infV2V v.isAux vp) (predV v) vp.embComp  ** {c2 = {s = sE ; c = VTrans}}; -- changed from VTransPost
+--SlashV2V v p vp = insertVV (infV2V v.isAux vp) (predV v) vp.embComp  ** {c2 = {s = sE ; c = VTrans}}; -- changed from VTransPost
 ---------------
   
 
