@@ -925,7 +925,7 @@ pgf_load_meta_child_probs(PgfPGF* pgf, const char* fpath, GuPool* pool)
 	for (;;) {
 		char cat1_s[21];
 		char cat2_s[21];
-		float prob;
+		prob_t prob;
 
 		if (fscanf(fp, "%20s\t%20s\t%f", cat1_s, cat2_s, &prob) < 3)
 			break;
@@ -943,7 +943,7 @@ pgf_load_meta_child_probs(PgfPGF* pgf, const char* fpath, GuPool* pool)
 		} else if (strcmp(cat2_s, "_") == 0) {
 			abscat1->meta_token_prob = prob;
 		} else {
-			GuString cat2 = gu_str_string(cat2_s, tmp_pool);			
+			GuString cat2 = gu_str_string(cat2_s, tmp_pool);
 			PgfCat* abscat2 = gu_map_get(pgf->abstract.cats, &cat2, PgfCat*);
 			if (abscat2 == NULL)
 				return false;
@@ -953,7 +953,7 @@ pgf_load_meta_child_probs(PgfPGF* pgf, const char* fpath, GuPool* pool)
 					gu_map_type_new(PgfMetaChildMap, pool);
 			}
 
-			gu_map_put(abscat1->meta_child_probs, abscat2, float, prob);
+			gu_map_put(abscat1->meta_child_probs, abscat2, prob_t, prob);
 		}
 	}
 	
