@@ -1,12 +1,12 @@
 --# -path=alltenses:../abstract:../english
 concrete ParseHin of ParseEngAbs = 
   TenseX - [AdN,Adv,SC],
-  TextX - [AdN,Adv,SC],
+--  TextX - [AdN,Adv,SC],
   CatHin,
   NounHin,
   AdjectiveHin,
   NumeralHin,
-  SymbolHin,
+--  SymbolHin,
   ConjunctionHin,
   VerbHin - [SlashV2V, PassV2],
   AdverbHin,
@@ -60,7 +60,7 @@ lin
 
   PositAdVAdj a = {s = a.s ! Sg ! Masc ! Dir ! Posit} ;
 ---------------
-SlashV2V v p vp = insertVV (infV2V v.isAux vp) (predV v) vp.embComp  ** {c2 = {s = sE ; c = VTrans}}; -- changed from VTransPost
+--SlashV2V v p vp = insertVV (infV2V v.isAux vp) (predV v) vp.embComp  ** {c2 = {s = sE ; c = VTrans}}; -- changed from VTransPost
 ---------------
   
 
