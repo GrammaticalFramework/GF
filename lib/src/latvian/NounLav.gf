@@ -161,9 +161,9 @@ lin
     g = cn.g
   } ;
 
-  -- FIXME: vajag -ts / -ta divdabja formu, + šķirot noteikto/nenoteikto galotni
+  -- FIXME: vajag šķirot noteikto/nenoteikto galotni..?
   PPartNP np v2 = {
-    s = \\c => v2.s ! Pos ! (Participle (fromAgr np.a).g (fromAgr np.a).n c) ++ np.s ! c ;
+    s = \\c => v2.s ! Pos ! (Participle TsTa (fromAgr np.a).g (fromAgr np.a).n c) ++ np.s ! c ;
     a = np.a ;
     isNeg = np.isNeg
   } ;

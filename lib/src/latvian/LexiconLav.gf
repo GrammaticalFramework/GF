@@ -124,7 +124,7 @@ lin
   love_N = mkN "mīlestība" ;
   love_V2   = mkV2 (mkV "mīlēt" third_conjugation) acc_Prep ;
   man_N = mkN "vīrietis" ;
-  married_A2 = mkA2 (mkA (mkV "precēties" third_conjugation)) with_Prep ;
+  married_A2 = mkA2 (mkA (mkV "precēties" third_conjugation) IsUsi) with_Prep ;
   meat_N = mkN "gaļa" ;
   milk_N = mkN "piens" ;
   moon_N = mkN "mēness" ;

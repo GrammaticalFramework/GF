@@ -110,7 +110,8 @@ oper
         Imperative Sg => pal_C1_4 stem2 ;
         Imperative Pl => pal_C1_4 stem2 + "iet" ;
 
-        Participle g n c => mkParticiple_IsUsi g n c (pal_C1_3 stem3) (pal_C1_4 stem3)
+        Participle IsUsi g n c => mkParticiple_IsUsi g n c (pal_C1_3 stem3) ;
+        Participle TsTa  g n c => mkParticiple_TsTa g n c stem1
       }
     } ;
 
@@ -157,7 +158,8 @@ oper
         Imperative Sg => stem ;
         Imperative Pl => stem + "jiet" ;
 
-        Participle g n c => mkParticiple g n c (stem + "j")
+        Participle IsUsi g n c => mkParticiple_IsUsi g n c (stem + "j") ;
+        Participle TsTa  g n c => mkParticiple_TsTa g n c stem
       }
     } ;
 
@@ -204,7 +206,8 @@ oper
         Imperative Sg => pal_C3_1 stem + "i" ;
         Imperative Pl => pal_C3_1 stem + "iet" ;
 
-        Participle g n c => mkParticiple g n c (stem + "j")
+        Participle IsUsi g n c => mkParticiple_IsUsi g n c (stem + "j") ;
+        Participle TsTa  g n c => mkParticiple_TsTa g n c stem
       }
     } ;
 
@@ -255,7 +258,8 @@ oper
         Imperative Sg => pal_C1_2 stem3 stem2 + "ies" ;
         Imperative Pl => pal_C1_2 stem3 stem2 + "ieties" ;
 
-        Participle g n c => mkParticiple_Refl_IesUsies g n c (pal_C1_3 stem3) (pal_C1_4 stem3)
+        Participle IsUsi g n c => mkParticiple_IesUsies g n c (pal_C1_3 stem3) ;
+        Participle TsTa  g n c => mkParticiple_TsTa g n c stem1
       }
     } ;
 
@@ -302,7 +306,8 @@ oper
         Imperative Sg => stem + "jies" ;
         Imperative Pl => stem + "jieties" ;
 
-        Participle g n c => mkParticiple_Refl g n c (stem + "j")
+        Participle IsUsi g n c => mkParticiple_IesUsies g n c (stem + "j") ;
+        Participle TsTa  g n c => mkParticiple_TsTa g n c stem
       }
     } ;
 
@@ -349,7 +354,8 @@ oper
         Imperative Sg => pal_C3_1 stem + "ies" ;
         Imperative Pl => pal_C3_1 stem + "ieties" ;
 
-        Participle g n c => mkParticiple_Refl g n c (stem + "j")
+        Participle IsUsi g n c => mkParticiple_IesUsies g n c (stem + "j") ;
+        Participle TsTa  g n c => mkParticiple_TsTa g n c stem
       }
     } ;
 
@@ -528,11 +534,13 @@ oper
   -- Ref. to the Java implementation: mija9
   pal_C3_5 : Str -> Str = \stem ->
     case stem of {
-      s + "dā" => Predef.tk 1 stem ;
-      s + "ā"  => s + "a" ;
-      s + "cī" => s + "ka" ; -- e.g. 'sacīt' => 'saka'
-      s + "ī"  => s + "a" ;
-      _        => Predef.tk 1 stem
+      s + "dā"  => Predef.tk 1 stem ;
+      s + "ā"   => s + "a" ;
+      s + "ācī" => s + "āca" ; -- e.g. 'mācīt' => 'māca'
+      s + "īcī" => s + "īca" ; -- e.g. 'mīcīt' => 'mīca'
+      s + "cī"  => s + "ka" ; -- e.g. 'sacīt' => 'saka'
+      s + "ī"   => s + "a" ;
+      _         => Predef.tk 1 stem
     } ;
 
   -- Ref. to the Java implementation: mija12
@@ -549,16 +557,14 @@ oper
   -- Participles: non-declinable and partially declinable participles, nominative cases of declinable participles
   -- Declinable participles: syntactic function - attribute => category - adjective
   -- TODO: declinable participles => adjectives
-  -- TODO: -ot, -am, -ām; -dams/dama, -damies/damās; -ošs/oša, -ams/ama, -āms/āma, -ts/ta
-  -- Nē, -ošs/oša ir tikai adjektīvi! Divdabji - tikai verbālās formas! (sk. Baibas sarakstu)
+  -- TODO: -ot, -am, -ām; -dams/dama, -damies/damās; -ams/ama, -āms/āma
+  -- -ošs/oša ir tikai adjektīvi! Divdabji - tikai verbālās formas! (sk. Baibas sarakstu)
 
-  mkParticiple : Gender -> Number -> Case -> Str -> Str = \g,n,c,stem -> mkParticiple_IsUsi g n c stem stem ;
-
-  mkParticiple_IsUsi : Gender -> Number -> Case -> Str -> Str -> Str = \g,n,c,stem,stem_lemma ->
+  mkParticiple_IsUsi : Gender -> Number -> Case -> Str -> Str = \g,n,c,stem ->
     case g of {
       Masc => case n of {
         Sg => case c of {
-          Nom => stem_lemma + "is" ;
+          Nom => stem + "is" ;
           Gen => stem + "uša" ;
           Dat => stem + "ušam" ;
           Acc => stem + "ušu" ;
@@ -594,13 +600,51 @@ oper
       }
     } ;
 
-  mkParticiple_Refl : Gender -> Number -> Case -> Str -> Str = \g,n,c,stem -> mkParticiple_Refl_IesUsies g n c stem stem ;
-
-  mkParticiple_Refl_IesUsies : Gender -> Number -> Case -> Str -> Str -> Str = \g,n,c,stem,stem_lemma ->
+  mkParticiple_TsTa : Gender -> Number -> Case -> Str -> Str = \g,n,c,stem ->
     case g of {
       Masc => case n of {
         Sg => case c of {
-          Nom => stem_lemma + "ies" ;
+          Nom => stem + "ts" ;
+          Gen => stem + "ta" ;
+          Dat => stem + "tam" ;
+          Acc => stem + "tu" ;
+          Loc => stem + "tā" ;
+          Voc => NON_EXISTENT     -- FIXME: -tais ?
+        } ;
+        Pl => case c of {
+          Nom => stem + "ti" ;
+          Gen => stem + "tu" ;
+          Dat => stem + "tiem" ;
+          Acc => stem + "tus" ;
+          Loc => stem + "tos" ;
+          Voc => NON_EXISTENT     -- FIXME: -tie ?
+        }
+      } ;
+      Fem => case n of {
+        Sg => case c of {
+          Nom => stem + "ta" ;
+          Gen => stem + "tas" ;
+          Dat => stem + "tai" ;
+          Acc => stem + "tu" ;
+          Loc => stem + "tā" ;
+          Voc => NON_EXISTENT     -- FIXME: -tā ?
+        } ;
+        Pl => case c of {
+          Nom => stem + "tas" ;
+          Gen => stem + "tu" ;
+          Dat => stem + "tām" ;
+          Acc => stem + "tas" ;
+          Loc => stem + "tās" ;
+          Voc => NON_EXISTENT     -- FIXME: -tās ?
+        }
+      }
+    } ;
+
+  mkParticiple_IesUsies : Gender -> Number -> Case -> Str -> Str = \g,n,c,stem ->
+    case g of {
+      Masc => case n of {
+        Sg => case c of {
+          Nom => stem + "ies" ;
           Gen => NON_EXISTENT ;
           Dat => NON_EXISTENT ;
           Acc => stem + "ušos" ;

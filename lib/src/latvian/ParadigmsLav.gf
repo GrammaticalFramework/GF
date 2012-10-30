@@ -58,7 +58,12 @@ oper
   mkA = overload {
     mkA : (lemma : Str) -> A = \s -> lin A (mkAdjective s) ;
     mkA : (lemma : Str) -> AdjType -> A = \s,t -> lin A (mkAdjectiveByType s t) ;
-    mkA : (v : Verb) -> A = \v -> lin A (mkAdjective_Participle v) ;
+    -- TODO: nav forši, ka jānorāda PartType, bet kā lai aptiet?
+    -- TODO: drīzāk jānorāda Str (divdabja forma) + PartType - pārējais iekšēji (auto)
+    -- Turklāt Adj f-cijā iespējams būtu ok, ja pa tiešo izsauktu mkAdjective?!
+    -- Tomēr diez vai: IsUsi...
+    -- mkA2 gadījumā: vai PartType var noteikt pēc obj_Prep? Diez vai...
+    mkA : (v : Verb) -> PartType -> A = \v,p -> lin A (mkAdjective_Participle v p) ;
   } ;
 
   mkA2  : A -> ResLav.Prep -> A2 = \a,p -> lin A2 (a ** { p = p }) ; -- precējies ar ...

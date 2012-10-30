@@ -19,6 +19,9 @@ param
   -- TODO: pārveidot uz šādu formu lai ir arī apstākļa vārdi kas atvasināti no īpašības vārdiem
   AForm = AAdj Degree Definite Gender Number Case | AAdv Degree ;
 
+  -- Participles
+  PartType = IsUsi | TsTa ;
+
   -- Verbs
   -- Ind  = Indicative
   -- Rel  = Relative (Latvian specific: http://www.isocat.org/rest/dc/3836)
@@ -32,7 +35,7 @@ param
   	| Debitive
   	| Imperative Number
   	| DebitiveRelative
-  	| Participle Gender Number Case
+  	| Participle PartType Gender Number Case
   	;
     -- TODO: divdabim noteiktā forma un arī pārākā / vispārākā pakāpe
 
