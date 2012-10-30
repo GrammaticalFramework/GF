@@ -74,9 +74,9 @@ oper
   -- TODO: Jāpieliek parametrs Tense: present = ziedošs, izsalkstošs; past = ziedējis, izsalcis.
   --       Vai arī jāpadod Str "-is"/"-ošs" un pa tiešo jāizsauc mkParticiple, bet
   --       kā šis mkA(Str) atšķirsies no citiem mkA(Str)? 
-  mkAdjective_Participle : Verb -> Adj = \v -> {
+  mkAdjective_Participle : Verb -> PartType -> Adj = \v,p -> {
     s = table {
-      AAdj Posit Indef g n c => v.s ! Pos ! (Participle g n c) ;
+      AAdj Posit Indef g n c => v.s ! Pos ! (Participle p g n c) ;
       _ => NON_EXISTENT
     }
   };

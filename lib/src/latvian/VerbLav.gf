@@ -213,6 +213,7 @@ oper
     objNeg = vp.objNeg
   } ;
 
+  -- FIXME: the type of the participle form - depending on what?! (currently fixed)
   buildVerb : Verb -> VerbMood -> Polarity -> Agr -> Bool -> Bool -> Str = 
   \v,mood,pol,agr,subjNeg,objNeg ->
     let
@@ -223,7 +224,7 @@ oper
       } ;
       agr = fromAgr agr
       ;  --# notpresent
-      part = v.s ! ResLav.Pos ! (Participle agr.g agr.n Nom)  --# notpresent
+      part = v.s ! ResLav.Pos ! (Participle TsTa agr.g agr.n Nom)  --# notpresent
     in case mood of {
       Ind Simul tense => v.s ! pol_prim ! (Indicative agr.p agr.n tense)
       ;  --# notpresent
@@ -237,7 +238,7 @@ oper
       Deb Simul tense => mkVerb_Irreg_Be.s ! pol_prim ! (Indicative P3 Sg tense) ++  --# notpresent
       	v.s ! ResLav.Pos ! Debitive ;  --# notpresent
       Deb Anter tense => mkVerb_Irreg_Be.s ! pol_prim ! (Indicative P3 Sg tense) ++  --# notpresent
-        mkVerb_Irreg_Be.s ! ResLav.Pos ! (Participle Masc Sg Nom) ++  --# notpresent
+        mkVerb_Irreg_Be.s ! ResLav.Pos ! (Participle TsTa Masc Sg Nom) ++  --# notpresent
         v.s ! ResLav.Pos ! Debitive ;  --# notpresent
 
       Condit Simul => v.s ! pol_prim ! (Indicative agr.p agr.n ParamX.Cond) ;  --# notpresent
