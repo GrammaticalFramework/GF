@@ -135,25 +135,25 @@ in {
 			mkCl p.name (mkV2 (mkV "saukt" "saucu" "saucu") nom_Prep Acc) name |
 			mkCl (nameOf p) name ;
 		
-		AHungry p = mkCl p.name (mkA (mkV "izsalkt" "izsalkstu" "izsalku")) ;
+		AHungry p = mkCl p.name (mkA (mkV "izsalkt" "izsalkstu" "izsalku") IsUsi) ;
 		AIll p = mkCl p.name (mkA "slims") ;
 		AKnow p = mkCl p.name (mkV "zināt" third_conjugation) ;
 		ALike p item = mkCl p.name (mkV2 (mkV "garšot" second_conjugation) nom_Prep Dat) item ;
 		ALive p co = mkCl p.name (mkVP (mkVP (mkV "dzīvot" second_conjugation)) (SyntaxLav.mkAdv in_Prep co)) ;
 		ALove p q = mkCl p.name L.love_V2 q.name ;
-		AMarried p = mkCl p.name (mkA (mkV "precēties" third_conjugation)) ;
+		AMarried p = mkCl p.name (mkA (mkV "precēties" third_conjugation) IsUsi) ;
 		AReady p = mkCl p.name (mkA "gatavs") ;
 		
 		AScared p = 
 			mkCl p.name (mkV "baidīties" third_conjugation) | 
-			mkCl p.name (mkA (mkV "nobīties" "nobīstos" "nobijos")) ;
+			mkCl p.name (mkA (mkV "nobīties" "nobīstos" "nobijos") IsUsi) ;
 		
 		ASpeak p lang = 
 			mkCl p.name (mkVP (mkVP (mkV "runāt" second_conjugation)) lang.modif) | 
 			mkCl p.name (mkV2 (mkV "runāt" second_conjugation) loc_Prep) lang.lang ;
 		
-		AThirsty p = mkCl p.name (mkA (mkV "izslāpt" "izslāpstu" "izslāpu")) ;
-		ATired p = mkCl p.name (mkA (mkV "nogurt" "nogurstu" "noguru")) ;
+		AThirsty p = mkCl p.name (mkA (mkV "izslāpt" "izslāpstu" "izslāpu") IsUsi) ;
+		ATired p = mkCl p.name (mkA (mkV "nogurt" "nogurstu" "noguru") IsUsi) ;
 		AUnderstand p = mkCl p.name (mkV "saprast" "saprotu" "sapratu") ;
 		AWant p obj = mkCl p.name (mkV2 (mkV "vēlēties" third_conjugation) acc_Prep) obj ;
 
