@@ -15193,4 +15193,58 @@ lin
 
  language_title_Utt = ss "اردو" ;
 
+-- added during translator experiments
+--lin officialMasc_N= mkN "";
+lin use_V= compoundV "استعمال" (mkV "کرنا") ;
+lin bureaucrat_N= mkN "بیوروکریٹ";
+--lin operational_A= mkA "";
+lin over_Prep= mkPrep "اوپر" "اوپر";
+lin say_V= mkV "کہنا";
+lin leave_V= compoundV "چلے" (mkV "جانا") ;
+--lin payable_A= mkA "";
+lin as_Prep= mkPrep "ایسا" "ایسا";
+lin capsule_N= mkN "کیپسول";
+--lin regard_V= mkV "";
+lin as_Subj= ss "ایسا";
+lin insist_V= compoundV "اصرار" (mkV "کرنا") ;
+--lin say_V= mkV "";
+--lin representativeMasc_N= mkN "";
+lin refuse_V= compoundV "انکار" (mkV "کرنا") ;
+lin temporary_A= mkA "عارظی";
+--lin prostate_N= mkN "";
+lin via_Prep= mkPrep "کے ذریعے" "کے ذریعے";
+lin only_Adv= mkAdv "صرف";
+--lin amount_V= mkV "";
+lin up_Prep= mkPrep "اوپر" "اوپر";
+--lin snuff_N= mkN "";
+lin fighter_N= mkN "لڑاکا";
+--lin so_Subj= ss "";
+lin reply_V= compoundV "جواب" (mkV "دینا") ;
+lin god_N= mkN "خدا";
+lin have_V= mkV "رکھنا";
+lin but_Subj= ss "لیکن";
+lin move_V= compoundV "حرکت" (mkV "کرنا") ;
+lin football_N= mkN "فٹبال";
+--lin leave_V= mkV "";
+lin annual_A= mkA "سالانہ";
+lin by_Prep= mkPrep "کے ذرییے" "کے ذرییے";
+lin go_V= mkV "جانا";
+lin about_Prep= mkPrep "کے متعلق" "کے متعلق";
+--lin unless_Subj= ss "";
+--lin reply_V= mkV "";
+lin long_N= mkN "لمبا";
+--lin go_V= mkV "";
+lin since_Prep= mkPrep "کیونکہ" "کیونکہ";
+lin serve_V= compoundV "خدمت" (mkV "کرنا") ;
+lin other_N= mkN "دوسرا";
+--lin publish_V= mkV "";
+lin against_Prep= mkPrep "مخالف" "مخالف";
+lin sunday_N= mkN "اتوار";
+lin squad_N= mkN "دستہ";
+lin presidentMasc_N= mkN "صدر";
+lin more_Adv= mkAdv "ذیادہ";
+lin total_N= mkN "ٹوٹل";
+lin april_N= mkN "اپریل";
+lin understand_V2 = mkV2 (compoundV "سمجھ" (mkV "لینا")) ;
+
 };

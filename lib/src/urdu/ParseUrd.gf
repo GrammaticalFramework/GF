@@ -1,4 +1,4 @@
---# -path=alltenses:../abstract:../english
+--# -path=.:alltenses:../abstract:../english
 concrete ParseUrd of ParseEngAbs = 
   TenseX - [AdN,Adv,SC],
 --  TextX - [AdN,Adv,SC],
@@ -6,19 +6,19 @@ concrete ParseUrd of ParseEngAbs =
   NounUrd,
   AdjectiveUrd,
   NumeralUrd,
- -- SymbolUrd,
   ConjunctionUrd,
-  VerbUrd - [PassV2],
+  VerbUrd - [PassV2,ComplVV],
   AdverbUrd,
   PhraseUrd,
   SentenceUrd,
   RelativeUrd,
+  SymbolUrd [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],
 --  StructuralUrd,
   IdiomUrd [NP, VP, Tense, Cl, ProgrVP, ExistNP],
   ExtraUrd [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash],
-  DictUrd **
+  DictUrd2 **
 --  UNDictUrd ** 
-open MorphoUrd, ResUrd, ParadigmsUrd, ParamX, CommonHindustani, Prelude in {
+open MorphoUrd, ResUrd, ParadigmsUrd,CommonX, CommonHindustani, Prelude in {
 
 flags
   literal=Symb ;
@@ -34,7 +34,7 @@ lin
   themself_NP = regNP "themself" plural ;
 -}
   CompoundCN num noun cn = {
-    s = \\n,c => num.s ++ noun.s ! num.n ! Dir ++ cn.s ! n ! c ;
+    s = \\n,c => num.s ++ cn.s ! n ! c ++ noun.s ! num.n ! Dir;
     g = cn.g
   } ;
   
@@ -61,10 +61,11 @@ lin
   PositAdVAdj a = {s = a.s ! Sg ! Masc ! Dir ! Posit} ;
 ---------------
 --SlashV2V v p vp = insertVV (infV2V v.isAux vp) (predV v) vp.embComp  ** {c2 = {s = sE ; c = VTrans}}; -- changed from VTransPost
+ComplVV v a p vp = insertTrans (insertVV (infVV v.isAux vp) (predV v) vp.embComp ) VTrans; -- changed from VTransPost
 ---------------
   
 
---  UseQuantPN q pn = {s = \\c => q.s ! Sg ! Masc ! Dir ++ pn.s ! c ; a = agrP3 Sg pn.g} ;
+  UseQuantPN q pn = {s = \\c => q.s ! Sg ! pn.g ! Dir ++ pn.s ! Dir ; a = agrP3 pn.g Sg} ;
 {-
   SlashV2V v p vp = insertObjc (\\a => p.s ++ case p.p of {CPos => ""; _ => "not"} ++ 
                                        v.c3 ++ 
@@ -87,10 +88,10 @@ lin
     s = \\_,_ => "kh" ;
     a = RNoAg
     } ;
-  no_RP = {
-    s = \\_,_ => "" ;
-    a = RNoAg
-    } ;
+  --no_RP = {
+   -- s = \\_,_ => "" ;
+   -- a = RNoAg
+   -- } ;
 
   CompS s = {s = \\_ => "kh" ++ s.s} ;
 --  CompVP vp = {s = \\a => infVP VVInf vp a} ;
