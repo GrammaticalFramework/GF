@@ -23,6 +23,9 @@ flags coding = utf8 ;
     
     -- added for causitives
     make_CV = mkVerb "نoتہiنگ"   ** {c2 = "" };
+    PassVPSlash vps = vps ;
+    
+    UncNeg = {s = [] ; p = Neg} ; 
 
 -- for VP conjunction
 } 

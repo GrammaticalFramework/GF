@@ -36,5 +36,9 @@ incomplete concrete AdjectiveHindustani of Adjective = CatHindustani ** open Com
 	 };
     
     AdjOrd ord =  { s = \\_,_,_,_ => ord.s ; };
+    
+    AdvAP ap adv = {
+      s = \\n,g,c,d => adv.s ! g ++ ap.s ! n ! g ! c ! d ;
+      } ;
 
 }

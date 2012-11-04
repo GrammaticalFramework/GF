@@ -1,4 +1,5 @@
---# -path=.:../abstract:../common
+
+
 
 --concrete SymbolUrd of Symbol = CatUrd ** open Prelude, ResUrd, StringsHindustani in {
 incomplete concrete SymbolHindustani of Symbol = 
@@ -36,7 +37,7 @@ lin
 
   BaseSymb = infixSS awr ;
   ConsSymb = infixSS [] ;
-
+  
 oper
     -- Note: this results in a space before 's, but there's
     -- not mauch we can do about that.
