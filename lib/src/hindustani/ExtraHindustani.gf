@@ -21,5 +21,19 @@ incomplete concrete ExtraHindustani of ExtraHindustaniAbs = CatHindustani **
     -- added for causitives
     make_CV = mkVerb "nothing"   ** {c2 = "" };
 
+
+   PassVPSlash vps = vsp ;
+ {-   let 
+      be = predAux auxBe ;
+      ppt = vps.ptp
+    in {
+    s = be.s ;
+    prp = be.prp ;
+    ptp = be.ptp ;
+    inf = be.inf ;
+    ad = vps.ad ;
+    s2 = \\a => ppt ++ vps.s2 ! a ---- order
+    } ;
+    -}
 -- for VP conjunction
 } 
