@@ -8568,7 +8568,7 @@ lin dizzy_V2 = mkV2 (compoundV "چکر" (mkV "آنا")) ;
 lin dna_N = mkN "حرکیاتی نفسیات" ;
 lin do_N = mkN "سرانجام دینا" ;
 lin do_V = compoundV "سرانجام" (mkV "دینا") ;
-lin do_V2 = mkV2 (compoundV "ادا" (mkV "کرنا")) ;       -- from DictUrd
+lin do_V2 = mkV2 (mkV "کرنا") ;       -- from DictUrd
 lin do_gooder_N = mkN "مصلح" ;
 lin dobbin_N = mkN "چھکڑا" ;
 lin docile_A = mkA "مطیع" ;       -- from DictUrd
@@ -12240,10 +12240,10 @@ lin gnaw_V2 = mkV2 (compoundV "کتر کتر کر" (mkV "کھانا")) ;
 lin gnome_N = mkN "ایک فرضی بونا" ;
 lin gnu_N = mkN "اسب ہرن" ;
 lin go_N = mkN "جاؤ" ;
-lin go_V = mkV "جاؤ" ;
-lin go_V2 = mkV2 (mkV "جاؤ") ;
-lin go_VA = mkV "جاؤ" ;
-lin go_VS = mkVS (mkV "جاؤ") ;
+lin go_V = mkV "جانا" ; -- corrected manually
+lin go_V2 = mkV2 ("جانا" ) ;
+lin go_VA = mkV "جانا" ;
+lin go_VS = mkVS (mkV "جانا") ;
 lin go_ahead_N = mkN "کام جاری رکھنا" ;
 lin go_between_N = mkN "دلال" ;
 lin go_by_N = mkN "گزرنا" ;
@@ -30206,5 +30206,12 @@ lin presidentMasc_N= mkN "صدر";
 --lin april_N= mkN "اپریل";
 lin understand_V2 = mkV2 (compoundV "سمجھ" (mkV "لینا")) ;
 lin savagery_N = mkN "وحشیانہ پن" ;
-
+lin officialMasc_N= mkN "افسر";
+lin representativeMasc_N= mkN "نمائیندہ";
+lin handcart_N= mkN "صورتحال";
+lin unless_Subj= ss "جب تک";
+lin so_Subj= ss "اس لئے";
+lin several_Num = {s = "کئی" ; n = Pl} ;
+lin few_Num = {s = "چند" ; n = Pl} ;
+lin even_AdV = ss "حتی کہ";
 }

@@ -392,7 +392,7 @@ makeIQuant : Str -> {s : Number => Gender => Case => Str} = \str -> {
         <Perf,_,_,_>      => case root of {
 		                      "ہو" => (mkPastInd root p n g).s ;
 				      "جا" => (mkPastInd "گی" p n g).s ;
-				      "كر" => (mkPastInd "ك" p n g).s ;
+				      "کر" => (mkPastInd "ک" p n g).s ;
 				      "دے" => (mkPastInd "د" p n g).s ;
 				      "لے" => (mkPastInd "ل" p n g).s ;
 				      _    => (mkPastInd root p n g).s };
@@ -415,7 +415,7 @@ makeIQuant : Str -> {s : Number => Gender => Case => Str} = \str -> {
    mkPastInd : Str -> UPerson -> Number -> Gender -> {s:Str} = \root,p,n,g ->
     {s = let roo = root ;
              a = case (last root) of {
-                  "ا"|"آ"|"و"|"ك" => "یا" ;
+                  "ا"|"آ"|"و"|"ک" => "یا" ;
                   _           => "ا"
                  } ;
              y = case (last root) of {
@@ -423,7 +423,7 @@ makeIQuant : Str -> {s : Number => Gender => Case => Str} = \str -> {
                   _           => "ی"
                  } ;
              e = case (last root) of {
-                  "ا"|"آ"|"و"|"ك" => "ئے" ;
+                  "ا"|"آ"|"و"|"ک" => "ئے" ;
                   _           => "ے"
                  } ;
             yN = case (last root) of {

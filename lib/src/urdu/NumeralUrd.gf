@@ -55,7 +55,7 @@ oper mkR : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> DSize 
 } ;
 
 oper rows : DSize => DSize => Str = table {
-  sg => mkR "گیار" "اك" "اكت" "اكت" "اكیاو" "اك" "اك" "اكی" "اكی" ; 
+  sg => mkR "گیار" "اک" "اکت" "اکت" "اکیاو" "اک" "اک" "اکی" "اکی" ; 
   r2 => mkR "بار" "بای" "بات" "بای" "باو" "با" "با" "بای" "ب" ;
   r3 => mkR "تیر" "تی" "تین" "تنت" "ترپ" "تری" "ت" "تر" "تر" ;
   r4 => mkR "چود" "چوب" "چون" "چوا" "چوو" "چون" "چوہ" "چور" "چور" ;
@@ -71,7 +71,7 @@ oper rows : DSize => DSize => Str = table {
 
 oper ss : Str -> {s : Str} = \s -> {s = s} ;
 
-lin pot01 = {s = table {unit => "ایك" ; _ => "دمی" } ; size = sg ; n = Sg} ;
+lin pot01 = {s = table {unit => "ایک" ; _ => "دمی" } ; size = sg ; n = Sg} ;
 lin pot0 d = d ; 
 lin pot110 = {s = "دس" ; size = less100 ; n = Pl} ; 
 lin pot111 = {s = rows ! sg ! sg ; size = less100 ; n = Pl} ;
@@ -83,10 +83,10 @@ lin pot1plus d e = {s = rows ! e.size ! d.size ; size = less100 ; n = Pl} ; --ch
 
 lin pot1as2 n = {s = n.s ; s2 = "دمی" ; size = n.size ; n = n.n} ;
 lin pot2 d = {s = (mksau (d.s ! unit) d.size) ; 
-              s2 = d.s ! unit ++ "لاكھ" ; size = more100 ; n = Pl} ; --changed from d.n
+              s2 = d.s ! unit ++ "لاکھ" ; size = more100 ; n = Pl} ; --changed from d.n
 lin pot2plus d e = 
   {s = (mksau (d.s ! unit) d.size) ++ e.s ; 
-   s2 = (d.s ! unit) ++ "لاكھ" ++ (mkhazar e.s e.size) ; 
+   s2 = (d.s ! unit) ++ "لاکھ" ++ (mkhazar e.s e.size) ; 
    size = more100 ; n = Pl} ;
 
 lin pot2as3 n = {s = n.s ; n = n.n} ;
@@ -111,7 +111,7 @@ lin D_9 = { s = "۹" ; n = Pl};
 lin IDig d = { s = \\_ => d.s ; n = d.n} ;
 lin IIDig d dg = { s = \\df => Prelude.glue (dg.s ! df) d.s ; n = Pl }; 
 
-oper ekhazar : Str = variants {"ہزار" ; "ایك" ++ "ہزار"} ; 
+oper ekhazar : Str = variants {"ہزار" ; "ایک" ++ "ہزار"} ; 
 oper mkhazar : Str -> Size -> Str = \s -> \sz -> table {singl => ekhazar ; _ => s ++ "ہزار"} ! sz ;
-oper mksau : Str -> DSize -> Str = \s -> \sz -> table {sg => "ایك" ++ "سو" ; _ => s ++ "سو"} ! sz ;
+oper mksau : Str -> DSize -> Str = \s -> \sz -> table {sg => "ایک" ++ "سو" ; _ => s ++ "سو"} ! sz ;
 }

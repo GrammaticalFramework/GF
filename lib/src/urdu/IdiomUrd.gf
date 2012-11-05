@@ -5,7 +5,7 @@ concrete IdiomUrd of Idiom = CatUrd ** open Prelude,Predef, ResUrd,ParamX,Common
 
   lin
     ImpersCl vp = mkSClause " " (agrP3 Masc Sg) vp ;
-    GenericCl vp = mkSClause "كوی" (agrP3 Masc Sg) vp ;
+    GenericCl vp = mkSClause "کوی" (agrP3 Masc Sg) vp ;
 
     CleftNP np rs = 
 	 let cl = mkSClause (np.s ! NPC rs.c) (np.a) (predAux auxBe);
@@ -32,8 +32,8 @@ concrete IdiomUrd of Idiom = CatUrd ** open Prelude,Predef, ResUrd,ParamX,Common
 
 --    ImpPl1 vp = {s = "آو" ++ infVP True vp (agrP1 Masc Pl)} ; -- inf form is not used e.g Aw swna instead Aw swyyN (Imp.fin)
    ImpPl1 vp = {s = "آو" ++ (vp.s ! VPImp).fin} ;
---	ImpP3 np vp = {s = np.s!NPC Dir ++ "كو" ++ (vp.s ! VPImp ).inf ++ "دو"}; here VPImp form is not correct e.g jan ko sw do, rather jan ko swnE do, and swnE is stored in vp.VPInf.fin
-  ImpP3 np vp = {s = np.s!NPC Dir ++ "كو" ++ (vp.s ! VPInf ).fin ++ "دو"};
+--	ImpP3 np vp = {s = np.s!NPC Dir ++ "کو" ++ (vp.s ! VPImp ).inf ++ "دو"}; here VPImp form is not correct e.g jan ko sw do, rather jan ko swnE do, and swnE is stored in vp.VPInf.fin
+  ImpP3 np vp = {s = np.s!NPC Dir ++ "کو" ++ (vp.s ! VPInf ).fin ++ "دو"};
 
 
 }

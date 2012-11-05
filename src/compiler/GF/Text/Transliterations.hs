@@ -138,13 +138,13 @@ allTransUrduHindi = words $
 transUrdu :: Transliteration
 transUrdu = 
   (mkTransliteration "Urdu" allTrans allCodes) where
-    allCodes = [0x0622 .. 0x062f] ++ [0x0630 .. 0x063a] ++ [0x0641 .. 0x0648] ++ 
+    allCodes = [0x0622 .. 0x062f] ++ [0x0630 .. 0x063a] ++ [0x0641,0x0642] ++ [0x06A9] ++ [0x0644 .. 0x0648] ++ 
                [0x0654,0x0658,0x0679,0x067e,0x0686,0x0688,0x0691,0x0698,0x06af,0x06c1,0x06c3,0x06cc,0x06ba,0x06be,0x06d2] ++
 			   [0x06f0 .. 0x06f9] ++ [0x061f,0x06D4]
     allTrans = words $
       "A - w^ - y^ a b - t C j H K d " ++  -- 0622 - 062f
       "Z r z s X S Z- t- z- e G "   ++  -- 0630 - 063a
-      "f q k l m n - w "    ++  -- 0641 - 0648
+      "f q k l m n - w "    ++  -- 0641, 0642, 0643 - 0648
       "$ n- T p c D R x g h t: y N h' E " ++  -- 0654,658,679,67e,686,688,698,6af,6c1,6c3,6cc,6ba,6be,6d2
       "N0 N1 N2 N3 N4 N5 N6 N7 N8 N9 " ++ "? ."
 
