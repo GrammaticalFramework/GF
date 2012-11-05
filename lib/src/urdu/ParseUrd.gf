@@ -84,6 +84,9 @@ ComplVV v a p vp = insertTrans (insertVV (infVV v.isAux vp) (predV v) vp.embComp
           }
     } ;
 -}
+CompVP ant p vp = {s = \\a => ant.s ++ p.s ++ 
+                                infVP False vp a} ;
+
   that_RP = {
     s = \\_,_ => "kh" ;
     a = RNoAg

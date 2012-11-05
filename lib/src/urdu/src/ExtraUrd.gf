@@ -25,4 +25,25 @@ flags coding = utf8 ;
     make_CV = mkVerb "nothing"   ** {c2 = "" };
 
 -- for VP conjunction
-} 
+
+PassVPSlash vps = vps ;
+{-
+--{
+  --  let 
+  --    be = predAux auxBe 
+   -- in {
+   -- s = be.s ;
+   s = vps.s ;
+    obj = vps.obj ;
+      subj = vps.c2.c ;
+      inf = vps.inf;
+      ad = vps.ad;
+      embComp = vps.embComp;
+      prog = vps.prog ;
+      comp = vps.comp ;
+      cvp = vps.cvp       
+   -- } ;
+
+--};
+-}
+}

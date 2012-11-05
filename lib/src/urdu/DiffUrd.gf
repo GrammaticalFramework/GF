@@ -45,7 +45,7 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
           quest =
             case ord of
               { ODir => [];
-                OQuest => "كیا" }; 
+                OQuest => "کیا" }; 
 		  na =
             case b of
               { Pos => [];
@@ -88,7 +88,7 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
 	  quest =
             case ord of
               { ODir => [];
-                OQuest => "كیا" }; 
+                OQuest => "کیا" }; 
 	  na =
             case b of
               { Pos => [];
@@ -114,17 +114,17 @@ Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
       } ;
       
       
-conjThat = "كہ" ;
+conjThat = "کہ" ;
   insertSubj : UPerson -> Str -> Str = \p,s -> 
       case p of { Pers1 => s ++ "واں" ; _ => s ++ "ے"}; -- check with prasad for vn~
       
   agr = "اگر" ;
   awr = "اور" ;
-  ky = "كی" ;
+  ky = "کی" ;
   jn = "جن" ;
   js = "جس" ;
   jw = "جو" ;
-  kw = "كو" ;
+  kw = "کو" ;
   mt = "مت" ;
   nE = "نے" ;
   nh = "نا" ;
@@ -204,7 +204,7 @@ copula : CTense -> Number -> UPerson -> Gender -> Str = \t,n,p,g ->
 	   (regAdjective "رہا").s ! n ! g ! Dir ! Posit ;
 
   cka : Gender -> Number -> Str = \g,n -> 
-	  (regAdjective "چكا").s ! n ! g ! Dir ! Posit ;
+	  (regAdjective "چکا").s ! n ! g ! Dir ! Posit ;
 	  
   hw : UPerson -> Number -> Str = \pp,n ->    
 	 case <pp,n> of {
