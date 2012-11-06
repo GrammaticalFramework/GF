@@ -228,12 +228,12 @@ param
     insertObj2 obj vp ** {c2 = vp.c2} ;
 
 	infVP : Bool -> VPH -> Agr -> Str = \isAux,vp,a ->
-     vp.obj.s ++ vp.comp ! a ++ vp.inf  ;
+     vp.obj.s ++ vp.ad ++ vp.comp ! a ++ vp.cvp ++ vp.inf ;
 
    infVV : Bool -> VPH -> Str = \isAux,vp -> 
-      case isAux of {False =>  vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc))  ++ vp.cvp ++ vp.inf ; True => vp.cvp ++ (vp.s ! VPImp).inf  ++ vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) } ;
+      case isAux of {False =>  vp.obj.s ++ vp.ad ++ (vp.comp ! (toAgr Sg Pers1 Masc))  ++ vp.cvp ++ vp.inf ; True => vp.cvp ++ (vp.s ! VPImp).inf  ++ vp.obj.s ++ vp.ad ++ (vp.comp ! (toAgr Sg Pers1 Masc)) } ;
     infV2V : Bool -> VPH -> Str = \isAux,vp -> 
-      case isAux of {False =>  vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPInf).fin ++ ky  ; True => vp.obj.s ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPImp).fin  ++ ky};
+      case isAux of {False =>  vp.obj.s ++ vp.ad ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPInf).fin ++ ky  ; True => vp.obj.s  ++ vp.ad ++ (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPImp).fin  ++ ky};
 
 
     insertObject : NP -> VPHSlash -> VPH = \np,vps -> {
