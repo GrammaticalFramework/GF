@@ -85,7 +85,7 @@ ComplVV v a p vp = insertTrans (insertVV (infVV v.isAux vp) (predV v) vp.embComp
     } ;
 -}
 CompVP ant p vp = {s = \\a => ant.s ++ p.s ++ 
-                                infVP False vp a} ;
+                                infVP False vp a} ; -- check for vp.isAux
 
   that_RP = {
     s = \\_,_ => "kh" ;
