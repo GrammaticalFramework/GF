@@ -211,9 +211,12 @@ handle state0 cache execute1
           then return path
           else err $ resp400 $ "unacceptable path "++path
 
-    make skip dir files =
-      do _ <- upload skip files
-         let args = "-s":"-make":map fst files
+    make skip dir args =
+      do let (flags,files) = partition ((=="-").take 1.fst) args
+         _ <- upload skip files
+         let args = "-s":"-make":map flag flags++map fst files
+             flag (n,"") = n
+             flag (n,v) = n++"="++v
              cmd = unwords ("gf":args)
          out <- liftIO $ readProcessWithExitCode "gf" args ""
          cwd <- liftIO $ getCurrentDirectory
