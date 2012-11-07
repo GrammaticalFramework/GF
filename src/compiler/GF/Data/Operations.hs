@@ -15,7 +15,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Data.Operations (-- * misc functions
-		   ifNull, onSnd,
+		   ifNull,
 
 		   -- * the Error monad
 		   Err(..), err, maybeErr, testErr, errVal, errIn, 
@@ -75,9 +75,6 @@ infixr 5 +++++
 
 ifNull :: b -> ([a] -> b) -> [a] -> b
 ifNull b f xs = if null xs then b else f xs
-
-onSnd :: (a -> b) -> (c,a) -> (c,b)
-onSnd f (x, y) = (x, f y)
 
 -- the Error monad
 
