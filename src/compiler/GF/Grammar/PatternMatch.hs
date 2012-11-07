@@ -28,7 +28,7 @@ import Control.Monad
 import Text.PrettyPrint
 import Debug.Trace
 
-matchPattern :: [(Patt,Term)] -> Term -> Err (Term, Substitution)
+matchPattern :: [(Patt,rhs)] -> Term -> Err (rhs, Substitution)
 matchPattern pts term = 
   if not (isInConstantForm term)
     then Bad (render (text "variables occur in" <+> ppTerm Unqualified 0 term))
@@ -57,7 +57,7 @@ testOvershadow pts vs = do
   ts <- mapM (liftM fst . matchPattern cases) vs
   return [p | (p,i) <- numpts, notElem i [i | EInt i <- ts] ]
 
-findMatch :: [([Patt],Term)] -> [Term] -> Err (Term, Substitution)
+findMatch :: [([Patt],rhs)] -> [Term] -> Err (rhs, Substitution)
 findMatch cases terms = case cases of
    [] -> Bad (render (text "no applicable case for" <+> hsep (punctuate comma (map (ppTerm Unqualified 0) terms))))
    (patts,_):_ | length patts /= length terms -> 
