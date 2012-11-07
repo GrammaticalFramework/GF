@@ -130,11 +130,20 @@ both f g x y = g (f x) (f y)
 
 -- * functions on pairs
 
-mapFst :: (a -> a') -> (a, b) -> (a', b)
-mapFst f (a, b) = (f a, b)
+apFst :: (a -> a') -> (a, b) -> (a', b)
+apFst f (a, b) = (f a, b)
 
-mapSnd :: (b -> b') -> (a, b) -> (a, b')
-mapSnd f (a, b) = (a, f b)
+apSnd :: (b -> b') -> (a, b) -> (a, b')
+apSnd f (a, b) = (a, f b)
+
+apBoth :: (a -> b) -> (a, a) -> (b, b)
+apBoth f (x, y) = (f x, f y)
+
+-- * functions on lists of pairs
+
+mapFst = map . apFst
+mapSnd = map . apSnd
+mapBoth = map . apBoth
 
 -- * functions on monads
 
