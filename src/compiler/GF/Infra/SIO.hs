@@ -21,7 +21,7 @@ module GF.Infra.SIO(
 import Prelude hiding (putStrLn,print)
 import Control.Monad(liftM)
 import System.IO(Handle,hPutStrLn,hFlush,stdout)
-import System.IO.Error(try)
+import GF.System.Catch(try)
 import System.Cmd(system)
 import System.Environment(getEnv)
 import Control.Concurrent.Chan(newChan,writeChan,getChanContents)
