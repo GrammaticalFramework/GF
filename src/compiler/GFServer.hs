@@ -8,7 +8,8 @@ import Control.Monad.State(StateT(..),get,gets,put)
 import Control.Monad.Error(ErrorT(..),Error(..))
 import System.Random(randomRIO)
 import System.IO(stderr,hPutStrLn)
-import System.IO.Error(try,isAlreadyExistsError)
+import GF.System.Catch(try)
+import System.IO.Error(isAlreadyExistsError)
 import System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
                         setCurrentDirectory,getCurrentDirectory,
                         getDirectoryContents,removeFile,removeDirectory)

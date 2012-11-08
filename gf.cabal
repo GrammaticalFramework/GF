@@ -95,7 +95,7 @@ library
     Data.Binary.IEEE754
 
 executable gf
-  build-depends: base >= 4.2,
+  build-depends: base >= 4.2 && <5,
                  array,
                  containers,
                  bytestring,
@@ -146,8 +146,9 @@ executable gf
     GF.Infra.Option
     GF.Infra.UseIO
     GF.Infra.CheckM
-    GF.System.Signal
+    GF.System.Catch
     GF.System.Console
+    GF.System.Signal
     GF.Command.Commands
     GF.Command.Interpreter
     GF.Command.Abstract

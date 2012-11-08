@@ -15,14 +15,17 @@
 
 module GF.Infra.UseIO where
 
+import Prelude hiding (catch)
+
 import GF.Data.Operations
 import GF.Infra.Option
+import GF.System.Catch
 import Paths_gf(getDataDir)
 
 import System.Directory
 import System.FilePath
 import System.IO
-import System.IO.Error
+import System.IO.Error(isUserError,ioeGetErrorString)
 import System.Environment
 import System.Exit
 import System.CPUTime

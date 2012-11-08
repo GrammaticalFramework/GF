@@ -14,8 +14,11 @@
 
 module GF.Compile.GetGrammar (getSourceModule) where
 
+import Prelude hiding (catch)
+
 import GF.Data.Operations
 
+import GF.System.Catch
 import GF.Infra.UseIO
 import GF.Infra.Option(Options,optPreprocessors,addOptions,flag)
 import GF.Grammar.Lexer

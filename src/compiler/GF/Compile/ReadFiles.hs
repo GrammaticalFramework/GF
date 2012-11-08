@@ -23,6 +23,8 @@ module GF.Compile.ReadFiles
              gfoFile,gfFile,isGFO,gf2gfo,
              getOptionsFromFile) where
 
+import Prelude hiding (catch)
+import GF.System.Catch
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Infra.Ident
