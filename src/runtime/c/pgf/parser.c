@@ -83,11 +83,14 @@ struct PgfParseState {
 	PgfParseState* next;
 
     PgfItemBuf* agenda;
+    PgfItem* meta_item;
 	PgfContsMap* conts_map;
 	PgfGenCatMap* generated_cats;
 #ifdef PGF_PARSER_DEBUG
     unsigned short offset;
 #endif
+
+	prob_t delta_prob;
 
     PgfParsing* ps;
     PgfTokenState* ts;
@@ -493,21 +496,6 @@ pgf_parsing_get_conts(PgfContsMap* conts_map,
 	return conts;
 }
 
-static bool
-pgf_parsing_has_conts(PgfContsMap* conts_map,
-                      PgfCCat* ccat, size_t lin_idx,
-                      PgfItemConts* conts)
-{
-	gu_require(lin_idx < ccat->cnccat->n_lins);
-
-	PgfItemContss* contss = gu_map_get(conts_map, ccat, PgfItemContss*);
-	if (!contss)
-		return false;
-
-	PgfItemConts* conts0 = gu_list_index(contss, lin_idx);
-	return (conts == conts0);
-}
-
 static PgfCCat*
 pgf_parsing_create_completed(PgfParseState* state, PgfItemConts* conts,
                              prob_t viterbi_prob)
@@ -753,8 +741,12 @@ pgf_parsing_add_transition(PgfParseState* before, PgfParseState* after,
                            PgfToken tok, PgfItem* item)
 {
     if (gu_string_eq(tok, after->ts->tok)) {
-        if (after->next == NULL)
+        if (after->next == NULL) {
 			after->ps->target = item;
+			after->delta_prob = 
+				item->inside_prob+item->conts->outside_prob - 
+				before->delta_prob;
+		}
 
 		gu_buf_heap_push(after->agenda, &pgf_item_prob_order, &item);
     } else {
@@ -764,8 +756,7 @@ pgf_parsing_add_transition(PgfParseState* before, PgfParseState* after,
 
 static void
 pgf_parsing_combine(PgfParseState* before, PgfParseState* after,
-                    PgfItem* cont, PgfCCat* cat, int lin_idx,
-                    bool is_empty)
+                    PgfItem* cont, PgfCCat* cat, int lin_idx)
 {
 	if (cont == NULL) {
 		if (after == NULL)
@@ -801,7 +792,7 @@ pgf_parsing_combine(PgfParseState* before, PgfParseState* after,
 			gu_impossible();
 		}
 	} else {
-		if (is_empty)
+		if (before->meta_item != NULL)
 			return;
 
 		item = pgf_item_copy(cont, before->pool, before->ps);
@@ -827,6 +818,8 @@ pgf_parsing_combine(PgfParseState* before, PgfParseState* after,
 		*((PgfSymbol*)(scat+1)) = prev;
 		scat->d = nargs;
 		scat->r = lin_idx;
+		
+		before->meta_item = item;
 	}
 
 	pgf_item_advance(item, before->pool);
@@ -1020,15 +1013,10 @@ pgf_parsing_complete(PgfParseState* before, PgfParseState* after,
 			state = state->next;
 		}
 	} else {
-		bool is_empty =
-			pgf_parsing_has_conts(before->conts_map, 
-		                          item->conts->ccat, item->conts->lin_idx, 
-		                          item->conts);
-
 		size_t n_conts = gu_buf_length(item->conts->items);
 		for (size_t i = 0; i < n_conts; i++) {
 			PgfItem* cont = gu_buf_get(item->conts->items, PgfItem*, i);
-			pgf_parsing_combine(before, after, cont, cat, item->conts->lin_idx, is_empty);
+			pgf_parsing_combine(before, after, cont, cat, item->conts->lin_idx);
 		}
     }
 }
@@ -1105,16 +1093,6 @@ pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
 				gu_seq_get(prods, PgfProduction, i);		
 			pgf_parsing_production(before, conts, prod);
 		}
-		
-		if (ccat->cnccat->abscat->meta_prob != INFINITY &&
-		    ccat->conts == NULL /* grammar defined ccat */) {
-			// Top-down prediction for meta rules
-			PgfItem *item =
-				pgf_new_item(conts, before->ps->meta_prod, before->pool, before->ps);
-			item->inside_prob = 
-				ccat->cnccat->abscat->meta_prob;
-			gu_buf_heap_push(before->agenda, &pgf_item_prob_order, &item);
-		}
 
 		// Bottom-up prediction for lexical rules
 		if (after != NULL && after->ts->lexicon_idx != NULL) {
@@ -1153,7 +1131,7 @@ pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
 		PgfCCat* completed =
 			pgf_parsing_get_completed(before, conts);
 		if (completed) {
-			pgf_parsing_combine(before, after, item, completed, lin_idx, true);
+			pgf_parsing_combine(before, after, item, completed, lin_idx);
 		}
 
 		PgfParseState* state = after;
@@ -1161,7 +1139,7 @@ pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
 			PgfCCat* completed =
 				pgf_parsing_get_completed(state, conts);
 			if (completed) {
-				pgf_parsing_combine(state, state->next, item, completed, lin_idx, true);
+				pgf_parsing_combine(state, state->next, item, completed, lin_idx);
 			}
 
 			state = state->next;
@@ -1360,7 +1338,7 @@ pgf_parsing_symbol(PgfParseState* before, PgfParseState* after,
 					PgfCCat* completed =
 							pgf_parsing_get_completed(before, conts);
 					if (completed) {
-						pgf_parsing_combine(before, after, item, completed, slit->r, true);
+						pgf_parsing_combine(before, after, item, completed, slit->r);
 					}
 						
 					PgfParseState* state = after;
@@ -1368,7 +1346,7 @@ pgf_parsing_symbol(PgfParseState* before, PgfParseState* after,
 						PgfCCat* completed =
 							pgf_parsing_get_completed(state, conts);
 						if (completed) {
-							pgf_parsing_combine(state, state->next, item, completed, slit->r, true);
+							pgf_parsing_combine(state, state->next, item, completed, slit->r);
 						}
 
 						state = state->next;
@@ -1509,7 +1487,7 @@ pgf_parsing_item(PgfParseState* before, PgfParseState* after, PgfItem* item)
 				pgf_parsing_symbol(before, after, item, sym);
 			}
 		} else {
-			if (!gu_variant_is_null(item->curr_sym)) {
+			if (after == NULL) {
 				PgfExprProb *ep = gu_new(PgfExprProb, before->pool);
 				ep->expr = before->ps->meta_var;
 				ep->prob = item->inside_prob;
@@ -1519,9 +1497,7 @@ pgf_parsing_item(PgfParseState* before, PgfParseState* after, PgfItem* item)
 					ep->prob -= arg->ccat->viterbi_prob;
 				}
 				pgf_parsing_complete(before, after, item, ep);
-			}
-
-			if (after != NULL) {
+			} else {
 				if (after->ts->lexicon_idx == NULL) {
 					prob_t meta_token_prob = 
 						item->conts->ccat->cnccat->abscat->meta_token_prob;
@@ -1563,16 +1539,20 @@ pgf_parsing_proceed(PgfParseState* state) {
 	prob_t best_prob = INFINITY;
 	PgfParseState* before = NULL;
 
+	prob_t delta_prob = 0;
 	PgfParseState* st = state;
 	while (st != NULL) {
 		if (gu_buf_length(st->agenda) > 0) {
 			PgfItem* item = gu_buf_get(st->agenda, PgfItem*, 0);
-			prob_t item_prob = item->inside_prob+item->conts->outside_prob;
+			prob_t item_prob = 
+				item->inside_prob+item->conts->outside_prob+delta_prob;
 			if (item_prob < best_prob) {
 				best_prob = item_prob;
 				before    = st;
 			}
 		}
+
+		delta_prob += st->delta_prob*0.8;
 		st = st->next;
 	}
 
@@ -1646,11 +1626,13 @@ pgf_new_parse_state(PgfParsing* ps,
 	state->pool = pool;
 	state->next = next;
     state->agenda = gu_new_buf(PgfItem*, pool);
+    state->meta_item = NULL;
 	state->generated_cats = gu_map_type_new(PgfGenCatMap, pool);
 	state->conts_map = gu_map_type_new(PgfContsMap, pool);
 #ifdef PGF_PARSER_DEBUG
     state->offset = next ? next->offset+1 : 0;
 #endif
+	state->delta_prob = 0;
     state->ps = ps;
     state->ts = ts;
 	return state;
@@ -1944,10 +1926,10 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
                     pgf_new_item(conts, prod, pool, ps);
                 gu_buf_heap_push(state->agenda, &pgf_item_prob_order, &item);
             }
-            
+
          	PgfItem *item =
 				pgf_new_item(conts, ps->meta_prod, pool, ps);
-			item->inside_prob = 
+			item->inside_prob =
 				ccat->cnccat->abscat->meta_prob;
 			gu_buf_heap_push(state->agenda, &pgf_item_prob_order, &item);
 		}
