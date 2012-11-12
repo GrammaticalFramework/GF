@@ -14,18 +14,10 @@
 typedef GuBuf PgfItemBuf;
 static GU_DEFINE_TYPE(PgfItemBuf, abstract, _);
 
-#ifdef PGF_PARSER_DEBUG
-#define STATE_OFFSET(state) state->offset
-#else
-#define STATE_OFFSET(state) 0
-#endif
-
 struct PgfItemConts {
 	PgfCCat* ccat;
 	size_t lin_idx;
-#ifdef PGF_PARSER_DEBUG
-	unsigned short offset;
-#endif
+	PgfParseState* state;
 	prob_t outside_prob;
 	PgfItemBuf* items;
 	int ref_count;			// how many items point to this cont?
@@ -380,11 +372,11 @@ pgf_print_item_seq(PgfItem *item,
 }
 
 static void
-pgf_print_item(PgfItem* item, int offset, GuWriter* wtr, GuExn* err, GuPool* pool)
+pgf_print_item(PgfItem* item, PgfParseState* state, GuWriter* wtr, GuExn* err, GuPool* pool)
 {
     gu_printf(wtr, err, "[%d-%d; C%d -> ",
-	                    item->conts->offset,
-	                    offset,
+	                    item->conts->state ? item->conts->state->offset : 0,
+	                    state ? state->offset : 0,
 	                    item->conts->ccat->fid);
 
 	GuVariantInfo i = gu_variant_open(item->prod);
@@ -472,7 +464,8 @@ pgf_parsing_get_contss(PgfContsMap* conts_map, PgfCCat* cat, GuPool *pool)
 
 static PgfItemConts*
 pgf_parsing_get_conts(PgfContsMap* conts_map,
-                      PgfCCat* ccat, size_t lin_idx, int offset,
+                      PgfCCat* ccat, size_t lin_idx, 
+                      PgfParseState* state,
 					  GuPool *pool)
 {
 	gu_require(lin_idx < ccat->cnccat->n_lins);
@@ -483,9 +476,7 @@ pgf_parsing_get_conts(PgfContsMap* conts_map,
 		conts = gu_new(PgfItemConts, pool);
 		conts->ccat      = ccat;
 		conts->lin_idx   = lin_idx;
-#ifdef PGF_PARSER_DEBUG
-		conts->offset    = offset;
-#endif
+		conts->state     = state;
 		conts->items     = gu_new_buf(PgfItem*, pool);
 		conts->ref_count = 0;
 		gu_list_index(contss, lin_idx) = conts;
@@ -965,7 +956,7 @@ pgf_parsing_complete(PgfParseState* before, PgfParseState* after,
     GuExn* err = gu_exn(NULL, type, tmp_pool);
     if (tmp_cat == NULL)
 		gu_printf(wtr, err, "[%d-%d; C%d; %d; C%d]\n",
-                            item->conts->offset,
+                            item->conts->state ? item->conts->state->offset : 0,
                             before->offset,
                             item->conts->ccat->fid, 
                             item->conts->lin_idx, 
@@ -1077,7 +1068,7 @@ pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
 {
 	PgfItemConts* conts = 
 		pgf_parsing_get_conts(before->conts_map, 
-		                      ccat, lin_idx, STATE_OFFSET(before),
+		                      ccat, lin_idx, before,
 		                      before->pool);
 	gu_buf_push(conts->items, PgfItem*, item);
 	if (gu_buf_length(conts->items) == 1) {
@@ -1321,7 +1312,7 @@ pgf_parsing_symbol(PgfParseState* before, PgfParseState* after,
 			else {
 				PgfItemConts* conts = 
 					pgf_parsing_get_conts(before->conts_map, 
-										  parg->ccat, slit->r, STATE_OFFSET(before),
+										  parg->ccat, slit->r, before,
 										  before->pool);
 				gu_buf_push(conts->items, PgfItem*, item);
 
@@ -1386,7 +1377,7 @@ pgf_parsing_item(PgfParseState* before, PgfParseState* after, PgfItem* item)
     GuOut* out = gu_file_out(stderr, tmp_pool);
     GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
     GuExn* err = gu_exn(NULL, type, tmp_pool);
-    pgf_print_item(item, before->offset, wtr, err, tmp_pool);
+    pgf_print_item(item, before, wtr, err, tmp_pool);
     gu_pool_free(tmp_pool);
 #endif
 	
@@ -1630,7 +1621,7 @@ pgf_new_parsing(PgfConcr* concr, GuPool* pool)
 static PgfParseState*
 pgf_new_parse_state(PgfParsing* ps,
                     PgfParseState* next,
-                    PgfTokenState* ts, int offset,
+                    PgfTokenState* ts,
                     GuPool* pool)
 {
 	PgfParseState* state = gu_new(PgfParseState, pool);
@@ -1640,7 +1631,7 @@ pgf_new_parse_state(PgfParsing* ps,
 	state->generated_cats = gu_map_type_new(PgfGenCatMap, pool);
 	state->conts_map = gu_map_type_new(PgfContsMap, pool);
 #ifdef PGF_PARSER_DEBUG
-    state->offset = offset;
+    state->offset = next ? next->offset+1 : 0;
 #endif
     state->ps = ps;
     state->ts = ts;
@@ -1667,9 +1658,7 @@ pgf_parser_next_state(PgfParseState* prev, PgfToken tok, GuPool* pool)
 	PgfTokenState* ts =
 		pgf_new_token_state(prev->ps->concr,tok,pool);
 	PgfParseState* state =
-	    pgf_new_parse_state(prev->ps, prev,
-                            ts, STATE_OFFSET(prev)+1,
-                            pool);
+	    pgf_new_parse_state(prev->ps, prev, ts, pool);
 
 	state->ps->target = NULL;
 	pgf_parsing_proceed(state, (void**) &state->ps->target);
@@ -1893,7 +1882,7 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
 	PgfParsing* ps =
 		pgf_new_parsing(concr, pool);
 	PgfParseState* state =
-		pgf_new_parse_state(ps, NULL, NULL, 0, pool);
+		pgf_new_parse_state(ps, NULL, NULL, pool);
 
 	size_t n_ccats = gu_list_length(cnccat->cats);
 	for (size_t i = 0; i < n_ccats; i++) {
@@ -1907,9 +1896,7 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
 			PgfItemConts* conts = gu_new(PgfItemConts, pool);
 			conts->ccat      = ccat;
 			conts->lin_idx   = lin_idx;
-#ifdef PGF_PARSER_DEBUG
-			conts->offset    = 0;
-#endif
+			conts->state     = NULL;
 			conts->items     = gu_new_buf(PgfItem*, pool);
 			conts->ref_count = 0;
 			gu_buf_push(conts->items, PgfItem*, NULL);
@@ -2015,7 +2002,7 @@ pgf_parser_leftcorner_item(PgfLeftcornerFn* clo, PgfItem* item)
     GuOut* out = gu_file_out(stderr, tmp_pool);
     GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
     GuExn* err = gu_exn(NULL, type, tmp_pool);
-    pgf_print_item(item, 0, wtr, err, tmp_pool);
+    pgf_print_item(item, NULL, wtr, err, tmp_pool);
     gu_pool_free(tmp_pool);
 #endif
 
