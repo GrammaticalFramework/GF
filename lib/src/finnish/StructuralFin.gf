@@ -68,7 +68,7 @@ concrete StructuralFin of Structural = CatFin **
   on_Prep = casePrep adessive ;
 ---  one_Quant = mkDet Sg  DEPREC
   only_Predet = {s = \\_,_ => "vain"} ;
-  or_Conj = {s1 = [] ; s2 = "tai" ; n = Pl} ;
+  or_Conj = {s1 = [] ; s2 = "tai" ; n = Sg} ;
   otherwise_PConj = ss "muuten" ;
   part_Prep = casePrep partitive ;
   please_Voc = ss ["ole hyvä"] ; --- number
