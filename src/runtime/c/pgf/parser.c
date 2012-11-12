@@ -48,8 +48,11 @@ typedef struct {
 	PgfProduction meta_prod;
     int max_fid;
 #ifdef PGF_COUNTS_DEBUG
-    int item_count;
-    int real_count;
+    int item_full_count;
+    int item_real_count;
+    int cont_full_count;
+    int ccat_full_count;
+    int prod_full_count;
 #endif
     PgfItem* free_item;
 } PgfParsing;
@@ -480,6 +483,12 @@ pgf_parsing_get_conts(PgfContsMap* conts_map,
 		conts->items     = gu_new_buf(PgfItem*, pool);
 		conts->ref_count = 0;
 		gu_list_index(contss, lin_idx) = conts;
+		
+#ifdef PGF_COUNTS_DEBUG
+		if (state != NULL) {
+			state->ps->cont_full_count++;
+		}
+#endif
 	}
 	return conts;
 }
@@ -511,6 +520,11 @@ pgf_parsing_create_completed(PgfParseState* state, PgfItemConts* conts,
 	cat->prods = gu_buf_seq(gu_new_buf(PgfProduction, state->pool));
 	cat->n_synprods = 0;
 	gu_map_put(state->generated_cats, conts, PgfCCat*, cat);
+
+#ifdef PGF_COUNTS_DEBUG	
+	state->ps->ccat_full_count++;
+#endif
+
 	return cat;
 }
 
@@ -635,8 +649,8 @@ pgf_new_item(PgfItemConts* conts, PgfProduction prod,
 
 #ifdef PGF_COUNTS_DEBUG
 	if (ps != NULL) {
-		ps->item_count++;
-		ps->real_count++;
+		ps->item_full_count++;
+		ps->item_real_count++;
 	}
 #endif
 
@@ -657,8 +671,8 @@ pgf_item_copy(PgfItem* item, GuPool* pool, PgfParsing* ps)
 
 #ifdef PGF_COUNTS_DEBUG
 	if (ps != NULL) {
-		ps->item_count++;
-		ps->real_count++;
+		ps->item_full_count++;
+		ps->item_real_count++;
 	}
 #endif
 
@@ -730,7 +744,7 @@ pgf_item_free(PgfParseState* before, PgfParseState* after,
 	item->next = before->ps->free_item;
 	before->ps->free_item = item;
 #ifdef PGF_COUNTS_DEBUG
-	before->ps->real_count--;
+	before->ps->item_real_count--;
 #endif
 }
 
@@ -937,6 +951,9 @@ pgf_parsing_complete(PgfParseState* before, PgfParseState* after,
 {
 	PgfProduction prod =
 		pgf_parsing_new_production(item, ep, before->pool);
+#ifdef PGF_COUNTS_DEBUG
+	before->ps->prod_full_count++;
+#endif
 
 	PgfCCat* tmp_cat = pgf_parsing_get_completed(before, item->conts);
     PgfCCat* cat = tmp_cat;
@@ -1596,8 +1613,11 @@ pgf_new_parsing(PgfConcr* concr, GuPool* pool)
 	ps->target = NULL;
 	ps->max_fid = concr->total_cats;
 #ifdef PGF_COUNTS_DEBUG
-	ps->item_count = 0;
-	ps->real_count = 0;
+	ps->item_full_count = 0;
+	ps->item_real_count = 0;
+	ps->cont_full_count = 0;
+	ps->ccat_full_count = 0;
+	ps->prod_full_count = 0;
 #endif
 	ps->free_item = NULL;
 
@@ -1648,11 +1668,23 @@ pgf_new_token_state(PgfConcr *concr, PgfToken tok, GuPool* pool)
 	return ts;
 }
 
+#ifdef PGF_COUNTS_DEBUG
+void pgf_parsing_print_counts(PgfParsing* ps)
+{
+	printf("%d\t%d\t%d\t%d\t%d\n", 
+		ps->item_full_count, 
+		ps->item_real_count, 
+		ps->cont_full_count,
+		ps->ccat_full_count,
+		ps->prod_full_count);
+}
+#endif
+
 PgfParseState*
 pgf_parser_next_state(PgfParseState* prev, PgfToken tok, GuPool* pool)
 {
 #ifdef PGF_COUNTS_DEBUG
-	printf("%d\t%d\n", prev->ps->item_count, prev->ps->real_count);
+	pgf_parsing_print_counts(prev->ps);
 #endif
 
 	PgfTokenState* ts =
@@ -1850,7 +1882,7 @@ PgfExprEnum*
 pgf_parse_result(PgfParseState* state, GuPool* pool)
 {
 #ifdef PGF_COUNTS_DEBUG
-	printf("%d\t%d\n", state->ps->item_count, state->ps->real_count);
+	pgf_parsing_print_counts(state->ps);
 #endif
 
 	GuPool* tmp_pool = gu_new_pool();
@@ -1900,6 +1932,10 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
 			conts->items     = gu_new_buf(PgfItem*, pool);
 			conts->ref_count = 0;
 			gu_buf_push(conts->items, PgfItem*, NULL);
+			
+#ifdef PGF_COUNTS_DEBUG
+			ps->cont_full_count++;
+#endif
 
             size_t n_prods = gu_seq_length(ccat->prods);
             for (size_t i = 0; i < n_prods; i++) {
