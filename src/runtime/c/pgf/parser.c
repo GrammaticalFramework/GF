@@ -62,12 +62,12 @@ typedef struct {
 } PgfParsing;
 
 typedef struct {
-	int fid;
+	PgfCCat* ccat;
 	size_t lin_idx;
 } PgfCFCat;
 
 static GU_DEFINE_TYPE(PgfCFCat, struct,
-	       GU_MEMBER(PgfCFCat, fid, int),
+	       GU_MEMBER(PgfCFCat, ccat, PgfCCat),
            GU_MEMBER(PgfCFCat, lin_idx, size_t));
 
 extern GuHasher pgf_cfcat_hasher;
@@ -1067,7 +1067,7 @@ pgf_parsing_bu_filter(PgfParseState* before, PgfParseState* after,
 {
 	while (ccat->conts != NULL)			// back to the original PgfCCat
 		ccat = ccat->conts->ccat;
-	PgfCFCat cfc = {ccat->fid, lin_idx};
+	PgfCFCat cfc = {ccat, lin_idx};
 
 	if (gu_map_has(before->ps->concr->epsilon_idx, &cfc)) {
 		return false;
@@ -1117,7 +1117,7 @@ pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
 
 		// Bottom-up prediction for lexical rules
 		if (after != NULL && after->ts->lexicon_idx != NULL) {
-			PgfCFCat cfc = {ccat->fid, lin_idx};
+			PgfCFCat cfc = {ccat, lin_idx};
 			PgfProductionSeq tok_prods = 
 				gu_map_get(after->ts->lexicon_idx, &cfc, PgfProductionSeq);
 			
@@ -1133,7 +1133,7 @@ pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
 		}
 
 		// Bottom-up prediction for epsilon rules
-		PgfCFCat cfc = {ccat->fid, lin_idx};
+		PgfCFCat cfc = {ccat, lin_idx};
 		PgfProductionSeq eps_prods =
 			gu_map_get(before->ps->concr->epsilon_idx, &cfc, PgfProductionSeq);
 
@@ -1967,7 +1967,7 @@ pgf_parser_leftcorner_add_token(PgfConcr* concr,
 		gu_map_put(concr->leftcorner_tok_idx, &tok, PgfProductionIdx*, set);
 	}
 
-	PgfCFCat cfc = {item->conts->ccat->fid, item->conts->lin_idx};
+	PgfCFCat cfc = {item->conts->ccat, item->conts->lin_idx};
 	PgfProductionSeq prods = gu_map_get(set, &cfc, PgfProductionSeq);
 
 	if (gu_seq_length(item->args) == 0) {
@@ -1989,7 +1989,7 @@ pgf_parser_leftcorner_add_epsilon(PgfConcr* concr,
                                   PgfProduction prod, PgfItem* item, 
                                   GuPool *pool)
 {
-	PgfCFCat cfc = {item->conts->ccat->fid, item->conts->lin_idx};
+	PgfCFCat cfc = {item->conts->ccat, item->conts->lin_idx};
 	PgfProductionSeq prods =
 		gu_map_get(concr->epsilon_idx, &cfc, PgfProductionSeq);
 		
@@ -2266,8 +2266,7 @@ pgf_parser_leftcorner_closure(PgfProductionIdx* set, PgfItemBuf* items,
 	for (size_t i = 0; i < n_items; i++) {
 		PgfItem* item = gu_buf_get(items, PgfItem*, i);
 
-		PgfCFCat cfc = {item->conts->ccat->fid, 
-					    item->conts->lin_idx};
+		PgfCFCat cfc = {item->conts->ccat, item->conts->lin_idx};
 		if (!gu_map_has(set, &cfc)) {
 			gu_map_put(set, &cfc, PgfCCat*, NULL);
 
@@ -2297,7 +2296,7 @@ pgf_parser_leftcorner_iter_conts(GuMapItor* fn, const void* key, void* value, Gu
 		PgfItemConts* conts = gu_list_index(contss, lin_idx);
 
 		if (conts != NULL) {
-			PgfCFCat cfc = {ccat->fid, lin_idx};
+			PgfCFCat cfc = {ccat, lin_idx};
 			PgfProductionIdx* set = 
 				gu_map_get(concr->leftcorner_cat_idx, 
 		                   &cfc, PgfProductionIdx*);
@@ -2394,14 +2393,14 @@ pgf_cfcat_eq_fn(GuEquality* self, const void* a, const void* b)
 	PgfCFCat *x = (PgfCFCat *) a;
 	PgfCFCat *y = (PgfCFCat *) b;
 	
-	return (x->fid == y->fid && x->lin_idx == y->lin_idx);
+	return (x->ccat->fid == y->ccat->fid && x->lin_idx == y->lin_idx);
 }
 
 static GuHash
 pgf_cfcat_hash_fn(GuHasher* self, const void* a)
 {
 	PgfCFCat *x = (PgfCFCat *) a;
-	return ((x->fid << 16) ^ x->lin_idx);
+	return ((x->ccat->fid << 16) ^ x->lin_idx);
 }
 
 GuHasher pgf_cfcat_hasher = {
