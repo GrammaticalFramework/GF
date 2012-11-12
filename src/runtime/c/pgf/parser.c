@@ -1559,49 +1559,47 @@ pgf_parsing_item(PgfParseState* before, PgfParseState* after, PgfItem* item)
 }
 
 static void
-pgf_parsing_proceed(PgfParseState* state, void** output) {
-	while (*output == NULL) {
-		prob_t best_prob = INFINITY;
-		PgfParseState* before = NULL;
+pgf_parsing_proceed(PgfParseState* state) {
+	prob_t best_prob = INFINITY;
+	PgfParseState* before = NULL;
 
-		PgfParseState* st = state;
-		while (st != NULL) {
-			if (gu_buf_length(st->agenda) > 0) {
-				PgfItem* item = gu_buf_get(st->agenda, PgfItem*, 0);
-				prob_t item_prob = item->inside_prob+item->conts->outside_prob;
-				if (item_prob < best_prob) {
-					best_prob = item_prob;
-					before    = st;
-				}
+	PgfParseState* st = state;
+	while (st != NULL) {
+		if (gu_buf_length(st->agenda) > 0) {
+			PgfItem* item = gu_buf_get(st->agenda, PgfItem*, 0);
+			prob_t item_prob = item->inside_prob+item->conts->outside_prob;
+			if (item_prob < best_prob) {
+				best_prob = item_prob;
+				before    = st;
 			}
-			st = st->next;
 		}
-
-		if (before == NULL)
-			break;
-
-		PgfParseState* after = NULL;
-
-		st = state;
-		while (st != before) {
-			PgfParseState* tmp = st->next;
-			st->next = after;
-			after    = st;
-			st       = tmp;
-		}
-
-		PgfItem* item;
-		gu_buf_heap_pop(before->agenda, &pgf_item_prob_order, &item);
-		pgf_parsing_item(before, after, item);
-
-		while (after != NULL) {
-			PgfParseState* tmp = after->next;
-			after->next = before;
-			before = after;
-			after  = tmp;
-		}
-		state = before;
+		st = st->next;
 	}
+
+	if (before == NULL)
+		return;
+
+	PgfParseState* after = NULL;
+
+	st = state;
+	while (st != before) {
+		PgfParseState* tmp = st->next;
+		st->next = after;
+		after    = st;
+		st       = tmp;
+	}
+
+	PgfItem* item;
+	gu_buf_heap_pop(before->agenda, &pgf_item_prob_order, &item);
+	pgf_parsing_item(before, after, item);
+
+	while (after != NULL) {
+		PgfParseState* tmp = after->next;
+		after->next = before;
+		before = after;
+		after  = tmp;
+	}
+	state = before;
 }
 
 static PgfParsing*
@@ -1693,7 +1691,8 @@ pgf_parser_next_state(PgfParseState* prev, PgfToken tok, GuPool* pool)
 	    pgf_new_parse_state(prev->ps, prev, ts, pool);
 
 	state->ps->target = NULL;
-	pgf_parsing_proceed(state, (void**) &state->ps->target);
+	while (state->ps->target == NULL)
+		pgf_parsing_proceed(state);
     if (state->ps->target != NULL) {
 		return state;
     }
@@ -1815,8 +1814,8 @@ pgf_parse_result_next(PgfParseResult* pr, GuPool* pool)
 
 	for (;;) {
 		if (pr->state->ps->completed == NULL) {
-			pgf_parsing_proceed(pr->state,
-								(void**) &pr->state->ps->completed);
+			while (pr->state->ps->completed == NULL)
+				pgf_parsing_proceed(pr->state);
 			if (pr->state->ps->completed == NULL)
 				return NULL;
 			pgf_result_cat_init(pr, NULL, 0, pr->state->ps->completed);
