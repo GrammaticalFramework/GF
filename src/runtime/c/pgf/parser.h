@@ -106,12 +106,12 @@ PgfExpr
 pgf_parse_best_result(PgfParseState* state, GuPool* pool);
 
 
-int
+size_t
 pgf_item_lin_idx(PgfItem* item);
 
 void
 pgf_item_sequence(PgfItem* item, 
-                  int* lin_idx, PgfSequence* seq,
+                  size_t* lin_idx, PgfSequence* seq,
                   GuPool* pool);
 
 int

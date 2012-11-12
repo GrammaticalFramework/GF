@@ -16,7 +16,7 @@ pgf_match_string_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
 {
 	GuPool* tmp_pool = gu_new_pool();
 
-	int lin_idx;
+	size_t lin_idx;
 	PgfSequence seq;
 	pgf_item_sequence(item, &lin_idx, &seq, tmp_pool);
 	gu_assert(lin_idx == 0);
@@ -64,7 +64,7 @@ pgf_match_int_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
 {
 	GuPool* tmp_pool = gu_new_pool();
 
-	int lin_idx;
+	size_t lin_idx;
 	PgfSequence seq;
 	pgf_item_sequence(item, &lin_idx, &seq, tmp_pool);
 	gu_assert(lin_idx == 0);
@@ -121,7 +121,7 @@ pgf_match_float_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
 {
 	GuPool* tmp_pool = gu_new_pool();
 
-	int lin_idx;
+	size_t lin_idx;
 	PgfSequence seq;
 	pgf_item_sequence(item, &lin_idx, &seq, tmp_pool);
 	gu_assert(lin_idx == 0);
@@ -176,7 +176,7 @@ static bool
 pgf_match_name_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
                    PgfExprProb** out_ep, GuPool *pool)
 {
-	int lin_idx;
+	size_t lin_idx;
 	PgfSequence seq;
 	pgf_item_sequence(item, &lin_idx, &seq, pool);
 
