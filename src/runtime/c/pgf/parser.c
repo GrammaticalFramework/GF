@@ -26,6 +26,7 @@ struct PgfItemConts {
 #ifdef PGF_PARSER_DEBUG
 	unsigned short offset;
 #endif
+	prob_t outside_prob;
 	PgfItemBuf* items;
 	int ref_count;			// how many items point to this cont?
 };
@@ -135,7 +136,6 @@ struct PgfItem {
 	uint8_t tok_idx;
 	uint8_t alt;
 	prob_t inside_prob;
-	prob_t outside_prob;
 };
 
 GU_DEFINE_TYPE(PgfLeftcornerCatIdx, GuMap,
@@ -430,8 +430,8 @@ pgf_print_item(PgfItem* item, int offset, GuWriter* wtr, GuExn* err, GuPool* poo
     pgf_print_item_seq(item, wtr, err, pool);
     gu_printf(wtr, err, "; %f+%f=%f]\n",
 	            item->inside_prob,
-	            item->outside_prob,
-	            item->inside_prob+item->outside_prob);
+	            item->conts->outside_prob,
+	            item->inside_prob+item->conts->outside_prob);
 }
 #endif
 
@@ -441,8 +441,8 @@ cmp_item_prob(GuOrder* self, const void* a, const void* b)
 	PgfItem *item1 = *((PgfItem **) a);
 	PgfItem *item2 = *((PgfItem **) b);
 
-	prob_t prob1 = item1->inside_prob + item1->outside_prob;
-	prob_t prob2 = item2->inside_prob + item2->outside_prob;
+	prob_t prob1 = item1->inside_prob + item1->conts->outside_prob;
+	prob_t prob2 = item2->inside_prob + item2->conts->outside_prob;
 	
 	if (prob1 < prob2)
 		return -1;
@@ -571,7 +571,6 @@ pgf_item_set_curr_symbol(PgfItem* item, GuPool* pool)
 
 static PgfItem*
 pgf_new_item(PgfItemConts* conts, PgfProduction prod,
-             prob_t delta_prob,
              GuPool* pool, PgfParsing* ps)
 {
 	PgfItem* item;
@@ -640,16 +639,6 @@ pgf_new_item(PgfItemConts* conts, PgfProduction prod,
 	item->alt = 0;
 
 	conts->ref_count++;
-
-	item->outside_prob = 0;
-	if (gu_buf_length(conts->items) > 0) {
-		PgfItem* best_cont = gu_buf_get(conts->items, PgfItem*, 0);
-		if (best_cont != NULL)
-			item->outside_prob = 
-				best_cont->inside_prob-conts->ccat->viterbi_prob+
-				best_cont->outside_prob;
-	}
-	item->outside_prob += delta_prob;
 
 	pgf_item_set_curr_symbol(item, pool);
 
@@ -841,11 +830,10 @@ pgf_parsing_combine(PgfParseState* before, PgfParseState* after,
 
 static void
 pgf_parsing_production(PgfParseState* state,
-                       PgfItemConts* conts, PgfProduction prod,
-                       prob_t delta_prob)
+                       PgfItemConts* conts, PgfProduction prod)
 {
 	PgfItem* item =
-        pgf_new_item(conts, prod, delta_prob, state->pool, state->ps);
+        pgf_new_item(conts, prod, state->pool, state->ps);
     gu_buf_heap_push(state->agenda, &pgf_item_prob_order, &item);
 }
 
@@ -998,7 +986,7 @@ pgf_parsing_complete(PgfParseState* before, PgfParseState* after,
 			 * production immediately to the agenda,
 			 * i.e. process it. */
 			if (conts2) {
-				pgf_parsing_production(before, conts2, prod, 0);
+				pgf_parsing_production(before, conts2, prod);
 			}
 		}
 
@@ -1017,7 +1005,7 @@ pgf_parsing_complete(PgfParseState* before, PgfParseState* after,
 				 * production immediately to the agenda,
 				 * i.e. process it. */
 				if (conts2) {
-					pgf_parsing_production(state, conts2, prod, 0);
+					pgf_parsing_production(state, conts2, prod);
 				}
 			}
 
@@ -1097,19 +1085,24 @@ pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
 		 * of this category at the current position,
 		 * so predict it. */
 
+		conts->outside_prob =
+			item->inside_prob-conts->ccat->viterbi_prob+
+			item->conts->outside_prob +
+			delta_prob;
+
 		// Top-down prediction for syntactic rules
 		PgfProductionSeq prods = ccat->prods;
 		for (size_t i = 0; i < ccat->n_synprods; i++) {
 			PgfProduction prod =
 				gu_seq_get(prods, PgfProduction, i);		
-			pgf_parsing_production(before, conts, prod, delta_prob);
+			pgf_parsing_production(before, conts, prod);
 		}
 		
 		if (ccat->cnccat->abscat->meta_prob != INFINITY &&
 		    ccat->conts == NULL /* grammar defined ccat */) {
 			// Top-down prediction for meta rules
 			PgfItem *item =
-				pgf_new_item(conts, before->ps->meta_prod, 0, before->pool, before->ps);
+				pgf_new_item(conts, before->ps->meta_prod, before->pool, before->ps);
 			item->inside_prob = 
 				ccat->cnccat->abscat->meta_prob;
 			gu_buf_heap_push(before->agenda, &pgf_item_prob_order, &item);
@@ -1127,7 +1120,7 @@ pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
 					PgfProduction prod =
 						gu_seq_get(tok_prods, PgfProduction, i);
 					
-					pgf_parsing_production(before, conts, prod, 0);
+					pgf_parsing_production(before, conts, prod);
 				}
 			}
 		}
@@ -1143,7 +1136,7 @@ pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
 				PgfProduction prod = 
 					gu_seq_get(eps_prods, PgfProduction, i);
 
-				pgf_parsing_production(before, conts, prod, 0);
+				pgf_parsing_production(before, conts, prod);
 			}
 		}
 	} else {
@@ -1351,7 +1344,7 @@ pgf_parsing_symbol(PgfParseState* before, PgfParseState* after,
 						pext->ep = NULL;
 						pext->lins = gu_null_seq;
 
-						pgf_parsing_production(before, conts, prod, 0);
+						pgf_parsing_production(before, conts, prod);
 					}
 				} else {
 					/* If it has already been completed, combine. */
@@ -1567,7 +1560,7 @@ pgf_parsing_proceed(PgfParseState* state, void** output) {
 		while (st != NULL) {
 			if (gu_buf_length(st->agenda) > 0) {
 				PgfItem* item = gu_buf_get(st->agenda, PgfItem*, 0);
-				prob_t item_prob = item->inside_prob+item->outside_prob;
+				prob_t item_prob = item->inside_prob+item->conts->outside_prob;
 				if (item_prob < best_prob) {
 					best_prob = item_prob;
 					before    = st;
@@ -1926,12 +1919,12 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
                 PgfProduction prod =
                     gu_seq_get(ccat->prods, PgfProduction, i);
                 PgfItem* item = 
-                    pgf_new_item(conts, prod, 0, pool, ps);
+                    pgf_new_item(conts, prod, pool, ps);
                 gu_buf_heap_push(state->agenda, &pgf_item_prob_order, &item);
             }
             
          	PgfItem *item =
-				pgf_new_item(conts, ps->meta_prod, 0, pool, ps);
+				pgf_new_item(conts, ps->meta_prod, pool, ps);
 			item->inside_prob = 
 				ccat->cnccat->abscat->meta_prob;
 			gu_buf_heap_push(state->agenda, &pgf_item_prob_order, &item);
@@ -2251,7 +2244,7 @@ pgf_parser_leftcorner_iter_cats(GuMapItor* fn, const void* key, void* value, GuE
 			PgfItemConts* conts =
 				pgf_parsing_get_conts(clo->conts_map, ccat, lin_idx, 0, clo->tmp_pool);
 			PgfItem* item =
-				pgf_new_item(conts, prod, 0, clo->tmp_pool, NULL);
+				pgf_new_item(conts, prod, clo->tmp_pool, NULL);
 
 			pgf_parser_leftcorner_item(clo, item);
 		}
