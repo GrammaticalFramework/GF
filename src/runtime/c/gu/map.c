@@ -303,6 +303,19 @@ gu_map_iter(GuMap* map, GuMapItor* itor, GuExn* err)
 	}
 }
 
+size_t
+gu_map_count(GuMap* map)
+{
+	size_t count = 0;
+	for (size_t i = 0; i < map->data.n_entries; i++) {
+		if (gu_map_entry_is_free(map, &map->data, i)) {
+			continue;
+		}
+		count++;
+	}
+	return count;
+}
+
 static const uint8_t gu_map_no_values[1] = { 0 };
 
 GuMap*
