@@ -22,7 +22,7 @@ static GU_DEFINE_TYPE(PgfItemBuf, abstract, _);
 
 struct PgfItemConts {
 	PgfCCat* ccat;
-	unsigned short lin_idx;
+	size_t lin_idx;
 #ifdef PGF_PARSER_DEBUG
 	unsigned short offset;
 #endif
@@ -63,12 +63,12 @@ typedef struct {
 
 typedef struct {
 	int fid;
-	int lin_idx;
+	size_t lin_idx;
 } PgfCFCat;
 
 static GU_DEFINE_TYPE(PgfCFCat, struct,
 	       GU_MEMBER(PgfCFCat, fid, int),
-           GU_MEMBER(PgfCFCat, lin_idx, int));
+           GU_MEMBER(PgfCFCat, lin_idx, size_t));
 
 extern GuHasher pgf_cfcat_hasher;
 
@@ -166,7 +166,7 @@ pgf_prev_extern_sym(PgfSymbol sym)
 	}
 }
 
-int
+size_t
 pgf_item_lin_idx(PgfItem* item) {
 	return item->conts->lin_idx;
 }
@@ -243,7 +243,7 @@ pgf_extern_seq_get(PgfItem* item, GuPool* pool)
 
 void
 pgf_item_sequence(PgfItem* item, 
-                  int* lin_idx, PgfSequence* seq,
+                  size_t* lin_idx, PgfSequence* seq,
                   GuPool* pool) {
 	*lin_idx = item->conts->lin_idx;
 
@@ -360,7 +360,7 @@ static void
 pgf_print_item_seq(PgfItem *item,
                    GuWriter* wtr, GuExn* err, GuPool* pool)
 {
-	int lin_idx;
+	size_t lin_idx;
 	PgfSequence seq;
 	pgf_item_sequence(item, &lin_idx, &seq, pool);
 
