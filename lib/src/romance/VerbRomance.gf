@@ -73,6 +73,8 @@ incomplete concrete VerbRomance of Verb =
 
     UseComp comp = insertComplement comp.s (predV copula) ;
 
+    UseCopula = predV copula ;
+
     CompAP ap = {s = \\ag => let agr = complAgr ag in ap.s ! AF agr.g agr.n} ;
     CompCN cn = { s = \\ag => 
       let agr = complAgr ag in 
