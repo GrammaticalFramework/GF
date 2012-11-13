@@ -1534,7 +1534,7 @@ pgf_parsing_item(PgfParseState* before, PgfParseState* after, PgfItem* item)
 	}
 }
 
-static void
+static bool
 pgf_parsing_proceed(PgfParseState* state) {
 	prob_t best_prob = INFINITY;
 	PgfParseState* before = NULL;
@@ -1557,7 +1557,7 @@ pgf_parsing_proceed(PgfParseState* state) {
 	}
 
 	if (before == NULL)
-		return;
+		return false;
 
 	PgfParseState* after = NULL;
 
@@ -1580,6 +1580,8 @@ pgf_parsing_proceed(PgfParseState* state) {
 		after  = tmp;
 	}
 	state = before;
+	
+	return true;
 }
 
 static PgfParsing*
@@ -1673,8 +1675,10 @@ pgf_parser_next_state(PgfParseState* prev, PgfToken tok, GuPool* pool)
 	    pgf_new_parse_state(prev->ps, prev, ts, pool);
 
 	state->ps->target = NULL;
-	while (state->ps->target == NULL)
-		pgf_parsing_proceed(state);
+	while (state->ps->target == NULL) {
+		if (!pgf_parsing_proceed(state))
+			break;
+	}
     if (state->ps->target != NULL) {
 		return state;
     }
@@ -1796,8 +1800,10 @@ pgf_parse_result_next(PgfParseResult* pr, GuPool* pool)
 
 	for (;;) {
 		if (pr->state->ps->completed == NULL) {
-			while (pr->state->ps->completed == NULL)
-				pgf_parsing_proceed(pr->state);
+			while (pr->state->ps->completed == NULL) {
+				if (!pgf_parsing_proceed(pr->state))
+					break;
+			}
 			if (pr->state->ps->completed == NULL)
 				return NULL;
 			pgf_result_cat_init(pr, NULL, 0, pr->state->ps->completed);
