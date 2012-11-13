@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 module GF.Infra.Option
     (
      -- * Option types
@@ -256,11 +257,7 @@ defaultFlags = Flags {
       optPreprocessors   = [],
       optEncoding        = "latin1",
       optPMCFG           = True,
--- #ifdef CC_LAZY
---       optOptimizations   = Set.fromList [OptStem,OptCSE],
--- #else
       optOptimizations   = Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize],
--- #endif
       optOptimizePGF     = False,
       optMkIndexPGF     = False,
       optCFGTransforms   = Set.fromList [CFGRemoveCycles, CFGBottomUpFilter, 
@@ -273,7 +270,12 @@ defaultFlags = Flags {
       optWarnings        = [],
       optDump            = [],
       optTagsOnly        = False,
-      optNewComp         = False
+      optNewComp         =
+#ifdef NEW_COMP
+                           True
+#else
+                           False
+#endif
     }
 
 -- Option descriptions
@@ -352,6 +354,7 @@ optDescr =
      Option [] ["cse"] (onOff (toggleOptimize OptCSE) True) "Perform common sub-expression elimination (default on).",
      Option [] ["cfg"] (ReqArg cfgTransform "TRANS") "Enable or disable specific CFG transformations. TRANS = merge, no-merge, bottomup, no-bottomup, ...",
      Option [] ["new-comp"] (NoArg (set $ \o -> o{optNewComp = True})) "Use the new experimental compiler.",
+     Option [] ["old-comp"] (NoArg (set $ \o -> o{optNewComp = False})) "Use old trusty compiler.",
      dumpOption "source" Source,
      dumpOption "rebuild" Rebuild,
      dumpOption "extend" Extend,

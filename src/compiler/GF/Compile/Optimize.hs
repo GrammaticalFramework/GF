@@ -86,7 +86,7 @@ evalInfo opts sgr m c info = do
     return $ CncFun mt pde' ppr' mpmcfg -- only cat in type actually needed
 
   ResOper pty pde 
-    | OptExpand `Set.member` optim -> do
+    | not new && OptExpand `Set.member` optim -> do
          pde' <- case pde of
                    Just (L loc de) -> do de <- computeConcrete gr de
                                          return (Just (L loc (factor param c 0 de)))
@@ -95,6 +95,8 @@ evalInfo opts sgr m c info = do
 
   _ ->  return info
  where
+   new = flag optNewComp opts -- computations moved to GF.Compile.GeneratePMCFG
+
    gr = prependModule sgr m
    optim = flag optOptimizations opts
    param = OptParametrize `Set.member` optim
@@ -107,13 +109,17 @@ partEval opts gr (context, val) trm = errIn (render (text "partial evaluation" <
       args  = map Vr vars
       subst = [(v, Vr v) | v <- vars]
       trm1 = mkApp trm args
-  trm2 <- computeTerm gr subst trm1
-  trm3 <- if rightType trm2
-            then computeTerm gr subst trm2
-            else recordExpand val trm2 >>= computeTerm gr subst
+  trm2 <- if new then return trm1 else computeTerm gr subst trm1
+  trm3 <- if new
+          then return trm2
+          else if rightType trm2
+               then computeTerm gr subst trm2 -- compute twice??
+               else recordExpand val trm2 >>= computeTerm gr subst
   trm4 <- checkPredefError gr trm3
   return $ mkAbs [(Explicit,v) | v <- vars] trm4
   where
+    new = flag optNewComp opts -- computations moved to GF.Compile.GeneratePMCFG
+
     -- don't eta expand records of right length (correct by type checking)
     rightType (R rs) = case val of
                          RecType ts -> length rs == length ts
