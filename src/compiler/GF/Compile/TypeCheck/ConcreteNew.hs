@@ -4,7 +4,7 @@ import GF.Grammar hiding (Env, VGen, VApp, VRecType)
 import GF.Grammar.Lookup
 import GF.Grammar.Predef
 import GF.Grammar.Lockfield
-import GF.Compile.Compute.ConcreteNew
+import GF.Compile.Compute.ConcreteNew1
 import GF.Compile.Compute.AppPredefined
 import GF.Infra.CheckM
 import GF.Infra.UseIO
@@ -245,7 +245,7 @@ tcPatt gr scope (PAlt p1 p2) ty0 = do
   tcPatt gr scope p1 ty0
   tcPatt gr scope p2 ty0
   return scope
-tcPatt gr scope p ty = error ("tcPatt "++show p)
+tcPatt gr scope p ty = unimplemented ("tcPatt "++show p)
 
 
 inferRecFields gr scope rs = 
@@ -478,6 +478,8 @@ tcError msg = TcM (\ms msgs -> TcFail (msg : msgs))
 
 tcWarn :: Message -> TcM ()
 tcWarn msg = TcM (\ms msgs -> TcOk () ms ((text "Warning:" <+> msg) : msgs))
+
+unimplemented str = fail ("Unimplemented: "++str)
 
 runTcM :: TcM a -> Check a
 runTcM f = case unTcM f IntMap.empty [] of

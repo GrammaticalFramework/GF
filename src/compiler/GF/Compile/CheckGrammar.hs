@@ -78,7 +78,7 @@ checkRestrictedInheritance sgr (name,mo) = checkIn (ppLocation (msrc mo) NoLoc <
            (f,cs) <- allDeps, incld f, let is = filter illegal cs, not (null is)]
      case illegals of 
        [] -> return ()
-       cs -> checkError (text "In inherited module" <+> ppIdent i <> text ", dependence of excluded constants:" $$
+       cs -> checkWarn (text "In inherited module" <+> ppIdent i <> text ", dependence of excluded constants:" $$
                          nest 2 (vcat [ppIdent f <+> text "on" <+> fsep (map ppIdent is) | (f,is) <- cs]))
    allDeps = concatMap (allDependencies (const True) . jments . snd) mos
 
@@ -176,7 +176,7 @@ checkInfo opts sgr (m,mo) c info = do
     CncCat mty mdef mpr mpmcfg -> do
       mty  <- case mty of
                 Just (L loc typ) -> chIn loc "linearization type of" $ 
-                                     (if flag optNewComp opts
+                                     (if False --flag optNewComp opts
                                         then do (typ,_) <- CN.checkLType gr typ typeType
                                                 typ  <- computeLType gr [] typ
                                                 return (Just (L loc typ))
@@ -217,17 +217,17 @@ checkInfo opts sgr (m,mo) c info = do
       (pty', pde') <- case (pty,pde) of
          (Just (L loct ty), Just (L locd de)) -> do
            ty'     <- chIn loct "operation" $
-                         (if flag optNewComp opts
+                         (if False --flag optNewComp opts
                             then CN.checkLType gr ty typeType >>= return . CN.normalForm gr . fst
                             else checkLType gr [] ty typeType >>= computeLType gr [] . fst)
            (de',_) <- chIn locd "operation" $
-                         (if flag optNewComp opts
+                         (if False -- flag optNewComp opts
                             then CN.checkLType gr de ty'
                             else checkLType gr [] de ty')
            return (Just (L loct ty'), Just (L locd de'))
          (Nothing         , Just (L locd de)) -> do
            (de',ty') <- chIn locd "operation" $
-                          (if flag optNewComp opts
+                          (if False -- flag optNewComp opts
                             then CN.inferLType gr de
                             else inferLType gr [] de)
            return (Just (L locd ty'), Just (L locd de'))

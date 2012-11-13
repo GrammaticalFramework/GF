@@ -16,6 +16,9 @@ buildInfo =
 #ifdef SERVER_MODE
     ++" server"
 #endif
+#ifdef NEW_COMP
+    ++" new-comp"
+#endif
   where
     details = either (const no_info) info darcs_info
     no_info = "No detailed version info available"

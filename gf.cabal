@@ -1,5 +1,5 @@
 name: gf
-version: 3.3.3-darcs
+version: 3.3.10-darcs
 
 cabal-version: >= 1.8
 build-type: Custom
@@ -10,7 +10,7 @@ synopsis: Grammatical Framework
 description: GF, Grammatical Framework, is a programming language for multilingual grammar applications
 homepage: http://www.grammaticalframework.org/
 bug-reports: http://code.google.com/p/grammatical-framework/issues/list
-tested-with: GHC==6.12.3, GHC==7.0.4
+tested-with: GHC==6.12.3, GHC==7.0.4, GHC==7.4.2
 
 data-dir: src
 data-files: www/*.html
@@ -44,6 +44,10 @@ flag interrupt
 flag server
   Description: Include --server mode
   Default:     True
+
+flag new-comp
+  Description: Make -new-comp the default
+  Default:     False
 
 library
   build-depends: base >= 4.2 && <5,
@@ -117,6 +121,9 @@ executable gf
     other-modules: GFServer
     hs-source-dirs: src/server src/server/transfer src/example-based
 
+  if flag(new-comp)
+    cpp-options: -DNEW_COMP
+
   build-tools: happy
            --, alex>=2 && <3 -- tricky to install in Ubuntu 12.04
   if os(windows)
@@ -177,10 +184,15 @@ executable gf
     GF.Compile.ToAPI
     GF.Compile.TypeCheck.Abstract
     GF.Compile.TypeCheck.Concrete
+    GF.Compile.TypeCheck.ConcreteNew
     GF.Compile.TypeCheck.TC
     GF.Compile.Compute.Abstract
     GF.Compile.Compute.Concrete
+    GF.Compile.Compute.ConcreteNew1
+    GF.Compile.Compute.ConcreteNew
     GF.Compile.Compute.AppPredefined
+    GF.Compile.Compute.Value
+    GF.Compile.Compute.Predef
     GF.Compile.Optimize
     GF.Compile.SubExOpt
     GF.Compile.GetGrammar

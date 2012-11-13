@@ -23,8 +23,8 @@ import GF.Grammar.Predef
 import GF.Data.BacktrackM
 import GF.Data.Operations
 import GF.Data.Utilities (updateNthM, updateNth)
-
-import System.IO
+import GF.Compile.Compute.ConcreteNew(normalForm)
+import System.IO(hPutStr,hPutStrLn,stderr)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.List as List
@@ -71,7 +71,7 @@ addPMCFG opts gr am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin
 
       pmcfgEnv0   = emptyPMCFGEnv
 
-      b          = runCnvMonad gr (unfactor term >>= convertTerm opts CNil val) (pargs,[])
+      b          = convert opts gr term val pargs
       (seqs1,b1) = addSequencesB seqs b
       pmcfgEnv1  = foldBM addRule
                           pmcfgEnv0
@@ -104,7 +104,7 @@ addPMCFG opts gr am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) mdef@(
 
       pmcfgEnv0  = emptyPMCFGEnv
 
-      b          = runCnvMonad gr (unfactor term >>= convertTerm opts CNil lincat) ([parg],[])
+      b          = convert opts gr term lincat [parg]
       (seqs1,b1) = addSequencesB seqs b
       pmcfgEnv1  = foldBM addRule
                           pmcfgEnv0
@@ -121,12 +121,34 @@ addPMCFG opts gr am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) mdef@(
 
 addPMCFG opts gr am cm seqs id info = return (seqs, info)
 
+convert opts gr term val pargs =
+    runCnvMonad gr conv (pargs,[])
+  where
+    conv = convertTerm opts CNil val =<< unfactor term'
+    term' = if flag optNewComp opts
+            then normalForm gr (recordExpand val term) -- new evaluator
+            else term -- old evaluator is invoked from GF.Compile.Optimize
+
+recordExpand :: Type -> Term -> Term
+recordExpand typ trm =
+  case typ of
+     RecType tys -> expand trm
+       where
+         n = length tys
+         expand trm =
+           case trm of
+             FV ts -> FV (map expand ts)
+             R rs | length rs==n -> trm
+             _ -> R [assign lab (P trm lab) | (lab,_) <- tys]
+     _ -> trm
+
 unfactor :: Term -> CnvMonad Term
 unfactor t = CM (\gr c -> c (unfac gr t))
   where
     unfac gr t = 
       case t of
         T (TTyped ty) [(PV x,u)] -> V ty [restore x v (unfac gr u) | v <- err bug id (allParamValues gr ty)]
+        T (TTyped ty) _ -> ppbug $ text "unfactor"<+>ppTerm Unqualified 10 t
         _ -> composSafeOp (unfac gr) t
       where
         restore x u t = case t of
@@ -329,9 +351,16 @@ convertTerm opts sel ctype (Alts s alts)
                                               strings (K s)     = [s]
                                               strings (C u v)   = strings u ++ strings v
                                               strings (Strs ss) = concatMap strings ss
+                                              strings Empty = [] -- ??
+                                              strings t = bug $ "strings "++show t
+
+convertTerm opts sel@(CProj l _) ctype (ExtR t1 t2@(R rs2))
+                    | l `elem` map fst rs2 = convertTerm opts sel ctype t2
+                    | otherwise            = convertTerm opts sel ctype t1
+
 convertTerm opts CNil ctype t           = do v <- evalTerm CNil t
                                              return (CPar v)
-convertTerm _    _    _     t           = ppbug (text "convertTerm" <+> parens (ppTerm Unqualified 0 t))
+convertTerm _    sel  _     t           = ppbug (text "convertTerm" <+> sep [parens (text (show sel)),ppTerm Unqualified 10 t])
 
 convertArg :: Options -> Term -> Int -> Path -> CnvMonad (Value [Symbol])
 convertArg opts (RecType rs)  nr path =
@@ -460,7 +489,7 @@ evalTerm path (V pt ts)    = case path of
                                (CSel trm path) -> do vs <- getAllParamValues pt
                                                      case lookup trm (zip vs ts) of
                                                        Just t  -> evalTerm path t
-                                                       Nothing -> bug "evalTerm: missing value"
+                                                       Nothing -> ppbug $ text "evalTerm: missing value:"<+>ppTerm Unqualified 0 trm $$ text "among:"<+>fsep (map (ppTerm Unqualified 10) vs)
                                CNil             -> do ts <- mapM (evalTerm path) ts
                                                       return (V pt ts)
 evalTerm path (S term sel) = do v <- evalTerm CNil sel
@@ -468,10 +497,12 @@ evalTerm path (S term sel) = do v <- evalTerm CNil sel
 evalTerm path (FV terms)   = variants terms >>= evalTerm path
 evalTerm path (EInt n)     = return (EInt n)
 evalTerm path t            = ppbug (text "evalTerm" <+> parens (ppTerm Unqualified 0 t))
+--evalTerm path t            = ppbug (text "evalTerm" <+> sep [parens (text (show path)),parens (text (show t))])
 
 getVarIndex (IA _ i) = i
 getVarIndex (IAV _ _ i) = i
 getVarIndex (IC s) | isDigit (BS.last s) = (read . BS.unpack . snd . BS.spanEnd isDigit) s
+getVarIndex x = bug ("getVarIndex "++show x)
 
 ----------------------------------------------------------------------
 -- GrammarEnv
@@ -545,4 +576,4 @@ mkArray    lst = listArray (0,length lst-1) lst
 mkSetArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]
 
 bug msg = ppbug (text msg)
-ppbug doc = error $ render $ text "Internal error:" <+> doc
+ppbug = error . render . hang (text "Internal error in GeneratePMCFG:") 4

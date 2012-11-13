@@ -18,6 +18,7 @@ import GF.Grammar.ShowTerm
 import GF.Grammar.Lookup (allOpers,allOpersTo)
 import GF.Compile.Rename(renameSourceTerm)
 import GF.Compile.Compute.Concrete (computeConcrete,checkPredefError)
+import qualified GF.Compile.Compute.ConcreteNew as CN(normalForm)
 import GF.Compile.TypeCheck.Concrete (inferLType,ppType)
 import GF.Infra.Dependencies(depGraph)
 import GF.Infra.CheckM
@@ -177,13 +178,16 @@ execute1 opts gfenv0 s0 =
         pOpts style q ("-qual"   :ws) = pOpts style            Qualified   ws
         pOpts style q             ws  = (style,q,unwords ws)
 
-        (style,q,s) = pOpts TermPrintDefault Qualified ws
+        (style,q,s) = pOpts TermPrintDefault Qualified ws'
+        (new,ws') = case ws of
+                      "-new":ws' -> (True,ws')
+                      _ -> (False,ws)
 
       case runP pExp (encodeUnicode utf8 s) of
         Left (_,msg) -> putStrLn msg
-        Right t      -> case checkComputeTerm sgr (codeTerm (decodeUnicode utf8 . BS.pack) t) of
-                          Ok  x -> putStrLn $ showTerm sgr style q x
-                          Bad s -> putStrLn $ s
+        Right t      -> putStrLn . err id (showTerm sgr style q)
+                                 . checkComputeTerm' new sgr
+                                 $ codeTerm (decodeUnicode utf8 . BS.pack) t
       continue gfenv
 
     show_deps ws = do
@@ -319,11 +323,14 @@ execute1 opts gfenv0 s0 =
 
 printException e = maybe (print e) (putStrLn . ioErrorText) (fromException e)
 
-checkComputeTerm sgr t = do
+checkComputeTerm = checkComputeTerm' False
+checkComputeTerm' new sgr t = do
                  mo <- maybe (Bad "no source grammar in scope") return $ greatestResource sgr
                  ((t,_),_) <- runCheck $ do t <- renameSourceTerm sgr mo t
                                             inferLType sgr [] t
-                 t1 <- computeConcrete sgr t
+                 t1 <- if new
+                       then return (CN.normalForm sgr t)
+                       else computeConcrete sgr t
                  checkPredefError sgr t1
 
 fetchCommand :: GFEnv -> IO String
