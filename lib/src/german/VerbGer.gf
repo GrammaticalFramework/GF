@@ -66,6 +66,7 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer, Coordination in {
 
     UseComp comp = insertObj comp.s (predV sein_V) ; -- agr not used
     -- we want to say "ich liebe sie nicht" but not "ich bin alt nicht"
+    UseCopula = predV sein_V ;
 
     CompAP ap = {s = \\_ => ap.s ! APred} ;
     CompNP np = {s = \\_ => np.s ! NPC Nom} ;
