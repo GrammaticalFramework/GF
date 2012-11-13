@@ -1,0 +1,64 @@
+body {
+    background: #ccc url("http://cloud.grammaticalframework.org/minibar/brushed-metal.png");
+}
+
+#tree
+{
+  white-space:pre;
+  font-family: monospace;
+  background: rgba(238, 238, 238, 0.6);
+  padding:0.5em;
+  margin:0.5em 0;
+  }
+
+#tree .node
+{
+  margin: 0.4em 0 0.4em 1.5em;
+  }
+
+#tree .node a
+{ 
+  cursor: pointer;
+  }
+#tree .node a:hover
+{ 
+  text-decoration: underline;
+  }
+#tree .node a.current
+{ 
+  font-weight: bold;
+  }
+
+#linearisations
+{
+  background: rgba(170, 170, 170, 0.5);
+  padding:0.5em;
+  margin:0.5em 0;
+  }
+#linearisations div
+{
+  padding:0.2em;
+  }
+#linearisations .lang
+{
+  display: inline-block;
+  margin-right: 0.5em;
+  width: 3em;
+  font-weight: bold;
+  text-align: center;
+  }
+#linearisations .lin
+{
+  }
+
+.refinement
+{ 
+  margin: 0 0.1em;
+  display: inline-block;
+  cursor: pointer;
+  border: 1px solid;
+  padding: 0.2em;
+  font: 0.9em sans-serif;
+  background: white;
+  }
+
