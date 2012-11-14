@@ -90,7 +90,7 @@ struct PgfParseState {
     unsigned short offset;
 #endif
 
-	prob_t delta_prob;
+	prob_t viterbi_prob;
 
     PgfParsing* ps;
     PgfTokenState* ts;
@@ -743,9 +743,8 @@ pgf_parsing_add_transition(PgfParseState* before, PgfParseState* after,
     if (gu_string_eq(tok, after->ts->tok)) {
         if (after->next == NULL) {
 			after->ps->target = item;
-			after->delta_prob = 
-				item->inside_prob+item->conts->outside_prob - 
-				before->delta_prob;
+			after->viterbi_prob = 
+				item->inside_prob+item->conts->outside_prob;
 		}
 
 		gu_buf_heap_push(after->agenda, &pgf_item_prob_order, &item);
@@ -1552,7 +1551,8 @@ pgf_parsing_proceed(PgfParseState* state) {
 			}
 		}
 
-		delta_prob += st->delta_prob*0.8;
+		delta_prob += 
+			(st->viterbi_prob-(st->next ? st->next->viterbi_prob : 0))*0.95;
 		st = st->next;
 	}
 
@@ -1634,7 +1634,7 @@ pgf_new_parse_state(PgfParsing* ps,
 #ifdef PGF_PARSER_DEBUG
     state->offset = next ? next->offset+1 : 0;
 #endif
-	state->delta_prob = 0;
+	state->viterbi_prob = 0;
     state->ps = ps;
     state->ts = ts;
 	return state;
