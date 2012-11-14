@@ -48,7 +48,7 @@ import qualified Data.ByteString.Char8 as BS
 
 usageHeader :: String
 usageHeader = unlines 
- ["Usage: gfc [OPTIONS] [FILE [...]]",
+ ["Usage: gf [OPTIONS] [FILE [...]]",
   "",
   "How each FILE is handled depends on the file name suffix:",
   "",
@@ -318,7 +318,7 @@ optDescr =
      Option ['D'] ["output-dir"] (ReqArg outDir "DIR") 
            "Save output files (other than .gfo files) in DIR.",
      Option [] ["gf-lib-path"] (ReqArg gfLibPath "DIR") 
-           "Overides the value of GF_LIB_PATH.",
+           "Overrides the value of GF_LIB_PATH.",
      Option [] ["src","force-recomp"] (NoArg (recomp AlwaysRecomp)) 
                  "Always recompile from source.",
      Option [] ["gfo","recomp-if-newer"] (NoArg (recomp RecompIfNewer)) 
