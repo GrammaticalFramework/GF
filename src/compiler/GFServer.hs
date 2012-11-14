@@ -47,12 +47,12 @@ import RunHTTP(cgiHandler)
 debug s = logPutStrLn s
 
 -- | Combined FastCGI and HTTP server
-server port execute1 state0 = 
+server port optroot execute1 state0 =
   do --stderrToFile logFile
      state <- newMVar M.empty
      cache <- PS.newPGFCache
      datadir <- getDataDir
-     let root = datadir</>"www"
+     let root = maybe (datadir</>"www") id optroot
 --   debug $ "document root="++root
      setCurrentDirectory root
 --   FCGI.acceptLoop forkIO (handle_fcgi execute1 state0 state cache)

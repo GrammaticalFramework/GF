@@ -71,8 +71,11 @@ shell opts files = loop opts =<< runSIO (importInEnv emptyGFEnv opts files)
 
 #ifdef SERVER_MODE
 mainServerGFI opts0 port files =
-    server port (execute1 opts) =<< runSIO (importInEnv emptyGFEnv opts files)
-  where opts = beQuiet opts0
+    server port root (execute1 opts)
+      =<< runSIO (importInEnv emptyGFEnv opts files)
+  where
+    root = flag optDocumentRoot opts
+    opts = beQuiet opts0
 #else
 mainServerGFI opts files =
   error "GF has not been compiled with server mode support"

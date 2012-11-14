@@ -75,7 +75,7 @@ errors = fail . unlines
 -- Types
 
 data Mode = ModeVersion | ModeHelp | ModeInteractive | ModeRun | ModeCompiler
-          | ModeServer Int{-port-}
+          | ModeServer {-port::-}Int
   deriving (Show,Eq,Ord)
 
 data Verbosity = Quiet | Normal | Verbose | Debug
@@ -152,6 +152,7 @@ data Flags = Flags {
       optGFODir          :: Maybe FilePath,
       optOutputDir       :: Maybe FilePath,
       optGFLibPath       :: Maybe FilePath,
+      optDocumentRoot    :: Maybe FilePath, -- For --server mode
       optRecomp          :: Recomp,
       optProbsFile       :: Maybe FilePath,
       optRetainResource  :: Bool,
@@ -249,6 +250,7 @@ defaultFlags = Flags {
       optGFODir          = Nothing,
       optOutputDir       = Nothing,
       optGFLibPath       = Nothing,
+      optDocumentRoot    = Nothing,
       optRecomp          = RecompIfNewer,
       optProbsFile       = Nothing,
       optRetainResource  = False,
@@ -292,6 +294,8 @@ optDescr =
      Option [] ["run"] (NoArg (mode ModeRun)) "Run in interactive mode, showing output only (no other messages).",
      Option [] ["server"] (OptArg modeServer "port") $
        "Run in HTTP server mode on given port (default "++show defaultPort++").",
+     Option [] ["document-root"] (ReqArg gfDocuRoot "DIR")
+           "Overrides the default document root for --server mode.",
      Option [] ["tags"] (NoArg (set $ \o -> o{optMode = ModeCompiler, optTagsOnly = True})) "Build TAGS file and exit.",
      Option ['E'] [] (NoArg (phase Preproc)) "Stop after preprocessing (with --preproc).",
      Option ['C'] [] (NoArg (phase Convert)) "Stop after conversion to .gf.",
@@ -394,6 +398,7 @@ optDescr =
        lexicalCat  x = set $ \o -> o { optLexicalCats = foldr Set.insert (optLexicalCats o) (splitBy (==',') x) }
        outDir      x = set $ \o -> o { optOutputDir = Just x }
        gfLibPath   x = set $ \o -> o { optGFLibPath = Just x }
+       gfDocuRoot  x = set $ \o -> o { optDocumentRoot = Just x }
        recomp      x = set $ \o -> o { optRecomp = x }
        probsFile   x = set $ \o -> o { optProbsFile = Just x }
 
