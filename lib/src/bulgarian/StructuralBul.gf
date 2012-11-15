@@ -10,6 +10,7 @@ concrete StructuralBul of Structural = CatBul **
   after_Prep = mkPrep "след" Acc ;
   all_Predet = {s = table GenNum ["всичкия";"всичката";"всичкото";"всичките"]} ;
   almost_AdA, almost_AdN = ss "почти" ;
+  at_least_AdN, at_most_AdN =  ss "почти" ; ---- AR
   although_Subj = ss ["въпреки че"] ;
   always_AdV = ss "винаги" ;
   and_Conj = {s=[]; conj=0; distr=False; n = Pl} ;

@@ -72,6 +72,8 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
     UseComp comp = insertObj comp.s (predV verbBe) ;
 
+    UseCopula = predV verbBe ;
+
     AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
     AdvVPSlash vp adv = insertSlashObj1 (\\_ => adv.s) vp ;
 
@@ -95,5 +97,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     CompNP np = {s = \\_ => np.s ! RObj Acc} ;
     CompAdv a = {s = \\_ => a.s} ;
     CompCN cn = {s = \\agr => cn.s ! (NF (numGenNum agr.gn) Indef)} ;
+
+    VPSlashPrep vp prep = vp ** {c2 = prep ; compl1,compl2 = \\_ => []} ; ---- AR
 
 }
