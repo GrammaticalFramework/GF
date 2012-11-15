@@ -84,27 +84,26 @@ Editor.prototype.start_fresh=function () {
 /* --- Functions for handling tree manipulation ----------------------------- */
 
 Editor.prototype.get_refinements=function(cat) {
-    with (this) {
-        if (cat == undefined)
-            cat = ast.getCat();
-        var args = {
-            id: cat,
-            format: "json"
-        };
-        var cont = function(data){
-            clear(refinements);
-            for (pi in data.producers) {
-                var opt = span_class("refinement", text(data.producers[pi]));
-                opt.onclick = function(){ select_refinement(this.innerText) };
-                refinements.appendChild(opt);
-            }
-        };
-        var err = function(data){
-            clear(refinements);
-            alert("no refinements");
-        };
-        server.browse(args,cont,err);
-    }
+    var t = this;
+    if (cat == undefined)
+        cat = t.ast.getCat();
+    var args = {
+        id: cat,
+        format: "json"
+    };
+    var cont = function(data){
+        clear(t.ui.refinements);
+        for (pi in data.producers) {
+            var opt = span_class("refinement", text(data.producers[pi]));
+            opt.onclick = bind(function(){ t.select_refinement(this.innerHTML) }, opt);
+            t.ui.refinements.appendChild(opt);
+        }
+    };
+    var err = function(data){
+        clear(t.ui.refinements);
+        alert("No refinements");
+    };
+    t.server.browse(args, cont, err);
 }
 
 Editor.prototype.select_refinement=function(fun) {
