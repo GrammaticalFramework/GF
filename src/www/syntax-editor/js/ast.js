@@ -5,7 +5,8 @@ function Tree(value) {
     var createNode = function(value, children) {
         var node = {
             value: value,
-            children: []
+            children: [],
+            hasChildren: function(){ return this.children.length > 0; }
         };
         if (children != undefined)
             for (c in children)
@@ -104,6 +105,43 @@ function AST(fun, cat) {
     // Clear children of current node
     this.removeChildren = function() {
         this.tree.find(this.current).children = [];
+    }
+
+    // generic HOF for traversing tree
+    this.traverse = function(f) {
+        function visit(id, node) {
+            f(node);
+            for (i in node.children) {
+                var newid = new NodeID(id);
+                newid.add(parseInt(i));
+                visit(newid, node.children[i]);
+            }
+        }
+        visit(new NodeID(), this.tree.root);
+    }
+
+    // Move current ID to next hole
+    this.toNextHole = function() {
+        var id = new NodeID(this.current);
+        
+        // loop until we're at top
+        while (id.get().length > 0) {
+            var node = this.tree.find(id);
+
+            // first check children
+            for (i in node.children) {
+                var child = node.children[i];
+                if (!child.value.fun) {
+                    var newid = new NodeID(id);
+                    newid.add(i);
+                    this.current = newid;
+                    return;
+                }
+            }
+
+            // otherwise go up to parent
+            id.get().pop();
+        }
     }
 
     // Move current id to child number i

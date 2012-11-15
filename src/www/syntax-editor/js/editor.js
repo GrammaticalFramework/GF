@@ -137,14 +137,16 @@ Editor.prototype.complete_refinement=function(data) {
             for (ci in fun_args) {
                 ast.add(null, fun_args[ci]);
             }
-
-            // Select next hole & get its refinements
-            ast.toChild(0);
-            update_current_node();
-            get_refinements();
         }
+        
+        // Update vis
         redraw_tree();
         update_linearisation();
+
+        // Select next hole & get its refinements
+        ast.toNextHole();
+        update_current_node();
+        get_refinements();
     }
 }
 
