@@ -58,8 +58,8 @@ lin pot111  =
    s,p = table {
     shi => mkD "十一" "拾壹" ; 
     shi0 => mkD "一十一" "壹拾壹" ; 
-    wan => mkD "十一万" "拾壹万" ; 
-    wan0 => mkD "十一万" "拾壹万"}} ;
+    wan => mkD "一万一千" "壹万壹千" ;  -- 11.16 by chenpeng wan => mkD "十一万" "拾壹万" ;
+    wan0 => mkD "一万一千" "壹万壹千"}} ; -- 11.16 by chenpeng wan0 => mkD "十一万" "拾壹万"}} ;
 lin pot1to19 d =
   {inh = nozero ; 
    s,p = table {
@@ -116,10 +116,10 @@ lin pot2 d =
 lin pot2plus d e =
   {inh = nozero ; 
    s,p = table {
-    bai => d.s ++ mkD "" "佰" ++ (ling ! <e.inh,e.inh>) ++ e.s ! shi0 ; 
-    bai0 => d.s ++ mkD "" "佰" ++ (ling ! <e.inh,e.inh>) ++ e.s ! shi0 ; 
-    shiwan => d.s ++ mkD "" "拾" ++ (Wan ! (e.inh)) ++ e.s ! wan ; 
-    shiwan0 => d.s ++ mkD "" "拾" ++ (Wan ! (e.inh)) ++ e.s ! wan0}} ;
+    bai => d.s ++ mkD "百" "佰" ++ (ling ! <e.inh,e.inh>) ++ e.s ! shi0 ; --why omit "百"? i add it /chenpeng
+    bai0 => d.s ++ mkD "百" "佰" ++ (ling ! <e.inh,e.inh>) ++ e.s ! shi0 ; --why omit "百"? i add it /chenpeng
+    shiwan => d.s ++ mkD "十" "拾" ++ (Wan ! (e.inh)) ++ e.s ! wan ; --why omit "十"? i add it /chenpeng
+    shiwan0 => d.s ++ mkD "十" "拾" ++ (Wan ! (e.inh)) ++ e.s ! wan0}} ;--why omit "十"? i add it /chenpeng
 lin pot2as3 n =
   {s = n.s ! bai ; p = n.p ! bai} ;
 lin pot3 n =
