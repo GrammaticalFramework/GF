@@ -98,6 +98,6 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     CompAdv a = {s = \\_ => a.s} ;
     CompCN cn = {s = \\agr => cn.s ! (NF (numGenNum agr.gn) Indef)} ;
 
-    VPSlashPrep vp prep = vp ** {c2 = prep ; compl1,compl2 = \\_ => []} ; ---- AR
+    VPSlashPrep vp prep = vp ** {c2 = prep ; compl1 = vp.compl ; compl2 = \\_ => []} ; ---- AR
 
 }
