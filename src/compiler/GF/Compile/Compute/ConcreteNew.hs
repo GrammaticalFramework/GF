@@ -265,8 +265,12 @@ vapply v vs =
 
 vbeta bt f (v:vs) =
   case (bt,v) of
-    (Implicit,VImplArg v) -> vapply (f v) vs
-    (Explicit,         v) -> vapply (f v) vs
+    (Implicit,VImplArg v) -> ap v
+    (Explicit,         v) -> ap v
+  where
+    ap (VFV avs) = VFV [vapply (f v) vs|v<-avs]
+    ap v         = vapply (f v) vs
+
 {-
 beta env b x t (v:vs) =
   case (b,v) of
