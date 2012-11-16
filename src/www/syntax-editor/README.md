@@ -13,6 +13,8 @@ Tested with latest Chrome and Firefox.
 
 ## TODO
 
+- Clicking on tokens to select tree node
+- Use local caching
 - Enter string/float/int literals
 - UI issue with DisambPhrasebookEng
 - more prominence to Disamb-linearizations

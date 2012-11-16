@@ -101,24 +101,22 @@ Editor.prototype.get_refinements=function(cat) {
     };
     var err = function(data){
         clear(t.ui.refinements);
-        alert("No refinements");
+        alert("Error");
     };
     t.server.browse(args, cont, err);
 }
 
 Editor.prototype.select_refinement=function(fun) {
     with (this) {
-        clear(ui.refinements);
+        ui.refinements.innerHTML = "...";
         ast.removeChildren();
         ast.setFun(fun);
-//        redraw_tree();
-
         var args = {
             id: fun,
             format: "json"
         };
         var err = function(data){
-            alert("no refinements");
+            alert("Error");
         };
         server.browse(args, bind(complete_refinement,this), err);
     }
@@ -148,7 +146,6 @@ Editor.prototype.complete_refinement=function(data) {
         // Select next hole & get its refinements
         ast.toNextHole();
         update_current_node();
-        get_refinements();
     }
 }
 
@@ -166,7 +163,9 @@ Editor.prototype.redraw_tree=function() {
     var elem = node; // function from support.js
     function visit(container, id, node) {
         var container2 = empty_class("div", "node");
-        var label = ((node.value.fun) ? node.value.fun : "?") + " : " + node.value.cat;
+        var label =
+            ((node.value.fun) ? node.value.fun : "?") + " : " +
+            ((node.value.cat) ? node.value.cat : "?");
         var current = id.equals(t.ast.current);
         var element = elem("a", {class:(current?"current":"")}, [text(label)]);
         element.onclick = function() {
@@ -214,6 +213,48 @@ Editor.prototype.update_linearisation=function(){
                 }
             }
         });
+    }
+}
+
+// 
+Editor.prototype.delete_refinement = function() {
+    var t = this;
+    t.ast.removeChildren();
+    t.ast.setFun(null);
+    t.redraw_tree();
+//    t.get_refinements();
+}
+
+// Generate random subtree from current node
+Editor.prototype.generate_random = function() {
+    var t = this;
+    t.ui.refinements.innerHTML = "...";
+    t.ast.removeChildren();
+    var args = {
+        cat: t.ast.getCat(),
+        limit: 1
+    };
+    var cont = function(data){
+        // Build tree of just fun, then populate with cats
+        var tree = t.ast.parseTree(data[0].tree);
+        tree.traverse(function(node){
+            var info = t.lookup_fun(node.value.fun);
+            node.value.cat = info.cat;
+        });
+        t.ast.setSubtree(tree);
+        t.redraw_tree();
+    };
+    var err = function(data){
+        alert("Error");
+    };
+    server.get_random(args, cont, err);
+}
+
+// Look up information for a function, hopefully from cache
+Editor.prototype.lookup_fun = function(fun) {
+    // TODO
+    return {
+        cat: null
     }
 }
 

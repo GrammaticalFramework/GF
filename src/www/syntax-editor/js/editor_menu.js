@@ -26,11 +26,19 @@ function EditorMenu(editor,opts) {
             id: "to_menu",
             multiple: "multiple",
             class: "hidden"
-        } )
+        }),
+        clear_button: button("Clear", function(){
+            t.editor.delete_refinement();
+        }),
+        random_button: button("Random", function(){
+            t.editor.generate_random();
+        }),
     };
     with(this.ui) {
 	appendChildren(this.container, [text(" Startcat: "),startcat_menu]);
         appendChildren(this.container, [text(" To: "), to_toggle, to_menu]);
+//        appendChildren(this.container, [clear_button, random_button]);
+        appendChildren(this.container, [clear_button]);
         startcat_menu.onchange=bind(this.change_startcat,this);
         to_menu.onchange=bind(this.change_language,this);
     }
@@ -157,9 +165,8 @@ EditorMenu.prototype.update_language_menu=function(menu,grammar) {
 	    menu.appendChild(option(lp,ln));
 	}
     }
-
-    insertFirst(menu,option("All","All"));
-    menu.value="All";
+    // insertFirst(menu,option("All","All"));
+    // menu.value="All";
 }
 
 

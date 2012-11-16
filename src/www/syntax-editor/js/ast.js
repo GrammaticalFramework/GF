@@ -1,25 +1,40 @@
 /* --- Tree representation -------------------------------------------------- */
-function Tree(value) {
-
-    // Create node as JS object
-    var createNode = function(value, children) {
-        var node = {
-            value: value,
-            children: [],
-            hasChildren: function(){ return this.children.length > 0; }
-        };
-        if (children != undefined)
-            for (c in children)
-                node.children.push( createNode(children[c],[]) );
-        return node;
+function Node(value, children) {
+    this.value = value;
+    this.children = [];
+    if (children != undefined)
+        for (c in children)
+            this.children.push( new Node(children[c],[]) );
+    this.hasChildren = function(){
+        return this.children.length > 0;
     }
 
-    this.root = createNode(value, []);
+    // generic HOF for traversing tree
+    this.traverse = function(f) {
+        function visit(node) {
+            f(node);
+            for (i in node.children) {
+                visit(node.children[i]);
+            }
+        }
+        visit(this);
+    }
+}
+
+function Tree(value) {
+    this.root = new Node(value, []);
 
     // add value as child of id
     this.add = function(id, value, children) {
         var x = this.find(id);
-        x.children.push( createNode(value, children) );
+        x.children.push( new Node(value, children) );
+    }
+
+    // set tree at given id to 
+    this.setSubtree = function(id, node) {
+        var x = this.find(id);
+        x.value = node.value;
+        x.children = node.children;
     }
 
     // id should be a list of child indices [0,1,0]
@@ -40,6 +55,20 @@ function Tree(value) {
             return undefined;
         return node;
     }
+
+    // generic HOF for traversing tree
+    this.traverse = function(f) {
+        function visit(id, node) {
+            f(node);
+            for (i in node.children) {
+                var newid = new NodeID(id);
+                newid.add(parseInt(i));
+                visit(newid, node.children[i]);
+            }
+        }
+        visit(new NodeID(), this.root);
+    }
+
 }
 
 /* --- ID for a node in a tree ---------------------------------------------- */
@@ -77,12 +106,12 @@ function NodeID(x) {
 /* --- Abstract Syntax Tree (with state)------------------------------------- */
 function AST(fun, cat) {
 
-    function Node(fun, cat) {
+    function ASTNode(fun, cat) {
         this.fun = fun;
         this.cat = cat;
     }
 
-    this.tree = new Tree(new Node(fun, cat));
+    this.tree = new Tree(new ASTNode(fun, cat));
     this.current = new NodeID(); // current id in tree
 
     this.getFun = function() {
@@ -98,26 +127,19 @@ function AST(fun, cat) {
         this.tree.find(this.current).value.cat = c;
     }
 
+    // Add a single fun at current node
     this.add = function(fun, cat) {
-        this.tree.add(this.current, new Node(fun,cat));
+        this.tree.add(this.current, new ASTNode(fun,cat));
+    }
+    
+    // Set entire subtree at current node
+    this.setSubtree = function(node) {
+        this.tree.setSubtree(this.current, node);
     }
     
     // Clear children of current node
     this.removeChildren = function() {
         this.tree.find(this.current).children = [];
-    }
-
-    // generic HOF for traversing tree
-    this.traverse = function(f) {
-        function visit(id, node) {
-            f(node);
-            for (i in node.children) {
-                var newid = new NodeID(id);
-                newid.add(parseInt(i));
-                visit(newid, node.children[i]);
-            }
-        }
-        visit(new NodeID(), this.tree.root);
     }
 
     // Move current ID to next hole
@@ -149,6 +171,11 @@ function AST(fun, cat) {
         this.current.add(i);
     }
 
+    // 
+    this.traverse = function(f) {
+        this.tree.traverse(f);
+    }
+
     // Return tree as string
     this.toString = function() {
         var s = "";
@@ -157,13 +184,52 @@ function AST(fun, cat) {
             if (node.children.length == 0)
                 return;
             for (i in node.children) {
-            s += "(";
+                s += " (";
                 visit(node.children[i]);
-            s += ")";
+                s += ")";
             }
         }
         visit(this.tree.root);
         return s;
+    }
+
+    // Parse AST string into node tree
+    this.parseTree = function(str) {
+
+        function trim(str) {
+            return str.trim().replace(/^\(\s*(.*)\s*\)$/, "$1");
+        }
+
+        function visit(node, str) {
+            var parts = [];
+            var ix_last = 0;
+            var par_cnt = 0;
+            for (i in str) {
+                if (str[i] == " ") {
+                    if (par_cnt == 0) {
+                        parts.push(trim(str.substring(ix_last, i)));
+                        ix_last = i;
+                    }
+                }
+                else if (str[i] == "(")
+                    par_cnt++;
+                else if (str[i] == ")")
+                    par_cnt--;
+            }
+            parts.push(trim(str.substring(ix_last)));
+
+            var fun = parts.shift();
+            var cat = null; // will be filled later
+
+            node.value = new ASTNode(fun, cat);
+            for (i in parts) {
+                node.children.push(new Node());
+                visit(node.children[i], parts[i]);
+            }
+        }
+        var tree = new Node();
+        visit(tree, str);
+        return tree;
     }
 }
 
