@@ -2,6 +2,18 @@ body {
     background: #ccc url("http://cloud.grammaticalframework.org/minibar/brushed-metal.png");
 }
 
+.hidden
+{ 
+  display:none;
+}
+
+select#to_menu
+{ 
+  height: 10em;
+  position: absolute;
+  min-width: 5em;
+  }
+
 #tree
 {
   white-space:pre;

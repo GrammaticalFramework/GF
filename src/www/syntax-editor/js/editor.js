@@ -108,14 +108,16 @@ Editor.prototype.get_refinements=function(cat) {
 
 Editor.prototype.select_refinement=function(fun) {
     with (this) {
+        clear(ui.refinements);
         ast.removeChildren();
         ast.setFun(fun);
+//        redraw_tree();
+
         var args = {
             id: fun,
             format: "json"
         };
         var err = function(data){
-            clear(refinements);
             alert("no refinements");
         };
         server.browse(args, bind(complete_refinement,this), err);
@@ -139,7 +141,7 @@ Editor.prototype.complete_refinement=function(data) {
             }
         }
         
-        // Update vis
+        // Update ui
         redraw_tree();
         update_linearisation();
 

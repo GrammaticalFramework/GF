@@ -15,11 +15,22 @@ function EditorMenu(editor,opts) {
     this.container = editor.ui.menubar;
     this.ui = {
         startcat_menu: empty("select"),
-        to_menu: empty_id("select","to_menu")
+        to_toggle: button("...", function(){
+            var sel = t.ui.to_menu;
+            if (sel.classList.contains("hidden"))
+                sel.classList.remove("hidden")
+            else
+                sel.classList.add("hidden")
+        }),
+        to_menu: node("select",{
+            id: "to_menu",
+            multiple: "multiple",
+            class: "hidden"
+        } )
     };
     with(this.ui) {
 	appendChildren(this.container, [text(" Startcat: "),startcat_menu]);
-        appendChildren(this.container, [text(" To: "), to_menu]);
+        appendChildren(this.container, [text(" To: "), to_toggle, to_menu]);
         startcat_menu.onchange=bind(this.change_startcat,this);
         to_menu.onchange=bind(this.change_language,this);
     }
@@ -119,10 +130,12 @@ EditorMenu.prototype.change_startcat=function () {
 
 // 
 EditorMenu.prototype.change_language=function () {
-    if (this.ui.to_menu.value == "All")
-        this.editor.languages = new Array();
-    else
-        this.editor.languages = new Array(this.ui.to_menu.value);
+    this.editor.languages = new Array();
+    for (i in this.ui.to_menu.options) {
+        var opt = this.ui.to_menu.options[i];
+        if (opt.selected)
+            this.editor.languages.push(opt.value);
+    }
     this.editor.update_linearisation();
 }
 
