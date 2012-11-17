@@ -3,21 +3,19 @@
 <head>
 <title>GF web services API examples</title>
 <meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="../gfse/editor.css" title="Cloud">
+<meta name = "viewport" content = "width = device-width">
 
 <style type="text/css">
-body { background: #ddd; }
-h1, h2, h3, small, th { font-family: sans-serif; }
 
 dt { background: #cef; }
 dt.js { background: white; margin-bottom: 1ex; }
 dt.js em { color: #36f; }
 dd { background: #ffc; margin-top: 1ex; margin-bottom: 1ex; }
+dt, dd { padding: 0.3ex; }
 
 dl.apiexamples>dt, dl.apiexamples>dd { font-family: monospace; }
 dl.apiexamples>dd {  white-space: pre; }
-
-div.modtime { float: right; }
-.modtime { color: #666; white-space: nowrap; }
 
 @media projection {
     div.intro { display: none; }
@@ -37,7 +35,8 @@ div.modtime { float: right; }
 </style>
 
 <body>
-<h1>GF web services API examples</h1>
+<h1><a href="../"><img src="../P/gf-cloud.png" alt=""></a>
+    GF web services API examples</h1>
 
 GF can be used interactively from the GF Shell. Some of the functionality
 availiable in the GF shell is also available via the GF web services API.
@@ -153,6 +152,16 @@ full API.
     <br>server.browse({id:"This"},callback)
   <dt>http://localhost:41296/grammars/Foods.pgf?command=browse&amp;id=This&amp;format=json
   <dd>{"def":"fun This : Kind -> Item","producers":[],"consumers":[]}
+  <dt class=js><em>// Get info about all categories and functions in the abstract syntax</em>
+    <br>server.browse({},callback)
+  <dt>http://localhost:41296/grammars/Foods.pgf?command=browse&amp;format=json
+  <dd>{"cats":{"Kind":{"def":"cat Kind",
+                 "producers":["Cheese","Fish","Mod","Pizza","Wine"],
+                 "consumers":["Mod","That","These","This","Those"]},
+         ...},
+ "funs":{"This":{"def":"fun This : Kind -> Item","producers":[],"consumers":[]},
+         ...}
+}
   <dt class=js><em>// Convert an abstract syntax tree to JSON</em>
     <br>server.pgf_call("abstrjson",{tree:"Pred (That Pizza) (Very Boring)"},callback)
 
@@ -165,6 +174,6 @@ full API.
 </dl>
 <hr>
 <div class=modtime><small>
-<!-- hhmts start -->Last modified: Sat Nov 17 12:53:47 CET 2012 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Sat Nov 17 18:40:55 CET 2012 <!-- hhmts end -->
   </small></div>
 <address><a href="http://www.cse.chalmers.se/~hallgren/">TH</a></address>
