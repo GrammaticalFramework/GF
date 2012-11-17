@@ -71,7 +71,7 @@ pgfMain pgf command =
                              Just l <- getFrom
                              outputGraphviz (parseTree pgf l t)
       "abstrjson"      -> outputJSONP . jsonExpr =<< getTree
-      "browse"         -> id =<< doBrowse pgf `fmap` getId `ap` getCSSClass `ap` getHRef `ap` getFormat "html"
+      "browse"         -> id =<< doBrowse pgf `fmap` getOptId `ap` getCSSClass `ap` getHRef `ap` getFormat "html"
       "external"       -> do cmd <- getInput "external"
                              input <- getText
                              doExternal cmd input
@@ -109,10 +109,13 @@ pgfMain pgf command =
     getTo = getLang "to"
 
     getId :: CGI PGF.CId
-    getId = do mb_id <- fmap (>>= PGF.readCId) (getInput "id")
-               case mb_id of
-                 Just id -> return id
-                 Nothing -> throwCGIError 400 "Bad identifier" []
+    getId = maybe errorMissingId return =<< getOptId
+
+    getOptId :: CGI (Maybe PGF.CId)
+    getOptId = maybe (return Nothing) rd =<< getInput "id"
+      where
+        rd = maybe err (return . Just) . PGF.readCId
+        err = throwCGIError 400 "Bad identifier" []
 
     getCSSClass :: CGI (Maybe String)
     getCSSClass = getInput "css-class"
@@ -136,6 +139,9 @@ pgfMain pgf command =
                          Nothing -> throwCGIError 400 "Bad language" ["Bad language: " ++ l]
                          Just lang | lang `elem` PGF.languages pgf -> return $ Just lang
                                    | otherwise -> throwCGIError 400 "Unknown language" ["Unknown language: " ++ l]
+
+
+errorMissingId = throwCGIError 400 "Missing identifier" []
 
 getFormat def = maybe def id `fmap` getInput "format"
 
@@ -367,12 +373,20 @@ pipeIt2graphviz format code = do
      ExitSuccess   -> return output
      ExitFailure r -> fail ("pipeIt2graphviz: (exit " ++ show r ++ ")")
 
-doBrowse pgf id _ _ "json" =
-    outputJSONP . makeObj . maybe [] obj $ PGF.browse pgf id
+browse1json pgf id = makeObj . maybe [] obj $ PGF.browse pgf id
   where
     obj (def,ps,cs) = ["def".=def,"producers".=ps,"consumers".=cs]
 
-doBrowse pgf id cssClass href _ = -- default to "html" format
+doBrowse pgf (Just id) _ _ "json" = outputJSONP $ browse1json pgf id
+doBrowse pgf Nothing   _ _ "json" =
+    outputJSONP $ makeObj ["cats".=all (PGF.categories pgf),
+                           "funs".=all (PGF.functions pgf)]
+  where
+    all = makeObj . map one
+    one id = PGF.showCId id.=browse1json pgf id
+
+doBrowse pgf Nothing cssClass href _ = errorMissingId
+doBrowse pgf (Just id) cssClass href _ = -- default to "html" format
   outputHTML $
   case PGF.browse pgf id of
     Just (def,ps,cs) -> "<PRE>"++annotate def++"</PRE>\n"++
