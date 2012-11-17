@@ -107,10 +107,10 @@ full API.
   <dd>[{"tree":"Pred (That Pizza) (Very Boring)"}]
   <dt class=js><em>// Linearize a syntax tree</em>
     <br>server.linearize({tree:"Pred (That Pizza) (Very Boring)",to:"FoodsEng"},callback)
-  <dt>http://localhost:41296/grammars/Foods.pgf?command=linearize&tree=Pred+(That+Pizza)+(Very+Boring)&to=FoodsEng
+  <dt>http://localhost:41296/grammars/Foods.pgf?command=linearize&amp;tree=Pred+(That+Pizza)+(Very+Boring)&amp;to=FoodsEng
   <dd>[{"to":"FoodsEng","text":"that pizza is very boring"}]
   <dt class=js>server.linearize({tree:"Pred (That Pizza) (Very Boring)"},callback)
-  <dt>http://localhost:41296/grammars/Foods.pgf?command=linearize&tree=Pred+(That+Pizza)+(Very+Boring)
+  <dt>http://localhost:41296/grammars/Foods.pgf?command=linearize&amp;tree=Pred+(That+Pizza)+(Very+Boring)
   <dd>[{"to":"FoodsBul","text":"онази пица е много еднообразна"},
  {"to":"FoodsEng","text":"that pizza is very boring"},
  {"to":"FoodsFin","text":"tuo pizza on erittäin tylsä"},
@@ -119,7 +119,7 @@ full API.
 ]
   <dt class=js><em>// Parse a string</em>
     <br>server.parse({from:"FoodsEng",input:"that pizza is very boring"},callback)
-  <dt>http://localhost:41296/grammars/Foods.pgf?command=parse&input=that+pizza+is+very+boring&from=FoodsEng
+  <dt>http://localhost:41296/grammars/Foods.pgf?command=parse&amp;input=that+pizza+is+very+boring&amp;from=FoodsEng
   <dd>[{"from":"FoodsEng",
   "brackets":{"cat":"Comment","fid":10,"index":0,"children":[{"cat":"Item","fid":7,"index":0,"children":[{"token":"that"},{"cat":"Kind","fid":6,"index":0,"children":[{"token":"pizza"}]}]},{"token":"is"},{"cat":"Quality","fid":9,"index":0,"children":[{"token":"very"},{"cat":"Quality","fid":8,"index":0,"children":[{"token":"boring"}]}]}]},
   "trees":["Pred (That Pizza) (Very Boring)"]}]
@@ -128,7 +128,7 @@ full API.
   <dd>...
   <dt class=js><em>// Translate to one language</em>
     <br>server.translate({input:"that pizza is very boring", from:"FoodsEng", to:"FoodsSwe"}, callback)
-  <dt>http://localhost:41296/grammars/Foods.pgf?command=translate&input=that+pizza+is+very+boring&from=FoodsEng&to=FoodsSwe
+  <dt>http://localhost:41296/grammars/Foods.pgf?command=translate&amp;input=that+pizza+is+very+boring&amp;from=FoodsEng&amp;to=FoodsSwe
   <dd>[{"from":"FoodsEng",
   "brackets":{"cat":"Comment","fid":10,"index":0,"children":[{"cat":"Item","fid":7,"index":0,"children":[{"token":"that"},{"cat":"Kind","fid":6,"index":0,"children":[{"token":"pizza"}]}]},{"token":"is"},{"cat":"Quality","fid":9,"index":0,"children":[{"token":"very"},{"cat":"Quality","fid":8,"index":0,"children":[{"token":"boring"}]}]}]},
   "translations":
@@ -138,25 +138,33 @@ full API.
               "text":"den där pizzan är mycket tråkig"}]}]}]
   <dt class=js><em>// Get completions (what words could come next)</em>
     <br>server.complete({from:"FoodsEng",input:"that pizza is very "},callback)
-  <dt>http://localhost:41296/grammars/Foods.pgf?command=complete&input=that+pizza+is+very+&from=FoodsEng
+  <dt>http://localhost:41296/grammars/Foods.pgf?command=complete&amp;input=that+pizza+is+very+&amp;from=FoodsEng
   <dd>[{"from":"FoodsEng",
   "brackets":{"cat":"_","fid":0,"index":0,"children":[{"cat":"Item","fid":7,"index":0,"children":[{"token":"that"},{"cat":"Kind","fid":6,"index":0,"children":[{"token":"pizza"}]}]},{"token":"is"},{"token":"very"}]},
   "completions":["boring","delicious","expensive","fresh","Italian","very","warm"],
   "text":""}]
   <dt class=js><em>// Get info about a category in the abstract syntax</em>
     <br>server.browse({id:"Kind"},callback)
-  <dt>http://localhost:41296/grammars/Foods.pgf?command=browse&id=Kind&format=json
+  <dt>http://localhost:41296/grammars/Foods.pgf?command=browse&amp;id=Kind&amp;format=json
   <dd>{"def":"cat Kind",
  "producers":["Cheese","Fish","Mod","Pizza","Wine"],
  "consumers":["Mod","That","These","This","Those"]}
   <dt class=js><em>// Get info about a function in the abstract syntax</em>
     <br>server.browse({id:"This"},callback)
-  <dt>http://localhost:41296/grammars/Foods.pgf?command=browse&id=This&format=json
+  <dt>http://localhost:41296/grammars/Foods.pgf?command=browse&amp;id=This&amp;format=json
   <dd>{"def":"fun This : Kind -> Item","producers":[],"consumers":[]}
+  <dt class=js><em>// Convert an abstract syntax tree to JSON</em>
+    <br>server.pgf_call("abstrjson",{tree:"Pred (That Pizza) (Very Boring)"},callback)
+
+  <dt>http://localhost:41296/grammars/Foods.pgf?command=abstrjson&amp;tree=Pred+(That+Pizza)+(Very+Boring)
+  <dd>{"fun":"Pred","fid":4,
+ "children":[{"fun":"That","fid":1,
+              "children":[{"fun":"Pizza","fid":0}]},
+             {"fun":"Very","fid":3,
+              "children":[{"fun":"Boring","fid":2}]}]}
 </dl>
 <hr>
 <div class=modtime><small>
-<!-- hhmts start --> Last modified: Tue Apr 10 15:08:14 CEST 2012 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Sat Nov 17 12:53:47 CET 2012 <!-- hhmts end -->
   </small></div>
 <address><a href="http://www.cse.chalmers.se/~hallgren/">TH</a></address>
-  
