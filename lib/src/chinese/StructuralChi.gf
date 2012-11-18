@@ -56,7 +56,7 @@ few_Det = mkDet "少" Pl ;
 other_A = mkA "其他" ;
 
 oper
-  mkIPL, mkIAdvL, mkAdA, mkIDetL, mkPConjL, mkCAdv, mkIQuant = ssword ;
+  mkIPL, mkIAdvL, mkAdA, mkIDetL, mkPConjL, mkIQuant = ssword ;
 
 -- hsk
 
@@ -99,6 +99,7 @@ no_Utt = ss neg_s ;
 
 oper
   mkConjForm : Str -> {s1,s2 : Str} = \s -> {s1 = [] ; s2 = word s} ;
+  mkConjForm2 : Str -> Str -> {s1,s2 : Str} = \s1,s2 -> {s1 = word s1 ; s2 = word s1} ;
 
 -- manually by AR, Jolene
 
@@ -114,16 +115,32 @@ lin
 lin
 almost_AdA = ssword "几乎" ;  
 almost_AdN = ssword "几乎" ;  
---as_CAdv = ssword "什么" ;   -- as good as X
+as_CAdv = {s,p = word "如同"} ;   -- modified by chenpeng 11.17
 at_least_AdN = ssword "最少" ;  -- at least five
 at_most_AdN = ssword "最多" ;
-behind_Prep = mkPrep "后面" "在";  
---both7and_DConj = ssword "什么" ;  -- both - and
+behind_Prep = mkPrep "后面" "在";
+  
+both7and_DConj =  {s = table {     -- modified by chenpeng 11.17
+                    CPhr CNPhrase => mkConjForm2 "亦" "亦" ;
+                    CPhr CAPhrase => mkConjForm2 "即" "又" ;
+                    CPhr CVPhrase => mkConjForm2 "不仅" "而且" ;
+                    CSent => mkConjForm2 "不仅" "而且"
+                    }
+                } ;
+
 by8agent_Prep = mkPrep "被" ;    -- by for agent in passive 
                                   -- [mark] 被
 during_Prep = mkPrep "期间" "在" ;  -- [mark] often equivalent to nothing
                                    -- translation for "he swam during this summer. " and "he swam this summer." are often the same
---either7or_DConj = ssword "什么" ;  
+
+either7or_DConj =  {s = table {     -- modified by chenpeng 11.17
+                    CPhr CNPhrase => mkConjForm2 "或" "或" ;
+                    CPhr CAPhrase => mkConjForm2 "要么" "要么" ;
+                    CPhr CVPhrase => mkConjForm2 "要么" "要么" ;
+                    CSent         => mkConjForm2 "要么" "要么"
+                    }
+                } ; 
+
 everybody_NP = ssword "每个人" ;  -- [mark] "每个人": 每(every)+个(classifier)+人(person)
 everything_NP = ssword "每件事" ;  -- [mark] "每件事": 每(every)+件(classifier)+事(thing)
 everywhere_Adv = mkAdv "到处" ;  
@@ -134,8 +151,8 @@ here7to_Adv = mkAdv "到这里" ;    -- to here
 how8many_IDet = ssword "多少" ;  
 how8much_IAdv = ssword "多少" ;  
 if_Subj = mkSubj "如果" [] ; --"就" ;  -- [mark] "就" often comes between NP and VP
---less_CAdv = ssword "什么" ;  -- less good than
---more_CAdv = ssword "什么" ;  
+less_CAdv = {s = word "少于" ; p = than_s} ;  -- modified by chenpeng 11.17
+more_CAdv = {s = "更加" ; p = than_s} ;   -- modified by chenpeng 11.17
 most_Predet = ssword "大多数" ;  
 nobody_NP = ssword "没人" ;  
 nothing_NP = ssword "没有什么" ;  
