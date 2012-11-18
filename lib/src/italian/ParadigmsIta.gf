@@ -62,6 +62,9 @@ oper
   genitive   : Prep ; -- preposition "di" and its contractions
   dative     : Prep ; -- preposition "a" and its contractions
 
+  di_Prep    : Prep ; -- = genitive
+  a_Prep     : Prep ; -- = dative
+
 -- The following prepositions also have special contracted forms.
 
   con_Prep : Prep ; -- preposition "con" and its contractions
@@ -298,8 +301,8 @@ oper
 
   --Prep = Compl ;
   accusative = lin Prep complAcc ;
-  genitive = lin Prep complGen ;
-  dative = lin Prep complDat ;
+  genitive, di_Prep = lin Prep complGen ;
+  dative, a_Prep = lin Prep complDat ;
   mkPrep p = lin Prep {s = p ; c = Acc ; isDir = False ; lock_Prep = <>} ;
 
   con_Prep = {s = [] ; c = CPrep P_con ; isDir = False ; lock_Prep = <>} ;

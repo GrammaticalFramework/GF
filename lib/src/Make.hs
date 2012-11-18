@@ -117,10 +117,12 @@ make xx = do
   let pres
         | elem "present" xx = 1
         | elem "alltenses" xx = 2
+        | elem "newcomp" xx = 3
         | otherwise = 0
   let dir = case pres of
               1 -> "../present"
               2 -> "../alltenses"
+              3 -> "../newcomp"
               _ -> "../full"
 
   let optl ls = maybe ls id $ getOptLangs xx
@@ -173,9 +175,10 @@ gfc pres ppath file = do
   let preproc = if (pres==1) then "-preproc=mkPresent" else ""
   let path    = if (pres==1) then ppath else ""
   putStrLn $ "Compiling " ++ file
-  if pres == 0
-     then run_gfc ["-s","-src",preproc, path, file]
-     else run_gfc ["-s","-src","-no-pmcfg",preproc, path, file]
+  case pres of
+    0 -> run_gfc ["-s","-src",preproc, path, file]
+    3 -> run_gfc ["-s","-src","-no-pmcfg", "-new-comp", preproc, path, file]
+    _ -> run_gfc ["-s","-src","-no-pmcfg",preproc, path, file]
 
 
 gfcmin path file = do
