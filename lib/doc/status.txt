@@ -12,46 +12,46 @@ that are currently available via http://grammaticalframework.org
 are marked in the table
 
 
-|| Lang | Darcs | Mini | Parad | Lex | Lang | API | Symb | Irreg | Dict | authors       ||
-| Afr   | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *LPs,LPj
-| Amh   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | *MK
-| Ara   | +     | +    | +     | +   | -    | -   | -    | -     | -    | AD
-| Bul   | +     | +    | +     | +   | +    | +   | +    | +     | +    | *KA
-| Cat   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *JS
-| Chi   | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *ZL,AR
-| Dan   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
-| Dut   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,FJ
-| Eng   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,BB
-| Est   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *KK,IL
-| Fin   | +     | +    | ++    | +   | +    | +   | +    | -     | +    | *AR
-| Fre   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,RE
-| Ger   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,HH,EG
-| Heb   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *DD
-| Hin   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,*KP,MH,AR
-| Ina   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | JB
-| Ita   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *AR,*RE,GP
-| Jpn   | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *LZ
-| Lat   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
-| Lav   | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *NG,*PP
-| Mlt   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *JC
-| Mon   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *NE
-| Nep   | +     | +    | ++    | +   | +    | -   | -    | -     | -    | *DS
-| Nor   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
-| Pes   | +     | -    | +     | +   | +    | +   | -    | -     | -    | *SV,*EA,SM
-| Pnb   | +     | +    | +     | +   | +    | +   | +    | -     | -    | *SV,MH
-| Pol   | +     | +    | +     | +   | +    | +   | +    | -     | -    | IN,*AS
-| Ron   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *RE
-| Rus   | +     | +    | ++    | +   | +    | +   | -    | -     | -    | JK,*NF
-| Snd   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,*JD
-| Spa   | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,IA,TS,IL
-| Swa   | +     | -    | -     | -   | -    | -   | -    | -     | -    | *WN,JM
-| Swe   | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *MA,*AR,MF
-| Tha   | +     | -    | ++    | +   | +    | +   | +    | -     | -    | *AR,CK
-| Tsn   | -     | -    | -     | -   | -    | -   | -    | -     | -    | *LPs,AB
-| Tur   | +     | -    | ++    | +   | -    | -   | -    | -     | +    | *SC,KA
-| Urd   | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,MH
+|| ISO  | Language     | Darcs | Mini | Parad | Lex | Lang | API | Symb | Irreg | Dict | authors       ||
+| Afr   | Afrikaans    | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *LPs,LPj
+| Amh   | Amharic      | +     | +    | ++    | +   | +    | -   | -    | -     | -    | *MK
+| Ara   | Arabic       | +     | +    | +     | +   | -    | -   | -    | -     | -    | AD
+| Bul   | Bulgarian    | +     | +    | +     | +   | +    | +   | +    | +     | +    | *KA
+| Cat   | Catalan      | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *JS
+| Chi   | Chinese      | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *ZL,*AR,*CP
+| Dan   | Danish       | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Dut   | Dutch        | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,FJ
+| Eng   | English      | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,BB,KA
+| Est   | Estonian     | -     | -    | -     | -   | -    | -   | -    | -     | -    | *KK,IL
+| Fin   | Finnish      | +     | +    | ++    | +   | +    | +   | +    | -     | +    | *AR
+| Fre   | French       | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,RE
+| Ger   | German       | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,HH,EG
+| Heb   | Hebrew       | -     | -    | -     | -   | -    | -   | -    | -     | -    | *DD
+| Hin   | Hindi        | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,*KP,MH,AR
+| Ina   | Interlingua  | +     | +    | ++    | +   | +    | -   | -    | -     | -    | JB
+| Ita   | Italian      | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *AR,*RE,GP
+| Jpn   | Japanese     | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *LZ
+| Lat   | Latin        | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
+| Lav   | Latvian      | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *NG,*PP
+| Mlt   | Maltese      | +     | -    | -     | -   | -    | -   | -    | -     | -    | *JC
+| Mon   | Mongolian    | -     | -    | -     | -   | -    | -   | -    | -     | -    | *NE
+| Nep   | Nepali       | +     | +    | ++    | +   | +    | -   | -    | -     | -    | *DS
+| Nor   | Norwegian(b) | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
+| Pes   | Persian      | +     | -    | +     | +   | +    | +   | -    | -     | -    | *SV,*EA,SM
+| Pnb   | Pubjabi      | +     | +    | +     | +   | +    | +   | +    | -     | -    | *SV,MH
+| Pol   | Polish       | +     | +    | +     | +   | +    | +   | +    | -     | -    | IN,*AS
+| Ron   | Romanian     | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *RE
+| Rus   | Russian      | +     | +    | ++    | +   | +    | +   | -    | -     | -    | JK,*NF
+| Snd   | Sindhi       | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,*JD
+| Spa   | Spanish      | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR,IA,TS,IL
+| Swa   | Swahili      | +     | -    | -     | -   | -    | -   | -    | -     | -    | *WN,JM
+| Swe   | Swedish      | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *MA,*AR,MF
+| Tha   | Thai         | +     | -    | ++    | +   | +    | +   | +    | -     | -    | *AR,CK
+| Tsn   | Tswana       | -     | -    | -     | -   | -    | -   | -    | -     | -    | *LPs,AB
+| Tur   | Turkish      | +     | -    | ++    | +   | -    | -   | -    | -     | +    | *SC,KA
+| Urd   | Urdu         | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,MH
 
-Lang = 3-letter ISO language code, used in library file names 
+ISO = 3-letter ISO language code, used in library file names 
 (mostly ISO 639-2 B (bibliographic))
 
 Darcs = available in the darcs repository of --http://code.haskell.org/gf-- http://www.grammaticalframework.org/
@@ -84,6 +84,7 @@ AR Aarne Ranta,
 AS Adam Slaski,
 BB Björn Bringert,
 CK Chotiros Kairoje,
+CP Chen Peng,
 DD Dana Dannélls,
 DS Dinesh Simk,
 EA Elnaz Abolahrar,

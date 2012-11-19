@@ -151,7 +151,7 @@ how8many_IDet = ssword "多少" ;
 how8much_IAdv = ssword "多少" ;
 if_Subj = mkSubj "如果" [] ; --"就" ; -- [mark] "就" often comes between NP and VP
 less_CAdv = {s = word "少于" ; p = than_s} ; -- modified by chenpeng 11.17
-more_CAdv = {s = "更加" ; p = than_s} ; -- modified by chenpeng 11.17
+more_CAdv = {s = word "更加" ; p = than_s} ; -- modified by chenpeng 11.17
 most_Predet = ssword "大多数" ;
 if_then_Conj = {s = table { -- added by chenpeng 11.19
                     CPhr CNPhrase => mkConjForm [] ;
