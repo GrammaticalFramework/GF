@@ -68,7 +68,6 @@ static GU_DEFINE_TYPE(PgfCFCat, struct,
 
 extern GuHasher pgf_cfcat_hasher;
 
-typedef GuMap PgfProductionIdx;
 GU_DEFINE_TYPE(PgfProductionIdx, GuMap,
 		       gu_type(PgfCFCat), &pgf_cfcat_hasher,
 		       gu_type(PgfProductionSeq), &gu_null_seq);
