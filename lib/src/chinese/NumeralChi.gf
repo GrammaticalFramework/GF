@@ -81,7 +81,7 @@ lin pot0as1 n =
     wan0 => n.s ++ mkD "千" "仟"}
   } ;
 lin pot1 d =
-  {inh = zero ; 
+  {inh = nozero ;  -- inh = zero
    s,p = table {
     shi => d.s ++ mkD "十" "拾" ; 
     shi0 => d.s ++ mkD "十" "拾" ; 
