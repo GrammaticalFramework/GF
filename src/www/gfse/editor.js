@@ -336,7 +336,6 @@ function show_compile_error(res,err_ind) {
 		     : "<span class=error_message>"+res.errorcode+" </span>")
     if(dst) {
 	clear(dst);
-	//var minibarlink=a(res.minibar_url,[text("Minibar")])
 	if(res.errorcode=="OK")
 	    dst.appendChild(wrap("h3",text("OK")))
 	else
