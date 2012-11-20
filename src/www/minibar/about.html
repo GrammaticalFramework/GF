@@ -34,7 +34,7 @@ Some implementation details:
   (there are both styling and scripting issues).
   There seems to be some rendering bugs in Chrome 5.0.342.9 β.
   <li>The implementation consist of two JavaScript files:
-  <a href="minibar.js">minibar.js</a> and <a href="support.js">support.js</a>
+  <a href="minibar.js">minibar.js</a> and <a href="../js/support.js">support.js</a>
   The latter is also used in
   <a href="http://spraakbanken.gu.se/swe/forskning/saldo/ordspel">a couple of
   small web apps</a> based on the
@@ -127,12 +127,12 @@ Some implementation details:
   <li>[Added 2010-10-27] Code restructuring:
     <ul>
     <li>The PGF server API has been moved to its own file:
-      <a href="pgf_online.js">pgf_online.js</a>. This
+      <a href="../js/pgf_online.js">pgf_online.js</a>. This
       allows it to be reused in other applicaitons without importing the entire
       minibar. It also allows minibar to be used with different server
       interfaces. <a href="minibar.html">minibar.html</a> has been updated to
       show how you use the new <a href="minibar.js">minibar.js</a> and
-      <a href="pgf_online.js">pgf_online.js</a>.
+      <a href="../js/pgf_online.js">pgf_online.js</a>.
     <li>The minibar code has been rewritten to avoid storing state information
       in the document tree and accessing it by referring to named document
       elements. The code now also avoids using string literals containing
@@ -144,9 +144,9 @@ Some implementation details:
    <ul>
      <li><a href="gf-web-api-examples.html">gf-web-api-examples.html</a>:
      examples illustrating the PGF server API provided by
-     <a href="pgf_online.js">pgf_online.js</a>.
+     <a href="../js/pgf_online.js">pgf_online.js</a>.
      <li><a href="example.html">example.html</a>: a minimal example of a web
-     page that uses <a href="pgf_online.js">pgf_online.js</a> to talk to the
+     page that uses <a href="../js/pgf_online.js">pgf_online.js</a> to talk to the
      PGF server.
    </ul>
  <li>[Added 2011-03-03] Added a button to display word alignment.
@@ -217,7 +217,7 @@ Some implementation details:
 
 <hr>
 <div class=modtime><small>
-<!-- hhmts start -->Last modified: Mon Sep 10 00:50:08 CEST 2012 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Tue Nov 20 13:41:21 CET 2012 <!-- hhmts end -->
 </small></div>
 <address>
 <a href="http://www.cse.chalmers.se/~hallgren/">TH</a>
