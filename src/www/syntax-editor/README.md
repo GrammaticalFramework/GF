@@ -9,7 +9,7 @@ An improved version of the [old syntax editor][1].
 
 ## Notes
 
-Tested with latest Chrome and Firefox.
+- Tested with latest Chrome and Firefox (only).
 
 ## TODO
 
@@ -19,7 +19,6 @@ Tested with latest Chrome and Firefox.
 - UI issue with DisambPhrasebookEng
 - more prominence to Disamb-linearizations
 - ambiguity: (optionally) parse all the resulting linearizations/variants and point out those which are ambiguous
-- random-generate a non-empty tree as a starting point
 - try to retain subtree when replacing node
 - add undo/redo (or back/forward) navigation
 - structure the set of fridge magnets some more. Even though they

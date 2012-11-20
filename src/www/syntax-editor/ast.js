@@ -35,10 +35,9 @@ function NodeID(x) {
 function ASTNode(data) {
     for(var d in data) this[d]=data[d];
     this.children = [];
-    // if (children != undefined)
-    //     for (c in children) {
-    //         this.children.push( new ASTNode(children[c]) );
-    //     }
+    for (c in data.children) {
+        this.children.push( new ASTNode(data.children[c]) );
+    }
     this.hasChildren = function(){
         return this.children.length > 0;
     }
@@ -84,7 +83,6 @@ function AST(fun, cat) {
         this.find(this.current).cat = c;
     }
 
-
     // Add a single fun at current node
     this.add = function(fun, cat) {
         this._add(this.current, newNode(fun,cat));
@@ -101,33 +99,39 @@ function AST(fun, cat) {
         this._setSubtree(this.current, node);
     }
     
-    // set tree at given id to 
-    this._setSubtree = function(id, node) {
-        var x = this.find(id);
-        for (var n in node) x[n] = node[n];
+    // set tree at given id
+    this._setSubtree = function(id, subtree) {
+        var lid = id.get().slice(); // clone NodeID array
+        var node = this.root;
 
-        x.traverse(function(node){
-            if (!node.children) node.children=[];
-            // TODO: this doesn't work!
-            //node = new ASTNode(node);
-        })
+        if (lid.length==1)
+            // Insert at root
+            this.root = new ASTNode(subtree);
+        else {
+            lid.shift(); // throw away root
+            while (lid.length>1 && node.hasChildren()) {
+                node = node.children[lid.shift()];
+            }
+            node.children[lid.shift()] = new ASTNode(subtree);
+        }
+
     }
 
     // id should be a list of child indices [0,1,0]
     // or a string separated by commas "0,1,0"
-    this.find = function(_id) {
-        var id = undefined
-        switch (typeof _id) {
-        case "number": id = [_id]; break;
-        case "string": id = _id.split(","); break;
-        case "object": id = _id.get().slice(); break; // clone NodeID array
+    this.find = function(id) {
+        var lid = undefined
+        switch (typeof id) {
+        case "number": lid = [id]; break;
+        case "string": lid = id.split(","); break;
+        case "object": lid = id.get().slice(); break; // clone NodeID array
         }
         var node = this.root;
-        if (id[0] == 0) id.shift();
-        while (id.length>0 && node.children.length>0) {
-            node = node.children[id.shift()];
+        if (lid[0] == 0) lid.shift();
+        while (lid.length>0 && node.children.length>0) {
+            node = node.children[lid.shift()];
         }
-        if (id.length>0)
+        if (lid.length>0)
             return undefined;
         return node;
     }
@@ -187,8 +191,8 @@ function AST(fun, cat) {
         var s = "";
         function visit(node) {
             s += node.fun ? node.fun : "?" ;
-//            if (!node.hasChildren())
-            if (node.children.length == 0)
+            if (!node.hasChildren())
+//            if (node.children.length == 0)
                 return;
             for (i in node.children) {
                 s += " (";

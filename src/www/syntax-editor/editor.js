@@ -243,7 +243,6 @@ Editor.prototype.delete_refinement = function() {
 // Generate random subtree from current node
 Editor.prototype.generate_random = function() {
     var t = this;
-    t.ui.refinements.innerHTML = "...";
     t.ast.removeChildren();
     var args = {
         cat: t.ast.getCat(),
@@ -263,7 +262,7 @@ Editor.prototype.generate_random = function() {
     server.get_random(args, cont, err);
 }
 
-// Import AST from string representation
+// Import AST from string representation, setting at current node
 Editor.prototype.import_ast = function(abstr) {
     var t = this;
     var args = {
@@ -272,7 +271,9 @@ Editor.prototype.import_ast = function(abstr) {
     var cont = function(tree){
         // Build tree of just fun, then populate with cats
         t.ast.setSubtree(tree);
+        /// TODO: traverse only subtree, not everything!
         t.ast.traverse(function(node){
+            if (!node.fun) return;
             var info = t.lookup_fun(node.fun);
             node.cat = info.cat;
         });
@@ -282,7 +283,8 @@ Editor.prototype.import_ast = function(abstr) {
     server.pgf_call("abstrjson", args, cont);
 }
 
-// Look up information for a function, hopefully from cache
+// Look up information for a function
+// This will absolutely fail on dependant types
 Editor.prototype.lookup_fun = function(fun) {
     var t = this;
     var def = t.grammar_constructors.funs[fun].def;

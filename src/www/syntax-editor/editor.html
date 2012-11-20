@@ -5,7 +5,7 @@
   <link rel="author" href="http://www.grammaticalframework.org/~john/" title="John J. Camilleri">
   <title>Syntax Editor</title>
   <link rel="stylesheet" type="text/css" href="http://cloud.grammaticalframework.org/minibar/minibar.css" />
-  <link rel="stylesheet" type="text/css" href="ui/style.css" />
+  <link rel="stylesheet" type="text/css" href="editor.css" />
 </head>
 <body>
   <h2>Syntax Editor</h2>
@@ -17,16 +17,15 @@
   John J. Camilleri, November 2012
   </small>
 
-  <script type="text/javascript" src="js/support.js"></script>
-  <script type="text/javascript" src="js/pgf_online.js"></script>
-  <script type="text/javascript" src="js/ast.js"></script>
-  <script type="text/javascript" src="js/editor_menu.js"></script>
-  <script type="text/javascript" src="js/editor.js"></script>
+  <script type="text/javascript" src="../js/support.js"></script>
+  <script type="text/javascript" src="../js/pgf_online.js"></script>
+  <script type="text/javascript" src="ast.js"></script>
+  <script type="text/javascript" src="editor_menu.js"></script>
+  <script type="text/javascript" src="editor.js"></script>
   <script type="text/javascript">
-    // Code taken from minibar_online.js
     var server_options = {
-        //grammars_url: "http://www.grammaticalframework.org/grammars/",
-        //grammars_url: "http://localhost:41296/grammars/",
+        // grammars_url: "http://www.grammaticalframework.org/grammars/",
+        grammars_url: "http://localhost:41296/grammars/",
     }
     var editor_options = {
 	target: "editor"
