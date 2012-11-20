@@ -13,6 +13,8 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       isNeg = False 
      } ;
 
+    GenIP ip = {s = \\_,_ => ip.s ! NPCase Gen} ;
+
     GenCN n1 n2 = {s = \\nf => n1.s ! NPCase Gen ++ n2.s ! nf} ;
 
   lincat
@@ -85,7 +87,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     AdvPredNP  adv v np =
       mkClause (\_ -> adv.s) np.a (insertObj 
-        (\\_,b,_ => np.s ! NPCase Nom) (predV v)) ;
+        (\\_,b,_ => subjForm np v.sc b) (predV v)) ;
 
     ICompExistNP adv np = 
       let cl = mkClause (\_ -> adv.s ! np.a) np.a (insertObj 
