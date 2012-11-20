@@ -20,13 +20,14 @@ data-files: www/*.html
 	    www/gfse/*.js
 	    www/gfse/P/*.png
 	    www/gfse/P/*.jpg
+            www/js/*.js
 	    www/minibar/*.html
 	    www/minibar/*.css
 	    www/minibar/*.js
 	    www/minibar/*.png
 	    www/syntax-editor/*.html
-	    www/syntax-editor/ui/*.css
-	    www/syntax-editor/js/*.js
+	    www/syntax-editor/*.css
+	    www/syntax-editor/*.js
 	    www/TransQuiz/*.html
 	    www/TransQuiz/*.css
 	    www/TransQuiz/*.js
