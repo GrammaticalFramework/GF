@@ -43,7 +43,7 @@ select#to_menu
 
 #linearisations
 {
-  background: rgba(170, 170, 170, 0.5);
+  /* background: rgba(170, 170, 170, 0.5); */
   padding:0.5em;
   margin:0.5em 0;
   }
