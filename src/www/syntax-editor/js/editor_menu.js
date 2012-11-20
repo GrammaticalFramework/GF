@@ -37,8 +37,8 @@ function EditorMenu(editor,opts) {
     with(this.ui) {
 	appendChildren(this.container, [text(" Startcat: "),startcat_menu]);
         appendChildren(this.container, [text(" To: "), to_toggle, to_menu]);
-//        appendChildren(this.container, [clear_button, random_button]);
-        appendChildren(this.container, [clear_button]);
+        appendChildren(this.container, [clear_button, random_button]);
+        // appendChildren(this.container, [clear_button]);
         startcat_menu.onchange=bind(this.change_startcat,this);
         to_menu.onchange=bind(this.change_language,this);
     }

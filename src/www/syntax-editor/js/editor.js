@@ -43,6 +43,21 @@ function Editor(server,opts) {
 
 }
 
+Editor.prototype.get_grammar_constructors=function(callback) {
+    var t = this;
+    var args = {
+        format: "json"
+    };
+    var cont = function(data){
+        t.grammar_constructors = data;
+        if (callback) callback();
+    };
+    var err = function(data){
+        alert("Error");
+    };
+    t.server.browse(args, cont, err);
+}
+
 /* --- API for getting and setting state ------------------------------------ */
 
 Editor.prototype.get_ast=function() {
@@ -59,7 +74,7 @@ Editor.prototype.change_grammar=function(grammar_info) {
     with(this) {
         grammar = grammar_info;
         local.startcat = null;
-        start_fresh();
+        get_grammar_constructors(bind(start_fresh,this));
     }
 }
 
@@ -164,8 +179,8 @@ Editor.prototype.redraw_tree=function() {
     function visit(container, id, node) {
         var container2 = empty_class("div", "node");
         var label =
-            ((node.value.fun) ? node.value.fun : "?") + " : " +
-            ((node.value.cat) ? node.value.cat : "?");
+            ((node.fun) ? node.fun : "?") + " : " +
+            ((node.cat) ? node.cat : "?");
         var current = id.equals(t.ast.current);
         var element = elem("a", {class:(current?"current":"")}, [text(label)]);
         element.onclick = function() {
@@ -183,7 +198,7 @@ Editor.prototype.redraw_tree=function() {
     }
     with(this) {
         clear(ui.tree);
-        visit(ui.tree, new NodeID(), ast.tree.root);
+        visit(ui.tree, new NodeID(), ast.root);
     }
 }
 
@@ -234,15 +249,13 @@ Editor.prototype.generate_random = function() {
         cat: t.ast.getCat(),
         limit: 1
     };
+    if (!args.cat) {
+        alert("Missing category at current node");
+        return;
+    }
     var cont = function(data){
-        // Build tree of just fun, then populate with cats
-        var tree = t.ast.parseTree(data[0].tree);
-        tree.traverse(function(node){
-            var info = t.lookup_fun(node.value.fun);
-            node.value.cat = info.cat;
-        });
-        t.ast.setSubtree(tree);
-        t.redraw_tree();
+        var tree = data[0].tree;
+        t.import_ast(tree);
     };
     var err = function(data){
         alert("Error");
@@ -250,11 +263,33 @@ Editor.prototype.generate_random = function() {
     server.get_random(args, cont, err);
 }
 
+// Import AST from string representation
+Editor.prototype.import_ast = function(abstr) {
+    var t = this;
+    var args = {
+        tree: abstr
+    };
+    var cont = function(tree){
+        // Build tree of just fun, then populate with cats
+        t.ast.setSubtree(tree);
+        t.ast.traverse(function(node){
+            var info = t.lookup_fun(node.fun);
+            node.cat = info.cat;
+        });
+        t.redraw_tree();
+        t.update_linearisation();
+    };
+    server.pgf_call("abstrjson", args, cont);
+}
+
 // Look up information for a function, hopefully from cache
 Editor.prototype.lookup_fun = function(fun) {
-    // TODO
+    var t = this;
+    var def = t.grammar_constructors.funs[fun].def;
+    var ix = def.lastIndexOf(" ");
+    var cat = def.substr(ix).trim();
     return {
-        cat: null
+        cat: cat
     }
 }
 
