@@ -2,11 +2,12 @@
 /* --- Input object --------------------------------------------------------- */
 
 function Input(server,translations,opts) { // Input object constructor
-    this.server=server;
-    this.translations=translations;
+    var t=this
+    t.server=server;
+    t.translations=translations;
 
     // Default values for options:
-    this.options={
+    t.options={
 	delete_button_text: "⌫",
 	default_source_language: null,
 	startcat_menu: true,
@@ -15,34 +16,42 @@ function Input(server,translations,opts) { // Input object constructor
     }
 
     // Apply supplied options
-    if(opts) for(var o in opts) this.options[o]=opts[o];
+    if(opts) for(var o in opts) t.options[o]=opts[o];
 
     // User interface elements
-    this.main=empty("div");
-    this.menus=empty("span");
-    this.buttons=empty("span");
-    this.surface=div_id("surface");
-    this.words=div_id("words");
-    this.from_menu=empty("select");
-    this.startcat_menu=empty("select")
+    t.main=empty("div");
+    t.menus=empty("span");
+    t.buttons=empty("span");
+    t.surface=div_id("surface");
+    t.words=div_id("words");
+    t.from_menu=empty("select");
+    t.startcat_menu=empty("select")
 
-    with(this) {
+    with(t) {
 	appendChildren(main,[surface,words]);
 	if(options.startcat_menu)
 	    appendChildren(menus,[text(" Startcat: "),startcat_menu])
 	appendChildren(menus,[text(" From: "),from_menu])
 	appendChildren(buttons,
-		       [button(options.delete_button_text,bind(delete_last,this),"H"),
-			button("Clear",bind(clear_all,this),"L")]);
+		       [button(options.delete_button_text,bind(delete_last,t),"H"),
+			button("Clear",bind(clear_all,t),"L")]);
 	if(options.random_button)
-	    buttons.appendChild(button("Random",bind(generate_random,this),"R"));
+	    buttons.appendChild(button("Random",bind(generate_random,t),"R"));
+
+	with(options) {
+	    if(initial_grammar && initial && initial.from && initial.input) {
+		t.local=mi_local(initial_grammar)
+		t.local.put("from",initial.from)
+		t.local.put("current",initial)
+	    }
+	}
     }
 
     /* --- Input client state initialization --- */
-    this.current={from: null, input: [] };
+    t.current={from: null, input: [] };
 
-    this.from_menu.onchange=bind(this.change_language,this);
-    this.startcat_menu.onchange=bind(this.change_startcat,this);
+    t.from_menu.onchange=bind(t.change_language,t);
+    t.startcat_menu.onchange=bind(t.change_startcat,t);
 }
 
 Input.prototype.change_grammar=function (grammar) {
