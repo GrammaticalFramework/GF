@@ -38,12 +38,11 @@ function Input(server,translations,opts) { // Input object constructor
 	if(options.random_button)
 	    buttons.appendChild(button("Random",bind(generate_random,t),"R"));
 
-	with(options) {
-	    if(initial_grammar && initial && initial.from && initial.input) {
-		t.local=mi_local(initial_grammar)
-		t.local.put("from",initial.from)
-		t.local.put("current",initial)
-	    }
+	var o=options;
+	if(o.initial_grammar && o.initial && o.initial.from && o.initial.input){
+	    t.local=mi_local(o.initial_grammar)
+	    t.local.put("from",o.initial.from)
+	    t.local.put("current",o.initial)
 	}
     }
 
