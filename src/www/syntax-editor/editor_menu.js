@@ -82,7 +82,7 @@ EditorMenu.prototype.show_grammarlist=function(dir,grammar_names,dir_count) {
 	    return hasPrefix(dir,"/tmp/gfse.") ? "gfse: "+g : g
 	}
 	function opt(g) { return option(glabel(g),dir+g); }
-	appendChildren(grammar_menu,map(opt,grammar_names));
+	appendChildren(t.ui.grammar_menu,map(opt,grammar_names));
 	function pick_first_grammar() {
 	    if(t.timeout) clearTimeout(t.timeout),t.timeout=null;
 	    var grammar0=t.options.initial.grammar;

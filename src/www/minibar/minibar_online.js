@@ -1,4 +1,4 @@
-// minibar_demo.js, assumes that minibar.js and pgf_online.js have been loaded.
+// minibar_online.js, assumes that minibar.js and pgf_online.js have been loaded.
 
 var online_options={
   //grammars_url: "http://www.grammaticalframework.org/grammars/",
@@ -19,6 +19,20 @@ var minibar_options= {
     try_google: true
 }
 
+/*
+if(window.Editor) // Syntax editor loaded?
+    minibar_options.abstract_action=function(tree) {
+	var editor_options = {
+	    target: "editor",
+	    initial: { grammar: minibar.grammar_menu.value, // hmm
+		       startcat: minibar.input.startcat_menu.value, // hmm
+		       ast: tree
+		     }
+	}
+	minibar.minibar.style.display="none"
+	minibar.editor=new Editor(server,editor_options)
+    }
+*/
 if(/^\?\/tmp\//.test(location.search)) {
     var args=decodeURIComponent(location.search.substr(1)).split(" ")
     if(args[0]) online_options.grammars_url=args[0];
@@ -31,4 +45,5 @@ else if(window.localStorage) {
 
 var server=pgf_online(online_options);
 if(editor_dir) server.add_grammars_url(editor_dir+"/");
+
 var minibar=new Minibar(server,minibar_options);

@@ -9,6 +9,7 @@ function Translations(server,opts) {
     // Default values for options:
     this.options={
 	show_abstract: false,
+	abstract_action: null, // action when selecting the abstracy syntax tree
 	show_trees: false, // add buttons to show abstract syntax trees,
 	                   // parse trees & word alignment
 	tree_img_format: "png", // format for trees & alignment images,
@@ -100,12 +101,19 @@ Translations.prototype.show_translations=function(translationResults) {
 		    var t = tra.translations[q];
 		    var lin=t.linearizations;
 		    var tbody=empty("tbody");
-		    if(options.show_abstract && t.tree)
+		    if(options.show_abstract && t.tree) {
+			function abs_act() {
+			    self.options.abstract_action(t.tree)
+			}
+			var abs_hdr = options.abstract_action 
+		                      ? button("Abstract",abs_act)
+			              : text("Abstract: ")
 			tbody.appendChild(
-			    tr([th(text("Abstract: ")),
+			    tr([th(abs_hdr),
 				tdt(node("span",{},[abstree_button(t.tree),
 						    alignment_button(t.tree)]),
 				    t.tree)]));
+		    }
 		    for(var i=0;i<lin.length;i++) {
 			if(lin[i].to==to)
 			    trans.single_translation.push(lin[i].text);
