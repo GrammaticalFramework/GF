@@ -1,5 +1,5 @@
-body {
-    background: #ccc url("http://cloud.grammaticalframework.org/minibar/brushed-metal.png");
+body.syntax_editor {
+    background: #ccc url("../minibar/brushed-metal.png");
 }
 
 .hidden
