@@ -13,7 +13,20 @@ function Editor(server,opts) {
 
     // default values for options:
     this.options={
-	target: "editor"
+	target: "editor",
+        initial: {
+            grammar: null,
+            startcat: null,
+            languages: null,
+            ast: null,
+            node_id: null
+        },
+        show: {
+            grammar_menu: true,
+            startcat_menu: true,
+            to_menu: true,
+            random_button: true
+        }
     }
 
     // Apply supplied options
@@ -35,11 +48,14 @@ function Editor(server,opts) {
     this.server = server;
     this.ast = null;
     this.grammar = null;
+    this.startcat = null;
     this.languages = [];
-    this.local = {}; // local settings which may override grammar
 
     /* --- Main program, this gets things going ----------------------------- */
-    this.menu = new EditorMenu(this);
+    this.menu = new EditorMenu(this, this.options);
+
+    /* --- Apply supplied initial settings (if any) ------------------------- */
+//    if (this.options.initial.grammar)
 
 }
 
@@ -65,24 +81,25 @@ Editor.prototype.get_ast=function() {
 }
 
 Editor.prototype.get_startcat=function() {
-    return this.local.startcat || this.grammar.startcat;
+    return this.startcat || this.grammar.startcat;
 }
 
 /* --- These get called from EditorMenu, or some custom code                  */
 
 Editor.prototype.change_grammar=function(grammar_info) {
-    with(this) {
-        grammar = grammar_info;
-        local.startcat = null;
-        get_grammar_constructors(bind(start_fresh,this));
-    }
+    var t = this;
+    t.grammar = grammar_info;
+    var startcat0 = t.options.initial.startcat
+    if (elem(startcat0, grammar_info.categories))
+        t.startcat = startcat0;
+    else
+        t.startcat = null;
+    t.get_grammar_constructors(bind(t.start_fresh,t));
 }
 
 Editor.prototype.change_startcat=function(startcat) {
-    with(this) {
-        local.startcat = startcat;
-        start_fresh();
-    }
+    this.startcat = startcat;
+    this.start_fresh();
 }
 
 // Called after changing grammar or startcat
