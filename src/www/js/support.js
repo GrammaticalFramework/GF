@@ -318,6 +318,7 @@ function overlaps(as,bs) {
 }
 
 function elem(a,as) {
+    if (!as) return false;
     for(var i=0;i<as.length;i++)
 	if(a==as[i]) return true;
     return false;
