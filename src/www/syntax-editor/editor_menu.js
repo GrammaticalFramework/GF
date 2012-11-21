@@ -59,9 +59,7 @@ function EditorMenu(editor,opts) {
     this.server = editor.server;
 
     /* --- Main program, this gets things going ----------------------------- */
-    with(this) {
-	server.get_grammarlists(bind(show_grammarlist,this));
-    }
+    this.server.get_grammarlists(bind(this.show_grammarlist,this));
 }
 
 /* --- Grammar menu --------------------------------------------------------- */
@@ -75,25 +73,23 @@ EditorMenu.prototype.show_grammarlist=function(dir,grammar_names,dir_count) {
 	t.grammars=[];
 	t.grammar_dirs=[];
     }
-    with(t) {
-	grammar_dirs.push(dir);
-	grammars=grammars.concat(grammar_names.map(function(g){return dir+g}))
-	function glabel(g) {
-	    return hasPrefix(dir,"/tmp/gfse.") ? "gfse: "+g : g
-	}
-	function opt(g) { return option(glabel(g),dir+g); }
-	appendChildren(t.ui.grammar_menu,map(opt,grammar_names));
-	function pick_first_grammar() {
-	    if(t.timeout) clearTimeout(t.timeout),t.timeout=null;
-	    var grammar0=t.options.initial.grammar;
-	    if(!grammar0) grammar0=t.grammars[0];
-	    t.ui.grammar_menu.value=grammar0;
-	    t.change_grammar();
-	}
-	// Wait at most 1.5s before showing the grammar menu.
-	if(first_time) t.timeout=setTimeout(pick_first_grammar,1500);
-	if(t.grammar_dirs.length>=dir_count) pick_first_grammar();
+    t.grammar_dirs.push(dir);
+    t.grammars=t.grammars.concat(grammar_names.map(function(g){return dir+g}))
+    function glabel(g) {
+	return hasPrefix(dir,"/tmp/gfse.") ? "gfse: "+g : g
     }
+    function opt(g) { return option(glabel(g),dir+g); }
+    appendChildren(t.ui.grammar_menu, map(opt, grammar_names));
+    function pick_first_grammar() {
+	if(t.timeout) clearTimeout(t.timeout),t.timeout=null;
+	var grammar0=t.options.initial.grammar;
+	if(!grammar0) grammar0=t.grammars[0];
+	t.ui.grammar_menu.value=grammar0;
+	t.change_grammar();
+    }
+    // Wait at most 1.5s before showing the grammar menu.
+    if(first_time) t.timeout=setTimeout(pick_first_grammar,1500);
+    if(t.grammar_dirs.length>=dir_count) pick_first_grammar();
 }
 
 // Copied from minibar.js
@@ -102,8 +98,8 @@ EditorMenu.prototype.change_grammar=function() {
     var grammar_url = t.ui.grammar_menu.value;
     t.server.switch_to_other_grammar(grammar_url, function() {
 	t.server.grammar_info(function(grammar){
-            t.update_language_menu(t.ui.to_menu, grammar);
             t.update_startcat_menu(grammar);
+            t.update_language_menu(t.ui.to_menu, grammar);
 
             // Call in main Editor object
             t.editor.change_grammar(grammar);
