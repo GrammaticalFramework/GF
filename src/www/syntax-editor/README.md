@@ -11,8 +11,30 @@ An improved version of the [old syntax editor][1].
 
 - Tested with latest Chrome and Firefox (only).
 
+## Available startup options
+
+    var editor_options = {
+        target: "editor",
+            initial: {
+                grammar: "http://localhost:41296/grammars/Foods.pgf",
+                startcat: "Kind",
+                languages: ["Eng","Swe","Mlt"],
+                ast: null,
+                node_id: null
+            },
+            show: {
+                grammar_menu: true,
+                startcat_menu: true,
+                to_menu: true,
+                random_button: true
+            }
+        }
+
 ## TODO
 
+- Link to jump into minibar
+- Start with initial grammar, startcat, ast
+- Compatibility with grammars with dependent category types
 - Clicking on tokens to select tree node
 - Use local caching
 - Enter string/float/int literals
@@ -21,10 +43,7 @@ An improved version of the [old syntax editor][1].
 - ambiguity: (optionally) parse all the resulting linearizations/variants and point out those which are ambiguous
 - try to retain subtree when replacing node
 - add undo/redo (or back/forward) navigation
-- structure the set of fridge magnets some more. Even though they
-are alphabetically sorted, it's difficult to find the one that I want,
-maybe put a newline before the magnet whose first letter is different
-with respect to the previous magnet
+- structure fridge magnets some more (eg newline before the magnet whose first letter is different)
 - The formal-looking funs and cats are not linked/aligned to the linearizations.
 Maybe a possible UI could be where the user is
 clicking on the linearization (in a chosen language) and the tree is
