@@ -7,6 +7,22 @@
 // }
 
 /* --- Main Editor object --------------------------------------------------- */
+/* When creating the object, stuff gets called in this order:
+new EditorMenu
+  server.get_grammarlists
+  EditorMenu.show_grammarlist
+    EditorMenu.change_grammar
+      server.switch_to_other_grammar
+      server.get_grammar_info
+      EditorMenu.update_startcat_menu
+      EditorMenu.update_language_menu
+      Editor.change_grammar
+        Editor.get_grammar_constructors
+        Editor.start_fresh
+          Editor.update_current_node();
+            Editor.redraw_tree();
+            Editor.get_refinements();
+*/
 function Editor(server,opts) {
     var t = this;
     /* --- Configuration ---------------------------------------------------- */
@@ -18,7 +34,7 @@ function Editor(server,opts) {
             grammar: null,
             startcat: null,
             languages: null,
-            ast: null,
+            abstr: null,
             node_id: null
         },
         show: {
@@ -98,19 +114,20 @@ Editor.prototype.change_grammar=function(grammar_info) {
 }
 
 Editor.prototype.change_startcat=function(startcat) {
-    this.startcat = startcat;
-    this.start_fresh();
+    var t = this;
+    t.startcat = startcat;
+    t.start_fresh();
 }
 
 // Called after changing grammar or startcat
 Editor.prototype.start_fresh=function () {
-    with(this) {
-        ast = new AST(null, get_startcat());
-        redraw_tree();
-        update_current_node();
-        get_refinements();
-        clear(ui.lin);
+    var t = this;
+        t.ast = new AST(null, t.get_startcat());
+    if (t.options.initial.abstr) {
+        t.import_ast(t.options.initial.abstr);
     }
+    t.update_current_node();
+    clear(t.ui.lin);
 }
 
 /* --- Functions for handling tree manipulation ----------------------------- */

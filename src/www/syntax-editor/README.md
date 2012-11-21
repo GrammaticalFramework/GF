@@ -19,8 +19,7 @@ An improved version of the [old syntax editor][1].
                 grammar: "http://localhost:41296/grammars/Foods.pgf",
                 startcat: "Kind",
                 languages: ["Eng","Swe","Mlt"],
-                ast: null,
-                node_id: null
+                abstr: "Pred (That Fish) Expensive"
             },
             show: {
                 grammar_menu: true,
@@ -33,7 +32,6 @@ An improved version of the [old syntax editor][1].
 ## TODO
 
 - Link to jump into minibar
-- Start with initial grammar, startcat, ast
 - Compatibility with grammars with dependent category types
 - Clicking on tokens to select tree node
 - Use local caching
