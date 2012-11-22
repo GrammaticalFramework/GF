@@ -20,6 +20,15 @@ if(!Array.isArray) {
     };
 }
 
+// Create a clone of an array
+// http://davidwalsh.name/javascript-clone-array
+// Note that iterating over an array with for...in will include "clone" as a key!
+// if(!Array.clone) {
+//     Array.prototype.clone = function() {
+//         return this.slice(0);
+//     };
+// }
+
 /* --- JSONP ---------------------------------------------------------------- */
 
 // Inspired by the function jsonp from 

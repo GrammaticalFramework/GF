@@ -9,7 +9,7 @@
 </head>
 <body class=syntax_editor>
   <h2>Syntax Editor</h2>
-  <div id="editor"></div>
+  <div id="editor" class="test"></div>
   <noscript>This page doesn't works unless JavaScript is enabled.</noscript>
 
   <hr />
@@ -17,26 +17,23 @@
   John J. Camilleri, November 2012
   </small>
 
+  <!-- Common -->
   <script type="text/javascript" src="../js/support.js"></script>
   <script type="text/javascript" src="../js/pgf_online.js"></script>
+
+  <!-- Editor -->
   <script type="text/javascript" src="ast.js"></script>
   <script type="text/javascript" src="editor_menu.js"></script>
   <script type="text/javascript" src="editor.js"></script>
-  <script type="text/javascript">
-    var server_options = {
-        // grammars_url: "http://www.grammaticalframework.org/grammars/",
-        grammars_url: "http://localhost:41296/grammars/",
-    }
-    var editor_options = {
-	target: "editor"
-    }
-    if(/^\?\/tmp\//.test(location.search)) {
-        var args=decodeURIComponent(location.search.substr(1)).split(" ")
-        if(args[0]) server_options.grammars_url=args[0];
-    }
-    var server = pgf_online(server_options);
-    var editor = new Editor(server, editor_options);
-  </script>
+
+  <!-- Minibar -->
+  <script type="text/JavaScript" src="../minibar/minibar.js"></script>
+  <script type="text/JavaScript" src="../minibar/minibar_input.js"></script>
+  <script type="text/JavaScript" src="../minibar/minibar_translations.js"></script>
+  <script type="text/JavaScript" src="../minibar/minibar_support.js"></script>
+
+  <!-- Get us rolling! -->
+  <script type="text/javascript" src="editor_online.js"></script>
   
 </body>
 </html>
