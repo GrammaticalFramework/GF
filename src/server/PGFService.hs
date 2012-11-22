@@ -338,7 +338,7 @@ outputGraphviz code =
         _     -> "application/binary"
 
 abstrTree pgf tree      = PGF.graphvizAbstractTree pgf (True,True) tree
-parseTree pgf lang tree = PGF.graphvizParseTree pgf lang tree
+parseTree pgf lang tree = PGF.graphvizParseTree pgf lang PGF.graphvizDefaults tree
 alignment pgf tree      = PGF.graphvizAlignment pgf (PGF.languages pgf) tree
 
 pipeIt2graphviz :: String -> String -> IO BS.ByteString

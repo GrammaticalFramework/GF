@@ -122,6 +122,8 @@ module PGF(
            graphvizBracketedString,
            graphvizAlignment,
            gizaAlignment,
+           GraphvizOptions(..),
+           graphvizDefaults,
  
            -- * Probabilities
            Probabilities,

@@ -17,6 +17,7 @@
 
 module PGF.VisualizeTree 
              ( GraphvizOptions(..)
+             , graphvizDefaults
              , graphvizAbstractTree
              , graphvizParseTree
              , graphvizParseTreeOld
@@ -57,6 +58,8 @@ data GraphvizOptions = GraphvizOptions {noLeaves :: Bool,
                                         nodeEdgeStyle :: String,
                                         leafEdgeStyle :: String
                                        }
+
+graphvizDefaults = GraphvizOptions False False False "" "" "" "" "" ""
 
 
 -- | Renders abstract syntax tree in Graphviz format
