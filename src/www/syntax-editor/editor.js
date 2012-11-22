@@ -1,11 +1,3 @@
-
-/* --- Some enhancements  --------------------------------------------------- */
-
-// http://www.xenoveritas.org/blog/xeno/the-correct-way-to-clone-javascript-arrays
-// Array.prototype.clone = function(){
-//     return this.slice(0);
-// }
-
 /* --- Main Editor object --------------------------------------------------- */
 /* When creating the object, stuff gets called in this order:
 new EditorMenu
@@ -49,16 +41,20 @@ function Editor(server,opts) {
     if(opts) for(var o in opts) this.options[o]=opts[o];
 
     /* --- Creating UI components ------------------------------------------- */
-    var main = document.getElementById(this.options.target);
+    this.container = document.getElementById(this.options.target);
+    this.container.classList.add("editor");
     this.ui = {
         menubar: div_class("menu"),
         tree: div_id("tree"),
         refinements: div_id("refinements"),
         lin: div_id("linearisations")
     };
-    with(this.ui) {
-	appendChildren(main, [menubar, tree, refinements, lin]);
-    }
+    appendChildren(this.container, [
+        this.ui.menubar,
+        this.ui.tree,
+        this.ui.refinements,
+        this.ui.lin
+    ]);
 
     /* --- Client state initialisation -------------------------------------- */
     this.server = server;
@@ -70,8 +66,11 @@ function Editor(server,opts) {
     /* --- Main program, this gets things going ----------------------------- */
     this.menu = new EditorMenu(this, this.options);
 
-    /* --- Apply supplied initial settings (if any) ------------------------- */
-//    if (this.options.initial.grammar)
+    /* --- Shutdown the editor nicely --------------------------------------- */
+    this.shutdown = function() {
+        clear(this.container);
+        this.container.classList.remove("editor");
+    }
 
 }
 
@@ -237,32 +236,34 @@ Editor.prototype.redraw_tree=function() {
 }
 
 Editor.prototype.update_linearisation=function(){
-
+    var t = this;
     function langpart(conc,abs) { // langpart("FoodsEng","Foods") == "Eng"
         return hasPrefix(conc,abs) ? conc.substr(abs.length) : conc;
     }
-
-    var t = this;
-    with (this) {
-        var args = {
-            tree: ast.toString()
-        };
-        server.linearize(args, function(data){
-            clear(t.ui.lin);
-            for (i in data) {
-                var lang = data[i].to;
-                var langname = langpart(lang, t.grammar.name);
-                if (t.languages.length < 1 || elem(lang, t.languages)) {
-                    var div_lang = empty("div");
-                    div_lang.appendChild(span_class("lang", text(langname)));
-                    div_lang.appendChild(
-                        span_class("lin", [text(data[i].text)])
-                    );
-                    t.ui.lin.appendChild(div_lang);
-                }
-            }
+    function row(lang, lin) {
+        var langname = langpart(lang, t.grammar.name);
+        var btn = button(langname, function(){
+            t.options.lin_action(lin,lang);
         });
+        var c1 = th(btn);
+        var c2 = td(text(lin));
+        var row = tr([c1,c2]);
+        return row;
     }
+    var args = {
+        tree: t.ast.toString()
+    };
+    t.server.linearize(args, function(data){
+        clear(t.ui.lin);
+	var tbody=empty("tbody");
+        for (i in data) {
+            var lang = data[i].to;
+            if (t.languages.length < 1 || elem(lang, t.languages)) {
+                tbody.appendChild(row(lang, data[i].text))
+            }
+        }
+        t.ui.lin.appendChild(wrap("table",tbody));
+    });
 }
 
 // 

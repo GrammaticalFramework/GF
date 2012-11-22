@@ -7,7 +7,7 @@ body.syntax_editor {
   display:none;
 }
 
-#editor select#to_menu
+.editor select#to_menu
 { 
   height: 10em;
   position: absolute;
