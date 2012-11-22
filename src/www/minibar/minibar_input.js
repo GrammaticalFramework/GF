@@ -39,11 +39,8 @@ function Input(server,translations,opts) { // Input object constructor
 	    buttons.appendChild(button("Random",bind(generate_random,t),"R"));
 
 	var o=options;
-	if(o.initial_grammar && o.initial && o.initial.from && o.initial.input){
-	    t.local=mi_local(o.initial_grammar)
-	    t.local.put("from",o.initial.from)
-	    t.local.put("current",o.initial)
-	}
+	if(o.initial_grammar && o.initial && o.initial.from && o.initial.input)
+	    t.set_input_for(o.initial_grammar,o.initial.from,o.initial.input)
     }
 
     /* --- Input client state initialization --- */
@@ -90,6 +87,13 @@ Input.prototype.change_language=function () {
 	           ? old_current.input : []
     this.clear_all1();
     this.add_words(new_input)
+}
+
+Input.prototype.set_input_for=function(grammar_url,from,new_input) {
+    var t=this
+    var local=mi_local(grammar_url)
+    local.put("from",from)
+    local.put("current",{from:from,input:new_input})
 }
 
 Input.prototype.clear_all2=function() {
