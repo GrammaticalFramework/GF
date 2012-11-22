@@ -27,10 +27,29 @@ if(window.Editor) // Syntax editor loaded?
 	    initial: { grammar: minibar.grammar_menu.value, // hmm
 		       startcat: minibar.input.startcat_menu.value, // hmm
 		       abstr: tree
-		     }
+		     },
+	    lin_action: function(new_input,langFrom) {
+		var grammar_url=editor.menu.ui.grammar_menu.value // hmm
+		minibar.input.set_input_for(grammar_url,langFrom,
+					    gf_lex(new_input))
+
+		//Easier: delete the editor and create a new one next time:
+		clear(editor.container)
+		editor=null;
+
+		//Better: keep editor around and reactivate it next time:
+		//editor.container.style.display="none"
+
+		// Even if the grammar is the same as before, this call is
+		// what eventually triggers the new_input to be loaded:
+		minibar.select_grammar(grammar_url)
+
+		// Make the minibar visible again
+		minibar.minibar.style.display=""
+	    }
 	}
-	minibar.minibar.style.display="none"
-	minibar.editor=new Editor(server,editor_options)
+	minibar.minibar.style.display="none" // Hide the minibar
+	var editor=new Editor(server,editor_options)
     }
 
 if(/^\?\/tmp\//.test(location.search)) {

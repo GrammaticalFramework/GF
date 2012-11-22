@@ -23,6 +23,11 @@ if(window.Minibar) // Minibar loaded?
         editor.shutdown();
 	var minibar_options = {
 	    target: "editor",
+	    show_abstract: true,
+	    show_trees: true,
+	    show_grouped_translations: false,
+	    show_brackets: true,
+	    word_replacements: true,
 	    initial_grammar: editor.menu.ui.grammar_menu.value, // hmm
 	    initial: {
                 from: langFrom,
