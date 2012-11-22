@@ -968,7 +968,7 @@ allCommands = Map.fromList [
      longname = "visualize_parse",
      synopsis = "show parse tree graphically",
      explanation = unlines [
-       "Prints a parse tree the .dot format (the graphviz format).",
+       "Prints a parse tree in the .dot format (the graphviz format).",
        "The graph can be saved in a file by the wf command as usual.",
        "If the -view flag is defined, the graph is saved in a temporary file",
        "which is processed by graphviz and displayed by the program indicated",
@@ -977,7 +977,21 @@ allCommands = Map.fromList [
        ],
      exec = \env@(pgf, mos) opts es -> do
          let lang = optLang pgf opts
-         let grph = if null es then [] else graphvizParseTree pgf lang (head es)
+         let gvOptions = GraphvizOptions {noLeaves = isOpt "noleaves" opts && not (isOpt "showleaves" opts),
+                                          noFun = isOpt "nofun" opts || not (isOpt "showfun" opts),
+                                          noCat = isOpt "nocat" opts && not (isOpt "showcat" opts),
+                                          nodeFont = valStrOpts "nodefont" "" opts,
+                                          leafFont = valStrOpts "leaffont" "" opts,
+                                          nodeColor = valStrOpts "nodecolor" "" opts,
+                                          leafColor = valStrOpts "leafcolor" "" opts,
+                                          nodeEdgeStyle = valStrOpts "nodeedgestyle" "solid" opts,
+                                          leafEdgeStyle = valStrOpts "leafedgestyle" "dashed" opts
+                                         }
+         let grph = if null es then [] 
+                    else if isOpt "old" opts then 
+                             graphvizParseTreeOld pgf lang (head es)
+                         else 
+                             graphvizParseTree pgf lang gvOptions (head es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts
@@ -992,12 +1006,26 @@ allCommands = Map.fromList [
        mkEx "gr | vp -view=\"open\" -- generate a tree and display parse tree on a Mac"
        ],
      options = [
+       ("showcat","show categories in the tree nodes (default)"),
+       ("nocat","don't show categories"),
+       ("showfun","show function names in the tree nodes"),
+       ("nofun","don't show function names (default)"),
+       ("showleaves","show the leaves of the tree (default)"),
+       ("noleaves","don't show the leaves of the tree (i.e., only the abstract tree)"),
+       ("old","use the old tree visualization algorithm")
        ],
      flags = [
        ("format","format of the visualization file (default \"png\")"),
-       ("view","program to open the resulting file (default \"open\")")
+       ("view","program to open the resulting file (default \"open\")"),
+       ("nodefont","font for tree nodes (default: Times -- graphviz standard font)"),
+       ("leaffont","font for tree leaves (default: nodefont)"),
+       ("nodecolor","color for tree nodes (default: black -- graphviz standard color)"),
+       ("leafcolor","color for tree leaves (default: nodecolor)"),
+       ("nodeedgestyle","edge style between tree nodes (solid/dashed/dotted/bold, default: solid)"),
+       ("leafedgestyle","edge style for links to leaves (solid/dashed/dotted/bold, default: dashed)")
        ]
     }),
+
 
   ("vt", emptyCommandInfo {
      longname = "visualize_tree",

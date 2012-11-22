@@ -16,8 +16,10 @@
 -----------------------------------------------------------------------------
 
 module PGF.VisualizeTree 
-             ( graphvizAbstractTree
+             ( GraphvizOptions(..)
+             , graphvizAbstractTree
              , graphvizParseTree
+             , graphvizParseTreeOld
              , graphvizDependencyTree
              , graphvizBracketedString
              , graphvizAlignment
@@ -43,6 +45,18 @@ import Data.Array.IArray
 import Control.Monad
 import qualified Data.Set as Set
 import qualified Text.ParserCombinators.ReadP as RP
+
+
+data GraphvizOptions = GraphvizOptions {noLeaves :: Bool,
+                                        noFun :: Bool,
+                                        noCat :: Bool,
+                                        nodeFont :: String,
+                                        leafFont :: String,
+                                        nodeColor :: String,
+                                        leafColor :: String,
+                                        nodeEdgeStyle :: String,
+                                        leafEdgeStyle :: String
+                                       }
 
 
 -- | Renders abstract syntax tree in Graphviz format
@@ -169,11 +183,87 @@ getDepLabels :: [String] -> Labels
 getDepLabels ss = Map.fromList [(mkCId f,ls) | f:ls <- map words ss]
 
 
-graphvizParseTree :: PGF -> Language -> Tree -> String
-graphvizParseTree pgf lang = graphvizBracketedString . bracketedLinearize pgf lang
+graphvizParseTree :: PGF -> Language -> GraphvizOptions -> Tree -> String
+graphvizParseTree pgf lang opts = graphvizBracketedString opts . bracketedLinearize pgf lang
 
-graphvizBracketedString :: BracketedString -> String
-graphvizBracketedString = render . lin2tree
+
+graphvizBracketedString :: GraphvizOptions -> BracketedString -> String
+graphvizBracketedString opts bs = render graphviz_code
+    where
+      graphviz_code 
+          = text "graph {" $$
+            text node_style $$
+            vcat internal_nodes $$
+            (if noLeaves opts then empty
+             else text leaf_style $$
+                  leaf_nodes
+            ) $$ text "}" 
+
+      leaf_style = mkOption "edge" "style" (leafEdgeStyle opts) ++
+                   mkOption "edge" "color" (leafColor opts) ++
+                   mkOption "node" "fontcolor" (leafColor opts) ++
+                   mkOption "node" "fontname" (leafFont opts) ++
+                   mkOption "node" "shape" "plaintext"
+
+      node_style = mkOption "edge" "style" (nodeEdgeStyle opts) ++
+                   mkOption "edge" "color" (nodeColor opts) ++
+                   mkOption "node" "fontcolor" (nodeColor opts) ++
+                   mkOption "node" "fontname" (nodeFont opts) ++
+                   mkOption "node" "shape" nodeshape
+          where nodeshape | noFun opts && noCat opts = "point"
+                          | otherwise = "plaintext"
+
+      mkOption object optname optvalue 
+          | null optvalue  = "" 
+          | otherwise      = object ++ "[" ++ optname ++ "=\"" ++ optvalue ++ "\"]; "
+
+      mkNode fun cat
+          | noFun opts = showCId cat
+          | noCat opts = showCId fun
+          | otherwise  = showCId fun ++ " : " ++ showCId cat
+
+      nil = -1
+      internal_nodes = [mkLevel internals | 
+                        internals <- getInternals [(nil, bs)], 
+                        not (null internals)]
+      leaf_nodes = mkLevel [(parent, id, word) | 
+                            (id, (parent, word)) <- zip [100000..] (getLeaves nil bs)]
+
+      getInternals []    = []
+      getInternals nodes 
+          = nub [(parent, fid, mkNode fun cat) | 
+                 (parent, Bracket cat fid _ fun _ _) <- nodes] 
+            : getInternals [(fid, child) | 
+                            (_, Bracket _ fid _ _ _ children) <- nodes, 
+                            child <- children]
+
+      getLeaves parent (Leaf word) = [(parent, word)]
+      getLeaves parent (Bracket _ fid i _ _ children)
+          = concatMap (getLeaves fid) children
+
+      mkLevel nodes 
+          = text "subgraph {rank=same;" $$
+            nest 2 (-- the following gives the name of the node and its label:
+                    vcat [tag id <> text (mkOption "" "label" lbl) | (_, id, lbl) <- nodes] $$
+                    -- the following is for fixing the order between the children:
+                    (if length nodes > 1 then
+                         text (mkOption "edge" "style" "invis") $$
+                         hsep (intersperse (text " -- ") [tag id | (_, id, _) <- nodes]) <+> semi 
+                     else empty)
+                   ) $$
+            text "}" $$
+            -- the following is for the edges between parent and children:
+            vcat [tag pid <> text " -- " <> tag id <> semi | (pid, id, _) <- nodes, pid /= nil] $$
+            space
+
+
+
+graphvizParseTreeOld :: PGF -> Language -> Tree -> String
+graphvizParseTreeOld pgf lang = graphvizBracketedStringOld . bracketedLinearize pgf lang
+
+
+graphvizBracketedStringOld :: BracketedString -> String
+graphvizBracketedStringOld = render . lin2tree
   where
     lin2tree bs =
       text "graph {" $$
