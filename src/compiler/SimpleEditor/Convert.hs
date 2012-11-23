@@ -6,7 +6,7 @@ import Data.List(sortBy)
 import Data.Function(on)
 import qualified Data.Map as Map
 import Text.JSON(encode,makeObj)
-import Text.PrettyPrint(render)
+import Text.PrettyPrint(render,text,(<+>))
 
 -- 4 extra imports just to deal with the ByteString mess...
 import qualified Data.ByteString.Char8 as BS(pack)
@@ -126,7 +126,13 @@ convCncJment (name,jment) =
     ResOper oltyp (Just lterm) -> return $ Op $ Oper lhs rhs
       where
         lhs = i++maybe "" ((" : "++) . render . ppTerm q 0 . unLoc) oltyp
-        rhs = " = "++render (ppTerm q 0 (unLoc lterm))
+        rhs = render (text " ="<+>ppTerm q 0 (unLoc lterm))
+    ResOverload [] defs -> return $ Op $ Oper lhs rhs
+      where
+        lhs = i
+        rhs = render $ text " = overload"<+>ppTerm q 0 r
+        r =  R [(lab,(Just ty,fu)) | (L _ ty,L _ fu) <-defs]
+        lab = ident2label name
     CncFun _ (Just ldef) pprn _ -> -- ignores printname !!
       do let (xs,e') = getAbs (unLoc ldef)
              lin = render $ ppTerm q 0 e'
