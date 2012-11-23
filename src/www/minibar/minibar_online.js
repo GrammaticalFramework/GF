@@ -49,7 +49,8 @@ if(window.Editor) // Syntax editor loaded?
 	    }
 	}
 	minibar.minibar.style.display="none" // Hide the minibar
-	var editor=new Editor(server,editor_options)
+        var gm = new GrammarManager(server);
+	var editor=new Editor(gm,editor_options)
     }
 
 if(/^\?\/tmp\//.test(location.search)) {
