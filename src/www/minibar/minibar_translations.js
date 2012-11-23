@@ -103,7 +103,8 @@ Translations.prototype.show_translations=function(translationResults) {
 		    var tbody=empty("tbody");
 		    if(options.show_abstract && t.tree) {
 			function abs_act() {
-			    self.options.abstract_action(t.tree)
+                            var minibar = self.minibar;
+			    bind(self.options.abstract_action,minibar)(t.tree)
 			}
 			var abs_hdr = options.abstract_action 
 		                      ? button("Abstract",abs_act)
