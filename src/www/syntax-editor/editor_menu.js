@@ -34,39 +34,64 @@ function EditorMenu(editor,opts) {
         random_button: button("Random", function(){
             t.editor.generate_random();
         }),
+        debug_toggle: button("⚙", function(){
+            var sel = element("debug");
+            if (sel.classList.contains("hidden"))
+                sel.classList.remove("hidden")
+            else
+                sel.classList.add("hidden")
+        }),
     };
-    with(this.ui) {
-        if (this.options.show.grammar_menu) {
-	    appendChildren(this.container, [text(" Grammar: "), grammar_menu]);
-    	    grammar_menu.onchange = bind(this.change_grammar,this);
-        }
-        if (this.options.show.startcat_menu) {
-	    appendChildren(this.container, [text(" Startcat: "), startcat_menu]);
-            startcat_menu.onchange = bind(this.change_startcat,this);
-        }
-        if (this.options.show.to_menu) {
-            appendChildren(this.container, [text(" To: "), to_toggle, to_menu]);
-            to_menu.onchange = bind(this.change_language,this);
-        }
-        appendChildren(this.container, [clear_button]);
-        if (this.options.show.random_button) {
-            appendChildren(this.container, [random_button]);
+    if (t.options.show.grammar_menu) {
+	appendChildren(t.container, [text(" Grammar: "), t.ui.grammar_menu]);
+    	t.ui.grammar_menu.onchange = function(){
+            var grammar_url = t.ui.grammar_menu.value;
+            t.gm.change_grammar(grammar_url);
         }
     }
+    if (t.options.show.startcat_menu) {
+	appendChildren(t.container, [text(" Startcat: "), t.ui.startcat_menu]);
+        t.ui.startcat_menu.onchange = function(){
+            var startcat = t.ui.startcat_menu.value;
+            t.gm.change_startcat(startcat);
+        }
+    }
+    if (t.options.show.to_menu) {
+        appendChildren(t.container, [text(" To: "), t.ui.to_toggle, t.ui.to_menu]);
+        t.ui.to_menu.onchange = function(){
+            var languages = new Array();
+            for (i in t.ui.to_menu.options) {
+                var opt = t.ui.to_menu.options[i];
+                if (opt.selected)
+                    languages.push(opt.value);
+            }
+            t.gm.change_languages(languages);
+        }
+    }
+    appendChildren(t.container, [t.ui.clear_button]);
+    if (t.options.show.random_button) {
+        appendChildren(t.container, [t.ui.random_button]);
+    }
+    appendChildren(t.container, [t.ui.debug_toggle]);
 
     /* --- Client state initialisation -------------------------------------- */
     this.editor = editor;
+    this.gm = editor.gm;
     this.server = editor.server;
 
-    /* --- Main program, this gets things going ----------------------------- */
-    this.server.get_grammarlists(bind(this.show_grammarlist,this));
+    /* --- Register Grammar Manager hooks ----------------------------------- */
+    this.gm.register_action("onload", bind(this.hook_onload, this));
+    this.gm.register_action("change_grammar", bind(this.hook_change_grammar, this));
+    // this.gm.register_action("change_startcat", bind(this.hook_change_startcat, this));
+    // this.gm.register_action("change_languages", bind(this.hook_change_languages, this));
+
 }
 
 /* --- Grammar menu --------------------------------------------------------- */
 
-// Basically called once, when initializing
-// Copied from minibar.js
-EditorMenu.prototype.show_grammarlist=function(dir,grammar_names,dir_count) {
+// show the grammar list
+EditorMenu.prototype.hook_onload=function(dir,grammar_names,dir_count) {
+    debug("EditorMenu: onload");
     var t=this;
     var first_time=t.ui.grammar_menu.options.length == 0;
     if(first_time) {
@@ -85,7 +110,7 @@ EditorMenu.prototype.show_grammarlist=function(dir,grammar_names,dir_count) {
 	var grammar0=t.options.initial.grammar;
 	if(!grammar0) grammar0=t.grammars[0];
 	t.ui.grammar_menu.value=grammar0;
-	t.change_grammar();
+//	t.change_grammar();
     }
     // Wait at most 1.5s before showing the grammar menu.
     if(first_time) t.timeout=setTimeout(pick_first_grammar,1500);
@@ -93,24 +118,21 @@ EditorMenu.prototype.show_grammarlist=function(dir,grammar_names,dir_count) {
 }
 
 // Copied from minibar.js
-EditorMenu.prototype.change_grammar=function() {
+EditorMenu.prototype.hook_change_grammar=function() {
+    debug("EditorMenu: change grammar");
     var t=this;
     var grammar_url = t.ui.grammar_menu.value;
     t.server.switch_to_other_grammar(grammar_url, function() {
 	t.server.grammar_info(function(grammar){
             t.update_startcat_menu(grammar);
             t.update_language_menu(t.ui.to_menu, grammar);
-
-            // Call in main Editor object
-            t.editor.change_grammar(grammar);
         });
     });
 }
 
 /* --- Start category menu -------------------------------------------------- */
 
-// Called each time the current grammar is changed!
-// Copied from minibar_input.js
+// Called from hook_change_grammar
 EditorMenu.prototype.update_startcat_menu=function(grammar) {
     var t=this;
     var menu=this.ui.startcat_menu;
@@ -129,16 +151,9 @@ EditorMenu.prototype.update_startcat_menu=function(grammar) {
     // }
 }
 
-// 
-EditorMenu.prototype.change_startcat=function() {
-    var new_startcat = this.ui.startcat_menu.value;
-    this.editor.change_startcat(new_startcat);
-}
-
 /* --- Langugage (to) menu -------------------------------------------------- */
 
-// Called each time the current grammar is changed!
-// Copied from minibar_support.js
+// Called from hook_change_grammar
 EditorMenu.prototype.update_language_menu=function(menu,grammar) {
     var t = this;
     function langpart(conc,abs) { // langpart("FoodsEng","Foods") == "Eng"
@@ -160,16 +175,5 @@ EditorMenu.prototype.update_language_menu=function(menu,grammar) {
 	    menu.appendChild(opt);
 	}
     }
-}
-
-// 
-EditorMenu.prototype.change_language=function() {
-    this.editor.languages = new Array();
-    for (i in this.ui.to_menu.options) {
-        var opt = this.ui.to_menu.options[i];
-        if (opt.selected)
-            this.editor.languages.push(opt.value);
-    }
-    this.editor.update_linearisation();
 }
 

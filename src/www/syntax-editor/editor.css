@@ -1,4 +1,4 @@
-body.syntax_editor {
+body.syntax-editor {
     background: #ccc url("../minibar/brushed-metal.png");
 }
 
@@ -72,5 +72,15 @@ body.syntax_editor {
   padding: 0.2em;
   font: 0.9em sans-serif;
   background: white;
+  }
+
+#debug
+{
+  font: 10px monospace;
+  white-space: pre;
+  color: #333;
+  margin: 1em 0;
+  border: 1px dashed #999;
+  padding: 1em;
   }
 

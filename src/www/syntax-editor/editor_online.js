@@ -8,8 +8,7 @@ var editor_options = {
     //     grammar: "http://localhost:41296/grammars/Phrasebook.pgf",
     //     startcat: "Proposition",
     //     languages: ["Eng","Swe","Ita"],
-    //     abstr: "PropOpenDate (SuperlPlace TheMostExpensive School) Tomorrow",
-    //     node_id: null
+    //     abstr: "PropOpenDate (SuperlPlace TheMostExpensive School) Tomorrow"
     // },
     show: {
         grammar_menu: true,
@@ -35,8 +34,6 @@ if(window.Minibar) // Minibar loaded?
             },
             // get us back to the editor!
             abstract_action: function(tree) {
-                //var minibar=this;
-                // how to get hold of new minibar?
                 var editor_options = {
                     target: "editor",
                     initial: {
@@ -52,13 +49,14 @@ if(window.Minibar) // Minibar loaded?
         editor.hide();
         editor.minibar=new Minibar(server,minibar_options);
         //editor.minibar.editor = editor; // :S
-	editor.minibar.show()
+	editor.minibar.show();
     }
 if(/^\?\/tmp\//.test(location.search)) {
     var args=decodeURIComponent(location.search.substr(1)).split(" ")
     if(args[0]) server_options.grammars_url=args[0];
 }
 var server = pgf_online(server_options);
-var editor = new Editor(server, editor_options);
-
+// var editor = new Editor(server, editor_options);
+var gm = new GrammarManager(server);
+var editor = new Editor(gm, editor_options);
 
