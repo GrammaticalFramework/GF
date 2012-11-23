@@ -31,28 +31,28 @@ if(!Array.isArray) {
 
 /* --- JSONP ---------------------------------------------------------------- */
 
-// Inspired by the function jsonp from 
+// Inspired by the function jsonp from
 //          http://www.west-wind.com/Weblog/posts/107136.aspx
 // See also http://niryariv.wordpress.com/2009/05/05/jsonp-quickly/
 //          http://en.wikipedia.org/wiki/JSONP
 function jsonp(url,callback)
-{                
+{
     if (url.indexOf("?") > -1)
-        url += "&jsonp=" 
+        url += "&jsonp="
     else
-        url += "?jsonp=" 
+        url += "?jsonp="
     url += callback;
-    //url += "&" + new Date().getTime().toString(); // prevent caching        
-    
-    var script = empty("script");        
+    //url += "&" + new Date().getTime().toString(); // prevent caching
+
+    var script = empty("script");
     script.setAttribute("src",url);
-    script.setAttribute("type","text/javascript");                
+    script.setAttribute("type","text/javascript");
     document.body.appendChild(script);
 }
 
 var json = {next:0};
 
-// Like jsonp, but instead of passing the name of the callback function, you 
+// Like jsonp, but instead of passing the name of the callback function, you
 // pass the callback function directly, making it possible to use anonymous
 // functions.
 function jsonpf(url,callback,errorcallback)
@@ -65,7 +65,7 @@ function jsonpf(url,callback,errorcallback)
 /* --- AJAX ----------------------------------------------------------------- */
 
 function GetXmlHttpObject(handler)
-{ 
+{
   var objXMLHttp=null
   if (window.XMLHttpRequest)
   {
@@ -116,8 +116,14 @@ function ajax_http_post(url,formdata,callback,errorcallback) {
 
 // JSON via AJAX
 function ajax_http_get_json(url,cont,errorcallback) {
-    ajax_http_get(url,function(txt){cont(eval("("+txt+")"));}, errorcallback);
+    ajax_http_get(url, with_json(cont), errorcallback);
 }
+
+function ajax_http_post_json(url,formdata,cont,errorcallback) {
+    ajax_http_post(url, formdata, with_json(cont), errorcallback);
+}
+
+function with_json(cont) { return function(txt){cont(eval("("+txt+")"));} }
 
 function sameOrigin(url) {
     var a=empty("a");
@@ -169,7 +175,7 @@ function wrap(tag,contents) {
 
 function wrap_class(tag,cls,contents) {
     return node(tag,{"class":cls},
-		contents ? Array.isArray(contents) ? 
+		contents ? Array.isArray(contents) ?
 		contents : [contents] : [])
 }
 
@@ -310,7 +316,7 @@ function map(f,xs) {
   return ys;
 }
 
-// map in continuation passing style 
+// map in continuation passing style
 function mapc(f,xs,cont) { mapc_from(f,xs,0,[],cont); }
 
 function mapc_from(f,xs,i,ys,cont) {
