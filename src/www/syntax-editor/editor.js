@@ -15,7 +15,7 @@ new EditorMenu
             Editor.redraw_tree();
             Editor.get_refinements();
 */
-function Editor(server,opts) {
+function Editor(gm,opts) {
     var t = this;
     /* --- Configuration ---------------------------------------------------- */
 
@@ -57,16 +57,34 @@ function Editor(server,opts) {
     ]);
 
     /* --- Client state initialisation -------------------------------------- */
-    this.server = server;
+    this.gm = gm;
+    this.server = gm.server;
     this.ast = null;
-    this.grammar = null;
-    this.startcat = null;
-    this.languages = [];
+
+    /* --- Register Grammar Manager hooks ----------------------------------- */
+    this.gm.register_action("change_grammar",function(grammar){
+        debug("Editor: change grammar");
+        var startcat0 = t.options.initial.startcat;
+        if (elem(startcat0, grammar.categories))
+            t.startcat = startcat0;
+        else
+            t.startcat = null;
+        t.get_grammar_constructors(bind(t.start_fresh,t));
+    });
+    this.gm.register_action("change_startcat",function(startcat){
+        debug("Editor: change startcat");
+        t.startcat = startcat;
+        t.start_fresh();
+    });
+    this.gm.register_action("change_languages",function(languages){
+        debug("Editor: change languages");
+        t.update_linearisation();
+    });
 
     /* --- Main program, this gets things going ----------------------------- */
     this.menu = new EditorMenu(this, this.options);
 
-    /* --- Shutdown the editor nicely --------------------------------------- */
+    /* --- Other basic stuff ------------------------------------------------ */
     this.shutdown = function() {
         clear(this.container);
         this.container.classList.remove("editor");
@@ -102,26 +120,17 @@ Editor.prototype.get_ast=function() {
 }
 
 Editor.prototype.get_startcat=function() {
-    return this.startcat || this.grammar.startcat;
+    return this.gm.startcat;
 }
 
-/* --- These get called from EditorMenu, or some custom code                  */
-
-Editor.prototype.change_grammar=function(grammar_info) {
-    var t = this;
-    t.grammar = grammar_info;
-    var startcat0 = t.options.initial.startcat
-    if (elem(startcat0, grammar_info.categories))
-        t.startcat = startcat0;
-    else
-        t.startcat = null;
-    t.get_grammar_constructors(bind(t.start_fresh,t));
-}
-
-Editor.prototype.change_startcat=function(startcat) {
-    var t = this;
-    t.startcat = startcat;
-    t.start_fresh();
+// TODO
+Editor.prototype.initialize_from=function(opts) {
+    var t=this;
+    if (opts.startcat)
+        t.options.initial_startcat=opts.startcat;
+    t.change_grammar();
+    if (opts.abstr)
+        t.import_ast(opts.abstr);
 }
 
 // Called after changing grammar or startcat
@@ -247,7 +256,7 @@ Editor.prototype.update_linearisation=function(){
         return hasPrefix(conc,abs) ? conc.substr(abs.length) : conc;
     }
     function row(lang, lin) {
-        var langname = langpart(lang, t.grammar.name);
+        var langname = langpart(lang, t.gm.grammar.name);
         var btn = button(langname, function(){
             bind(t.options.lin_action,t)(lin,lang);
         });
@@ -264,7 +273,7 @@ Editor.prototype.update_linearisation=function(){
 	var tbody=empty("tbody");
         for (i in data) {
             var lang = data[i].to;
-            if (t.languages.length < 1 || elem(lang, t.languages)) {
+            if (t.gm.languages.length < 1 || elem(lang, t.gm.languages)) {
                 tbody.appendChild(row(lang, data[i].text))
             }
         }
