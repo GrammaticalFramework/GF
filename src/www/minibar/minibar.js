@@ -57,6 +57,12 @@ function Minibar(server,opts) {
 	    menubar.appendChild(button("Help",bind(open_help,this)));
 	append_extra_buttons(extra,options);
     }
+    this.hide = function() {
+        this.minibar.style.display="none";
+    }
+    this.show = function() {
+        this.minibar.style.display="block";
+    }
 
     /* --- Minibar client state initialisation ------------------------------ */
     this.grammar=null;
