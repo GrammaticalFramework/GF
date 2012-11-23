@@ -259,7 +259,8 @@ function gfshell(cmd,cont) {
 // Check the syntax of a source module
 function check_module(path,source,cont) {
     var enc=encodeURIComponent;
-    http_get_json("/parse?"+enc(path)+"="+enc(source),cont)
+    //http_get_json("/parse?"+enc(path)+"="+enc(source),cont)
+    ajax_http_post_json("/parse",enc(path)+"="+enc(source),cont)
 }
 
 // Check the syntax of an expression
