@@ -41,7 +41,6 @@ function Minibar(server,opts) {
 
     /* --- Creating the components of the minibar --------------------------- */
     this.translations=new Translations(server,this.options)
-    this.translations.minibar=this; // ref to parent
     this.input=new Input(server,this.translations,this.options)
 
     /* --- Creating user interface elements --------------------------------- */

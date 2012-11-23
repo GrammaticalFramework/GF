@@ -35,7 +35,7 @@ if(window.Minibar) // Minibar loaded?
             },
             // get us back to the editor!
             abstract_action: function(tree) {
-                var minibar=this;
+                //var minibar=this;
                 // how to get hold of new minibar?
                 var editor_options = {
                     target: "editor",
@@ -45,13 +45,14 @@ if(window.Minibar) // Minibar loaded?
                         abstr: tree
                     }
                 }
-                minibar.hide();
-                minibar.editor.show();
+                editor.minibar.hide();
+                editor.show();
             }
         }
         editor.hide();
         editor.minibar=new Minibar(server,minibar_options);
-        editor.minibar.editor = editor; // :S
+        //editor.minibar.editor = editor; // :S
+	editor.minibar.show()
     }
 if(/^\?\/tmp\//.test(location.search)) {
     var args=decodeURIComponent(location.search.substr(1)).split(" ")
