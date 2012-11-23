@@ -71,6 +71,12 @@ function Editor(server,opts) {
         clear(this.container);
         this.container.classList.remove("editor");
     }
+    this.hide = function() {
+        this.container.style.display="none";
+    }
+    this.show = function() {
+        this.container.style.display="block";
+    }
 
 }
 
@@ -243,7 +249,7 @@ Editor.prototype.update_linearisation=function(){
     function row(lang, lin) {
         var langname = langpart(lang, t.grammar.name);
         var btn = button(langname, function(){
-            t.options.lin_action(lin,lang);
+            bind(t.options.lin_action,t)(lin,lang);
         });
         var c1 = th(btn);
         var c2 = td(text(lin));
