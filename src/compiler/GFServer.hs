@@ -12,7 +12,10 @@ import GF.System.Catch(try)
 import System.IO.Error(isAlreadyExistsError)
 import System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
                         setCurrentDirectory,getCurrentDirectory,
-                        getDirectoryContents,removeFile,removeDirectory)
+                        getDirectoryContents,removeFile,removeDirectory,
+                        getModificationTime)
+import System.Time(toUTCTime,formatCalendarTime)
+import System.Locale(defaultTimeLocale,rfc822DateFormat)
 import System.FilePath(dropExtension,takeExtension,takeFileName,takeDirectory,
                        (</>))
 #ifndef mingw32_HOST_OS
@@ -200,6 +203,7 @@ handle state0 cache execute1
            "remake" -> make skip_empty dir . raw =<< get_qs
            "upload" -> upload id . raw =<< get_qs
            "ls" -> jsonList . maybe ".json" fst . lookup "ext" =<< get_qs
+           "ls-l" -> jsonListLong . maybe ".json" fst . lookup "ext" =<< get_qs
            "rm" -> rm =<< look_file
            "download" -> download =<< look_file
            "link_directories" ->  link_directories dir =<< look "newdir"
@@ -233,7 +237,16 @@ handle state0 cache execute1
 
     skip_empty = filter (not.null.snd)
 
-    jsonList ext = fmap (json200) (ls_ext "." ext)
+    jsonList = jsonList' return
+    jsonListLong = jsonList' (mapM addTime)
+    jsonList' details ext = fmap (json200) (details =<< ls_ext "." ext)
+
+    addTime path =
+        do t <- liftIO $ getModificationTime path
+           return $ makeObj ["path".=path,"time".=format t]
+      where
+        format = formatCalendarTime defaultTimeLocale rfc822DateFormat
+                 . toUTCTime
 
     rm path | takeExtension path `elem` ok_to_delete =
       do b <- liftIO $ doesFileExist path

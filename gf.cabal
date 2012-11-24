@@ -112,6 +112,7 @@ executable gf
                  directory,
                  random,
                  old-time,
+                 old-locale,
                  process,
                  pretty,
                  mtl,

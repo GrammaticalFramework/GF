@@ -131,7 +131,7 @@ function draw_grammar_list() {
 	    var unique_id=local.get("unique_id","-")
 	    var t=empty_class("table","grammar_list")
 	    for(var i in files) {
-		var file=files[i]
+		var file=files[i].path
 		var parts=file.split(/[-.]/)
 		var basename=parts[0]
 		var unique_name=parts[1]+"-"+parts[2]
@@ -139,13 +139,17 @@ function draw_grammar_list() {
 		var del = mine
 		    ? delete_button(rmpublic(file),"Don't publish this grammar")
 		    : []
-		var tit = mine
+		var tip = mine
 		    ? "This is a copy of your grammar"
 		    : "Click to download a copy of this grammar"
+		var modt=new Date(files[i].time)
+		var fmtmodt=modt.toDateString()+", "+modt.toTimeString().split(" ")[0]
+		var when=wrap_class("small","modtime",text(" "+fmtmodt))
 		t.appendChild(edtr([td(del),
-				    td(title(tit,
+				    td(title(tip,
 					     a(jsurl('open_public("'+file+'")'),
-					       [text(basename)])))]))
+					       [text(basename)]))),
+				    td(when)]))
 	    }
 	    publiclist.appendChild(t)
 	}
@@ -153,7 +157,7 @@ function draw_grammar_list() {
 	    publiclist.appendChild(p(text("No public grammars are available.")))
     }
     if(navigator.onLine)
-	gfcloud_public_json("ls",{},show_public,no_public)
+	gfcloud_public_json("ls-l",{},show_public,no_public)
     var home=div_class("home",table(tr([userlist,publiclist])))
     home.appendChild(empty_id("div","sharing"));
     editor.appendChild(home)
