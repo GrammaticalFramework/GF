@@ -77,6 +77,9 @@ div.template:hover
  tr.deletable:hover .delete 
   { visibility: visible; }
 
+.editable { white-space: pre; }
+div.lin span.editable { display: inline-block; vertical-align: top; }
+
 .more { color: green; }
 .edit { color: orange; }
 .delete { color: red; }
@@ -110,7 +113,8 @@ table.tabs input[type=button], table.matrixview th input[type=button] {
     /*text-decoration: underline;*/
 }
 
-input.string_edit { font-family: inherit; font-size: inherit; }
+.string_edit { font-family: inherit; font-size: inherit; }
+textarea.string_edit { vertical-align: top; }
 
 ul.languages { -moz-column-width: 20em; }
 
