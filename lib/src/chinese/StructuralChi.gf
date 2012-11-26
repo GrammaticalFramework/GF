@@ -114,7 +114,7 @@ lin
 lin
 almost_AdA = ssword "几乎" ;
 almost_AdN = ssword "几乎" ;
-as_CAdv = {s,p = word "如同"} ; -- modified by chenpeng 11.17
+as_CAdv = {s = word "和" ; p = word "一样" } ; -- modified by chenpeng 11.24
 at_least_AdN = ssword "最少" ; -- at least five
 at_most_AdN = ssword "最多" ;
 behind_Prep = mkPrep "后面" "在";
@@ -150,8 +150,8 @@ here7to_Adv = mkAdv "到这里" ; -- to here
 how8many_IDet = ssword "多少" ;
 how8much_IAdv = ssword "多少" ;
 if_Subj = mkSubj "如果" [] ; --"就" ; -- [mark] "就" often comes between NP and VP
-less_CAdv = {s = word "少于" ; p = than_s} ; -- modified by chenpeng 11.17
-more_CAdv = {s = word "更加" ; p = than_s} ; -- modified by chenpeng 11.17
+less_CAdv = {s = than_s ; p = word "没更"} ; -- modified by chenpeng 11.24
+more_CAdv = {s = than_s ; p = word "更"} ; -- modified by chenpeng 11.24
 most_Predet = ssword "大多数" ;
 if_then_Conj = {s = table { -- added by chenpeng 11.19
                     CPhr CNPhrase => mkConjForm [] ;
