@@ -54,6 +54,9 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
       c = (prepC slash.c2.c).c
       } ;
 
+    PassVPSlash vps = 
+      insertInf (vps.s.s ! VPastPart APred) (predV werdenPass);
+
   lincat
     VPS   = {s : Order => Agr => Str} ;
     [VPS] = {s1,s2 : Order => Agr => Str} ;

@@ -61,12 +61,33 @@ lin
                       a = {gn = GSg pn.g; p = P3}
                     } ;
 
-  PPartNP np vps = {
-      s = \\c => np.s ! c ++ 
-                 vps.s ! Perf ! VPassive (aform np.a.gn Indef c) ++
-                 vps.compl1 ! np.a ++ vps.compl2 ! np.a;
-      a = np.a
-      } ;
+  PastPartRS ant pol vp = {
+      s = \\agr => 
+             ant.s ++ pol.s ++
+             vp.ad.s ++
+             case pol.p of {Pos   => ""; Neg => "не"} ++
+             case ant.a of {Simul => ""; Anter => auxBe ! VPerfect (aform agr.gn Indef (RObj Acc))} ++
+             vp.s ! Perf ! VPassive (aform agr.gn Indef (RObj Acc)) ++
+             case vp.vtype of {
+               VMedial c => reflClitics ! c;
+               _         => []
+             } ++
+             vp.compl1 ! agr ++ vp.compl2 ! agr ;
+  } ;
+
+  PresPartRS ant pol vp = {
+      s = \\agr => 
+             ant.s ++ pol.s ++
+             vp.ad.s ++
+             case pol.p of {Pos   => ""; Neg => "не"} ++
+             case ant.a of {Simul => ""; Anter => auxBe ! VPerfect (aform agr.gn Indef (RObj Acc))} ++
+             vp.s ! Imperf ! VPresPart (aform agr.gn Indef (RObj Acc)) ++
+             case vp.vtype of {
+               VMedial c => reflClitics ! c;
+               _         => []
+             } ++
+             vp.compl ! agr ;
+  } ;
 
   SlashV2V vv ant p vp =
       insertSlashObj2 (\\agr => ant.s ++ p.s ++ vv.c3.s ++
@@ -99,13 +120,19 @@ lin
     } ;
 
   CompS s = {s = \\_ => "че" ++ s.s} ;
+  CompQS qs = {s = \\_ => qs.s ! QIndir} ;
   CompVP ant p vp = {s = \\agr => ant.s ++ p.s ++
                                   daComplex ant.a p.p vp ! Perf ! agr} ;
 
-  PassVS vs vp = 
-      insertObj (\\a => vs.s ! Perf ! VPassive (aform a.gn Indef (RObj Acc))
-                        ++ daComplex Simul Pos vp ! Perf ! a)
-                (predV verbBe) ;
+  VPSlashVS vs vp = 
+    let vp = insertObj (daComplex Simul Pos vp ! Perf) (predV vs)
+    in { s  = vp.s;
+         ad = vp.ad;
+         compl1 = \\_ => "";
+         compl2 = vp.compl;
+         vtype  = vp.vtype;
+         c2     = {s=""; c=Acc}
+       } ;
 
   ApposNP np1 np2 = {
     s = \\role => np1.s ! role ++ "," ++ np2.s ! RSubj ;
