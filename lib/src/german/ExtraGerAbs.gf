@@ -1,6 +1,7 @@
 abstract ExtraGerAbs = Extra [
   VPI,ListVPI,BaseVPI,ConsVPI,MkVPI,ComplVPIVV,ConjVPI,ClSlash,RCl,
   VPS,ListVPS,BaseVPS,ConsVPS,ConjVPS,MkVPS,PredVPS,EmptyRelSlash,
+  VPSlash,PassVPSlash,
   Temp,Tense,Pol,S,NP,VV,VP,Conj,IAdv,IComp,ICompAP,IAdvAdv,Adv,AP] ** {
 
   fun

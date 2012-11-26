@@ -54,15 +54,15 @@ fun CompoundCN : Num -> N -> CN -> CN ;
     that_RP : RP ;
 
     CompS : S -> Comp ;
+    CompQS : QS -> Comp ;
     CompVP : Ant -> Pol -> VP -> Comp ;
 
-	PassVS : VS -> VP -> VP ;
-	PPartNP : NP -> VPSlash -> NP ;
-	
+	VPSlashVS : VS -> VP -> VPSlash ;
+
 	UncNeg : Pol ;
 
---	PastPartRS : Anter -> Pol -> VP -> RS ;
---  PresPartRS : Anter -> Pol -> VP -> RS ;
+	PastPartRS : Ant -> Pol -> VPSlash -> RS ;
+    PresPartRS : Ant -> Pol -> VP -> RS ;
 
 	ApposNP : NP -> NP -> NP ;
 	

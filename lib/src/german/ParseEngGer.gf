@@ -34,12 +34,22 @@ lin
             insertObj vpi.p1 (
               predVGen v.isAux v)))) ;
 
-    PPartNP np sl = heavyNP {   -- guessed by KA, some fields in sl are ignored!!
-      s = \\c => np.s ! c ++ 
-                 sl.s.s ! VPastPart APred ++ 
-                 (sl.nn ! np.a).p1 ++ (sl.nn ! np.a).p2 ++ sl.a2;
-      a = np.a
+    PastPartRS ant pol sl = {   -- guessed by KA, some fields in sl are ignored!!
+      s = \\gn => let agr = agrgP3 Masc (numGenNum gn)
+                  in sl.s.s ! VPastPart APred ++ 
+                     (sl.nn ! agr).p1 ++ (sl.nn ! agr).p2 ++ sl.a2;
+      c = Nom
       } ;
+
+    PresPartRS ant pol vp = {   -- guessed by KA!!
+      s = \\gn => let agr = agrgP3 Masc (numGenNum gn)
+                  in vp.s.s ! VPresPart APred ++ 
+                     (vp.nn ! agr).p1 ++ (vp.nn ! agr).p2;
+      c = Nom
+      } ;
+
+    PredVPosv = PredVP;
+    PredVPovs = PredVP;
 
 {-
 lin
@@ -102,10 +112,10 @@ lin
           OQuest => verb.aux ++ compl ++ "," ++ np.s ! npNom ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf 
           }
     } ;
-
-  CompS s = {s = \\_ => "that" ++ s.s} ;  -- S -> Comp
-  CompVP vp = {s = \\a => infVP VVInf vp a} ; -- VP -> Comp
 -}
+  CompS s = {s = \\_ => "that" ++ s.s ! Main} ;  -- S -> Comp
+  CompVP ant p vp = {s = \\_ => useInfVP True vp} ; -- VP -> Comp
+
 lin
   that_RP = which_RP ;
 

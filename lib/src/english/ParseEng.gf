@@ -109,53 +109,23 @@ lin
     } ;
 
   CompS s = {s = \\_ => "that" ++ s.s} ;
+  CompQS qs = {s = \\_ => qs.s ! QIndir} ;
   CompVP ant p vp = {s = \\a => ant.s ++ p.s ++ 
                                 infVP VVInf vp ant.a p.p a} ;
 
-  PassVS vs vp = 
-    let
-      vps = insertObj (\\a => infVP VVInf vp Simul CPos a) (predV vs) ;
-      be  = predAux auxBe ;
-      ppt = vps.ptp
-    in {
-    s = be.s ;
-    prp = be.prp ;
-    ptp = be.ptp ;
-    inf = be.inf ;
-    ad = vps.ad ;
-    s2 = \\a => ppt ++ vps.s2 ! a
+  VPSlashVS vs vp = 
+    insertObj (\\a => infVP VVInf vp Simul CPos a) (predV vs) **
+    {c2 = ""; gapInMiddle = False} ;
+
+  PastPartRS ant pol vps = {
+    s = \\agr => vps.ad ++ vps.ptp ++ vps.s2 ! agr ;
+    c = npNom
     } ;
 
-  PPartNP np vps = {
-    s = let
-          be = predAux auxBe ;
-          ppt = vps.ptp
-        in \\c => np.s ! c ++ vps.ad ++ vps.ptp ++ vps.s2 ! np.a ;
-    a = np.a
-  } ;
-
-{-  
-  PastPartRS ant pol vp = {
-    s = let
-          be = predAux auxBe ;
-          ppt = vps.ptp
-        in \\c => np.s ! c ++ vps.ad ++ vps.ptp ++ vps.s2 ! np.a ;
-    a = np.a
-    } ;
-  
-  PresPartRS rp vp = {
-    s = \\t,ant,b,ag => 
-        let 
-          agr = case rp.a of {
-            RNoAg => ag ;
-            RAg a => a
-            } ;
-          cl = mkClause (rp.s ! RC (fromAgr agr).g npNom) agr vp
-        in
-        cl.s ! t ! ant ! b ! ODir ;
+  PresPartRS ant pol vp = {
+    s = \\agr => vp.ad ++ vp.prp ++ vp.s2 ! agr ;
     c = npNom
   } ;
--}
 
   ApposNP np1 np2 = {
     s = \\c => np1.s ! c ++ "," ++ np2.s ! npNom ;
