@@ -1798,9 +1798,16 @@ function string_editor(el,init,ok,async) {
 	e.it.focus();
     }
     var m=empty_class("span","error_message");
-    var i=node("input",{"class":"string_edit",name:"it",value:init},[]);
-    if(init.length>10) i.size=init.length+5;
-//  var i=node("textarea",{name:"it",rows:"2",cols:"60"},[text(init)]);
+    if(init.indexOf("\n")>=0) {
+	var rows=init.split("\n").length+1
+	var i=node("textarea",{"class":"string_edit",name:"it",
+			       rows:rows,cols:"80"},
+		   [text(init)]);
+    }
+    else {
+	var i=node("input",{"class":"string_edit",name:"it",value:init},[]);
+	if(init.length>10) i.size=init.length+5;
+    }
     var e=node("form",{},
 	       [i,
 		text(" "),
@@ -1996,7 +2003,8 @@ if(editor) {
 	initial_view();
 	touch_edit();
 	dir_bugfix();
-	initialize_sorting(["DIV"],["fun","lin","lincat","oper"]);
+	initialize_sorting(["DIV","INPUT","TEXTAREA"],
+			   ["fun","lin","lincat","oper"]);
     }
     else
 	editor.innerHTML="<p>This browser does not appear to support localStorage, and the grammar editor does not work without it. Sorry!"
