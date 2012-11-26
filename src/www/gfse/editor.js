@@ -1111,7 +1111,9 @@ function draw_concrete(g,i) {
 }
 
 var rgl_modules=["Syntax","Lexicon","Paradigms","Extra","Symbolic"];
+var common_modules=["Prelude"];
 var rgl_info = {
+    Prelude: "Some facilities usable in all grammars",
     Paradigms: "Lexical categories (A, N, V, ...) and smart paradigms (mkA, mkN, mkV, ...) for turning raw strings into new dictionary entries.",
     Syntax: "Syntactic categories (Utt, Cl, V, NP, CN, AP, ...), structural words (this_Det, few_Det, ...) and functions for building phrases (mkUtt, mkCl, mkCN, mkVP, mkAP, ...)",
     Lexicon: "A multilingual lexicon with ~350 common words.",
@@ -1126,14 +1128,21 @@ function add_open(g,ci) {
 	var ds={};
 	for(var i in os) ds[os[i]]=true;
 	var list=[]
-	for(var i in rgl_modules) {
-	    var b=rgl_modules[i], m=b+conc.langcode;
+	function add_module(b,m) {
 	    if(!ds[m]) {
 		var info=rgl_info[b];
 		var infotext=info ? text(" - "+info) : text("");
 		list.push(li([a(jsurl("add_open2("+g.index+","+ci+",'"+m+"')"),
 				[text(m)]),infotext]));
 	    }
+	}
+	for(var i in rgl_modules) {
+	    var b=rgl_modules[i];
+	    add_module(b,b+conc.langcode)
+	}
+	for(var i in common_modules) {
+	    var b=common_modules[i];
+	    add_module(b,b)
 	}
 	if(list.length>0) {
 	    var file=element("file");
@@ -1186,7 +1195,7 @@ function draw_opens(g,ci) {
 	if(!first) es.push(sep(", "))
 	var m=os[i];
 	var b=m.substr(0,m.length-conc.langcode.length);
-	var info=rgl_info[b];
+	var info=rgl_info[m] || rgl_info[b];
 	var id=ident(m);
 	if(info) id.title=info;
 	id.onclick=show_opers(m)
