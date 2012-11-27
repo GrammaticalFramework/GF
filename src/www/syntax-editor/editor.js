@@ -198,14 +198,12 @@ Editor.prototype.select_refinement=function(fun) {
 
     // Parse out function arguments
     var def = t.grammar_constructors.funs[fun].def;
-    def = def.substr(def.lastIndexOf(":")+1);
-    var fun_args = map(function(s){return s.trim()}, def.split("->"))
-    fun_args = fun_args.slice(0,-1);
+    var typeobj = AST.parse_type_signature(def);
 
-    if (fun_args.length > 0) {
+    if (typeobj.args.length > 0) {
         // Add placeholders
-        for (ci in fun_args) {
-            t.ast.add(null, fun_args[ci]);
+        for (var i in typeobj.args) {
+            t.ast.add(null, typeobj.args[i]);
         }
     }
     

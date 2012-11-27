@@ -58,7 +58,7 @@ function ASTNode(data) {
 function AST(fun, cat) {
 
     // local helper function for building ASTNodes
-    newNode = function(fun, cat) {
+    var newNode = function(fun, cat) {
         return new ASTNode({
             "fun": fun,
             "cat": cat,
@@ -204,5 +204,37 @@ function AST(fun, cat) {
         return s;
     }
 
+}
+    
+// Parse type signature into a JSON object
+// (This probably needs a better home)
+AST.parse_type_signature = function(str) {
+    var obj = {
+        type: undefined,
+        name: [],
+        deps: [],
+        args: [],
+        ret: undefined
+    };
+    var ix = str.indexOf(":");
+    
+    // judgement type
+    var bits = str.substr(0, ix).split(" ");
+    obj.type = bits[0];
+
+    // name (possibly with constructors)
+    obj.name = bits.slice(1);
+    
+    // function args (possibly with type dependency)
+    var bits = map(function(s){return s.trim()}, str.substr(ix+1).split("->"));
+    for (var i=0 ; i<bits.length-1; i++) {
+        var bit = bits[i];
+        obj.args.push(bit);
+    }
+
+    // return type
+    obj.ret = bits[bits.length-1];
+
+    return obj;
 }
 
