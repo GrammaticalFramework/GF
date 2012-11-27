@@ -14,6 +14,13 @@ var editor_options = {
         random_button: true
     }
 }
+var gm_options = {
+    initial: {
+        // grammar: "http://localhost:41296/grammars/Smart.pgf",
+        // startcat: "Command",
+        // languages: ["Eng","Swe"]
+    }
+}
 if(window.Minibar) // Minibar loaded?
     editor_options.lin_action=function(s,langFrom) {
         var editor=this;
@@ -53,7 +60,6 @@ if(/^\?\/tmp\//.test(location.search)) {
     if(args[0]) server_options.grammars_url=args[0];
 }
 var server = pgf_online(server_options);
-// var editor = new Editor(server, editor_options);
-var gm = new GrammarManager(server);
+var gm = new GrammarManager(server, gm_options);
 var editor = new Editor(gm, editor_options);
 
