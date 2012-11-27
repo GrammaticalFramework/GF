@@ -252,8 +252,8 @@ oper
 					} 
 				}
                };    
-   makeDemonPronForm : Str -> Str -> Str -> DemPronForm ;
-   makeDemonPronForm  yeh is inn = mkDemonPronForm 	yeh	is	"" yeh is "" yeh inn "" yeh inn "";	
+   makeDemonPronForm : Str -> Str -> Str -> Str -> DemPronForm ;
+   makeDemonPronForm  yeh ye is inn = mkDemonPronForm 	yeh	is	"" yeh is "" ye inn "" ye inn "";	
 --   makePossPronForm myra myry hmara hmary = mkDemonPronForm myra myra myra myry myry myry hmara hmara hmara hmary hmary hmary;
    
    PersPron = {s: PersPronForm => Str};
