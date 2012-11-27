@@ -13,6 +13,10 @@ resource:
 	latex resource.tex
 	dvipdf resource.dvi
 
+gf-help-full.txt::
+	{ echo ; echo ; echo ; } > $@
+	echo help -full -t2t | gf -run >> $@
+
 ### Converting SVG logos to PNG, using convert from ImageMagick
 logos:: Logos/gf00.png Logos/gf0.png
 

@@ -597,9 +597,10 @@ command (flag -printer):
  js		JavaScript (whole grammar)
  jsgf		JSGF speech recognition format
  lambda_prolog		LambdaProlog (abstract syntax)
+ lp_byte_code		Bytecode for Teyjus (abstract syntax, experimental)
  pgf_pretty		human-readable pgf
  prolog		Prolog (whole grammar)
- prolog_abs		Prolog (abstract syntax)
+ python		Python (whole grammar)
  regexp		regular expression
  slf		SLF speech recognition format
  srgs_abnf		SRGS speech recognition format in ABNF
@@ -1100,7 +1101,7 @@ flag -format.
 
 #TINY
 
-Prints a parse tree the .dot format (the graphviz format).
+Prints a parse tree in the .dot format (the graphviz format).
 The graph can be saved in a file by the wf command as usual.
 If the -view flag is defined, the graph is saved in a temporary file
 which is processed by graphviz and displayed by the program indicated
@@ -1108,10 +1109,26 @@ by the flag. The target format is png, unless overridden by the
 flag -format.
 
 
+- Options:
+
+ | ``-showcat`` | show categories in the tree nodes (default)
+ | ``-nocat`` | don't show categories
+ | ``-showfun`` | show function names in the tree nodes
+ | ``-nofun`` | don't show function names (default)
+ | ``-showleaves`` | show the leaves of the tree (default)
+ | ``-noleaves`` | don't show the leaves of the tree (i.e., only the abstract tree)
+ | ``-old`` | use the old tree visualization algorithm
+
 - Flags:
 
  | ``-format`` | format of the visualization file (default "png")
  | ``-view`` | program to open the resulting file (default "open")
+ | ``-nodefont`` | font for tree nodes (default: Times -- graphviz standard font)
+ | ``-leaffont`` | font for tree leaves (default: nodefont)
+ | ``-nodecolor`` | color for tree nodes (default: black -- graphviz standard color)
+ | ``-leafcolor`` | color for tree leaves (default: nodecolor)
+ | ``-nodeedgestyle`` | edge style between tree nodes (solid/dashed/dotted/bold, default: solid)
+ | ``-leafedgestyle`` | edge style for links to leaves (solid/dashed/dotted/bold, default: dashed)
 
 - Examples:
 
