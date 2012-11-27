@@ -4,6 +4,7 @@ Editor modes & IDE integration for GF
 %!style:../css/style.css
 %!options(html): --toc
 %!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
+%!encoding:utf-8
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
 We collect GF modes for various editors on this page. Contributions are
@@ -12,7 +13,7 @@ welcome!
 
 ==Emacs==
 
-[gf.el ../src/tools/gf.el] by Johan Bockgård provides syntax highlighting and
+[gf.el ../src/tools/gf.el] by Johan BockgÃ¥rd provides syntax highlighting and
 automatic indentation and lets you run the GF Shell in an emacs buffer.
 See installation instructions inside.
 
