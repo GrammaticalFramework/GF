@@ -53,7 +53,7 @@ incomplete concrete SentenceHindustani of Sentence =
           <Past,Anter> => temp.s ++ p.s ++ cl.s ! VPPerfPast ! p.p ! ODir;
           <Fut,Simul>  => temp.s ++ p.s ++ cl.s ! VPFut ! p.p ! ODir;
           <Fut,Anter>  => temp.s ++ p.s ++ cl.s ! VPPerfFut ! p.p ! ODir;
-          <Cond,Simul> => temp.s ++ p.s ++ cl.s ! VPSubj ! p.p ! ODir;
+          <Cond,Simul> => temp.s ++ p.s ++ cl.s ! VPFut ! p.p ! ODir;  --cl.s ! VPSubj ! p.p ! ODir;
           <Cond,Anter> => temp.s ++ p.s ++ cl.s ! VPSubj ! p.p ! ODir -- this needs to be fixed by making SubjPerf in ResUrd		  
 
    };
@@ -66,7 +66,7 @@ incomplete concrete SentenceHindustani of Sentence =
           <Past,Anter> => temp.s ++ p.s ++ cl.s ! VPPerfPast ! p.p ! q;
           <Fut,Simul>  => temp.s ++ p.s ++ cl.s ! VPFut ! p.p ! q;
           <Fut,Anter>  => temp.s ++ p.s ++ cl.s ! VPPerfFut ! p.p ! q;
-          <Cond,Simul> => temp.s ++ p.s ++ cl.s ! VPSubj ! p.p ! q;
+          <Cond,Simul> => temp.s ++ p.s ++ cl.s ! VPFut ! p.p ! q; -- cl.s ! VPSubj ! p.p ! q;
           <Cond,Anter> => temp.s ++ p.s ++ cl.s ! VPSubj ! p.p ! q		  
  
    };
@@ -79,7 +79,7 @@ incomplete concrete SentenceHindustani of Sentence =
           <Past,Anter> => temp.s ++ p.s ++ rcl.s ! VPPerfPast ! p.p ! ODir ! q;
           <Fut,Simul>  => temp.s ++ p.s ++ rcl.s ! VPFut ! p.p ! ODir ! q;
           <Fut,Anter>  => temp.s ++ p.s ++ rcl.s ! VPPerfFut ! p.p ! ODir ! q;
-          <Cond,Simul> => temp.s ++ p.s ++ rcl.s ! VPSubj ! p.p ! ODir ! q;
+          <Cond,Simul> => temp.s ++ p.s ++ rcl.s ! VPFut ! p.p ! ODir ! q; --rcl.s ! VPSubj ! p.p ! ODir ! q;
           <Cond,Anter> => temp.s ++ p.s ++ rcl.s ! VPSubj ! p.p ! ODir ! q
      };		  
       c = rcl.c
@@ -92,7 +92,7 @@ incomplete concrete SentenceHindustani of Sentence =
           <Past,Anter> => temp.s ++ p.s ++ clslash.s ! VPPerfPast ! p.p ! ODir;
           <Fut,Simul>  => temp.s ++ p.s ++ clslash.s ! VPFut ! p.p ! ODir;
           <Fut,Anter>  => temp.s ++ p.s ++ clslash.s ! VPPerfFut ! p.p ! ODir;
-          <Cond,Simul> => temp.s ++ p.s ++ clslash.s ! VPSubj ! p.p ! ODir;
+          <Cond,Simul> => temp.s ++ p.s ++ clslash.s ! VPFut ! p.p ! ODir; --clslash.s ! VPSubj ! p.p ! ODir;
           <Cond,Anter> => temp.s ++ p.s ++ clslash.s ! VPSubj ! p.p ! ODir
      };		  
       c2 = clslash.c2

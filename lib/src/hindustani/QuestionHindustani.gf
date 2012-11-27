@@ -19,7 +19,7 @@ incomplete concrete QuestionHindustani of Question =
            qp1 = qp.s ! Dir;
            qp2 = qp.s ! Obl ++ nE
           in { s = \\t,p,o => case t of {
-		             VPImpPast => case vp.subj of {VIntrans => qp1 ++ cl.s ! t ! p ! ODir; _ => qp2 ++ cl.s ! t ! p ! ODir};
+		             VPImpPast => case vp.subj of {VIntrans => qp1 ++ cl.s ! t ! p ! ODir; _ => qp2 ++ cl.s ! t ! p ! ODir}; 
 			      _         => qp1 ++ cl.s ! t ! p ! ODir
 					 }
 					}; 
