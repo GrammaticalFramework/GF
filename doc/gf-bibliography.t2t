@@ -11,6 +11,7 @@ Aarne Ranta
 %!options(html): --toc
 %!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
 %!postproc(html): #BR <br>
+%!encoding:utf-8
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
 ==Publications on GF==
@@ -27,7 +28,7 @@ ACM,
 #BR
 //Using GF to verbalize platform-independent requirement specifications as a part of a software engineering tool chain.//
 
-C. España-Bonet, R. Enache, A. Slaski, A. Ranta, L. Màrquez, and M. Gonzàlez.
+C. EspaÃ±a-Bonet, R. Enache, A. Slaski, A. Ranta, L. MÃ rquez, and M. GonzÃ lez.
 Patent translation within the MOLTO project.
 Proceedings of the 4th Workshop on Patent Translation, 
 MT Summit XIII, Xiamen, China, September 23, 2011.
@@ -39,7 +40,7 @@ Seyed M. Montazeri, Nivir Roy, and Gerardo Schneider.
 From Contracts in Structured English to CL Specifications. 
 //5th International Workshop on Formal Languages and Analysis of Contract-Oriented Software (FLACOS'11)//, 
 volume 68 of EPTCS, pages 55-69, 
-Málaga, Spain, 22-23 September 2011.
+MÃ¡laga, Spain, 22-23 September 2011.
 [PDF/DOI http://dx.doi.org/10.4204/EPTCS.68.6]
 #BR
 //Formal analysis of contracts written in controlled English.//
@@ -53,7 +54,7 @@ pp. 70-76.
 #BR
 //Punjabi syntax, building on Humayoun and Ranta 2010.//
 
-D. Dannélls, M. Damova, R.Enache, M. Chechev.
+D. DannÃ©lls, M. Damova, R.Enache, M. Chechev.
 A Framework for Improved Access to Museum Databases in the Semantic Web.
 Proceedings of the Workshop on Language Technologies for Digital Humanities and Cultural Heritage,
 RANLP-2011, Recent Advances in Natural Language Processing, 
@@ -65,7 +66,7 @@ pp 8-15
 
 A. Ranta.
 Translating between Language and Logic: What Is Easy and What is Difficult?
-In N. Bjørner and V. Sofronie-Stokkermans (eds.),
+In N. BjÃ¸rner and V. Sofronie-Stokkermans (eds.),
 //CADE-23. Automated Deduction//,
 LNCS/LNAI 6803,
 pp. 5-25,
@@ -92,7 +93,7 @@ Swedish Language Technology Conference SLTC 2010.
 //Tourist Phrasebook grammar, available in 14 European languages.//
 
 
-G. Détrez and R. Enache.
+G. DÃ©trez and R. Enache.
 A Framework for Multilingual Applications on the Android Platform
 Swedish Language Technology Conference SLTC 2010.
 [PDF http://www.grammaticalframework.org/doc/archive/sltc10_submission_24.pdf]
@@ -149,7 +150,7 @@ ACM Digital Library,
 #BR
 //An overview of GF for developers and users of translation systems.//
 
-D. Dannélls and J. Camilleri. 
+D. DannÃ©lls and J. Camilleri. 
 Verb Morphology of Hebrew and Maltese - Towards an Open Source Type Theoretical Resource Grammar in GF.
 //Proceedings of the Language Resources (LRs) and Human Language Technologies (HLT) for Semitic Languages Status, Updates, and Prospects, LREC-2010 Workshop//,
 Malta, pp. 57-61.
@@ -165,7 +166,7 @@ MathNat - Mathematical Text in a Controlled Natural Language.
 #BR
 //Natural language interface to a proof system, implemented in GF.//
 
-D. Dannélls.
+D. DannÃ©lls.
 Discourse Generation from Formal Specifications Using the Grammatical Framework, GF. 
 //Special issue: Natural Language Processing and its Applications.  Journal on Research in Computing Science (RCS)//, 
 volume 46. pp. 167-178,
@@ -223,7 +224,7 @@ vol. 448,
 //Makes a case for using GF in controlled language implementation, illustrated by Attempto Controlled English ported to French, German, and Swedish; longer version in 2010.//
 
 A. Ranta. Grammars as Software Libraries.
-In Y. Bertot, G. Huet, J-J. Lévy, and G. Plotkin (eds.),
+In Y. Bertot, G. Huet, J-J. LÃ©vy, and G. Plotkin (eds.),
 //From Semantics to Computer Science//,
 Cambridge University Press, Cambridge, 
 pp. 281-308,
@@ -270,18 +271,18 @@ ed. by R. Cooper and R. Kempson, pp. 109-120. London: College Publications,
 #BR
 //The resource grammar idea applied to language learning and evolution.//
 
-Moisés Salvador Meza Moreno and B. Bringert.
+MoisÃ©s Salvador Meza Moreno and B. Bringert.
 Interactive Multilingual Web Applications with Grammatical Framework.
-In B. Nordström and A. Ranta (eds), 
+In B. NordstrÃ¶m and A. Ranta (eds), 
 //Advances in Natural Language Processing (GoTAL 2008)//, 
 LNCS/LNAI 5221, Springer,
 2008.
 #BR
 //Shows how GF compiled to JavaScript is used in dynamic multilingual web pages.//
 
-Peter Ljunglöf and Staffan Larsson. 
+Peter LjunglÃ¶f and Staffan Larsson. 
 A grammar formalism for specifying ISU-based dialogue systems.
-In B. Nordström and A. Ranta (eds), 
+In B. NordstrÃ¶m and A. Ranta (eds), 
 //Advances in Natural Language Processing (GoTAL 2008)//, 
 LNCS/LNAI 5221, Springer,
 2008.
@@ -291,7 +292,7 @@ LNCS/LNAI 5221, Springer,
 
 K. Angelov.
 Type-Theoretical Bulgarian Grammar.
-In B. Nordström and A. Ranta (eds), 
+In B. NordstrÃ¶m and A. Ranta (eds), 
 //Advances in Natural Language Processing (GoTAL 2008)//, 
 LNCS/LNAI 5221, Springer,
 2008.
@@ -309,8 +310,8 @@ Manchester, UK, August 23,
 
 A. Ranta.
 How predictable is Finnish morphology? An experiment on lexicon construction.
-In J. Nivre, M. Dahllöf and B. Megyesi (eds),
-//Resourceful Language Technology: Festschrift in Honor of Anna Sågvall Hein//,
+In J. Nivre, M. DahllÃ¶f and B. Megyesi (eds),
+//Resourceful Language Technology: Festschrift in Honor of Anna SÃ¥gvall Hein//,
 University of Uppsala,
 2008.
 Available from [series homepage http://publications.uu.se/abstract.xsql?dbid=8933]
@@ -371,7 +372,7 @@ Dublin, August 2007 (ESSLLI workshop).
 #BR
 //Describes the compilation of GF source code to lower-level run-time formats.//
 
-M. Humayoun, H. Hammarström, and A. Ranta.
+M. Humayoun, H. HammarstrÃ¶m, and A. Ranta.
 Urdu Morphology, Orthography and Lexicon Extraction.
 //CAASL-2: The Second Workshop on Computational Approaches to Arabic Script-based Languages//,
 July 21-22, 2007, LSA 2007 Linguistic Institute, Stanford University.
@@ -409,7 +410,7 @@ Tartu, 24 May 2007 (NODALIDA workshop).
 //with comparisons to feature-based unification grammars.//
 
 
-O. Caprotti and M. Seppälä.
+O. Caprotti and M. SeppÃ¤lÃ¤.
 Multilingual Delivery of Online Tests in mathematics.
 Proceedings of Online Educa Berlin 2006. 29 November - 1 December 2006. 
   Berlin, Germany.
@@ -451,7 +452,7 @@ pp. 488-499,
 A. Ranta.
 Type Theory and Universal Grammar.
 //Philosophia Scientiae, Constructivism: Mathematics, Logic, Philosophy and Linguistics//,
-cahier spécial 6,
+cahier spÃ©cial 6,
 pp. 115-131,
 2006.
 #BR
@@ -515,7 +516,7 @@ pp. 51-66,
 //Natural Language Generation techniques to improve text quality.//
 
 
-B. Bringert, R. Cooper, P. Ljunglöf, A. Ranta, 
+B. Bringert, R. Cooper, P. LjunglÃ¶f, A. Ranta, 
 Multimodal Dialogue System Grammars.
 //Proceedings of DIALOR'05, Ninth Workshop on the Semantics and Pragmatics of Dialogue, Nancy, France, June 9-11, 2005//,
 2005.
@@ -529,16 +530,16 @@ Multimodal Dialogue System Grammars.
 K.  Johannisson,
 Formal and Informal Software Specifications.
 PhD thesis,
-Computer Science, Göteborg University, 
+Computer Science, GÃ¶teborg University, 
 2005.
 [http://www.cse.chalmers.se/~krijo/thesis/thesisA4.pdf]
 #BR
 //Collection of articles in the GF-KeY project, with an introduction.//
 
-P. Ljunglöf.
+P. LjunglÃ¶f.
 Expressivity and Complexity of the  Grammatical Framework.
 PhD thesis, Computer Science, 
-Göteborg University, 
+GÃ¶teborg University, 
 2004.
 [pdf http://www.cse.chalmers.se/~peb/pubs/Ljunglof-2004a.pdf]
 #BR
@@ -565,7 +566,7 @@ Draft available as [pdf http://www.cse.chalmers.se/~aarne/articles/3formsem.pdf]
 // Shows how Montague-style grammars are implemented in GF and extends//
 //this to type-theoretical grammars for anaphoric expressions.//
 
-H. Hammarström and A. Ranta.
+H. HammarstrÃ¶m and A. Ranta.
 Cardinal Numerals Revisited in GF.
 //Workshop on Numerals in the World's Languages//. 
 Dept. of Linguistics Max Planck Institute for Evolutionary Anthropology, Leipzig,
@@ -581,7 +582,7 @@ In A. Beckmann and N. Preining, editors,
 //Collegium Logicum//, 
 volume V,
 pp. 1-86. 
-Kurt Gödel Society, 
+Kurt GÃ¶del Society, 
 Vienna,
 2004.
 #BR
@@ -626,7 +627,7 @@ pp. 38-41,
 //how new grammars are created.//
 
 
-R. Hähnle, K. Johannisson, and A. Ranta.
+R. HÃ¤hnle, K. Johannisson, and A. Ranta.
 An Authoring Tool for Informal and Formal Requirements Specifications.
 In R. D. Kutsche and H. Weber (eds),
 //ETAPS/FASE-2002: Fundamental Approaches to Software Engineering//,
@@ -638,7 +639,7 @@ pp. 233--248,
 #BR
 //Describes a GF-based authoring tool for object-oriented//
 //specifications in OCL and English. Carries out in full//
-//the work proposed in the position paper (Hähnle & Ranta 2001).//
+//the work proposed in the position paper (HÃ¤hnle & Ranta 2001).//
 
 
 
@@ -646,14 +647,14 @@ K. Johannisson and A.Ranta,
 Formal Verification of Multilingual Instructions.
 //Proceedings of the Joint Winter Meeting 2001//.
 Departments of Computer Science and Computer Engineering,
-Chalmers University of Technology and Göteborg University.
+Chalmers University of Technology and GÃ¶teborg University.
 2001.
 [ps.gz http://www.cse.chalmers.se/~aarne/articles/aarne+krijo.ps.gz].
 #BR
 //Instructions for an alarm system in four languages, verified in the proof editor Alfa.//
 
 
-R. Hähnle and A. Ranta,
+R. HÃ¤hnle and A. Ranta,
 Connecting OCL with the Rest of the World.
 //ETAPS 2001 Workshop on Transformations in UML (WTUML)//, 
 Genova, 
@@ -667,14 +668,14 @@ Genova,
 
 
 T. Hallgren, "The Correctness of Insertion Sort",
-Manuscript, Chalmers University, Göteborg, 2001.
+Manuscript, Chalmers University, GÃ¶teborg, 2001.
 Available in
 [ps http://www.cse.chalmers.se/~hallgren/Papers/insertion_sort.ps]
 #BR
 //A seven-page text generated by GF-Alfa//.
 
 
-A. Ranta. "Bescherelle bricolé",
+A. Ranta. "Bescherelle bricolÃ©",
 [ps.gz ../../GF2.0/doc/BeschBric.ps.gz], 
 2001.
 #BR
@@ -706,7 +707,7 @@ Saarbruecken,
 
 
 
-P. Mäenpää and A. Ranta.
+P. MÃ¤enpÃ¤Ã¤ and A. Ranta.
 The type theory and type checker of GF.
 //Colloquium on Principles, Logics, and Implementations of High-Level Programming Languages, Workshop on Logical Frameworks and Meta-languages, Paris, 28 September 1999//.
 1999. 
@@ -728,10 +729,10 @@ In alphabetical order:
 
 
 L. Magnusson.
-//The Implementation of ALF - a Proof Editor based on Martin-Löf's//
+//The Implementation of ALF - a Proof Editor based on Martin-LÃ¶f's//
 //Monomorphic Type Theory with Explicit Substitutions//.
 PhD Thesis, Department of Computing Science,
-Chalmers University of Technology and Göteborg University,
+Chalmers University of Technology and GÃ¶teborg University,
 1994.
 #BR
 //Back in 1992 the most wonderful program in the world, ALF is//
@@ -739,7 +740,7 @@ Chalmers University of Technology and Göteborg University,
 
 
 
-P. Martin-Löf.
+P. Martin-LÃ¶f.
 //Intuitionistic Type Theory//.
 Bibliopolis, Naples, 1984.
 #BR
@@ -747,8 +748,8 @@ Bibliopolis, Naples, 1984.
 
 
 
-B. Nordström, K. Petersson, and J. Smith.
-//Programming in Martin-Löf's Type Theory: an Introduction//.
+B. NordstrÃ¶m, K. Petersson, and J. Smith.
+//Programming in Martin-LÃ¶f's Type Theory: an Introduction//.
 Oxford University Press, 1990.
  The book is out of print, but a free version can be picked up from
 [www.cse.chalmers.se/Cs/Research/Logic/book/ http://www.cse.chalmers.se/Cs/Research/Logic/book/]
@@ -768,7 +769,7 @@ Oxford University Press, Oxford,
 
 A. Ranta.
 Syntactic categories in the language of mathematics.
-In P. Dybjer, B. Nordström, and J. Smith, eds.,
+In P. Dybjer, B. NordstrÃ¶m, and J. Smith, eds.,
 //Types for Proofs and Programs//, 
 pp. 162-182,
 Lecture Notes in Computer Science
@@ -797,8 +798,8 @@ Heidelberg,
 
 
 A. Ranta.
-Structures grammaticales dans le français mathématique. 
-//Mathématiques, informatique et Sciences Humaines.//,
+Structures grammaticales dans le franÃ§ais mathÃ©matique. 
+//MathÃ©matiques, informatique et Sciences Humaines.//,
 vol. 138 pp. 5-56 and 139 pp. 5-36, 
 1997.
 #BR
