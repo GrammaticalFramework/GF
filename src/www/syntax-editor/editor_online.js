@@ -4,12 +4,9 @@ var server_options = {
 }
 var editor_options = {
     target: "editor",
-    // initial: {
-    //     grammar: "http://localhost:41296/grammars/Phrasebook.pgf",
-    //     startcat: "Proposition",
-    //     languages: ["Eng","Swe","Ita"],
-    //     abstr: "PropOpenDate (SuperlPlace TheMostExpensive School) Tomorrow"
-    // },
+    initial: {
+//        abstr: "PropOpenDate (SuperlPlace TheMostExpensive School) Tomorrow"
+    },
     show: {
         grammar_menu: true,
         startcat_menu: true,

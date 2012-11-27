@@ -20,7 +20,7 @@ function GrammarManager(server,opts) {
     this.options = {
         initial: {}
     };
-    this.hooks = {
+    this.actions = {
         onload: [
             function(gm){ debug("default action: onload"); }
         ],
@@ -36,13 +36,13 @@ function GrammarManager(server,opts) {
     }
 
     // Apply supplied options
-//    if(opts) for(var o in opts) this.options[o]=opts[o];
+    if(opts) for(var o in opts) this.options[o]=opts[o];
 
     /* --- Client state initialisation -------------------------------------- */
     this.server = server;
     this.grammar = null; // current grammar
-    // this.grammars=[];
-    // this.grammar_dirs=[];
+    this.grammars=[];
+    this.grammar_dirs=[];
     this.startcat = null; // current startcat
     this.languages = []; // current languages (empty means all langs)
 
@@ -71,17 +71,23 @@ GrammarManager.prototype.onload=function(dir,grammar_names,dir_count) {
 /* --- Registering / unregistering actions to hooks ------------------------- */
 
 GrammarManager.prototype.register_action=function(hook,action) {
-    this.hooks[hook].push(action);
+    var hookring = this.actions[hook];
+    hookring.push(action);
 }
 
 GrammarManager.prototype.unregister_action=function(hook,action) {
-    // TODO!
+    var hookring = this.actions[hook];
+    for (var f=0; f < hookring.length; f++) {
+        if (hookring[f] == action) {
+            hookring = Array.remove(hookring, f);
+        }
+    }
 }
 
 // Execute actions for a given hook
 // TODO: any number of arguments
 GrammarManager.prototype.run_actions=function(hook,arg1,arg2,arg3) {
-    var acts = this.hooks[hook];
+    var acts = this.actions[hook];
     for (f in acts) {
         acts[f](arg1,arg2,arg3);
     }
@@ -147,11 +153,11 @@ GrammarManager.prototype.update_language_list=function(grammar) {
     // Replace the options in the menu with the languages in the grammar
     var langs=grammar.languages;
     for(var i=0; i<langs.length; i++) {
-	var ln=langs[i].name;
+	var ln=langs[i].name; // "PhrasebookEng"
 	if(!hasPrefix(ln,"Disamb")) {
-	    var lp=langpart(ln,grammar.name);
+	    var lp=langpart(ln,grammar.name); // "Eng"
             if (elem(lp, t.options.initial.languages)) {
-                t.languages.push(ln); // or lp?
+                t.languages.push(ln);
             }
 	}
     }

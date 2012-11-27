@@ -1,20 +1,4 @@
 /* --- Main Editor object --------------------------------------------------- */
-/* When creating the object, stuff gets called in this order:
-new EditorMenu
-  server.get_grammarlists
-  EditorMenu.show_grammarlist
-    EditorMenu.change_grammar
-      server.switch_to_other_grammar
-      server.get_grammar_info
-      EditorMenu.update_startcat_menu
-      EditorMenu.update_language_menu
-      Editor.change_grammar
-        Editor.get_grammar_constructors
-        Editor.start_fresh
-          Editor.update_current_node();
-            Editor.redraw_tree();
-            Editor.get_refinements();
-*/
 function Editor(gm,opts) {
     var t = this;
     /* --- Configuration ---------------------------------------------------- */
@@ -64,11 +48,6 @@ function Editor(gm,opts) {
     /* --- Register Grammar Manager hooks ----------------------------------- */
     this.gm.register_action("change_grammar",function(grammar){
         debug("Editor: change grammar");
-        var startcat0 = t.options.initial.startcat;
-        if (elem(startcat0, grammar.categories))
-            t.startcat = startcat0;
-        else
-            t.startcat = null;
         t.get_grammar_constructors(bind(t.start_fresh,t));
     });
     this.gm.register_action("change_startcat",function(startcat){
@@ -124,19 +103,19 @@ Editor.prototype.get_startcat=function() {
 }
 
 // TODO
-Editor.prototype.initialize_from=function(opts) {
-    var t=this;
-    if (opts.startcat)
-        t.options.initial_startcat=opts.startcat;
-    t.change_grammar();
-    if (opts.abstr)
-        t.import_ast(opts.abstr);
-}
+// Editor.prototype.initialize_from=function(opts) {
+//     var t=this;
+//     if (opts.startcat)
+//         t.options.initial_startcat=opts.startcat;
+//     t.change_grammar();
+//     if (opts.abstr)
+//         t.import_ast(opts.abstr);
+// }
 
 // Called after changing grammar or startcat
 Editor.prototype.start_fresh=function () {
     var t = this;
-        t.ast = new AST(null, t.get_startcat());
+    t.ast = new AST(null, t.get_startcat());
     if (t.options.initial.abstr) {
         t.import_ast(t.options.initial.abstr);
     }
