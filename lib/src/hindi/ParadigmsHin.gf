@@ -57,7 +57,7 @@ oper
 			<Pl,Masc> => pmp ;
 			<Pl,Fem> => pfp } ; lock_Pron = <>};
   
-  demoPN : Str -> Str -> Str -> Quant = \s1,s2,s3 -> let n = makeDemonPronForm s1 s2 s3 in {s = n.s ; a = defaultAgr ; lock_Quant = <>};
+  demoPN : Str -> Str -> Str -> Str -> Quant = \s1,s2,s3,s4 -> let n = makeDemonPronForm s1 s2 s3 s4 in {s = n.s ; a = defaultAgr ; lock_Quant = <>};
   mkDet : Str -> Str -> Str -> Str -> Number -> Det = \s1,s2,s3,s4,nb -> let dt = makeDet s1 s2 s3 s4 nb in {s = dt.s ; n = nb ; lock_Det = <>};
   mkIP : (x1,x2,x3:Str) -> Number -> Gender -> IP = \s1,s2,s3,n,g -> let p = mkIntPronForm s1 s2 s3 in { s = p.s ; n = n ; g = g ;  lock_IP = <>}; 
 

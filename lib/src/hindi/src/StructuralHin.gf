@@ -77,14 +77,14 @@ concrete StructuralHin of Structural = CatHin **
   somePl_Det = mkDet "kuc'" "kuc'" "kuc'" "kuc'" Pl ;
   something_NP = MassNP (UseN (ParadigmsHin.mkN ["ko:I: ci:z"] ["ko:I: ci:z"] ["ko:I: ci:z"] ["ko:I: ci:z"] ["ko:I: ci:z"] ["ko:I: ci:z"] Masc ));
   somewhere_Adv = mkAdv ["kahi:m."] ;
-  that_Quant = demoPN "vah" "Us" "Un" ;
+  that_Quant = demoPN "vah" "ve:" "Us" "Un" ;
   that_Subj = ss "ki";
   there_Adv = mkAdv "vaha:n~" ;
   there7to_Adv = mkAdv ["vaha:n~ par"] ;
   there7from_Adv = mkAdv ["vaha:n~ se:"] ;
   therefore_PConj = ss "Is liye:" ;
   they_Pron = personalPN "ve:" "ve:" "ve:" "Un ka:" "Un ki:" "Un ke:" "Un ki:" Pl Masc Pers3_Distant ; ---- 
-  this_Quant = demoPN "ye:" "Is" "In";      
+  this_Quant = demoPN "yah" "ye:" "Is" "In";      
   through_Prep = mkPrep ["me:m. se:"] ["me:m. se:"] ;
   too_AdA = ss "bahut" ;
   to_Prep = mkPrep "ko:" "ko:" ; -- ** {lock_Prep = <>};
