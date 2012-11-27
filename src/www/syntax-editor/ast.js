@@ -8,7 +8,7 @@ function NodeID(x) {
         switch (typeof x) {
         case "number": this.id = [x]; break;
         case "string": this.id = map(function(s){return parseInt(s)}, x.split(",")); break;
-        case "object": this.id = x.get().slice(); break; // another NodeID
+        case "object": this.id = Array.clone(x.get()); break; // another NodeID
         }
     }
 
@@ -101,7 +101,7 @@ function AST(fun, cat) {
     
     // set tree at given id
     this._setSubtree = function(id, subtree) {
-        var lid = id.get().slice(); // clone NodeID array
+        var lid = Array.clone(id.get()); // clone NodeID array
         var node = this.root;
 
         if (lid.length==1)
@@ -124,7 +124,7 @@ function AST(fun, cat) {
         switch (typeof id) {
         case "number": lid = [id]; break;
         case "string": lid = id.split(","); break;
-        case "object": lid = id.get().slice(); break; // clone NodeID array
+        case "object": lid = Array.clone(id.get()); break; // clone NodeID array
         }
         var node = this.root;
         if (lid[0] == 0) lid.shift();

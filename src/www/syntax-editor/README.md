@@ -13,21 +13,21 @@ An improved version of the [old syntax editor][1].
 
 ## Available startup options
 
-    var editor_options = {
-        target: "editor",
-            initial: {
-                grammar: "http://localhost:41296/grammars/Foods.pgf",
-                startcat: "Kind",
-                languages: ["Eng","Swe","Mlt"],
-                abstr: "Pred (That Fish) Expensive"
-            },
-            show: {
-                grammar_menu: true,
-                startcat_menu: true,
-                to_menu: true,
-                random_button: true
-            }
-        }
+|Options|Description|Default|
+|:------|:----------|:------|
+|target |           |"editor"|
+|initial.grammar|Initial grammar URL, e.g. `"http://localhost:41296/grammars/Foods.pgf"`|-|
+|initial.startcat|Initial startcat|-|
+|initial.languages|Initial linearisation languages, e.g. `["Eng","Swe","Mlt"]`|-|
+|initial.abstr|Initial abstract tree (as string), e.g. `"Pred (That Fish) Expensive"`|-|
+|show.grammar_menu|Show grammar menu?|true|
+|show.startcat_menu|Show start category menu?|true|
+|show.to_menu|Show languages menu?|true|
+|show.random_button|Show random button?|true|
+
+## Example usage
+
+See `editor.html` and `editor_online.js`.
 
 ## TODO
 

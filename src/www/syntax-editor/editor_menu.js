@@ -107,7 +107,7 @@ EditorMenu.prototype.hook_onload=function(dir,grammar_names,dir_count) {
     appendChildren(t.ui.grammar_menu, map(opt, grammar_names));
     function pick_first_grammar() {
 	if(t.timeout) clearTimeout(t.timeout),t.timeout=null;
-	var grammar0=t.options.initial.grammar;
+	var grammar0=t.gm.options.initial.grammar;
 	if(!grammar0) grammar0=t.grammars[0];
 	t.ui.grammar_menu.value=grammar0;
 //	t.change_grammar();
@@ -139,16 +139,11 @@ EditorMenu.prototype.update_startcat_menu=function(grammar) {
     menu.innerHTML="";
     var cats=grammar.categories;
     for(var cat in cats) menu.appendChild(option(cats[cat],cats[cat]))
-//    var startcat=this.local.get("startcat") || grammar.startcat;
-    var startcat0 = t.options.initial.startcat;
+    var startcat0 = t.gm.options.initial.startcat;
     if (elem(startcat0, cats))
         menu.value = startcat0;
     else
         menu.value = grammar.startcat;
-    // else {
-    //     insertFirst(menu,option("Default",""));
-    //     menu.value="";
-    // }
 }
 
 /* --- Langugage (to) menu -------------------------------------------------- */
@@ -168,9 +163,8 @@ EditorMenu.prototype.update_language_menu=function(menu,grammar) {
 	if(!hasPrefix(ln,"Disamb")) {
 	    var lp=langpart(ln,grammar.name);
             var opt=option(lp,ln);
-            if (elem(lp, t.options.initial.languages)) {
+            if (elem(lp, t.gm.options.initial.languages)) {
                 opt.selected=true;
-                t.editor.languages.push(opt.value);
             }
 	    menu.appendChild(opt);
 	}

@@ -22,12 +22,21 @@ if(!Array.isArray) {
 
 // Create a clone of an array
 // http://davidwalsh.name/javascript-clone-array
-// Note that iterating over an array with for...in will include "clone" as a key!
-// if(!Array.clone) {
-//     Array.prototype.clone = function() {
-//         return this.slice(0);
-//     };
-// }
+if(!Array.clone) {
+    Array.clone = function(arg) {
+        return arg.slice(0);
+    };
+}
+
+// Array Remove - By John Resig (MIT Licensed)
+// http://ejohn.org/blog/javascript-array-remove/if(!Array.remove) {
+if(!Array.remove) {
+    Array.remove = function(arg, from, to) {
+        var rest = arg.slice((to || from) + 1 || arg.length);
+        arg.length = from < 0 ? arg.length + from : from;
+        return arg.push.apply(arg, rest);
+    };
+}
 
 /* --- JSONP ---------------------------------------------------------------- */
 
