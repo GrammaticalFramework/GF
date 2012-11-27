@@ -46,50 +46,48 @@ function Editor(gm,opts) {
     this.ast = null;
 
     /* --- Register Grammar Manager hooks ----------------------------------- */
-    this.gm.register_action("change_grammar",function(grammar){
+    this.hook_change_grammar = function(grammar){
         debug("Editor: change grammar");
-        t.get_grammar_constructors(bind(t.start_fresh,t));
-    });
-    this.gm.register_action("change_startcat",function(startcat){
+        var args = {
+            format: "json"
+        };
+        var cont = function(data){
+            t.grammar_constructors = data;
+            t.start_fresh();
+        };
+        t.server.browse(args, cont);
+    };
+    this.hook_change_startcat = function(startcat){
         debug("Editor: change startcat");
         t.startcat = startcat;
         t.start_fresh();
-    });
-    this.gm.register_action("change_languages",function(languages){
+    };
+    this.hook_change_languages = function(languages){
         debug("Editor: change languages");
         t.update_linearisation();
-    });
+    };
+    this.gm.register_action("change_grammar",this.hook_change_grammar);
+    this.gm.register_action("change_startcat",this.hook_change_startcat);
+    this.gm.register_action("change_languages",this.hook_change_languages);
 
     /* --- Main program, this gets things going ----------------------------- */
     this.menu = new EditorMenu(this, this.options);
 
     /* --- Other basic stuff ------------------------------------------------ */
     this.shutdown = function() {
-        clear(this.container);
-        this.container.classList.remove("editor");
+        t.gm.unregister_action("change_grammar",t.hook_change_grammar);
+        t.gm.unregister_action("change_startcat",t.hook_change_startcat);
+        t.gm.unregister_action("change_languages",t.hook_change_languages);
+        clear(t.container);
+        t.container.classList.remove("editor");
     }
     this.hide = function() {
-        this.container.style.display="none";
+        t.container.style.display="none";
     }
     this.show = function() {
-        this.container.style.display="block";
+        t.container.style.display="block";
     }
 
-}
-
-Editor.prototype.get_grammar_constructors=function(callback) {
-    var t = this;
-    var args = {
-        format: "json"
-    };
-    var cont = function(data){
-        t.grammar_constructors = data;
-        if (callback) callback();
-    };
-    var err = function(data){
-        alert("Error");
-    };
-    t.server.browse(args, cont, err);
 }
 
 /* --- API for getting and setting state ------------------------------------ */
@@ -137,7 +135,9 @@ Editor.prototype.get_refinements=function(cat) {
         clear(t.ui.refinements);
         for (pi in data.producers) {
             var opt = span_class("refinement", text(data.producers[pi]));
-            opt.onclick = bind(function(){ t.select_refinement(this.innerHTML) }, opt);
+            opt.onclick = bind(function(){
+                t.select_refinement(this.innerHTML)
+            }, opt);
             t.ui.refinements.appendChild(opt);
         }
     };
@@ -148,47 +148,74 @@ Editor.prototype.get_refinements=function(cat) {
     t.server.browse(args, cont, err);
 }
 
-Editor.prototype.select_refinement=function(fun) {
-    with (this) {
-        ui.refinements.innerHTML = "...";
-        ast.removeChildren();
-        ast.setFun(fun);
-        var args = {
-            id: fun,
-            format: "json"
-        };
-        var err = function(data){
-            alert("Error");
-        };
-        server.browse(args, bind(complete_refinement,this), err);
-    }
-}
+// Editor.prototype.select_refinement=function(fun) {
+//     var t = this;
+//     t.ui.refinements.innerHTML = "...";
+//     t.ast.removeChildren();
+//     t.ast.setFun(fun);
+//     var args = {
+//         id: fun,
+//         format: "json"
+//     };
+//     var err = function(data){
+//         alert("Error");
+//     };
+//     t.server.browse(args, bind(t.complete_refinement,this), err);
+// }
 
-Editor.prototype.complete_refinement=function(data) {
-    if (!data) return;
+// Editor.prototype.complete_refinement=function(data) {
+//     if (!data) return;
 
-    with (this) {
-        // Parse out function arguments
-        var def = data.def;
-        def = def.substr(def.lastIndexOf(":")+1);
-        var fun_args = map(function(s){return s.trim()}, def.split("->"))
-        fun_args = fun_args.slice(0,-1);
+//     with (this) {
+//         // Parse out function arguments
+//         var def = data.def;
+//         def = def.substr(def.lastIndexOf(":")+1);
+//         var fun_args = map(function(s){return s.trim()}, def.split("->"))
+//         fun_args = fun_args.slice(0,-1);
 
-        if (fun_args.length > 0) {
-            // Add placeholders
-            for (ci in fun_args) {
-                ast.add(null, fun_args[ci]);
-            }
-        }
+//         if (fun_args.length > 0) {
+//             // Add placeholders
+//             for (ci in fun_args) {
+//                 ast.add(null, fun_args[ci]);
+//             }
+//         }
         
-        // Update ui
-        redraw_tree();
-        update_linearisation();
+//         // Update ui
+//         redraw_tree();
+//         update_linearisation();
 
-        // Select next hole & get its refinements
-        ast.toNextHole();
-        update_current_node();
+//         // Select next hole & get its refinements
+//         ast.toNextHole();
+//         update_current_node();
+//     }
+// }
+
+Editor.prototype.select_refinement=function(fun) {
+    var t = this;
+    t.ui.refinements.innerHTML = "...";
+    t.ast.removeChildren();
+    t.ast.setFun(fun);
+
+    // Parse out function arguments
+    var def = t.grammar_constructors.funs[fun].def;
+    def = def.substr(def.lastIndexOf(":")+1);
+    var fun_args = map(function(s){return s.trim()}, def.split("->"))
+    fun_args = fun_args.slice(0,-1);
+
+    if (fun_args.length > 0) {
+        // Add placeholders
+        for (ci in fun_args) {
+            t.ast.add(null, fun_args[ci]);
+        }
     }
+    
+    // Update ui
+    t.redraw_tree();
+    t.update_linearisation();
+
+    // Select next hole & get its refinements
+    t.ast.toNextHole();
+    t.update_current_node();
 }
 
 Editor.prototype.update_current_node=function(newID) {
