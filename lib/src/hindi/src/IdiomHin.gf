@@ -15,7 +15,7 @@ concrete IdiomHin of Idiom = CatHin ** open Prelude,Predef, ResHin,ParamX,Common
     CleftAdv ad ss = { s = \\t,b,o => ad.s ! Masc ++ ss.s};
         
      ExistNP np = 
-      mkSClause "vaha:n~" (agrP3 (fromAgr np.a).g (fromAgr np.a).n) 
+      mkSClause "" (agrP3 (fromAgr np.a).g (fromAgr np.a).n)  --removed waha:n
         (insertObj (\\_ => np.s ! NPC Dir) (predAux auxBe)) ;
 
    ExistIP ip = 
