@@ -13079,6 +13079,7 @@ lin fame_N = mkN "fame" ;
 lin fame_V2 = mkV2 (mkV "fame");
 lin famed_A = compoundA (mkA "famed");
 lin familiar_A = compoundA (mkA "familiar");
+lin familiar_A2 = mkA2 (compoundA (mkA "familiar")) (mkPrep "with");
 lin familiar_N = mkN "familiar" "familiars";
 lin familiarity_N = mkN "familiarity" "familiarities";
 lin familiarize_V2 = mkV2 (mkV "familiarize" "familiarizes" "familiarized" "familiarized" "familiarizing");
