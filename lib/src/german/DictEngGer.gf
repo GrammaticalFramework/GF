@@ -13049,6 +13049,7 @@ lin fame_N = variants {};
 lin fame_V2 = variants {};
 lin famed_A = variants {};
 lin familiar_A = variants {};
+lin familiar_A2 = variants {};
 lin familiar_N = variants {};
 lin familiarity_N = variants {};
 lin familiarize_V2 = variants {};

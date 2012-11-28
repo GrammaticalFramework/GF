@@ -13059,6 +13059,7 @@ fun fame_N : N;
 fun fame_V2 : V2;
 fun famed_A : A;
 fun familiar_A : A;
+fun familiar_A2 : A2;
 fun familiar_N : N;
 fun familiarity_N : N;
 fun familiarize_V2 : V2;
