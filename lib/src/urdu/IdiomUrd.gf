@@ -15,7 +15,7 @@ concrete IdiomUrd of Idiom = CatUrd ** open Prelude,Predef, ResUrd,ParamX,Common
     CleftAdv ad ss = { s = \\t,b,o => ad.s ! Masc ++ ss.s};
         
     ExistNP np = 
-      mkSClause "وہاں" (agrP3 (fromAgr np.a).g (fromAgr np.a).n) 
+      mkSClause "" (agrP3 (fromAgr np.a).g (fromAgr np.a).n) --removed wahaN
         (insertObj (\\_ => np.s ! NPC Dir) (predAux auxBe)) ;
 
     ExistIP ip = 
