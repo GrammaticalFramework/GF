@@ -37,7 +37,7 @@ concrete AdjectiveBul of Adjective = CatBul ** open ResBul, Prelude in {
     ComplA2 a np = {
       s = \\aform => a.s ! aform ++ a.c2 ++ np.s ! RObj Acc ; 
       adv = a.adv ++ a.c2 ++ np.s ! RObj Acc ; 
-      isPre = True
+      isPre = False
       } ;
 
     ReflA2 a = {
