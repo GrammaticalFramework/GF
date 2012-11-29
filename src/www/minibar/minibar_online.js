@@ -49,7 +49,7 @@ if(window.Editor) // Syntax editor loaded?
 	    }
 	}
 	minibar.minibar.style.display="none" // Hide the minibar
-        var gm = new GrammarManager(server);
+        var gm = new GrammarManager(server,editor_options);
 	var editor=new Editor(gm,editor_options)
     }
 
