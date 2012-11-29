@@ -5,10 +5,12 @@ function NodeID(x) {
 
     // Initialize from input
     if (x) {
-        switch (typeof x) {
-        case "number": this.id = [x]; break;
-        case "string": this.id = map(function(s){return parseInt(s)}, x.split(",")); break;
-        case "object": this.id = Array.clone(x.get()); break; // another NodeID
+        var type = Object.prototype.toString.call(x);
+        switch (type) {
+        case "[object Number]": this.id = [x]; break;
+        case "[object String]": this.id = map(function(s){return parseInt(s)}, x.split(",")); break;
+        case "[object Array]" : this.id = Array.clone(x); break;
+        case "[object Object]": this.id = Array.clone(x.get()); break; // another NodeID
         }
     }
 
@@ -26,6 +28,11 @@ function NodeID(x) {
     // compare with other id
     this.equals = function(other) {
         return JSON.stringify(this.id)==JSON.stringify(other.id);
+    }
+
+    // clone
+    this.clone = function() {
+        return new NodeID( this );
     }
 
 }
@@ -62,6 +69,7 @@ function AST(fun, cat) {
         return new ASTNode({
             "fun": fun,
             "cat": cat,
+            "deps": {}, // dependent types
             "children": []
         });
     }
@@ -70,6 +78,9 @@ function AST(fun, cat) {
     
     this.current = new NodeID(); // current id in tree
 
+    this.getCurrent = function() {
+        return this.find(this.current);
+    }
     this.getFun = function() {
         return this.find(this.current).fun;
     }
@@ -83,9 +94,24 @@ function AST(fun, cat) {
         this.find(this.current).cat = c;
     }
 
+    // Add a single type dependency at current node
+    this.addDep = function(k, type) {
+        // Add unassigned type variable to current
+        var cur = this.getCurrent();
+        cur.deps[k] = null;
+
+        // Add actual type dep node
+        var node = newNode(k, type);
+        node.depid = k; // links to dep in parent
+        this._add(this.current, node);
+        return node;
+    }
+
     // Add a single fun at current node
     this.add = function(fun, cat) {
-        this._add(this.current, newNode(fun,cat));
+        var node = newNode(fun,cat);
+        this._add(this.current, node);
+        return node;
     }
 
     // add node as child of id
@@ -117,14 +143,12 @@ function AST(fun, cat) {
 
     }
 
-    // id should be a list of child indices [0,1,0]
-    // or a string separated by commas "0,1,0"
     this.find = function(id) {
         var lid = undefined
-        switch (typeof id) {
-        case "number": lid = [id]; break;
-        case "string": lid = id.split(","); break;
-        case "object": lid = Array.clone(id.get()); break; // clone NodeID array
+        if (Object.prototype.toString.call(id) == "[object Object]") {
+            lid = Array.clone( id.get() );
+        } else {
+            alert("non-NodeID passed to AST.find()");
         }
         var node = this.root;
         if (lid[0] == 0) lid.shift();
@@ -163,6 +187,13 @@ function AST(fun, cat) {
             // otherwise go up to parent
             id.get().pop();
         }
+    }
+
+    // Return parent of current node
+    this.getParent = function(i) {
+        var parent_id = this.current.clone();
+        parent_id.get().pop();
+        return this.find(parent_id);
     }
 
     // Move current id to child number i
@@ -219,20 +250,27 @@ AST.parse_type_signature = function(str) {
     var ix = str.indexOf(":");
     
     // judgement type
-    var bits = str.substr(0, ix).split(" ");
+    var bits = str.substr(0, ix).trim().split(" ");
     obj.type = bits[0];
 
     // name (possibly with constructors)
     obj.name = bits.slice(1);
     
     // function args (possibly with type dependency)
+    var regex_dep = new RegExp(/\(\s*(.+?)\s*:\s*(.+?)\s*\)/);
     var bits = map(function(s){return s.trim()}, str.substr(ix+1).split("->"));
     for (var i=0 ; i<bits.length-1; i++) {
         var bit = bits[i];
-        obj.args.push(bit);
+        var m = regex_dep.exec(bit);
+        if (m == null) {
+            obj.args.push(bit);
+        } else {
+            // We have a type dependency
+            obj.deps.push({ "id": m[1], "type": m[2] });
+        }
     }
 
-    // return type
+    //return type
     obj.ret = bits[bits.length-1];
 
     return obj;

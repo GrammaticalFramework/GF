@@ -100,15 +100,11 @@ Editor.prototype.get_startcat=function() {
     return this.gm.startcat;
 }
 
-// TODO
-// Editor.prototype.initialize_from=function(opts) {
-//     var t=this;
-//     if (opts.startcat)
-//         t.options.initial_startcat=opts.startcat;
-//     t.change_grammar();
-//     if (opts.abstr)
-//         t.import_ast(opts.abstr);
-// }
+Editor.prototype.initialize_from=function(opts) {
+    var t=this;
+    if (opts.abstr)
+        t.import_ast(opts.abstr);
+}
 
 // Called after changing grammar or startcat
 Editor.prototype.start_fresh=function () {
@@ -125,6 +121,7 @@ Editor.prototype.start_fresh=function () {
 
 Editor.prototype.get_refinements=function(cat) {
     var t = this;
+    t.ui.refinements.innerHTML = "...";
     if (cat == undefined)
         cat = t.ast.getCat();
     var args = {
@@ -192,7 +189,6 @@ Editor.prototype.get_refinements=function(cat) {
 
 Editor.prototype.select_refinement=function(fun) {
     var t = this;
-    t.ui.refinements.innerHTML = "...";
     t.ast.removeChildren();
     t.ast.setFun(fun);
 
@@ -200,8 +196,15 @@ Editor.prototype.select_refinement=function(fun) {
     var def = t.grammar_constructors.funs[fun].def;
     var typeobj = AST.parse_type_signature(def);
 
+    // Add dependent type placeholders
+    if (typeobj.deps.length > 0) {
+        for (var i in typeobj.deps) {
+            t.ast.addDep(typeobj.deps[i].id, typeobj.deps[i].type);
+        }
+    }
+    
+    // Add function argument placeholders
     if (typeobj.args.length > 0) {
-        // Add placeholders
         for (var i in typeobj.args) {
             t.ast.add(null, typeobj.args[i]);
         }
@@ -212,6 +215,7 @@ Editor.prototype.select_refinement=function(fun) {
     t.update_linearisation();
 
     // Select next hole & get its refinements
+    t.ui.refinements.innerHTML = "...";
     t.ast.toNextHole();
     t.update_current_node();
 }
