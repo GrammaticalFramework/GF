@@ -82,3 +82,8 @@ span.brackets {
 div.brackets .token {
   padding: 0 0.5ex;
 }
+
+div.browse, table.browse td {
+    background: white;
+    padding: 2px;
+}
