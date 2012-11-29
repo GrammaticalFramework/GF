@@ -160,10 +160,14 @@ function encodeArgs(args) {
 function text(s) { return document.createTextNode(s); }
 
 function node(tag,as,ds) {
-    var n=document.createElement(tag);
-    for(var a in as) n.setAttribute(a,as[a]);
+    var n=attr(as,document.createElement(tag));
     if(ds) for(var i in ds) n.appendChild(ds[i]);
     return n;
+}
+
+function attr(as,n) {
+    for(var a in as) n.setAttribute(a,as[a]);
+    return n
 }
 
 function empty(tag,name,value) {
@@ -220,6 +224,8 @@ function hidden(name,value) {
 function tda(cs) { return node("td",{},cs); }
 
 function img(src) { return empty("img","src",src); }
+
+function title(t,n) { return attr({title:t},n) }
 
 /* --- Document modification ------------------------------------------------ */
 

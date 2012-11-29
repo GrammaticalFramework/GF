@@ -106,7 +106,8 @@ Translations.prototype.show_translations=function(translationResults) {
 			    self.options.abstract_action(t.tree)
 			}
 			var abs_hdr = options.abstract_action 
-		                      ? button("Abstract",abs_act)
+		                      ? title("Edit the syntax tree",
+				              button("Abstract",abs_act))
 			              : text("Abstract: ")
 			tbody.appendChild(
 			    tr([th(abs_hdr),
@@ -122,7 +123,8 @@ Translations.prototype.show_translations=function(translationResults) {
 			if(to=="All" || lin[i].to==to) {
 			    var langcode=langpart(lin[i].to,grammar.name)
 		          //var hdr=text(langcode+": ")
-			    var hdr=button(langcode,act(lin[i]))
+			    var hdr=title("Switch input language to "+langcode,
+					  button(langcode,act(lin[i])))
 			    //hdr.disabled=lin[i].to==current.from
 			    var btn=parsetree_button(t.tree,lin[i].to)
 			    tbody.appendChild(tr([th(hdr),

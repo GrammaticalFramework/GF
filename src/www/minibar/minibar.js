@@ -101,7 +101,7 @@ Minibar.prototype.show_grammarlist=function(dir,grammar_names,dir_count) {
 	    if(t.timeout) clearTimeout(t.timeout),t.timeout=null;
 	    if(t.grammar_menu.length>1 && !t.grammar_menu.parentElement) {
     		t.grammar_menu.onchange=pick;
-		insertFirst(t.menubar,button("i",bind(t.show_grammarinfo,t)))
+		insertFirst(t.menubar,title("Show grammar info",button("i",bind(t.show_grammarinfo,t))))
 		insertFirst(t.menubar,t.grammar_menu);
 		insertFirst(t.menubar,text("Grammar: "));
 	    }
