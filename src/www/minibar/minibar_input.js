@@ -33,7 +33,7 @@ function Input(server,translations,opts) { // Input object constructor
 	    appendChildren(menus,[text(" Startcat: "),startcat_menu])
 	appendChildren(menus,[text(" From: "),from_menu])
 	appendChildren(buttons,
-		       [button(options.delete_button_text,bind(delete_last,t),"H"),
+		       [title("Delete last word",button(options.delete_button_text,bind(delete_last,t),"H")),
 			button("Clear",bind(clear_all,t),"L")]);
 	if(options.random_button)
 	    buttons.appendChild(button("Random",bind(generate_random,t),"R"));

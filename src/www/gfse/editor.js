@@ -1908,12 +1908,6 @@ function table(rows) { return wrap("table",rows); }
 function td_right(cs) { return node("td",{"class":"right"},cs); }
 function td_center(cs) { return node("td",{"class":"center"},cs); }
 function jsurl(js) { return "javascript:"+js; }
-function title(t,n) { return attr({title:t},n) }
-
-function attr(as,n) {
-    for(var a in as) n.setAttribute(a,as[a]);
-    return n
-}
 
 /* -------------------------------------------------------------------------- */
 
