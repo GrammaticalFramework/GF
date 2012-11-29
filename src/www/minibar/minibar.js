@@ -142,17 +142,48 @@ Minibar.prototype.change_grammar=function(grammar_info) {
 }
 
 Minibar.prototype.show_grammarinfo=function() {
-    this.translations.main.innerHTML=""
+    var t=this
     var g=this.grammar;
+    function draw_cats(cats) {
+	function draw_cat(cat) {
+	    var i=cats[cat]
+	    return tr([td(text(i.def)),
+		       td(text(i.producers.join(", "))),
+		       td(text(i.consumers.join(", ")))])
+	}
+	var table=wrap_class("table","browse",g.categories.map(draw_cat))
+	var hdr=tr([th(text("Category")),
+		    th(text("Producers")),
+		    th(text("Consumers"))])
+	insertFirst(table,hdr)
+	return table
+    }
+    function draw_funs(funs) {
+	function draw_fun(fun) {
+	    var def=funs[fun].def.split(":")
+	    return tr([td(text(def[0])),td(text(":")),td(text(def[1]||""))])
+	}
+	return div_class("browse",wrap("table",g.functions.map(draw_fun)))
+    }
+    function draw_more(info) {
+	replaceChildren(cats,draw_cats(info.cats))
+	replaceChildren(funs,draw_funs(info.funs))
+	btn.disabled=true;
+    }
+
+    function more() { t.server.browse({},draw_more) }
+
+    var cats=wrap("div",text(g.categories.join(", ")))
+    var funs=wrap("div",text(g.functions.join(", ")))
+    var btn=button("More info",more)
+
+    clear(t.translations.main)
     appendChildren(this.translations.main,
 		   [wrap("h3",text(g.name)),
-		    node("dl",{},
-			 [dt(text("Start category")),
-			  dd(text(g.startcat || "")),
-			  dt(text("Categories")),
-			  dd(text(g.categories.join(", "))),
-			  dt(text("Functions")),
-			  dd(text(g.functions.join(", ")))])])
+		    btn,
+		    wrap("h4",text("Start category")), text(g.startcat || ""),
+		    wrap("h4",text("Categories")), cats,
+		    wrap("h4",text("Functions")), funs])
 }
 
 Minibar.prototype.append_extra_buttons=function(extra,options) {
