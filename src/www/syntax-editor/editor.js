@@ -52,7 +52,7 @@ function Editor(gm,opts) {
             format: "json"
         };
         var cont = function(data){
-            t.grammar_constructors = data;
+            t.process_grammar_constructors(data);
             t.start_fresh();
         };
         t.server.browse(args, cont);
@@ -90,6 +90,30 @@ function Editor(gm,opts) {
 
 }
 
+/* --- Pre-processed grammar information ------------------------------------ */
+
+Editor.prototype.process_grammar_constructors=function(data) {
+    var t = this;
+    t.grammar_constructors=data;
+    for (var fun in t.grammar_constructors.funs) {
+        var def = t.grammar_constructors.funs[fun].def;
+        var typeobj = AST.parse_type_signature(def);
+        t.grammar_constructors.funs[fun] = typeobj;
+    }
+}
+
+// Look up information for a category
+Editor.prototype.lookup_cat = function(cat) {
+    var t = this;
+    return t.grammar_constructors.cats[cat];
+}
+
+// Look up information for a function
+Editor.prototype.lookup_fun = function(fun) {
+    var t = this;
+    return t.grammar_constructors.funs[fun];
+}
+
 /* --- API for getting and setting state ------------------------------------ */
 
 Editor.prototype.get_ast=function() {
@@ -101,9 +125,8 @@ Editor.prototype.get_startcat=function() {
 }
 
 Editor.prototype.initialize_from=function(opts) {
-    var t=this;
     if (opts.abstr)
-        t.import_ast(opts.abstr);
+        this.import_ast(opts.abstr);
 }
 
 // Called after changing grammar or startcat
@@ -131,7 +154,9 @@ Editor.prototype.get_refinements=function(cat) {
     };
     var cont = function(data){
         clear(t.ui.refinements);
-        for (pi in data.producers) {
+        for (var pi in data.producers) {
+            // hide refinement if identical to current fun?
+            
             var fun = data.producers[pi];
             var opt = span_class("refinement", text(fun));
             opt.onclick = bind(function(){
@@ -140,8 +165,7 @@ Editor.prototype.get_refinements=function(cat) {
 
             // If refinement would be destructive, disable it
             var blank = t.ast.is_writable();
-            var def = t.grammar_constructors.funs[fun].def;
-            var typeobj = AST.parse_type_signature(def);
+            var typeobj = t.lookup_fun(fun);
             var inplace = t.ast.fits_in_place(typeobj);
             if (!blank && !inplace) {
                 opt.classList.add("disabled");
@@ -157,48 +181,6 @@ Editor.prototype.get_refinements=function(cat) {
     t.server.browse(args, cont, err);
 }
 
-// Editor.prototype.select_refinement=function(fun) {
-//     var t = this;
-//     t.ui.refinements.innerHTML = "...";
-//     t.ast.removeChildren();
-//     t.ast.setFun(fun);
-//     var args = {
-//         id: fun,
-//         format: "json"
-//     };
-//     var err = function(data){
-//         alert("Error");
-//     };
-//     t.server.browse(args, bind(t.complete_refinement,this), err);
-// }
-
-// Editor.prototype.complete_refinement=function(data) {
-//     if (!data) return;
-
-//     with (this) {
-//         // Parse out function arguments
-//         var def = data.def;
-//         def = def.substr(def.lastIndexOf(":")+1);
-//         var fun_args = map(function(s){return s.trim()}, def.split("->"))
-//         fun_args = fun_args.slice(0,-1);
-
-//         if (fun_args.length > 0) {
-//             // Add placeholders
-//             for (ci in fun_args) {
-//                 ast.add(null, fun_args[ci]);
-//             }
-//         }
-        
-//         // Update ui
-//         redraw_tree();
-//         update_linearisation();
-
-//         // Select next hole & get its refinements
-//         ast.toNextHole();
-//         update_current_node();
-//     }
-// }
-
 // Select refinement now by default replaces "in-place"
 // Case 1: current node is blank/no kids
 // Case 2: kids have all same types, perform an in-place replacement
@@ -210,12 +192,11 @@ Editor.prototype.select_refinement=function(fun) {
     var blank = t.ast.is_writable();
 
     // Check if we can replace in-place (case 2)
-    var def = t.grammar_constructors.funs[fun].def;
-    var typeobj = AST.parse_type_signature(def);
+    var typeobj = t.lookup_fun(fun);
     var inplace = !blank && t.ast.fits_in_place(typeobj);
 
     if (!blank && !inplace) {
-        alert("use clear first if you want to replace the subtree");
+        alert("Use 'Clear' first if you want to replace the subtree.");
         return;
     }
 
@@ -223,10 +204,6 @@ Editor.prototype.select_refinement=function(fun) {
 
     if (blank) {
         t.ast.removeChildren();
-
-        // Get new function arguments
-        var def = t.grammar_constructors.funs[fun].def;
-        var typeobj = AST.parse_type_signature(def);
 
         // Add dependent type placeholders
         if (typeobj.deps.length > 0) {
@@ -255,7 +232,7 @@ Editor.prototype.select_refinement=function(fun) {
 Editor.prototype.update_current_node=function(newID) {
     with(this) {
         if (newID)
-            ast.current = new NodeID(newID);
+            ast.setCurrentID(newID);
         redraw_tree();
         get_refinements();
     }
@@ -269,14 +246,14 @@ Editor.prototype.redraw_tree=function() {
         var label =
             ((node.fun) ? node.fun : "?") + " : " +
             ((node.cat) ? node.cat : "?");
-        var current = id.equals(t.ast.current);
+        var current = id.equals(t.ast.getCurrentID());
         var element = elem("a", {class:(current?"current":"")}, [text(label)]);
         element.onclick = function() {
             t.update_current_node(id);
         }
         container2.appendChild( element );
 
-        for (i in node.children) {
+        for (var i in node.children) {
             var newid = new NodeID(id);
             newid.add(parseInt(i));
             visit(container2, newid, node.children[i]);
@@ -311,7 +288,7 @@ Editor.prototype.update_linearisation=function(){
     t.server.linearize(args, function(data){
         clear(t.ui.lin);
 	var tbody=empty("tbody");
-        for (i in data) {
+        for (var i in data) {
             var lang = data[i].to;
             if (t.gm.languages.length < 1 || elem(lang, t.gm.languages)) {
                 tbody.appendChild(row(lang, data[i].text))
@@ -327,7 +304,7 @@ Editor.prototype.clear_node = function() {
     t.ast.removeChildren();
     t.ast.setFun(null);
     t.redraw_tree();
-//    t.get_refinements();
+    t.get_refinements();
 }
 
 // Generate random subtree from current node
@@ -364,22 +341,12 @@ Editor.prototype.import_ast = function(abstr) {
         /// TODO: traverse only subtree, not everything!
         t.ast.traverse(function(node){
             if (!node.fun) return;
-            var info = t.lookup_fun(node.fun);
-            node.cat = info.cat;
+            var typeobj = t.lookup_fun(node.fun);
+            node.cat = typeobj.ret;
         });
         t.redraw_tree();
         t.update_linearisation();
     };
     server.pgf_call("abstrjson", args, cont);
-}
-
-// Look up information for a function
-Editor.prototype.lookup_fun = function(fun) {
-    var t = this;
-    var def = t.grammar_constructors.funs[fun].def;
-    var typeobj = AST.parse_type_signature(def);
-    return {
-        cat: typeobj.ret
-    }
 }
 
