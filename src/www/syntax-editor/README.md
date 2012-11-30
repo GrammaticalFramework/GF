@@ -38,11 +38,10 @@ See `editor.html` and `editor_online.js`.
 - Wrap a subtree
 - Compatibility with grammars with dependent category types
 - Clicking on tokens to select tree node
-- Use local caching
 - Clipboard of trees
 - Usage of printnames
 - Enter string/float/int literals
 - more prominence to Disamb-linearizations
-- ambiguity: (optionally) parse all the resulting linearizations/variants and point out those which are ambiguous
-- add undo/redo (or back/forward) navigation
-- structure fridge magnets some more (eg newline before the magnet whose first letter is different)
+- show all resulting linearizations/variants
+- undo/redo (or back/forward) navigation
+- structure fridge magnets more (eg newline before the magnet whose first letter is different)

@@ -40,9 +40,9 @@ function NodeID(x) {
 /* --- Abstract Syntax Tree (with state)------------------------------------- */
 
 function ASTNode(data) {
-    for(var d in data) this[d]=data[d];
+    for (var d in data) this[d]=data[d];
     this.children = [];
-    for (c in data.children) {
+    for (var c in data.children) {
         this.children.push( new ASTNode(data.children[c]) );
     }
     this.hasChildren = function(){
@@ -53,7 +53,7 @@ function ASTNode(data) {
     this.traverse = function(f) {
         function visit(node) {
             f(node);
-            for (i in node.children) {
+            for (var i in node.children) {
                 visit(node.children[i]);
             }
         }
@@ -76,41 +76,49 @@ function AST(fun, cat) {
 
     this.root = newNode(fun, cat);
     
-    this.current = new NodeID(); // current id in tree
+    this.currentID = new NodeID(); // current id in tree
+    this.currentNode = this.root; // current node in tree
 
-    this.getCurrent = function() {
-        return this.find(this.current);
+    this.getCurrentNode = function() {
+        return this.currentNode;
     }
+    this.getCurrentID = function() {
+        return this.currentID;
+    }
+    this.setCurrentID = function(id) {
+        this.currentID = id; // new new NodeID(id);
+        this.currentNode = this.find(this.currentID);
+    }
+
     this.getFun = function() {
-        return this.find(this.current).fun;
+        return this.currentNode.fun;
     }
     this.setFun = function(f) {
-        this.find(this.current).fun = f;
+        this.currentNode.fun = f;
     }
     this.getCat = function() {
-        return this.find(this.current).cat;
+        return this.currentNode.cat;
     }
     this.setCat = function(c) {
-        this.find(this.current).cat = c;
+        this.currentNode.cat = c;
     }
 
     // Add a single type dependency at current node
     this.addDep = function(k, type) {
         // Add unassigned type variable to current
-        var cur = this.getCurrent();
-        cur.deps[k] = null;
+        this.currentNode.deps[k] = null;
 
         // Add actual type dep node
         var node = newNode(k, type);
         node.depid = k; // links to dep in parent
-        this._add(this.current, node);
+        this._add(this.currentID, node);
         return node;
     }
 
     // Add a single fun at current node
     this.add = function(fun, cat) {
         var node = newNode(fun,cat);
-        this._add(this.current, node);
+        this._add(this.currentID, node);
         return node;
     }
 
@@ -122,30 +130,30 @@ function AST(fun, cat) {
 
     // Determine if current node is writable (empty/no children)
     this.is_writable=function() {
-        var current = this.getCurrent();
-        var blank = current.fun == null || current.children.length == 0;
+        var cn = this.currentNode;
+        var blank = cn.fun == null || cn.children.length == 0;
         return blank;
     }
 
     // Determine if a fun would fit in a current hole
     this.fits_in_place=function(typeobj) {
-        var current = this.getCurrent();
+        var cn = this.currentNode;
 
         var inplace = false;
-        if (typeobj.args.length == current.children.length) {
+        if (typeobj.args.length == cn.children.length) {
             var matches = 0;
             for (var i in typeobj.args) {
-                if (typeobj.args[i] == current.children[i].cat)
+                if (typeobj.args[i] == cn.children[i].cat)
                     matches++;
             }
-            inplace = matches == current.children.length;
+            inplace = matches == cn.children.length;
         }
         return inplace;
     }
 
     // Set entire subtree at current node
     this.setSubtree = function(node) {
-        this._setSubtree(this.current, node);
+        this._setSubtree(this.currentID, node);
     }
     
     // set tree at given id
@@ -185,24 +193,24 @@ function AST(fun, cat) {
     
     // Clear children of current node
     this.removeChildren = function() {
-        this.find(this.current).children = [];
+        this.currentNode.children = [];
     }
 
     // Move current ID to next hole
     this.toNextHole = function() {
-        var id = new NodeID(this.current);
+        var id = new NodeID(this.currentID);
         
         // loop until we're at top
         while (id.get().length > 0) {
             var node = this.find(id);
 
             // first check children
-            for (i in node.children) {
+            for (var i in node.children) {
                 var child = node.children[i];
                 if (!child.fun) {
                     var newid = new NodeID(id);
                     newid.add(i);
-                    this.current = newid;
+                    this.setCurrentID(newid);
                     return;
                 }
             }
@@ -213,15 +221,18 @@ function AST(fun, cat) {
     }
 
     // Return parent of current node
-    this.getParent = function(i) {
-        var parent_id = this.current.clone();
+    this.getParent = function() {
+        var parent_id = this.currentID.clone();
         parent_id.get().pop();
         return this.find(parent_id);
     }
 
     // Move current id to child number i
     this.toChild = function(i) {
-        this.current.add(i);
+        if (i < this.currentNode.children.length) {
+            this.currentID.add(i);
+            this.currentNode = this.currentNode.children[i];
+        }
     }
 
     // generic HOF for traversing tree
@@ -231,7 +242,7 @@ function AST(fun, cat) {
     this.traverse = function(f) {
         function visit(id, node) {
             f(node);
-            for (i in node.children) {
+            for (var i in node.children) {
                 var newid = new NodeID(id);
                 newid.add(parseInt(i));
                 visit(newid, node.children[i]);
@@ -248,7 +259,7 @@ function AST(fun, cat) {
             if (!node.hasChildren())
 //            if (node.children.length == 0)
                 return;
-            for (i in node.children) {
+            for (var i in node.children) {
                 s += " (";
                 visit(node.children[i]);
                 s += ")";
