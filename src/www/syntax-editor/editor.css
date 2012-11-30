@@ -73,6 +73,10 @@ body.syntax-editor {
   font: 0.9em sans-serif;
   background: white;
   }
+.refinement.disabled
+{ 
+  opacity: 0.5;
+  }
 
 #debug
 {

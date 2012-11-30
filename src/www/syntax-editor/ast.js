@@ -120,6 +120,29 @@ function AST(fun, cat) {
         x.children.push(node);
     }
 
+    // Determine if current node is writable (empty/no children)
+    this.is_writable=function() {
+        var current = this.getCurrent();
+        var blank = current.fun == null || current.children.length == 0;
+        return blank;
+    }
+
+    // Determine if a fun would fit in a current hole
+    this.fits_in_place=function(typeobj) {
+        var current = this.getCurrent();
+
+        var inplace = false;
+        if (typeobj.args.length == current.children.length) {
+            var matches = 0;
+            for (var i in typeobj.args) {
+                if (typeobj.args[i] == current.children[i].cat)
+                    matches++;
+            }
+            inplace = matches == current.children.length;
+        }
+        return inplace;
+    }
+
     // Set entire subtree at current node
     this.setSubtree = function(node) {
         this._setSubtree(this.current, node);
@@ -140,9 +163,9 @@ function AST(fun, cat) {
             }
             node.children[lid.shift()] = new ASTNode(subtree);
         }
-
     }
 
+    // Find a node in the tree from its ID
     this.find = function(id) {
         var lid = undefined
         if (Object.prototype.toString.call(id) == "[object Object]") {
