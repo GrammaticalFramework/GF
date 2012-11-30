@@ -28,8 +28,11 @@ function EditorMenu(editor,opts) {
             multiple: "multiple",
             class: "hidden"
         }),
+        // wrap_button: button("Wrap", function(){
+        //     t.editor.wrap();
+        // }),
         clear_button: button("Clear", function(){
-            t.editor.delete_refinement();
+            t.editor.clear_node();
         }),
         random_button: button("Random", function(){
             t.editor.generate_random();

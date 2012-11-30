@@ -29,12 +29,15 @@ An improved version of the [old syntax editor][1].
 
 See `editor.html` and `editor_online.js`.
 
+## Bugs
+
+- Change startcat doesn't work when given an initial startcat 
+
 ## TODO
 
 - Wrap a subtree
 - Compatibility with grammars with dependent category types
 - Clicking on tokens to select tree node
-- try to retain subtree when replacing node
 - Use local caching
 - Clipboard of trees
 - Usage of printnames

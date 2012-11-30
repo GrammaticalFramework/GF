@@ -119,6 +119,7 @@ Editor.prototype.start_fresh=function () {
 
 /* --- Functions for handling tree manipulation ----------------------------- */
 
+// Show refinements for given cat (usually that of current node)
 Editor.prototype.get_refinements=function(cat) {
     var t = this;
     t.ui.refinements.innerHTML = "...";
@@ -131,10 +132,21 @@ Editor.prototype.get_refinements=function(cat) {
     var cont = function(data){
         clear(t.ui.refinements);
         for (pi in data.producers) {
-            var opt = span_class("refinement", text(data.producers[pi]));
+            var fun = data.producers[pi];
+            var opt = span_class("refinement", text(fun));
             opt.onclick = bind(function(){
                 t.select_refinement(this.innerHTML)
             }, opt);
+
+            // If refinement would be destructive, disable it
+            var blank = t.ast.is_writable();
+            var def = t.grammar_constructors.funs[fun].def;
+            var typeobj = AST.parse_type_signature(def);
+            var inplace = t.ast.fits_in_place(typeobj);
+            if (!blank && !inplace) {
+                opt.classList.add("disabled");
+            }
+
             t.ui.refinements.appendChild(opt);
         }
     };
@@ -187,35 +199,55 @@ Editor.prototype.get_refinements=function(cat) {
 //     }
 // }
 
+// Select refinement now by default replaces "in-place"
+// Case 1: current node is blank/no kids
+// Case 2: kids have all same types, perform an in-place replacement
+// Case 3: kids have diff types/number, prevent replacement (must clear first)
 Editor.prototype.select_refinement=function(fun) {
     var t = this;
-    t.ast.removeChildren();
-    t.ast.setFun(fun);
+    
+    // Check if current node is blank or childless (case 1)
+    var blank = t.ast.is_writable();
 
-    // Parse out function arguments
+    // Check if we can replace in-place (case 2)
     var def = t.grammar_constructors.funs[fun].def;
     var typeobj = AST.parse_type_signature(def);
+    var inplace = !blank && t.ast.fits_in_place(typeobj);
 
-    // Add dependent type placeholders
-    if (typeobj.deps.length > 0) {
-        for (var i in typeobj.deps) {
-            t.ast.addDep(typeobj.deps[i].id, typeobj.deps[i].type);
+    if (!blank && !inplace) {
+        alert("use clear first if you want to replace the subtree");
+        return;
+    }
+
+    t.ast.setFun(fun);
+
+    if (blank) {
+        t.ast.removeChildren();
+
+        // Get new function arguments
+        var def = t.grammar_constructors.funs[fun].def;
+        var typeobj = AST.parse_type_signature(def);
+
+        // Add dependent type placeholders
+        if (typeobj.deps.length > 0) {
+            alert("the syntax editor current doesn't support dependent types");
+            // for (var i in typeobj.deps) {
+            //     t.ast.addDep(typeobj.deps[i].id, typeobj.deps[i].type);
+            // }
+        }
+        // Add function argument placeholders
+        if (typeobj.args.length > 0) {
+            for (var i in typeobj.args) {
+                t.ast.add(null, typeobj.args[i]);
+            }
         }
     }
-    
-    // Add function argument placeholders
-    if (typeobj.args.length > 0) {
-        for (var i in typeobj.args) {
-            t.ast.add(null, typeobj.args[i]);
-        }
-    }
-    
+
     // Update ui
     t.redraw_tree();
     t.update_linearisation();
 
     // Select next hole & get its refinements
-    t.ui.refinements.innerHTML = "...";
     t.ast.toNextHole();
     t.update_current_node();
 }
@@ -289,8 +321,8 @@ Editor.prototype.update_linearisation=function(){
     });
 }
 
-// 
-Editor.prototype.delete_refinement = function() {
+// Clear current node and all its children
+Editor.prototype.clear_node = function() {
     var t = this;
     t.ast.removeChildren();
     t.ast.setFun(null);
@@ -342,14 +374,12 @@ Editor.prototype.import_ast = function(abstr) {
 }
 
 // Look up information for a function
-// This will absolutely fail on dependant types
 Editor.prototype.lookup_fun = function(fun) {
     var t = this;
     var def = t.grammar_constructors.funs[fun].def;
-    var ix = def.lastIndexOf(" ");
-    var cat = def.substr(ix).trim();
+    var typeobj = AST.parse_type_signature(def);
     return {
-        cat: cat
+        cat: typeobj.ret
     }
 }
 
