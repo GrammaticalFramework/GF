@@ -64,6 +64,9 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
               predVv v)))) ** {c2 = v.c2} ;
 
     UseComp comp = insertObj comp.s (predV zijn_V) ; -- agr not used
+
+    UseCopula = predV zijn_V ;
+
     CompCN cn = {s = \\a => cn.s ! Strong ! NF a.n Nom} ;
     CompAP ap = {s = \\_ => ap.s ! APred} ;
     CompNP np = {s = \\_ => np.s ! NPNom} ;
@@ -76,9 +79,12 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
 
     PassV2 v = insertInf (v.s ! VPerf) (predV worden_V) ;
 
+    VPSlashPrep vp prep = vp ** {c2 = prep.s} ;
+
 ---- workaround for a subtyping bug
   oper
     v2v : VVerb -> VVerb = \v -> 
       {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = v.vtype} ;
     predVv : VVerb -> ResDut.VP = \v -> predV (v2v v) ;
+
 }
