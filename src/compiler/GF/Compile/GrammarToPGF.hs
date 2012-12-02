@@ -215,7 +215,8 @@ genCncFuns gr am cm seqs0 cdefs fid_cnt cnccats =
     mkCncFuns []                                                        fid_cnt funs_cnt seqs funs lindefs crc prods =
       (fid_cnt,funs_cnt,seqs,funs,prods)
     mkCncFuns (((m,id),CncFun _ _ _ (Just (PMCFG prods0 funs0))):cdefs) fid_cnt funs_cnt seqs funs lindefs crc prods =
-      let Ok ty_C        = fmap GM.typeForm (Look.lookupFunType gr am id)
+      let ---Ok ty_C        = fmap GM.typeForm (Look.lookupFunType gr am id)
+          ty_C           = err error (\x -> x) $ fmap GM.typeForm (Look.lookupFunType gr am id)
           !funs_cnt'     = let (s_funid, e_funid) = bounds funs0
                            in funs_cnt+(e_funid-s_funid+1)
           !(fid_cnt',crc',prods') 
