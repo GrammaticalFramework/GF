@@ -35,6 +35,10 @@ function NodeID(x) {
         return new NodeID( this );
     }
 
+    // Return NodeID as string
+    this.toString = function() {
+        return this.id.toString();
+    }
 }
 
 /* --- Abstract Syntax Tree (with state)------------------------------------- */
@@ -42,7 +46,7 @@ function NodeID(x) {
 function ASTNode(data) {
     for (var d in data) this[d]=data[d];
     this.children = [];
-    for (var c in data.children) {
+    if (data) for (var c in data.children) {
         this.children.push( new ASTNode(data.children[c]) );
     }
     this.hasChildren = function(){
@@ -103,6 +107,10 @@ function AST(fun, cat) {
         this.currentNode.cat = c;
     }
 
+    this.hasParent = function() {
+        return this.currentID.get().length > 1;
+    }
+
     // Add a single type dependency at current node
     this.addDep = function(k, type) {
         // Add unassigned type variable to current
@@ -115,7 +123,7 @@ function AST(fun, cat) {
         return node;
     }
 
-    // Add a single fun at current node
+    // Add a node as child of current node
     this.add = function(fun, cat) {
         var node = newNode(fun,cat);
         this._add(this.currentID, node);
@@ -126,6 +134,19 @@ function AST(fun, cat) {
     this._add = function(id, node) {
         var x = this.find(id);
         x.children.push(node);
+    }
+
+    // Wrap the current node inside another node
+    this.wrap = function(typeobj, childid) {
+        var subtree = new ASTNode(this.currentNode);
+        this.currentNode.fun = typeobj.name.join(" ");
+        this.currentNode.cat = typeobj.ret;
+        this.currentNode.children = [];
+        for (var i in typeobj.args) {
+            this.add(null, typeobj.args[i]);
+        }
+        this.currentNode.children[i] = subtree;
+        return subtree;
     }
 
     // Determine if current node is writable (empty/no children)

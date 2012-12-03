@@ -142,6 +142,29 @@ Editor.prototype.start_fresh=function () {
 
 /* --- Functions for handling tree manipulation ----------------------------- */
 
+
+Editor.prototype.add_refinement=function(t,fun,callback,disable_destructive) {
+    // var t = this;
+    // hide refinement if identical to current fun?
+
+    var opt = span_class("refinement", text(fun));
+    opt.onclick = bind(function(){
+        callback(this.innerHTML)
+    }, opt);
+
+    // If refinement would be destructive, disable it
+    if (disable_destructive) {
+        var blank = t.ast.is_writable();
+        var typeobj = t.lookup_fun(fun);
+        var inplace = t.ast.fits_in_place(typeobj);
+        if (!blank && !inplace) {
+            opt.classList.add("disabled");
+        }
+    }
+
+    t.ui.refinements.appendChild(opt);
+}
+
 // Show refinements for given cat (usually that of current node)
 Editor.prototype.get_refinements=function(cat) {
     var t = this;
@@ -155,23 +178,8 @@ Editor.prototype.get_refinements=function(cat) {
     var cont = function(data){
         clear(t.ui.refinements);
         for (var pi in data.producers) {
-            // hide refinement if identical to current fun?
-            
             var fun = data.producers[pi];
-            var opt = span_class("refinement", text(fun));
-            opt.onclick = bind(function(){
-                t.select_refinement(this.innerHTML)
-            }, opt);
-
-            // If refinement would be destructive, disable it
-            var blank = t.ast.is_writable();
-            var typeobj = t.lookup_fun(fun);
-            var inplace = t.ast.fits_in_place(typeobj);
-            if (!blank && !inplace) {
-                opt.classList.add("disabled");
-            }
-
-            t.ui.refinements.appendChild(opt);
+            t.add_refinement(t, fun, bind(t.select_refinement,t), true);
         }
     };
     var err = function(data){
@@ -238,6 +246,84 @@ Editor.prototype.update_current_node=function(newID) {
     }
 }
 
+// Clear current node and all its children
+Editor.prototype.clear_node = function() {
+    var t = this;
+    t.ast.removeChildren();
+    t.ast.setFun(null);
+    t.redraw_tree();
+    t.get_refinements();
+}
+
+// Show wrap candidates
+Editor.prototype.wrap_candidates = function() {
+    var t = this;
+
+    // we need to end with this
+    var cat = t.ast.getCat();
+
+    // if no parent, then cat can be anything as long
+    // as the current tree fits somewhere
+    var refinements = [];
+    for (var i in t.grammar_constructors.funs) {
+        var obj = t.grammar_constructors.funs[i];
+        if (elem(cat, obj.args)) {
+            if (!t.ast.hasParent() || obj.ret==cat) {
+                refinements.push(obj);
+            }
+        }
+    }
+
+    if (refinements.length == 0) {
+        alert("No functions exist which can wrap the selected node.");
+        return;
+    }
+
+    t.ui.refinements.innerHTML = "Wrap with: ";
+    for (var i in refinements) {
+        var fun = refinements[i].name;
+        t.add_refinement(t, fun, bind(t.wrap,t), false);
+    }
+}
+
+// Wrap the current node inside another function
+Editor.prototype.wrap = function(fun,childid) {
+    var t = this;
+
+    var typeobj = t.grammar_constructors.funs[fun];
+
+    // do actual replacement
+    t.ast.wrap(typeobj, childid);
+
+    // refresh stuff
+    t.redraw_tree();
+    t.update_linearisation();
+    t.ast.toNextHole();
+    t.update_current_node();
+}
+
+// Generate random subtree from current node
+Editor.prototype.generate_random = function() {
+    var t = this;
+    t.ast.removeChildren();
+    var args = {
+        cat: t.ast.getCat(),
+        limit: 1
+    };
+    if (!args.cat) {
+        alert("Missing category at current node");
+        return;
+    }
+    var cont = function(data){
+        var tree = data[0].tree;
+        t.import_ast(tree);
+    };
+    var err = function(data){
+        alert("Error");
+    };
+    server.get_random(args, cont, err);
+}
+
 Editor.prototype.redraw_tree=function() {
     var t = this;
     var elem = node; // function from support.js
@@ -296,37 +382,6 @@ Editor.prototype.update_linearisation=function(){
         }
         t.ui.lin.appendChild(wrap("table",tbody));
     });
-}
-
-// Clear current node and all its children
-Editor.prototype.clear_node = function() {
-    var t = this;
-    t.ast.removeChildren();
-    t.ast.setFun(null);
-    t.redraw_tree();
-    t.get_refinements();
-}
-
-// Generate random subtree from current node
-Editor.prototype.generate_random = function() {
-    var t = this;
-    t.ast.removeChildren();
-    var args = {
-        cat: t.ast.getCat(),
-        limit: 1
-    };
-    if (!args.cat) {
-        alert("Missing category at current node");
-        return;
-    }
-    var cont = function(data){
-        var tree = data[0].tree;
-        t.import_ast(tree);
-    };
-    var err = function(data){
-        alert("Error");
-    };
-    server.get_random(args, cont, err);
 }
 
 // Import AST from string representation, setting at current node
