@@ -102,9 +102,12 @@ pgf_parse_result(PgfParseState* state, GuPool* pool);
  * succesful, or ambiguously successful.
  */
 
-PgfExpr
-pgf_parse_best_result(PgfParseState* state, GuPool* pool);
-
+// Use this procedure only on your own risk.
+// It is dirty and it will probably be removed or replaced
+// with something else. Currently it is here only for experimental
+// purposes.
+void
+pgf_parse_print_chunks(PgfParseState* state);
 
 size_t
 pgf_item_lin_idx(PgfItem* item);

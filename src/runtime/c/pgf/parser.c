@@ -85,9 +85,7 @@ struct PgfParseState {
     PgfItem* meta_item;
 	PgfContsMap* conts_map;
 	PgfGenCatMap* generated_cats;
-#ifdef PGF_PARSER_DEBUG
     unsigned short offset;
-#endif
 
 	prob_t viterbi_prob;
 
@@ -1630,9 +1628,7 @@ pgf_new_parse_state(PgfParsing* ps,
     state->meta_item = NULL;
 	state->generated_cats = gu_map_type_new(PgfGenCatMap, pool);
 	state->conts_map = gu_map_type_new(PgfContsMap, pool);
-#ifdef PGF_PARSER_DEBUG
     state->offset = next ? next->offset+1 : 0;
-#endif
 	state->viterbi_prob = 0;
     state->ps = ps;
     state->ts = ts;
@@ -1884,6 +1880,102 @@ pgf_parse_result(PgfParseState* state, GuPool* pool)
 	return en;
 }
 
+void
+pgf_parse_print_chunks(PgfParseState* state)
+{
+	if (state->ps->completed == NULL) {
+		while (state->ps->completed == NULL) {
+			if (!pgf_parsing_proceed(state))
+				break;
+		}
+		if (state->ps->completed == NULL)
+			return;
+	}
+		
+	GuPool* tmp_pool = gu_new_pool();
+    GuOut* out = gu_file_out(stdout, tmp_pool);
+    GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
+    GuExn* err = gu_exn(NULL, type, tmp_pool);
+
+	PgfCCat* completed = state->ps->completed;
+	if (gu_seq_length(completed->prods) == 0)
+		return;
+
+	size_t n_args  = 0;
+	size_t arg_idx = 0;
+	PgfCCat* ccat = NULL;
+	PgfProductionMeta* pmeta = NULL;
+
+	PgfProduction prod = gu_seq_get(completed->prods, PgfProduction, 0);
+	GuVariantInfo pi = gu_variant_open(prod);
+	switch (pi.tag) {
+	case PGF_PRODUCTION_APPLY:
+		n_args  = 1;
+		arg_idx = 0;
+		ccat = completed;
+		break;
+	case PGF_PRODUCTION_META:
+		pmeta = pi.data;
+		n_args  = gu_seq_length(pmeta->args);
+		arg_idx = 0;
+		ccat    = gu_seq_index(pmeta->args, PgfPArg, arg_idx)->ccat;
+		break;
+	}
+
+	PgfParseState* next = NULL;
+	while (state != NULL) {
+		PgfParseState* tmp = state->next;
+		state->next = next;
+		next  = state;
+		state = tmp;
+	}
+
+	int offset = 0;
+
+	state = next;
+	next  = NULL;
+	while (state != NULL) {
+		if (state->ts != NULL)
+		{
+			if (ccat != NULL &&
+			    offset == ((ccat->conts->state != NULL) ? ccat->conts->state->offset : 0)) {
+				PgfCCat *ccat2 = ccat;
+				while (ccat2->conts != NULL) {
+					ccat2 = ccat2->conts->ccat;
+				}
+
+				gu_putc('(', wtr, err);
+				gu_string_write(ccat2->cnccat->abscat->name, wtr, err);
+				gu_putc(' ', wtr, err);
+			}
+
+			gu_string_write(state->ts->tok, wtr, err);
+			offset++;
+			
+			if (ccat != NULL &&
+			    ccat ==
+				   gu_map_get(state->generated_cats, ccat->conts, PgfCCat*)) {
+				gu_putc(')', wtr, err);
+				
+				arg_idx++;
+				ccat =
+					(arg_idx >= n_args) ?
+						NULL :
+						gu_seq_index(pmeta->args, PgfPArg, arg_idx)->ccat;
+			}
+			
+			gu_putc(' ', wtr, err);
+		}
+
+		PgfParseState* tmp = state->next;
+		state->next = next;
+		next  = state;
+		state = tmp;
+	}
+	gu_putc('\n', wtr, err);
+
+	gu_pool_free(tmp_pool);
+}
 
 // TODO: s/CId/Cat, add the cid to Cat, make Cat the key to CncCat
 PgfParseState*
