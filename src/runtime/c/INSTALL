@@ -1,0 +1,24 @@
+The compilation steps are:
+
+$ autoreconf -i
+$ ./configure
+$ make
+$ make install
+
+If you want to use the statistical ranking in the parser then you
+have to compile your grammar with the option '-probs=grammar.probs',
+where grammar.probs must contain a tab separated file with
+the probabilities for all functions in the abstract syntax.
+In order to enable the named entity recongizer for the ParseEngAbs
+grammar you also have to add the option '-literal=Symb' while compiling.
+
+Note For Mac OSX users
+----------------------
+
+You have to comment out the following line in config.h:
+
+   #define HAVE_STATEMENT_EXPRESSIONS 1
+
+This has to be done AFTER you have called './configure', but before you call 'make'!
+
+(Tested on Mac OSX 10.8 Mountain Lion with XCode installed)
