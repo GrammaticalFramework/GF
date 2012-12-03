@@ -28,9 +28,9 @@ function EditorMenu(editor,opts) {
             multiple: "multiple",
             class: "hidden"
         }),
-        // wrap_button: button("Wrap", function(){
-        //     t.editor.wrap();
-        // }),
+        wrap_button: button("Wrap", function(){
+            t.editor.wrap_candidates();
+        }),
         clear_button: button("Clear", function(){
             t.editor.clear_node();
         }),
@@ -72,6 +72,7 @@ function EditorMenu(editor,opts) {
         }
     }
     appendChildren(t.container, [t.ui.clear_button]);
+    appendChildren(t.container, [t.ui.wrap_button]);
     if (t.options.show.random_button) {
         appendChildren(t.container, [t.ui.random_button]);
     }
