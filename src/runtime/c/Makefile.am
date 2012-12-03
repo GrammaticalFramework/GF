@@ -116,7 +116,8 @@ libpgf_la_SOURCES = \
 bin_PROGRAMS = \
 	utils/pgf2yaml \
 	utils/pgf-print \
-	utils/pgf-translate
+	utils/pgf-translate \
+	utils/pgf-chunk
 
 utils_pgf2yaml_SOURCES = utils/pgf2yaml.c
 utils_pgf2yaml_LDADD = libpgf.la libgu.la
@@ -126,6 +127,9 @@ utils_pgf_print_LDADD = libpgf.la libgu.la
 
 utils_pgf_translate_SOURCES = utils/pgf-translate.c
 utils_pgf_translate_LDADD = libpgf.la libgu.la
+
+utils_pgf_chunk_SOURCES = utils/pgf-chunk.c
+utils_pgf_chunk_LDADD = libpgf.la libgu.la
 
 AUTOMAKE_OPTIONS = foreign subdir-objects dist-bzip2
 ACLOCAL_AMFLAGS = -I m4
