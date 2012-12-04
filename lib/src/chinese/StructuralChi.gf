@@ -23,6 +23,7 @@ lin
     in_Prep = mkPrep "里" [];
     possess_Prep = mkPrep "的" [];
     with_Prep = mkPrep "一起" "和";
+----    with_Prep = mkPrep [] "和"; -- an alternative for some uses
  
 and_Conj = {s = table {
                     CPhr CNPhrase => mkConjForm "和" ;
