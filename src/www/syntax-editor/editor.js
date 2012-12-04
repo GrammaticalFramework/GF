@@ -142,18 +142,23 @@ Editor.prototype.start_fresh=function () {
 
 /* --- Functions for handling tree manipulation ----------------------------- */
 
-
-Editor.prototype.add_refinement=function(t,fun,callback,disable_destructive) {
+// Add refinement to UI, with a given callback function
+// The opts param is used both in this function as:
+//     opts.disable_destructive
+// as well as being passed to the callback function
+Editor.prototype.add_refinement=function(t,fun,callback,opts) {
     // var t = this;
+    if (!opts) opts = {};
+
     // hide refinement if identical to current fun?
 
     var opt = span_class("refinement", text(fun));
     opt.onclick = bind(function(){
-        callback(this.innerHTML)
+        callback(opts);
     }, opt);
 
     // If refinement would be destructive, disable it
-    if (disable_destructive) {
+    if (opts.disable_destructive) {
         var blank = t.ast.is_writable();
         var typeobj = t.lookup_fun(fun);
         var inplace = t.ast.fits_in_place(typeobj);
@@ -179,7 +184,10 @@ Editor.prototype.get_refinements=function(cat) {
         clear(t.ui.refinements);
         for (var pi in data.producers) {
             var fun = data.producers[pi];
-            t.add_refinement(t, fun, bind(t.select_refinement,t), true);
+            t.add_refinement(t, fun, bind(t.select_refinement,t), {
+                fun: fun,
+                disable_destructive: true
+            });
         }
     };
     var err = function(data){
@@ -193,8 +201,9 @@ Editor.prototype.get_refinements=function(cat) {
 // Case 1: current node is blank/no kids
 // Case 2: kids have all same types, perform an in-place replacement
 // Case 3: kids have diff types/number, prevent replacement (must clear first)
-Editor.prototype.select_refinement=function(fun) {
+Editor.prototype.select_refinement=function(opts) {
     var t = this;
+    var fun = opts.fun;
     
     // Check if current node is blank or childless (case 1)
     var blank = t.ast.is_writable();
@@ -281,19 +290,34 @@ Editor.prototype.wrap_candidates = function() {
 
     t.ui.refinements.innerHTML = "Wrap with: ";
     for (var i in refinements) {
-        var fun = refinements[i].name;
-        t.add_refinement(t, fun, bind(t.wrap,t), false);
+        var typeobj = refinements[i];
+        // t.add_refinement(t, typeobj.name, bind(t.wrap,t), false);
+
+        // Show a refinement for each potential child position
+        for (var a in typeobj.args) {
+            var arg = typeobj.args[a];
+            if (arg == cat) {
+                var label = typeobj.name + " ?" + (parseInt(a)+1);
+                t.add_refinement(t, label, bind(t.wrap,t), {
+                    fun: typeobj.name,
+                    disable_destructive: false,
+                    child_id: a
+                });
+            }
+        }
     }
 }
 
 // Wrap the current node inside another function
-Editor.prototype.wrap = function(fun,childid) {
+Editor.prototype.wrap = function(opts) {
     var t = this;
+    var fun = opts.fun;
+    var child_id = opts.child_id;
 
     var typeobj = t.grammar_constructors.funs[fun];
 
     // do actual replacement
-    t.ast.wrap(typeobj, childid);
+    t.ast.wrap(typeobj, child_id);
 
     // refresh stuff
     t.redraw_tree();
