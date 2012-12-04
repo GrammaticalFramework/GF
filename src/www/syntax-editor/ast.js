@@ -137,7 +137,8 @@ function AST(fun, cat) {
     }
 
     // Wrap the current node inside another node
-    this.wrap = function(typeobj, childid) {
+    // Doesn't check whether child_id is within in range
+    this.wrap = function(typeobj, child_id) {
         var subtree = new ASTNode(this.currentNode);
         this.currentNode.fun = typeobj.name.join(" ");
         this.currentNode.cat = typeobj.ret;
@@ -145,7 +146,7 @@ function AST(fun, cat) {
         for (var i in typeobj.args) {
             this.add(null, typeobj.args[i]);
         }
-        this.currentNode.children[i] = subtree;
+        this.currentNode.children[child_id] = subtree;
         return subtree;
     }
 
