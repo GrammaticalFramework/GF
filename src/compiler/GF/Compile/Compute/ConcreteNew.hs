@@ -60,7 +60,7 @@ value env t0 =
                         then let p = identC (BS.pack "P")   
                              in value0 (fst env) (mkProd [(Implicit,p,typeType)] (Vr p) [])
                         else VApp x []
-      | otherwise    -> err bug (value0 (fst env)) (lookupResDef (fst env) x)
+      | otherwise    -> valueResDef (fst env) x
     QC x   -> VCApp x []
     App e1 e2 -> apply' env e1 [value env e2]
     Let (x,(oty,t)) body -> value (ext (x,value env t) env) body
@@ -90,7 +90,10 @@ value env t0 =
     Strs ts    -> VStrs (map (value env) ts)
     Glue t1 t2 -> glue (both (value env) (t1,t2))
     ELin c r -> unlockVRec c (value env r)
+    EPatt p  -> VPatt p -- hmm
     t -> ppbug (text "value"<+>ppTerm Unqualified 10 t $$ text (show t))
+
+valueResDef gr = err bug (value0 gr) . lookupResDef gr
 
 vconcat vv@(v1,v2) =
     case vv of
@@ -236,10 +239,13 @@ valueTable env@(gr,bs) i cs =
                  sts  <- mapM (matchPattern cs') vs 
                  return $ VV pty (map (valueMatch gr) sts)
 
-    inlinePattMacro p = case p of
-                          PM qc -> do EPatt p' <- lookupResDef gr qc
-                                      inlinePattMacro p'
-                          _ -> composPattOp inlinePattMacro p
+    inlinePattMacro p =
+        case p of
+          PM qc -> case valueResDef gr qc of
+                     VPatt p' -> inlinePattMacro p'
+                     r -> ppbug $ hang (text "Expected pattern macro:") 4
+                                       (text (show r))
+          _ -> composPattOp inlinePattMacro p
 
 apply' env t           []     = value env t
 apply' env t vs =
@@ -268,7 +274,7 @@ vbeta bt f (v:vs) =
     (Implicit,VImplArg v) -> ap v
     (Explicit,         v) -> ap v
   where
-    ap (VFV avs) = VFV [vapply (f v) vs|v<-avs]
+    ap (VFV avs) = vfv [vapply (f v) vs|v<-avs]
     ap v         = vapply (f v) vs
 
 {-
@@ -339,4 +345,4 @@ both = apBoth
 
 bug msg = ppbug (text msg)
 ppbug doc = error $ render $
-                    hang (text "Internal error in Compute.ConcreteNew2:") 4 doc
+                    hang (text "Internal error in Compute.ConcreteNew:") 4 doc
