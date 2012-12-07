@@ -15,6 +15,11 @@ abstract Idiom = Cat ** {
     ExistNP   : NP -> Cl ;        -- there is a house
     ExistIP   : IP -> QCl ;       -- which houses are there
 
+-- 7/12/2012 generalizations of these
+
+    ExistNPAdv : NP -> Adv -> Cl ;    -- there is a house in Paris
+    ExistIPAdv : IP -> Adv -> QCl ;   -- which houses are there in Paris
+
     ProgrVP   : VP -> VP ;        -- be sleeping
 
     ImpPl1    : VP -> Utt ;       -- let's go

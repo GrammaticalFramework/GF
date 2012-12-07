@@ -1,4 +1,5 @@
---# -path=alltenses:.:../english
+--# -path=.:../english:../abstract:../common:../api
+-- # -path=alltenses:.:../english
 concrete ParseFin of ParseEngAbs = 
   TenseX, ---- - [Pol, PNeg, PPos],
   CatFin,
