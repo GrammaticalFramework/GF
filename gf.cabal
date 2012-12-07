@@ -1,5 +1,5 @@
 name: gf
-version: 3.3.10-darcs
+version: 3.3.11-darcs
 
 cabal-version: >= 1.8
 build-type: Custom
@@ -51,7 +51,7 @@ flag server
 
 flag new-comp
   Description: Make -new-comp the default
-  Default:     False
+  Default:     True
 
 library
   build-depends: base >= 4.2 && <5,

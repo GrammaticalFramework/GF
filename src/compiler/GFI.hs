@@ -184,7 +184,8 @@ execute1 opts gfenv0 s0 =
         (style,q,s) = pOpts TermPrintDefault Qualified ws'
         (new,ws') = case ws of
                       "-new":ws' -> (True,ws')
-                      _ -> (False,ws)
+                      "-old":ws' -> (False,ws')
+                      _ -> (flag optNewComp opts,ws)
 
       case runP pExp (encodeUnicode utf8 s) of
         Left (_,msg) -> putStrLn msg
