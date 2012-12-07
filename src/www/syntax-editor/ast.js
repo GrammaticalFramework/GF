@@ -94,6 +94,15 @@ function AST(fun, cat) {
         this.currentNode = this.find(this.currentID);
     }
 
+    this.hasParent = function() {
+        return this.currentID.get().length > 1;
+        // return !this.atRoot();
+    }
+    this.atRoot = function() {
+        return this.currentNode == this.root;
+        // return !this.hasParent();
+    }
+
     this.getFun = function() {
         return this.currentNode.fun;
     }
@@ -105,10 +114,6 @@ function AST(fun, cat) {
     }
     this.setCat = function(c) {
         this.currentNode.cat = c;
-    }
-
-    this.hasParent = function() {
-        return this.currentID.get().length > 1;
     }
 
     // Add a single type dependency at current node
@@ -140,7 +145,7 @@ function AST(fun, cat) {
     // Doesn't check whether child_id is within in range
     this.wrap = function(typeobj, child_id) {
         var subtree = new ASTNode(this.currentNode);
-        this.currentNode.fun = typeobj.name.join(" ");
+        this.currentNode.fun = typeobj.name;
         this.currentNode.cat = typeobj.ret;
         this.currentNode.children = [];
         for (var i in typeobj.args) {
@@ -185,15 +190,14 @@ function AST(fun, cat) {
 
         if (lid.length==1) {
             // Insert at root
-            this.root = new ASTNode(subtree);
-            this.currentNode = this.root;
+            this.currentNode = this.root = new ASTNode(subtree);
         }
         else {
             lid.shift(); // throw away root
             while (lid.length>1 && node.hasChildren()) {
                 node = node.children[lid.shift()];
             }
-            node.children[lid.shift()] = new ASTNode(subtree);
+            this.currentNode = node.children[lid.shift()] = new ASTNode(subtree);
         }
     }
 
@@ -301,7 +305,7 @@ AST.parse_type_signature = function(str) {
     var obj = {
         signature: str,
         type: undefined,
-        name: [],
+        name: undefined,
         deps: [],
         args: [],
         ret: undefined
@@ -313,7 +317,7 @@ AST.parse_type_signature = function(str) {
     obj.type = bits[0];
 
     // name (possibly with constructors)
-    obj.name = bits.slice(1);
+    obj.name = bits.slice(1).join(" ");
     
     // function args (possibly with type dependency)
     var regex_dep = new RegExp(/\(\s*(.+?)\s*:\s*(.+?)\s*\)/);

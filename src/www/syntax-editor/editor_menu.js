@@ -109,6 +109,7 @@ function EditorMenu(editor,opts) {
     /* --- Register Grammar Manager hooks ----------------------------------- */
     this.gm.register_action("onload", bind(this.hook_onload, this));
     this.gm.register_action("change_grammar", bind(this.hook_change_grammar, this));
+    this.gm.register_action("change_startcat", bind(this.hook_change_startcat, this));
 
 }
 
@@ -143,16 +144,11 @@ EditorMenu.prototype.hook_onload=function(dir,grammar_names,dir_count) {
 }
 
 // Copied from minibar.js
-EditorMenu.prototype.hook_change_grammar=function() {
+EditorMenu.prototype.hook_change_grammar=function(grammar) {
     debug("EditorMenu: change grammar");
     var t=this;
-    var grammar_url = t.ui.grammar_menu.value;
-    t.server.switch_to_other_grammar(grammar_url, function() {
-	t.server.grammar_info(function(grammar){
-            t.update_startcat_menu(grammar);
-            t.update_language_menu(t.ui.to_menu, grammar);
-        });
-    });
+    t.update_startcat_menu(grammar);
+    t.update_language_menu(t.ui.to_menu, grammar);
 }
 
 /* --- Start category menu -------------------------------------------------- */
@@ -169,6 +165,14 @@ EditorMenu.prototype.update_startcat_menu=function(grammar) {
         menu.value = startcat0;
     else
         menu.value = grammar.startcat;
+}
+
+// If startcat changed externally, update menu
+EditorMenu.prototype.hook_change_startcat=function(startcat) {
+    debug("EditorMenu: change startcat");
+    var t=this;
+    var menu=this.ui.startcat_menu;
+    menu.value = startcat;
 }
 
 /* --- Langugage (to) menu -------------------------------------------------- */

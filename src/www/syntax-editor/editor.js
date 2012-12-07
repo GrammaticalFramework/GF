@@ -64,6 +64,7 @@ function Editor(gm,opts) {
     this.gm = gm;
     this.server = gm.server;
     this.ast = null;
+    this.clear_on_change_startcat = true; // temp. false when wrapping
 
     /* --- Register Grammar Manager hooks ----------------------------------- */
     this.hook_change_grammar = function(grammar){
@@ -80,7 +81,8 @@ function Editor(gm,opts) {
     this.hook_change_startcat = function(startcat){
         debug("Editor: change startcat");
         t.startcat = startcat;
-        t.start_fresh();
+        if (t.clear_on_change_startcat)
+            t.start_fresh();
     };
     this.hook_change_languages = function(languages){
         debug("Editor: change languages");
@@ -167,7 +169,7 @@ Editor.prototype.add_refinement=function(fun,opts) {
     var t = this;
     options = {
         label: fun,
-        disable_destructive: true
+        disable_destructive: false
     };
     if (opts) for (var o in opts) options[o] = opts[o];
     var typeobj = t.lookup_fun(fun);
@@ -296,12 +298,12 @@ Editor.prototype.wrap_candidates = function() {
     // we need to end with this
     var cat = t.ast.getCat();
 
-    // if no parent, then cat can be anything as long
-    // as the current tree fits somewhere
     var refinements = [];
     for (var i in t.grammar_constructors.funs) {
         var obj = t.grammar_constructors.funs[i];
         if (elem(cat, obj.args)) {
+            // if no parent, then cat can be anything
+            // as long as the current tree fits somewhere
             if (!t.ast.hasParent() || obj.ret==cat) {
                 refinements.push(obj);
             }
@@ -313,27 +315,46 @@ Editor.prototype.wrap_candidates = function() {
         return;
     }
 
+    // Display wrap refinements
+    function addClickHandler(fun, child_id) {
+        return function() {
+            t.wrap.apply(t,[fun, child_id]);
+        }
+    }
     t.ui.refinements.innerHTML = "Wrap with: ";
     for (var i in refinements) {
         var typeobj = refinements[i];
+        var fun = typeobj.name;
 
-        // Show a refinement for each potential child position
-        function addClickHandler(fun, child_id) {
-            return function() {
-                t.wrap.apply(t,[fun, child_id]);
-            }
-        }
+        // Find valid child ids
+        var child_ids = [];
         for (var a in typeobj.args) {
-            var arg = typeobj.args[a];
-            if (arg == cat) {
-                var label = typeobj.name + " ?" + (parseInt(a)+1);
-                var ref = t.add_refinement(typeobj.name, {
-                    label: label,
-                    disable_destructive: false,
-                });
-                ref.onclick = addClickHandler(typeobj.name, a);
+            if (typeobj.args[a] == cat) {
+                child_ids.push(a);
             }
         }
+
+        // if (child_ids.length < 2) {
+        //     var ref = t.add_refinement(fun);
+        //     ref.onclick = addClickHandler(typeobj.name, a);
+        // } else {
+            // Show a refinement for each potential child position
+            for (var c in child_ids) {
+                var id = child_ids[c];
+                var label = fun;
+                for (var a in typeobj.args) {
+                    if (a == id)
+                        if (t.ast.currentNode.hasChildren())
+                            label += " ("+t.ast.currentNode.fun+" …)";
+                        else
+                            label += " "+t.ast.currentNode.fun;
+                    else
+                        label += " ?";
+                }
+                var ref = t.add_refinement(typeobj.name, {label: label});
+                ref.onclick = addClickHandler(typeobj.name, id);
+            }
+        // }
     }
 }
 
@@ -341,6 +362,14 @@ Editor.prototype.wrap_candidates = function() {
 Editor.prototype.wrap = function(fun, child_id) {
     var t = this;
     var typeobj = t.grammar_constructors.funs[fun];
+
+    // if we are at root node, potentially change startcat
+    if (t.ast.atRoot() && t.get_startcat() != typeobj.ret) {
+        var old_val = t.clear_on_change_startcat;
+        t.clear_on_change_startcat = false;
+        t.gm.change_startcat(typeobj.ret);
+        t.clear_on_change_startcat = old_val;
+    }
 
     // do actual replacement
     t.ast.wrap(typeobj, child_id);
@@ -380,6 +409,8 @@ Editor.prototype.redraw_tree=function() {
     var elem = node; // function from support.js
     function visit(container, id, node) {
         var container2 = empty_class("div", "node");
+        if (id.get().length == 1)
+            container2.classList.add("first");
         var label =
             ((node.fun) ? node.fun : "?") + " : " +
             ((node.cat) ? node.cat : "?");
