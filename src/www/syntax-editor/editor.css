@@ -46,7 +46,14 @@ body.syntax-editor {
 
 #tree .node
 {
-  margin: 0.4em 0 0.4em 1.5em;
+  margin: 0.5em 0 0.5em 0.75em;
+  border-left: 1px dashed #BBB;
+  padding-left: 1.25em;
+  }
+#tree .node.first
+{
+  margin-left: 0;
+  border-left: none;
   }
 
 #tree .node a
@@ -72,7 +79,7 @@ body.syntax-editor {
 #linearisations
 {
   /* background: rgba(170, 170, 170, 0.5); */
-  padding:0.5em;
+  /* padding:0.5em; */
   margin:0.5em 0;
   }
 #linearisations div
