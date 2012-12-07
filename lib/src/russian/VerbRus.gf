@@ -332,7 +332,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
 
   ComplVV putatsya bezhat =
   { s =  \\clf,gn,p => putatsya.s ! (getActVerbForm clf (genGNum gn) 
-       (numGenNum gn) p) ++ bezhat.s!ClInfinit !gn!p ; 
+       (numGenNum gn) p) ++ bezhat.s!ClInfinit !gn!p ++ bezhat.s2 ; ---- s2 added by AR 7/12/2012 - but where should s3 go? 
       asp = putatsya.asp ;
       w = Act;
       negBefore = True;

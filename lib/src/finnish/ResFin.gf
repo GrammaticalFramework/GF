@@ -410,7 +410,7 @@ oper
             _ => False           -- minun täytyy nähdä auto
             } ;
           verb  = vp.s ! VIInf vi ! Simul ! Pos ! agr ; -- no "ei"
-          compl = vp.s2 ! fin ! pol ! agr ++ vp.ext     -- but compl. case propagated
+          compl = vp.s2 ! fin ! pol ! agr ++ vp.adv ! pol ++ vp.ext     -- but compl. case propagated
         in
         verb.fin ++ verb.inf ++ compl ;
 
