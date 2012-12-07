@@ -200,12 +200,12 @@ lin
 
 -- modifiers of places
     TheBest = mkSuperl True L.good_A ;
-    TheClosest = mkSuperl False L.near_A ; 
-    TheCheapest = mkSuperl False 
+    TheClosest = mkSuperl True L.near_A ; 
+    TheCheapest = mkSuperl False
       (compADeg {s = \\_ => (M.mkAdj "bon marché" "bon marché" "bon marché" "bon marché").s ; 
        isPre = False ; lock_A = <>}) ; 
-    TheMostExpensive = mkSuperl False (mkA "cher") ;
-    TheMostPopular = mkSuperl False (mkA "populaire") ;
+    TheMostExpensive = mkSuperl True (mkA "cher") ;
+    TheMostPopular = mkSuperl True (mkA "populaire") ;
     TheWorst = mkSuperl True L.bad_A ;
 
     SuperlPlace sup kind = 
