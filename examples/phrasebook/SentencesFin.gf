@@ -3,7 +3,9 @@ concrete SentencesFin of Sentences = NumeralFin ** SentencesI -
    IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
    WeMale, WeFemale, YouPlurFamMale, YouPlurFamFemale, YouPlurPolFemale, YouPlurPolMale, 
    NPPlace, CNPlace, placeNP, mkCNPlace, mkCNPlacePl,
-   GObjectPlease
+   GObjectPlease,
+   NPNationality, mkNPNationality,
+   Country, PCountry
   ] with 
   (Syntax = SyntaxFin),
   (Symbolic = SymbolicFin),
@@ -12,16 +14,21 @@ concrete SentencesFin of Sentences = NumeralFin ** SentencesI -
 
   flags optimize = noexpand ;
 
+  lincat
+    Country = {np : NP ; isExternal : Bool} ;
+  lin 
+    PCountry x = mkPhrase (mkUtt x.np) ;
   oper
+    NPNationality = {lang : NP ; prop : A ; country : {np : NP ; isExternal : Bool}} ;
     NPPlace = {name : NP ; at : Adv ; to : Adv ; from : Adv} ;
-    CNPlace = {name : CN ; at : Prep ; to : Prep ; from : Prep ; isPl : Bool} ;
+    CNPlace = {name : CN ; isExternal : Bool ; isPl : Bool} ;
 
   placeNP : Det -> CNPlace -> NPPlace = \det,kind ->
     let name : NP = mkNP det kind.name in {
       name = name ;
-      at = mkAdv kind.at name ;
-      to = mkAdv kind.to name ;
-      from = mkAdv kind.from name
+      at = mkAdv (P.casePrep (if_then_else P.Case kind.isExternal P.adessive P.inessive)) name ;
+      to = mkAdv (P.casePrep (if_then_else P.Case kind.isExternal P.allative P.illative)) name ;
+      from = mkAdv (P.casePrep (if_then_else P.Case kind.isExternal P.ablative P.elative)) name
     } ;
 
   lin 
