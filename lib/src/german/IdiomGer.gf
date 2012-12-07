@@ -33,6 +33,23 @@ concrete IdiomGer of Idiom = CatGer **
               }
       } ;
 
+    ExistNPAdv np adv= 
+      mkClause "es" (agrP3 Sg) 
+        (insertAdv adv.s (insertObj (\\_ => appPrep geben.c2 np.s) 
+          (predV geben))) ;
+
+    ExistIPAdv ip adv = {
+      s = \\m,t,a,p => 
+            let 
+              cls = 
+                (mkClause "es" (agrP3 Sg)  (insertAdv adv.s (predV geben))).s ! m ! t ! a ! p ;
+              who = ip.s ! Acc
+            in table {
+              QDir   => who ++ cls ! Inv ;
+              QIndir => who ++ cls ! Sub
+              }
+      } ;
+
     ProgrVP = insertAdv "eben" ; ----
 
     ImpPl1 vp = {s = 
