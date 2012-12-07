@@ -183,9 +183,11 @@ function AST(fun, cat) {
         var lid = Array.clone(id.get()); // clone NodeID array
         var node = this.root;
 
-        if (lid.length==1)
+        if (lid.length==1) {
             // Insert at root
             this.root = new ASTNode(subtree);
+            this.currentNode = this.root;
+        }
         else {
             lid.shift(); // throw away root
             while (lid.length>1 && node.hasChildren()) {
@@ -297,6 +299,7 @@ function AST(fun, cat) {
 // (This probably needs a better home)
 AST.parse_type_signature = function(str) {
     var obj = {
+        signature: str,
         type: undefined,
         name: [],
         deps: [],

@@ -248,6 +248,13 @@ function insertAfter(el,ref) {
     ref.parentNode.insertBefore(el,ref.nextSibling);
 }
 
+function toggleHidden(el) {
+    if (el.classList.contains("hidden"))
+        el.classList.remove("hidden")
+    else
+        el.classList.add("hidden")
+}
+
 /* --- Debug ---------------------------------------------------------------- */
 
 function debug(s) {

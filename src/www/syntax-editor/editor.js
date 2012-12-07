@@ -29,15 +29,35 @@ function Editor(gm,opts) {
     this.container.classList.add("editor");
     this.ui = {
         menubar: div_class("menu"),
+
         tree: div_id("tree"),
+
+        actionbar: div_id("actions"),
+        clear_button: button("Clear", function(){
+            t.clear_node();
+        }),
+        wrap_button: button("Wrap…", function(){
+            t.wrap_candidates();
+        }),
+        unwrap_button: button("Unwrap", function(){
+            t.wrap_candidates();
+        }),
+
         refinements: div_id("refinements"),
+
         lin: div_id("linearisations")
     };
     appendChildren(this.container, [
-        this.ui.menubar,
-        this.ui.tree,
-        this.ui.refinements,
-        this.ui.lin
+        t.ui.menubar,
+        t.ui.tree,
+        t.ui.actionbar,
+        t.ui.lin
+    ]);
+    appendChildren(this.ui.actionbar, [
+        t.ui.clear_button,
+        t.ui.wrap_button,
+        // t.ui.unwrap_button,
+        t.ui.refinements
     ]);
 
     /* --- Client state initialisation -------------------------------------- */
@@ -142,25 +162,24 @@ Editor.prototype.start_fresh=function () {
 
 /* --- Functions for handling tree manipulation ----------------------------- */
 
-// Add refinement to UI, with a given callback function
-// The opts param is used both in this function as:
-//     opts.disable_destructive
-// as well as being passed to the callback function
-Editor.prototype.add_refinement=function(t,fun,callback,opts) {
-    // var t = this;
-    if (!opts) opts = {};
+// Add refinement to UI, returning object
+Editor.prototype.add_refinement=function(fun,opts) {
+    var t = this;
+    options = {
+        label: fun,
+        disable_destructive: true
+    };
+    if (opts) for (var o in opts) options[o] = opts[o];
+    var typeobj = t.lookup_fun(fun);
 
     // hide refinement if identical to current fun?
 
-    var opt = span_class("refinement", text(fun));
-    opt.onclick = bind(function(){
-        callback(opts);
-    }, opt);
+    var opt = span_class("refinement", text(options.label));
+    opt.title = typeobj.signature;
 
     // If refinement would be destructive, disable it
-    if (opts.disable_destructive) {
+    if (options.disable_destructive) {
         var blank = t.ast.is_writable();
-        var typeobj = t.lookup_fun(fun);
         var inplace = t.ast.fits_in_place(typeobj);
         if (!blank && !inplace) {
             opt.classList.add("disabled");
@@ -168,12 +187,13 @@ Editor.prototype.add_refinement=function(t,fun,callback,opts) {
     }
 
     t.ui.refinements.appendChild(opt);
+    return opt;
 }
 
 // Show refinements for given cat (usually that of current node)
 Editor.prototype.get_refinements=function(cat) {
     var t = this;
-    t.ui.refinements.innerHTML = "...";
+    t.ui.refinements.innerHTML = "…";
     if (cat == undefined)
         cat = t.ast.getCat();
     var args = {
@@ -182,12 +202,18 @@ Editor.prototype.get_refinements=function(cat) {
     };
     var cont = function(data){
         clear(t.ui.refinements);
+        // t.ui.refinements.innerHTML = "Refinements: ";
+        function addClickHandler(fun) {
+            return function() {
+                t.select_refinement.apply(t,[fun]);
+            }
+        }
         for (var pi in data.producers) {
             var fun = data.producers[pi];
-            t.add_refinement(t, fun, bind(t.select_refinement,t), {
-                fun: fun,
+            var ref = t.add_refinement(fun, {
                 disable_destructive: true
             });
+            ref.onclick = addClickHandler(fun);
         }
     };
     var err = function(data){
@@ -201,9 +227,8 @@ Editor.prototype.get_refinements=function(cat) {
 // Case 1: current node is blank/no kids
 // Case 2: kids have all same types, perform an in-place replacement
 // Case 3: kids have diff types/number, prevent replacement (must clear first)
-Editor.prototype.select_refinement=function(opts) {
+Editor.prototype.select_refinement=function(fun) {
     var t = this;
-    var fun = opts.fun;
     
     // Check if current node is blank or childless (case 1)
     var blank = t.ast.is_writable();
@@ -291,29 +316,30 @@ Editor.prototype.wrap_candidates = function() {
     t.ui.refinements.innerHTML = "Wrap with: ";
     for (var i in refinements) {
         var typeobj = refinements[i];
-        // t.add_refinement(t, typeobj.name, bind(t.wrap,t), false);
 
         // Show a refinement for each potential child position
+        function addClickHandler(fun, child_id) {
+            return function() {
+                t.wrap.apply(t,[fun, child_id]);
+            }
+        }
         for (var a in typeobj.args) {
             var arg = typeobj.args[a];
             if (arg == cat) {
                 var label = typeobj.name + " ?" + (parseInt(a)+1);
-                t.add_refinement(t, label, bind(t.wrap,t), {
-                    fun: typeobj.name,
+                var ref = t.add_refinement(typeobj.name, {
+                    label: label,
                     disable_destructive: false,
-                    child_id: a
                 });
+                ref.onclick = addClickHandler(typeobj.name, a);
             }
         }
     }
 }
 
 // Wrap the current node inside another function
-Editor.prototype.wrap = function(opts) {
+Editor.prototype.wrap = function(fun, child_id) {
     var t = this;
-    var fun = opts.fun;
-    var child_id = opts.child_id;
-
     var typeobj = t.grammar_constructors.funs[fun];
 
     // do actual replacement
@@ -348,6 +374,7 @@ Editor.prototype.generate_random = function() {
     server.get_random(args, cont, err);
 }
 
+// Redraw tree
 Editor.prototype.redraw_tree=function() {
     var t = this;
     var elem = node; // function from support.js
@@ -377,9 +404,11 @@ Editor.prototype.redraw_tree=function() {
     }
 }
 
+// Get and display linearisations for AST
 Editor.prototype.update_linearisation=function(){
     var t = this;
-    function langpart(conc,abs) { // langpart("FoodsEng","Foods") == "Eng"
+    // langpart("FoodsEng","Foods") == "Eng"
+    function langpart(conc,abs) {
         return hasPrefix(conc,abs) ? conc.substr(abs.length) : conc;
     }
     function row(lang, lin) {
@@ -426,6 +455,9 @@ Editor.prototype.import_ast = function(abstr) {
         t.redraw_tree();
         t.update_linearisation();
     };
-    server.pgf_call("abstrjson", args, cont);
+    var err = function(tree){
+        alert("Invalid abstract syntax tree");
+    };
+    server.pgf_call("abstrjson", args, cont, err);
 }
 
