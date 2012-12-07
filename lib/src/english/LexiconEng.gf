@@ -81,7 +81,7 @@ lin
   forget_V2 = dirV2 (irregDuplV "forget" "forgot" "forgotten") ;
   fridge_N = regN "fridge" ;
   friend_N = mkN human (regN "friend") ;
-  fruit_N = regN "fruit" ;
+  fruit_N = mkN "fruit" "fruit" ; --- was: fruit, fruits before 7/12/2012
   fun_AV = mkAV (regA "fun") ;
   garden_N = regN "garden" ;
   girl_N = mkN feminine (regN "girl") ;
