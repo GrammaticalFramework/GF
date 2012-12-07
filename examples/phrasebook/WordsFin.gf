@@ -60,7 +60,7 @@ concrete WordsFin of Words = SentencesFin **
     School = mkPlace (mkN "koulu") lla ;
 
     CitRestaurant cit = {
-      name = mkCN cit (mkN "ravintola") ; at = casePrep inessive ; to = casePrep illative; from = casePrep elative ; isPl = False
+      name = mkCN cit (mkN "ravintola") ; isExternal = False ; isPl = False
       } ;
     Parking = mkPlace (mkN "pysäköinti" (mkN "alue")) lla ;
     Supermarket = mkPlace (mkN "supermarket") ssa ;
@@ -88,7 +88,7 @@ concrete WordsFin of Words = SentencesFin **
 -- nationalities
 
     Belgian = mkA "belgialainen" ;
-    Belgium = mkNP (mkPN "Belgia") ;
+    Belgium = {np = mkNP (mkPN "Belgia") ; isExternal = False} ;
     Bulgarian = mkNat (mkPN "bulgaria") (mkPN "Bulgaria") (mkA "bulgarialainen") ;
     Catalan = mkNat (mkPN "katalaani") (mkPN "Katalonia") (mkA "katalonialainen") ;
     Danish = mkNat (mkPN "tanska") (mkPN "Tanska") (mkA "tanskalainen") ;
@@ -104,7 +104,7 @@ concrete WordsFin of Words = SentencesFin **
     Norwegian = mkNat (mkPN "norja") (mkPN "Norja") (mkA "norjalainen") ;
     Polish = mkNat (mkPN "puola") (mkPN "Puola") (mkA "puolalainen") ;
     Romanian = mkNat (mkPN "romania") (mkPN "Romania") (mkA "romanialainen") ;
-    Russian = mkNat (mkPN "venäjä") (mkPN "Venäjä") (mkA "venäläinen") ;
+    Russian = mkNatExternal (mkPN "venäjä") (mkPN "Venäjä") (mkA "venäläinen") ;
     Spanish = mkNat (mkPN "espanja") (mkPN "Espanja") (mkA "espanjalainen") ;
     Swedish = mkNat (mkPN "ruotsi") (mkPN "Ruotsi") (mkA "ruotsalainen") ;
 
@@ -136,7 +136,7 @@ concrete WordsFin of Words = SentencesFin **
     AIll p = mkCl p.name (mkA "sairas") ;
     AKnow p = mkCl p.name (mkV "tietää") ;
     ALike p item = mkCl p.name L.like_V2 item ;
-    ALive p co = mkCl p.name (mkVP (mkVP (mkV "asua")) (SyntaxFin.mkAdv in_Prep co)) ;
+    ALive p co = mkCl p.name (mkVP (mkVP (mkV "asua")) (SyntaxFin.mkAdv (casePrep (if_then_else Case co.isExternal adessive inessive)) co.np)) ;
     ALove p q = mkCl p.name (mkV2 (mkV "rakastaa") partitive) q.name ;
     AMarried p = mkCl p.name (ParadigmsFin.mkAdv "naimisissa") ;
     AReady p = mkCl p.name (ParadigmsFin.mkA "valmis") ;
@@ -228,10 +228,17 @@ concrete WordsFin of Words = SentencesFin **
 
   oper
     mkNat : PN -> PN -> A -> 
-      {lang : NP ; prop : A ; country : NP} = \nat,co,pro ->
+      {lang : NP ; prop : A ; country : {np : NP ; isExternal : Bool}} = \nat,co,pro ->
         {lang = mkNP nat ; 
          prop = pro ;
-         country = mkNP co
+         country = {np = mkNP co ; isExternal = False}
+        } ;
+
+    mkNatExternal : PN -> PN -> A -> 
+      {lang : NP ; prop : A ; country : {np : NP ; isExternal : Bool}} = \nat,co,pro ->
+        {lang = mkNP nat ; 
+         prop = pro ;
+         country = {np = mkNP co ; isExternal = True}
         } ;
 
     ---- using overloaded paradigms slows down compilation dramatically
@@ -242,11 +249,9 @@ concrete WordsFin of Words = SentencesFin **
        habitual = ParadigmsFin.mkAdv s
       } ;
 
-    mkPlace : N -> Bool -> {name : CN ; at : Prep ; to : Prep; from : Prep ; isPl : Bool} = \p,e -> {
+    mkPlace : N -> Bool -> {name : CN ; isExternal : Bool ; isPl : Bool} = \p,e -> {
       name = mkCN p ;
-      at = casePrep (if_then_else Case e adessive inessive) ;  -- True: external
-      to = casePrep (if_then_else Case e allative illative) ;
-      from = casePrep (if_then_else Case e ablative elative) ;
+      isExternal = e ;
       isPl = False   
    } ;
     ssa = False ;
