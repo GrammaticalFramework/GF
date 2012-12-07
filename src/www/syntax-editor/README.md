@@ -1,7 +1,7 @@
 # GF web-based syntax editor
 
 John J. Camilleri  
-November 2012
+December 2012
 
 An improved version of the [old syntax editor][1].
 
@@ -14,7 +14,7 @@ An improved version of the [old syntax editor][1].
 ## Available startup options
 
 |Options|Description|Default|
-|:------|:----------|:------|
+|-------|-----------|-------|
 |target |           |"editor"|
 |initial.grammar|Initial grammar URL, e.g. `"http://localhost:41296/grammars/Foods.pgf"`|-|
 |initial.startcat|Initial startcat|-|
@@ -35,7 +35,7 @@ See `editor.html` and `editor_online.js`.
 
 ## TODO
 
-- Wrap a subtree
+- Import AST from text field
 - Compatibility with grammars with dependent category types
 - Clicking on tokens to select tree node
 - Clipboard of trees
@@ -45,3 +45,4 @@ See `editor.html` and `editor_online.js`.
 - show all resulting linearizations/variants
 - undo/redo (or back/forward) navigation
 - structure fridge magnets more (eg newline before the magnet whose first letter is different)
+

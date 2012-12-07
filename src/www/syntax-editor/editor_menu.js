@@ -5,7 +5,13 @@ function EditorMenu(editor,opts) {
 
     // default values for options:
     this.options={
-	target: "editor"
+	target: "editor",
+        show_grammar_menu: true,
+        show_startcat_menu: true,
+        show_to_menu: true,
+        show_random_button: true,
+        show_import: true,
+        show_export: true,
     }
 
     // Apply supplied options
@@ -16,50 +22,53 @@ function EditorMenu(editor,opts) {
     this.ui = {
 	grammar_menu: empty_id("select","grammar_menu"),
         startcat_menu: empty("select"),
-        to_toggle: button("Languages...", function(){
-            var sel = t.ui.to_menu;
-            if (sel.classList.contains("hidden"))
-                sel.classList.remove("hidden")
-            else
-                sel.classList.add("hidden")
+        to_toggle: button("Languages…", function(){
+            toggleHidden(t.ui.to_menu);
         }),
         to_menu: node("select",{
             id: "to_menu",
             multiple: "multiple",
             class: "hidden"
         }),
-        wrap_button: button("Wrap", function(){
-            t.editor.wrap_candidates();
-        }),
-        clear_button: button("Clear", function(){
-            t.editor.clear_node();
-        }),
         random_button: button("Random", function(){
             t.editor.generate_random();
         }),
-        debug_toggle: button("⚙", function(){
-            var sel = element("debug");
-            if (sel.classList.contains("hidden"))
-                sel.classList.remove("hidden")
-            else
-                sel.classList.add("hidden")
+        import: {
+            toggle: button("Import…", function(){
+                toggleHidden(t.ui.import.panel);
+            }),
+            panel: node("div",{
+                id: "import",
+                class: "hidden"
+            }),
+            input: node("input",{type:"text"},[]),
+            button: button("Import", function(){
+                t.editor.import_ast(t.ui.import.input.value);
+                toggleHidden(t.ui.import.panel);
+            })
+        },
+        export_button: button("Export", function(){
+            alert(t.editor.ast.toString());
         }),
+        debug_toggle: button("⚙", function(){
+            toggleHidden(element("debug"));
+        })
     };
-    if (t.options.show.grammar_menu) {
+    if (t.options.show_grammar_menu) {
 	appendChildren(t.container, [text(" Grammar: "), t.ui.grammar_menu]);
     	t.ui.grammar_menu.onchange = function(){
             var grammar_url = t.ui.grammar_menu.value;
             t.gm.change_grammar(grammar_url);
         }
     }
-    if (t.options.show.startcat_menu) {
+    if (t.options.show_startcat_menu) {
 	appendChildren(t.container, [text(" Startcat: "), t.ui.startcat_menu]);
         t.ui.startcat_menu.onchange = function(){
             var startcat = t.ui.startcat_menu.value;
             t.gm.change_startcat(startcat);
         }
     }
-    if (t.options.show.to_menu) {
+    if (t.options.show_to_menu) {
         appendChildren(t.container, [text(" To: "), t.ui.to_toggle, t.ui.to_menu]);
         t.ui.to_menu.onchange = function(){
             var languages = new Array();
@@ -71,10 +80,24 @@ function EditorMenu(editor,opts) {
             t.gm.change_languages(languages);
         }
     }
-    appendChildren(t.container, [t.ui.clear_button]);
-    appendChildren(t.container, [t.ui.wrap_button]);
-    if (t.options.show.random_button) {
+    if (t.options.show_random_button) {
         appendChildren(t.container, [t.ui.random_button]);
+    }
+    if (t.options.show_import) {
+        appendChildren(t.container, [
+            t.ui.import.toggle,
+            t.ui.import.panel
+        ]);
+        appendChildren(t.ui.import.panel, [
+            text("Import AST: "),
+            t.ui.import.input,
+            t.ui.import.button
+        ]);
+    }
+    if (t.options.show_export) {
+        appendChildren(t.container, [
+            t.ui.export_button,
+        ]);
     }
     appendChildren(t.container, [t.ui.debug_toggle]);
 
@@ -86,8 +109,6 @@ function EditorMenu(editor,opts) {
     /* --- Register Grammar Manager hooks ----------------------------------- */
     this.gm.register_action("onload", bind(this.hook_onload, this));
     this.gm.register_action("change_grammar", bind(this.hook_change_grammar, this));
-    // this.gm.register_action("change_startcat", bind(this.hook_change_startcat, this));
-    // this.gm.register_action("change_languages", bind(this.hook_change_languages, this));
 
 }
 
