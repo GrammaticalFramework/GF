@@ -44,7 +44,7 @@ concrete StructuralGer of Structural = CatGer **
   here_Adv = ss "hier" ;
   how_IAdv = ss "wie" ;
   how8much_IAdv = ss "wieviel" ;
-  how8many_IDet = {s = \\g,c => (detLikeAdj False Pl "wieviel").s ! g ! NPC c ; n = Pl} ;
+  how8many_IDet = {s = \\g,c => (detLikeAdj False Pl "wie viel").s ! g ! NPC c ; n = Pl} ;
   if_Subj = ss "wenn" ;
   in8front_Prep = mkPrep "vor" P.dative ;
   i_Pron = mkPronPers "ich" "mich" "mir" "meiner" "mein" Masc Sg P1 ;
