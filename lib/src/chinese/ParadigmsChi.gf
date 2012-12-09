@@ -105,10 +105,10 @@ oper
    = ATManner ;
     
   mkPrep = overload { ---- is this the right order of the fields?
-    mkPrep : Str -> Preposition 
-     = \s -> ResChi.mkPreposition [] s ;
-    mkPrep : Str -> Str -> Preposition 
-     = \s,t -> ResChi.mkPreposition s t ;
+    mkPrep : Str -> Prep 
+     = \s -> lin Prep (ResChi.mkPreposition [] s) ;
+    mkPrep : Str -> Str -> Prep 
+     = \s,t -> lin Prep (ResChi.mkPreposition s t) ;
     } ;
 
   emptyPrep : Preposition = mkPrep [] ;

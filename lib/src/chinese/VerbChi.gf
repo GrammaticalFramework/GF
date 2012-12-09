@@ -32,6 +32,7 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
       } ;
 
     UseComp comp = comp ;
+    UseCopula = predV copula ;
 
     SlashVV v vp = ---- too simple?
       insertObj (mkNP (infVP vp)) (predV v) ** {c2 = vp.c2 ; isPre = vp.isPre} ;
@@ -58,6 +59,8 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
     CompCN cn = insertObj cn (predV copula) ; ----
 
     CompAdv adv = insertObj adv (predV zai_V) ;
+
+    VPSlashPrep vp prep = vp ** {c2 = prep ; isPre = True} ;
 
 }
 

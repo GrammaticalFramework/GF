@@ -166,6 +166,7 @@ concrete VerbRon of Verb =
 
 
     UseComp comp = insertSimpObj comp.s copula ;
+    UseCopula = copula ;
 
     CompAP ap = {s = \\ag => ap.s ! AF ag.g ag.n Indef ANomAcc} ;
     CompCN cn = { s = \\ag => cn.s ! ag.n ! Indef ! ANomAcc }; --- RE 7/12/2010
@@ -178,7 +179,7 @@ concrete VerbRon of Verb =
 
     PassV2 v = insertSimpObj (\\a => v.s ! PPasse a.g a.n Indef ANomAcc) auxPassive ** {lock_VP = <>};
 
-
+    VPSlashPrep vp prep = vp ** {c2 = prep ; needAgr = False; needClit = True} ; ---- AR
 
 oper auxPassive = copula ; 
 
