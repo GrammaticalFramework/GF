@@ -1,0 +1,2 @@
+i -retain testsuite/compiler/compute/Variants.gf
+cc hello

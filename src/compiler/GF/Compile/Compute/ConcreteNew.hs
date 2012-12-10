@@ -267,6 +267,7 @@ vapply v vs =
 --  VClosure env (Abs b x t) -> beta gr env b x t vs
     VAbs bt _ (Bind f) -> vbeta bt f vs
     VS (VV t fs) s -> VS (VV t [vapply f vs|f<-fs]) s
+    VFV fs -> vfv [vapply f vs|f<-fs]
     v -> bug $ "vapply "++show v++" "++show vs
 
 vbeta bt f (v:vs) =
