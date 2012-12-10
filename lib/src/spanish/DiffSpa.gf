@@ -172,7 +172,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
       _ => False
       } ;
 
-    auxPassive : Verb = copula ;
+    auxPassive : Verb = verbBeschH (estar_2 "estar") ;
 
     copula = verbBeschH (ser_1 "ser") ;
 

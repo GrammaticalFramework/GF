@@ -170,7 +170,7 @@ oper
       _ => False
       } ;
 
-    auxPassive : Verb = copula ;
+    auxPassive : Verb = verbBeschH (estar_54 "estar") ;
 
     copula = verbBeschH (ser_52 "ser") ;
 
