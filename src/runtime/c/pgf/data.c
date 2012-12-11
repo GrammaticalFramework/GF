@@ -131,7 +131,6 @@ GU_DEFINE_TYPE(
 		GU_MEMBER(PgfProductionExtern, lins, GuSeq)),
 	GU_CONSTRUCTOR_S(
 		PGF_PRODUCTION_META, PgfProductionMeta,
-		GU_MEMBER(PgfProductionMeta, lins, GuSeq),
 		GU_MEMBER(PgfProductionMeta, args, PgfPArgs)));
 
 GU_DEFINE_TYPE(PgfProductions, GuList, gu_type(PgfProduction));

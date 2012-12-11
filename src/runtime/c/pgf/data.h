@@ -337,7 +337,6 @@ typedef struct {
 
 typedef struct {
 	PgfExprProb *ep;
-	GuSeq lins; 
 	PgfPArgs args;
 } PgfProductionMeta;
 
