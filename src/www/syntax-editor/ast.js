@@ -103,6 +103,9 @@ function AST(fun, cat) {
         // return !this.hasParent();
     }
 
+    this.getRoot = function() {
+        return this.root;
+    }
     this.getFun = function() {
         return this.currentNode.fun;
     }
@@ -142,8 +145,8 @@ function AST(fun, cat) {
     }
 
     // Wrap the current node inside another node
-    // Doesn't check whether child_id is within in range
-    this.wrap = function(typeobj, child_id) {
+    // Doesn't check whether child_ix is within in range
+    this.wrap = function(typeobj, child_ix) {
         var subtree = new ASTNode(this.currentNode);
         this.currentNode.fun = typeobj.name;
         this.currentNode.cat = typeobj.ret;
@@ -151,8 +154,26 @@ function AST(fun, cat) {
         for (var i in typeobj.args) {
             this.add(null, typeobj.args[i]);
         }
-        this.currentNode.children[child_id] = subtree;
+        this.currentNode.children[child_ix] = subtree;
         return subtree;
+    }
+
+    // Wrap the current node inside another node
+    // Doesn't check whether child_ix is within in range
+    this.unwrap = function() {
+        var parent_id = this.currentID.clone();
+        parent_id.get().pop();
+        if (parent_id.get().length==1) {
+            this.root = this.currentNode;
+            this.currentID = new NodeID();
+        } else {
+            var gparent_id = parent_id.clone();
+            gparent_id.get().pop();
+            var gparent = this.find(gparent_id);
+            child_ix = parent_id.clone().get().pop();
+            gparent.children[child_ix] = this.currentNode;
+            this.currentID = parent_id;
+        }
     }
 
     // Determine if current node is writable (empty/no children)

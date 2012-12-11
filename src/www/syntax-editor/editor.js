@@ -40,7 +40,7 @@ function Editor(gm,opts) {
             t.wrap_candidates();
         }),
         unwrap_button: button("Unwrap", function(){
-            t.wrap_candidates();
+            t.unwrap();
         }),
 
         refinements: div_id("refinements"),
@@ -56,7 +56,7 @@ function Editor(gm,opts) {
     appendChildren(this.ui.actionbar, [
         t.ui.clear_button,
         t.ui.wrap_button,
-        // t.ui.unwrap_button,
+        t.ui.unwrap_button,
         t.ui.refinements
     ]);
 
@@ -157,6 +157,7 @@ Editor.prototype.start_fresh=function () {
     t.ast = new AST(null, t.get_startcat());
     if (t.options.initial.abstr) {
         t.import_ast(t.options.initial.abstr);
+        t.options.initial.abstr = null; // don't use again
     }
     t.update_current_node();
     clear(t.ui.lin);
@@ -316,9 +317,9 @@ Editor.prototype.wrap_candidates = function() {
     }
 
     // Display wrap refinements
-    function addClickHandler(fun, child_id) {
+    function addClickHandler(fun, child_ix) {
         return function() {
-            t.wrap.apply(t,[fun, child_id]);
+            t.wrap.apply(t,[fun, child_ix]);
         }
     }
     t.ui.refinements.innerHTML = "Wrap with: ";
@@ -327,20 +328,20 @@ Editor.prototype.wrap_candidates = function() {
         var fun = typeobj.name;
 
         // Find valid child ids
-        var child_ids = [];
+        var child_ixs = [];
         for (var a in typeobj.args) {
             if (typeobj.args[a] == cat) {
-                child_ids.push(a);
+                child_ixs.push(a);
             }
         }
 
-        // if (child_ids.length < 2) {
+        // if (child_ixs.length < 2) {
         //     var ref = t.add_refinement(fun);
         //     ref.onclick = addClickHandler(typeobj.name, a);
         // } else {
             // Show a refinement for each potential child position
-            for (var c in child_ids) {
-                var id = child_ids[c];
+            for (var c in child_ixs) {
+                var id = child_ixs[c];
                 var label = fun;
                 for (var a in typeobj.args) {
                     if (a == id)
@@ -359,7 +360,7 @@ Editor.prototype.wrap_candidates = function() {
 }
 
 // Wrap the current node inside another function
-Editor.prototype.wrap = function(fun, child_id) {
+Editor.prototype.wrap = function(fun, child_ix) {
     var t = this;
     var typeobj = t.grammar_constructors.funs[fun];
 
@@ -372,13 +373,57 @@ Editor.prototype.wrap = function(fun, child_id) {
     }
 
     // do actual replacement
-    t.ast.wrap(typeobj, child_id);
+    t.ast.wrap(typeobj, child_ix);
 
     // refresh stuff
     t.redraw_tree();
     t.update_linearisation();
     t.ast.toNextHole();
     t.update_current_node();
+}
+
+// Unwrap a node by deleting a fun with same input/output category
+Editor.prototype.unwrap = function() {
+    var t = this;
+    var fun = t.ast.getFun();
+    var typeobj = t.grammar_constructors.funs[fun];
+
+    // Cannot unwrap when at root
+    if (t.ast.atRoot()) {
+        alert("It is not possible to unwrap the top node");
+        return;
+    }
+    
+    var child = t.ast.getCurrentNode();
+    var parent = t.ast.getParent();
+
+    // TODO: We can also unwrap when at level one and cats don't match
+
+    // Check if unwrap is possible
+    if (parent.children.length==1 &&
+        (parent.cat==child.cat || parent==t.ast.getRoot())
+       ) {
+
+        // do actual unwrap
+        t.ast.unwrap();
+
+        // if root node changed, potentially change startcat
+        var rootcat = t.ast.getRoot().cat;
+        if (rootcat != t.get_startcat()) {
+            var old_val = t.clear_on_change_startcat;
+            t.clear_on_change_startcat = false;
+            t.gm.change_startcat(rootcat);
+            t.clear_on_change_startcat = old_val;
+        }
+
+        // refresh stuff
+        t.redraw_tree();
+        t.update_linearisation();
+        // t.ast.toNextHole();
+        // t.update_current_node();
+    } else {
+        alert("Cannot unwrap this node");
+    }
 }
 
 // Generate random subtree from current node
