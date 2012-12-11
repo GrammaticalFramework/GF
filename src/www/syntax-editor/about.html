@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+About the syntax editor
+</title>
+<link rel=stylesheet type="text/css" href="../minibar/minibar.css"> <link rel=stylesheet type="text/css" href="editor.css"> <meta charset="UTF-8">
+</head>
+<body class="syntax-editor">
+
+<h1 id="gf-web-based-syntax-editor">GF web-based syntax editor</h1>
+<p>John J. Camilleri<br>December 2012</p>
+<p>An improved version of the <a href="http://www.grammaticalframework.org/~meza/restWiki/editor.html">old syntax editor</a>.</p>
+<h2 id="example-usage">Example usage</h2>
+<p>See <code>editor.html</code> and <code>editor_online.js</code>.</p>
+<h2 id="available-startup-options">Available startup options</h2>
+<table>
+<col style="width: 26%" /><col style="width: 62%" /><col style="width: 10%" /><thead>
+<tr class="header">
+<th style="text-align: left;">Options</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">target</td>
+<td style="text-align: left;">
+
+</td>
+<td style="text-align: left;">&quot;editor&quot;</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">initial.grammar</td>
+<td style="text-align: left;">Initial grammar URL, e.g. <code>&quot;http://localhost:41296/grammars/Foods.pgf&quot;</code></td>
+<td style="text-align: left;">
+
+</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">initial.startcat</td>
+<td style="text-align: left;">Initial startcat</td>
+<td style="text-align: left;">(grammar default)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">initial.languages</td>
+<td style="text-align: left;">Initial linearisation languages, e.g. <code>[&quot;Eng&quot;,&quot;Swe&quot;,&quot;Mlt&quot;]</code></td>
+<td style="text-align: left;">(all)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">initial.abstr</td>
+<td style="text-align: left;">Initial abstract tree (as string), e.g. <code>&quot;Pred (That Fish) Expensive&quot;</code></td>
+<td style="text-align: left;">
+
+</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">show_grammar_menu</td>
+<td style="text-align: left;">Show grammar menu?</td>
+<td style="text-align: left;">True</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">show_startcat_menu</td>
+<td style="text-align: left;">Show startcat menu?</td>
+<td style="text-align: left;">True</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">show_to_menu</td>
+<td style="text-align: left;">Show languages menu?</td>
+<td style="text-align: left;">True</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">show_random_button</td>
+<td style="text-align: left;">Show random button?</td>
+<td style="text-align: left;">True</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">show_import</td>
+<td style="text-align: left;">Show import button/panel?</td>
+<td style="text-align: left;">True</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">show_export</td>
+<td style="text-align: left;">Show export button?</td>
+<td style="text-align: left;">True</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Tested with latest Chrome and Firefox (only).</li>
+</ul>
+<h2 id="to-dofeature-requests">To do/feature requests</h2>
+<ul>
+<li>Compatibility with grammars with dependent category types</li>
+<li>Clicking on tokens to select tree node</li>
+<li>Clipboard of trees</li>
+<li>Usage of printnames</li>
+<li>Enter string/float/int literals</li>
+<li>more prominence to Disamb-linearizations</li>
+<li>show all resulting linearizations/variants</li>
+<li>undo/redo (or back/forward) navigation</li>
+<li>structure fridge magnets more (eg newline before the magnet whose first letter is different)</li>
+</ul>
+<h2 id="known-bugs">Known bugs</h2>
+<ul>
+<li>Change startcat doesn't work when given an initial startcat</li>
+</ul>
+</body>
+</html>
+
+
