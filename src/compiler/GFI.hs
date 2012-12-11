@@ -18,7 +18,7 @@ import GF.Grammar.ShowTerm
 import GF.Grammar.Lookup (allOpers,allOpersTo)
 import GF.Compile.Rename(renameSourceTerm)
 import GF.Compile.Compute.Concrete (computeConcrete,checkPredefError)
-import qualified GF.Compile.Compute.ConcreteNew as CN(normalForm)
+import qualified GF.Compile.Compute.ConcreteNew as CN(normalForm,resourceValues)
 import GF.Compile.TypeCheck.Concrete (inferLType,ppType)
 import GF.Infra.Dependencies(depGraph)
 import GF.Infra.CheckM
@@ -333,7 +333,7 @@ checkComputeTerm' new sgr t = do
                  ((t,_),_) <- runCheck $ do t <- renameSourceTerm sgr mo t
                                             inferLType sgr [] t
                  t1 <- if new
-                       then return (CN.normalForm sgr t)
+                       then return (CN.normalForm (CN.resourceValues sgr) t)
                        else computeConcrete sgr t
                  checkPredefError sgr t1
 

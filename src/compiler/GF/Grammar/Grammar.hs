@@ -16,7 +16,7 @@
 
 module GF.Grammar.Grammar (
         SourceGrammar, SourceModInfo(..), SourceModule, ModuleType(..),
-        emptySourceGrammar, mGrammar, modules, prependModule,
+        emptySourceGrammar, mGrammar, modules, prependModule, moduleMap,
 
         MInclude (..), OpenSpec(..),
         extends, isInherited, inheritAll,

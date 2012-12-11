@@ -38,11 +38,13 @@ import Control.Monad.Identity
 
 mkCanon2pgf :: Options -> SourceGrammar -> Ident -> IO D.PGF
 mkCanon2pgf opts gr am = do
-  (an,abs) <- mkAbstr gr am
-  cncs     <- mapM (mkConcr gr) (allConcretes gr am)
+  (an,abs) <- mkAbstr am
+  cncs     <- mapM mkConcr (allConcretes gr am)
   return $ updateProductionIndices (D.PGF Map.empty an abs (Map.fromList cncs))
   where
-    mkAbstr gr am = return (i2i am, D.Abstr flags funs cats bcode)
+    cenv = resourceValues gr
+
+    mkAbstr am = return (i2i am, D.Abstr flags funs cats bcode)
       where
         aflags = 
           concatOptions (reverse [mflags mo | (_,mo) <- modules gr, isModAbs mo])
@@ -64,7 +66,7 @@ mkCanon2pgf opts gr am = do
               (map (\x -> (0,snd x)) . sortBy (compare `on` fst))
                  [(loc,i2i f) | ((m,f),AbsFun (Just (L loc ty)) _ _ (Just True),_) <- adefs, snd (GM.valCat ty) == cat]
 
-    mkConcr gr cm = do
+    mkConcr cm = do
       let cflags  = concatOptions [mflags mo | (i,mo) <- modules gr, isModCnc mo, 
                                                   Just r <- [lookup i (allExtendSpecs gr cm)]]
 
@@ -96,7 +98,7 @@ mkCanon2pgf opts gr am = do
         -- we have to create the PMCFG code just before linking
         addMissingPMCFGs seqs []                  = return (seqs,[])
         addMissingPMCFGs seqs (((m,id), info):is) = do
-          (seqs,info) <- addPMCFG opts gr am cm seqs id info
+          (seqs,info) <- addPMCFG opts gr cenv am cm seqs id info
           (seqs,is  ) <- addMissingPMCFGs seqs is
           return (seqs, ((m,id), info) : is)
 
