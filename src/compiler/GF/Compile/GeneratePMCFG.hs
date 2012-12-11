@@ -10,7 +10,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Compile.GeneratePMCFG
-    (generatePMCFG, pgfCncCat, addPMCFG
+    (generatePMCFG, pgfCncCat, addPMCFG, resourceValues
     ) where
 
 import PGF.CId
@@ -23,7 +23,7 @@ import GF.Grammar.Predef
 import GF.Data.BacktrackM
 import GF.Data.Operations
 import GF.Data.Utilities (updateNthM, updateNth)
-import GF.Compile.Compute.ConcreteNew(normalForm)
+import GF.Compile.Compute.ConcreteNew(GlobalEnv,normalForm,resourceValues)
 import System.IO(hPutStr,hPutStrLn,stderr)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
@@ -45,10 +45,11 @@ import Control.Exception
 
 generatePMCFG :: Options -> SourceGrammar -> SourceModule -> IO SourceModule
 generatePMCFG opts sgr cmo@(cm,cmi) = do
-  (seqs,js) <- mapAccumWithKeyM (addPMCFG opts gr am cm) Map.empty (jments cmi)
+  (seqs,js) <- mapAccumWithKeyM (addPMCFG opts gr cenv am cm) Map.empty (jments cmi)
   when (verbAtLeast opts Verbose) $ hPutStrLn stderr ""
   return (cm,cmi{mseqs = Just (mkSetArray seqs), jments = js})
   where
+    cenv = resourceValues gr
     gr = prependModule sgr cmo
     MTConcrete am = mtype cmi
 
@@ -64,14 +65,14 @@ mapAccumWithKeyM f a m = do let xs = Map.toAscList m
                                    return (a,(k,y):kys)
 
 
-addPMCFG :: Options -> SourceGrammar -> Ident -> Ident -> SeqSet -> Ident -> Info -> IO (SeqSet, Info)
-addPMCFG opts gr am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin@(Just (L _ term)) mprn Nothing) = do
+addPMCFG :: Options -> SourceGrammar -> GlobalEnv -> Ident -> Ident -> SeqSet -> Ident -> Info -> IO (SeqSet, Info)
+addPMCFG opts gr cenv am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin@(Just (L _ term)) mprn Nothing) = do
   let pres  = protoFCat gr res val
       pargs = [protoFCat gr (snd $ catSkeleton ty) lincat | ((_,_,ty),(_,_,lincat)) <- zip ctxt cont]
 
       pmcfgEnv0   = emptyPMCFGEnv
 
-      b          = convert opts gr term val pargs
+      b          = convert opts gr cenv term val pargs
       (seqs1,b1) = addSequencesB seqs b
       pmcfgEnv1  = foldBM addRule
                           pmcfgEnv0
@@ -98,13 +99,13 @@ addPMCFG opts gr am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin
           newArgs  = map getFIds newArgs'
       in addFunction env0 newCat fun newArgs
 
-addPMCFG opts gr am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) mdef@(Just (L _ term)) mprn Nothing) = do
+addPMCFG opts gr cenv am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) mdef@(Just (L _ term)) mprn Nothing) = do
   let pres = protoFCat gr (am,id) lincat
       parg = protoFCat gr (identW,cVar) typeStr
 
       pmcfgEnv0  = emptyPMCFGEnv
 
-      b          = convert opts gr term lincat [parg]
+      b          = convert opts gr cenv term lincat [parg]
       (seqs1,b1) = addSequencesB seqs b
       pmcfgEnv1  = foldBM addRule
                           pmcfgEnv0
@@ -119,14 +120,14 @@ addPMCFG opts gr am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) mdef@(
           !fun     = mkArray lins
       in addFunction env0 newCat fun [[fidVar]]
 
-addPMCFG opts gr am cm seqs id info = return (seqs, info)
+addPMCFG opts gr cenv am cm seqs id info = return (seqs, info)
 
-convert opts gr term val pargs =
+convert opts gr cenv term val pargs =
     runCnvMonad gr conv (pargs,[])
   where
-    conv = convertTerm opts CNil val =<< unfactor term'
+    conv = convertTerm opts CNil val =<< unfactor cenv term'
     term' = if flag optNewComp opts
-            then normalForm gr (recordExpand val term) -- new evaluator
+            then normalForm cenv (recordExpand val term) -- new evaluator
             else term -- old evaluator is invoked from GF.Compile.Optimize
 
 recordExpand :: Type -> Term -> Term
@@ -142,8 +143,8 @@ recordExpand typ trm =
              _ -> R [assign lab (P trm lab) | (lab,_) <- tys]
      _ -> trm
 
-unfactor :: Term -> CnvMonad Term
-unfactor t = CM (\gr c -> c (unfac gr t))
+unfactor :: GlobalEnv -> Term -> CnvMonad Term
+unfactor cenv t = CM (\gr c -> c (unfac gr t))
   where
     unfac gr t = 
       case t of

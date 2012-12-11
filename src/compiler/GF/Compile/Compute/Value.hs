@@ -21,7 +21,7 @@ data Value
   | VTblType Value Value
   | VRecType [(Label,Value)]
   | VRec [(Label,Value)]
-  | VV Type [Value]
+  | VV Type [Value] [Value] -- preserve type for conversion back to Term
   | VT TInfo [(Patt,Bind Env)]
   | VC Value Value
   | VS Value Value

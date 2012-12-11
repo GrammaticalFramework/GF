@@ -9,8 +9,9 @@ import Data.Char (isUpper,toLower,toUpper)
 import GF.Data.Utilities (mapSnd,apBoth)
 
 import GF.Compile.Compute.Value
-import GF.Infra.Ident (Ident)
+import GF.Infra.Ident (Ident,varX)
 import GF.Grammar.Predef
+import PGF.Data(BindType(..))
 
 predefs :: Map.Map Ident ([Value]->Value)
 predefs = Map.fromList $ mapSnd strictf
@@ -40,6 +41,10 @@ predefs = Map.fromList $ mapSnd strictf
 
     apISS f vs = case vs of
                    [VInt i, VString s] -> string (f i s)
+                   [VInt i] -> VAbs Explicit (varX 0) $ Bind $ \ v ->
+                               case norm v of
+                                 VString s -> string (f i s)
+                                 _ -> bug $ "f::Int->Str->Str got "++show (vs++[v])
                    _ -> bug $ "f::Int->Str->Str got "++show vs
 
     apSSB f vs = case vs of
