@@ -1,8 +1,6 @@
 #ifndef GU_SYSDEPS_H_
 #define GU_SYSDEPS_H_
 
-#include <config.h>
-
 #if defined(__GNUC__) && !defined(__STRICT_ANSI__)
 # define GU_GNUC
 #endif

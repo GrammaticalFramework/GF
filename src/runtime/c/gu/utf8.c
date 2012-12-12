@@ -1,6 +1,6 @@
 #include <gu/assert.h>
 #include <gu/utf8.h>
-#include <config.h>
+#include "config.h"
 
 GuUCS
 gu_utf8_decode(const uint8_t** src_inout)
@@ -73,7 +73,6 @@ fail:
 	return 0;
 }
 
-
 size_t
 gu_advance_utf8(GuUCS ucs, uint8_t* buf)
 {
@@ -103,6 +102,19 @@ char
 gu_in_utf8_char_(GuIn* in, GuExn* err)
 {
 	return gu_ucs_char(gu_in_utf8(in, err), err);
+}
+
+char
+gu_in_utf8_char(GuIn* in, GuExn* err)
+{
+#ifdef CHAR_ASCII
+	int i = gu_in_peek_u8(in);
+	if (i >= 0 && i < 0x80) {
+		gu_in_consume(in, 1);
+		return (char) i;
+	}
+#endif
+	return gu_in_utf8_char_(in, err);
 }
 
 void
@@ -210,11 +222,17 @@ void gu_str_out_utf8_(const char* str, GuOut* out, GuExn* err)
 
 #endif
 
-extern inline void 
-gu_str_out_utf8(const char* str, GuOut* out, GuExn* err);
-
 extern inline GuUCS
 gu_in_utf8(GuIn* in, GuExn* err);
 
-extern inline char
-gu_in_utf8_char(GuIn* in, GuExn* err);
+void 
+gu_str_out_utf8(const char* str, GuOut* out, GuExn* err)
+{
+#ifdef CHAR_ASCII
+	gu_out_bytes(out, (const uint8_t*) str, strlen(str), err);
+#else
+	extern void 
+		gu_str_out_utf8_(const char* str, GuOut* out, GuExn* err);
+	gu_str_out_utf8_(str, out, err);
+#endif
+}

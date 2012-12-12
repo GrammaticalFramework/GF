@@ -1,6 +1,6 @@
 #include <gu/ucs.h>
 #include <gu/assert.h>
-#include <config.h>
+#include "config.h"
 
 GU_DEFINE_TYPE(GuUCSExn, abstract, _);
 
@@ -131,5 +131,16 @@ gu_ucs_to_str(const GuUCS* ubuf, size_t len, char* cbuf, GuExn* err)
 extern inline bool
 gu_ucs_valid(GuUCS ucs);
 
-extern inline GuUCS
-gu_char_ucs(char c);
+GuUCS
+gu_char_ucs(char c)
+{
+	gu_require(gu_char_is_valid(c));
+#ifdef CHAR_ASCII
+	GuUCS u = (GuUCS) c;
+#else
+	extern const uint8_t gu_ucs_ascii_reverse_[CHAR_MAX];
+	GuUCS u = gu_ucs_ascii_reverse_[(unsigned char) c];
+#endif
+	gu_ensure(u < 0x80);
+	return u;
+}

@@ -20,6 +20,7 @@
 #include "data.h"
 #include "expr.h"
 #include "literals.h"
+#include "reader.h"
 #include <gu/defs.h>
 #include <gu/map.h>
 #include <gu/seq.h>
@@ -39,8 +40,6 @@
 //
 // PgfReader
 // 
-
-typedef struct PgfReader PgfReader;
 
 struct PgfReader {
 	GuIn* in;
@@ -132,7 +131,7 @@ struct PgfReadNewFn {
 		    size_t* size_out);
 };
 
-static void*
+void*
 pgf_read_new(PgfReader* rdr, GuType* type, GuPool* pool, size_t* size_out)
 {
 	size_t size = 0;
@@ -884,7 +883,7 @@ pgf_read_new_table = GU_TYPETABLE(
 	PGF_READ_NEW(PgfConcr)
 	);
 
-static PgfReader*
+PgfReader*
 pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 {
 	PgfReader* rdr = gu_new(PgfReader, tmp_pool);
@@ -899,66 +898,4 @@ pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 	rdr->read_to_map = gu_new_type_map(&pgf_read_to_table, tmp_pool);
 	rdr->read_new_map = gu_new_type_map(&pgf_read_new_table, tmp_pool);
 	return rdr;
-}
-
-
-PgfPGF*
-pgf_read(GuIn* in, GuPool* pool, GuExn* err)
-{
-	GuPool* tmp_pool = gu_new_pool();
-	PgfReader* rdr = pgf_new_reader(in, pool, tmp_pool, err);
-	PgfPGF* pgf = pgf_read_new(rdr, gu_type(PgfPGF), pool, NULL);
-	gu_pool_free(tmp_pool);
-	gu_return_on_exn(err, NULL);
-	return pgf;
-}
-
-bool
-pgf_load_meta_child_probs(PgfPGF* pgf, const char* fpath, GuPool* pool)
-{
-	FILE *fp = fopen(fpath, "r");
-	if (!fp)
-		return false;
-
-	GuPool* tmp_pool = gu_new_pool();
-	
-	for (;;) {
-		char cat1_s[21];
-		char cat2_s[21];
-		prob_t prob;
-
-		if (fscanf(fp, "%20s\t%20s\t%f", cat1_s, cat2_s, &prob) < 3)
-			break;
-
-		prob = - log(prob);
-
-		GuString cat1 = gu_str_string(cat1_s, tmp_pool);
-		PgfCat* abscat1 =
-			gu_map_get(pgf->abstract.cats, &cat1, PgfCat*);
-		if (abscat1 == NULL)
-			return false;
-
-		if (strcmp(cat2_s, "*") == 0) {
-			abscat1->meta_prob = prob;
-		} else if (strcmp(cat2_s, "_") == 0) {
-			abscat1->meta_token_prob = prob;
-		} else {
-			GuString cat2 = gu_str_string(cat2_s, tmp_pool);
-			PgfCat* abscat2 = gu_map_get(pgf->abstract.cats, &cat2, PgfCat*);
-			if (abscat2 == NULL)
-				return false;
-
-			if (abscat1->meta_child_probs == NULL) {
-				abscat1->meta_child_probs = 
-					gu_map_type_new(PgfMetaChildMap, pool);
-			}
-
-			gu_map_put(abscat1->meta_child_probs, abscat2, prob_t, prob);
-		}
-	}
-	
-	gu_pool_free(tmp_pool);
-
-	fclose(fp);
-	return true;
 }

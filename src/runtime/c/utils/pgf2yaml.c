@@ -4,11 +4,16 @@
 #include <gu/file.h>
 #include <gu/utf8.h>
 
-int main(void) {
+int main(int argc, char* argv[]) {
+	if (argc != 1) {
+		fprintf(stderr, "usage: %s pgf\n", argv[0]);
+		return 1;
+	}
+	char* filename = argv[1];
+
 	GuPool* pool = gu_new_pool();
 	GuExn* err = gu_exn(NULL, type, pool);
-	GuIn* in = gu_file_in(stdin, pool);
-	PgfPGF* pgf = pgf_read(in, pool, err);
+	PgfPGF* pgf = pgf_read(filename, pool, err);
 	int status = 0;
 	if (!gu_ok(err)) {
 		fprintf(stderr, "Reading PGF failed\n");
