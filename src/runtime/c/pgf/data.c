@@ -217,7 +217,7 @@ GU_DEFINE_TYPE(
 					    &gu_null_struct))));
 
 GU_DEFINE_TYPE(
-	PgfPrintNames, PgfCIdMap, gu_type(GuString), NULL);
+	PgfPrintNames, PgfCIdMap, gu_type(GuString), &gu_empty_string);
 
 GU_DEFINE_TYPE(
 	PgfConcr, struct, 

@@ -1,5 +1,5 @@
 /* 
- * Copyright 2010 University of Helsinki.
+ * Copyright 2010 University of Gothenburg.
  *   
  * This file is part of libpgf.
  * 
@@ -27,7 +27,7 @@
 
 #include <gu/exn.h>
 #include <gu/mem.h>
-#include <gu/in.h>
+#include <gu/map.h>
 #include <gu/string.h>
 
 
@@ -35,20 +35,25 @@ typedef GuString PgfCId;
 extern GU_DECLARE_TYPE(PgfCId, typedef);
 
 
+extern GU_DECLARE_TYPE(PgfExn, abstract);
+
+
 /// A single lexical token			      
-typedef GuString PgfToken;			      
+typedef GuString PgfToken;
 
 /// @name PGF Grammar objects
 /// @{
 
 typedef struct PgfPGF PgfPGF;
+typedef struct PgfConcr PgfConcr;
 
 /**< A representation of a PGF grammar. 
  */
 
 
 PgfPGF*
-pgf_read(GuIn* in, GuPool* pool, GuExn* err); 
+pgf_read(const char* fpath,
+         GuPool* pool, GuExn* err);
 
 /**< Read a grammar from a PGF file.
  *
@@ -69,10 +74,34 @@ pgf_read(GuIn* in, GuPool* pool, GuExn* err);
  */
 
 
-bool
-pgf_load_meta_child_probs(PgfPGF*, const char* fpath, GuPool* pool);
+void
+pgf_load_meta_child_probs(PgfPGF*, const char* fpath, 
+                          GuPool* pool, GuExn* err);
 
-typedef struct PgfConcr PgfConcr;
+GuString
+pgf_abstract_name(PgfPGF*);
+
+void
+pgf_iter_languages(PgfPGF*, GuMapItor*, GuExn* err);
+
+PgfConcr*
+pgf_get_language(PgfPGF*, PgfCId lang);
+
+void
+pgf_iter_categories(PgfPGF* pgf, GuMapItor* fn, GuExn* err);
+
+PgfCId
+pgf_start_cat(PgfPGF* pgf, GuPool* pool);
+
+void
+pgf_iter_functions(PgfPGF* pgf, GuMapItor* fn, GuExn* err);
+
+void
+pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname,
+                          GuMapItor* fn, GuExn* err);
+
+GuString
+pgf_print_name(PgfConcr*, PgfCId id);
 
 #include <gu/type.h>
 extern GU_DECLARE_TYPE(PgfPGF, struct);

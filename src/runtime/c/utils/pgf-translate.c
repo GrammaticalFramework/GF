@@ -5,7 +5,6 @@
 #include <gu/enum.h>
 #include <gu/file.h>
 #include <pgf/pgf.h>
-#include <pgf/data.h>
 #include <pgf/parser.h>
 #include <pgf/lexer.h>
 #include <pgf/literals.h>
@@ -53,7 +52,7 @@ int main(int argc, char* argv[]) {
 	GuPool* pool = gu_new_pool();
 	int status = EXIT_SUCCESS;
 	if (argc != 5) {
-		fprintf(stderr, "usage: %s pgf [.]cat from_lang to_lang\n", argv[0]);
+		fprintf(stderr, "usage: %s pgf cat from_lang to_lang\n", argv[0]);
 		status = EXIT_FAILURE;
 		goto fail;
 	}
@@ -64,40 +63,29 @@ int main(int argc, char* argv[]) {
 	GuString from_lang = gu_str_string(argv[3], pool);
 	GuString to_lang = gu_str_string(argv[4], pool);
 	
-	FILE* infile = fopen(filename, "r");
-	if (infile == NULL) {
-		fprintf(stderr, "couldn't open %s\n", filename);
-		status = EXIT_FAILURE;
-		goto fail;
-	}
-
-	// Create an input stream from the input file
-	GuIn* in = gu_file_in(infile, pool);
-
 	// Create an exception frame that catches all errors.
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
 
 	// Read the PGF grammar.
-	PgfPGF* pgf = pgf_read(in, pool, err);
+	PgfPGF* pgf = pgf_read(filename, pool, err);
 
 	// If an error occured, it shows in the exception frame
 	if (!gu_ok(err)) {
 		fprintf(stderr, "Reading PGF failed\n");
 		status = EXIT_FAILURE;
-		goto fail_read;
+		goto fail;
 	}
 
-	if (!pgf_load_meta_child_probs(pgf, "../../../treebanks/PennTreebank/ParseEngAbs3.probs", pool)) {
+	pgf_load_meta_child_probs(pgf, "../../../treebanks/PennTreebank/ParseEngAbs3.probs", pool, err);
+	if (!gu_ok(err)) {
 		fprintf(stderr, "Loading meta child probs failed\n");
 		status = EXIT_FAILURE;
-		goto fail_read;
+		goto fail;
 	}
 
 	// Look up the source and destination concrete categories
-	PgfConcr* from_concr =
-		gu_map_get(pgf->concretes, &from_lang, PgfConcr*);
-	PgfConcr* to_concr =
-		gu_map_get(pgf->concretes, &to_lang, PgfConcr*);
+	PgfConcr* from_concr = pgf_get_language(pgf, from_lang);
+	PgfConcr* to_concr = pgf_get_language(pgf, to_lang);
 	if (!from_concr || !to_concr) {
 		fprintf(stderr, "Unknown language\n");
 		status = EXIT_FAILURE;
@@ -229,8 +217,6 @@ int main(int argc, char* argv[]) {
 		result = NULL;
 	}
 fail_concr:
-fail_read:
-	fclose(infile);
 fail:
 	gu_pool_free(pool);
 	return status;
