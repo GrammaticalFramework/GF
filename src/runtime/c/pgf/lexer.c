@@ -21,6 +21,16 @@ pgf_new_lexer(GuReader *rdr, GuPool *pool)
 	return lexer;
 }
 
+static void
+pgf_lexer_read_ucs(PgfLexer *lexer, GuExn* err)
+{
+	lexer->ucs = gu_read_ucs(lexer->rdr, err);
+	if (gu_exn_is_raised(err)) {
+		gu_exn_clear(err);
+		lexer->ucs = ' ';
+	}
+}
+
 PgfToken
 pgf_lexer_read_token(PgfLexer *lexer, GuExn* err)
 {
@@ -44,19 +54,15 @@ pgf_lexer_read_token(PgfLexer *lexer, GuExn* err)
 			if (gu_exn_is_raised(err))
 				goto stop;
 			counter++;
-			lexer->ucs = gu_read_ucs(lexer->rdr, err);
-			if (gu_exn_is_raised(err))
-				goto stop;
-			
+			pgf_lexer_read_ucs(lexer, err);
+
 			if (lexer->ucs == '.' && counter < 4) {
 				// perhaps an abreviation
 				gu_ucs_write(lexer->ucs, wtr, err);
 				if (gu_exn_is_raised(err))
 					goto stop;
 				counter = 0;
-				lexer->ucs = gu_read_ucs(lexer->rdr, err);
-				if (gu_exn_is_raised(err))
-					goto stop;
+				pgf_lexer_read_ucs(lexer, err);
 			}
 		} while (iswalnum(lexer->ucs) ||
 		         lexer->ucs == '\''   ||
@@ -66,10 +72,8 @@ pgf_lexer_read_token(PgfLexer *lexer, GuExn* err)
 			gu_ucs_write(lexer->ucs, wtr, err);
 			if (gu_exn_is_raised(err))
 				goto stop;
-			lexer->ucs = gu_read_ucs(lexer->rdr, err);
-			if (gu_exn_is_raised(err))
-				goto stop;
-
+				
+			pgf_lexer_read_ucs(lexer, err);
 			if (!iswdigit(lexer->ucs))
 				goto stop;
 		}
@@ -78,9 +82,8 @@ pgf_lexer_read_token(PgfLexer *lexer, GuExn* err)
 			gu_ucs_write(lexer->ucs, wtr, err);
 			if (gu_exn_is_raised(err))
 				goto stop;
-			lexer->ucs = gu_read_ucs(lexer->rdr, err);
-			if (gu_exn_is_raised(err))
-				goto stop;
+
+			pgf_lexer_read_ucs(lexer, err);
 		} while (iswdigit(lexer->ucs));
 		
 		if (lexer->ucs == '.') {
@@ -88,26 +91,19 @@ pgf_lexer_read_token(PgfLexer *lexer, GuExn* err)
 			if (gu_exn_is_raised(err))
 				goto stop;
 
-			lexer->ucs = gu_read_ucs(lexer->rdr, err);
-			if (gu_exn_is_raised(err))
-				goto stop;
-
+			pgf_lexer_read_ucs(lexer, err);
 			while (iswdigit(lexer->ucs)) {
 				gu_ucs_write(lexer->ucs, wtr, err);
 				if (gu_exn_is_raised(err))
 					goto stop;
-				lexer->ucs = gu_read_ucs(lexer->rdr, err);
-				if (gu_exn_is_raised(err))
-					goto stop;
+				pgf_lexer_read_ucs(lexer, err);
 			}
 		}
 	} else {
 		gu_ucs_write(lexer->ucs, wtr, err);
 		if (gu_exn_is_raised(err))
 			goto stop;
-		lexer->ucs = gu_read_ucs(lexer->rdr, err);
-		if (gu_exn_is_raised(err))
-			goto stop;
+		pgf_lexer_read_ucs(lexer, err);
 	}
 
 stop:
