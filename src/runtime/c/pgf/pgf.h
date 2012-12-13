@@ -28,6 +28,7 @@
 #include <gu/exn.h>
 #include <gu/mem.h>
 #include <gu/map.h>
+#include <gu/enum.h>
 #include <gu/string.h>
 
 
@@ -37,19 +38,21 @@ extern GU_DECLARE_TYPE(PgfCId, typedef);
 
 extern GU_DECLARE_TYPE(PgfExn, abstract);
 
-
-/// A single lexical token			      
-typedef GuString PgfToken;
-
 /// @name PGF Grammar objects
 /// @{
 
 typedef struct PgfPGF PgfPGF;
+extern GU_DECLARE_TYPE(PgfPGF, struct);
+
 typedef struct PgfConcr PgfConcr;
+extern GU_DECLARE_TYPE(PgfConcr, struct);
+
 
 /**< A representation of a PGF grammar. 
  */
 
+#include <pgf/expr.h>
+#include <pgf/lexer.h>
 
 PgfPGF*
 pgf_read(const char* fpath,
@@ -103,8 +106,16 @@ pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname,
 GuString
 pgf_print_name(PgfConcr*, PgfCId id);
 
-#include <gu/type.h>
-extern GU_DECLARE_TYPE(PgfPGF, struct);
+void
+pgf_linearize(PgfConcr* concr, PgfExpr expr, GuWriter* wtr, GuExn* err);
+
+GuEnum*
+pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool);
+
+// an experimental function. Please don't use it
+void
+pgf_print_chunks(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool);
+
 
 /// @}
 

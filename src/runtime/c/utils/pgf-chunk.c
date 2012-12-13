@@ -70,14 +70,6 @@ int main(int argc, char* argv[]) {
 	pgf_parser_add_literal(from_concr, gu_str_string("Symb", pool),
 	                       &pgf_nerc_literal_callback);
 
-	// Create an output stream for stdout
-	GuOut* out = gu_file_out(stdout, pool);
-
-	// Locale-encoding writers are currently unsupported
-	// GuWriter* wtr = gu_locale_writer(out, pool);
-	// Use a writer with hard-coded utf-8 encoding for now.
-	GuWriter* wtr = gu_new_utf8_writer(out, pool);
-
 	// We will keep the latest results in the 'ppool' and
 	// we will iterate over them by using 'result'.
 	GuPool* ppool = NULL;
@@ -103,42 +95,15 @@ int main(int argc, char* argv[]) {
 		// sentence, so our memory usage doesn't increase over time.
 		ppool = gu_new_pool();
 
-		// Begin parsing a sentence of the specified category
-		PgfParseState* state =
-			pgf_parser_init_state(from_concr, cat, 0, ppool);
-		if (state == NULL) {
-			fprintf(stderr, "Couldn't begin parsing\n");
-			status = EXIT_FAILURE;
-			break;
-		}
-		
 		GuReader *rdr =
 			gu_string_reader(gu_str_string(line, ppool), ppool);
 		PgfLexer *lexer =
 			pgf_new_lexer(rdr, ppool);
 
-		// Tokenization
-		GuExn* lex_err = gu_new_exn(NULL, gu_kind(type), ppool);
-		PgfToken tok = pgf_lexer_next_token(lexer, lex_err, ppool);
-		while (!gu_exn_is_raised(lex_err)) {
-			// feed the token to get a new parse state
-			state = pgf_parser_next_state(state, tok, ppool);
-			if (!state) {
-				gu_puts("Unexpected token: \"", wtr, err);
-				gu_string_write(tok, wtr, err);
-				gu_puts("\"\n", wtr, err);
-				goto fail_parse;
-			}
-			
-			tok = pgf_lexer_next_token(lexer, lex_err, ppool);
-		}
-
-		pgf_parse_print_chunks(state);
-		continue;
-	fail_parse:
+		pgf_print_chunks(from_concr, cat, lexer, ppool);
+		
 		// Free all resources allocated during parsing and linearization
 		gu_pool_free(ppool);
-		ppool = NULL;
 	}
 fail_concr:
 fail:

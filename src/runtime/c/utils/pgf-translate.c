@@ -9,7 +9,6 @@
 #include <pgf/lexer.h>
 #include <pgf/literals.h>
 #include <pgf/linearize.h>
-#include <pgf/expr.h>
 #include <pgf/edsl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -160,40 +159,29 @@ int main(int argc, char* argv[]) {
 		// sentence, so our memory usage doesn't increase over time.
 		ppool = gu_new_pool();
 
-		clock_t start = clock();
-
-		// Begin parsing a sentence of the specified category
-		PgfParseState* state =
-			pgf_parser_init_state(from_concr, cat, 0, ppool);
-		if (state == NULL) {
-			fprintf(stderr, "Couldn't begin parsing\n");
-			status = EXIT_FAILURE;
-			break;
-		}
-		
 		GuReader *rdr =
 			gu_string_reader(gu_str_string(line, ppool), ppool);
 		PgfLexer *lexer =
 			pgf_new_lexer(rdr, ppool);
 
-		// Tokenization
-		GuExn* lex_err = gu_new_exn(NULL, gu_kind(type), ppool);
-		PgfToken tok = pgf_lexer_next_token(lexer, lex_err, ppool);
-		while (!gu_exn_is_raised(lex_err)) {
-			// feed the token to get a new parse state
-			state = pgf_parser_next_state(state, tok, ppool);
-			if (!state) {
+		clock_t start = clock();
+
+		GuEnum* result =
+			pgf_parse(from_concr, cat, lexer, ppool);
+		if (result == NULL) {
+			PgfToken tok =
+				pgf_lexer_current_token(lexer);
+
+			if (gu_string_eq(tok, gu_empty_string))
+				gu_puts("Couldn't begin parsing", wtr, err);
+			else {
 				gu_puts("Unexpected token: \"", wtr, err);
 				gu_string_write(tok, wtr, err);
 				gu_puts("\"\n", wtr, err);
-				goto fail_parse;
 			}
-			
-			tok = pgf_lexer_next_token(lexer, lex_err, ppool);
-		}
 
-		// Now begin enumerating the resulting syntax trees
-		result = pgf_parse_result(state, ppool);
+			goto fail_parse;
+		}
 
 		PgfExprProb* ep = gu_next(result, PgfExprProb*, ppool);
 
@@ -201,8 +189,7 @@ int main(int argc, char* argv[]) {
 		double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 		printf("%.2f sec\n", cpu_time_used);
 
-		// The enumerator will return a null variant at the
-		// end of the results.
+		// The enumerator will return null at the end of the results.
 		if (ep == NULL) {
 			goto fail_parse;
 		}

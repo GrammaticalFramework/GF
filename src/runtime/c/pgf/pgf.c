@@ -2,8 +2,12 @@
 #include <pgf/data.h>
 #include <pgf/expr.h>
 #include <pgf/reader.h>
+#include <pgf/linearize.h>
+#include <pgf/parser.h>
+#include <pgf/lexer.h>
 #include <gu/file.h>
 #include <gu/string.h>
+#include <gu/enum.h>
 #include <stdio.h>
 #include <math.h>
 
@@ -166,4 +170,74 @@ pgf_print_name(PgfConcr* concr, PgfCId id)
 	if (gu_string_eq(name, gu_empty_string))
 		name = id;
 	return name;
+}
+
+void
+pgf_linearize(PgfConcr* concr, PgfExpr expr, GuWriter* wtr, GuExn* err)
+{
+	GuPool* tmp_pool = gu_local_pool();
+	
+	GuEnum* cts = 
+		pgf_lzr_concretize(concr, expr, tmp_pool);
+	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
+	if (!gu_variant_is_null(ctree)) {
+		pgf_lzr_linearize_simple(concr, ctree, 0, wtr, err);
+	}
+
+	gu_pool_free(tmp_pool);
+}
+
+GuEnum*
+pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool)
+{
+	// Begin parsing a sentence of the specified category
+	PgfParseState* state =
+		pgf_parser_init_state(concr, cat, 0, pool);
+	if (state == NULL) {
+		return NULL;
+	}
+
+	// Tokenization
+	GuExn* lex_err = gu_new_exn(NULL, gu_kind(type), pool);
+	PgfToken tok = pgf_lexer_read_token(lexer, lex_err);
+	while (!gu_exn_is_raised(lex_err)) {
+		// feed the token to get a new parse state
+		state = pgf_parser_next_state(state, tok, pool);
+		if (state == NULL) {
+			return NULL;
+		}
+
+		tok = pgf_lexer_read_token(lexer, lex_err);
+	}
+
+	// Now begin enumerating the resulting syntax trees
+	return pgf_parse_result(state, pool);
+}
+
+void
+pgf_print_chunks(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool)
+{
+	// Begin parsing a sentence of the specified category
+	PgfParseState* state =
+		pgf_parser_init_state(concr, cat, 0, pool);
+	if (state == NULL) {
+		printf("\n");
+		return;
+	}
+
+	// Tokenization
+	GuExn* lex_err = gu_new_exn(NULL, gu_kind(type), pool);
+	PgfToken tok = pgf_lexer_read_token(lexer, lex_err);
+	while (!gu_exn_is_raised(lex_err)) {
+		// feed the token to get a new parse state
+		state = pgf_parser_next_state(state, tok, pool);
+		if (state == NULL) {
+			printf("\n");
+			return;
+		}
+
+		tok = pgf_lexer_read_token(lexer, lex_err);
+	}
+
+	pgf_parse_print_chunks(state);
 }

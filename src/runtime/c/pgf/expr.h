@@ -5,7 +5,6 @@
 #include <gu/write.h>
 #include <gu/variant.h>
 #include <gu/seq.h>
-#include <pgf/pgf.h>
 
 /// Abstract syntax trees
 /// @file
@@ -124,6 +123,15 @@ typedef struct {
 typedef struct {
 	PgfExpr expr;
 } PgfExprImplArg;
+
+typedef float prob_t;
+
+typedef struct {
+	prob_t prob;
+	PgfExpr expr;
+} PgfExprProb;
+
+extern GU_DECLARE_TYPE(PgfExprProb, struct);
 
 int
 pgf_expr_arity(PgfExpr expr);

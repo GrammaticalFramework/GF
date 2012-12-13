@@ -27,7 +27,6 @@
 #include <gu/type.h>
 #include <gu/seq.h>
 #include <pgf/pgf.h>
-#include <pgf/expr.h>
 
 typedef struct PgfCCat PgfCCat;
 typedef PgfCCat* PgfCCatId;
@@ -122,15 +121,6 @@ struct PgfPGF {
 };
 
 extern GU_DECLARE_TYPE(PgfPGF, struct);
-
-typedef float prob_t;
-
-typedef struct {
-	prob_t prob;
-	PgfExpr expr;
-} PgfExprProb;
-
-extern GU_DECLARE_TYPE(PgfExprProb, struct);
 
 struct PgfFunDecl {
 	PgfType* type;

@@ -1,11 +1,13 @@
 #include <gu/list.h>
-#include <pgf/lexer.h>
+#include <pgf/pgf.h>
 #include <pgf/data.h>
 #include <wctype.h>
 
 struct PgfLexer {
 	GuReader* rdr;
+	GuPool* pool;
 	GuUCS ucs;
+	PgfToken tok;
 };
 
 PgfLexer*
@@ -13,16 +15,16 @@ pgf_new_lexer(GuReader *rdr, GuPool *pool)
 {
 	PgfLexer* lexer = gu_new(PgfLexer, pool);
 	lexer->rdr = rdr;
+	lexer->pool = pool;
 	lexer->ucs = ' ';
+	lexer->tok = gu_empty_string;
 	return lexer;
 }
 
 PgfToken
-pgf_lexer_next_token(PgfLexer *lexer, GuExn* err, GuPool *pool)
+pgf_lexer_read_token(PgfLexer *lexer, GuExn* err)
 {
 	GuPool* tmp_pool = gu_new_pool();
-
-	PgfToken tok;
 
 	GuStringBuf* buf = gu_string_buf(tmp_pool);
 	GuWriter* wtr = gu_string_buf_writer(buf);
@@ -109,8 +111,14 @@ pgf_lexer_next_token(PgfLexer *lexer, GuExn* err, GuPool *pool)
 	}
 
 stop:
-	tok = gu_string_buf_freeze(buf, pool);
+	lexer->tok = gu_string_buf_freeze(buf, lexer->pool);
 
 	gu_pool_free(tmp_pool);
-	return tok;
+	return lexer->tok;
+}
+
+PgfToken
+pgf_lexer_current_token(PgfLexer *lexer)
+{
+	return lexer->tok;
 }
