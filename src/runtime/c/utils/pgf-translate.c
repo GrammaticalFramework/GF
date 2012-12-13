@@ -6,7 +6,6 @@
 #include <gu/file.h>
 #include <pgf/pgf.h>
 #include <pgf/parser.h>
-#include <pgf/lexer.h>
 #include <pgf/literals.h>
 #include <pgf/linearize.h>
 #include <pgf/edsl.h>
