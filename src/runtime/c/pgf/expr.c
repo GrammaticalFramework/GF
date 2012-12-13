@@ -141,10 +141,8 @@ struct PgfExprParser {
 	int next_char;
 };
 
-
 static const char pgf_expr_lpar[] = "(";
 static const char pgf_expr_rpar[] = ")";
-static const char pgf_expr_semic[] = ";";
 
 static char
 pgf_expr_parser_next(PgfExprParser* parser)
@@ -168,6 +166,7 @@ pgf_expr_parser_lookahead(PgfExprParser* parser)
 	do {
 		c = pgf_expr_parser_next(parser);
 		if (!gu_ok(parser->err)) {
+			gu_exn_clear(parser->err);
 			return NULL;
 		}
 	} while (isspace(c));
@@ -178,9 +177,6 @@ pgf_expr_parser_lookahead(PgfExprParser* parser)
 	case ')':
 		str = pgf_expr_rpar;
 		break;
-	case ';':
-		str = pgf_expr_semic;
-		break;
 	default:
 		if (isalpha(c)) {
 			GuPool* tmp_pool = gu_new_pool();
@@ -189,7 +185,7 @@ pgf_expr_parser_lookahead(PgfExprParser* parser)
 				gu_buf_push(chars, char, c);
 				c = pgf_expr_parser_next(parser);
 				if (!gu_ok(parser->err)) {
-					return NULL;
+					break;
 				}
 			}
 			parser->next_char = (unsigned char) c;
@@ -235,6 +231,8 @@ pgf_expr_parser_term(PgfExprParser* parser)
 		if (la == pgf_expr_rpar) {
 			pgf_expr_parser_consume(parser);
 			return expr;
+		} else {
+			gu_raise(parser->err, PgfExn);
 		}
 	} else if (pgf_expr_parser_token_is_id(la)) {
 		pgf_expr_parser_consume(parser);
@@ -252,9 +250,8 @@ pgf_expr_parser_expr(PgfExprParser* parser)
 {
 	PgfExpr expr = pgf_expr_parser_term(parser);
 	if (gu_variant_is_null(expr))
-	{
 		return expr;
-	}
+
 	while (true) {
 		PgfExpr arg = pgf_expr_parser_term(parser);
 		if (gu_variant_is_null(arg)) {
@@ -266,8 +263,6 @@ pgf_expr_parser_expr(PgfExprParser* parser)
 					expr, arg);
 	}
 }
-
-
 
 PgfExpr
 pgf_read_expr(GuReader* rdr, GuPool* pool, GuExn* err)
@@ -281,12 +276,6 @@ pgf_read_expr(GuReader* rdr, GuPool* pool, GuExn* err)
 	parser->lookahead = NULL;
 	parser->next_char = -1;
 	PgfExpr expr = pgf_expr_parser_expr(parser);
-	const char* la = pgf_expr_parser_lookahead(parser);
-	if (la == pgf_expr_semic) {
-		pgf_expr_parser_consume(parser);
-	} else {
-		expr = gu_null_variant;
-	}
 	gu_pool_free(tmp_pool);
 	return expr;
 }
