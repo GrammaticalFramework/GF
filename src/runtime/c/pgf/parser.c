@@ -468,6 +468,7 @@ pgf_parsing_get_conts(PgfContsMap* conts_map,
 		conts->lin_idx   = lin_idx;
 		conts->state     = state;
 		conts->items     = gu_new_buf(PgfItem*, pool);
+		conts->outside_prob = 0;
 		conts->ref_count = 0;
 		gu_list_index(contss, lin_idx) = conts;
 		
@@ -1941,6 +1942,7 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
 			conts->lin_idx   = lin_idx;
 			conts->state     = NULL;
 			conts->items     = gu_new_buf(PgfItem*, pool);
+			conts->outside_prob = 0;
 			conts->ref_count = 0;
 			gu_buf_push(conts->items, PgfItem*, NULL);
 			
