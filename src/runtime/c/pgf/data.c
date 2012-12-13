@@ -1,5 +1,4 @@
 #include "data.h"
-#include "expr.h"
 #include <gu/type.h>
 #include <gu/variant.h>
 #include <gu/assert.h>
