@@ -8,6 +8,8 @@
 
 static PyObject* PGFError;
 
+static PyObject* ParseError;
+
 static PyObject*
 gu2py_string(GuString s) {
 	GuWord w = s.w_;
@@ -34,12 +36,216 @@ gu2py_string(GuString s) {
 }
 
 typedef struct {
+	PyObject_HEAD
+	PyObject* master;
+	GuPool* pool;
+    PgfExpr expr;
+} ExprObject;
+
+static ExprObject*
+Expr_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    ExprObject* self = (ExprObject *)type->tp_alloc(type, 0);
+    if (self != NULL) {
+		self->master = NULL;
+		self->expr   = gu_null_variant;
+    }
+
+    return self;
+}
+
+static void
+Expr_dealloc(ExprObject* self)
+{
+	if (self->master != NULL)
+		Py_DECREF(self->master);
+	else if (self->pool != NULL)
+		gu_pool_free(self->pool);
+
+    self->ob_type->tp_free((PyObject*)self);
+}
+
+static int
+Expr_init(ExprObject *self, PyObject *args, PyObject *kwds)
+{
+    return -1;
+}
+
+static PyObject *
+Expr_repr(ExprObject *self)
+{
+	GuPool* tmp_pool = gu_local_pool();
+	
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuWriter* wtr = gu_string_buf_writer(sbuf);
+
+	pgf_print_expr(self->expr, 0, wtr, err);
+
+	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
+	PyObject* pystr = gu2py_string(str);
+	
+	gu_pool_free(tmp_pool);
+	return pystr;
+}
+
+static PyMethodDef Expr_methods[] = {
+    {NULL}  /* Sentinel */
+};
+
+static PyTypeObject pgf_ExprType = {
+    PyObject_HEAD_INIT(NULL)
+    0,                         /*ob_size*/
+    "pgf.Expr",                /*tp_name*/
+    sizeof(ExprObject),        /*tp_basicsize*/
+    0,                         /*tp_itemsize*/
+    (destructor)Expr_dealloc,  /*tp_dealloc*/
+    0,                         /*tp_print*/
+    0,                         /*tp_getattr*/
+    0,                         /*tp_setattr*/
+    0,                         /*tp_compare*/
+    0,                         /*tp_repr*/
+    0,                         /*tp_as_number*/
+    0,                         /*tp_as_sequence*/
+    0,                         /*tp_as_mapping*/
+    0,                         /*tp_hash */
+    0,                         /*tp_call*/
+    (reprfunc) Expr_repr,      /*tp_str*/
+    0,                         /*tp_getattro*/
+    0,                         /*tp_setattro*/
+    0,                         /*tp_as_buffer*/
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /*tp_flags*/
+    "abstract syntax tree",    /*tp_doc*/
+    0,		                   /*tp_traverse */
+    0,		                   /*tp_clear */
+    0,		                   /*tp_richcompare */
+    0,		                   /*tp_weaklistoffset */
+    0,		                   /*tp_iter */
+    0,		                   /*tp_iternext */
+    Expr_methods,              /*tp_methods */
+    0,                         /*tp_members */
+    0,                         /*tp_getset */
+    0,                         /*tp_base */
+    0,                         /*tp_dict */
+    0,                         /*tp_descr_get */
+    0,                         /*tp_descr_set */
+    0,                         /*tp_dictoffset */
+    (initproc)Expr_init,       /*tp_init */
+    0,                         /*tp_alloc */
+    (newfunc) Expr_new,        /*tp_new */
+};
+
+typedef struct {
+    PyObject_HEAD
+    GuPool* pool;
+    GuEnum* res;
+} ParseResultObject;
+
+static ParseResultObject*
+ParseResult_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    ParseResultObject* self = (ParseResultObject *)type->tp_alloc(type, 0);
+    if (self != NULL) {
+		self->pool = NULL;
+		self->res  = NULL;
+    }
+
+    return self;
+}
+
+static void
+ParseResult_dealloc(ParseResultObject* self)
+{
+	if (self->pool != NULL)
+		gu_pool_free(self->pool);
+
+    self->ob_type->tp_free((PyObject*)self);
+}
+
+static int
+ParseResult_init(ParseResultObject *self, PyObject *args, PyObject *kwds)
+{
+    return -1;
+}
+
+static PyObject*
+ParseResult_iter(ParseResultObject *self)
+{
+	Py_INCREF(self);
+	return (PyObject*) self;
+}
+
+static ExprObject*
+ParseResult_iternext(ParseResultObject *self)
+{
+	PgfExprProb* ep = gu_next(self->res, PgfExprProb*, self->pool);
+	if (ep == NULL)
+		return NULL;
+
+	ExprObject* pyexpr = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
+	if (pyexpr == NULL)
+		return NULL;
+	pyexpr->pool   = self->pool;
+	pyexpr->expr   = ep->expr;
+	pyexpr->master = (PyObject*) self;
+	Py_INCREF(self);
+
+	return pyexpr;
+}
+
+static PyMethodDef ParseResult_methods[] = {
+    {NULL}  /* Sentinel */
+};
+
+static PyTypeObject pgf_ParseResultType = {
+    PyObject_HEAD_INIT(NULL)
+    0,                         /*ob_size*/
+    "pgf.ParseResult",         /*tp_name*/
+    sizeof(ParseResultObject), /*tp_basicsize*/
+    0,                         /*tp_itemsize*/
+    (destructor)ParseResult_dealloc, /*tp_dealloc*/
+    0,                         /*tp_print*/
+    0,                         /*tp_getattr*/
+    0,                         /*tp_setattr*/
+    0,                         /*tp_compare*/
+    0,                         /*tp_repr*/
+    0,                         /*tp_as_number*/
+    0,                         /*tp_as_sequence*/
+    0,                         /*tp_as_mapping*/
+    0,                         /*tp_hash */
+    0,                         /*tp_call*/
+    0,                         /*tp_str*/
+    0,                         /*tp_getattro*/
+    0,                         /*tp_setattro*/
+    0,                         /*tp_as_buffer*/
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /*tp_flags*/
+    "parsing result",          /*tp_doc*/
+    0,		                   /*tp_traverse */
+    0,		                   /*tp_clear */
+    0,		                   /*tp_richcompare */
+    0,		                   /*tp_weaklistoffset */
+    (getiterfunc) ParseResult_iter, /*tp_iter */
+    (iternextfunc) ParseResult_iternext, /*tp_iternext */
+    ParseResult_methods,       /*tp_methods */
+    0,                         /*tp_members */
+    0,                         /*tp_getset */
+    0,                         /*tp_base */
+    0,                         /*tp_dict */
+    0,                         /*tp_descr_get */
+    0,                         /*tp_descr_set */
+    0,                         /*tp_dictoffset */
+    (initproc)ParseResult_init,/*tp_init */
+    0,                         /*tp_alloc */
+    (newfunc) ParseResult_new, /*tp_new */
+};
+
+typedef struct {
     PyObject_HEAD
     PyObject* grammar;
     PgfConcr* concr;
 } ConcrObject;
 
-static PyObject *
+static ConcrObject*
 Concr_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
     ConcrObject* self = (ConcrObject *)type->tp_alloc(type, 0);
@@ -48,7 +254,7 @@ Concr_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 		self->concr   = NULL;
     }
 
-    return (PyObject *)self;
+    return self;
 }
 
 static void
@@ -73,13 +279,97 @@ Concr_printName(ConcrObject* self, PyObject *args)
 
 	GuPool *tmp_pool = gu_local_pool();
     GuString name = gu_str_string(name_s, tmp_pool);
+    PyObject* pyname = gu2py_string(pgf_print_name(self->concr, name));
+	gu_pool_free(tmp_pool);
 
-	return gu2py_string(pgf_print_name(self->concr, name));
+	return pyname;
+}
+
+static ParseResultObject*
+Concr_parse(ConcrObject* self, PyObject *args)
+{
+	size_t len;
+	const char *catname_s;
+	const uint8_t *buf;
+	if (!PyArg_ParseTuple(args, "ss#", &catname_s, &buf, &len))
+        return NULL;
+
+	ParseResultObject* pyres = (ParseResultObject*) 
+		pgf_ExprType.tp_alloc(&pgf_ParseResultType, 0);
+	if (pyres == NULL) {
+		return NULL;
+	}
+
+	pyres->pool = gu_new_pool();
+
+	GuPool *tmp_pool = gu_local_pool();
+    GuString catname = gu_str_string(catname_s, tmp_pool);
+	GuIn* in = gu_data_in(buf, len, tmp_pool);
+	GuReader* rdr = gu_new_utf8_reader(in, tmp_pool);
+	PgfLexer *lexer =
+		pgf_new_lexer(rdr, tmp_pool);
+
+	pyres->res =
+		pgf_parse(self->concr, catname, lexer, pyres->pool);
+	if (pyres->res == NULL) {
+		Py_DECREF(pyres);
+
+		PgfToken tok =
+			pgf_lexer_current_token(lexer);
+
+		if (gu_string_eq(tok, gu_empty_string))
+			PyErr_SetString(PGFError, "The sentence cannot be parsed");
+		else {
+			PyObject* py_tok = gu2py_string(tok);
+			PyObject_SetAttrString(ParseError, "token", py_tok);
+			PyErr_Format(ParseError, "Unexpected token: \"%s\"", 
+										PyString_AsString(py_tok));
+			Py_DECREF(py_tok);
+		}
+
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return pyres;
+}
+
+static PyObject*
+Concr_linearize(ConcrObject* self, PyObject *args)
+{
+	ExprObject* pyexpr;
+	if (!PyArg_ParseTuple(args, "O!", &pgf_ExprType, &pyexpr))
+        return NULL;
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	
+	pgf_linearize(self->concr, pyexpr->expr, wtr, err);
+	if (!gu_ok(err)) {
+		PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
+		return NULL;
+	}
+
+	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
+	PyObject* pystr = gu2py_string(str);
+	
+	gu_pool_free(tmp_pool);
+	return pystr;
 }
 
 static PyMethodDef Concr_methods[] = {
     {"printName", (PyCFunction)Concr_printName, METH_VARARGS,
-     "Return the print name of a function or category"
+     "Returns the print name of a function or category"
+    },
+    {"parse", (PyCFunction)Concr_parse, METH_VARARGS,
+     "Parses a string and returns an iterator over the abstract trees for this sentence"
+    },
+    {"linearize", (PyCFunction)Concr_linearize, METH_VARARGS,
+     "Takes an abstract tree and linearizes it to a sentence"
     },
     {NULL}  /* Sentinel */
 };
@@ -106,7 +396,7 @@ static PyTypeObject pgf_ConcrType = {
     0,                         /*tp_setattro*/
     0,                         /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /*tp_flags*/
-    "concrete syntax object",  /*tp_doc*/
+    "concrete syntax",         /*tp_doc*/
     0,		                   /*tp_traverse */
     0,		                   /*tp_clear */
     0,		                   /*tp_richcompare */
@@ -123,7 +413,7 @@ static PyTypeObject pgf_ConcrType = {
     0,                         /*tp_dictoffset */
     (initproc)Concr_init,      /*tp_init */
     0,                         /*tp_alloc */
-    Concr_new,                 /*tp_new */
+    (newfunc)Concr_new,        /*tp_new */
 };
 
 typedef struct {
@@ -132,7 +422,7 @@ typedef struct {
     PgfPGF* pgf;
 } PGFObject;
 
-static PyObject *
+static PGFObject*
 PGF_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
     PGFObject* self = (PGFObject *)type->tp_alloc(type, 0);
@@ -141,7 +431,7 @@ PGF_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 		self->pgf  = NULL;
     }
 
-    return (PyObject *)self;
+    return self;
 }
 
 static void
@@ -222,12 +512,14 @@ PGF_getLanguages(PGFObject *self, void *closure)
 	pgf_iter_languages(self->pgf, &clo.fn, err);
 	if (!gu_ok(err)) {
 		Py_DECREF(languages);
+		gu_pool_free(tmp_pool);
 		return NULL;
 	}
 
 	PyObject* proxy = PyDictProxy_New(languages);
 	
 	Py_DECREF(languages);
+	gu_pool_free(tmp_pool);
 
     return proxy;
 }
@@ -271,9 +563,11 @@ PGF_getCategories(PGFObject *self, void *closure)
 	pgf_iter_categories(self->pgf, &clo.fn, err);
 	if (!gu_ok(err)) {
 		Py_DECREF(categories);
+		gu_pool_free(tmp_pool);
 		return NULL;
 	}
 
+	gu_pool_free(tmp_pool);
     return categories;
 }
 
@@ -281,7 +575,9 @@ static PyObject*
 PGF_getStartCat(PGFObject *self, void *closure)
 {
 	GuPool* tmp_pool = gu_local_pool();
-    return gu2py_string(pgf_start_cat(self->pgf, tmp_pool));
+	PyObject* pyname = gu2py_string(pgf_start_cat(self->pgf, tmp_pool));
+	gu_pool_free(tmp_pool);
+    return pyname;
 }
 
 static void
@@ -323,9 +619,11 @@ PGF_getFunctions(PGFObject *self, void *closure)
 	pgf_iter_functions(self->pgf, &clo.fn, err);
 	if (!gu_ok(err)) {
 		Py_DECREF(functions);
+		gu_pool_free(tmp_pool);
 		return NULL;
 	}
 
+	gu_pool_free(tmp_pool);
     return functions;
 }
 
@@ -340,8 +638,10 @@ PGF_functionsByCat(PGFObject* self, PyObject *args)
     GuString catname = gu_str_string(catname_s, tmp_pool);
 
 	PyObject* functions = PyList_New(0);
-	if (functions == NULL)
+	if (functions == NULL) {
+		gu_pool_free(tmp_pool);
 		return NULL;
+	}
 
 	// Create an exception frame that catches all errors.
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
@@ -350,9 +650,11 @@ PGF_functionsByCat(PGFObject* self, PyObject *args)
 	pgf_iter_functions_by_cat(self->pgf, catname, &clo.fn, err);
 	if (!gu_ok(err)) {
 		Py_DECREF(functions);
+		gu_pool_free(tmp_pool);
 		return NULL;
 	}
 
+	gu_pool_free(tmp_pool);
     return functions;
 }
 
@@ -430,10 +732,10 @@ static PyTypeObject pgf_PGFType = {
     0,                         /*tp_dictoffset */
     (initproc)PGF_init,        /*tp_init */
     0,                         /*tp_alloc */
-    PGF_new,                   /*tp_new */
+    (newfunc)PGF_new,          /*tp_new */
 };
 
-static PyObject *
+static PGFObject*
 pgf_readPGF(PyObject *self, PyObject *args)
 {
     const char *fpath;
@@ -453,15 +755,50 @@ pgf_readPGF(PyObject *self, PyObject *args)
 	if (!gu_ok(err)) {
 		PyErr_SetString(PGFError, "The grammar cannot be loaded");
 		Py_DECREF(py_pgf);
+		gu_pool_free(tmp_pool);
 		return NULL;
 	}
 
-	return ((PyObject*) py_pgf);
+	gu_pool_free(tmp_pool);
+	return py_pgf;
+}
+
+static ExprObject*
+pgf_readExpr(PyObject *self, PyObject *args) {
+	size_t len;
+    const uint8_t *buf;
+    if (!PyArg_ParseTuple(args, "s#", &buf, &len))
+        return NULL;
+
+	ExprObject* pyexpr = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
+	if (pyexpr == NULL)
+		return NULL;
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuIn* in = gu_data_in(buf, len, tmp_pool);
+	GuReader* rdr = gu_new_utf8_reader(in, tmp_pool);
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	pyexpr->pool = gu_new_pool();
+	pyexpr->expr = pgf_read_expr(rdr, pyexpr->pool, err);
+	pyexpr->master = NULL;
+	
+	if (!gu_ok(err) || gu_variant_is_null(pyexpr->expr)) {
+		PyErr_SetString(PGFError, "The expression cannot be parsed");
+		Py_DECREF(pyexpr);
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+    return pyexpr;
 }
 
 static PyMethodDef module_methods[] = {
-    {"readPGF",  pgf_readPGF, METH_VARARGS,
+    {"readPGF",  (void*)pgf_readPGF,  METH_VARARGS,
      "Reads a PGF file in the memory"},
+    {"readExpr", (void*)pgf_readExpr, METH_VARARGS,
+     "Parses a string as an abstract tree"},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
@@ -476,14 +813,28 @@ initpgf(void)
     if (PyType_Ready(&pgf_ConcrType) < 0)
         return;
 
+    if (PyType_Ready(&pgf_ExprType) < 0)
+        return;
+
+	if (PyType_Ready(&pgf_ParseResultType) < 0)
+		return;
+
     m = Py_InitModule("pgf", module_methods);
     if (m == NULL)
         return;
         
-    PGFError = PyErr_NewException("pgf.error", NULL, NULL);
+    PGFError = PyErr_NewException("pgf.PGFError", NULL, NULL);
+    PyModule_AddObject(m, "PGFError", PGFError);
     Py_INCREF(PGFError);
-    PyModule_AddObject(m, "error", PGFError);
     
-    Py_INCREF(&pgf_PGFType);    
+    PyObject *dict = PyDict_New();
+    PyDict_SetItemString(dict, "token", PyString_FromString("")); 
+    ParseError = PyErr_NewException("pgf.ParseError", NULL, dict);
+    PyModule_AddObject(m, "ParseError", ParseError);
+    Py_INCREF(ParseError);
+    
+    Py_INCREF(&pgf_PGFType);
     Py_INCREF(&pgf_ConcrType);
+    Py_INCREF(&pgf_ExprType);
+    Py_INCREF(&pgf_ParseResultType);
 }
