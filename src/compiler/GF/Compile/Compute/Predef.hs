@@ -1,5 +1,5 @@
 -- | Implementations of predefined functions
-{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
 module GF.Compile.Compute.Predef(predef,predefName,delta) where
 
 import Text.PrettyPrint(render,hang,text)
