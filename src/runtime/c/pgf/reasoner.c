@@ -68,8 +68,10 @@ pgf_reasoner_cat_init(PgfReasoner* rs,
 		return false;
 	}
 
-	PgfExprQState q = {cont, cont_prob, 0, abscat};
-	gu_buf_heap_push(rs->pqueue, &pgf_expr_qstate_order, &q);	
+	if (abscat->n_functions > 0) {
+		PgfExprQState q = {cont, cont_prob, 0, abscat};
+		gu_buf_heap_push(rs->pqueue, &pgf_expr_qstate_order, &q);
+	}
 	return true;
 }
 
