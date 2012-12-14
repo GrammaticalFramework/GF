@@ -1,7 +1,10 @@
 #include <pgf/pgf.h>
 #include <pgf/data.h>
+#include <gu/file.h>
 #include <math.h>
 #include <stdio.h>
+
+//#define PGF_REASONER_DEBUG
 
 typedef struct PgfExprState PgfExprState;
 
@@ -46,6 +49,58 @@ cmp_expr_qstate(GuOrder* self, const void* a, const void* b)
 static GuOrder
 pgf_expr_qstate_order = { cmp_expr_qstate };
 
+#ifdef PGF_REASONER_DEBUG
+static void
+pgf_print_expr_state(PgfExprState* st,
+                     GuWriter* wtr, GuExn* err, GuBuf* stack)
+{
+	gu_buf_push(stack, int, (gu_seq_length(st->hypos) - st->arg_idx - 1));
+
+	if (st->cont != NULL)
+		pgf_print_expr_state(st->cont, wtr, err, stack);
+
+	gu_puts(" (", wtr, err);
+	pgf_print_expr(st->expr, 0, wtr, err);
+}
+
+static void
+pgf_print_expr_qstate(PgfExprQState* q, PgfAbstr* abstract,
+                      GuWriter* wtr, GuExn* err, GuPool* tmp_pool)
+{
+	PgfCId fun = q->abscat->functions[q->fun_idx].fun;
+	PgfFunDecl* absfun =
+		gu_map_get(abstract->funs, &fun, PgfFunDecl*);
+	
+	prob_t prob = q->cont_prob+absfun->ep.prob;
+	gu_printf(wtr, err, "[%f]", prob);
+	
+	size_t n_args = gu_seq_length(absfun->type->hypos);
+
+	GuBuf* stack = gu_new_buf(int, tmp_pool);
+	if (n_args > 0)
+		gu_buf_push(stack, int, n_args);
+
+	if (q->st != NULL)
+		pgf_print_expr_state(q->st, wtr, err, stack);
+
+	if (n_args > 0)
+		gu_puts(" (", wtr, err);
+	else
+		gu_puts(" ", wtr, err);
+	pgf_print_expr(absfun->ep.expr, 0, wtr, err);
+
+	size_t n_counts = gu_buf_length(stack);
+	for (size_t i = 0; i < n_counts; i++) {
+		int count = gu_buf_get(stack, int, i);
+		while (count-- > 0)
+			gu_puts(" ?", wtr, err);
+		
+		gu_puts(")", wtr, err);
+	}
+	gu_puts("\n", wtr, err);
+}
+#endif
+
 static bool
 pgf_reasoner_cat_init(PgfReasoner* rs, 
                       PgfExprState* cont, prob_t cont_prob, PgfCId cat,
@@ -84,6 +139,17 @@ pgf_reasoner_next(PgfReasoner* rs, GuPool* pool)
 	while (gu_buf_length(rs->pqueue) > 0) {
 		PgfExprQState q;
 		gu_buf_heap_pop(rs->pqueue, &pgf_expr_qstate_order, &q);
+
+#ifdef PGF_REASONER_DEBUG
+		{
+			GuPool* tmp_pool = gu_new_pool();
+			GuOut* out = gu_file_out(stderr, tmp_pool);
+			GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
+			GuExn* err = gu_exn(NULL, type, tmp_pool);
+			pgf_print_expr_qstate(&q, rs->abstract, wtr, err, tmp_pool);
+			gu_pool_free(tmp_pool);
+		}
+#endif
 
 		PgfCId fun = q.abscat->functions[q.fun_idx++].fun;
 		PgfFunDecl* absfun =
