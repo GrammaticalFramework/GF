@@ -182,7 +182,7 @@ ExprIter_iter(ExprIterObject *self)
 static PyObject*
 ExprIter_iternext(ExprIterObject *self)
 {
-	if (self->max_count > 0 && self->counter >= self->max_count) {
+	if (self->max_count >= 0 && self->counter >= self->max_count) {
 		return NULL;
 	}
 	self->counter++;
@@ -253,7 +253,13 @@ static PyTypeObject pgf_ExprIterType = {
 
 typedef struct {
     PyObject_HEAD
-    PyObject* grammar;
+    GuPool* pool;
+    PgfPGF* pgf;
+} PGFObject;
+
+typedef struct {
+    PyObject_HEAD
+    PGFObject* grammar;
     PgfConcr* concr;
 } ConcrObject;
 
@@ -298,12 +304,16 @@ Concr_printName(ConcrObject* self, PyObject *args)
 }
 
 static ExprIterObject*
-Concr_parse(ConcrObject* self, PyObject *args)
+Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 {
+	static char *kwlist[] = {"sentence", "cat", "n", NULL};
+
 	size_t len;
-	const char *catname_s;
 	const uint8_t *buf;
-	if (!PyArg_ParseTuple(args, "ss#", &catname_s, &buf, &len))
+	const char *catname_s = NULL;
+	int max_count = -1;
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "s#|si", kwlist,
+                                     &buf, &len, &catname_s, &max_count))
         return NULL;
 
 	ExprIterObject* pyres = (ExprIterObject*) 
@@ -313,11 +323,13 @@ Concr_parse(ConcrObject* self, PyObject *args)
 	}
 
 	pyres->pool = gu_new_pool();
-	pyres->max_count = -1;
+	pyres->max_count = max_count;
 	pyres->counter   = 0;
 
 	GuPool *tmp_pool = gu_local_pool();
-    GuString catname = gu_str_string(catname_s, tmp_pool);
+    GuString catname = 
+		(catname_s == NULL) ? pgf_start_cat(self->grammar->pgf, tmp_pool)
+		                    : gu_str_string(catname_s, tmp_pool);
 	GuIn* in = gu_data_in(buf, len, tmp_pool);
 	GuReader* rdr = gu_new_utf8_reader(in, tmp_pool);
 	PgfLexer *lexer =
@@ -379,7 +391,7 @@ static PyMethodDef Concr_methods[] = {
     {"printName", (PyCFunction)Concr_printName, METH_VARARGS,
      "Returns the print name of a function or category"
     },
-    {"parse", (PyCFunction)Concr_parse, METH_VARARGS,
+    {"parse", (PyCFunction)Concr_parse, METH_VARARGS | METH_KEYWORDS,
      "Parses a string and returns an iterator over the abstract trees for this sentence"
     },
     {"linearize", (PyCFunction)Concr_linearize, METH_VARARGS,
@@ -430,12 +442,6 @@ static PyTypeObject pgf_ConcrType = {
     (newfunc)Concr_new,        /*tp_new */
 };
 
-typedef struct {
-    PyObject_HEAD
-    GuPool* pool;
-    PgfPGF* pgf;
-} PGFObject;
-
 static PGFObject*
 PGF_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
@@ -470,7 +476,7 @@ PGF_getAbstractName(PGFObject *self, void *closure)
 
 typedef struct {
 	GuMapItor fn;
-	PyObject* grammar;
+	PGFObject* grammar;
 	PyObject* object;
 } PyPGFClosure;
 
@@ -522,7 +528,7 @@ PGF_getLanguages(PGFObject *self, void *closure)
 	// Create an exception frame that catches all errors.
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 
-	PyPGFClosure clo = { { pgf_collect_langs }, (PyObject*) self, languages };
+	PyPGFClosure clo = { { pgf_collect_langs }, self, languages };
 	pgf_iter_languages(self->pgf, &clo.fn, err);
 	if (!gu_ok(err)) {
 		Py_DECREF(languages);
@@ -573,7 +579,7 @@ PGF_getCategories(PGFObject *self, void *closure)
 	// Create an exception frame that catches all errors.
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 
-	PyPGFClosure clo = { { pgf_collect_cats }, (PyObject*) self, categories };
+	PyPGFClosure clo = { { pgf_collect_cats }, self, categories };
 	pgf_iter_categories(self->pgf, &clo.fn, err);
 	if (!gu_ok(err)) {
 		Py_DECREF(categories);
@@ -629,7 +635,7 @@ PGF_getFunctions(PGFObject *self, void *closure)
 	// Create an exception frame that catches all errors.
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 
-	PyPGFClosure clo = { { pgf_collect_funs }, (PyObject*) self, functions };
+	PyPGFClosure clo = { { pgf_collect_funs }, self, functions };
 	pgf_iter_functions(self->pgf, &clo.fn, err);
 	if (!gu_ok(err)) {
 		Py_DECREF(functions);
@@ -660,7 +666,7 @@ PGF_functionsByCat(PGFObject* self, PyObject *args)
 	// Create an exception frame that catches all errors.
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 
-	PyPGFClosure clo = { { pgf_collect_funs }, (PyObject*) self, functions };
+	PyPGFClosure clo = { { pgf_collect_funs }, self, functions };
 	pgf_iter_functions_by_cat(self->pgf, catname, &clo.fn, err);
 	if (!gu_ok(err)) {
 		Py_DECREF(functions);
