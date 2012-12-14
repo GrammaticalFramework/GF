@@ -1,9 +1,8 @@
 -- | Functions for computing the values of terms in the concrete syntax, in
 -- | preparation for PMCFG generation.
 module GF.Compile.Compute.ConcreteNew
-           ( normalForm
-           , GlobalEnv, resourceValues
-           , Value(..), Env, eval, apply, value2term
+           (GlobalEnv, resourceValues, normalForm
+           --, Value(..), Env, value2term, eval, apply
            ) where
 
 import GF.Grammar hiding (Env, VGen, VApp, VRecType)
@@ -11,27 +10,30 @@ import GF.Grammar.Lookup(lookupResDef,allParamValues)
 import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr)
 import GF.Grammar.PatternMatch(matchPattern)
 import GF.Grammar.Lockfield(unlockRecord,lockLabel,isLockLabel,lockRecType)
-import GF.Compile.Compute.Value
-import GF.Compile.Compute.Predef(predefs)
+import GF.Compile.Compute.Value hiding (Predefined(..))
+import GF.Compile.Compute.Predef(predef,predefName,delta)
 import GF.Data.Str(Str,glueStr,str2strings,str,sstr,plusStr,strTok)
-import GF.Data.Operations(Err,err,maybeErr,combinations)
-import GF.Data.Utilities(mapSnd,mapBoth,apBoth,apSnd)
-import Control.Monad(liftM,liftM2,mplus)
-import Data.List (findIndex,intersect,isInfixOf,nub)
+import GF.Data.Operations(Err,err,maybeErr,combinations,mapPairsM)
+import GF.Data.Utilities(mapFst,mapSnd,mapBoth,apBoth,apSnd)
+import Control.Monad(ap,liftM,liftM2,mplus)
+import Data.List (findIndex,intersect,isInfixOf,nub,elemIndex)
 import Data.Char (isUpper,toUpper,toLower)
 import Text.PrettyPrint
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Map as Map
-import Debug.Trace(trace)
+--import Debug.Trace(trace)
 
 -- * Main entry points
 
-normalForm :: GlobalEnv -> Term -> Term
-normalForm = nfx . toplevel
-nfx env = value2term (srcgr env) [] . value env
+normalForm :: GlobalEnv -> L Ident -> Term -> Term
+normalForm (GE gr rv _) loc = err bugloc id . nfx (GE gr rv loc)
+  where
+    bugloc s = ppbug $ hang (text "In"<+>ppL loc<>text ":") 4 (text s)
 
-eval :: GlobalEnv -> Term -> Value
-eval = value . toplevel
+nfx env@(GE gr _ loc) t = value2term loc gr [] # eval env t
+
+eval :: GlobalEnv -> Term -> Err Value
+eval ge t = ($[]) # value (toplevel ge) t
 
 apply env = apply' env
 
@@ -41,21 +43,36 @@ apply env = apply' env
 
 type ResourceValues = Map.Map Ident (Map.Map Ident (Err Value))
 
-data GlobalEnv = GE SourceGrammar ResourceValues
-data CompleteEnv = CE {srcgr::SourceGrammar,rvs::ResourceValues,local::Env}
-
+data GlobalEnv = GE SourceGrammar ResourceValues (L Ident)
+data CompleteEnv = CE {srcgr::SourceGrammar,rvs::ResourceValues,
+                       gloc::L Ident,local::LocalScope}
+type LocalScope = [Ident]
+type Stack = [Value]
+type OpenValue = Stack->Value
+                            
 ext b env = env{local=b:local env}
 extend bs env = env{local=bs++local env}
-global env = GE (srcgr env) (rvs env)
-toplevel (GE gr rvs) = CE gr rvs []
+global env = GE (srcgr env) (rvs env) (gloc env)
+toplevel (GE gr rvs loc) = CE gr rvs loc []
 
-var env x = maybe unbound id (lookup x (local env))
-  where unbound = bug ("Unknown variable: "++showIdent x)
+var :: CompleteEnv -> Ident -> Err OpenValue
+var env x = maybe unbound pick' (elemIndex x (local env))
+  where
+    unbound = fail ("Unknown variable: "++showIdent x)
+    pick' i = return $ \ vs -> maybe (err i vs) id (pick i vs)
+    err i vs = bug $ "Stack problem: "++showIdent x++": "
+                    ++unwords (map showIdent (local env))
+                    ++" => "++show (i,length vs)
+
+pick :: Int -> Stack -> Maybe Value
+pick 0 (v:_) = Just v
+pick i (_:vs) = pick (i-1) vs
+pick i vs = Nothing -- bug $ "pick "++show (i,vs)
 
 resource env (m,c) =
-     err bug id $
+--  err bug id $
     if isPredefCat c
-    then fmap (value0 env) (lockRecType c defLinType) -- hmm
+    then value0 env =<< lockRecType c defLinType -- hmm
     else maybe e id $ Map.lookup c =<< Map.lookup m (rvs env)
   where e = fail $ "Not found: "++showIdent m++"."++showIdent c
 
@@ -63,64 +80,90 @@ resource env (m,c) =
 resourceValues :: SourceGrammar -> GlobalEnv
 resourceValues gr = env
   where
-    env = GE gr rvs
+    env = GE gr rvs (L NoLoc IW)
     rvs = Map.mapWithKey moduleResources (moduleMap gr)
     moduleResources m = Map.mapWithKey (moduleResource m) . jments
-    moduleResource m c _info = fmap (eval env) (lookupResDef gr (m,c))
+    moduleResource m c _info = eval (GE gr rvs (L NoLoc c)) =<< lookupResDef gr (m,c)
 
 -- * Computing values
 
 -- | Computing the value of a top-level term
+value0 :: CompleteEnv -> Term -> Err Value
 value0 = eval . global
 
 -- | Computing the value of a term
-value :: CompleteEnv -> Term -> Value
+value :: CompleteEnv -> Term -> Err OpenValue
 value env t0 =
+  -- Each terms is traversed only once by this function, using only statically
+  -- available information. Notably, the values of lambda bound variables 
+  -- will be unknown during the term traversal phase.
+  -- The result is an OpenValue, which is a function that may be applied many
+  -- times to different dynamic values, but without the term traversal overhead
+  -- and without recomputing other statically known information.
+  -- For this to work, there should be no recursive calls under lambdas here.
+  -- Whenever we need to construct the OpenValue function with an explicit
+  -- lambda, we have to lift the recursive calls outside the lambda.
+  -- (See e.g. the rules for Let, Prod and Abs)
+{-
+  trace (render $ text "value"<+>sep [ppL (gloc env)<>text ":",
+                                      brackets (fsep (map ppIdent (local env))),
+                                      ppTerm Unqualified 10 t0]) $
+-}
   case t0 of
     Vr x   -> var env x
     Q x@(m,f)
       | m == cPredef -> if f==cErrorType                -- to be removed
                         then let p = identC (BS.pack "P")   
-                             in value0 env (mkProd [(Implicit,p,typeType)] (Vr p) [])
-                        else VApp x []
-      | otherwise    -> resource env x --valueResDef (fst env) x
-    QC x   -> VCApp x []
-    App e1 e2 -> apply' env e1 [value env e2]
-    Let (x,(oty,t)) body -> value (ext (x,value env t) env) body
-    Meta i -> VMeta i (local env) []
-    Prod bt x t1 t2 -> VProd bt (value env t1) x (Bind $ \ vx -> value (ext (x,vx) env) t2)
-    Abs bt x t -> VAbs bt x (Bind $ \ vx -> value (ext (x,vx) env) t)
-    EInt n -> VInt n
-    EFloat f -> VFloat f
-    K s -> VString s
-    Empty -> VString ""
-    Sort s | s == cTok -> VSort cStr                        -- to be removed 
-           | otherwise -> VSort s
-    ImplArg t -> VImplArg (value env t)
-    Table p res -> VTblType (value env p) (value env res)
-    RecType rs -> VRecType [(l,value env ty) | (l,ty) <- rs]
-    t@(ExtR t1 t2) -> extR t (both (value env) (t1,t2))
-    FV ts   -> vfv (map (value env) ts)
-    R as    -> VRec [(lbl,value env t)|(lbl,(oty,t))<-as]
+                             in const # value0 env (mkProd [(Implicit,p,typeType)] (Vr p) [])
+                        else const . flip VApp [] # predef f
+      | otherwise    -> const # resource env x --valueResDef (fst env) x
+    QC x   -> return $ const (VCApp x [])
+    App e1 e2 -> apply' env e1 . (:[]) =<< value env e2
+    Let (x,(oty,t)) body -> do vb <- value (ext x env) body
+                               vt <- value env t
+                               return $ \ vs -> vb (vt vs:vs)
+    Meta i -> return $ \ vs -> VMeta i (zip (local env) vs) []
+    Prod bt x t1 t2 ->
+       do vt1 <- value env t1
+          vt2 <- value (ext x env) t2
+          return $ \ vs -> VProd bt (vt1 vs) x $ Bind $ \ vx -> vt2 (vx:vs)
+    Abs bt x t -> do vt <- value (ext x env) t
+                     return $ VAbs bt x . Bind . \ vs vx -> vt (vx:vs)
+    EInt n -> return $ const (VInt n)
+    EFloat f -> return $ const (VFloat f)
+    K s -> return $ const (VString s)
+    Empty -> return $ const (VString "")
+    Sort s | s == cTok -> return $ const (VSort cStr)        -- to be removed 
+           | otherwise -> return $ const (VSort s)
+    ImplArg t -> (VImplArg.) # value env t
+    Table p res -> liftM2 VTblType # value env p <# value env res
+    RecType rs -> do lovs <- mapPairsM (value env) rs
+                     return $ \vs->VRecType $ mapSnd ($vs) lovs
+    t@(ExtR t1 t2) -> ((extR t.)# both id) # both (value env) (t1,t2)
+    FV ts   -> ((vfv .) # sequence) # mapM (value env) ts
+    R as    -> do lovs <- mapPairsM (value env.snd) as
+                  return $ \ vs->VRec $ mapSnd ($vs) lovs
     T i cs  -> valueTable env i cs
-    V ty ts -> VV ty (paramValues env ty) (map (value env) ts)
-    C t1 t2 -> vconcat (both (value env) (t1,t2))
-    S t1 t2 -> select env (both (value env) (t1,t2))
+    V ty ts -> do pvs <- paramValues env ty
+                  ((VV ty pvs .) . sequence) # mapM (value env) ts
+    C t1 t2 -> ((vconcat.) # both id) # both (value env) (t1,t2)
+    S t1 t2 -> ((select env.) # both id) # both (value env) (t1,t2)
     P t l   -> --maybe (bug $ "project "++show l++" from "++show v) id $
-               maybe (VP v l) id $
-               proj l v where v = (value env t)
-    Alts t tts -> VAlts (value env t) (mapBoth (value env) tts)
-    Strs ts    -> VStrs (map (value env) ts)
-    Glue t1 t2 -> glue (both (value env) (t1,t2))
-    ELin c r -> unlockVRec c (value env r)
-    EPatt p  -> VPatt p -- hmm
-    t -> ppbug (text "value"<+>ppTerm Unqualified 10 t $$ text (show t))
+               do ov <- value env t
+                  return $ \ vs -> let v = ov vs
+                                   in maybe (VP v l) id (proj l v)
+    Alts t tts -> (\v vts -> VAlts # v <# mapM (both id) vts) # value env t <# mapM (both (value env)) tts
+    Strs ts    -> ((VStrs.) # sequence) # mapM (value env) ts
+    Glue t1 t2 -> ((glue.) # both id) # both (value env) (t1,t2)
+    ELin c r -> (unlockVRec c.) # value env r
+    EPatt p  -> return $ const (VPatt p) -- hmm
+    t -> fail.render $ text "value"<+>ppTerm Unqualified 10 t $$ text (show t)
 
 --valueResDef gr = err bug (value0 gr) . lookupResDef gr
 
-paramValues env ty = let pty = nfx env ty
-                         ats = err bug id $ allParamValues (srcgr env) pty
-                     in map (value0 env) ats
+paramValues env ty = do let ge = global env
+                        ats <- allParamValues (srcgr env) =<< nfx ge ty
+                        mapM (eval ge) ats
 
 vconcat vv@(v1,v2) =
     case vv of
@@ -242,57 +285,90 @@ select env vv =
             --let vs = map (value0 env) ats
             i <- maybeErr "no match" $ findIndex (==v2) vs
             return (rs!!i)
-      (v1@(VT i cs),v2) ->
-                 err bug (valueMatch env) $ matchPattern cs (value2term (srcgr env) [] v2)
+      (v1@(VT _ _ cs),v2) ->
+                 err bug id $ valueMatch env =<< matchPattern cs (value2term (gloc env) (srcgr env) [] v2)
       (VS (VV pty pvs rs) v12,v2) -> VS (VV pty pvs [select env (v11,v2)|v11<-rs]) v12
       (v1,v2) -> ok2 VS v1 v2
 
-valueMatch env (Bind f,env') = f (mapSnd (value0 env) env')
-
+valueMatch :: CompleteEnv -> (Bind Env,Substitution) -> Err Value
+valueMatch env (Bind f,env') = f # mapPairsM (value0 env) env'
+--{-
+valueTable :: CompleteEnv -> TInfo -> [Case] -> Err OpenValue
 valueTable env i cs =
     case i of
-      TComp ty -> VV ty (paramValues env ty) (map (value env.snd) cs)
-      _ -> err keep id convert
+      TComp ty -> do pvs <- paramValues env ty
+                     ((VV ty pvs .) # sequence) # mapM (value env.snd) cs
+      _ -> do vty <- value env =<< getTableType i
+              err (keep vty) return convert
   where
-    keep _ = VT i (err bug id $ mapM valueCase cs)
+    keep vty _ = cases vty # mapM valueCase cs
+    cases vty cs vs = VT wild (vty vs) (mapSnd ($vs) cs)
+    wild =  case i of
+              TWild _ -> True
+              _ -> False
 
     valueCase (p,t) = do p' <- inlinePattMacro p
-                         return (p',Bind $ \ bs' -> value (extend bs' env) t)
+                         let pvs = pattVars p'
+                         vt <- value (extend pvs env) t
+                         return (p', \ vs -> Bind $ \ bs -> vt (push' p' bs pvs vs))
 --{-
-    convert = do ty <- getTableType i
-                 let pty = nfx env ty
+    convert :: Err OpenValue
+    convert = do ty   <- getTableType i
+                 pty  <- nfx (global env) ty
                  vs   <- allParamValues (srcgr env) pty
-                 let pvs = map (value0 env) vs
+                 pvs  <- mapM (value0 env) vs
                  cs'  <- mapM valueCase cs
                  sts  <- mapM (matchPattern cs') vs 
-                 return $ VV pty pvs (map (valueMatch env) sts)
+                 return $ \ vs -> VV pty pvs $ map (err bug id . valueMatch env) (mapFst ($vs) sts)
 --}
     inlinePattMacro p =
         case p of
-          PM qc -> case resource env qc of
-                     VPatt p' -> inlinePattMacro p'
-                     r -> ppbug $ hang (text "Expected pattern macro:") 4
-                                       (text (show r))
+          PM qc -> do r <- resource env qc
+                      case r of
+                        VPatt p' -> inlinePattMacro p'
+                        _ -> ppbug $ hang (text "Expected pattern macro:") 4
+                                          (text (show r))
           _ -> composPattOp inlinePattMacro p
+--}
 
-apply' env t           []     = value env t
+push' p bs xs = if length bs/=length xs
+                then bug $ "push "++show (p,bs,xs)
+                else push bs xs
+
+push :: Env -> LocalScope -> Stack -> Stack
+push bs [] vs = vs
+push bs (x:xs) vs = maybe err id (lookup x bs):push bs xs vs
+  where  err = bug $ "Unbound pattern variable "++showIdent x
+
+apply' :: CompleteEnv -> Term -> [OpenValue] -> Err OpenValue
+apply' env t [] = value env t
 apply' env t vs =
   case t of
-    QC x                   -> VCApp x vs
-    Q x@(m,f) | m==cPredef -> let constr = --trace ("predef "++show x) .
+    QC x                   -> return $ \ svs -> VCApp x (map ($svs) vs)
+{-
+    Q x@(m,f) | m==cPredef -> return $
+                              let constr = --trace ("predef "++show x) .
                                            VApp x 
-                              in maybe constr id (Map.lookup f predefs) vs
-              | otherwise  -> vapply (resource env x) vs
-    App t1 t2              -> apply' env t1 (value env t2 : vs)
---  Abs b x t              -> beta env b x t vs
-    _                      -> vapply (value env t) vs
+                              in \ svs -> maybe constr id (Map.lookup f predefs)
+                                          $ map ($svs) vs
+              | otherwise  -> do r <- resource env x
+                                 return $ \ svs -> vapply r (map ($svs) vs)
+-}
+    App t1 t2              -> apply' env t1 . (:vs) =<< value env t2
+    _                      -> do fv <- value env t
+                                 return $ \ svs -> vapply (fv svs) (map ($svs) vs)
 
+vapply :: Value -> [Value] -> Value
 vapply v [] = v
 vapply v vs =
   case v of
     VError {} -> v
 --  VClosure env (Abs b x t) -> beta gr env b x t vs
     VAbs bt _ (Bind f) -> vbeta bt f vs
+    VApp pre vs1 -> err msg id $ delta pre (vs1++vs)
+      where
+        --msg = const (VApp pre (vs1++vs))
+        msg = bug . (("Applying Predef."++showIdent (predefName pre)++": ")++)
     VS (VV t pvs fs) s -> VS (VV t pvs [vapply f vs|f<-fs]) s
     VFV fs -> vfv [vapply f vs|f<-fs]
     v -> bug $ "vapply "++show v++" "++show vs
@@ -315,10 +391,10 @@ beta env b x t (v:vs) =
 --  tr s f vs = trace (s++" "++show vs++" = "++show r) r where r = f vs
 
 -- | Convert a value back to a term
-value2term :: SourceGrammar -> [Ident] -> Value -> Term
-value2term gr xs v0 =
+value2term :: L Ident -> SourceGrammar -> [Ident] -> Value -> Term
+value2term loc gr xs v0 =
   case v0 of
-    VApp f vs      -> foldl App (Q f)                  (map v2t vs)
+    VApp pre vs    -> foldl App (Q (cPredef,predefName pre)) (map v2t vs)
     VCApp f vs     -> foldl App (QC f)                 (map v2t vs)
     VGen j vs      -> foldl App (Vr (reverse xs !! j)) (map v2t vs)
     VMeta j env vs -> foldl App (Meta j)               (map v2t vs)
@@ -336,7 +412,8 @@ value2term gr xs v0 =
     VRecType rs    -> RecType [(l,v2t v) | (l,v) <- rs]
     VRec as        -> R [(l,(Nothing,v2t v))|(l,v) <- as]
     VV t _ vs      -> V t (map v2t vs)
-    VT i cs        -> T i (map nfcase cs)
+    VT wild v cs   -> T ((if wild then TWild else TTyped) (v2t v))
+                        (map nfcase cs)
     VFV vs         -> FV (map v2t vs)
     VC v1 v2       -> C (v2t v1) (v2t v2)
     VS v1 v2       -> S (v2t v1) (v2t v2)
@@ -346,30 +423,38 @@ value2term gr xs v0 =
 --  VGlue v1 v2    -> Glue (v2t v1) (v2t v2)
     VExtR v1 v2    -> ExtR (v2t v1) (v2t v2)
     VError err     -> Error err
-    _              -> bug ("value2term "++show v0)
+    _              -> bug ("value2term "++show loc++" "++show v0)
   where
-    v2t = value2term gr xs
-    v2t' x f = value2term gr (x:xs) (f (gen xs))
+    v2t = value2term loc gr xs
+    v2t' x f = value2term loc gr (x:xs) (f (gen xs))
 
     pushs xs e = foldr push e xs
     push x (env,xs) = ((x,gen xs):env,x:xs)
     gen xs = VGen (length xs) []
 
-    nfcase (p,Bind f) = (p,value2term gr xs' (f env'))
+    nfcase (p,Bind f) = (p,value2term loc gr xs' (f env'))
       where (env',xs') = pushs (pattVars p) ([],xs)
 
 --  nf gr (env,xs) = value2term gr xs . eval gr env
 
-pattVars = nub . pv
-  where
-    pv p = case p of
-             PV i -> [i]
-             PAs i p -> i:pv p
-             _ -> collectPattOp pv p
+pattVars = nub . allPattVars
+allPattVars p =
+    case p of
+      PV i    -> [i]
+      PAs i p -> i:allPattVars p
+      _       -> collectPattOp allPattVars p
 
 ---
 
-both = apBoth
+infixl 1 #,<#,@@
+
+f # x = fmap f x
+mf <# mx  = ap mf mx
+m1 @@ m2 = (m1 =<<) . m2
+
+both f (x,y) = (,) # f x <# f y
+
+ppL (L loc x) = ppLocation "" loc<>text ":"<>ppIdent x
 
 bug msg = ppbug (text msg)
 ppbug doc = error $ render $
