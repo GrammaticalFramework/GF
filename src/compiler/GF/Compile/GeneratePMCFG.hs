@@ -66,13 +66,13 @@ mapAccumWithKeyM f a m = do let xs = Map.toAscList m
 
 
 addPMCFG :: Options -> SourceGrammar -> GlobalEnv -> Ident -> Ident -> SeqSet -> Ident -> Info -> IO (SeqSet, Info)
-addPMCFG opts gr cenv am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin@(Just (L _ term)) mprn Nothing) = do
+addPMCFG opts gr cenv am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin@(Just (L loc term)) mprn Nothing) = do
   let pres  = protoFCat gr res val
       pargs = [protoFCat gr (snd $ catSkeleton ty) lincat | ((_,_,ty),(_,_,lincat)) <- zip ctxt cont]
 
       pmcfgEnv0   = emptyPMCFGEnv
 
-      b          = convert opts gr cenv term val pargs
+      b          = convert opts gr cenv (L loc id) term val pargs
       (seqs1,b1) = addSequencesB seqs b
       pmcfgEnv1  = foldBM addRule
                           pmcfgEnv0
@@ -99,13 +99,13 @@ addPMCFG opts gr cenv am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val))
           newArgs  = map getFIds newArgs'
       in addFunction env0 newCat fun newArgs
 
-addPMCFG opts gr cenv am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) mdef@(Just (L _ term)) mprn Nothing) = do
+addPMCFG opts gr cenv am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) mdef@(Just (L loc term)) mprn Nothing) = do
   let pres = protoFCat gr (am,id) lincat
       parg = protoFCat gr (identW,cVar) typeStr
 
       pmcfgEnv0  = emptyPMCFGEnv
 
-      b          = convert opts gr cenv term lincat [parg]
+      b          = convert opts gr cenv (L loc id) term lincat [parg]
       (seqs1,b1) = addSequencesB seqs b
       pmcfgEnv1  = foldBM addRule
                           pmcfgEnv0
@@ -122,12 +122,12 @@ addPMCFG opts gr cenv am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) m
 
 addPMCFG opts gr cenv am cm seqs id info = return (seqs, info)
 
-convert opts gr cenv term val pargs =
+convert opts gr cenv loc term val pargs =
     runCnvMonad gr conv (pargs,[])
   where
-    conv = convertTerm opts CNil val =<< unfactor cenv term'
+    conv = convertTerm opts CNil val =<< unfactor term'
     term' = if flag optNewComp opts
-            then normalForm cenv (recordExpand val term) -- new evaluator
+            then normalForm cenv loc (recordExpand val term) -- new evaluator
             else term -- old evaluator is invoked from GF.Compile.Optimize
 
 recordExpand :: Type -> Term -> Term
@@ -143,8 +143,8 @@ recordExpand typ trm =
              _ -> R [assign lab (P trm lab) | (lab,_) <- tys]
      _ -> trm
 
-unfactor :: GlobalEnv -> Term -> CnvMonad Term
-unfactor cenv t = CM (\gr c -> c (unfac gr t))
+unfactor :: Term -> CnvMonad Term
+unfactor t = CM (\gr c -> c (unfac gr t))
   where
     unfac gr t = 
       case t of
