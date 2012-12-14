@@ -138,15 +138,19 @@ static PyTypeObject pgf_ExprType = {
 typedef struct {
     PyObject_HEAD
     GuPool* pool;
+    int max_count;
+    int counter;
     GuEnum* res;
-} ParseResultObject;
+} ExprIterObject;
 
-static ParseResultObject*
-ParseResult_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+static ExprIterObject*
+ExprIter_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-    ParseResultObject* self = (ParseResultObject *)type->tp_alloc(type, 0);
+    ExprIterObject* self = (ExprIterObject *)type->tp_alloc(type, 0);
     if (self != NULL) {
 		self->pool = NULL;
+		self->max_count = -1;
+		self->counter   = 0;
 		self->res  = NULL;
     }
 
@@ -154,7 +158,7 @@ ParseResult_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 }
 
 static void
-ParseResult_dealloc(ParseResultObject* self)
+ExprIter_dealloc(ExprIterObject* self)
 {
 	if (self->pool != NULL)
 		gu_pool_free(self->pool);
@@ -163,21 +167,26 @@ ParseResult_dealloc(ParseResultObject* self)
 }
 
 static int
-ParseResult_init(ParseResultObject *self, PyObject *args, PyObject *kwds)
+ExprIter_init(ExprIterObject *self, PyObject *args, PyObject *kwds)
 {
     return -1;
 }
 
 static PyObject*
-ParseResult_iter(ParseResultObject *self)
+ExprIter_iter(ExprIterObject *self)
 {
 	Py_INCREF(self);
 	return (PyObject*) self;
 }
 
-static ExprObject*
-ParseResult_iternext(ParseResultObject *self)
+static PyObject*
+ExprIter_iternext(ExprIterObject *self)
 {
+	if (self->max_count > 0 && self->counter >= self->max_count) {
+		return NULL;
+	}
+	self->counter++;
+
 	PgfExprProb* ep = gu_next(self->res, PgfExprProb*, self->pool);
 	if (ep == NULL)
 		return NULL;
@@ -190,20 +199,23 @@ ParseResult_iternext(ParseResultObject *self)
 	pyexpr->master = (PyObject*) self;
 	Py_INCREF(self);
 
-	return pyexpr;
+	PyObject* res = Py_BuildValue("(f,O)", ep->prob, pyexpr);
+	Py_DECREF(pyexpr);
+
+	return res;
 }
 
-static PyMethodDef ParseResult_methods[] = {
+static PyMethodDef ExprIter_methods[] = {
     {NULL}  /* Sentinel */
 };
 
-static PyTypeObject pgf_ParseResultType = {
+static PyTypeObject pgf_ExprIterType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "pgf.ParseResult",         /*tp_name*/
-    sizeof(ParseResultObject), /*tp_basicsize*/
+    "pgf.ExprIter",            /*tp_name*/
+    sizeof(ExprIterObject),    /*tp_basicsize*/
     0,                         /*tp_itemsize*/
-    (destructor)ParseResult_dealloc, /*tp_dealloc*/
+    (destructor)ExprIter_dealloc, /*tp_dealloc*/
     0,                         /*tp_print*/
     0,                         /*tp_getattr*/
     0,                         /*tp_setattr*/
@@ -219,14 +231,14 @@ static PyTypeObject pgf_ParseResultType = {
     0,                         /*tp_setattro*/
     0,                         /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /*tp_flags*/
-    "parsing result",          /*tp_doc*/
+    "an iterator over a sequence of expressions",/*tp_doc*/
     0,		                   /*tp_traverse */
     0,		                   /*tp_clear */
     0,		                   /*tp_richcompare */
     0,		                   /*tp_weaklistoffset */
-    (getiterfunc) ParseResult_iter, /*tp_iter */
-    (iternextfunc) ParseResult_iternext, /*tp_iternext */
-    ParseResult_methods,       /*tp_methods */
+    (getiterfunc) ExprIter_iter, /*tp_iter */
+    (iternextfunc) ExprIter_iternext, /*tp_iternext */
+    ExprIter_methods,          /*tp_methods */
     0,                         /*tp_members */
     0,                         /*tp_getset */
     0,                         /*tp_base */
@@ -234,9 +246,9 @@ static PyTypeObject pgf_ParseResultType = {
     0,                         /*tp_descr_get */
     0,                         /*tp_descr_set */
     0,                         /*tp_dictoffset */
-    (initproc)ParseResult_init,/*tp_init */
+    (initproc)ExprIter_init,   /*tp_init */
     0,                         /*tp_alloc */
-    (newfunc) ParseResult_new, /*tp_new */
+    (newfunc) ExprIter_new,    /*tp_new */
 };
 
 typedef struct {
@@ -285,7 +297,7 @@ Concr_printName(ConcrObject* self, PyObject *args)
 	return pyname;
 }
 
-static ParseResultObject*
+static ExprIterObject*
 Concr_parse(ConcrObject* self, PyObject *args)
 {
 	size_t len;
@@ -294,13 +306,15 @@ Concr_parse(ConcrObject* self, PyObject *args)
 	if (!PyArg_ParseTuple(args, "ss#", &catname_s, &buf, &len))
         return NULL;
 
-	ParseResultObject* pyres = (ParseResultObject*) 
-		pgf_ExprType.tp_alloc(&pgf_ParseResultType, 0);
+	ExprIterObject* pyres = (ExprIterObject*) 
+		pgf_ExprType.tp_alloc(&pgf_ExprIterType, 0);
 	if (pyres == NULL) {
 		return NULL;
 	}
 
 	pyres->pool = gu_new_pool();
+	pyres->max_count = -1;
+	pyres->counter   = 0;
 
 	GuPool *tmp_pool = gu_local_pool();
     GuString catname = gu_str_string(catname_s, tmp_pool);
@@ -658,6 +672,43 @@ PGF_functionsByCat(PGFObject* self, PyObject *args)
     return functions;
 }
 
+static ExprIterObject*
+PGF_generate(PGFObject* self, PyObject *args, PyObject *keywds)
+{
+	static char *kwlist[] = {"cat", "n", NULL};
+
+	const char *catname_s;
+	int max_count = -1;
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "s|i", kwlist,
+                                     &catname_s, &max_count))
+        return NULL;
+
+	ExprIterObject* pyres = (ExprIterObject*)
+		pgf_ExprType.tp_alloc(&pgf_ExprIterType, 0);
+	if (pyres == NULL) {
+		return NULL;
+	}
+
+	pyres->pool = gu_new_pool();
+	pyres->max_count = max_count;
+	pyres->counter   = 0;
+
+	GuPool *tmp_pool = gu_local_pool();
+    GuString catname = gu_str_string(catname_s, tmp_pool);
+
+	pyres->res =
+		pgf_generate(self->pgf, catname, pyres->pool);
+	if (pyres->res == NULL) {
+		Py_DECREF(pyres);
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return pyres;
+}
+
 static PyGetSetDef PGF_getseters[] = {
     {"abstractName", 
      (getter)PGF_getAbstractName, NULL,
@@ -688,7 +739,10 @@ static PyMemberDef PGF_members[] = {
 
 static PyMethodDef PGF_methods[] = {
     {"functionsByCat", (PyCFunction)PGF_functionsByCat, METH_VARARGS,
-     "Return the list of functions for a given category"
+     "Returns the list of functions for a given category"
+    },
+    {"generate", (PyCFunction)PGF_generate, METH_VARARGS | METH_KEYWORDS,
+     "Generates abstract syntax trees of given category in decreasing probability order"
     },
     {NULL}  /* Sentinel */
 };
@@ -816,7 +870,7 @@ initpgf(void)
     if (PyType_Ready(&pgf_ExprType) < 0)
         return;
 
-	if (PyType_Ready(&pgf_ParseResultType) < 0)
+	if (PyType_Ready(&pgf_ExprIterType) < 0)
 		return;
 
     m = Py_InitModule("pgf", module_methods);
@@ -836,5 +890,5 @@ initpgf(void)
     Py_INCREF(&pgf_PGFType);
     Py_INCREF(&pgf_ConcrType);
     Py_INCREF(&pgf_ExprType);
-    Py_INCREF(&pgf_ParseResultType);
+    Py_INCREF(&pgf_ExprIterType);
 }
