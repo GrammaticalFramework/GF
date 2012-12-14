@@ -82,11 +82,6 @@ pgf_parser_add_literal(PgfConcr *concr, PgfCId cat,
  * @{
  */
 
-
-/// An enumeration of #PgfExpr elements.
-typedef GuEnum PgfExprEnum;
-
-
 /// Retrieve the current parses from the parse state.
 PgfExprEnum*
 pgf_parse_result(PgfParseState* state, GuPool* pool);

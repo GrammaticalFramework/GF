@@ -19,8 +19,8 @@ while True:
 		break;
 
 	try:
-		for e in gr.languages["ParseEng"].parse(gr.startCat,line):
-			print e
+		for (p,e) in gr.languages["ParseEng"].parse(gr.startCat,line):
+			sys.stdout.write("["+str(p)+"] "+str(e)+"\n")
 			print gr.languages["ParseEngBul"].linearize(e)
 	except pgf.ParseError as e:
 		print e.message

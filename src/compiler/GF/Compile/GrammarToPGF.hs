@@ -25,7 +25,6 @@ import GF.Infra.Option
 import GF.Data.Operations
 
 import Data.List
-import Data.Function
 import Data.Char (isDigit,isSpace)
 import qualified Data.Set as Set
 import qualified Data.Map as Map
@@ -63,8 +62,7 @@ mkCanon2pgf opts gr am = do
                                    ((m,c),AbsCat (Just (L _ cont)),addr) <- adefs]
 
         catfuns cat =
-              (map (\x -> (0,snd x)) . sortBy (compare `on` fst))
-                 [(loc,i2i f) | ((m,f),AbsFun (Just (L loc ty)) _ _ (Just True),_) <- adefs, snd (GM.valCat ty) == cat]
+              [(0,i2i f) | ((m,f),AbsFun (Just (L _ ty)) _ _ (Just True),_) <- adefs, snd (GM.valCat ty) == cat]
 
     mkConcr cm = do
       let cflags  = concatOptions [mflags mo | (i,mo) <- modules gr, isModCnc mo, 

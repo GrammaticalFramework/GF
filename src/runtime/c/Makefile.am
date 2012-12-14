@@ -111,6 +111,7 @@ libpgf_la_SOURCES = \
 	pgf/reader.h \
 	pgf/reader.c \
 	pgf/linearize.c \
+	pgf/reasoner.c \
 	pgf/printer.c \
 	pgf/pgf.c \
 	pgf/pgf.h

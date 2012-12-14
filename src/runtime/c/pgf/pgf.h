@@ -54,6 +54,9 @@ extern GU_DECLARE_TYPE(PgfConcr, struct);
 #include <pgf/expr.h>
 #include <pgf/lexer.h>
 
+/// An enumeration of #PgfExpr elements.
+typedef GuEnum PgfExprEnum;
+
 PgfPGF*
 pgf_read(const char* fpath,
          GuPool* pool, GuExn* err);
@@ -109,8 +112,11 @@ pgf_print_name(PgfConcr*, PgfCId id);
 void
 pgf_linearize(PgfConcr* concr, PgfExpr expr, GuWriter* wtr, GuExn* err);
 
-GuEnum*
+PgfExprEnum*
 pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool);
+
+PgfExprEnum*
+pgf_generate(PgfPGF* pgf, PgfCId cat, GuPool* pool);
 
 // an experimental function. Please don't use it
 void
