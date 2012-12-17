@@ -70,7 +70,7 @@ lin
     a = PNoAg} ;
   much_Det = {
     s,sp = \\g,c => prepCase c ++ genForms "molt" "molta" ! g ; n = Sg ; s2 = [] ; isNeg = False} ;
-  must_VV = mkVV (verbV (haver_59 "haver" True)) ;   -- + of_Prep
+  must_VV = deVV (verbV (haver_59 "haver" True)) ;
   no_Utt = ss "no" ;
   on_Prep = mkPrep "sobre" ;
 ---  one_Quant = {s = \\g,c => prepCase c ++ genForms "un" "una" ! g} ;
