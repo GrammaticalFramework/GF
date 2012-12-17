@@ -128,7 +128,7 @@ flags coding = utf8 ;
 
 -- actions
     AHasAge p num = mkCl p.name (mkNP num L.year_N) ; 
-    AHasName p name = mkCl (mkVP (P.mkV3 name_is_V "" "" P.accusative P.nominative) p.name name) ;
+    AHasName p name = mkCl (mkVP (P.mkV3 name_is_V "" "" P.nominative P.accusative) name p.name) ;
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ; 
     AHasRoom p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (P.mkN "номер")) 
@@ -136,22 +136,22 @@ flags coding = utf8 ;
     AHasTable p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (P.mkN "стол")) 
         (SyntaxRus.mkAdv for_Prep (mkNP num (P.mkN "человек")))) ;
-    AHungry p = mkCl p.name (P.mkAdv "голодный") ;    
+    AHungry p = mkCl p.name (P.mkA "голодный") ;
     AIll p = mkCl p.name (P.mkA "больной") ; 
     AKnow p = mkCl p.name (P.regV P.imperfective P.first "зна" "ю" "знал" "знай" "знать" ) ; 
-    ALike p item = mkCl p.name (P.dirV2 (P.regV P.imperfective P.second "нрав" "лю" "нравил" "нравь" "нравить" )) item ; 
+    ALike p item = mkCl item (P.mkV2 (P.mkV P.imperfective "нравлюсь" "нравишься" "нравится" "нравимся" "нравитесь" "нравятся" "нравился" "нравься" "нравиться") [] P.dative) p.name ;
     ALive p co = mkCl p.name (mkVP (mkVP (P.regV P.imperfective P.firstE "жив" "у" "жил" "живи" "жить")) (SyntaxRus.mkAdv in_Prep co)) ; 
     ALove p q = mkCl p.name (P.dirV2 (P.regV P.imperfective P.second "люб" "лю" "любил" "люби" "любить" )) q.name ; 
     AMarried p = mkCl p.name (P.mkA "женатый") ; 
     AReady p = mkCl p.name (P.mkA "готовый") ; 
-    AScared p = mkCl p.name (P.mkA "испуганный") ;
+    AScared p = mkCl p.name (P.mkV P.imperfective "боюсь" "боишься" "боится" "боимся" "бойтесь" "боятся" "боялся" "бойся" "бояться") ;
     ASpeak p lang = mkCl p.name (P.mkV2 (P.regV P.imperfective P.secondA "говор" "ю" "говорил" "говори" "говорить") "на" P.prepositional) lang ; 
-    AThirsty p = mkCl p.name (P.mkA "жаждущий") ; 
+    AThirsty p = mkCl p.name want_VV (mkVP (P.regV P.imperfective P.firstE "пь" "ю" "пил" "пей" "пить" )) ;
     ATired p = mkCl p.name (P.mkA "уставший") ; 
     AUnderstand p = mkCl p.name (P.regV P.imperfective P.first "понима" "ю" "понимал" "понимай" "понимать") ;
-    AWant p obj = mkCl p.name want_VV (mkVP have_V2 obj) ; 
-    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ; 
-
+    AWant p obj = mkCl p.name (P.dirV2 (P.regV P.imperfective P.mixed "хо" "чу" "хотел" "хоти" "хотеть")) obj ; 
+    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP (P.mkV P.imperfective "иду" "идёшь" "идёт" "идём" "идёте" "идут" "шёл" "иди" "идти")) place.to) ; 
+    
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl how_IAdv (mkCl (mkVP (P.mkV2 name_is_V "" P.accusative) p.name))) ;
@@ -251,7 +251,7 @@ flags coding = utf8 ;
 
     cost_V = P.regV P.imperfective P.secondA "сто" "ю" "стоил" "стой" "стоить" ;
 
-    name_is_V = P.regV P.imperfective P.first "зов" "у" "звал" "зови" "звать" ;
+    name_is_V = P.mkV P.imperfective "зову" "зовëшь" "зовут" "зовëм" "зовëте" "зовут" "звал" "зови" "звать" ;
 
    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
       relativePerson n (mkCN x) (\a,b,c -> mkNP (mkNP the_Quant a c) (SyntaxRus.mkAdv possess_Prep b)) p ;
