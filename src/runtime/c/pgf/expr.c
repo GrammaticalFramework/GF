@@ -2,6 +2,8 @@
 #include <gu/intern.h>
 #include <gu/assert.h>
 #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 PgfExpr
@@ -132,88 +134,119 @@ GU_DEFINE_TYPE(
 
 typedef struct PgfExprParser PgfExprParser;
 
+typedef enum {
+	PGF_TOKEN_LPAR,
+	PGF_TOKEN_RPAR,
+	PGF_TOKEN_QUESTION,
+	PGF_TOKEN_IDENT,
+	PGF_TOKEN_INT,
+	PGF_TOKEN_FLT,
+	PGF_TOKEN_STR,
+	PGF_TOKEN_UNKNOWN,
+	PGF_TOKEN_EOF,
+} PGF_TOKEN_TAG;
+
 struct PgfExprParser {
-	GuReader* rdr;
-	GuIntern* intern;
 	GuExn* err;
+	GuReader* rdr;
 	GuPool* expr_pool;
-	const char* lookahead;
-	int next_char;
+	GuPool* tmp_pool;
+	PGF_TOKEN_TAG token_tag;
+	GuChars token_value;
+	int ch;
 };
 
-static const char pgf_expr_lpar[] = "(";
-static const char pgf_expr_rpar[] = ")";
-
-static char
-pgf_expr_parser_next(PgfExprParser* parser)
+static void
+pgf_expr_parser_getc(PgfExprParser* parser)
 {
-	if (parser->next_char >= 0) {
-		char ret = (char) parser->next_char;
-		parser->next_char = -1;
-		return ret;
+	parser->ch = gu_getc(parser->rdr, parser->err);
+	if (!gu_ok(parser->err)) {
+		gu_exn_clear(parser->err);
+		parser->ch = EOF;
 	}
-	return gu_getc(parser->rdr, parser->err);
-}
-
-static const char*
-pgf_expr_parser_lookahead(PgfExprParser* parser)
-{
-	if (parser->lookahead != NULL) {
-		return parser->lookahead;
-	}
-	const char* str = NULL;
-	char c;
-	do {
-		c = pgf_expr_parser_next(parser);
-		if (!gu_ok(parser->err)) {
-			gu_exn_clear(parser->err);
-			return NULL;
-		}
-	} while (isspace(c));
-	switch (c) {
-	case '(':
-		str = pgf_expr_lpar;
-		break;
-	case ')':
-		str = pgf_expr_rpar;
-		break;
-	default:
-		if (isalpha(c)) {
-			GuPool* tmp_pool = gu_new_pool();
-			GuCharBuf* chars = gu_new_buf(char, tmp_pool);
-			while (isalnum(c) || c == '_') {
-				gu_buf_push(chars, char, c);
-				c = pgf_expr_parser_next(parser);
-				if (!gu_ok(parser->err)) {
-					break;
-				}
-			}
-			parser->next_char = (unsigned char) c;
-			char* tmp_str = gu_chars_str(gu_buf_seq(chars),
-						     tmp_pool);
-			str = gu_intern_str(parser->intern, tmp_str);
-			gu_pool_free(tmp_pool);
-		}
-	}
-	parser->lookahead = str;
-	return str;
-}
-
-static bool
-pgf_expr_parser_token_is_id(const char* str)
-{
-	if (str == NULL || !str[0]) {
-		return false;
-	}
-	char c = str[0];
-	return (isalpha(c) || c == '_');
 }
 
 static void
-pgf_expr_parser_consume(PgfExprParser* parser)
+pgf_expr_parser_token(PgfExprParser* parser)
 {
-	pgf_expr_parser_lookahead(parser);
-	parser->lookahead = NULL;
+	while (isspace(parser->ch)) {
+		pgf_expr_parser_getc(parser);
+	}
+	
+	if (parser->tmp_pool != NULL) {
+		gu_pool_free(parser->tmp_pool);
+		parser->tmp_pool = NULL;
+	}
+
+	parser->token_tag   = PGF_TOKEN_UNKNOWN;
+	parser->token_value = gu_null_seq;
+
+	switch (parser->ch) {
+	case EOF:
+		parser->token_tag = PGF_TOKEN_EOF;
+		break;
+	case '(':
+		pgf_expr_parser_getc(parser);
+		parser->token_tag = PGF_TOKEN_LPAR;
+		break;
+	case ')':
+		pgf_expr_parser_getc(parser);
+		parser->token_tag = PGF_TOKEN_RPAR;
+		break;
+	case '?':
+		pgf_expr_parser_getc(parser);
+		parser->token_tag = PGF_TOKEN_QUESTION;
+		break;
+	default: {
+		parser->tmp_pool = gu_new_pool();
+		GuCharBuf* chars = gu_new_buf(char, parser->tmp_pool);
+
+		if (isalpha(parser->ch)) {
+			while (isalnum(parser->ch) || 
+			       parser->ch == '_' || 
+			       parser->ch == '\'') {
+				gu_buf_push(chars, char, parser->ch);
+				pgf_expr_parser_getc(parser);
+			}
+			parser->token_tag   = PGF_TOKEN_IDENT;
+			parser->token_value = gu_buf_seq(chars);
+		} else if (isdigit(parser->ch)) {
+			while (isdigit(parser->ch)) {
+				gu_buf_push(chars, char, parser->ch);
+				pgf_expr_parser_getc(parser);
+			}
+			
+			if (parser->ch == '.') {
+				gu_buf_push(chars, char, parser->ch);
+				pgf_expr_parser_getc(parser);
+				
+				while (isdigit(parser->ch)) {
+					gu_buf_push(chars, char, parser->ch);
+					pgf_expr_parser_getc(parser);
+				}
+				parser->token_tag   = PGF_TOKEN_FLT;
+				parser->token_value = gu_buf_seq(chars);
+			} else {
+				parser->token_tag   = PGF_TOKEN_INT;
+				parser->token_value = gu_buf_seq(chars);
+			}
+		} else if (parser->ch == '"') {
+			pgf_expr_parser_getc(parser);
+			
+			while (parser->ch != '"' && parser->ch != EOF) {
+				gu_buf_push(chars, char, parser->ch);
+				pgf_expr_parser_getc(parser);
+			}
+			
+			if (parser->ch == '"') {
+				pgf_expr_parser_getc(parser);
+				parser->token_tag   = PGF_TOKEN_STR;
+				parser->token_value = gu_buf_seq(chars);
+			}
+		}
+		break;
+	}
+	}
 }
 
 static PgfExpr
@@ -222,27 +255,82 @@ pgf_expr_parser_expr(PgfExprParser* parser);
 static PgfExpr
 pgf_expr_parser_term(PgfExprParser* parser)
 {
-	const char* la = pgf_expr_parser_lookahead(parser);
-
-	if (la == pgf_expr_lpar) {
-		pgf_expr_parser_consume(parser);
+	switch (parser->token_tag) {
+	case PGF_TOKEN_LPAR: {
+		pgf_expr_parser_token(parser);
 		PgfExpr expr = pgf_expr_parser_expr(parser);
-		la = pgf_expr_parser_lookahead(parser);
-		if (la == pgf_expr_rpar) {
-			pgf_expr_parser_consume(parser);
+		if (parser->token_tag == PGF_TOKEN_RPAR) {
+			pgf_expr_parser_token(parser);
 			return expr;
 		} else {
-			gu_raise(parser->err, PgfExn);
+			return gu_null_variant;
 		}
-	} else if (pgf_expr_parser_token_is_id(la)) {
-		pgf_expr_parser_consume(parser);
-		GuString s = gu_str_string(la, parser->expr_pool);
+	}
+	case PGF_TOKEN_QUESTION: {
+		pgf_expr_parser_token(parser);
+		return gu_new_variant_i(parser->expr_pool,
+					            PGF_EXPR_META,
+					            PgfExprMeta,
+					            0);
+	}
+	case PGF_TOKEN_IDENT: {
+		char* str = 
+			gu_chars_str(parser->token_value, parser->tmp_pool);
+		PgfCId id = gu_str_string(str, parser->expr_pool);
+		pgf_expr_parser_token(parser);
 		return gu_new_variant_i(parser->expr_pool,
 					PGF_EXPR_FUN,
 					PgfExprFun,
-					s);
+					id);
 	}
-	return gu_null_variant;
+	case PGF_TOKEN_INT: {
+		char* str = 
+			gu_chars_str(parser->token_value, parser->tmp_pool);
+		int n = atoi(str);
+		pgf_expr_parser_token(parser);
+		PgfLiteral lit = 
+			gu_new_variant_i(parser->expr_pool,
+			                 PGF_LITERAL_INT,
+			                 PgfLiteralInt,
+			                 n);
+		return gu_new_variant_i(parser->expr_pool,
+					PGF_EXPR_LIT,
+					PgfExprLit,
+					lit);
+	}
+	case PGF_TOKEN_STR: {
+		char* str =
+			gu_chars_str(parser->token_value, parser->tmp_pool);
+		GuString s = gu_str_string(str, parser->expr_pool);
+		pgf_expr_parser_token(parser);
+		PgfLiteral lit = 
+			gu_new_variant_i(parser->expr_pool,
+			                 PGF_LITERAL_STR,
+			                 PgfLiteralStr,
+			                 s);
+		return gu_new_variant_i(parser->expr_pool,
+					PGF_EXPR_LIT,
+					PgfExprLit,
+					lit);
+	}
+	case PGF_TOKEN_FLT: {
+		char* str = 
+			gu_chars_str(parser->token_value, parser->tmp_pool);
+		double d = atof(str);
+		pgf_expr_parser_token(parser);
+		PgfLiteral lit = 
+			gu_new_variant_i(parser->expr_pool,
+			                 PGF_LITERAL_FLT,
+			                 PgfLiteralFlt,
+			                 d);
+		return gu_new_variant_i(parser->expr_pool,
+					PGF_EXPR_LIT,
+					PgfExprLit,
+					lit);
+	}
+	default:
+		return gu_null_variant;
+	}
 }
 
 static PgfExpr
@@ -269,12 +357,12 @@ pgf_read_expr(GuReader* rdr, GuPool* pool, GuExn* err)
 {
 	GuPool* tmp_pool = gu_new_pool();
 	PgfExprParser* parser = gu_new(PgfExprParser, tmp_pool);
-	parser->rdr = rdr;
-	parser->intern = gu_new_intern(pool, tmp_pool);
-	parser->expr_pool = pool;
 	parser->err = err;
-	parser->lookahead = NULL;
-	parser->next_char = -1;
+	parser->rdr = rdr;
+	parser->expr_pool = pool;
+	parser->tmp_pool = NULL;
+	parser->ch = ' ';
+	pgf_expr_parser_token(parser);
 	PgfExpr expr = pgf_expr_parser_expr(parser);
 	gu_pool_free(tmp_pool);
 	return expr;
