@@ -26,8 +26,10 @@ oper
         <Masc,Sg, CPrep P_a>  => pre {"al" ; ["a l'"]  / vocalForta} ;
         <Masc,Sg, _>    => elisEl ;
         <Fem, Sg, _>    => prepCase c ++ elisLa ;
-        <_,   Pl, CPrep P_de> => "dels" ;
-        <_,   Pl, CPrep P_a>  => "als" ;
+        <Masc,Pl, CPrep P_de> => "dels" ;
+        <Fem, Pl, CPrep P_de> => ["de les"] ;
+        <Masc,Pl, CPrep P_a>  => "als" ;
+        <Fem, Pl, CPrep P_a>  => ["a les"] ;
         <Masc,   Pl, _ >   => "els" ;
         <Fem,   Pl, _ >   => "les"
         } ;
