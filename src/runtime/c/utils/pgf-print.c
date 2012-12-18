@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
 	// Set the character locale, so we can produce proper output.
 	setlocale(LC_CTYPE, "");
 
-	if (argc != 1) {
+	if (argc != 2) {
 		fprintf(stderr, "usage: %s pgf\n", argv[0]);
 		return EXIT_FAILURE;
 	}
