@@ -70,7 +70,7 @@ predefList =
      -- cShow, cRead, cMapStr, cEqVal
      (cError,Error),
      -- Canonical values:
-     (cPBool,PBool),(cPFalse,PFalse),(cPTrue,PTrue),(cInts,Ints)]
+     (cPBool,PBool),(cPFalse,PFalse),(cPTrue,PTrue),(cInt,Int),(cInts,Ints)]
     --- add more functions!!!
 
 delta f vs =
@@ -93,6 +93,7 @@ delta f vs =
       Error   -> ap1 VError
       -- Canonical values:
       PBool   -> canonical
+      Int     -> canonical
       Ints    -> canonical
       PFalse  -> canonical
       PTrue   -> canonical
