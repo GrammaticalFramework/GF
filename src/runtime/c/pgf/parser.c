@@ -29,14 +29,14 @@ typedef GuList(PgfItemConts*) PgfItemContss;
 static GU_DEFINE_TYPE(PgfItemContss, abstract, _);
 
 typedef GuMap PgfContsMap;
-GU_DEFINE_TYPE(PgfContsMap, GuMap,
-		      gu_type(PgfCCat), NULL,
-		      gu_ptr_type(PgfItemContss), &gu_null_struct);
+static GU_DEFINE_TYPE(PgfContsMap, GuMap,
+                      gu_type(PgfCCat), NULL,
+                      gu_ptr_type(PgfItemContss), &gu_null_struct);
 
 typedef GuMap PgfGenCatMap;
-GU_DEFINE_TYPE(PgfGenCatMap, GuMap,
-		      gu_type(PgfItemConts), NULL,
-		      gu_ptr_type(PgfCCat), &gu_null_struct);
+static GU_DEFINE_TYPE(PgfGenCatMap, GuMap,
+		              gu_type(PgfItemConts), NULL,
+		              gu_ptr_type(PgfCCat), &gu_null_struct);
 
 typedef GuBuf PgfCCatBuf;
 
