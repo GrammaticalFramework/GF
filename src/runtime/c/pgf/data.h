@@ -200,11 +200,11 @@ extern PgfCCat pgf_ccat_string, pgf_ccat_int, pgf_ccat_float, pgf_ccat_var;
 typedef PgfCIdMap PgfPrintNames;
 extern GU_DECLARE_TYPE(PgfPrintNames, GuStringMap);
 
-typedef GuStringMap PgfFunIndices;
-extern GU_DECLARE_TYPE(PgfFunIndices, GuStringMap);
+typedef GuStringMap PgfCncFunOverloadMap;
+extern GU_DECLARE_TYPE(PgfCncFunOverloadMap, GuStringMap);
 
-typedef GuMap PgfCoerceIdx;
-extern GU_DECLARE_TYPE(PgfCoerceIdx, GuMap);
+typedef GuMap PgfCncOverloadMap;
+extern GU_DECLARE_TYPE(PgfCncOverloadMap, GuMap);
 
 typedef GuMap PgfProductionIdx;
 extern GU_DECLARE_TYPE(PgfProductionIdx, GuMap);
@@ -232,8 +232,8 @@ struct PgfConcr {
 	PgfFlags* cflags;
 	PgfPrintNames* printnames;
     GuMap* ccats;
-	PgfFunIndices* fun_indices;
-	PgfCoerceIdx* coerce_idx;
+	PgfCncFunOverloadMap* fun_indices;
+	PgfCncOverloadMap* coerce_idx;
 	PgfProductionIdx* epsilon_idx;
 	PgfLeftcornerCatIdx* leftcorner_cat_idx;
 	PgfLeftcornerTokIdx* leftcorner_tok_idx;

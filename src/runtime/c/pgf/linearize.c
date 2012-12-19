@@ -1,22 +1,3 @@
-/* 
- * Copyright 2010 University of Helsinki.
- *   
- * This file is part of libpgf.
- * 
- * Libpgf is free software: you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Libpgf is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with libpgf. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "data.h"
 #include "linearize.h"
 #include <gu/map.h>
@@ -24,132 +5,35 @@
 #include <gu/log.h>
 #include <gu/choice.h>
 #include <gu/seq.h>
+#include <gu/file.h>
 #include <gu/string.h>
 #include <gu/assert.h>
 #include <pgf/expr.h>
 #include <pgf/literals.h>
+#include <stdio.h>
 
-typedef GuStringMap PgfLinInfer;
-typedef GuSeq PgfProdSeq;
+//#define PGF_LINEARIZER_DEBUG
 
-static GU_DEFINE_TYPE(PgfProdSeq, GuSeq, gu_type(PgfProduction));
+GU_DEFINE_TYPE(PgfCncOverloadMap, GuMap,
+               gu_type(PgfCCat), NULL,
+               gu_ptr_type(GuBuf), &gu_null_struct);
 
-typedef struct PgfLinInferEntry PgfLinInferEntry;
-
-struct PgfLinInferEntry {
-	PgfCCat* cat;
-	PgfCncFun* fun;
-};
-
-static GU_DEFINE_TYPE(
-	PgfLinInferEntry, struct,
-	GU_MEMBER_P(PgfLinInferEntry, cat, PgfCCat)
-	// ,GU_MEMBER(PgfLinInferEntry, fun, ...)
-	);
-
-typedef GuBuf PgfLinInfers;
-static GU_DEFINE_TYPE(PgfLinInfers, GuBuf, gu_type(PgfLinInferEntry));
-
-typedef GuIntMap PgfCncProds;
-static GU_DEFINE_TYPE(PgfCncProds, GuIntMap, gu_type(PgfProdSeq),
-		      &gu_null_seq);
-
-typedef GuStringMap PgfLinProds;
-static GU_DEFINE_TYPE(PgfLinProds, GuStringMap, gu_ptr_type(PgfCncProds),
-		      &gu_null_struct);
-
-
-static GuHash
-pgf_lzr_cats_hash_fn(GuHasher* self, const void* p)
-{
-	(void) self;
-	PgfCCatIds* cats = *(PgfCCatIds* const*)p;
-	size_t len = gu_list_length(cats);
-	uintptr_t h = 0;
-	for (size_t i = 0; i < len; i++) {
-		h = 101 * h + (uintptr_t) gu_list_index(cats, i);
-	}
-	return h;
-}
-
-static bool
-pgf_lzr_cats_eq_fn(GuEquality* self, const void* p1, const void* p2)
-{
-	(void) self;
-	PgfCCatIds* cats1 = *(PgfCCatIds* const*) p1;
-	PgfCCatIds* cats2 = *(PgfCCatIds* const*) p2;
-	int len = gu_list_length(cats1);
-	if (gu_list_length(cats2) != len) {
-		return false;
-	}
-	for (int i = 0; i < len; i++) {
-		PgfCCat* cat1 = gu_list_index(cats1, i);
-		PgfCCat* cat2 = gu_list_index(cats2, i);
-		if (cat1 != cat2) {
-			return false;
-		}
-	}
-	return true;
-}
-
-static GuHasher
-pgf_lzr_cats_hasher[1] = {
-	{
-		.eq = { pgf_lzr_cats_eq_fn },
-		.hash = pgf_lzr_cats_hash_fn
-	}
-};
-
-typedef GuMap PgfInferMap;
-static GU_DEFINE_TYPE(PgfInferMap, GuMap,
-		      gu_ptr_type(PgfCCatIds), pgf_lzr_cats_hasher,
-		      gu_ptr_type(PgfLinInfers), &gu_null_struct);
-
-GU_DEFINE_TYPE(PgfFunIndices, GuStringMap, gu_ptr_type(PgfInferMap),
-		      &gu_null_struct);
-
-typedef GuBuf PgfCCatBuf;
-static GU_DEFINE_TYPE(PgfCCatBuf, GuBuf, gu_ptr_type(PgfCCat));
-
-GU_DEFINE_TYPE(PgfCoerceIdx, GuMap,
-		      gu_type(PgfCCat), NULL,
-		      gu_ptr_type(PgfCCatBuf), &gu_null_struct);
-
+GU_DEFINE_TYPE(PgfCncFunOverloadMap, GuStringMap, gu_ptr_type(PgfCncOverloadMap),
+               &gu_null_struct);
 
 static void
-pgf_lzr_add_infer_entry(
-			PgfInferMap* infer_table,
-			PgfCCat* cat,
-			PgfProductionApply* papply,
-			GuPool *pool)
+pgf_lzr_add_overl_entry(PgfCncOverloadMap* overl_table,
+			            PgfCCat* ccat, void* entry,
+			            GuPool *pool)
 {
-	PgfPArgs args = papply->args;
-	size_t n_args = gu_seq_length(args);
-	PgfCCatIds* arg_cats = gu_new_list(PgfCCatIds, pool, n_args);
-	for (size_t i = 0; i < n_args; i++) {
-		// XXX: What about the hypos in the args?
-		gu_list_index(arg_cats, i) = gu_seq_get(args, PgfPArg, i).ccat;
-	}
-	gu_debug("%d,%d,%d -> %d, %s",
-		 n_args > 0 ? gu_list_index(arg_cats, 0)->fid : -1,
-		 n_args > 1 ? gu_list_index(arg_cats, 1)->fid : -1,
-		 n_args > 2 ? gu_list_index(arg_cats, 2)->fid : -1,
-		 cat->fid, papply->fun->name);
-	PgfLinInfers* entries =
-		gu_map_get(infer_table, &arg_cats, PgfLinInfers*);
-	if (!entries) {
-		entries = gu_new_buf(PgfLinInferEntry, pool);
-		gu_map_put(infer_table, &arg_cats, PgfLinInfers*, entries);
-	} else {
-		// XXX: arg_cats is duplicate, we ought to free it
-		// Display warning?
+	GuBuf* entries =
+		gu_map_get(overl_table, ccat, GuBuf*);
+	if (entries == NULL) {
+		entries = gu_new_buf(void*, pool);
+		gu_map_put(overl_table, ccat, GuBuf*, entries);
 	}
 
-	PgfLinInferEntry entry = {
-		.cat = cat,
-		.fun = papply->fun
-	};
-	gu_buf_push(entries, PgfLinInferEntry, entry);
+	gu_buf_push(entries, void*, entry);
 }
 
 typedef struct {
@@ -159,7 +43,7 @@ typedef struct {
 } PgfLzrIndexFn;
 
 static void
-pgf_lzr_index_iter(GuMapItor* fn, const void* key, void* value, GuExn* err)
+pgf_lzr_index_itor(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
 	(void) (key && err);
 
@@ -179,43 +63,32 @@ pgf_lzr_index_iter(GuMapItor* fn, const void* key, void* value, GuExn* err)
 		switch (gu_variant_tag(prod)) {
 		case PGF_PRODUCTION_APPLY: {
 			PgfProductionApply* papply = data;
-			PgfInferMap* infer =
+			PgfCncOverloadMap* overl_table =
 				gu_map_get(concr->fun_indices, &papply->fun->name,
-					PgfInferMap*);
-			gu_debug("index: %s -> %d", papply->fun->name, ccat->fid);
-			if (!infer) {
-				infer = gu_map_type_new(PgfInferMap, pool);
+					PgfCncOverloadMap*);
+			if (!overl_table) {
+				overl_table = gu_map_type_new(PgfCncOverloadMap, pool);
 				gu_map_put(concr->fun_indices,
-					&papply->fun->name, PgfInferMap*, infer);
+					&papply->fun->name, PgfCncOverloadMap*, overl_table);
 			}
-			pgf_lzr_add_infer_entry(infer, ccat, papply, pool);
+			pgf_lzr_add_overl_entry(overl_table, ccat, papply, pool);
 			break;
 		}
 		case PGF_PRODUCTION_COERCE: {
 			PgfProductionCoerce* pcoerce = data;
-			PgfCCatBuf* cats = gu_map_get(concr->coerce_idx, pcoerce->coerce,
-							PgfCCatBuf*);
-			if (!cats) {
-				cats = gu_new_buf(PgfCCat*, pool);
-				gu_map_put(concr->coerce_idx, 
-					pcoerce->coerce, PgfCCatBuf*, cats);
-			}
-			gu_debug("coerce_idx: %d -> %d", pcoerce->coerce->fid, ccat->fid);
-			gu_buf_push(cats, PgfCCat*, ccat);
+			pgf_lzr_add_overl_entry(concr->coerce_idx, ccat, pcoerce, pool);
 			break;
 		}
 		default:
-			// Display warning?
-			break;
+			gu_impossible();
 		}
-
 	}
 }
 
 void
 pgf_lzr_index(PgfConcr* concr, GuPool *pool)
 {
-	PgfLzrIndexFn clo = { { pgf_lzr_index_iter }, concr, pool };
+	PgfLzrIndexFn clo = { { pgf_lzr_index_itor }, concr, pool };
 	gu_map_iter(concr->ccats, &clo.fn, NULL);
 }
 
@@ -238,190 +111,243 @@ typedef enum {
 	PGF_CNC_TREE_LIT,
 } PgfCncTreeTag;
 
-typedef struct PgfCncTreeApp PgfCncTreeApp;
-struct PgfCncTreeApp {
+typedef struct {
 	PgfCncFun* fun;
 	GuLength n_args;
 	PgfCncTree args[];
-};
+} PgfCncTreeApp;
 
-typedef struct PgfCncTreeLit PgfCncTreeLit;
-struct PgfCncTreeLit {
+typedef struct {
 	PgfLiteral lit;
-};
+} PgfCncTreeLit;
 
-
-static PgfCCat*
-pgf_lzn_pick_supercat(PgfLzn* lzn, PgfCCat* cat)
+#ifdef PGF_LINEARIZER_DEBUG
+void
+pgf_print_cnc_tree(PgfCncTree ctree, GuWriter* wtr, GuExn* err)
 {
-	gu_enter("->");
-	while (true) {
-		PgfCCatBuf* supers =
-			gu_map_get(lzn->concr->coerce_idx, cat, PgfCCatBuf*);
-		if (!supers) {
-			break;
-		}
-		gu_debug("n_supers: %d", gu_buf_length(supers));
-		int ch = gu_choice_next(lzn->ch, gu_buf_length(supers) + 1);
-		gu_debug("choice: %d", ch);
-		if (ch == 0) {
-			break;
-		}
-		cat = gu_buf_get(supers, PgfCCat*, ch - 1);
+	GuVariantInfo ti = gu_variant_open(ctree);
+	switch (ti.tag) {
+	case PGF_CNC_TREE_LIT: {
+		PgfCncTreeLit* clit = ti.data;
+		pgf_print_literal(clit->lit, wtr, err);
+		break;
 	}
-	gu_exit("<- %d", cat->fid);
-	return cat;
+	case PGF_CNC_TREE_APP: {
+		PgfCncTreeApp* capp = ti.data;
+		if (capp->n_args > 0) gu_putc('(', wtr, err);
+		gu_printf(wtr, err, "F%d", capp->fun->funid);
+		for (size_t i = 0; i < capp->n_args; i++) {
+			gu_putc(' ', wtr, err);
+			pgf_print_cnc_tree(capp->args[i], wtr, err);
+		}
+		if (capp->n_args > 0) gu_putc(')', wtr, err);
+		break;
+	}
+	default:
+		gu_impossible();
+	}
 }
-
-static PgfCCat*
-pgf_lzn_infer(PgfLzn* lzn, PgfExpr expr, GuPool* pool, PgfCncTree* ctree_out);
-
-static PgfCCat*
-pgf_lzn_infer_apply_try(PgfLzn* lzn, PgfApplication* appl,
-			PgfInferMap* infer, GuChoiceMark* marks,
-			PgfCCatIds* arg_cats, int* ip, int n_args, 
-			GuPool* pool, PgfCncTreeApp* app_out)
-{
-	gu_enter("f: %s, *ip: %d, n_args: %d", appl->fun, *ip, n_args);
-	PgfCCat* ret = NULL;
-	while (*ip < n_args) {
-		PgfCncTree* arg_treep = 
-			(app_out == NULL ? NULL : &app_out->args[*ip]);
-		PgfCCat* arg_i = 
-			pgf_lzn_infer(lzn, appl->args[*ip], pool, arg_treep);
-		if (arg_i == NULL) {
-			goto finish;
-		}
-		arg_i = pgf_lzn_pick_supercat(lzn, arg_i);
-		gu_list_index(arg_cats, *ip) = arg_i;
-		marks[++*ip] = gu_choice_mark(lzn->ch);
-	}
-	PgfLinInfers* entries = gu_map_get(infer, &arg_cats, PgfLinInfers*);
-	if (!entries) {
-		goto finish;
-	}
-	size_t n_entries = gu_buf_length(entries);
-	int e = gu_choice_next(lzn->ch, n_entries);
-	gu_debug("entry %d of %d", e, n_entries);
-	if (e < 0) {
-		goto finish;
-	}
-	PgfLinInferEntry* entry = gu_buf_index(entries, PgfLinInferEntry, e);
-	if (app_out != NULL) {
-		app_out->fun = entry->fun;
-	}
-	ret = entry->cat;
-finish:
-	gu_exit("fid: %d", ret ? ret->fid : -1);
-	return ret;
-}
-typedef GuList(GuChoiceMark) PgfChoiceMarks;
-
-static PgfCCat*
-pgf_lzn_infer_application(PgfLzn* lzn, PgfApplication* appl, 
-			  GuPool* pool, PgfCncTree* ctree_out)
-{
-	PgfInferMap* infer =
-		gu_map_get(lzn->concr->fun_indices, &appl->fun, PgfInferMap*);
-	gu_enter("-> f: %s, n_args: %d", appl->fun, appl->n_args);
-	if (infer == NULL) {
-		gu_exit("<- couldn't find f");
-		return NULL;
-	}
-	GuPool* tmp_pool = gu_new_pool();
-	PgfCCat* ret = NULL;
-	int n = appl->n_args;
-	PgfCCatIds* arg_cats = gu_new_list(PgfCCatIds, tmp_pool, n);
-
-	PgfCncTreeApp* appt = NULL;
-	if (ctree_out) {
-		appt = gu_new_flex_variant(PGF_CNC_TREE_APP, PgfCncTreeApp, 
-					   args, n, ctree_out, pool);
-		appt->n_args = n;
-	}
-
-	PgfChoiceMarks* marksl = gu_new_list(PgfChoiceMarks, tmp_pool, n + 1);
-	GuChoiceMark* marks = gu_list_elems(marksl);
-	int i = 0;
-	marks[i] = gu_choice_mark(lzn->ch);
-	while (true) {
-		ret = pgf_lzn_infer_apply_try(lzn, appl, infer,
-					      marks, arg_cats,
-					      &i, n, pool, appt);
-		if (ret != NULL) {
-			break;
-		}
-
-		do {
-			--i;
-			if (i < 0) {
-				goto finish;
-			}
-			gu_choice_reset(lzn->ch, marks[i]);
-		} while (!gu_choice_advance(lzn->ch));
-	}
-finish:
-	gu_pool_free(tmp_pool);
-	gu_exit("<- fid: %d", ret ? ret->fid : -1);
-	return ret;
-}
-
-static PgfCCat*
-pgf_lzn_infer(PgfLzn* lzn, PgfExpr expr, GuPool* pool, PgfCncTree* ctree_out)
-{
-	PgfCCat* ret = NULL;
-	GuPool* tmp_pool = gu_new_pool();
-	PgfApplication* appl = pgf_expr_unapply(expr, tmp_pool);
-	if (appl != NULL) {
-		ret = pgf_lzn_infer_application(lzn, appl, pool, ctree_out);
-	} else {
-		GuVariantInfo i = gu_variant_open(pgf_expr_unwrap(expr));
-		switch (i.tag) {
-		case PGF_EXPR_LIT: {
-			PgfExprLit* elit = i.data;
-			if (pool != NULL) {
-				*ctree_out = gu_new_variant_i(
-					pool, PGF_CNC_TREE_LIT,
-					PgfCncTreeLit,
-					.lit = elit->lit);
-			}
-			ret = pgf_literal_cat(lzn->concr, elit->lit);
-		}
-		default:
-			// XXX: should we do something here?
-			break;
-		}
-	}
-	gu_pool_free(tmp_pool);
-	return ret;
-}
-
+#endif
 
 static PgfCncTree
-pgf_lzn_next(PgfLzn* lzn, GuPool* pool)
-{
-	// XXX: rewrite this whole mess
-	PgfCncTree ctree = gu_null_variant;
-	if (gu_variant_is_null(lzn->expr)) {
-		return ctree;
-	}
-	PgfCCat* cat = NULL;
-	GuChoiceMark mark = gu_choice_mark(lzn->ch);
-	do {
-		cat = pgf_lzn_infer(lzn, lzn->expr, NULL, NULL);
-		gu_choice_reset(lzn->ch, mark);
-	} while (!cat && gu_choice_advance(lzn->ch));
+pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool);
 
-	if (cat) {
-		PgfCCat* cat2 = pgf_lzn_infer(lzn, lzn->expr, pool, &ctree);
-		gu_assert(cat == cat2);
-		gu_debug("fid: %d", cat->fid);
-		gu_choice_reset(lzn->ch, mark);
-		if (!gu_choice_advance(lzn->ch)) {
-			lzn->expr = gu_null_variant;
+static PgfCncTree
+pgf_lzn_resolve_app(PgfLzn* lzn, GuBuf* buf, GuBuf* args, GuPool* pool)
+{
+	GuChoiceMark mark = gu_choice_mark(lzn->ch);
+
+redo:;
+	int index = gu_choice_next(lzn->ch, gu_buf_length(buf));
+	if (index < 0) {
+		return gu_null_variant;
+	}
+
+	size_t n_args = gu_buf_length(args);
+
+	PgfProductionApply* papply =
+		gu_buf_get(buf, PgfProductionApply*, index);
+	gu_assert(n_args == gu_seq_length(papply->args));
+
+	PgfCncTree ret = gu_null_variant;
+	PgfCncTreeApp* capp = 
+		gu_new_flex_variant(PGF_CNC_TREE_APP,
+							PgfCncTreeApp,
+							args, n_args, &ret, pool);
+	capp->fun = papply->fun;
+	capp->n_args = n_args;
+
+	for (size_t i = 0; i < n_args; i++) {
+		PgfPArg* parg = gu_seq_index(papply->args, PgfPArg, i);
+		PgfExpr  earg = gu_buf_get(args, PgfExpr, n_args-i-1);
+
+		PgfCCat* ccat = NULL;
+		GuBuf* coercions =
+			gu_map_get(lzn->concr->coerce_idx, parg->ccat, GuBuf*);
+		if (coercions == NULL) {
+			ccat = parg->ccat;
+		} else {
+			int index = gu_choice_next(lzn->ch, gu_buf_length(coercions));
+			gu_choice_advance(lzn->ch);
+			PgfProductionCoerce* pcoerce =
+				gu_buf_get(coercions, PgfProductionCoerce*, index);
+			ccat = pcoerce->coerce;
+		}
+
+		capp->args[i] =
+			pgf_lzn_resolve(lzn, earg, ccat, pool);
+		if (gu_variant_is_null(capp->args[i])) {
+			gu_choice_reset(lzn->ch, mark);
+			if (!gu_choice_advance(lzn->ch))
+				return gu_null_variant;
+			goto redo;
 		}
 	}
-	return ctree;
+	
+	return ret;
+}
+
+static PgfCncTree
+pgf_lzn_resolve_def(PgfLzn* lzn, PgfFunIds* lindefs, GuString s, GuPool* pool)
+{
+	PgfCncTree ret = gu_null_variant;
+
+	int index =
+		gu_choice_next(lzn->ch, gu_list_length(lindefs));
+	if (index < 0) {
+		return ret;
+	}
+	PgfCncTreeApp* capp =
+		gu_new_flex_variant(PGF_CNC_TREE_APP,
+							PgfCncTreeApp,
+							args, 1, &ret, pool);
+	capp->fun = gu_list_index(lindefs, index);
+	capp->n_args = 1;
+
+	PgfCncTreeLit* clit =
+		gu_new_variant(PGF_CNC_TREE_LIT,
+					   PgfCncTreeLit,
+					   &capp->args[0], pool);
+	clit->lit =
+		gu_new_variant_i(pool,
+					 PGF_LITERAL_STR,
+					 PgfLiteralStr,
+					 s);
+
+	return ret;
+}
+
+typedef struct {
+	GuMapItor fn;
+	PgfLzn* lzn;
+	GuBuf* args;
+	GuPool* pool;
+	PgfCncTree ctree;
+} PgfLznItor;
+
+static void
+pgf_lzn_cat_resolve_itor(GuMapItor* fn, const void* key, void* value, GuExn* err)
+{
+	PgfLznItor* clo = (PgfLznItor*) fn;
+	GuBuf* buf = *((GuBuf**) value);
+
+	if (gu_variant_is_null(clo->ctree))
+		clo->ctree = pgf_lzn_resolve_app(clo->lzn, buf, clo->args, clo->pool);
+}
+
+static PgfCncTree
+pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
+{
+	PgfCncTree ret = gu_null_variant;
+	GuPool* tmp_pool = gu_new_pool();
+	GuBuf* args = gu_new_buf(PgfExpr, tmp_pool);
+
+	for (;;) {
+		GuVariantInfo i = gu_variant_open(expr);
+		switch (i.tag) {
+		case PGF_EXPR_APP: {
+			PgfExprApp* eapp = i.data;
+			gu_buf_push(args, PgfExpr, eapp->arg);
+			expr = eapp->fun;
+			break;
+		}
+		case PGF_EXPR_LIT: {
+			PgfExprLit* elit = i.data;
+			PgfCncTreeLit* clit = 
+				gu_new_variant(PGF_CNC_TREE_LIT,
+				               PgfCncTreeLit,
+				               &ret, pool);
+			clit->lit = elit->lit;
+			goto done;
+		}
+		case PGF_EXPR_META: {
+			if (ccat->lindefs == NULL)
+				goto done;
+
+			GuString s = gu_str_string("?", pool);
+			
+			ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, s, pool);
+			goto done;
+		}
+		case PGF_EXPR_FUN: {
+			PgfExprFun* efun = i.data;
+
+			PgfCncOverloadMap* overl_table =
+				gu_map_get(lzn->concr->fun_indices, &efun->fun, PgfCncOverloadMap*);
+			if (overl_table == NULL) {
+				if (ccat->lindefs == NULL)
+					goto done;
+
+				GuPool* tmp_pool = gu_local_pool();
+				GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+				GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+				GuWriter* wtr = gu_string_buf_writer(sbuf);
+
+				gu_putc('[', wtr, err);
+				gu_string_write(efun->fun, wtr, err);
+				gu_putc(']', wtr, err);
+				GuString s = gu_string_buf_freeze(sbuf, tmp_pool);
+
+				ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, s,
+				                          pool);
+
+				gu_pool_free(tmp_pool);
+				goto done;
+			}
+
+			if (ccat == NULL) {
+				PgfLznItor clo = { { pgf_lzn_cat_resolve_itor }, lzn, args, pool, gu_null_variant };
+				gu_map_iter(overl_table, &clo.fn, NULL);
+				ret = clo.ctree;
+			} else {
+				GuBuf* buf =
+					gu_map_get(overl_table, ccat, GuBuf*);
+				if (buf == NULL) {
+					goto done;
+				}
+				
+				ret = pgf_lzn_resolve_app(lzn, buf, args, pool);
+			}
+			goto done;
+		}
+		case PGF_EXPR_TYPED: {
+			PgfExprTyped* etyped = i.data;
+			expr = etyped->expr;
+			break;
+		}
+		case PGF_EXPR_IMPL_ARG: {
+			PgfExprImplArg* eimpl = i.data;
+			expr = eimpl->expr;
+			break;
+		}
+		default:
+			gu_impossible();
+		}
+	}
+	
+done:
+	gu_pool_free(tmp_pool);
+	return ret;
 }
 
 static void
@@ -429,7 +355,21 @@ pgf_cnc_tree_enum_next(GuEnum* self, void* to, GuPool* pool)
 {
 	PgfLzn* lzn = gu_container(self, PgfLzn, en);
 	PgfCncTree* toc = to;
-	*toc = pgf_lzn_next(lzn, pool);
+	*toc = pgf_lzn_resolve(lzn, lzn->expr, NULL, pool);
+
+#ifdef PGF_LINEARIZER_DEBUG
+    GuPool* tmp_pool = gu_new_pool();
+    GuOut* out = gu_file_out(stderr, tmp_pool);
+    GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
+    GuExn* err = gu_exn(NULL, type, tmp_pool);
+    if (gu_variant_is_null(*toc))
+		gu_puts("*nil*\n", wtr, err);
+	else {
+		pgf_print_cnc_tree(*toc, wtr, err);
+		gu_puts("\n", wtr, err);
+	}
+    gu_pool_free(tmp_pool);
+#endif
 }
 
 PgfCncTreeEnum*
@@ -442,7 +382,6 @@ pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuPool* pool)
 	lzn->en.next = pgf_cnc_tree_enum_next;
 	return &lzn->en;
 }
-
 
 int
 pgf_cnc_tree_dimension(PgfCncTree ctree)

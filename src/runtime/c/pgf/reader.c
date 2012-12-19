@@ -754,8 +754,8 @@ pgf_read_new_PgfConcr(GuType* type, PgfReader* rdr, GuPool* pool,
 	GuMapType* ccats_t = gu_type_cast(gu_type(PgfCCatMap), GuMap);
 	concr->ccats =
 		gu_new_int_map(PgfCCat*, &gu_null_struct, pool);
-	concr->fun_indices = gu_map_type_new(PgfFunIndices, pool);
-	concr->coerce_idx  = gu_map_type_new(PgfCoerceIdx,  pool);
+	concr->fun_indices = gu_map_type_new(PgfCncFunOverloadMap, pool);
+	concr->coerce_idx  = gu_map_type_new(PgfCncOverloadMap, pool);
 	concr->epsilon_idx = gu_map_type_new(PgfProductionIdx, pool);
 	concr->leftcorner_cat_idx = gu_map_type_new(PgfLeftcornerCatIdx,pool);
 	concr->leftcorner_tok_idx = gu_map_type_new(PgfLeftcornerTokIdx,pool);
