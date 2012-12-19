@@ -478,6 +478,7 @@ typedef struct PgfSimpleLin PgfSimpleLin;
 
 struct PgfSimpleLin {
 	PgfLinFuncs* funcs;
+	int n_tokens;
 	GuWriter* wtr;
 	GuExn* err;
 };
@@ -491,9 +492,13 @@ pgf_file_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens toks)
 	}
 	size_t len = gu_seq_length(toks);
 	for (size_t i = 0; i < len; i++) {
+		if (flin->n_tokens > 0)
+			gu_putc(' ', flin->wtr, flin->err);
+
 		PgfToken tok = gu_seq_get(toks, PgfToken, i);
 		gu_string_write(tok, flin->wtr, flin->err);
-		gu_putc(' ', flin->wtr, flin->err);
+		
+		flin->n_tokens++;
 	}
 }
 
@@ -504,28 +509,32 @@ pgf_file_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
 	if (!gu_ok(flin->err)) {
 		return;
 	}
-	
+
+	if (flin->n_tokens > 0)
+		gu_putc(' ', flin->wtr, flin->err);
+
 	GuVariantInfo i = gu_variant_open(lit);
     switch (i.tag) {
     case PGF_LITERAL_STR: {
         PgfLiteralStr* lstr = i.data;
 		gu_string_write(lstr->val, flin->wtr, flin->err);
-		gu_putc(' ', flin->wtr, flin->err);
 		break;
 	}
     case PGF_LITERAL_INT: {
         PgfLiteralInt* lint = i.data;
-		gu_printf(flin->wtr, flin->err, "%d ", lint->val);
+		gu_printf(flin->wtr, flin->err, "%d", lint->val);
 		break;
 	}
     case PGF_LITERAL_FLT: {
         PgfLiteralFlt* lflt = i.data;
-		gu_printf(flin->wtr, flin->err, "%lf ", lflt->val);
+		gu_printf(flin->wtr, flin->err, "%lf", lflt->val);
 		break;
 	}
 	default:
 		gu_impossible();
 	}
+
+	flin->n_tokens++;
 }
 
 static PgfLinFuncs pgf_file_lin_funcs = {
@@ -539,6 +548,7 @@ pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
 {
 	PgfSimpleLin flin = {
 		.funcs = &pgf_file_lin_funcs,
+		.n_tokens = 0,
 		.wtr = wtr,
 		.err = err
 	};
