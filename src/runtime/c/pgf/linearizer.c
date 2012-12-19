@@ -1,5 +1,5 @@
 #include "data.h"
-#include "linearize.h"
+#include "linearizer.h"
 #include <gu/map.h>
 #include <gu/fun.h>
 #include <gu/log.h>

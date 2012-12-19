@@ -2,7 +2,7 @@
 #include <pgf/data.h>
 #include <pgf/expr.h>
 #include <pgf/reader.h>
-#include <pgf/linearize.h>
+#include <pgf/linearizer.h>
 #include <pgf/parser.h>
 #include <pgf/lexer.h>
 #include <gu/file.h>

@@ -11,7 +11,7 @@
 #include <pgf/parser.h>
 #include <pgf/lexer.h>
 #include <pgf/literals.h>
-#include <pgf/linearize.h>
+#include <pgf/linearizer.h>
 #include <pgf/expr.h>
 #include <pgf/edsl.h>
 #include <stdio.h>

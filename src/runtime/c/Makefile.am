@@ -43,7 +43,7 @@ guinclude_HEADERS = \
 pgfincludedir=$(includedir)/pgf
 pgfinclude_HEADERS = \
 	pgf/expr.h \
-	pgf/linearize.h \
+	pgf/linearizer.h \
 	pgf/parser.h \
 	pgf/lexer.h \
 	pgf/literals.h \
@@ -110,7 +110,7 @@ libpgf_la_SOURCES = \
 	pgf/literals.h \
 	pgf/reader.h \
 	pgf/reader.c \
-	pgf/linearize.c \
+	pgf/linearizer.c \
 	pgf/reasoner.c \
 	pgf/printer.c \
 	pgf/pgf.c \
