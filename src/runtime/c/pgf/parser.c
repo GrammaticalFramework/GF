@@ -1945,7 +1945,7 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
 			conts->outside_prob = 0;
 			conts->ref_count = 0;
 			gu_buf_push(conts->items, PgfItem*, NULL);
-			
+
 #ifdef PGF_COUNTS_DEBUG
 			ps->cont_full_count++;
 #endif
