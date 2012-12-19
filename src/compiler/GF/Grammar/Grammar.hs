@@ -36,7 +36,7 @@ module GF.Grammar.Grammar (
         PMCFG(..), Production(..), FId, FunId, SeqId, LIndex, Sequence,
         
         Info(..),
-        Location(..), L(..), unLoc,
+        Location(..), L(..), unLoc, noLoc,
         Type,
         Cat,
         Fun,
@@ -371,6 +371,8 @@ instance Functor L where
 
 unLoc :: L a -> a
 unLoc (L _ x) = x
+
+noLoc = L NoLoc
 
 type Type = Term
 type Cat  = QIdent

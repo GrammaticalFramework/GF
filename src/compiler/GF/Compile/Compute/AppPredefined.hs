@@ -88,8 +88,6 @@ primitives = Map.fromList
     fun from to = oper (mkFunType from to)
     oper ty     = ResOper (Just (noLoc ty)) Nothing
 
-    noLoc = L NoLoc
-
     varL :: Ident
     varL = identC (BS.pack "L")
 
