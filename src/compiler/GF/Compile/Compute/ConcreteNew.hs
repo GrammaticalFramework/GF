@@ -6,14 +6,14 @@ module GF.Compile.Compute.ConcreteNew
            ) where
 
 import GF.Grammar hiding (Env, VGen, VApp, VRecType)
-import GF.Grammar.Lookup(lookupResDef,allParamValues)
+import GF.Grammar.Lookup(lookupResDefLoc,allParamValues)
 import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr)
 import GF.Grammar.PatternMatch(matchPattern)
 import GF.Grammar.Lockfield(unlockRecord,lockLabel,isLockLabel,lockRecType)
 import GF.Compile.Compute.Value hiding (Predefined(..))
 import GF.Compile.Compute.Predef(predef,predefName,delta)
 import GF.Data.Str(Str,glueStr,str2strings,str,sstr,plusStr,strTok)
-import GF.Data.Operations(Err,err,maybeErr,combinations,mapPairsM)
+import GF.Data.Operations(Err,err,errIn,maybeErr,combinations,mapPairsM)
 import GF.Data.Utilities(mapFst,mapSnd,mapBoth,apBoth,apSnd)
 import Control.Monad(ap,liftM,liftM2,mplus)
 import Data.List (findIndex,intersect,isInfixOf,nub,elemIndex)
@@ -26,11 +26,9 @@ import qualified Data.Map as Map
 -- * Main entry points
 
 normalForm :: GlobalEnv -> L Ident -> Term -> Term
-normalForm (GE gr rv _) loc = err bugloc id . nfx (GE gr rv loc)
-  where
-    bugloc s = ppbug $ hang (text "In"<+>ppL loc<>text ":") 4 (text s)
+normalForm (GE gr rv _) loc = err (bugloc loc) id . nfx (GE gr rv loc)
 
-nfx env@(GE gr _ loc) t = value2term loc gr [] # eval env t
+nfx env@(GE gr _ loc) t = value2term loc [] # eval env t
 
 eval :: GlobalEnv -> Term -> Err Value
 eval ge t = ($[]) # value (toplevel ge) t
@@ -59,10 +57,12 @@ var :: CompleteEnv -> Ident -> Err OpenValue
 var env x = maybe unbound pick' (elemIndex x (local env))
   where
     unbound = fail ("Unknown variable: "++showIdent x)
-    pick' i = return $ \ vs -> maybe (err i vs) id (pick i vs)
+    pick' i = return $ \ vs -> maybe (err i vs) ok (pick i vs)
     err i vs = bug $ "Stack problem: "++showIdent x++": "
                     ++unwords (map showIdent (local env))
                     ++" => "++show (i,length vs)
+    ok v = --trace ("var "++show x++" = "++show v) $
+           v
 
 pick :: Int -> Stack -> Maybe Value
 pick 0 (v:_) = Just v
@@ -83,7 +83,8 @@ resourceValues gr = env
     env = GE gr rvs (L NoLoc IW)
     rvs = Map.mapWithKey moduleResources (moduleMap gr)
     moduleResources m = Map.mapWithKey (moduleResource m) . jments
-    moduleResource m c _info = eval (GE gr rvs (L NoLoc c)) =<< lookupResDef gr (m,c)
+    moduleResource m c _info = do L l t <- lookupResDefLoc gr (m,c)
+                                  eval (GE gr rvs (L l c)) t
 
 -- * Computing values
 
@@ -108,7 +109,8 @@ value env t0 =
   trace (render $ text "value"<+>sep [ppL (gloc env)<>text ":",
                                       brackets (fsep (map ppIdent (local env))),
                                       ppTerm Unqualified 10 t0]) $
--}
+--}
+  errIn (render $ ppTerm Unqualified 0 t0) $
   case t0 of
     Vr x   -> var env x
     Q x@(m,f)
@@ -158,8 +160,6 @@ value env t0 =
     ELin c r -> (unlockVRec c.) # value env r
     EPatt p  -> return $ const (VPatt p) -- hmm
     t -> fail.render $ text "value"<+>ppTerm Unqualified 10 t $$ text (show t)
-
---valueResDef gr = err bug (value0 gr) . lookupResDef gr
 
 paramValues env ty = do let ge = global env
                         ats <- allParamValues (srcgr env) =<< nfx ge ty
@@ -284,11 +284,16 @@ select env vv =
          do --ats <- allParamValues (srcgr env) pty
             --let vs = map (value0 env) ats
             i <- maybeErr "no match" $ findIndex (==v2) vs
-            return (rs!!i)
+            return (ix (gloc env) "select" rs i)
       (v1@(VT _ _ cs),v2) ->
-                 err bug id $ valueMatch env =<< matchPattern cs (value2term (gloc env) (srcgr env) [] v2)
+                 err (\_->ok2 VS v1 v2) (err bug id . valueMatch env) $
+                 match (gloc env) cs v2
       (VS (VV pty pvs rs) v12,v2) -> VS (VV pty pvs [select env (v11,v2)|v11<-rs]) v12
       (v1,v2) -> ok2 VS v1 v2
+
+match loc cs = err bad return . matchPattern cs . value2term loc []
+  where
+    bad = fail . ("In pattern matching: "++)
 
 valueMatch :: CompleteEnv -> (Bind Env,Substitution) -> Err Value
 valueMatch env (Bind f,env') = f # mapPairsM (value0 env) env'
@@ -391,12 +396,13 @@ beta env b x t (v:vs) =
 --  tr s f vs = trace (s++" "++show vs++" = "++show r) r where r = f vs
 
 -- | Convert a value back to a term
-value2term :: L Ident -> SourceGrammar -> [Ident] -> Value -> Term
-value2term loc gr xs v0 =
+value2term :: L Ident -> [Ident] -> Value -> Term
+value2term loc xs v0 =
   case v0 of
     VApp pre vs    -> foldl App (Q (cPredef,predefName pre)) (map v2t vs)
     VCApp f vs     -> foldl App (QC f)                 (map v2t vs)
-    VGen j vs      -> foldl App (Vr (reverse xs !! j)) (map v2t vs)
+--  VGen j vs      -> foldl App (Vr (ix loc "value2term" (reverse xs) j)) (map v2t vs)
+    VGen j vs      -> foldl App (var j) (map v2t vs)
     VMeta j env vs -> foldl App (Meta j)               (map v2t vs)
 --  VClosure env (Prod bt x t1 t2) -> Prod bt x (v2t  (eval gr env t1))
 --                                              (nf gr (push x (env,xs)) t2)
@@ -425,17 +431,22 @@ value2term loc gr xs v0 =
     VError err     -> Error err
     _              -> bug ("value2term "++show loc++" "++show v0)
   where
-    v2t = value2term loc gr xs
-    v2t' x f = value2term loc gr (x:xs) (f (gen xs))
+    v2t = value2term loc xs
+    v2t' x f = value2term loc (x:xs) (f (gen xs))
+
+    var j = if j<n
+            then Vr (reverse xs !! j)
+            else Error ("VGen "++show j++" "++show xs) -- bug hunting
+      where n = length xs
 
     pushs xs e = foldr push e xs
     push x (env,xs) = ((x,gen xs):env,x:xs)
     gen xs = VGen (length xs) []
 
-    nfcase (p,Bind f) = (p,value2term loc gr xs' (f env'))
+    nfcase (p,Bind f) = (p,value2term loc xs' (f env'))
       where (env',xs') = pushs (pattVars p) ([],xs)
 
---  nf gr (env,xs) = value2term gr xs . eval gr env
+--  nf gr (env,xs) = value2term xs . eval gr env
 
 pattVars = nub . allPattVars
 allPattVars p =
@@ -445,6 +456,11 @@ allPattVars p =
       _       -> collectPattOp allPattVars p
 
 ---
+ix loc fn xs i =
+    if i<n
+    then xs !! i
+    else bugloc loc $ "(!!): index too large in "++fn++", "++show i++"<"++show n
+  where n = length xs
 
 infixl 1 #,<#,@@
 
@@ -455,6 +471,8 @@ m1 @@ m2 = (m1 =<<) . m2
 both f (x,y) = (,) # f x <# f y
 
 ppL (L loc x) = ppLocation "" loc<>text ":"<>ppIdent x
+
+bugloc loc s = ppbug $ hang (text "In"<+>ppL loc<>text ":") 4 (text s)
 
 bug msg = ppbug (text msg)
 ppbug doc = error $ render $
