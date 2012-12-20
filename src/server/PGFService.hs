@@ -282,9 +282,7 @@ doRandom pgf mcat mdepth mlimit mto =
      let trees = PGF.generateRandomDepth g pgf cat (Just depth)
      return $ showJSON
           [makeObj ["tree".=PGF.showExpr [] tree,
-                    "linearizations".=
-                       [makeObj ["to".=to, "text".=text] 
-                          | (to,text,bs) <- linearize' pgf mto tree]]
+                    "linearizations".= doLinearizes pgf tree mto]
              | tree <- limit trees]
   where cat = fromMaybe (PGF.startCat pgf) mcat
         limit = take (fromMaybe 1 mlimit)
