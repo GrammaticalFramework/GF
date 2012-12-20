@@ -124,7 +124,7 @@ compileModule opts1 env file = do
                        exists <- ioeIO $ doesFileExist file1
                        if exists
                          then return file1
-                         else ioeErr $ Bad (render (text "None of this files exist:" $$ nest 2 (text file $$ text file1)))
+                         else ioeErr $ Bad (render (text "None of these files exists:" $$ nest 2 (text file $$ text file1)))
                else ioeErr $ Bad (render (text "File" <+> text file <+> text "does not exist."))
 
 compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
