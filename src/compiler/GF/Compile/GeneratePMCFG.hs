@@ -148,10 +148,18 @@ unfactor t = CM (\gr c -> c (unfac gr t))
   where
     unfac gr t = 
       case t of
-        T (TTyped ty) [(PV x,u)] -> V ty [restore x v (unfac gr u) | v <- err bug id (allParamValues gr ty)]
-        T (TTyped ty) _ -> ppbug $ text "unfactor"<+>ppTerm Unqualified 10 t
+        T (TTyped ty) [(PV x,u)] -> let u' = unfac gr u
+                                    in V ty [restore x v u' | v <- allparams ty]
+        T (TTyped ty) [(PW  ,u)] -> let u' = unfac gr u
+                                    in V ty [u' | _ <- allparams ty]
+        T (TTyped ty) _ -> -- converTerm doesn't handle these tables
+                           ppbug $
+                           sep [text "unfactor"<+>ppTerm Unqualified 10 t,
+                                text (show t)]
         _ -> composSafeOp (unfac gr) t
       where
+        allparams ty = err bug id (allParamValues gr ty)
+
         restore x u t = case t of
                           Vr y | y == x -> u
                           _             -> composSafeOp (restore x u) t
