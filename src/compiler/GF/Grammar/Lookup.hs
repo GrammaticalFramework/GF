@@ -19,7 +19,7 @@ module GF.Grammar.Lookup (
            lookupIdent,
            lookupOrigInfo,
            allOrigInfos,
-           lookupResDef,
+           lookupResDef, lookupResDefLoc,
            lookupResType, 
            lookupOverload,
            lookupParamValues, 
@@ -62,24 +62,26 @@ lookupQIdentInfo :: SourceGrammar -> QIdent -> Err Info
 lookupQIdentInfo gr (m,c) = flip lookupIdentInfo c =<< lookupModule gr m
 
 lookupResDef :: SourceGrammar -> QIdent -> Err Term
-lookupResDef gr (m,c)
-  | isPredefCat c = lock c defLinType 
+lookupResDef gr x = fmap unLoc (lookupResDefLoc gr x)
+
+lookupResDefLoc gr (m,c)
+  | isPredefCat c = fmap noLoc (lock c defLinType)
   | otherwise     = look m c
   where 
     look m c = do
       info <- lookupQIdentInfo gr (m,c)
       case info of
-        ResOper _ (Just (L _ t)) -> return t
-        ResOper _ Nothing  -> return (Q (m,c))
-        CncCat (Just (L _ ty)) _ _ _ -> lock c ty
-        CncCat _ _ _ _         -> lock c defLinType
+        ResOper _ (Just lt) -> return lt
+        ResOper _ Nothing  -> return (noLoc (Q (m,c)))
+        CncCat (Just (L l ty)) _ _ _ -> fmap (L l) (lock c ty)
+        CncCat _ _ _ _         -> fmap noLoc (lock c defLinType)
       
-        CncFun (Just (cat,_,_)) (Just (L _ tr)) _ _ -> unlock cat tr
-        CncFun _                (Just (L _ tr)) _ _ -> return tr
+        CncFun (Just (cat,_,_)) (Just (L l tr)) _ _ -> fmap (L l) (unlock cat tr)
+        CncFun _                (Just ltr) _ _ -> return ltr
 
         AnyInd _ n        -> look n c
-        ResParam _ _      -> return (QC (m,c))
-        ResValue _        -> return (QC (m,c))
+        ResParam _ _      -> return (noLoc (QC (m,c)))
+        ResValue _        -> return (noLoc (QC (m,c)))
         _   -> Bad $ render (ppIdent c <+> text "is not defined in resource" <+> ppIdent m)
 
 lookupResType :: SourceGrammar -> QIdent -> Err Type
