@@ -70,7 +70,8 @@ getLibraryDirectory opts =
 
 getGrammarPath :: FilePath -> IO [FilePath]
 getGrammarPath lib_dir = do
-  catch (fmap splitSearchPath $ getEnv gfGrammarPathVar) (\_ -> return [lib_dir </> "prelude"])     -- e.g. GF_GRAMMAR_PATH
+  catch (fmap splitSearchPath $ getEnv gfGrammarPathVar) 
+        (\_ -> return [lib_dir </> "alltenses",lib_dir </> "prelude"])     -- e.g. GF_GRAMMAR_PATH
 
 -- | extends the search path with the
 -- 'gfLibraryPath' and 'gfGrammarPathVar'
