@@ -203,12 +203,14 @@ oper
         Nom => "mikä" ;
         Gen => "minkä" ;
         Part => "mitä" ;
+        Illat => "mihin" ;
         c   => mi.s ! NCase Sg c
        } ; 
       Pl => table {
         Nom => "mitkä" ;
         Gen => "minkä" ;
         Part => "mitä" ;
+        Illat => "mihin" ;
         c   => mi.s ! NCase Sg c
         }
       } ;
