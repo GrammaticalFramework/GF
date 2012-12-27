@@ -47,9 +47,8 @@ gu_utf8_string(const uint8_t* buf, size_t sz, GuPool* pool)
 		p = gu_malloc_aligned(pool, 1 + sz, 2);
 		p[0] = (uint8_t) sz;
 	} else {
-		uint8_t* p =
-			gu_malloc_prefixed(pool, gu_alignof(size_t),
-					   sizeof(size_t), 1, 1 + sizeof(sz));
+		p =	gu_malloc_prefixed(pool, gu_alignof(size_t),
+		                       sizeof(size_t), 1, 1 + sz);
 		((size_t*) p)[-1] = sz;
 		p[0] = 0;
 	}
