@@ -20,7 +20,8 @@ lin n2  =
 		case <c, g, a> of {
 		  <(Nom|Acc), Fem, Inanimate > => "две";
 		  <(Nom|Acc), _, Inanimate   > => "два";
-		  <(Nom|Acc), _, Animate     > => "двух";
+		  <Nom      , _, Animate     > => "два";
+		  <Acc      , _, Animate     > => "двух";
 		  <(Gen|Prepos _), _, _      > => "двух";
 		  <Dat, _, _                 > => "двум";
 		  <Inst, _, _                > => "двумя"
@@ -197,11 +198,11 @@ lin pot01  =
 lin pot0 d =
   {s = table {_ => d.s} ; size = d.size} ;
 lin pot110  =
-  {s = \\ p => n59 "десять" ; size = plg} ;
+  {s = \\ p => n59 "десят" ; size = plg} ;
 lin pot111  =
   {s = \\ p => nadsat "один" ; size = plg} ; --- 11
 lin pot1to19 d =
-  {s = table {_ => d.s ! teen} ; size = d.size} ;
+  {s = table {_ => d.s ! teen} ; size = plg} ;
 lin pot0as1 n =
   {s = table {p => n.s ! p ! unit} ; size = n.size} ;
 lin pot1 d =
@@ -217,9 +218,9 @@ lin pot2plus d e =
 lin pot2as3 n =
   {s = n.s ! indep ; size = n.size} ;
 lin pot3 n =
-  {s = \\ g, a, c => n.s ! attr ! Fem ! a ! c ++ mille ! n.size ; size = n.size} ;
+  {s = \\ g, a, c => n.s ! attr ! Fem ! a ! c ++ mille ! n.size ; size = plg} ;
 lin pot3plus n m =
-  {s = \\ g, a, c => n.s ! attr ! Fem ! a ! c ++ mille ! n.size ++ m.s ! indep ! g ! a ! c ; size = m.size} ;
+  {s = \\ g, a, c => n.s ! attr ! Fem ! a ! c ++ mille ! n.size ++ m.s ! indep ! g ! a ! c ; size = plg} ;
 
 --- TODO
 --- raz/odin

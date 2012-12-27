@@ -73,6 +73,8 @@ oper
  
   mkIndeclinableNoun: Str -> Gender -> Animacy -> N ; 
 
+  mkNAltPl: Str -> Str -> Gender -> Animacy -> N ; 
+
   mkN : overload {
 
 -- The regular function captures the variants for some common noun endings.
@@ -290,6 +292,17 @@ foreign = Foreign; -- +++ MG_UR: added +++
      anim = anim 
    } ** {lock_N = <>};
 
+  mkNAltPl = \s, alt, g, anim ->
+    let {singular = mkN s ; plural = mkN alt} in {
+    s = table { NF Sg c size   => singular.s ! NF Sg c size;
+		NF Pl c nom    => singular.s ! NF Sg c nom;
+		NF Pl c nompl  => plural.s ! NF Sg c nompl;
+		NF Pl c sgg    => plural.s ! NF Sg c sgg;
+		NF Pl c plg    => plural.s ! NF Pl c plg } ;
+    g = g ;
+    anim = anim 
+    } ** {lock_N = <>};
+
   oper mkWorstN  : (nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
           nomPl, genPl, datPl, accPl, instPl, preposPl : Str) -> Gender -> Animacy -> N
     =  \nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
@@ -362,14 +375,18 @@ foreign = Foreign; -- +++ MG_UR: added +++
   mkN3 f p2 p3 = (UseN f) ** {c2 = p2; c3 = p3; lock_N3 = <>} ; 
 
 
-  mkPN = \ivan, g, n, anim -> 
-    case n of {
-      Sg => case g of { 
-	Masc => mkProperNameMasc ivan anim ; 
-	_ => mkProperNameFem ivan anim
-	} ;
-      Pl => mkProperNamePl ivan anim
-    } ** {lock_PN =<>};
+  -- mkPN = \ivan, g, n, anim -> 
+  --   case n of {
+  --     Sg => case g of { 
+  -- 	Masc => mkProperNameMasc ivan anim ; 
+  -- 	Fem  => mkProperNameFem ivan anim ;
+  -- 	_ => mkProperNameMasc ivan anim
+  -- 	} ;
+  --     Pl => mkProperNamePl ivan anim
+  --   } ** {lock_PN =<>};
+
+  mkPN ivan g n anim = nounPN (mk1N ivan);
+
   nounPN n = {s=\\c => n.s! NF Sg c nom; anim=n.anim; g=n.g; lock_PN=<>};
     
 -- On the top level, it is maybe $CN$ that is used rather than $N$, and
@@ -385,6 +402,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
 
    mkA = overload {
      mkA : (positive : Str) -> A = mk1A ;
+     mkA : (positive : Str) -> AdjType -> A = mk1Ab ;
      mkA : (positive, comparative : Str) -> A = mk2A;
   } ;
 
@@ -393,13 +411,26 @@ foreign = Foreign; -- +++ MG_UR: added +++
 
   mk2A : Str -> Str -> A = \positive, comparative -> 
     case positive of {
-      stem+"ый"                       => mkAdjDeg (aRegHardStemStress stem) comparative ;
-      stem+"ой"                       => mkAdjDeg (aRegHardEndStress stem) comparative ;
-      stem@(_+("г"|"к"|"х"))+"ий"     => mkAdjDeg (aRegHardStemStress stem) comparative;
-      stem@(_+("ш"|"ж"|"ч"|"щ"))+"ий" => mkAdjDeg (aRegHardStemStress stem) comparative;
-      stem+"ий"                       => mkAdjDeg (aRegSoft stem) comparative ;
-      stem                            => mkAdjDeg (adjInvar stem) comparative
+      stem+"ый"                        => mkAdjDeg (aRegHard StemStress Qual stem) comparative ;
+      stem+"ой"                        => mkAdjDeg (aRegHard EndStress Qual stem) comparative ;
+      stem@(_+("г"|"к"|"х"))+"ий"       => mkAdjDeg (aRegHard StemStress Qual stem) comparative;
+      stem@(_+("ш"|"ж"|"ч"|"щ"))+"ий" => mkAdjDeg (aRegHard StemStress Qual stem) comparative;
+      stem+"ий"                        => mkAdjDeg (aRegSoft Qual stem) comparative ;
+      stem                             => mkAdjDeg (adjInvar stem) comparative
     } ;
+
+  mk1Ab : Str -> AdjType -> A = \positive, at -> 
+    let { stem = Predef.tk 2 positive;
+	  comparative = stem + "ее"
+	  } in case positive of {
+      stem+"ый"                        => mkAdjDeg (aRegHard StemStress at stem) comparative ;
+      stem+"ой"                        => mkAdjDeg (aRegHard EndStress at stem) comparative ;
+      stem@(_+("г"|"к"|"х"))+"ий"       => mkAdjDeg (aRegHard StemStress at stem) comparative;
+      stem@(_+("ш"|"ж"|"ч"|"щ"))+"ий" => mkAdjDeg (aRegHard StemStress at stem) comparative;
+      stem+"ий"                        => mkAdjDeg (aRegSoft at stem) comparative ;
+      stem                             => mkAdjDeg (adjInvar stem) comparative
+    } ;
+
 
   -- khaki, mini, hindi, netto
   adjInvar : Str -> Adjective = \stem -> { s = \\_ => stem } ;
