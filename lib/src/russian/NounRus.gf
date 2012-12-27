@@ -8,24 +8,27 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
     DetCN kazhduj okhotnik = {
       s = \\c => case kazhduj.size of {
 	nom =>
-              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
+              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g Sg) ++ 
               okhotnik.s ! NF kazhduj.n (extCase c) nom  ;
+	nompl =>
+              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g Pl) ++ 
+              okhotnik.s ! NF kazhduj.n (extCase c) nompl  ;
 	sgg =>
-	  case kazhduj.c of {
-	    Nom => 
-              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
+	  case c of {
+	    PF Nom _ _ => 
+              kazhduj.s ! AF Nom okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
               okhotnik.s ! NF Sg Gen sgg; 
 	    _ => 
               kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
-              okhotnik.s ! NF Pl kazhduj.c sgg } ;
+              okhotnik.s ! NF Pl (extCase c) sgg } ;
 	plg =>
-	  case kazhduj.c of {
-	    Nom => 
-              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
+	  case c of {
+	    PF Nom _ _ => 
+              kazhduj.s ! AF Nom okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
               okhotnik.s ! NF Pl Gen plg ; 
 	    _ => 
               kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
-              okhotnik.s ! NF Pl kazhduj.c plg }
+              okhotnik.s ! NF Pl (extCase c) plg }
 	  };
       n = kazhduj.n ; 
       p = P3 ;
@@ -151,7 +154,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 
    NumCard c = c ;
    NumSg = {s = \\_,_,_ => [] ; n = Sg ; size = nom} ;
-   NumPl = {s = \\_,_,_ => [] ; n = Pl ; size = plg} ;
+   NumPl = {s = \\_,_,_ => [] ; n = Pl ; size = nompl} ;
 
    OrdNumeral numeral = variants {} ; ---- TODO; needed to compile Constructors
    OrdDigits numeral = variants {} ; ---- TODO; needed to compile Constructors

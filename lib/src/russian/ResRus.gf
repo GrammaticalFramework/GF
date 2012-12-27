@@ -102,6 +102,9 @@ oper Pronoun = { s : PronForm => Str ; n : Number ; p : Person ;
 -- Gender is not morphologically determined for first
 --  and second person pronouns.
 
+-- NF: but adjectives and verbs in past tense have to agree with gender of the
+-- person speaking!
+
 param  PronGen = PGen Gender | PNoGen ;
 
 -- The following coercion is useful:
@@ -349,9 +352,12 @@ oper animAF: AdjForm -> Animacy = \af ->
 -- 
 -- An adjective phrase may contain a complement, e.g. "моложе Риты".
 -- Then it is used as postfix in modification, e.g. "человек, моложе Риты".
+param
+  AdjStress = EndStress | StemStress ;
+  AdjType = Qual | Rel ;
 
+oper
   IsPostfixAdj = Bool ;
-
 
 -- Simple adjectives are not postfix:
 
@@ -378,7 +384,7 @@ oper animAF: AdjForm -> Animacy = \af ->
 
 param DForm = unit  | teen  | ten | hund ;
 param Place = attr  | indep  ;
-param Size  = nom | sgg | plg ;
+param Size  = nom | nompl | sgg | plg ;
 --param Gend = masc | fem | neut ;
 oper mille : Size => Str = table {
   nom => "тысяча" ;

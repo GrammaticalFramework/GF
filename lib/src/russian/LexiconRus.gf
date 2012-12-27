@@ -1,6 +1,6 @@
 --# -path=.:abstract:common
 concrete LexiconRus of Lexicon = CatRus ** 
-  open ParadigmsRus, Prelude, StructuralRus, MorphoRus in {
+  open ParadigmsRus, Prelude, StructuralRus, MorphoRus, (E = ExtraRus) in {
 flags 
   optimize=values ;
   coding=utf8 ;
@@ -57,7 +57,8 @@ lin
   ceiling_N = mkN "потолок" ; -- vowel change
   chair_N = mkN "стул" ; -- irregular
   cheese_N = mkN "сыр" ;
-  child_N = mkN "ребёнок" "ребёнка" "ребёнку" "ребёнка" "ребёнком" "ребёнке" "ребёнке" "дети" "детей" "детям" "детей" "детьми" "детях"  masculine animate ;
+  child_N = mkNAltPl "ребёнок" "деть" masculine animate;
+--  child_N = mkN "ребёнок" "ребёнка" "ребёнку" "ребёнка" "ребёнком" "ребёнке" "ребёнке" "дети" "детей" "детям" "детей" "детьми" "детях"  masculine animate ;
   church_N = mkN "церковь" "церкви" "церкви" "церковь" "церковью" "церкви" "церкви" "церкви" "церквей" "церквям" "церкви" "церквями" "церквях"  masculine inanimate ;
   city_N = mkN "город" ;
   clean_A = mkA "чистый" "чище"; 
@@ -185,7 +186,7 @@ lin
   louse_N = mkN "вошь" "вши" "вши" "вошь" "вошью" "вше" "вше" "вши" "вшей" "вшам" "вшей" "вшами" "вшах" feminine animate ;
   love_N = mkN "любовь" ; -- vowel change
   love_V2= dirV2 (regV imperfective second "люб" "лю" "любил" "люби" "любить" );
-  man_N = mkN "человек" ; -- null gen pl
+  man_N = mkNAltPl "человек" "людь" masculine animate ; -- null gen pl
   married_A2 = mkA2 (mkA "замужем") "за" instructive ;
   meat_N = mkN "мясо" ;
   milk_N = mkN "молоко" ;
@@ -353,7 +354,7 @@ lin
   wood_N = mkN "дерево" ;
   worm_N = mkN "черв" ;
   write_V2 = dirV2 (regV imperfective first "пиш" "у" "писал" "пиши" "писать" );
-  year_N = mkN "год" ;
+  year_N = mkNAltPl "год" "лето" masculine inanimate ;
   yellow_A = mkA "жёлтый" ;
-  young_A = mkA "молодой" "моложе";
+  young_A = mkA "молодой" "моложе" ;
 }

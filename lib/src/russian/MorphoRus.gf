@@ -16,27 +16,27 @@ flags  coding=utf8 ;
 
 ----2 Personal (together with possesive) pronouns.
 
-oper pronYa : Pronoun = 
+oper pronYa : Gender -> Pronoun = \ gen ->
   let nonPoss = { s = table { Nom      => "я" ;
 			      Gen      => "меня" ;
 			      Dat      => "мне" ;
 			      Acc      => "меня" ;
 			      Inst     => "мной" ;
 			      Prepos _ => "мне" } }
-   in pronYaTu nonPoss "мо" P1 ;
+   in pronYaTu nonPoss "мо" P1 gen ;
 
-oper pronTu : Pronoun = 
+oper pronTu : Gender -> Pronoun = \ gen ->
   let nonPoss = { s = table { Nom      => "ты" ;
 			      Gen      => "тебя" ;
 			      Dat      => "тебе" ;
 			      Acc      => "тебя" ;
 			      Inst     => "тобой" ;
 			      Prepos _ => "тебе" } }
-   in pronYaTu nonPoss "тво" P2 ;
+   in pronYaTu nonPoss "тво" P2 gen ;
 
 -- Pronouns ya, ty, svoj
-oper pronYaTu : { s : Case => Str } -> Str -> Person -> Pronoun =
-  \nonPoss, mo, pers ->
+oper pronYaTu : { s : Case => Str } -> Str -> Person -> Gender -> Pronoun =
+  \nonPoss, mo, pers, gen ->
   { s = table {
     PF c _ NonPoss   => nonPoss.s!c ;
     PF c _ (Poss gn) => case <c, gn> of {
@@ -64,7 +64,7 @@ oper pronYaTu : { s : Case => Str } -> Str -> Person -> Pronoun =
 	
       }
     } ;
-    g = PNoGen ; n = Sg ; p = pers ; pron = True
+    g = PGen gen ; n = Sg ; p = pers ; pron = True
   } ;
 
 oper pronNAfterPrep : Pronoun -> Pronoun = \p ->
@@ -106,8 +106,8 @@ oper pronOno: Pronoun =
     g = PGen Neut ; n = Sg ; p = P3 ; pron = True
   } ;
 
-oper pronMuVu : Str -> Str -> Person -> Pronoun =
-  \mu,na,pers -> 
+oper pronMuVu : Str -> Str -> Person -> Gender -> Pronoun =
+  \mu,na,pers,gen -> 
   { s = table {
     PF Nom        _ NonPoss => mu ;
     PF Gen        _ NonPoss => na + "с" ;
@@ -138,12 +138,12 @@ oper pronMuVu : Str -> Str -> Person -> Pronoun =
     PF Inst       _ (Poss GPl) => na + "шими" ;
     PF (Prepos _) _ (Poss GPl) => na + "ших"
     };
-    g = PNoGen ; n = Pl ; p = pers ; pron = True
+    g = PGen gen ; n = Pl ; p = pers ; pron = True
   } ;
 
-oper pronMu: Pronoun = pronMuVu "мы" "на" P1;
+oper pronMu: Gender -> Pronoun = \gen -> pronMuVu "мы" "на" P1 gen;
 
-oper pronVu: Pronoun = pronMuVu "вы" "ва" P2;
+oper pronVu: Gender -> Pronoun = \gen -> pronMuVu "вы" "ва" P2 gen;
 
 oper pronOni: Pronoun = pronNAfterPrep
   { s = table {
@@ -699,15 +699,15 @@ oper eEnd_Decl: Str -> CommNoun =  \vs ->
 ---- Type Adjective only has positive degree while AdjDegr type
 ---- includes also comparative and superlative forms.
 --
-   kazhdujDet: Adjective = aRegHardStemStress "кажд" ;
-   samuj : Adjective = aRegHardStemStress "сам" ;
+   kazhdujDet: Adjective = aRegHard StemStress Rel "кажд" ;
+   samuj : Adjective = aRegHard StemStress Rel "сам" ;
 
 --   lubojDet: Adjective = uy_oj_EndDecl "люб" ;
 --   drugojDet: Adjective = uy_oj_EndDecl "друг" ;
 --   glaznoj: Adjective = uy_oj_EndDecl "глазн" ;
-   kotorujDet: Adjective = aRegHardStemStress "котор";
-   nekotorujDet: Adjective = aRegHardStemStress "некотор";
-   takoj: Adjective = aRegHardEndStress "так";
+   kotorujDet: Adjective = aRegHard StemStress Rel "котор";
+   nekotorujDet: Adjective = aRegHard StemStress Rel "некотор";
+   takoj: Adjective = aRegHard EndStress Rel "так";
 --   kakojNibudDet: Adjective = i_oj_EndDecl "как" "-нибудь";
 --   kakojDet: Adjective = i_oj_EndDecl "как" [];
 --   nikakojDet: Adjective = i_oj_EndDecl "никак" [];
@@ -720,23 +720,23 @@ oper eEnd_Decl: Str -> CommNoun =  \vs ->
 
 
 
-  oper aRegHardStemStress : Str -> Adjective = \stem -> aRegHard stem False ;
+  -- oper aRegHardStemStress : Str -> Adjective = \stem -> aRegHard stem False ;
 
-  oper aRegHardEndStress : Str -> Adjective = \stem -> aRegHard stem True;
+  -- oper aRegHardEndStress : Str -> Adjective = \stem -> aRegHard stem True;
 
   -- 1. regular hard adjective
   -- 3. stem ending with г, к, х
   -- 4. stem ending with ш, ж, ч, щ
   -- 5. stem ending with ц
-  oper aRegHard : Str -> Bool -> Adjective = \stem, endStress ->
+  oper aRegHard : AdjStress -> AdjType -> Str -> Adjective = \stress, at, stem ->
     let i = iAfter stem in
-    let o = case endStress of {
-	       True  => "о" ;
-	       False => oAfter stem } in
+    let o = case stress of {
+	       EndStress  => "о" ;
+	       StemStress => oAfter stem } in
     { s = table {
-	 AF Nom _ (GSg Masc)               => stem + case endStress of {
-                                                        True => "ой";
-							False => iAfter stem + "й" } ;
+	 AF Nom _ (GSg Masc)               => stem + case stress of {
+                                                        EndStress => "ой";
+							StemStress => iAfter stem + "й" } ;
 	 AF Nom _ (GSg Neut)               => stem + o+"е";
 	 AF Gen _ (GSg (Masc|Neut))        => stem + o+"го";
 	 AF Dat _ (GSg (Masc|Neut))        => stem + o+"му";
@@ -758,15 +758,31 @@ oper eEnd_Decl: Str -> CommNoun =  \vs ->
 	 AF Dat  _ GPl         => stem + i+"м";
 	 AF (Prepos _) _ GPl   => stem + i+"х";
 
-	 AFShort (GSg Masc) => stem;
-	 AFShort (GSg Fem)  => stem + "а";
-	 AFShort (GSg Neut) => stem + o ;
-	 AFShort GPl        => stem + i;
+	 AFShort (GSg Masc) => case at of {
+	   Qual => case stem of {
+	     stem2 + ("н"|"ьн") => stem2 + "ен" ;
+	     _ => stem
+	     } ;
+	   Rel => stem + case stress of {
+             EndStress => "ой";
+	     StemStress => iAfter stem + "й" } };
+	 AFShort (GSg Fem)  => case at of {
+	   Qual => stem + "а";
+	   Rel  => stem + "ая"
+	   };
+	 AFShort (GSg Neut) => case at of {
+	    Qual => stem + o ;
+	    Rel  => stem + o+"е"
+	   };
+	 AFShort GPl        => case at of {
+	   Qual => stem + i;
+	   Rel => stem + i+"е"
+	   };
 
 	 AdvF => stem + o
      } } ;
 
-  oper aRegSoft : Str -> Adjective = \stem ->
+  oper aRegSoft : AdjType -> Str -> Adjective = \at, stem ->
     { s = table {
 	 AF Nom _ (GSg Masc)               => stem + "ий" ;
 	 AF Nom _ (GSg Neut)               => stem + "ее";
@@ -790,10 +806,22 @@ oper eEnd_Decl: Str -> CommNoun =  \vs ->
 	 AF Dat  _ GPl         => stem + "им";
 	 AF (Prepos _) _ GPl   => stem + "их";
 
-	 AFShort (GSg Masc) => stem; -- FIXME: add e if stem ends in consonant + n
-	 AFShort (GSg Fem)  => stem + "я";
-	 AFShort (GSg Neut) => stem + "е" ;
-	 AFShort GPl        => stem + "и" ;
+	 AFShort (GSg Masc) => case at of {
+	   Qual => stem;
+	   Rel  => stem + "ий" 
+	   };
+	 AFShort (GSg Fem)  => case at of {
+	   Qual => stem + "я";
+	   Rel  => stem + "яя"
+	   };
+	 AFShort (GSg Neut) => case at of {
+	   Qual => stem + "е" ;
+	   Rel  => stem + "ее"
+	   };
+	 AFShort GPl        => case at of {
+	   Qual => stem + "и" ;
+	   Rel  => stem + "ие"
+	   };
 
 	 AdvF => stem + "е"
      } } ;

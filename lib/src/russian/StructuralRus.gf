@@ -48,7 +48,7 @@ lin
   how_IAdv  = ss "как" ;
   how8many_IDet   = skolkoSgDet ** {n = Pl; g = (PGen Neut); c= Gen}; 
   how8much_IAdv   = ss "сколько" ;
-  i_Pron   = pronYa ;
+  i_Pron   = pronYa Masc ;
   if_Subj    = ss "если" ;
   in8front_Prep  = { s = "перед" ; c = Inst};
   in_Prep = { s = "в" ; c = Prepos PrepVNa } ;
@@ -93,7 +93,7 @@ lin
   under_Prep  = { s = "под"  ; c = Inst };
   very_AdA  = ss "очень" ;
   want_VV  = verbKhotet ;
-  we_Pron  = pronMu ;
+  we_Pron  = pronMu Masc;
   whatPl_IP = pron2NounPhraseNum pronChto Inanimate Pl;
   whatSg_IP = pron2NounPhraseNum pronChto Inanimate Sg;
   when_IAdv = ss "когда" ;
@@ -109,10 +109,10 @@ lin
   why_IAdv  = ss "почему" ;
   with_Prep  = { s = "с" ; c = Inst};
   without_Prep  = { s = "без" ; c = Gen};
-  youPl_Pron  = pronVu;
+  youPl_Pron  = pronVu Masc;
   yes_Utt  = ss ["Да"] ;
-  youSg_Pron   = pronTu;
-  youPol_Pron =  pronVu;
+  youSg_Pron   = pronTu Masc;
+  youPol_Pron =  pronVu Masc;
 
   have_V2= P.dirV2 (P.regV P.imperfective P.first "име" "ю" "имел" "имей" "иметь" );
   have_V3 = P.mkV3 (P.mkV P.imperfective "есть" "есть" "есть" "есть" "есть" "есть" "был" "будь" "есть") "" "у" Nom Gen;

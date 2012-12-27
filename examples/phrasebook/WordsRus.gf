@@ -1,7 +1,7 @@
 -- (C) 2009 Aarne Ranta under LGPL
 
 concrete WordsRus of Words = SentencesRus ** 
-    open SyntaxRus, (P = ParadigmsRus), (L = LexiconRus), Prelude in {
+    open SyntaxRus, (P = ParadigmsRus), (L = LexiconRus), ExtraRus, (R = ResRus), Prelude in {
 
 flags coding = utf8 ;
 
@@ -71,7 +71,7 @@ flags coding = utf8 ;
 
  
     CitRestaurant cit = 
-      mkCNPlace (mkCN cit (P.mkN "ресторан")) in_Prep to_Prep ;    
+      mkCNPlace (mkCN cit (P.mkN "ресторан")) in_Prep to2_Prep ;    
 
 
 -- currencies
@@ -127,30 +127,36 @@ flags coding = utf8 ;
 
 
 -- actions
-    AHasAge p num = mkCl p.name (mkNP num L.year_N) ; 
+--    AHasAge p num = mkCl p.name (mkNP num L.year_N) ; 
+    AHasAge p num = mkCl (mkVP be_V3 (mkNP num L.year_N) p.name) ; 
     AHasName p name = mkCl (mkVP (P.mkV3 name_is_V "" "" P.nominative P.accusative) name p.name) ;
-    AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ; 
-    AHasRoom p num = mkCl p.name have_V2 
+    AHasChildren p num = mkCl (mkVP have_V3 (mkNP num L.child_N) p.name) ; 
+    AHasRoom p num = mkCl (mkVP have2_V3 
       (mkNP (mkNP a_Det (P.mkN "номер")) 
-        (SyntaxRus.mkAdv for_Prep (mkNP num (P.mkN "человек")))) ; 
-    AHasTable p num = mkCl p.name have_V2 
+        (SyntaxRus.mkAdv for_Prep (mkNP num (L.man_N)))) p.name) ; 
+    AHasTable p num = mkCl (mkVP have2_V3 
       (mkNP (mkNP a_Det (P.mkN "стол")) 
-        (SyntaxRus.mkAdv for_Prep (mkNP num (P.mkN "человек")))) ;
+        (SyntaxRus.mkAdv for_Prep (mkNP num (L.man_N)))) p.name) ;
     AHungry p = mkCl p.name (P.mkA "голодный") ;
     AIll p = mkCl p.name (P.mkA "больной") ; 
     AKnow p = mkCl p.name (P.regV P.imperfective P.first "зна" "ю" "знал" "знай" "знать" ) ; 
     ALike p item = mkCl item (P.mkV2 (P.mkV P.imperfective "нравлюсь" "нравишься" "нравится" "нравимся" "нравитесь" "нравятся" "нравился" "нравься" "нравиться") [] P.dative) p.name ;
     ALive p co = mkCl p.name (mkVP (mkVP (P.regV P.imperfective P.firstE "жив" "у" "жил" "живи" "жить")) (SyntaxRus.mkAdv in_Prep co)) ; 
     ALove p q = mkCl p.name (P.dirV2 (P.regV P.imperfective P.second "люб" "лю" "любил" "люби" "любить" )) q.name ; 
-    AMarried p = mkCl p.name (P.mkA "женатый") ; 
+--    AMarried p = mkCl p.name (P.mkA "женатый") ; 
+    AMarried p = let status = case p.name.g of {
+    		       R.PGen R.Masc => P.mkAdv "женат" ;
+    		       _         => P.mkAdv "замужем"
+    		       } in mkCl p.name status ;
     AReady p = mkCl p.name (P.mkA "готовый") ; 
     AScared p = mkCl p.name (P.mkV P.imperfective "боюсь" "боишься" "боится" "боимся" "бойтесь" "боятся" "боялся" "бойся" "бояться") ;
     ASpeak p lang = mkCl p.name (P.mkV2 (P.regV P.imperfective P.secondA "говор" "ю" "говорил" "говори" "говорить") "на" P.prepositional) lang ; 
     AThirsty p = mkCl p.name want_VV (mkVP (P.regV P.imperfective P.firstE "пь" "ю" "пил" "пей" "пить" )) ;
-    ATired p = mkCl p.name (P.mkA "уставший") ; 
+    ATired p = mkCl p.name (P.mkA "уставший" R.Rel) ; 
     AUnderstand p = mkCl p.name (P.regV P.imperfective P.first "понима" "ю" "понимал" "понимай" "понимать") ;
     AWant p obj = mkCl p.name (P.dirV2 (P.regV P.imperfective P.mixed "хо" "чу" "хотел" "хоти" "хотеть")) obj ; 
-    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP (P.mkV P.imperfective "иду" "идёшь" "идёт" "идём" "идёте" "идут" "шёл" "иди" "идти")) place.to) ; 
+    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP (P.mkV P.perfective "пошёл" "пошёл" "пошёл" "пошли" "пошли" "пошли" "пошёл" "пойди" "пойти")) place.to) ;
+    --AWantGo p place = mkCl p.name want_VV (mkVP (mkVP (P.mkV P.imperfective "иду" "идёшь" "идёт" "идём" "идёте" "идут" "шёл" "иди" "идти")) place.to) ; 
     
 -- miscellaneous
 
@@ -261,12 +267,9 @@ flags coding = utf8 ;
      by = SyntaxRus.mkAdv on_Prep (mkNP the_Det n)
       } ;
 
-  far_IAdv = ss "как далеко" ** {lock_IAdv = <>} ;
-  long_IAdv = ss "как долго" ** {lock_IAdv = <>};
+     far_IAdv = ss "как далеко" ** {lock_IAdv = <>} ;
+     long_IAdv = ss "как долго" ** {lock_IAdv = <>};
 
-  mkSuperl : A -> Det = \a -> SyntaxRus.mkDet the_Art (SyntaxRus.mkOrd a) ;
-
-
-
+     mkSuperl : A -> Det = \a -> SyntaxRus.mkDet the_Art (SyntaxRus.mkOrd a) ;
 
 }
