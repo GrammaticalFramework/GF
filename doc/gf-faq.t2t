@@ -1,0 +1,91 @@
+Grammatical Framework: Frequently Asked Quuestions
+Aarne Ranta
+%%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags gf-bibliography.t2t
+
+%!style:../css/style.css
+%!target:html
+%!options(html): --toc
+%!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
+%!postproc(html): #BR <br>
+%!encoding:utf-8
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+
+
+===What has been done with GF?===
+
+**Translation**: systems with any number of parallel languages, with input in one language and output in all the others.
+
+**Natural language generation** (NLG): translation from a formal language to natural languages.
+
+**Ontology verbalization** is a special case of NLG.
+
+**Language training**: grammar and vocabulary training systems.
+
+**Human-computer interaction**: natural language interfaces, spoken dialogue systems.
+
+**Linguistics**: comparisons between languages.
+
+
+
+===What parts does GF have?===
+
+A **grammar compiler**, used for compiling grammars to parsing, generation, and translation code. 
+
+A **run-time system**, used for parsing, generation and translation. The run-time system is available in several languages:
+Haskell, Java, C, C++, Javascript, and Python. The point with this is that you can include GF-based parsing and generation in 
+larger programs written in any of these languages.
+
+A **resource grammar library**, containing the morphology and basic syntax of currently 26 languages.
+
+A **web application toolkit**, containing server-side (Haskell) and client-side (Javascript) libraries.
+
+An **integrated development environment**, the GF-Eclipse plug-in.
+
+A **shell**, i.e. a command interpreter for testing and developing GF grammars. This is the program started by the command ``gf`` in a terminal.
+
+
+
+===Is GF open-source?===
+
+
+===Can I use GF for commercial applications?===
+
+Yes. Those parts of GF that you will need to distribute - the run-time system and the libraries - are licensed under LGPL and BSD; it's up to you to choose which. 
+
+
+
+===When was GF started?===
+
+
+===Where does the name GF come from?===
+
+GF = Grammatical Framework = LF + concrete syntax
+
+LF = Logical Framework
+
+Logical Frameworks are implementations of type theory, which have been built since the 1980's to support formalized mathematics. GF has its roots in
+type theory, which is widely used in the semantics of natural language. Some of these ideas were first implemented in ALF, Another Logical Framework,
+in 1992; the book //Type-Theoretical Grammar// (by A. Ranta, OUP 1994) has a chapter and an appendix on this. The first implementations did not have
+a parser, and GF proper, started in 1998, was an implementation of yet another LF together with concrete syntax supporting generation and parsing.
+Grammatical Framework was a natural name for this. We tried to avoid it in the beginning, because it sounded pretentious in its generality. But the
+name was just too natural to be avoided. 
+
+
+
+===Is GF backward compatible?===
+
+
+
+===Do I need Haskell to use GF?===
+
+No. GF is a language of its own, and you don't need to know Haskell. And if you download the GF binary, you don't need any Haskell tools. But if you want to
+become a GF developer, then it's better you install GF from the latest source, and then you need the GHC Haskell compiler to compile GF. But even then, you
+don't need to know Haskell yourself.
+
+
+===What is a lock field?===
+
