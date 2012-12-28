@@ -30,4 +30,6 @@ lin
 
   IAdvAdv adv = {s = "cik" ++ adv.s} ;
 
+  have_V3 = mkV3 (mkV "būt") nom_Prep dat_Prep Dat ;
+
 }

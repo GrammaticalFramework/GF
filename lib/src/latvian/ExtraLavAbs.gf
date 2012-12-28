@@ -11,4 +11,6 @@ abstract ExtraLavAbs = Extra ** {
     youPl8fem_Pron : Pron ;
     they8fem_Pron : Pron ;
     it8fem_Pron : Pron ;
+
+    have_V3 : V3 ;
 }
