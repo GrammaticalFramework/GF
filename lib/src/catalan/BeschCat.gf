@@ -3107,12 +3107,16 @@ oper haver_59  : Str -> Bool -> Verbum = \haver,flag ->
         VP (Cond Pl P1) => h_ + "auríem" ; --# notpresent
         VP (Cond Pl P2) => h_ + "auríeu" ; --# notpresent
         VP (Cond Pl P3) => h_ + "aurien" ; --# notpresent
+
+        VP (Imp _ _) => h_ + "aver" ; ---- variants {} ;
+{-
         VP (Imp Sg P1) => variants {} ;
         VP (Imp Sg P2) => variants {} ;
         VP (Imp Sg P3) => variants {} ;
         VP (Imp Pl P1) => variants {} ;
         VP (Imp Pl P2) => variants {} ;
         VP (Imp Pl P3) => variants {} ;
+-}
         VP (Pass Sg Masc) => h_ + "agut" ;
         VP (Pass Sg Fem) => h_ + "aguda" ;
         VP (Pass Pl Masc) => h_ + "aguts" ;
