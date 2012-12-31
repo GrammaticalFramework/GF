@@ -8,5 +8,7 @@ abstract ExtraRomanceAbs = Cat, Extra[
     TPasseSimple : Tense ; --# notpresent
     ComplCN : V2 -> CN -> VP ;  -- j'ai soif
 
+    DetNPFem : Det -> NP ; -- DetNP with feminine determiner
+
 
 }

@@ -65,5 +65,14 @@ incomplete concrete ExtraRomance of ExtraRomanceAbs = CatRomance **
 
     ConjVPS = conjunctDistrTable3 Mood Agr Bool ;
 
+    DetNPFem det = 
+      let 
+        g = Fem ;  -- Masc in Noun
+        n = det.n
+      in heavyNPpol det.isNeg {
+        s = det.sp ! g ;
+        a = agrP3 g n ;
+        hasClit = False
+        } ;
 
 } 
