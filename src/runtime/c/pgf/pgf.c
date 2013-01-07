@@ -155,10 +155,23 @@ pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname,
 		return;
 	}
 	
-	for (size_t i = 0; i < abscat->n_functions; i++) {
-		fn->fn(fn, &abscat->functions[i].fun, NULL, err);
-		if (!gu_ok(err))
-			return;
+	size_t n_functions = gu_buf_length(abscat->functions);
+	for (size_t i = 0; i < n_functions; i++) {
+		PgfFunDecl* fun =
+			gu_buf_get(abscat->functions, PgfFunDecl*, i);
+		
+		GuVariantInfo i = gu_variant_open(fun->ep.expr);
+		switch (i.tag) {
+		case PGF_EXPR_FUN: {
+			PgfExprFun* efun = i.data;
+			fn->fn(fn, &efun->fun, NULL, err);
+			if (!gu_ok(err))
+				return;
+			break;
+		}
+		default:
+			gu_impossible();
+		}
 	}
 }
 

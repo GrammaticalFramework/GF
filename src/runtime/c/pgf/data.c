@@ -181,11 +181,6 @@ GU_DEFINE_TYPE(
 	GU_MEMBER(PgfFunDecl, defns, PgfEquationsM),
 	GU_MEMBER(PgfFunDecl, ep, PgfExprProb));
 
-GU_DEFINE_TYPE(
-	PgfCatFun, struct,
-	GU_MEMBER(PgfCatFun, prob, double),
-	GU_MEMBER(PgfCatFun, fun, PgfCId));
-
 static prob_t inf_prob = INFINITY;
 
 GU_DEFINE_TYPE(prob_t, GuFloating, _);
@@ -196,9 +191,7 @@ GU_DEFINE_TYPE(PgfMetaChildMap, GuMap,
 
 GU_DEFINE_TYPE(
 	PgfCat, struct, 
-	GU_MEMBER(PgfCat, context, PgfHypos),
-	GU_MEMBER(PgfCat, n_functions, GuLength),
-	GU_FLEX_MEMBER(PgfCat, functions, PgfCatFun));
+	GU_MEMBER(PgfCat, context, PgfHypos));
 
 
 GU_DEFINE_TYPE(

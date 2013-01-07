@@ -644,28 +644,42 @@ typedef struct {
 } PgfIndexFn;
 
 static void
-pgf_init_meta_probs(GuMapItor* fn, const void* key, void* value, GuExn* err)
-{
-	(void) (err);
-	
-	PgfCId name = *((PgfCId*) key);
-    PgfCat* cat = *((PgfCat**) value);
-
-    cat->name = name;
-
-    cat->meta_prob = INFINITY;
-	cat->meta_token_prob = INFINITY;
-    cat->meta_child_probs = NULL;
-}
-
-static void
 pgf_read_to_PgfAbstr(GuType* type, PgfReader* rdr, void* to)
 {
 	rdr->curr_abstr = to;
 	pgf_read_to_struct(type, rdr, to);
+}
 
-	PgfIndexFn clo = { { pgf_init_meta_probs }, rdr };
-	gu_map_iter(rdr->curr_abstr->cats, &clo.fn, NULL);
+static void*
+pgf_read_new_PgfCat(GuType* type, PgfReader* rdr, GuPool* pool,
+		       size_t* size_out)
+{
+	(void) (type && size_out);
+	PgfCat* cat = gu_new(PgfCat, pool);
+
+	cat->name = *((PgfCId*) rdr->curr_key);	
+
+	pgf_read_to(rdr, gu_type(PgfHypos), &cat->context);
+
+	cat->meta_prob = INFINITY;
+	cat->meta_token_prob = INFINITY;
+    cat->meta_child_probs = NULL;
+
+    cat->functions = gu_new_buf(PgfFunDecl*, rdr->opool);
+
+	size_t n_functions = pgf_read_len(rdr);
+	for (size_t i = 0; i < n_functions; i++) {
+		double prob;
+		PgfCId name;
+		pgf_read_to_double(gu_type(double), rdr, &prob);
+		pgf_read_to_GuString(gu_type(PgfCId), rdr, &name);
+		
+		PgfFunDecl* absfun =
+			gu_map_get(rdr->curr_abstr->funs, &name, PgfFunDecl*);
+		gu_buf_push(cat->functions, PgfFunDecl*, absfun);
+	}
+	
+	return cat;
 }
 
 static GU_DEFINE_TYPE(PgfLinDefs, GuIntMap, gu_ptr_type(PgfFunIds),
@@ -880,7 +894,8 @@ pgf_read_new_table = GU_TYPETABLE(
 	PGF_READ_NEW(PgfFunDecl),
 	PGF_READ_NEW(PgfCCat),
 	PGF_READ_NEW(PgfCncCat),
-	PGF_READ_NEW(PgfConcr)
+	PGF_READ_NEW(PgfConcr),
+	PGF_READ_NEW(PgfCat)
 	);
 
 PgfReader*
