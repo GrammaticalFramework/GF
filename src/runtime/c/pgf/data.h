@@ -131,11 +131,6 @@ struct PgfFunDecl {
 
 extern GU_DECLARE_TYPE(PgfFunDecl, struct);
 
-struct PgfCatFun {
-	double prob;
-	PgfCId fun;
-};
-
 typedef GuMap PgfMetaChildMap;
 extern GU_DECLARE_TYPE(PgfMetaChildMap, GuMap);
 
@@ -147,8 +142,7 @@ struct PgfCat {
 	prob_t meta_token_prob;
 	PgfMetaChildMap* meta_child_probs;
 
-	GuLength n_functions;
-	PgfCatFun functions[]; // XXX: resolve to PgfFunDecl*?
+	GuBuf* functions; // -->PgfFunDecl
 };
 
 
