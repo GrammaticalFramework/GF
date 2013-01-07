@@ -863,7 +863,7 @@ static PyMethodDef module_methods[] = {
 };
 
 PyMODINIT_FUNC
-initpgf(void)
+initbinding(void)
 {
     PyObject *m;
 
@@ -879,7 +879,7 @@ initpgf(void)
 	if (PyType_Ready(&pgf_ExprIterType) < 0)
 		return;
 
-    m = Py_InitModule("pgf", module_methods);
+    m = Py_InitModule("binding", module_methods);
     if (m == NULL)
         return;
         
