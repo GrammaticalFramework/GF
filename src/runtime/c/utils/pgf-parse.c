@@ -78,7 +78,6 @@ int main(int argc, char* argv[]) {
   // We will keep the latest results in the 'ppool' and
   // we will iterate over them by using 'result'.
   GuPool* ppool = NULL;
-  GuEnum* result = NULL;
 
   // The interactive PARSING loop.
   // XXX: This currently reads stdin directly, so it doesn't support
@@ -106,7 +105,6 @@ int main(int argc, char* argv[]) {
     if (ppool != NULL) {
       gu_pool_free(ppool);
       ppool  = NULL;
-      result = NULL;
     }
 
     // We create a temporary pool for translating a single
