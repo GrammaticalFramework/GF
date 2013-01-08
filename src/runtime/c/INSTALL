@@ -15,10 +15,15 @@ grammar you also have to add the option '-literal=Symb' while compiling.
 Note For Mac OSX users
 ----------------------
 
-You have to comment out the following line in config.h:
+The following is what I did to make it work on MacOSX 10.8:
 
-   #define HAVE_STATEMENT_EXPRESSIONS 1
+- Install XCode and XCode command line tools
+- Install Homebrew: http://mxcl.github.com/homebrew/
 
-This has to be done AFTER you have called './configure', but before you call 'make'!
+$ brew install automake autoconf libtool
+$ glibtoolize
+$ autoreconf -i
+$ ./configure
+$ make
+$ make install
 
-(Tested on Mac OSX 10.8 Mountain Lion with XCode installed)
