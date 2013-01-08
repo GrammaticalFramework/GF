@@ -49,8 +49,8 @@ int main(int argc, char* argv[]) {
 	// Create the pool that is used to allocate everything
 	GuPool* pool = gu_new_pool();
 	int status = EXIT_SUCCESS;
-	if (argc != 5) {
-		fprintf(stderr, "usage: %s pgf cat from_lang to_lang\n", argv[0]);
+	if (argc < 5 || argc > 6) {
+		fprintf(stderr, "usage: %s pgf cat from-lang to-lang [probs-file]\n", argv[0]);
 		status = EXIT_FAILURE;
 		goto fail;
 	}
@@ -74,11 +74,14 @@ int main(int argc, char* argv[]) {
 		goto fail;
 	}
 
-	pgf_load_meta_child_probs(pgf, "../../../treebanks/PennTreebank/ParseEngAbs3.probs", pool, err);
-	if (!gu_ok(err)) {
-		fprintf(stderr, "Loading meta child probs failed\n");
-		status = EXIT_FAILURE;
-		goto fail;
+	if (argc == 6) {
+		char* meta_probs_filename = argv[5];
+		pgf_load_meta_child_probs(pgf, meta_probs_filename, pool, err);
+		if (!gu_ok(err)) {
+			fprintf(stderr, "Loading meta child probs failed\n");
+			status = EXIT_FAILURE;
+			goto fail;
+		}
 	}
 
 	// Look up the source and destination concrete categories
