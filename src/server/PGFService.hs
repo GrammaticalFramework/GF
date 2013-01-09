@@ -48,15 +48,15 @@ cgiMain cache = handleErrors . handleCGIErrors $
 
 cgiMain' :: Cache PGF -> FilePath -> CGI CGIResult
 cgiMain' cache path =
-    do pgf <- liftIO $ readCache cache path
-       command <- liftM (maybe "grammar" (urlDecodeUnicode . UTF8.decodeString))
+    do command <- liftM (maybe "grammar" (urlDecodeUnicode . UTF8.decodeString))
                         (getInput "command")
-       pgfMain path pgf command
+       case command of
+         "download" -> outputBinary    =<< liftIO (BS.readFile path)
+         _          -> pgfMain command =<< liftIO (readCache cache path)
 
-pgfMain :: FilePath -> PGF -> String -> CGI CGIResult
-pgfMain path pgf command =
+pgfMain :: String -> PGF -> CGI CGIResult
+pgfMain command pgf =
     case command of
-      "download"       -> outputBinary =<< liftIO (BS.readFile path)
       "parse"          -> outputJSONP =<< doParse pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit
       "complete"       -> outputJSONP =<< doComplete pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit
       "linearize"      -> outputJSONP =<< doLinearize pgf `fmap` getTree `ap` getTo

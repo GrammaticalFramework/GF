@@ -29,7 +29,7 @@ function pgf_offline(options) {
 		self.current_grammar_url=new_grammar_url;
 		if(cont) cont();
 	    }
-	    ajax_http_get_binary(new_grammar_url,update_pgf);
+	    ajax_http_get_binary(new_grammar_url+"?command=download",update_pgf);
 	},
 	get_grammarlist: function(cont,err) {
 	    if(this.grammar_list) cont(this.grammar_list)
