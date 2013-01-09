@@ -3,9 +3,8 @@ module FastCGIUtils (--initFastCGI, loopFastCGI,
                      throwCGIError, handleCGIErrors,
                      stderrToFile,logError,
                      outputJSONP,outputEncodedJSONP,
-                     outputPNG,
-                     outputHTML,
-                     outputPlain,
+                     outputPNG,outputBinary,
+                     outputHTML,outputPlain,
                      splitBy) where
 
 import Control.Concurrent
@@ -177,14 +176,19 @@ outputPNG x = do
        setHeader "Content-Type" "image/png"
        outputFPS x
 
+outputBinary :: BS.ByteString -> CGI CGIResult
+outputBinary x = do
+       setHeader "Content-Type" "application/binary"
+       outputFPS x
+
 outputHTML :: String -> CGI CGIResult
 outputHTML x = do
-       setHeader "Content-Type" "text/html"
+       setHeader "Content-Type" "text/html; charset=utf-8"
        outputStrict $ UTF8.encodeString x
 
 outputPlain :: String -> CGI CGIResult
 outputPlain x = do
-       setHeader "Content-Type" "text/plain"
+       setHeader "Content-Type" "text/plain; charset=utf-8"
        outputStrict $ UTF8.encodeString x
 
 outputStrict :: String -> CGI CGIResult

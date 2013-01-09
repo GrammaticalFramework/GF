@@ -51,11 +51,12 @@ cgiMain' cache path =
     do pgf <- liftIO $ readCache cache path
        command <- liftM (maybe "grammar" (urlDecodeUnicode . UTF8.decodeString))
                         (getInput "command")
-       pgfMain pgf command
+       pgfMain path pgf command
 
-pgfMain :: PGF -> String -> CGI CGIResult
-pgfMain pgf command =
+pgfMain :: FilePath -> PGF -> String -> CGI CGIResult
+pgfMain path pgf command =
     case command of
+      "download"       -> outputBinary =<< liftIO (BS.readFile path)
       "parse"          -> outputJSONP =<< doParse pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit
       "complete"       -> outputJSONP =<< doComplete pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit
       "linearize"      -> outputJSONP =<< doLinearize pgf `fmap` getTree `ap` getTo
