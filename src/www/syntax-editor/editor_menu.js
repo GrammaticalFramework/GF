@@ -54,6 +54,12 @@ function EditorMenu(editor,opts) {
             toggleHidden(element("debug"));
         })
     };
+    this.ui.to_toggle.title = "Select languages to linearise to (use Ctrl/Shift to select multiple)";
+    this.ui.random_button.title = "Insert a randomly generated tree at the current node";
+    this.ui.import.toggle.title = "Import an abstract syntax tree from a string (replaces current tree)";
+    this.ui.export_button.title = "Get the string representation of the abstract syntax tree";
+    this.ui.debug_toggle.title = "Toggle the debug console";
+
     if (t.options.show_grammar_menu) {
 	appendChildren(t.container, [text(" Grammar: "), t.ui.grammar_menu]);
     	t.ui.grammar_menu.onchange = function(){
@@ -62,7 +68,7 @@ function EditorMenu(editor,opts) {
         }
     }
     if (t.options.show_startcat_menu) {
-	appendChildren(t.container, [text(" Startcat: "), t.ui.startcat_menu]);
+	appendChildren(t.container, [text(" Start Category: "), t.ui.startcat_menu]);
         t.ui.startcat_menu.onchange = function(){
             var startcat = t.ui.startcat_menu.value;
             t.gm.change_startcat(startcat);

@@ -22,6 +22,7 @@ var gm_options = {
     }
 }
 if(window.Minibar) // Minibar loaded?
+    editor_options.lin_action_tooltip="Load sentence in Minibar";
     editor_options.lin_action=function(s,langFrom) {
         var editor=this;
         var minibar_options = {
