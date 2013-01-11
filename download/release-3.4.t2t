@@ -1,8 +1,8 @@
 GF Version 3.4 Release Notes
-December 2012?
+January 2013?
 
 %!style:../css/style.css
-%!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
+%!postproc(html): <TITLE> <meta charset="UTF-8"><meta name = "viewport" content = "width = device-width"> <TITLE>
 %!postproc(html): <H1> <H1><IMG src="../doc/Logos/gf0.png">
 
 ==Installation==
@@ -12,10 +12,13 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 ==What's new==
 
 ===GF compiler and run-time library===
+
 - A new partial evaluator that should provide more efficient grammar
   complilation, and solve problems with stack overflows and overly long
   compilaton times for certain grammars.
 - Better visualization of parse trees (contributed by Peter Ljunglöf).
+- ``alltenses`` is now part of the default search path, eliminating the need for
+  ``-path=…`` flags in many cases.
 - Various other small improvements and bug fixes.
 - [...]
 
@@ -29,10 +32,12 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 
 ===GF Cloud services===
+
 - A Simple Translation Tool (a bilungual document editor) has been added.
 - A syntax tree editor has been added (contributed by John J. Camilleri).
 - Some new functionality in the web-based grammar editor, e.g. preliminary
   support for public grammars.
+- Various other small improvements and bug fixes.
 
 
 --------------------
