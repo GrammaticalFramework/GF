@@ -47,6 +47,10 @@ function Editor(gm,opts) {
 
         lin: div_id("linearisations")
     };
+    this.ui.clear_button.title = "Clear current node and all its children";
+    this.ui.wrap_button.title = "Wrap the current node with a new function";
+    this.ui.unwrap_button.title = "Replace parent of current node with current node (if possible)";
+    
     appendChildren(this.container, [
         t.ui.menubar,
         t.ui.tree,
@@ -492,6 +496,9 @@ Editor.prototype.update_linearisation=function(){
         var btn = button(langname, function(){
             bind(t.options.lin_action,t)(lin,lang);
         });
+        if (t.options.lin_action_tooltip) {
+            btn.title = t.options.lin_action_tooltip;
+        }
         var c1 = th(btn);
         var c2 = td(text(lin));
         var row = tr([c1,c2]);
