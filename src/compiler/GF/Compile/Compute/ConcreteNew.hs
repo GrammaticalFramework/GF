@@ -235,7 +235,7 @@ glue vv = case vv of
                   x' <- strsFromValue v1
                   return $ vfv [foldr1 VC (map VString (str2strings (glueStr v u))) | v <- x', u <- y']
             (VC va vb,v2) -> VC va (glue (vb,v2))
-            (v1,VC va vb) -> VC (glue (va,va)) vb
+            (v1,VC va vb) -> VC (glue (v1,va)) vb
             (VS (VV ty pvs vs) vb,v2) -> VS (VV ty pvs [glue (v,v2)|v<-vs]) vb
             (v1,VS (VV ty pvs vs) vb) -> VS (VV ty pvs [glue (v1,v)|v<-vs]) vb
 --          (v1,v2) -> ok2 VGlue v1 v2
