@@ -1,2 +1,2 @@
 html:
-	pandoc --from=markdown --to=html5 --parse-raw --output=about.html README.md
+	pandoc --from=markdown+pipe_tables --to=html --output=about.html README.md

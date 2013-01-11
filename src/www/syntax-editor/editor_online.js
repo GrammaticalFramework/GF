@@ -39,14 +39,10 @@ if(window.Minibar) // Minibar loaded?
             },
             // get us back to the editor!
             abstract_action: function(tree) {
-                var editor_options = {
-                    target: "editor",
-                    initial: {
-                        grammar: editor.minibar.grammar_menu.value, // hmm
-                        startcat: editor.minibar.input.startcat_menu.value, // hmm
-                        abstr: tree
-                    }
+                var opts = {
+                    abstr: tree
                 }
+                editor.initialize_from(opts);
                 editor.minibar.hide();
                 editor.show();
             }
