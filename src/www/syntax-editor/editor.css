@@ -1,4 +1,4 @@
-body.syntax-editor {
+body {
     background: #ccc url("../minibar/brushed-metal.png");
 }
 
@@ -124,3 +124,9 @@ body.syntax-editor {
   padding: 1em;
   }
 
+/* From http://www.grammaticalframework.org/css/style.css */
+.about table { border-collapse: collapse; }
+.about th,
+.about td { border: 1px solid #333; padding:0 5px; }
+.about td { background: white; }
+.about th { background: #9df; }

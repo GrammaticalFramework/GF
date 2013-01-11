@@ -73,6 +73,7 @@ function AST(fun, cat) {
         return new ASTNode({
             "fun": fun,
             "cat": cat,
+            "string": "", // for String literals
             "deps": {}, // dependent types
             "children": []
         });
@@ -304,7 +305,10 @@ function AST(fun, cat) {
     this.toString = function() {
         var s = "";
         function visit(node) {
-            s += node.fun ? node.fun : "?" ;
+            if (node.cat == "String")
+                s += '"' + ((node.string) ? node.string : "") + '"';
+            else
+                s += node.fun ? node.fun : "?" ;
             if (!node.hasChildren())
 //            if (node.children.length == 0)
                 return;

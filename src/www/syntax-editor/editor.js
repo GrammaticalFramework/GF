@@ -27,6 +27,7 @@ function Editor(gm,opts) {
     /* --- Creating UI components ------------------------------------------- */
     this.container = document.getElementById(this.options.target);
     this.container.classList.add("editor");
+
     this.ui = {
         menubar: div_class("menu"),
 
@@ -150,9 +151,13 @@ Editor.prototype.get_startcat=function() {
     return this.gm.startcat;
 }
 
+// Called from Minibar, for example
 Editor.prototype.initialize_from=function(opts) {
-    if (opts.abstr)
-        this.import_ast(opts.abstr);
+    var t = this;
+    if (opts.abstr) {
+        t.ast = new AST(null, t.get_startcat());
+        t.import_ast(opts.abstr);
+    }
 }
 
 // Called after changing grammar or startcat
@@ -197,12 +202,37 @@ Editor.prototype.add_refinement=function(fun,opts) {
     return opt;
 }
 
+// Add a literal refinement to UI, e.g. String
+Editor.prototype.add_literal_refinement=function() {
+    var t = this;
+    t.ui.refinements.innerHTML = "Enter string: ";
+    var nde = t.ast.getCurrentNode();
+    var val = (nde.string) ? nde.string : "";
+    var input = node("input",{
+        type:"text",
+        value: val
+    },[]);
+    // TODO: Perhaps we should have an update button instead
+    input.onkeyup = function() {
+        nde.string = input.value;
+        t.redraw_tree();
+        t.update_linearisation();
+    }
+    t.ui.refinements.appendChild(input);
+}
+
 // Show refinements for given cat (usually that of current node)
 Editor.prototype.get_refinements=function(cat) {
     var t = this;
     t.ui.refinements.innerHTML = "…";
-    if (cat == undefined)
-        cat = t.ast.getCat();
+    if (cat == undefined) cat = t.ast.getCat();
+
+    // Special case when cat is "String"
+    if (cat == "String") {
+        t.add_literal_refinement();
+        return;
+    }
+
     var args = {
         id: cat,
         format: "json"
@@ -460,9 +490,18 @@ Editor.prototype.redraw_tree=function() {
         var container2 = empty_class("div", "node");
         if (id.get().length == 1)
             container2.classList.add("first");
-        var label =
-            ((node.fun) ? node.fun : "?") + " : " +
-            ((node.cat) ? node.cat : "?");
+
+        // Special case for String literal
+        if (node.cat == "String") {
+            var label =
+                '"' + ((node.string) ? node.string : "") + '"' +
+                " : String";
+        } else {
+            var label =
+                ((node.fun) ? node.fun : "?") + " : " +
+                ((node.cat) ? node.cat : "?");
+        }
+
         var current = id.equals(t.ast.getCurrentID());
         var element = elem("a", {class:(current?"current":"")}, [text(label)]);
         element.onclick = function() {
