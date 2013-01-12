@@ -68,7 +68,7 @@ server port optroot execute1 state0 =
          putStrLn $ "Document root = "++root
          putStrLn $ "Starting HTTP server, open http://localhost:"
                     ++show port++"/ in your web browser."
-         initServer port (modifyMVar state . handle state0 cache execute1)
+         initServer port (modifyMVar state . handle root state0 cache execute1)
 
 gf_version = "This is GF version "++showVersion version++".\n"++buildInfo
 
@@ -126,7 +126,7 @@ hmtry m = do s <- get
                Right (Right (a,s)) -> do put s;return (Right a)
 
 -- | HTTP request handler
-handle state0 cache execute1
+handle root state0 cache execute1
        rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) state =
     case method of
       "POST" -> run normal_request (utf8inputs body,state)
@@ -134,7 +134,9 @@ handle state0 cache execute1
       _ -> return (state,resp501 $ "method "++method)
   where
     normal_request =
-      do qs <- get_qs
+      do -- Defend against unhandled errors under inDir:
+         liftIO $ setCurrentDirectory root
+         qs <- get_qs
          logPutStrLn $ method++" "++upath++" "++show (mapSnd (take 100.fst) qs)
          case upath of
            "/new" -> new
