@@ -64,10 +64,10 @@ server port optroot execute1 state0 =
   where
     -- | HTTP server
     http_server execute1 state0 state cache root =
-      do putStrLn gf_version
-         putStrLn $ "Document root = "++root
-         putStrLn $ "Starting HTTP server, open http://localhost:"
-                    ++show port++"/ in your web browser."
+      do logPutStrLn gf_version
+         logPutStrLn $ "Document root = "++root
+         logPutStrLn $ "Starting HTTP server, open http://localhost:"
+                       ++show port++"/ in your web browser."
          initServer port (modifyMVar state . handle root state0 cache execute1)
 
 gf_version = "This is GF version "++showVersion version++".\n"++buildInfo
@@ -225,7 +225,9 @@ handle root state0 cache execute1
              flag (n,"") = n
              flag (n,v) = n++"="++v
              cmd = unwords ("gf":args)
-         out <- liftIO $ readProcessWithExitCode "gf" args ""
+         logPutStrLn cmd
+         out@(ecode,_,_) <- liftIO $ readProcessWithExitCode "gf" args ""
+         logPutStrLn $ show ecode
          cwd <- liftIO $ getCurrentDirectory
          return $ json200 (jsonresult cwd ('/':dir++"/") cmd out files)
 
