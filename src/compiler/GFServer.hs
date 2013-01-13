@@ -126,7 +126,7 @@ hmtry m = do s <- get
                Right (Right (a,s)) -> do put s;return (Right a)
 
 -- | HTTP request handler
-handle root state0 cache execute1
+handle documentroot state0 cache execute1
        rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) state =
     case method of
       "POST" -> run normal_request (utf8inputs body,state)
@@ -135,7 +135,7 @@ handle root state0 cache execute1
   where
     normal_request =
       do -- Defend against unhandled errors under inDir:
-         liftIO $ setCurrentDirectory root
+         liftIO $ setDir documentroot
          qs <- get_qs
          logPutStrLn $ method++" "++upath++" "++show (mapSnd (take 100.fst) qs)
          case upath of
@@ -173,7 +173,7 @@ handle root state0 cache execute1
       where
         cd ('/':dir@('t':'m':'p':_)) =
           do cwd <- liftIO $ getCurrentDirectory
-             b <- liftIO $ try $ setCurrentDirectory dir
+             b <- liftIO $ try $ setDir dir
              case b of
                Left _ -> do b <- liftIO $ try $ readFile dir -- poor man's symbolic links
                             case b of
@@ -181,7 +181,7 @@ handle root state0 cache execute1
                               Right dir' -> cd dir'
                Right _ -> do --logPutStrLn $ "cd "++dir
                              r <- hmtry (ok dir)
-                             liftIO $ setCurrentDirectory cwd
+                             liftIO $ setDir cwd
                              either (either (liftIO . ioError) err) return r
         cd dir = err $ resp400 $ "unacceptable directory "++dir
 
@@ -264,7 +264,7 @@ handle root state0 cache execute1
 
     link_directories olddir newdir@('/':'t':'m':'p':'/':_) | old/=new =
         liftIO $
-        do setCurrentDirectory ".."
+        do setDir ".."
            logPutStrLn =<< getCurrentDirectory
            logPutStrLn $ "link_dirs new="++new++", old="++old
 #ifdef mingw32_HOST_OS
@@ -326,7 +326,9 @@ serveStaticFile' path =
        then return $ resp400 $ "Unsupported file type: "++ext
        else do b <- doesFileExist path
                if b then fmap (ok200' (ct t)) $ rdFile path
-                    else return (resp404 path)
+                    else do cwd <- getCurrentDirectory
+                            logPutStrLn $ "Not found: "++path++" cwd="++cwd
+                            return (resp404 path)
 
 -- * Logging
 logPutStrLn s = liftIO . hPutStrLn stderr $ s
@@ -417,6 +419,11 @@ removeDir dir =
   do files <- filter (`notElem` [".",".."]) `fmap` getDirectoryContents dir
      mapM (removeFile . (dir</>)) files
      removeDirectory dir
+
+setDir path =
+  do logPutStrLn $ "cd "++show path
+     setCurrentDirectory path
+
 {-
 -- * direct-fastcgi deficiency workaround
 
