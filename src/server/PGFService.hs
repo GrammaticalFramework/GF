@@ -72,7 +72,7 @@ pgfMain command pgf =
                              Just l <- getFrom
                              outputGraphviz (parseTree pgf l t)
       "abstrjson"      -> outputJSONP . jsonExpr =<< getTree
-      "browse"         -> id =<< doBrowse pgf `fmap` getOptId `ap` getCSSClass `ap` getHRef `ap` getFormat "html"
+      "browse"         -> id =<< doBrowse pgf `fmap` getOptId `ap` getCSSClass `ap` getHRef `ap` getFormat "html" `ap` getIncludePrintNames
       "external"       -> do cmd <- getInput "external"
                              input <- getText
                              doExternal cmd input
@@ -140,6 +140,9 @@ pgfMain command pgf =
                          Nothing -> throwCGIError 400 "Bad language" ["Bad language: " ++ l]
                          Just lang | lang `elem` PGF.languages pgf -> return $ Just lang
                                    | otherwise -> throwCGIError 400 "Unknown language" ["Unknown language: " ++ l]
+    
+    getIncludePrintNames :: CGI Bool
+    getIncludePrintNames = maybe (return False) (\_->return True) =<< getInput "printnames"
 
 
 errorMissingId = throwCGIError 400 "Missing identifier" []
@@ -372,20 +375,24 @@ pipeIt2graphviz format code = do
      ExitSuccess   -> return output
      ExitFailure r -> fail ("pipeIt2graphviz: (exit " ++ show r ++ ")")
 
-browse1json pgf id = makeObj . maybe [] obj $ PGF.browse pgf id
+browse1json pgf id pn = makeObj . maybe [] obj $ PGF.browse pgf id
   where
-    obj (def,ps,cs) = ["def".=def,"producers".=ps,"consumers".=cs]
+    obj (def,ps,cs) = if pn then (baseobj ++ pnames) else baseobj
+      where
+        baseobj = ["def".=def, "producers".=ps, "consumers".=cs]
+        pnames = ["printnames".=makeObj [(show lang).=PGF.showPrintName pgf lang id | lang <- PGF.languages pgf]]
 
-doBrowse pgf (Just id) _ _ "json" = outputJSONP $ browse1json pgf id
-doBrowse pgf Nothing   _ _ "json" =
+
+doBrowse pgf (Just id) _ _ "json" pn = outputJSONP $ browse1json pgf id pn
+doBrowse pgf Nothing   _ _ "json" pn =
     outputJSONP $ makeObj ["cats".=all (PGF.categories pgf),
                            "funs".=all (PGF.functions pgf)]
   where
     all = makeObj . map one
-    one id = PGF.showCId id.=browse1json pgf id
+    one id = PGF.showCId id.=browse1json pgf id pn
 
-doBrowse pgf Nothing cssClass href _ = errorMissingId
-doBrowse pgf (Just id) cssClass href _ = -- default to "html" format
+doBrowse pgf Nothing cssClass href _ pn = errorMissingId
+doBrowse pgf (Just id) cssClass href _ pn = -- default to "html" format
   outputHTML $
   case PGF.browse pgf id of
     Just (def,ps,cs) -> "<PRE>"++annotate def++"</PRE>\n"++
@@ -399,6 +406,11 @@ doBrowse pgf (Just id) cssClass href _ = -- default to "html" format
                            then "<BR/>"++
                                 "<H3>Consumers</H3>"++
                                 "<P>"++annotateCIds cs++"</P>\n"
+                           else "")++
+                        (if pn
+                           then "<BR/>"++
+                                "<H3>Print Names</H3>"++
+                                "<P>"++annotatePrintNames++"</P>\n"
                            else "")
     Nothing          -> ""
   where
@@ -459,6 +471,9 @@ doBrowse pgf (Just id) cssClass href _ = -- default to "html" format
         Just s  -> "class=\""++s++"\""
 
     mkLink s = "<A "++hrefAttr s++" "++classAttr++">"++s++"</A>"
+    
+    annotatePrintNames = "<DL>"++(unwords pns)++"</DL>"
+      where pns = ["<DT>"++(show lang)++"</DT><DD>"++(PGF.showPrintName pgf lang id)++"</DD>" | lang <- PGF.languages pgf ]
 
 instance JSON PGF.CId where
     readJSON x = readJSON x >>= maybe (fail "Bad language.") return . PGF.readLanguage
