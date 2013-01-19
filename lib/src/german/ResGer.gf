@@ -366,8 +366,14 @@ resource ResGer = ParamX ** open Prelude in {
     \ich,mich,mir,meiner,mein,g,n,p -> {
       s = table {
         NPCase c    => caselist ich mich mir meiner ! c ;
-        NPPoss gn c => mein + pronEnding ! gn ! c
-        } ;
+        NPPoss gn c => case pronEnding ! gn ! c of {
+          "" => mein ;
+          s  => case <n,p> of {
+              <Pl,P2> => Predef.tk 2 meiner + s ;
+              _ => mein + s
+              }
+            }
+          } ;
       a = Ag g n p
       } ;
 
