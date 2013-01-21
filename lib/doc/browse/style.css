@@ -2,78 +2,75 @@
   GF RGL Browser
   John J. Camiller, 2012
 */
-.scroll-y
-{ 
+
+body {
+  background-color: white;
+  margin:0;
+}
+
+h1,h2,h3,h4 {
+  font-family: sans-serif;
+  color: #303030;
+  text-shadow: rgba(0,0,0,0.25) 2px 2px 5px;
+}
+
+.scroll-y { 
   overflow-y:auto;
-  }
-header h1
-{
-  text-align:left;
-  margin:0 0 0.2em;
-  }
-div[role='main']
-{ 
+}
+
+header {
+  background:#f2f2f2;
+  padding:10px;
+}
+header h1 {
+  margin:0;
+  font-size:1em;
+}
+div[role='main'] { 
   overflow:hidden;
   width:100%;
   height:100%;
- }
-.pane
-{ 
+  font: 13px sans-serif;
+}
+
+.pane { 
   display:block;
   height:100%;
- }
-.pane.left
-{ 
+}
+.pane.left { 
   width:170px;
   float:left;
-  background:#ddd;
-  padding:0.2em;
- }
-.pane.right
-{ 
+  background:#f2f2f2;
+}
+.pane.right { 
   margin-left:170px;
- }
-.panel
-{
-  padding:15px;
-  }
-.button
-{
-  cursor:pointer;
-  color:#00e;
-  padding:1px;
-  }
-.button:hover
-{ 
-  text-decoration:underline;
- }
-#language_select
-{ 
-  font-size:1em;
+  padding:5px 0 0 10px;
+
+  border-width:1px 0 0 1px;
+  border-style:solid;
+  border-color:#ddd;
+}
+#language_select { 
   width:100%;
-  }
-#modules a
-{ 
-  display:block;
-  margin:0.1em;
-  text-decoration:none;
-  }
-#modules a:hover
-{ 
+}
+#modules a { 
+  display: block;
+  text-decoration: none;
+  margin: 2px 5px;
+}
+#modules a:hover { 
   text-decoration:underline;
-  }
-#tabbar *
-{ 
-  display:inline-block;
- }
-#tabbar h2
-{ 
-  margin: 0 1em;
-  font-size: 1em;
-  border:0;
- }
-.tab
-{ 
+}
+
+#tabbar {
+  border-bottom: 1px dotted #ccc;
+  padding-bottom: 5px;
+}
+#module_name { 
+  font-weight: bold;
+  margin-right: 2em;
+}
+.tab { 
   cursor:pointer;
   padding:0.5em 0.5em;
   margin-right:0.5em;
@@ -82,105 +79,96 @@ div[role='main']
   text-decoration:none;
   font-family:sans-serif;
   font-weight:bold;
-  font-size:0.9em;
-  }
-#loading
-{ 
+  background: #aaa;
+  color: white;
+  border-radius: 0.5em;
+  line-height: 1;
+}
+.tab:hover {
+  background: #666;
+}
+
+#loading {
   position: fixed;
-  top: 5px;
-  left: 50%;
+  top: 10px;
+  left: 46%;
   white-space: nowrap;
   padding: 0.5em 1em;
   border: 1px solid #F0C36D;
   background: #F9EDBE;
-  color: #222;
+  color: #333;
   vertical-align: top;
-  font-family: sans-serif;
- }
-.scope
-{ 
-  background:#fff;
-  color:#333;
- }
-.code
-{ 
-  background:#444;
-  color:#eee;
- }
-.help
-{ 
-  background:#ccc;
-  color:#000;
- }
-input#search
-{
-  font-size:1em;
+  font: bold 13px sans-serif;
+}
+.scope { 
+}
+.code { 
+}
+.help { 
+}
+input#search {
   font-family:monospace;
   width:25em;
   padding:0.25em;
   background:#eee;
-  }
-#scope
-{
-  padding: 1em;
-  }
-#scope_controls
-{ 
+}
+
+.panel {
+  padding:10px 5px;
+}
+
+#scope_controls { 
   border-bottom: 1px solid #CCC;
   padding-bottom: 0.5em;
-  }
-#scope_list
-{
-  font-family:monospace;
+}
+#scope_list {
+  font: 12px monospace;
   width:100%;
   margin-top:1em;
-  }
-#scope_list tr:hover
-{
+  border-collapse: collapse;
+}
+#scope_list tr:hover {
   background:#f9f9f9;
-  }
-#scope_list tr.indir
-{
+}
+#scope_list tr.indir {
   font-style:italic;
-  }
-#scope_list tr.local td:nth-child(2)
-{
+}
+#scope_list tr.local td:nth-child(2) {
   font-weight:bold;
-  }
-#scope_list th
-{
+}
+#scope_list th {
   text-align:left;
-  }
-#scope_list th, #scope_list td
-{
+}
+#scope_list th, #scope_list td {
   padding:0.4em;
   border-style: solid;
   border-width: 0 0 1px 0;
-  border-color: #ddd;
+  border-color: #eee;
   background:none;
   white-space:nowrap;
-  }
-#scope_list td:nth-child(6)
-{
+}
+#scope_list td:nth-child(6) {
   white-space:normal;
-  }
-#code pre
-{
+}
+#code pre {
   margin:0;
   color:#000;
   overflow:auto;
-  }
-dt
-{ 
+  font: 12px monospace;
+}
+#code ol.linenums {
+  color: #aaa;
+  margin: 0;
+}
+dt { 
   font-weight:bold;
-  }
-footer
-{ 
-  padding:0.5em;
+}
+footer { 
+  padding:3px 6px;
   color:#333;
-  font-size:0.9em;
+  font-size:13px;
   text-align:right;
   position:fixed;
   top:0;
   right:0;
-  }
+}
