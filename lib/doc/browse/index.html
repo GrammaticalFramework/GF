@@ -7,7 +7,6 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <link rel="shortcut icon" href="icon.png" type="image/png">
-  <link rel="stylesheet" href="http://www.grammaticalframework.org/css/style.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="google-code-prettify/prettify-gf.css">
 </head>
@@ -25,8 +24,7 @@
     </div>
     <div class="pane right">
       <div id="tabbar">
-        <h2>...</h2>
-        <a href="http://www.grammaticalframework.org/lib/doc/synopsis.html" title="RGL Synopsis">Synopsis...</a>
+        Module: <span id="module_name">...</span>
       </div>
       <div id="scope" class="panel scope maxheight">
         <div id="scope_controls">
@@ -34,7 +32,7 @@
           &nbsp;<span id="scope_count">0</span> items&nbsp;
           <input type="submit" id="submit" value="Filter" />
           <input type="reset" id="clear" value="Clear" />
-          <input type="checkbox" id="case_sensitive" checked="checked" /><label for="case_sensitive">Case sensitive?</label>
+          <input type="checkbox" id="case_sensitive" /><label for="case_sensitive">Case sensitive?</label>
           <input type="radio" name="show" id="show_all" checked="checked" /><label for="show_all">Show all</label>
           <input type="radio" name="show" id="show_local" /><label for="show_local">Local only</label>
         </div>
