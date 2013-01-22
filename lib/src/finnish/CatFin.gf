@@ -47,12 +47,12 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 
 -- The $Bool$ tells if a possessive suffix is attached, which affects the case.
 
-    CN   = {s : NForm => Str} ;
+    CN   = {s : NForm => Str ; h : Harmony} ;
     Pron = {s : NPForm => Str ; a : Agr} ;
     NP   = {s : NPForm => Str ; a : Agr ; isPron : Bool ; isNeg : Bool} ;
     Det  = {
       s1 : Case => Str ;       -- minun kolme
-      s2 : Str ;               -- -ni
+      s2 : Harmony => Str ;    -- -ni (Front for -nsä, Back for -nsa)
       sp : Case => Str ;       -- se   (substantival form)
       n : Number ;             -- Pl   (agreement feature for verb)
       isNum : Bool ;           -- True (a numeral is present)
@@ -63,7 +63,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 ----    QuantSg, QuantPl = {s1 : Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
     Ord    = {s : NForm => Str} ;
     Predet = {s : Number => NPForm => Str} ;
-    Quant  = {s1,sp : Number => Case => Str ; s2 : Str ; isPoss : Bool ; isDef : Bool ; isNeg : Bool} ;
+    Quant  = {s1,sp : Number => Case => Str ; s2 : Harmony => Str ; isPoss : Bool ; isDef : Bool ; isNeg : Bool} ;
     Card   = {s : Number => Case => Str ; n : Number} ;
     Num    = {s : Number => Case => Str ; isNum : Bool ; n : Number} ;
 
@@ -91,9 +91,9 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
     A  = {s : Degree => AForm => Str} ;
     A2 = {s : Degree => AForm => Str ; c2 : Compl} ;
 
-    N  = {s : NForm => Str} ;
-    N2 = {s : NForm => Str} ** {c2 : Compl ; isPre : Bool} ;
-    N3 = {s : NForm => Str} ** {c2,c3 : Compl ; isPre,isPre2 : Bool} ;
+    N  = {s : NForm => Str ; h : Harmony} ;
+    N2 = {s : NForm => Str ; h: Harmony} ** {c2 : Compl ; isPre : Bool} ;
+    N3 = {s : NForm => Str ; h: Harmony} ** {c2,c3 : Compl ; isPre,isPre2 : Bool} ;
     PN = {s : Case  => Str} ;
 
 oper Verb1 = {s : VForm => Str ; sc : NPForm ; qp : Bool} ;

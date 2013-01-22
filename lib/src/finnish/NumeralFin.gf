@@ -75,7 +75,8 @@ lin
     } ;
 
 oper
-  co : (c,o : {s : NForm => Str}) -> {s : CardOrd => Str} = \c,o -> {
+--  co : (c,o : {s : NForm => Str}) -> {s : CardOrd => Str} = \c,o -> {
+  co : (c,o : CommonNoun) -> {s : CardOrd => Str} = \c,o -> {
     s = table {
       NCard nf => c.s ! nf ;
       NOrd  nf => o.s ! nf
@@ -86,7 +87,8 @@ oper
 
 -- Too much trouble to infer vowel, cf. "kuudes" vs. "viides".
 
-  ordN : Str -> Str -> {s : NForm => Str} = \a,sadas -> 
+--  ordN : Str -> Str -> {s : NForm => Str} = \a,sadas -> 
+  ordN : Str -> Str -> CommonNoun = \a,sadas -> 
     let
       sada = init sadas
     in

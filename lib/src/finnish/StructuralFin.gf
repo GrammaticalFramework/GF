@@ -62,7 +62,7 @@ concrete StructuralFin of Structural = CatFin **
   many_Det = mkDet Sg (mkN "moni" "monia") ;
   more_CAdv = X.mkCAdv "enemmän" "kuin" ;
   most_Predet = {s = \\n,c => (nForms2N (dSuurin "useinta")).s ! NCase n (npform2case n c)} ;
-  much_Det = mkDet Sg {s = \\_ => "paljon"} ;
+  much_Det = mkDet Sg {s = \\_ => "paljon" ; h = Back} ; --Harmony not relevant, it's just a CommonNoun
   must_VV = mkVV (caseV genitive (mkV "täytyä")) ;
   no_Utt = ss "ei" ;
   on_Prep = casePrep adessive ;
@@ -83,12 +83,12 @@ concrete StructuralFin of Structural = CatFin **
     } ;
   someSg_Det = heavyDet {
     s1 = jokuPron ! Sg ;
-    s2 = [] ;
+    s2 = \\_ => [] ;
     isNum,isPoss = False ; isDef = True ; isNeg = False ; n = Sg
     } ;
   somePl_Det = heavyDet {
     s1 = jokuPron ! Pl ;
-    s2 = [] ; isNum,isPoss = False ; isNeg = False ; isDef = True ; 
+    s2 = \\_ => [] ; isNum,isPoss = False ; isNeg = False ; isDef = True ; 
     n = Pl ; isNeg = False
     } ;
   something_NP = {
@@ -106,7 +106,7 @@ concrete StructuralFin of Structural = CatFin **
             c => (mkPronoun "nuo" "noiden" "noita" "noina" "noihin" Sg P3).s ! NPCase c
             }
           } ;
-    s2 = [] ; isNum,isPoss = False ; isDef = True  ; isNeg = False 
+    s2 = \\_ => [] ; isNum,isPoss = False ; isDef = True  ; isNeg = False 
     } ;
   that_Subj = ss "että" ;
   there_Adv = ss "siellä" ; --- tuolla
@@ -123,7 +123,7 @@ concrete StructuralFin of Structural = CatFin **
             c => (mkPronoun "nämä" "näiden" "näitä" "näinä" "näihin" Sg P3).s ! NPCase c
             }
           } ;
-    s2 = [] ; isNum,isPoss = False ; isDef = True  ; isNeg = False
+    s2 = \\_ => [] ; isNum,isPoss = False ; isDef = True  ; isNeg = False
     } ;
   through_Prep = postGenPrep "kautta" ;
   too_AdA = ss "liian" ;
@@ -284,7 +284,7 @@ lin
 
   no_Quant = heavyQuant {
     s1 = \\n,c => mikaanPron ! n ! c ;  -- requires negative or question polarity
-    s2 = [] ; isNum,isPoss = False ; isDef = True ; isNeg = True
+    s2 = \\_ => [] ; isNum,isPoss = False ; isDef = True ; isNeg = True
     } ;
 
   if_then_Conj = {s1 = "jos" ; s2 = "niin" ; n = Sg} ;

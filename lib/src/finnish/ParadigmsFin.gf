@@ -293,7 +293,8 @@ oper
       s = table {
         NCase Sg Nom => nom ;
         f => noun.s ! f
-        }
+	} ;
+      h = noun.h
       } ;
 
 
@@ -311,10 +312,14 @@ oper
         nForms2N (nForms10 a b c d e f g h i j) ;
 
   mkStrN : Str -> N -> N = \sora,tie -> {
-    s = \\c => sora + tie.s ! c ; lock_N = <>
+    s = \\c => sora + tie.s ! c ; 
+    h = tie.h ;
+    lock_N = <>
     } ;
   mkNN : N -> N -> N = \oma,tunto -> {
-    s = \\c => oma.s ! c + tunto.s ! c ; lock_N = <>
+    s = \\c => oma.s ! c + tunto.s ! c ; 
+    h = tunto.h ;
+    lock_N = <>
     } ; ---- TODO: oma in possessive suffix forms
 
   nForms1 : Str -> NForms = \ukko ->

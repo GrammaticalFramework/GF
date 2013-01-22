@@ -365,7 +365,7 @@ resource MorphoFin = ResFin ** open Prelude in {
       9 => ukkoihin
       } ;
 
-    Noun = {s : NForm => Str; lock_N : {}} ;
+    Noun = {s : NForm => Str; h : Harmony; lock_N : {}} ;
 
     nForms2N : NForms -> Noun = \f -> 
       let
@@ -384,6 +384,8 @@ resource MorphoFin = ResFin ** open Prelude in {
         ukko  = Predef.tk 2 ukkona ;
         ukkoi = Predef.tk 2 ukkoina ;
         ukoi  = Predef.tk 3 ukoissa ;
+        harmony : Harmony = case a of 
+          {"a" => Back ; _   => Front  } ;
       in 
     {s = table {
       NCase Sg Nom    => Ukko ;
@@ -423,6 +425,7 @@ resource MorphoFin = ResFin ** open Prelude in {
       NPossIllat Sg  => init ukkoon ;
       NPossIllat Pl  => init ukkoihin
       } ;
+    h = harmony ;
     lock_N = <>
     } ;
 
@@ -839,7 +842,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
   mkDet : Number -> CommonNoun -> {
       s1,sp : Case => Str ;       -- minun kolme
-      s2 : Str ;               -- -ni
+      s2 : Harmony => Str ;    -- -ni ; nsa/nsä
       n : Number ;             -- Pl   (agreement feature for verb)
       isNum : Bool ;           -- True (a numeral is present)
       isPoss : Bool ;          -- True (a possessive suffix is present)
@@ -847,7 +850,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       isNeg : Bool
       } = \n, noun -> heavyDet {
     s1 = \\c => noun.s ! NCase n c ;
-    s2 = [] ;
+    s2 = \\_ => [] ;
     n = n ;
     isNum, isPoss = False ;
     isDef = True ;  --- does this hold for all new dets?
