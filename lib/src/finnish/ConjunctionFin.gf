@@ -20,7 +20,9 @@ concrete ConjunctionFin of Conjunction =
       c = ss.c
       } ;
 
-    ConjCN conj ss = conjunctDistrTable NForm conj ss ;
+    ConjCN conj ss = 
+      let s = (conjunctDistrTable NForm conj ss).s
+      in {s = s ; h = Back } ; ---- harmony?
 
 -- These fun's are generated from the list cat's.
 

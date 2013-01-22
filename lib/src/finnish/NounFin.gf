@@ -33,7 +33,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
       s = \\c => let 
                    k = ncase c ;
                  in
-                 det.s1 ! k.p1 ++ cn.s ! k.p2 ++ det.s2 ; 
+                 det.s1 ! k.p1 ++ cn.s ! k.p2 ++ det.s2 ! cn.h ;
       a = agrP3 (case <det.isDef, det.isNum> of {
             <False,True> => Sg ;  -- kolme kytkintä on
             _ => det.n
@@ -108,7 +108,8 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
 
     PossPron p = {
       s1,sp = \\_,_ => p.s ! NPCase Gen ;
-      s2 = BIND ++ possSuffix p.a ;
+      s2 = table {Front => BIND ++ possSuffixFront p.a ; 
+                  Back  => BIND ++ possSuffix p.a } ;
       isNum = False ;
       isPoss = True ;
       isDef = True ; --- "minun kolme autoani ovat" ; thus "...on" is missing
@@ -142,7 +143,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
     DefArt = {
       s1 = \\_,_ => [] ; 
       sp = table {Sg => pronSe.s ; Pl => pronNe.s} ;
-      s2 = [] ; 
+      s2 = \\_ => [] ;
       isNum,isPoss,isNeg = False ;
       isDef = True   -- autot ovat
       } ;
@@ -152,7 +153,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
       sp = \\n,c => 
          (nhn (mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
          "yksien" "yksiä" "yksiin")).s ! NCase n c ;
-      s2 = [] ; 
+      s2 = \\_ => [] ; 
       isNum,isPoss,isDef,isNeg = False -- autoja on
       } ;
 
@@ -174,11 +175,13 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
     Use2N3 f = {
       s = f.s ;
       c2 = f.c2 ;
+      h = f.h ;
       isPre = f.isPre
       } ;
     Use3N3 f = {
       s = f.s ;
       c2 = f.c3 ;
+      h = f.h ;
       isPre = f.isPre2
       } ;
 
@@ -186,19 +189,21 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
 --- If a possessive suffix is added here it goes after the complements...
 
     ComplN2 f x = {
-      s = \\nf => preOrPost f.isPre (f.s ! nf) (appCompl True Pos f.c2 x)
-      } ;
+      s = \\nf => preOrPost f.isPre (f.s ! nf) (appCompl True Pos f.c2 x) ;
+      h = f.h } ;
     ComplN3 f x = {
       s = \\nf => preOrPost f.isPre (f.s ! nf) (appCompl True Pos f.c2 x) ;
       c2 = f.c3 ;
+      h = f.h ; 
       isPre = f.isPre2
       } ;
 
     AdjCN ap cn = {
-      s = \\nf => ap.s ! True ! (n2nform nf) ++ cn.s ! nf
-      } ;
+      s = \\nf => ap.s ! True ! (n2nform nf) ++ cn.s ! nf ;
+      h = cn.h } ;
 
-    RelCN cn rs = {s = \\nf => cn.s ! nf ++ rs.s ! agrP3 (numN nf)} ;
+    RelCN cn rs = {s = \\nf => cn.s ! nf ++ rs.s ! agrP3 (numN nf) ;
+                   h = cn.h } ;
 
     RelNP np rs = {
       s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ; 
@@ -207,11 +212,14 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
       isNeg = np.isNeg
       } ;
 
-    AdvCN cn ad = {s = \\nf => cn.s ! nf ++ ad.s} ;
+    AdvCN cn ad = {s = \\nf => cn.s ! nf ++ ad.s ;
+                   h = cn.h} ;
 
-    SentCN cn sc = {s = \\nf=> cn.s ! nf ++ sc.s} ;
+    SentCN cn sc = {s = \\nf=> cn.s ! nf ++ sc.s;
+                    h = cn.h } ;
 
-    ApposCN cn np = {s = \\nf=> cn.s ! nf ++ np.s ! NPCase Nom} ; --- luvun x
+    ApposCN cn np = {s = \\nf=> cn.s ! nf ++ np.s ! NPCase Nom ; 
+                    h = cn.h } ; --- luvun x
 
   oper
     numN : NForm -> Number = \nf -> case nf of {

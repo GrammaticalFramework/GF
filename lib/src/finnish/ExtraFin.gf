@@ -6,7 +6,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
   lin
     GenNP np = {
       s1,sp = \\_,_ => np.s ! NPCase Gen ;
-      s2 = [] ;
+      s2 = \\_ => [] ;
       isNum  = False ;
       isPoss = False ;
       isDef  = True ; --- "Jussin kolme autoa ovat" ; thus "...on" is missing
@@ -15,7 +15,8 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     GenIP ip = {s = \\_,_ => ip.s ! NPCase Gen} ;
 
-    GenCN n1 n2 = {s = \\nf => n1.s ! NPCase Gen ++ n2.s ! nf} ;
+    GenCN n1 n2 = {s = \\nf => n1.s ! NPCase Gen ++ n2.s ! nf ;
+                   h = n2.h } ;
 
   lincat
     VPI   = {s : Str} ;
@@ -153,7 +154,8 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
     ProDropPoss p = {
       s1 = \\_,_ => [] ;
       sp = \\_,_ => p.s ! NPCase Gen ;
-      s2 = BIND ++ possSuffix p.a ;
+      s2 = table {Front => BIND ++ possSuffixFront p.a ;
+                  Back  => BIND ++ possSuffix p.a } ;
       isNum = False ;
       isPoss = True ;
       isDef = True ;  --- "minun kolme autoani ovat" ; thus "...on" is missing

@@ -30,7 +30,13 @@ resource ResFin = ParamX ** open Prelude in {
 
 
     Agr = Ag Number Person | AgPol ;
+    
+    
+-- Vowel harmony, used for CNs in determining the correct possessive suffix.
 
+    Harmony = Back | Front ;
+    
+    
   oper
     complNumAgr : Agr -> Number = \a -> case a of {
       Ag n _ => n ;
@@ -546,7 +552,7 @@ oper
          }
        } ;
 
-  CommonNoun = {s : NForm => Str} ;
+  CommonNoun = {s : NForm => Str ; h : Harmony } ; --IL 11/2012, vowharmony
 
 -- To form an adjective, it is usually enough to give a noun declension: the
 -- adverbial form is regular.
@@ -586,7 +592,9 @@ oper
      vesii = nh.vesii ;
      vesien = nh.vesien ;
      vesia = nh.vesia ;
-     vesiin = nh.vesiin
+     vesiin = nh.vesiin ;
+     harmony : Harmony = case a of 
+       {"a" => Back ; _   => Front  } 
     in
     {s = table {
       NCase Sg Nom    => vesi ;
@@ -625,9 +633,10 @@ oper
       NPossTransl Pl => vesii + "kse" ;
       NPossIllat Sg  => Predef.tk 1 veteen ;
       NPossIllat Pl  => Predef.tk 1 vesiin
-      }
+      } ;
+      h = harmony 
     } ;
--- Surpraisingly, making the test for the partitive, this not only covers
+-- Surprisingly, making the test for the partitive, this not only covers
 -- "rae", "perhe", "savuke", but also "rengas", "lyhyt" (except $Sg Illat$), etc.
 
   sRae : (_,_ : Str) -> NounH = \rae,rakeena ->
@@ -713,7 +722,7 @@ oper
     heavyDet : PDet -> PDet ** {sp : Case => Str} = \d -> d ** {sp = d.s1} ;
     PDet : Type = {
       s1 : Case => Str ;
-      s2 : Str ;
+      s2 : Harmony => Str ;
       n : Number ;
       isNum : Bool ;
       isPoss : Bool ;
@@ -723,7 +732,12 @@ oper
 
     heavyQuant : PQuant -> PQuant ** {sp : Number => Case => Str} = \d -> 
       d ** {sp = d.s1} ; 
-    PQuant : Type =  
-      {s1 : Number => Case => Str ; s2 : Str ; isPoss : Bool ; isDef : Bool ; isNeg : Bool} ; 
+    PQuant : Type = {
+      s1 : Number => Case => Str ;
+      s2 : Harmony => Str ; 
+      isPoss : Bool ;
+      isDef : Bool ;
+      isNeg : Bool
+      } ;  
 
 }
