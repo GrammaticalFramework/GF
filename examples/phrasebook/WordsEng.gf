@@ -150,7 +150,8 @@ concrete WordsEng of Words = SentencesEng **
 
 -- miscellaneous
 
-    QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
+    QWhatName p = mkQS (mkQCl (mkIComp whatSg_IP) (nameOf p)) ;
+--    QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
     QWhatAge p = mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item IrregEng.cost_V)) ; 
     ItCost item price = mkCl item (mkV2 IrregEng.cost_V) price ;

@@ -1,6 +1,6 @@
 DisambPhrasebookEng : ObjPlur ThesPlur ThesePlur ThosePlur
 PhrasebookBul : ObjPlur ThesPlur ThesePlur ThosePlur
-PhrasebookCat : MMust ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookCat : ObjPlur ThesPlur ThesePlur ThosePlur
 PhrasebookDan : ObjPlur ThesPlur ThesePlur ThosePlur
 PhrasebookDut : ObjPlur ThesPlur ThesePlur ThosePlur
 PhrasebookEng : ObjPlur ThesPlur ThesePlur ThosePlur
@@ -8,7 +8,7 @@ PhrasebookFin : ObjPlur ThesPlur ThesePlur ThosePlur
 PhrasebookFre : ObjPlur ThesPlur ThesePlur ThosePlur
 PhrasebookGer : ObjPlur ThesPlur ThesePlur ThosePlur
 PhrasebookHin : AScared ATired MMust ObjPlur ThesPlur ThesePlur ThosePlur
-PhrasebookIta : MCan MMust ObjPlur ThesPlur ThesePlur ThosePlur
+PhrasebookIta : ObjPlur ThesPlur ThesePlur ThosePlur
 PhrasebookLav : ObjPlur ThesPlur ThesePlur ThosePlur
 PhrasebookNor : ObjPlur ThesPlur ThesePlur ThosePlur
 PhrasebookPes : AHasAge AHasChildren AHasRoom AHasTable AmountCurrency Belgian DrinkNumber ItCost MCan MKnow MMust NNumeral ObjNumber ObjPlur PNumber PPrice ThesPlur ThesePlur ThosePlur V2Wait VWait
