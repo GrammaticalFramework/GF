@@ -362,6 +362,74 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 	return pyres;
 }
 
+// Concr_parse_tokens is the same as the above function but
+// instead of a string it expect a sequence of tokens as argument.
+// This is usefull if you want to implement your own tokenizer in
+// python.
+static ExprIterObject*
+Concr_parse_tokens(ConcrObject* self, PyObject *args, PyObject *keywds)
+{
+    static char *kwlist[] = {"tokens", "cat", "n", NULL};
+    // Variable for the input list of tokens
+    PyObject* obj;
+    PyObject* seq;
+    int len;
+    const char *catname_s = NULL;
+    int max_count = -1;
+
+    // Parsing arguments: the tokens is a python object (O),
+    // cat is a string (s) and n an integer (i)
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "O|si", kwlist,
+                                    &obj, &catname_s, &max_count))
+        return NULL;
+    // The python object should be a sequence
+    seq = PySequence_Fast(obj, "expected a sequence");
+    len = PySequence_Size(obj);
+
+    ExprIterObject* pyres = (ExprIterObject*) 
+        pgf_ExprType.tp_alloc(&pgf_ExprIterType, 0);
+    if (pyres == NULL) {
+        return NULL;
+    }
+
+    pyres->pool = gu_new_pool();
+    pyres->max_count = max_count;
+    pyres->counter   = 0;
+
+    GuPool *tmp_pool = gu_local_pool();
+    GuString catname = 
+        (catname_s == NULL) ? pgf_start_cat(self->grammar->pgf, tmp_pool)
+                            : gu_str_string(catname_s, tmp_pool);
+
+    // turn the (python) list of tokens into a string array
+    char* tokens[len];
+    for (int i = 0; i < len; i++) {
+        tokens[i] = PyString_AsString(PySequence_Fast_GET_ITEM(seq, i));
+        if (tokens[i] == NULL) {
+            // Note: if the list item is not a string, 
+            // PyString_AsString raises TypeError itself
+            // so we just have to return
+            gu_pool_free(tmp_pool);
+            return NULL;
+        }
+    }
+    Py_DECREF(seq);
+    
+    pyres->res =
+        pgf_parse_tokens(self->concr, catname, tokens, len, pyres->pool);
+
+    if (pyres->res == NULL) {
+        Py_DECREF(pyres);
+
+        PyErr_SetString(PGFError, "Something went wrong during parsing");
+        gu_pool_free(tmp_pool);
+        return NULL;
+    }
+
+    gu_pool_free(tmp_pool);
+    return pyres;
+}
+
 static PyObject*
 Concr_linearize(ConcrObject* self, PyObject *args)
 {
@@ -393,6 +461,9 @@ static PyMethodDef Concr_methods[] = {
     },
     {"parse", (PyCFunction)Concr_parse, METH_VARARGS | METH_KEYWORDS,
      "Parses a string and returns an iterator over the abstract trees for this sentence"
+    },
+    {"parse_tokens", (PyCFunction)Concr_parse_tokens, METH_VARARGS | METH_KEYWORDS,
+     "Parses list of tokens and returns an iterator over the abstract trees for this sentence. Allows you to write your own tokenizer in python."
     },
     {"linearize", (PyCFunction)Concr_linearize, METH_VARARGS,
      "Takes an abstract tree and linearizes it to a sentence"

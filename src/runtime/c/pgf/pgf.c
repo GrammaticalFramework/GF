@@ -227,6 +227,33 @@ pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool)
 	return pgf_parse_result(state, pool);
 }
 
+// Same as previous but accept a list of tokens as input instead of a 
+// lexer
+GuEnum*
+pgf_parse_tokens(PgfConcr* concr, PgfCId cat, char **tokens, int len, GuPool* pool)
+{
+    // Begin parsing a sentence of the specified category
+    PgfParseState* state =
+        pgf_parser_init_state(concr, cat, 0, pool);
+    if (state == NULL) {
+        return NULL;
+    }
+
+    // Parsing
+    PgfToken tok;
+    for (int i = 0; i < len; i++) {
+        tok = gu_str_string(tokens[i], pool);
+
+        state = pgf_parser_next_state(state, tok, pool);
+        if (state == NULL) {
+            return NULL;
+        }
+    }
+
+    // Now begin enumerating the resulting syntax trees
+    return pgf_parse_result(state, pool);
+}
+
 void
 pgf_print_chunks(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool)
 {
