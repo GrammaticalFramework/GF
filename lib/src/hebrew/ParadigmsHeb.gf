@@ -14,9 +14,9 @@
           
   mkNoun : (bait,batim,batimD : Str) -> Gender -> Noun = \bait,batim,batimD,g -> {
 	  s = table {
-		  Sg => table{Indef => bait ; Def =>  ("h" +bait)};
-		  Pl => table{Indef => batim ; Def =>  ("h" + batim)} ;
-		  Dl => table{Indef => batimD ; Def =>  ("h" +batimD)}
+		  Sg => table{Indef => bait ; Def =>  ("ה" +bait)};
+		  Pl => table{Indef => batim ; Def =>  ("ה" + batim)} ;
+		  Dl => table{Indef => batimD ; Def =>  ("ה" +batimD)}
 		  } ;
 	  g=g ;
     }; 
@@ -27,8 +27,8 @@
   regNoun2 :  Str -> Gender -> Noun = \root,g -> 
 	  case root of {
 	  heret + c@? => table {
-		  Masc => mkNoun root (heret + replaceLastLet (c) + "yM" ) ("")  g;
-		  Fem => mkNoun root (heret + replaceLastLet (c) + "wt") ("") g
+		  Masc => mkNoun root (heret + replaceLastLet (c) + "ים" ) ("")  g;
+		  Fem => mkNoun root (heret + replaceLastLet (c) + "ות") ("") g
 		    } ! g
     } ;
 		  
@@ -36,11 +36,11 @@
 
   regNoun : Str -> Noun = 
 	  \root -> case root of {
-	  malc + "h" => mkNoun root (malc + "wt") ("") Fem ;
-	  mecon + "yt" => mkNoun root (mecon + "ywt") ("") Fem ; --  (it -> iyot)	
-	  khan + "wt" => mkNoun root (khan + "ywt") ("") Fem; -- (ut -> uyot)	
-	  tsalakh + "t" => mkNoun root (tsalakh + "wt") ("") Fem ; --  (at -> ot)
-	  _ => mkNoun root (root + "yM") ("")  Masc 
+	  malc + "ה" => mkNoun root (malc + "ות") ("") Fem ;
+	  mecon + "ית" => mkNoun root (mecon + "יות") ("") Fem ; --  (it -> iyot)	
+	  khan + "ות" => mkNoun root (khan + "יות") ("") Fem; -- (ut -> uyot)	
+	  tsalakh + "ת" => mkNoun root (tsalakh + "ות") ("") Fem ; --  (at -> ot)
+	  _ => mkNoun root (root + "ים") ("")  Masc 
     } ;
 
   mkN = overload {
@@ -86,23 +86,23 @@
 
    regA : Str ->  Adj = \root 
 	-> case root of { 
-	kaTan + c@? => mkAdj root (kaTan + replaceLastLet (c) + "h") (kaTan +
-	replaceLastLet (c) + "yM") (kaTan + replaceLastLet (c) + "wt") 
+	kaTan + c@? => mkAdj root (kaTan + replaceLastLet (c) + "ה") (kaTan +
+	replaceLastLet (c) + "ים") (kaTan + replaceLastLet (c) + "ות") 
    };
 
    regA2 : Str ->  Adj = \bwleT
-	-> mkAdj bwleT  ( bwleT + "t") ( bwleT + "yM" ) (bwleT + "wt" ); 
+	-> mkAdj bwleT  ( bwleT + "ת") ( bwleT + "ים" ) (bwleT + "ות" ); 
 	
    mkAdj : (_,_,_,_ : Str) -> Adj = \tov,tova,tovim,tovot -> {
     s = table {
       	Sg => table { 
 		Indef => table { Masc => tov ; Fem => tova } ; 
-		Def => table { Masc => ("h" + tov) ; Fem =>  ("h"
+		Def => table { Masc => ("ה" + tov) ; Fem =>  ("ה"
     + tova) }  
             	} ; 
         _ => table { 
 		Indef => table {Masc => tovim ; Fem  => tovot } ; 
-		Def => table { Masc =>  ("h" + tovim) ; Fem  =>  ("h" + tovot) }
+		Def => table { Masc =>  ("ה" + tovim) ; Fem  =>  ("ה" + tovot) }
                }
          }
    };
