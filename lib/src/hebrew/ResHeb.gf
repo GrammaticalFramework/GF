@@ -121,13 +121,13 @@ oper
       } ; 
 
   replaceLastLet :  Str -> Str = \c -> 
-	 case c of {"P" => "p" ; "M" => "m" ; "N" => "n" ; "Z." => "Z" ; "K" => "k"; _ => c} ;
+	 case c of {"ף" => "פ" ; "ם" => "מ" ; "ן" => "נ" ; "ץ" => "צ" ; "ך" => "כ"; _ => c} ;
 
   Num, Ord :  Type = {s : Case => Str; n : Number} ;
   Det :   Type = {s :  Gender => Str ; n : Number ; sp : Species; isDef : Bool} ; 
 
 --  defH : Str -> Str = \cn ->
---	case cn of {_ => "h" + cn} ;	
+--	case cn of {_ => "ה" + cn} ;	
 
   insertObj : NP ->  VP -> VP = \np,vp ->
       let
@@ -135,7 +135,7 @@ oper
       in
       { s = vp.s;    
  	obj  =  case <np.isDef> of  
- 	     { <True> =>  "At" ++ nps.obj; 
+ 	     { <True> =>  "את" ++ nps.obj; 
 	         _    =>  nps.obj } ;
         s2 = vp.s2;
         pred = vp.pred;
@@ -171,7 +171,7 @@ oper
 
   getRoot : Str -> Root = \s -> case s of {
     C1@? + C2@? + C3 => {C1 = C1 ; C2 = C2 ; C3 = C3} ;
-    _ => Predef.error ("cannot get root from" ++ s)
+    _ => Predef.error ("caננoת גeת רooת fרoמ" ++ s)
     } ;
 
 
