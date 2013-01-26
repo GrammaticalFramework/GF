@@ -88,7 +88,7 @@ concrete StructuralGer of Structural = CatGer **
   somewhere_Adv = ss "irgendwo" ;
   that_Quant = let 
      jener : Number => Gender => PCase => Str = \\n => (detLikeAdj True n "jen").s in 
-     {s = \\_ => jener ; sp = jener ; a,aPl = Weak} ;
+     {s,sp = \\_ => jener ; a,aPl = Weak} ;
 ---b  that_NP = nameNounPhrase {s = caselist "das" "das" "denem" "dessen"} ; ----
   there_Adv = ss "da" ;
   there7to_Adv = ss "dahin" ;
@@ -98,7 +98,7 @@ concrete StructuralGer of Structural = CatGer **
   they_Pron = mkPronPers "sie" "sie" "ihnen" "ihrer" "ihr" Fem Pl P3 ;
   this_Quant = let 
      dieser : Number => Gender => PCase => Str = \\n => (detLikeAdj True n "dies").s in 
-     {s = \\_ => dieser ; sp = dieser ; a,aPl = Weak} ;
+     {s,sp = \\_ => dieser ; a,aPl = Weak} ;
 ---b  this_NP = nameNounPhrase {s = caselist "dies" "dies" "diesem" "dieses"} ; ----
 ---b  those_NP = {s = caselist "jene" "jene" "jenen" "jener" ; a = agrP3 Pl} ;
   through_Prep = mkPrep "durch" P.accusative ;
@@ -139,7 +139,7 @@ concrete StructuralGer of Structural = CatGer **
        Pl => (detLikeAdj False Pl "kein").s
        }
      in 
-     {s = \\_ => keiner ; sp = keiner ; a = Strong ; aPl = Weak} ;   ---- sp
+     {s,sp = \\_ => keiner ; a = Strong ; aPl = Weak} ;   ---- sp
   if_then_Conj = {s1 = "wenn" ; s2 = "dann" ; n = Sg ; lock_Conj = <>} ;
   nobody_NP = 
     nameNounPhrase {s = caselist "niemand" "niemanden" "niemandem" "niemands"} ;
