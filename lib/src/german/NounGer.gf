@@ -51,9 +51,9 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
         n = num.n ;
         a = quant.a
       in {
-        s  = \\g,c => quant.s ! num.isNum ! n ! g ! c ++ (let k = (prepC c).c in
+        s  = \\g,c => quant.s  ! num.isNum ! n ! g ! c ++ (let k = (prepC c).c in
                         num.s!g!k ++ ord.s ! agrAdj g (adjfCase a k) n k) ;
-        sp = \\g,c => quant.sp ! n ! g ! c ++ (let k = (prepC c).c in
+        sp = \\g,c => quant.sp ! num.isNum ! n ! g ! c ++ (let k = (prepC c).c in
                         num.s!g!k ++ ord.s ! agrAdj g (adjfCase quant.aPl k) n k) ;
         n = n ;
         a = case n of {Sg => a ; Pl => quant.aPl} ;
@@ -65,9 +65,9 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
         n = num.n ;
         a = quant.a
       in {
-        s  = \\g,c => quant.s ! num.isNum ! n ! g ! c ++ (let k = (prepC c).c in
+        s  = \\g,c => quant.s  ! num.isNum ! n ! g ! c ++ (let k = (prepC c).c in
                         num.s!g!k) ;
-        sp = \\g,c => quant.sp ! n ! g ! c ++ (let k = (prepC c).c in
+        sp = \\g,c => quant.sp ! num.isNum ! n ! g ! c ++ (let k = (prepC c).c in
                         num.s!g!k) ;
         n = n ;
         a = case n of {Sg => a ; Pl => quant.aPl} ;
@@ -77,7 +77,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
 
     PossPron p = {
       s  = \\_,n,g,c => usePrepC c (\k -> p.s ! NPPoss (gennum g n) k) ;
-      sp = \\n,g,c   => usePrepC c (\k -> p.s ! NPPoss (gennum g n) k) ;
+      sp = \\_,n,g,c => usePrepC c (\k -> p.s ! NPPoss (gennum g n) k) ;
       a = Strong ;
       aPl = Weak ;
       } ;
@@ -99,7 +99,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
 
     DefArt = {
       s = \\_,n,g,c => artDefContr (gennum g n) c ; 
-      sp = \\n,g,c  => artDefContr (gennum g n) c ;  ---- deren, denem...
+      sp = \\_,n,g,c  => artDefContr (gennum g n) c ;  ---- deren, denem...
       a, aPl = Weak
       } ;
 
@@ -112,8 +112,11 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
           }
         } ; 
       sp = table {
-        Sg => \\g,c => usePrepC c (\k -> (detLikeAdj False Sg "ein").s ! g ! NPC k) ;
-        Pl => \\_,c => usePrepC c (\k -> caselist "einige" "einige" "einigen" "einiger" ! k)
+        True => \\_,_,c => usePrepC c (\k -> []) ;
+        False => table {
+          Sg => \\g,c => usePrepC c (\k -> (detLikeAdj False Sg "ein").s ! g ! NPC k) ;
+          Pl => \\_,c => usePrepC c (\k -> caselist "einige" "einige" "einigen" "einiger" ! k)
+          }
         } ;
       a, aPl = Strong 
       } ;

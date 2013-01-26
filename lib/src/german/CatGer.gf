@@ -52,8 +52,8 @@ concrete CatGer of Cat =
     Pron = {s : NPForm => Str ; a : Agr} ;
     Det = {s,sp : Gender => PCase => Str ; n : Number ; a : Adjf ; isDef : Bool} ;
     Quant = {
-      s   : Bool => Number => Gender => PCase => Str ; 
-      sp  : Number => Gender => PCase => Str ; 
+      s   : Bool => Number => Gender => PCase => Str ;  -- Bool is True if a cardinal number is present
+      sp  : Bool => Number => Gender => PCase => Str ; 
       a   : Adjf ;
       aPl : Adjf ;  --- to distinguish "meine guten Freunde" / "gute Freunde"
       } ;
