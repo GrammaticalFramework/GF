@@ -198,7 +198,7 @@ oper
     qp  : Bool -- True = back vowel
     } ;
     
-  predV : (Verb ** {sc : NPForm ; qp : Bool}) -> VP = \verb -> {
+  predV : (Verb ** {sc : NPForm ; qp : Bool ; p : Str}) -> VP = \verb -> {
     s = \\vi,ant,b,agr0 => 
       let
 
@@ -256,7 +256,7 @@ oper
         } ;
 
     s2 = \\_,_,_ => [] ;
-    adv = \\_ => [] ;
+    adv = \\_ => verb.p ; -- the particle of the verb
     ext = [] ;
     sc = verb.sc ;
     qp = verb.qp ;

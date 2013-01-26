@@ -24,7 +24,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
                   NPCase Nom => v.sc ;   -- minun täytyy pestä auto
                   c => c                 -- minulla täytyy olla auto
                   } ;
-                qp = v.qp
+                qp = v.qp ; p = v.p
                }
          ) ;
 
@@ -53,9 +53,9 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
     ComplSlash vp np = insertObjPre np.isNeg (\\fin,b,_ => appCompl fin b vp.c2 np) vp ;
 
     UseComp comp = 
-      insertObj (\\_,_ => comp.s) (predV (verbOlla ** {sc = NPCase Nom ; qp = True})) ;
+      insertObj (\\_,_ => comp.s) (predV (verbOlla ** {sc = NPCase Nom ; qp = True ; p = []})) ;
 
-    UseCopula = predV (verbOlla ** {sc = NPCase Nom ; qp = True}) ;
+    UseCopula = predV (verbOlla ** {sc = NPCase Nom ; qp = True ; p = []}) ;
 
     SlashVV v vp = 
       insertObj 
@@ -65,7 +65,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
                   NPCase Nom => v.sc ;   -- minun täytyy pestä auto
                   c => c                 -- minulla täytyy olla auto
                   } ;
-                qp = v.qp
+                qp = v.qp ; p = v.p
                }
          ) ** {c2 = vp.c2} ; ---- correct ??
 

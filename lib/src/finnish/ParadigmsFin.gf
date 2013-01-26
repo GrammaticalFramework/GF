@@ -164,6 +164,7 @@ oper
     mkV : (huutaa,huudan,huusi : Str) -> V ; -- also deviating pres. 1sg
     mkV : (huutaa,dan,taa,tavat,takaa,detaan,sin,si,sisi,tanut,dettu,tanee : Str) -> V ; -- worst-case verb
     mkV : VK -> V ;  -- verb from DictFin (Kotus)
+    mkV : V -> Str -> V ; -- hakata päälle (particle verb)
   } ;
 
 -- All the patterns above have $nominative$ as subject case.
@@ -519,20 +520,21 @@ oper
     mkV : (
       huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
       huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = mk12V ;
-    mkV : (sana : VK) -> V = \w -> vforms2V w.s ** {sc = NPCase Nom ; lock_V = <>} ;
+    mkV : (sana : VK) -> V = \w -> vforms2V w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
+    mkV : V -> Str -> V = \w,p -> vforms2V w.s ** {sc = NPCase Nom ; lock_V = <> ; p = p} ;
   } ;
 
   mk1V : Str -> V = \s -> 
     let vfs = vforms2V (vForms1 s) in 
-      vfs ** {sc = NPCase Nom ; lock_V = <>} ;
+      vfs ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
   mk2V : (_,_ : Str) -> V = \x,y -> 
-    let vfs = vforms2V (vForms2 x y) in vfs ** {sc = NPCase Nom ; lock_V = <>} ;
+    let vfs = vforms2V (vForms2 x y) in vfs ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
   mk3V : (huutaa,huudan,huusi : Str) -> V = \x,_,y -> mk2V x y ; ----
   mk12V : (
       huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
       huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = 
      \a,b,c,d,e,f,g,h,i,j,k,l -> 
-        vforms2V (vForms12 a b c d e f g h i j k l) ** {sc = NPCase Nom ; lock_V = <>} ;
+        vforms2V (vForms12 a b c d e f g h i j k l) ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
 
   vForms1 : Str -> VForms = \ottaa ->
     let
@@ -595,9 +597,9 @@ oper
 
 
 
-  caseV c v = {s = v.s ; sc = NPCase c ; qp = v.qp ; lock_V = <>} ;
+  caseV c v = {s = v.s ; sc = NPCase c ; qp = v.qp ; lock_V = <> ; p = v.p} ;
 
-  vOlla = verbOlla ** {sc = NPCase Nom ; qp = True ; lock_V = <>} ; ---- lieneekö
+  vOlla = verbOlla ** {sc = NPCase Nom ; qp = True ; lock_V = <> ; p = []} ; ---- lieneekö
 
   mk2V2 : V -> Prep -> V2 = \v,c -> v ** {c2 = c ; lock_V2 = <>} ;
   caseV2 : V -> Case -> V2 = \v,c -> mk2V2 v (casePrep c) ; 
@@ -613,7 +615,7 @@ oper
     mkV2 : V -> V2 = dirV2 ;
     mkV2 : V -> Case -> V2 = caseV2 ;
     mkV2 : V -> Prep -> V2 = mk2V2 ;
-    mkV2 : VK -> V2 = \w -> dirV2 (vforms2V w.s ** {sc = NPCase Nom ; lock_V = <>}) ;
+    mkV2 : VK -> V2 = \w -> dirV2 (vforms2V w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []}) ;
     } ;
 
   mk2V2 : V -> Prep -> V2 ;

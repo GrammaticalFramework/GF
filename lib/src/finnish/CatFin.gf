@@ -96,6 +96,6 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
     N3 = {s : NForm => Str ; h: Harmony} ** {c2,c3 : Compl ; isPre,isPre2 : Bool} ;
     PN = {s : Case  => Str} ;
 
-oper Verb1 = {s : VForm => Str ; sc : NPForm ; qp : Bool} ;
+oper Verb1 = {s : VForm => Str ; sc : NPForm ; qp : Bool ; p : Str} ;
 
 }
