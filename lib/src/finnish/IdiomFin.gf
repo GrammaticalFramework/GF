@@ -71,7 +71,7 @@ concrete IdiomFin of Idiom = CatFin **
     } ;
 
   oper
-    olla = verbOlla ** {sc = NPCase Nom ; qp = True} ;
+    olla = verbOlla ** {sc = NPCase Nom ; qp = True ; p = []} ;
 
     noSubj : Polarity -> Str = \_ -> [] ;
 }
