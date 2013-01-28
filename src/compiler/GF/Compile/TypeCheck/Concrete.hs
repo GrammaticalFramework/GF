@@ -317,6 +317,14 @@ getOverload gr g mt ot = case appForm ot of
      let matches = [vf | vf@((_,v,_),_) <- vfs, matchVal mt v]
      let showTypes ty = hsep (map ppType ty)
 
+    
+     let (stys,styps) = (showTypes tys, [showTypes ty | (ty,_) <- typs])
+
+     -- to avoid strange error msg e.g. in case of unmatch record extension, show whole types if needed AR 28/1/2013
+     let (stysError,stypsError) = if elem (render stys) (map render styps)
+            then (hsep (map (ppTerm Unqualified 0) tys), [hsep (map (ppTerm Unqualified 0) ty) | (ty,_) <- typs])
+            else (stys,styps)
+
      case ([vf | (vf,True) <- matches],[vf | (vf,False) <- matches]) of
        ([(_,val,fun)],_) -> return (mkApp fun tts, val)
        ([],[(pre,val,fun)]) -> do
@@ -329,9 +337,9 @@ getOverload gr g mt ot = case appForm ot of
        ([],[]) -> do
          checkError $ text "no overload instance of" <+> ppTerm Unqualified 0 f $$
                       text "for" $$
-                      nest 2 (showTypes tys) $$
+                      nest 2 stysError $$
                       text "among" $$
-                      nest 2 (vcat [showTypes ty | (ty,_) <- typs]) $$
+                      nest 2 (vcat stypsError) $$
                       maybe empty (\x -> text "with value type" <+> ppType x) mt
 
        (vfs1,vfs2) -> case (noProds vfs1,noProds vfs2) of
