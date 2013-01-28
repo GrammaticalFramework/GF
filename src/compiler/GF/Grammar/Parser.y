@@ -17,6 +17,8 @@ import GF.Grammar.Macros
 import GF.Grammar.Lexer
 import qualified Data.ByteString.Char8 as BS
 import GF.Compile.Update (buildAnyTree)
+import Codec.Binary.UTF8.String(decodeString)
+import Data.Char(toLower)
 }
 
 %name pModDef ModDef
@@ -116,7 +118,7 @@ ModDef
                                       jments <- mapM (checkInfoType mtype) jments
                                       defs <- case buildAnyTree id jments of
                                                 Ok x    -> return x
-                                                Bad msg -> fail msg
+                                                Bad msg -> fail (optDecode opts msg)
                                       return (id, ModInfo mtype mstat opts extends with opens [] "" Nothing defs)  }
 
 ModHeader :: { SourceModule }
@@ -604,6 +606,12 @@ Posn
 
 happyError :: P a
 happyError = fail "syntax error"
+
+-- Quick fix to render error messages from UTF-8-encoded source files correctly.
+optDecode opts =
+    if map toLower (flag optEncoding opts) `elem` ["utf8","utf-8"]
+    then decodeString
+    else id
 
 mkListId,mkConsId,mkBaseId  :: Ident -> Ident
 mkListId = prefixId (BS.pack "List")
