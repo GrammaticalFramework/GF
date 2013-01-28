@@ -7,11 +7,12 @@ resource PhonoIta = open Prelude in {
 
 oper 
   vocale : Strs = strs {
-    "a" ; "e" ; "h" ; "i" ; "o" ; "u" ; "è" ; "y"
+    "a" ; "e" ; "h" ; "i" ; "o" ; "u" ; "è" ; "y" ; "A" ; "E" ; "I" ; "O" ; "U" ; "H"
     } ;
 
   sImpuro : Strs = strs {
-    "z" ; "sb" ; "sc" ; "sd" ; "sf" ; "sm" ; "sp" ; "sq" ; "sr" ; "st" ; "sv"
+    "z" ; "sb" ; "sc" ; "sd" ; "sf" ; "sm" ; "sp" ; "sq" ; "sr" ; "st" ; "sv" ;
+    "Z" ; "Sb" ; "Sc" ; "Sd" ; "Sf" ; "Sm" ; "Sp" ; "Sq" ; "Sr" ; "St" ; "Sv"
     } ;
 
   elision : (_,_,_ : Str) -> Str = \il, l', lo -> 
