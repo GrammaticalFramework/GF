@@ -30,7 +30,7 @@ import System.IO
 import System.Directory
 import System.FilePath
 import qualified Data.Map as Map
-import qualified Data.Set as Set
+--import qualified Data.Set as Set
 import Data.List(nub)
 import Data.Maybe (isNothing)
 import qualified Data.ByteString.Char8 as BS
@@ -55,7 +55,7 @@ link opts cnc gr = do
   let isv = (verbAtLeast opts Normal)
   putPointE Normal opts "linking ... " $ do
     let abs = err (const cnc) id $ abstractOfConcrete gr cnc
-    pgf <- ioeIO (mkCanon2pgf opts gr abs)
+    pgf <- mkCanon2pgf opts gr abs
     probs <- ioeIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
     ioeIO $ when (verbAtLeast opts Normal) $ putStrFlush "OK"     
     return $ setProbabilities probs 
@@ -196,7 +196,7 @@ compileSourceModule opts env@(k,gr,_) mb_gfFile mo@(i,mi) = do
                      refreshModule (k,gr) mo3
       mo4 <- runPass2 id Optimize "optimizing" $ optimizeModule opts gr mo3r
       mo5 <- if isModCnc (snd mo4) && flag optPMCFG opts
-             then runPass2' "generating PMCFG" $ generatePMCFG opts gr mo4
+             then runPass2' "generating PMCFG" $ generatePMCFG opts gr mb_gfFile mo4
              else runPass2' "" $ return mo4
       generateGFO k' mo5
 
@@ -215,9 +215,10 @@ compileSourceModule opts env@(k,gr,_) mb_gfFile mo@(i,mi) = do
     putpp s = if null s then id else putPointE Verbose opts ("  "++s++" ")
     idump pass = intermOut opts (Dump pass) . ppModule Internal
 
+    -- * Impedance matching
     runPass = runPass' fst fst snd (ioeErr . runCheck)
     runPass2 = runPass2e ioeErr
-    runPass2' = runPass2e ioeIO id Canon
+    runPass2' = runPass2e id id Canon
     runPass2e lift f = runPass' id f (const "") lift
 
     runPass' ret dump warn lift pass pp m =
