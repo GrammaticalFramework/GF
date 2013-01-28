@@ -32,6 +32,7 @@ import System.CPUTime
 import System.Cmd
 import Text.Printf
 import Control.Monad
+import Control.Monad.Trans(MonadIO(..))
 import Control.Exception(evaluate)
 import qualified Data.ByteString.Char8 as BS
 
@@ -126,10 +127,7 @@ putStrLnFlush s = putStrLn s >> hFlush stdout
 
 -- * IO monad with error; adapted from state monad
 
-newtype IOE a = IOE (IO (Err a))
-
-appIOE :: IOE a -> IO (Err a)
-appIOE (IOE iea) = iea
+newtype IOE a = IOE { appIOE :: IO (Err a) }
 
 ioe :: IO (Err a) -> IOE a
 ioe = IOE
@@ -140,6 +138,9 @@ ioeIO io = ioe (io >>= return . return)
 ioeErr :: Err a -> IOE a
 ioeErr = ioe . return 
 
+ioeErrIn :: String -> IOE a -> IOE a
+ioeErrIn msg (IOE ioe) = IOE (fmap (errIn msg) ioe)
+
 instance Functor IOE where fmap = liftM
 
 instance  Monad IOE where
@@ -148,6 +149,8 @@ instance  Monad IOE where
                   x <- c          -- Err a
                   appIOE $ err ioeBad f x         -- f :: a -> IOE a
   fail = ioeBad
+
+instance MonadIO IOE where liftIO = ioeIO
 
 ioeBad :: String -> IOE a
 ioeBad = ioe . return . Bad

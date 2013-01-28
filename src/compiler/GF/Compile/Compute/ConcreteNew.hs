@@ -1,7 +1,7 @@
 -- | Functions for computing the values of terms in the concrete syntax, in
 -- | preparation for PMCFG generation.
 module GF.Compile.Compute.ConcreteNew
-           (GlobalEnv, resourceValues, normalForm
+           (GlobalEnv, resourceValues, normalForm, ppL
            --, Value(..), Env, value2term, eval, apply
            ) where
 
@@ -148,7 +148,7 @@ value env t0 =
     T i cs  -> valueTable env i cs
     V ty ts -> do pvs <- paramValues env ty
                   ((VV ty pvs .) . sequence) # mapM (value env) ts
-    C t1 t2 -> ((vconcat.) # both id) # both (value env) (t1,t2)
+    C t1 t2 -> ((ok2p vconcat.) # both id) # both (value env) (t1,t2)
     S t1 t2 -> ((select env.) # both id) # both (value env) (t1,t2)
     P t l   -> --maybe (bug $ "project "++show l++" from "++show v) id $
                do ov <- value env t
@@ -156,7 +156,7 @@ value env t0 =
                                    in maybe (VP v l) id (proj l v)
     Alts t tts -> (\v vts -> VAlts # v <# mapM (both id) vts) # value env t <# mapM (both (value env)) tts
     Strs ts    -> ((VStrs.) # sequence) # mapM (value env) ts
-    Glue t1 t2 -> ((glue.) # both id) # both (value env) (t1,t2)
+    Glue t1 t2 -> ((ok2p glue.) # both id) # both (value env) (t1,t2)
     ELin c r -> (unlockVRec c.) # value env r
     EPatt p  -> return $ const (VPatt p) -- hmm
     t -> fail.render $ text "value"<+>ppTerm Unqualified 10 t $$ text (show t)
@@ -167,9 +167,7 @@ paramValues env ty = do let ge = global env
 
 vconcat vv@(v1,v2) =
     case vv of
-      (VError _,_) -> v1
       (VString "",_) -> v2
-      (_,VError _) -> v2
       (_,VString "") -> v1
       _ -> VC v1 v2
 
@@ -189,6 +187,10 @@ ok1 f v1 v2 = f v1 v2
 ok2 f v1@(VError {}) _ = v1
 ok2 f _ v2@(VError {}) = v2
 ok2 f v1 v2 = f v1 v2
+
+ok2p f (v1@VError {},_) = v1
+ok2p f (_,v2@VError {}) = v2
+ok2p f vv = f vv
 
 unlockVRec ::Ident -> Value -> Value
 unlockVRec c v =
@@ -470,9 +472,10 @@ m1 @@ m2 = (m1 =<<) . m2
 
 both f (x,y) = (,) # f x <# f y
 
-ppL (L loc x) = ppLocation "" loc<>text ":"<>ppIdent x
+ppL (L loc x) msg = hang (ppLocation "" loc<>colon) 4
+                         (text "In"<+>ppIdent x<>colon<+>msg)
 
-bugloc loc s = ppbug $ hang (text "In"<+>ppL loc<>text ":") 4 (text s)
+bugloc loc s = ppbug $ ppL loc (text s)
 
 bug msg = ppbug (text msg)
 ppbug doc = error $ render $

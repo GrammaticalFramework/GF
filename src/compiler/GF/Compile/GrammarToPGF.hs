@@ -22,6 +22,7 @@ import GF.Compile.GeneratePMCFG
 
 import GF.Infra.Ident
 import GF.Infra.Option
+import GF.Infra.UseIO (IOE)
 import GF.Data.Operations
 
 import Data.List
@@ -35,7 +36,7 @@ import Text.PrettyPrint
 import Control.Monad.Identity
 
 
-mkCanon2pgf :: Options -> SourceGrammar -> Ident -> IO D.PGF
+mkCanon2pgf :: Options -> SourceGrammar -> Ident -> IOE D.PGF
 mkCanon2pgf opts gr am = do
   (an,abs) <- mkAbstr am
   cncs     <- mapM mkConcr (allConcretes gr am)
@@ -96,7 +97,7 @@ mkCanon2pgf opts gr am = do
         -- we have to create the PMCFG code just before linking
         addMissingPMCFGs seqs []                  = return (seqs,[])
         addMissingPMCFGs seqs (((m,id), info):is) = do
-          (seqs,info) <- addPMCFG opts gr cenv am cm seqs id info
+          (seqs,info) <- addPMCFG opts gr cenv Nothing am cm seqs id info
           (seqs,is  ) <- addMissingPMCFGs seqs is
           return (seqs, ((m,id), info) : is)
 

@@ -109,7 +109,7 @@ delta f vs =
              [v1,v2] -> toValue `fmap` (f `fmap` fromValue v1 `ap` fromValue v2)
              _ -> delay
 
-    unimpl id = bug $ "unimplemented predefined function: "++showIdent id
+--  unimpl id = bug $ "unimplemented predefined function: "++showIdent id
 --  problem id vs = bug $ "unexpected arguments: Predef."++showIdent id++" "++show vs
 
     tk i s = take (max 0 (length s - i)) s :: String

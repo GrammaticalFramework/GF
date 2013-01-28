@@ -22,8 +22,9 @@ import GF.Grammar.Lookup
 import GF.Grammar.Predef
 import GF.Data.BacktrackM
 import GF.Data.Operations
+import GF.Infra.UseIO (IOE)
 import GF.Data.Utilities (updateNthM, updateNth)
-import GF.Compile.Compute.ConcreteNew(GlobalEnv,normalForm,resourceValues)
+import GF.Compile.Compute.ConcreteNew(GlobalEnv,normalForm,resourceValues,ppL)
 import System.IO(hPutStr,hPutStrLn,stderr)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
@@ -38,15 +39,16 @@ import Data.Maybe
 import Data.Char (isDigit)
 import Control.Monad
 import Control.Monad.Identity
+import Control.Monad.Trans (liftIO)
 import Control.Exception
 
 ----------------------------------------------------------------------
 -- main conversion function
 
-generatePMCFG :: Options -> SourceGrammar -> SourceModule -> IO SourceModule
-generatePMCFG opts sgr cmo@(cm,cmi) = do
-  (seqs,js) <- mapAccumWithKeyM (addPMCFG opts gr cenv am cm) Map.empty (jments cmi)
-  when (verbAtLeast opts Verbose) $ hPutStrLn stderr ""
+generatePMCFG :: Options -> SourceGrammar -> Maybe FilePath -> SourceModule -> IOE SourceModule
+generatePMCFG opts sgr opath cmo@(cm,cmi) = do
+  (seqs,js) <- mapAccumWithKeyM (addPMCFG opts gr cenv opath am cm) Map.empty (jments cmi)
+  when (verbAtLeast opts Verbose) $ liftIO $ hPutStrLn stderr ""
   return (cm,cmi{mseqs = Just (mkSetArray seqs), jments = js})
   where
     cenv = resourceValues gr
@@ -65,15 +67,15 @@ mapAccumWithKeyM f a m = do let xs = Map.toAscList m
                                    return (a,(k,y):kys)
 
 
-addPMCFG :: Options -> SourceGrammar -> GlobalEnv -> Ident -> Ident -> SeqSet -> Ident -> Info -> IO (SeqSet, Info)
-addPMCFG opts gr cenv am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin@(Just (L loc term)) mprn Nothing) = do
+addPMCFG :: Options -> SourceGrammar -> GlobalEnv -> Maybe FilePath -> Ident -> Ident -> SeqSet -> Ident -> Info -> IOE (SeqSet, Info)
+addPMCFG opts gr cenv opath am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin@(Just (L loc term)) mprn Nothing) = do
   let pres  = protoFCat gr res val
       pargs = [protoFCat gr (snd $ catSkeleton ty) lincat | ((_,_,ty),(_,_,lincat)) <- zip ctxt cont]
 
       pmcfgEnv0   = emptyPMCFGEnv
 
-      b          = convert opts gr cenv (L loc id) term val pargs
-      (seqs1,b1) = addSequencesB seqs b
+  b             <- convert opts gr cenv (floc opath loc id) term val pargs
+  let (seqs1,b1) = addSequencesB seqs b
       pmcfgEnv1  = foldBM addRule
                           pmcfgEnv0
                           (goB b1 CNil [])
@@ -86,9 +88,9 @@ addPMCFG opts gr cenv am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val))
                        !funs_cnt        = e-s+1
                    in (prods_cnt,funs_cnt)
 
-  when (verbAtLeast opts Verbose) $ hPutStr stderr ("\n+ "++showIdent id ++ " " ++ show (product (map catFactor pargs)))
+  when (verbAtLeast opts Verbose) $ liftIO $ hPutStr stderr ("\n+ "++showIdent id ++ " " ++ show (product (map catFactor pargs)))
   seqs1 `seq` stats `seq` return ()
-  when (verbAtLeast opts Verbose) $ hPutStr stderr (" "++show stats)
+  when (verbAtLeast opts Verbose) $ liftIO $ hPutStr stderr (" "++show stats)
   return (seqs1,GF.Grammar.CncFun mty mlin mprn (Just pmcfg))
   where
     (ctxt,res,_) = err bug typeForm (lookupFunType gr am id)
@@ -99,20 +101,20 @@ addPMCFG opts gr cenv am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val))
           newArgs  = map getFIds newArgs'
       in addFunction env0 newCat fun newArgs
 
-addPMCFG opts gr cenv am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) mdef@(Just (L loc term)) mprn Nothing) = do
+addPMCFG opts gr cenv opath am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) mdef@(Just (L loc term)) mprn Nothing) = do
   let pres = protoFCat gr (am,id) lincat
       parg = protoFCat gr (identW,cVar) typeStr
 
       pmcfgEnv0  = emptyPMCFGEnv
 
-      b          = convert opts gr cenv (L loc id) term lincat [parg]
-      (seqs1,b1) = addSequencesB seqs b
+  b             <- convert opts gr cenv (floc opath loc id) term lincat [parg]
+  let (seqs1,b1) = addSequencesB seqs b
       pmcfgEnv1  = foldBM addRule
                           pmcfgEnv0
                           (goB b1 CNil [])
                           (pres,[parg])
       pmcfg     = getPMCFG pmcfgEnv1
-  when (verbAtLeast opts Verbose) $ hPutStr stderr ("\n+ "++showIdent id++" "++show (catFactor pres))
+  when (verbAtLeast opts Verbose) $ liftIO $ hPutStr stderr ("\n+ "++showIdent id++" "++show (catFactor pres))
   seqs1 `seq` pmcfg `seq` return (seqs1,GF.Grammar.CncCat mty mdef mprn (Just pmcfg))
   where
     addRule lins (newCat', newArgs') env0 =
@@ -120,12 +122,17 @@ addPMCFG opts gr cenv am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) m
           !fun     = mkArray lins
       in addFunction env0 newCat fun [[fidVar]]
 
-addPMCFG opts gr cenv am cm seqs id info = return (seqs, info)
+addPMCFG opts gr cenv opath am cm seqs id info = return (seqs, info)
+
+floc opath loc id = maybe (L loc id) (\path->L (External path loc) id) opath
 
 convert opts gr cenv loc term val pargs =
-    runCnvMonad gr conv (pargs,[])
+    case term' of
+      Error s -> fail $ render $ ppL loc (text $ "Predef.error: "++s)
+      _ -> return $ runCnvMonad gr (conv term') (pargs,[])
   where
-    conv = convertTerm opts CNil val =<< unfactor term'
+    conv t = convertTerm opts CNil val =<< unfactor t
+
     term' = if flag optNewComp opts
             then normalForm cenv loc (recordExpand val term) -- new evaluator
             else term -- old evaluator is invoked from GF.Compile.Optimize
@@ -152,7 +159,7 @@ unfactor t = CM (\gr c -> c (unfac gr t))
                                     in V ty [restore x v u' | v <- allparams ty]
         T (TTyped ty) [(PW  ,u)] -> let u' = unfac gr u
                                     in V ty [u' | _ <- allparams ty]
-        T (TTyped ty) _ -> -- converTerm doesn't handle these tables
+        T (TTyped ty) _ -> -- convertTerm doesn't handle these tables
                            ppbug $
                            sep [text "unfactor"<+>ppTerm Unqualified 10 t,
                                 text (show t)]
@@ -241,6 +248,7 @@ choices nr path = do (args,_) <- get
                                                      values          -> let path = reversePath rpath
                                                                         in CM (\gr c s -> Case nr path [(value, updateEnv path value gr c s)
                                                                                                                     | (value,index) <- values])
+    descend schema       path              rpath = bug $ "descend "++show (schema,path,rpath)
 
     updateEnv path value gr c (args,seq) = 
       case updateNthM (restrictProtoFCat path value) nr args of
@@ -271,6 +279,15 @@ data Schema b s c
   | CTbl Type [(Term, b (Schema b s c))]
   | CStr s
   | CPar c
+--deriving Show -- doesn't work
+
+instance Show s => Show (Schema b s c) where
+  showsPrec _ sch =
+      case sch of
+        CRec r   -> showString "CRec " . shows (map fst r)
+        CTbl t _ -> showString "CTbl " . showsPrec 10 t . showString " _"
+        CStr s   -> showString "CStr " . showsPrec 10 s
+        CPar c   -> showString "CPar{}"
 
 -- | Path into a term or term schema
 data Path
