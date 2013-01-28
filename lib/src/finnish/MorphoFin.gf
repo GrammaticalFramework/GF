@@ -824,7 +824,7 @@ resource MorphoFin = ResFin ** open Prelude in {
       } ;
 
   vowHarmony : Str -> Str = \s -> case s of {
-    _ + ("a" | "o" | "u") + _ => "a" ;
+    _ + ("a" | "o" | "u" | "A" | "O" | "U") + _ => "a" ;
     _ => "ä"
     } ;
 
