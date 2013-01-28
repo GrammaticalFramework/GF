@@ -221,6 +221,7 @@ langsCoding = [
   (("english",  "Eng"),""),
   (("finnish",  "Fin"),""),
   (("french",   "Fre"),""),
+  (("hebrew",   "Heb"),""),
   (("hindi",    "Hin"),"to_devanagari"),
   (("german",   "Ger"),""),
   (("interlingua","Ina"),""),
@@ -258,7 +259,7 @@ langsPresent = langsLang `except` ["Pes"{-,"Jpn","Nep","Snd","Tha","Thb"-}]
 -- languages for which to compile Try
 langsAPI  = langsLang `except` langsIncomplete -- ["Ina","Mlt","Amh","Ara"]
 
-langsIncomplete = ["Amh","Ara","Ina","Lat","Mlt","Tur"]
+langsIncomplete = ["Amh","Ara","Heb","Ina","Lat","Mlt","Tur"]
 
 -- languages for which to compile Symbolic
 langsSymbolic  = langsAPI `except` ["Jpn"]
