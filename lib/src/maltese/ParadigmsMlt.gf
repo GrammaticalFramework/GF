@@ -20,7 +20,7 @@ resource ParadigmsMlt = open
 
   oper
 
-    {- ===== Parameters ===== -}
+    {- Parameters --------------------------------------------------------- -}
 
     -- Abstraction over gender names
     Gender : Type ;
@@ -31,7 +31,10 @@ resource ParadigmsMlt = open
     masculine = Masc ;
     feminine = Fem ;
 
-    {- ===== Noun Paradigms ===== -}
+    singular : Number = Sg ;
+    plural : Number = Pl ;
+
+    {- Noun paradigms ----------------------------------------------------- -}
 
     -- Helper function for inferring noun plural from singulative
     -- Nouns with collective & determinate forms should not use this...
@@ -177,19 +180,17 @@ resource ParadigmsMlt = open
         -- gender = inferNounGender sing ;
         gender = Masc ; -- Collective noun is always treated as Masculine
       in
-        mk5N sing coll [] det [] gender ;
+      mk5N sing coll [] det [] gender ;
 
     -- Build a noun using 5 forms, and a gender
     mk5N : (_,_,_,_,_ : Str) -> Gender -> N ;
-    mk5N = \sing,coll,dual,det,ind,gen ->
---      lin N (mkNoun sing coll dual det ind gen) ;
-      lin N (mkNoun
-               (nullSuffixTable sing)
-               (nullSuffixTable coll)
-               (nullSuffixTable dual)
-               (nullSuffixTable det)
-               (nullSuffixTable ind)
-               gen) ;
+    mk5N = \sing,coll,dual,det,ind,gen -> lin N (mkNoun sing coll dual det ind gen) ;
+
+    -- Make a proper noun
+    mkPN : Str -> Gender -> Number -> ProperNoun = \name,g,n -> {
+      s = name ;
+      a = mkAgr g n P3 ;
+      } ;
 
 {-
     -- Correctly abbreviate definite prepositions and join with noun
@@ -253,7 +254,6 @@ resource ParadigmsMlt = open
 
       });
 
-
     mkN2 = overload {
       mkN2 : N -> Prep -> N2 = prepN2 ;
       mkN2 : N -> Str -> N2 = \n,s -> prepN2 n (mkPrep s);
@@ -272,140 +272,30 @@ resource ParadigmsMlt = open
     noPrep = mkPrep [] ;
 
 
-    {- ===== Verb paradigms ===== -}
-{-
-    -- Takes a verb as a string determined derived form
-    -- Params: "Mamma" (Perf Per3 Sg Masc) as string (eg KITEB or ĦAREĠ)
-    classifyDerivedVerb : Str -> Root -> Pattern -> VDerivedForm = \mamma,root,patt ->
-      case mamma of {
+    {- Verb paradigms ----------------------------------------------------- -}
 
-        -- Form I
-        --- form III verbs with long A's will get incorrectly classified as I, e.g. ĦÂRES : impossible to detect!
-        c1@#Consonant + v1@#Vowel + c2@#Consonant + v2@#Vowel + c3@#Consonant => FormI ; -- FETAĦ
-
-        -- Form II
-        -- c2 and c3 are equal
-        c1@#Consonant + v1@#Vowel + c2@#Consonant + c3@#Consonant + v2@#Vowel + c4@#Consonant => -- FETTAĦ
-          if_then_else VDerivedForm (pbool2bool (eqStr c2 c3)) FormII FormUnknown ;
-
-        -- Form III
-        -- v1 is long --- anything with v1==a would have already been caught above
-        c1@#Consonant + v1@("a"|"ie") + c2@#Consonant + v2@#Vowel + c3@#Consonant =>
-          case <v1, patt.V1> of {
---            <"a","a"> => FormI ; -- no vowel change; ĦAREĠ
---            <"a",_> => FormIII ; -- ĦARES > ĦÂRES --- impossible to detect!
-            <"ie","ie"> => FormI ; -- no vowel change; MIET
-            _ => FormIII -- QAGĦAD > QIEGĦED
-            } ;
-
-        -- Form IV
-        "wera" => FormIV ;
-        "għama" => FormIV ;
-        "għana" => FormIV ;
-
-        -- Form V
-        -- c0 is T, OR c0 and c1 are equal
-        -- c2 and c3 are equal
-        "t" + c1@#Consonant + v1@#Vowel + c2@#Consonant + c3@#Consonant + v2@#Vowel + c4@#Consonant => -- TWAQQAF
-          if_then_else VDerivedForm (pbool2bool (eqStr c2 c3)) FormV FormUnknown ;
-        c0@#DoublingConsT + c1@#DoublingConsT + v1@#Vowel + c2@#Consonant + c3@#Consonant + v2@#Vowel + c4@#Consonant => -- SARRAF
-          if_then_else
-          VDerivedForm
-          (andB (pbool2bool (eqStr c0 c1)) (pbool2bool (eqStr c2 c3)))
-          FormV FormUnknown ;
-
-        -- Form VI
-        -- c0 is T, OR c0 and c1 are equal
-        -- v1 is long
-        "t" + c1@#Consonant + v1@("a"|"ie") + c2@#Consonant + v2@#Vowel + c3@#Consonant => FormVI ; -- TQIEGĦED
-        c0@#DoublingConsT + c1@#DoublingConsT + v1@("a"|"ie") + c2@#Consonant + v2@#Vowel + c3@#Consonant => -- ĠĠIELED
-          if_then_else VDerivedForm (pbool2bool (eqStr c0 c1)) FormVI FormUnknown ;
-
-        -- Form VII
-        -- c0 is N, OR c0 is NT, OR c0 is N-T
-        "n" + c1@#Consonant + v1@#Vowel + c2@#Consonant + v2@#Vowel + c3@#Consonant => FormVII ; -- NĦASEL
-        "nt" + c1@#Consonant + _ => FormVII ; -- NTQAL
-        "nt" + c1@#Vowel + _ => case root.C1 of {
-          "n" => FormVIII ; -- NTESA (N-S-J)
-          _ => FormVII -- NTIŻEN (W-Ż-N)
-          } ;
-        "nst" + _ => FormVII ; -- NSTAB
-        "nxt" + _ => FormVII ; -- NXTAMM
-
-        -- Form VIII
-        -- c2 is T
-        c1@#Consonant + "t" + v1@#Vowel + c3@#Consonant + _ =>
-          case <c1, root.C1> of {
-            <"s", "s"> => FormVIII ; -- STABAT (S-B-T)
-            <"s", _> => FormX ; -- STAĦBA (Ħ-B-A)
-            _ => FormVIII -- MTEDD, XTEĦET
-          } ;
-
-        -- Form IX
-        c1@#Consonant + c2@#Consonant + v1@("a"|"ie") + c3@#Consonant => FormIX ; -- SFAR, BLIEH
-
-        -- Form X
-        "st" + v1@#Vowel + c2@#Consonant + c2@#Consonant + _ => FormX ; -- STAGĦĠEB, STAQSA
-
-        -- boqq
-        _ => FormUnknown
+    -- Re-export ResMlt.mkRoot
+    mkRoot : Root = overload {
+      mkRoot : Root = ResMlt.mkRoot ;
+      mkRoot : Str -> Root = \s0 -> ResMlt.mkRoot s0 ;
+      mkRoot : Str -> Str -> Str -> Root = \s0,s1,s2 -> ResMlt.mkRoot s0 s1 s2 ;
+      mkRoot : Str -> Str -> Str -> Str -> Root = \s0,s1,s2,s3 -> ResMlt.mkRoot s0 s1 s2 s3 ;
       } ;
--}
-    -- Takes a verb as a string and returns the VType and root/pattern.
-    -- Used in smart paradigm below and elsewhere.
-    -- Params: "Mamma" (Perf Per3 Sg Masc) as string (eg KITEB or ĦAREĠ)
-    classifyVerb : Str -> VerbInfo = \mamma ->
-      case mamma of {
 
-        -- Defective, BELA'
-        c1@#Consonant + v1@#Vowel + c2@#Consonant + v2@#Vowel + c3@( "għ" | "'" ) =>
-          mkVerbInfo (Weak Defective) FormI (mkRoot c1 c2 "għ") (mkPattern v1 v2) ;
-
-        -- Lacking, MEXA
-        c1@#Consonant + v1@#Vowel + c2@#Consonant + v2@#Vowel =>
-          mkVerbInfo (Weak Lacking) FormI (mkRoot c1 c2 "j") (mkPattern v1 v2) ;
-
-        -- Hollow, SAB
-        -- --- determining of middle radical is not right, e.g. SAB = S-J-B
-        c1@#Consonant + v1@"a"  + c3@#Consonant =>
-          mkVerbInfo (Weak Hollow) FormI (mkRoot c1 "w" c3) (mkPattern v1) ;
-        c1@#Consonant + v1@"ie" + c3@#Consonant =>
-          mkVerbInfo (Weak Hollow) FormI (mkRoot c1 "j" c3) (mkPattern v1) ;
-
-        -- Weak Assimilative, WAQAF
-        c1@#WeakCons + v1@#Vowel + c2@#Consonant + v2@#Vowel  + c3@#Consonant =>
-          mkVerbInfo (Weak Assimilative) FormI (mkRoot c1 c2 c3) (mkPattern v1 v2) ;
-
-        -- Strong Geminated, ĦABB --- no checking that c2 and c3 are actually equal
-        c1@#Consonant + v1@#Vowel + c2@#Consonant + c3@#Consonant =>
-          mkVerbInfo (Strong Geminated) FormI (mkRoot c1 c2 c3) (mkPattern v1) ;
-
-        -- Strong LiquidMedial, ŻELAQ
-        c1@#Consonant + v1@#Vowel + c2@(#LiquidCons | "għ") + v2@#Vowel + c3@#Consonant =>
-          mkVerbInfo (Strong LiquidMedial) FormI (mkRoot c1 c2 c3) (mkPattern v1 v2) ;
-
-        -- Strong Regular, QATEL
-        c1@#Consonant + v1@#Vowel + c2@#Consonant + v2@#Vowel + c3@#Consonant =>
-          mkVerbInfo (Strong Regular) FormI (mkRoot c1 c2 c3) (mkPattern v1 v2) ;
-
-        -- Strong Quad, QAĊĊAT
-        c1@#Consonant + v1@#Vowel + c2@#Consonant + c3@#Consonant + v2@#Vowel + c4@#Consonant =>
-          mkVerbInfo (Quad QStrong) FormI (mkRoot c1 c2 c3 c4) (mkPattern v1 v2) ;
-
-        -- Weak-Final Quad, PINĠA
-        c1@#Consonant + v1@#Vowel + c2@#Consonant + c3@#Consonant + v2@#Vowel =>
-          mkVerbInfo (Quad QWeak) FormI (mkRoot c1 c2 c3 "j") (mkPattern v1 v2) ;
-
-        -- Assume it is a loan verb
-        _ => mkVerbInfo Loan FormUnknown
+    -- Re-export ResMlt.mkPattern
+    mkPattern : Pattern = overload {
+      mkPattern : Pattern = ResMlt.mkPattern ;
+      mkPattern : Str -> Pattern = \s0 -> ResMlt.mkPattern s0 ;
+      mkPattern : Str -> Str -> Pattern = \s0,s1 -> ResMlt.mkPattern s0 s1 ;
       } ;
 
     -- Return the class for a given root
     classifyRoot : Root -> VClass = \r ->
       case <r.C1,r.C2,r.C3,r.C4> of {
-        <#WeakCons, #Consonant, #Consonant, ""> => Weak Assimilative ;
-        <#Consonant, #WeakCons, #Consonant, ""> => Weak Hollow ;
-        <#Consonant, #Consonant, #WeakCons, ""> => Weak Lacking ;
+        <#WeakCons, #StrongCons, #StrongCons, ""> => Weak Assimilative ;
+        <#StrongCons, #WeakCons, #StrongCons, ""> => Weak Hollow ;
+        <#StrongCons, #StrongCons, #WeakCons, ""> => Weak Lacking ;
+        <#StrongCons, #WeakCons, #WeakCons, ""> => Weak Lacking ;
         <#Consonant, #Consonant, "għ", ""> => Weak Defective ;
         <#Consonant, c2@#Consonant, c3@#Consonant, ""> =>
           if_then_else VClass (pbool2bool (eqStr c2 c3))
@@ -416,90 +306,69 @@ resource ParadigmsMlt = open
           }) ;
         <#Consonant, #Consonant, #Consonant, #WeakCons> => Quad QWeak ;
         <#Consonant, #Consonant, #Consonant, #Consonant> => Quad QStrong ;
-        _ => Predef.error("Cannot classify root: "++r.C1++"-"++r.C2++"-"++r.C3++"-"++r.C4) --- this should never happen
+
+        -- Irregular
+        <"'",_,_,_> => Irregular ;
+        <_,"'",_,_> => Irregular ;
+        <_,_,"'",_> => Irregular ;
+        <_,_,_,"'"> => Irregular ;
+
+        <_,_,_,""> => Predef.error("Cannot classify root:"++r.C1+"-"+r.C2+"-"+r.C3) ;
+        <_,_,_,_>  => Predef.error("Cannot classify root:"++r.C1+"-"+r.C2+"-"+r.C3+"-"+r.C4)
       } ;
 
     -- Just get the non-suffixed forms of a verb, for quick testing
-    plainVerbTable : V -> (VForm => Str) = \v ->
-      \\tense => v.s ! tense ! VSuffixNone ! Pos ;
+    -- plainVerbTable : V -> (VForm => Str) = \v ->
+    --   \\tense => v.s ! tense ! VSuffixNone ! Pos ;
 
     -- Smart paradigm for building a verb
     mkV : V = overload {
 
-      -- Tries to do everything just from the mamma of the verb
+      -- With no root, automatically treat as loan verb
       -- Params: mamma
-      mkV : Str -> V = \mamma ->
-        let
-          info = classifyVerb mamma ;
-        in
-        case info.class of {
-          Strong Regular      => strongV info.root info.patt ;
-          Strong LiquidMedial => liquidMedialV info.root info.patt ;
-          Strong Geminated    => geminatedV info.root info.patt ;
-          Weak Assimilative   => assimilativeV info.root info.patt ;
-          Weak Hollow         => hollowV info.root info.patt ;
-          Weak Lacking        => lackingV info.root info.patt ;
-          Weak Defective      => defectiveV info.root info.patt ;
-          Quad QStrong        => quadV info.root info.patt ;
-          Quad QWeak          => quadWeakV info.root info.patt ;
-          Loan                => loanV mamma
-        } ;
+      mkV : Str -> V = loanV ;
 
-      -- Takes an explicit root, when it is not obvious from the mamma
+      -- Take an explicit root, implying it is a root & pattern verb
       -- Params: mamma, root
       mkV : Str -> Root -> V = \mamma,root ->
         let
-          info = classifyVerb mamma ;
+          class : VClass = classifyRoot root ;
+          patt : Pattern = extractPattern mamma ;
         in
-        case info.class of {
-          Strong Regular      => strongV root info.patt ;
-          Strong LiquidMedial => liquidMedialV root info.patt ;
-          Strong Geminated    => geminatedV root info.patt ;
-          Weak Assimilative   => assimilativeV root info.patt ;
-          Weak Hollow         => hollowV root info.patt ;
-          Weak Lacking        => lackingV root info.patt ;
-          Weak Defective      => defectiveV root info.patt ;
-          Quad QStrong        => quadV root info.patt ;
-          Quad QWeak          => quadWeakV root info.patt ;
-          Loan                => loanV mamma
+        case class of {
+          Strong Regular      => strongV root patt ;
+          Strong LiquidMedial => liquidMedialV root patt ;
+          Strong Geminated    => geminatedV root patt ;
+          Weak Assimilative   => assimilativeV root patt ;
+          Weak Hollow         => hollowV root patt ;
+          Weak Lacking        => lackingV root patt ;
+          Weak Defective      => defectiveV root patt ;
+          Quad QStrong        => quadV root patt ;
+          Quad QWeak          => quadWeakV root patt ;
+          Irregular           => Predef.error("Cannot use smart paradigm for irregular verb:"++mamma) ;
+          Loan                => loanV mamma --- this should probably be an error
         } ;
 
       -- Takes takes an Imperative of the word for when it behaves less predictably
-      -- Params: mamma, imperative P2Sg
-      mkV : Str -> Str -> V = \mamma,imp_sg ->
+      -- Params: mamma, imperative P2Sg, root
+      mkV : Str -> Str -> Root -> V = \mamma,imp_sg,root ->
         let
-          info = classifyVerb mamma ;
+          class : VClass = classifyRoot root ;
+          patt : Pattern = extractPattern mamma ;
         in
-        case info.class of {
-          Strong Regular      => strongV info.root info.patt imp_sg ;
-          Strong LiquidMedial => liquidMedialV info.root info.patt imp_sg ;
-          Strong Geminated    => geminatedV info.root info.patt imp_sg ;
-          Weak Assimilative   => assimilativeV info.root info.patt imp_sg ;
-          Weak Hollow         => hollowV info.root info.patt imp_sg ;
-          Weak Lacking        => lackingV info.root info.patt imp_sg ;
-          Weak Defective      => defectiveV info.root info.patt imp_sg ;
-          Quad QStrong        => quadV info.root info.patt imp_sg ;
-          Quad QWeak          => quadWeakV info.root info.patt imp_sg ;
+        case class of {
+          Strong Regular      => strongV root patt imp_sg ;
+          Strong LiquidMedial => liquidMedialV root patt imp_sg ;
+          Strong Geminated    => geminatedV root patt imp_sg ;
+          Weak Assimilative   => assimilativeV root patt imp_sg ;
+          Weak Hollow         => hollowV root patt imp_sg ;
+          Weak Lacking        => lackingV root patt imp_sg ;
+          Weak Defective      => defectiveV root patt imp_sg ;
+          Quad QStrong        => quadV root patt imp_sg ;
+          Quad QWeak          => quadWeakV root patt imp_sg ;
+          Irregular           => Predef.error("Cannot use smart paradigm for irregular verb:"++mamma) ;
           Loan                => loanV mamma
         } ;
-
-      -- Params: mamma, root, imperative P2Sg
-      -- mkV : Str -> Root -> Str -> V = \mamma,root,imp_sg ->
-      --   let
-      --     info = classifyVerb mamma ;
-      --   in
-      --   case info.class of {
-      --     Strong Regular      => strongV root info.patt imp_sg ;
-      --     Strong LiquidMedial => liquidMedialV root info.patt imp_sg ;
-      --     Strong Geminated    => geminatedV root info.patt imp_sg ;
-      --     Weak Assimilative   => assimilativeV root info.patt imp_sg ;
-      --     Weak Hollow         => hollowV root info.patt imp_sg ;
-      --     Weak Lacking        => lackingV root info.patt imp_sg ;
-      --     Weak Defective      => defectiveV root info.patt imp_sg ;
-      --     Quad QStrong        => quadV root info.patt imp_sg ;
-      --     Quad QWeak          => quadWeakV root info.patt imp_sg ;
-      --     Loan                => loanV mamma
-      --   } ;
 
       -- All forms! :S
       -- mkV (Strong Regular) (FormI) (mkRoot "k-t-b") (mkPattern "i" "e") "ktibt" "ktibt" "kiteb" "kitbet" "ktibna" "ktibtu" "kitbu" "nikteb" "tikteb" "jikteb" "tikteb" "niktbu" "tiktbu" "jiktbu" "ikteb" "iktbu"
@@ -529,47 +398,35 @@ resource ParadigmsMlt = open
             } ;
           info : VerbInfo = mkVerbInfo class form root patt impSg ;
         in lin V  {
-          s = verbPolarityTable info (verbPronSuffixTable info tbl) ;
+          s = tbl ;
           i = info ;
         } ;
 
       } ; --end of mkV overload
 
     -- Some shortcut function names (haven't decided on naming yet)
-    mkV_II : Str -> V = \s -> derivedV_II s ;
-    mkV_III : Str -> V = \s -> derivedV_III s ;
-    mkV_V : Str -> V = \s -> derivedV_V s ;
-    mkV_VI : Str -> V = \s -> derivedV_VI s ;
-    mkV_VII : Str -> Str -> V = \s,t -> derivedV_VII s t ;
-    mkV_VIII : Str -> V = \s -> derivedV_VIII s ;
-    mkV_IX : Str -> V = \s -> derivedV_IX s ;
-    mkV_X : Str -> Str -> V = \s,t -> derivedV_X s t ;
-    derivedV_I : Str -> V = mkV ;
+    mkV_II = overload {
+      mkV_II : Str -> Root -> V = \s,r -> derivedV_II s r ;
+      mkV_II : Str -> Str -> Root -> V = \s,i,r -> derivedV_II s i r ;
+      } ;
+    mkV_III : Str -> Root -> V = \s,r -> derivedV_III s r ;
+    mkV_V : Str -> Root -> V = \s,r -> derivedV_V s r ;
+    mkV_VI : Str -> Root -> V = \s,r -> derivedV_VI s r ;
+    mkV_VII : Str -> Str -> Root -> V = \s,t,r -> derivedV_VII s t r ;
+    mkV_VIII : Str -> Root -> V = \s,r -> derivedV_VIII s r ;
+    mkV_IX : Str -> Root -> V = \s,r -> derivedV_IX s r ;
+    mkV_X : Str -> Root -> V = \s,r -> derivedV_X s r ;
+    derivedV_I : Str -> Root -> V = mkV ;
 
     -- Make a Form II verb. Accepts both Tri & Quad roots, then delegates.
-    -- e.g.: derivedV_II "waqqaf"
     derivedV_II : V = overload {
-      derivedV_II : Str -> V = \mammaII ->
-        case mammaII of {
-            -- Quad Form II
---            "t" + #Consonant + _ => derivedV_QuadII mammaII root4 ; -- TFIXKEL
---            #DoublingConsT + #DoublingConsT + _ => derivedV_QuadII mammaII root4 ; -- DDARDAR
-            #Consonant + #Consonant + _ => derivedV_QuadII mammaII root4 where {
-              mammaI4 : Str = dropPfx 1 mammaII ;          
-              root4 : Root = (classifyVerb mammaI4).root ;
-              } ; -- DDARDAR
-            
-            -- Tri Form II
-            _ => derivedV_TriII mammaII root3 where {
-              mammaI3 : Str = delCharAt 3 mammaII ; --- this works because the only verb with a duplicated GĦ is ŻAGĦGĦAR (make smaller)
-              root3 : Root = (classifyVerb mammaI3).root ;
-              }
-        } ;
+      -- e.g.: derivedV_II "waqqaf" (mkRoot "w-q-f")
       derivedV_II : Str -> Root -> V = \mammaII, root ->
         case root.C4 of {
           "" => derivedV_TriII mammaII root ;
           _  => derivedV_QuadII mammaII root
         } ;
+      -- e.g.: derivedV_II "waqqaf" "waqqaf" (mkRoot "w-q-f")
       derivedV_II : Str -> Str -> Root -> V = \mammaII, imp, root ->
         case root.C4 of {
           "" => derivedV_TriII mammaII root ;
@@ -616,155 +473,129 @@ resource ParadigmsMlt = open
       } ;
 
     -- Make a Form III verb
-    -- e.g.: derivedV_III "qiegħed"
---    derivedV_III : V = overload {
-      derivedV_III : Str -> V = \mammaIII ->
-        let
-          info : VerbInfo = classifyVerb (ie2i mammaIII) ;
-          vowels : Pattern = extractPattern mammaIII ;
-          vowels2 : Pattern = case <info.root, vowels> of { -- see {GO pg93}
-            <{C2="għ"},{V1="ie";V2="e"}> => mkPattern "e" "i" ; -- QIEGĦED > QEGĦIDKOM
-            <_,{V1="ie";V2="e"}> => mkPattern "i" "i" ; -- WIEĠEB > WIĠIBKOM
-            _ => vowels
-            } ;
-          newinfo : VerbInfo = mkVerbInfo info.class FormIII info.root vowels vowels2 mammaIII ; --- assumption: mamma III is also imperative
-        in lin V {
-          s = conjFormIII newinfo ;
-          i = newinfo ;
-        } ;
---      } ;
+    -- e.g.: derivedV_III "qiegħed" (mkRoot "q-għ-d")
+    derivedV_III : Str -> Root -> V = \mammaIII, root ->
+      let
+        vowels : Pattern = extractPattern mammaIII ;
+        vowels2 : Pattern = vowelChangesIE root vowels ;
+        class : VClass = classifyRoot root ;
+        info : VerbInfo = mkVerbInfo class FormIII root vowels vowels2 mammaIII ; --- assumption: mamma III is also imperative
+      in lin V {
+        s = conjFormIII info ;
+        i = info ;
+      } ;
 
     -- No point having a paradigm for Form IV
     -- derivedV_IV
 
     -- Make a Form V verb
-    -- e.g.: derivedV_V "twaqqaf"
---    derivedV_V : V = overload {
-      derivedV_V : Str -> V = \mammaV ->
-        let
-          -- use the Form II conjugation, just prefixing a T
-          mammaII : Str = dropPfx 1 mammaV ; -- WAQQAF
-          vII : V = derivedV_II mammaII ;
-          newinfo : VerbInfo = mkVerbInfo vII.i.class FormV vII.i.root vII.i.patt mammaV ;
-        in lin V {
-          s = table {
-            VPerf agr => \\suffix,pol => pfx_T (vII.s ! VPerf agr ! suffix ! pol) ;
-            VImpf (AgP1 Sg) => \\suffix,pol => pfx "ni" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP1 Sg) ! suffix ! pol))) ;
-            VImpf (AgP2 Sg) => \\suffix,pol => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP2 Sg) ! suffix ! pol))) ;
-            VImpf (AgP3Sg Masc) => \\suffix,pol => pfx "ji" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP3Sg Masc) ! suffix ! pol))) ;
-            VImpf (AgP3Sg Fem)  => \\suffix,pol => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP3Sg Fem) ! suffix ! pol))) ;
-            VImpf (AgP1 Pl) => \\suffix,pol => pfx "ni" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP1 Pl) ! suffix ! pol))) ;
-            VImpf (AgP2 Pl) => \\suffix,pol => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP2 Pl) ! suffix ! pol))) ;
-            VImpf (AgP3Pl) => \\suffix,pol => pfx "ji" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP3Pl) ! suffix ! pol))) ;
-            VImp num => \\suffix,pol => pfx_T (vII.s ! VImp num ! suffix ! pol)
-            } ;
-          i = newinfo ;
-        } ;
---      } ;
+    -- e.g.: derivedV_V "twaqqaf" (mkRoot "w-q-f")
+    derivedV_V : Str -> Root -> V = \mammaV, root ->
+      let
+        -- use the Form II conjugation, just prefixing a T
+        mammaII : Str = dropPfx 1 mammaV ; -- WAQQAF
+        vII : V = derivedV_II mammaII root ;
+        info : VerbInfo = mkVerbInfo vII.i.class FormV vII.i.root vII.i.patt mammaV ;
+      in lin V {
+        s = table {
+          VPerf agr => pfx_T (vII.s ! VPerf agr) ;
+          VImpf (AgP1 Sg) => pfx "ni" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP1 Sg)))) ;
+          VImpf (AgP2 Sg) => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP2 Sg)))) ;
+          VImpf (AgP3Sg Masc) => pfx "ji" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP3Sg Masc)))) ;
+          VImpf (AgP3Sg Fem)  => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP3Sg Fem)))) ;
+          VImpf (AgP1 Pl) => pfx "ni" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP1 Pl)))) ;
+          VImpf (AgP2 Pl) => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP2 Pl)))) ;
+          VImpf (AgP3Pl) => pfx "ji" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP3Pl)))) ;
+          VImp num => pfx_T (vII.s ! VImp num)
+          } ;
+        i = info ;
+      } ;
 
     -- Make a Form VI verb
-    -- e.g.: derivedV_VI "tqiegħed"
---    derivedV_VI : V = overload {
-      derivedV_VI : Str -> V = \mammaVI ->
-        let
-          -- use the Form III conjugation, just prefixing a T
-          mammaIII : Str = dropPfx 1 mammaVI ; -- QIEGĦED
-          vIII : V = derivedV_III mammaIII ;
-          newinfo : VerbInfo = updateVerbInfo vIII.i FormVI mammaVI ;
-        in lin V {
-          s = table {
-            VPerf agr => \\suffix,pol => pfx_T (vIII.s ! VPerf agr ! suffix ! pol) ;
-            VImpf (AgP1 Sg) => \\suffix,pol => pfx "ni" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP1 Sg) ! suffix ! pol))) ;
-            VImpf (AgP2 Sg) => \\suffix,pol => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP2 Sg) ! suffix ! pol))) ;
-            VImpf (AgP3Sg Masc) => \\suffix,pol => pfx "ji" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP3Sg Masc) ! suffix ! pol))) ;
-            VImpf (AgP3Sg Fem)  => \\suffix,pol => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP3Sg Fem) ! suffix ! pol))) ;
-            VImpf (AgP1 Pl) => \\suffix,pol => pfx "ni" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP1 Pl) ! suffix ! pol))) ;
-            VImpf (AgP2 Pl) => \\suffix,pol => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP2 Pl) ! suffix ! pol))) ;
-            VImpf (AgP3Pl) => \\suffix,pol => pfx "ji" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP3Pl) ! suffix ! pol))) ;
-            VImp num => \\suffix,pol => pfx_T (vIII.s ! VImp num ! suffix ! pol)
-            } ;
-          i = newinfo ;
-        } ;
---      } ;
+    -- e.g.: derivedV_VI "tqiegħed" (mkRoot "q-għ-d")
+    derivedV_VI : Str -> Root -> V = \mammaVI, root ->
+      let
+        -- use the Form III conjugation, just prefixing a T
+        mammaIII : Str = dropPfx 1 mammaVI ; -- QIEGĦED
+        vIII : V = derivedV_III mammaIII root ;
+        info : VerbInfo = updateVerbInfo vIII.i FormVI mammaVI ;
+      in lin V {
+        s = table {
+          VPerf agr => pfx_T (vIII.s ! VPerf agr) ;
+          VImpf (AgP1 Sg) => pfx "ni" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP1 Sg)))) ;
+          VImpf (AgP2 Sg) => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP2 Sg)))) ;
+          VImpf (AgP3Sg Masc) => pfx "ji" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP3Sg Masc)))) ;
+          VImpf (AgP3Sg Fem)  => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP3Sg Fem)))) ;
+          VImpf (AgP1 Pl) => pfx "ni" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP1 Pl)))) ;
+          VImpf (AgP2 Pl) => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP2 Pl)))) ;
+          VImpf (AgP3Pl) => pfx "ji" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP3Pl)))) ;
+          VImp num => pfx_T (vIII.s ! VImp num)
+          } ;
+        i = info ;
+      } ;
 
     -- Make a Form VII verb
-    -- e.g.: derivedV_VII "xeħet" "nxteħet"
---    derivedV_VII : V = overload {
-      derivedV_VII : Str -> Str -> V = \mammaI,mammaVII ->
-        let
-          info : VerbInfo = classifyVerb mammaI ;
-          c1 : Str = case mammaVII of {
-            "n" + c@#C + "t" + _ => "n"+c+"t" ; -- NXT-EĦET
-            "ntgħ" + _ => "ntgħ" ; -- NTGĦ-AĠEN
-            "nt" + c@#C + _ => "nt"+c ; -- NTR-IFES
-            "nt" + #Vowel + _ => "nt" ; -- NT-IŻEN
-            "n" + c@#C + _ => "n"+c ; -- NĦ-ASEL
-            _ => "nt" --- unknown case
-            } ;
-          newinfo : VerbInfo = mkVerbInfo info.class FormVII info.root info.patt mammaVII ;
-        in lin V {
-          s = conjFormVII newinfo c1 ;
-          i = newinfo ;
-        } ;
---      } ;
+    -- e.g.: derivedV_VII "xeħet" "nxteħet" (mkRoot "x-ħ-t")
+    derivedV_VII : Str -> Str -> Root -> V = \mammaI, mammaVII, root ->
+      let
+        class : VClass = classifyRoot root ;
+        vowels : Pattern = extractPattern mammaI ;
+        c1 : Str = case mammaVII of {
+          "n" + c@#Cns + "t" + _ => "n"+c+"t" ; -- NXT-EĦET
+          "ntgħ" + _ => "ntgħ" ; -- NTGĦ-AĠEN
+          "nt" + c@#Cns + _ => "nt"+c ; -- NTR-IFES
+          "nt" + #Vowel + _ => "nt" ; -- NT-IŻEN
+          "n" + c@#Cns + _ => "n"+c ; -- NĦ-ASEL
+          _ => "nt" --- unknown case
+          } ;
+        info : VerbInfo = mkVerbInfo class FormVII root vowels mammaVII ;
+      in lin V {
+        s = conjFormVII info c1 ;
+        i = info ;
+      } ;
 
     -- Make a Form VIII verb
-    -- e.g.: derivedV_VIII "xteħet"
---    derivedV_VIII : V = overload {
-      derivedV_VIII : Str -> V = \mammaVIII ->
-        let
-          mammaI : Str = delCharAt 1 mammaVIII ;
-          info : VerbInfo = classifyVerb mammaI ;
-          c1 : Str = info.root.C1+"t";
-          newinfo : VerbInfo = updateVerbInfo info FormVIII mammaVIII ;
-        in lin V {
-          s = conjFormVII newinfo c1 ; -- note we use conjFormVIII ! 
-          i = newinfo ;
-        } ;
---      } ;
+    -- e.g.: derivedV_VIII "xteħet" (mkRoot "x-ħ-t")
+    derivedV_VIII : Str -> Root -> V = \mammaVIII, root ->
+      let
+        mammaI : Str = delCharAt 1 mammaVIII ;
+        class : VClass = classifyRoot root ;
+        vowels : Pattern = extractPattern mammaI ;
+        info : VerbInfo = mkVerbInfo class FormVIII root vowels mammaVIII ;
+        c1 : Str = root.C1+"t";
+      in lin V {
+        s = conjFormVII info c1 ; -- note we use conjFormVII !
+        i = info ;
+      } ;
 
     -- Make a Form IX verb
     -- e.g.: derivedV_IX "sfar"
---    derivedV_IX : V = overload {
-      derivedV_IX : Str -> V = \mammaIX ->
-        case mammaIX of {
-          c1@#Consonant + c2@#Consonant + v1@("ie"|"a") + c3@#Consonant => 
-            let
-              root : Root = mkRoot c1 c2 c3 ;
-              patt : Pattern = mkPattern v1 ;
-              class : VClass = classifyRoot root ;
-              newinfo : VerbInfo = mkVerbInfo class FormIX root patt mammaIX ;
-            in lin V {
-              s = conjFormIX newinfo ;
-              i = newinfo ;
-            } ;
-          _ => Predef.error("I don't know how to make a Form IX verb out of" ++ mammaIX)
-        } ;
---      } ;
+    derivedV_IX : Str -> Root -> V = \mammaIX, root ->
+      case mammaIX of {
+        -- c1@#Consonant + c2@#Consonant + v1@("ie"|"a") + c3@#Consonant => 
+        _  + v1@("ie"|"a"|"â") + _ => 
+          let
+            patt : Pattern = mkPattern v1 ;
+            class : VClass = classifyRoot root ;
+            info : VerbInfo = mkVerbInfo class FormIX root patt mammaIX ;
+          in lin V {
+            s = conjFormIX info ;
+            i = info ;
+          } ;
+        _ => Predef.error("I don't know how to make a Form IX verb out of" ++ mammaIX)
+      } ;
 
     -- Make a Form X verb
-    derivedV_X : V = overload {
-      -- e.g.: derivedV_X "stagħġeb" (mkRoot "għ-ġ-b")
-      derivedV_X : Str -> Root -> V = \mammaX,root ->
-        let
-          class : VClass = classifyRoot root ;
-          patt : Pattern = extractPattern mammaX ;
-          newinfo : VerbInfo = mkVerbInfo class FormX root patt mammaX ;
-        in lin V {
-          s = conjFormX newinfo ;
-          i = newinfo ;
-        } ;
-      -- e.g.: derivedV_X "stagħġeb" "għ-ġ-b"
-      derivedV_X : Str -> Str -> V = \mammaX,str_root ->
-        let
-          root : Root = mkRoot str_root ;
-          class : VClass = classifyRoot root ;
-          patt : Pattern = extractPattern mammaX ;
-          newinfo : VerbInfo = mkVerbInfo class FormX root patt mammaX ;
-        in lin V {
-          s = conjFormX newinfo ;
-          i = newinfo ;
-        } ;
+    -- e.g.: derivedV_X "stagħġeb" (mkRoot "għ-ġ-b")
+    derivedV_X : Str -> Root -> V = \mammaX, root ->
+      let
+        class : VClass = classifyRoot root ;
+        patt : Pattern = extractPattern mammaX ;
+        patt2 : Pattern = vowelChangesIE root patt ;
+        info : VerbInfo = mkVerbInfo class FormX root patt patt2 mammaX ;
+      in lin V {
+        s = conjFormX info ;
+        i = info ;
       } ;
 
     {- ~~~ Strong Verb ~~~ -}
@@ -798,7 +629,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Strong Regular) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = verbPolarityTable info (verbPronSuffixTable info tbl) ;
+        s = tbl ;
         i = info ;
       } ;
 
@@ -838,7 +669,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Strong LiquidMedial) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = verbPolarityTable info (verbPronSuffixTable info tbl) ;
+        s = tbl ;
         i = info ;
       } ;
 
@@ -873,7 +704,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Strong Geminated) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = verbPolarityTable info (verbPronSuffixTable info tbl) ;
+        s = tbl ;
         i = info ;
       } ;
 
@@ -912,7 +743,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Weak Assimilative) (FormI) root patt patt2 (imp ! Sg) ;
       in lin V {
-        s = verbPolarityTable info (verbPronSuffixTable info tbl) ;
+        s = tbl ;
         i = info ;
       } ;
 
@@ -951,7 +782,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Weak Hollow) (FormI) root patt patt2 (imp ! Sg) ;
       in lin V {
-        s = verbPolarityTable info (verbPronSuffixTable info tbl) ;
+        s = tbl ;
         i = info ;
       } ;
 
@@ -990,7 +821,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Weak Lacking) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = verbPolarityTable info (verbPronSuffixTable info tbl) ;
+        s = tbl ;
         i = info ;
       } ;
 
@@ -1025,7 +856,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Weak Defective) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = verbPolarityTable info (verbPronSuffixTable info tbl) ;
+        s = tbl ;
         i = info ;
       } ;
 
@@ -1060,7 +891,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Quad QStrong) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = verbPolarityTable info (verbPronSuffixTable info tbl) ;
+        s = tbl ;
         i = info ;
       } ;
 
@@ -1098,7 +929,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Quad QWeak) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = verbPolarityTable info (verbPronSuffixTable info tbl) ;
+        s = tbl ;
         i = info ;
       } ;
 
@@ -1116,12 +947,12 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Loan) (FormI) (imp ! Sg) ;
       in lin V {
-        s = verbPolarityTable info (verbPronSuffixTable info tbl) ;
+        s = tbl ;
         i = info ;
       } ;
 
 
-    {- ===== Adjective Paradigms ===== -}
+    {- Adjective paradigms ------------------------------------------------ -}
 
     -- Overloaded function for building an adjective
     mkA : A = overload {
