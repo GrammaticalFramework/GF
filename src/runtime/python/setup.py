@@ -1,7 +1,7 @@
 from distutils.core import setup, Extension
 
-pgf_module = Extension('pgf.binding',
-                       sources = ['pgf/binding.c'],
+pgf_module = Extension('pgf',
+                       sources = ['pypgf.c'],
                        extra_compile_args = ['-std=c99'],
                        libraries = ['gu', 'pgf'])
 
@@ -11,5 +11,4 @@ setup (name = 'pgf',
        author='Krasimir Angelov',
        author_email='kr.angelov@gmail.com',
        license='BSD',
-       packages=['pgf'],
        ext_modules = [pgf_module])
