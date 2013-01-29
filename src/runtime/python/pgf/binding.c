@@ -48,6 +48,7 @@ Expr_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
     ExprObject* self = (ExprObject *)type->tp_alloc(type, 0);
     if (self != NULL) {
 		self->master = NULL;
+		self->pool   = NULL;
 		self->expr   = gu_null_variant;
     }
 
@@ -57,25 +58,62 @@ Expr_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 static void
 Expr_dealloc(ExprObject* self)
 {
-	if (self->master != NULL)
+	if (self->master != NULL) {
 		Py_DECREF(self->master);
-	else if (self->pool != NULL)
+	}
+	if (self->pool != NULL) {
 		gu_pool_free(self->pool);
+	}
 
     self->ob_type->tp_free((PyObject*)self);
 }
 
+static PyObject*
+Expr_getattro(ExprObject *self, PyObject *attr_name);
+
+static int
+Expr_initMeta(ExprObject *self);
+
+static int
+Expr_initLiteral(ExprObject *self, PyObject *lit);
+
+static int
+Expr_initApp(ExprObject *self, const char* fname, PyObject *args);
+
+static PyObject*
+Expr_unpack(ExprObject* self, PyObject *args);
+
 static int
 Expr_init(ExprObject *self, PyObject *args, PyObject *kwds)
 {
-    return -1;
+	Py_ssize_t tuple_size = PyTuple_Size(args);
+
+	if (tuple_size == 0) {
+		return Expr_initMeta(self);
+	} else if (tuple_size == 1) {
+		PyObject* lit = NULL;
+		if (!PyArg_ParseTuple(args, "O", &lit))
+			return -1;
+		return Expr_initLiteral(self, lit);
+	} else if (tuple_size == 2) {
+		const char* fname;
+		PyObject* list = NULL;
+		if (!PyArg_ParseTuple(args, "sO!", &fname, &PyList_Type, &list))
+			return -1;
+		return Expr_initApp(self, fname, list);
+	} else {
+		PyErr_Format(PyExc_TypeError, "function takes 0, 1 or 2 arguments (%d given)", tuple_size);
+		return -1;
+	}
+	
+	return 0;
 }
 
 static PyObject *
 Expr_repr(ExprObject *self)
 {
 	GuPool* tmp_pool = gu_local_pool();
-	
+
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 	GuWriter* wtr = gu_string_buf_writer(sbuf);
@@ -90,6 +128,9 @@ Expr_repr(ExprObject *self)
 }
 
 static PyMethodDef Expr_methods[] = {
+    {"unpack", (PyCFunction)Expr_unpack, METH_VARARGS,
+     "Decomposes an expression into its components"
+    },
     {NULL}  /* Sentinel */
 };
 
@@ -111,7 +152,7 @@ static PyTypeObject pgf_ExprType = {
     0,                         /*tp_hash */
     0,                         /*tp_call*/
     (reprfunc) Expr_repr,      /*tp_str*/
-    0,                         /*tp_getattro*/
+    (getattrofunc) Expr_getattro,/*tp_getattro*/
     0,                         /*tp_setattro*/
     0,                         /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /*tp_flags*/
@@ -134,6 +175,239 @@ static PyTypeObject pgf_ExprType = {
     0,                         /*tp_alloc */
     (newfunc) Expr_new,        /*tp_new */
 };
+
+static int
+Expr_initMeta(ExprObject *self)
+{
+	self->master = NULL;
+	self->pool = gu_new_pool();
+	PgfExprMeta* e =
+		gu_new_variant(PGF_EXPR_META,
+					   PgfExprMeta,
+					   &self->expr, self->pool);
+	e->id = 0;
+	return 0;
+}
+
+static int
+Expr_initLiteral(ExprObject *self, PyObject *lit)
+{
+	self->master = NULL;
+	self->pool   = gu_new_pool();
+	PgfExprLit* e =
+		gu_new_variant(PGF_EXPR_LIT,
+					   PgfExprLit,
+					   &self->expr, self->pool);
+	e->lit = gu_null_variant;
+
+	if (PyString_Check(lit)) {
+		PgfLiteralStr* slit =
+			gu_new_variant(PGF_LITERAL_STR,
+			               PgfLiteralStr,
+			               &e->lit, self->pool);
+		slit->val = gu_str_string(PyString_AsString(lit), self->pool);
+	} else if (PyInt_Check(lit)) {
+		PgfLiteralInt* ilit =
+			gu_new_variant(PGF_LITERAL_INT,
+			               PgfLiteralInt,
+			               &e->lit, self->pool);
+		ilit->val = PyInt_AsLong(lit);
+	} else if (PyFloat_Check(lit)) {
+		PgfLiteralFlt* flit =
+			gu_new_variant(PGF_LITERAL_FLT,
+			               PgfLiteralFlt,
+			               &e->lit, self->pool);
+		flit->val = PyFloat_AsDouble(lit);
+	} else {
+		PyErr_SetString(PyExc_TypeError, "the literal must be a string, an integer, or a float");
+		return -1;
+	}
+	return 0;
+}
+
+static int
+Expr_initApp(ExprObject *self, const char* fname, PyObject *args)
+{
+	Py_ssize_t n_args = PyList_Size(args);
+
+	self->master = PyTuple_New(n_args);
+	if (self->master == NULL)
+		return -1;
+
+	self->pool = gu_new_pool();
+	PgfExprFun* e =
+		gu_new_variant(PGF_EXPR_FUN,
+					   PgfExprFun,
+					   &self->expr, self->pool);
+	e->fun = gu_str_string(fname, self->pool);
+
+	for (Py_ssize_t i = 0; i < n_args; i++) {
+		PyObject* obj = PyList_GetItem(args, i);
+		if (obj->ob_type != &pgf_ExprType) {
+			PyErr_SetString(PyExc_TypeError, "the arguments in the list must be expressions");
+			return -1;
+		}
+
+		PyTuple_SetItem(self->master, i, obj);
+		Py_INCREF(obj);
+
+		PgfExpr fun = self->expr;
+		PgfExpr arg = ((ExprObject*) obj)->expr;
+
+		PgfExprApp* e =
+			gu_new_variant(PGF_EXPR_APP,
+						   PgfExprApp,
+						   &self->expr, self->pool);
+		e->fun = fun;
+		e->arg = arg;
+	}
+	
+	return 0;
+}
+
+static PyObject*
+Expr_unpack(ExprObject* self, PyObject *fargs)
+{
+	PgfExpr expr = self->expr;
+	PyObject* args = PyList_New(0);
+
+	for (;;) {
+		GuVariantInfo i = gu_variant_open(expr);
+		switch (i.tag) {
+		case PGF_EXPR_APP: {
+			PgfExprApp* eapp = i.data;
+			
+			ExprObject* pyexpr = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
+			if (pyexpr == NULL)
+				return NULL;
+			pyexpr->pool   = NULL;
+			pyexpr->master = (self->master) ? self->master : (PyObject*) self;
+			pyexpr->expr   = eapp->arg;
+			Py_INCREF(pyexpr->master);
+
+			if (PyList_Insert(args, 0, (PyObject*) pyexpr) == -1) {
+				Py_DECREF(args);
+				return NULL;
+			}
+
+			Py_DECREF((PyObject*) pyexpr);
+
+			expr = eapp->fun;
+			break;
+		}
+		case PGF_EXPR_LIT: {
+			PgfExprLit* elit = i.data;
+
+			Py_DECREF(args);
+			
+			GuVariantInfo i = gu_variant_open(elit->lit);
+			switch (i.tag) {
+			case PGF_LITERAL_STR: {
+				PgfLiteralStr* lstr = i.data;
+				return gu2py_string(lstr->val);
+			}
+			case PGF_LITERAL_INT: {
+				PgfLiteralInt* lint = i.data;
+				return PyInt_FromLong(lint->val);
+			}
+			case PGF_LITERAL_FLT: {
+				PgfLiteralFlt* lflt = i.data;
+				return PyFloat_FromDouble(lflt->val);
+			}
+			default:
+				gu_impossible();
+				return NULL;
+			}
+		}
+		case PGF_EXPR_META: {
+			Py_DECREF(args);
+			return Py_None;
+		}
+		case PGF_EXPR_FUN: {
+			PgfExprFun* efun = i.data;
+			PyObject* fun = gu2py_string(efun->fun);
+			PyObject* res = Py_BuildValue("OO", fun, args);
+			Py_DECREF(fun);
+			Py_DECREF(args);
+			return res;
+		}
+		default:
+			gu_impossible();
+			return NULL;
+		}
+	}
+	return NULL;
+}
+
+static PyObject*
+Expr_getattro(ExprObject *self, PyObject *attr_name) {
+	const char* name = PyString_AsString(attr_name);
+
+    GuVariantInfo i = gu_variant_open(self->expr);
+    switch (i.tag) {
+	case PGF_EXPR_APP: {
+		PgfExprApp* eapp = i.data;
+		
+		ExprObject* pyexpr = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
+		if (pyexpr == NULL)
+			return NULL;
+		pyexpr->pool   = NULL;
+		pyexpr->master = (self->master) ? self->master : (PyObject*) self;
+		pyexpr->expr   = gu_null_variant;
+		Py_INCREF(pyexpr->master);
+
+		if (strcmp(name, "fun") == 0) {
+			pyexpr->expr = eapp->fun;
+			return ((PyObject*) pyexpr);
+		} else if (strcmp(name, "arg") == 0) {
+			pyexpr->expr = eapp->arg;
+			return ((PyObject*) pyexpr);
+		} else {
+			Py_DECREF(pyexpr);
+		}
+		break;
+	}
+	case PGF_EXPR_LIT: {
+		PgfExprLit* elit = i.data;
+		
+		if (strcmp(name, "val") == 0) {
+			GuVariantInfo i = gu_variant_open(elit->lit);
+			switch (i.tag) {
+			case PGF_LITERAL_INT: {
+				PgfLiteralInt* lint = i.data;
+				return PyInt_FromLong(lint->val);
+			}
+			case PGF_LITERAL_FLT: {
+				PgfLiteralFlt* lflt = i.data;
+				return PyFloat_FromDouble(lflt->val);
+			}
+			case PGF_LITERAL_STR: {
+				PgfLiteralStr* lstr = i.data;
+				return gu2py_string(lstr->val);
+			}
+			}
+		}
+		break;
+	}
+	case PGF_EXPR_META: {
+		PgfExprMeta* emeta = i.data;
+		if (strcmp(name, "id") == 0)
+			return PyInt_FromLong(emeta->id);
+		break;
+	}
+	case PGF_EXPR_FUN: {		
+		PgfExprFun* efun = i.data;
+		if (strcmp(name, "name") == 0) {
+			return gu2py_string(efun->fun);
+		}
+		break;
+	}
+	default:
+		gu_impossible();
+	}
+
+	return PyObject_GenericGetAttr((PyObject*)self, attr_name);
+}
 
 typedef struct {
     PyObject_HEAD
@@ -194,7 +468,7 @@ ExprIter_iternext(ExprIterObject *self)
 	ExprObject* pyexpr = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
 	if (pyexpr == NULL)
 		return NULL;
-	pyexpr->pool   = self->pool;
+	pyexpr->pool   = NULL;
 	pyexpr->expr   = ep->expr;
 	pyexpr->master = (PyObject*) self;
 	Py_INCREF(self);
@@ -963,9 +1237,11 @@ initbinding(void)
     ParseError = PyErr_NewException("pgf.ParseError", NULL, dict);
     PyModule_AddObject(m, "ParseError", ParseError);
     Py_INCREF(ParseError);
-    
+
+    PyModule_AddObject(m, "Expr", (PyObject *) &pgf_ExprType);
+    Py_INCREF(&pgf_ExprType);
+
     Py_INCREF(&pgf_PGFType);
     Py_INCREF(&pgf_ConcrType);
-    Py_INCREF(&pgf_ExprType);
     Py_INCREF(&pgf_ExprIterType);
 }
