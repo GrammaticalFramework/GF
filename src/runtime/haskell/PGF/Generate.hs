@@ -169,6 +169,6 @@ instance RandomGen g => Selector (Identity g) where
 
       hit :: Double -> [(Double,Expr,TType)] -> (Double,(Expr,TType),[(Double,Expr,TType)])
       hit d (gen@(p,e,ty):gens)
-        | d < p     = (p,(e,ty),gens)
+        | d < p || null gens = (p,(e,ty),gens)
         | otherwise = let (p',e_ty',gens') = hit (d-p) gens
                       in (p',e_ty',gen:gens')
