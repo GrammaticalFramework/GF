@@ -25,10 +25,12 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 ===Resource Grammar Library===
 
-- New languages in the Resource Grammar Library: Japanese, Chinese
+- New languages in the Resource Grammar Library: Japanese, Chinese (complete);
+  Maltese, Hebrew (partial)
   [more?].
  (see the [updated synopsis ../lib/doc/synopsis.html]).
 - Improvements for other languages, e.g. Latvian, [more?].
+- Large morphological dictionaries for German, Urdu [more?]
 
 
 ===GF Cloud services===
