@@ -25,7 +25,7 @@ concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
 
 -- Sentence
 
-    -- Cl = {s : ResMlt.Tense => Anteriority => Polarity => Order => Str} ;
+    Cl = {s : Tense => Anteriority => Polarity => Str} ;
     -- ClSlash = {
     --   s : ResMlt.Tense => Anteriority => Polarity => Order => Str ;
     --   c2 : Str
@@ -50,9 +50,9 @@ concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
 
 -- Verb
 
-    -- VP = ResMlt.VP ;
-    -- VPSlash = ResMlt.VP ** {c2 : Str} ;
-    -- Comp = {s : Agr => Str} ; 
+    VP = ResMlt.VP ;
+    VPSlash = ResMlt.VP ;
+    -- Comp = {s : Agr => Str} ;
 
 -- Adjective
 
@@ -62,7 +62,8 @@ concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
 -- Noun
 
     CN = Noun ;
-    NP = {s : NPCase => Str ; a : Agr} ;
+    NP = NounPhrase ;
+    Pron = Pronoun ;
     -- Pron = {s : NPCase => Str ; sp : Case => Str ; a : Agr} ;
     Det = {s : Str ; n : Num_Number ; hasNum : Bool} ;
     -- Det = {s : Str ; sp : NPCase => Str ; n : Number ; hasNum : Bool} ;
@@ -99,20 +100,16 @@ concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
 
 -- Open lexical classes, e.g. Lexicon
 
-    V, VS, VQ, VA = Verb ; -- = {s : VForm => Str} ;
-    V2, V2A, V2Q, V2S = Verb ** {c2 : Str} ;
-    V3 = Verb ** {c2, c3 : Str} ;
+    V, VS, VQ, VA = Verb ;
+    V2, V2A, V2Q, V2S = Verb ; -- ** {c2 : Str} ;
+    V3 = Verb ; -- ** {c2, c3 : Str} ;
     -- VV = {s : VVForm => Str ; typ : VVType} ;
     -- V2V = Verb ** {c2,c3 : Str ; typ : VVType} ;
 
-    -- [JJC]
     A = Adjective ** {hasComp : Bool} ; -- Does the adjective have a comparative form (e.g. ISBAĦ)?
 --    A2 = Adjective ** {c2 : Str} ;
 
-    -- [JJC]
-    N, N3 = Noun ;
-    N2 = Noun ** {c2 : Str} ;
-    -- N3 = Noun ** {c2,c3 : Str} ;
+    N, N2, N3 = Noun ;
     PN = ProperNoun ;
 
 }
