@@ -162,7 +162,8 @@ unfactor t = CM (\gr c -> c (unfac gr t))
         T (TTyped ty) _ -> -- convertTerm doesn't handle these tables
                            ppbug $
                            sep [text "unfactor"<+>ppTerm Unqualified 10 t,
-                                text (show t)]
+                                text (show t){-,
+                                fsep (map (ppTerm Unqualified 10) (allparams ty))-}]
         _ -> composSafeOp (unfac gr) t
       where
         allparams ty = err bug id (allParamValues gr ty)
@@ -383,6 +384,10 @@ convertTerm opts sel ctype (Alts s alts)
 convertTerm opts sel@(CProj l _) ctype (ExtR t1 t2@(R rs2))
                     | l `elem` map fst rs2 = convertTerm opts sel ctype t2
                     | otherwise            = convertTerm opts sel ctype t1
+
+convertTerm opts sel@(CProj l _) ctype (ExtR t1@(R rs1) t2)
+                    | l `elem` map fst rs1 = convertTerm opts sel ctype t1
+                    | otherwise            = convertTerm opts sel ctype t2
 
 convertTerm opts CNil ctype t           = do v <- evalTerm CNil t
                                              return (CPar v)
