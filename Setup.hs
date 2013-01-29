@@ -254,7 +254,7 @@ langsLang = langs -- `except` ["Amh","Ara","Lat","Tur","Mlt"]
 --langsLang = langs `only` ["Fin"] --test
 
 -- languagues that have notpresent marked
-langsPresent = langsLang `except` ["Pes"{-,"Jpn","Nep","Snd","Tha","Thb"-}]
+langsPresent = langsLang `except` ["Chi","Heb","Jpn","Mlt","Nep","Pes","Snd","Tha","Thb"]
 
 -- languages for which to compile Try
 langsAPI  = langsLang `except` langsIncomplete -- ["Ina","Mlt","Amh","Ara"]
