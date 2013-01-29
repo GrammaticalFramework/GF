@@ -36,6 +36,12 @@ gu2py_string(GuString s) {
 }
 
 typedef struct {
+    PyObject_HEAD
+    GuPool* pool;
+    PgfPGF* pgf;
+} PGFObject;
+
+typedef struct {
 	PyObject_HEAD
 	PyObject* master;
 	GuPool* pool;
@@ -411,6 +417,7 @@ Expr_getattro(ExprObject *self, PyObject *attr_name) {
 
 typedef struct {
     PyObject_HEAD
+    PGFObject* grammar;
     GuPool* pool;
     int max_count;
     int counter;
@@ -422,6 +429,7 @@ ExprIter_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
     ExprIterObject* self = (ExprIterObject *)type->tp_alloc(type, 0);
     if (self != NULL) {
+		self->grammar = NULL;
 		self->pool = NULL;
 		self->max_count = -1;
 		self->counter   = 0;
@@ -436,6 +444,8 @@ ExprIter_dealloc(ExprIterObject* self)
 {
 	if (self->pool != NULL)
 		gu_pool_free(self->pool);
+
+	Py_XDECREF(self->grammar);
 
     self->ob_type->tp_free((PyObject*)self);
 }
@@ -527,12 +537,6 @@ static PyTypeObject pgf_ExprIterType = {
 
 typedef struct {
     PyObject_HEAD
-    GuPool* pool;
-    PgfPGF* pgf;
-} PGFObject;
-
-typedef struct {
-    PyObject_HEAD
     PGFObject* grammar;
     PgfConcr* concr;
 } ConcrObject;
@@ -595,6 +599,9 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 	if (pyres == NULL) {
 		return NULL;
 	}
+
+	pyres->grammar = self->grammar;
+	Py_XINCREF(pyres->grammar);
 
 	pyres->pool = gu_new_pool();
 	pyres->max_count = max_count;
@@ -1039,6 +1046,9 @@ PGF_generate(PGFObject* self, PyObject *args, PyObject *keywds)
 	if (pyres == NULL) {
 		return NULL;
 	}
+
+	pyres->grammar = self;
+	Py_INCREF(self);
 
 	pyres->pool = gu_new_pool();
 	pyres->max_count = max_count;
