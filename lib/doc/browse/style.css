@@ -23,8 +23,12 @@ header {
   padding:10px;
 }
 header h1 {
-  margin:0;
+  margin:0 1em 0 0;
   font-size:1em;
+  display: inline-block;
+}
+header .tab {
+  font-size: 90%;
 }
 div[role='main'] { 
   overflow:hidden;
