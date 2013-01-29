@@ -31,11 +31,11 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
  (see the [updated synopsis ../lib/doc/synopsis.html]).
 - Improvements for other languages, e.g. Latvian, [more?].
 - Large morphological dictionaries for German, Urdu [more?]
-
+- Updated web-based RGL browser (/lib/doc/browse/)
 
 ===GF Cloud services===
 
-- A Simple Translation Tool (a bilungual document editor) has been added.
+- A Simple Translation Tool (a bilingual document editor) has been added.
 - A syntax tree editor has been added (contributed by John J. Camilleri).
 - Some new functionality in the web-based grammar editor, e.g. preliminary
   support for public grammars.
