@@ -75,7 +75,7 @@ langsLangAll = langs
 langsLang = langs `except` langsIncomplete
 
 -- languagues that have notpresent marked
-langsPresent = langsLang `except` ["Chi","Heb","Jpn","Nep","Pes","Snd","Tha","Thb"]
+langsPresent = langsLang `except` ["Chi","Heb","Jpn","Mlt","Nep","Pes","Snd","Tha","Thb"]
 
 -- languages for which Lang can be compiled but which are incomplete
 langsIncomplete = ["Amh","Ara","Heb","Lat","Mlt","Tur","Thb"]
