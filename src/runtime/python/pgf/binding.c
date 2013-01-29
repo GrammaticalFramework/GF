@@ -317,7 +317,7 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
         return NULL;
 
 	ExprIterObject* pyres = (ExprIterObject*) 
-		pgf_ExprType.tp_alloc(&pgf_ExprIterType, 0);
+		pgf_ExprIterType.tp_alloc(&pgf_ExprIterType, 0);
 	if (pyres == NULL) {
 		return NULL;
 	}
@@ -387,7 +387,7 @@ Concr_parse_tokens(ConcrObject* self, PyObject *args, PyObject *keywds)
     len = PySequence_Size(obj);
 
     ExprIterObject* pyres = (ExprIterObject*) 
-        pgf_ExprType.tp_alloc(&pgf_ExprIterType, 0);
+        pgf_ExprIterType.tp_alloc(&pgf_ExprIterType, 0);
     if (pyres == NULL) {
         return NULL;
     }
@@ -761,7 +761,7 @@ PGF_generate(PGFObject* self, PyObject *args, PyObject *keywds)
         return NULL;
 
 	ExprIterObject* pyres = (ExprIterObject*)
-		pgf_ExprType.tp_alloc(&pgf_ExprIterType, 0);
+		pgf_ExprIterType.tp_alloc(&pgf_ExprIterType, 0);
 	if (pyres == NULL) {
 		return NULL;
 	}
