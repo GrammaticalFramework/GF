@@ -28,7 +28,7 @@ import qualified Data.Map as Map
 normalForm :: GlobalEnv -> L Ident -> Term -> Term
 normalForm (GE gr rv _) loc = err (bugloc loc) id . nfx (GE gr rv loc)
 
-nfx env@(GE gr _ loc) t = value2term loc [] # eval env t
+nfx env@(GE _ _ loc) t = value2term loc [] # eval env t
 
 eval :: GlobalEnv -> Term -> Err Value
 eval ge t = ($[]) # value (toplevel ge) t
@@ -108,9 +108,9 @@ value env t0 =
 {-
   trace (render $ text "value"<+>sep [ppL (gloc env)<>text ":",
                                       brackets (fsep (map ppIdent (local env))),
-                                      ppTerm Unqualified 10 t0]) $
+                                      ppT 10 t0]) $
 --}
-  errIn (render $ ppTerm Unqualified 0 t0) $
+  errIn (render $ ppT 0 t0) $
   case t0 of
     Vr x   -> var env x
     Q x@(m,f)
@@ -156,10 +156,10 @@ value env t0 =
                                    in maybe (VP v l) id (proj l v)
     Alts t tts -> (\v vts -> VAlts # v <# mapM (both id) vts) # value env t <# mapM (both (value env)) tts
     Strs ts    -> ((VStrs.) # sequence) # mapM (value env) ts
-    Glue t1 t2 -> ((ok2p glue.) # both id) # both (value env) (t1,t2)
+    Glue t1 t2 -> ((ok2p (glue env).) # both id) # both (value env) (t1,t2)
     ELin c r -> (unlockVRec c.) # value env r
     EPatt p  -> return $ const (VPatt p) -- hmm
-    t -> fail.render $ text "value"<+>ppTerm Unqualified 10 t $$ text (show t)
+    t -> fail.render $ text "value"<+>ppT 10 t $$ text (show t)
 
 paramValues env ty = do let ge = global env
                         ats <- allParamValues (srcgr env) =<< nfx ge ty
@@ -221,29 +221,35 @@ extR t vv =
       (v1,v2) -> ok2 VExtR v1 v2 -- hmm
 --    (v1,v2) -> error $ text "not records" $$ text (show v1) $$ text (show v2)
   where
-    error explain = ppbug $ text "The term" <+> ppTerm Unqualified 0 t
+    error explain = ppbug $ text "The term" <+> ppT 0 t
                             <+> text "is not reducible" $$ explain
 
-glue vv = case vv of
-            (VFV vs,v2) -> vfv [glue (v1,v2)|v1<-vs]
-            (v1,VFV vs) -> vfv [glue (v1,v2)|v2<-vs]
-            (VString s1,VString s2) -> VString (s1++s2)
-            (v1,VAlts d vs) -> VAlts (glx d) [(glx v,c) | (v,c) <- vs]
-               where glx v2 = glue (v1,v2)
-            (v1@(VAlts {}),v2) ->
-             --err (const (ok2 VGlue v1 v2)) id $
-               err bug id $
-               do y' <- strsFromValue v2
-                  x' <- strsFromValue v1
-                  return $ vfv [foldr1 VC (map VString (str2strings (glueStr v u))) | v <- x', u <- y']
-            (VC va vb,v2) -> VC va (glue (vb,v2))
-            (v1,VC va vb) -> VC (glue (v1,va)) vb
-            (VS (VV ty pvs vs) vb,v2) -> VS (VV ty pvs [glue (v,v2)|v<-vs]) vb
-            (v1,VS (VV ty pvs vs) vb) -> VS (VV ty pvs [glue (v1,v)|v<-vs]) vb
---          (v1,v2) -> ok2 VGlue v1 v2
-            (v1,v2) -> bug vv
+glue env (v1,v2) = glu v1 v2
   where
-    bug vv = ppbug $ text "glue"<+>text (show vv)
+    glu v1 v2 =
+        case (v1,v2) of
+          (VFV vs,v2) -> vfv [glu v1 v2|v1<-vs]
+          (v1,VFV vs) -> vfv [glu v1 v2|v2<-vs]
+          (VString s1,VString s2) -> VString (s1++s2)
+          (v1,VAlts d vs) -> VAlts (glx d) [(glx v,c) | (v,c) <- vs]
+             where glx v2 = glu v1 v2
+          (v1@(VAlts {}),v2) ->
+           --err (const (ok2 VGlue v1 v2)) id $
+             err bug id $
+             do y' <- strsFromValue v2
+                x' <- strsFromValue v1
+                return $ vfv [foldr1 VC (map VString (str2strings (glueStr v u))) | v <- x', u <- y']
+          (VC va vb,v2) -> VC va (glu vb v2)
+          (v1,VC va vb) -> VC (glu v1 va) vb
+          (VS (VV ty pvs vs) vb,v2) -> VS (VV ty pvs [glu v v2|v<-vs]) vb
+          (v1,VS (VV ty pvs vs) vb) -> VS (VV ty pvs [glu v1 v|v<-vs]) vb
+--        (v1,v2) -> ok2 VGlue v1 v2
+          (v1,v2) -> error . render $
+                     ppL loc (hang (text "unsupported token gluing:") 4
+                                   (ppT 0 (Glue (vt v1) (vt v2))))
+
+    vt = value2term loc (local env)
+    loc = gloc env
 
 -- | to get a string from a value that represents a sequence of terminals
 strsFromValue :: Value -> Err [Str]
@@ -471,6 +477,8 @@ mf <# mx  = ap mf mx
 m1 @@ m2 = (m1 =<<) . m2
 
 both f (x,y) = (,) # f x <# f y
+
+ppT = ppTerm Unqualified
 
 ppL (L loc x) msg = hang (ppLocation "" loc<>colon) 4
                          (text "In"<+>ppIdent x<>colon<+>msg)
