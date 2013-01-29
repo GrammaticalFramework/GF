@@ -13,6 +13,8 @@
 <body>
   <header>
     <h1>RGL Source Browser</h1>
+    <a class="tab help" href="#help">Help</a>
+    <a href="http://www.grammaticalframework.org/lib/doc/synopsis.html" target="_blank">Synopsis...</a>
   </header>
   <div id="loading">
     <img src="ajax-loader.gif" /> Loading...
@@ -25,6 +27,8 @@
     <div class="pane right">
       <div id="tabbar">
         Module: <span id="module_name">...</span>
+        <a class="tab scope" href="#scope">scope</a>
+        <a class="tab code" href="#code">code</a>
       </div>
       <div id="scope" class="panel scope maxheight">
         <div id="scope_controls">
@@ -93,7 +97,7 @@
     <br style="clear:both" />
   </div>
   <footer id="footer">
-  John J. Camilleri<br/><em>Updated 2012-07-11</em>
+  John J. Camilleri<br/><em>Updated 2013-01-29</em>
   </footer>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script src="jquery.history.min.js"></script>
