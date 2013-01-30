@@ -1,9 +1,9 @@
 GF Version 3.4 Release Notes
-January 2013?
+January 2013
 
 %!style:../css/style.css
 %!postproc(html): <TITLE> <meta charset="UTF-8"><meta name = "viewport" content = "width = device-width"> <TITLE>
-%!postproc(html): <H1> <H1><IMG src="../doc/Logos/gf0.png">
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
 ==Installation==
 
@@ -16,27 +16,33 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 - A new partial evaluator that should provide more efficient grammar
   complilation, and solve problems with stack overflows and overly long
   compilaton times for certain grammars.
-- Better visualization of parse trees (contributed by Peter Ljunglöf).
+- New options for visualization of parse trees with the
+  shell command [``visualize_parse`` ../doc/gf-shell-reference.html#toc39].
 - ``alltenses`` is now part of the default search path, eliminating the need for
   ``-path=…`` flags in many cases.
 - Various other small improvements and bug fixes.
-- [...]
+%- [...]
 
 
 ===Resource Grammar Library===
 
 - New languages in the Resource Grammar Library: Japanese, Chinese (complete);
-  Maltese, Hebrew (partial)
-  [more?].
+  Maltese, Hebrew (partial).
+% [more?]
  (see the [updated synopsis ../lib/doc/synopsis.html]).
-- Improvements for other languages, e.g. Latvian, [more?].
-- Large morphological dictionaries for German, Urdu [more?]
-- Updated web-based RGL browser (/lib/doc/browse/)
+- Improvements for other languages, e.g. Latvian.
+% [more?]
+- Large morphological dictionaries for German, Urdu.
+% [more?]
+- Updated web-based RGL browser ([/lib/doc/browse/ ../lib/doc/browse/]).
+
 
 ===GF Cloud services===
 
-- A Simple Translation Tool (a bilingual document editor) has been added.
-- A syntax tree editor has been added (contributed by John J. Camilleri).
+- A [Simple Translation Tool http://cloud.grammaticalframework.org/translator/about.html]
+  (a bilingual document editor) has been added.
+- A [syntax tree editor http://cloud.grammaticalframework.org/syntax-editor/about.html]
+  has been added.
 - Some new functionality in the web-based grammar editor, e.g. preliminary
   support for public grammars.
 - Various other small improvements and bug fixes.
