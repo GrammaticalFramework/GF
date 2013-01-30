@@ -51,8 +51,8 @@ main = defaultMainWithHooks simpleUserHooks{ preBuild =gfPreBuild
 -- Commands for building the Resource Grammar Library
 --------------------------------------------------------
 
-data Mode = AllTenses | Present | Minimal deriving Show
-all_modes = ["minimal","present","alltenses"]
+data Mode = AllTenses | Present deriving Show
+all_modes = ["present","alltenses"]
 default_modes = [Present,AllTenses]
 
 data RGLCommand
@@ -282,7 +282,6 @@ gfc1 mode pkg lbi file = do
       preproc = case mode of
                   AllTenses -> ""
                   Present   -> "-preproc="++({-rgl_src_dir </>-} "mkPresent")
-                  Minimal   -> "-preproc="++({-rgl_src_dir </>-} "mkMinimal")
   createDirectoryIfMissing True dir
   putStrLn $ "Compiling [" ++ show mode ++ "] " ++ file
   run_gfc pkg lbi ["-s", "-no-pmcfg", preproc, "--gfo-dir="++dir, file]
@@ -317,7 +316,6 @@ getOptMode args =
     else explicit_modes
   where
     explicit_modes =
-      [Minimal|have "minimal"]++
       [Present|have "present"]++
       [AllTenses|have "alltenses"]
 
@@ -344,7 +342,7 @@ getRGLBuildSubDir lbi mode =
   case mode of
     AllTenses -> "alltenses"
     Present   -> "present"
-    Minimal   -> "minimal"
+
 
 getRGLBuildDir lbi mode = rgl_dst_dir lbi </> getRGLBuildSubDir lbi mode
 
@@ -372,7 +370,9 @@ unlexer abstr ls =
 -- | Runs the gf executable in compile mode with the given arguments.
 run_gfc :: PackageDescription -> LocalBuildInfo -> [String] -> IO ()
 run_gfc pkg lbi args =
-    do let args' = ["-batch","-gf-lib-path="++rgl_src_dir,"+RTS","-K32M","-RTS"] ++ filter (not . null) args
+    do let args' = ["-batch","-gf-lib-path="++rgl_src_dir]
+                   ++ ["+RTS","-K32M","-RTS"] -- not needed with new-comp
+                   ++ filter (not . null) args
            gf = default_gf pkg lbi
            gf_cmdline = gf ++ " " ++ unwords (map showArg args')
 --     putStrLn $ "Running: " ++ gf_cmdline
@@ -409,10 +409,13 @@ extractDarcsVersion distFlag =
                       [] -> []
                       tag:_ -> ["--from-tag="++tag]
          changes <- lines `fmap` readProcess "darcs" ("changes":from) ""
-         let dates = filter ((`notElem` [""," "]).take 1) changes
+         let dates = init' (filter ((`notElem` [""," "]).take 1) changes)
          whatsnew<-E.try $ lines `fmap` readProcess "darcs" ["whatsnew","-s"] ""
          return (listToMaybe tags,listToMaybe dates,
                  length dates,either (const 0) length whatsnew)
+
+    init' [] = []
+    init' xs = init xs
 
 -- | Only update the file if contents has changed
 updateFile path new =
