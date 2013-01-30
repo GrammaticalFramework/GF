@@ -1,5 +1,6 @@
-import List
-import System
+import Data.List
+import System.Cmd
+import System.Environment
 
 -- (c) Aarne Ranta 2010 under GNU LGPL
 
