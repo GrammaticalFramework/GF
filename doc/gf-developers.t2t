@@ -40,7 +40,7 @@ web sites, as described below.
 === The Haskell Platform ===
 
 GF is written in Haskell, so first of all you need
-the //Haskell Platform//, version 2010.2.0.0 or later. Downloads
+the //Haskell Platform//, version 2012.4.0.0. Downloads
 and installation instructions are available from here:
 
     http://hackage.haskell.org/platform/
@@ -54,12 +54,13 @@ This command should show you which version of GHC you have. If the installation
 of the Haskell Platform	 was successful you should see a message like:
 
 ```
-The Glorious Glasgow Haskell Compilation System, version 7.0.4
+The Glorious Glasgow Haskell Compilation System, version 7.4.2
 ```
 
 Other required tools included in the Haskell Platform are 
-[Cabal http://www.haskell.org/cabal/], 
-[Alex http://www.haskell.org/alex/] and
+[Cabal http://www.haskell.org/cabal/] 
+%,[Alex http://www.haskell.org/alex/]
+and
 [Happy http://www.haskell.org/happy/].
 
 === Darcs ===
