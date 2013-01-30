@@ -1,7 +1,8 @@
 import MkExxTable
-import System
-import Char
-import List
+import System.Cmd
+import System.Environment
+import Data.Char
+import Data.List
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Map as M
 ---import Debug.Trace ----
