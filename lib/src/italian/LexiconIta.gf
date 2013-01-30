@@ -193,7 +193,7 @@ lin
   thick_A = regADeg "grosso" ;
   thin_A = regADeg "sottile" ;
   train_N = regN "treno" ;
-  travel_V = regV "viaggare" ;
+  travel_V = regV "viaggiare" ;
   tree_N = regN "albero" ;
  --- trousers_N = regN "pantalon" ;
   ugly_A = regADeg "brutto" ;
