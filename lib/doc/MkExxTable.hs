@@ -1,6 +1,7 @@
 module MkExxTable (getApiExx, ApiExx, prApiEx) where
 
-import System
+import System.Cmd
+import System.Environment
 import qualified Data.Map as M
 import Data.Char
 

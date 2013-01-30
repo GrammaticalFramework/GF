@@ -7,6 +7,9 @@ Aarne Ranta
 The following table gives the languages currently available in the 
 GF Resource Grammar Library.
 
+For another view, see the 
+[The Resource Grammar Library coverage map http://www.postcrashgames.com/gf_world/] .
+
 Corrections and additions are welcome! Notice that only those parts of implementations
 that are currently available via http://grammaticalframework.org 
 are marked in the table
@@ -26,7 +29,7 @@ are marked in the table
 | Fin   | Finnish      | +     | +    | ++    | +   | +    | +   | +    | -     | +    | *AR
 | Fre   | French       | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,RE
 | Ger   | German       | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,HH,EG
-| Heb   | Hebrew       | -     | -    | -     | -   | -    | -   | -    | -     | -    | *DD
+| Heb   | Hebrew       | +     | -    | -     | -   | -    | -   | -    | -     | -    | *DD
 | Hin   | Hindi        | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,*KP,MH,AR
 | Ina   | Interlingua  | +     | +    | ++    | +   | +    | -   | -    | -     | -    | JB
 | Ita   | Italian      | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *AR,*RE,GP

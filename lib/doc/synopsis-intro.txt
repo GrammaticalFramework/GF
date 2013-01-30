@@ -34,6 +34,7 @@ use the resource modules.
 Other relevant documents:
 - [The RGL Status Document ./status.html]: the current status of different languages
   and the authors of each grammar
+- [The Resource Grammar Library coverage map http://www.postcrashgames.com/gf_world/] 
 - [More modules gfdoc/sources.html]: extra modules, dictionaries, and
   the internals of the resource grammar
 - [RGL Source Browser ./browse]: look up functions and their source code
