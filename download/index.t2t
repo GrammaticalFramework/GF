@@ -16,6 +16,7 @@ What's new? See the [Release notes release-3.4.html].
 
 | **Platform** | **Download** | **How to install**
 | MacOS X | [gf-3.4-bin-intel-mac.tar.gz gf-3.4-bin-intel-mac.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.4-bin-intel-mac.tar.gz``
+| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | ``sudo rpm -i ...``
 | Ubuntu (32-bit) | [gf_3.4-1_i386.deb gf_3.4-1_i386.deb] | ``sudo dpkg -i gf_3.4-1_i386.deb``
 | Ubuntu (64-bit) | [gf_3.4-1_amd64.deb gf_3.4-1_amd64.deb] | ``sudo dpkg -i gf_3.4-1_amd64.deb``
 | ... | ... | ...
@@ -121,8 +122,13 @@ Subsequently:
   cabal install
 ```
 
-The above notes for installing from source apply also in this case.
-For more info, see the [GF Developers Guide ../doc/gf-developers.html].
+Alternatively, you can get the code from the
+[GF GitHub https://github.com/GrammaticalFramework/GF/] mirror, which is
+updated nightly.
+
+The above notes for installing from source apply also in these cases.
+For more info on working with the GF source code, see the
+[GF Developers Guide ../doc/gf-developers.html].
 
 ==Older releases==
 
