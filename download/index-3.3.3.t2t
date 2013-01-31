@@ -7,35 +7,38 @@ Grammatical Framework Download and Installation
 %!postproc(html): </B></TD> </TH>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
-**GF 3.4** was released on 31 January 2013.
+**GF 3.3.3** was released on 3 March 2012.
 
-What's new? See the [Release notes release-3.4.html].
+What's new? See the [Release notes release-3.3.3.html].
 
 
 == Binary packages ==
 
 | **Platform** | **Download** | **How to install**
-| ... | ... | ...
+| Linux (32-bit) | [gf-3.3.3-bin-i386-linux.tar.gz gf-3.3.3-bin-i386-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3.3-bin-i386-linux.tar.gz``
+| Linux (64-bit) | [gf-3.3.3-bin-amd64-linux.tar.gz gf-3.3.3-bin-amd64-linux.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3.3-bin-amd64-linux.tar.gz``
+| MacOS X | [gf-3.3.3-bin-intel-mac.tar.gz gf-3.3.3-bin-intel-mac.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.3.3-bin-intel-mac.tar.gz``
+| Windows | [gf-3.3.3-bin-windows.zip gf-3.3.3-bin-windows.zip] | ``unzip gf-3.3.3-bin-windows.zip``
 
-More packages might be added later.
+%More packages might be added later.
 
 ===Notes===
 
 The Windows package is installed by just unpacking it anywhere. 
 It finds the libraries relative to the ``.exe`` file.
 
-%The ``.deb`` packages work on Ubuntu 12.04 and 12.10.
+%The ``.deb`` packages work on Ubuntu 10.04 and 10.10.
 
 %The ``.pkg`` package works on MacOS X 10.6 (Snow Leopard).
-The MacOS tar package works on 10.6 (Leopard), 10.7 (Lion)
-and 10.8 (Mountain Lion)
+The MacOS tar package works on 10.5 (Leopard), 10.6 (Snow Leopard) and probably
+also 10.7 (Lion).
 
 The MacOS and Linux ``.tar.gz`` packages are designed to be installed in ``/usr/local``.
 You can install them in other locations, but then you need to set the
 ``GF_LIB_PATH`` environment variable:
 
 ```
-  export GF_LIB_PATH=/usr/local/share/gf-3.4/lib
+  export GF_LIB_PATH=/usr/local/share/gf-3.3.3/lib
 ```
 
 where ``/usr/local`` should be replaced with the path to the location where you
@@ -48,7 +51,7 @@ unpacked the package.
 fairly simple:
 
 + Install the [Haskell Platform http://hackage.haskell.org/platform]
-  version 2012.4.0.0 (see notes 2&3 below)
+  (versions 2010.2.0.0 - 2011.4.0.0 should work) (see notes 2&3 below)
 + ``cabal update``
 + On Linux: install some C libraries from your Linux distribution
   (see note 1 below)
@@ -56,7 +59,7 @@ fairly simple:
 
 
 You can also download the full source package from here:
-[``gf-3.4.tar.gz`` gf-3.4.tar.gz].
+[``gf-3.3.3.tar.gz`` gf-3.3.3.tar.gz].
 
 === Notes ===
 
@@ -86,12 +89,8 @@ manually. Here is one way to do this:
 
 
 **Note 2**.
-GF 3.4 does **not** compile with the most recent versions of GHC (>=7.6).
-We recommend using GHC 7.4 (which is part of the Haskell Platform 2012.4.0.0).
-Older versions of GHC (6.12 and 7.0) still works for the most part.
-(For example, there is a issue with error reporting in ``gf -server``
-when compiled with GHC 7.0.)
-%GF does **not** compile with the most recent versions of Alex (>=3.0).
+GF (<=3.3.3) does **not** compile with the most recent versions of GHC (>=7.2).
+GF does **not** compile with the most recent versions of Alex (>=3.0).
 
 **Note 3**.
 [The Haskell Platform for Mac OS X http://hackage.haskell.org/platform/mac.html]
@@ -123,7 +122,6 @@ For more info, see the [GF Developers Guide ../doc/gf-developers.html].
 
 ==Older releases==
 
-- [GF 3.3.3 index-3.3.3.html] (March 2012).
 - [GF 3.3 index-3.3.html] (October 2011).
 - [GF 3.2.9 index-3.2.9.html] source-only snapshot (September 2011).
 - [GF 3.2 index-3.2.html] (December 2010).
@@ -134,3 +132,4 @@ For more info, see the [GF Developers Guide ../doc/gf-developers.html].
 --------------------
 
 [www.grammaticalframework.org http://www.grammaticalframework.org]
+ 
