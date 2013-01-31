@@ -1,6 +1,6 @@
 
 concrete NumeralAmh of Numeral = CatAmh ** open ResAmh,ParamX in {
-flags coding = UTF8;
+flags coding = utf8;
 lincat 
 
 
