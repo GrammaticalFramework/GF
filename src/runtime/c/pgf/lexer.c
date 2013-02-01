@@ -3,26 +3,15 @@
 #include <pgf/data.h>
 #include <wctype.h>
 
-struct PgfLexer {
+typedef struct {
+	PgfLexer base;
 	GuReader* rdr;
 	GuPool* pool;
 	GuUCS ucs;
-	PgfToken tok;
-};
-
-PgfLexer*
-pgf_new_lexer(GuReader *rdr, GuPool *pool)
-{
-	PgfLexer* lexer = gu_new(PgfLexer, pool);
-	lexer->rdr = rdr;
-	lexer->pool = pool;
-	lexer->ucs = ' ';
-	lexer->tok = gu_empty_string;
-	return lexer;
-}
+} PgfSimpleLexer;
 
 static void
-pgf_lexer_read_ucs(PgfLexer *lexer, GuExn* err)
+pgf_lexer_read_ucs(PgfSimpleLexer *lexer, GuExn* err)
 {
 	lexer->ucs = gu_read_ucs(lexer->rdr, err);
 	if (gu_exn_is_raised(err)) {
@@ -31,9 +20,10 @@ pgf_lexer_read_ucs(PgfLexer *lexer, GuExn* err)
 	}
 }
 
-PgfToken
-pgf_lexer_read_token(PgfLexer *lexer, GuExn* err)
+static PgfToken
+pgf_simple_lexer_read_token(PgfLexer *base, GuExn* err)
 {
+	PgfSimpleLexer* lexer = (PgfSimpleLexer*) base;
 	GuPool* tmp_pool = gu_new_pool();
 
 	GuStringBuf* buf = gu_string_buf(tmp_pool);
@@ -107,10 +97,28 @@ pgf_lexer_read_token(PgfLexer *lexer, GuExn* err)
 	}
 
 stop:
-	lexer->tok = gu_string_buf_freeze(buf, lexer->pool);
+	lexer->base.tok = gu_string_buf_freeze(buf, lexer->pool);
 
 	gu_pool_free(tmp_pool);
-	return lexer->tok;
+	return lexer->base.tok;
+}
+
+PgfLexer*
+pgf_new_simple_lexer(GuReader *rdr, GuPool *pool)
+{
+	PgfSimpleLexer* lexer = gu_new(PgfSimpleLexer, pool);
+	lexer->base.read_token = pgf_simple_lexer_read_token;
+	lexer->base.tok = gu_empty_string;
+	lexer->rdr = rdr;
+	lexer->pool = pool;
+	lexer->ucs = ' ';	
+	return ((PgfLexer*) lexer);
+}
+
+PgfToken
+pgf_lexer_read_token(PgfLexer *lexer, GuExn* err)
+{
+	return lexer->read_token(lexer, err);
 }
 
 PgfToken

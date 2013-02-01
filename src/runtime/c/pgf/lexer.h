@@ -6,10 +6,13 @@
 /// A single lexical token			      
 typedef GuString PgfToken;
 
-typedef struct PgfLexer PgfLexer;
+typedef struct {
+	PgfToken (*read_token)();
+	PgfToken tok;
+} PgfLexer;
 
 PgfLexer*
-pgf_new_lexer(GuReader *rdr, GuPool *pool);
+pgf_new_simple_lexer(GuReader *rdr, GuPool *pool);
 
 PgfToken
 pgf_lexer_read_token(PgfLexer *lexer, GuExn* err);
