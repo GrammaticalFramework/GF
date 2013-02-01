@@ -385,5 +385,8 @@ PassV2  se =
       s3 = table{_=> table{_ => ""}}
 };
 
+    VPSlashPrep vp prep = vp ** {sc = prep.s ; c = prep.c} ; ---- AR
+
+
 }
 
