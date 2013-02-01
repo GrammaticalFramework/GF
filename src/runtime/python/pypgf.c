@@ -581,22 +581,79 @@ Concr_printName(ConcrObject* self, PyObject *args)
 	return pyname;
 }
 
+typedef struct {
+	PgfLexer base;
+	PyObject* pylexer;
+	GuPool* pool;
+} PgfPythonLexer;
+
+GU_DEFINE_TYPE(PyPgfLexerExn, abstract, _);
+
+static PgfToken
+pypgf_python_lexer_read_token(PgfLexer *base, GuExn* err)
+{
+	PgfPythonLexer* lexer = (PgfPythonLexer*) base;
+	lexer->base.tok = gu_empty_string;
+
+	PyObject* item = PyIter_Next(lexer->pylexer);
+	if (item == NULL)
+		if (PyErr_Occurred() != NULL)
+			gu_raise(err, PyPgfLexerExn);
+		else
+			gu_raise(err, GuEOF);
+	else {
+		const char* str = PyString_AsString(item);
+		if (str == NULL)
+			gu_raise(err, PyPgfLexerExn);
+		else
+			lexer->base.tok = gu_str_string(str, lexer->pool);
+	}
+
+	return lexer->base.tok;
+}
+
+static PgfLexer*
+pypgf_new_python_lexer(PyObject* pylexer, GuPool* pool)
+{
+	PgfPythonLexer* lexer = gu_new(PgfPythonLexer, pool);
+	lexer->base.read_token = pypgf_python_lexer_read_token;
+	lexer->base.tok = gu_empty_string;
+	lexer->pylexer = pylexer;
+	lexer->pool = pool;
+	return ((PgfLexer*) lexer);
+}
+
 static ExprIterObject*
 Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 {
-	static char *kwlist[] = {"sentence", "cat", "n", NULL};
+	static char *kwlist[] = {"sentence", "tokens", "cat", "n", NULL};
 
 	size_t len;
-	const uint8_t *buf;
+	const uint8_t *buf = NULL;
+	PyObject* py_lexer = NULL;
 	const char *catname_s = NULL;
 	int max_count = -1;
-    if (!PyArg_ParseTupleAndKeywords(args, keywds, "s#|si", kwlist,
-                                     &buf, &len, &catname_s, &max_count))
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "|s#Osi", kwlist,
+                                     &buf, &len, &py_lexer, &catname_s, &max_count))
         return NULL;
+
+    if ((buf == NULL && py_lexer == NULL) || 
+        (buf != NULL && py_lexer != NULL)) {
+		PyErr_SetString(PyExc_TypeError, "either the sentence or the tokens argument must be provided");
+		return NULL;
+	}
+
+	if (py_lexer != NULL) {
+		// get an iterator out of the iterable object
+		py_lexer = PyObject_GetIter(py_lexer);
+		if (py_lexer == NULL)
+			return NULL;
+	}
 
 	ExprIterObject* pyres = (ExprIterObject*) 
 		pgf_ExprIterType.tp_alloc(&pgf_ExprIterType, 0);
 	if (pyres == NULL) {
+		Py_XDECREF(py_lexer);
 		return NULL;
 	}
 
@@ -608,18 +665,26 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 	pyres->counter   = 0;
 
 	GuPool *tmp_pool = gu_local_pool();
-    GuString catname = 
+    GuString catname =
 		(catname_s == NULL) ? pgf_start_cat(self->grammar->pgf, tmp_pool)
 		                    : gu_str_string(catname_s, tmp_pool);
-	GuIn* in = gu_data_in(buf, len, tmp_pool);
-	GuReader* rdr = gu_new_utf8_reader(in, tmp_pool);
-	PgfLexer *lexer =
-		pgf_new_lexer(rdr, tmp_pool);
+
+	PgfLexer *lexer = NULL;
+	if (buf != NULL) {
+		GuIn* in = gu_data_in(buf, len, tmp_pool);
+		GuReader* rdr = gu_new_utf8_reader(in, tmp_pool);
+		lexer = pgf_new_simple_lexer(rdr, tmp_pool);
+	} 
+	if (py_lexer != NULL) {
+		lexer = pypgf_new_python_lexer(py_lexer, tmp_pool);
+	}
 
 	pyres->res =
 		pgf_parse(self->concr, catname, lexer, pyres->pool);
+
 	if (pyres->res == NULL) {
 		Py_DECREF(pyres);
+		pyres = NULL;
 
 		PgfToken tok =
 			pgf_lexer_current_token(lexer);
@@ -633,82 +698,12 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 										PyString_AsString(py_tok));
 			Py_DECREF(py_tok);
 		}
-
-		gu_pool_free(tmp_pool);
-		return NULL;
 	}
 
+	Py_XDECREF(py_lexer);
 	gu_pool_free(tmp_pool);
 
 	return pyres;
-}
-
-// Concr_parse_tokens is the same as the above function but
-// instead of a string it expect a sequence of tokens as argument.
-// This is usefull if you want to implement your own tokenizer in
-// python.
-static ExprIterObject*
-Concr_parse_tokens(ConcrObject* self, PyObject *args, PyObject *keywds)
-{
-    static char *kwlist[] = {"tokens", "cat", "n", NULL};
-    // Variable for the input list of tokens
-    PyObject* obj;
-    PyObject* seq;
-    int len;
-    const char *catname_s = NULL;
-    int max_count = -1;
-
-    // Parsing arguments: the tokens is a python object (O),
-    // cat is a string (s) and n an integer (i)
-    if (!PyArg_ParseTupleAndKeywords(args, keywds, "O|si", kwlist,
-                                    &obj, &catname_s, &max_count))
-        return NULL;
-    // The python object should be a sequence
-    seq = PySequence_Fast(obj, "expected a sequence");
-    len = PySequence_Size(obj);
-
-    ExprIterObject* pyres = (ExprIterObject*) 
-        pgf_ExprIterType.tp_alloc(&pgf_ExprIterType, 0);
-    if (pyres == NULL) {
-        return NULL;
-    }
-
-    pyres->pool = gu_new_pool();
-    pyres->max_count = max_count;
-    pyres->counter   = 0;
-
-    GuPool *tmp_pool = gu_local_pool();
-    GuString catname = 
-        (catname_s == NULL) ? pgf_start_cat(self->grammar->pgf, tmp_pool)
-                            : gu_str_string(catname_s, tmp_pool);
-
-    // turn the (python) list of tokens into a string array
-    char* tokens[len];
-    for (int i = 0; i < len; i++) {
-        tokens[i] = PyString_AsString(PySequence_Fast_GET_ITEM(seq, i));
-        if (tokens[i] == NULL) {
-            // Note: if the list item is not a string, 
-            // PyString_AsString raises TypeError itself
-            // so we just have to return
-            gu_pool_free(tmp_pool);
-            return NULL;
-        }
-    }
-    Py_DECREF(seq);
-    
-    pyres->res =
-        pgf_parse_tokens(self->concr, catname, tokens, len, pyres->pool);
-
-    if (pyres->res == NULL) {
-        Py_DECREF(pyres);
-
-        PyErr_SetString(PGFError, "Something went wrong during parsing");
-        gu_pool_free(tmp_pool);
-        return NULL;
-    }
-
-    gu_pool_free(tmp_pool);
-    return pyres;
 }
 
 static PyObject*
@@ -742,9 +737,6 @@ static PyMethodDef Concr_methods[] = {
     },
     {"parse", (PyCFunction)Concr_parse, METH_VARARGS | METH_KEYWORDS,
      "Parses a string and returns an iterator over the abstract trees for this sentence"
-    },
-    {"parse_tokens", (PyCFunction)Concr_parse_tokens, METH_VARARGS | METH_KEYWORDS,
-     "Parses list of tokens and returns an iterator over the abstract trees for this sentence. Allows you to write your own tokenizer in python."
     },
     {"linearize", (PyCFunction)Concr_linearize, METH_VARARGS,
      "Takes an abstract tree and linearizes it to a sentence"

@@ -116,9 +116,6 @@ PgfExprEnum*
 pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool);
 
 PgfExprEnum*
-pgf_parse_tokens(PgfConcr* concr, PgfCId cat, char* tokens[], int len, GuPool* pool);
-
-PgfExprEnum*
 pgf_generate(PgfPGF* pgf, PgfCId cat, GuPool* pool);
 
 // an experimental function. Please don't use it

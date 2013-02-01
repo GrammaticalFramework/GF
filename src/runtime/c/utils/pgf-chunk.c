@@ -98,7 +98,7 @@ int main(int argc, char* argv[]) {
 		GuReader *rdr =
 			gu_string_reader(gu_str_string(line, ppool), ppool);
 		PgfLexer *lexer =
-			pgf_new_lexer(rdr, ppool);
+			pgf_new_simple_lexer(rdr, ppool);
 
 		pgf_print_chunks(from_concr, cat, lexer, ppool);
 		
