@@ -1362,13 +1362,16 @@ infinity = 256
 
 prLexcLexicon :: Morpho -> String
 prLexcLexicon mo =
-  unlines $ "LEXICON" : [prLexc l p ++ ":" ++ w  ++ " # ;" | (w,lps) <- morpho, (l,p) <- lps] ++ ["END"]
+  unlines $ "Multichar_Symbols":multichars:"":"LEXICON Root" : [prLexc l p ++ ":" ++ w  ++ " # ;" | (w,lps) <- morpho, (l,p) <- lps] ++ ["END"]
  where
   morpho = fullFormLexicon mo
-  prLexc l p = showCId l ++ mkTags (words p)
+  prLexc l p = showCId l ++ concat (mkTags (words p))
   mkTags p = case p of
     "s":ws -> mkTags ws   --- remove record field
-    ws -> concat $ "+" : intersperse "+" ws
+    ws -> map ('+':) ws
+
+  multichars = unwords $ nub $ concat [mkTags (words p) | (w,lps) <- morpho, (l,p) <- lps]
+  -- thick_A+(AAdj+Posit+Gen):thick's # ;
 
 prFullFormLexicon :: Morpho -> String
 prFullFormLexicon mo =
