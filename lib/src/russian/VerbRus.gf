@@ -29,7 +29,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
          P1=> "буду"++ masha.s ! (mkPronForm Inst No NonPoss)      
       } --case p
     }; --case gn
-      ClCondit => "" ;        
+      ClCondit => masha.s!(mkPronForm Inst No NonPoss) ;        
       ClImper  => case (numGenNum gn) of 
         {Sg  => "будь" ++ masha.s ! (mkPronForm Inst No NonPoss);
          Pl => "будьте" ++  masha.s ! (mkPronForm Inst No NonPoss) 
@@ -54,7 +54,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
 -- infinitive does not save GenNum, 
 -- but indicative does for the sake of adjectival predication !
 --        ClIndic Present _ =>  zloj.s ! AF Nom Animate gn ;
-        ClIndic Present _ =>  zloj.s ! AFShort gn ;
+        ClIndic Present _ | ClCondit =>  zloj.s ! AFShort gn ; ---- CLCondit AR 6/2/2013
         ClIndic PastRus _ => case gn of
        { (GSg Fem)   => "была" ++ zloj.s! AF Nom Animate (GSg Fem);
           (GSg Masc)  => "был" ++ zloj.s! AF Nom Animate (GSg Masc);
@@ -72,8 +72,8 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
           P2 => "будешь"++ zloj.s! AF Nom Animate (GSg (genGNum gn));
           P1=> "буду" ++ zloj.s! AF Nom Animate (GSg (genGNum gn))
         }
-      };
-       ClCondit => ""
+      }
+      ---- ; ClCondit => "" 
       } ;        
 
       asp = Imperfective ;      
@@ -99,7 +99,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
           };  
 -- infinitive does not save GenNum, 
 -- but indicative does for the sake of adjectival predication !
-        ClIndic Present _ =>  zloj.s ! NF num Nom nom ;
+        ClIndic Present _ | ClCondit =>  zloj.s ! NF num Nom nom ;
         ClIndic PastRus _ => case gn of
        { (GSg Fem)   => "была" ++ zlojsg ;
           (GSg Masc)  => "был" ++ zlojsg ;
@@ -117,8 +117,8 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
           P2 => "будешь"++ zlojsg ;
           P1=> "буду" ++ zlojsg 
         }
-      };
-       ClCondit => ""
+      }
+----   ; ClCondit => ""
       } ;        
 
       asp = Imperfective ;      
@@ -144,7 +144,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
        GPl => "будьте" ++ zloj.s
      };
      ClInfinit => "быть" ++ zloj.s;
-        ClIndic Present  _ => zloj.s ;
+        ClIndic Present  _ | ClCondit => zloj.s ;
         ClIndic PastRus _ => case gn of 
        { (GSg Fem)  => "была" ++ zloj.s;
          (GSg Masc) => "был" ++ zloj.s;
@@ -154,8 +154,8 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
         ClIndic Future _ => case gn of 
        { (GSg _) => "будет" ++ zloj.s;
          GPl => "будут" ++ zloj.s
-        };
-        ClCondit => ""
+        }
+----  ;      ClCondit => ""
         } ;        
       asp = Imperfective ;
       w = Act;
@@ -386,6 +386,45 @@ PassV2  se =
 };
 
     VPSlashPrep vp prep = vp ** {sc = prep.s ; c = prep.c} ; ---- AR
+
+
+---- AR 6/2/2013. Unfortunately there's no copula in the resources...
+
+  UseCopula =
+ { s=\\clf,gn,p => case clf of 
+   {
+        (ClIndic Present _) => [] ;
+        (ClIndic PastRus _) => case  gn of 
+    {   (GSg Fem)  =>"была" ;
+      (GSg Masc)  =>"был" ; 
+     (GSg Neut)  =>"было" ;
+      GPl => "были" 
+    };
+    (ClIndic Future _) => case gn of 
+   {    GPl => case p of
+      { P3 => "будут" ;
+        P2 => "будете" ;
+        P1 => "будем"
+      };
+      (GSg _) => case p of
+      {  P3=>"будет" ;
+         P2 => "будешь" ;
+         P1=> "буду"
+      } --case p
+    }; --case gn
+      ClCondit => "" ;        
+      ClImper  => case (numGenNum gn) of 
+        {Sg  => "будь" ;
+         Pl => "будьте"
+       };
+       ClInfin => "быть" 
+};  -- case clf     
+      asp = Imperfective ;
+      w = Act;
+      negBefore = True;
+      s2 = "";
+      s3 = \\g,n => ""
+   } ;
 
 
 }
