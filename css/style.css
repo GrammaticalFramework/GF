@@ -32,3 +32,26 @@ th { background: #9df; }
 
 h1 img { float: right; border: 0; }
 h1 img.nofloat { float: none; }
+
+.grow {
+  animation-name: grow;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+
+  -webkit-animation-name: grow;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-timing-function: ease-in-out;
+
+}
+
+@keyframes grow {
+  from,50% { opacity: 0; transform: scale(0.1,0.1); }
+  80% { opacity: 1; transform: scale(1.1,1.1); }
+  to { transform: scale(1.0,1.0); }
+}
+
+@-webkit-keyframes grow {
+  from,50% { opacity: 0; -webkit-transform: scale(0.1,0.1); }
+  80% { opacity: 1; -webkit-transform: scale(1.1,1.1); }
+  to { -webkit-transform: scale(1.0,1.0); }
+}
