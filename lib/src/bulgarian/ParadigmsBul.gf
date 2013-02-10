@@ -717,10 +717,10 @@ oper
   mkN074 : Str -> N ;
   mkN074 base = let v0 = base
                 in { s = table {
-                           NF Sg _     => variants {} ;
+                           NF Sg _     => v0 ;
                            NF Pl Indef => v0 ;
                            NF Pl Def   => v0+"та" ;
-                           NFSgDefNom  => variants {} ;
+                           NFSgDefNom  => v0 ;
                            NFPlCount   => v0 ;
                            NFVocative  => v0
                          } ;
@@ -1147,7 +1147,7 @@ oper
                           (v0+"чех")
                           (v0+"кал")
                           (v0+"чел")
-                          (v0+"-")
+                          (v0+"кан")
                           (v0+"чещ")
                           (v0+"чи")
                           (v0+"чене") ;
@@ -1255,7 +1255,7 @@ oper
                           (v0+"ех")
                           (v0+"ял")
                           (v0+"ел")
-                          (v0+"-")
+                          (v0+"ян")
                           (v0+"ещ")
                           (v0+"й")
                           (v0+"ене") ;
