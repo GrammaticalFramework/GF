@@ -109,6 +109,12 @@ pgf_get_language(PgfPGF* pgf, PgfCId lang)
 	return gu_map_get(pgf->concretes, &lang, PgfConcr*);
 }
 
+GuString
+pgf_concrete_name(PgfConcr* concr)
+{
+	return concr->name;
+}
+
 void
 pgf_iter_categories(PgfPGF* pgf, GuMapItor* fn, GuExn* err)
 {
