@@ -14,7 +14,9 @@ table.menubar td { padding: 5px; cursor: default; }
 table.menubar dl, td.options > div > dl, dl.popupmenu {
     z-index: 2;
     display: none; position: absolute;
-    background: white; color: black;
+    background: white; /* fallback */
+    background: rgba(255,255,255,0.95);
+    color: black;
     border: 1px solid black;
     margin: 0;
     box-shadow: 4px 4px 12px rgba(0,0,0,0.33);
