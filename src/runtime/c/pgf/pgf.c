@@ -58,8 +58,8 @@ pgf_load_meta_child_probs(PgfPGF* pgf, const char* fpath,
 		prob = - log(prob);
 
 		GuString cat1 = gu_str_string(cat1_s, tmp_pool);
-		PgfCat* abscat1 =
-			gu_map_get(pgf->abstract.cats, &cat1, PgfCat*);
+		PgfAbsCat* abscat1 =
+			gu_map_get(pgf->abstract.cats, &cat1, PgfAbsCat*);
 		if (abscat1 == NULL) {
 			gu_raise(err, PgfExn);
 			goto close;
@@ -71,7 +71,7 @@ pgf_load_meta_child_probs(PgfPGF* pgf, const char* fpath,
 			abscat1->meta_token_prob = prob;
 		} else {
 			GuString cat2 = gu_str_string(cat2_s, tmp_pool);
-			PgfCat* abscat2 = gu_map_get(pgf->abstract.cats, &cat2, PgfCat*);
+			PgfAbsCat* abscat2 = gu_map_get(pgf->abstract.cats, &cat2, PgfAbsCat*);
 			if (abscat2 == NULL) {
 				gu_raise(err, PgfExn);
 				goto close;
@@ -148,8 +148,8 @@ void
 pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname, 
                           GuMapItor* fn, GuExn* err) 
 {
-	PgfCat* abscat =
-		gu_map_get(pgf->abstract.cats, &catname, PgfCat*);
+	PgfAbsCat* abscat =
+		gu_map_get(pgf->abstract.cats, &catname, PgfAbsCat*);
 	if (abscat == NULL) {
 		gu_raise(err, PgfExn);
 		return;
@@ -157,8 +157,8 @@ pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname,
 	
 	size_t n_functions = gu_buf_length(abscat->functions);
 	for (size_t i = 0; i < n_functions; i++) {
-		PgfFunDecl* fun =
-			gu_buf_get(abscat->functions, PgfFunDecl*, i);
+		PgfAbsFun* fun =
+			gu_buf_get(abscat->functions, PgfAbsFun*, i);
 		
 		GuVariantInfo i = gu_variant_open(fun->ep.expr);
 		switch (i.tag) {

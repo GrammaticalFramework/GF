@@ -1093,7 +1093,7 @@ pgf_parsing_meta_predict(GuMapItor* fn, const void* key, void* value, GuExn* err
 {
 	(void) (err);
 	
-	PgfCat* abscat = (PgfCat*) key;
+	PgfAbsCat* abscat = (PgfAbsCat*) key;
     prob_t meta_prob = *((prob_t*) value);
     PgfMetaPredictFn* clo = (PgfMetaPredictFn*) fn;
     PgfParseState* before = clo->before;

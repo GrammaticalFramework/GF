@@ -154,7 +154,7 @@ pgf_reasoner_predict(PgfReasoner* rs, PgfExprState* cont,
 	gu_buf_push(answers->conts, PgfExprState*, cont);
 
 	if (gu_buf_length(answers->conts) == 1) {
-		PgfCat* abscat = gu_map_get(rs->abstract->cats, &cat, PgfCat*);
+		PgfAbsCat* abscat = gu_map_get(rs->abstract->cats, &cat, PgfAbsCat*);
 		if (abscat == NULL) {
 			return;
 		}
@@ -166,7 +166,7 @@ pgf_reasoner_predict(PgfReasoner* rs, PgfExprState* cont,
 			q->choice_idx = 0;
 			q->choices = abscat->functions;
 
-			q->prob = answers->outside_prob + gu_buf_get(q->choices, PgfFunDecl*, 0)->ep.prob;
+			q->prob = answers->outside_prob + gu_buf_get(q->choices, PgfAbsFun*, 0)->ep.prob;
 			gu_buf_heap_push(rs->pqueue, &pgf_expr_qstate_order, &q);
 		}
 	} else {
@@ -196,8 +196,8 @@ pgf_reasoner_next(PgfReasoner* rs, GuPool* pool)
 		PgfExprState* st = NULL;
 		switch (q->kind) {
 		case PGF_EXPR_QSTATE_PREDICT: {
-			PgfFunDecl* absfun =
-				gu_buf_get(q->choices, PgfFunDecl*, q->choice_idx);
+			PgfAbsFun* absfun =
+				gu_buf_get(q->choices, PgfAbsFun*, q->choice_idx);
 
 			st = gu_new(PgfExprState, pool);
 			st->answers = q->single;
@@ -207,7 +207,7 @@ pgf_reasoner_next(PgfReasoner* rs, GuPool* pool)
 
 			q->choice_idx++;
 			if (q->choice_idx < gu_buf_length(q->choices)) {
-				q->prob = st->answers->outside_prob + gu_buf_get(q->choices, PgfFunDecl*, q->choice_idx)->ep.prob;
+				q->prob = st->answers->outside_prob + gu_buf_get(q->choices, PgfAbsFun*, q->choice_idx)->ep.prob;
 				gu_buf_heap_push(rs->pqueue, &pgf_expr_qstate_order, &q);
 			}
 			break;
