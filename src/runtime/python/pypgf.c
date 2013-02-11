@@ -731,6 +731,20 @@ Concr_linearize(ConcrObject* self, PyObject *args)
 	return pystr;
 }
 
+static PyObject*
+Concr_getName(ConcrObject *self, void *closure)
+{
+    return gu2py_string(pgf_concrete_name(self->concr));
+}
+
+static PyGetSetDef Concr_getseters[] = {
+    {"name", 
+     (getter)Concr_getName, NULL,
+     "the name of the concrete syntax",
+    },
+    {NULL}  /* Sentinel */
+};
+
 static PyMethodDef Concr_methods[] = {
     {"printName", (PyCFunction)Concr_printName, METH_VARARGS,
      "Returns the print name of a function or category"
@@ -775,7 +789,7 @@ static PyTypeObject pgf_ConcrType = {
     0,		                   /*tp_iternext */
     Concr_methods,             /*tp_methods */
     0,                         /*tp_members */
-    0,                         /*tp_getset */
+    Concr_getseters,           /*tp_getset */
     0,                         /*tp_base */
     0,                         /*tp_dict */
     0,                         /*tp_descr_get */
