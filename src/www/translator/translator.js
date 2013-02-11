@@ -627,7 +627,7 @@ Translator.prototype.import_globalsight=function(el) {
 	t.filebox.appendChild(wrap("h2",text("Import")))
 	function restore() { t.hide_filebox() }
 	var cancel_button=button("Cancel",restore)
-	if(false && supports_local_files()) {
+	if(supports_local_files()) {
 	    // Allow import from local files, if the browers supports it.
 	    var files=node("input",{name:"files","type":"file"})
 	    var inp=wrap("p",wrap("label",[text("Choose a file: "),files]))
