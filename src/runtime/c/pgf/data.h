@@ -71,6 +71,7 @@ typedef struct {
 typedef GuSeq PgfEquations;
 
 typedef struct {
+	PgfCId name;
 	PgfType* type;
 	int arity;
 	PgfEquations defns; // maybe null
@@ -96,6 +97,7 @@ typedef struct {
 extern GU_DECLARE_TYPE(PgfAbsCat, abstract);
 
 typedef struct {
+	PgfCId name;
 	PgfFlags* aflags;
 	PgfCIdMap* funs; // |-> PgfAbsFun*
 	PgfCIdMap* cats; // |-> PgfAbsCat*
@@ -105,7 +107,6 @@ struct PgfPGF {
 	uint16_t major_version;
 	uint16_t minor_version;
 	PgfFlags* gflags;
-	PgfCId absname;
 	PgfAbstr abstract;
 	PgfCIdMap* concretes; // |-> PgfConcr*
 	GuPool* pool;
@@ -223,6 +224,7 @@ typedef struct {
 typedef GuList(PgfCncFun*) PgfCncFuns; 
 
 struct PgfConcr {
+	PgfCId name;
 	PgfFlags* cflags;
 	PgfPrintNames* printnames;
     GuMap* ccats;

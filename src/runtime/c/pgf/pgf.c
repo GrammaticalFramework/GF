@@ -94,7 +94,7 @@ close:
 GuString
 pgf_abstract_name(PgfPGF* pgf)
 {
-	return pgf->absname;
+	return pgf->abstract.name;
 }
 
 void
