@@ -6,6 +6,7 @@ function Translator() {
     var t=this
     t.local=tr_local();
     t.view=element("document")
+    t.filebox=element("filebox")
     if(!supports_html5_storage()) {
 	var warning=span_class("error",text("It appears that localStorage is unsupported or disabled in this browser. Documents will not be preserved after you leave or reload this page!"))
 	insertAfter(warning,t.view)
@@ -338,25 +339,32 @@ Translator.prototype.browse=function(el) {
 	}
     }
     function browse() {
-	clear(t.view)
-	t.view.appendChild(wrap("h2",text("Your translator documents")))
+	var list=empty("div")
+	clear(t.filebox)
+	t.filebox.appendChild(list)
+	list.appendChild(wrap("h2",text("Open...")))
 	var files=t.local.ls("/")
 	if(files.length>0) {
-	    t.view.appendChild(wrap("h3",text("Local documents")))
-	    t.view.appendChild(ls(files,"translator.open",delete_local))
+	    list.appendChild(wrap("h3",text("Local documents")))
+	    list.appendChild(ls(files,"translator.open",delete_local))
 	}
 	function lscloud(result) {
 	    var filenames=JSON.parse(result)
 	    var files=map(strip_cloudext,filenames)
 	    if(files.length>0) {
-		t.view.appendChild(wrap("h3",[text("Documents in the cloud "),
+		list.appendChild(wrap("h3",[text("Documents in the cloud "),
 					      img("../P/cloud.png")]))
-		t.view.appendChild(ls(files,"translator.open_from_cloud",delete_from_cloud))
+		list.appendChild(ls(files,"translator.open_from_cloud",delete_from_cloud))
 	    }
 	}
 	if(navigator.onLine) gfcloud("ls",{ext:cloudext},lscloud)
+	/*
 	t.current="/"
 	t.local.put("current","/")
+	*/
+	
+	t.filebox.appendChild(button("Cancel",function () { t.hide_filebox() }))
+	t.show_filebox()
     }
     setTimeout(browse,100) // leave time to hide the menu first
 }
@@ -371,6 +379,16 @@ Translator.prototype.open=function(name) {
     }
 }
 
+Translator.prototype.show_filebox=function() {
+    this.filebox.parentNode.style.display="block";
+}
+
+Translator.prototype.hide_filebox=function() {
+    var t=this
+    t.filebox.parentNode.style.display="";
+    clear(t.filebox)
+}
+
 Translator.prototype.load=function(name,document,in_cloud) {
     var t=this
     t.current=name;
@@ -378,6 +396,7 @@ Translator.prototype.load=function(name,document,in_cloud) {
     t.local.put("current",name)
     t.local.put("current_in_cloud",in_cloud)
     t.document=document;
+    t.hide_filebox();
     t.redraw();
 }
 
@@ -581,9 +600,6 @@ Translator.prototype.import_globalsight=function(el) {
     hide_menu(el);
     var t=this
     function imp() {
-	function restore() {
-	    t.redraw()
-	}
 	function done() {
 	    function import_text(name,text) {
 		var ls=lines(text)
@@ -592,7 +608,8 @@ Translator.prototype.import_globalsight=function(el) {
 		    t.local.put("current",null)
 		    t.document=import_globalsight_download_file(ls)
 		    t.current=t.document.name=name
-		    restore();
+		    t.hide_filebox();
+		    t.redraw();
 		}
 		else alert("Not a GlobalSight Download File") // !! improve
 	    }
@@ -606,20 +623,25 @@ Translator.prototype.import_globalsight=function(el) {
 	    return false
 	}
 
-	clear(t.view)
-	t.view.appendChild(wrap("h2",text("Import")))
-	if(supports_local_files()) {
+	clear(t.filebox)
+	t.filebox.appendChild(wrap("h2",text("Import")))
+	function restore() { t.hide_filebox() }
+	var cancel_button=button("Cancel",restore)
+	if(false && supports_local_files()) {
 	    // Allow import from local files, if the browers supports it.
 	    var files=node("input",{name:"files","type":"file"})
 	    var inp=wrap("p",wrap("label",[text("Choose a file: "),files]))
 	    var e=node("form",{class:"import"},
 		       [wrap("h3",text("Import a GlobalSight Download File")),
-			inp, submit(), button("Cancel",restore)])
-	    t.view.appendChild(e)
+			inp, submit(), cancel_button])
+	    t.filebox.appendChild(e)
 	    e.onsubmit=done
 	}
-	else
-	    t.view.appendChild(text("Support for readling local files is missing in this browser."))
+	else {
+	    t.filebox.appendChild(wrap("p",[text("Support for readling local files is missing in this browser.")]))
+	    t.filebox.appendChild(cancel_button)
+	}
+	t.show_filebox();
     }
     setTimeout(imp,100) // leave time to hide the menu first
 }
