@@ -59,11 +59,10 @@ pgf_print_absfun(GuMapItor* fn, const void* key, void* value,
     gu_printf(wtr, err, " ;   -- %f\n", fun->ep.prob);
 }
 static void
-pgf_print_abstract(PgfCId absname, PgfAbstr* abstr, 
-                   GuWriter* wtr, GuExn* err)
+pgf_print_abstract(PgfAbstr* abstr, GuWriter* wtr, GuExn* err)
 {
 	gu_puts("abstract ", wtr, err);
-	gu_string_write(absname, wtr, err);
+	gu_string_write(abstr->name, wtr, err);
 	gu_puts(" {\n", wtr, err);
 	
 	PgfPrintFn clo1 = { { pgf_print_flag }, wtr };
@@ -349,7 +348,7 @@ pgf_print_concr_cb(GuMapItor* fn, const void* key, void* value,
 void
 pgf_print(PgfPGF* pgf, GuWriter* wtr, GuExn* err)
 {
-	pgf_print_abstract(pgf->absname, &pgf->abstract, wtr, err);
+	pgf_print_abstract(&pgf->abstract, wtr, err);
 	
 	PgfPrintFn clo = { { pgf_print_concr_cb }, wtr };
 	gu_map_iter(pgf->concretes, &clo.fn, err);
