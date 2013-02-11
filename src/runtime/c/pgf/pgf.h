@@ -42,10 +42,8 @@ extern GU_DECLARE_TYPE(PgfExn, abstract);
 /// @{
 
 typedef struct PgfPGF PgfPGF;
-extern GU_DECLARE_TYPE(PgfPGF, struct);
 
 typedef struct PgfConcr PgfConcr;
-extern GU_DECLARE_TYPE(PgfConcr, struct);
 
 
 /**< A representation of a PGF grammar. 

@@ -117,14 +117,10 @@ libpgf_la_SOURCES = \
 	pgf/pgf.h
 
 bin_PROGRAMS = \
-	utils/pgf2yaml \
 	utils/pgf-print \
 	utils/pgf-translate \
 	utils/pgf-parse \
 	utils/pgf-chunk 
-
-utils_pgf2yaml_SOURCES = utils/pgf2yaml.c
-utils_pgf2yaml_LDADD = libpgf.la libgu.la
 
 utils_pgf_print_SOURCES = utils/pgf-print.c
 utils_pgf_print_LDADD = libpgf.la libgu.la 

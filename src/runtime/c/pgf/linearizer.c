@@ -208,7 +208,7 @@ redo:;
 }
 
 static PgfCncTree
-pgf_lzn_resolve_def(PgfLzn* lzn, PgfFunIds* lindefs, GuString s, GuPool* pool)
+pgf_lzn_resolve_def(PgfLzn* lzn, PgfCncFuns* lindefs, GuString s, GuPool* pool)
 {
 	PgfCncTree lit = gu_null_variant;
 	PgfCncTree ret = gu_null_variant;
@@ -286,13 +286,12 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 			goto done;
 		}
 		case PGF_EXPR_META: {
-			PgfFunIds* lindefs = NULL;
 			if (ccat != NULL && ccat->lindefs == NULL) {
 				goto done;
 			}
 
 			GuString s = gu_str_string("?", pool);
-			ret = pgf_lzn_resolve_def(lzn, lindefs, s, pool);
+			ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, s, pool);
 			goto done;
 		}
 		case PGF_EXPR_FUN: {
@@ -301,7 +300,6 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 			PgfCncOverloadMap* overl_table =
 				gu_map_get(lzn->concr->fun_indices, &efun->fun, PgfCncOverloadMap*);
 			if (overl_table == NULL) {
-				PgfFunIds* lindefs = NULL;
 				if (ccat != NULL && ccat->lindefs == NULL) {
 					goto done;
 				}
@@ -316,7 +314,7 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 				gu_putc(']', wtr, err);
 				GuString s = gu_string_buf_freeze(sbuf, tmp_pool);
 
-				ret = pgf_lzn_resolve_def(lzn, lindefs, s, pool);
+				ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, s, pool);
 
 				gu_pool_free(tmp_pool);
 				goto done;

@@ -27,7 +27,7 @@ pgf_print_cat(GuMapItor* fn, const void* key, void* value,
 {
 	PgfPrintFn* clo = (PgfPrintFn*) fn;
     PgfCId name = *((PgfCId *) key);
-    PgfCat *cat  = *((PgfCat **) value);
+    PgfAbsCat *cat  = *((PgfAbsCat **) value);
     GuWriter *wtr = clo->wtr;
 
     gu_puts("  cat ", wtr, err);
@@ -49,7 +49,7 @@ pgf_print_absfun(GuMapItor* fn, const void* key, void* value,
 {
 	PgfPrintFn* clo = (PgfPrintFn*) fn;
     PgfCId name = *((PgfCId *) key);
-    PgfFunDecl *fun = *((PgfFunDecl **) value);
+    PgfAbsFun *fun = *((PgfAbsFun **) value);
     GuWriter *wtr = clo->wtr;
     
     gu_puts(gu_seq_is_null(fun->defns) ? "  data " : "  fun ", wtr, err);
@@ -149,8 +149,8 @@ pgf_print_lindefs(GuMapItor* fn, const void* key, void* value,
 		for (size_t i = 0; i < n_lindefs; i++) {
 			if (i > 0) gu_putc(' ', wtr, err);
 			
-			PgfFunId funid = gu_list_index(ccat->lindefs, i);
-			gu_printf(wtr,err,"F%d",funid->funid);
+			PgfCncFun* fun = gu_list_index(ccat->lindefs, i);
+			gu_printf(wtr,err,"F%d",fun->funid);
 		}
 		
 		gu_putc('\n', wtr,err);
