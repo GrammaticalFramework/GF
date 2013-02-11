@@ -29,9 +29,9 @@ pgf_read(const char* fpath,
 	GuIn* in = gu_file_in(infile, tmp_pool);
 
 	PgfReader* rdr = pgf_new_reader(in, pool, tmp_pool, err);
-	PgfPGF* pgf = pgf_read_new(rdr, gu_type(PgfPGF), pool, NULL);
+	PgfPGF* pgf = pgf_read_pgf(rdr);
+
 	gu_pool_free(tmp_pool);
-	gu_return_on_exn(err, NULL);
 	return pgf;
 }
 

@@ -351,7 +351,7 @@ typedef	struct {
 } PgfPattApp;
 
 typedef struct {
-	PgfLiteral* lit;
+	PgfLiteral lit;
 } PgfPattLit;
 
 typedef struct {
