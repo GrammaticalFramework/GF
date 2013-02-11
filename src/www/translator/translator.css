@@ -19,6 +19,7 @@ table.menubar dl, td.options > div > dl, dl.popupmenu {
     color: black;
     border: 1px solid black;
     margin: 0;
+    padding: 5px 0;
     box-shadow: 4px 4px 12px rgba(0,0,0,0.33);
 }
 table.menubar td:hover > dl, :hover > dl.popupmenu { display: block; }
