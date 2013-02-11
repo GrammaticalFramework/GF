@@ -483,7 +483,7 @@ pgf_print_type(PgfType *type, int prec, GuWriter *wtr, GuExn *err)
 
 		gu_string_write(type->cid, wtr, err);
     
-		for (int i = 0; i < type->n_exprs; i++) {
+		for (size_t i = 0; i < type->n_exprs; i++) {
 			gu_puts(" ", wtr, err);
 			pgf_print_expr(type->exprs[i], 4, wtr, err);
 		}
@@ -494,7 +494,7 @@ pgf_print_type(PgfType *type, int prec, GuWriter *wtr, GuExn *err)
 		
 		gu_string_write(type->cid, wtr, err);
     
-		for (int i = 0; i < type->n_exprs; i++) {
+		for (size_t i = 0; i < type->n_exprs; i++) {
 			gu_puts(" ", wtr, err);
 			pgf_print_expr(type->exprs[i], 4, wtr, err);
 		}

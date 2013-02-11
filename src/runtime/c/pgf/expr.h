@@ -68,7 +68,7 @@ extern GU_DECLARE_TYPE(PgfHypos, GuSeq);
 struct PgfType {
 	PgfHypos hypos;
 	PgfCId cid; /// XXX: resolve to PgfCat*?
-	int n_exprs;
+	size_t n_exprs;
 	PgfExpr exprs[];
 };
 
