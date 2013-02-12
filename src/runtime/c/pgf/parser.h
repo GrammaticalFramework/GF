@@ -68,6 +68,9 @@ pgf_parser_next_state(PgfParseState* prev, PgfToken tok,
  */
 
 void
+pgf_parser_set_beam_size(PgfParseState* state, double beam_size);
+
+void
 pgf_parser_add_literal(PgfConcr *concr, PgfCId cat,
                        PgfLiteralCallback* callback);
 
