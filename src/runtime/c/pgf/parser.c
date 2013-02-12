@@ -1522,6 +1522,21 @@ pgf_parsing_proceed(PgfParseState* state) {
 	return true;
 }
 
+static prob_t
+pgf_parsing_default_beam_size(PgfConcr* concr)
+{
+	GuPool* tmp_pool = gu_new_pool();
+	PgfCId flag_name = gu_str_string("beam_size", tmp_pool);
+	PgfLiteral lit = gu_map_get(concr->cflags, &flag_name, PgfLiteral);
+	
+	if (gu_variant_is_null(lit))
+		return 0;
+
+	GuVariantInfo pi = gu_variant_open(lit);
+	gu_assert (pi.tag == PGF_LITERAL_FLT);	
+	return ((PgfLiteralFlt*) pi.data)->val;
+}
+
 static PgfParsing*
 pgf_new_parsing(PgfConcr* concr, GuPool* pool)
 {
@@ -1538,7 +1553,7 @@ pgf_new_parsing(PgfConcr* concr, GuPool* pool)
 	ps->prod_full_count = 0;
 #endif
 	ps->free_item = NULL;
-	ps->beam_size = 0.95;
+	ps->beam_size = pgf_parsing_default_beam_size(concr);
 
 	PgfExprMeta *expr_meta =
 		gu_new_variant(PGF_EXPR_META,

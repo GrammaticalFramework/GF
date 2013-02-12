@@ -277,6 +277,9 @@ FlagDef
   : Posn Ident '=' Ident Posn  {% case parseModuleOptions ["--" ++ showIdent $2 ++ "=" ++ showIdent $4] of
                                     Ok  x   -> return x
                                     Bad msg -> failLoc $1 msg                                           } 
+  | Posn Ident '=' Double Posn {% case parseModuleOptions ["--" ++ showIdent $2 ++ "=" ++ show $4] of
+                                    Ok  x   -> return x
+                                    Bad msg -> failLoc $1 msg                                           } 
 
 ListDataConstr :: { [Ident] }
 ListDataConstr

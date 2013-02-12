@@ -172,6 +172,7 @@ data Flags = Flags {
       optWarnings        :: [Warning],
       optDump            :: [Dump],
       optTagsOnly        :: Bool,
+      optBeamSize        :: Maybe Double,
       optNewComp         :: Bool
     }
   deriving (Show)
@@ -216,6 +217,7 @@ optionsPGF :: Options -> [(String,String)]
 optionsPGF opts = 
          maybe [] (\x -> [("language",x)]) (flag optSpeechLanguage opts)
       ++ maybe [] (\x -> [("startcat",x)]) (flag optStartCat opts)
+      ++ maybe [] (\x -> [("beam_size",show x)]) (flag optBeamSize opts)
 
 -- Option manipulation
 
@@ -272,6 +274,7 @@ defaultFlags = Flags {
       optWarnings        = [],
       optDump            = [],
       optTagsOnly        = False,
+      optBeamSize        = Nothing,
       optNewComp         =
 #ifdef NEW_COMP
                            True
@@ -357,6 +360,7 @@ optDescr =
      Option [] ["stem"] (onOff (toggleOptimize OptStem) True) "Perform stem-suffix analysis (default on).",
      Option [] ["cse"] (onOff (toggleOptimize OptCSE) True) "Perform common sub-expression elimination (default on).",
      Option [] ["cfg"] (ReqArg cfgTransform "TRANS") "Enable or disable specific CFG transformations. TRANS = merge, no-merge, bottomup, no-bottomup, ...",
+     Option [] ["beam_size"] (ReqArg readDouble "SIZE") "Set the beam size for statistical parsing",
      Option [] ["new-comp"] (NoArg (set $ \o -> o{optNewComp = True})) "Use the new experimental compiler.",
      Option [] ["old-comp"] (NoArg (set $ \o -> o{optNewComp = False})) "Use old trusty compiler.",
      dumpOption "source" Source,
@@ -430,6 +434,10 @@ optDescr =
                               Just t  -> set $ setCFGTransform' t b
                               Nothing -> fail $ "Unknown CFG transformation: " ++ x'
                                                 ++ " Known: " ++ show (map fst cfgTransformNames)
+
+       readDouble x = case reads x of
+                        [(d,"")] -> set $ \o -> o { optBeamSize = Just d }
+                        _        -> fail "A floating point number is expected"
 
        dumpOption s d = Option [] ["dump-"++s] (NoArg (set $ \o -> o { optDump = Dump d:optDump o})) ("Dump output of the " ++ s ++ " phase.")
 
