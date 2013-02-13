@@ -188,7 +188,13 @@ redo:;
 			ccat = parg->ccat;
 		} else {
 			int index = gu_choice_next(lzn->ch, gu_buf_length(coercions));
-			gu_choice_advance(lzn->ch);
+			if (index < 0) {
+				gu_choice_reset(lzn->ch, mark);
+				if (!gu_choice_advance(lzn->ch))
+					return gu_null_variant;
+				goto redo;
+			}
+
 			PgfProductionCoerce* pcoerce =
 				gu_buf_get(coercions, PgfProductionCoerce*, index);
 			ccat = pcoerce->coerce;
@@ -360,7 +366,10 @@ pgf_cnc_tree_enum_next(GuEnum* self, void* to, GuPool* pool)
 {
 	PgfLzn* lzn = gu_container(self, PgfLzn, en);
 	PgfCncTree* toc = to;
+
+	GuChoiceMark mark = gu_choice_mark(lzn->ch);
 	*toc = pgf_lzn_resolve(lzn, lzn->expr, NULL, pool);
+	gu_choice_reset(lzn->ch, mark);
 
 #ifdef PGF_LINEARIZER_DEBUG
     GuPool* tmp_pool = gu_new_pool();
@@ -375,6 +384,8 @@ pgf_cnc_tree_enum_next(GuEnum* self, void* to, GuPool* pool)
 	}
     gu_pool_free(tmp_pool);
 #endif
+
+	gu_choice_advance(lzn->ch);
 }
 
 PgfCncTreeEnum*
