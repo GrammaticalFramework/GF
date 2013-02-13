@@ -1,7 +1,7 @@
 -- ResMlt.gf: Language-specific parameter types, morphology, VP formation
 --
--- Maltese Resource Grammar Library
--- John J. Camilleri 2009 -- 2013
+-- Maltese GF Resource Grammar
+-- John J. Camilleri 2011 -- 2013
 -- Angelo Zammit 2012
 -- Licensed under LGPL
 
@@ -68,26 +68,65 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
 
     CardOrd = NCard | NOrd ;
 
+    -- Order of magnitude
     DForm =
-        Unit    -- 0..10
-      | Teen    -- 11-19
-      --| TeenIl  -- 11-19
-      | Ten    -- 20-99
-      | Hund    -- 100..999
-      --| Thou    -- 1000+
+        Unit  -- 0..10
+      | Teen  -- 11..19
+      | Ten   -- 20..99
+      | Hund  -- 100..999
+      | Thou  -- 1000+
       ;
 
-    Num_Number =
-        Num_Sg
-      | Num_Dl
-      | Num_Pl
+    -- Indicate how a corresponding object should be treated
+    --- Overlap between Num Sg and Num1, but leaving as is for now
+    NumForm =
+        Num Number -- Sg | Pl
+      | Num0     -- 0 (l-edba SIEGĦA)
+      | Num1     -- 1, 101... (SIEGĦA, mija u SIEGĦA)
+      | Num2     -- 2 (SAGĦTEJN)
+      | Num3_10  -- 3..10, 102, 103... (tlett SIEGĦAT, għaxar SIEGĦAT, mija u żewġ SIEGĦAT, mija u tlett SIEGĦAT)
+      | Num11_19 -- 11..19, 111... (ħdax-il SIEGĦA, mija u dsatax-il SIEGĦA)
+      | Num20_99 -- 20..99, 120... (għoxrin SIEGĦA, disa' u disgħajn SIEGĦA)
       ;
 
-    Num_Case =
-        NumNominative -- TNEJN, ĦAMSA, TNAX, MIJA
-      | NumAdjectival -- ŻEWĠ, ĦAMES, TNAX-IL, MITT
+    NumCase =
+        NumNom  -- "Type B" in {MDG, 133}, e.g. TNEJN, ĦAMSA, TNAX, MIJA
+      | NumAdj  -- "Type A" in {MDG, 133}, e.g. ŻEWĠ, ĦAMES, TNAX-IL, MITT
       ;
 
+  {- Determiners etc. ----------------------------------------------------- -}
+
+  oper
+    -- [AZ]
+    Determiner : Type = {
+      s : Gender => Str ;
+      n : NumForm ;
+      clitic : Str ;
+      hasNum : Bool ;
+      isPron : Bool ;
+      } ;
+    -- Determiner = {
+    --   s : NPCase => Gender => NumCase => Str ;
+    --   s2 : NPCase => Gender => Str ; -- tieghi (possessive pronoun)
+    --   -- size : Num_Size ; -- One (agreement feature for noun)
+    --   isNum : Bool ; -- True (a numeral is present)
+    --   isDemo : Bool ; -- True (is a demostrative)
+    --   isDefn : Bool ;-- True (is definite)
+    --   } ;
+
+    -- [AZ]
+    Quantifier : Type = {
+      s      : GenNum => Str ;
+      clitic : Str ;
+      isPron : Bool ;
+      isDemo : Bool ; -- Demonstrative (this/that/those/these)
+      } ;
+    -- Quantifier = {
+    --   s : NPCase => Gender => NumForm => Str ;
+    --   s2 : NPCase => Gender => NumForm => Str ;
+    --   isDemo : Bool ; -- Demonstrative (this/that/those/these)
+    --   isDefn : Bool ;
+    --   } ;
 
   {- Nouns ---------------------------------------------------------------- -}
 
@@ -95,6 +134,9 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
     Noun : Type = {
       s : Noun_Number => Str ;
       g : Gender ;
+      hasColl : Bool ; -- has a collective form? e.g. BAQAR
+      hasDual : Bool ; -- has a dual form? e.g. SAGĦTEJN
+      takesPron : Bool ; -- takes enclitic pronon? e.g. MISSIERI
       --      anim : Animacy ; -- is the noun animate? e.g. TABIB
       } ;
 
@@ -127,9 +169,9 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
   {- Pronoun -------------------------------------------------------------- -}
 
   oper
-    -- [AZ]
     Pronoun = {
-      s : PronForm => {c1, c2: Str} ;
+      -- s : PronForm => {c1, c2: Str} ;
+      s : PronForm => Str ; -- cases like omm-i / hi-ja are handled elsewhere
       a : Agr ;
       } ;
 
@@ -447,12 +489,17 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
 
     {- ~~~ Conversions ~~~ -}
 
-    numnum2nounnum : Num_Number -> Noun_Number = \n ->
+    numform2nounnum : NumForm -> Noun_Number = \n ->
       case n of {
-	Num_Sg => Singular Singulative ;
-	_ => Plural Determinate
+        Num Sg   => Singular Singulative ;
+        Num Pl   => Plural Indeterminate ;
+        Num0     => Singular Singulative ;
+        Num1     => Singular Singulative ;
+        Num2     => Dual ;
+        Num3_10  => Singular Collective ;
+        Num11_19 => Singular Singulative ;
+        Num20_99 => Plural Indeterminate
       } ;
-
 
     {- ~~~ Useful helper functions ~~~ -}
 
@@ -588,24 +635,11 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
         _                   => []          -- ?
       } ;
 
-    artIndef : Str =
-      pre {
-        "lill-" ;
-        "lil" / strs { "a" ; "e" ; "i" ; "o" ; "u" ; "h" ; "għ" } ;
-        "liċ-" ++ BIND / strs { "ċ" } ;
-        "lid-" ++ BIND / strs { "d" } ;
-        "lin-" ++ BIND / strs { "n" } ;
-        "lir-" ++ BIND / strs { "r" } ;
-        "lis-" ++ BIND / strs { "s" } ;
-        "lit-" ++ BIND / strs { "t" } ;
-        "lix-" ++ BIND / strs { "x" } ;
-        "liż-" ++ BIND / strs { "ż" } ;
-        "liz-" ++ BIND / strs { "z" }
-      } ;
+    artIndef : Str = "" ;
 
     artDef : Str =
       pre {
-        "il-" ;
+        "il- &+" ; --- ugly hack! but won't let me use ++
         "l-" ++ BIND / strs { "a" ; "e" ; "i" ; "o" ; "u" ; "h" ; "għ" } ;
         "iċ-" ++ BIND / strs { "ċ" } ;
         "id-" ++ BIND / strs { "d" } ;
@@ -637,6 +671,9 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
         Plural Indeterminate => ind
         } ;
       g = gen ;
+      takesPron = False ;
+      hasDual = notB (isNil dual) ;
+      hasColl = notB (isNil coll) ;
       -- anim = Inanimate ;
       } ;
 

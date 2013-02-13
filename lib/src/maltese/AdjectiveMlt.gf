@@ -1,7 +1,7 @@
 -- AdjectiveMlt.gf: adjectives
 --
--- Maltese Resource Grammar Library
--- John J. Camilleri, 2012
+-- Maltese GF Resource Grammar
+-- John J. Camilleri 2011 -- 2013
 -- Licensed under LGPL
 
 concrete AdjectiveMlt of Adjective = CatMlt ** open ResMlt, Prelude in {

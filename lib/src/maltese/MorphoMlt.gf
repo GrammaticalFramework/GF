@@ -1,7 +1,7 @@
 -- MorphoMlt.gf: scary morphology operations which need their own elbow space
 --
--- Maltese Resource Grammar Library
--- John J. Camilleri 2009 -- 2013
+-- Maltese GF Resource Grammar
+-- John J. Camilleri 2011 -- 2013
 -- Angelo Zammit 2012
 -- Licensed under LGPL
 
@@ -12,6 +12,17 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     coding=utf8 ;
 
 
+  {- Determiners ---------------------------------------------------------- -}
+
+  oper
+    mkDeterminer : Number -> Str -> Determiner = \n,s -> {
+        s = \\gen => s ;
+        n = Num n ; -- Number -> NumForm
+        clitic = [] ;
+        hasNum = False ;
+        isPron = False ;
+      } ;
+
   {- Pronoun -------------------------------------------------------------- -}
 
   oper
@@ -19,14 +30,14 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     mkPron = overload {
       
       -- jiena, inti, huwa
-      mkPron : (_,_,_,_,_,_ : Str) -> Number -> Person -> Gender -> Pronoun =
-        \jien, _i, _ja, _ek, _k, _li, num, pers, gen -> {
+      mkPron : (_,_,_,_ : Str) -> Number -> Person -> Gender -> Pronoun =
+        \jien, _i, _ni, _li, num, pers, gen -> {
           s = table {
-            Personal     => {c1 = jien ; c2 = []} ;
-            Possessive   => {c1 = "tiegħ" + _i ; c2 = []} ;
-            Suffixed Acc => {c1 = _ek ; c2 = _k} ; -- rajtek, rak
-            Suffixed Dat => {c1 = _li ; c2 = []} ; -- rajtli
-            Suffixed Gen => {c1 = _i ; c2 = _ja} -- qalbi, idejja
+            Personal     => jien ;         -- jien
+            Possessive   => "tiegħ" + _i ; -- tiegħi
+            Suffixed Acc => _ni ;          -- rajtni
+            Suffixed Dat => _li ;          -- rajtli
+            Suffixed Gen => _i             -- qalbi, idejja
             } ;
           a = mkAgr gen num pers ;
         } ;
@@ -35,11 +46,11 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       mkPron : (_,_ : Str) -> Number -> Person -> Gender -> Pronoun =
         \hi, _ha, num, pers, gen -> {
           s = table {
-            Personal     => {c1 = hi ; c2 = []} ;
-            Possessive   => {c1 = "tagħ" + _ha ; c2 = []} ;
-            Suffixed Acc => {c1 = _ha ; c2 = []} ;
-            Suffixed Dat => {c1 = "l"+_ha ; c2 = []} ;
-            Suffixed Gen => {c1 = _ha ; c2 = []}
+            Personal     => hi ;           -- hi
+            Possessive   => "tagħ" + _ha ; -- tagħha
+            Suffixed Acc => _ha ;          -- rajtha
+            Suffixed Dat => "l"+_ha ;      -- rajtilha
+            Suffixed Gen => _ha            -- qalbha
             } ;
           a = mkAgr gen num pers ;
         } ;

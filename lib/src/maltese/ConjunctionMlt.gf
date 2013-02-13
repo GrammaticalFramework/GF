@@ -1,10 +1,11 @@
 -- ConjunctionMlt.gf: co-ordination
 --
--- Maltese Resource Grammar Library
--- John J. Camilleri, 2012
+-- Maltese GF Resource Grammar
+-- John J. Camilleri 2011 -- 2013
 -- Licensed under LGPL
 
-concrete ConjunctionMlt of Conjunction = CatMlt ** open ResMlt, Coordination, Prelude in {
+concrete ConjunctionMlt of Conjunction =
+  CatMlt ** open ResMlt, Coordination, Prelude in {
 
 -- Adv
 -- AP
