@@ -1,13 +1,9 @@
 -- CatMlt.gf: the common type system
 --
--- Maltese Resource Grammar Library
--- John J. Camilleri, 2012
+-- Maltese GF Resource Grammar
+-- John J. Camilleri 2011 -- 2013
+-- Angelo Zammit 2012
 -- Licensed under LGPL
-
-{-
-All code in comments was copied from CatEng.gf and may need to be corrected for Maltese.
-The same overall structure should be maintained.
--}
 
 concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
 
@@ -56,7 +52,6 @@ concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
 
 -- Adjective
 
---    AP = {s : Agr => Str ; isPre : Bool} ; 
     AP = {s : GenNum => Str ; isPre : Bool} ;
 
 -- Noun
@@ -64,28 +59,44 @@ concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
     CN = Noun ;
     NP = NounPhrase ;
     Pron = Pronoun ;
-    -- Pron = {s : NPCase => Str ; sp : Case => Str ; a : Agr} ;
-    Det = {s : Str ; n : Num_Number ; hasNum : Bool} ;
-    -- Det = {s : Str ; sp : NPCase => Str ; n : Number ; hasNum : Bool} ;
+
+    Det = Determiner ;
     -- Predet = {s : Str} ;
-    -- Ord = { s : Case => Str } ;
-    Num  = {s : Num_Case => Str ; n : Num_Number ; hasCard : Bool} ;
-    -- Card = {s : Case => Str ; n : Number} ;
-    -- Quant = {s : Bool => Number => Str ; sp : Bool => Number => NPCase => Str} ;
-    Quant = {s : Bool => Num_Number => Str} ;
+    Quant = Quantifier ;
 
--- Numeral
+    -- [AZ]
+    Num = {
+      s : NumCase => Str ;
+      n : NumForm ;
+      hasCard : Bool ;
+      -- isNum : Bool ;
+      } ;
 
-    -- Cardinal or ordinal in WORDS (not digits) [JJC]
+    -- [AZ]
+    Ord = {
+      s : NumCase => Str ;
+    --   s : NPCase => GenNum => Str ;
+    --   hasBSuperl : Bool
+      } ;
+
+    -- [AZ]
+    Card = {
+      s : NumCase => Str ;
+      n : NumForm ;
+      } ;
+
+-- numeral
+
+    -- Cardinal or ordinal in WORDS (not digits)
     Numeral = {
-      s : CardOrd => Num_Case => Str ;
-      n : Num_Number
+      s : CardOrd => NumCase => Str ;
+      n : NumForm -- number to be "treated as", e.g. 103 has n=Num3_10
     } ;
 
-    -- Cardinal or ordinal in DIGITS (not words) [JJC]
+    -- Cardinal or ordinal in DIGITS (not words)
     Digits = {
-      s : Str ;      -- No need for CardOrd, i.e. no 1st, 2nd etc in Maltese
-      n : Num_Number ;
+      s : NumCase => Str ;      -- No need for CardOrd, i.e. no 1st, 2nd etc in Maltese
+      n : NumForm ;
       tail : DTail
     };
 

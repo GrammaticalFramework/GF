@@ -1,7 +1,8 @@
 -- NounMlt.gf: noun phrases and nouns
 --
--- Maltese Resource Grammar Library
--- John J. Camilleri, 2012
+-- Maltese GF Resource Grammar
+-- John J. Camilleri 2011 -- 2013
+-- Angelo Zammit 2012
 -- Licensed under LGPL
 
 concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
@@ -9,30 +10,89 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
   flags
     optimize=noexpand ;
 
+  oper
+    -- Used in DetCN below
+    chooseNounNumForm : Det -> CN -> Str = \det,n ->
+      let
+        det' = det.s ! n.g ;
+        sing = n.s ! Singular Singulative ;
+        coll = if_then_Str n.hasColl
+          (n.s ! Singular Collective) -- BAQAR
+          (n.s ! Plural Determinate)  -- SNIEN
+          ;
+        dual = n.s ! Dual ;
+        pdet = n.s ! Plural Determinate ;
+        pind = n.s ! Plural Indeterminate ;
+      in case det.n of {
+        Num Sg   => det' ++ sing ; -- BAQRA
+        Num Pl   => det' ++ coll ; -- BAQAR (coll) / ħafna SNIEN (pdet)
+        Num0     => det' ++ sing ; -- L-EBDA BAQRA
+        Num1     => det' ++ sing ; -- BAQRA
+        Num2     => if_then_Str n.hasDual 
+          dual -- BAQARTEJN
+          (det' ++ pdet) -- ŻEWĠ IRĠIEL
+          ;
+        Num3_10  => det' ++ coll ; -- TLETT BAQAR
+        Num11_19 => det' ++ sing ; -- ĦDAX-IL BAQRA
+        Num20_99 => det' ++ sing -- GĦOXRIN BAQRA
+      } ;
+
   lin
     -- Det -> CN -> NP
     DetCN det cn = {
-      s = \\c => det.s ++ cn.s ! numnum2nounnum det.n ; 
-      a = case (numnum2nounnum det.n) of {
+      s = \\c => case <det.isPron, cn.takesPron> of {
+        <True,True>  => glue (cn.s ! numform2nounnum det.n) det.clitic ;
+        <True,_>     => artDef ++ cn.s ! numform2nounnum det.n ++ det.s ! cn.g ;
+        _            => chooseNounNumForm det cn
+        } ;
+      a = case (numform2nounnum det.n) of {
 	Singular _ => mkAgr cn.g Sg P3 ;
-	_ => mkAgr cn.g Pl P3
+	_          => mkAgr cn.g Pl P3
       } ;
       isPron = False ;
     } ;
 
     -- Quant -> Num -> Det
     DetQuant quant num = {
-      s  = quant.s ! num.hasCard ! num.n ++ num.s ! NumNominative;
-      n  = num.n ;
-      hasNum = num.hasCard
+      s = \\gen =>
+        let gennum = case num.n of { Num Sg => GSg gen ; _ => GPl }
+        in case quant.isDemo of {
+          True  => quant.s ! gennum ++ artDef ++ num.s ! NumAdj ;
+          False => quant.s ! gennum ++ num.s ! NumAdj
+        } ;
+      n = num.n ;
+      hasNum = num.hasCard ;
+      isPron = quant.isPron ;
+      clitic = quant.clitic ;
     } ;
+
+    -- Quant -> Num -> Ord -> Det
+    --- Almost an exact copy of DetQuant, consider factoring together
+    DetQuantOrd quant num ord = {
+      s = \\gen => 
+        let gennum = case num.n of { Num Sg => GSg gen ; _ => GPl }
+        in case quant.isDemo of {
+          True  => quant.s ! gennum ++ artDef ++ num.s ! NumAdj ++ ord.s ! NumAdj ;
+          False => quant.s ! gennum ++ num.s ! NumAdj ++ ord.s ! NumAdj
+        } ;
+      n = num.n ;
+      hasNum = True ;
+      isPron = quant.isPron ;
+      clitic = quant.clitic ;
+      } ;
 
     -- Quant
     DefArt = {
-      s  = \\hasCard,n => artDef ;
+      s  = \\_ => artDef ;
+      clitic = [] ;
+      isPron = False ;
+      isDemo = False ;
     } ;
     IndefArt = {
-      s  = \\hasCard,n => artIndef ;
+      s  = \\_ => artIndef ;
+      clitic = [] ;
+      isPron = False ;
+      isDemo = False ;
     } ;
 
     -- PN -> NP
@@ -44,18 +104,40 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
 
     -- Pron -> NP
     UsePron p = {
-      -- s = \\npcase => (p.s ! Personal).c1 ;
       s = table {
-        Nom => (p.s ! Personal).c1 ;
-        CPrep => (p.s ! Suffixed Acc).c1
+        Nom => p.s ! Personal ;
+        CPrep => p.s ! Suffixed Acc
         } ;
       a = p.a ;
       isPron = True ;
       } ;
 
+    -- Pron -> Quant
+    PossPron p = {
+      s = \\_ => p.s ! Possessive ;
+      clitic = p.s ! Suffixed Gen ;
+      isPron = True ;
+      isDemo = False ;
+      } ;
+
     -- Num
-    NumSg = {s = \\c => []; n = Num_Sg ; hasCard = False} ;
-    NumPl = {s = \\c => []; n = Num_Pl ; hasCard = False} ;
+    NumSg = {s = \\c => []; n = Num Sg ; hasCard = False} ;
+    NumPl = {s = \\c => []; n = Num Pl ; hasCard = False} ;
+
+    -- Card -> Num
+    NumCard n = n ** {hasCard = True} ;
+ 
+    -- Digits -> Card
+    NumDigits d = {s = d.s ; n = d.n} ;
+
+    -- Digits -> Ord
+    OrdDigits d = {s = d.s} ;
+
+    -- Numeral -> Card
+    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n} ;
+
+    -- Numeral -> Ord
+    OrdNumeral numeral = {s = numeral.s ! NOrd} ;
 
     -- N -> CN
     UseN n = n ;

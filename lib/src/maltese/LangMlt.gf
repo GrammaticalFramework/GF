@@ -1,7 +1,7 @@
 -- LangMlt.gf: common syntax and lexicon
 --
--- Maltese Resource Grammar Library
--- John J. Camilleri, 2012
+-- Maltese GF Resource Grammar
+-- John J. Camilleri 2011 -- 2013
 -- Licensed under LGPL
 
 --# -path=.:../abstract:../common:../prelude
@@ -11,6 +11,10 @@ concrete LangMlt of Lang =
   LexiconMlt
   ** {
 
-  flags startcat = Phr ; unlexer = text ; lexer = text ; coding = utf8 ;
+  flags
+    coding = utf8 ;
+    startcat = Phr ;
+    unlexer = text ;
+    lexer = text ;
 
 }

@@ -1,7 +1,7 @@
 -- StructuralMlt.gf: lexicon of structural words
 --
--- Maltese Resource Grammar Library
--- John J. Camilleri 2009 -- 2013
+-- Maltese GF Resource Grammar
+-- John J. Camilleri 2011 -- 2013
 -- Licensed under LGPL
 
 concrete StructuralMlt of Structural = CatMlt **
@@ -15,21 +15,42 @@ concrete StructuralMlt of Structural = CatMlt **
     
     {- Pronoun -------------------------------------------------------------- -}
     
-    he_Pron = mkPron "hu" "u" "h" "u" "h" "lu" singular P3 masculine ; --- also HUWA
-    i_Pron = mkPron "jien" "i" "ja" "ni" [] "li" singular P1 masculine ; --- also JIENA
-    -- it_Pron  = mkPron "it" "it" "its" "its" singular P3 nonhuman ;
-    she_Pron = mkPron "hi" "ha" singular P3 feminine ; --- also HIJA
-    they_Pron = mkPron "huma" "hom" plural P3 masculine ;
-    we_Pron = mkPron "aħna" "na" plural P1 masculine ;
-    youSg_Pron = mkPron "int" "ek" "ok" "ek" "k" "lek" singular P2 masculine ; -- also INTI
-    youPl_Pron = mkPron "intom" "kom" plural P2 masculine ;
+    i_Pron      = mkPron "jien"  "i"   "ni" "li"  singular P1 masculine ; --- also JIENA
+    youSg_Pron  = mkPron "int"   "ek"  "ek" "lek" singular P2 masculine ; --- also INTI
+    he_Pron     = mkPron "hu"    "u"   "u"  "lu"  singular P3 masculine ; --- also HUWA
+    she_Pron    = mkPron "hi"    "ha"             singular P3 feminine  ; --- also HIJA
+    we_Pron     = mkPron "aħna"  "na"             plural   P1 masculine ;
+    youPl_Pron  = mkPron "intom" "kom"            plural   P2 masculine ;
+    they_Pron   = mkPron "huma"  "hom"            plural   P3 masculine ;
     youPol_Pron = youSg_Pron ;
+    -- it_Pron  = mkPron "it" "it" "its" "its" singular P3 nonhuman ;
+
+    {- Determiner ----------------------------------------------------------- -}
+
+    all_Predet = ss "kollha" ;
+    -- every_Det = mkDeterminerSpec singular "every" "everyone" False ;
+    few_Det = mkDeterminer plural "ftit" ;
+    many_Det = mkDeterminer plural "ħafna" ; -- bosta
+    -- most_Predet = ss "most" ;
+    -- much_Det = mkDeterminer singular "much" ;
+    only_Predet = ss "biss" ;
+    someSg_Det = mkDeterminer singular "xi" ;
+    somePl_Det = mkDeterminer plural "xi" ;
+    -- not_predet = {s = "not" ; lock_Predet = <>} ;
+    
+    {- Quantifier ----------------------------------------------------------- -}
+
+    that_Quant = mkQuant "dak" "dik" "dawk" True ;
+    this_Quant = mkQuant "dan" "din" "dawn" True ;
+    no_Quant = let l_ebda = artDef ++ "ebda" in
+      mkQuant l_ebda l_ebda l_ebda False ;
+
+    -- which_IQuant = {s = \\_ => "which"} ;
 
     {- Others --------------------------------------------------------------- -}
 
     -- above_Prep = mkPrep "above" ;
     -- after_Prep = mkPrep "after" ;
-    -- all_Predet = ss "all" ;
     -- almost_AdA = mkAdA "almost" ;
     -- almost_AdN = mkAdN "almost" ;
     -- although_Subj = ss "although" ;
@@ -58,10 +79,8 @@ concrete StructuralMlt of Structural = CatMlt **
     -- during_Prep = mkPrep "during" ;
     -- either7or_DConj = mkConj "either" "or" singular ;
     -- everybody_NP = regNP "everybody" singular ;
-    -- every_Det = mkDeterminerSpec singular "every" "everyone" False ;
     -- everything_NP = regNP "everything" singular ;
     -- everywhere_Adv = mkAdv "everywhere" ;
-    -- few_Det = mkDeterminer plural "few" ;
     -- for_Prep = mkPrep "for" ;
     -- from_Prep = mkPrep "from" ;
     -- here_Adv = mkAdv "here" ;
@@ -74,10 +93,8 @@ concrete StructuralMlt of Structural = CatMlt **
     -- in8front_Prep = mkPrep ["in front of"] ;
     -- in_Prep = mkPrep "in" ;
     -- less_CAdv = C.mkCAdv "less" "than" ;
-    -- many_Det = mkDeterminer plural "many" ;
     -- more_CAdv = C.mkCAdv "more" "than" ;
     -- most_Predet = ss "most" ;
-    -- much_Det = mkDeterminer singular "much" ;
     -- must_VV = {
     --   s = table {
     --     VVF VInf => ["have to"] ;
@@ -92,7 +109,6 @@ concrete StructuralMlt of Structural = CatMlt **
     --   } ;
     -- no_Utt = ss "no" ;
     -- on_Prep = mkPrep "on" ;
-    -- only_Predet = ss "only" ;
     -- or_Conj = mkConj "or" singular ;
     -- otherwise_PConj = ss "otherwise" ;
     -- part_Prep = mkPrep "of" ;
@@ -101,16 +117,12 @@ concrete StructuralMlt of Structural = CatMlt **
     -- quite_Adv = mkAdv "quite" ;
     -- so_AdA = mkAdA "so" ;
     -- somebody_NP = regNP "somebody" singular ;
-    -- someSg_Det = mkDeterminer singular "some" ;
-    -- somePl_Det = mkDeterminer plural "some" ;
     -- something_NP = regNP "something" singular ;
     -- somewhere_Adv = mkAdv "somewhere" ;
-    -- that_Quant = mkQuant "that" "those" ;
     -- there_Adv = mkAdv "there" ;
     -- there7to_Adv = mkAdv "there" ;
     -- there7from_Adv = mkAdv ["from there"] ;
     -- therefore_PConj = ss "therefore" ;
-    -- this_Quant = mkQuant "this" "these" ;
     -- through_Prep = mkPrep "through" ;
     -- too_AdA = mkAdA "too" ;
     -- to_Prep = mkPrep "to" ;
@@ -122,7 +134,6 @@ concrete StructuralMlt of Structural = CatMlt **
     -- when_IAdv = ss "when" ;
     -- when_Subj = ss "when" ;
     -- where_IAdv = ss "where" ;
-    -- which_IQuant = {s = \\_ => "which"} ;
     -- whoPl_IP = mkIP "who" "whom" "whose" plural ;
     -- whoSg_IP = mkIP "who" "whom" "whose" singular ;
     -- why_IAdv = ss "why" ;
@@ -130,8 +141,6 @@ concrete StructuralMlt of Structural = CatMlt **
     -- with_Prep = mkPrep "with" ;
     -- yes_Utt = ss "yes" ;
     
-    -- not_predet = {s = "not" ; lock_Predet = <>} ;
-    -- no_Quant = mkQuant "no" "no" "none" "none" ;
     -- if_then_Conj = mkConj "if" "then" singular ;
     -- nobody_NP = regNP "nobody" singular ;
     -- nothing_NP = regNP "nothing" singular ;

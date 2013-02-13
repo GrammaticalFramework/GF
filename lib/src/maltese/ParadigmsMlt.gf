@@ -1,7 +1,8 @@
 -- ParadigmsMlt.gf: morphological paradigms
 --
--- Maltese Resource Grammar Library
--- John J. Camilleri, 2012
+-- Maltese GF Resource Grammar
+-- John J. Camilleri 2011 -- 2013
+-- Angelo Zammit 2012
 -- Licensed under LGPL
 
 --# -path=.:../abstract:../../prelude:../common
@@ -110,7 +111,6 @@ resource ParadigmsMlt = open
       mkN : Str -> Str -> Gender -> N = \sing,plural,gender ->
           mk5N sing [] [] plural [] gender ;
 
-
       -- Takes all 5 forms, inferring gender
       -- Params:
         -- Singulative, eg KOXXA
@@ -184,12 +184,36 @@ resource ParadigmsMlt = open
 
     -- Build a noun using 5 forms, and a gender
     mk5N : (_,_,_,_,_ : Str) -> Gender -> N ;
-    mk5N = \sing,coll,dual,det,ind,gen -> lin N (mkNoun sing coll dual det ind gen) ;
+    mk5N = \sing,coll,dual,det,ind,gen -> lin N (
+      mkNoun sing coll dual det ind gen
+      ) ;
 
-    -- Make a proper noun
+    -- Proper noun
     mkPN : Str -> Gender -> Number -> ProperNoun = \name,g,n -> {
       s = name ;
       a = mkAgr g n P3 ;
+      } ;
+
+    mkN2 = overload {
+      mkN2 : N -> Prep -> N2 = prepN2 ;
+      mkN2 : N -> Str -> N2 = \n,s -> prepN2 n (mkPrep s);
+--      mkN2 : Str -> Str -> N2 = \n,s -> prepN2 (regN n) (mkPrep s);
+      mkN2 : N -> N2         = \n -> prepN2 n (mkPrep "ta'") ;
+--      mkN2 : Str -> N2       = \s -> prepN2 (regN s) (mkPrep "ta'")
+    } ;
+
+    prepN2 : N -> Prep -> N2 ;
+    prepN2 = \n,p -> lin N2 (n ** {c2 = p.s}) ;
+
+    -- Mark a noun as taking possessive enclitic pronouns
+    possN : N -> N ;
+    -- possN = \n -> n ** { takesPron = True } ;
+    possN = \n -> lin N {
+      s = n.s ;
+      g = n.g ;
+      hasColl = n.hasColl ;
+      hasDual = n.hasDual ;
+      takesPron = True ;
       } ;
 
 {-
@@ -254,21 +278,12 @@ resource ParadigmsMlt = open
 
       });
 
-    mkN2 = overload {
-      mkN2 : N -> Prep -> N2 = prepN2 ;
-      mkN2 : N -> Str -> N2 = \n,s -> prepN2 n (mkPrep s);
---      mkN2 : Str -> Str -> N2 = \n,s -> prepN2 (regN n) (mkPrep s);
-      mkN2 : N -> N2         = \n -> prepN2 n (mkPrep "ta'") ;
---      mkN2 : Str -> N2       = \s -> prepN2 (regN s) (mkPrep "ta'")
-    } ;
-
-    prepN2 : N -> Prep -> N2 ;
-    prepN2 = \n,p -> lin N2 (n ** {c2 = p.s}) ;
+    {- Prepositions ------------------------------------------------------- -}
 
     mkPrep : Str -> Prep ; -- e.g. "in front of"
-    noPrep : Prep ;  -- no preposition
-
     mkPrep p = lin Prep (ss p) ;
+
+    noPrep : Prep ;  -- no preposition
     noPrep = mkPrep [] ;
 
 
@@ -1043,4 +1058,18 @@ resource ParadigmsMlt = open
       _ => (init fem) + "i" -- BRAVA
       } ;
 
+
+    {- Quantitifer paradigms ---------------------------------------------- -}
+
+    mkQuant : (dak, dik, dawk : Str) -> Bool -> Quant = \dak,dik,dawk,isdemo -> lin Quant {
+      s = table {
+        GSg Masc => dak ;
+        GSg Fem  => dik ;
+        GPl      => dawk
+        } ;
+      clitic = [] ;
+      isPron = False ;
+      isDemo = isdemo ;
+      } ;
+        
 }
