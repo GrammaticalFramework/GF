@@ -578,8 +578,8 @@ pgf_read_printnames(PgfReader* rdr)
 {
 	GuMapType* map_type = (GuMapType*)
 		GU_TYPE_LIT(GuStringMap, _,
-			 		gu_ptr_type(GuString),
-					&gu_null_struct);
+			 		gu_type(GuString),
+					&gu_empty_string);
 	PgfCIdMap* printnames = gu_map_type_make(map_type, rdr->opool);
 
 	size_t len = pgf_read_len(rdr);
