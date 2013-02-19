@@ -1976,10 +1976,9 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
 {
 	PgfCncCat* cnccat =
 		gu_map_get(concr->cnccats, &cat, PgfCncCat*);
-	if (!cnccat) {
-		// error ...
-		gu_impossible();
-	}
+	if (!cnccat)
+		return NULL;
+
 	gu_assert(lin_idx < cnccat->n_lins);
 
 	PgfParsing* ps =
