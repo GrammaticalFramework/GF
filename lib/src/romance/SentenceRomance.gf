@@ -16,13 +16,13 @@ incomplete concrete SentenceRomance of Sentence =
 
     SlashVP np v2 = 
       -- agreement decided afterwards: la fille qu'il a trouvée
-      {s = \\_ => 
+      {s = \\a => 
           let 
-            vp = v2
-----e            vp = case <v2.c2.c, v2.c2.isDir> of {
-----              <Acc,True> => insertAgr ag v2 ;
-----              _ => v2
-----e              }
+-----            vp = v2
+            vp = case <v2.c2.c, v2.c2.isDir> of {
+              <Acc,True> => insertAgr a v2 ;
+             _ => v2
+              }
           in (mkClausePol np.isNeg (np.s ! Nom).comp False      np.isPol np.a vp).s ;
 -----     in (mkClausePol np.isNeg (np.s ! Nom).comp np.hasClit np.isPol np.a vp).s ;
        c2 = v2.c2
