@@ -94,7 +94,12 @@ oper
         let 
           pe    = case b of {True => P3 ; _ => p} ;
           agr   = {g = g ; n = n ; p = pe} ;
-          clpr  =  <vp.clit1 ++ vp.clit2, [],False> ;  ---- TODO: True if clit
+          refl  = case vp.s.vtyp of {
+            VRefl => <reflPron n pe Acc,True> ;
+            _ => <[],False> 
+            } ;
+
+          clpr  =  <vp.clit1 ++ vp.clit2, [],vp.clit3.hasClit> ;  ---- TODO: True if clit
 ----          clpr  = <[],[],False> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
 ----e          verb  = case <aag.n, pol,pe> of {
 ----e            <Sg,Neg,P2> => (vp.s ! VPInfinit Simul clpr.p3).inf ! aag ;
@@ -104,7 +109,8 @@ oper
           neg   = vp.neg ! pol ;
           compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
         in
-        neg.p1 ++ verb ++ bindIf clpr.p3 ++ clpr.p1 ++ compl ;
+        neg.p1 ++ verb ++ bindIf refl.p2 ++ refl.p1 ++ bindIf clpr.p3 ++ clpr.p1 ++ compl
+         ;
 
     negation : RPolarity => (Str * Str) = table {
       RPos => <[],[]> ;

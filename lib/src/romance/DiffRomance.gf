@@ -110,11 +110,19 @@ oper
     neg    : RPolarity => (Str * Str) ; -- ne-pas
     clit1  : Str ;                      -- le/se
     clit2  : Str ;                      -- lui
-    clit3  : Str ;                      -- y en
+    clit3  : Clit3 ;                    -- y en
     isNeg  : Bool ;                     -- includes a negative element, such as "rien"
     comp   : Agr => Str ;               -- content(e) ; à ma mère ; hier
     ext    : RPolarity => Str ;         -- que je dors / que je dorme
     } ;
+
+  Clit3 : Type = {s : Str ; imp : Str ; hasClit : Bool} ;   --- imp encodes special imperative clitic, hasClit whether there is a clitic
+
+  addClit3 : Bool -> Str -> Str -> Clit3 -> Clit3 = \hasClit,s,imp,clit -> {
+    s = clit.s ++ s ; imp = clit.imp ++ imp ; hasClit = hasClit  ---- in Fre, imp is "moi" for "me"
+    } ;
+
+  imperClit : Agr -> Str -> Str -> Str = \a,c1,c2 -> c1 ++ c2 ;
 
 -- The pronoun to be repeated in $VPS$ coordination, and also in Fre inverted questions.
 -- Empty in other languages than Fre (as a kind of prodrop).

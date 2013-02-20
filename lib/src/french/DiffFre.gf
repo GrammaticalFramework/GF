@@ -1,6 +1,6 @@
 --# -path=.:../romance:../abstract:../common:prelude
 
-instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
+instance DiffFre of DiffRomance - [imperClit] = open CommonRomance, PhonoFre, Prelude in {
 
   flags optimize=noexpand ; -- coding=utf8 ;
 --  flags optimize=all ;
@@ -122,15 +122,30 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
           num   = if_then_else Number b Pl n ;
           verb  = vp.s.s ! vImper num p ;
           neg   = vp.neg ! pol ;
-          clpr  = <vp.clit1 ++ vp.clit2, False> ;  ---- TODO: True if clit
+          refl  = case vp.s.vtyp of {
+            VRefl => case <n,b> of {
+              <Sg,False> => <"toi",elision "t",True> ;
+              _ => <"vous","vous",True>
+              } ;
+            _ => <[],[],False> 
+            } ;
+          clpr  = <vp.clit1 ++ vp.clit2, vp.clit3.hasClit> ;
           compl = vp.comp ! agr ++ vp.ext ! pol
         in
         case pol of {
-          RPos => verb ++ if_then_Str clpr.p2 "-" [] ++ clpr.p1 ++ compl ;
-          RNeg _ => neg.p1 ++ clpr.p1 ++ verb ++ neg.p2 ++ compl
+          RPos => verb ++ if_then_Str refl.p3 bindHyphen [] ++ refl.p1 ++ 
+                          if_then_Str clpr.p2 bindHyphen [] ++ vp.clit3.imp ++ 
+                          compl ;
+          RNeg _ => neg.p1 ++ refl.p2 ++ clpr.p1 ++ verb ++ neg.p2 ++ compl
           } ;
-          ---- TODO: vois-le vs. vois-moi vs. ne me vois pas
 
+    imperClit : Agr -> Str -> Str -> Str = \a,c1,c2 -> case a of {
+      {n = Sg ; p = P1 ; g = _} => "moi" ;
+      {n = Sg ; p = P2 ; g = _} => "toi" ;
+      _ => c1 ++ c2
+      } ;
+
+    bindHyphen : Str = BIND ++ "-" ++ BIND ;
 
     negation : RPolarity => (Str * Str) = table {
       RPos => <[],[]> ;

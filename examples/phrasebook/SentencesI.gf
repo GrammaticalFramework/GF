@@ -268,6 +268,8 @@ oper
     VSleep = mkVP sleep_V ;
     VSwim = mkVP swim_V ; 
     VWalk = mkVP walk_V ;
+    VSit = mkVP sit_V ;
+    VStop = mkVP stop_V ;
     VDrink = mkVP <lin V drink_V2 : V> ; 
     VEat = mkVP <lin V eat_V2 : V> ; 
     VRead = mkVP <lin V read_V2 : V> ; 
