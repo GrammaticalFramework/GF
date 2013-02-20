@@ -33,7 +33,7 @@ lin
   asseoir_V2 = v_besch49 "asseoir" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complAcc} ;
   astreindre_V2 = v_besch57 "astreindre" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complAcc} ;
   atteindre_V2 = v_besch57 "atteindre" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complAcc} ;
-  attendre_V2 = v_besch53 "attendre" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complDat} ;
+  attendre_V2 = v_besch53 "attendre" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complAcc} ; --- Dat?
   avoir_V2 = v_besch1 "avoir" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complAcc} ;
   battre_V2 = v_besch55 "battre" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complAcc} ;
   boire_V2 = v_besch69 "boire" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complAcc} ;

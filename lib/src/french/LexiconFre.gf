@@ -200,7 +200,7 @@ lin
   understand_V2 = comprendre_V2 ;
   university_N = regGenN "université" feminine ;
   village_N = regGenN "village" masculine ;
-  wait_V2 = attendre_V2 ; ---- dative?
+  wait_V2 = attendre_V2 ; 
   walk_V = regV "marcher" ;
   warm_A = regA "chaud" ;
   war_N = regGenN "guerre" masculine ;

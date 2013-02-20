@@ -134,7 +134,7 @@ oper
     <Sg,P2> => VImper SgP2 ; 
     <Pl,P1> => VImper PlP1 ; 
     <Pl,P2> => VImper PlP2 ;
-    _       => VInfin False
+    _       => VFin (VPres Conjunct) n p
     } ; 
 
 {-
