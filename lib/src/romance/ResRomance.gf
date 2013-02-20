@@ -225,7 +225,8 @@ oper
           compl = case isPol of {
             True => vp.comp ! {g = gen ; n = Sg ; p = per} ;
             _ => vp.comp ! agr
-            } ++ vp.ext ! pol ;
+            } ;
+          ext = vp.ext ! pol ;
 
           vtyp  = vp.s.vtyp ;
           refl  = case vtyp of {
@@ -258,11 +259,11 @@ oper
         in
         case d of {
           DDir => 
-            subj ++ neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ;
+            subj ++ neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ ext ;
           DInv => 
-            neg.p1 ++ clit ++ fin ++ preOrPost hasClit subj (neg.p2 ++ inf)
+            neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ subj ++ ext
+----            neg.p1 ++ clit ++ fin ++ preOrPost hasClit subj (neg.p2 ++ inf) ++ compl ++ ext ----
           }
-        ++ compl
     } ;
 
 --- in French, pronouns should 
