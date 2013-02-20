@@ -96,7 +96,7 @@ interface DiffRomance = open CommonRomance, Prelude in {
   auxPassive : Verb ;
 
 
---2 Contants needed in type signatures above
+--2 Constants needed in type signatures above
 
 param
   Case = Nom | Acc | CPrep Prepos ; 

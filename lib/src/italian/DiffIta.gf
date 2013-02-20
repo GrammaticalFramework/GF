@@ -115,11 +115,11 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
           agr   = {g = g ; n = n ; p = pe} ;
           clpr  = <vp.clit1 ++ vp.clit2,[],False> ;  ---- TODO: True is clit 
           verb  = case <n,pol,pe> of {
-            <Sg,RNeg False,P2> => vp.s.s ! VInfin clpr.p3 ; ----  ! aag ;
+            <Sg, RNeg False, P2> => vp.s.s ! VInfin clpr.p3 ; ----  ! aag ;
             _ => vp.s.s ! vImper n pe
             } ;
           neg   = vp.neg ! pol ;
-          compl = clpr.p1 ++ vp.comp ! agr ++ vp.ext ! pol
+          compl = vp.comp ! agr ++ vp.ext ! pol
         in
         neg.p1 ++ verb ++ bindIf clpr.p3 ++ clpr.p1 ++ compl ;
         ---- TODO non mi mangi

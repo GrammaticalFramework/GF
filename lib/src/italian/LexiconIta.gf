@@ -200,7 +200,7 @@ lin
   understand_V2 = dirV2 (regV "capire") ;
   university_N = regN "università" ;
   village_N = regN "paese" ;
-  wait_V2 = mkV2 (regV "aspettare") ParadigmsIta.dative ;
+  wait_V2 = mkV2 (regV "aspettare") ;
   walk_V = regV "camminare" ;
   warm_A = regADeg "caldo" ;
   war_N = regN "guerra" ;
