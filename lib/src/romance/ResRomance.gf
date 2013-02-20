@@ -85,7 +85,7 @@ oper
       neg    = negation ;
       clit1  = [] ;
       clit2  = [] ;
-      clit3  = [] ;
+      clit3  = {s,imp = [] ; hasClit = False} ;
       isNeg  = False ; 
       comp   = \\a => [] ;
       ext    = \\p => []
@@ -102,7 +102,7 @@ oper
         } ;
       clit1 = vp.clit1 ++ obj.c1 ;
       clit2 = vp.clit2 ++ obj.c2 ;
-      clit3 = vp.clit3 ;
+      clit3 = addClit3 np.hasClit [] (imperClit np.a obj.c1 obj.c2) vp.clit3 ;
       isNeg = orB vp.isNeg np.isNeg ;
       comp  = \\a => c.s ++ obj.comp ++ vp.comp ! a ;
       neg   = vp.neg ;
@@ -178,7 +178,7 @@ oper
     agr   = vp.agr ;
     clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
-    clit3 = vp.clit3 ++ co ;
+    clit3 = addClit3 True co vp.clit3.imp vp.clit3 ;
     isNeg = vp.isNeg ;  
     neg   = vp.neg ;
     comp  = vp.comp ;
@@ -232,7 +232,7 @@ oper
             VRefl => reflPron num per Acc ; ---- case ?
             _ => [] 
             } ;
-          clit  = refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3 ; ---- refl first?
+          clit  = refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3.s ; ---- refl first?
 
           verb = vp.s.s ;
           vaux = auxVerb vp.s.vtyp ;
@@ -271,7 +271,7 @@ oper
 
   infVP : VP -> Agr -> Str = \vp,agr ->
       let
-        iform = False ;                    ---- meaning: no clitics
+        iform = vp.clit3.hasClit ;
         inf   = vp.s.s ! VInfin iform ;    
         neg   = vp.neg ! RPos ;             --- Neg not in API
         obj   = neg.p2 ++ vp.comp ! agr ++ vp.ext ! RPos ; ---- pol
@@ -280,7 +280,7 @@ oper
             _ => [] 
             } ;
       in
-      neg.p1 ++ clitInf iform (refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3) inf ++ obj ;
+      neg.p1 ++ clitInf iform (refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3.s) inf ++ obj ;
       
 }
 

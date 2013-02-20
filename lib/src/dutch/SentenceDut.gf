@@ -21,7 +21,7 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
           inf  = vp.inf.p1 ;
         in
         verb ++ ps.p2 ++ 
-        vp.a1 ! pol ++ vp.n2 ! agr ++ vp.a2 ++ inf ++ vp.ext
+        vp.a1 ! pol ++ vp.n0 ! agr ++ vp.n2 ! agr ++ vp.a2 ++ inf ++ vp.ext
     } ;
 
     SlashVP np vp = 

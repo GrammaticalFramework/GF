@@ -196,7 +196,7 @@ abstract Sentences = Numeral ** {
 -- lexical items given in the resource Lexicon
     
     VPlay, VRun, VSit, VSleep, VSwim, VWalk : VerbPhrase ;
-    VDrink, VEat, VRead, VWait, VWrite : VerbPhrase ;
+    VDrink, VEat, VRead, VWait, VWrite, VSit, VStop : VerbPhrase ;
     V2Buy, V2Drink, V2Eat : Object -> VerbPhrase ;
     V2Wait : Person -> VerbPhrase ;
 
