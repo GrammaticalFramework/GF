@@ -119,9 +119,10 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
             } ;
 
           clpr  = <vp.clit1 ++ vp.clit2,[],vp.clit3.hasClit> ;
+          iform = orB clpr.p3 refl.p2 ;
           verb  = case <n,pol,pe> of {
-            <Sg, RNeg True, P2> => vp.s.s ! VInfin clpr.p3 ; ----  ! aag ;
-            <Sg, RNeg False, P2> => vp.s.s ! VInfin clpr.p3 ; ----  ! aag ;
+            <Sg, RNeg True, P2> => vp.s.s ! VInfin iform ; ----  ! aag ;
+            <Sg, RNeg False, P2> => vp.s.s ! VInfin iform ; ----  ! aag ;
             _ => vp.s.s ! vImper n pe
             } ;
           neg   = vp.neg ! pol ;

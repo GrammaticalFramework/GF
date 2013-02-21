@@ -85,7 +85,7 @@ oper
       neg    = negation ;
       clit1  = [] ;
       clit2  = [] ;
-      clit3  = {s,imp = [] ; hasClit = False} ;
+      clit3  = {s,imp = [] ; hasClit = False} ;  --- refl is treated elsewhere
       isNeg  = False ; 
       comp   = \\a => [] ;
       ext    = \\p => []
@@ -273,7 +273,7 @@ oper
 
   infVP : VP -> Agr -> Str = \vp,agr ->
       let
-        iform = vp.clit3.hasClit ;
+        iform = orB vp.clit3.hasClit (isVRefl vp.s.vtyp) ;
         inf   = vp.s.s ! VInfin iform ;    
         neg   = vp.neg ! RPos ;             --- Neg not in API
         obj   = neg.p2 ++ vp.comp ! agr ++ vp.ext ! RPos ; ---- pol
