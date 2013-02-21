@@ -382,10 +382,10 @@ oper
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
-  regV x = let v = vvf (mkVerbReg x) in {s = v ; vtyp = VHabere ; lock_V = <>} ;
-  reg3V x y z = let v = vvf (mkVerb3Reg x y z) in {s = v ; vtyp = VHabere ; lock_V = <>} ;
-  etreV v = {s = v.s ; vtyp = VEsse ; lock_V = <>} ;
-  reflV v = {s = v.s ; vtyp = VRefl ; lock_V = <>} ;
+  regV x = let v = vvf (mkVerbReg x) in {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <>} ;
+  reg3V x y z = let v = vvf (mkVerb3Reg x y z) in {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <>} ;
+  etreV v = {s = v.s ; vtyp = VTyp VEsse (getVTypT v.vtyp) ; lock_V = <>} ;
+  reflV v = {s = v.s ; vtyp = vRefl v.vtyp ; lock_V = <>} ;
 
   mmkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
   dirV3 v p = mmkV3 v accusative p ;
@@ -444,16 +444,17 @@ oper
   mkV = overload {
     mkV : Str -> V = regV ;
     mkV : (jeter,jette : Str) -> V = 
-      \x,y -> let v = vvf (mkVerb2Reg x y) in {s = v ; vtyp = VHabere ; lock_V = <>} ;
+      \x,y -> let v = vvf (mkVerb2Reg x y) in {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <>} ;
     mkV : (jeter,jette,jettera : Str) -> V = reg3V ;
     mkV : V2 -> V = v2V ;
     mkV : (tenir,tiens,tenons,tiennent,tint,tiendra,tenu : Str) -> V
     = \tenir,tiens,tenons,tiennent,tint,tiendra,tenu -> 
-      {s = vvf (mkVerb7 tenir tiens tenons tiennent tint tiendra tenu) ; vtyp = VHabere ; lock_V = <>} ;
+      let v = vvf (mkVerb7 tenir tiens tenons tiennent tint tiendra tenu) in
+      {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <>} ;
     mkV : (tenir,tiens,tient,tenons,tenez,tiennent,tienne,tenions,tiensI,tint,tiendra,tenu : Str) -> V
     = \tenir,tiens,tient,tenons,tenez,tiennent,tienne,tenions,tiensI,tint,tiendra,tenu -> 
-      {s = vvf (mkVerb12 tenir tiens tient tenons tenez tiennent tienne tenions tiensI tint tiendra tenu) ; 
-       vtyp = VHabere ; lock_V = <>} ;
+      let v = vvf (mkVerb12 tenir tiens tient tenons tenez tiennent tienne tenions tiensI tint tiendra tenu) in
+      {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <>} ;
   } ;
 
   regV : Str -> V ;
@@ -468,6 +469,11 @@ oper
   mmkV3    : V -> Prep -> Prep -> V3 ;  -- parler, à, de
   dirV3    : V -> Prep -> V3 ;          -- donner,_,à
   dirdirV3 : V -> V3 ;                  -- donner,_,_
+
+  getVerbT : (VF => Str) -> Bool = \v -> case last (v ! (VFin (VPres Indic) Sg P3)) of {
+    "a" | "e" => True ; -- parle-t-il, va-t-il
+    _ => False  -- prend-il
+    } ;
 
 
 } ;

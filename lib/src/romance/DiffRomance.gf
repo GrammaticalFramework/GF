@@ -59,7 +59,7 @@ interface DiffRomance = open CommonRomance, Prelude in {
   oper dative   : Case ;
   oper genitive : Case ;
 
-  vRefl   : VType ;
+  vRefl   : VType -> VType ;
   isVRefl : VType -> Bool ;
 
 
@@ -140,6 +140,12 @@ oper
 
   oper infForm : Number -> Person -> CAgr -> CAgr -> Bool ;
 
+-- AR 21/2/2013
+-- inverted clause order, only deviant in Fre where also the intervening -t- has to be taken to account
+
+  invertedClause : 
+    VType -> (RTense * Anteriority * Number * Person) -> Bool -> (Str * Str) -> (clit,fin,inf,compl,subj,ext : Str) -> Str =
+    \_,_,_,neg,clit,fin,inf,compl,subj,ext -> neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ subj ++ ext ;
 
 }
 
