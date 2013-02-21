@@ -102,7 +102,7 @@ incomplete concrete QuestionRomance of Question =
   lincat 
     QVP = ResRomance.VP ;
   lin
-    ComplSlashIP vp ip = insertObject vp.c2 (heavyNP {s = ip.s ; a = ip.a ** {p = P3}}) vp ;
+    ComplSlashIP vp ip = insertObject vp.c2 (heavyNP {s = ip.s ; a = {g = ip.a.g ; n = ip.a.n ; p = P3}}) vp ;
     AdvQVP vp adv = insertAdv adv.s vp ;
     AddAdvQVP vp adv = insertAdv adv.s vp ;
 

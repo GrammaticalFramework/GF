@@ -193,7 +193,7 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
         <_,   Pl,P3> => cases4 "li" "li" "glie"  "loro"
         } ;
 
-    vRefl   : VType = VRefl ;
+    vRefl _ = VRefl ;
     isVRefl : VType -> Bool = \ty -> case ty of {
       VRefl => True ;
       _ => False

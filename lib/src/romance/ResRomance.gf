@@ -138,7 +138,7 @@ oper
     } ;
 
   insertRefl : VP -> VP = \vp -> { 
-    s     = {s = vp.s.s ; vtyp = vRefl} ;
+    s     = {s = vp.s.s ; vtyp = vRefl vp.s.vtyp} ;
     agr   = VPAgrSubj ;
     clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
@@ -229,8 +229,8 @@ oper
           ext = vp.ext ! pol ;
 
           vtyp  = vp.s.vtyp ;
-          refl  = case vtyp of {
-            VRefl => reflPron num per Acc ; ---- case ?
+          refl  = case isVRefl vtyp of {
+            True => reflPron num per Acc ; ---- case ?
             _ => [] 
             } ;
           clit  = refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3.s ; ---- refl first?
@@ -261,7 +261,8 @@ oper
           DDir => 
             subj ++ neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ ext ;
           DInv => 
-            neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ subj ++ ext
+----            neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ subj ++ ext
+            invertedClause vp.s.vtyp <te, a, num, per> hasClit neg clit fin inf compl subj ext
 ----            neg.p1 ++ clit ++ fin ++ preOrPost hasClit subj (neg.p2 ++ inf) ++ compl ++ ext ----
           }
     } ;
@@ -276,8 +277,8 @@ oper
         inf   = vp.s.s ! VInfin iform ;    
         neg   = vp.neg ! RPos ;             --- Neg not in API
         obj   = neg.p2 ++ vp.comp ! agr ++ vp.ext ! RPos ; ---- pol
-        refl  = case vp.s.vtyp of {
-            VRefl => reflPron agr.n agr.p Acc ; ---- case ?
+        refl  = case isVRefl vp.s.vtyp of {
+            True => reflPron agr.n agr.p Acc ; ---- case ?
             _ => [] 
             } ;
       in

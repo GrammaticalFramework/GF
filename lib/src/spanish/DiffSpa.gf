@@ -171,7 +171,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
         <_,  Pl,P3> => cases3 "los" "les" "ellos"
         } ;
 
-    vRefl   : VType = VRefl ;
+    vRefl _ = VRefl ;
     isVRefl : VType -> Bool = \ty -> case ty of {
       VRefl => True ;
       _ => False

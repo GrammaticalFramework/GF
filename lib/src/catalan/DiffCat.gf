@@ -172,7 +172,7 @@ oper
         <Masc,  Pl,P3> => cases3 "els" "els" "ells"
         } ;
 
-    vRefl   : VType = VRefl ;
+    vRefl _ = VRefl ;
     isVRefl : VType -> Bool = \ty -> case ty of {
       VRefl => True ;
       _ => False

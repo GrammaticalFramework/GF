@@ -1,13 +1,18 @@
 --# -path=.:../romance:../abstract:../common:prelude
 
-instance DiffFre of DiffRomance - [imperClit] = open CommonRomance, PhonoFre, Prelude in {
+instance DiffFre of DiffRomance - [
+  imperClit,
+  invertedClause
+  ] 
+  = open CommonRomance, PhonoFre, Prelude in {
 
   flags optimize=noexpand ; -- coding=utf8 ;
 --  flags optimize=all ;
 
   param 
     Prepos = P_de | P_a | PNul ;
-    VType = VHabere | VEsse | VRefl ;
+    VType = VTyp VAux Bool ;  -- True means that -t- is required as in va-t-il, alla-t-il
+    VAux  = VHabere | VEsse | VRefl ;
 
   oper
     dative   : Case = CPrep P_a ;
@@ -50,12 +55,12 @@ instance DiffFre of DiffRomance - [imperClit] = open CommonRomance, PhonoFre, Pr
     conjunctCase : Case -> Case = \c -> c ;
 
     auxVerb : VType -> (VF => Str) = \vtyp -> case vtyp of {
-      VHabere => avoir_V.s ;
+      VTyp VHabere _ => avoir_V.s ;
       _ => copula.s
       } ;
 
     partAgr : VType -> VPAgr = \vtyp -> case vtyp of {
-      VHabere => vpAgrNone ;
+      VTyp VHabere _ => vpAgrNone ;
       _ => VPAgrSubj
       } ;
 
@@ -123,7 +128,7 @@ instance DiffFre of DiffRomance - [imperClit] = open CommonRomance, PhonoFre, Pr
           verb  = vp.s.s ! vImper num p ;
           neg   = vp.neg ! pol ;
           refl  = case vp.s.vtyp of {
-            VRefl => case <n,b> of {
+            VTyp VRefl _ => case <n,b> of {
               <Sg,False> => <"toi",elision "t",True> ;
               _ => <"vous","vous",True>
               } ;
@@ -211,11 +216,13 @@ instance DiffFre of DiffRomance - [imperClit] = open CommonRomance, PhonoFre, Pr
         <_,Pl,P3> => cases3 "les" "leur" "eux"
         } ;
 
-    vRefl   : VType = VRefl ;
+    vRefl   : VType -> VType = \t -> VTyp VRefl (getVTypT t) ;
     isVRefl : VType -> Bool = \ty -> case ty of {
-      VRefl => True ;
+      VTyp VRefl _ => True ;
       _ => False
       } ;
+
+    getVTypT : VType -> Bool = \t -> case t of {VTyp _ b => b} ; -- only in Fre
 
     auxPassive : Verb = copula ;
 
@@ -226,7 +233,7 @@ instance DiffFre of DiffRomance - [imperClit] = open CommonRomance, PhonoFre, Pr
 "fus";"fus";"fut";"fûmes";"fûtes";"furent";--# notpresent
 "serai";"seras";"sera";"serons";"serez";"seront";--# notpresent
 "serais";"serais";"serait";"serions";"seriez";"seraient";--# notpresent
-"sois";"soyons";"soyez";"été";"étés";"étée";"étées";"étant"]; vtyp=VHabere} ;
+"sois";"soyons";"soyez";"été";"étés";"étée";"étées";"étant"]; vtyp=VTyp VHabere False} ;
 
     avoir_V : Verb = {s=table VF ["avoir";"avoir";"ai";"as";"a";"avons";"avez";"ont";"aie";"aies";"ait"
 ;"ayons";"ayez";"aient";
@@ -235,7 +242,7 @@ instance DiffFre of DiffRomance - [imperClit] = open CommonRomance, PhonoFre, Pr
 "eus";"eus";"eut";"eûmes";"eûtes";"eurent";--# notpresent
 "aurai";"auras";"aura";"aurons";"aurez";"auront";--# notpresent
 "aurais";"aurais";"aurait";"aurions";"auriez";"auraient";--# notpresent
-"aie";"ayons";"ayez";"eu";"eus";"eue";"eues";"ayant"];vtyp=VHabere};
+"aie";"ayons";"ayez";"eu";"eus";"eue";"eues";"ayant"];vtyp=VTyp VHabere True}; ---- a-t-il eut-il
 
   datClit = "y" ;
   genClit = "en" ;
@@ -252,5 +259,35 @@ instance DiffFre of DiffRomance - [imperClit] = open CommonRomance, PhonoFre, Pr
     } ;
 
   polNegDirSubj = RNeg True ;
+
+  invertedClause : 
+    VType -> (RTense * Anteriority * Number * Person) -> Bool -> (Str * Str) -> (clit,fin,inf,compl,subj,ext : Str) -> Str =
+    \vtyp,vform,hasClit,neg,clit,fin,inf,compl,subj,ext -> case <vtyp,vform,hasClit> of {
+
+      -- parle-t-il
+      <VTyp _ True, <RPres,Simul,Sg,P3>, True> =>
+           neg.p1 ++ clit ++ fin ++ bindHyphensT ++ subj ++ neg.p2 ++ inf ++ compl ++ ext ;
+
+      -- parla-t-il
+      <VTyp _ True, <RPasse,Simul,Sg,P3>, True> =>                                             --# notpresent
+           neg.p1 ++ clit ++ fin ++ bindHyphensT ++ subj ++ neg.p2 ++ inf ++ compl ++ ext ;    --# notpresent
+
+      -- fera-t-il, sera-t-il venu
+      <_,           <RFut,_,Sg,P3>, True> =>                                                   --# notpresent
+           neg.p1 ++ clit ++ fin ++ bindHyphensT ++ subj ++ neg.p2 ++ inf ++ compl ++ ext ;    --# notpresent
+
+      -- a-t-il fait
+      <VTyp VHabere _,<RPres,Anter,Sg,P3>, True> =>                                            --# notpresent
+           neg.p1 ++ clit ++ fin ++ bindHyphensT ++ subj ++ neg.p2 ++ inf ++ compl ++ ext ;    --# notpresent
+
+      -- suis-je
+      <_, _, True> =>
+           neg.p1 ++ clit ++ fin ++ bindHyphen ++ subj ++ neg.p2 ++ inf ++ compl ++ ext ;
+
+      -- est loin la ville
+      _ => neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ subj ++ ext
+      } ;
+
+  bindHyphensT : Str = bindHyphen ++ "t" ++ bindHyphen ;
 
 }
