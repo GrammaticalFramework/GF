@@ -1,16 +1,15 @@
 <html>
 <head>
-
-<title>GF Eclipse Plugin</title>
-
-<link rel="stylesheet" type="text/css" href="http://www.grammaticalframework.org/css/style.css">
-
-<meta name = "viewport" content = "width = device-width">
+<title>
+GF Eclipse Plugin
+</title>
+<link rel="stylesheet" type="text/css" href="http://www.grammaticalframework.org/css/style.css" /> <meta name="viewport" content="width=device-width" />
 </head>
 <body>
 
+
 <h1 id="the-gf-eclipse-plugin">The GF Eclipse Plugin</h1>
-<p>John J. Camilleri<br />Updated: 11 January 2013</p>
+<p>John J. Camilleri<br />Updated: 22 February 2013</p>
 <p><em>The research leading to these results has received funding from the European Union's Seventh Framework Programme (FP7/2007-2013) under grant agreement no. FP7-ICT-247914 (the <a href="http://www.molto-project.eu/">MOLTO Project</a>).</em></p>
 <h2 id="introduction">Introduction</h2>
 <p>The aim behind developing a desktop IDE for GF is to provide more powerful tools than may be possible and/or practical in a web-based environment (the <a href="http://www.grammaticalframework.org/demos/gfse/">GF Web IDE</a>). In particular, the ability to resolve identifier cross-references and browse external libraries quickly during development time is one of the primary motivations for the project.</p>
@@ -49,7 +48,7 @@
 <li>External library browser</li>
 </ul>
 <h2 id="release-history">Release history</h2>
-<p><strong>11/01/13</strong> : (1.5.2.x) New option for specifying build files.</p>
+<p><strong>22/02/13</strong> : (1.5.2.x) New option for specifying include/exclude build files. Progress indicators during build.</p>
 <p><strong>12/06/12</strong> : (1.5.1.x) Support for scoping when library sources not available. Performance and implementational improvements to External Library View.</p>
 <p><strong>19/04/12</strong> : (1.5.0.x) Removed need for <code>.gfexternal</code> folder. Much improved &quot;External Libraries&quot; view allows you to search in current scope. Memory usage improvements in scoping implementation. Validation now occurs on file open. Re-added GF Library Path field in preferences.</p>
 <p><strong>04/04/12</strong> : (1.4.3.x) Improvements to the Test Manager. Added support for arbitrary commands in launch. Made the license information clearer.</p>
@@ -136,8 +135,8 @@
       &lt;/arguments&gt;
   &lt;/buildCommand&gt;
 &lt;/buildSpec&gt;</code></pre>
-<h4 id="specifying-build-files-guided-build">Specifying build files (guided build)</h4>
-<p>As of GFEP ≥ 1.5.2, you are now able to explicitly which modules in your GF project should be built by the builder. This would normally contain your &quot;top-level&quot; modules. This can be done right-clicking on your project in the Project Explorer and choosing <strong>Properties → GF Build Settings</strong>. From here you simply tick which modules in your project the GF builder should compile:</p>
+<h4 id="specifying-build-files">Specifying build files</h4>
+<p>As of GFEP ≥ 1.5.2, you are now able to explicitly a set of modules in your GF project which should be either included or excluded from the build process. In the inclusive case, this would normally contain your &quot;top-level&quot; modules. This can be done right-clicking on your project in the Project Explorer and choosing <strong>Properties → GF Build Settings</strong>. From here you simply tick which modules in your project the GF builder should compile:</p>
 <div class="figure">
 <img src="https://raw.github.com/GrammaticalFramework/gf-eclipse-plugin/master/doc/images/eclipse-project-build-settings.png" alt="Project-specific build settings" /><p class="caption">Project-specific build settings</p>
 </div>
@@ -443,3 +442,5 @@ sudo apt-get install gtk2-engines-pixbuf</code></pre>
 <pre><code>gf --v=0 --tags --output-dir=.gfbuild [--path=PATH] FILE</code></pre>
 </body>
 </html>
+
+
