@@ -121,6 +121,9 @@ gu_buf_trim_n(GuBuf* buf, size_t n_elems);
 const void*
 gu_buf_trim(GuBuf* buf);
 
+void
+gu_buf_flush(GuBuf* buf);
+
 #define gu_buf_pop(BUF, T)			\
 	(*(T*)gu_buf_trim(BUF))
 

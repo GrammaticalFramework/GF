@@ -151,6 +151,12 @@ gu_buf_trim(GuBuf* buf)
 }
 
 void
+gu_buf_flush(GuBuf* buf)
+{
+	gu_buf_set_length(buf, 0);
+}
+
+void
 gu_buf_pop_n(GuBuf* buf, size_t n_elems, void* data_out)
 {
 	const void* p = gu_buf_trim_n(buf, n_elems);
