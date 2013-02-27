@@ -430,6 +430,7 @@ data Term =
  | Error String                  -- ^ error values returned by Predef.error
   deriving (Show, Eq, Ord)
 
+-- | Patterns
 data Patt =
    PC Ident [Patt]        -- ^ constructor pattern: @C p1 ... pn@    @C@ 
  | PP QIdent [Patt]       -- ^ package constructor pattern: @P.C p1 ... pn@    @P.C@ 
@@ -450,13 +451,16 @@ data Patt =
  | PNeg Patt              -- ^ negated pattern: -p
  | PAlt Patt Patt         -- ^ disjunctive pattern: p1 | p2
  | PSeq Patt Patt         -- ^ sequence of token parts: p + q
+ | PMSeq MPatt MPatt      -- ^ sequence of token parts: p + q
  | PRep Patt              -- ^ repetition of token part: p*
  | PChar                  -- ^ string of length one: ?
  | PChars [Char]          -- ^ character list: ["aeiou"]
  | PMacro Ident           -- #p
  | PM QIdent              -- #m.p
-
   deriving (Show, Eq, Ord)
+
+-- | Measured pattern (paired with the min & max matching length)
+type MPatt = ((Int,Int),Patt)
 
 -- | to guide computation and type checking of tables
 data TInfo = 

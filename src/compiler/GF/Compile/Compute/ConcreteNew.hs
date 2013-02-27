@@ -8,7 +8,7 @@ module GF.Compile.Compute.ConcreteNew
 import GF.Grammar hiding (Env, VGen, VApp, VRecType)
 import GF.Grammar.Lookup(lookupResDefLoc,allParamValues)
 import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr)
-import GF.Grammar.PatternMatch(matchPattern)
+import GF.Grammar.PatternMatch(matchPattern,measurePatt)
 import GF.Grammar.Lockfield(unlockRecord,lockLabel,isLockLabel,lockRecType)
 import GF.Compile.Compute.Value hiding (Predefined(..))
 import GF.Compile.Compute.Predef(predef,predefName,delta)
@@ -320,7 +320,7 @@ valueTable env i cs =
               TWild _ -> True
               _ -> False
 
-    valueCase (p,t) = do p' <- inlinePattMacro p
+    valueCase (p,t) = do p' <- measurePatt # inlinePattMacro p
                          let pvs = pattVars p'
                          vt <- value (extend pvs env) t
                          return (p', \ vs -> Bind $ \ bs -> vt (push' p' bs pvs vs))

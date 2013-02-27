@@ -14,7 +14,8 @@
 
 module GF.Grammar.PatternMatch (matchPattern,
 		     testOvershadow, 
-		     findMatch
+		     findMatch,
+                     measurePatt
 		    ) where
 
 import GF.Data.Operations
@@ -117,6 +118,7 @@ tryMatch (p,t) = do
         _ -> Bad (render (text "no match with negative pattern" <+> ppPatt Unqualified 0 p))
 
       (PSeq p1 p2, ([],K s, [])) -> matchPSeq p1 p2 s
+      (PMSeq mp1 mp2, ([],K s, [])) -> matchPMSeq mp1 mp2 s
 
       (PRep p1, ([],K s, [])) -> checks [
          trym (foldr (const (PSeq p1)) (PString "") 
@@ -129,13 +131,18 @@ tryMatch (p,t) = do
 
       _ -> Bad (render (text "no match in case expr for" <+> ppTerm Unqualified 0 t))
 
-matchPSeq p1 p2 s =
-  do let min1 = 0 --minLength p1
-         min2 = length s -- -minLength p2
-         cuts = [splitAt n s | n <- [min1 .. min2]]
+matchPMSeq (m1,p1) (m2,p2) s = matchPSeq' m1 p1 m2 p2 s
+--matchPSeq p1 p2 s = matchPSeq' (0,maxBound::Int) p1 (0,maxBound::Int) p2 s
+matchPSeq p1 p2 s = matchPSeq' (lengthBounds p1) p1 (lengthBounds p2) p2 s
+
+matchPSeq' b1@(min1,max1) p1 b2@(min2,max2) p2 s =
+  do let n = length s
+         lo = min1 `max` (n-max2)
+         hi = (n-min2) `min` max1
+         cuts = [splitAt i s | i <- [lo..hi]]
      matches <- checks [mapM tryMatch [(p1,K s1),(p2,K s2)] | (s1,s2) <- cuts]
      return (concat matches)
-{-
+
 -- | Estimate the minimal length of the string that a pattern will match
 minLength p =
   case p of
@@ -147,7 +154,31 @@ minLength p =
     PAs x p' -> minLength p' 
     PT t p' -> minLength p' 
     _ -> 0 -- safe underestimate
--}
+
+-- | Estimate the maximal length of the string that a pattern will match
+maxLength = maybe maxBound id . maxl  -- safe overestimate
+  where
+    maxl p =
+      case p of
+        PString s  -> Just (length s)
+        PSeq p1 p2 -> liftM2 (+) (maxl p1) (maxl p2)
+        PAlt p1 p2 -> liftM2 max (maxl p1) (maxl p2)
+        PChar      -> Just 1
+        PChars _   -> Just 1
+        PAs x p'   -> maxl p'
+        PT t p'    -> maxl p'
+        _          -> Nothing -- unknown length
+
+lengthBounds p = (minLength p,maxLength p)
+
+mPatt p = (lengthBounds p,measurePatt p)
+
+measurePatt p =
+  case p of
+    PSeq p1 p2 -> PMSeq (mPatt p1) (mPatt p2)
+    _ -> composSafePattOp measurePatt p
+
+
 isInConstantForm :: Term -> Bool
 isInConstantForm trm = case trm of
     Cn _     -> True
