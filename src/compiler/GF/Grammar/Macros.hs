@@ -483,6 +483,8 @@ composOp co trm =
    ImplArg t        -> liftM ImplArg (co t)
    _ -> return trm -- covers K, Vr, Cn, Sort, EPatt
 
+composSafePattOp op = runIdentity . composPattOp (return . op)
+
 composPattOp :: Monad m => (Patt -> m Patt) -> Patt -> m Patt
 composPattOp op patt =
   case patt of
@@ -495,6 +497,7 @@ composPattOp op patt =
     PNeg p          -> liftM  PNeg (op p)
     PAlt p1 p2      -> liftM2 PAlt (op p1) (op p2)
     PSeq p1 p2      -> liftM2 PSeq (op p1) (op p2)
+    PMSeq (_,p1) (_,p2) -> liftM2 PSeq (op p1) (op p2) -- information loss
     PRep p          -> liftM  PRep (op p)
     _               -> return patt -- covers cases without subpatterns
 
@@ -545,6 +548,7 @@ collectPattOp op patt =
     PNeg p          -> op p
     PAlt p1 p2      -> op p1++op p2
     PSeq p1 p2      -> op p1++op p2
+    PMSeq (_,p1) (_,p2) -> op p1++op p2
     PRep p          -> op p
     _               -> []     -- covers cases without subpatterns
 
