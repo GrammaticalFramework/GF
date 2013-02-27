@@ -190,7 +190,7 @@ ppTerm q d (Table kt vt)=prec d 0 (ppTerm q 3 kt <+> text "=>" <+> ppTerm q 0 vt
 ppTerm q d (Let l e)    = let (ls,e') = getLet e
                           in prec d 0 (text "let" <+> vcat (map (ppLocDef q) (l:ls)) $$ text "in" <+> ppTerm q 0 e')
 ppTerm q d (Example e s)=prec d 0 (text "in" <+> ppTerm q 5 e <+> str s)
-ppTerm q d (C e1 e2)    =prec d 1 (ppTerm q 2 e1 <+> text "++" <+> ppTerm q 1 e2)
+ppTerm q d (C e1 e2)    =prec d 1 (hang (ppTerm q 2 e1) 2 (text "++" <+> ppTerm q 1 e2))
 ppTerm q d (Glue e1 e2) =prec d 2 (ppTerm q 3 e1 <+> char '+'  <+> ppTerm q 2 e2)
 ppTerm q d (S x y)     = case x of
                            T annot xs -> let e = case annot of
@@ -201,10 +201,10 @@ ppTerm q d (S x y)     = case x of
 			                 in text "case" <+> ppTerm q 0 e <+> text "of" <+> lbrace $$
 			                    nest 2 (vcat (punctuate semi (map (ppCase q) xs))) $$
 			                   rbrace
-			   _          -> prec d 3 (ppTerm q 3 x <+> text "!" <+> ppTerm q 4 y)
+			   _          -> prec d 3 (hang (ppTerm q 3 x) 2 (text "!" <+> ppTerm q 4 y))
 ppTerm q d (ExtR x y)  = prec d 3 (ppTerm q 3 x <+> text "**" <+> ppTerm q 4 y)
 ppTerm q d (App x y)   = prec d 4 (ppTerm q 4 x <+> ppTerm q 5 y)
-ppTerm q d (V e es)    = text "table" <+> ppTerm q 6 e <+> brackets (fsep (punctuate semi (map (ppTerm q 0) es)))
+ppTerm q d (V e es)    = hang (text "table") 2 (sep [ppTerm q 6 e,brackets (fsep (punctuate semi (map (ppTerm q 0) es)))])
 ppTerm q d (FV es)     = text "variants" <+> braces (fsep (punctuate semi (map (ppTerm q 0) es)))
 ppTerm q d (Alts e xs) = prec d 4 (text "pre" <+> braces (ppTerm q 0 e <> semi <+> fsep (punctuate semi (map (ppAltern q) xs))))
 ppTerm q d (Strs es)   = text "strs" <+> braces (fsep (punctuate semi (map (ppTerm q 0) es)))
