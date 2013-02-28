@@ -266,8 +266,10 @@ topoTest = topologicalSort . mkRel'
 
 -- | topological sorting with test of cyclicity, new version /TH 2012-06-26
 topoTest2 :: Ord a => [(a,[a])] -> Either [[a]] [[a]]
-topoTest2 g = maybe (Right cycles) Left (tsort g)
+topoTest2 g0 = maybe (Right cycles) Left (tsort g)
   where
+    g = g0++[(n,[])|n<-nub (concatMap snd g0)\\map fst g0]
+
     cycles = findCycles (mkRel' g)
 
     tsort nes =
