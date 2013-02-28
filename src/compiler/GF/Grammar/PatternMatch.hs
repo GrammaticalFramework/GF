@@ -144,30 +144,25 @@ matchPSeq' b1@(min1,max1) p1 b2@(min2,max2) p2 s =
      return (concat matches)
 
 -- | Estimate the minimal length of the string that a pattern will match
-minLength p =
-  case p of
-    PString s -> length s
-    PSeq p1 p2 -> minLength p1+minLength p2
-    PAlt p1 p2 -> min (minLength p1) (minLength p2)
-    PChar -> 1
-    PChars _ -> 1
-    PAs x p' -> minLength p' 
-    PT t p' -> minLength p' 
-    _ -> 0 -- safe underestimate
+minLength = matchLength 0 id (+) min -- safe underestimate
 
 -- | Estimate the maximal length of the string that a pattern will match
-maxLength = maybe maxBound id . maxl  -- safe overestimate
+maxLength =
+    maybe maxBound id . matchLength Nothing Just (liftM2 (+)) (liftM2 max)
+        -- safe overestimate
+
+matchLength unknown known seq alt = len
   where
-    maxl p =
+    len p =
       case p of
-        PString s  -> Just (length s)
-        PSeq p1 p2 -> liftM2 (+) (maxl p1) (maxl p2)
-        PAlt p1 p2 -> liftM2 max (maxl p1) (maxl p2)
-        PChar      -> Just 1
-        PChars _   -> Just 1
-        PAs x p'   -> maxl p'
-        PT t p'    -> maxl p'
-        _          -> Nothing -- unknown length
+        PString s  -> known (length s)
+        PSeq p1 p2 -> seq (len p1) (len p2)
+        PAlt p1 p2 -> alt (len p1) (len p2)
+        PChar      -> known 1
+        PChars _   -> known 1
+        PAs x p'   -> len p'
+        PT t p'    -> len p'
+        _          -> unknown
 
 lengthBounds p = (minLength p,maxLength p)
 
