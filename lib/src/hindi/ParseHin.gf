@@ -7,7 +7,7 @@ concrete ParseHin of ParseEngAbs =
   AdjectiveHin,
   NumeralHin,
   ConjunctionHin,
-  VerbHin - [PassV2,ComplVV],
+  VerbHin - [PassV2,ComplVV,VPSlashPrep],
   AdverbHin,
   PhraseHin,
   SentenceHin,
@@ -19,8 +19,8 @@ concrete ParseHin of ParseEngAbs =
   ExtraHin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,Temp,Pol,Conj,VPS,ListVPS,S,Num, CN,
   RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,VPI, VPIForm, VPIInf, VPIPresPart, ListVPI,
   VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,ClSlash, RCl, EmptyRelSlash],
-  DictHinMath **
---  DictHin ** 
+--  DictHinMath **
+  DictHin ** 
 open MorphoHin, ResHin, ParadigmsHin,CommonX, CommonHindustani, Prelude in {
 
 flags
@@ -59,7 +59,7 @@ lin
     s = \\n,g,_,_ => v.cvp ++ v.s ! VF Imperf Pers2_Casual n g ; -- the main verb of compound versb needs to be attached here
   } ;
 
---  OrdCompar a = {s = \\c => a.s ! AAdj Compar c } ;
+  OrdCompar a = {s = a.s ! Sg ! Masc ! Dir ! Compar ; n = Sg } ;
 
   PositAdVAdj a = {s = a.s ! Sg ! Masc ! Dir ! Posit} ;
 ---------------
@@ -132,5 +132,7 @@ lin
   PPos = {s = [] ; p = Pos} ;
   PNeg = {s = [] ; p = Neg} ; -- contracted: don't
   UncNeg = {s = [] ; p = Neg} ;
+  
+  VPSlashPrep vp p = vp ** {c2 = {s = p.s!Masc ; c = VTrans}} ;
     
 }
