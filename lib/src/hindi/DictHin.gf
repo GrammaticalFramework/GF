@@ -25793,14 +25793,14 @@ of_Prep = mkPrep "का" "की" ;
   somePl_Det = mkDet "कुछ" "कुछ" "कुछ" "कुछ" Pl ;
   something_NP = MassNP (UseN (ParadigmsHin.mkN ["कोई चीज़"] ["कोई चीज़"] ["कोई चीज़"] ["कोई चीज़"] ["कोई चीज़"] ["कोई चीज़"] Masc ));
  -- somewhere_Adv = mkAdv ["कहीं"] ;
-  that_Quant = demoPN "वह" "उस" "उन" ;
+  that_Quant = demoPN "वह" "उस" "उन" "उन";
   that_Subj = ss "कि";
   there_Adv = mkAdv "वहाँ" ;
   there7to_Adv = mkAdv ["वहाँ पर"] ;
   there7from_Adv = mkAdv ["वहाँ से"] ;
   therefore_PConj = ss "इस लिये" ;
   they_Pron = personalPN "वे" "वे" "वे" "उन का" "उन की" "उन के" "उन की" Pl Masc Pers3_Distant ; ----
-  this_Quant = demoPN "ये" "इस" "इन";
+  this_Quant = demoPN "ये" "इस" "इन" "इन";
   through_Prep = mkPrep ["में से"] ["में से"] ;
   too_AdA = ss "बहुत" ;
   to_Prep = mkPrep "को" "को" ; -- ** {lock_Prep = <>};
