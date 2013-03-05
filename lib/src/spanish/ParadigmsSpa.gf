@@ -380,7 +380,12 @@ oper
     vtyp = VHabere
     } ;
 
-  regAltV x y = verboV (regAlternV x y) ;
+  regAltV x y = case x of {
+    _ + "ar" => verboV (regAlternV x y) ;
+    _  => verboV (regAlternVEr x y) 
+    } ;
+
+    
 
   mk2V2 v p = {s = v.s ; vtyp = v.vtyp ; c2 = p ; lock_V2 = <>} ;
   dirV2 v = mk2V2 v accusative ;
