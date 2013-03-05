@@ -38,7 +38,7 @@ incomplete concrete VerbHindustani of Verb = CatHindustani ** open CommonHindust
     CompAdv adv = {s = \\a => adv.s ! giveGender a} ;
     CompCN cn = {s = \\a => cn.s ! giveNumber a ! Dir} ;
     
-    VPSlashPrep vp p = vp ** {c2 = p.s ;  c = VTrans } ;
+    VPSlashPrep vp p = vp ** {c2 ={s = p.s ! Masc ;  c = VTrans }} ;
 
 
 }
