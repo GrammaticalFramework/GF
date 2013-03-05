@@ -44,10 +44,15 @@ oper
     mkNoun (numForms mec mecs) ;
 
   mkNomReg : Str -> Noun = \mec ->
-    case last mec of {
-      "o" | "e" => mkNoun (nomVino mec) Masc ; 
-      "a" => mkNoun (nomVino mec) Fem ;
-      "z" => mkNounIrreg mec (init mec + "ces") Fem ;
+    case mec of {
+      _ + "o" | "e" => mkNoun (nomVino mec) Masc ; 
+      _ + "a" => mkNoun (nomVino mec) Fem ;
+      _ + "z" => mkNounIrreg mec (init mec + "ces") Fem ;
+      _ + "án" => mkNounIrreg mec (tk 2 mec + "anes") Masc ;
+      _ + "én" => mkNounIrreg mec (tk 2 mec + "enes") Masc ;
+      _ + "ín" => mkNounIrreg mec (tk 2 mec + "ines") Masc ;
+      _ + "ón" => mkNounIrreg mec (tk 2 mec + "ones") Masc ;
+      _ + "ún" => mkNounIrreg mec (tk 2 mec + "unes") Masc ;
       _   => mkNoun (nomPilar mec) Masc
       } ;
 

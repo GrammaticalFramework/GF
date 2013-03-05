@@ -6444,12 +6444,12 @@ oper
     VPB (Pres Ind Pl P1) => mostr + "amos" ;
     VPB (Pres Ind Pl P2) => mostr + "áis" ;
     VPB (Pres Ind Pl P3) => muestr + "an" ;
-    VPB (Pres Sub Sg P1) => muestr + "ue" ;
-    VPB (Pres Sub Sg P2) => muestr + "ues" ;
-    VPB (Pres Sub Sg P3) => muestr + "ue" ;
-    VPB (Pres Sub Pl P1) => mostr + "uemos" ;
-    VPB (Pres Sub Pl P2) => mostr + "uéis" ;
-    VPB (Pres Sub Pl P3) => muestr + "uen" ;
+    VPB (Pres Sub Sg P1) => muestr + "e" ;
+    VPB (Pres Sub Sg P2) => muestr + "es" ;
+    VPB (Pres Sub Sg P3) => muestr + "e" ;
+    VPB (Pres Sub Pl P1) => mostr + "emos" ;
+    VPB (Pres Sub Pl P2) => mostr + "éis" ;
+    VPB (Pres Sub Pl P3) => muestr + "en" ;
     VPB (Impf Ind Sg P1) => mostr + "aba" ; --# notpresent
     VPB (Impf Ind Sg P2) => mostr + "abas" ; --# notpresent
     VPB (Impf Ind Sg P3) => mostr + "aba" ; --# notpresent
@@ -6468,7 +6468,7 @@ oper
     VPB (ImpfSub2 Pl P1) => mostr + "ásemos" ; --# notpresent
     VPB (ImpfSub2 Pl P2) => mostr + "aseis" ; --# notpresent
     VPB (ImpfSub2 Pl P3) => mostr + "asen" ; --# notpresent
-    VPB (Pret Sg P1) => mostr + "ué" ; --# notpresent
+    VPB (Pret Sg P1) => mostr + "é" ; --# notpresent
     VPB (Pret Sg P2) => mostr + "aste" ; --# notpresent
     VPB (Pret Sg P3) => mostr + "ó" ; --# notpresent
     VPB (Pret Pl P1) => mostr + "amos" ; --# notpresent
@@ -6494,14 +6494,91 @@ oper
     VPB (Cond Pl P3) => mostr + "arían" ; --# notpresent
     VPB (Imper Sg P1) => variants {} ;
     VPB (Imper Sg P2) => muestr + "a" ;
-    VPB (Imper Sg P3) => muestr + "ue" ;
-    VPB (Imper Pl P1) => mostr + "uemos" ;
+    VPB (Imper Sg P3) => muestr + "e" ;
+    VPB (Imper Pl P1) => mostr + "emos" ;
     VPB (Imper Pl P2) => mostr + "ad" ;
-    VPB (Imper Pl P3) => muestr + "uen" ;
+    VPB (Imper Pl P3) => muestr + "en" ;
     VPB (Pass Sg Masc) => mostr + "ado" ;
     VPB (Pass Sg Fem) => mostr + "ada" ;
     VPB (Pass Pl Masc) => mostr + "ados" ;
     VPB (Pass Pl Fem) => mostr + "adas"
+    }
+  } ;
+  
+  regAlternVEr : Str -> Str -> Verbum = 
+  \entender, entiendo -> 
+    let 
+      entend  = Predef.tk 2 entender ;
+      entiend = Predef.tk 1 entiendo ;
+    in
+   {s = table {
+    VI Infn => entender ;
+    VI Ger => entend + "iendo" ;
+    VI Part => entend + "ido" ;
+    VPB (Pres Ind Sg P1) => entiend + "o" ;
+    VPB (Pres Ind Sg P2) => entiend + "es" ;
+    VPB (Pres Ind Sg P3) => entiend + "e" ;
+    VPB (Pres Ind Pl P1) => entend + "emos" ;
+    VPB (Pres Ind Pl P2) => entend + "éis" ;
+    VPB (Pres Ind Pl P3) => entiend + "en" ;
+    VPB (Pres Sub Sg P1) => entiend + "a" ;
+    VPB (Pres Sub Sg P2) => entiend + "as" ;
+    VPB (Pres Sub Sg P3) => entiend + "a" ;
+    VPB (Pres Sub Pl P1) => entend + "amos" ;
+    VPB (Pres Sub Pl P2) => entend + "áis" ;
+    VPB (Pres Sub Pl P3) => entiend + "an" ;
+    VPB (Impf Ind Sg P1) => entend + "ía" ; --# notpresent
+    VPB (Impf Ind Sg P2) => entend + "ías" ; --# notpresent
+    VPB (Impf Ind Sg P3) => entend + "ía" ; --# notpresent
+    VPB (Impf Ind Pl P1) => entend + "íamos" ; --# notpresent
+    VPB (Impf Ind Pl P2) => entend + "íais" ; --# notpresent
+    VPB (Impf Ind Pl P3) => entend + "ían" ; --# notpresent
+    VPB (Impf Sub Sg P1) => entend + "iera" ; --# notpresent
+    VPB (Impf Sub Sg P2) => entend + "ieras" ; --# notpresent
+    VPB (Impf Sub Sg P3) => entend + "iera" ; --# notpresent
+    VPB (Impf Sub Pl P1) => entend + "iéramos" ; --# notpresent
+    VPB (Impf Sub Pl P2) => entend + "ierais" ; --# notpresent
+    VPB (Impf Sub Pl P3) => entend + "ieran" ; --# notpresent
+    VPB (ImpfSub2 Sg P1) => entend + "iese" ; --# notpresent
+    VPB (ImpfSub2 Sg P2) => entend + "ieses" ; --# notpresent
+    VPB (ImpfSub2 Sg P3) => entend + "iese" ; --# notpresent
+    VPB (ImpfSub2 Pl P1) => entend + "iésemos" ; --# notpresent
+    VPB (ImpfSub2 Pl P2) => entend + "ieseis" ; --# notpresent
+    VPB (ImpfSub2 Pl P3) => entend + "iesen" ; --# notpresent
+    VPB (Pret Sg P1) => entend + "í" ; --# notpresent
+    VPB (Pret Sg P2) => entend + "iste" ; --# notpresent
+    VPB (Pret Sg P3) => entend + "ió" ; --# notpresent
+    VPB (Pret Pl P1) => entend + "imos" ; --# notpresent
+    VPB (Pret Pl P2) => entend + "isteis" ; --# notpresent
+    VPB (Pret Pl P3) => entend + "ieron" ; --# notpresent
+    VPB (Fut Ind Sg P1) => entend + "eré" ; --# notpresent
+    VPB (Fut Ind Sg P2) => entend + "erás" ; --# notpresent
+    VPB (Fut Ind Sg P3) => entend + "erá" ; --# notpresent
+    VPB (Fut Ind Pl P1) => entend + "eremos" ; --# notpresent
+    VPB (Fut Ind Pl P2) => entend + "eréis" ; --# notpresent
+    VPB (Fut Ind Pl P3) => entend + "erán" ; --# notpresent
+    VPB (Fut Sub Sg P1) => entend + "iere" ; --# notpresent
+    VPB (Fut Sub Sg P2) => entend + "ieres" ; --# notpresent
+    VPB (Fut Sub Sg P3) => entend + "iere" ; --# notpresent
+    VPB (Fut Sub Pl P1) => entend + "iéremos" ; --# notpresent
+    VPB (Fut Sub Pl P2) => entend + "iereis" ; --# notpresent
+    VPB (Fut Sub Pl P3) => entend + "ieren" ; --# notpresent
+    VPB (Cond Sg P1) => entend + "ería" ; --# notpresent
+    VPB (Cond Sg P2) => entend + "erías" ; --# notpresent
+    VPB (Cond Sg P3) => entend + "ería" ; --# notpresent
+    VPB (Cond Pl P1) => entend + "eríamos" ; --# notpresent
+    VPB (Cond Pl P2) => entend + "eríais" ; --# notpresent
+    VPB (Cond Pl P3) => entend + "erían" ; --# notpresent
+    VPB (Imper Sg P1) => variants {} ;
+    VPB (Imper Sg P2) => entiend + "e" ;
+    VPB (Imper Sg P3) => entiend + "a" ;
+    VPB (Imper Pl P1) => entend + "amos" ;
+    VPB (Imper Pl P2) => entend + "ed" ;
+    VPB (Imper Pl P3) => entiend + "an" ;
+    VPB (Pass Sg Masc) => entend + "ido" ;
+    VPB (Pass Sg Fem) => entend + "ida" ;
+    VPB (Pass Pl Masc) => entend + "idos" ;
+    VPB (Pass Pl Fem) => entend + "idas"
     }
   } ;
 
