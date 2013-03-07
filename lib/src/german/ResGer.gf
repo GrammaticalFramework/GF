@@ -609,7 +609,7 @@ resource ResGer = ParamX ** open Prelude in {
   isLightComplement : Bool -> Preposition -> Bool = \isPron,prep -> case isPron of {
      False => False ;
      _ => case prep.c of {
-       NPC Nom => True ;
+       NPC Acc => True ;
        _ => False
        }
      } ;
