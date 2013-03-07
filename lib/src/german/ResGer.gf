@@ -606,6 +606,14 @@ resource ResGer = ParamX ** open Prelude in {
     infExt = vp.infExt
 	} ;
 
+  isLightComplement : Bool -> Preposition -> Bool = \isPron,prep -> case isPron of {
+     False => False ;
+     _ => case prep.c of {
+       NPC Nom => True ;
+       _ => False
+       }
+     } ;
+
   insertAdV : Str -> VP -> VP = \adv,vp -> {
     s = vp.s ;
     a1 = \\a => adv ++ vp.a1 ! a ; -- immer nicht
