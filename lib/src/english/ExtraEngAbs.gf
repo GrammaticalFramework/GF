@@ -24,6 +24,10 @@ abstract ExtraEngAbs = Extra - [ProDrop] ** {
    may_VV : VV ;
 
    shall_VV : VV ;
+
+   --- AR 7/3/2013
+   ComplSlashPartLast : VPSlash -> NP -> VP ;
+
 ---------------------
 --- these are obsolete: use UncNeg : Pol instead
 

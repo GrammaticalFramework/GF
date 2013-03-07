@@ -154,6 +154,7 @@ resource ResEng = ParamX ** open Prelude in {
         VPPart => gone ;
         VPresPart => going
         } ;
+      p = [] ; -- no particle
       isRefl = False
       } ;
 
@@ -203,6 +204,7 @@ resource ResEng = ParamX ** open Prelude in {
 
   Verb : Type = {
     s : VForm => Str ;
+    p : Str ; -- verb particle
     isRefl : Bool
     } ;
 
@@ -223,6 +225,7 @@ resource ResEng = ParamX ** open Prelude in {
 
   VP : Type = {
     s   : VerbForms ;
+    p   : Str ;   -- verb particle
     prp : Str ;   -- present participle 
     ptp : Str ;   -- past participle
     inf : Str ;   -- the infinitive form ; VerbForms would be the logical place
@@ -263,6 +266,7 @@ resource ResEng = ParamX ** open Prelude in {
         <Cond,Anter,CNeg c,_> => vfn c "would" "wouldn't" ("have" ++ part) ; --# notpresent
         <Pres,Simul,CNeg c,_>    => vfn c (does agr) (doesnt agr) inf
         } ;
+    p    = verb.p ;
     prp  = verb.s ! VPresPart ;
     ptp  = verb.s ! VPPart ;
     inf  = verb.s ! VInf ;
@@ -300,6 +304,7 @@ resource ResEng = ParamX ** open Prelude in {
         <Pres,Simul,CPos,  _>    => vf fin          [] ;
         <Pres,Simul,CNeg c,  _>  => vfn c finp fin          [] 
         } ;
+    p = [] ;
     prp = verb.prpart ;
     ptp = verb.ppart ;
     inf = verb.inf ;
@@ -321,6 +326,7 @@ resource ResEng = ParamX ** open Prelude in {
 
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
+    p = vp.p ;
     prp = vp.prp ;
     ptp = vp.ptp ;
     inf = vp.inf ;
@@ -330,6 +336,7 @@ resource ResEng = ParamX ** open Prelude in {
 
   insertObjPre : (Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
+    p = vp.p ;
     prp = vp.prp ;
     ptp = vp.ptp ;
     inf = vp.inf ;
@@ -340,10 +347,22 @@ resource ResEng = ParamX ** open Prelude in {
   insertObjc : (Agr => Str) -> SlashVP -> SlashVP = \obj,vp -> 
     insertObj obj vp ** {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
 
+--- AR 7/3/2013 move the particle after the object
+  insertObjPartLast : (Agr => Str) -> VP -> VP = \obj,vp -> {
+    s = vp.s ;
+    p = [] ;  -- remove particle from here
+    prp = vp.prp ;
+    ptp = vp.ptp ;
+    inf = vp.inf ;
+    ad = vp.ad ;
+    s2 = \\a => obj ! a ++ vp.s2 ! a ++ vp.p  -- and put it here ; corresponds to insertObjPre
+    } ;
+
 --- The adverb should be before the finite verb.
 
   insertAdV : Str -> VP -> VP = \ad,vp -> {
     s = vp.s ;
+    p = vp.p ;
     prp = vp.prp ;
     ptp = vp.ptp ;
     inf = vp.inf ;
@@ -353,7 +372,7 @@ resource ResEng = ParamX ** open Prelude in {
 
 -- 
 
-  predVV : {s : VVForm => Str ; typ : VVType} -> VP = \verb ->
+  predVV : {s : VVForm => Str ; p : Str ; typ : VVType} -> VP = \verb ->
     let verbs = verb.s
     in
     case verb.typ of {
@@ -366,11 +385,12 @@ resource ResEng = ParamX ** open Prelude in {
           Pos => \\_ => verbs ! VVF VPast ;  --# notpresent
           Neg => \\_ => verbs ! VVPastNeg    --# notpresent
           } ;    --# notpresent
+        p = verb.p ;
         inf = verbs ! VVF VInf ;
         ppart = verbs ! VVF VPPart ;
         prpart = verbs ! VVF VPresPart ;
         } ;
-      _    => predV {s = \\vf => verbs ! VVF vf ; isRefl = False}
+      _    => predV {s = \\vf => verbs ! VVF vf ; p = verb.p ; isRefl = False}
       } ;
 
   presVerb : {s : VForm => Str} -> Agr -> Str = \verb -> 
@@ -383,13 +403,13 @@ resource ResEng = ParamX ** open Prelude in {
                  VVAux => vp.ad ++ vp.inf ; 
                  VVInf => "to" ++ vp.ad ++ vp.inf ;
                  _ => vp.ad ++ vp.prp
-               };
-      Anter => case typ of {
-                 VVAux => "have" ++ vp.ad ++ vp.ptp ;
-                 VVInf => "to" ++ "have" ++ vp.ad ++ vp.ptp ;
-                 _     => "having" ++ vp.ad ++ vp.ptp
                }
-    } ++
+      ; Anter => case typ of {                                    --# notpresent
+                 VVAux => "have" ++ vp.ad ++ vp.ptp ;                --# notpresent
+                 VVInf => "to" ++ "have" ++ vp.ad ++ vp.ptp ;        --# notpresent
+                 _     => "having" ++ vp.ad ++ vp.ptp                 --# notpresent
+               }                                                       --# notpresent
+    } ++ vp.p ++
     vp.s2 ! a ;
 
   agrVerb : Str -> Str -> Agr -> Str = \has,have,agr -> 
@@ -456,8 +476,8 @@ resource ResEng = ParamX ** open Prelude in {
           compl = vp.s2 ! agr
         in
         case o of {
-          ODir => subj ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ compl ;
-          OQuest => verb.aux ++ subj ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ compl
+          ODir => subj ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ vp.p ++ compl ;
+          OQuest => verb.aux ++ subj ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ vp.p ++ compl
           }
     } ;
 

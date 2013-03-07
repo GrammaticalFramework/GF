@@ -40,9 +40,9 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
 
     MkVPI vp = {
       s = table {
-            VVAux      => \\a => vp.ad ++ vp.inf ++ vp.s2 ! a;
-            VVInf      => \\a => "to" ++ vp.ad ++ vp.inf ++ vp.s2 ! a;
-            VVPresPart => \\a => vp.ad ++ vp.prp ++ vp.s2 ! a
+            VVAux      => \\a => vp.ad ++ vp.inf ++ vp.p ++ vp.s2 ! a;
+            VVInf      => \\a => "to" ++ vp.ad ++ vp.inf ++ vp.p ++ vp.s2 ! a;
+            VVPresPart => \\a => vp.ad ++ vp.prp ++ vp.p ++ vp.s2 ! a
           }
       } ;
     ConjVPI = conjunctDistrTable2 VVType Agr ;
@@ -81,7 +81,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
             let 
               verb = vp.s ! t.t ! t.a ! p.p ! ODir ! a ;
               verbf = verb.aux ++ verb.adv ++ verb.fin ++ verb.inf ;
-            in t.s ++ p.s ++ vp.ad ++ verbf ++ vp.s2 ! a
+            in t.s ++ p.s ++ vp.ad ++ verbf ++ vp.p ++ vp.s2 ! a
       } ;
 
     ConjVPS = conjunctDistrTable Agr ;
@@ -109,6 +109,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       VVPastNeg => ["didn't"] ;      --# notpresent
       VVPresNeg => "doesn't"
       } ;
+    p = [] ;
     typ = VVAux
     } ;
 
@@ -122,6 +123,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       VVPastNeg => "mightn't" ; --# notpresent
       VVPresNeg => "may not"
       } ;
+    p = [] ;
     typ = VVAux
     } ;
 
@@ -135,6 +137,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       VVPastNeg => "shouldn't" ; --# notpresent
       VVPresNeg => "shall not"  --- shan't
       } ;
+    p = [] ;
     typ = VVAux
     } ;
 
@@ -153,12 +156,18 @@ lin
       ppt = vps.ptp
     in {
     s = be.s ;
+    p = vps.p ;
     prp = be.prp ;
     ptp = be.ptp ;
     inf = be.inf ;
     ad = vps.ad ;
     s2 = \\a => ppt ++ vps.s2 ! a ---- order
     } ;
+
+   --- AR 7/3/2013
+   ComplSlashPartLast vps np = case vps.gapInMiddle of {
+     _  => insertObjPartLast (\\_ => vps.c2 ++ np.s ! NPAcc) vps  ---
+     } ;
 
 ------------
 --- obsolete: use UncNeg : Pol

@@ -531,24 +531,26 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ; --%
     in
     mk5V fit (fit + "s") y z fitting ;
 
-  partV v p = lin V {s = \\f => v.s ! f ++ p ; isRefl = v.isRefl} ;
-  reflV v = lin V {s = v.s ; part = v.part ; isRefl = True} ;
+  partV v p = lin V {s = \\f => v.s ! f ; p = p ; isRefl = v.isRefl} ;
+  reflV v = lin V {s = v.s ; p = v.p ; isRefl = True} ;
 
-  prepV2 v p = lin V2 {s = v.s ; s1 = v.s1 ; c2 = p.s ; isRefl = v.isRefl} ;
+  prepV2 v p = lin V2 {s = v.s ; p = v.p ; s1 = v.s1 ; c2 = p.s ; isRefl = v.isRefl} ;
   dirV2 v = prepV2 v noPrep ;
 
   prepPrepV3 v p q = 
-    lin V3 {s = v.s ; s1 = v.s1 ; c2 = p.s ; c3 = q.s ; isRefl = v.isRefl} ;
+    lin V3 {s = v.s ; p = v.p ; s1 = v.s1 ; c2 = p.s ; c3 = q.s ; isRefl = v.isRefl} ;
   dirV3 v p = prepPrepV3 v noPrep p ;
   dirdirV3 v = dirV3 v noPrep ;
 
   mkVS  v = lin VS v ;
   mkVV  v = lin VV {
     s = table {VVF vf => v.s ! vf ; _ => v.s ! VInf} ;
+    p = v.p ; 
     typ = VVInf
     } ;
   ingVV  v = lin VV {
     s = table {VVF vf => v.s ! vf ; _ => v.s ! VInf} ;
+    p = v.p ; 
     typ = VVPresPart
     } ;
   mkVQ  v = lin VQ v ;
@@ -646,7 +648,7 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ; --%
 
   prepV2 : V -> Prep -> V2 ;
   dirV2 : V -> V2 ;
-  prefixV : Str -> V -> V = \p,v -> lin V { s = \\vform => p + v.s ! vform; isRefl = v.isRefl } ;
+  prefixV : Str -> V -> V = \p,v -> lin V { s = \\vform => p + v.s ! vform; p = v.p ; isRefl = v.isRefl } ;
 
   mkV2 = overload {
     mkV2  : V -> V2 = dirV2 ;
