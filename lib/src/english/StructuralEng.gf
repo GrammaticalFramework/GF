@@ -31,6 +31,7 @@ concrete StructuralEng of Structural = CatEng **
       VVPastNeg => "couldn't" ;   --# notpresent
       VVPresNeg => "can't"
       } ;
+    p = [] ;
     typ = VVAux
     } ;
   during_Prep = mkPrep "during" ;
@@ -70,6 +71,7 @@ concrete StructuralEng of Structural = CatEng **
       VVPastNeg => ["hadn't to"] ;      --# notpresent
       VVPresNeg => "mustn't"
       } ;
+    p = [] ;
     typ = VVAux
     } ;
 ---b  no_Phr = ss "no" ;
