@@ -45,7 +45,7 @@ oper
 
   mkNomReg : Str -> Noun = \mec ->
     case mec of {
-      _ + "o" | "e" => mkNoun (nomVino mec) Masc ; 
+      _ + ("o" | "e") => mkNoun (nomVino mec) Masc ; 
       _ + "a" => mkNoun (nomVino mec) Fem ;
       _ + "z" => mkNounIrreg mec (init mec + "ces") Fem ;
       _ + "án" => mkNounIrreg mec (tk 2 mec + "anes") Masc ;
@@ -106,9 +106,9 @@ oper
         V : Str = case A of {
           "á" => "a" ;
           "é" => "e" ;
-          "í­" => "i" ;
-	  "ó" => "o" ;
-	  "ú" => "u"
+          "í" => "i" ;
+          "ó" => "o" ;
+          "ú" => "u"
         } ;
         alemVn : Str = alem + V + "n" ;
     in mkAdj alemAn (alemVn + "a") (alemVn + "es")
@@ -119,7 +119,7 @@ oper
       _ + "o" => adjSolo solo ;
       _ + ("e" | "a") => adjUtil solo (solo + "s") ;
       _ + "és" => adjEs solo ;
-      _ + ("á" | "é­" | "í" | "ó")  + "n" => adjVn solo ;
+      _ + ("á" | "é" | "í" | "ó" | "ú")  + "n" => adjVn solo ;
       _   => adjUtil solo (solo + "es")
       } ;
 
