@@ -42,7 +42,7 @@ lin
     Expensive = expensive_A ;
     Fresh = mkA "fresco" ;
     Good = L.good_A ;
-    Warm = L.warm_A ;
+    Warm = mkA "caliente" ;
     Suspect = mkA "sospechoso" ;
 
 -- places
@@ -104,7 +104,7 @@ lin
     Italian = mkNat (mkA "italiano") "italiano" "Italia" ;
     Norwegian = mkNat (mkA "noruego") "noruego" "Noruega" ;
     Polish = mkNat (mkA "polaco") "polaco" "Polonia" ;
-    Romanian = mkNat (mkA "rumano") "rumano" "Rumania" ;
+    Romanian = mkNat (mkA "rumano") "rumano" "Rumanía" ;
     Russian = mkNat (mkA "ruso") "ruso" "Rusia" ;
     Spanish = mkNat (mkA "español" "española") "español" "España" ;
     Swedish = mkNat (mkA "sueco") "sueco" "Suecia" ;
@@ -138,7 +138,7 @@ lin
     ALike p item = mkCl item (mkV2 (mkV ("gustar")) dative) p.name ;
     ALive p co = mkCl p.name (mkVP (mkVP (mkV "vivir")) (S.mkAdv in_Prep co)) ;
     ALove p q = mkCl p.name (mkV2 (mkV "amar")) q.name ;
-    AMarried p = mkCl p.name (mkA "casado") ;
+    AMarried p = mkCl p.name stateCopula (mkAP (mkA "casado")) ;
     AReady p = mkCl p.name stateCopula (mkAP (mkA "listo")) ;
     AScared p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "miedo"))) ;
     ASpeak p lang = mkCl p.name (mkV2 (mkV "hablar")) lang ;
