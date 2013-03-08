@@ -75,7 +75,7 @@ concrete CatGer of Cat =
 
     Conj = {s1,s2 : Str ; n : Number} ;
     Subj = {s : Str} ;
-    Prep = {s : Str ; c : PCase} ;
+    Prep = Preposition ;
 
 -- Open lexical classes, e.g. Lexicon
 
