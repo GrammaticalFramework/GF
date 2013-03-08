@@ -51,8 +51,8 @@ lin
   here7to_Adv = mkAdv ["para aquí"] ;
   here7from_Adv = mkAdv ["de aquí"] ;
   how_IAdv = ss "como" ;
-  how8many_IDet = mkIDet "cuantos" "cuantas" Pl ;
-  how8much_IAdv = ss "cuanto" ;
+  how8many_IDet = mkIDet "cuántos" "cuántas" Pl ;
+  how8much_IAdv = ss "cuánto" ;
   if_Subj = ss "si" ** {m = Indic} ;
   if_then_Conj = {s1 = "si" ; s2 = "entonces" ; n = Sg ; lock_Conj = <>} ;
   in8front_Prep = {s = "delante" ; c = MorphoSpa.genitive ; isDir = False} ;
@@ -134,9 +134,9 @@ lin
       Masc Pl P1 ;
   whatSg_IP = {s = \\c => prepCase c ++ ["qué"] ; a = aagr Masc Sg} ;
   whatPl_IP = {s = \\c => prepCase c ++ ["qué"] ; a = aagr Masc Pl} ; ---
-  when_IAdv = ss "cuando" ;
+  when_IAdv = ss "cuándo" ;
   when_Subj = ss "cuando" ** {m = Indic} ;
-  where_IAdv = ss "donde" ;
+  where_IAdv = ss "dónde" ;
   which_IQuant = {s = table {
     Sg => \\g,c => prepCase c ++ "qué" ; --- cual
     Pl => \\g,c => prepCase c ++ "qué" 
