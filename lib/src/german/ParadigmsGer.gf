@@ -351,7 +351,7 @@ mkV2 : overload {
 
 
   mmkN2  : N -> Prep -> N2 = \n,p -> n ** {c2 = p ; lock_N2 = <>} ;
-  vonN2 : N -> N2 = \n -> n ** {c2 = {s = "von" ; c = dative} ; lock_N2 = <>} ;
+  vonN2 : N -> N2 = \n -> n ** {c2 = von_Prep ; lock_N2 = <>} ;
 
   mkN3 = \n,p,q -> n ** {c2 = p ; c3 = q ; lock_N3 = <>} ;
 
@@ -397,10 +397,10 @@ mkV2 : overload {
 
   mkAdv s = {s = s ; lock_Adv = <>} ;
 
-  mkPrep s c = {s = s ; c = c ; lock_Prep = <>} ;
-  accPrep = mkPrep [] accusative ;
-  datPrep = mkPrep [] dative ;
-  genPrep = mkPrep [] genitive ;
+  mkPrep s c = {s = s ; c = c ; isPrep = True ; lock_Prep = <>} ;
+  accPrep = {s = [] ; c = accusative ; isPrep = False ; lock_Prep = <>} ;
+  datPrep = {s = [] ; c = dative ; isPrep = False ; lock_Prep = <>} ;
+  genPrep = {s = [] ; c = genitive ; isPrep = False ; lock_Prep = <>} ;
   --von_Prep = mkPrep "von" dative ;
   von_Prep = mkPrep [] vonDat_Case ;
   zu_Prep = mkPrep [] zuDat_Case ;
@@ -472,8 +472,8 @@ mkV2 : overload {
   werden_V = MorphoGer.werden_V ** {lock_V = <>} ;
 
   prepV2 v c   = v ** {c2 = c ; lock_V2 = <>} ;
-  dirV2 v = prepV2 v (mkPrep [] accusative) ;
-  datV2 v = prepV2 v (mkPrep [] dative) ;
+  dirV2 v = prepV2 v accPrep ;
+  datV2 v = prepV2 v datPrep ;
 
   mkV3 v c d = v ** {c2 = c ; c3 = d ; lock_V3 = <>} ;
   dirV3 v p = mkV3 v (mkPrep [] accusative) p ;

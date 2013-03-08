@@ -344,7 +344,7 @@ resource ResGer = ParamX ** open Prelude in {
 
 -- Prepositions for complements indicate the complement case.
 
-  Preposition : Type = {s : Str ; c : PCase} ;
+  Preposition : Type = {s : Str ; c : PCase ; isPrep : Bool} ;
 
 -- To apply a preposition to a complement.
 
@@ -354,7 +354,7 @@ resource ResGer = ParamX ** open Prelude in {
 -- To build a preposition from just a case.
 
   noPreposition : Case -> Preposition = \c -> 
-    {s = [] ; c = NPC c} ;
+    {s = [] ; c = NPC c ; isPrep = False} ;
 
 -- Pronouns and articles
 -- Here we define personal and relative pronouns.
@@ -608,9 +608,9 @@ resource ResGer = ParamX ** open Prelude in {
 
   isLightComplement : Bool -> Preposition -> Bool = \isPron,prep -> case isPron of {
      False => False ;
-     _ => case prep.c of {
-       NPC Acc => True ;
-       _ => False
+     _ => case prep.isPrep of {
+       True => False ;
+       _ => True
        }
      } ;
 
