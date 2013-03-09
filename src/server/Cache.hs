@@ -4,11 +4,12 @@ import Control.Concurrent.MVar
 import Data.Map (Map)
 import qualified Data.Map as Map 
 import System.Directory (getModificationTime)
-import System.Time (ClockTime)
+import Data.Time (UTCTime)
+import Data.Time.Compat (toUTCTime)
 
 data Cache a = Cache {
       cacheLoad :: FilePath -> IO a,
-      cacheObjects :: MVar (Map FilePath (MVar (Maybe (ClockTime, a))))
+      cacheObjects :: MVar (Map FilePath (MVar (Maybe (UTCTime, a))))
     }
 
 newCache :: (FilePath -> IO a) -> IO (Cache a)
@@ -27,7 +28,7 @@ readCache c file =
                        Nothing -> do v <- newMVar Nothing
                                      return (Map.insert file v objs, v)
     -- Check time stamp, and reload if different than the cache entry
-    readObject m = do t' <- getModificationTime file
+    readObject m = do t' <- toUTCTime `fmap` getModificationTime file
                       x' <- case m of
                         Just (t,x) | t' == t -> return x
                         _                    -> cacheLoad c file
