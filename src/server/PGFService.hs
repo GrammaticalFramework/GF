@@ -16,7 +16,7 @@ import qualified Codec.Binary.UTF8.String as UTF8 (decodeString)
 import qualified Data.ByteString.Lazy as BS
 
 import Control.Concurrent
-import Control.Exception(evaluate)
+import qualified Control.Exception as E
 import Control.Monad
 import Control.Monad.State(State,evalState,get,put)
 import Data.Char
@@ -30,6 +30,9 @@ import System.Exit
 import System.IO
 import System.Directory(removeFile)
 import Fold(fold) -- transfer function for OpenMath LaTeX
+
+catchIOE :: IO a -> (E.IOException -> IO a) -> IO a
+catchIOE = E.catch
 
 logFile :: FilePath
 logFile = "pgf-error.log"
@@ -154,7 +157,7 @@ doExternal Nothing input = throwCGIError 400 "Unknown external command" ["Unknow
 doExternal (Just cmd) input =
   do liftIO $ logError ("External command: "++cmd)
      cmds <- liftIO $ (fmap lines $ readFile "external_services")
-                        `catch` const (return [])
+                        `catchIOE` const (return [])
      liftIO $ logError ("External services: "++show cmds)
      if cmd `elem` cmds then ok else err
   where
@@ -357,7 +360,7 @@ pipeIt2graphviz format code = do
     -- fork off a thread to start consuming the output
     output  <- BS.hGetContents outh
     outMVar <- newEmptyMVar
-    _ <- forkIO $ evaluate (BS.length output) >> putMVar outMVar ()
+    _ <- forkIO $ E.evaluate (BS.length output) >> putMVar outMVar ()
 
     -- now write and flush any input
     hPutStr inh code
