@@ -14,7 +14,8 @@ import System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
                         setCurrentDirectory,getCurrentDirectory,
                         getDirectoryContents,removeFile,removeDirectory,
                         getModificationTime)
-import System.Time(toUTCTime,formatCalendarTime)
+import Data.Time.Compat (toUTCTime)
+import Data.Time (formatTime)
 import System.Locale(defaultTimeLocale,rfc822DateFormat)
 import System.FilePath(dropExtension,takeExtension,takeFileName,takeDirectory,
                        (</>))
@@ -249,8 +250,7 @@ handle documentroot state0 cache execute1
         do t <- liftIO $ getModificationTime path
            return $ makeObj ["path".=path,"time".=format t]
       where
-        format = formatCalendarTime defaultTimeLocale rfc822DateFormat
-                 . toUTCTime
+        format = formatTime defaultTimeLocale rfc822DateFormat
 
     rm path | takeExtension path `elem` ok_to_delete =
       do b <- liftIO $ doesFileExist path

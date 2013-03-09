@@ -40,13 +40,14 @@ import Data.List
 import Data.Maybe(isJust)
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Map as Map
-import System.Time
+import Data.Time
+import Data.Time.Compat (toUTCTime)
 import System.Directory
 import System.FilePath
 import Text.PrettyPrint
 
 type ModName = String
-type ModEnv  = Map.Map ModName (ClockTime,[ModName])
+type ModEnv  = Map.Map ModName (UTCTime,[ModName])
 
 
 -- | Returns a list of all files to be compiled in topological order i.e.
@@ -95,13 +96,13 @@ getAllFiles opts ps env file = do
       (file,gfTime,gfoTime) <- do
           mb_gfFile <- ioeIO $ getFilePath ps (gfFile name)
           case mb_gfFile of
-            Just gfFile -> do gfTime  <- ioeIO $ getModificationTime gfFile
-                              mb_gfoTime <- ioeIO $ catch (liftM Just $ getModificationTime (gf2gfo opts gfFile))
+            Just gfFile -> do gfTime  <- ioeIO $ toUTCTime `fmap` getModificationTime gfFile
+                              mb_gfoTime <- ioeIO $ catch (liftM Just $ toUTCTime `fmap` getModificationTime (gf2gfo opts gfFile))
                                                           (\_->return Nothing)
                               return (gfFile, Just gfTime, mb_gfoTime)
             Nothing     -> do mb_gfoFile <- ioeIO $ getFilePath (maybe id (:) (flag optGFODir opts) ps) (gfoFile name)
                               case mb_gfoFile of
-                                Just gfoFile -> do gfoTime <- ioeIO $ getModificationTime gfoFile
+                                Just gfoFile -> do gfoTime <- ioeIO $ toUTCTime `fmap` getModificationTime gfoFile
                                                    return (gfoFile, Nothing, Just gfoTime)
                                 Nothing      -> ioeErr $ Bad (render (text "File" <+> text (gfFile name) <+> text "does not exist." $$
                                                                       text "searched in:" <+> vcat (map text ps)))
@@ -147,7 +148,7 @@ gf2gfo opts file = maybe (gfoFile (dropExtension file))
 -- From the given Options and the time stamps computes
 -- whether the module have to be computed, read from .gfo or
 -- the environment version have to be used
-selectFormat :: Options -> Maybe ClockTime -> Maybe ClockTime -> Maybe ClockTime -> (CompStatus,Maybe ClockTime)
+selectFormat :: Options -> Maybe UTCTime -> Maybe UTCTime -> Maybe UTCTime -> (CompStatus,Maybe UTCTime)
 selectFormat opts mtenv mtgf mtgfo =
   case (mtenv,mtgfo,mtgf) of
     (_,_,Just tgf)         | fromSrc  -> (CSComp,Nothing)
@@ -172,7 +173,7 @@ data CompStatus =
  | CSEnv  -- gfo is in env
   deriving Eq
 
-type ModuleInfo = (ModName,CompStatus,Maybe ClockTime,Bool,[ModName],InitPath)
+type ModuleInfo = (ModName,CompStatus,Maybe UTCTime,Bool,[ModName],InitPath)
 
 importsOfModule :: SourceModule -> (ModName,[ModName])
 importsOfModule (m,mi) = (modName m,depModInfo mi [])
