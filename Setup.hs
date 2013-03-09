@@ -9,7 +9,7 @@ import Control.Monad
 import Data.List(isPrefixOf,intersect)
 import Data.Maybe(listToMaybe)
 import System.IO
-import qualified System.IO.Error as E
+import qualified Control.Exception as E
 import System.Cmd
 import System.FilePath
 import System.Directory
@@ -17,6 +17,9 @@ import System.Process
 import System.Exit
 
 import WebSetup
+
+tryIOE :: IO a -> IO (Either E.IOException a)
+tryIOE = E.try
 
 main :: IO ()
 main = defaultMainWithHooks simpleUserHooks{ preBuild =gfPreBuild
@@ -391,7 +394,7 @@ default_gf pkg lbi = buildDir lbi </> exeName' </> exeNameReal
 
 -- | Create autogen module with detailed version info by querying darcs
 extractDarcsVersion distFlag =
-  do info <- E.try askDarcs
+  do info <- tryIOE askDarcs
      createDirectoryIfMissing True autogenPath
      updateFile versionModulePath $ unlines $
        ["module "++modname++" where",
@@ -410,7 +413,7 @@ extractDarcsVersion distFlag =
                       tag:_ -> ["--from-tag="++tag]
          changes <- lines `fmap` readProcess "darcs" ("changes":from) ""
          let dates = init' (filter ((`notElem` [""," "]).take 1) changes)
-         whatsnew<-E.try $ lines `fmap` readProcess "darcs" ["whatsnew","-s"] ""
+         whatsnew <- tryIOE $ lines `fmap` readProcess "darcs" ["whatsnew","-s"] ""
          return (listToMaybe tags,listToMaybe dates,
                  length dates,either (const 0) length whatsnew)
 
@@ -419,7 +422,7 @@ extractDarcsVersion distFlag =
 
 -- | Only update the file if contents has changed
 updateFile path new =
-  do old <- E.try $ readFile path
+  do old <- tryIOE $ readFile path
      when (Right new/=old) $ seq (either (const 0) length old) $
                                  writeFile path new
 
