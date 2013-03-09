@@ -252,7 +252,7 @@ rawToBytes raw = integerToBytes mashed width where
 in positions above the count.
 
 \begin{code}
-clamp :: Bits a => BitCount -> a -> a
+clamp :: (Num a, Bits a) => BitCount -> a -> a
 clamp = (.&.) . mask where
 	mask 1 = 1
 	mask n | n > 1 = (mask (n - 1) `shiftL` 1) + 1
