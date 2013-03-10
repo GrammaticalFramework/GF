@@ -167,7 +167,8 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
         } ;
 
     RelCN cn rs = {
-      s = \\a,n,c => cn.s ! a ! n ! c ++ rs.s ! gennum cn.g n ;
+      s = \\a,n,c => cn.s ! a ! n ! c ++ "," ++  
+                     rs.s ! gennum cn.g n ;
       g = cn.g
       } ;
 
