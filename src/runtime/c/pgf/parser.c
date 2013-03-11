@@ -1631,8 +1631,10 @@ pgf_new_token_state(PgfConcr *concr, PgfToken tok, GuPool* pool)
     ts->lexicon_idx = gu_map_get(concr->leftcorner_tok_idx, 
                                  &tok, PgfProductionIdx*);
 	ts->lexical_prob = INFINITY;
-	PgfLexiconFn clo = { { pgf_parser_compute_lexicon_prob }, ts };
-	gu_map_iter(ts->lexicon_idx, &clo.fn, NULL);
+	if (ts->lexicon_idx != NULL) {
+		PgfLexiconFn clo = { { pgf_parser_compute_lexicon_prob }, ts };
+		gu_map_iter(ts->lexicon_idx, &clo.fn, NULL);
+	}
 	if (ts->lexical_prob == INFINITY)
 		ts->lexical_prob = 0;
 	return ts;
