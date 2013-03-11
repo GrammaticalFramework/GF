@@ -27,7 +27,7 @@ import GF.Data.Operations
 
 import Control.Monad
 import System.IO
-import System.Directory
+import GF.System.Directory
 import System.FilePath
 import qualified Data.Map as Map
 --import qualified Data.Set as Set
