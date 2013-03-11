@@ -10,11 +10,10 @@ import System.Random(randomRIO)
 import System.IO(stderr,hPutStrLn)
 import GF.System.Catch(try)
 import System.IO.Error(isAlreadyExistsError)
-import System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
-                        setCurrentDirectory,getCurrentDirectory,
-                        getDirectoryContents,removeFile,removeDirectory,
-                        getModificationTime)
-import Data.Time.Compat (toUTCTime)
+import GF.System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
+                           setCurrentDirectory,getCurrentDirectory,
+                           getDirectoryContents,removeFile,removeDirectory,
+                           getModificationTime)
 import Data.Time (formatTime)
 import System.Locale(defaultTimeLocale,rfc822DateFormat)
 import System.FilePath(dropExtension,takeExtension,takeFileName,takeDirectory,
