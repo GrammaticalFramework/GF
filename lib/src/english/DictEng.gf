@@ -5105,6 +5105,7 @@ lin can_VV = {
       VVPastNeg => "couldn't" ;
       VVPresNeg => "can't"
       } ;
+    p = [] ;
     typ = VVAux
     } ;
 lin canada_PN = mkPN "Canada";
@@ -22447,6 +22448,7 @@ lin may_VV = {
       VVPastNeg => "mightn't" ;
       VVPresNeg => "may not"
       } ;
+    p = [] ;
     typ = VVAux
     } ;
 lin may_beetle_N = mkN "may - beetle" "may - beetles";
@@ -23936,6 +23938,7 @@ lin must_VV = {
       VVPastNeg => ["hadn't to"] ;      --# notpresent
       VVPresNeg => "mustn't"
       } ;
+    p = [] ;
     typ = VVAux
     } ;
 lin mustachio_N = mkN "mustachio" "mustachios";
@@ -27697,7 +27700,7 @@ lin pleasantness_N = mkN "pleasantness" ;
 lin pleasantry_N = mkN "pleasantry" "pleasantries";
 lin please_V = mkV "please" "pleases" "pleased" "pleased" "pleasing";
 lin please_V2 = mkV2 (mkV "please" "pleases" "pleased" "pleased" "pleasing");
-lin please_VV = {s = (mkVV (mkV "please" "pleases" "pleased" "pleased" "pleasing")).s; typ = VVAux};
+lin please_VV = {s = (mkVV (mkV "please" "pleases" "pleased" "pleased" "pleasing")).s; typ = VVAux ; p = []};
 lin pleased_A = compoundA (mkA "pleased");
 lin pleasing_A = compoundA (mkA "pleasing");
 lin pleasurable_A = compoundA (mkA "pleasurable");
@@ -33869,6 +33872,7 @@ lin should_VV = {
       VVPastNeg => "shall not" ;
       VVPresNeg => "shouldn't"
       } ;
+    p = [] ;
     typ = VVAux
     } ;
 lin shoulder_N = mkN "shoulder" "shoulders";
