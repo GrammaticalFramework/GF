@@ -20,9 +20,16 @@ allTreeOps pgf = [
       Right $ \f -> map (transfer pgf f))),
    ("paraphrase",("paraphrase by using semantic definitions (def)",
       Left  $ nub . concatMap (paraphrase pgf))),
+   ("largest",("sort trees from largest to smallest, in number of nodes",
+      Left  $ largest)),
    ("smallest",("sort trees from smallest to largest, in number of nodes",
-      Left  $ smallest))
+      Left  $ smallest)),
+   ("subtrees",("return all fully applied subtrees (stopping at abstractions), by default sorted from the largest",
+      Left  $ concatMap subtrees))
   ]
+
+largest :: [Expr] -> [Expr]
+largest = reverse . smallest
 
 smallest :: [Expr] -> [Expr]
 smallest = sortBy (\t u -> compare (size t) (size u)) where
@@ -31,6 +38,10 @@ smallest = sortBy (\t u -> compare (size t) (size u)) where
     EApp e1 e2 -> size e1 + size e2 + 1
     _ -> 1
 
+subtrees :: Expr -> [Expr]
+subtrees t = t : case unApp t of
+  Just (f,ts) -> concatMap subtrees ts
+  _ -> []  -- don't go under abstractions
 
 --- simple-minded transfer; should use PGF.Expr.match
 
