@@ -378,7 +378,7 @@ vapply v vs =
     VError {} -> v
 --  VClosure env (Abs b x t) -> beta gr env b x t vs
     VAbs bt _ (Bind f) -> vbeta bt f vs
-    VApp pre vs1 -> err msg id $ delta pre (vs1++vs)
+    VApp pre vs1 -> err msg vfv $ mapM (delta pre) (varyList (vs1++vs))
       where
         --msg = const (VApp pre (vs1++vs))
         msg = bug . (("Applying Predef."++showIdent (predefName pre)++": ")++)
@@ -393,6 +393,10 @@ vbeta bt f (v:vs) =
   where
     ap (VFV avs) = vfv [vapply (f v) vs|v<-avs]
     ap v         = vapply (f v) vs
+
+vary (VFV vs) = vs
+vary v = [v]
+varyList = mapM vary
 
 {-
 beta env b x t (v:vs) =
