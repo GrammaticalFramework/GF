@@ -1,11 +1,11 @@
 --# -path=.:../abstract:../common
 
-concrete SymbolFin of Symbol = CatFin ** open Prelude, NounFin, ResFin in {
+concrete SymbolFin of Symbol = CatFin ** open Prelude, NounFin, ResFin, MorphoFin in {
 
 lin
-  SymbPN i = {s = \\c => i.s} ; --- c
-  IntPN i  = {s = \\c => i.s} ; --- c
-  FloatPN i  = {s = \\c => i.s} ; --- c
+  SymbPN i = {s = \\c => i.s ++ BIND ++ defaultCaseEnding c} ; --- c
+  IntPN i  = {s = \\c => i.s ++ BIND ++ ":" ++ BIND ++ defaultCaseEnding c} ; --- c
+  FloatPN i  = {s = \\c => i.s ++ BIND ++ ":" ++ BIND ++ defaultCaseEnding c} ; --- c
   NumPN i  = {s = \\c => i.s!Sg!Nom } ; --- c
 
   CNIntNP cn i = {

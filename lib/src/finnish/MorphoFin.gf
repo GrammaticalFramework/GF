@@ -951,5 +951,20 @@ oper
       } ;
     } ;
 
+  defaultCaseEnding : Case -> Str = \c -> case c of {
+      Nom    => "" ;
+      Gen    => "n" ;
+      Part   => "a" ;
+      Transl => "ksi" ;
+      Ess    => "na" ;
+      Iness  => "ssa" ;
+      Elat   => "sta" ;
+      Illat  => "an" ;
+      Adess  => "lla" ;
+      Ablat  => "lta" ;
+      Allat  => "lle" ;
+      Abess  => "tta"
+      } ;
+
 
 }
