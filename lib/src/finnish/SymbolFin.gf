@@ -3,9 +3,9 @@
 concrete SymbolFin of Symbol = CatFin ** open Prelude, NounFin, ResFin, MorphoFin in {
 
 lin
-  SymbPN i = {s = \\c => i.s ++ BIND ++ defaultCaseEnding c} ; --- c
-  IntPN i  = {s = \\c => i.s ++ BIND ++ ":" ++ BIND ++ defaultCaseEnding c} ; --- c
-  FloatPN i  = {s = \\c => i.s ++ BIND ++ ":" ++ BIND ++ defaultCaseEnding c} ; --- c
+  SymbPN i = {s = \\c => i.s ++ bindIf c ++ defaultCaseEnding c} ; --- c
+  IntPN i  = {s = \\c => i.s ++ bindColonIf c ++ defaultCaseEnding c} ; --- c
+  FloatPN i  = {s = \\c => i.s ++ bindColonIf c ++ defaultCaseEnding c} ; --- c
   NumPN i  = {s = \\c => i.s!Sg!Nom } ; --- c
 
   CNIntNP cn i = {
