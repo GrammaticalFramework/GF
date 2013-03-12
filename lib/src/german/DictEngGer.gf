@@ -24648,7 +24648,7 @@ lin no_Quant =
               R.Sg => \\g,c => R.usePrepC c (\k -> "kein" + R.pronEnding ! R.GSg g ! k) ;
               R.Pl => (M.detLikeAdj False R.Pl "kein").s
             }
-      in {s = \\_ => keiner ; sp = keiner ; a = R.Strong ; aPl = R.Weak} ;
+      in {s,sp = \\_ => keiner ; a = R.Strong ; aPl = R.Weak} ;
 lin no_ball_N = variants {};
 lin no_go_A = variants {};
 lin noah_PN = variants {};
@@ -38159,7 +38159,7 @@ lin thanksgiving_N = variants {};
 lin that_Subj = ss "daß";
 lin that_Quant = 
       let jener : R.Number => R.Gender => R.PCase => Str = \\n => (M.detLikeAdj True n "jen").s
-      in {s = \\_ => jener ; sp = jener ; a,aPl = R.Weak} ;
+      in {s,sp = \\_ => jener ; a,aPl = R.Weak} ;
 lin thatch_N = variants {};
 lin thatch_V2 = variants {};
 lin thatcham_PN = variants {};
@@ -38298,7 +38298,7 @@ lin thirstily_Adv = variants {};
 lin thirsty_A = mk3A "durstig" "durstiger" "durstigste";
 lin this_Quant =
       let dieser : R.Number => R.Gender => R.PCase => Str = \\n => (M.detLikeAdj True n "dies").s
-      in {s = \\_ => dieser ; sp = dieser ; a,aPl = R.Weak} ;
+      in {s,sp = \\_ => dieser ; a,aPl = R.Weak} ;
 lin thistle_N = variants {};
 lin thistledown_N = variants {};
 lin thither_Adv = variants {};
