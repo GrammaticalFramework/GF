@@ -1,6 +1,7 @@
 abstract IrregGerAbs = Cat ** {
 
   fun backen_V : V ;
+  fun backen_u_V : V ;
   fun befehlen_V : V ;
   fun beginnen_V : V ;
   fun beißen_V : V ;
@@ -23,6 +24,7 @@ abstract IrregGerAbs = Cat ** {
   fun dringen_V : V ;
   fun dürfen_V : V ;
   fun empfehlen_V : V ;
+  fun empfehlen_o_V : V ;
   fun erlöschen_V : V ;
   fun erkennen_V : V ;
   fun erschrecken_V : V ;
@@ -39,16 +41,19 @@ abstract IrregGerAbs = Cat ** {
   fun fressen_V : V ;
   fun frieren_V : V ;
   fun gären_V : V ;
+  fun gären_o_V : V ;
   fun gebären_V : V ;
   fun geben_V : V ;
   fun gedeihen_V : V ;
   fun gehen_V : V ;
   fun gelingen_V : V ;
   fun gelten_V : V ;
+  fun gelten_o_V : V ;
   fun genesen_V : V ;
   fun genießen_V : V ;
   fun geschehen_V : V ;
   fun gewinnen_V : V ;
+  fun gewinnen_o_V : V ;
   fun gießen_V : V ;
   fun gleichen_V : V ;
   fun gleiten_V : V ;
@@ -59,6 +64,7 @@ abstract IrregGerAbs = Cat ** {
   fun halten_V : V ;
   fun hängen_V : V ;
   fun hauen_V : V ;
+  fun hauen_te_V : V ;
   fun heben_V : V ;
   fun heißen_V : V ;
   fun helfen_V : V ;
@@ -127,6 +133,7 @@ abstract IrregGerAbs = Cat ** {
   fun schweigen_V : V ;
   fun schwellen_V : V ;
   fun schwimmen_V : V ;
+  fun schwimmen_o_V : V ;
   fun schwinden_V : V ;
   fun schwingen_V : V ;
   fun schwören_V : V ;
@@ -141,12 +148,14 @@ abstract IrregGerAbs = Cat ** {
   fun sollen_V : V ;
   fun speien_V : V ;
   fun spinnen_V : V ;
+  fun spinnen_o_V : V ;
   fun spleißen_V : V ;
   fun sprechen_V : V ;
   fun sprießen_V : V ;
   fun springen_V : V ;
   fun stechen_V : V ;
   fun stehen_V : V ;
+  fun stehen_u_V : V ;
   fun stehlen_V : V ;
   fun steigen_V : V ;
   fun sterben_V : V ;
