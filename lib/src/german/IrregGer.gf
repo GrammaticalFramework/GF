@@ -10,7 +10,8 @@ in {
 
   flags optimize=values ;
 
-  lin backen_V =  irregV "backen" "bäckt" (variants {"backt" ; "buk"}) (variants {"backt" ; "buke"}) "gebacken" ;
+  lin backen_V =  irregV "backen" "bäckt" "backt" "backt" "gebacken" ;
+  lin backen_u_V =  irregV "backen" "bäckt" "buk" "buke" "gebacken" ;
   lin befehlen_V =  irregV "befehlen" "befiehlt" "befahl" "beföhle" "befähle)" ;
   lin beginnen_V =  irregV "beginnen" "beginnt" "begann" "begönne" "begänne)" ;
   lin beißen_V =  irregV "beißen" "beißt" "biß" "biße" "gebissen" ;
@@ -37,7 +38,9 @@ in {
         "dürfte" "gedurft" [] 
         M.VHaben ** {lock_V = <>} ;
   lin empfehlen_V =  irregV "empfehlen" "empfiehlt" "empfahl" 
-    (variants {"empföhle" ; "empfähle"}) "empfohlen" ;
+    "empfähle" "empfohlen" ;
+  lin empfehlen_o_V =  irregV "empfehlen" "empfiehlt" "empfahl" 
+    "empföhle" "empfohlen" ;
   lin erlöschen_V =  irregV "erlöschen" "erlischt" "erlosch" "erlösche" "erloschen" ;
   lin erkennen_V =  irregV "erkennen" "erkennt" "erkannte" "erkannte" "erkannt" ;
   lin erschrecken_V =  irregV "erschrecken" "erschrickt" "erschrak" "erschräke" "erschrocken" ;
@@ -53,17 +56,20 @@ in {
   lin fließen_V =  irregV "fließen" "fließt" "floß" "flösse" "geflossen" ;
   lin fressen_V =  irregV "fressen" "frißt" "fraß" "fräße" "gefressen" ;
   lin frieren_V =  irregV "frieren" "friert" "fror" "fröre" "gefroren" ;
-  lin gären_V =  irregV "gären" "gärt" (variants {"gor" ; "gärte"}) "göre" "gegoren" ;
+  lin gären_V =  irregV "gären" "gärt" "gärte" "göre" "gegoren" ;
+  lin gären_o_V =  irregV "gären" "gärt" "gor" "göre" "gegoren" ;
   lin gebären_V =  irregV "gebären" "gebiert" "gebar" "gebäre" "geboren" ;
   lin geben_V =  irregV "geben" "gibt" "gab" "gäbe" "gegeben" ;
   lin gedeihen_V =  irregV "gedeihen" "gedeiht" "gedieh" "gediehe" "gediehen" ;
   lin gehen_V =  irregV "gehen" "geht" "ging" "ginge" "gegangen" ;
   lin gelingen_V =  irregV "gelingen" "gelingt" "gelang" "gelange" "gelungen" ;
-  lin gelten_V =  irregV "gelten" "gilt" "galt" (variants {"galte" ; "golte"}) "gegolten" ;
+  lin gelten_V =  irregV "gelten" "gilt" "galt" "galte" "gegolten" ;
+  lin gelten_o_V =  irregV "gelten" "gilt" "galt" "golte" "gegolten" ;
   lin genesen_V =  irregV "genesen" "genest" "genas" "genäse" "genesen" ;
   lin genießen_V =  irregV "genießen" "genießt" "genoß" "genösse" "genossen" ;
   lin geschehen_V =  irregV "geschehen" "geschieht" "geschah" "geschehen" "geschähe" ;
-  lin gewinnen_V =  irregV "gewinnen" "gewinnt" "gewann" (variants {"gewönne" ; "gewänne"}) "gewonnen" ;
+  lin gewinnen_V =  irregV "gewinnen" "gewinnt" "gewann" "gewänne" "gewonnen" ;
+  lin gewinnen_o_V =  irregV "gewinnen" "gewinnt" "gewann" "gewönne" "gewonnen" ;
   lin gießen_V =  irregV "gießen" "gießt" "goß" "gösse" "gegossen" ;
   lin gleichen_V =  irregV "gleichen" "gleicht" "glich" "gliche" "geglichen" ;
   lin gleiten_V =  irregV "gleiten" "gleitet" "glitt" "glitte" "geglitten" ;
@@ -73,7 +79,8 @@ in {
   lin haben_V =  irregV "haben" "hat" "hatte" "hätte" "gehabt" ;
   lin halten_V =  irregV "halten" "hält" "hielt" "hielte" "gehalten" ;
   lin hängen_V =  irregV "hängen" "hängt" "hing" "hinge" "gehangen" ;
-  lin hauen_V =  irregV "hauen" "haut" (variants {"haute" ; "hieb"}) (variants {"haute" ; "hiebe"}) "gehauen" ;
+  lin hauen_V =  irregV "hauen" "haut" "hieb" "hiebe" "gehauen" ;
+  lin hauen_te_V =  irregV "hauen" "haut" "haute" "haute" "gehauen" ;
   lin heben_V =  irregV "heben" "hebt" "hob" "höbe" "gehoben" ;
   lin heißen_V =  irregV "heißen" "heißt" "hieß" "hieße" "geheißen" ;
   lin helfen_V =  irregV "helfen" "hilft" "half" "hülfe" "geholfen" ;
@@ -99,7 +106,7 @@ in {
   lin lügen_V =  irregV "lügen" "lügt" "log" "löge" "gelogen" ;
   lin mahlen_V =  irregV "mahlen" "mahlt" "mahlte" "mahlte" "gemahlen" ;
   lin meiden_V =  irregV "meiden" "meidt" "mied" "miede" "gemieden" ;
-  lin melken_V =  irregV "melken" (variants {"melkt" ; "milkt"}) (variants {"melkte" ; "molk"}) "gemolken" "gemelkt" ;
+  lin melken_V =  irregV "melken" "milkt" "molk" "mölke" "gemolken" ;
   lin messen_V =  irregV "messen" "mißt" "maß" "mäße" "gemessen" ;
   lin mißlingen_V =  irregV "mißlingen" "mißlingt" "mißlang" "mißlungen" "mißlänge" ;
   lin mögen_V =  M.mkV 
@@ -128,7 +135,7 @@ in {
   lin rufen_V =  irregV "rufen" "ruft" "rief" "riefe" "gerufen" ;
   lin salzen_V =  irregV "salzen" "salzt" "salzte" "salzte" "gesalzen" ;
   lin saufen_V =  irregV "saufen" "säuft" "soff" "söffe" "gesoffen" ;
-  lin saugen_V =  irregV "saugen" "saugt" (variants {"saugte" ; "sog"}) (variants {"saugte" ; "soge"}) (variants {"gesaugt" ; "gesogen"}) ;
+  lin saugen_V =  irregV "saugen" "saugt" "sog" "soge" "gesogen" ;
   lin schaffen_V =  irregV "schaffen" "schafft" "schuf" "schüfe" "geschaffen" ;
   lin scheiden_V =  irregV "scheiden" "scheidt" "schied" "schiede" "geschieden" ;
   lin scheinen_V =  irregV "scheinen" "scheint" "schien" "schiene" "geschienen" ;
@@ -142,7 +149,7 @@ in {
   lin schlagen_V =  irregV "schlagen" "schlägt" "schlug" "schlüge" "geschlagen" ;
   lin schleichen_V =  irregV "schleichen" "schleicht" "schlich" "schliche" "geschlichen" ;
   lin schleifen_V =  irregV "schleifen" "schleift" "schliff" "schliffe" "geschliffen" ;
-  lin schleißen_V =  irregV "schleißen" "schleißt" (variants {"schliß" ; "schleißte"}) (variants {"schliß" ; "schleißte"}) (variants {"geschlissen" ; "geschleißt"}) ;
+  lin schleißen_V =  irregV "schleißen" "schleißt" "schliß" "schliß" "geschlissen" ;
   lin schließen_V =  irregV "schließen" "schließt" "schloß" "schlösse" "geschlossen" ;
   lin schlingen_V =  irregV "schlingen" "schlingt" "schlang" "schlünge" "geschlungen" ;
   lin schmeißen_V =  irregV "schmeißen" "schmeißt" "schmiß" "schmiße" "geschmissen" ;
@@ -153,14 +160,15 @@ in {
   lin schreiten_V =  irregV "schreiten" "schreitet" "schritt" "schritte" "geschritten" ;
   lin schweigen_V =  irregV "schweigen" "schweigt" "schwieg" "schwiege" "geschwiegen" ;
   lin schwellen_V =  irregV "schwellen" "schwillt" "schwoll" "schwölle" "geschwollen" ;
-  lin schwimmen_V =  irregV "schwimmen" "schwimmt" "schwamm" (variants {"schwömme" ; "schwämme"}) "geschwommen" ;
+  lin schwimmen_V =  irregV "schwimmen" "schwimmt" "schwamm" "schwämme" "geschwommen" ;
+  lin schwimmen_o_V =  irregV "schwimmen" "schwimmt" "schwamm" "schwömme" "geschwommen" ;
   lin schwinden_V =  irregV "schwinden" "schwindt" "schwand" "schwände" "geschwunden" ;
   lin schwingen_V =  irregV "schwingen" "schwingt" "schwang" "schwänge" "geschwungen" ;
   lin schwören_V =  irregV "schwören" "schwört" "schwor" "schwüre" "geschworen" ;
   lin sehen_V =  irregV "sehen" "sieht" "sah" "sähe" "gesehen" ;
   lin sein_V =  irregV "sein" "ist" "war" "wäre" "gewesen" ;
-  lin senden_V =  irregV "senden" "sendt" (variants {"sandte" ; "sendete"}) (variants {"sandte" ; "sendete"}) (variants {"gesandt" ; "gesendet"}) ;
-  lin sieden_V =  irregV "sieden" "siedt" (variants {"siedete" ; "sott"}) (variants {"siedete" ; "sotte"}) (variants {"gesotten" ; "gesiedet"}) ;
+  lin senden_V =  irregV "senden" "sendt" "sandte" "sandte" "gesandt" ;
+  lin sieden_V =  irregV "sieden" "siedt" "sott" "sotte" "gesotten" ;
   lin singen_V =  irregV "singen" "singt" "sang" "sänge" "gesungen" ;
   lin sinken_V =  irregV "sinken" "sinkt" "sank" "sänke" "gesunken" ;
   lin sinnen_V =  irregV "sinnen" "sinnt" "sann" "sänne" "gesonnen" ;
@@ -172,13 +180,15 @@ in {
         M.VHaben ** {lock_V = <>} ;
 
   lin speien_V =  irregV "speien" "speit" "spie" "spie" "gespien" ;
-  lin spinnen_V =  irregV "spinnen" "spinnt" "spann" (variants {"spönne" ; "spänne"}) "gesponnen" ;
+  lin spinnen_V =  irregV "spinnen" "spinnt" "spann" "spänne" "gesponnen" ;
+  lin spinnen_o_V =  irregV "spinnen" "spinnt" "spann" "spönne" "gesponnen" ;
   lin spleißen_V =  irregV "spleißen" "spleißt" "spliß" "spliße" "gesplissen" ;
   lin sprechen_V =  irregV "sprechen" "spricht" "sprach" "spräche" "gesprochen" ;
   lin sprießen_V =  irregV "sprießen" "sprießt" "sproß" "sprösse" "gesprossen" ;
   lin springen_V =  irregV "springen" "springt" "sprang" "spränge" "gesprungen" ;
   lin stechen_V =  irregV "stechen" "sticht" "stach" "stäche" "gestochen" ;
-  lin stehen_V =  irregV "stehen" "steht" "stand" (variants {"stünde" ; "stände"}) "gestanden" ;
+  lin stehen_V =  irregV "stehen" "steht" "stand" "stände" "gestanden" ;
+  lin stehen_u_V =  irregV "stehen" "steht" "stand" "stünde" "gestanden" ;
   lin stehlen_V =  irregV "stehlen" "stiehlt" "stahl" "stähle" "gestohlen" ;
   lin steigen_V =  irregV "steigen" "steigt" "stieg" "stiege" "gestiegen" ;
   lin sterben_V =  irregV "sterben" "stirbt" "starb" "stürbe" "gestorben" ;
@@ -199,10 +209,10 @@ in {
   lin wachsen_V =  irregV "wachsen" "wächst" "wuchs" "wüchse" "gewachsen" ;
   lin wägen_V =  irregV "wägen" "wägt" "wog" "woge" "gewogen" ;
   lin waschen_V =  irregV "waschen" "wäscht" "wusch" "wüsche" "gewaschen" ;
-  lin weben_V =  irregV "weben" "webt" (variants {"wob" ; "webte"}) "wöbe" (variants {"gewoben" ; "gewebt"}) ;
+  lin weben_V =  irregV "weben" "webt" "wob" "wöbe" "gewoben" ;
   lin weichen_V =  irregV "weichen" "weicht" "wich" "wiche" "gewichen" ;
   lin weisen_V =  irregV "weisen" "weist" "wies" "wiese" "gewiesen" ;
-  lin wenden_V =  irregV "wenden" "wendt" (variants {"wandte" ; "wendete"}) (variants {"wandte" ; "wendete"}) (variants {"gewandt" ; "gewendet"}) ;
+  lin wenden_V =  irregV "wenden" "wendt" "wandte" "wandte" "gewandt" ;
   lin werben_V =  irregV "werben" "wirbt" "warb" "würbe" "geworben" ;
   lin werden_V = M.mkV 
         "werden" "werde" "wirst" "wird" "werdet" "werd" 
