@@ -966,5 +966,13 @@ oper
       Abess  => "tta"
       } ;
 
+  bindIf : Case -> Str = \c -> case c of {
+    Nom => [] ;
+    _ => BIND
+    } ;
+  bindColonIf : Case -> Str = \c -> case c of {
+    Nom => [] ;
+    _ => BIND ++ ":" ++ BIND
+    } ;
 
 }
