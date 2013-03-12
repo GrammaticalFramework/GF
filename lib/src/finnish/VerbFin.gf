@@ -79,6 +79,10 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
 
     AdVVP adv vp = insertAdv (\\_ => adv.s) vp ;
 
+    AdvVPSlash vps adv = insertAdv (\\_ => adv.s) vps ** {c2 = vps.c2} ;
+
+    AdVVPSlash adv vps = insertAdv (\\_ => adv.s) vps ** {c2 = vps.c2} ;
+
     ReflVP v = insertObjPre False (\\fin,b,agr => appCompl fin b v.c2 (reflPron agr)) v ;
 
     PassV2 v = let vp = predV v in {
