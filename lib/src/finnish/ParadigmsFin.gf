@@ -483,8 +483,23 @@ oper
     mkA : N -> (kivempaa,kivinta : Str) -> A = regAdjective ;
     mkA : (sana : AK) -> A = \w -> noun2adjDeg (nForms2N w.s) ;
 
---    mkA : (hyva,parempi,paras : N) -> (hyvin,paremmin,parhaiten : Str) -> A ;
-  } ;
+    mkA : (hyva,parempi,paras : N) -> (hyvin,paremmin,parhaiten : Str) -> A = \h,p,ps,hn,pn,ph -> lin A {
+      s = table {
+        Posit => table {
+           AN nf => h.s ! nf ;
+           AAdv  => hn
+           } ; 
+        Compar => table {
+           AN nf => p.s ! nf ;
+           AAdv  => pn
+           } ; 
+        Superl => table {
+           AN nf => ps.s ! nf ;
+           AAdv  => ph
+           }
+        } 
+      } ;
+     } ;
 
   mkA_1 : Str -> A = \x -> noun2adjDeg (mk1N x) ** {lock_A = <>} ;
 
