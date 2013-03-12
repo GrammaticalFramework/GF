@@ -44,7 +44,7 @@ concrete VerbEng of Verb = CatEng ** open ResEng, Prelude in {
 
     ReflVP v = insertObjPre (\\a => v.c2 ++ reflPron ! a) v ;
 
-    PassV2 v = insertObj (\\_ => v.s ! VPPart) (predAux auxBe) ;
+    PassV2 v = insertObj (\\_ => v.s ! VPPart ++ v.p) (predAux auxBe) ;
 
 ---b    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; isRefl = vv.isRefl} ; -- no "to"
 
