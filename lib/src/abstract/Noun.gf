@@ -134,5 +134,15 @@ abstract Noun = Cat ** {
 
     ApposCN : CN -> NP -> CN ;    -- city Paris (, numbers x and y)
 
+--2 Possessive and partitive constructs
+
+-- (New 13/3/2013 AR; Structural.possess_Prep and part_Prep should be deprecated in favour of these.)
+
+    PossNP  : CN -> NP -> CN ;     -- house of Paris, house of mine
+    PartNP  : CN -> NP -> CN ;     -- glass of wine
+
+-- This is different from the partitive, as shown by many languages.
+
+    CountNP : Det -> NP -> NP ;    -- three of them, some of the boys
 
 }
