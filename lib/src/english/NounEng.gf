@@ -42,20 +42,21 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       } ;
 
     DetQuantOrd quant num ord = {
-      s  = quant.s ! num.hasCard ! num.n ++ num.s ! Nom ++ ord.s ! Nom; 
+      s  =        quant.s  ! num.hasCard ! num.n ++ num.s ! Nom ++ ord.s ! Nom; 
       sp = \\c => quant.sp ! num.hasCard ! num.n ! npNom ++ num.s ! Nom ++ ord.s ! npcase2case c ; 
       n  = num.n ;
       hasNum = True
       } ;
 
     DetNP det = {
-      s = case det.hasNum of {True => \\_ => det.s ; _ => \\c => det.sp ! c} ;
+      -- s = case det.hasNum of {True => \\_ => det.s ; _ => \\c => det.sp ! c} ;
+      s = det.sp ;
       a = agrP3 det.n
       } ;
 
     PossPron p = {
       s = \\_,_ => p.s ! NCase Gen ;
-      sp = \\_,_,c => p.sp ! npcase2case c 
+      sp = \\_,_,c => p.sp ! Gen
       } ;
 
     NumSg = {s = \\c => []; n = Sg ; hasCard = False} ;
@@ -136,5 +137,14 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
     SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s ; g = cn.g} ;
 
     ApposCN cn np = {s = \\n,c => cn.s ! n ! Nom ++ np.s ! NCase c ; g = cn.g} ;
+
+    PossNP cn np = {s = \\n,c => cn.s ! n ! c ++ "of" ++ np.s ! NPNomPoss ; g = cn.g} ;
+
+    PartNP cn np = {s = \\n,c => cn.s ! n ! c ++ "of" ++ np.s ! NPAcc ; g = cn.g} ;
+
+    CountNP det np = {
+      s = \\c => det.sp ! c ++ "of" ++ np.s ! NPAcc ;
+      a = agrP3 det.n
+      } ;
 
 }
