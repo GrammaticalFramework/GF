@@ -81,4 +81,6 @@ instance DiffSwe of DiffScand = open CommonScand, Prelude in {
       } ;
 
     hur_IAdv = {s = "hur"} ;
+    av_Prep = "av" ;
+
 }

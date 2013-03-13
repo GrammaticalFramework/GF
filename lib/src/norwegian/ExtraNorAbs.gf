@@ -4,6 +4,6 @@
 abstract ExtraNorAbs = ExtraScandAbs ** {
 
   fun
-    PossNP : NP -> Pron -> NP ;   -- bilen min
+    PossNPPron : NP -> Pron -> NP ;   -- bilen min
 
 }
