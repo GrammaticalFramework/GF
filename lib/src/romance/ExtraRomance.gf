@@ -75,4 +75,19 @@ incomplete concrete ExtraRomance of ExtraRomanceAbs = CatRomance **
         hasClit = False
         } ;
 
+    PassVPSlash vps = 
+      let auxvp = predV auxPassive 
+      in
+      insertComplement (\\a => let agr = complAgr a in vps.s.s ! VPart agr.g agr.n) {
+        s = auxvp.s ;
+        agr = auxvp.agr ;
+        neg = vps.neg ;
+        clit1 = vps.clit1 ;
+        clit2 = vps.clit2 ;
+        clit3 = vps.clit3 ;
+        isNeg = vps.isNeg ;
+        comp  = vps.comp ;
+        ext   = vps.ext
+        } ;
+
 } 
