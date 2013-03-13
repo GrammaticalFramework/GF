@@ -221,6 +221,32 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
     ApposCN cn np = {s = \\nf=> cn.s ! nf ++ np.s ! NPCase Nom ; 
                     h = cn.h } ; --- luvun x
 
+    PossNP cn np = {s = \\nf => np.s ! NPCase Gen ++ cn.s ! nf ;  
+                    h = cn.h 
+                   } ;
+
+    PartNP cn np = {s = \\nf => cn.s ! nf ++ np.s ! NPCase Part ; 
+                    h = cn.h ---- gives "lasin viiniänsa" ; should be "lasinsa viiniä"
+                   } ;
+
+
+    CountNP det np = 
+      let
+        n : Number = case det.isNum of {
+          True => Sg ;
+          _ => det.n
+          } ;
+      in {
+        s = \\c => let k = npform2case n c in
+                   det.sp ! k ++ np.s ! NPCase Elat ; -- cf DetNP above
+        a = agrP3 (case det.isDef of {
+            False => Sg ;  -- autoja menee; kolme autoa menee
+            _ => det.n
+            }) ;
+        isPron = False ; isNeg = det.isNeg
+      } ;
+
+
   oper
     numN : NForm -> Number = \nf -> case nf of {
       NCase n _ => n ;
