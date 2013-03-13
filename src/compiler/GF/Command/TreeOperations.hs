@@ -22,6 +22,8 @@ allTreeOps pgf = [
       Left  $ nub . concatMap (paraphrase pgf))),
    ("largest",("sort trees from largest to smallest, in number of nodes",
       Left  $ largest)),
+   ("nub",("remove duplicate trees",
+      Left  $ nub)),
    ("smallest",("sort trees from smallest to largest, in number of nodes",
       Left  $ smallest)),
    ("subtrees",("return all fully applied subtrees (stopping at abstractions), by default sorted from the largest",
