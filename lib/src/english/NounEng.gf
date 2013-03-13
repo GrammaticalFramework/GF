@@ -78,7 +78,7 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       s  = \\hasCard,n => artDef ;
       sp = \\hasCard,n => case <n,hasCard> of {
         <Sg,False> => table { NCase Gen => "its"; _ => "it" } ;
-        <Pl,False> => table { NCase Nom => "they"; NPAcc => "them"; NCase Gen => "theirs" } ;
+        <Pl,False> => table { NCase Nom => "they"; NPAcc => "them"; _ => "theirs" } ;
         _          => \\c => artDef
         }
       } ;

@@ -36,6 +36,7 @@ resource MorphoEng = open Prelude, (Predef=Predef), ResEng in {
      s = table {
        NCase Nom => i ;
        NPAcc => me ;
+       NPNomPoss => mine ;
        NCase Gen => my
        } ;
      a = toAgr n p g ;
