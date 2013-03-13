@@ -202,4 +202,28 @@ incomplete concrete NounScand of Noun =
       g = g ;
       isMod = cn.isMod
       } ;
+
+    PossNP cn np = let g = cn.g in {
+      s = \\n,d,c => cn.s ! n ! d ! Nom ++ av_Prep ++ np.s ! NPAcc ; --c -- "np's cn" would not work, because it can't get a determiner; use Extra.GenNP
+      g = g ;
+      isMod = cn.isMod
+      } ;
+
+    PartNP cn np = let g = cn.g in {
+      s = \\n,d,c => cn.s ! n ! d ! Nom ++ np.s ! NPAcc ; --c -- also possible: "ett glas av vin", but can be built with part_Prep
+      g = g ;
+      isMod = cn.isMod
+      } ;
+
+    CountNP det np = 
+      let 
+        g = np.a.g ; 
+        ng = case g of {Utr => utrum ; _ => neutrum} ; ---- misses Nor feminine
+        m = True ;  ---- see DetNP above
+      in {
+        s = \\c => det.sp ! m ! ng ++ av_Prep ++ np.s ! NPAcc ;
+        a = agrP3 g det.n
+      } ;
+
+
 }
