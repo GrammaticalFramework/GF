@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable, CPP #-}
 module PGFService(cgiMain,cgiMain',getPath,
                   logFile,stderrToFile,
                   newPGFCache) where
@@ -11,7 +10,7 @@ import URLEncoding
 
 import Network.CGI
 import Text.JSON
-import Text.PrettyPrint (render, text, (<+>))
+import Text.PrettyPrint as PP(render, text, (<+>))
 import qualified Codec.Binary.UTF8.String as UTF8 (decodeString)
 import qualified Data.ByteString.Lazy as BS
 
@@ -60,44 +59,46 @@ cgiMain' cache path =
 pgfMain :: String -> PGF -> CGI CGIResult
 pgfMain command pgf =
     case command of
-      "parse"          -> outputJSONP =<< doParse pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit
-      "complete"       -> outputJSONP =<< doComplete pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getLimit
-      "linearize"      -> outputJSONP =<< doLinearize pgf `fmap` getTree `ap` getTo
-      "linearizeAll"   -> outputJSONP =<< doLinearizes pgf `fmap` getTree `ap` getTo
-      "random"         -> getCat >>= \c -> getDepth >>= \dp -> getLimit >>= \l -> getTo >>= \to -> liftIO (doRandom pgf c dp l to) >>= outputJSONP
-      "generate"       -> outputJSONP =<< doGenerate pgf `fmap` getCat `ap` getDepth `ap` getLimit `ap` getTo
-      "translate"      -> outputJSONP =<< doTranslate pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo `ap` getLimit
-      "translategroup" -> outputJSONP =<< doTranslateGroup pgf `fmap` getText `ap` getCat `ap` getFrom `ap` getTo `ap` getLimit
-      "grammar"        -> outputJSONP =<< doGrammar pgf `fmap` requestAcceptLanguage
-      "abstrtree"      -> outputGraphviz . abstrTree pgf =<< getTree
-      "alignment"      -> outputGraphviz . alignment pgf =<< getTree
-      "parsetree"      -> do t <- getTree
-                             Just l <- getFrom
+      "parse"          -> out =<< doParse pgf # text % cat % from % limit
+      "complete"       -> out =<< doComplete pgf # text % cat % from % limit
+      "linearize"      -> out =<< doLinearize pgf # tree % to
+      "linearizeAll"   -> out =<< doLinearizes pgf # tree % to
+      "random"         -> cat >>= \c -> depth >>= \dp -> limit >>= \l -> to >>= \to -> liftIO (doRandom pgf c dp l to) >>= out
+      "generate"       -> out =<< doGenerate pgf # cat % depth % limit % to
+      "translate"      -> out =<< doTranslate pgf # text % cat % from % to % limit
+      "translategroup" -> out =<< doTranslateGroup pgf # text % cat % from % to % limit
+      "grammar"        -> out =<< doGrammar pgf # requestAcceptLanguage
+      "abstrtree"      -> outputGraphviz . abstrTree pgf =<< tree
+      "alignment"      -> outputGraphviz . alignment pgf =<< tree
+      "parsetree"      -> do t <- tree
+                             Just l <- from
                              outputGraphviz (parseTree pgf l t)
-      "abstrjson"      -> outputJSONP . jsonExpr =<< getTree
-      "browse"         -> id =<< doBrowse pgf `fmap` getOptId `ap` getCSSClass `ap` getHRef `ap` getFormat "html" `ap` getIncludePrintNames
+      "abstrjson"      -> out . jsonExpr =<< tree
+      "browse"         -> join $ doBrowse pgf # optId % cssClass % href % format "html" % getIncludePrintNames
       "external"       -> do cmd <- getInput "external"
-                             input <- getText
+                             input <- text
                              doExternal cmd input
       _                -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show command]
   where
-    getText :: CGI String
-    getText = liftM (maybe "" (urlDecodeUnicode . UTF8.decodeString)) $ getInput "input"
+    out = outputJSONP
 
-    getTree :: CGI PGF.Tree
-    getTree = do ms <- getInput "tree"
-                 s <- maybe (throwCGIError 400 "No tree given" ["No tree given"]) return ms
-                 t <- maybe (throwCGIError 400 "Bad tree" ["tree: " ++ s]) return (PGF.readExpr s)
-                 t <- either (\err -> throwCGIError 400 "Type incorrect tree" 
-                                                        ["tree: " ++ PGF.showExpr [] t
-                                                        ,render (text "error:" <+> PGF.ppTcError err)
-                                                        ])
-                             (return . fst)
-                             (PGF.inferExpr pgf t)
-                 return t
+    text :: CGI String
+    text = liftM (maybe "" (urlDecodeUnicode . UTF8.decodeString)) $ getInput "input"
 
-    getCat :: CGI (Maybe PGF.Type)
-    getCat = 
+    tree :: CGI PGF.Tree
+    tree = do ms <- getInput "tree"
+              s <- maybe (throwCGIError 400 "No tree given" ["No tree given"]) return ms
+              t <- maybe (throwCGIError 400 "Bad tree" ["tree: " ++ s]) return (PGF.readExpr s)
+              t <- either (\err -> throwCGIError 400 "Type incorrect tree"
+                                                     ["tree: " ++ PGF.showExpr [] t
+                                                     ,render (PP.text "error:" <+> PGF.ppTcError err)
+                                                     ])
+                          (return . fst)
+                          (PGF.inferExpr pgf t)
+              return t
+
+    cat :: CGI (Maybe PGF.Type)
+    cat =
        do mcat  <- getInput "cat"
           case mcat of
             Nothing -> return Nothing
@@ -106,51 +107,50 @@ pgfMain command pgf =
                           Nothing  -> throwCGIError 400 "Bad category" ["Bad category: " ++ cat]
                           Just typ -> return $ Just typ  -- typecheck the category
 
-    getFrom :: CGI (Maybe PGF.Language)
-    getFrom = getLang "from"
-
-    getTo :: CGI (Maybe PGF.Language)
-    getTo = getLang "to"
-
-    getId :: CGI PGF.CId
-    getId = maybe errorMissingId return =<< getOptId
-
-    getOptId :: CGI (Maybe PGF.CId)
-    getOptId = maybe (return Nothing) rd =<< getInput "id"
+    optId :: CGI (Maybe PGF.CId)
+    optId = maybe (return Nothing) rd =<< getInput "id"
       where
         rd = maybe err (return . Just) . PGF.readCId
         err = throwCGIError 400 "Bad identifier" []
 
-    getCSSClass :: CGI (Maybe String)
-    getCSSClass = getInput "css-class"
+    cssClass, href :: CGI (Maybe String)
+    cssClass = getInput "css-class"
+    href = getInput "href"
 
-    getHRef :: CGI (Maybe String)
-    getHRef = getInput "href"
+    limit, depth :: CGI (Maybe Int)
+    limit = readInput "limit"
+    depth = readInput "depth"
 
-    getLimit :: CGI (Maybe Int)
-    getLimit = readInput "limit"
+    from :: CGI (Maybe PGF.Language)
+    from = getLang "from"
 
-    getDepth :: CGI (Maybe Int)
-    getDepth = readInput "depth"
+    to :: CGI [PGF.Language]
+    to = getLangs "to"
+
+    getLangs :: String -> CGI [PGF.Language]
+    getLangs i = mapM readLang . maybe [] words =<< getInput i
 
     getLang :: String -> CGI (Maybe PGF.Language)
-    getLang i = 
+    getLang i =
        do mlang <- getInput i
           case mlang of
-            Nothing -> return Nothing
-            Just "" -> return Nothing
-            Just l  -> case PGF.readLanguage l of
-                         Nothing -> throwCGIError 400 "Bad language" ["Bad language: " ++ l]
-                         Just lang | lang `elem` PGF.languages pgf -> return $ Just lang
-                                   | otherwise -> throwCGIError 400 "Unknown language" ["Unknown language: " ++ l]
+            Just l@(_:_) -> Just # readLang l
+            _            -> return Nothing
+
+    readLang :: String -> CGI PGF.Language
+    readLang l =
+      case PGF.readLanguage l of
+        Nothing -> throwCGIError 400 "Bad language" ["Bad language: " ++ l]
+        Just lang | lang `elem` PGF.languages pgf -> return lang
+                  | otherwise -> throwCGIError 400 "Unknown language" ["Unknown language: " ++ l]
     
     getIncludePrintNames :: CGI Bool
-    getIncludePrintNames = maybe (return False) (\_->return True) =<< getInput "printnames"
+    getIncludePrintNames = maybe False (const True) # getInput "printnames"
 
 
 errorMissingId = throwCGIError 400 "Missing identifier" []
 
-getFormat def = maybe def id `fmap` getInput "format"
+format def = maybe def id # getInput "format"
 
 -- Hook for simple extensions of the PGF service
 doExternal Nothing input = throwCGIError 400 "Unknown external command" ["Unknown external command"]
@@ -172,8 +172,8 @@ doExternal (Just cmd) input =
          liftIO $ removeFile tmpfile2
          return r
 
-doTranslate :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> Maybe Int -> JSValue
-doTranslate pgf input mcat mfrom mto mlimit =
+doTranslate :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [PGF.Language] -> Maybe Int -> JSValue
+doTranslate pgf input mcat mfrom tos mlimit =
   showJSON
      [makeObj ("from".=from : "brackets".=bs : jsonTranslateOutput po)
           | (from,po,bs) <- parse' pgf input mcat mfrom]
@@ -185,7 +185,7 @@ doTranslate pgf input mcat mfrom mto mlimit =
               [makeObj ["tree".=tree,
                         "linearizations".=
                             [makeObj ["to".=to, "text".=text, "brackets".=bs]
-                               | (to,text,bs)<- linearizeAndBind pgf mto tree]]
+                               | (to,text,bs)<- linearizeAndBind pgf tos tree]]
                 | tree <- maybe id take mlimit trees]]
         PGF.ParseIncomplete -> ["incomplete".=True]
         PGF.ParseFailed n   -> ["parseFailed".=n]
@@ -196,8 +196,8 @@ jsonTypeErrors errs =
                        | (fid,err) <- errs]]
 
 -- used in phrasebook
-doTranslateGroup :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> Maybe Int -> JSValue
-doTranslateGroup pgf input mcat mfrom mto mlimit =
+doTranslateGroup :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [PGF.Language] -> Maybe Int -> JSValue
+doTranslateGroup pgf input mcat mfrom tos mlimit =
   showJSON
     [makeObj ["from".=langOnly (PGF.showLanguage from),
               "to".=langOnly (PGF.showLanguage to),
@@ -207,7 +207,7 @@ doTranslateGroup pgf input mcat mfrom mto mlimit =
               ]
        | 
          (from,po,bs) <- parse' pgf input mcat mfrom,
-         (to,output)  <- groupResults [(t, linearize' pgf mto t) | t <- case po of {PGF.ParseOk ts -> maybe id take mlimit ts; _ -> []}]
+         (to,output)  <- groupResults [(t, linearize' pgf tos t) | t <- case po of {PGF.ParseOk ts -> maybe id take mlimit ts; _ -> []}]
           ]
   where
    groupResults = Map.toList . foldr more Map.empty . start . collect
@@ -273,34 +273,34 @@ doComplete pgf input mcat mfrom mlimit = showJSON
     froms = maybe (PGF.languages pgf) (:[]) mfrom
     cat = fromMaybe (PGF.startCat pgf) mcat
 
-doLinearize :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
-doLinearize pgf tree mto = showJSON
+doLinearize :: PGF -> PGF.Tree -> [PGF.Language] -> JSValue
+doLinearize pgf tree tos = showJSON
     [makeObj ["to".=to, "text".=text,"brackets".=bs]
-      | (to,text,bs) <- linearize' pgf mto tree]
+      | (to,text,bs) <- linearize' pgf tos tree]
 
-doLinearizes :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
-doLinearizes pgf tree mto = showJSON
+doLinearizes :: PGF -> PGF.Tree -> [PGF.Language] -> JSValue
+doLinearizes pgf tree tos = showJSON
     [makeObj ["to".=to, "texts".=texts]
-       | (to,texts) <- linearizes' pgf mto tree]
+       | (to,texts) <- linearizes' pgf tos tree]
 
-doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> Maybe PGF.Language -> IO JSValue
-doRandom pgf mcat mdepth mlimit mto =
+doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> [PGF.Language] -> IO JSValue
+doRandom pgf mcat mdepth mlimit tos =
   do g <- newStdGen
      let trees = PGF.generateRandomDepth g pgf cat (Just depth)
      return $ showJSON
           [makeObj ["tree".=PGF.showExpr [] tree,
-                    "linearizations".= doLinearizes pgf tree mto]
+                    "linearizations".= doLinearizes pgf tree tos]
              | tree <- limit trees]
   where cat = fromMaybe (PGF.startCat pgf) mcat
         limit = take (fromMaybe 1 mlimit)
         depth = fromMaybe 4 mdepth
 
-doGenerate :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> Maybe PGF.Language -> JSValue
-doGenerate pgf mcat mdepth mlimit mto = 
+doGenerate :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> [PGF.Language] -> JSValue
+doGenerate pgf mcat mdepth mlimit tos =
     showJSON [makeObj ["tree".=PGF.showExpr [] tree,
                        "linearizations".=
                           [makeObj ["to".=to, "text".=text]
-                             | (to,text,bs) <- linearize' pgf mto tree]]
+                             | (to,text,bs) <- linearize' pgf tos tree]]
                 | tree <- limit trees]
   where
     trees = PGF.generateAllDepth pgf cat (Just depth)
@@ -325,13 +325,13 @@ doGrammar pgf macc = showJSON $ makeObj
     functions  = [PGF.showCId fun | fun <- PGF.functions pgf]
 
 outputGraphviz code =
-  do format <- getFormat "png"
-     case format of
+  do fmt <- format "png"
+     case fmt of
        "gv" -> outputPlain code
-       _ -> outputFPS' format =<< liftIO (pipeIt2graphviz format code)
+       _ -> outputFPS' fmt =<< liftIO (pipeIt2graphviz fmt code)
   where
-    outputFPS' format bs =
-      do setHeader "Content-Type" (mimeType format)
+    outputFPS' fmt bs =
+      do setHeader "Content-Type" (mimeType fmt)
          outputFPS bs
 
     mimeType fmt =
@@ -347,9 +347,9 @@ parseTree pgf lang tree = PGF.graphvizParseTree pgf lang PGF.graphvizDefaults tr
 alignment pgf tree      = PGF.graphvizAlignment pgf (PGF.languages pgf) tree
 
 pipeIt2graphviz :: String -> String -> IO BS.ByteString
-pipeIt2graphviz format code = do
+pipeIt2graphviz fmt code = do
     (Just inh, Just outh, _, pid) <-
-        createProcess (proc "dot" ["-T",format])
+        createProcess (proc "dot" ["-T",fmt])
                       { std_in  = CreatePipe,
                         std_out = CreatePipe,
                         std_err = Inherit }
@@ -541,24 +541,24 @@ complete' pgf from typ mlimit input =
                        Left  es -> (ps,w:ws)
                        Right ps -> loop ps ws
 
-linearize' :: PGF -> Maybe PGF.Language -> PGF.Tree -> [(PGF.Language,String,PGF.BracketedString)]
-linearize' pgf mto tree =
+linearize' :: PGF -> [PGF.Language] -> PGF.Tree -> [(PGF.Language,String,PGF.BracketedString)]
+linearize' pgf to tree =
     [(to,s,bs) | to<-langs,
                  let bs = PGF.bracketedLinearize pgf to (transfer to tree)
                      s = unwords $ PGF.flattenBracketedString bs]
   where
-    langs = maybe (PGF.languages pgf) (:[]) mto
+    langs = if null to then PGF.languages pgf else to
 
 transfer lang = if "LaTeX" `isSuffixOf` show lang
                 then fold -- OpenMath LaTeX transfer
                 else id
 
 -- all variants and their forms
-linearizes' :: PGF -> Maybe PGF.Language -> PGF.Tree -> [(PGF.Language,[String])]
-linearizes' pgf mto tree =
+linearizes' :: PGF -> [PGF.Language] -> PGF.Tree -> [(PGF.Language,[String])]
+linearizes' pgf tos tree =
     [(to,lins to (transfer to tree)) | to <- langs]
   where
-    langs = maybe (PGF.languages pgf) (:[]) mto
+    langs = if null tos then PGF.languages pgf else tos
     lins to = nub . concatMap (map snd) . PGF.tabularLinearizes pgf to
 
 linearizeAndBind pgf mto t =
@@ -585,6 +585,8 @@ langCodeLanguage pgf code = listToMaybe [l | l <- PGF.languages pgf, PGF.languag
 -- * General utilities
 
 f .= v = (f,showJSON v)
+f # x = fmap f x
+f % x = ap f x
 
 --cleanFilePath :: FilePath -> FilePath
 --cleanFilePath = takeFileName
