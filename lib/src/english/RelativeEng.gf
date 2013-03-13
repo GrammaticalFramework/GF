@@ -39,7 +39,7 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
 
     IdRP = 
      { s = table {
-        RC _ (NCase Gen) => "whose" ; 
+        RC _ (NCase Gen) | RC _ NPNomPoss => "whose" ; 
         RC Neutr _  => "which" ;
         RC _ NPAcc    => "whom" ;
         RC _ (NCase Nom)    => "who" ;

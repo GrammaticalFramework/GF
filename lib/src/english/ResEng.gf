@@ -21,9 +21,9 @@ resource ResEng = ParamX ** open Prelude in {
   param
     Case = Nom | Gen ;
 
--- This is the worst-case $Case$ needed for pronouns.
+-- This is the worst-case $Case$ needed for pronouns: I, me, my, mine
 
-    NPCase = NCase Case | NPAcc ;
+    NPCase = NCase Case | NPAcc | NPNomPoss ;
 
 -- Useful macros and conversions:
 
@@ -169,7 +169,7 @@ resource ResEng = ParamX ** open Prelude in {
    { s = table {
        NCase Nom => i ;
        NPAcc => me ;
-       NCase Gen => my
+       NCase Gen | NPNomPoss => my -- works for normal genitives, "whose", etc.
        } ;
      a = toAgr n p g ;
    };
