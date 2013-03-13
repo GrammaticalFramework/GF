@@ -26,4 +26,6 @@ fun
     youPolPl8fem_Pron : Pron ;
 
     ImpNeg : NP -> VP -> Utt ; --IL 2012-10-12
+
+    PassVPSlash_ser : VPSlash -> VP ;
 }

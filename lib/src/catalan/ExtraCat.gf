@@ -54,5 +54,20 @@ lin
     youPolPl_Pron = vostePl Masc;
     youPolPl8fem_Pron = vostePl Fem;
 
+    -- ExtraRomance.PassVPSlash uses estar 
+    PassVPSlash_ser vps = 
+      let auxvp = predV copula
+      in
+      insertComplement (\\a => let agr = complAgr a in vps.s.s ! VPart agr.g agr.n) {
+        s = auxvp.s ;
+        agr = auxvp.agr ;
+        neg = vps.neg ;
+        clit1 = vps.clit1 ;
+        clit2 = vps.clit2 ;
+        clit3 = vps.clit3 ;
+        isNeg = vps.isNeg ;
+        comp  = vps.comp ;
+        ext   = vps.ext
+        } ;
 
 }

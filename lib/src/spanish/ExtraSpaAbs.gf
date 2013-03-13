@@ -27,4 +27,7 @@ abstract ExtraSpaAbs = ExtraRomanceAbs ** {
 
 
     ImpNeg : NP -> VP -> Utt ; --IL 2012-10-12
+
+    PassVPSlash_ser : VPSlash -> VP ;
+
 }
