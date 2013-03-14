@@ -754,7 +754,10 @@ are type checking and semantic computation.
 
  | ``-compute`` | compute by using semantic definitions (def)
  | ``-paraphrase`` | paraphrase by using semantic definitions (def)
+ | ``-largest`` | sort trees from largest to smallest, in number of nodes
+ | ``-nub`` | remove duplicate trees
  | ``-smallest`` | sort trees from smallest to largest, in number of nodes
+ | ``-subtrees`` | return all fully applied subtrees (stopping at abstractions), by default sorted from the largest
 
 - Flags:
 
