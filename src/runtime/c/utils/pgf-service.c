@@ -5,12 +5,8 @@
 #include <gu/enum.h>
 #include <gu/file.h>
 #include <pgf/pgf.h>
-#include <pgf/data.h>
-#include <pgf/parser.h>
-#include <pgf/lexer.h>
 #include <pgf/literals.h>
-#include <pgf/linearize.h>
-#include <pgf/expr.h>
+#include <pgf/parser.h>
 
 #define NO_FCGI_DEFINES
 #include <fcgi_stdio.h>
@@ -29,11 +25,11 @@ url_escape(char *str)
     size_t len = strlen(str);
     
     for (;;) {
-        if ((pr - str) >= len)
+        if (((size_t) (pr - str)) >= len)
             break;
 
         if (*pr == '%' &&
-            ((pr - str)+2) < len &&
+            (((size_t) (pr - str))+2) < len &&
             ISXDIGIT(*(pr+1)) &&
             ISXDIGIT(*(pr+2))) 
 		{
@@ -198,33 +194,49 @@ int main ()
 	GuPool* pool = gu_new_pool();
 	int status = EXIT_SUCCESS;
 
-	FILE* infile = fopen("/home/krasimir/www.grammaticalframework.org/examples/PennTreebank/ParseEngAbs.pgf", "r");
-	if (infile == NULL) {
-		fprintf(stderr, "couldn't open the grammar\n");
+	// Create an exception frame that catches all errors.
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
+
+	char* grammar_path = getenv("GRAMMAR_PATH");
+	if (grammar_path == NULL) {
+		fprintf(stderr, "Please set the GRAMMAR_PATH variable\n");
 		status = EXIT_FAILURE;
 		goto fail;
 	}
 
-	// Create an input stream from the input file
-	GuIn* in = gu_file_in(infile, pool);
-
-	// Create an exception frame that catches all errors.
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
-
 	// Read the PGF grammar.
-	PgfPGF* pgf = pgf_read(in, pool, err);
+	char* grammar_name = "/ParseEngAbs.pgf";
+	char* grammar_file = malloc(strlen(grammar_path)+strlen(grammar_name)+1);
+	strcpy(grammar_file,grammar_path);
+	strcat(grammar_file,grammar_name);
+	PgfPGF* pgf = pgf_read(grammar_file, pool, err);
+	free(grammar_file);
 
 	// If an error occured, it shows in the exception frame
 	if (!gu_ok(err)) {
 		fprintf(stderr, "Reading PGF failed\n");
 		status = EXIT_FAILURE;
-		goto fail_read;
+		goto fail;
 	}
 
-	GuString cat = gu_str_string("Utt", pool);
+	// Read the extra probs.
+	char* probs_name = "/ParseEngAbs2.probs";
+	char* probs_file = malloc(strlen(grammar_path)+strlen(probs_name)+1);
+	strcpy(probs_file,grammar_path);
+	strcat(probs_file,probs_name);
+	pgf_load_meta_child_probs(pgf, probs_file, pool, err);
+	free(probs_file);
+
+	if (!gu_ok(err)) {
+		fprintf(stderr, "Loading meta child probs failed\n");
+		status = EXIT_FAILURE;
+		goto fail;
+	}
+
+	GuString cat = gu_str_string("Phr", pool);
 	GuString lang = gu_str_string("ParseEng", pool);
 	PgfConcr* concr =
-		gu_map_get(pgf->concretes, &lang, PgfConcr*);
+		pgf_get_language(pgf, lang);
 	if (!concr) {
 		status = EXIT_FAILURE;
 		goto fail;
@@ -240,7 +252,7 @@ int main ()
 		    (sentence = strchr(sentence, '=')) == NULL) {
 			FCGI_printf("Content-type: text/html\r\n"
 				        "\r\n"
-				        "<body>Please specify a sentence to parse</body>\r\n");
+				        "<body>Please type a sentence to parse</body>\r\n");
 		} else {
 			sentence++;
 
@@ -255,45 +267,30 @@ int main ()
 			tmp[len] = '\n';
 			tmp[len+1] = '\0';
 			sentence = tmp;
-
-			// Begin parsing a sentence of the specified category
-			PgfParseState* state =
-				pgf_parser_init_state(concr, cat, 0, pool);
-			if (state == NULL) {
-				FCGI_printf("Content-type: text/html\r\n"
-				            "\r\n"
-				            "<body>Couldn't begin parsing</body>");
-				goto fail_request;
-			}
 		
 			GuReader *rdr =
 				gu_string_reader(gu_str_string(sentence, ppool), ppool);
 			PgfLexer *lexer =
-				pgf_new_lexer(rdr, ppool);
+				pgf_new_simple_lexer(rdr, ppool);
 
-			// Tokenization
-			GuExn* lex_err = gu_new_exn(NULL, gu_kind(type), ppool);
-			PgfToken tok = pgf_lexer_next_token(lexer, lex_err, ppool);
-			while (!gu_exn_is_raised(lex_err)) {
-				// feed the token to get a new parse state
-				state = pgf_parser_next_state(state, tok, ppool);
-				if (!state) {
-					FCGI_printf("Content-type: text/html\r\n"
-								"\r\n"
-								"<body>Unexpected token</body>");
-					goto fail_request;
-				}
-				
-				tok = pgf_lexer_next_token(lexer, lex_err, ppool);
+			GuEnum* result = 
+				pgf_parse(concr, cat, lexer, ppool);
+			if (result == NULL) {
+				FCGI_printf("Content-type: text/html\r\n"
+							"\r\n"
+							"<body>Parsing failed</body>");
+				goto fail_request;
 			}
 
-			// Now begin enumerating the resulting syntax trees
-			GuEnum* result = pgf_parse_result(state, ppool);
-
 			PgfExprProb* ep = gu_next(result, PgfExprProb*, ppool);
+			if (ep == NULL) {
+				FCGI_printf("Content-type: text/html\r\n"
+							"\r\n"
+							"<body>The sentence was parsed but there was no tree constructed</body>");
+				goto fail_request;
+			}
 
 			FCGI_printf("Content-type: image/svg+xml\r\n\r\n");
-
 			render(ep->expr, ppool);
 
 fail_request:
@@ -301,8 +298,6 @@ fail_request:
 		}
     }
     
-fail_read:
-	fclose(infile);
 fail:
     gu_pool_free(pool);
     return status;
