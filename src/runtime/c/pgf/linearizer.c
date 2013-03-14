@@ -292,7 +292,7 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 			goto done;
 		}
 		case PGF_EXPR_META: {
-			if (ccat != NULL && ccat->lindefs == NULL) {
+			if (ccat == NULL || ccat->lindefs == NULL) {
 				goto done;
 			}
 
