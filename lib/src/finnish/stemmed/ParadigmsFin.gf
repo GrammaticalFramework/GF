@@ -481,7 +481,7 @@ oper
     mkA : Str -> A  = mkA_1 ;
     mkA : N -> A = \n -> noun2adjDeg n ** {lock_A = <>} ;
     mkA : N -> (kivempaa,kivinta : Str) -> A = \n -> regAdjective n ;
-    mkA : (sana : AK) -> A = \w -> noun2adjDeg (nForms2N w.s) ;
+    mkA : (sana : AK) -> A = \w -> noun2adjDeg (nforms2snoun w.s) ;
 
     mkA : (hyva,parempi,paras : N) -> (hyvin,paremmin,parhaiten : Str) -> A = \h,p,ps,hn,pn,ph -> lin A {
       s = table {

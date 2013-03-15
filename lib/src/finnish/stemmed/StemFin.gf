@@ -278,4 +278,27 @@ oper
       False => glue x y 
       } ;
 
+-- for Symbol
+
+  defaultStemEnding : SNForm -> Str = \c -> case c of {
+      0 => "" ;
+      1 => "" ;
+      2 => "a" ;
+      3 => "na" ;
+      4 => "ii" ;
+      5 => "ie" ;
+      6 => "ia" ;
+      7 => "i" ;
+      8 => "i" ;
+      9 => "ihi"
+      } ; 
+  bindIfS : SNForm -> Str = \c -> case c of {
+    0|1 => [] ;
+    _ => BIND
+    } ;
+  bindColonIfS : SNForm -> Str = \c -> case c of {
+    0|1 => [] ;
+    _ => BIND ++ ":" ++ BIND
+    } ;
+
 }

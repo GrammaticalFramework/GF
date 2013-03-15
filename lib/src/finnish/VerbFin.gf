@@ -68,13 +68,13 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
                 qp = v.qp ; p = v.p
                }
          ) ** {c2 = vp.c2} ; ---- correct ??
-
+{----
     SlashV2VNP v np vp = 
       insertObjPre np.isNeg
         (\\fin,b,a => appCompl True b v.c2 np ++ ---- fin -> stack overflow
                       infVP v.sc b a vp v.vi) 
           (predV v) ** {c2 = vp.c2} ;
-
+----}
     AdvVP vp adv = insertAdv (\\_ => adv.s) vp ;
 
     AdVVP adv vp = insertAdv (\\_ => adv.s) vp ;
