@@ -302,7 +302,7 @@ oper
 ----  mk1A : Str -> A = \jalo -> aForms2A (nforms2aforms (nForms1 jalo)) ;
 ----  mkNA : N -> A = snoun2sadj ; 
 
-  mk1N : (talo : Str) -> N = \s -> nforms2snoun (nForms1 s) ;
+  mk1N : (talo : Str) -> N = \s -> lin N (nforms2snoun (nForms1 s)) ;
   mk2N : (talo,talon : Str) -> N = \s,t -> nforms2snoun (nForms2 s t) ;
   mk3N : (talo,talon,taloja : Str) -> N = \s,t,u -> nforms2snoun (nForms3 s t u) ;
   mk4N : (talo,talon,taloa,taloja : Str) -> N = \s,t,u,v -> 
@@ -537,21 +537,21 @@ oper
     mkV : (
       huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
       huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = mk12V ;
-    mkV : (sana : VK) -> V = \w -> vforms2V w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
-    mkV : V -> Str -> V = \w,p -> vforms2V w.s ** {sc = NPCase Nom ; lock_V = <> ; p = p} ;
+    mkV : (sana : VK) -> V = \w -> vforms2sverb w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
+    mkV : V -> Str -> V = \w,p -> vforms2sverb w.s ** {sc = NPCase Nom ; lock_V = <> ; p = p} ;
   } ;
 
   mk1V : Str -> V = \s -> 
-    let vfs = vforms2V (vForms1 s) in 
+    let vfs = vforms2sverb (vForms1 s) in 
       vfs ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
   mk2V : (_,_ : Str) -> V = \x,y -> 
-    let vfs = vforms2V (vForms2 x y) in vfs ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
+    let vfs = vforms2sverb (vForms2 x y) in vfs ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
   mk3V : (huutaa,huudan,huusi : Str) -> V = \x,_,y -> mk2V x y ; ----
   mk12V : (
       huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
       huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = 
      \a,b,c,d,e,f,g,h,i,j,k,l -> 
-        vforms2V (vForms12 a b c d e f g h i j k l) ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
+        vforms2sverb (vForms12 a b c d e f g h i j k l) ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
 
   vForms1 : Str -> VForms = \ottaa ->
     let
@@ -614,9 +614,11 @@ oper
 
 
 
-  caseV c v = {s = v.s ; sc = NPCase c ; qp = v.qp ; lock_V = <> ; p = v.p} ;
+  caseV c v = {s = v.s ; sc = NPCase c ; h = v.h ; lock_V = <> ; p = v.p} ;
 
-  vOlla = verbOlla ** {sc = NPCase Nom ; qp = True ; lock_V = <> ; p = []} ; ---- lieneekö
+  vOlla = {
+    s = table VForm ["olla";"ole";"on";"o";"olk";"olla";"oli";"oli";"olisi";"oll";"oltu";"ollu";"liene"] ;
+    sc = NPCase Nom ; h = Back ; lock_V = <> ; p = []} ; ---- lieneekö
 
   mk2V2 : V -> Prep -> V2 = \v,c -> v ** {c2 = c ; lock_V2 = <>} ;
   caseV2 : V -> Case -> V2 = \v,c -> mk2V2 v (casePrep c) ; 
@@ -632,7 +634,7 @@ oper
     mkV2 : V -> V2 = dirV2 ;
     mkV2 : V -> Case -> V2 = caseV2 ;
     mkV2 : V -> Prep -> V2 = mk2V2 ;
-    mkV2 : VK -> V2 = \w -> dirV2 (vforms2V w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []}) ;
+    mkV2 : VK -> V2 = \w -> dirV2 (vforms2sverb w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []}) ;
     } ;
 
   mk2V2 : V -> Prep -> V2 ;
