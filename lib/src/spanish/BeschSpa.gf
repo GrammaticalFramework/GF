@@ -3840,7 +3840,7 @@ oper mover_50 : Str -> Verbum = \mover ->
     }
   } ;
 oper morder_50b : Str -> Verbum = \morder ->
-  let m_ = Predef.tk 4 morder in
+  let m_ = Predef.tk 5 morder in
  {s = table {
     VI Infn => m_ + "order" ;
     VI Ger => m_ + "ordiendo" ;
@@ -3911,6 +3911,80 @@ oper morder_50b : Str -> Verbum = \morder ->
     VPB (Pass Pl Fem) => m_ + "ordidas"
     }
   } ;
+
+oper oir_51 : Str -> Verbum = \oir ->
+  let o_ = Predef.tk 2 oir in
+ {s = table {
+    VI Infn => o_ + "ír" ;
+    VI Ger => o_ + "yendo" ;
+    VI Part => o_ + "ído" ;
+    VPB (Pres Ind Sg P1) => o_ + "igo" ;
+    VPB (Pres Ind Sg P2) => o_ + "yes" ;
+    VPB (Pres Ind Sg P3) => o_ + "ye" ;
+    VPB (Pres Ind Pl P1) => o_ + "ímos" ;
+    VPB (Pres Ind Pl P2) => o_ + "ís" ;
+    VPB (Pres Ind Pl P3) => o_ + "yen" ;
+    VPB (Pres Sub Sg P1) => o_ + "iga" ;
+    VPB (Pres Sub Sg P2) => o_ + "igas" ;
+    VPB (Pres Sub Sg P3) => o_ + "iga" ;
+    VPB (Pres Sub Pl P1) => o_ + "igamos" ;
+    VPB (Pres Sub Pl P2) => o_ + "igáis" ;
+    VPB (Pres Sub Pl P3) => o_ + "igan" ;
+    VPB (Impf Ind Sg P1) => o_ + "ía" ; --# notpresent
+    VPB (Impf Ind Sg P2) => o_ + "ías" ; --# notpresent
+    VPB (Impf Ind Sg P3) => o_ + "ía" ; --# notpresent
+    VPB (Impf Ind Pl P1) => o_ + "íamos" ; --# notpresent
+    VPB (Impf Ind Pl P2) => o_ + "íais" ; --# notpresent
+    VPB (Impf Ind Pl P3) => o_ + "ían" ; --# notpresent
+    VPB (Impf Sub Sg P1) => o_ + "yera" ; --# notpresent
+    VPB (Impf Sub Sg P2) => o_ + "yeras" ; --# notpresent
+    VPB (Impf Sub Sg P3) => o_ + "yera" ; --# notpresent
+    VPB (Impf Sub Pl P1) => o_ + "yéramos" ; --# notpresent
+    VPB (Impf Sub Pl P2) => o_ + "yerais" ; --# notpresent
+    VPB (Impf Sub Pl P3) => o_ + "yeran" ; --# notpresent
+    VPB (ImpfSub2 Sg P1) => o_ + "yese" ; --# notpresent
+    VPB (ImpfSub2 Sg P2) => o_ + "yeses" ; --# notpresent
+    VPB (ImpfSub2 Sg P3) => o_ + "yese" ; --# notpresent
+    VPB (ImpfSub2 Pl P1) => o_ + "yésemos" ; --# notpresent
+    VPB (ImpfSub2 Pl P2) => o_ + "yeseis" ; --# notpresent
+    VPB (ImpfSub2 Pl P3) => o_ + "yesen" ; --# notpresent
+    VPB (Pret Sg P1) => o_ + "í" ; --# notpresent
+    VPB (Pret Sg P2) => o_ + "iste" ; --# notpresent
+    VPB (Pret Sg P3) => o_ + "yó" ; --# notpresent
+    VPB (Pret Pl P1) => o_ + "ímos" ; --# notpresent
+    VPB (Pret Pl P2) => o_ + "ísteis" ; --# notpresent
+    VPB (Pret Pl P3) => o_ + "yeron" ; --# notpresent
+    VPB (Fut Ind Sg P1) => o_ + "iré" ; --# notpresent
+    VPB (Fut Ind Sg P2) => o_ + "irás" ; --# notpresent
+    VPB (Fut Ind Sg P3) => o_ + "irá" ; --# notpresent
+    VPB (Fut Ind Pl P1) => o_ + "iremos" ; --# notpresent
+    VPB (Fut Ind Pl P2) => o_ + "iréis" ; --# notpresent
+    VPB (Fut Ind Pl P3) => o_ + "irán" ; --# notpresent
+    VPB (Fut Sub Sg P1) => o_ + "yere" ; --# notpresent
+    VPB (Fut Sub Sg P2) => o_ + "yeres" ; --# notpresent
+    VPB (Fut Sub Sg P3) => o_ + "yere" ; --# notpresent
+    VPB (Fut Sub Pl P1) => o_ + "yéremos" ; --# notpresent
+    VPB (Fut Sub Pl P2) => o_ + "yereis" ; --# notpresent
+    VPB (Fut Sub Pl P3) => o_ + "yeren" ; --# notpresent
+    VPB (Cond Sg P1) => o_ + "iría" ; --# notpresent
+    VPB (Cond Sg P2) => o_ + "irías" ; --# notpresent
+    VPB (Cond Sg P3) => o_ + "iría" ; --# notpresent
+    VPB (Cond Pl P1) => o_ + "iríamos" ; --# notpresent
+    VPB (Cond Pl P2) => o_ + "iríais" ; --# notpresent
+    VPB (Cond Pl P3) => o_ + "irían" ; --# notpresent
+    VPB (Imper Sg P1) => variants {} ;
+    VPB (Imper Sg P2) => o_ + "ye" ;
+    VPB (Imper Sg P3) => o_ + "iga" ;
+    VPB (Imper Pl P1) => o_ + "igamos" ;
+    VPB (Imper Pl P2) => o_ + "íd" ;
+    VPB (Imper Pl P3) => o_ + "igan" ;
+    VPB (Pass Sg Masc) => o_ + "ído" ;
+    VPB (Pass Sg Fem) => o_ + "ída" ;
+    VPB (Pass Pl Masc) => o_ + "ídos" ;
+    VPB (Pass Pl Fem) => o_ + "ídas"
+    }
+  } ;
+
 oper oler_52 : Str -> Verbum = \oler ->
   let x_ = Predef.tk 4 oler in
  {s = table {
@@ -6364,6 +6438,7 @@ oper llover_89 : Str -> Verbum = \llover ->
     VPB (Pass Pl Fem) => variants {}
     }
   } ;
+
 
 -- Verbs: conversion from full verbs to present-tense verbs.
 
