@@ -2755,7 +2755,7 @@ lin
 --   colour_blind_A = "värisokea" ; -- 20000 
 --   colour_wash_N = "+?" ; -- 40000 
 --   colouring_N = "kaunistella" ; -- 20000 
---   colourless_A = "väritön" ; -- 20000 
+   colourless_A = mkA "väritön" ; -- 20000 
 --   comatose_A = "tajuton" ; -- 20000 
 --   combatant_A = "taistelija" ; -- 20000 
 --   combative_A = "taistelunhaluinen" ; -- 20000 
