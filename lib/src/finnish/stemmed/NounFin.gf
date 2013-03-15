@@ -74,7 +74,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
       } ;
 
     PPartNP np v2 = {
-      s = \\c => np.s ! c ++ v2.s ! PastPartPass (AN (NCase (complNumAgr np.a) Ess)) ;
+      s = \\c => np.s ! c ++ (sverb2verbSep v2).s ! PastPartPass (AN (NCase (complNumAgr np.a) Ess)) ;
       a = np.a ;
       isPron = np.isPron ;  -- minun t‰‰ll‰ - ni
       isNeg = np.isNeg
