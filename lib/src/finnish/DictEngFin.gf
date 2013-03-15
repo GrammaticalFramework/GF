@@ -39228,8 +39228,8 @@ lin
   put_V2 = mkV2 (mkV "panna") ;
   stop_V = mkV "pysähtyä" ;
   jump_V = mkV "hypätä" ;
-  left_Ord = mkOrd (mkN "vasen") ;
-  right_Ord = mkOrd (mkN "oikea") ;
+----  left_Ord = mkOrd (mkN "vasen") ;
+----  right_Ord = mkOrd (mkN "oikea") ;
   far_Adv = mkAdv "kaukana" ;
   correct_A = mkA "oikea" ;
   dry_A = mkA (mkN "kuiva") "kuivempi" "kuivin" ;
@@ -39369,8 +39369,8 @@ lin
     uncertain_A = mkA "epävarma" ;
 
  oper
-    mkOrd : N -> Ord ;
-    mkOrd x = {s = x.s ; lock_Ord = <> } ;
+----    mkOrd : N -> Ord ;
+----    mkOrd x = {s = x.s ; lock_Ord = <> } ;
     cpartitive = casePrep partitive ;
 
 
