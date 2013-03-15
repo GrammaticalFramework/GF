@@ -1,54 +1,54 @@
 --1 Verb Phrases in Finnish
 
-concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
+concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
 
   flags optimize=all_subs ;
 
   lin
-    UseV = predV ;
+    UseV = predSV ;
 
-    SlashV2a v = predV v ** {c2 = v.c2} ;
+    SlashV2a v = predSV v ** {c2 = v.c2} ;
 
     Slash2V3 v np = 
       insertObj 
-        (\\fin,b,_ => appCompl fin b v.c2 np) (predV v) ** {c2 = v.c3} ;
+        (\\fin,b,_ => appCompl fin b v.c2 np) (predSV v) ** {c2 = v.c3} ;
     Slash3V3 v np = 
       insertObj 
-        (\\fin,b,_ => appCompl fin b v.c3 np) (predV v) ** {c2 = v.c2} ;
+        (\\fin,b,_ => appCompl fin b v.c3 np) (predSV v) ** {c2 = v.c2} ;
 
     ComplVV v vp = 
       insertObj 
         (\\_,b,a => infVP v.sc b a vp v.vi) 
-        (predV {s = v.s ; 
+        (predSV {s = v.s ; 
                 sc = case vp.sc of {
                   NPCase Nom => v.sc ;   -- minun täytyy pestä auto
                   c => c                 -- minulla täytyy olla auto
                   } ;
-                qp = v.qp ; p = v.p
+                h = v.h ; p = v.p
                }
          ) ;
 
-    ComplVS v s  = insertExtrapos (etta_Conj ++ s.s) (predV v) ;
-    ComplVQ v q  = insertExtrapos (          q.s) (predV v) ;
+    ComplVS v s  = insertExtrapos (etta_Conj ++ s.s) (predSV v) ;
+    ComplVQ v q  = insertExtrapos (          q.s) (predSV v) ;
     ComplVA v ap = 
       insertObj 
         (\\_,b,agr => 
            let n = (complNumAgr agr) in
            ap.s ! False ! (NCase n (npform2case n v.c2.c))) --- v.cs.s ignored
-        (predV v) ;
+        (predSV v) ;
 
     SlashV2S v s = 
-      insertExtrapos (etta_Conj ++ s.s) (predV v) ** {c2 = v.c2} ;
+      insertExtrapos (etta_Conj ++ s.s) (predSV v) ** {c2 = v.c2} ;
     SlashV2Q v q = 
-      insertExtrapos (q.s) (predV v) ** {c2 = v.c2} ;
+      insertExtrapos (q.s) (predSV v) ** {c2 = v.c2} ;
     SlashV2V v vp = 
-      insertObj (\\_,b,a => infVP v.sc b a vp v.vi) (predV v) ** {c2 = v.c2} ;
+      insertObj (\\_,b,a => infVP v.sc b a vp v.vi) (predSV v) ** {c2 = v.c2} ;
       ---- different infinitives
     SlashV2A v ap = 
       insertObj 
         (\\fin,b,_ => 
           ap.s ! False ! (NCase Sg (npform2case Sg v.c3.c))) ----agr to obj
-        (predV v) ** {c2 = v.c2} ;
+        (predSV v) ** {c2 = v.c2} ;
 
     ComplSlash vp np = insertObjPre np.isNeg (\\fin,b,_ => appCompl fin b vp.c2 np) vp ;
 
@@ -60,12 +60,12 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
     SlashVV v vp = 
       insertObj 
         (\\_,b,a => infVP v.sc b a vp v.vi) 
-        (predV {s = v.s ; 
+        (predSV {s = v.s ; 
                 sc = case vp.sc of {
                   NPCase Nom => v.sc ;   -- minun täytyy pestä auto
                   c => c                 -- minulla täytyy olla auto
                   } ;
-                qp = v.qp ; p = v.p
+                h = v.h ; p = v.p
                }
          ) ** {c2 = vp.c2} ; ---- correct ??
 {---- 153543936 (210912,312)
@@ -73,7 +73,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
       insertObjPre np.isNeg
         (\\fin,b,a => appCompl True b v.c2 np ++ ---- fin -> stack overflow
                       infVP v.sc b a vp v.vi) 
-          (predV v) ** {c2 = vp.c2} ;
+          (predSV v) ** {c2 = vp.c2} ;
 ----}
 
     AdvVP vp adv = insertAdv (\\_ => adv.s) vp ;
@@ -86,12 +86,12 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
 
     ReflVP v = insertObjPre False (\\fin,b,agr => appCompl fin b v.c2 (reflPron agr)) v ;
 
-    PassV2 v = let vp = predV v in {
+    PassV2 v = let vp = predSV v in {
       s = \\_ => vp.s ! VIPass ;
       s2 = \\_,_,_ => [] ;
       adv = \\_ => [] ;
       ext = [] ;
-      qp = v.qp ;
+      qp = vp.qp ;
       isNeg = False ;
       sc = v.c2.c  -- minut valitaan ; minua rakastetaan ; minulle kuiskataan 
       } ;          ---- talon valitaan: should be marked like inf.
