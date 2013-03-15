@@ -7,7 +7,6 @@ flags coding = utf8 ;
 oper
   SNForm : Type = Predef.Ints 9 ;
   SNoun : Type = {s : SNForm => Str ; h : Harmony} ;
---  SVerb : Type ;
 
   nforms2snoun : NForms -> SNoun = \nf -> {
     s = table {
@@ -30,11 +29,7 @@ oper
 
     snoun2noun : Bool -> SNoun -> Noun = \b,sn -> 
       let
-        plus : Str -> Str -> Str = \x,y -> case b of {
-          True  => x + y ;
-          False => glue x y 
-          } ;
-
+        plus = plusIf b ;
         f = sn.s ;
 
         ukko    = f ! 0 ;
@@ -102,11 +97,13 @@ oper
     aHarmony : Str -> Harmony = \a -> case a of 
        {"a" => Back ; _   => Front} ;
 
-    harmonyA : Harmony -> Str = \h -> case h of 
-       {Back => "a" ; Front => "ä"} ;
+    harmonyA : Harmony -> Str = harmonyV "a" "ä" ;
+
+    harmonyV : Str -> Str -> Harmony -> Str = \u,y,h -> case h of 
+       {Back => u ; Front => y} ;
 
 
--- Adjectives
+-- Adjectives --- could be made more compact by pressing comparison forms down to a few
 
 param 
   SAForm = SAN SNForm | SAAdv ;
