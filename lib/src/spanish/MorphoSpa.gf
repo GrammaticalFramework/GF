@@ -45,7 +45,7 @@ oper
 
   mkNomReg : Str -> Noun = \mec ->
     case mec of {
-      _ + ("o" | "e") => mkNoun (nomVino mec) Masc ; 
+      _ + ("o" | "e" | "é" | "á") => mkNoun (nomVino mec) Masc ;  --bebé, papá; how about other accented vocal endings? champú champúes
       _ + "a" => mkNoun (nomVino mec) Fem ;
       _ + "z" => mkNounIrreg mec (init mec + "ces") Fem ;
       _ + "án" => mkNounIrreg mec (tk 2 mec + "anes") Masc ;
