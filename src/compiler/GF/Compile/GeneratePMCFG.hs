@@ -374,12 +374,22 @@ convertTerm opts sel ctype (K t)        = return (CStr [SymKS [t]])
 convertTerm opts sel ctype Empty        = return (CStr [])
 convertTerm opts sel ctype (Alts s alts)
                                         = return (CStr [SymKP (strings s) [Alt (strings u) (strings v) | (u,v) <- alts]])
-                                            where
-                                              strings (K s)     = [s]
-                                              strings (C u v)   = strings u ++ strings v
-                                              strings (Strs ss) = concatMap strings ss
-                                              strings Empty = [] -- ??
-                                              strings t = bug $ "strings "++show t
+           where
+             strings (K s)     = [s]
+             strings (C u v)   = strings u ++ strings v
+             strings (Strs ss) = concatMap strings ss
+             strings (EPatt p) = getPatts p
+             strings Empty = [] -- ??
+             strings t = bug $ "strings "++show t
+
+             getPatts p =
+               case p of
+                 PAlt a b  -> getPatts a ++ getPatts b
+                 PString s -> [s]
+                 PSeq a b  -> [s ++ t | s <- getPatts a, t <- getPatts b]
+                 _ -> ppbug $ hang (text "not valid pattern in pre expression:")
+                                   4
+                                   (ppPatt Unqualified 0 p)
 
 convertTerm opts sel@(CProj l _) ctype (ExtR t1 t2@(R rs2))
                     | l `elem` map fst rs2 = convertTerm opts sel ctype t2
