@@ -436,12 +436,14 @@ value2term loc xs v0 =
     VC v1 v2       -> C (v2t v1) (v2t v2)
     VS v1 v2       -> S (v2t v1) (v2t v2)
     VP v l         -> P (v2t v) l
+    VPatt p        -> EPatt p -- hmm
+--  VPattType v    -> ...
     VAlts v vvs    -> Alts (v2t v) (mapBoth v2t vvs)
     VStrs vs       -> Strs (map v2t vs)
 --  VGlue v1 v2    -> Glue (v2t v1) (v2t v2)
     VExtR v1 v2    -> ExtR (v2t v1) (v2t v2)
     VError err     -> Error err
-    _              -> bug ("value2term "++show loc++" "++show v0)
+    _              -> bug ("value2term "++show loc++" : "++show v0)
   where
     v2t = value2term loc xs
     v2t' x f = value2term loc (x:xs) (f (gen xs))
