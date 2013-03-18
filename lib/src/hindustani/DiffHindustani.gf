@@ -1,10 +1,10 @@
 interface DiffHindustani = open Prelude in {
  oper
+  addErgative : Str -> Str -> Str ;
+ -- mkClause : NP -> VPH -> Clause ;
+ -- mkSClause : Str -> Agr -> VPH -> Clause ;
   
-  mkClause : NP -> VPH -> Clause ;
-  mkSClause : Str -> Agr -> VPH -> Clause ;
-  
-  np2pronCase :  (Case => Str) -> NPCase -> Agr -> Str ;
+ -- np2pronCase :  (Case => Str) -> NPCase -> Agr -> Str ;
   conjThat : Str ; -- = "kh" ;
   insertSubj : UPerson -> Str -> Str ;
 
@@ -25,6 +25,11 @@ interface DiffHindustani = open Prelude in {
   indfArt : Str ;
   nE : Str ;
   hE : Str ;
+  
+  na : Str ;
+  nahen : Str ;
+  xayad : Str ;
+  kya : Str ;
 
   copula : CTense -> Number -> UPerson -> Gender -> Str ;
   raha : Gender -> Number -> Str ;
