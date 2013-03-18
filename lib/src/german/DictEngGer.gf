@@ -1342,7 +1342,7 @@ lin anonymity_N = variants {};
 lin anonymous_A = mk3A "anonym" "anonymer" "anonymste";
 lin anopheles_N = variants {};
 lin anorak_N = reg2N  "Anorak" "Anoraks" masculine;
-lin another_Quant = variants {};
+--lin another_Quant = variants {};
 lin anshan_PN = variants {};
 lin answer_N = reg2N  "Antwort" "Antworten" feminine;
 lin answer_V = variants {};
@@ -1837,7 +1837,7 @@ lin arum_N = variants {};
 lin aryan_A = variants {};
 lin aryan_N = variants {};
 lin as_Prep = mkPrep "wie" accusative;
-lin as_Subj = variants {};
+--lin as_Subj = variants {};
 lin as_well_Adv = variants {};
 lin asap_PN = variants {};
 lin asbestos_N = reg2N  "Asbest" "Asbeste" masculine;
@@ -3280,7 +3280,7 @@ lin betty_PN = variants {};
 lin between_Adv = variants {};
 lin between_Prep = mkPrep "zwischen" dative;
 lin betwixt_Prep = variants {};
-lin bevel_N = variants {};
+--lin bevel_N = variants {};
 lin bevel_V2 = variants {};
 lin beverage_N = reg2N  "Getränk" "Getränke" neuter;
 lin beverley_PN = variants {};
@@ -5677,7 +5677,7 @@ lin certify_V = regV "zertifizieren";
 lin certify_V2 = dirV2 (regV "zertifizieren");
 lin certitude_N = variants {};
 lin cerulean_A = variants {};
-lin cervical_A = variants {};
+--lin cervical_A = variants {};
 lin cervix_N = variants {};
 lin cesarean_A = variants {};
 lin cessation_N = variants {};
@@ -6304,7 +6304,7 @@ lin clacton_PN = variants {};
 lin clad_V = variants {};
 lin clad_V2 = variants {};
 lin claim_N = reg2N  "Anspruch" "Ansprüche" masculine;
-lin claim_V = variants {};
+--lin claim_V = variants {};
 lin claim_V2 = variants {};
 lin claim_VV = variants {};
 lin claim_VS = variants {};
@@ -6626,7 +6626,7 @@ lin clwyd_PN = variants {};
 lin clydach_PN = variants {};
 lin clydebank_PN = variants {};
 lin cm_N = variants {};
-lin co_N = variants {};
+--lin co_N = variants {};
 lin co_author_V2 = variants {};
 lin co_ed_N = variants {};
 lin co_edit_V2 = variants {};
@@ -10694,7 +10694,7 @@ lin djinn_N = variants {};
 lin djs_N = variants {};
 lin dlitt_N = variants {};
 lin dm_N = variants {};
-lin dna_N = variants {};
+--lin dna_N = variants {};
 lin dnepropetrovsk_PN = variants {};
 lin do_N = variants {};
 lin do_V = variants {};
@@ -11253,7 +11253,7 @@ lin dude_N = reg2N  "Alter" "Alter" neuter;
 lin dudgeon_N = variants {};
 lin dudley_PN = variants {};
 lin due_A = regA "fällig";
-lin due_Adv = variants {};
+--lin due_Adv = variants {};
 lin due_N = variants {};
 lin duel_N = reg2N  "Duell" "Duelle" neuter;
 lin duel_V = variants {};
@@ -14219,7 +14219,7 @@ lin forli_PN = variants {};
 lin forlorn_A = variants {};
 lin forlornness_N = variants {};
 lin form_N = reg2N  "Form" "Formen" feminine;
-lin form_V = variants {};
+--lin form_V = variants {};
 lin form_V2 = dirV2 (regV "formen");
 lin formal_A = mk3A "formal" "formaler" "formalste";
 lin formaldehyde_N = variants {};
@@ -17536,7 +17536,7 @@ lin hum_N = variants {};
 lin hum_V = variants {};
 lin hum_V2 = variants {};
 lin human_A = mk3A "menschlich" "menschlicher" "menschlichste";
-lin human_N = variants {};
+--lin human_N = variants {};
 lin humane_A = mk3A "menschlich" "menschlicher" "menschlichste";
 lin humanism_N = variants {};
 lin humanist_N = variants {};
@@ -18375,7 +18375,7 @@ lin indenture_N = variants {};
 lin indenture_V2 = variants {};
 lin independence_N = reg2N  "Unabhängigkeit" "Unabhängigkeiten" feminine;
 lin independent_A = mk3A "unabhängig" "unabhängiger" "unabhängigste";
-lin independent_N = variants {};
+--lin independent_N = variants {};
 lin indescribable_A = variants {};
 lin indestructibility_N = variants {};
 lin indestructible_A = variants {};
@@ -21471,7 +21471,7 @@ lin lobster_N = variants {};
 lin lobster_pot_N = variants {};
 lin loc_cit_PN = variants {};
 lin local_A = regA "lokal";
-lin local_N = variants {};
+--lin local_N = variants {};
 lin locale_N = variants {};
 lin localism_N = variants {};
 lin locality_N = variants {};
@@ -22956,7 +22956,7 @@ lin mezzanine_N = variants {};
 lin mezzo_Adv = variants {};
 lin mezzo_soprano_N = variants {};
 lin mezzotint_N = variants {};
-lin mg_N = variants {};
+--lin mg_N = variants {};
 lin mgr_PN = variants {};
 lin mi5_PN = variants {};
 lin mi6_PN = variants {};
@@ -22987,7 +22987,7 @@ lin microfiche_N = variants {};
 lin microfilm_N = variants {};
 lin microfilm_V2 = variants {};
 lin micrometer_N = reg2N  "Mikrometer" "Mikrometer" masculine;
-lin micron_N = variants {};
+--lin micron_N = variants {};
 lin microphone_N = reg2N  "Mikrofon" "Mikrofone" neuter;
 lin microscope_N = reg2N  "Mikroskop" "Mikroskope" neuter;
 lin microscopic_A = regA "mikroskopisch";
@@ -23417,7 +23417,7 @@ lin mizzen_mast_N = variants {};
 lin mizzle_V = variants {};
 lin ml_N = mk6N "ml" "ml" "ml" "ml" "ml" "ml" masculine;
 lin mlle_PN = variants {};
-lin mm_N = variants {};
+--lin mm_N = variants {};
 lin mme_PN = variants {};
 lin mnemonic_A = variants {};
 lin mnemonics_N = variants {};
@@ -24453,7 +24453,7 @@ lin neuter_A = regA "geschlechtslos";
 lin neuter_N = variants {};
 lin neuter_V2 = variants {};
 lin neutral_A = mk3A "neutral" "neutraler" "neutralste";
-lin neutral_N = variants {};
+--lin neutral_N = variants {};
 lin neutrality_N = reg2N  "Neutralität" "Neutralitäten" feminine;
 lin neutralization_N = variants {};
 lin neutralize_V2 = variants {};
@@ -25468,7 +25468,7 @@ lin or_Conj = {s1 = [] ; s2 = "oder" ; n = R.Sg};
 lin oracle_N = variants {};
 lin oracular_A = variants {};
 lin oral_A = regA "mündlich";
-lin oral_N = variants {};
+--lin oral_N = variants {};
 lin orang_outan_N = variants {};
 lin orang_outang_N = variants {};
 lin orang_utan_N = variants {};
@@ -26426,7 +26426,7 @@ lin parsley_N = variants {};
 lin parsnip_N = variants {};
 lin parson_N = variants {};
 lin parsonage_N = variants {};
-lin part_Adv = variants {};
+--lin part_Adv = variants {};
 lin part_N = reg2N  "Rolle" "Rollen" feminine;
 lin part_V = variants {};
 lin part_V2 = variants {};
@@ -33370,7 +33370,7 @@ lin sepal_N = variants {};
 lin separability_N = variants {};
 lin separable_A = variants {};
 lin separate_A = regA "einzeln";
-lin separate_N = variants {};
+--lin separate_N = variants {};
 lin separate_V = variants {};
 lin separate_V2 = dirV2 (regV "trennen");
 lin separation_N = mkN "Trennung";
@@ -35068,7 +35068,7 @@ lin solicitor_general_N = variants {};
 lin solicitous_A = variants {};
 lin solicitude_N = variants {};
 lin solid_A = mk3A "bündig" "bündiger" "bündigste";
-lin solid_N = variants {};
+--lin solid_N = variants {};
 lin solid_state_A = variants {};
 lin solidarity_N = reg2N  "Solidarität" "Solidaritäten" feminine;
 lin solidification_N = variants {};
@@ -35105,7 +35105,7 @@ lin somatic_A = variants {};
 lin sombre_A = variants {};
 lin sombreness_N = variants {};
 lin sombrero_N = variants {};
-lin some_Quant = variants {};
+--lin some_Quant = variants {};
 lin somebody_NP = M.nameNounPhrase {s = R.caselist "jemand" "jemanden" "jemandem" "jemands"};
 lin someday_Adv = variants {};
 lin somehow_Adv = variants {};
@@ -35351,7 +35351,7 @@ lin spasm_N = reg2N  "Krampf" "Krämpfe" masculine;
 lin spasmodic_A = variants {};
 lin spasmodically_Adv = variants {};
 lin spastic_A = regA "spastisch";
-lin spastic_N = variants {};
+--lin spastic_N = variants {};
 lin spat_N = variants {};
 lin spat_V = variants {};
 lin spat_V2 = variants {};
@@ -40919,7 +40919,7 @@ lin urgent_A = mk3A "dringend" "dringender" "dringendste";
 lin urging_N = variants {};
 lin uric_A = variants {};
 lin urinal_N = reg2N  "Urinal" "Urinale" neuter;
-lin urinary_A = variants {};
+--lin urinary_A = variants {};
 lin urinate_V = regV "urinieren";
 lin urine_N = reg2N  "Harn" "Harne" masculine;
 lin urn_N = reg2N  "Urne" "Urnen" feminine;
@@ -40934,7 +40934,7 @@ lin usable_A = regA "nutzbar";
 lin usaf_N = variants {};
 lin usage_N = reg2N  "Gebrauch" "Gebräuche" masculine;
 lin use_N = mkN "Verwendung";
-lin use_V = variants {};
+--lin use_V = variants {};
 lin use_V2 = dirV2 (irregV "verwenden" "verwendet" "verwendete" "verwendete" "verwendet");
 lin use_V2V = variants {};
 lin use_VV = variants {};
@@ -41079,7 +41079,7 @@ lin vapour_bath_N = variants {};
 lin varanasi_PN = variants {};
 lin variability_N = variants {};
 lin variable_A = mk3A "variabel" "variabler" "variabelste";
-lin variable_N = variants {};
+--lin variable_N = variants {};
 lin variableness_N = variants {};
 lin variance_N = variants {};
 lin variant_A = regA "variant";
@@ -43129,5 +43129,168 @@ lin zoophyte_N = variants {};
 lin zoot_suit_N = variants {};
 lin zucchini_N = variants {};
 lin zurich_PN = variants {};
+
+
+-- added during Patents experiments:shafqat
+
+ lin Botulinum_PN = mkPN "Botulinum";
+ lin COPD_PN = mkPN "COPD";
+ lin Claim_PN = mkPN "Anspruch";
+ lin EGF_PN = mkPN "EGF";
+ lin IGFBP_PN = mkPN "IGFBP";
+ lin Neisserial_A = mkA "neisserial";
+ lin PDGF_PN = mkPN "PDGF";
+ lin RNA_PN = mkPN "RNA";
+ lin RS_PN = mkPN "RS";
+
+ lin alkylcellulose_N = mkN "Alkylzellulose" ; -- 0.5000000
+ lin antifolate_N = mkN "Antifolat" ; -- 1.0000000 ----M
+ lin antigen_N = mkN "Antigene" ; -- 0.0168634
+ lin antihyperplastic_A = mkA "antihyperplastisch";
+ lin antineoplastic_A = mkA "antineoplatisch" ;
+ lin aquaculture_N = mkN "Aquakultur" ; -- 0.5555556
+ lin arginine_N = mkN "Arginin" ; -- 0.9940828
+ lin as_Subj = ss "wie" ; -- 0.5281126
+ lin atopical_A = mkA "atopisch" ; 
+ lin bevel_N = mkN "Kegelradverzahnung" ; -- 0.2500000 ---M
+ lin biosynthesis_N = mkN "Biosynthese" ; -- 0.9661017
+ lin botulinum_N = mkN "Botulinum" ; -- 0.8461538
+ lin caboxylic_A = mkA "karboxylisch" ; 
+ lin cerebrovascular_A = mkA "zerebrovaskulär" ;
+ lin cervical_A = mkA "zervikal" ; 
+ lin chemotherapeutic_A = mkA "cheomtherapeutisch" ;
+ lin chloro_N = mkN "Clor" ; -- 1.0000000 ---M ??
+ lin chorionic_A = mkA "chorionisch" ;
+ lin chymotrypsin_N = mkN "Chymotrypsin" ; -- 0.8292683 ---M
+ lin claim_V = mkV "an" IrregGer.sprechen_V ; 
+
+ lin co_N = mkN "Co" ; -- 0.6933333 ---M ??
+ lin coumadin_N = mkN "Coumadin" ; -- 1.0000000 ---M
+
+ lin cytostatic_N = mkN "Zytostatisch" ; -- 0.2962963
+
+ lin cytotoxic_A = mkA "zytotoxisch" ; -- 0.8695652
+
+ lin dendritic_A = mkA "dendritisch" ;
+ lin dexamethasone_N = mkN "Dexamethason" ; -- 0.9506173 ---M
+
+ lin dihydrate_N = mkN "Dihydrat" ; -- 0.7812500 ---M
+
+ lin dna_N = mkN "DNA" ; ---M ??
+
+ lin due_Adv = mkAdv "zurückzuführende" ; -- 0.5714286 ---?
+
+ lin dystonia_N = mkN "Dystonie" ; -- 1.0000000
+ lin ectoparasitic_A = mkA "ektoparasitär" ; 
+ lin embolism_N = mkN "Embolie" ; -- 0.9230769
+ lin estradiol_N = mkN "Östradiol" ; ---M
+ lin estrogen_N = mkN "Östrogen" ; ---M
+
+ lin ethylcellulose_N = mkN "Ethylcellulose" ; -- 0.3655914
+ lin eukaryotic_A = mkA "eukaryotisch" ; -- 0.5882353
+
+ lin form_V = mkV "bilden" ; -- 0.4275899
+
+ lin gonadotropin_N = mkN "Gonadotropin" ; -- 0.7142857
+-- lin guage_N = mkN ")" ; -- 0.0000291
+
+ lin helminth_A = mkA "helminthisch" ; -- 1.0000000
+ lin hemitartrate_N = mkN "Zolpidem-hemitartrat" ; -- 0.6181818 ---M
+
+ lin heparin_N = mkN "Heparin" ;
+ lin human_N = mkN "Mensch" "Menschen" masculine ;
+
+ lin hyaluronidase_N = mkN "Hyaluronidase" ; -- 0.9523810
+
+ lin hydrochlorothiazide_N = mkN "Hydrochlorthiazid" ; -- 1.0000000
+ lin hypertrophied_A = mkA "hypertrophiert" ;
+
+ lin immunogen_N = mkN "Immunogen" ; -- 0.6845238
+ lin immunogenic_A = mkA "immunologisch" ; 
+
+-- lin in_N = mkN ""second" ; -- 0.3333333
+
+ lin independent_N = mkN "Unabhängig" ; -- 0.0075557
+ lin irbesartan_N = mkN "Irbesartan" ; -- 1.0000000 ---M
+
+ lin local_N = mkN "Lokale" ; -- 0.7398374
+ lin losartan_N = mkN "Losartan" ; -- 1.0000000 ---M
+
+ lin luteinizing_N = mkN "Luteinisierend" ;
+
+ lin methanesulfonate_N = mkN "Methansulfonat" ; -- 0.5000000 ---M
+
+-- lin methylmercaptopurine_N = mkN "";
+
+
+
+ lin mg_N = mkN "Mg" ; -- 0.8686005 ---M
+
+ lin micron_N = mkN "Mikron" ; -- 0.0547945 ---M
+ lin microorganism_N = mkN "Wirtsmikroorganismus" ; -- 0.4428571 ---M
+ lin mm_N = mkN "Mm" ; -- 0.8349146
+ lin monoclonal_A = mkA "monoklonal" ;
+ lin monohydrate_N = mkN "Monohydrat" ; -- 0.8484848 ---M
+ lin neurotoxic_A = mkA "neurotoxisch" ; 
+ lin neurotoxin_N = mkN "Neurotoxin" ; -- 0.8888889
+ lin neutral_N = mkN "Neutral" ;
+ lin oligomer_N = mkN "Oligomer" ; -- 0.6339869
+ lin oral_N = mkN "Mündhöhle" ; -- 0.5000000 ---??
+ lin ovarian_A = mkA "ovariell" ;
+ lin oxycodone_N = mkN "Oxykodon" ; -- 1.0000000 ---M
+ lin parathyroid_N = mkN "Parathyroid" ; ---M
+ lin part_Adv = mkAdv "teils" ; -- 0.2752613
+ lin phosphatidylethanolamine_N = mkN "Phosphatidyläthanolamin" ; -- 1.0000000 ---M
+ lin polymer_N = mkN "Polymer" ; 
+
+
+
+ lin polynucleotide_N = mkN "Polyonukleotid" ; -- 1.0000000 ---M
+ lin polypeptide_N = mkN "Polypetid" ; -- 0.7272727 ---M
+
+-- lin present_N = mkN "(+)-norcisapride" ; -- 0.0192308
+
+ lin proinflammatory_A = mkA "proinflammatorisch" ;
+
+ lin prokaryotic_A = mkA "prokaryotisch" ; -- 0.8181818
+ lin protozoan_N = mkN "Protozoon" ; -- 0.3750000 ---M
+
+ lin purine_N = mkN "Purin" ; ---M
+
+ lin racemic_A = mkA "razemisch" ; -- 1.0000000
+
+ lin ramipril_N = mkN "Ramipril" ; -- 1.0000000 ---M
+
+ lin reboxetine_N = mkN "Reboxetin" ; -- 1.0000000 ---M
+
+ lin recombinant_A = mkA "rekombinant" ; -- 0.1744186
+
+ lin reovirus_N = mkN "Reovirus" ; -- 0.9661017 ---M
+ lin riboside_N = mkN "Ribosid" ; -- 1.0000000 ---M
+ lin separate_N = mkN "Separate" ; -- 0.7536232 ---??
+
+ lin serotype_N = mkN "Serotyp" ; -- 0.9938650 ---M
+
+ lin solid_N = mkN "Festkörper" ; -- 0.2500000 ---M
+ lin spastic_N = mkN "Spastisch" ;
+ lin sphincter_N = mkN "Sphincter" ; -- 0.5000000 ---M
+ lin taxoid_N = mkN "Taxoid" ; -- 0.7272727 ---M
+ lin telmisartan_N = mkN "Telmisartan" ; -- 0.8571429 ---M
+
+
+
+
+ lin tetrahydrate_N = mkN "Tetrahydrat" ; ---M
+ lin thrombotic_A = mkA "thrombotisch" ; 
+ lin trihydrate_N = mkN "Trihydrat" ; -- 0.9090909 ---M
+
+-- lin trimetrexate_N = mkN "";
+ lin urinary_A = mkA "urinär" ; 
+-- lin use_V = fixprefixV "ver" IrregGer.wenden_V ; ---??
+ lin valsartan_N = mkN "Valsartan" ; -- 0.6285714 ---M
+ lin variable_N = mkN "Variable" ; -- 0.9767442
+ lin warfarin_N = mkN "Warfarin" ; -- 1.0000000 ---M
+ lin zolpidem_N = mkN "Zolpidem" ; -- 1.0000000 ---M
+
 
 }
