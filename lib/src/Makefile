@@ -113,3 +113,13 @@ compiled:
 clean:
 	$(RUNMAKE) clean
 
+
+ParseEng:
+	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseEng english/ParseEng.gf
+
+ParseFin:
+	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseFin finnish/stemmed/ParseFin.gf
+
+ParseEngFin:
+	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseEngFin ParseEng.pgf ParseFin.pgf
+
