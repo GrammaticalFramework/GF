@@ -10,6 +10,7 @@
 //#define PGF_PARSER_DEBUG
 //#define PGF_COUNTS_DEBUG
 //#define PGF_LEFTCORNER_DEBUG
+//#define PGF_LEFTCORNER_FILTER
 
 typedef GuBuf PgfItemBuf;
 static GU_DEFINE_TYPE(PgfItemBuf, abstract, _);
@@ -939,6 +940,7 @@ pgf_parsing_complete(PgfParseState* before, PgfParseState* after,
     }
 }
 
+#if PGF_LEFTCORNER_FILTER
 typedef struct {
 	GuMapItor fn;
 	PgfConcr* concr;
@@ -962,11 +964,13 @@ pgf_parsing_bu_filter_iter(GuMapItor* fn, const void* key, void* value, GuExn* e
 		}
 	}
 }
+#endif
 
 static bool
 pgf_parsing_bu_filter(PgfParseState* before, PgfParseState* after,
                       PgfCCat* ccat, size_t lin_idx)
 {
+#if PGF_LEFTCORNER_FILTER
 	while (ccat->conts != NULL)			// back to the original PgfCCat
 		ccat = ccat->conts->ccat;
 	PgfCFCat cfc = {ccat, lin_idx};
@@ -980,7 +984,7 @@ pgf_parsing_bu_filter(PgfParseState* before, PgfParseState* after,
 		gu_map_iter(after->ts->lexicon_idx, &clo.fn, NULL);
 		return clo.filter;
 	}
-
+#endif
 	return false;
 }
 
@@ -2410,6 +2414,7 @@ pgf_parser_leftcorner_iter_cats(GuMapItor* fn, const void* key, void* value, GuE
 	}
 }
 
+#ifdef PGF_LEFTCORNER_FILTER
 static void
 pgf_parser_leftcorner_closure(PgfProductionIdx* set, PgfItemBuf* items, 
                               PgfContsMap* conts_map, GuPool* pool)
@@ -2472,6 +2477,7 @@ pgf_parser_leftcorner_iter_conts(GuMapItor* fn, const void* key, void* value, Gu
 		}
 	}
 }
+#endif
 
 void
 pgf_parser_index(PgfConcr* concr, GuPool *pool)
@@ -2486,11 +2492,13 @@ pgf_parser_index(PgfConcr* concr, GuPool *pool)
 	                         pool, tmp_pool };
 	gu_map_iter(concr->ccats, &clo1.fn, NULL);
 
+#ifdef PGF_LEFTCORNER_FILTER
 	PgfLeftcornerFn clo2 = { { pgf_parser_leftcorner_iter_conts }, 
 	                         concr, conts_map, generated_cats,
 	                         concr->total_cats,
 	                         pool, tmp_pool };
 	gu_map_iter(conts_map, &clo2.fn, NULL);
+#endif
 
 	gu_pool_free(tmp_pool);
 }
