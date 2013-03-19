@@ -8,7 +8,7 @@ concrete ParseFin of ParseEngAbs =
   NumeralFin,
   SymbolFin [PN, Symb, MkSymb, SymbPN],
   ConjunctionFin,
-  VerbFin - [SlashV2V, PassV2, UseCopula],
+  VerbFin - [SlashV2V, PassV2, UseCopula, ComplVV],
   AdverbFin,
   PhraseFin,
   SentenceFin,
