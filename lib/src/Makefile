@@ -123,3 +123,15 @@ ParseFin:
 ParseEngFin:
 	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseEngFin ParseEng.pgf ParseFin.pgf
 
+ParseGer:
+	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseGer german/ParseEngGer.gf
+
+ParseEngGer:
+	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseEngGer ParseEng.pgf ParseGer.pgf
+
+ParseHin:
+	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseHin hindi/ParseHin.gf
+
+ParseEngHin:
+	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseEngHin ParseEng.pgf ParseHin.pgf
+
