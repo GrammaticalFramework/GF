@@ -1,10 +1,6 @@
 interface DiffHindustani = open Prelude in {
  oper
   addErgative : Str -> Str -> Str ;
- -- mkClause : NP -> VPH -> Clause ;
- -- mkSClause : Str -> Agr -> VPH -> Clause ;
-  
- -- np2pronCase :  (Case => Str) -> NPCase -> Agr -> Str ;
   conjThat : Str ; -- = "kh" ;
   insertSubj : UPerson -> Str -> Str ;
 
