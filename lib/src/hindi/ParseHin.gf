@@ -1,4 +1,4 @@
---# -path=.:alltenses:../abstract:../english
+--# -path=.:alltenses:../abstract:../english:../hindustani
 concrete ParseHin of ParseEngAbs = 
   TenseX - [AdN,Adv,SC,PPos,PNeg],
 --  TextX - [AdN,Adv,SC],

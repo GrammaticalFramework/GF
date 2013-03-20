@@ -1,6 +1,4 @@
 
-
-
 --concrete SymbolUrd of Symbol = CatUrd ** open Prelude, ResUrd, StringsHindustani in {
 incomplete concrete SymbolHindustani of Symbol = 
   CatHindustani ** open Prelude, ResHindustani, CommonHindustani in {
