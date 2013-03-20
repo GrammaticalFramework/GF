@@ -940,7 +940,7 @@ pgf_parsing_complete(PgfParseState* before, PgfParseState* after,
     }
 }
 
-#if PGF_LEFTCORNER_FILTER
+#ifdef PGF_LEFTCORNER_FILTER
 typedef struct {
 	GuMapItor fn;
 	PgfConcr* concr;
@@ -970,7 +970,7 @@ static bool
 pgf_parsing_bu_filter(PgfParseState* before, PgfParseState* after,
                       PgfCCat* ccat, size_t lin_idx)
 {
-#if PGF_LEFTCORNER_FILTER
+#ifdef PGF_LEFTCORNER_FILTER
 	while (ccat->conts != NULL)			// back to the original PgfCCat
 		ccat = ccat->conts->ccat;
 	PgfCFCat cfc = {ccat, lin_idx};
