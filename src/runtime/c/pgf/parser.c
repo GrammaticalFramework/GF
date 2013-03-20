@@ -1492,9 +1492,9 @@ pgf_parsing_proceed(PgfParseState* state) {
 		prob_t state_delta =
 			(st->viterbi_prob-(st->next ? st->next->viterbi_prob : 0))*
 			state->ps->beam_size;
-		prob_t lexical_prob =
-			st->ts ? st->ts->lexical_prob : 0;
-		delta_prob += fmax(state_delta, lexical_prob);
+		//prob_t lexical_prob =
+		//	st->ts ? st->ts->lexical_prob : 0;
+		delta_prob += state_delta; /*fmax(state_delta, lexical_prob)*/;   // the calculation of lexical_prob doesn't work properly.
 		st = st->next;
 	}
 
