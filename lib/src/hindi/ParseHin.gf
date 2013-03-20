@@ -7,7 +7,7 @@ concrete ParseHin of ParseEngAbs =
   AdjectiveHin,
   NumeralHin,
   ConjunctionHin,
-  VerbHin - [PassV2,ComplVV,VPSlashPrep],
+  VerbHin - [SlashV2V, PassV2, UseCopula, ComplVV, VPSlashPrep],
   AdverbHin,
   PhraseHin,
   SentenceHin,
