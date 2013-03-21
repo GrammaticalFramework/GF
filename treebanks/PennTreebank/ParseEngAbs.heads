@@ -1,0 +1,223 @@
+PositA head
+ComparA head mod
+ComplA2 head mod
+ReflA2 head
+UseA2 head
+UseComparA head
+CAdvAP mod head mod
+AdjOrd head
+SentAP head mod
+AdAP mod head
+AdvAP head mod
+PositAdvAdj head
+PrepNP head mod
+AdAdv mod head
+PositAdAAdj head
+SubjS mod head
+AdnCAdv head
+ComplV2 head mod
+ComplV3 head mod mod
+ComplV2V head mod mod
+ComplV2S head mod mod
+ComplV2Q head mod mod
+ComplV2A head mod mod
+SlashV2 mod head
+SlashVVV2 mod head mod
+NumInt head
+OrdInt head
+AdvSC head
+NumInt head
+OrdInt head
+ConjS head mod
+ConjRS head mod
+ConjAP head mod
+ConjNP mod head
+ConjAdv head mod
+ConjIAdv head mod
+ConjCN head mod
+GenNP head
+GenIP head
+GenRP mod head
+EmptyRelSlash head
+MkVPI head
+ConjVPI head mod
+ComplVPIVV head mod
+MkVPS _ _ head
+ConjVPS head mod
+PredVPS mod head
+PartVP head
+PassVPSlash head
+ExistNP head
+ExistIP head
+ProgrVP head
+ImpPl1 head
+ImpP3 mod head
+DetCN _ head
+UsePN head
+UsePron head
+PredetNP mod head
+PPartNP head mod
+AdvNP head mod
+RelNP head mod
+DetNP head
+DetQuant head _ _
+DetQuantOrd head _ _
+NumCard head
+NumDigits head
+NumNumeral head
+AdNum mod head
+OrdDigits head
+OrdNumeral head
+OrdSuperl head
+MassNP head
+PossPron head
+UseN head
+ComplN2 head mod
+ComplN3 head mod
+UseN2 head
+Use2N3 head
+Use3N3 head
+AdjCN mod head
+RelCN head mod
+AdvCN head mod
+SentCN head mod
+ApposCN head mod
+num _
+pot0 _
+pot1to19 _
+pot0as1 _
+pot1 _
+pot1plus _ _
+pot1as2 _
+pot2 _
+pot2plus _ _
+pot2as3 _
+pot3 _
+pot3plus _ _
+IDig _
+IIDig _ _
+num2digits head
+PhrUtt mod head mod
+UttS head
+UttQS head
+UttImpSg _ head
+UttImpPl _ head
+UttImpPol _ head
+UttIP head
+UttIAdv head
+UttNP head
+UttAdv head
+UttVP head
+UttCN head
+UttCard head
+UttAP head
+UttInterj head
+PConjConj head
+VocNP head
+QuestCl head
+QuestVP mod head
+QuestSlash mod head
+QuestIAdv mod head
+QuestIComp mod head
+IdetCN mod head 
+IdetIP head
+AdvIP head mod
+IdetQuant head mod
+PrepIP _ head
+AdvIAdv head mod
+CompIAdv head
+CompIP head
+ComplSlashIP head mod
+AdvQVP head mod
+AddAdvQVP head mod
+QuestQVP mod head
+RelCl head
+RelVP mod head
+RelSlash mod head
+FunRP mod mod head
+PredVP mod head
+PredSCVP mod head
+SlashVP mod head
+AdvSlash head mod
+SlashPrep head mod
+SlashVS mod head mod
+ImpVP head
+EmbedS head
+EmbedQS head
+EmbedVP head
+UseCl _ _ head
+UseQCl _ _ head
+UseRCl _ _ head
+UseSlash _ _ head
+AdvS mod head
+ExtAdvS mod head
+SSubjS mod mod head
+RelS head mod
+SymbPN head
+CNNumNP head _
+MkSymb _
+TTAnt head mod
+UseV head
+ComplVV head mod
+ComplVS head mod
+ComplVQ head mod
+ComplVA head mod
+SlashV2a head
+Slash2V3 head mod
+Slash3V3 head mod
+SlashV2V head _ _ mod
+SlashV2S head mod
+SlashV2Q head mod
+SlashV2A head mod
+ComplSlash head mod
+SlashVV head mod
+SlashV2VNP head mod mod
+ReflVP head
+UseComp head
+AdvVP head mod
+AdVVP mod head
+AdvVPSlash head mod
+AdVVPSlash mod head
+VPSlashPrep head mod
+CompAP head
+CompNP head
+CompAdv head
+CompCN head
+CompoundCN _ mod head
+DashCN mod head
+GerundN head
+GerundAP head
+PastPartAP head
+OrdCompar head
+PositAdVAdj head
+UseQuantPN _ head
+SlashVPIV2V head _ mod
+SlashSlashV2V head _ _ mod
+ComplVV head _ _ mod
+PredVPosv mod head
+PredVPovs mod head
+CompS head
+CompQS head
+CompVP mod mod head
+VPSlashVS mod head
+PastPartRS _ _ head
+PresPartRS _ _ head
+ApposNP head mod
+AdAdV mod head
+UttAdV head
+BaseNP head mod
+ConsNP head mod
+BaseVPS head mod
+ConsVPS head mod
+BaseVPI head mod
+ConsVPI head mod
+BaseAP head mod
+ConsAP head mod
+BaseS head mod
+ConsS head mod
+BaseCN head mod
+ConsCN head mod
+BaseAdv head mod
+ConsAdv head mod
+BaseRS head mod
+ConsRS head mod
