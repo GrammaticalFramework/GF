@@ -408,17 +408,25 @@ oper
         }
       } ;
 
-  infVP : NPForm -> Polarity -> Agr -> VP -> InfForm -> Str =
-    \sc,pol,agr,vp,vi ->
+-- the first Polarity is VP-internal, the second comes form the main verb:
+-- ([main] tahdon | en tahdo) ([internal] nukkua | olla nukkumatta)
+  infVPGen : Polarity -> NPForm -> Polarity -> Agr -> VP -> InfForm -> Str =
+    \ipol,sc,pol,agr,vp,vi ->
         let 
           fin = case sc of {     -- subject case
             NPCase Nom => True ; -- minä tahdon nähdä auton
             _ => False           -- minun täytyy nähdä auto
             } ;
-          verb  = vp.s ! VIInf vi ! Simul ! Pos ! agr ; -- no "ei"
-          compl = vp.s2 ! fin ! pol ! agr ++ vp.adv ! pol ++ vp.ext     -- but compl. case propagated
+          verb = case ipol of {
+            Pos => <vp.s ! VIInf vi ! Simul ! Pos ! agr, []> ; -- nähdä/näkemään
+            Neg => <(predV (verbOlla ** {sc = NPCase Nom ; qp = True ; p = []})).s ! VIInf vi ! Simul ! Pos ! agr,
+                    (vp.s ! VIInf Inf3Abess ! Simul ! Pos ! agr).fin> -- olla/olemaan näkemättä
+            } ;
+          compl = vp.s2 ! fin ! pol ! agr ++ vp.adv ! pol ++ vp.ext     -- compl. case propagated
         in
-        verb.fin ++ verb.inf ++ compl ;
+        verb.p1.fin ++ verb.p1.inf ++ verb.p2 ++ compl ;
+
+  infVP : NPForm -> Polarity -> Agr -> VP -> InfForm -> Str = infVPGen Pos ;
 
 -- The definitions below were moved here from $MorphoFin$ so that we the
 -- auxiliary of predication can be defined.
