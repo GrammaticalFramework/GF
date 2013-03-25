@@ -15,6 +15,8 @@ import System.FilePath
 import System.Directory
 import System.Process
 import System.Exit
+import Control.Concurrent(forkIO)
+import Control.Concurrent.Chan(newChan,writeChan,readChan)
 
 import WebSetup
 
@@ -71,22 +73,22 @@ rglCommands =
        let prelude_src_dir = rgl_src_dir     </> "prelude"
            prelude_dst_dir = rgl_dst_dir lbi </> "prelude"
        createDirectoryIfMissing True prelude_dst_dir
-       files <- getDirectoryContents prelude_src_dir
-       run_gfc pkg lbi (["-s", "--gfo-dir="++prelude_dst_dir] ++ [prelude_src_dir </> file | file <- files, take 1 file /= "."])
+       files <- ls prelude_src_dir
+       run_gfc pkg lbi (["-s", "--gfo-dir="++prelude_dst_dir] ++ [prelude_src_dir </> file | file <- files])
   , RGLCommand "lang"    True  $ \modes args pkg lbi -> do
-       sequence_
+       parallel_
          [do mapM_ (gfc1 mode pkg lbi . lang) (optml mode langsLang args)
              mapM_ (gfc1 mode pkg lbi . symbol) (optml mode langsAPI args)
           | mode <- modes]
   , RGLCommand "compat"  True  $ \modes args pkg lbi -> do
          mapM_ (gfc modes pkg lbi . compat) (optl langsCompat args)
   , RGLCommand "api"     True  $ \modes args pkg lbi -> do
-       sequence_
+       parallel_
          [do mapM_ (gfc1 mode pkg lbi . try) (optml mode langsAPI args)
              mapM_ (gfc1 mode pkg lbi . symbolic) (optml mode langsSymbolic args)
           | mode <- modes]
   , RGLCommand "pgf"     False $ \modes args pkg lbi ->
-     sequence_ [
+     parallel_ [
        do let dir = getRGLBuildDir lbi mode
           createDirectoryIfMissing True dir
           sequence_ [run_gfc pkg lbi ["-s","-make","-name=Lang"++la,
@@ -145,17 +147,14 @@ copyRGL args flags pkg lbi = do
 copyAll s from to = do
   putStrLn $ "Installing [" ++ s ++ "] " ++ to
   createDirectoryIfMissing True to
-  files <- fmap (filter (\f -> take 1 f /= ".")) $ getDirectoryContents from
-  mapM_ (\file -> copyFile (from </> file) (to </> file)) files
+  mapM_ (\file -> copyFile (from </> file) (to </> file)) =<< ls from
 
 sdistRGL pkg mb_lbi hooks flags = do
   paths <- getRGLFiles rgl_src_dir []
   let pkg' = pkg{dataFiles=paths}
   sDistHook simpleUserHooks pkg' mb_lbi hooks flags
   where
-    getRGLFiles dir paths = do
-      files <- getDirectoryContents dir
-      foldM (processFile dir) paths [file | file <- files, file /= "." && file /= ".."]
+    getRGLFiles dir paths = foldM (processFile dir) paths =<< ls dir
 
     processFile dir paths file = do
       let path = dir </> file
@@ -171,11 +170,9 @@ testRGL args _ pkg lbi = do
   let paths = case args of
                 []    -> ["testsuite"]
                 paths -> paths
-  sequence_ [walk path | path <- paths]
+  mapM_ walk paths
   where
-    walk path = do
-      files <- getDirectoryContents path
-      sequence_ [walkFile (path </> file) | file <- files, file /= "." && file /= ".."]
+    walk path = mapM_ (walkFile . (path </>)) =<< ls path
 
     walkFile fpath = do
       exists <- doesFileExist fpath
@@ -279,7 +276,7 @@ langsPGF = langsLang `except` ["Ara","Hin","Ron","Tha"]
 -- languages for which Compatibility exists (to be extended)
 langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Lav","Spa","Swe"]
 
-gfc modes pkg lbi file = sequence_ [gfc1 mode pkg lbi file | mode<-modes]
+gfc modes pkg lbi file = parallel_ [gfc1 mode pkg lbi file | mode<-modes]
 gfc1 mode pkg lbi file = do
   let dir = getRGLBuildDir lbi mode
       preproc = case mode of
@@ -426,3 +423,14 @@ updateFile path new =
      when (Right new/=old) $ seq (either (const 0) length old) $
                                  writeFile path new
 
+-- | List files, excluding "." and ".."
+ls path = filter (`notElem` [".",".."]) `fmap` getDirectoryContents path
+
+
+-- | For parallel RGL module compilation
+-- Unfortunately, this has no effect unless Setup.hs is compiled with -threaded
+parallel_ ms = -- sequence_ ms {-
+  do c <- newChan
+     ts <- sequence [ forkIO (m >> writeChan c ()) | m <- ms]
+     sequence_ [readChan c | _ <- ts]
+--}
