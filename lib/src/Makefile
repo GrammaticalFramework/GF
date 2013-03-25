@@ -1,6 +1,8 @@
 RUNGHC=runghc
 RUNMAKE=$(RUNGHC) Make.hs
 
+PROBSFILE=../../treebanks/PennTreebank/ParseEngAbs.probs
+
 GF_LIB_PATH=..
 
 .PHONY: all present alltenses full lang api math prelude test demo parse synopsis link compiled constructX clean
@@ -115,23 +117,23 @@ clean:
 
 
 ParseEng:
-	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseEng english/ParseEng.gf
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEng english/ParseEng.gf
 
 ParseFin:
-	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseFin finnish/stemmed/ParseFin.gf
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseFin finnish/stemmed/ParseFin.gf
 
 ParseEngFin:
-	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseEngFin ParseEng.pgf ParseFin.pgf
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngFin ParseEng.pgf ParseFin.pgf
 
 ParseGer:
-	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseGer german/ParseEngGer.gf
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseGer german/ParseEngGer.gf
 
 ParseEngGer:
-	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseEngGer ParseEng.pgf ParseGer.pgf
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngGer ParseEng.pgf ParseGer.pgf
 
 ParseHin:
-	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseHin hindi/ParseHin.gf
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseHin hindi/ParseHin.gf
 
 ParseEngHin:
-	gf -make -literal=Symb -probs=english/ParseEngAbs.probs -name=ParseEngHin ParseEng.pgf ParseHin.pgf
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngHin ParseEng.pgf ParseHin.pgf
 
