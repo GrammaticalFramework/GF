@@ -24,6 +24,19 @@ open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, StemFin, Prelude in {
 flags literal=Symb ; coding = utf8 ;
 
 lin
+    ComplVV v ant pol vp = 
+      insertObj 
+        (\\_,b,a => infVPGen pol.p v.sc b a vp v.vi) 
+        (predSV {s = v.s ; 
+                sc = case vp.sc of {
+                  NPCase Nom => v.sc ;   -- minun täytyy pestä auto
+                  c => c                 -- minulla täytyy olla auto
+                  } ;
+                h = v.h ; p = v.p
+               }
+         ) ;
+
+
   myself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P1) ;
   yourselfSg_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P2) ;
   himself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3) ;
