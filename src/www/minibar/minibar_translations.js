@@ -25,10 +25,13 @@ function Translations(server,opts) {
     this.main=empty("div");
     this.menus=empty("span");
 
-    this.to_menu=empty_id("select","to_menu");
-
+    var tom=this.to_menu=node("select",{id:"to_menu",multiple:"",size:4},[]);
     appendChildren(this.menus,[text(" To: "), this.to_menu])
-    this.to_menu.onchange=bind(this.get_translations,this);
+    tom.onchange=bind(this.get_translations,this);
+    tom.onmouseover=function() { var n=tom.options.length;
+				 tom.size=n<12 ? n : 12; }
+    tom.onmouseout=function() { var n=tom.options.length;
+				tom.size=n<4 ? n : 4; }
 
 }
 
@@ -84,6 +87,14 @@ Translations.prototype.show_translations=function(translationResults) {
 	var trans=main;
 	//var to=target_lang(); // wrong
 	var to=to_menu.value;
+	var toLangs=[]
+	var toSet={}
+	var os=to_menu.options;
+	for(var i=0;i<os.length;i++)
+	    if(os[i].selected) {
+		toLangs.push(os[i].value)
+		toSet[os[i].value]=true;
+	    }
 	var cnt=translationResults.length; // cnt==1 usually
 	//trans.translations=translations;
 	trans.single_translation=[];
@@ -111,16 +122,17 @@ Translations.prototype.show_translations=function(translationResults) {
 			              : text("Abstract: ")
 			tbody.appendChild(
 			    tr([th(abs_hdr),
-				tdt(node("span",{},[abstree_button(t.tree),
-						    alignment_button(t.tree)]),
+				tdt(node("span",{},
+					 [abstree_button(t.tree),
+					  alignment_button(t.tree,to=="All",toLangs)]),
 				    t.tree)]));
 		    }
 		    for(var i=0;i<lin.length;i++) {
-			if(lin[i].to==to)
+			if(lin[i].to==to && toLangs.length==1)
 			    trans.single_translation.push(lin[i].text);
 			if(lin[i].to==current.from && lin[i].brackets)
 			    bra=lin[i].brackets;
-			if(to=="All" || lin[i].to==to) {
+			if(to=="All" || toSet[lin[i].to]) {
 			    var langcode=langpart(lin[i].to,grammar.name)
 		          //var hdr=text(langcode+": ")
 			    var hdr=title("Switch input language to "+langcode,
@@ -181,11 +193,12 @@ Translations.prototype.abstree_button=function(abs) {
   return i;
 }
 
-Translations.prototype.alignment_button=function(abs) {
+Translations.prototype.alignment_button=function(abs,all,toLangs) {
   var f=this.options.tree_img_format;
   var i=button_img(alignment_icon,"toggle_img(this)");
+  var to= all ? "" : "&to="+encodeURIComponent(toLangs.join(" "))
   i.title="Click to display word alignment"
-  i.other=this.server.current_grammar_url+"?command=alignment&format="+f+"&tree="+encodeURIComponent(abs);
+  i.other=this.server.current_grammar_url+"?command=alignment&format="+f+"&tree="+encodeURIComponent(abs)+to;
   return i;
 }
 
