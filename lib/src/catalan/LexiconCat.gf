@@ -91,7 +91,7 @@ lin
    girl_N = regFN "noia" ;
    glove_N = regMN "guant" ;
    gold_N = regMN "or" ;
-   good_A = mkADeg (mkA "bo" "bona" "bons" "bones" "bonament") (regA "millor") ; ---- adv?
+   good_A = prefA (mkADeg (mkA "bo" "bona") (mkA "millor")) ;
    go_V = (verbV (anar_4 "anar")) ;
    green_A = regADeg "verd" ;
    harbour_N = regMN "port" ;
@@ -101,9 +101,9 @@ lin
    hill_N = regMN "turó" ;
    hope_VS = mkVS (regV "esperar") ;
    horse_N = regMN "cavall" ;
-	hot_A = regADeg "calent" ;
+   hot_A = regADeg "calent" ;
    house_N = regFN "casa" ;
-	important_A = regADeg "important" ;
+   important_A = regADeg "important" ;
    industry_N = regFN "indústria" ;
    iron_N = regMN "ferro" ;
    king_N = regMN "rei" ;

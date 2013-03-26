@@ -12,7 +12,7 @@ lin
    these8fem_NP = makeNP "aquestes" Fem Pl ;
    they8fem_Pron = mkPronoun
       "elles" "les" "les" "elles"
-      "llur" "llur" "llurs" "llurs"
+      ["el seu"] ["la seva"] ["els seus"] ["les seves"]
       Fem Pl P3 ;
     this8fem_NP = pn2np (mkPN ["aquesta"] Fem) ;
     those8fem_NP = makeNP ["aquestes"] Fem Pl ;
@@ -39,7 +39,18 @@ lin
       ["el seu"] ["la seva"] ["els seus"] ["les seves"]
       Fem Sg P3 ;
 
-    --IL 2012-10-12
+   --they_Pron (StructuralCat) and they8fem_Pron (ExtraCat) use "el seu / la seva" as possessive.
+   theyLlur_Pron = mkPronoun
+      "ells" "els" "els" "ells"
+      "llur" "llur" "llurs" "llurs"
+      Masc Pl P3 ;
+    
+   theyLlur8fem_Pron = mkPronoun
+      "elles" "les" "les" "elles"
+      "llur" "llur" "llurs" "llurs"
+      Fem Pl P3 ;
+    
+
     ImpNeg np vp = lin Utt{ 
       s = (mkClause (np.s ! Nom).comp np.hasClit False np.a vp).s 
              ! DInv ! RPres ! Simul ! RNeg False ! Conjunct

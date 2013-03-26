@@ -110,8 +110,8 @@ lin
   there7from_Adv = mkAdv ["d'allà"] ;	
   therefore_PConj = ss ["per tant"] ;
   they_Pron = mkPronoun
-    "elles" "les" "les" "elles"
-    "llur" "llur" "llurs" "llurs"
+    "ells" "els" "els" "ells"
+    ["el seu"] ["la seva"] ["els seus"] ["les seves"]
     Masc Pl P3 ;
 
   this_Quant =
