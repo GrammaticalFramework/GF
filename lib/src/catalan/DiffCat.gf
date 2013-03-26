@@ -143,8 +143,8 @@ oper
         in
         case p of { 
         P3 => case c of {
-          Acc | CPrep P_a => "se" ;
-          _ => "sÌ"
+          Acc | CPrep P_a => "es" ;
+          _ => "si"
           } ;
         _ => pro
         } ; 

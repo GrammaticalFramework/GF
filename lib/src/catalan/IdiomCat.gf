@@ -40,13 +40,9 @@ concrete IdiomCat of Idiom = CatCat **
     ImpPl1 vp = {s =
       mkImperative False P1 vp ! RPos ! Masc ! Pl --- fem
       } ;
-
+      
     CleftAdv ad s = mkClause [] True False (agrP3 Masc Sg) 
       (insertComplement (\\_ => conjThat ++ s.s ! Indic)
         (insertComplement (\\_ => ad.s) (predV copula))) ;
-
-        
-
-
 
 }
