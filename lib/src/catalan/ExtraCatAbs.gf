@@ -24,8 +24,11 @@ fun
 
     youPolPl_Pron : Pron ;  -- vostés
     youPolPl8fem_Pron : Pron ;
+    
+    theyLlur_Pron : Pron ;     --version of ells whose possessive is llur/llurs
+    theyLlur8fem_Pron : Pron ; --version of elles whose possessive is llur/llurs
 
-    ImpNeg : NP -> VP -> Utt ; --IL 2012-10-12
+    ImpNeg : NP -> VP -> Utt ;
 
     PassVPSlash_ser : VPSlash -> VP ;
 }
