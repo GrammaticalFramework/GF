@@ -368,7 +368,7 @@ instance Binary Word where
                                          put (b .|. 0x80)
                                          put (c .|. 0x80)
                                          put  d
--- #if WORD_SIZE_IN_BITS < 64
+-- -- #if WORD_SIZE_IN_BITS < 64
           | otherwise               = do put (a .|. 0x80)
                                          put (b .|. 0x80)
                                          put (c .|. 0x80)
