@@ -32,22 +32,22 @@ lin
 -- properties
 
     Bad = L.bad_A ;
-    Boring = mkA "avorrit" "avorrida" "avorrits" "avorrides" "avorridament" ;
+    Boring = mkA "avorrit" ;
     Cheap = cheap_A ; 
     Cold = L.cold_A ;
-    Delicious = mkA "deliciós" "deliciosa" "deliciosos" "delicioses" "deliciosament";
+    Delicious = mkA "deliciós" ;
     Expensive = expensive_A ; 
     Fresh = mkA "fresc" ;
     Good = L.good_A ;
-    Suspect = mkA "sospitós" "sospitosa" "sospitosos" "sospitoses" "sospitosament" ;
-    Warm = L.warm_A ;
+    Suspect = mkA "sospitós"  ;
+    Warm = mkA "calent" ;
 
 -- places
 
 lin
     Airport = mkPlace (mkN "aeroport") ;
     AmusementPark = mkPlace (mkN "parc d' atraccions") ;
-	Bank = mkPlace (mkN "banc") ;
+    Bank = mkPlace (mkN "banc") ;
     Bar = mkPlace (mkN "bar") ;
     Cafeteria = mkPlace (mkN "cafeteria") ;
     Center = mkPlace (mkN "centre") ;
@@ -58,9 +58,9 @@ lin
     Hotel = mkPlace (mkN "hotel")  ;
     Museum = mkPlace (mkN "museu")  ;
     Park = mkPlace (mkN "parc") ;
-    Parking = mkPlace (mkN "pàrking" masculine) ;
+    Parking = mkPlace (mkN "aparcament" masculine) ;
     Pharmacy = mkPlace (mkN "farmàcia") ;
-	PostOffice = mkPlace (mkN "oficina de correus" feminine) ;
+    PostOffice = mkPlace (mkN "oficina de correus" feminine) ;
     Pub = mkPlace (mkN "pub" masculine) ;
     Restaurant = mkPlace (mkN "restaurant") ;
     School = mkPlace (mkN "escola") ;
@@ -80,7 +80,7 @@ oper corona : A -> CN = \adj ->
 	  in mkCN adj corona_N | mkCN corona_N ;
 lin
     DanishCrown = corona (mkA "danès" "danesa" "danesos" "daneses" "a la danesa") ; 
-    Dollar = mkCN (mkN "dollar") ;
+    Dollar = mkCN (mkN "dòlar") ;
   	Euro = mkCN (mkN "euro" masculine) ;
     Lei = mkCN (mkN "leu" "lei" masculine) ;
 	Leva = mkCN (mkN "lev" "lev" masculine) ; 
@@ -94,15 +94,15 @@ lin
 
     Belgian = mkA "belga" "belga" "belgues" "belgues" "a la Belga" ;
     Belgium = mkNP (mkPN "Bèlgica") ;
-	Bulgarian = mkNat3 "búlgar" "búlgara" "búlgars" "búlgueres" "Bulgària" ;
-	Catalan = mkNat5 "catal" "Catalunya" ;
-	Danish = mkNat4 "dan" "Dinamarca" ; 
-	Dutch = mkNat4 "holand" "Holanda" ; 
+    Bulgarian = mkNat3 "búlgar" "búlgara" "búlgars" "búlgueres" "Bulgària" ;
+    Catalan = mkNat5 "catal" "Catalunya" ;
+    Danish = mkNat4 "dan" "Dinamarca" ; 
+    Dutch = mkNat4 "holand" "Holanda" ; 
     English = mkNat4 "angl" "Anglaterra" ;
     Finnish = mkNat4 "fin" "Finlàndia" ;
     Flemish = mkNP (mkPN "flamenc") ;
     French = mkNat4 "franc" "França" ;
-    German = mkNat3 "alemany" "alemenya" "alemanys" "alemanyes" "Alemania" ;
+    German = mkNat3 "alemany" "alemanya" "alemanys" "alemanyes" "Alemania" ;
     Italian = mkNat5 "itali" "Itàlia" ;
     Norwegian = mkNat3 "noruec" "noruega" "noruecs" "noruegues" "Noruega" ;
     Polish = mkNat4 "polon" "Polònia" ; 
@@ -129,7 +129,7 @@ lin
 -- actions
 
     AHasAge p num = mkCl p.name have_V2 (mkNP num L.year_N) ;
-    AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
+    AHasChildren p num = mkCl p.name have_V2 (mkNP num (mkN "fill" masculine)) ;
     AHasName p name =
        let dir = mkV (dir_41 "dir")
        in mkCl p.name (mkV2 (reflV dir)) name ;
@@ -138,7 +138,7 @@ lin
     AHasTable p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det (mkN "taula")) (SyntaxCat.mkAdv for_Prep (mkNP num (mkN "persona")))) ;
     AHungry p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "gana" feminine))) ;
-    AIll p = mkCl p.name (mkA "malalt") ;
+    AIll p = mkCl p.name  stateCopula (mkAP (mkA "malalt")) ;
     AKnow p =
       let saber = mkV (saber_99 "saber")
       in mkCl p.name saber ;
@@ -147,14 +147,12 @@ lin
       let viure = mkV (viure_119 "viure")
       in mkCl p.name (mkVP (mkVP viure) (SyntaxCat.mkAdv in_Prep co)) ;
     ALove p q = mkCl p.name (mkV2 (mkV "estimar")) q.name ;
-    AMarried p = mkCl p.name (mkA "casat") ;
-    AReady p =
-      let ap = "a punt"
-      in mkCl p.name (mkA ap ap ap ap ap) ;
+    AMarried p = mkCl p.name stateCopula (mkAP (mkA "casat")) ;
+    AReady p = mkCl p.name stateCopula (mkAP (mkA "preparat")) ;
     AScared p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "por" feminine))) ;
     ASpeak p lang = mkCl p.name  (mkV2 (mkV "parlar")) lang ;
     AThirsty p = mkCl p.name (E.ComplCN have_V2 (mkCN (mkN "set" feminine))) ;
-    ATired p = mkCl p.name (mkA "cansat") ;
+    ATired p = mkCl p.name stateCopula (mkAP (mkA "cansat")) ;
     AUnderstand p = mkCl p.name (mkV "entendre") ;
     AWant p obj = 
       let voler = mkV (voler_120 "voler")
@@ -174,10 +172,10 @@ lin
     ItCost item price = 
       let valer = mkV (valer_114 "valer")
       in mkCl item (mkV2 valer) price ;
-    PropOpen p = mkCl p.name open_A ;
-    PropClosed p = mkCl p.name closed_A ;
-    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_A) d) ; 
-    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_A) d) ; 
+    PropOpen p = mkCl p.name stateCopula (mkAP open_A) ;
+    PropClosed p = mkCl p.name stateCopula (mkAP closed_A) ;
+    PropOpenDate p d = mkCl p.name (mkVP (mkVP stateCopula (mkAP open_A)) d) ; 
+    PropClosedDate p d = mkCl p.name (mkVP (mkVP stateCopula (mkAP closed_A)) d) ;
     PropOpenDay p d = mkCl p.name (mkVP (mkVP open_A) d.habitual) ; 
     PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
 	PSeeYouPlaceDate p d = 
@@ -190,10 +188,10 @@ lin
 -- family relations
 
     Wife = xOf sing (mkN "dona") ;
-    Husband = xOf sing (mkN "home") ;
+    Husband = xOf sing (mkN "marit") ;
     Son = xOf sing (mkN "fill") ;
     Daughter = xOf sing (mkN "filla") ;
-    Children = xOf plur L.child_N ;
+    Children = xOf plur (mkN "fill") ;
 
 -- week days
 
@@ -229,7 +227,7 @@ lin
    WhichTranspPlace trans place = 
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
    IsTranspPlace trans place =
-      mkQS (mkQCl (mkCl (mkCN trans.name (SyntaxCat.mkAdv for_Prep place.name)))) ;
+      mkQS (mkQCl (mkCl (mkCN trans.name (SyntaxCat.mkAdv to_Prep place.name)))) ;
 
 -- modifiers of places
     TheBest = mkSuperl L.good_A True ;
@@ -263,29 +261,34 @@ lin
     mkNat2 : A -> Str -> Str -> NPNationality = \adj,nat,co -> 
       mkNPNationality (mkNP (mkPN nat)) (mkNP (mkPN co)) adj ;
 
-	mkNat3 : (_,_,_,_:Str) -> Str -> NPNationality = \ms,fs,mp,fp,co -> 
+    mkNat3 : (_,_,_,_:Str) -> Str -> NPNationality = \ms,fs,mp,fp,co -> 
       mkNPNationality (mkNP (mkPN ms)) (mkNP (mkPN co)) (mkA ms fs mp fp ("a la" ++ fs)) ;
 
-	mkNat4 : Str -> Str -> NPNationality = \angl,co ->
-	  mkNat3 (angl+"ès") (angl+"esa") (angl+"esos") (angl+"eses") co ;
-	
-	mkNat5 : Str -> Str -> NPNationality = \catal,co ->
-	  mkNat3 (catal+"à") (catal+"ana") (catal+"ans") (catal+"anes") co ;
-	
+    mkNat4 : Str -> Str -> NPNationality = \angl,co ->
+      mkNat3 (angl+"ès") (angl+"esa") (angl+"esos") (angl+"eses") co ;
+
+    mkNat5 : Str -> Str -> NPNationality = \catal,co ->
+      mkNat3 (catal+"à") (catal+"ana") (catal+"ans") (catal+"anes") co ;
+
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
       let day = mkNP (mkPN d)
-      in mkNPDay day (P.mkAdv ("el" ++ d)) (P.mkAdv ("el" ++ d)) ; ---- ?
+      in 
+        case last d of {
+          "s" => mkNPDay day (P.mkAdv ("el" ++ d)) (P.mkAdv ("els" ++ d)) ;
+           _  => mkNPDay day (P.mkAdv ("el" ++ d)) (P.mkAdv ("els" ++ d + "s")) 
+         } ;
 
     mkPlace : N -> {name : CN ; at : Prep ; to : Prep; isPl : Bool} = \p ->
       mkCNPlace (mkCN p) dative dative ;
 
-	 mkTransport : N -> {name : CN ; by : Adv} = \n -> {
-	      name = mkCN n ; 
-	      by = S.mkAdv with_Prep (mkNP n)
-	      } ;
+    mkTransport : N -> {name : CN ; by : Adv} = \n -> {
+          name = mkCN n ; 
+          by = S.mkAdv with_Prep (mkNP n)
+          } ;
 
     xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (mkCN x) p ; 
 
+    stateCopula = mkVA (mkV (estar_54 "estar")) ;
     open_A = mkA "obert" ;
 
     closed_A = mkA "tancat" ;

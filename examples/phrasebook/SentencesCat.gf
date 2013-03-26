@@ -3,7 +3,8 @@ concrete SentencesCat of Sentences = NumeralCat ** SentencesI - [
   IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,
   WeMale, WeFemale, YouPlurFamMale, YouPlurFamFemale, YouPlurPolFemale, YouPlurPolMale, TheyMale, TheyFemale, 
   PImperativeFamNeg, PImperativePolNeg, PImperativePlurNeg, --negative imperatives in subjunctive
-  Superlative
+  Superlative,
+  AKnowPerson
  ] 
   with 
     (Syntax = SyntaxCat), 
@@ -11,7 +12,7 @@ concrete SentencesCat of Sentences = NumeralCat ** SentencesI - [
     (Lexicon = LexiconCat) ** 
   open ParadigmsCat, BeschCat, SyntaxCat, ExtraCat, Prelude in {
 
-flags coding = utf8 ;
+--flags coding = utf8 ;
 
 lincat
   Superlative = OrdSuperlative ; -- {ord: Ord ; isPre: Bool}
@@ -56,6 +57,9 @@ lin
     PImperativePolNeg  v = phrasePlease (ImpNeg (mkNP (ProDrop youPol_Pron)) v) ;
     PImperativePlurNeg v = phrasePlease (ImpNeg (mkNP (ProDrop youPl_Pron)) v) ;
 
+    AKnowPerson p q = 
+      let coneixer : V2 = mkV2 (mkV (conèixer_27 "conèixer"))
+      in  mkCl p.name coneixer  q.name ;
 
 oper
 
