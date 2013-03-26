@@ -204,10 +204,18 @@ Translations.prototype.alignment_button=function(abs,all,toLangs) {
 
 Translations.prototype.parsetree_button=function(abs,lang) {
   var f=this.options.tree_img_format;
-  var i=button_img(tree_icon,"toggle_img(this)");
-  i.title="Click to display parse tree"
-  i.other=this.server.current_grammar_url
-          +"?command=parsetree&format="+f+"&from="+lang+"&tree="+encodeURIComponent(abs);
+  var img=this.server.current_grammar_url
+          +"?command=parsetree&format="+f+"&nodefont=arial"
+	  +"&from="+lang+"&tree="+encodeURIComponent(abs);
+  var imgs=[tree_icon,img+"&nofun=true",img]
+  var current=0;
+  function cycle() {
+      current++;
+      if(current>=imgs.length) current=0;
+      i.src=imgs[current]
+  }
+  var i=button_img(tree_icon,cycle);
+  i.title="Click to display parse tree. Click again to show function names."
   return i;
 }
 

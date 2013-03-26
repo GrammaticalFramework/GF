@@ -24,9 +24,8 @@ function update_language_menu(menu,grammar) {
 }
 
 function button_img(url,action) {
-    var i=img(url);
-    i.setAttribute("class","button");
-    i.setAttribute("onclick",action);
+    var i=node("img",{"class":"button","src":url});
+    i.onclick=action;
     return i;
 }
 
