@@ -4,6 +4,7 @@
 --
 -- Aarne Ranta 2002 -- 2005
 -- Jordi Saludes 2008: Derived from MorphoSpa. 
+-- Inari Listenmaa 2012: Added smart paradigms for adjectives.
 --
 -- This resource morphology contains definitions needed in the resource
 -- syntax. To build a lexicon, it is better to use $ParadigmsCat$, which
@@ -63,19 +64,19 @@ oper
     mkNoun (numForms vi vins) ;
 
   mkNomReg : Str -> Noun = \noi ->
-        let
-                mkNounMas : (Str -> Number => Str) -> Noun = \rule -> mkNoun (rule noi) Masc
-        in
+    let
+       mkNounMas : (Str -> Number => Str) -> Noun = \rule -> mkNoun (rule noi) Masc
+    in
     case last noi of {
-      "a"                                                 => mkNoun (nomCasa "es" noi) Fem ;
-          "s"|"x"|"ç"                                 => mkNounMas nomCas ;
-          "i"                                                => mkNounMas nomFre ;
-          "í"                                                => mkNounMas (nomCasa "ins") ;
-          "à"                                                => mkNounMas (nomCasa "ans") ;
-          "ó"                                                => mkNounMas (nomCasa "ons") ;
-          "g"                                                => mkNounMas nomFaig ;
-      _                                                   => mkNounMas nomCep
-     } ;
+      "a"          => mkNoun (nomCasa "es" noi) Fem ;
+      "s"|"x"|"ç"  => mkNounMas nomCas ;
+      "i"          => mkNounMas nomFre ;
+      "í"          => mkNounMas (nomCasa "ins") ;
+      "à"          => mkNounMas (nomCasa "ans") ;
+      "ó"          => mkNounMas (nomCasa "ons") ;
+      "g"          => mkNounMas nomFaig ;
+       _           => mkNounMas nomCep
+    } ;
 
 --2 Adjectives
 --
