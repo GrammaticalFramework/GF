@@ -72,7 +72,8 @@ pgfMain command pgf =
       "alignment"      -> outputGraphviz =<< alignment pgf # tree % to
       "parsetree"      -> do t <- tree
                              Just l <- from
-                             outputGraphviz (parseTree pgf l t)
+                             opts <- graphvizOptions
+                             outputGraphviz (parseTree pgf l opts t)
       "abstrjson"      -> out . jsonExpr =<< tree
       "browse"         -> join $ doBrowse pgf # optId % cssClass % href % format "html" % getIncludePrintNames
       "external"       -> do cmd <- getInput "external"
@@ -147,6 +148,20 @@ pgfMain command pgf =
     getIncludePrintNames :: CGI Bool
     getIncludePrintNames = maybe False (const True) # getInput "printnames"
 
+    graphvizOptions =
+        PGF.GraphvizOptions # bool "noleaves"
+                            % bool "nofun"
+                            % bool "nocat"
+                            % string "nodefont"
+                            % string "leaffont"
+                            % string "nodecolor"
+                            % string "leafcolor"
+                            % string "nodeedgestyle"
+                            % string "leafedgestyle"
+      where
+        string name = maybe "" id # getInput name
+        bool name = maybe False toBool # getInput name
+        toBool s = s `elem` ["","yes","true","True"]
 
 errorMissingId = throwCGIError 400 "Missing identifier" []
 
@@ -342,9 +357,9 @@ outputGraphviz code =
     -- ...
         _     -> "application/binary"
 
-abstrTree pgf tree      = PGF.graphvizAbstractTree pgf (True,True) tree
-parseTree pgf lang tree = PGF.graphvizParseTree pgf lang PGF.graphvizDefaults tree
-alignment pgf tree tos  = PGF.graphvizAlignment pgf tos' tree
+abstrTree pgf tree           = PGF.graphvizAbstractTree pgf (True,True) tree
+parseTree pgf lang opts tree = PGF.graphvizParseTree pgf lang opts tree
+alignment pgf tree tos       = PGF.graphvizAlignment pgf tos' tree
   where tos' = if null tos then PGF.languages pgf else tos
 
 pipeIt2graphviz :: String -> String -> IO BS.ByteString
