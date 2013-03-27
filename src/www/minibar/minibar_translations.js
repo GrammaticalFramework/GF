@@ -25,14 +25,15 @@ function Translations(server,opts) {
     this.main=empty("div");
     this.menus=empty("span");
 
-    var tom=this.to_menu=node("select",{id:"to_menu",multiple:"",size:4},[]);
+    var tom=this.to_menu=node("select",{id:"to_menu",multiple:"",size:5},[]);
     appendChildren(this.menus,[text(" To: "), this.to_menu])
     tom.onchange=bind(this.get_translations,this);
+    /* // This seems triggers weird scrolling behavior in Firefox and Chrome:
     tom.onmouseover=function() { var n=tom.options.length;
 				 tom.size=n<12 ? n : 12; }
     tom.onmouseout=function() { var n=tom.options.length;
 				tom.size=n<4 ? n : 4; }
-
+    */
 }
 
 Translations.prototype.change_grammar=function(grammar) {
