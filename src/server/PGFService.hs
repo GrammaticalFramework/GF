@@ -63,6 +63,7 @@ pgfMain command pgf =
       "complete"       -> out =<< doComplete pgf # text % cat % from % limit
       "linearize"      -> out =<< doLinearize pgf # tree % to
       "linearizeAll"   -> out =<< doLinearizes pgf # tree % to
+      "linearizeTable" -> out =<< doLinearizeTabular pgf # tree % to
       "random"         -> cat >>= \c -> depth >>= \dp -> limit >>= \l -> to >>= \to -> liftIO (doRandom pgf c dp l to) >>= out
       "generate"       -> out =<< doGenerate pgf # cat % depth % limit % to
       "translate"      -> out =<< doTranslate pgf # text % cat % from % to % limit
@@ -297,6 +298,12 @@ doLinearizes :: PGF -> PGF.Tree -> [PGF.Language] -> JSValue
 doLinearizes pgf tree tos = showJSON
     [makeObj ["to".=to, "texts".=texts]
        | (to,texts) <- linearizes' pgf tos tree]
+
+doLinearizeTabular :: PGF -> PGF.Tree -> [PGF.Language] -> JSValue
+doLinearizeTabular pgf tree tos = showJSON
+    [makeObj ["to".=to,
+              "table".=[makeObj ["params".=ps,"texts".=ts] | (ps,ts)<-texts]]
+       | (to,texts) <- linearizeTabular pgf tos tree]
 
 doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> [PGF.Language] -> IO JSValue
 doRandom pgf mcat mdepth mlimit tos =
@@ -569,13 +576,25 @@ transfer lang = if "LaTeX" `isSuffixOf` show lang
                 then fold -- OpenMath LaTeX transfer
                 else id
 
--- all variants and their forms
+-- | list all variants and their forms
 linearizes' :: PGF -> [PGF.Language] -> PGF.Tree -> [(PGF.Language,[String])]
 linearizes' pgf tos tree =
     [(to,lins to (transfer to tree)) | to <- langs]
   where
     langs = if null tos then PGF.languages pgf else tos
     lins to = nub . concatMap (map snd) . PGF.tabularLinearizes pgf to
+
+-- | tabulate all variants and their forms
+linearizeTabular
+  :: PGF -> [PGF.Language] -> PGF.Tree -> [(PGF.Language,[(String,[String])])]
+linearizeTabular pgf tos tree =
+    [(to,lintab to (transfer to tree)) | to <- langs]
+  where
+    langs = if null tos then PGF.languages pgf else tos
+    lintab to t = [(p,nub [t|(p',t)<-vs,p'==p])|p<-ps]
+      where
+        ps = nub (map fst vs)
+        vs = concat (PGF.tabularLinearizes pgf to t)
 
 linearizeAndBind pgf mto t =
     [(la, binds s,bs) | (la,s,bs) <- linearize' pgf mto t]
