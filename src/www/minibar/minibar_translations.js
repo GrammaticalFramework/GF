@@ -187,7 +187,7 @@ Translations.prototype.show_groupedtranslations=function(translationsResult) {
 
 Translations.prototype.abstree_button=function(abs) {
   var f=this.options.tree_img_format;
-  var i=button_img(tree_icon,"toggle_img(this)");
+  var i=button_img(tree_icon,function(){toggle_img(i)});
   i.title="Click to display abstract syntax tree"
   i.other=this.server.current_grammar_url+"?command=abstrtree&format="+f+"&tree="+encodeURIComponent(abs);
   return i;
@@ -195,7 +195,7 @@ Translations.prototype.abstree_button=function(abs) {
 
 Translations.prototype.alignment_button=function(abs,all,toLangs) {
   var f=this.options.tree_img_format;
-  var i=button_img(alignment_icon,"toggle_img(this)");
+  var i=button_img(alignment_icon,function(){toggle_img(i)});
   var to= all ? "" : "&to="+encodeURIComponent(toLangs.join(" "))
   i.title="Click to display word alignment"
   i.other=this.server.current_grammar_url+"?command=alignment&format="+f+"&tree="+encodeURIComponent(abs)+to;
