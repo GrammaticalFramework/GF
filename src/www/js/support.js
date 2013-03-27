@@ -238,6 +238,10 @@ function appendChildren(el,ds) {
     return el;
 }
 
+function replaceNode(el,ref) {
+    ref.parentNode.replaceChild(el,ref)
+}
+
 function insertFirst(parent,child) {
     parent.insertBefore(child,parent.firstChild);
 }
