@@ -87,3 +87,6 @@ div.browse, table.browse td {
     background: white;
     padding: 2px;
 }
+
+table.lintable { display: inline-table; border-collapse: collapse; }
+table.lintable td { border: 1px solid black; padding: 2px; }

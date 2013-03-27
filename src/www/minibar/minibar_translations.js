@@ -75,13 +75,40 @@ Translations.prototype.show_translations=function(translationResults) {
     function tdt(tree_btn,s,action) {
 	var txt=text(s);
 	if(action) {
-	    txt=node("span",{onclick:action},[txt])
+	    txt=wrap("span",[txt])
+	    txt.onclick=action
 	    //txt=button(s,action)
 	}
-	return self.options.show_trees ? tda([tree_btn,text(" "),txt]) : td(txt)
+	return self.options.show_trees ? td([tree_btn,text(" "),txt]) : td(txt)
     }
     function act(lin) {
 	return self.lin_action ? function() { self.lin_action(lin) } : null
+    }
+    function show_lin(tree_btn,lin,tree) {
+	function draw_table(lintable) {
+	    function draw_texts(texts) {
+		return texts.map(function(s) { return wrap("div",text(s)) })
+	    }
+	    function draw_row(row) {
+		return tr([td(text(row.params)),td(draw_texts(row.texts))])
+	    }
+	    return wrap_class("table","lintable",lintable.map(draw_row))
+	}
+	function get_tabular() {
+	    var t=this
+	    var pa=this.parentNode
+	    function show_table(lins) {
+		if(lins.length==1) {
+		    var ta=draw_table(lins[0].table)
+		    replaceNode(ta,t)
+		    ta.onclick=function() { replaceNode(t,ta) }
+		    t.onclick=function() { replaceNode(ta,t) }
+		}
+	    }
+	    self.server.pgf_call("linearizeTable",{"tree":tree,"to":lin.to},
+				 show_table)
+	}
+	return tdt(tree_btn,lin.text,get_tabular)
     }
     with(self) {
 	var trans=main;
@@ -139,8 +166,8 @@ Translations.prototype.show_translations=function(translationResults) {
 					  button(langcode,act(lin[i])))
 			    //hdr.disabled=lin[i].to==current.from
 			    var btn=parsetree_button(t.tree,lin[i].to)
-			    tbody.appendChild(tr([th(hdr),
-						  tdt(btn,lin[i].text)]));
+			    tbody.appendChild(
+				tr([th(hdr),show_lin(btn,lin[i],t.tree)]));
 			}
 		    }
 		    trans.appendChild(wrap("table",tbody));
