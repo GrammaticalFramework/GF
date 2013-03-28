@@ -213,12 +213,24 @@ Translations.prototype.show_groupedtranslations=function(translationsResult) {
 }
 
 
+function tree_button(img_url) {
+  var imgs=[tree_icon,img_url+"&nofun=true",img_url]
+  var current=0;
+  function cycle() {
+      current++;
+      if(current>=imgs.length) current=0;
+      i.src=imgs[current]
+  }
+  var i=button_img(tree_icon,cycle);
+  return i
+}
+
 Translations.prototype.abstree_button=function(abs) {
   var f=this.options.tree_img_format;
-  var i=button_img(tree_icon,function(){toggle_img(i)});
-  i.title="Click to display abstract syntax tree"
-  i.other=this.server.current_grammar_url+"?command=abstrtree&format="+f+"&tree="+encodeURIComponent(abs);
-  return i;
+  var img=this.server.current_grammar_url+"?command=abstrtree&format="+f+"&tree="+encodeURIComponent(abs)
+  var btn=tree_button(img);
+  btn.title="Click to display abstract syntax tree"
+  return btn
 }
 
 Translations.prototype.alignment_button=function(abs,all,toLangs) {
@@ -235,16 +247,9 @@ Translations.prototype.parsetree_button=function(abs,lang) {
   var img=this.server.current_grammar_url
           +"?command=parsetree&format="+f+"&nodefont=arial"
 	  +"&from="+lang+"&tree="+encodeURIComponent(abs);
-  var imgs=[tree_icon,img+"&nofun=true",img]
-  var current=0;
-  function cycle() {
-      current++;
-      if(current>=imgs.length) current=0;
-      i.src=imgs[current]
-  }
-  var i=button_img(tree_icon,cycle);
-  i.title="Click to display parse tree. Click again to show function names."
-  return i;
+  var btn=tree_button(img)
+  btn.title="Click to display parse tree. Click again to show function names."
+  return btn;
 }
 
 function draw_brackets(b) {
