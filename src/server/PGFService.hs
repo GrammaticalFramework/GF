@@ -69,7 +69,7 @@ pgfMain command pgf =
       "translate"      -> out =<< doTranslate pgf # text % cat % from % to % limit
       "translategroup" -> out =<< doTranslateGroup pgf # text % cat % from % to % limit
       "grammar"        -> out =<< doGrammar pgf # requestAcceptLanguage
-      "abstrtree"      -> outputGraphviz . abstrTree pgf =<< tree
+      "abstrtree"      -> outputGraphviz =<< abstrTree pgf # graphvizOptions % tree
       "alignment"      -> outputGraphviz =<< alignment pgf # tree % to
       "parsetree"      -> do t <- tree
                              Just l <- from
@@ -364,8 +364,11 @@ outputGraphviz code =
     -- ...
         _     -> "application/binary"
 
-abstrTree pgf tree           = PGF.graphvizAbstractTree pgf (True,True) tree
+abstrTree pgf      opts tree = PGF.graphvizAbstractTree pgf opts' tree
+  where opts' = (not (PGF.noFun opts),not (PGF.noCat opts))
+
 parseTree pgf lang opts tree = PGF.graphvizParseTree pgf lang opts tree
+
 alignment pgf tree tos       = PGF.graphvizAlignment pgf tos' tree
   where tos' = if null tos then PGF.languages pgf else tos
 
