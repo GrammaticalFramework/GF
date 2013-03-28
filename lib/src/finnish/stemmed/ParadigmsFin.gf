@@ -655,12 +655,18 @@ oper
   A2V : Type = A2 ;
 
   mkV0  v = v ** {lock_V = <>} ;
+  mkV2Sbare : V -> V2S = \v -> mkV2S v (casePrep allative) ; ----
+
   mkV2S v p = mk2V2 v p ** {lock_V2S = <>} ;
+  mkV2Vbare : V -> V2V = \v -> mkV2V v (casePrep partitive) ; ----
   mkV2V v p = mkV2Vf v p infIllat ;
   mkV2Vf v p f = mk2V2 v p ** {vi = f ; lock_V2V = <>} ;
 
+  mkVAbare : V -> VA = \v -> mkVA v (casePrep partitive) ; ----
   mkVA  v p = v ** {c2 = p ; lock_VA = <>} ;
+  mkV2Abare : V -> V2A = \v -> mkV2A v (casePrep partitive) (casePrep translative) ;
   mkV2A v p q = v ** {c2 = p ; c3 = q ; lock_V2A = <>} ;
+  mkV2Qbare : V -> V2Q = \v -> mkV2Q v (casePrep ablative) ; ----
   mkV2Q v p = mk2V2 v p ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;

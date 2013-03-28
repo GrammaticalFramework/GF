@@ -1,0 +1,11 @@
+AR 28/3/2013
+
+26/3 Morphology from Kotus.
+
+27/3 Senses from Princeton.
+
+27/3 
+Designed new paradigms. Filtered problematic/illegal things (PLURNOUN, ILLEGALVERB, POSTPONE, TODO).
+Just 9035 lemmas missing now.
+
+
