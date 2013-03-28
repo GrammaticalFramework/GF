@@ -1,6 +1,6 @@
 --# -path=.:..:../../abstract:../../common:../../english:../kotus
 
-resource WNKotus = open Kotus, MorphoFin, ParadigmsFin, Prelude in {
+resource WNKotus = open Kotus, MorphoFin, ParadigmsFin, CatFin, StemFin, Prelude in {
 
 -- interpretations of paradigms in KOTUS word list, used in DictFin built with the Finnish Wordnet
 
@@ -10,42 +10,130 @@ oper
 
 -- lexicon constructors
 
-  compoundN : Str -> NForms -> N
+  separateN : Str -> N -> N = \s,n -> mkN (s + "_") n ;
+
+  compoundN : Str -> NForms -> N = \s,nf -> lin N (mkStrN s (nforms2snoun nf)) ;
+
+  compoundA : Str -> NForms -> N = \s,nf -> lin N (mkStrN s (nforms2snoun nf)) ;
+
+  compoundAdv = overload {
+    compoundAdv : Str -> NForms -> Adv = \s,nf -> mkAdv (s + nf ! 0) ;
+    compoundAdv : Str -> Str    -> Adv = \s,t  -> mkAdv (s + t) ;
+    } ;
+
+  compoundV : Str -> VForms -> V = \s,vf -> mkV (lin VK {s = table (Predef.Ints 11) {f => s + vf ! f}}) ;
 
   mkWN = overload {
     mkWN : (_ : Str)     -> N = \s -> mkN s ;
-    mkWN : (_,_ : Str)   -> N = \s,p -> mkN (s ++ p) ;
-    mkWN : (_,_,_ : Str) -> N = \s,p,q -> mkN (s ++ p ++ q) ;
-    mkWN : (_,_,_,_ : Str) -> N = \s,p,q,r -> mkN (s ++ p ++ q ++ r) ;
-    mkWN : (_,_,_,_,_ : Str) -> N = \s,p,q,r,x -> mkN (s ++ p ++ q ++ r ++ x) ;
-    mkWN : (_,_,_,_,_,_ : Str) -> N = \s,p,q,r,x,y -> mkN (s ++ p ++ q ++ r ++ x ++ y) ;
-    mkWN : (_,_,_,_,_,_,_ : Str) -> N = \s,p,q,r,x,y,z -> mkN (s ++ p ++ q ++ r ++ x ++ y ++ z) ;
-    mkWN : (_,_,_,_,_,_,_,_ : Str) -> N = \s,p,q,r,x,y,z,u -> mkN (s ++ p ++ q ++ r ++ x ++ y ++ z ++ u) ;
-    mkWN : (_,_,_,_,_,_,_,_,_ : Str) -> N = \s,p,q,r,x,y,z,u,v -> mkN (s ++ p ++ q ++ r ++ x ++ y ++ z ++ u ++ v) ;
+    mkWN : (_,_ : Str)   -> N = \s,t -> separateN s (mkN t);
+    mkWN : (_ : NForms)  -> N = \nf -> lin N (nforms2snoun nf) ;
+    mkWN : NForms -> Str -> N = \s,t -> separateN t (lin N (nforms2snoun s)) ;
+    mkWN : NForms -> Str -> Str -> N = \s,t,u -> separateN (t ++ u) (lin N (nforms2snoun s)) ;
+    mkWN : (_ : N)       -> N = \n -> n ;
+    mkWN : N -> Str      -> N = \n,s -> separateN s n ; --- emansipaation kannattaja
+    mkWN : N -> (_,_ : Str) -> N = \n,s,t -> separateN (s ++ t) n ; --- silmäluomien synnynnäinen puuttuminen
     } ;
-
 
   mkWA = overload {
-    mkWA : (_ : Str)     -> A = \s -> mkA s ;
-    mkWA : (_,_ : Str)   -> A = \s,p -> mkA (s ++ p) ;
-    mkWA : (_,_,_ : Str) -> A = \s,p,q -> mkA (s ++ p ++ q) ;
-    } ;
-
-  mkWV = overload {
-    mkWV : (_ : Str)   -> V   = \s -> mkV s ;
-    mkWV : (_,_ : Str) -> V   = \s,p -> partV (mkV s) p ;
-    mkWV : (_,_,_ : Str) -> V   = \s,p,q -> partV (mkV s) (p ++ q) ;
-    mkWV : (_,_,_,_ : Str) -> V   = \s,p,q,r -> partV (mkV s) (p ++ q ++ r) ;
+    mkWA : (_   : Str)    -> A = \s -> mkA s ;
+    mkWA : (_,_ : Str)    -> A = \s,t -> mkA (separateN s (mkN t));
+    mkWA : (_ : NForms)   -> A = \nf  -> mkA (lin N (nforms2snoun nf)) ;
+    mkWN : NForms -> Str  -> A = \s,t -> mkA (separateN t (lin N (nforms2snoun s))) ;
+    mkWA : (_ : N)        -> A = \n   -> mkA n ;
+    mkWA : N -> Str       -> A = \n,s -> mkA (separateN s n) ; --- emansipaation kannattaja
+    mkWA : N -> (_,_ : Str) -> A = \n,s,t -> mkA (separateN (s ++ t) n) ; --- silmäluomien synnynnäinen puuttuminen
     } ;
 
   mkWAdv = overload {
-    mkWAdv : (_ : Str)     -> WAdv = \s -> ParadigmsEng.mkAdv s ;
-    mkWAdv : (_,_ : Str)   -> WAdv = \s,p -> ParadigmsEng.mkAdv (s ++ p) ;
-    mkWAdv : (_,_,_ : Str) -> WAdv = \s,p,q -> ParadigmsEng.mkAdv (s ++ p ++ q) ;
-    mkWAdv : (_,_,_,_ : Str) -> WAdv = \s,p,q,r -> ParadigmsEng.mkAdv (s ++ p ++ q ++ r) ;
-    mkWAdv : (_,_,_,_,_ : Str) -> WAdv = \s,p,q,r,s -> ParadigmsEng.mkAdv (s ++ p ++ q ++ r ++ s) ;
+    mkWAdv : (_ : Str)     -> Adv = \s -> mkAdv s ;
+    mkWAdv : (_ : Adv)     -> Adv = \a -> a ;
+    mkWAdv : NForms        -> Adv = \nf -> mkAdv (nf ! 0) ;
+    mkWAdv : Adv -> Str    -> Adv = \a,s -> mkAdv (s ++ a.s) ;
+    mkWAdv : (_,_ : Str)   -> Adv = \s,p -> mkAdv (s ++ p) ;
+    mkWAdv : (_,_,_ : Str) -> Adv = \s,p,q -> mkAdv (s ++ p ++ q) ;
     } ;
 
+  mkWV = overload {
+    mkWV : (_ : Str)             -> V   = \s -> mkV s ;
+    mkWV : (_ : VForms)          -> V   = \vf -> mkV (lin VK {s = vf}) ;
+    mkWV : (_ : V)               -> V   = \v -> v ;
+    mkWV : VForms       -> Str   -> V   = \vf,s -> mkV (mkV (lin VK {s = vf})) s ;
+    } ;
+
+  mkWV2 = overload {
+    mkWV2 : (_ : Str)             -> V2   = \s -> mkV2 s ;
+    mkWV2 : (_ : VForms)          -> V2   = \vf -> mkV2 (lin VK {s = vf}) ;
+    mkWV2 : (_ : V)               -> V2   = \v -> mkV2 v ;
+    mkWV2 : VForms       -> Str   -> V2   = \vf,s -> mkV2 (mkV (mkV (lin VK {s = vf})) s) ;
+    } ;
+
+  mkWV3 = overload {
+    mkWV3 : (_ : Str)             -> V3   = \s -> dirdirV3 (mkV s) ;
+    mkWV3 : (_ : VForms)          -> V3   = \vf -> dirdirV3 (mkV (lin VK {s = vf})) ;
+    mkWV3 : (_ : V)               -> V3   = \v -> dirdirV3 v ;
+    mkWV3 : VForms       -> Str   -> V3   = \vf,s -> dirdirV3 (mkV (mkV (lin VK {s = vf})) s) ;
+    } ;
+
+
+  mkWVV = overload {
+    mkWVV : (_ : Str)             -> VV   = \s -> mkVV (mkV s) ;
+    mkWVV : (_ : VForms)          -> VV   = \vf -> mkVV (mkV (lin VK {s = vf})) ;
+    mkWVV : (_ : V)               -> VV   = \v -> mkVV v ;
+    mkWVV : VForms       -> Str   -> VV   = \vf,s -> mkVV (mkV (mkV (lin VK {s = vf})) s) ;
+    } ;
+
+  mkWVS = overload {
+    mkWVS : (_ : Str)             -> VS   = \s -> mkVS (mkV s) ;
+    mkWVS : (_ : VForms)          -> VS   = \vf -> mkVS (mkV (lin VK {s = vf})) ;
+    mkWVS : (_ : V)               -> VS   = \v -> mkVS v ;
+    mkWVS : VForms       -> Str   -> VS   = \vf,s -> mkVS (mkV (mkV (lin VK {s = vf})) s) ;
+    } ;
+
+  mkWVQ = overload {
+    mkWVQ : (_ : Str)             -> VQ   = \s -> mkVQ (mkV s) ;
+    mkWVQ : (_ : VForms)          -> VQ   = \vf -> mkVQ (mkV (lin VK {s = vf})) ;
+    mkWVQ : (_ : V)               -> VQ   = \v -> mkVQ v ;
+    mkWVQ : VForms       -> Str   -> VQ   = \vf,s -> mkVQ (mkV (mkV (lin VK {s = vf})) s) ;
+    } ;
+
+  mkWV2V = overload {
+    mkWV2V : (_ : Str)             -> V2V   = \s -> mkV2Vbare (mkV s) ;
+    mkWV2V : (_ : VForms)          -> V2V   = \vf -> mkV2Vbare (mkV (lin VK {s = vf})) ;
+    mkWV2V : (_ : V)               -> V2V   = \v -> mkV2Vbare v ;
+    mkWV2V : VForms       -> Str   -> V2V   = \vf,s -> mkV2Vbare (mkV (mkV (lin VK {s = vf})) s) ;
+    } ;
+
+  mkWVA = overload {
+    mkWVA : (_ : Str)             -> VA   = \s -> mkVAbare (mkV s) ;
+    mkWVA : (_ : VForms)          -> VA   = \vf -> mkVAbare (mkV (lin VK {s = vf})) ;
+    mkWVA : (_ : V)               -> VA   = \v -> mkVAbare v ;
+    mkWVA : VForms       -> Str   -> VA   = \vf,s -> mkVAbare (mkV (mkV (lin VK {s = vf})) s) ;
+    } ;
+
+  mkWV2A = overload {
+    mkWV2A : (_ : Str)             -> V2A   = \s -> mkV2Abare (mkV s) ;
+    mkWV2A : (_ : VForms)          -> V2A   = \vf -> mkV2Abare (mkV (lin VK {s = vf})) ;
+    mkWV2A : (_ : V)               -> V2A   = \v -> mkV2Abare v ;
+    mkWV2A : VForms       -> Str   -> V2A   = \vf,s -> mkV2Abare (mkV (mkV (lin VK {s = vf})) s) ;
+    } ;
+
+  mkWV2Q = overload {
+    mkWV2Q : (_ : Str)             -> V2Q   = \s -> mkV2Qbare (mkV s) ;
+    mkWV2Q : (_ : VForms)          -> V2Q   = \vf -> mkV2Qbare (mkV (lin VK {s = vf})) ;
+    mkWV2Q : (_ : V)               -> V2Q   = \v -> mkV2Qbare v ;
+    mkWV2Q : VForms       -> Str   -> V2Q   = \vf,s -> mkV2Qbare (mkV (mkV (lin VK {s = vf})) s) ;
+    } ;
+
+  mkWV2S = overload {
+    mkWV2S : (_ : Str)             -> V2S   = \s -> mkV2Sbare (mkV s) ;
+    mkWV2S : (_ : VForms)          -> V2S   = \vf -> mkV2Sbare (mkV (lin VK {s = vf})) ;
+    mkWV2S : (_ : V)               -> V2S   = \v -> mkV2Sbare v ;
+    mkWV2S : VForms       -> Str   -> V2S   = \vf,s -> mkV2Sbare (mkV (mkV (lin VK {s = vf})) s) ;
+    } ;
+
+  mkWAdV  : Str -> AdV = \s -> lin AdV (ss s) ;
+  mkWAdA  : Str -> AdA = \s -> lin AdA (ss s) ;
+  mkWAdN  : Str -> AdN = \s -> lin AdN (ss s) ;
 
 -- kotus paradigms
 
@@ -232,12 +320,7 @@ oper
         } ;
   k49A : Str -> NForms -- 11 vemmel
     = \s -> dPiennar s (strongGrade (init s) + "len") ;
-{-
-  k50 : Str -> NForms -- 520 vääräsääri
-    = \s ->  ;
-  k51 : Str -> NForms -- 62 vierasmies
-    = \s ->  ;
--}
+
   k52 : Str -> VForms -- 667 ärjyä
     = \s -> cHukkua s (init s + "n") ;
   k52A : Str -> VForms -- 1568 öljyyntyä
@@ -348,6 +431,15 @@ oper
 --- this is a lot slower
   kccompoundNK : (Str -> NForms) -> Str -> Str -> NForms = \d,x,y -> 
     let ys = d y in \\v => x + ys ! v ;
+
+---- remnants of erroneous annotations
+
+  k50 : Str -> N  ---- Forms -- 520 vääräsääri
+    = \s -> mkN s ;
+  k51 : Str -> N  ---- Forms -- 62 vierasmies
+    = \s -> mkN s ;
+  kH1 : Str -> N  ---- Forms -- remnant of homonym information
+    = \s -> mkN s ;
 
 }
 
