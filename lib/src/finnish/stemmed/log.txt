@@ -78,5 +78,8 @@ It turned out that this happens just because there was no N2 in the lexicon. Str
 "part of" and "idea of" (as well as "familiar with") changes 35 sentences. Now only 9 with unknown
 constants. 314 without lin.
 
+Attacked the first ten missing constructs down to 4 occurrences. Now 13 with unknown, 167 missing. 
+Thus almost 95% complete.
+
 
 
