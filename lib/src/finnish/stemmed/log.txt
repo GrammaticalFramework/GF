@@ -84,5 +84,9 @@ Thus almost 95% complete.
 Defined some more, down to the 34th with 2 occurrences. Now 32 missing, 18 with unknown 
 (version 7, 7-eng-fin-wsj.txt). Thus over 98% complete. Soon time to fix errors in the things covered!
 
+Fixed obvious errors in "date" (taateli -> päivämäärä) and "force" (polttaminen -> voima). Effect on
+24 examples.
+
+
 
 
