@@ -59319,6 +59319,26 @@ part_of_N2 = mkN2 (mkN "osa") (mkPrep elative) ; --MAN
 idea_of_N2 = mkN2 (mkN "ajatus") (mkPrep elative) ; --MAN
 familiar_with_A2 = mkA2 (mkA "perehtynyt") (mkPrep illative) ; --MAN
 
+both_Det = mkDet Pl (snoun2nounBind (nforms2snoun (dSuurempi "molempi"))) ; --MAN
+most_Det = mkDet Pl (snoun2nounBind (nforms2snoun (dSuurin "usein"))) ; --MAN
+several_Num = {s = \\n,c => (snoun2nounBind (mkN "usea")).s ! NCase n c ; n = Sg ; isNum = True} ; --suspect --MAN
+another_Quant = heavyQuant {s1 = \\n,c => (snoun2nounBind (mkN "toinen")).s ! NCase n c ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ; --MAN
+neither_Det = mkDet Sg {s = \\nf => (snoun2nounBind (nforms2snoun (dSuurempi "kumpi"))).s ! nf + "kaan" ; h = Back} ; --MAN
+draw_V2	= mkV2 "vetää" ; --MAN
+aware_of_A2 = mkA2 (mkA "tietoinen") (mkPrep elative) ; --MAN
+each_Det = mkDet Pl (snoun2nounBind (mkN "jokainen")) ; --MAN
+start_V2 = mkV2 "aloittaa" ; --MAN
+few_Num	= {s = \\n,c => (snoun2nounBind (mkN "harva")).s ! NCase n c ; n = Sg ; isNum = True} ; --suspect --MAN
+blame_V2 = mkV2 "syyttää" ; --MAN
+feel_VA	= mkVA (caseV elative (mkV "tuntua")) (mkPrep ablative) ; --MAN
+--anything_NP	4
+--anySg_Det	4
+--moreSg_Det	3
+lack_V2	= mkV2 (caseV ablative (mkV "puuttua")) ; --MAN
+exceed_V2 = mkV2 "ylittää" ; --MAN
+everyone_NP = S.everybody_NP ; --MAN
+begin_V2 = mkV2 "aloittaa" ; --MAN
+
 }
 
 
