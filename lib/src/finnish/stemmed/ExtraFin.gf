@@ -18,6 +18,11 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
     GenCN n1 n2 = {s = \\nf => n1.s ! NPCase Gen ++ n2.s ! nf ;
                    h = n2.h } ;
 
+    GenRP num cn = {
+      s = \\n,c => let k = (npform2case num.n c) in "jonka" ++ num.s ! Sg ! k ++ cn.s ! NCase num.n k ;
+      a = RAg (agrP3 num.n) ;
+      } ;
+
   lincat
     VPI   = {s : Str} ;
     [VPI] = {s1,s2 : Str} ;
