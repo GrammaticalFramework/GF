@@ -6,7 +6,7 @@ concrete ParseFin of ParseEngAbs =
   NounFin - [PPartNP],
   AdjectiveFin,
   NumeralFin,
-  SymbolFin [PN, Symb, MkSymb, SymbPN],
+  SymbolFin [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],
   ConjunctionFin,
   VerbFin - [SlashV2V, PassV2, UseCopula, ComplVV],
   AdverbFin,

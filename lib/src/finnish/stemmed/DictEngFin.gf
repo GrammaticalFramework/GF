@@ -18259,10 +18259,10 @@ expatiate_V = mkWV (k54A "täsmentää") ;
 expatiation_N = mkWN (k2 "keskustelu") "laaja" ;
 expatriate_N = mkWN (k2 "henkilö") "ulkomailla" "asuva" ;
 expatriate_V2 = mkWV2 (k53A "muuttaa") "maasta" ;
-expect_V = mkWV (k53A "odottaa") "lasta" ;
-expect_V2 = mkWV2 (k53A "odottaa") "lasta" ;
-expect_V2V = mkWV2V (k53A "odottaa") "lasta" ;
-expect_VS = mkWVS (k53A "odottaa") "lasta" ;
+expect_V = mkWV (k53A "odottaa") ; ---MANC
+expect_V2 = mkWV2 (k53A "odottaa") ; ---MANC
+expect_V2V = mkWV2V (k53A "odottaa") ; ---MANC
+expect_VS = mkWVS (k53A "odottaa") ; ---MANC
 --PLURNOUN --PREDEF expect_VV = mkWVV (k53A "odottaa") "lasta" ;
 expectable_A = mkWA (k10 "oleva") "odotettavissa" ;
 expectancy_N = mkWN (k39 "odotus") ;
@@ -59319,6 +59319,9 @@ part_of_N2 = mkN2 (mkN "osa") (mkPrep elative) ; --MAN
 idea_of_N2 = mkN2 (mkN "ajatus") (mkPrep elative) ; --MAN
 familiar_with_A2 = mkA2 (mkA "perehtynyt") (mkPrep illative) ; --MAN
 
+
+some_Quant = heavyQuant {s1 = S.jokinPron ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ; --MAN
+anyPl_Det = {s1,sp = S.mikaInt ! Pl ; s2 = \\_ => "tahansa" ; isNum,isPoss,isNeg,isDef = False ; n = Pl} ; --MAN
 both_Det = mkDet Pl (snoun2nounBind (nforms2snoun (dSuurempi "molempi"))) ; --MAN
 most_Det = mkDet Pl (snoun2nounBind (nforms2snoun (dSuurin "usein"))) ; --MAN
 several_Num = {s = \\n,c => (snoun2nounBind (mkN "usea")).s ! NCase n c ; n = Sg ; isNum = True} ; --suspect --MAN
@@ -59331,14 +59334,19 @@ start_V2 = mkV2 "aloittaa" ; --MAN
 few_Num	= {s = \\n,c => (snoun2nounBind (mkN "harva")).s ! NCase n c ; n = Sg ; isNum = True} ; --suspect --MAN
 blame_V2 = mkV2 "syyttää" ; --MAN
 feel_VA	= mkVA (caseV elative (mkV "tuntua")) (mkPrep ablative) ; --MAN
---anything_NP	4
---anySg_Det	4
---moreSg_Det	3
+anything_NP = {s = \\c => S.mikaInt ! Sg ! (npform2case Sg c) ++ "tahansa" ; a = agrP3 Sg ; isPron, isNeg = False} ; --MAN
+anySg_Det = {s1,sp = S.mikaInt ! Sg ; s2 = \\_ => "tahansa" ; isNum,isPoss,isNeg,isDef = False ; n = Sg} ; --MAN
+moreSg_Det = mkDet Sg (snoun2nounBind (nforms2snoun (dSuurempi "useampi"))) ; --MAN
 lack_V2	= mkV2 (caseV ablative (mkV "puuttua")) ; --MAN
 exceed_V2 = mkV2 "ylittää" ; --MAN
 everyone_NP = S.everybody_NP ; --MAN
 begin_V2 = mkV2 "aloittaa" ; --MAN
-
+withdraw_V2 = mkV2 (mkV (mkV "vetää") "pois") ; --MAN
+survivor_N = mkN "selviytyjä" ; --MAN
+morePl_Det = mkDet Pl (snoun2nounBind (nforms2snoun (dSuurempi "useampi"))) ; --MAN
+less_Det = mkDet Sg (snoun2nounBind (nforms2snoun (dSuurempi "vähempi"))) ; --MAN
+enjoy_V2 = mkV2 (mkV "nauttia") partitive ;
+enforce_V2 = mkV2 "pakottaa" ; 
 }
 
 
