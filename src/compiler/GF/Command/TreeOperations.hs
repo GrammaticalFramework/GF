@@ -27,7 +27,9 @@ allTreeOps pgf = [
    ("smallest",("sort trees from smallest to largest, in number of nodes",
       Left  $ smallest)),
    ("subtrees",("return all fully applied subtrees (stopping at abstractions), by default sorted from the largest",
-      Left  $ concatMap subtrees))
+      Left  $ concatMap subtrees)),
+   ("funs",("return all fun functions appearing in the tree, with duplications",
+      Left  $ concatMap funNodes))
   ]
 
 largest :: [Expr] -> [Expr]
@@ -44,6 +46,13 @@ subtrees :: Expr -> [Expr]
 subtrees t = t : case unApp t of
   Just (f,ts) -> concatMap subtrees ts
   _ -> []  -- don't go under abstractions
+
+funNodes :: Expr -> [Expr]
+funNodes t = case t of
+   EAbs _ _ e -> funNodes e
+   EApp e1 e2 -> funNodes e1 ++ funNodes e2
+   EFun _ -> [t]
+   _ -> []  -- not literals, metas, etc
 
 --- simple-minded transfer; should use PGF.Expr.match
 
