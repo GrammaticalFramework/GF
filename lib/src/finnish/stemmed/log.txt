@@ -8,4 +8,18 @@ AR 28/3/2013
 Designed new paradigms. Filtered problematic/illegal things (PLURNOUN, ILLEGALVERB, POSTPONE, TODO).
 Just 9035 lemmas missing now.
 
+28/3
+Set up an experiment with 3220 complete trees from Penn prepared by Krasimir. First results:
+  561 no linearization
+  960 lin with unknowns
+
+around 20 missing syntax constructions, 230 missing words 
+
+29/3
+Added most missing syntax constructions.
+Some new opers in ParadigmsFin, and 230 more words in DictEngFin: out of 3220 Penn trees now 2721 
+are completely translated (but mostly not so well...)
+  317 no lin
+  182 lin with unknowns
+
 
