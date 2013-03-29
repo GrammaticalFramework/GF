@@ -46,6 +46,10 @@ concrete AdjectiveFin of Adjective = CatFin ** open ResFin, StemFin, Prelude in 
       s = \\b,af => ada.s ++ ap.s ! b ! af
       } ;
 
+    AdvAP ap adv = {
+      s = \\b,af => adv.s ++ ap.s ! b ! af -- luonnostaan vaalea
+      } ;
+
     UseA2 a = {
       s = \\_ => (snoun2nounSep {s = \\f => a.s ! Posit ! SAN f ; h = a.h}).s
       } ;

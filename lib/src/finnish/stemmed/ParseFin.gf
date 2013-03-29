@@ -12,9 +12,10 @@ concrete ParseFin of ParseEngAbs =
   AdverbFin,
   PhraseFin,
   SentenceFin,
+  QuestionFin,
   RelativeFin,
   IdiomFin [NP, VP, Tense, Cl, ProgrVP, ExistNP]
-  , ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash, Voc,
+  , ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash, Voc, RP, GenRP, 
       Temp, Tense, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
       VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV]
  , DictEngFin 
@@ -37,15 +38,15 @@ lin
          ) ;
 
 
-  myself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P1) ;
-  yourselfSg_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P2) ;
-  himself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3) ;
-  herself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3) ;
-  itself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3) ;
-  ourself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P1) ;
-  yourselfPl_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P2) ;
-  themself_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P3) ;
-  themselves_NP = mkNP (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P3) ;
+  myself_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P1)) ;
+  yourselfSg_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P2)) ;
+  himself_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3)) ;
+  herself_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3)) ;
+  itself_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3)) ;
+  ourself_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P1)) ;
+  yourselfPl_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P2)) ;
+  themself_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P3)) ;
+  themselves_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P3)) ;
 
 
   CompoundCN num noun cn = {
@@ -56,7 +57,7 @@ lin
   PassVPSlash = passVPSlash ;
 
 oper  
-  passVPSlash : VPSlash -> VP = \vp -> lin VP {
+  passVPSlash : VPSlash -> ResFin.VP = \vp -> lin VP {
       s = \\_ => vp.s ! VIPass ;
       s2 = vp.s2 ;
       adv = vp.adv ;
@@ -87,50 +88,86 @@ lin
 
 
 {-
-  GerundN v = { -- parsing
+  GerundN v = { -- parsing    -- GerundN : V -> N ; peseminen
     s = \\n,c => v.s ! VPresPart ;
     g = Neutr
   } ;
   
-  GerundAP v = {  -- beckoning
+  GerundAP v = {  -- beckoning  -- V -> AP  houkutteleva
     s = \\agr => v.s ! VPresPart ;
     isPre = True
   } ;
-
-  PastPartAP v = {   -- broken
-    s = \\agr => v.s ! VPPart ;
-    isPre = True
-  } ;
-
-  OrdCompar a = {s = \\c => a.s ! AAdj Compar c } ;  -- higher
-
-  PositAdVAdj a = {s = a.s ! AAdv} ;  -- really
-
-  UseQuantPN q pn = {s = \\c => q.s ! False ! Sg ++ pn.s ! npcase2case c ; a = agrgP3 Sg pn.g} ;  -- this London
-
-  SlashV2V v p vp = insertObjc (\\a => p.s ++ case p.p of {CPos => ""; _ => "not"} ++  -- force not to sleep
-                                       v.c3 ++ 
-                                       infVP v.typ vp a)
-                               (predVc v) ;
-
-  ComplPredVP np vp = { -- ?
-      s = \\t,a,b,o => 
-        let 
-          verb  = vp.s ! t ! a ! b ! o ! np.a ;
-          compl = vp.s2 ! np.a
-        in
-        case o of {
-          ODir => compl ++ "," ++ np.s ! npNom ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ;
-          OQuest => verb.aux ++ compl ++ "," ++ np.s ! npNom ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf 
-          }
-    } ;
-
-  CompS s = {s = \\_ => "that" ++ s.s} ;  -- S -> Comp
-  CompVP vp = {s = \\a => infVP VVInf vp a} ; -- VP -> Comp
 -}
+
+  OrdCompar a = snoun2nounSep {s = \\nc => a.s ! Compar ! SAN nc ; h = a.h} ; 
+
+  PositAdVAdj a = {s = a.s ! Posit ! SAAdv} ;  -- A -> AdV really
+
+  UseQuantPN quant pn = {
+      s = \\c => let k = (npform2case Sg c) in
+                 quant.s1 ! Sg ! k ++ snoun2np Sg pn ! c ++ quant.s2 ! pn.h ; 
+      a = agrP3 Sg ;
+      isPron = False ; 
+      isNeg = quant.isNeg
+      } ;
+
+  -- V2V -> Ant -> Pol -> VP -> VPSlash
+  SlashV2V v ant p vp = 
+      insertObj (\\_,b,a => infVPGen p.p v.sc b a vp v.vi) (predSV v) ** {c2 = v.c2} ;
+
+--     SlashSlashV2V : V2V -> Ant -> Pol -> VPSlash -> VPSlash ;
+
+  CompS s = {s = \\_ => "että" ++ s.s} ;  -- S -> Comp            ---- what are these expected to do ? 29/3/2013
+  CompVP ant pol vp = {s = \\a => infVPGen pol.p vp.sc Pos a vp Inf1} ; -- VP -> Comp
+
 
   that_RP = which_RP ;
   no_RP = which_RP ;
 
+  UttAdV a = a ;
+
+  UncNeg = negativePol ;
+
+  PresPartRS ant pol vp = mkRS ant pol (mkRCl which_RP vp) ;  ---- present participle attr "teräviä ottava"
+
+     PredVPosv np vp = mkCl np vp ; ---- OSV yes, but not for Cl
+     PredVPovs np vp = mkCl np vp ; ---- SVO
+
+    EmptyRelSlash cls = mkRCl which_RP cls ;
+
+
+
+  AdAdV ada adv = {s = ada.s ++ adv.s} ;
+
+--    SlashVPIV2V : V2V -> Pol -> VPI -> VPSlash ;
+-- 	VPSlashVS : VS -> VP -> VPSlash ;
 
 }
+
+{-
+-- 19 constructors missing, as revealed by the 3k sentences from Penn 28/3(2013
+-- [AdAdV] 
+-- [AdvAP]
+-- [CompS]
+-- [CompVP]
+-- [EmptyRelSlash] 
+-- [GenRP]
+[GerundAP]
+[GerundN]
+-- [OrdCompar]
+-- [PositAdVAdj]
+-- [PredVPovs]
+-- [PresPartRS]
+-- [SSubjS]
+[SlashSlashV2V]
+-- [SlashV2V]
+[SlashVPIV2V]
+-- [UncNeg] 
+-- [UttAdV]
+[VPSlashVS]
+
+
+ParseEngAbs> pg -missing | wf -file=missing-ParseFin
+
+AddAdvQVP AdnCAdv AdvIAdv AdvIP AdvQVP BaseIAdv CAdvAP CNNumNP CompIAdv CompIP CompQS CompS CompVP ComparAdvAdj ComparAdvAdjS ComplN2 ComplN3 ComplSlashIP ComplVQ ConjIAdv ConsIAdv EmbedQS GerundAP GerundN IdetCN IdetIP IdetQuant OrdCompar PositAdVAdj PredVPovs PrepIP QuestCl QuestIAdv QuestIComp QuestQVP QuestSlash QuestVP SlashSlashV2V SlashV2Q SlashV2V SlashV2VNP SlashVPIV2V Use2N3 Use3N3 UseN2 UseQCl UseQuantPN UttInterj UttQS VPSlashVS
+-}

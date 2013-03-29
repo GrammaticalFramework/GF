@@ -64,4 +64,6 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin, StemFin in {
 
     RelS s r = {s = s.s ++ "," ++ r.s ! agrP3 Sg} ; ---- mikä
 
+    SSubjS a subj b = {s = a.s ++ "," ++ subj.s ++ b.s} ;
+
 }

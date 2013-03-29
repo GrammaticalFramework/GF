@@ -1,8 +1,8 @@
 abstract ExtraFinAbs = Extra [
-  GenNP,GenIP,
+  GenNP,GenIP,GenRP,
   VPI,ListVPI,BaseVPI,ConsVPI,MkVPI,ComplVPIVV,ConjVPI,
   VPS,ListVPS,BaseVPS,ConsVPS,ConjVPS,MkVPS,PredVPS,ConjVPS,Tense,Temp,Pol,S,
-  VV,VP,Conj,NP,Quant,IAdv,IComp,ICompAP,IAdvAdv,Adv,AP, Pron, ProDrop] ** {
+  VV,VP,Conj,NP,Quant,IAdv,IComp,ICompAP,IAdvAdv,Adv,AP, Pron, RP, ProDrop] ** {
 
   fun
     GenCN : NP -> CN -> CN ;              -- auton merkki
