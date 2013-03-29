@@ -69,6 +69,20 @@ oper
   postGenPrep :         Str -> Prep ;  -- genitive postposition, e.g. "takana"
   casePrep    : Case ->        Prep ;  -- just case, e.g. adessive
 
+  mkPrep = overload {
+    mkPrep : Case -> Prep 
+     = casePrep ;
+    mkPrep : Str -> Prep
+     = postGenPrep ;
+    mkPrep : Case -> Str -> Prep
+     = postPrep ;
+    mkPrep : Str -> Case -> Prep
+     = \s,c -> prePrep c s ;
+    } ;
+
+  accusative : Prep
+    = {c = NPAcc ; s = [] ; isPre = True ; lock_Prep = <>} ;
+
   NK : Type ;   -- Noun from DictFin (Kotus)
   AK : Type ;   -- Adjective from DictFin (Kotus)
   VK : Type ;   -- Verb from DictFin (Kotus)
@@ -165,6 +179,7 @@ oper
     mkV : (huutaa,dan,taa,tavat,takaa,detaan,sin,si,sisi,tanut,dettu,tanee : Str) -> V ; -- worst-case verb
     mkV : VK -> V ;  -- verb from DictFin (Kotus)
     mkV : V -> Str -> V ; -- hakata päälle (particle verb)
+---    mkV : Str -> V -> V ; -- laimin+lyödä (prefixed verb)
   } ;
 
 -- All the patterns above have $nominative$ as subject case.
@@ -176,6 +191,8 @@ oper
 
   vOlla : V ; -- the verb "be"
 
+  olla_V : V
+   = vOlla ;
 
 --3 Two-place verbs
 --
@@ -208,10 +225,23 @@ oper
 -- Verbs and adjectives can take complements such as sentences,
 -- questions, verb phrases, and adjectives.
 
+mkVV = overload {
+  mkVV : Str -> VV   -- e.g. "yrittää"
+   = \s -> mkVVf (mkV s) infFirst ; 
+  mkVV : V -> VV     -- e.g. "alkaa"
+   = \v -> mkVVf v infFirst ; 
+  } ;
+
+mkVS = overload {
+  mkVS : Str -> VS   -- e.g. "väittää"
+   = \s -> lin VS (mk1V s) ;
+  mkVS : V -> VS     -- e.g. "sanoa"
+   = \v -> lin VS v ;
+  } ;
+
   mkV0  : V -> V0 ; --%
-  mkVS  : V -> VS ;
+
   mkV2S : V -> Prep -> V2S ; -- e.g. "sanoa" allative
-  mkVV  : V -> VV ;  -- e.g. "alkaa"
   mkVVf : V -> InfForm -> VV ; -- e.g. "ruveta" infIllat
   mkV2V : V -> Prep -> V2V ;  -- e.g. "käskeä" genitive
   mkV2Vf : V -> Prep -> InfForm -> V2V ; -- e.g. "kieltää" partitive infElat  
@@ -232,6 +262,32 @@ oper
 
   V0 : Type ; --%
   AS, A2S, AV, A2V : Type ; --%
+
+--2 Structural categories
+
+  mkAdV : Str -> AdV
+   = \s -> lin AdV (ss s) ;
+  mkAdA : Str -> AdA
+   = \s -> lin AdA (ss s) ;
+  mkAdN : Str -> AdN
+   = \s -> lin AdN (ss s) ;
+  mkPConj : Str -> PConj
+   = \s -> lin PConj (ss s) ;
+  mkSubj : Str -> Subj
+   = \s -> lin Subj (ss s) ;
+
+  mkPredet : Str -> Predet  -- invariable Predet, such as "vain"
+   = \s -> lin Predet {s = \\_,_ => s} ;
+
+  mkConj = overload {
+   mkConj : Str -> Conj
+   = \y -> {s1 = [] ; s2 = y ; n = Pl ; lock_Conj = <>} ;
+   mkConj : Str -> Str -> Conj 
+   = \x,y -> {s1 = x ; s2 = y ; n = Pl ; lock_Conj = <>} ;
+   mkConj : Str -> Str -> Number -> Conj 
+   = \x,y,n -> {s1 = x ; s2 = y ; n = n ; lock_Conj = <>} ;
+   } ;
+
 
 --.
 -- The definitions should not bother the user of the API. So they are
@@ -538,7 +594,7 @@ oper
       huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
       huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = mk12V ;
     mkV : (sana : VK) -> V = \w -> vforms2sverb w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
-    mkV : V -> Str -> V = \w,p -> vforms2sverb w.s ** {sc = NPCase Nom ; lock_V = <> ; p = p} ;
+    mkV : V -> Str -> V = \w,p -> {s = w.s ; sc = w.sc ; lock_V = <> ; h = w.h ; p = p} ;
   } ;
 
   mk1V : Str -> V = \s -> 
@@ -645,8 +701,7 @@ oper
   dirV3 v p = mkV3 v accPrep (casePrep p) ;
   dirdirV3 v = dirV3 v allative ;
 
-  mkVS  v = v ** {lock_VS = <>} ;
-  mkVV  v = mkVVf v infFirst ;
+
   mkVVf  v f = v ** {vi = f ; lock_VV = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
 
