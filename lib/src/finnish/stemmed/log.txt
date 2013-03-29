@@ -81,5 +81,8 @@ constants. 314 without lin.
 Attacked the first ten missing constructs down to 4 occurrences. Now 13 with unknown, 167 missing. 
 Thus almost 95% complete.
 
+Defined some more, down to the 34th with 2 occurrences. Now 32 missing, 18 with unknown 
+(version 7, 7-eng-fin-wsj.txt). Thus over 98% complete. Soon time to fix errors in the things covered!
+
 
 
