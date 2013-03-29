@@ -117,6 +117,7 @@ oper
     mkN : (pika : Str) -> (juna  : N) -> N ; -- compound with invariable prefix
     mkN : (oma : N)    -> (tunto : N) -> N ; -- compound with inflecting prefix
     mkN : NK -> N ;  -- noun from DictFin (Kotus)
+    mkN : V -> N ;   -- verbal noun: "tekeminen"
   } ;
 
 -- Some nouns are regular except for the singular nominative (e.g. "mies").
@@ -344,6 +345,7 @@ mkVS = overload {
     mkN : (sora : Str) -> (tie : N) -> N = mkStrN ;
     mkN : (oma,tunto : N) -> N = mkNN ;
     mkN : (sana : NK) -> N = \w -> nforms2snoun w.s ;
+    mkN : V -> N = \w -> sverb2snoun w ;
   } ;
 
     exceptNomN : N -> Str -> N = \noun,nom -> lin N {

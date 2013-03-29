@@ -271,6 +271,51 @@ oper
 --    (Verb ** {sc : NPForm ; qp : Bool ; p : Str}) -> VP = \verb -> {
 
 
+-- word formation functions
+
+  sverb2snoun : SVerb1 -> SNoun = \v ->    -- syöminen
+    let teke = v.s ! 3 in {
+    s = table {
+      0 => partPlus teke "minen" ;
+      1 => partPlus teke "mise" ;
+      2 => partPlus teke "mista" ;  ---- vh
+      3 => partPlus teke "misena" ; ---- vh
+      4 => partPlus teke "misee" ;
+      5 => partPlus teke "miste" ; 
+      6 => partPlus teke "misia" ; ---- vh
+      7 => partPlus teke "misi" ; 
+      8 => partPlus teke "misi" ; 
+      9 => partPlus teke "misii" 
+      } ; 
+    h = v.h
+    } ;
+
+  sverb2nounPresPartAct : SVerb1 -> SNoun = \v ->  -- syövä
+    let teke = v.s ! 3 in {
+    s = table {
+      0 => partPlus teke "va" ;
+      1 => partPlus teke "va" ;
+      2 => partPlus teke "vaa" ;  ---- vh
+      3 => partPlus teke "vana" ; ---- vh
+      4 => partPlus teke "vaa" ;
+      5 => partPlus teke "vie" ; 
+      6 => partPlus teke "via" ; ---- vh
+      7 => partPlus teke "vi" ; 
+      8 => partPlus teke "vi" ; 
+      9 => partPlus teke "vii" 
+      } ; 
+    h = v.h
+    } ;
+
+  sverb2nounPresPartPass : SVerb1 -> SNoun = \v ->  -- syötävä
+    let a = harmonyA v.h in
+    nforms2snoun (dLava (partPlus (v.s ! 3) (partPlus "t" (partPlus a (partPlus "v" a))))) ;
+
+  dLava : Str -> NForms = \s -> dUkko s (s + "n") ;
+  
+ --- to use these at run time in ParseFin
+  partPlus = glue ;
+
 -- auxiliary
 
     plusIf : Bool -> Str -> Str -> Str = \b,x,y -> case b of {

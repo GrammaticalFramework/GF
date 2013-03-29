@@ -86,18 +86,9 @@ lin
       isPron = np1.isPron ; isNeg = np1.isNeg
       } ;
 
-
-{-
-  GerundN v = { -- parsing    -- GerundN : V -> N ; peseminen
-    s = \\n,c => v.s ! VPresPart ;
-    g = Neutr
-  } ;
+  GerundN v = mkN (lin V v) ;
   
-  GerundAP v = {  -- beckoning  -- V -> AP  houkutteleva
-    s = \\agr => v.s ! VPresPart ;
-    isPre = True
-  } ;
--}
+  GerundAP v = {s = \\_ => (snoun2nounSep (sverb2nounPresPartAct v)).s} ;
 
   OrdCompar a = snoun2nounSep {s = \\nc => a.s ! Compar ! SAN nc ; h = a.h} ; 
 
