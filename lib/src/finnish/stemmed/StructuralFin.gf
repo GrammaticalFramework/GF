@@ -1,5 +1,5 @@
 concrete StructuralFin of Structural = CatFin ** 
-  open MorphoFin, ParadigmsFin, (X = ConstructX), MakeStructuralFin, StemFin, Prelude in {
+  open MorphoFin, ParadigmsFin, (X = ConstructX), StemFin, Prelude in {
 
   flags optimize=all ;
 

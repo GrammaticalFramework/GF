@@ -2,15 +2,12 @@ import qualified Data.Set as S
 
 -- comment out words that are predefined in another lexicon
 -- runghc ElimPredef.hs <DictEngFin.gf
--- removeFile = "predef.txt"
--- removeMsg = "PREDEF"
+removeFile = "KoeFin.gf"
+removeMsg = "MANUAL"
 
 -- also used for temporarily eliminating whatever from compilation
 --removeFile = "commentOut"
 --removeMsg = "POSTPONE"
-
-removeFile = "t-nouns"
-removeMsg = "PLURNOUN"
 
 main = do
   predefs <- readFile removeFile >>= return . S.fromList . map (head . words) . lines
