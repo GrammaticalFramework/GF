@@ -22,4 +22,9 @@ are completely translated (but mostly not so well...)
   317 no lin
   182 lin with unknowns
 
+After implementing GerundN and GerundNP, only 40 lin with unknowns. But the implementations are bad:
+- applying to run-time V prevents correct vowel harmony
+- composite forms with "minen" should be "mis", e.g. hinnoitteleminendetaljit
+
+
 
