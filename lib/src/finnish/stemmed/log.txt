@@ -99,7 +99,19 @@ really be needed.
 
 Fixed NounFin.IndefArt, which erroneously added "yksi" to the substantival form of numeral determiners. This changed 125
 linearizations - but there are some mistaken parses of numbers in the treebank, in particular years. Also fixed the passive
-VP in the infinitive form, to better results in 95 sentences - but this structure should be different in Finnish:
+VP in the infinitive form, to better results in 95 sentences - but this structure should be different in Finnish.
+
+Fixing passive past tenses improved 250 sentences! Incredibly, they had been missing in the RGL. As well as the correct
+form of the compounds: "minut ollaan nähty" -> "minut on nähty" ("I have been seen").
+
+Fixed the form for NPossNom and NPossGen. It had been mistakenly the Nom form. This gave "rakkausnsa" ("his love").
+The proper form is the tk-2 prefix of the essive case: "rakkautensa"; the tk-1 genitive won't do ("rakkaudensa"). 
+This changed to the better 81 sentences.
+
+Added NCompound, or form nr 10, to nouns. This may differ from Nom Sg, e.g. käteinenvirtaus -> käteisvirtaus. 107 errors
+corrected by this.
+
+
 
   
 

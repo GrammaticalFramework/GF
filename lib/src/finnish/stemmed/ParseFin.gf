@@ -50,7 +50,7 @@ lin
 
 
   CompoundCN num noun cn = {
-    s = \\nf => num.s ! Sg ! Nom ++ noun.s ! 0 ++ BIND ++ cn.s ! nf ;
+    s = \\nf => num.s ! Sg ! Nom ++ noun.s ! 10 ++ BIND ++ cn.s ! nf ;
     h = cn.h
     } ;
 
@@ -72,7 +72,7 @@ oper
 
 lin
   DashCN noun1 noun2 = {
-    s = \\nf => noun1.s ! 0 ++ BIND ++ noun2.s ! nf ;
+    s = \\nf => noun1.s ! 10 ++ BIND ++ noun2.s ! nf ;
     h = noun2.h
     } ;
 
