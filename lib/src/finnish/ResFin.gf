@@ -24,7 +24,8 @@ resource ResFin = ParamX ** open Prelude in {
     NForm = NCase Number Case 
           | NComit | NInstruct  -- no number dist
           | NPossNom Number | NPossGen Number --- number needed for syntax of AdjCN
-          | NPossTransl Number | NPossIllat Number ;
+          | NPossTransl Number | NPossIllat Number 
+          | NCompound ;  -- special compound form, e.g. "nais"
 
 -- Agreement of $NP$ has number*person and the polite second ("te olette valmis").
 
@@ -663,7 +664,8 @@ oper
       NPossTransl Sg => vede + "kse" ;
       NPossTransl Pl => vesii + "kse" ;
       NPossIllat Sg  => Predef.tk 1 veteen ;
-      NPossIllat Pl  => Predef.tk 1 vesiin
+      NPossIllat Pl  => Predef.tk 1 vesiin ;
+      NCompound      => vesi
       } ;
       h = harmony 
     } ;

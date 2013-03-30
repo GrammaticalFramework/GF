@@ -5,7 +5,7 @@ resource StemFin = open MorphoFin, Prelude in {
 flags coding = utf8 ;
 
 oper
-  SNForm : Type = Predef.Ints 9 ;
+  SNForm : Type = Predef.Ints 10 ;
   SNoun : Type = {s : SNForm => Str ; h : Harmony} ;
 
   nforms2snoun : NForms -> SNoun = \nf -> {
@@ -13,13 +13,14 @@ oper
       0 => nf ! 0 ;                -- ukko
       1 => Predef.tk 1 (nf ! 1) ;  -- uko(n)
       2 => nf ! 2 ;                -- ukkoa
-      3 => nf ! 3 ;                -- ukkona
+      3 => Predef.tk 2 (nf ! 3) ;  -- ukkona
       4 => Predef.tk 1 (nf ! 4) ;  -- ukkoo(n)
       5 => Predef.tk 1 (nf ! 5) ;  -- ukkoje(n)
       6 => nf ! 6 ;                -- ukkoja
       7 => Predef.tk 2 (nf ! 7) ;  -- ukkoi(na)
       8 => Predef.tk 3 (nf ! 8) ;  -- ukoi(ssa)
-      9 => Predef.tk 1 (nf ! 9)    -- ukkoihi(n)
+      9 => Predef.tk 1 (nf ! 9) ;  -- ukkoihi(n)
+     10 => nf ! 10                 -- ukko(-)
       } ;
     h = aHarmony (last (nf ! 2)) ;
     } ;
@@ -35,14 +36,14 @@ oper
         ukko    = f ! 0 ;
         uko     = f ! 1 ;
         ukkoa   = f ! 2 ;
-        ukkona  = f ! 3 ;
+        ukko_   = f ! 3 ;
         ukkoo   = f ! 4 ;
         ukkoje  = f ! 5 ;
         ukkoja  = f ! 6 ;
         ukkoi   = f ! 7 ;
         ukoi    = f ! 8 ;
         ukkoihi = f ! 9 ;
-
+        ukkos_  = f ! 10 ;
         a       = harmonyA sn.h ;
       in 
 
@@ -51,7 +52,7 @@ oper
       NCase Sg Gen    => plus uko "n" ;
       NCase Sg Part   => ukkoa ;
       NCase Sg Transl => plus uko "ksi" ;
-      NCase Sg Ess    => ukkona ;
+      NCase Sg Ess    => plus ukko_ ("n" + a) ;
       NCase Sg Iness  => plus uko ("ss" + a) ;
       NCase Sg Elat   => plus uko ("st" + a) ;
       NCase Sg Illat  => plus ukkoo "n" ;
@@ -76,13 +77,15 @@ oper
       NComit    => plus ukkoi "ne" ;
       NInstruct => plus ukoi "n" ;
 
-      NPossNom _     => ukko ;
-      NPossGen Sg    => ukko ;
+      NPossNom _     => ukko_ ;
+      NPossGen Sg    => ukko_ ;
       NPossGen Pl    => ukkoje ;
       NPossTransl Sg => plus uko "kse" ;
       NPossTransl Pl => plus ukoi "kse" ;
       NPossIllat Sg  => ukkoo ;
-      NPossIllat Pl  => ukkoihi
+      NPossIllat Pl  => ukkoihi ;
+
+      NCompound      => ukkos_
       } ;
     h = sn.h ;
     lock_N = <>
@@ -200,7 +203,8 @@ oper
           plus tulle ("it" + a) ;
           plus tulle "i" ;
           plus tulle "i" ;
-          plus tulle "isii"
+          plus tulle "isii" ;
+          tullut 
         ] ;
         h = sverb.h
         } ;
@@ -216,7 +220,8 @@ oper
           plus tultu ("j" + a) ;
           plus tultu "i" ;
           plus tullu__ "i" ;
-          plus tultu "ihi"
+          plus tultu "ihi" ;
+          tultu
         ] ;
         h = sverb.h
         } ;
@@ -284,13 +289,14 @@ oper
       0 => partPlus teke "minen" ;
       1 => partPlus teke "mise" ;
       2 => partPlus teke "mista" ;  ---- vh
-      3 => partPlus teke "misena" ; ---- vh
+      3 => partPlus teke "mise" ; 
       4 => partPlus teke "misee" ;
       5 => partPlus teke "miste" ; 
       6 => partPlus teke "misia" ; ---- vh
       7 => partPlus teke "misi" ; 
       8 => partPlus teke "misi" ; 
-      9 => partPlus teke "misii" 
+      9 => partPlus teke "misii" ;
+     10 => partPlus teke "mis" 
       } ; 
     h = v.h
     } ;
@@ -301,13 +307,14 @@ oper
       0 => partPlus teke "va" ;
       1 => partPlus teke "va" ;
       2 => partPlus teke "vaa" ;  ---- vh
-      3 => partPlus teke "vana" ; ---- vh
+      3 => partPlus teke "va" ;   ---- vh
       4 => partPlus teke "vaa" ;
       5 => partPlus teke "vie" ; 
       6 => partPlus teke "via" ; ---- vh
       7 => partPlus teke "vi" ; 
       8 => partPlus teke "vi" ; 
-      9 => partPlus teke "vii" 
+      9 => partPlus teke "vii" ;
+     10 => partPlus teke "va" 
       } ; 
     h = v.h
     } ;
@@ -334,20 +341,21 @@ oper
       0 => "" ;
       1 => "i" ;
       2 => "ia" ;
-      3 => "ina" ;
+      3 => "i" ;
       4 => "ii" ;
       5 => "ie" ;
       6 => "ia" ;
       7 => "i" ;
       8 => "i" ;
-      9 => "ihi"
+      9 => "ihi" ;
+     10 => "" 
       } ; 
   bindIfS : SNForm -> Str = \c -> case c of {
-    0 => [] ;
+    0 | 10 => [] ;
     _ => BIND
     } ;
   bindColonIfS : SNForm -> Str = \c -> case c of {
-    0 => [] ;
+    0 | 10 => [] ;
     _ => BIND ++ ":" ++ BIND
     } ;
 

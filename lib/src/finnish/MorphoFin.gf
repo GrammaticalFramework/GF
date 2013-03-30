@@ -29,10 +29,10 @@ resource MorphoFin = ResFin ** open Prelude in {
     let 
       a = vowHarmony nainen ;
       nais = Predef.tk 3 nainen + "s"
-    in nForms10
+    in nForms11
       nainen (nais + "en") (nais + "t" + a) (nais + "en" + a) (nais + "een")
       (nais + "ten") (nais + "i" + a) 
-      (nais + "in" + a) (nais + "iss" + a) (nais + "iin") ; 
+      (nais + "in" + a) (nais + "iss" + a) (nais + "iin") nais ; 
 
   dPaluu : Str -> NForms = \paluu ->
     let
@@ -348,7 +348,7 @@ resource MorphoFin = ResFin ** open Prelude in {
 
 -- the maximal set of technical stems
 
-    NForms : Type = Predef.Ints 9 => Str ;
+    NForms : Type = Predef.Ints 10 => Str ;
 
     nForms10 : (x1,_,_,_,_,_,_,_,_,x10 : Str) -> NForms = 
       \Ukko,ukon,ukkoa,ukkona,ukkoon,
@@ -362,7 +362,24 @@ resource MorphoFin = ResFin ** open Prelude in {
       6 => ukkoja ;
       7 => ukkoina ;
       8 => ukoissa ;
-      9 => ukkoihin
+      9 => ukkoihin ;
+      10 => Ukko
+      } ;
+         
+    nForms11 : (x1,_,_,_,_,_,_,_,_,_,x11 : Str) -> NForms = 
+      \Ukko,ukon,ukkoa,ukkona,ukkoon,
+       ukkojen,ukkoja,ukkoina,ukoissa,ukkoihin,ukko_ -> table {
+      0 => Ukko ;
+      1 => ukon ;
+      2 => ukkoa ;
+      3 => ukkona ;
+      4 => ukkoon ;
+      5 => ukkojen ;
+      6 => ukkoja ;
+      7 => ukkoina ;
+      8 => ukoissa ;
+      9 => ukkoihin ;
+      10 => ukko_  -- the compound form, e.g. nais-
       } ;
 
     Noun = {s : NForm => Str; h : Harmony; lock_N : {}} ;
@@ -373,12 +390,14 @@ resource MorphoFin = ResFin ** open Prelude in {
         ukon = f ! 1 ;
         ukkoa = f ! 2 ;
         ukkona = f ! 3 ;
+        ukko_ = Predef.tk 2 ukkona ;
         ukkoon = f ! 4 ;
         ukkojen = f ! 5 ;
         ukkoja = f ! 6 ;
         ukkoina = f ! 7 ;
         ukoissa = f ! 8 ;
         ukkoihin = f ! 9 ;
+        ukkos_ = f ! 10 ;
         a     = last ukkoja ;
         uko   = init ukon ;
         ukko  = Predef.tk 2 ukkona ;
@@ -417,13 +436,15 @@ resource MorphoFin = ResFin ** open Prelude in {
       NComit    => ukkoi + "ne" ;
       NInstruct => ukoi + "n" ;
 
-      NPossNom _     => ukko ;
-      NPossGen Sg    => ukko ;
+      NPossNom _     => ukko_ ;
+      NPossGen Sg    => ukko_ ;
       NPossGen Pl    => init ukkojen ;
       NPossTransl Sg => uko + "kse" ;
       NPossTransl Pl => ukoi + "kse" ;
       NPossIllat Sg  => init ukkoon ;
-      NPossIllat Pl  => init ukkoihin
+      NPossIllat Pl  => init ukkoihin ;
+
+      NCompound      => ukkos_
       } ;
     h = harmony ;
     lock_N = <>
@@ -439,7 +460,8 @@ resource MorphoFin = ResFin ** open Prelude in {
     6 => ukko.s ! NCase Pl Part ;
     7 => ukko.s ! NCase Pl Ess ;
     8 => ukko.s ! NCase Pl Iness ;
-    9 => ukko.s ! NCase Pl Illat
+    9 => ukko.s ! NCase Pl Illat ;
+   10 => ukko.s ! NCompound
   } ;
 
 -- Adjective forms
