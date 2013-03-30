@@ -88,5 +88,13 @@ Fixed obvious errors in "date" (taateli -> päivämäärä) and "force" (polttam
 24 examples.
 
 
+30/3
+
+Version 9: Changed subcat's of 170 of 230 V2's (the ones with 3 occurrences or more). One hour's work. Changes in 1124 
+translations. 
+
+Also changed the default genitive of symbol (+n) to +in, to be uniform with the other cases. Works for words ending
+in a consonant: Inteln -> Intelin. But a proper morphological analysis with dynamic lex extension is what would
+really be needed.
 
 
