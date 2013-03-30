@@ -98,6 +98,9 @@ in a consonant: Inteln -> Intelin. But a proper morphological analysis with dyna
 really be needed.
 
 Fixed NounFin.IndefArt, which erroneously added "yksi" to the substantival form of numeral determiners. This changed 125
-linearizations - but there are some mistaken parses of numbers in the treebank, in particular years.
+linearizations - but there are some mistaken parses of numbers in the treebank, in particular years. Also fixed the passive
+VP in the infinitive form, to better results in 95 sentences - but this structure should be different in Finnish:
+
+  
 
 

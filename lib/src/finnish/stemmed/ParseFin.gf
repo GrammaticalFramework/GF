@@ -58,16 +58,16 @@ lin
 
 oper  
   passVPSlash : VPSlash -> ResFin.VP = \vp -> lin VP {
-      s = \\vif,ant,pol,agr => case pol of {
-        Pos => vp.s ! VIPass ! ant ! pol ! agr ;
-        Neg => vp.s ! VIPass ! ant ! pol ! agr
+      s = \\vif,ant,pol,agr => case vif of {
+        VIInf _ => vp.s ! vif ! ant ! pol ! agr ;
+        _     => vp.s ! VIPass ! ant ! pol ! agr
         } ;
       s2 = vp.s2 ;
       adv = vp.adv ;
       ext = vp.ext ;
       qp = vp.qp ;
       isNeg = vp.isNeg ;
-      sc = vp.c2.c
+      sc = case vp.c2.c of {NPCase Nom => NPAcc ; c => c}
       } ; 
 
 lin
