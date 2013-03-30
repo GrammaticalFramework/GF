@@ -97,4 +97,7 @@ Also changed the default genitive of symbol (+n) to +in, to be uniform with the 
 in a consonant: Inteln -> Intelin. But a proper morphological analysis with dynamic lex extension is what would
 really be needed.
 
+Fixed NounFin.IndefArt, which erroneously added "yksi" to the substantival form of numeral determiners. This changed 125
+linearizations - but there are some mistaken parses of numbers in the treebank, in particular years.
+
 

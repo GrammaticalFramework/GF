@@ -58,7 +58,10 @@ lin
 
 oper  
   passVPSlash : VPSlash -> ResFin.VP = \vp -> lin VP {
-      s = \\_ => vp.s ! VIPass ;
+      s = \\vif,ant,pol,agr => case pol of {
+        Pos => vp.s ! VIPass ! ant ! pol ! agr ;
+        Neg => vp.s ! VIPass ! ant ! pol ! agr
+        } ;
       s2 = vp.s2 ;
       adv = vp.adv ;
       ext = vp.ext ;
@@ -143,8 +146,8 @@ lin
 -- [CompVP]
 -- [EmptyRelSlash] 
 -- [GenRP]
-[GerundAP]
-[GerundN]
+-- [GerundAP]
+-- [GerundN]
 -- [OrdCompar]
 -- [PositAdVAdj]
 -- [PredVPovs]
