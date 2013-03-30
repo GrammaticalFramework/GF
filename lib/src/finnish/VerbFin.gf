@@ -86,7 +86,10 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
     ReflVP v = insertObjPre False (\\fin,b,agr => appCompl fin b v.c2 (reflPron agr)) v ;
 
     PassV2 v = let vp = predV v in {
-      s = \\_ => vp.s ! VIPass ;
+      s = \\vif,ant,pol,agr => case vif of {
+        VIFin t  => vp.s ! VIPass t ! ant ! pol ! agr ;
+        _ => vp.s ! vif ! ant ! pol ! agr 
+        } ;
       s2 = \\_,_,_ => [] ;
       adv = \\_ => [] ;
       ext = [] ;

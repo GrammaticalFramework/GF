@@ -59,8 +59,8 @@ lin
 oper  
   passVPSlash : VPSlash -> ResFin.VP = \vp -> lin VP {
       s = \\vif,ant,pol,agr => case vif of {
-        VIInf _ => vp.s ! vif ! ant ! pol ! agr ;
-        _     => vp.s ! VIPass ! ant ! pol ! agr
+        VIFin t  => vp.s ! VIPass t ! ant ! pol ! agr ;
+        _ => vp.s ! vif ! ant ! pol ! agr 
         } ;
       s2 = vp.s2 ;
       adv = vp.adv ;
