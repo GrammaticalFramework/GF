@@ -243,7 +243,8 @@ oper
           <Anter,Pos> => vf (olla ! p)  part ;    --# notpresent
           <Anter,Neg> => vf ei          (ole ++ part) ;   --# notpresent
           <Simul,Neg> => vf ei          neg
-          }
+          } ;
+        passPol = case b of {Pos => True ; Neg => False} ;
       in
       case vi of {
         VIFin Past => mkvf (Impf agr.n agr.p) ;     --# notpresent
@@ -251,7 +252,7 @@ oper
         VIFin Fut  => mkvf (Presn agr.n agr.p) ;  --# notpresent
         VIFin Pres => mkvf (Presn agr.n agr.p) ;
         VIImper    => mkvf (Imper agr.n) ;
-        VIPass     => mkvf (Pass True) ;
+        VIPass     => mkvf (Pass passPol) ;
         VIInf i    => mkvf (Inf i)
         } ;
 
