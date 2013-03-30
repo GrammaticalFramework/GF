@@ -2,7 +2,7 @@ import qualified Data.Set as S
 
 -- comment out words that are predefined in another lexicon
 -- runghc ElimPredef.hs <DictEngFin.gf
-removeFile = "KoeFin.gf"
+removeFile = "v2.txt"
 removeMsg = "MANUAL"
 
 -- also used for temporarily eliminating whatever from compilation

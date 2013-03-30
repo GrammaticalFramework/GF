@@ -327,9 +327,9 @@ oper
 
   defaultStemEnding : SNForm -> Str = \c -> case c of {
       0 => "" ;
-      1 => "" ;
-      2 => "a" ;
-      3 => "na" ;
+      1 => "i" ;
+      2 => "ia" ;
+      3 => "ina" ;
       4 => "ii" ;
       5 => "ie" ;
       6 => "ia" ;
@@ -338,11 +338,11 @@ oper
       9 => "ihi"
       } ; 
   bindIfS : SNForm -> Str = \c -> case c of {
-    0|1 => [] ;
+    0 => [] ;
     _ => BIND
     } ;
   bindColonIfS : SNForm -> Str = \c -> case c of {
-    0|1 => [] ;
+    0 => [] ;
     _ => BIND ++ ":" ++ BIND
     } ;
 

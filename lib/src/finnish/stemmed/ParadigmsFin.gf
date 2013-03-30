@@ -204,6 +204,7 @@ oper
 
   mkV2 : overload {
     mkV2 : Str -> V2 ;  -- predictable direct transitive
+    mkV2 : Str -> Case -> V2 ;  -- predictable with another case
     mkV2 : V -> V2 ;    -- direct transitive
     mkV2 : V -> Case -> V2 ; -- complement just case
     mkV2 : V -> Prep -> V2 ; -- complement pre/postposition
@@ -689,6 +690,7 @@ mkVS = overload {
 
   mkV2 = overload {
     mkV2 : Str -> V2 = \s -> dirV2 (mk1V s) ;
+    mkV2 : Str -> Case -> V2 = \s -> caseV2 (mk1V s) ;
     mkV2 : V -> V2 = dirV2 ;
     mkV2 : V -> Case -> V2 = caseV2 ;
     mkV2 : V -> Prep -> V2 = mk2V2 ;
