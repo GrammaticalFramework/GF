@@ -150,7 +150,7 @@ oper
       7  =>             (vf ! 7) ;  -- tuli
       8  =>             (vf ! 8) ;  -- tulisi
       9  => Predef.tk 2 (vf ! 9) ;  -- tull(ut)
-      10 =>             (vf ! 10) ; -- tultu
+      10 => Predef.tk 1 (vf ! 10) ; -- tult(u)
       11 => weakGrade   (vf ! 10) ; -- tullu(n)
       12 => Predef.tk 1 (vf ! 11)   -- tulle(e)
       } ;
@@ -172,7 +172,7 @@ oper
       tuli    = vh ! 7 ;
       tulisi  = vh ! 8 ;
       tull_   = vh ! 9 ;    -- tull(ut)
-      tultu   = vh ! 10 ;
+      tult_   = vh ! 10 ;
       tullu__ = vh ! 11 ;   -- tullu(n)
       tulle_  = vh ! 12 ;   -- tulle(e)
 
@@ -187,6 +187,7 @@ oper
       tullu_  = plus tull_ u ;
       tullut  = plus tullu_ "t" ;
       tullun  = plus tullu_ "n" ; 
+      tultu   = plus tult_ u ;
 
       tullutN : Noun = snoun2noun b {
         s = table SNForm [
@@ -250,8 +251,12 @@ oper
       ImperP3 Pl   => plus tulkoo "t" ;
       ImperP1Pl    => plus tulk_ (a + a + "mme") ;
       ImpNegPl     => tulko ;
-      Pass True    => plus tulla_ (a + "n") ;
-      Pass False   => tulla_ ;
+      PassPresn True    => plus tulla_ (a + "n") ;
+      PassPresn False   => tulla_ ;
+      PassImpf True     => plus tult_ ("iin") ;       --# notpresent
+      PassImpf False    => tultu ;                    --# notpresent
+      PassCondit True   => plus tult_ (a + "isiin") ; --# notpresent
+      PassCondit False  => plus tult_ (a + "isi") ;   --# notpresent
       PastPartAct (AN n)  => tullutN.s ! n ;
       PastPartAct AAdv    => plus tullee "sti" ;
       PastPartPass (AN n) => tultuN.s ! n ;

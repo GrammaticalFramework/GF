@@ -101,13 +101,19 @@ param
    | Presn Number Person
    | Impf Number Person  --# notpresent
    | Condit Number Person  --# notpresent
+----   | Potent Number Person
    | Imper Number
    | ImperP3 Number
    | ImperP1Pl
    | ImpNegPl
-   | Pass Bool 
+   | PassPresn  Bool 
+   | PassImpf   Bool --# notpresent
+   | PassCondit Bool --# notpresent
+----   | PassPotent Bool 
    | PastPartAct  AForm
    | PastPartPass AForm
+----   | PresPartAct  AForm
+----   | PresPartPass AForm
    ;
 
   InfForm =
@@ -183,7 +189,7 @@ param
   VIForm =
      VIFin  Tense  
    | VIInf  InfForm
-   | VIPass 
+   | VIPass Tense
    | VIImper 
    ;  
 
@@ -205,8 +211,8 @@ oper
         agr = verbAgr agr0 ;
         verbs = verb.s ;
         part  : Str = case vi of {
-          VIPass => verbs ! PastPartPass (AN (NCase agr.n Nom)) ; 
-          _      => verbs ! PastPartAct (AN (NCase agr.n Nom))
+          VIPass _ => verbs ! PastPartPass (AN (NCase agr.n Nom)) ; 
+          _        => verbs ! PastPartAct (AN (NCase agr.n Nom))
           } ; 
 
         eiv : Str = case agr of {
@@ -219,14 +225,17 @@ oper
           } ;
 
         einegole : Str * Str * Str = case <vi,agr.n> of {
-          <VIFin Pres,_>  => <eiv, verbs ! Imper Sg,     "ole"> ;
-          <VIFin Fut,_>  => <eiv, verbs ! Imper Sg,     "ole"> ;   --# notpresent
+          <VIFin Pres,        _>  => <eiv, verbs ! Imper Sg,     "ole"> ;
+          <VIFin Fut,         _>  => <eiv, verbs ! Imper Sg,     "ole"> ;   --# notpresent
           <VIFin Cond,        _>  => <eiv, verbs ! Condit Sg P3, "olisi"> ;  --# notpresent
           <VIFin Past,        Sg> => <eiv, part,                 "ollut"> ;  --# notpresent
           <VIFin Past,        Pl> => <eiv, part,                 "olleet"> ;  --# notpresent
           <VIImper,           Sg> => <"älä", verbs ! Imper Sg,   "ole"> ;
           <VIImper,           Pl> => <"älkää", verbs ! ImpNegPl, "olko"> ;
-          <VIPass,            _>  => <"ei", verbs ! Pass False,  "ole"> ;
+          <VIPass Pres,       _>  => <"ei", verbs ! PassPresn False,  "ole"> ;
+          <VIPass Fut,        _>  => <"ei", verbs ! PassPresn False,  "ole"> ; --# notpresent
+          <VIPass Cond,       _>  => <"ei", verbs ! PassCondit False,  "olisi"> ; --# notpresent
+          <VIPass Past,       _>  => <"ei", verbs ! PassImpf False,  "ollut"> ; --# notpresent
           <VIInf i,           _>  => <"ei", verbs ! Inf i, "olla"> ----
           } ;
 
@@ -234,7 +243,12 @@ oper
         neg : Str = einegole.p2 ;
         ole : Str = einegole.p3 ;
 
-        olla : VForm => Str = verbOlla.s ;
+        olla : VForm => Str = table {
+           PassPresn  True => verbOlla.s ! Presn Sg P3 ;
+           PassImpf   True => verbOlla.s ! Impf Sg P3 ;   --# notpresent
+           PassCondit True => verbOlla.s ! Condit Sg P3 ; --# notpresent
+           vf => verbOlla.s ! vf
+           } ;
 
         vf : Str -> Str -> {fin, inf : Str} = \x,y -> 
           {fin = x ; inf = y} ;
@@ -252,7 +266,10 @@ oper
         VIFin Fut  => mkvf (Presn agr.n agr.p) ;  --# notpresent
         VIFin Pres => mkvf (Presn agr.n agr.p) ;
         VIImper    => mkvf (Imper agr.n) ;
-        VIPass     => mkvf (Pass passPol) ;
+        VIPass Past    => mkvf (PassImpf passPol) ;  --# notpresent
+        VIPass Cond    => mkvf (PassCondit passPol) ; --# notpresent
+        VIPass Fut     => mkvf (PassPresn passPol) ;  --# notpresent
+        VIPass Pres    => mkvf (PassPresn passPol) ;  
         VIInf i    => mkvf (Inf i)
         } ;
 
@@ -477,6 +494,7 @@ oper
       tullut = vh.tullut ;
       tultu = vh.tultu ;
       tultu = vh.tultu ;
+      tult = init tultu ;
       tullun = vh.tullun ;
       tuje = init tulen ;
       tuji = init tulin ;
@@ -516,8 +534,12 @@ oper
       ImperP3 Pl => tulko + o + "t" ;
       ImperP1Pl  => tulkaa + "mme" ;
       ImpNegPl   => tulko ;
-      Pass True  => tullaan ;
-      Pass False => Predef.tk 2 tullaan ;
+      PassPresn True  => tullaan ;
+      PassPresn False => Predef.tk 2 tullaan ;
+      PassImpf  True  => tult + "iin" ;  --# notpresent
+      PassImpf  False => tultu ;  --# notpresent
+      PassCondit  True  => tult + a + "isiin" ;  --# notpresent
+      PassCondit  False => tult + a + "isi" ;  --# notpresent
       PastPartAct n => tulleen ! n ;
       PastPartPass n => tullun ! n ;
       Inf Inf3Iness => tulema + "ss" + a ;

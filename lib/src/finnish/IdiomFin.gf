@@ -38,7 +38,10 @@ concrete IdiomFin of Idiom = CatFin **
     ImpersCl vp = mkClause noSubj (agrP3 Sg) vp ;
 
     GenericCl vp = mkClause noSubj (agrP3 Sg) {
-      s = \\_ => vp.s ! VIPass ;
+      s = \\vif,ant,pol,agr => case vif of {
+        VIFin t  => vp.s ! VIPass t ! ant ! pol ! agr ;
+        _ => vp.s ! vif ! ant ! pol ! agr 
+        } ;
       s2 = vp.s2 ;
       adv = vp.adv ;
       ext = vp.ext ;
@@ -64,7 +67,7 @@ concrete IdiomFin of Idiom = CatFin **
 -- The imperative is not available in a $VP$.
 
   ImpPl1 vp = 
-    let vps = vp.s ! VIPass ! Simul ! Pos ! Ag Pl P1
+    let vps = vp.s ! VIPass Pres ! Simul ! Pos ! Ag Pl P1
     in
     {s = vps.fin ++ vps.inf ++ 
          vp.s2 ! True ! Pos ! Ag Pl P1 ++ vp.ext
