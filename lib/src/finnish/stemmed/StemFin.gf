@@ -192,6 +192,8 @@ oper
       tullun  = plus tullu_ "n" ; 
       tultu   = plus tult_ u ;
 
+      tuleva  = plus tule_ ("v" + a) ;
+
       tullutN : Noun = snoun2noun b {
         s = table SNForm [
           tullut ;
@@ -270,7 +272,9 @@ oper
       Inf Inf3Elat  => plus tulema ("st" + a) ;
       Inf Inf3Illat => plus tulema (a + "n") ;
       Inf Inf3Adess => plus tulema ("ll" + a) ;
-      Inf Inf3Abess => plus tulema ("tt" + a) 
+      Inf Inf3Abess => plus tulema ("tt" + a) ;
+      Inf InfPresPart => plus tuleva "n" ;
+      Inf InfPresPartAgr => tuleva
       } ;
     sc = NPCase Nom ;
     lock_V = <>

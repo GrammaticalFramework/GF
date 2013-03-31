@@ -739,7 +739,8 @@ resource MorphoFin = ResFin ** open Prelude in {
       tulleen = (nForms2N (dOttanut tullut)).s ;
       tullu : Str = weakGrade tultu ;
       tullun  = (nForms2N (dUkko tultu (tullu + "n"))).s ; 
-      tulema = Predef.tk 3 tulevat + "m" + a ;
+      tulema = tule_ + "m" + a ;
+      tuleva = tule_ + "v" + a ;
       vat = "v" + a + "t"
     in
     {s = table {
@@ -782,7 +783,9 @@ resource MorphoFin = ResFin ** open Prelude in {
       Inf Inf3Elat  => tulema + "st" + a ;
       Inf Inf3Illat => tulema +  a   + "n" ;
       Inf Inf3Adess => tulema + "ll" + a ;
-      Inf Inf3Abess => tulema + "tt" + a 
+      Inf Inf3Abess => tulema + "tt" + a ;
+      Inf InfPresPart => tuleva + "n" ;
+      Inf InfPresPartAgr => tuleva
       } ;
     sc = NPCase Nom ;
     qp = pbool2bool (Predef.eqStr (last tulko) "o") ;

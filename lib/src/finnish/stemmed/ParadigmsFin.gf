@@ -59,6 +59,8 @@ oper
   infFirst : InfForm ; -- e.g. "tehdä"
   infElat : InfForm ;  -- e.g. "tekemästä"
   infIllat : InfForm ; -- e.g. "tekemään"
+  infPresPart : InfForm ; -- e.g. "tekevän"
+  infPresPartAgr : InfForm ; -- e.g. "tekevänsä"
 
 -- The following type is used for defining *rection*, i.e. complements
 -- of many-place verbs and adjective. A complement can be defined by
@@ -228,10 +230,14 @@ oper
 -- questions, verb phrases, and adjectives.
 
 mkVV = overload {
-  mkVV : Str -> VV   -- e.g. "yrittää"
+  mkVV : Str -> VV   -- e.g. "yrittää" (puhua)
    = \s -> mkVVf (mkV s) infFirst ; 
-  mkVV : V -> VV     -- e.g. "alkaa"
+  mkVV : V -> VV     -- e.g. "alkaa" (puhua)
    = \v -> mkVVf v infFirst ; 
+  mkVV : Str -> InfForm -> VV  -- e.g. "ruveta" (puhumaan)
+   = \s,i -> mkVVf (mkV s) i ;
+  mkVV : V -> InfForm -> VV  -- e.g. "lakata" (puhumasta)
+   = \v,i -> mkVVf v i ;
   } ;
 
 mkVS = overload {
@@ -313,7 +319,7 @@ mkVS = overload {
   ablative = Ablat ;
   allative = Allat ;
 
-  infFirst = Inf1 ; infElat = Inf3Elat ; infIllat = Inf3Illat ;
+  infFirst = Inf1 ; infElat = Inf3Elat ; infIllat = Inf3Illat ; infPresPart = InfPresPart ; infPresPartAgr = InfPresPartAgr ;
 
   prePrep  : Case -> Str -> Prep = 
     \c,p -> {c = NPCase c ; s = p ; isPre = True ; lock_Prep = <>} ;
