@@ -81,6 +81,7 @@ oper
   mkWVV = overload {
     mkWVV : (_ : Str)             -> VV   = \s -> mkVV (mkV s) ;
     mkWVV : (_ : VForms)          -> VV   = \vf -> mkVV (mkV (lin VK {s = vf})) ;
+    mkWVV : (_ : VForms) -> InfForm -> VV   = \vf,i -> mkVV (mkV (lin VK {s = vf})) i ;
     mkWVV : (_ : V)               -> VV   = \v -> mkVV v ;
     mkWVV : VForms       -> Str   -> VV   = \vf,s -> mkVV (mkV (mkV (lin VK {s = vf})) s) ;
     } ;

@@ -118,12 +118,14 @@ param
    ;
 
   InfForm =
-     Inf1
-   | Inf3Iness  -- 5 forms acc. to Karlsson
-   | Inf3Elat
-   | Inf3Illat
-   | Inf3Adess
-   | Inf3Abess
+     Inf1         -- puhua
+   | Inf3Iness    -- puhumassa
+   | Inf3Elat     -- puhumasta
+   | Inf3Illat    -- puhumaan
+   | Inf3Adess    -- puhumalla
+   | Inf3Abess    -- puhumatta
+   | InfPresPart  -- puhuvan
+   | InfPresPartAgr -- puhuva(mme)
    ;
 
   SType = SDecl | SQuest ;
@@ -441,9 +443,14 @@ oper
             Neg => <(predV (verbOlla ** {sc = NPCase Nom ; qp = True ; p = []})).s ! VIInf vi ! Simul ! Pos ! agr,
                     (vp.s ! VIInf Inf3Abess ! Simul ! Pos ! agr).fin> -- olla/olemaan näkemättä
             } ;
+          vph = case vp.qp of {True => Back ; False => Front} ;
+          poss = case vi of {
+            InfPresPartAgr => possSuffixGen vph agr ; -- toivon nukkuva + ni
+            _ => []
+            } ;
           compl = vp.s2 ! fin ! pol ! agr ++ vp.adv ! pol ++ vp.ext     -- compl. case propagated
         in
-        verb.p1.fin ++ verb.p1.inf ++ verb.p2 ++ compl ;
+        verb.p1.fin ++ verb.p1.inf ++ poss ++ verb.p2 ++ compl ;
 
   infVP : NPForm -> Polarity -> Agr -> VP -> InfForm -> Str = infVPGen Pos ;
 
@@ -460,6 +467,8 @@ oper
       Inf Inf3Illat => "olemaan" ;
       Inf Inf3Adess => "olemalla" ;
       Inf Inf3Abess => "olematta" ;
+      Inf InfPresPart => "olevan" ;
+      Inf InfPresPartAgr => "oleva" ;
       v => olla.s ! v
       }
     } ;
@@ -505,7 +514,8 @@ oper
       tulleena = Predef.tk 2 tullut + ("een" + a) ;
       tulleen = (noun2adj (nhn (sRae tullut tulleena))).s ;
       tullun = (noun2adj (nhn (sKukko tultu tullun (tultu + ("j"+a))))).s  ;
-      tulema = Predef.tk 3 tulevat + "m" + a ;
+      tulema = tuje + "m" + a ;
+      tuleva = tuje + "v" + a ;
 ----      tulema = tuje + "m" + a ;
       vat = "v" + a + "t"
     in
@@ -547,7 +557,9 @@ oper
       Inf Inf3Elat  => tulema + "st" + a ;
       Inf Inf3Illat => tulema +  a   + "n" ;
       Inf Inf3Adess => tulema + "ll" + a ;
-      Inf Inf3Abess => tulema + "tt" + a 
+      Inf Inf3Abess => tulema + "tt" + a ;
+      Inf InfPresPart => tuleva + "n" ;
+      Inf InfPresPartAgr => tuleva
       }
     } ;
 
@@ -737,6 +749,11 @@ oper
       a = agr ;
       isPron = False -- no special acc form
       } ;
+
+  possSuffixGen : Harmony -> Agr -> Str = \h,agr -> case h of {
+    Front => BIND ++ possSuffixFront agr ; 
+    Back  => BIND ++ possSuffix agr
+    } ;
 
   possSuffixFront : Agr -> Str = \agr -> 
     table Agr ["ni" ; "si" ; "nsä" ; "mme" ; "nne" ; "nsä" ; "nne"] ! agr ;

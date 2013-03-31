@@ -115,11 +115,18 @@ Spent 30 minutes going through 230 10+ words. Changed a half of them. Some ARBIT
 business language (e.g. "officer", "upseeri"/"vastaava"?). This changed 1362 sentences.
 
 Now, after 2 days of work, we have version 10-, where 2700 translations have changed from version 1-. Spent approximately
-- 2 hours manually correcting the lexicon
+- 3 hours manually correcting the lexicon
 - 5 hours analysing the problems and designing analysis tools
 - 8 hours fixing RGL bugs
 
 
+
+31/3
+
+Dictionary revision: 250 words with 6--10 occurrences ; 107 changed in 30 minutes. Changes in 557 sentences.
+
+RGL fix: more infinitive forms (näyttää nukkuvan, toivoo nukkuvansa); forms available through mkVV. 
+Checked 50 VV's in Dict. 145 changes in translations.
 
 
 
