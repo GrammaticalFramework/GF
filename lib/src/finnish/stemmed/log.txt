@@ -128,6 +128,14 @@ Dictionary revision: 250 words with 6--10 occurrences ; 107 changed in 30 minute
 RGL fix: more infinitive forms (näyttää nukkuvan, toivoo nukkuvansa); forms available through mkVV. 
 Checked 50 VV's in Dict. 145 changes in translations.
 
+RGL fix: weakForm (projekdin -> projektin etc). Also noted that "olemaan"/"oleva" require one more VForm,
+separate from "ole" ("ottamaan", not "otamaan") and from "ovat" (*"omaan").
+
+Received a corrected corpus from Krasimir, with weekdays and months recognized. This changes 100 translations.
+Now at version 13-eng-fin-wsj.txt, working with penn/wsj-3220/corr-wsj.full.
+
+
+
 
 
 

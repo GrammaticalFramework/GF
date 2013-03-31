@@ -59789,4 +59789,26 @@ fail_VV = mkVV (mkV "epäonnistua") infIllat ;
 help_VV = mkVV (mkV "auttaa") infIllat ;
 hope_VV = mkVV (mkV "toivoa") infPresPartAgr ; 
 
+--weekdays an and months, manually
+monday_PN = mkPN "maanantai" ;
+tuesday_PN = mkPN "tiistai" ;
+wednesday_PN = mkPN "keskiviikko" ;
+thursday_PN = mkPN "torstai" ;
+friday_PN = mkPN "perjantai" ;
+saturday_PN = mkPN "lauantai" ;
+sunday_PN = mkPN "sunnuntai" ;
+
+january_PN = mkPN (mkN "tammi" (mkN "kuu")) ;
+february_PN = mkPN (mkN "helmi" (mkN "kuu")) ;
+march_PN = mkPN (mkN "maalis" (mkN "kuu")) ;
+april_PN = mkPN (mkN "huhti" (mkN "kuu")) ;
+may_PN = mkPN (mkN "touko" (mkN "kuu")) ;
+june_PN = mkPN (mkN "kesä" (mkN "kuu")) ;
+july_PN = mkPN (mkN "heinä" (mkN "kuu")) ;
+august_PN = mkPN (mkN "elo" (mkN "kuu")) ;
+september_PN = mkPN (mkN "syys" (mkN "kuu")) ;
+october_PN = mkPN (mkN "loka" (mkN "kuu")) ;
+november_PN = mkPN (mkN "marras" (mkN "kuu")) ;
+december_PN = mkPN (mkN "joulu" (mkN "kuu")) ;
+
 }
