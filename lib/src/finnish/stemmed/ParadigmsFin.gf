@@ -682,7 +682,7 @@ mkVS = overload {
   caseV c v = {s = v.s ; sc = NPCase c ; h = v.h ; lock_V = <> ; p = v.p} ;
 
   vOlla = {
-    s = table VForm ["olla";"ole";"on";"o";"olk";"olla";"oli";"oli";"olisi";"oll";"oltu";"ollu";"liene"] ;
+    s = table SVForm ["olla";"ole";"on";"o";"olk";"olla";"oli";"oli";"olisi";"oll";"oltu";"ollu";"liene";"ole"] ;
     sc = NPCase Nom ; h = Back ; lock_V = <> ; p = []} ; ---- lieneekö
 
   mk2V2 : V -> Prep -> V2 = \v,c -> v ** {c2 = c ; lock_V2 = <>} ;

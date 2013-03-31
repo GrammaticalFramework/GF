@@ -132,7 +132,7 @@ oper
 -- verbs
 
 oper
-  SVForm : Type = Predef.Ints 12 ;
+  SVForm : Type = Predef.Ints 13 ;
   SVerb : Type = {s : SVForm => Str ; h : Harmony} ;
 
   -- used in Cat
@@ -155,7 +155,8 @@ oper
       9  => Predef.tk 2 (vf ! 9) ;  -- tull(ut)
       10 => Predef.tk 1 (vf ! 10) ; -- tult(u)
       11 => weakGrade   (vf ! 10) ; -- tullu(n)
-      12 => Predef.tk 1 (vf ! 11)   -- tulle(e)
+      12 => Predef.tk 1 (vf ! 11) ; -- tulle(e)
+      13 => Predef.tk 3 (vf ! 3)    -- tule(va)
       } ;
     h = aHarmony (last (vf ! 0)) ;
     } ;
@@ -178,6 +179,7 @@ oper
       tult_   = vh ! 10 ;
       tullu__ = vh ! 11 ;   -- tullu(n)
       tulle_  = vh ! 12 ;   -- tulle(e)
+      tule___ = vh ! 13 ;   -- tule(va)
 
       a = harmonyA sverb.h ;
       o = harmonyV "o" "ö" sverb.h ;
@@ -192,7 +194,7 @@ oper
       tullun  = plus tullu_ "n" ; 
       tultu   = plus tult_ u ;
 
-      tuleva  = plus tule_ ("v" + a) ;
+      tuleva  = plus tule___ ("v" + a) ;
 
       tullutN : Noun = snoun2noun b {
         s = table SNForm [
@@ -229,7 +231,7 @@ oper
         } ;
 
 
-      tulema  = plus tule__ ("m" + a) ;
+      tulema  = plus tule___ ("m" + a) ;
       vat     = "v" + a + "t"
     in
     {s = table {
@@ -288,7 +290,7 @@ oper
 -- word formation functions
 
   sverb2snoun : SVerb1 -> SNoun = \v ->    -- syöminen
-    let teke = v.s ! 3 in {
+    let teke = v.s ! 13 in {
     s = table {
       0 => partPlus teke "minen" ;
       1 => partPlus teke "mise" ;
@@ -306,7 +308,7 @@ oper
     } ;
 
   sverb2nounPresPartAct : SVerb1 -> SNoun = \v ->  -- syövä
-    let teke = v.s ! 3 in {
+    let teke = v.s ! 13 in {
     s = table {
       0 => partPlus teke "va" ;
       1 => partPlus teke "va" ;
