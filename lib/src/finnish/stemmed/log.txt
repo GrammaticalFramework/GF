@@ -111,6 +111,17 @@ This changed to the better 81 sentences.
 Added NCompound, or form nr 10, to nouns. This may differ from Nom Sg, e.g. käteinenvirtaus -> käteisvirtaus. 107 errors
 corrected by this.
 
+Spent 30 minutes going through 230 10+ words. Changed a half of them. Some ARBITRARY, tried to avoid biasing to 
+business language (e.g. "officer", "upseeri"/"vastaava"?). This changed 1362 sentences.
+
+Now, after 2 days of work, we have version 10-, where 2700 translations have changed from version 1-. Spent approximately
+- 2 hours manually correcting the lexicon
+- 5 hours analysing the problems and designing analysis tools
+- 8 hours fixing RGL bugs
+
+
+
+
 
 
   
