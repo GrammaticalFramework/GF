@@ -514,8 +514,9 @@ oper
       tulleena = Predef.tk 2 tullut + ("een" + a) ;
       tulleen = (noun2adj (nhn (sRae tullut tulleena))).s ;
       tullun = (noun2adj (nhn (sKukko tultu tullun (tultu + ("j"+a))))).s  ;
-      tulema = tuje + "m" + a ;
-      tuleva = tuje + "v" + a ;
+      tule_ = Predef.tk 3 tulevat ;
+      tulema = tule_ + "m" + a ;
+      tuleva = tule_ + "v" + a ;
 ----      tulema = tuje + "m" + a ;
       vat = "v" + a + "t"
     in
