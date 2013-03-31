@@ -163,7 +163,7 @@ abort_V2 = mkWV2 (k71 "tehdä") "abortti" ;
 aborticide_N = mkWN (compoundN "raskauden" (k39 "keskeytys")) ;
 abortifacient_A = mkWA "keskenmenon" "aiheuttava" ;
 abortifacient_N = mkWN (k48 "aine") "keskenmenon" "aiheuttava" ;
-abortion_N = mkWN (k5A "abortti") ;
+--MANUAL5_3 abortion_N = mkWN (k5A "abortti") ;
 abortionist_N = mkWN "sikiönlähdettäjä" ;
 abortive_A = mkWA (k10 "turha") ;
 abortus_N = mkWN (k3 "sikiö") "abortoitu" ;
@@ -623,7 +623,7 @@ active_N = mkWN (k5 "aktiivi") ;
 activeness_N = mkWN (k5A "aktiviteetti") ;
 activism_N = mkWN (k5 "aktivismi") ;
 activist_A = mkWA (compoundA "akti" (k38 "vistinen")) ;
-activist_N = mkWN (k5 "aktivisti") ;
+--MANUAL5_3 activist_N = mkWN (k5 "aktivisti") ;
 activity_N = mkWN (k9A "toiminta") ;
 actomyosin_N = mkWN "aktomyosiini" ;
 actor_N = mkWN (k12 "näyttelijä") ;
@@ -1123,7 +1123,7 @@ agate_N = mkWN (k5A "akaatti") ;
 agateware_N = mkWN (compoundN "akaatti" (k9A "keramiikka")) ;
 agave_N = mkWN (k8 "agaave") ;
 agaze_A = mkWA (compoundA "tuij" (k10 "ottava")) ;
-age_N = mkWN (k10A "ikä") ;
+--MANUAL5_3 age_N = mkWN (k10A "ikä") ;
 age_V = mkWV (k52A "vanhentua") ;
 age_V2 = mkWV2 (k52A "vanhentua") ;
 age_bracket_N = mkWN (k5A "kohortti") ;
@@ -1139,7 +1139,7 @@ agelong_A = mkWA (compoundA "elin" (k38 "aikainen")) ;
 --PLURNOUN --PREDEF agenda_N = mkWN (k10 "ohjelma") ;
 agenesis_N = mkWN "ageneesi" ;
 agent_N = mkWN (k5A "agentti") ;
-agent_provocateur_N = mkWN (k6 "provokaattori") ;
+--MANUAL5_3 agent_provocateur_N = mkWN (k6 "provokaattori") ;
 agential_A = mkWA "agentuurin" ;
 agerasia_N = mkWN (k40 "nuorekkuus") ;
 ageratum_N = mkWN (compoundN "sini" (k38 "tähtönen")) ;
@@ -1503,7 +1503,7 @@ allantoid_A = mkWA (compoundA "makkaran" (k38 "muotoinen")) ;
 allantois_N = mkWN (compoundN "rakko" (k1 "kalvo")) ;
 --PLURNOUN --POSTPONE allargando_A = mkWA "hitaammin," "äänen" "voimaa" "lisäten" ;
 allay_V2 = mkWV2 (k53A "tyydyttää") ;
-allegation_N = mkWN (k48A "väite") ;
+--MANUAL5_3 allegation_N = mkWN (k48A "väite") ;
 --PLURNOUN --PREDEF allege_V2 = mkWV2 (k52 "vannoa") ;
 allege_V2V = mkWV2V (k52 "vannoa") ;
 allege_VS = mkWVS (k52 "vannoa") ;
@@ -1804,7 +1804,7 @@ amenorrheic_A = mkWA "amenorreeinen" ;
 amentiferous_A = mkWA "urpu-" ;
 amerciable_A = mkWA (k10 "oleva") "sakotettavissa" ;
 americanFem_N = mkWN (compoundN "Ame" (k9A "rikka")) ;
-americanMasc_N = mkWN (compoundN "Ame" (k9A "rikka")) ;
+--MANUAL5_3 americanMasc_N = mkWN (compoundN "Ame" (k9A "rikka")) ;
 --PLURNOUN --PREDEF american_A = mkWA (k38 "amerikkalainen") ;
 americanism_N = mkWN (k40 "amerikkalaisuus") ;
 americanize_V2 = mkWV2 (k52 "amerikkalaistua") ;
@@ -2195,7 +2195,7 @@ angolan_N = mkWN (compoundN "angol" (k38 "alainen")) ;
 angora_N = mkWN (k12 "angora") ;
 angostura_N = mkWN (kH1 "kuori") "angosturan" ;
 angrecum_N = mkWN "angrecum" ;
-angry_A = mkWA (k38 "vihainen") ;
+--MANUAL5_3 angry_A = mkWA (k38 "vihainen") ;
 angst_N = mkWN (k39 "ahdistus") ;
 angstrom_N = mkWN (k4A "yksikkö") "Ångströmin" ;
 anguillan_A = mkWA (compoundA "anguill" (k38 "alainen")) ;
@@ -2351,7 +2351,7 @@ anoxemic_A = mkWA "anokseeminen" ;
 anoxia_N = mkWN (compoundN "hapen" (k48A "puute")) ;
 anoxic_A = mkWA "hapenpuutteesta" "kärsivä" ;
 anserine_A = mkWA (compoundA "hanhi" (k38 "mainen")) ;
-answer_N = mkWN (k39 "vastaus") ;
+--MANUAL5_3 answer_N = mkWN (k39 "vastaus") ;
 answer_V = mkWV (k53A "selvittää") ;
 answer_V2 = mkWV2 (k53A "selvittää") ;
 answer_for_V2 = mkWV2 (k73 "vastata") ;
@@ -2803,7 +2803,7 @@ appetizer_N = mkWN (compoundN "alku" (k9 "pala")) ;
 appetizing_A = mkWA (k38 "herkullinen") ;
 appetizingness_N = mkWN (k40 "herkullisuus") ;
 applaud_V = mkWV (k53 "ylistää") ;
-applaud_V2 = mkWV2 (k53 "ylistää") ;
+--MANUAL5_3 applaud_V2 = mkWV2 (k53 "ylistää") ;
 applaudable_A = mkWA (k10 "kunnioitettava") ;
 --PLURNOUN applause_N = mkWN "aplodit" ;
 --PLURNOUN --PREDEF apple_N = mkWN (k11 "omena") ;
@@ -3078,7 +3078,7 @@ arguable_A = mkWA (k34A "ratkaisematon") ;
 --PLURNOUN --PREDEF argue_V = mkWV (k67 "perustella") ;
 argue_V2 = mkWV2 (k67 "perustella") ;
 --PLURNOUN --PREDEF argue_VS = mkWVS (k67 "perustella") ;
-argument_N = mkWN (k48 "peruste") ;
+--MANUAL5_3 argument_N = mkWN (k48 "peruste") ;
 argumentation_N = mkWN (k48 "peruste") ;
 argumentative_A = mkWA (compoundA "väittelyn" (k38 "haluinen")) ;
 argus_N = mkWN (compoundN "argus" (k6 "fasaani")) ;
@@ -3657,7 +3657,7 @@ attach_V2 = mkWV2 (k53A "liittää") ;
 attachable_A = mkWA (k10 "oleva") "sidottavissa" ;
 attache_N = mkWN (compoundN "attasea" (k1A "salkku")) ;
 attachment_N = mkWN (k39 "kiinnitys") ;
-attack_N = mkWN (compoundN "alku" (k1A "sointu")) ;
+--MANUAL5_3 attack_N = mkWN (compoundN "alku" (k1A "sointu")) ;
 attack_V2 = mkWV2 (k53A "syövyttää") ;
 attacker_N = mkWN (k10 "ahdistaja") ;
 attain_V = mkWV (k56 "kasvaa") ;
@@ -3718,7 +3718,7 @@ au_fait_A = mkWA (k99 "tasalla") ;
 au_pair_N = mkWN "au" "pair" ;
 aubergine_N = mkWN (compoundN "muna" (k1 "koiso")) ;
 auburn_A = mkWA (compoundA "kastanjan" (k15 "ruskea")) ;
-auction_N = mkWN (compoundN "huuto" (k9A "kauppa")) ;
+--MANUAL5_3 auction_N = mkWN (compoundN "huuto" (k9A "kauppa")) ;
 --PLURNOUN --POSTPONE auction_V2 = mkWV2 (k61 "toimia") "meklarina" "huutokaupassa" ;
 --PLURNOUN --POSTPONE auction_off_V2 = mkWV2 (k61 "toimia") "meklarina" "huutokaupassa" ;
 auctioneer_N = mkWN (k10 "toimittaja") "huutokaupan" ;
@@ -3823,7 +3823,7 @@ authoritarian_A = mkWA (k38 "tyrannimainen") ;
 authoritarian_N = mkWN (k6 "diktaattori") ;
 authoritarianism_N = mkWN (k12 "tyrannia") ;
 authoritative_A = mkWA (k1A "valtuutettu") ;
-authority_N = mkWN (k10A "lupa") "virallinen" ;
+--MANUAL5_3 authority_N = mkWN (k10A "lupa") "virallinen" ;
 authorization_N = mkWN (k39 "oikeutus") ;
 authorize_V2 = mkWV2 (k52 "hyväksyä") ;
 authorize_V2V = mkWV2V (k52 "hyväksyä") ;
@@ -4109,7 +4109,7 @@ bachelorhood_N = mkWN (k1 "olo") "poikamiehenä" ;
 bacillar_A = mkWA "basilli-" ;
 bacillus_N = mkWN (k6 "basilli") ;
 bacitracin_N = mkWN (k5A "antibiootti") ;
-back_Adv = mkWAdv (k99 "taakse") ;
+--MANUAL5_3 back_Adv = mkWAdv (k99 "taakse") ;
 --MANUAL10 -- back_N n NOT_IN_KOTUS
 back_V = mkWV (k52A "perääntyä") ;
 --MANUAL back_V2 = mkWV2 (k52A "perääntyä") ;
@@ -4429,14 +4429,14 @@ bank_draft_N = mkWN (compoundN "pankki" (k6 "vekseli")) ;
 bank_rate_N = mkWN (compoundN "korko" (k9A "kanta")) ;
 bankable_A = mkWA (compoundA "pankki" (k38 "kelpoinen")) ;
 bankbook_N = mkWN (compoundN "pankki" (k9 "kirja")) ;
-banker_N = mkWN (k6 "pankkiiri") ;
+--MANUAL5_3 banker_N = mkWN (k6 "pankkiiri") ;
 --PLURNOUN --PREDEF banking_N = mkWN (compoundN "hoi" (k38 "taminen")) "pankkiasioiden" ;
 banknote_N = mkWN (k6 "seteli") "dollarin" ;
 bankroll_N = mkWN (compoundN "seteli" (k1A "nippu")) ;
 --MANUAL10 -- bankrupt_A a NOT_IN_KOTUS
 bankrupt_N = mkWN (compoundN "tyrsky" (k10 "kahlaaja")) ;
 bankrupt_V2 = mkWV2 (k57A "kaataa") ;
-bankruptcy_N = mkWN (k5 "konkurssi") ;
+--MANUAL5_3 bankruptcy_N = mkWN (k5 "konkurssi") ;
 banksia_N = mkWN (k10 "kuusama") ;
 banner_A = mkWA (k38 "oivallinen") ;
 banner_N = mkWN (k5 "viiri") ;
@@ -4625,7 +4625,7 @@ basalt_N = mkWN (k5A "basaltti") ;
 basaltic_A = mkWA "basaltti-" ;
 bascule_N = mkWN (compoundN "lasku" (k9A "salpa")) ;
 base_A = mkWA (k10 "väärä") ;
-base_N = mkWN (k13 "jalusta") ;
+--MANUAL5_3 base_N = mkWN (k13 "jalusta") ;
 base_V = mkWV (k52A "pohjautua") ;
 --PLURNOUN --PREDEF base_V2 = mkWV2 (k52A "pohjautua") ;
 baseball_N = mkWN (k5 "baseball") ;
@@ -4749,7 +4749,7 @@ batter_V2 = mkWV2 (k71 "tehdä") "syvennys" ;
 battering_N = mkWN (compoundN "pahoin" (k2 "pitely")) ;
 battery_N = mkWN (compoundN "pahoin" (k2 "pitely")) ;
 batting_N = mkWN (k5A "lyönti") ;
-battle_N = mkWN (k2 "ponnistelu") ;
+--MANUAL5_3 battle_N = mkWN (k2 "ponnistelu") ;
 battle_V = mkWV (k67 "taistella") ;
 battle_V2 = mkWV2 (k67 "taistella") ;
 battle_cruiser_N = mkWN (compoundN "taistelu" (k12 "risteilijä")) ;
@@ -4986,7 +4986,7 @@ beggary_N = mkWN (k40 "kerjäläisyys") ;
 --PLURNOUN --POSTPONE begin_V2 = mkWV2 (k63 "saada") "alkunsa" "jstak" ;
 --PLURNOUN --POSTPONE begin_VV = mkWVV (k63 "saada") "alkunsa" "jstak" ;
 beginner_N = mkWN (k10 "aloittaja") ;
-beginning_N = mkWN (k39 "aloitus") ;
+--MANUAL5_3 beginning_N = mkWN (k39 "aloitus") ;
 begonia_N = mkWN (k12 "begonia") ;
 begrimed_A = mkWA (k34A "siivoton") ;
 begrudge_V2 = mkWV2 (k67 "olla") "pahoillaan" ;
@@ -5226,7 +5226,7 @@ bestowal_N = mkWN "lahjoittaminen" ;
 bestrew_V2 = mkWV2 (k67A "sirotella") ;
 bestride_V2 = mkWV2 (k73A "harpata") ;
 bestubbled_A = mkWA (compoundA "sän" (k38 "kinen")) ;
-bet_N = mkWN (k39 "veikkaus") ;
+--MANUAL5_3 bet_N = mkWN (k39 "veikkaus") ;
 bet_V = mkWV (k73 "nojata") ;
 bet_V2 = mkWV2 (k73 "nojata") ;
 bet_VS = mkWVS (k73 "nojata") ;
@@ -5337,7 +5337,7 @@ bicyclic_A = mkWA (compoundA "kaks" (k38 "irenkainen")) ;
 bicycling_N = mkWN (k2 "pyöräily") ;
 bicylindrical_A = mkWA (compoundA "kaks" (k38 "isylinterinen")) ;
 --PLURNOUN --PREDEF bid_N = mkWN (kH1 "veto") ;
-bid_V = mkWV (k74A "vedota") ;
+--MANUAL5_3 bid_V = mkWV (k74A "vedota") ;
 bid_V2 = mkWV2 (k74A "vedota") ;
 biddable_A = mkWA (k38 "tottelevainen") ;
 bidder_N = mkWN (k10 "tarjoaja") ;
@@ -6782,7 +6782,7 @@ bride_N = mkWN (k33 "morsian") ;
 bridecake_N = mkWN (compoundN "morsius" (k1A "kakku")) ;
 bridegroom_N = mkWN (k38 "sulhanen") ;
 bridesmaid_N = mkWN (k1 "kaaso") ;
-bridge_N = mkWN (k8 "bridge") ;
+--MANUAL5_3 bridge_N = mkWN (k8 "bridge") ;
 bridge_V2 = mkWV2 (k53A "silloittaa") ;
 bridgeable_A = mkWA "silloitettava" ;
 bridgehead_N = mkWN (compoundN "sillanpää" (k10 "asema")) ;
@@ -6914,7 +6914,7 @@ broiler_N = mkWN (k12 "parila") ;
 broke_A = mkWA (k38 "persaukinen") ;
 brokenhearted_A = mkWA (k34A "lohduton") ;
 --PLURNOUN --PREDEF broker_N = mkWN (k6 "meklari") ;
-brokerage_N = mkWN (compoundN "pankkiiri" (k48A "liike")) ;
+--MANUAL5_3 brokerage_N = mkWN (compoundN "pankkiiri" (k48A "liike")) ;
 brolly_N = mkWN (k10 "sontsa") ;
 brome_N = mkWN (k12 "kattara") ;
 bromic_A = mkWA "bromi-" ;
@@ -7066,7 +7066,7 @@ buddy_N = mkWN (k10 "tuttava") ;
 budge_V = mkWV (k52A "myöntyä") ;
 budge_V2 = mkWV2 (k52A "myöntyä") ;
 budgerigar_N = mkWN (k5A "undulaatti") ;
-budget_N = mkWN (k5A "budjetti") ;
+--MANUAL5_3 budget_N = mkWN (k5A "budjetti") ;
 budget_V = mkWV (k62 "budjetoida") ;
 budget_V2 = mkWV2 (k62 "budjetoida") ;
 budgetary_A = mkWA "budjetti-" ;
@@ -7499,7 +7499,7 @@ cabinetmaker_N = mkWN "huonekalupuuseppä" ;
 cabinetmaking_N = mkWN (compoundN "puusepän" (k19 "työ")) ;
 cabinetwork_N = mkWN (compoundN "huonekalupuusepän" (k19 "työ")) ;
 cable's_length_N = mkWN (compoundN "kaapelin" (k9A "mitta")) ;
-cable_N = mkWN (k5 "touvi") ;
+--MANUAL5_3 cable_N = mkWN (k5 "touvi") ;
 cable_V = mkWV (k53A "sähköttää") ;
 cable_V2 = mkWV2 (k53A "sähköttää") ;
 cable_car_N = mkWN (k1 "vaunu") ;
@@ -7667,7 +7667,7 @@ calisthenics_N = mkWN (k2 "voimistelu") ;
 calk_N = mkWN "hokki" ;
 calk_V2 = mkWV2 (k53A "vammauttaa") ;
 --PLURNOUN --PREDEF call_N = mkWN (compoundN "osto-" (k3 "optio")) ;
-call_V = mkWV (k53A "herättää") ;
+--MANUAL5_3 call_V = mkWV (k53A "herättää") ;
 call_V2 = mkWV2 (k53A "herättää") ;
 call_V2A = mkWV2A (k53A "herättää") ;
 call_V2V = mkWV2V (k53A "herättää") ;
@@ -7781,7 +7781,7 @@ camp_bed_N = mkWN (compoundN "kenttä" (k48A "vuode")) ;
 camp_chair_N = mkWN (compoundN "teltta" (k5 "tuoli")) ;
 camp_follower_N = mkWN (k12 "myötäilijä") ;
 camp_out_V = mkWV (k52A "leiriytyä") ;
-campaign_N = mkWN (k6 "safari") ;
+--MANUAL5_3 campaign_N = mkWN (k6 "safari") ;
 campaign_V = mkWV (k60A "lähteä") "sotaan" ;
 campaigner_N = mkWN (k5A "kandidaatti") ;
 campaigning_N = mkWN (k5A "kampanjointi") ;
@@ -8116,7 +8116,7 @@ cardsharp_N = mkWN (k6 "huijari") ;
 care_for_V2 = mkWV2 (k53A "hoitaa") ;
 careen_V = mkWV (k52 "heilua") ;
 careen_V2 = mkWV2 (k52 "heilua") ;
-career_N = mkWN (k10 "ura") ;
+--MANUAL5_3 career_N = mkWN (k10 "ura") ;
 career_V = mkWV (k53A "viilettää") ;
 careerism_N = mkWN (compoundN "karrier" (k5 "ismi")) ;
 careerist_N = mkWN (k5 "karrieristi") ;
@@ -9640,7 +9640,7 @@ circularization_N = mkWN (compoundN "joukko" (k39 "postitus")) ;
 circularize_V2 = mkWV2 (k53 "pyöristää") ;
 circulate_V = mkWV (k53A "kierrättää") ;
 circulate_V2 = mkWV2 (k53A "kierrättää") ;
-circulation_N = mkWN (k2 "jakelu") ;
+--MANUAL5_3 circulation_N = mkWN (k2 "jakelu") ;
 circulative_A = mkWA "kierron" ;
 circulatory_A = mkWA "verenkierto-" ;
 circumcise_V2 = mkWV2 (compoundV "ympäri" (k73A "leikata")) ;
@@ -9817,7 +9817,7 @@ clatter_V = mkWV (k52A "paukkua") ;
 clatter_V2 = mkWV2 (k52A "paukkua") ;
 clattery_A = mkWA (compoundA "rämis" (k10 "evä")) ;
 clausal_A = mkWA "lause-" ;
-clause_N = mkWN (k48 "lause") ;
+--MANUAL5_3 clause_N = mkWN (k48 "lause") ;
 claustrophobe_N = mkWN (k2 "henkilö") "klaustrofobinen" ;
 claustrophobia_N = mkWN (k1 "kammo") "suljetun" "paikan" ;
 claustrophobic_A = mkWA "klaustrofobinen" ;
@@ -10541,7 +10541,7 @@ combinative_A = mkWA "yhtymä-" ;
 combinatorial_A = mkWA "kombinatorinen" ;
 combine_N = mkWN (k6 "puimuri") ;
 combine_V = mkWV (k53 "yhdistää") ;
-combine_V2 = mkWV2 (k53 "yhdistää") ;
+--MANUAL5_3 combine_V2 = mkWV2 (k53 "yhdistää") ;
 combine_V2V = mkWV2V (k53 "yhdistää") ;
 --MANUALVV combine_VV = mkWVV (k53 "yhdistää") ;
 combining_N = mkWN (k3 "kombinaatio") ;
@@ -10592,7 +10592,7 @@ comeback_N = mkWN (k17 "paluu") ;
 comedian_N = mkWN (k4A "koomikko") ;
 comedienne_N = mkWN (k8 "komedienne") ;
 comedown_N = mkWN (compoundN "arvon" (k39 "alennus")) ;
-comedy_N = mkWN (k40 "hauskuus") ;
+--MANUAL5_3 comedy_N = mkWN (k40 "hauskuus") ;
 comeliness_N = mkWN (k40 "ihanuus") ;
 comely_A = mkWA (k15 "komea") ;
 comer_N = mkWN (k12 "tulija") ;
@@ -10651,7 +10651,7 @@ commentary_N = mkWN (k39 "selitys") ;
 commentate_V = mkWV (k53 "selostaa") ;
 --PLURNOUN --PREDEF commentator_N = mkWN (k12 "arvostelija") ;
 commerce_N = mkWN (k40 "kaupallisuus") ;
-commercial_A = mkWA (k38 "kaupallinen") ;
+--MANUAL5_3 commercial_A = mkWA (k38 "kaupallinen") ;
 commercial_N = mkWN (k39 "mainos") ;
 commercialism_N = mkWN (k40 "kaupallisuus") ;
 commercialization_N = mkWN (compoundN "kaupallis" (k38 "taminen")) ;
@@ -10681,7 +10681,7 @@ committeeman_N = mkWN (k32 "jäsen") "valiokunnan" ;
 committeewoman_N = mkWN (k32 "jäsen") "valiokunnan" ;
 commode_N = mkWN (k2 "lipasto") ;
 commodious_A = mkWA (k10 "sopiva") ;
-commodity_N = mkWN (k12 "tavara") ;
+--MANUAL5_3 commodity_N = mkWN (k12 "tavara") ;
 commodore_N = mkWN (k5 "kommodori") ;
 common_A = mkWA (k38 "tavallinen") ;
 common_N = mkWN (k10A "kenttä") ;
@@ -10775,7 +10775,7 @@ compere_V2 = mkWV2 (k53A "kuuluttaa") ;
 --PLURNOUN --PREDEF compete_V = mkWV (k67A "kilvoitella") ;
 competence_N = mkWN (k40 "pätevyys") ;
 --MANUAL10 -- competent_A a NOT_IN_KOTUS
-competition_N = mkWN (k2 "kilpailu") ;
+--MANUAL5_3 competition_N = mkWN (k2 "kilpailu") ;
 competitive_A = mkWA "kilpailu-" ;
 competitiveness_N = mkWN (compoundN "taistelu" (k1A "tahto")) ;
 competitor_N = mkWN (k10 "haastaja") ;
@@ -11230,7 +11230,7 @@ conservancy_N = mkWN (compoundN "luonnon" (k2 "suojelu")) ;
 conservation_N = mkWN (compoundN "ympäristön" (k2 "suojelu")) ;
 conservatism_N = mkWN (k40 "vanhoillisuus") ;
 conservative_A = mkWA (k38 "konservatiivinen") ;
-conservative_N = mkWN (k38 "vanhoillinen") ;
+--MANUAL5_3 conservative_N = mkWN (k38 "vanhoillinen") ;
 conservatoire_N = mkWN (k3 "konservatorio") ;
 conservator_N = mkWN (compoundN "edun" (k10 "valvoja")) ;
 conservatory_N = mkWN "talvipuutarha" ;
@@ -11240,13 +11240,13 @@ consider_V = mkWV (k67 "olla") "mielipiteenä" ;
 --PLURNOUN --PREDEF consider_V2 = mkWV2 (k67 "olla") "mielipiteenä" ;
 consider_V2A = mkWV2A (k67 "olla") "mielipiteenä" ;
 consider_V2V = mkWV2V (k67 "olla") "mielipiteenä" ;
-consider_V3 = mkWV3 (k67 "olla") "mielipiteenä" ;
+--MANUAL5_3 consider_V3 = mkWV3 (k67 "olla") "mielipiteenä" ;
 consider_VS = mkWVS (k67 "olla") "mielipiteenä" ;
 --MANUALVV consider_VV = mkWVV (k67 "olla") "mielipiteenä" ;
-considerable_A = mkWA (k10 "varteenotettava") ;
+--MANUAL5_3 considerable_A = mkWA (k10 "varteenotettava") ;
 considerate_A = mkWA (k38 "huomaavainen") ;
 considerateness_N = mkWN (k40 "ystävällisyys") ;
-consideration_N = mkWN (k40 "huomaavaisuus") ;
+--MANUAL5_3 consideration_N = mkWN (k40 "huomaavaisuus") ;
 consign_V2 = mkWV2 (k52 "uskoa") "haltuun" ;
 consignee_N = mkWN (k10 "saaja") ;
 consigner_N = mkWN (k10 "lähettäjä") ;
@@ -11441,7 +11441,7 @@ contract_V2V = mkWV2V (k63 "saada") ;
 contractile_A = mkWA (compoundA "supistumisky" (k38 "kyinen")) ;
 contractility_N = mkWN (compoundN "supistumis" (k1A "kyky")) ;
 contraction_N = mkWN (k39 "supistus") ;
-contractor_N = mkWN (k33 "elin") "supistumiskykyinen" ;
+--MANUAL5_3 contractor_N = mkWN (k33 "elin") "supistumiskykyinen" ;
 contractual_A = mkWA "sopimus-" ;
 contracture_N = mkWN (compoundN "kontrak" (k10 "tuura")) ;
 contradict_V2 = mkWV2 (k54A "kieltää") ;
@@ -11486,7 +11486,7 @@ contrivance_N = mkWN (compoundN "keksi" (k38 "minen")) ;
 contrive_V = mkWV (k73A "kekata") ;
 contrive_V2 = mkWV2 (k73A "kekata") ;
 contriver_N = mkWN (k12 "keksijä") ;
-control_N = mkWN (k9A "hallinta") ;
+--MANUAL5_3 control_N = mkWN (k9A "hallinta") ;
 control_V = mkWV (k69 "hallita") ;
 --PLURNOUN --PREDEF control_V2 = mkWV2 (k69 "hallita") ;
 controllable_A = mkWA (k10 "ohjattava") ;
@@ -11712,7 +11712,7 @@ cordovan_N = mkWN (compoundN "karduaani" (k9 "nahka")) ;
 --PLURNOUN cords_N = mkWN (compoundN "vakosametti" (k1 "housut")) ;
 corduroy_N = mkWN (compoundN "vako" (k5A "sametti")) ;
 cordwood_N = mkWN (compoundN "poltto" (k18 "puu")) ;
-core_N = mkWN "kaapelin" "säikeistö" ;
+--MANUAL5_3 core_N = mkWN "kaapelin" "säikeistö" ;
 core_V2 = mkWV2 (k53 "poistaa") "sisus" ;
 coreference_N = mkWN (compoundN "samaviitte" (k40 "isyys")) ;
 coreferent_A = mkWA (compoundA "sama" (k38 "viitteinen")) ;
@@ -14057,7 +14057,7 @@ departer_N = mkWN (k12 "lähtijä") ;
 --MANUAL10_06 department_N = mkWN (k9 "ala") ;
 departmental_A = mkWA "osaston" ;
 --MANUAL10_06 departure_N = mkWN "lähteminen" ;
-depend_V = mkWV (k73 "nojata") ;
+--MANUAL5_3 depend_V = mkWV (k73 "nojata") ;
 dependability_N = mkWN (k40 "luotettavuus") ;
 dependable_A = mkWA (k10 "luotettava") ;
 dependant_N = mkWN (k10 "oleva") "riippuvuussuhteessa" ;
@@ -14123,7 +14123,7 @@ depth_charge_N = mkWN (k5 "syvyyspommi") ;
 deputation_N = mkWN "valtuuttaminen" ;
 depute_V2 = mkWV2 (k73 "määrätä") "tehtävään" ;
 deputize_V = mkWV (k73 "määrätä") "sijaiseksi" ;
-deputy_N = mkWN (k10 "edustaja") ;
+--MANUAL5_3 deputy_N = mkWN (k10 "edustaja") ;
 derail_V2 = mkWV2 (k52 "suistua") "[raiteilta]" ;
 derailment_N = mkWN "raiteilta" "suistuminen" ;
 derange_V2 = mkWV2 (k53A "sekoittaa") ;
@@ -14220,7 +14220,7 @@ deshabille_N = mkWN (k99 "puolipukeissa") ;
 desiccant_N = mkWN (k5 "sikkatiivi") ;
 desiccate_V2 = mkWV2 (k52 "kuivua") ;
 desideratum_N = mkWN (k48 "toive") ;
-design_N = mkWN (compoundN "suu" (k38 "nnitteleminen")) ;
+--MANUAL5_3 design_N = mkWN (compoundN "suu" (k38 "nnitteleminen")) ;
 design_V = mkWV (k53A "tarkoittaa") ;
 --MANUAL design_V2 = mkWV2 (k53A "tarkoittaa") ;
 --MANUAL design_V2V = mkWV2V (k53A "tarkoittaa") ;
@@ -14376,7 +14376,7 @@ devastate_V2 = mkWV2 (k52A "musertua") ;
 devastation_N = mkWN (compoundN "tuho" (k38 "aminen")) ;
 develop_V = mkWV (k67 "tulla") ;
 --MANUAL develop_V2 = mkWV2 (k67 "tulla") ;
-developer_N = mkWN (k48A "kehite") ;
+--MANUAL5_3 developer_N = mkWN (k48A "kehite") ;
 --PLURNOUN --PREDEF development_N = mkWN "kehittäminen" ;
 developmental_A = mkWA "kehitys-" ;
 deviant_A = mkWA (k10 "poikkeava") ;
@@ -14385,7 +14385,7 @@ deviate_V = mkWV (k52A "kääntyä") "toisaalle" ;
 deviation_N = mkWN (compoundN "kierto" (k19 "tie")) ;
 --PLURNOUN --POSTPONE deviationism_N = mkWN "poikkeaminen" "puolueen" "virallisesta" "linjasta" ;
 deviationist_N = mkWN (compoundN "toisin" (k12 "ajattelija")) ;
-device_N = mkWN (k5 "konsti") ;
+--MANUAL5_3 device_N = mkWN (k5 "konsti") ;
 --PLURNOUN devices_N = mkWN "mielihalut" ;
 devil_N = mkWN (k48 "perkele") ;
 devil_V = mkWV (k56 "maustaa") "voimakkaasti" ;
@@ -14974,7 +14974,7 @@ discordance_N = mkWN (k10 "eripura") ;
 discordant_A = mkWA (compoundA "sora" (k38 "ääninen")) ;
 discorporate_A = mkWA (k34A "aineeton") ;
 discotheque_N = mkWN (k5A "diskoteekki") ;
-discount_N = mkWN (compoundN "ale" (k38 "ntaminen")) "hintojen" ;
+--MANUAL5_3 discount_N = mkWN (compoundN "ale" (k38 "ntaminen")) "hintojen" ;
 discount_V = mkWV (k73 "tyrmätä") ;
 discount_V2 = mkWV2 (k73 "tyrmätä") ;
 discountenance_V2 = mkWV2 (k52 "paheksua") ;
@@ -15231,7 +15231,7 @@ disputable_A = mkWA (k34A "selvittämätön") ;
 disputant_N = mkWN (k1A "poleemikko") ;
 disputation_N = mkWN (k2 "keskustelu") ;
 disputatious_A = mkWA (k10 "riitaisa") ;
-dispute_N = mkWN (k2 "väittely") ;
+--MANUAL5_3 dispute_N = mkWN (k2 "väittely") ;
 dispute_V = mkWV (k67A "väitellä") ;
 dispute_V2 = mkWV2 (k67A "väitellä") ;
 disqualification_N = mkWN (k5A "diskvalifiointi") ;
@@ -16045,7 +16045,7 @@ droop_V = mkWV (k53A "väsähtää") ;
 droop_V2 = mkWV2 (k53A "väsähtää") ;
 droopingly_Adv = mkWAdv (compoundAdv "nuokkuv" (k99 "asti")) ;
 --MANUAL10 -- drop_N n NOT_IN_KOTUS
-drop_V = mkWV (k53A "pudottaa") ;
+--MANUAL5_3 drop_V = mkWV (k53A "pudottaa") ;
 --MANUAL drop_V2 = mkWV2 (k53A "pudottaa") ;
 drop_away_V = mkWV (k74A "pudota") ;
 drop_back_V = mkWV (k52A "vetäytyä") "taakse" ;
@@ -16744,7 +16744,7 @@ ejector_seat_N = mkWN (compoundN "heitto" (k33 "istuin")) ;
 eke_out_V2 = mkWV2 (k53 "puristaa") ;
 el_dorado_N = mkWN (k1 "eldorado") ;
 elaborate_A = mkWA (k9A "tarkka") ;
-elaborate_V = mkWV (k67A "neuvotella") ;
+--MANUAL5_3 elaborate_V = mkWV (k67A "neuvotella") ;
 elaborate_V2 = mkWV2 (k67A "neuvotella") ;
 elaborateness_N = mkWN (k40 "taidokkuus") ;
 elaboration_N = mkWN (k9A "laadinta") "huolellinen" ;
@@ -16792,7 +16792,7 @@ electric_A = mkWA "sähkö-" ;
 electric_N = mkWN (compoundN "sähkö" (k1 "auto")) ;
 electrical_A = mkWA "sähkö-" ;
 electrician_N = mkWN (compoundN "sähkö" (k42 "mies")) ;
-electricity_N = mkWN (compoundN "sähkö" (k40 "isyys")) ;
+--MANUAL5_3 electricity_N = mkWN (compoundN "sähkö" (k40 "isyys")) ;
 electrification_N = mkWN (k39 "sähköistys") ;
 electrify_V2 = mkWV2 (k53 "sähköistää") ;
 electrifying_A = mkWA (k10 "jännittävä") ;
@@ -16830,7 +16830,7 @@ electron_N = mkWN (k5 "elektroni") ;
 electronegativity_N = mkWN (k40 "negatiivisuus") ;
 electronic_A = mkWA (k38 "elektroninen") ;
 electronically_Adv = mkWAdv (k99 "elektronisesti") ;
-electronics_N = mkWN (k9A "elektroniikka") ;
+--MANUAL5_3 electronics_N = mkWN (k9A "elektroniikka") ;
 electrophoresis_N = mkWN "sähköforeesi" ;
 electrophoretic_A = mkWA (compoundA "katafor" (k38 "eettinen")) ;
 electrophorus_N = mkWN (compoundN "Electrophorus-" (k1A "suku")) ;
@@ -17047,7 +17047,7 @@ employ_N = mkWN (k25 "toimi") ;
 employable_A = mkWA "työllistettävä" ;
 employable_N = mkWN "työllistettävä" ;
 --PLURNOUN --PREDEF employee_N = mkWN (compoundN "työn" (k12 "tekijä")) ;
-employer_N = mkWN (compoundN "työn" (k10 "antaja")) ;
+--MANUAL5_3 employer_N = mkWN (compoundN "työn" (k10 "antaja")) ;
 employment_N = mkWN (k19 "työ") ;
 emporium_N = mkWN (compoundN "tavara" (k1 "talo")) ;
 empower_V2 = mkWV2 (k53A "valtuuttaa") ;
@@ -17262,7 +17262,7 @@ engelmannia_N = mkWN "engelmannia" ;
 engender_V2 = mkWV2 (k53A "siittää") ;
 engine_N = mkWN (k6 "moottori") ;
 engine_driver_N = mkWN (compoundN "veturin" (k10 "kuljettaja")) ;
-engineer_N = mkWN (k5 "insinööri") ;
+--MANUAL5_3 engineer_N = mkWN (k5 "insinööri") ;
 engineer_V = mkWV (k53A "toteuttaa") ;
 engineer_V2 = mkWV2 (k53A "toteuttaa") ;
 engineering_N = mkWN (k12 "teknologia") ;
@@ -17437,7 +17437,7 @@ entrepot_N = mkWN (k2 "varasto") ;
 entrepreneur_N = mkWN (k10 "yrittäjä") ;
 entrepreneurial_A = mkWA "yrittäjän" ;
 entrust_V2 = mkWV2 (k52 "uskoa") ;
-entry_N = mkWN (compoundN "sisään" (k1 "tulo")) ;
+--MANUAL5_3 entry_N = mkWN (compoundN "sisään" (k1 "tulo")) ;
 entwine_V2 = mkWV2 (k52 "punoa") "yhteen" ;
 --MANUAL10 -- enucleation_N n NOT_IN_KOTUS
 enumerate_V2 = mkWV2 (k67A "eritellä") ;
@@ -17454,7 +17454,7 @@ envenom_V2 = mkWV2 (k53A "myrkyttää") ;
 enviable_A = mkWA "kadehdittava" ;
 envious_A = mkWA (k38 "mustasukkainen") ;
 environ_V2 = mkWV2 (k53 "reunustaa") ;
-environment_N = mkWN (k1 "ympäristö") ;
+--MANUAL5_3 environment_N = mkWN (k1 "ympäristö") ;
 environmental_A = mkWA "ympäristö-" ;
 environmentalism_N = mkWN (compoundN "ympäristön" (k2 "suojelu")) ;
 environmentalist_N = mkWN (compoundN "ympäristön" (k12 "suojelija")) ;
@@ -17612,7 +17612,7 @@ epoxy_N = mkWN (compoundN "epoksi" (k9 "liima")) ;
 epsilon_N = mkWN "epsilon" ;
 eptatretus_N = mkWN "eptatretus" ;
 equable_A = mkWA (k26 "tyyni") ;
-equal_A = mkWA (k10 "vastaava") ;
+--MANUAL5_3 equal_A = mkWA (k10 "vastaava") ;
 equal_N = mkWN (k38 "vertainen") ;
 equal_V2 = mkWV2 (k56A "saattaa") "samanarvoiseksi" ;
 equalitarian_N = mkWN (k10 "kannattava") "tasa-arvoisuutta" ;
@@ -17787,7 +17787,7 @@ esoterica_N = mkWN (compoundN "esoter" (k9A "iikka")) ;
 esp_N = mkWN (k1A "havainto") "yliaistillinen" ;
 espadrille_N = mkWN (k6 "sandaali") "punospohjainen" ;
 espalier_N = mkWN (k4A "säleikkö") ;
-especial_A = mkWA (k38 "erikoinen") ;
+--MANUAL5_3 especial_A = mkWA (k38 "erikoinen") ;
 esperanto_N = mkWN (k1 "esperanto") ;
 espionage_N = mkWN (k2 "vakoilu") ;
 esplanade_N = mkWN (k5 "esplanadi") ;
@@ -17991,7 +17991,7 @@ evenhanded_A = mkWA (k34A "puolueeton") ;
 evening_N = mkWN (k9A "ilta") ;
 evenness_N = mkWN (k40 "tasapuolisuus") ;
 evensong_N = mkWN (compoundN "ilta" (k40 "hartaus")) ;
-event_N = mkWN (k40 "tilaisuus") ;
+--MANUAL5_3 event_N = mkWN (k40 "tilaisuus") ;
 eventful_A = mkWA (k41A "vauhdikas") ;
 eventide_N = mkWN (k9A "ilta") ;
 eventration_N = mkWN (compoundN "vatsa" (k10 "tyrä")) "suuri" ;
@@ -18245,7 +18245,7 @@ exothermic_A = mkWA (k10 "kehittävä") "lämpöä" ;
 exotic_A = mkWA (k38 "eksoottinen") ;
 exoticism_N = mkWN (k40 "eksoottisuus") ;
 exotoxin_N = mkWN (compoundN "ekso" (k5 "toksiini")) ;
-expand_V = mkWV (k52A "laajentua") ;
+--MANUAL5_3 expand_V = mkWV (k52A "laajentua") ;
 --MANUAL expand_V2 = mkWV2 (k52A "laajentua") ;
 expand_V2V = mkWV2V (k52A "laajentua") ;
 expandable_A = mkWA (compoundA "laaje" (k9 "neva")) ;
@@ -18267,7 +18267,7 @@ expect_VS = mkWVS (k53A "odottaa") ; ---MANC
 expectable_A = mkWA (k10 "oleva") "odotettavissa" ;
 expectancy_N = mkWN (k39 "odotus") ;
 --PLURNOUN --POSTPONE expectant_A = mkWA (k10 "oleva") "raskauden" "loppuvaiheessa" ;
-expectation_N = mkWN (k10 "näkymä") ;
+--MANUAL5_3 expectation_N = mkWN (k10 "näkymä") ;
 expectedness_N = mkWN (compoundN "toden" (k40 "näköisyys")) ;
 expectorant_N = mkWN (k48A "lääke") "limaa" "poistava" ;
 expectorate_V = mkWV (k58A "sylkeä") ;
@@ -18290,7 +18290,7 @@ expense_N = mkWN (k39 "kustannus") ;
 --MANUAL10 -- expensive_A a NOT_IN_KOTUS
 expensiveness_N = mkWN (k40 "kalleus") ;
 experience_N = mkWN (k39 "kokemus") ;
-experience_V2 = mkWV2 (k58A "kokea") ;
+--MANUAL5_3 experience_V2 = mkWV2 (k58A "kokea") ;
 experienced_A = mkWA (k47 "kokenut") ;
 experiential_A = mkWA (compoundA "kokemus" (k38 "peräinen")) ;
 experiment_N = mkWN (k2 "kokeilu") ;
@@ -18347,7 +18347,7 @@ exponent_N = mkWN (k5 "potenssi") ;
 exponential_A = mkWA (k38 "räjähdysmäinen") ;
 exponential_N = mkWN (compoundN "eksponentti" (k3 "funktio")) ;
 exponentiation_N = mkWN (k39 "korotus") "potenssiin" ;
-export_N = mkWN (k5A "vienti") ;
+--MANUAL5_3 export_N = mkWN (k5A "vienti") ;
 export_V = mkWV (k64 "viedä") ;
 export_V2 = mkWV2 (k64 "viedä") ;
 exportable_A = mkWA "vienti-" ;
@@ -18780,7 +18780,7 @@ farfetched_A = mkWA "epätodennäköinen" ;
 farina_N = mkWN (k1 "jauho") ;
 farinaceous_A = mkWA (k38 "jauhomainen") ;
 farkleberry_N = mkWN (k14A "puolukka") ;
-farm_N = mkWN (k9 "tila") ;
+--MANUAL5_3 farm_N = mkWN (k9 "tila") ;
 farm_V = mkWV (k53 "valmistaa") ;
 farm_V2 = mkWV2 (k53 "valmistaa") ;
 farm_out_V2 = mkWV2 (k53A "teettää") "alihankintana" ;
@@ -18908,7 +18908,7 @@ favor_VS = mkWVS (k61 "suosia") ;
 favorable_A = mkWA (k10 "suotuisa") ;
 favorableness_N = mkWN (k40 "kannattavuus") ;
 favoritism_N = mkWN (k9A "syrjintä") ;
-favour_N = mkWN (compoundN "suosion" (k39 "osoitus")) ;
+--MANUAL5_3 favour_N = mkWN (compoundN "suosion" (k39 "osoitus")) ;
 favour_V2 = mkWV2 (k61 "suosia") ;
 favourable_A = mkWA (k10 "suotuisa") ;
 favourite_A = mkWA "mieli-" ;
@@ -18918,7 +18918,7 @@ favus_N = mkWN (compoundN "rupi" (k9 "silsa")) ;
 fawn_N = mkWN (kH1 "vasa") ;
 fawn_V = mkWV (k62 "vasikoida") ;
 fealty_N = mkWN (k40 "uskollisuus") ;
-fear_N = mkWN (k1 "kauhu") ;
+--MANUAL5_3 fear_N = mkWN (k1 "kauhu") ;
 fear_V = mkWV (k53A "kunnioittaa") "syvästi" ;
 --PLURNOUN --PREDEF fear_V2 = mkWV2 (k53A "kunnioittaa") "syvästi" ;
 --PLURNOUN --PREDEF fear_VS = mkWVS (k53A "kunnioittaa") "syvästi" ;
@@ -19234,7 +19234,7 @@ fiduciary_A = mkWA (k1A "uskottu") ;
 fiduciary_N = mkWN (k42 "mies") "uskottu" ;
 fief_N = mkWN (k39 "läänitys") ;
 fiefdom_N = mkWN (compoundN "seuraaja" (k10A "kunta")) ;
-field_N = mkWN (k9 "ala") ;
+--MANUAL5_3 field_N = mkWN (k9 "ala") ;
 --PLURNOUN --POSTPONE field_V = mkWV (kH1 "panna") "kentälle" ;
 --PLURNOUN --POSTPONE field_V2 = mkWV2 (kH1 "panna") "kentälle" ;
 field_hospital_N = mkWN (compoundN "kenttä" (k13 "sairaala")) ;
@@ -19292,7 +19292,7 @@ filature_N = mkWN (compoundN "vyyhdin" (k18 "puu")) ;
 filbert_N = mkWN (k12 "pähkinä") ;
 filch_V2 = mkWV2 (k67 "näpistellä") ;
 file_N = mkWN (k9 "viila") ;
-file_V = mkWV (k53 "nostaa") "kanne" ;
+--MANUAL5_3 file_V = mkWV (k53 "nostaa") "kanne" ;
 --MANUAL file_V2 = mkWV2 (k53 "nostaa") "kanne" ;
 file_away_V2 = mkWV2 (k54A "tallentaa") ;
 filefish_N = mkWN (compoundN "säppi" (k9 "kala")) ;
@@ -19355,10 +19355,10 @@ finalist_N = mkWN (k5 "finalisti") ;
 finality_N = mkWN (k40 "lopullisuus") ;
 finalization_N = mkWN (k2 "viimeistely") ;
 finalize_V2 = mkWV2 (k64 "lyödä") "lukkoon" ;
-finance_N = mkWN (k39 "rahoitus") ;
+--MANUAL5_3 finance_N = mkWN (k39 "rahoitus") ;
 finance_V2 = mkWV2 (k53A "rahoittaa") ;
 financial_A = mkWA (k38 "taloudellinen") ;
-financier_N = mkWN (k10 "rahoittaja") ;
+--MANUAL5_3 financier_N = mkWN (k10 "rahoittaja") ;
 financing_N = mkWN (k39 "rahoitus") ;
 finback_N = mkWN (compoundN "uurteis" (k41 "valas")) ;
 finch_N = mkWN (k1A "peippo") ;
@@ -20839,7 +20839,7 @@ furrow_N = mkWN (k1A "vako") ;
 furrow_V = mkWV (k71 "tehdä") "uurre" ;
 furrow_V2 = mkWV2 (k71 "tehdä") "uurre" ;
 furry_A = mkWA (k38 "karvainen") ;
-further_A = mkWA (k10 "oleva") "kauempana" ;
+--MANUAL5_3 further_A = mkWA (k10 "oleva") "kauempana" ;
 --PLURNOUN --POSTPONE further_AdV = mkWAdV (k10 "oleva") "kauempana" ;
 further_Adv = mkWAdv (k99 "kauempana") ;
 further_V2 = mkWV2 (k53 "edistää") ;
@@ -20877,7 +20877,7 @@ fusty_A = mkWA (compoundA "vanhan" (k38 "aikainen")) ;
 futile_A = mkWA (k10 "tyhjä") ;
 futility_N = mkWN (k40 "hyödyttömyys") ;
 futon_N = mkWN "futon" ;
-future_A = mkWA (k10 "tuleva") ;
+--MANUAL5_3 future_A = mkWA (k10 "tuleva") ;
 future_N = mkWN (k6 "futuuri") ;
 futureless_A = mkWA "vailla" "tulevaisuutta" ;
 futurism_N = mkWN (k5 "futurismi") ;
@@ -21011,7 +21011,7 @@ gambol_N = mkWN (k2 "hulluttelu") ;
 gambol_V = mkWV (k68 "karkeloida") ;
 gambrel_N = mkWN (compoundN "taite" (k1A "katto")) ;
 game_A = mkWA (k15 "rohkea") ;
-game_N = mkWN (k5 "peli") ;
+--MANUAL5_3 game_N = mkWN (k5 "peli") ;
 game_V = mkWV (k73 "riskeerata") ;
 game_V2 = mkWV2 (k73 "riskeerata") ;
 game_bird_N = mkWN (compoundN "riista" (k1A "lintu")) ;
@@ -21121,7 +21121,7 @@ garrotte_N = mkWN (compoundN "rauta" (k9A "lanka")) ;
 garrulity_N = mkWN (k40 "suulaus") ;
 garrulous_A = mkWA (k41 "puhelias") ;
 garter_N = mkWN (compoundN "sukka" (k9 "nauha")) ;
-gas_N = mkWN (k1 "kaasu") ;
+--MANUAL5_3 gas_N = mkWN (k1 "kaasu") ;
 gas_V = mkWV (k67A "rehennellä") ;
 gas_V2 = mkWV2 (k67A "rehennellä") ;
 gas_bracket_N = mkWN (compoundN "kaasu" (k33A "suutin")) ;
@@ -21446,7 +21446,7 @@ gesture_V = mkWV (k52A "viittoa") ;
 --PLURNOUN --PREDEF get_V = mkWV (k73A "napata") ;
 --MANUAL get_V2 = mkWV2 (k73A "napata") ;
 get_V2V = mkWV2V (k73A "napata") ;
-get_VA = mkWVA (k73A "napata") ;
+--MANUAL5_3 get_VA = mkWVA (k73A "napata") ;
 get_VS = mkWVS (k73A "napata") ;
 --MANUALVV get_VV = mkWVV (k73A "napata") ;
 --PLURNOUN --POSTPONE get_about_V = mkWV (kH1 "päästä") "liikkumaan" ;
@@ -22079,7 +22079,7 @@ governed_N = mkWN (k9 "kansa") ;
 governess_N = mkWN (compoundN "koti" (k32A "opettajatar")) ;
 --PLURNOUN --PREDEF government_N = mkWN (k1A "hoito") ;
 --PLURNOUN --POSTPONE governmental_A = mkWA (compoundA "hallituk" (k99 "sen")) ;
-governor_N = mkWN (k33 "tasain") ;
+--MANUAL5_3 governor_N = mkWN (k33 "tasain") ;
 governor_general_N = mkWN (compoundN "kenraali" (k5 "kuvernööri")) ;
 governorship_N = mkWN (compoundN "maaherran" (k9A "virka")) ;
 gown_N = mkWN (k1A "puku") "naisen" ;
@@ -23863,7 +23863,7 @@ highlight_V2 = mkWV2 (k53 "korostaa") ;
 highlighter_N = mkWN (compoundN "korostus" (k10 "kynä")) ;
 highness_N = mkWN (k40 "korkeus") ;
 highroad_N = mkWN (compoundN "runko" (k19 "tie")) ;
-highway_N = mkWN (compoundN "runko" (k19 "tie")) ;
+--MANUAL5_3 highway_N = mkWN (compoundN "runko" (k19 "tie")) ;
 highwayman_N = mkWN (k10 "kaappaaja") ;
 hijab_N = mkWN "hijab" ;
 hijack_N = mkWN (k39 "kaappaus") ;
@@ -24398,7 +24398,7 @@ hotbed_N = mkWN (compoundN "taimi" (k9 "lava")) ;
 --PLURNOUN hotbox_N = mkWN (k6 "akselinlaakeri") "kuumentunut" ;
 hotchpotch_N = mkWN (compoundN "lihavihannes" (k39 "muhennos")) ;
 hotdog_N = mkWN (kH1 "nakki") ;
-hotel_N = mkWN (k6 "hotelli") ;
+--MANUAL5_3 hotel_N = mkWN (k6 "hotelli") ;
 hotelier_N = mkWN (k10 "johtaja") "hotellin" ;
 hotfoot_Adv = mkWAdv (k99 "vilkkaa") "kiireen" ;
 hotfoot_N = mkWN (k9 "pila") "käytännön" ;
@@ -25012,7 +25012,7 @@ identifiable_A = mkWA "tunnistettava" ;
 identification_N = mkWN "tunnistaminen" ;
 identifier_N = mkWN (k48 "tunniste") ;
 identify_V = mkWV (k53 "tunnistaa") ;
-identify_V2 = mkWV2 (k53 "tunnistaa") ;
+--MANUAL5_3 identify_V2 = mkWV2 (k53 "tunnistaa") ;
 identikit_N = mkWN (compoundN "tunnistus" (k10 "kuva")) ;
 identity_N = mkWN (k40 "yksilöllisyys") ;
 ideogram_N = mkWN "ideografi" ;
@@ -25659,7 +25659,7 @@ incorruptibility_N = mkWN "korruptoitumattomuus" ;
 incorruptible_A = mkWA (k34A "lahjomaton") ;
 incorruptness_N = mkWN (k40 "turmeltumattomuus") ;
 --MANUAL10 increase_N = mkWN (k1 "nosto") ;
-increase_V = mkWV (k54A "suurentaa") ;
+--MANUAL5_3 increase_V = mkWV (k54A "suurentaa") ;
 --PLURNOUN --PREDEF increase_V2 = mkWV2 (k54A "suurentaa") ;
 increasingly_Adv = mkWAdv (k99 "enemmän") "yhä" ;
 incredibility_N = mkWN (k40 "uskomattomuus") ;
@@ -25801,7 +25801,7 @@ indistinctness_N = mkWN (k40 "hämäryys") ;
 indite_V2 = mkWV2 (k67 "kynäillä") ;
 indium_N = mkWN (k5 "indium") ;
 --PLURNOUN --PREDEF individual_A = mkWA (k38 "yksittäinen") ;
-individual_N = mkWN (k7A "henki") ;
+--MANUAL5_3 individual_N = mkWN (k7A "henki") ;
 individualism_N = mkWN (k5 "individualismi") ;
 individualist_A = mkWA (k38 "individualistinen") ;
 individualist_N = mkWN (k5 "individualisti") ;
@@ -26181,7 +26181,7 @@ inquire_V = mkWV (k67 "tiedustella") ;
 inquire_V2 = mkWV2 (k67 "tiedustella") ;
 inquirer_N = mkWN (k10 "kysyjä") ;
 inquiringly_Adv = mkWAdv (k99 "kysyvästi") ;
-inquiry_N = mkWN (k39 "tutkimus") ;
+--MANUAL5_3 inquiry_N = mkWN (k39 "tutkimus") ;
 inquisition_N = mkWN (k3 "inkvisitio") ;
 inquisitive_A = mkWA (k41 "utelias") ;
 inquisitiveness_N = mkWN (k40 "uteliaisuus") ;
@@ -26233,7 +26233,7 @@ inshore_Adv = mkWAdv "rantaan" ;
 inside_A = mkWA "sisä-" ;
 inside_Adv = mkWAdv (k99 "huolimatta") "ulkonäöstä" ;
 inside_N = mkWN (k13 "sisusta") ;
-insider_N = mkWN (k32 "jäsen") "sisäpiirin" ;
+--MANUAL5_3 insider_N = mkWN (k32 "jäsen") "sisäpiirin" ;
 insidious_A = mkWA (k38 "haitallinen") ;
 insidiousness_N = mkWN (compoundN "sala" (k40 "kavaluus")) ;
 insight_N = mkWN (k5 "aisti") "kuudes" ;
@@ -26513,7 +26513,7 @@ intern_V2 = mkWV2 (k67 "olla") "työharjoittelussa" ;
 --MANUAL10 -- internal_A a NOT_IN_KOTUS
 internalization_N = mkWN (k39 "sisäistys") ;
 internalize_V2 = mkWV2 (k53 "sisäistää") ;
-international_A = mkWA (compoundA "kansain" (k38 "välinen")) ;
+--MANUAL5_3 international_A = mkWA (compoundA "kansain" (k38 "välinen")) ;
 international_N = mkWN (k5 "internationaali") ;
 internationale_N = mkWN (k8 "Internationale") ;
 internationalism_N = mkWN (k5 "internationalismi") ;
@@ -26747,7 +26747,7 @@ invertible_A = mkWA "kääntyvä" ;
 invest_V2 = mkWV2 (k73 "satsata") ;
 investigate_V = mkWV (k67 "tiedustella") ;
 investigate_V2 = mkWV2 (k67 "tiedustella") ;
-investigation_N = mkWN (k9A "tutkinta") ;
+--MANUAL5_3 investigation_N = mkWN (k9A "tutkinta") ;
 investigator_N = mkWN (k10 "etsivä") ;
 investing_N = mkWN (k5A "investointi") ;
 investiture_N = mkWN (k39 "ylennys") ;
@@ -28035,7 +28035,7 @@ laborer_N = mkWN (k38 "työläinen") ;
 laborious_A = mkWA (k10 "vaativa") ;
 laboriousness_N = mkWN (k40 "työläys") ;
 laborsaving_A = mkWA "työtä" "säästävä" ;
-labour_N = mkWN (k5A "ahkerointi") ;
+--MANUAL5_3 labour_N = mkWN (k5A "ahkerointi") ;
 labour_V = mkWV (k53A "synnyttää") ;
 labour_V2 = mkWV2 (k53A "synnyttää") ;
 labourer_N = mkWN (k38 "työläinen") ;
@@ -28059,7 +28059,7 @@ lacework_N = mkWN (compoundN "punonta" (k19 "työ")) ;
 lachrymal_A = mkWA (compoundA "lakrima" (k38 "alinen")) ;
 lachrymose_A = mkWA (k38 "itkuinen") ;
 lacing_N = mkWN (k39 "löylytys") ;
-lack_N = mkWN (k39 "vajaus") ;
+--MANUAL5_3 lack_N = mkWN (k39 "vajaus") ;
 --PLURNOUN --POSTPONE lack_V = mkWV (k67 "olla") "vailla" "jotakin" ;
 --PLURNOUN --POSTPONE lack_V2 = mkWV2 (k67 "olla") "vailla" "jotakin" ;
 lackadaisical_A = mkWA (k15 "raukea") ;
@@ -29033,7 +29033,7 @@ lignosae_N = mkWN "lignosae" ;
 lignum_N = mkWN "lignum" ;
 ligule_N = mkWN (k48A "kieleke") ;
 likable_A = mkWA (k10 "miellyttävä") ;
-like_A = mkWA (k38 "samanlainen") ;
+--MANUAL5_3 like_A = mkWA (k38 "samanlainen") ;
 like_N = mkWN (k38 "lainen") ;
 --PLURNOUN --PREDEF like_V2 = mkWV2 (k53A "pitää") ;
 like_V2V = mkWV2V (k53A "pitää") ;
@@ -29082,7 +29082,7 @@ limerick_N = mkWN (k5A "limerikki") ;
 limestone_N = mkWN (compoundN "kalkki" (k7 "kivi")) ;
 limewater_N = mkWN (compoundN "kalkki" (k27 "vesi")) ;
 limey_N = mkWN (k5 "engelsmanni") ;
-limit_N = mkWN (kH1 "raja") ;
+--MANUAL5_3 limit_N = mkWN (kH1 "raja") ;
 --MANUAL limit_V2 = mkWV2 (k54A "vähentää") ;
 limitation_N = mkWN (k39 "rajoitus") ;
 limitedly_Adv = mkWAdv (k99 "rajallisesti") ;
@@ -29212,7 +29212,7 @@ liquidate_V = mkWV (k62 "likvidoida") ;
 liquidate_V2 = mkWV2 (k62 "likvidoida") ;
 liquidation_N = mkWN (k5A "likvidointi") ;
 liquidator_N = mkWN (compoundN "pesän" (k10 "hoitaja")) ;
-liquidity_N = mkWN (compoundN "maksu" (k40 "valmius")) ;
+--MANUAL5_3 liquidity_N = mkWN (compoundN "maksu" (k40 "valmius")) ;
 liquidize_V2 = mkWV2 (k53A "sulattaa") ;
 liquidizer_N = mkWN (compoundN "teho" (k33A "sekoitin")) ;
 liquor_N = mkWN (compoundN "väki" (k10 "juoma")) ;
@@ -29230,7 +29230,7 @@ lissome_A = mkWA (k10 "taipuisa") ;
 lissomeness_N = mkWN (k40 "taipuisuus") ;
 --PLURNOUN --PREDEF list_N = mkWN (k10 "kallistuma") ;
 list_V = mkWV (k67A "luetella") ;
-list_V2 = mkWV2 (k67A "luetella") ;
+--MANUAL5_3 list_V2 = mkWV2 (k67A "luetella") ;
 list_V2V = mkWV2V (k67A "luetella") ;
 list_price_N = mkWN "ohjevähittäishinta" ;
 listen_V = mkWV (k67A "kuunnella") ;
@@ -30126,7 +30126,7 @@ maidenliness_N = mkWN (k40 "neitseellisyys") ;
 maidenly_A = mkWA (k38 "neitseellinen") ;
 maidservant_N = mkWN (k32A "palvelijatar") ;
 maigre_N = mkWN (compoundN "kotka" (k9 "kala")) ;
-mail_N = mkWN (compoundN "silmukka" (k6 "panssari")) ;
+--MANUAL5_3 mail_N = mkWN (compoundN "silmukka" (k6 "panssari")) ;
 mail_V2 = mkWV2 (k53A "toimittaa") ;
 mail_train_N = mkWN (compoundN "posti" (k10 "juna")) ;
 mailbag_N = mkWN (compoundN "posti" (k1A "laukku")) ;
@@ -30165,7 +30165,7 @@ majolica_N = mkWN (k13 "majolika") ;
 --MANUAL10 -- major_A a NOT_IN_KOTUS
 major_N = mkWN (compoundN "saksan" (k10 "seisoja")) "lyhytkarvainen" ;
 --PLURNOUN --POSTPONE major_V = mkWV (k67 "opiskella") "jtak" "pääaineenaan" ;
-majority_N = mkWN (k10 "osa") "suurin" ;
+--MANUAL5_3 majority_N = mkWN (k10 "osa") "suurin" ;
 majuscular_A = mkWA (compoundA "versa" (k38 "alinen")) ;
 majuscule_A = mkWA (compoundA "versa" (k38 "alinen")) ;
 --MANUAL10 -- make_N n NOT_IN_KOTUS
@@ -30509,7 +30509,7 @@ margarita_N = mkWN (compoundN "marga" (k9A "rita")) ;
 margate_N = mkWN (compoundN "muri" (k9 "sija")) ;
 margay_N = mkWN (compoundN "pitkähäntä" (k9 "kissa")) ;
 marge_N = mkWN (k1 "öljy") ;
-margin_N = mkWN (k5 "toleranssi") ;
+--MANUAL5_3 margin_N = mkWN (k5 "toleranssi") ;
 marginal_A = mkWA (k38 "marginaalinen") ;
 --PLURNOUN marginalia_N = mkWN "reunahuomautukset" ;
 marginality_N = mkWN (k40 "vähäpätöisyys") ;
@@ -30740,7 +30740,7 @@ mateless_A = mkWA (k34A "naimaton") ;
 matelote_N = mkWN "sekakalamuhennos" ;
 mater_N = mkWN (k5A "äiti") ;
 material_A = mkWA (k38 "todellinen") ;
-material_N = mkWN (k48A "vaate") ;
+--MANUAL5_3 material_N = mkWN (k48A "vaate") ;
 materialism_N = mkWN (k5 "materialismi") ;
 materialist_N = mkWN (k5 "materialisti") ;
 materialistic_A = mkWA (k38 "materialistinen") ;
@@ -30845,7 +30845,7 @@ mayfly_N = mkWN (k38 "surviainen") ;
 mayhaw_N = mkWN (compoundN "ora" (k10 "pihlaja")) ;
 mayhem_N = mkWN (k1 "tuho") ;
 mayonnaise_N = mkWN (k5 "majoneesi") ;
-mayor_N = mkWN (k6 "pormestari") ;
+--MANUAL5_3 mayor_N = mkWN (k6 "pormestari") ;
 mayoral_A = mkWA "pormestarin" ;
 mayoralty_N = mkWN (compoundN "kaupungin" (k40 "johtajuus")) ;
 mayoress_N = mkWN (k6 "pormestari") ;
@@ -30905,7 +30905,7 @@ measly_A = mkWA (k38 "vähäpätöinen") ;
 measurable_A = mkWA (k10 "oleva") "mitattavissa" ;
 --PLURNOUN --PREDEF measure_N = mkWN (k10 "summa") ;
 measure_V = mkWV (k73A "mitata") ;
-measure_V2 = mkWV2 (k73A "mitata") ;
+--MANUAL5_3 measure_V2 = mkWV2 (k73A "mitata") ;
 measure_out_V2 = mkWV2 (k73A "mitata") ;
 measure_up_V = mkWV (k53A "täyttää") "vaatimukset" ;
 measure_up_V2 = mkWV2 (k53A "täyttää") "vaatimukset" ;
@@ -31116,7 +31116,7 @@ memorialize_V2 = mkWV2 (k53A "säilyttää") "jälkipolville" ;
 memorization_N = mkWN (compoundN "ope" (k38 "tteleminen")) "ulkoa" ;
 memorize_V2 = mkWV2 (k56 "painaa") "muistiin" ;
 memorizer_N = mkWN "ulkoa" "opettelija" ;
-memory_N = mkWN (k5 "muisti") ;
+--MANUAL5_3 memory_N = mkWN (k5 "muisti") ;
 memsahib_N = mkWN "memsahib" ;
 menace_N = mkWN (k10 "uhka") ;
 menace_V2 = mkWV2 (k73A "uhata") ;
@@ -31192,7 +31192,7 @@ mercenary_N = mkWN (compoundN "palkka" (k6 "soturi")) ;
 mercer_N = mkWN (k41 "kauppias") ;
 mercerize_V2 = mkWV2 (k62 "merseroida") ;
 merchandise_N = mkWN (k12 "tavara") ;
-merchant_N = mkWN (k41 "kauppias") ;
+--MANUAL5_3 merchant_N = mkWN (k41 "kauppias") ;
 merchantability_N = mkWN (compoundN "myynti" (k40 "kelpoisuus")) ;
 merchantman_N = mkWN (compoundN "kauppa-" (k39 "alus")) ;
 merciful_A = mkWA (k41 "armelias") ;
@@ -32069,7 +32069,7 @@ mod_N = mkWN "modi" ;
 modal_A = mkWA (k38 "modaalinen") ;
 modality_N = mkWN "modaliteetti" ;
 mode_N = mkWN (k5 "tyyli") ;
-model_N = mkWN (k39 "mallinnus") ;
+--MANUAL5_3 model_N = mkWN (k39 "mallinnus") ;
 model_V = mkWV (k73A "muokata") ;
 model_V2 = mkWV2 (k73A "muokata") ;
 modeler_N = mkWN (k12 "muotoilija") ;
@@ -32405,7 +32405,7 @@ moppet_N = mkWN (k2 "tyllerö") ;
 moquette_N = mkWN "moketti" ;
 moraceous_A = mkWA (compoundA "mulperi" (k38 "mainen")) ;
 moraine_N = mkWN (k6 "moreeni") ;
-moral_A = mkWA (k38 "moraalinen") ;
+--MANUAL5_3 moral_A = mkWA (k38 "moraalinen") ;
 moral_N = mkWN (k1 "läksy") ;
 morale_N = mkWN (k7A "henki") ;
 moralism_N = mkWN (k5 "moralismi") ;
@@ -32482,7 +32482,7 @@ mortality_N = mkWN (k40 "kuolevaisuus") ;
 mortar_N = mkWN (k5 "haupitsi") ;
 mortar_V2 = mkWV2 (k52A "sitoa") "laastilla" ;
 mortarboard_N = mkWN (k48 "päähine") "akateeminen" ;
-mortgage_N = mkWN (k39 "kiinnitys") ;
+--MANUAL5_3 mortgage_N = mkWN (k39 "kiinnitys") ;
 mortgage_V2 = mkWV2 (k53A "kiinnittää") ;
 mortgagee_N = mkWN (compoundN "kiinnitys" (k10 "velkoja")) ;
 mortgagor_N = mkWN (compoundN "kiinnitys" (k38 "velallinen")) ;
@@ -33388,7 +33388,7 @@ negotiable_A = mkWA (k10 "vaihdettava") ;
 negotiate_V = mkWV (k61A "sopia") "ehdoista" ;
 --MANUAL negotiate_V2 = mkWV2 (k61A "sopia") "ehdoista" ;
 negotiate_VV = mkWVV (k61A "sopia") "ehdoista" ;
-negotiation_N = mkWN (k2 "neuvottelu") ;
+--MANUAL5_3 negotiation_N = mkWN (k2 "neuvottelu") ;
 negotiator_N = mkWN (k12 "sovittelija") ;
 negotiatress_N = mkWN (k12 "sovittelija") ;
 negress_N = mkWN (compoundN "neekeri" (k38 "nainen")) ;
@@ -34130,7 +34130,7 @@ norethindrone_N = mkWN (compoundN "noretindroni" (k5A "asetaatti")) ;
 --PLURNOUN --POSTPONE norgestrel_N = mkWN (compoundN "norgestre" (k99 "eli")) ;
 noria_N = mkWN (compoundN "vedennosto" (k41A "ratas")) ;
 norm_N = mkWN (k6 "standardi") ;
-normal_A = mkWA (k6 "normaali") ;
+--MANUAL5_3 normal_A = mkWA (k6 "normaali") ;
 normal_N = mkWN (k1A "käytäntö") ;
 normalcy_N = mkWN (k40 "tavallisuus") ;
 normality_N = mkWN (k40 "normaalius") ;
@@ -34557,7 +34557,7 @@ obtuseness_N = mkWN (k40 "tylsyys") ;
 obverse_N = mkWN (compoundN "kuva" (k26 "puoli")) ;
 obviate_V2 = mkWV2 (k53A "pysäyttää") ;
 obviation_N = mkWN (k2 "ehkäisy") ;
-obvious_A = mkWA (kH1 "ilmeinen") ;
+--MANUAL5_3 obvious_A = mkWA (kH1 "ilmeinen") ;
 obviousness_N = mkWN (k40 "havaittavuus") ;
 oca_N = mkWN (compoundN "ketun" (k10A "leipä")) ;
 ocarina_N = mkWN (k9 "okariina") ;
@@ -34654,7 +34654,7 @@ oenomel_N = mkWN (k5 "hunajaviini") ;
 --PLURNOUN --POSTPONE oersted_N = mkWN "Hans" "Christian" "Oersted" ;
 oesophagus_N = mkWN (k1 "nielu") ;
 oeuvre_N = mkWN (k39 "teos") ;
-of_course_Adv = mkWAdv (k99 "kai") "totta" ;
+--MANUAL5_3 of_course_Adv = mkWAdv (k99 "kai") "totta" ;
 off_A = mkWA (k99 "pois") ;
 off_Adv = mkWAdv (k99 "pois") ;
 --PLURNOUN offal_N = mkWN "teurasjätteet" ;
@@ -34905,7 +34905,7 @@ opaque_A = mkWA (k34A "läpikuultamaton") ;
 opaqueness_N = mkWN (k40 "himmeys") ;
 --PLURNOUN --PREDEF open_A = mkWA (k33 "avoin") ;
 open_N = mkWN (k9A "pinta") ;
-open_V = mkWV (k64 "tuoda") "ilmi" ;
+--MANUAL5_3 open_V = mkWV (k64 "tuoda") "ilmi" ;
 --PLURNOUN --PREDEF open_V2 = mkWV2 (k64 "tuoda") "ilmi" ;
 open_up_V = mkWV (k64 "tuoda") "ilmi" ;
 open_up_V2 = mkWV2 (k64 "tuoda") "ilmi" ;
@@ -34938,7 +34938,7 @@ operationalist_A = mkWA (compoundA "ope" (k38 "rationalistinen")) ;
 operations_N = mkWN (k9A "toiminta") ;
 operative_A = mkWA (k10 "oleva") "voimassa" ;
 operative_N = mkWN (k5A "agentti") ;
-operator_N = mkWN (compoundN "supliikki" (k42 "mies")) ;
+--MANUAL5_3 operator_N = mkWN (compoundN "supliikki" (k42 "mies")) ;
 operculate_A = mkWA "kiduskantinen" ;
 operculum_N = mkWN (compoundN "kidus" (k28 "kansi")) ;
 operetta_N = mkWN (k5A "operetti") ;
@@ -34981,7 +34981,7 @@ oppose_V = mkWV (k53 "vastustaa") ;
 oppose_VS = mkWVS (k53 "vastustaa") ;
 opposite_A = mkWA (k38 "parillinen") ;
 opposite_N = mkWN (k10A "vastakohta") ;
-opposition_N = mkWN (k39 "vastustus") ;
+--MANUAL5_3 opposition_N = mkWN (k39 "vastustus") ;
 oppress_V2 = mkWV2 (k53 "alistaa") ;
 oppression_N = mkWN (k1A "sorto") ;
 oppressive_A = mkWA (k38 "tyrannimainen") ;
@@ -35006,7 +35006,7 @@ optics_N = mkWN (k14A "optiikka") ;
 optimal_A = mkWA (k38 "optimaalinen") ;
 optimism_N = mkWN (k5 "optimismi") ;
 optimist_N = mkWN (k5 "optimisti") ;
-optimistic_A = mkWA (k38 "optimistinen") ;
+--MANUAL5_3 optimistic_A = mkWA (k38 "optimistinen") ;
 optimistically_Adv = mkWAdv (k99 "optimistisesti") ;
 optimization_N = mkWN (k5A "optimointi") ;
 optimum_A = mkWA (k38 "optimaalinen") ;
@@ -35302,7 +35302,7 @@ oust_V = mkWV (k56A "antaa") "potkut" ;
 oust_V2 = mkWV2 (k56A "antaa") "potkut" ;
 ouster_N = mkWN (k39 "karkotus") ;
 out_A = mkWA (k99 "ulkona") ;
-out_Adv = mkWAdv (k99 "ulkona") ;
+--MANUAL5_3 out_Adv = mkWAdv (k99 "ulkona") ;
 out_N = mkWN (k1 "palo") ;
 out_V2 = mkWV2 (k67 "tulla") "ilmi" ;
 out_of_doors_Adv = mkWAdv (k99 "ulkosalla") ;
@@ -35725,7 +35725,7 @@ own_V = mkWV (k67 "olla") "oma" ;
 own_up_V = mkWV (k53 "kakistaa") "ulos" ;
 --PLURNOUN --PREDEF owner_N = mkWN (k10 "omistaja") ;
 ownerless_A = mkWA (compoundA "omist" (k34A "ajaton")) ;
-ownership_N = mkWN (k39 "omistus") ;
+--MANUAL5_3 ownership_N = mkWN (k39 "omistus") ;
 ox_N = mkWN (k10A "härkä") ;
 oxacillin_N = mkWN "oksasilliini" ;
 oxalacetate_N = mkWN (compoundN "oksalo" (k5A "asetaatti")) ;
@@ -36647,7 +36647,7 @@ pawnshop_N = mkWN (kH1 "kani") ;
 pawpaw_N = mkWN "papavi" ;
 pax_N = mkWN (k9 "rauha") "Herran" ;
 pax_romana_N = mkWN "Pax" "Romana" ;
-pay_N = mkWN (k9 "liksa") ;
+--MANUAL5_3 pay_N = mkWN (k9 "liksa") ;
 --PLURNOUN --PREDEF pay_V = mkWV (k52A "omistautua") ;
 --MANUAL pay_V2 = mkWV2 (k52A "omistautua") ;
 pay_V2V = mkWV2V (k52A "omistautua") ;
@@ -36871,7 +36871,7 @@ pen_name_N = mkWN (k5 "pseudonyymi") ;
 penal_A = mkWA "rangaistus-" ;
 penalization_N = mkWN (k39 "rangaistus") ;
 penalize_V2 = mkWV2 (k54A "ojentaa") ;
-penalty_N = mkWN (k39 "rangaistus") ;
+--MANUAL5_3 penalty_N = mkWN (k39 "rangaistus") ;
 penance_N = mkWN (k39 "parannus") ;
 penchant_N = mkWN (k39 "mieltymys") "voimakas" ;
 pencil_N = mkWN (k10 "kynä") ;
@@ -37337,7 +37337,7 @@ petrochemical_N = mkWN (compoundN "petro" (k5 "kemikaali")) ;
 petroglyph_N = mkWN (compoundN "kallio" (k39 "piirros")) ;
 petrol_N = mkWN (k9 "bensa") ;
 petrolatum_N = mkWN (k5 "vaseliini") ;
-petroleum_N = mkWN (k1 "öljy") ;
+--MANUAL5_3 petroleum_N = mkWN (k1 "öljy") ;
 petrology_N = mkWN (k12 "petrologia") ;
 petrous_A = mkWA (compoundA "kivi" (k38 "mäinen")) ;
 petter_N = mkWN "koskettelija" ;
@@ -38091,7 +38091,7 @@ plait_N = mkWN (k48A "taite") ;
 plait_V2 = mkWV2 (k62 "palmikoida") ;
 plaiter_N = mkWN "palmikoija" ;
 --PLURNOUN --PREDEF plan_N = mkWN (k9 "kaava") ;
-plan_V = mkWV (k67 "kaavailla") ;
+--MANUAL5_3 plan_V = mkWV (k67 "kaavailla") ;
 --MANUAL plan_V2 = mkWV2 (k67 "kaavailla") ;
 plan_V2V = mkWV2V (k67 "kaavailla") ;
 plan_VS = mkWVS (k67 "kaavailla") ;
@@ -38285,7 +38285,7 @@ plenitude_N = mkWN (k40 "runsaus") ;
 plenteous_A = mkWA (k99 "paljon") ;
 plentiful_A = mkWA (k99 "paljon") ;
 plenty_Adv = mkWAdv (k99 "kyllin") ;
-plenty_N = mkWN (k40 "runsaus") ;
+--MANUAL5_3 plenty_N = mkWN (k40 "runsaus") ;
 plenum_N = mkWN (k9 "tila") "täysi" ;
 pleochroic_A = mkWA "pleokroinen" ;
 pleochroism_N = mkWN (compoundN "pleokro" (k5 "ismi")) ;
@@ -38579,11 +38579,11 @@ polite_A = mkWA (k41 "kohtelias") ;
 politeness_N = mkWN (k40 "kohteliaisuus") ;
 politic_A = mkWA (k38 "diplomaattinen") ;
 --PLURNOUN --PREDEF political_A = mkWA (k38 "poliittinen") ;
-politician_N = mkWN (k1A "poliitikko") ;
+--MANUAL5_3 politician_N = mkWN (k1A "poliitikko") ;
 politicize_V = mkWV (k62 "politisoida") ;
 politicize_V2 = mkWV2 (k62 "politisoida") ;
 politick_V = mkWV (k62 "laskelmoida") ;
-politics_N = mkWN (compoundN "valtio" (k48A "tiede")) ;
+--MANUAL5_3 politics_N = mkWN (compoundN "valtio" (k48A "tiede")) ;
 polity_N = mkWN (k2 "kieroilu") ;
 polka_N = mkWN (k10A "polkka") ;
 --PLURNOUN --PREDEF poll_N = mkWN (compoundN "äänten" (k1 "lasku")) ;
@@ -38903,7 +38903,7 @@ possessiveness_N = mkWN (k40 "mustasukkaisuus") ;
 possessor_N = mkWN (k12 "haltija") ;
 --PLURNOUN posset_N = mkWN (compoundN "olut" (k1 "juusto")) ;
 --PLURNOUN --PREDEF possibility_N = mkWN (k25 "toimi") "mahdollinen" ;
-possible_A = mkWA (k38 "mahdollinen") ;
+--MANUAL5_3 possible_A = mkWA (k38 "mahdollinen") ;
 possible_N = mkWN (k38 "mahdollinen") ;
 possum_N = mkWN (k5 "opossumi") ;
 post_N = mkWN (kH1 "posti") ;
@@ -39094,7 +39094,7 @@ practicability_N = mkWN (compoundN "käyttö" (k40 "kelpoisuus")) ;
 practicable_A = mkWA (k38 "mahdollinen") ;
 practical_A = mkWA (k38 "käytännöllinen") ;
 practicality_N = mkWN (k40 "käytännöllisyys") ;
-practice_N = mkWN (k9A "tapa") ;
+--MANUAL5_3 practice_N = mkWN (k9A "tapa") ;
 practice_V = mkWV (k73 "treenata") ;
 practice_V2 = mkWV2 (k73 "treenata") ;
 practician_N = mkWN (compoundN "ammatin" (k10 "harjoittaja")) ;
@@ -39230,7 +39230,7 @@ predation_N = mkWN (k39 "saalistus") ;
 predator_N = mkWN (k10 "saalistaja") ;
 predatory_A = mkWA (k41 "ahnas") ;
 predecease_V2 = mkWV2 (k67 "kuolla") "ennen" ;
-predecessor_N = mkWN (k10 "edeltäjä") ;
+--MANUAL5_3 predecessor_N = mkWN (k10 "edeltäjä") ;
 predestinarian_A = mkWA "predestinaatio-" ;
 predestinarianism_N = mkWN (compoundN "predestinaatio-" (k5A "oppi")) ;
 predestinate_A = mkWA (k1A "määrätty") "ennalta" ;
@@ -39561,7 +39561,7 @@ primaeval_A = mkWA (k38 "muinainen") ;
 primal_A = mkWA (k38 "muinainen") ;
 primality_N = mkWN (compoundN "alku" (k1A "luku")) ;
 primaquine_N = mkWN "primakiini" ;
-primary_A = mkWA (compoundA "ensi" (k38 "sijainen")) ;
+--MANUAL5_3 primary_A = mkWA (compoundA "ensi" (k38 "sijainen")) ;
 --PLURNOUN primary_N = mkWN "esivaalit" ;
 primate_N = mkWN (k38 "kädellinen") ;
 primateship_N = mkWN (k9A "virka") "arkkipiispan" ;
@@ -39634,7 +39634,7 @@ prisoner_N = mkWN (k5A "vanki") ;
 prisonlike_A = mkWA (compoundA "vankila" (k38 "mainen")) ;
 pristine_A = mkWA (k34A "turmeltumaton") ;
 privacy_N = mkWN (k9 "rauha") "oma" ;
-private_A = mkWA (k38 "yksityinen") ;
+--MANUAL5_3 private_A = mkWA (k38 "yksityinen") ;
 --PLURNOUN --PREDEF private_N = mkWN (k5 "matruusi") ;
 privateer_N = mkWN (compoundN "kaappari" (k9 "laiva")) ;
 privation_N = mkWN (k48A "puute") ;
@@ -39766,11 +39766,11 @@ profess_V2 = mkWV2 (k53A "opettaa") ;
 profess_V2V = mkWV2V (k53A "opettaa") ;
 professedly_Adv = mkWAdv (compoundAdv "teeskennel" (k5 "lysti")) ;
 profession_N = mkWN (k19 "työ") ;
-professional_A = mkWA (k38 "ammattilainen") ;
+--MANUAL5_3 professional_A = mkWA (k38 "ammattilainen") ;
 professional_N = mkWN (k38 "ammattilainen") ;
 professionalism_N = mkWN (k40 "ammattimaisuus") ;
 professionalization_N = mkWN (compoundN "ammatti" (k38 "laistaminen")) ;
-professor_N = mkWN (k6 "professori") ;
+--MANUAL5_3 professor_N = mkWN (k6 "professori") ;
 professorial_A = mkWA "opettajan" ;
 professorship_N = mkWN (k5 "professuuri") ;
 proffer_N = mkWN (k39 "ehdotus") ;
@@ -39895,7 +39895,7 @@ promontory_N = mkWN (k48A "niemeke") ;
 promote_V = mkWV (k53 "edistää") ;
 promote_V2 = mkWV2 (k53 "edistää") ;
 promoter_N = mkWN (k6 "promoottori") ;
-promotion_N = mkWN (k39 "ylennys") ;
+--MANUAL5_3 promotion_N = mkWN (k39 "ylennys") ;
 promotional_A = mkWA "mainos-" ;
 promotive_A = mkWA (compoundA "promov" (k10 "oiva")) ;
 prompt_A = mkWA (k10 "sukkela") ;
@@ -40104,7 +40104,7 @@ proteolytic_A = mkWA (compoundA "pro" (k38 "teolyyttinen")) ;
 proteome_N = mkWN "proteomi" ;
 proteomics_N = mkWN (compoundN "proteo" (k9A "miikka")) ;
 proterozoic_A = mkWA (compoundA "pro" (k38 "terotsooinen")) ;
-protest_N = mkN "protesti" ; --MANC
+--MANUAL5_3 protest_N = mkN "protesti" ; --MANC
 protest_V = mkWV (k53A "esittää") "vastalause" ;
 protest_V2 = mkWV2 (k53A "esittää") "vastalause" ;
 protestant_A = mkWA (k38 "protestanttinen") ;
@@ -40331,7 +40331,7 @@ pubescent_A = mkWA (k38 "silkkinen") ;
 pubic_A = mkWA "häpy-" ;
 pubis_N = mkWN (compoundN "häpy" (k18 "luu")) ;
 --PLURNOUN --PREDEF public_A = mkWA (k38 "yleinen") ;
-public_N = mkWN (k2 "yleisö") ;
+--MANUAL5_3 public_N = mkWN (k2 "yleisö") ;
 publican_N = mkWN (k12 "kapakoitsija") ;
 publication_N = mkWN (compoundN "kustannus" (k25 "toimi")) ;
 publicist_N = mkWN (k10 "toimittaja") ;
@@ -40862,7 +40862,7 @@ quarterdeck_N = mkWN (compoundN "puoli" (k28 "kansi")) ;
 quarterfinal_N = mkWN (compoundN "puoliväli" (k10 "erä")) ;
 --PLURNOUN --POSTPONE quartering_N = mkWN "jakaminen" "neljään" "osaan" ;
 quarterlight_N = mkWN (compoundN "pikku" (k12 "ikkuna")) ;
-quarterly_A = mkWA (compoundA "neljännes" (k38 "vuosittainen")) ;
+--MANUAL5_3 quarterly_A = mkWA (compoundA "neljännes" (k38 "vuosittainen")) ;
 quarterly_Adv = mkWAdv (k99 "vuosineljänneksittäin") ;
 quarterly_N = mkWN "neljännesvuosijulkaisu" ;
 quartermaster_N = mkWN (compoundN "huolto" (k4A "päällikkö")) ;
@@ -40950,7 +40950,7 @@ quid_pro_quo_N = mkWN (k39 "hyvitys") ;
 quiddity_N = mkWN (k39 "olemus") ;
 quiescence_N = mkWN (k40 "liikkumattomuus") ;
 quiescent_A = mkWA "uinuva" ;
-quiet_A = mkWA (k38 "hiljainen") ;
+--MANUAL5_3 quiet_A = mkWA (k38 "hiljainen") ;
 quiet_N = mkWN (k40 "rauhallisuus") ;
 quiet_V = mkWV (k67A "tyynnytellä") ;
 quiet_V2 = mkWV2 (k67A "tyynnytellä") ;
@@ -41351,7 +41351,7 @@ rapt_A = mkWA (compoundA "hurmio" (k47 "itunut")) ;
 raptorial_A = mkWA "peto-" ;
 rapture_N = mkWN (k39 "hurmos") ;
 rapturous_A = mkWA (compoundA "hurmio" (k47 "itunut")) ;
-rare_A = mkWA (k38 "harvinainen") ;
+--MANUAL5_3 rare_A = mkWA (k38 "harvinainen") ;
 rarebit_N = mkWN (compoundN "voi" (k10A "leipä")) "englantilaistyyppinen" "lämmin" ;
 rarefaction_N = mkWN "ohentuminen" ;
 rarefy_V = mkWV (k54A "laimentaa") ;
@@ -41765,7 +41765,7 @@ recover_V = mkWV (k52A "tervehtyä") ;
 recover_V2 = mkWV2 (k52A "tervehtyä") ;
 recover_V2V = mkWV2V (k52A "tervehtyä") ;
 recoverable_A = mkWA (k10 "saatava") "takaisin" ;
-recovery_N = mkWN (k38 "saaminen") "takaisin" ;
+--MANUAL5_3 recovery_N = mkWN (k38 "saaminen") "takaisin" ;
 recreant_A = mkWA (k38 "raukkamainen") ;
 recreant_N = mkWN (k6 "petturi") ;
 recreate_V2 = mkWV2 (k53 "virkistää") ;
@@ -41885,7 +41885,7 @@ reducible_A = mkWA (k10 "vähennettävä") ;
 reducing_N = mkWN "laihduttaminen" ;
 --PLURNOUN reductase_N = mkWN (compoundN "redukt" (k5 "aasi")) ;
 reductio_ad_absurdum_N = mkWN (k3 "reduktio") ;
-reduction_N = mkWN (k39 "pelkistys") ;
+--MANUAL5_3 reduction_N = mkWN (k39 "pelkistys") ;
 reductionism_N = mkWN (compoundN "reduktion" (k5 "ismi")) ;
 reductionist_A = mkWA (compoundA "reduktio" (k38 "nistinen")) ;
 reductive_A = mkWA (k10 "alentava") ;
@@ -42051,7 +42051,7 @@ regiment_V2 = mkWV2 (k73 "määrätä") "rykmenttiin" ;
 regimental_A = mkWA "rykmentti-" ;
 regimentals_N = mkWN (compoundN "uni" (k1 "formu")) ;
 regimentation_N = mkWN (compoundN "kurissa" (k1A "pito")) ;
-region_N = mkWN (k48 "alue") ;
+--MANUAL5_3 region_N = mkWN (k48 "alue") ;
 regional_A = mkWA (k38 "alueellinen") ;
 regionalism_N = mkWN (k5 "regionalismi") ;
 register_N = mkWN (k9 "kassa") ;
@@ -42075,7 +42075,7 @@ regretful_A = mkWA (k10 "oleva") "pahoillaan" ;
 regrettable_A = mkWA (k1 "huono") ;
 regroup_V = mkWV (k53A "ryhmittää") "uudelleen" ;
 regroup_V2 = mkWV2 (k53A "ryhmittää") "uudelleen" ;
-regular_A = mkWA (k10 "toimiva") ;
+--MANUAL5_3 regular_A = mkWA (k10 "toimiva") ;
 regular_N = mkWN (kH1 "koko") "tavallinen" ;
 regularity_N = mkWN (k40 "säännöllisyys") ;
 regularization_N = mkWN (k2 "säännöstely") ;
@@ -42160,7 +42160,7 @@ relatedness_N = mkWN (k40 "sukulaisuus") ;
 relation_N = mkWN (k48A "suhde") ;
 relational_A = mkWA (k38 "suhteellinen") ;
 relations_N = mkWN (k38 "kanssakäyminen") ;
-relationship_N = mkWN (k48A "suhde") ;
+--MANUAL5_3 relationship_N = mkWN (k48A "suhde") ;
 relative_A = mkWA (k38 "relatiivinen") ;
 relative_N = mkWN (k38 "sukulainen") ;
 relativism_N = mkWN (k5 "relativismi") ;
@@ -42293,7 +42293,7 @@ remunerative_A = mkWA (k10 "tuottoisa") ;
 renaissance_N = mkWN (k5 "renessanssi") ;
 renal_A = mkWA (compoundA "rena" (k38 "alinen")) ;
 rename_V2 = mkWV2 (k75 "nimetä") "uudelleen" ;
-rename_V3 = mkWV3 (k75 "nimetä") "uudelleen" ;
+--MANUAL5_3 rename_V3 = mkWV3 (k75 "nimetä") "uudelleen" ;
 renascence_N = mkWN (k5 "renessanssi") ;
 renascent_A = mkWA "uudelleen" "voimistuva" ;
 rend_V2 = mkWV2 (k53A "revähdyttää") ;
@@ -42495,7 +42495,7 @@ repute_N = mkWN (k48 "maine") ;
 repute_V2 = mkWV2 (k52 "katsoa") ;
 repute_V2V = mkWV2V (k52 "katsoa") ;
 reputedly_Adv = mkWAdv (k99 "kuulemma") ;
-request_N = mkWN (k5 "adressi") ;
+--MANUAL5_3 request_N = mkWN (k5 "adressi") ;
 request_V2 = mkWV2 (k52 "anoa") ;
 request_VS = mkWVS (k52 "anoa") ;
 requiem_N = mkWN "Requiem" ;
@@ -42505,7 +42505,7 @@ require_V = mkWV (k58 "käskeä") ;
 require_V2V = mkWV2V (k58 "käskeä") ;
 require_VS = mkWVS (k58 "käskeä") ;
 --MANUALVV require_VV = mkWVV (k58 "käskeä") ;
-requirement_N = mkWN (k39 "edellytys") ;
+--MANUAL5_3 requirement_N = mkWN (k39 "edellytys") ;
 requisite_A = mkWA (k34A "välttämätön") ;
 requisite_N = mkWN (k48A "tarve") ;
 requisiteness_N = mkWN (k40 "pakollisuus") ;
@@ -42589,7 +42589,7 @@ resinous_A = mkWA (k38 "pihkainen") ;
 resist_V = mkWV (k53 "vastustaa") ;
 resist_V2 = mkWV2 (k53 "vastustaa") ;
 --MANUALVV resist_VV = mkWVV (k53 "vastustaa") ;
-resistance_N = mkWN (k39 "vastustus") ;
+--MANUAL5_3 resistance_N = mkWN (k39 "vastustus") ;
 resistant_A = mkWA (k10 "kestävä") ;
 resister_N = mkWN (k38 "vihollinen") ;
 resistible_A = mkWA (k10 "siedettävä") ;
@@ -42639,7 +42639,7 @@ respite_V2 = mkWV2 (k73A "lykätä") ;
 resplendence_N = mkWN (k40 "upeus") ;
 resplendency_N = mkWN (k40 "upeus") ;
 resplendent_A = mkWA (k10 "mahtava") ;
-respond_V = mkWV (k73 "vastata") ;
+--MANUAL5_3 respond_V = mkWV (k73 "vastata") ;
 respond_V2 = mkWV2 (k73 "vastata") ;
 respond_VS = mkWVS (k73 "vastata") ;
 respondent_N = mkWN (k10 "vastaaja") ;
@@ -42757,7 +42757,7 @@ retinue_N = mkWN (k48 "seurue") ;
 retire_V = mkWV (k67 "mennä") "sänkyyn" ;
 retire_V2 = mkWV2 (k67 "mennä") "sänkyyn" ;
 retiree_N = mkWN (k38 "eläkeläinen") ;
-retirement_N = mkWN "vetäytyminen" ;
+--MANUAL5_3 retirement_N = mkWN "vetäytyminen" ;
 retool_V2 = mkWV2 (k61 "uusia") "kalusto" ;
 retort_N = mkWN (compoundN "tislaus" (k1 "pullo")) ;
 retort_V2 = mkWV2 (k54A "sivaltaa") ;
@@ -43181,7 +43181,7 @@ ripple_V = mkWV (k53A "värisyttää") ;
 ripple_V2 = mkWV2 (k53A "värisyttää") ;
 ripsaw_N = mkWN (compoundN "halkaisu" (k9 "saha")) ;
 riptide_N = mkWN (compoundN "risti" (k4A "aallokko")) ;
-rise_N = mkWN (k1 "nousu") ;
+--MANUAL5_3 rise_N = mkWN (k1 "nousu") ;
 --PLURNOUN --PREDEF rise_V = mkWV (k66 "nousta") "ylös" ;
 --PLURNOUN --PREDEF rise_V2 = mkWV2 (k66 "nousta") "ylös" ;
 rise_VA = mkWVA (k66 "nousta") "ylös" ;
@@ -43336,7 +43336,7 @@ roll_out_V2 = mkWV2 (k53A "levittää") ;
 roll_over_V = mkWV (k53A "pyörähtää") ;
 roll_up_V = mkWV (k61 "kääriä") ;
 rollback_N = mkWN (compoundN "ale" (k38 "neminen")) ;
-roller_N = mkWN (k5A "lyönti") "matala" ;
+--MANUAL5_3 roller_N = mkWN (k5A "lyönti") "matala" ;
 roller_skate_N = mkWN (compoundN "rulla" (k33 "luistin")) ;
 rollerblader_N = mkWN (compoundN "rulla" (k12 "luistelija")) ;
 rollerblading_N = mkWN (compoundN "rulla" (k2 "luistelu")) ;
@@ -43391,7 +43391,7 @@ rook_N = mkWN (k50 "mustavaris") ;
 rook_V2 = mkWV2 (k53A "vedättää") ;
 rookery_N = mkWN (compoundN "pesiytymis" (k48 "alue")) ;
 rookie_N = mkWN (k5 "noviisi") ;
-room_N = mkWN (k48 "huone") ;
+--MANUAL5_3 room_N = mkWN (k48 "huone") ;
 room_V = mkWV (k52 "asua") ;
 roomer_N = mkWN (k38 "vuokralainen") ;
 roomette_N = mkWN (compoundN "makuu" (k9 "tila")) ;
@@ -44580,7 +44580,7 @@ sciatic_A = mkWA (compoundA "iskia" (k38 "alinen")) ;
 sciatica_N = mkWN (k39 "iskias") ;
 --PLURNOUN --PREDEF science_N = mkWN (k1A "tieto") ;
 scienter_Adv = mkWAdv (k99 "tahallisesti") ;
-scientific_A = mkWA (k38 "tieteellinen") ;
+--MANUAL5_3 scientific_A = mkWA (k38 "tieteellinen") ;
 scientifically_Adv = mkWAdv (k99 "tieteellisesti") ;
 --MANUAL10_06 scientist_N = mkWN (k12 "tieteilijä") ;
 scilla_N = mkWN (compoundN "sini" (k9 "lilja")) ;
@@ -45028,7 +45028,7 @@ sect_N = mkWN (k1 "lahko") "uskonnollinen" ;
 sectarian_A = mkWA (k38 "lahkolainen") ;
 sectarian_N = mkWN (k12 "kiihkoilija") ;
 sectarianism_N = mkWN (k40 "lahkolaisuus") ;
-section_N = mkWN (k3 "sektio") ;
+--MANUAL5_3 section_N = mkWN (k3 "sektio") ;
 sectional_A = mkWA "läpileikkaus-" ;
 sectional_N = mkWN (compoundN "huone" (k1 "kalu")) "koottava" ;
 sectionalism_N = mkWN (k5 "provinsialismi") ;
@@ -45425,7 +45425,7 @@ seriatim_Adv = mkWAdv (k99 "yksittäin") ;
 --PLURNOUN --POSTPONE sericultural_A = mkWA (compoundA "silkinviljelyk" (k99 "sen")) ;
 sericulture_N = mkWN (compoundN "silkin" (k2 "viljely")) ;
 sericulturist_N = mkWN (compoundN "silkin" (k12 "viljelijä")) ;
-series_N = mkWN (k9 "sarja") ;
+--MANUAL5_3 series_N = mkWN (k9 "sarja") ;
 serif_N = mkWN (compoundN "pääte" (k9 "viiva")) ;
 serigraphy_N = mkWN (compoundN "silkki" (k1 "paino")) ;
 serin_N = mkWN (compoundN "kelta" (k1A "hemppo")) ;
@@ -45539,7 +45539,7 @@ sever_V2 = mkWV2 (k53A "irrottaa") ;
 severally_Adv = mkWAdv (k99 "eri") ;
 severalty_N = mkWN "severalty" ;
 severance_N = mkWN (k39 "irrotus") ;
-severe_A = mkWA (k10 "ankara") ;
+--MANUAL5_3 severe_A = mkWA (k10 "ankara") ;
 severity_N = mkWN (k40 "jyrkkyys") ;
 --PLURNOUN --PREDEF sew_V = mkWV (k61 "kursia") ;
 sew_V2 = mkWV2 (k61 "kursia") ;
@@ -45679,7 +45679,7 @@ shaping_N = mkWN (k2 "muotoilu") ;
 shard_N = mkWN (k38 "osanen") ;
 --PLURNOUN --PREDEF share_N = mkWN (k40 "osuus") ;
 share_V = mkWV (k56A "jakaa") ;
-share_V2 = mkWV2 (k56A "jakaa") ;
+--MANUAL5_3 share_V2 = mkWV2 (k56A "jakaa") ;
 sharecropper_N = mkWN (compoundN "maan" (k10 "vuokraaja")) ;
 --PLURNOUN --PREDEF shareholder_N = mkWN (compoundN "osakkeen" (k10 "omistaja")) ;
 shareholding_N = mkWN (compoundN "osakkeen" (k39 "omistus")) ;
@@ -46248,7 +46248,7 @@ sigmoid_A = mkWA "vemmelsuolen" ;
 sigmoidectomy_N = mkWN (compoundN "poisto" (k39 "leikkaus")) "sigmasuolen" ;
 sigmoidoscope_N = mkWN (compoundN "sigmoidosko" (k5A "oppi")) "taipuisa" ;
 sigmoidoscopy_N = mkWN "taipuisa" "sigmoidoskopia" ;
-sign_N = mkWN (k7A "kilpi") ;
+--MANUAL5_3 sign_N = mkWN (k7A "kilpi") ;
 sign_V = mkWV (k71 "tehdä") "ristinmerkki" ;
 sign_V2 = mkWV2 (k71 "tehdä") "ristinmerkki" ;
 sign_V2V = mkWV2V (k71 "tehdä") "ristinmerkki" ;
@@ -46379,7 +46379,7 @@ simper_N = mkWN (k1 "hymy") "mairea" ;
 simper_V = mkWV (k67 "hymyillä") "teennäisesti" ;
 simperer_N = mkWN (k12 "teeskentelijä") ;
 simperingly_Adv = mkWAdv (k99 "arasti") ;
-simple_A = mkWA (k34A "jakamaton") ;
+--MANUAL5_3 simple_A = mkWA (k34A "jakamaton") ;
 simple_N = mkWN (k6 "tyhmyri") ;
 simpleton_N = mkWN (k6 "tyhmyri") ;
 simplex_A = mkWA "simplex" ;
@@ -46808,7 +46808,7 @@ slide_V = mkWV (k52 "lipsua") ;
 slide_V2 = mkWV2 (k52 "lipsua") ;
 slide_rule_N = mkWN (compoundN "lasku" (k1A "tikku")) ;
 slider_N = mkWN "slider" ;
-slight_A = mkWA (k38 "vähäinen") ;
+--MANUAL5_3 slight_A = mkWA (k38 "vähäinen") ;
 slight_N = mkWN (k39 "loukkaus") ;
 slight_V2 = mkWV2 (k67A "kohdella") "kylmästi" ;
 slightingly_Adv = mkWAdv (k99 "halventavasti") ;
@@ -47367,7 +47367,7 @@ softheartedness_N = mkWN (k40 "hellyys") ;
 softie_N = mkWN (k14A "tallukka") ;
 softish_A = mkWA (compoundA "puoli" (k15 "pehmeä")) ;
 softness_N = mkWN (k40 "pehmeys") ;
-software_N = mkWN (k10 "softa") ;
+--MANUAL5_3 software_N = mkWN (k10 "softa") ;
 softwood_N = mkWN (k18 "puu") "pehmeä" ;
 softy_N = mkWN (k14A "tallukka") ;
 sogginess_N = mkWN (compoundN "läpi" (k40 "märkyys")) ;
@@ -47403,7 +47403,7 @@ soldierfish_N = mkWN (compoundN "juovaorava" (k9 "kala")) ;
 soldiering_N = mkWN (k39 "lintsaus") ;
 soldierly_A = mkWA (k10 "sotaisa") ;
 --PLURNOUN soldiery_N = mkWN "joukot" ;
-sole_A = mkWA (k38 "eksklusiivinen") ;
+--MANUAL5_3 sole_A = mkWA (k38 "eksklusiivinen") ;
 sole_N = mkWN (compoundN "meri" (k12 "antura")) ;
 sole_V2 = mkWV2 (compoundV "puoli" (k73 "pohjata")) ;
 solecism_N = mkWN (k40 "karkeus") ;
@@ -47693,7 +47693,7 @@ soy_N = mkWN (k10 "soija") ;
 soya_N = mkWN (k10 "soija") ;
 sozzled_A = mkWA (k10 "oleva") "tillin-tallin" ;
 spa_N = mkWN (k12 "kylpylä") ;
-space_N = mkWN (k40 "avaruus") "fysikaalinen" ;
+--MANUAL5_3 space_N = mkWN (k40 "avaruus") "fysikaalinen" ;
 space_V2 = mkWV2 (k53A "jättää") "tilaa" ;
 space_bar_N = mkWN (compoundN "väli" (k5A "lyönti")) ;
 space_capsule_N = mkWN (compoundN "avaruus" (k6 "kapseli")) ;
@@ -47831,7 +47831,7 @@ speciality_N = mkWN (compoundN "erikois" (k9 "ala")) ;
 specialization_N = mkWN (compoundN "erikois" (k9 "ala")) ;
 specialize_V = mkWV (k52 "erikoistua") ;
 specialize_V2 = mkWV2 (k52 "erikoistua") ;
-specialty_N = mkWN (compoundN "erikois" (k9 "ala")) ;
+--MANUAL5_3 specialty_N = mkWN (compoundN "erikois" (k9 "ala")) ;
 speciation_N = mkWN (compoundN "laji" (k38 "utuminen")) ;
 specie_N = mkWN (k9 "raha") "kova" ;
 species_N = mkWN (k5 "laji") ;
@@ -48540,7 +48540,7 @@ stand_out_V = mkWV (k53 "vastustaa") ;
 stand_up_V = mkWV (k53 "puolustaa") ;
 stand_up_V2 = mkWV2 (k53 "puolustaa") ;
 standard_A = mkWA (compoundA "korkea" (k38 "tasoinen")) ;
-standard_N = mkWN (k6 "standaari") ;
+--MANUAL5_3 standard_N = mkWN (k6 "standaari") ;
 standardization_N = mkWN (k39 "normitus") ;
 standardize_V2 = mkWV2 (k62 "standardisoida") ;
 standardizer_N = mkWN (compoundN "standardi" (k10 "soija")) ;
@@ -48606,7 +48606,7 @@ starling_N = mkWN (k38 "kottarainen") ;
 starlit_A = mkWA (compoundA "tähti" (k41A "kirkas")) ;
 starry_A = mkWA (k41A "kirkas") ;
 starship_N = mkWN (compoundN "avaruus" (k39 "alus")) ;
-start_N = mkWN (k39 "aloitus") ;
+--MANUAL5_3 start_N = mkWN (k39 "aloitus") ;
 --PLURNOUN --POSTPONE start_V = mkWV (k63 "saada") "alkunsa" "jstak" ;
 --PLURNOUN --POSTPONE start_V2 = mkWV2 (k63 "saada") "alkunsa" "jstak" ;
 --PLURNOUN --POSTPONE start_out_V = mkWV (k63 "saada") "alkunsa" "jstak" ;
@@ -48734,7 +48734,7 @@ steelworks_N = mkWN (compoundN "teräs" (k41A "tehdas")) ;
 steely_A = mkWA (compoundA "teräksen" (k10 "luja")) ;
 steelyard_N = mkWN (compoundN "käsi" (k6 "puntari")) ;
 steenbok_N = mkWN (compoundN "puna-" (k5A "antilooppi")) ;
-steep_A = mkWA (k10A "jyrkkä") ;
+--MANUAL5_3 steep_A = mkWA (k10A "jyrkkä") ;
 steep_N = mkWN (k48A "jyrkänne") ;
 steep_V = mkWV (k53A "uuttaa") ;
 steep_V2 = mkWV2 (k53A "uuttaa") ;
@@ -49160,7 +49160,7 @@ straitjacket_N = mkWN (compoundN "pakko" (k9A "paita")) ;
 strand_N = mkWN (k9 "nauha") ;
 strand_V = mkWV (k56 "ajaa") "rantaan" ;
 strand_V2 = mkWV2 (k56 "ajaa") "rantaan" ;
-strange_A = mkWA (k38 "merkillinen") ;
+--MANUAL5_3 strange_A = mkWA (k38 "merkillinen") ;
 strangeness_N = mkWN (k40 "outous") ;
 stranger_N = mkWN (k38 "muukalainen") ;
 strangle_V2 = mkWV2 (k52A "pakahtua") ;
@@ -49374,7 +49374,7 @@ studentship_N = mkWN (k10 "asema") ;
 studio_N = mkWN (k3 "studio") ;
 studious_A = mkWA (k38 "huolellinen") ;
 studiousness_N = mkWN (k40 "huolellisuus") ;
-study_N = mkWN (k39 "kartoitus") ;
+--MANUAL5_3 study_N = mkWN (k39 "kartoitus") ;
 study_V = mkWV (k67 "opiskella") ;
 --MANUAL study_V2 = mkWV2 (k67 "opiskella") ;
 stuff_N = mkWN (k1 "romu") ;
@@ -49600,7 +49600,7 @@ subspace_N = mkWN (compoundN "ali" (k40 "avaruus")) ;
 subspecies_N = mkWN (compoundN "ala" (k5 "laji")) ;
 substance_N = mkWN (k12 "materia") ;
 --MANUAL10 -- substandard_A a NOT_IN_KOTUS
-substantial_A = mkWA (k38 "todellinen") ;
+--MANUAL5_3 substantial_A = mkWA (k38 "todellinen") ;
 substantiality_N = mkWN (k40 "aineellisuus") ;
 substantiate_V2 = mkWV2 (k53 "vahvistaa") ;
 substantiation_N = mkWN (k39 "todistus") ;
@@ -49698,7 +49698,7 @@ suctorial_A = mkWA "imu-" ;
 sudanese_A = mkWA (compoundA "sudani" (k38 "lainen")) ;
 sudanese_N = mkWN (compoundN "sudani" (k38 "lainen")) ;
 sudatorium_N = mkWN (compoundN "höyry" (k12 "kylpylä")) ;
-sudden_A = mkWA (k38 "yhtäkkinen") ;
+--MANUAL5_3 sudden_A = mkWA (k38 "yhtäkkinen") ;
 suddenness_N = mkWN (k40 "yllättävyys") ;
 sudoku_N = mkWN "sudoku" ;
 sudorific_N = mkWN (k48A "lääke") ;
@@ -50015,7 +50015,7 @@ supplicant_N = mkWN (k10 "anoja") ;
 supplicate_V = mkWV (k54A "pyytää") "nöyrästi" ;
 supplicate_V2 = mkWV2 (k54A "pyytää") "nöyrästi" ;
 supplication_N = mkWN (k39 "rukous") ;
-supplier_N = mkWN (k10 "toimittaja") ;
+--MANUAL5_3 supplier_N = mkWN (k10 "toimittaja") ;
 --PLURNOUN --PREDEF supply_N = mkWN (k9A "hankinta") ;
 --MANUAL supply_V2 = mkWV2 (k56 "jatkaa") ;
 --PLURNOUN --PREDEF support_N = mkWN (k39 "vahvistus") ;
@@ -50126,7 +50126,7 @@ surtax_N = mkWN (compoundN "lisä" (k1 "vero")) ;
 surtax_V2 = mkWV2 (k53A "verottaa") "lisää" ;
 surtout_N = mkWN (k5A "takki") "pitkä" ;
 surveillance_N = mkWN (k9A "valvonta") ;
-survey_N = mkWN (k39 "kartoitus") ;
+--MANUAL5_3 survey_N = mkWN (k39 "kartoitus") ;
 survey_V2 = mkWV2 (k62 "arvioida") ;
 surveying_N = mkWN (compoundN "maan" (k39 "mittaus")) ;
 surveyor_N = mkWN (compoundN "maanmittaus" (k5 "insinööri")) ;
@@ -50703,7 +50703,7 @@ talipot_N = mkWN (compoundN "viuhka" (k1 "palmu")) ;
 talisman_N = mkWN (k5 "talismaani") ;
 talismanic_A = mkWA (k10 "tuottava") "onnea" ;
 --PLURNOUN --PREDEF talk_N = mkWN (k10 "esitelmä") ;
-talk_V = mkWV (k68 "luennoida") ;
+--MANUAL5_3 talk_V = mkWV (k68 "luennoida") ;
 --MANUAL talk_V2 = mkWV2 (k68 "luennoida") ;
 talk_VA = mkWVA (k68 "luennoida") ;
 talk_down_V2 = mkWV2 (k56A "antaa") "laskeutumisohjeet" ;
@@ -50853,7 +50853,7 @@ tardiness_N = mkWN (compoundN "hidasliikke" (k40 "isyys")) ;
 tardive_A = mkWA (compoundA "ilmen" (k10 "evä")) "myöhään" ;
 tardy_A = mkWA (k99 "myöhässä") ;
 tare_N = mkWN (k9 "taara") ;
-target_N = mkWN (kH1 "pilkka") ;
+--MANUAL5_3 target_N = mkWN (kH1 "pilkka") ;
 target_V2 = mkWV2 (k73A "suunnata") ;
 target_V2V = mkWV2V (k73A "suunnata") ;
 target_VS = mkWVS (k73A "suunnata") ;
@@ -50966,7 +50966,7 @@ taxonomic_A = mkWA (k38 "systemaattinen") ;
 taxonomically_Adv = mkWAdv "taksonomisesti" ;
 taxonomist_N = mkWN (k4A "systemaatikko") ;
 taxonomy_N = mkWN (k12 "taksonomia") ;
-taxpayer_N = mkWN (compoundN "veron" (k10 "maksaja")) ;
+--MANUAL5_3 taxpayer_N = mkWN (compoundN "veron" (k10 "maksaja")) ;
 taxpaying_A = mkWA "veroamaksava" ;
 tayra_N = mkWN "Eira" "barbara" ;
 tb_N = mkWN (compoundN "tera" (k1 "tavu")) ;
@@ -51106,7 +51106,7 @@ tektite_N = mkWN "tektiitti" ;
 telecast_N = mkWN (compoundN "televisio" (k39 "lähetys")) ;
 telecast_V2 = mkWV2 (k62 "televisioida") ;
 telecaster_N = mkWN (compoundN "televisio" (k3 "yhtiö")) ;
-telecommunication_N = mkWN (compoundN "tele" (k9 "ala")) ;
+--MANUAL5_3 telecommunication_N = mkWN (compoundN "tele" (k9 "ala")) ;
 telecommuting_N = mkWN (k38 "tekeminen") "etätyön" ;
 teleconference_N = mkWN (compoundN "tele" (k2 "neuvottelu")) ;
 telefilm_N = mkWN "televisioelokuva" ;
@@ -52120,7 +52120,7 @@ titivate_V = mkWV (k73 "tällätä") ;
 titivate_V2 = mkWV2 (k73 "tällätä") ;
 titivation_N = mkWN "pynttääminen" ;
 titlark_N = mkWN (k38 "kirvinen") ;
-title_N = mkWN (k40 "oikeus") ;
+--MANUAL5_3 title_N = mkWN (k40 "oikeus") ;
 title_V3 = mkWV3 (k61A "luonnehtia") ;
 title_deed_N = mkWN (compoundN "omistus" (k39 "todistus")) ;
 title_page_N = mkWN (compoundN "nimiö" (k1 "sivu")) ;
@@ -52153,7 +52153,7 @@ toasting_N = mkWN "ruskistaminen" ;
 toasting_fork_N = mkWN (compoundN "grilli" (k14A "haarukka")) ;
 toastmaster_N = mkWN (compoundN "juhla" (k10A "isäntä")) ;
 toastrack_N = mkWN (compoundN "paahtoleipä" (k48 "teline")) ;
-tobacco_N = mkWN (k14A "tupakka") ;
+--MANUAL5_3 tobacco_N = mkWN (k14A "tupakka") ;
 tobacconist_N = mkWN (compoundN "tupakka" (k9A "kauppa")) ;
 tobagonian_A = mkWA (compoundA "tobago" (k38 "lainen")) ;
 tobagonian_N = mkWN (compoundN "tobago" (k38 "lainen")) ;
@@ -52580,7 +52580,7 @@ tradesman_N = mkWN (k41 "kauppias") ;
 --PLURNOUN tradespeople_N = mkWN "kauppamiehet" ;
 trading_N = mkWN (compoundN "kaupan" (k5A "käynti")) ;
 tradition_N = mkWN (k48A "perinne") ;
-traditional_A = mkWA (k38 "perinteinen") ;
+--MANUAL5_3 traditional_A = mkWA (k38 "perinteinen") ;
 traditionalism_N = mkWN (compoundN "traditional" (k5 "ismi")) ;
 traditionalist_N = mkWN (k5 "konservatiivi") ;
 traditionalistic_A = mkWA "perinteitä" "noudattava" ;
@@ -52856,7 +52856,7 @@ treat_N = mkWN (k1A "nautinto") ;
 treat_V = mkWV (k53A "hoitaa") ;
 treat_V2 = mkWV2 (k53A "hoitaa") ;
 treatise_N = mkWN (k10 "tutkielma") ;
-treatment_N = mkWN (k2 "käsittely") ;
+--MANUAL5_3 treatment_N = mkWN (k2 "käsittely") ;
 treaty_N = mkWN (k39 "sopimus") ;
 treble_A = mkWA (k15 "korkea") ;
 treble_N = mkWN (k2 "sopraano") ;
@@ -52889,7 +52889,7 @@ trenchancy_N = mkWN (k40 "purevuus") ;
 trenchant_A = mkWA (k15 "selkeä") ;
 trencher_N = mkWN (compoundN "leikkuu" (k9A "lauta")) ;
 trencherman_N = mkWN (k6 "syömäri") ;
-trend_N = mkWN (k39 "villitys") ;
+--MANUAL5_3 trend_N = mkWN (k39 "villitys") ;
 trend_V = mkWV (k58A "kulkea") "poikki" ;
 trend_setting_N = mkWN (compoundN "suunnan" (k1A "näyttö")) ;
 trendsetting_A = mkWA (k10 "luova") "muotisuuntausta" ;
@@ -53151,7 +53151,7 @@ trot_out_V2 = mkWV2 (k67A "esitellä") ;
 troth_N = mkWN (compoundN "uskollisuuden" (k9 "vala")) ;
 trotter_N = mkWN (k6 "ravuri") ;
 troubadour_N = mkWN (k5 "trubaduuri") ;
-trouble_N = mkWN (k10 "ongelma") ;
+--MANUAL5_3 trouble_N = mkWN (k10 "ongelma") ;
 trouble_V = mkWV (k53A "satuttaa") ;
 --MANUAL trouble_V2 = mkWV2 (k53A "satuttaa") ;
 troublemaker_N = mkWN (k6 "öykkäri") ;
@@ -53186,7 +53186,7 @@ truculent_A = mkWA (k10 "hyökkäävä") ;
 trudge_N = mkWN (k9 "matka") "vaivalloinen" ;
 trudge_V = mkWV (k53 "laahustaa") ;
 trudger_N = mkWN "laahustaja" ;
-true_A = mkWA (k38 "rehellinen") ;
+--MANUAL5_3 true_A = mkWA (k38 "rehellinen") ;
 true_Adv = mkWAdv (k99 "tosiaan") ;
 true_N = mkWN (k5 "rivi") ;
 true_V2 = mkWV2 (k53 "suoristaa") ;
@@ -53853,7 +53853,7 @@ unchain_V2 = mkWV2 (k53A "vapauttaa") ;
 unchallengeable_A = mkWA (compoundA "vastaan" (k34A "sanomaton")) ;
 unchallenged_A = mkWA (compoundA "vastaan" (k34A "sanomaton")) ;
 unchangeable_A = mkWA (k34A "muuttumaton") ;
-unchanged_A = mkWA (k99 "entisellään") ;
+--MANUAL5_3 unchanged_A = mkWA (k99 "entisellään") ;
 unchanging_A = mkWA (k38 "tasainen") ;
 uncharacteristic_A = mkWA (compoundA "epä" (k38 "tyypillinen")) ;
 uncharacteristically_Adv = mkWAdv (compoundAdv "epä" (k99 "tyypillisesti")) ;
@@ -55447,7 +55447,7 @@ uterus_N = mkWN (k1A "kohtu") ;
 utilitarian_A = mkWA (k38 "hyödyllinen") ;
 utilitarian_N = mkWN (k5 "utilitaristi") ;
 utilitarianism_N = mkWN (k5 "utilitarismi") ;
-utility_N = mkWN (k48A "hyödyke") ;
+--MANUAL5_3 utility_N = mkWN (k48A "hyödyke") ;
 utilizable_A = mkWA (k10 "oleva") "hyödynnettävissä" ;
 utilization_N = mkWN (k1A "käyttö") ;
 utilize_V2 = mkWV2 (k54A "hyödyntää") ;
@@ -55614,7 +55614,7 @@ variableness_N = mkWN (k2 "vaihtelu") ;
 variance_N = mkWN (k2 "vaihtelu") ;
 variant_A = mkWA (k10 "poikkeava") ;
 variant_N = mkWN (k39 "painos") ;
-variation_N = mkWN (k2 "vaihtelu") ;
+--MANUAL5_3 variation_N = mkWN (k2 "vaihtelu") ;
 varicelliform_A = mkWA (compoundA "muis" (k10 "tuttava")) "vesirokkoa" ;
 varicocele_N = mkWN (compoundN "varikose" (k48 "ele")) ;
 varicolored_A = mkWA (k41A "laikukas") ;
@@ -55626,7 +55626,7 @@ variedness_N = mkWN "vaihtelevuus" ;
 variegated_A = mkWA (k10 "kirjava") ;
 variegation_N = mkWN (compoundN "moni" (k38 "puolistaminen")) ;
 varietal_N = mkWN (k5 "varietal-viini") ;
-variety_N = mkWN (k40 "moninaisuus") ;
+--MANUAL5_3 variety_N = mkWN (k40 "moninaisuus") ;
 variform_A = mkWA (compoundA "moni" (k38 "muotoinen")) ;
 variolar_A = mkWA "isorokkoon" "liittyvä" ;
 --PLURNOUN variolation_N = mkWN (compoundN "isorokko-rokotus" (k10 "menetelmä")) "vanhentunut" ;
@@ -55902,7 +55902,7 @@ vetchling_N = mkWN (k10 "nätkelmä") ;
 veteran_N = mkWN (k12 "tekijä") "vanha" ;
 veterinarian_N = mkWN (compoundN "eläin" (k6 "lääkäri")) ;
 veterinary_A = mkWA (compoundA "eläinlääke" (k38 "tieteellinen")) ;
-veto_N = mkWN (kH1 "veto") ;
+--MANUAL5_3 veto_N = mkWN (kH1 "veto") ;
 veto_V = mkWV (k53A "käyttää") "veto-oikeuttaan" ;
 veto_V2 = mkWV2 (k53A "käyttää") "veto-oikeuttaan" ;
 vex_V2 = mkWV2 (k53A "sekoittaa") ;
@@ -55950,7 +55950,7 @@ vicinity_N = mkWN (k40 "läheisyys") ;
 vicious_A = mkWA (k10 "katkera") ;
 viciousness_N = mkWN (k40 "häijyys") ;
 vicissitude_N = mkWN (k2 "vaihtelu") ;
-victim_N = mkWN (k5 "uhri") ;
+--MANUAL5_3 victim_N = mkWN (k5 "uhri") ;
 victimization_N = mkWN (k1 "riisto") ;
 victimize_V2 = mkWV2 (k53A "sortaa") ;
 victimizer_N = mkWN (k10 "sortaja") ;
@@ -56194,7 +56194,7 @@ void_N = mkWN (k3 "tyhjiö") ;
 void_V2 = mkWV2 (k53A "erittää") ;
 voider_N = mkWN (compoundN "pyykki" (k5 "kori")) ;
 voile_N = mkWN (k20 "voilee") ;
-volatile_A = mkWA (compoundA "räjähdys" (k10A "herkkä")) ;
+--MANUAL5_3 volatile_A = mkWA (compoundA "räjähdys" (k10A "herkkä")) ;
 volatile_N = mkWN (k48 "aine") "haihtuva" ;
 --MANUAL10_06 volatility_N = mkWN (k40 "kiihottuvuus") ;
 volcanic_A = mkWA (k38 "vulkaaninen") ;
@@ -56249,7 +56249,7 @@ voracity_N = mkWN (k40 "ahnaus") ;
 vortex_N = mkWN (k48A "pyörre") ;
 vorticella_N = mkWN "vorticella" ;
 votary_N = mkWN (k10 "seuraaja") ;
-vote_N = mkWN (k39 "äänestys") ;
+--MANUAL5_3 vote_N = mkWN (k39 "äänestys") ;
 vote_V = mkWV (k53 "äänestää") ;
 vote_V2 = mkWV2 (k53 "äänestää") ;
 vote_VS = mkWVS (k53 "äänestää") ;
@@ -56325,7 +56325,7 @@ waft_V2 = mkWV2 (k52 "leijua") ;
 wag_N = mkWN (k39 "pudistus") ;
 wag_V = mkWV (k53A "huiskuttaa") ;
 wag_V2 = mkWV2 (k53A "huiskuttaa") ;
-wage_N = mkWN (k9 "liksa") ;
+--MANUAL5_3 wage_N = mkWN (k9 "liksa") ;
 wage_V2 = mkWV2 (k52A "ryhtyä") ;
 wage_claim_N = mkWN (compoundN "palkka" (k39 "vaatimus")) ;
 wage_earner_N = mkWN (compoundN "palkan" (k10 "saaja")) ;
@@ -56802,7 +56802,7 @@ weekday_N = mkWN (compoundN "arki" (k10 "päivä")) ;
 weekend_V = mkWV (k53A "viettää") "viikonloppua" ;
 weekender_N = mkWN (compoundN "viikonloppu" (k5 "kassi")) ;
 --PLURNOUN --POSTPONE weeklong_A = mkWA (k38 "mittainen") "seitsemän" "päivän" ;
-weekly_A = mkWA (k38 "viikoittainen") ;
+--MANUAL5_3 weekly_A = mkWA (k38 "viikoittainen") ;
 --PLURNOUN --POSTPONE weekly_Adv = mkWAdv (k1A "viikko") "joka" ;
 weekly_N = mkWN (compoundN "viikko" (k7A "lehti")) ;
 weeknight_N = mkWN "arkiyö" ;
@@ -57651,7 +57651,7 @@ writing_N = mkWN (compoundN "kirjo" (k38 "ittaminen")) ;
 writing_desk_N = mkWN (compoundN "kirjoitus" (k10A "pöytä")) ;
 writing_ink_N = mkWN (compoundN "kirjoitus" (k48 "muste")) ;
 writing_paper_N = mkWN (compoundN "kirjoitus" (k6 "paperi")) ;
-wrong_A = mkWA (k10 "väärä") ;
+--MANUAL5_3 wrong_A = mkWA (k10 "väärä") ;
 wrong_Adv = mkWAdv (k99 "virheellisesti") ;
 wrong_N = mkWN (k1A "vahinko") ;
 wrong_V2 = mkWV2 (k71 "tehdä") "vääryyttä" ;
@@ -57794,7 +57794,7 @@ yet_Adv = mkWAdv (k99 "vielä") ;
 yeti_N = mkWN (compoundN "lumi" (k42 "mies")) ;
 yew_N = mkWN (k24 "marjakuusi") ;
 yiddish_N = mkWN "Jiddiš" ;
-yield_N = mkWN (k1A "sato") ;
+--MANUAL5_3 yield_N = mkWN (k1A "sato") ;
 yield_V = mkWV (k56A "antaa") "periksi" ;
 --PLURNOUN --PREDEF yield_V2 = mkWV2 (k56A "antaa") "periksi" ;
 yield_up_V = mkWV (k53A "luovuttaa") ;
@@ -58450,23 +58450,23 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   eventual_A = mkA (mkN "lopulta" (mkN "tapahtuva")) ; -- 30000 
   exclude_V2 = mkV2 (mkV (mkV "jättää") "ulkopuolelle") ; ---CHANGE "jättää ulkopuolelle" ; -- 30000 
   executive_A = mkA "suorittava" ; ---CHANGE johtaja 20000 
-  exist_V = vOlla ; ---CHANGE "olla olemassa" ; -- 30000 
+--MANUAL5_3   exist_V = vOlla ; ---CHANGE "olla olemassa" ; -- 30000 
   fiscal_A = mkA "verotuksellinen" ; ---CHANGE "finanssi-" ; -- 20000 
   floppy_A = mkA "taipuisa" ; ---CHANGE "levyke" ; -- 20000 
   gravy_N = mkN "kastike" ; ---CHANGE "paistinneste" ; -- 20000 
   gray_A = mkA "harmaa" ; -- 20000 
   income_N = mkN "tulo" ; ---CHANGE "tulot" ; -- 20000 
-  initial_A = mkA "alustava" ; ---CHANGE "alkukirjain" ; -- 20000 
+--MANUAL5_3   initial_A = mkA "alustava" ; ---CHANGE "alkukirjain" ; -- 20000 
   instead_Adv = mkAdv "sen sijaan" ; -- 30000 
   institutional_A = mkA "järjestäytynyt" ; -- 20000 
   intermittent_A = mkA "ajoittainen" ; -- 20000 
   interstate_A = mkA (mkN "osavaltioiden" (mkN "välinen")) ; -- 30000 
   korean_A = mkA "korealainen" ; -- 40000 
-  litigation_N = mkN "käräjöinti" ; -- 20000 
+--MANUAL5_3   litigation_N = mkN "käräjöinti" ; -- 20000 
   manual_A = mkA "manuaalinen" ; ---CHANGE "käsi-" ; -- 20000 
-  monthly_A = mkA "kuukausittainen" ; ---CHANGE "kuukausijulkaisu" ; -- 20000 
+--MANUAL5_3   monthly_A = mkA "kuukausittainen" ; ---CHANGE "kuukausijulkaisu" ; -- 20000 
   not_Adv = mkAdv "ei" ; -- 20000 
-  overall_A = mkA "totaalinen" ; ---CHANGE "työtakki" ; -- 20000 
+--MANUAL5_3   overall_A = mkA "totaalinen" ; ---CHANGE "työtakki" ; -- 20000 
   overnight_A = mkA (mkN "yön" (mkN "kestävä")) ; ---CHANGE "yö-" ; -- 20000 
   rebuild_V2 = mkV2 "uudelleenrakentaa" ; ---CHANGE 30000 
   redistribute_V2 = mkV2 "uudelleenjakaa" ; ---CHANGE 30000 
@@ -58474,7 +58474,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   revenue_N = mkN "tulo" ; ---CHANGE verotulot 20000 
   side_V = mkV "puolustaa" ; ---CHANGE asettua puolelle" ; -- 30000 
   sideline_N = mkN "sivuartikkeli" ; -- 20000 
-  soar_V = mkV "ampaista" ; -- 30000 --- 
+--MANUAL5_3   soar_V = mkV "ampaista" ; -- 30000 --- 
   south_A = mkA "eteläinen" ; ---CHANGE etelä- 20000 
   south_Adv = mkAdv "etelään" ; ---CHANGE etelä- 20000 
   sterling_N = mkN "punta" ; ---CHANGE "erinomainen" ; -- 20000 
@@ -58496,7 +58496,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   action_N = mkN "toiminta" ; -- 153 
 --MANUAL10   administration_N = mkN (lin NK {s = d01A "hoito"}) ; -- 497 
   admit_V2 = mkV2 (lin VK {s = c53A "ottaa"}) ; -- 59 
-  advertiser_N = mkN (lin NK {s = d10 "mainostaja"}) ; ---C ilmoittaja 10000 
+--MANUAL5_3   advertiser_N = mkN (lin NK {s = d10 "mainostaja"}) ; ---C ilmoittaja 10000 
   afternoon_N = mkN "iltapäivä" ; -- 1422 
   again_Adv = mkAdv (lin AdvK {s = c99 "uudelleen"}) ; -- 760 
   agenda_N = mkN (lin NK {s = d10 "suunnitelma"}) ; -- 565 
@@ -58510,7 +58510,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   ambassador_N = mkN "suurlähettiläs" ; -- 3231 
   analyst_N = mkN (lin NK {s = d04A "analyytikko"}) ; -- 6309 
   anniversary_N = mkN "merkkipäivä" ; -- 7188 
-  apparent_A = mkA "ilmeinen" ; -- 2713 
+--MANUAL5_3   apparent_A = mkA "ilmeinen" ; -- 2713 
   appear_V = mkV (lin VK {s = c53A "vaikuttaa"}) ; -- 268 
   applicant_N = mkN (lin NK {s = d12 "hakija"}) ; -- 1873 
   approve_V2 = mkV2 "hyväksyä" ; -- 290 
@@ -58520,7 +58520,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   assembly_N = mkN (lin NK {s = d39 "kokous"}) ; -- 347 
 --MANUAL   assume_V2 = mkV2 (lin VK {s = c63 "saada"}) ; -- 10 
   attempt_N = mkN (lin NK {s = d39 "yritys"}) ; -- 117 
-  attention_N = mkN (lin NK {s = d03 "huomio"}) ; -- 486 
+--MANUAL5_3   attention_N = mkN (lin NK {s = d03 "huomio"}) ; -- 486 
   auto_N = mkN (lin NK {s = d01 "auto"}) ; -- 10000 
   average_A = mkA "keskimääräinen" ; -- 2336 
   balance_N = mkN "tasapaino" ; -- 2885 
@@ -58528,7 +58528,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   barrel_N = mkN (lin NK {s = d01A "rumpu"}) ; -- 6414 
   base_V2 = mkV2 (lin VK {s = c53 "perustaa"}) ; -- 398 
   before_Adv = mkAdv "ennen" ; -- 846 
-  begin_V = mkV (lin VK {s = c56A "alkaa"}) ; -- 65 
+--MANUAL5_3   begin_V = mkV (lin VK {s = c56A "alkaa"}) ; -- 65 
   believe_V = mkV "pitää" ; -- 18 
 --MANUAL10   bid_N = mkN (lin NK {s = d39 "yritys"}) ; -- 117 
   bland_A = mkA "mieto" ; -- 7983 
@@ -58564,7 +58564,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   civil_A = mkA (lin AK {s = d38 "porvarillinen"}) ; -- 7073 
 --MANUAL10   claim_N = mkN (lin NK {s = d40 "oikeus"}) ; -- 322 
   claim_V2 = mkV2 (lin VK {s = c61A "vaatia"}) ; -- 135 
-  clear_A = mkA "selvä" ; -- 446 
+--MANUAL5_3   clear_A = mkA "selvä" ; -- 446 
   client_N = mkN (lin NK {s = d41A "asiakas"}) ; -- 383 
   collapse_V = mkV (lin VK {s = c53A "romahtaa"}) ; -- 2702 
   column_N = mkN (lin NK {s = d07 "putki"}) ; -- 2534 
@@ -58588,11 +58588,11 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
 --MANUAL10   corporate_A = mkA (lin AK {s = d38 "yhteinen"}) ; -- 343 
 --MANUAL10   cost_N = mkN (lin NK {s = d09A "hinta"}) ; -- 245 
 --MANUAL10   court_N = mkN "kenttä" ; -- 701 
-  crash_N = mkN "kaatuminen" ; -- 4923 
+--MANUAL5_3   crash_N = mkN "kaatuminen" ; -- 4923 
 --MANUAL   create_V2 = mkV2 (lin VK {s = c53A "aiheuttaa"}) ; -- 298 
 --MANUAL10   credit_N = mkN (lin NK {s = d03 "ansio"}) ; -- 2368 
   criminal_A = mkA (lin AK {s = d38 "rikollinen"}) ; -- 6189 
-  crisis_N = mkN (lin NK {s = d05 "kriisi"}) ; -- 785 
+--MANUAL5_3   crisis_N = mkN (lin NK {s = d05 "kriisi"}) ; -- 785 
   critic_N = mkN (lin NK {s = d04A "kriitikko"}) ; -- 4619 
   cruise_N = mkN (lin NK {s = d02 "risteily"}) ; -- 7409 
   crush_V2 = mkV2 (lin VK {s = c53 "poistaa"}) ; -- 1076 
@@ -58601,7 +58601,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   damage_V2 = mkV2 (lin VK {s = c53A "vahingoittaa"}) ; -- 5415 
   dangerous_A = mkA (lin AK {s = d38 "vaarallinen"}) ; -- 1398 
   data_N = mkN (lin NK {s = d01A "tieto"}) ; -- 127 
-  deadline_N = mkN "määräaika" ; -- 4359 
+--MANUAL5_3   deadline_N = mkN "määräaika" ; -- 4359 
   debt_N = mkN (lin NK {s = d09A "velka"}) ; -- 1481 
   deck_N = mkN (lin NK {s = d28 "kansi"}) ; -- 3123 
   declaration_N = mkN (lin NK {s = d39 "julistus"}) ; -- 3765 
@@ -58609,8 +58609,8 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   defence_N = mkN (lin NK {s = d39 "puolustus"}) ; -- 1587 
   defendant_N = mkN (lin NK {s = d10 "vastaaja"}) ; -- 2397 
   definite_A = mkA (lin AK {s = d09 "varma"}) ; -- 790 
-  democracy_N = mkN (lin NK {s = d12 "demokratia"}) ; -- 1742 
-  democratic_A = mkA (lin AK {s = d38 "demokraattinen"}) ; -- 2612 
+--MANUAL5_3   democracy_N = mkN (lin NK {s = d12 "demokratia"}) ; -- 1742 
+--MANUAL5_3   democratic_A = mkA (lin AK {s = d38 "demokraattinen"}) ; -- 2612 
   democratization_N = mkN (lin NK {s = d05A "demokratisointi"}) ; -- 10000 
   depository_N = mkN (lin NK {s = d02 "varasto"}) ; -- 2325 
   depress_V2 = mkV2 (lin VK {s = c58 "laskea"}) ; -- 259 
@@ -58624,19 +58624,19 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
 --MANUAL   disclose_V2 = mkV2 (lin VK {s = c53 "paljastaa"}) ; -- 1044 
 --MANUAL   discuss_V2 = mkV2 "käsitellä" ; -- 460 
   disk_N = mkN (lin NK {s = d01 "levy"}) ; -- 832 
-  distribution_N = mkN (lin NK {s = d02 "jakelu"}) ; -- 5389 
+--MANUAL5_3   distribution_N = mkN (lin NK {s = d02 "jakelu"}) ; -- 5389 
   dollar_N = mkN (lin NK {s = d06 "dollari"}) ; -- 804 
   doubt_N = mkN "epävarmuus" ; -- 3178 
   drive_N = mkN (lin NK {s = d10 "asema"}) ; -- 325 
-  drop_N = mkN (lin NK {s = d01 "piilo"}) ; -- 5264 
+--MANUAL5_3   drop_N = mkN (lin NK {s = d01 "piilo"}) ; -- 5264 
   drought_N = mkN (lin NK {s = d40 "kuivuus"}) ; -- 5221 
   due_A = mkA "asianmukainen" ; -- 6693 
-  duty_N = mkN (lin NK {s = d40 "velvollisuus"}) ; -- 2904 
-  early_A = mkA "aikainen" ; -- 1030 
+--MANUAL5_3   duty_N = mkN (lin NK {s = d40 "velvollisuus"}) ; -- 2904 
+--MANUAL5_3   early_A = mkA "aikainen" ; -- 1030 
   economic_A = mkA (lin AK {s = d38 "taloudellinen"}) ; -- 598 
 --MANUAL10_06   effort_N = mkN (lin NK {s = d39 "saavutus"}) ; -- 2177 
   elect_V2 = mkV2 (lin VK {s = c69 "valita"}) ; -- 179 
-  eliminate_V2 = mkV2 (lin VK {s = c53 "poistaa"}) ; -- 1076 
+--MANUAL5_3   eliminate_V2 = mkV2 (lin VK {s = c53 "poistaa"}) ; -- 1076 
   emotional_A = mkA (lin AK {s = d41A "tunteikas"}) ; -- 10000 
   employee_N = mkN "työntekijä" ; -- 367 
 --MANUAL10   end_N = mkN "pää" ; ---CHANGED --(lin NK {s = d10 "osa"}) ; -- 73 
@@ -58651,25 +58651,25 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   excess_N = mkN (lin NK {s = d09A "liika"}) ; -- 10000 
 --MANUAL10   exchange_N = mkN "pörssi" ; -- 1426 
   executive_N = mkN (lin NK {s = d10 "johtaja"}) ; -- 210 
-  expansion_N = mkN "laajeneminen" ; -- 4781 
+--MANUAL5_3   expansion_N = mkN "laajeneminen" ; -- 4781 
   explain_V2 = mkV2 "selittää" ; -- 1137 
   extend_V = mkV (lin VK {s = c56 "jatkaa"}) ; -- 188 
   extraordinary_A = mkA (lin AK {s = d38 "erikoinen"}) ; -- 2361 
-  face_N = mkN (lin NK {s = d09A "pinta"}) ; -- 1053 
-  fact_N = mkN (lin NK {s = d40 "todellisuus"}) ; -- 1492 
+--MANUAL5_3   face_N = mkN (lin NK {s = d09A "pinta"}) ; -- 1053 
+--MANUAL5_3   fact_N = mkN (lin NK {s = d40 "todellisuus"}) ; -- 1492 
   factor_N = mkN "tekijä" ; -- 538 
   farmer_N = mkN "viljelijä" ; -- 1899 
-  fee_N = mkN (lin NK {s = d01 "maksu"}) ; -- 1082 
+--MANUAL5_3   fee_N = mkN (lin NK {s = d01 "maksu"}) ; -- 1082 
   feel_V2 = mkV2 (lin VK {s = c59A "tuntea"}) ; -- 219 
   feeling_N = mkN (lin NK {s = d48A "tunne"}) ; -- 930 
   figure_V = mkV (lin VK {s = c62 "arvioida"}) ; -- 203 
   film_N = mkN "elokuva" ; -- 326 
   firm_N = mkN (lin NK {s = d39 "yritys"}) ; -- 117 
   flamboyant_A = mkA (lin AK {s = d38 "mahtipontinen"}) ; -- 10000 
-  flat_A = mkA "selvä" ; -- 446 
-  focus_V = mkV "keskittyä" ; -- 662 
+--MANUAL5_3   flat_A = mkA "selvä" ; -- 446 
+--MANUAL5_3   focus_V = mkV "keskittyä" ; -- 662 
   follow_V2 = mkV2 (lin VK {s = c73 "seurata"}) ; -- 120 
-  forecast_N = mkN (lin NK {s = d48 "ennuste"}) ; -- 2597 
+--MANUAL5_3   forecast_N = mkN (lin NK {s = d48 "ennuste"}) ; -- 2597 
   former_A = mkA "entinen" ; -- 155 
   fraud_N = mkN (lin NK {s = d39 "petos"}) ; -- 4350 
   fresh_A = mkA (lin AK {s = d48 "tuore"}) ; -- 691 
@@ -58687,33 +58687,33 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   guideline_N = mkN (lin NK {s = d48 "ohje"}) ; -- 1559 
   habit_N = mkN (lin NK {s = d09A "tapa"}) ; -- 130 
   half_N = mkN (lin NK {s = d26 "puoli"}) ; -- 253 
-  hard_A = mkA (lin AK {s = d10 "kova"}) ; -- 218 
+--MANUAL5_3   hard_A = mkA (lin AK {s = d10 "kova"}) ; -- 218 
   harvest_N = mkN (lin NK {s = d01A "sato"}) ; -- 2427 
   hasty_A = mkA (lin AK {s = d38 "pikainen"}) ; -- 4796 
   have_V = mkV (lin VK {s = c67 "olla"}) ; -- 1 
-  healthy_A = mkA (lin AK {s = d48 "terve"}) ; -- 1774 
+--MANUAL5_3   healthy_A = mkA (lin AK {s = d48 "terve"}) ; -- 1774 
 --MANUAL10_06   here_Adv = mkAdv (lin AdvK {s = c99 "nyt"}) ; -- 28 
   high_A = mkA (lin AK {s = d15 "korkea"}) ; -- 10000 
   hire_V2 = mkV2 (lin VK {s = c73A "palkata"}) ; -- 1704 
   history_N = mkN (lin NK {s = d12 "historia"}) ; -- 465 
 --MANUAL10   home_N = mkN (lin NK {s = d48 "perhe"}) ; -- 309 
-  hour_N = mkN (lin NK {s = d07 "hetki"}) ; -- 231 
-  however_Adv = mkAdv (lin AdvK {s = c99 "kuitenkin"}) ; -- 49 
+--MANUAL5_3   hour_N = mkN (lin NK {s = d07 "hetki"}) ; -- 231 
+--MANUAL5_3   however_Adv = mkAdv (lin AdvK {s = c99 "kuitenkin"}) ; -- 49 
   hurdle_N = mkN (lin NK {s = d48 "este"}) ; -- 1884 
   image_N = mkN "mielikuva" ; -- 3027 
-  impact_N = mkN (lin NK {s = d39 "vaikutus"}) ; -- 593 
+--MANUAL5_3   impact_N = mkN (lin NK {s = d39 "vaikutus"}) ; -- 593 
   implication_N = mkN "johtopäätös" ; -- 3354 
-  import_N = mkN (lin NK {s = d39 "merkitys"}) ; -- 551 
+--MANUAL5_3   import_N = mkN (lin NK {s = d39 "merkitys"}) ; -- 551 
   impose_V2 = mkV2 "määrätä" ; -- 838 
   improvement_N = mkN (lin NK {s = d39 "kehitys"}) ; -- 484 
-  incentive_N = mkN (lin NK {s = d33 "kannustin"}) ; -- 10000 
+--MANUAL5_3   incentive_N = mkN (lin NK {s = d33 "kannustin"}) ; -- 10000 
   include_V2 = mkV2 "sisältää" ; -- 888 
 --MANUAL   increase_V2 = mkV2 (lin VK {s = c66 "nousta"}) ; -- 111 
   incur_V2 = mkV2 (lin VK {s = c53A "aiheuttaa"}) ; -- 298 
   indeed_Adv = mkAdv (lin AdvK {s = c99 "todella"}) ; -- 478 
   index_N = mkN (lin NK {s = d05 "indeksi"}) ; -- 4785 
   indictment_N = mkN (lin NK {s = d48A "syyte"}) ; -- 1343 
-  individual_A = mkA "eri" ; -- 154 
+--MANUAL5_3   individual_A = mkA "eri" ; -- 154 
 --MANUAL10   information_N = mkN (lin NK {s = d01A "tieto"}) ; -- 127 
   inhibit_V2 = mkV2 "estää" ; -- 773 
   injection_N = mkN (lin NK {s = d03 "injektio"}) ; -- 10000 
@@ -58735,10 +58735,10 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
 --MANUAL10   last_A = mkA "viime" ; -- 45 
 --MANUAL10   law_N = mkN "poliisi" ; -- 147 
 --MANUAL10   lawyer_N = mkN "asianajaja" ; -- 2616 
-  lead_V = mkV (lin VK {s = c53A "johtaa"}) ; -- 172 
+--MANUAL5_3   lead_V = mkV (lin VK {s = c53A "johtaa"}) ; -- 172 
   leader_N = mkN (lin NK {s = d10 "johtaja"}) ; -- 210 
   legal_A = mkA (lin AK {s = d38 "laillinen"}) ; -- 4088 
-  legislation_N = mkN "lainsäädäntö" ; -- 2206 
+--MANUAL5_3   legislation_N = mkN "lainsäädäntö" ; -- 2206 
 --MANUAL10_06   life_N = mkN (lin NK {s = d07A "henki"}) ; -- 426 
   light_N = mkN (lin NK {s = d39 "valaistus"}) ; -- 5746 
   line_N = mkN "linja" ; ---C (lin NK {s = d01A "johto"}) ; -- 332 
@@ -58746,7 +58746,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   list_N = mkN (lin NK {s = d09 "lista"}) ; -- 972 
 --MANUAL10_06   loan_N = mkN "laina" ; -- 1335 
 --MANUAL10_06   long_term_A = mkA "pitkäaikainen" ; -- 2184 
-  look_V = mkV "näyttää" ; -- 156 
+--MANUAL5_3   look_V = mkV "näyttää" ; -- 156 
   loss_N = mkN (lin NK {s = d03 "tappio"}) ; -- 908 
 --MANUAL   lower_V2 = mkV2 (lin VK {s = c58 "laskea"}) ; -- 259 
   machine_N = mkN (lin NK {s = d48 "kone"}) ; -- 524 
@@ -58775,14 +58775,14 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   movement_N = mkN (lin NK {s = d10 "osa"}) ; -- 73 
   nation_N = mkN "kansakunta" ; -- 3368 
   nature_N = mkN (lin NK {s = d01A "luonto"}) ; -- 748 
-  necessary_A = mkA "välttämätön" ; -- 1846 
+--MANUAL5_3   necessary_A = mkA "välttämätön" ; -- 1846 
 --MANUAL   need_V2 = mkV2 (lin VK {s = c69 "tarvita"}) ; -- 104 
-  net_A = mkA (lin AK {s = d38 "lopullinen"}) ; -- 1117 
+--MANUAL5_3   net_A = mkA (lin AK {s = d38 "lopullinen"}) ; -- 1117 
   news_N = mkN (lin NK {s = d38 "uutinen"}) ; -- 10000 
   north_N = mkN (lin NK {s = d38 "pohjoinen"}) ; -- 10000 
 --MANUAL10   office_N = mkN (lin NK {s = d09A "valta"}) ; -- 749 
 --MANUAL10   officer_N = mkN (lin NK {s = d06 "upseeri"}) ; -- 4121 
-  only_Adv = mkAdv (lin AdvK {s = c99 "vain"}) ; -- 32 
+--MANUAL5_3   only_Adv = mkAdv (lin AdvK {s = c99 "vain"}) ; -- 32 
   operate_V = mkV (lin VK {s = c61 "toimia"}) ; -- 83 
   operation_N = mkN (lin NK {s = d39 "yritys"}) ; -- 117 
   opportunity_N = mkN (lin NK {s = d40 "tilaisuus"}) ; -- 815 
@@ -58794,13 +58794,13 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   other_N = mkN (lin NK {s = d38 "toinen"}) ; -- 10000 
   overtime_N = mkN (lin NK {s = d09A "jatkoaika"}) ; -- 3016 
   overwhelm_V2 = mkV2 (lin VK {s = c73A "vallata"}) ; -- 1962 
-  owner_N = mkN (lin NK {s = d10 "omistaja"}) ; -- 694 
+--MANUAL5_3   owner_N = mkN (lin NK {s = d10 "omistaja"}) ; -- 694 
   page_N = mkN (lin NK {s = d01 "sivu"}) ; -- 386 
   part_N = mkN (lin NK {s = d10 "osa"}) ; -- 73 
   particular_A = mkA "tietty" ; -- 993 
   partnership_N = mkN (lin NK {s = d40 "kumppanuus"}) ; -- 10000 
 --MANUAL10   past_A = mkA "viime" ; -- 45 
-  patent_N = mkN (lin NK {s = d33 "avoin"}) ; -- 10000 
+--MANUAL5_3   patent_N = mkN (lin NK {s = d33 "avoin"}) ; -- 10000 
   pay_V = mkV "maksaa" ; -- 16 
   payment_N = mkN (lin NK {s = d09A "palkka"}) ; -- 828 
   perform_V = mkV "esittää" ; -- 141 
@@ -58819,7 +58819,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   pressure_N = mkN (lin NK {s = d48 "paine"}) ; -- 1222 
   pretty_A = mkA (lin AK {s = d09 "kiva"}) ; -- 2365 
   price_N = mkN (lin NK {s = d09A "hinta"}) ; -- 245 
-  price_V = mkV (lin VK {s = c67A "hinnoitella"}) ; -- 8727 
+--MANUAL5_3   price_V = mkV (lin VK {s = c67A "hinnoitella"}) ; -- 8727 
   printout_N = mkN (lin NK {s = d48 "tuloste"}) ; -- 10000 
   priority_N = mkN (lin NK {s = d05A "prioriteetti"}) ; -- 10000 
   private_N = mkN "yksityinen" ; -- 3725 
@@ -58836,21 +58836,21 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
 --MANUAL   provide_V2 = mkV2 (lin VK {s = c56A "antaa"}) ; -- 61 
   public_A = mkA (lin AK {s = d38 "julkinen"}) ; -- 686 
   publisher_N = mkN (lin NK {s = d10 "kustantaja"}) ; -- 4549 
-  pulp_N = mkN (lin NK {s = d09 "massa"}) ; -- 4290 
+--MANUAL5_3   pulp_N = mkN (lin NK {s = d09 "massa"}) ; -- 4290 
   putt_V = mkV (lin VK {s = c73A "putata"}) ; -- 10000 
 --MANUAL10   quarter_N = mkN (lin NK {s = d01 "taho"}) ; -- 1552 
 --MANUAL   raise_V2 = mkV2 "esittää" ; -- 141 
   rally_N = mkN "ralli" ; -- 1650 
-  range_N = mkN (lin NK {s = d10 "valikoima"}) ; -- 3895 
+--MANUAL5_3   range_N = mkN (lin NK {s = d10 "valikoima"}) ; -- 3895 
 --MANUAL10   rate_N = mkN (lin NK {s = d09A "hinta"}) ; -- 245 
   rather_Adv = mkAdv "aika" ; -- 758 
 --MANUAL10   rating_N = mkN (lin NK {s = d01 "arvo"}) ; -- 425 
 --MANUAL   reach_V2 = mkV2 (lin VK {s = c66 "nousta"}) ; -- 111 
-  reaction_N = mkN (lin NK {s = d39 "vastaus"}) ; -- 958 
+--MANUAL5_3   reaction_N = mkN (lin NK {s = d39 "vastaus"}) ; -- 958 
 --MANUAL10   real_A = mkA (lin AK {s = d15 "oikea"}) ; -- 418 
   receipt_N = mkN (lin NK {s = d05A "kuitti"}) ; -- 8508 
   recent_A = mkA "viimeaikainen" ; -- 5740 
-  reform_N = mkN (lin NK {s = d39 "uudistus"}) ; -- 1004 
+--MANUAL5_3   reform_N = mkN (lin NK {s = d39 "uudistus"}) ; -- 1004 
   rein_V2 = mkV2 "pysäyttää" ; -- 2287 
   release_N = mkN "purkaminen" ; -- 3429 
   remain_V = mkV "jäädä" ; -- 57 
@@ -58860,7 +58860,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
 --MANUAL   replace_V2 = mkV2 (lin VK {s = c56A "vaihtaa"}) ; -- 800 
   replacement_N = mkN (lin NK {s = d10 "seuraaja"}) ; -- 2884 
   reserve_N = mkN (lin NK {s = d39 "varaus"}) ; -- 4056 
-  responsibility_N = mkN (lin NK {s = d17 "vastuu"}) ; -- 626 
+--MANUAL5_3   responsibility_N = mkN (lin NK {s = d17 "vastuu"}) ; -- 626 
   restriction_N = mkN "rajoittaminen" ; -- 5940 
   result_N = mkN (lin NK {s = d39 "tulos"}) ; -- 159 
   revise_V = mkV (lin VK {s = c73A "muokata"}) ; -- 3712 
@@ -58869,7 +58869,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   rich_A = mkA (lin AK {s = d41 "runsas"}) ; -- 554 
   rise_V = mkV (lin VK {s = c66 "nousta"}) ; -- 111 
 --MANUAL   rise_V2 = mkV2 (lin VK {s = c66 "nousta"}) ; -- 111 
-  rival_N = mkN (lin NK {s = d12 "kilpailija"}) ; -- 1298 
+--MANUAL5_3   rival_N = mkN (lin NK {s = d12 "kilpailija"}) ; -- 1298 
   sad_A = mkA (lin AK {s = d38 "surullinen"}) ; -- 4850 
 --MANUAL10   sale_N = mkN (lin NK {s = d09A "kauppa"}) ; -- 240 
   save_V2 = mkV2 "säilyttää" ; -- 1010 
@@ -58892,9 +58892,9 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   slate_V2 = mkV2 "määrätä" ; -- 838 
   slot_N = mkN "paikka" ; -- 123 
   solo_N = mkN (lin NK {s = d01 "soolo"}) ; -- 10000 
-  source_N = mkN "alkuperä" ; -- 4551 
+--MANUAL5_3   source_N = mkN "alkuperä" ; -- 4551 
   spare_V2 = mkV2 "säästää" ; -- 1794 
-  speculation_N = mkN (lin NK {s = d09A "pohdinta"}) ; -- 4913 
+--MANUAL5_3   speculation_N = mkN (lin NK {s = d09A "pohdinta"}) ; -- 4913 
 --MANUAL10_06   spend_V = mkV "käyttää" ; -- 94 
   spend_V2 = mkV2 "käyttää" ; -- 94 
   spiral_N = mkN (lin NK {s = d48A "kierre"}) ; -- 6587 
@@ -58905,7 +58905,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   stability_N = mkN "vakaus" ; -- 3736 
   stadium_N = mkN (lin NK {s = d06 "stadion"}) ; -- 3285 
 --MANUAL10_06   stem_V = mkV (lin VK {s = c66 "nousta"}) ; -- 111 
-  step_N = mkN (lin NK {s = d01 "keino"}) ; -- 756 
+--MANUAL5_3   step_N = mkN (lin NK {s = d01 "keino"}) ; -- 756 
   step_V = mkV (lin VK {s = c52 "astua"}) ; -- 1620 
   stock_N = mkN (lin NK {s = d48A "osake"}) ; -- 485 
   strategy_N = mkN (lin NK {s = d12 "strategia"}) ; -- 2736 
@@ -58923,16 +58923,16 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   test_N = mkN (lin NK {s = d05 "testi"}) ; -- 2179 
   then_Adv = mkAdv (lin AdvK {s = c99 "silloin"}) ; -- 334 
 --MANUAL10   time_N = mkN "kerta" ; -- 113 
-  timing_N = mkN (lin NK {s = d39 "ajoitus"}) ; -- 8679 
+--MANUAL5_3   timing_N = mkN (lin NK {s = d39 "ajoitus"}) ; -- 8679 
   too_Adv = mkAdv (lin AdvK {s = c99 "liian"}) ; -- 319 
 --MANUAL   total_V2 = mkV2 (lin VK {s = c52A "rikkoa"}) ; -- 1483 
   town_N = mkN (lin NK {s = d05A "kaupunki"}) ; -- 70 
   trade_V = mkV (lin VK {s = c73A "kaupata"}) ; -- 3633 
   trader_N = mkN (lin NK {s = d41 "kauppias"}) ; -- 2074 
 --MANUAL   transfer_V2 = mkV2 "siirtää" ; -- 584 
-  trip_N = mkN "elämys" ; -- 3005 
+--MANUAL5_3   trip_N = mkN "elämys" ; -- 3005 
   troop_N = mkN (lin NK {s = d09 "lauma"}) ; -- 8478 
-  trust_N = mkN (lin NK {s = d39 "luottamus"}) ; -- 1763 
+--MANUAL5_3   trust_N = mkN (lin NK {s = d39 "luottamus"}) ; -- 1763 
   try_V = mkV "yrittää" ; -- 262 
   turf_N = mkN (lin NK {s = d07 "nurmi"}) ; -- 7206 
   typical_A = mkA (lin AK {s = d38 "tyypillinen"}) ; -- 2243 
@@ -58940,7 +58940,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   unfounded_A = mkA "perusteeton" ; -- 8850 
   union_N = mkN (lin NK {s = d06 "unioni"}) ; -- 1311 
   unit_N = mkN "kokonaisuus" ; -- 1034 
-  unusual_A = mkA "epätavallinen" ; -- 8513 
+--MANUAL5_3   unusual_A = mkA "epätavallinen" ; -- 8513 
   up_Adv = mkAdv "eteenpäin" ; -- 1095 
   uprising_N = mkN (lin NK {s = d12 "kapina"}) ; -- 6431 
   vice_N = mkN (lin NK {s = d48 "pahe"}) ; -- 10000 
@@ -58951,9 +58951,9 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   wealth_N = mkN (lin NK {s = d40 "varallisuus"}) ; -- 6141 
   weather_N = mkN "sää" ; -- 1439 
   week_N = mkN (lin NK {s = d01A "viikko"}) ; -- 100 
-  weekend_N = mkN "viikonloppu" ; -- 946 
+--MANUAL5_3   weekend_N = mkN "viikonloppu" ; -- 946 
   widespread_A = mkA (lin AK {s = d38 "yleinen"}) ; -- 499 
-  withdrawal_N = mkN (lin NK {s = d01 "nosto"}) ; -- 4194 
+--MANUAL5_3   withdrawal_N = mkN (lin NK {s = d01 "nosto"}) ; -- 4194 
   word_N = mkN (lin NK {s = d09 "sana"}) ; -- 544 
 --MANUAL10   worker_N = mkN "työntekijä" ; -- 367 
   yesterday_N = mkN (lin NK {s = d38 "eilinen"}) ; -- 10000 
@@ -59810,5 +59810,258 @@ september_PN = mkPN (mkN "syys" (mkN "kuu")) ;
 october_PN = mkPN (mkN "loka" (mkN "kuu")) ;
 november_PN = mkPN (mkN "marras" (mkN "kuu")) ;
 december_PN = mkPN (mkN "joulu" (mkN "kuu")) ;
+
+-- 368 freq 5--3, 140 changed in 30 minutes
+abortion_N = mkWN (k5A "abortti") ;
+activist_N = mkWN (k5 "aktivisti") ;
+age_N = mkWN (k10A "ikä") ;
+agent_provocateur_N = mkWN (k6 "provokaattori") ;
+allegation_N = mkWN (k48A "väite") ;
+americanMasc_N = mkN "amerikkalainen" ;
+angry_A = mkWA (k38 "vihainen") ;
+answer_N = mkWN (k39 "vastaus") ;
+applaud_V2 = mkWV2 (k53 "ylistää") ;
+argument_N = mkN "argumentti" ;
+attack_N = mkN "hyökkäys" ;
+auction_N = mkWN (compoundN "huuto" (k9A "kauppa")) ;
+authority_N = mkN "viranomainen" ;
+back_Adv = mkAdv "takaisin" ;
+banker_N = mkWN (k6 "pankkiiri") ;
+bankruptcy_N = mkWN (k5 "konkurssi") ;
+base_N = mkN "perusta" ;
+battle_N = mkN "taistelu" ;
+beginning_N = mkN "alku" ;
+bet_N = mkN "vedon" (mkN "lyönti") ;
+bid_V = mkV "tarjota" ;
+bridge_N = mkN "silta" ;
+brokerage_N = mkWN (compoundN "pankkiiri" (k48A "liike")) ;
+budget_N = mkWN (k5A "budjetti") ;
+cable_N = mkN "kaapeli" "kaapeleita" ;
+call_V = mkV "kutsua" ;
+campaign_N = mkN "kampanja" ;
+career_N = mkWN (k10 "ura") ;
+circulation_N = mkWN (k2 "jakelu") ;
+clause_N = mkWN (k48 "lause") ;
+combine_V2 = mkWV2 (k53 "yhdistää") ;
+comedy_N = mkN "komedia" ;
+commercial_A = mkWA (k38 "kaupallinen") ;
+commodity_N = mkN "hyödyke" ;
+competition_N = mkWN (k2 "kilpailu") ;
+conservative_N = mkN "konservatiivinen" ;
+consider_V3 = mkV3 (mkV "pitää") (mkPrep partitive) (mkPrep essive) ;
+considerable_A = mkWA (k10 "varteenotettava") ;
+consideration_N = mkWN (k40 "huomaavaisuus") ;
+contractor_N = mkN "osapuoli" ;
+control_N = mkN "kontrolli" ;
+core_N = mkN "ydin" ;
+depend_V = mkV "riippua" ;
+deputy_N = mkN "sijainen" ;
+design_N = mkN "muotoilu" ;
+developer_N = mkN "kehittäjä" ;
+device_N = mkN "laite" ;
+discount_N = mkN "alennus" ;
+dispute_N = mkWN (k2 "väittely") ;
+drop_V = mkV "pudota" ;
+elaborate_V = mkV (mkV "kehittää") "pidemmälle" ;
+electricity_N = mkN "sähkö" ;
+electronics_N = mkWN (k9A "elektroniikka") ;
+employer_N = mkWN (compoundN "työn" (k10 "antaja")) ;
+engineer_N = mkWN (k5 "insinööri") ;
+entry_N = mkWN (compoundN "sisään" (k1 "tulo")) ;
+environment_N = mkWN (k1 "ympäristö") ;
+equal_A = mkA "samanarvoinen" ;
+especial_A = mkWA (k38 "erikoinen") ;
+event_N = mkN "tapahtuma" ;
+expand_V = mkWV (k52A "laajentua") ;
+expectation_N = mkWN (k10 "näkymä") ;
+experience_V2 = mkWV2 (k58A "kokea") ;
+export_N = mkWN (k5A "vienti") ;
+farm_N = mkN "maatila" ;
+favour_N = mkN "palvelus" ;
+fear_N = mkN "pelko" ;
+field_N = mkN "kenttä" ;
+file_V = mkV "arkistoida" ;
+finance_N = mkN "finanssi" ;
+financier_N = mkWN (k10 "rahoittaja") ;
+further_A = mkA "kaukaisempi" ;
+future_A = mkWA (k10 "tuleva") ;
+game_N = mkWN (k5 "peli") ;
+gas_N = mkWN (k1 "kaasu") ;
+get_VA = mkVA (mkV "tulla") (mkPrep translative) ;
+governor_N = mkN "kuvernööri" ;
+highway_N = mkWN (compoundN "valta" (k19 "tie")) ;
+hotel_N = mkWN (k6 "hotelli") ;
+identify_V2 = mkWV2 (k53 "tunnistaa") ;
+increase_V = mkV "kasvaa" ;
+individual_N = mkN "yksilö" ;
+inquiry_N = mkN "kysely" ;
+insider_N = mkWN (k32 "jäsen") "sisäpiirin" ;
+international_A = mkWA (compoundA "kansain" (k38 "välinen")) ;
+investigation_N = mkWN (k9A "tutkinta") ;
+labour_N = mkN "työ" ;
+lack_N = mkN "puute" ;
+like_A = mkWA (k38 "samanlainen") ;
+limit_N = mkWN (kH1 "raja") ;
+liquidity_N = mkWN (compoundN "maksu" (k40 "valmius")) ;
+list_V2 = mkWV2 (k67A "luetella") ;
+mail_N = mkN "posti" ;
+majority_N = mkN "enemmistö" ;
+margin_N = mkN "marginaali" ;
+material_N = mkN "materiaali" ;
+mayor_N = mkWN (k6 "pormestari") ;
+measure_V2 = mkWV2 (k73A "mitata") ;
+memory_N = mkWN (k5 "muisti") ;
+merchant_N = mkWN (k41 "kauppias") ;
+model_N = mkN "malli" ;
+moral_A = mkWA (k38 "moraalinen") ;
+mortgage_N = mkN "kiinnelaina" ;
+negotiation_N = mkWN (k2 "neuvottelu") ;
+normal_A = mkWA (k6 "normaali") ;
+obvious_A = mkWA (kH1 "ilmeinen") ;
+of_course_Adv = mkAdv "tietenkin" ;
+open_V = mkV "avata" ;
+operator_N = mkN "operaattori" "operaattoreita" ;
+opposition_N = mkN "oppositio" ;
+optimistic_A = mkWA (k38 "optimistinen") ;
+out_Adv = mkWAdv (k99 "ulkona") ;
+ownership_N = mkWN (k39 "omistus") ;
+pay_N = mkN "palkka" ;
+penalty_N = mkWN (k39 "rangaistus") ;
+petroleum_N = mkWN (k1 "öljy") ;
+plan_V = mkV "suunnitella" ;
+plenty_N = mkWN (k40 "runsaus") ;
+politician_N = mkWN (k1A "poliitikko") ;
+politics_N = mkN "politiikka" ;
+possible_A = mkWA (k38 "mahdollinen") ;
+practice_N = mkN "käytäntö" ;
+predecessor_N = mkWN (k10 "edeltäjä") ;
+primary_A = mkWA (compoundA "ensi" (k38 "sijainen")) ;
+private_A = mkWA (k38 "yksityinen") ;
+professional_A = mkA "professionaalinen" ;
+professor_N = mkWN (k6 "professori") ;
+promotion_N = mkWN (k39 "ylennys") ;
+protest_N = mkN "protesti" ; --MANC
+public_N = mkWN (k2 "yleisö") ;
+quarterly_A = mkWA (compoundA "neljännes" (k38 "vuosittainen")) ;
+quiet_A = mkWA (k38 "hiljainen") ;
+rare_A = mkWA (k38 "harvinainen") ;
+recovery_N = mkN "toipuminen" ;
+reduction_N = mkN "vähennys" ;
+region_N = mkWN (k48 "alue") ;
+regular_A = mkA "säännöllinen" ;
+relationship_N = mkWN (k48A "suhde") ;
+rename_V3 = mkV3 (mkV (mkV "nimetä") "uudelleen") accusative (mkPrep translative) ;
+request_N = mkN "pyyntö" ;
+requirement_N = mkN "vaatimus" ;
+resistance_N = mkWN (k39 "vastustus") ;
+respond_V = mkWV (k73 "vastata") ;
+retirement_N = mkWN "vetäytyminen" ;
+rise_N = mkWN (k1 "nousu") ;
+roller_N = mkWN (k5A "lyönti") "matala" ;
+room_N = mkWN (k48 "huone") ;
+scientific_A = mkWA (k38 "tieteellinen") ;
+section_N = mkWN (k3 "sektio") ;
+series_N = mkWN (k9 "sarja") ;
+severe_A = mkWA (k10 "ankara") ;
+share_V2 = mkWV2 (k56A "jakaa") ;
+sign_N = mkN "merkki" ;
+simple_A = mkA "yksinkertainen" ;
+slight_A = mkWA (k38 "vähäinen") ;
+software_N = mkN "ohjelmisto" ;
+sole_A = mkA "ainoa" ;
+space_N = mkN "avaruus" ;
+specialty_N = mkWN (compoundN "erikois" (k9 "ala")) ;
+standard_N = mkN "standardi" ;
+start_N = mkN "lähtö" ;
+steep_A = mkWA (k10A "jyrkkä") ;
+strange_A = mkWA (k38 "merkillinen") ;
+study_N = mkN "opiskelu" ; ---ARB
+substantial_A = mkA "merkittävä" ;
+sudden_A = mkWA (k38 "yhtäkkinen") ;
+supplier_N = mkWN (k10 "toimittaja") ;
+survey_N = mkWN (k39 "kartoitus") ;
+talk_V = mkV "puhua" ;
+target_N = mkN "maalitaulu" ;
+taxpayer_N = mkWN (compoundN "veron" (k10 "maksaja")) ;
+telecommunication_N = mkN "telekommunikaatio" ;
+title_N = mkN "titteli" ;
+tobacco_N = mkWN (k14A "tupakka") ;
+traditional_A = mkWA (k38 "perinteinen") ;
+treatment_N = mkWN (k2 "käsittely") ;
+trend_N = mkN "trendi" ;
+trouble_N = mkN "vaikeus" ;
+true_A = mkA "tosi" ;
+unchanged_A = mkA "muuttumaton" ;
+utility_N = mkWN (k48A "hyödyke") ;
+variation_N = mkWN (k2 "vaihtelu") ;
+variety_N = mkWN (k40 "moninaisuus") ;
+veto_N = mkN "veto" ;
+victim_N = mkWN (k5 "uhri") ;
+volatile_A = mkA "liikkuva" ;
+vote_N = mkWN (k39 "äänestys") ;
+wage_N = mkN "palkka" ;
+weekly_A = mkWA (k38 "viikoittainen") ;
+wrong_A = mkWA (k10 "väärä") ;
+yield_N = mkN "tuotos" ;
+  exist_V = mkV vOlla "olemassa" ;
+  initial_A = mkA "alustava" ;
+  litigation_N = mkN "riita" ;
+  monthly_A = mkA "kuukausittainen" ;
+  overall_A = mkA "totaalinen" ;
+  soar_V = mkV "ampaista" ; -- 30000 --- 
+  advertiser_N = mkN (lin NK {s = d10 "mainostaja"}) ; ---C ilmoittaja 10000 
+  apparent_A = mkA "ilmeinen" ; -- 2713 
+  attention_N = mkN (lin NK {s = d03 "huomio"}) ; -- 486 
+  begin_V = mkV (lin VK {s = c56A "alkaa"}) ; -- 65 
+  clear_A = mkA "selvä" ; -- 446 
+  crash_N = mkN "törmays" ; -- 4923 
+  crisis_N = mkN (lin NK {s = d05 "kriisi"}) ; -- 785 
+  deadline_N = mkN "määräaika" ; -- 4359 
+  democracy_N = mkN (lin NK {s = d12 "demokratia"}) ; -- 1742 
+  democratic_A = mkA (lin AK {s = d38 "demokraattinen"}) ; -- 2612 
+  distribution_N = mkN (lin NK {s = d02 "jakelu"}) ; -- 5389 
+  drop_N = mkN "putoaminen" ;x
+  duty_N = mkN (lin NK {s = d40 "velvollisuus"}) ; -- 2904 
+  early_A = mkA "aikainen" ; -- 1030 
+  eliminate_V2 = mkV2 (lin VK {s = c53 "poistaa"}) ; -- 1076 
+  expansion_N = mkN "laajeneminen" ; -- 4781 
+  face_N = mkN "kasvo" ;
+  fact_N = mkN "tosiasia" ;
+  fee_N = mkN (lin NK {s = d01 "maksu"}) ; -- 1082 
+  flat_A = mkA "litteä" ; -- 446 
+  focus_V = mkV "keskittyä" ; -- 662 
+  forecast_N = mkN (lin NK {s = d48 "ennuste"}) ; -- 2597 
+  hard_A = mkA (lin AK {s = d10 "kova"}) ; -- 218 
+  healthy_A = mkA (lin AK {s = d48 "terve"}) ; -- 1774 
+  hour_N = mkN "tunti" ;
+  however_Adv = mkAdv (lin AdvK {s = c99 "kuitenkin"}) ; -- 49 
+  impact_N = mkN (lin NK {s = d39 "vaikutus"}) ; -- 593 
+  import_N = mkN "tuonti" ;
+  incentive_N = mkN (lin NK {s = d33 "kannustin"}) ; -- 10000 
+  individual_A = mkA "yksilöllinen" ; -- 154 
+  lead_V = mkV (lin VK {s = c53A "johtaa"}) ; -- 172 
+  legislation_N = mkN "lain" (mkN "säädäntö") ; -- 2206 
+  look_V = mkV "katsoa" ; ---ARB
+  necessary_A = mkA "välttämätön" ; -- 1846 
+  net_A = mkA "puhdas" ;
+  only_Adv = mkAdv (lin AdvK {s = c99 "vain"}) ; -- 32 
+  owner_N = mkN (lin NK {s = d10 "omistaja"}) ; -- 694 
+  patent_N = mkN "patentti" ;
+  price_V = mkV (lin VK {s = c67A "hinnoitella"}) ; -- 8727 
+  pulp_N = mkN "selluloosa" ;
+  range_N = mkN (lin NK {s = d10 "valikoima"}) ; -- 3895 
+  reaction_N = mkN "reaktio" "reaktioita" ;
+  reform_N = mkN (lin NK {s = d39 "uudistus"}) ; -- 1004 
+  responsibility_N = mkN (lin NK {s = d17 "vastuu"}) ; -- 626 
+  rival_N = mkN (lin NK {s = d12 "kilpailija"}) ; -- 1298 
+  source_N = mkN "lähde" ; -- 4551 
+  speculation_N = mkN "spekulaatio" ;
+  step_N = mkN "askel" ;
+  timing_N = mkN (lin NK {s = d39 "ajoitus"}) ; -- 8679 
+  trip_N = mkN "matka" ;
+  trust_N = mkN (lin NK {s = d39 "luottamus"}) ; -- 1763 
+  unusual_A = mkA "epätavallinen" ; -- 8513 
+  weekend_N = mkN "viikonloppu" ; -- 946 
+  withdrawal_N = mkN "pois" (mkN "vetäminen") ;
 
 }

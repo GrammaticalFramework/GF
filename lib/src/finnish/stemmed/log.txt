@@ -134,7 +134,13 @@ separate from "ole" ("ottamaan", not "otamaan") and from "ovat" (*"omaan").
 Received a corrected corpus from Krasimir, with weekdays and months recognized. This changes 100 translations.
 Now at version 13-eng-fin-wsj.txt, working with penn/wsj-3220/corr-wsj.full.
 
-
+Dictionary revision: 368 words with 5--3 occurrences, 140 changed in 30 minutes. Effect on 425 translations.
+It feels that FiWN - or maybe the method we have used it? - is not the optimal source, as the translations
+we get are often unusual translations, and even strange words. For instance, pay_N = "liksa", a slang word.
+Now at version 14. Work done:
+- 5 hours correcting the lexicon
+- 7 hours analysing
+- 10 hours fixing RGL
 
 
 
