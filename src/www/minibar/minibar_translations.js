@@ -213,22 +213,22 @@ Translations.prototype.show_groupedtranslations=function(translationsResult) {
 }
 
 
-function tree_button(img_url) {
-  var imgs=[tree_icon,img_url+"&nofun=true",img_url]
-  var current=0;
-  function cycle() {
-      current++;
-      if(current>=imgs.length) current=0;
-      i.src=imgs[current]
-  }
-  var i=button_img(tree_icon,cycle);
-  return i
+function tree_button(img_url,opt) {
+    var imgs=[tree_icon,img_url+(opt||"&nofun=true"),img_url]
+    var current=0;
+    function cycle() {
+	current++;
+	if(current>=imgs.length) current=0;
+	i.src=imgs[current]
+    }
+    var i=button_img(tree_icon,cycle);
+    return i
 }
 
 Translations.prototype.abstree_button=function(abs) {
   var f=this.options.tree_img_format;
   var img=this.server.current_grammar_url+"?command=abstrtree&format="+f+"&tree="+encodeURIComponent(abs)
-  var btn=tree_button(img);
+    var btn=tree_button(img,"&nocat=true");
   btn.title="Click to display abstract syntax tree"
   return btn
 }
