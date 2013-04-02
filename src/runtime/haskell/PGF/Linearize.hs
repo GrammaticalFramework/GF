@@ -50,7 +50,7 @@ firstLin (_,arr)
 
 -- | Creates a table from feature name to linearization. 
 -- The outher list encodes the variations
-tabularLinearizes :: PGF -> CId -> Expr -> [[(String,String)]]
+tabularLinearizes :: PGF -> Language -> Expr -> [[(String,String)]]
 tabularLinearizes pgf lang e = map cnv (linTree pgf lang e)
   where
     cnv ((cat,_),lin) = zip (lbls cat) $ map (unwords . concatMap flattenBracketedString . snd . untokn "") (elems lin)
