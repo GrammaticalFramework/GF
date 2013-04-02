@@ -119,7 +119,7 @@ executable gf
                  mtl,
                  haskeline,
                  parallel>=3,
-		 utf8-string
+                 utf8-string
   ghc-options: -threaded
   if flag(server)
     build-depends: httpd-shed, network, json, cgi
