@@ -190,7 +190,11 @@ Also tried linearization by chunks, defined as maximal fun-headed subtrees. Quit
 smoothing with shorter n-grams one could say. Long-distance agreements lost, but chunks make sense.
 
 
+2/4
 
-  
+Implemented an elementary chunking translator, located in svn://molto-project.eu/wp5/engfin/
+For the first time, able to "translate everything" from English to Finnish. The quality is horrible of course.
+
+
 
 
