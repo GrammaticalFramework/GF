@@ -27,7 +27,7 @@ function Translations(server,opts) {
 
     var tom=this.to_menu=node("select",{id:"to_menu",multiple:"",size:5},[]);
     appendChildren(this.menus,[text(" To: "), this.to_menu])
-    tom.onchange=bind(this.get_translations,this);
+    tom.onchange=bind(this.change_language,this);
     /* // This seems triggers weird scrolling behavior in Firefox and Chrome:
     tom.onmouseover=function() { var n=tom.options.length;
 				 tom.size=n<12 ? n : 12; }
@@ -37,15 +37,43 @@ function Translations(server,opts) {
 }
 
 Translations.prototype.change_grammar=function(grammar) {
-    this.grammar=grammar;
+    var t=this
+    t.grammar=grammar;
     
-    update_language_menu(this.to_menu,grammar);
-    insertFirst(this.to_menu,option("All","All"));
-    this.to_menu.value="All";
+    t.local=mt_local(t.server.current_grammar_url)
+    update_language_menu(t.to_menu,grammar);
+    insertFirst(t.to_menu,option("All","All"));
+    t.to_menu.value="All";
+    var toLangs=t.local.get("toLangs")
+    if(toLangs) {
+	t.toLangs=toLangs
+	t.toSet=toSet(toLangs)
+	var os=to_menu.options
+	for(var i=0;i<os.length;i++)
+	    os[i].selected=t.toSet[os[i].value] || false
+    }
+    else {
+	t.toLangs=["All"]
+	t.toSet={"All":true}
+    }
 }
 
 Translations.prototype.clear=function() {
     this.main.innerHTML="";
+}
+
+Translations.prototype.change_language=function() {
+    var toLangs=[]
+    var os=to_menu.options;
+    for(var i=0;i<os.length;i++)
+	if(os[i].selected) {
+	    toLangs.push(os[i].value)
+	    toSet[os[i].value]=true;
+	}
+    this.toLangs=toLangs
+    this.toSet=toSet(toLangs)
+    this.local.put("toLangs",toLangs)
+    this.get_translations();
 }
 
 Translations.prototype.translateFrom=function(current,startcat,lin_action) {
@@ -115,14 +143,8 @@ Translations.prototype.show_translations=function(translationResults) {
 	var trans=main;
 	//var to=target_lang(); // wrong
 	var to=to_menu.value;
-	var toLangs=[]
-	var toSet={}
-	var os=to_menu.options;
-	for(var i=0;i<os.length;i++)
-	    if(os[i].selected) {
-		toLangs.push(os[i].value)
-		toSet[os[i].value]=true;
-	    }
+	var toLangs=self.toLangs
+	var toSet=self.toSet
 	var cnt=translationResults.length; // cnt==1 usually
 	//trans.translations=translations;
 	trans.single_translation=[];
@@ -212,19 +234,6 @@ Translations.prototype.show_groupedtranslations=function(translationsResult) {
     }
 }
 
-
-function tree_button(img_url,opt) {
-    var imgs=[tree_icon,img_url+(opt||"&nofun=true"),img_url]
-    var current=0;
-    function cycle() {
-	current++;
-	if(current>=imgs.length) current=0;
-	i.src=imgs[current]
-    }
-    var i=button_img(tree_icon,cycle);
-    return i
-}
-
 Translations.prototype.abstree_button=function(abs) {
   var f=this.options.tree_img_format;
   var img=this.server.current_grammar_url+"?command=abstrtree&format="+f+"&tree="+encodeURIComponent(abs)
@@ -252,10 +261,56 @@ Translations.prototype.parsetree_button=function(abs,lang) {
   return btn;
 }
 
+/* --- Auxiliary functions -------------------------------------------------- */
+
+function tree_button(img_url,opt) {
+    var imgs=[tree_icon,img_url+(opt||"&nofun=true"),img_url]
+    var current=0;
+    function cycle() {
+	current++;
+	if(current>=imgs.length) current=0;
+	i.src=imgs[current]
+    }
+    var i=button_img(tree_icon,cycle);
+    return i
+}
+
 function draw_brackets(b) {
     return b.token
 	? span_class("token",text(b.token))
 	: node("span",{"class":"brackets",
 		       title:(b.fun||"_")+":"+b.cat+" "+b.fid+":"+b.index},
 	       b.children.map(draw_brackets))
+}
+
+
+// Access to localStorage, if available
+function mt_local(grammar_url) {
+    function dummy() {
+	return {
+	    get: function(name,def) { return def },
+	    put: function(name,value) { }
+	}
+    }
+    function real() {
+	var prefix="gf.minibar_translations."+grammar_url+"."
+	return {
+	    get: function (name,def) {
+		var id=prefix+name
+		return localStorage[id] ? JSON.parse(localStorage[id]) : def;
+	    },
+	    put: function (name,value) {
+		var id=prefix+name;
+		localStorage[id]=JSON.stringify(value);
+	    }
+	}
+    }
+    return window.localStorage ? real() : dummy()
+}
+
+// Convert an array of strings to a set (for quick & easy membership tests)
+function toSet(a) {
+    var set={}
+    for(var i=0;i<a.length;i++) set[a[i]]=true
+    return set
 }
