@@ -60063,4 +60063,9 @@ yield_N = mkN "tuotos" ;
   weekend_N = mkN "viikonloppu" ; -- 946 
   withdrawal_N = mkN "pois" (mkN "vetäminen") ;
 
+
+-- miscellaneous additions
+
+  how8much_IDet = {s = \\c => "kuinka" ++ (snoun2nounBind (exceptNomN (mkN "paljo") "paljon")).s ! NCase Sg c ; n = Sg ; isNum = False} ;
+
 }
