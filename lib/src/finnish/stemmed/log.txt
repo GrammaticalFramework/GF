@@ -134,7 +134,7 @@ separate from "ole" ("ottamaan", not "otamaan") and from "ovat" (*"omaan").
 Received a corrected corpus from Krasimir, with weekdays and months recognized. This changes 100 translations.
 Now at version 13-eng-fin-wsj.txt, working with penn/wsj-3220/corr-wsj.full.
 
-Dictionary revision: 368 words with 5--3 occurrences, 140 changed in 30 minutes. Effect on 425 translations.
+Dictionary revision: 368 words with 5--4 occurrences, 150 changed in 30 minutes. Effect on 425 translations.
 It feels that FiWN - or maybe the method we have used it? - is not the optimal source, as the translations
 we get are often unusual translations, and even strange words. For instance, pay_N = "liksa", a slang word.
 Now at version 14. Work done:
@@ -142,6 +142,52 @@ Now at version 14. Work done:
 - 7 hours analysing
 - 10 hours fixing RGL
 
+
+1/4
+
+Calculation of returns
+- 22403 lemma tokens
+-  4333 lemma types
+-   390 types with 10 occurrences or more
+-    61 % of tokens covered by these
+- Going down from 10: (k=occs, n=lemmas with k occs, k*n)
+
+(9,58,522),
+(8,52,416),
+(7,87,609),
+(6,118,708),
+(5,169,845),
+(4,200,800),
+(3,388,1164),
+(2,745,1490),
+(1,2126,2126)
+
+Thus by covering >3 we now cover 79%. >2 is 84%, and >1 is 91%. >1 means 51% of the lemmas.
+
+That is, we need to revise 2100 words to achieve 90% accuracy. Revision taking 1h/600 words (with 50% OK)
+means 3.5h work. Maybe 8h work for all 4333 lemmas.
+
+Analysed the whole log4.txt. Statistics of types of metas:
+
+NP	25369
+A	12837
+N	11191
+S	3961
+Quant -> N -> NP	3609
+N -> NP	3193
+Prep -> S -> Adv	2581
+NP -> VP -> S	2184
+AP	2176
+NP -> VPSlash -> NP	1680
+S -> NP -> VP -> S	1635
+
+
+Etc. 14,718 different types. Many of those could be dealt with by padding with nullables and coercions.
+
+  Quant -> N -> NP ===> \quant, n -> DetCN (DetQuant q NumSg) (UseN n)
+
+Also tried linearization by chunks, defined as maximal fun-headed subtrees. Quite similar to 
+smoothing with shorter n-grams one could say. Long-distance agreements lost, but chunks make sense.
 
 
 
