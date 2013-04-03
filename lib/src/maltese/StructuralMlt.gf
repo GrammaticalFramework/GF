@@ -47,23 +47,48 @@ concrete StructuralMlt of Structural = CatMlt **
 
     -- which_IQuant = {s = \\_ => "which"} ;
 
+    {- Conjunction ---------------------------------------------------------- -}
+
+    and_Conj        = mkConj "u" ;
+    both7and_DConj  = mkConj "kemm" "u";
+    but_PConj       = ss "imma" ;
+    either7or_DConj = mkConj "jew" "inkella" ;
+    or_Conj         = mkConj "jew" ;
+    otherwise_PConj = ss "inkella" ;
+    therefore_PConj = ss "allura" ;
+    if_then_Conj    = mkConj "jekk" ;
+
+    {- Preposition ---------------------------------------------------------- -}
+
+    above_Prep    = mkPrep "fuq" ;
+    after_Prep    = mkPrep "wara" ;
+    before_Prep   = mkPrep "qabel" ;
+    behind_Prep   = mkPrep "wara" ;
+    between_Prep  = mkPrep "bejn" ;
+    by8agent_Prep = mkPrep "minn" "mill-" "mit-" ;
+    by8means_Prep = mkPrep "bi" "b'" "bil-" "bit-" "bl-" ;
+    during_Prep   = mkPrep "waqt" ;
+    for_Prep      = mkPrep "għal" "għall-" "għat-" ;
+    from_Prep     = mkPrep "minn" "mill-" "mit-" ;
+    in8front_Prep = mkPrep "quddiem" ;
+    in_Prep       = mkPrep "fi" "f'" "fil-" "fit-" "fl-" ;
+    on_Prep       = mkPrep "fuq" ;
+    part_Prep     = mkPrep "ta'" "t'" "tal-" "tat-" "tal-" ;
+    possess_Prep  = mkPrep "ta'" "t'" "tal-" "tat-" "tal-" ;
+    through_Prep  = mkPrep "ġo" "ġol-" "ġot-" ;
+    to_Prep       = mkPrep "lil" "lill-" "lit-" ;
+    under_Prep    = mkPrep "taħt" ;
+    without_Prep  = mkPrep "mingħajr" ;
+    with_Prep     = mkPrep "ma'" "m'" "mal-" "mat-" "mal-" ;
+    except_Prep   = mkPrep "apparti" ;
+
     {- Others --------------------------------------------------------------- -}
 
-    -- above_Prep = mkPrep "above" ;
-    -- after_Prep = mkPrep "after" ;
     -- almost_AdA = mkAdA "almost" ;
     -- almost_AdN = mkAdN "almost" ;
     -- although_Subj = ss "although" ;
     -- always_AdV = mkAdV "always" ;
-    -- and_Conj = mkConj "and" ;
     -- because_Subj = ss "because" ;
-    -- before_Prep = mkPrep "before" ;
-    -- behind_Prep = mkPrep "behind" ;
-    -- between_Prep = mkPrep "between" ;
-    -- both7and_DConj = mkConj "both" "and";
-    -- but_PConj = ss "but" ;
-    -- by8agent_Prep = mkPrep "by" ;
-    -- by8means_Prep = mkPrep "by" ;
     -- can8know_VV, can_VV = {
     --   s = table { 
     --     VVF VInf => ["be able to"] ;
@@ -76,13 +101,9 @@ concrete StructuralMlt of Structural = CatMlt **
     --     } ;
     --   typ = VVAux
     --   } ;
-    -- during_Prep = mkPrep "during" ;
-    -- either7or_DConj = mkConj "either" "or" singular ;
     -- everybody_NP = regNP "everybody" singular ;
     -- everything_NP = regNP "everything" singular ;
     -- everywhere_Adv = mkAdv "everywhere" ;
-    -- for_Prep = mkPrep "for" ;
-    -- from_Prep = mkPrep "from" ;
     -- here_Adv = mkAdv "here" ;
     -- here7to_Adv = mkAdv ["to here"] ;
     -- here7from_Adv = mkAdv ["from here"] ;
@@ -90,8 +111,6 @@ concrete StructuralMlt of Structural = CatMlt **
     -- how8much_IAdv = ss "how much" ;
     -- how8many_IDet = mkDeterminer plural ["how many"] ;
     -- if_Subj = ss "if" ;
-    -- in8front_Prep = mkPrep ["in front of"] ;
-    -- in_Prep = mkPrep "in" ;
     -- less_CAdv = C.mkCAdv "less" "than" ;
     -- more_CAdv = C.mkCAdv "more" "than" ;
     -- most_Predet = ss "most" ;
@@ -108,12 +127,7 @@ concrete StructuralMlt of Structural = CatMlt **
     --   typ = VVAux
     --   } ;
     -- no_Utt = ss "no" ;
-    -- on_Prep = mkPrep "on" ;
-    -- or_Conj = mkConj "or" singular ;
-    -- otherwise_PConj = ss "otherwise" ;
-    -- part_Prep = mkPrep "of" ;
     -- please_Voc = ss "please" ;
-    -- possess_Prep = mkPrep "of" ;
     -- quite_Adv = mkAdv "quite" ;
     -- so_AdA = mkAdA "so" ;
     -- somebody_NP = regNP "somebody" singular ;
@@ -122,11 +136,7 @@ concrete StructuralMlt of Structural = CatMlt **
     -- there_Adv = mkAdv "there" ;
     -- there7to_Adv = mkAdv "there" ;
     -- there7from_Adv = mkAdv ["from there"] ;
-    -- therefore_PConj = ss "therefore" ;
-    -- through_Prep = mkPrep "through" ;
     -- too_AdA = mkAdA "too" ;
-    -- to_Prep = mkPrep "to" ;
-    -- under_Prep = mkPrep "under" ;
     -- very_AdA = mkAdA "very" ;
     -- want_VV = mkVV (regV "want") ;
     -- whatPl_IP = mkIP "what" "what" "what's" plural ;
@@ -137,22 +147,24 @@ concrete StructuralMlt of Structural = CatMlt **
     -- whoPl_IP = mkIP "who" "whom" "whose" plural ;
     -- whoSg_IP = mkIP "who" "whom" "whose" singular ;
     -- why_IAdv = ss "why" ;
-    -- without_Prep = mkPrep "without" ;
-    -- with_Prep = mkPrep "with" ;
     -- yes_Utt = ss "yes" ;
     
-    -- if_then_Conj = mkConj "if" "then" singular ;
     -- nobody_NP = regNP "nobody" singular ;
     -- nothing_NP = regNP "nothing" singular ;
     
     -- at_least_AdN = mkAdN "at least" ;
     -- at_most_AdN = mkAdN "at most" ;
     
-    -- except_Prep = mkPrep "except" ;
     
     -- as_CAdv = C.mkCAdv "as" "as" ;
     
-    -- have_V2 = dirV2 (mk5V "have" "has" "had" "had" "having") ;
+    have_V2 = dirV2 (
+      irregularV form1 (ResMlt.mkRoot) (ResMlt.mkPattern)
+        "kelli" "kellek" "kellu" "kellha" "kellna" "kellkom" "kellhom"
+        "għandi" "għandek" "għandu" "għandha" "għandna" "għandkom" "għandhom"
+        "kollok" "kollkom"
+      ) ;
+
     -- that_Subj = ss "that" ;
 
   lin language_title_Utt = ss "Malti" ;

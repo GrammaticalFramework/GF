@@ -33,6 +33,11 @@ concrete SentenceMlt of Sentence = CatMlt ** open
         } ;
       } ;
 
+    --  Temp -> Polarity -> Cl -> S
+    UseCl t p cl = {
+      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p
+      } ;
+
 -- Cl
 -- Imp
 -- QS

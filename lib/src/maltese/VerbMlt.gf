@@ -30,8 +30,10 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
         _ => insertObj (\\agr => np.s ! CPrep) vp
       } ;
 
--- Comp
--- VP
--- VPSplash
+    -- VP -> Adv -> VP
+    AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
+
+    -- AdV -> VP -> VP
+    -- AdVVP adv vp = insertAdV adv.s vp ;
 
 }

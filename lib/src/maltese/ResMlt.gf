@@ -22,6 +22,11 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
       | GPl -- dawk
       ;
 
+    Definiteness =
+        Definite    -- eg BIL-
+      | Indefinite  -- eg BI
+      ;
+
   oper
     -- Agreement system corrected based on comments by [AZ]
     Agr : Type = { g : Gender ; n : Number ; p : Person } ;
@@ -32,37 +37,29 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
       case <agr.p,agr.n> of {
         <P1,num> => AgP1 num;
         <P2,num> => AgP2 num;
-        <P3,Sg> => AgP3Sg agr.g;
-        <P3,Pl> => AgP3Pl
+        <P3,Sg>  => AgP3Sg agr.g;
+        <P3,Pl>  => AgP3Pl
       } ;
     
     toAgr : VAgr -> Agr = \vagr ->
       case vagr of {
-        AgP1 num => mkAgr Masc num P1 ; --- sorry ladies
-        AgP2 num => mkAgr Masc num P2 ;
+        AgP1 num   => mkAgr Masc num P1 ; --- sorry ladies
+        AgP2 num   => mkAgr Masc num P2 ;
         AgP3Sg gen => mkAgr gen Pl P3 ;
-        AgP3Pl => mkAgr Masc Pl P3
+        AgP3Pl     => mkAgr Masc Pl P3
       } ;
 
   param
     -- Agreement for verbs
     VAgr =
-        AgP1 Number  -- jiena, aħna
-      | AgP2 Number  -- inti, intom
-      | AgP3Sg Gender  -- huwa, hija
-      | AgP3Pl    -- huma
+        AgP1 Number   -- jiena, aħna
+      | AgP2 Number   -- inti, intom
+      | AgP3Sg Gender -- huwa, hija
+      | AgP3Pl        -- huma
       ;
 
   param
     NPCase = Nom | CPrep ; -- [AZ]
-
-    -- Animacy = Animate | Inanimate ;
-
-    -- Definiteness =
-    --     Definite    -- eg IL-KARTA. In this context same as Determinate
-    --   | Indefinite  -- eg KARTA
-    --   ;
-
 
   {- Numeral -------------------------------------------------------------- -}
 
@@ -80,13 +77,13 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
     -- Indicate how a corresponding object should be treated
     --- Overlap between Num Sg and Num1, but leaving as is for now
     NumForm =
-        Num Number -- Sg | Pl
-      | Num0     -- 0 (l-edba SIEGĦA)
-      | Num1     -- 1, 101... (SIEGĦA, mija u SIEGĦA)
-      | Num2     -- 2 (SAGĦTEJN)
-      | Num3_10  -- 3..10, 102, 103... (tlett SIEGĦAT, għaxar SIEGĦAT, mija u żewġ SIEGĦAT, mija u tlett SIEGĦAT)
-      | Num11_19 -- 11..19, 111... (ħdax-il SIEGĦA, mija u dsatax-il SIEGĦA)
-      | Num20_99 -- 20..99, 120... (għoxrin SIEGĦA, disa' u disgħajn SIEGĦA)
+        NumX Number -- Sg | Pl
+      | Num0        -- 0 (l-edba SIEGĦA)
+      | Num1        -- 1, 101... (SIEGĦA, mija u SIEGĦA)
+      | Num2        -- 2 (SAGĦTEJN)
+      | Num3_10     -- 3..10, 102, 103... (tlett SIEGĦAT, għaxar SIEGĦAT, mija u żewġ SIEGĦAT, mija u tlett SIEGĦAT)
+      | Num11_19    -- 11..19, 111... (ħdax-il SIEGĦA, mija u dsatax-il SIEGĦA)
+      | Num20_99    -- 20..99, 120... (għoxrin SIEGĦA, disa' u disgħajn SIEGĦA)
       ;
 
     NumCase =
@@ -102,8 +99,9 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
       s : Gender => Str ;
       n : NumForm ;
       clitic : Str ;
-      hasNum : Bool ;
-      isPron : Bool ;
+      hasNum : Bool ; -- has a numeral
+      isPron : Bool ; -- is a pronoun
+      isDefn : Bool ; -- is definite
       } ;
     -- Determiner = {
     --   s : NPCase => Gender => NumCase => Str ;
@@ -120,6 +118,7 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
       clitic : Str ;
       isPron : Bool ;
       isDemo : Bool ; -- Demonstrative (this/that/those/these)
+      isDefn : Bool ; -- is definite
       } ;
     -- Quantifier = {
     --   s : NPCase => Gender => NumForm => Str ;
@@ -149,21 +148,15 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
       s : NPCase => Str ;
       a : Agr ;
       isPron : Bool ;
+      isDefn : Bool ;
       } ;
 
   param
-    Noun_Sg_Type =
-        Singulative  -- eg ĦUTA
-      | Collective  -- eg ĦUT
-      ;
-    Noun_Pl_Type =
-        Determinate  -- eg ĦUTIET
-      | Indeterminate  -- eg ĦWIET
-      ;
     Noun_Number =
-        Singular Noun_Sg_Type    -- eg ĦUTA / ĦUT
-      | Dual            -- eg WIDNEJN
-      | Plural Noun_Pl_Type    -- eg ĦUTIET / ĦWIET
+        Singulative -- ĦUTA
+      | Collective  -- ĦUT
+      | Dual        -- WIDNEJN
+      | Plural      -- ĦUTIET
       ;
 
   {- Pronoun -------------------------------------------------------------- -}
@@ -198,13 +191,13 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
 
     VerbInfo : Type = {
       class : VClass ;
-      form : VDerivedForm ;
-      root : Root ; -- radicals
-      patt : Pattern ; -- vowels extracted from mamma
-      patt2: Pattern ; -- vowel changes; default to patt (experimental)
+      form  : VDerivedForm ;
+      root  : Root ; -- radicals
+      patt  : Pattern ; -- vowels extracted from mamma
+      patt2 : Pattern ; -- vowel changes; default to patt (experimental)
       -- in particular, patt2 is used to indicate whether an IE sould be shortened
       -- to an I or an E (same for entire verb)
-      imp : Str ; -- Imperative Sg. Gives so much information jaħasra!
+      imp   : Str ; -- Imperative Sg. Gives so much information jaħasra!
       } ;
 
   param
@@ -212,7 +205,7 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
     VForm =
         VPerf VAgr    -- Perfect tense in all pronoun cases
       | VImpf VAgr    -- Imperfect tense in all pronoun cases
-      | VImp Number  -- Imperative is always P2, Sg & Pl
+      | VImp Number   -- Imperative is always P2, Sg & Pl
       -- | VPresPart GenNum  -- Present Particible for Gender/Number
       -- | VPastPart GenNum  -- Past Particible for Gender/Number
       -- | VVerbalNoun      -- Verbal Noun
@@ -292,22 +285,22 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
 
     copula_kien = {
       s : (VForm => Str) = table {
-        VPerf (AgP1 Sg) => "kont" ;
-        VPerf (AgP2 Sg) => "kont" ;
+        VPerf (AgP1 Sg)     => "kont" ;
+        VPerf (AgP2 Sg)     => "kont" ;
         VPerf (AgP3Sg Masc) => "kien" ;
-        VPerf (AgP3Sg Fem) => "kienet" ;
-        VPerf (AgP1 Pl) => "konna" ;
-        VPerf (AgP2 Pl) => "kontu" ;
-        VPerf (AgP3Pl) => "kienu" ;
-        VImpf (AgP1 Sg) => "nkun" ;
-        VImpf (AgP2 Sg) => "tkun" ;
+        VPerf (AgP3Sg Fem)  => "kienet" ;
+        VPerf (AgP1 Pl)     => "konna" ;
+        VPerf (AgP2 Pl)     => "kontu" ;
+        VPerf (AgP3Pl)      => "kienu" ;
+        VImpf (AgP1 Sg)     => "nkun" ;
+        VImpf (AgP2 Sg)     => "tkun" ;
         VImpf (AgP3Sg Masc) => "jkun" ;
-        VImpf (AgP3Sg Fem) => "tkun" ;
-        VImpf (AgP1 Pl) => "nkunu" ;
-        VImpf (AgP2 Pl) => "tkunu" ;
-        VImpf (AgP3Pl) => "jkunu" ;
-        VImp (Pl) => "kun" ;
-        VImp (Sg) => "kunu"
+        VImpf (AgP3Sg Fem)  => "tkun" ;
+        VImpf (AgP1 Pl)     => "nkunu" ;
+        VImpf (AgP2 Pl)     => "tkunu" ;
+        VImpf (AgP3Pl)      => "jkunu" ;
+        VImp (Pl)           => "kun" ;
+        VImp (Sg)           => "kunu"
         } ;
       i : VerbInfo = mkVerbInfo (Irregular) (FormI) (mkRoot "k-w-n") (mkPattern "ie") ;
       } ;
@@ -367,18 +360,19 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
       -- a2 = [] ;
       } ;
 
-  {- Adjective ------------------------------------------------------------ -}
+  {- Adjecive ------------------------------------------------------------ -}
 
   oper
     Adjective : Type = {
       s : AForm => Str ;
+      hasComp : Bool ;
       } ;
 
   param
     AForm =
-        APosit GenNum
-      | ACompar
-      | ASuperl
+        APosit GenNum  -- Positive, e.g. SABIĦ
+      | ACompar        -- Comparative, e.g. ISBAĦ
+      | ASuperl        -- Superlative, e.g. L-ISBAĦ
       ;
 
   {- Other ---------------------------------------------------------------- -}
@@ -387,19 +381,19 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
 
     {- ~~~ Some character classes ~~~ -}
     
-    Letter : pattern Str = #( "a" | "b" | "ċ" | "d" | "e" | "f" | "ġ" | "g" | "għ" | "h" | "ħ" | "i" | "ie" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "ż" | "z" );
-    Consonant : pattern Str = #( "b" | "ċ" | "d" | "f" | "ġ" | "g" | "għ" | "h" | "ħ" | "j" | "k" | "l" | "m" | "n" | "p" | "q" | "r" | "s" | "t" | "v" | "w" | "x" | "ż" | "z" );
-    CoronalCons : pattern Str = #( "ċ" | "d" | "n" | "r" | "s" | "t" | "x" | "ż" | "z" ); -- "konsonanti xemxin"
-    LiquidCons : pattern Str = #( "l" | "m" | "n" | "r" | "għ" );
-    SonorantCons : pattern Str = #( "l" | "m" | "n" | "r" ); -- See {SA pg13}. Currently unused, but see DoublingConsN below
+    Letter        : pattern Str = #( "a" | "b" | "ċ" | "d" | "e" | "f" | "ġ" | "g" | "għ" | "h" | "ħ" | "i" | "ie" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "ż" | "z" );
+    Consonant     : pattern Str = #( "b" | "ċ" | "d" | "f" | "ġ" | "g" | "għ" | "h" | "ħ" | "j" | "k" | "l" | "m" | "n" | "p" | "q" | "r" | "s" | "t" | "v" | "w" | "x" | "ż" | "z" );
+    CoronalCons   : pattern Str = #( "ċ" | "d" | "n" | "r" | "s" | "t" | "x" | "ż" | "z" ); -- "konsonanti xemxin"
+    LiquidCons    : pattern Str = #( "l" | "m" | "n" | "r" | "għ" );
+    SonorantCons  : pattern Str = #( "l" | "m" | "n" | "r" ); -- See {SA pg13}. Currently unused, but see DoublingConsN below
     DoublingConsT : pattern Str = #( "ċ" | "d" | "ġ" | "s" | "x" | "ż" | "z" ); -- require doubling when prefixed with 't', eg DDUM, ĠĠORR, SSIB, TTIR, ŻŻID {GM pg68,2b} {OM pg90}
     DoublingConsN : pattern Str = #( "l" | "m" | "r" ); -- require doubling when prefixed with 'n', eg LLAĦĦAQ, MMUR, RRID {OM pg90}
-    StrongCons : pattern Str = #( "b" | "ċ" | "d" | "f" | "ġ" | "g" | "għ" | "h" | "ħ" | "k" | "l" | "m" | "n" | "p" | "q" | "r" | "s" | "t" | "v" | "x" | "ż" | "z" );
-    WeakCons : pattern Str = #( "j" | "w" );
-    Vowel : pattern Str = #( "a" | "e" | "i" | "o" | "u" );
-    VowelIE : pattern Str = #( "a" | "e" | "i" | "ie" | "o" | "u" );
-    Digraph : pattern Str = #( "ie" );
-    SemiVowel : pattern Str = #( "għ" | "j" );
+    StrongCons    : pattern Str = #( "b" | "ċ" | "d" | "f" | "ġ" | "g" | "għ" | "h" | "ħ" | "k" | "l" | "m" | "n" | "p" | "q" | "r" | "s" | "t" | "v" | "x" | "ż" | "z" );
+    WeakCons      : pattern Str = #( "j" | "w" );
+    Vowel         : pattern Str = #( "a" | "e" | "i" | "o" | "u" );
+    VowelIE       : pattern Str = #( "a" | "e" | "i" | "ie" | "o" | "u" );
+    Digraph       : pattern Str = #( "ie" );
+    SemiVowel     : pattern Str = #( "għ" | "j" );
 
     Vwl = Vowel ;
     Cns = Consonant ;
@@ -446,13 +440,13 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
     --- potentially slow
     extractPattern : Str -> Pattern = \s ->
       case s of {
-        v1@"ie" + _ + v2@#Vowel + _ => mkPattern v1 v2 ; -- IEQAF
-        v1@#Vowel + _ + v2@#Vowel + _ => mkPattern v1 v2 ; -- IKTEB
-        _ + v1@"ie" + _ + v2@#Vowel + _ => mkPattern v1 v2 ; -- RIEQED
-        _ + v1@"ie" + _ => mkPattern v1 ; -- ŻIED
+        v1@"ie" + _ + v2@#Vowel + _       => mkPattern v1 v2 ; -- IEQAF
+        v1@#Vowel + _ + v2@#Vowel + _     => mkPattern v1 v2 ; -- IKTEB
+        _ + v1@"ie" + _ + v2@#Vowel + _   => mkPattern v1 v2 ; -- RIEQED
+        _ + v1@"ie" + _                   => mkPattern v1 ;    -- ŻIED
         _ + v1@#Vowel + _ + v2@#Vowel + _ => mkPattern v1 v2 ; -- ĦARBAT
-        _ + v1@#Vowel + _ => mkPattern v1 ; -- ĦOBB
-        _ => mkPattern
+        _ + v1@#Vowel + _                 => mkPattern v1 ;    -- ĦOBB
+        _                                 => mkPattern
       } ;
 
     -- Create a VerbInfo record, optionally omitting various fields
@@ -491,20 +485,19 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
 
     numform2nounnum : NumForm -> Noun_Number = \n ->
       case n of {
-        Num Sg   => Singular Singulative ;
-        Num Pl   => Plural Indeterminate ;
-        Num0     => Singular Singulative ;
-        Num1     => Singular Singulative ;
+        NumX Sg  => Singulative ;
+        NumX Pl  => Plural ;
+        Num0     => Singulative ;
+        Num1     => Singulative ;
         Num2     => Dual ;
-        Num3_10  => Singular Collective ;
-        Num11_19 => Singular Singulative ;
-        Num20_99 => Plural Indeterminate
+        Num3_10  => Collective ;
+        Num11_19 => Singulative ;
+        Num20_99 => Plural
       } ;
 
     {- ~~~ Useful helper functions ~~~ -}
 
     -- Non-existant form
-    --- If changed, also see: MorphoMlt.verbPolarityTable
     noexist : Str = "NOEXIST" ;
 
     -- New names for the drop/take operations
@@ -602,54 +595,52 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
         _ => False
       } ;
 
-    
-    -- Add a definite preposition in front of your token
-    addDefinitePreposition : Str -> Str -> Str = \prep,n -> (getDefinitePreposition prep n) ++ n ;
-    addDefiniteArticle = addDefinitePreposition "il" ;
-    getDefiniteArticle = getDefinitePreposition "il" ;
-
-    -- Correctly inflect definite preposition
-    -- A more generic version of getDefiniteArticle
-      -- Params:
-        -- preposition (eg TAL, MAL, BĦALL)
-        -- noun
-    -- NOTE trying to call this with a runtime string will cause a world of pain. Design around it.
-    getDefinitePreposition : Str -> Str -> Str = \prep,noun ->
-      let
-        -- Remove either 1 or 2 l's
-        prepStem : Str = case prep of {
-          _ + "ll" => Predef.tk 2 prep ;
-          _ + "l"  => Predef.tk 1 prep ;
-          _ => prep -- this should never happen, I don't think
-        }
-      in
-      case noun of {
-        ("s"|#LiquidCons) + #Consonant + _   => prep + "-i" ;    -- L-ISKOLA
-        ("għ" | #Vowel) + _         => case prep of {    -- L-GĦATBA...
-                            ("fil"|"bil")  => (Predef.take 1 prep) + "l-" ;
-                            "il"       => "l" + "-" ;
-                            _         => prep + "-"
-                          };
-        K@#CoronalCons + _       => prepStem + K + "-" ;  -- IĊ-ĊISK
-        #Consonant + _             => prep + "-" ;      -- IL-QADDIS
-        _                   => []          -- ?
-      } ;
-
     artIndef : Str = "" ;
 
     artDef : Str =
+      makePreFull
+        "il-" -- il-ktieb
+        "i"   -- it-triq
+        "l-"  -- l-ajruplan
+      ;
+
+    -- Make a pre string which only varies for vowels
+    makePreVowel : Str -> Str -> Str = \cons,vowel ->
+      let
+        vowel' : Str = case vowel of {
+          _ + "'" => vowel ++ BIND ;
+          _ => vowel
+          } ;
+      in
       pre {
-        "il- &+" ; --- ugly hack! but won't let me use ++
-        "l-" ++ BIND / strs { "a" ; "e" ; "i" ; "o" ; "u" ; "h" ; "għ" } ;
-        "iċ-" ++ BIND / strs { "ċ" } ;
-        "id-" ++ BIND / strs { "d" } ;
-        "in-" ++ BIND / strs { "n" } ;
-        "ir-" ++ BIND / strs { "r" } ;
-        "is-" ++ BIND / strs { "s" } ;
-        "it-" ++ BIND / strs { "t" } ;
-        "ix-" ++ BIND / strs { "x" } ;
-        "iż-" ++ BIND / strs { "ż" } ;
-        "iz-" ++ BIND / strs { "z" }
+        -- Consonant
+        cons ;
+        -- Vowel
+        vowel' / strs { "a" ; "e" ; "i" ; "o" ; "u" ; "h" ; "għ" }
+      } ;
+
+    -- Make a pre string which varies coronal consonants and vowels
+    makePreFull : Str -> Str -> Str -> Str = \cons,corcons,vowel ->
+      let
+        mal = cons ++ BIND ;
+        m' = vowel ++ BIND ;
+        ma = corcons ;
+      in
+      pre {
+        -- Regular consonant
+        mal ;
+        -- Vowel
+        m' / strs { "a" ; "e" ; "i" ; "o" ; "u" ; "h" ; "għ" } ;
+        -- Coronal consonants
+        ma+"ċ-" ++ BIND / strs { "ċ" } ;
+        ma+"d-" ++ BIND / strs { "d" } ;
+        ma+"n-" ++ BIND / strs { "n" } ;
+        ma+"r-" ++ BIND / strs { "r" } ;
+        ma+"s-" ++ BIND / strs { "s" } ;
+        ma+"t-" ++ BIND / strs { "t" } ;
+        ma+"x-" ++ BIND / strs { "x" } ;
+        ma+"ż-" ++ BIND / strs { "ż" } ;
+        ma+"z-" ++ BIND / strs { "z" }
       } ;
 
     {- ~~~ Worst-case functions ~~~ -}
@@ -664,11 +655,11 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
     -- Gender
     mkNoun : (_,_,_,_,_ : Str) -> Gender -> Noun = \sing,coll,dual,det,ind,gen -> {
       s = table {
-        Singular Singulative => sing ;
-        Singular Collective => coll ;
-        Dual => dual ;
-        Plural Determinate => det ;
-        Plural Indeterminate => ind
+        Singulative => sing ;
+        Collective  => coll ;
+        Dual        => dual ;
+        Plural      => if_then_Str (isNil det) ind det
+        -- Plural   => variants {det ; ind}
         } ;
       g = gen ;
       takesPron = False ;
@@ -687,12 +678,13 @@ resource ResMlt = ParamX ** open Prelude, Predef in {
       s = table {
         APosit gn => case gn of {
           GSg Masc => masc ;
-          GSg Fem => fem ;
-          GPl => plural
+          GSg Fem  => fem ;
+          GPl      => plural
         } ;
         ACompar => compar ;
-        ASuperl => addDefiniteArticle compar
+        ASuperl => artDef ++ compar
       } ;
+      hasComp = notB (isNil compar) ;
     } ;
 
 }

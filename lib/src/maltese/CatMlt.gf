@@ -14,14 +14,14 @@ concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
 
 -- Tensed/Untensed
 
-    -- S  = {s : Str} ;
+    S  = {s : Str} ;
     -- QS = {s : QForm => Str} ;
     -- RS = {s : Agr => Str ; c : NPCase} ; -- c for it clefts
     -- SSlash = {s : Str ; c2 : Str} ;
 
 -- Sentence
 
-    Cl = {s : Tense => Anteriority => Polarity => Str} ;
+    Cl = {s : ResMlt.Tense => Anteriority => Polarity => Str} ;
     -- ClSlash = {
     --   s : ResMlt.Tense => Anteriority => Polarity => Order => Str ;
     --   c2 : Str
@@ -85,7 +85,7 @@ concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
       n : NumForm ;
       } ;
 
--- numeral
+-- Numeral
 
     -- Cardinal or ordinal in WORDS (not digits)
     Numeral = {
@@ -100,25 +100,24 @@ concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
       tail : DTail
     };
 
-
 -- Structural
 
---     Conj = {s1,s2 : Str ; n : Number} ;
--- ---b    Conj = {s : Str ; n : Number} ;
--- ---b    DConj = {s1,s2 : Str ; n : Number} ;
+    Conj = {s1,s2 : Str} ;
 --     Subj = {s : Str} ;
-    Prep = {s : Str} ;
+    Prep = {
+      s : Definiteness => Str ;
+      takesDet : Bool
+      } ;
 
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ;
-    V2, V2A, V2Q, V2S = Verb ; -- ** {c2 : Str} ;
-    V3 = Verb ; -- ** {c2, c3 : Str} ;
+    V2, V2A, V2Q, V2S = Verb ** {prep : Prep} ;
     -- VV = {s : VVForm => Str ; typ : VVType} ;
-    -- V2V = Verb ** {c2,c3 : Str ; typ : VVType} ;
+    V3, V2V = Verb ** {prep1,prep2 : Prep} ; -- ** {typ : VVType} ;
 
-    A = Adjective ** {hasComp : Bool} ; -- Does the adjective have a comparative form (e.g. ISBAĦ)?
---    A2 = Adjective ** {c2 : Str} ;
+    A = Adjective ;
+    A2 = Adjective ;
 
     N, N2, N3 = Noun ;
     PN = ProperNoun ;

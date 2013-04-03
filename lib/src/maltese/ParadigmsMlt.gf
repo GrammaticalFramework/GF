@@ -35,7 +35,29 @@ resource ParadigmsMlt = open
     singular : Number = Sg ;
     plural : Number = Pl ;
 
-    {- Noun paradigms ----------------------------------------------------- -}
+    form1 = FormI ;
+    form2 = FormII ;
+    form3 = FormIII ;
+    form4 = FormIV ;
+    form5 = FormV ;
+    form6 = FormVI ;
+    form7 = FormVII ;
+    form8 = FormVIII ;
+    form9 = FormIX ;
+    form10 = FormX ;
+
+    strong       = Strong Regular ;
+    liquidMedial = Strong LiquidMedial ;
+    geminated    = Strong Geminated ;
+    assimilative = Weak Assimilative ;
+    hollow       = Weak Hollow ;
+    lacking      = Weak Lacking ;
+    quad         = Quad QStrong ;
+    quadWeak     = Quad QWeak ;
+    loan         = Loan ;
+    irregular    = Irregular ;
+
+    {- Noun --------------------------------------------------------------- -}
 
     -- Helper function for inferring noun plural from singulative
     -- Nouns with collective & determinate forms should not use this...
@@ -216,78 +238,46 @@ resource ParadigmsMlt = open
       takesPron = True ;
       } ;
 
-{-
-    -- Correctly abbreviate definite prepositions and join with noun
-    -- Params:
-      -- preposition (eg TAL, MAL, BĦALL)
-      -- noun
-    abbrevPrepositionDef : Str -> Str -> Str = \prep,noun ->
-      let
-        -- Remove either 1 or 2 l's
-        prepStem : Str = case prep of {
-          _ + "ll" => dropSfx 2 prep ;
-          _ + "l"  => dropSfx 1 prep ;
-          _ => prep -- this should never happen, I don't think
-        }
-      in
-      case noun of {
-        ("s"|#LiquidCons) + #Consonant + _ => prep + "-i" + noun ;
-        ("għ" | #Vowel) + _ => case prep of {
-          ("fil"|"bil") => (takePfx 1 prep) + "l-" + noun ;
-          _ => prep + "-" + noun
-        };
-        K@#CoronalConsonant + _ => prepStem + K + "-" + noun ;
-        #Consonant + _ => prep + "-" + noun ;
-        _ => []
-      } ;
--}
-    -- Correctly abbreviate indefinite prepositions and join with noun
-    -- Params:
-      -- preposition (eg TA', MA', BĦAL)
-      -- noun
-    abbrevPrepositionIndef : Str -> Str -> Str = \prep,noun ->
-      let
-        initPrepLetter = takePfx 1 prep ;
-        initNounLetter = takePfx 1 noun
-      in
-      if_then_Str (isNil noun) [] (
-      case prep of {
+    {- Preposition -------------------------------------------------------- -}
 
-        -- TA', MA', SA
-        _ + ("a'"|"a") =>
-          case noun of {
-            #Vowel + _  => initPrepLetter + "'" + noun ;
-            ("għ" | "h") + #Vowel + _ => initPrepLetter + "'" + noun ;
-            _ => prep ++ noun
+    mkPrep = overload {
+      -- Same in all cases, e.g. FUQ
+      mkPrep : Str -> Prep = \fuq -> lin Prep {
+        s = \\defn => fuq ;
+        takesDet = False
+        } ;
+
+      -- Forms:
+      --   GĦAL ktieb / triq / ajruplan
+      --   GĦALL-ktieb / ajruplan
+      --   GĦAT-triq
+      mkPrep : Str -> Str -> Str -> Prep = \ghal,ghall,ghat -> lin Prep {
+        s = table {
+          Indefinite => ghal ;
+          Definite   => makePreFull ghall (dropSfx 2 ghat) ghall
           } ;
+        takesDet = True
+        } ;
 
-        -- FI, BI
-        _ + "i" =>
-        if_then_Str (pbool2bool (eqStr initPrepLetter initNounLetter))
-          (prep ++ noun)
-          (case noun of {
-            -- initPrepLetter + _ => prep ++ noun ;
-            #Vowel + _  => initPrepLetter + "'" + noun ;
-            #Consonant + #Vowel + _  => initPrepLetter + "'" + noun ;
-            #Consonant + "r" + #Vowel + _ => initPrepLetter + "'" + noun ;
-            _ => prep ++ noun
-          }) ;
-
-        -- Else leave untouched
-        _ => prep ++ noun
-
-      });
-
-    {- Prepositions ------------------------------------------------------- -}
-
-    mkPrep : Str -> Prep ; -- e.g. "in front of"
-    mkPrep p = lin Prep (ss p) ;
+      -- All forms:
+      --   BI ktieb/triq
+      --   B'ajruplan
+      --   BIL-ktieb
+      --   BIT-triq
+      --   BL-ajruplan
+      mkPrep : Str -> Str -> Str -> Str -> Str -> Prep = \bi,b',bil,bit,bl -> lin Prep {
+        s = table {
+          Indefinite => makePreVowel bi b' ;
+          Definite   => makePreFull  bil (dropSfx 2 bit) bl
+          } ;
+        takesDet = True
+        } ;
+      } ;
 
     noPrep : Prep ;  -- no preposition
     noPrep = mkPrep [] ;
 
-
-    {- Verb paradigms ----------------------------------------------------- -}
+    {- Verb --------------------------------------------------------------- -}
 
     -- Re-export ResMlt.mkRoot
     mkRoot : Root = overload {
@@ -331,10 +321,6 @@ resource ParadigmsMlt = open
         <_,_,_,""> => Predef.error("Cannot classify root:"++r.C1+"-"+r.C2+"-"+r.C3) ;
         <_,_,_,_>  => Predef.error("Cannot classify root:"++r.C1+"-"+r.C2+"-"+r.C3+"-"+r.C4)
       } ;
-
-    -- Just get the non-suffixed forms of a verb, for quick testing
-    -- plainVerbTable : V -> (VForm => Str) = \v ->
-    --   \\tense => v.s ! tense ! VSuffixNone ! Pos ;
 
     -- Smart paradigm for building a verb
     mkV : V = overload {
@@ -385,7 +371,7 @@ resource ParadigmsMlt = open
           Loan                => loanV mamma
         } ;
 
-      -- All forms! :S
+      -- All forms
       -- mkV (Strong Regular) (FormI) (mkRoot "k-t-b") (mkPattern "i" "e") "ktibt" "ktibt" "kiteb" "kitbet" "ktibna" "ktibtu" "kitbu" "nikteb" "tikteb" "jikteb" "tikteb" "niktbu" "tiktbu" "jiktbu" "ikteb" "iktbu"
       mkV : VClass -> VDerivedForm -> Root -> Pattern -> (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> V =
         \class, form, root, patt,
@@ -948,7 +934,12 @@ resource ParadigmsMlt = open
         i = info ;
       } ;
 
-    {- ~~~ Non-semitic verbs ~~~ -}
+    {- ~~~ Irregular verbs ~~~ -}
+
+    -- Make an irregular verb, giving all forms (see last overload of mkV)
+    irregularV = mkV Irregular ;
+
+    {- ~~~ Loan verbs ~~~ -}
 
     -- Make a loan verb, eg IPPARKJA
     -- Params: mamma
@@ -966,8 +957,57 @@ resource ParadigmsMlt = open
         i = info ;
       } ;
 
+    {- Verb --------------------------------------------------------------- -}
 
-    {- Adjective paradigms ------------------------------------------------ -}
+    mkVS : V -> VS ; -- sentence-compl
+    mkVS v = lin VS v ;
+
+    prepV2 : V -> Prep -> V2 ;
+    prepV2 v p = lin V2 ( v ** { prep = p } ) ;
+
+    dirV2 : V -> V2 ;
+    dirV2 v = prepV2 v noPrep ;
+
+    prepPrepV3 : V -> Prep -> Prep -> V3 ;
+    prepPrepV3 v p t = lin V3 (v ** { prep1 = p ; prep2 = t }) ;
+
+    dirV3 : V -> Prep -> V3 ;
+    dirV3 v p = prepPrepV3 v noPrep p ;
+
+    dirdirV3 : V -> V3 ;
+    dirdirV3 v = dirV3 v noPrep ;
+
+    mkV3 : overload {
+      mkV3  : V -> V3 ;                   -- ditransitive, e.g. give,_,_
+      mkV3  : V -> Prep -> Prep -> V3 ;   -- two prepositions, e.g. speak, with, about
+      mkV3  : V -> Prep -> V3 ;           -- give,_,to --%
+      -- mkV3  : V -> Str -> V3 ;            -- give,_,to --%
+      -- mkV3  : Str -> Str -> V3 ;          -- give,_,to --%
+      -- mkV3  : Str -> V3 ;                 -- give,_,_ --%
+      };
+    mkV3 = overload {
+      mkV3 : V -> V3 = dirdirV3 ;
+      mkV3 : V -> Prep -> Prep -> V3 = prepPrepV3 ;
+      mkV3 : V -> Prep -> V3 = dirV3 ;
+      -- mkV3 : V -> Str -> V3 = \v,s -> dirV3 v (mkPrep s);
+      -- mkV3 : Str -> Str -> V3 = \v,s -> dirV3 (regV v) (mkPrep s);
+      -- mkV3 : Str -> V3 = \v -> dirdirV3 (regV v) ;
+      } ;
+
+    mkV2V : V -> Prep -> Prep -> V2V ;  -- e.g. want (noPrep NP) (to VP)
+    mkV2V v p t = lin V2V (v ** { prep1 = p ; prep2 = t }) ;
+
+    {- Conjunction -------------------------------------------------------- -}
+
+    mkConj = overload {
+      mkConj : Str -> Conj = \y -> mk2Conj [] y ;
+      mkConj : Str -> Str -> Conj = \x,y -> mk2Conj x y ;
+      } ;
+
+    mk2Conj : Str -> Str -> Conj = \x,y ->
+      lin Conj (sd2 x y) ;
+
+    {- Adjective ---------------------------------------------------------- -}
 
     -- Overloaded function for building an adjective
     mkA : A = overload {
@@ -1058,8 +1098,38 @@ resource ParadigmsMlt = open
       _ => (init fem) + "i" -- BRAVA
       } ;
 
+    prepA2 : A -> Prep -> A2 ;
+    prepA2 a p = lin A2 (a ** {c2 = p.s}) ;
 
-    {- Quantitifer paradigms ---------------------------------------------- -}
+    mkA2 : overload {
+      mkA2 : A -> Prep -> A2 ;
+      mkA2 : A -> Str -> A2 ;
+      } ;
+    mkA2 = overload {
+      mkA2 : A -> Prep -> A2   = prepA2 ;
+      mkA2 : A -> Str -> A2    = \a,p -> prepA2 a (mkPrep p) ;
+      } ;
+
+    AS, A2S, AV : Type = A ;
+    A2V : Type = A2 ;
+
+    mkAS : A -> AS ;
+    mkAS a = a ;
+
+    {- Adverb ------------------------------------------------------------- -}
+
+    mkAdv : Str -> Adv ; -- post-verbal adverb, e.g. ILLUM
+    mkAdV : Str -> AdV ; -- preverbal adverb, e.g. DEJJEM
+    
+    mkAdA : Str -> AdA ; -- adverb modifying adjective, e.g. PJUTTOST
+    mkAdN : Str -> AdN ; -- adverb modifying numeral, e.g. MADWAR
+    
+    mkAdv x = lin Adv (ss x) ;
+    mkAdV x = lin AdV (ss x) ;
+    mkAdA x = lin AdA (ss x) ;
+    mkAdN x = lin AdN (ss x) ;
+
+    {- Quantifier, Ord ---------------------------------------------------- -}
 
     mkQuant : (dak, dik, dawk : Str) -> Bool -> Quant = \dak,dik,dawk,isdemo -> lin Quant {
       s = table {
@@ -1070,6 +1140,10 @@ resource ParadigmsMlt = open
       clitic = [] ;
       isPron = False ;
       isDemo = isdemo ;
+      isDefn = False ;
       } ;
         
+    mkOrd : Str -> Ord = \x -> lin Ord { s = \\c => x };
+
+
 }
