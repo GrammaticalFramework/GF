@@ -3,7 +3,6 @@
 concrete DictEngFin of DictEngAbs = CatFin ** open ParadigmsFin,
   (S = StructuralFin),
   (L = LexiconFin),
---MANUAL10 --  SyntaxFin,
   MorphoFin, ParadigmsFin, Kotus, WNKotus, StemFin, Prelude in {
 
 flags coding=utf8 ;
@@ -59321,29 +59320,33 @@ familiar_with_A2 = mkA2 (mkA "perehtynyt") (mkPrep illative) ; --MAN
 
 some_Quant = heavyQuant {s1 = S.jokinPron ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ; --MAN
 anyPl_Det = {s1,sp = S.mikaInt ! Pl ; s2 = \\_ => "tahansa" ; isNum,isPoss,isNeg,isDef = False ; n = Pl} ; --MAN
-both_Det = mkDet Pl (snoun2nounBind (nforms2snoun (dSuurempi "molempi"))) ; --MAN
-most_Det = mkDet Pl (snoun2nounBind (nforms2snoun (dSuurin "usein"))) ; --MAN
+little_Det = mkDet False Sg (exceptNomN (mkN "vähä") "vähän") partitive ; --MAN
+both_Det = mkDet Pl (mkN "molempi" "molamman" "molempia") ; --MAN
+most_Det = mkDet Pl (mkN "usein" "useimman" "useimpia") ; --MAN
 several_Num = {s = \\n,c => (snoun2nounBind (mkN "usea")).s ! NCase n c ; n = Sg ; isNum = True} ; --suspect --MAN
 another_Quant = heavyQuant {s1 = \\n,c => (snoun2nounBind (mkN "toinen")).s ! NCase n c ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ; --MAN
-neither_Det = mkDet Sg {s = \\nf => (snoun2nounBind (nforms2snoun (dSuurempi "kumpi"))).s ! nf + "kaan" ; h = Back} ; --MAN
+neither_Det = MorphoFin.mkDetPol True Sg {s = table NForm {nf => (snoun2nounBind (nforms2snoun (dSuurempi "kumpi"))).s ! nf + "kaan"} ; h = Back} ; --MAN
+either_Det = MorphoFin.mkDetPol False Sg {s = table NForm {nf => (snoun2nounBind (nforms2snoun (dSuurempi "kumpi"))).s ! nf ++ "tahansa"} ; h = Back} ; --MAN
+anyone_NP  = {s = table {NPAcc => "kenet" ++ "tahansa" ; c => S.kukaInt ! Sg ! npform2case Sg c ++ "tahansa"} ; a = agrP3 Sg ; isPron, isNeg = False} ; 
+anybody_NP = {s = table {NPAcc => "kenet" ++ "tahansa" ; c => S.kukaInt ! Sg ! npform2case Sg c ++ "tahansa"} ; a = agrP3 Sg ; isPron, isNeg = False} ; 
 draw_V2	= mkV2 "vetää" ; --MAN
 aware_of_A2 = mkA2 (mkA "tietoinen") (mkPrep elative) ; --MAN
-each_Det = mkDet Pl (snoun2nounBind (mkN "jokainen")) ; --MAN
+each_Det = mkDet Pl (mkN "jokainen") ; --MAN
 start_V2 = mkV2 "aloittaa" ; --MAN
 few_Num	= {s = \\n,c => (snoun2nounBind (mkN "harva")).s ! NCase n c ; n = Sg ; isNum = True} ; --suspect --MAN
 --MANUAL blame_V2 = mkV2 "syyttää" ; --MAN
 feel_VA	= mkVA (caseV elative (mkV "tuntua")) (mkPrep ablative) ; --MAN
 anything_NP = {s = \\c => S.mikaInt ! Sg ! (npform2case Sg c) ++ "tahansa" ; a = agrP3 Sg ; isPron, isNeg = False} ; --MAN
 anySg_Det = {s1,sp = S.mikaInt ! Sg ; s2 = \\_ => "tahansa" ; isNum,isPoss,isNeg,isDef = False ; n = Sg} ; --MAN
-moreSg_Det = mkDet Sg (snoun2nounBind (nforms2snoun (dSuurempi "useampi"))) ; --MAN
+moreSg_Det = mkDet Sg (exceptNomN (mkN "enempä") "enemmän") ; --MAN
 lack_V2	= mkV2 (caseV ablative (mkV "puuttua")) ; --MAN
 exceed_V2 = mkV2 "ylittää" ; --MAN
 everyone_NP = S.everybody_NP ; --MAN
 begin_V2 = mkV2 "aloittaa" ; --MAN
 withdraw_V2 = mkV2 (mkV (mkV "vetää") "pois") ; --MAN
 survivor_N = mkN "selviytyjä" ; --MAN
-morePl_Det = mkDet Pl (snoun2nounBind (nforms2snoun (dSuurempi "useampi"))) ; --MAN
-less_Det = mkDet Sg (snoun2nounBind (nforms2snoun (dSuurempi "vähempi"))) ; --MAN
+morePl_Det = mkDet Pl (mkN "useampi" "useamman" "useampia") ; --MAN
+less_Det = mkDet Sg (exceptNomN (mkN "vähempä") "vähemmän") ; --MAN
 enjoy_V2 = mkV2 (mkV "nauttia") partitive ;
 enforce_V2 = mkV2 "pakottaa" ; 
 

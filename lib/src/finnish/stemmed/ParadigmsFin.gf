@@ -296,9 +296,17 @@ mkVS = overload {
    = \x,y,n -> {s1 = x ; s2 = y ; n = n ; lock_Conj = <>} ;
    } ;
 
+  mkDet = overload {
+    mkDet : Number -> N -> Det 
+    = \nu,noun -> MorphoFin.mkDet nu (snoun2nounBind noun) ;
+    mkDet : (isNeg : Bool) -> Number -> N -> Det  -- use this with True to create a negative determiner 
+    = \isNeg,nu,noun -> MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun) ;
+    mkDet : (isNeg : Bool) -> Number -> N -> Case -> Det  -- paljon + False + partitive, ei yhtään + True + partitive
+    = \isNeg,nu,noun,_ -> MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun) ;
+    } ;
 
 --.
--- The definitions should not bother the user of the API. So they are
+-- THE definitions should not bother the user of the API. So they are
 -- hidden from the document.
 
   Case = MorphoFin.Case ;

@@ -872,7 +872,9 @@ resource MorphoFin = ResFin ** open Prelude in {
 caseTable : Number -> CommonNoun -> Case => Str = \n,cn -> 
   \\c => cn.s ! NCase n c ;
 
-  mkDet : Number -> CommonNoun -> {
+  mkDet = mkDetPol False ;
+
+  mkDetPol : Bool -> Number -> CommonNoun -> {
       s1,sp : Case => Str ;       -- minun kolme
       s2 : Harmony => Str ;    -- -ni ; nsa/nsä
       n : Number ;             -- Pl   (agreement feature for verb)
@@ -880,13 +882,13 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       isPoss : Bool ;          -- True (a possessive suffix is present)
       isDef : Bool ;           -- True (verb agrees in Pl, Nom is not Part)
       isNeg : Bool
-      } = \n, noun -> heavyDet {
+      } = \pol,n, noun -> heavyDet {
     s1 = \\c => noun.s ! NCase n c ;
     s2 = \\_ => [] ;
     n = n ;
     isNum, isPoss = False ;
     isDef = True ;  --- does this hold for all new dets?
-    isNeg = False
+    isNeg = pol
     } ;
 
 -- Here we define personal and relative pronouns.

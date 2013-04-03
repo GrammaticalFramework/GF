@@ -33,11 +33,11 @@ concrete StructuralFin of Structural = CatFin **
   during_Prep = postGenPrep "aikana" ;
   either7or_DConj = sd2 "joko" "tai" ** {n = Sg} ;
   everybody_NP = makeNP (snoun2nounBind (mkN "jokainen")) Sg ;
-  every_Det = mkDet Sg (snoun2nounBind (mkN "jokainen")) ;
+  every_Det = MorphoFin.mkDet Sg (snoun2nounBind (mkN "jokainen")) ;
   everything_NP = makeNP (((snoun2nounBind (mkN "kaikki" "kaiken" "kaikkena"))) **
     {lock_N = <>}) Sg ;
   everywhere_Adv = ss "kaikkialla" ;
-  few_Det  = mkDet Sg (snoun2nounBind (mkN "harva")) ;
+  few_Det  = MorphoFin.mkDet Sg (snoun2nounBind (mkN "harva")) ;
 ---  first_Ord = {s = \\n,c => (mkN "ensimmäinen").s ! NCase n c} ;
   for_Prep = casePrep allative ;
   from_Prep = casePrep elative ;
@@ -59,14 +59,14 @@ concrete StructuralFin of Structural = CatFin **
     isPron = False
     } ;
   less_CAdv = X.mkCAdv "vähemmän" "kuin" ;
-  many_Det = mkDet Sg (snoun2nounBind (mkN "moni" "monia")) ;
+  many_Det = MorphoFin.mkDet Sg (snoun2nounBind (mkN "moni" "monia")) ;
   more_CAdv = X.mkCAdv "enemmän" "kuin" ;
   most_Predet = {s = \\n,c => (nForms2N (dSuurin "useinta")).s ! NCase n (npform2case n c)} ;
-  much_Det = mkDet Sg {s = \\_ => "paljon" ; h = Back} ; --Harmony not relevant, it's just a CommonNoun
+  much_Det = MorphoFin.mkDet Sg {s = \\_ => "paljon" ; h = Back} ; --Harmony not relevant, it's just a CommonNoun
   must_VV = mkVV (caseV genitive (mkV "täytyä")) ;
   no_Utt = ss "ei" ;
   on_Prep = casePrep adessive ;
----  one_Quant = mkDet Sg  DEPREC
+---  one_Quant = MorphoFin.mkDet Sg  DEPREC
   only_Predet = {s = \\_,_ => "vain"} ;
   or_Conj = {s1 = [] ; s2 = "tai" ; n = Sg} ;
   otherwise_PConj = ss "muuten" ;
