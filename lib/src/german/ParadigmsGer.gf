@@ -81,7 +81,12 @@ mkN : overload {
 -- Worst case: give all four singular forms, two plural forms (others + dative),
 -- and the gender.
 
-  mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N -- worst case: mann, mann, manne, mannes, männer, männern
+  mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N ; -- worst case: mann, mann, manne, mannes, männer, männern
+
+-- compound nouns
+
+  mkN : Str -> N -> N ;   -- Auto + Fahrer -> Autofahrer
+
   };
 
 
@@ -509,7 +514,9 @@ mkV2 : overload {
   mkN = overload {
     mkN : Str -> N = regN ;
     mkN : (x1,x2 : Str) -> Gender -> N = reg2N ;
-    mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N = mk6N
+    mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N = mk6N ;
+    mkN : Str -> N -> N  -- Auto + Fahrer -> Autofahrer
+    = \s,x -> lin N {s = \\n,c => s + Predef.toLower (x.s ! n ! c) ; g = x.g} ;
     };
 
 
