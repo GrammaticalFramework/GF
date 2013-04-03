@@ -1,2 +1,2 @@
-concrete ExtraRomanceFre of ExtraRomanceAbs = CatFre ** ExtraRomance with
+concrete ExtraRomanceFre of ExtraRomanceAbs = CatFre ** ExtraRomance - [ProDrop] with
   (ResRomance = ResFre) ;
