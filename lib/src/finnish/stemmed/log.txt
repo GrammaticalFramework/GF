@@ -196,5 +196,14 @@ Implemented an elementary chunking translator, located in svn://molto-project.eu
 For the first time, able to "translate everything" from English to Finnish. The quality is horrible of course.
 
 
+3/4
+
+Worked with analysis tools, completed most of the first 300 full-Penn
+words (>3) still missing in Dict. Changes in 250 sentences in
+wsj-3220.
+
+Rough estimate: in DictEngFin, there are 60k words, of which 57.5k from
+WN, 2.5k manual (based on grep mkW DictEngFin.gf).
+
 
 
