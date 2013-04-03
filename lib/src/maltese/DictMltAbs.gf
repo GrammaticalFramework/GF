@@ -2,6 +2,7 @@
 
 abstract DictMltAbs = Cat ** {
 
+  -- Root-and-pattern verbs
   fun
     badbad_BDBD_1_6674_V : V ;
     tbadbad_BDBD_2_6675_V : V ;
@@ -759,8 +760,8 @@ abstract DictMltAbs = Cat ** {
     balla'_BLGH_2_7436_V : V ;
     tballa'_BLGH_5_7437_V : V ;
     nbela'_BLGH_7_7438_V : V ;
-    belleh_BLHN_2_7439_V : V ;
-    tbelleh_BLHN_5_7440_V : V ;
+    blehhen_BLHN_1_7439_V : V ;
+    tblehhen_BLHN_2_7440_V : V ;
     bell_BLL_1_7441_V : V ;
     bellel_BLL_2_7442_V : V ;
     tbell_BLL_5_7443_V : V ;
@@ -861,9 +862,9 @@ abstract DictMltAbs = Cat ** {
     bexxex_BXX_2_7538_V : V ;
     tbexxex_BXX_5_7539_V : V ;
     nbexx_BXX_7_7540_V : V ;
-    baza'_BZGH_1_7541_V : V ;
-    bazza'_BZGH_2_7542_V : V ;
-    tbazza'_BZGH_5_7543_V : V ;
+    beza'_BZGH_1_7541_V : V ;
+    bezza'_BZGH_2_7542_V : V ;
+    tbezza'_BZGH_5_7543_V : V ;
     bizel_BZL_1_7544_V : V ;
     bizzel_BZL_2_7545_V : V ;
     tbizzel_BZL_5_7546_V : V ;
@@ -1145,8 +1146,12 @@ abstract DictMltAbs = Cat ** {
     faggar_FGR_2_7822_V : V ;
     nfagar_FGR_7_7823_V : V ;
     faghal_FGHL_1_7824_V : V ;
-    nftehem_FHM_7_7825_V : V ;
-    ftiehem_FHM_8_7826_V : V ;
+    fehem_FHM_1_10830_V : V ;
+    fehhem_FHM_2_10832_V : V ;
+    fiehem_FHM_3_10831_V : V ;
+    tfehem_FHM_6_10833_V : V ;
+    nfehem_FHM_7_7825_V : V ;
+    ftehem_FHM_8_7826_V : V ;
     fahal_FHL_1_7827_V : V ;
     fahhal_FHL_2_7828_V : V ;
     tfahhal_FHL_5_7829_V : V ;
@@ -4141,4 +4146,11 @@ abstract DictMltAbs = Cat ** {
     itteka_TKW_1_10825_V : V ;
     ntemm_TMM_7_10826_V : V ;
     nghadda_GHDJ_7_10828_V : V ;
+
+  -- Loan verbs
+  fun
+    mbotta_V : V ;
+    vvjagga_V : V ;
+    ffriza_V : V ;
+    kkuntempla_V : V ;
 }

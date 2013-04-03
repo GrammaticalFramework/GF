@@ -15,22 +15,22 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
     chooseNounNumForm : Det -> CN -> Str = \det,n ->
       let
         det' = det.s ! n.g ;
-        sing = n.s ! Singular Singulative ;
+        sing = n.s ! Singulative ;
         coll = if_then_Str n.hasColl
-          (n.s ! Singular Collective) -- BAQAR
-          (n.s ! Plural Determinate)  -- SNIEN
+          (n.s ! Collective) -- BAQAR
+          (n.s ! Plural)  -- SNIEN
           ;
         dual = n.s ! Dual ;
-        pdet = n.s ! Plural Determinate ;
-        pind = n.s ! Plural Indeterminate ;
+        plur = n.s ! Plural ;
+        -- pind = n.s ! Plural Indeterminate ;
       in case det.n of {
-        Num Sg   => det' ++ sing ; -- BAQRA
-        Num Pl   => det' ++ coll ; -- BAQAR (coll) / ħafna SNIEN (pdet)
+        NumX Sg   => det' ++ sing ; -- BAQRA
+        NumX Pl   => det' ++ coll ; -- BAQAR (coll) / ħafna SNIEN (pdet)
         Num0     => det' ++ sing ; -- L-EBDA BAQRA
         Num1     => det' ++ sing ; -- BAQRA
         Num2     => if_then_Str n.hasDual 
           dual -- BAQARTEJN
-          (det' ++ pdet) -- ŻEWĠ IRĠIEL
+          (det' ++ plur) -- ŻEWĠ IRĠIEL
           ;
         Num3_10  => det' ++ coll ; -- TLETT BAQAR
         Num11_19 => det' ++ sing ; -- ĦDAX-IL BAQRA
@@ -40,45 +40,51 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
   lin
     -- Det -> CN -> NP
     DetCN det cn = {
-      s = \\c => case <det.isPron, cn.takesPron> of {
-        <True,True>  => glue (cn.s ! numform2nounnum det.n) det.clitic ;
-        <True,_>     => artDef ++ cn.s ! numform2nounnum det.n ++ det.s ! cn.g ;
-        _            => chooseNounNumForm det cn
+      s = table {
+        Nom => case <det.isPron, cn.takesPron> of {
+          <True,True>  => glue (cn.s ! numform2nounnum det.n) det.clitic ;
+          <True,_>     => artDef ++ cn.s ! numform2nounnum det.n ++ det.s ! cn.g ;
+          _            => chooseNounNumForm det cn
+          } ;
+        CPrep => cn.s ! numform2nounnum det.n
         } ;
       a = case (numform2nounnum det.n) of {
-	Singular _ => mkAgr cn.g Sg P3 ;
-	_          => mkAgr cn.g Pl P3
+	Singulative => mkAgr cn.g Sg P3 ; --- collective?
+	_           => mkAgr cn.g Pl P3
       } ;
       isPron = False ;
+      isDefn = det.isDefn ;
     } ;
 
     -- Quant -> Num -> Det
     DetQuant quant num = {
       s = \\gen =>
-        let gennum = case num.n of { Num Sg => GSg gen ; _ => GPl }
+        let gennum = case num.n of { NumX Sg => GSg gen ; _ => GPl }
         in case quant.isDemo of {
           True  => quant.s ! gennum ++ artDef ++ num.s ! NumAdj ;
           False => quant.s ! gennum ++ num.s ! NumAdj
         } ;
       n = num.n ;
+      clitic = quant.clitic ;
       hasNum = num.hasCard ;
       isPron = quant.isPron ;
-      clitic = quant.clitic ;
+      isDefn = quant.isDefn ;
     } ;
 
     -- Quant -> Num -> Ord -> Det
     --- Almost an exact copy of DetQuant, consider factoring together
     DetQuantOrd quant num ord = {
       s = \\gen => 
-        let gennum = case num.n of { Num Sg => GSg gen ; _ => GPl }
+        let gennum = case num.n of { NumX Sg => GSg gen ; _ => GPl }
         in case quant.isDemo of {
           True  => quant.s ! gennum ++ artDef ++ num.s ! NumAdj ++ ord.s ! NumAdj ;
           False => quant.s ! gennum ++ num.s ! NumAdj ++ ord.s ! NumAdj
         } ;
       n = num.n ;
+      clitic = quant.clitic ;
       hasNum = True ;
       isPron = quant.isPron ;
-      clitic = quant.clitic ;
+      isDefn = quant.isDefn ;
       } ;
 
     -- Quant
@@ -87,12 +93,14 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       clitic = [] ;
       isPron = False ;
       isDemo = False ;
+      isDefn = True ;
     } ;
     IndefArt = {
       s  = \\_ => artIndef ;
       clitic = [] ;
       isPron = False ;
       isDemo = False ;
+      isDefn = False ;
     } ;
 
     -- PN -> NP
@@ -100,6 +108,7 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       s = \\c => pn.s ;
       a = pn.a ;
       isPron = False ;
+      isDefn = False ;
       } ;
 
     -- Pron -> NP
@@ -110,6 +119,7 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
         } ;
       a = p.a ;
       isPron = True ;
+      isDefn = False ;
       } ;
 
     -- Pron -> Quant
@@ -118,11 +128,12 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       clitic = p.s ! Suffixed Gen ;
       isPron = True ;
       isDemo = False ;
+      isDefn = True ;
       } ;
 
     -- Num
-    NumSg = {s = \\c => []; n = Num Sg ; hasCard = False} ;
-    NumPl = {s = \\c => []; n = Num Pl ; hasCard = False} ;
+    NumSg = {s = \\c => []; n = NumX Sg ; hasCard = False} ;
+    NumPl = {s = \\c => []; n = NumX Pl ; hasCard = False} ;
 
     -- Card -> Num
     NumCard n = n ** {hasCard = True} ;
