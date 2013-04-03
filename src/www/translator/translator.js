@@ -4,11 +4,12 @@
 
 function Translator() {
     var t=this
-    t.local=tr_local();
+
+    t.local=appLocalStorage("gf.translator.")
     t.view=element("document")
     t.filebox=element("filebox")
     if(!supports_html5_storage()) {
-	var warning=span_class("error",text("It appears that localStorage is unsupported or disabled in this browser. Documents will not be preserved after you leave or reload this page!"))
+	var warning=span_class("error",text("It appears that localStorage is unsupported or disabled in this browser. Local documents will not be preserved after you leave or reload this page!"))
 	insertAfter(warning,t.view)
     }
     if(!supports_local_files()) {
@@ -18,6 +19,16 @@ function Translator() {
     t.servers={}; //The API is stateful, use one pgf_online object per grammar
     t.grammar_info={};
     pgf_online({}).get_grammarlist(bind(t.extend_methods,t))
+
+    function update_language_menu(t,id) {
+	var dl=element(id);
+	clear(dl);
+	for(var i in languages) {
+	    var l=languages[i]
+	    dl.appendChild(dt(radiobutton(id,l.code,l.name,bind(t.change,t))))
+	}
+    }
+
     update_language_menu(t,"source")
     update_language_menu(t,"target")
     if(window.apertium) t.add_apertium()
@@ -27,15 +38,6 @@ function Translator() {
     if(t.current && t.current!="/") {
 	if(t.local.get("current_in_cloud")) t.open_from_cloud(t.current)
 	else t.open(t.current)
-    }
-}
-
-function update_language_menu(t,id) {
-    var dl=element(id);
-    clear(dl);
-    for(var i in languages) {
-	var l=languages[i]
-	dl.appendChild(dt(radiobutton(id,l.code,l.name,bind(t.change,t))))
     }
 }
 
@@ -67,7 +69,7 @@ Translator.prototype.switch_grammar=function(grammar,cont) {
 	var pgf=t.servers[grammar]
 	if(pgf) pgf.waiting.push(cont)
 	else {
-	    pgf=t.servers[grammar]=pgf_online({})
+	    pgf=t.servers[grammar]=pgf_online({grammar_list:[grammar]})
 	    pgf.waiting=[cont]
 	    function cont2(gr_info) {
 		t.grammar_info[grammar]=gr_info
@@ -201,11 +203,9 @@ Translator.prototype.update_translation=function(i) {
 	var server=t.servers[grammar]
 	function upd3(txts) { update_segment(grammar,txts) }
 	function upd2(ts) {
-	    function unlex(txt,cont) { gfshell('ps -unlextext "'+txt+'"',cont) }
-
 	    switch(ts.length) {
 	    case 0: upd3(["[no translation]"]);break;
-	    default: mapc(unlex,ts,upd3); break;
+	    default: mapc(unlextext,ts,upd3); break;
 	    }
 	}
 	function upd1(translate_output) {
@@ -221,7 +221,7 @@ Translator.prototype.update_translation=function(i) {
 	    var want={from:o.from, to:o.to, method:grammar}
 	    if(!eq_options(segment.options,want)) {
 		//console.log("Updating "+i)
-		gfshell('ps -lextext "'+segment.source+'"',upd0)
+		lextext(segment.source,upd0)
 	    }
 	    //else console.log("No update ",want,segment.options)
 	}
@@ -250,6 +250,18 @@ Translator.prototype.update_translation=function(i) {
 	    update_gf_translation(m,gfrom,gto)
 	}
 	t.switch_grammar(m,upd00)
+    }
+}
+
+// Return the name of the grammar if the segment uses GF for translation
+function uses_gf(doc,segment) {
+    var m= segment.options.method || doc.options.method
+    var d=segment.use_default
+    if(d || d==null) m=doc.options.method
+    switch(m) {
+    case "Manual":   return null
+    case "Apertium": return null
+    default:         return m
     }
 }
 
@@ -688,11 +700,12 @@ Translator.prototype.pick_translation=function(i,txt) {
 
 Translator.prototype.edit_source=function(source,i) {
     var t=this
-    var s=t.document.segments[i]
+    var doc=t.document
+    var s=doc.segments[i]
 
     function restore() { t.replace_segment(i,t.draw_segment(s,i)) }
-    function done() {
-	s.source=inp.value // side effect, updating the document in-place
+    function change(str) {
+	s.source=str // side effect, updating the document in-place
 	restore();
 	if(s.options.method!="Manual") {
 	    s.options.to="" // hack to force an update
@@ -700,9 +713,55 @@ Translator.prototype.edit_source=function(source,i) {
 	}
 	return false;
     }
+    function done() { change(inp.value) }
+
+    function goto_minibar() {
+	function cont(grammar_info) {
+	    var gname=grammar_info.name
+	    var gfrom=gname+doc.options.from
+	    var gto=gname+doc.options.to
+	    var pgf_server=t.servers[grammarname]
+	    function cont2(source) {
+		function ok() {
+		    unlextext(gf_unlex(minibar.input.current.input),change)
+		    t.hide_filebox()
+		}
+		function cancel() {
+		    restore()
+		    t.hide_filebox()
+		}
+		var minibar_options= {
+		    startcat_menu: false,
+		    random_button: false,
+		    try_google: false,
+		    show_abstract: true,
+		    show_trees: true,
+		    show_grouped_translations: false,
+		    word_replacements: true,
+		    default_source_language: "Eng",
+		    initial_grammar: pgf_server.current_grammar_url,
+		    initial:{from:gfrom,
+			     startcat:grammar_info.startcat,
+			     input:source.split(" ")},
+		    initial_toLangs: [gto]
+		}
+		replaceChildren(t.filebox,empty_id("div","minibar"))
+		var minibar=new Minibar(pgf_server,minibar_options)
+		appendChildren(t.filebox,[button("OK",ok),
+					  button("Cancel",cancel)])
+		t.show_filebox()
+	    }
+	    lextext(s.source,cont2)
+
+	}
+	t.switch_grammar(grammarname,cont)
+    }
 
     var inp=node("input",{name:"it",value:s.source})
-    var e=wrap("form",[inp, submit(), button("Cancel",restore)])
+    var e=wrap("form",[inp, submit(), button("Cancel",restore),
+		       text(" ")])
+    var grammarname=uses_gf(doc,s)
+    if(grammarname) e.appendChild(button("Minibar",goto_minibar))
     clear(source)
     source.appendChild(e)
     e.onsubmit=done
@@ -930,35 +989,6 @@ for(var i in languages) {
 function concname(code) { return langname[code] || code; }
 function alangcode(code) { return langcode2[code] || code; }
 
-function tr_local() {
-    function real(storage) {
-	var appPrefix="gf.translator."
-	return {
-	    get: function (name,def) {
-		var id=appPrefix+name
-		return storage[id] ? JSON.parse(storage[id]) : def;
-	    },
-	    put: function (name,value) {
-		var id=appPrefix+name;
-		storage[id]=JSON.stringify(value);
-	    },
-	    remove: function(name) {
-		var id=appPrefix+name;
-		delete storage[id]
-	    },
-	    ls: function(prefix) {
-		var pre=appPrefix+prefix
-		var files=[]
-		for(var i in storage)
-		    if(hasPrefix(i,pre)) files.push(i.substr(pre.length))
-		files.sort()
-		return files
-	    }
-	}
-    }
-    return supports_html5_storage() ? real(localStorage) : real([])
-}
-
 // Collect alternative texts in the output from PGF service translate command
 function collect_texts(ts) {
     var list=[]
@@ -1095,6 +1125,10 @@ function save_in_cloud(filename,document,cont) {
     }
     with_dir(save)
 }
+
+function unlextext(txt,cont) { gfshell('ps -unlextext "'+txt+'"',cont) }
+function lextext(txt,cont) { gfshell('ps -lextext "'+txt+'"',cont) }
+
 
 
 /* --- DOM Support ---------------------------------------------------------- */

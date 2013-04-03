@@ -119,3 +119,9 @@ div.overlay > div {
     box-shadow: 4px 4px 12px rgba(0,0,0,0.33);
     /*border-radius: 5px;*/
 }
+
+div#minibar {
+    border: 1px solid black;
+    padding: 5px;
+    background: #ccc url("../minibar/brushed-metal.png");
+}

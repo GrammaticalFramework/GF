@@ -40,7 +40,7 @@ function Input(server,translations,opts) { // Input object constructor
 
 	var o=options;
 	if(o.initial_grammar && o.initial && o.initial.from && o.initial.input)
-	    t.set_input_for(o.initial_grammar,o.initial.from,o.initial.input)
+	    t.set_input_for(o.initial_grammar,o.initial)
     }
 
     /* --- Input client state initialization --- */
@@ -89,11 +89,12 @@ Input.prototype.change_language=function () {
     this.add_words(new_input)
 }
 
-Input.prototype.set_input_for=function(grammar_url,from,new_input) {
+Input.prototype.set_input_for=function(grammar_url,initial) {
     var t=this
     var local=mi_local(grammar_url)
-    local.put("from",from)
-    local.put("current",{from:from,input:new_input})
+    local.put("from",initial.from)
+    local.put("current",{from:initial.from,input:initial.input})
+    if(initial.startcat) local.put("startcat",initial.startcat)
 }
 
 Input.prototype.clear_all2=function() {
@@ -484,26 +485,7 @@ Input.prototype.browse=function(id,cont) {
 
 
 function mi_local(grammar_url) {
-    function dummy() {
-	return {
-	    get: function(name,def) { return def },
-	    put: function(name,value) { }
-	}
-    }
-    function real() {
-	var prefix="gf.minibar_input."+grammar_url+"."
-	return {
-	    get: function (name,def) {
-		var id=prefix+name
-		return localStorage[id] ? JSON.parse(localStorage[id]) : def;
-	    },
-	    put: function (name,value) {
-		var id=prefix+name;
-		localStorage[id]=JSON.stringify(value);
-	    }
-	}
-    }
-    return window.localStorage ? real() : dummy()
+    return appLocalStorage("gf.minibar_input."+grammar_url+".")
 }
 
 
