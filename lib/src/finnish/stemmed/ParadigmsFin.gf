@@ -182,7 +182,7 @@ oper
     mkV : (huutaa,dan,taa,tavat,takaa,detaan,sin,si,sisi,tanut,dettu,tanee : Str) -> V ; -- worst-case verb
     mkV : VK -> V ;  -- verb from DictFin (Kotus)
     mkV : V -> Str -> V ; -- hakata päälle (particle verb)
----    mkV : Str -> V -> V ; -- laimin+lyödä (prefixed verb)
+    mkV : Str -> V -> V ; -- laimin+lyödä (prefixed verb)
   } ;
 
 -- All the patterns above have $nominative$ as subject case.
@@ -604,6 +604,7 @@ mkVS = overload {
       huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = mk12V ;
     mkV : (sana : VK) -> V = \w -> vforms2sverb w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
     mkV : V -> Str -> V = \w,p -> {s = w.s ; sc = w.sc ; lock_V = <> ; h = w.h ; p = p} ;
+    mkV : Str -> V -> V = \s,v -> {s = \\f => s + v.s ! f ; sc = v.sc ; lock_V = <> ; h = v.h ; p = v.p} ;
   } ;
 
   mk1V : Str -> V = \s -> 
