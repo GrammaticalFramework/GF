@@ -28,6 +28,11 @@ function Translations(server,opts) {
     var tom=this.to_menu=node("select",{id:"to_menu",multiple:"",size:5},[]);
     appendChildren(this.menus,[text(" To: "), this.to_menu])
     tom.onchange=bind(this.change_language,this);
+    var o=this.options
+    if(o.initial_grammar && o.initial_toLangs) {
+	var local=mt_local(o.initial_grammar);
+	local.put("toLangs",o.initial_toLangs)
+    }
     /* // This seems triggers weird scrolling behavior in Firefox and Chrome:
     tom.onmouseover=function() { var n=tom.options.length;
 				 tom.size=n<12 ? n : 12; }
@@ -39,8 +44,9 @@ function Translations(server,opts) {
 Translations.prototype.change_grammar=function(grammar) {
     var t=this
     t.grammar=grammar;
-    
+
     t.local=mt_local(t.server.current_grammar_url)
+
     update_language_menu(t.to_menu,grammar);
     insertFirst(t.to_menu,option("All","All"));
     t.to_menu.value="All";
@@ -263,6 +269,10 @@ Translations.prototype.parsetree_button=function(abs,lang) {
 
 /* --- Auxiliary functions -------------------------------------------------- */
 
+function mt_local(grammar_url) {
+    return appLocalStorage("gf.minibar_translations."+grammar_url+".")
+}
+
 function tree_button(img_url,opt) {
     var imgs=[tree_icon,img_url+(opt||"&nofun=true"),img_url]
     var current=0;
@@ -281,31 +291,6 @@ function draw_brackets(b) {
 	: node("span",{"class":"brackets",
 		       title:(b.fun||"_")+":"+b.cat+" "+b.fid+":"+b.index},
 	       b.children.map(draw_brackets))
-}
-
-
-// Access to localStorage, if available
-function mt_local(grammar_url) {
-    function dummy() {
-	return {
-	    get: function(name,def) { return def },
-	    put: function(name,value) { }
-	}
-    }
-    function real() {
-	var prefix="gf.minibar_translations."+grammar_url+"."
-	return {
-	    get: function (name,def) {
-		var id=prefix+name
-		return localStorage[id] ? JSON.parse(localStorage[id]) : def;
-	    },
-	    put: function (name,value) {
-		var id=prefix+name;
-		localStorage[id]=JSON.stringify(value);
-	    }
-	}
-    }
-    return window.localStorage ? real() : dummy()
 }
 
 // Convert an array of strings to a set (for quick & easy membership tests)
