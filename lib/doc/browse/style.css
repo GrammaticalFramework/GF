@@ -22,6 +22,10 @@ header {
   background:#f2f2f2;
   padding:10px;
 }
+header img {
+  height:2em;
+  vertical-align:bottom;
+}
 header h1 {
   margin:0 1em 0 0;
   font-size:1em;
