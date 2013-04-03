@@ -83,10 +83,12 @@ intermOut opts d doc
 
 warnOut opts warnings
   | null warnings = return ()
-  | otherwise     = ioeIO (hPutStrLn stderr $ 
-                                     if flag optVerbosity opts == Normal
-                                       then ('\n':warnings)
-                                       else warnings)
+  | otherwise     = ioeIO $ hPutStrLn stderr ws `catch` oops
+  where
+    oops _ = hPutStrLn stderr "" -- prevent crash on character encoding problem
+    ws = if flag optVerbosity opts == Normal
+         then '\n':warnings
+         else warnings
 
 -- | the environment
 type CompileEnv = (Int,SourceGrammar,ModEnv)
