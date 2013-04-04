@@ -235,4 +235,8 @@ Checked words:
 
 as of version 17-.
 
+Prepared a list ToCheckFin.gf (in MOLTO svn) for checking the top-3000
+Penn words, which occur >9 times. Went through >99, with 260 changes
+in test corpus as result. Version 18-
+
 
