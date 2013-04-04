@@ -221,3 +221,18 @@ sentences (only). Now at version 16.
 Checked through around 500 old-generation words, changing around
 200. 300 changes in test corpus.
 
+Annotations in the grammar: MAN for manual, CHECKED for checked. MAN
+is not applied everywhere, so there is a heuristics to count manual
+words instead - those that don't come from WN/Kotus.
+
+  grep -v mkW DictEngFin.gf | grep -v "K " | wc
+    1845
+
+Checked words:
+
+  grep CHECKED DictEngFin.gf | wc
+    2120
+
+as of version 17-.
+
+
