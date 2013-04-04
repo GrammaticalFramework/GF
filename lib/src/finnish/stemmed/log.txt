@@ -218,3 +218,6 @@ tieksi".
 Having fixed the negativity of heither_Det yesterday, changed 22
 sentences (only). Now at version 16.
 
+Checked through around 500 old-generation words, changing around
+200. 300 changes in test corpus.
+
