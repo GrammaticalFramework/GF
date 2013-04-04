@@ -60319,8 +60319,8 @@ beside_Prep = mkPrep "vieressä" ;
 aesthetic_A = mkA "esteettinen" ;
 
 
-see_V2V = mkV2V "see" ;
-whichSg_IDet = mkIDet "whichSg" ;
+----see_V2V = mkV2V "see" ;
+----whichSg_IDet = mkIDet "whichSg" ;
 
 
 
