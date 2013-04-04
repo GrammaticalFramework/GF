@@ -58430,6 +58430,8 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   yellow_A = L.yellow_A ;
   young_A = L.young_A ;
 
+-- first patch of checked words, revised 4/4 (changing perhaps 30%)
+
   additional_A = mkA "lisätty" ; -- 20000 
   agricultural_A = mkA (mkN "maan" (mkN "viljelyllinen")) ; -- 20000 --- 
   australian_A = mkA "australialainen" ; -- 40000 
@@ -58456,7 +58458,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   income_N = mkN "tulo" ; ---CHANGE "tulot" ; -- 20000 
 --MANUAL5_3   initial_A = mkA "alustava" ; ---CHANGE "alkukirjain" ; -- 20000 
   instead_Adv = mkAdv "sen sijaan" ; -- 30000 
-  institutional_A = mkA "järjestäytynyt" ; -- 20000 
+  institutional_A = mkA "institutionaalinen" ; -- 20000 
   intermittent_A = mkA "ajoittainen" ; -- 20000 
   interstate_A = mkA (mkN "osavaltioiden" (mkN "välinen")) ; -- 30000 
   korean_A = mkA "korealainen" ; -- 40000 
@@ -58493,23 +58495,23 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
 --MANUAL   acquire_V2 = mkV2 (lin VK {s = c63 "saada"}) ; -- 10 
   action_N = mkN "toiminta" ; -- 153 
 --MANUAL10   administration_N = mkN (lin NK {s = d01A "hoito"}) ; -- 497 
-  admit_V2 = mkV2 (lin VK {s = c53A "ottaa"}) ; -- 59 
+  admit_V2 = mkV2 "myöntää" ;
 --MANUAL5_3   advertiser_N = mkN (lin NK {s = d10 "mainostaja"}) ; ---C ilmoittaja 10000 
-  afternoon_N = mkN "iltapäivä" ; -- 1422 
+  afternoon_N = mkN "ilta" (mkN "päivä") ; -- 1422 
   again_Adv = mkAdv (lin AdvK {s = c99 "uudelleen"}) ; -- 760 
   agenda_N = mkN (lin NK {s = d10 "suunnitelma"}) ; -- 565 
   ago_Adv = mkAdv (lin AdvK {s = c99 "sitten"}) ; -- 10000 
   agreement_N = mkN (lin NK {s = d39 "sopimus"}) ; -- 242 
   aid_N = mkN (lin NK {s = d01A "apu"}) ; -- 226 
-  alien_N = mkN (lin NK {s = d41 "vieras"}) ; -- 10000 
+  alien_N = mkN "muukalainen" ;
   allege_V2 = mkV2 "väittää" ; -- 915 
-  alliance_N = mkN (lin NK {s = d39 "sopimus"}) ; -- 242 
+  alliance_N = mkN "allianssi" ;
   almost_Adv = mkAdv "lähes" ; -- 138 
-  ambassador_N = mkN "suurlähettiläs" ; -- 3231 
+  ambassador_N = mkN "suur" (mkN "lähettiläs") ; -- 3231 
   analyst_N = mkN (lin NK {s = d04A "analyytikko"}) ; -- 6309 
   anniversary_N = mkN "merkkipäivä" ; -- 7188 
 --MANUAL5_3   apparent_A = mkA "ilmeinen" ; -- 2713 
-  appear_V = mkV (lin VK {s = c53A "vaikuttaa"}) ; -- 268 
+  appear_V = mkV "ilmestyä" ;
   applicant_N = mkN (lin NK {s = d12 "hakija"}) ; -- 1873 
   approve_V2 = mkV2 "hyväksyä" ; -- 290 
   argue_V = mkV "kiistellä" ; -- 3094 
@@ -58523,30 +58525,30 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   average_A = mkA "keskimääräinen" ; -- 2336 
   balance_N = mkN "tasapaino" ; -- 2885 
   barb_N = mkN (lin NK {s = d05A "piikki"}) ; -- 4299 
-  barrel_N = mkN (lin NK {s = d01A "rumpu"}) ; -- 6414 
+  barrel_N = mkN "tynnyri" ;
   base_V2 = mkV2 (lin VK {s = c53 "perustaa"}) ; -- 398 
   before_Adv = mkAdv "ennen" ; -- 846 
 --MANUAL5_3   begin_V = mkV (lin VK {s = c56A "alkaa"}) ; -- 65 
-  believe_V = mkV "pitää" ; -- 18 
+  believe_V = mkV "uskoa" ; -- 18 
 --MANUAL10   bid_N = mkN (lin NK {s = d39 "yritys"}) ; -- 117 
   bland_A = mkA "mieto" ; -- 7983 
-  block_N = mkN "ryhmä" ; -- 230 
-  blunder_N = mkN (lin NK {s = d10 "moka"}) ; -- 10000 
+  block_N = mkN "blokki" ; -- 230 
+  blunder_N = mkN "kömmähdys" ;
   board_N = mkN (lin NK {s = d39 "hallitus"}) ; -- 82 
   bomb_V2 = mkV2 (mkV (lin VK {s = c53A "pommittaa"})) partitive ; ---C add partitive 3886 
-  bond_N = mkN (lin NK {s = d39 "liitos"}) ; -- 5879 
+  bond_N = mkN "sidos" ;
   boost_N = mkN (lin NK {s = d07A "tuki"}) ; -- 292 
 --MANUAL   bring_V2 = mkV2 (lin VK {s = c63 "saada"}) ; -- 10 
   broker_N = mkN "välittäjä" ; -- 3553 
   bus_N = mkN (lin NK {s = d05 "bussi"}) ; -- 1814 
 --MANUAL10   business_N = mkN (lin NK {s = d12 "asia"}) ; -- 43 
-  businessman_N = mkN "liikemies" ; -- 4379 
-  call_N = mkN (lin NK {s = d39 "vaatimus"}) ; -- 887 
+  businessman_N = mkN "liike" L.man_N ;
+  call_N = mkN "kutsu" ;
   capability_N = mkN (lin NK {s = d01A "kyky"}) ; -- 1564 
-  capacity_N = mkN (lin NK {s = d10 "asema"}) ; -- 325 
+  capacity_N = mkN "kapasiteetti" ;
 --MANUAL10   capital_N = mkN (lin NK {s = d40 "omaisuus"}) ; -- 1914 
-  capitalize_V = mkV (lin VK {s = c62 "aktivoida"}) ; -- 8749 
-  care_V = mkV (lin VK {s = c75 "haluta"}) ; -- 64 
+  capitalize_V = mkV "kapitalisoida" ;
+  care_V = mkV "välittää" ;
 --MANUAL10   case_N = mkN (lin NK {s = d12 "asia"}) ; -- 43 
   cent_N = mkN (lin NK {s = d05A "sentti"}) ; -- 1751 
   certain_A = mkA (lin AK {s = d09 "varma"}) ; -- 790 
@@ -58555,20 +58557,20 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   chance_N = mkN (lin NK {s = d40 "mahdollisuus"}) ; -- 184 
   change_N = mkN (lin NK {s = d39 "muutos"}) ; -- 333 
 --MANUAL10   change_V = mkV (lin VK {s = c53A "muuttaa"}) ; -- 301 
-  charge_V2 = mkV2 (lin VK {s = c53A "osoittaa"}) ; -- 378 
+  charge_V2 = mkV2 "kuormittaa" partitive ;
   cheer_V = mkV (lin VK {s = c53 "kannustaa"}) ; -- 2181 
 --MANUAL10   chief_N = mkN (lin NK {s = d10 "johtaja"}) ; -- 210 
-  chip_N = mkN (lin NK {s = d01 "kolo"}) ; -- 10000 
-  civil_A = mkA (lin AK {s = d38 "porvarillinen"}) ; -- 7073 
+  chip_N = mkN "hippu" ;
+  civil_A = mkA "siviili" ; ---
 --MANUAL10   claim_N = mkN (lin NK {s = d40 "oikeus"}) ; -- 322 
   claim_V2 = mkV2 (lin VK {s = c61A "vaatia"}) ; -- 135 
 --MANUAL5_3   clear_A = mkA "selvä" ; -- 446 
   client_N = mkN (lin NK {s = d41A "asiakas"}) ; -- 383 
   collapse_V = mkV (lin VK {s = c53A "romahtaa"}) ; -- 2702 
-  column_N = mkN (lin NK {s = d07 "putki"}) ; -- 2534 
+  column_N = mkN "kolumni" ;
   commentator_N = mkN (lin NK {s = d06 "kommentaattori"}) ; -- 10000 
   commission_N = mkN (lin NK {s = d03 "komissio"}) ; -- 466 
-  commonplace_N = mkN (lin NK {s = d34A "mielenkiinnoton"}) ; -- 10000 
+  commonplace_N = mkN "tavanomainen" ;
   community_N = mkN "yhteisö" ; -- 1278 
 --MANUAL10   company_N = mkN (lin NK {s = d39 "yritys"}) ; -- 117 
   compete_V = mkV (lin VK {s = c67 "kilpailla"}) ; -- 989 
@@ -58576,7 +58578,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   concentration_N = mkN "keskittyminen" ; -- 4186 
 --MANUAL10   concern_N = mkN (lin NK {s = d12 "asia"}) ; -- 43 
 --MANUAL   consider_V2 = mkV2 "pitää" ; -- 18 
-  consortium_N = mkN "yhteenliittymä" ; -- 6841 
+  consortium_N = mkN "konsortio" ; -- 6841 
   contest_N = mkN (lin NK {s = d02 "kilpailu"}) ; -- 173 
 --MANUAL   continue_V2 = mkV2 (lin VK {s = c56 "jatkaa"}) ; -- 188 
 --MANUAL   control_V2 = mkV2 (lin VK {s = c69 "hallita"}) ; -- 618 
@@ -58593,12 +58595,12 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
 --MANUAL5_3   crisis_N = mkN (lin NK {s = d05 "kriisi"}) ; -- 785 
   critic_N = mkN (lin NK {s = d04A "kriitikko"}) ; -- 4619 
   cruise_N = mkN (lin NK {s = d02 "risteily"}) ; -- 7409 
-  crush_V2 = mkV2 (lin VK {s = c53 "poistaa"}) ; -- 1076 
+  crush_V2 = mkV2 "murskata" ;
 --MANUAL10   current_A = mkA "nykyinen" ; -- 202 
-  cycle_N = mkN (lin NK {s = d01 "jakso"}) ; -- 978 
+  cycle_N = mkN "sykli" ;
   damage_V2 = mkV2 (lin VK {s = c53A "vahingoittaa"}) ; -- 5415 
   dangerous_A = mkA (lin AK {s = d38 "vaarallinen"}) ; -- 1398 
-  data_N = mkN (lin NK {s = d01A "tieto"}) ; -- 127 
+  data_N = mkN "data" ;
 --MANUAL5_3   deadline_N = mkN "määräaika" ; -- 4359 
   debt_N = mkN (lin NK {s = d09A "velka"}) ; -- 1481 
   deck_N = mkN (lin NK {s = d28 "kansi"}) ; -- 3123 
@@ -58611,11 +58613,11 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
 --MANUAL5_3   democratic_A = mkA (lin AK {s = d38 "demokraattinen"}) ; -- 2612 
   democratization_N = mkN (lin NK {s = d05A "demokratisointi"}) ; -- 10000 
   depository_N = mkN (lin NK {s = d02 "varasto"}) ; -- 2325 
-  depress_V2 = mkV2 (lin VK {s = c58 "laskea"}) ; -- 259 
+  depress_V2 = mkV2 (mkV (mkV "painaa") "alaspäin") ;
   designation_N = mkN (lin NK {s = d39 "nimitys"}) ; -- 2936 
-  desperate_A = mkA "äärimmäinen" ; -- 5572 
+  desperate_A = mkA "epätoivoinen" ; -- 5572 
 --MANUAL10_06   development_N = mkN (lin NK {s = d10 "tapahtuma"}) ; -- 340 
-  devote_V2 = mkV2 (lin VK {s = c73 "varata"}) ; -- 854 
+  devote_V2 = mkV2 "omistaa" ;
   diplomatic_A = mkA "diplomaattinen" ; -- 7201 
   director_N = mkN (lin NK {s = d10 "johtaja"}) ; -- 210 
   disagreement_N = mkN (lin NK {s = d09 "kiista"}) ; -- 1425 
@@ -58624,8 +58626,8 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   disk_N = mkN (lin NK {s = d01 "levy"}) ; -- 832 
 --MANUAL5_3   distribution_N = mkN (lin NK {s = d02 "jakelu"}) ; -- 5389 
   dollar_N = mkN (lin NK {s = d06 "dollari"}) ; -- 804 
-  doubt_N = mkN "epävarmuus" ; -- 3178 
-  drive_N = mkN (lin NK {s = d10 "asema"}) ; -- 325 
+  doubt_N = mkN "epäilys" ; -- 3178 
+  drive_N = mkN "ajomatka" ;
 --MANUAL5_3   drop_N = mkN (lin NK {s = d01 "piilo"}) ; -- 5264 
   drought_N = mkN (lin NK {s = d40 "kuivuus"}) ; -- 5221 
   due_A = mkA "asianmukainen" ; -- 6693 
@@ -58635,24 +58637,24 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
 --MANUAL10_06   effort_N = mkN (lin NK {s = d39 "saavutus"}) ; -- 2177 
   elect_V2 = mkV2 (lin VK {s = c69 "valita"}) ; -- 179 
 --MANUAL5_3   eliminate_V2 = mkV2 (lin VK {s = c53 "poistaa"}) ; -- 1076 
-  emotional_A = mkA (lin AK {s = d41A "tunteikas"}) ; -- 10000 
+  emotional_A = mkA "emotionaalinen" ;
   employee_N = mkN "työntekijä" ; -- 367 
 --MANUAL10   end_N = mkN "pää" ; ---CHANGED --(lin NK {s = d10 "osa"}) ; -- 73 
 --MANUAL   end_V2 = mkV2 "päättää" ; -- 161 
-  enter_V2 = mkV2 (lin VK {s = c66 "nousta"}) ; -- 111 
+  enter_V2 = mkV2 (mkV L.go_V "sisään") illative ;
 --MANUAL10_06   entire_A = mkA "kokonainen" ; -- 2842 
   equity_N = mkN (lin NK {s = d48A "osake"}) ; -- 485 
   estate_N = mkN (lin NK {s = d09 "tila"}) ; -- 225 
 --MANUAL   estimate_V2 = mkV2 (lin VK {s = c62 "arvioida"}) ; -- 203 
   examine_V2 = mkV2 (lin VK {s = c61 "tutkia"}) ; -- 417 
-  example_N = mkN (lin NK {s = d39 "tapaus"}) ; -- 419 
+  example_N = mkN "esimerkki" ;
   excess_N = mkN (lin NK {s = d09A "liika"}) ; -- 10000 
 --MANUAL10   exchange_N = mkN "pörssi" ; -- 1426 
   executive_N = mkN (lin NK {s = d10 "johtaja"}) ; -- 210 
 --MANUAL5_3   expansion_N = mkN "laajeneminen" ; -- 4781 
   explain_V2 = mkV2 "selittää" ; -- 1137 
-  extend_V = mkV (lin VK {s = c56 "jatkaa"}) ; -- 188 
-  extraordinary_A = mkA (lin AK {s = d38 "erikoinen"}) ; -- 2361 
+  extend_V = mkV "jatkua" ;
+  extraordinary_A = mkA (separateN "tavallisuudesta" (mkN "poikkeava" "poikkeavia")) ;
 --MANUAL5_3   face_N = mkN (lin NK {s = d09A "pinta"}) ; -- 1053 
 --MANUAL5_3   fact_N = mkN (lin NK {s = d40 "todellisuus"}) ; -- 1492 
   factor_N = mkN "tekijä" ; -- 538 
@@ -58660,25 +58662,25 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
 --MANUAL5_3   fee_N = mkN (lin NK {s = d01 "maksu"}) ; -- 1082 
   feel_V2 = mkV2 (lin VK {s = c59A "tuntea"}) ; -- 219 
   feeling_N = mkN (lin NK {s = d48A "tunne"}) ; -- 930 
-  figure_V = mkV (lin VK {s = c62 "arvioida"}) ; -- 203 
+  figure_V = mkV "kuvitella" ;
   film_N = mkN "elokuva" ; -- 326 
   firm_N = mkN (lin NK {s = d39 "yritys"}) ; -- 117 
   flamboyant_A = mkA (lin AK {s = d38 "mahtipontinen"}) ; -- 10000 
 --MANUAL5_3   flat_A = mkA "selvä" ; -- 446 
 --MANUAL5_3   focus_V = mkV "keskittyä" ; -- 662 
-  follow_V2 = mkV2 (lin VK {s = c73 "seurata"}) ; -- 120 
+  follow_V2 = mkV2 (mkV (lin VK {s = c73 "seurata"})) partitive ; -- 120 
 --MANUAL5_3   forecast_N = mkN (lin NK {s = d48 "ennuste"}) ; -- 2597 
   former_A = mkA "entinen" ; -- 155 
   fraud_N = mkN (lin NK {s = d39 "petos"}) ; -- 4350 
   fresh_A = mkA (lin AK {s = d48 "tuore"}) ; -- 691 
-  freshman_N = mkN (lin NK {s = d05 "fuksi"}) ; -- 10000 
+  freshman_N = mkN "aloittelija" ;
   frock_N = mkN (lin NK {s = d01A "kaapu"}) ; -- 10000 
   gain_N = mkN "hyöty" ; -- 1266 
-  gather_V2 = mkV2 (lin VK {s = c56 "kasvaa"}) ; -- 169 
+  gather_V2 = mkV2 "koota" ;
   get_V = mkV (lin VK {s = c63 "saada"}) ; -- 10 
-  gossip_N = mkN (lin NK {s = d02 "juoruilu"}) ; -- 10000 
+  gossip_N = mkN "juoru" ;
   government_N = mkN (lin NK {s = d39 "hallitus"}) ; -- 82 
-  ground_N = mkN (lin NK {s = d48 "alue"}) ; -- 75 
+  ground_N = mkN "perusta" ;
 --MANUAL10   group_N = mkN (lin NK {s = d01A "joukko"}) ; -- 207 
   grow_V = mkV (lin VK {s = c56 "kasvaa"}) ; -- 169 
   growth_N = mkN (lin NK {s = d01 "kasvu"}) ; -- 393 
@@ -58688,7 +58690,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
 --MANUAL5_3   hard_A = mkA (lin AK {s = d10 "kova"}) ; -- 218 
   harvest_N = mkN (lin NK {s = d01A "sato"}) ; -- 2427 
   hasty_A = mkA (lin AK {s = d38 "pikainen"}) ; -- 4796 
-  have_V = mkV (lin VK {s = c67 "olla"}) ; -- 1 
+  have_V = lin V S.have_V2 ;
 --MANUAL5_3   healthy_A = mkA (lin AK {s = d48 "terve"}) ; -- 1774 
 --MANUAL10_06   here_Adv = mkAdv (lin AdvK {s = c99 "nyt"}) ; -- 28 
   high_A = mkA (lin AK {s = d15 "korkea"}) ; -- 10000 
@@ -58700,20 +58702,20 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   hurdle_N = mkN (lin NK {s = d48 "este"}) ; -- 1884 
   image_N = mkN "mielikuva" ; -- 3027 
 --MANUAL5_3   impact_N = mkN (lin NK {s = d39 "vaikutus"}) ; -- 593 
-  implication_N = mkN "johtopäätös" ; -- 3354 
+  implication_N = mkN "seuraus" ;
 --MANUAL5_3   import_N = mkN (lin NK {s = d39 "merkitys"}) ; -- 551 
   impose_V2 = mkV2 "määrätä" ; -- 838 
-  improvement_N = mkN (lin NK {s = d39 "kehitys"}) ; -- 484 
+  improvement_N = mkN "parannus" ;
 --MANUAL5_3   incentive_N = mkN (lin NK {s = d33 "kannustin"}) ; -- 10000 
   include_V2 = mkV2 "sisältää" ; -- 888 
 --MANUAL   increase_V2 = mkV2 (lin VK {s = c66 "nousta"}) ; -- 111 
-  incur_V2 = mkV2 (lin VK {s = c53A "aiheuttaa"}) ; -- 298 
+  incur_V2 = mkV2 (lin VK {s = c53A "aiheuttaa"}) ; -- 298 ---?? 
   indeed_Adv = mkAdv (lin AdvK {s = c99 "todella"}) ; -- 478 
   index_N = mkN (lin NK {s = d05 "indeksi"}) ; -- 4785 
   indictment_N = mkN (lin NK {s = d48A "syyte"}) ; -- 1343 
 --MANUAL5_3   individual_A = mkA "eri" ; -- 154 
 --MANUAL10   information_N = mkN (lin NK {s = d01A "tieto"}) ; -- 127 
-  inhibit_V2 = mkV2 "estää" ; -- 773 
+  inhibit_V2 = mkV2 "estää" partitive ; -- 773 
   injection_N = mkN (lin NK {s = d03 "injektio"}) ; -- 10000 
   insurance_N = mkN (lin NK {s = d39 "vakuutus"}) ; -- 2678 
 --MANUAL10   interest_N = mkN (lin NK {s = d40 "osuus"}) ; -- 369 
@@ -58723,11 +58725,11 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   investment_N = mkN (lin NK {s = d05A "investointi"}) ; -- 1280 
   investor_N = mkN (lin NK {s = d10 "sijoittaja"}) ; -- 2147 
 --MANUAL10   issue_N = mkN (lin NK {s = d12 "asia"}) ; -- 43 
-  item_N = mkN (lin NK {s = d12 "asia"}) ; -- 43 
+  item_N = mkN "kohta" ;
 --MANUAL10   job_N = mkN "työ" ; -- 58 
   joint_A = mkA (lin AK {s = d38 "yhteinen"}) ; -- 343 
   joke_N = mkN (lin NK {s = d05 "vitsi"}) ; -- 4929 
-  just_Adv = mkAdv (lin AdvK {s = c99 "aivan"}) ; -- 275 
+  just_Adv = mkAdv "juuri" ;
   kind_N = mkN (lin NK {s = d05 "laji"}) ; -- 623 
 --MANUAL10   large_A = mkA (lin AK {s = d09 "laaja"}) ; -- 481 
 --MANUAL10   last_A = mkA "viime" ; -- 45 
@@ -58738,17 +58740,17 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   legal_A = mkA (lin AK {s = d38 "laillinen"}) ; -- 4088 
 --MANUAL5_3   legislation_N = mkN "lainsäädäntö" ; -- 2206 
 --MANUAL10_06   life_N = mkN (lin NK {s = d07A "henki"}) ; -- 426 
-  light_N = mkN (lin NK {s = d39 "valaistus"}) ; -- 5746 
+  light_N = mkN "valo" ;
   line_N = mkN "linja" ; ---C (lin NK {s = d01A "johto"}) ; -- 332 
   link_V2 = mkV2 "yhdistää" ; -- 784 
   list_N = mkN (lin NK {s = d09 "lista"}) ; -- 972 
 --MANUAL10_06   loan_N = mkN "laina" ; -- 1335 
 --MANUAL10_06   long_term_A = mkA "pitkäaikainen" ; -- 2184 
 --MANUAL5_3   look_V = mkV "näyttää" ; -- 156 
-  loss_N = mkN (lin NK {s = d03 "tappio"}) ; -- 908 
+  loss_N = mkN "menetys" ;
 --MANUAL   lower_V2 = mkV2 (lin VK {s = c58 "laskea"}) ; -- 259 
   machine_N = mkN (lin NK {s = d48 "kone"}) ; -- 524 
-  machinery_N = mkN "järjestelmä" ; -- 834 
+  machinery_N = mkN "koneisto" ;
   magazine_N = mkN (lin NK {s = d05 "makasiini"}) ; -- 10000 
   maintenance_N = mkN "ylläpito" ; -- 4715 
   major_A = mkA "merkittävä" ; -- 542 
@@ -58759,9 +58761,9 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
 --MANUAL   manufacture_V2 = mkV2 (lin VK {s = c53A "tuottaa"}) ; -- 448 
   market_N = mkN "markkina" ; -- 531 --CHANGE 
   marketing_N = mkN (lin NK {s = d05A "markkinointi"}) ; -- 1825 
-  mask_N = mkN (lin NK {s = d05 "maski"}) ; -- 10000 
+  mask_N = mkN "naamio" ;
   measure_N = mkN (lin NK {s = d01 "keino"}) ; -- 756 
-  median_N = mkN "keskiarvo" ; -- 2666 
+  median_N = mkN "mediaani" ; -- 2666 
   meeting_N = mkN (lin NK {s = d39 "kokous"}) ; -- 347 
   member_N = mkN "jäsen" ; -- 258 
   membership_N = mkN "jäsenyys" ; -- 1486 
@@ -58770,8 +58772,8 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   month_N = mkN "kuukausi" ; -- 278 
   morning_N = mkN (lin NK {s = d01 "aamu"}) ; -- 1048 
 --MANUAL10_06   move_V = mkV (lin VK {s = c61 "toimia"}) ; -- 83 
-  movement_N = mkN (lin NK {s = d10 "osa"}) ; -- 73 
-  nation_N = mkN "kansakunta" ; -- 3368 
+  movement_N = mkN "liike" ;
+  nation_N = mkN "kansa" (mkN "kunta") ; -- 3368 
   nature_N = mkN (lin NK {s = d01A "luonto"}) ; -- 748 
 --MANUAL5_3   necessary_A = mkA "välttämätön" ; -- 1846 
 --MANUAL   need_V2 = mkV2 (lin VK {s = c69 "tarvita"}) ; -- 104 
@@ -58781,49 +58783,49 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
 --MANUAL10   office_N = mkN (lin NK {s = d09A "valta"}) ; -- 749 
 --MANUAL10   officer_N = mkN (lin NK {s = d06 "upseeri"}) ; -- 4121 
 --MANUAL5_3   only_Adv = mkAdv (lin AdvK {s = c99 "vain"}) ; -- 32 
-  operate_V = mkV (lin VK {s = c61 "toimia"}) ; -- 83 
-  operation_N = mkN (lin NK {s = d39 "yritys"}) ; -- 117 
+  operate_V = mkV "operoida" ;
+  operation_N = mkN "operaatio" ;
   opportunity_N = mkN (lin NK {s = d40 "tilaisuus"}) ; -- 815 
 --MANUAL10_06   option_N = mkN "vaihtoehto" ; -- 547 
 --MANUAL10   order_N = mkN "luokka" ; -- 640 
 --MANUAL   order_V2 = mkV2 "järjestää" ; -- 171 
-  original_A = mkA "alkuperäinen" ; -- 1577 
+  original_A = mkA (mkN "alku" (mkN "peräinen")) ; -- 1577 
   other_A = mkA "muu" ; ---C toisenlainen" ; -- 2919 
   other_N = mkN (lin NK {s = d38 "toinen"}) ; -- 10000 
-  overtime_N = mkN (lin NK {s = d09A "jatkoaika"}) ; -- 3016 
-  overwhelm_V2 = mkV2 (lin VK {s = c73A "vallata"}) ; -- 1962 
+  overtime_N = mkN "yliaika" ;
+  overwhelm_V2 = mkV2 (mkV "pursuta") (mkPrep "yli") ;
 --MANUAL5_3   owner_N = mkN (lin NK {s = d10 "omistaja"}) ; -- 694 
   page_N = mkN (lin NK {s = d01 "sivu"}) ; -- 386 
   part_N = mkN (lin NK {s = d10 "osa"}) ; -- 73 
-  particular_A = mkA "tietty" ; -- 993 
+  particular_A = mkA "yksittäinen" ; -- 993 
   partnership_N = mkN (lin NK {s = d40 "kumppanuus"}) ; -- 10000 
 --MANUAL10   past_A = mkA "viime" ; -- 45 
 --MANUAL5_3   patent_N = mkN (lin NK {s = d33 "avoin"}) ; -- 10000 
-  pay_V = mkV "maksaa" ; -- 16 
-  payment_N = mkN (lin NK {s = d09A "palkka"}) ; -- 828 
+  pay_V = mkV "kannattaa" ; -- 16 
+  payment_N = mkN "maksu" ;
   perform_V = mkV "esittää" ; -- 141 
-  picture_N = mkN (lin NK {s = d48A "tilanne"}) ; -- 125 
-  piece_N = mkN (lin NK {s = d10 "osa"}) ; -- 73 
+  picture_N = mkN "kuva" ;
+  piece_N = mkN "palanen" ;
   pilot_N = mkN "lentäjä" ; -- 3420 
-  place_V2 = mkV2 (lin VK {s = c67 "olla"}) ; -- 1 
+  place_V2 = mkV2 "sijoittaa" ;
   plan_N = mkN (lin NK {s = d10 "suunnitelma"}) ; -- 565 
-  plant_N = mkN (lin NK {s = d41A "tehdas"}) ; -- 763 
+  plant_N = mkN "kasvi" ; ---ARB
   political_A = mkA (lin AK {s = d38 "poliittinen"}) ; -- 375 
-  poll_N = mkN (lin NK {s = d39 "tutkimus"}) ; -- 260 
-  pool_N = mkN (lin NK {s = d02 "palvelu"}) ; -- 353 
+  poll_N = mkN "äänestys" ;
+  pool_N = mkN "allas" ;
   positive_A = mkA "myönteinen" ; -- 1088 
   possibility_N = mkN (lin NK {s = d40 "mahdollisuus"}) ; -- 184 
   powerful_A = mkA (lin AK {s = d41A "voimakas"}) ; -- 1032 
   pressure_N = mkN (lin NK {s = d48 "paine"}) ; -- 1222 
-  pretty_A = mkA (lin AK {s = d09 "kiva"}) ; -- 2365 
+  pretty_A = mkA "sievä" ;
   price_N = mkN (lin NK {s = d09A "hinta"}) ; -- 245 
 --MANUAL5_3   price_V = mkV (lin VK {s = c67A "hinnoitella"}) ; -- 8727 
   printout_N = mkN (lin NK {s = d48 "tuloste"}) ; -- 10000 
   priority_N = mkN (lin NK {s = d05A "prioriteetti"}) ; -- 10000 
   private_N = mkN "yksityinen" ; -- 3725 
-  procedural_A = mkA (lin AK {s = d38 "muodollinen"}) ; -- 7851 
+  procedural_A = mkA "proseduraalinen" ;
 --MANUAL10_06   process_N = mkN (lin NK {s = d39 "kehitys"}) ; -- 484 
-  produce_V = mkV (lin VK {s = c53A "aiheuttaa"}) ; -- 298 
+  produce_V = mkV "tuottaa" ;
 --MANUAL   produce_V2 = mkV2 (lin VK {s = c53A "aiheuttaa"}) ; -- 298 
 --MANUAL10_06   producer_N = mkN (lin NK {s = d10 "tuottaja"}) ; -- 1638 
   product_N = mkN "tuote" ; ---C (lin NK {s = d01 "tulo"}) ; -- 360 
@@ -58841,7 +58843,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   rally_N = mkN "ralli" ; -- 1650 
 --MANUAL5_3   range_N = mkN (lin NK {s = d10 "valikoima"}) ; -- 3895 
 --MANUAL10   rate_N = mkN (lin NK {s = d09A "hinta"}) ; -- 245 
-  rather_Adv = mkAdv "aika" ; -- 758 
+  rather_Adv = mkAdv "mieluummin" ; -- 758 
 --MANUAL10   rating_N = mkN (lin NK {s = d01 "arvo"}) ; -- 425 
 --MANUAL   reach_V2 = mkV2 (lin VK {s = c66 "nousta"}) ; -- 111 
 --MANUAL5_3   reaction_N = mkN (lin NK {s = d39 "vastaus"}) ; -- 958 
@@ -58849,37 +58851,37 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   receipt_N = mkN (lin NK {s = d05A "kuitti"}) ; -- 8508 
   recent_A = mkA "viimeaikainen" ; -- 5740 
 --MANUAL5_3   reform_N = mkN (lin NK {s = d39 "uudistus"}) ; -- 1004 
-  rein_V2 = mkV2 "pysäyttää" ; -- 2287 
-  release_N = mkN "purkaminen" ; -- 3429 
+  rein_V2 = mkV2 "hallita" partitive ; -- 2287 
+  release_N = mkN "päästäminen" ; ---ARB
   remain_V = mkV "jäädä" ; -- 57 
-  remove_V2 = mkV2 "lähteä" ; -- 102 
-  repair_V2 = mkV2 "mennä" ; -- 88 
-  repayment_N = mkN (lin NK {s = d39 "hyvitys"}) ; -- 8506 
+  remove_V2 = mkV2 "poistaa" ; -- 102 
+  repair_V2 = mkV2 "korjata" ; -- 88 
+  repayment_N = mkN "takaisin" (mkN "maksu") ;
 --MANUAL   replace_V2 = mkV2 (lin VK {s = c56A "vaihtaa"}) ; -- 800 
-  replacement_N = mkN (lin NK {s = d10 "seuraaja"}) ; -- 2884 
-  reserve_N = mkN (lin NK {s = d39 "varaus"}) ; -- 4056 
+  replacement_N = mkN "korvaaminen" ;
+  reserve_N = mkN "reservi" ;
 --MANUAL5_3   responsibility_N = mkN (lin NK {s = d17 "vastuu"}) ; -- 626 
-  restriction_N = mkN "rajoittaminen" ; -- 5940 
+  restriction_N = mkN "rajoitus" ;
   result_N = mkN (lin NK {s = d39 "tulos"}) ; -- 159 
-  revise_V = mkV (lin VK {s = c73A "muokata"}) ; -- 3712 
-  revise_V2 = mkV2 (lin VK {s = c73A "muokata"}) ; -- 3712 
+  revise_V = mkV "tarkistaa" ;
+  revise_V2 = mkV2 "tarkistaa" ;
   rhetoric_N = mkN (lin NK {s = d09A "retoriikka"}) ; -- 10000 
-  rich_A = mkA (lin AK {s = d41 "runsas"}) ; -- 554 
+  rich_A = mkA "rikas" ;
   rise_V = mkV (lin VK {s = c66 "nousta"}) ; -- 111 
 --MANUAL   rise_V2 = mkV2 (lin VK {s = c66 "nousta"}) ; -- 111 
 --MANUAL5_3   rival_N = mkN (lin NK {s = d12 "kilpailija"}) ; -- 1298 
   sad_A = mkA (lin AK {s = d38 "surullinen"}) ; -- 4850 
 --MANUAL10   sale_N = mkN (lin NK {s = d09A "kauppa"}) ; -- 240 
-  save_V2 = mkV2 "säilyttää" ; -- 1010 
+  save_V2 = mkV2 "pelastaa" ;
   scar_N = mkN (lin NK {s = d07A "arpi"}) ; -- 10000 
-  scenario_N = mkN "käsikirjoitus" ; -- 2761 
+  scenario_N = mkN "skenaario" ; -- 2761 
 --MANUAL   schedule_V2 = mkV2 (lin VK {s = c67A "suunnitella"}) ; -- 412 
 --MANUAL10_06   screen_N = mkN "näyttö" ; -- 1939 
   sector_N = mkN (lin NK {s = d06 "sektori"}) ; -- 2065 
-  segment_N = mkN (lin NK {s = d10 "osa"}) ; -- 73 
+  segment_N = mkN "segmentti" ;
 --MANUAL   set_V2 = mkV2 (lin VK {s = c58 "laskea"}) ; -- 259 
-  shake_V = mkV "heikentää" ; -- 2491 
-  share_N = mkN (lin NK {s = d10 "osa"}) ; -- 73 
+  shake_V = mkV "ravistaa" ; -- 2491 
+  share_N = mkN "osuus" ;
 --MANUAL10_06   shareholder_N = mkN "osakkeenomistaja" ; -- 5562 
   shine_V = mkV (lin VK {s = c53 "loistaa"}) ; -- 1695 
   shipping_N = mkN (lin NK {s = d39 "kuljetus"}) ; -- 2304 
@@ -58887,18 +58889,18 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   similar_A = mkA "samanlainen" ; -- 1099 
   situation_N = mkN (lin NK {s = d48A "tilanne"}) ; -- 125 
   sizable_A = mkA (lin AK {s = d38 "melkoinen"}) ; -- 1537 
-  slate_V2 = mkV2 "määrätä" ; -- 838 
-  slot_N = mkN "paikka" ; -- 123 
+  slate_V2 = mkV2 "määrätä" ; ---??
+  slot_N = mkN "kolo" ;
   solo_N = mkN (lin NK {s = d01 "soolo"}) ; -- 10000 
 --MANUAL5_3   source_N = mkN "alkuperä" ; -- 4551 
   spare_V2 = mkV2 "säästää" ; -- 1794 
 --MANUAL5_3   speculation_N = mkN (lin NK {s = d09A "pohdinta"}) ; -- 4913 
 --MANUAL10_06   spend_V = mkV "käyttää" ; -- 94 
-  spend_V2 = mkV2 "käyttää" ; -- 94 
+  spend_V2 = mkV2 "kuluttaa" ;
   spiral_N = mkN (lin NK {s = d48A "kierre"}) ; -- 6587 
   spirit_V2 = mkV2 (lin VK {s = c66 "rohkaista"}) ; -- 3669 
   sprawl_V = mkV "levittäytyä" ; -- 8719 
-  spread_V2 = mkV2 "levitä" ; -- 1563 
+  spread_V2 = mkV2 "levittää" ;
   squalor_N = mkN (lin NK {s = d40 "kurjuus"}) ; -- 8489 
   stability_N = mkN "vakaus" ; -- 3736 
   stadium_N = mkN (lin NK {s = d06 "stadion"}) ; -- 3285 
@@ -58907,7 +58909,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   step_V = mkV (lin VK {s = c52 "astua"}) ; -- 1620 
   stock_N = mkN (lin NK {s = d48A "osake"}) ; -- 485 
   strategy_N = mkN (lin NK {s = d12 "strategia"}) ; -- 2736 
-  strength_N = mkN (lin NK {s = d10 "voima"}) ; -- 327 
+  strength_N = mkN "vahvuus" ;
   stretch_N = mkN "pätkä" ; -- 4017 
   strict_A = mkA "tiukka" ; -- 706 
   summit_N = mkN "huippukokous" ; -- 1094 
@@ -58915,21 +58917,21 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   support_N = mkN (lin NK {s = d07A "tuki"}) ; -- 292 
   sure_A = mkA (lin AK {s = d09 "varma"}) ; -- 790 
   surge_N = mkN (lin NK {s = d10 "tulva"}) ; -- 3232 
-  swap_V2 = mkV2 (lin VK {s = c56A "vaihtaa"}) ; -- 800 
+  swap_V2 = mkV2 (mkV (lin VK {s = c56A "vaihtaa"})) partitive ; -- 800 
 --MANUAL   take_V2 = mkV2 (lin VK {s = c67 "tulla"}) ; -- 14 
-  term_N = mkN (lin NK {s = d01A "ehto"}) ; -- 897 
+  term_N = mkN (lin NK {s = d01A "ehto"}) ; ---ARB 
   test_N = mkN (lin NK {s = d05 "testi"}) ; -- 2179 
   then_Adv = mkAdv (lin AdvK {s = c99 "silloin"}) ; -- 334 
 --MANUAL10   time_N = mkN "kerta" ; -- 113 
 --MANUAL5_3   timing_N = mkN (lin NK {s = d39 "ajoitus"}) ; -- 8679 
-  too_Adv = mkAdv (lin AdvK {s = c99 "liian"}) ; -- 319 
+  too_Adv = mkAdv "liikaa" ;
 --MANUAL   total_V2 = mkV2 (lin VK {s = c52A "rikkoa"}) ; -- 1483 
   town_N = mkN (lin NK {s = d05A "kaupunki"}) ; -- 70 
   trade_V = mkV (lin VK {s = c73A "kaupata"}) ; -- 3633 
   trader_N = mkN (lin NK {s = d41 "kauppias"}) ; -- 2074 
 --MANUAL   transfer_V2 = mkV2 "siirtää" ; -- 584 
 --MANUAL5_3   trip_N = mkN "elämys" ; -- 3005 
-  troop_N = mkN (lin NK {s = d09 "lauma"}) ; -- 8478 
+  troop_N = mkN "joukko" ;
 --MANUAL5_3   trust_N = mkN (lin NK {s = d39 "luottamus"}) ; -- 1763 
   try_V = mkV "yrittää" ; -- 262 
   turf_N = mkN (lin NK {s = d07 "nurmi"}) ; -- 7206 
@@ -58937,9 +58939,9 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   unease_N = mkN (lin NK {s = d40 "rauhattomuus"}) ; -- 10000 
   unfounded_A = mkA "perusteeton" ; -- 8850 
   union_N = mkN (lin NK {s = d06 "unioni"}) ; -- 1311 
-  unit_N = mkN "kokonaisuus" ; -- 1034 
+  unit_N = mkN "yksikkö" ;
 --MANUAL5_3   unusual_A = mkA "epätavallinen" ; -- 8513 
-  up_Adv = mkAdv "eteenpäin" ; -- 1095 
+  up_Adv = mkAdv "ylös" ; -- 1095 
   uprising_N = mkN (lin NK {s = d12 "kapina"}) ; -- 6431 
   vice_N = mkN (lin NK {s = d48 "pahe"}) ; -- 10000 
   viewer_N = mkN (lin NK {s = d12 "katselija"}) ; -- 9416 
@@ -58950,12 +58952,12 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   weather_N = mkN "sää" ; -- 1439 
   week_N = mkN (lin NK {s = d01A "viikko"}) ; -- 100 
 --MANUAL5_3   weekend_N = mkN "viikonloppu" ; -- 946 
-  widespread_A = mkA (lin AK {s = d38 "yleinen"}) ; -- 499 
+  widespread_A = mkA (mkN "laajalle" (mkN "levinnyt")) ;
 --MANUAL5_3   withdrawal_N = mkN (lin NK {s = d01 "nosto"}) ; -- 4194 
   word_N = mkN (lin NK {s = d09 "sana"}) ; -- 544 
 --MANUAL10   worker_N = mkN "työntekijä" ; -- 367 
   yesterday_N = mkN (lin NK {s = d38 "eilinen"}) ; -- 10000 
-  yield_V2 = mkV2 (lin VK {s = c56A "antaa"}) ; -- 61 
+  yield_V2 = mkV2 "tuottaa" ;
   about_Prep = casePrep elative ;
   according_to_Prep = postPrep genitive "mukaan" ;
 --MANUAL   add_V2 = mkV2 "lisätä" ;
@@ -59021,7 +59023,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   make_VS = mkVS tehda_V ; --- tekee että
   malaysia_PN = mkPN "Malesia" ;
   manage_VV = mkVVf (mkV "onnistua") infIllat ;
-  may_VV = mkVV (mkV "saada") ;
+  may_VV = mkVV (mkV "saattaa") ;
 --MANUAL10_06   mean_VS = mkVS (mkV "tarkoittaa") ;
 ---moreSg_Det
   mother_N = mkN "äiti" ;
@@ -59074,7 +59076,7 @@ oper
   tehda_V = mkV (lin VK {s = c71 "tehdä"}) ;
   nahda_V = mkV (lin VK {s = c71 "nähdä"}) ;
 
---MANUAL10 -- another batch of additions, 29/3/2013
+-- another batch of additions, 29/3/2013
 
 lin
 absent_Prep = mkPrep "poissa" elative ; --MAN
