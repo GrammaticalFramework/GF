@@ -26,12 +26,18 @@ if(window.Editor) // Syntax editor loaded?
 	    target: "editor",
 	    initial: { grammar: minibar.grammar_menu.value, // hmm
 		       startcat: minibar.input.startcat_menu.value, // hmm
+		       languages: minibar.translations.toLangs, // hmm
 		       abstr: tree
 		     },
 	    lin_action: function(new_input,langFrom) {
 		var grammar_url=editor.menu.ui.grammar_menu.value // hmm
-		minibar.input.set_input_for(grammar_url,langFrom,
-					    gf_lex(new_input))
+		var startcat=editor.menu.ui.startcat_menu.value // hmm
+		var toLangs=multiMenuSelections(editor.menu.ui.to_menu) // hmm
+		minibar.input.set_input_for(grammar_url,
+					    {from:langFrom,
+					     startcat:startcat,
+					     input:gf_lex(new_input)})
+		minibar.translations.set_toLangs_for(grammar_url,toLangs)
 
 		//Easier: delete the editor and create a new one next time:
 		clear(editor.container)
@@ -59,7 +65,7 @@ if(/^\?\/tmp\//.test(location.search)) {
     if(args[1]) minibar_options.initial_grammar=args[1];
 }
 else if(window.localStorage) {
-    var s=localStorage["gf.editor.simple.grammardir"]
+    var s=window.localStorage["gf.editor.simple.grammardir"]
     if(s) var editor_dir=JSON.parse(s);
 }
 

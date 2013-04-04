@@ -29,10 +29,9 @@ function Translations(server,opts) {
     appendChildren(this.menus,[text(" To: "), this.to_menu])
     tom.onchange=bind(this.change_language,this);
     var o=this.options
-    if(o.initial_grammar && o.initial_toLangs) {
-	var local=mt_local(o.initial_grammar);
-	local.put("toLangs",o.initial_toLangs)
-    }
+    if(o.initial_grammar && o.initial_toLangs)
+	this.set_toLangs_for(o.initial_grammar,o.initial_toLangs)
+
     /* // This seems triggers weird scrolling behavior in Firefox and Chrome:
     tom.onmouseover=function() { var n=tom.options.length;
 				 tom.size=n<12 ? n : 12; }
@@ -51,12 +50,10 @@ Translations.prototype.change_grammar=function(grammar) {
     insertFirst(t.to_menu,option("All","All"));
     t.to_menu.value="All";
     var toLangs=t.local.get("toLangs")
-    if(toLangs) {
+    if(toLangs && toLangs.length>0) {
 	t.toLangs=toLangs
 	t.toSet=toSet(toLangs)
-	var os=to_menu.options
-	for(var i=0;i<os.length;i++)
-	    os[i].selected=t.toSet[os[i].value] || false
+	updateMultiMenu(t.to_menu,toLangs)
     }
     else {
 	t.toLangs=["All"]
@@ -68,18 +65,17 @@ Translations.prototype.clear=function() {
     this.main.innerHTML="";
 }
 
+Translations.prototype.set_toLangs_for=function(grammar_url,toLangs) {
+    var local=mt_local(grammar_url)
+    local.put("toLangs",toLangs)
+}
+
 Translations.prototype.change_language=function() {
-    var toLangs=[]
-    var os=to_menu.options;
-    for(var i=0;i<os.length;i++)
-	if(os[i].selected) {
-	    toLangs.push(os[i].value)
-	    toSet[os[i].value]=true;
-	}
-    this.toLangs=toLangs
-    this.toSet=toSet(toLangs)
-    this.local.put("toLangs",toLangs)
-    this.get_translations();
+    var t=this
+    t.toLangs=multiMenuSelections(t.to_menu)
+    t.toSet=toSet(t.toLangs)
+    t.local.put("toLangs",t.toLangs)
+    t.get_translations();
 }
 
 Translations.prototype.translateFrom=function(current,startcat,lin_action) {
@@ -291,11 +287,4 @@ function draw_brackets(b) {
 	: node("span",{"class":"brackets",
 		       title:(b.fun||"_")+":"+b.cat+" "+b.fid+":"+b.index},
 	       b.children.map(draw_brackets))
-}
-
-// Convert an array of strings to a set (for quick & easy membership tests)
-function toSet(a) {
-    var set={}
-    for(var i=0;i<a.length;i++) set[a[i]]=true
-    return set
 }

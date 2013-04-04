@@ -77,12 +77,7 @@ function EditorMenu(editor,opts) {
     if (t.options.show_to_menu) {
         appendChildren(t.container, [text(" To: "), t.ui.to_toggle, t.ui.to_menu]);
         t.ui.to_menu.onchange = function(){
-            var languages = new Array();
-            for (i in t.ui.to_menu.options) {
-                var opt = t.ui.to_menu.options[i];
-                if (opt.selected)
-                    languages.push(opt.value);
-            }
+            var languages = multiMenuSelections(t.ui.to_menu)
             t.gm.change_languages(languages);
         }
     }

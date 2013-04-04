@@ -35,8 +35,11 @@ if(window.Minibar) // Minibar loaded?
             initial_grammar: editor.menu.ui.grammar_menu.value, // hmm
             initial: {
                 from: langFrom,
-                input: s.split(" ") // is it that easy?
+                input: s.split(" "), // is it that easy?
+		startcat: editor.menu.ui.startcat_menu.value // hmm
             },
+	    initial_toLangs: multiMenuSelections(editor.menu.ui.to_menu), // hmm
+
             // get us back to the editor!
             abstract_action: function(tree) {
                 var opts = {

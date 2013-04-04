@@ -259,6 +259,25 @@ function toggleHidden(el) {
         el.classList.add("hidden")
 }
 
+// Update the selected options in a menu that allow multiple selections
+function updateMultiMenu(menu,selection) {
+    var set=toSet(selection)
+    var os=menu.options
+    for(var i=0;i<os.length;i++)
+	os[i].selected=set[os[i].value] || false
+}
+
+/* --- Document data extraction --------------------------------------------- */
+
+// List the selected options in a menu that allows multiple selections
+function multiMenuSelections(menu) {
+    var selection=[]
+    var os=menu.options;
+    for(var i=0;i<os.length;i++)
+	if(os[i].selected) selection.push(os[i].value)
+    return selection
+}
+
 /* --- Debug ---------------------------------------------------------------- */
 
 function debug(s) {
@@ -368,4 +387,11 @@ function elem(a,as) {
 function shuffle(a) {
     for(i=0;i<a.length;i++) swap(a,i,Math.floor(Math.random()*a.length))
     return a;
+}
+
+// Convert an array of strings to a set (for quick & easy membership tests)
+function toSet(a) {
+    var set={}
+    for(var i=0;i<a.length;i++) set[a[i]]=true
+    return set
 }

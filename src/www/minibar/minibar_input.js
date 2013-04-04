@@ -90,7 +90,6 @@ Input.prototype.change_language=function () {
 }
 
 Input.prototype.set_input_for=function(grammar_url,initial) {
-    var t=this
     var local=mi_local(grammar_url)
     local.put("from",initial.from)
     local.put("current",{from:initial.from,input:initial.input})
