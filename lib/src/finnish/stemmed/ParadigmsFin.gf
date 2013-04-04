@@ -163,9 +163,14 @@ oper
 
 -- Two-place adjectives need a case for the second argument.
 
-  mkA2 : A -> Prep -> A2  -- e.g. "jaollinen" casePrep adessive
-    = \a,p -> a ** {c2 = p ; lock_A2 = <>};
-
+  mkA2 = overload {
+    mkA2 : Str -> A2  -- e.g. "vihainen" (jollekin)
+    = \s -> mkA s ** {c2 = mkPrep "allative" ; lock_A2 = <>} ;
+    mkA2 : Str -> Prep -> A2  -- e.g. "jaollinen" (mkPrep adessive)
+    = \a,p -> mkA a ** {c2 = p ; lock_A2 = <>} ;
+    mkA2 : A -> Prep -> A2  -- e.g. "jaollinen" (mkPrep adessive)
+    = \a,p -> a ** {c2 = p ; lock_A2 = <>} ;
+    } ;
 
 
 --2 Verbs
@@ -219,7 +224,15 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Prep -> Prep -> V3 ;  -- e.g. puhua, allative, elative
+  mkV3 = overload {
+   mkV3 : Str -> V3
+     = \s -> dirdirV3 (mkV s) ; 
+   mkV3 : V -> V3
+     = \v -> dirdirV3 v ;
+   mkV3 : V -> Prep -> Prep -> V3  -- e.g. puhua, allative, elative
+     = \v,p,q -> v ** {c2 = p ; c3 = q ; lock_V3 = <>} ; 
+   } ;
+
   dirV3    : V -> Case -> V3 ;          -- siirtää, (accusative), illative
   dirdirV3 : V         -> V3 ;          -- antaa, (accusative), (allative)
 
@@ -247,11 +260,21 @@ mkVS = overload {
    = \v -> lin VS v ;
   } ;
 
+  mkV2V = overload {
+    mkV2V : Str -> V2V 
+     = \s -> mkV2Vf (mkV s) (casePrep partitive) infIllat ; ----
+    mkV2V : V -> V2V 
+     = \v -> mkV2Vf v (casePrep partitive) infIllat ; ----
+    mkV2V : V -> Prep -> V2V  -- e.g. "käskeä" genitive
+     = \v,p -> mkV2Vf v p infIllat ;
+    mkV2Vf  : V -> Prep -> InfForm -> V2V -- e.g. "kieltää" partitive infElatv 
+     = \v,p,f -> mk2V2 v p ** {vi = f ; lock_V2V = <>} ;
+    } ;
+
   mkV0  : V -> V0 ; --%
 
   mkV2S : V -> Prep -> V2S ; -- e.g. "sanoa" allative
   mkVVf : V -> InfForm -> VV ; -- e.g. "ruveta" infIllat
-  mkV2V : V -> Prep -> V2V ;  -- e.g. "käskeä" genitive
   mkV2Vf : V -> Prep -> InfForm -> V2V ; -- e.g. "kieltää" partitive infElat  
   mkVA  : V -> Prep -> VA ; -- e.g. "maistua" ablative
   mkV2A : V -> Prep -> Prep -> V2A ; -- e.g. "maalata" accusative translative
@@ -259,9 +282,9 @@ mkVS = overload {
   mkV2Q : V -> Prep -> V2Q ; -- e.g. "kysyä" ablative 
 
   mkAS  : A -> AS ; --%
-  mkA2S : A -> Prep -> A2S ; --%
+---  mkA2S : A -> Prep -> A2S ; --%
   mkAV  : A -> AV ; --%
-  mkA2V : A -> Prep -> A2V ; --%
+---  mkA2V : A -> Prep -> A2V ; --%
 
 -- Notice: categories $AS, A2S, AV, A2V$ are just $A$, 
 -- and the second argument is given
@@ -716,8 +739,7 @@ mkVS = overload {
   caseV2 : V -> Case -> V2 ;
   dirV2 : V -> V2 ;
 
-  mkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ; 
-  dirV3 v p = mkV3 v accPrep (casePrep p) ;
+  dirV3 v p = v ** {c2 = accPrep ; c3 = casePrep p ; lock_V3 = <>} ; 
   dirdirV3 v = dirV3 v allative ;
 
 
@@ -732,8 +754,8 @@ mkVS = overload {
   mkV2Sbare : V -> V2S = \v -> mkV2S v (casePrep allative) ; ----
 
   mkV2S v p = mk2V2 v p ** {lock_V2S = <>} ;
-  mkV2Vbare : V -> V2V = \v -> mkV2V v (casePrep partitive) ; ----
-  mkV2V v p = mkV2Vf v p infIllat ;
+  mkV2Vbare : V -> V2V = \v -> mkV2Vf v (casePrep partitive) infIllat ; ----
+--  mkV2V v p = mkV2Vf v p infIllat ;
   mkV2Vf v p f = mk2V2 v p ** {vi = f ; lock_V2V = <>} ;
 
   mkVAbare : V -> VA = \v -> mkVA v (casePrep partitive) ; ----
@@ -744,8 +766,8 @@ mkVS = overload {
   mkV2Q v p = mk2V2 v p ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;
-  mkA2S v p = mkA2 v p ** {lock_A = <>} ;
+---  mkA2S v p = mkA2 <v : A> p ** {lock_A = <>} ;
   mkAV  v = v ** {lock_A = <>} ;
-  mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
+---  mkA2V v p = mkA2 <v : A> p ** {lock_A2 = <>} ;
 
 } ;
