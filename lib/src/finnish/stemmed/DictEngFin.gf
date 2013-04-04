@@ -59070,7 +59070,9 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   worry_VS = mkVS (caseV partitive (mkV "huolettaa")) ; --- minua huolettaa että
   zip_code_N = mkN "postinumero" ;
 
-oper tehda_V = mkV (lin VK {s = c71 "tehdä"}) ;
+oper 
+  tehda_V = mkV (lin VK {s = c71 "tehdä"}) ;
+  nahda_V = mkV (lin VK {s = c71 "nähdä"}) ;
 
 --MANUAL10 -- another batch of additions, 29/3/2013
 
@@ -59321,7 +59323,7 @@ familiar_with_A2 = mkA2 (mkA "perehtynyt") (mkPrep illative) ; --MAN
 some_Quant = heavyQuant {s1 = S.jokinPron ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ; --MAN
 anyPl_Det = {s1,sp = S.mikaInt ! Pl ; s2 = \\_ => "tahansa" ; isNum,isPoss,isNeg,isDef = False ; n = Pl} ; --MAN
 little_Det = mkDet False Sg (exceptNomN (mkN "vähä") "vähän") partitive ; --MAN
-both_Det = mkDet Pl (mkN "molempi" "molamman" "molempia") ; --MAN
+both_Det = mkDet Pl (mkN "molempi" "molemman" "molempia") ; --MAN
 most_Det = mkDet Pl (mkN "usein" "useimman" "useimpia") ; --MAN
 several_Num = {s = \\n,c => (snoun2nounBind (mkN "usea")).s ! NCase n c ; n = Sg ; isNum = True} ; --suspect --MAN
 another_Quant = heavyQuant {s1 = \\n,c => (snoun2nounBind (mkN "toinen")).s ! NCase n c ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ; --MAN
@@ -60080,7 +60082,7 @@ san_francisco_PN = mkPN "San Francisco" ;
 thus_Adv = mkAdv "siten" ;
 ever_AdV = mkAdV "koskaan" ;
 out_Prep = mkPrep "ulos" elative ;
-see_V = mkV "nähdä" ;
+see_V = nahda_V ;
 price_V2 = mkV2 "hinnoitella" ;
 next_Prep = mkPrep elative "seuraava" ;
 mind_N = mkN "mieli" ;
@@ -60318,10 +60320,8 @@ bolt_N = mkN "pultti" ;
 beside_Prep = mkPrep "vieressä" ;
 aesthetic_A = mkA "esteettinen" ;
 
-
-----see_V2V = mkV2V "see" ;
-----whichSg_IDet = mkIDet "whichSg" ;
-
+see_V2V = mkV2V nahda_V (mkPrep genitive) infPresPart ;
+whichSg_IDet = {s = S.mikaInt ! Sg ; n = Sg ; isNum = False} ; ---- why needed?
 
 
 

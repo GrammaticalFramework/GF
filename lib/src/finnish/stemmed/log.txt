@@ -206,4 +206,15 @@ Rough estimate: in DictEngFin, there are 60k words, of which 57.5k from
 WN, 2.5k manual (based on grep mkW DictEngFin.gf).
 
 
+4/4
+
+Sent missing Penn words to Inari.
+
+Added missing syntactic constructs. Including a very nice one:
+VPSlashVS : VS -> VPSlash -> VPSlash, which permits "Mr. Bronner
+vaikuttaa uskovan että kuulustelut voivat tulla kummaksi tahansa
+tieksi".
+
+Having fixed the negativity of heither_Det yesterday, changed 22
+sentences (only). Now at version 16.
 
