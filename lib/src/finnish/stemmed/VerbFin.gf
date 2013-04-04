@@ -43,7 +43,6 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
       insertExtrapos (q.s) (predSV v) ** {c2 = v.c2} ;
     SlashV2V v vp = 
       insertObj (\\_,b,a => infVP v.sc b a vp v.vi) (predSV v) ** {c2 = v.c2} ;
-      ---- different infinitives
     SlashV2A v ap = 
       insertObj 
         (\\fin,b,_ => 

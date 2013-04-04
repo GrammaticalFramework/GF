@@ -24,16 +24,16 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       } ;
 
   lincat
-    VPI   = {s : Str} ;
-    [VPI] = {s1,s2 : Str} ;
+    VPI   = {s : InfForm => Str} ;
+    [VPI] = {s1,s2 : InfForm => Str} ;
   lin
-    BaseVPI = twoSS ;
-    ConsVPI = consrSS comma ;
+    BaseVPI = twoTable InfForm ;
+    ConsVPI = consrTable InfForm comma ;
 
-    MkVPI vp = {s = infVP (NPCase Nom) Pos (agrP3 Sg) vp Inf1} ;
-    ConjVPI = conjunctDistrSS ;
+    MkVPI vp = {s = \\i => infVP (NPCase Nom) Pos (agrP3 Sg) vp i} ;
+    ConjVPI = conjunctDistrTable InfForm ;
     ComplVPIVV vv vpi = 
-      insertObj (\\_,_,_ => vpi.s) (predSV vv) ;
+      insertObj (\\_,_,_ => vpi.s ! vv.vi) (predSV vv) ;
 
   lincat
     VPS = {

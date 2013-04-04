@@ -105,11 +105,8 @@ lin
       isNeg = quant.isNeg
       } ;
 
-  -- V2V -> Ant -> Pol -> VP -> VPSlash
   SlashV2V v ant p vp = 
       insertObj (\\_,b,a => infVPGen p.p v.sc b a vp v.vi) (predSV v) ** {c2 = v.c2} ;
-
---     SlashSlashV2V : V2V -> Ant -> Pol -> VPSlash -> VPSlash ;
 
   CompS s = {s = \\_ => "että" ++ s.s} ;  -- S -> Comp            ---- what are these expected to do ? 29/3/2013
   CompVP ant pol vp = {s = \\a => infVPGen pol.p vp.sc Pos a vp Inf1} ; -- VP -> Comp
@@ -129,39 +126,18 @@ lin
 
     EmptyRelSlash cls = mkRCl which_RP cls ;
 
+  CompQS qs = {s = \\_ => qs.s} ;
 
 
   AdAdV ada adv = {s = ada.s ++ adv.s} ;
 
---    SlashVPIV2V : V2V -> Pol -> VPI -> VPSlash ;
--- 	VPSlashVS : VS -> VP -> VPSlash ;
+   SlashVPIV2V v pol vpi = -- : V2V -> Pol -> VPI -> VPSlash ;
+      insertObj (\\_,b,a => vpi.s ! v.vi) (predSV v) ** {c2 = v.c2} ;
 
+   VPSlashVS v vp = -- : VS -> VP -> VPSlash ; -- hän sanoo (minun) menevän (!) ---- menneen ?
+      insertObj (\\_,b,a => infVP v.sc b a vp InfPresPart) (predSV v) ** {c2 = {c = NPCase Gen ; s = [] ; isPre = True}} ;
+     
+--   SlashSlashV2V : V2V -> Ant -> Pol -> VPSlash -> VPSlash ; --- not implemented in Eng either so far
+--in Verb,   SlashV2VNP : V2V -> NP -> VPSlash -> VPSlash
 }
 
-{-
--- 19 constructors missing, as revealed by the 3k sentences from Penn 28/3(2013
--- [AdAdV] 
--- [AdvAP]
--- [CompS]
--- [CompVP]
--- [EmptyRelSlash] 
--- [GenRP]
--- [GerundAP]
--- [GerundN]
--- [OrdCompar]
--- [PositAdVAdj]
--- [PredVPovs]
--- [PresPartRS]
--- [SSubjS]
-[SlashSlashV2V]
--- [SlashV2V]
-[SlashVPIV2V]
--- [UncNeg] 
--- [UttAdV]
-[VPSlashVS]
-
-
-ParseEngAbs> pg -missing | wf -file=missing-ParseFin
-
-AddAdvQVP AdnCAdv AdvIAdv AdvIP AdvQVP BaseIAdv CAdvAP CNNumNP CompIAdv CompIP CompQS CompS CompVP ComparAdvAdj ComparAdvAdjS ComplN2 ComplN3 ComplSlashIP ComplVQ ConjIAdv ConsIAdv EmbedQS GerundAP GerundN IdetCN IdetIP IdetQuant OrdCompar PositAdVAdj PredVPovs PrepIP QuestCl QuestIAdv QuestIComp QuestQVP QuestSlash QuestVP SlashSlashV2V SlashV2Q SlashV2V SlashV2VNP SlashVPIV2V Use2N3 Use3N3 UseN2 UseQCl UseQuantPN UttInterj UttQS VPSlashVS
--}
