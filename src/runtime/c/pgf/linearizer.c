@@ -408,6 +408,11 @@ pgf_cnc_tree_enum_next(GuEnum* self, void* to, GuPool* pool)
 	PgfLzn* lzn = gu_container(self, PgfLzn, en);
 	PgfCncTree* toc = to;
 
+	if (lzn->ch == NULL) {
+		*toc = gu_null_variant;
+		return;
+	}
+
 	GuChoiceMark mark = gu_choice_mark(lzn->ch);
 	*toc = pgf_lzn_resolve(lzn, lzn->expr, NULL, pool);
 	gu_choice_reset(lzn->ch, mark);
@@ -426,7 +431,9 @@ pgf_cnc_tree_enum_next(GuEnum* self, void* to, GuPool* pool)
     gu_pool_free(tmp_pool);
 #endif
 
-	gu_choice_advance(lzn->ch);
+	if (!gu_choice_advance(lzn->ch)) {
+		lzn->ch = NULL;
+	}
 }
 
 PgfCncTreeEnum*
