@@ -69,17 +69,18 @@ lin
     g = cn.g
   } ;
 
-{-
+
   DashCN noun1 noun2 = { -- type-checking
-    s = \\n,c => noun1.s ! Sg ! Nom ++ "-" ++ noun2.s ! n ! c ;
+    s = \\n,c => glue (noun1.s ! Sg ! Nom) (noun2.s ! n ! c) ;
     g = noun2.g
   } ;
 
   GerundN v = { -- parsing
-    s = \\n,c => v.s ! VPresPart ;
+    s = \\n,c => v.s ! VInf False ; --- formalisieren, not formalisierung
     g = Neutr
   } ;
-  
+
+{-  
   GerundAP v = {  -- beckoning
     s = \\agr => v.s ! VPresPart ;
     isPre = True

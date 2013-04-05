@@ -195,4 +195,9 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
       isMod = cn.isMod
       } ;
 
+    PossNP cn np = {
+      s = \\a,n,c => cn.s ! a ! n ! c ++ np.s ! NPP CVonDat ;
+      g = cn.g
+      } ;
+
 }

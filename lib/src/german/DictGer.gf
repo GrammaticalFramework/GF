@@ -17493,7 +17493,7 @@ lin
   hobel_N = reg2N  "Hobel" "Hobel" masculine ;
   hobelbank_N = reg2N  "Hobelbank" "Hobelbänke" feminine ;
   hobelmaschine_N = reg2N  "Hobelmaschine" "Hobelmaschinen" feminine ;
-  hoch_A = mk3A "hoch" "höher" "höchste" ;
+  hoch_A = mkA "hoch" "hoh" "höher" "höchste" ;
   hoch_N = reg2N  "Hoch" "Hochs" neuter ;
   hochachtungsvoll_A = mk3A "hochachtungsvoll" "hochachtungsvoller" "hochachtungsvollste" ;
   hochbegabung_N = mkN "Hochbegabung" ;
