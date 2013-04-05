@@ -48,24 +48,6 @@ typedef GuEnum PgfCncTreeEnum;
 PgfCncTreeEnum*
 pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuPool* pool);
 
-/** @}
- *
- * @name Linearizing concrete syntax trees
- *
- * An individual concrete syntax tree has several different
- * linearizations, corresponding to the various fields and cases of
- * corresponding GF values. The number of these linearizations, called
- * the \e dimension of the tree, can be retrieved with
- * #pgf_cnc_tree_dimension.
- *  
- * A single linearization of a concrete syntax tree is performed by
- * #pgf_lzr_linearize. The linearization is realized as a sequence of
- * events that are notified by calling the functions of a #PgfLinFuncs
- * structure that the client provides.
- *
- * @{
- */
-
 /// Callback functions for linearization.
 typedef struct PgfLinFuncs PgfLinFuncs;
 

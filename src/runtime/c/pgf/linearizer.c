@@ -108,6 +108,7 @@ struct PgfLzn {
 
 typedef enum {
 	PGF_CNC_TREE_APP,
+	PGF_CNC_TREE_CHUNKS,
 	PGF_CNC_TREE_LIT,
 } PgfCncTreeTag;
 
@@ -116,6 +117,11 @@ typedef struct {
 	GuLength n_args;
 	PgfCncTree args[];
 } PgfCncTreeApp;
+
+typedef struct {
+	GuLength n_args;
+	PgfCncTree args[];
+} PgfCncTreeChunks;
 
 typedef struct {
 	PgfLiteral lit;
@@ -127,11 +133,6 @@ pgf_print_cnc_tree(PgfCncTree ctree, GuWriter* wtr, GuExn* err)
 {
 	GuVariantInfo ti = gu_variant_open(ctree);
 	switch (ti.tag) {
-	case PGF_CNC_TREE_LIT: {
-		PgfCncTreeLit* clit = ti.data;
-		pgf_print_literal(clit->lit, wtr, err);
-		break;
-	}
 	case PGF_CNC_TREE_APP: {
 		PgfCncTreeApp* capp = ti.data;
 		if (capp->n_args > 0) gu_putc('(', wtr, err);
@@ -143,6 +144,25 @@ pgf_print_cnc_tree(PgfCncTree ctree, GuWriter* wtr, GuExn* err)
 		if (capp->n_args > 0) gu_putc(')', wtr, err);
 		break;
 	}
+	case PGF_CNC_TREE_CHUNKS: {
+		PgfCncTreeChunks* chunks = ti.data;
+		if (chunks->n_args > 0) gu_putc('(', wtr, err);
+		gu_putc('?', wtr, err);
+		for (size_t i = 0; i < chunks->n_args; i++) {
+			gu_putc(' ', wtr, err);
+			pgf_print_cnc_tree(chunks->args[i], wtr, err);
+		}
+		if (chunks->n_args > 0) gu_putc(')', wtr, err);
+		break;
+	}
+	case PGF_CNC_TREE_LIT: {
+		PgfCncTreeLit* clit = ti.data;
+		pgf_print_literal(clit->lit, wtr, err);
+		break;
+	}
+	case GU_VARIANT_NULL:
+		gu_puts("null", wtr, err);
+		break;
 	default:
 		gu_impossible();
 	}
@@ -292,13 +312,34 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 			goto done;
 		}
 		case PGF_EXPR_META: {
-			if (ccat == NULL || ccat->lindefs == NULL) {
+			if (ccat == NULL) {
+				size_t n_args = gu_buf_length(args);
+
+				PgfCncTreeChunks* chunks = 
+					gu_new_flex_variant(PGF_CNC_TREE_CHUNKS,
+								PgfCncTreeChunks,
+								args, n_args, &ret, pool);
+				chunks->n_args = n_args;
+
+				for (size_t i = 0; i < n_args; i++) {
+					PgfExpr earg = gu_buf_get(args, PgfExpr, n_args-i-1);
+					chunks->args[i] = pgf_lzn_resolve(lzn, earg, NULL, pool);
+					if (gu_variant_is_null(chunks->args[i])) {
+						ret = gu_null_variant;
+						break;
+					}
+				}
+
+				goto done;
+			} else {
+				if (ccat->lindefs == NULL) {
+					goto done;
+				}
+
+				GuString s = gu_str_string("?", pool);
+				ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, s, pool);
 				goto done;
 			}
-
-			GuString s = gu_str_string("?", pool);
-			ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, s, pool);
-			goto done;
 		}
 		case PGF_EXPR_FUN: {
 			PgfExprFun* efun = i.data;
@@ -318,7 +359,7 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 				gu_putc('[', wtr, err);
 				gu_string_write(efun->fun, wtr, err);
 				gu_putc(']', wtr, err);
-				GuString s = gu_string_buf_freeze(sbuf, tmp_pool);
+				GuString s = gu_string_buf_freeze(sbuf, pool);
 
 				ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, s, pool);
 
@@ -399,23 +440,6 @@ pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuPool* pool)
 	return &lzn->en;
 }
 
-int
-pgf_cnc_tree_dimension(PgfCncTree ctree)
-{
-	GuVariantInfo cti = gu_variant_open(ctree);
-	switch (cti.tag) {
-	case PGF_CNC_TREE_LIT: 
-		return 1;
-	case PGF_CNC_TREE_APP: {
-		PgfCncTreeApp* fapp = cti.data;
-		return fapp->fun->n_lins;
-	}
-	default:
-		gu_impossible();
-		return 0;
-	}
-}
-
 void
 pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs** fnsp)
 {
@@ -423,14 +447,6 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 	GuVariantInfo cti = gu_variant_open(ctree);
 
 	switch (cti.tag) {
-	case PGF_CNC_TREE_LIT: {
-		gu_require(lin_idx == 0);
-		PgfCncTreeLit* flit = cti.data;
-		if (fns->expr_literal) {
-			fns->expr_literal(fnsp, flit->lit);
-		}
-		break;
-	}
 	case PGF_CNC_TREE_APP: {
 		PgfCncTreeApp* fapp = cti.data;
 		PgfCncFun* fun = fapp->fun;
@@ -475,7 +491,23 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 			}
 		}
 		break;
-	} // case PGF_CNC_TREE_APP
+	}
+	case PGF_CNC_TREE_CHUNKS: {
+		gu_require(lin_idx == 0);
+		PgfCncTreeChunks* fchunks = cti.data;
+		for (size_t i = 0; i < fchunks->n_args; i++) {
+			pgf_lzr_linearize(concr, fchunks->args[i], 0, fnsp);
+		}
+		break;
+	}
+	case PGF_CNC_TREE_LIT: {
+		gu_require(lin_idx == 0);
+		PgfCncTreeLit* flit = cti.data;
+		if (fns->expr_literal) {
+			fns->expr_literal(fnsp, flit->lit);
+		}
+		break;
+	}
 	default:
 		gu_impossible();
 	}
