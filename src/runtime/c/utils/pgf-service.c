@@ -59,7 +59,7 @@ static int
 generate_graphviz_expr(PgfExpr expr, int *pid,
                        GuWriter* wtr, GuExn* err, GuPool* pool)
 {
-	int id;
+	int id = -1;
 	
 	GuVariantInfo ei = gu_variant_open(expr);
 	switch (ei.tag) {
@@ -188,6 +188,55 @@ render(PgfExpr expr, GuPool* pool)
 	}
 }
 
+static void
+put_gu_string(GuString s) {
+	GuWord w = s.w_;
+	uint8_t buf[sizeof(GuWord)];
+
+	char* src;
+	size_t len;
+	if (w & 1) {
+		len = (w & 0xff) >> 1;
+		gu_assert(len <= sizeof(GuWord));
+		size_t i = len;
+		while (i > 0) {
+			w >>= 8;
+			buf[--i] = w & 0xff;
+		}
+		src = (char*) buf;
+	} else {
+		uint8_t* p = (void*) w;
+		len = (p[0] == 0) ? ((size_t*) p)[-1] : p[0];
+		src = (char*) &p[1];
+	}
+
+	for (size_t i = 0; i < len; i++) {
+		FCGI_putchar(src[i]);
+	}
+}
+
+static void
+linearize(PgfConcr* concr, PgfExpr expr, GuPool* pool)
+{
+	GuStringBuf* sbuf = gu_string_buf(pool);
+	GuWriter* wtr = gu_string_buf_writer(sbuf);
+
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
+	
+	pgf_linearize(concr, expr, wtr, err);
+	
+	GuString s = gu_string_buf_freeze(sbuf, pool);
+	put_gu_string(s);
+}
+
+static void
+print_lang(GuMapItor* fn, const void* key, void* value, GuExn* err)
+{
+	PgfCId lang = *((PgfCId*) key);
+	put_gu_string(lang);
+	FCGI_putchar(' ');
+}
+
 int main ()
 {
 	// Create the pool that is used to allocate everything
@@ -220,7 +269,7 @@ int main ()
 	}
 
 	// Read the extra probs.
-	char* probs_name = "/ParseEngAbs2.probs";
+	char* probs_name = "/ParseEngAbs3.probs";
 	char* probs_file = malloc(strlen(grammar_path)+strlen(probs_name)+1);
 	strcpy(probs_file,grammar_path);
 	strcat(probs_file,probs_name);
@@ -234,39 +283,51 @@ int main ()
 	}
 
 	GuString cat = gu_str_string("Phr", pool);
-	GuString lang = gu_str_string("ParseEng", pool);
-	PgfConcr* concr =
-		pgf_get_language(pgf, lang);
-	if (!concr) {
+	GuString from_lang = gu_str_string("ParseEng", pool);
+	PgfConcr* from_concr =
+		pgf_get_language(pgf, from_lang);
+	if (!from_concr) {
 		status = EXIT_FAILURE;
 		goto fail;
 	}
 
 	// Register a callback for the literal category Symbol
-	pgf_parser_add_literal(concr, gu_str_string("Symb", pool),
+	pgf_parser_add_literal(from_concr, gu_str_string("Symb", pool),
 	                       &pgf_nerc_literal_callback);
 
     while (FCGI_Accept() >= 0) {
-		char* sentence = getenv("QUERY_STRING");
-		if (sentence == NULL ||
-		    (sentence = strchr(sentence, '=')) == NULL) {
-			FCGI_printf("Content-type: text/html\r\n"
-				        "\r\n"
-				        "<body>Please type a sentence to parse</body>\r\n");
-		} else {
-			sentence++;
+		char* query = getenv("QUERY_STRING");
 
+		char sentence[202];
+		char to_lang_buf[51] = "";
+		if (query == NULL ||
+		    sscanf(query, "sentence=%200[^&]&to=%50[^&]", sentence, to_lang_buf) < 1) {
+			FCGI_printf("Status: 200 OK\r\n");
+			FCGI_printf("Content-type: text/plain; charset=utf-8\r\n\r\n");
+
+			GuMapItor clo = { print_lang };
+			pgf_iter_languages(pgf, &clo, NULL);
+			FCGI_putchar('\n');
+		} else {
 			// We create a temporary pool for translating a single
 			// sentence, so our memory usage doesn't increase over time.
 			GuPool* ppool = gu_new_pool();
 
-			char* tmp = gu_malloc(ppool, strlen(sentence)+2);
-			strcpy(tmp, sentence);
-			url_escape(tmp);
-			int len = strlen(tmp);
-			tmp[len] = '\n';
-			tmp[len+1] = '\0';
-			sentence = tmp;
+			PgfConcr* to_concr = NULL;
+			if (strlen(to_lang_buf) > 0) {
+				GuString to_lang = gu_str_string(to_lang_buf, ppool);
+				to_concr =
+					pgf_get_language(pgf, to_lang);
+				if (!to_concr) {
+					status = EXIT_FAILURE;
+					goto fail;
+				}
+			}
+
+			url_escape(sentence);
+			int len = strlen(sentence);
+			sentence[len] = '\n';
+			sentence[len+1] = '\0';
 		
 			GuReader *rdr =
 				gu_string_reader(gu_str_string(sentence, ppool), ppool);
@@ -274,26 +335,34 @@ int main ()
 				pgf_new_simple_lexer(rdr, ppool);
 
 			GuEnum* result = 
-				pgf_parse(concr, cat, lexer, ppool);
+				pgf_parse(from_concr, cat, lexer, ppool);
 			if (result == NULL) {
-				FCGI_printf("Content-type: text/html\r\n"
+				FCGI_printf("Status: 500 Internal Server Error\r\n");
+				FCGI_printf("Content-type: text/plain\r\n"
 							"\r\n"
-							"<body>Parsing failed</body>");
-				goto fail_request;
+							"Parsing failed");
+				goto done;
 			}
 
 			PgfExprProb* ep = gu_next(result, PgfExprProb*, ppool);
 			if (ep == NULL) {
-				FCGI_printf("Content-type: text/html\r\n"
+				FCGI_printf("Status: 500 Internal Server Error\r\n");
+				FCGI_printf("Content-type: text/plain\r\n"
 							"\r\n"
-							"<body>The sentence was parsed but there was no tree constructed</body>");
-				goto fail_request;
+							"The sentence was parsed but there was no tree constructed");
+				goto done;
 			}
 
-			FCGI_printf("Content-type: image/svg+xml\r\n\r\n");
-			render(ep->expr, ppool);
+			FCGI_printf("Status: 200 OK\r\n");
+			if (to_concr == NULL) {
+				FCGI_printf("Content-type: image/svg+xml\r\n\r\n");
+				render(ep->expr, ppool);
+			} else {
+				FCGI_printf("Content-type: text/plain; charset=utf-8\r\n\r\n");
+				linearize(to_concr, ep->expr, ppool);
+			}
 
-fail_request:
+done:
 			gu_pool_free(ppool);
 		}
     }
