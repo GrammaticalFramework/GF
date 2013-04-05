@@ -1,5 +1,5 @@
 --# -path=alltenses:../english
-concrete ParseEngBul of ParseEngAbs = 
+concrete ParseBul of ParseEngAbs = 
   TenseX - [IAdv, CAdv],
   CatBul,
   NounBul - [PPartNP],
