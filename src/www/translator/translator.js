@@ -943,9 +943,11 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
 	}
 	var autoB=radiobutton("method","Default","Default",change)
 	var manualB=radiobutton("method","Manual","Manual",change)
+	var gfrobustB=radiobutton("method","GFRobust","GF Robust Parser",change)
 	var dl=wrap_class("dl","popupmenu",
 			  [dt(autoB),
-			   dt([manualB,text(" "),draw_translation(o)])])
+			   dt([manualB,text(" "),draw_translation(o)]),
+			   dt(gfrobustB)])
 	if(window.apertium) add_apertium_to_menu(dl,change)
 	t.extend_methods_menu(dl,change)
 	var form=wrap("form",dl)
