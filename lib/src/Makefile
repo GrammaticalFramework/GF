@@ -137,3 +137,9 @@ ParseHin:
 ParseEngHin:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngHin ParseEng.pgf ParseHin.pgf
 
+ParseBul:
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseBul bulgarian/ParseBul.gf
+
+ParseEngBul:
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngBul ParseEng.pgf ParseBul.pgf
+
