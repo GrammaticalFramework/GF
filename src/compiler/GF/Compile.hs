@@ -1,4 +1,6 @@
 module GF.Compile (batchCompile, link, compileToPGF, compileSourceGrammar) where
+import Prelude hiding (catch)
+import GF.System.Catch
 
 -- the main compiler passes
 import GF.Compile.GetGrammar
