@@ -117,6 +117,9 @@ Translator.prototype.update_language_menus=function() {
     case "Manual":
 	mark_menus(yes,yes)
 	break;
+    case "GFRobust":
+	mark_menus(gfrobust_ssupport,gfrobust_tsupport)
+	break;
     case "Apertium":
 	function ssupport(code) {
 	    return apertium.isTranslatable(alangcode(code))
@@ -135,6 +138,10 @@ Translator.prototype.update_language_menus=function() {
 	t.switch_grammar(o.method,cont)
     }
 }
+
+function gfrobust_ssupport(code) { return code=="Eng" }
+var gfrobust_targets=toSet(["Eng","Ger","Fin","Bul","Hin"]) // !!! Get list from server
+function gfrobust_tsupport(code) { return gfrobust_targets[code] }
 
 Translator.prototype.gf_supported=function(grammar,langcode) {
     var t=this;
@@ -198,6 +205,42 @@ Translator.prototype.update_translation=function(i) {
 	else
 	    upd3(["[Apertium does not support "+show_translation(o)+"]"])
     }
+    function update_gfrobust_translation() {
+	function upd3(txts) { update_segment("GFRobust",txts) }
+	function upd2(ts) {
+	    switch(ts.length) {
+	    case 0: upd3(["[no translation]"]);break;
+	    default: upd3([ts]); break;
+	    }
+	}
+	function upd1(translate_output) {
+	    //console.log(translate_output)
+	    upd2(translate_output)
+	}
+	function upd0(source) {
+	    var url="http://www.grammaticalframework.org:41296/robust-parser.cgi"
+	    http_get_json(url+"?sentence="+encodeURIComponent(source)+"&to=Parse"+o.to,upd1)
+	}
+	var fls=gfrobust_ssupport(o.from)
+	var tls=gfrobust_tsupport(o.to)
+	if(fls && tls) {
+	    var want={from:o.from, to:o.to, method:"GFRobust"}
+	    if(!eq_options(segment.options,want)) {
+		//console.log("Updating "+i)
+		//lextext(segment.source,upd0)
+		upd0(segment.source)
+	    }
+	    //else console.log("No update ",want,segment.options)
+	}
+	else {
+	    var fn=" from "+concname(o.from)
+	    var tn=" to "+concname(o.to)
+	    var msg="The GF robust translation service: not supported:"
+	    if(!fls) msg+=fn+(tls ? "." : ", ")
+	    if(!tls) msg+=tn+"."
+	    upd3(["["+msg+"]"])
+	}
+    }
 
     function update_gf_translation(grammar,gfrom,gto) {
 	var server=t.servers[grammar]
@@ -243,6 +286,7 @@ Translator.prototype.update_translation=function(i) {
     switch(m) {
     case "Manual":  /* Nothing to do */ break;
     case "Apertium": update_apertium_translation(); break;
+    case "GFRobust": update_gfrobust_translation(); break;
     default: // GF
 	function upd00(grammar_info) {
 	    var gname=grammar_info.name
@@ -808,7 +852,7 @@ type Segment = { source:String, target:String, options:Options }
 type DocOptions = Options & { view:View, cloud:Bool }
 type Options = {from: Lang, to: Lang, method:Method}
 type Lang = String // Eng, Swe, Ita, etc
-type Method = "Manual" | "Apertium" | GFGrammarName
+type Method = "Manual" | "Apertium" | "GFRobust" | GFGrammarName
 type View = "segmentbysegment" | "paralleltexts"
 type GFGrammarName = String // e.g. "Foods.pgf"
 
