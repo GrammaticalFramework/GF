@@ -57,7 +57,8 @@ oper
   allative    : Case ; -- e.g. "talolle"
 
   infFirst : InfForm ; -- e.g. "tehdä"
-  infElat : InfForm ;  -- e.g. "tekemästä"
+  infIness : InfForm ; -- e.g. "tekemässä"
+  infElat  : InfForm ; -- e.g. "tekemästä"
   infIllat : InfForm ; -- e.g. "tekemään"
   infPresPart : InfForm ; -- e.g. "tekevän"
   infPresPartAgr : InfForm ; -- e.g. "tekevänsä"
@@ -355,7 +356,7 @@ mkVS = overload {
   ablative = Ablat ;
   allative = Allat ;
 
-  infFirst = Inf1 ; infElat = Inf3Elat ; infIllat = Inf3Illat ; infPresPart = InfPresPart ; infPresPartAgr = InfPresPartAgr ;
+  infFirst = Inf1 ; infElat = Inf3Elat ; infIllat = Inf3Illat ; infIness = Inf3Iness ; infPresPart = InfPresPart ; infPresPartAgr = InfPresPartAgr ;
 
   prePrep  : Case -> Str -> Prep = 
     \c,p -> {c = NPCase c ; s = p ; isPre = True ; lock_Prep = <>} ;
