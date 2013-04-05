@@ -148,3 +148,9 @@ ParseSpa:
 
 ParseEngSpa:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngSpa ParseEng.pgf ParseSpa.pgf
+
+ParseSwe:
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseSwe swedish/ParseSwe.gf
+
+ParseEngSwe:
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngSwe ParseEng.pgf ParseSwe.pgf
