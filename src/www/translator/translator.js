@@ -210,7 +210,7 @@ Translator.prototype.update_translation=function(i) {
 	function upd2(ts) {
 	    switch(ts.length) {
 	    case 0: upd3(["[no translation]"]);break;
-	    default: upd3([ts]); break;
+	    default: mapc(unlextext,[ts],upd3); break;
 	    }
 	}
 	function upd1(translate_output) {
@@ -227,8 +227,8 @@ Translator.prototype.update_translation=function(i) {
 	    var want={from:o.from, to:o.to, method:"GFRobust"}
 	    if(!eq_options(segment.options,want)) {
 		//console.log("Updating "+i)
-		//lextext(segment.source,upd0)
-		upd0(segment.source)
+		lextext(segment.source,upd0)
+		//upd0(segment.source)
 	    }
 	    //else console.log("No update ",want,segment.options)
 	}
@@ -547,7 +547,7 @@ Translator.prototype.insert_segment=function(i) {
 	return false
     }
     var inp=node("input",{name:"it",value:""})
-    var e=wrap("form",[inp, submit(), button("Cancel",restore)])
+    var e=form({},[inp, submit(), button("Cancel",restore)])
     var source=wrap_class("td","source",e)
     var edit=wrap_class("tr","segment",[td([]),source])
     
@@ -607,7 +607,7 @@ Translator.prototype.import=function(el) {
 			      "Segments are separated by blank lines",null,false)
 	var punctchars=node("input",{name:"punctchars",value:".?!",size:"5"})
 	var lang=concname(t.document.options.from)
-	var e=node("form",{class:"import"},
+	var e=form({class:"import"},
 		   [wrap("h3",text("Import text ("+lang+")")),
 		    inp,
 		    wrap("dl",[dt([punct,punctchars]),dt(lines),dt(paras)]),
@@ -687,7 +687,7 @@ Translator.prototype.import_globalsight=function(el) {
 	    // Allow import from local files, if the browers supports it.
 	    var files=node("input",{name:"files","type":"file"})
 	    var inp=wrap("p",wrap("label",[text("Choose a file: "),files]))
-	    var e=node("form",{class:"import"},
+	    var e=form({class:"import"},
 		       [wrap("h3",text("Import a GlobalSight Download File")),
 			inp, submit(), cancel_button])
 	    t.filebox.appendChild(e)
@@ -755,9 +755,8 @@ Translator.prototype.edit_source=function(source,i) {
 	    s.options.to="" // hack to force an update
 	    t.update_translation(i)
 	}
-	return false;
     }
-    function done() { change(inp.value) }
+    function done() { change(inp.value); return false; }
 
     function goto_minibar() {
 	function cont(grammar_info) {
@@ -802,12 +801,10 @@ Translator.prototype.edit_source=function(source,i) {
     }
 
     var inp=node("input",{name:"it",value:s.source})
-    var e=wrap("form",[inp, submit(), button("Cancel",restore),
-		       text(" ")])
+    var e=form({},[inp, submit(), button("Cancel",restore),text(" ")])
     var grammarname=uses_gf(doc,s)
     if(grammarname) e.appendChild(button("Minibar",goto_minibar))
-    clear(source)
-    source.appendChild(e)
+    replaceChildren(source,e)
     e.onsubmit=done
     inp.focus()
 }
@@ -827,7 +824,7 @@ Translator.prototype.edit_translation=function(i) {
     }
 
     var inp=node("input",{name:"it",value:s.target})
-    var e=wrap("form",[inp, submit(), button("Cancel",restore)])
+    var e=form({},[inp, submit(), button("Cancel",restore)])
     var target=wrap_class("td","target",e)
     var edit=t.draw_segment_given_target(s,target,i)
     t.replace_segment(i,edit)
@@ -1198,6 +1195,8 @@ function update_radiobutton(form,name,value) {
 function update_checkbox(name,checked) {
     document.forms.options[name].checked=checked
 }
+
+function form(attrs,fields) { return node("form",attrs,fields) }
 
 function submit(label) {
     return node("input",{type:"submit",value:label||"OK"})
