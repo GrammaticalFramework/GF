@@ -1,5 +1,5 @@
 --# -path=alltenses:.:../english
-concrete ParseEngGer of ParseEngAbs = 
+concrete ParseGer of ParseEngAbs = 
   TenseGer,
   NounGer - [PPartNP],
   AdjectiveGer,
