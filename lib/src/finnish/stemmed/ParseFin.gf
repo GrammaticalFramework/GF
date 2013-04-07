@@ -38,15 +38,16 @@ lin
          ) ;
 
 
-  myself_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P1)) ;
-  yourselfSg_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P2)) ;
-  himself_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3)) ;
-  herself_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3)) ;
-  itself_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3)) ;
-  ourself_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P1)) ;
-  yourselfPl_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P2)) ;
-  themself_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P3)) ;
-  themselves_NP = mkNP (lin Pron (mkPronoun "itse" "itsen" "itseä" "itsenä" "itseen" Pl P3)) ;
+  ---- what is this...
+  myself_NP = mkPronounGen False "itse" "itsen" "itseä" "itsenä" "itseen" Sg P1  ** {isPron = True ; isNeg = False} ;
+  yourselfSg_NP = mkPronounGen False  "itse" "itsen" "itseä" "itsenä" "itseen" Sg P2** {isPron = True ; isNeg = False} ;
+  himself_NP = mkPronounGen False  "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3** {isPron = True ; isNeg = False} ;
+  herself_NP = mkPronounGen False  "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3** {isPron = True ; isNeg = False} ;
+  itself_NP = mkPronounGen False  "itse" "itsen" "itseä" "itsenä" "itseen" Sg P3** {isPron = True ; isNeg = False} ;
+  ourself_NP = mkPronounGen False  "itse" "itsen" "itseä" "itsenä" "itseen" Pl P1** {isPron = True ; isNeg = False} ;
+  yourselfPl_NP = mkPronounGen False  "itse" "itsen" "itseä" "itsenä" "itseen" Pl P2** {isPron = True ; isNeg = False} ;
+  themself_NP = mkPronounGen False  "itse" "itsen" "itseä" "itsenä" "itseen" Pl P3** {isPron = True ; isNeg = False} ;
+  themselves_NP = mkPronounGen False  "itse" "itsen" "itseä" "itsenä" "itseen" Pl P3** {isPron = True ; isNeg = False} ;
 
 
   CompoundCN num noun cn = {

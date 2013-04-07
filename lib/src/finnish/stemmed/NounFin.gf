@@ -113,10 +113,13 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
 
     PossPron p = {
       s1,sp = \\_,_ => p.s ! NPCase Gen ;
-      s2 = table {Front => BIND ++ possSuffixFront p.a ; 
-                  Back  => BIND ++ possSuffix p.a } ;
+      s2 = case p.hasPoss of {
+             True => table {Front => BIND ++ possSuffixFront p.a ; 
+                            Back  => BIND ++ possSuffix p.a } ;
+             False => \\_ => []
+             } ;
       isNum = False ;
-      isPoss = True ;
+      isPoss = p.hasPoss ;
       isDef = True ; --- "minun kolme autoani ovat" ; thus "...on" is missing
       isNeg = False
       } ;

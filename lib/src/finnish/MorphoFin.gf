@@ -892,10 +892,14 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     } ;
 
 -- Here we define personal and relative pronouns.
+-- Personal pronouns have possessive suffix (hänen talonsa) but "se" doesn't (sen talo)
 
   mkPronoun : (_,_,_,_,_ : Str) ->  Number -> Person -> 
-    {s : NPForm => Str ; a : Agr} = 
-    \mina, minun, minua, minuna, minuun, n, p ->
+    {s : NPForm => Str ; a : Agr ; hasPoss : Bool} = mkPronounGen True ;
+
+  mkPronounGen : Bool -> (_,_,_,_,_ : Str) ->  Number -> Person -> 
+    {s : NPForm => Str ; a : Agr ; hasPoss : Bool} = 
+    \hasPoss, mina, minun, minua, minuna, minuun, n, p ->
     let {
       minu = Predef.tk 2 minuna ;
       a    = Predef.dp 1 minuna
@@ -915,7 +919,8 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       NPCase Abess  => minu + ("tt" + a) ;
       NPAcc         => Predef.tk 1 minun + "t"
       } ;
-     a = Ag n p
+     a = Ag n p ;
+     hasPoss = hasPoss
     } ; 
 
   mkDemPronoun : (_,_,_,_,_ : Str) ->  Number -> 
