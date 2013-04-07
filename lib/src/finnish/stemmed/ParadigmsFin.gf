@@ -129,8 +129,12 @@ oper
 
 -- Nouns where the parts are separate (should perhaps be treated as CN)
 
-   separateN : Str -> N -> N 
-    = \s,n -> mkN (s + "_") n ;
+   separateN = overload {
+     separateN : Str -> N -> N 
+      = \s,n -> mkN (s + "_") n ;
+     separateN : N -> N -> N 
+      = \oma, asunto -> lin N {s = \\c => oma.s ! c + "_" + asunto.s ! c ; h = asunto.h} ;
+      } ;
 
 -- Nouns used as functions need a case, of which the default is
 -- the genitive.
