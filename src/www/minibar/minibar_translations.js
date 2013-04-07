@@ -103,12 +103,10 @@ Translations.prototype.target_lang=function() {
 
 Translations.prototype.show_translations=function(translationResults) {
     var self=this;
-    function tdt(tree_btn,s,action) {
-	var txt=text(s);
+    function tdt(tree_btn,txt,action) {
 	if(action) {
-	    txt=wrap("span",[txt])
+	    txt=wrap("span",txt)
 	    txt.onclick=action
-	    //txt=button(s,action)
 	}
 	return self.options.show_trees ? td([tree_btn,text(" "),txt]) : td(txt)
     }
@@ -122,8 +120,10 @@ Translations.prototype.show_translations=function(translationResults) {
 	    }
 	    function draw_row(row) {
 		return tr([td(text(row.params)),td(draw_texts(row.texts))])
-	    }
-	    return wrap_class("table","lintable",lintable.map(draw_row))
+	    } // ▼ ▾
+	    return wrap("span",
+			[text("▾ "),
+			 wrap_class("table","lintable",lintable.map(draw_row))])
 	}
 	function get_tabular() {
 	    var t=this
@@ -139,7 +139,7 @@ Translations.prototype.show_translations=function(translationResults) {
 	    self.server.pgf_call("linearizeTable",{"tree":tree,"to":lin.to},
 				 show_table)
 	}
-	return tdt(tree_btn,lin.text,get_tabular)
+	return tdt(tree_btn,text("▸ "+lin.text),get_tabular) // ▶
     }
     with(self) {
 	var trans=main;
@@ -177,7 +177,7 @@ Translations.prototype.show_translations=function(translationResults) {
 				tdt(node("span",{},
 					 [abstree_button(t.tree),
 					  alignment_button(t.tree,to=="All",toLangs)]),
-				    t.tree)]));
+				    text(t.tree))]));
 		    }
 		    for(var i=0;i<lin.length;i++) {
 			if(lin[i].to==to && toLangs.length==1)
