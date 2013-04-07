@@ -41,7 +41,7 @@ lin
   pot01 = 
    {s = table {
       NumAttr => \\_ => [] ; 
-      NumIndep => yksiN.s
+      NumIndep => yksi_ensiN.s
       } ;
     n = Sg
     } ;
@@ -104,7 +104,11 @@ oper
   yksiN = co 
     (nhn (mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
      "yksien" "yksiä" "yksiin")) 
-    (ordN "ä" "yhdes") ; ---- ensimmäinen
+    (ordN "ä" "yhdes") ; -- yhdestoista
+  yksi_ensiN = co 
+    (nhn (mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
+     "yksien" "yksiä" "yksiin")) 
+    (snoun2nounBind (mkN "ensimmäinen")) ; -- ensimmäinen ---- sadasensimmäinentuhannes
   kymmenenN = co 
     (nhn (mkSubst "ä" "kymmenen" "kymmene" "kymmene" "kymmentä" 
     "kymmeneen" "kymmeni" "kymmeni" "kymmenien" "kymmeniä" "kymmeniin")) 

@@ -153,7 +153,8 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
     ProDrop p = {
       s = table {NPCase (Nom) => [] ; c => p.s ! c} ; 
           ---- drop Gen only works in adjectival position: "autoni", but not in "ø täytyy mennä"
-      a = p.a
+      a = p.a ;
+      hasPoss = p.hasPoss ;
       } ;
 
     ProDropPoss p = {

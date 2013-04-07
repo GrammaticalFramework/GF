@@ -28,8 +28,8 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
                }
          ) ;
 
-    ComplVS v s  = insertExtrapos (etta_Conj ++ s.s) (predSV v) ;
-    ComplVQ v q  = insertExtrapos (          q.s) (predSV v) ;
+    ComplVS v s  = insertExtrapos ("," ++ etta_Conj ++ s.s) (predSV v) ;
+    ComplVQ v q  = insertExtrapos ("," ++ q.s) (predSV v) ;
     ComplVA v ap = 
       insertObj 
         (\\_,b,agr => 
@@ -38,9 +38,9 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
         (predSV v) ;
 
     SlashV2S v s = 
-      insertExtrapos (etta_Conj ++ s.s) (predSV v) ** {c2 = v.c2} ;
+      insertExtrapos ("," ++ etta_Conj ++ s.s) (predSV v) ** {c2 = v.c2} ;
     SlashV2Q v q = 
-      insertExtrapos (q.s) (predSV v) ** {c2 = v.c2} ;
+      insertExtrapos ("," ++ q.s) (predSV v) ** {c2 = v.c2} ;
     SlashV2V v vp = 
       insertObj (\\_,b,a => infVP v.sc b a vp v.vi) (predSV v) ** {c2 = v.c2} ;
     SlashV2A v ap = 

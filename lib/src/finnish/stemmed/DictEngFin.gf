@@ -7992,7 +7992,7 @@ center_A = mkWA (k38 "keskustalainen") ;
 center_V = mkWV (k53 "kohdistaa") "huomionsa" ;
 center_V2 = mkWV2 (k53 "kohdistaa") "huomionsa" ;
 centerboard_N = mkWN (compoundN "nosto" (k5 "köli")) ;
-centered_A = mkWA (k99 "keskellä") ;
+centered_A = mkA "keskitetty" ; --CHECKED --WA (k99 "keskellä") ;
 centerfold_N = mkWN (compoundN "keski" (k10 "aukeama")) ;
 centering_N = mkWN (compoundN "aloitus" (k1A "syöttö")) ;
 centerline_N = mkWN (compoundN "keski" (k9 "viiva")) ;
@@ -53596,13 +53596,13 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   name_N = L.name_N ; --CHECKED
   narrow_A = L.narrow_A ; --CHECKED
   near_A = L.near_A ; --CHECKED
-  neck_N = L.neck_N ; --CHECKED
+  neck_N = mkN "kaula" ; ---L.neck_N ; --CHECKED --ARB
   new_A = L.new_A ; --CHECKED
   newspaper_N = L.newspaper_N ; --CHECKED
   night_N = L.night_N ; --CHECKED
   nose_N = L.nose_N ; --CHECKED
   now_Adv = L.now_Adv ; --CHECKED
-  number_N = L.number_N ; --CHECKED
+  number_N = mkN "luku" ; ---L.number_N ; --CHECKED --ARB
   oil_N = L.oil_N ; --CHECKED
   old_A = L.old_A ; --CHECKED
   open_V2 = L.open_V2 ; --CHECKED
@@ -54000,7 +54000,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   member_N = mkN "jäsen" ; --CHECKED -- 258 
   membership_N = mkN "jäsenyys" ; --CHECKED -- 1486 
   moment_N = mkN (lin NK {s = d07 "hetki"}) ; --CHECKED -- 231 
-  month_N = mkN "kuukausi" ; --CHECKED -- 278 
+  month_N = mkN "kuukausi" "kuukauden" "kuukausia" ; --CHECKED -- 278 
   morning_N = mkN (lin NK {s = d01 "aamu"}) ; --CHECKED -- 1048 
   movement_N = mkN "liike" ; --CHECKED
   nation_N = mkN "kansa" (mkN "kunta") ; --CHECKED -- 3368 
@@ -54243,7 +54243,7 @@ amid_Prep = mkPrep "keskellä" ; --CHECKED --MAN
 amp_Conj = mkConj "&" ; --CHECKED --MAN
 amsterdam_PN = mkPN "Amsterdam" ; --CHECKED --MAN
 apart_from_Prep = mkPrep "lisäksi" ; --CHECKED --MAN
-area_1_N = mkN "ala" ; --CHECKED --MAN
+area_1_N = mkN "alue" ; --CHECKED --ARB ala
 arizona_PN = mkPN "Arizona" ; --CHECKED --MAN
 around_Prep = mkPrep "ympärillä" ; --CHECKED --MAN
 as_Subj = mkSubj "kun" ; --CHECKED --MAN
@@ -54307,7 +54307,7 @@ first_rate_A = mkA "ensiluokkainen" ; --CHECKED --MAN
 florida_PN = mkPN "Florida" ; --CHECKED --MAN
 for_starters_Adv = mkAdv "alkajaisiksi" ; --CHECKED --MAN
 foreclose_V = mkV (mkV "sulkea") "markkinoilta" ; --CHECKED --MAN
-four_part_A = mkA "neljänkeskeinen" ; --CHECKED --MAN
+four_part_A = mkA "neljänkeskinen" ; --CHECKED --MAN
 frankfurt_PN = mkPN "Frankfurt" ; --CHECKED --MAN
 free_A = mkA "vapaa" ; --CHECKED --MAN
 funeral_N = mkN "hautajaistilaisuus" ; --CHECKED --MAN
@@ -54436,7 +54436,7 @@ start_ing_VV = mkVV (mkV "alkaa" "alkoi") ; --CHECKED --MAN
 start_to_VV = mkVV (mkV "alkaa" "alkoi") ; --CHECKED --MAN
 stockholm_PN = mkPN "Tukholma" ; --CHECKED --MAN
 strike_N = mkN "lakko" ; --CHECKED --MAN
-such_Predet = mkPredet "sellainen" ; --CHECKED --MAN
+such_Predet = lin Predet {s = \\n,c => (snoun2nounBind (mkN "sellainen")).s ! NCase n (npform2case n c)} ; --CHECKED --MAN
 such_as_Prep = mkPrep "kuten" nominative ; --CHECKED --MAN
 sweden_PN = mkPN "Ruotsi" ; --CHECKED --MAN
 syndicate_N = mkN "syndikaatti" ; --CHECKED --MAN
@@ -54474,9 +54474,16 @@ part_of_N2 = mkN2 (mkN "osa") (mkPrep elative) ; --CHECKED --MAN
 idea_of_N2 = mkN2 (mkN "ajatus") (mkPrep elative) ; --CHECKED --MAN
 familiar_with_A2 = mkA2 (mkA "perehtynyt") (mkPrep illative) ; --CHECKED --MAN
 
+---- this group should be doubled by variants with "tahansa", but they are less common
+anySg_Det = {s1,sp = S.mikaanPron ! Sg ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False ; n = Sg} ; --CHECKED --MAN
+anyPl_Det = {s1,sp = S.mikaanPron ! Pl ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False ; n = Pl} ; --CHECKED --MAN
+
+----anyPl_Det = {s1,sp = S.mikaInt ! Pl ; s2 = \\_ => "tahansa" ; isNum,isPoss,isNeg,isDef = False ; n = Pl} ; --CHECKED --MAN
+----anySg_Det = {s1,sp = S.mikaInt ! Sg ; s2 = \\_ => "tahansa" ; isNum,isPoss,isNeg,isDef = False ; n = Sg} ; --CHECKED --MAN
+anybody_NP = {s = table {NPAcc => "kenet" ++ "tahansa" ; c => S.kukaInt ! Sg ! npform2case Sg c ++ "tahansa"} ; a = agrP3 Sg ; isPron, isNeg = False} ; --CHECKED
+anything_NP = {s = \\c => S.mikaInt ! Sg ! (npform2case Sg c) ++ "tahansa" ; a = agrP3 Sg ; isPron, isNeg = False} ; --CHECKED --MAN
 
 some_Quant = heavyQuant {s1 = S.jokinPron ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ; --CHECKED --MAN
-anyPl_Det = {s1,sp = S.mikaInt ! Pl ; s2 = \\_ => "tahansa" ; isNum,isPoss,isNeg,isDef = False ; n = Pl} ; --CHECKED --MAN
 little_Det = mkDet False Sg (exceptNomN (mkN "vähä") "vähän") partitive ; --CHECKED --MAN
 both_Det = mkDet Pl (mkN "molempi" "molemman" "molempia") ; --CHECKED --MAN
 most_Det = mkDet Pl (mkN "usein" "useimman" "useimpia") ; --CHECKED --MAN
@@ -54484,15 +54491,12 @@ several_Num = {s = \\n,c => (snoun2nounBind (mkN "usea")).s ! NCase n c ; n = Sg
 another_Quant = heavyQuant {s1 = \\n,c => (snoun2nounBind (mkN "toinen")).s ! NCase n c ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ; --CHECKED --MAN
 neither_Det = MorphoFin.mkDetPol True Sg {s = table NForm {nf => (snoun2nounBind (nforms2snoun (dSuurempi "kumpi"))).s ! nf + "kaan"} ; h = Back} ; --CHECKED --MAN
 either_Det = MorphoFin.mkDetPol False Sg {s = table NForm {nf => (snoun2nounBind (nforms2snoun (dSuurempi "kumpi"))).s ! nf ++ "tahansa"} ; h = Back} ; --CHECKED --MAN
-anybody_NP = {s = table {NPAcc => "kenet" ++ "tahansa" ; c => S.kukaInt ! Sg ! npform2case Sg c ++ "tahansa"} ; a = agrP3 Sg ; isPron, isNeg = False} ; 
 draw_V2	= mkV2 "vetää" ; --CHECKED --MAN
 aware_of_A2 = mkA2 (mkA "tietoinen") (mkPrep elative) ; --CHECKED --MAN
-each_Det = mkDet Pl (mkN "jokainen") ; --CHECKED --MAN
+each_Det = mkDet Sg (mkN "jokainen") ; --CHECKED --MAN
 start_V2 = mkV2 "aloittaa" ; --CHECKED --MAN
 few_Num	= {s = \\n,c => (snoun2nounBind (mkN "harva")).s ! NCase n c ; n = Sg ; isNum = True} ; --suspect --CHECKED --MAN
 feel_VA	= mkVA (caseV elative (mkV "tuntua")) (mkPrep ablative) ; --CHECKED --MAN
-anything_NP = {s = \\c => S.mikaInt ! Sg ! (npform2case Sg c) ++ "tahansa" ; a = agrP3 Sg ; isPron, isNeg = False} ; --CHECKED --MAN
-anySg_Det = {s1,sp = S.mikaInt ! Sg ; s2 = \\_ => "tahansa" ; isNum,isPoss,isNeg,isDef = False ; n = Sg} ; --CHECKED --MAN
 moreSg_Det = mkDet Sg (exceptNomN (mkN "enempä") "enemmän") ; --CHECKED --MAN
 lack_V2	= mkV2 (caseV ablative (mkV "puuttua")) ; --CHECKED --MAN
 exceed_V2 = mkV2 "ylittää" ; --CHECKED --MAN
@@ -54668,7 +54672,7 @@ worry_V2 = mkV2 "huolestuttaa" partitive ; --CHECKED --MANCV2
   manufacture_V2 = mkV2 (lin VK {s = c53A "tuottaa"}) ; --CHECKED --MANCV2 -- 448 
   order_V2 = mkV2 "tilata" ; --CHECKED --MANCV2 -- 171 
   replace_V2 = mkV2 "korvata" ; --CHECKED --MANCV2
-  rise_V2 = mkV2 "nostaa" ; --CHECKED --MANCV2
+  rise_V2 = mkV2 "nousta" ; -- nousi kaksi prosenttia --CHECKED --MANCV2
   schedule_V2 = mkV2 "määrätä" ; --CHECKED --MANCV2
   transfer_V2 = mkV2 "siirtää" ; --CHECKED --MANCV2 -- 584 
 blame_V2 = mkV2 "syyttää" partitive ; --CHECKED --MANCV2 --CHECKED --MAN
@@ -54695,7 +54699,7 @@ deal_N = mkN "jako" ; --CHECKED
 decline_N = mkN "rappio" ; --CHECKED
 discussion_N = mkN "keskustelu" ; --CHECKED
 division_N = mkN "osasto" ; --CHECKED
-economy_N = mkN "talous" ; --CHECKED
+economy_N = mkN "talous" "talouden" "talouksia" ; --CHECKED
 effect_N = mkN "vaikutus" ; --CHECKED
 federal_A = mkA "liittovaltiollinen" ; --CHECKED
 final_A = mkA "lopullinen" ; --CHECKED
@@ -55162,7 +55166,7 @@ yield_N = mkN "tuotos" ; --CHECKED
   advertiser_N = mkN (lin NK {s = d10 "mainostaja"}) ; --CHECKED ---C ilmoittaja 10000 
   apparent_A = mkA "ilmeinen" ; --CHECKED -- 2713 
   attention_N = mkN (lin NK {s = d03 "huomio"}) ; --CHECKED -- 486 
-  begin_V = mkV (lin VK {s = c56A "alkaa"}) ; --CHECKED -- 65 
+  begin_V = mkV "alkaa" "alkoi" ; --CHECKED -- 65 
   clear_A = mkA "selvä" ; --CHECKED -- 446 
   crash_N = mkN "törmays" ; --CHECKED -- 4923 
   crisis_N = mkN (lin NK {s = d05 "kriisi"}) ; --CHECKED -- 785 
@@ -56364,7 +56368,7 @@ application_N = mkN "sovellus" ; --CHECKED --f63
 affair_N = mkWN (k1A "juttu") ; --CHECKED --f63
 act_N = mkWN (k25 "toimi") ; --CHECKED --f63
 suffer_V = mkV "kärsiä" ; --CHECKED --f62
-spot_N = mkWN (k10A "läikkä") ; --CHECKED --f62
+spot_N = mkN "kohta" ; --WN (k10A "läikkä") ; --CHECKED --f62 --ARB
 social_A = mkWA (k38 "sosiaalinen") ; --CHECKED --f62
 plunge_V = mkWV (k52 "syöksyä") ; --CHECKED --f62
 patient_N = mkWN "potilas" ; --CHECKED --f62
@@ -56527,7 +56531,7 @@ write_VS = mkWVS (k53A "kirjoittaa") ; --CHECKED
 workweek_N = mkWN (compoundN "työ" (k1A "viikko")) ; --CHECKED
 wish_N = mkWN (k48 "toive") ; --CHECKED
 wire_N = mkWN (compoundN "metalli" (k9A "lanka")) ; --CHECKED
-willful_A = mkWA (k41A "sisukas") ; --CHECKED
+willful_A = mkA "tahallinen" ; --WA (k41A "sisukas") ; --CHECKED --ARB
 weariness_N = mkWN (k39 "väsymys") ; --CHECKED
 warranty_N = mkWN (k17 "takuu") ; --CHECKED
 vulnerable_A = mkWA (k34A "suojaton") ; --CHECKED
@@ -56548,7 +56552,7 @@ tolerate_V2 = mkWV2 (k69 "suvaita") ; --CHECKED
 tally_N = mkN "tili" ; --CHECKED --WN (k48 "piste") ; --CHECKED
 take_out_V2 = mkWV2 (k53A "vetää") "ulos" ; --CHECKED
 switch_V = mkV "vaihtaa" ; --CHECKED
-sweat_N = mkN "hiki" ; --CHECKED
+sweat_N = mkN "hiki" "hikiä" ; --CHECKED
 suspect_VS = mkWVS (k67 "epäillä") ; --CHECKED
 strategist_N = mkWN (k5 "strategi") ; --CHECKED
 stature_N = mkN "koko" ; --CHECKED --WN (k40 "pituus") ; --CHECKED
@@ -56710,7 +56714,7 @@ commercialize_V2 = mkV2 "kaupallistaa" ; --CHECKED --WV2 (k62 "markkinoida") ; -
 combination_N = mkN "yhdistelmä" ; --CHECKED --WN (k3 "kombinaatio") ; --CHECKED
 coin_N = mkN "kolikko" ; --CHECKED --WN (k5A "lantti") ; --CHECKED
 coal_N = mkN "hiili" "hiiliä" ; --CHECKED --WN (k48 "kekäle") ; --CHECKED
-chicken_N = mkN "kananpoika" ; --CHECKED --WN (k9 "kana") ; --CHECKED
+chicken_N = mkN "kanan" L.boy_N ; --CHECKED --WN (k9 "kana") ; --CHECKED
 cafeteria_N = mkN "kahvio" ; --CHECKED --WN (k12 "ruokala") ; --CHECKED
 burlap_N = mkWN (k41A "juuttikangas") ; --CHECKED 
 bullet_N = mkN "luoti" ; --CHECKED --WN (k1A "syöttö") "nopea" ; --CHECKED
@@ -56768,7 +56772,7 @@ storage_N = mkWN (k5A "varastointi") ; --CHECKED
 stockholder_N = mkWN (compoundN "osakkeen" (k10 "omistaja")) ; --CHECKED
 statistical_A = mkWA (k38 "tilastollinen") ; --CHECKED
 shortage_N = mkWN (k48 "vaje") ; --CHECKED
-score_N = mkN "pistemäärä" ; --WN (k5A "saanti") ; --CHECKED
+score_N = mkN "piste" (mkN "määrä") ; --WN (k5A "saanti") ; --CHECKED
 schedule_N = mkN "aikataulu" ; --WN (k10 "ohjelma") ; --CHECKED
 rush_V = mkV "kiirehtiä" ; --WV (k53A "hoputtaa") ; --CHECKED
 resume_V2 = mkWV2 (k53 "käynnistää") "uudelleen" ; --CHECKED
@@ -56798,7 +56802,7 @@ outpatient_N = mkWN (k41 "potilas") "avohoidon" ; --CHECKED
 outflow_N = mkN "ulosvirtaus" ; --WN (k1A "vuoto") ; --CHECKED
 orderly_A = mkA "kunnollinen" ; --WA (k38 "rauhallinen") ; --CHECKED
 object_N = mkN "objekti" ; --WN (k48 "esine") "fyysinen" ; --CHECKED
-name_V2V = mkV2V "nimetä" ; --WV2V (k53A "määrittää") "tauti" ; --CHECKED
+name_V2V = mkV2V (mkV "nimetä") accusative infIllat ; --WV2V (k53A "määrittää") "tauti" ; --CHECKED
 motive_N = mkN "motiivi" ; --WN (k48A "tarve") ; --CHECKED
 momentary_A = mkA "hetkellinen" ; --mkWA (k10 "ohikiitävä") ; --CHECKED
 march_N = mkN "marssi" ; --WN (k39 "kehitys") ; --CHECKED
@@ -56819,7 +56823,7 @@ handsome_A = mkWA (k15 "upea") ; --CHECKED
 guest_N = mkN "vieras" ; --WN (k12 "vierailija") ; --CHECKED
 grip_N = mkWN (k48A "ote") ; --CHECKED
 furniture_N = mkWN (compoundN "huone" (k1 "kalu")) ; --CHECKED
-fraught_A = mkA "täysi" ; --mkWA "täynnä" "jotakin" ; --CHECKED
+fraught_A = mkA (mkN "täysi" "täysiä") ; --mkWA "täynnä" "jotakin" ; --CHECKED
 foresee_V2 = mkWV2 (k53 "ennustaa") ; --CHECKED
 fleeting_A = mkWA (k10 "ohikiitävä") ; --CHECKED
 find_V2A = mkV2A (mkV "pitää") (mkPrep partitive) (mkPrep essive) ; --WV2A (k54A "löytää") ; --CHECKED
@@ -56834,11 +56838,11 @@ elaborate_V2 = mkV2 "kehitellä" partitive ; --WV2 (k67A "neuvotella") ; --CHECK
 drill_V2 = mkWV2 (k53A "harjoituttaa") ; --CHECKED
 drawing_N = mkN "piirustus" ; --WN (k1A "otto") ; --CHECKED
 dramatic_A = mkWA (k38 "dramaattinen") ; --CHECKED
-dislike_V2 = mkV2 "inhota" ; --WV2 (k53A "pitää") "vastenmielisenä" ; --CHECKED
+dislike_V2 = mkV2 "inhota" partitive ; --WV2 (k53A "pitää") "vastenmielisenä" ; --CHECKED
 discrepancy_N = mkWN (k40 "eroavuus") ; --CHECKED
 disconnect_V2 = mkV2 (mkV (mkV "katkaista") "yhteys") illative ; --CHECKED
 desirable_A = mkWA (k10 "toivottava") ; --CHECKED
-designate_V2V = mkV2V "osoittaa" ; --mkWV2V (k54A "täsmentää") --CHECKED
+designate_V2V = mkV2V (mkV "osoittaa") accusative infIness ; --mkWV2V (k54A "täsmentää") --CHECKED
 culture_N = mkN "kulttuuri" ; --WN (k2 "viljely") ; --CHECKED
 covering_N = mkN "peite" ; --WN (k2 "sively") ; --CHECKED
 controversial_A = mkWA (compoundA "kiistan" (k38 "alainen")) ; --CHECKED
@@ -56860,7 +56864,7 @@ bright_A = mkWA (k10 "loistava") ; --CHECKED
 blur_V2 = mkV2 "hämärtää" ; --WV2 (k52A "hämärtyä") ; --CHECKED
 bind_V2 = mkV2 "sitoa" ; --WV2 (k53A "aiheuttaa") "ummetusta" ; --CHECKED
 billion_N = mkWN (k5 "miljardi") ; --CHECKED
-basic_A = mkA "perustave" ; --WA (k38 "perimmäinen") ; --CHECKED
+basic_A = mkA "perustava" ; --WA (k38 "perimmäinen") ; --CHECKED
 attempt_V2 = mkV2 "yrittää" partitive ; --WV2 (k74A "ruveta") ; --CHECKED
 assault_N = mkWN (k4A "rynnäkkö") ; --CHECKED
 ask_V2V = mkWV2V (k54A "pyytää") ; --CHECKED
