@@ -3,7 +3,7 @@
 concrete SymbolFin of Symbol = CatFin ** open Prelude, NounFin, ResFin, MorphoFin, StemFin in {
 
 lin
-  SymbPN i = {s = \\c => i.s ++ bindIfS c ++ defaultStemEnding c ; h = Back} ; --- c
+  SymbPN i = {s = \\c => i.s ++ bindColonIfS c ++ defaultStemEnding c ; h = Back} ; --- c
   IntPN i  = {s = \\c => i.s ++ bindColonIfS c ++ defaultStemEnding c ; h = Back} ; --- c
   FloatPN i  = {s = \\c => i.s ++ bindColonIfS c ++ defaultStemEnding c ; h = Back} ; --- c
   NumPN i  = {s = \\c => i.s!Sg!Nom  ; h = Back} ; --- c

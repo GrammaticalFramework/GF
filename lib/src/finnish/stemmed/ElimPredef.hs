@@ -3,7 +3,7 @@ import qualified Data.Set as S
 -- comment out words that are predefined in another lexicon
 -- runghc ElimPredef.hs <DictEngFin.gf
 removeFile = "todo.txt"
-removeMsg = "LLLL"
+removeMsg = "WWWW"
 
 -- also used for temporarily eliminating whatever from compilation
 --removeFile = "commentOut"

@@ -1,3 +1,3 @@
 --# -path=.:alltenses:prelude
 
-resource TryFin = SyntaxFin, LexiconFin-[mkOrd], ParadigmsFin - [mkAdv] ;
+resource TryFin = SyntaxFin, LexiconFin-[mkOrd], ParadigmsFin - [mkAdv,mkAdN,mkDet,mkQuant,mkPConj] ;
