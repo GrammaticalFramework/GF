@@ -72,6 +72,10 @@ lin
                                            infVP v.typ vp ant.a p.p a)
                                    (predVc v) ;
 
+  SlashSlashV2V v ant p vp = insertObjc (\\a => v.c3 ++ ant.s ++ p.s ++
+                                           infVP v.typ vp ant.a p.p a)
+                                   (predVc v) ;
+
   SlashVPIV2V v p vpi = insertObjc (\\a => p.s ++ 
                                            v.c3 ++ 
                                            vpi.s ! VVAux ! a)
