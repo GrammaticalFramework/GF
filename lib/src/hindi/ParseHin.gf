@@ -7,7 +7,7 @@ concrete ParseHin of ParseEngAbs =
   AdjectiveHin,
   NumeralHin,
   ConjunctionHin,
-  VerbHin - [SlashV2V, PassV2, UseCopula, ComplVV, VPSlashPrep],
+  VerbHin - [PassV2, UseCopula, ComplVV, VPSlashPrep],
   AdverbHin,
   PhraseHin,
   SentenceHin,
@@ -25,6 +25,7 @@ open MorphoHin, ResHin, ParadigmsHin,CommonX, CommonHindustani, Prelude in {
 
 flags
   literal=Symb ;
+  coding=utf8 ;
 
 lin
   myself_NP = {s = \\_ => kwd ; a  = Ag Masc Sg Pers1 };
@@ -117,7 +118,7 @@ CompVP ant p vp = {s = \\a => ant.s ++ p.s ++
                                 infVP False vp a} ; -- check for vp.isAux
 
   that_RP = {
-    s = \\_,_ => "kh" ;
+    s = \\_,_ => "कि" ;
     a = RNoAg
     } ;
   --no_RP = {
@@ -125,7 +126,7 @@ CompVP ant p vp = {s = \\a => ant.s ++ p.s ++
    -- a = RNoAg
    -- } ;
 
-  CompS s = {s = \\_ => "kh" ++ s.s} ;
+  CompS s = {s = \\_ => "कि" ++ s.s} ;
 --  CompVP vp = {s = \\a => infVP VVInf vp a} ;
 
 lin
@@ -134,5 +135,25 @@ lin
   UncNeg = {s = [] ; p = Neg} ;
   
   VPSlashPrep vp p = vp ** {c2 = {s = p.s!Masc ; c = VTrans}} ;
+ {- 
+  PastPartRS ant pol vps = {
+    s = \\agr => vps.ad ++ vps.ptp ++ vps.s2 ! agr ;
+    c = npNom
+    } ;
+
+  PresPartRS ant pol vp = {
+    s = \\agr => vp.ad ++ vp.prp ++ vp.s2 ! agr ;
+    c = npNom
+  } ;
+  -}
+  
+  ApposNP np1 np2 = {
+      s = \\c => np1.s!NPC Dir ++ "," ++ np2.s ! c ;
+      a = np2.a
+      } ;
+      
+  AdAdV = cc2 ;
+  
+  UttAdV adv = adv;    
     
 }

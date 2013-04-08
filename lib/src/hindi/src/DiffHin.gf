@@ -8,9 +8,10 @@ oper
   insertSubj : UPerson -> Str -> Str = \p,s -> 
       case p of { Pers1 => s ++ "va:n~" ; _ => Prelude.glue s "E:"}; -- check with prasad for vn~
       
-  agr = "a-gar" ;
+  agr = "agar" ;
   awr = "O+r" ;
   ky = "ki:" ;
+  ka = "ka:" ;
   jn = "jin" ;
   js = "jis" ;
   jw = "jo:" ;

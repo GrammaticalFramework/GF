@@ -6,6 +6,7 @@ interface DiffHindustani = open Prelude in {
 
   kwd : Str ;
   ky : Str ;
+  ka : Str ;
   agr : Str ; 
   awr : Str ; 
   jn : Str ; 
