@@ -140,5 +140,13 @@ incomplete concrete NounHindustani of Noun =
 			   } ;
 
     ApposCN cn np = {s = \\n,c => cn.s ! n ! Dir ++ np.s ! NPC c ; g = cn.g} ;
+    
+    PossNP cn np = {s = \\n,c => case cn.g of {Masc => cn.s ! n ! c ++ ka ++ np.s ! NPC Dir ;
+                                               Fem =>  cn.s ! n ! c ++ ky ++ np.s ! NPC Dir } ;                    
+		     g = cn.g} ;
+
+    PartNP cn np = {s = \\n,c => case cn.g of {Masc => cn.s ! n ! c ++ ka ++ np.s ! NPC Dir ;
+                                               Fem =>  cn.s ! n ! c ++ ky ++ np.s ! NPC Dir } ;                    
+		     g = cn.g} ;
 
 }
