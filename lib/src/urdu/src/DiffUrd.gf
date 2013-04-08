@@ -12,6 +12,7 @@ conjThat = "kh" ;
   agr = "agr" ;
   awr = "awr" ;
   ky = "ky" ;
+  ka = "ka" ;
   jn = "jn" ;
   js = "js" ;
   jw = "jw" ;
