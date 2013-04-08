@@ -69,12 +69,13 @@ functionsToCat pgf cat =
  where 
    (_,fs,_) = lookMap ([],[],0) cat $ cats $ abstract pgf
 
-missingLins :: PGF -> CId -> [CId]
+-- | List of functions that lack linearizations in the given language.
+missingLins :: PGF -> Language -> [CId]
 missingLins pgf lang = [c | c <- fs, not (hasl c)] where
   fs = Map.keys $ funs $ abstract pgf
   hasl = hasLin pgf lang
 
-hasLin :: PGF -> CId -> CId -> Bool
+hasLin :: PGF -> Language -> CId -> Bool
 hasLin pgf lang f = Map.member f $ lproductions $ lookConcr pgf lang
 
 restrictPGF :: (CId -> Bool) -> PGF -> PGF

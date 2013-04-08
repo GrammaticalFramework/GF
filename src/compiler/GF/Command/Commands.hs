@@ -13,17 +13,17 @@ module GF.Command.Commands (
 import Prelude hiding (putStrLn)
 
 import PGF
-import PGF.CId
-import PGF.Linearize
-import PGF.VisualizeTree
-import PGF.Macros
-import PGF.Data ----
-import PGF.Morphology
-import PGF.Printer
-import PGF.Probabilistic -- (getProbsFromFile,prProbabilities,defaultProbabilities)
+
+import PGF.VisualizeTree(graphvizParseTreeOld,getDepLabels)
+import PGF.Macros(lookStartCat,functionsToCat,lookValCat,restrictPGF,hasLin)
+import PGF.Data(abstract,funs,cats,Literal(LStr),Expr(EFun,ELit)) ----
+import PGF.Morphology(isInMorpho,morphoKnown)
+import PGF.Printer(ppFun,ppCat)
+import PGF.Probabilistic(rankTreesByProbs,probTree,setProbabilities)
 import PGF.Generate (generateRandomFrom) ----
 import PGF.Tree (Tree(Fun), expr2tree, tree2expr)
-import PGF.Optimize
+import PGF.Optimize(optimizePGF)
+
 import GF.Compile.Export
 import GF.Compile.ToAPI
 import GF.Compile.ExampleBased

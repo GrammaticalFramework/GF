@@ -35,7 +35,7 @@ module PGF(
            categories, startCat,
 
            -- * Functions
-           functions, functionsByCat, functionType,
+           functions, functionsByCat, functionType, missingLins,
 
            -- * Expressions & Trees
            -- ** Tree
@@ -132,7 +132,7 @@ module PGF(
            showProbabilities,
            readProbabilitiesFromFile,
            
-           -- ** SortTop
+           -- -- ** SortTop
 --         forExample,
 
            -- * Browsing
