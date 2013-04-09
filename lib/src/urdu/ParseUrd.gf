@@ -1,4 +1,4 @@
---# -path=.:alltenses:../abstract:../english
+--# -path=.:alltenses:../abstract:../english:../hindustani
 concrete ParseUrd of ParseEngAbs = 
   TenseX - [AdN,Adv,SC,PPos,PNeg],
 --  TextX - [AdN,Adv,SC],
@@ -25,6 +25,7 @@ open MorphoUrd, ResUrd, ParadigmsUrd,CommonX, CommonHindustani, Prelude in {
 
 flags
   literal=Symb ;
+  coding=utf8 ;
 
 lin
   myself_NP = {s = \\_ => kwd ; a  = Ag Masc Sg Pers1 };
@@ -34,7 +35,8 @@ lin
   itself_NP = {s = \\_ => kwd ; a  = Ag Masc Sg Pers3_Near }; --regNP "itself" singular ;
   ourself_NP = {s = \\_ => kwd ; a  = Ag Masc Pl Pers1 }; --regNP "ourself" plural ;
   yourselfPl_NP = {s = \\_ => kwd ; a  = Ag Masc Pl Pers2_Respect }; --regNP "yourself" plural ;
-  themself_NP = {s = \\_ => kwd ; a  = Ag Masc Pl Pers3_Distant }; --regNP "themself" plural ;
+  themselves_NP = {s = \\_ => kwd ; a  = Ag Masc Pl Pers3_Distant }; --regNP "themself" plural ;
+  themself_NP = {s = \\_ => kwd ; a  = Ag Masc Sg Pers3_Distant }; --regNP "themself" plural ;
 
   CompoundCN num noun cn = {
     s = \\n,c => num.s  ++ cn.s ! n ! c ++ noun.s ! num.n ! Dir;
@@ -117,7 +119,7 @@ CompVP ant p vp = {s = \\a => ant.s ++ p.s ++
                                 infVP False vp a} ; -- check for vp.isAux
 
   that_RP = {
-    s = \\_,_ => "kh" ;
+    s = \\_,_ => "کہ" ;
     a = RNoAg
     } ;
   --no_RP = {
@@ -125,12 +127,35 @@ CompVP ant p vp = {s = \\a => ant.s ++ p.s ++
    -- a = RNoAg
    -- } ;
 
-  CompS s = {s = \\_ => "kh" ++ s.s} ;
+  CompS s = {s = \\_ => "کہ" ++ s.s} ;
 --  CompVP vp = {s = \\a => infVP VVInf vp a} ;
 
 lin
   PPos = {s = [] ; p = Pos} ;
   PNeg = {s = [] ; p = Neg} ; -- contracted: don't
   UncNeg = {s = [] ; p = Neg} ;
+  
+  --VPSlashPrep vp p = vp ** {c2 = {s = p.s!Masc ; c = VTrans}} ;
+  
+  PastPartRS ant pol vps = {
+    s = \\agr => (vps.s!VPTense VPPast agr).inf ;
+    c = Dir
+    } ;
+
+  PresPartRS ant pol vp = {
+    s = \\agr => (vp.s!VPTense VPPres agr).inf ;
+    c = Dir
+  } ;
+  
+  ApposNP np1 np2 = {
+      s = \\c => np1.s!NPC Dir ++ "," ++ np2.s ! c ;
+      a = np2.a
+      } ;
+      
+  AdAdV = cc2 ;
+  
+  UttAdV adv = adv;
+  
+  CompQS qs = {s = \\_ => qs.s ! QIndir} ;
     
 }

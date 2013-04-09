@@ -35,7 +35,8 @@ lin
   itself_NP = {s = \\_ => kwd ; a  = Ag Masc Sg Pers3_Near }; --regNP "itself" singular ;
   ourself_NP = {s = \\_ => kwd ; a  = Ag Masc Pl Pers1 }; --regNP "ourself" plural ;
   yourselfPl_NP = {s = \\_ => kwd ; a  = Ag Masc Pl Pers2_Respect }; --regNP "yourself" plural ;
-  themself_NP = {s = \\_ => kwd ; a  = Ag Masc Pl Pers3_Distant }; --regNP "themself" plural ;
+  themselves_NP = {s = \\_ => kwd ; a  = Ag Masc Pl Pers3_Distant }; --regNP "themself" plural ;
+  themself_NP = {s = \\_ => kwd ; a  = Ag Masc Sg Pers3_Distant }; --regNP "themself" plural ;
 
   CompoundCN num noun cn = {
     s = \\n,c => num.s  ++ cn.s ! n ! c ++ noun.s ! num.n ! Dir;
@@ -135,17 +136,16 @@ lin
   UncNeg = {s = [] ; p = Neg} ;
   
   VPSlashPrep vp p = vp ** {c2 = {s = p.s!Masc ; c = VTrans}} ;
- {- 
+
   PastPartRS ant pol vps = {
-    s = \\agr => vps.ad ++ vps.ptp ++ vps.s2 ! agr ;
-    c = npNom
+    s = \\agr => (vps.s!VPTense VPPast agr).inf ;
+    c = Dir
     } ;
 
   PresPartRS ant pol vp = {
-    s = \\agr => vp.ad ++ vp.prp ++ vp.s2 ! agr ;
-    c = npNom
+    s = \\agr => (vp.s!VPTense VPPres agr).inf ;
+    c = Dir
   } ;
-  -}
   
   ApposNP np1 np2 = {
       s = \\c => np1.s!NPC Dir ++ "," ++ np2.s ! c ;

@@ -2,6 +2,7 @@ incomplete concrete AdverbHindustani of Adverb = CatHindustani ** open CommonHin
 
   lin
     PositAdvAdj a = {s = \\g => a.s ! Sg ! g ! Obl ! Posit} ;
+    PositAdAAdj a = {s = a.s ! Sg ! Masc ! Obl ! Posit} ;
     ComparAdvAdj cadv a np = {
       s = \\g => np.s ! NPObj  ++ cadv.p ++ cadv.s ++ a.s ! Sg ! g ! Obl ! Posit;  
       } ;

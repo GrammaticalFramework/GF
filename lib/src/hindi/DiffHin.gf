@@ -29,6 +29,7 @@ oper
   nahen = "नहीं" ;
   xayad = "शायद" ;
   kya = "क्या" ;
+  mein = "में" ;
   
   oper 
   copula : CTense -> Number -> UPerson -> Gender -> Str = \t,n,p,g ->
