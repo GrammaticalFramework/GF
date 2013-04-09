@@ -11,6 +11,12 @@ incomplete concrete ExtraHindustani of ExtraHindustaniAbs = CatHindustani **
      };
      
    a = np.a} ;
+   
+   EmptyRelSlash slash = {
+      s = \\t,p,o,_ => slash.s ! t ! p ! o  ++ slash.c2.s ;
+      c = Obl
+      } ;
+
 
     each_Det = mkDet  "hr kwy" "hr kwy" "hr kwy" "hr kwy" Sg ;
     have_V = mkV "rakh'na";

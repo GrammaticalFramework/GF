@@ -30023,6 +30023,7 @@ lin zoology_N = mkN "حیوانیات" ;       -- from DictUrd
 lin zoom_N = mkN "تیزی سے آنا" ;
 lin zoom_V = compoundV "سیدھا" (mkV "اوپر چڑھنا") ;       -- from DictUrd
 
+
 -- Structural
 lin
   of_Prep = mkPrep "کا" "کی" ;
@@ -30219,4 +30220,27 @@ lin should_VV = mkV "چاہنا" ** { isAux = True} ; --this need to be fixed
 lin must_VV = (mkV "ضرور چاہنا") ** { isAux = True} ; -- this need to be fixed
 lin half_Predet = ss "آدھا" ;
 lin till_Prep = mkPrep "جب تک" "جب تک" ;
+--added 2013/04/09
+
+
+lin unit_3_N = mkN ["یونٹ تھری"];
+lin minneapolis_PN = mkPN "مینیاپولیس" ;
+lin pretty_AdA = ss "کافی" ;
+lin upon_Prep = mkPrep "پر" "پر" ;
+lin anyPl_Det = mkDet "کوئی" "کوئی" "کوئی" "کوئی" Pl ;
+--lin as_Prep = mkPrep "جیسا" "جیسی" ;
+lin also_AdV = ss "بھی" ;
+lin even_AdA = ss "چاھے" ;
+lin such_Predet = ss "ایسی" ;
+lin outside_Prep = mkPrep "باہر" "باہر" ;
+lin another_Quant = demoPN "کوئی اور" "کوئی اور" "کوئی اور";
+lin japaneseMasc_N = mkN "جاپانی" ;
+lin in_addition_Adv = mkAdv "مزید" ;
+lin for_starters_Adv = mkAdv "آغاز کرنے والوں کیلئے" ;
+lin never_AdV = ss "کھبی نہیں" ;
+lin among_Prep = mkPrep "میں سے" "میں سے" ;
+lin throughout_Prep = mkPrep "مکمل" "مکمل" ;
+lin further_AdV = ss "مزید" ;
+lin for_instance_Adv = mkAdv "مثال کے طور پر" ; 
+
 }

@@ -29,6 +29,7 @@ oper
   nahen = "nahi:m." ;
   xayad = "s*a:yd" ;
   kya = "kX,ya:" ;
+  mein = "me:m." ;
   
   oper 
   copula : CTense -> Number -> UPerson -> Gender -> Str = \t,n,p,g ->

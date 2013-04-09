@@ -31,7 +31,7 @@ incomplete concrete NounHindustani of Noun =
     AdvNP np adv = {
 --      s = \\c => np.s ! c ++ adv.s ! (fromAgr np.a).g ; -- jan ka bh'ay so order is changed
       s = \\c => adv.s ! (fromAgr np.a).g  ++ np.s ! c ;
-      a = np.a
+      a = np.a 
       } ;
 
     DetQuantOrd quant num ord = {
@@ -148,5 +148,10 @@ incomplete concrete NounHindustani of Noun =
     PartNP cn np = {s = \\n,c => case cn.g of {Masc => cn.s ! n ! c ++ ka ++ np.s ! NPC Dir ;
                                                Fem =>  cn.s ! n ! c ++ ky ++ np.s ! NPC Dir } ;                    
 		     g = cn.g} ;
+
+   CountNP det np = {
+      s = \\c => np.s ! NPC Obl ++ mein ++ sE ++ det.s ! (giveNumber np.a) ! (giveGender np.a) ! Dir  ;
+      a = agrP3 (giveGender np.a) det.n
+      } ;
 
 }

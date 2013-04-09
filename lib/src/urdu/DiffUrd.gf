@@ -26,6 +26,7 @@ conjThat = "کہ" ;
   comma = "," ;
   indfArt = "" ; 
   kwd = "خود" ;
+  mein = "میں" ; 
   
   na = "نا" ;
   nahen = "نہیں" ;

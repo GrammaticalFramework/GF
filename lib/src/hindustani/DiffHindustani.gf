@@ -22,6 +22,7 @@ interface DiffHindustani = open Prelude in {
   indfArt : Str ;
   nE : Str ;
   hE : Str ;
+  mein : Str ;
   
   na : Str ;
   nahen : Str ;

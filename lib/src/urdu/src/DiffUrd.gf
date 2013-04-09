@@ -26,6 +26,7 @@ conjThat = "kh" ;
   comma = "," ;
   indfArt = "" ; 
   kwd = "Kwd" ;
+  mein = "myN" ; 
   
   na = "na" ;
   nahen = "nhyN" ;
