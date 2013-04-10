@@ -151,7 +151,7 @@ oper
   d41A : Str -> NForms -- 401 öljykangas
     = \s -> let is = init s in dRae s (strongGrade is + last is + "n") ;
   d42 : Str -> NForms -- 1 mies
-    = \s -> let mieh = init s + "s" in 
+    = \s -> let mieh = init s + "h" in 
       nForms10
         s (mieh + "en") (s + "tä") (mieh + "enä") (mieh + "een")
         (s + "ten") (mieh + "iä") (mieh + "inä") (mieh + "issä")
