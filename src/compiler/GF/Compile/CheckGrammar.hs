@@ -51,7 +51,7 @@ checkModule opts sgr mo@(m,mi) = do
   mo <- case mtype mi of
           MTConcrete a -> do let gr = prependModule sgr mo
                              abs <- checkErr $ lookupModule gr a
-                             checkCompleteGrammar gr (a,abs) mo
+                             checkCompleteGrammar opts gr (a,abs) mo
           _            -> return mo
   infoss <- checkErr $ topoSortJments2 mo
   foldM updateCheckInfos mo infoss
@@ -82,8 +82,8 @@ checkRestrictedInheritance sgr (name,mo) = checkIn (ppLocation (msrc mo) NoLoc <
                          nest 2 (vcat [ppIdent f <+> text "on" <+> fsep (map ppIdent is) | (f,is) <- cs]))
    allDeps = concatMap (allDependencies (const True) . jments . snd) mos
 
-checkCompleteGrammar :: SourceGrammar -> SourceModule -> SourceModule -> Check SourceModule
-checkCompleteGrammar gr (am,abs) (cm,cnc) = checkIn (ppLocation (msrc cnc) NoLoc <> colon) $ do
+checkCompleteGrammar :: Options -> SourceGrammar -> SourceModule -> SourceModule -> Check SourceModule
+checkCompleteGrammar opts gr (am,abs) (cm,cnc) = checkIn (ppLocation (msrc cnc) NoLoc <> colon) $ do
   let jsa = jments abs
   let jsc = jments cnc
 
@@ -98,33 +98,35 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = checkIn (ppLocation (msrc cnc) NoLoc
    checkAbs js i@(c,info) =
      case info of
        AbsFun (Just (L loc ty)) _ _ _ 
-                            -> do let mb_def = do
-                                        let (cxt,(_,i),_) = typeForm ty
-                                        info <- lookupIdent i js
-                                        info <- case info of
-                                                  (AnyInd _ m) -> do (m,info) <- lookupOrigInfo gr (m,i)
-                                                                     return info
-                                                  _            -> return info
-                                        case info of
-                                          CncCat (Just (L loc (RecType []))) _ _ _ -> return (foldr (\_ -> Abs Explicit identW) (R []) cxt)
-                                          _                                        -> Bad "no def lin"
-                                             
-                                  case lookupIdent c js of
-                                    Ok (AnyInd _ _) -> return js
-                                    Ok (CncFun ty (Just def) mn mf) -> 
-                                                  return $ updateTree (c,CncFun ty (Just def) mn mf) js
-                                    Ok (CncFun ty Nothing    mn mf) ->
-                                      case mb_def of
-                                        Ok def -> return $ updateTree (c,CncFun ty (Just (L NoLoc def)) mn mf) js
-                                        Bad _  -> do checkWarn (text "no linearization of" <+> ppIdent c)
-                                                     return js
-                                    _ -> do
-                                      case mb_def of
-                                        Ok def -> do (cont,val) <- linTypeOfType gr cm ty
-                                                     let linty = (snd (valCat ty),cont,val)
-                                                     return $ updateTree (c,CncFun (Just linty) (Just (L NoLoc def)) Nothing Nothing) js
-                                        Bad _  -> do checkWarn (text "no linearization of" <+> ppIdent c)
-                                                     return js
+           -> do let mb_def = do
+                       let (cxt,(_,i),_) = typeForm ty
+                       info <- lookupIdent i js
+                       info <- case info of
+                                 (AnyInd _ m) -> do (m,info) <- lookupOrigInfo gr (m,i)
+                                                    return info
+                                 _            -> return info
+                       case info of
+                         CncCat (Just (L loc (RecType []))) _ _ _ -> return (foldr (\_ -> Abs Explicit identW) (R []) cxt)
+                         _                                        -> Bad "no def lin"
+
+                 case lookupIdent c js of
+                   Ok (AnyInd _ _) -> return js
+                   Ok (CncFun ty (Just def) mn mf) ->
+                                 return $ updateTree (c,CncFun ty (Just def) mn mf) js
+                   Ok (CncFun ty Nothing    mn mf) ->
+                     case mb_def of
+                       Ok def -> return $ updateTree (c,CncFun ty (Just (L NoLoc def)) mn mf) js
+                       Bad _  -> do noLinOf c
+                                    return js
+                   _ -> do
+                     case mb_def of
+                       Ok def -> do (cont,val) <- linTypeOfType gr cm ty
+                                    let linty = (snd (valCat ty),cont,val)
+                                    return $ updateTree (c,CncFun (Just linty) (Just (L NoLoc def)) Nothing Nothing) js
+                       Bad _  -> do noLinOf c
+                                    return js
+         where noLinOf c = when (verbAtLeast opts Normal) $
+                           checkWarn (text "no linearization of" <+> ppIdent c)
        AbsCat (Just _) -> case lookupIdent c js of
          Ok (AnyInd _ _) -> return js
          Ok (CncCat (Just _) _ _ _) -> return js
