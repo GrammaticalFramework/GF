@@ -1,9 +1,10 @@
---# -path=.:alltenses
+--# -path=.:../english:folketslexikon
 
-concrete DictEngSwe of DictEngAbs = CatSwe ** open ParadigmsSwe,
+concrete DictEngSwe of DictEngAbs = CatSwe, FolketsLexikon ** open
   (S = StructuralSwe),
-  (L = LexiconSwe),
-  MorphoSwe, ParadigmsSwe, Prelude in {
+  (L = LexiconSwe)
+--,  MorphoSwe, ParadigmsSwe, Prelude
+ in {
 
 flags coding=utf8 ;
 
