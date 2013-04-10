@@ -33624,5 +33624,74 @@ at_Prep = mkPrep "पर" "पर" ;
   have_V2 = mkV2 "रखना";
 
  language_title_Utt = ss "हिन्दी" ;
+ 
+ 
+ -- added 2013-04-10
+lin officialMasc_N= mkN "अधिकारी";
+lin even_AdA= ss "समान";
+--lin expect_VV= "आशा रखना"
+lin hardcover_N= mkN "ठोस गिलाफ";
+lin turnkey_N= mkN "टर्नकी";
+lin minneapolis_PN= mkPN "minneapolis";
+lin far_reaching_A= mkA "व्यापक";
+lin fairness_N= mkN "निष्पक्षता";
+lin mississippi_PN= mkPN "mississippi";
+lin as_Prep= mkPrep "के जैसा" "के जैसा";
+lin outpatient_N= mkN "बहिरंग रोगी";
+--may_VV= "लेना"
+lin further_AdV= ss "इसके अतिरिक्त";
+lin throughout_Prep= mkPrep "पूरे" "में";
+lin such_Predet= ss "ऐसी";
+lin capitalism_N= mkN "पूँजीदारी";
+lin japaneseMasc_N= mkN "जापानी";
+lin jean_N= mkN "जीन";
+lin never_AdV= ss "कभी नहीं";
+lin customerMasc_N= mkN "";
+lin frankfurt_PN= mkPN "frankfurt";
+lin amid_Prep= mkPrep "के बीच" "के बीच";
+lin margin_N= mkN "गोट";
+lin mistrial_N= mkN "गलत मुकदमा";
+--hope_VV= "आशा"
+lin propane_N= mkN "propane";
+lin even_AdV= ss "केवल";
+lin about_Prep= mkPrep "पास" "पास";
+lin among_Prep= mkPrep "के बीच में" "के बीच में";
+lin pretty_AdA= ss "सुन्दर";
+lin new_york_PN= mkPN "new_york";
+--start_ing_VV= "आरम्भ करना"
+lin presidentMasc_N= mkN "अध्यक्ष";
+--should_VV= "चाहियेना"
+lin but_Subj= ss "परन्तु";
+lin several_Num= {s= "अनेक"; n = Pl} ;
+lin already_AdV= ss "पहले ही";
+lin each_Det= mkDet "प्रत्येक" "प्रत्येक" "प्रत्येक" "प्रत्येक" Sg;
+lin role_1_N= mkN "कार्य भाग";
+lin long_term_A= mkA "दीर्घकालिक";
+lin creditor_N= mkN "ऋणदाता";
+lin connecticut_PN= mkPN "connecticut";
+lin into_Prep= mkPrep "के अंदर" "के अंदर";
+lin along_Prep= mkPrep "के किनारे" "के किनारे";
+lin as_well_as_Conj= sd2 [] "के साथ-साथ" ** {n=Sg} ;
+lin still_AdV= ss "फिर भी";
+lin outside_Prep= mkPrep "बाहर" "बाहर";
+--intend_VV= "चाहना"
+lin upon_Prep= mkPrep "से ऊपर" "से ऊपर";
+lin over_Prep= mkPrep "से ऊपर" "से ऊपर";
+lin few_Num= {s = "कुछ ही"; n=Pl};
+--decline_VV= "इनकार करना"
+lin apart_from_Prep= mkPrep "के अतिरिक्त" "के अतिरिक्त";
+--continue_VV= "करता रहना"
+lin anyPl_Det= mkDet "कई" "कई" "कई" "कई" Pl;
+--expect_VV= "आशा रखना"
+lin no_Quant= demoPN "कोई नहीं"  "कोई नहीं" "कोई नहीं" "कोई नहीं" ;
+lin four_part_A= mkA "चहुंमुखी";
+lin some_Quant= demoPN "कई" "कई" "कई" "कई";
+lin so_called_A= mkA "तथाकथित";
+lin also_AdV= ss "भी";
+--plan_VV= "योजना बनाना"
+lin for_starters_Adv= mkAdv "आरंभ में";
+lin another_Quant= demoPN "एक और" "एक और" "एक और" "एक और";
+lin unit_3_N= mkN "इकांक";
+
 
 };
