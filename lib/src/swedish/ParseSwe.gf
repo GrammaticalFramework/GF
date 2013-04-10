@@ -1,4 +1,4 @@
---# -path=alltenses
+--# -path=.:folketslexikon:alltenses
 concrete ParseSwe of ParseEngAbs = 
   TenseSwe,
   NounSwe - [PPartNP],
@@ -24,8 +24,9 @@ open MorphoSwe, ResSwe, ParadigmsSwe, Prelude in {
 flags
   literal=Symb ;
   beam_size=0.95 ;
-{-
+
 lin
+{-
   myself_NP = regNP "myself" singular ;
   yourselfSg_NP = regNP "yourself" singular ;
   himself_NP = regNP "himself" singular ;
@@ -35,17 +36,21 @@ lin
   yourselfPl_NP = regNP "yourself" plural ;
   themself_NP = regNP "themself" plural ;
   themselves_NP = regNP "themselves" plural ;
+-}
 
   CompoundCN num noun cn = {
-    s = \\n,c => num.s ! Nom ++ noun.s ! num.n ! Nom ++ cn.s ! n ! c ;
-    g = cn.g
-  } ;
-  
+      s = \\n,d,c => noun.s ! num.n ! Indef ! Nom ++ BIND ++ cn.s ! n ! d ! c ; 
+      g = cn.g ;
+      isMod = False
+      } ;
+
   DashCN noun1 noun2 = {
-    s = \\n,c => noun1.s ! Sg ! Nom ++ "-" ++ noun2.s ! n ! c ;
-    g = noun2.g
+    s = \\n,d,c => noun1.s ! Sg ! Indef ! Nom ++ BIND ++ noun2.s ! n ! d ! c ;
+    g = noun2.g ;
+    isMod = False ;
   } ;
 
+{-
   GerundN v = {
     s = \\n,c => v.s ! VPresPart ;
     g = Neutr
@@ -126,9 +131,9 @@ lin
     s = \\agr => vp.ad ++ vp.prp ++ vp.s2 ! agr ;
     c = npNom
   } ;
-
+-}
   ApposNP np1 np2 = {
-    s = \\c => np1.s ! c ++ "," ++ np2.s ! npNom ;
+    s = \\c => np1.s ! c ++ "," ++ np2.s ! NPNom ;
     a = np1.a
   } ;
   
@@ -137,8 +142,6 @@ lin
   UttAdV adv = adv;
 
 lin
-  PPos = {s = [] ; p = CPos} ;
-  PNeg = {s = [] ; p = CNeg True} ; -- contracted: don't
-  UncNeg = {s = [] ; p = CNeg False} ;
--}    
+  UncNeg = {s = [] ; p = Neg} ;
+    
 }
