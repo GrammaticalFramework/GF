@@ -8,7 +8,7 @@
 
 import Prelude hiding (lookup)
 import Data.List hiding (lookup)
-import System.Directory(doesFileExist)
+import System.Directory(doesFileExist,renameFile)
 import System.Cmd(system)
 import System.Exit
 import Control.Monad(unless)
@@ -42,7 +42,7 @@ prepare =
     download url file         = ifMissing file $ curl (url++file)
     makePGF  imps dir pgf src = ifMissing (dir++pgf) (gfmake imps dir src)
 
-    curl   url          = shell $ ["curl -O",url]
+    curl   url          = shell $ ["curl -OL --compressed",url]
     gfmake imps dir src = shell $ ["cd",dir,"&&","gf",opts,imp imps,src]
 
     opts = "-s -make -no-pmcfg -gfo-dir ../../alltenses"
@@ -64,17 +64,19 @@ prepare =
 --- Create ---------------------------------------------------------------------
 
 create =
-    do eng <- readPGF "../../english/DictEngAbs.pgf"
-       lexicon1 <- fromFolketsEnSv `fmap` readFile folkets_en_sv
+    do lexicon1 <- fromFolketsEnSv `fmap` readFile folkets_en_sv
        lexicon2 <- fromFolketsSvEn `fmap` readFile folkets_sv_en
        let lexicon = M.unionWith (++) lexicon1 lexicon2
        missing <- missingWords `fmap` readPGF "../DictEngAbs.pgf"
+       putStrLn $ "Looking for "++show (length missing)++" missing words."
+       eng <- readPGF "../../english/DictEngAbs.pgf"
        saldo <- dict2map `fmap` readPGF "../DictSweAbs.pgf"
        let entries = map (translate lexicon eng saldo) missing
-       putStrLn $ "Looking for "++show (length missing)++" missing words."
-       writeFile target . concWrap $ map toGF entries
-       let histo = M.toList $ M.fromListWith (+) [(length ts,1)|(_,ts)<-entries]
+           histo = M.toList $ M.fromListWith (+) [(length ts,1)|(_,ts)<-entries]
+           tmp = target++".tmp"
        putStrLn $ "Found "++show (sum [n|(a,n)<-histo,a>0])++" words."
+       writeFile tmp . concWrap $ map toGF entries
+       renameFile tmp target
        mapM_ print histo
 
 lang1 = head . languages
@@ -92,24 +94,23 @@ missingWords pgf = missingLins pgf (lang1 pgf)
 
 fromFolketsEnSv :: String -> M.Map String [String]
 fromFolketsEnSv = 
-    fmap nub . fromList .
+    fromList .
     map entry . findElements (unqual "word") . fromJust . parseXMLDoc
   where
     entry w = (value w,map value (findChildren (unqual "translation") w))
-    value = fromJust . findAttr (unqual "value")
-
 
 fromFolketsSvEn :: String -> M.Map String [String]
 fromFolketsSvEn = 
-    fmap nub . fromList .
+    fromList .
     concatMap entry . findElements (unqual "word") . fromJust . parseXMLDoc
   where
     entry w = [(en,[sv])|let sv=value w,
                          en<-map value (findChildren (unqual "translation") w)]
-    value = fromJust . findAttr (unqual "value")
+
+value = fromJust . findAttr (unqual "value")
 
 lookup m = maybe [] id . M.lookup m
-fromList xs = M.fromListWith (++) xs
+fromList xs = fmap nub $ M.fromListWith (++) xs
 
 translate lexicon eng saldo eabs =
     (eabs,nub [sabs|let en=lin eng eabs,
