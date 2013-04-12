@@ -220,7 +220,9 @@ Translator.prototype.update_translation=function(i) {
 	if(!window.gfrobust)
 		upd3(["[GF robust parser is not available]"])
 	else {
-	    function check_support(fls,tls) {
+	    function check_support(ssupport,tsupport) {
+		var fls=ssupport(o.from)
+		var tls=tsupport(o.to)
 		if(fls && tls) {
 		    var want={from:o.from, to:o.to, method:"GFRobust"}
 		    if(!eq_options(segment.options,want)) {
@@ -1170,7 +1172,7 @@ function save_in_cloud(filename,document,cont) {
     with_dir(save)
 }
 
-function unlextext(txt,cont) { gfshell('ps -unlextext "'+txt+'"',cont) }
+function unlextext(txt,cont) { gfshell('ps -bind -unlextext "'+txt+'"',cont) }
 function lextext(txt,cont) { gfshell('ps -lextext "'+txt+'"',cont) }
 
 
