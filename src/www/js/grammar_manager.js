@@ -44,7 +44,8 @@ function GrammarManager(server,opts) {
     this.grammars=[];
     this.grammar_dirs=[];
     this.startcat = null; // current startcat
-    this.languages = []; // current languages (empty means all langs)
+    this.languages = this.options.initial.languages || [];
+                     // current languages (empty means all langs)
 
     /* --- Main program, this gets things going ----------------------------- */
     this.init=function(){

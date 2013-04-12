@@ -32,7 +32,7 @@ if(window.Editor) // Syntax editor loaded?
 	    lin_action: function(new_input,langFrom) {
 		var grammar_url=editor.menu.ui.grammar_menu.value // hmm
 		var startcat=editor.menu.ui.startcat_menu.value // hmm
-		var toLangs=multiMenuSelections(editor.menu.ui.to_menu) // hmm
+		var toLangs=gm.languages // hmm
 		minibar.input.set_input_for(grammar_url,
 					    {from:langFrom,
 					     startcat:startcat,

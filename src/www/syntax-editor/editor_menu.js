@@ -193,7 +193,7 @@ EditorMenu.prototype.update_language_menu=function(menu,grammar) {
 	if(!hasPrefix(ln,"Disamb")) {
 	    var lp=langpart(ln,grammar.name);
             var opt=option(lp,ln);
-            if (elem(lp, t.gm.options.initial.languages)) {
+            if (elem(ln, t.gm.languages)) {
                 opt.selected=true;
             }
 	    menu.appendChild(opt);
