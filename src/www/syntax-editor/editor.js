@@ -479,7 +479,7 @@ Editor.prototype.generate_random = function() {
     var err = function(data){
         alert("Error");
     };
-    server.get_random(args, cont, err);
+    t.server.get_random(args, cont, err);
 }
 
 // Redraw tree
@@ -580,6 +580,6 @@ Editor.prototype.import_ast = function(abstr) {
     var err = function(tree){
         alert("Invalid abstract syntax tree");
     };
-    server.pgf_call("abstrjson", args, cont, err);
+    t.server.pgf_call("abstrjson", args, cont, err);
 }
 
