@@ -118,7 +118,8 @@ Translator.prototype.update_language_menus=function() {
 	mark_menus(yes,yes)
 	break;
     case "GFRobust":
-	mark_menus(gfrobust_ssupport,gfrobust_tsupport)
+	if(window.gfrobust) gfrobust.get_support(mark_menus)
+	else mark_menus(no,no)
 	break;
     case "Apertium":
 	function ssupport(code) {
@@ -138,10 +139,6 @@ Translator.prototype.update_language_menus=function() {
 	t.switch_grammar(o.method,cont)
     }
 }
-
-function gfrobust_ssupport(code) { return code=="Eng" }
-var gfrobust_targets=toSet(["Eng","Ger","Fin","Bul","Hin"]) // !!! Get list from server
-function gfrobust_tsupport(code) { return gfrobust_targets[code] }
 
 Translator.prototype.gf_supported=function(grammar,langcode) {
     var t=this;
@@ -218,27 +215,31 @@ Translator.prototype.update_translation=function(i) {
 	    upd2(translate_output)
 	}
 	function upd0(source) {
-	    var url="http://www.grammaticalframework.org:41296/robust-parser.cgi"
-	    http_get_json(url+"?sentence="+encodeURIComponent(source)+"&to=Parse"+o.to,upd1)
+	    gfrobust.translate(source,o.to,upd1)
 	}
-	var fls=gfrobust_ssupport(o.from)
-	var tls=gfrobust_tsupport(o.to)
-	if(fls && tls) {
-	    var want={from:o.from, to:o.to, method:"GFRobust"}
-	    if(!eq_options(segment.options,want)) {
-		//console.log("Updating "+i)
-		lextext(segment.source,upd0)
-		//upd0(segment.source)
-	    }
-	    //else console.log("No update ",want,segment.options)
-	}
+	if(!window.gfrobust)
+		upd3(["[GF robust parser is not available]"])
 	else {
-	    var fn=" from "+concname(o.from)
-	    var tn=" to "+concname(o.to)
-	    var msg="The GF robust translation service: not supported:"
-	    if(!fls) msg+=fn+(tls ? "." : ", ")
-	    if(!tls) msg+=tn+"."
-	    upd3(["["+msg+"]"])
+	    function check_support(fls,tls) {
+		if(fls && tls) {
+		    var want={from:o.from, to:o.to, method:"GFRobust"}
+		    if(!eq_options(segment.options,want)) {
+			//console.log("Updating "+i)
+			lextext(segment.source,upd0)
+			//upd0(segment.source)
+		    }
+		    //else console.log("No update ",want,segment.options)
+		}
+		else {
+		    var fn=" from "+concname(o.from)
+		    var tn=" to "+concname(o.to)
+		    var msg="The GF robust translation service: not supported:"
+		    if(!fls) msg+=fn+(tls ? "." : ", ")
+		    if(!tls) msg+=tn+"."
+		    upd3(["["+msg+"]"])
+		}
+	    }
+	    gfrobust.get_support(check_support)
 	}
     }
 
