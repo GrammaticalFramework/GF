@@ -129,7 +129,7 @@ textarea.text_mode {
     width: 99%;
 }
 
-div#minibar {
+div#minibar, div#syntax_editor {
     border: 1px solid black;
     padding: 5px;
     background: #ccc url("../minibar/brushed-metal.png");

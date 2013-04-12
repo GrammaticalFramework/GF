@@ -1,4 +1,4 @@
-body {
+body.syntax-editor {
     background: #ccc url("../minibar/brushed-metal.png");
 }
 
@@ -114,7 +114,7 @@ body {
   opacity: 0.5;
   }
 
-#debug
+div#debug
 {
   font: 10px monospace;
   white-space: pre;

@@ -19,46 +19,6 @@ var minibar_options= {
     try_google: true
 }
 
-
-if(window.Editor) // Syntax editor loaded?
-    minibar_options.abstract_action=function(tree) {
-	var editor_options = {
-	    target: "editor",
-	    initial: { grammar: minibar.grammar_menu.value, // hmm
-		       startcat: minibar.input.startcat_menu.value, // hmm
-		       languages: minibar.translations.toLangs, // hmm
-		       abstr: tree
-		     },
-	    lin_action: function(new_input,langFrom) {
-		var grammar_url=editor.menu.ui.grammar_menu.value // hmm
-		var startcat=editor.menu.ui.startcat_menu.value // hmm
-		var toLangs=gm.languages // hmm
-		minibar.input.set_input_for(grammar_url,
-					    {from:langFrom,
-					     startcat:startcat,
-					     input:gf_lex(new_input)})
-		minibar.translations.set_toLangs_for(grammar_url,toLangs)
-
-		//Easier: delete the editor and create a new one next time:
-		clear(editor.container)
-		editor=null;
-
-		//Better: keep editor around and reactivate it next time:
-		//editor.container.style.display="none"
-
-		// Even if the grammar is the same as before, this call is
-		// what eventually triggers the new_input to be loaded:
-		minibar.select_grammar(grammar_url)
-
-		// Make the minibar visible again
-		minibar.minibar.style.display=""
-	    }
-	}
-	minibar.minibar.style.display="none" // Hide the minibar
-        var gm = new GrammarManager(server,editor_options);
-	var editor=new Editor(gm,editor_options)
-    }
-
 if(/^\?\/tmp\//.test(location.search)) {
     var args=decodeURIComponent(location.search.substr(1)).split(" ")
     if(args[0]) online_options.grammars_url=args[0];
