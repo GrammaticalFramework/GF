@@ -305,11 +305,7 @@ function uses_gf(doc,segment) {
     var m= segment.options.method || doc.options.method
     var d=segment.use_default
     if(d || d==null) m=doc.options.method
-    switch(m) {
-    case "Manual":   return null
-    case "Apertium": return null
-    default:         return m
-    }
+    return /\.pgf$/.test(m) ? m : null
 }
 
 Translator.prototype.add_apertium=function() {
@@ -769,7 +765,8 @@ Translator.prototype.edit_source=function(source,i) {
 	    var pgf_server=t.servers[grammarname]
 	    function cont2(source) {
 		function ok() {
-		    unlextext(gf_unlex(minibar.input.current.input),change)
+		    function cont(input) { unlextext(input,change) }
+		    minibar.get_current_input(cont)
 		    t.hide_filebox()
 		}
 		function cancel() {
@@ -789,9 +786,11 @@ Translator.prototype.edit_source=function(source,i) {
 		    initial:{from:gfrom,
 			     startcat:grammar_info.startcat,
 			     input:source.split(" ")},
-		    initial_toLangs: [gto]
+		    initial_toLangs: [gfrom,gto]
 		}
-		replaceChildren(t.filebox,empty_id("div","minibar"))
+		clear(t.filebox)
+		appendChildren(t.filebox,[empty_id("div","minibar"),
+					  empty_id("div","syntax_editor")])
 		var minibar=new Minibar(pgf_server,minibar_options)
 		appendChildren(t.filebox,[button("OK",ok),
 					  button("Cancel",cancel)])

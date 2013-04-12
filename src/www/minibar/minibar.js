@@ -37,7 +37,11 @@ function Minibar(server,opts) {
     }
 
     // Apply supplied options
+    this.server=server;
     if(opts) for(var o in opts) this.options[o]=opts[o];
+
+    /* --- Syntax editor integration ---------------------------------------- */
+    if(!this.options.abstract_action) this.integrate_syntax_editor()
 
     /* --- Creating the components of the minibar --------------------------- */
     this.translations=new Translations(server,this.options)
@@ -57,21 +61,81 @@ function Minibar(server,opts) {
 	    menubar.appendChild(button("Help",bind(open_help,this)));
 	append_extra_buttons(extra,options);
     }
-    this.hide = function() {
-        this.minibar.style.display="none";
+    this.set_hidden = function(b) {
+	this.hidden=b
+	this.minibar.style.display= b ? "none" : ""
     }
-    this.show = function() {
-        this.minibar.style.display="block";
-    }
+    this.hide = function() { this.set_hidden(true); }
+    this.show = function() { this.set_hidden(false); }
 
     /* --- Minibar client state initialisation ------------------------------ */
     this.grammar=null;
 
-    this.server=server;
-
     /* --- Main program, this gets things going ----------------------------- */
     with(this) {
 	server.get_grammarlists(bind(show_grammarlist,this));
+    }
+}
+
+Minibar.prototype.integrate_syntax_editor=function() {
+    var minibar=this
+    var editor_target="syntax_editor"
+    var e=element(editor_target)
+    if(!e || !window.Editor) return
+
+    e.style.display="none"
+    minibar.options.abstract_action=function(tree) {
+	var editor_options = {
+	    target: editor_target,
+	    show_startcat_menu: minibar.input.options.startcat_menu,
+	    initial: { grammar: minibar.grammar_menu.value, // hmm
+		       startcat: minibar.input.startcat_menu.value, // hmm
+		       languages: minibar.translations.toLangs, // hmm
+		       abstr: tree
+		     },
+	    lin_action: function(new_input,langFrom) {
+		console.log(editor.menu.ui.grammar_menu.value)
+		var grammar_url=editor.menu.ui.grammar_menu.value // hmm
+		                || minibar.server.current_grammar_url // hmm
+		var startcat=editor.get_startcat()
+		             || minibar.input.startcat_menu.value // hmm
+		var toLangs=gm.languages // hmm
+		minibar.input.set_input_for(grammar_url,
+					    {from:langFrom,
+					     startcat:startcat,
+					     input:gf_lex(new_input)})
+		minibar.translations.set_toLangs_for(grammar_url,toLangs)
+
+		//Better: keep editor around and reactivate it next time:
+		editor.hide()
+		// ...
+
+		//Easier: delete the editor and create a new one next time:
+		clear(editor.container)
+		editor=minibar.editor=null;
+
+		// Even if the grammar is the same as before, this call is
+		// what eventually triggers the new_input to be loaded:
+		minibar.select_grammar(grammar_url)
+
+		// Make the minibar visible again
+		minibar.show()
+	    }
+	}
+	minibar.hide()
+        var gm = new GrammarManager(minibar.server,editor_options);
+	var editor=minibar.editor=new Editor(gm,editor_options)
+	editor.show()
+    }
+}
+
+Minibar.prototype.get_current_input=function(cont) {
+    var t=this
+    if(!t.hidden) cont(gf_unlex(t.input.current.input))
+    else {
+	var tree=t.editor.get_ast()
+	function pick(lins) { cont(lins[0].text) }
+	t.server.linearize({tree:tree,to:t.input.current.from},pick)
     }
 }
 

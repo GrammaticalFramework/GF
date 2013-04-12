@@ -370,6 +370,7 @@ function compile_button(g,err_ind) {
 function minibar_button(g,files,err_ind,comp_btn) {
     var b2;
     var minibar_div=div_id("minibar");
+    var editor_div= div_id("syntax_editor");
 
     function page_overlay(inner) {
 	return wrap_class("table","page_overlay",tr(td(inner)))
@@ -530,7 +531,7 @@ function minibar_button(g,files,err_ind,comp_btn) {
 
     function goto_minibar() {
 	clear(files);
-	files.appendChild(minibar_div);
+	appendChildren(files,[minibar_div,editor_div]);
 	var online_options={grammars_url: local.get("dir")+"/",
 			    grammar_list: [g.basename+".pgf"]}
 	var pgf_server=pgf_online(online_options)
