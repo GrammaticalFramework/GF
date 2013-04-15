@@ -50,9 +50,11 @@ readProbabilitiesFromFile file pgf = do
 mkProbabilities :: PGF -> Map.Map CId Double -> Probabilities
 mkProbabilities pgf probs =
   let funs1 = Map.fromList [(f,p) | (_,cf) <- Map.toList cats1, (p,f) <- cf]
-      cats1 = Map.map (\(_,fs,_) -> fill fs) (cats (abstract pgf))
+      cats1 = Map.map (\(_,fs,_) -> sortBy cmpProb (fill fs)) (cats (abstract pgf))
   in Probs funs1 cats1
   where
+    cmpProb (p1,_) (p2,_) = compare p2 p1
+
     fill fs = pad [(Map.lookup f probs,f) | (_,f) <- fs]
       where
         pad :: [(Maybe Double,a)] -> [(Double,a)]
