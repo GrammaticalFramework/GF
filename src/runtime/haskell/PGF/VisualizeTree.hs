@@ -37,7 +37,7 @@ import PGF.Macros (lookValCat, lookMap,
 
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
-import Data.List (intersperse,nub,mapAccumL)
+import Data.List (intersperse,nub,mapAccumL,find)
 import Data.Char (isDigit)
 import Data.Maybe (fromMaybe)
 import Text.PrettyPrint
@@ -120,6 +120,7 @@ graphvizDependencyTree :: String -> Bool -> Maybe Labels -> Maybe String -> PGF 
 graphvizDependencyTree format debug mlab ms pgf lang t = render $
   case format of
     "conll"      -> vcat (map (hcat . intersperse (char '\t')         ) wnodes)
+    "malt_tab"   -> vcat (map (hcat . intersperse (char '\t') . (\ws -> [ws !! 0,ws !! 1,ws !! 3,ws !! 6,ws !! 7])) wnodes)
     "malt_input" -> vcat (map (hcat . intersperse (char '\t') . take 6) wnodes)
     _            -> text "digraph {" $$
                     space $$
@@ -134,9 +135,10 @@ graphvizDependencyTree format debug mlab ms pgf lang t = render $
 
     wnodes = [[int i, maltws ws, ppCId fun, ppCId cat, ppCId cat, unspec, int parent, text lab, unspec, unspec] | 
               ((cat,fid,fun),i,ws) <- tail leaves,
-              let (lab,parent) = maybe (dep_lbl,0)
-                                       (\(lbl,fid) -> (lbl,head [i | ((_,fid1,_),i,_) <- leaves, fid == fid1]))
-                                       (lookup fid deps)
+              let (lab,parent) = fromMaybe (dep_lbl,0)
+                                           (do (lbl,fid) <- lookup fid deps
+                                               (_,i,_) <- find (\((_,fid1,_),i,_) -> fid == fid1) leaves
+                                               return (lbl,i))
              ]
     maltws = text . concat . intersperse "+" . words  -- no spaces in column 2
 
