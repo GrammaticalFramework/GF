@@ -30241,6 +30241,13 @@ lin never_AdV = ss "کھبی نہیں" ;
 lin among_Prep = mkPrep "میں سے" "میں سے" ;
 lin throughout_Prep = mkPrep "مکمل" "مکمل" ;
 lin further_AdV = ss "مزید" ;
-lin for_instance_Adv = mkAdv "مثال کے طور پر" ; 
+lin for_instance_Adv = mkAdv "مثال کے طور پر" ;
+lin into_Prep = mkPrep "میں" "میں" ;
+lin reactor_N = mkN "رایکٹر" ;
+lin apart_from_Prep = mkPrep "کے علاوہ" "کے علاوہ" ;
+lin iranian_A = mkA "ایرانی" ;
+lin role_1_N = mkN "کردار" ;
+lin already_AdV = ss "پہلے ہی" ;
+lin customerMasc_N = mkN "گاہک" ;
 
 }

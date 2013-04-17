@@ -238,8 +238,8 @@ param
                 Neg => nahen };
         in
 		case vt of {
-		VPSubj => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ vp.cvp ++ na ++  vps.inf ++ vps.fin ++ vp.embComp ;
-		_      => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ vp.cvp ++ nahim  ++  vps.inf ++ vps.fin ++ vp.embComp};
+		VPSubj => quest ++ np.s ! subj ++ vp.ad ++ vp.comp ! np.a  ++ vp.obj.s ++  vp.cvp ++ na ++  vps.inf ++ vps.fin ++ vp.embComp 
+		_      => quest ++ np.s ! subj ++ vp.ad ++ vp.comp ! np.a  ++ vp.obj.s  ++ vp.cvp ++ nahim  ++  vps.inf ++ vps.fin ++ vp.embComp};
 
   } ;
 
@@ -281,8 +281,10 @@ param
                 Neg => nahen };		
         in
 		case t of {
-		VPSubj => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ vp.cvp ++ na ++  vps.inf ++ vps.fin ++ vp.embComp;
-		_      => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ vp.cvp ++ nahim ++  vps.inf ++ vps.fin ++ vp.embComp};
+	--	VPSubj => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ vp.cvp ++ na ++  vps.inf ++ vps.fin ++ vp.embComp;
+	--	_      => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ vp.cvp ++ nahim ++  vps.inf ++ vps.fin ++ vp.embComp};
+		VPSubj => quest ++ subj ++ vp.ad ++ vp.comp ! agr  ++ vp.obj.s ++ vp.cvp ++ na ++  vps.inf ++ vps.fin ++ vp.embComp;
+		_      => quest ++ subj ++ vp.ad ++ vp.comp ! agr ++ vp.obj.s  ++ vp.cvp ++ nahim ++  vps.inf ++ vps.fin ++ vp.embComp};
     } ;
 
  np2pronCase :  (Case => Str) -> NPCase -> Agr -> Str ;
