@@ -7,9 +7,9 @@
 <meta name = "viewport" content = "width = device-width">
 </head>
  
-<body> 
+<body class=minibar>
 
-<div id=minibar></div> 
+<div id=minibar></div>
 
 <hr> 
  
@@ -21,6 +21,7 @@ see <a href="http://www.grammaticalframework.org/examples/phrasebook/doc-phraseb
 </small>
 
 <script type="text/JavaScript" src="../js/support.js"></script>
+<script type="text/JavaScript" src="../js/localstorage.js"></script>
 <script type="text/JavaScript" src="minibar.js"></script>
 <script type="text/JavaScript" src="minibar_input.js"></script>
 <script type="text/JavaScript" src="minibar_translations.js"></script>
@@ -42,7 +43,9 @@ var phrasebook_options={
   delete_button_text: "Del",
   help_url: "http://www.grammaticalframework.org/examples/phrasebook/help-phrasebook.html",
   feedback_url: "feedback.html",
-  default_source_language: "Eng"
+  default_source_language: "Eng",
+  startcat_menu: false,
+  to_multiple: false
 }
 
 start_minibar(server,phrasebook_options)
