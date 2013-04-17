@@ -85,12 +85,14 @@ Minibar.prototype.integrate_syntax_editor=function() {
 
     e.style.display="none"
     minibar.options.abstract_action=function(tree) {
+	function not_all(s) { return s!="All" }
+	var languages=filter(not_all,minibar.translations.toLangs)
 	var editor_options = {
 	    target: editor_target,
 	    show_startcat_menu: minibar.input.options.startcat_menu,
 	    initial: { grammar: minibar.grammar_menu.value, // hmm
 		       startcat: minibar.input.startcat_menu.value, // hmm
-		       languages: minibar.translations.toLangs, // hmm
+		       languages: languages,
 		       abstr: tree
 		     },
 	    lin_action: function(new_input,langFrom) {
