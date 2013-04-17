@@ -15,6 +15,7 @@ function Translations(server,opts) {
 	tree_img_format: "png", // format for trees & alignment images,
 	                        // can be "gif", "png" or "svg"
 	show_grouped_translations: true,
+	to_multiple: true, // allow selection of multiple target languages
 	show_brackets: false, // show bracketed string
 	translate_limit: 25 // maximum number of parse trees to retrieve
     }
@@ -25,7 +26,9 @@ function Translations(server,opts) {
     this.main=empty("div");
     this.menus=empty("span");
 
-    var tom=this.to_menu=node("select",{id:"to_menu",multiple:"",size:5},[]);
+    var tom_opts={id:"to_menu"}
+    if(this.options.to_multiple) tom_opts.multiple=true,tom_opts.size=5;
+    var tom=this.to_menu=node("select",tom_opts,[]);
     appendChildren(this.menus,[text(" To: "), this.to_menu])
     tom.onchange=bind(this.change_language,this);
     var o=this.options
