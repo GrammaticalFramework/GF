@@ -20,7 +20,6 @@
 #include <gu/type.h>
 #include <gu/dump.h>
 #include <gu/enum.h>
-#include <pgf/data.h>
 
 /// Linearization of abstract syntax trees.
 /// @file
@@ -48,7 +47,6 @@ typedef GuEnum PgfCncTreeEnum;
 PgfCncTreeEnum*
 pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuPool* pool);
 
-/// Callback functions for linearization.
 typedef struct PgfLinFuncs PgfLinFuncs;
 
 struct PgfLinFuncs
@@ -56,19 +54,15 @@ struct PgfLinFuncs
 	/// Output tokens
 	void (*symbol_tokens)(PgfLinFuncs** self, PgfTokens toks);
 
-	void (*symbol_expr)(PgfLinFuncs** self, 
-			    int argno, PgfExpr expr, int lin_idx);
-
-	/// Begin application
-	void (*expr_apply)(PgfLinFuncs** self, PgfCId cid, int n_args);
-
 	/// Output literal
 	void (*expr_literal)(PgfLinFuncs** self, PgfLiteral lit);
 
-	void (*abort)(PgfLinFuncs** self);
-	void (*finish)(PgfLinFuncs** self);
-};
+	/// Begin phrase
+	void (*begin_phrase)(PgfLinFuncs** self, PgfCId cat, int fid, int lindex, PgfCId fun);
 
+	/// End phrase
+	void (*end_phrase)(PgfLinFuncs** self, PgfCId cat, int fid, int lindex, PgfCId fun);
+};
 
 
 
@@ -83,22 +77,3 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx,
 void
 pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
 			 size_t lin_idx, GuWriter* wtr, GuExn* err);
-
-
-/// Return the dimension of a concrete syntax tree.
-int
-pgf_cnc_tree_dimension(PgfCncTree ctree);
-/**<
- * @param ctree A concrete syntax tree.
- *
- * @return The dimension of the tree, i.e. the number of different
- * linearizations the tree has.
- */
-
-//@}
-
-
-
-extern GuTypeTable
-pgf_linearize_dump_table;
-
