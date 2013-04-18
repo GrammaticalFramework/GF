@@ -5,6 +5,7 @@
 
 /// A single lexical token			      
 typedef GuString PgfToken;
+typedef GuSeq PgfTokens;  // -> PgfToken
 
 typedef struct {
 	PgfToken (*read_token)();

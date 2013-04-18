@@ -128,8 +128,6 @@ typedef struct {
 
 extern GU_DECLARE_TYPE(PgfCncCat, abstract);
 
-typedef GuSeq PgfTokens;  // -> PgfToken
-
 bool
 pgf_tokens_equal(PgfTokens t1, PgfTokens t2);
 
@@ -214,7 +212,7 @@ typedef GuSeq PgfSequence; // -> PgfSymbol
 typedef GuList(PgfSequence) PgfSequences;
 
 typedef struct {
-	PgfCId name;
+	PgfAbsFun* absfun;
 	PgfExprProb *ep;
     int funid;
 	GuLength n_lins;

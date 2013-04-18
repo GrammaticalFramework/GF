@@ -758,15 +758,14 @@ pgf_read_cncfun(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr, int funid)
 	size_t len = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 
+	PgfAbsFun* absfun =
+		gu_map_get(abstr->funs, &name, PgfAbsFun*);
 
 	PgfCncFun* cncfun = gu_new_flex(rdr->opool, PgfCncFun, lins, len);
-	cncfun->name = name;
+	cncfun->absfun = absfun;
+	cncfun->ep = (absfun == NULL) ? NULL : &absfun->ep;
 	cncfun->funid = funid;
 	cncfun->n_lins = len;
-
-	PgfAbsFun* absfun =
-		gu_map_get(abstr->funs, &cncfun->name, PgfAbsFun*);
-	cncfun->ep = (absfun == NULL) ? NULL : &absfun->ep;
 
 	for (size_t i = 0; i < len; i++) {
 		int seqid = pgf_read_int(rdr);
