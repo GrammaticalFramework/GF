@@ -203,22 +203,24 @@ Translator.prototype.update_translation=function(i) {
 	    upd3(["[Apertium does not support "+show_translation(o)+"]"])
     }
     function update_gfrobust_translation() {
-	function upd3(txts) { update_segment("GFRobust",txts) }
-	function upd2(ts) {
+	function upd3s(txt) { update_segment("GFRobust",[txt]) }
+	function upd2(ts,punct) {
 	    switch(ts.length) {
-	    case 0: upd3(["[no translation]"]);break;
-	    default: mapc(unlextext,[ts],upd3); break;
+	    case 0: upd3s("[no translation]");break;
+	    default:
+		if(punct) ts=ts+" "+punct
+		unlextext(ts,upd3s);
 	    }
 	}
-	function upd1(translate_output) {
-	    //console.log(translate_output)
-	    upd2(translate_output)
-	}
-	function upd0(source) {
+	function upd0(source,punct) {
+	    function upd1(translate_output) {
+		//console.log(translate_output)
+		upd2(translate_output,punct)
+	    }
 	    gfrobust.translate(source,o.to,upd1)
 	}
 	if(!window.gfrobust)
-		upd3(["[GF robust parser is not available]"])
+		upd3s("[GF robust parser is not available]")
 	else {
 	    function check_support(ssupport,tsupport) {
 		var fls=ssupport(o.from)
@@ -227,7 +229,7 @@ Translator.prototype.update_translation=function(i) {
 		    var want={from:o.from, to:o.to, method:"GFRobust"}
 		    if(!eq_options(segment.options,want)) {
 			//console.log("Updating "+i)
-			lextext(segment.source,upd0)
+			lexgfrobust(segment.source,upd0)
 			//upd0(segment.source)
 		    }
 		    //else console.log("No update ",want,segment.options)
@@ -238,7 +240,7 @@ Translator.prototype.update_translation=function(i) {
 		    var msg="The GF robust translation service: not supported:"
 		    if(!fls) msg+=fn+(tls ? "." : ", ")
 		    if(!tls) msg+=tn+"."
-		    upd3(["["+msg+"]"])
+		    upd3s("["+msg+"]")
 		}
 	    }
 	    gfrobust.get_support(check_support)
@@ -283,9 +285,7 @@ Translator.prototype.update_translation=function(i) {
 	}
     }
 
-    var m= ss[i].options.method || doc.options.method
-    var d=ss[i].use_default
-    if(d || d==null) m=doc.options.method
+    var m=segment_method(doc,ss[i])
     switch(m) {
     case "Manual":  /* Nothing to do */ break;
     case "Apertium": update_apertium_translation(); break;
@@ -298,14 +298,6 @@ Translator.prototype.update_translation=function(i) {
 	}
 	t.switch_grammar(m,upd00)
     }
-}
-
-// Return the name of the grammar if the segment uses GF for translation
-function uses_gf(doc,segment) {
-    var m= segment.options.method || doc.options.method
-    var d=segment.use_default
-    if(d || d==null) m=doc.options.method
-    return /\.pgf$/.test(m) ? m : null
 }
 
 Translator.prototype.add_apertium=function() {
@@ -973,9 +965,21 @@ Translator.prototype.draw_segment_given_target=function(s,target,i) {
 					   wrap_class("dl","popupmenu",
 						      [insertB,removeB])]))
     }
-    var source=wrap_class("td","source",text(s.source))
+    var txt=wrap("span",text(s.source))
+    var source=wrap_class("td","source",txt)
     if(!t.document.globalsight)
-	source.onclick=function() { t.edit_source(source,i); }
+	txt.onclick=function() { t.edit_source(source,i); }
+    if(window.gfrobust && segment_method(t.document,s)=="GFRobust") {
+	function add_button(src) {
+	    var btn=img("../minibar/tree-btn.png")
+	    btn.className="right"
+	    btn.other=gfrobust.parsetree_url(src)
+	    btn.title="Click to toggle parse tree view."
+	    btn.onclick=function() { toggle_img(btn) }
+	    source.appendChild(btn)
+	}
+	lexgfrobust(s.source,add_button)
+    }
     var options=wrap_class("td","options",draw_options())
 
     return node("tr",{"class":"segment",id:i},[actions,source,options,target])
@@ -998,6 +1002,20 @@ function new_segment(source) {
 function set_manual(segment) {
     segment.options.method="Manual"
     segment.use_default=false
+}
+
+// Return the name of the grammar if the segment uses GF for translation
+function uses_gf(doc,segment) {
+    var m= segment_method(doc,segment)
+    return /\.pgf$/.test(m) ? m : null
+}
+
+// Return the translation method use by a segment
+function segment_method(doc,segment) {
+    var m= segment.options.method || doc.options.method
+    var d=segment.use_default
+    if(d || d==null) m=doc.options.method
+    return m
 }
 
 /* -------------------------------------------------------------------------- */
@@ -1174,7 +1192,17 @@ function save_in_cloud(filename,document,cont) {
 function unlextext(txt,cont) { gfshell('ps -bind -unlextext "'+txt+'"',cont) }
 function lextext(txt,cont) { gfshell('ps -lextext "'+txt+'"',cont) }
 
-
+// Like lextext, but separate punctuation from the end
+function lexgfrobust(txt,cont) {
+    function rmpunct(txt) {
+	var ts=gf_lex(txt)
+	var n=ts.length
+	var punct=""
+	if(n>0 && /[.?!]/.test(ts[n-1])) { punct=ts[n-1]; ts.pop()}
+	cont(gf_unlex(ts),punct)
+    }
+    lextext(txt,rmpunct)
+}
 
 /* --- DOM Support ---------------------------------------------------------- */
 
