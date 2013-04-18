@@ -3,12 +3,13 @@
 
 var gfrobust = {}
 
-gfrobust.url="http://www.grammaticalframework.org:41296/robust-parser.cgi"
+gfrobust.url="http://www.grammaticalframework.org:41296/robust-parser/parse"
+gfrobust.jsonurl="http://www.grammaticalframework.org:41296/robust-parser.cgi"
 gfrobust.grammar="Parse" // the name of the grammar
 gfrobust.targetlist=[] // do not use, exposed only for debugging
 
 gfrobust.call=function(querystring,cont) {
-    http_get_json(gfrobust.url+querystring,cont)
+    http_get_json(gfrobust.jsonurl+querystring,cont)
 }
 
 // Translate a sentence to the given target language
@@ -17,7 +18,12 @@ gfrobust.translate=function(source,to,cont) {
     gfrobust.call("?sentence="+enc(source)+"&to="+gfrobust.grammar+to,cont)
 }
 
-// Get functions to test which source and target langauges are supports
+// Get the url of a parse tree image (SVG)
+gfrobust.parsetree_url=function(source) {
+    return gfrobust.url+"?sentence="+encodeURIComponent(source)
+}
+
+// Get functions to test which source and target langauges are supported
 gfrobust.get_support=function(cont) {
     function ssupport(code) { return code=="Eng" }
     function tsupport(code) { return gfrobust.targets[code] }
