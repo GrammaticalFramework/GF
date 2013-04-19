@@ -154,6 +154,12 @@ pgf_expr_unapply(PgfExpr expr, GuPool* pool);
 PgfExpr
 pgf_read_expr(GuReader* rdr, GuPool* pool, GuExn* err);
 
+bool
+pgf_literal_eq(PgfLiteral lit1, PgfLiteral lit2);
+
+bool
+pgf_expr_eq(PgfExpr e1, PgfExpr e2);
+
 void
 pgf_print_literal(PgfLiteral lit, GuWriter* wtr, GuExn* err);
 
