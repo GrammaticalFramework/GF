@@ -368,6 +368,79 @@ pgf_read_expr(GuReader* rdr, GuPool* pool, GuExn* err)
 	return expr;
 }
 
+bool
+pgf_literal_eq(PgfLiteral lit1, PgfLiteral lit2)
+{
+	GuVariantInfo ei1 = gu_variant_open(lit1);
+	GuVariantInfo ei2 = gu_variant_open(lit2);
+	
+	if (ei1.tag != ei2.tag)
+		return false;
+
+	switch (ei1.tag) {
+	case PGF_LITERAL_STR: {
+		PgfLiteralStr* lit1 = ei1.data;
+		PgfLiteralStr* lit2 = ei2.data;
+        return gu_string_eq(lit1->val, lit2->val);
+    }
+    case PGF_LITERAL_INT: {
+		PgfLiteralInt* lit1 = ei1.data;
+		PgfLiteralInt* lit2 = ei2.data;
+        return (lit1->val == lit2->val);
+    }
+	case PGF_LITERAL_FLT: {
+		PgfLiteralFlt* lit1 = ei1.data;
+		PgfLiteralFlt* lit2 = ei2.data;
+		return (lit1->val == lit2->val);
+    }
+	default:
+		gu_impossible();
+    }
+    
+    return false;
+}
+
+bool
+pgf_expr_eq(PgfExpr e1, PgfExpr e2)
+{
+	GuVariantInfo ei1 = gu_variant_open(e1);
+	GuVariantInfo ei2 = gu_variant_open(e2);
+	
+	if (ei1.tag != ei2.tag)
+		return false;
+
+	switch (ei1.tag) {
+	case PGF_EXPR_FUN: {
+		PgfExprFun* fun1 = ei1.data;
+		PgfExprFun* fun2 = ei2.data;
+		return gu_string_eq(fun1->fun, fun2->fun);
+	}
+	case PGF_EXPR_APP: {
+		PgfExprApp* app1 = ei1.data;
+		PgfExprApp* app2 = ei2.data;
+		return (pgf_expr_eq(app1->fun,app2->fun) &&
+		        pgf_expr_eq(app1->arg,app2->arg));
+	}
+	case PGF_EXPR_LIT: {
+		PgfExprLit* lit1 = ei1.data;
+		PgfExprLit* lit2 = ei2.data;
+		return (pgf_literal_eq(lit1->lit,lit2->lit));
+	}
+	case PGF_EXPR_META:
+		return true;
+	case PGF_EXPR_ABS:
+	case PGF_EXPR_VAR:
+	case PGF_EXPR_TYPED:
+	case PGF_EXPR_IMPL_ARG:
+		gu_impossible();
+		break;
+	default:
+		gu_impossible();
+	}
+	
+	return false;
+}
+
 void
 pgf_print_literal(PgfLiteral lit,
 			  GuWriter* wtr, GuExn* err)
@@ -420,7 +493,6 @@ pgf_print_expr(PgfExpr expr, int prec,
 		}
 		break;
 	}
-	case PGF_EXPR_ABS:
 	case PGF_EXPR_LIT: {
 		PgfExprLit* lit = ei.data;
         pgf_print_literal(lit->lit, wtr, err);
@@ -429,6 +501,7 @@ pgf_print_expr(PgfExpr expr, int prec,
 	case PGF_EXPR_META:
 		gu_putc('?', wtr, err);
 		break;
+	case PGF_EXPR_ABS:
 	case PGF_EXPR_VAR:
 	case PGF_EXPR_TYPED:
 	case PGF_EXPR_IMPL_ARG:

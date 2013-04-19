@@ -135,6 +135,21 @@ Expr_repr(ExprObject *self)
 	return pystr;
 }
 
+PyObject *
+Expr_richcompare(ExprObject *e1, ExprObject *e2, int op)
+{
+	bool cmp = pgf_expr_eq(e1->expr,e2->expr);
+	
+	if (op == Py_EQ)
+		return cmp ? Py_True : Py_False;
+	else if (op == Py_NE)
+		return cmp ? Py_False : Py_True;
+	else {
+		PyErr_SetString(PyExc_TypeError, "the operation is not supported");
+		return NULL;
+	}
+}
+
 static PyMethodDef Expr_methods[] = {
     {"unpack", (PyCFunction)Expr_unpack, METH_VARARGS,
      "Decomposes an expression into its components"
@@ -167,7 +182,7 @@ static PyTypeObject pgf_ExprType = {
     "abstract syntax tree",    /*tp_doc*/
     0,		                   /*tp_traverse */
     0,		                   /*tp_clear */
-    0,		                   /*tp_richcompare */
+    (richcmpfunc) Expr_richcompare, /*tp_richcompare */
     0,		                   /*tp_weaklistoffset */
     0,		                   /*tp_iter */
     0,		                   /*tp_iternext */
@@ -709,6 +724,30 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 }
 
 static PyObject*
+Concr_parseval(ConcrObject* self, PyObject *args) {
+	ExprObject* pyexpr = NULL;
+	const char* s_cat = NULL;
+	if (!PyArg_ParseTuple(args, "O!s", &pgf_ExprType, &pyexpr, &s_cat))
+        return NULL;
+        
+    GuPool* tmp_pool = gu_local_pool();
+
+    PgfCId cat = gu_str_string(s_cat, tmp_pool);
+
+	double precision = 0;
+	double recall = 0;
+	double exact = 0;
+	
+    if (!pgf_parseval(self->concr, pyexpr->expr, cat, 
+                      &precision, &recall, &exact))
+		return NULL;
+
+    gu_pool_free(tmp_pool);
+    
+    return Py_BuildValue("ddd", precision, recall, exact);
+}
+
+static PyObject*
 Concr_linearize(ConcrObject* self, PyObject *args)
 {
 	ExprObject* pyexpr;
@@ -1005,6 +1044,9 @@ static PyMethodDef Concr_methods[] = {
     },
     {"parse", (PyCFunction)Concr_parse, METH_VARARGS | METH_KEYWORDS,
      "Parses a string and returns an iterator over the abstract trees for this sentence"
+    },
+    {"parseval", (PyCFunction)Concr_parseval, METH_VARARGS,
+     "Computes precision, recall and exact match for the parser on a given abstract tree"
     },
     {"linearize", (PyCFunction)Concr_linearize, METH_VARARGS,
      "Takes an abstract tree and linearizes it to a string"

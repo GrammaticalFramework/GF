@@ -116,6 +116,10 @@ pgf_linearize(PgfConcr* concr, PgfExpr expr, GuWriter* wtr, GuExn* err);
 PgfExprEnum*
 pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool);
 
+bool
+pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat, 
+             double *precision, double *recall, double *exact);
+                    
 PgfExprEnum*
 pgf_generate(PgfPGF* pgf, PgfCId cat, GuPool* pool);
 
