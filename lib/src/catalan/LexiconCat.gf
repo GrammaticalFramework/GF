@@ -64,7 +64,7 @@ lin
    computer_N = regMN "ordinador" ;    
    country_N = regMN "país" ;       -- masc
    cousin_N = regMN "cosí" ;
-   cow_N = regFN "vaca" ;
+   cow_N = mkN "vaca" ;
    die_V = verbV (morir_71 "morir") ;
    dirty_A = regADeg "brut" ;
    distance_N3 = mkN3 (regFN "distància") genitive dative ;
