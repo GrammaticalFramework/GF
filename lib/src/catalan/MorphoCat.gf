@@ -27,6 +27,14 @@ oper
   nomCep : Str -> Number => Str = \cep -> 
     numForms cep (cep + "s") ;
 
+  nomVaca : Str -> Number => Str = \vaca ->
+    let va : Str = Predef.tk 2 vaca ;
+        ca : Str = Predef.dp 2 vaca ;
+        ques : Str = case (ca) of {
+          "ca" => "ques" ;
+          _    => "gues"
+        } ;
+    in numForms vaca (va + ques) ;
 
   nomCasa : Str -> Str -> Number => Str = \es,casa ->
           numForms casa (init casa + es) ;
@@ -67,15 +75,16 @@ oper
     let
        mkNounMas : (Str -> Number => Str) -> Noun = \rule -> mkNoun (rule noi) Masc
     in
-    case last noi of {
-      "a"          => mkNoun (nomCasa "es" noi) Fem ;
-      "s"|"x"|"ç"  => mkNounMas nomCas ;
-      "i"          => mkNounMas nomFre ;
-      "í"          => mkNounMas (nomCasa "ins") ;
-      "à"          => mkNounMas (nomCasa "ans") ;
-      "ó"          => mkNounMas (nomCasa "ons") ;
-      "g"          => mkNounMas nomFaig ;
-       _           => mkNounMas nomCep
+    case noi of {
+      _ + ("ca"|"ga")  => mkNoun (nomVaca noi) Fem ;
+      _ + "a"          => mkNoun (nomCasa "es" noi) Fem ;
+      _ + "s"|"x"|"ç"  => mkNounMas nomCas ;
+      _ + "i"          => mkNounMas nomFre ;
+      _ + "í"          => mkNounMas (nomCasa "ins") ;
+      _ + "à"          => mkNounMas (nomCasa "ans") ;
+      _ + "ó"          => mkNounMas (nomCasa "ons") ;
+      _ + "ig"         => mkNounMas nomFaig ;
+      _                => mkNounMas nomCep
     } ;
 
 --2 Adjectives
