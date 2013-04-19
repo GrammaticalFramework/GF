@@ -1,18 +1,12 @@
 ----------------------------------------------------------------------
 -- |
 -- Module      : VisualizeTree
--- Maintainer  : AR
+-- Maintainer  : KA
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 
--- > CVS $Author:
--- > CVS $Revision: 
---
 -- Print a graph of an abstract syntax tree in Graphviz DOT format
 -- Based on BB's VisualizeGrammar
--- FIXME: change this to use GF.Visualization.Graphviz, 
---        instead of rolling its own.
 -----------------------------------------------------------------------------
 
 module PGF.VisualizeTree 
@@ -20,7 +14,6 @@ module PGF.VisualizeTree
              , graphvizDefaults
              , graphvizAbstractTree
              , graphvizParseTree
-             , graphvizParseTreeOld
              , graphvizDependencyTree
              , graphvizBracketedString
              , graphvizAlignment
@@ -288,50 +281,6 @@ graphvizBracketedString opts bs = render graphviz_code
             -- the following is for the edges between parent and children:
             vcat [tag pid <> text " -- " <> tag id <> semi | (pid, id, _) <- nodes, pid /= nil] $$
             space
-
-
-
-graphvizParseTreeOld :: PGF -> Language -> Tree -> String
-graphvizParseTreeOld pgf lang = graphvizBracketedStringOld . bracketedLinearize pgf lang
-
-
-graphvizBracketedStringOld :: BracketedString -> String
-graphvizBracketedStringOld = render . lin2tree
-  where
-    lin2tree bs =
-      text "graph {" $$
-      space $$
-      nest 2 (text "rankdir=BU ;" $$
-              text "node [shape = record, color = white] ;" $$
-              space $$
-              vcat (nodes bs)) $$
-      text "}"
-      where
-        nodes bs = zipWith mkStruct [0..] (interns ++ [zipWith (\i (l,p,w) -> (l,p,i,w)) [99990..] leaves])
-
-        nil = -1
-        
-        leaves  = getLeaves  0 nil bs
-        interns = getInterns 0 [(nil,bs)]
-
-        getLeaves  level parent bs =
-          case bs of
-            Leaf w                -> [(level-1,parent,w)]
-            Bracket _ fid i _ _ bss -> concatMap (getLeaves (level+1) fid) bss
-
-        getInterns level []    = []
-        getInterns level nodes =
-          nub [(level-1,parent,fid,showCId cat) | (parent,Bracket cat fid _ _ _ _) <- nodes] :
-          getInterns (level+1) [(fid,child) | (_,Bracket _ fid _ _ _ children) <- nodes, child <- children]
-
-        mkStruct l cs = struct l <> text "[label = \"" <> fields cs <> text "\"] ;" $$
-                        vcat [link pl pid l id | (pl,pid,id,_) <- cs]
-        link pl pid l id
-          | pl < 0    = empty
-          | otherwise = struct pl <> colon <> tag pid <> colon <> char 's' <+>
-                        text "--" <+>
-                        struct l  <> colon <> tag  id <> colon <> char 'n' <+> semi
-        fields cs = hsep (intersperse (char '|') [tbrackets (tag id) <> text c | (_,_,id,c) <- cs])
 
 
 type Rel = (Int,[Int])
