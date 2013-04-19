@@ -14,7 +14,7 @@ import Prelude hiding (putStrLn)
 
 import PGF
 
-import PGF.VisualizeTree(graphvizParseTreeOld,getDepLabels)
+import PGF.VisualizeTree(getDepLabels)
 import PGF.Macros(lookStartCat,functionsToCat,lookValCat,restrictPGF,hasLin)
 import PGF.Data(abstract,funs,cats,Literal(LStr),Expr(EFun,ELit)) ----
 import PGF.Morphology(isInMorpho,morphoKnown)
@@ -918,8 +918,8 @@ allCommands = Map.fromList [
      synopsis = "show word dependency tree graphically",
      explanation = unlines [
        "Prints a dependency tree in the .dot format (the graphviz format, default)",
-       "or the MaltParser/CoNLL format (flag -output=malt for training, malt_input)",
-       "for unanalysed input.",
+       "or the CoNLL/MaltParser format (flag -output=conll for training, malt_input",
+       "for unanalysed input).",
        "By default, the last argument is the head of every abstract syntax",
        "function; moreover, the head depends on the head of the function above.",
        "The graph can be saved in a file by the wf command as usual.",
@@ -959,7 +959,8 @@ allCommands = Map.fromList [
        ("file","configuration file for labels per fun, format 'fun l1 ... label ... l2'"),
        ("format","format of the visualization file (default \"png\")"),
        ("output","output format of graph source (default \"dot\")"),
-       ("view","program to open the resulting file (default \"open\")")
+       ("view","program to open the resulting file (default \"open\")"),
+       ("lang","the language of analysis")
        ]
     }),
 
