@@ -1010,8 +1010,7 @@ allCommands = Map.fromList [
        ("showfun","show function names in the tree nodes"),
        ("nofun","don't show function names (default)"),
        ("showleaves","show the leaves of the tree (default)"),
-       ("noleaves","don't show the leaves of the tree (i.e., only the abstract tree)"),
-       ("old","use the old tree visualization algorithm")
+       ("noleaves","don't show the leaves of the tree (i.e., only the abstract tree)")
        ],
      flags = [
        ("format","format of the visualization file (default \"png\")"),
