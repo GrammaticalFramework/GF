@@ -988,11 +988,9 @@ allCommands = Map.fromList [
                                           nodeEdgeStyle = valStrOpts "nodeedgestyle" "solid" opts,
                                           leafEdgeStyle = valStrOpts "leafedgestyle" "dashed" opts
                                          }
-         let grph = if null es then [] 
-                    else if isOpt "old" opts then 
-                             graphvizParseTreeOld pgf lang (head es)
-                         else 
-                             graphvizParseTree pgf lang gvOptions (head es)
+         let grph = if null es 
+                      then []
+                      else graphvizParseTree pgf lang gvOptions (head es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts
