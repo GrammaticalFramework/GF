@@ -34,5 +34,4 @@ interface DiffHindustani = open Prelude in {
   cka : Gender -> Number -> Str ;
   hw : UPerson -> Number -> Str ;
   hwa : Agr -> Str ;
-  regAdjective : Str -> Adjective ;  
 }

@@ -331,6 +331,25 @@ oper
 ----2 Adjectives
 
   makeIrregA : Str -> Adjective = \str -> {s = \\_,_,_,_ => str} ;
+  compoundAdj : Str -> Str -> Adjective = \s1,s2 -> mkCompoundAdj (regAdjective s1) (regAdjective s2) ;
+   mkCompoundAdj : Adjective -> Adjective -> Adjective ;
+   mkCompoundAdj adj1 adj2 = {s = \\n,g,c,d => adj1.s ! n ! g ! c ! d ++ adj2.s ! n ! g ! c ! d} ;
+   
+   
+   regAdjective : Str -> Adjective; 
+  regAdjective x =  case x of {
+	              acch + ("a:"|"an") => mkAdjective x  ("bahut" ++ x)          ("sab se:" ++ x)          (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:") (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:")
+		                                      (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:") (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:") (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:")
+						      (acch +"e:")  ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:") (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:") (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:")
+		                                      (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:") (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:") (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:");
+									
+                        _                 => mkAdjective  x  ("bahut" ++ x)  	("sab se:" ++ x)  x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x)
+							  x  ("bahut" ++ x) 	("sab se:" ++ x) 	x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x)
+							  x  ("bahut" ++ x) 	("sab se:" ++ x)  x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x)
+							  x  ("bahut" ++ x) 	("sab se:" ++ x)  x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x)
+																 
+                            }; 		
+  
 
 ----3 Verbs
   CommonVF = {s : VTense => UPerson => Number => Gender => Str} ;

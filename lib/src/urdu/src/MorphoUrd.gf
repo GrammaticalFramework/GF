@@ -169,6 +169,28 @@ oper
       mkN12 bhao = mkNoun (bhao)      (bhao)     (bhao)
                           (bhao)      (bhao)     (bhao)
                     Masc ;
+
+-- Adjectives
+  compoundAdj : Str -> Str -> Adjective = \s1,s2 -> mkCompoundAdj (regAdjective s1) (regAdjective s2) ;
+   mkCompoundAdj : Adjective -> Adjective -> Adjective ;
+   mkCompoundAdj adj1 adj2 = {s = \\n,g,c,d => adj1.s ! n ! g ! c ! d ++ adj2.s ! n ! g ! c ! d} ;
+
+  regAdjective : Str -> Adjective; 
+  regAdjective x =  case x of {
+	              acch + ("a"|"aN") => mkAdjective x  ("bht" ++ x)          ("sb sE" ++ x)          (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E")
+		                                      (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y")
+						      (acch +"E")  ("bht" ++ acch + "E") ("sb sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E")
+		                                      (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y");
+									
+                        _                 => mkAdjective  x  ("bht" ++ x)  	("sb sE" ++ x)  x ("bht" ++ x) ("sb sE" ++ x) x ("bht" ++ x) ("sb sE" ++ x)
+							  x  ("bht" ++ x) 	("sb sE" ++ x) 	x ("bht" ++ x) ("sb sE" ++ x) x ("bht" ++ x) ("sb sE" ++ x)
+							  x  ("bht" ++ x) 	("sb sE" ++ x)  x ("bht" ++ x) ("sb sE" ++ x) x ("bht" ++ x) ("sb sE" ++ x)
+							  x  ("bht" ++ x) 	("sb sE" ++ x)  x ("bht" ++ x) ("sb sE" ++ x) x ("bht" ++ x) ("sb sE" ++ x)
+																 
+                            }; 
+
+
+
 ----2 Determiners
   IDeterminer = {s:Gender => Case => Str ; n : Number};
   makeDet : Str -> Str -> Str -> Str -> Number -> Determiner = \s1,s2,s3,s4,n -> {
