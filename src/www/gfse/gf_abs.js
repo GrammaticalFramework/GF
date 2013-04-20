@@ -307,7 +307,7 @@ function conc_extends(conc) { return function(m) { return m+conc.langcode; }}
 
 function show_concrete(g) {
     return function(conc) {
-	return "--# -path=.:present\n"
+	return "" // "--# -path=.:present\n"
             + "concrete "+g.basename+conc.langcode+" of "+g.basename+" = "
 	    +show_extends((g.extends || []).map(conc_extends(conc)))
             +show_opens(conc.opens)
