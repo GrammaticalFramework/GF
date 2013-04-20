@@ -99,11 +99,21 @@ copula : CTense -> Number -> UPerson -> Gender -> Str = \t,n,p,g ->
         
         } ;
 	
-   raha : Gender -> Number -> Str = \g,n -> 
-	   (regAdjective "rha").s ! n ! g ! Dir ! Posit ;
+   raha : Gender -> Number -> Str = \g,n ->
+           case <g,n> of {
+	     <Masc,Sg> => "rha";
+	     <Masc,Pl> => "rhE";
+	     <Fem,_> => "rhy"
+	     
+	     };
 
-  cka : Gender -> Number -> Str = \g,n -> 
-	  (regAdjective "cka").s ! n ! g ! Dir ! Posit ;
+  cka : Gender -> Number -> Str = \g,n ->
+            case <g,n> of {
+	     <Masc,Sg> => "cka";
+	     <Masc,Pl> => "ckE";
+	     <Fem,_> => "cky"
+	     
+	     };
 	  
   hw : UPerson -> Number -> Str = \pp,n ->    
 	 case <pp,n> of {
@@ -124,24 +134,4 @@ copula : CTense -> Number -> UPerson -> Gender -> Str = \t,n,p,g ->
 	 <Pl,Fem>	=> "hwy"
 	 };		 
 	 
-   -----------------------------------------------
-   -- Hindustani Adjectives
-   -----------------------------------------------
-   	 
-  Adjective = { s: Number => Gender => Case => Degree => Str };
- 
-  regAdjective : Str -> Adjective; 
-  regAdjective x =  case x of {
-	              acch + ("a"|"aN") => mkAdjective x  ("bht" ++ x)          ("sb sE" ++ x)          (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E")
-		                                      (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y")
-						      (acch +"E")  ("bht" ++ acch + "E") ("sb sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E") (acch + "E") ("bht" ++ acch + "E") ("sb sE" ++ acch + "E")
-		                                      (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y") (acch + "y") ("bht" ++ acch + "y") ("sb sE" ++ acch + "y");
-									
-                        _                 => mkAdjective  x  ("bht" ++ x)  	("sb sE" ++ x)  x ("bht" ++ x) ("sb sE" ++ x) x ("bht" ++ x) ("sb sE" ++ x)
-							  x  ("bht" ++ x) 	("sb sE" ++ x) 	x ("bht" ++ x) ("sb sE" ++ x) x ("bht" ++ x) ("sb sE" ++ x)
-							  x  ("bht" ++ x) 	("sb sE" ++ x)  x ("bht" ++ x) ("sb sE" ++ x) x ("bht" ++ x) ("sb sE" ++ x)
-							  x  ("bht" ++ x) 	("sb sE" ++ x)  x ("bht" ++ x) ("sb sE" ++ x) x ("bht" ++ x) ("sb sE" ++ x)
-																 
-                            }; 
-	      
 }

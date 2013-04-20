@@ -99,11 +99,21 @@ copula : CTense -> Number -> UPerson -> Gender -> Str = \t,n,p,g ->
         
         } ;
 	
-   raha : Gender -> Number -> Str = \g,n -> 
-	   (regAdjective "رہا").s ! n ! g ! Dir ! Posit ;
+   raha : Gender -> Number -> Str = \g,n ->
+           case <g,n> of {
+	     <Masc,Sg> => "رہا";
+	     <Masc,Pl> => "رہے";
+	     <Fem,_> => "رہی"
+	     
+	     };
 
-  cka : Gender -> Number -> Str = \g,n -> 
-	  (regAdjective "چکا").s ! n ! g ! Dir ! Posit ;
+  cka : Gender -> Number -> Str = \g,n ->
+            case <g,n> of {
+	     <Masc,Sg> => "چکا";
+	     <Masc,Pl> => "چکے";
+	     <Fem,_> => "چکی"
+	     
+	     };
 	  
   hw : UPerson -> Number -> Str = \pp,n ->    
 	 case <pp,n> of {
@@ -124,24 +134,4 @@ copula : CTense -> Number -> UPerson -> Gender -> Str = \t,n,p,g ->
 	 <Pl,Fem>	=> "ہوی"
 	 };		 
 	 
-   -----------------------------------------------
-   -- Hindustani Adjectives
-   -----------------------------------------------
-   	 
-  Adjective = { s: Number => Gender => Case => Degree => Str };
- 
-  regAdjective : Str -> Adjective; 
-  regAdjective x =  case x of {
-	              acch + ("ا"|"اں") => mkAdjective x  ("بہت" ++ x)          ("سب سے" ++ x)          (acch + "ے") ("بہت" ++ acch + "ے") ("سب سے" ++ acch + "ے") (acch + "ے") ("بہت" ++ acch + "ے") ("سب سے" ++ acch + "ے")
-		                                      (acch + "ی") ("بہت" ++ acch + "ی") ("سب سے" ++ acch + "ی") (acch + "ی") ("بہت" ++ acch + "ی") ("سب سے" ++ acch + "ی") (acch + "ی") ("بہت" ++ acch + "ی") ("سب سے" ++ acch + "ی")
-						      (acch +"ے")  ("بہت" ++ acch + "ے") ("سب سے" ++ acch + "ے") (acch + "ے") ("بہت" ++ acch + "ے") ("سب سے" ++ acch + "ے") (acch + "ے") ("بہت" ++ acch + "ے") ("سب سے" ++ acch + "ے")
-		                                      (acch + "ی") ("بہت" ++ acch + "ی") ("سب سے" ++ acch + "ی") (acch + "ی") ("بہت" ++ acch + "ی") ("سب سے" ++ acch + "ی") (acch + "ی") ("بہت" ++ acch + "ی") ("سب سے" ++ acch + "ی");
-									
-                        _                 => mkAdjective  x  ("بہت" ++ x)  	("سب سے" ++ x)  x ("بہت" ++ x) ("سب سے" ++ x) x ("بہت" ++ x) ("سب سے" ++ x)
-							  x  ("بہت" ++ x) 	("سب سے" ++ x) 	x ("بہت" ++ x) ("سب سے" ++ x) x ("بہت" ++ x) ("سب سے" ++ x)
-							  x  ("بہت" ++ x) 	("سب سے" ++ x)  x ("بہت" ++ x) ("سب سے" ++ x) x ("بہت" ++ x) ("سب سے" ++ x)
-							  x  ("بہت" ++ x) 	("سب سے" ++ x)  x ("بہت" ++ x) ("سب سے" ++ x) x ("بہت" ++ x) ("سب سے" ++ x)
-																 
-                            }; 
-	      
 }

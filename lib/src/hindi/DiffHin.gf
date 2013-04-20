@@ -98,11 +98,21 @@ oper
        } ;
   
 
-  raha : Gender -> Number -> Str = \g,n -> 
-	   (regAdjective "रहा").s ! n ! g ! Dir ! Posit ;
+  raha : Gender -> Number -> Str = \g,n ->
+           case <g,n> of {
+	     <Masc,Sg> => "रहा";
+	     <Masc,Pl> => "रहे";
+	     <Fem,_> => "रही"
+	     
+	     };
 
-  cka : Gender -> Number -> Str = \g,n -> 
-	  (regAdjective "चुका").s ! n ! g ! Dir ! Posit ;
+  cka : Gender -> Number -> Str = \g,n ->
+            case <g,n> of {
+	     <Masc,Sg> => "चुका";
+	     <Masc,Pl> => "चुके";
+	     <Fem,_> => "चुकी"
+	     
+	     };
 	  
   hw : UPerson -> Number -> Str = \pp,n ->    
 	 case <pp,n> of {
@@ -121,23 +131,4 @@ oper
 	 <Pl,Masc>	=> "हुए" ;
 	 <Pl,Fem>	=> "हुई"
 	 };	 
-   -----------------------------------------------
-   -- Hindustani Adjectives
-   -----------------------------------------------
-   	 
- 
-  regAdjective : Str -> Adjective; 
-  regAdjective x =  case x of {
-	              acch + ("ा"|"न") => mkAdjective x  ("बहुत" ++ x)          ("सब से" ++ x)          (acch + "े") ("बहुत" ++ acch + "े") ("सब से" ++ acch + "े") (acch + "े") ("बहुत" ++ acch + "े") ("सब से" ++ acch + "े")
-		                                      (acch + "ी") ("बहुत" ++ acch + "ी") ("सब से" ++ acch + "ी") (acch + "ी") ("बहुत" ++ acch + "ी") ("सब से" ++ acch + "ी") (acch + "ी") ("बहुत" ++ acch + "ी") ("सब से" ++ acch + "ी")
-						      (acch +"े")  ("बहुत" ++ acch + "े") ("सब से" ++ acch + "े") (acch + "े") ("बहुत" ++ acch + "े") ("सब से" ++ acch + "े") (acch + "े") ("बहुत" ++ acch + "े") ("सब से" ++ acch + "े")
-		                                      (acch + "ी") ("बहुत" ++ acch + "ी") ("सब से" ++ acch + "ी") (acch + "ी") ("बहुत" ++ acch + "ी") ("सब से" ++ acch + "ी") (acch + "ी") ("बहुत" ++ acch + "ी") ("सब से" ++ acch + "ी");
-									
-                        _                 => mkAdjective  x  ("बहुत" ++ x)  	("सब से" ++ x)  x ("बहुत" ++ x) ("सब से" ++ x) x ("बहुत" ++ x) ("सब से" ++ x)
-							  x  ("बहुत" ++ x) 	("सब से" ++ x) 	x ("बहुत" ++ x) ("सब से" ++ x) x ("बहुत" ++ x) ("सब से" ++ x)
-							  x  ("बहुत" ++ x) 	("सब से" ++ x)  x ("बहुत" ++ x) ("सब से" ++ x) x ("बहुत" ++ x) ("सब से" ++ x)
-							  x  ("बहुत" ++ x) 	("सब से" ++ x)  x ("बहुत" ++ x) ("सब से" ++ x) x ("बहुत" ++ x) ("सब से" ++ x)
-																 
-                            }; 												 
-                  					 
 }

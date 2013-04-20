@@ -98,11 +98,21 @@ oper
        } ;
   
 
-  raha : Gender -> Number -> Str = \g,n -> 
-	   (regAdjective "raha:").s ! n ! g ! Dir ! Posit ;
+  raha : Gender -> Number -> Str = \g,n ->
+           case <g,n> of {
+	     <Masc,Sg> => "raha:";
+	     <Masc,Pl> => "rahe:";
+	     <Fem,_> => "rahi:"
+	     
+	     };
 
-  cka : Gender -> Number -> Str = \g,n -> 
-	  (regAdjective "cuka:").s ! n ! g ! Dir ! Posit ;
+  cka : Gender -> Number -> Str = \g,n ->
+            case <g,n> of {
+	     <Masc,Sg> => "cuka:";
+	     <Masc,Pl> => "cuke:";
+	     <Fem,_> => "cuki:"
+	     
+	     };
 	  
   hw : UPerson -> Number -> Str = \pp,n ->    
 	 case <pp,n> of {
@@ -121,23 +131,4 @@ oper
 	 <Pl,Masc>	=> "huE:" ;
 	 <Pl,Fem>	=> "huI:"
 	 };	 
-   -----------------------------------------------
-   -- Hindustani Adjectives
-   -----------------------------------------------
-   	 
- 
-  regAdjective : Str -> Adjective; 
-  regAdjective x =  case x of {
-	              acch + ("a:"|"an") => mkAdjective x  ("bahut" ++ x)          ("sab se:" ++ x)          (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:") (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:")
-		                                      (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:") (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:") (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:")
-						      (acch +"e:")  ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:") (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:") (acch + "e:") ("bahut" ++ acch + "e:") ("sab se:" ++ acch + "e:")
-		                                      (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:") (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:") (acch + "i:") ("bahut" ++ acch + "i:") ("sab se:" ++ acch + "i:");
-									
-                        _                 => mkAdjective  x  ("bahut" ++ x)  	("sab se:" ++ x)  x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x)
-							  x  ("bahut" ++ x) 	("sab se:" ++ x) 	x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x)
-							  x  ("bahut" ++ x) 	("sab se:" ++ x)  x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x)
-							  x  ("bahut" ++ x) 	("sab se:" ++ x)  x ("bahut" ++ x) ("sab se:" ++ x) x ("bahut" ++ x) ("sab se:" ++ x)
-																 
-                            }; 												 
-                  					 
 }
