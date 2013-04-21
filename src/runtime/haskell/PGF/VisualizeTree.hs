@@ -117,7 +117,7 @@ graphvizDependencyTree format debug mlab ms pgf lang t = render $
     "malt_input" -> vcat (map (hcat . intersperse (char '\t') . take 6) wnodes)
     _            -> text "digraph {" $$
                     space $$
-                    nest 2 (text "rankdir=RL ;" $$
+                    nest 2 (text "rankdir=LR ;" $$
                             text "node [shape = plaintext] ;" $$
                             vcat nodes $$
                             vcat links) $$
@@ -162,7 +162,7 @@ graphvizDependencyTree format debug mlab ms pgf lang t = render $
     mkNode ((_,p,_),i,w) = 
       tag p <+> brackets (text "label = " <> doubleQuotes (int i <> char '.' <+> text w)) <+> semi
 
-    mkLink (x,(lbl,y)) = tag x <+> text "->" <+> tag y  <+> text "[label = " <> doubleQuotes (text lbl) <> text "] ;"
+    mkLink (x,(lbl,y)) = tag y <+> text "->" <+> tag x  <+> text "[label = " <> doubleQuotes (text lbl) <> text "] ;"
 
     labels = maybe Map.empty id mlab
 
