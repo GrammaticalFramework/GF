@@ -77,7 +77,7 @@ lincat
   N3 = { s : Number => Case => Str ; g : Gender } ** { p1, p2 : ResLav.Prep ; isPre1, isPre2 : Bool } ;
   PN = { s : Case => Str ; g : Gender ; n : Number } ;
 
-  A = { s : AForm => Str } ;
+  A = { s : ResLav.AForm => Str } ;
   A2 = A ** { p : ResLav.Prep } ;
 
   V, VA = Verb ;
