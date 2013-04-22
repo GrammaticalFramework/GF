@@ -168,7 +168,7 @@ int main(int argc, char* argv[]) {
 
 		clock_t start = clock();
 
-		GuEnum* result =
+		result =
 			pgf_parse(from_concr, cat, lexer, ppool);
 		if (result == NULL) {
 			PgfToken tok =
