@@ -261,7 +261,7 @@ genCncFuns gr am cm seqs0 cdefs fid_cnt cnccats =
     mkFId (_,cat) fid0 =
       case Map.lookup (i2i cat) cnccats of
         Just (C.CncCat s e _) -> s+fid0
-        Nothing               -> error "GrammarToPGF.mkFId failed"
+        Nothing               -> error ("GrammarToPGF.mkFId: missing category "++showIdent cat)
 
     mkCtxt lindefs (_,cat) =
       case Map.lookup (i2i cat) cnccats of
