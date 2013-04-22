@@ -39,20 +39,20 @@ oper
   -- Indeclinable adjective: theoretically, any #vowel ending
   mkAdjective_Indecl : Str -> Adj = \lemma -> {
     s = table{
-	  AAdj Superl Indef _ _ _ => NON_EXISTENT;
-	  AAdj _ _ _ _ _ => lemma ;
-	  AAdv d => mkAdjective_Adverb lemma ! d-- TODO - notestēt šādu keisu
+      AAdj Superl Indef _ _ _ => NON_EXISTENT ;
+      AAdj _ _ _ _ _ => lemma ;
+      AAdv d => mkAdjective_Adverb lemma ! d-- TODO - notestēt šādu keisu
     }
   } ;
 
   -- Qualitative adjective: -s, -š
   mkAdjective_Qual : Str -> Adj = \lemma -> {
     s = table {
-	  AAdj Posit d g n c => mkAdjective_Pos lemma d ! g ! n ! c;
-	  AAdj Compar d g n c => mkAdjective_Comp lemma d ! g ! n ! c;
-	  AAdj Superl Def g n c => mkAdjective_Sup lemma ! g ! n ! c;
-	  AAdj Superl Indef _ _ _ => NON_EXISTENT;
-	  AAdv d => mkAdjective_Adverb lemma ! d
+      AAdj Posit d g n c => mkAdjective_Pos lemma d ! g ! n ! c ;
+      AAdj Compar d g n c => mkAdjective_Comp lemma d ! g ! n ! c ;
+      AAdj Superl Def g n c => mkAdjective_Sup lemma ! g ! n ! c ;
+      AAdj Superl Indef _ _ _ => NON_EXISTENT ;
+      AAdv d => mkAdjective_Adverb lemma ! d
     }
   } ;
 

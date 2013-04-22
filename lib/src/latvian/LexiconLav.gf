@@ -3,6 +3,7 @@
 concrete LexiconLav of Lexicon = CatLav ** open
   ParadigmsLav,
   StructuralLav,
+  ExtraLav,
   ResLav,
   Prelude
   in {
@@ -13,8 +14,7 @@ flags
 
 lin
   airplane_N = mkN "lidmašīna" ;
-  answer_V2S = mkV2S (mkV "atbildēt" third_conjugation) dat_Prep that_Subj ;
-  -- toP = 'answer to [Person]' = 'atbildēt [kam?]'
+  answer_V2S = mkV2S (mkV "atbildēt" third_conjugation) dat_Prep that_Subj ; -- toP = 'answer to [Person]' = 'atbildēt [kam?]'
   apartment_N = mkN "dzīvoklis" ;
   apple_N = mkN "ābols" ;
   art_N = mkN "māksla" ;
@@ -39,8 +39,7 @@ lin
   bread_N = mkN "maize" ;
   break_V2 = mkV2 (mkV "lauzt" "laužu" "lauzu") acc_Prep ;
   broad_A = mkA "plats" ;
-  brother_N2 = mkN2 (mkN "brālis") gen_Prep True;
-  -- Ģenitīvs nav kā piederība, bet kā relācija: "Jāņa/tēva brālis", bet ne "mans brālis" (?)
+  brother_N2 = mkN2 (mkN "brālis") gen_Prep True; -- Ģenitīvs nav kā piederība, bet kā relācija: "Jāņa/tēva brālis", bet ne "mans brālis" (?)
   brown_A = mkA "brūns" ;
   butter_N = mkN "sviests" ;
   buy_V2 = mkV2 (mkV "pirkt" "pērku" "pirku") acc_Prep ;
@@ -64,13 +63,13 @@ lin
   computer_N = mkN "dators" ;
   country_N = mkN "valsts" ;
   cousin_N = mkN "brālēns" ;  -- FIXME: brālēns/māsīca angļiem ir vienāds...
-  cow_N = mkN "govs" ;
+  cow_N = mkN "govs" feminine ;
   die_V = mkV "nomirt" "nomirstu" "nomiru";
   dirty_A = mkA "netīrs" ;
   distance_N3 = mkN3 (mkN "attālums") from_Prep to_Prep ; -- no / līdz
   doctor_N = mkN "ārsts" ;
   dog_N = mkN "suns" ;
-  door_N = mkN "durvis" ;
+  door_N = mkN "durvis" feminine ;
   drink_V2 = mkV2 (mkV "dzert" "dzeru" "dzēru") acc_Prep;
   --easy_A2V = mkA2V (regA "easy") forP ; -- FIXME: nav tādas konstrukcijas latviešu val.
   eat_V2 = mkV2 (mkV "ēst" "ēdu" "ēdu") acc_Prep ;
@@ -80,7 +79,7 @@ lin
   father_N2 = mkN2 (mkN "tēvs") gen_Prep True ;
   fear_VS = mkVS (mkV "baidīties" third_conjugation) that_Subj ;
   find_V2 = mkV2 (mkV "atrast" "atrodi" "atradu") acc_Prep ;
-  fish_N = mkN "zivs" ;
+  fish_N = mkN "zivs" feminine ;
   floor_N = mkN "grīda" ;
   forget_V2 = mkV2 (mkV "aizmirst" "aizmirstu" "aizmirsu") acc_Prep ;
   fridge_N = mkN "ledusskapis" ;
@@ -252,30 +251,30 @@ lin
   back_N = mkN "mugura" ;
   bark_N = mkN "miza" ;
   belly_N = mkN "vēders" ;
-  blood_N = mkN "asinis" Fem ;
+  blood_N = mkN "asinis" feminine ;
   bone_N = mkN "kauls" ;
-  breast_N = mkN "krūts" Fem ;
+  breast_N = mkN "krūts" feminine ;
   cloud_N = mkN "mākonis" ;
   day_N = mkN "diena" ;
   dust_N = mkN "putekļi" ;
-  ear_N = mkN "auss" ;
+  ear_N = mkN "auss" feminine ;
   earth_N = mkN "zeme" ;
   egg_N = mkN "ola" ;
-  eye_N = mkN "acs" ;
+  eye_N = mkN "acs" feminine ;
   fat_N = mkN "tauki" ;
   feather_N = mkN "spalva" ;
   fingernail_N = mkN "nags" ;
-  fire_N = mkN "uguns" ;
+  fire_N = mkN "uguns" feminine ;
   flower_N = mkN "puķe" ;
   fog_N = mkN "migla" ;
   foot_N = mkN "pēda" ;
   forest_N = mkN "mežs" ;
   grass_N = mkN "zāle" ;
-  guts_N = mkN "zarnas" ; -- FIXME: no singular
+  guts_N = mkN "zarnas" ;
   hair_N = mkN "mati" ;
   hand_N = mkN "roka" ;
   head_N = mkN "galva" ;
-  heart_N = mkN "sirds" ;
+  heart_N = mkN "sirds" feminine ;
   horn_N = mkN "rags" ;
   husband_N = mkN "vīrs" ;  --TODO: kāpēc nav parametrs tāpat kā tēvam?
   ice_N = mkN "ledus" ;
@@ -283,11 +282,11 @@ lin
   leaf_N = mkN "lapa" ;
   leg_N = mkN "kāja" ;
   liver_N = mkN "aknas" ;
-  louse_N = mkN "uts" ;
+  louse_N = mkN "uts" feminine ;
   mouth_N = mkN "mute" ;
   name_N = mkN "vārds" ;
   neck_N = mkN "kakls" ;
-  night_N = mkN "nakts" ;
+  night_N = mkN "nakts" feminine ;
   nose_N = mkN "deguns" ;
   person_N = mkN "persona" ;
   rain_N = mkN "lietus" ;
@@ -373,7 +372,6 @@ lin
   today_Adv = mkAdv "šodien" ;
   uncertain_A = mkA "nepārliecināts" ;
 
-oper
-  par_Prep = mkPrep "par" Acc Dat ;
+--oper par_Prep = mkPrep "par" Acc Dat ;
 
 }

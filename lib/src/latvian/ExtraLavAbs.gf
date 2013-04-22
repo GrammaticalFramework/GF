@@ -1,8 +1,17 @@
 --# -path=.:../abstract:../common:../prelude
 
-abstract ExtraLavAbs = Extra ** {
+abstract ExtraLavAbs = Extra ** open ResLav, Prelude in {
   fun
-    to8uz_Prep : Prep ;  -- "to" in the sense of "uz" (direction)
+    aiz_Prep : Prep ;
+    ap_Prep : Prep ;
+    gar_Prep : Prep ;
+    kopsh_Prep : Prep ;
+    liidz_Prep : Prep ;
+    pa_Prep : Prep ;
+    par_Prep : Prep ;
+    paar_Prep : Prep ;
+    pie_Prep : Prep ;
+    pret_Prep : Prep ;
 
     i8fem_Pron : Pron ;
     we8fem_Pron : Pron ;
@@ -11,6 +20,8 @@ abstract ExtraLavAbs = Extra ** {
     youPl8fem_Pron : Pron ;
     they8fem_Pron : Pron ;
     it8fem_Pron : Pron ;
+
+    --empty_Det : Number -> Definite -> Bool -> Det ;
 
     have_V3 : V3 ;
 }

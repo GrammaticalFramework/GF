@@ -18,6 +18,9 @@ oper
   singular : Number = Sg ;
   plural   : Number = Pl ;
 
+  masculine : Gender = Masc ;
+  feminine  : Gender = Fem ;
+
   second_conjugation : VerbConj = C2 ;
   third_conjugation  : VerbConj = C3 ;
 
@@ -27,6 +30,9 @@ oper
   accusative : Case = Acc ;
   locative   : Case = Loc ;
 
+  active_voice  : PartType = IsUsi ;
+  passive_voice : PartType = TsTa ;
+  
   mkN = overload {
     mkN : (lemma : Str) -> N = \l -> lin N (mkNoun l) ;
 

@@ -15,7 +15,6 @@ flags
 lin
   language_title_Utt = ss "latviešu valoda" ;
 
-  -- TODO: kā ar loģikā lietotajiem 'visi', 'katrs' ?
   every_Det = {
     s = (\\g,c => (mkPronoun_Gend "ikviens").s ! g ! Sg ! c) ;
     n = Sg ;
@@ -112,24 +111,23 @@ lin
   above_Prep = mkPrep "virs" Gen Dat ;
   after_Prep = mkPrep "pēc" Gen Dat ;
   before_Prep = mkPrep "pirms" Gen Dat ;
-  behind_Prep = mkPrep "aiz" Gen Dat ;
+  behind_Prep = mkPrep "aiz" Gen Dat ;  -- taču "aiz" nav viennozīmīgi "behind"
   between_Prep = mkPrep "starp" Acc Dat ;
   for_Prep = mkPrep "priekš" Gen Dat ;
   from_Prep = mkPrep "no" Gen Dat ;
   on_Prep = mkPrep "uz" Gen Dat ;
   with_Prep = mkPrep "ar" Acc Dat ;  -- ar sievu, ar sievām
   in_Prep = mkPrep Loc ;
-  to_Prep = mkPrep "līdz" Dat Dat ;  -- See also: ExtraLav.to8uz_Prep
+  to_Prep = mkPrep "uz" Acc Dat ;  -- See also: ExtraLav.liidz_Prep, pie_Prep
   possess_Prep = mkPrep Gen ;  -- FIXME: vajadzētu vārdu secību otrādi - pirms paskaidrojamā vārda likt
   under_Prep = mkPrep "zem" Gen Dat ;
-  with_Prep = mkPrep "ar" Acc Dat ;
   without_Prep = mkPrep "bez" Gen Dat ;
-  by8agent_Prep = nom_Prep ; -- TODO: should get rid of this Prep
+  by8agent_Prep = nom_Prep ; -- TODO: should get rid of this Prep; taču tas parādās Eng2Abs kokos... -- FIXME: nom_Prep vs. dat_Prep/accPrep
   by8means_Prep = mkPrep "ar" Acc Dat ;
-  during_Prep = mkPrep "laikā" Gen Gen ;  -- FIXME: laikam postfix 'X laikā' jāliek
+  during_Prep = mkPrep Loc ;
   in8front_Prep = mkPrep "priekšā" Dat Dat ;
-  --part_Prep = mkPrep Gen ; --FIXME - vajadzētu vārdu secību otrādi - pirms paskaidrojamā vārda likt
-  through_Prep = mkPrep "cauri" Dat Dat ;
+  part_Prep = mkPrep Gen ; --FIXME - vajadzētu vārdu secību otrādi - pirms paskaidrojamā vārda likt
+  through_Prep = mkPrep "caur" Acc Dat ;
   except_Prep = mkPrep "izņemot" Acc Acc ;
 
   very_AdA = mkAdA "ļoti" ;
@@ -277,17 +275,18 @@ oper
   lai_Subj = ss "lai" ;
   kameer_Subj = ss "kamēr" ;
 
-  emptyPl_Det = { -- TODO: pašlaik netiek izmantots, jāpārnes uz ExtraLav(?) kā dsk. alternatīva a_Art, the_Art, no_Quant, every_Det 
+  {- Netiek izmantoti; to vietā sk. ExtraLav
+  emptyPl_Det = {
     s : Gender => Case => Str = \\_,_ => [] ;
     n = Pl ;
     d = Indef
   } ;
-
   emptySg_Det = { -- TODO: analoģiski kā emptyPl_Det
     s : Gender => Case => Str = \\_,_ => [] ;
     n = Sg ;
     d = Indef
   } ;
+  -}
 
   no_Utt = ss "nē" ;
 

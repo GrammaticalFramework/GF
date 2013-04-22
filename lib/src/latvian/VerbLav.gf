@@ -170,12 +170,17 @@ lin
     objNeg = False
   } ;
 
+  -- TODO: vai VP nevajag papildlauku isPass?
   PassV2 v2 = {
     v = v2 ;
     compl = \\_ => [] ;
     agr = Topic v2.topic ;
     objNeg = False -- FIXME: inherit from the object
   } ;
+
+  -- TODO: šajā brīdī ir jāignorē prep (by8agent_Prep); tas jāaizstāj ar v2.topic
+  -- Tad varēs dzēst ārā komentāru pie StructuralLav.by8agent_Prep
+  VPSlashPrep vp prep = vp ** {p = prep} ;
 
   AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
 

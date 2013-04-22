@@ -132,7 +132,7 @@ oper
           Dat => stem + "am" ;
           Acc => stem + "u" ;
           Loc => stem + "ā" ;
-		  Voc => stem
+          Voc => stem
         } ;
         Pl => table {
           Nom => stem + "i" ;
@@ -140,7 +140,7 @@ oper
           Dat => stem + "iem" ;
           Acc => stem + "us" ;
           Loc => stem + "os" ;
-		  Voc => stem + "i"
+          Voc => stem + "i"
         }
       } ;
       g = Masc
@@ -190,7 +190,7 @@ oper
           Dat => stem + "um" ;
           Acc => stem + "u" ;
           Loc => stem + "ū" ;
-		  Voc => stem + "u"
+          Voc => stem + "u"
         } ;
         Pl => table {
           Nom => stem + "i" ;
@@ -198,7 +198,7 @@ oper
           Dat => stem + "iem" ;
           Acc => stem + "us" ;
           Loc => stem + "os" ;
-		  Voc => stem + "i"
+          Voc => stem + "i"
         }
       } ;
       g = Masc
@@ -217,7 +217,7 @@ oper
           Dat => case gend of {Fem => stem + "ai" ; Masc => stem + "am"} ;
           Acc => stem + "u" ;
           Loc => stem + "ā" ;
-		  Vod => stem + "a"
+          Voc => stem + "a"
         } ;
         Pl => table {
           Nom => stem + "as" ;
@@ -225,7 +225,7 @@ oper
           Dat => stem + "ām" ;
           Acc => stem + "as" ;
           Loc => stem + "ās" ;
-		  Voc => stem + "as"
+          Voc => stem + "as"
         }
       } ;
       g = gend
@@ -244,7 +244,7 @@ oper
           Dat => case gend of {Fem => stem + "ei" ; Masc => stem + "em"} ;
           Acc => stem + "i" ;
           Loc => stem + "ē" ;
-		  Voc => stem + "e"
+          Voc => stem + "e"
         } ;
         Pl => table {
           Nom => stem + "es" ;
@@ -252,7 +252,7 @@ oper
           Dat => stem + "ēm" ;
           Acc => stem + "es" ;
           Loc => stem + "ēs" ;
-		  Voc => stem + "es"
+          Voc => stem + "es"
         }
       } ;
       g = gend
@@ -273,7 +273,7 @@ oper
             Dat => case gend of {Fem => stem + "ij" ; Masc => stem + "im"} ;
             Acc => stem + "i" ;
             Loc => stem + "ī" ;
-			Voc => stem + "s"
+            Voc => stem + "s"
           }
         } ;
         Pl => table {
@@ -282,7 +282,7 @@ oper
           Dat => stem + "īm" ;
           Acc => stem + "is" ;
           Loc => stem + "īs" ;
-		  Voc => stem + "is"
+          Voc => stem + "is"
         }
       } ;
       g = gend
@@ -300,7 +300,7 @@ oper
           Dat => NON_EXISTENT ;
           Acc => stem + "šanos" ;
           Loc => NON_EXISTENT ;
-		  Voc => stem + "šanās"
+          Voc => stem + "šanās"
         } ;
         Pl => table {
           Nom => stem + "šanās" ;
@@ -308,7 +308,7 @@ oper
           Dat => NON_EXISTENT ;
           Acc => stem + "šanās" ;
           Loc => NON_EXISTENT ;
-		  Voc => stem + "šanās"
+          Voc => stem + "šanās"
         }
       } ;
       g = Fem
