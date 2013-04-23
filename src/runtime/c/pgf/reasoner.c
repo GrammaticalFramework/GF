@@ -82,7 +82,7 @@ pgf_print_expr_state(PgfExprState* st,
 }
 
 static void
-pgf_print_expr_state0(PgfExprState* st, PgfAbstr* abstract,
+pgf_print_expr_state0(PgfExprState* st,
                       GuWriter* wtr, GuExn* err, GuPool* tmp_pool)
 {	
 	prob_t prob = st->answers->outside_prob+st->ep.prob;
@@ -92,7 +92,7 @@ pgf_print_expr_state0(PgfExprState* st, PgfAbstr* abstract,
 
 	GuBuf* stack = gu_new_buf(int, tmp_pool);
 	if (n_args > 0)
-		gu_buf_push(stack, int, gu_seq_length(st->hypos) - st->arg_idx);
+		gu_buf_push(stack, int, n_args - st->arg_idx);
 
 	PgfExprState* cont =
 		gu_buf_get(st->answers->conts, PgfExprState*, 0);
@@ -249,7 +249,7 @@ pgf_reasoner_next(PgfReasoner* rs, GuPool* pool)
 			GuOut* out = gu_file_out(stderr, tmp_pool);
 			GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
 			GuExn* err = gu_exn(NULL, type, tmp_pool);
-			pgf_print_expr_state0(st, rs->abstract, wtr, err, tmp_pool);
+			pgf_print_expr_state0(st, wtr, err, tmp_pool);
 			gu_pool_free(tmp_pool);
 		}
 #endif
