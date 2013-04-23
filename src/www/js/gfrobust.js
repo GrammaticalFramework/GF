@@ -14,8 +14,10 @@ gfrobust.call=function(querystring,cont) {
 
 // Translate a sentence to the given target language
 gfrobust.translate=function(source,to,cont) {
-    var enc=encodeURIComponent
-    gfrobust.call("?sentence="+enc(source)+"&to="+gfrobust.grammar+to,cont)
+    var encsrc=encodeURIComponent(source)
+    if(encsrc.length<200) // match limit in runtime/c/utils/pgf-server.c
+	gfrobust.call("?sentence="+encsrc+"&to="+gfrobust.grammar+to,cont)
+    else cont("[GF robust parser: sentence too long]")
 }
 
 // Get the url of a parse tree image (SVG)
