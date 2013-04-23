@@ -10,8 +10,10 @@ function supports_html5_storage() {
   }
 }
 
+var fakedLocalStorage = [] // a shared substitute for persistent localStorage
+
 // An interface to localStorage to store JSON data under a unique prefix
-function appLocalStorage(appPrefix,fakeIt) {
+function appLocalStorage(appPrefix,privateStorage) {
 
     function methods(storage) {
 	return {
@@ -42,11 +44,13 @@ function appLocalStorage(appPrefix,fakeIt) {
 
     function get_html5_storage() {
 	try {
-	    return 'localStorage' in window && window['localStorage'] || []
+	    return 'localStorage' in window
+		   && window['localStorage']
+		   || fakedLocalStorage
 	} catch (e) {
-	    return []; // fake it
+	    return fakedLocalStorage; // fake it
 	}
     }
 
-    return methods(fakeIt || get_html5_storage())
+    return methods(privateStorage || get_html5_storage())
 }
