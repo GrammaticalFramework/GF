@@ -40,6 +40,9 @@ function Minibar(server,opts) {
     this.server=server;
     if(opts) for(var o in opts) this.options[o]=opts[o];
 
+    // LocalStorage
+    this.local=appLocalStorage("gf.minibar.")
+
     /* --- Syntax editor integration ---------------------------------------- */
     if(!this.options.abstract_action) this.integrate_syntax_editor()
 
@@ -159,8 +162,7 @@ Minibar.prototype.show_grammarlist=function(dir,grammar_names,dir_count) {
 	appendChildren(grammar_menu,map(opt,grammar_names));
 	function pick() {
 	    var grammar_url=grammar_menu.value
-	    if(window.localStorage)
-		localStorage["gf.minibar.last_grammar"]=grammar_url;
+	    local.put("last_grammar",grammar_url)
 	    t.select_grammar(grammar_url);
 	}
 	function pick_first_grammar() {
@@ -172,8 +174,8 @@ Minibar.prototype.show_grammarlist=function(dir,grammar_names,dir_count) {
 		insertFirst(t.menubar,text("Grammar: "));
 	    }
 	    var grammar0=t.options.initial_grammar
-	    if(!grammar0 && window.localStorage) {
-		var last_grammar=localStorage["gf.minibar.last_grammar"];
+	    if(!grammar0) {
+		var last_grammar=local.get("last_grammar");
 		if(last_grammar && elem(last_grammar,t.grammars))
 		    grammar0=last_grammar;
 	    }
