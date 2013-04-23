@@ -92,6 +92,7 @@ Minibar.prototype.integrate_syntax_editor=function() {
 	var languages=filter(not_all,minibar.translations.toLangs)
 	var editor_options = {
 	    target: editor_target,
+            show_grammar_menu: minibar.grammars.length>1,
 	    show_startcat_menu: minibar.input.options.startcat_menu,
 	    initial: { grammar: minibar.grammar_menu.value, // hmm
 		       startcat: minibar.input.startcat_menu.value, // hmm
