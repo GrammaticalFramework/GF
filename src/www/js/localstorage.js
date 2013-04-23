@@ -12,14 +12,18 @@ function supports_html5_storage() {
 
 var fakedLocalStorage = [] // a shared substitute for persistent localStorage
 
-// An interface to localStorage to store JSON data under a unique prefix
+// An interface to localStorage, to store JSON data under a unique prefix
 function appLocalStorage(appPrefix,privateStorage) {
+
+    function parse(s) {
+	try { return JSON.parse(s) } catch(e) { return null }
+    }
 
     function methods(storage) {
 	return {
 	    get: function (name,def) {
 		var id=appPrefix+name
-		return storage[id] ? JSON.parse(storage[id]) : def;
+		return storage[id] && parse(storage[id]) || def;
 	    },
 	    put: function (name,value) {
 		var id=appPrefix+name;
