@@ -218,12 +218,12 @@ doTranslateGroup pgf input mcat mfrom tos mlimit =
     [makeObj ["from".=langOnly (PGF.showLanguage from),
               "to".=langOnly (PGF.showLanguage to),
               "linearizations".=
-                 [toJSObject (("text", doText (doBind alt)) : disamb lg from ts)
+                 [toJSObject (("text", doText alt) : disamb lg from ts)
                     | (ts,alt) <- output, let lg = length output]
               ]
        | 
          (from,po,bs) <- parse' pgf input mcat mfrom,
-         (to,output)  <- groupResults [(t, linearize' pgf tos t) | t <- case po of {PGF.ParseOk ts -> maybe id take mlimit ts; _ -> []}]
+         (to,output)  <- groupResults [(t, linearizeAndBind pgf tos t) | t <- case po of {PGF.ParseOk ts -> maybe id take mlimit ts; _ -> []}]
           ]
   where
    groupResults = Map.toList . foldr more Map.empty . start . collect
@@ -237,21 +237,16 @@ doTranslateGroup pgf input mcat mfrom tos mlimit =
                    else (ts,y) : insertAlt t x xs2
      _ -> [([t],x)]
 
-   doBind = unwords . bind . words
    doText s = case s of
      c:cs | elem (last s) ".?!" -> toUpper c : init (init cs) ++ [last s]
      _ -> s
-   bind ws = case ws of
-         w : "&+" : u : ws2 -> bind ((w ++ u) : ws2)
-         "&+":ws2           -> bind ws2
-         w : ws2            -> w : bind ws2
-         _ -> ws
+
    langOnly = reverse . take 3 . reverse
 
    disamb lg from ts = 
      if lg < 2 
        then [] 
-       else [("tree", "-- " ++ groupDisambs [doText (doBind (disambLang from t)) | t <- ts])]
+       else [("tree", "-- " ++ groupDisambs [doText (disambLang from t) | t <- ts])]
 
    groupDisambs = unwords . intersperse "/"
 
@@ -292,12 +287,18 @@ doComplete pgf input mcat mfrom mlimit = showJSON
 doLinearize :: PGF -> PGF.Tree -> [PGF.Language] -> JSValue
 doLinearize pgf tree tos = showJSON
     [makeObj ["to".=to, "text".=text,"brackets".=bs]
-      | (to,text,bs) <- linearize' pgf tos tree]
+      | (to,text,bs) <- linearizeAndBind pgf tos tree]
 
 doLinearizes :: PGF -> PGF.Tree -> [PGF.Language] -> JSValue
 doLinearizes pgf tree tos = showJSON
-    [makeObj ["to".=to, "texts".=texts]
+    [makeObj ["to".=to, "texts".=map doBind texts]
        | (to,texts) <- linearizes' pgf tos tree]
+  where
+    linearizes' pgf tos tree =
+        [(to,lins to (transfer to tree)) | to <- langs]
+      where
+        langs = if null tos then PGF.languages pgf else tos
+        lins to = nub . concatMap (map snd) . PGF.tabularLinearizes pgf to
 
 doLinearizeTabular :: PGF -> PGF.Tree -> [PGF.Language] -> JSValue
 doLinearizeTabular pgf tree tos = showJSON
@@ -322,7 +323,7 @@ doGenerate pgf mcat mdepth mlimit tos =
     showJSON [makeObj ["tree".=PGF.showExpr [] tree,
                        "linearizations".=
                           [makeObj ["to".=to, "text".=text]
-                             | (to,text,bs) <- linearize' pgf tos tree]]
+                             | (to,text,bs) <- linearizeAndBind pgf tos tree]]
                 | tree <- limit trees]
   where
     trees = PGF.generateAllDepth pgf cat (Just depth)
@@ -567,25 +568,9 @@ complete' pgf from typ mlimit input =
                        Left  es -> (ps,w:ws)
                        Right ps -> loop ps ws
 
-linearize' :: PGF -> [PGF.Language] -> PGF.Tree -> [(PGF.Language,String,PGF.BracketedString)]
-linearize' pgf to tree =
-    [(to,s,bs) | to<-langs,
-                 let bs = PGF.bracketedLinearize pgf to (transfer to tree)
-                     s = unwords $ PGF.flattenBracketedString bs]
-  where
-    langs = if null to then PGF.languages pgf else to
-
 transfer lang = if "LaTeX" `isSuffixOf` show lang
                 then fold -- OpenMath LaTeX transfer
                 else id
-
--- | list all variants and their forms
-linearizes' :: PGF -> [PGF.Language] -> PGF.Tree -> [(PGF.Language,[String])]
-linearizes' pgf tos tree =
-    [(to,lins to (transfer to tree)) | to <- langs]
-  where
-    langs = if null tos then PGF.languages pgf else tos
-    lins to = nub . concatMap (map snd) . PGF.tabularLinearizes pgf to
 
 -- | tabulate all variants and their forms
 linearizeTabular
@@ -594,19 +579,24 @@ linearizeTabular pgf tos tree =
     [(to,lintab to (transfer to tree)) | to <- langs]
   where
     langs = if null tos then PGF.languages pgf else tos
-    lintab to t = [(p,nub [t|(p',t)<-vs,p'==p])|p<-ps]
+    lintab to t = [(p,map doBind (nub [t|(p',t)<-vs,p'==p]))|p<-ps]
       where
         ps = nub (map fst vs)
         vs = concat (PGF.tabularLinearizes pgf to t)
 
-linearizeAndBind pgf mto t =
-    [(la, binds s,bs) | (la,s,bs) <- linearize' pgf mto t]
+linearizeAndBind pgf mto tree =
+    [(to,s,bs) | to<-langs,
+                 let bs = PGF.bracketedLinearize pgf to (transfer to tree)
+                     s = unwords . bind $ PGF.flattenBracketedString bs]
   where
-    binds = unwords . bs . words
-    bs ws = case ws of
-      u:"&+":v:ws2 -> bs ((u ++ v):ws2)
-      u:ws2        -> u : bs ws2
-      _            -> []
+    langs = if null mto then PGF.languages pgf else mto
+
+doBind = unwords . bind . words
+bind ws = case ws of
+      w : "&+" : u : ws2 -> bind ((w ++ u) : ws2)
+      "&+":ws2           -> bind ws2
+      w : ws2            -> w : bind ws2
+      _ -> ws
 
 selectLanguage :: PGF -> Maybe (Accept Language) -> PGF.Language
 selectLanguage pgf macc = case acceptable of
