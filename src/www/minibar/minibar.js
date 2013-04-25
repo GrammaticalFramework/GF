@@ -201,13 +201,10 @@ Minibar.prototype.select_grammar=function(grammar_url) {
 
 Minibar.prototype.change_grammar=function(grammar_info) {
     var t=this;
-    with(t) {
-	//debug("show_languages ");
-	grammar=grammar_info;
-
-	input.change_grammar(grammar)
-	translations.change_grammar(grammar)
-    }
+    //debug("show_languages ");
+    t.grammar=grammar_info;
+    t.input.change_grammar(grammar_info)
+    t.translations.change_grammar(grammar_info)
 }
 
 Minibar.prototype.show_grammarinfo=function() {
@@ -281,7 +278,7 @@ Minibar.prototype.try_google=function() {
 }
 
 Minibar.prototype.open_help=function() {
-    with(this) open_popup(options.help_url,"help");
+    open_popup(this.options.help_url,"help");
 }
 
 Minibar.prototype.open_feedback=function() {
