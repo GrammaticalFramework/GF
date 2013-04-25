@@ -66,7 +66,7 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
     PossPron p = {
       s  = \\_,n,g => p.unstressed.poss ;
       sp = \\n,g => p.substposs ;
-      a = Strong
+      a = Weak
       } ;
 
     NumCard n = {s = n.s ! Utr ! Nom ; n = n.n ; isNum = True} ;
