@@ -29,6 +29,7 @@ are marked in the table
 | Fin   | Finnish      | +     | +    | ++    | +   | +    | +   | +    | -     | +    | *AR
 | Fre   | French       | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,RE
 | Ger   | German       | +     | +    | ++    | +   | +    | +   | +    | +     | +    | *AR,HH,EG
+| Gre   | Greek        | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *IP
 | Heb   | Hebrew       | +     | -    | -     | -   | -    | -   | -    | -     | -    | *DD
 | Hin   | Hindi        | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,*KP,MH,AR
 | Ina   | Interlingua  | +     | +    | ++    | +   | +    | -   | -    | -     | -    | JB
@@ -98,6 +99,7 @@ GP Gabriele Paganelli,
 IA Ingrid Andersson,
 IL Inari Listenmaa,
 IN Ilona Novak,
+IP Ioanna Papadopoulou,
 JB Jean-Philippe Bernardy,
 JC John J. Camilleri,
 JD Jherna Devi,

@@ -4,6 +4,8 @@ all: exx synopsis
 
 index:
 	txt2tags -thtml index.txt
+status:
+	txt2tags -thtml status.txt
 synopsis:
 	runghc MkSynopsis.hs
 
@@ -27,6 +29,7 @@ exx: exx-script
 	gf -retain -s ../alltenses/TryFin.gfo <api-examples.gfs >api-examples-Fin.txt
 	gf -retain -s ../alltenses/TryFre.gfo <api-examples.gfs >api-examples-Fre.txt
 	gf -retain -s ../alltenses/TryGer.gfo <api-examples.gfs >api-examples-Ger.txt
+	gf -retain -s ../alltenses/TryGre.gfo <api-examples.gfs >api-examples-Gre.txt
 	gf -retain -s ../alltenses/TryHin.gfo <api-examples.gfs >api-examples-Hin.txt
 	gf -retain -s ../alltenses/TryIta.gfo <api-examples.gfs >api-examples-Ita.txt
 	gf -retain -s ../alltenses/TryJpn.gfo <api-examples.gfs >api-examples-Jpn.txt
