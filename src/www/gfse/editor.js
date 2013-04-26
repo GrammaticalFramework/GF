@@ -1191,7 +1191,7 @@ function draw_opens(g,ci) {
 		setTimeout(function(){sheet.style.top="0px";},1000)
 	    }
 	    function cont1() { gfshell("so",cont2) }
-	    gfshell("i -retain present/"+m+".gfo",cont1)
+	    gfshell("i -retain alltenses/"+m+".gfo",cont1)
 	}
     }
     var first=true;
