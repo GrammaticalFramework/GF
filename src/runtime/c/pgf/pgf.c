@@ -221,7 +221,7 @@ pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool)
 	PgfToken tok = pgf_lexer_read_token(lexer, lex_err);
 	while (!gu_exn_is_raised(lex_err)) {
 		// feed the token to get a new parse state
-		state = pgf_parser_next_state(state, tok, pool);
+		state = pgf_parser_next_state(state, tok);
 		if (state == NULL) {
 			return NULL;
 		}
@@ -252,7 +252,7 @@ pgf_print_chunks(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool)
 	PgfToken tok = pgf_lexer_read_token(lexer, lex_err);
 	while (!gu_exn_is_raised(lex_err)) {
 		// feed the token to get a new parse state
-		state = pgf_parser_next_state(state, tok, pool);
+		state = pgf_parser_next_state(state, tok);
 		if (state == NULL) {
 			printf("\n");
 			return;

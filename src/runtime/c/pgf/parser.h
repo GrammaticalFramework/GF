@@ -50,8 +50,7 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx,
 
 /// Feed a token to the parser
 PgfParseState*
-pgf_parser_next_state(PgfParseState* prev, PgfToken tok,
-                      GuPool* pool);
+pgf_parser_next_state(PgfParseState* prev, PgfToken tok);
 /**<
  * @param parse The current parse state
  *
