@@ -816,6 +816,7 @@ pgf_read_fid(PgfReader* rdr, PgfConcr* concr)
         ccat->viterbi_prob = 0;
         ccat->fid = fid;
         ccat->conts = NULL;
+        ccat->answers = NULL;
 
         gu_map_put(concr->ccats, &fid, PgfCCat*, ccat);
 	}
@@ -985,6 +986,7 @@ pgf_read_cnccat(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr, PgfCId name)
             ccat->viterbi_prob = 0;
             ccat->fid = fid;
             ccat->conts = NULL;
+            ccat->answers = NULL;
 
             gu_map_put(concr->ccats, &fid, PgfCCat*, ccat);
         }

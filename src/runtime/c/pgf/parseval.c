@@ -28,7 +28,7 @@ pgf_metrics_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens toks)
 		PgfToken tok = gu_seq_get(toks, PgfToken, i);
 		
 		if (state->ps != NULL)
-			state->ps = pgf_parser_next_state(state->ps, tok, state->pool);
+			state->ps = pgf_parser_next_state(state->ps, tok);
 
 		state->pos++;
 	}
@@ -44,7 +44,7 @@ pgf_metrics_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
     case PGF_LITERAL_STR: {
         PgfLiteralStr* lstr = i.data;
         if (state->ps != NULL) {
-			state->ps = pgf_parser_next_state(state->ps, lstr->val, state->pool);
+			state->ps = pgf_parser_next_state(state->ps, lstr->val);
 		}
 		state->pos++;
 		break;
@@ -55,7 +55,7 @@ pgf_metrics_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
 			GuString tok =
 				gu_format_string(state->pool, "%d", lint->val);
 
-			state->ps = pgf_parser_next_state(state->ps, tok, state->pool);
+			state->ps = pgf_parser_next_state(state->ps, tok);
 		}
 		state->pos++;
 		break;
@@ -66,7 +66,7 @@ pgf_metrics_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
 			GuString tok =
 				gu_format_string(state->pool, "%f", lflt->val);
 
-			state->ps = pgf_parser_next_state(state->ps, tok, state->pool);
+			state->ps = pgf_parser_next_state(state->ps, tok);
 		}
 		state->pos++;
 		break;

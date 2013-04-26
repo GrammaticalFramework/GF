@@ -294,6 +294,7 @@ struct PgfCCat {
 	float viterbi_prob;
 	int fid;
 	PgfItemConts* conts;
+	struct PgfAnswers* answers;
 };
 
 #endif
