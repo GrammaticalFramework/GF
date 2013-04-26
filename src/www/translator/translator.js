@@ -1028,8 +1028,8 @@ function show_translation(o) {
 
 /* --- Auxiliary functions -------------------------------------------------- */
 
-function lang(code,name,code2) { return {code:code, name:name, code2:code2} }
 function lang1(namecode2) {
+    function lang(code,name,code2) {return {code:code, name:name, code2:code2}}
     var nc=namecode2.split(":");
     var name=nc[0]
     var ws=name.split("/");
@@ -1038,8 +1038,10 @@ function lang1(namecode2) {
 	                : lang(ws[0],ws[1],code2);
 }
 
+// Language names and ISO-639 codes (both 3-letter and 2-letter codes)
+// See http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 var languages = // [ISO-639-2 code "/"] language name ":" ISO 639-1 code
-    map(lang1,"Amharic:am Arabic:ar Bulgarian:bg Catalan:ca Chinese:zh Danish:da Dutch:nl English:en Finnish:fi French:fr German:de Hindi:hi Ina/Interlingua:ia Italian:it Jpn/Japanese:ja Latin:la Norwegian:nb Polish:pl Ron/Romanian:ro Russian:ru Spanish:es Swedish:sv Thai:th Turkish:tr Urdu:ur".split(" "));
+    map(lang1,"Amharic:am Arabic:ar Bulgarian:bg Catalan:ca Chinese:zh Danish:da Dutch:nl English:en Finnish:fi French:fr German:de Greek:el Hindi:hi Ina/Interlingua:ia Italian:it Jpn/Japanese:ja Latin:la Norwegian:nb Polish:pl Ron/Romanian:ro Russian:ru Spanish:es Swedish:sv Thai:th Turkish:tr Urdu:ur".split(" "));
 
 var langname={};
 var langcode2={}
