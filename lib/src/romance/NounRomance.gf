@@ -166,4 +166,8 @@ incomplete concrete NounRomance of Noun =
       g = g
       } ;
 
+    PossNP cn np = {
+      s = \\n => cn.s ! n ++ appCompl {s = [] ; c = genitive ; isDir = False} np ;
+      g = cn.g ;
+      } ;
 }
