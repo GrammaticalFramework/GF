@@ -68,7 +68,7 @@ and
 To get the GF source code, you also need //Darcs//, version 2 or later.  Darcs
 is a distributed version control system, see http://darcs.net/ for
 more information. There are precompiled packages for many platforms
-available at and source code if you want to compile it yourself. Darcs
+available and source code if you want to compile it yourself. Darcs
 is also written in Haskell and so you can use GHC to compile it.
 
 
@@ -238,7 +238,7 @@ main repo, use ``darcs push``.
 For more info about what you can do with darcs, see http://darcs.net/manual/
 
 
-== Compilation from source ==
+== Compilation from source with Cabal ==
 
 The build system of GF is based on //Cabal//, which is part of the
 Haskell Platform, so no extra steps are needed to install it. In the simplest
@@ -354,6 +354,26 @@ $ cabal clean
 %```
 %
 %to prepare archive with all source codes needed to compile GF.
+
+=== Known problems with Cabal ===
+
+Some versions of Cabal (at least version 1.16) seem to have a bug that can
+cause the following error:
+
+```
+Configuring gf-3.x...
+setup: Distribution/Simple/PackageIndex.hs:124:8-13: Assertion failed
+```
+
+The exact cause of this problem is unclear, but it seems to happen
+during the configure phase if GF is already installed, so a workaround
+is to remove the existing installation with
+
+```
+ghc-pkg unregister gf
+```
+
+You can check with ``ghc-pkg list gf`` that it is gone.
 
 == Compilation with make ==
 

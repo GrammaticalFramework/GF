@@ -2,6 +2,7 @@ Grammatical Framework Download and Installation
 
 
 %!style:../css/style.css
+%!postproc(html): </HEAD> <STYLE>body { color: #333; } li>code,p>code,pre { color: #730; }</STYLE></HEAD>
 %!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
 %!postproc(html): <TD><B> <TH>
 %!postproc(html): </B></TD> </TH>
@@ -19,10 +20,10 @@ What's new? See the [Release notes release-3.4.html].
 | Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | ``sudo rpm -i ...``
 | Ubuntu (32-bit) | [gf_3.4-1_i386.deb gf_3.4-1_i386.deb] | ``sudo dpkg -i gf_3.4-1_i386.deb``
 | Ubuntu (64-bit) | [gf_3.4-1_amd64.deb gf_3.4-1_amd64.deb] | ``sudo dpkg -i gf_3.4-1_amd64.deb``
-| Windows | [gf-3.4-bin-windows.zip gf-3.4-bin-windows.zip] |
-| ... | ... | ...
+| Windows | [gf-3.4-bin-windows.zip gf-3.4-bin-windows.zip] | 
+%| ... | ... | ...
 
-More binary packages might be added later.
+%More binary packages might be added later.
 
 ===Notes===
 
@@ -103,6 +104,19 @@ when compiled with GHC 7.0.)
 page states that you need Xcode 3.2 or later, but in fact it appears you need
 Xcode 3.2.3 or later. If you have Xcode 3.2.2, you can get an error from the
 linker: ``ld: unknown option: -no_pie``.
+
+=== Known problems ===
+
+There seems to be a bug in some versions of Cabal that can cause
+
+```
+  Distribution/Simple/PackageIndex.hs:124:8-13: Assertion failed
+```
+
+ if GF is
+already installed. If you encounter this, you can use ``ghc-pkg unregister gf``
+to remove the installed version of GF and ``ghc-pkg list gf`` to verify that
+it is gone.
 
 ==Installing from the latest developer code==
 
