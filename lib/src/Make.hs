@@ -79,7 +79,7 @@ langsLang = langs `except` langsIncomplete
 langsPresent = langsLang `except` ["Chi","Gre","Heb","Jpn","Mlt","Nep","Pes","Snd","Tha","Thb"]
 
 -- languages for which Lang can be compiled but which are incomplete
-langsIncomplete = ["Amh","Ara","Heb","Lat","Mlt","Tur","Thb"]
+langsIncomplete = ["Amh","Ara","Heb","Lat","Tur","Thb"]
 
 -- languages for which to compile Try
 langsAPI = langsLang `except` langsIncomplete
