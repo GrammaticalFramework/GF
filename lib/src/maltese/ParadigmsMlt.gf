@@ -24,16 +24,14 @@ resource ParadigmsMlt = open
     {- Parameters --------------------------------------------------------- -}
 
     -- Abstraction over gender names
-    Gender : Type ;
-    masculine : Gender ; --%
-    feminine : Gender ; --%
 
-    Gender = ResMlt.Gender ;
     masculine = Masc ;
-    feminine = Fem ;
+    feminine  = Fem ;
+    -- human     = Masc ;
+    -- nonhuman  = Neutr ;
 
-    singular : Number = Sg ;
-    plural : Number = Pl ;
+    singular = Sg ;
+    plural   = Pl ;
 
     form1 = FormI ;
     form2 = FormII ;
@@ -213,7 +211,7 @@ resource ParadigmsMlt = open
     -- Proper noun
     mkPN : Str -> Gender -> Number -> ProperNoun = \name,g,n -> {
       s = name ;
-      a = mkAgr g n P3 ;
+      a = mkAgr n P3 g ;
       } ;
 
     mkN2 = overload {
@@ -225,7 +223,10 @@ resource ParadigmsMlt = open
     } ;
 
     prepN2 : N -> Prep -> N2 ;
-    prepN2 = \n,p -> lin N2 (n ** {c2 = p.s}) ;
+    prepN2 = \n,p -> lin N2 (n ** {c2 = p}) ;
+
+    mkN3 : Noun -> Prep -> Prep -> N3 ;
+    mkN3 = \n,p,q -> lin N3 (n ** {c2 = p ; c3 = q}) ;
 
     -- Mark a noun as taking possessive enclitic pronouns
     possN : N -> N ;
@@ -380,22 +381,24 @@ resource ParadigmsMlt = open
         impSg, impPl ->
         let
           tbl : (VForm => Str) = table {
-            VPerf (AgP1 Sg) => perfP1Sg ;
-            VPerf (AgP2 Sg) => perfP2Sg ;
+            VPerf (AgP1 Sg)     => perfP1Sg ;
+            VPerf (AgP2 Sg)     => perfP2Sg ;
             VPerf (AgP3Sg Masc) => perfP3SgMasc ;
-            VPerf (AgP3Sg Fem) => perfP3SgFem ;
-            VPerf (AgP1 Pl) => perfP1Pl ;
-            VPerf (AgP2 Pl) => perfP2Pl ;
-            VPerf (AgP3Pl) => perfP3Pl ;
-            VImpf (AgP1 Sg) => impfP1Sg ;
-            VImpf (AgP2 Sg) => impfP2Sg ;
+            VPerf (AgP3Sg Fem)  => perfP3SgFem ;
+            VPerf (AgP1 Pl)     => perfP1Pl ;
+            VPerf (AgP2 Pl)     => perfP2Pl ;
+            VPerf (AgP3Pl)      => perfP3Pl ;
+            VImpf (AgP1 Sg)     => impfP1Sg ;
+            VImpf (AgP2 Sg)     => impfP2Sg ;
             VImpf (AgP3Sg Masc) => impfP3SgMasc ;
-            VImpf (AgP3Sg Fem) => impfP3SgFem ;
-            VImpf (AgP1 Pl) => impfP1Pl ;
-            VImpf (AgP2 Pl) => impfP2Pl ;
-            VImpf (AgP3Pl) => impfP3Pl ;
-            VImp (Pl) => impSg ;
-            VImp (Sg) => impPl
+            VImpf (AgP3Sg Fem)  => impfP3SgFem ;
+            VImpf (AgP1 Pl)     => impfP1Pl ;
+            VImpf (AgP2 Pl)     => impfP2Pl ;
+            VImpf (AgP3Pl)      => impfP3Pl ;
+            VImp (Pl)           => impSg ;
+            VImp (Sg)           => impPl ;
+            VActivePart  _      => "" ; --- TODO
+            VPassivePart _      => ""   --- TODO
             } ;
           info : VerbInfo = mkVerbInfo class form root patt impSg ;
         in lin V  {
@@ -410,13 +413,13 @@ resource ParadigmsMlt = open
       mkV_II : Str -> Root -> V = \s,r -> derivedV_II s r ;
       mkV_II : Str -> Str -> Root -> V = \s,i,r -> derivedV_II s i r ;
       } ;
-    mkV_III : Str -> Root -> V = \s,r -> derivedV_III s r ;
-    mkV_V : Str -> Root -> V = \s,r -> derivedV_V s r ;
-    mkV_VI : Str -> Root -> V = \s,r -> derivedV_VI s r ;
-    mkV_VII : Str -> Str -> Root -> V = \s,t,r -> derivedV_VII s t r ;
-    mkV_VIII : Str -> Root -> V = \s,r -> derivedV_VIII s r ;
-    mkV_IX : Str -> Root -> V = \s,r -> derivedV_IX s r ;
-    mkV_X : Str -> Root -> V = \s,r -> derivedV_X s r ;
+    mkV_III    : Str -> Root -> V = \s,r -> derivedV_III s r ;
+    mkV_V      : Str -> Root -> V = \s,r -> derivedV_V s r ;
+    mkV_VI     : Str -> Root -> V = \s,r -> derivedV_VI s r ;
+    mkV_VII    : Str -> Str -> Root -> V = \s,t,r -> derivedV_VII s t r ;
+    mkV_VIII   : Str -> Root -> V = \s,r -> derivedV_VIII s r ;
+    mkV_IX     : Str -> Root -> V = \s,r -> derivedV_IX s r ;
+    mkV_X      : Str -> Root -> V = \s,r -> derivedV_X s r ;
     derivedV_I : Str -> Root -> V = mkV ;
 
     -- Make a Form II verb. Accepts both Tri & Quad roots, then delegates.
@@ -499,15 +502,17 @@ resource ParadigmsMlt = open
         info : VerbInfo = mkVerbInfo vII.i.class FormV vII.i.root vII.i.patt mammaV ;
       in lin V {
         s = table {
-          VPerf agr => pfx_T (vII.s ! VPerf agr) ;
-          VImpf (AgP1 Sg) => pfx "ni" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP1 Sg)))) ;
-          VImpf (AgP2 Sg) => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP2 Sg)))) ;
+          VPerf agr           => pfx_T (vII.s ! VPerf agr) ;
+          VImpf (AgP1 Sg)     => pfx "ni" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP1 Sg)))) ;
+          VImpf (AgP2 Sg)     => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP2 Sg)))) ;
           VImpf (AgP3Sg Masc) => pfx "ji" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP3Sg Masc)))) ;
           VImpf (AgP3Sg Fem)  => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP3Sg Fem)))) ;
-          VImpf (AgP1 Pl) => pfx "ni" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP1 Pl)))) ;
-          VImpf (AgP2 Pl) => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP2 Pl)))) ;
-          VImpf (AgP3Pl) => pfx "ji" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP3Pl)))) ;
-          VImp num => pfx_T (vII.s ! VImp num)
+          VImpf (AgP1 Pl)     => pfx "ni" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP1 Pl)))) ;
+          VImpf (AgP2 Pl)     => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP2 Pl)))) ;
+          VImpf (AgP3Pl)      => pfx "ji" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP3Pl)))) ;
+          VImp num            => pfx_T (vII.s ! VImp num) ;
+          VActivePart  _      => "" ; --- TODO
+          VPassivePart _      => ""   --- TODO
           } ;
         i = info ;
       } ;
@@ -522,15 +527,17 @@ resource ParadigmsMlt = open
         info : VerbInfo = updateVerbInfo vIII.i FormVI mammaVI ;
       in lin V {
         s = table {
-          VPerf agr => pfx_T (vIII.s ! VPerf agr) ;
-          VImpf (AgP1 Sg) => pfx "ni" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP1 Sg)))) ;
-          VImpf (AgP2 Sg) => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP2 Sg)))) ;
+          VPerf agr           => pfx_T (vIII.s ! VPerf agr) ;
+          VImpf (AgP1 Sg)     => pfx "ni" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP1 Sg)))) ;
+          VImpf (AgP2 Sg)     => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP2 Sg)))) ;
           VImpf (AgP3Sg Masc) => pfx "ji" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP3Sg Masc)))) ;
           VImpf (AgP3Sg Fem)  => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP3Sg Fem)))) ;
-          VImpf (AgP1 Pl) => pfx "ni" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP1 Pl)))) ;
-          VImpf (AgP2 Pl) => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP2 Pl)))) ;
-          VImpf (AgP3Pl) => pfx "ji" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP3Pl)))) ;
-          VImp num => pfx_T (vIII.s ! VImp num)
+          VImpf (AgP1 Pl)     => pfx "ni" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP1 Pl)))) ;
+          VImpf (AgP2 Pl)     => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP2 Pl)))) ;
+          VImpf (AgP3Pl)      => pfx "ji" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP3Pl)))) ;
+          VImp num            => pfx_T (vIII.s ! VImp num) ;
+          VActivePart  _      => "" ; --- TODO
+          VPassivePart _      => ""   --- TODO
           } ;
         i = info ;
       } ;
@@ -573,8 +580,8 @@ resource ParadigmsMlt = open
     -- e.g.: derivedV_IX "sfar"
     derivedV_IX : Str -> Root -> V = \mammaIX, root ->
       case mammaIX of {
-        -- c1@#Consonant + c2@#Consonant + v1@("ie"|"a") + c3@#Consonant => 
-        _  + v1@("ie"|"a"|"â") + _ => 
+        -- c1@#Consonant + c2@#Consonant + v1@("ie"|"a") + c3@#Consonant =>
+        _  + v1@("ie"|"a"|"â") + _ =>
           let
             patt : Pattern = mkPattern v1 ;
             class : VClass = classifyRoot root ;
@@ -626,7 +633,9 @@ resource ParadigmsMlt = open
         tbl : (VForm => Str) = table {
           VPerf agr => ( conjStrongPerf root patt ) ! agr ;
           VImpf agr => ( conjStrongImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
-          VImp n =>    imp ! n
+          VImp n    => imp ! n ;
+          VActivePart  _ => "" ; --- TODO
+          VPassivePart _ => ""   --- TODO
           } ;
         info : VerbInfo = mkVerbInfo (Strong Regular) (FormI) root patt (imp ! Sg) ;
       in lin V {
@@ -666,7 +675,9 @@ resource ParadigmsMlt = open
         tbl : (VForm => Str) = table {
           VPerf agr => ( conjLiquidMedialPerf root patt ) ! agr ;
           VImpf agr => ( conjLiquidMedialImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
-          VImp n =>    imp ! n
+          VImp n    => imp ! n ;
+          VActivePart  _ => "" ; --- TODO
+          VPassivePart _ => ""   --- TODO
           } ;
         info : VerbInfo = mkVerbInfo (Strong LiquidMedial) (FormI) root patt (imp ! Sg) ;
       in lin V {
@@ -683,7 +694,7 @@ resource ParadigmsMlt = open
       geminatedV : Root -> Pattern -> V = \root,patt ->
         let imp = conjGeminatedImp root patt
         in geminatedVWorst root patt imp ;
-        
+
       -- Params: root, pattern, imperative P2Sg
       geminatedV : Root -> Pattern -> Str -> V = \root,patt,imp_sg ->
         let
@@ -701,7 +712,9 @@ resource ParadigmsMlt = open
         tbl : (VForm => Str) = table {
           VPerf agr => ( conjGeminatedPerf root patt ) ! agr ;
           VImpf agr => ( conjGeminatedImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
-          VImp n =>    imp ! n
+          VImp n    => imp ! n ;
+          VActivePart  _ => "" ; --- TODO
+          VPassivePart _ => ""   --- TODO
           } ;
         info : VerbInfo = mkVerbInfo (Strong Geminated) (FormI) root patt (imp ! Sg) ;
       in lin V {
@@ -736,7 +749,9 @@ resource ParadigmsMlt = open
         tbl : (VForm => Str) = table {
           VPerf agr => ( conjAssimilativePerf root patt ) ! agr ;
           VImpf agr => ( conjAssimilativeImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
-          VImp n =>    imp ! n
+          VImp n    => imp ! n ;
+          VActivePart  _ => "" ; --- TODO
+          VPassivePart _ => ""   --- TODO
           } ;
         patt2 : Pattern = case (imp!Sg) of {
           "ie"+_ => mkPattern "i" patt.V2 ; -- (WAQAF) IEQAF > TIQAFLI
@@ -775,7 +790,9 @@ resource ParadigmsMlt = open
         tbl : (VForm => Str) = table {
           VPerf agr => ( conjHollowPerf root patt ) ! agr ;
           VImpf agr => ( conjHollowImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
-          VImp n =>    imp ! n
+          VImp n    => imp ! n ;
+          VActivePart  _ => "" ; --- TODO
+          VPassivePart _ => ""   --- TODO
           } ;
         patt2 : Pattern = case patt.V1 of {
           "ie" => mkPattern "i" patt.V2 ; -- (ŻIED) ŻID > ŻIDLI
@@ -818,7 +835,9 @@ resource ParadigmsMlt = open
         tbl : (VForm => Str) = table {
           VPerf agr => ( conjLackingPerf root patt ) ! agr ;
           VImpf agr => ( conjLackingImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
-          VImp n =>    imp ! n
+          VImp n    => imp ! n ;
+          VActivePart  _ => "" ; --- TODO
+          VPassivePart _ => ""   --- TODO
           } ;
         info : VerbInfo = mkVerbInfo (Weak Lacking) (FormI) root patt (imp ! Sg) ;
       in lin V {
@@ -853,7 +872,9 @@ resource ParadigmsMlt = open
         tbl : (VForm => Str) = table {
           VPerf agr => ( conjDefectivePerf root patt ) ! agr ;
           VImpf agr => ( conjDefectiveImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
-          VImp n =>    imp ! n
+          VImp n    => imp ! n ;
+          VActivePart  _ => "" ; --- TODO
+          VPassivePart _ => ""   --- TODO
           } ;
         info : VerbInfo = mkVerbInfo (Weak Defective) (FormI) root patt (imp ! Sg) ;
       in lin V {
@@ -888,7 +909,9 @@ resource ParadigmsMlt = open
         tbl : (VForm => Str) = table {
           VPerf agr => ( conjQuadPerf root patt ) ! agr ;
           VImpf agr => ( conjQuadImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
-          VImp n =>    imp ! n
+          VImp n    => imp ! n ;
+          VActivePart  _ => "" ; --- TODO
+          VPassivePart _ => ""   --- TODO
           } ;
         info : VerbInfo = mkVerbInfo (Quad QStrong) (FormI) root patt (imp ! Sg) ;
       in lin V {
@@ -926,7 +949,9 @@ resource ParadigmsMlt = open
         tbl : (VForm => Str) = table {
           VPerf agr => ( conjQuadWeakPerf root patt (imp ! Sg) ) ! agr ;
           VImpf agr => ( conjQuadWeakImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
-          VImp n =>    imp ! n
+          VImp n    => imp ! n ;
+          VActivePart  _ => "" ; --- TODO
+          VPassivePart _ => ""   --- TODO
           } ;
         info : VerbInfo = mkVerbInfo (Quad QWeak) (FormI) root patt (imp ! Sg) ;
       in lin V {
@@ -949,7 +974,9 @@ resource ParadigmsMlt = open
         tbl : (VForm => Str) = table {
           VPerf agr => ( conjLoanPerf mamma ) ! agr ;
           VImpf agr => ( conjLoanImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
-          VImp n =>    imp ! n
+          VImp n    => imp ! n ;
+          VActivePart  _ => "" ; --- TODO
+          VPassivePart _ => ""   --- TODO
           } ;
         info : VerbInfo = mkVerbInfo (Loan) (FormI) (imp ! Sg) ;
       in lin V {
@@ -963,13 +990,13 @@ resource ParadigmsMlt = open
     mkVS v = lin VS v ;
 
     prepV2 : V -> Prep -> V2 ;
-    prepV2 v p = lin V2 ( v ** { prep = p } ) ;
+    prepV2 v p = lin V2 ( v ** { c2 = p } ) ;
 
     dirV2 : V -> V2 ;
     dirV2 v = prepV2 v noPrep ;
 
     prepPrepV3 : V -> Prep -> Prep -> V3 ;
-    prepPrepV3 v p t = lin V3 (v ** { prep1 = p ; prep2 = t }) ;
+    prepPrepV3 v p t = lin V3 (v ** { c2 = p ; c3 = t }) ;
 
     dirV3 : V -> Prep -> V3 ;
     dirV3 v p = prepPrepV3 v noPrep p ;
@@ -995,7 +1022,7 @@ resource ParadigmsMlt = open
       } ;
 
     mkV2V : V -> Prep -> Prep -> V2V ;  -- e.g. want (noPrep NP) (to VP)
-    mkV2V v p t = lin V2V (v ** { prep1 = p ; prep2 = t }) ;
+    mkV2V v p t = lin V2V (v ** { c2 = p ; c3 = t }) ;
 
     {- Conjunction -------------------------------------------------------- -}
 
@@ -1099,15 +1126,18 @@ resource ParadigmsMlt = open
       } ;
 
     prepA2 : A -> Prep -> A2 ;
-    prepA2 a p = lin A2 (a ** {c2 = p.s}) ;
+    prepA2 a p = lin A2 (a ** {c2 = p}) ;
+
+    dirA2 : A -> A2 ;
+    dirA2 a = prepA2 a noPrep ;
 
     mkA2 : overload {
       mkA2 : A -> Prep -> A2 ;
       mkA2 : A -> Str -> A2 ;
       } ;
     mkA2 = overload {
-      mkA2 : A -> Prep -> A2   = prepA2 ;
-      mkA2 : A -> Str -> A2    = \a,p -> prepA2 a (mkPrep p) ;
+      mkA2 : A -> Prep -> A2 = prepA2 ;
+      mkA2 : A -> Str -> A2  = \a,p -> prepA2 a (mkPrep p) ;
       } ;
 
     AS, A2S, AV : Type = A ;
@@ -1120,10 +1150,10 @@ resource ParadigmsMlt = open
 
     mkAdv : Str -> Adv ; -- post-verbal adverb, e.g. ILLUM
     mkAdV : Str -> AdV ; -- preverbal adverb, e.g. DEJJEM
-    
+
     mkAdA : Str -> AdA ; -- adverb modifying adjective, e.g. PJUTTOST
     mkAdN : Str -> AdN ; -- adverb modifying numeral, e.g. MADWAR
-    
+
     mkAdv x = lin Adv (ss x) ;
     mkAdV x = lin AdV (ss x) ;
     mkAdA x = lin AdA (ss x) ;
@@ -1142,7 +1172,7 @@ resource ParadigmsMlt = open
       isDemo = isdemo ;
       isDefn = False ;
       } ;
-        
+
     mkOrd : Str -> Ord = \x -> lin Ord { s = \\c => x };
 
 

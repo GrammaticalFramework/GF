@@ -28,7 +28,7 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
         NumX Pl   => det' ++ coll ; -- BAQAR (coll) / ħafna SNIEN (pdet)
         Num0     => det' ++ sing ; -- L-EBDA BAQRA
         Num1     => det' ++ sing ; -- BAQRA
-        Num2     => if_then_Str n.hasDual 
+        Num2     => if_then_Str n.hasDual
           dual -- BAQARTEJN
           (det' ++ plur) -- ŻEWĠ IRĠIEL
           ;
@@ -39,18 +39,23 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
 
   lin
     -- Det -> CN -> NP
-    DetCN det cn = {
+    DetCN det cn =
+      let
+        -- To stop complaining about lock fields
+        det = lin Det det ;
+        cn  = lin CN cn ;
+      in {
       s = table {
-        Nom => case <det.isPron, cn.takesPron> of {
+        NPCPrep => cn.s ! numform2nounnum det.n ;
+        _       => case <det.isPron, cn.takesPron> of {
           <True,True>  => glue (cn.s ! numform2nounnum det.n) det.clitic ;
           <True,_>     => artDef ++ cn.s ! numform2nounnum det.n ++ det.s ! cn.g ;
           _            => chooseNounNumForm det cn
-          } ;
-        CPrep => cn.s ! numform2nounnum det.n
+          }
         } ;
       a = case (numform2nounnum det.n) of {
-	Singulative => mkAgr cn.g Sg P3 ; --- collective?
-	_           => mkAgr cn.g Pl P3
+	Singulative => mkAgr Sg P3 cn.g ; --- collective?
+	_           => mkAgr Pl P3 cn.g
       } ;
       isPron = False ;
       isDefn = det.isDefn ;
@@ -74,7 +79,7 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
     -- Quant -> Num -> Ord -> Det
     --- Almost an exact copy of DetQuant, consider factoring together
     DetQuantOrd quant num ord = {
-      s = \\gen => 
+      s = \\gen =>
         let gennum = case num.n of { NumX Sg => GSg gen ; _ => GPl }
         in case quant.isDemo of {
           True  => quant.s ! gennum ++ artDef ++ num.s ! NumAdj ++ ord.s ! NumAdj ;
@@ -85,6 +90,18 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       hasNum = True ;
       isPron = quant.isPron ;
       isDefn = quant.isDefn ;
+      } ;
+
+    -- Det -> NP
+    DetNP det = {
+      -- s = case det.hasNum of {
+      --   True => \\_ => det.s ! Masc ;
+      --   _    => \\c => det.s ! Masc
+      --   } ;
+      s = \\c => det.s ! Masc ;
+      a = agrP3 (numform2num det.n) Masc ;
+      isPron = False ;
+      isDefn = True ;
       } ;
 
     -- Quant
@@ -114,8 +131,9 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
     -- Pron -> NP
     UsePron p = {
       s = table {
-        Nom => p.s ! Personal ;
-        CPrep => p.s ! Suffixed Acc
+        NPNom   => p.s ! Personal ;
+        NPAcc   => p.s ! Personal ;
+        NPCPrep => p.s ! Suffixed Acc
         } ;
       a = p.a ;
       isPron = True ;
@@ -131,13 +149,33 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       isDefn = True ;
       } ;
 
+    -- Predet -> NP -> NP
+    PredetNP pred np = np ** {
+      s = \\c => pred.s ++ np.s ! c ;
+      } ;
+
+    -- NP -> V2 -> NP
+    PPartNP np v2 = np ** {
+      s = \\c => np.s ! c ++ v2.s ! VImpf (toVAgr np.a) ; --- TODO: VPresPart
+      } ;
+
+    -- NP -> RS -> NP
+    RelNP np rs = np ** {
+      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ;
+      } ;
+
+    -- NP -> Adv -> NP
+    AdvNP np adv = np ** {
+      s = \\c => np.s ! c ++ adv.s ;
+      } ;
+
     -- Num
     NumSg = {s = \\c => []; n = NumX Sg ; hasCard = False} ;
     NumPl = {s = \\c => []; n = NumX Pl ; hasCard = False} ;
 
     -- Card -> Num
     NumCard n = n ** {hasCard = True} ;
- 
+
     -- Digits -> Card
     NumDigits d = {s = d.s ; n = d.n} ;
 
@@ -150,17 +188,102 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
     -- Numeral -> Ord
     OrdNumeral numeral = {s = numeral.s ! NOrd} ;
 
+    -- AdN -> Card -> Card
+    AdNum adn card = card ** {
+      s = \\c => adn.s ++ card.s ! c ;
+      } ;
+
+    -- A -> Ord
+    OrdSuperl a = {
+      s = \\c => case a.hasComp of {
+        True => a.s ! ASuperl ;
+        False => "l-iktar" ++ a.s ! APosit (GSg Masc) --- should agree
+        }
+      } ;
+
+    -- CN -> NP
+    MassNP cn = {
+      s = \\c => cn.s ! Collective ;
+      a = agrP3 Sg cn.g ;
+      isPron = False ;
+      isDefn = True ;
+      } ;
+
     -- N -> CN
     UseN n = n ;
 
     -- N2 -> CN
-    UseN2 n = n ;
+    UseN2 n2 = n2 ; -- just ignore the c2
 
--- Card
--- CN
--- Det
--- NP
--- Num
--- Ord
+    -- N3 -> N2
+    Use2N3 n3 = n3 ** { c2 = n3.c2 } ;
+
+    -- N3 -> N2
+    Use3N3 n3 = n3 ** { c2 = n3.c3 } ;
+
+    -- N2 -> NP -> CN
+    ComplN2 n2 np = {
+        s = \\num => n2.s ! num ++ prepNP n2.c2 np ;
+        g = n2.g ;
+        hasColl = False ;
+        hasDual = False ;
+        takesPron = False ;
+      } ;
+
+    -- N3 -> NP -> N2
+    ComplN3 n3 np = {
+        s = \\num => n3.s ! num ++ prepNP n3.c3 np ;
+        g = n3.g ;
+        hasColl = False ;
+        hasDual = False ;
+        takesPron = False ;
+        c2 = n3.c3
+      } ;
+
+    -- AP -> CN -> CN
+    AdjCN ap cn = cn ** {
+      s = \\num => preOrPost ap.isPre (ap.s ! mkGenNum num cn.g) (cn.s ! num) ;
+      } ;
+
+    -- CN -> RS -> CN
+    RelCN cn rs = cn ** {
+      s = \\num => cn.s ! num ++ rs.s ! mkGenNum num cn.g ;
+      } ;
+
+    -- CN -> Adv -> CN
+    AdvCN cn adv = cn ** {
+      s = \\num => cn.s ! num ++ adv.s
+      } ;
+
+    -- CN -> SC -> CN
+    SentCN cn sc = cn ** {
+      s = \\num => cn.s ! num ++ sc.s
+      } ;
+
+    -- CN -> NP -> CN
+    ApposCN cn np = cn ** {
+      s = \\num => cn.s ! num ++ np.s ! NPNom
+      } ;
+    PossNP cn np = cn ** {
+      s = \\num => cn.s ! num ++ prepNP (mkPrep "ta'") np
+      } ;
+    PartNP cn np = cn ** {
+      s = \\num => cn.s ! num ++ prepNP (mkPrep "ta'") np
+      } ;
+
+    -- Det -> NP -> NP
+    CountNP det np = {
+      s = \\c => det.s ! np.a.g ++ np.s ! c ;
+      a = agrP3 (numform2num det.n) np.a.g ;
+      isPron = False ;
+      isDefn = np.isDefn ;
+      } ;
+
+  oper
+    -- Copied from ParadigmsMlt (didn't want to change import structure)
+    mkPrep : Str -> Prep = \fuq -> lin Prep {
+      s = \\defn => fuq ;
+      takesDet = False
+      } ;
 
 }

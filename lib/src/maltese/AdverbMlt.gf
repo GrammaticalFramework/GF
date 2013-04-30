@@ -6,16 +6,42 @@
 
 concrete AdverbMlt of Adverb = CatMlt ** open ResMlt, Prelude in {
 
--- AdN
--- Adv
-
   lin
-    -- Prep -> NP -> Adv
-    PrepNP prep np = {
-      s = case <np.isDefn,prep.takesDet> of {
-        <True,True>  => prep.s ! Definite ++ np.s ! CPrep ; -- FIT-TRIQ
-        <True,False> => prep.s ! Definite ++ np.s ! Nom ;   -- FUQ IT-TRIQ
-        <False,_>    => prep.s ! Indefinite ++ np.s ! Nom   -- FI TRIQ
-        }
+
+    -- A -> Adv ;                 -- warmly
+    PositAdvAdj a = {
+      s = "b'mod" ++ a.s ! APosit (GSg Masc)
       } ;
+
+    -- CAdv -> A -> NP -> Adv ; -- more warmly than John
+    ComparAdvAdj cadv a np = {
+      s = cadv.s ++ a.s ! APosit (GSg Masc) ++ cadv.p ++ np.s ! npNom
+      } ;
+
+    -- CAdv -> A -> S  -> Adv ; -- more warmly than he runs
+    ComparAdvAdjS cadv a s = {
+      s = cadv.s ++ a.s ! APosit (GSg Masc) ++ cadv.p ++ s.s
+      } ;
+
+    -- Prep -> NP -> Adv ;        -- in the house
+    PrepNP prep np = {
+      s = prepNP prep np
+      };
+
+    -- AdA -> Adv -> Adv ;             -- very quickly
+    AdAdv = cc2 ;
+
+    -- A -> AdA ;                 -- extremely
+    PositAdAAdj a = {
+      s = a.s ! APosit (GSg Masc) ++ "ħafna" ;
+      } ;
+
+    -- Subj -> S -> Adv ;              -- when she sleeps
+    SubjS = cc2 ;
+
+    -- CAdv -> AdN ;                  -- less (than five)
+    AdnCAdv cadv = {
+      s = cadv.s ++ cadv.p
+      } ;
+
 }
