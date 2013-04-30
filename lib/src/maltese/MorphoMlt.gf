@@ -29,7 +29,7 @@ resource MorphoMlt = ResMlt ** open Prelude in {
   oper
     -- [AZ]
     mkPron = overload {
-      
+
       -- jiena, inti, huwa
       mkPron : (_,_,_,_ : Str) -> Number -> Person -> Gender -> Pronoun =
         \jien, _i, _ni, _li, num, pers, gen -> {
@@ -40,7 +40,7 @@ resource MorphoMlt = ResMlt ** open Prelude in {
             Suffixed Dat => _li ;          -- rajtli
             Suffixed Gen => _i             -- qalbi, idejja
             } ;
-          a = mkAgr gen num pers ;
+          a = mkAgr num pers gen ;
         } ;
 
       -- hija, aħna, intom, huma
@@ -53,9 +53,9 @@ resource MorphoMlt = ResMlt ** open Prelude in {
             Suffixed Dat => "l"+_ha ;      -- rajtilha
             Suffixed Gen => _ha            -- qalbha
             } ;
-          a = mkAgr gen num pers ;
+          a = mkAgr num pers gen ;
         } ;
-      
+
       } ;
 
   {- Verb ----------------------------------------------------------------- -}
@@ -584,7 +584,7 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         waqqf : Str = case i.class of {
           Weak Hollow => i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C3 ; -- QAJM
           Weak Lacking => i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C2 ; -- NEĦĦ
-          _ => sfx (i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C2) i.root.C3 
+          _ => sfx (i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C2) i.root.C3
           } ;
         waqqfu : Str = waqqf + "u" ;
         perf : VAgr => Str = table {
@@ -618,7 +618,9 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       in table {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
-        VImp num  => imp ! num
+        VImp num  => imp ! num ;
+        VActivePart  _ => "" ; --- TODO
+        VPassivePart _ => ""   --- TODO
       } ;
 
     conjFormII_quad : VerbInfo -> (VForm => Str) = \i ->
@@ -703,7 +705,9 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       in table {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
-        VImp num  => imp ! num
+        VImp num  => imp ! num ;
+        VActivePart  _ => "" ; --- TODO
+        VPassivePart _ => ""   --- TODO
       } ;
 
     {- ~~~ Form III verbs ~~~ -}
@@ -743,7 +747,9 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       in table {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
-        VImp num  => imp ! num
+        VImp num  => imp ! num ;
+        VActivePart  _ => "" ; --- TODO
+        VPassivePart _ => ""   --- TODO
       } ;
 
     {- ~~~ Form VII and VIII verbs ~~~ -}
@@ -812,7 +818,9 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       in table {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
-        VImp num  => imp ! num
+        VImp num  => imp ! num ;
+        VActivePart  _ => "" ; --- TODO
+        VPassivePart _ => ""   --- TODO
       } ;
 
     {- ~~~ Form IX verbs ~~~ -}
@@ -846,7 +854,9 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       in table {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
-        VImp num  => imp ! num
+        VImp num  => imp ! num ;
+        VActivePart  _ => "" ; --- TODO
+        VPassivePart _ => ""   --- TODO
       } ;
 
     {- ~~~ Form X verbs ~~~ -}
@@ -938,7 +948,9 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       in table {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
-        VImp num  => imp ! num
+        VImp num  => imp ! num ;
+        VActivePart  _ => "" ; --- TODO
+        VPassivePart _ => ""   --- TODO
       } ;
 
 }

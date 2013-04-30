@@ -15,40 +15,39 @@ concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
 -- Tensed/Untensed
 
     S  = {s : Str} ;
-    -- QS = {s : QForm => Str} ;
-    -- RS = {s : Agr => Str ; c : NPCase} ; -- c for it clefts
-    -- SSlash = {s : Str ; c2 : Str} ;
+    QS = {s : QForm => Str} ;
+    RS = {s : Agr => Str} ;
+    SSlash = {s : Str ; c2 : Compl} ; -- not sure if we need c2
 
 -- Sentence
 
-    Cl = {s : ResMlt.Tense => Anteriority => Polarity => Str} ;
-    -- ClSlash = {
-    --   s : ResMlt.Tense => Anteriority => Polarity => Order => Str ;
-    --   c2 : Str
-    --   } ;
-    -- Imp = {s : Polarity => ImpForm => Str} ;
+    Cl = Clause ;
+    ClSlash = Clause ** {c2 : Compl} ; -- not sure if we need c2
+    Imp = {s : Polarity => Number => Str} ;
 
 -- Question
 
-    -- QCl = {s : ResMlt.Tense => Anteriority => Polarity => QForm => Str} ;
-    -- IP = {s : NPCase => Str ; n : Number} ;
-    -- IComp = {s : Str} ;    
-    -- IDet = {s : Str ; n : Number} ;
-    -- IQuant = {s : Number => Str} ;
+    QCl    = QClause ;
+    IP     = {s : Str ; n : Number} ;
+    IComp  = {s : Str} ;
+    IDet   = {s : Str ; n : Number} ;
+    IQuant = {s : Str} ;
 
 -- Relative
 
+    RCl = RClause ;
+    RP  = {s : Str} ;
     -- RCl = {
-    --   s : ResMlt.Tense => Anteriority => Polarity => Agr => Str ; 
+    --   s : ResMlt.Tense => Anteriority => Polarity => Agr => Str ;
     --   c : NPCase
     --   } ;
     -- RP = {s : RCase => Str ; a : RAgr} ;
 
 -- Verb
 
-    VP = ResMlt.VP ;
-    VPSlash = ResMlt.VP ;
-    -- Comp = {s : Agr => Str} ;
+    VP = VerbPhrase ;
+    VPSlash = SlashVerbPhrase ;
+    Comp = {s : Agr => Str} ;
 
 -- Adjective
 
@@ -61,7 +60,7 @@ concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
     Pron = Pronoun ;
 
     Det = Determiner ;
-    -- Predet = {s : Str} ;
+    Predet = {s : Str} ;
     Quant = Quantifier ;
 
     -- [AZ]
@@ -103,23 +102,22 @@ concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
 -- Structural
 
     Conj = {s1,s2 : Str} ;
---     Subj = {s : Str} ;
-    Prep = {
-      s : Definiteness => Str ;
-      takesDet : Bool
-      } ;
+    Subj = {s : Str} ;
+    Prep = Preposition ;
 
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ;
-    V2, V2A, V2Q, V2S = Verb ** {prep : Prep} ;
-    -- VV = {s : VVForm => Str ; typ : VVType} ;
-    V3, V2V = Verb ** {prep1,prep2 : Prep} ; -- ** {typ : VVType} ;
+    V2, V2A, V2Q, V2S = Verb ** {c2 : Compl} ;
+    VV = Verb ;
+    V3, V2V = Verb ** {c2, c3 : Compl} ; -- ** {typ : VVType} ;
 
-    A = Adjective ;
-    A2 = Adjective ;
+    A  = Adjective ;
+    A2 = Adjective ** {c2 : Compl} ;
 
-    N, N2, N3 = Noun ;
+    N  = Noun ;
+    N2 = Noun ** {c2 : Compl} ;
+    N3 = Noun ** {c2, c3 : Compl} ;
     PN = ProperNoun ;
 
 }
