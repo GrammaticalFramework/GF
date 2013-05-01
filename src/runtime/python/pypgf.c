@@ -432,62 +432,19 @@ Expr_getattro(ExprObject *self, PyObject *attr_name) {
 	return PyObject_GenericGetAttr((PyObject*)self, attr_name);
 }
 
-typedef struct {
+typedef struct IterObject {
     PyObject_HEAD
     PGFObject* grammar;
     GuPool* pool;
     int max_count;
     int counter;
     GuEnum* res;
-} ExprIterObject;
+    PyObject* (*fetch)(struct IterObject* self);
+} IterObject;
 
-static ExprIterObject*
-ExprIter_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+PyObject*
+Iter_fetch_expr(IterObject* self)
 {
-    ExprIterObject* self = (ExprIterObject *)type->tp_alloc(type, 0);
-    if (self != NULL) {
-		self->grammar = NULL;
-		self->pool = NULL;
-		self->max_count = -1;
-		self->counter   = 0;
-		self->res  = NULL;
-    }
-
-    return self;
-}
-
-static void
-ExprIter_dealloc(ExprIterObject* self)
-{
-	if (self->pool != NULL)
-		gu_pool_free(self->pool);
-
-	Py_XDECREF(self->grammar);
-
-    self->ob_type->tp_free((PyObject*)self);
-}
-
-static int
-ExprIter_init(ExprIterObject *self, PyObject *args, PyObject *kwds)
-{
-    return -1;
-}
-
-static PyObject*
-ExprIter_iter(ExprIterObject *self)
-{
-	Py_INCREF(self);
-	return (PyObject*) self;
-}
-
-static PyObject*
-ExprIter_iternext(ExprIterObject *self)
-{
-	if (self->max_count >= 0 && self->counter >= self->max_count) {
-		return NULL;
-	}
-	self->counter++;
-
 	PgfExprProb* ep = gu_next(self->res, PgfExprProb*, self->pool);
 	if (ep == NULL)
 		return NULL;
@@ -506,17 +463,81 @@ ExprIter_iternext(ExprIterObject *self)
 	return res;
 }
 
-static PyMethodDef ExprIter_methods[] = {
+PyObject*
+Iter_fetch_token(IterObject* self)
+{
+	PgfTokenProb* tp = gu_next(self->res, PgfTokenProb*, self->pool);
+	if (tp == NULL)
+		return NULL;
+
+	PyObject* ty_tok = gu2py_string(tp->tok);
+	PyObject* res = Py_BuildValue("(f,O)", tp->prob, ty_tok);
+	Py_DECREF(ty_tok);
+
+	return res;
+}
+
+static IterObject*
+Iter_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    IterObject* self = (IterObject *)type->tp_alloc(type, 0);
+    if (self != NULL) {
+		self->grammar = NULL;
+		self->pool = NULL;
+		self->max_count = -1;
+		self->counter   = 0;
+		self->res  = NULL;
+    }
+
+    return self;
+}
+
+static void
+Iter_dealloc(IterObject* self)
+{
+	if (self->pool != NULL)
+		gu_pool_free(self->pool);
+
+	Py_XDECREF(self->grammar);
+
+    self->ob_type->tp_free((PyObject*)self);
+}
+
+static int
+Iter_init(IterObject *self, PyObject *args, PyObject *kwds)
+{
+    return -1;
+}
+
+static PyObject*
+Iter_iter(IterObject *self)
+{
+	Py_INCREF(self);
+	return (PyObject*) self;
+}
+
+static PyObject*
+Iter_iternext(IterObject *self)
+{
+	if (self->max_count >= 0 && self->counter >= self->max_count) {
+		return NULL;
+	}
+	self->counter++;
+
+	return self->fetch(self);
+}
+
+static PyMethodDef Iter_methods[] = {
     {NULL}  /* Sentinel */
 };
 
 static PyTypeObject pgf_ExprIterType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "pgf.ExprIter",            /*tp_name*/
-    sizeof(ExprIterObject),    /*tp_basicsize*/
+    "pgf.Iter",                /*tp_name*/
+    sizeof(IterObject),        /*tp_basicsize*/
     0,                         /*tp_itemsize*/
-    (destructor)ExprIter_dealloc, /*tp_dealloc*/
+    (destructor)Iter_dealloc,  /*tp_dealloc*/
     0,                         /*tp_print*/
     0,                         /*tp_getattr*/
     0,                         /*tp_setattr*/
@@ -537,9 +558,9 @@ static PyTypeObject pgf_ExprIterType = {
     0,		                   /*tp_clear */
     0,		                   /*tp_richcompare */
     0,		                   /*tp_weaklistoffset */
-    (getiterfunc) ExprIter_iter, /*tp_iter */
-    (iternextfunc) ExprIter_iternext, /*tp_iternext */
-    ExprIter_methods,          /*tp_methods */
+    (getiterfunc) Iter_iter,   /*tp_iter */
+    (iternextfunc) Iter_iternext, /*tp_iternext */
+    Iter_methods,              /*tp_methods */
     0,                         /*tp_members */
     0,                         /*tp_getset */
     0,                         /*tp_base */
@@ -547,9 +568,9 @@ static PyTypeObject pgf_ExprIterType = {
     0,                         /*tp_descr_get */
     0,                         /*tp_descr_set */
     0,                         /*tp_dictoffset */
-    (initproc)ExprIter_init,   /*tp_init */
+    (initproc)Iter_init,       /*tp_init */
     0,                         /*tp_alloc */
-    (newfunc) ExprIter_new,    /*tp_new */
+    (newfunc) Iter_new,        /*tp_new */
 };
 
 typedef struct {
@@ -640,7 +661,7 @@ pypgf_new_python_lexer(PyObject* pylexer, GuPool* pool)
 	return ((PgfLexer*) lexer);
 }
 
-static ExprIterObject*
+static IterObject*
 Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 {
 	static char *kwlist[] = {"sentence", "tokens", "cat", "n", NULL};
@@ -667,7 +688,7 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 			return NULL;
 	}
 
-	ExprIterObject* pyres = (ExprIterObject*) 
+	IterObject* pyres = (IterObject*) 
 		pgf_ExprIterType.tp_alloc(&pgf_ExprIterType, 0);
 	if (pyres == NULL) {
 		Py_XDECREF(py_lexer);
@@ -680,6 +701,7 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 	pyres->pool = gu_new_pool();
 	pyres->max_count = max_count;
 	pyres->counter   = 0;
+	pyres->fetch     = Iter_fetch_expr;
 
 	GuPool *tmp_pool = gu_local_pool();
     GuString catname =
@@ -698,6 +720,98 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 
 	pyres->res =
 		pgf_parse(self->concr, catname, lexer, pyres->pool);
+
+	if (pyres->res == NULL) {
+		Py_DECREF(pyres);
+		pyres = NULL;
+
+		PgfToken tok =
+			pgf_lexer_current_token(lexer);
+
+		if (gu_string_eq(tok, gu_empty_string))
+			PyErr_SetString(PGFError, "The sentence cannot be parsed");
+		else {
+			PyObject* py_tok = gu2py_string(tok);
+			PyObject_SetAttrString(ParseError, "token", py_tok);
+			PyErr_Format(ParseError, "Unexpected token: \"%s\"", 
+										PyString_AsString(py_tok));
+			Py_DECREF(py_tok);
+		}
+	}
+
+	Py_XDECREF(py_lexer);
+	gu_pool_free(tmp_pool);
+
+	return pyres;
+}
+
+static IterObject*
+Concr_getCompletions(ConcrObject* self, PyObject *args, PyObject *keywds)
+{
+	static char *kwlist[] = {"sentence", "tokens", "cat", 
+	                         "prefix", "n", NULL};
+
+	size_t len;
+	const uint8_t *buf = NULL;
+	PyObject* py_lexer = NULL;
+	const char *catname_s = NULL;
+	const char *prefix_s = NULL;
+	int max_count = -1;
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "|s#Ossi", kwlist,
+                                     &buf, &len, &py_lexer, &catname_s,
+                                     &prefix_s, &max_count))
+        return NULL;
+
+    if ((buf == NULL && py_lexer == NULL) || 
+        (buf != NULL && py_lexer != NULL)) {
+		PyErr_SetString(PyExc_TypeError, "either the sentence or the tokens argument must be provided");
+		return NULL;
+	}
+
+	if (py_lexer != NULL) {
+		// get an iterator out of the iterable object
+		py_lexer = PyObject_GetIter(py_lexer);
+		if (py_lexer == NULL)
+			return NULL;
+	}
+
+	IterObject* pyres = (IterObject*) 
+		pgf_ExprIterType.tp_alloc(&pgf_ExprIterType, 0);
+	if (pyres == NULL) {
+		Py_XDECREF(py_lexer);
+		return NULL;
+	}
+
+	pyres->grammar = self->grammar;
+	Py_XINCREF(pyres->grammar);
+
+	pyres->pool = gu_new_pool();
+	pyres->max_count = max_count;
+	pyres->counter   = 0;
+	pyres->fetch     = Iter_fetch_token;
+
+	GuPool *tmp_pool = gu_local_pool();
+
+    GuString catname =
+		(catname_s == NULL) ? pgf_start_cat(self->grammar->pgf, tmp_pool)
+		                    : gu_str_string(catname_s, tmp_pool);
+
+    GuString prefix =
+		(prefix_s == NULL) ? gu_empty_string
+		                   : gu_str_string(prefix_s, pyres->pool);
+
+	PgfLexer *lexer = NULL;
+	if (buf != NULL) {
+		GuIn* in = gu_data_in(buf, len, tmp_pool);
+		GuReader* rdr = gu_new_utf8_reader(in, tmp_pool);
+		lexer = pgf_new_simple_lexer(rdr, tmp_pool);
+	} 
+	if (py_lexer != NULL) {
+		lexer = pypgf_new_python_lexer(py_lexer, tmp_pool);
+	}
+
+	pyres->res =
+		pgf_get_completions(self->concr, catname, lexer, prefix, pyres->pool);
 
 	if (pyres->res == NULL) {
 		Py_DECREF(pyres);
@@ -745,6 +859,26 @@ Concr_parseval(ConcrObject* self, PyObject *args) {
     gu_pool_free(tmp_pool);
     
     return Py_BuildValue("ddd", precision, recall, exact);
+}
+
+static PyObject*
+Concr_addLiteral(ConcrObject* self, PyObject *args) {
+	ExprObject* pyexpr = NULL;
+	const char* s_cat = NULL;
+	if (!PyArg_ParseTuple(args, "sO!", &s_cat, &pgf_ExprType, &pyexpr))
+        return NULL;
+/*
+	PgfLiteralCallback* callback = NULL;
+
+    GuPool* tmp_pool = gu_local_pool();
+
+    PgfCId cat = gu_str_string(s_cat, tmp_pool);
+    
+	pgf_parser_add_literal(self->concr, cat, callback);
+
+	gu_pool_free(tmp_pool);
+*/
+	Py_RETURN_NONE;
 }
 
 static PyObject*
@@ -1045,8 +1179,14 @@ static PyMethodDef Concr_methods[] = {
     {"parse", (PyCFunction)Concr_parse, METH_VARARGS | METH_KEYWORDS,
      "Parses a string and returns an iterator over the abstract trees for this sentence"
     },
+    {"getCompletions", (PyCFunction)Concr_getCompletions, METH_VARARGS | METH_KEYWORDS,
+     "Parses a partial string and returns a list with the top n possible next tokens"
+    },
     {"parseval", (PyCFunction)Concr_parseval, METH_VARARGS,
      "Computes precision, recall and exact match for the parser on a given abstract tree"
+    },
+    {"addLiteral", (PyCFunction)Concr_addLiteral, METH_VARARGS,
+     "adds callbacks for custom literals in the grammar"
     },
     {"linearize", (PyCFunction)Concr_linearize, METH_VARARGS,
      "Takes an abstract tree and linearizes it to a string"
@@ -1335,7 +1475,7 @@ PGF_functionsByCat(PGFObject* self, PyObject *args)
     return functions;
 }
 
-static ExprIterObject*
+static IterObject*
 PGF_generate(PGFObject* self, PyObject *args, PyObject *keywds)
 {
 	static char *kwlist[] = {"cat", "n", NULL};
@@ -1346,7 +1486,7 @@ PGF_generate(PGFObject* self, PyObject *args, PyObject *keywds)
                                      &catname_s, &max_count))
         return NULL;
 
-	ExprIterObject* pyres = (ExprIterObject*)
+	IterObject* pyres = (IterObject*)
 		pgf_ExprIterType.tp_alloc(&pgf_ExprIterType, 0);
 	if (pyres == NULL) {
 		return NULL;
@@ -1358,6 +1498,7 @@ PGF_generate(PGFObject* self, PyObject *args, PyObject *keywds)
 	pyres->pool = gu_new_pool();
 	pyres->max_count = max_count;
 	pyres->counter   = 0;
+	pyres->fetch     = Iter_fetch_expr;
 
 	GuPool *tmp_pool = gu_local_pool();
     GuString catname = gu_str_string(catname_s, tmp_pool);

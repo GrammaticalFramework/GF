@@ -2,10 +2,16 @@
 #define PGF_LEXER_H_
 
 #include <gu/read.h>
+#include <pgf/expr.h>
 
 /// A single lexical token			      
 typedef GuString PgfToken;
 typedef GuSeq PgfTokens;  // -> PgfToken
+
+typedef struct {
+	prob_t prob;
+	PgfToken tok;
+} PgfTokenProb;
 
 typedef struct {
 	PgfToken (*read_token)();

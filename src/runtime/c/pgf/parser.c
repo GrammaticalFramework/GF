@@ -46,7 +46,6 @@ typedef struct {
 	PgfConcr* concr;
 	GuPool* pool;
 	GuBuf* expr_queue;
-	PgfItem* target;
 	PgfExpr meta_var;
 	PgfProduction meta_prod;
     int max_fid;
@@ -76,11 +75,18 @@ GU_DEFINE_TYPE(PgfProductionIdx, GuMap,
 		       gu_type(PgfCFCat), &pgf_cfcat_hasher,
 		       gu_type(PgfProductionSeq), &gu_null_seq);
 
+typedef struct PgfTokenState PgfTokenState;
+
 typedef struct {
-	PgfToken tok;
-    PgfProductionIdx* lexicon_idx;
+	bool (*match_token)(PgfTokenState* ts, PgfToken tok, PgfItem* item);
+	PgfToken (*get_token)(PgfTokenState* ts);
+	PgfProductionIdx* (*get_lexicon_idx)(PgfTokenState* ts);
+} PgfTokenFn;
+
+struct PgfTokenState {
+	PgfTokenFn* fn;
     prob_t lexical_prob;
-} PgfTokenState;
+};
 
 struct PgfParseState {
 	PgfParseState* next;
@@ -785,9 +791,8 @@ static void
 pgf_parsing_add_transition(PgfParseState* before, PgfParseState* after, 
                            PgfToken tok, PgfItem* item)
 {
-    if (gu_string_eq(tok, after->ts->tok)) {
+    if (after->ts->fn->match_token(after->ts, tok, item)) {
         if (after->next == NULL) {
-			after->ps->target = item;
 			after->viterbi_prob = 
 				item->inside_prob+item->conts->outside_prob;
 		}
@@ -1076,20 +1081,31 @@ pgf_parsing_td_predict(PgfParseState* before, PgfParseState* after,
 			item->inside_prob-conts->ccat->viterbi_prob+
 			item->conts->outside_prob;
 
+		size_t n_prods = ccat->n_synprods;
+		PgfProductionIdx* lexicon_idx = NULL;
+		if (after != NULL) {
+			lexicon_idx = after->ts->fn->get_lexicon_idx(after->ts);
+			
+			// we don't know the current token.
+			// probably we just compute the list of completions
+			if (lexicon_idx == NULL)
+				n_prods = gu_seq_length(ccat->prods);
+		}
+		
 		// Top-down prediction for syntactic rules
-		PgfProductionSeq prods = ccat->prods;
-		for (size_t i = 0; i < ccat->n_synprods; i++) {
+		for (size_t i = 0; i < n_prods; i++) {
 			PgfProduction prod =
-				gu_seq_get(prods, PgfProduction, i);		
+				gu_seq_get(ccat->prods, PgfProduction, i);		
 			pgf_parsing_production(before, conts, prod);
 		}
 
 		// Bottom-up prediction for lexical rules
-		if (after != NULL && after->ts->lexicon_idx != NULL) {
+		
+		if (lexicon_idx != NULL) {
 			PgfCFCat cfc = {ccat, lin_idx};
 			PgfProductionSeq tok_prods = 
-				gu_map_get(after->ts->lexicon_idx, &cfc, PgfProductionSeq);
-			
+				gu_map_get(lexicon_idx, &cfc, PgfProductionSeq);
+
 			if (!gu_seq_is_null(tok_prods)) {
 				size_t n_prods = gu_seq_length(tok_prods);
 				for (size_t i = 0; i < n_prods; i++) {
@@ -1141,20 +1157,24 @@ static void
 pgf_parsing_meta_scan(PgfParseState* before, PgfParseState* after,
 	                  PgfItem* meta_item, prob_t meta_prob)
 {
-	PgfItem* item = pgf_item_copy(meta_item, before->ps->pool, before->ps);
-	item->inside_prob += meta_prob;
+	PgfToken tok = after->ts->fn->get_token(after->ts);
+	
+	if (!gu_string_eq(tok, gu_empty_string)) {	
+		PgfItem* item = pgf_item_copy(meta_item, before->ps->pool, before->ps);
+		item->inside_prob += meta_prob;
 
-	PgfSymbol prev = item->curr_sym;
-	PgfSymbolKS* sks = (PgfSymbolKS*)
-		gu_alloc_variant(PGF_SYMBOL_KS,
-						 sizeof(PgfSymbolKS)+sizeof(PgfSymbol),
-						 gu_alignof(PgfSymbolKS),
-						 &item->curr_sym, after->ps->pool);
-	*((PgfSymbol*)(sks+1)) = prev;
-	sks->tokens = gu_new_seq(PgfToken, 1, after->ps->pool);
-	gu_seq_set(sks->tokens, PgfToken, 0, after->ts->tok);
+		PgfSymbol prev = item->curr_sym;
+		PgfSymbolKS* sks = (PgfSymbolKS*)
+			gu_alloc_variant(PGF_SYMBOL_KS,
+							 sizeof(PgfSymbolKS)+sizeof(PgfSymbol),
+							 gu_alignof(PgfSymbolKS),
+							 &item->curr_sym, after->ps->pool);
+		*((PgfSymbol*)(sks+1)) = prev;
+		sks->tokens = gu_new_seq(PgfToken, 1, after->ps->pool);
+		gu_seq_set(sks->tokens, PgfToken, 0, tok);
 
-	gu_buf_heap_push(before->agenda, &pgf_item_prob_order, &item);
+		gu_buf_heap_push(before->agenda, &pgf_item_prob_order, &item);
+	}
 }
 
 typedef struct {
@@ -1468,8 +1488,9 @@ pgf_parsing_item(PgfParseState* before, PgfParseState* after, PgfItem* item)
 				pgf_parsing_symbol(before, after, item, sym);
 			}
 		} else {
-			PgfToken tok = (after != NULL) ? after->ts->tok
-			                               : gu_empty_string;
+			PgfToken tok = (after != NULL)
+			    ? after->ts->fn->get_token(after->ts)
+			    : gu_empty_string;
 
 			PgfExprProb *ep = NULL;
 			bool accepted = 
@@ -1563,7 +1584,7 @@ pgf_parsing_proceed(PgfParseState* state)
 				before    = st;
 			}
 		}
-
+		
 		prob_t state_delta =
 			(st->viterbi_prob-(st->next ? st->next->viterbi_prob : 0))*
 			state->ps->beam_size;
@@ -1623,7 +1644,6 @@ pgf_new_parsing(PgfConcr* concr, GuPool* pool)
 	ps->concr = concr;
 	ps->pool = pool;
 	ps->expr_queue = gu_new_buf(PgfExprState*, pool);
-	ps->target = NULL;
 	ps->max_fid = concr->total_cats;
 #ifdef PGF_COUNTS_DEBUG
 	ps->item_full_count = 0;
@@ -1702,20 +1722,14 @@ pgf_parser_compute_lexicon_prob(GuMapItor* fn, const void* key, void* value, GuE
 	}
 }
 
+#define pgf_new_token_state(ty, pool) \
+	(ty*) pgf_new_token_state_(&pgf_tsfn_##ty, (PgfTokenState*) gu_new(ty, pool))
+
 static PgfTokenState*
-pgf_new_token_state(PgfConcr *concr, PgfToken tok, GuPool* pool)
+pgf_new_token_state_(PgfTokenFn* fn, PgfTokenState* ts)
 {
-	PgfTokenState* ts = gu_new(PgfTokenState, pool);
-	ts->tok = tok;
-    ts->lexicon_idx = gu_map_get(concr->leftcorner_tok_idx, 
-                                 &tok, PgfProductionIdx*);
-	ts->lexical_prob = INFINITY;
-	if (ts->lexicon_idx != NULL) {
-		PgfLexiconFn clo = { { pgf_parser_compute_lexicon_prob }, ts };
-		gu_map_iter(ts->lexicon_idx, &clo.fn, NULL);
-	}
-	if (ts->lexical_prob == INFINITY)
-		ts->lexical_prob = 0;
+	ts->fn = fn;
+	ts->lexical_prob = INFINITY;	
 	return ts;
 }
 
@@ -1731,6 +1745,34 @@ void pgf_parsing_print_counts(PgfParsing* ps)
 }
 #endif
 
+typedef struct {
+	PgfTokenState ts;
+	PgfToken tok;
+	PgfProductionIdx *lexicon_idx;
+} PgfRealTokenState;
+
+static bool
+pgf_real_match_token(PgfTokenState* ts, PgfToken tok, PgfItem* item)
+{
+	return gu_string_eq(gu_container(ts, PgfRealTokenState, ts)->tok, tok);
+}
+
+static PgfToken
+pgf_real_get_token(PgfTokenState* ts) {
+	return gu_container(ts, PgfRealTokenState, ts)->tok;
+}
+
+static PgfProductionIdx*
+pgf_real_get_lexicon_idx(PgfTokenState* ts) {
+	return gu_container(ts, PgfRealTokenState, ts)->lexicon_idx;
+}
+
+static PgfTokenFn pgf_tsfn_PgfRealTokenState = {
+	pgf_real_match_token,
+	pgf_real_get_token,
+	pgf_real_get_lexicon_idx
+};
+
 PgfParseState*
 pgf_parser_next_state(PgfParseState* prev, PgfToken tok)
 {
@@ -1738,21 +1780,102 @@ pgf_parser_next_state(PgfParseState* prev, PgfToken tok)
 	pgf_parsing_print_counts(prev->ps);
 #endif
 
-	PgfTokenState* ts =
-		pgf_new_token_state(prev->ps->concr,tok,prev->ps->pool);
-	PgfParseState* state =
-	    pgf_new_parse_state(prev->ps, prev, ts, prev->ps->pool);
+	PgfRealTokenState* ts =
+		pgf_new_token_state(PgfRealTokenState, prev->ps->pool);
+	ts->tok = tok;
+    ts->lexicon_idx = gu_map_get(prev->ps->concr->leftcorner_tok_idx,
+                                 &tok, PgfProductionIdx*);	
+	if (ts->lexicon_idx != NULL) {
+		PgfLexiconFn clo = { { pgf_parser_compute_lexicon_prob }, &ts->ts };
+		gu_map_iter(ts->lexicon_idx, &clo.fn, NULL);
+	}
+	if (ts->ts.lexical_prob == INFINITY)
+		ts->ts.lexical_prob = 0;
 
-	state->ps->target = NULL;
-	while (state->ps->target == NULL) {
+	PgfParseState* state =
+	    pgf_new_parse_state(prev->ps, prev, &ts->ts, prev->ps->pool);
+
+	while (gu_buf_length(state->agenda) == 0) {
 		if (!pgf_parsing_proceed(state))
+			return NULL;
+	}
+
+	return state;
+}
+
+typedef struct {
+	PgfTokenState ts;
+	GuEnum en;
+	GuString prefix;
+	PgfTokenProb* tp;
+	GuPool* pool;
+	PgfParseState* state;
+} PgfPrefixTokenState;
+
+static bool
+pgf_prefix_match_token(PgfTokenState* ts0, PgfToken tok, PgfItem* item)
+{
+	PgfPrefixTokenState* ts = 
+		gu_container(ts0, PgfPrefixTokenState, ts);
+
+	if (gu_string_is_prefix(ts->prefix, tok)) {
+		ts->tp = gu_new(PgfTokenProb, ts->pool);
+		ts->tp->tok  = tok;
+		ts->tp->prob = item->inside_prob+item->conts->outside_prob;
+	}
+
+	return false;
+}
+
+static PgfToken
+pgf_prefix_get_token(PgfTokenState* ts) {
+	return gu_empty_string;
+}
+
+static PgfProductionIdx*
+pgf_prefix_get_lexicon_idx(PgfTokenState* ts) {
+	return NULL;
+}
+
+static PgfTokenFn pgf_tsfn_PgfPrefixTokenState = {
+	pgf_prefix_match_token,
+	pgf_prefix_get_token,
+	pgf_prefix_get_lexicon_idx
+};
+
+static void
+pgf_parser_completions_next(GuEnum* self, void* to, GuPool* pool)
+{
+	PgfPrefixTokenState* ts =
+		gu_container(self, PgfPrefixTokenState, en);
+
+	ts->tp   = NULL;
+	ts->pool = pool;
+	while (ts->tp == NULL) {
+		if (!pgf_parsing_proceed(ts->state))
 			break;
 	}
-    if (state->ps->target != NULL) {
-		return state;
-    }
 
-	return NULL;
+	*((PgfTokenProb**)to) = ts->tp;
+}
+
+GuEnum*
+pgf_parser_completions(PgfParseState* prev, GuString prefix, 
+                       GuPool* pool)
+{
+#ifdef PGF_COUNTS_DEBUG
+	pgf_parsing_print_counts(prev->ps);
+#endif
+
+	PgfPrefixTokenState* ts =
+		pgf_new_token_state(PgfPrefixTokenState, pool);
+	ts->en.next = pgf_parser_completions_next;
+	ts->prefix  = prefix;
+	ts->tp      = NULL;
+	ts->state   =
+	    pgf_new_parse_state(prev->ps, prev, &ts->ts, pool);
+
+	return &ts->en;
 }
 
 static int
