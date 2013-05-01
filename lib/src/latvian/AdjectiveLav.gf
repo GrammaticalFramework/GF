@@ -18,7 +18,7 @@ lin
   UseComparA a = { s = \\d,g,n,c => a.s ! (AAdj Compar d g n c) } ;
 
   ComplA2 a np = {
-    s = \\d,g,n,c => a.s ! (AAdj Posit d g n c) ++ a.p.s ++ np.s ! (a.p.c ! (fromAgr np.a).n)
+    s = \\d,g,n,c => a.s ! (AAdj Posit d g n c) ++ a.p.s ++ np.s ! (a.p.c ! (fromAgr np.a).num)
   } ;
 
   ReflA2 a = { s = \\d,g,n,c => a.s ! (AAdj Posit d g n c) ++ a.p.s ++ reflPron ! (a.p.c ! n) } ;

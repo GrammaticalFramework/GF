@@ -8,7 +8,7 @@ abstract ExtraLavAbs = Extra ** open ResLav, Prelude in {
     kopsh_Prep : Prep ;
     liidz_Prep : Prep ;
     pa_Prep : Prep ;
-    par_Prep : Prep ;
+    --par_Prep : Prep ;
     paar_Prep : Prep ;
     pie_Prep : Prep ;
     pret_Prep : Prep ;

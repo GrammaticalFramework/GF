@@ -18,7 +18,7 @@ lin
   ComparAdvAdjS cadv a s = { s = cadv.s ++ a.s ! (AAdv cadv.d) ++ cadv.p ++ s.s } ;
 
   -- FIXME: postpozīcijas prievārdi
-  PrepNP prep np = { s = prep.s ++ np.s ! (prep.c ! (fromAgr np.a).n) } ;
+  PrepNP prep np = { s = prep.s ++ np.s ! (prep.c ! (fromAgr np.a).num) } ;
 
   AdAdv = cc2 ;
 
@@ -27,7 +27,7 @@ lin
   AdnCAdv cadv = {
     s = case cadv.d of {
       Posit => cadv.s ++ cadv.p ;
-      _ => NON_EXISTENT
+      _     => NON_EXISTENT
     }
   } ;
 

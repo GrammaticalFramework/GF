@@ -17,7 +17,7 @@ lin
   kopsh_Prep = mkPrep "kopš" Gen Dat ;
   liidz_Prep = mkPrep "līdz" Dat Dat ;
   pa_Prep = mkPrep "pa" Acc Dat ;
-  par_Prep = mkPrep "par" Acc Dat ;
+  --par_Prep = mkPrep "par" Acc Dat ;
   paar_Prep = mkPrep "pār" Acc Dat ;
   pie_Prep = mkPrep "pie" Gen Dat ;
   pret_Prep = mkPrep "pret" Acc Dat ;

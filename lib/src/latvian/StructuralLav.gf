@@ -15,6 +15,9 @@ flags
 lin
   language_title_Utt = ss "latviešu valoda" ;
 
+  yes_Utt = ss "jā" ;
+  no_Utt = ss "nē" ;
+
   every_Det = {
     s = (\\g,c => (mkPronoun_Gend "ikviens").s ! g ! Sg ! c) ;
     n = Sg ;
@@ -23,14 +26,14 @@ lin
   } ;
 
   someSg_Det = {
-    s = (\\g,c => (mkPronoun_Gend "kāds").s ! g ! Sg ! c) ;  --  lai atļautu arī tukšo, jāliek (\\_,_ => []) |  klāt
+    s = (\\g,c => (mkPronoun_Gend "kāds").s ! g ! Sg ! c) ;  --  TODO: lai atļautu arī tukšo, jāpieliek alternatīva: (\\_,_ => [])
     n = Sg ;
     d = Indef ;
     isNeg = False
   } ;
 
   somePl_Det = {
-    s = (\\g,c => (mkPronoun_Gend "kāds").s ! g ! Pl ! c) ;   --  lai atļautu arī tukšo, jāliek (\\_,_ => []) |  klāt
+    s = (\\g,c => (mkPronoun_Gend "kāds").s ! g ! Pl ! c) ;   --  TODO: lai atļautu arī tukšo, jāpieliek alternatīva: (\\_,_ => [])
     n = Pl ;
     d = Indef ;
     isNeg = False
@@ -44,14 +47,14 @@ lin
   } ;
 
   many_Det = {
-    s = (\\g,c => (mkPronoun_Gend "daudzs").s ! g ! Pl ! c) ;  -- 'daudzs' izlocīsies korekti uz daudzskaitļa 'daudzi'
+    s = (\\g,c => (mkPronoun_Gend "daudzs").s ! g ! Pl ! c) ;  -- 'daudzs' izlocīsies korekti uz daudzskaitļa 'daudzi'; tomēr nesmuki...
     n = Pl ;
     d = Indef ;
     isNeg = False
   } ;
 
   much_Det = {
-    s = (\\g,c => "daudz") ;  -- FIXME - ņem saistību ar ģenitīvu; kā to realizēt?
+    s = (\\g,c => "daudz") ;  -- FIXME: piesaista ģenitīvu
     n = Sg ;
     d = Indef ;
     isNeg = False
@@ -107,41 +110,35 @@ lin
 
   it_Pron = mkPronoun_It_Sg Masc ;  -- See also: ExtraLav.it8fem_Pron
 
-  -- manuprāt prievārdi tomēr ir valodas-specifiski un nebūtu tieši 1-pret-1 jātulko
+  -- Pronouns; their translation is very ambiguos...
+
   above_Prep = mkPrep "virs" Gen Dat ;
   after_Prep = mkPrep "pēc" Gen Dat ;
   before_Prep = mkPrep "pirms" Gen Dat ;
   behind_Prep = mkPrep "aiz" Gen Dat ;  -- taču "aiz" nav viennozīmīgi "behind"
   between_Prep = mkPrep "starp" Acc Dat ;
+  during_Prep = mkPrep Loc ;
   for_Prep = mkPrep "priekš" Gen Dat ;
   from_Prep = mkPrep "no" Gen Dat ;
-  on_Prep = mkPrep "uz" Gen Dat ;
-  with_Prep = mkPrep "ar" Acc Dat ;  -- ar sievu, ar sievām
   in_Prep = mkPrep Loc ;
-  to_Prep = mkPrep "uz" Acc Dat ;  -- See also: ExtraLav.liidz_Prep, pie_Prep
-  possess_Prep = mkPrep Gen ;  -- FIXME: vajadzētu vārdu secību otrādi - pirms paskaidrojamā vārda likt
-  under_Prep = mkPrep "zem" Gen Dat ;
-  without_Prep = mkPrep "bez" Gen Dat ;
-  by8agent_Prep = nom_Prep ; -- TODO: should get rid of this Prep; taču tas parādās Eng2Abs kokos... -- FIXME: nom_Prep vs. dat_Prep/accPrep
-  by8means_Prep = mkPrep "ar" Acc Dat ;
-  during_Prep = mkPrep Loc ;
   in8front_Prep = mkPrep "priekšā" Dat Dat ;
-  part_Prep = mkPrep Gen ; --FIXME - vajadzētu vārdu secību otrādi - pirms paskaidrojamā vārda likt
+  on_Prep = mkPrep "uz" Gen Dat ;
   through_Prep = mkPrep "caur" Acc Dat ;
-  except_Prep = mkPrep "izņemot" Acc Acc ;
-
+  to_Prep = mkPrep "uz" Acc Dat ;  -- See also: ExtraLav.liidz_Prep, pie_Prep
+  under_Prep = mkPrep "zem" Gen Dat ;
+  with_Prep = mkPrep "ar" Acc Dat ;
+  without_Prep = mkPrep "bez" Gen Dat ;
+  
+  by8agent_Prep = nom_Prep ; -- TODO: nom_Prep (default) vs. dat_Prep
+  by8means_Prep = mkPrep "ar" Acc Dat ;
+  except_Prep = mkPrep "izņemot" Acc Acc ; -- Acc - by default?
+  part_Prep = mkPrep Gen ; --FIXME - vajadzētu vārdu secību otrādi - pirms paskaidrojamā vārda likt
+  possess_Prep = mkPrep Gen ;  -- FIXME: vajadzētu vārdu secību otrādi - pirms paskaidrojamā vārda likt
+  
   very_AdA = mkAdA "ļoti" ;
   almost_AdA = mkAdA "gandrīz" ;
   so_AdA = mkAdA "tik" ;
   too_AdA = mkAdA "pārāk" ;
-
-  and_Conj = mkConj "un" ;
-  or_Conj = mkConj "vai" Sg ;
-  if_then_Conj = mkConj "ja" "tad" ;
-
-  but_PConj = ss "bet" ;
-  otherwise_PConj = ss "citādi" ;
-  therefore_PConj = ss "tāpēc" ;
 
   more_CAdv = (mkCAdv [] "nekā" Compar) | (mkCAdv "vairāk" "nekā" Posit) ;
   less_CAdv = mkCAdv "mazāk" "nekā" Posit ;
@@ -157,10 +154,16 @@ lin
   somewhere_Adv = mkAdv "kaut kur" ;
   quite_Adv = mkAdv "diezgan" ;
 
-  both7and_DConj = mkConj "gan" ("," ++ "gan"); --FIXME - komati nav tā kā vajag
-  either7or_DConj = mkConj ("vai" ++ "nu") ("," ++ "vai") Sg ; --FIXME - komati nav tā kā vajag
+  and_Conj = mkConj "un" ;
+  or_Conj = mkConj "vai" Sg ;
+  if_then_Conj = mkConj "ja" "tad" ;
 
-  want_VV = mkVV (mkV "vēlēties" third_conjugation) ;
+  but_PConj = ss "bet" ;
+  otherwise_PConj = ss "citādi" ;
+  therefore_PConj = ss "tāpēc" ;
+
+  both7and_DConj = mkConj "gan" ("," ++ "gan"); -- FIXME: komati nav tā kā vajag
+  either7or_DConj = mkConj ("vai" ++ "nu") ("," ++ "vai") Sg ; -- FIXME: komati nav tā kā vajag
 
   whoSg_IP = { -- FIXME: Fem
     s = table {
@@ -223,6 +226,11 @@ lin
     }
   } ;
 
+  how8many_IDet = {
+    s = table { _ => "cik" } ;
+    n = Pl
+  } ;
+
   when_Subj = ss "kad" ;
   although_Subj = ss "kaut arī" ;
   because_Subj = ss "jo" ;
@@ -230,23 +238,14 @@ lin
   that_Subj = ss "ka" ;
 
   all_Predet = { s = table { Masc => "visi" ; Fem => "visas" } } ;
-
   only_Predet = { s = table { _ => "tikai"} } ;
   most_Predet = { s = table { _ => "vairums"} } ;
-
-  yes_Utt = ss "jā" ;
-  please_Voc = ss "lūdzu" ;
 
   almost_AdN = mkAdN "gandrīz" ;
   at_least_AdN = mkAdN "vismaz" ;
   at_most_AdN = mkAdN "ne vairāk kā" ;
 
   always_AdV = mkAdV "vienmēr" ;
-
-  how8many_IDet = {
-    s = table { _ => "cik" } ;
-    n = Pl
-  } ;
 
   somebody_NP = UsePron (mkPronoun_Body "kāds") ;
   something_NP = UsePron (mkPronoun_Thing "kaut kas") ;
@@ -258,8 +257,12 @@ lin
   have_V2 = mkV2 (mkV "būt") nom_Prep Dat ;
   have_V3 = mkV3 (mkV "būt") nom_Prep dat_Prep Dat ;
 
-  can8know_VV, can_VV = mkVV (mkV "varēt" third_conjugation) ;
+  want_VV = mkVV (mkV "vēlēties" third_conjugation) ;
+  can_VV = mkVV (mkV "varēt" third_conjugation) ;
+  can8know_VV = mkVV (mkV "varēt" third_conjugation) ;
   must_VV = mkVV (mkV "vajadzēt" third_conjugation) Dat ;
+
+  please_Voc = ss "lūdzu" ;
 
 oper
   
@@ -287,7 +290,5 @@ oper
     d = Indef
   } ;
   -}
-
-  no_Utt = ss "nē" ;
 
 }
