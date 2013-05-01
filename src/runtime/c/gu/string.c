@@ -311,6 +311,58 @@ gu_string_to_double(GuString s, double *res)
 	return true;
 }
 
+bool
+gu_string_is_prefix(GuString s1, GuString s2)
+{
+	GuWord w1 = s1.w_;
+	uint8_t buf1[sizeof(GuWord)];
+	size_t sz1;
+	char* str1;
+	if (w1 & 1) {
+		sz1 = (w1 & 0xff) >> 1;
+		gu_assert(sz1 <= sizeof(GuWord));
+		size_t i = sz1;
+		while (i > 0) {
+			w1 >>= 8;
+			buf1[--i] = w1 & 0xff;
+		}
+		str1 = (char*) buf1;
+	} else {
+		uint8_t* p = (void*) w1;
+		sz1 = (p[0] == 0) ? ((size_t*) p)[-1] : p[0];
+		str1 = (char*) &p[1];
+	}
+
+	GuWord w2 = s2.w_;
+	uint8_t buf2[sizeof(GuWord)];
+	size_t sz2;
+	char* str2;
+	if (w2 & 1) {
+		sz2 = (w2 & 0xff) >> 1;
+		gu_assert(sz2 <= sizeof(GuWord));
+		size_t i = sz2;
+		while (i > 0) {
+			w2 >>= 8;
+			buf2[--i] = w2 & 0xff;
+		}
+		str2 = (char*) buf2;
+	} else {
+		uint8_t* p = (void*) w2;
+		sz2 = (p[0] == 0) ? ((size_t*) p)[-1] : p[0];
+		str2 = (char*) &p[1];
+	}
+
+	while (sz1 > 0 && sz2 > 0) {
+		if (*str1 != *str2)
+			return false;
+			
+		str1++; sz1--;
+		str2++; sz2--;
+	}
+
+	return true;
+}
+
 GuWord
 gu_string_hash(GuString s)
 {

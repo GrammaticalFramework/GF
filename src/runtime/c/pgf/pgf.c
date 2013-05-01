@@ -236,6 +236,37 @@ pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool)
 	return pgf_parse_result(state, pool);
 }
 
+GuEnum*
+pgf_get_completions(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
+                    GuString prefix, GuPool* pool)
+{
+	// Begin parsing a sentence of the specified category
+	PgfParseState* state =
+		pgf_parser_init_state(concr, cat, 0, pool);
+	if (state == NULL) {
+		return NULL;
+	}
+
+	// Tokenization
+	GuExn* lex_err = gu_new_exn(NULL, gu_kind(type), pool);
+	PgfToken tok = pgf_lexer_read_token(lexer, lex_err);
+	while (!gu_exn_is_raised(lex_err)) {
+		// feed the token to get a new parse state
+		state = pgf_parser_next_state(state, tok);
+		if (state == NULL) {
+			return NULL;
+		}
+
+		tok = pgf_lexer_read_token(lexer, lex_err);
+	}
+
+	if (gu_exn_caught(lex_err) != gu_type(GuEOF))
+		return NULL;
+
+	// Now begin enumerating the resulting syntax trees
+	return pgf_parser_completions(state, prefix, pool);
+}
+
 void
 pgf_print_chunks(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool)
 {
