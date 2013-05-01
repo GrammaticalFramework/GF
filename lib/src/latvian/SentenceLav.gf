@@ -11,6 +11,7 @@ flags
     coding = utf8 ;
 
 lin
+  -- NP -> VP -> Cl
   PredVP np vp = mkClause np vp ;
 
   PredSCVP sc vp = mkClauseSC sc vp ;
@@ -30,7 +31,7 @@ lin
     mkClause np (lin VP {
       v = vs ;
       compl = \\_ => "," ++ vs.subj.s ++ sslash.s ;
-      agr = Topic vs.topic ;
+      agr = toClAgr_Reg vs.topic ;
       objNeg = False
     }) ** { p = sslash.p } ;
 
@@ -58,24 +59,43 @@ lin
   AdvS a s = { s = NON_EXISTENT } ;
 
 oper
-
-  mkClause : NP -> CatLav.VP -> Cl = \np,vp -> lin Cl {
-    s = \\mood,pol =>
-      case mood of {  -- Subject
-        Deb _ _ => np.s ! Dat ;  --# notpresent
-        _       => case vp.agr of {
-          Topic c        => np.s ! c ;
-          TopicFocus c _ => np.s ! c
-        }
-      } ++
-      case vp.agr of {  -- Verb
-        Topic Nom          => buildVerb vp.v mood pol np.a np.isNeg vp.objNeg ;
-        Topic _            => buildVerb vp.v mood pol (AgP3 Sg Masc) np.isNeg vp.objNeg ;  -- TODO: test me
-        TopicFocus Nom _   => buildVerb vp.v mood pol np.a np.isNeg vp.objNeg ;
-        TopicFocus _   agr => buildVerb vp.v mood pol agr np.isNeg vp.objNeg
-      } ++
-      vp.compl ! np.a  -- Object(s), complements, adverbial modifiers
-  } ;
+  -- TODO: PassV2 verbs jāsaskaņo ar objektu, nevis subjektu (by8means_Prep: AgP3 Sg Masc)
+  mkClause : NP -> CatLav.VP -> Cl = \np,vp ->  
+    let subj : Case = case vp.agr.voice of {
+      Act  => vp.agr.c_topic ;
+      Pass => vp.agr.c_focus
+    } in lin Cl {
+      s = \\mood,pol =>
+        case mood of {  -- Subject
+          Deb _ _ => np.s ! Dat ;  --# notpresent
+          _       => np.s ! vp.agr.c_topic
+          {-
+          _       => case vp.agr.voice of {
+            Act  => np.s ! vp.agr.c_topic ;
+            Pass => np.s ! vp.agr.c_focus
+          }
+          -}
+          {-
+          _       => case vp.agr of {
+            Topic      c     _ => np.s ! c ;
+            TopicFocus c _ _ _ => np.s ! c
+          }
+          -}
+        } ++
+        case subj of {  -- Verb
+          Nom => buildVerb vp.v mood pol np.a np.isNeg vp.objNeg ;
+          _   => buildVerb vp.v mood pol vp.agr.agr np.isNeg vp.objNeg -- TODO: test me
+        } ++
+        {-
+        case vp.agr of {  -- Verb
+          Topic      Nom       _ => buildVerb vp.v mood pol np.a np.isNeg vp.objNeg ;
+          Topic      _         _ => buildVerb vp.v mood pol (AgP3 Sg Masc) np.isNeg vp.objNeg ;  -- TODO: test me
+          TopicFocus Nom _ _   _ => buildVerb vp.v mood pol np.a np.isNeg vp.objNeg ;
+          TopicFocus _   _ agr _ => buildVerb vp.v mood pol agr np.isNeg vp.objNeg
+        } ++
+        -}
+        vp.compl ! np.a  -- Object(s), complements, adverbial modifiers
+    } ;
 
   -- FIXME: quick&dirty - lai kompilētos pret RGL API
   -- Eng: PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp

@@ -19,7 +19,7 @@ lin
   UsePron p = { s = p.s ; a = p.a ; isNeg = False } ;
 
   PredetNP pred np = {
-    s = \\c => pred.s ! (fromAgr np.a).g ++ np.s ! c ;
+    s = \\c => pred.s ! (fromAgr np.a).gend ++ np.s ! c ;
     a = np.a ;
     isNeg = False 
   } ;
@@ -29,12 +29,12 @@ lin
   --UseN3 n = n ;
 
   ComplN2 f x = {
-    s = \\_,n,c => preOrPost f.isPre (f.p.s ++ x.s ! (f.p.c ! (fromAgr x.a).n)) (f.s ! n ! c) ;
+    s = \\_,n,c => preOrPost f.isPre (f.p.s ++ x.s ! (f.p.c ! (fromAgr x.a).num)) (f.s ! n ! c) ;
     g = f.g
   } ;
 
   ComplN3 f x = {
-    s = \\n,c => preOrPost f.isPre1 (f.p1.s ++ x.s ! (f.p1.c ! (fromAgr x.a).n)) (f.s ! n ! c) ;
+    s = \\n,c => preOrPost f.isPre1 (f.p1.s ++ x.s ! (f.p1.c ! (fromAgr x.a).num)) (f.s ! n ! c) ;
     g = f.g ;
     p = f.p2 ;
     isPre = f.isPre2
@@ -144,7 +144,7 @@ lin
 
   -- 'Pielikums'
   ApposCN cn np = {
-    s = \\d,n,c => case (fromAgr np.a).n of {
+    s = \\d,n,c => case (fromAgr np.a).num of {
       n => cn.s ! d ! n ! c ++ np.s ! c ;	-- FIXME: comparison not working
       _ => NON_EXISTENT -- FIXME: pattern never reached
     } ;
@@ -163,7 +163,7 @@ lin
 
   -- FIXME: vajag šķirot noteikto/nenoteikto galotni..?
   PPartNP np v2 = {
-    s = \\c => v2.s ! Pos ! (Participle TsTa (fromAgr np.a).g (fromAgr np.a).n c) ++ np.s ! c ;
+    s = \\c => v2.s ! Pos ! (Participle TsTa (fromAgr np.a).gend (fromAgr np.a).num c) ++ np.s ! c ;
     a = np.a ;
     isNeg = np.isNeg
   } ;

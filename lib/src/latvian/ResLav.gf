@@ -20,7 +20,8 @@ param
   AForm = AAdj Degree Definite Gender Number Case | AAdv Degree ;
 
   -- Participles
-  PartType = IsUsi | TsTa ;
+  PartType = IsUsi | TsTa ; -- TODO: šo jāmet ārā - pārklājas ar Voice, kas attiecas ne tikai uz divdabjiem
+  Voice = Act | Pass ;
 
   -- Verbs
   -- Ind  = Indicative
@@ -54,7 +55,9 @@ param
   Agr = AgP1 Number Gender | AgP2 Number Gender | AgP3 Number Gender ;
 
   -- Clause agreement
-  ClAgr = Topic Case | TopicFocus Case Agr ;
+  -- TODO: jāpāriet uz vienotu TopicFocus (=> ieraksta tips)
+  --ClAgr = Topic Case Voice | TopicFocus Case Case Agr Voice ;
+  --ClAgr = NomAcc Agr Voice | DatNom Agr Voice | DatGen Agr Voice ;
 
   ThisOrThat = This | That ;
   CardOrd = NCard | NOrd ;
@@ -74,6 +77,9 @@ oper
 
   Verb : Type = { s : Polarity => VerbForm => Str } ;
 
+  -- TODO: voice ir jāliek pa tiešo zem VP (?)
+  ClAgr : Type = { c_topic : Case ; c_focus : Case ; agr : Agr ; voice : Voice } ;
+
   -- TODO: topic un focus jāapvieno vienā (jaunā) agr parametrā (?), jo
   --       ne vienmēr ir abi un ne visas kombinācijas ir vajadzīgas
   --       
@@ -83,7 +89,7 @@ oper
   -- topic: typically - subject
   -- focus: typically - objects, complements, adverbial modifiers
 
-  VPSlash = VP ** { p : Prep } ;
+  VPSlash = VP ** { p : Prep } ; -- TODO: p pārklājas ar agr
   -- principā rekur ir objekts kuram jau kaut kas ir bet ir vēl viena brīva valence...
 
   Prep : Type = { s : Str ; c : Number => Case } ;
@@ -93,36 +99,54 @@ oper
   --Valence : Type = { p : Prep ; c : Number => Case } ;
   -- e.g. 'ar' + Sg-Acc or Pl-Dat; Preposition may be skipped for simple case-baced valences
 
-  toAgr : Number -> Person -> Gender -> Agr = \n,p,g ->
-    case p of {
-      P1 => AgP1 n g ;
-      P2 => AgP2 n g ;
-      P3 => AgP3 n g
+  toAgr : Number -> Person -> Gender -> Agr = \num,pers,gend ->
+    case pers of {
+      P1 => AgP1 num gend ;
+      P2 => AgP2 num gend ;
+      P3 => AgP3 num gend
     } ;
 
-  fromAgr : Agr -> { n : Number ; p : Person ; g : Gender } = \a ->
-    case a of {
-      AgP1 n g => { n = n ; p = P1 ; g = g } ;
-      AgP2 n g => { n = n ; p = P2 ; g = g } ;
-      AgP3 n g => { n = n ; p = P3 ; g = g }
+  toClAgr : Case -> Case -> Agr -> Voice -> ClAgr = \c_topic,c_focus,agr,voice -> {
+    c_topic = c_topic ;
+    c_focus = c_focus ;
+    agr = agr ;
+    voice = voice
+  } ;
+
+  -- TODO: quick & dirty
+  toClAgr_Reg : Case -> ClAgr = \c_topic -> toClAgr c_topic Nom (AgP3 Sg Masc) Act ;
+
+  fromAgr : Agr -> { num : Number ; pers : Person ; gend : Gender } = \agr ->
+    case agr of {
+      AgP1 num gend => { num = num ; pers = P1 ; gend = gend } ;
+      AgP2 num gend => { num = num ; pers = P2 ; gend = gend } ;
+      AgP3 num gend => { num = num ; pers = P3 ; gend = gend }
     } ;
 
-  conjAgr : Agr -> Agr -> Agr = \a0,b0 ->
+  {-
+  fromClAgr : ClAgr -> { c_topic : Case ; c_focus : Case ; voice : Voice } = \agr ->
+    case agr of {
+      Topic      c_topic           voice => { c_topic = c_topic ; c_focus = Acc     ; voice = voice } ;
+      TopicFocus c_topic c_focus _ voice => { c_topic = c_topic ; c_focus = c_focus ; voice = voice }
+    } ;
+  -}
+  
+  conjAgr : Agr -> Agr -> Agr = \agr1,agr2 ->
     let
-      a = fromAgr a0 ;
-      b = fromAgr b0
+      a1 = fromAgr agr1 ;
+      a2 = fromAgr agr2
     in
       toAgr
-        (conjNumber a.n b.n)
-        (conjPerson a.p b.p)	-- FIXME: personu apvienošana ir tricky un ir jāuztaisa korekti
-		(conjGender a.g b.g) ;
+        (conjNumber a1.num a2.num)
+        (conjPerson a1.pers a2.pers) -- FIXME: personu apvienošana ir tricky un ir jāuztaisa korekti
+        (conjGender a1.gend a2.gend) ;
 
-  conjGender : Gender -> Gender -> Gender = \a,b ->
-    case a of {
-      Fem => b ;
-      _  => Masc
+  conjGender : Gender -> Gender -> Gender = \gend1,gend2 ->
+    case gend1 of {
+      Fem => gend2 ;
+      _   => Masc
     } ;
 
-  agrgP3 : Number -> Gender -> Agr = \n,g -> toAgr n P3 g ;
+  agrgP3 : Number -> Gender -> Agr = \num,gend -> toAgr num P3 gend ;
 
 }

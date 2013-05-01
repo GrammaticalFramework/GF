@@ -17,7 +17,7 @@ lin
   ConjAdv = conjunctDistrSS ;
 
   ConjNP conj ss = conjunctDistrTable Case conj ss ** {
-    a = toAgr (conjNumber (fromAgr ss.a).n conj.n) (fromAgr ss.a).p (fromAgr ss.a).g ;
+    a = toAgr (conjNumber (fromAgr ss.a).num conj.n) (fromAgr ss.a).pers (fromAgr ss.a).gend ;
     isNeg = False
   } ;
 

@@ -1,9 +1,9 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:abstract:common:prelude
 
 concrete LexiconLav of Lexicon = CatLav ** open
   ParadigmsLav,
   StructuralLav,
-  ExtraLav,
+  --(E = ExtraLav),
   ResLav,
   Prelude
   in {
@@ -190,7 +190,7 @@ lin
   switch8off_V2 = mkV2 (mkV "izslēgt" "izslēdzu" "izslēdzu") acc_Prep ;
   switch8on_V2 = mkV2 (mkV "ieslēgt" "ieslēdzu" "ieslēdzu") acc_Prep ;
   table_N = mkN "galds" ;
-  talk_V3 = mkV3 (mkV "runāt" second_conjugation) to_Prep par_Prep ;  -- ar ko, par ko
+  talk_V3 = mkV3 (mkV "runāt" second_conjugation) with_Prep par_Prep ;  -- ar ko, par ko
   teacher_N = mkN "skolotājs" ;
   teach_V2 = mkV2 (mkV "mācīt" third_conjugation) acc_Prep ;
   television_N = mkN "televīzija" ;
@@ -372,6 +372,8 @@ lin
   today_Adv = mkAdv "šodien" ;
   uncertain_A = mkA "nepārliecināts" ;
 
---oper par_Prep = mkPrep "par" Acc Dat ;
+  -- TODO: kāpēc neizdodas ar ExtraLav?
+  -- Eng arī dara šitā:
+  oper par_Prep = mkPrep "par" Acc Dat ;
 
 }

@@ -24,88 +24,105 @@ lin
   UseV v = {
     v = v ;
     compl = \\_ => [] ;
-    agr = Topic Nom ;
+    agr = toClAgr_Reg Nom ;
     objNeg = False
   } ;
 
   ComplVV vv vp = {
     v = vv ;
     compl = \\agr => build_VP vp Pos Infinitive agr ;
-    agr = Topic vv.topic ;
+    agr = toClAgr_Reg vv.topic ;
     objNeg = False
   } ;
 
   ComplVS vs s = {
     v = vs ;
     compl = \\_ => "," ++ vs.subj.s ++ s.s ;
-    agr = Topic vs.topic ;
+    agr = toClAgr_Reg vs.topic ;
     objNeg = False
   } ;
 
   ComplVQ vq qs = {
     v = vq ;
     compl = \\_ => "," ++ qs.s ;
-    agr = Topic vq.topic ;
+    agr = toClAgr_Reg vq.topic ;
     objNeg = False
   } ;
   
   ComplVA va ap = {
     v = va ;
-    compl = \\agr => ap.s ! Indef ! (fromAgr agr).g ! (fromAgr agr).n ! Nom ;
-    agr = Topic Nom ;
+    compl = \\agr => ap.s ! Indef ! (fromAgr agr).gend ! (fromAgr agr).num ! Nom ;
+    agr = toClAgr_Reg Nom ;
     objNeg = False
   } ;
 
-  -- SlashV2a : V2 -> VPSlash ;  -- love (it)
+  -- V2 -> VPSlash
   -- The (direct) object is added by ComplSlash
   SlashV2a v2 = {
     v = v2 ;
     compl = \\_ => [] ;
     p = v2.p ;
-    agr = TopicFocus v2.topic (AgP3 Sg Masc) ; -- overriden in ComplSlash
+    agr = toClAgr v2.topic (v2.p.c ! Sg) (AgP3 Sg Masc) Act ; -- overriden in ComplSlash
     objNeg = False -- overriden in ComplSlash
   } ;
 
-  -- VPSlash = { v : Verb ; compl : Agr => Str ; agr : ClAgr ; objNeg : Bool ; p : ResLav.Prep }
-  -- Agr = AgP1 Number Gender | AgP2 Number Gender | AgP3 Number Gender
-  ComplSlash vpslash np = 
+  -- VPSlash -> NP -> VP
+  ComplSlash vp np = 
     let agr : Agr = np.a
     in insertObjPre_Spec
-      (\\agr => vpslash.p.s ++ np.s ! (vpslash.p.c ! (fromAgr agr).n))
-      vpslash 
+      {-
+      (\\agr => case (fromClAgr vp.agr).voice of {
+        Act  => vp.p.s ++ np.s ! (vp.p.c ! (fromAgr agr).num) ;
+        Pass => np.s ! (fromClAgr vp.agr).c_topic
+      })
+      -}
+      (\\agr => case vp.agr.voice of {
+        Act  => vp.p.s ++ np.s ! (vp.p.c ! (fromAgr agr).num) ;
+        Pass => case vp.p.c ! (fromAgr agr).num of {
+          --Nom => np.s ! vp.agr.c_topic ;
+          Nom => np.s ! vp.agr.c_focus ;
+          _   => vp.p.s ++ np.s ! (vp.p.c ! (fromAgr agr).num)
+        }
+      })
+      vp 
       np ;
 
 oper
   insertObjPre_Spec : (Agr => Str) -> ResLav.VP -> NP -> ResLav.VP = \obj,vp,obj_np -> {
     v = vp.v ;
     compl = \\agr => obj ! agr ++ vp.compl ! agr ;
-    agr = case vp.agr of {
-      TopicFocus topic _ => TopicFocus topic obj_np.a ;
-      _                  => Topic Nom
+    agr = vp.agr ;
+    {-
+    agr = case vp.agr.voice of {
+      Topic      c_topic           voice => Topic      c_topic                  voice ;
+      TopicFocus c_topic c_focus _ voice => TopicFocus c_topic c_focus obj_np.a voice
+      -- _                          => Topic Nom -- kāpēc ne 'Topic topic_case'? -- TODO: remove
     } ;
+    -}
     objNeg = obj_np.isNeg
   } ;
 
 lin
-    -- Slash2V3 : V3 -> NP -> VPSlash ;  -- give it (to her)
+    -- V3 -> NP -> VPSlash ;  -- give it (to her)
+    -- FIXME: "vīrietis runā par ābolus ar sievieti" ("a man talks to a woman about apples")
   Slash2V3 v3 np = insertObjC
-    (\\_ => v3.p1.s ++ np.s ! (v3.p1.c ! (fromAgr np.a).n))
+    (\\_ => v3.p1.s ++ np.s ! (v3.p1.c ! (fromAgr np.a).num))
     {
       v = v3 ;
       compl = \\_ => [] ;
       p = v3.p2 ;
-      agr = TopicFocus v3.topic np.a ; -- TESTME: P1, P2 (in the focus)
+      agr = toClAgr v3.topic (v3.p1.c ! Sg) np.a Act ; -- TESTME: P1, P2 (in the focus)
       objNeg = np.isNeg -- TESTME
     } ;
 
-  -- Slash3V3 : V3 -> NP -> VPSlash ;  -- give (it) to her
+  -- V3 -> NP -> VPSlash ;  -- give (it) to her
   Slash3V3 v3 np = insertObjC
-    (\\_ => v3.p2.s ++ np.s ! (v3.p2.c ! (fromAgr np.a).n))
+    (\\_ => v3.p2.s ++ np.s ! (v3.p2.c ! (fromAgr np.a).num))
     {
       v = v3 ;
       compl = \\_ => [] ;
       p = v3.p1 ;
-      agr = TopicFocus v3.topic (AgP3 Sg Masc) ; -- FIXME: works only if the focus is P3 (Sg/Pl); TODO: P1, P2 (Sg, Pl)
+      agr = toClAgr v3.topic (v3.p2.c ! Sg) (AgP3 Sg Masc) Act ; -- FIXME: works only if the focus is P3 (Sg/Pl); TODO: P1, P2 (Sg, Pl)
       objNeg = np.isNeg -- TESTME
     } ;
 
@@ -113,7 +130,7 @@ lin
     v = v2v ;
     compl = \\agr => build_VP vp Pos Infinitive agr ;
     p = v2v.p ;
-    agr = Topic Nom ;
+    agr = toClAgr_Reg Nom ;
     objNeg = False
   } ;
   
@@ -121,7 +138,7 @@ lin
     v = v2s ;
     compl = \\_ => "," ++ v2s.subj.s ++ s.s ;
     p = v2s.p ;
-    agr = Topic Nom ;
+    agr = toClAgr_Reg Nom ;
     objNeg = False
   } ;
 
@@ -129,15 +146,15 @@ lin
     v = v2q ;
     compl = \\_ => "," ++ qs.s ;
     p = v2q.p ;
-    agr = Topic Nom ;
+    agr = toClAgr_Reg Nom ;
     objNeg = False
   } ;
   
   SlashV2A v2a ap = {
     v = v2a ;
-    compl = \\agr => ap.s ! Indef ! (fromAgr agr).g ! (fromAgr agr).n ! Nom ;
+    compl = \\agr => ap.s ! Indef ! (fromAgr agr).gend ! (fromAgr agr).num ! Nom ;
     p = v2a.p ;
-    agr = Topic Nom ;
+    agr = toClAgr_Reg Nom ;
     objNeg = False
   } ;
 
@@ -145,39 +162,42 @@ lin
     v = vv ;
     compl = \\agr => build_VP vpslash Pos Infinitive agr ;
     p = vpslash.p ;
-    agr = Topic vv.topic ;
+    agr = toClAgr_Reg vv.topic ;
     objNeg = False
   } ;
 
   SlashV2VNP v2v np vpslash = insertObjC
-    (\\_ => v2v.p.s ++ np.s ! (v2v.p.c ! (fromAgr np.a).n))
+    (\\_ => v2v.p.s ++ np.s ! (v2v.p.c ! (fromAgr np.a).num))
     {
       v = v2v ;
       compl = \\agr => build_VP vpslash Pos Infinitive agr ;
       p = vpslash.p ;
-      agr = Topic Nom ;
+      agr = toClAgr_Reg Nom ;
       objNeg = False
     } ;
 
   ReflVP vpslash = insertObjPre
-    (\\agr => vpslash.p.s ++ reflPron ! (vpslash.p.c ! (fromAgr agr).n))
+    (\\agr => vpslash.p.s ++ reflPron ! (vpslash.p.c ! (fromAgr agr).num))
     vpslash ;
 
   UseComp comp = {
     v = lin V mkVerb_Irreg_Be ;
     compl = \\agr => comp.s ! agr ;
-    agr = Topic Nom ;
+    agr = toClAgr_Reg Nom ;
     objNeg = False
   } ;
 
-  -- TODO: vai VP nevajag papildlauku isPass?
+  -- V2 -> VP
+  -- TODO: vai VP nevajag papildlauku isPass? Izskatās, ka vajag - jau/tikai ComplSlash (objekta locījumam)
   PassV2 v2 = {
-    v = v2 ;
-    compl = \\_ => [] ;
-    agr = Topic v2.topic ;
-    objNeg = False -- FIXME: inherit from the object
+    v      = v2 ;
+    compl  = \\_ => [] ;
+    --agr    = toClAgr v2.topic (v2.p.c ! Sg) (AgP3 Sg Masc) Pass ; -- FIXME(?): should not be overriden in ComplSlash; P3 restriction - never used?
+    agr    = toClAgr (v2.p.c ! Sg) v2.topic (AgP3 Sg Masc) Pass ; -- FIXME(?): should not be overriden in ComplSlash; P3 restriction - never used?
+    objNeg = False -- overriden in ComplSlash
   } ;
 
+  -- VP -> Prep -> VPSlash
   -- TODO: šajā brīdī ir jāignorē prep (by8agent_Prep); tas jāaizstāj ar v2.topic
   -- Tad varēs dzēst ārā komentāru pie StructuralLav.by8agent_Prep
   VPSlashPrep vp prep = vp ** {p = prep} ;
@@ -186,13 +206,13 @@ lin
 
   AdVVP adv vp = insertObjPre (\\_ => adv.s) vp ;
 
-  CompAP ap = { s = \\agr => ap.s ! Indef ! (fromAgr agr).g ! (fromAgr agr).n ! Nom } ;
+  CompAP ap = { s = \\agr => ap.s ! Indef ! (fromAgr agr).gend ! (fromAgr agr).num ! Nom } ;
 
   CompNP np = { s = \\_ => np.s ! Nom } ;
   
   CompAdv a = { s = \\_ => a.s } ;
   
-  CompCN cn = { s = \\agr => cn.s ! Indef ! (fromAgr agr).n ! Nom } ;
+  CompCN cn = { s = \\agr => cn.s ! Indef ! (fromAgr agr).num ! Nom } ;
 
 oper
   build_VP : ResLav.VP -> Polarity -> VerbForm -> Agr -> Str = \vp,pol,vf,agr ->
@@ -220,20 +240,20 @@ oper
 
   -- FIXME: the type of the participle form - depending on what?! (currently fixed)
   buildVerb : Verb -> VerbMood -> Polarity -> Agr -> Bool -> Bool -> Str = 
-  \v,mood,pol,agr,subjNeg,objNeg ->
+  \v,mood,pol,subjAgr,subjNeg,objNeg ->
     let
       pol_prim : Polarity = case <subjNeg, objNeg> of {
         <True, _> => Neg ;
         <_, True> => Neg ;
         _         => pol
       } ;
-      agr = fromAgr agr
+      agr = fromAgr subjAgr
       ;  --# notpresent
-      part = v.s ! ResLav.Pos ! (Participle TsTa agr.g agr.n Nom)  --# notpresent
+      part = v.s ! ResLav.Pos ! (Participle TsTa agr.gend agr.num Nom)  --# notpresent
     in case mood of {
-      Ind Simul tense => v.s ! pol_prim ! (Indicative agr.p agr.n tense)
+      Ind Simul tense => v.s ! pol_prim ! (Indicative agr.pers agr.num tense)
       ;  --# notpresent
-      Ind Anter tense => mkVerb_Irreg_Be.s ! pol_prim ! (Indicative agr.p agr.n tense) ++ part ;  --# notpresent
+      Ind Anter tense => mkVerb_Irreg_Be.s ! pol_prim ! (Indicative agr.pers agr.num tense) ++ part ;  --# notpresent
 
       -- FIXME(?): Rel _ Past => ...
       Rel _     Past  => ResLav.NON_EXISTENT ;  --# notpresent
@@ -246,7 +266,7 @@ oper
         mkVerb_Irreg_Be.s ! ResLav.Pos ! (Participle TsTa Masc Sg Nom) ++  --# notpresent
         v.s ! ResLav.Pos ! Debitive ;  --# notpresent
 
-      Condit Simul => v.s ! pol_prim ! (Indicative agr.p agr.n ParamX.Cond) ;  --# notpresent
-      Condit Anter => mkVerb_Irreg_Be.s ! pol_prim ! (Indicative agr.p agr.n ParamX.Cond) ++ part  --# notpresent
+      Condit Simul => v.s ! pol_prim ! (Indicative agr.pers agr.num ParamX.Cond) ;  --# notpresent
+      Condit Anter => mkVerb_Irreg_Be.s ! pol_prim ! (Indicative agr.pers agr.num ParamX.Cond) ++ part  --# notpresent
     } ;
 }
