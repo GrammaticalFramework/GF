@@ -2,6 +2,8 @@
 
 abstract ExtraLavAbs = Extra ** open ResLav, Prelude in {
   fun
+    GenCN : NP -> CN -> CN ;
+
     aiz_Prep : Prep ;
     ap_Prep : Prep ;
     gar_Prep : Prep ;
