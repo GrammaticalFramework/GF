@@ -1,6 +1,9 @@
 --# -path=.:../abstract:../common:../prelude
 
-abstract ExtraLavAbs = Extra ** open ResLav, Prelude in {
+abstract ExtraLavAbs = Extra **
+--open ResLav, Prelude in
+{
+
   fun
     GenCN : NP -> CN -> CN ;
 
