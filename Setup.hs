@@ -15,8 +15,8 @@ import System.FilePath
 import System.Directory
 import System.Process
 import System.Exit
-import Control.Concurrent(forkIO)
-import Control.Concurrent.Chan(newChan,writeChan,readChan)
+--import Control.Concurrent(forkIO)
+--import Control.Concurrent.Chan(newChan,writeChan,readChan)
 
 import WebSetup
 
@@ -430,7 +430,7 @@ ls path = filter (`notElem` [".",".."]) `fmap` getDirectoryContents path
 
 -- | For parallel RGL module compilation
 -- Unfortunately, this has no effect unless Setup.hs is compiled with -threaded
-parallel_ ms = -- sequence_ ms {-
+parallel_ ms = sequence_ ms {-
   do c <- newChan
      ts <- sequence [ forkIO (m >> writeChan c ()) | m <- ms]
      sequence_ [readChan c | _ <- ts]
