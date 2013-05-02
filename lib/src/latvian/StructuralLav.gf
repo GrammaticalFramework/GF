@@ -22,60 +22,60 @@ lin
     s = (\\g,c => (mkPronoun_Gend "ikviens").s ! g ! Sg ! c) ;
     n = Sg ;
     d = Indef ;
-    isNeg = False
+    pol = Pos
   } ;
 
   someSg_Det = {
     s = (\\g,c => (mkPronoun_Gend "kāds").s ! g ! Sg ! c) ;  --  TODO: lai atļautu arī tukšo, jāpieliek alternatīva: (\\_,_ => [])
     n = Sg ;
     d = Indef ;
-    isNeg = False
+    pol = Pos
   } ;
 
   somePl_Det = {
     s = (\\g,c => (mkPronoun_Gend "kāds").s ! g ! Pl ! c) ;   --  TODO: lai atļautu arī tukšo, jāpieliek alternatīva: (\\_,_ => [])
     n = Pl ;
     d = Indef ;
-    isNeg = False
+    pol = Pos
   } ;
 
   few_Det = {
     s = (\\g,c => (mkPronoun_Gend "dažs").s ! g ! Pl ! c) ;
     n = Pl ;
     d = Indef ;
-    isNeg = False
+    pol = Pos
   } ;
 
   many_Det = {
     s = (\\g,c => (mkPronoun_Gend "daudzs").s ! g ! Pl ! c) ;  -- 'daudzs' izlocīsies korekti uz daudzskaitļa 'daudzi'; tomēr nesmuki...
     n = Pl ;
     d = Indef ;
-    isNeg = False
+    pol = Pos
   } ;
 
   much_Det = {
     s = (\\g,c => "daudz") ;  -- FIXME: piesaista ģenitīvu
     n = Sg ;
     d = Indef ;
-    isNeg = False
+    pol = Pos
   } ;
 
   this_Quant = {
     s = (mkPronoun_ThisThat This).s ;
     d = Def ;
-    isNeg = False
+    pol = Pos
   } ;
 
   that_Quant = {
     s = (mkPronoun_ThisThat That).s ;
     d = Def ;
-    isNeg = False
+    pol = Pos
   } ;
 
   no_Quant = {
     s = (mkPronoun_Gend "neviens").s ;
     d = Indef ;
-    isNeg = True
+    pol = Neg
   } ;
 
   -- P1
@@ -96,13 +96,13 @@ lin
 
   he_Pron = {
     s = \\c => (mkPronoun_Gend "viņš").s ! Masc ! Sg ! c ;
-    a = AgP3 Sg Masc ;
+    a = AgP3 Sg Masc Pos ;
     possessive = \\_,_,_ => "viņa"
   } ;
 
   she_Pron = {
     s = \\c => (mkPronoun_Gend "viņš").s ! Fem ! Sg ! c ;
-    a = AgP3 Sg Fem ;
+    a = AgP3 Sg Fem Pos ;
     possessive = \\_,_,_ => "viņas"
   } ;
 
@@ -247,15 +247,15 @@ lin
 
   always_AdV = mkAdV "vienmēr" ;
 
-  somebody_NP = UsePron (mkPronoun_Body "kāds") ;
-  something_NP = UsePron (mkPronoun_Thing "kaut kas") ;
-  everybody_NP = UsePron (mkPronoun_Body "ikviens") ;
-  everything_NP = UsePron (mkPronoun_Thing "jebkas") ;
-  nobody_NP = UsePron (mkPronoun_Body "neviens") ;
-  nothing_NP = UsePron (mkPronoun_Thing "nekas") ;
+  somebody_NP = UsePron (mkPronoun_Body "kāds" Pos) ;
+  something_NP = UsePron (mkPronoun_Thing "kaut kas" Pos) ;
+  everybody_NP = UsePron (mkPronoun_Body "ikviens" Pos) ;
+  everything_NP = UsePron (mkPronoun_Thing "jebkas" Pos) ;
+  nobody_NP = UsePron (mkPronoun_Body "neviens" Neg) ;
+  nothing_NP = UsePron (mkPronoun_Thing "nekas" Neg) ;
 
   have_V2 = mkV2 (mkV "būt") nom_Prep Dat ;
-  have_V3 = mkV3 (mkV "būt") nom_Prep dat_Prep Dat ;
+  --have_V3 = mkV3 (mkV "būt") nom_Prep dat_Prep Dat ;
 
   want_VV = mkVV (mkV "vēlēties" third_conjugation) ;
   can_VV = mkVV (mkV "varēt" third_conjugation) ;

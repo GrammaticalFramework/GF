@@ -29,8 +29,8 @@ oper
           _       => rp.s ! Masc ! vp.agr.c_topic
         } ++
         case subj of {  -- Verb
-          Nom => buildVerb vp.v mood pol (toAgr (fromAgr agr).num P3 (fromAgr agr).gend) False vp.objNeg ; -- TODO: kāpēc P3 nevis agr, kāds tas ir?
-          _   => buildVerb vp.v mood pol vp.agr.agr False vp.objNeg -- TODO: test me
+          Nom => buildVerb vp.v mood pol (AgP3 (fromAgr agr).num (fromAgr agr).gend Pos) Pos vp.objNeg ; -- TODO: kāpēc P3 nevis agr, kāds tas ir?
+          _   => buildVerb vp.v mood pol vp.agr.agr Pos vp.objNeg -- TODO: test me
         } ++
         vp.compl ! agr  -- Object(s), complements, adverbial modifiers
     } ;
