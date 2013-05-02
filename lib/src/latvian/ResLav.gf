@@ -52,7 +52,8 @@ param
   -- Verb agreement
   -- Number depends on the person
   -- Gender has to be taken into accunt because of predicative nominals and participles
-  Agr = AgP1 Number Gender | AgP2 Number Gender | AgP3 Number Gender ;
+  -- Polarity may depend on the subject/object NP (double negation, if subject/object has a negated determiner)
+  Agr = AgP1 Number Gender | AgP2 Number Gender | AgP3 Number Gender Polarity ;
 
   -- Clause agreement
   -- TODO: jāpāriet uz vienotu TopicFocus (=> ieraksta tips)
@@ -84,7 +85,7 @@ oper
   --       ne vienmēr ir abi un ne visas kombinācijas ir vajadzīgas
   --       
   -- TODO: lai varētu spēlēties ar vārdu secību, compl vēlāk būs jāskalda pa daļām
-  VP = { v : Verb ; compl : Agr => Str ; agr : ClAgr ; objNeg : Bool } ;
+  VP = { v : Verb ; compl : Agr => Str ; agr : ClAgr ; objNeg : Polarity } ;
   -- compl: objects, complements, adverbial modifiers
   -- topic: typically - subject
   -- focus: typically - objects, complements, adverbial modifiers
@@ -99,11 +100,11 @@ oper
   --Valence : Type = { p : Prep ; c : Number => Case } ;
   -- e.g. 'ar' + Sg-Acc or Pl-Dat; Preposition may be skipped for simple case-baced valences
 
-  toAgr : Number -> Person -> Gender -> Agr = \num,pers,gend ->
+  toAgr : Person -> Number -> Gender -> Polarity -> Agr = \pers,num,gend,pol ->
     case pers of {
       P1 => AgP1 num gend ;
       P2 => AgP2 num gend ;
-      P3 => AgP3 num gend
+      P3 => AgP3 num gend pol
     } ;
 
   toClAgr : Case -> Case -> Agr -> Voice -> ClAgr = \c_topic,c_focus,agr,voice -> {
@@ -113,33 +114,25 @@ oper
     voice = voice
   } ;
 
-  -- TODO: quick & dirty
-  toClAgr_Reg : Case -> ClAgr = \c_topic -> toClAgr c_topic Nom (AgP3 Sg Masc) Act ;
+  toClAgr_Reg : Case -> ClAgr = \c_topic -> toClAgr c_topic Nom (AgP3 Sg Masc Pos) Act ;
 
-  fromAgr : Agr -> { num : Number ; pers : Person ; gend : Gender } = \agr ->
+  fromAgr : Agr -> { pers : Person ; num : Number ; gend : Gender ; pol : Polarity } = \agr ->
     case agr of {
-      AgP1 num gend => { num = num ; pers = P1 ; gend = gend } ;
-      AgP2 num gend => { num = num ; pers = P2 ; gend = gend } ;
-      AgP3 num gend => { num = num ; pers = P3 ; gend = gend }
+      AgP1 num gend     => { pers = P1 ; num = num ; gend = gend ; pol = Pos } ;
+      AgP2 num gend     => { pers = P2 ; num = num ; gend = gend ; pol = Pos } ;
+      AgP3 num gend pol => { pers = P3 ; num = num ; gend = gend ; pol = pol }
     } ;
 
-  {-
-  fromClAgr : ClAgr -> { c_topic : Case ; c_focus : Case ; voice : Voice } = \agr ->
-    case agr of {
-      Topic      c_topic           voice => { c_topic = c_topic ; c_focus = Acc     ; voice = voice } ;
-      TopicFocus c_topic c_focus _ voice => { c_topic = c_topic ; c_focus = c_focus ; voice = voice }
-    } ;
-  -}
-  
   conjAgr : Agr -> Agr -> Agr = \agr1,agr2 ->
     let
       a1 = fromAgr agr1 ;
       a2 = fromAgr agr2
     in
       toAgr
-        (conjNumber a1.num a2.num)
         (conjPerson a1.pers a2.pers) -- FIXME: personu apvienošana ir tricky un ir jāuztaisa korekti
-        (conjGender a1.gend a2.gend) ;
+        (conjNumber a1.num a2.num)
+        (conjGender a1.gend a2.gend)
+        (conjPolarity a1.pol a2.pol) ;
 
   conjGender : Gender -> Gender -> Gender = \gend1,gend2 ->
     case gend1 of {
@@ -147,6 +140,12 @@ oper
       _   => Masc
     } ;
 
-  agrgP3 : Number -> Gender -> Agr = \num,gend -> toAgr num P3 gend ;
+  conjPolarity : Polarity -> Polarity -> Polarity = \pol1,pol2 ->
+    case pol1 of {
+      Neg => Neg ;
+      _   => pol2
+    } ;
+
+  --agrP3 : Number -> Gender -> Polarity -> Agr = \num,gend,pol -> toAgr P3 num gend pol ;
 
 }

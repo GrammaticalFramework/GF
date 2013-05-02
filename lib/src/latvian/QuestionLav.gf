@@ -14,13 +14,13 @@ flags
 lin
   QuestCl cl = { s = \\m,p => "vai" ++ cl.s ! m ! p } ;
 
-  QuestVP ip vp = { s = \\m,p => ip.s ! Nom ++ buildVerb vp.v m p (AgP3 ip.n Masc) False vp.objNeg } ;
+  QuestVP ip vp = { s = \\m,p => ip.s ! Nom ++ buildVerb vp.v m p (AgP3 ip.n Masc Pos) Pos vp.objNeg } ;
 
   QuestSlash ip slash = { s = \\m,p => slash.p.s ++ ip.s ! (slash.p.c ! ip.n) ++ slash.s ! m ! p } ;
 
   QuestIAdv iadv cl = { s = \\m,p => iadv.s ++ cl.s ! m ! p } ;
 
-  QuestIComp icomp np = { s = \\m,p => icomp.s ++ buildVerb mkVerb_Irreg_Be m p np.a np.isNeg False  ++ np.s ! Nom } ;
+  QuestIComp icomp np = { s = \\m,p => icomp.s ++ buildVerb mkVerb_Irreg_Be m p np.a (fromAgr np.a).pol Pos  ++ np.s ! Nom } ;
 
   IdetQuant idet num = {
     s = \\g => idet.s ! g ! num.n ++ num.s ! g ! Nom ;

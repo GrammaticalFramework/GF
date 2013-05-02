@@ -13,18 +13,18 @@ flags
 
 lin
   ImpersCl vp =
-    let agr = AgP3 Sg Masc
+    let agr = AgP3 Sg Masc Pos
     in {
       s = \\mood,pol =>
-        buildVerb vp.v mood pol agr False vp.objNeg ++  -- Verb
+        buildVerb vp.v mood pol agr Pos vp.objNeg ++  -- Verb
         vp.compl ! agr  -- Object(s), complements, adverbial modifiers
     } ;
 
   GenericCl vp =
-    let agr = AgP3 Sg Masc
+    let agr = AgP3 Sg Masc Pos
     in {
       s = \\mood,pol =>
-        buildVerb vp.v mood pol agr False vp.objNeg ++
+        buildVerb vp.v mood pol agr Pos vp.objNeg ++
         vp.compl ! agr
     } ;
 
@@ -34,18 +34,18 @@ lin
       agr = np.a
     in {
       s = \\mood,pol =>
-        buildVerb v mood pol agr np.isNeg False ++
+        buildVerb v mood pol agr (fromAgr np.a).pol Pos ++
         np.s ! Nom
     } ;
 
   ExistIP ip =
     let
       v = lin V mkVerb_Irreg_Be ;
-      agr = AgP3 ip.n Masc
+      agr = AgP3 ip.n Masc Pos
 	in {
       s = \\mood,pol =>
         ip.s ! Nom ++
-        buildVerb v mood pol agr False False
+        buildVerb v mood pol agr Pos Pos
     } ;
 
   -- FIXME: needs restriction so that only VerbMood Indicative _ _ Present is allowed;
@@ -63,7 +63,7 @@ lin
     ;
 
   ImpP3 np vp = {
-    s = "lai" ++ np.s ! Nom ++ buildVerb vp.v (Ind Simul Pres) Pos np.a np.isNeg vp.objNeg ++ vp.compl ! np.a ;
+    s = "lai" ++ np.s ! Nom ++ buildVerb vp.v (Ind Simul Pres) Pos np.a (fromAgr np.a).pol vp.objNeg ++ vp.compl ! np.a ;
   } ;
 
   -- FIXME: placeholder

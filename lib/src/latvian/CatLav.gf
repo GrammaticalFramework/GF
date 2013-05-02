@@ -50,14 +50,14 @@ lincat
   -- Noun
 
   CN = { s : Definite => Number => Case => Str ; g : Gender } ;
-  NP = { s : Case => Str ; a : ResLav.Agr ; isNeg : Bool } ;
+  NP = { s : Case => Str ; a : ResLav.Agr } ;
   Pron = { s : Case => Str ; a : ResLav.Agr ; possessive : Gender => Number => Case => Str } ;
-  Det = { s : Gender => Case => Str ; n : Number ; d : Definite ; isNeg : Bool } ;
+  Det = { s : Gender => Case => Str ; n : Number ; d : Definite ; pol : Polarity } ;
   Predet = { s : Gender => Str } ;
   Ord = { s : Gender => Case => Str } ;
   Num = { s : Gender => Case => Str ; n : Number ; hasCard : Bool } ;
   Card = { s : Gender => Case => Str ; n : Number } ;
-  Quant = { s : Gender => Number => Case => Str ; d : Definite ; isNeg : Bool } ;
+  Quant = { s : Gender => Number => Case => Str ; d : Definite ; pol : Polarity } ;
 
   -- Numeral
 

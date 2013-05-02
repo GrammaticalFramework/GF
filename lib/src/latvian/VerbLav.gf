@@ -25,35 +25,35 @@ lin
     v = v ;
     compl = \\_ => [] ;
     agr = toClAgr_Reg Nom ;
-    objNeg = False
+    objNeg = Pos
   } ;
 
   ComplVV vv vp = {
     v = vv ;
     compl = \\agr => build_VP vp Pos Infinitive agr ;
     agr = toClAgr_Reg vv.topic ;
-    objNeg = False
+    objNeg = Pos
   } ;
 
   ComplVS vs s = {
     v = vs ;
     compl = \\_ => "," ++ vs.subj.s ++ s.s ;
     agr = toClAgr_Reg vs.topic ;
-    objNeg = False
+    objNeg = Pos
   } ;
 
   ComplVQ vq qs = {
     v = vq ;
     compl = \\_ => "," ++ qs.s ;
     agr = toClAgr_Reg vq.topic ;
-    objNeg = False
+    objNeg = Pos
   } ;
   
   ComplVA va ap = {
     v = va ;
     compl = \\agr => ap.s ! Indef ! (fromAgr agr).gend ! (fromAgr agr).num ! Nom ;
     agr = toClAgr_Reg Nom ;
-    objNeg = False
+    objNeg = Pos
   } ;
 
   -- V2 -> VPSlash
@@ -62,8 +62,8 @@ lin
     v = v2 ;
     compl = \\_ => [] ;
     p = v2.p ;
-    agr = toClAgr v2.topic (v2.p.c ! Sg) (AgP3 Sg Masc) Act ; -- overriden in ComplSlash
-    objNeg = False -- overriden in ComplSlash
+    agr = toClAgr v2.topic (v2.p.c ! Sg) (AgP3 Sg Masc Pos) Act ; -- overriden in ComplSlash
+    objNeg = Pos -- overriden in ComplSlash
   } ;
 
   -- VPSlash -> NP -> VP
@@ -99,7 +99,7 @@ oper
       -- _                          => Topic Nom -- kāpēc ne 'Topic topic_case'? -- TODO: remove
     } ;
     -}
-    objNeg = obj_np.isNeg
+    objNeg = (fromAgr obj_np.a).pol
   } ;
 
 lin
@@ -112,7 +112,7 @@ lin
       compl = \\_ => [] ;
       p = v3.p2 ;
       agr = toClAgr v3.topic (v3.p1.c ! Sg) np.a Act ; -- TESTME: P1, P2 (in the focus)
-      objNeg = np.isNeg -- TESTME
+      objNeg = (fromAgr np.a).pol -- TESTME
     } ;
 
   -- V3 -> NP -> VPSlash ;  -- give (it) to her
@@ -122,8 +122,8 @@ lin
       v = v3 ;
       compl = \\_ => [] ;
       p = v3.p1 ;
-      agr = toClAgr v3.topic (v3.p2.c ! Sg) (AgP3 Sg Masc) Act ; -- FIXME: works only if the focus is P3 (Sg/Pl); TODO: P1, P2 (Sg, Pl)
-      objNeg = np.isNeg -- TESTME
+      agr = toClAgr v3.topic (v3.p2.c ! Sg) (AgP3 Sg Masc Pos) Act ; -- FIXME: works only if the focus is P3 (Sg/Pl); TODO: P1, P2 (Sg, Pl)
+      objNeg = (fromAgr np.a).pol -- TESTME
     } ;
 
   SlashV2V v2v vp = {
@@ -131,7 +131,7 @@ lin
     compl = \\agr => build_VP vp Pos Infinitive agr ;
     p = v2v.p ;
     agr = toClAgr_Reg Nom ;
-    objNeg = False
+    objNeg = Pos
   } ;
   
   SlashV2S v2s s = {
@@ -139,7 +139,7 @@ lin
     compl = \\_ => "," ++ v2s.subj.s ++ s.s ;
     p = v2s.p ;
     agr = toClAgr_Reg Nom ;
-    objNeg = False
+    objNeg = Pos
   } ;
 
   SlashV2Q v2q qs = {
@@ -147,7 +147,7 @@ lin
     compl = \\_ => "," ++ qs.s ;
     p = v2q.p ;
     agr = toClAgr_Reg Nom ;
-    objNeg = False
+    objNeg = Pos
   } ;
   
   SlashV2A v2a ap = {
@@ -155,7 +155,7 @@ lin
     compl = \\agr => ap.s ! Indef ! (fromAgr agr).gend ! (fromAgr agr).num ! Nom ;
     p = v2a.p ;
     agr = toClAgr_Reg Nom ;
-    objNeg = False
+    objNeg = Pos
   } ;
 
   SlashVV vv vpslash = {
@@ -163,7 +163,7 @@ lin
     compl = \\agr => build_VP vpslash Pos Infinitive agr ;
     p = vpslash.p ;
     agr = toClAgr_Reg vv.topic ;
-    objNeg = False
+    objNeg = Pos
   } ;
 
   SlashV2VNP v2v np vpslash = insertObjC
@@ -173,7 +173,7 @@ lin
       compl = \\agr => build_VP vpslash Pos Infinitive agr ;
       p = vpslash.p ;
       agr = toClAgr_Reg Nom ;
-      objNeg = False
+      objNeg = Pos
     } ;
 
   ReflVP vpslash = insertObjPre
@@ -184,7 +184,7 @@ lin
     v = lin V mkVerb_Irreg_Be ;
     compl = \\agr => comp.s ! agr ;
     agr = toClAgr_Reg Nom ;
-    objNeg = False
+    objNeg = Pos
   } ;
 
   -- V2 -> VP
@@ -193,8 +193,8 @@ lin
     v      = v2 ;
     compl  = \\_ => [] ;
     --agr    = toClAgr v2.topic (v2.p.c ! Sg) (AgP3 Sg Masc) Pass ; -- FIXME(?): should not be overriden in ComplSlash; P3 restriction - never used?
-    agr    = toClAgr (v2.p.c ! Sg) v2.topic (AgP3 Sg Masc) Pass ; -- FIXME(?): should not be overriden in ComplSlash; P3 restriction - never used?
-    objNeg = False -- overriden in ComplSlash
+    agr    = toClAgr (v2.p.c ! Sg) v2.topic (AgP3 Sg Masc Pos) Pass ; -- FIXME(?): should not be overriden in ComplSlash; P3 restriction - never used?
+    objNeg = Pos -- overriden in ComplSlash
   } ;
 
   -- VP -> Prep -> VPSlash
@@ -239,13 +239,13 @@ oper
   } ;
 
   -- FIXME: the type of the participle form - depending on what?! (currently fixed)
-  buildVerb : Verb -> VerbMood -> Polarity -> Agr -> Bool -> Bool -> Str = 
+  buildVerb : Verb -> VerbMood -> Polarity -> Agr -> Polarity -> Polarity -> Str = 
   \v,mood,pol,subjAgr,subjNeg,objNeg ->
     let
       pol_prim : Polarity = case <subjNeg, objNeg> of {
-        <True, _> => Neg ;
-        <_, True> => Neg ;
-        _         => pol
+        <Neg, _> => Neg ;
+        <_, Neg> => Neg ;
+        _        => pol
       } ;
       agr = fromAgr subjAgr
       ;  --# notpresent

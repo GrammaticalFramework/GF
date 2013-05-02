@@ -23,7 +23,7 @@ lin
   UttAdv adv = adv ;
 
   -- FIXME: neesmu līdz galam drošs vai agreement ir tieši (AgPr Pl)
-  UttVP vp = { s = build_VP vp Pos Infinitive (AgP3 Pl Masc) } ;
+  UttVP vp = { s = build_VP vp Pos Infinitive (AgP3 Pl Masc Pos) } ;
 
   UttIP ip = { s = ip.s ! Nom } ;
   UttIAdv iadv = iadv ;

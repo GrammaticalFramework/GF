@@ -157,13 +157,13 @@ oper
 
   mkPronoun_They : Gender -> Pron = \g -> {
     s = \\c => (mkPronoun_Gend "viņš").s ! g ! Pl ! c ;
-    a = AgP3 Pl g ;
+    a = AgP3 Pl g Pos ;
     possessive = \\_,_,_ => "viņu"
   } ;
 
   mkPronoun_It_Sg : Gender -> Pron = \g -> {
     s = \\c => (mkPronoun_ThisThat That).s ! g ! Sg ! c ;
-    a = AgP3 Sg g ;
+    a = AgP3 Sg g Pos ;
     possessive = \\_,_,_ => case g of { Masc => "tā" ; Fem => "tās" }
   } ;
 
@@ -268,8 +268,7 @@ oper
     } ;
 
     -- Everything, something, nothing, i.e., all that end with "kas"
-    -- Quick & dirty
-    mkPronoun_Thing : Str -> Pron = \lemma ->
+    mkPronoun_Thing : Str -> Polarity -> Pron = \lemma,pol ->
     let stem : Str = Predef.tk 3 lemma
     in {
       s = \\c => table {
@@ -280,13 +279,14 @@ oper
         Loc => case stem of { "kaut" => stem ++ "kur" ; _ => stem + "kur" } ;
         Voc => NON_EXISTENT
       } ! c ;
-      a = AgP3 Sg Masc ;
+      a = AgP3 Sg Masc pol ;
       possessive = \\_,_,_ => case stem of { "kaut" => stem ++ "kā" ; _ => stem + "kā" }
     } ;
 
-    mkPronoun_Body : Str -> Pron = \lemma -> {
+    -- Everybody, somebody, nobody
+    mkPronoun_Body : Str -> Polarity -> Pron = \lemma,pol -> {
       s = \\c => (mkPronoun_Gend lemma).s ! Masc ! Sg ! c ;
-      a = AgP3 Sg Masc ;
+      a = AgP3 Sg Masc pol ;
       possessive = \\_,_,_ => (mkPronoun_Gend lemma).s ! Masc ! Sg ! Gen ;
     } ;
 

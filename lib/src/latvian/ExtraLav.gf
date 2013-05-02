@@ -40,6 +40,8 @@ lin
   they8fem_Pron = mkPronoun_They Fem ;
   it8fem_Pron = mkPronoun_It_Sg Fem ;
 
+  have_V3 = mkV3 (mkV "būt") nom_Prep dat_Prep Dat ;
+
   {-empty_Det num def neg = \num,def,neg -> {
     s = \\_,_ => [] ;
     n = num ;
@@ -49,17 +51,16 @@ lin
 
   -- Zemāk esošās f-cijas nav ExtraLavAbs, tās ir abstract/Extra.gf
 
+  -- NP -> Quant
   GenNP np = {
     s = \\_,_,_ => np.s ! Gen ;
     d = Def ;
-    isNeg = np.isNeg
+    pol = (fromAgr np.a).pol
   } ;
 
   --ICompAP ap = {s = \\g,n => "cik" ++ ap.s ! Indef ! g ! n ! Nom } ;
 
   IAdvAdv adv = {s = "cik" ++ adv.s} ;
-
-  have_V3 = mkV3 (mkV "būt") nom_Prep dat_Prep Dat ;
 
   -- for VP conjunction
 
@@ -84,7 +85,7 @@ lin
         -- TODO: subj-dependent double negation
         -- TODO: subj/obj isNeg jāpārceļ uz Agr (?)
         --let verb = vp.v.s ! pol.p ! Indicative (fromAgr agr).pers (fromAgr agr).num temp.t in
-        temp.s ++ buildVerb vp.v (Ind temp.a temp.t) pol.p subjAgr False vp.objNeg ++ vp.compl ! subjAgr
+        temp.s ++ buildVerb vp.v (Ind temp.a temp.t) pol.p subjAgr (fromAgr subjAgr).pol vp.objNeg ++ vp.compl ! subjAgr
       } ;
     
     -- Conj -> [VPS] -> VPS
