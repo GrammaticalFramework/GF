@@ -3,7 +3,9 @@
 concrete ExtraLav of ExtraLavAbs = CatLav ** open
   ParadigmsLav,
   ParadigmsPronounsLav,
+  VerbLav,
   ResLav,
+  Coordination,
   Prelude
   in {
 
@@ -47,11 +49,44 @@ lin
 
   -- Zemāk esošās f-cijas nav ExtraLavAbs, tās ir abstract/Extra.gf
 
-  GenNP np = {s = \\_,_,_ => np.s ! Gen ; d = Def ; isNeg = np.isNeg} ;
+  GenNP np = {
+    s = \\_,_,_ => np.s ! Gen ;
+    d = Def ;
+    isNeg = np.isNeg
+  } ;
 
   --ICompAP ap = {s = \\g,n => "cik" ++ ap.s ! Indef ! g ! n ! Nom } ;
 
   IAdvAdv adv = {s = "cik" ++ adv.s} ;
 
   have_V3 = mkV3 (mkV "būt") nom_Prep dat_Prep Dat ;
+
+  -- for VP conjunction
+
+  lincat
+    VPS   = {s : Agr => Str} ;
+    [VPS] = {s1,s2 : Agr => Str} ;
+
+  lin
+    BaseVPS = twoTable Agr ;
+    ConsVPS = consrTable Agr comma ;
+
+    -- NP -> VPS -> S
+    -- NP = { s : Case => Str ; a : Agr ; isNeg : Bool } ;
+    PredVPS np vps = {s = np.s ! Nom ++ vps.s ! np.a} ; -- TODO: vps.s ! np.a ! np.isNeg
+
+    -- Temp -> Pol -> VP -> VPS
+    MkVPS temp pol vp = {
+      s = \\subjAgr =>
+        -- VP = { v : Verb ; compl : Agr => Str ; agr : ClAgr ; objNeg : Bool } ;
+        -- Verb = { s : Polarity => VerbForm => Str } ;
+        -- TODO: other VerbForm-s (moods)
+        -- TODO: subj-dependent double negation
+        -- TODO: subj/obj isNeg jāpārceļ uz Agr (?)
+        --let verb = vp.v.s ! pol.p ! Indicative (fromAgr agr).pers (fromAgr agr).num temp.t in
+        temp.s ++ buildVerb vp.v (Ind temp.a temp.t) pol.p subjAgr False vp.objNeg ++ vp.compl ! subjAgr
+      } ;
+    
+    -- Conj -> [VPS] -> VPS
+    ConjVPS = conjunctDistrTable Agr ;
 }
