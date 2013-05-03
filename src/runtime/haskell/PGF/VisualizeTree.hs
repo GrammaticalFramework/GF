@@ -9,7 +9,7 @@
 -- Based on BB's VisualizeGrammar
 -----------------------------------------------------------------------------
 
-module PGF.VisualizeTree 
+module PGF.VisualizeTree
              ( GraphvizOptions(..)
              , graphvizDefaults
              , graphvizAbstractTree
@@ -67,7 +67,7 @@ graphvizAbstractTree pgf (funs,cats) = render . tree2graph
     getAbs xs (EAbs _ x e) = getAbs (x:xs) e
     getAbs xs (ETyped e _) = getAbs xs e
     getAbs xs e            = (xs,e)
-    
+
     getApp (EApp x (EImplArg y)) es = getApp x es
     getApp (EApp x y)            es = getApp x (y:es)
     getApp (ETyped e _)          es = getApp e es
@@ -100,11 +100,11 @@ graphvizAbstractTree pgf (funs,cats) = render . tree2graph
          vcat (zipWith (ppGraph scope' (i:ps)) [0..] eargs)
 
     ppNode ps = char 'n' <> hcat (punctuate (char '_') (map int ps))
-    
+
     escapeStr []        = []
     escapeStr ('\\':cs) = '\\':'\\':escapeStr cs
     escapeStr ('"' :cs) = '\\':'"' :escapeStr cs
-    escapeStr (c   :cs) = c        :escapeStr cs    
+    escapeStr (c   :cs) = c        :escapeStr cs
 
 
 type Labels = Map.Map CId [String]
@@ -126,7 +126,7 @@ graphvizDependencyTree format debug mlab ms pgf lang t = render $
     nodes  = map mkNode leaves
     links  = map mkLink [(fid, fromMaybe (dep_lbl,nil) (lookup fid deps)) | ((cat,fid,fun),_,w) <- tail leaves]
 
-    wnodes = [[int i, maltws ws, ppCId fun, ppCId cat, ppCId cat, unspec, int parent, text lab, unspec, unspec] | 
+    wnodes = [[int i, maltws ws, ppCId fun, ppCId cat, ppCId cat, unspec, int parent, text lab, unspec, unspec] |
               ((cat,fid,fun),i,ws) <- tail leaves,
               let (lab,parent) = fromMaybe (dep_lbl,0)
                                            (do (lbl,fid) <- lookup fid deps
@@ -140,7 +140,7 @@ graphvizDependencyTree format debug mlab ms pgf lang t = render $
     bs = bracketedLinearize pgf lang t
 
     root = (wildCId,nil,wildCId)
-    
+
     leaves = (root,0,root_lbl) : (groupAndIndexIt 1 . getLeaves root) bs
     deps   = let (_,(h,deps)) = getDeps 0 [] t []
              in (h,(dep_lbl,nil)):deps
@@ -159,7 +159,7 @@ graphvizDependencyTree format debug mlab ms pgf lang t = render $
         Leaf w                      -> [(parent,w)]
         Bracket cat fid _ fun _ bss -> concatMap (getLeaves (cat,fid,fun)) bss
 
-    mkNode ((_,p,_),i,w) = 
+    mkNode ((_,p,_),i,w) =
       tag p <+> brackets (text "label = " <> doubleQuotes (int i <> char '.' <+> text w)) <+> semi
 
     mkLink (x,(lbl,y)) = tag y <+> text "->" <+> tag x  <+> text "[label = " <> doubleQuotes (text lbl) <> text "] ;"
@@ -216,14 +216,14 @@ graphvizParseTree pgf lang opts = graphvizBracketedString opts . bracketedLinear
 graphvizBracketedString :: GraphvizOptions -> BracketedString -> String
 graphvizBracketedString opts bs = render graphviz_code
     where
-      graphviz_code 
+      graphviz_code
           = text "graph {" $$
             text node_style $$
             vcat internal_nodes $$
             (if noLeaves opts then empty
              else text leaf_style $$
                   leaf_nodes
-            ) $$ text "}" 
+            ) $$ text "}"
 
       leaf_style = mkOption "edge" "style" (leafEdgeStyle opts) ++
                    mkOption "edge" "color" (leafColor opts) ++
@@ -239,8 +239,8 @@ graphvizBracketedString opts bs = render graphviz_code
           where nodeshape | noFun opts && noCat opts = "point"
                           | otherwise = "plaintext"
 
-      mkOption object optname optvalue 
-          | null optvalue  = "" 
+      mkOption object optname optvalue
+          | null optvalue  = ""
           | otherwise      = object ++ "[" ++ optname ++ "=\"" ++ optvalue ++ "\"]; "
 
       mkNode fun cat
@@ -249,32 +249,32 @@ graphvizBracketedString opts bs = render graphviz_code
           | otherwise  = showCId fun ++ " : " ++ showCId cat
 
       nil = -1
-      internal_nodes = [mkLevel internals | 
-                        internals <- getInternals [(nil, bs)], 
+      internal_nodes = [mkLevel internals |
+                        internals <- getInternals [(nil, bs)],
                         not (null internals)]
-      leaf_nodes = mkLevel [(parent, id, word) | 
+      leaf_nodes = mkLevel [(parent, id, word) |
                             (id, (parent, word)) <- zip [100000..] (getLeaves nil bs)]
 
       getInternals []    = []
-      getInternals nodes 
-          = nub [(parent, fid, mkNode fun cat) | 
-                 (parent, Bracket cat fid _ fun _ _) <- nodes] 
-            : getInternals [(fid, child) | 
-                            (_, Bracket _ fid _ _ _ children) <- nodes, 
+      getInternals nodes
+          = nub [(parent, fid, mkNode fun cat) |
+                 (parent, Bracket cat fid _ fun _ _) <- nodes]
+            : getInternals [(fid, child) |
+                            (_, Bracket _ fid _ _ _ children) <- nodes,
                             child <- children]
 
       getLeaves parent (Leaf word) = [(parent, word)]
       getLeaves parent (Bracket _ fid i _ _ children)
           = concatMap (getLeaves fid) children
 
-      mkLevel nodes 
+      mkLevel nodes
           = text "subgraph {rank=same;" $$
             nest 2 (-- the following gives the name of the node and its label:
                     vcat [tag id <> text (mkOption "" "label" lbl) | (_, id, lbl) <- nodes] $$
                     -- the following is for fixing the order between the children:
                     (if length nodes > 1 then
                          text (mkOption "edge" "style" "invis") $$
-                         hsep (intersperse (text " -- ") [tag id | (_, id, _) <- nodes]) <+> semi 
+                         hsep (intersperse (text " -- ") [tag id | (_, id, _) <- nodes]) <+> semi
                      else empty)
                    ) $$
             text "}" $$
@@ -291,13 +291,13 @@ type LangSeq = [IndexedSeq]
 
 data PreAlign = PreAlign [LangSeq] [[Rel]]
   deriving Show
--- alignment structure for a phrase in 2 languages, along with the 
+-- alignment structure for a phrase in 2 languages, along with the
 -- many-to-many relations
 
 
 genPreAlignment :: PGF -> [Language] -> Expr -> PreAlign
 genPreAlignment pgf langs = lin2align . linsBracketed
- where  
+ where
       linsBracketed t = [bracketedLinearize pgf lang t | lang <- langs]
 
       lin2align :: [BracketedString] -> PreAlign
@@ -322,12 +322,12 @@ genPreAlignment pgf langs = lin2align . linsBracketed
                     Bracket _ fid _ _ _ bss -> concatMap (getLeaves fid) bss
 
            mkLayers (cs:css:rest) = let (lrest, rrest) =  mkLayers (css:rest)
-                                     in ((fields cs) : lrest, (map (mkLinks css) cs) : rrest)    
+                                     in ((fields cs) : lrest, (map (mkLinks css) cs) : rrest)
            mkLayers [cs] = ([fields cs], [])
            mkLayers _ = ([],[])
 
            mkLinks cs (p0,id0,_) = (id0,indices)
-                    where 
+                    where
                      indices = [id1 | (p1,id1,_) <- cs, p1 == p0]
 
            fields cs = [(id, [w]) | (_,id,w) <- cs]
@@ -336,45 +336,45 @@ genPreAlignment pgf langs = lin2align . linsBracketed
 -- we assume we have 2 languages - source and target
 gizaAlignment :: PGF -> (Language,Language) -> Expr -> (String,String,String)
 gizaAlignment pgf (l1,l2) e = let PreAlign [rl1,rl2] rels = genPreAlignment pgf [l1,l2] e
-                                   in 
+                                   in
                                      (unwords (map showIndSeq rl1), unwords (concat $ map snd rl2),
                                         unwords $ words $ showRels rl2 (concat rels))
 
 
 showIndSeq (_,l) = let ww = map words l
                        w_ = map (intersperse "_")  ww
-                      in 
+                      in
                        concat $ concat w_
 
 showRels inds2 [] = []
-showRels inds2 ((ind,is):rest) = 
+showRels inds2 ((ind,is):rest) =
                        let lOffs = computeOffset inds2 0
-                           ltemp = [(i,getOffsetIndex i lOffs) | i <- is] 
+                           ltemp = [(i,getOffsetIndex i lOffs) | i <- is]
                            lcurr = concat $ map (\(offset,ncomp) -> [show ind ++ "-" ++ show (-1 + offset + ii)  ++ " "| ii <- [1..ncomp]]) (map snd ltemp)
                            lrest = showRels inds2 rest
-                            in 
+                            in
                              (unwords lcurr) ++ lrest
-                               
-                            
-                           
-                         
+
+
+
+
 
 
 
 getOffsetIndex i lst = let ll = filter (\(x,_) -> x == i) lst
-                           in 
-                           snd $ head ll                           
+                           in
+                           snd $ head ll
 
 computeOffset [] transp = []
-computeOffset ((i,l):rest) transp = let nw = (length $ words $ concat l) 
-                                     in (i,(transp,nw)) : (computeOffset rest (transp + nw))  
+computeOffset ((i,l):rest) transp = let nw = (length $ words $ concat l)
+                                     in (i,(transp,nw)) : (computeOffset rest (transp + nw))
 
 
 
--- alignment in the Graphviz format from the intermediate structure 
--- same effect as the old direct function 
+-- alignment in the Graphviz format from the intermediate structure
+-- same effect as the old direct function
 graphvizAlignment :: PGF -> [Language] -> Expr -> String
-graphvizAlignment pgf langs exp = 
+graphvizAlignment pgf langs exp =
     render (text "digraph {" $$
       space $$
       nest 2 (text "rankdir=LR ;" $$
@@ -382,23 +382,23 @@ graphvizAlignment pgf langs exp =
               space $$
               renderList 0 lrels rrels) $$
       text "}")
-  where             
-     (PreAlign lrels rrels) = genPreAlignment pgf langs exp 
-     
-             
+  where
+     (PreAlign lrels rrels) = genPreAlignment pgf langs exp
+
+
      renderList ii (l:ls) (r:rs) = struct ii <> text "[label = \"" <> fields l <> text "\"] ;" $$
-                                 (case ls of 
-                                       [] -> empty 
-                                       _  -> vcat [struct ii  <> colon <> tag id0 
-                                               <> colon <> char 'e' <+> text "->" <+> struct (ii+1) 
-                                               <> colon <> tag id1 <> colon <> char 'w' <+> semi 
+                                 (case ls of
+                                       [] -> empty
+                                       _  -> vcat [struct ii  <> colon <> tag id0
+                                               <> colon <> char 'e' <+> text "->" <+> struct (ii+1)
+                                               <> colon <> tag id1 <> colon <> char 'w' <+> semi
                                                    | (id0,ids) <- r, id1 <- ids] $$ renderList (ii + 1) ls rs)
-     renderList ii [] _ = empty                                           
+     renderList ii [] _ = empty
      renderList ii [l] [] = struct ii <> text "[label = \"" <> fields l <> text "\"] ;"
- 
+
      fields cs = hsep (intersperse (char '|') [tbrackets (tag id) <> text w | (id,ws) <- cs, w <- ws])
 
-  
+
 
 -- auxiliaries for graphviz syntax
 struct l = text ("struct" ++ show l)
