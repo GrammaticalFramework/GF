@@ -30,7 +30,7 @@ What's new? See the [Release notes release-3.4.html].
 %The Windows package is installed by just unpacking it anywhere. 
 %It finds the libraries relative to the ``.exe`` file.
 
-The ``.deb`` packages work on Ubuntu 12.04 and 12.10.
+The ``.deb`` packages work on Ubuntu 12.04, 12.10 and 13.04.
 
 %The ``.pkg`` package works on MacOS X 10.6 (Snow Leopard).
 The MacOS tar package works on 10.6 (Leopard), 10.7 (Lion)
