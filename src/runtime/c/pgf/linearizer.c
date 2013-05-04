@@ -327,6 +327,11 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 			if (ccat == NULL) {
 				size_t n_args = gu_buf_length(args);
 
+				int flag = gu_choice_next(lzn->ch, 1);
+				if (flag == 0) {
+					return gu_null_variant;
+				}
+
 				PgfCncTreeChunks* chunks = 
 					gu_new_flex_variant(PGF_CNC_TREE_CHUNKS,
 								PgfCncTreeChunks,
