@@ -26,7 +26,7 @@ abstract ExtraLavAbs = Extra **
     they8fem_Pron : Pron ;
     it8fem_Pron : Pron ;
 
-    --empty_Det : Number -> Definite -> Bool -> Det ;
+    --empty_Det : Number -> Definiteness -> Bool -> Det ;
 
     have_V3 : V3 ;
 }

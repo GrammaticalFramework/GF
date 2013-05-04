@@ -5,15 +5,13 @@ concrete ExtraLav of ExtraLavAbs = CatLav ** open
   ParadigmsPronounsLav,
   VerbLav,
   ResLav,
-  Coordination,
-  Prelude
-  in {
+  Coordination
+in {
 
-flags
-  coding = utf8 ;
+flags coding = utf8 ;
 
 lin
-  -- NP -> CN -> CN ;
+  -- NP -> CN -> CN
   GenCN np cn = {
     s = \\d,n,c => np.s ! Gen ++ cn.s ! d ! n ! c ;
     g = cn.g
@@ -42,12 +40,14 @@ lin
 
   have_V3 = mkV3 (mkV "būt") nom_Prep dat_Prep Dat ;
 
-  {-empty_Det num def neg = \num,def,neg -> {
+  {-
+  empty_Det num def pol = \num,def,pol -> {
     s = \\_,_ => [] ;
     n = num ;
     d = def ;
-    isNeg = neg
-  } ;-}
+    pol = pol
+  } ;
+  -}
 
   -- Zemāk esošās f-cijas nav ExtraLavAbs, tās ir abstract/Extra.gf
 
@@ -58,34 +58,30 @@ lin
     pol = (fromAgr np.a).pol
   } ;
 
-  --ICompAP ap = {s = \\g,n => "cik" ++ ap.s ! Indef ! g ! n ! Nom } ;
+  --ICompAP ap = { s = \\g,n => "cik" ++ ap.s ! Indef ! g ! n ! Nom } ;
 
-  IAdvAdv adv = {s = "cik" ++ adv.s} ;
+  IAdvAdv adv = { s = "cik" ++ adv.s } ;
 
-  -- for VP conjunction
+  -- VP conjunction:
 
   lincat
-    VPS   = {s : Agr => Str} ;
-    [VPS] = {s1,s2 : Agr => Str} ;
+    VPS = { s : Agr => Str } ;
+    [VPS] = { s1,s2 : Agr => Str } ;
 
   lin
     BaseVPS = twoTable Agr ;
     ConsVPS = consrTable Agr comma ;
 
     -- NP -> VPS -> S
-    -- NP = { s : Case => Str ; a : Agr ; isNeg : Bool } ;
-    PredVPS np vps = {s = np.s ! Nom ++ vps.s ! np.a} ; -- TODO: vps.s ! np.a ! np.isNeg
+    PredVPS np vps = { s = np.s ! Nom ++ vps.s ! np.a } ;
 
     -- Temp -> Pol -> VP -> VPS
     MkVPS temp pol vp = {
       s = \\subjAgr =>
-        -- VP = { v : Verb ; compl : Agr => Str ; agr : ClAgr ; objNeg : Bool } ;
-        -- Verb = { s : Polarity => VerbForm => Str } ;
-        -- TODO: other VerbForm-s (moods)
-        -- TODO: subj-dependent double negation
-        -- TODO: subj/obj isNeg jāpārceļ uz Agr (?)
-        --let verb = vp.v.s ! pol.p ! Indicative (fromAgr agr).pers (fromAgr agr).num temp.t in
-        temp.s ++ buildVerb vp.v (Ind temp.a temp.t) pol.p subjAgr (fromAgr subjAgr).pol vp.objNeg ++ vp.compl ! subjAgr
+        temp.s ++
+        -- TODO: verb moods other than Ind
+        buildVerb vp.v (Ind temp.a temp.t) pol.p subjAgr (fromAgr subjAgr).pol vp.objNeg ++
+        vp.compl ! subjAgr
       } ;
     
     -- Conj -> [VPS] -> VPS

@@ -12,7 +12,7 @@ flags
 
 oper
   PronGend : Type = { s : Gender => Number => Case => Str } ;
-  Pron : Type = { s : Case => Str ; a : ResLav.Agr ; possessive : Gender => Number => Case => Str } ;
+  Pron : Type = { s : Case => Str ; a : ResLav.Agr ; poss : Gender => Number => Case => Str } ;
 
 -- PRONOUNS (incl. 'determiners')
 
@@ -26,7 +26,7 @@ oper
       ResLav.Voc => NON_EXISTENT
     } ;
     a = AgP1 Sg g ;
-    possessive = table {
+    poss = table {
       Masc => table {
         Sg => table {
           Nom => "mans" ;
@@ -76,7 +76,7 @@ oper
       ResLav.Voc => NON_EXISTENT
     } ;
     a = AgP1 Pl g ;
-    possessive = \\_,_,_ => "mūsu"
+    poss = \\_,_,_ => "mūsu"
   } ;
 
   mkPronoun_You_Sg : Gender -> Pron = \g -> {
@@ -89,7 +89,7 @@ oper
       ResLav.Voc => "tu"
     } ;
     a = AgP2 Sg g ;
-    possessive = table {
+    poss = table {
       Masc => table {
         Sg => table {
           Nom => "tavs" ;
@@ -139,7 +139,7 @@ oper
       ResLav.Voc => "Jūs"
     } ;
     a = AgP2 Pl g ;  -- FIXME: in the case of a predicate nominal: copula=Pl, complement=Sg
-    possessive = \\_,_,_ => "Jūsu"
+    poss = \\_,_,_ => "Jūsu"
   } ;
 
   mkPronoun_You_Pl : Gender -> Pron = \g -> {
@@ -152,19 +152,19 @@ oper
       ResLav.Voc => "jūs"
     } ;
     a = AgP2 Pl g ;
-    possessive = \\_,_,_ => "jūsu"
+    poss = \\_,_,_ => "jūsu"
   } ;
 
   mkPronoun_They : Gender -> Pron = \g -> {
     s = \\c => (mkPronoun_Gend "viņš").s ! g ! Pl ! c ;
     a = AgP3 Pl g Pos ;
-    possessive = \\_,_,_ => "viņu"
+    poss = \\_,_,_ => "viņu"
   } ;
 
   mkPronoun_It_Sg : Gender -> Pron = \g -> {
     s = \\c => (mkPronoun_ThisThat That).s ! g ! Sg ! c ;
     a = AgP3 Sg g Pos ;
-    possessive = \\_,_,_ => case g of { Masc => "tā" ; Fem => "tās" }
+    poss = \\_,_,_ => case g of { Masc => "tā" ; Fem => "tās" }
   } ;
 
   -- Gender=>Number=>Case P3 pronouns
@@ -280,14 +280,14 @@ oper
         Voc => NON_EXISTENT
       } ! c ;
       a = AgP3 Sg Masc pol ;
-      possessive = \\_,_,_ => case stem of { "kaut" => stem ++ "kā" ; _ => stem + "kā" }
+      poss = \\_,_,_ => case stem of { "kaut" => stem ++ "kā" ; _ => stem + "kā" }
     } ;
 
     -- Everybody, somebody, nobody
     mkPronoun_Body : Str -> Polarity -> Pron = \lemma,pol -> {
       s = \\c => (mkPronoun_Gend lemma).s ! Masc ! Sg ! c ;
       a = AgP3 Sg Masc pol ;
-      possessive = \\_,_,_ => (mkPronoun_Gend lemma).s ! Masc ! Sg ! Gen ;
+      poss = \\_,_,_ => (mkPronoun_Gend lemma).s ! Masc ! Sg ! Gen ;
     } ;
 
 } ;

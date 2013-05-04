@@ -48,7 +48,7 @@ lin
         buildVerb v mood pol agr Pos Pos
     } ;
 
-  -- FIXME: needs restriction so that only VerbMood Indicative _ _ Present is allowed;
+  -- FIXME: needs restriction so that only VMood Indicative _ _ Present is allowed;
   -- can't do that on VP level...
   ProgrVP v = v ;
 
@@ -56,10 +56,10 @@ lin
     let agr = AgP1 Pl Masc
     in {
       s =
-        vp.v.s ! Pos ! (Indicative P1 Pl Pres) ++  -- Verb
+        vp.v.s ! Pos ! (VInd P1 Pl Pres) ++  -- Verb
         vp.compl ! agr  -- Object(s), complements, adverbial modifiers
     }
-    | { s = vp.v.s ! Pos ! (Indicative P1 Pl Fut) ++ vp.compl ! agr }  --# notpresent
+    | { s = vp.v.s ! Pos ! (VInd P1 Pl Fut) ++ vp.compl ! agr }  --# notpresent
     ;
 
   ImpP3 np vp = {

@@ -19,18 +19,18 @@ lin
 oper
   -- TODO: PassV2 verbs jāsaskaņo ar objektu, nevis subjektu (by8means_Prep: AgP3 Sg Masc)
   mkRelClause : RP -> CatLav.VP -> RCl = \rp,vp ->  
-    let subj : Case = case vp.agr.voice of {
-      Act  => vp.agr.c_topic ;
-      Pass => vp.agr.c_focus
+    let subj : Case = case vp.voice of {
+      Act  => vp.val.subj ;
+      Pass => vp.val.obj
     } in lin RCl {
       s = \\mood,pol,agr =>
         case mood of {  -- Subject
           Deb _ _ => rp.s ! Masc ! Dat ;  --# notpresent
-          _       => rp.s ! Masc ! vp.agr.c_topic
+          _       => rp.s ! Masc ! vp.val.subj
         } ++
         case subj of {  -- Verb
           Nom => buildVerb vp.v mood pol (AgP3 (fromAgr agr).num (fromAgr agr).gend Pos) Pos vp.objNeg ; -- TODO: kāpēc P3 nevis agr, kāds tas ir?
-          _   => buildVerb vp.v mood pol vp.agr.agr Pos vp.objNeg -- TODO: test me
+          _   => buildVerb vp.v mood pol vp.val.agr Pos vp.objNeg -- TODO: test me
         } ++
         vp.compl ! agr  -- Object(s), complements, adverbial modifiers
     } ;
