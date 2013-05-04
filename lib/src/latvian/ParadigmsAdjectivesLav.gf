@@ -29,11 +29,11 @@ oper
     } ;
 
   -- Specified type - no defaults
-  mkAdjectiveByType : Str -> AdjType -> Adj = \lemma,type ->
+  mkAdjectiveByType : Str -> AType -> Adj = \lemma,type ->
     case type of {
-      AdjQual   => mkAdjective_Qual lemma ;
-      AdjRel    => mkAdjective_Rel lemma ;
-      AdjIndecl => mkAdjective_Indecl lemma
+      AQual   => mkAdjective_Qual lemma ;
+      ARel    => mkAdjective_Rel lemma ;
+      AIndecl => mkAdjective_Indecl lemma
     } ;
 
   -- Indeclinable adjective: theoretically, any #vowel ending
@@ -74,16 +74,16 @@ oper
   -- TODO: Jāpieliek parametrs Tense: present = ziedošs, izsalkstošs; past = ziedējis, izsalcis.
   --       Vai arī jāpadod Str "-is"/"-ošs" un pa tiešo jāizsauc mkParticiple, bet
   --       kā šis mkA(Str) atšķirsies no citiem mkA(Str)? 
-  mkAdjective_Participle : Verb -> PartType -> Adj = \v,p -> {
+  mkAdjective_Participle : Verb -> Voice -> Adj = \v,p -> {
     s = table {
-      AAdj Posit Indef g n c => v.s ! Pos ! (Participle p g n c) ;
+      AAdj Posit Indef g n c => v.s ! Pos ! (VPart p g n c) ;
       _ => NON_EXISTENT
     }
   };
 
   -- Positive degree: -s, -š (Indef and Def); -ais (Def only)
   -- TODO: atsaukties uz lietvārdu locīšanas tabulām?
-  mkAdjective_Pos : Str -> Definite -> Gender => Number => Case => Str = \lemma,defin ->
+  mkAdjective_Pos : Str -> Definiteness -> Gender => Number => Case => Str = \lemma,defin ->
     let stem : Str = case lemma of {
       s + "ais" => s ;
       _ => Predef.tk 1 lemma
@@ -168,7 +168,7 @@ oper
     } ;
 
   -- Comparative degree: Qual only
-  mkAdjective_Comp : Str -> Definite -> Gender => Number => Case => Str = \lemma,defin ->
+  mkAdjective_Comp : Str -> Definiteness -> Gender => Number => Case => Str = \lemma,defin ->
     let stem : Str = Predef.tk 1 lemma
     in case defin of {
       Indef => table {

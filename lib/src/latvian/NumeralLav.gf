@@ -25,14 +25,14 @@ lin
     let trijs = mkNumSpec "trijs" "trešais" "trīs" "trīs" Pl
     in {
       s = \\f,o,g,c => case <f, o, g, c> of {
-        <unit, NCard, _, Nom> => "trīs" ;
-        <unit, NCard, _, Dat> => "trim" ;
-        <unit, NCard, _, Loc> => "trīs" ;
+        <DUnit, NCard, _, Nom> => "trīs" ;
+        <DUnit, NCard, _, Dat> => "trim" ;
+        <DUnit, NCard, _, Loc> => "trīs" ;
         _ => trijs.s ! f ! o ! g ! c
       }
     } | {
       s = \\f,o,g,c => case <f, o, g, c> of {
-        <unit, NCard, _, Nom> => "trīs" ;
+        <DUnit, NCard, _, Nom> => "trīs" ;
         _ => trijs.s ! f ! o ! g ! c
     }
   } ;
@@ -44,16 +44,16 @@ lin
   n8 = mkNumReg "astoņi" "astotais" Pl ;
   n9 = mkNumReg "deviņi" "devītais" Pl ;
 
-  pot01 = { s = viens.s ! unit } ** { n = Sg } ;
-  pot0 d = { s = d.s ! unit } ** { n = Pl } ;
-  pot110 = { s = viens.s ! ten } ** { n = Pl } ;
-  pot111 = { s = viens.s ! teen } ** { n = Pl } ;
-  pot1to19 d = { s = d.s ! teen } ** { n = Pl } ;
+  pot01 = { s = viens.s ! DUnit } ** { n = Sg } ;
+  pot0 d = { s = d.s ! DUnit } ** { n = Pl } ;
+  pot110 = { s = viens.s ! DTen } ** { n = Pl } ;
+  pot111 = { s = viens.s ! DTeen } ** { n = Pl } ;
+  pot1to19 d = { s = d.s ! DTeen } ** { n = Pl } ;
   pot0as1 n = { s = n.s ; n = n.n } ;
-  pot1 d = { s = d.s ! ten } ** { n = Pl } ;
+  pot1 d = { s = d.s ! DTen } ** { n = Pl } ;
 
   pot1plus d e = {
-    s = \\o,g,c => d.s ! ten ! NCard ! Masc ! Nom ++ e.s ! o ! g ! c ;
+    s = \\o,g,c => d.s ! DTen ! NCard ! Masc ! Nom ++ e.s ! o ! g ! c ;
     n = e.n
   } ;
 

@@ -11,10 +11,10 @@ flags
   coding = utf8 ;
 
 oper
-  Verb_TMP : Type = {s : VerbForm => Str} ;
+  Verb_TMP : Type = {s : VForm => Str} ;
 
   -- Second and third conjugations
-  mkVerb : Str -> VerbConj -> Verb = \lemma,conj -> {
+  mkVerb : Str -> Conjugation -> Verb = \lemma,conj -> {
     s = table {
       Pos => (mkVerb_Pos lemma conj).s ;
       Neg => (filter_Neg (mkVerb_Pos ("ne"+lemma) conj)).s
@@ -29,7 +29,7 @@ oper
     }
   } ;
 
-  mkVerb_Pos : Str -> VerbConj -> Verb_TMP = \lemma,conj ->
+  mkVerb_Pos : Str -> Conjugation -> Verb_TMP = \lemma,conj ->
     case lemma of {
       -- TODO: "ir" =>
       s + ("t")    => mkRegVerb lemma conj ;
@@ -43,13 +43,13 @@ oper
       s + ("ties") => mkVerb_C1_Refl lemma lemma2 lemma3
     } ;
 
-  mkRegVerb : Str -> VerbConj -> Verb_TMP = \lemma,conj ->
+  mkRegVerb : Str -> Conjugation -> Verb_TMP = \lemma,conj ->
     case conj of {
       C2 => mkVerb_C2 lemma ;
       C3 => mkVerb_C3 lemma
     } ;
 
-  mkReflVerb : Str -> VerbConj -> Verb_TMP = \lemma,conj ->
+  mkReflVerb : Str -> Conjugation -> Verb_TMP = \lemma,conj ->
     case conj of {
       C2 => mkVerb_C2_Refl lemma ;
       C3 => mkVerb_C3_Refl lemma
@@ -57,17 +57,17 @@ oper
 
   filter_Neg : Verb_TMP -> Verb_TMP = \full -> {
     s = table {
-      Debitive => NON_EXISTENT ;
-      DebitiveRelative => NON_EXISTENT ;
+      VDeb => NON_EXISTENT ;
+      VDebRel => NON_EXISTENT ;
       x => full.s ! x
     }
   } ;
 
   -- First conjugation
   -- Ref. to lexicon.xml (revision 719): 15th paradigm
-  -- lemma1: Infinitive
-  -- lemma2: Indicative P1 Sg Pres
-  -- lemma3: Indicative P1 Sg Past
+  -- lemma1: VInf
+  -- lemma2: VInd P1 Sg Pres
+  -- lemma3: VInd P1 Sg Past
   mkVerb_C1 : Str -> Str -> Str -> Verb_TMP = \lemma1,lemma2,lemma3 ->
     let
       stem1 : Str = Predef.tk 1 lemma1 ;
@@ -75,147 +75,141 @@ oper
       stem3 : Str = Predef.tk 1 lemma3
     in {
       s = table {
-        Infinitive => lemma1 ; -- stem1 + "t"
+        VInf => lemma1 ;  -- stem1 + "t"
 
-        Indicative P1 Sg Pres => lemma2 ; -- stem2 + "u"
-        Indicative P1 Sg Fut  => pal_C1_1 stem3 stem1 + "šu" ;
-        Indicative P1 Sg Past => lemma3 ; -- stem3 + "u"
-        Indicative P1 Pl Pres => stem2 + "am" ;
-        Indicative P1 Pl Fut  => pal_C1_1 stem3 stem1 + "sim" ;
-        Indicative P1 Pl Past => stem3 + "ām" ;
+        VInd P1 Sg Pres => lemma2 ;  -- stem2 + "u"
+        VInd P1 Sg Fut  => pal_C1_1 stem3 stem1 + "šu" ;
+        VInd P1 Sg Past => lemma3 ;  -- stem3 + "u"
+        VInd P1 Pl Pres => stem2 + "am" ;
+        VInd P1 Pl Fut  => pal_C1_1 stem3 stem1 + "sim" ;
+        VInd P1 Pl Past => stem3 + "ām" ;
 
-        Indicative P2 Sg Pres => pal_C1_4 stem2 ;
-        Indicative P2 Sg Fut  => pal_C1_1 stem3 stem1 + "si" ;
-        Indicative P2 Sg Past => stem3 + "i" ;
-        Indicative P2 Pl Pres => stem2 + "at" ;
-      --Indicative P2 Pl Fut  => pal_C1_1 stem3 stem1 + ("siet"|"sit") ;
-        Indicative P2 Pl Fut  => pal_C1_1 stem3 stem1 + "siet" ;
-        Indicative P2 Pl Past => stem3 + "āt" ;
+        VInd P2 Sg Pres => pal_C1_4 stem2 ;
+        VInd P2 Sg Fut  => pal_C1_1 stem3 stem1 + "si" ;
+        VInd P2 Sg Past => stem3 + "i" ;
+        VInd P2 Pl Pres => stem2 + "at" ;
+        VInd P2 Pl Fut  => pal_C1_1 stem3 stem1 + "siet" ;  -- ("siet"|"sit")
+        VInd P2 Pl Past => stem3 + "āt" ;
 
-        Indicative P3 _ Pres => stem2 ;
-        Indicative P3 _ Fut  => pal_C1_1 stem3 stem1 + "s" ;
-        Indicative P3 _ Past => stem3 + "a" ;
+        VInd P3 _ Pres => stem2 ;
+        VInd P3 _ Fut  => pal_C1_1 stem3 stem1 + "s" ;
+        VInd P3 _ Past => stem3 + "a" ;
 
-        Indicative _ _ Cond => stem1 + "tu" ;
+        VInd _  _ Cond => stem1 + "tu" ;
 
-        Relative Pres => stem2 + "ot" ;
-        Relative Fut  => pal_C1_1 stem3 stem1 + "šot" ;
-        Relative Past => NON_EXISTENT ;
-        Relative Cond => NON_EXISTENT ;
+        VRel Pres => stem2 + "ot" ;
+        VRel Fut  => pal_C1_1 stem3 stem1 + "šot" ;
+        VRel Past => NON_EXISTENT ;
+        VRel Cond => NON_EXISTENT ;
 
-        Debitive => "jā" + stem2 ;
+        VDeb    => "jā" + stem2 ;
+        VDebRel => "jā" + stem2 + "ot" ;
 
-        DebitiveRelative => "jā" + stem2 + "ot" ;
+        VImp Sg => pal_C1_4 stem2 ;
+        VImp Pl => pal_C1_4 stem2 + "iet" ;
 
-        Imperative Sg => pal_C1_4 stem2 ;
-        Imperative Pl => pal_C1_4 stem2 + "iet" ;
-
-        Participle IsUsi g n c => mkParticiple_IsUsi g n c (pal_C1_3 stem3) ;
-        Participle TsTa  g n c => mkParticiple_TsTa g n c stem1
+        VPart Act  g n c => mkParticiple_IsUsi g n c (pal_C1_3 stem3) ;
+        VPart Pass g n c => mkParticiple_TsTa g n c stem1
       }
     } ;
 
   -- Second conjugation
   -- Ref. to lexicon.xml (revision 719): 16th paradigm
-  -- lemma: Infinitive
+  -- lemma: VInf
   mkVerb_C2 : Str -> Verb_TMP = \lemma ->
     let
       stem : Str = Predef.tk 1 lemma
     in {
       s = table {
-        Infinitive => lemma ; -- stem + "t"
+        VInf => lemma ; -- stem + "t"
 
-        Indicative P1 Sg Pres => stem + "ju" ;
-        Indicative P1 Sg Fut  => stem + "šu" ;
-        Indicative P1 Sg Past => stem + "ju" ;
-        Indicative P1 Pl Pres => stem + "jam" ;
-        Indicative P1 Pl Fut  => stem + "sim" ;
-        Indicative P1 Pl Past => stem + "jām" ;
+        VInd P1 Sg Pres => stem + "ju" ;
+        VInd P1 Sg Fut  => stem + "šu" ;
+        VInd P1 Sg Past => stem + "ju" ;
+        VInd P1 Pl Pres => stem + "jam" ;
+        VInd P1 Pl Fut  => stem + "sim" ;
+        VInd P1 Pl Past => stem + "jām" ;
 
-        Indicative P2 Sg Pres => stem ;
-        Indicative P2 Sg Fut  => stem + "si" ;
-        Indicative P2 Sg Past => stem + "ji" ;
-        Indicative P2 Pl Pres => stem + "jat" ;
-      --Indicative P2 Pl Fut  => stem + ("siet"|"sit") ;
-        Indicative P2 Pl Fut  => stem + "siet" ;
-        Indicative P2 Pl Past => stem + "jāt" ;
+        VInd P2 Sg Pres => stem ;
+        VInd P2 Sg Fut  => stem + "si" ;
+        VInd P2 Sg Past => stem + "ji" ;
+        VInd P2 Pl Pres => stem + "jat" ;
+        VInd P2 Pl Fut  => stem + "siet" ;  -- ("siet"|"sit")
+        VInd P2 Pl Past => stem + "jāt" ;
 
-        Indicative P3 _ Pres => stem ;
-        Indicative P3 _ Fut  => stem + "s" ;
-        Indicative P3 _ Past => stem + "ja" ;
+        VInd P3 _ Pres => stem ;
+        VInd P3 _ Fut  => stem + "s" ;
+        VInd P3 _ Past => stem + "ja" ;
 
-        Indicative _ _ Cond => stem + "tu" ;
+        VInd _  _ Cond => stem + "tu" ;
 
-        Relative Pres => stem + "jot" ;
-        Relative Fut  => stem + "šot" ;
-        Relative Past => NON_EXISTENT ;
-        Relative Cond => NON_EXISTENT ;
+        VRel Pres => stem + "jot" ;
+        VRel Fut  => stem + "šot" ;
+        VRel Past => NON_EXISTENT ;
+        VRel Cond => NON_EXISTENT ;
 
-        Debitive => "jā" + stem ;
+        VDeb    => "jā" + stem ;
+        VDebRel => "jā" + stem + "jot" ;
 
-        DebitiveRelative => "jā" + stem + "jot" ;
+        VImp Sg => stem ;
+        VImp Pl => stem + "jiet" ;
 
-        Imperative Sg => stem ;
-        Imperative Pl => stem + "jiet" ;
-
-        Participle IsUsi g n c => mkParticiple_IsUsi g n c (stem + "j") ;
-        Participle TsTa  g n c => mkParticiple_TsTa g n c stem
+        VPart Act  g n c => mkParticiple_IsUsi g n c (stem + "j") ;
+        VPart Pass g n c => mkParticiple_TsTa g n c stem
       }
     } ;
 
   -- Third conjugation
   -- Ref. to lexicon.xml (revision 719): 17th paradigm
-  -- lemma: Infinitive
+  -- lemma: VInf
   mkVerb_C3 : Str -> Verb_TMP = \lemma ->
     let
       stem : Str = Predef.tk 1 lemma
     in {
       s = table {
-        Infinitive => lemma ; -- stem + "t"
+        VInf => lemma ;  -- stem + "t"
 
-        Indicative P1 Sg Pres => pal_C3_1 stem + "u" ;
-        Indicative P1 Sg Fut  => stem + "šu" ;
-        Indicative P1 Sg Past => stem + "ju" ;
-        Indicative P1 Pl Pres => pal_C3_1 stem + pal_C3_2 stem "am" ;
-        Indicative P1 Pl Fut  => stem + "sim" ;
-        Indicative P1 Pl Past => stem + "jām" ;
+        VInd P1 Sg Pres => pal_C3_1 stem + "u" ;
+        VInd P1 Sg Fut  => stem + "šu" ;
+        VInd P1 Sg Past => stem + "ju" ;
+        VInd P1 Pl Pres => pal_C3_1 stem + pal_C3_2 stem "am" ;
+        VInd P1 Pl Fut  => stem + "sim" ;
+        VInd P1 Pl Past => stem + "jām" ;
 
-        Indicative P2 Sg Pres => pal_C3_1 stem + "i" ;
-        Indicative P2 Sg Fut  => stem + "si" ;
-        Indicative P2 Sg Past => stem + "ji" ;
-        Indicative P2 Pl Pres => pal_C3_1 stem + pal_C3_2 stem "at" ;
-      --Indicative P2 Pl Fut  => stem + ("siet"|"sit") ;
-        Indicative P2 Pl Fut  => stem + "siet" ;
-        Indicative P2 Pl Past => stem + "jāt" ;
+        VInd P2 Sg Pres => pal_C3_1 stem + "i" ;
+        VInd P2 Sg Fut  => stem + "si" ;
+        VInd P2 Sg Past => stem + "ji" ;
+        VInd P2 Pl Pres => pal_C3_1 stem + pal_C3_2 stem "at" ;
+        VInd P2 Pl Fut  => stem + "siet" ;  -- ("siet"|"sit")
+        VInd P2 Pl Past => stem + "jāt" ;
 
-        Indicative P3 _ Pres => pal_C3_5 stem ;
-        Indicative P3 _ Fut  => stem + "s" ;
-        Indicative P3 _ Past => stem + "ja" ;
+        VInd P3 _ Pres => pal_C3_5 stem ;
+        VInd P3 _ Fut  => stem + "s" ;
+        VInd P3 _ Past => stem + "ja" ;
 
-        Indicative _ _ Cond => stem + "tu" ;
+        VInd _  _ Cond => stem + "tu" ;
 
-        Relative Pres => pal_C3_1 stem + "ot" ;
-        Relative Fut  => stem + "šot" ;
-        Relative Past => NON_EXISTENT ;
-        Relative Cond => NON_EXISTENT ;
+        VRel Pres => pal_C3_1 stem + "ot" ;
+        VRel Fut  => stem + "šot" ;
+        VRel Past => NON_EXISTENT ;
+        VRel Cond => NON_EXISTENT ;
 
-        Debitive => pal_C3_3 stem ;
+        VDeb    => pal_C3_3 stem ;
+        VDebRel => pal_C3_3 stem + "ot" ;
 
-        DebitiveRelative => pal_C3_3 stem + "ot" ;
+        VImp Sg => pal_C3_1 stem + "i" ;
+        VImp Pl => pal_C3_1 stem + "iet" ;
 
-        Imperative Sg => pal_C3_1 stem + "i" ;
-        Imperative Pl => pal_C3_1 stem + "iet" ;
-
-        Participle IsUsi g n c => mkParticiple_IsUsi g n c (stem + "j") ;
-        Participle TsTa  g n c => mkParticiple_TsTa g n c stem
+        VPart Act  g n c => mkParticiple_IsUsi g n c (stem + "j") ;
+        VPart Pass g n c => mkParticiple_TsTa g n c stem
       }
     } ;
 
   -- First conjugation: reflexive
   -- Ref. to lexicon.xml (revision 719): 18th paradigm
-  -- lemma1: Infinitive
-  -- lemma2: Indicative P1 Sg Pres
-  -- lemma3: Indicative P1 Sg Past
+  -- lemma1: VInf
+  -- lemma2: VInd P1 Sg Pres
+  -- lemma3: VInd P1 Sg Past
   mkVerb_C1_Refl : Str -> Str -> Str -> Verb_TMP = \lemma1,lemma2,lemma3 ->
     let
       stem1 : Str = Predef.tk 4 lemma1 ;
@@ -223,139 +217,133 @@ oper
       stem3 : Str = Predef.tk 2 lemma3
     in {
       s = table {
-        Infinitive => lemma1 ; -- stem + "ties"
+        VInf => lemma1 ;  -- stem + "ties"
 
-        Indicative P1 Sg Pres => lemma2 ; -- stem2 + "os"
-        Indicative P1 Sg Fut  => pal_C1_1 stem3 stem1 + "šos" ;
-        Indicative P1 Sg Past => lemma3 ; -- stem3 + "os"
-        Indicative P1 Pl Pres => stem2 + "amies" ;
-        Indicative P1 Pl Fut  => pal_C1_1 stem3 stem1 + "simies" ;
-        Indicative P1 Pl Past => stem3 + "āmies" ;
+        VInd P1 Sg Pres => lemma2 ;  -- stem2 + "os"
+        VInd P1 Sg Fut  => pal_C1_1 stem3 stem1 + "šos" ;
+        VInd P1 Sg Past => lemma3 ;  -- stem3 + "os"
+        VInd P1 Pl Pres => stem2 + "amies" ;
+        VInd P1 Pl Fut  => pal_C1_1 stem3 stem1 + "simies" ;
+        VInd P1 Pl Past => stem3 + "āmies" ;
 
-        Indicative P2 Sg Pres => pal_C1_2 stem3 stem2 + "ies" ;
-        Indicative P2 Sg Fut  => pal_C1_1 stem3 stem1 + "sies" ;
-        Indicative P2 Sg Past => stem3 + "ies" ;
-        Indicative P2 Pl Pres => stem2 + "aties" ;
-      --Indicative P2 Pl Fut  => pal_C1_1 stem3 stem1 + ("sieties"|"sities") ;
-        Indicative P2 Pl Fut  => pal_C1_1 stem3 stem1 + "sieties" ;
-        Indicative P2 Pl Past => stem3 + "āties" ;
+        VInd P2 Sg Pres => pal_C1_2 stem3 stem2 + "ies" ;
+        VInd P2 Sg Fut  => pal_C1_1 stem3 stem1 + "sies" ;
+        VInd P2 Sg Past => stem3 + "ies" ;
+        VInd P2 Pl Pres => stem2 + "aties" ;
+        VInd P2 Pl Fut  => pal_C1_1 stem3 stem1 + "sieties" ;  -- ("sieties"|"sities")
+        VInd P2 Pl Past => stem3 + "āties" ;
 
-        Indicative P3 _ Pres => stem2 + "as" ;
-        Indicative P3 _ Fut  => pal_C1_1 stem3 stem1 + "sies" ;
-        Indicative P3 _ Past => stem3 + "ās" ;
+        VInd P3 _ Pres => stem2 + "as" ;
+        VInd P3 _ Fut  => pal_C1_1 stem3 stem1 + "sies" ;
+        VInd P3 _ Past => stem3 + "ās" ;
 
-        Indicative _ _ Cond => stem1 + "tos" ;
+        VInd _  _ Cond => stem1 + "tos" ;
 
-        Relative Pres => stem2 + "oties" ;
-        Relative Fut  => pal_C1_1 stem3 stem1 + "šoties" ;
-        Relative Past => NON_EXISTENT ;
-        Relative Cond => NON_EXISTENT ;
+        VRel Pres => stem2 + "oties" ;
+        VRel Fut  => pal_C1_1 stem3 stem1 + "šoties" ;
+        VRel Past => NON_EXISTENT ;
+        VRel Cond => NON_EXISTENT ;
 
-        Debitive => "jā" + stem2 + "as" ;
+        VDeb    => "jā" + stem2 + "as" ;
+        VDebRel => "jā" + stem2 + "oties" ;
 
-        DebitiveRelative => "jā" + stem2 + "oties" ;
+        VImp Sg => pal_C1_2 stem3 stem2 + "ies" ;
+        VImp Pl => pal_C1_2 stem3 stem2 + "ieties" ;
 
-        Imperative Sg => pal_C1_2 stem3 stem2 + "ies" ;
-        Imperative Pl => pal_C1_2 stem3 stem2 + "ieties" ;
-
-        Participle IsUsi g n c => mkParticiple_IesUsies g n c (pal_C1_3 stem3) ;
-        Participle TsTa  g n c => mkParticiple_TsTa g n c stem1
+        VPart Act  g n c => mkParticiple_IesUsies g n c (pal_C1_3 stem3) ;
+        VPart Pass g n c => mkParticiple_TsTa g n c stem1
       }
     } ;
 
   -- Second conjugation: reflexive
   -- Ref. to lexicon.xml (revision 719): 19th paradigm
-  -- lemma: Infinitive
+  -- lemma: VInf
   mkVerb_C2_Refl : Str -> Verb_TMP = \lemma ->
     let
       stem : Str = Predef.tk 4 lemma
     in {
       s = table {
-        Infinitive => lemma ; -- stem + "ties"
+        VInf => lemma ;  -- stem + "ties"
 
-        Indicative P1 Sg Pres => stem + "jos" ;
-        Indicative P1 Sg Fut  => stem + "šos" ;
-        Indicative P1 Sg Past => stem + "jos" ;
-        Indicative P1 Pl Pres => stem + "jamies" ;
-        Indicative P1 Pl Fut  => stem + "simies" ;
-        Indicative P1 Pl Past => stem + "jāmies" ;
+        VInd P1 Sg Pres => stem + "jos" ;
+        VInd P1 Sg Fut  => stem + "šos" ;
+        VInd P1 Sg Past => stem + "jos" ;
+        VInd P1 Pl Pres => stem + "jamies" ;
+        VInd P1 Pl Fut  => stem + "simies" ;
+        VInd P1 Pl Past => stem + "jāmies" ;
 
-        Indicative P2 Sg Pres => stem + "jies" ;
-        Indicative P2 Sg Fut  => stem + "sies" ;
-        Indicative P2 Sg Past => stem + "jies" ;
-        Indicative P2 Pl Pres => stem + "jaties" ;
-      --Indicative P2 Pl Fut  => stem + ("sieties"|"sities") ;
-        Indicative P2 Pl Fut  => stem + "sieties" ;
-        Indicative P2 Pl Past => stem + "jāties" ;
+        VInd P2 Sg Pres => stem + "jies" ;
+        VInd P2 Sg Fut  => stem + "sies" ;
+        VInd P2 Sg Past => stem + "jies" ;
+        VInd P2 Pl Pres => stem + "jaties" ;
+        VInd P2 Pl Fut  => stem + "sieties" ;  -- ("sieties"|"sities")
+        VInd P2 Pl Past => stem + "jāties" ;
 
-        Indicative P3 _ Pres => stem + "jas" ;
-        Indicative P3 _ Fut  => stem + "sies" ;
-        Indicative P3 _ Past => stem + "jās" ;
+        VInd P3 _ Pres => stem + "jas" ;
+        VInd P3 _ Fut  => stem + "sies" ;
+        VInd P3 _ Past => stem + "jās" ;
 
-        Indicative _ _ Cond => stem + "tos" ;
+        VInd _  _ Cond => stem + "tos" ;
 
-        Relative Pres => stem + "joties" ;
-        Relative Fut  => stem + "šoties" ;
-        Relative Past => NON_EXISTENT ;
-        Relative Cond => NON_EXISTENT ;
+        VRel Pres => stem + "joties" ;
+        VRel Fut  => stem + "šoties" ;
+        VRel Past => NON_EXISTENT ;
+        VRel Cond => NON_EXISTENT ;
 
-        Debitive => "jā" + stem + "jas" ;
+        VDeb    => "jā" + stem + "jas" ;
+        VDebRel => "jā" + stem + "joties" ;
 
-        DebitiveRelative => "jā" + stem + "joties" ;
+        VImp Sg => stem + "jies" ;
+        VImp Pl => stem + "jieties" ;
 
-        Imperative Sg => stem + "jies" ;
-        Imperative Pl => stem + "jieties" ;
-
-        Participle IsUsi g n c => mkParticiple_IesUsies g n c (stem + "j") ;
-        Participle TsTa  g n c => mkParticiple_TsTa g n c stem
+        VPart Act  g n c => mkParticiple_IesUsies g n c (stem + "j") ;
+        VPart Pass g n c => mkParticiple_TsTa g n c stem
       }
     } ;
 
   -- Third conjugation: reflexive
   -- Ref. to lexicon.xml (revision 719): 20th paradigm
-  -- lemma: Infinitive
+  -- lemma: VInf
   mkVerb_C3_Refl : Str -> Verb_TMP = \lemma ->
     let
       stem : Str = Predef.tk 4 lemma
     in {
       s = table {
-        Infinitive => lemma ; -- stem + "ties"
+        VInf => lemma ;  -- stem + "ties"
 
-        Indicative P1 Sg Pres => pal_C3_1 stem + "os" ;
-        Indicative P1 Sg Fut  => stem + "šos" ;
-        Indicative P1 Sg Past => stem + "jos" ;
-        Indicative P1 Pl Pres => pal_C3_4 stem + "mies" ;
-        Indicative P1 Pl Fut  => stem + "simies" ;
-        Indicative P1 Pl Past => stem + "jāmies" ;
+        VInd P1 Sg Pres => pal_C3_1 stem + "os" ;
+        VInd P1 Sg Fut  => stem + "šos" ;
+        VInd P1 Sg Past => stem + "jos" ;
+        VInd P1 Pl Pres => pal_C3_4 stem + "mies" ;
+        VInd P1 Pl Fut  => stem + "simies" ;
+        VInd P1 Pl Past => stem + "jāmies" ;
 
-        Indicative P2 Sg Pres => pal_C3_1 stem + "ies" ;
-        Indicative P2 Sg Fut  => stem + "sies" ;
-        Indicative P2 Sg Past => stem + "jies" ;
-        Indicative P2 Pl Pres => pal_C3_4 stem + "ties" ;
-      --Indicative P2 Pl Fut  => stem + ("sieties"|"sities") ;
-        Indicative P2 Pl Fut  => stem + "sieties" ;
-        Indicative P2 Pl Past => stem + "jāties" ;
+        VInd P2 Sg Pres => pal_C3_1 stem + "ies" ;
+        VInd P2 Sg Fut  => stem + "sies" ;
+        VInd P2 Sg Past => stem + "jies" ;
+        VInd P2 Pl Pres => pal_C3_4 stem + "ties" ;
+        VInd P2 Pl Fut  => stem + "sieties" ;  -- ("sieties"|"sities")
+        VInd P2 Pl Past => stem + "jāties" ;
 
-        Indicative P3 _ Pres => pal_C3_4 stem + "s" ;
-        Indicative P3 _ Fut  => stem + "sies" ;
-        Indicative P3 _ Past => stem + "jās" ;
+        VInd P3 _ Pres => pal_C3_4 stem + "s" ;
+        VInd P3 _ Fut  => stem + "sies" ;
+        VInd P3 _ Past => stem + "jās" ;
 
-        Indicative _ _ Cond => stem + "tos" ;
+        VInd _  _ Cond => stem + "tos" ;
 
-        Relative Pres => pal_C3_1 stem + "oties" ;
-        Relative Fut  => stem + "šoties" ;
-        Relative Past => NON_EXISTENT ;
-        Relative Cond => NON_EXISTENT ;
+        VRel Pres => pal_C3_1 stem + "oties" ;
+        VRel Fut  => stem + "šoties" ;
+        VRel Past => NON_EXISTENT ;
+        VRel Cond => NON_EXISTENT ;
 
-        Debitive => pal_C3_6 stem + "s" ;
+        VDeb    => pal_C3_6 stem + "s" ;
+        VDebRel => pal_C3_6 stem + "oties" ;
 
-        DebitiveRelative => pal_C3_6 stem + "oties" ;
+        VImp Sg => pal_C3_1 stem + "ies" ;
+        VImp Pl => pal_C3_1 stem + "ieties" ;
 
-        Imperative Sg => pal_C3_1 stem + "ies" ;
-        Imperative Pl => pal_C3_1 stem + "ieties" ;
-
-        Participle IsUsi g n c => mkParticiple_IesUsies g n c (stem + "j") ;
-        Participle TsTa  g n c => mkParticiple_TsTa g n c stem
+        VPart Act  g n c => mkParticiple_IesUsies g n c (stem + "j") ;
+        VPart Pass g n c => mkParticiple_TsTa g n c stem
       }
     } ;
 
@@ -373,22 +361,22 @@ oper
   mkVerb_Irreg_Be : Verb = {
     s = table {
       Pos => table {
-        Indicative P1 Sg Pres => "esmu" ;
-        Indicative P2 Sg Pres => "esi" ;
-        Indicative P3 _  Pres => "ir" ;
+        VInd P1 Sg Pres => "esmu" ;
+        VInd P2 Sg Pres => "esi" ;
+        VInd P3 _  Pres => "ir" ;
 
-        Debitive => "jābūt" ;
+        VDeb => "jābūt" ;
 
         x => (mkVerb_C1 "būt" "esu" "biju").s ! x -- the incorrect 'esu' will be overriden
       } ;
       Neg => table {
-        Indicative P1 Sg Pres => "neesmu" ;
-        Indicative P2 Sg Pres => "neesi" ;
-        Indicative P3 _  Pres => "nav" ;
+        VInd P1 Sg Pres => "neesmu" ;
+        VInd P2 Sg Pres => "neesi" ;
+        VInd P3 _  Pres => "nav" ;
 
-        Debitive => NON_EXISTENT ;
+        VDeb => NON_EXISTENT ;
 
-        DebitiveRelative => NON_EXISTENT ;
+        VDebRel => NON_EXISTENT ;
 
         x => (mkVerb_C1 "nebūt" "neesu" "nebiju").s ! x -- the incorrect 'neesu' will be overriden
       }
@@ -400,14 +388,14 @@ oper
   mkVerb_Irreg_Go_Prefix : Str -> Verb = \pref -> {
     s = table {
       Pos => table {
-        Indicative P3 _ Pres => pref + "iet" ;
-        Debitive => "jā" + pref + "iet" ;
+        VInd P3 _ Pres => pref + "iet" ;
+        VDeb => "jā" + pref + "iet" ;
         x => (mkVerb_C1 (pref + "iet") (pref + "eju") (pref + "gāju")).s ! x
       } ;
       Neg => table {
-        Indicative P3 _ Pres => "ne" + pref + "iet" ;
-        Debitive => NON_EXISTENT ;
-        DebitiveRelative => NON_EXISTENT ;
+        VInd P3 _ Pres => "ne" + pref + "iet" ;
+        VDeb => NON_EXISTENT ;
+        VDebRel => NON_EXISTENT ;
         x => (mkVerb_C1 ("ne" + pref + "iet") ("ne" + pref + "eju") ("ne" + pref + "gāju")).s ! x
       }
     }
@@ -416,28 +404,28 @@ oper
   mkVerb_Irreg_Sleep : Verb = {
     s = table {
       Pos => table {
-        Indicative P2 Sg Pres => (mkVerb_C3 "gulēt").s ! Indicative P2 Sg Pres ;
-        Indicative p  n  Pres => (mkVerb_C3 "guļēt").s ! Indicative p n Pres ;
+        VInd P2 Sg Pres => (mkVerb_C3 "gulēt").s ! VInd P2 Sg Pres ;
+        VInd p  n  Pres => (mkVerb_C3 "guļēt").s ! VInd p n Pres ;
 
         -- FIXME: Here and there, the incorrect 'guļēt' contains intentional palatalization
 
-        Relative Pres => (mkVerb_C3 "guļēt").s ! Relative Pres ;
+        VRel Pres => (mkVerb_C3 "guļēt").s ! VRel Pres ;
 
-        Debitive => (mkVerb_C3 "guļēt").s ! Debitive ;
+        VDeb => (mkVerb_C3 "guļēt").s ! VDeb ;
 
-        DebitiveRelative => (mkVerb_C3 "guļēt").s ! DebitiveRelative ;
+        VDebRel => (mkVerb_C3 "guļēt").s ! VDebRel ;
 
         x => (mkVerb_C3 "gulēt").s ! x
       } ;
       Neg => table {
-        Indicative P2 Sg Pres => (mkVerb_C3 "negulēt").s ! Indicative P2 Sg Pres ;
-        Indicative p  n  Pres => (mkVerb_C3 "neguļēt").s ! Indicative p n Pres ;
+        VInd P2 Sg Pres => (mkVerb_C3 "negulēt").s ! VInd P2 Sg Pres ;
+        VInd p  n  Pres => (mkVerb_C3 "neguļēt").s ! VInd p n Pres ;
 
-        Relative Pres => (mkVerb_C3 "neguļēt").s ! Relative Pres ;
+        VRel Pres => (mkVerb_C3 "neguļēt").s ! VRel Pres ;
 
-        Debitive => NON_EXISTENT ;
+        VDeb => NON_EXISTENT ;
 
-        DebitiveRelative => NON_EXISTENT ;
+        VDebRel => NON_EXISTENT ;
 
         x => (mkVerb_C3 "negulēt").s ! x
       }
@@ -447,8 +435,8 @@ oper
   -- Auxiliaries: palatalization rules
 
   -- Ref. to the Java implementation: mija6
-  -- stem3: Indicative P1 Sg Past
-  -- stem1: Infinitive
+  -- stem3: VInd P1 Sg Past
+  -- stem1: VInf
   pal_C1_1 : Str -> Str -> Str = \stem3,stem1 ->
     case stem1 of {
       s + "s" => case stem3 of {
@@ -462,8 +450,8 @@ oper
     } ;
 
   -- Ref. to the Java implementation: mija7
-  -- stem3: Indicative P1 Sg Past
-  -- stem2: Indicative P1 Sg Pres
+  -- stem3: VInd P1 Sg Past
+  -- stem2: VInd P1 Sg Pres
   pal_C1_2 : Str -> Str -> Str = \stem3,stem2 ->
     case stem2 of {
       s + "š" => case stem3 of {
@@ -486,7 +474,7 @@ oper
     } ;
 
   -- Ref. to the Java implementation: mija11
-  -- stem3: Indicative P1 Sg Past
+  -- stem3: VInd P1 Sg Past
   pal_C1_3 : Str -> Str = \stem3 ->
     case stem3 of {
       s + "c"  => s + "k" ;
@@ -495,7 +483,7 @@ oper
     } ;
 
   -- Ref. to the Java implementation: mija14
-  -- stem: Indicative P1 Sg Pres | Indicative P1 Sg Past
+  -- stem: VInd P1 Sg Pres | VInd P1 Sg Past
   pal_C1_4 : Str -> Str = \stem ->
     case stem of {
       s + "k" => s + "c" ;

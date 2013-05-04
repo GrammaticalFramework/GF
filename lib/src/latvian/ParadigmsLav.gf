@@ -9,20 +9,16 @@ resource ParadigmsLav = open
   ParadigmsPronounsLav,
   ResLav,
   CatLav
-  in {
+in {
 
-flags
-  coding = utf8 ;
+flags coding = utf8 ;
 
 oper
-  singular : Number = Sg ;
-  plural   : Number = Pl ;
-
   masculine : Gender = Masc ;
   feminine  : Gender = Fem ;
 
-  second_conjugation : VerbConj = C2 ;
-  third_conjugation  : VerbConj = C3 ;
+  singular : Number = Sg ;
+  plural   : Number = Pl ;
 
   nominative : Case = Nom ;
   genitive   : Case = Gen ;
@@ -30,21 +26,24 @@ oper
   accusative : Case = Acc ;
   locative   : Case = Loc ;
 
-  active_voice  : PartType = IsUsi ;
-  passive_voice : PartType = TsTa ;
-  
+  second_conjugation : Conjugation = C2 ;
+  third_conjugation  : Conjugation = C3 ;
+
+  active_voice  : Voice = Act ;
+  passive_voice : Voice = Pass ;
+
   mkN = overload {
     mkN : (lemma : Str) -> N = \l -> lin N (mkNoun l) ;
 
     mkN : (lemma : Str) -> Bool -> N = \l,p -> lin N (mkNounByPal l p) ;
     mkN : (lemma : Str) -> Gender -> N = \l,g -> lin N (mkNounByGend l g) ;
-    mkN : (lemma : Str) -> NounDecl -> N = \l,d -> lin N (mkNounByDecl l d) ;
+    mkN : (lemma : Str) -> Declension -> N = \l,d -> lin N (mkNounByDecl l d) ;
 
     mkN : (lemma : Str) -> Gender -> Bool -> N = \l,g,p -> lin N (mkNounByGendPal l g p) ;
-    mkN : (lemma : Str) -> NounDecl -> Bool -> N = \l,d,p -> lin N (mkNounByDeclPal l d p) ;
-    mkN : (lemma : Str) -> Gender -> NounDecl -> N = \l,g,d -> lin N (mkNounByGendDecl l g d) ;
+    mkN : (lemma : Str) -> Declension -> Bool -> N = \l,d,p -> lin N (mkNounByDeclPal l d p) ;
+    mkN : (lemma : Str) -> Gender -> Declension -> N = \l,g,d -> lin N (mkNounByGendDecl l g d) ;
 
-    mkN : (lemma : Str) -> Gender -> NounDecl -> Bool -> N = \l,g,d,p ->
+    mkN : (lemma : Str) -> Gender -> Declension -> Bool -> N = \l,g,d,p ->
       lin N (mkNounByGendDeclPal l g d p) ;
   } ;
 
@@ -63,13 +62,13 @@ oper
 
   mkA = overload {
     mkA : (lemma : Str) -> A = \s -> lin A (mkAdjective s) ;
-    mkA : (lemma : Str) -> AdjType -> A = \s,t -> lin A (mkAdjectiveByType s t) ;
-    -- TODO: nav forši, ka jānorāda PartType, bet kā lai aptiet?
-    -- TODO: drīzāk jānorāda Str (divdabja forma) + PartType - pārējais iekšēji (auto)
+    mkA : (lemma : Str) -> AType -> A = \s,t -> lin A (mkAdjectiveByType s t) ;
+    -- TODO: nav forši, ka jānorāda Voice, bet kā lai aptiet?
+    -- TODO: drīzāk jānorāda Str (divdabja forma) + Voice - pārējais iekšēji (auto)
     -- Turklāt Adj f-cijā iespējams būtu ok, ja pa tiešo izsauktu mkAdjective?!
     -- Tomēr diez vai: IsUsi...
-    -- mkA2 gadījumā: vai PartType var noteikt pēc obj_Prep? Diez vai...
-    mkA : (v : Verb) -> PartType -> A = \v,p -> lin A (mkAdjective_Participle v p) ;
+    -- mkA2 gadījumā: vai Voice var noteikt pēc obj_Prep? Diez vai...
+    mkA : (v : Verb) -> Voice -> A = \v,p -> lin A (mkAdjective_Participle v p) ;
   } ;
 
   mkA2  : A -> ResLav.Prep -> A2 = \a,p -> lin A2 (a ** { p = p }) ; -- precējies ar ...
@@ -83,7 +82,7 @@ oper
 
   mkV = overload {
     mkV : (lemma : Str) -> V = \l -> lin V (mkVerb_Irreg l) ;
-    mkV : (lemma : Str) -> VerbConj -> V = \l,c -> lin V (mkVerb l c) ;
+    mkV : (lemma : Str) -> Conjugation -> V = \l,c -> lin V (mkVerb l c) ;
     mkV : (lemma : Str) -> Str -> Str -> V = \l1,l2,l3 -> lin V (mkVerbC1 l1 l2 l3) ;
   } ;
 
@@ -162,11 +161,11 @@ oper
         masc = mkNoun_D1 pieci ;
         fem = mkNoun_D4 pieci Fem ;
         ord = mkAdjective_Pos piektais Def ;
-        padsmit = mkAdjective_Pos (stem_teen+"padsmitais") Def ;
-        desmit = mkAdjective_Pos (stem_ten+"desmitais") Def ;
+        padsmit = mkAdjective_Pos (stem_teen + "padsmitais") Def ;
+        desmit = mkAdjective_Pos (stem_ten + "desmitais") Def ;
       in {
         s = table {
-          unit => table {
+          DUnit => table {
             NCard => table {
               Masc => table { c => masc.s ! n ! c } ;
               Fem => table { c => fem.s ! n ! c }
@@ -176,11 +175,11 @@ oper
               g => table { c => ord ! g ! Sg ! c }
             }
           } ;
-          teen => table {
+          DTeen => table {
             NCard => table { g => table { c => stem_teen + "padsmit" } } ;
             NOrd => table { g => table { c => padsmit ! g ! Sg ! c } }
           } ;
-          ten => table {
+          DTen => table {
             NCard => table { g => table { c => stem_ten + "desmit" } } ;
             NOrd => table { g => table { c => desmit ! g ! Sg ! c } }
           }

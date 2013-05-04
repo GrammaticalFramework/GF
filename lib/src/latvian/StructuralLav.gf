@@ -97,13 +97,13 @@ lin
   he_Pron = {
     s = \\c => (mkPronoun_Gend "viņš").s ! Masc ! Sg ! c ;
     a = AgP3 Sg Masc Pos ;
-    possessive = \\_,_,_ => "viņa"
+    poss = \\_,_,_ => "viņa"
   } ;
 
   she_Pron = {
     s = \\c => (mkPronoun_Gend "viņš").s ! Fem ! Sg ! c ;
     a = AgP3 Sg Fem Pos ;
-    possessive = \\_,_,_ => "viņas"
+    poss = \\_,_,_ => "viņas"
   } ;
 
   they_Pron = mkPronoun_They Masc ;  -- See also: ExtraLav.they8fem_Pron

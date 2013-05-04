@@ -16,7 +16,7 @@ lin
 
   PredSCVP sc vp = mkClauseSC sc vp ;
 
-  ImpVP vp = { s = \\pol,n => vp.v.s ! pol ! (Imperative n) ++ vp.compl ! (AgP2 n Masc) } ;
+  ImpVP vp = { s = \\pol,n => vp.v.s ! pol ! (VImp n) ++ vp.compl ! (AgP2 n Masc) } ;
 
   SlashVP np vp = mkClause np vp ** { p = vp.p } ;
 
@@ -31,8 +31,9 @@ lin
     mkClause np (lin VP {
       v = vs ;
       compl = \\_ => "," ++ vs.subj.s ++ sslash.s ;
-      agr = toClAgr_Reg vs.topic ;
-      objNeg = Pos
+      val = toVal_Reg vs.topic ;
+      objNeg = Pos ;
+      voice = Act
     }) ** { p = sslash.p } ;
 
   ComplVS v s  = { v = v ; compl = \\_ => "," ++ v.subj.s ++ s.s } ;
@@ -43,7 +44,7 @@ lin
   EmbedQS qs = { s = qs.s } ;
 
   -- FIXME: vai agr ir Pl?
-  EmbedVP vp = { s = build_VP vp Pos Infinitive (AgP3 Pl Masc Pos) } ;
+  EmbedVP vp = { s = build_VP vp Pos VInf (AgP3 Pl Masc Pos) } ;
 
   UseCl t p cl = { s = t.s ++ p.s ++ cl.s ! (Ind t.a t.t) ! p.p } ;
   UseQCl t p cl = { s = t.s ++ p.s ++ cl.s ! (Ind t.a t.t) ! p.p } ;
@@ -61,19 +62,19 @@ lin
 oper
   -- TODO: PassV2 verbs jāsaskaņo ar objektu, nevis subjektu (by8means_Prep: AgP3 Sg Masc)
   mkClause : NP -> CatLav.VP -> Cl = \np,vp ->  
-    let subj : Case = case vp.agr.voice of {
-      Act  => vp.agr.c_topic ;
-      Pass => vp.agr.c_focus
+    let subj : Case = case vp.voice of {
+      Act  => vp.val.subj ;
+      Pass => vp.val.obj
     } in lin Cl {
       s = \\mood,pol =>
         case mood of {  -- Subject
           Deb _ _ => np.s ! Dat ;  --# notpresent
-          _       => np.s ! vp.agr.c_topic
+          _       => np.s ! vp.val.subj
         } ++
         case subj of {  -- Verb
           -- TODO: vai np.a un np.a.pol argumentus nevar apvienot?
           Nom => buildVerb vp.v mood pol np.a (fromAgr np.a).pol vp.objNeg ;
-          _   => buildVerb vp.v mood pol vp.agr.agr (fromAgr np.a).pol vp.objNeg -- TESTME
+          _   => buildVerb vp.v mood pol vp.val.agr (fromAgr np.a).pol vp.objNeg -- TESTME
         } ++
         vp.compl ! np.a  -- Object(s), complements, adverbial modifiers
     } ;

@@ -98,7 +98,7 @@ lin
   } ;
 
   PossPron p = {
-    s = p.possessive ;
+    s = p.poss ;
     d = Def ;
     pol = Pos
   } ;
@@ -156,7 +156,7 @@ lin
 
   -- FIXME: vajag šķirot noteikto/nenoteikto galotni..?
   PPartNP np v2 = {
-    s = \\c => v2.s ! Pos ! (Participle TsTa (fromAgr np.a).gend (fromAgr np.a).num c) ++ np.s ! c ;
+    s = \\c => v2.s ! Pos ! (VPart Pass (fromAgr np.a).gend (fromAgr np.a).num c) ++ np.s ! c ;
     a = np.a
   } ;
 

@@ -11,8 +11,8 @@ flags
   coding = utf8 ;
 
 oper
-  Noun       : Type = { s : Number => Case => Str ; g : Gender } ;
-  ProperNoun : Type = { s : Case => Str ; g : Gender ; n : Number } ;
+  Noun  : Type = { s : Number => Case => Str ; g : Gender } ;
+  PNoun : Type = { s : Case => Str ; g : Gender ; n : Number } ;
 
   masculine : Gender = Masc ;
   feminine  : Gender = Fem ;
@@ -21,7 +21,7 @@ oper
   mkNoun : Str -> Noun = \lemma ->
     mkNounByPal lemma True ;
 
-  mkProperNoun : Str -> Number -> ProperNoun = \lemma,number ->
+  mkProperNoun : Str -> Number -> PNoun = \lemma,number ->
     let noun = mkNoun lemma
     in {
       s = \\c => noun.s ! number ! c  ;
@@ -61,7 +61,7 @@ oper
 
   -- Specified gender and palatalization; default declension
   mkNounByGendPal : Str -> Gender -> Bool -> Noun = \lemma,gend,pal ->
-    let decl : NounDecl = case lemma of {
+    let decl : Declension = case lemma of {
       #exception_D2_1 + "s"      => D2 ;
       #exception_D2_1_pal + "i"  => D2 ;
       #exception_D2_2 + "s"      => D2 ;
@@ -82,22 +82,22 @@ oper
     in mkNounByGendDeclPal lemma gend decl pal ;
 
   -- Specified declension; default gender and palatalization
-  mkNounByDecl : Str -> NounDecl -> Noun = \lemma,decl ->
+  mkNounByDecl : Str -> Declension -> Noun = \lemma,decl ->
     mkNounByDeclPal lemma decl True ;
 
   -- Specified declension and palatalization; default gender
-  mkNounByDeclPal : Str -> NounDecl -> Bool -> Noun = \lemma,decl,pal ->
+  mkNounByDeclPal : Str -> Declension -> Bool -> Noun = \lemma,decl,pal ->
     case decl of {
       D0|D1|D2|D3 => mkNounByGendDeclPal lemma Masc decl pal ;
       D4|D5|D6|DR => mkNounByGendDeclPal lemma Fem  decl pal
     } ;
 
   -- Specified gender and declension; default palatalization
-  mkNounByGendDecl : Str -> Gender -> NounDecl -> Noun = \lemma,gend,decl ->
+  mkNounByGendDecl : Str -> Gender -> Declension -> Noun = \lemma,gend,decl ->
     mkNounByGendDeclPal lemma gend decl True ;
 
   -- Specified gender, declension and palatalization - no defaults
-  mkNounByGendDeclPal : Str -> Gender -> NounDecl -> Bool -> Noun = \lemma,gend,decl,pal ->
+  mkNounByGendDeclPal : Str -> Gender -> Declension -> Bool -> Noun = \lemma,gend,decl,pal ->
     case decl of {
       D0 => mkNoun_D0 lemma gend     ;
       D1 => mkNoun_D1 lemma          ;

@@ -1,10 +1,6 @@
 --# -path=.:../abstract:../common:../prelude
 
-concrete CatLav of Cat = CommonX - [CAdv, Voc] **
-open
-  Prelude,
-  ResLav
-in {
+concrete CatLav of Cat = CommonX - [CAdv, Voc] ** open Prelude, ResLav in {
 
 flags
   coding = utf8 ;
@@ -20,21 +16,21 @@ lincat
 
   -- Sentence
 
-  Cl = { s : VerbMood => Polarity => Str } ;
-  ClSlash = { s : VerbMood => Polarity => Str ; p : ResLav.Prep } ;
+  Cl = { s : VMood => Polarity => Str } ;
+  ClSlash = { s : VMood => Polarity => Str ; p : ResLav.Prep } ;
   Imp = { s : Polarity => Number => Str } ;
 
   -- Question
 
-  QCl = { s : VerbMood => Polarity => Str } ;
+  QCl = { s : VMood => Polarity => Str } ;
   IP = { s : Case => Str ; n : Number } ;
   IDet = { s : Gender => Str ; n : Number } ;
   IQuant = { s : Gender => Number => Str } ;
-  -- TODO: IComp = { s : Str ; a : ResLav.Agr } ;
+  --IComp = { s : Str ; a : ResLav.Agr } ;
 
-  -- Relative
+  -- Relative clause
 
-  RCl = { s : VerbMood => Polarity => Agr => Str } ;
+  RCl = { s : VMood => Polarity => Agr => Str } ;
   RP = { s : Gender => Case => Str } ;
 
   -- Verb
@@ -45,19 +41,19 @@ lincat
 
   -- Adjective
 
-  AP = { s : Definite => Gender => Number => Case => Str } ;
+  AP = { s : Definiteness => Gender => Number => Case => Str } ;
 
   -- Noun
 
-  CN = { s : Definite => Number => Case => Str ; g : Gender } ;
+  CN = { s : Definiteness => Number => Case => Str ; g : Gender } ;
   NP = { s : Case => Str ; a : ResLav.Agr } ;
-  Pron = { s : Case => Str ; a : ResLav.Agr ; possessive : Gender => Number => Case => Str } ;
-  Det = { s : Gender => Case => Str ; n : Number ; d : Definite ; pol : Polarity } ;
+  Pron = { s : Case => Str ; a : ResLav.Agr ; poss : Gender => Number => Case => Str } ;
+  Det = { s : Gender => Case => Str ; n : Number ; d : Definiteness ; pol : Polarity } ;
   Predet = { s : Gender => Str } ;
   Ord = { s : Gender => Case => Str } ;
   Num = { s : Gender => Case => Str ; n : Number ; hasCard : Bool } ;
   Card = { s : Gender => Case => Str ; n : Number } ;
-  Quant = { s : Gender => Number => Case => Str ; d : Definite ; pol : Polarity } ;
+  Quant = { s : Gender => Number => Case => Str ; d : Definiteness ; pol : Polarity } ;
 
   -- Numeral
 
