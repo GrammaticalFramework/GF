@@ -1054,9 +1054,9 @@ pgf_parsing_bu_filter(PgfParseState* before, PgfParseState* after,
 		return false;
 	}
 
-	if (after != NULL && after->ts->lexicon_idx != NULL) {
+	if (after != NULL && after->ts->fn->get_lexicon_idx(after->ts) != NULL) {
 		PgfFilterFn clo = {{ pgf_parsing_bu_filter_iter }, before->ps->concr, cfc, true};
-		gu_map_iter(after->ts->lexicon_idx, &clo.fn, NULL);
+		gu_map_iter(after->ts->fn->get_lexicon_idx(after->ts), &clo.fn, NULL);
 		return clo.filter;
 	}
 #endif
