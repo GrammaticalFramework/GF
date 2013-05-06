@@ -285,6 +285,11 @@ oper
   AS, A2S, AV, A2V : Type ; --%
 
 
+--2 Closed categories
+
+  mkPredet : Str -> Predet 
+    = \s -> lin Predet {s = \\a,c => prepCase c ++ s ; c = Nom ; a = PNoAg} ;
+
 --.
 --2 The definitions of the paradigms
 --
