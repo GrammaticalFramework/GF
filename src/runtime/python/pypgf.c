@@ -435,6 +435,7 @@ Expr_getattro(ExprObject *self, PyObject *attr_name) {
 typedef struct IterObject {
     PyObject_HEAD
     PGFObject* grammar;
+    PyObject* container;
     GuPool* pool;
     int max_count;
     int counter;
@@ -454,8 +455,8 @@ Iter_fetch_expr(IterObject* self)
 		return NULL;
 	pyexpr->pool   = NULL;
 	pyexpr->expr   = ep->expr;
-	pyexpr->master = (PyObject*) self;
-	Py_INCREF(self);
+	pyexpr->master = self->container;
+	Py_INCREF(self->container);
 
 	PyObject* res = Py_BuildValue("(f,O)", ep->prob, pyexpr);
 	Py_DECREF(pyexpr);
@@ -483,6 +484,7 @@ Iter_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
     IterObject* self = (IterObject *)type->tp_alloc(type, 0);
     if (self != NULL) {
 		self->grammar = NULL;
+		self->container = NULL;
 		self->pool = NULL;
 		self->max_count = -1;
 		self->counter   = 0;
@@ -499,6 +501,8 @@ Iter_dealloc(IterObject* self)
 		gu_pool_free(self->pool);
 
 	Py_XDECREF(self->grammar);
+	
+	Py_XDECREF(self->container);
 
     self->ob_type->tp_free((PyObject*)self);
 }
@@ -661,6 +665,14 @@ pypgf_new_python_lexer(PyObject* pylexer, GuPool* pool)
 	return ((PgfLexer*) lexer);
 }
 
+#define PGF_CONTAINER_NAME "pgf.Container"
+
+void pypgf_container_descructor(PyObject *capsule)
+{
+	GuPool* pool = PyCapsule_GetPointer(capsule, PGF_CONTAINER_NAME);
+	gu_pool_free(pool);
+}
+
 static IterObject*
 Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 {
@@ -698,28 +710,35 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 	pyres->grammar = self->grammar;
 	Py_XINCREF(pyres->grammar);
 
-	pyres->pool = gu_new_pool();
+	GuPool* out_pool = gu_new_pool();
+	
+	PyObject* py_pool =
+		PyCapsule_New(out_pool, PGF_CONTAINER_NAME, 
+		              pypgf_container_descructor);
+	pyres->container = PyTuple_Pack(2, pyres->grammar, py_pool);
+	Py_DECREF(py_pool);
+
+	pyres->pool      = gu_new_pool();
 	pyres->max_count = max_count;
 	pyres->counter   = 0;
 	pyres->fetch     = Iter_fetch_expr;
 
-	GuPool *tmp_pool = gu_local_pool();
     GuString catname =
-		(catname_s == NULL) ? pgf_start_cat(self->grammar->pgf, tmp_pool)
-		                    : gu_str_string(catname_s, tmp_pool);
+		(catname_s == NULL) ? pgf_start_cat(self->grammar->pgf, pyres->pool)
+		                    : gu_str_string(catname_s, pyres->pool);
 
 	PgfLexer *lexer = NULL;
 	if (buf != NULL) {
-		GuIn* in = gu_data_in(buf, len, tmp_pool);
-		GuReader* rdr = gu_new_utf8_reader(in, tmp_pool);
-		lexer = pgf_new_simple_lexer(rdr, tmp_pool);
+		GuIn* in = gu_data_in(buf, len, pyres->pool);
+		GuReader* rdr = gu_new_utf8_reader(in, pyres->pool);
+		lexer = pgf_new_simple_lexer(rdr, pyres->pool);
 	} 
 	if (py_lexer != NULL) {
-		lexer = pypgf_new_python_lexer(py_lexer, tmp_pool);
+		lexer = pypgf_new_python_lexer(py_lexer, pyres->pool);
 	}
 
 	pyres->res =
-		pgf_parse(self->concr, catname, lexer, pyres->pool);
+		pgf_parse(self->concr, catname, lexer, pyres->pool, out_pool);
 
 	if (pyres->res == NULL) {
 		Py_DECREF(pyres);
@@ -740,7 +759,6 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 	}
 
 	Py_XDECREF(py_lexer);
-	gu_pool_free(tmp_pool);
 
 	return pyres;
 }
@@ -784,6 +802,8 @@ Concr_getCompletions(ConcrObject* self, PyObject *args, PyObject *keywds)
 
 	pyres->grammar = self->grammar;
 	Py_XINCREF(pyres->grammar);
+	
+	pyres->container = NULL;
 
 	pyres->pool = gu_new_pool();
 	pyres->max_count = max_count;

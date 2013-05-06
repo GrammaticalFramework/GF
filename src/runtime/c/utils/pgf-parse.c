@@ -124,7 +124,7 @@ int main(int argc, char* argv[]) {
 
     GuReader *rdr = gu_string_reader(gu_str_string(line, ppool), ppool);
     PgfLexer *lexer = pgf_new_simple_lexer(rdr, ppool);
-    GuEnum* result = pgf_parse(concr, cat, lexer, ppool);
+    GuEnum* result = pgf_parse(concr, cat, lexer, ppool, ppool);
 
     PgfExprProb* ep = NULL;
     if (result != NULL) 

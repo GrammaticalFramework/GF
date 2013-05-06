@@ -114,7 +114,8 @@ void
 pgf_linearize(PgfConcr* concr, PgfExpr expr, GuWriter* wtr, GuExn* err);
 
 PgfExprEnum*
-pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool);
+pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
+          GuPool* pool, GuPool* out_pool);
 
 GuEnum*
 pgf_get_completions(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 

@@ -207,7 +207,8 @@ pgf_linearize(PgfConcr* concr, PgfExpr expr, GuWriter* wtr, GuExn* err)
 }
 
 GuEnum*
-pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool)
+pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
+          GuPool* pool, GuPool* out_pool)
 {
 	// Begin parsing a sentence of the specified category
 	PgfParseState* state =
@@ -233,7 +234,7 @@ pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool)
 		return NULL;
 
 	// Now begin enumerating the resulting syntax trees
-	return pgf_parse_result(state, pool);
+	return pgf_parse_result(state, out_pool);
 }
 
 GuEnum*

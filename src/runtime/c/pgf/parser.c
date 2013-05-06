@@ -44,7 +44,8 @@ typedef GuBuf PgfCCatBuf;
 
 typedef struct {
 	PgfConcr* concr;
-	GuPool* pool;
+	GuPool* pool;      // this pool is used for structures internal to the parser
+	GuPool* out_pool;  // this pool is used for the allocating the final abstract trees
 	GuBuf* expr_queue;
 	PgfExpr meta_var;
 	PgfProduction meta_prod;
@@ -119,7 +120,6 @@ typedef struct {
 typedef struct PgfParseResult PgfParseResult;
 
 struct PgfParseResult {
-	GuPool* tmp_pool;
     PgfParseState* state;
 	PgfExprEnum en;
 };
@@ -1496,7 +1496,7 @@ pgf_parsing_item(PgfParseState* before, PgfParseState* after, PgfItem* item)
 			bool accepted = 
 				pext->callback->match(before->ps->concr, item, 
 				                      tok,
-				                      &ep, before->ps->pool);
+				                      &ep, before->ps->out_pool);
 
 			if (ep != NULL)
 				pgf_parsing_complete(before, after, item, ep);
@@ -1643,6 +1643,7 @@ pgf_new_parsing(PgfConcr* concr, GuPool* pool)
 	PgfParsing* ps = gu_new(PgfParsing, pool);
 	ps->concr = concr;
 	ps->pool = pool;
+	ps->out_pool = NULL;
 	ps->expr_queue = gu_new_buf(PgfExprState*, pool);
 	ps->max_fid = concr->total_cats;
 #ifdef PGF_COUNTS_DEBUG
@@ -2011,9 +2012,10 @@ pgf_result_predict(PgfParsing* ps,
 			PgfExprState* st = gu_new(PgfExprState, ps->pool);
 			st->answers = cont->answers;
 			st->ep.expr =
-				gu_new_variant_i(ps->pool, PGF_EXPR_APP,
-						PgfExprApp,
-						.fun = cont->ep.expr, .arg = ep->expr);
+				gu_new_variant_i(ps->out_pool, 
+				                 PGF_EXPR_APP, PgfExprApp,
+						         .fun = cont->ep.expr,
+						         .arg = ep->expr);
 			st->ep.prob = cont->ep.prob+ep->prob;
 			st->args    = cont->args;
 			st->arg_idx = cont->arg_idx+1;
@@ -2024,7 +2026,7 @@ pgf_result_predict(PgfParsing* ps,
 }
 
 static PgfExprProb*
-pgf_parse_result_next(PgfParseResult* pr, GuPool* pool)
+pgf_parse_result_next(PgfParseResult* pr)
 {
 	for (;;) {
 		while (pgf_parsing_proceed(pr->state));
@@ -2052,8 +2054,8 @@ pgf_parse_result_next(PgfParseResult* pr, GuPool* pool)
 
 			if (ccat->fid < pr->state->ps->concr->total_cats) {
 				st->ep.expr =
-					gu_new_variant_i(pool, PGF_EXPR_APP,
-									 PgfExprApp,
+					gu_new_variant_i(pr->state->ps->out_pool, 
+					                 PGF_EXPR_APP, PgfExprApp,
 									 .fun = st->ep.expr,
 									 .arg = pr->state->ps->meta_var);
 				st->arg_idx++;
@@ -2075,9 +2077,10 @@ pgf_parse_result_next(PgfParseResult* pr, GuPool* pool)
 				PgfExprState* st3 = gu_new(PgfExprState, pr->state->ps->pool);
 				st3->answers = st2->answers;
 				st3->ep.expr =
-					gu_new_variant_i(pr->state->ps->pool, PGF_EXPR_APP,
-							PgfExprApp,
-							.fun = st2->ep.expr, .arg = st->ep.expr);
+					gu_new_variant_i(pr->state->ps->out_pool,
+					                 PGF_EXPR_APP, PgfExprApp,
+							         .fun = st2->ep.expr,
+							         .arg = st->ep.expr);
 				st3->ep.prob = st2->ep.prob + st->ep.prob;
 				st3->args = st2->args;
 				st3->arg_idx = st2->arg_idx+1;
@@ -2094,7 +2097,7 @@ static void
 pgf_parse_result_enum_next(GuEnum* self, void* to, GuPool* pool)
 {
 	PgfParseResult* pr = gu_container(self, PgfParseResult, en);
-	*(PgfExprProb**)to = pgf_parse_result_next(pr, pool);
+	*(PgfExprProb**)to = pgf_parse_result_next(pr);
 }
 
 PgfExprEnum*
@@ -2104,11 +2107,10 @@ pgf_parse_result(PgfParseState* state, GuPool* pool)
 	pgf_parsing_print_counts(state->ps);
 #endif
 
-	GuPool* tmp_pool = gu_new_pool();
+	state->ps->out_pool = pool;
 
 	PgfExprEnum* en =
            &gu_new_i(pool, PgfParseResult,
-			 .tmp_pool = tmp_pool,
              .state = state,
 			 .en.next = pgf_parse_result_enum_next)->en;
 

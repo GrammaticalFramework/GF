@@ -176,13 +176,14 @@ static bool
 pgf_match_name_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
                    PgfExprProb** out_ep, GuPool *pool)
 {
+	GuPool* tmp_pool = gu_new_pool();
+
 	size_t lin_idx;
 	PgfSequence seq;
-	pgf_item_sequence(item, &lin_idx, &seq, pool);
+	pgf_item_sequence(item, &lin_idx, &seq, tmp_pool);
 
 	gu_assert(lin_idx == 0);
 
-	GuPool* tmp_pool = gu_new_pool();
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 	
 	GuString hyp = gu_str_string("-", tmp_pool);

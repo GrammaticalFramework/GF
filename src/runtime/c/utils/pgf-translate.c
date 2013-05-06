@@ -169,7 +169,7 @@ int main(int argc, char* argv[]) {
 		clock_t start = clock();
 
 		result =
-			pgf_parse(from_concr, cat, lexer, ppool);
+			pgf_parse(from_concr, cat, lexer, ppool, ppool);
 		if (result == NULL) {
 			PgfToken tok =
 				pgf_lexer_current_token(lexer);

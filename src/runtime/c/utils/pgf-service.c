@@ -335,7 +335,7 @@ int main ()
 				pgf_new_simple_lexer(rdr, ppool);
 
 			GuEnum* result = 
-				pgf_parse(from_concr, cat, lexer, ppool);
+				pgf_parse(from_concr, cat, lexer, ppool, ppool);
 			if (result == NULL) {
 				FCGI_printf("Status: 500 Internal Server Error\r\n");
 				FCGI_printf("Content-type: text/plain\r\n"
