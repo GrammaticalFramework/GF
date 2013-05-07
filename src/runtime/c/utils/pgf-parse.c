@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
 
     // Begin parsing a sentence of the specified category
     PgfParseState* state =
-      pgf_parser_init_state(concr, cat, 0, ppool);
+      pgf_parser_init_state(concr, cat, 0, ppool, ppool);
     if (state == NULL) {
       fprintf(stderr, "Couldn't begin parsing\n");
       status = EXIT_FAILURE;
