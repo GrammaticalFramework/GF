@@ -212,7 +212,7 @@ pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer,
 {
 	// Begin parsing a sentence of the specified category
 	PgfParseState* state =
-		pgf_parser_init_state(concr, cat, 0, pool);
+		pgf_parser_init_state(concr, cat, 0, pool, out_pool);
 	if (state == NULL) {
 		return NULL;
 	}
@@ -234,7 +234,7 @@ pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer,
 		return NULL;
 
 	// Now begin enumerating the resulting syntax trees
-	return pgf_parse_result(state, out_pool);
+	return pgf_parse_result(state);
 }
 
 GuEnum*
@@ -243,7 +243,7 @@ pgf_get_completions(PgfConcr* concr, PgfCId cat, PgfLexer *lexer,
 {
 	// Begin parsing a sentence of the specified category
 	PgfParseState* state =
-		pgf_parser_init_state(concr, cat, 0, pool);
+		pgf_parser_init_state(concr, cat, 0, pool, pool);
 	if (state == NULL) {
 		return NULL;
 	}
@@ -265,7 +265,7 @@ pgf_get_completions(PgfConcr* concr, PgfCId cat, PgfLexer *lexer,
 		return NULL;
 
 	// Now begin enumerating the resulting syntax trees
-	return pgf_parser_completions(state, prefix, pool);
+	return pgf_parser_completions(state, prefix);
 }
 
 void
@@ -273,7 +273,7 @@ pgf_print_chunks(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool)
 {
 	// Begin parsing a sentence of the specified category
 	PgfParseState* state =
-		pgf_parser_init_state(concr, cat, 0, pool);
+		pgf_parser_init_state(concr, cat, 0, pool, pool);
 	if (state == NULL) {
 		printf("\n");
 		return;

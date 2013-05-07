@@ -157,7 +157,7 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 
 	PgfMetricsLznState state;
 	state.funcs = &pgf_metrics_lin_funcs1;
-	state.ps = pgf_parser_init_state(concr, cat, 0, pool);
+	state.ps = pgf_parser_init_state(concr, cat, 0, pool, pool);
 	state.marks = gu_new_buf(int, pool);
 	state.pos = 0;
 	state.phrases = gu_new_buf(PgfPhrase*, pool);
@@ -172,7 +172,7 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 		return false;
 	}
 
-	GuEnum* en_trees = pgf_parse_result(state.ps, pool);
+	GuEnum* en_trees = pgf_parse_result(state.ps);
 	PgfExprProb* ep = gu_next(en_trees, PgfExprProb*, pool);
 	if (ep == NULL) {
 		gu_pool_free(pool);

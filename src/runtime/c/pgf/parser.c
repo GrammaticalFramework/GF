@@ -1638,12 +1638,12 @@ pgf_parsing_default_beam_size(PgfConcr* concr)
 }
 
 static PgfParsing*
-pgf_new_parsing(PgfConcr* concr, GuPool* pool)
+pgf_new_parsing(PgfConcr* concr, GuPool* pool, GuPool* out_pool)
 {
 	PgfParsing* ps = gu_new(PgfParsing, pool);
 	ps->concr = concr;
 	ps->pool = pool;
-	ps->out_pool = NULL;
+	ps->out_pool = out_pool;
 	ps->expr_queue = gu_new_buf(PgfExprState*, pool);
 	ps->max_fid = concr->total_cats;
 #ifdef PGF_COUNTS_DEBUG
@@ -1861,20 +1861,19 @@ pgf_parser_completions_next(GuEnum* self, void* to, GuPool* pool)
 }
 
 GuEnum*
-pgf_parser_completions(PgfParseState* prev, GuString prefix, 
-                       GuPool* pool)
+pgf_parser_completions(PgfParseState* prev, GuString prefix)
 {
 #ifdef PGF_COUNTS_DEBUG
 	pgf_parsing_print_counts(prev->ps);
 #endif
 
 	PgfPrefixTokenState* ts =
-		pgf_new_token_state(PgfPrefixTokenState, pool);
+		pgf_new_token_state(PgfPrefixTokenState, prev->ps->pool);
 	ts->en.next = pgf_parser_completions_next;
 	ts->prefix  = prefix;
 	ts->tp      = NULL;
 	ts->state   =
-	    pgf_new_parse_state(prev->ps, prev, &ts->ts, pool);
+	    pgf_new_parse_state(prev->ps, prev, &ts->ts, prev->ps->pool);
 
 	return &ts->en;
 }
@@ -2101,18 +2100,16 @@ pgf_parse_result_enum_next(GuEnum* self, void* to, GuPool* pool)
 }
 
 PgfExprEnum*
-pgf_parse_result(PgfParseState* state, GuPool* pool)
+pgf_parse_result(PgfParseState* state)
 {
 #ifdef PGF_COUNTS_DEBUG
 	pgf_parsing_print_counts(state->ps);
 #endif
 
-	state->ps->out_pool = pool;
-
 	PgfExprEnum* en =
-           &gu_new_i(pool, PgfParseResult,
-             .state = state,
-			 .en.next = pgf_parse_result_enum_next)->en;
+           &gu_new_i(state->ps->pool, PgfParseResult,
+                     .state = state,
+			         .en.next = pgf_parse_result_enum_next)->en;
 
 	return en;
 }
@@ -2216,7 +2213,8 @@ pgf_parse_print_chunks(PgfParseState* state)
 
 // TODO: s/CId/Cat, add the cid to Cat, make Cat the key to CncCat
 PgfParseState*
-pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
+pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, 
+                      GuPool* pool, GuPool* out_pool)
 {
 	PgfCncCat* cnccat =
 		gu_map_get(concr->cnccats, &cat, PgfCncCat*);
@@ -2226,7 +2224,7 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, GuPool* pool)
 	gu_assert(lin_idx < cnccat->n_lins);
 
 	PgfParsing* ps =
-		pgf_new_parsing(concr, pool);
+		pgf_new_parsing(concr, pool, out_pool);
 	PgfParseState* state =
 		pgf_new_parse_state(ps, NULL, NULL, pool);
 
