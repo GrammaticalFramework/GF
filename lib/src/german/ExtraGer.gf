@@ -33,6 +33,8 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
 
     ICompAP ap = {s = \\_ => "wie" ++ ap.s ! APred} ; 
 
+    CompIQuant iq = {s = table {Ag g n p => iq.s ! n ! g ! Nom}} ;
+
     IAdvAdv adv = {s = "wie" ++ adv.s} ;
 
     DetNPMasc det = {

@@ -9,7 +9,7 @@ concrete StructuralFin of Structural = CatFin **
 
   all_Predet = {s = \\n,c => 
     let
-      kaiket = caseTable n ((mkN "kaikki" "kaiken" "kaikkena"))
+      kaiket = caseTable n (mkN "kaikki" "kaiken" "kaikkia")
     in
     case npform2case n c of {
       Nom => "kaikki" ;
