@@ -1171,8 +1171,14 @@ Concr_bracketedLinearize(ConcrObject* self, PyObject *args)
 
 	gu_pool_free(tmp_pool);
 	
-	PyObject* bracket = PyList_GetItem(list, 0);
-	Py_INCREF(bracket);
+	PyObject* bracket = NULL;
+	if (PyList_Size(list) == 1) {
+		bracket = PyList_GetItem(list, 0);
+		Py_INCREF(bracket);
+	} else {
+		PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
+	}
+
 	Py_DECREF(list);
 
 	return bracket;
