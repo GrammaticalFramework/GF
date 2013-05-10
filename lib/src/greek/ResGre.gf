@@ -29,6 +29,7 @@ resource ResGre = ParamX  **  open Prelude in {
 
   Form = Weak |Emphatic ;
   
+  
   VForm =  VPres Mood Number Person Voice Aspect| VPast Mood Number Person Voice Aspect|  VNonFinite Voice| VImperative Aspect Number Voice|  Gerund  | Participle Degree Gender Number Case;
 
   Voice = Active | Passive;
@@ -173,36 +174,36 @@ resource ResGre = ParamX  **  open Prelude in {
         in        
         case <o,t,ant,m> of {
         <Main, TPres,Simul,Ind> =>  subj ++ negpm ++ clit ++ clit2 ++ verb m vo as ! t ++ comp;
-        <Inv,  TPres,Simul,Ind> =>    negpm ++  clit ++ clit2 ++ verb m vo as ! t ++  comp ++ subj  ;
+        <Inv,  TPres,Simul,Ind> =>    negpm ++  clit ++ clit2 ++ verb m vo as ! t ++ subj ++   comp   ;
 
         <Main, TPres,Anter,Ind> =>  subj ++ negpm ++ clit ++  clit2++ verb m vo as! TCond  ++ comp ;
-        <Inv, TPres,Anter,Ind> => negpm ++  clit ++ clit2 ++ verb m vo as ! TCond ++  comp ++ subj  ;
+        <Inv, TPres,Anter,Ind> => negpm ++  clit ++ clit2 ++ verb m vo as ! TCond ++ subj ++ comp  ;
 
         <Main,TFut,Simul,Ind>  => subj ++ negpm ++ "θα" ++ clit ++  clit2 ++verb m vo as! t ++ comp ;
-        <Inv,TFut,Simul,Ind>  =>  negpm  ++ "θα"++ clit ++ clit2++  verb m vo as! t ++ comp  ++ subj;
+        <Inv,TFut,Simul,Ind>  =>  negpm  ++ "θα"++ clit ++ clit2++  verb m vo as! t ++  subj ++ comp  ;
       
         <Main,TFut,Anter,Ind>  => subj ++ negpm ++ "θα" ++ clit ++  clit2 ++ verb m vo as! TCond ++ comp ;
-        <Inv,TFut,Anter,Ind>  => negpm  ++"θα" ++ clit  ++  clit2 ++ verb m vo  as! TCond ++ comp  ++  subj  ;
+        <Inv,TFut,Anter,Ind>  => negpm  ++"θα" ++ clit  ++  clit2 ++ verb m vo  as! TCond ++ subj ++ comp    ;
 
         <Main,TCond,Simul,Ind>  => subj ++ negpm ++ "θα" ++ clit ++ verb m vo Imperf! TPast  ++ comp ;
-        <Inv,TCond,Simul,Ind>  => negpm ++ "θα" ++ clit  ++  clit2 ++ verb m vo Imperf ! TPast ++ comp   ++  subj;
+        <Inv,TCond,Simul,Ind>  => negpm ++ "θα" ++ clit  ++  clit2 ++ verb m vo Imperf ! TPast ++ subj ++ comp  ;
 
         <Main,TCond,Anter,Ind> => subj ++ negpm  ++ "θα"++ clit ++ clit2 ++ verb m vo as! TImperf ++ comp ;
-        <Inv,TCond,Anter,Ind> => negpm ++ "θα" ++clit  ++ clit2 ++ verb m vo  as! TImperf ++ comp ++  subj   ;
+        <Inv,TCond,Anter,Ind> => negpm ++ "θα" ++clit  ++ clit2 ++ verb m vo  as! TImperf ++ subj ++comp    ;
 
         <Main, TPast,Simul,Ind>  =>  subj ++ negpm ++ clit ++ clit2 ++ verb m vo as! TPast ++ comp ;
-        <Inv, TPast,Simul,Ind>  => negpm ++ clit ++ clit2 ++ verb m vo as! TPast ++ comp ++ subj  ;
+        <Inv, TPast,Simul,Ind>  => negpm ++ clit ++ clit2 ++ verb m vo as! TPast ++ subj ++ comp  ;
 
         
         <Main, TPast,Anterior,Ind> =>  subj ++ negpm ++  clit ++ clit2 ++ verb m vo as!TImperf ++ comp;
-        <Inv, TPast,Anterior,Ind> =>    negpm ++  clit ++ clit2 ++ verb m vo as!TImperf ++ comp ++ subj;
+        <Inv, TPast,Anterior,Ind> =>    negpm ++  clit ++ clit2 ++ verb m vo as!TImperf ++ subj ++comp ;
 
         <_, TImperf,Simul,Ind>  =>  subj ++ negpm ++  clit ++ clit2 ++ verb m vo as! t ++ comp ;
-        <_, TImperf,Anterior,Ind> =>  negpm ++  clit ++ clit2 ++ verb m vo as! TImperf ++ comp ++ subj;
+        <_, TImperf,Anterior,Ind> =>  negpm ++  clit ++ clit2 ++ verb m vo as! TImperf ++ subj ++ comp ;
   
         <_, _,_,Con> =>  subj ++  "να" ++ negpm ++ clit ++ clit2 ++  verb m vo as! t ++ comp ;
         <Main, _,_,Hortative> =>  subj ++ "ας" ++ negpm ++ clit ++ clit2 ++  verb m vo as! t ++ comp ; 
-        <Inv, _,_,Hortative> =>  "ας" ++ negpm ++ clit ++ clit2 ++  verb m vo as! t ++   comp ++ subj
+        <Inv, _,_,Hortative> =>  "ας" ++ negpm ++ clit ++ clit2 ++  verb m vo as! t ++  subj ++  comp 
         }
         } ;
 
@@ -1439,17 +1440,17 @@ resource ResGre = ParamX  **  open Prelude in {
                                                      <Neut,Pl> => "τα οποία"  
                                                       };
         Gen |CPrep P_Dat => case <ag.g, ag.n > of
-                                                    {<Fem,Sg> => "της οποίας" ;   
-                                                     <Masc |Change |Neut,Sg> => "του οποίου" ;
-                                                     <Masc |Change |Fem |Neut ,Pl> => "των οποίων" 
+                                                    {<Fem,Sg> => prepCase c ++"της οποίας" ;   
+                                                     <Masc |Change |Neut,Sg> =>prepCase c ++ "του οποίου" ;
+                                                     <Masc |Change |Fem |Neut ,Pl> => prepCase c ++"των οποίων" 
                                                       };
         Acc | CPrep PNul  => case <ag.g, ag.n > of
-                                                    {<Fem,Sg> => "την οποία" ;   
-                                                     <Masc |Change,Sg> => "τον οποίο" ;
-                                                     <Neut,Sg> => "το οποίο" ;  
-                                                     <Fem,Pl> => "τις οποίες" ;   
-                                                     <Masc |Change,Pl> => "τους οποίους" ;
-                                                     <Neut,Pl> => "τα οποία"  
+                                                    {<Fem,Sg> => prepCase c ++ "την οποία" ;   
+                                                     <Masc |Change,Sg> => prepCase c ++"τον οποίο" ;
+                                                     <Neut,Sg> => prepCase c ++ "το οποίο" ;  
+                                                     <Fem,Pl> => prepCase c ++ "τις οποίες" ;   
+                                                     <Masc |Change,Pl> => prepCase c ++"τους οποίους" ;
+                                                     <Neut,Pl> => prepCase c ++"τα οποία"  
                                                       };
          CPrep P_se => case <ag.g, ag.n > of
                                                     {<Fem,Sg> =>  "στην οποία" ;   
@@ -1482,7 +1483,7 @@ resource ResGre = ParamX  **  open Prelude in {
         <Neut,Sg,   Nom|Acc |CPrep P_se |CPrep PNul > =>prepCase c++ "ένα" ;
         <Neut,Sg,   Gen|CPrep P_Dat>   => "ενός";
         <Neut ,Sg, Vocative> => " " ;
-        <_ ,Pl, _> => " "
+        <_ ,Pl, _> =>prepCase c ++  " "
      } ;
 
 
@@ -1582,13 +1583,13 @@ resource ResGre = ParamX  **  open Prelude in {
             
             VNonFinite  Active => "υπάρξει" ;
             VNonFinite Passive   => "υπάρξει" ;
-            VImperative Perf Sg Active=> " " ;
-            VImperative Perf Pl Active=> " " ;
-            VImperative Imperf Sg Active=> " " ;
-            VImperative Imperf Pl Active=> " "  ;
+            VImperative Perf Sg Active=> "να είσαι" ;
+            VImperative Perf Pl Active=> "να είστε" ;
+            VImperative Imperf Sg Active=> "να είσαι" ;
+            VImperative Imperf Pl Active=> "να είστε"  ;
 
-            VImperative _ Sg Passive =>  " " ;
-            VImperative _  Pl Passive=> "" ;
+            VImperative _ Sg Passive =>  "να είσαι" ;
+            VImperative _  Pl Passive=> "να είστε" ;
 
             Gerund => "όντας" ;
 
@@ -1626,10 +1627,10 @@ resource ResGre = ParamX  **  open Prelude in {
           
             VNonFinite  Active => "υπάρξει" ;
             VNonFinite  Passive => "υπάρξει" ;
-            VImperative Perf Sg Active=> " " ;
-            VImperative Perf Pl Active=> " " ;
-            VImperative Imperf Sg Active=> " " ;
-            VImperative Imperf Pl Active=> " "  ;
+            VImperative Perf Sg Active=> "να υπάρχεις" ;
+            VImperative Perf Pl Active=> "να υπάρχετε" ;
+            VImperative Imperf Sg Active=> "να υπάρχεις" ;
+            VImperative Imperf Pl Active=> "να υπάρχετε"  ;
 
             VImperative _ Sg Passive=>  " " ;
             VImperative _ Pl Passive=> "" ;
@@ -1652,39 +1653,29 @@ resource ResGre = ParamX  **  open Prelude in {
         in 
        {
         s = table {
-          VPres _ Sg P1 Active _=> Exw ;
-          VPres _ Sg P2 Active _=> Ex + "εις" ;
-          VPres _ Sg P3 Active _=> Ex + "ει" ;
-          VPres _ Pl P1 Active _=> Ex+ "ουμε" ;
-          VPres _ Pl P2 Active _=> Ex + "ετε" ;
-          VPres _ Pl P3 Active _=> Ex + "ουν" ;
+          VPres _ Sg P1 _ _=> Exw ;
+          VPres _ Sg P2 _ _=> Ex + "εις" ;
+          VPres _ Sg P3 _ _=> Ex + "ει" ;
+          VPres _ Pl P1 _ _=> Ex+ "ουμε" ;
+          VPres _ Pl P2 _ _=> Ex + "ετε" ;
+          VPres _ Pl P3 _ _=> Ex + "ουν" ;
 
-          VPres _ Sg P1 Passive _=> " " ;
-          VPres _ Sg P2 Passive _=> " " ;
-          VPres _ Sg P3 Passive _=>  " " ;
-          VPres _ Pl P1 Passive _=> " " ;
-          VPres _ Pl P2 Passive _=> " " ;
-          VPres _ Pl P3 Passive _=>  " " ;
+         
 
-          VPast _ Sg P1 Active _=> eIxa ;
-          VPast _ Sg P2 Active _=> eIx + "ες" ;
-          VPast _ Sg P3 Active _ => eIx + "ε" ;
-          VPast _ Pl P1 Active _ => eIx + "αμε" ;
-          VPast _ Pl P2 Active _ => eIx + "ατε" ;
-          VPast _ Pl P3 Active _ => eIx + "αν" ;
+          VPast _ Sg P1 _ _=> eIxa ;
+          VPast _ Sg P2 _ _=> eIx + "ες" ;
+          VPast _ Sg P3 _ _ => eIx + "ε" ;
+          VPast _ Pl P1 _ _ => eIx + "αμε" ;
+          VPast _ Pl P2 _ _ => eIx + "ατε" ;
+          VPast _ Pl P3 _ _ => eIx + "αν" ;
         
-          VPast _ Sg P1 Passive _  => " "  ;
-          VPast _ Sg P2 Passve _=> " "  ;
-          VPast _ Sg P3 Passive _ => " " ;
-          VPast _ Pl P1 Passive _ => " "  ;
-          VPast _ Pl P2 Passive _ => " "  ;
-          VPast _ Pl P3 Passive _ => " "  ;
+         
 
           VNonFinite    Active    => Ex + "ει" ; 
           VNonFinite  Passive      => " " ; 
 
-          VImperative Perf Sg Active=> " " ;
-          VImperative Perf Pl Active=> " " ;
+          VImperative Perf Sg Active=> Exe ;
+          VImperative Perf Pl Active=> Exe ;
           VImperative Imperf Sg Active=> Exe ;
           VImperative Imperf Pl Active=> Exe  ;
 

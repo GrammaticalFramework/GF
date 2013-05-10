@@ -65,7 +65,7 @@ concrete NounGre of Noun = CatGre ** open  ResGre, ParadigmsGre, Prelude in {
 
     RelNP np rs = {
       s = \\c => { 
-        comp =  (np.s ! c).comp ++ "," ++ rs.s! Ind ! np.a ;
+        comp =  (np.s ! c).comp  ++ rs.s! Ind ! np.a ;
         c1 = [] ;
         c2 = [] ;
         isClit = False
@@ -208,7 +208,7 @@ concrete NounGre of Noun = CatGre ** open  ResGre, ParadigmsGre, Prelude in {
       ApposCN  cn np = 
         let g = cn.g 
         in {
-          s = \\n,c => cn.s ! n ! c ++ (np.s ! Nom).comp ;
+          s = \\n,c =>cn.s ! n ! c ++ (np.s ! c).comp ;
           g = g
       } ;
     
